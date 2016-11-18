@@ -70,12 +70,12 @@ $assignment_modal_body = "";
 
 if ($filter == "judges") 	$staff_row_field = "staff_judge";
 if ($filter == "stewards") 	$staff_row_field = "staff_steward";
-if ($filter == "staff") 		$staff_row_field = "staff_staff";
+if ($filter == "staff") 	$staff_row_field = "staff_staff";
 if ($filter == "bos") 		$staff_row_field = "staff_judge_bos";
 
 if ($filter == "judges") 	$filter_readable .= "Judges";  
 if ($filter == "stewards") 	$filter_readable .= "Stewards";
-if ($filter == "staff") 		$filter_readable .= "Staff"; 
+if ($filter == "staff") 	$filter_readable .= "Staff"; 
 if ($filter == "bos") 		$filter_readable .= "Best of Show Judges";
 
 // *****************************************************************************
@@ -175,6 +175,7 @@ if ($section != "step5") {
 // ---------------------- List Judging Locations ---------------------------
 // *****************************************************************************
 if ($section != "step5") {
+	
 	if ((($action == "update") && ($filter != "default") && ($bid != "default")) || ($action == "assign")) { 
 	
 		$form_submit_url .= build_form_action($base_url,$section,"default","update",$filter,"default",$brewer_db_table,FALSE);
@@ -322,7 +323,7 @@ if ($section != "step5") {
 				$output_datatables_body .= " /></label></div>";
 				$output_datatables_body .= "</td>";
 				$output_datatables_body .= "<td>".$row_brewer['brewerLastName'].", ".$row_brewer['brewerFirstName']."</td>";
-				$output_datatables_body .= "<td class=\"hidden-xs hidden-sm\">".$brewer_assignment."</td>";
+				$output_datatables_body .= "<td class=\"hidden-xs hidden-sm\">".ucwords($brewer_assignment)."</td>";
 				
 				if ($filter == "bos") {
 					$output_datatables_body .= "<td>";
@@ -356,7 +357,7 @@ if ($section != "step5") {
 			
 		} // end if ($totalRows_brewer > 0)
 	
-	} // end if (($totalRows_brewer > 0) && ((($action == "update") && ($filter != "default") && ($bid != "default")) || ($action == "assign")))
+	} // end if ((($action == "update") && ($filter != "default") && ($bid != "default")) || ($action == "assign"))
 }
 // *****************************************************************************
 // ---------------------- Add/Edit Judging Locations ---------------------------

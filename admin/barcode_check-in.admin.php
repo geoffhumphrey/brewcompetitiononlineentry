@@ -11,6 +11,37 @@ $flag_jnum = "";
 $flag_enum = "";
 $jnum_info = "";
 
+
+
+
+
+
+$barcode_text_000 = "Check-In Entries with a Barcode Reader/Scanner";
+$barcode_text_001 = "The following entries have been checked in";
+$barcode_text_002 = "The following judging number(s) have already been assigned to entries. Please use another judging number for each.";
+$barcode_text_003 = "";
+$barcode_text_004 = "";
+$barcode_text_005 = "";
+$barcode_text_006 = "";
+$barcode_text_007 = "";
+$barcode_text_008 = "";
+$barcode_text_009 = "";
+$barcode_text_010 = "";
+$barcode_text_011 = "";
+$barcode_text_012 = "";
+$barcode_text_013 = "";
+$barcode_text_014 = "";
+$barcode_text_015 = "";
+$barcode_text_016 = "";
+$barcode_text_017 = "";
+$barcode_text_018 = "";
+$barcode_text_019 = "";
+$barcode_text_020 = "";
+
+
+
+
+
 if ((NHC) && ($prefix == "final_")) $maxlength = 6; else $maxlength = 4;
 
 // Update upon submitting the form
@@ -39,14 +70,14 @@ $(function() {
  
 });
 </script>
-<p class="lead"><?php echo $_SESSION['contestName']; ?>: Check-In Entries with a Barcode Reader/Scanner</p>
+<p class="lead"><?php echo $_SESSION['contestName'].": ".$barcode_text_000; ?></p>
 <?php 
 if (!empty($entry_list)) { 
 $entry_list = rtrim($entry_list,", ");
 $entry_list = ltrim($entry_list, ", ");
 ?>
 <div class="well">
-	<p><span class="fa fa-info-circle"></span> <?php if (count($entries_updated) == 1) echo "Entry ".rtrim($entry_list,", ")." has been checked in with the assigned judging number."; else echo "Entries ".$entry_list." have been checked in with the assigned judging numbers."; ?></p>
+	<p><span class="fa fa-info-circle"></span> <?php echo sprintf("%s: %s", $barcode_text_001, rtrim($entry_list,", ")); ?></p>
 </div>
 <?php } 
 if (!empty($flag_jnum)) { 
@@ -60,7 +91,7 @@ if (!empty($flag_jnum)) {
 	}
 ?>
 <div class="well">
-	<p><span class="fa fa-info-circle"></span> The following judging number(s) have already been assigned to entries. Please use another judging number for each.</p>
+	<p><span class="fa fa-info-circle"></span> <?php echo $barcode_text_002; ?></p>
 	<ul class="small">
 	<?php echo $jnum_info; ?>
     </ul>

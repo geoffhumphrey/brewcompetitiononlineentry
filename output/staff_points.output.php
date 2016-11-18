@@ -58,7 +58,7 @@ if ($view == "default") {
 		$output_organizer .= "<td>";
 		if (validate_bjcp_id($row_org['brewerJudgeID'])) $output_organizer .= strtoupper(strtr($row_org['brewerJudgeID'],$bjcp_num_replace));
 		$output_organizer .= "</td>";
-		$output_organizer .= "<td>".$organ_points."</td>";
+		$output_organizer .= "<td>".$organ_max_points."</td>";
 		$output_organizer .= "</tr>";
 	}
 	
@@ -142,7 +142,7 @@ if ($view == "default") {
 		$st_running_total[] = "";
 		foreach (array_unique($st) as $uid) { 
 		
-			if (array_sum($st_running_total) < $staff_points_total) {
+			if (array_sum($st_running_total) < $staff_max_points) {
 				$staff_info = explode("^",brewer_info($uid));
 				$st_running_total[] = $staff_points;
 				
@@ -156,8 +156,8 @@ if ($view == "default") {
 					
 					$output_staff .= "</td>";
 					$output_staff .= "<td>";
-					if ((array_sum($st_running_total) <= $staff_points_total) && ($staff_points < $organ_points)) $output_staff .= $staff_points;
-					else $output_staff .= $organ_points;
+					if ((array_sum($st_running_total) <= $staff_max_points) && ($staff_points < $organ_max_points)) $output_staff .= $staff_points;
+					else $output_staff .= $organ_max_points;
 					$output_staff .= "</td>";
 					$output_staff .= "</tr>";
 				}
@@ -277,7 +277,7 @@ if ($view == "default") {
     <?php } ?>
     <?php if (!empty($output_staff)) { ?>
     <h2><?php echo $label_staff; ?></h2>
-    <p><?php echo sprintf("%s: %s",$output_text_025,$staff_points_total); ?></p>
+    <p><?php echo sprintf("%s: %s",$output_text_025,$staff_max_points); ?></p>
     <script type="text/javascript" language="javascript">
 	 $(document).ready(function() {
 		$('#sortable99').dataTable( {

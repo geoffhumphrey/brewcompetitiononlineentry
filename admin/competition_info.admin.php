@@ -62,12 +62,41 @@
 </div><!-- ./Form Group -->
 
 <div class="form-group"><!-- Form Group NOT REQUIRED Text Input -->
-    <label for="contestID" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">BJCP ID</label>
+    <label for="contestID" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">BJCP Competition ID</label>
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
         <!-- Input Here -->
         <input class="form-control" id="contestID" name="contestID" type="text" value="<?php if ($section != "step4") echo $row_contest_info['contestID']; ?>" placeholder="">
+    
+    	<span id="helpBlock" class="help-block">
+        <div class="btn-group" role="group" aria-label="BJCPCompIDModal">
+			<div class="btn-group" role="group">
+				<button type="button" class="btn btn-xs btn-info" data-toggle="modal" data-target="#BJCPCompIDModal">
+				  BJCP Competition ID Info
+				</button>
+			</div>
+		</div>
+		</span>
     </div>
 </div><!-- ./Form Group -->
+
+
+<!-- Modal -->
+<div class="modal fade" id="BJCPCompIDModal" tabindex="-1" role="dialog" aria-labelledby="contactFormModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header bcoem-admin-modal">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="BJCPCompIDModalLabel">BJCP Competition ID Info</h4>
+            </div>
+            <div class="modal-body">
+                <p>Enter the Competition ID you received from the BJCP if you <a href="http://bjcp.org/apps/comp_reg/comp_reg.php" target="_blank">registered your competition</a>. The BJCP will <em>not</em> accept an XML competition report without a Competition ID.</p>
+            </div>
+            <div class="modal-footer">
+            	<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div><!-- ./modal -->
 
 <div class="form-group"><!-- Form Group REQUIRED Text Input -->
     <label for="contestHost" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Host</label>

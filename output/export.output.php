@@ -426,11 +426,13 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) {
 		}
 		
 		if ($view == "html") {
-			$header .= '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">';
-			$header .= '<html xmlns="http://www.w3.org/1999/xhtml">';
+			$header .= '<!DOCTYPE html>';
 			$header .= '<head>';
 			$header .= '<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />';
 			$header .= '<title>Results - '.$_SESSION['contestName'].'</title>';
+			$header .= '<style>';
+			$header .= 'body {font-family: Arial,sans-serif; font-size: 12px; }';
+			$header .= '</style>';
 			$header .= '</head>';
 			$header .= '<body>';
 		}
@@ -444,6 +446,8 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) {
 				$pdf->SetFont('Arial','',7);	
 			}
 			
+			if ($view == "html") $html .= '<h1>Winners - '.$_SESSION['contestName'].'</h1>';
+			
 			$filename = str_replace(" ","_",$_SESSION['contestName']).'_Results.'.$view;
 			
 			if ($_SESSION['prefsWinnerMethod'] == 0) {
@@ -451,7 +455,9 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) {
 				do { 
 					$entry_count = get_table_info(1,"count_total",$row_tables['id'],$dbTable,"default");
 					if ($entry_count > 0) { 
-					$html .= '<br><br><h3>Table '.$row_tables['tableNumber'].': '.$row_tables['tableName'].' ('.$entry_count.' entries)</h3><br>';
+					
+					if ($view == "pdf") $html .= '<br><br><strong>Table '.$row_tables['tableNumber'].': '.$row_tables['tableName'].' ('.$entry_count.' entries)</strong><br>';
+					else $html .= '<h2>Table '.$row_tables['tableNumber'].': '.$row_tables['tableName'].' ('.$entry_count.' entries)</h2>';
 					$html .= '<table border="1" cellpadding="5" cellspacing="0">';
 					$html .= '<tr>';
 					$html .= '<td width="35" align="center"  bgcolor="#cccccc" nowrap="nowrap"><strong>Pl.</strong></td>';
@@ -497,8 +503,9 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) {
 					
 					if (($results_count[0] > 0) && ($results_count[1] > 0)) {
 						
-						$html .= '<br><br><strong>Category '.ltrim($style,"0").': '.style_convert($style,"1").' ('.$results_count[0].' entries)</strong><br>';
-						$html .= '<table border="1">';
+						if ($view == "pdf") $html .= '<br><br><strong>Category '.ltrim($style,"0").': '.style_convert($style,"1").' ('.$results_count[0].' entries)</strong><br>';
+						else $html .= '<h2>Category '.ltrim($style,"0").': '.style_convert($style,"1").' ('.$results_count[0].' entries)</h2>';
+						$html .= '<table border="1" cellpadding="5" cellspacing="0">';
 						$html .= '<tr>';
 						$html .= '<td width="35" align="center"  bgcolor="#cccccc" nowrap="nowrap"><strong>Pl.</strong></td>';
 						$html .= '<td width="150" align="center" bgcolor="#cccccc"><strong>Brewer(s)</strong></td>';
@@ -545,8 +552,9 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) {
 					
 					if (($row_entry_count['count'] > 0) && ($row_score_count['count'] > 0)) {
 						
-						$html .= '<br><br><strong>Category '.ltrim($style[0],"0").$style[1].': '.$style[2].' ('.$row_entry_count['count'].' entries)</strong><br>';
-						$html .= '<table border="1">';
+						if ($view == "pdf") $html .= '<br><br><strong>Category '.ltrim($style[0],"0").$style[1].': '.$style[2].' ('.$row_entry_count['count'].' entries)</strong><br>';
+						else $html .= '<h2>Category '.ltrim($style[0],"0").$style[1].': '.$style[2].' ('.$row_entry_count['count'].' entries)</h2>';
+						$html .= '<table border="1" cellpadding="5" cellspacing="0">';
 						$html .= '<tr>';
 						$html .= '<td width="35" align="center"  bgcolor="#cccccc" nowrap="nowrap"><strong>Pl.</strong></td>';
 						$html .= '<td width="150" align="center" bgcolor="#cccccc"><strong>Brewer(s)</strong></td>';
@@ -607,8 +615,9 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) {
 				
 				if ($totalRows_bos > 0) {
 					
-					$html .= '<br><br><strong>'.$row_style_type['styleTypeName'].'</strong><br>';
-					$html .= '<table border="1">';
+					if ($view == "pdf") $html .= '<br><br><strong>'.$row_style_type['styleTypeName'].'</strong><br>';
+					else $html .= '<h2>'.$row_style_type['styleTypeName'].'</h2>';
+					$html .= '<table border="1" cellpadding="5" cellspacing="0">';
 					$html .= '<tr>';
 					$html .= '<td width="35"  align="center" bgcolor="#cccccc" nowrap="nowrap"><strong>Place</strong></td>';
 					$html .= '<td width="150" align="center" bgcolor="#cccccc"><strong>Brewer(s)</strong></td>';
@@ -650,10 +659,10 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) {
 					include(DB.'output_results_download_sbd.db.php');
 					
 					if ($totalRows_sbd > 0) {
-					
-					$html .= '<br><br><strong>'.strtr($row_sbi['sbi_name'],$html_remove).'</strong>';
+					if ($view == "pdf") $html .= '<br><br><strong>'.strtr($row_sbi['sbi_name'],$html_remove).'</strong>';
+					else $html .= '<h2>'.strtr($row_sbi['sbi_name'],$html_remove).'</h2>';
 					$html .= '<br>'.strtr($row_sbi['sbi_description'],$html_remove).'<br>';
-					$html .= '<table border="1">';
+					$html .= '<table border="1" cellpadding="5" cellspacing="0">';
 					$html .= '<tr>';
 					if ($row_sbi['sbi_display_places'] == "1") $html .= '<td width="35" align="center"  bgcolor="#cccccc" nowrap="nowrap"><strong>Place</strong></td>';
 					$html .= '<td width="150" align="center" bgcolor="#cccccc"><strong>Brewer(s)</strong></td>';
@@ -782,7 +791,7 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) {
 					$html .= '<td width="150">';
 						if ($row_org['brewerJudgeID'] != "") $html .=  strtoupper(strtr($row_org['brewerJudgeID'],$bjcp_num_replace)); else $html .= '&nbsp;';
 					$html .= '</td>';
-					$html .= '<td width="150">'.$organ_points.'</td>';
+					$html .= '<td width="150">'.$organ_max_points.'</td>';
 					$html .= '</tr>';
 				$html .= '</table>';
 				}
@@ -869,7 +878,7 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) {
 				$html .= '</tr>';
 				do { $st[] = $row_staff['uid']; } while ($row_staff = mysqli_fetch_assoc($staff));
 				foreach (array_unique($st) as $uid) { 
-					if ((is_array($st_running_total)) && (array_sum($st_running_total) < $staff_points_total)) {
+					if (array_sum($st_running_total) < $staff_max_points) {
 						$staff_info = explode("^",brewer_info($uid));
 						$staff_name = ucwords(strtolower($staff_info['1'])).", ".ucwords(strtolower($staff_info['0']));
 						$html .= '<tr>';
@@ -878,8 +887,8 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) {
 							if (validate_bjcp_id($staff_info['4'])) $html .= strtoupper(strtr($staff_info['4'],$bjcp_num_replace)); else $html .= '&nbsp;';
 						$html .= '</td>';
 						$html .= '<td width="150">';
-						if ((array_sum($st_running_total) <= $staff_points_total) && ($staff_points < $organ_points)) $html .= $staff_points;
-						else $html .= $organ_points;
+						if ((array_sum($st_running_total) <= $staff_max_points) && ($staff_points < $organ_max_points)) $html .= $staff_points;
+						else $html .= $organ_max_points;
 						$html .= '</td>';
 						$html .= '</tr>';
 					}
@@ -926,7 +935,7 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) {
 				$judge_points = judge_points($uid,$judge_info['5']);
 				if ($judge_points > 0) {
 					$bos_judge = bos_points($uid);
-					if ($bos_judge) $assignment = "Judge+BOS";
+					if (($bos_judge) && (!in_array($uid,$bos_judge_no_assignment))) $assignment = "Judge + BOS";
 					else $assignment = "Judge";
 						if (($judge_info['0'] != "") && ($judge_info['1'] != "") && (validate_bjcp_id($judge_info['4']))) { 
 								$judge_name = strtr(ucwords(strtolower($judge_info['0'])),$html_remove)." ".strtr(ucwords(strtolower($judge_info['1'])),$html_remove);
@@ -979,7 +988,7 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) {
 				
 				//Staff Members with a properly formatted BJCP IDs in the system
 				foreach (array_unique($st) as $uid) { 
-				if ((is_array($st_running_total)) && (array_sum($st_running_total) <= $staff_points_total)) {
+				if (array_sum($st_running_total) < $staff_max_points) {
 					$staff_info = explode("^",brewer_info($uid));
 						if (($staff_info['0'] != "") && ($staff_info['1'] != "") && (validate_bjcp_id($staff_info['4']))) {
 							$staff_name = ucwords(strtolower($staff_info['0']))." ".ucwords(strtolower($staff_info['1']));
@@ -1004,7 +1013,7 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) {
 						$output .= "\t\t\t<JudgeID>".strtoupper(strtr($organizer_info['4'],$bjcp_num_replace))."</JudgeID>\n";
 						$output .= "\t\t\t<JudgeRole>Organizer</JudgeRole>\n";
 						$output .= "\t\t\t<JudgePts>0.0</JudgePts>\n";
-						$output .= "\t\t\t<NonJudgePts>".$organ_points."</NonJudgePts>\n";
+						$output .= "\t\t\t<NonJudgePts>".$organ_max_points."</NonJudgePts>\n";
 						$output .= "\t\t</JudgeData>\n";
 					}
 				}
@@ -1019,7 +1028,7 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) {
 				$judge_points = judge_points($uid,$judge_info['5']);
 				if ($judge_points > 0) {
 					$bos_judge = bos_points($uid);
-					if ($bos_judge) $assignment = "Judge+BOS";
+					if ($bos_judge) $assignment = "Judge + BOS";
 					else $assignment = "Judge";
 						if (($judge_info['0'] != "") && ($judge_info['1'] != "") && (!validate_bjcp_id($judge_info['4']))) { 
 							$judge_name = ucwords(strtolower($judge_info['0']))." ".ucwords(strtolower($judge_info['1']));
@@ -1071,7 +1080,7 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) {
 				
 				// Staff Members without a properly formatted BJCP IDs in the system
 				foreach (array_unique($st) as $uid) { 
-				if (array_sum($st_running_total) < $staff_points_total) {
+				if (array_sum($st_running_total) < $staff_max_points) {
 					$staff_info = explode("^",brewer_info($uid));
 						if (($staff_info['0'] != "") && ($staff_info['1'] != "") && (!validate_bjcp_id($staff_info['4']))) {
 							$st_running_total[] = $staff_points;
@@ -1080,8 +1089,8 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) {
 							$output .= "\t\t\t<JudgeName>".$staff_name."</JudgeName>\n";
 							$output .= "\t\t\t<JudgeRole>Staff</JudgeRole>\n";
 							$output .= "\t\t\t<JudgePts>0.0</JudgePts>\n";
-							if ($staff_points < $organ_points) $output .= "\t\t\t<NonJudgePts>".$staff_points."</NonJudgePts>\n";
-							else $output .= "\t\t\t<NonJudgePts>".$organ_points."</NonJudgePts>\n";
+							if ($staff_points < $organ_max_points) $output .= "\t\t\t<NonJudgePts>".$staff_points."</NonJudgePts>\n";
+							else $output .= "\t\t\t<NonJudgePts>".$organ_max_points."</NonJudgePts>\n";
 							$output .= "\t\t</JudgeData>\n";
 						}
 					}
@@ -1095,7 +1104,7 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) {
 						$output .= "\t\t\t<JudgeName>".$organizer_info['0']." ".$organizer_info['1']."</JudgeName>\n";
 						$output .= "\t\t\t<JudgeRole>Organizer</JudgeRole>\n";
 						$output .= "\t\t\t<JudgePts>0.0</JudgePts>\n";
-						$output .= "\t\t\t<NonJudgePts>".$organ_points."</NonJudgePts>\n";
+						$output .= "\t\t\t<NonJudgePts>".$organ_max_points."</NonJudgePts>\n";
 						$output .= "\t\t</JudgeData>\n";
 					}
 				}

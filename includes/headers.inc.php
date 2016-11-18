@@ -183,7 +183,8 @@ switch($section) {
 		switch ($msg) {
 				case "2": $output = sprintf("<strong>%s</strong><br>",$header_text_006); break;
 				case "3": $output = sprintf("<strong>%s</strong> %s<br>",$header_text_007,$header_text_008); break;
-				default: $output = "<strong>More information is required for your entry to be accepted and confirmed.</strong> See the area(s) highlighted in RED below."; break;
+				case "4": $output = sprintf("<strong>%s</strong><br>",$header_text_108); break;
+				default: $output = sprintf("<strong>%s</strong> %s",$header_text_105,$header_text_106); break;
 		}
 	}
 	

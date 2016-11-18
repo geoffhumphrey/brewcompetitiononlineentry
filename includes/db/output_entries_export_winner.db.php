@@ -1,7 +1,9 @@
 <?php
 // BY TABLE	
 if ($_SESSION['prefsWinnerMethod'] == 0) {
-	$query_scores = sprintf("SELECT eid,scorePlace FROM $judging_scores_db_table WHERE scoreTable='%s' AND scorePlace IS NOT NULL ORDER BY scorePlace ASC", $row_sql['id']);
+	$query_scores = sprintf("SELECT eid,scorePlace FROM %s WHERE scoreTable='%s' AND scorePlace IS NOT NULL", $judging_scores_db_table, $row_sql['id']);
+	if (SINGLE) $query_scores .= sprintf(" AND comp_id='%s'", $_SESSION['comp_id']);
+	$query_scores .= " ORDER BY scorePlace ASC";
 	$scores = mysqli_query($connection,$query_scores) or die (mysqli_error($connection));
 	$row_scores = mysqli_fetch_assoc($scores);
 	$totalRows_scores = mysqli_num_rows($scores);
@@ -10,7 +12,7 @@ if ($_SESSION['prefsWinnerMethod'] == 0) {
 	if ($totalRows_scores > 0) {
 		do { 
 			
-			$query_entries = sprintf("SELECT id,brewBrewerID,brewCoBrewer,brewName,brewStyle,brewCategorySort,brewCategory,brewSubCategory,brewBrewerFirstName,brewBrewerLastName,brewJudgingNumber FROM $brewing_db_table WHERE id='%s'", $row_scores['eid']);
+			$query_entries = sprintf("SELECT id,brewBrewerID,brewCoBrewer,brewName,brewStyle,brewCategorySort,brewCategory,brewSubCategory,brewBrewerFirstName,brewBrewerLastName,brewJudgingNumber FROM %s WHERE id='%s'", $brewing_db_table, $row_scores['eid']);
 			$entries = mysqli_query($connection,$query_entries) or die (mysqli_error($connection));
 			$row_entries = mysqli_fetch_assoc($entries);
 			
@@ -27,6 +29,7 @@ if ($_SESSION['prefsWinnerMethod'] == 0) {
 }
 
 // BY CATEGORY
+// @single
 if ($_SESSION['prefsWinnerMethod'] == 1) {
 	
 	$query_styles = sprintf("SELECT brewStyleGroup FROM %s WHERE brewStyleActive='Y' AND (brewStyleVersion='%s' OR brewStyleOwn='custom') ORDER BY brewStyleGroup ASC", $styles_db_table, $_SESSION['prefsStyleSet']);

@@ -250,7 +250,7 @@ do {
 	
 	$delete_alt_title = sprintf("%s %s",$label_delete, $row_log['brewName']);
 	$delete_warning = sprintf("%s %s - %s.",$label_delete,$row_log['brewName'],strtolower($label_undone));
-	$delete_link = sprintf("<a data-toggle=\"tooltip\" title=\"%s\" href=\"%s\" data-confirm=\"%s %s - %s.\"><span class=\"fa fa-lg fa-trash-o\"></a>",$delete_alt_title,$base_url."includes/process.inc.php?section=".$section."&amp;go=".$go."&amp;dbTable=".$brewing_db_table."&amp;action=delete&amp;id=".$row_log['id'],$brewer_entries_text_012,$row_log['brewName'],strtolower($label_undone));
+	$delete_link = sprintf("<a data-toggle=\"tooltip\" title=\"%s\" href=\"%s\" data-confirm=\"%s.\"><span class=\"fa fa-lg fa-trash-o\"></a>",$delete_alt_title,$base_url."includes/process.inc.php?section=".$section."&amp;go=".$go."&amp;dbTable=".$brewing_db_table."&amp;action=delete&amp;id=".$row_log['id'],$delete_warning);
 	$entry_output .= "<td nowrap class=\"hidden-print\">";
 	
 	if ($scoresheet) { 
@@ -263,7 +263,7 @@ do {
 		
 		if ((NHC) && ($prefix == "final_")) $entry_output .= $print_recipe_link;
 		if ($row_log['brewPaid'] != 1) $entry_output .= $delete_link;
-		else $entry_output .= sprintf("<span class=\"fa fa-lg fa-trash-o text-muted\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"%s %s.\" href=\"#\"></span>",$row_log['brewName'],$brewer_entries_text_012);
+		else $entry_output .= sprintf("<span class=\"fa fa-lg fa-trash-o text-muted\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"%s\" href=\"#\"></span>",$brewer_entries_text_015);
 	}
 	
 	// Display the edit link for NHC final round after judging has taken place

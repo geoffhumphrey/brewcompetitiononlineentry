@@ -112,7 +112,6 @@ if (isset($_SESSION['loginUsername']))  {
 else $logged_in = FALSE;
 
 // DataTables Default Values
-
 $output_datatables_bPaginate = "true";
 $output_datatables_sPaginationType = "full_numbers";
 $output_datatables_bLengthChange = "true";
@@ -121,10 +120,6 @@ if ($action == "print") $output_datatables_sDom = "it";
 else $output_datatables_sDom = "rftp";
 $output_datatables_bStateSave = "false";
 $output_datatables_bProcessing = "false";
-
-$color = "#eeeeee";
-$color1 = "#e0e0e0";
-$color2 = "#eeeeee";
 
 // Disable stuff on participants, entries, tables, and other screens when looking at archived data
 $archive_display = FALSE;

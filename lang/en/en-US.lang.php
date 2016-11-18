@@ -375,7 +375,7 @@ $label_admin_custom_cat = "Custom Categories";
 $label_admin_custom_cat_data = "Custom Category Entries";
 $label_admin_sponsors = $label_sponsors;
 $label_admin_entry_count = "Entry Count By Style";
-$label_admin_entry_count_sub = "Entry Count By Bub-Style";
+$label_admin_entry_count_sub = "Entry Count By Sub-Style";
 $label_admin_custom_mods = "Custom Modules";
 $label_admin_check_in = $label_entry_check_in;
 $label_admin_make_admin = "Change User Level";
@@ -500,6 +500,10 @@ $header_text_101 = "Your installation has been updated successfully!";
 $header_text_102 = "The email addresses do not match.";
 $header_text_103 = "Please log in to access your account.";
 $header_text_104 = "You do not have sufficient access priveliges to view this page.";
+$header_text_105 = "More information is required for your entry to be accepted and confirmed.";
+$header_text_106 = "See the area(s) highlighted in RED below.";
+$header_text_107 = "Please choose a style.";
+$header_text_108 = "Your entry cannot be accepted or confirmed until a style has been chosen. Unconfirmed entries may be deleted from the system without warning.";
 
 // -------------------- Navigation --------------------
 
@@ -808,6 +812,7 @@ if ($section == "list") {
 	$brewer_entries_text_012 = "Are you sure you want to delete the entry called";
 	$brewer_entries_text_013 = "You will be able to add entries on or after";
 	$brewer_entries_text_014 = "You have not added any entries to the system.";
+	$brewer_entries_text_015 = "You cannot delete your entry at this time.";
 	
 	
 	$brewer_info_000 = "Thank you for entering the";

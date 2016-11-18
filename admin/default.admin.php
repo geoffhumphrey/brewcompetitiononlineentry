@@ -895,6 +895,7 @@
 								
 							</div>
 						</div><!-- ./row -->
+                        <?php } ?>
                         <div class="row">
 							<div class="col col-lg-4 col-md-4 col-sm-4 col-xs-4">
 								<strong>BJCP Points</strong>
@@ -903,10 +904,39 @@
 								<ul class="list-inline">
 									<li><a id="modal_window_link" href="<?php echo $base_url; ?>output/print.output.php?section=staff&amp;go=judging_assignments&amp;action=download&amp;filter=default&amp;view=default" data-toggle="tooltip" data-placement="top" title="Print the BJCP Points report for judges, stewards, and staff">Print</a></li>
 									<li><a href="<?php echo $base_url; ?>output/export.output.php?section=staff&amp;go=judging_assignments&amp;action=download&amp;filter=default&amp;view=pdf" data-toggle="tooltip" data-placement="top" title="Download a PDF of the BJCP points report for judges, stewards, and staff">PDF</a></li>
+                                    <?php if (empty($_SESSION['contestID'])) { ?>
+                                    <li><a href="#"  data-toggle="modal" data-target="#BJCPCompIDModal">XML</a></li>
+                                    <?php } else { ?>
 									<li><a href="<?php echo $base_url; ?>output/export.output.php?section=staff&amp;go=judging_assignments&amp;action=download&amp;filter=default&amp;view=xml" data-toggle="tooltip" data-placement="top" title="Download a fully compliant XML version of the points report to submit to the BJCP">XML</a></li>
+                                    <?php } ?>
 								</ul>
 							</div>
 						</div><!-- ./row -->
+                        
+                        <?php if (empty($_SESSION['contestID'])) { ?>
+                        
+                        <!-- Modal -->
+                        <div class="modal fade" id="BJCPCompIDModal" tabindex="-1" role="dialog" aria-labelledby="BJCPCompIDModalLabel">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header bcoem-admin-modal">
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                        <h4 class="modal-title" id="BJCPCompIDModalLabel">BJCP Competition ID Not Found</h4>
+                                    </div>
+                                    <div class="modal-body">
+                                        <p><strong>An XML Report cannot be generated at this time</strong> - a BJCP Competition ID has not been entered via the competition info screen.</p>
+                                        <p>You should have received a competition ID from the BJCP when you <a href="http://bjcp.org/apps/comp_reg/comp_reg.php" target="_blank">registered your competition</a>. If so, <a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=contest_info">edit your competition info</a> and enter it in the appropriate field. The BJCP will <em>not</em> accept an XML competition report without a competition ID.</p>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div><!-- ./modal -->
+                        
+                        <?php } ?>
+                        
+                     	<?php if ($totalRows_tables > 0) { ?>
 						<div class="row">
 							<div class="col col-lg-4 col-md-4 col-sm-4 col-xs-4">
 								<strong>Award Labels</strong>

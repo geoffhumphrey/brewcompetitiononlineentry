@@ -44,13 +44,13 @@ Declare all variables empty at the top of the script. Add on later...
 
  * ---------------- END Rebuild Info --------------------- */
 
-
+$display_bos_style_type = FALSE;
 
 require(DB.'winners.db.php');
 
 	// Display BOS winners for each applicable style type
-	do { 
-		$a[] = $row_style_types['id']; } while ($row_style_types = mysqli_fetch_assoc($style_types));
+	do { $a[] = $row_style_types['id']; } while ($row_style_types = mysqli_fetch_assoc($style_types));
+	
 		sort($a);
 		
 		foreach ($a as $type) {
@@ -58,6 +58,8 @@ require(DB.'winners.db.php');
 			include(DB.'output_results_download_bos.db.php');
 			
 			if ($totalRows_bos > 0) { 
+			
+				$display_bos_style_type = TRUE;
 				
 				$header1_1 = "";
 				$table_head1 = "";
@@ -107,14 +109,18 @@ require(DB.'winners.db.php');
 					
 				} while ($row_bos = mysqli_fetch_assoc($bos));
 			
-	$random = "";	 
-	$random = random_generator(7,2);
+				$random = "";	 
+				$random = random_generator(7,2);
+	
+
 
 // --------------------------------------------------------------
 // Display
 // --------------------------------------------------------------
 	
-echo $header1_1; ?>
+echo $header1_1; 
+
+?>
 <script type="text/javascript" language="javascript">
  $(document).ready(function() {
 	$('#sortable<?php echo $random; ?>').dataTable( {
@@ -151,6 +157,8 @@ if ($totalRows_sbi > 0) {
 	do { 
 		include(DB.'output_results_download_sbd.db.php');
 			if ($totalRows_sbd > 0) {
+				
+				$display_bos_style_type = TRUE;
 				
 				$header2_1 = "";
 				$table_head2 = "";
@@ -260,7 +268,9 @@ echo $header2_1;
 </table>
 <?php }
 	} while ($row_sbi = mysqli_fetch_assoc($sbi));
-} 
+}
+
+if (!$display_bos_style_type) echo "<p>".$winners_text_001."</p>";
 ?>
 
 

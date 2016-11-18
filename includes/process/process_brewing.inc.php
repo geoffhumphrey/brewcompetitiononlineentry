@@ -411,17 +411,15 @@ if ((isset($_SESSION['loginUsername'])) && (isset($_SESSION['userLevel']))) {
 			
 			$insertSQL .= GetSQLValueString($brewJudgingNumber,"text").", ";
 			$insertSQL .= "NOW( ), ";
-			$insertSQL .= GetSQLValueString($_POST['brewConfirmed'],"text").", ";
+			if ($_POST['brewStyle'] == "0-A") $insertSQL .= GetSQLValueString("0","text").", ";
+			else $insertSQL .= GetSQLValueString($_POST['brewConfirmed'],"text").", ";
 			$insertSQL .= GetSQLValueString($brewPaid,"text").", ";
 			$insertSQL .= GetSQLValueString("0","text");
 	
 			$insertSQL .= ")";
-		
+			
 		mysqli_real_escape_string($connection,$insertSQL);
 		$result = mysqli_query($connection,$insertSQL) or die (mysqli_error($connection));
-		
-		if ($section == "admin") $insertGoTo = $base_url."index.php?section=admin&go=entries&msg=1";
-		else $insertGoTo = $base_url."index.php?section=list&msg=1"; 
 		
 		if ($id == "default") {
 			
@@ -429,7 +427,23 @@ if ((isset($_SESSION['loginUsername'])) && (isset($_SESSION['userLevel']))) {
 			$brew_id = mysqli_query($connection,$query_brew_id) or die (mysqli_error($connection));
 			$row_brew_id = mysqli_fetch_assoc($brew_id);
 			$id = $row_brew_id['id'];
+			
 		}
+		
+		if ($section == "admin") {
+			
+			if ($_POST['brewStyle'] == "0-A") $insertGoTo = $base_url."index.php?section=brew&go=entries&action=edit&filter=".$brewBrewerID."&id=".$id."&view=0-A&msg=4";
+			else $insertGoTo = $base_url."index.php?section=admin&go=entries&msg=1";
+			
+		} 
+		
+		elseif (($section != "admin") && ($_POST['brewStyle'] == "0-A")) {
+			
+			$insertGoTo = $base_url."index.php?section=brew&action=edit&id=".$id."&view=0-A&msg=4";
+			
+		}
+		
+		else $insertGoTo = $base_url."index.php?section=list&msg=1"; 
 		  
 		// Check if entry requires special ingredients or a classic style
 		if (check_special_ingredients($styleBreak,$_SESSION['prefsStyleSet'])) {
@@ -542,6 +556,7 @@ if ((isset($_SESSION['loginUsername'])) && (isset($_SESSION['userLevel']))) {
 		
 		//echo $styleTrim."<br>";
 		//echo $brewJudgingNumber."<br>";
+		//echo $_POST['brewStyle']."<br>";
 		//echo $insertSQL."<br>";
 		//echo $insertGoTo;
 		//exit;

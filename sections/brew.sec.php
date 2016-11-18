@@ -302,7 +302,9 @@ $(document).ready(function()
         <label for="brewStyle" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label"><?php echo $style_set." ".$label_style; ?></label>
         <div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
         <!-- Input Here -->
-        <select class="selectpicker" name="brewStyle" id="type" data-live-search="true" data-size="10" data-width="auto">
+        <select class="selectpicker" name="brewStyle" id="type" data-live-search="true" data-size="10" data-width="auto" required>
+			
+			<option value="0-A" <?php if (($action == "add") || (($action == "edit") && ($view == "00-A"))) echo "selected"; ?>>Choose a Style</option>
             <?php
 				// Build style drop-down
 				do {

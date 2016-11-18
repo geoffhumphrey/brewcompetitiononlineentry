@@ -316,7 +316,7 @@ function judge_points($uid,$bos) {
 	require(INCLUDES.'db_tables.inc.php');
 	require(DB.'judging_locations.db.php');
 	
-	// Judges earn 0.5 points per session
+	// Judges earn a 0.5 points per session
 	// *minimum* of 1.0 points per competition
 	// *maximum* of 1.5 points per day
 	
@@ -324,6 +324,7 @@ function judge_points($uid,$bos) {
 	$sessions = number_format(total_sessions(),1);
 	
 	do { $a[] = $row_judging['id']; } while ($row_judging = mysqli_fetch_assoc($judging));
+	
 	foreach (array_unique($a) as $location) {
 		$query_assignments = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE bid='%s' AND assignLocation='%s' AND assignment='J'", $prefix."judging_assignments", $uid, $location);
 		$assignments = mysqli_query($connection,$query_assignments) or die (mysqli_error($connection));
@@ -336,10 +337,17 @@ function judge_points($uid,$bos) {
 	$points = array_sum($b);
 	$max_comp_points = ($sessions * 0.5);
 		
-	// Cannot exceed more than 1.5 points per day
-	if ($points > $days) $points = $days; else $points = $points;
-	if ($points > $max_comp_points) $points = $max_comp_points; else $points = $points;
-	if ($points < 1) $points = 1.0; else $points = $points;
+	// Cannot exceed more than 1.5 points per *day*
+	if ($points > ($days * 1.5)) $points = ($days * 1.5);
+	else $points = $points;
+	
+	// Cannot exceed the maximum amount of points possible for the entire competition
+	if ($points > $max_comp_points) $points = $max_comp_points; 
+	else $points = $points;
+	
+	// If points are below the minimum, award minimum
+	if ($points < 1) $points = 1.0; 
+	else $points = $points;
 	
 	return number_format($points,1);
 	

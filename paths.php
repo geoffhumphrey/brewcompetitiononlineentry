@@ -32,10 +32,10 @@ define('LANG',ROOT.'lang'.DIRECTORY_SEPARATOR);
 // --------------------------------------------------------
 // Global Definitions
 // --------------------------------------------------------
-define('HOSTED', FALSE); 		// Top-level constant for use in a hosted environment and shared db tables.
-define('MAINT', FALSE); 			// Top-level constant for maintenance mode. Set to TRUE to perform code updates.
-define('NHC', FALSE); 			// Top-level constant for specialized NHC functionality. Set to FALSE for production.
-define('TESTING', FALSE); 		// Top-level constant for testing functionality. Set to FALSE for production.
+define('HOSTED', FALSE);
+define('MAINT', FALSE);
+define('NHC', FALSE);
+define('TESTING', FALSE);
 define('SINGLE', FALSE);
 
 // --------------------------------------------------------

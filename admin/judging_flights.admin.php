@@ -188,7 +188,6 @@ echo "<p><strong>Table Location:</strong> ".table_location($row_tables_edit['id'
         <td><?php if ($action == "edit") echo $flight_number[3]; ?></td>
         <td><?php echo str_replace("^","; ",$row_entries['brewInfo']); ?></td>
 	</tr>
-    <?php if ($color == $color1) { $color = $color2; } else { $color = $color1; } ?>
     <?php } 
 	while ($row_entries = mysqli_fetch_assoc($entries));
 	} // end foreach ?>

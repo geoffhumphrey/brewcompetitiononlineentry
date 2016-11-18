@@ -36,11 +36,7 @@ if (($section != "update") && (empty($_SESSION['dataCheck'.$prefix_session]))) {
 if (empty($_SESSION['contest_info_general'.$prefix_session])) {
 	
 	$query_contest_info = sprintf("SELECT * FROM %s", $prefix."contest_info");
-	
-	// if SSO, get information from user choice on login screen
 	if (SINGLE) $query_contest_info .= sprintf(" WHERE id='%s'", $_POST['comp_id']);
-	
-	// if not, use 1
 	else $query_contest_info .= " WHERE id='1'";
 	$contest_info = mysqli_query($connection,$query_contest_info) or die (mysqli_error($connection));
 	$row_contest_info = mysqli_fetch_assoc($contest_info); 
@@ -79,7 +75,7 @@ if (empty($_SESSION['contest_info_general'.$prefix_session])) {
 // Get the general info for the competition from the DB and store in cookies
 if (empty($_SESSION['prefs'.$prefix_session])) {	
 
-	if (SINGLE) $query_prefs = sprintf("SELECT * FROM %s WHERE id='%s'", $prefix."preferences",$_SESSION['comp_id']);
+	if (SINGLE) $query_prefs = sprintf("SELECT * FROM %s WHERE comp_id='%s'", $prefix."preferences",$_SESSION['comp_id']);
 	else $query_prefs = sprintf("SELECT * FROM %s WHERE id='1'", $prefix."preferences");
 	$prefs = mysqli_query($connection,$query_prefs) or die (mysqli_error($connection));
 	$row_prefs = mysqli_fetch_assoc($prefs);

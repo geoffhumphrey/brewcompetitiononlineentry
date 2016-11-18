@@ -1,9 +1,11 @@
 <?php
-$query_substyle_count = sprintf("SELECT COUNT(*) AS 'count' FROM %s WHERE brewCategorySort='%s' AND brewSubCategory='%s' AND brewPaid='1' AND brewReceived='1'",$prefix."brewing",$substyle[0],$substyle[1]);
+if (SINGLE) $query_substyle_count = sprintf("SELECT COUNT(*) AS 'count' FROM %s WHERE brewCategorySort='%s' AND brewSubCategory='%s' AND brewPaid='1' AND brewReceived='1' AND comp_id='%s'",$prefix."brewing",$substyle[0],$substyle[1], $_SESSION['comp_id']);
+else $query_substyle_count = sprintf("SELECT COUNT(*) AS 'count' FROM %s WHERE brewCategorySort='%s' AND brewSubCategory='%s' AND brewPaid='1' AND brewReceived='1'",$prefix."brewing",$substyle[0],$substyle[1]);
 $substyle_count = mysqli_query($connection,$query_substyle_count) or die (mysqli_error($connection));
 $row_substyle_count = mysqli_fetch_assoc($substyle_count); 
 
-$query_substyle_count_logged = sprintf("SELECT COUNT(*) AS 'count' FROM %s WHERE brewCategorySort='%s' AND brewSubCategory='%s'",$prefix."brewing",$substyle[0],$substyle[1]);
+if (SINGLE) $query_substyle_count_logged = sprintf("SELECT COUNT(*) AS 'count' FROM %s WHERE brewCategorySort='%s' AND brewSubCategory='%s' AND comp_id='%s'",$prefix."brewing",$substyle[0],$substyle[1], $_SESSION['comp_id']);
+else $query_substyle_count_logged = sprintf("SELECT COUNT(*) AS 'count' FROM %s WHERE brewCategorySort='%s' AND brewSubCategory='%s'",$prefix."brewing",$substyle[0],$substyle[1]);
 $substyle_count_logged = mysqli_query($connection,$query_substyle_count_logged) or die (mysqli_error($connection));
 $row_substyle_count_logged = mysqli_fetch_assoc($substyle_count_logged);
 
@@ -86,6 +88,6 @@ if ($other_count) {
 		$style_other_count[] .= $row_substyle_count['count'];
 		$style_other_count_logged[] .= $row_substyle_count_logged['count']; 
 	}
-	//$style_type_array[] = $style_type;
+	
 }
 ?>

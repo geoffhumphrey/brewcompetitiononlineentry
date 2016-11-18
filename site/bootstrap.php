@@ -91,46 +91,55 @@ if ($setup_success) {
 	// ---------------------------- Load Required Scripts ----------------------------
 	
 	if (SINGLE) require(SSO.'sso.inc.php');
-	
-	else {
-
-		require(INCLUDES.'authentication_nav.inc.php'); 
-		require(LIB.'common.lib.php');
-		require(INCLUDES.'db_tables.inc.php');
-		require(LIB.'help.lib.php');
-		require(DB.'common.db.php');
-		require(DB.'brewer.db.php');
-		require(DB.'entries.db.php');
-		require(INCLUDES.'constants.inc.php');
-		require(LANG.'language.lang.php');
-		require(INCLUDES.'headers.inc.php');
-		require(INCLUDES.'scrubber.inc.php');
-	
-	}
 		
+	require(INCLUDES.'authentication_nav.inc.php'); 
+	require(LIB.'common.lib.php');
+	require(INCLUDES.'db_tables.inc.php');
+	require(LIB.'help.lib.php');
+	require(DB.'common.db.php');
+	require(DB.'brewer.db.php');
+	require(DB.'entries.db.php');
+	require(INCLUDES.'constants.inc.php');
+	require(LANG.'language.lang.php');
+	require(INCLUDES.'headers.inc.php');
+	require(INCLUDES.'scrubber.inc.php');
+	
+
 	if ($_SESSION['prefsSEF'] == "Y") $sef = "true";
 	else $sef = "false";
 	
 	// ---------------------------- Data Integrity Checks ---------------------------- 
 	
-	// Perform data integrity check on users, brewer, and brewing tables at 24 hour intervals
+	// Perform data integrity check on users, brewer, and brewing tables at 24 hour intervals. Set alert flag.
 	if ((isset($_SESSION['dataCheck'.$prefix_session])) && (isset($_SESSION['prefsAutoPurge']))) {
 		if (($_SESSION['prefsAutoPurge'] == 1) && (!NHC) && ($today > ($_SESSION['dataCheck'.$prefix_session] + 86400))) data_integrity_check();
 	}
+	
+	$alert_flag_preferences = FALSE;
+	// Check if preferences DB table is empty or does not have a row with id of 1. If so, add row with id of 1 with default preferences. Set alert flag.
+	// Avoids breaking of UI
+	
+	$alert_flag_contest_info = FALSE;
+	// Check if contest_info DB table is empty or does not have a row with id of 1. If so, add row with id of 1 with dummy content. Set alert flag.
+	
+	$alert_flag_users = FALSE;
+	// Check if users DB table is empty. If so, add row with with dummy Top Level admin. Set alert flag.
 	
 	
 	/*
 	This was reported to cause a "redirect loop failure" - commenting out in lieu of another solution
 	See https://github.com/geoffhumphrey/brewcompetitiononlineentry/issues/674
-	May not be necessary as there is now a judging number check upon adding and editing entries
+	Is not be necessary as there is now a judging number check upon adding and editing entries
+	Therefore, deprecated. Code will be removed in a future release.
 	
 	// Check to see if all judging numbers have been generated. If not, generate.
-	// if ((!check_judging_numbers()) && (!NHC)) header("Location: includes/process.inc.php?action=generate_judging_numbers&go=hidden");
+	if ((!check_judging_numbers()) && (!NHC)) header("Location: includes/process.inc.php?action=generate_judging_numbers&go=hidden");
 	
 	// Check if judging flights are up-to-date
 	if (!check_judging_flights()) $check_judging_flights = TRUE;
 	else $check_judging_flights = FALSE;
 	$check_judging_flights = FALSE;
+	
 	*/
 	
 	
@@ -155,7 +164,9 @@ if ($setup_success) {
 	*/
 	
 	//  ---------------------------- Load Theme ---------------------------- 
-	$theme = $base_url."css/".$_SESSION['prefsTheme'].".min.css";
+	
+	if (empty($_SESSION['prefsTheme'])) $theme = $base_url."css/default.min.css";
+	else $theme = $base_url."css/".$_SESSION['prefsTheme'].".min.css";
 	
 } // end if ($setup_success);
 ?>

@@ -79,7 +79,7 @@ if ($msg != "default") { ?>
     <?php if (($totalRows_dropoff == "0") && ($go == "default")) { ?>
     	<div class="alert alert-danger alert-dismissible hidden-print fade in" role="alert">
         	<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        	<span class="fa fa-lg fa-exclamation-circle"></span> <?php echo $alert_text_003; ?>
+        	<span class="fa fa-lg fa-exclamation-circle"></span> <?php echo $alert_text_005; ?>
         </div>
     <?php } ?>
     
