@@ -117,8 +117,8 @@ $output_datatables_aoColumns = "";
 if ($action == "print") {
 	
 	$output_datatables_aaSorting .= "";
-	if ($psort == "judge_rank") $output_datatables_aaSorting .= "[6,'desc']";
-	if ($psort == "judge_id")  $output_datatables_aaSorting .= "[5,'asc']";
+	if ($psort == "judge_rank") $output_datatables_aaSorting .= "[5,'desc']";
+	if ($psort == "judge_id")  $output_datatables_aaSorting .= "[4,'asc']";
 	if ($psort == "club") $output_datatables_aaSorting .= "[1,'asc']";
 	if (($psort == "default") || ($psort == "brewer_name")) $output_datatables_aaSorting .= "[0,'asc']";
 	
@@ -127,11 +127,11 @@ if ($action == "print") {
 	}
 	
 	if ($filter == "judges") 	{ 
-		$output_datatables_aoColumns .= "null, { \"asSorting\": [  ] }, null, null, null, null, null, null { \"asSorting\": [  ] }";
+		$output_datatables_aoColumns .= "{ \"asSorting\": [  ] }, { \"asSorting\": [  ] }, { \"asSorting\": [  ] }, { \"asSorting\": [  ] }, { \"asSorting\": [  ] }, { \"asSorting\": [  ] }, { \"asSorting\": [  ] }, { \"asSorting\": [  ] }, { \"asSorting\": [  ] }";
 	}
 	
 	if ($filter == "stewards") 	{
-		$output_datatables_aoColumns .= "null, { \"asSorting\": [  ] }, null, null, null, null, null";
+		$output_datatables_aoColumns .= "{ \"asSorting\": [  ] }, { \"asSorting\": [  ] }, { \"asSorting\": [  ] }, { \"asSorting\": [  ] }, { \"asSorting\": [  ] }, null, null";
 	}
 	
 
@@ -175,7 +175,7 @@ if ($filter == "with_entries") {
 else {
 	$output_datatables_head .= "<tr>";
 	$output_datatables_head .= "<th>Name</th>";
-	if ($action == "print") $output_datatables_head .= "<th class=\"".$output_hide_print."\">Info</th>";
+	if ($action == "print") $output_datatables_head .= "<th>Info</th>";
 	$output_datatables_head .= "<th class=\"".$output_hide_print."\">";
 	if (($totalRows_judging > 0) && (($filter == "judges") || ($filter == "stewards"))) $output_datatables_head .= "Location(s) Available"; 
 	else $output_datatables_head .= "Club";
@@ -566,8 +566,8 @@ echo $output_user_question_modals;
             <li class="small"><a id="modal_window_link" href="<?php echo $base_url; ?>output/print.output.php?section=admin&amp;go=participants&amp;action=print&amp;view=default&amp;filter=with_entries">By Entrant Last Name</a><li>
             <?php } ?>
             <?php if ($filter == "judges") { ?>
-			<li class="small"><a id="modal_window_link" href="<?php echo $base_url; ?>output/print.output.php?section=admin&amp;go=participants&amp;action=print&amp;view=default&amp;psort=judge_id">By Judge ID</a><li>
-            <li class="small"><a id="modal_window_link" href="<?php echo $base_url; ?>output/print.output.php?section=admin&amp;go=participants&amp;action=print&amp;view=default&amp;psort=judge_rank">By Judge Rank</a><li>
+			<li class="small"><a id="modal_window_link" href="<?php echo $base_url; ?>output/print.output.php?section=admin&amp;go=participants&amp;filter=judges&amp;action=print&amp;view=default&amp;psort=judge_id">By Judge ID</a><li>
+            <li class="small"><a id="modal_window_link" href="<?php echo $base_url; ?>output/print.output.php?section=admin&amp;go=participants&amp;filter=judges&amp;action=print&amp;view=default&amp;psort=judge_rank">By Judge Rank</a><li>
             <?php } ?>
 		</ul>
 	</div><!-- ./button group -->
@@ -582,8 +582,8 @@ echo $output_user_question_modals;
 			<li class="small"><a id="modal_window_link" href="<?php echo $base_url; ?>output/print.output.php?section=admin&amp;go=participants&amp;action=print&amp;view=default&amp;dbTable=<?php echo $dbTable; ?>&amp;psort=brewer_name">By Last Name</a></li>
 			<li class="small"><a id="modal_window_link" href="<?php echo $base_url; ?>output/print.output.php?section=admin&amp;go=participants&amp;action=print&amp;view=default&amp;dbTable=<?php echo $dbTable; ?>&amp;psort=club">By Club</a><li>
             <?php if ($filter == "judges") { ?>
-			<li class="small"><a id="modal_window_link" href="<?php echo $base_url; ?>output/print.output.php?section=admin&amp;go=participants&amp;action=print&amp;view=default&amp;dbTable=<?php echo $dbTable; ?>&amp;psort=judge_id">By Judge ID</a><li>
-            <li class="small"><a id="modal_window_link" href="<?php echo $base_url; ?>output/print.output.php?section=admin&amp;go=participants&amp;action=print&amp;view=default&amp;dbTable=<?php echo $dbTable; ?>&amp;psort=judge_rank">By Judge Rank</a><li>
+			<li class="small"><a id="modal_window_link" href="<?php echo $base_url; ?>output/print.output.php?section=admin&amp;go=participants&amp;filter=judges&amp;action=print&amp;view=default&amp;dbTable=<?php echo $dbTable; ?>&amp;psort=judge_id">By Judge ID</a><li>
+            <li class="small"><a id="modal_window_link" href="<?php echo $base_url; ?>output/print.output.php?section=admin&amp;go=participant&amp;filter=judgess&amp;action=print&amp;view=default&amp;dbTable=<?php echo $dbTable; ?>&amp;psort=judge_rank">By Judge Rank</a><li>
             <?php } ?>
 		</ul>
 	</div><!-- ./button group -->

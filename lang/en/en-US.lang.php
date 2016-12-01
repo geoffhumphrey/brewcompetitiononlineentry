@@ -262,6 +262,7 @@ $label_account_registration = "Account Registration";
 $label_entry_registration = "Entry Registration";
 $label_entry_fees = "Entry Fees";
 $label_entry_limit = "Entry Limit";
+$label_entry_info = "Entry Info";
 $label_entry_per_entrant = "Per Entrant Limits";
 $label_categories_accepted = "Categories Accepted";
 $label_judging_categories = "Judging Categories";
@@ -660,9 +661,7 @@ if (($section == "brewer") || ($section == "register") || ($section == "step2") 
 	$brewer_text_016 = "My participation in this judging is entirely voluntary. I know that participation in this judging involves consumption of alcoholic beverages and that this consumption may affect my perceptions and reactions.";
 	$brewer_text_017 = "Click or tap the button above to expand the preferred styles to judge list.";
 	$brewer_text_018 = "By checking this box, I am effectively signing a legal document wherein I accept responsibility for my conduct, behavior and actions and completely absolve the competition and its organizers, individually or collectively, of responsibility for my conduct, behavior and actions.";
-	
-	
-	
+
 }
 
 // -------------------- Contact --------------------
@@ -702,6 +701,8 @@ if ($section == "default") {
 	$default_page_text_019 = "Download the Best of Show winners in HTML format.";
 	$default_page_text_020 = "Download the winning entries in PDF format.";
 	$default_page_text_021 = "Download the winning entries in HTML format.";
+	$default_page_text_022 = "Thank you for your interest in the"; 
+	$default_page_text_023 = "organized by";
 	
 	$reg_open_text_000 = "Judge and Steward Registration is";
 	$reg_open_text_001 = "Open";
@@ -785,7 +786,8 @@ if ($section == "entry") {
 	$entry_info_text_042 = "If you live in the United States, please note that it is <strong>illegal</strong> to ship your entries via the United States Postal Service (USPS). Private shipping companies have the right to refuse your shipment if they are informed that the package contains glass and/or alcoholic beverages. Be aware that entries mailed internationally are often required by customs to have proper documentation. These entries might be opened and/or returned to the shipper by customs officials at their discretion. It is solely your responsibility to follow all applicable laws and regulations.";
 	$entry_info_text_043 = "Entry bottles accepted at our drop-off locations from";
 	$entry_info_text_044 = "Map to";
-	$entry_info_text_045 = "";
+	$entry_info_text_045 = "Click/Tap for Required Entry Info";
+	$entry_info_text_046 = "If a sub-category's name is hyperlinked, it has specific entry requirements. Click or tap on the name to view the sub-category's requirements..";
 	
 }
 
@@ -978,6 +980,7 @@ $sidebar_text_021 = "in this competition";
 $sidebar_text_022 = "Entry bottles accepted at";
 $sidebar_text_023 = "the shipping location";
 $sidebar_text_024 = "Competition judging dates are yet to be determined. Please check back later.";
+$sidebar_text_025 = "have been added to the system as of";
 	
 
 // -------------------- Sponsors --------------------

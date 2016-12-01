@@ -265,7 +265,7 @@ $(document).ready(function()
     </div><!-- ./Form Group -->
     <!-- Enter Co-Brewer(s) Name(s) -->
 	<div class="form-group"><!-- Form Group NOT REQUIRED Text Input -->
-        <label for="brewCoBrewer" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label"><?php $label_cobrewer; ?></label>
+        <label for="brewCoBrewer" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label"><?php echo $label_cobrewer; ?></label>
         <div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
         	<!-- Input Here -->
             <input class="form-control" name="brewCoBrewer" type="text" value="<?php if ($disable_fields) echo "Not Available"; if ($action == "edit") echo $row_log['brewCoBrewer']; ?>" placeholder="" <?php if ($disable_fields) echo "disabled";  ?>>

@@ -948,6 +948,19 @@
 								</ul>
 							</div>
 						</div><!-- ./row -->
+                        <!--
+                        <div class="row">
+							<div class="col col-lg-4 col-md-4 col-sm-4 col-xs-4">
+								<strong>Medal Labels (Round)</strong>
+							</div>
+							<div class="col col-lg-8 col-md-8 col-sm-8 col-xs-8">
+								<ul class="list-inline">
+									<li><a href="<?php echo $base_url; ?>output/labels.output.php?section=admin&amp;go=judging_scores&amp;action=awards&amp;filter=round&amp;psort=OL5375" data-toggle="tooltip" data-placement="top" title="Online Labels OL5375">Letter</a> - <a href="https://www.onlinelabels.com/OL5375.htm" target="_blank">OL5375</a></li>
+									<li><a href="<?php echo $base_url; ?>output/labels.output.php?section=admin&amp;go=judging_scores&amp;action=awards&amp;filter=round&amp;psort=EU30095" data-toggle="tooltip" data-placement="top" title="Online Labels EU30095">A4</a> - <a href="https://uk.onlinelabels.com/EU30095.htm" target="_blank">EU30095</a></li>
+								</ul>
+							</div>
+						</div>
+                        -->
 						<?php } ?>
 						<div class="row">
 							<div class="col col-lg-4 col-md-4 col-sm-4 col-xs-4">

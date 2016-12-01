@@ -96,7 +96,7 @@ if ($section != "admin") {
 		
 	
 		if (!$logged_in) {	
-			// Online Registration Dates
+			// Account Registration Dates
 			$header1_100 .= "<div class=\"panel ".$reg_panel_display."\">";
 			$header1_100 .= "<div class=\"panel-heading\">";
 			$header1_100 .= sprintf("<h4 class=\"panel-title\">%s",$label_account_registration);
@@ -135,6 +135,13 @@ if ($section != "admin") {
 	$header1_200 .= "</h4>";
 	$header1_200 .= "</div>";
 	$page_info200 .= "<div class=\"panel-body\">";
+	
+	if ($entry_window_open == 1) {
+		$page_info200 .= "<p>";
+		$page_info200 .= sprintf("<strong class=\"text-success\">%s %s</strong> %s %s, %s.", $total_entries, strtolower($label_entries), $sidebar_text_025, $current_time, $current_date_display);
+		$page_info200 .= "</p>";
+	}
+	
 	if ((!$comp_entry_limit) && (!$comp_paid_entry_limit)) $page_info200 .= sprintf("%s %s through %s.", $sidebar_text_009, $entry_open_sidebar, $entry_closed_sidebar);
 	if (($comp_entry_limit) || ($comp_paid_entry_limit)) {
 		$page_info200 .= "<span class=\"text-danger\">";

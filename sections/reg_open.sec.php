@@ -73,6 +73,11 @@ if ($registration_open != 1) $page_info1 .= sprintf("<p>%s %s.</p>",$reg_open_te
 
 if ($entry_window_open == 1) {
 	$header1_2 .= sprintf("<h2>%s <span class='text-success'>%s</a></h2>",$reg_open_text_010,$reg_open_text_001); 
+	
+	$page_info2 .= "<p>";
+	$page_info2 .= sprintf("<strong class=\"text-success\">%s %s</strong> %s %s, %s.", $total_entries, strtolower($label_entries), $sidebar_text_025, $current_time, $current_date_display);
+	$page_info2 .= "</p>";
+	
 	$page_info2 .= "<p>";
 	$page_info2 .= sprintf("%s, ",$reg_open_text_011);
 	if (!isset($_SESSION['loginUsername'])) $page_info2 .= sprintf("<a href=\"%s\">%s</a> or <a href=\"%s\">%s</a> %s",build_public_url("register","default","default","default",$sef,$base_url),$reg_open_text_012,build_public_url("login","default","default","default",$sef,$base_url),strtolower($label_log_in),$reg_open_text_013);

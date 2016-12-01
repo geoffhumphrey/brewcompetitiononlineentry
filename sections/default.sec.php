@@ -84,7 +84,7 @@ else {
 	
 	if ($logged_in) $primary_page_info .= sprintf("<p class=\"lead\">%s %s! <small><a href=\"%s\" data-toggle=\"tooltip\" title=\"%s\">%s</a></small></p>",$default_page_text_006,$_SESSION['brewerFirstName'],build_public_url("list","default","default","default",$sef,$base_url),$default_page_text_007,$default_page_text_008);
 	$primary_page_info .= "<p class='lead'>";
-	$primary_page_info .= sprintf("Thank you for your interest in the %s organized by ",$_SESSION['contestName']);
+	$primary_page_info .= sprintf("%s %s %s ",$default_page_text_022, $_SESSION['contestName'], $default_page_text_023);
 	if ($_SESSION['contestHostWebsite'] != "") $primary_page_info .= sprintf("<a href='%s' target='_blank'>%s</a>",$_SESSION['contestHostWebsite'],$_SESSION['contestHost']);
 	else $primary_page_info .= $_SESSION['contestHost'];
 	if (!empty($_SESSION['contestHostLocation'])) $primary_page_info .= sprintf(", %s",$_SESSION['contestHostLocation']);
@@ -113,7 +113,7 @@ else {
 	}
 	
 	if (($_SESSION['prefsSponsors'] == "Y") && ($totalRows_sponsors > 0)) {
-		$header1_30 = "<h1>Sponsors</h1>";
+		$header1_30 = "<h1>".$label_sponsors."</h1>";
 		 $page_info30 .= sprintf("<p>%s %s ",$_SESSION['contestHost'],$default_page_text_016);
 		if ($_SESSION['prefsSponsorLogos'] == "Y") $page_info30 .= sprintf("<a href='%s'>%s</a>",build_public_url("sponsors","default","default","default",$sef,$base_url),strtolower($label_sponsors)); else $page_info20 .= "sponsors";
         $page_info30 .= sprintf(" %s %s.",$default_page_text_017,$_SESSION['contestName']); 

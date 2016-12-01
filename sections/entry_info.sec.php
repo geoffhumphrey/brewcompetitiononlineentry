@@ -82,7 +82,7 @@ $header1_15 = "";
 $page_info15 = "";
 $header1_16 = "";
 $page_info16 = "";
-
+$style_info_modals = "";
 
 // Registration Window
 if (!$logged_in) {
@@ -179,7 +179,7 @@ else {
 // Categories Accepted
 $header1_8 .= "";
 $page_info8 .= "";
-
+$page_info8 .= sprintf("<p>%s</p>",$entry_info_text_046);
 if ($entry_window_open < 2) $header1_8 .= sprintf("<a name=\"categories\"></a><h2>%s %s</h2>",str_replace("2"," 2",$row_styles['brewStyleVersion']),$label_categories_accepted);
 else $header1_8 .= sprintf("<a name=\"categories\"></a><h2>%s %s</h2>",str_replace("2"," 2",$row_styles['brewStyleVersion']),$label_judging_categories);
 $page_info8 .= "<table class=\"table table-striped table-bordered table-responsive\">";
@@ -193,10 +193,49 @@ do {
 	if (($styles_endRow == 0) && ($styles_hloopRow1++ != 0)) $page_info8 .= "<tr>";
 	
 	$page_info8 .= "<td width=\"33%\">";
-	$page_info8 .= ltrim($row_styles['brewStyleGroup'], "0").$row_styles['brewStyleNum']." ".$row_styles['brewStyle']; 
-	if ($row_styles['brewStyleOwn'] == "custom") $page_info8 .= " (Custom Style)";
-	$page_info8 .= "</td>";
 	
+	
+	
+	if (!empty($row_styles['brewStyleEntry'])) {
+		
+		$page_info8 .= "<a href=\"#\" data-toggle=\"modal\" data-target=\"#custom-modal-".ltrim($row_styles['brewStyleGroup'], "0").$row_styles['brewStyleNum']."\" title=\"".$entry_info_text_045."\">".ltrim($row_styles['brewStyleGroup'], "0").$row_styles['brewStyleNum']." ".$row_styles['brewStyle']."</a>"; 
+			
+		$style_info_modal_body = "";
+		
+		$brewStyleInfo = str_replace("<p>","",$row_styles['brewStyleInfo']);
+		$brewStyleInfo = str_replace("</p>","",$brewStyleInfo);
+		
+		$brewStyleEntry = str_replace("<p>","",$row_styles['brewStyleEntry']);
+		$brewStyleEntry = str_replace("</p>","",$brewStyleEntry);
+		
+		
+		if (!empty($row_styles['brewStyleInfo'])) $style_info_modal_body .= "<p>".$brewStyleInfo."</p>";
+		if (!empty($row_styles['brewStyleEntry'])) $style_info_modal_body .= "<p><strong class=\"text-primary\">".$label_entry_info.":</strong> ".$brewStyleEntry."</p>";
+		
+		$style_info_modals .= "<div class=\"modal fade\" id=\"custom-modal-".ltrim($row_styles['brewStyleGroup'], "0").$row_styles['brewStyleNum']."\" tabindex=\"-1\" role=\"dialog\" aria-labelledby=\"assignment-modal-label-".$row_styles['brewStyleNum']."\">\n";
+		$style_info_modals .= "\t<div class=\"modal-dialog modal-lg\" role=\"document\">\n";
+		$style_info_modals .= "\t\t<div class=\"modal-content\">\n";
+		$style_info_modals .= "\t\t\t<div class=\"modal-header bcoem-admin-modal\">\n";
+		$style_info_modals .= "\t\t\t\t<button type=\"button\" class=\"close\" data-dismiss=\"modal\" aria-label=\"Close\"><span aria-hidden=\"true\">&times;</span></button>\n";
+		$style_info_modals .= "\t\t\t\t<h4 class=\"modal-title\" id=\"assignment-modal-label-".ltrim($row_styles['brewStyleGroup'], "0").$row_styles['brewStyleNum']."\">Info for ".$row_styles['brewStyle']."</h4>\n";
+		$style_info_modals .= "\t\t\t</div><!-- ./modal-header -->\n";
+		$style_info_modals .= "\t\t\t<div class=\"modal-body\">\n";
+		$style_info_modals .= "\t\t\t\t".$style_info_modal_body."\n";
+		$style_info_modals .= "\t\t\t</div><!-- ./modal-body -->\n";
+		$style_info_modals .= "\t\t\t<div class=\"modal-footer\">\n";
+		$style_info_modals .= "\t\t\t\t<button type=\"button\" class=\"btn btn-danger\" data-dismiss=\"modal\">Close</button>\n";
+		$style_info_modals .= "\t\t\t</div><!-- ./modal-footer -->\n";
+		$style_info_modals .= "\t\t</div><!-- ./modal-content -->\n";
+		$style_info_modals .= "\t</div><!-- ./modal-dialog -->\n";
+		$style_info_modals .= "</div><!-- ./modal -->\n";
+		
+	}
+	
+	else $page_info8 .= ltrim($row_styles['brewStyleGroup'], "0").$row_styles['brewStyleNum']." ".$row_styles['brewStyle'];
+	
+	if ($row_styles['brewStyleOwn'] == "custom") $page_info8 .= " (Custom Style)";	
+	
+	$page_info8 .= "</td>";
 	$styles_endRow++;
 	if ($styles_endRow >= $styles_columns) { $styles_endRow = 0; }
 		
@@ -351,5 +390,7 @@ echo $page_info14;
 // Display Circuit Qualification
 echo $header1_15;
 echo $page_info15;
+
+echo $style_info_modals;
 
 ?>

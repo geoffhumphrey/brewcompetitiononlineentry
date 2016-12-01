@@ -28,10 +28,12 @@ do {
 } while ($row_bos = mysqli_fetch_assoc($bos));
 
 if ($_SESSION['prefsWinnerMethod'] == "1") { // Output by Category
+	
 	$query_styles = sprintf("SELECT brewStyleGroup FROM %s WHERE brewStyleActive='Y' AND (brewStyleVersion='%s' OR brewStyleOwn='custom') ORDER BY brewStyleGroup ASC", $styles_db_table, $_SESSION['prefsStyleSet']);
 	$styles = mysqli_query($connection,$query_styles) or die (mysqli_error($connection));
 	$row_styles = mysqli_fetch_assoc($styles);
 	$totalRows_styles = mysqli_num_rows($styles);
+	
 	do { $style[] = $row_styles['brewStyleGroup']; } while ($row_styles = mysqli_fetch_assoc($styles));
 	
 
@@ -53,6 +55,7 @@ if ($_SESSION['prefsWinnerMethod'] == "1") { // Output by Category
 			$totalRows_scores = mysqli_num_rows($scores);
 			
 			do { 
+			
 			$style = $row_scores['brewCategory'].$row_scores['brewSubCategory'];
 					
 				$text = sprintf("\n%s%s\n%s\n%s",
@@ -63,7 +66,9 @@ if ($_SESSION['prefsWinnerMethod'] == "1") { // Output by Category
 				);
 				$text = iconv('UTF-8', 'windows-1252', $text);
 				$pdf->Add_Label($text);
+				
 			} while ($row_scores = mysqli_fetch_assoc($scores)); 
+			
 		}
 	}
 }
@@ -95,20 +100,39 @@ elseif ($_SESSION['prefsWinnerMethod'] == "2") { // Output by sub-category
 			$totalRows_scores = mysqli_num_rows($scores);
 					
 			do { 
-				$text = sprintf("\n%s%s\n%s\n%s",
-				display_place($row_scores['scorePlace'],1)." - ",
-				$row_scores['brewCategory'].$row_scores['brewSubCategory'].": ".$row_scores['brewStyle'],
-				strtr($row_scores['brewerFirstName'],$html_remove)." ".strtr($row_scores['brewerLastName'],$html_remove), 
-				strtr($row_scores['brewName'],$html_remove)
-				);
+				
+				if ($filter == "round") {
+				
+					$text = sprintf("\n%s%s\n%s\n%s",
+					display_place($row_scores['scorePlace'],1)." - ",
+					$row_scores['brewCategory'].$row_scores['brewSubCategory'].": ".$row_scores['brewStyle'],
+					strtr($row_scores['brewerFirstName'],$html_remove)." ".strtr($row_scores['brewerLastName'],$html_remove), 
+					strtr($row_scores['brewName'],$html_remove)
+					);
+				
+				}
+				
+				else {
+				
+					$text = sprintf("\n%s%s\n%s\n%s",
+					display_place($row_scores['scorePlace'],1)." - ",
+					$row_scores['brewCategory'].$row_scores['brewSubCategory'].": ".$row_scores['brewStyle'],
+					strtr($row_scores['brewerFirstName'],$html_remove)." ".strtr($row_scores['brewerLastName'],$html_remove), 
+					strtr($row_scores['brewName'],$html_remove)
+					);
+				
+				}
+				
 				$text = iconv('UTF-8', 'windows-1252', $text);
 				$pdf->Add_Label($text);
+				
 			} while ($row_scores = mysqli_fetch_assoc($scores)); 
 		}
 	}
 } // end elseif ($_SESSION['prefsWinnerMethod'] == "2")
 
 else { // Output by Table.
+	
 	do {
 	
 	$query_scores = sprintf("SELECT * FROM %s WHERE scoreTable='%s'", $judging_scores_db_table, $row_tables['id']);
@@ -120,14 +144,16 @@ else { // Output by Table.
 		do {
 			$query_entries = sprintf("SELECT id,brewBrewerFirstName,brewBrewerLastName,brewName,brewStyle,brewCategory,brewSubCategory FROM $brewing_db_table WHERE id='%s'", $row_scores['eid']);
 			$entries = mysqli_query($connection,$query_entries) or die (mysqli_error($connection));
-			$row_entries = mysqli_fetch_assoc($entries);
+			$row_entries = mysqli_fetch_assoc($entries);				
 			
 			$text = sprintf("\n%s%s\n%s\n%s",
 			display_place($row_scores['scorePlace'],1)." - ",
 			$row_tables['tableName'],
 			strtr($row_entries['brewBrewerFirstName'],$html_remove)." ".strtr($row_entries['brewBrewerLastName'],$html_remove), 
 			strtr($row_entries['brewName'],$html_remove)
-			);
+			);		
+			if (($filter == "round") && ($_SESSION['contestAwardsLocTime'] != "")) $text .= sprintf("\n%s",getTimeZoneDateTime($_SESSION['prefsTimeZone'], $_SESSION['contestAwardsLocTime'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "short", "date-no-gmt"));
+			
 			$text = iconv('UTF-8', 'windows-1252', $text);
 			$pdf->Add_Label($text);
 			

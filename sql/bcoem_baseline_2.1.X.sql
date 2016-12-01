@@ -5,7 +5,7 @@
 --
 -- ------------------------------------------------------------------------------------
 -- 
--- UPDATED 09.14.2016 for Version 2.1.7.0
+-- UPDATED 09.14.2016 for Version 2.1.8.0
 --
 -- ------------------------------------------------------------------------------------
 --
@@ -782,9 +782,8 @@ CREATE TABLE IF NOT EXISTS `baseline_preferences` (
 -- Dumping data for table `baseline_preferences`
 --
 
-INSERT INTO `baseline_preferences` (`id`, `prefsTemp`, `prefsWeight1`, `prefsWeight2`, `prefsLiquid1`, `prefsLiquid2`, `prefsPaypal`, `prefsPaypalAccount`, `prefsCurrency`, `prefsCash`, `prefsCheck`, `prefsCheckPayee`, `prefsTransFee`, `prefsGoogle`, `prefsGoogleAccount`, `prefsSponsors`, `prefsSponsorLogos`, `prefsSponsorLogoSize`, `prefsCompLogoSize`, `prefsDisplayWinners`, `prefsWinnerDelay`, `prefsWinnerMethod`, `prefsDisplaySpecial`, `prefsBOSMead`, `prefsBOSCider`, `prefsEntryForm`, `prefsRecordLimit`, `prefsRecordPaging`, `prefsTheme`, `prefsDateFormat`, `prefsContact`, `prefsTimeZone`, `prefsEntryLimit`, `prefsTimeFormat`, `prefsUserEntryLimit`, `prefsUserSubCatLimit`, `prefsUSCLEx`, `prefsUSCLExLimit`, `prefsPayToPrint`, `prefsHideRecipe`, `prefsUseMods`, `prefsSEF`, `prefsSpecialCharLimit`, `prefsStyleSet`, `prefsAutoPurge`, `prefsEntryLimitPaid`, `prefsEmailRegConfirm`, `prefsLanguage`, `prefsSpecific`, `prefsShipping`, `prefsDropOff`) VALUES
-(1, 'Fahrenheit', 'ounces', 'pounds', 'ounces', 'gallons', 'Y', '', '$', 'N', 'N', '', 'N', 'N', NULL, 'Y', 'Y', NULL, NULL, 'Y', 1, 0, NULL, 'N', 'N', 'B', 9999, 100, 'default', '1', 'Y', '-7.000', 400, 0, '10', '1', NULL, NULL, 'N', 'Y', 'N', 'Y', 150, 'BJCP2015', 1, NULL, NULL, 'English', 1, 1, 1);
-
+INSERT INTO `baseline_preferences` (`id`, `prefsTemp`, `prefsWeight1`, `prefsWeight2`, `prefsLiquid1`, `prefsLiquid2`, `prefsPaypal`, `prefsPaypalAccount`, `prefsCurrency`, `prefsCash`, `prefsCheck`, `prefsCheckPayee`, `prefsTransFee`, `prefsGoogle`, `prefsGoogleAccount`, `prefsSponsors`, `prefsSponsorLogos`, `prefsSponsorLogoSize`, `prefsCompLogoSize`, `prefsDisplayWinners`, `prefsWinnerDelay`, `prefsWinnerMethod`, `prefsDisplaySpecial`, `prefsBOSMead`, `prefsBOSCider`, `prefsEntryForm`, `prefsRecordLimit`, `prefsRecordPaging`, `prefsCompOrg`, `prefsTheme`, `prefsDateFormat`, `prefsContact`, `prefsTimeZone`, `prefsEntryLimit`, `prefsTimeFormat`, `prefsUserEntryLimit`, `prefsUserSubCatLimit`, `prefsUSCLEx`, `prefsUSCLExLimit`, `prefsPayToPrint`, `prefsHideRecipe`, `prefsUseMods`, `prefsSEF`, `prefsSpecialCharLimit`, `prefsStyleSet`, `prefsAutoPurge`, `prefsEntryLimitPaid`, `prefsEmailRegConfirm`, `prefsLanguage`, `prefsSpecific`, `prefsDropOff`, `prefsShipping`) VALUES
+(1, 'Fahrenheit', 'ounces', 'pounds', 'ounces', 'gallons', 'Y', 'user.baseline@brewcompetition.com', '$', 'N', 'N', NULL, 'Y', 'N', NULL, 'Y', 'Y', '250', '300', 'N', 8, 0, NULL, 'N', 'N', 'B', 9999, 150, NULL, 'default', '1', 'Y', '-7.000', NULL, 0, NULL, NULL, NULL, NULL, 'N', 'Y', 'N', 'N', 150, 'BJCP2015', 0, NULL, NULL, 'English', 1, 1, 1);
 
 -- --------------------------------------------------------
 
@@ -1163,7 +1162,7 @@ CREATE TABLE IF NOT EXISTS `baseline_system` (
 --
 
 INSERT INTO `baseline_system` (`id`, `version`, `version_date`, `data_check`, `setup`) VALUES
-(1, '2.1.7.0', '2016-09-14', '2016-09-14 00:00:01', 1);
+(1, '2.1.8.0', '2016-12-01', '2016-12-01 00:00:01', 1);
 
 -- --------------------------------------------------------
 
@@ -1186,4 +1185,28 @@ CREATE TABLE IF NOT EXISTS `baseline_users` (
 --
 
 INSERT INTO `baseline_users` (`id`, `user_name`, `password`, `userLevel`, `userQuestion`, `userQuestionAnswer`, `userCreated`) VALUES
-(1, 'user.baseline@brewcompetition.com', '$2a$08$2qgODWiSaYfLTVhu.2qVSer30aG7cLQZX0To01CqinyFyUbwdO64C', '0', 'What is your favorite all-time beer to drink?', 'pabst', '2016-08-31 13:00:01');
+(1, 'user.baseline@brewcompetition.com', '$2a$08$2qgODWiSaYfLTVhu.2qVSer30aG7cLQZX0To01CqinyFyUbwdO64C', '0', 'What is your favorite all-time beer to drink?', 'pabst', '2016-08-31 19:00:01');
+
+ALTER TABLE `baseline_archive`  ADD PRIMARY KEY (`id`);
+ALTER TABLE `baseline_brewer`  ADD PRIMARY KEY (`id`);
+ALTER TABLE `baseline_brewing`  ADD PRIMARY KEY (`id`);
+ALTER TABLE `baseline_contacts`  ADD PRIMARY KEY (`id`);
+ALTER TABLE `baseline_contest_info`  ADD PRIMARY KEY (`id`);
+ALTER TABLE `baseline_drop_off`  ADD PRIMARY KEY (`id`);
+ALTER TABLE `baseline_judging_assignments`  ADD PRIMARY KEY (`id`);
+ALTER TABLE `baseline_judging_flights`  ADD PRIMARY KEY (`id`);
+ALTER TABLE `baseline_judging_locations`  ADD PRIMARY KEY (`id`);
+ALTER TABLE `baseline_judging_preferences`  ADD PRIMARY KEY (`id`);
+ALTER TABLE `baseline_judging_scores`  ADD PRIMARY KEY (`id`);
+ALTER TABLE `baseline_judging_scores_bos`  ADD PRIMARY KEY (`id`);
+ALTER TABLE `baseline_judging_tables`  ADD PRIMARY KEY (`id`);
+ALTER TABLE `baseline_mods`  ADD PRIMARY KEY (`id`);
+ALTER TABLE `baseline_preferences`  ADD PRIMARY KEY (`id`);
+ALTER TABLE `baseline_special_best_data`  ADD PRIMARY KEY (`id`);
+ALTER TABLE `baseline_special_best_info`  ADD PRIMARY KEY (`id`);
+ALTER TABLE `baseline_sponsors`  ADD PRIMARY KEY (`id`);
+ALTER TABLE `baseline_staff`  ADD PRIMARY KEY (`id`);
+ALTER TABLE `baseline_styles`  ADD PRIMARY KEY (`id`);
+ALTER TABLE `baseline_style_types`  ADD PRIMARY KEY (`id`);
+ALTER TABLE `baseline_system`  ADD PRIMARY KEY (`id`);
+ALTER TABLE `baseline_users`  ADD PRIMARY KEY (`id`);

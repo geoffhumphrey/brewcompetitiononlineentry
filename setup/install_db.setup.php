@@ -41,6 +41,15 @@ if ($setup_free_access == TRUE) {
 		$output .= "</div>";
 		$output .= "<ul class=\"list-group\">";
 		
+		// -------------------
+		// Make sure default character set is utf8mb4 and collation is utf8mb4_unicode_ci
+		// -------------------
+		
+		$sql = sprintf("ALTER DATABASE `%s` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;",$database);
+		mysqli_select_db($connection,$database);
+		mysqli_real_escape_string($connection,$sql);
+		$result = mysqli_query($connection,$sql) or die (mysqli_error($connection));
+		
 		// ------------------- 
 		// Archive Table
 		// ------------------- 
@@ -53,7 +62,7 @@ if ($setup_free_access == TRUE) {
 			`archiveBrewingTableName` varchar(255) DEFAULT NULL,
 			`archiveSuffix` varchar(255) DEFAULT NULL,
 			PRIMARY KEY (`id`)
-		) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+		) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4;
 		";
 		
 		mysqli_select_db($connection,$database);
@@ -81,7 +90,7 @@ if ($setup_free_access == TRUE) {
 		  `brewerCountry` varchar(255) DEFAULT NULL,
 		  `brewerPhone1` varchar(25) DEFAULT NULL,
 		  `brewerPhone2` varchar(25) DEFAULT NULL,
-		  `brewerClubs` text CHARACTER SET utf8 COLLATE utf8_general_ci,
+		  `brewerClubs` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
 		  `brewerEmail` varchar(255) DEFAULT NULL,
 		  `brewerNickname` varchar(255) DEFAULT NULL,
 		  `brewerSteward` char(1) DEFAULT NULL,
@@ -89,12 +98,12 @@ if ($setup_free_access == TRUE) {
 		  `brewerJudgeID` varchar(25) DEFAULT NULL,
 		  `brewerJudgeMead` char(1) DEFAULT NULL,
 		  `brewerJudgeRank` varchar(255) DEFAULT NULL,
-		  `brewerJudgeLikes` text CHARACTER SET utf8 COLLATE utf8_general_ci,
-		  `brewerJudgeDislikes` text CHARACTER SET utf8 COLLATE utf8_general_ci,
-		  `brewerJudgeLocation` text CHARACTER SET utf8 COLLATE utf8_general_ci,
-		  `brewerStewardLocation` text CHARACTER SET utf8 COLLATE utf8_general_ci,
+		  `brewerJudgeLikes` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
+		  `brewerJudgeDislikes` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
+		  `brewerJudgeLocation` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
+		  `brewerStewardLocation` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
 		  `brewerJudgeExp` varchar(25),
-		  `brewerJudgeNotes` text CHARACTER SET utf8 COLLATE utf8_general_ci,
+		  `brewerJudgeNotes` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
 		  `brewerAssignment` char(1) DEFAULT NULL,
 		  `brewerJudgeWaiver` char(1) DEFAULT NULL,
 		  `brewerAHA` int(11) DEFAULT NULL,
@@ -129,7 +138,7 @@ if ($setup_free_access == TRUE) {
 			`brewBottleDate` date DEFAULT NULL,
 			`brewDate` date DEFAULT NULL,
 			`brewYield` varchar(10) DEFAULT NULL,
-			`brewInfo` text CHARACTER SET utf8 COLLATE utf8_general_ci,
+			`brewInfo` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
 			`brewMead1` varchar(25) DEFAULT NULL,
 			`brewMead2` varchar(25) DEFAULT NULL,
 			`brewMead3` varchar(25) DEFAULT NULL,
@@ -444,7 +453,7 @@ if ($setup_free_access == TRUE) {
 			`brewYeastType` varchar(10) DEFAULT NULL,
 			`brewYeastAmount` varchar(25) DEFAULT NULL,
 			`brewYeastStarter` char(1) DEFAULT NULL,
-			`brewYeastNutrients` text CHARACTER SET utf8 COLLATE utf8_general_ci,
+			`brewYeastNutrients` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
 			`brewOG` varchar(10) DEFAULT NULL,
 			`brewFG` varchar(10) DEFAULT NULL,
 			`brewPrimary` varchar(10) DEFAULT NULL,
@@ -453,13 +462,13 @@ if ($setup_free_access == TRUE) {
 			`brewSecondaryTemp` varchar(10) DEFAULT NULL,
 			`brewOther` varchar(10) DEFAULT NULL,
 			`brewOtherTemp` varchar(10) DEFAULT NULL,
-			`brewComments` text CHARACTER SET utf8 COLLATE utf8_general_ci,
-			`brewFinings` text CHARACTER SET utf8 COLLATE utf8_general_ci,
-			`brewWaterNotes` text CHARACTER SET utf8 COLLATE utf8_general_ci,
+			`brewComments` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
+			`brewFinings` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
+			`brewWaterNotes` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
 			`brewBrewerID` varchar(8) DEFAULT NULL,
 			`brewCarbonationMethod` char(1) DEFAULT NULL,
 			`brewCarbonationVol` varchar(10) DEFAULT NULL,
-			`brewCarbonationNotes` text CHARACTER SET utf8 COLLATE utf8_general_ci,
+			`brewCarbonationNotes` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
 			`brewBoilHours` varchar(5) DEFAULT NULL,
 			`brewBoilMins` varchar(5) DEFAULT NULL,
 			`brewBrewerFirstName` varchar(255) DEFAULT NULL,
@@ -533,8 +542,8 @@ if ($setup_free_access == TRUE) {
 			`contestJudgeDeadline` varchar(255) DEFAULT NULL,
 			`contestDropoffOpen` varchar(255) DEFAULT NULL,
 			`contestDropoffDeadline` varchar(255) DEFAULT NULL,
-			`contestRules` text CHARACTER SET utf8 COLLATE utf8_general_ci,
-			`contestAwardsLocation` text CHARACTER SET utf8 COLLATE utf8_general_ci,
+			`contestRules` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
+			`contestAwardsLocation` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
 			`contestAwardsLocName` varchar(255) DEFAULT NULL,
 			`contestAwardsLocDate` varchar(255) DEFAULT NULL,
 			`contestAwardsLocTime` varchar(255) DEFAULT NULL,
@@ -544,18 +553,18 @@ if ($setup_free_access == TRUE) {
 			`contestEntryFee2` int(11) DEFAULT NULL,
 			`contestEntryFeeDiscount` char(1) DEFAULT NULL,
 			`contestEntryFeeDiscountNum` char(4) DEFAULT NULL,
-			`contestBottles` text CHARACTER SET utf8 COLLATE utf8_general_ci,
-			`contestShippingAddress` text CHARACTER SET utf8 COLLATE utf8_general_ci,
+			`contestBottles` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
+			`contestShippingAddress` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
 			`contestShippingName` varchar(255) DEFAULT NULL,
-			`contestAwards` text CHARACTER SET utf8 COLLATE utf8_general_ci,
+			`contestAwards` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
 			`contestLogo` varchar(255) DEFAULT NULL,
-			`contestBOSAward` text CHARACTER SET utf8 COLLATE utf8_general_ci,
+			`contestBOSAward` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
 			`contestEntryCap` int(8) DEFAULT NULL,
 			`contestEntryFeePassword` varchar(255) DEFAULT NULL,
 			`contestEntryFeePasswordNum` int(11) DEFAULT NULL,
 			`contestID` varchar(11) DEFAULT NULL,
-			`contestCircuit` text CHARACTER SET utf8 COLLATE utf8_general_ci,
-			`contestVolunteers` text CHARACTER SET utf8 COLLATE utf8_general_ci,
+			`contestCircuit` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
+			`contestVolunteers` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
 			`contestCheckInPassword` varchar(255) DEFAULT NULL,
 			PRIMARY KEY (`id`)
 		) ENGINE=MyISAM DEFAULT CHARSET=utf8;
@@ -575,7 +584,7 @@ if ($setup_free_access == TRUE) {
 		$sql = "
 		CREATE TABLE IF NOT EXISTS `$drop_off_db_table` (
 			`id` int(8) NOT NULL AUTO_INCREMENT,
-			`dropLocation` text CHARACTER SET utf8 COLLATE utf8_general_ci,
+			`dropLocation` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
 			`dropLocationName` varchar(255) DEFAULT NULL,
 			`dropLocationPhone` varchar(255) DEFAULT NULL,
 			`dropLocationWebsite` varchar(255) DEFAULT NULL,
@@ -647,7 +656,7 @@ if ($setup_free_access == TRUE) {
 			`judgingDate` varchar(255) DEFAULT NULL,
 			`judgingTime` varchar(255) DEFAULT NULL,
 			`judgingLocName` varchar(255) DEFAULT NULL,
-			`judgingLocation` text CHARACTER SET utf8 COLLATE utf8_general_ci,
+			`judgingLocation` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
 			`judgingRounds` int(11) DEFAULT '1' COMMENT 'number of rounds at location',
 			PRIMARY KEY (`id`)
 		) ENGINE=MyISAM DEFAULT CHARSET=utf8;
@@ -870,7 +879,7 @@ if ($setup_free_access == TRUE) {
 			`bid` int(11) DEFAULT NULL COMMENT 'relational to brewer table - bid row',
 			`eid` int(11) DEFAULT NULL COMMENT 'relational to brewing table - id (entry number)',
 			`sbd_place` int(11) DEFAULT NULL,
-			`sbd_comments` text CHARACTER SET utf8 COLLATE utf8_general_ci,
+			`sbd_comments` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
 			PRIMARY KEY (`id`)
 		) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 		";
@@ -890,7 +899,7 @@ if ($setup_free_access == TRUE) {
 		CREATE TABLE IF NOT EXISTS `$special_best_info_db_table` (
 			`id` int(11) NOT NULL AUTO_INCREMENT,
 			`sbi_name` varchar(255) DEFAULT NULL,
-			`sbi_description` text CHARACTER SET utf8 COLLATE utf8_general_ci,
+			`sbi_description` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
 			`sbi_places` int(11) DEFAULT NULL,
 			`sbi_rank` int(11) DEFAULT NULL,
 			`sbi_display_places` int(1) DEFAULT NULL,
@@ -915,8 +924,8 @@ if ($setup_free_access == TRUE) {
 			`sponsorName` varchar(255) DEFAULT NULL,
 			`sponsorURL` varchar(255) DEFAULT NULL,
 			`sponsorImage` varchar(255) DEFAULT NULL,
-			`sponsorText` text CHARACTER SET utf8 COLLATE utf8_general_ci,
-			`sponsorLocation` text CHARACTER SET utf8 COLLATE utf8_general_ci,
+			`sponsorText` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
+			`sponsorLocation` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
 			`sponsorLevel` tinyint(1) DEFAULT NULL,
 			`sponsorEnable` tinyint(1) DEFAULT NULL,
 			PRIMARY KEY (`id`)
@@ -982,7 +991,7 @@ if ($setup_free_access == TRUE) {
 		  brewStyleSRM varchar(250) DEFAULT NULL,
 		  brewStyleSRMMax varchar(25) DEFAULT NULL,
 		  brewStyleType varchar(25) DEFAULT NULL,
-		  brewStyleInfo text CHARACTER SET utf8 COLLATE utf8_general_ci,
+		  brewStyleInfo text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
 		  brewStyleLink varchar(200) DEFAULT NULL,
 		  brewStyleGroup varchar(3) DEFAULT NULL,
 		  brewStyleActive char(1) DEFAULT 'Y',
@@ -993,8 +1002,8 @@ if ($setup_free_access == TRUE) {
 		  brewStyleCarb int(1) DEFAULT NULL COMMENT 'Requires carbonation? 0=No, 1=Yes',
 		  brewStyleSweet int(1) DEFAULT NULL COMMENT 'Requires sweetness? 0=No, 1=Yes',
 		  brewStyleTags varchar(255) DEFAULT NULL,
-		  brewStyleComEx text CHARACTER SET utf8 COLLATE utf8_general_ci,
-		  brewStyleEntry text CHARACTER SET utf8 COLLATE utf8_general_ci,
+		  brewStyleComEx text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
+		  brewStyleEntry text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
 		  PRIMARY KEY (id)
 		) 
 		ENGINE=MyISAM DEFAULT CHARSET=utf8;
@@ -1404,7 +1413,7 @@ if ($setup_free_access == TRUE) {
 		$result = mysqli_query($connection,$sql) or die (mysqli_error($connection));
 		$output .= "<li class=\"list-group-item\"><span class=\"fa fa-lg fa-check text-success\"></span> The <strong>System</strong> table was installed successfully.</li>";
 		
-		$sql = "INSERT INTO `$system_db_table` (`id`, `version`, `version_date`, `data_check`,`setup`) VALUES (1, '2.1.7.0', '2016-09-14', NOW( ),'0');";
+		$sql = "INSERT INTO `$system_db_table` (`id`, `version`, `version_date`, `data_check`,`setup`) VALUES (1, '2.1.8.0', '2016-12-01', NOW( ),'0');";
 		mysqli_select_db($connection,$database);
 		mysqli_real_escape_string($connection,$sql);
 		$result = mysqli_query($connection,$sql) or die (mysqli_error($connection));

@@ -13,7 +13,7 @@ include (LIB.'date_time.lib.php');
 include (INCLUDES.'version.inc.php');
 
 // ------------------ VERSION CHECK ------------------  
-// Current version is 2.1.7.0, change version in system table if not
+// Current version is 2.1.8.0, change version in system table if not
 // If there are NO database structure or data updates for the current version,
 // USE THIS FUNCTION ONLY IF THERE ARE *NOT* ANY DB TABLE OR DATA UPDATES
 // OTHERWISE, DEFINE/UPDATE THE VERSION VIA THE UPDATE PROCEDURE
@@ -25,7 +25,7 @@ function version_check($version,$current_version) {
 	if ($version != $current_version) {
 				
 		// Fix typo in styles
-		$updateSQL = sprintf("UPDATE %s SET version='%s', version_date='%s' WHERE id=%s",$prefix."system","2.1.7.0","2016-09-14","1");
+		$updateSQL = sprintf("UPDATE %s SET version='%s', version_date='%s' WHERE id=%s",$prefix."system","2.1.8.0","2016-012-01","1");
 		mysqli_real_escape_string($connection,$updateSQL);
 		$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 		
@@ -2263,6 +2263,7 @@ function display_place($place,$method) {
 		default: $place = "N/A";
 		}
 	}
+	
 	if ($method == "2") { 
 		switch($place){
 			case "1": $place = "<span class='fa fa-lg fa-trophy text-gold'></span> ".addOrdinalNumberSuffix($place);
@@ -3016,7 +3017,7 @@ function open_or_closed($now,$date1,$date2) {
 		if ($now < $date1) $output = "0";
 		
 		// First date has passed, but second has not
-		if (($now >= $date1) && ($now <= $date2)) $output = "1";
+		if (($now >= $date1) && ($now < $date2)) $output = "1";
 		
 		// Both dates have passed
 		if ($now >= $date2) $output = "2";

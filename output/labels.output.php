@@ -578,14 +578,14 @@ if (isset($_SESSION['loginUsername'])) {
 					}
 			} while ($row_brewer = mysqli_fetch_assoc($brewer));
 		
-		//$pdf->Output();
-		ob_end_clean();
-		$pdf->Output($filename,'D');
-	}
+			//$pdf->Output();
+			ob_end_clean();
+			$pdf->Output($filename,'D');
+		}
 	
 
 	
-		if (($go == "judging_scores") && ($action == "awards")) {
+		if (($go == "judging_scores") && ($action == "awards") && ($filter == "default")) {
 			if ($psort == "3422") $pdf = new PDF_Label('3422');
 			else $pdf = new PDF_Label('5160');
 			$pdf->AddPage();
@@ -595,6 +595,24 @@ if (isset($_SESSION['loginUsername'])) {
 			
 			if ($psort == "3422") 		$filename .= "_Avery3422";
 			else 						$filename .= "_Avery5160";
+			$filename .= ".pdf";
+			
+			include(DB.'output_labels_awards.db.php');
+				
+			ob_end_clean();
+			$pdf->Output($filename,'D');
+		}
+		
+		if (($go == "judging_scores") && ($action == "awards") && ($filter == "round")) {
+			if ($psort == "EU30095") $pdf = new PDF_Label('EU30095');
+			else $pdf = new PDF_Label('OL5375');
+			$pdf->AddPage();
+			$pdf->SetFont('Arial','',9);
+			
+			$filename .= str_replace(" ","_",$_SESSION['contestName'])."_Medal_Labels";
+			
+			if ($psort == "EU30095") $filename .= "_EU30095";
+			else $filename .= "_OL5375";
 			$filename .= ".pdf";
 			
 			include(DB.'output_labels_awards.db.php');

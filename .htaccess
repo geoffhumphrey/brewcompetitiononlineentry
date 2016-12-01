@@ -1,4 +1,4 @@
-#No indexing
+# No indexing
 IndexIgnore *
 
 # Make sure index.php is the default page

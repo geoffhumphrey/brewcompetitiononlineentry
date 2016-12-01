@@ -18,11 +18,11 @@ $countries = array("United States","Australia","Canada","Ireland","United Kingdo
 
 if (strpos($section, 'step') === FALSE) {
 
-	$registration_open = open_or_closed(strtotime("now"),$row_contest_dates['contestRegistrationOpen'],$row_contest_dates['contestRegistrationDeadline']);
-	$entry_window_open = open_or_closed(strtotime("now"),$row_contest_dates['contestEntryOpen'],$row_contest_dates['contestEntryDeadline']);
-	$judge_window_open = open_or_closed(strtotime("now"),$row_contest_dates['contestJudgeOpen'],$row_contest_dates['contestJudgeDeadline']);
-	$dropoff_window_open = open_or_closed(strtotime("now"),$row_contest_dates['contestDropoffOpen'],$row_contest_dates['contestDropoffDeadline']);
-	$shipping_window_open = open_or_closed(strtotime("now"),$row_contest_dates['contestShippingOpen'],$row_contest_dates['contestShippingDeadline']);
+	$registration_open = open_or_closed(time(),$row_contest_dates['contestRegistrationOpen'],$row_contest_dates['contestRegistrationDeadline']);
+	$entry_window_open = open_or_closed(time(),$row_contest_dates['contestEntryOpen'],$row_contest_dates['contestEntryDeadline']);
+	$judge_window_open = open_or_closed(time(),$row_contest_dates['contestJudgeOpen'],$row_contest_dates['contestJudgeDeadline']);
+	$dropoff_window_open = open_or_closed(time(),$row_contest_dates['contestDropoffOpen'],$row_contest_dates['contestDropoffDeadline']);
+	$shipping_window_open = open_or_closed(time(),$row_contest_dates['contestShippingOpen'],$row_contest_dates['contestShippingDeadline']);
 	 
 	$reg_open = getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_contest_dates['contestRegistrationOpen'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "long", "date-time");
 	$reg_closed = getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_contest_dates['contestRegistrationDeadline'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "long", "date-time");
@@ -73,6 +73,7 @@ if (strpos($section, 'step') === FALSE) {
 	if (($comp_entry_limit) || ($comp_paid_entry_limit)) $entry_window_open = 2;
 	
 	$current_date = getTimeZoneDateTime($_SESSION['prefsTimeZone'], time(), $_SESSION['prefsDateFormat'], $_SESSION['prefsTimeFormat'], "system", "date");
+	$current_date_display = getTimeZoneDateTime($_SESSION['prefsTimeZone'], time(), $_SESSION['prefsDateFormat'], $_SESSION['prefsTimeFormat'], "long", "date");
 	$current_time = getTimeZoneDateTime($_SESSION['prefsTimeZone'], time(), $_SESSION['prefsDateFormat'], $_SESSION['prefsTimeFormat'], "system", "time");
 	
 	$delay = $_SESSION['prefsWinnerDelay'] * 3600;
