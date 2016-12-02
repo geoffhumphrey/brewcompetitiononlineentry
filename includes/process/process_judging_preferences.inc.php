@@ -45,11 +45,11 @@ if (((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1))  || (
 	$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 	
 	if ($section == "setup") {
+		
 		// Lock down the config file
 		//if (@chmod("/site/config.php", 0555)) $message = "success"; else $message = "chmod";
 		
-		
-		$updateSQL = sprintf("UPDATE %s SET setup='1' WHERE id='1'",$prefix."system");			   
+		$updateSQL = sprintf("UPDATE %s SET setup='1', setup_last_step='8' WHERE id='1'",$prefix."system");			   
 		mysqli_real_escape_string($connection,$updateSQL);
 		$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 		

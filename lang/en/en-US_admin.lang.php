@@ -94,14 +94,9 @@ $archive_text_009 = "This option clears all entry, judging, and scoring data, bu
 $archive_text_010 = "To archive data currently stored in the database, provide a name of the archive.";
 $archive_text_011 = "Alpha numeric characters only - all others will be omitted.";
 $archive_text_012 = "Check the information you would like to retain for use in future competition instances.";
-$archive_text_013 = "Are you sure you want to archive current data with the name <span id=\"archiveName\"></span>? This cannot be undone.";
+$archive_text_013 = "Are you sure you want to archive current data?";
 $archive_text_014 = "Then, choose what data you would like to retain.";
 $archive_text_015 = "This will delete the archive called";
-$archive_text_016 = "";
-$archive_text_017 = "";
-$archive_text_018 = "";
-$archive_text_019 = "";
-$archive_text_020 = "";
 
 // -------------------- Barcode Check-In --------------------
 

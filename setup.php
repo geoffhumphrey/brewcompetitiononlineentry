@@ -8,6 +8,25 @@ require(LIB.'update.lib.php');
 require(DB.'setup.db.php');
 require(INCLUDES.'db_tables.inc.php');
 require(INCLUDES.'headers.inc.php');
+
+if ($section == "step0") {
+	
+	$query_character_check = "SHOW VARIABLES LIKE 'character_set_database'";
+	$character_check = mysqli_query($connection,$query_character_check) or die (mysqli_error($connection));
+	$row_character_check = mysqli_fetch_assoc($character_check);
+	
+	// If not usf8mb4, convert DB and all tables
+	if ($row_character_check['Value'] != "utf8mb4") {
+		
+		$sql = sprintf("ALTER DATABASE `%s` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;",$database);
+		mysqli_select_db($connection,$database);
+		mysqli_real_escape_string($connection,$sql);
+		$result = mysqli_query($connection,$sql) or die (mysqli_error($connection));
+		
+	}
+	
+}
+
 if (($section == "step2") || ($section == "step3")) require(INCLUDES.'constants.inc.php');
 
 // Set default timezone for setup steps before configuration of installation default timezone
@@ -129,7 +148,7 @@ else {
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </button>
-					<a class="navbar-brand" href="http://www.brewcompetition.com">BCOE&M</a>
+					<a class="navbar-brand" href="http://www.brewcompetition.com">BCOE&amp;M</a>
             	</div>
           	</div>
         </nav>
@@ -142,6 +161,25 @@ else {
     <!-- ./ALERTS -->
     <!-- Update Pages (Fluid Layout) -->
     <div class="container-fluid">
+    
+    <?php if ($msg == 99) { ?>
+    
+   		<div class="alert alert-danger alert-dismissible hidden-print fade in" role="alert">
+        	<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        	<span class="fa fa-lg fa-exclamation-circle"></span> <strong>There was an error in processing your input.</strong> Please re-enter the information.
+        </div>
+    
+    <?php } ?>
+    
+    <?php if ($msg == 100) { ?>
+    
+   		<div class="alert alert-danger alert-dismissible hidden-print fade in" role="alert">
+        	<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        	<span class="fa fa-lg fa-exclamation-circle"></span> <strong>Set Up has not been completed.</strong> For your installation to function properly, set up must be completed.
+        </div>
+    
+    <?php } ?>
+    
     <div class="row">
         	<div class="col col-lg-9 col-md-12 col-sm-12 col-xs-12">
             <div class="page-header">

@@ -156,7 +156,26 @@ if (((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] == 0)) || ($
 			mysqli_real_escape_string($connection,$insertSQL);
 			$result = mysqli_query($connection,$insertSQL) or die (mysqli_error($connection));
 			
-			$insertGoTo = "../setup.php?section=step5";
+			// Check to see if processed correctly. 
+			$query_comp_info_check = sprintf("SELECT COUNT(*) as 'count' FROM %s",$contest_info_db_table);
+			$comp_info_check = mysqli_query($connection,$query_comp_info_check) or die (mysqli_error($connection));
+			$row_comp_info_check = mysqli_fetch_assoc($comp_info_check);
+			
+			// If so, mark step as complete in system table and redirect to next step.
+			if ($row_comp_info_check['count'] == 1) {
+				
+				$sql = sprintf("UPDATE `%s` SET setup_last_step = '4' WHERE id='1';", $system_db_table);
+				mysqli_select_db($connection,$database);
+				mysqli_real_escape_string($connection,$sql);
+				$result = mysqli_query($connection,$sql) or die (mysqli_error($connection));
+			
+				$insertGoTo = $base_url."setup.php?section=step5";
+			
+			}
+			
+			// If not, redirect back to step 4 and display message.	
+			else  $insertGoTo = $base_url."setup.php?section=step4&msg=99";
+						
 			$pattern = array('\'', '"');
 			$insertGoTo = str_replace($pattern, "", $insertGoTo); 
 			header(sprintf("Location: %s", stripslashes($insertGoTo)));;
@@ -164,11 +183,6 @@ if (((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] == 0)) || ($
 	
 	// --------------------------------------- Editing  ----------------------------------------
 	if ($action == "edit") {
-		
-		
-		
-		
-		
 		
 		if ($go == "qr") {
 			

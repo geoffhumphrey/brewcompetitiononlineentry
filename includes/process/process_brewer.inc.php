@@ -394,8 +394,30 @@ if (((isset($_SESSION['loginUsername'])) && (isset($_SESSION['userLevel']))) || 
 			mysqli_real_escape_string($connection,$insertSQL);
 			$result = mysqli_query($connection,$insertSQL) or die (mysqli_error($connection));
 			
-			//echo $insertSQL;
-			if ($section == "setup") $insertGoTo = "../setup.php?section=step3";
+			if ($section == "setup") {
+				
+				// Check to see if processed correctly. 
+				$query_brewer_check = sprintf("SELECT COUNT(*) as 'count' FROM %s",$brewer_db_table);
+				$brewer_check = mysqli_query($connection,$query_brewer_check) or die (mysqli_error($connection));
+				$row_brewer_check = mysqli_fetch_assoc($brewer_check);
+				
+				// If so, mark step as complete in system table and redirect to next step.
+				if ($row_brewer_check['count'] == 1) {
+					
+					$sql = sprintf("UPDATE `%s` SET setup_last_step = '2' WHERE id='1';", $system_db_table);
+					mysqli_select_db($connection,$database);
+					mysqli_real_escape_string($connection,$sql);
+					$result = mysqli_query($connection,$sql) or die (mysqli_error($connection));
+				
+					$insertGoTo = $base_url."setup.php?section=step3";
+				
+				}
+				
+				// If not, redirect back to step 2 and display message.	
+				else  $insertGoTo = $base_url."setup.php?section=step2&msg=99";
+				
+			}
+			
 			elseif (($_POST['brewerJudge'] == "Y") || ($_POST['brewerSteward'] == "Y")) $insertGoTo = $base_url."index.php?section=judge&go=judge";
 			elseif ($section == "admin") $insertGoTo = $base_url."index.php?section=admin&go=participants&msg=1&username=".$username;
 			elseif (($go == "judge") && ($filter == "default")) $insertGoTo = $base_url."index.php?section=list&go=".$go."&filter=default&msg=7";
@@ -405,7 +427,9 @@ if (((isset($_SESSION['loginUsername'])) && (isset($_SESSION['userLevel']))) || 
 		$pattern = array('\'', '"');
 		$insertGoTo = str_replace($pattern, "", $insertGoTo); 
 		header(sprintf("Location: %s", stripslashes($insertGoTo)));
+		
 		}
+		
 	} // end if ($action == "add")
 	
 	// --------------------------------------- Editing a Participant ----------------------------------------

@@ -21,7 +21,9 @@ function check_update($column_name, $table_name) {
 	$query_log = sprintf("SHOW COLUMNS FROM `%s` LIKE '%s'",$table_name,$column_name);
 	$log = mysqli_query($connection,$query_log) or die (mysqli_error($connection));
 	$row_log_exists = mysqli_num_rows($log);
+	
     if ($row_log_exists) return TRUE;
 	else return FALSE;
+	
 }
 ?>

@@ -251,7 +251,7 @@ if ($section != "step2") {
 
 if ($section == "step2")  {
 	mysqli_select_db($connection,$database);
-	$query_brewerID = sprintf("SELECT id,brewerEmail FROM $users_db_table WHERE user_name = '%s'", $go); 
+	$query_brewerID = sprintf("SELECT id,user_name FROM $users_db_table WHERE user_name = '%s'", $go); 
 	$brewerID = mysqli_query($connection,$query_brewerID) or die (mysqli_error($connection));
 	$row_brewerID = mysqli_fetch_assoc($brewerID);
 	$totalRows_brewerID = mysqli_num_rows($brewerID);

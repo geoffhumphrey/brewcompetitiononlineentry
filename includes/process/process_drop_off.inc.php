@@ -20,7 +20,19 @@ if (((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) || ($
 		mysqli_real_escape_string($connection,$insertSQL);
 		$result = mysqli_query($connection,$insertSQL) or die (mysqli_error($connection));
 		
-		if ($section == "setup") $insertGoTo = "../setup.php?section=step6&msg=11"; else $insertGoTo = $insertGoTo;
+		if ($section == "setup") {
+			
+			$sql = sprintf("UPDATE `%s` SET setup_last_step = '6' WHERE id='1';", $system_db_table);
+			mysqli_select_db($connection,$database);
+			mysqli_real_escape_string($connection,$sql);
+			$result = mysqli_query($connection,$sql) or die (mysqli_error($connection));
+			
+			$insertGoTo = $base_url."setup.php?section=step6&msg=11";
+			
+		}
+			
+			
+			else $insertGoTo = $insertGoTo;
 		$pattern = array('\'', '"');
 		$insertGoTo = str_replace($pattern, "", $insertGoTo); 
 		header(sprintf("Location: %s", stripslashes($insertGoTo)));			   

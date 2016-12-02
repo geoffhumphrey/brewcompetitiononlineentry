@@ -333,8 +333,8 @@ $(document).ready(function(){
 	<div class="col-lg-6 col-md-3 col-sm-8 col-xs-12">
 	<!-- Input Here -->
 	<select class="selectpicker" name="prefsEntryForm" id="prefsEntryForm" data-size="12" data-width="auto">
-		<option value="1" <?php if (($section == "step3") || ($_SESSION['prefsEntryForm'] == "1")) echo " SELECTED"; ?> />BCOE&amp;M (Bottle Labels Only)</option>
-		<option value="2" <?php if ($_SESSION['prefsEntryForm'] == "2") echo " SELECTED"; ?> />BCOE&amp;M with Barcode/QR Code (Bottle Labels Only)</option>
+		<option value="1" <?php if ($_SESSION['prefsEntryForm'] == "1") echo " SELECTED"; ?> />BCOE&amp;M (Bottle Labels Only)</option>
+		<option value="2" <?php if (($section == "step3") ||  ($_SESSION['prefsEntryForm'] == "2")) echo " SELECTED"; ?> />BCOE&amp;M with Barcode/QR Code (Bottle Labels Only)</option>
         <option value="0" <?php if ($_SESSION['prefsEntryForm'] == "0") echo " SELECTED"; ?> />BCOE&amp;M Anonymous with Barcode/QR Code (Bottle Labels Only)</option>
         <option value="B" <?php if ($_SESSION['prefsEntryForm'] == "B") echo " SELECTED"; ?> />BJCP Official</option>
         <option value="E" <?php if ($_SESSION['prefsEntryForm'] == "E") echo " SELECTED"; ?> />BJCP Official (Bottle Labels Only)</option>

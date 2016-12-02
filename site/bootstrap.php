@@ -236,10 +236,10 @@ if ($setup_success) {
 	*/
 	
 	/*
-	This was reported to cause a "redirect loop failure" - commenting out in lieu of another solution
+	The following was reported to cause a "redirect loop failure" - commenting out in lieu of another solution
 	See https://github.com/geoffhumphrey/brewcompetitiononlineentry/issues/674
-	Is not be necessary as there is now a judging number check upon adding and editing entries
-	Therefore, deprecated. Code will be removed in a future release.
+	Is not necessary as there is now a judging number check upon adding and editing entries
+	Therefore, deprecated. Code will be removed in a future release after review.
 	
 	// Check to see if all judging numbers have been generated. If not, generate.
 	if ((!check_judging_numbers()) && (!NHC)) header("Location: includes/process.inc.php?action=generate_judging_numbers&go=hidden");
@@ -251,9 +251,7 @@ if ($setup_success) {
 	
 	*/
 	
-	
-	
-	//  ---------------------------- Time Related Globals ---------------------------- 
+	// ---------------------------- Time Related Globals ---------------------------- 
 	
 	// Set timezone globals
 	$timezone_prefs = get_timezone($_SESSION['prefsTimeZone']);

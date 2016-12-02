@@ -70,6 +70,20 @@ if (check_setup($prefix."system",$database)) {
 		$setup_relocate = "Location: ".$base_url."update.php";
 		
 	}
+	
+	// For current version, check if "setup_last_step" column is in the system table
+	
+	if (!check_update("setup_last_step", $prefix."system")) {
+	
+		require(CONFIG.'config.php');	
+		mysqli_select_db($connection,$database);
+		
+		$updateSQL = sprintf("ALTER TABLE `%s` ADD `setup_last_step` INT(3) NULL DEFAULT NULL;",$prefix."system");
+		mysqli_select_db($connection,$database);
+		mysqli_real_escape_string($connection,$updateSQL);
+		$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+		
+	}
 		
 	if ($row_version_check['version'] != $current_version) {
 		

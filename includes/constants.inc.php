@@ -128,4 +128,7 @@ if ($dbTable != "default") $archive_display = TRUE;
 
 $totalRows_mods = "";
 
+// Get unconfirmed entry count
+if (($section == "admin") && (($filter == "default") && ($bid == "default") && ($view == "default"))) $entries_unconfirmed = ($totalRows_entry_count - $totalRows_log_confirmed); 
+else $entries_unconfirmed = ($totalRows_log - $totalRows_log_confirmed);
 ?>

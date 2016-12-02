@@ -56,19 +56,32 @@ if (((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) || ($
 		}
 		
 		if($result){ 
-			if ($section == "setup") header("location:../setup.php?section=step8"); 
+		
+			if ($section == "setup") {
+				
+				$sql = sprintf("UPDATE `%s` SET setup_last_step = '7' WHERE id='1';", $system_db_table);
+				mysqli_select_db($connection,$database);
+				mysqli_real_escape_string($connection,$sql);
+				$result = mysqli_query($connection,$sql) or die (mysqli_error($connection));
+				
+				$massUpdateGoTo = $base_url."setup.php?section=step8";
+				$pattern = array('\'', '"');
+				$massUpdateGoTo = str_replace($pattern, "", $massUpdateGoTo);
+				header(sprintf("Location: %s", stripslashes($massUpdateGoTo)));
+				
+			}
+			
 			else {
 				$pattern = array('\'', '"');
 				$massUpdateGoTo = str_replace($pattern, "", $massUpdateGoTo);
 				header(sprintf("Location: %s", stripslashes($massUpdateGoTo)));
 			}
+			
 		}
 	
 	}
 	
 	if ($action == "add") {
-		
-	
 	
 	if ($_SESSION['prefsStyleSet'] == "BJCP2008") $category_end = 28;		
 	if ($_SESSION['prefsStyleSet'] == "BJCP2015") $category_end = 34;	

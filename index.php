@@ -6,22 +6,35 @@
  */
 
 // $locale = system('locale -a');
+
+// ---------------------------- Load Required Scripts ------------------------------
+
 require('paths.php');
 require(CONFIG.'bootstrap.php');
-
-// Load any mods
-include(DB.'mods.db.php');
+require(DB.'mods.db.php');
 
 $account_pages = array("list","pay","brewer","user","brew","beerxml","pay");
 if ((!$logged_in) && (in_array($section,$account_pages))) {
-	header(sprintf("Location: %s", $base_url."index.php?section=login&msg=99")); exit;
+	header(sprintf("Location: %s", $base_url."index.php?section=login&msg=99")); 
+	exit;
 }
-	
+
+// ---------------------------------------------------------------------------------
+
+// ---------------------------- Admin Only Functions -------------------------------
+
 if ($section == "admin") {
 	
 	// Redirect if non-admins try to access admin functions
-	if (!$logged_in) { header(sprintf("Location: %s", $base_url."index.php?section=login&msg=0")); exit; }
-	if (($logged_in) && ($_SESSION['userLevel'] > 1)) { header(sprintf("Location: %s", $base_url."index.php?msg=4")); exit; }
+	if (!$logged_in) { 
+		header(sprintf("Location: %s", $base_url."index.php?section=login&msg=0")); 
+		exit; 
+	}
+	
+	if (($logged_in) && ($_SESSION['userLevel'] > 1)) { 
+		header(sprintf("Location: %s", $base_url."index.php?msg=4")); 
+		exit; 
+	}
 	
 	include(LIB.'admin.lib.php');
 	include(DB.'admin_common.db.php');
@@ -35,6 +48,11 @@ if ($section == "admin") {
 	}
 }
 
+// --------------------------------------------------------------------------------- 
+
+// ---------------------------- Various Functions ---------------------------------- 
+
+// Testing
 if (TESTING) {
 	$mtime = microtime(); 
 	$mtime = explode(" ",$mtime); 
@@ -42,12 +60,15 @@ if (TESTING) {
 	$starttime = $mtime; 
 }
 
+// Hosted installations
 if (HOSTED) check_hosted_gh();
 
+// Perform version check if NOT going into setup
 if (strpos($section, 'step') === FALSE)  {
 	version_check($version,$current_version);
 }
 
+// Bootstrap layout containers
 if ($section == "admin") {
 	$container_main = "container-fluid";
 	$nav_container = "navbar-inverse";
@@ -64,7 +85,7 @@ $datetime_load = array("contest_info","judging","testing","preferences");
 if ((judging_date_return() == 0) && ($registration_open == 2)) $datatables_load = array("admin","list","default");
 else $datatables_load = array("admin","list");
 
-if (($section == "admin") && (($filter == "default") && ($bid == "default") && ($view == "default"))) $entries_unconfirmed = ($totalRows_entry_count - $totalRows_log_confirmed); else $entries_unconfirmed = ($totalRows_log - $totalRows_log_confirmed);
+// --------------------------------------------------------------------------------- 
 
 ?>
 <!DOCTYPE html>

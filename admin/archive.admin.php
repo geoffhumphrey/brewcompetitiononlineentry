@@ -53,7 +53,7 @@ $table_header7 = $label_actions;
             <!-- Input Here -->
 			<div class="checkbox">
                 <label>
-                    <input type="checkbox" name="none" id="retain_7" value=""> <?php echo $label_none; ?>
+                    <input type="checkbox" name="none" id="retain_7" value="" > <?php echo $label_none; ?>
                 </label>
             </div>
             <div class="checkbox">
@@ -114,11 +114,11 @@ $table_header7 = $label_actions;
                 <h4 class="modal-title"><?php echo $label_please_confirm; ?></h4>
             </div>
             <div class="modal-body">
-                <?php echo $archive_text_013; ?>
+                <?php echo $archive_text_013." ".$label_undone; ?>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-danger" data-dismiss="modal"><?php echo $label_cancel; ?></button>
-                <a href="#" id="submit" class="btn btn-success success"><?php $label_yes; ?></a>
+                <a href="#" id="submit" class="btn btn-success success"><?php echo $label_yes; ?></a>
             </div>
         </div>
     </div>
