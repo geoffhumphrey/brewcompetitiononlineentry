@@ -53,6 +53,11 @@ if ((isset($_SESSION['loginUsername'])) && (isset($_SESSION['userLevel']))) {
 		$brewName = strtr($brewName,$html_string);
 		$brewInfo = "";
 		
+		// Get style name from broken parts
+		$query_style_name = sprintf("SELECT * FROM %s WHERE (brewStyleVersion='%s' OR brewStyleOwn='custom') AND brewStyleGroup='%s' AND brewStyleNum='%s'",$styles_db_table, $_SESSION['prefsStyleSet'],$styleFix,$style[1]);
+		$style_name = mysqli_query($connection,$query_style_name) or die (mysqli_error($connection));
+		$row_style_name = mysqli_fetch_assoc($style_name);
+		
 		if (in_array($styleReturn,$all_special_ing_styles)) $brewInfo .= strtr($_POST['brewInfo'],$html_remove);
 		if (isset($custom_entry_information)) {
 			if (array_key_exists($index,$custom_entry_information)) { 
@@ -66,8 +71,17 @@ if ((isset($_SESSION['loginUsername'])) && (isset($_SESSION['userLevel']))) {
 			// Pale or Dark Variant
 			if (($index == "09-A") || ($index == "10-C") || ($index == "07-C"))  $brewInfo = $_POST['darkLightColor'];
 			
-			// IPA strength
+			// IPA strength for 21B (standalone)
 			elseif ($index == "21-B") $brewInfo .= "^".$_POST['strengthIPA'];
+			
+			// IPA strength for other Specialty IPA styles
+			elseif ($index == "21-B1") $brewInfo = $row_style_name['brewStyle']."^".$_POST['strengthIPA'];
+			elseif ($index == "21-B2") $brewInfo = $row_style_name['brewStyle']."^".$_POST['strengthIPA'];
+			elseif ($index == "21-B3") $brewInfo = $row_style_name['brewStyle']."^".$_POST['strengthIPA'];
+			elseif ($index == "21-B4") $brewInfo = $row_style_name['brewStyle']."^".$_POST['strengthIPA'];
+			elseif ($index == "21-B5") $brewInfo = $row_style_name['brewStyle']."^".$_POST['strengthIPA'];
+			elseif ($index == "21-B6") $brewInfo = $row_style_name['brewStyle']."^".$_POST['strengthIPA'];
+			
 			
 			// Fruit Lambic carb/sweetness
 			elseif ($index == "23-F") $brewInfo .= "^".$_POST['sweetnessLambic']."^".$_POST['carbLambic'];
@@ -194,11 +208,6 @@ if ((isset($_SESSION['loginUsername'])) && (isset($_SESSION['userLevel']))) {
 					
 		if (NHC) $brewJudgingNumber = "";
 		else $brewJudgingNumber = generate_judging_num(1,$styleTrim);
-					
-		// Get style name from broken parts
-		$query_style_name = sprintf("SELECT * FROM %s WHERE (brewStyleVersion='%s' OR brewStyleOwn='custom') AND brewStyleGroup='%s' AND brewStyleNum='%s'",$styles_db_table, $_SESSION['prefsStyleSet'],$styleFix,$style[1]);
-		$style_name = mysqli_query($connection,$query_style_name) or die (mysqli_error($connection));
-		$row_style_name = mysqli_fetch_assoc($style_name);
 		
 		$insertSQL = "INSERT INTO $brewing_db_table (";
 		if ($_SESSION['prefsHideRecipe'] == "N") { 

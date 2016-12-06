@@ -157,7 +157,9 @@ if (((!$add_entry_disable) && (!$edit_entry_disable) && ($remaining_entries > 0)
 	
 	if ($action == "edit") {
 		
-		if ($view == "21-B") {
+		
+		if (strlen(strstr($view,"21-B")) > 0) {
+		// if ($view == "21-B") {
 			$exploder = explode("^",$row_log['brewInfo']);
 			$brewInfo = $exploder[0];
 		 	if ($exploder[1] == "Session Strength") $IPASession = "CHECKED";

@@ -5,7 +5,7 @@
 --
 -- ------------------------------------------------------------------------------------
 -- 
--- UPDATED 09.14.2016 for Version 2.1.8.0
+-- UPDATED 2016-12-07 for Version 2.1.8.0
 --
 -- ------------------------------------------------------------------------------------
 --
@@ -51,17 +51,28 @@
 --
 -- --------------------------------------------------------
 
+SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+SET time_zone = "+00:00";
+
+--
+-- Drop existing tables if present
+-- 
+
+DROP TABLE IF EXISTS `baseline_archive`, `baseline_brewer`, `baseline_brewing`, `baseline_contacts`, `baseline_contest_info`, `baseline_drop_off`, `baseline_judging_assignments`, `baseline_judging_flights`, `baseline_judging_locations`, `baseline_judging_preferences`, `baseline_judging_scores`, `baseline_judging_scores_bos`, `baseline_judging_tables`, `baseline_mods`, `baseline_preferences`, `baseline_special_best_data`, `baseline_special_best_info`, `baseline_sponsors`, `baseline_staff`, `baseline_styles`, `baseline_style_types`, `baseline_system`, `baseline_users`;
+
+-- --------------------------------------------------------
+
 --
 -- Table structure for table `baseline_archive`
 --
 
 CREATE TABLE IF NOT EXISTS `baseline_archive` (
-  `id` int(8) NOT NULL,
+  `id` int(11) NOT NULL,
   `archiveUserTableName` varchar(255) DEFAULT NULL,
   `archiveBrewerTableName` varchar(255) DEFAULT NULL,
   `archiveBrewingTableName` varchar(255) DEFAULT NULL,
   `archiveSuffix` varchar(255) DEFAULT NULL
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -70,7 +81,7 @@ CREATE TABLE IF NOT EXISTS `baseline_archive` (
 --
 
 CREATE TABLE IF NOT EXISTS `baseline_brewer` (
-  `id` int(8) NOT NULL,
+  `id` int(11) NOT NULL,
   `uid` int(8) DEFAULT NULL,
   `brewerFirstName` varchar(200) DEFAULT NULL,
   `brewerLastName` varchar(200) DEFAULT NULL,
@@ -101,7 +112,7 @@ CREATE TABLE IF NOT EXISTS `baseline_brewer` (
   `brewerDiscount` char(1) DEFAULT NULL,
   `brewerJudgeBOS` char(1) DEFAULT NULL,
   `brewerDropOff` int(4) DEFAULT NULL COMMENT 'Location where brewer will drop off their entries; 0=shipping or relational to dropoff table'
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `baseline_brewer`
@@ -117,7 +128,7 @@ INSERT INTO `baseline_brewer` (`id`, `uid`, `brewerFirstName`, `brewerLastName`,
 --
 
 CREATE TABLE IF NOT EXISTS `baseline_brewing` (
-  `id` int(8) NOT NULL,
+  `id` int(11) NOT NULL,
   `brewName` varchar(255) DEFAULT NULL,
   `brewStyle` varchar(255) DEFAULT NULL,
   `brewCategory` char(2) DEFAULT NULL,
@@ -475,7 +486,7 @@ CREATE TABLE IF NOT EXISTS `baseline_brewing` (
   `brewUpdated` timestamp NULL DEFAULT NULL COMMENT 'Timestamp of when the entry was last updated',
   `brewConfirmed` tinyint(1) DEFAULT NULL COMMENT '1=true - 2=false',
   `brewBoxNum` varchar(10) DEFAULT NULL
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -484,12 +495,12 @@ CREATE TABLE IF NOT EXISTS `baseline_brewing` (
 --
 
 CREATE TABLE IF NOT EXISTS `baseline_contacts` (
-  `id` int(8) NOT NULL,
+  `id` int(11) NOT NULL,
   `contactFirstName` varchar(255) DEFAULT NULL,
   `contactLastName` varchar(255) DEFAULT NULL,
   `contactPosition` varchar(255) DEFAULT NULL,
   `contactEmail` varchar(255) DEFAULT NULL
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `baseline_contacts`
@@ -542,7 +553,7 @@ CREATE TABLE IF NOT EXISTS `baseline_contest_info` (
   `contestCircuit` text,
   `contestVolunteers` text,
   `contestCheckInPassword` varchar(255) DEFAULT NULL
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `baseline_contest_info`
@@ -558,13 +569,13 @@ INSERT INTO `baseline_contest_info` (`id`, `contestName`, `contestHost`, `contes
 --
 
 CREATE TABLE IF NOT EXISTS `baseline_drop_off` (
-  `id` int(8) NOT NULL,
+  `id` int(11) NOT NULL,
   `dropLocation` text,
   `dropLocationName` varchar(255) DEFAULT NULL,
   `dropLocationPhone` varchar(255) DEFAULT NULL,
   `dropLocationWebsite` varchar(255) DEFAULT NULL,
   `dropLocationNotes` varchar(255) DEFAULT NULL
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `baseline_drop_off`
@@ -587,7 +598,7 @@ CREATE TABLE IF NOT EXISTS `baseline_judging_assignments` (
   `assignFlight` int(11) DEFAULT NULL,
   `assignRound` int(11) DEFAULT NULL,
   `assignLocation` int(11) DEFAULT NULL
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -601,7 +612,7 @@ CREATE TABLE IF NOT EXISTS `baseline_judging_flights` (
   `flightNumber` int(11) DEFAULT NULL,
   `flightEntryID` text,
   `flightRound` int(11) DEFAULT NULL
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -610,13 +621,13 @@ CREATE TABLE IF NOT EXISTS `baseline_judging_flights` (
 --
 
 CREATE TABLE IF NOT EXISTS `baseline_judging_locations` (
-  `id` int(8) NOT NULL,
+  `id` int(11) NOT NULL,
   `judgingDate` varchar(255) DEFAULT NULL,
   `judgingTime` varchar(255) DEFAULT NULL,
   `judgingLocName` varchar(255) DEFAULT NULL,
   `judgingLocation` text,
   `judgingRounds` int(11) DEFAULT '1' COMMENT 'number of rounds at location'
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `baseline_judging_locations`
@@ -640,7 +651,7 @@ CREATE TABLE IF NOT EXISTS `baseline_judging_preferences` (
   `jPrefsCapJudges` int(3) DEFAULT NULL,
   `jPrefsCapStewards` int(3) DEFAULT NULL,
   `jPrefsBottleNum` int(3) DEFAULT NULL
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `baseline_judging_preferences`
@@ -664,7 +675,7 @@ CREATE TABLE IF NOT EXISTS `baseline_judging_scores` (
   `scorePlace` float DEFAULT NULL COMMENT 'place of entry as assigned by judges',
   `scoreType` char(1) DEFAULT NULL,
   `scoreMiniBOS` int(4) DEFAULT NULL COMMENT 'Did the entry go to the MiniBOS? 1=Yes, 0=No'
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -679,7 +690,7 @@ CREATE TABLE IF NOT EXISTS `baseline_judging_scores_bos` (
   `scoreEntry` int(11) DEFAULT NULL COMMENT 'numerical score assigned by judges',
   `scorePlace` float DEFAULT NULL COMMENT 'place of entry as assigned by judges',
   `scoreType` char(1) DEFAULT NULL
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -695,7 +706,7 @@ CREATE TABLE IF NOT EXISTS `baseline_judging_tables` (
   `tableLocation` int(11) DEFAULT NULL COMMENT 'Physical location of table (if more than one judging location) - relational to judging table',
   `tableJudges` varchar(255) DEFAULT NULL,
   `tableStewards` varchar(255) DEFAULT NULL
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -715,7 +726,7 @@ CREATE TABLE IF NOT EXISTS `baseline_mods` (
   `mod_rank` int(3) DEFAULT NULL COMMENT 'Rank order of the mod on the admin mods list',
   `mod_display_rank` tinyint(1) DEFAULT NULL COMMENT '0=normal 1=above default content',
   `mod_enable` tinyint(1) DEFAULT NULL COMMENT '1=yes 0=no'
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -724,7 +735,7 @@ CREATE TABLE IF NOT EXISTS `baseline_mods` (
 --
 
 CREATE TABLE IF NOT EXISTS `baseline_preferences` (
-  `id` int(8) NOT NULL,
+  `id` int(11) NOT NULL,
   `prefsTemp` varchar(255) DEFAULT NULL,
   `prefsWeight1` varchar(20) DEFAULT NULL,
   `prefsWeight2` varchar(20) DEFAULT NULL,
@@ -776,7 +787,7 @@ CREATE TABLE IF NOT EXISTS `baseline_preferences` (
   `prefsSpecific` tinyint(1) DEFAULT NULL,
   `prefsDropOff` tinyint(1) DEFAULT NULL,
   `prefsShipping` tinyint(1) DEFAULT NULL
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `baseline_preferences`
@@ -798,7 +809,7 @@ CREATE TABLE IF NOT EXISTS `baseline_special_best_data` (
   `eid` int(11) DEFAULT NULL COMMENT 'relational to brewing table - id (entry number)',
   `sbd_place` int(11) DEFAULT NULL,
   `sbd_comments` text
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -813,7 +824,7 @@ CREATE TABLE IF NOT EXISTS `baseline_special_best_info` (
   `sbi_places` int(11) DEFAULT NULL,
   `sbi_rank` int(11) DEFAULT NULL,
   `sbi_display_places` int(1) DEFAULT NULL
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -822,7 +833,7 @@ CREATE TABLE IF NOT EXISTS `baseline_special_best_info` (
 --
 
 CREATE TABLE IF NOT EXISTS `baseline_sponsors` (
-  `id` int(8) NOT NULL,
+  `id` int(11) NOT NULL,
   `sponsorName` varchar(255) DEFAULT NULL,
   `sponsorURL` varchar(255) DEFAULT NULL,
   `sponsorImage` varchar(255) DEFAULT NULL,
@@ -830,7 +841,7 @@ CREATE TABLE IF NOT EXISTS `baseline_sponsors` (
   `sponsorLocation` text,
   `sponsorLevel` tinyint(1) DEFAULT NULL,
   `sponsorEnable` tinyint(1) DEFAULT NULL
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -846,7 +857,7 @@ CREATE TABLE IF NOT EXISTS `baseline_staff` (
   `staff_steward` int(2) DEFAULT '0' COMMENT '0=no; 1=yes',
   `staff_organizer` int(2) DEFAULT '0' COMMENT '0=no; 1=yes',
   `staff_staff` int(2) DEFAULT '0' COMMENT '0=no; 1=yes'
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -855,7 +866,7 @@ CREATE TABLE IF NOT EXISTS `baseline_staff` (
 --
 
 CREATE TABLE IF NOT EXISTS `baseline_styles` (
-  `id` int(8) NOT NULL,
+  `id` int(11) NOT NULL,
   `brewStyleNum` varchar(3) DEFAULT NULL,
   `brewStyle` varchar(250) DEFAULT NULL,
   `brewStyleCategory` varchar(255) DEFAULT NULL,
@@ -883,7 +894,7 @@ CREATE TABLE IF NOT EXISTS `baseline_styles` (
   `brewStyleTags` varchar(255) DEFAULT NULL,
   `brewStyleComEx` text,
   `brewStyleEntry` text
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=296 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `baseline_styles`
@@ -1054,7 +1065,7 @@ INSERT INTO `baseline_styles` (`id`, `brewStyleNum`, `brewStyle`, `brewStyleCate
 (160, 'B', 'American Stout', 'American Porter and Stout', '1.05', '1.075', '1.01', '1.022', '5', '7', '35', '75', '30', '40', 'Ale', 'A fairly strong, highly roasted, bitter, hoppy dark stout. Has the body and dark flavors typical of stouts with a more aggressive American hop character and bitterness.', 'http://bjcp.org/stylecenter.php', '20', 'Y', 'bcoe', 'BJCP2015', 0, 0, 0, 0, 'high-strength, dark-color, top-fermented, north-america, craft-style, stout-family, bitter, roasty, hoppy', 'Rogue Shakespeare Stout, Deschutes Obsidian Stout, Sierra Nevada Stout, North Coast Old No. 38, Avery Out of Bounds Stout.', ''),
 (161, 'C', 'Imperial Stout', 'American Porter and Stout', '1.075', '1.115', '1.018', '1.03', '8', '12', '50', '90', '30', '40', 'Ale', 'An intensely-flavored, big, dark ale with a wide range of flavor balances and regional interpretations. Roasty-burnt malt with deep dark or dried fruit flavors, and a warming, bittersweet finish. Despite the intense flavors, the components need to meld together to create a complex, harmonious beer, not a hot mess.', 'http://bjcp.org/stylecenter.php', '20', 'Y', 'bcoe', 'BJCP2015', 0, 0, 0, 0, 'very-high-strength, dark-color, top-fermented, british-isles, north-america, traditional-style, craft-style, stout-family, malty, bitter, roasty', 'American - North Coast Old Rasputin Imperial Stout, Cigar City Marshal Zhukov&rsquo;s Imperial Stout; English - Courage Imperial Russian Stout, Le Coq Imperial Extra Double Stout, Samuel Smith Imperial Stout.', ''),
 (162, 'A', 'American IPA', 'IPA', '1.056', '1.07', '1.008', '1.014', '5.5', '7.5', '40', '70', '6', '14', 'Ale', 'A decidedly hoppy and bitter, moderately strong American pale ale, showcasing modern American and New World hop varieties. The balance is hop-forward, with a clean fermentation profile, dryish finish, and clean, supporting malt allowing a creative range of hop character to shine through.', 'http://bjcp.org/stylecenter.php', '21', 'Y', 'bcoe', 'BJCP2015', 0, 0, 0, 0, 'high-strength, pale-color, top-fermented, north-america, craft-style, ipa-family, bitter, hoppy', 'Russian River Blind Pig IPA, Bell&rsquo;s Two-Hearted Ale, Firestone Walker Union Jack, Alpine Duet, New Belgium Ranger IPA, Fat Heads Head Hunter, Stone IPA, Lagunitas IPA.', ''),
-(163, 'B', 'Specialty IPA', 'IPA', '', '', '', '', '', '', '', '', '', '', 'Ale', 'Recognizable as an IPA by balance - a hop-forward, bitter, dryish beer - with something else present to distinguish it from the standard categories. Should have good drinkability, regardless of the form. Excessive harshness and heaviness are typically faults, as are strong flavor clashes between the hops and the other specialty ingredients.', 'http://bjcp.org/stylecenter.php', '21', 'Y', 'bcoe', 'BJCP2015', 1, 0, 0, 0, 'high-strength, pale-color, top-fermented, north-america, craft-style, ipa-family, specialty-family, bitter, hoppy', '', 'Entrant must specify a strength (session: 3.0-5.0%, standard: 5.0-7.5%, double: 7.5-9.5%); if no strength is specified, standard will be assumed. Entrant must specify specific type of Specialty IPA from the library of known types listed in the Style Guidelines, or as amended by the BJCP web site; or the entrant must describe the type of Specialty IPA and its key characteristics in comment form so judges will know what to expect. Entrants may specify specific hop varieties used, if entrants feel that judges may not recognize the varietal characteristics of newer hops. Entrants may specify a combination of defined IPA types (e.g., Black Rye IPA) without providing additional descriptions. Entrants may use this category for a different strength version of an IPA defined by its own BJCP subcategory (e.g., session-strength American or English IPA) - except where an existing BJCP subcategory already exists for that style (e.g., double [American] IPA). Currently Defined Types: Black IPA, Brown IPA, White IPA, Rye IPA, Belgian IPA, Red IPA.'),
+(163, 'B', 'Specialty IPA', 'IPA', '', '', '', '', '', '', '', '', '', '', 'Ale', 'Recognizable as an IPA by balance - a hop-forward, bitter, dryish beer - with something else present to distinguish it from the standard categories. Should have good drinkability, regardless of the form. Excessive harshness and heaviness are typically faults, as are strong flavor clashes between the hops and the other specialty ingredients.', 'http://bjcp.org/stylecenter.php', '21', 'Y', 'bcoe', 'BJCP2015', 1, 0, 0, 0, 'high-strength, pale-color, top-fermented, north-america, craft-style, ipa-family, specialty-family, bitter, hoppy', '', 'Entrant MUST specify a strength (session: 3.0-5.0%, standard: 5.0-7.5%, double: 7.5-9.5%); if no strength is specified, standard will be assumed. This subcategory is a catch-all for entries that DO NOT fit into one of the defined BJCP Specialty IPA types: Black IPA, Brown IPA, White IPA, Rye IPA, Belgian IPA, or Red IPA. Entrant must describe the type of Specialty IPA and its key characteristics in comment form so judges will know what to expect. Entrants may specify specific hop varieties used, if entrants feel that judges may not recognize the varietal characteristics of newer hops. Entrants may specify a combination of defined IPA types (e.g., Black Rye IPA) without providing additional descriptions. Entrants may use this category for a different strength version of an IPA defined by its own BJCP subcategory (e.g., session-strength American or English IPA) - except where an existing BJCP subcategory already exists for that style (e.g., double [American] IPA). If the entry falls into one of the currently defined types (Black IPA, Brown IPA, White IPA, Rye IPA, Belgian IPA, Red IPA), it should be entered into that salient subcategory type'),
 (164, 'A', 'Double IPA', 'Strong American Ale', '1.065', '1.085', '1.008', '1.018', '7.5', '10', '60', '120', '6', '14', 'Ale', 'An intensely hoppy, fairly strong pale ale without the big, rich, complex maltiness and residual sweetness and body of an American barleywine. Strongly hopped, but clean, dry, and lacking harshness. Drinkability is an important characteristic; this should not be a heavy, sipping beer.', 'http://bjcp.org/stylecenter.php', '22', 'Y', 'bcoe', 'BJCP2015', 0, 0, 0, 0, 'very-high-strength, pale-color, top-fermented, north-america, craft-style, ipa-family, bitter, hoppy', 'Russian River Pliny the Elder, Port Brewing Hop 15, Three Floyds Dreadnaught, Avery Majaraja, Firestone Walker Double Jack, Alchemist Heady Topper, Bell''s Hopslam, Stone Ruination IPA, Great Divide Hercules Double IPA, Rogue XS Imperial India Pale Ale, Fat Heads Hop Juju, Alesmith Yulesmith Summer, Sierra Nevada Hoptimum.', ''),
 (165, 'B', 'American Strong Ale', 'Strong American Ale', '1.062', '1.09', '1.014', '1.024', '6.3', '10', '50', '100', '7', '19', 'Ale', 'A strong, full-flavored American ale that challenges and rewards the palate with full malty and hoppy flavors and substantial bitterness. The flavors are bold but complementary, and are stronger and richer than average-strength pale and amber American ales.', 'http://bjcp.org/stylecenter.php', '22', 'Y', 'bcoe', 'BJCP2015', 0, 0, 0, 0, 'high-strength, amber-color, top-fermented, north-america, craft-style, strong-ale-family, bitter, hoppy', 'Stone Arrogant Bastard, Great Lakes Nosferatu, Bear Republic Red Rocket Ale, Terrapin Big Hoppy Monster, Lagunitas Censored, Port Brewing Shark Attack Double Red.', ''),
 (166, 'C', 'American Barleywine', 'Strong American Ale', '1.08', '1.12', '1.016', '1.03', '8', '12', '50', '100', '10', '19', 'Ale', 'A well-hopped American interpretation of the richest and strongest of the English ales. The hop character should be evident throughout, but does not have to be unbalanced. The alcohol strength and hop bitterness often combine to leave a very long finish.', 'http://bjcp.org/stylecenter.php', '22', 'Y', 'bcoe', 'BJCP2015', 0, 0, 0, 0, 'very-high-strength, amber-color, top-fermented, north-america, craft-style, strong-ale-family, bitter, hoppy', 'Sierra Nevada Bigfoot, Great Divide Old Ruffian, Victory Old Horizontal, Rogue Old Crustacean, Avery Hog Heaven Barleywine, Bell''s Third Coast Old Ale, Anchor Old Foghorn, Three Floyds Behemoth, Stone Old Guardian, Bridgeport Old Knucklehead, Hair of the Dog Doggie Claws, Lagunitas Olde GnarleyWine, Smuttynose Barleywine, Flying Dog Horn Dog.', ''),
@@ -1075,7 +1086,7 @@ INSERT INTO `baseline_styles` (`id`, `brewStyleNum`, `brewStyle`, `brewStyleCate
 (181, 'B', 'Belgian Dubbel', 'Trappist Ale', '1.062', '1.075', '1.008', '1.018', '6', '7.6', '15', '25', '10', '17', 'Ale', 'A deep reddish-copper, moderately strong, malty, complex Trappist ale with rich malty flavors, dark or dried fruit esters, and light alcohol blended together in a malty presentation that still finishes fairly dry. Comments: Most commercial examples are in the 6.5 - 7% ABV range. Traditionally bottle-conditioned (&quot;refermented in the bottle&quot;). ', 'http://bjcp.org/stylecenter.php', '26', 'Y', 'bcoe', 'BJCP2015', 0, 0, 0, 0, 'high-strength, amber-color, top-fermented, western-europe, traditional-style, malty', 'Westmalle Dubbel, St. Bernardus Pater 6, La Trappe Dubbel, Corsendonk Abbey Brown Ale, Grimbergen Double, Affligem Dubbel, Chimay Premiere (Red), Pater Lieven Bruin, Duinen Dubbel, St. Feuillien Brune, New Belgium Abbey Belgian Style Ale, Stoudts Abbey Double Ale, Russian River Benediction, Flying Fish Dubbel, Lost Abbey Lost and Found Abbey Ale, Allagash Double.', ''),
 (182, 'C', 'Belgian Tripel', 'Trappist Ale', '1.075', '1.085', '1.008', '1.014', '7.5', '9.5', '20', '40', '4.5', '7', 'Ale', 'A pale, somewhat spicy, dry, strong Trappist ale with a pleasant rounded malt flavor and firm bitterness. Quite aromatic, with spicy, fruity, and light alcohol notes combining with the supportive clean malt character to produce a surprisingly drinkable beverage considering the high alcohol level.', 'http://bjcp.org/stylecenter.php', '26', 'Y', 'bcoe', 'BJCP2015', 0, 0, 0, 0, 'high-strength, pale-color, top-fermented, western-europe, traditional-style, bitter', 'Westmalle Tripel, La Rulles Tripel, St. Bernardus Tripel, Chimay Cinq Cents (White), Watou Tripel, Val-Dieu Triple, Affligem Tripel, Grimbergen Tripel, La Trappe Tripel, Witkap Pater Tripel, Corsendonk Abbey Pale Ale, St. Feuillien Tripel.', ''),
 (183, 'D', 'Belgian Dark Strong Ale', 'Trappist Ale', '1.075', '1.11', '1.01', '1.024', '8', '11', '20', '35', '12', '22', 'Ale', 'A dark, complex, very strong Belgian ale with a delicious blend of malt richness, dark fruit flavors, and spicy elements. Complex, rich, smooth and dangerous.', 'http://bjcp.org/stylecenter.php', '26', 'Y', 'bcoe', 'BJCP2015', 0, 0, 0, 0, 'very-high-strength, amber-color, top-fermented, western-europe, traditional-style, malty', 'Westvleteren 12, Rochefort 10, St. Bernardus Abt 12, Gouden Carolus Grand Cru of the Emperor, Achel Extra Brune, Rochefort 8, Southampton Abbot 12, Chimay Grande Reserve, Lost Abbey Judgment Day.', ''),
-(184, 'A', 'Historical Beer', 'Historical Beer', '', '', '', '', '', '', '', '', '', '', '', 'The Historical Beer category contains styles that either have all but died out in modern times, or that were much more popular in past times and are known only through recreations. This category can also be used for traditional or indigenous beers of cultural importance within certain countries. Placing a beer in the historical category does not imply that it is not currently being produced, just that it is a very minor style or perhaps is in the process of rediscovery by craft brewers.', 'http://bjcp.org/stylecenter.php', '27', 'Y', 'bcoe', 'BJCP2015', 1, 0, 0, 0, 'standard-strength, pale-color, top-fermented, central-europe, historical-style, wheat-beer-family, sour, spice, amber-color, north-america, historical-style, balanced, smoke, dark-color, british-isles, brown-ale-family, malty, sweet, bottom-fermented, lag', '', 'The entrant must either specify a style with a BJCP-supplied description, or provide a similar description for the judges of a different style. If a beer is entered with just a style name and no description, it is very unlikely that judges will understand how to judge it. Currently defined examples: Gose, Piwo Grodziskie, Lichtenhainer, Roggenbier, Sahti, Kentucky Common, Pre-Prohibition Lager, Pre-Prohibition Porter, London Brown Ale.'),
+(184, 'A', 'Historical Beer', 'Historical Beer', '', '', '', '', '', '', '', '', '', '', '', 'The Historical Beer category contains styles that either have all but died out in modern times, or that were much more popular in past times and are known only through recreations. This category can also be used for traditional or indigenous beers of cultural importance within certain countries. Placing a beer in the historical category does not imply that it is not currently being produced, just that it is a very minor style or perhaps is in the process of rediscovery by craft brewers.', 'http://bjcp.org/stylecenter.php', '27', 'Y', 'bcoe', 'BJCP2015', 1, 0, 0, 0, 'standard-strength, pale-color, top-fermented, central-europe, historical-style, wheat-beer-family, sour, spice, amber-color, north-america, historical-style, balanced, smoke, dark-color, british-isles, brown-ale-family, malty, sweet, bottom-fermented', '', 'Catch-all category for other historical beers that have NOT been defined by the BJCP. The entrant must provide a description for the judges of the historical style that is NOT one of the currently defined historical style examples provided by the BJCP. Currently defined examples are: Gose, Piwo Grodziskie, Lichtenhainer, Roggenbier, Sahti, Kentucky Common, Pre-Prohibition Lager, Pre-Prohibition Porter, London Brown Ale. If a beer is entered with just a style name and no description, it is very unlikely that judges will understand how to judge it.'),
 (185, 'A', 'Brett Beer', 'American Wild Ale', '', '', '', '', '', '', '', '', '', '', '', 'An interesting and refreshing variation on the base style, often drier and fruitier than expected, with at most a light acidity. Funky notes are generally restrained in 100% Brett examples, except in older examples.', 'http://bjcp.org/stylecenter.php', '28', 'Y', 'bcoe', 'BJCP2015', 1, 0, 0, 0, 'wild-fermentation, north-america, craft-style, specialty-beer', '', 'The entrant must specify either a base beer style (classic BJCP style, or a generic style family) or provide a description of the ingredients/specs/desired character. The entrant must specify if a 100% Brett fermentation was conducted. The entrant may specify the strain(s) of Brettanomyces used, along with a brief description of its character.'),
 (186, 'B', 'Mixed Fermentation Sour Beer', 'American Wild Ale', '', '', '', '', '', '', '', '', '', '', '', 'A sour and/or funky version of a base style of beer.', 'http://bjcp.org/stylecenter.php', '28', 'Y', 'bcoe', 'BJCP2015', 1, 0, 0, 0, 'wild-fermentation, north-america, craft-style, specialty-beer, sour', 'Bruery Tart of Darkness, Jolly Pumpkin Calabaza Blanca, Cascade Vlad the Imp Aler, Russian River Temptation, Boulevard Love Child, Hill Farmstead Bi', 'The entrant must specify a description of the beer, identifying the yeast/bacteria used and either a base style or the ingredients/specs/target character of the beer.'),
 (187, 'C', 'Wild Specialty Beer', 'American Wild Ale', '', '', '', '', '', '', '', '', '', '', '', 'A sour and/or funky version of a fruit, herb, or spice beer, or a wild beer aged in wood. If wood-aged, the wood should not be the primary or dominant character.', 'http://bjcp.org/stylecenter.php', '28', 'Y', 'bcoe', 'BJCP2015', 1, 0, 0, 0, 'wild-fermentation, north-america, craft-style, specialty-beer, sour, fruit', 'Cascade Bourbonic Plague, Jester King Atrial Rubicite, New Glarus Belgian Red, Russian River Supplication, The Lost Abbey Cuvee de Tomme.', 'Entrant must specify the type of fruit, spice, herb, or wood used. Entrant must specify a description of the beer, identifying the yeast/bacteria used and either a base style or the ingredients/specs/target character of the beer. A general description of the special nature of the beer can cover all the required items.'),
@@ -1118,7 +1129,22 @@ INSERT INTO `baseline_styles` (`id`, `brewStyleNum`, `brewStyle`, `brewStyleCate
 (223, 'C', 'Applewine', 'Specialty Cider and Perry', '1.07', '1.1', '0.995', '1.02', '9', '12', 'N/A', 'N/A', 'N/A', 'N/A', 'Cider', 'Typically like a dry white wine, balanced, and with low astringency and bitterness. ', 'http://bjcp.org/stylecenter.php', 'C2', 'Y', 'bcoe', 'BJCP2015', 0, 0, 1, 1, '', '[US] Uncle John''s Fruit House Winery Fruit House Apple (MI), McClure&rsquo;s Sweet Apple Wine (IN).', 'Entrants MUST specify carbonation level (3 levels). Entrants MUST specify sweetness (5 levels).'),
 (224, 'D', 'Ice Cider', 'Specialty Cider and Perry', '1.13', '1.18', '1.06', '1.085', '7', '13', 'N/A', 'N/A', 'N/A', 'N/A', 'Cider', 'This is a cider style in which the juice is concentrated before fermentation either by freezing fruit before pressing or freezing juice and removing water.', 'http://bjcp.org/stylecenter.php', 'C2', 'Y', 'bcoe', 'BJCP2015', 1, 0, 1, 0, '', '[US] various from Eden Ice Cider Company and Champlain Orchards. [Canada] Domaine Pinnacle, Les Vergers de la Colline, and Cidrerie St-Nicolas (Quebec).', 'Entrants MUST specify starting gravity, final gravity or residual sugar, and alcohol level. Entrants MUST specify carbonation level (3 levels).'),
 (225, 'E', 'Cider with Herbs/Spices', 'Specialty Cider and Perry', '1.045', '1.07', '0.995', '1.01', '5', '9', 'N/A', 'N/A', 'N/A', 'N/A', 'Cider', 'Like a white wine with complex flavors. The apple character must marry with the botanicals and give a balanced result.', 'http://bjcp.org/stylecenter.php', 'C2', 'Y', 'bcoe', 'BJCP2015', 1, 0, 1, 1, '', '[US] Colorado Cider Grasshop-ah (CO), Wandering Aengus Anthem Hops (OR).', 'Entrants MUST specify carbonation level (3 levels). Entrants MUST specify sweetness (5 categories). Entrants MUST specify all botanicals added. If hops are used, entrant must specify variety/varieties used.'),
-(226, 'F', 'Specialty Cider/Perry', 'Specialty Cider and Perry', '1.045', '1.1', '0.995', '1.02', '5', '12', 'N/A', 'N/A', 'N/A', 'N/A', 'Cider', 'This is an open-ended category for cider or perry with other ingredients such that it does not fit any of the other BJCP categories.', 'http://bjcp.org/stylecenter.php', 'C2', 'Y', 'bcoe', 'BJCP2015', 1, 0, 1, 1, '', '', 'Entrants MUST specify all ingredients. Entrants MUST specify carbonation level (3 levels). Entrants MUST specify sweetness (5 categories).');
+(226, 'F', 'Specialty Cider/Perry', 'Specialty Cider and Perry', '1.045', '1.1', '0.995', '1.02', '5', '12', 'N/A', 'N/A', 'N/A', 'N/A', 'Cider', 'This is an open-ended category for cider or perry with other ingredients such that it does not fit any of the other BJCP categories.', 'http://bjcp.org/stylecenter.php', 'C2', 'Y', 'bcoe', 'BJCP2015', 1, 0, 1, 1, '', '', 'Entrants MUST specify all ingredients. Entrants MUST specify carbonation level (3 levels). Entrants MUST specify sweetness (5 categories).'),
+(227, 'B3', 'Brown IPA', 'Specialty IPA', '1.056', '1.070', '1.008', '1.016', '5.5', '7.5', '40', '70', '11', '19', '1', 'Hoppy, bitter, and moderately strong like an American IPA, but with some caramel, chocolate, toffee, and/or dark fruit malt character as in an American Brown Ale. Retaining the dryish finish and lean body that makes IPAs so drinkable, a Brown IPA is a little more flavorful and malty than an American IPA without being sweet or heavy.', 'http://bjcp.org/stylecenter.php', '21', 'Y', 'bcoe', 'BJCP2015', 1, 0, 0, 0, 'high-strength, dark-color, top-fermented, north-america, craft-style, ipa-family, specialty-family, bitter, hoppy', 'Dogfish Head Indian Brown Ale, Grand Teton Bitch Creek, Harpoon Brown IPA, Russian River Janet’s Brown Ale', 'Entrant MUST specify a strength (session: 3.0-5.0%, standard: 5.0-7.5%, double: 7.5-9.5%).'),
+(228, 'B4', 'Red IPA', 'Specialty IPA', '1.056', '1.070', '1.008', '1.016', '5.5', '7.5', '40', '70', '11', '19', '1', 'Hoppy, bitter, and moderately strong like an American IPA, but with some caramel, toffee, and/or dark fruit malt character. Retaining the dryish finish and lean body that makes IPAs so drinkable, a Red IPA is a little more flavorful and malty than an American IPA without being sweet or heavy.', 'http://bjcp.org/stylecenter.php', '21', 'Y', 'bcoe', 'BJCP2015', 1, 0, 0, 0, 'high-strength, amber-color, top-fermented, north-america, craft-style, ipa-family, specialty-family, bitter, hoppy', 'Green Flash Hop Head Red Double Red IPA (double), Midnight Sun Sockeye Red, Sierra Nevada Flipside Red IPA, Summit Horizon Red IPA, Odell Runoff Red IPA', 'Entrant MUST specify a strength (session: 3.0-5.0%, standard: 5.0-7.5%, double: 7.5-9.5%).'),
+(229, 'B5', 'Rye IPA', 'Specialty IPA', '1.056', '1.075', '1.008', '1.014', '5.5', '8.0', '50', '75', '6', '14', '1', 'A decidedly hoppy and bitter, moderately strong American pale ale, showcasing modern American and New World hop varieties and rye malt. The balance is hop-forward, with a clean fermentation profile, dry finish, and clean, supporting malt allowing a creative range of hop character to shine through.', 'http://bjcp.org/stylecenter.php', '21', 'Y', 'bcoe', 'BJCP2015', 1, 0, 0, 0, 'high-strength, amber-color, top-fermented, north-america, craft-style, ipa-family, specialty-family, bitter, hoppy', 'Arcadia Sky High Rye, Bear Republic Hop Rod Rye, Founders Reds Rye, Great Lakes Rye of the Tiger, Sierra Nevada Ruthless Rye', 'Entrant MUST specify a strength (session: 3.0-5.0%, standard: 5.0-7.5%, double: 7.5-9.5%).'),
+(230, 'B6', 'White IPA', 'Specialty IPA', '1.056', '1.065', '1.010', '1.016', '5.5', '7.0', '40', '70', '5', '8', '1', 'A fruity, spicy, refreshing version of an American IPA, but with a lighter color, less body, and featuring either the distinctive yeast and/or spice additions typical of a Belgian witbier.', 'http://bjcp.org/stylecenter.php', '21', 'Y', 'bcoe', 'BJCP2015', 1, 0, 0, 0, 'high-strength, pale-color, top-fermented, north-america, craft-style, ipa-family, specialty-family, bitter, hoppy, spice', 'Blue Point White IPA, Deschutes Chainbreaker IPA, Harpoon The Long Thaw, New Belgium Accumulation', 'Entrant MUST specify a strength (session: 3.0-5.0%, standard: 5.0-7.5%, double: 7.5-9.5%).'),
+(231, 'A9', 'London Brown Ale', 'Historical Beer', '1.033', '1.038', '1.012', '1.015', '2.8', '3.6', '15', '20', '22', '35', '1', 'A luscious, sweet, malt-oriented dark brown ale, with caramel and toffee malt complexity and a sweet finish.', 'http://bjcp.org/stylecenter.php', '27', 'Y', 'bcoe', 'BJCP2015', 0, 0, 0, 0, 'session-strength, dark-color, top-fermented, britishisles, historical-style, brown-ale-family, malty, sweet', 'Harveys Bloomsbury Brown Ale, Mann''s Brown Ale', 'Entrant MUST specify a strength (session: 3.0-5.0%, standard: 5.0-7.5%, double: 7.5-9.5%).'),
+(232, 'B1', 'Belgian IPA', 'Specialty IPA', '1.058', '1.080', '1.008', '1.016', '6.2', '9.5', '50', '100', '5', '15', '1', 'An IPA with the fruitiness and spiciness derived from the use of Belgian yeast. The examples from Belgium tend to be lighter in color and more attenuated, similar to a tripel that has been brewed with more hops. This beer has a more complex flavor profile and may be higher in alcohol than a typical IPA.', 'http://bjcp.org/stylecenter.php', '21', 'Y', 'bcoe', 'BJCP2015', 1, 0, 0, 0, 'high-strength, pale-color, top-fermented, north-america, craft-style, ipa-family, specialty-family, bitter, hoppy', 'Brewery Vivant Triomphe, Houblon Chouffe, Epic Brainless IPA, Green Flash Le Freak, Stone Cali-Belgique, Urthel Hop It', 'Entrant MUST specify a strength (session: 3.0-5.0%, standard: 5.0-7.5%, double: 7.5-9.5%).'),
+(233, 'B2', 'Black IPA', 'Specialty IPA', '1.050', '1.085', '1.010', '1.018', '5.5', '9.0', '50', '90', '25', '40', '1', 'A beer with the dryness, hop-forward balance, and flavor characteristics of an American IPA, only darker in color – but without strongly roasted or burnt flavors. The flavor of darker malts is gentle and supportive, not a major flavor component. Drinkability is a key characteristic.', 'http://bjcp.org/stylecenter.php', '21', 'Y', 'bcoe', 'BJCP2015', 1, 0, 0, 0, 'high-strength, dark-color, top-fermented, north-america, craft-style, ipa-family, specialty-family, bitter, hoppy', '21st Amendment Back in Black (standard), Deschutes Hop in the Dark CDA (standard), Rogue Dad’s Little Helper (standard), Southern Tier Iniquity (double), Widmer Pitch Black IPA (standard)', 'Entrant MUST specify a strength (session: 3.0-5.0%, standard: 5.0-7.5%, double: 7.5-9.5%).'),
+(234, 'A8', 'Pre-Prohibition Porter', 'Historical Beer', '1.046', '1.060', '1.010', '1.016', '4.5', '6.0', '20', '30', '18', '30', '1', 'An American adaptation of English Porter using American ingredients, including adjuncts.', 'http://bjcp.org/stylecenter.php', '27', 'Y', 'bcoe', 'BJCP2015', 0, 0, 0, 0, 'standard-strength, dark-color, any-fermentation, northamerica, historical-style, porter-family, malty', 'Stegmaier Porter, Yuengling Porter', NULL),
+(235, 'A4', 'Roggenbier', 'Historical Beer', '1.046', '1.056', '1.010', '1.014', '4.5', '6.0', '10', '20', '14', '19', '1', 'A dunkelweizen made with rye rather than wheat, but with a greater body and light finishing hops.', 'http://bjcp.org/stylecenter.php', '27', 'Y', 'bcoe', 'BJCP2015', 0, 0, 0, 0, 'standard-strength, amber-color, top-fermenting, central-europe, historical-style, wheat-beer-family', 'Thurn und Taxis Roggen', NULL),
+(236, 'A5', 'Sahti', 'Historical Beer', '1.076', '1.120', '1.016', '1.020', '7.0', '11.0', '7', '15', '4', '22', '1', 'A sweet, heavy, strong traditional Finnish beer with a rye, juniper, and juniper berry flavor and a strong banana-clove yeast character.', 'http://bjcp.org/stylecenter.php', '27', 'Y', 'bcoe', 'BJCP2015', 0, 0, 0, 0, 'high-strength, amber-color, top-fermented, centraleurope, historical-style, spice', NULL, NULL),
+(237, 'A6', 'Kentucky Common', 'Historical Beer', '1.044', '1.055', '1.010', '1.018', '4.0', '5.5', '15', '30', '11', '20', '1', 'A darker-colored, light-flavored, malt-accented beer with a dry finish and interesting character malt flavors. Refreshing due to its high carbonation and mild flavors, and highly  sessionable due to being served very fresh and with restrained alcohol levels.', 'http://bjcp.org/stylecenter.php', '27', 'Y', 'bcoe', 'BJCP2015', 0, 0, 0, 0, 'standard-strength, amber-color, top-fermented, north america,historical-style, balanced', 'Apocalypse Brew Works Ortel''s 1912', NULL),
+(238, 'A7', 'Pre-Prohibition Lager', 'Historical Beer', '1.044', '1.060', '1.010', '1.015', '4.5', '6.0', '25', '40', '3', '6', '1', 'A clean, refreshing, but bitter pale lager, often showcasing a grainy-sweet corn flavor. All malt or rice-based versions have a crisper, more neutral character. The higher bitterness level is the largest differentiator between this style and most modern mass-market pale lagers, but the more robust flavor profile also sets it apart.', 'http://bjcp.org/stylecenter.php', '27', 'Y', 'bcoe', 'BJCP2015', 0, 0, 0, 0, 'standard-strength, pale-color, bottom-fermented, lagered, north-america, historical-style, pilsner-family, bitter, hoppy', 'Anchor California Lager, Coors Batch 19, Little Harpeth Chicken Scratch', NULL),
+(239, 'A1', 'Gose', 'Historical Beer', '1.036', '1.056', '1.006', '1.010', '4.2', '4.8', '5', '12', '3', '4', '1', 'A highly-carbonated, tart and fruity wheat ale with a restrained coriander and salt character and low bitterness. Very refreshing, with bright flavors and high attenuation.', 'http://bjcp.org/stylecenter.php', '27', 'Y', 'bcoe', 'BJCP2015', 0, 0, 0, 0, 'standard-strength, pale-color, top-fermented, centraleurope, historical-style, wheat-beer-family, sour, spice', 'Anderson Valley Gose, Bayerisch Bahnhof Leipziger Gose, Dollnitzer Ritterguts Gose', NULL),
+(240, 'A2', 'Piwo Grodziskie', 'Historical Beer', '1.028', '1.032', '1.010', '1.015', '4.5', '6.0', '25', '40', '3', '6', '1', 'A low-gravity, highly-carbonated, light bodied ale combining an oak-smoked flavor with a clean hop bitterness. Highly sessionable.', 'http://bjcp.org/stylecenter.php', '27', 'Y', 'bcoe', 'BJCP2015', 0, 0, 0, 0, 'standard-strength, pale-color, bottom-fermented,lagered, north-america, historical-style, pilsner-family, bitter, hoppy', NULL, NULL),
+(241, 'A3', 'Lichtenhainer', 'Historical Beer', '1.032', '1.040', '1.004', '1.008', '3.5', '4.7', '5', '12', '3', '6', '1', 'A sour, smoked, lower-gravity historical German wheat beer. Complex yet refreshing character due to high attenuation and carbonation, along with low bitterness and moderate sourness. ', 'http://bjcp.org/stylecenter.php', '27', 'Y', 'bcoe', 'BJCP2015', 0, 0, 0, 0, 'standard-strength, pale-color, top-fermented, centraleurope, historical-style, wheat-beer-family, sour, smoke', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -1132,7 +1158,7 @@ CREATE TABLE IF NOT EXISTS `baseline_style_types` (
   `styleTypeOwn` varchar(255) DEFAULT NULL,
   `styleTypeBOS` char(1) DEFAULT NULL,
   `styleTypeBOSMethod` int(11) DEFAULT NULL
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `baseline_style_types`
@@ -1154,15 +1180,16 @@ CREATE TABLE IF NOT EXISTS `baseline_system` (
   `version` varchar(12) DEFAULT NULL,
   `version_date` date DEFAULT NULL,
   `data_check` varchar(255) DEFAULT NULL,
-  `setup` tinyint(1) DEFAULT NULL COMMENT 'Has setup run? 1=true, 0=false.'
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+  `setup` tinyint(1) DEFAULT NULL COMMENT 'Has setup run? 1=true, 0=false.',
+  `setup_last_step` int(3) DEFAULT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `baseline_system`
 --
 
-INSERT INTO `baseline_system` (`id`, `version`, `version_date`, `data_check`, `setup`) VALUES
-(1, '2.1.8.0', '2016-12-01', '2016-12-01 00:00:01', 1);
+INSERT INTO `baseline_system` (`id`, `version`, `version_date`, `data_check`, `setup`, `setup_last_step`) VALUES
+(1, '2.1.8.0', '2016-12-07', '2016-12-07 00:00:01', 1, 8);
 
 -- --------------------------------------------------------
 
@@ -1171,42 +1198,72 @@ INSERT INTO `baseline_system` (`id`, `version`, `version_date`, `data_check`, `s
 --
 
 CREATE TABLE IF NOT EXISTS `baseline_users` (
-  `id` int(8) NOT NULL,
+  `id` int(11) NOT NULL,
   `user_name` varchar(255) DEFAULT NULL,
   `password` varchar(250) DEFAULT NULL,
   `userLevel` char(1) DEFAULT NULL,
   `userQuestion` varchar(255) DEFAULT NULL,
   `userQuestionAnswer` varchar(255) DEFAULT NULL,
   `userCreated` timestamp NULL DEFAULT NULL COMMENT 'Timestamp of when the user was created.'
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `baseline_users`
 --
 
 INSERT INTO `baseline_users` (`id`, `user_name`, `password`, `userLevel`, `userQuestion`, `userQuestionAnswer`, `userCreated`) VALUES
-(1, 'user.baseline@brewcompetition.com', '$2a$08$2qgODWiSaYfLTVhu.2qVSer30aG7cLQZX0To01CqinyFyUbwdO64C', '0', 'What is your favorite all-time beer to drink?', 'pabst', '2016-08-31 19:00:01');
+(1, 'user.baseline@brewcompetition.com', '$2a$08$2qgODWiSaYfLTVhu.2qVSer30aG7cLQZX0To01CqinyFyUbwdO64C', '0', 'What is your favorite all-time beer to drink?', 'pabst', '2016-09-01 01:00:01');
 
-ALTER TABLE `baseline_archive`  ADD PRIMARY KEY (`id`);
-ALTER TABLE `baseline_brewer`  ADD PRIMARY KEY (`id`);
-ALTER TABLE `baseline_brewing`  ADD PRIMARY KEY (`id`);
-ALTER TABLE `baseline_contacts`  ADD PRIMARY KEY (`id`);
-ALTER TABLE `baseline_contest_info`  ADD PRIMARY KEY (`id`);
-ALTER TABLE `baseline_drop_off`  ADD PRIMARY KEY (`id`);
-ALTER TABLE `baseline_judging_assignments`  ADD PRIMARY KEY (`id`);
-ALTER TABLE `baseline_judging_flights`  ADD PRIMARY KEY (`id`);
-ALTER TABLE `baseline_judging_locations`  ADD PRIMARY KEY (`id`);
-ALTER TABLE `baseline_judging_preferences`  ADD PRIMARY KEY (`id`);
-ALTER TABLE `baseline_judging_scores`  ADD PRIMARY KEY (`id`);
-ALTER TABLE `baseline_judging_scores_bos`  ADD PRIMARY KEY (`id`);
-ALTER TABLE `baseline_judging_tables`  ADD PRIMARY KEY (`id`);
-ALTER TABLE `baseline_mods`  ADD PRIMARY KEY (`id`);
-ALTER TABLE `baseline_preferences`  ADD PRIMARY KEY (`id`);
-ALTER TABLE `baseline_special_best_data`  ADD PRIMARY KEY (`id`);
-ALTER TABLE `baseline_special_best_info`  ADD PRIMARY KEY (`id`);
-ALTER TABLE `baseline_sponsors`  ADD PRIMARY KEY (`id`);
-ALTER TABLE `baseline_staff`  ADD PRIMARY KEY (`id`);
-ALTER TABLE `baseline_styles`  ADD PRIMARY KEY (`id`);
-ALTER TABLE `baseline_style_types`  ADD PRIMARY KEY (`id`);
-ALTER TABLE `baseline_system`  ADD PRIMARY KEY (`id`);
-ALTER TABLE `baseline_users`  ADD PRIMARY KEY (`id`);
+--
+-- Indexes
+--
+ALTER TABLE `baseline_archive` ADD PRIMARY KEY (`id`);
+ALTER TABLE `baseline_brewer` ADD PRIMARY KEY (`id`);
+ALTER TABLE `baseline_brewing` ADD PRIMARY KEY (`id`);
+ALTER TABLE `baseline_contacts` ADD PRIMARY KEY (`id`);
+ALTER TABLE `baseline_contest_info` ADD PRIMARY KEY (`id`);
+ALTER TABLE `baseline_drop_off` ADD PRIMARY KEY (`id`);
+ALTER TABLE `baseline_judging_assignments` ADD PRIMARY KEY (`id`);
+ALTER TABLE `baseline_judging_flights` ADD PRIMARY KEY (`id`);
+ALTER TABLE `baseline_judging_locations` ADD PRIMARY KEY (`id`);
+ALTER TABLE `baseline_judging_preferences` ADD PRIMARY KEY (`id`);
+ALTER TABLE `baseline_judging_scores` ADD PRIMARY KEY (`id`);
+ALTER TABLE `baseline_judging_scores_bos` ADD PRIMARY KEY (`id`);
+ALTER TABLE `baseline_judging_tables` ADD PRIMARY KEY (`id`);
+ALTER TABLE `baseline_mods` ADD PRIMARY KEY (`id`);
+ALTER TABLE `baseline_preferences` ADD PRIMARY KEY (`id`);
+ALTER TABLE `baseline_special_best_data` ADD PRIMARY KEY (`id`);
+ALTER TABLE `baseline_special_best_info` ADD PRIMARY KEY (`id`);
+ALTER TABLE `baseline_sponsors` ADD PRIMARY KEY (`id`);
+ALTER TABLE `baseline_staff` ADD PRIMARY KEY (`id`);
+ALTER TABLE `baseline_styles` ADD PRIMARY KEY (`id`);
+ALTER TABLE `baseline_style_types` ADD PRIMARY KEY (`id`);
+ALTER TABLE `baseline_system` ADD PRIMARY KEY (`id`);
+ALTER TABLE `baseline_users` ADD PRIMARY KEY (`id`);
+
+--
+-- AUTO_INCREMENT
+--
+ALTER TABLE `baseline_archive` MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+ALTER TABLE `baseline_brewer` MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+ALTER TABLE `baseline_brewing` MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+ALTER TABLE `baseline_contacts` MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+ALTER TABLE `baseline_contest_info` MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+ALTER TABLE `baseline_drop_off` MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+ALTER TABLE `baseline_judging_assignments` MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+ALTER TABLE `baseline_judging_flights` MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+ALTER TABLE `baseline_judging_locations` MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+ALTER TABLE `baseline_judging_preferences` MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+ALTER TABLE `baseline_judging_scores_bos` MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+ALTER TABLE `baseline_judging_scores` MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+ALTER TABLE `baseline_judging_tables` MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+ALTER TABLE `baseline_mods` MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+ALTER TABLE `baseline_preferences` MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+ALTER TABLE `baseline_special_best_data` MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+ALTER TABLE `baseline_special_best_info` MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+ALTER TABLE `baseline_sponsors` MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+ALTER TABLE `baseline_staff` MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+ALTER TABLE `baseline_styles` MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+ALTER TABLE `baseline_style_types` MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+ALTER TABLE `baseline_system` MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+ALTER TABLE `baseline_users` MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;

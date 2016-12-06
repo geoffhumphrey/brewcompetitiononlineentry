@@ -6,7 +6,8 @@ Checked Single
 */
 
 if (($section == "admin") && ($go == "styles") && ($action != "default")) { 
-
+$specialty_ipa_subs = array("21-B1","21-B2","21-B3","21-B4","21-B5","21-B6");
+$historical_subs = array("27-A1","27-A2","27-A3","27-A4","27-A5","27-A6","27-A7","27-A8","27-A9")
 ?>
 <!-- Load Show/Hide Configuration -->
 <script type="text/javascript">
@@ -212,6 +213,36 @@ $(document).ready(function() {
 				$("#strengthIPA").show("fast");
 				$("input[name='strengthIPA']").prop("required", true);
 				$("#special").show("fast");
+				$("#brewInfo").prop("required", true);
+			<?php } elseif ($key == "21-B1") { ?>
+				$("#strengthIPA").show("fast");
+				$("input[name='strengthIPA']").prop("required", true);
+				$("#special").hide("fast");
+				$("#brewInfo").prop("required", true);
+			<?php } elseif ($key == "21-B2") { ?>
+				$("#strengthIPA").show("fast");
+				$("input[name='strengthIPA']").prop("required", true);
+				$("#special").hide("fast");
+				$("#brewInfo").prop("required", true);
+			<?php } elseif ($key == "21-B3") { ?>
+				$("#strengthIPA").show("fast");
+				$("input[name='strengthIPA']").prop("required", true);
+				$("#special").hide("fast");
+				$("#brewInfo").prop("required", true);
+			<?php } elseif ($key == "21-B4") { ?>
+				$("#strengthIPA").show("fast");
+				$("input[name='strengthIPA']").prop("required", true);
+				$("#special").hide("fast");
+				$("#brewInfo").prop("required", true);
+			<?php } elseif ($key == "21-B5") { ?>
+				$("#strengthIPA").show("fast");
+				$("input[name='strengthIPA']").prop("required", true);
+				$("#special").hide("fast");
+				$("#brewInfo").prop("required", true);
+			<?php } elseif ($key == "21-B6") { ?>
+				$("#strengthIPA").show("fast");
+				$("input[name='strengthIPA']").prop("required", true);
+				$("#special").hide("fast");
 				$("#brewInfo").prop("required", true);
 			<?php } elseif ($key == "23-F") { ?>
 				$("#sweetnessLambic").show("fast");
@@ -927,9 +958,105 @@ $(document).ready(function() {
 				$("#specialInfoText").html("<?php echo $special_beer_info["$view"]; ?>");
 				$("#specialInfoName").html("<a href='#' data-tooltip='true' title='Click for specifics for this style.' data-toggle='modal' data-target='#<?php echo $view; ?>'>Style <?php echo str_replace("-","",$view); ?></a>");
 			});
+		<?php } elseif ($view == "21-B1") { ?>
+			$(document).ready(function() {
+				$("#special").hide("fast");
+				$("#carbonation").hide("fast");
+				$("#sweetness").hide("fast");
+				$("#strength").hide("fast");
+				$("#strengthIPA").show("fast");
+				$("#strengthSaison").hide("fast");
+				$("#darkLightColor").hide("fast");
+				$("#sweetnessLambic").hide("fast");
+				$("#carbLambic").hide("fast");
+				$("#BDGColor").hide("fast");
+				$("#specialInfo").hide("fast");
+				$("#specialInfoText").html("<?php echo $special_beer_info["$view"]; ?>");
+				$("#specialInfoName").html("<a href='#' data-tooltip='true' title='Click for specifics for this style.' data-toggle='modal' data-target='#<?php echo $view; ?>'>Style <?php echo str_replace("-","",$view); ?></a>");
+			});
+		<?php } elseif ($view == "21-B2") { ?>
+			$(document).ready(function() {
+				$("#special").hide("fast");
+				$("#carbonation").hide("fast");
+				$("#sweetness").hide("fast");
+				$("#strength").hide("fast");
+				$("#strengthIPA").show("fast");
+				$("#strengthSaison").hide("fast");
+				$("#darkLightColor").hide("fast");
+				$("#sweetnessLambic").hide("fast");
+				$("#carbLambic").hide("fast");
+				$("#BDGColor").hide("fast");
+				$("#specialInfo").hide("fast");
+				$("#specialInfoText").html("<?php echo $special_beer_info["$view"]; ?>");
+				$("#specialInfoName").html("<a href='#' data-tooltip='true' title='Click for specifics for this style.' data-toggle='modal' data-target='#<?php echo $view; ?>'>Style <?php echo str_replace("-","",$view); ?></a>");
+			});
+		<?php } elseif ($view == "21-B3") { ?>
+			$(document).ready(function() {
+				$("#special").hide("fast");
+				$("#carbonation").hide("fast");
+				$("#sweetness").hide("fast");
+				$("#strength").hide("fast");
+				$("#strengthIPA").show("fast");
+				$("#strengthSaison").hide("fast");
+				$("#darkLightColor").hide("fast");
+				$("#sweetnessLambic").hide("fast");
+				$("#carbLambic").hide("fast");
+				$("#BDGColor").hide("fast");
+				$("#specialInfo").hide("fast");
+				$("#specialInfoText").html("<?php echo $special_beer_info["$view"]; ?>");
+				$("#specialInfoName").html("<a href='#' data-tooltip='true' title='Click for specifics for this style.' data-toggle='modal' data-target='#<?php echo $view; ?>'>Style <?php echo str_replace("-","",$view); ?></a>");
+			});
+		<?php } elseif ($view == "21-B4") { ?>
+			$(document).ready(function() {
+				$("#special").hide("fast");
+				$("#carbonation").hide("fast");
+				$("#sweetness").hide("fast");
+				$("#strength").hide("fast");
+				$("#strengthIPA").show("fast");
+				$("#strengthSaison").hide("fast");
+				$("#darkLightColor").hide("fast");
+				$("#sweetnessLambic").hide("fast");
+				$("#carbLambic").hide("fast");
+				$("#BDGColor").hide("fast");
+				$("#specialInfo").hide("fast");
+				$("#specialInfoText").html("<?php echo $special_beer_info["$view"]; ?>");
+				$("#specialInfoName").html("<a href='#' data-tooltip='true' title='Click for specifics for this style.' data-toggle='modal' data-target='#<?php echo $view; ?>'>Style <?php echo str_replace("-","",$view); ?></a>");
+			});
+		<?php } elseif ($view == "21-B5") { ?>
+			$(document).ready(function() {
+				$("#special").hide("fast");
+				$("#carbonation").hide("fast");
+				$("#sweetness").hide("fast");
+				$("#strength").hide("fast");
+				$("#strengthIPA").show("fast");
+				$("#strengthSaison").hide("fast");
+				$("#darkLightColor").hide("fast");
+				$("#sweetnessLambic").hide("fast");
+				$("#carbLambic").hide("fast");
+				$("#BDGColor").hide("fast");
+				$("#specialInfo").hide("fast");
+				$("#specialInfoText").html("<?php echo $special_beer_info["$view"]; ?>");
+				$("#specialInfoName").html("<a href='#' data-tooltip='true' title='Click for specifics for this style.' data-toggle='modal' data-target='#<?php echo $view; ?>'>Style <?php echo str_replace("-","",$view); ?></a>");
+			});
+		<?php } elseif ($view == "21-B6") { ?>
+			$(document).ready(function() {
+				$("#special").hide("fast");
+				$("#carbonation").hide("fast");
+				$("#sweetness").hide("fast");
+				$("#strength").hide("fast");
+				$("#strengthIPA").show("fast");
+				$("#strengthSaison").hide("fast");
+				$("#darkLightColor").hide("fast");
+				$("#sweetnessLambic").hide("fast");
+				$("#carbLambic").hide("fast");
+				$("#BDGColor").hide("fast");
+				$("#specialInfo").hide("fast");
+				$("#specialInfoText").html("<?php echo $special_beer_info["$view"]; ?>");
+				$("#specialInfoName").html("<a href='#' data-tooltip='true' title='Click for specifics for this style.' data-toggle='modal' data-target='#<?php echo $view; ?>'>Style <?php echo str_replace("-","",$view); ?></a>");
+			});
 		<?php } elseif ($view == "23-F") { ?>
 			$(document).ready(function() {
-				$("#special").show("fast");
+				$("#special").hide("fast");
 				$("#carbonation").hide("fast");
 				$("#sweetness").hide("fast");
 				$("#strength").hide("fast");
