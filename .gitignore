@@ -44,3 +44,6 @@ config_for_test.php
 .DS_Store
 
 iframe.html
+
+site/config.reset.php
+*.zip

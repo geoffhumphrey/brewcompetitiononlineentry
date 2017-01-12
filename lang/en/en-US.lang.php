@@ -75,6 +75,8 @@ Note that the <em>...</em> tags were not altered. Just the word "Upload" to "Car
 // All labels are capitalized and without punctuation
 
 $label_home = "Home";
+$label_welcome = "Welcome";
+$label_comps = "Competition Directory";
 $label_info = "Info";
 $label_volunteers = "Volunteers";
 $label_register = "Register";
@@ -97,7 +99,8 @@ $label_sponsors = "Sponsors";
 $label_rules = "Rules";
 $label_volunteer_info = "Volunteer Info";
 $label_reg = $label_register;
-$label_judge_steward_reg = "Judge/Steward Registration";
+$label_judge_reg = "Judge Registration";
+$label_steward_reg = "Steward Registration";
 $label_past_winners = "Past Winners";
 $label_contact = "Contact";
 $label_style = "Style";
@@ -258,7 +261,7 @@ $label_subject = "Subject";
 $label_message = "Message";
 $label_send_message = "Send Message";
 $label_email = "Email Address";
-$label_account_registration = "Account Registration";
+$label_account_registration = "Registration";
 $label_entry_registration = "Entry Registration";
 $label_entry_fees = "Entry Fees";
 $label_entry_limit = "Entry Limit";
@@ -349,6 +352,16 @@ $label_participants = "Participants";
 $label_please_confirm = "Please Confirm";
 $label_undone = "This cannot be undone.";
 $label_data_retain = "Data to Retain";
+$label_comp_portal = "Competition Directory";
+$label_comp = "Competition";
+$label_continue = "Continue";
+$label_host = "Host";
+$label_closing_soon = "Closing Soon";
+$label_access = "Access";
+
+// v2.1.9
+$label_judge_info = "Judge Information";
+$label_cellar = "My Cellar";
 
 // Admin
 $label_admin = "Administration";
@@ -445,7 +458,7 @@ $header_text_042 = "Your email address has been updated.";
 $header_text_043 = "Your password has been updated.";
 $header_text_044 = "Info deleted successfully.";
 $header_text_045 = "You should verify all your entries imported using BeerXML.";
-$header_text_046 = "You have registered as a judge or steward.";
+$header_text_046 = "You have registered as a judge.";
 $header_text_047 = "You have reached the entry limit.";
 $header_text_048 = "Your entry was not added.";
 $header_text_049 = "You have reached the entry limit for the sub-category.";
@@ -506,6 +519,9 @@ $header_text_106 = "See the area(s) highlighted in RED below.";
 $header_text_107 = "Please choose a style.";
 $header_text_108 = "This entry cannot be accepted or confirmed until a style has been chosen. Unconfirmed entries may be deleted from the system without warning.";
 
+// v2.1.9
+$header_text_109 = "You have registered as a steward.";
+
 // -------------------- Navigation --------------------
 
 
@@ -541,7 +557,7 @@ $alert_text_029 = "Adding entries is not available.";
 $alert_text_030 = "The competition entry limit has been reached.";
 $alert_text_031 = "Your personal entry limit has been reached.";
 if (strpos($section, "step") === FALSE) $alert_text_032 = "You will be able to add entries on or after ".$entry_open.".";
-if (strpos($section, "step") === FALSE) $alert_text_033 = "Account registration will open ".$reg_open.".";
+if (strpos($section, "step") === FALSE) $alert_text_033 = "Registration will open ".$reg_open.".";
 $alert_text_034 = "Please return then to register your account.";
 if (strpos($section, "step") === FALSE) $alert_text_036 = "Entry registration will open ".$entry_open.".";
 $alert_text_037 = "Please return then to add your entries to the system.";
@@ -556,7 +572,7 @@ $alert_text_049 = "The entry limit has been reached.";
 if (strpos($section, "step") === FALSE) $alert_text_050 = "The limit of ".$row_limits['prefsEntryLimit']." entries has been reached. No further entries will be accepted.";
 $alert_text_052 = "The paid entry limit has been reached.";
 if (strpos($section, "step") === FALSE) $alert_text_053 = "The limit of ".$row_limits['prefsEntryLimitPaid']." <em>paid</em> entries has been reached. No further entries will be accepted.";
-$alert_text_055 = "Account registration is closed.";
+$alert_text_055 = "Registration is closed.";
 $alert_text_056 = "If you already registered an account,";
 $alert_text_057 = "log in here"; // lower-case and missing punctuation intentional
 $alert_text_059 = "Entry registration is closed.";
@@ -565,7 +581,7 @@ $alert_text_062 = "Entry drop-off is closed.";
 $alert_text_063 = "Entry bottles are no longer accepted at drop-off locations.";
 $alert_text_065 = "Entry shipping is closed.";
 $alert_text_066 = "Entry bottles are no longer accepted at the shipping location.";
-if (strpos($section, "step") === FALSE) $alert_text_068 = $j_s_text." account registration open.";
+if (strpos($section, "step") === FALSE) $alert_text_068 = $j_s_text." registration open.";
 $alert_text_069 = "Register here"; // missing punctuation intentional
 if (strpos($section, "step") === FALSE) $alert_text_070 = $j_s_text." registration will close ".$judge_closed.".";
 $alert_text_072 = "The limit of registered judges has been reached.";
@@ -586,6 +602,14 @@ $alert_email_not_in_use = "Congratulations! The email address you entered is not
 // ----------------------------------------------------------------------------------
 // Public Pages
 // ----------------------------------------------------------------------------------
+
+// v2.1.9
+$comps_text_000 = "Choose the competition you wish to access from the list below.";
+$comps_text_001 = "Current competition:";
+$comps_text_002 = "There are no competitions with entry windows open now.";
+$comps_text_003 = "There are no competitions with entry windows closing in the next 7 days.";
+$comps_text_004 = "";
+$comps_text_005 = "";
 
 // -------------------- BeerXML --------------------
 
@@ -661,8 +685,11 @@ if (($section == "brewer") || ($section == "register") || ($section == "step2") 
 	$brewer_text_016 = "My participation in this judging is entirely voluntary. I know that participation in this judging involves consumption of alcoholic beverages and that this consumption may affect my perceptions and reactions.";
 	$brewer_text_017 = "Click or tap the button above to expand the preferred styles to judge list.";
 	$brewer_text_018 = "By checking this box, I am effectively signing a legal document wherein I accept responsibility for my conduct, behavior and actions and completely absolve the competition and its organizers, individually or collectively, of responsibility for my conduct, behavior and actions.";
+	
+	// v2.1.9
+	$brewer_text_019 = "If you are planning to serve as a judge in any competition, click or tap the button above to enter your judge-related information.";
 
-}
+}	
 
 // -------------------- Contact --------------------
 
@@ -706,7 +733,7 @@ if ($section == "default") {
 	
 	$reg_open_text_000 = "Judge and Steward Registration is";
 	$reg_open_text_001 = "Open";
-	$reg_open_text_002 = "If you <em>have not</em> registered and are willing to be a judge or steward,";
+	$reg_open_text_002 = "If you <em>have not</em> registered and are willing to be a volunteer,";
 	$reg_open_text_003 = "please register";
 	$reg_open_text_004 = "If you <em>have</em> registered, log in and then choose <em>Edit Account</em> from the My Account menu indicated by the";
 	$reg_open_text_005 = "icon on the top menu.";
@@ -719,6 +746,10 @@ if ($section == "default") {
 	$reg_open_text_012 = "please proceed through the registration process";
 	$reg_open_text_013 = "if you already have an account.";
 	$reg_open_text_014 = "use the add an entry form";
+	
+	// v2.1.9
+	$reg_open_text_015 = "Judge Registration is";
+	$reg_open_text_016 = "Steward Registration is";
 	
 	$reg_closed_text_000 = "Thanks and Good Luck To All Who Entered the";
 	$reg_closed_text_001 = "There are";
@@ -747,10 +778,10 @@ if ($section == "entry") {
 	$entry_info_text_003 = "per entry";
 	$entry_info_text_004 = "You can create your account today through";
 	$entry_info_text_005 = "Judges and stewards may register now through";
-	$entry_info_text_006 = "Account registrations for";
+	$entry_info_text_006 = "Registrations for";
 	$entry_info_text_007 = "judges and stewards only";
 	$entry_info_text_008 = "accepted through";
-	$entry_info_text_009 = "Account registration is <strong class=\"text-danger\">closed</strong>.";
+	$entry_info_text_009 = "Registration is <strong class=\"text-danger\">closed</strong>.";
 	$entry_info_text_010 = "Welcome";
 	$entry_info_text_011 = "See your account details and list of entries.";
 	$entry_info_text_012 = "View your account information here.";
@@ -797,7 +828,7 @@ if ($section == "entry") {
 
 // -------------------- List (User Entry List) --------------------
 
-if ($section == "list") {
+if (($section == "list") || ($section == "account")) {
 	
 	$brewer_entries_text_000 = "There is a known issue with printing from the Firefox browser.";
 	$brewer_entries_text_001 = "You have unconfirmed entries.";
@@ -817,7 +848,8 @@ if ($section == "list") {
 	$brewer_entries_text_015 = "You cannot delete your entry at this time.";
 	
 	
-	$brewer_info_000 = "Thank you for entering the";
+	if (SINGLE) $brewer_info_000 = "Hello";
+	else $brewer_info_000 = "Thank you for entering the";
 	$brewer_info_001 = "Your account details were last updated";
 	$brewer_info_002 = "Take a moment to <a href=\"#entries\">review your entries</a>";
 	$brewer_info_003 = "pay your entry fees</a>";
@@ -917,7 +949,7 @@ if (($section == "register") || ($action == "register")) {
 	
 	$register_text_000 = "Is the volunteer ";
 	$register_text_001 = "Are you ";
-	$register_text_002 = "Account registration has closed.";
+	$register_text_002 = "Registration has closed.";
 	$register_text_003 = "Thank you for your interest.";
 	$register_text_004 = "The information you provide beyond your first name, last name, and club is strictly for record-keeping and contact purposes.";
 	$register_text_005 = "A condition of entry into the competition is providing this information. Your name and club may be displayed should one of your entries place, but no other information will be made public.";
@@ -955,12 +987,12 @@ if (($section == "register") || ($action == "register")) {
 
 // -------------------- Sidebar --------------------
 
-$sidebar_text_000 = "Account registrations for judges or stewards";
-$sidebar_text_001 = "Account registrations for stewards";
-$sidebar_text_002 = "Account registrations for judges";
-$sidebar_text_003 = "Account registrations are no longer accepted. The limit of judges and stewards has been reached.";
+$sidebar_text_000 = "Registrations for judges or stewards";
+$sidebar_text_001 = "Registrations for stewards";
+$sidebar_text_002 = "Registrations for judges";
+$sidebar_text_003 = "Registrations are no longer accepted. The limit of judges and stewards has been reached.";
 $sidebar_text_004 = "through";
-$sidebar_text_005 = "Account registrations accepted";
+$sidebar_text_005 = "Registrations accepted";
 $sidebar_text_006 = "is Open for Judges or Stewards Only";
 $sidebar_text_007 = "is Open for Stewards Only";
 $sidebar_text_008 = "is Open for Judges Only";
@@ -1053,7 +1085,7 @@ if ($section == "volunteers") {
 	$volunteers_text_001 = "and then choose <em>Edit Account</em> from the My Account menu indicated by the";
 	$volunteers_text_002 = "icon on the top menu";
 	$volunteers_text_003 = "and";
-	$volunteers_text_004 = "If you have <em>not</em> registered and are willing to be a judge or steward, please register:";
+	$volunteers_text_004 = "If you have <em>not</em> registered and are willing to be a judge or steward, please register";
 	$volunteers_text_005 = "Since you have already registered,";
 	$volunteers_text_006 = "access your account";
 	$volunteers_text_007 = "to see if you have volunteered to be a judge or steward";

@@ -39,7 +39,7 @@ elseif ($filter == "avail_stewards") {
 
 //@single
 else {
-	$query_sql = sprintf("SELECT uid, brewerFirstName, brewerLastName, brewerEmail, brewerAddress, brewerCity, brewerState, brewerZip, brewerCountry, brewerPhone1, brewerClubs, brewerJudge, brewerJudgeRank, brewerJudgeID, brewerSteward, brewerJudgeLocation, brewerStewardLocation FROM %s ORDER BY brewerLastName ASC", $prefix."brewer");
+	$query_sql = sprintf("SELECT uid, brewerFirstName, brewerLastName, brewerEmail, brewerAddress, brewerCity, brewerState, brewerZip, brewerCountry, brewerPhone1, brewerClubs, brewerJudge, brewerJudgeRank, brewerJudgeID, brewerSteward, brewerJudgeLocation, brewerStewardLocation FROM %s", $prefix."brewer");
 	$query_sql .= " ORDER BY brewerLastName ASC";	
 }
 

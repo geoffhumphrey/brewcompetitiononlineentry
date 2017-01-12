@@ -221,6 +221,7 @@ switch($section) {
 		elseif ($msg == "7") $output = sprintf("<strong>%s</strong>",$header_text_046);
 		elseif ($msg == "8") $output = sprintf("<strong>%s</strong> %s",$header_text_047,$header_text_048);
 		elseif ($msg == "9") $output = sprintf("<strong>%s</strong> %s",$header_text_049,$header_text_048); 
+		elseif ($msg == "10") $output = sprintf("<strong>%s</strong>",$header_text_109);
 		else $output = "";
 	break;
 	

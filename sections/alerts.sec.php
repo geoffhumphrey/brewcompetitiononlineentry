@@ -20,12 +20,12 @@ $alert_text_045 = sprintf("<strong>%s</strong> %s %s",$alert_text_042,$alert_tex
 $alert_text_048 = sprintf("<strong>%s</strong> %s",$alert_text_046,$alert_text_047);
 $alert_text_051 = sprintf("<strong>%s</strong> %s",$alert_text_049,$alert_text_050);
 $alert_text_054 = sprintf("<strong>%s</strong> %s",$alert_text_052,$alert_text_053);
-$alert_text_058 = sprintf("<strong>%s</strong> %s <a class=\"alert-link\ href=\"".build_public_url("login","default","default","default",$sef,$base_url)."\">%s</a>.",$alert_text_055,$alert_text_056,$alert_text_057);
+$alert_text_058 = sprintf("<strong>%s</strong> %s <a class=\"alert-link\" href=\"%s\">%s</a>.",$alert_text_055,$alert_text_056,build_public_url("login","default","default","default",$sef,$base_url),$alert_text_057);
 $alert_text_061 = sprintf("<strong>%s</strong> %s",$alert_text_059,$alert_text_060);
 $alert_text_064 = sprintf("<strong>%s</strong> %s",$alert_text_062,$alert_text_063);
 $alert_text_067 = sprintf("<strong>%s</strong> %s",$alert_text_065,$alert_text_066);
-$alert_text_071 = sprintf("<strong>%s</strong> <a class=\"alert-link\" href=\"".build_public_url("register","judge","default","default",$sef,$base_url)."\">%s</a>. %s",$alert_text_068,$alert_text_069,$alert_text_070);
-$alert_text_075 = sprintf("<strong>%s</strong> %s ",$alert_text_072,$alert_text_073);
+$alert_text_071 = sprintf("<strong>%s</strong> %s",$alert_text_068,$alert_text_070);
+$alert_text_075 = sprintf("<strong>%s</strong> %s",$alert_text_072,$alert_text_073);
 if (!$steward_limit) $alert_text_075 .= $alert_text_074;
 $alert_text_079 = sprintf("<strong>%s</strong> %s ",$alert_text_076,$alert_text_077);
 if (!$judge_limit) $alert_text_079 .= $alert_text_078;

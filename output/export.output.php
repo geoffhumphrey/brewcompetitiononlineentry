@@ -21,7 +21,7 @@ require(INCLUDES.'scrubber.inc.php');
 
 $header = "";
 
-if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) {
+if (((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) || (((judging_date_return() == 0) && ($registration_open == 2) && ($entry_window_open == 2)))) {
 
 /* -------------- ENTRY Exports -------------- */
 

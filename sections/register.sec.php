@@ -106,8 +106,6 @@ $page_info1 = "";
 $header1_2 = "";
 $page_info2 = "";
 
-
-
 if ($section == "admin") {
 	$you_volunteer = $register_text_000;
 }
@@ -150,6 +148,7 @@ if ($go != "default") {
 		do { 
     		$dropoff_select .= "<option value=\"".$row_dropoff['id']."\" ";
 			if (($action == "edit") && ($row_brewer['brewerDropOff'] == $row_dropoff['id'])) $dropoff_select .= "SELECTED";
+			if (($msg > 0) && ($_COOKIE['brewerDropOff'] == $row_dropoff['id'])) $dropoff_select .= "SELECTED"; 
 			$dropoff_select .= ">";
 			$dropoff_select .= $row_dropoff['dropLocationName']."</option>\n";
    		} while ($row_dropoff = mysqli_fetch_assoc($dropoff));
@@ -183,6 +182,20 @@ if ((($registration_open < 2) || ($judge_window_open < 2)) && ($go == "default")
 	}
 	$page_info1 .= "</ul>";	
 }
+
+if (isset($_SERVER['HTTP_REFERER'])) $relocate = $_SERVER['HTTP_REFERER'];
+else $relocate = $base_url."index.php?section=list";
+
+$judge_steward_class = "";
+$judge_class = "";
+$steward_class = "";
+
+if ($go == "entrant") $judge_steward_class = "hidden";
+if ($go == "judge") $steward_class = "hidden";
+if ($go == "steward") $judge_class = "hidden";
+if ($judge_limit) $judge_class = "hidden";
+if ($steward_limit) $steward_class = "hidden";
+
 // --------------------------------------------------------------
 // Display
 // --------------------------------------------------------------
@@ -206,58 +219,60 @@ if ($go == "default") {  ?>
 			</div>
 		</div>
 	</div><!-- Form Group -->	
-<?php if (isset($_SERVER['HTTP_REFERER'])) { ?>
-<input type="hidden" name="relocate" value="<?php echo relocate($_SERVER['HTTP_REFERER'],"default",$msg,$id); ?>">
-<?php } else { ?>
-<input type="hidden" name="relocate" value="<?php echo relocate($base_url."index.php?section=list","default",$msg,$id); ?>">
-<?php } ?>
+<input type="hidden" name="relocate" value="<?php echo relocate($relocate,"default",$msg,$id); ?>">
 </form>
-<?php } else { ?> 
-<?php if ($section == "admin") { ?>
-<div class="bcoem-admin-element hidden-print">
-    <!-- All Participants Button -->
-    <div class="btn-group" role="group" aria-label="...">
-        <a class="btn btn-default" href="<?php echo $base_url; ?>index.php?section=admin&amp;go=participants"><span class="fa fa-arrow-circle-left"></span> <?php echo $label_all_participants; ?></a>
-        
-    </div><!-- ./button group -->
-    <!-- All Participants Button -->
-    <div class="btn-group" role="group" aria-label="...">
-        <?php if ($view == "quick") { ?>
-        <a class="btn btn-default" href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judge&amp;action=register"><span class="fa fa-plus-circle"></span> <?php echo $label_register_judge_standard; ?></a>
-        <?php } ?>
-        <?php if ($view == "default") { ?>
-        <a class="btn btn-default" href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judge&amp;action=register&amp;view=quick"><span class="fa fa-plus-circle"></span> <?php echo $label_register_judge_quick; ?></a>
-        <?php } ?>
-    </div><!-- ./button group -->
-</div>
 <?php } ?>
-<form data-toggle="validator" role="form" class="form-horizontal" action="<?php echo $base_url; ?>includes/process.inc.php?action=add&amp;dbTable=<?php echo $users_db_table; ?>&amp;section=register&amp;go=<?php echo $go; if ($section == "admin") echo "&amp;filter=admin"; echo "&amp;view=".$view; ?>" method="POST" name="form1" id="form1">
-<?php if ($section == "admin") { ?>
-    <input type="hidden" name="password" value="bcoem">
-    <input type="hidden" name="userQuestion" value="Randomly generated.">
-    <input type="hidden" name="userQuestionAnswer" value="<?php echo random_generator(6,2); ?>">
-    <input type="hidden" name="brewerJudgeWaiver" value="Y">
-    <?php if ($view == "quick") { ?>
-        <input type="hidden" name="brewerAddress" value="1234 Main Street">
-        <input type="hidden" name="brewerCity" value="Anytown">
-        <input type="hidden" name="brewerState" value="CO">
-        <input type="hidden" name="brewerZip" value="80000">
-        <input type="hidden" name="brewerCountry" value="<?php echo $random_country; ?>">
-        <input type="hidden" name="brewerPhone1" value="1234567890">
-    <?php } // end if ($view == "quick")?>
-<?php } // end if ($section == "admin") ?>
+<?php if ($go != "default") { ?>
+	
+	
+	<?php if ($section == "admin") { ?>
+    <!-- Admin Specific Registration -->
+    <div class="bcoem-admin-element hidden-print">
+        <!-- All Participants Button -->
+        <div class="btn-group" role="group" aria-label="...">
+            <a class="btn btn-default" href="<?php echo $base_url; ?>index.php?section=admin&amp;go=participants"><span class="fa fa-arrow-circle-left"></span> <?php echo $label_all_participants; ?></a>
+        </div><!-- ./button group -->
+        <!-- All Participants Button -->
+        <div class="btn-group" role="group" aria-label="...">
+            <?php if ($view == "quick") { ?>
+            <a class="btn btn-default" href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judge&amp;action=register"><span class="fa fa-plus-circle"></span> <?php echo $label_register_judge_standard; ?></a>
+            <?php } ?>
+            <?php if ($view == "default") { ?>
+            <a class="btn btn-default" href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judge&amp;action=register&amp;view=quick"><span class="fa fa-plus-circle"></span> <?php echo $label_register_judge_quick; ?></a>
+            <?php } ?>
+        </div><!-- ./button group -->
+    </div>
+    <?php } // end if ($section == "admin") line 217 ?>
+
+	<form data-toggle="validator" role="form" class="form-horizontal" action="<?php echo $base_url; ?>includes/process.inc.php?action=add&amp;dbTable=<?php echo $users_db_table; ?>&amp;section=register&amp;go=<?php echo $go; if ($section == "admin") echo "&amp;filter=admin"; echo "&amp;view=".$view; ?>" method="POST" name="form1" id="form1">
+    
+    <!-- Hidden Form Elements -->
+    <?php if ($section == "admin") { ?>
+        <!-- Admin Specific Registration, Part II -->
+        <input type="hidden" name="password" value="bcoem">
+        <input type="hidden" name="userQuestion" value="Randomly generated.">
+        <input type="hidden" name="userQuestionAnswer" value="<?php echo random_generator(6,2); ?>">
+        <input type="hidden" name="brewerJudgeWaiver" value="Y">
+        <?php if ($view == "quick") { ?>
+            <input type="hidden" name="brewerAddress" value="1234 Main Street">
+            <input type="hidden" name="brewerCity" value="Anytown">
+            <input type="hidden" name="brewerState" value="CO">
+            <input type="hidden" name="brewerZip" value="80000">
+            <input type="hidden" name="brewerCountry" value="<?php echo $random_country; ?>">
+            <input type="hidden" name="brewerPhone1" value="1234567890">
+        <?php } // end if ($view == "quick")?>
+	<?php } // end if ($section == "admin") ?>
+    
+    
+    <!-- User Level is Always 2 -->
     <input type="hidden" name="userLevel" value="2" />
-    <?php if (isset($_SERVER['HTTP_REFERER'])) { ?>
-    <input type="hidden" name="relocate" value="<?php echo relocate($_SERVER['HTTP_REFERER'],"default",$msg,$id); ?>">
-    <?php } else { ?>
-    <input type="hidden" name="relocate" value="<?php echo relocate($base_url,"default",$msg,$id); ?>">
-   	<?php } ?>
-    <input type="hidden" name="IP" value="<?php echo $_SERVER['REMOTE_ADDR']; ?>" />
-<?php if ($go == "entrant") { ?>
+    <?php if ($go == "entrant") { ?>
     <input type="hidden" name="brewerJudge" value="N" />
     <input type="hidden" name="brewerSteward" value="N" />
-<?php } ?>
-	<div class="form-group"><!-- Form Group REQUIRED Text Input -->
+	<?php } ?>
+    
+    <!-- Email -->
+    <div class="form-group"><!-- Form Group REQUIRED Text Input -->
 		<label for="" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label_email; ?></label>
 		<div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
 			<div class="input-group has-warning">
@@ -271,8 +286,10 @@ if ($go == "default") {  ?>
 			<div id="status"></div>
 		</div>
 	</div><!-- ./Form Group -->
-	<?php if ($view == "default") { // Show if not using quick add judge/steward feature ?>
-	<div class="form-group"><!-- Form Group REQUIRED Text Input -->
+    
+    <?php if ($view == "default") { // Show if not using quick add judge/steward feature ?>
+	<!-- Password -->
+    <div class="form-group"><!-- Form Group REQUIRED Text Input -->
 		<label for="" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label_re_enter." ".$label_email; ?></label>
 		<div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
 			<div class="input-group has-warning">
@@ -296,8 +313,9 @@ if ($go == "default") {  ?>
             <div class="help-block with-errors"></div>
 		</div>
 	</div><!-- ./Form Group -->
-	<?php } ?>
-	<?php if ($section != "admin") { ?>
+	<?php } // end if ($view == "default") - ~ line 281 ?>
+    
+    <?php if ($section != "admin") { ?>
 	<div class="form-group"><!-- Form Group REQUIRED Radio Group -->
 		<label for="" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label_security_question; ?></label>
 		<div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
@@ -343,11 +361,11 @@ if ($go == "default") {  ?>
             <div class="help-block with-errors"><?php echo $register_text_024; ?></div>
 		</div>
 	</div><!-- ./Form Group -->
-	<?php } ?>
-	<div class="form-group"><!-- Form Group REQUIRED Text Input -->
+	<?php } // end if ($section != "admin") ~line 309 ?>
+    <!-- Name -->
+    <div class="form-group"><!-- Form Group REQUIRED Text Input -->
 		<label for="" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label_first_name; ?></label>
 		<div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
-			
 			<div class="input-group has-warning">
 				<span class="input-group-addon" id="first-name-addon1"><span class="fa fa-user"></span></span>
 				<!-- Input Here -->
@@ -372,7 +390,7 @@ if ($go == "default") {  ?>
 	</div><!-- ./Form Group -->
     
     <?php if ($view == "quick") { ?>
-    
+    <!-- Admin Quick Register Judge Fields -->
     <div class="form-group"><!-- Form Group Text Input -->
         <label for="brewerJudgeID" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label_bjcp_id; ?></label>
         <div class="col-lg-10 col-md-6 col-sm-8 col-xs-12">
@@ -380,7 +398,6 @@ if ($go == "default") {  ?>
             <input class="form-control" id="brewerJudgeID" name="brewerJudgeID" type="text" value="<?php if ($action == "edit") echo $row_brewer['brewerJudgeID']; ?>" placeholder="">
         </div>
     </div><!-- ./Form Group -->
-    
     <div class="form-group"><!-- Form Group Radio STACKED -->
             <label for="brewerJudgeRank" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label_bjcp_rank; ?></label>
             <div class="col-lg-10 col-md-6 col-sm-8 col-xs-12">
@@ -445,9 +462,10 @@ if ($go == "default") {  ?>
                 
             </div>
         </div><!-- ./Form Group -->
+    <?php } // end if ($view == "quick") ~line 383 ?>
     
-    <?php } ?>
-	<?php if ($view == "default") { ?>
+    <?php if ($view == "default") { ?>
+    <!-- General Entry Fields: Address, Phone, Dropoff Locations, Club, AHA -->
 	<div class="form-group"><!-- Form Group REQUIRED Text Input -->
 		<label for="" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label_street_address; ?></label>
 		<div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
@@ -562,122 +580,110 @@ if ($go == "default") {  ?>
 		</div>
 	</div><!-- ./Form Group -->
     <?php } ?>
-	
-	<?php if ($go != "entrant") { ?>
-	<?php if (!$judge_limit) { ?>
-    <?php if ($go == "steward") { ?>
-    <div class="hidden">
-    <?php } ?>
-	<div class="form-group"><!-- Form Group REQUIRED Radio Group -->
-		<label for="" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label_judging; ?></label>
-		<div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
-			<p><?php echo $brewer_text_006; ?></p>
-			<div class="input-group">
-				<!-- Input Here -->
-				<label class="radio-inline">
-					<input type="radio" name="brewerJudge" value="Y" id="brewerJudge_0"  <?php if ($msg != "4") echo "CHECKED"; if (($msg > 0) && ($_COOKIE['brewerJudge'] == "Y")) echo "CHECKED"; ?> rel="judge_no" /> <?php echo $label_yes; ?>
-				</label>
-				<label class="radio-inline">
-					<input type="radio" name="brewerJudge" value="N" id="brewerJudge_1" <?php if (($msg > 0) && ($_COOKIE['brewerJudge'] == "N")) echo "CHECKED"; if ($go == "steward") echo "CHECKED"; ?> rel="none" /> <?php echo $label_no; ?>
-				</label>
-			</div>
-		</div>
-	</div><!-- ./Form Group -->
     
-	<?php if ($totalRows_judging > 1) { ?>
+    <!-- Judge/Steward Fields - Do Not Show if ($go == "entrant") -->
+    <div id="judge-steward-fields" class="<?php echo $judge_steward_class; ?>">
     
-	<div class="form-group"><!-- Form Group REQUIRED Radio Group -->
-		<label for="" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label_judging_avail; ?></label>
-		<div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
-		<?php do { ?>
-			<div class="well well-sm">
-			<p><?php echo $row_judging3['judgingLocName']." ("; echo getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_judging3['judgingDate'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "short", "date-time").")"; ?></p>
-			<div class="input-group input-group-sm">
-				<!-- Input Here -->
-				<select class="selectpicker" name="brewerJudgeLocation[]" id="brewerJudgeLocation" data-width="auto">
-                    <option value="<?php echo "N-".$row_judging3['id']; ?>"   <?php if ($action == "edit") { $a = explode(",", $row_brewer['brewerJudgeLocation']); $b = "N-".$row_judging3['id']; foreach ($a as $value) { if ($value == $b) { echo "SELECTED"; } } } ?>><?php echo $label_no; ?></option>
-                    <option value="<?php echo "Y-".$row_judging3['id']; ?>"   <?php if ($action == "edit") { $a = explode(",", $row_brewer['brewerJudgeLocation']); $b = "Y-".$row_judging3['id']; foreach ($a as $value) { if ($value == $b) { echo "SELECTED"; } } } ?>><?php echo $label_yes; ?></option>
-                </select>
-			</div>
-			</div>
-		<?php }  while ($row_judging3 = mysqli_fetch_assoc($judging3)); ?>
-		</div>
-	</div><!-- ./Form Group -->
+    	<div id="judge-fields" class="<?php echo $judge_class; ?>">
+        
+        	<div class="form-group"><!-- Form Group REQUIRED Radio Group -->
+                <label for="" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label_judging; ?></label>
+                <div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
+                    <p><?php echo $brewer_text_006; ?></p>
+                    <div class="input-group">
+                        <!-- Input Here -->
+                        <label class="radio-inline">
+                            <input type="radio" name="brewerJudge" value="Y" id="brewerJudge_0"  <?php if ($go != "steward") { if ($msg != "4") echo "CHECKED"; if (($msg > 0) && ($_COOKIE['brewerJudge'] == "Y")) echo "CHECKED"; } ?> rel="judge_no" /> <?php echo $label_yes; ?>
+                        </label>
+                        <label class="radio-inline">
+                            <input type="radio" name="brewerJudge" value="N" id="brewerJudge_1" <?php if (($msg > 0) && ($_COOKIE['brewerJudge'] == "N")) echo "CHECKED"; if ($go == "steward") echo "CHECKED"; ?> rel="none" /> <?php echo $label_no; ?>
+                        </label>
+                    </div>
+                </div>
+            </div><!-- ./Form Group -->
+            
+            <?php if ($totalRows_judging > 1) { ?>
+            <div class="form-group"><!-- Form Group REQUIRED Radio Group -->
+                <label for="" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label_judging_avail; ?></label>
+                <div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
+                <?php do { ?>
+                    <div class="well well-sm">
+                    <p><?php echo $row_judging3['judgingLocName']." ("; echo getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_judging3['judgingDate'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "short", "date-time").")"; ?></p>
+                    <div class="input-group input-group-sm">
+                        <!-- Input Here -->
+                        <select class="selectpicker" name="brewerJudgeLocation[]" id="brewerJudgeLocation" data-width="auto">
+                            <option value="<?php echo "N-".$row_judging3['id']; ?>"   <?php if ($action == "edit") { $a = explode(",", $row_brewer['brewerJudgeLocation']); $b = "N-".$row_judging3['id']; foreach ($a as $value) { if ($value == $b) { echo "SELECTED"; } } } ?>><?php echo $label_no; ?></option>
+                            <option value="<?php echo "Y-".$row_judging3['id']; ?>"   <?php if ($action == "edit") { $a = explode(",", $row_brewer['brewerJudgeLocation']); $b = "Y-".$row_judging3['id']; foreach ($a as $value) { if ($value == $b) { echo "SELECTED"; } } } ?>><?php echo $label_yes; ?></option>
+                        </select>
+                    </div>
+                    </div>
+                <?php }  while ($row_judging3 = mysqli_fetch_assoc($judging3)); ?>
+                </div>
+            </div><!-- ./Form Group -->
+            <?php } else { ?><input name="brewerJudgeLocation" type="hidden" value="<?php echo "Y-".$row_judging3['id']; ?>" /><?php } ?>
+            
+        </div><!-- end judge-fields div ~line 586 -->
     
-    <?php if ($go == "steward") { ?>
-    </div>
-    <?php } ?>
+    	<div id="steward-fields" class="<?php echo $steward_class; ?>">
+        
+        	<div class="form-group"><!-- Form Group REQUIRED Radio Group -->
+                <label for="" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label_stewarding; ?></label>
+                <div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
+                    <p><?php echo $brewer_text_015; ?></p>
+                    <div class="input-group">
+                        <!-- Input Here -->
+                        <label class="radio-inline">
+                            <input type="radio" name="brewerSteward" value="Y" id="brewerSteward_0" <?php if ($go != "judge") { if ($msg != "4") echo "CHECKED"; if (($msg > 0) && ($_COOKIE['brewerSteward'] == "Y")) echo "CHECKED"; } ?> rel="steward_no" /><?php echo $label_yes; ?>
+                        </label>
+                        <label class="radio-inline">
+                            <input type="radio" name="brewerSteward" value="N" id="brewerSteward_1" <?php if (($msg > 0) && ($_COOKIE['brewerSteward'] == "N")) echo "CHECKED"; if ($go == "judge") echo "CHECKED"; ?> rel="none" /> <?php echo $label_no; ?>
+                        </label>
+                    </div>
+                </div>
+            </div><!-- ./Form Group -->
+        
+        <?php if ($totalRows_judging > 1) { ?>
+            <div class="form-group"><!-- Form Group REQUIRED Radio Group -->
+                <label for="" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label_stewarding_avail; ?></label>
+                <div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
+                <?php do { ?>
+                    <div class="well well-sm">
+                    <p><?php echo $row_stewarding['judgingLocName']." ("; echo getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_stewarding['judgingDate'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "short", "date-time").")"; ?></p>
+                    <div class="input-group input-group-sm">
+                        <!-- Input Here -->
+                        <select class="selectpicker" name="brewerStewardLocation[]" id="brewerStewardLocation" data-width="auto">
+                            <option value="<?php echo "N-".$row_stewarding['id']; ?>" <?php if ($action == "edit") { $a = explode(",", $row_brewer['brewerStewardLocation']); $b = "N-".$row_stewarding['id']; foreach ($a as $value) { if ($value == $b) { echo "SELECTED"; } } } ?>><?php echo $label_no; ?></option>
+                            <option value="<?php echo "Y-".$row_stewarding['id']; ?>" <?php if ($action == "edit") { $a = explode(",", $row_brewer['brewerStewardLocation']); $b = "Y-".$row_stewarding['id']; foreach ($a as $value) { if ($value == $b) { echo "SELECTED"; } } } ?>><?php echo $label_yes; ?></option>
+                        </select>
+                    </div>
+                    </div>
+                <?php }  while ($row_stewarding = mysqli_fetch_assoc($stewarding));  ?>
+                </div>
+            </div><!-- ./Form Group -->
+        <?php } else { ?><input name="brewerStewardLocation" type="hidden" value="<?php echo "Y-".$row_judging3['id']; ?>" /><?php } ?>
     
-	<?php } // end if (!$judge_limit) ?>
-	<?php } // end if ($go != "entrant") ?>
-    <?php if ($go == "judge") { ?>
-    <div class="hidden">
-    <?php } ?>
-	<?php if (!$steward_limit) { ?>
-	<div class="form-group"><!-- Form Group REQUIRED Radio Group -->
-		<label for="" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label_stewarding; ?></label>
-		<div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
-			<p><?php echo $brewer_text_015; ?></p>
-			<div class="input-group">
-				<!-- Input Here -->
-				<label class="radio-inline">
-					<input type="radio" name="brewerSteward" value="Y" id="brewerSteward_0" <?php if ($msg != "4") echo "CHECKED"; if (($msg > 0) && ($_COOKIE['brewerSteward'] == "Y")) echo "CHECKED"; ?> rel="steward_no" /><?php echo $label_yes; ?>
-				</label>
-				<label class="radio-inline">
-					<input type="radio" name="brewerSteward" value="N" id="brewerSteward_1" <?php if (($msg > 0) && ($_COOKIE['brewerSteward'] == "N")) echo "CHECKED"; if ($go == "judge") echo "CHECKED"; ?> rel="none" /> <?php echo $label_no; ?>
-				</label>
-			</div>
-		</div>
-	</div><!-- ./Form Group -->
+    	</div><!-- end steward-fields div ~line 626 -->
+        
+        <?php if ($section != "admin") { ?>
+        <div class="form-group"><!-- Form Group REQUIRED Radio Group -->
+            <label for="brewerJudgeWaiver" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label_waiver; ?></label>
+            <div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
+                <div class="checkbox">
+                    <!-- Input Here -->
+                    <p><?php echo $brewer_text_016; ?></p>
+                    <label>
+                        <input type="checkbox" name="brewerJudgeWaiver" value="Y" id="brewerJudgeWaiver_0" checked data-error="<?php echo $register_text_034; ?>" required /><?php echo $brewer_text_018; ?>
+                    </label>
+                </div>
+                <div class="help-block with-errors"></div>
+            </div>
+        </div><!-- ./Form Group -->
+        <?php } // end  if ($section != "admin") ~line 666 ?>
+        
+    </div><!-- end judge-steward-fields div ~line 582 -->
     
-	<?php if ($totalRows_judging > 1) { ?>
-	<div class="form-group"><!-- Form Group REQUIRED Radio Group -->
-		<label for="" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label_stewarding_avail; ?></label>
-		<div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
-		<?php do { ?>
-			<div class="well well-sm">
-			<p><?php echo $row_stewarding['judgingLocName']." ("; echo getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_stewarding['judgingDate'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "short", "date-time").")"; ?></p>
-			<div class="input-group input-group-sm">
-				<!-- Input Here -->
-				<select class="selectpicker" name="brewerStewardLocation[]" id="brewerStewardLocation" data-width="auto">
-					<option value="<?php echo "N-".$row_stewarding['id']; ?>" <?php if ($action == "edit") { $a = explode(",", $row_brewer['brewerStewardLocation']); $b = "N-".$row_stewarding['id']; foreach ($a as $value) { if ($value == $b) { echo "SELECTED"; } } } ?>><?php echo $label_no; ?></option>
-					<option value="<?php echo "Y-".$row_stewarding['id']; ?>" <?php if ($action == "edit") { $a = explode(",", $row_brewer['brewerStewardLocation']); $b = "Y-".$row_stewarding['id']; foreach ($a as $value) { if ($value == $b) { echo "SELECTED"; } } } ?>><?php echo $label_yes; ?></option>
-				</select>
-			</div>
-			</div>
-		<?php }  while ($row_stewarding = mysqli_fetch_assoc($stewarding));  ?>
-		</div>
-	</div><!-- ./Form Group -->
-    
-    <?php if ($go == "judge") { ?>
-    </div>
-    <?php } ?>
-    
-	<?php } // end if ($totalRows_judging > 1) 
-		else { ?>
-        <input name="brewerJudgeLocation" type="hidden" value="<?php echo "Y-".$row_judging3['id']; ?>" />
-        <input name="brewerStewardLocation" type="hidden" value="<?php echo "Y-".$row_judging3['id']; ?>" />
-    <?php } ?>
-    <?php } // end if (!$steward_limit) ?>
-    
-    <?php if (($go != "entrant") && ($section != "admin")) { ?>
-    <div class="form-group"><!-- Form Group REQUIRED Radio Group -->
-		<label for="brewerJudgeWaiver" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label_waiver; ?></label>
-		<div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
-			<div class="checkbox">
-				<!-- Input Here -->
-                <p><?php echo $brewer_text_016; ?></p>
-				<label>
-					<input type="checkbox" name="brewerJudgeWaiver" value="Y" id="brewerJudgeWaiver_0" checked data-error="<?php echo $register_text_034; ?>" required /><?php echo $brewer_text_018; ?>
-				</label>
-			</div>
-            <div class="help-block with-errors"></div>
-		</div>
-	</div><!-- ./Form Group -->
-    <?php } ?>
-<?php } // end if ($go != "entrant") ?>	
-	<?php if ($section != "admin") { ?>
-   	<!-- <script src="https://www.google.com/recaptcha/api.js"></script> -->
+    <!-- Captcha -->
+    <!-- <script src="https://www.google.com/recaptcha/api.js"></script> -->
 	<div class="form-group">
 		<label for="recaptcha" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">CAPTCHA</label>
 		<div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
@@ -688,20 +694,21 @@ if ($go == "default") {  ?>
 			</div>
 		</div>
 	</div><!-- Form Group -->
-    <?php } ?>
+    
+	<!-- Register Button -->
 	<div class="form-group">
 		<div class="col-lg-offset-2 col-md-offset-3 col-sm-offset-4">
 			<!-- Input Here -->
 			<button name="submit" type="submit" class="btn btn-primary" >Register</button>
 		</div>
 	</div><!-- Form Group -->
+    
+    </form>
 <script type="text/javascript">
   	$( function () {
   		twitter.screenNameKeyUp();
   		$('#user_screen_name').focus();
 	});
 </script>
-</form>
-<?php } 
-}
-?>
+<?php } // end if ($go != "default") ~line 216 ?>
+<?php } // end if registration open check ~line 119 ?>

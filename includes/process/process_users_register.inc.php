@@ -26,8 +26,24 @@ else $brewerPhone2 = "";
 if (isset($_POST['brewerJudgeWaiver'])) $brewerJudgeWaiver = $_POST['brewerJudgeWaiver'];
 else $brewerJudgeWaiver = "";
 
+if (isset($_POST['brewerDropOff'])) $brewerDropOff = $_POST['brewerDropOff'];
+else $brewerDropOff = "0";
 
- 
+if ($go == "entrant") {
+	$brewerSteward = "N";
+	$brewerJudge = "N";
+}
+
+if ($go == "judge") {
+	$brewerSteward = "N";
+	$brewerJudge = "Y";
+}
+
+if ($go == "steward") {
+	$brewerSteward = "Y";
+	$brewerJudge = "N";
+}
+
 // Custom Code for AHA NHC
 if (NHC) {
 	
@@ -87,8 +103,10 @@ if (NHC) {
 			setcookie("brewerPhone2", $brewerPhone2, 0, "/");
 			setcookie("brewerClubs", $brewerClubs, 0, "/");
 			setcookie("brewerAHA", $brewerAHA, 0, "/");
-			setcookie("brewerSteward", $_POST['brewerSteward'], 0, "/");
-			setcookie("brewerJudge", $_POST['brewerJudge'], 0, "/");
+			setcookie("brewerSteward", $brewerSteward, 0, "/");
+			setcookie("brewerJudge", $brewerJudge, 0, "/");
+			setcookie("brewerDropOff", $_POST['brewerDropOff'], 0, "/");
+			
 			//echo "AHA exists!";
 			header(sprintf("Location: %s", $base_url."index.php?section=".$section."&go=".$go."&msg=6"));
 			exit();
@@ -128,8 +146,10 @@ if (NHC) {
 	setcookie("brewerPhone2", $brewerPhone2, 0, "/");
 	setcookie("brewerClubs", $brewerClubs, 0, "/");
 	setcookie("brewerAHA", $brewerAHA, 0, "/");
-	setcookie("brewerSteward", $_POST['brewerSteward'], 0, "/");
-	setcookie("brewerJudge", $_POST['brewerJudge'], 0, "/");
+	setcookie("brewerSteward", $brewerSteward, 0, "/");
+	setcookie("brewerJudge", $brewerJudge, 0, "/");
+	setcookie("brewerDropOff", $_POST['brewerDropOff'], 0, "/");
+	
 	$location = $base_url."index.php?section=".$section."&go=".$go."&msg=4";
 	header(sprintf("Location: %s", $location));
 	}
@@ -151,8 +171,10 @@ if (NHC) {
 	setcookie("brewerPhone2", $brewerPhone2, 0, "/");
 	setcookie("brewerClubs", $brewerClubs, 0, "/");
 	setcookie("brewerAHA", $brewerAHA, 0, "/");
-	setcookie("brewerSteward", $_POST['brewerSteward'], 0, "/");
-	setcookie("brewerJudge", $_POST['brewerJudge'], 0, "/");
+	setcookie("brewerSteward", $brewerSteward, 0, "/");
+	setcookie("brewerJudge", $brewerJudge, 0, "/");
+	setcookie("brewerDropOff", $_POST['brewerDropOff'], 0, "/");
+	
 	if ($filter == "admin") $location =  $base_url."index.php?section=admin&go=entrant&action=register&msg=27";
 	else $location = $base_url."index.php?section=".$section."&go=".$go."&msg=5";
 	header(sprintf("Location: %s", $location));
@@ -187,8 +209,9 @@ if (strstr($username,'@'))  {
 		setcookie("brewerPhone2", $brewerPhone2, 0, "/");
 		setcookie("brewerClubs", $brewerClubs, 0, "/");
 		setcookie("brewerAHA", $brewerAHA, 0, "/");
-		setcookie("brewerSteward", $_POST['brewerSteward'], 0, "/");
-		setcookie("brewerJudge", $_POST['brewerJudge'], 0, "/");
+		setcookie("brewerSteward", $brewerSteward, 0, "/");
+		setcookie("brewerJudge", $brewerJudge, 0, "/");
+		setcookie("brewerDropOff", $_POST['brewerDropOff'], 0, "/");
 		
 		if ($filter == "admin") header(sprintf("Location: %s", $base_url."index.php?section=admin&go=".$go."&action=register&msg=10"));
 		else header(sprintf("Location: %s", $base_url."index.php?section=".$section."&go=".$go."&action=".$action."&msg=2"));
@@ -224,14 +247,14 @@ if (strstr($username,'@'))  {
 		$user = mysqli_query($connection,$query_user) or die (mysqli_error($connection));
 		$row_user = mysqli_fetch_assoc($user);
 		
-   if ($_POST['brewerJudge'] == "Y") {
+   if ($brewerJudge == "Y") {
 		if (($_POST['brewerJudgeLocation'] != "") && (is_array($_POST['brewerJudgeLocation']))) $location_pref1 = implode(",",$_POST['brewerJudgeLocation']);
         elseif (($_POST['brewerJudgeLocation'] != "") && (!is_array($_POST['brewerJudgeLocation']))) $location_pref1 = $_POST['brewerJudgeLocation'];
         
 	}
 	else $location_pref1 = "";
 	
-	if ($_POST['brewerSteward'] == "Y") {
+	if ($brewerSteward == "Y") {
         if (($_POST['brewerStewardLocation'] != "") && (is_array($_POST['brewerStewardLocation']))) $location_pref2 = implode(",",$_POST['brewerStewardLocation']);
         elseif (($_POST['brewerJudgeLocation'] != "") && (!is_array($_POST['brewerStewardLocation']))) $location_pref2 = $_POST['brewerStewardLocation'];
 	}
@@ -264,8 +287,10 @@ if (strstr($username,'@'))  {
 			  brewerJudgeLocation,
 			  brewerStewardLocation,
 			  brewerAHA,
-			  brewerJudgeWaiver
-			) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)",
+			  brewerJudgeWaiver,
+			  brewerDropOff
+			  
+			) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)",
 						   GetSQLValueString($row_user['id'], "int"),
 						   GetSQLValueString(capitalize($_POST['brewerFirstName']), "text"),
 						   GetSQLValueString(capitalize($_POST['brewerLastName']), "text"),
@@ -278,15 +303,16 @@ if (strstr($username,'@'))  {
 						   GetSQLValueString($brewerPhone2, "text"),
 						   GetSQLValueString($brewerClubs, "text"),
 						   GetSQLValueString($username, "text"),
-						   GetSQLValueString($_POST['brewerSteward'], "text"),
-						   GetSQLValueString($_POST['brewerJudge'], "text"),
+						   GetSQLValueString($brewerSteward, "text"),
+						   GetSQLValueString($brewerJudge, "text"),
 						   GetSQLValueString($brewerJudgeID, "text"),
 						   GetSQLValueString($brewerJudgeMead, "text"),
 						   GetSQLValueString($brewerJudgeRank, "text"),
 						   GetSQLValueString($location_pref1, "text"),
 						   GetSQLValueString($location_pref2, "text"),
 						   GetSQLValueString($brewerAHA, "int"),
-						   GetSQLValueString($brewerJudgeWaiver, "text")
+						   GetSQLValueString($brewerJudgeWaiver, "text"),
+						   GetSQLValueString($brewerDropOff, "text")
 						   );
 		}
 		
@@ -314,8 +340,10 @@ if (strstr($username,'@'))  {
 			  brewerJudgeRank,
 			  brewerJudgeLocation,
 			  brewerStewardLocation,
-			  brewerJudgeWaiver
-			) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)",
+			  brewerJudgeWaiver,
+			  brewerDropOff
+			  
+			) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)",
 						   GetSQLValueString($row_user['id'], "int"),
 						   GetSQLValueString(capitalize($_POST['brewerFirstName']), "text"),
 						   GetSQLValueString(capitalize($_POST['brewerLastName']), "text"),
@@ -328,14 +356,15 @@ if (strstr($username,'@'))  {
 						   GetSQLValueString($brewerPhone2, "text"),
 						   GetSQLValueString($brewerClubs, "text"),
 						   GetSQLValueString($username, "text"),
-						   GetSQLValueString($_POST['brewerSteward'], "text"),
-						   GetSQLValueString($_POST['brewerJudge'], "text"),
+						   GetSQLValueString($brewerSteward, "text"),
+						   GetSQLValueString($brewerJudge, "text"),
 						   GetSQLValueString($brewerJudgeID, "text"),
 						   GetSQLValueString($brewerJudgeMead, "text"),
 						   GetSQLValueString($brewerJudgeRank, "text"),
 						   GetSQLValueString($location_pref1, "text"),
 						   GetSQLValueString($location_pref2, "text"),
-						   GetSQLValueString($brewerJudgeWaiver, "text")
+						   GetSQLValueString($brewerJudgeWaiver, "text"),
+						   GetSQLValueString($brewerDropOff, "text")
 						   );
 		}
 		
@@ -398,8 +427,8 @@ if (strstr($username,'@'))  {
 			if (isset($brewerPhone2)) 		$message .= "<tr><td valign='top'><strong>Phone 2:</strong></td><td valign='top'>".$brewerPhone2."</td></tr>";
 			if (isset($brewerClubs)) 		$message .= "<tr><td valign='top'><strong>Club:</strong></td><td valign='top'>".$brewerClubs."</td></tr>";
 			if (isset($brewerAHA)) 			$message .= "<tr><td valign='top'><strong>AHA Number:</strong></td><td valign='top'>".$brewerAHA."</td></tr>";
-			if (isset($_POST['brewerJudge'])) 		$message .= "<tr><td valign='top'><strong>Available to Judge?</strong></td><td valign='top'>".$_POST['brewerJudge']."</td></tr>";
-			if (isset($_POST['brewerSteward'])) 		$message .= "<tr><td valign='top'><strong>Available to Steward?</strong></td><td valign='top'>".$_POST['brewerSteward']."</td></tr>";
+			if (isset($brewerJudge)) 		$message .= "<tr><td valign='top'><strong>Available to Judge?</strong></td><td valign='top'>".$brewerJudge."</td></tr>";
+			if (isset($brewerSteward)) 		$message .= "<tr><td valign='top'><strong>Available to Steward?</strong></td><td valign='top'>".$brewerSteward."</td></tr>";
 			$message .= "</table>";
 			$message .= "<p>If any of the above information is incorrect, <a href='".$base_url."index.php?section=login'>log in to your account</a> and make the necessary changes. Best of luck in the competition!</p>";
 			$message .= "<p><small>Please do not reply to this email as it is automatically generated. The originating account is not active or monitored.</small></p>";
@@ -435,21 +464,21 @@ if (strstr($username,'@'))  {
 		$_SESSION['loginUsername'] = $username;
 		
 		// Redirect to Judge Info section if willing to judge
-		if ($_POST['brewerJudge'] == "Y") {
+		if (($brewerJudge == "Y") && ($go == "judge")) {
 			$query_brewer= sprintf("SELECT id FROM $brewer_db_table WHERE uid = '%s'", $row_user['id']);
 			$brewer = mysqli_query($connection,$query_brewer) or die (mysqli_error($connection));
 			$row_brewer = mysqli_fetch_assoc($brewer);
 			header(sprintf("Location: %s", $base_url."index.php?section=brewer&action=edit&go=judge&psort=judge&id=".$row_brewer['id']));
 		}
 		else {
-			header(sprintf("Location: %s", $base_url."index.php?section=list&msg=1"));
+			header(sprintf("Location: %s", $base_url."index.php?section=list&msg=7"));
 		}
 	  } // end if ($filter == "default")
 	
 	if ($filter == "admin") {
 		
 		// Redirect to Judge Info section if willing to judge
-		if ($_POST['brewerJudge'] == "Y") {
+		if ($brewerJudge == "Y") {
 			$query_brewer= sprintf("SELECT id FROM $brewer_db_table WHERE uid = '%s'", $row_user['id']);
 			$brewer = mysqli_query($connection,$query_brewer) or die (mysqli_error($connection));
 			$row_brewer = mysqli_fetch_assoc($brewer);

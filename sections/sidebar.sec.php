@@ -109,13 +109,13 @@ if ($section != "admin") {
 			$header1_100 .= "</div>";
 			$page_info100 .= "<div class=\"panel-body\">";
 			//$page_info100 .= "Account";
-			
-			if (($registration_open != 1) && ($judge_window_open == 1) && (!$judge_limit) && (!$steward_limit)) $page_info100 .= sprintf("<a href=\"%s\">%s</a> accepted %s through %s.", build_public_url("register","judge","default","default",$sef,$base_url), $sidebar_text_000, $judge_open_sidebar, $judge_closed_sidebar);
-			elseif (($registration_open != 1) && ($judge_window_open == 1) && ($judge_limit) && (!$steward_limit)) $page_info100 .= sprintf("<a href=\"%s\">%s</a> accepted %s through %s.", build_public_url("register","judge","default","default",$sef,$base_url), $sidebar_text_001, $judge_open_sidebar, $judge_closed_sidebar);
+						
+			if (($registration_open != 1) && ($judge_window_open == 1) && (!$judge_limit) && (!$steward_limit)) $page_info100 .= sprintf("%s accepted %s through %s.", $sidebar_text_000, $judge_open_sidebar, $judge_closed_sidebar);
+			elseif (($registration_open != 1) && ($judge_window_open == 1) && ($judge_limit) && (!$steward_limit)) $page_info100 .= sprintf("<a href=\"%s\">%s</a> accepted %s through %s.", build_public_url("register","steward","default","default",$sef,$base_url), $sidebar_text_001, $judge_open_sidebar, $judge_closed_sidebar);
 			elseif (($registration_open != 1) && (!$judge_limit) && ($judge_window_open == 1) && ($steward_limit)) $page_info100 .= sprintf("<a href=\"%s\">%s</a> accepted %s through %s.", build_public_url("register","judge","default","default",$sef,$base_url), $sidebar_text_002, $judge_open_sidebar, $judge_closed_sidebar);
 			elseif (($registration_open == 2) && ($judge_window_open == 1) && ($judge_limit) && ($steward_limit)) $page_info100 .= sprintf("%s",$sidebar_text_003);
 			else {
-				if ($registration_open == 1) $page_info100 .= sprintf("<a href=\"%s\">%s</a> %s through %s.", $link_register, $sidebar_text_005, $reg_open_sidebar, $reg_closed_sidebar);
+				if ($registration_open == 1) $page_info100 .= sprintf("%s %s through %s.", $sidebar_text_005, $reg_open_sidebar, $reg_closed_sidebar);
 				else $page_info100 .= sprintf("%s %s through %s.", $sidebar_text_005, $reg_open_sidebar, $reg_closed_sidebar);
 			}
 			$page_info100 .= "</div>";

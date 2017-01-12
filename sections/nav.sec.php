@@ -260,8 +260,21 @@ if (($logged_in) && ($admin_user) && ($go != "error_page")) { ?>
                 <?php } ?>
                 <li<?php if ($section == "contact") echo $active_class; ?>><a href="<?php echo $link_contacts; ?>"><?php echo $label_contact; ?></a></li>
                 <?php if ((!$logged_in) && (($registration_open == 1) || ($judge_window_open == 1))) { ?>
-                <li<?php if ($section == "register") echo $active_class; ?>><a href="<?php echo $link_register; ?>"><?php if (($registration_open != 1) && (!$ua) && (!isset($_SESSION['loginUsername'])) && ($judge_window_open == 1) && ($msg == "default")) echo $label_judge_steward_reg; else echo $label_register; ?></a></li>
-                <?php } ?>
+                <!--<li<?php if ($section == "register") echo $active_class; ?>><a href="<?php echo $link_register; ?>"><?php if (($registration_open != 1) && (!$ua) && (!isset($_SESSION['loginUsername'])) && ($judge_window_open == 1) && ($msg == "default")) echo $label_judge_steward_reg; else echo $label_register; ?></a></li> -->
+                <li class="dropdown">
+                	<a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false"><?php echo $label_register; ?> <span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                    	<?php if (($registration_open == 1) && (!$ua) && (!isset($_SESSION['loginUsername']))) { ?>
+                    	<li><a href="<?php echo build_public_url("register","entrant","default","default",$sef,$base_url); ?>"><?php echo $label_entrant; ?></a></li>
+                        <?php } ?>
+                        <?php if (!$judge_limit) { ?>
+                        <li><a href="<?php echo build_public_url("register","judge","default","default",$sef,$base_url); ?>"><?php echo $label_judge; ?></a></li>
+                        <?php } if (!$steward_limit) { ?>
+                        <li><a href="<?php echo build_public_url("register","steward","default","default",$sef,$base_url); ?>"><?php echo $label_steward; ?></a></li>
+                        <?php } ?>
+                    </ul>
+                </li>
+                <?php } // end if ((!$logged_in) && (($registration_open == 1) || ($judge_window_open == 1))) ?>
                 <?php if ($qr_enable) { ?>
                 <li><a href="<?php echo $link_qr; ?>" target="_blank"><?php echo $label_entry_check_in; ?></a></li>
                 <?php } ?>

@@ -103,7 +103,7 @@ else $datatables_load = array("admin","list");
 	
 	// Load Locally
 	// Refer to instructions at http://brewcompetition.com/local-load
-	// To load libraries locally uncomment the line below and comment out line 81 above 
+	// To load libraries locally uncomment the line below and comment out line 102 above 
 	// include(INCLUDES.'load_local_libraries.inc.php'); 
 	
 	?>
