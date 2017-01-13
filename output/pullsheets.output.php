@@ -42,7 +42,7 @@ if ($flights > 0) $flights = $flights; else $flights = "0";
 	
 	?>
     <?php if ($filter != "mini_bos") { ?>
-    <h4><?php echo sprintf("%s %s, %s %s, %s %s",$label_table,$row_tables['tableNumber'],$label_flight,$i,$label_round,$row_round_check['flightRound']); ?></h4>
+    <h4><?php echo sprintf("%s %s: %s - %s %s, %s %s",$label_table,$row_tables['tableNumber'],$row_tables['tableName'],$label_flight,$i,$label_round,$row_round_check['flightRound']); ?></h4>
     <?php } ?>
     <script type="text/javascript" language="javascript">
 	 $(document).ready(function() {
@@ -158,7 +158,7 @@ if ($flights > 0) $flights = $flights; else $flights = "0";
 	
 	?>
     <?php if ($filter != "mini_bos") { ?>
-    <h4><?php echo sprintf("%s %s, %s %s, %s %s",$label_table,$row_tables['tableNumber'],$label_flight,$i,$label_round,$row_round_check['flightRound']); ?></h4>
+    <h4><?php echo sprintf("%s %s: %s - %s %s, %s %s",$label_table,$row_tables['tableNumber'],$row_tables['tableName'],$label_flight,$i,$label_round,$row_round_check['flightRound']); ?></h4>
     <?php } ?>
     <script type="text/javascript" language="javascript">
 	 $(document).ready(function() {

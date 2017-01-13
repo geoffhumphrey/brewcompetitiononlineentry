@@ -322,7 +322,10 @@ if ($section != "step5") {
 				if (($filter == "judges") && (strpos($brewer_assignment,'Steward') !== false)) $output_datatables_body .= " DISABLED";
 				$output_datatables_body .= " /></label></div>";
 				$output_datatables_body .= "</td>";
-				$output_datatables_body .= "<td>".$row_brewer['brewerLastName'].", ".$row_brewer['brewerFirstName']."</td>";
+				$output_datatables_body .= "<td>";
+				$output_datatables_body .= $row_brewer['brewerLastName'].", ".$row_brewer['brewerFirstName'];
+				if (($filter == "staff") && ($row_brewer['brewerStaff'] == "Y")) $output_datatables_body .= " <a href=\"".$base_url."index.php?section=admin&amp;action=assign&amp;go=judging&amp;filter=staff&amp;view=yes\" tabindex=\"0\" role=\"button\" data-toggle=\"popover\" data-placement=\"right\" data-trigger=\"hover focus\" data-content=\"".$row_brewer['brewerFirstName']." has expressed interest in being a staff member. Click to see only interested users.\"><span class=\"fa fa-star text-danger\"></span></a>";
+				$output_datatables_body .= "</td>";
 				$output_datatables_body .= "<td class=\"hidden-xs hidden-sm\">".ucwords($brewer_assignment)."</td>";
 				
 				if ($filter == "bos") {

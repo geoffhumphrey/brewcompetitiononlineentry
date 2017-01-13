@@ -103,6 +103,7 @@ if (NHC) {
 			setcookie("brewerPhone2", $brewerPhone2, 0, "/");
 			setcookie("brewerClubs", $brewerClubs, 0, "/");
 			setcookie("brewerAHA", $brewerAHA, 0, "/");
+			setcookie("brewerStaff", $_POST['brewerStaff'], 0, "/");
 			setcookie("brewerSteward", $brewerSteward, 0, "/");
 			setcookie("brewerJudge", $brewerJudge, 0, "/");
 			setcookie("brewerDropOff", $_POST['brewerDropOff'], 0, "/");
@@ -130,54 +131,56 @@ if (NHC) {
 	}
 	
 	if (($view == "default") && ($filter != "admin") && (!$resp->is_valid)) {
-	setcookie("user_name", $_POST['user_name'], 0, "/");
-	setcookie("user_name2", $_POST['user_name2'], 0, "/");
-	setcookie("password", $_POST['password'], 0, "/");
-	setcookie("userQuestion", $_POST['userQuestion'], 0, "/");
-	setcookie("userQuestionAnswer", $_POST['userQuestionAnswer'], 0, "/");
-	setcookie("brewerFirstName", $_POST['brewerFirstName'], 0, "/");
-	setcookie("brewerLastName", $_POST['brewerLastName'], 0, "/");
-	setcookie("brewerAddress", $_POST['brewerAddress'], 0, "/");
-	setcookie("brewerCity", $_POST['brewerCity'], 0, "/");
-	setcookie("brewerState", $_POST['brewerState'], 0, "/");
-	setcookie("brewerZip", $_POST['brewerZip'], 0, "/");
-	setcookie("brewerCountry", $_POST['brewerCountry'], 0, "/");
-	setcookie("brewerPhone1", $_POST['brewerPhone1'], 0, "/");
-	setcookie("brewerPhone2", $brewerPhone2, 0, "/");
-	setcookie("brewerClubs", $brewerClubs, 0, "/");
-	setcookie("brewerAHA", $brewerAHA, 0, "/");
-	setcookie("brewerSteward", $brewerSteward, 0, "/");
-	setcookie("brewerJudge", $brewerJudge, 0, "/");
-	setcookie("brewerDropOff", $_POST['brewerDropOff'], 0, "/");
-	
-	$location = $base_url."index.php?section=".$section."&go=".$go."&msg=4";
-	header(sprintf("Location: %s", $location));
+		setcookie("user_name", $_POST['user_name'], 0, "/");
+		setcookie("user_name2", $_POST['user_name2'], 0, "/");
+		setcookie("password", $_POST['password'], 0, "/");
+		setcookie("userQuestion", $_POST['userQuestion'], 0, "/");
+		setcookie("userQuestionAnswer", $_POST['userQuestionAnswer'], 0, "/");
+		setcookie("brewerFirstName", $_POST['brewerFirstName'], 0, "/");
+		setcookie("brewerLastName", $_POST['brewerLastName'], 0, "/");
+		setcookie("brewerAddress", $_POST['brewerAddress'], 0, "/");
+		setcookie("brewerCity", $_POST['brewerCity'], 0, "/");
+		setcookie("brewerState", $_POST['brewerState'], 0, "/");
+		setcookie("brewerZip", $_POST['brewerZip'], 0, "/");
+		setcookie("brewerCountry", $_POST['brewerCountry'], 0, "/");
+		setcookie("brewerPhone1", $_POST['brewerPhone1'], 0, "/");
+		setcookie("brewerPhone2", $brewerPhone2, 0, "/");
+		setcookie("brewerClubs", $brewerClubs, 0, "/");
+		setcookie("brewerAHA", $brewerAHA, 0, "/");
+		setcookie("brewerStaff", $_POST['brewerStaff'], 0, "/");
+		setcookie("brewerSteward", $brewerSteward, 0, "/");
+		setcookie("brewerJudge", $brewerJudge, 0, "/");
+		setcookie("brewerDropOff", $_POST['brewerDropOff'], 0, "/");
+		
+		$location = $base_url."index.php?section=".$section."&go=".$go."&msg=4";
+		header(sprintf("Location: %s", $location));
 	}
 	
 	elseif (($view == "default") && ($_POST['user_name'] != $_POST['user_name2'])) {
-	setcookie("user_name", $_POST['user_name'], 0, "/");
-	setcookie("user_name2", $_POST['user_name2'], 0, "/");
-	setcookie("password", $_POST['password'], 0, "/");
-	setcookie("userQuestion", $_POST['userQuestion'], 0, "/");
-	setcookie("userQuestionAnswer", $_POST['userQuestionAnswer'], 0, "/");
-	setcookie("brewerFirstName", $_POST['brewerFirstName'], 0, "/");
-	setcookie("brewerLastName", $_POST['brewerLastName'], 0, "/");
-	setcookie("brewerAddress", $_POST['brewerAddress'], 0, "/");
-	setcookie("brewerCity", $_POST['brewerCity'], 0, "/");
-	setcookie("brewerState", $_POST['brewerState'], 0, "/");
-	setcookie("brewerZip", $_POST['brewerZip'], 0, "/");
-	setcookie("brewerCountry", $_POST['brewerCountry'], 0, "/");
-	setcookie("brewerPhone1", $_POST['brewerPhone1'], 0, "/");
-	setcookie("brewerPhone2", $brewerPhone2, 0, "/");
-	setcookie("brewerClubs", $brewerClubs, 0, "/");
-	setcookie("brewerAHA", $brewerAHA, 0, "/");
-	setcookie("brewerSteward", $brewerSteward, 0, "/");
-	setcookie("brewerJudge", $brewerJudge, 0, "/");
-	setcookie("brewerDropOff", $_POST['brewerDropOff'], 0, "/");
-	
-	if ($filter == "admin") $location =  $base_url."index.php?section=admin&go=entrant&action=register&msg=27";
-	else $location = $base_url."index.php?section=".$section."&go=".$go."&msg=5";
-	header(sprintf("Location: %s", $location));
+		setcookie("user_name", $_POST['user_name'], 0, "/");
+		setcookie("user_name2", $_POST['user_name2'], 0, "/");
+		setcookie("password", $_POST['password'], 0, "/");
+		setcookie("userQuestion", $_POST['userQuestion'], 0, "/");
+		setcookie("userQuestionAnswer", $_POST['userQuestionAnswer'], 0, "/");
+		setcookie("brewerFirstName", $_POST['brewerFirstName'], 0, "/");
+		setcookie("brewerLastName", $_POST['brewerLastName'], 0, "/");
+		setcookie("brewerAddress", $_POST['brewerAddress'], 0, "/");
+		setcookie("brewerCity", $_POST['brewerCity'], 0, "/");
+		setcookie("brewerState", $_POST['brewerState'], 0, "/");
+		setcookie("brewerZip", $_POST['brewerZip'], 0, "/");
+		setcookie("brewerCountry", $_POST['brewerCountry'], 0, "/");
+		setcookie("brewerPhone1", $_POST['brewerPhone1'], 0, "/");
+		setcookie("brewerPhone2", $brewerPhone2, 0, "/");
+		setcookie("brewerClubs", $brewerClubs, 0, "/");
+		setcookie("brewerAHA", $brewerAHA, 0, "/");
+		setcookie("brewerStaff", $_POST['brewerStaff'], 0, "/");
+		setcookie("brewerSteward", $brewerSteward, 0, "/");
+		setcookie("brewerJudge", $brewerJudge, 0, "/");
+		setcookie("brewerDropOff", $_POST['brewerDropOff'], 0, "/");
+		
+		if ($filter == "admin") $location =  $base_url."index.php?section=admin&go=entrant&action=register&msg=27";
+		else $location = $base_url."index.php?section=".$section."&go=".$go."&msg=5";
+		header(sprintf("Location: %s", $location));
 
 } // end if NHC
 
@@ -209,6 +212,7 @@ if (strstr($username,'@'))  {
 		setcookie("brewerPhone2", $brewerPhone2, 0, "/");
 		setcookie("brewerClubs", $brewerClubs, 0, "/");
 		setcookie("brewerAHA", $brewerAHA, 0, "/");
+		setcookie("brewerStaff", $_POST['brewerStaff'], 0, "/");
 		setcookie("brewerSteward", $brewerSteward, 0, "/");
 		setcookie("brewerJudge", $brewerJudge, 0, "/");
 		setcookie("brewerDropOff", $_POST['brewerDropOff'], 0, "/");
@@ -269,28 +273,37 @@ if (strstr($username,'@'))  {
 			  brewerFirstName, 
 			  brewerLastName, 
 			  brewerAddress, 
-			  brewerCity, 
-			  brewerState, 
+			  brewerCity,
 			  
+			  brewerState, 
 			  brewerZip,
 			  brewerCountry,
 			  brewerPhone1, 
-			  brewerPhone2, 
+			  brewerPhone2,
+			   
 			  brewerClubs, 
 			  brewerEmail, 
-			  
 			  brewerSteward, 
 			  brewerJudge,
 			  brewerJudgeID,
+			  
 			  brewerJudgeMead,
 			  brewerJudgeRank,
 			  brewerJudgeLocation,
 			  brewerStewardLocation,
 			  brewerAHA,
-			  brewerJudgeWaiver,
-			  brewerDropOff
 			  
-			) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)",
+			  brewerJudgeWaiver,
+			  brewerDropOff,
+			  brewerStaff
+			  
+			) VALUES (
+			%s, %s, %s, %s, %s, 
+			%s, %s, %s, %s, %s, 
+			%s, %s, %s, %s, %s, 
+			%s, %s, %s, %s, %s, 
+			%s, %s, %s
+			)",
 						   GetSQLValueString($row_user['id'], "int"),
 						   GetSQLValueString(capitalize($_POST['brewerFirstName']), "text"),
 						   GetSQLValueString(capitalize($_POST['brewerLastName']), "text"),
@@ -312,7 +325,8 @@ if (strstr($username,'@'))  {
 						   GetSQLValueString($location_pref2, "text"),
 						   GetSQLValueString($brewerAHA, "int"),
 						   GetSQLValueString($brewerJudgeWaiver, "text"),
-						   GetSQLValueString($brewerDropOff, "text")
+						   GetSQLValueString($brewerDropOff, "text"),
+						   GetSQLValueString($_POST['brewerStaff'], "text")
 						   );
 		}
 		
@@ -323,27 +337,36 @@ if (strstr($username,'@'))  {
 			  brewerFirstName, 
 			  brewerLastName, 
 			  brewerAddress, 
-			  brewerCity, 
+			  brewerCity,
+			   
 			  brewerState, 
-			  
 			  brewerZip,
 			  brewerCountry,
 			  brewerPhone1, 
-			  brewerPhone2, 
+			  brewerPhone2,
+			  
 			  brewerClubs, 
 			  brewerEmail, 
-			  
 			  brewerSteward, 
 			  brewerJudge,
 			  brewerJudgeID,
+			  
 			  brewerJudgeMead,
 			  brewerJudgeRank,
 			  brewerJudgeLocation,
 			  brewerStewardLocation,
 			  brewerJudgeWaiver,
-			  brewerDropOff
 			  
-			) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)",
+			  brewerDropOff,
+			  brewerStaff
+			  
+			) VALUES (
+			%s, %s, %s, %s, %s, 
+			%s, %s, %s, %s, %s, 
+			%s, %s, %s, %s, %s, 
+			%s, %s, %s, %s, %s, 
+			%s, %s
+			)",
 						   GetSQLValueString($row_user['id'], "int"),
 						   GetSQLValueString(capitalize($_POST['brewerFirstName']), "text"),
 						   GetSQLValueString(capitalize($_POST['brewerLastName']), "text"),
@@ -364,7 +387,8 @@ if (strstr($username,'@'))  {
 						   GetSQLValueString($location_pref1, "text"),
 						   GetSQLValueString($location_pref2, "text"),
 						   GetSQLValueString($brewerJudgeWaiver, "text"),
-						   GetSQLValueString($brewerDropOff, "text")
+						   GetSQLValueString($brewerDropOff, "text"),
+						   GetSQLValueString($_POST['brewerStaff'], "text")
 						   );
 		}
 		
@@ -427,6 +451,7 @@ if (strstr($username,'@'))  {
 			if (isset($brewerPhone2)) 		$message .= "<tr><td valign='top'><strong>Phone 2:</strong></td><td valign='top'>".$brewerPhone2."</td></tr>";
 			if (isset($brewerClubs)) 		$message .= "<tr><td valign='top'><strong>Club:</strong></td><td valign='top'>".$brewerClubs."</td></tr>";
 			if (isset($brewerAHA)) 			$message .= "<tr><td valign='top'><strong>AHA Number:</strong></td><td valign='top'>".$brewerAHA."</td></tr>";
+											$message .= "<tr><td valign='top'><strong>Available as Staff?</strong></td><td valign='top'>".$_POST['brewerStaff']."</td></tr>";
 			if (isset($brewerJudge)) 		$message .= "<tr><td valign='top'><strong>Available to Judge?</strong></td><td valign='top'>".$brewerJudge."</td></tr>";
 			if (isset($brewerSteward)) 		$message .= "<tr><td valign='top'><strong>Available to Steward?</strong></td><td valign='top'>".$brewerSteward."</td></tr>";
 			$message .= "</table>";

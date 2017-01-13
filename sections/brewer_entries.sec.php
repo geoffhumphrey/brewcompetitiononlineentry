@@ -95,6 +95,16 @@ if (($totalRows_log > 0) && ($action != "print")) {
 $entry_output = "";
 
 do {
+	$required_info = "";
+	if ((!empty($row_log['brewInfo'])) || (!empty($row_log['brewMead1'])) || (!empty($row_log['brewMead2'])) || (!empty($row_log['brewMead3']))) {
+		$brewInfo = "";
+		//$brewInfo .= "Required Info: ";
+		if (!empty($row_log['brewInfo'])) $brewInfo .= str_replace("^", "; ", $row_log['brewInfo']);
+		if (!empty($row_log['brewMead1'])) $brewInfo .= "&nbsp;&nbsp;".$row_log['brewMead1'];
+		if (!empty($row_log['brewMead2'])) $brewInfo .= "&nbsp;&nbsp;".$row_log['brewMead2'];
+		if (!empty($row_log['brewMead3'])) $brewInfo .= "&nbsp;&nbsp;".$row_log['brewMead3'];
+		$required_info .= " <a tabindex=\"0\" role=\"button\" data-toggle=\"popover\" data-placement=\"right\" data-trigger=\"hover focus\" title=\"Required Info\" data-content=\"".$brewInfo."\"><span class=\"fa fa-comment\"></span></a>";
+	}
 	
 	$entry_style = $row_log['brewCategorySort']."-".$row_log['brewSubCategory'];
 	
@@ -154,7 +164,7 @@ do {
 	}
 	
 	$entry_output .= "<td>";
-	$entry_output .= $row_log['brewName']; 
+	$entry_output .= $row_log['brewName']."&nbsp;".$required_info;; 
 	if ($row_log['brewCoBrewer'] != "") $entry_output .= sprintf("<br><em>%s: ".$row_log['brewCoBrewer']."</em>",$label_cobrewer);
 	$entry_output .= "</td>";
 	

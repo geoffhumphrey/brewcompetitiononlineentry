@@ -181,6 +181,8 @@ elseif (($section == "admin") && ($go == "judging") && ($filter == "stewards")  
 elseif (($section == "admin") && ($go == "judging") && ($filter == "staff")  && ($dbTable == "default") && ($action == "assign")) {
 	$query_brewer = "SELECT * FROM $brewer_db_table";
 	if (SINGLE) $query_brewer .= sprintf(" WHERE FIND_IN_SET('%s',brewerCompParticipant) > 0", $_SESSION['comp_id']);
+	if ((!SINGLE) && ($view == "yes")) $query_brewer .= " WHERE brewerStaff='Y'";
+	if ((SINGLE) && ($view == "yes")) $query_brewer .= " AND brewerStaff='Y'";
 	$brewer = mysqli_query($connection,$query_brewer) or die (mysqli_error($connection));
 	$row_brewer = mysqli_fetch_assoc($brewer);
 	$totalRows_brewer = mysqli_num_rows($brewer);
