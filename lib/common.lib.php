@@ -2104,7 +2104,7 @@ function bjcp_rank($rank,$method) {
 			default: $return = "Level 0:";
 		}
 	if (($rank != "None") && ($rank != "")) $return .= " ".$rank;
-	else $return .= " Novice";
+	else $return .= " Non-BJCP Judge";
 	}
 	
 	if ($method == "2") {
@@ -2112,8 +2112,9 @@ function bjcp_rank($rank,$method) {
 			case "None": 
 			case "":
 			case "Novice";
+			case "Non-BJCP";
 			case "Experienced":
-			$return = "Experienced Judge";
+			$return = "Non-BJCP Judge";
 			break;
 			case "Professional Brewer":
 			case "Beer Sommelier":
@@ -2190,17 +2191,17 @@ function brewer_info($uid,$filter="default") {
 	$r .= $row_brewer_info['brewerLastName']."^"; 		// 1
 	$r .= $row_brewer_info['brewerPhone1']."^"; 		// 2
 	if (isset($row_brewer_info['brewerJudgeRank'])) $r .= $row_brewer_info['brewerJudgeRank']."^";
-	else $r .= "Novice^";									// 3
+	else $r .= "Non-BJCP^";								// 3
 	if (isset($row_brewer_info['brewerJudgeID'])) $r .= $row_brewer_info['brewerJudgeID']."^";
-	else $r .= "&nbsp;^";									// 4
+	else $r .= "&nbsp;^";								// 4
 	if (isset($row_brewer_info['brewerJudgeBOS'])) $r .= $row_brewer_info['brewerJudgeBOS']."^";
-	else $r .= "&nbsp;^";									// 5
+	else $r .= "&nbsp;^";								// 5
 	$r .= $row_brewer_info['brewerEmail']."^";			// 6
 	$r .= $row_brewer_info['uid']."^";					// 7
 	if (isset($row_brewer_info['brewerClubs'])) $r .= $row_brewer_info['brewerClubs']."^";
-	else $r .= "&nbsp;^";									// 8
+	else $r .= "&nbsp;^";								// 8
 	if (isset($row_brewer_info['brewerDiscount'])) $r .= $row_brewer_info['brewerDiscount']."^";
-	else $r .= "&nbsp;^";									// 9
+	else $r .= "&nbsp;^";								// 9
 	$r .= $row_brewer_info['brewerAddress']."^";		// 10
 	$r .= $row_brewer_info['brewerCity']."^";			// 11
 	$r .= $row_brewer_info['brewerState']."^";			// 12
@@ -3285,7 +3286,7 @@ function check_hosted_gh() {
 		$gh_user = mysqli_query($connection,$query_gh_user) or die (mysqli_error($connection));
 		$row_gh_user = mysqli_fetch_assoc($gh_user);
 		
-		$sql = sprintf("INSERT INTO `%s` (`id`, `uid`, `brewerFirstName`, `brewerLastName`, `brewerAddress`, `brewerCity`, `brewerState`, `brewerZip`, `brewerCountry`, `brewerPhone1`, `brewerPhone2`, `brewerClubs`, `brewerEmail`, `brewerNickname`, `brewerSteward`, `brewerJudge`, `brewerJudgeID`, `brewerJudgeMead`, `brewerJudgeRank`, `brewerJudgeLikes`, `brewerJudgeDislikes`, `brewerJudgeLocation`, `brewerStewardLocation`, `brewerJudgeExp`, `brewerJudgeNotes`, `brewerAssignment`, `brewerJudgeWaiver`, `brewerDiscount`, `brewerJudgeBOS`, `brewerAHA`) VALUES	(NULL, %s, 'Geoff', 'Humphrey', '1234 Main Street', 'Anytown', 'CO', '80126', 'United States', '303-555-5555', '303-555-5555', NULL, '%s', NULL, 'N', 'N', 'A0000', NULL, 'Certified', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0);",$prefix."brewer",$row_gh_user['id'],$gh_user_name);
+		$sql = sprintf("INSERT INTO `%s` (`id`, `uid`, `brewerFirstName`, `brewerLastName`, `brewerAddress`, `brewerCity`, `brewerState`, `brewerZip`, `brewerCountry`, `brewerPhone1`, `brewerPhone2`, `brewerClubs`, `brewerEmail`, `brewerStaff`, `brewerSteward`, `brewerJudge`, `brewerJudgeID`, `brewerJudgeMead`, `brewerJudgeRank`, `brewerJudgeLikes`, `brewerJudgeDislikes`, `brewerJudgeLocation`, `brewerStewardLocation`, `brewerJudgeExp`, `brewerJudgeNotes`, `brewerAssignment`, `brewerJudgeWaiver`, `brewerDiscount`, `brewerJudgeBOS`, `brewerAHA`) VALUES	(NULL, %s, 'Geoff', 'Humphrey', '1234 Main Street', 'Anytown', 'CO', '80126', 'United States', '303-555-5555', '303-555-5555', NULL, '%s', 'N', 'N', 'N', 'A0000', NULL, 'Certified', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0);",$prefix."brewer",$row_gh_user['id'],$gh_user_name);
 		mysqli_select_db($connection,$database);
 		mysqli_real_escape_string($connection,$sql);
 		$result = mysqli_query($connection,$sql) or die (mysqli_error($connection));

@@ -237,6 +237,24 @@ if (check_setup($prefix."system",$database)) {
 		//exit;
 		
 	}
+	
+	// For 2.1.9, check to see if brewerNickname is still present, if so, change to brewerStaff
+	// And correct the problem with new BJCP "example" substyles not being saved correctly
+	if (check_update("brewerNickname", $prefix."brewer")) {
+		
+		// Change brewerNickname to brewerStaff for ability for users to identify that they are interested in being a staff member
+		$sql = sprintf("ALTER TABLE `%s` CHANGE `brewerNickname` `brewerStaff` CHAR(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL;", $prefix."brewer");
+		mysqli_select_db($connection,$database);
+		mysqli_real_escape_string($connection,$sql);
+		$result = mysqli_query($connection,$sql) or die (mysqli_error($connection));
+		
+		// Change brewing table to be able to save new "example" substyles
+		$sql = sprintf("ALTER TABLE `%s` CHANGE `brewCategory` `brewCategory` VARCHAR(4) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL, CHANGE `brewCategorySort` `brewCategorySort` VARCHAR(4) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL, CHANGE `brewSubCategory` `brewSubCategory` VARCHAR(4) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL;", $prefix."brewing");
+		mysqli_select_db($connection,$database);
+		mysqli_real_escape_string($connection,$sql);
+		$result = mysqli_query($connection,$sql) or die (mysqli_error($connection));
+	
+	}
 		
 	if ($row_version_check['version'] != $current_version) {
 		

@@ -31,7 +31,7 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] == 0)) {
 		$brewerPhone2 = $row_name['brewerPhone2'];
 		$brewerClubs = $row_name['brewerClubs'];
 		$brewerEmail = $row_name['brewerEmail'];
-		$brewerNickname = $row_name['brewerNickname'];
+		$brewerStaff = $row_name['brewerStaff'];
 		$brewerSteward = $row_name['brewerSteward'];
 		$brewerJudge = $row_name['brewerJudge'];
 		$brewerJudgeID = $row_name['brewerJudgeID'];
@@ -62,7 +62,7 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] == 0)) {
 		$insertSQL = "INSERT INTO $users_db_table (id, user_name, password,	userLevel, userQuestion, userQuestionAnswer, userCreated) VALUES ('1', '$user_name', '$password', '0', '$userQuestion', '$userQuestionAnswer', NOW());";
 		mysqli_real_escape_string($connection,$insertSQL);
 		$result = mysqli_query($connection,$insertSQL) or die (mysqli_error($connection));
-		$insertSQL = "INSERT INTO $brewer_db_table (id, uid, brewerFirstName, brewerLastName, brewerAddress, brewerCity, brewerState, brewerZip, brewerCountry, brewerPhone1, brewerPhone2, brewerClubs, brewerEmail, brewerNickname, brewerSteward, 	brewerJudge, brewerJudgeID, brewerJudgeRank, brewerJudgeLikes, brewerJudgeDislikes, brewerJudgeLocation, brewerStewardLocation, brewerJudgeExp, brewerJudgeNotes, brewerAssignment, brewerAHA, brewerDiscount, brewerJudgeBOS, brewerDropOff) VALUES (NULL, '1', '$brewerFirstName', '$brewerLastName', '$brewerAddress', '$brewerCity',  '$brewerState', '$brewerZip', '$brewerCountry', '$brewerPhone1', '$brewerPhone2', '$brewerClubs', '$brewerEmail', '$brewerNickname', '$brewerSteward', '$brewerJudge', '$brewerJudgeID', '$brewerJudgeRank', '$brewerJudgeLikes', '$brewerJudgeDislikes', NULL, NULL, NULL, NULL, NULL, '$brewerAHA', NULL, NULL, NULL);";
+		$insertSQL = "INSERT INTO $brewer_db_table (id, uid, brewerFirstName, brewerLastName, brewerAddress, brewerCity, brewerState, brewerZip, brewerCountry, brewerPhone1, brewerPhone2, brewerClubs, brewerEmail, brewerStaff, brewerSteward, 	brewerJudge, brewerJudgeID, brewerJudgeRank, brewerJudgeLikes, brewerJudgeDislikes, brewerJudgeLocation, brewerStewardLocation, brewerJudgeExp, brewerJudgeNotes, brewerAssignment, brewerAHA, brewerDiscount, brewerJudgeBOS, brewerDropOff) VALUES (NULL, '1', '$brewerFirstName', '$brewerLastName', '$brewerAddress', '$brewerCity',  '$brewerState', '$brewerZip', '$brewerCountry', '$brewerPhone1', '$brewerPhone2', '$brewerClubs', '$brewerEmail', '$brewerStaff', '$brewerSteward', '$brewerJudge', '$brewerJudgeID', '$brewerJudgeRank', '$brewerJudgeLikes', '$brewerJudgeDislikes', NULL, NULL, NULL, NULL, NULL, '$brewerAHA', NULL, NULL, NULL);";
 		mysqli_real_escape_string($connection,$insertSQL);
 		$result = mysqli_query($connection,$insertSQL) or die (mysqli_error($connection));
 		
@@ -101,8 +101,8 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] == 0)) {
 			$gh_admin_user1 = mysqli_query($connection,$query_gh_admin_user1) or die (mysqli_error($connection));
 			$row_gh_admin_user1 = mysqli_fetch_assoc($gh_admin_user1);
 			
-			$updateSQL = sprintf("INSERT INTO `%s` (`id`, `uid`, `brewerFirstName`, `brewerLastName`, `brewerAddress`, `brewerCity`, `brewerState`, `brewerZip`, `brewerCountry`, `brewerPhone1`, `brewerPhone2`, `brewerClubs`, `brewerEmail`, `brewerNickname`, `brewerSteward`, `brewerJudge`, `brewerJudgeID`, `brewerJudgeRank`, `brewerJudgeLikes`, `brewerJudgeDislikes`, `brewerJudgeLocation`, `brewerStewardLocation`, `brewerJudgeExp`, `brewerJudgeNotes`, `brewerAssignment`, `brewerAHA`) VALUES
-	(NULL, '%s', 'Geoff', 'Humphrey', '1234 Main Street', 'Anytown', 'CO', '80126', 'United States', '303-555-5555', '303-555-5555', 'Rock Hoppers', '%s', NULL, 'N', 'N', 'A0000', 'Certified', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 000000);",$brewer_db_table,$row_gh_admin_user1['id'],$gh_user_name);
+			$updateSQL = sprintf("INSERT INTO `%s` (`id`, `uid`, `brewerFirstName`, `brewerLastName`, `brewerAddress`, `brewerCity`, `brewerState`, `brewerZip`, `brewerCountry`, `brewerPhone1`, `brewerPhone2`, `brewerClubs`, `brewerEmail`, `brewerStaff`, `brewerSteward`, `brewerJudge`, `brewerJudgeID`, `brewerJudgeRank`, `brewerJudgeLikes`, `brewerJudgeDislikes`, `brewerJudgeLocation`, `brewerStewardLocation`, `brewerJudgeExp`, `brewerJudgeNotes`, `brewerAssignment`, `brewerAHA`) VALUES
+	(NULL, '%s', 'Geoff', 'Humphrey', '1234 Main Street', 'Anytown', 'CO', '80126', 'United States', '303-555-5555', '303-555-5555', 'Rock Hoppers', '%s', 'N', 'N', 'N', 'A0000', 'Certified', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 000000);",$brewer_db_table,$row_gh_admin_user1['id'],$gh_user_name);
 			mysqli_real_escape_string($connection,$updateSQL);
 			$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 				
@@ -251,7 +251,7 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] == 0)) {
 			$_SESSION['brewerPhone1'] = $row_name['brewerPhone1'];
 			$_SESSION['brewerPhone2'] = $row_name['brewerPhone2'];
 			$_SESSION['brewerClubs'] = $row_name['brewerClubs'];
-			$_SESSION['brewerNickname'] = $row_name['brewerNickname'];
+			$_SESSION['brewerStaff'] = $row_name['brewerStaff'];
 			$_SESSION['brewerSteward'] = $row_name['brewerSteward'];
 			$_SESSION['brewerJudge'] = $row_name['brewerJudge'];
 			$_SESSION['brewerJudgeID'] = $row_name['brewerJudgeID'];

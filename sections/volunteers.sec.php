@@ -67,7 +67,7 @@ else {
 
 if ($registration_open < 2) {
 $header_vol_1_2 .= sprintf("<h2%s</h2>",$label_staff);
-$page_info_vol_2 .= sprintf("<p>%s <a href=\"%s\">%s</a>.",$volunteers_text_009, build_public_url("contact","default","default","default",$sef,$base_url), $volunteers_text_010);
+$page_info_vol_2 .= sprintf("<p>%s",$volunteers_text_009, build_public_url("contact","default","default","default",$sef,$base_url), $volunteers_text_010);
 }
 
 if (!empty($row_contest_info['contestVolunteers'])) {

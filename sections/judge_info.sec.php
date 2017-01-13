@@ -20,7 +20,7 @@
                 <?php 
 				$judge_array = explode(",",$row_brewer['brewerJudgeRank']); 
 				?>
-                <input type="radio" name="brewerJudgeRank[]" value="Novice" <?php if (($action == "edit") && in_array("Novice",$judge_array)) echo "CHECKED"; else echo "CHECKED" ?>>Novice<br />
+                <input type="radio" name="brewerJudgeRank[]" value="Novice" <?php if (($action == "edit") && (in_array("Non-BJCP",$judge_array) || in_array("Novice",$judge_array))) echo "CHECKED"; else echo "CHECKED" ?>>Non-BJCP<br />
                 <input type="radio" name="brewerJudgeRank[]" value="Rank Pending" <?php if (($action == "edit")  && in_array("Rank Pending",$judge_array)) echo "CHECKED"; ?>>Rank Pending<br />
                 <input type="radio" name="brewerJudgeRank[]" value="Apprentice" <?php if (($action == "edit") && in_array("Apprentice",$judge_array)) echo "CHECKED"; ?>>Apprentice<br />
                 <input type="radio" name="brewerJudgeRank[]" value="Provisional" <?php if (($action == "edit") && in_array("Provisional",$judge_array)) echo "CHECKED"; ?>>Provisional<br />
@@ -46,7 +46,7 @@
     <tr>
     	<td colspan="3">
         <ul>
-          <li>The <em>Novice</em> rank is for those who haven't taken the BJCP Beer Judge Entrance Exam, and are <em>not</em> a professional brewer.</li>
+          <li>The <em>Non-BJCP</em> rank is for those who haven't taken the BJCP Beer Judge Entrance Exam, and are <em>not</em> a professional brewer.</li>
           <li>The <em>Apprentice</em> rank is for those who have taken the BJCP Legacy Beer Exam, but did not pass one or more of the sections. This rank will be phased out in 2014.</li>
           <li>The <em>Provisional</em> rank is for those have taken the BJCP Beer Judge Entrance Exam, have passed, but have not yet taken the BJCP Beer Judging Exam.</li>
       	</ul>

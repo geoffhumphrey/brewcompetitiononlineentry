@@ -405,7 +405,7 @@ if ($go == "default") {  ?>
                     <!-- Input Here -->
                     <div class="radio">
                         <label>
-                            <input type="radio" name="brewerJudgeRank" value="Novice" checked> Novice
+                            <input type="radio" name="brewerJudgeRank" value="Non-BJCP" checked> Non-BJCP
                         </label>
                     </div>
                     <div class="radio">
@@ -579,6 +579,26 @@ if ($go == "default") {  ?>
             <div class="help-block"><?php echo $register_text_033; ?></div>
 		</div>
 	</div><!-- ./Form Group -->
+    
+    <!-- Staff preferences -->
+    <div class="form-group"><!-- Form Group Radio INLINE -->
+        <label for="brewerJudge" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label_staff; ?></label>
+        <div class="col-lg-10 col-md-9 col-sm-8 col-xs-12">
+        <p><?php echo $brewer_text_020; ?></p>
+            <div class="input-group">
+                <!-- Input Here -->
+                <label class="radio-inline">
+                    <input type="radio" name="brewerStaff" value="Y" id="brewerStaff_0" <?php if (($msg > 0) && ($_COOKIE['brewerStaff'] == "Y")) echo "CHECKED"; ?>> <?php echo $label_yes; ?>
+                </label>
+                <label class="radio-inline">
+                    <input type="radio" name="brewerStaff" value="N" id="brewerStaff_1" <?php if (($msg > 0) && ($_COOKIE['brewerStaff'] == "N")) echo "CHECKED"; if ($msg == "default") echo "CHECKED"; ?>> <?php echo $label_no; ?>
+                </label>
+            </div>
+            <span class="help-block"><?php echo $brewer_text_021; ?></span>
+        </div>
+    </div><!-- ./Form Group -->
+    
+    
     <?php } ?>
     
     <!-- Judge/Steward Fields - Do Not Show if ($go == "entrant") -->

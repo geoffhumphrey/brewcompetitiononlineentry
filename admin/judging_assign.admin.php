@@ -164,7 +164,7 @@ do {
 		
 		
 		$modal_rank = $bjcp_rank[0];
-		if (empty($modal_rank)) $modal_rank = "Novice";
+		if (empty($modal_rank)) $modal_rank = "Non-BJCP";
 		
 		$at_table = at_table($row_brewer['uid'],$row_tables_edit['id']);
 		

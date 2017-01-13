@@ -257,32 +257,35 @@ if (((isset($_SESSION['loginUsername'])) && (isset($_SESSION['userLevel']))) || 
 				  brewerLastName, 
 				  brewerAddress, 
 				  brewerCity, 
-				  brewerState, 
 				  
+				  brewerState, 
 				  brewerZip,
 				  brewerCountry,
 				  brewerPhone1, 
-				  brewerPhone2, 
+				  brewerPhone2,
+				   
 				  brewerClubs, 
-				  brewerEmail, 
-				  
+				  brewerEmail,
 				  brewerSteward, 
 				  brewerJudge,
 				  brewerJudgeID,
+				  
 				  brewerJudgeMead,
 				  brewerJudgeRank,
 				  brewerJudgeLocation,
 				  brewerStewardLocation,
 				  brewerAHA,
+				  
 				  brewerDropOff,
 				  brewerJudgeExp,
 				  brewerJudgeNotes
+				  brewerStaff
 				) VALUES (
 				%s, %s, %s, %s, %s, 
 				%s, %s, %s, %s, %s, 
 				%s, %s, %s, %s, %s, 
 				%s, %s, %s, %s, %s, 
-				%s, %s, %s)",
+				%s, %s, %s, %s)",
 							   GetSQLValueString($_POST['uid'], "int"),
 							   GetSQLValueString(capitalize($_POST['brewerFirstName']), "text"),
 							   GetSQLValueString(capitalize($_POST['brewerLastName']), "text"),
@@ -305,7 +308,8 @@ if (((isset($_SESSION['loginUsername'])) && (isset($_SESSION['userLevel']))) || 
 							   GetSQLValueString($_POST['brewerAHA'], "int"),
 							   GetSQLValueString($_POST['brewerDropOff'], "int"),
 							   GetSQLValueString($_POST['brewerJudgeExp'], "text"),
-							   GetSQLValueString($_POST['brewerJudgeNotes'], "text")
+							   GetSQLValueString($_POST['brewerJudgeNotes'], "text"),
+							   GetSQLValueString($_POST['brewerStaff'], "text")
 				);
 				
 				// only if added by an admin.
@@ -359,13 +363,14 @@ if (((isset($_SESSION['loginUsername'])) && (isset($_SESSION['userLevel']))) || 
 				  brewerDropOff,
 				  
 				  brewerJudgeExp,
-				  brewerJudgeNotes
+				  brewerJudgeNotes,
+				  brewerStaff
 				) VALUES (
 				%s, %s, %s, %s, %s, 
 				%s, %s, %s, %s, %s, 
 				%s, %s, %s, %s, %s, 
 				%s, %s, %s, %s, %s,
-				%s, %s)",
+				%s, %s, %s)",
 							   GetSQLValueString($_POST['uid'], "int"),
 							   GetSQLValueString(capitalize($_POST['brewerFirstName']), "text"),
 							   GetSQLValueString(capitalize($_POST['brewerLastName']), "text"),
@@ -387,7 +392,8 @@ if (((isset($_SESSION['loginUsername'])) && (isset($_SESSION['userLevel']))) || 
 							   GetSQLValueString($location_pref2, "text"),
 							   GetSQLValueString($_POST['brewerDropOff'], "int"),
 							   GetSQLValueString($_POST['brewerJudgeExp'], "text"),
-							   GetSQLValueString($_POST['brewerJudgeNotes'], "text")
+							   GetSQLValueString($_POST['brewerJudgeNotes'], "text"),
+							   GetSQLValueString($_POST['brewerStaff'], "text")
 							   );
 			}
 	
@@ -581,7 +587,8 @@ if (((isset($_SESSION['loginUsername'])) && (isset($_SESSION['userLevel']))) || 
 			brewerDropOff=%s,
 			brewerJudgeExp=%s,
 			brewerJudgeNotes=%s,
-			brewerJudgeWaiver=%s",
+			brewerJudgeWaiver=%s,
+			brewerStaff=%s",
 							   GetSQLValueString($_POST['uid'], "int"),
 							   GetSQLValueString(capitalize($_POST['brewerFirstName']), "text"),
 							   GetSQLValueString(capitalize($_POST['brewerLastName']), "text"),
@@ -606,7 +613,8 @@ if (((isset($_SESSION['loginUsername'])) && (isset($_SESSION['userLevel']))) || 
 							   GetSQLValueString($_POST['brewerDropOff'], "int"),
 							   GetSQLValueString($_POST['brewerJudgeExp'], "text"),
 							   GetSQLValueString($_POST['brewerJudgeNotes'], "text"),
-							   GetSQLValueString($_POST['brewerJudgeWaiver'], "text")
+							   GetSQLValueString($_POST['brewerJudgeWaiver'], "text"),
+							   GetSQLValueString($_POST['brewerStaff'], "text")
 							   );
 		// Numbers 999999994 through 999999999 are reserved for NHC applications.
 		if (($_POST['brewerAHA'] < "999999994") || ($_POST['brewerAHA'] == "")) {
@@ -627,18 +635,11 @@ if (((isset($_SESSION['loginUsername'])) && (isset($_SESSION['userLevel']))) || 
 			mysqli_real_escape_string($connection,$updateSQL);
 			$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 		}
-		  
-		if ((isset($_POST['brewerAssignment'])) && ($_POST['brewerAssignment'] == "J")) $updateSQL = "UPDATE $brewer_db_table SET brewerNickname='judge' WHERE id='".$id."'"; 
-		elseif ((isset($_POST['brewerAssignment'])) && ($_POST['brewerAssignment'] == "S")) $updateSQL = "UPDATE $brewer_db_table SET brewerNickname='steward' WHERE id='".$id."'"; 
-		else $updateSQL = "UPDATE $brewer_db_table SET brewerNickname=NULL WHERE id='".$id."'"; 
-		mysqli_real_escape_string($connection,$updateSQL);
-		$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 		
 		$updateSQL = sprintf("UPDATE $users_db_table SET userCreated=%s WHERE id=%s", 
 						   	"NOW( )",
 							GetSQLValueString($_POST['uid'], "text")
-							); 
-		
+							);
 		mysqli_real_escape_string($connection,$updateSQL);
 		$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 		
@@ -653,7 +654,6 @@ if (((isset($_SESSION['loginUsername'])) && (isset($_SESSION['userLevel']))) || 
 		
 		$pattern = array('\'', '"');
 		$updateGoTo = str_replace($pattern, "", $updateGoTo); 
-		
 		
 		header(sprintf("Location: %s", stripslashes($updateGoTo)));
 	}

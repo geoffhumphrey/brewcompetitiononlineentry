@@ -94,7 +94,7 @@ CREATE TABLE IF NOT EXISTS `baseline_brewer` (
   `brewerPhone2` varchar(25) DEFAULT NULL,
   `brewerClubs` text,
   `brewerEmail` varchar(255) DEFAULT NULL,
-  `brewerNickname` varchar(255) DEFAULT NULL,
+  `brewerStaff` varchar(255) DEFAULT NULL,
   `brewerSteward` char(1) DEFAULT NULL,
   `brewerJudge` char(1) DEFAULT NULL,
   `brewerJudgeID` varchar(25) DEFAULT NULL,
@@ -118,8 +118,8 @@ CREATE TABLE IF NOT EXISTS `baseline_brewer` (
 -- Dumping data for table `baseline_brewer`
 --
 
-INSERT INTO `baseline_brewer` (`id`, `uid`, `brewerFirstName`, `brewerLastName`, `brewerAddress`, `brewerCity`, `brewerState`, `brewerZip`, `brewerCountry`, `brewerPhone1`, `brewerPhone2`, `brewerClubs`, `brewerEmail`, `brewerNickname`, `brewerSteward`, `brewerJudge`, `brewerJudgeID`, `brewerJudgeMead`, `brewerJudgeRank`, `brewerJudgeLikes`, `brewerJudgeDislikes`, `brewerJudgeLocation`, `brewerStewardLocation`, `brewerJudgeExp`, `brewerJudgeNotes`, `brewerAssignment`, `brewerJudgeWaiver`, `brewerAHA`, `brewerDiscount`, `brewerJudgeBOS`, `brewerDropOff`) VALUES
-(1, 1, 'Default', 'Admin', '1234 Main Street', 'Anytown', 'CO', '80001', 'United States', '123.456.7890', NULL, NULL, 'user.baseline@brewcompetition.com', NULL, 'N', 'N', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0);
+INSERT INTO `baseline_brewer` (`id`, `uid`, `brewerFirstName`, `brewerLastName`, `brewerAddress`, `brewerCity`, `brewerState`, `brewerZip`, `brewerCountry`, `brewerPhone1`, `brewerPhone2`, `brewerClubs`, `brewerEmail`, `brewerStaff`, `brewerSteward`, `brewerJudge`, `brewerJudgeID`, `brewerJudgeMead`, `brewerJudgeRank`, `brewerJudgeLikes`, `brewerJudgeDislikes`, `brewerJudgeLocation`, `brewerStewardLocation`, `brewerJudgeExp`, `brewerJudgeNotes`, `brewerAssignment`, `brewerJudgeWaiver`, `brewerAHA`, `brewerDiscount`, `brewerJudgeBOS`, `brewerDropOff`) VALUES
+(1, 1, 'Default', 'Admin', '1234 Main Street', 'Anytown', 'CO', '80001', 'United States', '123.456.7890', NULL, NULL, 'user.baseline@brewcompetition.com', 'N', 'N', 'N', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0);
 
 -- --------------------------------------------------------
 

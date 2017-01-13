@@ -334,14 +334,20 @@ $table_body1 .= sprintf("<div class=\"col-lg-3 col-md-3 col-sm-4 col-xs-4\"><str
 $table_body1 .=  "<div class=\"col-lg-9 col-md-9 col-sm-8 col-xs-8\">".$club."</div>";
 $table_body1 .= "</div>";
 
+
 if (($row_brewer['brewerJudgeNotes'] != "") && (($_SESSION['brewerJudge'] == "Y") || ($_SESSION['brewerSteward'] == "Y"))) {  
-$table_body1 .= "<div class=\"row bcoem-account-info\">";
-$table_body1 .= sprintf("<div class=\"col-lg-3 col-md-3 col-sm-4 col-xs-4\"><strong>%s</strong></div>",$label_org_notes);
-$table_body1 .= "<div class=\"col-lg-9 col-md-9 col-sm-8 col-xs-8\">";
-$table_body1 .= "<em>".$row_brewer['brewerJudgeNotes']."</em>";		
-$table_body1 .= "</div>";
-$table_body1 .= "</div>";
+	$table_body1 .= "<div class=\"row bcoem-account-info\">";
+	$table_body1 .= sprintf("<div class=\"col-lg-3 col-md-3 col-sm-4 col-xs-4\"><strong>%s</strong></div>",$label_org_notes);
+	$table_body1 .= "<div class=\"col-lg-9 col-md-9 col-sm-8 col-xs-8\">";
+	$table_body1 .= "<em>".$row_brewer['brewerJudgeNotes']."</em>";		
+	$table_body1 .= "</div>";
+	$table_body1 .= "</div>";
 }
+
+$table_body1 .= "<div class=\"row bcoem-account-info\">";
+$table_body1 .= sprintf("<div class=\"col-lg-3 col-md-3 col-sm-4 col-xs-4\"><strong>%s</strong></div>",$label_staff);
+$table_body1 .= "<div class=\"col-lg-9 col-md-9 col-sm-8 col-xs-8\">".yes_no($_SESSION['brewerStaff'],$base_url)."</div>";
+$table_body1 .= "</div>";
 
 if ($entry_discount) {
 
@@ -360,21 +366,12 @@ if ((!empty($_SESSION['brewerJudge'])) && ($action != "print")) $table_body1 .= 
 else $table_body1 .= "None entered";
 $table_body1 .= "</div>";
 $table_body1 .= "</div>";
-if (($_SESSION['brewerJudge'] == "Y") || ($_SESSION['brewerSteward'] == "Y")) {
-	$table_body1 .= "<div class=\"row bcoem-account-info\">";
-	$table_body1 .= sprintf("<div class=\"col-lg-3 col-md-3 col-sm-4 col-xs-4\"><strong>%s</strong></div>",$label_waiver);
-	$table_body1 .= "<div class=\"col-lg-9 col-md-9 col-sm-8 col-xs-8\">";
-	if (!empty($row_brewer['brewerJudgeWaiver'])) $table_body1 .= yes_no($row_brewer['brewerJudgeWaiver'],$base_url); 
-	else $table_body1 .= $label_none_entered;
-	$table_body1 .= "</div>";
-	$table_body1 .= "</div>";
-}
 
 if (!empty($assignment)) {
 	
 	$table_body1 .= "<div class=\"row bcoem-account-info\">";
     $table_body1 .= sprintf("<div class=\"col-lg-3 col-md-3 col-sm-4 col-xs-4\"><strong>%s</strong></div>",$label_assignment);
-    $table_body1 .= "<div class=\"col-lg-9 col-md-9 col-sm-8 col-xs-8\">".$brewer_assignment."</div>";
+    $table_body1 .= "<div class=\"col-lg-9 col-md-9 col-sm-8 col-xs-8\">".ucwords($brewer_assignment)."</div>";
 	$table_body1 .= "</div>";
 	
 }
@@ -548,7 +545,15 @@ if ($_SESSION['brewerSteward'] == "Y") {
 	}
 }
 
-
+if (($_SESSION['brewerJudge'] == "Y") || ($_SESSION['brewerSteward'] == "Y")) {
+	$table_body1 .= "<div class=\"row bcoem-account-info\">";
+	$table_body1 .= sprintf("<div class=\"col-lg-3 col-md-3 col-sm-4 col-xs-4\"><strong>%s</strong></div>",$label_waiver);
+	$table_body1 .= "<div class=\"col-lg-9 col-md-9 col-sm-8 col-xs-8\">";
+	if (!empty($row_brewer['brewerJudgeWaiver'])) $table_body1 .= yes_no($row_brewer['brewerJudgeWaiver'],$base_url); 
+	else $table_body1 .= $label_none_entered;
+	$table_body1 .= "</div>";
+	$table_body1 .= "</div>";
+}
 
 // --------------------------------------------------------------
 // Display

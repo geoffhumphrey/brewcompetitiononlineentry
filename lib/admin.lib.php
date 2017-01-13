@@ -1126,7 +1126,7 @@ function not_assigned($method) {
 					$judge_rank = $assignment_info[5];
 					$judge_rank_explode = explode(",",$assignment_info[5]);
 					$judge_rank_display = $judge_rank_explode[0];
-					if (empty($judge_rank)) $judge_rank_display = "Novice";
+					if (empty($judge_rank)) $judge_rank_display = "Non-BJCP";
 					if (!empty($assignment_info[1])) $assignment .= "<tr><td class=\"small\">".$assignment_info[1].", ".$assignment_info[0]."</td><td class=\"small\">".$judge_rank_display."</td></tr>";
 				}
 				
@@ -1144,7 +1144,7 @@ function not_assigned($method) {
 					$judge_rank = $assignment_info[5];
 					$judge_rank_explode = explode(",",$assignment_info[5]);
 					$judge_rank_display = $judge_rank_explode[0];
-					if (empty($judge_rank)) $judge_rank_display = "Novice";
+					if (empty($judge_rank)) $judge_rank_display = "Non-BJCP";
 					if (!empty($assignment_info[1])) $assignment .= "<tr><td class=\"small\">".$assignment_info[1].", ".$assignment_info[0]."</td><td class=\"small\">".$judge_rank_display."</td></tr>";
 				}
 			}

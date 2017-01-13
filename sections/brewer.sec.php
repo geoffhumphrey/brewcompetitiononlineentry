@@ -228,8 +228,25 @@ if ($go != "admin") echo $info_msg;
             <span class="help-block"><?php echo $brewer_text_003; ?></span>
         </div>
     </div><!-- ./Form Group -->
+       
+    <!-- Staff preferences -->
+    <div class="form-group"><!-- Form Group Radio INLINE -->
+        <label for="brewerJudge" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label_staff; ?></label>
+        <div class="col-lg-10 col-md-9 col-sm-8 col-xs-12">
+            <div class="input-group">
+                <!-- Input Here -->
+                <label class="radio-inline">
+                    <input type="radio" name="brewerStaff" value="Y" id="brewerStaff_0" <?php if (($action == "edit") && ($row_brewer['brewerStaff'] == "Y")) echo "checked"; ?>> <?php echo $label_yes; ?>
+                </label>
+                <label class="radio-inline">
+                    <input type="radio" name="brewerStaff" value="N" id="brewerStaff_1" <?php if (($action == "edit") && (($row_brewer['brewerStaff'] == "N") || ($row_brewer['brewerStaff'] == ""))) echo "checked"; ?>> <?php echo $label_no; ?>
+                </label>
+            </div>
+            <span class="help-block"><?php echo $brewer_text_020; ?></span>
+        </div>
+    </div><!-- ./Form Group -->
     
-    <?php if (($go != "entrant") && ($section != "step2")) { ?>
+	<?php if (($go != "entrant") && ($section != "step2")) { ?>
         
         <div class="form-group"><!-- Form Group NOT REQUIRED Text Input -->
             <label for="brewerJudgeNotes" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label_org_notes; ?></label>
@@ -239,6 +256,8 @@ if ($go != "admin") echo $info_msg;
                 <span class="help-block"><?php echo $brewer_text_004; ?></span>
             </div>
         </div><!-- ./Form Group -->
+   
+    
     <!-- Judging and Stewarding Preferences or Assignments -->
     
 		<?php if (($table_assignment) && ($go != "admin")) { ?>
@@ -314,13 +333,13 @@ if ($go != "admin") echo $info_msg;
         </div><!-- ./Form Group -->
         <?php $judge_array = explode(",",$row_brewer['brewerJudgeRank']); ?>
         <div class="form-group"><!-- Form Group Radio STACKED -->
-            <label for="brewerJudgeRank" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label"></label>
+            <label for="brewerJudgeRank" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label_bjcp_rank; ?></label>
             <div class="col-lg-10 col-md-9 col-sm-8 col-xs-12">
                 <div class="input-group">
                     <!-- Input Here -->
                     <div class="radio">
                         <label>
-                            <input type="radio" name="brewerJudgeRank[]" value="Novice" <?php if (($action == "edit") && in_array("Novice",$judge_array)) echo "CHECKED"; else echo "CHECKED" ?>> Novice *
+                            <input type="radio" name="brewerJudgeRank[]" value="Non-BJCP" <?php if (($action == "edit") && (in_array("Non-BJCP",$judge_array) || in_array("Novice",$judge_array))) echo "CHECKED"; else echo "CHECKED" ?>> Non-BJCP *
                         </label>
                     </div>
                     <div class="radio">

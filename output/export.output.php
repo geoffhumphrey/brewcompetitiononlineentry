@@ -240,7 +240,7 @@ if (((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) || ((
 			$brewerLastName = strtr($row_sql['brewerLastName'],$html_remove);
 			$brewerAddress = strtr($row_sql['brewerAddress'],$html_remove);
 			$brewerCity = strtr($row_sql['brewerCity'],$html_remove);
-			if ($go == "tab") $assignment = $row_sql['brewerNickname']; else $assignment = brewer_assignment($row_sql['uid'],"1","blah","default","default");
+			$assignment = brewer_assignment($row_sql['uid'],"1","blah","default","default");
 			if ($row_sql['brewerCountry'] == "United States") $phone = format_phone_us($row_sql['brewerPhone1']); else $phone = $row_sql['brewerPhone1'];
 			$a[] = array($brewerFirstName,$brewerLastName,$brewerAddress,$brewerCity,$row_sql['brewerState'],$row_sql['brewerZip'],$row_sql['brewerCountry'],$phone,$row_sql['brewerEmail'],$row_sql['brewerClubs'],judge_entries($row_sql['uid'],0),$assignment,$row_sql['brewerJudgeID'],str_replace(",",", ",$row_sql['brewerJudgeRank']),style_convert($row_sql['brewerJudgeLikes'],'6'),style_convert($row_sql['brewerJudgeDislikes'],'6')); 
 		} while ($row_sql = mysqli_fetch_assoc($sql));

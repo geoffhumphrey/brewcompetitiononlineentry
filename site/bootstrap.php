@@ -118,12 +118,6 @@ if ($setup_success) {
 	
 	$alert_flag_character = FALSE;
 	
-	// For 2.1.9 ONLY!
-	$sql = sprintf("ALTER TABLE `%s` CHANGE `brewCategory` `brewCategory` VARCHAR(4) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL, CHANGE `brewCategorySort` `brewCategorySort` VARCHAR(4) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL, CHANGE `brewSubCategory` `brewSubCategory` VARCHAR(4) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL;", $prefix."brewing");
-	mysqli_select_db($connection,$database);
-	mysqli_real_escape_string($connection,$sql);
-	$result = mysqli_query($connection,$sql) or die (mysqli_error($connection));
-	
 	if (!isset($_SESSION['characterSet'])) {
 		
 		$query_character_check = "SHOW VARIABLES LIKE 'character_set_database'";

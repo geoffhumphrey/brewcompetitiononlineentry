@@ -674,7 +674,7 @@ if (($section == "brewer") || ($section == "register") || ($section == "step2") 
 	$brewer_text_005 = "Not Applicable / Shipping Entries";
 	$brewer_text_006 = "Are you willing and qualified to serve as a judge in this competition?";
 	$brewer_text_007 = "Have you passed the BJCP Mead Judge exam?";
-	$brewer_text_008 = "* The <em>Novice</em> rank is for those who haven't taken the BJCP Beer Judge Entrance Exam, and are <em>not</em> a professional brewer.";
+	$brewer_text_008 = "* The <em>Non-BJCP</em> rank is for those who haven't taken the BJCP Beer Judge Entrance Exam, and are <em>not</em> a professional brewer.";
 	$brewer_text_009 = "** The <em>Provisional</em> rank is for those have taken and passed the BJCP Beer Judge Entrance Exam, but have not yet taken the BJCP Beer Judging Exam.";
 	$brewer_text_010 = "Only the first two designations will appear on your printed scoresheet labels.";
 	$brewer_text_011 = "How many competitions have you previously served as a <strong>".strtolower($label_judge)."</strong>?";
@@ -688,6 +688,8 @@ if (($section == "brewer") || ($section == "register") || ($section == "step2") 
 	
 	// v2.1.9
 	$brewer_text_019 = "If you are planning to serve as a judge in any competition, click or tap the button above to enter your judge-related information.";
+	$brewer_text_020 = "Are you willing to serve as a staff member in this competition?";
+	$brewer_text_021 = "Competition staff are people that serve in various roles to assist in the organization and execution of the competition before, during, and after judging. Judges and stewards can also serve as staff members. Staff members can earn BJCP points if the competition is sanctioned.";
 
 }	
 
@@ -1090,8 +1092,10 @@ if ($section == "volunteers") {
 	$volunteers_text_006 = "access your account";
 	$volunteers_text_007 = "to see if you have volunteered to be a judge or steward";
 	$volunteers_text_008 = "If you are willing to judge or steward, please return to register on or after";
-	$volunteers_text_009 = "If you would like to volunteer to be a competition staff member,";
-	$volunteers_text_010 = "contact the appropriate competition official";
+	
+	// v2.1.9
+	$volunteers_text_009 = "If you would like to volunteer to be a competition staff member, please register or update your account to indicate that you wish to be a part of the competition staff.";
+	$volunteers_text_010 = "";
 	
 }
 
