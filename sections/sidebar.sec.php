@@ -237,11 +237,7 @@ if ($section != "admin") {
 		$page_info100 .= "</div>";
 		
 	}
-	
-	
-	
-	
-	
+		
 	// Drop-off Dates and Location
 	if ($_SESSION['prefsDropOff'] == 1) {
 		$header1_300 .= sprintf("<div class=\"panel %s\">",$dropoff_panel_display);
@@ -268,7 +264,7 @@ if ($section != "admin") {
 		$header1_500 .= "</h4>";
 		$header1_500 .= "</div>";
 		$page_info500 .= "<div class=\"panel-body\">";
-		$page_info500 .= sprintf("%s <a href=\"%s\">%s</a> %s %s %s.",$sidebar_text_022, build_public_url("entry","default","default","default",$sef,$base_url)."#shipping", $sidebar_text_023, $sidebar_text_004,$shipping_open_sidebar, $shipping_closed_sidebar);
+		$page_info500 .= sprintf("%s <a href=\"%s\">%s</a> %s %s %s.",$sidebar_text_022, build_public_url("entry","default","default","default",$sef,$base_url)."#shipping", $sidebar_text_023, $shipping_open_sidebar, $sidebar_text_004, $shipping_closed_sidebar);
 		$page_info500 .= "</p>";
 		$page_info500 .= "</div>";
 		$page_info500 .= "</div>";
@@ -298,19 +294,26 @@ if ($section != "admin") {
 	// Display
 	// --------------------------------------------------------------
 	if ((($_SESSION['contestLogo'] != "") && (file_exists(USER_IMAGES.$_SESSION['contestLogo'])))) echo $competition_logo;
+	
 	echo $page_info;
+	
 	if ($_SESSION['prefsUseMods'] == "Y") include(INCLUDES.'mods_sidebar_top.inc.php');
 	
 	echo $header1_400;
 	echo $page_info400;
+	
 	echo $header1_100;
 	echo $page_info100;
+	
 	echo $header1_200;
 	echo $page_info200;
+	
 	echo $header1_300;
 	echo $page_info300;
+	
 	echo $header1_500;
 	echo $page_info500;
+	
 	if ($_SESSION['prefsUseMods'] == "Y") include(INCLUDES.'mods_sidebar_bottom.inc.php');
 }
 

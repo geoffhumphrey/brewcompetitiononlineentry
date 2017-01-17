@@ -5,7 +5,8 @@
  * 
  */
 require('paths.php');
-require(CONFIG.'bootstrap.php');
+require(LANG.'language.lang.php'); 
+require(LIB.'common.lib.php');
 if (NHC) $base_url = "";
 else $base_url = "http://".$_SERVER['SERVER_NAME'].$sub_directory."/";
 ?>
@@ -35,7 +36,7 @@ else $base_url = "http://".$_SERVER['SERVER_NAME'].$sub_directory."/";
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
     
     <!-- Load BCOE&M Custom Theme CSS - Contains Bootstrap overrides and custom classes -->
-    <link rel="stylesheet" type="text/css" href="<?php echo $theme; ?>" />
+    <link rel="stylesheet" type="text/css" href="<?php echo $base_url; ?>/css/default.min.css" />
 	
 	<!-- Load BCOE&M Custom JS -->
     <script src="<?php echo $base_url; ?>js_includes/bcoem_custom.min.js"></script>
@@ -67,12 +68,12 @@ else $base_url = "http://".$_SERVER['SERVER_NAME'].$sub_directory."/";
     <!-- Container -->
     <div class="jumbotron">
     	<div class="container">
-        	<h1>Maintenance</h1>
-            <p class="lead">The <?php echo $_SESSION['contestName']; ?> site administrator has taken the site offline. It is currently undergoing maintenance.</p>
+        	<h1><?php echo $label_maintenance; ?></h1>
+            <p class="lead"><?php echo $maintenance_text_000; ?></p>
         </div>
     </div>
     <div class="container">
-    	<p>Please check back shortly.</p>
+    	<p><?php echo $maintenance_text_001; ?></p>
     </div><!-- ./container-fluid -->    
     <!-- ./Container -->
     

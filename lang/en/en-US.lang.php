@@ -359,10 +359,6 @@ $label_host = "Host";
 $label_closing_soon = "Closing Soon";
 $label_access = "Access";
 
-// v2.1.9
-$label_judge_info = "Judge Information";
-$label_cellar = "My Cellar";
-
 // Admin
 $label_admin = "Administration";
 $label_admin_short = "Admin";
@@ -406,6 +402,11 @@ $label_unpaid_confirmed_entries = "Unpaid Confirmed Entries";
 $label_total_entry_fees = "Total Entry Fees";
 $label_entry_fees_to_pay = "Entry Fees to Pay";
 $label_entry_drop_off = "Entry Drop-Off";
+
+// v2.1.9
+$label_maintenance = "Maintenance";
+$label_judge_info = "Judge Information";
+$label_cellar = "My Cellar";
 
 // -------------------- Headers --------------------
 // Missing punctuation intentional for all
@@ -608,8 +609,6 @@ $comps_text_000 = "Choose the competition you wish to access from the list below
 $comps_text_001 = "Current competition:";
 $comps_text_002 = "There are no competitions with entry windows open now.";
 $comps_text_003 = "There are no competitions with entry windows closing in the next 7 days.";
-$comps_text_004 = "";
-$comps_text_005 = "";
 
 // -------------------- BeerXML --------------------
 
@@ -1143,6 +1142,12 @@ $output_text_027 = "link to Beer Judge Certification Program Style Guidelines";
 $output_text_028 = "";
 $output_text_029 = "";
 $output_text_030 = "";
+
+// Maintenance
+
+// v2.1.9
+$maintenance_text_000 = "The site administrator has taken the site offline to undergo maintenance.";
+$maintenance_text_001 = "Please check back later.";
 
 // ----------------------------------------------------------------------------------
 // Admin Pages - Admin pages will be included in a future release
