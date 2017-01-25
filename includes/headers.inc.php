@@ -615,6 +615,8 @@ switch($section) {
 	elseif ($msg == "31") $output = sprintf("<strong>%s</strong>",$header_text_091);
 	elseif ($msg == "32") $output = sprintf("<strong>%s</strong>",$header_text_092);
 	elseif ($msg == "33") $output = sprintf("<strong>%s</strong>",$header_text_093);
+	elseif ($msg == "34") $output = sprintf("<strong>%s</strong>",$header_text_110);
+	elseif ($msg == "35") $output = sprintf("<strong>%s</strong>",$header_text_111);
 	elseif ($msg == "755") $output = sprintf("<strong>%s</strong> ",$header_text_094,$header_text_095);
 	else $output = "";
 	break;

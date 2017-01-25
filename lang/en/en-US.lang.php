@@ -407,6 +407,8 @@ $label_entry_drop_off = "Entry Drop-Off";
 $label_maintenance = "Maintenance";
 $label_judge_info = "Judge Information";
 $label_cellar = "My Cellar";
+$label_verify = "Verify";
+$label_entry_number = "Entry Number";
 
 // -------------------- Headers --------------------
 // Missing punctuation intentional for all
@@ -522,6 +524,9 @@ $header_text_108 = "This entry cannot be accepted or confirmed until a style has
 
 // v2.1.9
 $header_text_109 = "You have registered as a steward.";
+$header_text_110 = "All entries have been un-marked as paid.";
+$header_text_111 = "All entries have been un-marked as received.";
+
 
 // -------------------- Navigation --------------------
 

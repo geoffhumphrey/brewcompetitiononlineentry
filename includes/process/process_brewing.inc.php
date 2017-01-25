@@ -846,6 +846,19 @@ if ((isset($_SESSION['loginUsername'])) && (isset($_SESSION['userLevel']))) {
 			
 		}
 		
+		if ($action == "unpaid") {
+			
+			$updateSQL = "UPDATE $brewing_db_table SET brewPaid='0'";
+			mysqli_real_escape_string($connection,$updateSQL);
+			$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+			
+			$massUpdateGoTo = $base_url."index.php?section=admin&go=entries&msg=34";
+			$pattern = array('\'', '"');
+			$massUpdateGoTo = str_replace($pattern, "", $massUpdateGoTo); 
+			header(sprintf("Location: %s", stripslashes($massUpdateGoTo))); 
+			
+		}
+		
 		if ($action == "received") {
 			
 			$updateSQL = "UPDATE $brewing_db_table SET brewReceived='1'";
@@ -853,6 +866,19 @@ if ((isset($_SESSION['loginUsername'])) && (isset($_SESSION['userLevel']))) {
 			$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 			
 			$massUpdateGoTo = $base_url."index.php?section=admin&go=entries&msg=21";
+			$pattern = array('\'', '"');
+			$massUpdateGoTo = str_replace($pattern, "", $massUpdateGoTo); 
+			header(sprintf("Location: %s", stripslashes($massUpdateGoTo))); 
+			
+		}
+		
+		if ($action == "not-received") {
+			
+			$updateSQL = "UPDATE $brewing_db_table SET brewReceived='0'";
+			mysqli_real_escape_string($connection,$updateSQL);
+			$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+			
+			$massUpdateGoTo = $base_url."index.php?section=admin&go=entries&msg=35";
 			$pattern = array('\'', '"');
 			$massUpdateGoTo = str_replace($pattern, "", $massUpdateGoTo); 
 			header(sprintf("Location: %s", stripslashes($massUpdateGoTo))); 

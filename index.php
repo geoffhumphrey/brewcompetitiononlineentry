@@ -144,7 +144,7 @@ else $datatables_load = array("admin","list");
     <?php include(INCLUDES.'mods_top.inc.php'); ?>
     <!-- ./MODS TOP -->
     <?php } ?>
-    
+     
     <?php if (($section == "admin") && (($logged_in) && ($_SESSION['userLevel'] <= 1))) { ?>
     <!-- Admin Pages (Fluid Layout) -->
     <div class="container-fluid">
@@ -204,7 +204,7 @@ else $datatables_load = array("admin","list");
     <!-- ./Admin Pages -->
     <?php } else { ?>
     <!-- Public Pages (Fixed Layout with Sidebar) -->
-    <div class="container"> 
+    <div class="container">
     	<div class="row">
     		<div class="col col-lg-9 col-md-8 col-sm-12 col-xs-12">
             <div class="page-header">

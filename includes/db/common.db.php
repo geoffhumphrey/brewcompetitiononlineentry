@@ -1,4 +1,24 @@
 <?php
+// Check for last activity session variable and determine if it's over 15 minutes)
+// If so, reset the session
+if (isset($_SESSION['last_activity']) && (time() - $_SESSION['last_activity'] > 900)) {
+    session_unset();
+    session_destroy();
+}
+
+// Store the time this script ran
+$_SESSION['last_activity'] = time();
+
+// Define when the user started their browsing
+if (!isset($_SESSION['created'])) $_SESSION['created'] = time();
+
+// Check whether the created session variable is more that 15 minutes ago
+// If so, regenerate the created session variable
+elseif (time() - $_SESSION['created'] > 900) {
+    session_regenerate_id(true);
+    $_SESSION['created'] = time();
+}
+
 // General vars
 $today = strtotime("now");
 $url = parse_url($_SERVER['PHP_SELF']);

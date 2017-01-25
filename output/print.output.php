@@ -52,6 +52,7 @@ if (isset($_SESSION['loginUsername'])) {
 			if ($section == "bos-mat") 		include (OUTPUT.'bos_mat.output.php');
 			if ($section == "dropoff") 		include (OUTPUT.'dropoff.output.php');
 			if ($section == "summary") 		include (OUTPUT.'participant_summary.output.php');
+			if ($section == "particpant-entries") 		include (OUTPUT.'participant_entries_list.output.php');
 			if ($section == "inventory") 	include (OUTPUT.'post_judge_inventory.output.php');
 			if ($section == "pullsheets") 	include (OUTPUT.'pullsheets.output.php');
 			if ($section == "results") 		include (OUTPUT.'results.output.php');

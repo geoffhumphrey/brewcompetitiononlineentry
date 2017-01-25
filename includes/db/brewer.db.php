@@ -46,7 +46,7 @@ elseif ($section == "pay") {
 
 // Viewing all participants in current comp DB query
 // @single
-elseif ((($section == "admin") && ($go == "participants") && ($filter == "default")  && ($dbTable == "default"))  || ($section == "participant_summary")) {
+elseif ((($section == "admin") && ($go == "participants") && ($filter == "default")  && ($dbTable == "default")) || ($section == "participant_summary") || ($section == "particpant-entries")) {
 	if (SINGLE) $query_brewer = sprintf("SELECT * FROM %s WHERE FIND_IN_SET('%s',brewerCompParticipant) > 0", $brewer_db_table, $_SESSION['comp_id']);
 	else $query_brewer = sprintf("SELECT * FROM %s ORDER BY brewerLastName", $brewer_db_table);
 	$brewer = mysqli_query($connection,$query_brewer) or die (mysqli_error($connection));
@@ -190,7 +190,7 @@ elseif (($section == "admin") && ($go == "judging") && ($filter == "staff")  && 
 
 // Assign BOS judges query
 elseif (($section == "admin") && ($go == "judging") && ($filter == "bos")  && ($dbTable == "default") && ($action == "assign")) {
-	$query_brewer = "SELECT * FROM $brewer_db_table WHERE (brewerJudgeRank='Certified' OR brewerJudgeRank='National' OR brewerJudgeRank LIKE '%Master%')";
+	$query_brewer = "SELECT * FROM $brewer_db_table WHERE (brewerJudgeRank LIKE '%Certified%' OR brewerJudgeRank LIKE'%National%' OR brewerJudgeRank LIKE '%Master%')";
 	if (SINGLE) $query_brewer .= sprintf(" AND brewerJudge='%s' AND FIND_IN_SET('%s',brewerCompParticipant) > 0", "Y-".$_SESSION['comp_id'], $_SESSION['comp_id']);
 	else $query_brewer .= " AND brewerJudge='Y'";
 	$brewer = mysqli_query($connection,$query_brewer) or die (mysqli_error($connection));

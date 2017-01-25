@@ -508,8 +508,8 @@ $(document).ready(function() {
     <tr>
     	<th class="hidden-xs hidden-sm">No.</th>
         <th>Name</th>
-        <th class="hidden-xs hidden-sm">Style(s)</th>
-        <th class="hidden-xs hidden-sm"><em>Rec'd</em> Entries</th>
+        <th>Style(s)</th>
+        <th><em>Rec'd</em> Entries</th>
         <th class="hidden-xs hidden-sm"><em>Scored</em> Entries</th>
         <th>Judges</th>
         <th>Stew<span class="hidden-xs">ards</span></th>
@@ -568,8 +568,8 @@ $(document).ready(function() {
     <tr>
     	<td class="hidden-xs hidden-sm"><?php echo $row_tables['tableNumber']; ?></td>
         <td><?php echo $row_tables['tableName']; ?></td>
-        <td class="hidden-xs hidden-sm"><?php echo $styles; ?></td>
-        <td class="hidden-xs hidden-sm"><?php echo $received; ?></td>
+        <td><?php echo $styles; ?></td>
+        <td><?php echo $received; ?></td>
         <td class="hidden-xs hidden-sm"><?php echo $scored; ?></td>
         <td><?php echo $assigned_judges; ?></td>
         <td><?php echo $assigned_stewards; ?></td>
