@@ -238,7 +238,6 @@ if ($section != "step5") {
 			do {
 				
 				$brewer_assignment = brewer_assignment($row_brewer['uid'],"1","default",$dbTable,$filter);
-				
 				if (!empty($brewer_assignment)) {
 					
 					// Build assignment modal for participants

@@ -255,6 +255,15 @@ if (check_setup($prefix."system",$database)) {
 		$result = mysqli_query($connection,$sql) or die (mysqli_error($connection));
 	
 	}
+	
+	// For 2.1.9, check if assignRoles is present in judging_assingments table
+	// If not, add it
+	if (!check_update("assignRoles", $prefix."judging_assignments")) {
+		$updateSQL = sprintf("ALTER TABLE `%s` ADD `assignRoles` VARCHAR(25) NULL DEFAULT NULL;",$prefix."judging_assignments");
+		mysqli_select_db($connection,$database);
+		mysqli_real_escape_string($connection,$updateSQL);
+		$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+	}
 		
 	if ($row_version_check['version'] != $current_version) {
 		

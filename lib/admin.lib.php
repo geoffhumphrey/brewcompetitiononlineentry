@@ -964,7 +964,7 @@ function unassign($bid,$location,$round,$tid) {
 	return $r;
 }
 
-function assign_to_table($tid,$bid,$filter,$total_flights,$round,$location,$table_styles,$queued) {
+function assign_to_table($tid,$bid,$filter,$total_flights,$round,$location,$table_styles,$queued,$random) {
 // Function almalgamates the above functions to output the correct form elements
 // $bid = id of row in the brewer's table
 // $tid = id of row in the judging_tables table
@@ -976,7 +976,7 @@ function assign_to_table($tid,$bid,$filter,$total_flights,$round,$location,$tabl
 // Define variables
 $unassign = unassign($bid,$location,$round,$tid);
 $unavailable = unavailable($bid,$location,$round,$tid);
-$random = random_generator(8,2);
+
 $r = "";
 if (entry_conflict($bid,$table_styles)) $disabled = "disabled"; else $disabled = "";
 if ($filter == "stewards") $role = "S"; else $role = "J";
@@ -987,6 +987,7 @@ $r .= '<input type="hidden" name="bid'.$random.'" value="'.$bid.'" />';
 $r .= '<input type="hidden" name="assignRound'.$random.'" value="'.$round.'" />';
 $r .= '<input type="hidden" name="assignment'.$random.'" value="'.$role.'" />';
 $r .= '<input type="hidden" name="assignLocation'.$random.'" value="'.$location.'" />';
+$r .= '<input type="hidden" name="id'.$random.'" value="'.$unassign.'"/>';
 
 if ($queued == "Y") { 
 	if (already_assigned($bid,$tid,"1",$round)) { $selected = "checked"; $default = ""; } else { $selected = ""; $default = "checked"; } 

@@ -13,6 +13,8 @@ if ($totalRows_tables == 0) {
 else {
 if ($round != "default") $round2 = $round; else $round2 = "default";
 if ($filter == "stewards") $filter = "S"; else $filter = "J";
+$role_replace1 = array("HJ","LJ","MBOS",", ");
+$role_replace2 = array("<span class=\"fa fa-gavel\"></span> Head Judge","<span class=\"fa fa-star\"></span> Lead Judge","<span class=\"fa fa-trophy\"></span> Mini-BOS Judge"," ");
 
 if ($id == "default") { ?>
 
@@ -53,10 +55,11 @@ if ($id == "default") { ?>
                         if ($row_assignments['assignment'] == "S") $assignment = "Steward"; else $assignment = "Judge";
                         if ($row_assignments['assignRound'] != "") $round = "Round ".$row_assignments['assignRound']; else $round = "";
                         if ($row_assignments['assignFlight'] != "") $flight = "Flight ".$row_assignments['assignFlight']; else $flight = "";
-						$rank = str_replace(",",", ",$judge_info['3']);
+						$rank = str_replace(",",", ",$judge_info['3']);	
+						$role = str_replace($role_replace1,$role_replace2,$row_assignments['assignRoles']);
                 ?>
         <tr>
-                <td width="75%"><?php echo $judge_info['1'].", ".$judge_info['0']; if (!empty($rank)) echo " (".$rank.")"; ?></td>
+                <td><?php echo $judge_info['1'].", ".$judge_info['0']; if (!empty($rank)) echo " (".$rank.") "; echo $role; ?></td>
                 <td width="5%" nowrap="nowrap"><?php echo $assignment ?></td>
             	<td width="5%" nowrap="nowrap"><?php echo $round; ?></td>
                 <?php if ($_SESSION['jPrefsQueued'] == "N") { ?>
@@ -110,13 +113,15 @@ if ($id != "default") {
                         if ($row_assignments['assignRound'] != "") $round = "Round ".$row_assignments['assignRound']; else $round = "";
                         if ($row_assignments['assignFlight'] != "") $flight = "Flight ".$row_assignments['assignFlight']; else $flight = "";
 						$rank = str_replace(",",", ",$judge_info['3']);
+						
+						$role = str_replace($role_replace1,$role_replace2,$row_assignments['assignRoles']);
                 ?>
         <tr>
-                <td width="5%" nowrap="nowrap"><?php echo $judge_info['1'].", ".$judge_info['0']; if (!empty($rank)) echo " (".$rank.")"; ?></td>
+                <td><?php echo $judge_info['1'].", ".$judge_info['0']; if (!empty($rank)) echo " (".$rank.") "; echo $role; ?></td>
                 <td width="5%" nowrap="nowrap"><?php echo $assignment ?></td>
             	<td width="5%" nowrap="nowrap"><?php echo $round; ?></td>
 				<?php if ($_SESSION['jPrefsQueued'] == "N") { ?>
-            	<td><?php echo $flight; ?></td>
+            	<td width="5%" nowrap="nowrap"><?php echo $flight; ?></td>
                 <?php } ?>
         </tr>
                 <?php } while ($row_assignments = mysqli_fetch_assoc($assignments)); ?>

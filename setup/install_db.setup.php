@@ -612,6 +612,7 @@ if ($setup_free_access == TRUE) {
 			`assignFlight` int(11) DEFAULT NULL,
 			`assignRound` int(11) DEFAULT NULL,
 			`assignLocation` int(11) DEFAULT NULL,
+			`assignRoles` varchar(25) DEFAULT NULL,
 			PRIMARY KEY (`id`)
 		) ENGINE = MYISAM ;
 		";

@@ -3,7 +3,9 @@ if (NHC) $base_url = "../";
 if ($filter == "stewards") $filter = "S"; else $filter = "J";
 
 include(DB.'output_assignments.db.php');
-$count = round((get_entry_count('received')/($_SESSION['jPrefsFlightEntries'])),0); 
+$count = round((get_entry_count('received')/($_SESSION['jPrefsFlightEntries'])),0);
+$role_replace1 = array("HJ","LJ","MBOS",", ");
+$role_replace2 = array("<span class=\"fa fa-gavel\"></span> Head Judge<br>","<span class=\"fa fa-star\"></span> Lead Judge<br>","<span class=\"fa fa-trophy\"></span> Mini-BOS Judge<br>"," ");
 
 ?>
 
@@ -76,9 +78,11 @@ include (LIB.'admin.lib.php');
 	$table_info = explode("^",get_table_info("none","basic",$row_assignments['assignTable'],$dbTable,"default"));
 	$location_info = explode("^",get_table_info($row_assignments['assignLocation'],"location","1",$dbTable,"default"));
 	$judge_ranks = str_replace(",",", ",$judge_info['3']);
+	$role = "";
+	$role .= str_replace($role_replace1,$role_replace2,$row_assignments['assignRoles']);
 	?>
     <tr>
-    	<td class="bdr1B_gray"><?php echo ucfirst(strtolower($judge_info['1'])).", ".ucfirst(strtolower($judge_info['0'])); ?></td>
+    	<td class="bdr1B_gray"><?php echo ucfirst(strtolower($judge_info['1'])).", ".ucfirst(strtolower($judge_info['0'])); if (!empty($role)) echo "<br>".$role; ?></td>
         <td class="data bdr1B_gray"><?php echo $judge_ranks; ?></td>
         <td class="data bdr1B_gray"><?php echo table_location($row_assignments['assignTable'],$_SESSION['prefsDateFormat'],$_SESSION['prefsTimeZone'],$_SESSION['prefsTimeFormat'],"default"); ?></td>
         <td class="data bdr1B_gray"><?php echo $table_info['0']; ?></td>
