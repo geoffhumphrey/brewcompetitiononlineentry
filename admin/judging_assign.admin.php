@@ -96,8 +96,33 @@ do {
 	
 	for($i=1; $i<$row_flights['flightRound']+1; $i++) {
 		
+		// Get role from judging_assignments table
+		$query_judge_roles = sprintf("SELECT assignRoles FROM %s WHERE (bid='%s' AND assignTable='%s' AND assignRound='%s')", $prefix."judging_assignments", $row_brewer['uid'], $row_tables_edit['id'], $i);
+		$judge_roles = mysqli_query($connection,$query_judge_roles) or die (mysqli_error($connection));
+		$row_judge_roles = mysqli_fetch_assoc($judge_roles);
+		
+		$checked_head_judge = "";
+		$checked_lead_judge = "";
+		$checked_minibos_judge = "";
+		$roles_previously_defined = 0;
+		
+		if (!empty($row_judge_roles['assignRoles'])) {
+			$roles_previously_defined = 1;
+		}
+		
+		if (strpos($row_judge_roles['assignRoles'],"HJ") !== FALSE) { 
+			$checked_head_judge = "CHECKED";
+		}
+		
+		if (strpos($row_judge_roles['assignRoles'],"LJ") !== FALSE) {
+			$checked_lead_judge = "CHECKED";
+		}
+		
+		if (strpos($row_judge_roles['assignRoles'],"MBOS") !== FALSE) {
+			$checked_minibos_judge = "CHECKED";
+		}
+		
 		if  (table_round($row_tables_edit['id'],$i)) {
-			
 			
 			$flights_display .= "<td>";
 			
@@ -129,6 +154,7 @@ do {
 			$flights_display .= $assign_flag;
 			$flights_display .= assign_to_table($row_tables_edit['id'],$row_brewer['uid'],$filter,$total_flights,$i,$location,$row_tables_edit['tableStyles'],$queued,$random);
 			$flights_display .= "</td>";
+			
 		}
 		
 	}
@@ -144,33 +170,6 @@ do {
 	else $locations = explode(",",$judge_info[8]);
 	
 	if (in_array($table_location,$locations)) {
-		
-		// Get role from judging_assignments table
-		
-		$query_judge_roles = sprintf("SELECT assignRoles FROM %s WHERE bid='%s'", $prefix."judging_assignments", $row_brewer['uid']);
-		$judge_roles = mysqli_query($connection,$query_judge_roles) or die (mysqli_error($connection));
-		$row_judge_roles = mysqli_fetch_assoc($judge_roles);
-		
-		$checked_head_judge = "";
-		$checked_lead_judge = "";
-		$checked_minibos_judge = "";
-		$roles_previously_defined = 0;
-		
-		if (!empty($row_judge_roles['assignRoles'])) {
-			$roles_previously_defined = 1;
-		}
-		
-		if (strpos($row_judge_roles['assignRoles'],"HJ") !== FALSE) { 
-			$checked_head_judge = "CHECKED";
-		}
-		
-		if (strpos($row_judge_roles['assignRoles'],"LJ") !== FALSE) {
-			$checked_lead_judge = "CHECKED";
-		}
-		
-		if (strpos($row_judge_roles['assignRoles'],"MBOS") !== FALSE) {
-			$checked_minibos_judge = "CHECKED";
-		}
 		
 		$output_datatables_body .= "<tr class=\"".$assign_row_color."\">\n";
 		
