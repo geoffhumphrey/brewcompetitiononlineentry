@@ -475,19 +475,16 @@ if (isset($_SESSION['loginUsername'])) {
 			do {
 				
 				$bjcp_rank = explode(",",$row_brewer['brewerJudgeRank']);
+				$rank = bjcp_rank($bjcp_rank[0],2);
 	
 				/*
 				$bjcp_rank1 = $bjcp_rank[0].",";
 				$other_ranks = str_replace($bjcp_rank1,"",$row_brewer['brewerJudgeRank']);
 				$other_ranks = str_replace(",",", ",$other_ranks);
-				*/
-				
-				$rank = bjcp_rank($bjcp_rank[0],2);
-				//if (!empty($other_ranks)) $rank .= ", ".$other_ranks;
-				
+				if (!empty($other_ranks)) $rank .= ", ".$other_ranks;
 				if (!empty($bjcp_rank[1])) $rank .= ", ".$bjcp_rank[1];
 				if (!empty($bjcp_rank[2])) $rank .= ", ".$bjcp_rank[2];
-			
+				*/
 				
 				$j = preg_replace('/[a-zA-Z]/','',$row_brewer['brewerJudgeID']);
 				
@@ -512,6 +509,7 @@ if (isset($_SESSION['loginUsername'])) {
 					$text = iconv('UTF-8', 'windows-1252', $text);
 					$pdf->Add_Label($text);
 				}
+				
 			} while ($row_brewer = mysqli_fetch_assoc($brewer));
 			
 			ob_end_clean();

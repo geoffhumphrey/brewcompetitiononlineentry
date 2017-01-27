@@ -841,7 +841,7 @@ function special_best_info($sid) {
 	$flight_round = mysqli_query($connection,$query_flight_round) or die (mysqli_error($connection));
 	$row_flight_round = mysqli_fetch_assoc($flight_round);
 	if ($row_flight_round['count'] > 0) return TRUE; else return FALSE;
-	}
+}
 
 function flight_round($tid,$flight,$round) {
 	require(CONFIG.'config.php');
@@ -851,7 +851,7 @@ function flight_round($tid,$flight,$round) {
 	$flight_round = mysqli_query($connection,$query_flight_round) or die (mysqli_error($connection));
 	$row_flight_round = mysqli_fetch_assoc($flight_round);
 	if ($row_flight_round['flightRound'] == $round) return TRUE; else return FALSE;
-	}
+}
 
 function already_assigned($bid,$tid,$flight,$round) {
 	require(CONFIG.'config.php');
@@ -990,7 +990,14 @@ $r .= '<input type="hidden" name="assignLocation'.$random.'" value="'.$location.
 $r .= '<input type="hidden" name="id'.$random.'" value="'.$unassign.'"/>';
 
 if ($queued == "Y") { 
-	if (already_assigned($bid,$tid,"1",$round)) { $selected = "checked"; $default = ""; } else { $selected = ""; $default = "checked"; } 
+	if (already_assigned($bid,$tid,"1",$round)) {
+		$selected = "checked"; 
+		$default = ""; 
+	}
+	else { 
+		$selected = ""; 
+		$default = "checked";
+	}
 }
 
 if ($unassign > 0) {
@@ -1041,6 +1048,10 @@ if ($queued == "Y") {
 		$r .= '<input type="hidden" name="assignFlight'.$random.'" value="1">';
 	}
 return $r;
+}
+
+function get_judge_role($uid,$tid) {
+	
 }
 
 function judge_alert($round,$bid,$tid,$location,$likes,$dislikes,$table_styles,$id) {

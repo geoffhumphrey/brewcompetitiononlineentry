@@ -13,9 +13,6 @@ if ($totalRows_tables == 0) {
 else {
 if ($round != "default") $round2 = $round; else $round2 = "default";
 if ($filter == "stewards") $filter = "S"; else $filter = "J";
-$role_replace1 = array("HJ","LJ","MBOS",", ");
-$role_replace2 = array("<span class=\"fa fa-gavel\"></span> Head Judge","<span class=\"fa fa-star\"></span> Lead Judge","<span class=\"fa fa-trophy\"></span> Mini-BOS Judge"," ");
-
 if ($id == "default") { ?>
 
     <?php do { 
@@ -59,7 +56,7 @@ if ($id == "default") { ?>
 						$role = str_replace($role_replace1,$role_replace2,$row_assignments['assignRoles']);
                 ?>
         <tr>
-                <td><?php echo $judge_info['1'].", ".$judge_info['0']; if (!empty($rank)) echo " (".$rank.") "; echo $role; ?></td>
+                <td><?php echo "<strong>".$judge_info['1'].", ".$judge_info['0']."</strong>"; if (!empty($rank)) echo " (".$rank.") "; if (!empty($role)) echo "<br><em>".$role."</em>"; ?></td>
                 <td width="5%" nowrap="nowrap"><?php echo $assignment ?></td>
             	<td width="5%" nowrap="nowrap"><?php echo $round; ?></td>
                 <?php if ($_SESSION['jPrefsQueued'] == "N") { ?>

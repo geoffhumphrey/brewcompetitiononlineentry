@@ -5,7 +5,7 @@ if ($filter == "stewards") $filter = "S"; else $filter = "J";
 include(DB.'output_assignments.db.php');
 $count = round((get_entry_count('received')/($_SESSION['jPrefsFlightEntries'])),0);
 $role_replace1 = array("HJ","LJ","MBOS",", ");
-$role_replace2 = array("<span class=\"fa fa-gavel\"></span> Head Judge<br>","<span class=\"fa fa-star\"></span> Lead Judge<br>","<span class=\"fa fa-trophy\"></span> Mini-BOS Judge<br>"," ");
+$role_replace2 = array("<span class=\"fa fa-gavel\"></span> Head Judge","<span class=\"fa fa-star\"></span> Lead Judge","<span class=\"fa fa-trophy\"></span> Mini-BOS Judge","<br>");
 
 ?>
 
@@ -29,7 +29,7 @@ include (LIB.'admin.lib.php');
 			<?php } ?>
 			
 			<?php if ($view == "location") { ?>
-			"aaSorting": [[2,'asc'],[4,'asc'],[5,'asc'],[0,'asc']],
+			"aaSorting": [[2,'asc'],[3,'asc'],[5,'asc'],[0,'asc']],
 			<?php } ?>
 			"bProcessing" : false,
 			"aoColumns": [
@@ -77,19 +77,19 @@ include (LIB.'admin.lib.php');
 	$judge_info = explode("^",brewer_info($row_assignments['bid']));
 	$table_info = explode("^",get_table_info("none","basic",$row_assignments['assignTable'],$dbTable,"default"));
 	$location_info = explode("^",get_table_info($row_assignments['assignLocation'],"location","1",$dbTable,"default"));
-	$judge_ranks = str_replace(",",", ",$judge_info['3']);
+	$judge_rank = explode(",",$judge_info['3']);
 	$role = "";
 	$role .= str_replace($role_replace1,$role_replace2,$row_assignments['assignRoles']);
 	?>
     <tr>
-    	<td class="bdr1B_gray"><?php echo ucfirst(strtolower($judge_info['1'])).", ".ucfirst(strtolower($judge_info['0'])); if (!empty($role)) echo "<br>".$role; ?></td>
-        <td class="data bdr1B_gray"><?php echo $judge_ranks; ?></td>
-        <td class="data bdr1B_gray"><?php echo table_location($row_assignments['assignTable'],$_SESSION['prefsDateFormat'],$_SESSION['prefsTimeZone'],$_SESSION['prefsTimeFormat'],"default"); ?></td>
-        <td class="data bdr1B_gray"><?php echo $table_info['0']; ?></td>
-        <td class="data bdr1B_gray"><?php echo $table_info['1']; ?></td>
-        <td class="data bdr1B_gray"><?php echo $row_assignments['assignRound']; ?></td>
+    	<td nowrap><?php echo "<strong>".ucfirst(strtolower($judge_info['1'])).", ".ucfirst(strtolower($judge_info['0']))."</strong>"; if (!empty($role)) echo "<br>".$role; ?></td>
+        <td><?php echo $judge_rank[0]; ?></td>
+        <td><?php echo table_location($row_assignments['assignTable'],$_SESSION['prefsDateFormat'],$_SESSION['prefsTimeZone'],$_SESSION['prefsTimeFormat'],"default"); ?></td>
+        <td><?php echo $table_info['0']; ?></td>
+        <td><?php echo $table_info['1']; ?></td>
+        <td><?php echo $row_assignments['assignRound']; ?></td>
         <?php if ($_SESSION['jPrefsQueued'] == "N") { ?>
-        <td class="data bdr1B_gray"><?php echo $row_assignments['assignFlight']; ?></td>
+        <td><?php echo $row_assignments['assignFlight']; ?></td>
 		<?php } ?>
     </tr>
     <?php } while ($row_assignments = mysqli_fetch_assoc($assignments)); ?>

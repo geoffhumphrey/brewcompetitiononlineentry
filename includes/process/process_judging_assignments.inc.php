@@ -191,7 +191,7 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) {
 						GetSQLValueString("1", "text"),
 						GetSQLValueString($_POST['assignRound'.$random], "text"),
 						GetSQLValueString($_POST['assignLocation'.$random], "text"),
-						GetSQLValueString($_POST['assignRoles'.$random], "text"),
+						GetSQLValueString($assignRoles, "text"),
 						GetSQLValueString($_POST['unassign'.$random], "text"));		   
 					mysqli_real_escape_string($connection,$updateSQL);
 					$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
