@@ -365,7 +365,7 @@ if ($action != "print") { ?>
 		else $entry_paid_display .= ">";
 		$entry_paid_display .= "</label></div>";
         $entry_paid_display .= "<span class=\"hidden\">".$row_log['brewPaid']."</span>"; 
-		if ($brewer_info[9] == "Y") $entry_paid_display .= "&nbsp;<span class=\"fa fa-lg fa-star-o\"></span>"; 
+		if ($brewer_info[9] == "Y") $entry_paid_display .= "&nbsp;<a tabindex=\"0\" role=\"button\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"This entry has been discounted to ".$currency_symbol.number_format($_SESSION['contestEntryFeePasswordNum'], 2).".\"><span class=\"fa fa-lg fa-star\"></span></a>"; 
 	} 
 	else { 
 		if ($row_log['brewPaid'] == "1") $entry_paid_display .= "<span class=\"fa fa-lg fa-check text-success\"></span>";

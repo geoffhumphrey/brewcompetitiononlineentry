@@ -13,6 +13,8 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) {
 			$roles = "";
 			$assignRoles = "";
 			
+			/*
+			
 			if (!empty($_POST['head_judge'.$random])) {
 				$roles[] = $_POST['head_judge'.$random];
 			}
@@ -29,6 +31,8 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) {
 				$assignRoles = implode(", ",$roles);
 			}
 			
+			*/
+			
 			if ((!isset($_POST['unassign'.$random])) && (($_POST['rolesPrevDefined'.$random] == 1) || ($_POST['rolesPrevDefined'.$random] == 0)) && (!empty($assignRoles))) $roles_only_update = TRUE;
 			elseif ((!isset($_POST['unassign'.$random])) && ($_POST['rolesPrevDefined'.$random] == 1) && (empty($assignRoles))) $roles_only_update = TRUE;
 			else $roles_only_update = FALSE;
@@ -41,7 +45,7 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) {
 				
 				//Perform check to see if a record is in the DB. If not, insert a new record.
 				// If so, see will update
-				$query_flights = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE (bid='%s' AND assignRound='%s' AND assignFlight='%s' AND assignLocation='%s')", $prefix."judging_assignments", $_POST['bid'.$random], $_POST['assignRound'.$random], $_POST['assignFlight'.$random], $_POST['assignLocation'.$random]);
+				$query_flights = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE (bid='%s' AND assignTable='%s' AND assignRound='%s' AND assignFlight='%s' AND assignLocation='%s')", $prefix."judging_assignments", $_POST['bid'.$random], $_POST['assignTable'.$random], $_POST['assignRound'.$random], $_POST['assignFlight'.$random], $_POST['assignLocation'.$random]);
 				$flights = mysqli_query($connection,$query_flights) or die (mysqli_error($connection));
 				$row_flights = mysqli_fetch_assoc($flights);
 				//echo $query_flights."<br>";
@@ -122,6 +126,8 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) {
 				$roles = "";
 				$assignRoles = "";
 				
+				/*
+				
 				if (!empty($_POST['head_judge'.$random])) {
 					$roles[] = $_POST['head_judge'.$random];
 				}
@@ -137,6 +143,8 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) {
 				if (!empty($roles)) {
 					$assignRoles = implode(", ",$roles);
 				}
+				
+				*/
 				
 				if ((!isset($_POST['unassign'.$random])) && (($_POST['rolesPrevDefined'.$random] == 1) || ($_POST['rolesPrevDefined'.$random] == 0)) && (!empty($assignRoles))) $roles_only_update = TRUE;
 				elseif ((!isset($_POST['unassign'.$random])) && ($_POST['rolesPrevDefined'.$random] == 1) && (empty($assignRoles))) $roles_only_update = TRUE;
@@ -209,6 +217,7 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) {
 	 }  // end if ($_SESSION['jPrefsQueued'] == "Y")
 	 
 	header(sprintf("Location: %s", $base_url."index.php?section=admin&go=judging_tables&msg=2"));
+	exit;
 	
 	}
 	

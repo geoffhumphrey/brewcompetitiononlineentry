@@ -13,6 +13,9 @@ if ($totalRows_tables == 0) {
 else {
 if ($round != "default") $round2 = $round; else $round2 = "default";
 if ($filter == "stewards") $filter = "S"; else $filter = "J";
+$role_replace1 = array("HJ","LJ","MBOS",", ");
+$role_replace2 = array("<span class=\"fa fa-gavel\"></span> Head Judge","<span class=\"fa fa-star\"></span> Lead Judge","<span class=\"fa fa-trophy\"></span> Mini-BOS Judge","&nbsp;&nbsp;&nbsp;");
+
 if ($id == "default") { ?>
 
     <?php do { 

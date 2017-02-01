@@ -1,8 +1,8 @@
 <?php
 // -----------------------------------------------------------
 // Alter Tables
-// Version 2.1.8.0
-// 2.1.6.0 was last version to have an update to DB
+// Version 2.1.9.0
+// 2.1.6.0 was last version to have a major update to DB
 // -----------------------------------------------------------
 
 /*

@@ -435,7 +435,7 @@ do {
 			
 		}
 		
-		$output_datatables_body .= "<td>".$brewer_assignment."</td>";
+		$output_datatables_body .= "<td>".ucwords($brewer_assignment)."</td>";
 		
 		if ($filter != "default") { 
 			if ($filter == "judges") {

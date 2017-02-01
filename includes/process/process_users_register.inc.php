@@ -5,6 +5,8 @@
  *              the "brewer" tables upon registration
  */
 
+
+// Gather, convert, and/or sanitize info from the form
 if (isset($_POST['brewerJudgeID'])) $brewerJudgeID = $_POST['brewerJudgeID'];
 else $brewerJudgeID = "";
 
@@ -29,6 +31,30 @@ else $brewerJudgeWaiver = "";
 if (isset($_POST['brewerDropOff'])) $brewerDropOff = $_POST['brewerDropOff'];
 else $brewerDropOff = "0";
 
+$username = strtolower($_POST['user_name']);
+$username2 = strtolower($_POST['user_name2']);
+
+$first_name = ucwords(strtolower($_POST['brewerFirstName']));
+$last_name = ucwords(strtolower($_POST['brewerLastName']));
+$address = ucwords(strtolower($_POST['brewerAddress']));
+$city = ucwords(strtolower($_POST['brewerCity']));
+
+$brewerJudge = $_POST['brewerJudge'];
+$brewerSteward = $_POST['brewerSteward'];
+
+if ($brewerJudge == "Y") {
+	if (($_POST['brewerJudgeLocation'] != "") && (is_array($_POST['brewerJudgeLocation']))) $location_pref1 = implode(",",$_POST['brewerJudgeLocation']);
+	elseif (($_POST['brewerJudgeLocation'] != "") && (!is_array($_POST['brewerJudgeLocation']))) $location_pref1 = $_POST['brewerJudgeLocation'];
+}
+else $location_pref1 = "";
+
+if ($brewerSteward == "Y") {
+	if (($_POST['brewerStewardLocation'] != "") && (is_array($_POST['brewerStewardLocation']))) $location_pref2 = implode(",",$_POST['brewerStewardLocation']);
+	elseif (($_POST['brewerStewardLocation'] != "") && (!is_array($_POST['brewerStewardLocation']))) $location_pref2 = $_POST['brewerStewardLocation'];
+}
+else $location_pref2 = "";
+
+/*
 if ($go == "entrant") {
 	$brewerSteward = "N";
 	$brewerJudge = "N";
@@ -58,7 +84,7 @@ if (NHC) {
 	$registration_open = open_or_closed(strtotime("now"),$row_contest_dates['contestRegistrationOpen'],$row_contest_dates['contestRegistrationDeadline']);
 	
 	if ($registration_open == 1) {
-		$email = $_POST['user_name'];
+		
 	
 		$query_user_exists = "SELECT * FROM nhcentrant WHERE email = '$email'";
 		$user_exists = mysqli_query($connection,$query_user_exists) or die (mysqli_error($connection));
@@ -87,15 +113,15 @@ if (NHC) {
 		//exit();
 		// If the AHA number is in the DB, redirect.
 		if ($aha_exists) {
-			setcookie("user_name", $_POST['user_name'], 0, "/");
-			setcookie("user_name2", $_POST['user_name2'], 0, "/");
+			setcookie("user_name", $username, 0, "/");
+			setcookie("user_name2", $username2, 0, "/");
 			setcookie("password", $_POST['password'], 0, "/");
 			setcookie("userQuestion", $_POST['userQuestion'], 0, "/");
 			setcookie("userQuestionAnswer", $_POST['userQuestionAnswer'], 0, "/");
 			setcookie("brewerFirstName", $_POST['brewerFirstName'], 0, "/");
-			setcookie("brewerLastName", $_POST['brewerLastName'], 0, "/");
-			setcookie("brewerAddress", $_POST['brewerAddress'], 0, "/");
-			setcookie("brewerCity", $_POST['brewerCity'], 0, "/");
+			setcookie("brewerLastName", $last_name, 0, "/");
+			setcookie("brewerAddress", $address, 0, "/");
+			setcookie("brewerCity", $city, 0, "/");
 			setcookie("brewerState", $_POST['brewerState'], 0, "/");
 			setcookie("brewerZip", $_POST['brewerZip'], 0, "/");
 			setcookie("brewerCountry", $_POST['brewerCountry'], 0, "/");
@@ -107,87 +133,117 @@ if (NHC) {
 			setcookie("brewerSteward", $brewerSteward, 0, "/");
 			setcookie("brewerJudge", $brewerJudge, 0, "/");
 			setcookie("brewerDropOff", $_POST['brewerDropOff'], 0, "/");
+			setcookie("brewerJudgeLocation", $location_pref1, 0, "/");
+			setcookie("brewerStewardLocation", $location_pref2, 0, "/");
 			
 			//echo "AHA exists!";
 			header(sprintf("Location: %s", $base_url."index.php?section=".$section."&go=".$go."&msg=6"));
 			exit();
 			
 		}
-		/*
+		
 		// If AHA is blank or doesn't exist, perform other checks and redirect if needed.
-		if (!$aha_exists) {  }
-		*/
+		// if (!$aha_exists) {  }
+		
 		
 	}
 	
 	// ...and proceed normally with registration at the Region level.
 	}
-	
-	// CAPCHA check
-	if ($filter != "admin") {
-	require_once(INCLUDES.'recaptchalib.inc.php');
-	$privatekey = "6LdquuQSAAAAAHkf3dDRqZckRb_RIjrkofxE8Knd";
-	$resp = recaptcha_check_answer ($privatekey, $_SERVER["REMOTE_ADDR"], $_POST["recaptcha_challenge_field"], $_POST["recaptcha_response_field"]);
-	}
-	
-	if (($view == "default") && ($filter != "admin") && (!$resp->is_valid)) {
-		setcookie("user_name", $_POST['user_name'], 0, "/");
-		setcookie("user_name2", $_POST['user_name2'], 0, "/");
-		setcookie("password", $_POST['password'], 0, "/");
-		setcookie("userQuestion", $_POST['userQuestion'], 0, "/");
-		setcookie("userQuestionAnswer", $_POST['userQuestionAnswer'], 0, "/");
-		setcookie("brewerFirstName", $_POST['brewerFirstName'], 0, "/");
-		setcookie("brewerLastName", $_POST['brewerLastName'], 0, "/");
-		setcookie("brewerAddress", $_POST['brewerAddress'], 0, "/");
-		setcookie("brewerCity", $_POST['brewerCity'], 0, "/");
-		setcookie("brewerState", $_POST['brewerState'], 0, "/");
-		setcookie("brewerZip", $_POST['brewerZip'], 0, "/");
-		setcookie("brewerCountry", $_POST['brewerCountry'], 0, "/");
-		setcookie("brewerPhone1", $_POST['brewerPhone1'], 0, "/");
-		setcookie("brewerPhone2", $brewerPhone2, 0, "/");
-		setcookie("brewerClubs", $brewerClubs, 0, "/");
-		setcookie("brewerAHA", $brewerAHA, 0, "/");
-		setcookie("brewerStaff", $_POST['brewerStaff'], 0, "/");
-		setcookie("brewerSteward", $brewerSteward, 0, "/");
-		setcookie("brewerJudge", $brewerJudge, 0, "/");
-		setcookie("brewerDropOff", $_POST['brewerDropOff'], 0, "/");
-		
-		$location = $base_url."index.php?section=".$section."&go=".$go."&msg=4";
-		header(sprintf("Location: %s", $location));
-	}
-	
-	elseif (($view == "default") && ($_POST['user_name'] != $_POST['user_name2'])) {
-		setcookie("user_name", $_POST['user_name'], 0, "/");
-		setcookie("user_name2", $_POST['user_name2'], 0, "/");
-		setcookie("password", $_POST['password'], 0, "/");
-		setcookie("userQuestion", $_POST['userQuestion'], 0, "/");
-		setcookie("userQuestionAnswer", $_POST['userQuestionAnswer'], 0, "/");
-		setcookie("brewerFirstName", $_POST['brewerFirstName'], 0, "/");
-		setcookie("brewerLastName", $_POST['brewerLastName'], 0, "/");
-		setcookie("brewerAddress", $_POST['brewerAddress'], 0, "/");
-		setcookie("brewerCity", $_POST['brewerCity'], 0, "/");
-		setcookie("brewerState", $_POST['brewerState'], 0, "/");
-		setcookie("brewerZip", $_POST['brewerZip'], 0, "/");
-		setcookie("brewerCountry", $_POST['brewerCountry'], 0, "/");
-		setcookie("brewerPhone1", $_POST['brewerPhone1'], 0, "/");
-		setcookie("brewerPhone2", $brewerPhone2, 0, "/");
-		setcookie("brewerClubs", $brewerClubs, 0, "/");
-		setcookie("brewerAHA", $brewerAHA, 0, "/");
-		setcookie("brewerStaff", $_POST['brewerStaff'], 0, "/");
-		setcookie("brewerSteward", $brewerSteward, 0, "/");
-		setcookie("brewerJudge", $brewerJudge, 0, "/");
-		setcookie("brewerDropOff", $_POST['brewerDropOff'], 0, "/");
-		
-		if ($filter == "admin") $location =  $base_url."index.php?section=admin&go=entrant&action=register&msg=27";
-		else $location = $base_url."index.php?section=".$section."&go=".$go."&msg=5";
-		header(sprintf("Location: %s", $location));
+	*/
+/*
+echo $username."<br>";
+echo $username2."<br>";
+echo $_POST['password']."<br>";
+echo $_POST['userQuestion']."<br>";
+echo $_POST['userQuestionAnswer']."<br>";
+echo $first_name."<br>";
+echo $last_name."<br>";
+echo $address."<br>";
+echo $city."<br>";
+echo $_POST['brewerState']."<br>";
+echo $_POST['brewerZip']."<br>";
+echo $_POST['brewerCountry']."<br>";
+echo $_POST['brewerPhone1']."<br>";
+echo $brewerPhone2."<br>";
+echo $brewerClubs."<br>";
+echo $brewerAHA."<br>";
+echo $_POST['brewerStaff']."<br>";
+echo $brewerSteward."<br>";
+echo $brewerJudge."<br>";
+echo $_POST['brewerDropOff']."<br>";
+echo $location_pref1."<br>";
+echo $location_pref2."<br>";
+exit;
+*/
+// CAPCHA check
+if ($filter != "admin") {
+require_once(INCLUDES.'recaptchalib.inc.php');
+$privatekey = "6LdquuQSAAAAAHkf3dDRqZckRb_RIjrkofxE8Knd";
+$resp = recaptcha_check_answer ($privatekey, $_SERVER["REMOTE_ADDR"], $_POST["recaptcha_challenge_field"], $_POST["recaptcha_response_field"]);
+}
 
-} // end if NHC
+if (($view == "default") && ($filter != "admin") && (!$resp->is_valid)) {
+	setcookie("user_name", $username, 0, "/");
+	setcookie("user_name2", $username2, 0, "/");
+	setcookie("password", $_POST['password'], 0, "/");
+	setcookie("userQuestion", $_POST['userQuestion'], 0, "/");
+	setcookie("userQuestionAnswer", $_POST['userQuestionAnswer'], 0, "/");
+	setcookie("brewerFirstName", $first_name, 0, "/");
+	setcookie("brewerLastName", $last_name, 0, "/");
+	setcookie("brewerAddress", $address, 0, "/");
+	setcookie("brewerCity", $city, 0, "/");
+	setcookie("brewerState", $_POST['brewerState'], 0, "/");
+	setcookie("brewerZip", $_POST['brewerZip'], 0, "/");
+	setcookie("brewerCountry", $_POST['brewerCountry'], 0, "/");
+	setcookie("brewerPhone1", $_POST['brewerPhone1'], 0, "/");
+	setcookie("brewerPhone2", $brewerPhone2, 0, "/");
+	setcookie("brewerClubs", $brewerClubs, 0, "/");
+	setcookie("brewerAHA", $brewerAHA, 0, "/");
+	setcookie("brewerStaff", $_POST['brewerStaff'], 0, "/");
+	setcookie("brewerSteward", $brewerSteward, 0, "/");
+	setcookie("brewerJudge", $brewerJudge, 0, "/");
+	setcookie("brewerDropOff", $_POST['brewerDropOff'], 0, "/");
+	setcookie("brewerJudgeLocation", $location_pref1, 0, "/");
+	setcookie("brewerStewardLocation", $location_pref2, 0, "/");
+	
+	$location = $base_url."index.php?section=".$section."&go=".$go."&msg=4";
+	header(sprintf("Location: %s", $location));
+	
+}
 
-else {
+elseif (($view == "default") && ($username != $username2)) {
+	setcookie("user_name", $username, 0, "/");
+	setcookie("user_name2", $username2, 0, "/");
+	setcookie("password", $_POST['password'], 0, "/");
+	setcookie("userQuestion", $_POST['userQuestion'], 0, "/");
+	setcookie("userQuestionAnswer", $_POST['userQuestionAnswer'], 0, "/");
+	setcookie("brewerFirstName", $first_name, 0, "/");
+	setcookie("brewerLastName", $last_name, 0, "/");
+	setcookie("brewerAddress", $address, 0, "/");
+	setcookie("brewerCity", $city, 0, "/");
+	setcookie("brewerState", $_POST['brewerState'], 0, "/");
+	setcookie("brewerZip", $_POST['brewerZip'], 0, "/");
+	setcookie("brewerCountry", $_POST['brewerCountry'], 0, "/");
+	setcookie("brewerPhone1", $_POST['brewerPhone1'], 0, "/");
+	setcookie("brewerPhone2", $brewerPhone2, 0, "/");
+	setcookie("brewerClubs", $brewerClubs, 0, "/");
+	setcookie("brewerAHA", $brewerAHA, 0, "/");
+	setcookie("brewerStaff", $_POST['brewerStaff'], 0, "/");
+	setcookie("brewerSteward", $brewerSteward, 0, "/");
+	setcookie("brewerJudge", $brewerJudge, 0, "/");
+	setcookie("brewerDropOff", $_POST['brewerDropOff'], 0, "/");
+	setcookie("brewerJudgeLocation", $location_pref1, 0, "/");
+	setcookie("brewerStewardLocation", $location_pref2, 0, "/");
+	
+	if ($filter == "admin") $location =  $base_url."index.php?section=admin&go=entrant&action=register&msg=27";
+	else $location = $base_url."index.php?section=".$section."&go=".$go."&msg=5";
+	header(sprintf("Location: %s", $location));
+
+} else {
 
 // Check to see if email address is already in the system. If so, redirect.
-$username = strtolower($_POST['user_name']);
+
 
 if (strstr($username,'@'))  {
 	
@@ -201,10 +257,10 @@ if (strstr($username,'@'))  {
 		
 		setcookie("userQuestion", $_POST['userQuestion'], 0, "/");
 		setcookie("userQuestionAnswer", $_POST['userQuestionAnswer'], 0, "/");
-		setcookie("brewerFirstName", $_POST['brewerFirstName'], 0, "/");
-		setcookie("brewerLastName", $_POST['brewerLastName'], 0, "/");
-		setcookie("brewerAddress", $_POST['brewerAddress'], 0, "/");
-		setcookie("brewerCity", $_POST['brewerCity'], 0, "/");
+		setcookie("brewerFirstName", $first_name, 0, "/");
+		setcookie("brewerLastName", $last_name, 0, "/");
+		setcookie("brewerAddress", $address, 0, "/");
+		setcookie("brewerCity", $city, 0, "/");
 		setcookie("brewerState", $_POST['brewerState'], 0, "/");
 		setcookie("brewerZip", $_POST['brewerZip'], 0, "/");
 		setcookie("brewerCountry", $_POST['brewerCountry'], 0, "/");
@@ -216,13 +272,15 @@ if (strstr($username,'@'))  {
 		setcookie("brewerSteward", $brewerSteward, 0, "/");
 		setcookie("brewerJudge", $brewerJudge, 0, "/");
 		setcookie("brewerDropOff", $_POST['brewerDropOff'], 0, "/");
+		setcookie("brewerJudgeLocation", $location_pref1, 0, "/");
+		setcookie("brewerStewardLocation", $location_pref2, 0, "/");
 		
 		if ($filter == "admin") header(sprintf("Location: %s", $base_url."index.php?section=admin&go=".$go."&action=register&msg=10"));
 		else header(sprintf("Location: %s", $base_url."index.php?section=".$section."&go=".$go."&action=".$action."&msg=2"));
-	  }
-	else  {
 		
-	// Add the user's creds to the "users" table
+	  	} else  {
+		
+		// Add the user's creds to the "users" table
 		$password = md5($_POST['password']);
 		require(CLASSES.'phpass/PasswordHash.php');
 		$hasher = new PasswordHash(8, false);
@@ -231,7 +289,6 @@ if (strstr($username,'@'))  {
 		if ($filter == "admin") {
 			
 		}
-		
 		
 		$insertSQL = sprintf("INSERT INTO $users_db_table (user_name, userLevel, password, userQuestion, userQuestionAnswer, userCreated) VALUES (%s, %s, %s, %s, %s, %s)", 
                        GetSQLValueString($username, "text"),
@@ -246,23 +303,10 @@ if (strstr($username,'@'))  {
 		$result = mysqli_query($connection,$insertSQL) or die (mysqli_error($connection));
 
 		//echo $insertSQL."<br />";
-	// Get the id from the "users" table to insert as the uid in the "brewer" table
+		// Get the id from the "users" table to insert as the uid in the "brewer" table
 		$query_user= "SELECT * FROM $users_db_table WHERE user_name = '$username'";
 		$user = mysqli_query($connection,$query_user) or die (mysqli_error($connection));
 		$row_user = mysqli_fetch_assoc($user);
-		
-   if ($brewerJudge == "Y") {
-		if (($_POST['brewerJudgeLocation'] != "") && (is_array($_POST['brewerJudgeLocation']))) $location_pref1 = implode(",",$_POST['brewerJudgeLocation']);
-        elseif (($_POST['brewerJudgeLocation'] != "") && (!is_array($_POST['brewerJudgeLocation']))) $location_pref1 = $_POST['brewerJudgeLocation'];
-        
-	}
-	else $location_pref1 = "";
-	
-	if ($brewerSteward == "Y") {
-        if (($_POST['brewerStewardLocation'] != "") && (is_array($_POST['brewerStewardLocation']))) $location_pref2 = implode(",",$_POST['brewerStewardLocation']);
-        elseif (($_POST['brewerJudgeLocation'] != "") && (!is_array($_POST['brewerStewardLocation']))) $location_pref2 = $_POST['brewerStewardLocation'];
-	}
-    else $location_pref2 = "";
 	
 		// Add the user's info to the "brewer" table
 	  	// Numbers 999999994 through 999999999 are reserved for NHC applications.
@@ -305,10 +349,10 @@ if (strstr($username,'@'))  {
 			%s, %s, %s
 			)",
 						   GetSQLValueString($row_user['id'], "int"),
-						   GetSQLValueString(capitalize($_POST['brewerFirstName']), "text"),
-						   GetSQLValueString(capitalize($_POST['brewerLastName']), "text"),
-						   GetSQLValueString(capitalize($_POST['brewerAddress']), "text"),
-						   GetSQLValueString(capitalize($_POST['brewerCity']), "text"),
+						   GetSQLValueString($first_name, "text"),
+						   GetSQLValueString($last_name, "text"),
+						   GetSQLValueString($address, "text"),
+						   GetSQLValueString($city, "text"),
 						   GetSQLValueString($_POST['brewerState'], "text"),
 						   GetSQLValueString($_POST['brewerZip'], "text"),
 						   GetSQLValueString($_POST['brewerCountry'], "text"),
@@ -328,10 +372,9 @@ if (strstr($username,'@'))  {
 						   GetSQLValueString($brewerDropOff, "text"),
 						   GetSQLValueString($_POST['brewerStaff'], "text")
 						   );
-		}
 		
-		
-		else {
+		} else {
+			
 			$insertSQL = sprintf("INSERT INTO $brewer_db_table (
 			  uid,
 			  brewerFirstName, 
@@ -368,10 +411,10 @@ if (strstr($username,'@'))  {
 			%s, %s
 			)",
 						   GetSQLValueString($row_user['id'], "int"),
-						   GetSQLValueString(capitalize($_POST['brewerFirstName']), "text"),
-						   GetSQLValueString(capitalize($_POST['brewerLastName']), "text"),
-						   GetSQLValueString(capitalize($_POST['brewerAddress']), "text"),
-						   GetSQLValueString(capitalize($_POST['brewerCity']), "text"),
+						   GetSQLValueString($first_name, "text"),
+						   GetSQLValueString($last_name, "text"),
+						   GetSQLValueString($address, "text"),
+						   GetSQLValueString($city, "text"),
 						   GetSQLValueString($_POST['brewerState'], "text"),
 						   GetSQLValueString($_POST['brewerZip'], "text"),
 						   GetSQLValueString($_POST['brewerCountry'], "text"),
@@ -392,6 +435,7 @@ if (strstr($username,'@'))  {
 						   );
 		}
 		
+		/*
 		if(NHC) {
 			$updateSQL =  sprintf("INSERT INTO nhcentrant (
 			uid, 
@@ -404,8 +448,8 @@ if (strstr($username,'@'))  {
 			VALUES 
 			(%s, %s, %s, %s, %s, %s)",
 							   GetSQLValueString($row_user['id'], "int"),
-							   GetSQLValueString(capitalize($_POST['brewerFirstName']), "text"),
-							   GetSQLValueString(capitalize($_POST['brewerLastName']), "text"),
+							   GetSQLValueString($first_name, "text"),
+							   GetSQLValueString($last_name, "text"),
 							   GetSQLValueString($username, "text"),
 							   GetSQLValueString($brewerAHA, "text"),
 							   GetSQLValueString($prefix, "text"));
@@ -414,6 +458,7 @@ if (strstr($username,'@'))  {
 			$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 
 		}
+		*/
 		
 		mysqli_real_escape_string($connection,$insertSQL);
 		$result = mysqli_query($connection,$insertSQL) or die (mysqli_error($connection));
@@ -427,8 +472,6 @@ if (strstr($username,'@'))  {
 		if ($_SESSION['prefsEmailRegConfirm'] == 1) {
 			
 			// Build vars
-			$first_name = ucwords(strtolower($_POST['brewerFirstName']));
-			$last_name = ucwords(strtolower($_POST['brewerLastName']));
 			$url = str_replace("www.","",$_SERVER['SERVER_NAME']);
 			$to_recipient = $first_name." ".$last_name;
 			$to_email = $username;
@@ -446,7 +489,7 @@ if (strstr($username,'@'))  {
 			//$message .= "<tr><td valign='top'><strong>Password:</strong></td><td valign='top'>".$_POST['password']."</td></tr>";
 			$message .= "<tr><td valign='top'><strong>Security Question:</strong></td><td valign='top'>".$_POST['userQuestion']."</td></tr>";
 			$message .= "<tr><td valign='top'><strong>Security Question Answer:</strong></td><td valign='top'>".$_POST['userQuestionAnswer']."</td></tr>";
-			$message .= "<tr><td valign='top'><strong>Address:</strong></td><td valign='top'>".$_POST['brewerAddress']."<br>".$_POST['brewerCity'].", ".$_POST['brewerState']." ".$_POST['brewerZip']."</td></tr>";
+			$message .= "<tr><td valign='top'><strong>Address:</strong></td><td valign='top'>".$address."<br>".$city.", ".$_POST['brewerState']." ".$_POST['brewerZip']."</td></tr>";
 			$message .= "<tr><td valign='top'><strong>Phone 1:</strong></td><td valign='top'>".$_POST['brewerPhone1']."</td></tr>";
 			if (isset($brewerPhone2)) 		$message .= "<tr><td valign='top'><strong>Phone 2:</strong></td><td valign='top'>".$brewerPhone2."</td></tr>";
 			if (isset($brewerClubs)) 		$message .= "<tr><td valign='top'><strong>Club:</strong></td><td valign='top'>".$brewerClubs."</td></tr>";

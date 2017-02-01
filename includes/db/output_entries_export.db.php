@@ -36,7 +36,7 @@ if (($go == "csv") && ($action == "email")) $query_sql .= " ORDER BY brewBrewerL
 if (($go == "csv") && ($action == "all") && ($filter == "all")) $query_sql .= " ORDER BY id ASC";
 
 if ($filter == "winners") {
-	$query_sql = "SELECT id,tableNumber,tableName FROM $judging_tables_db_table ORDER BY tableNumber ASC";
+	$query_sql = "SELECT id,tableNumber,tableName FROM $judging_tables_db_table";
 	if (SINGLE) $query_sql .= sprintf(" AND comp_id='%s'",$_SESSION['comp_id']);
 	$query_sql .= " ORDER BY tableNumber ASC";
 }
