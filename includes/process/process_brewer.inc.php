@@ -278,7 +278,7 @@ if (((isset($_SESSION['loginUsername'])) && (isset($_SESSION['userLevel']))) || 
 				  
 				  brewerDropOff,
 				  brewerJudgeExp,
-				  brewerJudgeNotes
+				  brewerJudgeNotes,
 				  brewerStaff
 				) VALUES (
 				%s, %s, %s, %s, %s, 
