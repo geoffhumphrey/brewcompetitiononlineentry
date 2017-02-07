@@ -6,7 +6,7 @@
  
 $table_id = $id;
 
-if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) {
+if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1))) {
 	
 		if ($action == "add") {
 			foreach($_POST['id'] as $id){
@@ -166,6 +166,9 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) {
 			header(sprintf("Location: %s", stripslashes($updateGoTo)));		   
 		}
 	
-} else echo "<p>Not available.</p>";
+} else { 
+	header(sprintf("Location: %s", $base_url."index.php?msg=98"));
+	exit;
+}
 
 ?>

@@ -1,5 +1,5 @@
 <?php
-if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] == 0)) { 
+if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] == 0))) { 
 	session_name($prefix_session);
 	session_start();
 	require(INCLUDES.'scrubber.inc.php');
@@ -279,5 +279,8 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] == 0)) {
 			exit;
 		}
 	}
-} // end if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] == 0))
+} else { 
+	header(sprintf("Location: %s", $base_url."index.php?msg=98"));
+	exit;
+}
 ?>

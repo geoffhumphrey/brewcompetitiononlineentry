@@ -5,7 +5,7 @@
  *              "preferences" table.
  */
 
-if (((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) || ($section == "setup")) {
+if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) || ($section == "setup"))) {
 	
 	if (isset($_POST['prefsUSCLEx'])) $prefsUSCLEx = implode(",",$_POST['prefsUSCLEx']);
 	else  $prefsUSCLEx = "";
@@ -290,5 +290,8 @@ if (((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) || ($
 			header(sprintf("Location: %s", stripslashes($updateGoTo)));
 	}
 
-} else echo "<p>Not available.</p>";
+} else { 
+	header(sprintf("Location: %s", $base_url."index.php?msg=98"));
+	exit;
+}
 ?>

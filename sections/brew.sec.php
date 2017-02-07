@@ -33,6 +33,21 @@ $BDGAmber = "";
 $BDGBrown = "";
 $brewInfo = "";
 
+
+if (($_SESSION['userLevel'] == 2) && ($action == "edit")) {
+	
+	$user_entries = "";
+	
+	// Check whether user is "authorized" to edit the entry in DB
+	$query_brews = sprintf("SELECT id FROM $brewing_db_table WHERE brewBrewerId = '%s'", $_SESSION['user_id']);
+	$brews = mysqli_query($connection,$query_brews) or die (mysqli_error($connection));
+	$row_brews = mysqli_fetch_assoc($brews);
+	
+	do { $user_entries[] = $row_brews['id'];  } while ($row_brews = mysqli_fetch_assoc($brews));
+	
+	if (!in_array($id,$user_entries)) { $edit_entry_disable = TRUE; echo "<p>You are only able to edit your own entries.</p>"; }
+}
+
 // Adding an entry not allowed conditionals for non-admins
 if ($action == "add") {
 	

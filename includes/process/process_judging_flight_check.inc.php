@@ -1,5 +1,5 @@
 <?php
-if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) {
+if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1))) {
 	
 	$query_check_received = sprintf("SELECT id,brewCategorySort,brewSubCategory FROM %s WHERE brewReceived='1'", $prefix."brewing");
 	$check_received = mysqli_query($connection,$query_check_received) or die (mysqli_error($connection));
@@ -107,5 +107,8 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) {
 		header(sprintf("Location: %s", $updateGoTo));
 	}
 	
-} else echo "<p>Not available.</p>";
+} else { 
+	header(sprintf("Location: %s", $base_url."index.php?msg=98"));
+	exit;
+}
 ?>

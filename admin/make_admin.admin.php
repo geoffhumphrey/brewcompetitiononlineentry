@@ -1,4 +1,11 @@
-<?php include(DB.'admin_make_admin.db.php'); ?>
+<?php include(DB.'admin_make_admin.db.php'); 
+
+session_start();
+
+if ($_SESSION['userLevel'] == 0) $_SESSION['editUser'] = 1;
+else $_SESSION['editUser'] = 0;
+
+?>
 <p class="lead">Change User Level for <?php echo $row_brewer['brewerFirstName']." ".$row_brewer['brewerLastName']; ?></p>
 
 <form class="form-hoizontal" action="<?php echo $base_url; ?>includes/process.inc.php?section=<?php echo $section; ?>&amp;action=edit&amp;dbTable=<?php echo $users_db_table; ?>&amp;go=make_admin" name="form1" method="post">

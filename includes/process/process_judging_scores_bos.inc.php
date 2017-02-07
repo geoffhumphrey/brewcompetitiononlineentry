@@ -4,7 +4,7 @@
  * Description: This module does all the heavy lifting for adding/editing info in the "judging_scores_bos" table
  */
 
-if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) {
+if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1))) {
 	
 	if ($action == "enter") {
 		foreach($_POST['score_id'] as $score_id)	{
@@ -67,5 +67,8 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) {
 		
 	} // end if ($action == "enter")
 		
-} else echo "<p>Not available.</p>";
+} else { 
+	header(sprintf("Location: %s", $base_url."index.php?msg=98"));
+	exit;
+}
 ?>

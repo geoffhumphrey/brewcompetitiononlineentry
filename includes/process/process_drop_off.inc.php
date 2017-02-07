@@ -3,7 +3,7 @@
  * Module:      process_drop_off.inc.php
  * Description: This module does all the heavy lifting for adding/editing info in the "drop_off" table
  */
-if (((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) || ($section == "setup")) {
+if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) || ($section == "setup"))) {
 	
 	$dropLocationWebsite = check_http($_POST['dropLocationWebsite']);
 	$dropLocationName = strtr($_POST['dropLocationName'],$html_string);
@@ -56,5 +56,8 @@ if (((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) || ($
 		header(sprintf("Location: %s", stripslashes($updateGoTo)));			
 	}
 		
-} else echo "<p>Not available.</p>"; 
+} else { 
+	header(sprintf("Location: %s", $base_url."index.php?msg=98"));
+	exit;
+}
 ?>

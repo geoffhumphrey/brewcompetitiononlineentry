@@ -19,7 +19,7 @@
 <p class="lead">For entrants to be able to view their scoresheets, each PDF should:
 	<ol>
     	<li>Contain all judge scoresheets and other documentation (cover sheet, etc.) in a single file.</li>
-        <li>Be named with the <strong>six (6) digit</strong> judging number only (e.g., 000012.pdf, 000652.pdf, etc.).</li>
+        <li>Be named with the <strong>six (6) digit</strong> judging number (e.g., 000012.pdf, 996563.pdf, etc.) <strong>OR</strong> entry number (e.g., 000198.pdf, 000567.pdf, etc.).</li>
         <li>Have a .pdf or .PDF extension.</li>
     </ol>
 </p>

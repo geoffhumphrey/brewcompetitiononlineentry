@@ -3,7 +3,7 @@
  * Module:      process_judging_assignments.inc.php
  * Description: This module does all the heavy lifting for adding/editing info in the "judging_assignments" table
  */
-if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) {
+if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1))) {
 	
 	
 	if ($action == "update") {
@@ -221,5 +221,8 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) {
 	
 	}
 	
-} else echo "<p>Not available.</p>";
+} else { 
+	header(sprintf("Location: %s", $base_url."index.php?msg=98"));
+	exit;
+}
 ?>

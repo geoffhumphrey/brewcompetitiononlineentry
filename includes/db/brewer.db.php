@@ -67,7 +67,6 @@ elseif ((($section == "admin") && ($go == "participants") && ($filter == "with_e
 // Viewing available judges query (not assigned)
 elseif (($section == "admin") && ($go == "participants") && ($filter == "judges") && ($dbTable == "default")) {
 	
-	
 	// @single
 	if (SINGLE) include(SSO.'available_judges.db.php');
 	
@@ -134,7 +133,7 @@ elseif (($section == "admin") && ($go == "judging") && ($filter == "judges")  &&
 elseif (($section == "admin") && ($go == "judging") && ($filter == "stewards")  && ($dbTable == "default") && ($action == "update")) {
 	
 	// @single
-	if (SINGLE) 	include(SSO.'assigned_stewards.db.php');
+	if (SINGLE) include(SSO.'assigned_stewards.db.php');
 	
 	else {
 	
@@ -234,6 +233,14 @@ elseif ((($section == "admin") && ($go == "make_admin")) || (($section == "admin
 	$brewer = mysqli_query($connection,$query_brewer) or die (mysqli_error($connection));
 	$row_brewer = mysqli_fetch_assoc($brewer);
 	$totalRows_brewer = mysqli_num_rows($brewer);
+}
+
+elseif (($section == "user") && ($filter == "default")) {
+	
+	$query_brewer = sprintf("SELECT id,uid FROM $brewer_db_table WHERE uid = '%s'", $_SESSION['user_id']);
+	$brewer = mysqli_query($connection,$query_brewer) or die (mysqli_error($connection));
+	$row_brewer = mysqli_fetch_assoc($brewer);
+	
 }
 	
 elseif (($section == "list") || ($section == "judge") || ($section == "steward")) {

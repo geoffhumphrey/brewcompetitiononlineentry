@@ -4,7 +4,7 @@
  * Description: This module does all the heavy lifting for adding/editing information in the 
  *              "contest_info" table.
  */
-if (((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] == 0)) || ($section == "setup")) { 
+if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] == 0)) || ($section == "setup"))) { 
 	// Constants
 	if ($go == "default") {
 		$contestRegistrationOpen = strtotime($_POST['contestRegistrationOpen']);
@@ -298,5 +298,8 @@ if (((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] == 0)) || ($
 		}
 	
 	} // end else
-} else echo "<p>Not available.</p>";
+} else { 
+	header(sprintf("Location: %s", $base_url."index.php?msg=98"));
+	exit;
+}
 ?>

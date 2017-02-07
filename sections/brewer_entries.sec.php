@@ -43,8 +43,8 @@ Declare all variables empty at the top of the script. Add on later...
 	etc., etc., etc.
 
  * ---------------- END Rebuild Info --------------------- */
- 
- 
+
+
 $primary_page_info = "";
 $primary_links = "";
 $secondary_links = "";
@@ -106,6 +106,9 @@ do {
 		$required_info .= " <a tabindex=\"0\" role=\"button\" data-toggle=\"popover\" data-placement=\"right\" data-trigger=\"hover focus\" title=\"Required Info\" data-content=\"".$brewInfo."\"><span class=\"fa fa-comment\"></span></a>";
 	}
 	
+	$entry_number = sprintf("%04s",$row_log['id']);
+	$judging_number = sprintf("%06s",$row_log['brewJudgingNumber']);
+	
 	$entry_style = $row_log['brewCategorySort']."-".$row_log['brewSubCategory'];
 	
 	include(DB.'styles.db.php');
@@ -119,45 +122,61 @@ do {
 	
 	$entry_output .= "<tr class=\"".$entry_tr_style."\">";
 	$entry_output .= "<td class=\"hidden-xs\">";
-	$entry_output .= sprintf("%04s",$row_log['id']);
+	$entry_output .= $entry_number;
 	$entry_output .= "</td>";
 
-//	$filename = USER_DOCS.$row_log['brewJudgingNumber'].".pdf";	
 	$scoresheet = FALSE;
 	if ($show_scores) {
 
 		$entry_output .= "<td class=\"hidden-xs\">";
-		$entry_output .= $row_log['brewJudgingNumber']; 
+		$entry_output .= $judging_number; 
 		$entry_output .= "</td>";
 
 		// Check whether scoresheet file exists, and, if so, provide link.
-		$judgingnumber = $row_log['brewJudgingNumber'];
-		$scoresheetfilename = $judgingnumber.".pdf";
-		$scoresheetfile = USER_DOCS.$scoresheetfilename;
-//		$filename = USER_DOCS.$row_log['brewJudgingNumber'].".pdf";
-//		if (file_exists($filename)) $scoresheet = TRUE;		
-		if (file_exists($scoresheetfile)) {
+		$scoresheetfilename_entry = sprintf("%06s",$entry_number).".pdf";
+		$scoresheetfilename_judging = $judging_number.".pdf";
+		$scoresheetfile_entry = USER_DOCS.$scoresheetfilename_entry;
+		$scoresheetfile_judging = USER_DOCS.$scoresheetfilename_judging;
+		
+		if (file_exists($scoresheetfile_entry)) $scoresheetfilename = $scoresheetfilename_entry;
+		elseif (file_exists($scoresheetfile_judging)) $scoresheetfilename = $scoresheetfilename_judging;
+		else $scoresheetfilename = "";
+	
+		if ((file_exists($scoresheetfile_entry)) || (file_exists($scoresheetfile_judging))) {
 			$scoresheet = TRUE;
 			
-			// The pseudo-random number and the corresponding name of the temporary file are defined each time this brewer_entries.sec.php script is accessed (or refreshed), but the temporary file is created only when the entrant clicks on the gavel icon to access the scoresheet. 
-			$random_num_str = str_pad(mt_rand(1,9999999999),10,'0',STR_PAD_LEFT);
+			// The pseudo-random number and the corresponding name of the temporary file are defined each time 
+			// this brewer_entries.sec.php script is accessed (or refreshed), but the temporary file is created
+			// only when the entrant clicks on the gavel icon to access the scoresheet. 
+			$random_num_str = random_generator(8,2);
 			$randomfilename = $random_num_str.".pdf";
 			$scoresheetrandomfilerelative = "user_temp/".$randomfilename;
 			$scoresheetrandomfile = USER_TEMP.$randomfilename;
 			$scoresheetrandomfilehtml = $base_url.$scoresheetrandomfilerelative;
 		
-			$scoresheet_link = "";			
-			$scoresheet_link .= "<a href=\"".$base_url."output/scoresheets.output.php?";
-			$scoresheet_link .= "scoresheetfilename=".$scoresheetfilename;
-			$scoresheet_link .= "&amp;randomfilename=".$randomfilename."&amp;download=true";
-			$scoresheet_link .= sprintf("\" data-toggle=\"tooltip\" title=\"%s '".$row_log['brewName']."'.\">",$brewer_entries_text_006);
-			$scoresheet_link .= "<span class=\"fa fa-lg fa-gavel\"></a>&nbsp;&nbsp;";
-		}		
-
+			if (($scoresheet) && (!empty($scoresheetfilename))) {
+				$scoresheet_link = "";
+				$scoresheet_link .= "<a href=\"".$base_url."output/scoresheets.output.php?";
+				
+				// Obfuscate the *ACTUAL* file names. 
+				// Prevents casual users from right clicking on scoresheet download link and changing
+				// the entry or judging number pdf name passed via the URL to force downloads of files 
+				// they shouldn't have access to. Can I get a harumph?!
+				$scoresheet_link .= "scoresheetfilename=".encryptString($scoresheetfilename);
+				$scoresheet_link .= "&amp;randomfilename=".encryptString($randomfilename)."&amp;download=true";
+				$scoresheet_link .= sprintf("\" data-toggle=\"tooltip\" title=\"%s '".$row_log['brewName']."'.\">",$brewer_entries_text_006);
+				$scoresheet_link .= "<span class=\"fa fa-lg fa-gavel\"></a>&nbsp;&nbsp;";
+			}
+		}
+		
 		// Clean up temporary scoresheets created for other brewers, when they are at least 1 minute old (just to avoid problems when two entrants try accessing their scoresheets at practically the same time, and clean up previously created scoresheets for the same brewer, regardless of how old they are.
 		$tempfiles = array_diff(scandir(USER_TEMP), array('..', '.'));
 		foreach ($tempfiles as $file) {
-			if ((filectime(USER_TEMP.$file) < time() - 1*60) || ((strpos($file, $judgingnumber) !== FALSE))) {
+			if ((filectime(USER_TEMP.$file) < time() - 1*60) || ((strpos($file, $judging_number) !== FALSE))) {
+				unlink(USER_TEMP.$file);
+			}
+			
+			if ((filectime(USER_TEMP.$file) < time() - 1*60) || ((strpos($file, $entry_number) !== FALSE))) {
 				unlink(USER_TEMP.$file);
 			}
 		}
@@ -254,9 +273,6 @@ do {
 	$print_recipe_link = sprintf("<a id=\"modal_window_link\" href=\"".$base_url."output/entry.output.php?go=recipe&amp;id=".$row_log['id']."&amp;bid=".$_SESSION['brewerID']."\" title=\"%s ".$row_log['brewName']."\"><span class=\"fa fa-lg fa-book\"><span></a>&nbsp;&nbsp;",$brewer_entries_text_010);
 	
 	if ($comp_entry_limit) $warning_append = sprintf("\n%s",$brewer_entries_text_011); else $warning_append = "";
-	
-	
-	
 	
 	$delete_alt_title = sprintf("%s %s",$label_delete, $row_log['brewName']);
 	$delete_warning = sprintf("%s %s - %s.",$label_delete,$row_log['brewName'],strtolower($label_undone));

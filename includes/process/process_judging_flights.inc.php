@@ -3,7 +3,7 @@
  * Module:      process_judging_flights.inc.php
  * Description: This module does all the heavy lifting for adding/editing info in the "judging_flights" table
  */
-if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) {
+if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1))) {
 	
 	 if ($action == "add") {
 		foreach($_POST['id'] as $id)	{
@@ -113,4 +113,9 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) {
 		$updateGoTo = str_replace($pattern, "", $updateGoTo); 
 		header(sprintf("Location: %s", stripslashes($updateGoTo)));
 	}
-} else echo "<p>Not available.</p>";?>
+} else { 
+	header(sprintf("Location: %s", $base_url."index.php?msg=98"));
+	exit;
+}
+
+?>

@@ -222,6 +222,8 @@ switch($section) {
 		elseif ($msg == "8") $output = sprintf("<strong>%s</strong> %s",$header_text_047,$header_text_048);
 		elseif ($msg == "9") $output = sprintf("<strong>%s</strong> %s",$header_text_049,$header_text_048); 
 		elseif ($msg == "10") $output = sprintf("<strong>%s</strong>",$header_text_109);
+		elseif ($msg == "11") $output = sprintf("<strong>%s</strong>",$output_text_004);
+		elseif ($msg == "12") $output = sprintf("<strong>%s</strong>",$header_text_113);
 		else $output = "";
 	break;
 	
@@ -631,5 +633,6 @@ if ($msg == "16") {
 	}
 if ($msg == "17") $output = sprintf("<strong>%s</strong>",$header_text_101);
 if ($msg == "27") $output = sprintf("<strong>%s</strong> %s",$header_text_102,$header_text_008);
+if ($msg == "98") $output = sprintf("<strong>%s</strong>",$header_text_112);
 if ($msg == "99") $output = sprintf("<strong>%s</strong>",$header_text_103);
 ?>

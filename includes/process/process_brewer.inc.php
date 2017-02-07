@@ -5,8 +5,22 @@
  *              "brewer" table.
  */
 
-if (((isset($_SESSION['loginUsername'])) && (isset($_SESSION['userLevel']))) || ($section == "setup")) {
-	 
+if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) && (isset($_SESSION['userLevel']))) || ($section == "setup"))) {
+	
+	if ($_SESSION['userLevel'] == 2) {
+			
+		// Check whether user is "authorized" to edit the entry in DB
+		$query_brewer_id = sprintf("SELECT id FROM $brewer_db_table WHERE uid = '%s'", $_SESSION['user_id']);
+		$brewer_id = mysqli_query($connection,$query_brewer_id) or die (mysqli_error($connection));
+		$row_brewer_id = mysqli_fetch_assoc($brewer_id);
+		
+		if ($id != $row_brewer_id['id']) {
+			$redirectGoTo = $base_url."index.php?section=list&msg=12";
+			header(sprintf("Location: %s", stripslashes($redirectGoTo)));
+		}
+		
+	}
+	
 	require(DB.'common.db.php');
 	require(DB.'brewer.db.php');
 	require(DB.'judging_locations.db.php');
@@ -278,7 +292,7 @@ if (((isset($_SESSION['loginUsername'])) && (isset($_SESSION['userLevel']))) || 
 				  
 				  brewerDropOff,
 				  brewerJudgeExp,
-				  brewerJudgeNotes
+				  brewerJudgeNotes,
 				  brewerStaff
 				) VALUES (
 				%s, %s, %s, %s, %s, 
@@ -440,6 +454,11 @@ if (((isset($_SESSION['loginUsername'])) && (isset($_SESSION['userLevel']))) || 
 	
 	// --------------------------------------- Editing a Participant ----------------------------------------
 	if ($action == "edit") {
+		
+		
+		// Check whether the id passed belongs to the current user; if not, redirect; if so, continue.
+		// Does not apply to admins
+		
 		if ($_POST['brewerJudge'] == "Y") {
 			if ($_POST['brewerJudgeLocation'] != "") {
 				if (is_array($_POST['brewerJudgeLocation'])) $location_pref1 = implode(",",$_POST['brewerJudgeLocation']);
@@ -560,6 +579,9 @@ if (((isset($_SESSION['loginUsername'])) && (isset($_SESSION['userLevel']))) || 
 		
 		}
 		
+		if (isset($_POST['brewerJudgeWaiver'])) $judgeWaiver = $_POST['brewerJudgeWaiver'];
+		else $judgeWaiver = "N";
+		
 		$updateSQL = sprintf("UPDATE $brewer_db_table SET 
 			uid=%s,
 			brewerFirstName=%s, 
@@ -613,7 +635,7 @@ if (((isset($_SESSION['loginUsername'])) && (isset($_SESSION['userLevel']))) || 
 							   GetSQLValueString($_POST['brewerDropOff'], "int"),
 							   GetSQLValueString($_POST['brewerJudgeExp'], "text"),
 							   GetSQLValueString($_POST['brewerJudgeNotes'], "text"),
-							   GetSQLValueString($_POST['brewerJudgeWaiver'], "text"),
+							   GetSQLValueString($judgeWaiver, "text"),
 							   GetSQLValueString($_POST['brewerStaff'], "text")
 							   );
 		// Numbers 999999994 through 999999999 are reserved for NHC applications.
@@ -658,5 +680,8 @@ if (((isset($_SESSION['loginUsername'])) && (isset($_SESSION['userLevel']))) || 
 		header(sprintf("Location: %s", stripslashes($updateGoTo)));
 	}
 	
-} else echo "<p>Not available.</p>";
+} else { 
+	header(sprintf("Location: %s", $base_url."index.php?msg=98"));
+	exit;
+}
 ?>

@@ -63,7 +63,7 @@ $bool = date("I");
 if ($bool == 1) $timezone_offset = number_format(($timezone_raw + 1.000),0); 
 else $timezone_offset = number_format($timezone_raw,0);
 
-if ((isset($_SESSION['prefs'.$prefix_session])) || ($setup_free_access)) { 
+if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['prefs'.$prefix_session])) || ($setup_free_access))) { 
 
 	require(LIB.'process.lib.php');
 	
@@ -165,19 +165,21 @@ if ((isset($_SESSION['prefs'.$prefix_session])) || ($setup_free_access)) {
 		}
 		
 	}
+
+		if 		(strstr($_SERVER['HTTP_REFERER'], $base_url."list"))  		$deleteGoTo = $base_url."index.php?section=list&msg=5"; 
+		elseif 	(strstr($_SERVER['HTTP_REFERER'], $base_url."rules")) 		$deleteGoTo = $base_url."index.php?section=rules&msg=5"; 
+		elseif 	(strstr($_SERVER['HTTP_REFERER'], $base_url."volunteers")) 	$deleteGoTo = $base_url."index.php?section=volunteers&msg=5"; 
+		elseif 	(strstr($_SERVER['HTTP_REFERER'], $base_url."sponsors")) 	$deleteGoTo = $base_url."index.php?section=sponsors&msg=5"; 
+		elseif 	(strstr($_SERVER['HTTP_REFERER'], $base_url."pay")) 			$deleteGoTo = $base_url."index.php?section=pay&msg=5"; 
+		else $deleteGoTo = clean_up_url($_SERVER['HTTP_REFERER'])."&msg=5";
+		
+		//echo $insertGoTo;
+		//echo $updateGoTo;
+		//echo $deleteGoTo;
+		//exit;
+		//session_start();
 	
-	if 		(strstr($_SERVER['HTTP_REFERER'], $base_url."list"))  		$deleteGoTo = $base_url."index.php?section=list&msg=5"; 
-	elseif 	(strstr($_SERVER['HTTP_REFERER'], $base_url."rules")) 		$deleteGoTo = $base_url."index.php?section=rules&msg=5"; 
-	elseif 	(strstr($_SERVER['HTTP_REFERER'], $base_url."volunteers")) 	$deleteGoTo = $base_url."index.php?section=volunteers&msg=5"; 
-	elseif 	(strstr($_SERVER['HTTP_REFERER'], $base_url."sponsors")) 	$deleteGoTo = $base_url."index.php?section=sponsors&msg=5"; 
-	elseif 	(strstr($_SERVER['HTTP_REFERER'], $base_url."pay")) 			$deleteGoTo = $base_url."index.php?section=pay&msg=5"; 
-	else $deleteGoTo = clean_up_url($_SERVER['HTTP_REFERER'])."&msg=5";
 	
-	//echo $insertGoTo;
-	//echo $updateGoTo;
-	//echo $deleteGoTo;
-	//exit;
-	//session_start();
 	// --------------------------- Various Actions ------------------------------- //
 	
 	if ($action == "delete")							include_once (PROCESS.'process_delete.inc.php');
@@ -329,5 +331,11 @@ if ((isset($_SESSION['prefs'.$prefix_session])) || ($setup_free_access)) {
 	
 	}
 
-} else echo "<p>Not available, SON.</p>";
+}
+ 
+else { 
+	header(sprintf("Location: %s", $base_url."index.php?msg=98"));
+	exit;
+}
+
 ?>

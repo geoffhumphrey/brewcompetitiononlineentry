@@ -1,5 +1,5 @@
 <?php
-if ($_SESSION['loginUsername']) { 
+if ((isset($_SERVER['HTTP_REFERER'])) && ($_SESSION['loginUsername'])) { 
 include (INCLUDES.'beerXML/input_beer_xml.inc.php');
 	//Mmaximum file size.
 	$MAX_SIZE = 2000000;
@@ -37,5 +37,8 @@ include (INCLUDES.'beerXML/input_beer_xml.inc.php');
 	elseif (!$_FILES['userfile']) $message = "userfile check failed";
 	else $message = "Invalid file specified.";
 }
-else echo "<p>Not available.</p>";
+else { 
+	header(sprintf("Location: %s", $base_url."index.php?msg=98"));
+	exit;
+}
 ?>

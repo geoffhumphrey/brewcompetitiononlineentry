@@ -3295,5 +3295,21 @@ function check_hosted_gh() {
 	
 }
 
+// Simple encrypt and decrypt
+// Useful for URL passed strings that need to be obfuscated for *casual* users using php's mcrypt_ functions
+// Uses urlencoding and base 64 encoding for universal use and md5 for obfuscation
+
+function encryptString($value){
+	$salt = "rdwhahb"; // should be the same as the $salt var in the decryptString function
+	$encrypted = base64_encode(urlencode(mcrypt_encrypt(MCRYPT_RIJNDAEL_256, md5($salt), $value, MCRYPT_MODE_CBC, md5(md5($salt)))));
+	return $encrypted;
+}
+
+function decryptString($value) {
+	$salt = "rdwhahb"; // should be the same as the $salt var in the encryptString function
+	$decode = rtrim(mcrypt_decrypt(MCRYPT_RIJNDAEL_256, md5($salt), urldecode(base64_decode($value)), MCRYPT_MODE_CBC, md5(md5($salt))), "\0"); 
+	return $decode;
+}
+
 
 ?>

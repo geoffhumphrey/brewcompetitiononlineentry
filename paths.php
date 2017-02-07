@@ -41,8 +41,8 @@ define('SINGLE', FALSE);
 // --------------------------------------------------------
 // Error Reporting
 // --------------------------------------------------------
-error_reporting(0);	// comment out to debug
-// error_reporting(E_ALL); // uncomment to debug 
+//error_reporting(0);	// comment out to debug
+error_reporting(E_ALL); // uncomment to debug 
 
 // --------------------------------------------------------
 // Load Configuration

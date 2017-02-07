@@ -4,7 +4,7 @@
  * Description: This module does all the heavy lifting for adding entries to the DB
  */
 
-if ((isset($_SESSION['loginUsername'])) && (isset($_SESSION['userLevel']))) { 
+if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) && (isset($_SESSION['userLevel'])))) { 
 	
 	include(DB.'common.db.php');
 	
@@ -51,6 +51,7 @@ if ((isset($_SESSION['loginUsername'])) && (isset($_SESSION['userLevel']))) {
 		//$index = $_POST['brewStyle'];
 		$brewName = strtr($_POST['brewName'],$html_remove);
 		$brewName = strtr($brewName,$html_string);
+		$brewName = htmlspecialchars($brewName);
 		$brewInfo = "";
 		
 		// Get style name from broken parts
@@ -95,6 +96,7 @@ if ((isset($_SESSION['loginUsername'])) && (isset($_SESSION['userLevel']))) {
 			else $brewInfo .= "";
 		}
 		
+		$brewInfo = htmlspecialchars($brewInfo);
 		$brewMead1 = "";
 		$brewMead2 = "";
 		$brewMead3 = "";
@@ -898,5 +900,8 @@ if ((isset($_SESSION['loginUsername'])) && (isset($_SESSION['userLevel']))) {
 			
 		}
 	
-} else echo "<p>Not available.</p>";
+} else { 
+	header(sprintf("Location: %s", $base_url."index.php?msg=98"));
+	exit;
+}
 ?>

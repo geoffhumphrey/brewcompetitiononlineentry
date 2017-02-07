@@ -6,30 +6,44 @@
  * 
  */
 
-if ((($_SESSION['loginUsername'] == $_SESSION['user_name'])) || ($_SESSION['userLevel'] <= "1")) {
+// Verify if current user is authorized to make changes to the user account
+
+session_start();
+
+$edit_enable = FALSE;
+$lead_msg = $header_text_113;
+if ($_SESSION['userLevel'] == 0) $lead_msg .= " <small>".$header_text_114."</small>";
+
+if ((($filter == "admin") && ($_SESSION['userLevel'] == 0)) || (($filter == "default") && ($id == $_SESSION['user_id']))) {
+	$_SESSION['editUser'] = 1;
+	$edit_enable = TRUE;
+}
+
+else $_SESSION['editUser'] = 0;
+//echo $_SESSION['editUser'];
+
+if (((($_SESSION['loginUsername'] == $_SESSION['user_name'])) || ($_SESSION['userLevel'] <= "1")) && ($edit_enable)) {
 
 // Build Variables
 $user_help_link = "";
 $user_help_link_text = "";
 
-if ($action == "username") { 
-	$user_help_link .= "change_email_address.html";
-	$user_help_link_text .= "Change Email Address Help";
-}
-
 if ($action == "password") {
 	$user_help_link .= "change_password.html";
 	$user_help_link_text .= "Change Password Help";
+	if ($filter == "admin") $lead_msg = "You are changing ".$row_brewer['brewerFirstName']." ".$row_brewer['brewerLastName']."&rsquo;s Password.";
+	else $lead_msg = $user_text_004;
 }
 
 if ($action == "username") {
-	if ($filter == "admin") $current_email_msg = "You are changing ".$row_brewer['brewerFirstName']." ".$row_brewer['brewerLastName']."&rsquo;s Email Address (User Name)."; 
-	else $current_email_msg = "Your current email address is: <small class=\"text-muted\">".$_SESSION['user_name']."</small>.";
+	$user_help_link .= "change_email_address.html";
+	$user_help_link_text .= "Change Email Address Help";
+	if ($filter == "admin") $lead_msg = "You are changing ".$row_brewer['brewerFirstName']." ".$row_brewer['brewerLastName']."&rsquo;s Email Address (User Name).";
+	else $lead_msg = sprintf("%s: <small class=\"text-muted\">%s</small>.", $user_text_005, $_SESSION['user_name']);
 }
 
 ?>
 <?php if ($action == "username") { ?>
-
 <script type="text/javascript">
 function checkAvailability()
 {
@@ -88,8 +102,9 @@ httpxml.send(null);
 }
 //-->
 </script>
-<p class="lead"><?php echo $current_email_msg; ?></p>
 <?php } // end if ($action == "username") ?>
+<p class="lead"><?php echo $lead_msg; ?></p>
+
 <form data-toggle="validator" role="form" class="form-horizontal"  action="<?php echo $base_url; ?>includes/process.inc.php?section=<?php echo $section; ?>&amp;go=<?php echo $action; ?>&amp;action=edit&amp;dbTable=<?php echo $users_db_table; ?>&amp;filter=<?php echo $filter; ?>&amp;id=<?php if ($filter == "admin") echo $row_brewer['uid']; else echo $_SESSION['user_id']; ?>" method="POST" name="form1" id="form1" onSubmit="return CheckRequiredFields()">
 <input name="user_name_old" type="hidden" value="<?php if ($filter == "admin") echo $row_brewer['brewerEmail']; else echo $_SESSION['user_name']; ?>">
 <?php if (isset($_SERVER['HTTP_REFERER'])) { ?>
@@ -170,6 +185,5 @@ httpxml.send(null);
 
 <?php } ?>
 </form>
-
-<?php } // end if ((($_SESSION['loginUsername'] == $_SESSION['user_name'])) || ($_SESSION['userLevel'] <= "1")) - LINE 9
-else echo "<div class='lead'>You can only edit your own user name and password.</div>"; ?>
+<?php } // end if ((($_SESSION['loginUsername'] == $_SESSION['user_name'])) || ($_SESSION['userLevel'] <= "1"))
+else echo "<div class='lead'>".$lead_msg."</div>"; ?>

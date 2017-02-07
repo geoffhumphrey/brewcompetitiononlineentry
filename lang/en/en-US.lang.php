@@ -70,6 +70,34 @@ Note that the <em>...</em> tags were not altered. Just the word "Upload" to "Car
 ==============================
 
 */
+
+if (isset($entry_open)) $entry_open = $entry_open;
+else $entry_open = "";
+
+if (isset($judge_open)) $judge_open = $judge_open;
+else $judge_open = "";
+
+if (isset($reg_open)) $reg_open = $reg_open;
+else $reg_open = "";
+
+if (isset($total_entries)) $total_entries = $total_entries;
+else $total_entries = "";
+
+if (isset($current_time)) $current_time = $current_time;
+else $current_time = "";
+
+if (isset($current_time)) $current_time = $current_time;
+else $current_time = "";
+
+if (isset($row_limits['prefsEntryLimit'])) $row_limits['prefsEntryLimit'] = $row_limits['prefsEntryLimit'];
+else $row_limits['prefsEntryLimit'] = "";
+
+if (isset($row_limits['prefsEntryLimitPaid'])) $row_limits['prefsEntryLimitPaid'] = $row_limits['prefsEntryLimitPaid'];
+else $row_limits['prefsEntryLimitPaid'] = "";
+
+
+
+
  
 // -------------------- Global Labels - mostly used for titles and navigation --------------------
 // All labels are capitalized and without punctuation
@@ -516,7 +544,7 @@ $header_text_100 = "Log in now to access the Admin Dashboard";
 $header_text_101 = "Your installation has been updated successfully!";
 $header_text_102 = "The email addresses do not match.";
 $header_text_103 = "Please log in to access your account.";
-$header_text_104 = "You do not have sufficient access priveliges to view this page.";
+$header_text_104 = "You do not have sufficient access privileges to view this page.";
 $header_text_105 = "More information is required for your entry to be accepted and confirmed.";
 $header_text_106 = "See the area(s) highlighted in RED below.";
 $header_text_107 = "Please choose a style.";
@@ -527,15 +555,21 @@ $header_text_109 = "You have registered as a steward.";
 $header_text_110 = "All entries have been un-marked as paid.";
 $header_text_111 = "All entries have been un-marked as received.";
 
+// v2.1.10
+$header_text_112 = "You do not have sufficient access privileges to perform this action.";
+$header_text_113 = "You can only edit your own account information.";
+$header_text_114 = "As an admin, you can change a user's account information via Admin > Entries and Particpants > Manage Participants.";
 
 // -------------------- Navigation --------------------
 
 
 // -------------------- Alerts --------------------
 if (strpos($section, "step") === FALSE) {
-	if (($judge_limit) && (!$steward_limit)) $j_s_text = "Steward"; // missing punctuation intentional
-	elseif ((!$judge_limit) && ($steward_limit)) $j_s_text = "Judge"; // missing punctuation intentional
-	else $j_s_text = "Judge or steward"; // missing punctuation intentional
+	if ((isset($judge_limit)) && (isset($steward_limit))) {
+		if (($judge_limit) && (!$steward_limit)) $j_s_text = "Steward"; // missing punctuation intentional
+		elseif ((!$judge_limit) && ($steward_limit)) $j_s_text = "Judge"; // missing punctuation intentional
+		else $j_s_text = "Judge or steward"; // missing punctuation intentional
+	}
 }
 $alert_text_000 = "Grant users top-level admin and admin access with caution.";
 $alert_text_001 = "Data clean-up completed.";
@@ -1081,7 +1115,10 @@ $user_text_000 = "A new email address is required and must be in valid form.";
 $user_text_001 = "Enter the old password.";
 $user_text_002 = "Enter the new password.";
 $user_text_003 = "Please check this box if you wish to proceed with changing your email address.";
-$user_text_004 = "";
+
+// v2.1.10
+$user_text_004 = "Be sure to use upper and lower case letters, numbers, and special characters for a stronger password.";
+$user_text_005 = "Your current email address is";
 
 // -------------------- Volunteers --------------------
 

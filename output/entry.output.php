@@ -16,7 +16,7 @@ $no_entry_form_array = array("0","1","2","E","C");
 // Check access restrictions
 if (($brewer_info['brewerEmail'] != $_SESSION['loginUsername']) && ($row_logged_in_user['userLevel'] > 1)) { 
   	echo "<html><head><title>Error</title></head><body>";
-  	echo "<p>You do not have sufficient access priveliges to view this page.</p>";
+  	echo "<p>You do not have sufficient access privileges to view this page.</p>";
   	echo "</body>";
   	exit();
 }

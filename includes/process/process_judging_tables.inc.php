@@ -6,7 +6,7 @@
  */
 
 
-if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) {
+if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1))) {
 	
 	include(INCLUDES.'process/process_judging_flight_check.inc.php');
 
@@ -299,144 +299,8 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) {
 		
 		}
 	
-} else echo "<p>Not available.</p>";
-
-
-
-/*
-
-************************************************************
-
-07-18-2016
-Below was elimintated when editing a table in favor of the more foolproof, yet far less convoluted,
-method of simply erasing all associated records in the judging_flights table and replacing with all 
-new records when editing a judging table. Kinda brute force, but hey, it works far better than before.
-
-************************************************************
-
-// Check to see if flights have been designated already
-$query_flight_count = sprintf("SELECT id,flightEntryID FROM $judging_flights_db_table WHERE flightTable='%s'", $id);
-$flight_count = mysqli_query($connection,$query_flight_count) or die (mysqli_error($connection));
-$row_flight_count = mysqli_fetch_assoc($flight_count);
-$totalRows_flight_count = mysqli_num_rows($flight_count);
-		
-// If flights are designated and the Table's styles have changed, loop through the judging_flights table and update or remove the affected entries
-
-if (($totalRows_flight_count > 0) && ($table_styles != "")) {
-	
-	$query_flight_round = sprintf("SELECT flightRound FROM $judging_flights_db_table WHERE flightTable='%s' ORDER BY flightRound DESC LIMIT 1", $id);
-	$flight_round = mysqli_query($connection,$query_flight_round) or die (mysqli_error($connection));
-	$row_flight_round = mysqli_fetch_assoc($flight_round);
-	
-	$a = explode(",",$table_styles);
-	
-	$query_table_styles = "SELECT id,tableStyles FROM $judging_tables_db_table";
-	$table_styles = mysqli_query($connection,$query_table_styles) or die (mysqli_error($connection));
-	$row_table_styles = mysqli_fetch_assoc($table_styles);
-				
-	do { $t[] = $row_table_styles['id']; } while ($row_table_styles = mysqli_fetch_assoc($table_styles));
-
-	// Update or remove	
-	do { $f[] = $row_flight_count['id']; } while ($row_flight_count = mysqli_fetch_assoc($flight_count)); 
-	
-	foreach ($f as $id) {
-		unset($update);
-		unset($b);	
-		
-		$query_entry_style = sprintf("SELECT flightEntryID FROM $judging_flights_db_table WHERE id='%s'", $id);
-		$entry_style = mysqli_query($connection,$query_entry_style) or die (mysqli_error($connection));
-		$row_entry_style = mysqli_fetch_assoc($entry_style);
-						
-		$query_entry = sprintf("SELECT brewCategorySort,brewSubCategory FROM $brewing_db_table WHERE id='%s'", $row_entry_style['flightEntryID']);
-		$entry = mysqli_query($connection,$query_entry) or die (mysqli_error($connection));
-		$row_entry = mysqli_fetch_assoc($entry);
-		
-		foreach ($t as $table_id) {
-			
-			$query_table_style = sprintf("SELECT id,tableStyles FROM $judging_tables_db_table WHERE id='%s'", $table_id);
-			$table_style = mysqli_query($connection,$query_table_style) or die (mysqli_error($connection));
-			$row_table_style = mysqli_fetch_assoc($table_style);
-			
-			$query_style = sprintf("SELECT id FROM %s WHERE (brewStyleVersion='%s' OR brewStyleOwn='custom') AND brewStyleGroup='%s' AND brewStyleNum='%s'",$styles_db_table,$_SESSION['prefsStyleSet'],$row_entry['brewCategorySort'],$row_entry['brewSubCategory']);
-			$style = mysqli_query($connection,$query_style) or die (mysqli_error($connection));
-			$row_style = mysqli_fetch_assoc($style);
-			
-			$array = explode(",",$row_table_style['tableStyles']);
-			if (in_array($row_style['id'],$array)) $update[] = $row_table_style['id']; else $update[] = "N";
-		}
-		
-		$query_flight_info = sprintf("SELECT id,flightEntryID,flightTable FROM $judging_flights_db_table WHERE id='%s'", $id);
-		$flight_info = mysqli_query($connection,$query_flight_info) or die (mysqli_error($connection));
-		$row_flight_info = mysqli_fetch_assoc($flight_info);
-		$totalRows_flight_info = mysqli_num_rows($flight_info);
-		
-		$query_entry = sprintf("SELECT brewCategorySort,brewSubCategory FROM $brewing_db_table WHERE id='%s'", $row_flight_info['flightEntryID']);
-		$entry = mysqli_query($connection,$query_entry) or die (mysqli_error($connection));
-		$row_entry = mysqli_fetch_assoc($entry);
-		
-		$entry_style = $row_entry['brewCategorySort'].$row_entry['brewSubCategory'];
-		
-		foreach ($a as $style_id) {
-			
-			$b[] = 0;
-			
-			$query_style = sprintf("SELECT brewStyleGroup,brewStyleNum FROM $styles_db_table WHERE id='%s'", $style_id);
-			$style = mysqli_query($connection,$query_style) or die (mysqli_error($connection));
-			$row_style = mysqli_fetch_assoc($style);
-			
-			$table_style = $row_style['brewStyleGroup'].$row_style['brewStyleNum'];
-			
-			if ($table_style == $entry_style) $b[] = 1;
-			if ($table_style != $entry_style) $b[] = 0;
-		}
-		
-		$update = array_filter($update,"is_numeric");
-		$update = implode("",$update);
-		$delete = array_sum($b);
-		
-		//echo $update."<br>";
-		//echo $delete."<br>";
-		
-		// Delete the flightTable (id from judging_tables) if no table is found that contains the entry's style
-		// This "saves" the row for future use
-		if (($delete == 0) && ($update == "")) {
-			
-			$delete = sprintf("DELETE FROM $judging_flights_db_table WHERE id='%s'", $row_flight_info['id']);
-			//echo $delete."<br>";
-			$updateSQL = sprintf("UPDATE $judging_flights_db_table SET
-				flightTable=%s, 
-				flightNumber=%s, 
-				flightRound=%s
-				WHERE id=%s",
-				   GetSQLValueString("", "text"),
-				   GetSQLValueString("1", "text"),
-				   GetSQLValueString("1", "text"),
-				   GetSQLValueString($id, "text"));
-			
-			mysqli_real_escape_string($connection,$updateSQL);
-			$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
-				
-		}
-		
-		// If table style is assigned to another table, reassign the entry to that table
-		if (($delete == 0) && ($update != "")) {
-			
-			$updateSQL = sprintf("UPDATE $judging_flights_db_table SET
-				flightTable=%s, 
-				flightNumber=%s, 
-				flightRound=%s
-				WHERE id=%s",
-				   GetSQLValueString($update, "text"),
-				   GetSQLValueString("1", "text"),
-				   GetSQLValueString("1", "text"),
-				   GetSQLValueString($id, "text"));
-			
-			mysqli_real_escape_string($connection,$updateSQL);
-			$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
-				
-		}
-	}
-} //end if (($row_flight_count['count'] > 0) && ($table_styles != ""))
-
-*/
+} else { 
+	header(sprintf("Location: %s", $base_url."index.php?msg=98"));
+	exit;
+}
 ?>

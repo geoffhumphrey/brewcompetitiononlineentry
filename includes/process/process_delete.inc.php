@@ -7,7 +7,7 @@
  
 require(INCLUDES.'url_variables.inc.php');
 
-if ((isset($_SESSION['loginUsername'])) && (isset($_SESSION['userLevel']))) { 
+if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) && (isset($_SESSION['userLevel'])))) { 
 
 	if (NHC) {
 		// Place NHC SQL calls below
@@ -299,5 +299,8 @@ if ((isset($_SESSION['loginUsername'])) && (isset($_SESSION['userLevel']))) {
 	
 	} // end else NHC
 	
-} else echo "<p>Not available.</p>";
+} else { 
+	header(sprintf("Location: %s", $base_url."index.php?msg=98"));
+	exit;
+}
 ?>
