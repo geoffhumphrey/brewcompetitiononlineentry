@@ -472,19 +472,19 @@ if ($setup_free_access == TRUE) {
 			`brewBoilMins` varchar(5) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
 			`brewBrewerFirstName` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
 			`brewBrewerLastName` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
-			`brewPaid` int(1) DEFAULT NULL COMMENT '1=true; 0=false',
+			`brewPaid` tinyint(1) DEFAULT NULL COMMENT '1=true; 0=false',
 			`brewWinner` char(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
 			`brewWinnerCat` varchar(5) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
 			`brewWinnerSubCat` varchar(3) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
 			`brewWinnerPlace` varchar(3) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
 			`brewBOSRound` char(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
 			`brewBOSPlace` varchar(3) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
-			`brewReceived` int(1) DEFAULT NULL COMMENT '1=true; 0=false',
+			`brewReceived` tinyint(1) DEFAULT NULL COMMENT '1=true; 0=false',
 			`brewJudgingLocation` int(8) DEFAULT NULL,
 			`brewCoBrewer` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
 			`brewJudgingNumber` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
 			`brewUpdated` timestamp NULL DEFAULT NULL COMMENT 'Timestamp of when the entry was last updated',
-			`brewConfirmed` int(1) DEFAULT NULL COMMENT '1=true - 2=false',
+			`brewConfirmed` tinyint(1) DEFAULT NULL COMMENT '1=true - 2=false',
 			`brewBoxNum` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
 			PRIMARY KEY (`id`)
 		) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci;
@@ -528,7 +528,7 @@ if ($setup_free_access == TRUE) {
 		
 		$sql = "
 		CREATE TABLE IF NOT EXISTS `$contest_info_db_table` (
-			`id` int(1) NOT NULL DEFAULT '0',
+			`id` tinyint(1) NOT NULL DEFAULT '0',
 			`contestName` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
 			`contestHost` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
 			`contestHostWebsite` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
@@ -784,21 +784,41 @@ if ($setup_free_access == TRUE) {
 		$sql = "CREATE TABLE IF NOT EXISTS `$mods_db_table` (
 			`id` int(11) NOT NULL AUTO_INCREMENT,
 			`mod_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT 'Name of the custom module',
-			`mod_type` int(1) DEFAULT NULL COMMENT 'Type of module: 0=informational 1=report 2=export 3=other',
-			`mod_extend_function` int(1) DEFAULT NULL COMMENT 'If the custom module extends a core function. 0=all 1=home 2=rules 3=volunteer 4=sponsors 5=contact 6=register 7=pay 8=list 9=admin',
+			`mod_type` tinyint(1) DEFAULT NULL COMMENT 'Type of module: 0=informational 1=report 2=export 3=other',
+			`mod_extend_function` tinyint(1) DEFAULT NULL COMMENT 'If the custom module extends a core function. 0=all 1=home 2=rules 3=volunteer 4=sponsors 5=contact 6=register 7=pay 8=list 9=admin',
 			`mod_extend_function_admin` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT 'If the custom module extends an admin function (9 in mod_extend_function). Keys off of the go= variable.',
 			`mod_filename` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT 'File name of the custom module',
 			`mod_description` text COMMENT 'Short description of the custom module',
-			`mod_permission` int(1) DEFAULT NULL COMMENT 'Who has permission to view the module. 0=uber-admin 1=admin 2=all',
+			`mod_permission` tinyint(1) DEFAULT NULL COMMENT 'Who has permission to view the module. 0=uber-admin 1=admin 2=all',
 			`mod_rank` int(3) DEFAULT NULL COMMENT 'Rank order of the mod on the admin mods list',
-			`mod_display_rank` int(1) DEFAULT NULL COMMENT '0=normal 1=above default content',
-			`mod_enable` int(1) DEFAULT NULL COMMENT '1=yes 0=no',
+			`mod_display_rank` tinyint(1) DEFAULT NULL COMMENT '0=normal 1=above default content',
+			`mod_enable` tinyint(1) DEFAULT NULL COMMENT '1=yes 0=no',
 			PRIMARY KEY (`id`)
 		) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci";
 		mysqli_select_db($connection,$database);
 		mysqli_real_escape_string($connection,$sql);
 		$result = mysqli_query($connection,$sql) or die (mysqli_error($connection));
 		
+		// ------------------- 
+		// Payments Table
+		// -------------------
+		/*
+		$sql = "CREATE TABLE IF NOT EXISTS `$payments_db_table` (
+		  ``id` int(11) NOT NULL AUTO_INCREMENT,
+		  `uid` int(11) DEFAULT NULL,
+		  `item_name` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+		  `txn_id` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+		  `payment_gross` float(10,2) DEFAULT NULL,
+		  `currency_code` varchar(5) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+		  `payment_status` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+		  `payment_entries` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+		  `payment_time` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+		  PRIMARY KEY (`id`)
+		) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;";
+		mysqli_select_db($connection,$database);
+		mysqli_real_escape_string($connection,$sql);
+		$result = mysqli_query($connection,$sql) or die (mysqli_error($connection));
+		*/
 		// ------------------- 
 		// Preferences Table
 		// -------------------
@@ -813,6 +833,7 @@ if ($setup_free_access == TRUE) {
 			`prefsLiquid2` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
 			`prefsPaypal` char(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
 			`prefsPaypalAccount` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
+			`prefsPaypalIPN` tinyint(1) DEFAULT NULL,
 			`prefsCurrency` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
 			`prefsCash` char(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
 			`prefsCheck` char(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
@@ -833,13 +854,13 @@ if ($setup_free_access == TRUE) {
 			`prefsEntryForm` char(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
 			`prefsRecordLimit` int(11) DEFAULT '999999' COMMENT 'User defined record limit for using DataTables vs. PHP paging',
 			`prefsRecordPaging` int(11) DEFAULT '100' COMMENT 'User defined per page record limit',
-			`prefsCompOrg` char(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
+			`prefsProEdition` tinyint(1) NULL DEFAULT NULL,
 			`prefsTheme` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
 			`prefsDateFormat` char(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
 			`prefsContact` char(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
 			`prefsTimeZone` int(11) NULL DEFAULT NULL,
 			`prefsEntryLimit` int(11) NULL DEFAULT NULL,
-			`prefsTimeFormat` int(1) NULL DEFAULT NULL,
+			`prefsTimeFormat` tinyint(1) NULL DEFAULT NULL,
 			`prefsUserEntryLimit` varchar(4) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT 'Numeric limit of entries for each user',
 			`prefsUserSubCatLimit` varchar(4) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT 'Numeric limit of entries for each user per subcategory',
 			`prefsUSCLEx` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT 'Array of exceptions corresponding to id in styles table',
@@ -850,13 +871,13 @@ if ($setup_free_access == TRUE) {
 			`prefsSEF` char(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT 'Use search engine friendly URLs.',
 			`prefsSpecialCharLimit` int(3) NULL DEFAULT NULL COMMENT 'Character limit for special ingredients field',
 			`prefsStyleSet` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
-			`prefsAutoPurge` int(1) DEFAULT NULL,
+			`prefsAutoPurge` tinyint(1) DEFAULT NULL,
 			`prefsEntryLimitPaid` int(4) DEFAULT NULL,
-			`prefsEmailRegConfirm` int(1) DEFAULT NULL,
-			`prefsLanguage` int(1) DEFAULT NULL,
-			`prefsSpecific` int(1) DEFAULT NULL,
-			`prefsDropOff` int(1) DEFAULT NULL,
-			`prefsShipping` int(1) DEFAULT NULL,
+			`prefsEmailRegConfirm` tinyint(1) DEFAULT NULL,
+			`prefsLanguage` tinyint(1) DEFAULT NULL,
+			`prefsSpecific` tinyint(1) DEFAULT NULL,
+			`prefsDropOff` tinyint(1) DEFAULT NULL,
+			`prefsShipping` tinyint(1) DEFAULT NULL,
 			PRIMARY KEY (`id`)
 		) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci;
 		";
@@ -902,7 +923,7 @@ if ($setup_free_access == TRUE) {
 			`sbi_description` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
 			`sbi_places` int(11) DEFAULT NULL,
 			`sbi_rank` int(11) DEFAULT NULL,
-			`sbi_display_places` int(1) DEFAULT NULL,
+			`sbi_display_places` tinyint(1) DEFAULT NULL,
 			PRIMARY KEY (`id`)
 		) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci;
 		";
@@ -926,8 +947,8 @@ if ($setup_free_access == TRUE) {
 			`sponsorImage` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
 			`sponsorText` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
 			`sponsorLocation` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
-			`sponsorLevel` int(1) DEFAULT NULL,
-			`sponsorEnable` int(1) DEFAULT NULL,
+			`sponsorLevel` tinyint(1) DEFAULT NULL,
+			`sponsorEnable` tinyint(1) DEFAULT NULL,
 			PRIMARY KEY (`id`)
 		) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci;
 		";
@@ -997,10 +1018,10 @@ if ($setup_free_access == TRUE) {
 		  brewStyleActive char(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT 'Y',
 		  brewStyleOwn varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT 'bcoe',
 		  brewStyleVersion varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
-		  brewStyleReqSpec int(1) DEFAULT NULL COMMENT 'Does the style require special ingredients be input? 1=yes 0=no',
-		  brewStyleStrength int(1) DEFAULT NULL COMMENT 'Requires strength? 0=No, 1=Yes',
-		  brewStyleCarb int(1) DEFAULT NULL COMMENT 'Requires carbonation? 0=No, 1=Yes',
-		  brewStyleSweet int(1) DEFAULT NULL COMMENT 'Requires sweetness? 0=No, 1=Yes',
+		  brewStyleReqSpec tinyint(1) DEFAULT NULL COMMENT 'Does the style require special ingredients be input? 1=yes 0=no',
+		  brewStyleStrength tinyint(1) DEFAULT NULL COMMENT 'Requires strength? 0=No, 1=Yes',
+		  brewStyleCarb tinyint(1) DEFAULT NULL COMMENT 'Requires carbonation? 0=No, 1=Yes',
+		  brewStyleSweet tinyint(1) DEFAULT NULL COMMENT 'Requires sweetness? 0=No, 1=Yes',
 		  brewStyleTags varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
 		  brewStyleComEx text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
 		  brewStyleEntry text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
@@ -1077,7 +1098,7 @@ if ($setup_free_access == TRUE) {
 		$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));	
 		
 		$updateSQL = "INSERT INTO ".$prefix."styles (id, brewStyleNum, brewStyle, brewStyleCategory, brewStyleOG, brewStyleOGMax, brewStyleFG, brewStyleFGMax, brewStyleABV, brewStyleABVMax, brewStyleIBU, brewStyleIBUMax, brewStyleSRM, brewStyleSRMMax, brewStyleType, brewStyleInfo, brewStyleLink, brewStyleGroup, brewStyleActive, brewStyleOwn, brewStyleVersion, brewStyleReqSpec, brewStyleStrength, brewStyleCarb, brewStyleSweet, brewStyleTags, brewStyleComEx, brewStyleEntry) VALUES ";
-		$updateSQL .= "(41, 'C', 'Baltic Porter', 'Porter', '1.06', '1.09', '1.016', '1.024', '5.5', '9.5', '20', '40', '17', '30', 'Ale', 'A Baltic Porter often has the malt flavors reminiscent of an English brown porter and the restrained roast of a schwarzbier, but with a higher OG and alcohol content than either. Very complex, with multi-layered flavors.', 'http://www.bjcp.org/2008styles/style12.php#1c', '12', 'Y', 'bcoe', 'BJCP2008', 0, 0, 0, 0, '', 'Sinebrychoff Porter (Finland), Okocim Porter (Poland), Zywiec Porter (Poland), Baltika #6 Porter (Russia), Carnegie Stark Porter (Sweden), Aldaris Porteris (Latvia), Utenos Porter (Lithuania), Stepan Razin Porter (Russia), N&oslash;gne ø porter (Norway), Neuzeller Kloster-Bräu Neuzeller Porter (Germany), Southampton Imperial Baltic Porter.', ''), ";
+		$updateSQL .= "(41, 'C', 'Baltic Porter', 'Porter', '1.06', '1.09', '1.016', '1.024', '5.5', '9.5', '20', '40', '17', '30', 'Ale', 'A Baltic Porter often has the malt flavors reminiscent of an English brown porter and the restrained roast of a schwarzbier, but with a higher OG and alcohol content than either. Very complex, with multi-layered flavors.', 'http://www.bjcp.org/2008styles/style12.php#1c', '12', 'Y', 'bcoe', 'BJCP2008', 0, 0, 0, 0, '', 'Sinebrychoff Porter (Finland), Okocim Porter (Poland), Zywiec Porter (Poland), Baltika #6 Porter (Russia), Carnegie Stark Porter (Sweden), Aldaris Porteris (Latvia), Utenos Porter (Lithuania), Stepan Razin Porter (Russia), N&oslash;gne &oslash; porter (Norway), Neuzeller Kloster-Bräu Neuzeller Porter (Germany), Southampton Imperial Baltic Porter.', ''), ";
 		$updateSQL .= "(42, 'A', 'Dry Stout', 'Stout', '1.036', '1.05', '1.007', '1.011', '4', '5', '30', '45', '25', '40', 'Ale', 'A very dark, roasty, bitter, creamy ale.', 'http://www.bjcp.org/2008styles/style13.php#1a', '13', 'Y', 'bcoe', 'BJCP2008', 0, 0, 0, 0, '', 'Guinness Draught Stout (also canned), Murphy&rsquo;s Stout, Beamish Stout, O&rsquo;Hara&rsquo;s Celtic Stout, Russian River O.V.L. Stout, Three Floyd&rsquo;s Black Sun Stout, Dorothy Goodbody&rsquo;s Wholesome Stout, Orkney Dragonhead Stout, Old Dominion Stout, Goose Island Dublin Stout, Brooklyn Dry Stout.', ''), ";
 		$updateSQL .= "(43, 'B', 'Sweet Stout', 'Stout', '1.044', '1.06', '1.012', '1.024', '4', '6', '20', '40', '30', '40', 'Ale', 'A very dark, sweet, full-bodied, slightly roasty ale. Often tastes like sweetened espresso.', 'http://www.bjcp.org/2008styles/style13.php#1b', '13', 'Y', 'bcoe', 'BJCP2008', 0, 0, 0, 0, '', 'Mackeson&rsquo;s XXX Stout, Watney&rsquo;s Cream Stout, Farson&rsquo;s Lacto Stout, St. Peter&rsquo;s Cream Stout, Marston&rsquo;s Oyster Stout, Sheaf Stout, Hitachino Nest Sweet Stout (Lacto), Samuel Adams Cream Stout, Left Hand Milk Stout, Widmer Snowplow Milk Stout.', ''), ";
 		$updateSQL .= "(44, 'C', 'Oatmeal Stout', 'Stout', '1.048', '1.065', '1.01', '1.018', '4.2', '5.9', '25', '40', '22', '40', 'Ale', 'A very dark, full-bodied, roasty, malty ale with a complementary oatmeal flavor.', 'http://www.bjcp.org/2008styles/style13.php#1c', '13', 'Y', 'bcoe', 'BJCP2008', 0, 0, 0, 0, '', 'Samuel Smith Oatmeal Stout, Young&rsquo;s Oatmeal Stout, McAuslan Oatmeal Stout, Maclay&rsquo;s Oat Malt Stout, Broughton Kinmount Willie Oatmeal Stout, Anderson Valley Barney Flats Oatmeal Stout, Troegs Oatmeal Stout, New Holland The Poet, Goose Island Oatmeal Stout, Wolaver&rsquo;s Oatmeal Stout.', ''), ";
@@ -1420,7 +1441,7 @@ if ($setup_free_access == TRUE) {
 			`version` varchar(12) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
 			`version_date` date DEFAULT NULL,
 			`data_check` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT 'Date/time of the last data integrity check.',
-			`setup` int(1) DEFAULT NULL COMMENT 'Has setup run? 1=true, 0=false.',
+			`setup` tinyint(1) DEFAULT NULL COMMENT 'Has setup run? 1=true, 0=false.',
 			`setup_last_step` int(3) DEFAULT NULL COMMENT 'What step of setup was last completed if setup row is 0 (false)',
 			PRIMARY KEY (`id`)
 		) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci ;

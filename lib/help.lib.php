@@ -20,7 +20,7 @@ function bcoem_dashboard_help($content) {
   		$bcoem_dashboard_help_body .= "<li><a href=\"".$base_url."index.php?section=admin&amp;go=dropoff\">Manage</a> or <a href=\"".$base_url."index.php?section=admin&amp;go=dropoff&amp;action=add\">add</a> drop-off locations.";
   		$bcoem_dashboard_help_body .= "<li><a href=\"".$base_url."index.php?section=admin&amp;go=judging\">Manage</a> or <a href=\"".$base_url."index.php?section=admin&amp;go=judging&amp;action=add\">add</a> judging locations.";
   		$bcoem_dashboard_help_body .= "<li><a href=\"".$base_url."index.php?section=admin&amp;go=sponsors\">Manage</a> or <a href=\"".$base_url."index.php?section=admin&amp;go=sponsors&amp;action=add\">add</a> sponsors.</li>";
-		$bcoem_dashboard_help_body .= "<li><a href=\"".$base_url."index.php?section=admin&amp;go=styles\">Manage</a> or <a href=\"".$base_url."index.php?section=admin&amp;go=styles&amp;action=add\">add</a> accepted style categories.</li>";
+		$bcoem_dashboard_help_body .= "<li><a href=\"".$base_url."index.php?section=admin&amp;go=styles\">Manage</a> or <a href=\"".$base_url."index.php?section=admin&amp;go=styles&amp;action=add\">add</a> accepted styles.</li>";
   		$bcoem_dashboard_help_body .= "<li><a href=\"".$base_url."index.php?section=admin&amp;go=style_types\">Manage</a> or <a href=\"".$base_url."index.php?section=admin&amp;go=style_types&amp;action=add\">add</a> style types.</li>";
   		$bcoem_dashboard_help_body .= "<li><a href=\"".$base_url."index.php?section=admin&amp;go=contest_info\">Edit</a> competition info.</a></li>";
   		$bcoem_dashboard_help_body .= "<li><a href=\"".$base_url."index.php?section=admin&amp;go=upload\">Upload</a> a competition logo or sponsor logos.</li>";

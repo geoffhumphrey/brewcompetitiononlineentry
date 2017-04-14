@@ -1,7 +1,5 @@
 <?php include(DB.'admin_make_admin.db.php'); 
 
-session_start();
-
 if ($_SESSION['userLevel'] == 0) $_SESSION['editUser'] = 1;
 else $_SESSION['editUser'] = 0;
 

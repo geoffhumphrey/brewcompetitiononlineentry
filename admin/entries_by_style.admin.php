@@ -1,23 +1,5 @@
 <?php
-if ($_SESSION['prefsStyleSet'] == "BJCP2008") {
-	$beer_end = 23;
-	$mead_array = array('24','25','26');
-	$cider_array = array('27','28');
-	$category_end = 28;
-}
 
-if ($_SESSION['prefsStyleSet'] == "BJCP2015") {
-	$beer_end = 34;
-	$mead_array = array('M1','M2','M3','M4');
-	$cider_array = array('C1','C2');
-	$category_end = 34;
-}
-
-include(DB.'styles.db.php');
-do { $accepted_categories[] = $row_styles['brewStyleGroup']; } 
-while ($row_styles = mysqli_fetch_assoc($styles));
-$total_cat = array_unique($accepted_categories);
-//print_r($total_cat);
 $html = "";
 $style_other_count[] = 0;
 $style_beer_count[] = 0;
@@ -28,12 +10,14 @@ $style_mead_count_logged[] = 0;
 $style_cider_count_logged[] = 0;
 $style_other_count_logged[] = 0;
 
-foreach ($total_cat as $cat) {
-
-	include(DB.'entries_by_style.db.php');	
+if (strpos($_SESSION['prefsStyleSet'],"BABDB") !== false) {
 	
-	if (!empty($cat_name)) { 
+	include(INCLUDES.'ba_constants.inc.php');
 	
+	foreach ($ba_all_categories as $value) {
+			
+		include(DB.'entries_by_style.db.php');
+		
 		if ($action == "print") $html .= "<tr>"; 
 		else $html .= "<tr>";
 		$html .= "<td>".$cat_convert." - ".$cat_name."</td>";
@@ -41,23 +25,67 @@ foreach ($total_cat as $cat) {
 		$html .= "<td>".$row_style_count['count']."</td>";
 		$html .= "<td class=\"hidden-xs hidden-sm\">".$style_type."</td>";
 		$html .= "</tr>";
+			
+		
+	} // end foreach ($_SESSION['styles'] as $styles => $stylesData)
 	
+}
+
+else {
+	
+	if ($_SESSION['prefsStyleSet'] == "BJCP2008") {
+		$beer_end = 23;
+		$mead_array = array('24','25','26');
+		$cider_array = array('27','28');
+		$category_end = 28;
+	}
+	
+	if ($_SESSION['prefsStyleSet'] == "BJCP2015") {
+		$beer_end = 34;
+		$mead_array = array('M1','M2','M3','M4');
+		$cider_array = array('C1','C2');
+		$category_end = 34;
 	}
 
-	// ------ DEBUG ------
+	include(DB.'styles.db.php');
 	
-	//echo "<br>";
-	//echo $query_style_count."<br>";
-	//echo $query_style_count_logged."<br>";
-	//echo $cat_convert." ".$cat_name." Paid/Received: ".$row_style_count['count']." Logged: ".$row_style_count_logged['count']."<br>";
-	//$style_display[] = $cat."-".$cat_name."-".$row_style_count['count']."-".$row_style_count_logged['count'];
-	//echo $row_style_type['brewStyleType']."<br>";
-	//echo $style_type."<br>";
-	//echo $source."<br>";
+	do { 
+		$accepted_categories[] = $row_styles['brewStyleGroup']; 
+	} while ($row_styles = mysqli_fetch_assoc($styles));
 	
-} 
+	$total_cat = array_unique($accepted_categories);
+	//print_r($total_cat);
+	
+	foreach ($total_cat as $cat) {
 
+		include(DB.'entries_by_style.db.php');	
+		
+		if (!empty($cat_name)) { 
+		
+			if ($action == "print") $html .= "<tr>"; 
+			else $html .= "<tr>";
+			$html .= "<td>".$cat_convert." - ".$cat_name."</td>";
+			$html .= "<td>".$row_style_count_logged['count']."</td>";
+			$html .= "<td>".$row_style_count['count']."</td>";
+			$html .= "<td class=\"hidden-xs hidden-sm\">".$style_type."</td>";
+			$html .= "</tr>";
+		
+		}
+	
+		// ------ DEBUG ------
+		
+		//echo "<br>";
+		//echo $query_style_count."<br>";
+		//echo $query_style_count_logged."<br>";
+		//echo $cat_convert." ".$cat_name." Paid/Received: ".$row_style_count['count']." Logged: ".$row_style_count_logged['count']."<br>";
+		//$style_display[] = $cat."-".$cat_name."-".$row_style_count['count']."-".$row_style_count_logged['count'];
+		//echo $row_style_type['brewStyleType']."<br>";
+		//echo $style_type."<br>";
+		//echo $source."<br>";
+		
+	} 
 
+}
 
 $mead_total = array_sum($style_mead_count);
 $mead_total_logged = array_sum($style_mead_count_logged);

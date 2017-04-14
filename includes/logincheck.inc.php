@@ -134,12 +134,7 @@ else {
 // If the username/password combo is valid, register a session, register a session cookie
 // perform certain tasks and redirect
 if ($check == 1) {
-	
-	// Start the session and regenerate the session ID
-	session_name($prefix_session);
-	session_start();
-	session_regenerate_id(true); 
-	
+		
 	if (NHC) {
 	// Place NHC SQL calls below
 	
@@ -154,7 +149,7 @@ if ($check == 1) {
 		mysqli_real_escape_string($connection,$updateSQL);
 		$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 	
-		// Convert email address in the user's accociate record in the "brewer" table
+		// Convert email address in the user's accociated record in the "brewer" table
 		$updateSQL = sprintf("UPDATE %s SET brewerEmail='%s' WHERE uid='%s'",$prefix."brewer",$loginUsername, $row_login['id']);
 		mysqli_real_escape_string($connection,$updateSQL);
 		$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
@@ -171,9 +166,11 @@ if ($check == 1) {
 		else $location = $base_url."index.php?section=list";
 	}
 	
-	//echo $loginUsername."<br>";
+	//echo $_SESSION['loginUsername']."<br>";
 	//echo $location."<br>";
 	//echo "Yes."."<br>";
+	
+	//exit;
 	
 }
 

@@ -21,6 +21,7 @@ include(INCLUDES.'scrubber.inc.php');
 mysqli_select_db($connection,$database);
 require(DB.'common.db.php');
 include(LIB.'common.lib.php');
+include(LANG.'language.lang.php');
 
 if (NHC) $base_url = "../";
 else $base_url = $base_url;
@@ -63,7 +64,14 @@ $bool = date("I");
 if ($bool == 1) $timezone_offset = number_format(($timezone_raw + 1.000),0); 
 else $timezone_offset = number_format($timezone_raw,0);
 
-if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['prefs'.$prefix_session])) || ($setup_free_access))) { 
+if (isset($_SERVER['HTTP_REFERER'])) {
+	$referrer = parse_url($_SERVER['HTTP_REFERER']);
+	// echo $referrer['host']."<br>".$_SERVER['SERVER_NAME']; exit;
+}
+
+
+
+if (((isset($_SERVER['HTTP_REFERER'])) && ($referrer['host'] == $_SERVER['SERVER_NAME'])) && ((isset($_SESSION['prefs'.$prefix_session])) || ($setup_free_access))) { 
 
 	require(LIB.'process.lib.php');
 	
@@ -247,7 +255,15 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['prefs'.$prefix_sessi
 				
 	}
 	
+	elseif (($action == "paypal") && ($dbTable == "default")) {
+		
+		include_once (PROCESS.'process_paypal.inc.php');
+				
+	}
+	
 	else {
+		
+		// include (DEBUGGING.'session_vars.debug.php');
 	
 		// --------------------------- Entries -------------------------------- //
 		

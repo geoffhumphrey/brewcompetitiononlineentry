@@ -50,28 +50,6 @@ $message0 = "";
 $message1 = "";
 $message2 = "";
 
-$login_text_000 = "You are already logged in.";
-$login_text_001 = "There is no email address in the system that matches the one you entered.";
-$login_text_002 = "Try again?";
-$login_text_003 = "Have you registered your account yet?";
-$login_text_004 = "Did you forget your password?";
-$login_text_005 = "If so, click here to reset it.";
-$login_text_006 = "To reset your password, enter the email address you used when you registered.";
-$login_text_007 = "Verify";
-$login_text_008 = "Randomly generated.";
-$login_text_009 = "<strong>Unavailable.</strong> Your account was created by an administrator and your &quot;secret answer&quot; was randomly generated. Please contact a website administrator to recover or change your password.";
-$login_text_010 = "Or, use the email option below.";
-$login_text_011 = "Your security question is...";
-$login_text_012 = "If you didn't receive the email,";
-$login_text_013 = "An email will be sent to you with your verification question and answer. Be sure to check your SPAM folder.";
-$login_text_014 = "click here to resend it to";
-$login_text_015 = "Can't remember the answer to your security question?";
-$login_text_016 = "Get it emailed to";
-$login_text_017 = "";
-$login_text_018 = "";
-$login_text_019 = "";
-$login_text_020 = "";
-
 // Build Messages
 if (isset($_SESSION['loginUsername'])) $message1 .= sprintf("<p class=\"lead\">%s</p>",$login_text_000);
 
@@ -166,19 +144,14 @@ echo $primary_links;
 		if ($_SESSION['prefsContact'] == "Y") $secret_question .= sprintf(" %s",$login_text_010);
 	}
 	else $secret_question = $user_check[1];
-	
-	
-	
-	
-	
-	
 	?>	
 	<p class="lead"><?php echo $login_text_011; ?> <small class="text-muted"><em><?php echo $secret_question; ?></em></small></p>
 	<?php if ($_SESSION['prefsContact'] == "Y") { ?>
 	<?php if ($msg =="5") { ?>
 	<p class='lead'><small><?php echo $login_text_012; ?> <a href="<?php echo $base_url; ?>includes/forgot_password.inc.php?action=email&amp;id=<?php echo $user_check[2]; ?>" data-confirm="<?php echo $login_text_013; ?>"><?php echo $login_text_014." ".$username_check; ?></a>.</small></p>
 	<?php } else { ?>
-	<p class="lead"><small><?php echo $login_text_015; ?> <a href="<?php echo $base_url; ?>includes/forgot_password.inc.php?action=email&amp;id=<?php echo $user_check[2]; ?>" data-confirm="<?php echo $login_text_013; ?>"> <?php echo $login_text_016." ".$username_check; ?></a>.</small></p>
+	<p class="lead"><small><?php echo $login_text_015." ".$login_text_016." ".$username_check; ?>.</small></p>
+    <p class="bcoem-admin-element"><a class="btn btn-block btn-info" href="<?php echo $base_url; ?>includes/forgot_password.inc.php?action=email&amp;id=<?php echo $user_check[2]; ?>" data-confirm="<?php echo $login_text_013; ?>"><?php echo $login_text_017; ?></a>
 	<?php } ?>
 	<?php } ?>
 <form class="form-horizontal" action="<?php echo $base_url; ?>includes/forgot_password.inc.php" method="POST" name="form1" id="form1">

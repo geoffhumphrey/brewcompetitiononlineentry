@@ -1,7 +1,6 @@
 <?php 
 require('../paths.php');
 session_name($prefix_session);
-session_start(); 
 require(CONFIG.'bootstrap.php');
 require(LIB.'output.lib.php');
 include(CLASSES.'tiny_but_strong/tbs_class.php');
@@ -10,11 +9,11 @@ include(DB.'output_entry.db.php');
 $entry_closed = getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_contest_dates['contestEntryDeadline'], $_SESSION['prefsDateFormat'],$_SESSION['prefsTimeFormat'], "long", "date-no-gmt");
 $contest_name = $contest_info['contestName'];
 
-$barcode_qrcode_array = array("0","2","N","C","3","4");
-$no_entry_form_array = array("0","1","2","E","C");
-
 // Check access restrictions
-if (($brewer_info['brewerEmail'] != $_SESSION['loginUsername']) && ($row_logged_in_user['userLevel'] > 1)) { 
+$restricted = FALSE;
+if (($_SESSION['user_id'] != $brewing_info['brewBrewerID']) && ($_SESSION['userLevel'] > 1)) $restricted = TRUE;
+
+if ($restricted) { 
   	echo "<html><head><title>Error</title></head><body>";
   	echo "<p>You do not have sufficient access privileges to view this page.</p>";
   	echo "</body>";

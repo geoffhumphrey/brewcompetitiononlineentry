@@ -28,6 +28,7 @@ define('USER_IMAGES',ROOT.'user_images'.DIRECTORY_SEPARATOR);
 define('USER_DOCS',ROOT.'user_docs'.DIRECTORY_SEPARATOR);
 define('USER_TEMP',ROOT.'user_temp'.DIRECTORY_SEPARATOR);
 define('LANG',ROOT.'lang'.DIRECTORY_SEPARATOR);
+define('DEBUGGING',ROOT.'includes'.DIRECTORY_SEPARATOR.'debug'.DIRECTORY_SEPARATOR);
 
 // --------------------------------------------------------
 // Global Definitions
@@ -37,12 +38,17 @@ define('MAINT', FALSE);
 define('NHC', FALSE);
 define('TESTING', FALSE);
 define('SINGLE', FALSE);
+define('DEBUG', TRUE);
+define('DEBUG_SESSION_VARS', TRUE);
 
 // --------------------------------------------------------
 // Error Reporting
 // --------------------------------------------------------
-//error_reporting(0);	// comment out to debug
-error_reporting(E_ALL); // uncomment to debug 
+
+ini_set('error_reporting', E_ALL ^ E_DEPRECATED);
+ini_set('log_errors','On');
+if (DEBUG)  ini_set('display_errors','On');
+else ini_set('display_errors','Off');
 
 // --------------------------------------------------------
 // Load Configuration
@@ -63,11 +69,24 @@ For single installations, the default below will be sufficient. Otherwise,
 change the variable to something completely unique for each installation.
 */
 
+
 $installation_id = "";
 if (empty($installation_id)) $prefix_session = md5("BCOEM012345"); 
 else $prefix_session = md5($installation_id);
 
-if (session_status() == PHP_SESSION_NONE) {
+
+function is_session_started() {
+    if (php_sapi_name() !== 'cli' ) {
+        if (version_compare(phpversion(), '5.4.0', '>=')) {
+            return session_status() === PHP_SESSION_ACTIVE ? TRUE : FALSE;
+        } else {
+            return session_id() === '' ? FALSE : TRUE;
+        }
+    }
+    return FALSE;
+}
+
+if (is_session_started() === FALSE) {
 	session_name($prefix_session);
     session_start();
 }

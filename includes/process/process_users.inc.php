@@ -20,6 +20,7 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 		
 		// Check to see if email address is already in the system. If so, redirect.
 		$username = strtolower($_POST['user_name']);
+		$username = filter_var($username,FILTER_SANITIZE_EMAIL);
 		
 		if (strstr($username,'@')) {
 		
@@ -44,7 +45,7 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 								   GetSQLValueString($_POST['userLevel'], "text"),
 								   GetSQLValueString($hash, "text"),
 								   GetSQLValueString($_POST['userQuestion'], "text"),
-								   GetSQLValueString($_POST['userQuestionAnswer'], "text"),
+								   GetSQLValueString(strip_tags($_POST['userQuestionAnswer']), "text"),
 								   "NOW( )"					   
 								   );
 				
@@ -89,9 +90,16 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 	if (($action == "edit") && ($_SESSION['editUser'] == 1)) {
 		
 		// Check to see if email address is already in the system. If so, redirect.
-		if (isset($_POST['user_name'])) $username = strtolower($_POST['user_name']);
+		if (isset($_POST['user_name'])) {
+			$username = strtolower($_POST['user_name']);
+			$username = filter_var($username,FILTER_SANITIZE_EMAIL);
+		}
 		else $username = "";
-		if (isset($_POST['user_name_old'])) $usernameOld = strtolower($_POST['user_name_old']);
+		
+		if (isset($_POST['user_name_old'])) { 
+			$usernameOld = strtolower($_POST['user_name_old']);
+			$usernameOld = filter_var($usernameOld,FILTER_SANITIZE_EMAIL);
+		}
 		else $usernameOld = "";
 		
 		if (strstr($username,'@'))  {
@@ -113,7 +121,7 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 				$updateSQL = sprintf("UPDATE $users_db_table SET userLevel=%s,userCreated=%s WHERE user_name=%s", 
 								   GetSQLValueString($_POST['userLevel'], "text"),
 								   "NOW( )",
-								   GetSQLValueString($_POST['user_name'], "text")
+								   GetSQLValueString($username, "text")
 								   );
 								   
 				
@@ -133,7 +141,7 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 			  else  {  
 				
 				$updateSQL = sprintf("UPDATE $users_db_table SET user_name=%s,userCreated=%s WHERE id=%s", 
-								   GetSQLValueString(strtolower($_POST['user_name']), "text"),
+								   GetSQLValueString($username, "text"),
 								   "NOW( )",
 								   GetSQLValueString($id, "text")
 								   ); 
@@ -142,7 +150,7 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 				$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 				
 				$updateSQL = sprintf("UPDATE $brewer_db_table SET brewerEmail=%s WHERE uid=%s", 
-								   GetSQLValueString(strtolower($_POST['user_name']), "text"),
+								   GetSQLValueString($username, "text"),
 								   GetSQLValueString($id, "text")); 
 				
 				mysqli_real_escape_string($connection,$updateSQL);
@@ -166,8 +174,8 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 					// Authenticate the user
 					if ($totalRows_login == 1) {
 						// Register the loginUsername
-						$_SESSION['loginUsername'] = strtolower($_POST['user_name']);
-						$_SESSION['user_info'.$prefix_session] = "";
+						$_SESSION['loginUsername'] = $username;
+						unset($_SESSION['user_info'.$prefix_session]);
 						//$_SESSION['session_set_'.$prefix_session] = "";
 						// If the username/password combo is OK, relocate to the "protected" content index page
 						header(sprintf("Location: %s", $base_url."index.php?section=list&msg=3"));

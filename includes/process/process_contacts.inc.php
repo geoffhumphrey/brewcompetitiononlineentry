@@ -18,14 +18,14 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 			//die ("The reCAPTCHA wasn't entered correctly. Go back and try it again."."(reCAPTCHA said: " . $resp->error . ")");
 			
 			setcookie("to", $_POST['to'], 0, "/"); // $id of contact record in contacts table
-			setcookie("from_email", strtolower($_POST['from_email']), 0, "/");
+			setcookie("from_email", strtolower(filter_var($_POST['from_email'], FILTER_SANITIZE_EMAIL)), 0, "/");
 			setcookie("from_name", capitalize($_POST['from_name']), 0, "/");
 			setcookie("subject", capitalize($_POST['subject']), 0, "/");
 			setcookie("message", $_POST['message'], 0, "/");
 			header(sprintf("Location: %s", $base_url."index.php?section=contact&action=email&msg=2"));
 			
 		} // end if (!$resp->is_valid)
-		
+		//filter_var($_POST['email'], FILTER_SANITIZE_EMAIL)
 		else {
 			
 			$query_contact = sprintf("SELECT * FROM $contacts_db_table WHERE id='%s'", $_POST['to']);
@@ -36,7 +36,7 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 			// Gather the variables from the form
 			$to_email = $row_contact['contactEmail'];
 			$to_name = $row_contact['contactFirstName']." ".$row_contact['contactLastName'];
-			$from_email = strtolower($_POST['from_email']);
+			$from_email = strtolower(filter_var($_POST['from_email'], FILTER_SANITIZE_EMAIL));
 			$from_name = capitalize($_POST['from_name']);
 			$subject = capitalize($_POST['subject']);
 			$message_post = $_POST['message'];
@@ -89,7 +89,7 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 							   GetSQLValueString(capitalize($_POST['contactFirstName']), "text"),
 							   GetSQLValueString(capitalize($_POST['contactLastName']), "text"),
 							   GetSQLValueString(capitalize($_POST['contactPosition']), "text"),
-							   GetSQLValueString(strtolower($_POST['contactEmail']), "text"));
+							   GetSQLValueString(strtolower(filter_var($_POST['contactEmail'], FILTER_SANITIZE_EMAIL)), "text"));
 			//echo $insertSQL;				   
 			mysqli_real_escape_string($connection,$insertSQL);
 			$result = mysqli_query($connection,$insertSQL) or die (mysqli_error($connection));
@@ -109,7 +109,7 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 							   GetSQLValueString(capitalize($_POST['contactFirstName']), "text"),
 							   GetSQLValueString(capitalize($_POST['contactLastName']), "text"),
 							   GetSQLValueString(capitalize($_POST['contactPosition']), "text"),
-							   GetSQLValueString(strtolower($_POST['contactEmail']), "text"),
+							   GetSQLValueString(strtolower(filter_var($_POST['contactEmail'], FILTER_SANITIZE_EMAIL)), "text"),
 							   GetSQLValueString($id, "int"));
 							   
 			mysqli_real_escape_string($connection,$updateSQL);

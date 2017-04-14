@@ -8,8 +8,6 @@
 
 // Verify if current user is authorized to make changes to the user account
 
-session_start();
-
 $edit_enable = FALSE;
 $lead_msg = $header_text_113;
 if ($_SESSION['userLevel'] == 0) $lead_msg .= " <small>".$header_text_114."</small>";

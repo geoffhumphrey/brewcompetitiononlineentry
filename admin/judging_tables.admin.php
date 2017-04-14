@@ -2,6 +2,11 @@
 include(DB.'styles.db.php'); 
 include(DB.'admin_judging_tables.db.php');
 
+if (strpos($section, "step") === FALSE) {
+	if ($_SESSION['jPrefsQueued'] == "N") $assign_to = "Flights"; 
+	else $assign_to = "Tables";
+}
+
 if ($action == "edit") $title = ": Edit a Table"; 
 elseif ($action == "add") $title = ": Add a Table"; 
 elseif (($action == "assign") && ($filter == "default")) $title = ": Assign Judges or Stewards to Tables";
@@ -672,7 +677,7 @@ do {
 				<tr>
 					<th width="1%">&nbsp;</th>
 					<th width="1%">#</th>
-					<th>BJCP Style</th>
+					<th>Style</th>
 					<th>Sub-Style</th>
 					<th width="20%"><em>Received</em> Entries</th>
 				</tr>

@@ -157,7 +157,6 @@ a:active {
 
 
 h1, h2, h3, h4, h5, h6 {
-	
 	font-family: "Raleway", Arial, sans-serif;
 	font-weight: 800;
 	margin: 0;
@@ -173,8 +172,7 @@ h2, h2, h3, h4, h5, h6 {
 
 @media print {
 	h1, h2, h3, h4, h5, h6 {
-		 
-		font-family: Arial, sans-serif;
+	   font-family: Arial, sans-serif;
 		font-weight: 800;
 		margin: 0;
 	}
@@ -1106,10 +1104,9 @@ a.text-danger:focus {
 .navbar-default {
   border-color: #78909c;
   background: #F5F5F5; /* Old browsers */
-  background: -moz-linear-gradient(top,  #F5F5F5 0%, #EEEEEE 100%); /* FF3.6-15 */
-  background: -webkit-linear-gradient(top,  #F5F5F5 0%,#EEEEEE 100%); /* Chrome10-25,Safari5.1-6 */
-  background: linear-gradient(to bottom,  #F5F5F5 0%,#EEEEEE 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#F5F5F5', endColorstr='#EEEEEE',GradientType=0 ); /* IE6-9 */
+  background: -moz-linear-gradient(top,  #F5F5F5 0%, #EEEEEE 100%);
+  background: -webkit-linear-gradient(top,  #F5F5F5 0%,#EEEEEE 100%);
+  background: linear-gradient(to bottom,  #F5F5F5 0%,#EEEEEE 100%);
   -webkit-box-shadow: 0px 3px 3px 0px rgba(230, 230, 230, 0.75);
   -moz-box-shadow:    0px 3px 3px 0px rgba(230, 230, 230, 0.75);
   box-shadow:         0px 3px 3px 0px rgba(230, 230, 230, 0.75);
@@ -1117,10 +1114,9 @@ a.text-danger:focus {
 
 .navbar-default.bcoem-footer {
   background: #EEEEEE; /* Old browsers */
-  background: -moz-linear-gradient(top,  #EEEEEE 0%, #F5F5F5 100%); /* FF3.6-15 */
-  background: -webkit-linear-gradient(top,  #EEEEEE 0%,#F5F5F5 100%); /* Chrome10-25,Safari5.1-6 */
-  background: linear-gradient(to bottom,  #EEEEEE 0%,#F5F5F5 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#EEEEEE', endColorstr='#F5F5F5',GradientType=0 ); /* IE6-9 */
+  background: -moz-linear-gradient(top,  #EEEEEE 0%, #F5F5F5 100%);
+  background: -webkit-linear-gradient(top,  #EEEEEE 0%,#F5F5F5 100%);
+  background: linear-gradient(to bottom,  #EEEEEE 0%,#F5F5F5 100%);
 }
 
 .navbar-default .navbar-brand {
@@ -1219,10 +1215,9 @@ fieldset[disabled] .navbar-default .btn-link:focus {
 .navbar-inverse {
   border-color: #000000;
   background: #000000; /* Old browsers */
-  background: -moz-linear-gradient(top,  #000000 0%, #424242 100%); /* FF3.6-15 */
-  background: -webkit-linear-gradient(top,  #000000 0%,#424242 100%); /* Chrome10-25,Safari5.1-6 */
-  background: linear-gradient(to bottom,  #000000 0%,#424242 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#000000', endColorstr='#424242',GradientType=0 ); /* IE6-9 */
+  background: -moz-linear-gradient(top,  #000000 0%, #424242 100%);
+  background: -webkit-linear-gradient(top,  #000000 0%,#424242 100%);
+  background: linear-gradient(to bottom,  #000000 0%,#424242 100%);
   -webkit-box-shadow: 0px 3px 3px 0px rgba(230, 230, 230, 0.75);
   -moz-box-shadow:    0px 3px 3px 0px rgba(230, 230, 230, 0.75);
   box-shadow:         0px 3px 3px 0px rgba(230, 230, 230, 0.75);
@@ -1478,13 +1473,13 @@ footer .navbar {
 }
 
 .bcoem-admin-modal {
-	color: 000;
+	color: #000;
 }
 
 .bcoem-admin-modal h4 {
 	padding: 0;
 	margin: 0;
-	color: 000;
+	color: #000;
 }
 
 .bcoem-admin-element {

@@ -22,7 +22,6 @@
         <li>Be named with the <strong>six (6) digit</strong> judging number (e.g., 000012.pdf, 996563.pdf, etc.) <strong>OR</strong> entry number (e.g., 000198.pdf, 000567.pdf, etc.).</li>
         <li>Have a .pdf or .PDF extension.</li>
     </ol>
-</p>
 <form id="upload-widget" method="post" action="<?php echo $base_url; ?>handle.php?action=docs" class="dropzone">
 <div class="fallback">
     <input name="file" type="file" multiple />

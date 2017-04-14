@@ -346,7 +346,7 @@ if (((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) || ((
 			} while ($row_judging = mysqli_fetch_assoc($judging));
 		}
 		
-		$output .= "<h3>Categories Accepted</h3>\n";
+		$output .= "<h3>Styles Accepted</h3>\n";
 		$output .= "<ul>\n";
 		do { 
 		  $output .= "\t<li>".ltrim($row_styles['brewStyleGroup'], "0").$row_styles['brewStyleNum']." ".$row_styles['brewStyle']; if ($row_styles['brewStyleOwn'] == "custom") $output .= " (Special style: ".$_SESSION['contestName'].")"; $output .= "</li>\n";
@@ -688,6 +688,7 @@ if (((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) || ((
 						$html .= '</td>';   
 						$html .= '</tr>';
 						if ($row_sbd['sbd_comments'] != "") {
+							$html .= '<tr>';
 							if ($row_sbi['sbi_display_places'] == "1") $html .= '<td width="760" colspan="5"><em>'.$row_sbd['sbd_comments'].'</em></td>';
 							else $html .= '<td width="725" colspan="4"><em>'.$row_sbd['sbd_comments'].'</em></td>';
 							$html .= '</tr>';

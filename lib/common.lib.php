@@ -427,110 +427,60 @@ function currency_info($input,$method) {
 		
 		switch ($input) {
 			
-			case "$": $currency_code = "$^USD";
-			break;
-			case "R$": $currency_code = "R$^BRL";
-			break;
-			case "pound": $currency_code = "&pound;^GBP";
-			break;
-			case "czkoruna": $currency_code = "K&#269;^CZK";
-			break;
-			case "euro": $currency_code = "&euro;^EUR";
-			break;
-			case "A$": $currency_code = "$^AUD";
-			break;
-			case "C$": $currency_code = "$^CAD";
-			break;
-			case "H$": $currency_code = "$^HKD";
-			break;
-			case "N$": $currency_code = "$^NZD";
-			break;
-			case "S$": $currency_code = "$^SGD";
-			break;
-			case "T$": $currency_code = "$^TWD";
-			break;
-			case "Ft": $currency_code = "Ft^HUF";
-			break;
-			case "shekel": $currency_code = "&#8362;^ILS";
-			break;
-			case "yen": $currency_code = "&yen;^JPY";
-			break;
-			case "nkr": $currency_code = "kr^NOK";
-			break;
-			case "kr": $currency_code = "kr^DKK";
-			break;
-			case "RM": $currency_code = "RM^MYR";
-			break;
-			case "M$": $currency_code = "$^MXM";
-			break;
-			case "phpeso": $currency_code = "&#8369;^PHP";
-			break;
-			case "pol": $currency_code = "z&#322;^PLN";
-			break;
-			case "p.": $currency_code = "p.^RUB";
-			break;
-			case "skr": $currency_code = "kr^SEK";
-			break;
-			case "sfranc": $currency_code = "&#8355;^CHF";
-			break;
-			case "baht": $currency_code = "&#3647;^THB";
-			break;
-			case "tlira": $currency_code = "&#8356;^TRY";
-			break;
-			case "R": $currency_code = "R^ZAR";
-			break;
-			case "rupee": $currency_code = "&#8360;^INR";
-			break;
+			case "$": $currency_code = "$^USD"; break;
+			case "R$": $currency_code = "R$^BRL"; break;
+			case "pound": $currency_code = "&pound;^GBP"; break;
+			case "czkoruna": $currency_code = "K&#269;^CZK"; break;
+			case "euro": $currency_code = "&euro;^EUR"; break;
+			case "A$": $currency_code = "$^AUD"; break;
+			case "C$": $currency_code = "$^CAD"; break;
+			case "H$": $currency_code = "$^HKD"; break;
+			case "N$": $currency_code = "$^NZD"; break;
+			case "S$": $currency_code = "$^SGD"; break;
+			case "T$": $currency_code = "$^TWD"; break;
+			case "Ft": $currency_code = "Ft^HUF"; break;
+			case "shekel": $currency_code = "&#8362;^ILS"; break;
+			case "yen": $currency_code = "&yen;^JPY"; break;
+			case "nkr": $currency_code = "kr^NOK"; break;
+			case "kr": $currency_code = "kr^DKK"; break;
+			case "RM": $currency_code = "RM^MYR"; break;
+			case "M$": $currency_code = "$^MXM"; break;
+			case "phpeso": $currency_code = "&#8369;^PHP"; break;
+			case "pol": $currency_code = "z&#322;^PLN"; break;
+			case "p.": $currency_code = "p.^RUB"; break;
+			case "skr": $currency_code = "kr^SEK"; break;
+			case "sfranc": $currency_code = "&#8355;^CHF"; break;
+			case "baht": $currency_code = "&#3647;^THB"; break;
+			case "tlira": $currency_code = "&#8356;^TRY"; break;
+			case "R": $currency_code = "R^ZAR"; break;
+			case "rupee": $currency_code = "&#8360;^INR"; break;
 			
 			
 			/*
 			
-			case "&pound;": $currency_code = $input."^GBP";
-			break;
-			case "&euro;": $currency_code = $input."^EUR";
-			break;
-			case "&yen;": $currency_code = $input."^JPY";
-			break;
-			case "C$": $currency_code = "$^CAD";
-			break;
-			case "kr": $currency_code = $input."^DKK";
-			break;
-			case "R$": $currency_code = "R$^BRL";
-			break;
-			case "A$": $currency_code = "$^AUD";
-			break;
-			case "N$": $currency_code = "$^NZD";
-			break;
-			case "H$": $currency_code = "$^HKD";
-			break;
-			case "S$": $currency_code = "$^SGD";
-			break;
-			case "skr": $currency_code = "kr^SEK";
-			break;
-			case "pol": $currency_code = "z&#322;^PLN";
-			break;
-			case "nkr": $currency_code = "kr^NOK";
-			break;
-			case "Ft": $currency_code = $input."^HUF";
-			break;
-			case "czkoruna": $currency_code = "K&#269;^CZK";
-			break;
-			case "shekel": $currency_code = "&#8362;^ILS";
-			break;
-			case "M$": $currency_code = "$^MXM";
-			break;
-			case "RM": $currency_code = $input."^MYR";
-			break;
-			case "T$": $currency_code = "$^TWD";
-			break;
-			case "baht": $currency_code = "&#3647;^THB";
-			break;
-			case "tlira": $currency_code = "&#8356;^TRY";
-			break;
-			case "p.": $currency_code = $input."^RUB";
-			break;
-			case "phpeso": $currency_code = "&#8369;^PHP";
-			break;
+			case "&pound;": $currency_code = $input."^GBP"; break;
+			case "&euro;": $currency_code = $input."^EUR"; break;
+			case "&yen;": $currency_code = $input."^JPY"; break;
+			case "C$": $currency_code = "$^CAD"; break;
+			case "kr": $currency_code = $input."^DKK"; break;
+			case "R$": $currency_code = "R$^BRL"; break;
+			case "A$": $currency_code = "$^AUD"; break;
+			case "N$": $currency_code = "$^NZD"; break;
+			case "H$": $currency_code = "$^HKD"; break;
+			case "S$": $currency_code = "$^SGD"; break;
+			case "skr": $currency_code = "kr^SEK"; break;
+			case "pol": $currency_code = "z&#322;^PLN"; break;
+			case "nkr": $currency_code = "kr^NOK"; break;
+			case "Ft": $currency_code = $input."^HUF"; break;
+			case "czkoruna": $currency_code = "K&#269;^CZK"; break;
+			case "shekel": $currency_code = "&#8362;^ILS"; break;
+			case "M$": $currency_code = "$^MXM"; break;
+			case "RM": $currency_code = $input."^MYR"; break;
+			case "T$": $currency_code = "$^TWD"; break;
+			case "baht": $currency_code = "&#3647;^THB"; break;
+			case "tlira": $currency_code = "&#8356;^TRY"; break;
+			case "p.": $currency_code = $input."^RUB"; break;
+			case "phpeso": $currency_code = "&#8369;^PHP"; break;
 			default: $currency_code = $input."^USD";
 			*/
 			
@@ -1553,92 +1503,211 @@ function style_convert($number,$type,$base_url="") {
 		case "4":
 		$replacement1 = array('Entry Instructions:','Commercial Examples:','must specify','may specify','MUST specify','MAY specify','must provide','must be specified','must declare','must either','must supply','may provide','MUST state');
 		$replacement2 = array('<strong class="text-danger">Entry Instructions:</strong>','<strong class="text-info">Commercial Examples:</strong>','<strong><u>MUST</u></strong> specify','<strong><u>MAY</u></strong> specify','<strong><u>MUST</u></strong> specify','<strong><u>MAY</u></strong> specify','<u>MUST</u> provide','<strong><u>MUST</u></strong> be specified','<strong><u>MUST</u></strong> declare','<strong><u>MUST</u></strong> either','<strong><u>MUST</u></strong> supply','<strong><u>MAY</u></strong> provide','<strong><u>MUST</u></strong> state');
-		$a = explode(",",$number);
-		$styleSet = str_replace("2"," 2",$_SESSION['prefsStyleSet']);
+		
+		if (strpos($_SESSION['prefsStyleSet'],"BABDB") === false) $styleSet = str_replace("2"," 2",$_SESSION['prefsStyleSet']);
+		if (strpos($_SESSION['prefsStyleSet'],"BABDB") !== false) $styleSet = "Brewers Association";
+		
 		require(CONFIG.'config.php');
 	    mysqli_select_db($connection,$database);
-		foreach ($a as $value) {
-			$styles_db_table = $prefix."styles";
-			$query_style = sprintf("SELECT * FROM %s WHERE id='%s'",$styles_db_table,$value); 
-			$style = mysqli_query($connection,$query_style) or die (mysqli_error($connection));
-			$row_style = mysqli_fetch_assoc($style);
-			$trimmed = ltrim($row_style['brewStyleGroup'],"0");
-			
-			if ($row_style['brewStyleOwn'] == "custom") $styleSet = "Custom"; else $styleSet = $styleSet;
-	
-			$info = str_replace($replacement1,$replacement2,"<p>".$row_style['brewStyleInfo']."</p>");
-			
-			if (!empty($row_style['brewStyleComEx'])) $info .= str_replace($replacement1,$replacement2,"<p>Commercial Examples: ".$row_style['brewStyleComEx']."</p>");
-			if (!empty($row_style['brewStyleEntry'])) $info .= str_replace($replacement1,$replacement2,"<p>Entry Instructions: ".$row_style['brewStyleEntry']."</p>");
-			
-			if (empty($row_style['brewStyleOG'])) $styleOG = "Varies";
-			else $styleOG = number_format((float)$row_style['brewStyleOG'], 3, '.', '')." &ndash; ".number_format((float)$row_style['brewStyleOGMax'], 3, '.', '');
 		
-			if (empty($row_style['brewStyleFG'])) $styleFG = "Varies";
-			else $styleFG = number_format((float)$row_style['brewStyleFG'], 3, '.', '')." &ndash; ".number_format((float)$row_style['brewStyleFGMax'], 3, '.', '');
+		if (strpos($_SESSION['prefsStyleSet'],"BABDB") !== false) {
 			
-			if (empty($row_style['brewStyleABV'])) $styleABV = "Varies";
-			else $styleABV = $row_style['brewStyleABV']." &ndash; ".$row_style['brewStyleABVMax'];
+			$styleSet = "Brewers Association";
 			
-			if (empty($row_style['brewStyleIBU']))  $styleIBU = "Varies";
-			elseif ($row_style['brewStyleIBU'] == "N/A") $styleIBU =  "N/A"; 
-			elseif (!empty($row_style['brewStyleIBU'])) $styleIBU = ltrim($row_style['brewStyleIBU'], "0")." &ndash; ".ltrim($row_style['brewStyleIBUMax'], "0")." IBU";
-			else $styleIBU = "&nbsp;";
+			// $style_convert = str_replace(",",", ",$number);
 			
-			if (empty($row_style['brewStyleSRM'])) $styleColor = "Varies";
-			elseif ($row_style['brewStyleSRM'] == "N/A") $styleColor = "N/A";
-			elseif (!empty($row_style['brewStyleSRM'])) { 
-						$SRMmin = ltrim ($row_style['brewStyleSRM'], "0"); 
-						$SRMmax = ltrim ($row_style['brewStyleSRMMax'], "0"); 
-						if ($SRMmin >= "15") $color1 = "#ffffff"; else $color1 = "#000000"; 
-						if ($SRMmax >= "15") $color2 = "#ffffff"; else $color2 = "#000000"; 
-						
-						$styleColor = "<span class=\"badge\" style=\"background-color: ".srm_color($SRMmin,"srm")."; color: ".$color1."\">&nbsp;".$SRMmin."&nbsp;</span>";
-						$styleColor .= " &ndash; ";
-						$styleColor .= "<span class=\"badge\" style=\"background-color: ".srm_color($SRMmax,"srm")."; color: ".$color2."\">&nbsp;".$SRMmax."&nbsp;</span> <small class=\"text-muted\"><em>SRM</em></small>";
+			$number = explode(",",$number);
+			
+			foreach ($_SESSION['styles'] as $ba_styles => $stylesData) {
+		
+				if (is_array($stylesData) || is_object($stylesData)) {
 					
-					} 
-			else $styleColor = "&nbsp;";
+					foreach ($stylesData as $key => $ba_style) { 
+					
+						// Likes
+						$brewer_ba_likes_selected = "";
+						
+						if (in_array($ba_style['id'],$number)) {
+							
+							$info = "";
+							$minABV = "";
+							$maxABV = "";
+							$minIBU = "";
+							$maxIBU = "";
+							$minSRM = "";
+							$maxSRM = "";
+							$minOG = "";
+							$maxOG = "";
+							
+							// if (isset($ba_style['updateDate'])) $updated = getTimeZoneDateTime($timezone_offset, strtotime($ba_style['updateDate']), 1, 2, "short", "date-time");
+							if (isset($ba_style['abvMin'])) $minABV = number_format($ba_style['abvMin'],1); else $minABV = $label_varies;
+							if (isset($ba_style['abvMax'])) $maxABV = " - ".number_format($ba_style['abvMax'],1);  else $maxABV = " - ".$label_varies;
+							if (isset($ba_style['ibuMin'])) $minIBU = $ba_style['ibuMin']; else $minIBU = $label_varies;
+							if (isset($ba_style['ibuMax'])) $maxIBU = " - ".$ba_style['ibuMax']; else $maxIBU = " - ".$label_varies;
+							
+							if (isset($ba_style['srmMin'])) {
+								if ($ba_style['srmMin'] >= "15") $color1 = "#ffffff"; else $color1 = "#000000"; 
+								$minSRM = "<span class=\"badge\" style=\"background-color: ".srm_color($ba_style['srmMin'],"srm")."; color: ".$color1."\">".$ba_style['srmMin']."</span>";
+							}
+							else $minSRM = $label_varies;
+							
+							if (isset($ba_style['srmMax'])) {
+								if ($ba_style['srmMax'] >= "15") $color2 = "#ffffff"; else $color2 = "#000000"; 
+								$maxSRM = " - <span class=\"badge\" style=\"background-color: ".srm_color($ba_style['srmMax'],"srm")."; color: ".$color2."\">".$ba_style['srmMax']."</span>";
+							}
+							else $maxSRM = " - ".$label_varies;
+							
+							if (!empty($ba_style['ogMin'])) $minOG = number_format($ba_style['ogMin'],3); else $minOG = $label_varies;
+							if (!empty($ba_style['ogMax'])) $maxOG = " - ".number_format($ba_style['ogMax'],3); else $maxOG = " - ".$label_varies;
+							if (!empty($ba_style['fgMin'])) $minFG = number_format($ba_style['fgMin'],3); else $minFG = $label_varies;
+							if (!empty($ba_style['fgMax'])) $maxFG = " - ".number_format($ba_style['fgMax'],3); else $maxFG = " - ".$label_varies;
+							
+							if ($ba_style['category']['name'] == "Hybrid/mixed Beer") $categoryName = "Hybrid/Mixed Beer"; 
+							elseif ($ba_style['category']['name'] == "European-germanic Lager") $categoryName = "European-Germanic Lager";
+							else $categoryName = ucwords($ba_style['category']['name']);
+							
+							$info .= "<p>".$ba_style['description']."</p>";
+							
+							$info .= "
+							<table class=\"table table-bordered table-striped\">
+							<tr>
+								<th class=\"dataLabel data bdr1B\">OG</th>
+								<th class=\"dataLabel data bdr1B\">FG</th>
+								<th class=\"dataLabel data bdr1B\">% ABV</th>
+								<th class=\"dataLabel data bdr1B\">".$label_bitterness." (IBU)</th>
+								<th class=\"dataLabel data bdr1B\">".$label_color."</th>
+							</tr>
+							<tr>
+								<td nowrap>".$minOG.$maxOG."</td>
+								<td nowrap>".$minFG.$maxFG."</td>
+								<td nowrap>".$minABV.$maxABV."</td>
+								<td nowrap>".$minIBU.$maxIBU."</td>
+								<td>".$minSRM.$maxSRM."</td>
+							</tr>
+							</table>";
+							
+							
+							$style_convert[] = "<a href=\"#\" data-target=\"#".$ba_style['id']."\" data-toggle=\"modal\" data-tooltip=\"true\" title=\"".$ba_style['name']."\">".$ba_style['id']."</a>";
+						
+							$style_modal[] = "
+							<!-- Modal -->
+							<div class=\"modal fade\" id=\"".$ba_style['id']."\" tabindex=\"-1\" role=\"dialog\" aria-labelledby=\"".$ba_style['id']."Label\">
+							  <div class=\"modal-dialog modal-lg\" role=\"document\">
+								<div class=\"modal-content\">
+								  <div class=\"modal-header\">
+									<button type=\"button\" class=\"close\" data-dismiss=\"modal\" aria-label=\"".$label_close."\"><span aria-hidden=\"true\">&times;</span></button>
+									<h4 class=\"modal-title\" id=\"".$ba_style['id']."Label\">".$styleSet." Style - ".$ba_style['name']." (".$categoryName.")</h4>
+								  </div>
+								  <div class=\"modal-body\">".$info."</div>
+								  <div class=\"modal-footer\">
+									<button type=\"button\" class=\"btn btn-danger\" data-dismiss=\"modal\">".$label_close."</button>
+								  </div>
+								</div>
+							  </div>
+							</div>";
+							
+						
+						}
+						
+					
+					} // end foreach ($stylesData as $data => $ba_style)
 			
-			$info .= "
-			<table class=\"table table-bordered table-striped\">
-			<tr>
-				<th class=\"dataLabel data bdr1B\">OG</th>
-				<th class=\"dataLabel data bdr1B\">FG</th>
-				<th class=\"dataLabel data bdr1B\">ABV</th>
-				<th class=\"dataLabel data bdr1B\">".$label_bitterness."</th>
-				<th class=\"dataLabel data bdr1B\">".$label_color."</th>
-			</tr>
-			<tr>
-				<td nowrap>".$styleOG."</td>
-				<td nowrap>".$styleFG."</td>
-				<td nowrap>".$styleABV."</td>
-				<td nowrap>".$styleIBU."</td>
-				<td>".$styleColor."</td>
-			</tr>
-			</table>";
+				} // end if (is_array($stylesData) || is_object($stylesData))
+				
+			} // end foreach ($_SESSION['styles'] as $styles => $stylesData)
 			
-			
-			$style_convert[] = "<a href=\"#\" data-target=\"#".$trimmed.$row_style['brewStyleNum']."\" data-toggle=\"modal\" data-tooltip=\"true\" title=\"".$row_style['brewStyle']."\">".$trimmed.$row_style['brewStyleNum']."</a>";
-			$style_modal[] = "
-				<!-- Modal -->
-				<div class=\"modal fade\" id=\"".$trimmed.$row_style['brewStyleNum']."\" tabindex=\"-1\" role=\"dialog\" aria-labelledby=\"".$trimmed.$row_style['brewStyleNum']."Label\">
-				  <div class=\"modal-dialog modal-lg\" role=\"document\">
-					<div class=\"modal-content\">
-					  <div class=\"modal-header\">
-						<button type=\"button\" class=\"close\" data-dismiss=\"modal\" aria-label=\"".$label_close."\"><span aria-hidden=\"true\">&times;</span></button>
-						<h4 class=\"modal-title\" id=\"".$trimmed.$row_style['brewStyleNum']."Label\">".$styleSet." Style ".$trimmed.$row_style['brewStyleNum'].": ".$row_style['brewStyle']."</h4>
-					  </div>
-					  <div class=\"modal-body\">".$info."</div>
-					  <div class=\"modal-footer\">
-						<button type=\"button\" class=\"btn btn-danger\" data-dismiss=\"modal\">".$label_close."</button>
-					  </div>
-					</div>
-				  </div>
-				</div>
-				";
+			$style_convert = rtrim(implode(", ",$style_convert),", ")."|".implode("^",$style_modal);
 		}
-		$style_convert = rtrim(implode(", ",$style_convert),", ")."|".implode("^",$style_modal);
+		
+		if (strpos($_SESSION['prefsStyleSet'],"BABDB") === false) {
+			
+			$a = explode(",",$number);
+			
+			foreach ($a as $value) {
+				
+				$styles_db_table = $prefix."styles";
+				$query_style = sprintf("SELECT * FROM %s WHERE id='%s'",$styles_db_table,$value); 
+				$style = mysqli_query($connection,$query_style) or die (mysqli_error($connection));
+				$row_style = mysqli_fetch_assoc($style);
+				$trimmed = ltrim($row_style['brewStyleGroup'],"0");
+				
+				if ($row_style['brewStyleOwn'] == "custom") $styleSet = "Custom"; else $styleSet = $styleSet;
+		
+				$info = str_replace($replacement1,$replacement2,"<p>".$row_style['brewStyleInfo']."</p>");
+				
+				if (!empty($row_style['brewStyleComEx'])) $info .= str_replace($replacement1,$replacement2,"<p>Commercial Examples: ".$row_style['brewStyleComEx']."</p>");
+				if (!empty($row_style['brewStyleEntry'])) $info .= str_replace($replacement1,$replacement2,"<p>Entry Instructions: ".$row_style['brewStyleEntry']."</p>");
+				
+				if (empty($row_style['brewStyleOG'])) $styleOG = "Varies";
+				else $styleOG = number_format((float)$row_style['brewStyleOG'], 3, '.', '')." &ndash; ".number_format((float)$row_style['brewStyleOGMax'], 3, '.', '');
+			
+				if (empty($row_style['brewStyleFG'])) $styleFG = "Varies";
+				else $styleFG = number_format((float)$row_style['brewStyleFG'], 3, '.', '')." &ndash; ".number_format((float)$row_style['brewStyleFGMax'], 3, '.', '');
+				
+				if (empty($row_style['brewStyleABV'])) $styleABV = "Varies";
+				else $styleABV = $row_style['brewStyleABV']." &ndash; ".$row_style['brewStyleABVMax'];
+				
+				if (empty($row_style['brewStyleIBU']))  $styleIBU = "Varies";
+				elseif ($row_style['brewStyleIBU'] == "N/A") $styleIBU =  "N/A"; 
+				elseif (!empty($row_style['brewStyleIBU'])) $styleIBU = ltrim($row_style['brewStyleIBU'], "0")." &ndash; ".ltrim($row_style['brewStyleIBUMax'], "0")." IBU";
+				else $styleIBU = "&nbsp;";
+				
+				if (empty($row_style['brewStyleSRM'])) $styleColor = "Varies";
+				elseif ($row_style['brewStyleSRM'] == "N/A") $styleColor = "N/A";
+				elseif (!empty($row_style['brewStyleSRM'])) { 
+					$SRMmin = ltrim ($row_style['brewStyleSRM'], "0"); 
+					$SRMmax = ltrim ($row_style['brewStyleSRMMax'], "0"); 
+					if ($SRMmin >= "15") $color1 = "#ffffff"; else $color1 = "#000000"; 
+					if ($SRMmax >= "15") $color2 = "#ffffff"; else $color2 = "#000000"; 
+					
+					$styleColor = "<span class=\"badge\" style=\"background-color: ".srm_color($SRMmin,"srm")."; color: ".$color1."\">&nbsp;".$SRMmin."&nbsp;</span>";
+					$styleColor .= " &ndash; ";
+					$styleColor .= "<span class=\"badge\" style=\"background-color: ".srm_color($SRMmax,"srm")."; color: ".$color2."\">&nbsp;".$SRMmax."&nbsp;</span> <small class=\"text-muted\"><em>SRM</em></small>";
+				} 
+				else $styleColor = "&nbsp;";
+				
+				$info .= "
+				<table class=\"table table-bordered table-striped\">
+				<tr>
+					<th class=\"dataLabel data bdr1B\">OG</th>
+					<th class=\"dataLabel data bdr1B\">FG</th>
+					<th class=\"dataLabel data bdr1B\">ABV</th>
+					<th class=\"dataLabel data bdr1B\">".$label_bitterness."</th>
+					<th class=\"dataLabel data bdr1B\">".$label_color."</th>
+				</tr>
+				<tr>
+					<td nowrap>".$styleOG."</td>
+					<td nowrap>".$styleFG."</td>
+					<td nowrap>".$styleABV."</td>
+					<td nowrap>".$styleIBU."</td>
+					<td>".$styleColor."</td>
+				</tr>
+				</table>";
+				
+				$style_convert[] = "<a href=\"#\" data-target=\"#".$trimmed.$row_style['brewStyleNum']."\" data-toggle=\"modal\" data-tooltip=\"true\" title=\"".$row_style['brewStyle']."\">".$trimmed.$row_style['brewStyleNum']."</a>";
+				$style_modal[] = "
+					<!-- Modal -->
+					<div class=\"modal fade\" id=\"".$trimmed.$row_style['brewStyleNum']."\" tabindex=\"-1\" role=\"dialog\" aria-labelledby=\"".$trimmed.$row_style['brewStyleNum']."Label\">
+					  <div class=\"modal-dialog modal-lg\" role=\"document\">
+						<div class=\"modal-content\">
+						  <div class=\"modal-header\">
+							<button type=\"button\" class=\"close\" data-dismiss=\"modal\" aria-label=\"".$label_close."\"><span aria-hidden=\"true\">&times;</span></button>
+							<h4 class=\"modal-title\" id=\"".$trimmed.$row_style['brewStyleNum']."Label\">".$styleSet." Style ".$trimmed.$row_style['brewStyleNum'].": ".$row_style['brewStyle']."</h4>
+						  </div>
+						  <div class=\"modal-body\">".$info."</div>
+						  <div class=\"modal-footer\">
+							<button type=\"button\" class=\"btn btn-danger\" data-dismiss=\"modal\">".$label_close."</button>
+						  </div>
+						</div>
+					  </div>
+					</div>";
+				
+			} // end foreach
+			
+			$style_convert = rtrim(implode(", ",$style_convert),", ")."|".implode("^",$style_modal);
+				
+		} // end
+		
 		break;
 		
 		case "5":
@@ -1940,51 +2009,37 @@ function get_table_info($input,$method,$id,$dbTable,$param) {
 function style_type($type,$method,$source) { 
 	if ($method == "1") { 
 		switch($type) { 
-			case "Mead": $type = "3";
-			break;
+			case "Mead": $type = "3"; break;
 			
-			case "Cider": $type = "2";
-			break;
+			case "Cider": $type = "2"; break;
 			
-			case "Mixed": $type = "1";
-			break;
+			case "Mixed": $type = "1"; break;
 			
-			case "Ale": $type = "1";
-			break;
+			case "Ale": $type = "1"; break;
 			
-			case "Lager": $type = "1";
-			break;
+			case "Lager": $type = "1"; break;
 			
-			default: $type = $type;
-			break;
+			default: $type = $type; break;
 		}
 	}
 	
 	if (($method == "2") && ($source == "bcoe")) { 
 		switch($type) {
-			case "3": $type = "Mead";
-			break;
+			case "3": $type = "Mead"; break;
 			
-			case "2": $type = "Cider";
-			break;
+			case "2": $type = "Cider"; break;
 			
-			case "1": $type = "Beer";
-			break;
+			case "1": $type = "Beer"; break;
 			
-			case "Lager": $type = "Beer";
-			break;
+			case "Lager": $type = "Beer"; break;
 			
-			case "Ale": $type = "Beer";
-			break;
+			case "Ale": $type = "Beer"; break;
 			
-			case "Mixed": $type = "Beer";
-			break;
+			case "Mixed": $type = "Beer"; break;
 			
-			case "": $type = "Beer";
-			break;
+			case "": $type = "Beer"; break;
 			
-			default: $type = $type;
-			break;
+			default: $type = $type; break;
 		}
 	}
 	
@@ -2074,33 +2129,22 @@ function bjcp_rank($rank,$method) {
 			case "Apprentice": 
 			case "Provisional":
 			case "Rank Pending":
-			$return = "Level 1:";
-			break;
-			case "Recognized": $return = "Level 2:";
-			break;
-			case "Certified": $return = "Level 3:";
-			break;
-			case "National": $return = "Level 4:";
-			break;
-			case "Master": $return = "Level 5:";
-			break;
-			case "Grand Master": $return = "Level 6:";
-			break;
-			case "Honorary Master": $return = "Level 5:";
-			break;
-			case "Honorary Grand Master": $return = "Level 6:";
-			break;
-			case "Experienced": $return = "Level 0:";
-			break;
+			$return = "Level 1:"; break;
+			case "Recognized": $return = "Level 2:"; break;
+			case "Certified": $return = "Level 3:"; break;
+			case "National": $return = "Level 4:"; break;
+			case "Master": $return = "Level 5:"; break;
+			case "Grand Master": $return = "Level 6:"; break;
+			case "Honorary Master": $return = "Level 5:"; break;
+			case "Honorary Grand Master": $return = "Level 6:"; break;
+			case "Experienced": $return = "Level 0:"; break;
 			case "Professional Brewer":
 			case "Beer Sommelier":
 			case "Certified Cicerone":
 			case "Master Cicerone":
 			case "Judge with Sensory Training":
-			$return = "Level 2:";
-			break;
-			case "Mead Judge": $return = "Level 3:";
-			break;
+			$return = "Level 2:"; break;
+			case "Mead Judge": $return = "Level 3:"; break;
 			default: $return = "Level 0:";
 		}
 	if (($rank != "None") && ($rank != "")) $return .= " ".$rank;
@@ -2114,15 +2158,13 @@ function bjcp_rank($rank,$method) {
 			case "Novice";
 			case "Non-BJCP";
 			case "Experienced":
-			$return = "Non-BJCP Judge";
-			break;
+			$return = "Non-BJCP Judge"; break;
 			case "Professional Brewer":
 			case "Beer Sommelier":
 			case "Certified Cicerone":
 			case "Master Cicerone":
 			case "Judge with Sensory Training":
-			$return = $rank;
-			break;
+			$return = $rank; break;
 			default: $return = "BJCP ".$rank." Judge";
 		}
 	}
@@ -2206,7 +2248,9 @@ function brewer_info($uid,$filter="default") {
 	$r .= $row_brewer_info['brewerCity']."^";			// 11
 	$r .= $row_brewer_info['brewerState']."^";			// 12
 	$r .= $row_brewer_info['brewerZip']."^";			// 13
-	$r .= $row_brewer_info['brewerCountry'];			// 14
+	$r .= $row_brewer_info['brewerCountry']."^";		// 14
+	if (isset($row_brewer_info['brewerBreweryName'])) $r .= $row_brewer_info['brewerBreweryName']; // 15
+	else $r .= "&nbsp;^";								// 15
 	return $r;
 }
 
@@ -2250,48 +2294,34 @@ function display_place($place,$method) {
 	
 	if ($method == "1") { 
 		switch($place){
-			case "1": $place = addOrdinalNumberSuffix($place);
-			break;
-			case "2": $place = addOrdinalNumberSuffix($place);
-			break;
-			case "3": $place = addOrdinalNumberSuffix($place);
-			break;
-			case "4": $place = addOrdinalNumberSuffix($place);
-			break;
+			case "1": $place = addOrdinalNumberSuffix($place); break;
+			case "2": $place = addOrdinalNumberSuffix($place); break;
+			case "3": $place = addOrdinalNumberSuffix($place); break;
+			case "4": $place = addOrdinalNumberSuffix($place); break;
 			case "5": 
-			case "HM": $place = "HM";
-			break;
+			case "HM": $place = "HM"; break;
 		default: $place = "N/A";
 		}
 	}
 	
 	if ($method == "2") { 
 		switch($place){
-			case "1": $place = "<span class='fa fa-lg fa-trophy text-gold'></span> ".addOrdinalNumberSuffix($place);
-			break;
-			case "2": $place = "<span class='fa fa-lg fa-trophy text-silver'></span> ".addOrdinalNumberSuffix($place);
-			break;
-			case "3": $place = "<span class='fa fa-lg fa-trophy text-bronze'></span> ".addOrdinalNumberSuffix($place);
-			break;
-			case "4": $place = "<span class='fa fa-lg fa-trophy text-purple'></span> ".addOrdinalNumberSuffix($place);
-			break;
+			case "1": $place = "<span class='fa fa-lg fa-trophy text-gold'></span> ".addOrdinalNumberSuffix($place); break;
+			case "2": $place = "<span class='fa fa-lg fa-trophy text-silver'></span> ".addOrdinalNumberSuffix($place); break;
+			case "3": $place = "<span class='fa fa-lg fa-trophy text-bronze'></span> ".addOrdinalNumberSuffix($place); break;
+			case "4": $place = "<span class='fa fa-lg fa-trophy text-purple'></span> ".addOrdinalNumberSuffix($place); break;
 			case "5": 
-			case "HM": $place = "<span class='fa fa-lg fa-trophy text-teal'></span> HM";
-			break;
+			case "HM": $place = "<span class='fa fa-lg fa-trophy text-teal'></span> HM"; break;
 			default: $place = "N/A";
 			}
 	}
 	
 	if ($method == "3") { 
 		switch($place){
-			case "1": $place = "<span class='fa fa-lg fa-trophy text-gold'></span> ".addOrdinalNumberSuffix($place);
-			break;
-			case "2": $place = "<span class='fa fa-lg fa-trophy text-silver'></span> ".addOrdinalNumberSuffix($place);
-			break;
-			case "3": $place = "<span class='fa fa-lg fa-trophy text-bronze'></span> ".addOrdinalNumberSuffix($place);
-			break;
-			case "HM":  $place = "<span class='fa fa-lg fa-trophy text-teal'></span> HM";
-			break;
+			case "1": $place = "<span class='fa fa-lg fa-trophy text-gold'></span> ".addOrdinalNumberSuffix($place); break;
+			case "2": $place = "<span class='fa fa-lg fa-trophy text-silver'></span> ".addOrdinalNumberSuffix($place); break;
+			case "3": $place = "<span class='fa fa-lg fa-trophy text-bronze'></span> ".addOrdinalNumberSuffix($place); break;
+			case "HM":  $place = "<span class='fa fa-lg fa-trophy text-teal'></span> HM"; break;
 			default: $place = "<span class='fa fa-lg fa-trophy text-forest-green'></span> ".addOrdinalNumberSuffix($place);
 			}
 	}
@@ -2698,23 +2728,17 @@ function winner_method($type,$output_type) {
 	
 	if ($output_type == 1) {
 		switch ($type) {
-			case 0: $output = $label_by_table;
-			break;
-			case 1: $output = $label_by_category;
-			break;
-			case 3: $output = $label_by_subcategory;
-			break;
+			case 0: $output = $label_by_table; break;
+			case 1: $output = $label_by_category; break;
+			case 3: $output = $label_by_subcategory; break;
 		}
 	}
 	
 	if ($output_type == 2) {
 		switch ($type) {
-			case 0: $output = sprintf("<p>%s</p>",$winners_text_002);
-			break;
-			case 1: $output = sprintf("<p>%s</p>",$winners_text_003);
-			break;
-			case 3: $output = sprintf("<p>%s</p>",$winners_text_004);
-			break;
+			case 0: $output = sprintf("<p>%s</p>",$winners_text_002); break;
+			case 1: $output = sprintf("<p>%s</p>",$winners_text_003); break;
+			case 3: $output = sprintf("<p>%s</p>",$winners_text_004); break;
 		}
 	}
 	return $output;
@@ -3311,5 +3335,117 @@ function decryptString($value) {
 	return $decode;
 }
 
+function get_ba_style_info($id) {
+	
+	$return = "";
+	
+	foreach ($_SESSION['styles'] as $styles => $stylesData) {
+		
+		if (is_array($stylesData) || is_object($stylesData)) {
+			
+			foreach ($stylesData as $key => $ba_style) { 
+			
+				if ($ba_style['id'] === $id) { 
+					$return = $ba_style['name']."|";
+					if (isset($ba_style['description'])) $return .= $ba_style['description']."|";
+					$return .= $ba_style['category']['id']."|";
+					$return .= $ba_style['category']['name'];
+				}
+				
+			} // end foreach ($stylesData as $data => $ba_style)
+			
+		} // end if (is_array($stylesData) || is_object($stylesData))
+		
+	} // end foreach ($_SESSION['styles'] as $styles => $stylesData)
+	
+	return $return;
+}
 
+
+function convert_to_ba() {
+	
+	require(CONFIG.'config.php');
+	mysqli_select_db($connection,$database);
+	
+	include(INCLUDES.'ba_constants.inc.php');
+	
+	$query_check = sprintf("SELECT id, brewCategory, brewCategorySort, brewSubCategory, brewStyle, brewMead1, brewMead2, brewMead3, brewInfo FROM %s", $prefix."brewing");
+	$check = mysqli_query($connection,$query_check) or die (mysqli_error($connection));
+	$row_check = mysqli_fetch_assoc($check);
+	
+	$return = "";
+	
+	$carb = array("Still","Petillant","Sparkling");
+	$sweet = array("Dry","Medium Dry","Medium","Medium Sweet","Sweet");
+	$strength = array("Hydromel","Standard","Sack");
+	
+	do {
+		
+		$ba_category = "";
+		$ba_category_sort = "";
+		$ba_sub_category = "";
+		$ba_carb = "";
+		$ba_strength = "";
+		$ba_sweetness = "";
+		$ba_style = "";
+		$ba_style_info = "";
+		$ba_category_id = "";
+		
+		if (isset($row_check['brewInfo'])) {
+			
+			// Mead or Cider
+			if ((isset($row_check['brewMead1'])) || (isset($row_check['brewMead2'])) || (isset($row_check['brewMead3']))) {
+				
+				$ba_category_id = $ba_special_mead_cider_ids[array_rand($ba_special_mead_cider_ids, 1)];
+				$ba_style_info = get_ba_style_info($ba_category_id);
+				$brew_info = $row_check['brewInfo']; 
+								
+			}
+			
+			// Beer
+			else {
+				
+				$ba_category_id = $ba_special_beer_ids[array_rand($ba_special_beer_ids, 1)];
+				$ba_style_info = get_ba_style_info($ba_category_id);
+				$brew_info = $row_check['brewInfo']; 
+				
+			}
+			
+		}
+		
+		else {
+			
+			$ba_category_id = (rand(1,170));
+			$ba_style_info = get_ba_style_info($ba_category_id);
+			
+			if (in_array($ba_category_id,$ba_special)) $brew_info = "Special ingredients, yo"; 
+			else $brew_info = ""; 
+		
+		}
+		
+		$ba_style_info_from_id = explode("|",$ba_style_info);
+		$ba_category = $ba_style_info_from_id[2];
+		$ba_style = $ba_style_info_from_id[0];
+		$ba_sub_category = $ba_category_id;
+		
+		if (in_array($ba_category_id,$ba_carb_ids)) $ba_carb = $carb[array_rand($carb,1)];
+		if (in_array($ba_category_id,$ba_strength_ids)) $ba_strength = $strength[array_rand($strength,1)];
+		if (in_array($ba_category_id,$ba_sweetness_ids)) $ba_sweetness = $sweet[array_rand($sweet,1)];
+		
+		if ($ba_category_id < 10) $ba_category_sort = "0".$ba_category_id; 
+		else $ba_category_sort = $ba_category_id;
+		
+		$updateSQL = sprintf("UPDATE %s SET brewCategory='%s', brewCategorySort='%s', brewSubCategory='%s', brewStyle='%s', brewMead1='%s', brewMead2='%s', brewMead3='%s', brewInfo='%s' WHERE id=%s;",$prefix."brewing",$ba_category,$ba_category_sort,$ba_sub_category,$ba_style,$ba_carb,$ba_sweetness,$ba_strength,$brew_info,$row_check['id']);
+		mysqli_real_escape_string($connection,$updateSQL);
+		$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+		
+		$return .= $updateSQL."<br>";
+		
+		// $return .= $ba_style_info."<br>";
+		
+	} while ($row_check = mysqli_fetch_assoc($check));
+	
+	return $return;
+	
+}
 ?>

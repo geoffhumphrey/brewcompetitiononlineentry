@@ -31,7 +31,7 @@ if (table_exists($style_types_db_table)) {
 		$row_style_type = mysqli_fetch_assoc($style_type);
 		$totalRows_style_type = mysqli_num_rows($style_type); 
 		
-		//echo $totalRows_style_type;
+		
 	}
 }
 

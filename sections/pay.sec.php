@@ -113,13 +113,8 @@ Declare all variables empty at the top of the script. Add on later...
 			$primary_page_info .= "</ol>";
 		}
 		
-		$return = $base_url."index.php?section=pay&msg=10&view=".$return_entries;
-		
-		
-		
-		
-		
-		
+		if ($_SESSION['prefsPaypalIPN'] == 1) $return = $base_url."index.php?section=pay&msg=10";
+		else $return = $base_url."index.php?section=pay&msg=10&view=".rtrim($return_entries,'-');
 		if (($total_to_pay > 0) && ($view == "default")) {
 			
 			// Cash Payment
@@ -150,9 +145,11 @@ Declare all variables empty at the top of the script. Add on later...
 				// PayPal
 				$header2_4 .= "<h3>PayPal <span class=\"fa fa-lg fa-cc-paypal\"></span> <span class=\"fa fa-lg fa-cc-visa\"></span> <span class=\"fa fa-lg fa-cc-mastercard\"></span> <span class=\"fa fa-lg fa-cc-discover\"></span> <span class=\"fa fa-lg fa-cc-amex\"></span></h3>";
 				$page_info4 .= sprintf("<p>%s",$pay_text_018);
-				if ($_SESSION['prefsTransFee'] == "Y") $page_info4 .= sprintf(" %s %s %s</p>",$pay_text_019,$currency_symbol.$fee,$pay_text_020);
-				//$page_info4 .= "<div class=\"alert alert-warning\"><span class=\"fa fa-lg fa-exclamation-triangle\"> <strong>Be sure to click the &quot;Return to...&quot; link on PayPal&rsquo;s confirmation screen after you have sent your payment.</strong> This will ensure that your entries are marked as &quot;paid&quot; on <em>this site</em>.</div>";
-				$page_info4 .= "<form role=\"form\" id=\"formfield\" name=\"PayPal\" action=\"https://www.paypal.com/cgi-bin/webscr\" method=\"post\">";
+				if ($_SESSION['prefsTransFee'] == "Y") $page_info4 .= sprintf(" %s %s %s",$pay_text_019,$currency_symbol.$fee,$pay_text_020);
+				$page_info4 .= "</p>";
+				// If IPN is NOT enabled show this:
+				// $page_info4 .= "<form role=\"form\" id=\"formfield\" name=\"PayPal\" action=\"https://www.paypal.com/cgi-bin/webscr\" method=\"post\">";
+				$page_info4 .= "<form role=\"form\" id=\"formfield\" name=\"PayPal\" action=\"".$base_url."includes/process.inc.php?action=paypal\" method=\"post\">";
 				$page_info4 .= "<input type=\"hidden\" name=\"action\" value=\"add_form\" />";
 				$page_info4 .= "<input type=\"hidden\" name=\"cmd\" value=\"_xclick\">";
 				$page_info4 .= sprintf("<input type=\"hidden\" name=\"business\" value=\"%s\">",$_SESSION['prefsPaypalAccount']);
@@ -164,11 +161,15 @@ Declare all variables empty at the top of the script. Add on later...
 				$page_info4 .= "<input type=\"hidden\" name=\"cn\" value=\"Add special instructions\">";
 				$page_info4 .= "<input type=\"hidden\" name=\"no_shipping\" value=\"1\">";
 				$page_info4 .= "<input type=\"hidden\" name=\"rm\" value=\"1\">";
+				$page_info4 .= sprintf("<input type=\"hidden\" name=\"custom\" value=\"%s|%s\">",$_SESSION['user_id'],rtrim($return_entries, '-'));
 				$page_info4 .= sprintf("<input type=\"hidden\" name=\"return\" value=\"%s\">",rtrim($return, '-'));
 				$page_info4 .= sprintf("<input type=\"hidden\" name=\"cancel_return\" value=\"%s\">",$base_url."index.php?section=pay&msg=11");
 				$page_info4 .= "<input type=\"hidden\" name=\"bn\" value=\"PP-BuyNowBF:btn_paynowCC_LG.gif:NonHosted\">";
 				$page_info4 .= "<button type=\"button\" name=\"btn\" id=\"submitBtn\" data-toggle=\"modal\" data-target=\"#confirm-submit\" class=\"btn btn-primary\" /><span class=\"fa fa-paypal\"></span> Pay with PayPal</button>";
 				$page_info4 .= "</form>";
+				
+				
+				
 				$page_info4 .= "<!-- Form submit confirmation modal -->";
 				$page_info4 .= "<!-- Refer to bcoem_custom.js for configuration -->";
 				$page_info4 .= "<div class=\"modal fade\" id=\"confirm-submit\" tabindex=\"-1\" role=\"dialog\" aria-hidden=\"true\">";
@@ -176,9 +177,11 @@ Declare all variables empty at the top of the script. Add on later...
 				$page_info4 .= "<div class=\"modal-content\">";
 				$page_info4 .= "<div class=\"modal-header\">";
 				$page_info4 .= "<button type=\"button\" class=\"close\" data-dismiss=\"modal\" aria-label=\"Close\"><span aria-hidden=\"true\">&times;</span></button>";
-				$page_info4 .= sprintf("<h4 class=\"modal-title\">%s</h4>",$pay_text_022);
+				if ($_SESSION['prefsPaypalIPN'] == 0) $page_info4 .= sprintf("<h4 class=\"modal-title\">%s</h4>",$pay_text_022);
+				if ($_SESSION['prefsPaypalIPN'] == 1) $page_info4 .= sprintf("<h4 class=\"modal-title\">%s</h4>",$pay_text_031);
 				$page_info4 .= "</div>";
-				$page_info4 .= sprintf("<div class=\"modal-body\"><p>%s</p>",$pay_text_021);
+				if ($_SESSION['prefsPaypalIPN'] == 0) $page_info4 .= sprintf("<div class=\"modal-body\"><p>%s</p>",$pay_text_021);
+				if ($_SESSION['prefsPaypalIPN'] == 1) $page_info4 .= sprintf("<div class=\"modal-body\"><p>%s</p>",$pay_text_030);
 				$page_info4 .= "</div>";
 				$page_info4 .= "<div class=\"modal-footer\">";
 				$page_info4 .= sprintf("<button type=\"button\" class=\"btn btn-danger\" data-dismiss=\"modal\">%s</button>",$label_cancel);

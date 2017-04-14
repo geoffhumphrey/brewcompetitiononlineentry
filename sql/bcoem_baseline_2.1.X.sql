@@ -743,6 +743,7 @@ CREATE TABLE IF NOT EXISTS `baseline_preferences` (
   `prefsLiquid2` varchar(20) DEFAULT NULL,
   `prefsPaypal` char(1) DEFAULT NULL,
   `prefsPaypalAccount` varchar(255) DEFAULT NULL,
+  `prefsPayPalIPN` tinyint(1) DEFAULT NULL,
   `prefsCurrency` varchar(20) DEFAULT NULL,
   `prefsCash` char(1) DEFAULT NULL,
   `prefsCheck` char(1) DEFAULT NULL,
@@ -763,7 +764,7 @@ CREATE TABLE IF NOT EXISTS `baseline_preferences` (
   `prefsEntryForm` char(1) DEFAULT NULL,
   `prefsRecordLimit` int(11) DEFAULT '500' COMMENT 'User defined record limit for using DataTables vs. PHP paging',
   `prefsRecordPaging` int(11) DEFAULT '30' COMMENT 'User defined per page record limit',
-  `prefsCompOrg` char(1) DEFAULT NULL,
+  `prefsProEdition` tinyint(1) DEFAULT NULL,
   `prefsTheme` varchar(255) DEFAULT NULL,
   `prefsDateFormat` char(1) DEFAULT NULL,
   `prefsContact` char(1) DEFAULT NULL,
@@ -793,8 +794,8 @@ CREATE TABLE IF NOT EXISTS `baseline_preferences` (
 -- Dumping data for table `baseline_preferences`
 --
 
-INSERT INTO `baseline_preferences` (`id`, `prefsTemp`, `prefsWeight1`, `prefsWeight2`, `prefsLiquid1`, `prefsLiquid2`, `prefsPaypal`, `prefsPaypalAccount`, `prefsCurrency`, `prefsCash`, `prefsCheck`, `prefsCheckPayee`, `prefsTransFee`, `prefsGoogle`, `prefsGoogleAccount`, `prefsSponsors`, `prefsSponsorLogos`, `prefsSponsorLogoSize`, `prefsCompLogoSize`, `prefsDisplayWinners`, `prefsWinnerDelay`, `prefsWinnerMethod`, `prefsDisplaySpecial`, `prefsBOSMead`, `prefsBOSCider`, `prefsEntryForm`, `prefsRecordLimit`, `prefsRecordPaging`, `prefsCompOrg`, `prefsTheme`, `prefsDateFormat`, `prefsContact`, `prefsTimeZone`, `prefsEntryLimit`, `prefsTimeFormat`, `prefsUserEntryLimit`, `prefsUserSubCatLimit`, `prefsUSCLEx`, `prefsUSCLExLimit`, `prefsPayToPrint`, `prefsHideRecipe`, `prefsUseMods`, `prefsSEF`, `prefsSpecialCharLimit`, `prefsStyleSet`, `prefsAutoPurge`, `prefsEntryLimitPaid`, `prefsEmailRegConfirm`, `prefsLanguage`, `prefsSpecific`, `prefsDropOff`, `prefsShipping`) VALUES
-(1, 'Fahrenheit', 'ounces', 'pounds', 'ounces', 'gallons', 'Y', 'user.baseline@brewcompetition.com', '$', 'N', 'N', NULL, 'Y', 'N', NULL, 'Y', 'Y', '250', '300', 'N', 8, 0, NULL, 'N', 'N', 'B', 9999, 150, NULL, 'default', '1', 'Y', '-7.000', NULL, 0, NULL, NULL, NULL, NULL, 'N', 'Y', 'N', 'N', 150, 'BJCP2015', 0, NULL, NULL, 'English', 1, 1, 1);
+INSERT INTO `baseline_preferences` (`id`, `prefsTemp`, `prefsWeight1`, `prefsWeight2`, `prefsLiquid1`, `prefsLiquid2`, `prefsPaypal`, `prefsPaypalAccount`, `prefsCurrency`, `prefsCash`, `prefsCheck`, `prefsCheckPayee`, `prefsTransFee`, `prefsGoogle`, `prefsGoogleAccount`, `prefsSponsors`, `prefsSponsorLogos`, `prefsSponsorLogoSize`, `prefsCompLogoSize`, `prefsDisplayWinners`, `prefsWinnerDelay`, `prefsWinnerMethod`, `prefsDisplaySpecial`, `prefsBOSMead`, `prefsBOSCider`, `prefsEntryForm`, `prefsRecordLimit`, `prefsRecordPaging`, `prefsProEdition`, `prefsTheme`, `prefsDateFormat`, `prefsContact`, `prefsTimeZone`, `prefsEntryLimit`, `prefsTimeFormat`, `prefsUserEntryLimit`, `prefsUserSubCatLimit`, `prefsUSCLEx`, `prefsUSCLExLimit`, `prefsPayToPrint`, `prefsHideRecipe`, `prefsUseMods`, `prefsSEF`, `prefsSpecialCharLimit`, `prefsStyleSet`, `prefsAutoPurge`, `prefsEntryLimitPaid`, `prefsEmailRegConfirm`, `prefsLanguage`, `prefsSpecific`, `prefsDropOff`, `prefsShipping`, `prefsPaypalIPN`) VALUES
+(1, 'Fahrenheit', 'ounces', 'pounds', 'ounces', 'gallons', 'Y', 'user.baseline@brewcompetition.com', '$', 'N', 'N', NULL, 'Y', 'N', NULL, 'Y', 'Y', '250', '300', 'N', 8, 0, NULL, 'N', 'N', 'B', 9999, 150, 0, 'default', '1', 'Y', '-7.000', NULL, 0, NULL, NULL, NULL, NULL, 'N', 'Y', 'N', 'N', 150, 'BJCP2015', 0, NULL, NULL, 'English', 1, 1, 1, 0);
 
 -- --------------------------------------------------------
 

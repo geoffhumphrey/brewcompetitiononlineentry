@@ -1,7 +1,10 @@
 
 <?php
 if (($action == "edit") && ($id != "default") && ($filter == "default")) $title = ": Edit Flights for Table ".$row_tables_edit['tableNumber']." &ndash; ".$row_tables_edit['tableName']; 
-elseif (($action == "add") && ($id != "default") && ($filter == "default")) $title = ": Define Flights for Table ".$row_tables_edit['tableNumber']." &ndash; ".$row_tables_edit['tableName']; 
+elseif (($action == "add") && ($id != "default") && ($filter == "default")) $title = ": Define Flights for Table ".$row_tables_edit['tableNumber']." &ndash; ".$row_tables_edit['tableName'];
+if (strpos($section, "step") === FALSE) {
+	if ($_SESSION['jPrefsQueued'] == "N") $assign_to = "Flights"; else $assign_to = "Tables";
+}
 elseif (($action == "assign") && ($filter == "rounds"))  $title = ": Assign $assign_to to Rounds"; 
 else $title =  ": Define/Edit Flights"; ?>
 <p onload="updateButCount(event);" class="lead"><?php echo $_SESSION['contestName'].$title;  ?></p>

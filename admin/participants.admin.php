@@ -140,7 +140,8 @@ if ($action == "print") {
 else {
 
 	if ($filter == "default") 	{ 
-		$output_datatables_aaSorting .= "[0,'asc']";
+		if ($_SESSION['prefsProEdition'] == 1) $output_datatables_aaSorting .= "[1,'asc']";
+		else  $output_datatables_aaSorting .= "[0,'asc']";
 		$output_datatables_aoColumns .= "null, null, { \"asSorting\": [  ] }, { \"asSorting\": [  ] }, null, null";
 		if ($dbTable == "default") 	$output_datatables_aoColumns .= ",  { \"asSorting\": [  ] }";
 	}
@@ -174,11 +175,15 @@ if ($filter == "with_entries") {
 	
 else {
 	$output_datatables_head .= "<tr>";
-	$output_datatables_head .= "<th>Name</th>";
+	if ($_SESSION['prefsProEdition'] == 1) $output_datatables_head .= "<th>Contact Name</th>";
+	else $output_datatables_head .= "<th>Name</th>";
 	if ($action == "print") $output_datatables_head .= "<th>Info</th>";
 	$output_datatables_head .= "<th class=\"".$output_hide_print."\">";
 	if (($totalRows_judging > 0) && (($filter == "judges") || ($filter == "stewards"))) $output_datatables_head .= "Location(s) Available"; 
-	else $output_datatables_head .= "Club";
+	else { 
+		if ($_SESSION['prefsProEdition'] == 1) $output_datatables_head .= "Brewery";
+		else $output_datatables_head .= "Club";
+	}
 	$output_datatables_head .= "</th>";
 	if ($filter == "default") { 
 		$output_datatables_head .= "<th class=\"".$output_hide_print."\">Steward?</th>";
@@ -370,6 +375,7 @@ do {
 		}
 		
 		$output_datatables_body .= "<tr>";
+		
 		$output_datatables_body .= "<td><a name='".$row_brewer['uid']."'></a>".$row_brewer['brewerLastName'].", ".$row_brewer['brewerFirstName'];
 		if (($dbTable == "default") && ($user_info[1] == 0)) $output_datatables_body .= " <span class=\"fa fa-lg fa-lock text-danger\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"".$row_brewer['brewerFirstName']." ".$row_brewer['brewerLastName']." is a Top-Level Admin User\"></span>";
 		elseif (($dbTable == "default") && ($user_info[1] == 1)) $output_datatables_body .= " <span class=\"fa fa-lg fa-lock text-warning\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"".$row_brewer['brewerFirstName']." ".$row_brewer['brewerLastName']." is an Admin Level User\"></span>";
@@ -408,7 +414,10 @@ do {
 			$output = rtrim($output,"<br>");
 			$output_datatables_body .= $output; 
 		}	
-		else $output_datatables_body .= $row_brewer['brewerClubs'];
+		else { 
+			if ($_SESSION['prefsProEdition'] == 1) $output_datatables_body .= $row_brewer['brewerBreweryName'];
+			else $output_datatables_body .= $row_brewer['brewerClubs'];
+		}
 		$output_datatables_body .= "</td>";
 		
 		if ($filter == "default") {

@@ -9,37 +9,65 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 	if (isset($_POST['brewStyleLink'])) $brew_style_link = $_POST['brewStyleLink'];
 	else $brew_style_link = "";
 	
-	if ($action == "update") {
-	foreach($_POST['id'] as $id)	{
-		
-		if (isset($_POST["brewStyleActive".$id])) $brewStyleActive = "Y"; else $brewStyleActive = "N";
+	$ba_styles_accepted = "";
 	
-			if ($filter == "default") {
-				
-			 	$updateSQL = "UPDATE $styles_db_table SET brewStyleActive='".$brewStyleActive."' WHERE id='".$id."'";
-			 	mysqli_real_escape_string($connection,$updateSQL);
-				$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
-				echo $updateSQL."<br>";
-				
-			 }
-			 
-			if (($filter == "judging") && ($bid == $_POST["brewStyleJudgingLoc".$id])) { 
+	if ($action == "update") {
+	
+		foreach($_POST['id'] as $id) {
 			
-				$updateSQL = "UPDATE $styles_db_table SET brewStyleJudgingLoc='".$_POST["brewStyleJudgingLoc".$id]."' WHERE id='".$id."';";
-			 	mysqli_real_escape_string($connection,$updateSQL);
-				$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
-			 
-			 	// Also need to find all records in the "brewing" table (entries) that are null or have either old judging location associated with the style and update them with the new judging location.		 
-			 	$query_style_name = "SELECT *FROM $styles_db_table WHERE id='".$id."'";
-			 	$style_name = mysqli_query($connection,$query_style_name) or die (mysqli_error($connection));
-			 	$row_style_name = mysqli_fetch_assoc($style_name);
-			 
-			 	$query_loc = sprintf("SELECT * FROM $brewing_db_table WHERE brewCategorySort='%s' AND brewSubCategory='%s'", $row_style_name['brewStyleGroup'], $row_style_name['brewStyleNum']);
-			 	$loc = mysqli_query($connection,$query_loc) or die (mysqli_error($connection));
-			 	$row_loc = mysqli_fetch_assoc($loc);
-			 	$totalRows_loc = mysqli_num_rows($loc);
+			if (isset($_POST['brewStyleActive'.$id])) $brewStyleActive = "Y"; 
+			else $brewStyleActive = "N";
+		
+				if ($filter == "default") {
+					
+					if (strpos($_SESSION['prefsStyleSet'],"BABDB") !== false) {
+						
+						// If the record is from the BreweryDB (not a custom style), add to the list
+						if ($_POST['ba_brewerydb'.$id] == 1) {
+							
+							if ($brewStyleActive == "Y") $ba_styles_accepted .= $id.",";
+							
+						}
+						
+						// If the record is a custom style, update the local DB
+						if ($_POST['ba_brewerydb'.$id] == 0) {
+							
+							$updateSQL = "UPDATE $styles_db_table SET brewStyleActive='".$brewStyleActive."' WHERE id='".$id."'";
+							mysqli_real_escape_string($connection,$updateSQL);
+							$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+							
+						}
+						
+					} // end if (strpos($_SESSION['prefsStyleSet'],"BABDB") !== false)
+					
+					else {
+					
+						$updateSQL = "UPDATE $styles_db_table SET brewStyleActive='".$brewStyleActive."' WHERE id='".$id."'";
+						mysqli_real_escape_string($connection,$updateSQL);
+						$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+						// echo $updateSQL."<br>";
+					
+					}
+					
+				 } // end if ($filter == "default")
+				 
+				if (($filter == "judging") && ($bid == $_POST["brewStyleJudgingLoc".$id])) { 
 				
-				if ($totalRows_loc > 0) {
+					$updateSQL = "UPDATE $styles_db_table SET brewStyleJudgingLoc='".$_POST["brewStyleJudgingLoc".$id]."' WHERE id='".$id."';";
+					mysqli_real_escape_string($connection,$updateSQL);
+					$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+				 
+					// Also need to find all records in the "brewing" table (entries) that are null or have either old judging location associated with the style and update them with the new judging location.		 
+					$query_style_name = "SELECT *FROM $styles_db_table WHERE id='".$id."'";
+					$style_name = mysqli_query($connection,$query_style_name) or die (mysqli_error($connection));
+					$row_style_name = mysqli_fetch_assoc($style_name);
+				 
+					$query_loc = sprintf("SELECT * FROM $brewing_db_table WHERE brewCategorySort='%s' AND brewSubCategory='%s'", $row_style_name['brewStyleGroup'], $row_style_name['brewStyleNum']);
+					$loc = mysqli_query($connection,$query_loc) or die (mysqli_error($connection));
+					$row_loc = mysqli_fetch_assoc($loc);
+					$totalRows_loc = mysqli_num_rows($loc);
+					
+					if ($totalRows_loc > 0) {
 						do { 
 					
 							if ($row_loc['brewJudgingLocation'] != $_POST["brewStyleJudgingLoc".$id]) {
@@ -51,11 +79,31 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 							}
 						
 						} while($row_loc = mysqli_fetch_assoc($loc));
-					}
-			 	}
-		}
+					
+					} // end if ($totalRows_loc > 0)
+				
+				} // end if (($filter == "judging") && ($bid == $_POST["brewStyleJudgingLoc".$id]))
+			
+			} // end foreach($_POST['id'] as $id)
 		
-		if($result){ 
+		if (strpos($_SESSION['prefsStyleSet'],"BABDB") !== false) {
+			
+			$explodies = explode("|",$_SESSION['prefsStyleSet']);
+			
+			// Add new list to broken up parts
+			$styles_accepted = $explodies[0]."|".$explodies[1]."|".rtrim($ba_styles_accepted,",");
+						
+			$updateSQL = sprintf("UPDATE %s SET prefsStyleSet='%s' WHERE id='1'",$preferences_db_table,$styles_accepted);
+			mysqli_real_escape_string($connection,$updateSQL);
+			$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+			
+			session_name($prefix_session);
+			session_start();
+			unset($_SESSION['prefs'.$prefix_session]);
+			
+		} // end if (strpos($_SESSION['prefsStyleSet'],"BABDB") !== false)
+		
+		if($result) { 
 		
 			if ($section == "setup") {
 				
@@ -77,16 +125,17 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 				header(sprintf("Location: %s", stripslashes($massUpdateGoTo)));
 			}
 			
-		}
+		} // end if($result)
 	
-	}
+	} // end if ($action == "update");
 	
 	if ($action == "add") {
 	
 	if ($_SESSION['prefsStyleSet'] == "BJCP2008") $category_end = 28;		
-	if ($_SESSION['prefsStyleSet'] == "BJCP2015") $category_end = 34;	
+	else $category_end = 34;	
 	
-	$query_style_name = sprintf("SELECT brewStyleGroup FROM %s WHERE (brewStyleVersion='%s' OR brewStyleOwn='custom') AND brewStyleGroup >= %s ORDER BY id DESC LIMIT 1", $styles_db_table, $_SESSION['prefsStyleSet'], $category_end);
+	if (strpos($_SESSION['prefsStyleSet'],"BABDB") !== false) $query_style_name = sprintf("SELECT brewStyleGroup FROM %s WHERE (brewStyleVersion='%s' OR brewStyleOwn='custom') AND brewStyleGroup >= %s ORDER BY id DESC LIMIT 1", $styles_db_table, "BJCP2015", $category_end);
+	else $query_style_name = sprintf("SELECT brewStyleGroup FROM %s WHERE (brewStyleVersion='%s' OR brewStyleOwn='custom') AND brewStyleGroup >= %s ORDER BY id DESC LIMIT 1", $styles_db_table, $_SESSION['prefsStyleSet'], $category_end);
 	$style_name = mysqli_query($connection,$query_style_name) or die (mysqli_error($connection));
 	$row_style_name = mysqli_fetch_assoc($style_name);
 	

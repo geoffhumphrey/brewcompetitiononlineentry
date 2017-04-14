@@ -1,24 +1,4 @@
 <?php
-// Check for last activity session variable and determine if it's over 15 minutes)
-// If so, reset the session
-if (isset($_SESSION['last_activity']) && (time() - $_SESSION['last_activity'] > 900)) {
-    session_unset();
-    session_destroy();
-}
-
-// Store the time this script ran
-$_SESSION['last_activity'] = time();
-
-// Define when the user started their browsing
-if (!isset($_SESSION['created'])) $_SESSION['created'] = time();
-
-// Check whether the created session variable is more that 15 minutes ago
-// If so, regenerate the created session variable
-elseif (time() - $_SESSION['created'] > 900) {
-    session_regenerate_id(true);
-    $_SESSION['created'] = time();
-}
-
 // General vars
 $today = strtotime("now");
 $url = parse_url($_SERVER['PHP_SELF']);
@@ -30,6 +10,9 @@ $version1 = mysqli_query($connection,$query_version1) or die (mysqli_error($conn
 $row_version1 = mysqli_fetch_assoc($version1);
 $version = $row_version1['version'];
 
+$_SESSION['session_set_'.$prefix_session] = $prefix_session;
+
+// Check to see if the session_set variable is corrupted or hijacked. If so, destroy the session and reset
 if (((!empty($_SESSION['session_set_'.$prefix_session])) && ($_SESSION['session_set_'.$prefix_session] != $prefix_session)) || (empty($_SESSION['session_set_'.$prefix_session]))) {
 
 	session_unset();
@@ -50,7 +33,6 @@ if (($section != "update") && (empty($_SESSION['dataCheck'.$prefix_session]))) {
 		$_SESSION['dataCheck'.$prefix_session] = $data_check_date;
 	}
 }
-
 
 // Get the general info for the competition from the DB and store in session variables
 if (empty($_SESSION['contest_info_general'.$prefix_session])) {
@@ -108,6 +90,7 @@ if (empty($_SESSION['prefs'.$prefix_session])) {
 	$_SESSION['prefsLiquid2'] = $row_prefs['prefsLiquid2'];
 	$_SESSION['prefsPaypal'] = $row_prefs['prefsPaypal'];
 	$_SESSION['prefsPaypalAccount'] = $row_prefs['prefsPaypalAccount'];
+	$_SESSION['prefsPaypalIPN'] = $row_prefs['prefsPaypalIPN'];
 	$_SESSION['prefsCurrency'] = $row_prefs['prefsCurrency'];
 	$_SESSION['prefsCash'] = $row_prefs['prefsCash'];
 	$_SESSION['prefsCheck'] = $row_prefs['prefsCheck'];
@@ -141,6 +124,7 @@ if (empty($_SESSION['prefs'.$prefix_session])) {
 	$_SESSION['prefsSpecific'] = $row_prefs['prefsSpecific'];
 	$_SESSION['prefsDropOff'] = $row_prefs['prefsDropOff'];
 	$_SESSION['prefsShipping'] = $row_prefs['prefsShipping'];
+	$_SESSION['prefsProEdition'] = $row_prefs['prefsProEdition'];
 
 	if (SINGLE) $query_judging_prefs = sprintf("SELECT * FROM %s WHERE id='%s'", $prefix."judging_preferences",$_SESSION['comp_id']);
 	else $query_judging_prefs = sprintf("SELECT * FROM %s WHERE id='1'", $prefix."judging_preferences");
@@ -165,7 +149,6 @@ if (empty($_SESSION['prefs'.$prefix_session])) {
 	$_SESSION['prefs'.$prefix_session] = "1";
 	$_SESSION['prefix'] = $prefix;
 }
-
 
 // Set global pagination variables 
 $display = $_SESSION['prefsRecordPaging']; 
@@ -220,6 +203,11 @@ if ((isset($_SESSION['loginUsername'])) && (empty($_SESSION['user_info'.$prefix_
 	$_SESSION['brewerDropOff'] = $row_name['brewerDropOff'];
 	$_SESSION['brewerAHA'] = $row_name['brewerAHA'];
 	
+	if ($_SESSION['prefsProEdition'] == 1) {
+		$_SESSION['brewerBreweryName'] = $row_name['brewerBreweryName'];
+		$_SESSION['brewerBreweryTTB'] = $row_name['brewerBreweryTTB'];
+	}
+	
 	$_SESSION['user_info'.$prefix_session] = "1";
 	
 	if (($go == "make_admin") || (($go == "participants") && ($action == "add"))) {
@@ -237,11 +225,35 @@ if ((isset($_SESSION['loginUsername'])) && (empty($_SESSION['user_info'.$prefix_
 	
 }
 
+
+
+// Check for last activity session variable and determine if it's over 30 minutes
+// If so, reset the session
+if (isset($_SESSION['last_activity']) && (time() - $_SESSION['last_activity'] >1800)) {
+	session_unset();
+	session_destroy();
+}
+
+// Store the time this script ran
+$_SESSION['last_activity'] = time();
+
+// Define when the user started their browsing
+if (!isset($_SESSION['created'])) $_SESSION['created'] = time();
+
+// Check whether the session variable was created more that 30 minutes ago
+// If so, regenerate the created session variable
+elseif (time() - $_SESSION['created'] > 1800) {
+	session_regenerate_id(true);
+	$_SESSION['created'] = time();
+}
+
+
+
 session_write_close();
 
 // Some limits and dates may need to be changed by admin and propagated instantly to all users
 // These will be called on every page load instead of being stored in a session variable
-$query_limits = sprintf("SELECT prefsEntryLimit,prefsUserEntryLimit,prefsSpecialCharLimit,prefsUserSubCatLimit,prefsUSCLEx,prefsUSCLExLimit,prefsEntryLimitPaid FROM %s WHERE id='1'", $prefix."preferences");
+$query_limits = sprintf("SELECT prefsStyleSet, prefsEntryLimit, prefsUserEntryLimit, prefsSpecialCharLimit, prefsUserSubCatLimit, prefsUSCLEx, prefsUSCLExLimit, prefsEntryLimitPaid FROM %s WHERE id='1'", $prefix."preferences");
 $limits = mysqli_query($connection,$query_limits) or die (mysqli_error($connection));
 $row_limits = mysqli_fetch_assoc($limits);
 
@@ -249,7 +261,7 @@ $query_judge_limits = sprintf("SELECT jprefsCapJudges,jprefsCapStewards FROM %s 
 $judge_limits = mysqli_query($connection,$query_judge_limits) or die (mysqli_error($connection));
 $row_judge_limits = mysqli_fetch_assoc($judge_limits);
 
-$query_contest_dates = sprintf("SELECT contestCheckInPassword,contestRegistrationOpen,contestRegistrationDeadline,contestJudgeOpen,contestJudgeDeadline,contestEntryOpen,contestEntryDeadline,contestShippingOpen,contestShippingDeadline,contestDropoffOpen,contestDropoffDeadline FROM %s WHERE id=1", $prefix."contest_info");
+$query_contest_dates = sprintf("SELECT contestCheckInPassword, contestRegistrationOpen, contestRegistrationDeadline, contestJudgeOpen, contestJudgeDeadline, contestEntryOpen, contestEntryDeadline, contestShippingOpen, contestShippingDeadline, contestDropoffOpen, contestDropoffDeadline FROM %s WHERE id=1", $prefix."contest_info");
 $contest_dates = mysqli_query($connection,$query_contest_dates) or die (mysqli_error($connection));
 $row_contest_dates = mysqli_fetch_assoc($contest_dates);
 
@@ -319,14 +331,17 @@ if ($section == "volunteers") {
 
 // If using BA Styles, use the BreweryDB API to get all styles and store the resulting array as a session variable
 
-if ($_SESSION['prefsStyleSet'] == "BA") {
+if (strpos($_SESSION['prefsStyleSet'],"BABDB") !== false) {
 	
 	if (!isset($_SESSION['styles'])) {
+		
+		$bdb_api_key = explode("|",$_SESSION['prefsStyleSet']);
 		
 		include (INCLUDES.'brewerydb/brewerydb.inc.php');
 		include (INCLUDES.'brewerydb/exception.inc.php');
 		
-		$apikey = "9b986a69d8803dfcaedd2bbdabbf9169";
+		//$apikey = "9b986a69d8803dfcaedd2bbdabbf9169";
+		$apikey = $bdb_api_key[1];
 		$bdb = new Pintlabs_Service_Brewerydb($apikey);
 		$bdb->setFormat('php');
 		$params = array();

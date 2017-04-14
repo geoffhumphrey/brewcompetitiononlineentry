@@ -24,12 +24,13 @@ if ((!$logged_in) && (in_array($section,$account_pages))) {
 // ---------------------------- Admin Only Functions -------------------------------
 
 if ($section == "admin") {
-	
+		
 	// Redirect if non-admins try to access admin functions
 	if (!$logged_in) { 
 		header(sprintf("Location: %s", $base_url."index.php?section=login&msg=0")); 
 		exit; 
 	}
+	
 	
 	if (($logged_in) && ($_SESSION['userLevel'] > 1)) { 
 		header(sprintf("Location: %s", $base_url."index.php?msg=4")); 
@@ -138,6 +139,16 @@ else $datatables_load = array("admin","list");
     	<?php include (SECTIONS.'alerts.sec.php'); ?>
     </div><!-- ./container --> 
     <!-- ./ALERTS -->
+    
+    <!-- DEBUG -->
+    <div class="<?php echo $container_main; ?> hidden-print">
+    <?php 
+	if (DEBUG_SESSION_VARS) include (DEBUGGING.'session_vars.debug.php'); 
+	// echo convert_to_ba();
+	
+	?>
+    </div>
+    <!-- ./DEBUG -->
     
     <?php if ($_SESSION['prefsUseMods'] == "Y") { ?>
     <!-- MODS TOP -->

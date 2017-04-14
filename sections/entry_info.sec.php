@@ -178,10 +178,15 @@ else {
 
 // Categories Accepted
 $header1_8 .= "";
-$page_info8 .= "";
-$page_info8 .= sprintf("<p>%s</p>",$entry_info_text_046);
-if ($entry_window_open < 2) $header1_8 .= sprintf("<a name=\"categories\"></a><h2>%s %s</h2>",str_replace("2"," 2",$row_styles['brewStyleVersion']),$label_categories_accepted);
-else $header1_8 .= sprintf("<a name=\"categories\"></a><h2>%s %s</h2>",str_replace("2"," 2",$row_styles['brewStyleVersion']),$label_judging_categories);
+if (strpos($_SESSION['prefsStyleSet'],"BABDB") !== false) $page_info8 .= sprintf("<p>%s</p>",$entry_info_text_047);
+else $page_info8 .= sprintf("<p>%s</p>",$entry_info_text_046);
+
+if (strpos($_SESSION['prefsStyleSet'],"BABDB") !== false) $style_set = "Brewers Association";
+else $style_set = str_replace("2"," 2",$row_styles['brewStyleVersion']);
+
+if ($entry_window_open < 2) $header1_8 .= sprintf("<a name=\"categories\"></a><h2>%s %s</h2>",$style_set,$label_styles_accepted);
+else $header1_8 .= sprintf("<a name=\"categories\"></a><h2>%s %s</h2>",$style_set,$label_judging_styles);
+
 $page_info8 .= "<table class=\"table table-striped table-bordered table-responsive\">";
 $page_info8 .= "<tr>"; 
 
@@ -189,57 +194,101 @@ $styles_endRow = 0;
 $styles_columns = 3;   // number of columns
 $styles_hloopRow1 = 0; // first row flag
 
-do {
-	if (($styles_endRow == 0) && ($styles_hloopRow1++ != 0)) $page_info8 .= "<tr>";
+// BA Styles
+
+if (strpos($_SESSION['prefsStyleSet'],"BABDB") !== false) {
 	
-	$page_info8 .= "<td width=\"33%\">";
+	include (INCLUDES.'ba_constants.inc.php');
 	
-	
-	
-	if (!empty($row_styles['brewStyleEntry'])) {
-		
-		$page_info8 .= "<a href=\"#\" data-toggle=\"modal\" data-target=\"#custom-modal-".ltrim($row_styles['brewStyleGroup'], "0").$row_styles['brewStyleNum']."\" title=\"".$entry_info_text_045."\">".ltrim($row_styles['brewStyleGroup'], "0").$row_styles['brewStyleNum']." ".$row_styles['brewStyle']."</a>"; 
+	$styles_options = "";
 			
-		$style_info_modal_body = "";
-		
-		$brewStyleInfo = str_replace("<p>","",$row_styles['brewStyleInfo']);
-		$brewStyleInfo = str_replace("</p>","",$brewStyleInfo);
-		
-		$brewStyleEntry = str_replace("<p>","",$row_styles['brewStyleEntry']);
-		$brewStyleEntry = str_replace("</p>","",$brewStyleEntry);
-		
-		
-		if (!empty($row_styles['brewStyleInfo'])) $style_info_modal_body .= "<p>".$brewStyleInfo."</p>";
-		if (!empty($row_styles['brewStyleEntry'])) $style_info_modal_body .= "<p><strong class=\"text-primary\">".$label_entry_info.":</strong> ".$brewStyleEntry."</p>";
-		
-		$style_info_modals .= "<div class=\"modal fade\" id=\"custom-modal-".ltrim($row_styles['brewStyleGroup'], "0").$row_styles['brewStyleNum']."\" tabindex=\"-1\" role=\"dialog\" aria-labelledby=\"assignment-modal-label-".$row_styles['brewStyleNum']."\">\n";
-		$style_info_modals .= "\t<div class=\"modal-dialog modal-lg\" role=\"document\">\n";
-		$style_info_modals .= "\t\t<div class=\"modal-content\">\n";
-		$style_info_modals .= "\t\t\t<div class=\"modal-header bcoem-admin-modal\">\n";
-		$style_info_modals .= "\t\t\t\t<button type=\"button\" class=\"close\" data-dismiss=\"modal\" aria-label=\"Close\"><span aria-hidden=\"true\">&times;</span></button>\n";
-		$style_info_modals .= "\t\t\t\t<h4 class=\"modal-title\" id=\"assignment-modal-label-".ltrim($row_styles['brewStyleGroup'], "0").$row_styles['brewStyleNum']."\">Info for ".$row_styles['brewStyle']."</h4>\n";
-		$style_info_modals .= "\t\t\t</div><!-- ./modal-header -->\n";
-		$style_info_modals .= "\t\t\t<div class=\"modal-body\">\n";
-		$style_info_modals .= "\t\t\t\t".$style_info_modal_body."\n";
-		$style_info_modals .= "\t\t\t</div><!-- ./modal-body -->\n";
-		$style_info_modals .= "\t\t\t<div class=\"modal-footer\">\n";
-		$style_info_modals .= "\t\t\t\t<button type=\"button\" class=\"btn btn-danger\" data-dismiss=\"modal\">Close</button>\n";
-		$style_info_modals .= "\t\t\t</div><!-- ./modal-footer -->\n";
-		$style_info_modals .= "\t\t</div><!-- ./modal-content -->\n";
-		$style_info_modals .= "\t</div><!-- ./modal-dialog -->\n";
-		$style_info_modals .= "</div><!-- ./modal -->\n";
-		
-	}
+	$ba_styleSet_explodies = explode("|",$_SESSION['prefsStyleSet']);
+	$ba_style_explodies = explode(",",$ba_styleSet_explodies[2]);
 	
-	else $page_info8 .= ltrim($row_styles['brewStyleGroup'], "0").$row_styles['brewStyleNum']." ".$row_styles['brewStyle'];
+	foreach ($ba_styles_sorted as $ba_styles => $ba_stylesData) {
+			
+			if (is_array($ba_stylesData) || is_object($ba_stylesData)) {
+				
+				foreach ($ba_stylesData as $key => $ba_style) { 
+					
+					if (in_array($ba_style['id'],$ba_style_explodies)) {
+						
+						if (($styles_endRow == 0) && ($styles_hloopRow1++ != 0)) $page_info8 .= "<tr>";
+						
+						$page_info8 .= "<td width=\"33%\">";
+						
+						if (in_array($ba_style['id'],$ba_special_ids)) $page_info8 .= "<a href=\"https://www.brewersassociation.org/resources/brewers-association-beer-style-guidelines/\" target=\"_blank\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"".$entry_info_text_045." - ".$ba_style['name']." \">".$ba_style['name']."</a>"; 
+						
+						else $page_info8 .= $ba_style['name'];
+						
+						$page_info8 .= "</td>";
+						$styles_endRow++;
+						if ($styles_endRow >= $styles_columns) { $styles_endRow = 0; }
+						
+					}
+				
+				} // end foreach ($stylesData as $data => $style)
+				
+			} // end if (is_array($stylesData) || is_object($stylesData))
+			
+		} // end foreach ($_SESSION['styles'] as $styles => $stylesData)
 	
-	if ($row_styles['brewStyleOwn'] == "custom") $page_info8 .= " (Custom Style)";	
 	
-	$page_info8 .= "</td>";
-	$styles_endRow++;
-	if ($styles_endRow >= $styles_columns) { $styles_endRow = 0; }
+}
+
+else {
+
+	do {
+		if (($styles_endRow == 0) && ($styles_hloopRow1++ != 0)) $page_info8 .= "<tr>";
 		
-} while ($row_styles = mysqli_fetch_assoc($styles));
+		$page_info8 .= "<td width=\"33%\">";
+		
+		if (!empty($row_styles['brewStyleEntry'])) {
+			
+			$page_info8 .= "<a href=\"#\" data-toggle=\"modal\" data-target=\"#custom-modal-".ltrim($row_styles['brewStyleGroup'], "0").$row_styles['brewStyleNum']."\" title=\"".$entry_info_text_045."\">".ltrim($row_styles['brewStyleGroup'], "0").$row_styles['brewStyleNum']." ".$row_styles['brewStyle']."</a>"; 
+				
+			$style_info_modal_body = "";
+			
+			$brewStyleInfo = str_replace("<p>","",$row_styles['brewStyleInfo']);
+			$brewStyleInfo = str_replace("</p>","",$brewStyleInfo);
+			
+			$brewStyleEntry = str_replace("<p>","",$row_styles['brewStyleEntry']);
+			$brewStyleEntry = str_replace("</p>","",$brewStyleEntry);
+			
+			
+			if (!empty($row_styles['brewStyleInfo'])) $style_info_modal_body .= "<p>".$brewStyleInfo."</p>";
+			if (!empty($row_styles['brewStyleEntry'])) $style_info_modal_body .= "<p><strong class=\"text-primary\">".$label_entry_info.":</strong> ".$brewStyleEntry."</p>";
+			
+			$style_info_modals .= "<div class=\"modal fade\" id=\"custom-modal-".ltrim($row_styles['brewStyleGroup'], "0").$row_styles['brewStyleNum']."\" tabindex=\"-1\" role=\"dialog\" aria-labelledby=\"assignment-modal-label-".$row_styles['brewStyleNum']."\">\n";
+			$style_info_modals .= "\t<div class=\"modal-dialog modal-lg\" role=\"document\">\n";
+			$style_info_modals .= "\t\t<div class=\"modal-content\">\n";
+			$style_info_modals .= "\t\t\t<div class=\"modal-header bcoem-admin-modal\">\n";
+			$style_info_modals .= "\t\t\t\t<button type=\"button\" class=\"close\" data-dismiss=\"modal\" aria-label=\"Close\"><span aria-hidden=\"true\">&times;</span></button>\n";
+			$style_info_modals .= "\t\t\t\t<h4 class=\"modal-title\" id=\"assignment-modal-label-".ltrim($row_styles['brewStyleGroup'], "0").$row_styles['brewStyleNum']."\">Info for ".$row_styles['brewStyle']."</h4>\n";
+			$style_info_modals .= "\t\t\t</div><!-- ./modal-header -->\n";
+			$style_info_modals .= "\t\t\t<div class=\"modal-body\">\n";
+			$style_info_modals .= "\t\t\t\t".$style_info_modal_body."\n";
+			$style_info_modals .= "\t\t\t</div><!-- ./modal-body -->\n";
+			$style_info_modals .= "\t\t\t<div class=\"modal-footer\">\n";
+			$style_info_modals .= "\t\t\t\t<button type=\"button\" class=\"btn btn-danger\" data-dismiss=\"modal\">Close</button>\n";
+			$style_info_modals .= "\t\t\t</div><!-- ./modal-footer -->\n";
+			$style_info_modals .= "\t\t</div><!-- ./modal-content -->\n";
+			$style_info_modals .= "\t</div><!-- ./modal-dialog -->\n";
+			$style_info_modals .= "</div><!-- ./modal -->\n";
+			
+		}
+		
+		else $page_info8 .= ltrim($row_styles['brewStyleGroup'], "0").$row_styles['brewStyleNum']." ".$row_styles['brewStyle'];
+		
+		if ($row_styles['brewStyleOwn'] == "custom") $page_info8 .= " (Custom Style)";	
+		
+		$page_info8 .= "</td>";
+		$styles_endRow++;
+		if ($styles_endRow >= $styles_columns) { $styles_endRow = 0; }
+			
+	} while ($row_styles = mysqli_fetch_assoc($styles));
+
+} // end else 
 
 if ($styles_endRow != 0) {
 		while ($styles_endRow < $styles_columns) {

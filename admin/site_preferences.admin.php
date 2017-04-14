@@ -3,8 +3,56 @@ include (DB.'styles.db.php'); ?>
 <script type='text/javascript'>//<![CDATA[ 
 $(document).ready(function(){
 	
-	// hide divs on load
+	<?php if (!empty($row_limits['prefsUserEntryLimit'])) { ?>
+	$("#subStyleExeptions").show("fast");
+	<?php } else { ?>
+	// hide divs on load if no value
 	$("#subStyleExeptions").hide("fast");
+	<?php } ?>
+	
+	<?php
+	$styleKey = "";
+	if (strpos($row_limits['prefsStyleSet'],"BABDB") !== false) {
+	
+	// Get API Key if set
+	$styleKey = explode("|",$row_limits['prefsStyleSet']);
+	
+	?>
+	$("#styleSetAPIKey").show("fast");
+	$("#helpBlockBAAPI").show("fast");
+	<?php } else { ?>
+	// hide divs on load if no value
+	$("#styleSetAPIKey").hide("fast");
+	$("#helpBlockBAAPI").hide("fast");
+	<?php } ?>
+	
+	<?php if ($row_limits['prefsStyleSet'] == "BJCP2008") { ?>
+	$("#helpBlockBJCP2008").show("fast");
+	<?php } else { ?>
+	$("#helpBlockBJCP2008").hide("fast");
+	<?php } ?>
+	
+	$("#prefsStyleSet").change(function() {
+		
+		if ($("#prefsStyleSet").val() == "BABDB") {
+			$("#styleSetAPIKey").show("fast");
+			$("#helpBlockBAAPI").show("fast");
+			$("#helpBlockBJCP2008").hide("fast");
+		}
+		
+		else if ($("#prefsStyleSet").val() == "BJCP2008") {
+			$("#styleSetAPIKey").hide("fast");
+			$("#helpBlockBAAPI").hide("fast");
+			$("#helpBlockBJCP2008").show("fast");
+		}
+		
+		else  { 
+			$("#styleSetAPIKey").hide("fast");
+			$("#helpBlockBAAPI").hide("fast");
+			$("#helpBlockBJCP2008").hide("fast");
+		}
+		
+	}); // end $("#prefsStyleSet").change(function()
 	
 	$("#prefsUserSubCatLimit").change(function() {
 		
@@ -16,7 +64,7 @@ $(document).ready(function(){
 		<?php for ($i=1; $i <= 25; $i++) { ?>
 		else if ( 
 			$("#prefsUserSubCatLimit").val() == "<?php echo $i; ?>"){
-			$("#subStyleExeptions").show("slow");
+			$("#subStyleExeptions").show("fast");
 		}
 		<?php } ?>
 		
@@ -41,16 +89,33 @@ $(document).ready(function(){
 <form class="form-horizontal" method="post" action="<?php echo $base_url; ?>includes/process.inc.php?section=<?php if ($section == "step3") echo "setup"; else echo $section; ?>&amp;action=<?php if ($section == "step3") echo "add"; else echo "edit"; ?>&amp;dbTable=<?php echo $preferences_db_table; ?>&amp;id=1" name="form1">
 <input type="hidden" name="prefsRecordLimit" value="9999" />
 <h3>General</h3>
+
+<div class="form-group"><!-- Form Group Radio INLINE -->
+    <label for="prefsProEdition" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Competition Type</label>
+    <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
+        <div class="input-group">
+            <!-- Input Here -->
+            <label class="radio-inline">
+                <input type="radio" name="prefsProEdition" value="0" id="prefsProEdition_0"  <?php if ($_SESSION['prefsProEdition'] == "0") echo "CHECKED"; ?> /> Amateur
+            </label>
+            <label class="radio-inline">
+                <input type="radio" name="prefsProEdition" value="1" id="prefsProEdition_1" <?php if ($_SESSION['prefsProEdition'] == "1") echo "CHECKED"; elseif ($section == "step3") echo "CHECKED"; ?>/> Professional
+            </label>
+        </div>
+        <span id="helpBlock" class="help-block">Indicate whether the participants in the competition will be individual amateur brewers or licensed breweries with designated points of contact.</span>
+    </div>
+</div><!-- ./Form Group -->
+
 <div class="form-group"><!-- Form Group Radio INLINE -->
     <label for="prefsDisplayWinners" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Winner Display</label>
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
         <div class="input-group">
             <!-- Input Here -->
             <label class="radio-inline">
-                <input type="radio" name="prefsDisplayWinners" value="Y" id="prefsDisplayWinners_0"  <?php if ($_SESSION['prefsDisplayWinners'] == "Y") echo "CHECKED"; ?> /> Yes
+                <input type="radio" name="prefsDisplayWinners" value="Y" id="prefsDisplayWinners_0"  <?php if ($_SESSION['prefsDisplayWinners'] == "Y") echo "CHECKED"; ?> /> Enable
             </label>
             <label class="radio-inline">
-                <input type="radio" name="prefsDisplayWinners" value="N" id="prefsDisplayWinners_1" <?php if ($_SESSION['prefsDisplayWinners'] == "N") echo "CHECKED"; elseif ($section == "step3") echo "CHECKED"; ?>/> No
+                <input type="radio" name="prefsDisplayWinners" value="N" id="prefsDisplayWinners_1" <?php if ($_SESSION['prefsDisplayWinners'] == "N") echo "CHECKED"; elseif ($section == "step3") echo "CHECKED"; ?>/> Disable
             </label>
         </div>
         <span id="helpBlock" class="help-block">Indicate if the winners of the competition for each category and Best of Show Style Type will be displayed.</span>
@@ -101,10 +166,10 @@ $(document).ready(function(){
         <div class="input-group">
             <!-- Input Here -->
             <label class="radio-inline">
-                <input type="radio" name="prefsContact" value="Y" id="prefsContact_0"  <?php if ($_SESSION['prefsContact'] == "Y") echo "CHECKED"; elseif ($section == "step3") echo "CHECKED"; ?> /> Yes
+                <input type="radio" name="prefsContact" value="Y" id="prefsContact_0"  <?php if ($_SESSION['prefsContact'] == "Y") echo "CHECKED"; elseif ($section == "step3") echo "CHECKED"; ?> /> Enable
             </label>
             <label class="radio-inline">
-                <input type="radio" name="prefsContact" value="N" id="prefsContact_1" <?php if ($_SESSION['prefsContact'] == "N") echo "CHECKED"; ?>/> No
+                <input type="radio" name="prefsContact" value="N" id="prefsContact_1" <?php if ($_SESSION['prefsContact'] == "N") echo "CHECKED"; ?>/> Disable
             </label>
         </div>
         <span id="helpBlock" class="help-block">
@@ -145,15 +210,15 @@ $(document).ready(function(){
 
 
 <div class="form-group"><!-- Form Group Radio INLINE -->
-    <label for="EmailRegConfirm" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Send Confirmation Emails</label>
+    <label for="EmailRegConfirm" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Confirmation Emails</label>
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
         <div class="input-group">
             <!-- Input Here -->
             <label class="radio-inline">
-                <input type="radio" name="prefsEmailRegConfirm" value="1" id="prefsEmailRegConfirm_1"  <?php if ($_SESSION['prefsEmailRegConfirm'] == "1") echo "CHECKED"; elseif ($section == "step3") echo "CHECKED"; ?> /> Yes
-            </label>
+                <input type="radio" name="prefsEmailRegConfirm" value="1" id="prefsEmailRegConfirm_1"  <?php if ($_SESSION['prefsEmailRegConfirm'] == "1") echo "CHECKED"; elseif ($section == "step3") echo "CHECKED"; ?> /> Enable
+          </label>
             <label class="radio-inline">
-                <input type="radio" name="prefsEmailRegConfirm" value="0" id="prefsEmailRegConfirm_0" <?php if ($_SESSION['prefsEmailRegConfirm'] == "0") echo "CHECKED"; ?>/> No
+                <input type="radio" name="prefsEmailRegConfirm" value="0" id="prefsEmailRegConfirm_0" <?php if ($_SESSION['prefsEmailRegConfirm'] == "0") echo "CHECKED"; ?>/> Disable
             </label>
         </div>
         <span id="helpBlock" class="help-block">
@@ -221,10 +286,10 @@ $(document).ready(function(){
         <div class="input-group">
             <!-- Input Here -->
             <label class="radio-inline">
-                <input type="radio" name="prefsSEF" value="Y" id="prefsSEF_0"  <?php if ($_SESSION['prefsSEF'] == "Y") echo "CHECKED"; ?> />Yes
+                <input type="radio" name="prefsSEF" value="Y" id="prefsSEF_0"  <?php if ($_SESSION['prefsSEF'] == "Y") echo "CHECKED"; ?> />Enable
             </label>
             <label class="radio-inline">
-                <input type="radio" name="prefsSEF" value="N" id="prefsSEF_1" <?php if ($_SESSION['prefsSEF'] == "N") echo "CHECKED"; elseif ($section == "step3") echo "CHECKED"; ?>/>No
+                <input type="radio" name="prefsSEF" value="N" id="prefsSEF_1" <?php if ($_SESSION['prefsSEF'] == "N") echo "CHECKED"; elseif ($section == "step3") echo "CHECKED"; ?>/>Disable
             </label>
         </div>
 		<span id="helpBlock" class="help-block">
@@ -246,7 +311,7 @@ $(document).ready(function(){
                 <h4 class="modal-title" id="entryFormModalLabel">SEF URLs Info</h4>
             </div>
             <div class="modal-body">
-                <p>Generally, &ldquo;Yes&rdquo;  is good for most installations. However, if your installation is experiencing multiple &ldquo;Page Not Found&rdquo;  errors (404), select &ldquo;No&rdquo; to turn off Search Engine Friendly (SEF) URLs.</p>
+                <p>Generally, this can be enabled for most installations. However, if your installation is experiencing multiple &ldquo;Page Not Found&rdquo;  errors (404), select &ldquo;Disable&rdquo; to turn off Search Engine Friendly (SEF) URLs.</p>
                 <p>If you enable this and receive 404 errors, <?php if ($section == "step3") echo "<strong>after setup has been completed</strong>, "; ?>navigate to the login screen at <a href="<?php echo $base_url; ?>index.php?section=login" target="_blank"><?php echo $base_url; ?>index.php?section=login</a> to log back in and &ldquo;turn off&rdquo;  this feature.</p>
             </div>
             <div class="modal-footer">
@@ -261,10 +326,10 @@ $(document).ready(function(){
         <div class="input-group">
             <!-- Input Here -->
             <label class="radio-inline">
-                <input type="radio" name="prefsUseMods" value="Y" id="prefsUseMods_0"  <?php if ($_SESSION['prefsUseMods'] == "Y") echo "CHECKED"; ?> /> Yes
+                <input type="radio" name="prefsUseMods" value="Y" id="prefsUseMods_0"  <?php if ($_SESSION['prefsUseMods'] == "Y") echo "CHECKED"; ?> /> Enable
             </label>
             <label class="radio-inline">
-                <input type="radio" name="prefsUseMods" value="N" id="prefsUseMods_1" <?php if ($_SESSION['prefsUseMods'] == "N") echo "CHECKED"; elseif ($section == "step3") echo "CHECKED"; ?>/> No
+                <input type="radio" name="prefsUseMods" value="N" id="prefsUseMods_1" <?php if ($_SESSION['prefsUseMods'] == "N") echo "CHECKED"; elseif ($section == "step3") echo "CHECKED"; ?>/> Disable
             </label>
         </div>
         <span id="helpBlock" class="help-block"><strong>FOR ADVANCED USERS.</strong> Utilize the ability to add custom modules that extend BCOE&amp;M's core functionality.</span>
@@ -281,10 +346,10 @@ $(document).ready(function(){
         <div class="input-group">
             <!-- Input Here -->
             <label class="radio-inline">
-                <input type="radio" name="prefsDropOff" value="1" id="prefsDropOff_0"  <?php if ($_SESSION['prefsDropOff'] == "1") echo "CHECKED"; elseif ($section == "step3") echo "CHECKED";  ?> /> Enabled
+                <input type="radio" name="prefsDropOff" value="1" id="prefsDropOff_0"  <?php if ($_SESSION['prefsDropOff'] == "1") echo "CHECKED"; elseif ($section == "step3") echo "CHECKED";  ?> /> Enable
             </label>
             <label class="radio-inline">
-                <input type="radio" name="prefsDropOff" value="0" id="prefsDropOff_1" <?php if ($_SESSION['prefsDropOff'] == "0") echo "CHECKED";?>/> Disabled
+                <input type="radio" name="prefsDropOff" value="0" id="prefsDropOff_1" <?php if ($_SESSION['prefsDropOff'] == "0") echo "CHECKED";?>/> Disable
             </label>
         </div>
         <span id="helpBlock" class="help-block">Disable if your competition does not have drop-off locations.</span>
@@ -297,10 +362,10 @@ $(document).ready(function(){
         <div class="input-group">
             <!-- Input Here -->
             <label class="radio-inline">
-                <input type="radio" name="prefsShipping" value="1" id="prefsShipping_0"  <?php if ($_SESSION['prefsShipping'] == "1") echo "CHECKED"; elseif ($section == "step3") echo "CHECKED";  ?> /> Enabled
+                <input type="radio" name="prefsShipping" value="1" id="prefsShipping_0"  <?php if ($_SESSION['prefsShipping'] == "1") echo "CHECKED"; elseif ($section == "step3") echo "CHECKED";  ?> /> Enable
             </label>
             <label class="radio-inline">
-                <input type="radio" name="prefsShipping" value="0" id="prefsShipping_1" <?php if ($_SESSION['prefsShipping'] == "0") echo "CHECKED"; ?>/> Disabled
+                <input type="radio" name="prefsShipping" value="0" id="prefsShipping_1" <?php if ($_SESSION['prefsShipping'] == "0") echo "CHECKED"; ?>/> Disable
             </label>
         </div>
         <span id="helpBlock" class="help-block">Disable if your competition does not have an entry shipping location.</span>
@@ -311,22 +376,54 @@ $(document).ready(function(){
 <div class="form-group"><!-- Form Group Radio INLINE -->
     <label for="prefsStyleSet" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Styleset</label>
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
-        <div class="input-group">
-            <!-- Input Here -->
-            <label class="radio-inline">
-                <input type="radio" name="prefsStyleSet" value="BJCP2008" id="prefsStyleSet_0"  <?php if ($_SESSION['prefsStyleSet'] == "BJCP2008") echo "CHECKED"; ?> /> BJCP 2008
-            </label>
-            <label class="radio-inline">
-                <input type="radio" name="prefsStyleSet" value="BJCP2015" id="prefsStyleSet_1" <?php if (($section == "step3") || ($_SESSION['prefsStyleSet'] == "BJCP2015")) echo "CHECKED"; ?>/> BJCP 2015
-            </label>
-			<!--
-            <label class="radio-inline">
-                <input type="radio" name="prefsStyleSet" value="BA" id="prefsStyleSet_2" <?php // if (($section == "step3") || ($_SESSION['prefsStyleSet'] == "BA")) echo "CHECKED"; ?>/> Brewer&rsquo;s Association (Current Year)
-            </label>
-			-->
-        </div>
+    <!-- Input Here -->
+	<select class="selectpicker" name="prefsStyleSet" id="prefsStyleSet" data-size="4">
+    	<option value="BJCP2015" <?php if ($section == "step3") echo "SELECTED"; elseif ($row_limits['prefsStyleSet'] == "BJCP2015") echo "SELECTED"; ?>>BJCP 2015</option>
+        <option value="BJCP2008" <?php if ($row_limits['prefsStyleSet'] == "BJCP2008") echo "SELECTED"; ?>>BJCP 2008</option>
+        <option value="BABDB" <?php if (strpos($row_limits['prefsStyleSet'],"BABDB") !== false) echo "SELECTED"; ?>>Brewers Association</option>
+	</select>
+    <div id="helpBlockBJCP2008" class="help-block">The BJCP 2008 style guidelines have been deprecated and will be completely removed in version 2.2.0. The 2008 guidelines are considered by the BJCP as &quot;obsolete.&quot;</div>
+    <div id="helpBlockBAAPI" class="help-block">Brewers Association style data is housed and maintained by the <a href="http://www.brewerydb.com/" target="_blank">Brewery DB</a>. An API key issued by the Brewery DB is <strong>required</strong> for the styles to be utilized by BCOE&amp;M. Please note that the latest <a href="https://www.brewersassociation.org/resources/brewers-association-beer-style-guidelines/" target="_blank">BA style set</a> may <strong>not</strong> be available.</div>
     </div>
 </div><!-- ./Form Group -->
+
+<div id="styleSetAPIKey">
+<div class="form-group"><!-- Form Group NOT REQUIRED Text Input -->
+    <label for="prefsStyleSetAPIKey" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Brewery DB API Key</label>
+    <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
+    	<!-- Input Here -->
+        <input class="form-control" id="prefsStyleSetAPIKey" name="prefsStyleSetAPIKey" type="text" value="<?php if (isset($styleKey[1])) echo $styleKey[1]; ?>" placeholder="">
+		<span id="helpBlock" class="help-block">
+		<div class="btn-group" role="group" aria-label="prefsStyleSetAPIKeyModal">
+            <button type="button" class="btn btn-xs btn-info" data-toggle="modal" data-target="#prefsStyleSetAPIKeyModal">
+               Brewery DB API Key Info
+            </button>
+		</div>
+		</span>
+    </div>
+</div><!-- ./Form Group -->
+<!-- Modal -->
+<div class="modal fade" id="prefsStyleSetAPIKeyModal" tabindex="-1" role="dialog" aria-labelledby="prefsStyleSetAPIKeyModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header bcoem-admin-modal">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="prefsStyleSetAPIKeyModalLabel">Brewery DB API Key Info</h4>
+            </div>
+            <div class="modal-body">
+                <p>The Brewers Association styles are available via the <a href="https://www.brewerydb.com" target="_blank">Brewery DB</a>'s API. To utilize these styles in BCOE&amp;M, you will need an API key issued by Brewery DB.</p>
+                <p>To obtain an API key from the Brewery DB project website, you will need to <a href="https://www.brewerydb.com/auth/signup" target="_blank">create an account on the Brewery DB website</a> and register your installation as an app.</p>
+                <p>After creating your account, click the &quot;Register New App&quot; button, provide a name for the app (something like &quot;BCOE&amp;M <?php echo $_SESSION['contestName']; ?>&quot;), web address, and platform (choose &quot;Web Application&quot;). Once you have your API key, enter it here in the designated field.</p>
+                <p><strong>Please note:</strong> The Brewers Association styles will not populate without a valid API key issued by the Brewery DB.</p>
+            </div>
+            <div class="modal-footer">
+            	<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div><!-- ./modal -->
+</div>
+
 
 <div class="form-group"><!-- Form Group NOT REQUIRED Select -->
 	<label for="prefsEntryForm" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Printed Entry Form and/or Bottle Labels</label>
@@ -364,7 +461,7 @@ $(document).ready(function(){
             </div>
             <div class="modal-body">
                 <p>The <em>BJCP Official</em> options only display U.S. weights and measures.</p>
-                <p>The <em>Anonymous with Barcode/QR Code</em> option provides bottle labels with only an entry number, style, barcode label, and QR code. These labels are intended to be taped to bottles by entrants before submittal, thereby saving the labor and waste of removing rubberbanded labels by competition staff when sorting. This approach is simlar to the method used in the National Homebrew Competition final round.</p>
+                <p>The <em>Anonymous with Barcode/QR Code</em> option provides bottle labels with only an entry number, style, barcode label, and QR code. These labels are intended to be taped to bottles by entrants before submittal, thereby saving the labor and waste of removing rubberbanded labels by competition staff when sorting. This approach is similar to the method used in the National Homebrew Competition final round.</p>
                 <p>The Barcode options are intended to be used with a USB barcode scanner and the <a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=checkin">barcode entry check-in function</a>.</p>
                 <p>The QR code options are intended to be used with a mobile device and <a href="<?php echo $base_url; ?>qr.php" target="_blank">QR code entry check-in function</a> (requires a QR code reading app).</p>
                 <div class="well">
@@ -450,7 +547,7 @@ $(document).ready(function(){
                 <h4 class="modal-title" id="prefsSpecificModalLabel">Hide Brewer&rsquo;s Specifics Field</h4>
             </div>
             <div class="modal-body">
-                <p>Indicate if the Brewer&rsquo;s Specifics field on the Add Entry or Edit Entry screens will be displayed to users. The field is sometimes confused with the requried &ldquo;Special Ingredients&rdquo; field. If enabled, the field will display the following message as a placeholder:</p>
+                <p>Indicate if the Brewer&rsquo;s Specifics field on the Add Entry or Edit Entry screens will be displayed to users. The field is sometimes confused with the required &ldquo;Special Ingredients&rdquo; field. If enabled, the field will display the following message as a placeholder:</p>
                 <small>***NOT REQUIRED*** Provide ONLY if you wish the judges to fully consider what you write here when evaluating and scoring your entry. Use to record specifics that you would like judges to consider when evaluating your entry that you have NOT SPECIFIED in other fields (e.g., mash technique, hop variety, honey variety, grape variety, pear variety, etc.).</small>
             </div>
             <div class="modal-footer">
@@ -578,8 +675,30 @@ $(document).ready(function(){
 	<span id="helpBlock" class="help-block">Limit of entries that each participant can enter into a single sub-style. Leave blank if no limit.</span>
 	</div>
 </div><!-- ./Form Group -->
+<?php if (strpos($styleSet,"BABDB") === false) { ?>
 <!-- Insert Collapsable -->
 <div id="subStyleExeptions">
+	<div class="form-group"><!-- Form Group NOT REQUIRED Select -->
+		<label for="prefsUSCLExLimit" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Entry Limit For <em>Excepted</em> Sub-Styles</label>
+		<div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
+		<!-- Input Here -->
+		<select class="selectpicker" name="prefsUSCLExLimit" id="prefsUSCLExLimit" data-size="10" data-width="auto">
+			<option value="" rel="none" <?php ($row_limits['prefsUSCLExLimit'] == ""); echo "SELECTED"; ?>></option>
+			<?php for ($i=1; $i <= 100; $i++) { ?>
+			<option value="<?php echo $i; ?>" <?php if ($row_limits['prefsUSCLExLimit'] == $i) echo "SELECTED"; ?>><?php echo $i; ?></option>
+			<?php } ?>
+		</select>
+		<span id="helpBlock" class="help-block">
+			<div class="btn-group" role="group" aria-label="exceptdSubstylesModal">
+			<div class="btn-group" role="group">
+				<button type="button" class="btn btn-xs btn-info" data-toggle="modal" data-target="#exceptdSubstylesModal">
+				   Entry Limit For Excepted Sub-Styles Info
+				</button>
+			</div>
+			</div>
+		</span>
+		</div>
+	</div><!-- ./Form Group -->
 	<div class="form-group"><!-- Form Group Checkbox Stacked -->
 		<label for="prefsUSCLEx" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Exceptions to Entry Limit per Sub-Style</label>
 		<div class="col-lg-9 col-md-9 col-sm-8 col-xs-12">
@@ -608,27 +727,6 @@ $(document).ready(function(){
 			</div>
 		</div>
 	</div><!-- ./Form Group -->
-	<div class="form-group"><!-- Form Group NOT REQUIRED Select -->
-		<label for="prefsUSCLExLimit" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Entry Limit For <em>Excepted</em> Sub-Styles</label>
-		<div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
-		<!-- Input Here -->
-		<select class="selectpicker" name="prefsUSCLExLimit" id="prefsUSCLExLimit" data-size="10" data-width="auto">
-			<option value="" rel="none" <?php ($row_limits['prefsUSCLExLimit'] == ""); echo "SELECTED"; ?>></option>
-			<?php for ($i=1; $i <= 100; $i++) { ?>
-			<option value="<?php echo $i; ?>" <?php if ($row_limits['prefsUSCLExLimit'] == $i) echo "SELECTED"; ?>><?php echo $i; ?></option>
-			<?php } ?>
-		</select>
-		<span id="helpBlock" class="help-block">
-			<div class="btn-group" role="group" aria-label="exceptdSubstylesModal">
-			<div class="btn-group" role="group">
-				<button type="button" class="btn btn-xs btn-info" data-toggle="modal" data-target="#exceptdSubstylesModal">
-				   Entry Limit For Excepted Sub-Styles Info
-				</button>
-			</div>
-			</div>
-		</span>
-		</div>
-	</div><!-- ./Form Group -->
 </div><!-- ./subStyleExeptions -->
 <!-- Modal -->
 <div class="modal fade" id="exceptdSubstylesModal" tabindex="-1" role="dialog" aria-labelledby="exceptdSubstylesModalLabel">
@@ -648,6 +746,7 @@ $(document).ready(function(){
     </div>
 </div><!-- ./modal -->
 <?php } ?>
+<?php } ?>
 <h3>Performance and Data Clean-Up</h3>
 <div class="form-group"><!-- Form Group NOT REQUIRED Text Input -->
     <label for="prefsRecordPaging" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Records Displayed</label>
@@ -663,10 +762,10 @@ $(document).ready(function(){
         <div class="input-group">
             <!-- Input Here -->
             <label class="radio-inline">
-                <input type="radio" name="prefsAutoPurge" value="1" id="prefsAutoPurge_0"  <?php if ($_SESSION['prefsAutoPurge'] == "1") echo "CHECKED";  ?> /> Yes
+                <input type="radio" name="prefsAutoPurge" value="1" id="prefsAutoPurge_0"  <?php if ($_SESSION['prefsAutoPurge'] == "1") echo "CHECKED";  ?> /> Enable
             </label>
             <label class="radio-inline">
-                <input type="radio" name="prefsAutoPurge" value="0" id="prefsAutoPurge_1" <?php if ($_SESSION['prefsAutoPurge'] == "0") echo "CHECKED"; elseif ($section == "step3") echo "CHECKED"; ?>/> No
+                <input type="radio" name="prefsAutoPurge" value="0" id="prefsAutoPurge_1" <?php if ($_SESSION['prefsAutoPurge'] == "0") echo "CHECKED"; elseif ($section == "step3") echo "CHECKED"; ?>/> Disable
             </label>
         </div>
         <span id="helpBlock" class="help-block">
@@ -689,7 +788,7 @@ $(document).ready(function(){
                 <h4 class="modal-title" id="purgeModalLabel">Automatically Purge Info</h4>
             </div>
             <div class="modal-body">
-                <p>Automatically purge any entries flagged as unconfirmed or that require special ingredients but do not 24 hours after entry as well as any data clean-up functions. If "No," Admins will have the option to manually purge the entries.</p>
+                <p>Automatically purge any entries flagged as unconfirmed or that require special ingredients but do not 24 hours after entry as well as any data clean-up functions. If disabled, Admins will have the option to manually purge the entries.</p>
             </div>
             <div class="modal-footer">
             	<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
@@ -833,7 +932,8 @@ $(document).ready(function(){
                 <input type="radio" name="prefsLiquid1" value="ounces" id="prefsLiquid1_0"  <?php if ($_SESSION['prefsLiquid1'] == "ounces") echo "CHECKED"; elseif ($section == "step3") echo "CHECKED"; ?> /> Ounces (oz)
             </label>
             <label class="radio-inline">
-                <input type="radio" name="prefsLiquid1" value="millilitres" id="prefsLiquid1_1" <?php if ($_SESSION['prefsLiquid1'] == "millilitres") echo "CHECKED";  ?> /> Millilitres (ml)
+                <input type="radio" name="prefsLiquid1" value="millilitres" id="prefsLiquid1_1" <?php if ($_SESSION['prefsLiquid1'] == "millilitres") echo "CHECKED";  ?> /> 
+                Milliliters (ml)
             </label>
         </div>
     </div>
@@ -848,7 +948,8 @@ $(document).ready(function(){
                 <input type="radio" name="prefsLiquid2" value="gallons" id="prefsLiquid2_0"  <?php if ($_SESSION['prefsLiquid2'] == "gallons") echo "CHECKED"; elseif ($section == "step3") echo "CHECKED"; ?> /> Gallons (gal)
             </label>
             <label class="radio-inline">
-                <input type="radio" name="prefsLiquid2" value="litres" id="prefsLiquid2_1" <?php if ($_SESSION['prefsLiquid2'] == "litres") echo "CHECKED"; ?> /> Litres (lt)
+                <input type="radio" name="prefsLiquid2" value="litres" id="prefsLiquid2_1" <?php if ($_SESSION['prefsLiquid2'] == "litres") echo "CHECKED"; ?> /> 
+                Liters (lt)
             </label>
         </div>
     </div>
@@ -910,10 +1011,11 @@ $(document).ready(function(){
         <div class="input-group">
             <!-- Input Here -->
             <label class="radio-inline">
-                <input type="radio" name="prefsPayToPrint" value="Y" id="prefsPayToPrint_0"  <?php if ($_SESSION['prefsPayToPrint'] == "Y") echo "CHECKED"; ?> />Yes
+                <input type="radio" name="prefsPayToPrint" value="Y" id="prefsPayToPrint_0"  <?php if ($_SESSION['prefsPayToPrint'] == "Y") echo "CHECKED"; ?> />Enable
             </label>
             <label class="radio-inline">
-                <input type="radio" name="prefsPayToPrint" value="N" id="prefsPayToPrint_1" <?php if ($_SESSION['prefsPayToPrint'] == "N") echo "CHECKED"; elseif ($section == "step3") echo "CHECKED"; ?>/>No
+                <input type="radio" name="prefsPayToPrint" value="N" id="prefsPayToPrint_1" <?php if ($_SESSION['prefsPayToPrint'] == "N") echo "CHECKED"; elseif ($section == "step3") echo "CHECKED"; ?>/>
+                Disable
             </label>
         </div>
 		<span id="helpBlock" class="help-block">
@@ -937,7 +1039,7 @@ $(document).ready(function(){
             </div>
             <div class="modal-body">
                 <p>Indicate if the entry must be marked as paid to be able to print associated paperwork.</p>
-                <p>The default of &ldquo;No&rdquo; is appropriate for most installations; otherwise issues may arise that the BCOE&amp;M programming cannot control (e.g., if the user doesn't click the &ldquo;return to...&rdquo; link in PayPal).</p>
+                <p>The default of &ldquo;Disable&rdquo; is appropriate for most installations; otherwise issues may arise that the BCOE&amp;M programming cannot control (e.g., if the user doesn't click the &ldquo;return to...&rdquo; link in PayPal).</p>
             </div>
             <div class="modal-footer">
             	<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
@@ -952,11 +1054,12 @@ $(document).ready(function(){
         <div class="input-group">
             <!-- Input Here -->
             <label class="radio-inline">
-                <input type="radio" name="prefsCash" value="Y" id="prefsCash_0"  <?php if ($_SESSION['prefsCash'] == "Y") echo "CHECKED"; ?> />Yes
+                <input type="radio" name="prefsCash" value="Y" id="prefsCash_0"  <?php if ($_SESSION['prefsCash'] == "Y") echo "CHECKED"; ?> />Enable
             </label>
-            <label class="radio-inline">
-                <input type="radio" name="prefsCash" value="N" id="prefsCash_1" <?php if ($_SESSION['prefsCash'] == "N") echo "CHECKED"; elseif ($section == "step3") echo "CHECKED"; ?>/>No
-            </label>
+          <label class="radio-inline">
+                <input type="radio" name="prefsCash" value="N" id="prefsCash_1" <?php if ($_SESSION['prefsCash'] == "N") echo "CHECKED"; elseif ($section == "step3") echo "CHECKED"; ?>/>
+              Disable
+          </label>
         </div>
     </div>
 </div><!-- ./Form Group -->
@@ -967,11 +1070,11 @@ $(document).ready(function(){
         <div class="input-group">
             <!-- Input Here -->
             <label class="radio-inline">
-                <input type="radio" name="prefsCheck" value="Y" id="prefsCheck_0"  <?php if ($_SESSION['prefsCheck'] == "Y") echo "CHECKED"; ?> />Yes
+                <input type="radio" name="prefsCheck" value="Y" id="prefsCheck_0"  <?php if ($_SESSION['prefsCheck'] == "Y") echo "CHECKED"; ?> />Enable
             </label>
             <label class="radio-inline">
-                <input type="radio" name="prefsCheck" value="N" id="prefsCheck_1" <?php if ($_SESSION['prefsCheck'] == "N") echo "CHECKED"; elseif ($section == "step3") echo "CHECKED"; ?>/>No
-            </label>
+                <input type="radio" name="prefsCheck" value="N" id="prefsCheck_1" <?php if ($_SESSION['prefsCheck'] == "N") echo "CHECKED"; elseif ($section == "step3") echo "CHECKED"; ?>/>
+                Disable</label>
         </div>
     </div>
 </div><!-- ./Form Group -->
@@ -991,11 +1094,11 @@ $(document).ready(function(){
         <div class="input-group">
             <!-- Input Here -->
             <label class="radio-inline">
-                <input type="radio" name="prefsPaypal" value="Y" id="prefsPaypal_0"  <?php if ($_SESSION['prefsPaypal'] == "Y") echo "CHECKED"; ?> />Yes
+                <input type="radio" name="prefsPaypal" value="Y" id="prefsPaypal_0"  <?php if ($_SESSION['prefsPaypal'] == "Y") echo "CHECKED"; ?> />Enable
             </label>
             <label class="radio-inline">
-                <input type="radio" name="prefsPaypal" value="N" id="prefsPaypal_1" <?php if ($_SESSION['prefsPaypal'] == "N") echo "CHECKED"; elseif ($section == "step3") echo "CHECKED"; ?>/>No
-            </label>
+                <input type="radio" name="prefsPaypal" value="N" id="prefsPaypal_1" <?php if ($_SESSION['prefsPaypal'] == "N") echo "CHECKED"; elseif ($section == "step3") echo "CHECKED"; ?>/>
+                Disable</label>
         </div>
     </div>
 </div><!-- ./Form Group -->
@@ -1035,16 +1138,61 @@ $(document).ready(function(){
 </div><!-- ./modal -->
 
 <div class="form-group"><!-- Form Group Radio INLINE -->
-    <label for="prefsTransFee" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Entrant Pays Checkout Fees</label>
+    <label for="prefsPaypal" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label"><a href="https://developer.paypal.com/docs/classic/products/instant-payment-notification/" target="_blank">PayPal Instant Payment Notification</a> (IPN)</label>
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
         <div class="input-group">
             <!-- Input Here -->
             <label class="radio-inline">
-                <input type="radio" name="prefsTransFee" value="Y" id="prefsTransFee_0"  <?php if ($_SESSION['prefsTransFee'] == "Y") echo "CHECKED"; ?> />Yes
+                <input type="radio" name="prefsPaypalIPN" value="1" id="prefsPaypalIPN_0"  <?php if ($_SESSION['prefsPaypalIPN'] == 1) echo "CHECKED"; ?> />Enable
             </label>
             <label class="radio-inline">
-                <input type="radio" name="prefsTransFee" value="N" id="prefsTransFee_1" <?php if ($_SESSION['prefsTransFee'] == "N") echo "CHECKED"; elseif ($section == "step3") echo "CHECKED"; ?>/>No
+                <input type="radio" name="prefsPaypalIPN" value="0" id="prefsPaypalIPN_1" <?php if ($_SESSION['prefsPaypalIPN'] == 0) echo "CHECKED"; elseif ($section == "step3") echo "CHECKED"; ?>/>
+                Disable</label>
+        </div>
+        <span id="helpBlock" class="help-block">
+		<div class="btn-group" role="group" aria-label="paypalIPNModal">
+            <button type="button" class="btn btn-xs btn-info" data-toggle="modal" data-target="#payPalIPNModal">
+               PayPal IPN Info and Setup
+            </button>
+		</div>
+		</span>
+    </div>
+</div><!-- ./Form Group -->
+
+<!-- Modal -->
+<div class="modal fade" id="payPalIPNModal" tabindex="-1" role="dialog" aria-labelledby="payPalIPNModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header bcoem-admin-modal">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="payPalIPNModalLabel">PayPal IPN Info and Setup</h4>
+            </div>
+            <div class="modal-body">
+              <p>PayPal's Instant Payment Notification service is a way for your BCOE&amp;M installation to be updated entry status to &quot;paid&quot; <strong>instantly</strong> after a user successfully completes their payment on PayPal.</p>
+                <p>Implementing IPN involves a number of factors and a bit of setup <strong>on your <a href="https://www.paypal.com/us/signin/" target="_blank">PayPal</a> account</strong>.</p>
+              <p class="text-danger"><strong>To implement PayPal IPN, your PayPal account must be a <u>business</u> account.</strong></p>
+              <p>Setting Up IPN Notifications on PayPal instructions <a href="https://developer.paypal.com/docs/classic/ipn/integration-guide/IPNSetup/#id089EG030E5Z" target="_blank"><strong>can be found here</strong></a>. You will need to enter a Notification URL for the function to work. Your notification URL is: <blockquote><strong><?php echo $base_url; ?>ppv.php</strong></blockquote></p>
+                <p>Once you have set up your PayPal account, since environments vary, it is suggested that you perform a test using your own BCOE&amp;M account by adding an entry and paying for it via PayPal.</p>
+              	<p>Transaction details will be saved to your BCOE&amp;M database and are available via your PayPal dashboard as well.</p>
+            </div>
+            <div class="modal-footer">
+            	<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div><!-- ./modal -->
+
+<div class="form-group"><!-- Form Group Radio INLINE -->
+    <label for="prefsTransFee" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Checkout Fees Paid by Entrant</label>
+<div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
+        <div class="input-group">
+            <!-- Input Here -->
+            <label class="radio-inline">
+                <input type="radio" name="prefsTransFee" value="Y" id="prefsTransFee_0"  <?php if ($_SESSION['prefsTransFee'] == "Y") echo "CHECKED"; ?> />Enable
             </label>
+            <label class="radio-inline">
+                <input type="radio" name="prefsTransFee" value="N" id="prefsTransFee_1" <?php if ($_SESSION['prefsTransFee'] == "N") echo "CHECKED"; elseif ($section == "step3") echo "CHECKED"; ?>/>
+                Disable</label>
         </div>
 		<span id="helpBlock" class="help-block">
 		<div class="btn-group" role="group" aria-label="payPalFeeModal">
@@ -1066,7 +1214,7 @@ $(document).ready(function(){
             </div>
             <div class="modal-body">
                 <p>Do you want participants paying via PayPal also pay the transaction fees?</p>
-                <p>PayPal charges 2.9% + $0.30 USD per transaction. Checking "Yes" indicates that the transaction fees will be added to the participant's total.</p>
+                <p>PayPal charges 2.9% + $0.30 USD per transaction. Enabling this indicates that the transaction fees will be added to the entrant's total.</p>
             </div>
             <div class="modal-footer">
             	<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
@@ -1076,30 +1224,30 @@ $(document).ready(function(){
 </div><!-- ./modal -->
 <h3>Sponsors</h3>
 <div class="form-group"><!-- Form Group Radio INLINE -->
-    <label for="prefsSponsors" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Display Sponsors</label>
+    <label for="prefsSponsors" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Sponsor Display</label>
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
         <div class="input-group">
             <!-- Input Here -->
             <label class="radio-inline">
-                <input type="radio" name="prefsSponsors" value="Y" id="prefs0"  <?php if ($_SESSION['prefsSponsors'] == "Y") echo "CHECKED"; elseif ($section == "step3") echo "CHECKED"; ?> /> Yes
+                <input type="radio" name="prefsSponsors" value="Y" id="prefs0"  <?php if ($_SESSION['prefsSponsors'] == "Y") echo "CHECKED"; elseif ($section == "step3") echo "CHECKED"; ?> /> Enable
             </label>
             <label class="radio-inline">
-                <input type="radio" name="prefsSponsors" value="N" id="prefs1" <?php if ($_SESSION['prefsSponsors'] == "N") echo "CHECKED"; ?>/> No
+                <input type="radio" name="prefsSponsors" value="N" id="prefs1" <?php if ($_SESSION['prefsSponsors'] == "N") echo "CHECKED"; ?>/> Disable
             </label>
         </div>
     </div>
 </div><!-- ./Form Group -->
 
 <div class="form-group"><!-- Form Group Radio INLINE -->
-    <label for="prefsSponsorLogos" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Display Sponsor Logos</label>
+    <label for="prefsSponsorLogos" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Sponsor Logo Display</label>
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
         <div class="input-group">
             <!-- Input Here -->
             <label class="radio-inline">
-                <input type="radio" name="prefsSponsorLogos" value="Y" id="prefsSponsorLogos_0"  <?php if ($_SESSION['prefsSponsorLogos'] == "Y") echo "CHECKED"; elseif ($section == "step3") echo "CHECKED"; ?> /> Yes
+                <input type="radio" name="prefsSponsorLogos" value="Y" id="prefsSponsorLogos_0"  <?php if ($_SESSION['prefsSponsorLogos'] == "Y") echo "CHECKED"; elseif ($section == "step3") echo "CHECKED"; ?> /> Enable
             </label>
             <label class="radio-inline">
-                <input type="radio" name="prefsSponsorLogos" value="N" id="prefsSponsorLogos_1" <?php if ($_SESSION['prefsSponsorLogos'] == "N") echo "CHECKED"; ?>/> No
+                <input type="radio" name="prefsSponsorLogos" value="N" id="prefsSponsorLogos_1" <?php if ($_SESSION['prefsSponsorLogos'] == "N") echo "CHECKED"; ?>/> Disable
             </label>
         </div>
     </div>

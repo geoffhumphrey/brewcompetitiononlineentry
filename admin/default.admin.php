@@ -27,7 +27,7 @@
                                 </div>
                                 <div class="col col-lg-7 col-md-8 col-sm-8 col-xs-8">
                                     <ul class="list-inline">
-                                        <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=contest_info">Edit</a></li>
+                                        <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=contest_info&amp;action=edit">Edit</a></li>
 										<li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=upload&amp;action=html" data-toggle="tooltip" data-placement="top" title="Upload your logo before editing your Competition Information">Upload Logo</a></li>
 									</ul>
                                 </div>
@@ -203,11 +203,13 @@
                                 </div>
                                 <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-8">
                                     <ul class="list-inline">
-                                        <li><a data-confirm="Are you sure you want to regenerate judging numbers for all entries?<?php if ($_SESSION['prefsEntryForm'] == "N") echo " This will over-write all judging numbers, including those that have been assigned via the barcode scanning function."; ?>" href="<?php echo $base_url; ?>includes/process.inc.php?section=admin&amp;go=default&amp;action=generate_judging_numbers&amp;sort=default">Judging Numbers (Random)</a></li>
-                                        <li><a data-confirm="Are you sure you want to regenerate judging numbers for all entries?<?php if ($_SESSION['prefsEntryForm'] == "N") echo " This will over-write all judging numbers, including those that have been assigned via the barcode scanning function."; ?>" href="<?php echo $base_url; ?>includes/process.inc.php?section=admin&amp;go=default&amp;action=generate_judging_numbers&amp;sort=legacy">Judging Numbers (With Style Number Prefix)</a></li>
+                                        <li><a data-confirm="Are you sure you want to regenerate judging numbers for all entries? This will over-write all judging numbers, including those that have been assigned via the barcode or QR Code scanning function." href="<?php echo $base_url; ?>includes/process.inc.php?section=admin&amp;go=default&amp;action=generate_judging_numbers&amp;sort=default">Judging Numbers (Random)</a></li>
+                                        <li><a data-confirm="Are you sure you want to regenerate judging numbers for all entries? This will over-write all judging numbers, including those that have been assigned via the barcode or QR Code scanning function." href="<?php echo $base_url; ?>includes/process.inc.php?section=admin&amp;go=default&amp;action=generate_judging_numbers&amp;sort=legacy">Judging Numbers (With Style Number Prefix)</a></li>
+                                        <li><a data-confirm="Are you sure you want to regenerate judging numbers for all entries? This will over-write all judging numbers, including those that have been assigned via the barcode or QR Code scanning function." href="<?php echo $base_url; ?>includes/process.inc.php?section=admin&amp;go=<?php echo $go; ?>&amp;action=generate_judging_numbers&amp;sort=identical">Judging Numbers (Same as Entry Numbers)</a></li>
                                     </ul>
                                 </div>
                             </div><!-- ./row -->
+                            <?php if (in_array($_SESSION['prefsEntryForm'],$barcode_qrcode_array)) { ?>
                             <div class="row">
                                 <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-4">
                                     <strong>Using Barcodes/QR Codes?</strong>
@@ -218,6 +220,7 @@
                                     </ul>
                                 </div>
                             </div><!-- ./row -->
+                            <?php } ?>
 							<div class="row">
                                 <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-4">
                                     <strong>Entry Check-In</strong>
@@ -225,8 +228,10 @@
                                 <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-8">
                                     <ul class="list-inline">
                                         <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=entries">Manually</a></li>
+                                        <?php if (in_array($_SESSION['prefsEntryForm'],$barcode_qrcode_array)) { ?>
                                         <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=checkin">Via Barcode Scanner</a></li>
                                         <li><a href="<?php echo $base_url; ?>qr.php" target="_blank">Via Mobile Devices <span class="fa fa-external-link"></span></a></li>
+                                        <?php } ?>
                                     </ul>
                                 </div>
                             </div><!-- ./row -->

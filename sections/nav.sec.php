@@ -30,12 +30,6 @@ else {
 	$admin_tooltip = "Admin Dashboard";
 }
 
-// TESTING
-if (TESTING) {
-	$logged_in = TRUE;
-	$admin_user = TRUE;
-}
-
 $print_icon = FALSE;
 
 $help = bcoem_help($section,$go,$action,$filter);
@@ -96,7 +90,7 @@ else $link_logout = build_public_url("logout","default","default","default",$sef
 $qr_enable = FALSE;
 $link_qr = "";
 if (!empty($row_contest_dates['contestCheckInPassword'])) {
-	if (($entry_window_open == 2) && ($dropoff_window_open == 2) && ($shipping_window_open == 2) && (judging_date_return() > 0)) $qr_enable = TRUE;
+	if (($entry_window_open == 2) && ($dropoff_window_open == 2) && ($shipping_window_open == 2) && (judging_date_return() > 0) && (in_array($_SESSION['prefsEntryForm'],$barcode_qrcode_array))) $qr_enable = TRUE;
 	$link_qr .= build_public_url("qr","default","default","default",$sef,$base_url);
 }
 
@@ -165,7 +159,7 @@ if (($logged_in) && ($admin_user) && ($go != "error_page")) { ?>
             <li class="dropdown">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">Competition Preparation <span class="caret"></span></a>
                 <ul class="dropdown-menu navmenu-nav">
-                    <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=contest_info">Edit Competition Info</a></li>
+                    <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=contest_info&amp;action=edit">Edit Competition Info</a></li>
 					<li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=contacts">Manage Contacts</a></li>
                     <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=special_best">Manage Custom Categories</a></li>
                     <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=dropoff">Manage Drop-Off Locations</a></li>
@@ -192,8 +186,10 @@ if (($logged_in) && ($admin_user) && ($go != "error_page")) { ?>
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">Sorting <span class="caret"></span></a>
                 <ul class="dropdown-menu navmenu-nav">
                     <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=entries">Manually</a></li>
+                    <?php if (in_array($_SESSION['prefsEntryForm'],$barcode_qrcode_array)) { ?>
                     <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=checkin">Entry Check-in Via Barcode Scanner</a></li>
                     <li><a href="<?php echo $base_url; ?>qr.php" target="_blank">Entry Check-in Via Mobile Devices <span class="fa fa-external-link"></span></a></li>
+                    <?php } ?>
                 </ul> 
             </li>
             <li class="dropdown">

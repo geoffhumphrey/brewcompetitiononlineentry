@@ -188,8 +188,10 @@ do {
 	$entry_output .= "</td>";
 	
 	$entry_output .= "<td>";
-	if ($row_styles['brewStyleActive'] == "Y") $entry_output .= $row_log['brewCategorySort'].$row_log['brewSubCategory'].": ".$row_styles['brewStyle']; 
-	elseif (empty($row_log['brewCategorySort'])) $entry_output .= sprintf("<strong class=\"text-danger\">%s</strong>",$brewer_entries_text_007);
+	if (strpos($_SESSION['prefsStyleSet'],"BABDB") === false) { 
+		if ($row_styles['brewStyleActive'] == "Y") $entry_output .= $row_log['brewCategorySort'].$row_log['brewSubCategory'].": ".$row_styles['brewStyle']; 
+		elseif (empty($row_log['brewCategorySort'])) $entry_output .= sprintf("<strong class=\"text-danger\">%s</strong>",$brewer_entries_text_007);
+	}
 	else $entry_output .= $entry_style;
 	$entry_output .= "</td>";
 	

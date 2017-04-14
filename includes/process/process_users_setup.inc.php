@@ -6,6 +6,9 @@
 
 if (isset($_SERVER['HTTP_REFERER'])) {
 	$username = strtolower($_POST['user_name']);
+	$username = filter_var($username,FILTER_SANITIZE_EMAIL);
+	$userQuestionAnswer = strip_tags($_POST['userQuestionAnswer']);
+	
 	if (strstr($username,'@'))  {
 		$password = md5($_POST['password']);
 		require(CLASSES.'phpass/PasswordHash.php');
@@ -16,7 +19,7 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 						   GetSQLValueString($_POST['userLevel'], "text"),
 						   GetSQLValueString($hash, "text"),
 						   GetSQLValueString($_POST['userQuestion'], "text"),
-						   GetSQLValueString($_POST['userQuestionAnswer'], "text"),
+						   GetSQLValueString($userQuestionAnswer, "text"),
 						   "NOW( )"					   
 						   );
 		

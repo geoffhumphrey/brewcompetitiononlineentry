@@ -222,6 +222,23 @@ function generate_judging_numbers($brewing_db_table,$method) {
 	
 	}
 	
+	if ($method == "identical") {
+		
+		do {
+			
+			$j_num = sprintf("%06s",$row_judging_numbers['id']);
+			$updateSQL = sprintf("UPDATE %s SET brewJudgingNumber=%s WHERE id=%s",
+						$brewing_db_table,
+						GetSQLValueString($j_num, "text"),
+						GetSQLValueString($row_judging_numbers['id'], "text"));	
+			mysqli_real_escape_string($connection,$updateSQL);
+			$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+		
+		} while ($row_judging_numbers = mysqli_fetch_assoc($judging_numbers));
+		
+		
+	}
+	
 	if ($method == "legacy") {
 		
 		do { 	
@@ -236,6 +253,7 @@ function generate_judging_numbers($brewing_db_table,$method) {
 		
 		
 	}
+	
 }
 
 

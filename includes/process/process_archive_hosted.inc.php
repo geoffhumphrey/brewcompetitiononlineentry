@@ -11,19 +11,22 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 		$query_user = sprintf("SELECT * FROM %s WHERE user_name = '%s'", $prefix."users", $_SESSION['loginUsername']);
 		$user = mysqli_query($connection,$query_user) or die (mysqli_error($connection));
 		$row_user = mysqli_fetch_assoc($user);
-		$user_name = strtr($row_user['user_name'], $html_string);
+		$user_name = strip_tags($row_user['user_name']);
+		
 		$password = $row_user['password'];
 		$userLevel = $row_user['userLevel'];
-		$userQuestion = strtr($row_user['userQuestion'], $html_string);
-		$userQuestionAnswer = strtr($row_user['userQuestionAnswer'], $html_string);
+		$userQuestion = strip_tags($row_user['userQuestion']);
+		$userQuestionAnswer = strip_tags($row_user['userQuestionAnswer']);
 		$userCreated = $row_user['userCreated'];
+		
 		$query_name = sprintf("SELECT * FROM %s WHERE uid='%s'", $prefix."brewer", $row_user['id']);
 		$name = mysqli_query($connection,$query_name) or die (mysqli_error($connection));
 		$row_name = mysqli_fetch_assoc($name);
-		$brewerFirstName = strtr($row_name['brewerFirstName'],$html_string);
-		$brewerLastName = strtr($row_name['brewerLastName'],$html_string);
-		$brewerAddress = strtr($row_name['brewerAddress'],$html_string);
-		$brewerCity = strtr($row_name['brewerCity'],$html_string);
+		
+		$brewerFirstName = strip_tags($row_name['brewerFirstName']);
+		$brewerLastName = strip_tags($row_name['brewerLastName']);
+		$brewerAddress = strip_tags($row_name['brewerAddress']);
+		$brewerCity = strip_tags($row_name['brewerCity']);
 		$brewerState = $row_name['brewerState'];
 		$brewerZip = $row_name['brewerZip'];
 		$brewerCountry = $row_name['brewerCountry'];
@@ -195,7 +198,6 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 			$_SESSION['prefsEntryForm'] = $row_prefs['prefsEntryForm'];
 			$_SESSION['prefsRecordLimit'] = $row_prefs['prefsRecordLimit'];
 			$_SESSION['prefsRecordPaging'] = $row_prefs['prefsRecordPaging'];
-			$_SESSION['prefsCompOrg'] = $row_prefs['prefsCompOrg'];
 			$_SESSION['prefsTheme'] = $row_prefs['prefsTheme'];
 			$_SESSION['prefsDateFormat'] = $row_prefs['prefsDateFormat'];
 			$_SESSION['prefsContact'] = $row_prefs['prefsContact'];

@@ -1,5 +1,4 @@
-	
-    <!-- Load jQuery / http://jquery.com/ -->
+	<!-- Load jQuery / http://jquery.com/ -->
 	<script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
 	
     <!-- Load Bootstrap / http://www.getbootsrap.com -->
@@ -33,7 +32,7 @@
     <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/js/bootstrap-datetimepicker.min.js"></script>
     <?php } ?>
 	
-	<?php if (($section == "admin") && (in_array($go,$tinymce_load))) { ?>
+	<?php if (($section == "admin") && (($action == "add") || ($action == "edit")) && (in_array($go,$tinymce_load))) { ?>
     
     <!-- Load TinyMCE / https://www.tinymce.com/ -->
 	<script src="//cdn.tinymce.com/4/tinymce.min.js"></script>
@@ -58,8 +57,8 @@
     <script src="//cdnjs.cloudflare.com/ajax/libs/1000hz-bootstrap-validator/0.9.0/validator.min.js"></script>
     
     <!-- Load Bootstrap-Select / http://silviomoreto.github.io/bootstrap-select -->
-    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.9.3/css/bootstrap-select.min.css">	
-    <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.9.3/js/bootstrap-select.min.js"></script>
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.2/css/bootstrap-select.min.css">	
+    <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.2/js/bootstrap-select.min.js"></script>
     
     <!-- Load Font Awesome / https://fortawesome.github.io/Font-Awesome -->
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">

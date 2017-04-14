@@ -46,7 +46,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 					%s, %s, %s, %s, %s,
 					%s, %s, %s, %s, %s
 					)",
-					GetSQLValueString(strtr($_POST['mod_name'],$html_string), "text"),
+					GetSQLValueString(strip_tags($_POST['mod_name']), "text"),
 					GetSQLValueString($_POST['mod_type'], "int"),
 					GetSQLValueString($_POST['mod_extend_function'], "int"),
 					GetSQLValueString($mod_extend_function_admin, "text"),
@@ -80,7 +80,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 				mod_display_rank=%s,
 				mod_enable=%s
 				WHERE id=%s",
-				GetSQLValueString(strtr($_POST['mod_name'],$html_string), "text"),
+				GetSQLValueString(strip_tags($_POST['mod_name']), "text"),
 				GetSQLValueString($_POST['mod_type'], "int"),
 				GetSQLValueString($_POST['mod_extend_function'], "int"),
 				GetSQLValueString($mod_extend_function_admin, "text"),

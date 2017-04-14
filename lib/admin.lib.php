@@ -391,11 +391,13 @@ function score_custom_winning_choose($special_best_info_db_table,$special_best_d
 	return $r;
 }
 
-function participant_choose($brewer_db_table) {
+function participant_choose($brewer_db_table,$pro_edition) {
 	require(CONFIG.'config.php');	
 	mysqli_select_db($connection,$database);
 	
-	$query_brewers = "SELECT uid,brewerFirstName,brewerLastName FROM $brewer_db_table ORDER BY brewerLastName";
+	//$query_brewers = "SELECT uid,brewerFirstName,brewerLastName FROM $brewer_db_table ORDER BY brewerLastName";
+	if ($pro_edition == 1) $query_brewers = "SELECT uid,brewerBreweryName FROM $brewer_db_table WHERE brewerBreweryName IS NOT NULL ORDER BY brewerBreweryName ASC";
+	else $query_brewers = "SELECT uid,brewerFirstName,brewerLastName FROM $brewer_db_table ORDER BY brewerLastName ASC";
 	$brewers = mysqli_query($connection,$query_brewers) or die (mysqli_error($connection));
 	$row_brewers = mysqli_fetch_assoc($brewers);
 	
@@ -403,7 +405,9 @@ function participant_choose($brewer_db_table) {
 	$output .= "<select class=\"selectpicker\" name=\"participants\" id=\"participants\" onchange=\"jumpMenu('self',this,0)\" data-size=\"15\" data-width=\"auto\" data-live-search=\"true\">";
 	$output .= "<option value=\"\" selected disabled data-icon=\"fa fa-plus-circle\">Add an Entry For...</option>";
 	do { 
-		$output .= "<option value=\"index.php?section=brew&amp;go=entries&amp;filter=".$row_brewers['uid']."&amp;action=add\" data-content=\"<span class='small'>".$row_brewers['brewerLastName'].", ".$row_brewers['brewerFirstName']."</span>\">".$row_brewers['brewerLastName'].", ".$row_brewers['brewerFirstName']."</option>"; 
+		if ($pro_edition == 1) $output .= "<option value=\"index.php?section=brew&amp;go=entries&amp;filter=".$row_brewers['uid']."&amp;action=add\" data-content=\"<span class='small'>".$row_brewers['brewerBreweryName']."</span>\">".$row_brewers['brewerBreweryName']."</option>"; 
+		
+		else $output .= "<option value=\"index.php?section=brew&amp;go=entries&amp;filter=".$row_brewers['uid']."&amp;action=add\" data-content=\"<span class='small'>".$row_brewers['brewerLastName'].", ".$row_brewers['brewerFirstName']."</span>\">".$row_brewers['brewerLastName'].", ".$row_brewers['brewerFirstName']."</option>"; 
 	} while ($row_brewers = mysqli_fetch_assoc($brewers)); 
 	$output .= "</select>";
 	

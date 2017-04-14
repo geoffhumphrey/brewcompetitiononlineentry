@@ -9,8 +9,23 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 	
 	if (isset($_POST['prefsUSCLEx'])) $prefsUSCLEx = implode(",",$_POST['prefsUSCLEx']);
 	else  $prefsUSCLEx = "";
-
- 
+	
+	$prefsStyleSet = "";
+	
+	
+	if (strpos($_SESSION['prefsStyleSet'],"BABDB") !== false) {
+		
+		$ba_styleSet_explodies = explode("|",$_SESSION['prefsStyleSet']);
+		
+	}
+	
+	if ((isset($_POST['prefsStyleSetAPIKey'])) && ($_POST['prefsStyleSet'] == "BABDB")) {
+		 $prefsStyleSet = $_POST['prefsStyleSet']."|".$_POST['prefsStyleSetAPIKey'];
+		 if (isset($ba_styleSet_explodies[2])) $prefsStyleSet .= "|".$ba_styleSet_explodies[2];
+	}
+	
+	else $prefsStyleSet = $_POST['prefsStyleSet']; 
+	
 	if ($action == "add") {
 		$insertSQL = sprintf("INSERT INTO $preferences_db_table (
 		prefsTemp, 
@@ -69,6 +84,8 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 		
 		prefsDropOff,
 		prefsShipping,
+		prefsPaypalIPN,
+		prefsProEdition, 
 		id
 		
 		) VALUES (
@@ -81,7 +98,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 		%s, %s, %s, %s, %s,
 		%s, %s, %s, %s, %s,
 		%s, %s, %s, %s, %s,
-		%s, %s, %s)",
+		%s, %s, %s, %s, %s)",
 							   GetSQLValueString($_POST['prefsTemp'], "text"),
 							   GetSQLValueString($_POST['prefsWeight1'], "text"),
 							   GetSQLValueString($_POST['prefsWeight2'], "text"),
@@ -129,17 +146,48 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 							   GetSQLValueString($_POST['prefsUseMods'], "text"),
 							   GetSQLValueString($_POST['prefsSEF'], "text"),
 							   GetSQLValueString($_POST['prefsSpecialCharLimit'], "int"),
-							   GetSQLValueString($_POST['prefsStyleSet'], "text"),
+							   GetSQLValueString($prefsStyleSet, "text"),
 							   GetSQLValueString($_POST['prefsAutoPurge'], "text"),
 							   GetSQLValueString($_POST['prefsEntryLimitPaid'], "int"),
 							   GetSQLValueString($_POST['prefsEmailRegConfirm'], "int"),
 							   GetSQLValueString($_POST['prefsSpecific'], "int"),
 							   GetSQLValueString($_POST['prefsDropOff'], "int"),
 							   GetSQLValueString($_POST['prefsShipping'], "int"),
+							   GetSQLValueString($_POST['prefsPaypalIPN'], "int"),
+							   GetSQLValueString($_POST['prefsProEdition'], "int"),
 							   GetSQLValueString($id, "int"));
 							   
 			mysqli_real_escape_string($connection,$insertSQL);
 			$result = mysqli_query($connection,$insertSQL) or die (mysqli_error($connection));
+			
+			if ($_POST['prefsPaypalIPN'] == 1) {
+				
+				include (LIB.'update.lib.php');
+			
+				// Only install the payments db table if enabled and if not there already
+				if (!check_setup($prefix."payments", $database)) {
+					
+					$sql = sprintf("CREATE TABLE IF NOT EXISTS `%s` (
+					  `id` int(11) NOT NULL AUTO_INCREMENT,
+					  `uid` int(11) DEFAULT NULL,
+					  `item_name` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+					  `first_name` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+					  `last_name` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+					  `txn_id` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+					  `payment_gross` float(10,2) DEFAULT NULL,
+					  `currency_code` varchar(5) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+					  `payment_status` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+					  `payment_entries` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+					  `payment_time` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+					  PRIMARY KEY (`id`)
+					) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;",$prefix."payments");
+					mysqli_select_db($connection,$database);
+					mysqli_real_escape_string($connection,$sql);
+					$result = mysqli_query($connection,$sql) or die (mysqli_error($connection));
+					
+				}
+				
+			}
 		
 			// Check to see if processed correctly. 
 			$query_prefs_check = sprintf("SELECT COUNT(*) as 'count' FROM %s",$preferences_db_table);
@@ -157,7 +205,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 				$insertGoTo = $base_url."setup.php?section=step4";
 			
 			}
-			
+						
 			// If not, redirect back to step 3 and display message.	
 			else  $insertGoTo = $base_url."setup.php?section=step3&msg=99";
 			
@@ -226,7 +274,9 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 		prefsSpecific=%s,
 		
 		prefsDropOff=%s,
-		prefsShipping=%s
+		prefsShipping=%s,
+		prefsPaypalIPN=%s,
+		prefsProEdition=%s
 		
 		WHERE id=%s",
 							   GetSQLValueString($_POST['prefsTemp'], "text"),
@@ -270,7 +320,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 							   GetSQLValueString($_POST['prefsSEF'], "text"),
 							   GetSQLValueString($_POST['prefsSpecialCharLimit'], "int"),
 							   
-							   GetSQLValueString($_POST['prefsStyleSet'], "text"),
+							   GetSQLValueString($prefsStyleSet, "text"),
 							   GetSQLValueString($_POST['prefsAutoPurge'], "text"),
 							   GetSQLValueString($_POST['prefsEntryLimitPaid'], "int"),
 							   GetSQLValueString($_POST['prefsEmailRegConfirm'], "int"),
@@ -279,11 +329,41 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 							   
 							   GetSQLValueString($_POST['prefsDropOff'], "int"),
 							   GetSQLValueString($_POST['prefsShipping'], "int"),
+							   GetSQLValueString($_POST['prefsPaypalIPN'], "int"),
+							   GetSQLValueString($_POST['prefsProEdition'], "int"),
 							   GetSQLValueString($id, "int"));
 							   
-			
 			mysqli_real_escape_string($connection,$updateSQL);
 			$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+			
+			if ($_POST['prefsPaypalIPN'] == 1) {
+				
+				include (LIB.'update.lib.php');
+			
+				// Only install the payments db table if enabled and if not there already
+				if (!check_setup($prefix."payments", $database)) {
+					
+					$sql = sprintf("CREATE TABLE IF NOT EXISTS `%s` (
+					  `id` int(11) NOT NULL AUTO_INCREMENT,
+					  `uid` int(11) DEFAULT NULL,
+					  `item_name` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+					  `first_name` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+					  `last_name` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+					  `txn_id` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+					  `payment_gross` float(10,2) DEFAULT NULL,
+					  `currency_code` varchar(5) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+					  `payment_status` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+					  `payment_entries` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+					  `payment_time` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+					  PRIMARY KEY (`id`)
+					) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;",$prefix."payments");
+					mysqli_select_db($connection,$database);
+					mysqli_real_escape_string($connection,$sql);
+					$result = mysqli_query($connection,$sql) or die (mysqli_error($connection));
+					
+				}
+				
+			}
 			
 			$pattern = array('\'', '"');
 			$updateGoTo = str_replace($pattern, "", $updateGoTo); 
