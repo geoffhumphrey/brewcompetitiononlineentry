@@ -194,6 +194,28 @@ if (((isset($_SERVER['HTTP_REFERER'])) && ($referrer['host'] == $_SERVER['SERVER
 	elseif ($action == "beerxml")						include_once (PROCESS.'process_beerxml.inc.php');
 	elseif ($action == "update_judging_flights")		include_once (PROCESS.'process_judging_flight_check.inc.php'); 
 	
+	elseif ($action == "delete-scoresheets") {
+		
+		$upload_dir = (USER_DOCS);
+		$file_mimes = array('image/jpeg','image/jpg','image/gif','image/png','application/pdf'); // Allowable file mime types
+		$file_exts  = array('.jpeg','.jpg','.png','.gif','.pdf'); // Allowable file extensions
+		
+		if (!is_dir_empty($upload_dir)) {
+			
+			$handle = opendir($upload_dir);
+			
+			while ($file = readdir($handle)) {
+	   
+	   			if(!is_dir($file) && !is_link($file)) {
+			
+					$file_extension = explode('.', $_FILES['file']['name']);
+		
+				}
+				
+			}
+		}
+	}
+	
 	elseif ($action == "purge") {
 		
 		

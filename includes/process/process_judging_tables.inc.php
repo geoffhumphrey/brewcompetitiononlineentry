@@ -42,11 +42,15 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 		
 		foreach (array_unique($a) as $value) {
 			
-			$query_styles = sprintf("SELECT brewStyleGroup, brewStyleNum FROM %s WHERE id='%s'", $styles_db_table, $value);
-			$styles = mysqli_query($connection,$query_styles) or die (mysqli_error($connection));
-			$row_styles = mysqli_fetch_assoc($styles);
 			
-			$query_entries = sprintf("SELECT id FROM $brewing_db_table WHERE brewCategorySort='%s' AND brewSubCategory='%s' AND brewReceived='1'", $row_styles['brewStyleGroup'],$row_styles['brewStyleNum']);
+			if (strpos($_SESSION['prefsStyleSet'],"BABDB") === false) {
+				$query_styles = sprintf("SELECT brewStyleGroup, brewStyleNum FROM %s WHERE id='%s'", $styles_db_table, $value);
+				$styles = mysqli_query($connection,$query_styles) or die (mysqli_error($connection));
+				$row_styles = mysqli_fetch_assoc($styles);
+			}
+			
+			if (strpos($_SESSION['prefsStyleSet'],"BABDB") !== false) $query_entries = sprintf("SELECT id FROM %s WHERE brewSubCategory='%s' AND brewReceived='1'", $brewing_db_table, $value);
+			else $query_entries = sprintf("SELECT id FROM %s WHERE brewCategorySort='%s' AND brewSubCategory='%s' AND brewReceived='1'", $brewing_db_table, $row_styles['brewStyleGroup'],$row_styles['brewStyleNum']);
 			$entries = mysqli_query($connection,$query_entries) or die (mysqli_error($connection));
 			$row_entries = mysqli_fetch_assoc($entries);
 			
@@ -111,7 +115,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 		
 		
 		// Check to see if table styles are different.
-		$query_table = sprintf("SELECT tableStyles FROM $judging_tables_db_table WHERE id='%s'",$id);
+		$query_table = sprintf("SELECT tableStyles FROM %s WHERE id='%s'", $judging_tables_db_table, $id);
 		$table = mysqli_query($connection,$query_table) or die (mysqli_error($connection));
 		$row_table = mysqli_fetch_assoc($table);
 		
@@ -119,7 +123,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 		if ($table_styles != $row_table['tableStyles']) {
 			
 			// Delete all associated scores
-			$deleteSQL = sprintf("DELETE FROM %s WHERE scoreTable='%s'", $prefix."judging_scores",$id);
+			$deleteSQL = sprintf("DELETE FROM %s WHERE scoreTable='%s'", $prefix."judging_scores", $id);
 			mysqli_real_escape_string($connection,$deleteSQL);
 			$result = mysqli_query($connection,$deleteSQL) or die (mysqli_error($connection));
 			
@@ -130,11 +134,11 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 			$result = mysqli_query($connection,$deleteSQL) or die (mysqli_error($connection));
 			
 			// Add back in
-			$query_table = sprintf("SELECT tableLocation FROM $judging_tables_db_table WHERE id=%s",$id);
+			$query_table = sprintf("SELECT tableLocation FROM %s WHERE id=%s", $judging_tables_db_table, $id);
 			$table = mysqli_query($connection,$query_table) or die (mysqli_error($connection));
 			$row_table = mysqli_fetch_assoc($table);
 			
-			$query_table_rounds = sprintf("SELECT judgingRounds FROM $judging_locations_db_table WHERE id='%s'", $row_table['tableLocation']);
+			$query_table_rounds = sprintf("SELECT judgingRounds FROM %s WHERE id='%s'", $judging_locations_db_table, $row_table['tableLocation']);
 			$table_rounds = mysqli_query($connection,$query_table_rounds) or die (mysqli_error($connection));
 			$row_table_rounds = mysqli_fetch_assoc($table_rounds);
 			if ($row_table_rounds['judgingRounds'] == 1) $rounds = "1"; else $rounds = "";
@@ -143,11 +147,14 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 		
 			foreach (array_unique($a) as $value) {
 				
-				$query_styles = sprintf("SELECT brewStyleGroup, brewStyleNum FROM %s WHERE id='%s'", $styles_db_table, $value);
-				$styles = mysqli_query($connection,$query_styles) or die (mysqli_error($connection));
-				$row_styles = mysqli_fetch_assoc($styles);
+				if (strpos($_SESSION['prefsStyleSet'],"BABDB") === false) {
+					$query_styles = sprintf("SELECT brewStyleGroup, brewStyleNum FROM %s WHERE id='%s'", $styles_db_table, $value);
+					$styles = mysqli_query($connection,$query_styles) or die (mysqli_error($connection));
+					$row_styles = mysqli_fetch_assoc($styles);
+				}
 				
-				$query_entries = sprintf("SELECT id FROM $brewing_db_table WHERE brewCategorySort='%s' AND brewSubCategory='%s' AND brewReceived='1'", $row_styles['brewStyleGroup'],$row_styles['brewStyleNum']);
+				if (strpos($_SESSION['prefsStyleSet'],"BABDB") !== false) $query_entries = sprintf("SELECT id FROM %s WHERE brewSubCategory='%s' AND brewReceived='1'", $brewing_db_table, $value);
+				else $query_entries = sprintf("SELECT id FROM %s WHERE brewCategorySort='%s' AND brewSubCategory='%s' AND brewReceived='1'", $brewing_db_table, $row_styles['brewStyleGroup'],$row_styles['brewStyleNum']);
 				$entries = mysqli_query($connection,$query_entries) or die (mysqli_error($connection));
 				$row_entries = mysqli_fetch_assoc($entries);
 				
@@ -161,7 +168,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 					$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));			
 					
 					// Check if entry is already in the judging_flights table
-					$query_empty_count = sprintf("SELECT id FROM $judging_flights_db_table WHERE flightEntryID='%s'",$row_entries['id']);
+					$query_empty_count = sprintf("SELECT id FROM %s WHERE flightEntryID='%s'", $judging_flights_db_table, $row_entries['id']);
 					$empty_count = mysqli_query($connection,$query_empty_count) or die (mysqli_error($connection));
 					$row_empty_count = mysqli_fetch_assoc($empty_count);
 					$totalRows_empty_count = mysqli_num_rows($empty_count);
@@ -203,8 +210,6 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 			
 		} // End if ($table_styles != $row_table['tableStyles'])
 		
-		
-		
 		// Update table in judging_tables table
 		$updateSQL = sprintf("UPDATE $judging_tables_db_table SET 
 		tableName=%s, 
@@ -244,9 +249,17 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 				
 				//echo $query_entry."<br>";
 				
-				$query_style = sprintf("SELECT id FROM $styles_db_table WHERE (brewStyleVersion='%s' OR brewStyleOwn='custom') AND brewStyleGroup='%s' AND brewStyleNum='%s'", $styles_db_table,$_SESSION['prefsStyleSet'],$row_entry['brewCategorySort'],$row_entry['brewSubCategory']);
-				$style = mysqli_query($connection,$query_style) or die (mysqli_error($connection));
-				$row_style = mysqli_fetch_assoc($style);
+				if (strpos($_SESSION['prefsStyleSet'],"BABDB") === false) {
+				
+					$query_style = sprintf("SELECT id FROM $styles_db_table WHERE (brewStyleVersion='%s' OR brewStyleOwn='custom') AND brewStyleGroup='%s' AND brewStyleNum='%s'", $styles_db_table,$_SESSION['prefsStyleSet'],$row_entry['brewCategorySort'],$row_entry['brewSubCategory']);
+					$style = mysqli_query($connection,$query_style) or die (mysqli_error($connection));
+					$row_style = mysqli_fetch_assoc($style);
+					
+					$style_id = $row_style['id'];
+				
+				}
+				
+				else $style_id = $row_entry['brewSubCategory'];
 				
 				//echo $query_style."<br>";
 				
@@ -260,7 +273,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 				do {
 					$style_array = explode(",",$row_table_styles['tableStyles']);
 					
-					if (in_array($row_style['id'],$style_array)) {
+					if (in_array($style_id,$style_array)) {
 						
 						$updateSQL = sprintf("UPDATE $judging_flights_db_table SET flightTable=%s WHERE flightEntryID=%s",
 							   GetSQLValueString($row_table_styles['id'], "text"),

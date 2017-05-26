@@ -1,43 +1,32 @@
-<script type="text/javascript">
-<!--
-// From http://www.dynamicdrive.com/forums/showthread.php?33533-No-Duplicates-Chosen-in-Drop-Down-lists
-function uniqueChoicesSetup(){
-	var warning = 'The place you specified has already been input. Please choose another place or no place (blank).',
-	s = document.getElementsByTagName('select'),
-	f = function (e){
-		var s = uniqueChoicesSetup.ar;
-		for (var o = this.options.selectedIndex, i = s.length - 1; i > -1; --i)
-		if(this != s[i] && o && o == s[i].options.selectedIndex){
-			this.options.selectedIndex = 0;
-			if(e && e.preventDefault)
-			e.preventDefault();
-			alert(warning);
-			return false;
+<?php if ($_SESSION['prefsWinnerMethod'] == "0") { ?>
+<script>
+$(document).ready(function () {
+	$('select').change(function () {
+		if (($('select option[value="' + $(this).val() + '"]:selected').length > 1) && $('select option[value="' + $(this).val() + '"]:selected') != "") {
+			$(this).val('-1').change();
+			$('#noDupeModal').modal('show');
 		}
-	},
-	add = function(el){
-	uniqueChoicesSetup.ar[uniqueChoicesSetup.ar.length] = el;
-	if ( typeof window.addEventListener != 'undefined' ) el.addEventListener( 'change', f, false );
-	else if ( typeof window.attachEvent != 'undefined' ){
-			var t = function() {
-				return f.apply(el);
-			};
-		el.attachEvent( 'onchange', t );
-		}
-	};
-	uniqueChoicesSetup.ar = [];
-	for (var i = s.length - 1; i > -1; --i)
-	if(/nodupe/.test(s[i].className))
-	add(s[i]);
-}
-
-if(typeof window.addEventListener!='undefined')
-window.addEventListener('load', uniqueChoicesSetup, false);
-else if(typeof window.attachEvent!='undefined')
-window.attachEvent('onload', uniqueChoicesSetup);
-// -->
+	});
+});
 </script>
-
+<!-- Modal -->
+<div class="modal fade" id="noDupeModal" tabindex="-1" role="dialog" aria-labelledby="noDupeModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="noDupeModalLabel">Place Previously Selected</h4>
+      </div>
+      <div class="modal-body">
+      The place you specified has already been input for the table. Please choose another place or no place (blank).
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+<?php } ?>
 <p class="lead"><?php echo $_SESSION['contestName']; 
 if (($action == "edit") && ($id != "default")) echo ": Edit Scores for Table ".$row_tables_edit['tableNumber']." - ".$row_tables_edit['tableName'];  
 elseif (($action == "add") && ($id != "default")) echo ": Add Scores for Table ".$row_tables_edit['tableNumber']." - ".$row_tables_edit['tableName'];  
@@ -161,7 +150,7 @@ $totalRows_entry_count = total_paid_received($go,"default");
     	<th nowrap>Judging</th>
         <th nowrap>Table</th>
         <th class="hidden-xs hidden-sm">Table Name</th>
-        <th class="hidden-xs hidden-sm">Category</th>
+        <th class="hidden-xs hidden-sm">Style</th>
         <?php if ($dbTable != "default") { ?>
         <th>Brewer</th>
         <th>Entry Name</th>
@@ -195,6 +184,16 @@ $totalRows_entry_count = total_paid_received($go,"default");
 	if ($row_scores['scoreMiniBOS'] == "1") $mini_bos = "<span class=\"fa fa-lg fa-check text-success\"></span>";
 	else $mini_bos = "&nbsp;";
 	
+	$entry_category = "";
+	
+	if (strpos($_SESSION['prefsStyleSet'],"BABDB") === false) {
+		if ($filter == "default") $entry_category = $table_score_data[12]." ".style_convert($table_score_data[8],1).": ".$table_score_data[13]; 
+		else $entry_category = $table_score_data[12].": ".$table_score_data[1];
+	}
+	
+	else {
+		$entry_category = $table_score_data[13];
+	}
 	
 	?>
 	<tr>
@@ -202,7 +201,7 @@ $totalRows_entry_count = total_paid_received($go,"default");
         <td><?php echo $judging_number;  ?></td>
         <td><?php echo $table_score_data[11]; ?></td>
         <td class="hidden-xs hidden-sm"><?php echo $table_score_data[10]; ?></td>
-        <td class="hidden-xs hidden-sm"><?php if ($filter == "default") echo $table_score_data[12]." ".style_convert($table_score_data[8],1).": ".$table_score_data[13]; else echo $table_score_data[12].": ".$table_score_data[1]; ?></td>
+        <td class="hidden-xs hidden-sm"><?php echo $entry_category; ?></td>
         
         <?php if ($dbTable != "default") { ?>
         <td><?php echo $table_score_data[5].", ".$table_score_data[4]; ?></td>
@@ -233,18 +232,6 @@ if (NHC) echo "<div class='alert alert-danger'><span class=\"fa fa-exclamation-c
 <?php if ($id != "default") { ?>
 <form name="scores" method="post" action="<?php echo $base_url; ?>includes/process.inc.php?action=<?php echo $action; ?>&amp;dbTable=<?php echo $judging_scores_db_table; ?>&amp;id=<?php echo $id; ?>">
 <script type="text/javascript" language="javascript">
-$('.fDrop').live('change', function (event) {
-    var cI = $(this);
-    $('.fDrop option:selected').each(function (i, e) {
-        //Check if values match AND if not default AND not match changed item to self
-        if ($(e).val() == cI.val() && $(e).val() != '' && $(e).parent().index() != cI.index()) {
-            alert('Duplicate place detected. Is this correct?');
-            // cI.val('');
-        }
-    });
-}); 
-</script>
-<script type="text/javascript" language="javascript">
 $(document).ready(function() {
 	$('#sortable').dataTable( {
 		"bPaginate" : false,
@@ -269,7 +256,7 @@ $(document).ready(function() {
 	<tr>
     	<th>Entry</th>
         <th>Judging</th>
-        <th class="hidden-xs hidden-sm">Category</th>
+        <th class="hidden-xs hidden-sm">Style</th>
         <th>Mini-BOS?</th>
     	<th>Score</th>
         <th>Place</th>
@@ -313,7 +300,8 @@ $(document).ready(function() {
 				
 				$judging_number = sprintf("%06s",$row_entries['brewJudgingNumber']);
 				 
-				$style_display = $style." ".style_convert($row_entries['brewCategorySort'],1).": ".$score_style_data[2];
+				if (strpos($_SESSION['prefsStyleSet'],"BABDB") === false) $style_display = $style." ".style_convert($row_entries['brewCategorySort'],1).": ".$score_style_data[2];
+				else $style_display = $score_style_data[2];
 			
 	?>
 	<tr>

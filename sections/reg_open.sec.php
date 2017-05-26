@@ -79,7 +79,7 @@ if (($registration_open == 1) && (!isset($_SESSION['loginUsername']))) {
 	$page_info1 .= sprintf("<p>%s <span class=\"fa fa-lg fa-user\"></span> %s</p>",$reg_open_text_004,$reg_open_text_005);
 }
 
-if (($registration_open == 1) && (isset($_SESSION['loginUsername']))) $page_info1 .= sprintf("<p>%s <a href=\"%s\">%s</a> %s</p>",$reg_open_text_006,build_public_url("list","default","default","default",$sef,$base_url),$reg_open_text_008);
+if (($registration_open == 1) && (!isset($_SESSION['brewerBreweryName'])) && (isset($_SESSION['loginUsername']))) $page_info1 .= sprintf("<p>%s <a href=\"%s\">%s</a> %s</p>",$reg_open_text_006,build_public_url("list","default","default","default",$sef,$base_url),$reg_open_text_007,$reg_open_text_008);
 
 if ($registration_open != 1) $page_info1 .= sprintf("<p>%s %s.</p>",$reg_open_text_009,$judge_open);
 
@@ -87,9 +87,11 @@ if ($registration_open != 1) $page_info1 .= sprintf("<p>%s %s.</p>",$reg_open_te
 if ($entry_window_open == 1) {
 	$header1_2 .= sprintf("<h2>%s <span class='text-success'>%s</a></h2>",$reg_open_text_010,$reg_open_text_001); 
 	
-	$page_info2 .= "<p>";
-	$page_info2 .= sprintf("<strong class=\"text-success\">%s %s</strong> %s %s, %s.", $total_entries, strtolower($label_entries), $sidebar_text_025, $current_time, $current_date_display);
-	$page_info2 .= "</p>";
+	if ($_SESSION['prefsProEdition'] == 0)  {
+		$page_info2 .= "<p>";
+		$page_info2 .= sprintf("<strong class=\"text-success\">%s %s</strong> %s %s, %s.", $total_entries, strtolower($label_entries), $sidebar_text_025, $current_time, $current_date_display);
+		$page_info2 .= "</p>";
+	}
 	
 	$page_info2 .= "<p>";
 	$page_info2 .= sprintf("%s, ",$reg_open_text_011);

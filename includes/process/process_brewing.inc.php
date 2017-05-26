@@ -61,53 +61,30 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 		// Style Name
 		$styleName = "";
 		
-		// Get style name from broken parts if BJCP
-		if (strpos($_SESSION['prefsStyleSet'],"BABDB") === false) {
-			$query_style_name = sprintf("SELECT * FROM %s WHERE (brewStyleVersion='%s' OR brewStyleOwn='custom') AND brewStyleGroup='%s' AND brewStyleNum='%s'",$styles_db_table,$_SESSION['prefsStyleSet'],$styleFix,$style[1]);
-			$style_name = mysqli_query($connection,$query_style_name) or die (mysqli_error($connection));
-			$row_style_name = mysqli_fetch_assoc($style_name);
-			
-			$styleName = $row_style_name['brewStyle'];
-		}
+		// Get style name from broken parts if BA (currently there are 14 overall BA categories, 34 BJCP 2015, and 28 BJCP 2007)
+		// Custom style overall category will always be greater than 28
+		if ((strpos($_SESSION['prefsStyleSet'],"BABDB") !== false) && ($style[0] > 28)) $query_style_name = sprintf("SELECT * FROM %s WHERE brewStyleOwn='custom' AND brewStyleGroup='%s' AND brewStyleNum='%s'",$styles_db_table,$styleFix,$style[1]);
 		
-		// Get style name from BA array
-		if (strpos($_SESSION['prefsStyleSet'],"BABDB") !== false) {
+		// Get style name from broken parts if BJCP
+		else $query_style_name = sprintf("SELECT * FROM %s WHERE (brewStyleVersion='%s' OR brewStyleOwn='custom') AND brewStyleGroup='%s' AND brewStyleNum='%s'",$styles_db_table,$_SESSION['prefsStyleSet'],$styleFix,$style[1]);
+		$style_name = mysqli_query($connection,$query_style_name) or die (mysqli_error($connection));
+		$row_style_name = mysqli_fetch_assoc($style_name);
 			
-			// print_r($_SESSION['styles']);
-			
-			foreach ($_SESSION['styles'] as $styles => $stylesData) {
-			
-				if (is_array($stylesData) || is_object($stylesData)) {
-					
-					foreach ($stylesData as $key => $style) { 
-					
-						if ($style['category']['name'] == "Hybrid/mixed Beer") $categoryName = "Hybrid/Mixed Beer"; 
-						elseif ($style['category']['name'] == "European-germanic Lager") $categoryName = "European-Germanic Lager";
-						else $categoryName = ucwords($style['category']['name']);
-					
-						if ($styleID == $style['id']) {
-							
-							$styleName .= $style['name'];
-							$brewComments .= $categoryName;
-							
-						}
-						
-					} // end foreach ($stylesData as $data => $style)
-					
-				} // end if (is_array($stylesData) || is_object($stylesData))
-				
-			} // end foreach ($_SESSION['styles'] as $styles => $stylesData)
-			
-		}
+		$styleName = $row_style_name['brewStyle'];
 		
 		// Mark as paid if free entry fee
 		if ($_SESSION['contestEntryFee'] == 0) $brewPaid = "1"; 
 		elseif (isset($_POST['brewPaid'])) $brewPaid = $_POST['brewPaid'];
 		else $brewPaid = "0";
 		
-		if (strpos($_SESSION['prefsStyleSet'],"BABDB") !== false) $all_special_ing_styles = array_merge($ba_special_carb_str_sweet,$ba_carb_sweet_special,$ba_carb_special,$ba_special_beer);
+		$all_special_ing_styles = array();
+		if (is_array($special_beer)) $all_special_ing_styles = array_merge($all_special_ing_styles,$special_beer);
+		if (is_array($carb_str_sweet_special)) $all_special_ing_styles = array_merge($all_special_ing_styles,$carb_str_sweet_special);
+		if (is_array($spec_sweet_carb_only)) $all_special_ing_styles = array_merge($all_special_ing_styles,$spec_sweet_carb_only);
+		if (is_array($spec_carb_only)) $all_special_ing_styles = array_merge($all_special_ing_styles,$spec_carb_only);
+		if (strpos($styleSet,"BABDB") !== false) $all_special_ing_styles = array_merge($all_special_ing_styles,$ba_special);
 		
-		else $all_special_ing_styles = array_merge($special_beer,$carb_str_sweet_special,$spec_sweet_carb_only,$spec_carb_only);
+		// $ba_special
 		
 		$brewName = $_POST['brewName'];
 		$brewName = strip_tags($brewName);
@@ -119,7 +96,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 		$brewInfo = "";
 		
 		if (in_array($styleReturn,$all_special_ing_styles)) $brewInfo .= strip_tags($_POST['brewInfo']);
-		if (isset($custom_entry_information)) {
+		if (is_array($custom_entry_information)) {
 			if (array_key_exists($index,$custom_entry_information)) { 
 				$explodies = explode("|",$custom_entry["$index"]);
 				if ($explodies[2] == 1) $brewInfo .= strip_tags($_POST['brewInfo']);
@@ -671,8 +648,12 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 		if (($style [0] < 10) && (preg_match("/^[[:digit:]]+$/",$style [0]))) $styleFix = "0".$style[0];
 		else $styleFix = $style[0];
 		
-		// Get style name from broken parts
-		$query_style_name = sprintf("SELECT * FROM %s WHERE (brewStyleVersion='%s' OR brewStyleOwn='custom') AND brewStyleGroup='%s' AND brewStyleNum='%s'",$styles_db_table,$_SESSION['prefsStyleSet'],$styleFix,$style[1]);
+		// Get style name from broken parts if BA (currently there are 14 overall BA categories, 34 BJCP 2015, and 28 BJCP 2007)
+		// Custom style overall category will always be greater than 28
+		if ((strpos($_SESSION['prefsStyleSet'],"BABDB") !== false) && ($style[0] > 28)) $query_style_name = sprintf("SELECT * FROM %s WHERE brewStyleOwn='custom' AND brewStyleGroup='%s' AND brewStyleNum='%s'",$styles_db_table,$styleFix,$style[1]);
+		
+		// Get style name from broken parts if BJCP
+		else $query_style_name = sprintf("SELECT * FROM %s WHERE (brewStyleVersion='%s' OR brewStyleOwn='custom') AND brewStyleGroup='%s' AND brewStyleNum='%s'",$styles_db_table,$_SESSION['prefsStyleSet'],$styleFix,$style[1]);
 		$style_name = mysqli_query($connection,$query_style_name) or die (mysqli_error($connection));
 		$row_style_name = mysqli_fetch_assoc($style_name);
 		$check = $row_style_name['brewStyleOwn'];
@@ -774,9 +755,9 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 		if (check_special_ingredients($styleBreak,$_SESSION['prefsStyleSet'])) {
 			
 			if (empty($brewInfo)) {
-				$updateSQL = sprintf("UPDATE $brewing_db_table SET brewConfirmed='0' WHERE id=%s", GetSQLValueString($id, "text"));
-				mysqli_real_escape_string($connection,$updateSQL);
-				$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+				$updateSQL1 = sprintf("UPDATE $brewing_db_table SET brewConfirmed='0' WHERE id=%s", GetSQLValueString($id, "text"));
+				mysqli_real_escape_string($connection,$updateSQL1);
+				//$result = mysqli_query($connection,$updateSQL1) or die (mysqli_error($connection));
 			}
 			
 			if ($section == "admin") {
@@ -796,9 +777,9 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 		 if (check_carb($styleBreak,$_SESSION['prefsStyleSet'])) {
 			 
 			if (empty($brewMead1)) {
-				$updateSQL = sprintf("UPDATE $brewing_db_table SET brewConfirmed='0' WHERE id=%s", GetSQLValueString($id, "text"));
-				mysqli_real_escape_string($connection,$updateSQL);
-				$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+				$updateSQL2 = sprintf("UPDATE $brewing_db_table SET brewConfirmed='0' WHERE id=%s", GetSQLValueString($id, "text"));
+				mysqli_real_escape_string($connection,$updateSQL2);
+				//$result = mysqli_query($connection,$updateSQL2) or die (mysqli_error($connection));
 			}
 			
 			if ($section == "admin") {
@@ -816,9 +797,9 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 		 if (check_sweetness($styleBreak,$_SESSION['prefsStyleSet'])) {
 			 
 			if (empty($brewMead2)) {
-				$updateSQL = sprintf("UPDATE $brewing_db_table SET brewConfirmed='0' WHERE id=%s", GetSQLValueString($id, "text"));
-				mysqli_real_escape_string($connection,$updateSQL);
-				$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+				$updateSQL3 = sprintf("UPDATE $brewing_db_table SET brewConfirmed='0' WHERE id=%s", GetSQLValueString($id, "text"));
+				mysqli_real_escape_string($connection,$updateSQL3);
+				$result = mysqli_query($connection,$updateSQL3) or die (mysqli_error($connection));
 			}
 			
 			if ($section == "admin") {
@@ -837,10 +818,9 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 		 if (check_mead_strength($styleBreak,$_SESSION['prefsStyleSet'])) {
 			
 			if (empty($brewMead3))  {
-				$updateSQL = sprintf("UPDATE $brewing_db_table SET brewConfirmed='0' WHERE id=%s", GetSQLValueString($id, "text"));
-				mysqli_real_escape_string($connection,$updateSQL);
-				$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
-				//echo $updateSQL."<br>";
+				$updateSQL4 = sprintf("UPDATE $brewing_db_table SET brewConfirmed='0' WHERE id=%s", GetSQLValueString($id, "text"));
+				mysqli_real_escape_string($connection,$updateSQL4);
+				$result = mysqli_query($connection,$updateSQL4) or die (mysqli_error($connection));
 			}
 			
 			if ($section == "admin") {
@@ -854,21 +834,29 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 			}
 		}
 		
-		
-		
 		$pattern = array('\'', '"');
 		$updateGoTo = str_replace($pattern, "", $updateGoTo); 
 		header(sprintf("Location: %s", stripslashes($updateGoTo)));
+		
 		/*
 		echo $updateGoTo."<br>";
 		echo $style[0]."<br>";
 		echo $styleTrim."<br>";
+		echo $style[1]."<br>";
+		echo $styleBreak."<br>";
 		if (check_mead_strength($styleBreak,$_SESSION['prefsStyleSet'])) echo "YES strength<br>"; else echo "No strength<br>";
-		if (check_carb($styleBreak,$_SESSION['prefsStyleSet'])) echo "YES carb<br>"; else echo "No carb/sweeness<br>";
-		if (check_sweetness($styleBreak,$_SESSION['prefsStyleSet'])) echo "YES sweetness<br>"; else echo "No carb/sweeness<br>";
-		echo $brewMead1."<br>";
-		echo $brewMead2."<br>";
-		echo $brewMead3."<br>";
+		if (check_carb($styleBreak,$_SESSION['prefsStyleSet'])) echo "YES carb<br>"; else echo "No carb<br>";
+		if (check_sweetness($styleBreak,$_SESSION['prefsStyleSet'])) echo "YES sweetness<br>"; else echo "No sweeness<br>";
+		if (check_special_ingredients($styleBreak,$_SESSION['prefsStyleSet']))  echo "YES special<br>"; else echo "No special<br>";
+		if (!empty($brewMead1)) echo $brewMead1."<br>";
+		if (!empty($brewMead2)) echo $brewMead2."<br>";
+		if (!empty($brewMead3)) echo $brewMead3."<br>";
+		echo $_POST['brewInfo']."<br>";
+		if (isset($updateSQL)) echo $updateSQL."<br>";
+		if (isset($updateSQL1)) echo $updateSQL1."<br>";
+		if (isset($updateSQL2)) echo $updateSQL2."<br>";
+		if (isset($updateSQL3)) echo $updateSQL3."<br>";
+		if (isset($updateSQL4)) echo $updateSQL4."<br>";
 		*/
 		
 	} // end if ($action == "edit")

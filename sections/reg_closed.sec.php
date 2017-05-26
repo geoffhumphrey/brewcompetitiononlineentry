@@ -59,9 +59,12 @@ $page_info3 = "";
 // Header
 $header1_1 .= sprintf("<h2>%s %s!</h2>",$reg_closed_text_000,$_SESSION['contestName']);
 if (NHC) $page_info1 .= sprintf("<p>%s <strong>%s</strong> %s</p>",$reg_closed_text_001,get_participant_count('default'),$reg_closed_text_002);
-else {
+elseif ($_SESSION['prefsProEdition'] == 0) {
 	$page_info1 .= sprintf("<p>%s <strong class=\"text-success\">%s</strong> %s <strong class=\"text-success\">%s</strong> %s</p>",$reg_closed_text_001,get_entry_count('none'),$reg_closed_text_003,get_participant_count('default'),$reg_closed_text_004);
 	$page_info1 .= sprintf("<p>%s %s, %s <strong class=\"text-success\">%s</strong> %s</p>",$reg_closed_text_005, $current_time, strtolower($reg_closed_text_001), get_entry_count('received'), $reg_closed_text_006);
+}
+else {
+	$page_info1 .= sprintf("<p>%s <strong class=\"text-success\">%s</strong> %s</p>",$reg_closed_text_001,get_participant_count('default'),$reg_closed_text_004);
 }
 
 $header1_3 .= sprintf("<a name='rules'></a><h2>%s</h2>",$label_rules);

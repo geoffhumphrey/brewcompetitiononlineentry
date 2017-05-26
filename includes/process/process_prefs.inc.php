@@ -217,13 +217,6 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 	
 	if ($action == "edit") {
 		
-		// Empty the prefs session variable
-		// Will trigger the session to reset the variables in common.db.php upon reload after redirect
-		session_name($prefix_session);
-		session_start();
-		unset($_SESSION['prefs'.$prefix_session]);
-		
-		
 		$updateSQL = sprintf("UPDATE $preferences_db_table SET 
 		prefsTemp=%s, 
 		prefsWeight1=%s, 
@@ -297,7 +290,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 							   GetSQLValueString($_POST['prefsDisplayWinners'], "text"),
 							   GetSQLValueString($_POST['prefsWinnerDelay'], "text"),
 							   
-							   GetSQLValueString($_POST['prefsWinnerMethod'], "text"),
+							   GetSQLValueString($_POST['prefsWinnerMethod'], "int"),
 							   GetSQLValueString($_POST['prefsEntryForm'], "text"),
 							   GetSQLValueString($_POST['prefsRecordLimit'], "int"),
 							   GetSQLValueString($_POST['prefsRecordPaging'], "int"),
@@ -321,7 +314,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 							   GetSQLValueString($_POST['prefsSpecialCharLimit'], "int"),
 							   
 							   GetSQLValueString($prefsStyleSet, "text"),
-							   GetSQLValueString($_POST['prefsAutoPurge'], "text"),
+							   GetSQLValueString($_POST['prefsAutoPurge'], "int"),
 							   GetSQLValueString($_POST['prefsEntryLimitPaid'], "int"),
 							   GetSQLValueString($_POST['prefsEmailRegConfirm'], "int"),
 							   GetSQLValueString($_POST['prefsSponsorLogos'], "text"),
@@ -335,6 +328,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 							   
 			mysqli_real_escape_string($connection,$updateSQL);
 			$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+			// echo $updateSQL; exit;
 			
 			if ($_POST['prefsPaypalIPN'] == 1) {
 				
@@ -364,6 +358,12 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 				}
 				
 			}
+			
+			// Empty the prefs session variable
+			// Will trigger the session to reset the variables in common.db.php upon reload after redirect
+			session_name($prefix_session);
+			session_start();
+			unset($_SESSION['prefs'.$prefix_session]);
 			
 			$pattern = array('\'', '"');
 			$updateGoTo = str_replace($pattern, "", $updateGoTo); 

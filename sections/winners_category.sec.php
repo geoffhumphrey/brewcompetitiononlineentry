@@ -50,86 +50,98 @@ Declare all variables empty at the top of the script. Add on later...
 if ($row_scored_entries['count'] > 0) {
 
 	$a = styles_active(0);
+	
+	// print_r($a);
 	foreach (array_unique($a) as $style) {
-		
-		include(DB.'winners_category.db.php');
-		
-		// Display all winners 
-		if ($row_entry_count['count'] > 1) $entries = strtolower($label_entries); else $entries = strtolower($label_entry);
-		if ($row_score_count['count'] > "0")   {
+	
+		if ($style > 0) {
 			
-			$primary_page_info = "";
-			$header1_1 = "";
-			$page_info1 = "";
-			$header1_2 = "";
-			$page_info2 = "";
+			include(DB.'winners_category.db.php');
 			
-			$table_head1 = "";
-			$table_body1 = "";
+			//echo $style."<br>";
+			//echo $row_entry_count['count']."<br>";
+			//echo $row_score_count['count']."<br><br>";
 			
-			
-			// Build headers		
-			$header1_1 .= sprintf("<h3>%s %s: %s (%s %s)</h3>",$label_category,ltrim($style,"0"),style_convert($style,"1"),$row_entry_count['count'],$entries);
-			
-			// Build table headers
-			$table_head1 .= "<tr>";
-			$table_head1 .= sprintf("<th width=\"1%%\" nowrap>%s</th>",$label_place);
-			$table_head1 .= sprintf("<th width=\"24%%\">%s</th>",$label_brewer);
-			$table_head1 .= sprintf("<th width=\"24%%\"><span class=\"hidden-xs hidden-sm hidden-md\">%s </span>%s</th>",$label_entry,$label_name);
-			$table_head1 .= sprintf("<th width=\"24%%\">%s</th>",$label_style);
-			$table_head1 .= sprintf("<th width=\"24%%\" class=\"hidden-xs hidden-sm hidden-md\">%s</th>",$label_club);
-			if ($filter == "scores") $table_head1 .= sprintf("<th width=\"1%%\" nowrap>Score</th>",$label_score);
-			$table_head1 .= "</tr>";
-			
-			// Build table body
-			
-			include(DB.'scores.db.php');
+			// Display all winners 
+			if ($row_entry_count['count'] > 1) $entries = strtolower($label_entries); else $entries = strtolower($label_entry);
+			if ($row_score_count['count'] > 0)   {
 				
-			do { 
-				$style = $row_scores['brewCategory'].$row_scores['brewSubCategory'];
+				$primary_page_info = "";
+				$header1_1 = "";
+				$page_info1 = "";
+				$header1_2 = "";
+				$page_info2 = "";
 				
-				$table_body1 .= "<tr>";
+				$table_head1 = "";
+				$table_body1 = "";
 				
-				if ($action == "print") { 
-					$table_body1 .= "<td>";
-					$table_body1 .= display_place($row_scores['scorePlace'],1);
-					$table_body1 .= "</td>";
-				}
 				
+				// Build headers		
+				if (strpos($_SESSION['prefsStyleSet'],"BABDB") === false) $header1_1 .= sprintf("<h3>%s %s: %s (%s %s)</h3>",$label_category,ltrim($style,"0"),style_convert($style,"1"),$row_entry_count['count'],$entries);
 				else {
+					include(INCLUDES.'ba_constants.inc.php');
+					$header1_1 .= sprintf("<h3>%s (%s %s)</h3>",$ba_category_names[$style],$row_entry_count['count'],$entries);
+				}
+				// Build table headers
+				$table_head1 .= "<tr>";
+				$table_head1 .= sprintf("<th width=\"1%%\" nowrap>%s</th>",$label_place);
+				$table_head1 .= sprintf("<th width=\"24%%\">%s</th>",$label_brewer);
+				$table_head1 .= sprintf("<th width=\"24%%\"><span class=\"hidden-xs hidden-sm hidden-md\">%s </span>%s</th>",$label_entry,$label_name);
+				$table_head1 .= sprintf("<th width=\"24%%\">%s</th>",$label_style);
+				$table_head1 .= sprintf("<th width=\"24%%\" class=\"hidden-xs hidden-sm hidden-md\">%s</th>",$label_club);
+				if ($filter == "scores") $table_head1 .= sprintf("<th width=\"1%%\" nowrap>Score</th>",$label_score);
+				$table_head1 .= "</tr>";
+				
+				// Build table body
+				
+				include(DB.'scores.db.php');
+					
+				do { 
+					$style = $row_scores['brewCategory'].$row_scores['brewSubCategory'];
+					
+					$table_body1 .= "<tr>";
+					
+					if ($action == "print") { 
+						$table_body1 .= "<td>";
+						$table_body1 .= display_place($row_scores['scorePlace'],1);
+						$table_body1 .= "</td>";
+					}
+					
+					else {
+						$table_body1 .= "<td>";
+						$table_body1 .= display_place($row_scores['scorePlace'],2);
+						$table_body1 .= "</td>";
+					}
+					
 					$table_body1 .= "<td>";
-					$table_body1 .= display_place($row_scores['scorePlace'],2);
+					$table_body1 .= $row_scores['brewerFirstName']." ".$row_scores['brewerLastName'];
+					if ($row_scores['brewCoBrewer'] != "") $table_body1 .= "<br>Co-Brewer: ".$row_scores['brewCoBrewer'];
 					$table_body1 .= "</td>";
-				}
-				
-				$table_body1 .= "<td>";
-				$table_body1 .= $row_scores['brewerFirstName']." ".$row_scores['brewerLastName'];
-				if ($row_scores['brewCoBrewer'] != "") $table_body1 .= "<br>Co-Brewer: ".$row_scores['brewCoBrewer'];
-				$table_body1 .= "</td>";
-				
-				$table_body1 .= "<td>";
-				$table_body1 .= $row_scores['brewName'];
-				$table_body1 .= "</td>";
-				
-				$table_body1 .= "<td>";
-				$table_body1 .= $style.": ".$row_scores['brewStyle'];
-				$table_body1 .= "</td>";
-				
-				$table_body1 .= "<td class=\"hidden-xs hidden-sm hidden-md\">";
-				$table_body1 .= $row_scores['brewerClubs'];
-				$table_body1 .= "</td>";
-				
-				if ($filter == "scores") { 
+					
+					$table_body1 .= "<td>";
+					$table_body1 .= $row_scores['brewName'];
+					$table_body1 .= "</td>";
+					
+					$table_body1 .= "<td>";
+					if (strpos($_SESSION['prefsStyleSet'],"BABDB") === false) $table_body1 .= $style.": ".$row_scores['brewStyle'];
+					else $table_body1 .= $row_scores['brewStyle'];
+					$table_body1 .= "</td>";
+					
 					$table_body1 .= "<td class=\"hidden-xs hidden-sm hidden-md\">";
-					$table_body1 .= $row_scores['scoreEntry'];
+					$table_body1 .= $row_scores['brewerClubs'];
 					$table_body1 .= "</td>";
-				}
-				
-				$table_body1 .= "</tr>";
-				
-			 } while ($row_scores = mysqli_fetch_assoc($scores)); 
+					
+					if ($filter == "scores") { 
+						$table_body1 .= "<td class=\"hidden-xs hidden-sm hidden-md\">";
+						if (!empty($row_scores['scoreEntry'])) $table_body1 .= $row_scores['scoreEntry'];
+						else $table_body1 .= "&nbsp;";
+						$table_body1 .= "</td>";
+					}
+					
+					$table_body1 .= "</tr>";
+					
+				 } while ($row_scores = mysqli_fetch_assoc($scores)); 
 			 
-			
 	$random1 = "";	
 	$random1 .= random_generator(12,1);
 			 
@@ -170,9 +182,10 @@ if ($row_scored_entries['count'] > 0) {
 		</tbody>
 		</table>
 	</div>
-<?php 	} // end if > 0
-	} // end foreach
-} // end if score count > 0
+<?php 		} 
+		}
+	} 
+} 
 
 else echo sprintf("<p>%s</p>",$winners_text_001);
 ?>

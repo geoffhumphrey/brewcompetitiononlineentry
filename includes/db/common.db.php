@@ -82,62 +82,123 @@ if (empty($_SESSION['prefs'.$prefix_session])) {
 	$prefs = mysqli_query($connection,$query_prefs) or die (mysqli_error($connection));
 	$row_prefs = mysqli_fetch_assoc($prefs);
 	$totalRows_prefs = mysqli_num_rows($prefs);
-
-	$_SESSION['prefsTemp'] = $row_prefs['prefsTemp'];
-	$_SESSION['prefsWeight1'] = $row_prefs['prefsWeight1'];
-	$_SESSION['prefsWeight2'] = $row_prefs['prefsWeight2'];
-	$_SESSION['prefsLiquid1'] = $row_prefs['prefsLiquid1'];
-	$_SESSION['prefsLiquid2'] = $row_prefs['prefsLiquid2'];
-	$_SESSION['prefsPaypal'] = $row_prefs['prefsPaypal'];
-	$_SESSION['prefsPaypalAccount'] = $row_prefs['prefsPaypalAccount'];
-	$_SESSION['prefsPaypalIPN'] = $row_prefs['prefsPaypalIPN'];
-	$_SESSION['prefsCurrency'] = $row_prefs['prefsCurrency'];
-	$_SESSION['prefsCash'] = $row_prefs['prefsCash'];
-	$_SESSION['prefsCheck'] = $row_prefs['prefsCheck'];
-	$_SESSION['prefsCheckPayee'] = $row_prefs['prefsCheckPayee'];
-	$_SESSION['prefsTransFee'] = $row_prefs['prefsTransFee'];
-	$_SESSION['prefsSponsors'] = $row_prefs['prefsSponsors'];
-	$_SESSION['prefsSponsorLogos'] = $row_prefs['prefsSponsorLogos'];
-	$_SESSION['prefsSponsorLogoSize'] = $row_prefs['prefsSponsorLogoSize'];
-	$_SESSION['prefsCompLogoSize'] = $row_prefs['prefsCompLogoSize'];
-	$_SESSION['prefsDisplayWinners'] = $row_prefs['prefsDisplayWinners'];
-	$_SESSION['prefsWinnerDelay'] = $row_prefs['prefsWinnerDelay'];
-	$_SESSION['prefsWinnerMethod'] = $row_prefs['prefsWinnerMethod'];
-	$_SESSION['prefsDisplaySpecial'] = $row_prefs['prefsDisplaySpecial'];
-	$_SESSION['prefsEntryForm'] = $row_prefs['prefsEntryForm'];
-	$_SESSION['prefsRecordLimit'] = $row_prefs['prefsRecordLimit'];
-	$_SESSION['prefsRecordPaging'] = $row_prefs['prefsRecordPaging'];
-	$_SESSION['prefsTheme'] = $row_prefs['prefsTheme'];
-	$_SESSION['prefsDateFormat'] = $row_prefs['prefsDateFormat'];
-	$_SESSION['prefsContact'] = $row_prefs['prefsContact'];
-	$_SESSION['prefsTimeZone'] = $row_prefs['prefsTimeZone'];
-	$_SESSION['prefsTimeFormat'] = $row_prefs['prefsTimeFormat'];
-	$_SESSION['prefsPayToPrint'] = $row_prefs['prefsPayToPrint'];
-	$_SESSION['prefsHideRecipe'] = $row_prefs['prefsHideRecipe'];
-	$_SESSION['prefsUseMods'] = $row_prefs['prefsUseMods'];
-	$_SESSION['prefsSEF'] = $row_prefs['prefsSEF'];
-	$_SESSION['prefsSpecialCharLimit'] = $row_prefs['prefsSpecialCharLimit'];
-	$_SESSION['prefsStyleSet'] = $row_prefs['prefsStyleSet'];
-	$_SESSION['prefsAutoPurge'] = $row_prefs['prefsAutoPurge'];
-	$_SESSION['prefsEntryLimitPaid'] = $row_prefs['prefsEntryLimitPaid'];
-	$_SESSION['prefsEmailRegConfirm'] = $row_prefs['prefsEmailRegConfirm'];
-	$_SESSION['prefsSpecific'] = $row_prefs['prefsSpecific'];
-	$_SESSION['prefsDropOff'] = $row_prefs['prefsDropOff'];
-	$_SESSION['prefsShipping'] = $row_prefs['prefsShipping'];
-	$_SESSION['prefsProEdition'] = $row_prefs['prefsProEdition'];
+	
+	// prefsDisplaySpecial appears to be unused
+	if (isset($row_prefs['prefsDisplaySpecial'])) $_SESSION['prefsDisplaySpecial'] = $row_prefs['prefsDisplaySpecial'];
+	else $_SESSION['prefsDisplaySpecial'] = "N";
+	
+	// For all preferences, check to see if their value is NULL, if so, provide default value
+	// This prevents "breaking" of UI elements
+	if (isset($row_prefs['prefsTemp'])) $_SESSION['prefsTemp'] = $row_prefs['prefsTemp'];
+	else $_SESSION['prefsTemp'] = "Fahrenheit";
+	if (isset($row_prefs['prefsWeight1'])) $_SESSION['prefsWeight1'] = $row_prefs['prefsWeight1'];
+	else $_SESSION['prefsWeight1'] = "ounces";
+	if (isset($row_prefs['prefsWeight2'])) $_SESSION['prefsWeight2'] = $row_prefs['prefsWeight2'];
+	else $_SESSION['prefsWeight2'] = "pounds";
+	if (isset($row_prefs['prefsLiquid1'])) $_SESSION['prefsLiquid1'] = $row_prefs['prefsLiquid1'];
+	else $_SESSION['prefsLiquid1'] = "ounces";
+	if (isset($row_prefs['prefsLiquid2'])) $_SESSION['prefsLiquid2'] = $row_prefs['prefsLiquid2'];
+	else $_SESSION['prefsLiquid2'] = "gallons";
+	if (isset($row_prefs['prefsCurrency'])) $_SESSION['prefsCurrency'] = $row_prefs['prefsCurrency'];
+	else $_SESSION['prefsCurrency'] = "$";
+	if (isset($row_prefs['prefsCash'])) $_SESSION['prefsCash'] = $row_prefs['prefsCash'];
+	else $_SESSION['prefsCash'] = "N";
+	if (isset($row_prefs['prefsCheck'])) $_SESSION['prefsCheck'] = $row_prefs['prefsCheck'];
+	else $_SESSION['prefsCheck'] = "N";
+	if (isset($row_prefs['prefsCheckPayee'])) $_SESSION['prefsCheckPayee'] = $row_prefs['prefsCheckPayee'];
+	else {
+		$_SESSION['prefsCheckPayee'] = "";
+		$_SESSION['prefsCheck'] = "N";	
+	}
+	if (isset($row_prefs['prefsPaypal'])) $_SESSION['prefsPaypal'] = $row_prefs['prefsPaypal'];
+	else $_SESSION['prefsPaypal'] = "N";
+	if (isset($row_prefs['prefsTransFee'])) $_SESSION['prefsTransFee'] = $row_prefs['prefsTransFee'];
+	else $_SESSION['prefsTransFee'] = "N";
+	if (isset($row_prefs['prefsPaypalIPN'])) $_SESSION['prefsPaypalIPN'] = $row_prefs['prefsPaypalIPN'];
+	else $_SESSION['prefsPaypalIPN'] = "0";
+	if (isset($row_prefs['prefsPaypalAccount'])) $_SESSION['prefsPaypalAccount'] = $row_prefs['prefsPaypalAccount'];
+	else {
+		$_SESSION['prefsPaypalAccount'] = "";
+		$_SESSION['prefsPaypal'] = "N";
+		$_SESSION['prefsTransFee'] = "N";
+		$_SESSION['prefsPaypalIPN'] = "0";
+	}
+	if (isset($row_prefs['prefsSponsors'])) $_SESSION['prefsSponsors'] = $row_prefs['prefsSponsors'];
+	else $SESSION['prefsSponsors'] = "N";
+	if (isset($row_prefs['prefsSponsorLogos'])) $_SESSION['prefsSponsorLogos'] = $row_prefs['prefsSponsorLogos'];
+	else $_SESSION['prefsSponsorLogos'] = "N";
+	if (isset($row_prefs['prefsSponsorLogoSize'])) $_SESSION['prefsSponsorLogoSize'] = $row_prefs['prefsSponsorLogoSize'];
+	else $_SESSION['prefsSponsorLogoSize'] = "250";
+	if (isset($row_prefs['prefsCompLogoSize'])) $_SESSION['prefsCompLogoSize'] = $row_prefs['prefsCompLogoSize'];
+	else $_SESSION['prefsCompLogoSize'] = "300";
+	if (isset($row_prefs['prefsDisplayWinners'])) $_SESSION['prefsDisplayWinners'] = $row_prefs['prefsDisplayWinners'];
+	else $_SESSION['prefsDisplayWinners'] = "N";
+	if (isset($row_prefs['prefsWinnerDelay'])) $_SESSION['prefsWinnerDelay'] = $row_prefs['prefsWinnerDelay'];
+	else $_SESSION['prefsWinnerDelay'] = "8";
+	if (isset($row_prefs['prefsWinnerMethod'])) $_SESSION['prefsWinnerMethod'] = $row_prefs['prefsWinnerMethod'];
+	else $_SESSION['prefsWinnerMethod'] = "0";	
+	if (isset($row_prefs['prefsEntryForm'])) $_SESSION['prefsEntryForm'] = $row_prefs['prefsEntryForm'];
+	else $_SESSION['prefsEntryForm'] = "C";
+	if (isset($row_prefs['prefsRecordLimit'])) $_SESSION['prefsRecordLimit'] = $row_prefs['prefsRecordLimit'];
+	else $_SESSION['prefsRecordLimit'] = 9999;
+	if (isset($row_prefs['prefsRecordLimit'])) $_SESSION['prefsRecordPaging'] = $row_prefs['prefsRecordPaging'];
+	else $row_prefs['prefsRecordPaging'] = 150;
+	if (isset($row_prefs['prefsTheme'])) $_SESSION['prefsTheme'] = $row_prefs['prefsTheme'];
+	else $_SESSION['prefsTheme'] = "default";
+	if (isset($row_prefs['prefsDateFormat'])) $_SESSION['prefsDateFormat'] = $row_prefs['prefsDateFormat'];
+	else $_SESSION['prefsDateFormat'] = "1";
+	if (isset($row_prefs['prefsContact'])) $_SESSION['prefsContact'] = $row_prefs['prefsContact'];
+	else $_SESSION['prefsContact'] = "N";
+	if (isset($row_prefs['prefsTimeZone'])) $_SESSION['prefsTimeZone'] = $row_prefs['prefsTimeZone'];
+	else $_SESSION['prefsTimeZone'] = "0";
+	if (isset($row_prefs['prefsTimeFormat'])) $_SESSION['prefsTimeFormat'] = $row_prefs['prefsTimeFormat'];
+	else $_SESSION['prefsTimeFormat'] = "0";
+	if (isset($row_prefs['prefsPayToPrint'])) $_SESSION['prefsPayToPrint'] = $row_prefs['prefsPayToPrint'];
+	else $_SESSION['prefsPayToPrint'] = "N";
+	if (isset($row_prefs['prefsHideRecipe'])) $_SESSION['prefsHideRecipe'] = $row_prefs['prefsHideRecipe'];
+	else $_SESSION['prefsHideRecipe'] = "Y";
+	if (isset($row_prefs['prefsUseMods'])) $_SESSION['prefsUseMods'] = $row_prefs['prefsUseMods'];
+	else $_SESSION['prefsUseMods'] = "N";
+	if (isset($row_prefs['prefsSEF'])) $_SESSION['prefsSEF'] = $row_prefs['prefsSEF'];
+	else $_SESSION['prefsSEF'] = "N";
+	if (isset($row_prefs['prefsSpecialCharLimit'])) $_SESSION['prefsSpecialCharLimit'] = $row_prefs['prefsSpecialCharLimit'];
+	else $_SESSION['prefsSpecialCharLimit'] = "150";
+	if (isset($row_prefs['prefsStyleSet'])) $_SESSION['prefsStyleSet'] = $row_prefs['prefsStyleSet'];
+	else $_SESSION['prefsStyleSet'] = "BJCP2015";
+	if (isset($row_prefs['prefsAutoPurge'])) $_SESSION['prefsAutoPurge'] = $row_prefs['prefsAutoPurge'];
+	else $_SESSION['prefsAutoPurge'] = "N";
+	if (isset($row_prefs['prefsEntryLimitPaid'])) $_SESSION['prefsEntryLimitPaid'] = $row_prefs['prefsEntryLimitPaid'];
+	else $_SESSION['prefsEntryLimitPaid'] = "";
+	if (isset($row_prefs['prefsEmailRegConfirm'])) $_SESSION['prefsEmailRegConfirm'] = $row_prefs['prefsEmailRegConfirm'];
+	else $_SESSION['prefsEmailRegConfirm'] = "0";
+	if (isset($row_prefs['prefsSpecific'])) $_SESSION['prefsSpecific'] = $row_prefs['prefsSpecific'];
+	else $_SESSION['prefsSpecific'] = "0";
+	if (isset($row_prefs['prefsDropOff'])) $_SESSION['prefsDropOff'] = $row_prefs['prefsDropOff'];
+	else $_SESSION['prefsDropOff'] = "0";
+	if (isset($row_prefs['prefsShipping'])) $_SESSION['prefsShipping'] = $row_prefs['prefsShipping'];
+	else $_SESSION['prefsShipping'] = "0";
+	if (isset($row_prefs['prefsProEdition'])) $_SESSION['prefsProEdition'] = $row_prefs['prefsProEdition'];
+	else $_SESSION['prefsProEdition'] = "0";
 
 	if (SINGLE) $query_judging_prefs = sprintf("SELECT * FROM %s WHERE id='%s'", $prefix."judging_preferences",$_SESSION['comp_id']);
 	else $query_judging_prefs = sprintf("SELECT * FROM %s WHERE id='1'", $prefix."judging_preferences");
 	$judging_prefs = mysqli_query($connection,$query_judging_prefs) or die (mysqli_error($connection));
 	$row_judging_prefs = mysqli_fetch_assoc($judging_prefs);	
 	
-	$_SESSION['jPrefsQueued'] = $row_judging_prefs['jPrefsQueued'];
-	$_SESSION['jPrefsFlightEntries'] = $row_judging_prefs['jPrefsFlightEntries'];
-	$_SESSION['jPrefsMaxBOS'] = $row_judging_prefs['jPrefsMaxBOS'];
-	$_SESSION['jPrefsRounds'] = $row_judging_prefs['jPrefsRounds'];
-	$_SESSION['jPrefsBottleNum'] = $row_judging_prefs['jPrefsBottleNum'];
-	$_SESSION['jPrefsCapStewards'] = $row_judging_prefs['jPrefsCapStewards'];
-	$_SESSION['jPrefsCapJudges'] = $row_judging_prefs['jPrefsCapJudges'];
+	if (isset($row_judging_prefs['jPrefsQueued'])) $_SESSION['jPrefsQueued'] = $row_judging_prefs['jPrefsQueued'];
+	else $_SESSION['jPrefsQueued'] = "Y";
+	if (isset($row_judging_prefs['jPrefsFlightEntries'])) $_SESSION['jPrefsFlightEntries'] = $row_judging_prefs['jPrefsFlightEntries'];
+	else $_SESSION['jPrefsFlightEntries'] = "12";
+	if (isset($row_judging_prefs['jPrefsMaxBOS'])) $_SESSION['jPrefsMaxBOS'] = $row_judging_prefs['jPrefsMaxBOS'];
+	else $_SESSION['jPrefsMaxBOS'] = "7";
+	if (isset($row_judging_prefs['jPrefsRounds'])) $_SESSION['jPrefsRounds'] = $row_judging_prefs['jPrefsRounds'];
+	else $_SESSION['jPrefsRounds'] = "3";
+	if (isset($row_judging_prefs['jPrefsBottleNum'])) $_SESSION['jPrefsBottleNum'] = $row_judging_prefs['jPrefsBottleNum'];
+	else $_SESSION['jPrefsBottleNum'] = "3";
+	if (isset($row_judging_prefs['jPrefsCapStewards'])) $_SESSION['jPrefsCapStewards'] = $row_judging_prefs['jPrefsCapStewards'];
+	else $_SESSION['jPrefsCapStewards'] = "";
+	if (isset($row_judging_prefs['jPrefsCapJudges'])) $_SESSION['jPrefsCapJudges'] = $row_judging_prefs['jPrefsCapJudges'];
+	else $_SESSION['jPrefsCapJudges'] = "";
 	
 	// Get counts for common, mostly static items
 	$query_sponsor_count = sprintf("SELECT COUNT(*) as 'count' FROM %s", $prefix."sponsors");
@@ -225,7 +286,7 @@ if ((isset($_SESSION['loginUsername'])) && (empty($_SESSION['user_info'.$prefix_
 	
 }
 
-
+/*
 
 // Check for last activity session variable and determine if it's over 30 minutes
 // If so, reset the session
@@ -247,7 +308,7 @@ elseif (time() - $_SESSION['created'] > 1800) {
 	$_SESSION['created'] = time();
 }
 
-
+*/
 
 session_write_close();
 
@@ -340,7 +401,6 @@ if (strpos($_SESSION['prefsStyleSet'],"BABDB") !== false) {
 		include (INCLUDES.'brewerydb/brewerydb.inc.php');
 		include (INCLUDES.'brewerydb/exception.inc.php');
 		
-		//$apikey = "9b986a69d8803dfcaedd2bbdabbf9169";
 		$apikey = $bdb_api_key[1];
 		$bdb = new Pintlabs_Service_Brewerydb($apikey);
 		$bdb->setFormat('php');
@@ -354,7 +414,7 @@ if (strpos($_SESSION['prefsStyleSet'],"BABDB") !== false) {
 				$results = array('error' => $e->getMessage()); 
 			}
 			
-		$_SESSION['styles'] = $results;
+		$_SESSION['styles'] = $results; // store results in a session variable
 	}
 	
 }

@@ -143,6 +143,8 @@ function score_style_data($value) {
 	require(CONFIG.'config.php');
 	mysqli_select_db($connection,$database);
 	
+	if (strpos($_SESSION['prefsStyleSet'],"BABDB") === false) {
+	
 	$query_styles = sprintf("SELECT brewStyleGroup,brewStyleNum,brewStyle,brewStyleType FROM %s WHERE id='%s'", $prefix."styles", $value);
 	$styles = mysqli_query($connection,$query_styles) or die (mysqli_error($connection));
 	$row_styles = mysqli_fetch_assoc($styles);
@@ -154,6 +156,38 @@ function score_style_data($value) {
 	$row_styles['brewStyleNum']."^". //1
 	$row_styles['brewStyle']."^". //2
 	$styleType; //3
+	
+	}
+	
+	else {
+		
+		include(INCLUDES.'ba_constants.inc.php');
+		
+		$value = ($value - 1);
+		
+		$return = $_SESSION['styles']['data'][$value]['id']."^"; //0
+		$return .= $_SESSION['styles']['data'][$value]['id']."^"; //1
+		$return .= $_SESSION['styles']['data'][$value]['name']."^"; //2
+		
+		// Custom Styles
+		if ($value > 500) {
+			$query_styles = sprintf("SELECT brewStyleGroup,brewStyleNum,brewStyle,brewStyleType FROM %s WHERE id='%s'", $prefix."styles", $value);
+			$styles = mysqli_query($connection,$query_styles) or die (mysqli_error($connection));
+			$row_styles = mysqli_fetch_assoc($styles);
+			
+			if ($row_styles['brewStyleType'] == "") $return .= 1; else $return .= $row_styles['brewStyleType'];
+		}
+		
+		else {
+			
+			if (in_array($_SESSION['styles']['data'][$value]['categoryId'],$ba_beer_categories)) $return .= 1; //3
+			if ((in_array($_SESSION['styles']['data'][$value]['categoryId'],$ba_mead_cider_categories)) && (in_array($_SESSION['styles']['data'][$value]['id'],$ba_mead))) $return .= 3; //3
+			if ((in_array($_SESSION['styles']['data'][$value]['categoryId'],$ba_mead_cider_categories)) && (in_array($_SESSION['styles']['data'][$value]['id'],$ba_cider))) $return .= 2; //3
+		
+		}
+		
+	}
+	
 	return $return;
 
 }
@@ -613,8 +647,7 @@ function flight_entry_info($entry_id) {
 	$query_flight_number = sprintf("SELECT id,flightNumber,flightEntryID,flightRound FROM %s WHERE flightEntryID='%s'",$prefix."judging_flights",$entry_id);
 	$flight_number = mysqli_query($connection,$query_flight_number) or die (mysqli_error($connection));
 	$row_flight_number = mysqli_fetch_assoc($flight_number);
-	$return = $row_flight_number['id']."^".$row_flight_number['flightNumber']."^".$row_flight_number['flightEntryID']."^".$row_flight_number['flightRound'];
-	return $return;
+	return $row_flight_number['id']."^".$row_flight_number['flightNumber']."^".$row_flight_number['flightEntryID']."^".$row_flight_number['flightRound'];
 }
 
 function flight_round_number($flight_table,$flight_number) {
@@ -681,9 +714,16 @@ function table_score_data($eid,$score_table,$suffix) {
 	$row_entries = mysqli_fetch_assoc($entries);
 	$style = $row_entries['brewCategorySort'].$row_entries['brewSubCategory'];
 	
-	$query_styles = sprintf("SELECT brewStyle FROM %s WHERE (brewStyleVersion='%s' OR brewStyleOwn='custom') AND brewStyleGroup='%s' AND brewStyleNum='%s'", $prefix."styles",$_SESSION['prefsStyleSet'],$row_entries['brewCategorySort'],$row_entries['brewSubCategory']);
-	$styles = mysqli_query($connection,$query_styles) or die (mysqli_error($connection));
-	$row_styles = mysqli_fetch_assoc($styles);
+	if (strpos($_SESSION['prefsStyleSet'],"BABDB") === false) {
+		$query_styles = sprintf("SELECT brewStyle FROM %s WHERE (brewStyleVersion='%s' OR brewStyleOwn='custom') AND brewStyleGroup='%s' AND brewStyleNum='%s'", $prefix."styles",$_SESSION['prefsStyleSet'],$row_entries['brewCategorySort'],$row_entries['brewSubCategory']);
+		$styles = mysqli_query($connection,$query_styles) or die (mysqli_error($connection));
+		$row_styles = mysqli_fetch_assoc($styles);
+		$style_name = $row_styles['brewStyle'];
+	}
+	
+	else {
+		$style_name = $row_entries['brewStyle'];
+	}
 	
 	$query_tables = sprintf("SELECT id,tableName,tableNumber FROM %s WHERE id='%s'", $prefix."judging_tables".$suffix, $score_table);
 	$tables = mysqli_query($connection,$query_tables) or die (mysqli_error($connection));
@@ -708,7 +748,7 @@ function table_score_data($eid,$score_table,$suffix) {
 	$row_tables['tableName']."^". //10
 	$row_tables['tableNumber']."^". //11
 	$style."^". //12
-	$row_styles['brewStyle']; //13
+	$style_name; //13
 	
 	return $return;
 
@@ -924,9 +964,9 @@ function like_dislike($likes,$dislikes,$styles) {
 	
 	else $f = 0;
 	
-	if (($c > 0) && ($f == 0)) $r .= 'bg-success text-success|<span class="fa fa-thumbs-o-up"></span> <strong>Preferred Style(s).</strong> One or more styles are on the participant&rsquo;s &ldquo;likes&rdquo; list.'; // 1 or more likes matched, color table cell green
-	elseif (($c == 0) && ($f > 0)) $r .= 'bg-danger text-danger|<span class="fa fa-thumbs-o-down"></span> <strong>Non-Preferred Style(s).</strong> One or more styles are on the participant&rsquo;s &ldquo;dislikes&rdquo; list.'; // 1 or more dislikes matched, color table cell red
-	else $r .="default|<span class=\"fa fa-star-o\"></span> <strong>Available.</strong> Paricipant is available for this round.";
+	if (($c > 0) && ($f == 0)) $r .= "bg-success text-success|<span class=\"text-success\"><span class=\"fa fa-thumbs-o-up\"></span> <strong>Available and Preferred Style(s).</strong> Paricipant is available for this round. One or more styles at the table are on the participant&rsquo;s &ldquo;likes&rdquo; list.<span>"; // 1 or more likes matched, color table cell green
+	elseif (($c == 0) && ($f > 0)) $r .= "bg-danger text-danger|<span class=\"text-danger\"><span class=\"fa fa-thumbs-o-down\"></span> <strong>Available but Non-Preferred Style(s).</strong> Paricipant is available for this round. One or more styles are on the participant&rsquo;s &ldquo;dislikes&rdquo; list.</span>"; // 1 or more dislikes matched, color table cell red
+	else $r .="bg-grey text-grey|<span class=\"text-orange\"><span class=\"fa fa-star-o\"></span> <strong>Available.</strong> Paricipant is available for this round.</span>";
 	
 	return $r;
 }
@@ -1063,8 +1103,8 @@ function judge_alert($round,$bid,$tid,$location,$likes,$dislikes,$table_styles,$
 		$unavailable = unavailable($bid,$location,$round,$tid);
 		$entry_conflict = entry_conflict($bid,$table_styles);
 		$at_table = at_table($bid,$tid);
-		if ($unavailable) $r = "bg-purple text-purple|<span class=\"fa fa-check\"></span> <strong>Assigned.</strong> Paricipant is assigned to another table in this round.";
-		if ($entry_conflict) $r = "bg-info text-info|<span class=\"fa fa-ban\"></span> <strong>Disabled.</strong> Participant has an entry at this table.";
+		if ($unavailable) $r = "bg-purple text-purple|<span class=\"text-purple\"><span class=\"fa fa-check\"></span> <strong>Assigned.</strong> Paricipant is assigned to another table in this round.</span>";
+		if ($entry_conflict) $r = "bg-info text-info|<span class=\"text-info\"><span class=\"fa fa-ban\"></span> <strong>Disabled.</strong> Participant has an entry at this table.</span>";
 		if ((!$unavailable) && (!$entry_conflict)) $r = like_dislike($likes,$dislikes,$table_styles);
 	}
 	else $r = '';

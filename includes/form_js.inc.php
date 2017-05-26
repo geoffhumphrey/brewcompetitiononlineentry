@@ -482,8 +482,8 @@ $(document).ready(function() {
 		}
 		<?php } ?>
 		
-		// Styles requiring special ingredients and carbonation
 		<?php foreach ($ba_carb_special as $key => $value) { ?>
+		// Styles requiring special ingredients and carbonation
 		else if ( 
 			$("#type").val() == "<?php echo ltrim($key,"0"); ?>"){
 				<?php if ($action == "edit") { ?>
@@ -537,8 +537,8 @@ $(document).ready(function() {
 		<?php 
 		
 		// --------------------------------------------------------------------------------------- //
-		if (strpos($styleSet,"BABDB") === false) {
 		
+		if (is_array($special_beer_info)) {
 		foreach ($special_beer_info as $key => $value) { ?>
 		
 		// Special Beer
@@ -661,10 +661,12 @@ $(document).ready(function() {
 			<?php } ?>
 			
 		}
-		<?php } ?>
+		<?php } 
+		}
 		
+		if (is_array($carb_str_sweet_special_info)) {
+		foreach ($carb_str_sweet_special_info as $key => $value) { ?>
 		// Styles requiring special ing, strength, sweetness, and carb
-		<?php foreach ($carb_str_sweet_special_info as $key => $value) { ?>
 		else if ( 
 			$("#type").val() == "<?php echo ltrim($key,"0"); ?>"){
 			<?php if ($action == "edit") { ?>
@@ -726,10 +728,12 @@ $(document).ready(function() {
 			$("#specialInfoText").html("<?php echo $value; ?>");
 			$("#specialInfoName").html("<a href='#' data-tooltip='true' title='Click for specifics for this style.' data-toggle='modal' data-target='#<?php echo $key; ?>'>Style <?php echo str_replace("-","",$key); ?></a>");
 		}
-		<?php } ?>
+		<?php } 
+		}
 		
+		if (is_array($carb_str_only)) { 
+		foreach ($carb_str_only as $value) { ?>
 		// Styles requiring strength and carb only
-		<?php foreach ($carb_str_only as $value) { ?>
 		else if ( 
 			$("#type").val() == "<?php echo ltrim($value,"0"); ?>"){
 			<?php if ($action == "edit") { ?>
@@ -777,9 +781,12 @@ $(document).ready(function() {
 			
 			
 		}
-		<?php } ?>
+		<?php }
+		} 
+		?>
 		
-		<?php foreach ($sweet_carb_only as $value) { ?>
+		<?php if (is_array($sweet_carb_only)) {
+		foreach ($sweet_carb_only as $value) { ?>
 		else if ( 
 			$("#type").val() == "<?php echo ltrim($value,"0"); ?>"){
 			<?php if ($action == "edit") { ?>
@@ -825,10 +832,12 @@ $(document).ready(function() {
 			$("input[name='brewMead2']").prop("required", true);
 			
 		}
-		<?php } ?>
-	
+		<?php } 
+		}
+		
+		if (is_array($sweet_carb_str_only)) { 
+		foreach ($sweet_carb_str_only as $value) { ?>
 		// Styles requiring strength, carbonation, and sweetness (no special)
-		<?php foreach ($sweet_carb_str_only as $value) { ?>
 		else if ( 
 			$("#type").val() == "<?php echo ltrim($value,"0"); ?>"){
 			<?php if ($action == "edit") { ?>
@@ -877,10 +886,12 @@ $(document).ready(function() {
 			$("input[name='brewMead3']").prop("required", true);
 			
 		}
-		<?php } ?>
+		<?php }
+		} 
 		
+		if (is_array($spec_sweet_carb_only)) {
+		foreach ($spec_sweet_carb_only_info as $key => $value) { ?>
 		// Styles requiring special ingredients, carbonation, and sweetness
-		<?php foreach ($spec_sweet_carb_only_info as $key => $value) { ?>
 		else if ( 
 			$("#type").val() == "<?php echo ltrim($key,"0"); ?>"){
 			<?php if ($action == "edit") { ?>
@@ -929,10 +940,12 @@ $(document).ready(function() {
 			$("#specialInfoText").html("<?php echo $value; ?>");
 			$("#specialInfoName").html("<a href='#' data-tooltip='true' title='Click for specifics for this style.' data-toggle='modal' data-target='#<?php echo $key; ?>'>Style <?php echo str_replace("-","",$key); ?></a>");
 		}
-		<?php } ?>
+		<?php }
+		} ?>
 		
+		<?php if (is_array($spec_carb_only_info)) {
+		foreach ($spec_carb_only_info as $key => $value) { ?>
 		// Styles requiring special ingredients and carbonation
-		<?php foreach ($spec_carb_only_info as $key => $value) { ?>
 		else if ( 
 			$("#type").val() == "<?php echo ltrim($key,"0"); ?>"){
 			<?php if ($action == "edit") { ?>
@@ -978,81 +991,7 @@ $(document).ready(function() {
 			$("#specialInfoText").html("<?php echo $value; ?>");
 			$("#specialInfoName").html("<a href='#' data-tooltip='true' title='Click for specifics for this style.' data-toggle='modal' data-target='#<?php echo $key; ?>'>Style <?php echo str_replace("-","",$key); ?></a>");
 		}
-		<?php } ?>
-		
-		// Custom styles
-		<?php 
-		if (isset($custom_entry_information)) {
-		foreach ($custom_entry_information as $key => $value) { 
-		$explodies = explode("|",$custom_entry["$key"]);
-		//print_r($explodies);
-		?>
-		else if ( 
-			$("#type").val() == "<?php echo ltrim($key,"0"); ?>"){
-			<?php if ($action == "edit") { ?>
-			$("#brewInfo").val("");
-			$("#brewComments").val("");
-			$("input[name='brewMead1']").removeAttr('checked');
-			$("input[name='brewMead2']").removeAttr('checked');
-			$("input[name='brewMead3']").removeAttr('checked');
-			$("input[name='strengthIPA']").removeAttr('checked');
-			$("input[name='strengthSaison']").removeAttr('checked');
-			$("input[name='darkLightColor']").removeAttr('checked');
-			$("input[name='sweetnessLambic']").removeAttr('checked');
-			$("input[name='carbLambic']").removeAttr('checked');
-			$("input[name='BDGColor']").removeAttr('checked');
-			<?php } ?>
-			$("#special").hide("fast");
-			$("#carbonation").hide("fast");
-			$("#sweetness").hide("fast");
-			$("#strength").hide("fast");
-			$("#strengthIPA").hide("fast");
-			$("#strengthSaison").hide("fast");
-			$("#darkLightColor").hide("fast");
-			$("#sweetnessLambic").hide("fast");
-			$("#carbLambic").hide("fast");
-			$("#BDGColor").hide("fast");
-			
-			$("#brewInfo").prop("required", false);
-			$("input[name='brewMead1']").prop("required", false);
-			$("input[name='brewMead2']").prop("required", false);
-			$("input[name='brewMead3']").prop("required", false);
-			$("input[name='strengthIPA']").prop("required", false);
-			$("input[name='strengthSaison']").prop("required", false);
-			$("input[name='darkLightColor']").prop("required", false);
-			$("input[name='sweetnessLambic']").prop("required", false);
-			$("input[name='carbLambic']").prop("required", false);
-			$("input[name='BDGColor']").prop("required", false);
-			
-			<?php if ($explodies[2] == 1) { ?>
-			$("#brewInfo").prop("required", true);
-			$("#special").show("fast");
-			<?php } ?>
-			
-			<?php if (!empty($value)) { ?>
-			$("#specialInfo").show("fast");
-			$("#specialInfoText").html("<?php echo $value; ?>");
-			$("#specialInfoName").html("<a href='#' data-tooltip='true' title='Click for specifics for this style.' data-toggle='modal' data-target='#<?php echo $key; ?>'>Style <?php echo str_replace("-","",$key); ?></a>");
-			<?php } ?>
-			
-			<?php if ($explodies[3] == 1) { ?>
-			$("input[name='brewMead3']").prop("required", true);
-			$("#strength").show("fast");
-			<?php } ?>
-			
-			<?php if ($explodies[4] == 1) { ?>
-			$("input[name='brewMead1']").prop("required", true);
-			$("#carbonation").show("fast");			
-			<?php } ?>
-			
-			<?php if ($explodies[5] == 1) { ?>
-			$("input[name='brewMead2']").prop("required", true);
-			$("#sweetness").show("fast");
-			<?php } ?>
-			
-		}
-		<?php }
-		}
+		<?php } 
 		}
 		?>
 				
@@ -1120,8 +1059,8 @@ if ($action == "edit") {
 	
 	<?php if (strpos($styleSet,"BABDB") !== false) { 	?>
 	
-		// Show fields for styles that require special ingredients, carb, sweetness, strength, etc.
 		<?php if (in_array($view,$ba_special_carb_str_sweet)) { ?>
+		// Show fields for styles that require special ingredients, carb, sweetness, strength, etc.
 		
 		// 1 - carb, sweetness, strength, and special styles
 		$(document).ready(function() {
@@ -1324,10 +1263,10 @@ if ($action == "edit") {
 		
 		<?php } ?>
 		
-	<?php } if (strpos($styleSet,"BABDB") === false) { ?>
+	<?php }  ?>
 	
+		<?php if ((is_array($carb_str_sweet_special_info)) && (array_key_exists($view,$carb_str_sweet_special_info))) { ?>
 		// Show fields for styles that require special ingredients, carb, sweetness, strength, etc.
-		<?php if (array_key_exists($view,$carb_str_sweet_special_info)) { ?>
 		
 		// 1 - carb, sweetness, strength, and special styles
 		$(document).ready(function() {
@@ -1358,7 +1297,7 @@ if ($action == "edit") {
 		
 		<?php } ?>
 		
-		<?php if (in_array($view,$carb_str_only)) { ?>
+		<?php if ((is_array($carb_str_only)) && (in_array($view,$carb_str_only))) { ?>
 		
 		// 2 - carb and strength only styles
 		$(document).ready(function() {
@@ -1387,7 +1326,7 @@ if ($action == "edit") {
 		
 		<?php } ?>
 		
-		<?php if (in_array($view,$sweet_carb_only)) { ?>
+		<?php if ((is_array($sweet_carb_only)) && (in_array($view,$sweet_carb_only))) { ?>
 		
 		// 3 - carb and strength only styles
 		$(document).ready(function() {
@@ -1416,7 +1355,7 @@ if ($action == "edit") {
 		
 		<?php } ?>
 		
-		<?php if (in_array($view,$sweet_carb_str_only)) { ?>
+		<?php if ((is_array($sweet_carb_str_only)) && (in_array($view,$sweet_carb_str_only))) { ?>
 		
 		// 4 - sweet, carb, and strength only styles 
 		$(document).ready(function() {
@@ -1445,7 +1384,7 @@ if ($action == "edit") {
 		
 		<?php } ?>
 		
-		<?php if (array_key_exists($view,$spec_sweet_carb_only_info)) { ?>
+		<?php if ((is_array($spec_sweet_carb_only_info)) && (array_key_exists($view,$spec_sweet_carb_only_info))) { ?>
 		
 		// 5 - sweet and sweet only styles with special ingredients
 		$(document).ready(function() {
@@ -1476,7 +1415,7 @@ if ($action == "edit") {
 		
 		<?php } ?>
 		
-		<?php if (array_key_exists($view,$spec_carb_only_info)) { ?>
+		<?php if ((is_array($spec_carb_only_info)) && (array_key_exists($view,$spec_carb_only_info))) { ?>
 		
 		// 6 - carb with special ingredients only styles
 		$(document).ready(function() {
@@ -1507,7 +1446,7 @@ if ($action == "edit") {
 		
 		<?php } ?>
 		
-		<?php if (array_key_exists($view,$special_beer_info)) { ?>
+		<?php if ((is_array($special_beer_info)) && (array_key_exists($view,$special_beer_info))) { ?>
 		
 		// 7 - beer styles with special ingredients only
 		$(document).ready(function() {
@@ -1718,12 +1657,10 @@ if ($action == "edit") {
 				});
 			<?php }	?>
 		
-		<?php } // if ($_SESSION['prefsStyleSet'] == "BJCP2015") ?>
-				
-		<?php } // END if (strpos($styleSet,"BABDB") === false) ?>
+		<?php } // if ($_SESSION['prefsStyleSet'] == "BJCP2015") ?>		
 		
-		
-	<?php if ((isset($custom_entry_information)) && (array_key_exists($view,$custom_entry_information))) { 
+	<?php if (is_array($custom_entry_information)) { 
+	if (array_key_exists($view,$custom_entry_information)) { 
 	
 		// Custom styles
 		
@@ -1771,7 +1708,9 @@ if ($action == "edit") {
 			<?php } ?>
 		
 		});
-		<?php } ?>
+		<?php }
+		}
+		?>
 	
 <?php } // end if ($action == "edit") ?>
 </script>

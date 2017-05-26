@@ -73,7 +73,8 @@ if ($row_scored_entries['count'] > 0) {
 			$table_body1 = "";
 					
 			// Build headers		
-			$header1_1 .= sprintf("<h3>%s %s%s: %s (%s %s)</h3>",$label_category,ltrim($style[0],"0"),$style[1],$style[2],$row_entry_count['count'],$entries);
+			if (strpos($_SESSION['prefsStyleSet'],"BABDB") === false) $header1_1 .= sprintf("<h3>%s %s%s: %s (%s %s)</h3>",$label_category,ltrim($style[0],"0"),$style[1],$style[2],$row_entry_count['count'],$entries);
+			else $header1_1 .= sprintf("<h3>%s (%s %s)</h3>",$style[2],$row_entry_count['count'],$entries);
 			
 			// Build table headers
 			$table_head1 .= "<tr>";
@@ -89,21 +90,38 @@ if ($row_scored_entries['count'] > 0) {
 			
 			include(DB.'scores.db.php');
 				
-			do { 
-				$style = $row_scores['brewCategory'].$row_scores['brewSubCategory'];
-				if ($row_scores['brewCategorySort'] > $category_end) $style_long = style_convert($row_scores['brewCategorySort'],1);
-				else $style_long = $row_scores['brewStyle'];
+			do {
+				
+				if (strpos($_SESSION['prefsStyleSet'],"BABDB") === false) {
+					$style = $row_scores['brewCategory'].$row_scores['brewSubCategory'];
+					if ($row_scores['brewCategorySort'] > $category_end) $style_long = style_convert($row_scores['brewCategorySort'],1);
+					else $style_long = $row_scores['brewStyle'];
+				}
+				
+				else {
+					
+					if (is_numeric($row_scores['brewSubCategory'])) {
+						$style = $_SESSION['styles']['data'][$row_scores['brewSubCategory'] - 1]['category']['name'];
+						if ($style == "Hybrid/mixed Beer") $style = "Hybrid/Mixed Beer"; 
+						elseif ($style == "European-germanic Lager") $style = "European-Germanic Lager";
+						else $style = ucwords($style);
+					}
+					
+					else $style = "Custom Style";
+					
+					$style_long = $row_scores['brewStyle'];
+				}
 				
 				$table_body1 .= "<tr>";
 				
 				if ($action == "print") { 
-					$table_body1 .= "<td>";
+					$table_body1 .= "<td width=\"1%%\" nowrap>";
 					$table_body1 .= display_place($row_scores['scorePlace'],1);
 					$table_body1 .= "</td>";
 				}
 				
 				else {
-					$table_body1 .= "<td>";
+					$table_body1 .= "<td width=\"1%%\" nowrap>";
 					$table_body1 .= display_place($row_scores['scorePlace'],2);
 					$table_body1 .= "</td>";
 				}
@@ -127,7 +145,8 @@ if ($row_scored_entries['count'] > 0) {
 				
 				if ($filter == "scores") { 
 					$table_body1 .= "<td class=\"hidden-xs hidden-sm hidden-md\">";
-					$table_body1 .= $row_scores['scoreEntry'];
+					if (!empty($row_scores['scoreEntry'])) $table_body1 .= $row_scores['scoreEntry'];
+					else $table_body1 .= "&nbsp;";
 					$table_body1 .= "</td>";
 				}
 				

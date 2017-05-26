@@ -83,6 +83,7 @@ $page_info15 = "";
 $header1_16 = "";
 $page_info16 = "";
 $style_info_modals = "";
+$ba_accepted_styles[] = "";
 
 // Registration Window
 if (!$logged_in) {
@@ -140,9 +141,47 @@ if ($entry_window_open < 2) {
 		if (count($excepted_styles) == 1) $sub = $entry_info_text_027; else $sub = $entry_info_text_028;
 			if ($row_limits['prefsUSCLExLimit'] == 1) $page_info16 .= sprintf("<p>%s to %s %s %s: </p>",$entry_info_text_021,$row_limits['prefsUSCLExLimit'],$entry_info_text_029,$sub);
 			else $page_info16 .= sprintf("<p>%s %s %s %s: </p>",$entry_info_text_021,$row_limits['prefsUSCLExLimit'],$entry_info_text_030,$sub);
+			
 			$page_info16 .= "<div class=\"row\">";
 			$page_info16 .= "<div class=\"col col-lg-6 col-md-8 col-sm-10 col-xs-12\">";
-			$page_info16 .= style_convert($row_limits['prefsUSCLEx'],"7");
+			
+			if (strpos($_SESSION['prefsStyleSet'],"BABDB") !== false) {
+				
+				$ba_style[] = "";
+				
+				// Check for any custom styles 
+				if ($totalRows_styles > 0) {
+			
+					do {
+						
+						if ((isset($row_styles['id'])) && ($row_styles['brewStyleActive'] == "Y")) {
+							$ba_style[] .= $row_styles['brewStyle']." (".$label_custom_style.")";
+							$ba_accepted_styles[] .= $row_styles['brewStyle']." (".$label_custom_style.")"."|".$row_styles['id'];
+						}
+						
+					} while($row_styles = mysqli_fetch_assoc($styles));
+				
+				}
+				
+				foreach ($excepted_styles as $ba_excepted_style) {
+					// Hack - cannot figure out why the id of the style in the array is returning the NEXT style's name as a value
+					$ba_style[] .= $_SESSION['styles']['data'][$ba_excepted_style-1]['name'];
+					
+				}
+				
+				sort($ba_style);
+				
+				foreach ($ba_style as $value) {
+					if (!empty($value)) $page_info16 .= "<li class=\"list-group-item small\">".$value."</li>";
+				}
+				
+				$page_info16 .= "</ul>";
+				
+				
+			} else {
+				$page_info16 .= style_convert($row_limits['prefsUSCLEx'],"7");
+			}
+			
 			$page_info16 .= "</div>";
 			$page_info16 .= "</div>";
 	
@@ -205,35 +244,32 @@ if (strpos($_SESSION['prefsStyleSet'],"BABDB") !== false) {
 	$ba_styleSet_explodies = explode("|",$_SESSION['prefsStyleSet']);
 	$ba_style_explodies = explode(",",$ba_styleSet_explodies[2]);
 	
-	foreach ($ba_styles_sorted as $ba_styles => $ba_stylesData) {
-			
-			if (is_array($ba_stylesData) || is_object($ba_stylesData)) {
-				
-				foreach ($ba_stylesData as $key => $ba_style) { 
-					
-					if (in_array($ba_style['id'],$ba_style_explodies)) {
-						
-						if (($styles_endRow == 0) && ($styles_hloopRow1++ != 0)) $page_info8 .= "<tr>";
-						
-						$page_info8 .= "<td width=\"33%\">";
-						
-						if (in_array($ba_style['id'],$ba_special_ids)) $page_info8 .= "<a href=\"https://www.brewersassociation.org/resources/brewers-association-beer-style-guidelines/\" target=\"_blank\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"".$entry_info_text_045." - ".$ba_style['name']." \">".$ba_style['name']."</a>"; 
-						
-						else $page_info8 .= $ba_style['name'];
-						
-						$page_info8 .= "</td>";
-						$styles_endRow++;
-						if ($styles_endRow >= $styles_columns) { $styles_endRow = 0; }
-						
-					}
-				
-				} // end foreach ($stylesData as $data => $style)
-				
-			} // end if (is_array($stylesData) || is_object($stylesData))
-			
-		} // end foreach ($_SESSION['styles'] as $styles => $stylesData)
+	foreach ($_SESSION['styles'] as $ba_styles => $ba_stylesData) {
+		if (is_array($ba_stylesData) || is_object($ba_stylesData)) {
+			foreach ($ba_stylesData as $key => $ba_style) { 
+				if (in_array($ba_style['id'],$ba_style_explodies)) {
+						$ba_accepted_styles[] .= $ba_style['name']."|".$ba_style['id'];
+				}
+			} // end foreach ($stylesData as $data => $style)	
+		} // end if (is_array($stylesData) || is_object($stylesData))
+	} // end foreach ($_SESSION['styles'] as $styles => $stylesData)
 	
+	sort($ba_accepted_styles);
 	
+	foreach ($ba_accepted_styles as $value) {
+		$ba_style_explodies = explode("|",$value);
+		if (($styles_endRow == 0) && ($styles_hloopRow1++ != 0)) $page_info8 .= "<tr>";
+		if (!empty($value)) {		
+			$page_info8 .= "<td width=\"33%\">";
+			if (in_array($ba_style_explodies[1],$ba_special_ids)) $page_info8 .= "<a href=\"https://www.brewersassociation.org/resources/brewers-association-beer-style-guidelines/\" target=\"_blank\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"".$entry_info_text_045." - ".$ba_style_explodies[0]." \">".$ba_style_explodies[0]."</a>"; 
+			else $page_info8 .= $ba_style_explodies[0];
+			$page_info8 .= "</td>";
+			$styles_endRow++;
+		}
+		if ($styles_endRow >= $styles_columns) { 
+			$styles_endRow = 0; 
+		}
+	}
 }
 
 else {

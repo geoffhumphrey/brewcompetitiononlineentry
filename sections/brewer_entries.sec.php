@@ -80,7 +80,7 @@ if (($totalRows_log > 0) && ($action != "print")) {
 	
 	if (($totalRows_log - $totalRows_log_confirmed) > 0) { 
 			$warnings .= "<div class=\"alert alert-warning\">";
-			$warnings .= sprintf("<span class=\"fa fa-lg fa-exclamation-triangle\"></span> <strong>%s</strong> %s",$brewer_entries_text_001); 
+			$warnings .= sprintf("<span class=\"fa fa-lg fa-exclamation-triangle\"></span> <strong>%s</strong> %s",$brewer_entries_text_001,$brewer_entries_text_002); 
 			if ($_SESSION['prefsPayToPrint'] == "Y") $warnings .= sprintf(" %s",$brewer_entries_text_003); 
 			$warnings .= "</div>"; 
 		}
@@ -95,6 +95,9 @@ if (($totalRows_log > 0) && ($action != "print")) {
 $entry_output = "";
 
 do {
+	
+	if ($row_log['brewCategorySort'] > 28) include(DB.'styles.db.php');
+	
 	$required_info = "";
 	if ((!empty($row_log['brewInfo'])) || (!empty($row_log['brewMead1'])) || (!empty($row_log['brewMead2'])) || (!empty($row_log['brewMead3']))) {
 		$brewInfo = "";
@@ -110,8 +113,6 @@ do {
 	$judging_number = sprintf("%06s",$row_log['brewJudgingNumber']);
 	
 	$entry_style = $row_log['brewCategorySort']."-".$row_log['brewSubCategory'];
-	
-	include(DB.'styles.db.php');
 	
 	// Build Entry Table Body
 	
@@ -188,14 +189,31 @@ do {
 	$entry_output .= "</td>";
 	
 	$entry_output .= "<td>";
+	
 	if (strpos($_SESSION['prefsStyleSet'],"BABDB") === false) { 
 		if ($row_styles['brewStyleActive'] == "Y") $entry_output .= $row_log['brewCategorySort'].$row_log['brewSubCategory'].": ".$row_styles['brewStyle']; 
-		elseif (empty($row_log['brewCategorySort'])) $entry_output .= sprintf("<strong class=\"text-danger\">%s</strong>",$brewer_entries_text_007);
+		else $entry_output .= sprintf("<strong class=\"text-danger\">%s</strong>",$brewer_entries_text_016);
+		if (empty($row_log['brewCategorySort'])) $entry_output .= sprintf("<strong class=\"text-danger\">%s</strong>",$brewer_entries_text_007);
 	}
-	else $entry_output .= $entry_style;
+	
+	else {
+	
+		if ($row_log['brewCategorySort'] < 28) {
+			$styleSet_explodies = explode("|",$_SESSION['prefsStyleSet']);
+			$style_explodies = explode(",",$styleSet_explodies[2]);
+			if (in_array($row_log['brewSubCategory'],$style_explodies)) $entry_output .= $row_log['brewStyle'];
+			else $entry_output .= sprintf("<strong class=\"text-danger\">%s</strong>",$brewer_entries_text_016);
+			if (empty($row_log['brewCategorySort'])) $entry_output .= sprintf("<strong class=\"text-danger\">%s</strong>",$brewer_entries_text_007);
+		}
+		
+		else {
+			if ($row_styles['brewStyleActive'] == "Y") $entry_output .= $row_styles['brewStyle']." (".$label_custom_style.")"; 
+			else $entry_output .= sprintf("<strong class=\"text-danger\">%s</strong>",$brewer_entries_text_016);
+		}
+	
+	}	
 	$entry_output .= "</td>";
-	
-	
+		
 	if (!$show_scores) {
 	$entry_output .= "<td class=\"hidden-xs hidden-sm\">";
 	if ($row_log['brewConfirmed'] == "0")  $entry_output .= "<span class=\"fa fa-lg fa-exclamation-circle text-danger\"></span>";
@@ -206,9 +224,7 @@ do {
 	
 	$entry_output .= "<td class=\"hidden-xs hidden-sm\">";
 	$entry_output .= yes_no($row_log['brewPaid'],$base_url,1);
-	$entry_output .= "</td>";
-	
-	
+	$entry_output .= "</td>";	
 	
 	$entry_output .= "<td class=\"hidden-xs hidden-sm\">";
 	if ($row_log['brewUpdated'] != "") $entry_output .= "<span class=\"hidden\">".strtotime($row_log['brewUpdated'])."</span>".getTimeZoneDateTime($_SESSION['prefsTimeZone'], strtotime($row_log['brewUpdated']), $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "short", "date-time-no-gmt"); else $entry_output .= "&nbsp;";
@@ -241,7 +257,6 @@ do {
 		$entry_output .= "</td>";
 		
 	}
-	
 	
 	// Build Actions Links
 	

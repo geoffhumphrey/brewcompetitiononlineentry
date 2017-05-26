@@ -160,7 +160,7 @@ include(DB.'admin_judging_scores_bos.db.php');
         <th nowrap>Judging</th>
         <th nowrap>Table</th>
         <th class="hidden-xs hidden-sm">Table Name</th>
-        <th>Category</th>
+        <th>Style</th>
         <?php if ($dbTable == "default") { ?>
     	<th class="hidden-xs hidden-sm">Table Score</th>
         <th class="hidden-xs hidden-sm">Table Place</th>
@@ -183,6 +183,14 @@ include(DB.'admin_judging_scores_bos.db.php');
 	if ((NHC) || ($_SESSION['prefsEntryForm'] == "N")) $judging_number = sprintf("%06s",$bos_entry_info[6]); 
 	else $judging_number = readable_judging_number($bos_entry_info[1],$bos_entry_info[6]);
 	
+	if (strpos($_SESSION['prefsStyleSet'],"BABDB") === false) {
+		
+		if ($filter == "default") $style_name = $style." ".style_convert($bos_entry_info[1],1).": ".$bos_entry_info[0];
+		else $style_name = $style.": ".$bos_entry_info[0];
+		
+	}
+	
+	else $style_name = $bos_entry_info[0];
 	?>
 	<tr>
     	<td nowrap><?php echo sprintf("%04s",$row_bos['eid']); ?></td>
@@ -190,7 +198,7 @@ include(DB.'admin_judging_scores_bos.db.php');
         <td><?php echo $bos_entry_info[9] ?></td>
         <td class="hidden-xs hidden-sm"><?php echo $bos_entry_info[8]; ?></td>
         <td>
-		<?php if ($filter == "default") echo $style." ".style_convert($bos_entry_info[1],1).": ".$bos_entry_info[0]; else echo $style.": ".$bos_entry_info[0]; ?>
+		<?php echo $style_name;  ?>
         </td>
         <?php if ($dbTable == "default") { ?>
         <td class="hidden-xs hidden-sm"><?php echo $row_bos['scoreEntry']; ?></td>
@@ -248,7 +256,7 @@ include(DB.'admin_judging_scores_bos.db.php');
 	<tr>
     	<th nowrap>Entry</th>
         <th nowrap>Judging</th>
-        <th>Category</th>
+        <th>Style</th>
     	<th>Score</th>
         <th>Place</th>
     </tr>
@@ -263,6 +271,15 @@ include(DB.'admin_judging_scores_bos.db.php');
 		if ((NHC) || ($_SESSION['prefsEntryForm'] == "N")) $judging_number = sprintf("%06s",$bos_entry_info[6]); 
 		else $judging_number = readable_judging_number($bos_entry_info[1],$bos_entry_info[6]);
 		
+		if (strpos($_SESSION['prefsStyleSet'],"BABDB") === false) {
+		
+		if ($filter == "default") $style_name = $style." ".style_convert($bos_entry_info[1],1).": ".$bos_entry_info[0];
+		else $style_name = $style.": ".$bos_entry_info[0];
+		
+	}
+	
+	else $style_name = $bos_entry_info[0];
+		
 	?>
 	<tr>
 		<?php $score_id = $bos_entry_info[13]; ?>
@@ -276,7 +293,7 @@ include(DB.'admin_judging_scores_bos.db.php');
         <?php } ?>
         <td><?php echo sprintf("%04s",$row_enter_bos['eid']); ?></td>
         <td><?php echo $judging_number ?></td>
-        <td><?php echo $style." ".style_convert($bos_entry_info[1],1).": ".$bos_entry_info[0]; ?></td>
+        <td><?php echo $style_name; ?></td>
     	<td><input class="form-control" type="text" name="scoreEntry<?php echo $score_id; ?>" size="5" maxlength="2" value="<?php echo $bos_entry_info[11]; ?>" /></td>
         <td>
         <select class="form-control nodupe" name="scorePlace<?php echo $score_id; ?>">

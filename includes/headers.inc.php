@@ -15,6 +15,9 @@ Checked Single
 $header_output = "";
 $output = "";
 $output_extend = "";
+if (strpos($section, "step") === FALSE) {
+	if ($_SESSION['jPrefsQueued'] == "N") $assign_to = "Flights"; else $assign_to = "Tables";
+}
 
 switch($section) {
 	

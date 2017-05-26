@@ -71,7 +71,7 @@ if (!is_dir_empty($upload_dir)) {
 	
 	// List Files in the directory
 	$handle = opendir($upload_dir);
-	$filelist = "<h2>Files in the Directory</h2>";
+	$filelist = "<h2>Files in the Directory <small><a class=\"btn btn-danger btn-sm\" href=\"".$base_url."includes/process.php?action=delete-scoresheets\" data-confirm=\"Are you sure? This will delete all scoresheets listed below. This cannot be undone.\"><span class=\"fa fa-trash\"></span> Delete All Scoresheets</a></small></h2>";
 	$filelist .= "<table class=\"table table-bordered table-responsive table-striped\" id=\"sortable\">\n";
 	$filelist .= "<thead>\n";
 	$filelist .= "<tr>\n";
@@ -80,7 +80,9 @@ if (!is_dir_empty($upload_dir)) {
 	$filelist .= "<th>Actions</th>\n";
 	$filelist .= "</thead>\n";
 	$filelist .= "<tbody>\n";
+	
 	while ($file = readdir($handle)) {
+	   
 	   if(!is_dir($file) && !is_link($file)) {
 		   
 		   	// The pseudo-random number and the corresponding name of the temporary file are defined each time this brewer_entries.sec.php script is accessed (or refreshed), but the temporary file is created only when the entrant clicks on the gavel icon to access the scoresheet. 

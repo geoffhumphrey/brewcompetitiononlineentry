@@ -1722,7 +1722,7 @@ a.bg-amber:focus, a.bg-amber:hover {
 	background-color: #FFE082;  /* 200 Shade */
 }
 	
-.text-v {
+.text-amber {
 	color: #FF6F00;  /* 900 Shade */
 }
 	
@@ -1734,6 +1734,29 @@ a.text-amber:focus, a.text-amber:hover {
 	border-color: #FFECB3; /* 100 Shade */
 	background: #FFF8E1; /* 50 Shade */
 	color: #FF6F00; /* 900 Shade */
+}
+
+/* Grey */
+.bg-grey {
+	background-color: #FAFAFA;  /* 50 Shade */
+}
+	
+a.bg-grey:focus, a.bg-grey:hover {
+	background-color: #EEEEEE;  /* 200 Shade */
+}
+	
+.text-grey {
+	color: #212121;  /* 900 Shade */
+}
+	
+a.text-grey:focus, a.text-amber:grey {
+	color: #BDBDBD;  /* 400 Shade */
+}
+
+.alert-grey {
+	border-color: #F5F5F5; /* 100 Shade */
+	background: #FAFAFA; /* 50 Shade */
+	color: #212121; /* 900 Shade */
 }
 
 /** DataTables Overrides **/

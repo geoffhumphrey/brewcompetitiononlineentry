@@ -41,6 +41,8 @@ sso/*
 
 config_for_test.php
 
+php_info.php
+
 .DS_Store
 
 iframe.html

@@ -67,16 +67,16 @@ $judge_loc_url_yes = "";
 $judge_loc_url_no = "";
 $assignment_modal_body = "";
 
-
-if ($filter == "judges") 	$staff_row_field = "staff_judge";
-if ($filter == "stewards") 	$staff_row_field = "staff_steward";
-if ($filter == "staff") 	$staff_row_field = "staff_staff";
-if ($filter == "bos") 		$staff_row_field = "staff_judge_bos";
-
-if ($filter == "judges") 	$filter_readable .= "Judges";  
-if ($filter == "stewards") 	$filter_readable .= "Stewards";
-if ($filter == "staff") 	$filter_readable .= "Staff"; 
-if ($filter == "bos") 		$filter_readable .= "Best of Show Judges";
+if ($filter == "bos") { 
+	$filter_readable .= "Best of Show Judges";
+	$staff_row_field = "staff_judge_bos";
+}
+else {
+	$filter_readable = ucwords($filter);
+	if ($filter == "judges") 	$staff_row_field = "staff_judge";
+	if ($filter == "stewards") 	$staff_row_field = "staff_steward";
+	if ($filter == "staff") 	$staff_row_field = "staff_staff";
+}
 
 // *****************************************************************************
 // ---------------------- Top of Page Vars -------------------------------------
@@ -92,8 +92,6 @@ if ($section != "step5") {
 	elseif ($action == "assign") $subtitle .= ": Assign Participants as ".$filter_readable;
 	else $subtitle .= ": Judging Locations &amp; Dates";
 }
-
-
 
 // Build Secondary Page Info
 
@@ -227,7 +225,7 @@ if ($section != "step5") {
 		}
 		if (($filter == "judges") || ($filter == "stewards")) {
 			$output_datatables_head .= "<th class=\"hidden-xs hidden-sm\">Location Preferences</th>";
-			$output_datatables_head .= "<th class=\"hidden-xs hidden-sm\">Has Entries In...</th>";
+			$output_datatables_head .= "<th class=\"hidden-xs hidden-sm\" width=\"30%\">Has Entries In...</th>";
 		}
 		$output_datatables_head .= "</tr>";
 		
@@ -237,7 +235,8 @@ if ($section != "step5") {
 		
 			do {
 				
-				$brewer_assignment = brewer_assignment($row_brewer['uid'],"1","default",$dbTable,$filter);
+				$brewer_assignment = brewer_assignment($row_brewer['uid'],"1","default",$dbTable,$filter,"default");
+				
 				if (!empty($brewer_assignment)) {
 					
 					// Build assignment modal for participants

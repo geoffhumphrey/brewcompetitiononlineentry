@@ -11,7 +11,7 @@ if ($bid != "") {
 if ($filter != "winners") {
 	
 	if ($filter == "all") 	$query_sql = "SELECT * FROM $brewing_db_table";
-	else $query_sql = "SELECT DISTINCT id, brewBrewerFirstName, brewBrewerLastName, brewCategory, brewSubCategory, brewName, brewInfo, brewComments, brewMead2, brewMead1, brewMead3, brewBrewerID, brewJudgingNumber FROM $brewing_db_table";
+	else $query_sql = "SELECT DISTINCT id, brewBrewerFirstName, brewBrewerLastName, brewCategory, brewSubCategory, brewName, brewInfo, brewComments, brewMead2, brewMead1, brewMead3, brewBrewerID, brewJudgingNumber, brewStyle FROM $brewing_db_table";
 	
 	if (SINGLE) {
 		if (($filter == "paid") && ($bid == "default") && ($view == "default"))  $query_sql .= sprintf(" WHERE brewPaid = '1' AND brewReceived = '1' AND comp_id='%s'",$_SESSION['comp_id']); 

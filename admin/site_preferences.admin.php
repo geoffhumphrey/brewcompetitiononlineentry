@@ -1,14 +1,59 @@
 <?php if ($go == "preferences") { 
-include (DB.'styles.db.php'); ?>
+include (DB.'styles.db.php'); 
+$prefsUSCLEx = "";
+if (strpos($styleSet,"BABDB") === false) {
+	
+	do { 
+	$checked = "";
+	if ($go == "preferences") {
+		$a = explode(",", $row_limits['prefsUSCLEx']); 
+		$b = $row_styles['id']; 
+		foreach ($a as $value) { 
+			if ($value == $b) $checked = "CHECKED"; 
+		} 
+	}
+
+	if ($row_styles['id'] != "") $$prefsUSCLEx .= "<div class=\"checkbox\"><label><input name=\"prefsUSCLEx[]\" type=\"checkbox\" value=\"".$row_styles['id']."\" ".$checked."> ".ltrim($row_styles['brewStyleGroup'], "0").$row_styles['brewStyleNum'].": ".$row_styles['brewStyle']."</label></div>";
+	
+	} while ($row_styles = mysqli_fetch_assoc($styles));
+
+} else { 
+
+
+	include(INCLUDES.'ba_constants.inc.php');
+
+	$ba_exceptions = "";
+	
+	$exceptions = explode(",",$row_limits['prefsUSCLEx']);
+				
+	foreach ($_SESSION['styles'] as $ba_styles => $stylesData) {
+		
+		if (is_array($stylesData) || is_object($stylesData)) {
+			
+			foreach ($stylesData as $key => $ba_style) { 
+			
+				// Likes
+				$ba_exceptions_selected = "";
+				if (in_array($ba_style['id'],$exceptions)) $ba_exceptions_selected = "CHECKED";
+				
+				$ba_exceptions .= "<div class=\"checkbox\">";
+				$ba_exceptions .= "<label>";
+				$ba_exceptions .= "<input name=\"prefsUSCLEx[]\" type=\"checkbox\" value=\"".$ba_style['id']."\" ".$ba_exceptions_selected.">";
+				$ba_exceptions .= $ba_style['name'];
+				$ba_exceptions .= "</label>";
+				$ba_exceptions .= "</div>";
+			
+			} // end foreach ($stylesData as $data => $ba_style)
+	
+		} // end if (is_array($stylesData) || is_object($stylesData))
+		
+	} // end foreach ($_SESSION['styles'] as $styles => $stylesData)
+
+	$prefsUSCLEx = $ba_exceptions;
+} 
+?>
 <script type='text/javascript'>//<![CDATA[ 
 $(document).ready(function(){
-	
-	<?php if (!empty($row_limits['prefsUserEntryLimit'])) { ?>
-	$("#subStyleExeptions").show("fast");
-	<?php } else { ?>
-	// hide divs on load if no value
-	$("#subStyleExeptions").hide("fast");
-	<?php } ?>
 	
 	<?php
 	$styleKey = "";
@@ -20,10 +65,12 @@ $(document).ready(function(){
 	?>
 	$("#styleSetAPIKey").show("fast");
 	$("#helpBlockBAAPI").show("fast");
+	$("#prefsHideSpecific").hide("fast");
 	<?php } else { ?>
-	// hide divs on load if no value
+	// show/hide divs on load if no value
 	$("#styleSetAPIKey").hide("fast");
 	$("#helpBlockBAAPI").hide("fast");
+	$("#prefsHideSpecific").show("fast");
 	<?php } ?>
 	
 	<?php if ($row_limits['prefsStyleSet'] == "BJCP2008") { ?>
@@ -38,21 +85,30 @@ $(document).ready(function(){
 			$("#styleSetAPIKey").show("fast");
 			$("#helpBlockBAAPI").show("fast");
 			$("#helpBlockBJCP2008").hide("fast");
+			$("#prefsHideSpecific").hide("fast");
 		}
 		
 		else if ($("#prefsStyleSet").val() == "BJCP2008") {
 			$("#styleSetAPIKey").hide("fast");
 			$("#helpBlockBAAPI").hide("fast");
 			$("#helpBlockBJCP2008").show("fast");
+			$("#prefsHideSpecific").show("fast");
 		}
 		
 		else  { 
 			$("#styleSetAPIKey").hide("fast");
 			$("#helpBlockBAAPI").hide("fast");
 			$("#helpBlockBJCP2008").hide("fast");
+			$("#prefsHideSpecific").show("fast");
 		}
 		
 	}); // end $("#prefsStyleSet").change(function()
+	
+	<?php if ($row_limits['prefsUserSubCatLimit'] > 0) { ?>
+	$("#subStyleExeptions").show("fast");
+	<?php } else { ?>
+	$("#subStyleExeptions").hide("fast");
+	<?php } ?>
 	
 	$("#prefsUserSubCatLimit").change(function() {
 		
@@ -67,11 +123,6 @@ $(document).ready(function(){
 			$("#subStyleExeptions").show("fast");
 		}
 		<?php } ?>
-		
-		else {
-			$("#subStyleExeptions").hide("fast");
-			
-		}
 		
 	}); // end $("#prefsUserSubCatLimit").change(function()
 	
@@ -515,8 +566,8 @@ $(document).ready(function(){
         </div>
     </div>
 </div><!-- ./modal -->
-<div class="form-group"><!-- Form Group Radio INLINE -->
-    <label for="prefsHideRecipe" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Hide Brewer&rsquo;s Specifics Field</label>
+<div id="prefsHideSpecific" class="form-group"><!-- Form Group Radio INLINE -->
+    <label for="prefsHideSpecific" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Hide Brewer&rsquo;s Specifics Field</label>
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
         <div class="input-group">
             <!-- Input Here -->
@@ -675,7 +726,6 @@ $(document).ready(function(){
 	<span id="helpBlock" class="help-block">Limit of entries that each participant can enter into a single sub-style. Leave blank if no limit.</span>
 	</div>
 </div><!-- ./Form Group -->
-<?php if (strpos($styleSet,"BABDB") === false) { ?>
 <!-- Insert Collapsable -->
 <div id="subStyleExeptions">
 	<div class="form-group"><!-- Form Group NOT REQUIRED Select -->
@@ -704,26 +754,7 @@ $(document).ready(function(){
 		<div class="col-lg-9 col-md-9 col-sm-8 col-xs-12">
 			<div class="input-group">
 				<!-- Input Here -->
-				<?php do { 
-					$checked = "";
-					if ($go == "preferences") {
-						$a = explode(",", $row_limits['prefsUSCLEx']); 
-						$b = $row_styles['id']; 
-						foreach ($a as $value) { 
-							if ($value == $b) $checked = "CHECKED"; 
-						} 
-					}
-				
-				?>
-				<?php if ($row_styles['id'] != "") { ?>
-				<div class="checkbox">
-					<label>
-						<input name="prefsUSCLEx[]" type="checkbox" value="<?php echo $row_styles['id']; ?>" <?php echo $checked; ?>> <?php echo ltrim($row_styles['brewStyleGroup'], "0").$row_styles['brewStyleNum'].": ".$row_styles['brewStyle']; 
-						 ?>
-					</label>
-				</div>
-				<?php } ?>
-				<?php } while ($row_styles = mysqli_fetch_assoc($styles)); ?>
+				<?php echo $prefsUSCLEx; ?>
 			</div>
 		</div>
 	</div><!-- ./Form Group -->
@@ -745,7 +776,6 @@ $(document).ready(function(){
         </div>
     </div>
 </div><!-- ./modal -->
-<?php } ?>
 <?php } ?>
 <h3>Performance and Data Clean-Up</h3>
 <div class="form-group"><!-- Form Group NOT REQUIRED Text Input -->

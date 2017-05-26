@@ -27,8 +27,6 @@ if (strpos($_SESSION['prefsStyleSet'],"BABDB") !== false) {
 				
 				foreach ($stylesData as $key => $ba_style) { 
 					
-					// if (in_array($style['category']['id'],$ba_beer_categories)) {
-					
 						$style_value = $ba_style['category']['id']."-".$ba_style['id'];
 						
 						$brewStyleReqSpec = "";
@@ -52,11 +50,7 @@ if (strpos($_SESSION['prefsStyleSet'],"BABDB") !== false) {
 						else $categoryName = ucwords($ba_style['category']['name']);
 						
 						$brewStyleActive = "";
-						if (in_array($ba_style['id'],$style_explodies)) $brewStyleActive = "CHECKED";
-						
-						//$brewStyleJudgingLoc = "";
-						//if (isset($row_styles['brewStyleJudgingLoc']) && ($row_styles['brewStyleJudgingLoc'] == $bid)) $brewStyleJudgingLoc = "CHECKED";
-										
+						if (in_array($ba_style['id'],$style_explodies)) $brewStyleActive = "CHECKED";						
 						
 						$table_body .= "<tr>";
 						$table_body .= "<input type=\"hidden\" name=\"id[]\" value=\"".$ba_style['id']."\" />";
@@ -504,7 +498,7 @@ $style_type_2 = style_type($row_styles['brewStyleType'],"1","bcoe");
 <div class="bcoem-admin-element hidden-print">
 	<div class="form-group">
 		<div class="col-lg-offset-2 col-md-offset-3 col-sm-offset-4">
-			<input type="submit" name="Submit" id="updateStyle" class="btn btn-primary" value="<?php if ($action == "add") echo "Add"; else echo "Edit"; ?> Custom Style Category" />
+			<input type="submit" name="Submit" id="updateStyle" class="btn btn-primary" value="<?php if ($action == "add") echo "Add"; else echo "Edit"; ?> Custom Style" />
 		</div>
 	</div>
 </div>

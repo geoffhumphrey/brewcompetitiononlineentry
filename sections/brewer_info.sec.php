@@ -142,23 +142,17 @@ $judgeLikesModals = "";
 $judgeDislikesDisplay = "";
 $judgeDislikesModals = "";
 
-$show_judge_steward_fields = TRUE;
+$show_judge_steward_fields = FALSE;
 
-if ($_SESSION['prefsProEdition'] == 1) {
-	
-	// If registered as a brewery, will not be a judge
-	// Only individuals can be judges, stewards, or staff
-	if (($row_brewer['brewerJudge'] != "Y") && ($row_brewer['brewerSteward'] != "Y") && (isset($row_brewer['brewerBreweryName']))) {
-		$label_contact = $label_contact;
-		$label_organization = $label_organization;
-		$show_judge_steward_fields = FALSE;
-	}
-	
-	else {
-		$label_contact = "";
-		$label_organization = "";
-	}
-	
+if (($_SESSION['prefsProEdition'] == 1) && (isset($row_brewer['brewerBreweryName']))) {
+	$label_contact = $label_contact." ";
+	$label_organization = $label_organization." ";
+}
+
+else {
+	$show_judge_steward_fields = TRUE;
+	$label_contact = "";
+	$label_organization = "";
 }
 
 // Build useful variables
@@ -317,6 +311,9 @@ $account_display .= "<div class=\"".$display_right_cols."\">".$phone."</div>";
 $account_display .= "</div>";
 
 if (($_SESSION['prefsProEdition'] == 1) && (!$show_judge_steward_fields)) {
+	
+	$account_display .= "<hr>";
+	
 	$account_display .= "<div class=\"row bcoem-account-info\">";
 	$account_display .= sprintf("<div class=\"".$display_left_cols."\"><strong>%s</strong></div>",$label_organization.$label_name);
 	$account_display .= "<div class=\"".$display_right_cols."\">".$_SESSION['brewerBreweryName']."</div>";

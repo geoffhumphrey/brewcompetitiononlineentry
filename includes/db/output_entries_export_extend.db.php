@@ -26,6 +26,6 @@ if (isset($row_flight['flightTable'])) {
 } else {
 	$table_info = "";
 	$table_name = "00: Not Assigned to a Table";
-	$location = "";
+	$location = " ^ ";
 }
 ?>

@@ -12,13 +12,17 @@ else $styleSet = $_SESSION['prefsStyleSet'];
 // If styleset is BA, grab only the custom styles
 if (strpos($styleSet,"BABDB") !== false) {
 	
-	
 	if ($action == "edit") $query_styles = sprintf("SELECT * FROM %s WHERE id='%s'",$styles_db_table,$id);
+	elseif ($section == "list") $query_styles = sprintf("SELECT * FROM %s WHERE brewStyleGroup = '%s' AND brewStyleNum = '%s'",$styles_db_table,$row_log['brewCategorySort'],$row_log['brewSubCategory']);
 	else $query_styles = sprintf("SELECT * FROM %s WHERE brewStyleOwn='custom'",$styles_db_table);
 	$styles = mysqli_query($connection,$query_styles) or die (mysqli_error($connection));
 	$row_styles = mysqli_fetch_assoc($styles);
 	$totalRows_styles = mysqli_num_rows($styles);
 	
+	$query_styles_custom = sprintf("SELECT * FROM %s WHERE brewStyleOwn='custom'",$styles_db_table);
+	$styles_custom = mysqli_query($connection,$query_styles_custom) or die (mysqli_error($connection));
+	$row_styles_custom = mysqli_fetch_assoc($styles_custom);
+	$totalRows_styles_custom = mysqli_num_rows($styles_custom);
 	
 	/*
 	$query_styles = "";
@@ -94,7 +98,4 @@ if (strpos($styleSet,"BABDB") === false) {
 	}
 
 }
-
-// echo $query_styles;
-
 ?>

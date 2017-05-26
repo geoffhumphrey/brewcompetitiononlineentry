@@ -286,7 +286,7 @@ if (($logged_in) && ($admin_user) && ($go != "error_page")) { ?>
             <li class="dropdown">
                 <a href="#" title="My Account" class="my-dropdown" data-toggle="dropdown" data-placement="bottom"><span class="fa fa-user"></span> <span class="caret"></span></a>
                 <ul class="dropdown-menu">
-                	<li class="dropdown-header"><strong><?php echo $_SESSION['loginUsername']; ?></strong></li>
+                	<li class="dropdown-header"><strong><?php if (($_SESSION['prefsProEdition'] == 1) && (!empty($_SESSION['brewerBreweryName']))) echo $_SESSION['brewerBreweryName']; else echo $_SESSION['loginUsername']; ?></strong></li>
                     <li role="separator" class="divider"></li>
                     <li><a href="<?php echo $link_list; ?>" tabindex="-1"><?php echo $label_my_account; ?></a></li>
                     <li><a href="<?php echo $edit_user_info_link; ?>" tabindex="-1"><?php echo $label_edit_account; ?></a></li>

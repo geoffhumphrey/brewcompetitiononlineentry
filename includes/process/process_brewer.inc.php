@@ -27,10 +27,20 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 	else $brewerAHA = "";
 	
 	if (isset($_POST['brewerClubs'])) {
+		include(INCLUDES.'constants.inc.php');
 		$brewerClubs = strip_tags($_POST['brewerClubs']);
+		$brewerClubsConcat = $brewerClubs."|".$brewerClubs;
+		if (!in_array($brewerClubsConcat,$club_array))  {
+			if (($_POST['brewerClubs'] == "Other") && (!empty($_POST['brewerClubsOther']))) {
+				$brewerClubs = strip_tags($_POST['brewerClubsOther']);
+				$brewerClubs = ucwords($brewerClubs);
+			}
+			else $brewerClubs = "";
+		}
+		else $brewerClubs = $brewerClubs;
 	}
 	else $brewerClubs = "";
-	
+		
 	$brewerPhone1 = strip_tags($_POST['brewerPhone1']);
 	
 	if (isset($_POST['brewerPhone2'])) { 

@@ -19,6 +19,10 @@ if ((!$logged_in) && (in_array($section,$account_pages))) {
 	exit;
 }
 
+// convert_to_ba();
+// convert_to_pro();
+// add_ba_category();
+
 // ---------------------------------------------------------------------------------
 
 // ---------------------------- Admin Only Functions -------------------------------
@@ -144,7 +148,7 @@ else $datatables_load = array("admin","list");
     <div class="<?php echo $container_main; ?> hidden-print">
     <?php 
 	if (DEBUG_SESSION_VARS) include (DEBUGGING.'session_vars.debug.php'); 
-	// echo convert_to_ba();
+	
 	
 	?>
     </div>

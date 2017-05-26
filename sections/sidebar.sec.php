@@ -136,7 +136,7 @@ if ($section != "admin") {
 	$header1_200 .= "</div>";
 	$page_info200 .= "<div class=\"panel-body\">";
 	
-	if ($entry_window_open == 1) {
+	if (($_SESSION['prefsProEdition'] == 0) && ($entry_window_open == 1)) {
 		$page_info200 .= "<p>";
 		$page_info200 .= sprintf("<strong class=\"text-success\">%s %s</strong> %s %s, %s.", $total_entries, strtolower($label_entries), $sidebar_text_025, $current_time, $current_date_display);
 		$page_info200 .= "</p>";

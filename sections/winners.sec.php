@@ -59,24 +59,26 @@ if ($row_scored_entries['count'] > 0) {
 	do { 
 	$entry_count = get_table_info(1,"count_total",$row_tables['id'],$dbTable,"default");
 	
+	
 	if ($entry_count > 0) { 
 		
 		if ($entry_count > 1) $entries = strtolower($label_entries); else $entries = strtolower($label_entry);
+		
+		$primary_page_info = "";
+		$header1_1 = "";
+		$page_info1 = "";
+		$header1_2 = "";
+		$page_info2 = "";
+		$table_head1 = "";
+		$table_body1 = "";
+		
+		$header1_2 .= sprintf("<div class=\"bcoem-winner-table\"><h3>%s %s: %s (%s %s)</h3><p>%s</p></div>",$label_table,$row_tables['tableNumber'],$row_tables['tableName'],$entry_count,$entries,$winners_text_000);
 			
 			if (score_count($row_tables['id'],"1"))	{
 				
-				$primary_page_info = "";
-				$header1_1 = "";
-				$page_info1 = "";
-				$header1_2 = "";
-				$page_info2 = "";
-			
-				$table_head1 = "";
-				$table_body1 = "";
-				
 				// Build page headers
 				$header1_1 .= sprintf("<h3>%s %s: %s (%s %s)</h3>",$label_table,$row_tables['tableNumber'],$row_tables['tableName'],$entry_count,$entries);
-				$header1_2 .= sprintf("<div class=\"bcoem-winner-table\"><h3>%s %s: %s (%s %s)</h3><p>%s</p></div>",$label_table,$row_tables['tableNumber'],$row_tables['tableName'],$entry_count,$entries,$winners_text_000);
+				
 				
 				// Build table headers
 				$table_head1 .= "<tr>";
@@ -118,7 +120,8 @@ if ($row_scored_entries['count'] > 0) {
 					$table_body1 .= "</td>";
 					
 					$table_body1 .= "<td>";
-					$table_body1 .= $style.": ".$row_scores['brewStyle'];
+					if (strpos($_SESSION['prefsStyleSet'],"BABDB") === false) $table_body1 .= $style.": ".$row_scores['brewStyle'];
+					else $table_body1 .= $row_scores['brewStyle'];
 					$table_body1 .= "</td>";
 					
 					$table_body1 .= "<td class=\"hidden-xs hidden-sm hidden-md\">";
@@ -127,7 +130,8 @@ if ($row_scored_entries['count'] > 0) {
 					
 					if ($filter == "scores") { 
 						$table_body1 .= "<td>";
-						$table_body1 .= $row_scores['scoreEntry'];
+						if (!empty($row_scores['scoreEntry'])) $table_body1 .= $row_scores['scoreEntry'];
+						else $table_body1 .= "&nbsp;";
 						$table_body1 .= "</td>";
 					}
 					

@@ -131,127 +131,220 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 	
 	if ($action == "add") {
 	
-	if ($_SESSION['prefsStyleSet'] == "BJCP2008") $category_end = 28;		
-	else $category_end = 34;	
+		if ($_SESSION['prefsStyleSet'] == "BJCP2008") $category_end = 28;		
+		else $category_end = 34;	
 	
-	if (strpos($_SESSION['prefsStyleSet'],"BABDB") !== false) $query_style_name = sprintf("SELECT brewStyleGroup FROM %s WHERE (brewStyleVersion='%s' OR brewStyleOwn='custom') AND brewStyleGroup >= %s ORDER BY id DESC LIMIT 1", $styles_db_table, "BJCP2015", $category_end);
-	else $query_style_name = sprintf("SELECT brewStyleGroup FROM %s WHERE (brewStyleVersion='%s' OR brewStyleOwn='custom') AND brewStyleGroup >= %s ORDER BY id DESC LIMIT 1", $styles_db_table, $_SESSION['prefsStyleSet'], $category_end);
-	$style_name = mysqli_query($connection,$query_style_name) or die (mysqli_error($connection));
-	$row_style_name = mysqli_fetch_assoc($style_name);
+		if (strpos($_SESSION['prefsStyleSet'],"BABDB") !== false) {
+			$query_style_name = sprintf("SELECT id,brewStyleGroup FROM %s WHERE (brewStyleVersion='%s' OR brewStyleOwn='custom') AND brewStyleGroup >= %s ORDER BY id DESC LIMIT 1", $styles_db_table, "BJCP2015", $category_end);
+		}
+		
+		else {
+			$query_style_name = sprintf("SELECT id,brewStyleGroup FROM %s WHERE (brewStyleVersion='%s' OR brewStyleOwn='custom') AND brewStyleGroup >= %s ORDER BY id DESC LIMIT 1", $styles_db_table, $_SESSION['prefsStyleSet'], $category_end);
+		}
+		
+		$style_name = mysqli_query($connection,$query_style_name) or die (mysqli_error($connection));
+		$row_style_name = mysqli_fetch_assoc($style_name);
+		
+		// Get the difference between the category end and the last number
+		// $style_difference = ($row_style_name['brewStyleGroup'] - $category_end);
+		$style_add_one = $row_style_name['brewStyleGroup'] + 1;
+		
+		if (isset($_POST['brewStyleLink'])) $brew_style_link = $_POST['brewStyleLink']; else $brew_style_link = "";
+		
+		// Going to start IDs for custom styles at 500
+		// Allows for expansion of BA styles and saves conflicts with special requirement styles and subcategory limit exception styles
+		if ($row_style_name['id'] < 500) {
+			
+			$insertSQL = sprintf("INSERT INTO $styles_db_table (
+			id,
+			brewStyleNum, 
+			brewStyle, 
+			brewStyleOG, 
+			brewStyleOGMax, 
+			brewStyleFG, 
+			
+			brewStyleFGMax, 
+			brewStyleABV, 
+			brewStyleABVMax, 
+			brewStyleIBU, 
+			brewStyleIBUMax, 
+			
+			brewStyleSRM, 
+			brewStyleSRMMax, 
+			brewStyleType, 
+			brewStyleInfo, 
+			brewStyleLink, 
+			
+			brewStyleGroup, 
+			brewStyleActive, 
+			brewStyleOwn,
+			brewStyleVersion,
+			brewStyleReqSpec,
+			
+			brewStyleStrength,
+			brewStyleCarb,
+			brewStyleSweet,
+			brewStyleEntry
+			) 
+			VALUES (
+			%s, %s, %s, %s, %s, 
+			%s, %s, %s, %s, %s, 
+			%s, %s, %s, %s, %s, 
+			%s, %s, %s, %s, %s,
+			%s, %s, %s, %s, %s
+			)",
+							   GetSQLValueString("500", "text"),
+							   GetSQLValueString("A", "text"),
+							   GetSQLValueString($_POST['brewStyle'], "scrubbed"),
+							   GetSQLValueString($_POST['brewStyleOG'], "text"),
+							   GetSQLValueString($_POST['brewStyleOGMax'], "text"),
+							   GetSQLValueString($_POST['brewStyleFG'], "text"),
+							   GetSQLValueString($_POST['brewStyleFGMax'], "text"),
+							   GetSQLValueString($_POST['brewStyleABV'], "text"),
+							   GetSQLValueString($_POST['brewStyleABVMax'], "text"),
+							   GetSQLValueString($_POST['brewStyleIBU'], "text"),
+							   GetSQLValueString($_POST['brewStyleIBUMax'], "text"),
+							   GetSQLValueString($_POST['brewStyleSRM'], "text"),
+							   GetSQLValueString($_POST['brewStyleSRMMax'], "text"),
+							   GetSQLValueString($_POST['brewStyleType'], "text"),
+							   GetSQLValueString($_POST['brewStyleInfo'], "text"),
+							   GetSQLValueString($brew_style_link, "text"),
+							   GetSQLValueString($style_add_one, "text"),
+							   GetSQLValueString($_POST['brewStyleActive'], "text"),
+							   GetSQLValueString($_POST['brewStyleOwn'], "text"),
+							   GetSQLValueString($_SESSION['prefsStyleSet'], "text"),
+							   GetSQLValueString($_POST['brewStyleReqSpec'], "text"),
+							   GetSQLValueString($_POST['brewStyleStrength'], "text"),
+							   GetSQLValueString($_POST['brewStyleCarb'], "text"),
+							   GetSQLValueString($_POST['brewStyleSweet'], "text"),
+							   GetSQLValueString(strtr($_POST['brewStyleEntry'],$quote_convert), "text")
+							   );
+			
+			
+		}
+		
+		else {
 	
-	// Get the difference between the category end and the last number
-	// $style_difference = ($row_style_name['brewStyleGroup'] - $category_end);
-	$style_add_one = $row_style_name['brewStyleGroup'] + 1;
-	
-	
-	if (isset($_POST['brewStyleLink'])) $brew_style_link = $_POST['brewStyleLink']; else $brew_style_link = "";
-	
-	  $insertSQL = sprintf("INSERT INTO $styles_db_table (
-	  brewStyleNum, 
-	  brewStyle, 
-	  brewStyleOG, 
-	  brewStyleOGMax, 
-	  brewStyleFG, 
-	  
-	  brewStyleFGMax, 
-	  brewStyleABV, 
-	  brewStyleABVMax, 
-	  brewStyleIBU, 
-	  brewStyleIBUMax, 
-	  
-	  brewStyleSRM, 
-	  brewStyleSRMMax, 
-	  brewStyleType, 
-	  brewStyleInfo, 
-	  brewStyleLink, 
-	  
-	  brewStyleGroup, 
-	  brewStyleActive, 
-	  brewStyleOwn,
-	  brewStyleVersion,
-	  brewStyleReqSpec,
-	  
-	  brewStyleStrength,
-	  brewStyleCarb,
-	  brewStyleSweet,
-	  brewStyleEntry
-	  ) 
-	  VALUES (
-	  %s, %s, %s, %s, %s, 
-	  %s, %s, %s, %s, %s, 
-	  %s, %s, %s, %s, %s, 
-	  %s, %s, %s, %s, %s,
-	  %s, %s, %s, %s
-	  )",
-						   GetSQLValueString("A", "text"),
-						   GetSQLValueString($_POST['brewStyle'], "scrubbed"),
-						   GetSQLValueString($_POST['brewStyleOG'], "text"),
-						   GetSQLValueString($_POST['brewStyleOGMax'], "text"),
-						   GetSQLValueString($_POST['brewStyleFG'], "text"),
-						   GetSQLValueString($_POST['brewStyleFGMax'], "text"),
-						   GetSQLValueString($_POST['brewStyleABV'], "text"),
-						   GetSQLValueString($_POST['brewStyleABVMax'], "text"),
-						   GetSQLValueString($_POST['brewStyleIBU'], "text"),
-						   GetSQLValueString($_POST['brewStyleIBUMax'], "text"),
-						   GetSQLValueString($_POST['brewStyleSRM'], "text"),
-						   GetSQLValueString($_POST['brewStyleSRMMax'], "text"),
-						   GetSQLValueString($_POST['brewStyleType'], "text"),
-						   GetSQLValueString($_POST['brewStyleInfo'], "text"),
-						   GetSQLValueString($brew_style_link, "text"),
-						   GetSQLValueString($style_add_one, "text"),
-						   GetSQLValueString($_POST['brewStyleActive'], "text"),
-						   GetSQLValueString($_POST['brewStyleOwn'], "text"),
-						   GetSQLValueString($_SESSION['prefsStyleSet'], "text"),
-						   GetSQLValueString($_POST['brewStyleReqSpec'], "text"),
-						   GetSQLValueString($_POST['brewStyleStrength'], "text"),
-						   GetSQLValueString($_POST['brewStyleCarb'], "text"),
-						   GetSQLValueString($_POST['brewStyleSweet'], "text"),
-						   GetSQLValueString(strtr($_POST['brewStyleEntry'],$quote_convert), "text")
-						   );
+			$insertSQL = sprintf("INSERT INTO $styles_db_table (
+			brewStyleNum, 
+			brewStyle, 
+			brewStyleOG, 
+			brewStyleOGMax, 
+			brewStyleFG, 
+			
+			brewStyleFGMax, 
+			brewStyleABV, 
+			brewStyleABVMax, 
+			brewStyleIBU, 
+			brewStyleIBUMax, 
+			
+			brewStyleSRM, 
+			brewStyleSRMMax, 
+			brewStyleType, 
+			brewStyleInfo, 
+			brewStyleLink, 
+			
+			brewStyleGroup, 
+			brewStyleActive, 
+			brewStyleOwn,
+			brewStyleVersion,
+			brewStyleReqSpec,
+			
+			brewStyleStrength,
+			brewStyleCarb,
+			brewStyleSweet,
+			brewStyleEntry
+			) 
+			VALUES (
+			%s, %s, %s, %s, %s, 
+			%s, %s, %s, %s, %s, 
+			%s, %s, %s, %s, %s, 
+			%s, %s, %s, %s, %s,
+			%s, %s, %s, %s
+			)",
+							   GetSQLValueString("A", "text"),
+							   GetSQLValueString($_POST['brewStyle'], "scrubbed"),
+							   GetSQLValueString($_POST['brewStyleOG'], "text"),
+							   GetSQLValueString($_POST['brewStyleOGMax'], "text"),
+							   GetSQLValueString($_POST['brewStyleFG'], "text"),
+							   GetSQLValueString($_POST['brewStyleFGMax'], "text"),
+							   GetSQLValueString($_POST['brewStyleABV'], "text"),
+							   GetSQLValueString($_POST['brewStyleABVMax'], "text"),
+							   GetSQLValueString($_POST['brewStyleIBU'], "text"),
+							   GetSQLValueString($_POST['brewStyleIBUMax'], "text"),
+							   GetSQLValueString($_POST['brewStyleSRM'], "text"),
+							   GetSQLValueString($_POST['brewStyleSRMMax'], "text"),
+							   GetSQLValueString($_POST['brewStyleType'], "text"),
+							   GetSQLValueString($_POST['brewStyleInfo'], "text"),
+							   GetSQLValueString($brew_style_link, "text"),
+							   GetSQLValueString($style_add_one, "text"),
+							   GetSQLValueString($_POST['brewStyleActive'], "text"),
+							   GetSQLValueString($_POST['brewStyleOwn'], "text"),
+							   GetSQLValueString($_SESSION['prefsStyleSet'], "text"),
+							   GetSQLValueString($_POST['brewStyleReqSpec'], "text"),
+							   GetSQLValueString($_POST['brewStyleStrength'], "text"),
+							   GetSQLValueString($_POST['brewStyleCarb'], "text"),
+							   GetSQLValueString($_POST['brewStyleSweet'], "text"),
+							   GetSQLValueString(strtr($_POST['brewStyleEntry'],$quote_convert), "text")
+							   );		
+			
+		}
 	
 		//echo $insertSQL;
 		mysqli_real_escape_string($connection,$insertSQL);
 		$result = mysqli_query($connection,$insertSQL) or die (mysqli_error($connection));
-
+		
 		$pattern = array('\'', '"');
 		$insertGoTo = str_replace($pattern, "", $insertGoTo); 
 		header(sprintf("Location: %s", stripslashes($insertGoTo)));
+	
 		
-	}
+	} // end if ($action == "add");
 	
 	if ($action == "edit") {
 		
 		if ($_POST['brewStyleType'] == 2) $styleStrength = 0; else $styleStrength = $_POST['brewStyleStrength'];
 		
-		$updateSQL = sprintf("UPDATE $styles_db_table SET 
-		  brewStyleNum=%s, 
-		  brewStyle=%s, 
-		  brewStyleOG=%s, 
-		  brewStyleOGMax=%s, 
-		  brewStyleFG=%s, 
-		  
-		  brewStyleFGMax=%s, 
-		  brewStyleABV=%s, 
-		  brewStyleABVMax=%s, 
-		  brewStyleIBU=%s, 
-		  brewStyleIBUMax=%s, 
-		  
-		  brewStyleSRM=%s, 
-		  brewStyleSRMMax=%s, 
-		  brewStyleType=%s, 
-		  brewStyleInfo=%s, 
-		  brewStyleLink=%s, 
-		  
-		  brewStyleGroup=%s,
-		  brewStyleActive=%s, 
-		  brewStyleOwn=%s,
-		  brewStyleReqSpec=%s,
-		  brewStyleStrength=%s,
-		  brewStyleCarb=%s,
-		  brewStyleSweet=%s,
-		  brewStyleEntry=%s
-		  
-		  WHERE id=%s",
+		if ($id < 500) {
+			
+			$query_last_id = sprintf("SELECT id FROM %s ORDER BY id DESC LIMIT 1", $styles_db_table);
+			$last_id = mysqli_query($connection,$query_last_id) or die (mysqli_error($connection));
+			$row_last_id = mysqli_fetch_assoc($last_id);
+			
+			if ($row_last_id['id'] >= 500) $new_id = $row_last_id['id'] + 1;
+			else $new_id = 500;
+			
+			$updateSQL = sprintf("UPDATE $styles_db_table SET
+			id=%s, 
+			brewStyleNum=%s, 
+			brewStyle=%s, 
+			brewStyleOG=%s, 
+			brewStyleOGMax=%s, 
+			brewStyleFG=%s, 
+			
+			brewStyleFGMax=%s, 
+			brewStyleABV=%s, 
+			brewStyleABVMax=%s, 
+			brewStyleIBU=%s, 
+			brewStyleIBUMax=%s, 
+			
+			brewStyleSRM=%s, 
+			brewStyleSRMMax=%s, 
+			brewStyleType=%s, 
+			brewStyleInfo=%s, 
+			brewStyleLink=%s, 
+			
+			brewStyleGroup=%s,
+			brewStyleActive=%s, 
+			brewStyleOwn=%s,
+			brewStyleReqSpec=%s,
+			brewStyleStrength=%s,
+			brewStyleCarb=%s,
+			brewStyleSweet=%s,
+			brewStyleEntry=%s
+			
+			WHERE id=%s",
+						   GetSQLValueString($new_id, "int"), 
 						   GetSQLValueString($_POST['brewStyleNum'], "text"),
 						   GetSQLValueString($_POST['brewStyle'], "scrubbed"),
 						   GetSQLValueString($_POST['brewStyleOG'], "text"),
@@ -276,6 +369,65 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 						   GetSQLValueString($_POST['brewStyleSweet'], "text"),
 						   GetSQLValueString(strtr($_POST['brewStyleEntry'],$quote_convert), "text"),
 						   GetSQLValueString($id, "int"));
+		}
+		
+		else {
+		
+			$updateSQL = sprintf("UPDATE $styles_db_table SET 
+			brewStyleNum=%s, 
+			brewStyle=%s, 
+			brewStyleOG=%s, 
+			brewStyleOGMax=%s, 
+			brewStyleFG=%s, 
+			
+			brewStyleFGMax=%s, 
+			brewStyleABV=%s, 
+			brewStyleABVMax=%s, 
+			brewStyleIBU=%s, 
+			brewStyleIBUMax=%s, 
+			
+			brewStyleSRM=%s, 
+			brewStyleSRMMax=%s, 
+			brewStyleType=%s, 
+			brewStyleInfo=%s, 
+			brewStyleLink=%s, 
+			
+			brewStyleGroup=%s,
+			brewStyleActive=%s, 
+			brewStyleOwn=%s,
+			brewStyleReqSpec=%s,
+			brewStyleStrength=%s,
+			brewStyleCarb=%s,
+			brewStyleSweet=%s,
+			brewStyleEntry=%s
+			
+			WHERE id=%s",
+						   GetSQLValueString($_POST['brewStyleNum'], "text"),
+						   GetSQLValueString($_POST['brewStyle'], "scrubbed"),
+						   GetSQLValueString($_POST['brewStyleOG'], "text"),
+						   GetSQLValueString($_POST['brewStyleOGMax'], "text"),
+						   GetSQLValueString($_POST['brewStyleFG'], "text"),
+						   GetSQLValueString($_POST['brewStyleFGMax'], "text"),
+						   GetSQLValueString($_POST['brewStyleABV'], "text"),
+						   GetSQLValueString($_POST['brewStyleABVMax'], "text"),
+						   GetSQLValueString($_POST['brewStyleIBU'], "text"),
+						   GetSQLValueString($_POST['brewStyleIBUMax'], "text"),
+						   GetSQLValueString($_POST['brewStyleSRM'], "text"),
+						   GetSQLValueString($_POST['brewStyleSRMMax'], "text"),
+						   GetSQLValueString($_POST['brewStyleType'], "text"),
+						   GetSQLValueString($_POST['brewStyleInfo'], "text"),
+						   GetSQLValueString($brew_style_link, "text"),
+						   GetSQLValueString($_POST['brewStyleGroup'], "text"),
+						   GetSQLValueString($_POST['brewStyleActive'], "text"),
+						   GetSQLValueString($_POST['brewStyleOwn'], "text"),
+						   GetSQLValueString($_POST['brewStyleReqSpec'], "text"),
+						   GetSQLValueString($styleStrength, "text"),
+						   GetSQLValueString($_POST['brewStyleCarb'], "text"),
+						   GetSQLValueString($_POST['brewStyleSweet'], "text"),
+						   GetSQLValueString(strtr($_POST['brewStyleEntry'],$quote_convert), "text"),
+						   GetSQLValueString($id, "int"));
+						   
+		}
 	
 	  	mysqli_real_escape_string($connection,$updateSQL);
 		$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
