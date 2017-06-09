@@ -163,11 +163,7 @@ function score_style_data($value) {
 		
 		include(INCLUDES.'ba_constants.inc.php');
 		
-		$value = ($value - 1);
-		
-		$return = $_SESSION['styles']['data'][$value]['id']."^"; //0
-		$return .= $_SESSION['styles']['data'][$value]['id']."^"; //1
-		$return .= $_SESSION['styles']['data'][$value]['name']."^"; //2
+		$value1 = ($value - 1);
 		
 		// Custom Styles
 		if ($value > 500) {
@@ -175,14 +171,23 @@ function score_style_data($value) {
 			$styles = mysqli_query($connection,$query_styles) or die (mysqli_error($connection));
 			$row_styles = mysqli_fetch_assoc($styles);
 			
+			$return = 
+			$row_styles['brewStyleGroup']."^". //0
+			$row_styles['brewStyleNum']."^". //1
+			$row_styles['brewStyle']."^"; //2
+			
 			if ($row_styles['brewStyleType'] == "") $return .= 1; else $return .= $row_styles['brewStyleType'];
 		}
 		
 		else {
 			
-			if (in_array($_SESSION['styles']['data'][$value]['categoryId'],$ba_beer_categories)) $return .= 1; //3
-			if ((in_array($_SESSION['styles']['data'][$value]['categoryId'],$ba_mead_cider_categories)) && (in_array($_SESSION['styles']['data'][$value]['id'],$ba_mead))) $return .= 3; //3
-			if ((in_array($_SESSION['styles']['data'][$value]['categoryId'],$ba_mead_cider_categories)) && (in_array($_SESSION['styles']['data'][$value]['id'],$ba_cider))) $return .= 2; //3
+			$return = $_SESSION['styles']['data'][$value1]['id']."^"; //0
+			$return .= $_SESSION['styles']['data'][$value1]['id']."^"; //1
+			$return .= $_SESSION['styles']['data'][$value1]['name']."^"; //2
+			
+			if (in_array($_SESSION['styles']['data'][$value1]['categoryId'],$ba_beer_categories)) $return .= 1; //3
+			if ((in_array($_SESSION['styles']['data'][$value1]['categoryId'],$ba_mead_cider_categories)) && (in_array($_SESSION['styles']['data'][$value1]['id'],$ba_mead))) $return .= 3; //3
+			if ((in_array($_SESSION['styles']['data'][$value1]['categoryId'],$ba_mead_cider_categories)) && (in_array($_SESSION['styles']['data'][$value1]['id'],$ba_cider))) $return .= 2; //3
 		
 		}
 		

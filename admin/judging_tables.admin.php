@@ -184,14 +184,42 @@ if (($action == "default") && ($filter == "default")) {
     } while ($row_style_type = mysqli_fetch_assoc($style_type));
 
     if ($totalRows_tables > 0) {
+		
+		$a[] = "";
+		$y[] = "";
+		$z[] = 0;
+			
         if (strpos($_SESSION['prefsStyleSet'],"BABDB") !== false) {
+			
+			// Get custom style ids
+			if ($totalRows_styles_custom > 0) {
+				do {
+					if (get_table_info($row_styles_custom['brewStyleNum']."^".$row_styles_custom['brewStyleGroup'],"count","",$dbTable,"default")) {
+						
+						$a[] = $row_styles_custom['id']."c"; // Need to add differentiator for custom styles
+						$y[] = $row_styles_custom['id']."^".$row_styles_custom['brewStyle']."^Custom";
+						
+						if (!get_table_info($row_styles_custom['id'],"styles","default","default","default")) {
+							$z[] = 1;
+							$orphan_modal_body_2 .= "<li>".$row_styles_custom['brewStyleGroup'].$row_styles_custom['brewStyleNum']." ".style_convert($row_styles_custom['brewStyleGroup'],"1").": ".$row_styles_custom['brewStyle']." (".get_table_info($row_styles_custom['brewStyleNum']."^".$row_styles_custom['brewStyleGroup'],"count","default",$dbTable,"default")." entries)</li>";
+						}
+					}
+				} while ($row_styles_custom = mysqli_fetch_assoc($styles_custom));
+			}
+			
+			
+			// Get BA style ids
             foreach ($_SESSION['styles'] as $ba_styles => $stylesData) {
                 if (is_array($stylesData) || is_object($stylesData)) {
                     foreach ($stylesData as $key => $ba_style) {
                         $style_value = $ba_style['category']['id']."^".$ba_style['id'];
                         if (get_table_info($style_value,"count","default",$dbTable,"default")) {
-                            if (!get_table_info($ba_style['id'],"styles",$id,$dbTable,"default")) {
-                                $a[] = $ba_style['id'];
+							
+							$a[] = $ba_style['id'];
+							$y[] = $ba_style['id']."^".$ba_style['name']."^".$ba_style['category']['name'];
+							
+                            if (!get_table_info($ba_style['id'],"styles","default","default","default")) {
+                                $z[] = 1;
                                 $orphan_modal_body_2 .= "<li>".$ba_style['name']." (".get_table_info($style_value,"count","default",$dbTable,"default")." entries)</li>";
                             }
                         }
@@ -200,17 +228,17 @@ if (($action == "default") && ($filter == "default")) {
             }
         } else {
             do {
-            $a[] = 0;
-                if (get_table_info($row_styles['brewStyleNum']."^".$row_styles['brewStyleGroup'],"count","",$dbTable,"default")) {
-                    if (!get_table_info($row_styles['id'],"styles",$id,$dbTable,"default")) {
+                if (get_table_info($row_styles['brewStyleNum']."^".$row_styles['brewStyleGroup'],"count","","default","default")) {
+                    if (!get_table_info($row_styles['id'],"styles","styles","default","default","default")) {
                         $a[] = $row_styles['id'];
+						$z[] = 1;
                         $orphan_modal_body_2 .= "<li>".$row_styles['brewStyleGroup'].$row_styles['brewStyleNum']." ".style_convert($row_styles['brewStyleGroup'],"1").": ".$row_styles['brewStyle']." (".get_table_info($row_styles['brewStyleNum']."^".$row_styles['brewStyleGroup'],"count","default",$dbTable,"default")." entries)</li>";
                     }
                 }
             } while ($row_styles = mysqli_fetch_assoc($styles));
         }
 
-        $b = array_sum($a);
+        $b = array_sum($z);
         if ($b == 0) $orphan_modal_body .= "<p>All styles with entries have been assigned to tables.</p>";
         else $orphan_modal_body .= "<p>The following styles with entries have not been assigned to tables:</p>";
     } // end if ($totalRows_tables > 0)
@@ -351,13 +379,6 @@ if (($action == "add") || ($action == "edit")) {
 				$table_styles_available .= "<td>".$received_entry_count_style."</td>";
 				$table_styles_available .= "</tr>";
 			
-				$table_styles_available .= "<tr class=\"".$table_row_class."\">\n";
-				$table_styles_available .= "<td><input type=\"checkbox\" name=\"tableStyles[]\" value=\"".$row_styles['id']."\" ".$disabled_selected_styles."></td>\n";
-				$table_styles_available .= "<td>".$categoryName."</td>";
-				$table_styles_available .= "<td>".$ba_style['name'].$style_no_entries.$style_assigned_location."</td>\n";
-				$table_styles_available .= "<td>".$received_entry_count_style."</td>\n";
-				$table_styles_available .= "</tr>\n";
-			
 			}
             
         } while ($row_styles = mysqli_fetch_assoc($styles));
@@ -365,6 +386,67 @@ if (($action == "add") || ($action == "edit")) {
     }
     
     if (strpos($_SESSION['prefsStyleSet'],"BABDB") !== false) {
+		
+		
+		if ($totalRows_styles_custom > 0) {
+			
+			do {
+				
+				
+				$style_value = $row_styles_custom['brewStyleNum']."^".$row_styles_custom['brewStyleGroup']."^Custom";
+				$received_entry_count_style = get_table_info($style_value,"count","default",$dbTable,"default");
+				$table_row_class = "";
+				$style_assigned_location = "";
+				$style_no_entries = "";
+				$disabled_styles = "";
+				$selected_styles = "";
+				$table_row_class = "bg-success text-success";
+				
+				$show = get_table_info($row_styles_custom['id'],"styles","default",$dbTable,"default");
+				
+				if ($received_entry_count_style == 0) {
+					$disabled_styles = "DISABLED";
+					$style_no_entries = "<br><em>Disabled. No entries were received for this style.</em>";
+					$table_row_class = "bg-grey text-muted";
+				}
+				
+				if (($action == "edit") && (in_array($row_styles_custom['id'],$current_table_styles_array))) $style_assigned_location = "<br><em>Style currently assigned to this table.</em>";
+				else $style_assigned_location = get_table_info($row_styles_custom['id'],"assigned","default",$dbTable,"default");
+				
+				if (!empty($style_assigned_location)) {
+					$table_row_class = "bg-danger";
+					$disabled_styles = "DISABLED";
+				}
+				
+				if ($action == "edit") {
+				
+					$style_assigned_this = get_table_info($row_styles_custom['id'],"styles",$row_tables_edit['id'],$dbTable,"default");
+					if (in_array($row_styles_custom['id'],$all_table_styles_array)) $disabled_styles = "DISABLED";
+					if (in_array($row_styles_custom['id'],$current_table_styles_array)) $disabled_styles = "";
+					if ($style_assigned_this) {
+						$table_row_class = "bg-warning";
+						$selected_styles = "CHECKED";
+					}
+				
+				}
+				
+				$disabled_selected_styles = $selected_styles." ".$disabled_styles;
+				
+				if ((($action == "add") && (!$show)) || ($action == "edit")) {
+				
+					$table_styles_available .= "<tr class=\"".$table_row_class."\">";
+					$table_styles_available .= "<td><input type=\"checkbox\" name=\"tableStyles[]\" value=\"".$row_styles_custom['id']."\"".$disabled_selected_styles."></td>";
+					$table_styles_available .= "<td>Custom</td>";
+					$table_styles_available .= "<td>".$row_styles_custom['brewStyle'].$style_no_entries.$style_assigned_location."</td>";
+					$table_styles_available .= "<td>".$received_entry_count_style."</td>";
+					$table_styles_available .= "</tr>";
+				
+				
+				}
+				
+				
+			} while ($row_styles_custom = mysqli_fetch_assoc($styles_custom));
+		}
 		
 		foreach ($_SESSION['styles'] as $ba_styles => $stylesData) {
                 
