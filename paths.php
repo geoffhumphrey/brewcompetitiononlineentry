@@ -1,12 +1,12 @@
-<?php 
+<?php
 /**
 
- * Module:      paths.php 
+ * Module:      paths.php
  * Description: This module sets global file folder paths. Also houses
  *              specific, site-wide variables.
- * 
+ *
  */
- 
+
 define('ROOT',dirname( __FILE__ ).DIRECTORY_SEPARATOR);
 define('ADMIN',ROOT.'admin'.DIRECTORY_SEPARATOR);
 define('SSO',ROOT.'sso'.DIRECTORY_SEPARATOR);
@@ -54,26 +54,18 @@ else ini_set('display_errors','Off');
 // Load Configuration
 // --------------------------------------------------------
 require (CONFIG.'config.php');
-require (INCLUDES.'current_version.inc.php'); 
+require (INCLUDES.'current_version.inc.php');
 
-/*
-
------ NEED to FIND ANOTHER SOLUTION -----
-Add to config.php when found.
------------------------------------------
-Give your installation a unique ID. If you plan on running multiple instances
-of BCOE&M from the same domain, you'll need to give each installation a 
-unique identifier. This prevents "cross-pollination" of session data display.
-
-For single installations, the default below will be sufficient. Otherwise,
-change the variable to something completely unique for each installation.
-*/
-
-
-$installation_id = "";
-if (empty($installation_id)) $prefix_session = md5("BCOEM012345"); 
-else $prefix_session = md5($installation_id);
-
+/** Using an MD5 of __FILE__ will ensure a different session name for multiple
+ * installs on the same domain name.
+ * 
+ * @fixes https://github.com/geoffhumphrey/brewcompetitiononlineentry/issues/781
+ */
+if (empty($installation_id)) {
+	$prefix_session = md5(__FILE__);
+} else {
+	$prefix_session = md5($installation_id);
+}
 
 function is_session_started() {
     if (php_sapi_name() !== 'cli' ) {
@@ -94,14 +86,14 @@ if (is_session_started() === FALSE) {
 $expireAfter = 30;
 
 if (isset($_SESSION['last_action'])) {
-    
+
     $secondsInactive = time() - $_SESSION['last_action'];
     $expireAfterSeconds = $expireAfter * 60;
     if ($secondsInactive >= $expireAfterSeconds) {
         session_unset();
         session_destroy();
     }
-    
+
 }
 
 $_SESSION['last_action'] = time();
