@@ -11,7 +11,7 @@ if (strpos($styleSet,"BABDB") !== false) include (INCLUDES.'ba_constants.inc.php
 include(DB.'styles_special.db.php');
 
 // Disable fields trigger
-if ((($action == "add") && ($remaining_entries == 0) && ($_SESSION['userLevel'] == 2)) || (($action == "add") && ($entry_window_open == "2") && ($_SESSION['userLevel'] == 2))) $disable_fields = TRUE; else $disable_fields = FALSE;
+if ((($action == "add") && ($remaining_entries <= 0) && ($_SESSION['userLevel'] == 2)) || (($action == "add") && ($entry_window_open == "2") && ($_SESSION['userLevel'] == 2))) $disable_fields = TRUE; else $disable_fields = FALSE;
 	
 // Specific code for Style select
 if (strpos($_SESSION['prefsStyleSet'],"BABDB") !== false) {
@@ -100,7 +100,8 @@ if ($action == "add") {
 	// Registration and entry windows open; comp entry limit reached
 	if (($registration_open == 1) && ($entry_window_open == 1) && ($_SESSION['userLevel'] == 2)) { 
 		if ($comp_entry_limit) $add_entry_disable = TRUE;
-		elseif ($comp_paid_entry_limit)  $add_entry_disable = TRUE;
+		elseif ($remaining_entries <= 0) $add_entry_disable = TRUE;
+		elseif ($comp_paid_entry_limit) $add_entry_disable = TRUE;
 		elseif (($proEdition) && (!isset($_SESSION['brewerBreweryName'])))  $add_entry_disable = TRUE;
 		else $add_entry_disable = FALSE;
 	}
@@ -108,11 +109,11 @@ if ($action == "add") {
 	// Registration closed and entry window open; comp entry limit reached
 	elseif ((($registration_open == 0) || ($registration_open == 2)) && ($entry_window_open == 1) && ($_SESSION['userLevel'] == 2)) {
 		if ($comp_entry_limit) $add_entry_disable = TRUE;
+		elseif ($remaining_entries <= 0) $add_entry_disable = TRUE;
 		elseif ($comp_paid_entry_limit) $add_entry_disable = TRUE;
 		elseif (($proEdition) && (!isset($_SESSION['brewerBreweryName'])))  $add_entry_disable = TRUE;
 		else $add_entry_disable = FALSE;
 	}
-	
 	
 }
 // Registration and entry not open
@@ -131,8 +132,20 @@ if (($proEdition) && (!isset($_SESSION['brewerBreweryName'])) && ($adminUser) &&
 	$adminUserAddDisable = TRUE;
 }
 
-if (((!$add_entry_disable) && (!$edit_entry_disable) && ($remaining_entries > 0)) || (($adminUser) && (!$adminUserAddDisable))) {
-	
+//if ($add_entry_disable) echo "<p>Add disabled.</p>";
+//elseif ($edit_entry_disable) echo "<p>Editing disabled.</p>";
+//elseif (($adminUser) && ($adminUserAddDisable)) echo "<p>Admin editing disabled.</p>";
+
+if (($add_entry_disable) || ($edit_entry_disable))  echo "<p class=\"lead\">".$alert_text_083."</p>"; 
+elseif (($add_entry_disable) && (!$edit_entry_disable))  {
+	if (($proEdition) && (!isset($_SESSION['brewerBreweryName']))) { 
+		echo "<p class=\"lead\">".$alert_text_082."</p>";
+		if ($adminUser) echo "<p class=\"lead\"><small>".$alert_text_084."</small></p>";
+	}
+	else echo "<p class=\"lead\">".$alert_text_029."</p>";
+}
+
+else {	
 	// Decalre variables
 	if ($_SESSION['prefsStyleSet'] == "BJCP2008") $beer_end = 23;
 	if ($_SESSION['prefsStyleSet'] == "BJCP2015") $beer_end = 34;
@@ -467,7 +480,7 @@ $(document).ready(function()
         <div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
             <div class="input-group has-warning">
                 <!-- Input Here -->
-                <input class="form-control" name="brewName" type="text" value="<?php if ($disable_fields) echo "Not Available"; if ($action == "edit") echo $row_log['brewName']; ?>" <?php if ((($action == "add") && ($remaining_entries == 0) && ($entry_window_open == 1) && ($filter != "default")) || (($action == "add") && ($entry_window_open == "2") && ($_SESSION['userLevel'] > 1))) echo "disabled";?> placeholder="" data-error="<?php echo $brew_text_011; ?>" required autofocus>
+                <input class="form-control" name="brewName" type="text" value="<?php if ($disable_fields) echo "Not Available"; if ($action == "edit") echo $row_log['brewName']; ?>" <?php if ((($action == "add") && ($remaining_entries <= 0) && ($entry_window_open == 1) && ($filter != "default")) || (($action == "add") && ($entry_window_open == "2") && ($_SESSION['userLevel'] > 1))) echo "disabled";?> placeholder="" data-error="<?php echo $brew_text_011; ?>" required autofocus>
                 <span class="input-group-addon" id="brewName-addon2"><span class="fa fa-star"></span></span>
             </div>
             <div class="help-block with-errors"></div>
@@ -1334,16 +1347,4 @@ if ($action == "edit") {
 // Load Show/Hide
 include(INCLUDES.'form_js.inc.php');
 }  // end adding and editing allowed (line 52 or so)
-else {
-	
-if (($add_entry_disable) && ($edit_entry_disable))  echo "<p class=\"lead\">".$alert_text_083."</p>"; 
-if (($add_entry_disable) && (!$edit_entry_disable))  {
-	if (($proEdition) && (!isset($_SESSION['brewerBreweryName']))) { 
-		echo "<p class=\"lead\">".$alert_text_082."</p>";
-		if ($admin_user) echo "<p class=\"lead\"><small>".$alert_text_084."</small></p>";
-	}
-	else echo "<p class=\"lead\">".$alert_text_029."</p>";
-	}
-
-}
 ?>

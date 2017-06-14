@@ -1780,6 +1780,8 @@ function style_convert($number,$type,$base_url="") {
 
 function get_table_info($input,$method,$table_id,$dbTable,$param) {
 	
+	
+	
 	// Define Vars
 	require(CONFIG.'config.php');
 	require(LANG.'language.lang.php');
@@ -1792,18 +1794,25 @@ function get_table_info($input,$method,$table_id,$dbTable,$param) {
 		$judging_scores_bos_db_table = $prefix."judging_scores_bos";
 		$styles_db_table = $prefix."styles";
 		$brewing_db_table = $prefix."brewing";
+		$styleSet = $_SESSION['prefsStyleSet'];
 	}
 	
 	// Archives
 	else {
-		$suffix = ltrim(get_suffix($dbTable), "_");
-		$suffix = "_".$suffix;
+		$suffix_1 = ltrim(get_suffix($dbTable), "_");
+		$suffix = "_".$suffix_1;
 		$judging_tables_db_table = $prefix."judging_tables".$suffix;
 		$judging_locations_db_table = $prefix."judging_locations".$suffix;
 		$judging_scores_db_table = $prefix."judging_scores".$suffix;
 		$judging_scores_bos_db_table = $prefix."judging_scores_bos".$suffix;
 		$styles_db_table = $prefix."styles";
+		$archive_db_table = $prefix."archive";
 		$brewing_db_table = $prefix."brewing".$suffix;
+		
+		$query_archive = sprintf("SELECT * FROM %s WHERE archiveSuffix='%s'",$archive_db_table,$suffix_1);
+		$archive = mysqli_query($connection,$query_archive) or die (mysqli_error($connection));
+		$row_archive = mysqli_fetch_assoc($archive);
+		$styleSet = $row_archive['archiveStyleSet'];
 	}
 		
 	// Get info about the table from the DB	
@@ -1834,7 +1843,7 @@ function get_table_info($input,$method,$table_id,$dbTable,$param) {
 	if ($method == "unassigned") {
 		$return = "";
 	
-		if (strpos($_SESSION['prefsStyleSet'],"BABDB") !== false) {
+		if (strpos($styleSet,"BABDB") !== false) {
 			foreach ($_SESSION['styles'] as $ba_styles => $stylesData) {
 				if (is_array($stylesData) || is_object($stylesData)) {
 					foreach ($stylesData as $key => $ba_style) {
@@ -1947,7 +1956,7 @@ function get_table_info($input,$method,$table_id,$dbTable,$param) {
 				
 				foreach ($a as $value) {
 					
-					if (strpos($_SESSION['prefsStyleSet'],"BABDB") !== false) {
+					if (strpos($styleSet,"BABDB") !== false) {
 						
 						if ($value < 500) $c[] = $_SESSION['styles']['data'][$value-1]['name'].",&nbsp;";
 						
@@ -1992,7 +2001,7 @@ function get_table_info($input,$method,$table_id,$dbTable,$param) {
 		
 		foreach ($a as $value) {
 			
-			if (strpos($_SESSION['prefsStyleSet'],"BABDB") !== false) {
+			if (strpos($styleSet,"BABDB") !== false) {
 				
 				if ($value < 500) {
 					$query_style_count = sprintf("SELECT COUNT(*) as count FROM %s WHERE brewSubCategory='%s' AND brewReceived='1'", $brewing_db_table, $value);
@@ -2045,7 +2054,7 @@ function get_table_info($input,$method,$table_id,$dbTable,$param) {
 	// Get total number of scored entries at table	
 	if (($method == "score_total") && ($param == "default")) {
 		
-		$query_score_count = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE scoreTable='%s'", $judging_scores_db_table, $id);
+		$query_score_count = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE scoreTable='%s'", $judging_scores_db_table, $table_id);
 		$score_count = mysqli_query($connection,$query_score_count) or die (mysqli_error($connection));
 		$row_score_count = mysqli_fetch_assoc($score_count);
 		
@@ -2064,7 +2073,7 @@ function get_table_info($input,$method,$table_id,$dbTable,$param) {
 					
 				foreach ($a as $value) {
 					
-					if (strpos($_SESSION['prefsStyleSet'],"BABDB") !== false) {
+					if (strpos($styleSet,"BABDB") !== false) {
 						
 						if ($value < 500) {
 							$query_style_count = sprintf("SELECT COUNT(*) as count FROM %s WHERE brewSubCategory='%s' AND brewReceived='1'", $brewing_db_table, $value);
@@ -2120,7 +2129,7 @@ function get_table_info($input,$method,$table_id,$dbTable,$param) {
 		
 		$input = explode("^",$input);
 		 
-		if (strpos($_SESSION['prefsStyleSet'],"BABDB") !== false) {
+		if (strpos($styleSet,"BABDB") !== false) {
 			if (isset($input[2])) $query = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE brewCategorySort='%s' AND brewSubCategory='%s' AND brewReceived='1'", $brewing_db_table, $input[1], $input[0]);
 			else $query = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE brewSubCategory='%s' AND brewReceived='1'", $brewing_db_table, $input[1]);
 			
@@ -2143,7 +2152,7 @@ function get_table_info($input,$method,$table_id,$dbTable,$param) {
 					
 		foreach ($a as $value) {
 			
-			if (strpos($_SESSION['prefsStyleSet'],"BABDB") !== false) {
+			if (strpos($styleSet,"BABDB") !== false) {
 				
 				$query_style_count = sprintf("SELECT COUNT(*) as count FROM %s brewSubCategory='%s' AND brewReceived='1'", $brewing_db_table, $value);
 				$style_count = mysqli_query($connection,$query_style_count) or die (mysqli_error($connection));

@@ -147,9 +147,7 @@ else $datatables_load = array("admin","list");
     <!-- DEBUG -->
     <div class="<?php echo $container_main; ?> hidden-print">
     <?php 
-	if (DEBUG_SESSION_VARS) include (DEBUGGING.'session_vars.debug.php'); 
-	
-	
+	if (DEBUG_SESSION_VARS) include (DEBUGGING.'session_vars.debug.php'); 	
 	?>
     </div>
     <!-- ./DEBUG -->

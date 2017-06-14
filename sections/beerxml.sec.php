@@ -83,7 +83,7 @@ elseif (($registration_open == 1) && ($_SESSION['userLevel'] > 1) && ($comp_entr
 
 // Open but personal entry limit reached
 // No importing
-elseif (($registration_open == 1) && ($entry_window_open == 1) && ($_SESSION['userLevel'] > 1) && ($remaining_entries == 0)) {
+elseif (($registration_open == 1) && ($entry_window_open == 1) && ($_SESSION['userLevel'] > 1) && ($remaining_entries <= 0)) {
 	$message3 .= sprintf("<div class=\"alert alert-danger hidden-print fade in\"><strong>%s</strong></div>",$beerxml_text_000);
 	$message3 .= sprintf("<p>%s</p>",$alert_text_031);
 }

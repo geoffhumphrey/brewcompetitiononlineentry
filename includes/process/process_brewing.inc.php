@@ -63,14 +63,25 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 		
 		// Get style name from broken parts if BA (currently there are 14 overall BA categories, 34 BJCP 2015, and 28 BJCP 2007)
 		// Custom style overall category will always be greater than 28
-		if ((strpos($_SESSION['prefsStyleSet'],"BABDB") !== false) && ($style[0] > 28)) $query_style_name = sprintf("SELECT * FROM %s WHERE brewStyleOwn='custom' AND brewStyleGroup='%s' AND brewStyleNum='%s'",$styles_db_table,$styleFix,$style[1]);
+		if (strpos($_SESSION['prefsStyleSet'],"BABDB") !== false) {
+			
+			if ($style[0] > 28) {
+				$query_style_name = sprintf("SELECT * FROM %s WHERE brewStyleOwn='custom' AND brewStyleGroup='%s' AND brewStyleNum='%s'",$styles_db_table,$styleFix,$style[1]);
+				$style_name = mysqli_query($connection,$query_style_name) or die (mysqli_error($connection));
+				$row_style_name = mysqli_fetch_assoc($style_name);
+				$styleName = $row_style_name['brewStyle'];
+			}
+			
+			else $styleName = $_SESSION['styles']['data'][$style[1]-1]['name'];
+		}
 		
 		// Get style name from broken parts if BJCP
-		else $query_style_name = sprintf("SELECT * FROM %s WHERE (brewStyleVersion='%s' OR brewStyleOwn='custom') AND brewStyleGroup='%s' AND brewStyleNum='%s'",$styles_db_table,$_SESSION['prefsStyleSet'],$styleFix,$style[1]);
-		$style_name = mysqli_query($connection,$query_style_name) or die (mysqli_error($connection));
-		$row_style_name = mysqli_fetch_assoc($style_name);
-			
-		$styleName = $row_style_name['brewStyle'];
+		else { 
+			$query_style_name = sprintf("SELECT * FROM %s WHERE (brewStyleVersion='%s' OR brewStyleOwn='custom') AND brewStyleGroup='%s' AND brewStyleNum='%s'",$styles_db_table,$_SESSION['prefsStyleSet'],$styleFix,$style[1]);
+			$style_name = mysqli_query($connection,$query_style_name) or die (mysqli_error($connection));
+			$row_style_name = mysqli_fetch_assoc($style_name);
+			$styleName = $row_style_name['brewStyle'];
+		}
 		
 		// Mark as paid if free entry fee
 		if ($_SESSION['contestEntryFee'] == 0) $brewPaid = "1"; 
@@ -83,8 +94,6 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 		if (is_array($spec_sweet_carb_only)) $all_special_ing_styles = array_merge($all_special_ing_styles,$spec_sweet_carb_only);
 		if (is_array($spec_carb_only)) $all_special_ing_styles = array_merge($all_special_ing_styles,$spec_carb_only);
 		if (strpos($styleSet,"BABDB") !== false) $all_special_ing_styles = array_merge($all_special_ing_styles,$ba_special);
-		
-		// $ba_special
 		
 		$brewName = $_POST['brewName'];
 		$brewName = strip_tags($brewName);
@@ -249,9 +258,27 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 			
 		}
 		
-		if (NHC) $brewJudgingNumber = "";
-		else $brewJudgingNumber = generate_judging_num(1,$styleTrim);
+		$brewJudgingNumber = "";
 		
+		$files = array_slice(scandir(USER_DOCS), 2);
+		$judging_number_looper = TRUE;
+			
+		while($judging_number_looper) {
+		
+			$generated_judging_number = generate_judging_num(1,$styleTrim);
+			$scoresheetfilename_judging = $generated_judging_number.".pdf";
+		
+			if (!in_array($scoresheetfilename_judging,$files))  { 
+				$brewJudgingNumber = $generated_judging_number;
+				$judging_number_looper = FALSE;
+			}
+			
+			else {
+				$judging_number_looper = TRUE;
+			}
+			
+		}
+			
 		$insertSQL = "INSERT INTO $brewing_db_table (";
 		if ($_SESSION['prefsHideRecipe'] == "N") { 
 			$insertSQL .= "

@@ -87,7 +87,7 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 	}
 		
 	// ---------------------------  Editing a User -------------------------------------------
-	if (($action == "edit") && ($_SESSION['editUser'] == 1)) {
+	if (($action == "edit") && ($_POST['userEdit'] == 1)) {
 		
 		// Check to see if email address is already in the system. If so, redirect.
 		if (isset($_POST['user_name'])) {

@@ -56,7 +56,15 @@ httpxml.send(null);
 }
 //-->
 </script>
-<?php if (($action != "print") && ($msg != "default")) echo $msg_output; ?>
+<?php 
+$security_questions_display = (array_rand($security_question, 5));
+$security = "";
+$security .= "<div class=\"radio\"><label><input type=\"radio\" name=\"userQuestion\" value=\"".$_SESSION['userQuestion']."\" CHECKED> ".$_SESSION['userQuestion']."</label></div>";
+foreach ($security_questions_display as $key => $value) {
+	if ($security_question[$value] != $_SESSION['userQuestion']) $security .= "<div class=\"radio\"><label><input type=\"radio\" name=\"userQuestion\" value=\"".$security_question[$value]."\"> ".$security_question[$value]."</label></div>";
+}
+
+if (($action != "print") && ($msg != "default")) echo $msg_output; ?>
 <p class="lead">This will be the Administrator's account with full access to <em>all</em> of the installation's features and functions.</p>
 <p class="lead"><small>The owner of this account will be able to add, edit, and delete any entry and participant, grant administration privileges to other users, define custom styles, define tables and flights, add scores, print reports, etc. This user will also be able to add, edit, and delete their own entries into the competition.</small></p>
 <form class="form-horizontal" action="<?php echo $base_url; ?>includes/process.inc.php?section=<?php if ($section == "step1") echo "setup"; else echo $section; ?>&amp;action=add&amp;dbTable=<?php echo $users_db_table; ?>" method="POST" name="form1" id="form1" onSubmit="return CheckRequiredFields()">
@@ -88,37 +96,12 @@ httpxml.send(null);
 	</div><!-- ./Form Group -->
 
 	<div class="form-group"><!-- Form Group REQUIRED Radio Group -->
-		<label for="" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Security Question</label>
-		<div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
-			
+		<label for="" class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label_security_question; ?></label>
+		<div class="col-lg-9 col-md-9 col-sm-8 col-xs-12">
 			<div class="input-group">
-				<!-- Input Here -->
-				<div class="radio">
-					<label>
-						<input type="radio" name="userQuestion" id="userQuestion_0" value="What is your favorite all-time beer to drink?" <?php if (($msg > 0) && ($_COOKIE['userQuestion'] == "What is your favorite all-time beer to drink?")) echo "CHECKED"; if ($msg == "default") echo "CHECKED"; ?>>
-						What is your favorite all-time beer to drink?
-					</label>
-				</div>
-				<div class="radio">
-					<label>
-						<input type="radio" name="userQuestion" id="userQuestion_1" value="What was the name of your first pet?" <?php if (($msg > 0) && ($_COOKIE['userQuestion'] == "What was the name of your first pet?")) echo "CHECKED"; ?>>
-						What was the name of your first pet?
-					</label>
-				</div>
-				<div class="radio">
-					<label>
-						<input type="radio" name="userQuestion" id="userQuestion_2" value="What was the name of the street you grew up on?" <?php if (($msg > 0) && ($_COOKIE['userQuestion'] == "What was the name of the street you grew up on?")) echo "CHECKED"; ?>>
-						What was the name of the street you grew up on?
-					</label>
-				</div>
-				<div class="radio">
-					<label>
-						<input type="radio" name="userQuestion" id="userQuestion_3" value="What was your high school mascot?" <?php if (($msg > 0) && ($_COOKIE['userQuestion'] == "What was your high school mascot?")) echo "CHECKED"; ?>>
-						What was your high school mascot?
-					</label>
-				</div>
-			</div>
-            <span class="help-block">Choose one. This question will be used to verify your identity should you forget your password.</span>
+            	<?php echo $security; ?>
+            </div>
+            <span class="help-block"><?php echo $brewer_text_001; ?></span>
 		</div>
 	</div><!-- ./Form Group -->
 	

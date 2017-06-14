@@ -271,34 +271,7 @@ $(document).ready(function(){
 		<label for="" class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label_security_question; ?></label>
 		<div class="col-lg-9 col-md-9 col-sm-8 col-xs-12">
 			<div class="input-group">
-				<!-- Input Here -->
-                <!--
-				<div class="radio">
-					<label>
-						<input type="radio" name="userQuestion" id="userQuestion_0" value="What is your favorite all-time beer to drink?" <?php if (($action == "edit") && ($_SESSION['userQuestion'] == "What is your favorite all-time beer to drink?")) echo "CHECKED"; else echo "CHECKED"; ?> required>
-						<?php echo $label_secret_01; ?>
-					</label>
-				</div>
-				<div class="radio">
-					<label>
-						<input type="radio" name="userQuestion" id="userQuestion_1" value="What was the name of your first pet?" <?php if (($action == "edit") && ($_SESSION['userQuestion'] == "What was the name of your first pet?")) echo "CHECKED"; ?> required>
-						<?php echo $label_secret_02; ?>
-					</label>
-				</div>
-				<div class="radio">
-					<label>
-						<input type="radio" name="userQuestion" id="userQuestion_2" value="What was the name of the street you grew up on?" <?php if (($action == "edit") && ($_SESSION['userQuestion'] == "What was the name of the street you grew up on?")) echo "CHECKED"; ?> required>
-						<?php echo $label_secret_03; ?>
-					</label>
-				</div>
-				<div class="radio">
-					<label>
-						<input type="radio" name="userQuestion" id="userQuestion_3" value="What was your high school mascot?" <?php if (($action == "edit") && ($_SESSION['userQuestion'] == "What was your high school mascot?")) echo "CHECKED"; ?> required>
-						<?php echo $label_secret_04; ?>
-					</label>
-				</div>
-            -->
-            <?php echo $security; ?>
+            	<?php echo $security; ?>
             </div>
             <span class="help-block"><?php echo $brewer_text_001; ?></span>
 		</div>
@@ -493,6 +466,9 @@ $(document).ready(function(){
         <input name="brewerStewardLocation" type="hidden" value="<?php echo $row_brewer['brewerStewardLocation']; ?>" />        
         <?php } // end if ($table_assignment) 
 		else { ?>
+        
+        
+        <?php if (!$judge_limit) { ?>
         <!-- Judging preferences -->
         <div class="form-group"><!-- Form Group Radio INLINE -->
             <label for="brewerJudge" class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label_judging; ?></label>
@@ -720,7 +696,8 @@ $(document).ready(function(){
             </div><!-- ./Form Group -->
         </div>
         </div><!-- ./ brewerJudgeFields -->
-        
+        <?php } // end if (!$judge_limit) ?>
+        <?php if (!$steward_limit) { ?>
         <!-- Stewarding preferences -->
         <div class="form-group"><!-- Form Group Radio INLINE -->
             <label for="brewerSteward" class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label_stewarding; ?></label>
@@ -756,6 +733,7 @@ $(document).ready(function(){
         </div><!-- ./Form Group -->
         
         </div><!-- ./brewerStewardFields -->
+        <?php } // end if (!$steward_limit) ?>
         <?php } ?>
         <?php if (($go != "entrant") &&  (($row_brewer['brewerJudge'] == "Y") || ($row_brewer['brewerSteward'] == "Y"))) { ?>
     <div class="form-group"><!-- Form Group REQUIRED Radio Group -->

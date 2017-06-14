@@ -458,14 +458,30 @@ $label_select_style = "Select or Search for Your Entry's Style";
 $label_select_country = "Select or Search Your Country";
 $label_select_dropoff = "Select Your Drop-Off Location";
 $label_club_enter = "Enter Club Name";
-$label_secret_05 = "What is your maternal grandmother's maiden name?";
+$label_secret_05 = "What is your maternal grandmother&rsquo;s maiden name?";
 $label_secret_06 = "What was the first name of your first girlfriend or boyfriend?";
-$label_secret_07 = "What was the make and model of your first car?";
+$label_secret_07 = "What was the make and model of your first vehicle?";
 $label_secret_08 = "What was the last name of your third grade teacher?";
-$label_secret_09 = "In what city did you meet your significant other?";
+$label_secret_09 = "In what city or town did you meet your significant other?";
 $label_secret_10 = "What was the first name of your best friend in sixth grade?";
 $label_secret_11 = "What is the name your favorite musical artist or group?";
 $label_secret_12 = "What was your childhood nickname?";
+$label_secret_13 = "What is the last name of the teacher who gave you your first failing grade?";
+$label_secret_14 = "What is the name of your favorite childhood friend?";
+$label_secret_15 = "In what town or city did your mother and father meet?";
+$label_secret_16 = "What was childhood telephone number that you remember most including area code?";
+$label_secret_17 = "What was your favorite place to visit as a child?";
+$label_secret_18 = "Where were you when you had your first kiss?";
+$label_secret_19 = "In what city or town was your first job?";
+$label_secret_20 = "In what city or town were you on New Year&rsquo;s 2000?";
+$label_secret_21 = "What is the name of a college you applied to but did not attend?";
+$label_secret_22 = "What is the first name of the boy or girl that you first kissed?";
+$label_secret_23 = "What was the name of your first stuffed animal, doll, or action figure?";
+$label_secret_24 = "In what city or town did you meet your spouse/significant other?";
+$label_secret_25 = "What street did you live on in first grade?";
+$label_secret_26 = "What is the air speed velocity of an unladen swallow?";
+$label_secret_27 = "What is the name of your favorite canceled TV show?";
+
 $label_pro = "Professional Brewer";
 $label_hosted = "Hosted";
 $label_edition = "Edition";
@@ -503,7 +519,8 @@ $header_text_027 = "Please make sure to print the receipt and attach it to one o
 $header_text_028 = "Your online payment has been cancelled.";
 $header_text_029 = "The code has been verified.";
 $header_text_030 = "Sorry, the code you entered was incorrect.";
-if (strpos($section, "step") === FALSE) $header_text_031 = "You must log in and have admin privileges to access administration functions.";
+if (strpos($section, "step") === FALSE) 
+$header_text_031 = "You must log in and have admin privileges to access administration functions.";
 $header_text_032 = "Sorry, there was a problem with your last login attempt.";
 $header_text_033 = "Please make sure your email address and password are correct.";
 $header_text_034 = "Your password has been randomly generated and reset to ".$go;
@@ -626,34 +643,45 @@ $alert_text_028 = "Entry registration has closed.";
 $alert_text_029 = "Adding entries is not available.";
 $alert_text_030 = "The competition entry limit has been reached.";
 $alert_text_031 = "Your personal entry limit has been reached.";
-if (strpos($section, "step") === FALSE) $alert_text_032 = "You will be able to add entries on or after ".$entry_open."."; else $alert_text_032 = "";
-if (strpos($section, "step") === FALSE) $alert_text_033 = "Registration will open ".$reg_open."."; else $alert_text_033 = "";
+if (strpos($section, "step") === FALSE)
+$alert_text_032 = "You will be able to add entries on or after ".$entry_open."."; else $alert_text_032 = "";
+if (strpos($section, "step") === FALSE)
+$alert_text_033 = "Registration will open ".$reg_open."."; else $alert_text_033 = "";
 $alert_text_034 = "Please return then to register your account.";
-if (strpos($section, "step") === FALSE) $alert_text_036 = "Entry registration will open ".$entry_open."."; else $alert_text_036 = "";
+if (strpos($section, "step") === FALSE)
+$alert_text_036 = "Entry registration will open ".$entry_open."."; else $alert_text_036 = "";
 $alert_text_037 = "Please return then to add your entries to the system.";
-if (strpos($section, "step") === FALSE) $alert_text_039 = "Judge and steward registration will open ".$judge_open."."; else $alert_text_039 = "";
+if (strpos($section, "step") === FALSE)
+$alert_text_039 = "Judge and steward registration will open ".$judge_open."."; else $alert_text_039 = "";
 $alert_text_040 = "Please return then to register as a judge or steward.";
 $alert_text_042 = "Entry registration is open!";
-if ((strpos($section, "step") === FALSE) && ($_SESSION['prefsProEdition'] == 0)) $alert_text_043 = "A total of ".$total_entries." entries have been added to the system as of ".$current_time."."; else $alert_text_043 = "";
+if ((strpos($section, "step") === FALSE) && ($_SESSION['prefsProEdition'] == 0))
+$alert_text_043 = "A total of ".$total_entries." entries have been added to the system as of ".$current_time."."; else $alert_text_043 = "";
 $alert_text_044 = "Registration will close ";
 $alert_text_046 = "The entry limit nearly reached!";
-if ((strpos($section, "step") === FALSE) && ($_SESSION['prefsProEdition'] == 0)) $alert_text_047 = $total_entries." of ".$row_limits['prefsEntryLimit']." maximum entries have been added into the system as of ".$current_time."."; else $alert_text_047 = "";
+if ((strpos($section, "step") === FALSE) && ($_SESSION['prefsProEdition'] == 0))
+$alert_text_047 = $total_entries." of ".$row_limits['prefsEntryLimit']." maximum entries have been added into the system as of ".$current_time."."; else $alert_text_047 = "";
 $alert_text_049 = "The entry limit has been reached."; 
-if (strpos($section, "step") === FALSE) $alert_text_050 = "The limit of ".$row_limits['prefsEntryLimit']." entries has been reached. No further entries will be accepted."; else $alert_text_050 = "";
+if (strpos($section, "step") === FALSE)
+$alert_text_050 = "The limit of ".$row_limits['prefsEntryLimit']." entries has been reached. No further entries will be accepted."; else $alert_text_050 = "";
 $alert_text_052 = "The paid entry limit has been reached.";
-if (strpos($section, "step") === FALSE) $alert_text_053 = "The limit of ".$row_limits['prefsEntryLimitPaid']." <em>paid</em> entries has been reached. No further entries will be accepted."; else $alert_text_053 = "";
+if (strpos($section, "step") === FALSE)
+$alert_text_053 = "The limit of ".$row_limits['prefsEntryLimitPaid']." <em>paid</em> entries has been reached. No further entries will be accepted."; else $alert_text_053 = "";
 $alert_text_055 = "Registration is closed.";
 $alert_text_056 = "If you already registered an account,";
 $alert_text_057 = "log in here"; // lower-case and missing punctuation intentional
 $alert_text_059 = "Entry registration is closed.";
-if ((strpos($section, "step") === FALSE) && ($_SESSION['prefsProEdition'] == 0)) $alert_text_060 = "A total of ".$total_entries." entries were added into the system."; else $alert_text_060 = "";
+if ((strpos($section, "step") === FALSE) && ($_SESSION['prefsProEdition'] == 0))
+$alert_text_060 = "A total of ".$total_entries." entries were added into the system."; else $alert_text_060 = "";
 $alert_text_062 = "Entry drop-off is closed.";
 $alert_text_063 = "Entry bottles are no longer accepted at drop-off locations.";
 $alert_text_065 = "Entry shipping is closed.";
 $alert_text_066 = "Entry bottles are no longer accepted at the shipping location.";
-if (strpos($section, "step") === FALSE) $alert_text_068 = $j_s_text." registration open."; else $alert_text_068 = "";
+if (strpos($section, "step") === FALSE)
+$alert_text_068 = $j_s_text." registration open."; else $alert_text_068 = "";
 $alert_text_069 = "Register here"; // missing punctuation intentional
-if (strpos($section, "step") === FALSE) $alert_text_070 = $j_s_text." registration will close ".$judge_closed."."; else $alert_text_070 = "";
+if (strpos($section, "step") === FALSE)
+$alert_text_070 = $j_s_text." registration will close ".$judge_closed."."; else $alert_text_070 = "";
 $alert_text_072 = "The limit of registered judges has been reached.";
 $alert_text_073 = "No further judge registrations will be accepted.";
 $alert_text_074 = "Registering as a steward is still available.";
@@ -692,7 +720,8 @@ $beerxml_text_003 = "The file size is over 2MB.  Please adjust the size and try 
 $beerxml_text_004 = "Invalid file specified.";
 $beerxml_text_005 = "However, it has not been confirmed. To confirm your entry, access your entries list for further instructions. Or, you can add upload another BeerXML entry below.";
 $beerxml_text_006 = "Your server's version of PHP does not support the BeerXML import feature.";
-if (strpos($section, "step") === FALSE) $beerxml_text_007 = "PHP version 5.x or higher is required &mdash; this server is running PHP version ".$php_version."."; else $beerxml_text_007 = "";
+if (strpos($section, "step") === FALSE)
+$beerxml_text_007 = "PHP version 5.x or higher is required &mdash; this server is running PHP version ".$php_version."."; else $beerxml_text_007 = "";
 $beerxml_text_008 = "Browse for your BeerXML compliant file on your hard drive and click <em>Upload</em>.";
 $beerxml_text_009 = "Choose BeerXML File";
 $beerxml_text_010 = "No file chosen...";
@@ -901,7 +930,7 @@ if ($section == "entry") {
 	$entry_info_text_045 = "Click/Tap for Required Entry Info";
 	$entry_info_text_046 = "If a styles's name is hyperlinked, it has specific entry requirements. Click or tap on the name to view the sub-category's requirements.";
 	
-	//v2.1.10
+	// v2.1.10
 	$entry_info_text_047 = "If a style's name is hyperlinked, it has specific entry requirements. Click or tap on the name to access the Brewers Association styles as listed on their website.";
 	
 }
@@ -931,10 +960,10 @@ if (($section == "list") || ($section == "account")) {
 	$brewer_entries_text_014 = "You have not added any entries to the system.";
 	$brewer_entries_text_015 = "You cannot delete your entry at this time.";
 	
-	//v2.1.10
+	// v2.1.10
 	$brewer_entries_text_016 = "Style Entered NOT Accepted";
-	
-	
+	$brewer_entries_text_017 = "Entries will not be displayed as received until the competition staff has marked them as such in the system. Typically, this occurs AFTER all entries have been collected from all drop-off and shipping locations and sorted.";
+
 	
 	if (SINGLE) $brewer_info_000 = "Hello";
 	else $brewer_info_000 = "Thank you for participating in the";
@@ -993,7 +1022,7 @@ if ($section == "pay") {
 	$pay_text_028 = "You have unconfirmed entries that are <em>not</em> reflected in your fee totals below.";
 	$pay_text_029 = "Please go to your entry list to confirm all your entry data. Unconfirmed entries may be deleted from the system without warning.";
 	
-	//v2.1.10
+	// v2.1.10
 	$pay_text_030 = "By clicking the &quot;I Understand&quot; button below, you will be directed to PayPal to make your payment. Once you have <strong>completed</strong> your payment, PayPal will redirect you back to this site. <strong>If your payment was successful, your paid status will be updated automatically. Please note that you may need wait a few minutes for the payment status to be updated.</strong> Be sure to refresh the pay page or access your entries list.";
 	$pay_text_031 = "About to Leave this Site";
 	
@@ -1076,7 +1105,7 @@ if (($section == "register") || ($action == "register") || ($go == "account")) {
 	$register_text_033 = "Only American Homebrewers Association members are eligible for a Great American Beer Festival Pro-Am opportunity.";
 	$register_text_034 = "To register, you must check the box, indicating that you agree to the waiver statement.";
 	
-	//v2.1.10
+	// v2.1.10
 	
 	$register_text_035 = "The information you provide beyond your organization's name is strictly for record-keeping and contact purposes.";
 	$register_text_036 = "A condition of entry into the competition is providing this information, including a contact person's email address and phone number. Your organization's name may be displayed should one of your entries place, but no other information will be made public.";

@@ -222,10 +222,14 @@ do {
 	$entry_output .= "</td>";
 	
 	
-	$entry_output .= "<td class=\"hidden-xs hidden-sm\">";
+	$entry_output .= "<td class=\"hidden-xs\">";
 	$entry_output .= yes_no($row_log['brewPaid'],$base_url,1);
-	$entry_output .= "</td>";	
+	$entry_output .= "</td>";
 	
+	$entry_output .= "<td class=\"hidden-xs\">";
+	$entry_output .= yes_no($row_log['brewReceived'],$base_url,1);
+	$entry_output .= "</td>";
+	 
 	$entry_output .= "<td class=\"hidden-xs hidden-sm\">";
 	if ($row_log['brewUpdated'] != "") $entry_output .= "<span class=\"hidden\">".strtotime($row_log['brewUpdated'])."</span>".getTimeZoneDateTime($_SESSION['prefsTimeZone'], strtotime($row_log['brewUpdated']), $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "short", "date-time-no-gmt"); else $entry_output .= "&nbsp;";
 	$entry_output .= "</td>";
@@ -382,7 +386,8 @@ if (($totalRows_log > 0) && ($entry_window_open >= 1)) {
   	<th><?php echo $label_style; ?></th>
     <?php if (!$show_scores) { ?>
   	<th class="hidden-xs hidden-sm"><?php echo $label_confirmed; ?></th> 
-  	<th class="hidden-xs hidden-sm"><?php echo $label_paid; ?></th> 
+  	<th class="hidden-xs"><?php echo $label_paid; ?></th> 
+    <th class="hidden-xs" nowrap><?php echo $label_received; ?> <a tabindex="0" role="button" title="<?php echo $label_received." ".$label_entries." ".$label_info; ?>" data-placement="auto right" data-toggle="popover" data-trigger="hover focus" data-content="<?php echo $brewer_entries_text_017; ?>" data-container="body"><span class="fa fa-question-circle"></span></a></th>
     <th class="hidden-xs hidden-sm"><?php echo $label_updated; ?></th>
     <?php } ?>
   	<?php if ($show_scores) { ?>

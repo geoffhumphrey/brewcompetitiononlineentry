@@ -103,6 +103,31 @@ $prefix = "";
 
 /*
 ******************************************************************************
+Installation ID.
+******************************************************************************
+Give your installation a unique ID. If you plan on running multiple instances
+of BCOE&M from the same domain, you'll need to give each installation a 
+unique identifier. This prevents "cross-pollination" of session data display.
+
+For single installations, the default below will be sufficient. Otherwise,
+change the variable to something completely unique for each installation.
+
+*/
+
+$installation_id = "";
+
+/*
+******************************************************************************
+User session time out
+******************************************************************************
+Define the time (in minutes) that a user's session will be active before it 
+expires due to inactivity. Default is 30 minutes.
+*/
+
+$session_expire_after = 30;
+
+/*
+******************************************************************************
 Access control for Setup.
 ******************************************************************************
 If you are going to go through the installation and setup process, you will 

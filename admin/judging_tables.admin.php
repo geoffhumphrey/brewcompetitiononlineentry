@@ -45,7 +45,7 @@ if (($action == "default") && ($filter == "default")) {
     $sub_lead_text .= "<p>To ensure accuracy, verify that all paid and received entries have been marked as such via the <a href=\"".$base_url."index.php?section=admin&amp;go=entries\">Manage Entries</a> screen.</p>";
 	
 	if ($totalRows_tables_edit > 0) {
-
+ 
 		do {
 	
 			$flight_count = table_choose($section,$go,$action,$row_tables_edit['id'],$view,"default","flight_choose");
@@ -525,7 +525,7 @@ if (($action == "add") || ($action == "edit")) {
 } // end if (($action == "add") || ($action == "edit"))
 ?>
 <p class="lead"><?php echo $_SESSION['contestName'].$title;  ?></p>
-<?php echo $sub_lead_text; ?>
+<?php if ($dbTable == "default") echo $sub_lead_text; ?>
 <div class="bcoem-admin-element hidden-print">
 	<?php if  ($dbTable != "default") { ?>
     <!-- Postion 1: View All Button -->
@@ -816,6 +816,7 @@ $(document).ready(function() {
 </div><!-- ./bcoem-admin-dashboard-accordion -->
 <?php } 
 if ($manage_tables_default) { ?>
+	<?php if ($dbTable == "default") { ?>
     <div class="bcoem-admin-element hidden-print">
         <div class="btn-group" role="group" aria-label="compOrgModal">
             <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#compOrgModal">
@@ -876,42 +877,43 @@ if ($manage_tables_default) { ?>
             </div>
         </div><!-- ./modal -->
     <?php } ?>
-<!-- Orphan Styles Modal -->
-<div class="modal fade" id="orphanModal" tabindex="-1" role="dialog" aria-labelledby="orphanModalLabel">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header bcoem-admin-modal">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="orphanModalLabel">Styles with Entries Not Assigned to Tables</h4>
-            </div>
-            <div class="modal-body">
-                <?php
-				echo $orphan_modal_body;
-				if (!empty($orphan_modal_body_2)) echo "<ul>".$orphan_modal_body_2."</ul>"; 
-				?>
-            </div>
-            <div class="modal-footer">
-            	<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+	<!-- Orphan Styles Modal -->
+    <div class="modal fade" id="orphanModal" tabindex="-1" role="dialog" aria-labelledby="orphanModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header bcoem-admin-modal">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="orphanModalLabel">Styles with Entries Not Assigned to Tables</h4>
+                </div>
+                <div class="modal-body">
+                    <?php
+                    echo $orphan_modal_body;
+                    if (!empty($orphan_modal_body_2)) echo "<ul>".$orphan_modal_body_2."</ul>"; 
+                    ?>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                </div>
             </div>
         </div>
-    </div>
-</div><!-- ./modal -->
-    <div class="btn-group" role="group" aria-label="orphanModal">
-            <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#orphanModal">
-               Styles Not Assigned to Tables
+    </div><!-- ./modal -->
+        <div class="btn-group" role="group" aria-label="orphanModal">
+                <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#orphanModal">
+                   Styles Not Assigned to Tables
+                </button>
+            </div>
+        <div class="btn-group" role="group" aria-label="availJudgeModal">
+            <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#availJudgeModal">
+               Judges Not Assigned to Tables
             </button>
         </div>
-	<div class="btn-group" role="group" aria-label="availJudgeModal">
-		<button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#availJudgeModal">
-		   Judges Not Assigned to Tables
-		</button>
-	</div>
-	<div class="btn-group" role="group" aria-label="availStewardModal">
-		<button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#availStewardModal">
-		   Stewards Not Assigned to Tables
-		</button>
-	</div>
-</div>
+        <div class="btn-group" role="group" aria-label="availStewardModal">
+            <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#availStewardModal">
+               Stewards Not Assigned to Tables
+            </button>
+        </div>
+    </div>
+<?php } ?>
 <?php 
 if ($totalRows_tables > 0) { ?>
 <!-- Table of Judging Tables -->

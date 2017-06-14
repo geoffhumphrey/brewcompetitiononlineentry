@@ -13,12 +13,11 @@ $lead_msg = $header_text_113;
 if ($_SESSION['userLevel'] == 0) $lead_msg .= " <small>".$header_text_114."</small>";
 
 if ((($filter == "admin") && ($_SESSION['userLevel'] == 0)) || (($filter == "default") && ($id == $_SESSION['user_id']))) {
-	$_SESSION['editUser'] = 1;
+	$edit_user_enable = 1;
 	$edit_enable = TRUE;
 }
 
-else $_SESSION['editUser'] = 0;
-//echo $_SESSION['editUser'];
+else $edit_user_enable = 0;
 
 if (((($_SESSION['loginUsername'] == $_SESSION['user_name'])) || ($_SESSION['userLevel'] <= "1")) && ($edit_enable)) {
 
@@ -105,6 +104,7 @@ httpxml.send(null);
 
 <form data-toggle="validator" role="form" class="form-horizontal"  action="<?php echo $base_url; ?>includes/process.inc.php?section=<?php echo $section; ?>&amp;go=<?php echo $action; ?>&amp;action=edit&amp;dbTable=<?php echo $users_db_table; ?>&amp;filter=<?php echo $filter; ?>&amp;id=<?php if ($filter == "admin") echo $row_brewer['uid']; else echo $_SESSION['user_id']; ?>" method="POST" name="form1" id="form1" onSubmit="return CheckRequiredFields()">
 <input name="user_name_old" type="hidden" value="<?php if ($filter == "admin") echo $row_brewer['brewerEmail']; else echo $_SESSION['user_name']; ?>">
+<input type="hidden" name="userEdit" value="<?php echo $edit_user_enable; ?>">
 <?php if (isset($_SERVER['HTTP_REFERER'])) { ?>
 <input type="hidden" name="relocate" value="<?php echo relocate($_SERVER['HTTP_REFERER'],"default",$msg,$id); ?>">
 <?php } else { ?>

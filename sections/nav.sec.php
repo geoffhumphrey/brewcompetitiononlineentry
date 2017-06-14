@@ -15,7 +15,7 @@ if ($entry_window_open == 1) {
 	$add_entry_link_show = TRUE;
 	if ($comp_entry_limit) $add_entry_link_show = FALSE;
 	elseif ($comp_paid_entry_limit) $add_entry_link_show = FALSE;
-	elseif ($remaining_entries == 0) $add_entry_link_show = FALSE;
+	elseif ($remaining_entries <= 0) $add_entry_link_show = FALSE;
 }
 
 $active_class = " class=\"active\"";
