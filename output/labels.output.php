@@ -90,7 +90,7 @@ if (isset($_SESSION['loginUsername'])) {
 		
 			// Print labels
 			do {
-				
+				$text = '';
 				for($i=0; $i<$sort; $i++) {
 				$entry_no = sprintf("%04s",$row_log['id']);
 				
@@ -112,9 +112,11 @@ if (isset($_SESSION['loginUsername'])) {
 						if (!empty($row_log['brewMead2'])) $text .= sprintf(" / %s",$row_log['brewMead2']);
 						if (!empty($row_log['brewMead3'])) $text .= sprintf(" / %s",$row_log['brewMead3']); 
 				}
-					
-				$text = iconv('UTF-8', 'windows-1252', $text);
-				$pdf->Add_Label($text);
+
+				if ( ! empty( $text ) ) {
+					$text = iconv('UTF-8', 'windows-1252', $text);
+					$pdf->Add_Label($text);
+				}
 				
 				}
 				
@@ -327,7 +329,7 @@ if (isset($_SESSION['loginUsername'])) {
 		}
 		
 		if (($go == "entries") && ($action == "bottle-judging") && ($view == "special")) {
-		
+
 			$filename = str_replace(" ","_",$_SESSION['contestName'])."_Bottle_Labels_Judging_Numbers";
 			if ($filter != "default") $filename .= "_Category_".$filter;
 			$filename .= "_Req_Info_Mead-Cider";
@@ -344,9 +346,9 @@ if (isset($_SESSION['loginUsername'])) {
 			do {
 				
 				for($i=0; $i<$sort; $i++) {
+					$text = '';
 					if ((NHC) || ($_SESSION['prefsEntryForm'] == "N")) $entry_no = $row_log['brewJudgingNumber'];
 					else $entry_no = readable_judging_number($row_log['brewCategory'],$row_log['brewJudgingNumber']);
-					
 					
 					$style = $row_log['brewCategorySort'].$row_log['brewSubCategory'];
 					$style_name = truncate($row_log['brewStyle'],22);
@@ -365,8 +367,10 @@ if (isset($_SESSION['loginUsername'])) {
 							if (!empty($row_log['brewMead3'])) $text .= sprintf(" / %s",$row_log['brewMead3']);	
 					}
 					
-					$text = iconv('UTF-8', 'windows-1252', $text);
-					$pdf->Add_Label($text);
+					if ( ! empty( $text ) ) {
+						$text = iconv( 'UTF-8', 'windows-1252', $text );
+						$pdf->Add_Label( $text );
+					}
 				}
 				
 			} while ($row_log = mysqli_fetch_assoc($log));
