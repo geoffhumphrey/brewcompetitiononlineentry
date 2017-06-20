@@ -169,16 +169,28 @@ function truncate($string, $your_desired_width) {
   
 }
 
-function user_entry_count($uid) {
+function user_entry_count($uid,$view) {
 	
 	include(CONFIG.'config.php');
 	mysqli_select_db($connection,$database);
 	
-	$query_with_entries_count = sprintf("SELECT COUNT(*) AS 'count' FROM %s WHERE brewBrewerID='%s' AND brewReceived='1'",$prefix."brewing",$uid);
+	if ($view == "entry") $sort = "id";
+	else $sort = "brewJudgingNumber";
+	
+	$query_with_entries_count = sprintf("SELECT id,brewJudgingNumber FROM %s WHERE brewBrewerID='%s' AND brewReceived='1' ORDER BY %s ASC", $prefix."brewing",$uid,$sort);
 	$with_entries_count = mysqli_query($connection,$query_with_entries_count) or die (mysqli_error($connection));
 	$row_with_entries_count = mysqli_fetch_assoc($with_entries_count);
+	$totalRows_with_entries_count = mysqli_num_rows($with_entries_count);
 	
-	return $row_with_entries_count['count'];
+	do {
+		$judging_numbers[] = sprintf("%06d",$row_with_entries_count['brewJudgingNumber']);
+		$entry_numbers[] = sprintf("%06d",$row_with_entries_count['id']);
+	} while($row_with_entries_count = mysqli_fetch_assoc($with_entries_count));
+	
+	$user_judging_numbers = implode(", ",$judging_numbers);
+	$user_entry_numbers = implode(", ",$entry_numbers);
+	
+	return $totalRows_with_entries_count."^".$user_entry_numbers."^".$user_judging_numbers;
 	
 }
 

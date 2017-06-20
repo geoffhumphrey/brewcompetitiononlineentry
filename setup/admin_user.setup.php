@@ -56,12 +56,11 @@ httpxml.send(null);
 }
 //-->
 </script>
-<?php 
+<?php
 $security_questions_display = (array_rand($security_question, 5));
 $security = "";
-$security .= "<div class=\"radio\"><label><input type=\"radio\" name=\"userQuestion\" value=\"".$_SESSION['userQuestion']."\" CHECKED> ".$_SESSION['userQuestion']."</label></div>";
 foreach ($security_questions_display as $key => $value) {
-	if ($security_question[$value] != $_SESSION['userQuestion']) $security .= "<div class=\"radio\"><label><input type=\"radio\" name=\"userQuestion\" value=\"".$security_question[$value]."\"> ".$security_question[$value]."</label></div>";
+	$security .= "<div class=\"radio\"><label><input type=\"radio\" name=\"userQuestion\" value=\"".$security_question[$value]."\"> ".$security_question[$value]."</label></div>";
 }
 
 if (($action != "print") && ($msg != "default")) echo $msg_output; ?>
@@ -82,7 +81,7 @@ if (($action != "print") && ($msg != "default")) echo $msg_output; ?>
 			<div id="status"></div>
 		</div>
 	</div><!-- ./Form Group -->
-	
+
 	<div class="form-group"><!-- Form Group REQUIRED Text Input -->
 		<label for="" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Password</label>
 		<div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
@@ -101,10 +100,9 @@ if (($action != "print") && ($msg != "default")) echo $msg_output; ?>
 			<div class="input-group">
             	<?php echo $security; ?>
             </div>
-            <span class="help-block"><?php echo $brewer_text_001; ?></span>
 		</div>
 	</div><!-- ./Form Group -->
-	
+
 	<div class="form-group"><!-- Form Group REQUIRED Text Input -->
 		<label for="" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Security Question Answer</label>
 		<div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">

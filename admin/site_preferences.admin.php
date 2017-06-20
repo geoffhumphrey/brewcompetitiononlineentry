@@ -1,134 +1,56 @@
-<?php if ($go == "preferences") { 
-include (DB.'styles.db.php'); 
+<?php if ($go == "preferences") {
+include (DB.'styles.db.php');
 $prefsUSCLEx = "";
 if (strpos($styleSet,"BABDB") === false) {
-	
-	do { 
+
+	do {
 	$checked = "";
 	if ($go == "preferences") {
-		$a = explode(",", $row_limits['prefsUSCLEx']); 
-		$b = $row_styles['id']; 
-		foreach ($a as $value) { 
-			if ($value == $b) $checked = "CHECKED"; 
-		} 
+		$a = explode(",", $row_limits['prefsUSCLEx']);
+		$b = $row_styles['id'];
+		foreach ($a as $value) {
+			if ($value == $b) $checked = "CHECKED";
+		}
 	}
 
 	if ($row_styles['id'] != "") $$prefsUSCLEx .= "<div class=\"checkbox\"><label><input name=\"prefsUSCLEx[]\" type=\"checkbox\" value=\"".$row_styles['id']."\" ".$checked."> ".ltrim($row_styles['brewStyleGroup'], "0").$row_styles['brewStyleNum'].": ".$row_styles['brewStyle']."</label></div>";
-	
+
 	} while ($row_styles = mysqli_fetch_assoc($styles));
 
-} else { 
-
+} else {
 
 	include(INCLUDES.'ba_constants.inc.php');
 
 	$ba_exceptions = "";
-	
+
 	$exceptions = explode(",",$row_limits['prefsUSCLEx']);
-				
+
 	foreach ($_SESSION['styles'] as $ba_styles => $stylesData) {
-		
+
 		if (is_array($stylesData) || is_object($stylesData)) {
-			
-			foreach ($stylesData as $key => $ba_style) { 
-			
+
+			foreach ($stylesData as $key => $ba_style) {
+
 				// Likes
 				$ba_exceptions_selected = "";
 				if (in_array($ba_style['id'],$exceptions)) $ba_exceptions_selected = "CHECKED";
-				
+
 				$ba_exceptions .= "<div class=\"checkbox\">";
 				$ba_exceptions .= "<label>";
 				$ba_exceptions .= "<input name=\"prefsUSCLEx[]\" type=\"checkbox\" value=\"".$ba_style['id']."\" ".$ba_exceptions_selected.">";
 				$ba_exceptions .= $ba_style['name'];
 				$ba_exceptions .= "</label>";
 				$ba_exceptions .= "</div>";
-			
+
 			} // end foreach ($stylesData as $data => $ba_style)
-	
+
 		} // end if (is_array($stylesData) || is_object($stylesData))
-		
+
 	} // end foreach ($_SESSION['styles'] as $styles => $stylesData)
 
 	$prefsUSCLEx = $ba_exceptions;
-} 
-?>
-<script type='text/javascript'>//<![CDATA[ 
-$(document).ready(function(){
-	
-	<?php
-	$styleKey = "";
-	if (strpos($row_limits['prefsStyleSet'],"BABDB") !== false) {
-	
-	// Get API Key if set
-	$styleKey = explode("|",$row_limits['prefsStyleSet']);
-	
-	?>
-	$("#styleSetAPIKey").show("fast");
-	$("#helpBlockBAAPI").show("fast");
-	$("#prefsHideSpecific").hide("fast");
-	<?php } else { ?>
-	// show/hide divs on load if no value
-	$("#styleSetAPIKey").hide("fast");
-	$("#helpBlockBAAPI").hide("fast");
-	$("#prefsHideSpecific").show("fast");
-	<?php } ?>
-	
-	<?php if ($row_limits['prefsStyleSet'] == "BJCP2008") { ?>
-	$("#helpBlockBJCP2008").show("fast");
-	<?php } else { ?>
-	$("#helpBlockBJCP2008").hide("fast");
-	<?php } ?>
-	
-	$("#prefsStyleSet").change(function() {
-		
-		if ($("#prefsStyleSet").val() == "BABDB") {
-			$("#styleSetAPIKey").show("fast");
-			$("#helpBlockBAAPI").show("fast");
-			$("#helpBlockBJCP2008").hide("fast");
-			$("#prefsHideSpecific").hide("fast");
-		}
-		
-		else if ($("#prefsStyleSet").val() == "BJCP2008") {
-			$("#styleSetAPIKey").hide("fast");
-			$("#helpBlockBAAPI").hide("fast");
-			$("#helpBlockBJCP2008").show("fast");
-			$("#prefsHideSpecific").show("fast");
-		}
-		
-		else  { 
-			$("#styleSetAPIKey").hide("fast");
-			$("#helpBlockBAAPI").hide("fast");
-			$("#helpBlockBJCP2008").hide("fast");
-			$("#prefsHideSpecific").show("fast");
-		}
-		
-	}); // end $("#prefsStyleSet").change(function()
-	
-	<?php if ($row_limits['prefsUserSubCatLimit'] > 0) { ?>
-	$("#subStyleExeptions").show("fast");
-	<?php } else { ?>
-	$("#subStyleExeptions").hide("fast");
-	<?php } ?>
-	
-	$("#prefsUserSubCatLimit").change(function() {
-		
-		if ( 
-			$("#prefsUserSubCatLimit").val() == ""){
-			$("#subStyleExeptions").hide("fast");
-		}
-		
-		<?php for ($i=1; $i <= 25; $i++) { ?>
-		else if ( 
-			$("#prefsUserSubCatLimit").val() == "<?php echo $i; ?>"){
-			$("#subStyleExeptions").show("fast");
-		}
-		<?php } ?>
-		
-	}); // end $("#prefsUserSubCatLimit").change(function()
-	
-}); // end $(document).ready(function(){
-</script>
-<?php } ?>
+}
+} ?>
 <?php if ($section == "admin") { ?>
 <p class="lead"><?php echo $_SESSION['contestName'].": Set Website Preferences"; ?></p>
 <div class="bcoem-admin-element hidden-print">
@@ -137,6 +59,82 @@ $(document).ready(function(){
 	</div><!-- ./button group -->
 </div>
 <?php } ?>
+<script type='text/javascript'>//<![CDATA[
+$(document).ready(function(){
+
+    <?php
+    $styleKey = "";
+    if ((isset($row_limits['prefsStyleSet'])) && (strpos($row_limits['prefsStyleSet'],"BABDB")) !== false) {
+
+    // Get API Key if set
+    $styleKey = explode("|",$row_limits['prefsStyleSet']);
+
+    ?>
+    $("#styleSetAPIKey").show("fast");
+    $("#helpBlockBAAPI").show("fast");
+    $("#prefsHideSpecific").hide("fast");
+    <?php } else { ?>
+    // show/hide divs on load if no value
+    $("#styleSetAPIKey").hide("fast");
+    $("#helpBlockBAAPI").hide("fast");
+    $("#prefsHideSpecific").show("fast");
+    <?php } ?>
+
+    <?php if ((isset($row_limits['prefsStyleSet'])) && ($row_limits['prefsStyleSet'] == "BJCP2008")) { ?>
+    $("#helpBlockBJCP2008").show("fast");
+    <?php } else { ?>
+    $("#helpBlockBJCP2008").hide("fast");
+    <?php } ?>
+
+    $("#prefsStyleSet").change(function() {
+
+        if ($("#prefsStyleSet").val() == "BABDB") {
+            $("#styleSetAPIKey").show("fast");
+            $("#helpBlockBAAPI").show("fast");
+            $("#helpBlockBJCP2008").hide("fast");
+            $("#prefsHideSpecific").hide("fast");
+        }
+
+        else if ($("#prefsStyleSet").val() == "BJCP2008") {
+            $("#styleSetAPIKey").hide("fast");
+            $("#helpBlockBAAPI").hide("fast");
+            $("#helpBlockBJCP2008").show("fast");
+            $("#prefsHideSpecific").show("fast");
+        }
+
+        else  {
+            $("#styleSetAPIKey").hide("fast");
+            $("#helpBlockBAAPI").hide("fast");
+            $("#helpBlockBJCP2008").hide("fast");
+            $("#prefsHideSpecific").show("fast");
+        }
+
+    }); // end $("#prefsStyleSet").change(function()
+
+    <?php if ($row_limits['prefsUserSubCatLimit'] > 0) { ?>
+    $("#subStyleExeptions").show("fast");
+    <?php } else { ?>
+    $("#subStyleExeptions").hide("fast");
+    <?php } ?>
+
+    $("#prefsUserSubCatLimit").change(function() {
+
+        if (
+            $("#prefsUserSubCatLimit").val() == ""){
+            $("#subStyleExeptions").hide("fast");
+        }
+
+        <?php for ($i=1; $i <= 25; $i++) { ?>
+        else if (
+            $("#prefsUserSubCatLimit").val() == "<?php echo $i; ?>"){
+            $("#subStyleExeptions").show("fast");
+        }
+        <?php } ?>
+
+    }); // end $("#prefsUserSubCatLimit").change(function()
+
+}); // end $(document).ready(function(){
+</script>
 <form class="form-horizontal" method="post" action="<?php echo $base_url; ?>includes/process.inc.php?section=<?php if ($section == "step3") echo "setup"; else echo $section; ?>&amp;action=<?php if ($section == "step3") echo "add"; else echo "edit"; ?>&amp;dbTable=<?php echo $preferences_db_table; ?>&amp;id=1" name="form1">
 <input type="hidden" name="prefsRecordLimit" value="9999" />
 <h3>General</h3>
@@ -147,10 +145,10 @@ $(document).ready(function(){
         <div class="input-group">
             <!-- Input Here -->
             <label class="radio-inline">
-                <input type="radio" name="prefsProEdition" value="0" id="prefsProEdition_0"  <?php if ($_SESSION['prefsProEdition'] == "0") echo "CHECKED"; ?> /> Amateur
+                <input type="radio" name="prefsProEdition" value="0" id="prefsProEdition_0"  <?php if (($section != "step3") && ($_SESSION['prefsProEdition'] == "0")) echo "CHECKED"; if ($section == "step3") echo "CHECKED"; ?> /> Amateur
             </label>
             <label class="radio-inline">
-                <input type="radio" name="prefsProEdition" value="1" id="prefsProEdition_1" <?php if ($_SESSION['prefsProEdition'] == "1") echo "CHECKED"; elseif ($section == "step3") echo "CHECKED"; ?>/> Professional
+                <input type="radio" name="prefsProEdition" value="1" id="prefsProEdition_1" <?php if (($section != "step3") && ($_SESSION['prefsProEdition'] == "1")) echo "CHECKED"; ?>/> Professional
             </label>
         </div>
         <span id="helpBlock" class="help-block">Indicate whether the participants in the competition will be individual amateur brewers or licensed breweries with designated points of contact.</span>
@@ -163,10 +161,10 @@ $(document).ready(function(){
         <div class="input-group">
             <!-- Input Here -->
             <label class="radio-inline">
-                <input type="radio" name="prefsDisplayWinners" value="Y" id="prefsDisplayWinners_0"  <?php if ($_SESSION['prefsDisplayWinners'] == "Y") echo "CHECKED"; ?> /> Enable
+                <input type="radio" name="prefsDisplayWinners" value="Y" id="prefsDisplayWinners_0"  <?php if (($section != "step3") && ($_SESSION['prefsDisplayWinners'] == "Y")) echo "CHECKED"; ?> /> Enable
             </label>
             <label class="radio-inline">
-                <input type="radio" name="prefsDisplayWinners" value="N" id="prefsDisplayWinners_1" <?php if ($_SESSION['prefsDisplayWinners'] == "N") echo "CHECKED"; elseif ($section == "step3") echo "CHECKED"; ?>/> Disable
+                <input type="radio" name="prefsDisplayWinners" value="N" id="prefsDisplayWinners_1" <?php if (($section != "step3") && ($_SESSION['prefsDisplayWinners'] == "N")) echo "CHECKED"; if ($section == "step3") echo "CHECKED"; ?>/> Disable
             </label>
         </div>
         <span id="helpBlock" class="help-block">Indicate if the winners of the competition for each category and Best of Show Style Type will be displayed.</span>
@@ -234,7 +232,7 @@ $(document).ready(function(){
                 <a href="<?php echo $base_url; ?>includes/process.inc.php?section=admin&amp;&amp;go=default&amp;action=email&amp;filter=test-email&amp;id=<?php echo $_SESSION['brewerID']; ?>" role="button" class="btn btn-xs btn-primary">Send Test Email</a>
 			</div>
 		</div>
-		<p>If you are not sure that your server supports sending email via PHP scripts, click the &ldquo;Send Test Email&rdquo; button above to send an email to <?php echo $_SESSION['loginUsername']; ?>. Be sure to check your spam folder.</p>	
+		<p>If you are not sure that your server supports sending email via PHP scripts, click the &ldquo;Send Test Email&rdquo; button above to send an email to <?php echo $_SESSION['loginUsername']; ?>. Be sure to check your spam folder.</p>
 		</span>
     </div>
 </div><!-- ./Form Group -->
@@ -283,7 +281,7 @@ $(document).ready(function(){
                 <a href="<?php echo $base_url; ?>includes/process.inc.php?section=admin&amp;&amp;go=default&amp;action=email&amp;filter=test-email&amp;id=<?php echo $_SESSION['brewerID']; ?>" role="button" class="btn btn-xs btn-primary">Send Test Email</a>
 			</div>
 		</div>
-		<p>If you are not sure that your server supports sending email via PHP scripts, click the &ldquo;Send Test Email&rdquo; button above to send an email to <?php echo $_SESSION['loginUsername']; ?>. Be sure to check your spam folder.</p>	
+		<p>If you are not sure that your server supports sending email via PHP scripts, click the &ldquo;Send Test Email&rdquo; button above to send an email to <?php echo $_SESSION['loginUsername']; ?>. Be sure to check your spam folder.</p>
 		</span>
     </div>
 </div><!-- ./Form Group -->
@@ -321,7 +319,7 @@ $(document).ready(function(){
 	<div class="col-lg-6 col-md-5 col-sm-8 col-xs-12">
 	<!-- Input Here -->
 	<select class="selectpicker" name="prefsTheme" id="prefsTheme" data-width="auto">
-		<?php foreach ($theme_name as $theme) { 
+		<?php foreach ($theme_name as $theme) {
 			$themes = explode("|",$theme);
 		?>
     	<option value="<?php echo $themes['0']; ?>" <?php if ($_SESSION['prefsTheme'] ==  $themes['0']) echo " SELECTED"; ?> /><?php echo  $themes['1']; ?></option>
@@ -397,10 +395,10 @@ $(document).ready(function(){
         <div class="input-group">
             <!-- Input Here -->
             <label class="radio-inline">
-                <input type="radio" name="prefsDropOff" value="1" id="prefsDropOff_0"  <?php if ($_SESSION['prefsDropOff'] == "1") echo "CHECKED"; elseif ($section == "step3") echo "CHECKED";  ?> /> Enable
+                <input type="radio" name="prefsDropOff" value="1" id="prefsDropOff_0"  <?php if (($section != "step3") && ($_SESSION['prefsDropOff'] == "1")) echo "CHECKED"; if ($section == "step3") echo "CHECKED";  ?> /> Enable
             </label>
             <label class="radio-inline">
-                <input type="radio" name="prefsDropOff" value="0" id="prefsDropOff_1" <?php if ($_SESSION['prefsDropOff'] == "0") echo "CHECKED";?>/> Disable
+                <input type="radio" name="prefsDropOff" value="0" id="prefsDropOff_1" <?php if (($section != "step3") && ($_SESSION['prefsDropOff'] == "0")) echo "CHECKED";?>/> Disable
             </label>
         </div>
         <span id="helpBlock" class="help-block">Disable if your competition does not have drop-off locations.</span>
@@ -413,10 +411,10 @@ $(document).ready(function(){
         <div class="input-group">
             <!-- Input Here -->
             <label class="radio-inline">
-                <input type="radio" name="prefsShipping" value="1" id="prefsShipping_0"  <?php if ($_SESSION['prefsShipping'] == "1") echo "CHECKED"; elseif ($section == "step3") echo "CHECKED";  ?> /> Enable
+                <input type="radio" name="prefsShipping" value="1" id="prefsShipping_0"  <?php if (($section != "step3") && ($_SESSION['prefsShipping'] == "1")) echo "CHECKED"; if ($section == "step3") echo "CHECKED";  ?> /> Enable
             </label>
             <label class="radio-inline">
-                <input type="radio" name="prefsShipping" value="0" id="prefsShipping_1" <?php if ($_SESSION['prefsShipping'] == "0") echo "CHECKED"; ?>/> Disable
+                <input type="radio" name="prefsShipping" value="0" id="prefsShipping_1" <?php if (($section != "step3") && ($_SESSION['prefsShipping'] == "0")) echo "CHECKED"; ?>/> Disable
             </label>
         </div>
         <span id="helpBlock" class="help-block">Disable if your competition does not have an entry shipping location.</span>
@@ -711,7 +709,6 @@ $(document).ready(function(){
 	<span id="helpBlock" class="help-block">Limit of entries that each participant can enter. Leave blank if no limit.</span>
 	</div>
 </div><!-- ./Form Group -->
-
 <?php if ($go == "preferences") { ?>
 <div class="form-group"><!-- Form Group NOT REQUIRED Select -->
 	<label for="prefsUserSubCatLimit" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Entry Limit per Sub-Style</label>
@@ -962,7 +959,7 @@ $(document).ready(function(){
                 <input type="radio" name="prefsLiquid1" value="ounces" id="prefsLiquid1_0"  <?php if ($_SESSION['prefsLiquid1'] == "ounces") echo "CHECKED"; elseif ($section == "step3") echo "CHECKED"; ?> /> Ounces (oz)
             </label>
             <label class="radio-inline">
-                <input type="radio" name="prefsLiquid1" value="millilitres" id="prefsLiquid1_1" <?php if ($_SESSION['prefsLiquid1'] == "millilitres") echo "CHECKED";  ?> /> 
+                <input type="radio" name="prefsLiquid1" value="millilitres" id="prefsLiquid1_1" <?php if ($_SESSION['prefsLiquid1'] == "millilitres") echo "CHECKED";  ?> />
                 Milliliters (ml)
             </label>
         </div>
@@ -978,7 +975,7 @@ $(document).ready(function(){
                 <input type="radio" name="prefsLiquid2" value="gallons" id="prefsLiquid2_0"  <?php if ($_SESSION['prefsLiquid2'] == "gallons") echo "CHECKED"; elseif ($section == "step3") echo "CHECKED"; ?> /> Gallons (gal)
             </label>
             <label class="radio-inline">
-                <input type="radio" name="prefsLiquid2" value="litres" id="prefsLiquid2_1" <?php if ($_SESSION['prefsLiquid2'] == "litres") echo "CHECKED"; ?> /> 
+                <input type="radio" name="prefsLiquid2" value="litres" id="prefsLiquid2_1" <?php if ($_SESSION['prefsLiquid2'] == "litres") echo "CHECKED"; ?> />
                 Liters (lt)
             </label>
         </div>
@@ -991,10 +988,10 @@ $(document).ready(function(){
 	<div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
 		<!-- Input Here -->
 		<select class="selectpicker" name="prefsCurrency" id="prefsCurrency" data-live-search="true" data-size="10" data-width="auto">
-			<?php 
+			<?php
 				$currency = currency_info($_SESSION['prefsCurrency'],2);
 				$currency_dropdown = "";
-				
+
 				foreach($currency as $curr) {
 					$curr = explode("^",$curr);
 					$currency_dropdown .= '<option value="'.$curr[0].'"';
@@ -1002,7 +999,7 @@ $(document).ready(function(){
 					$currency_dropdown .= '>';
 					$currency_dropdown .= $curr[1]."</option>";
 				}
-				
+
 				echo $currency_dropdown;
 			?>
 		</select>
@@ -1014,7 +1011,7 @@ $(document).ready(function(){
 				</button>
 			</div>
 			</div>
-			
+
 		</span>
 	</div>
 </div><!-- ./Form Group -->
@@ -1230,7 +1227,7 @@ $(document).ready(function(){
                Entrant Pays Checkout Fees Info
             </button>
 		</div>
-		
+
 		</span>
 	</div>
 </div><!-- ./Form Group -->
@@ -1259,10 +1256,10 @@ $(document).ready(function(){
         <div class="input-group">
             <!-- Input Here -->
             <label class="radio-inline">
-                <input type="radio" name="prefsSponsors" value="Y" id="prefs0"  <?php if ($_SESSION['prefsSponsors'] == "Y") echo "CHECKED"; elseif ($section == "step3") echo "CHECKED"; ?> /> Enable
+                <input type="radio" name="prefsSponsors" value="Y" id="prefs0" <?php if (($section != "step3") && ($_SESSION['prefsSponsors'] == "Y")) echo "CHECKED"; if ($section == "step3") echo "CHECKED"; ?> /> Enable
             </label>
             <label class="radio-inline">
-                <input type="radio" name="prefsSponsors" value="N" id="prefs1" <?php if ($_SESSION['prefsSponsors'] == "N") echo "CHECKED"; ?>/> Disable
+                <input type="radio" name="prefsSponsors" value="N" id="prefs1" <?php if (($section != "step3") && ($_SESSION['prefsSponsors'] == "N")) echo "CHECKED"; ?> /> Disable
             </label>
         </div>
     </div>
@@ -1274,10 +1271,10 @@ $(document).ready(function(){
         <div class="input-group">
             <!-- Input Here -->
             <label class="radio-inline">
-                <input type="radio" name="prefsSponsorLogos" value="Y" id="prefsSponsorLogos_0"  <?php if ($_SESSION['prefsSponsorLogos'] == "Y") echo "CHECKED"; elseif ($section == "step3") echo "CHECKED"; ?> /> Enable
+                <input type="radio" name="prefsSponsorLogos" value="Y" id="prefsSponsorLogos_0"  <?php if (($section != "step3") && ($_SESSION['prefsSponsorLogos'] == "Y")) echo "CHECKED"; if ($section == "step3") echo "CHECKED"; ?> /> Enable
             </label>
             <label class="radio-inline">
-                <input type="radio" name="prefsSponsorLogos" value="N" id="prefsSponsorLogos_1" <?php if ($_SESSION['prefsSponsorLogos'] == "N") echo "CHECKED"; ?>/> Disable
+                <input type="radio" name="prefsSponsorLogos" value="N" id="prefsSponsorLogos_1" <?php if (($section != "step3") && ($_SESSION['prefsSponsorLogos'] == "N")) echo "CHECKED"; ?>/> Disable
             </label>
         </div>
     </div>

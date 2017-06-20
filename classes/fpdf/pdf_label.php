@@ -58,17 +58,14 @@ class PDF_Label extends FPDF {
 
 	// List of label formats
 	var $_Avery_Labels = array(
-		'5160' 		=> array('paper-size'=>'letter',		'metric'=>'mm',	'marginLeft'=>3,			'marginTop'=>10.7,		'NX'=>3,		'NY'=>10,	'SpaceX'=>3.175,		'SpaceY'=>0,		'width'=>66.675,		'height'=>25.4,		'font-size'=>9),
+		// '5160' 		=> array('paper-size'=>'letter',		'metric'=>'mm',	'marginLeft'=>3,			'marginTop'=>10.3,		'NX'=>3,		'NY'=>10,	'SpaceX'=>3.175,		'SpaceY'=>0,		'width'=>66.675,		'height'=>25.4,		'font-size'=>9),
+		//	'5160' 		=> array('paper-size'=>'letter', 	'metric'=>'in', 'marginLeft'=>0.1875, 	'marginTop'=>0.5, 		'NX'=>3, 	'NY'=>10, 	'SpaceX'=>0.15625, 	'SpaceY'=>0, 	'width'=>2.75, 		'height'=>1.075, 	'font-size'=>9), 
+		//	'5160'		=> array('paper-size'=>'letter', 	'metric'=>'mm', 'marginLeft'=>4, 		'marginTop'=>11, 		'NX'=>3, 	'NY'=>10, 	'SpaceX'=>3.175, 	'SpaceY'=>0, 	'width'=>66.675, 	'height'=>25.4, 	'font-size'=>9),
+		'5160' => array('paper-size'=>'letter',    'metric'=>'mm',    'marginLeft'=>3,    'marginTop'=>7.7,        'NX'=>3,    'NY'=>10,    'SpaceX'=>3.175,    'SpaceY'=>0,    'width'=>66.675,    'height'=>25.6,        'font-size'=>8),
 		'5395' 		=> array('paper-size'=>'letter',		'metric'=>'mm',	'marginLeft'=>17.526,	'marginTop'=>13.208,		'NX'=>2,		'NY'=>4,		'SpaceX'=>9.398,		'SpaceY'=>7.874,	'width'=>85.852,		'height'=>59.182,	'font-size'=>12),
-	//	'5160' 		=> array('paper-size'=>'letter', 	'metric'=>'in', 'marginLeft'=>0.1875, 	'marginTop'=>0.5, 		'NX'=>3, 	'NY'=>10, 	'SpaceX'=>0.15625, 	'SpaceY'=>0, 	'width'=>2.75, 		'height'=>1.075, 	'font-size'=>9), 
-	//	'5160'		=> array('paper-size'=>'letter', 	'metric'=>'mm', 'marginLeft'=>4, 		'marginTop'=>11, 		'NX'=>3, 	'NY'=>10, 	'SpaceX'=>3.175, 	'SpaceY'=>0, 	'width'=>66.675, 	'height'=>25.4, 	'font-size'=>9),
 		'OL32' 		=> array('paper-size'=>'letter',		'metric'=>'mm',	'marginLeft'=>6.35, 		'marginTop'=>9.52, 		'NX'=>11, 	'NY'=>14, 	'SpaceX'=>6.35, 		'SpaceY'=>6.35, 	'width'=>12.7, 		'height'=>12.7,		'font-size'=>7),
 		'OL5275WR'	=> array('paper-size'=>'letter',		'metric'=>'mm',	'marginLeft'=>15.82, 	'marginTop'=>16.6, 		'NX'=>9, 	'NY'=>12, 	'SpaceX'=>1.6, 		'SpaceY'=>1.6, 	'width'=>19.05, 		'height'=>19.05,		'font-size'=>7),
-		
-		
 		'OL5375' 	=> array('paper-size'=>'letter',		'metric'=>'mm',	'marginLeft'=>3.97, 		'marginTop'=>9.52, 		'NX'=>4, 	'NY'=>5, 	'SpaceX'=>1.59, 		'SpaceY'=>1.59, 	'width'=>50.8, 		'height'=>50.8,		'font-size'=>8),
-		
-		
 		'5161' 		=> array('paper-size'=>'letter',		'metric'=>'mm',	'marginLeft'=>0.967,		'marginTop'=>10.7,		'NX'=>2,		'NY'=>10,	'SpaceX'=>3.967,		'SpaceY'=>0,		'width'=>101.6,		'height'=>25.4,		'font-size'=>8),
 		'5162' 		=> array('paper-size'=>'letter',		'metric'=>'mm',	'marginLeft'=>0.97,		'marginTop'=>20.224,		'NX'=>2,		'NY'=>7,		'SpaceX'=>4.762,		'SpaceY'=>0,		'width'=>100.807,	'height'=>35.72,		'font-size'=>8),
 		'5163' 		=> array('paper-size'=>'letter',		'metric'=>'mm',	'marginLeft'=>1.762,		'marginTop'=>10.7, 		'NX'=>2,		'NY'=>5,		'SpaceX'=>3.175,		'SpaceY'=>0,		'width'=>101.6,		'height'=>50.8,		'font-size'=>8),

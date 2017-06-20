@@ -1,11 +1,11 @@
-<?php 
+<?php
 
 if ($setup_free_access == TRUE) {
 
 	$output = "";
 
-	if ($action == "default") { 
-	
+	if ($action == "default") {
+
 		$setup_alerts .= "<div class=\"alert alert-info alert-dismissible hidden-print fade in\" role=\"alert\"><button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-label=\"Close\"><span aria-hidden=\"true\">&times;</span></button><span class=\"fa fa-lg fa-info-circle\"></span> <strong>To begin setup and install, the necessary database tables need to be installed.</strong> These tables hold all of your competition data.</div>";
 		$output .= "<p>Click the &ldquo;Install DB Tables and Data&rdquo; button below to install the database schema";
 		if (!HOSTED) $output .= " into the following database:";
@@ -22,17 +22,17 @@ if ($setup_free_access == TRUE) {
 				$output .= "</ul>";
 			}
 		}
-		
+
 		$output .= "<a class=\"btn btn-lg btn-primary\" href=\"".$base_url."setup.php?section=step0&amp;action=install-db\" data-confirm=\"Are you sure? This will install all database elements.\"><span class=\"fa fa-lg fa-download\"></span> Install DB Tables and Data</a>";
-		
+
 		}
-		
+
 	if ($action == "install-db") {
-		
+
 		$setup_alerts .= "<div class=\"alert alert-success alert-dismissible hidden-print fade in\" role=\"alert\"><button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-label=\"Close\"><span aria-hidden=\"true\">&times;</span></button><span class=\"fa fa-lg fa-check-circle\"></span> <strong>All database tables and default data have been installed successfully.</strong></div>
 		<div class=\"alert alert-info\"><strong><span class=\"fa fa-lg fa-info-circle\"></span> The setup process is not done.</strong> Click &ldquo;Continue&rdquo; below to setup and customize your installation.</div>";
 		$output .= "<div class=\"bcoem-admin-element\"><a class=\"btn btn-primary btn-lg\" href=\"".$base_url."setup.php?section=step1\">Continue <span class=\"fa fa-lg fa-chevron-right\"><span></a></div>";
-	
+
 		//$setup_alerts .= "<div class=\"alert alert-info\"><span class=\"fa fa-lg fa-info-circle\"></span> <strong>Database tables install details are below.</strong></div>";
 		$output .= "<div class=\"panel panel-primary\">";
 		$output .= "<div class=\"panel-heading\"><strong>Table Installation Details</strong></div>";
@@ -40,20 +40,20 @@ if ($setup_free_access == TRUE) {
 		$output .= "<p>Status of database tables installation.</p>";
 		$output .= "</div>";
 		$output .= "<ul class=\"list-group\">";
-		
+
 		// -------------------
 		// Make sure default character set is utf8mb4 and collation is utf8mb4_unicode_ci
 		// -------------------
-		
+
 		$sql = sprintf("ALTER DATABASE `%s` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;",$database);
 		mysqli_select_db($connection,$database);
 		mysqli_real_escape_string($connection,$sql);
 		$result = mysqli_query($connection,$sql) or die (mysqli_error($connection));
-		
-		// ------------------- 
+
+		// -------------------
 		// Archive Table
-		// ------------------- 
-		
+		// -------------------
+
 		$sql = "
 		CREATE TABLE IF NOT EXISTS `$archive_db_table` (
 			`id` int(8) NOT NULL AUTO_INCREMENT,
@@ -64,19 +64,19 @@ if ($setup_free_access == TRUE) {
 			PRIMARY KEY (`id`)
 		) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci COLLATE utf8mb4_unicode_ci;
 		";
-		
+
 		mysqli_select_db($connection,$database);
 		mysqli_real_escape_string($connection,$sql);
 		$result = mysqli_query($connection,$sql) or die (mysqli_error($connection));
 		 //echo "<p>".$sql."</p>";
-		
+
 		$output .= "<li class=\"list-group-item\"><span class=\"fa fa-lg fa-check text-success\"></span> The <strong>Archive</strong> table was installed successfully.</li>";
-		
-		
-		// ------------------- 
+
+
+		// -------------------
 		// Brewer Table
 		// -------------------
-		
+
 		$sql = "
 		CREATE TABLE IF NOT EXISTS `$brewer_db_table` (
 		  `id` int(8) NOT NULL AUTO_INCREMENT,
@@ -102,7 +102,7 @@ if ($setup_free_access == TRUE) {
 		  `brewerJudgeDislikes` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
 		  `brewerJudgeLocation` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
 		  `brewerStewardLocation` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
-		  `brewerJudgeExp` varchar(25) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL, 
+		  `brewerJudgeExp` varchar(25) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
 		  `brewerJudgeNotes` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
 		  `brewerAssignment` char(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
 		  `brewerJudgeWaiver` char(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
@@ -113,20 +113,20 @@ if ($setup_free_access == TRUE) {
 		  PRIMARY KEY (`id`)
 		) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci;
 		";
-		
+
 		mysqli_select_db($connection,$database);
 		mysqli_real_escape_string($connection,$sql);
 		$result = mysqli_query($connection,$sql) or die (mysqli_error($connection));
 		 //echo "<p>".$sql."</p>";
-		
-		
-		
+
+
+
 		$output .= "<li class=\"list-group-item\"><span class=\"fa fa-lg fa-check text-success\"></span> The <strong>Participants</strong> table was installed successfully.</li>";
-		
-		// ------------------- 
+
+		// -------------------
 		// Brewing Table
 		// -------------------
-		
+
 		$sql = "CREATE TABLE IF NOT EXISTS `$brewing_db_table` (
 			`id` int(8) NOT NULL AUTO_INCREMENT,
 			`brewName` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
@@ -475,8 +475,8 @@ if ($setup_free_access == TRUE) {
 			`brewPaid` tinyint(1) DEFAULT NULL COMMENT '1=true; 0=false',
 			`brewWinner` char(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
 			`brewWinnerCat` varchar(5) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
-			`brewInfoOptional` TEXT utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
-			`brewWinnerPlace` varchar(3) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
+			`brewInfoOptional` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
+			`brewWinnerPlace` varchar(5) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
 			`brewBOSRound` char(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
 			`brewBOSPlace` varchar(3) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
 			`brewReceived` tinyint(1) DEFAULT NULL COMMENT '1=true; 0=false',
@@ -488,21 +488,21 @@ if ($setup_free_access == TRUE) {
 			`brewBoxNum` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
 			PRIMARY KEY (`id`)
 		) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci;
-		
+
 		";
-		
+
 		mysqli_select_db($connection,$database);
 		mysqli_real_escape_string($connection,$sql);
 		$result = mysqli_query($connection,$sql) or die (mysqli_error($connection));
 		 //echo "<p>".$sql."</p>";
-		
+
 		$output .= "<li class=\"list-group-item\"><span class=\"fa fa-lg fa-check text-success\"></span> The <strong>Entries</strong> table was installed successfully.</li>";
-		
-		
-		// ------------------- 
+
+
+		// -------------------
 		// Contacts Table
 		// -------------------
-		
+
 		$sql = "
 		CREATE TABLE IF NOT EXISTS `$contacts_db_table` (
 			`id` int(8) NOT NULL AUTO_INCREMENT,
@@ -513,19 +513,19 @@ if ($setup_free_access == TRUE) {
 			PRIMARY KEY (`id`)
 		) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci;
 		";
-		
+
 		mysqli_select_db($connection,$database);
 		mysqli_real_escape_string($connection,$sql);
 		$result = mysqli_query($connection,$sql) or die (mysqli_error($connection));
 		 //echo "<p>".$sql."</p>";
-		
+
 		$output .= "<li class=\"list-group-item\"><span class=\"fa fa-lg fa-check text-success\"></span> The <strong>Contacts</strong> table was installed successfully.</li>";
-		
-		
-		// ------------------- 
+
+
+		// -------------------
 		// Competition Info Table
 		// -------------------
-		
+
 		$sql = "
 		CREATE TABLE IF NOT EXISTS `$contest_info_db_table` (
 			`id` tinyint(1) NOT NULL DEFAULT '0',
@@ -568,18 +568,18 @@ if ($setup_free_access == TRUE) {
 			PRIMARY KEY (`id`)
 		) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci;
 		";
-		
+
 		mysqli_select_db($connection,$database);
 		mysqli_real_escape_string($connection,$sql);
 		$result = mysqli_query($connection,$sql) or die (mysqli_error($connection));
 		 //echo "<p>".$sql."</p>";
-		
+
 		$output .= "<li class=\"list-group-item\"><span class=\"fa fa-lg fa-check text-success\"></span> The <strong>Competition Info</strong> table was installed successfully.</li>";
-		
-		// ------------------- 
+
+		// -------------------
 		// Drop-Off Table
 		// -------------------
-		
+
 		$sql = "
 		CREATE TABLE IF NOT EXISTS `$drop_off_db_table` (
 			`id` int(8) NOT NULL AUTO_INCREMENT,
@@ -591,18 +591,18 @@ if ($setup_free_access == TRUE) {
 			PRIMARY KEY (`id`)
 		) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci;
 		";
-		
+
 		mysqli_select_db($connection,$database);
 		mysqli_real_escape_string($connection,$sql);
 		$result = mysqli_query($connection,$sql) or die (mysqli_error($connection));
 		 //echo "<p>".$sql."</p>";
-		
+
 		$output .= "<li class=\"list-group-item\"><span class=\"fa fa-lg fa-check text-success\"></span> The <strong>Drop-Off Locations</strong> table was installed successfully.</li>";
-		
-		// ------------------- 
+
+		// -------------------
 		// Judging Assignments Table
 		// -------------------
-		
+
 		$sql = "
 		CREATE TABLE `$judging_assignments_db_table` (
 			`id` int(11) NOT NULL AUTO_INCREMENT,
@@ -616,18 +616,18 @@ if ($setup_free_access == TRUE) {
 			PRIMARY KEY (`id`)
 		) ENGINE = MYISAM ;
 		";
-		
+
 		mysqli_select_db($connection,$database);
 		mysqli_real_escape_string($connection,$sql);
 		$result = mysqli_query($connection,$sql) or die (mysqli_error($connection));
 		//echo "<p>".$sql."</p>";
-		
+
 		$output .= "<li class=\"list-group-item\"><span class=\"fa fa-lg fa-check text-success\"></span> The <strong>Judging Assignments</strong> table was installed successfully.</li>";
-		
-		// ------------------- 
+
+		// -------------------
 		// Judging Flights Table
 		// -------------------
-		
+
 		$sql = "
 		CREATE TABLE IF NOT EXISTS `$judging_flights_db_table` (
 			`id` int(11) NOT NULL AUTO_INCREMENT,
@@ -638,18 +638,18 @@ if ($setup_free_access == TRUE) {
 			PRIMARY KEY (`id`)
 		) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci;
 		";
-		
+
 		mysqli_select_db($connection,$database);
 		mysqli_real_escape_string($connection,$sql);
 		$result = mysqli_query($connection,$sql) or die (mysqli_error($connection));
 		 //echo "<p>".$sql."</p>";
-		
+
 		$output .= "<li class=\"list-group-item\"><span class=\"fa fa-lg fa-check text-success\"></span> The <strong>Judging Flights</strong> table was installed successfully.</li>";
-		
-		// ------------------- 
+
+		// -------------------
 		// Judging Locations Table
 		// -------------------
-		
+
 		$sql = "
 		CREATE TABLE IF NOT EXISTS `$judging_locations_db_table` (
 			`id` int(8) NOT NULL AUTO_INCREMENT,
@@ -661,19 +661,19 @@ if ($setup_free_access == TRUE) {
 			PRIMARY KEY (`id`)
 		) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci;
 		";
-		
+
 		mysqli_select_db($connection,$database);
 		mysqli_real_escape_string($connection,$sql);
 		$result = mysqli_query($connection,$sql) or die (mysqli_error($connection));
 		 //echo "<p>".$sql."</p>";
-		
+
 		$output .= "<li class=\"list-group-item\"><span class=\"fa fa-lg fa-check text-success\"></span> The <strong>Judging Locations</strong> table was installed successfully.</li>";
-		
-		
-		// ------------------- 
+
+
+		// -------------------
 		// Judging Preferences Table (v1.3.3.0)
 		// -------------------
-		
+
 		$sql = "
 		CREATE TABLE IF NOT EXISTS `$judging_preferences_db_table` (
 		  `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -690,23 +690,23 @@ if ($setup_free_access == TRUE) {
 		mysqli_select_db($connection,$database);
 		mysqli_real_escape_string($connection,$sql);
 		$result = mysqli_query($connection,$sql) or die (mysqli_error($connection));
-		
+
 		$sql = "
 		INSERT INTO `$judging_preferences_db_table` (`id`, `jPrefsQueued`, `jPrefsFlightEntries`, `jPrefsMaxBOS`, `jPrefsRounds`) VALUES (1, 0, 12, 7, 3);
 		";
-		
+
 		mysqli_select_db($connection,$database);
 		mysqli_real_escape_string($connection,$sql);
 		$result = mysqli_query($connection,$sql) or die (mysqli_error($connection));
 		 //echo "<p>".$sql."</p>";
-		
+
 		$output .= "<li class=\"list-group-item\"><span class=\"fa fa-lg fa-check text-success\"></span> The <strong>Judging Preferences</strong> table was installed successfully.</li>";
-		
-		
-		// ------------------- 
+
+
+		// -------------------
 		// Judging Scores Table
 		// -------------------
-		
+
 		$sql = "
 		CREATE TABLE IF NOT EXISTS `$judging_scores_db_table` (
 			`id` int(11) NOT NULL AUTO_INCREMENT,
@@ -720,19 +720,19 @@ if ($setup_free_access == TRUE) {
 			PRIMARY KEY (`id`)
 		) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci;
 		";
-		
+
 		mysqli_select_db($connection,$database);
 		mysqli_real_escape_string($connection,$sql);
 		$result = mysqli_query($connection,$sql) or die (mysqli_error($connection));
 		 //echo "<p>".$sql."</p>";
-		
+
 		$output .= "<li class=\"list-group-item\"><span class=\"fa fa-lg fa-check text-success\"></span> The <strong>Judging Scores</strong> table was installed successfully.</li>";
-		
-		
-		// ------------------- 
+
+
+		// -------------------
 		// Judging Scores BOS Table
 		// -------------------
-		
+
 		$sql = "
 		CREATE TABLE IF NOT EXISTS `$judging_scores_bos_db_table` (
 			`id` int(11) NOT NULL AUTO_INCREMENT,
@@ -744,19 +744,19 @@ if ($setup_free_access == TRUE) {
 			PRIMARY KEY (`id`)
 		) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci;
 		";
-		
+
 		mysqli_select_db($connection,$database);
 		mysqli_real_escape_string($connection,$sql);
 		$result = mysqli_query($connection,$sql) or die (mysqli_error($connection));
 		 //echo "<p>".$sql."</p>";
-		
+
 		$output .= "<li class=\"list-group-item\"><span class=\"fa fa-lg fa-check text-success\"></span> The <strong>Judging Scores BOS</strong> table was installed successfully.</li>";
-		
-		
-		// ------------------- 
+
+
+		// -------------------
 		// Judging Tables BOS Table
 		// -------------------
-		
+
 		$sql = "
 		CREATE TABLE IF NOT EXISTS `$judging_tables_db_table` (
 			`id` int(11) NOT NULL AUTO_INCREMENT,
@@ -769,18 +769,18 @@ if ($setup_free_access == TRUE) {
 			PRIMARY KEY (`id`)
 		) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci ;
 		";
-		
+
 		mysqli_select_db($connection,$database);
 		mysqli_real_escape_string($connection,$sql);
 		$result = mysqli_query($connection,$sql) or die (mysqli_error($connection));
 		 //echo "<p>".$sql."</p>";
-		
+
 		$output .= "<li class=\"list-group-item\"><span class=\"fa fa-lg fa-check text-success\"></span> The <strong>Judging Tables</strong> table was installed successfully.</li>";
-		
-		// ------------------- 
+
+		// -------------------
 		// Mods Table
 		// -------------------
-		
+
 		$sql = "CREATE TABLE IF NOT EXISTS `$mods_db_table` (
 			`id` int(11) NOT NULL AUTO_INCREMENT,
 			`mod_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT 'Name of the custom module',
@@ -798,8 +798,8 @@ if ($setup_free_access == TRUE) {
 		mysqli_select_db($connection,$database);
 		mysqli_real_escape_string($connection,$sql);
 		$result = mysqli_query($connection,$sql) or die (mysqli_error($connection));
-		
-		// ------------------- 
+
+		// -------------------
 		// Payments Table
 		// -------------------
 		/*
@@ -819,10 +819,10 @@ if ($setup_free_access == TRUE) {
 		mysqli_real_escape_string($connection,$sql);
 		$result = mysqli_query($connection,$sql) or die (mysqli_error($connection));
 		*/
-		// ------------------- 
+		// -------------------
 		// Preferences Table
 		// -------------------
-		
+
 		$sql = "
 		CREATE TABLE IF NOT EXISTS `$preferences_db_table` (
 			`id` int(8) NOT NULL AUTO_INCREMENT,
@@ -870,7 +870,7 @@ if ($setup_free_access == TRUE) {
 			`prefsUseMods` char(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT 'Use the custom modules function (advanced users)',
 			`prefsSEF` char(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT 'Use search engine friendly URLs.',
 			`prefsSpecialCharLimit` int(3) NULL DEFAULT NULL COMMENT 'Character limit for special ingredients field',
-			`prefsStyleSet` TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
+			`prefsStyleSet` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
 			`prefsAutoPurge` tinyint(1) DEFAULT NULL,
 			`prefsEntryLimitPaid` int(4) DEFAULT NULL,
 			`prefsEmailRegConfirm` tinyint(1) DEFAULT NULL,
@@ -881,18 +881,18 @@ if ($setup_free_access == TRUE) {
 			PRIMARY KEY (`id`)
 		) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci;
 		";
-		
+
 		mysqli_select_db($connection,$database);
 		mysqli_real_escape_string($connection,$sql);
 		$result = mysqli_query($connection,$sql) or die (mysqli_error($connection));
 		 //echo "<p>".$sql."</p>";
-		
+
 		$output .= "<li class=\"list-group-item\"><span class=\"fa fa-lg fa-check text-success\"></span> The <strong>Preferences</strong> table was installed successfully.</li>";
-		
-		// ------------------- 
+
+		// -------------------
 		// Special Best Data Table
 		// -------------------
-		
+
 		$sql = "
 		CREATE TABLE IF NOT EXISTS `$special_best_data_db_table` (
 			`id` int(11) NOT NULL AUTO_INCREMENT,
@@ -904,18 +904,18 @@ if ($setup_free_access == TRUE) {
 			PRIMARY KEY (`id`)
 		) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci;
 		";
-		
+
 		mysqli_select_db($connection,$database);
 		mysqli_real_escape_string($connection,$sql);
 		$result = mysqli_query($connection,$sql) or die (mysqli_error($connection));
 		 //echo "<p>".$sql."</p>";
-		
+
 		$output .= "<li class=\"list-group-item\"><span class=\"fa fa-lg fa-check text-success\"></span> The <strong>Special Best Data</strong> table was installed successfully.</li>";
-		
-		// ------------------- 
+
+		// -------------------
 		// Special Best Info Table
 		// -------------------
-		
+
 		$sql = "
 		CREATE TABLE IF NOT EXISTS `$special_best_info_db_table` (
 			`id` int(11) NOT NULL AUTO_INCREMENT,
@@ -927,18 +927,18 @@ if ($setup_free_access == TRUE) {
 			PRIMARY KEY (`id`)
 		) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci;
 		";
-		
+
 		mysqli_select_db($connection,$database);
 		mysqli_real_escape_string($connection,$sql);
 		$result = mysqli_query($connection,$sql) or die (mysqli_error($connection));
 		 //echo "<p>".$sql."</p>";
-		
+
 		$output .= "<li class=\"list-group-item\"><span class=\"fa fa-lg fa-check text-success\"></span> The <strong>Special Best Info</strong> table was installed successfully.</li>";
-		
-		// ------------------- 
+
+		// -------------------
 		// Sponsors Table
 		// -------------------
-		
+
 		$sql = "
 		CREATE TABLE IF NOT EXISTS `$sponsors_db_table` (
 			`id` int(8) NOT NULL AUTO_INCREMENT,
@@ -952,18 +952,18 @@ if ($setup_free_access == TRUE) {
 			PRIMARY KEY (`id`)
 		) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci;
 		";
-		
+
 		mysqli_select_db($connection,$database);
 		mysqli_real_escape_string($connection,$sql);
 		$result = mysqli_query($connection,$sql) or die (mysqli_error($connection));
 		 //echo "<p>".$sql."</p>";
-		
+
 		$output .= "<li class=\"list-group-item\"><span class=\"fa fa-lg fa-check text-success\"></span> The <strong>Sponsors</strong> table was installed successfully.</li>";
-		
-		// ------------------- 
+
+		// -------------------
 		// Staff Table
 		// -------------------
-		
+
 		$sql = "
 		CREATE TABLE IF NOT EXISTS `$staff_db_table` (
 			`id` int(11) NOT NULL AUTO_INCREMENT,
@@ -976,26 +976,26 @@ if ($setup_free_access == TRUE) {
 			PRIMARY KEY (`id`)
 		) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci;
 		";
-		
+
 		mysqli_select_db($connection,$database);
 		mysqli_real_escape_string($connection,$sql);
 		$result = mysqli_query($connection,$sql) or die (mysqli_error($connection));
 		 //echo "<p>".$sql."</p>";
-		
+
 		$output .= "<li class=\"list-group-item\"><span class=\"fa fa-lg fa-check text-success\"></span> The <strong>Staff</strong> table was installed successfully.</li>";
-		
-		// ------------------- 
+
+		// -------------------
 		// Styles Table
 		// -------------------
-		
+
 		$updateSQL = "DROP TABLE IF EXISTS ".$prefix."styles; ";
 		mysqli_select_db($connection,$database);
 		mysqli_real_escape_string($connection,$updateSQL);
-		$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));	
-		
-		
+		$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+
+
 		$updateSQL = "
-		CREATE TABLE ".$prefix."styles 
+		CREATE TABLE ".$prefix."styles
 		(
 		  id int(8) NOT NULL AUTO_INCREMENT,
 		  brewStyleNum varchar(3) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
@@ -1026,14 +1026,14 @@ if ($setup_free_access == TRUE) {
 		  brewStyleComEx text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
 		  brewStyleEntry text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
 		  PRIMARY KEY (id)
-		) 
+		)
 		ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci;
 		";
 		mysqli_select_db($connection,$database);
 		mysqli_real_escape_string($connection,$updateSQL);
-		$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));	
-		
-		
+		$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+
+
 		$updateSQL = "INSERT INTO ".$prefix."styles (id, brewStyleNum, brewStyle, brewStyleCategory, brewStyleOG, brewStyleOGMax, brewStyleFG, brewStyleFGMax, brewStyleABV, brewStyleABVMax, brewStyleIBU, brewStyleIBUMax, brewStyleSRM, brewStyleSRMMax, brewStyleType, brewStyleInfo, brewStyleLink, brewStyleGroup, brewStyleActive, brewStyleOwn, brewStyleVersion, brewStyleReqSpec, brewStyleStrength, brewStyleCarb, brewStyleSweet, brewStyleTags, brewStyleComEx, brewStyleEntry) VALUES ";
 		$updateSQL .= "(1, 'A', 'Lite American Lager', 'Light Lager', '1.028', '1.04', '0.998', '1.008', '3.2', '4.2', '8', '12', '2', '3', 'Lager', 'A lower gravity and lower calorie beer than standard international lagers. Strong flavors are a fault. Designed to appeal to the broadest range of the general public as possible.', 'http://www.bjcp.org/2008styles/style01.php#1a', '01', 'Y', 'bcoe', 'BJCP2008', 0, 0, 0, 0, '', 'Bitburger Light, Sam Adams Light, Heineken Premium Light, Miller Lite, Bud Light, Coors Light, Baltika 1 Light, Old Milwaukee Light, Amstel Light. ', ''), ";
 		$updateSQL .= "(2, 'B', 'Standard American Lager', 'Light Lager', '1.04', '1.05', '1.004', '1.01', '4.2', '5.3', '8', '15', '2', '4', 'Lager', 'Strong flavors are a fault. An international style including the standard mass-market lager from most countries.', 'http://www.bjcp.org/2008styles/style01.php#1b', '01', 'Y', 'bcoe', 'BJCP2008', 0, 0, 0, 0, '', 'Pabst Blue Ribbon, Miller High Life, Budweiser, Baltika #3 Classic, Kirin Lager, Grain Belt Premium Lager, Molson Golden, Labatt Blue, Coors Original, Foster&rsquo;s Lager.', ''), ";
@@ -1045,11 +1045,11 @@ if ($setup_free_access == TRUE) {
 		$updateSQL .= "(8, 'C', 'Classic American Pilsner', 'Pilsner', '1.044', '1.06', '1.01', '1.015', '4.5', '6', '25', '40', '3', '6', 'Lager', 'A substantial Pilsner that can stand up to the classic European Pilsners, but exhibiting the native American grains and hops available to German brewers who initially brewed it in the USA. Refreshing, but with the underlying malt and hops that stand out when compared to other modern American light lagers. Maize lends a distinctive grainy sweetness. Rice contributes a crisper, more neutral character. A version of Pilsner brewed in the USA by immigrant German brewers who brought the process and yeast with them when they settled in America. They worked with the ingredients that were native to America to create a unique version of the original Pilsner. This style died out after Prohibition but was resurrected as a home-brewed style by advocates of the hobby.', 'http://www.bjcp.org/2008styles/style02.php#1c', '02', 'Y', 'bcoe', 'BJCP2008', 0, 0, 0, 0, '', 'Occasional brewpub and microbrewery specials. ', ''), ";
 		$updateSQL .= "(9, 'A', 'Vienna Lager', 'European Amber Lager', '1.046', '1.052', '1.01', '1.014', '4.5', '5.7', '18', '30', '10', '16', 'Lager', 'Characterized by soft, elegant maltiness that dries out in the finish to avoid becoming sweet.', 'http://www.bjcp.org/2008styles/style03.php#1a', '03', 'Y', 'bcoe', 'BJCP2008', 0, 0, 0, 0, '', 'Great Lakes Eliot Ness, Boulevard Bob&rsquo;s 47 Munich-Style Lager, Negra Modelo, Old Dominion Aviator Amber Lager, Gordon Biersch Vienna Lager, Capital Wisconsin Amber, Olde Saratoga Lager, Penn Pilsner. ', ''), ";
 		$updateSQL .= "(10, 'B', 'Oktoberfest/Marzen', 'European Amber Lager', '1.05', '1.057', '1.012', '1.016', '4.8', '5.7', '20', '28', '7', '14', 'Lager', 'Smooth, clean, and rather rich, with a depth of malt character. This is one of the classic malty styles, with a maltiness that is often described as soft, complex, and elegant but never cloying.', 'http://www.bjcp.org/2008styles/style03.php#1b', '03', 'Y', 'bcoe', 'BJCP2008', 0, 0, 0, 0, '', 'Paulaner Oktoberfest, Ayinger Oktoberfest-Marzen, Hacker-Pschorr Original Oktoberfest, Hofbrau Oktoberfest, Victory Festbier, Great Lakes Oktoberfest, Spaten Oktoberfest, Capital Oktoberfest, Gordon Biersch Marzen, Goose Island Oktoberfest, Samuel Adams Oktoberfest. ', ''); ";
-		
+
 		mysqli_select_db($connection,$database);
 		mysqli_real_escape_string($connection,$updateSQL);
-		$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));	
-		
+		$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+
 		$updateSQL = "INSERT INTO ".$prefix."styles (id, brewStyleNum, brewStyle, brewStyleCategory, brewStyleOG, brewStyleOGMax, brewStyleFG, brewStyleFGMax, brewStyleABV, brewStyleABVMax, brewStyleIBU, brewStyleIBUMax, brewStyleSRM, brewStyleSRMMax, brewStyleType, brewStyleInfo, brewStyleLink, brewStyleGroup, brewStyleActive, brewStyleOwn, brewStyleVersion, brewStyleReqSpec, brewStyleStrength, brewStyleCarb, brewStyleSweet, brewStyleTags, brewStyleComEx, brewStyleEntry) VALUES ";
 		$updateSQL .= "(11, 'A', 'Dark American Lager', 'Dark Lager', '1.044', '1.056', '1.008', '1.012', '4.2', '6', '8', '20', '14', '22', 'Lager', 'A somewhat sweeter version of standard/premium lager with a little more body and flavor.', 'http://www.bjcp.org/2008styles/style04.php#1a', '04', 'Y', 'bcoe', 'BJCP2008', 0, 0, 0, 0, '', 'Dixie Blackened Voodoo, Shiner Bock, San Miguel Dark, Baltika #4, Beck&rsquo;s Dark, Saint Pauli Girl Dark, Warsteiner Dunkel, Heineken Dark Lager, Crystal Diplomat Dark Beer. ', ''), ";
 		$updateSQL .= "(12, 'B', 'Munich Dunkel', 'Dark Lager', '1.048', '1.056', '1.01', '1.016', '4.5', '5.6', '18', '28', '14', '28', 'Lager', 'Characterized by depth and complexity of Munich malt and the accompanying melanoidins. Rich Munich flavors, but not as intense as a bock or as roasted as a schwarzbier.', 'http://www.bjcp.org/2008styles/style04.php#1b', '04', 'Y', 'bcoe', 'BJCP2008', 0, 0, 0, 0, '', 'Ayinger Altbairisch Dunkel, Hacker-Pschorr Alt Munich Dark, Paulaner Alt Munchner Dunkel, Weltenburger Kloster Barock-Dunkel, Ettaler Kloster Dunkel, Hofbrau Dunkel, Penn Dark Lager, Konig Ludwig Dunkel, Capital Munich Dark, Harpoon Munich-type Dark Beer, Gordon Biersch Dunkels, Dinkel Acker Dark. In Bavaria, Ettaler Dunkel, Lowenbrau Dunkel, Hartmann Dunkel, Kneitinger Dunkel, Augustiner Dunkel.', ''), ";
@@ -1061,11 +1061,11 @@ if ($setup_free_access == TRUE) {
 		$updateSQL .= "(18, 'A', 'Cream Ale', 'Light Hybrid Beer', '1.042', '1.055', '1.006', '1.012', '4.2', '5.6', '15', '20', '2.5', '5', 'Mixed', 'A clean, well-attenuated, flavorful American lawnmower beer.', 'http://www.bjcp.org/2008styles/style06.php#1a', '06', 'Y', 'bcoe', 'BJCP2008', 0, 0, 0, 0, '', 'Genesee Cream Ale, Little Kings Cream Ale (Hudepohl), Anderson Valley Summer Solstice Cerveza Crema, Sleeman Cream Ale, New Glarus Spotted Cow, Wisconsin Brewing Whitetail Cream Ale.', ''), ";
 		$updateSQL .= "(19, 'B', 'Blonde Ale', 'Light Hybrid Beer', '1.038', '1.054', '1.008', '1.013', '4.2', '5.5', '15', '28', '3', '6', 'Mixed', 'Easy-drinking, approachable, malt-oriented American craft beer.', 'http://www.bjcp.org/2008styles/style06.php#1b', '06', 'Y', 'bcoe', 'BJCP2008', 0, 0, 0, 0, '', 'Pelican Kiwanda Cream Ale, Russian River Aud Blonde, Rogue Oregon Golden Ale, Widmer Blonde Ale, Fuller&rsquo;s Summer Ale, Hollywood Blonde, Redhook Blonde.', ''), ";
 		$updateSQL .= "(20, 'C', 'Kolsch', 'Light Hybrid Beer', '1.044', '1.05', '1.007', '1.011', '4.4', '5.2', '20', '30', '3.5', '5', 'Mixed', 'A clean, crisp, delicately balanced beer usually with very subtle fruit flavors and aromas. Subdued maltiness throughout leads to a pleasantly refreshing tang in the finish. To the untrained taster easily mistaken for a light lager, a somewhat subtle pilsner, or perhaps a blonde ale.', 'http://www.bjcp.org/2008styles/style06.php#1c', '06', 'Y', 'bcoe', 'BJCP2008', 0, 0, 0, 0, '', 'Available in Cologne only: PJ Fruh, Hellers, Malzmuhle, Paeffgen, Sion, Peters, Dom; import versions available in parts of North America: Reissdorf, Gaffel; Non-German versions: Eisenbahn Dourada, Goose Island Summertime, Alaska Summer Ale, Harpoon Summer Beer, New Holland Lucid, Saint Arnold Fancy Lawnmower, Capitol City Capitol Kolsch, Shiner Kolsch.', ''); ";
-		
+
 		mysqli_select_db($connection,$database);
 		mysqli_real_escape_string($connection,$updateSQL);
-		$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));	
-		
+		$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+
 		$updateSQL = "INSERT INTO ".$prefix."styles (id, brewStyleNum, brewStyle, brewStyleCategory, brewStyleOG, brewStyleOGMax, brewStyleFG, brewStyleFGMax, brewStyleABV, brewStyleABVMax, brewStyleIBU, brewStyleIBUMax, brewStyleSRM, brewStyleSRMMax, brewStyleType, brewStyleInfo, brewStyleLink, brewStyleGroup, brewStyleActive, brewStyleOwn, brewStyleVersion, brewStyleReqSpec, brewStyleStrength, brewStyleCarb, brewStyleSweet, brewStyleTags, brewStyleComEx, brewStyleEntry) VALUES ";
 		$updateSQL .= "(21, 'D', 'American Wheat or Rye Beer', 'Light Hybrid Beer', '1.04', '1.055', '1.008', '1.013', '4', '5.5', '15', '30', '3', '6', 'Mixed', 'Refreshing wheat or rye beers that can display more hop character and less yeast character than their German cousins.', 'http://www.bjcp.org/2008styles/style06.php#1d', '06', 'Y', 'bcoe', 'BJCP2008', 1, 0, 0, 0, '', 'Bell&rsquo;s Oberon, Harpoon UFO Hefeweizen, Three Floyds Gumballhead, Pyramid Hefe-Weizen, Widmer Hefeweizen, Sierra Nevada Unfiltered Wheat Beer, Anchor Summer Beer, Redhook Sunrye, Real Ale Full Moon Pale Rye.', 'Entrant must specify whether wheat or rye is used.'), ";
 		$updateSQL .= "(22, 'A', 'Northern German Altbier', 'Amber Hybrid Beer', '1.046', '1.054', '1.01', '1.015', '4.5', '5.2', '25', '40', '13', '19', 'Ale', 'A very clean and relatively bitter beer, balanced by some malt character. Generally darker, sometimes more caramelly, and usually sweeter and less bitter than Dusseldorf Altbier.', 'http://www.bjcp.org/2008styles/style07.php#1a', '07', 'Y', 'bcoe', 'BJCP2008', 0, 0, 0, 0, '', 'DAB Traditional, Hannen Alt, Schwelmer Alt, Grolsch Amber, Alaskan Amber, Long Trail Ale, Otter Creek Copper Ale, Schmaltz&rsquo; Alt. ', ''), ";
@@ -1077,11 +1077,11 @@ if ($setup_free_access == TRUE) {
 		$updateSQL .= "(28, 'A', 'Scottish Light 60/-', 'Scottish and Irish Ale', '1.03', '1.035', '1.01', '1.013', '2.5', '3.2', '10', '20', '9', '17', 'Ale', 'Cleanly malty with a drying finish, perhaps a few esters, and on occasion a faint bit of peaty earthiness (smoke). Most beers finish fairly dry considering their relatively sweet palate, and as such have a different balance than strong Scotch ales.', 'http://www.bjcp.org/2008styles/style09.php#1a', '09', 'Y', 'bcoe', 'BJCP2008', 0, 0, 0, 0, '', 'Belhaven 60/-, McEwan&rsquo;s 60/-, Maclay 60/- Light (all are cask-only products not exported to the US).', ''), ";
 		$updateSQL .= "(29, 'B', 'Scottish Heavy 70/-', 'Scottish and Irish Ale', '1.035', '1.04', '1.01', '1.015', '3.2', '3.9', '10', '25', '9', '17', 'Ale', 'Cleanly malty with a drying finish, perhaps a few esters, and on occasion a faint bit of peaty earthiness (smoke). Most beers finish fairly dry considering their relatively sweet palate, and as such have a different balance than strong Scotch ales.', 'http://www.bjcp.org/2008styles/style09.php#1b', '09', 'Y', 'bcoe', 'BJCP2008', 0, 0, 0, 0, '', 'Caledonian 70/- (Caledonian Amber Ale in the US), Belhaven 70/-, Orkney Raven Ale, Maclay 70/-, Tennents Special, Broughton Greenmantle Ale.', ''), ";
 		$updateSQL .= "(30, 'C', 'Scottish Export 80/-', 'Scottish and Irish Ale', '1.04', '1.054', '1.01', '1.016', '3.9', '5', '15', '30', '9', '17', 'Ale', 'Cleanly malty with a drying finish, perhaps a few esters, and on occasion a faint bit of peaty earthiness (smoke). Most beers finish fairly dry considering their relatively sweet palate, and as such have a different balance than strong Scotch ales.', 'http://www.bjcp.org/2008styles/style09.php#1c', '09', 'Y', 'bcoe', 'BJCP2008', 0, 0, 0, 0, '', 'Orkney Dark Island, Caledonian 80/- Export Ale, Belhaven 80/- (Belhaven Scottish Ale in the US), Southampton 80 Shilling, Broughton Exciseman&rsquo;s 80/-, Belhaven St. Andrews Ale, McEwan&rsquo;s Export (IPA), Inveralmond Lia Fail, Broughton Merlin&rsquo;s Ale, Arran Dark', ''); ";
-		
+
 		mysqli_select_db($connection,$database);
 		mysqli_real_escape_string($connection,$updateSQL);
-		$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));	
-		
+		$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+
 		$updateSQL = "INSERT INTO ".$prefix."styles (id, brewStyleNum, brewStyle, brewStyleCategory, brewStyleOG, brewStyleOGMax, brewStyleFG, brewStyleFGMax, brewStyleABV, brewStyleABVMax, brewStyleIBU, brewStyleIBUMax, brewStyleSRM, brewStyleSRMMax, brewStyleType, brewStyleInfo, brewStyleLink, brewStyleGroup, brewStyleActive, brewStyleOwn, brewStyleVersion, brewStyleReqSpec, brewStyleStrength, brewStyleCarb, brewStyleSweet, brewStyleTags, brewStyleComEx, brewStyleEntry) VALUES ";
 		$updateSQL .= "(31, 'D', 'Irish Red Ale', 'Scottish and Irish Ale', '1.044', '1.06', '1.01', '1.014', '4', '6', '17', '28', '9', '18', 'Ale', 'An easy-drinking pint. Malt-focused with an initial sweetness and a roasted dryness in the finish.', 'http://www.bjcp.org/2008styles/style09.php#1d', '09', 'Y', 'bcoe', 'BJCP2008', 0, 0, 0, 0, '', 'Three Floyds Brian Boru Old Irish Ale, Great Lakes Conway&rsquo;s Irish Ale (a bit strong at 6.5%), Kilkenny Irish Beer, O&rsquo;Hara&rsquo;s Irish Red Ale, Smithwick&rsquo;s Irish Ale, Beamish Red Ale, Caffrey&rsquo;s Irish Ale, Goose Island Kilgubbin Red Ale, Murphy&rsquo;s Irish Red (lager), Boulevard Irish Ale, Harpoon Hibernian Ale.', ''), ";
 		$updateSQL .= "(32, 'E', 'Strong Scotch Ale', 'Scottish and Irish Ale', '1.07', '1.13', '1.018', '1.056', '6.5', '10', '17', '35', '14', '25', 'Ale', 'Rich, malty and usually sweet, which can be suggestive of a dessert. Complex secondary malt flavors prevent a one-dimensional impression. Strength and maltiness can vary.', 'http://www.bjcp.org/2008styles/style09.php#1e', '09', 'Y', 'bcoe', 'BJCP2008', 0, 0, 0, 0, '', 'Traquair House Ale, Belhaven Wee Heavy, McEwan&rsquo;s Scotch Ale, Founders Dirty Bastard, MacAndrew&rsquo;s Scotch Ale, AleSmith Wee Heavy, Orkney Skull Splitter, Inveralmond Black Friar, Broughton Old Jock, Gordon Highland Scotch Ale, Dragonmead Under the Kilt.', ''), ";
@@ -1093,11 +1093,11 @@ if ($setup_free_access == TRUE) {
 		$updateSQL .= "(38, 'C', 'Northern English Brown Ale', 'English Brown Ale', '1.04', '1.052', '1.008', '1.013', '4.2', '5.4', '20', '30', '12', '22', 'Ale', 'English mild ale or pale ale malt base with caramel malts. May also have small amounts darker malts (e.g., chocolate) to provide color and the nutty character. English hop varieties are most authentic. Moderate carbonate water.', 'http://www.bjcp.org/2008styles/style11.php#1c', '11', 'Y', 'bcoe', 'BJCP2008', 0, 0, 0, 0, '', 'Newcastle Brown Ale, Samuel Smith&rsquo;s Nut Brown Ale, Riggwelter Yorkshire Ale, Wychwood Hobgoblin, Troegs Rugged Trail Ale, Alesmith Nautical Nut Brown Ale, Avery Ellie&rsquo;s Brown Ale, Goose Island Nut Brown Ale, Samuel Adams Brown Ale.', ''), ";
 		$updateSQL .= "(39, 'A', 'Brown Porter', 'Porter', '1.04', '1.052', '1.008', '1.014', '4', '5.4', '18', '35', '20', '30', 'Ale', 'A fairly substantial English dark ale with restrained roasty characteristics.', 'http://www.bjcp.org/2008styles/style12.php#1a', '12', 'Y', 'bcoe', 'BJCP2008', 0, 0, 0, 0, '', 'Fuller&rsquo;s London Porter, Samuel Smith Taddy Porter, Burton Bridge Burton Porter, RCH Old Slug Porter, Nethergate Old Growler Porter, Hambleton Nightmare Porter, Harvey&rsquo;s Tom Paine Original Old Porter, Salopian Entire Butt English Porter, St. Peters Old-Style Porter, Shepherd Neame Original Porter, Flag Porter, Wasatch Polygamy Porter.', ''), ";
 		$updateSQL .= "(40, 'B', 'Robust Porter', 'Porter', '1.048', '1.065', '1.012', '1.016', '4.8', '6.5', '25', '50', '22', '35', 'Ale', 'A substantial, malty dark ale with a complex and flavorful roasty character.', 'http://www.bjcp.org/2008styles/style12.php#1b', '12', 'Y', 'bcoe', 'BJCP2008', 0, 0, 0, 0, '', 'Great Lakes Edmund Fitzgerald Porter, Meantime London Porter, Anchor Porter, Smuttynose Robust Porter, Sierra Nevada Porter, Deschutes Black Butte Porter, Boulevard Bully! Porter, Rogue Mocha Porter, Avery New World Porter, Bell&rsquo;s Porter, Great Divide Saint Bridget&rsquo;s Porter.', ''); ";
-		
+
 		mysqli_select_db($connection,$database);
 		mysqli_real_escape_string($connection,$updateSQL);
-		$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));	
-		
+		$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+
 		$updateSQL = "INSERT INTO ".$prefix."styles (id, brewStyleNum, brewStyle, brewStyleCategory, brewStyleOG, brewStyleOGMax, brewStyleFG, brewStyleFGMax, brewStyleABV, brewStyleABVMax, brewStyleIBU, brewStyleIBUMax, brewStyleSRM, brewStyleSRMMax, brewStyleType, brewStyleInfo, brewStyleLink, brewStyleGroup, brewStyleActive, brewStyleOwn, brewStyleVersion, brewStyleReqSpec, brewStyleStrength, brewStyleCarb, brewStyleSweet, brewStyleTags, brewStyleComEx, brewStyleEntry) VALUES ";
 		$updateSQL .= "(41, 'C', 'Baltic Porter', 'Porter', '1.06', '1.09', '1.016', '1.024', '5.5', '9.5', '20', '40', '17', '30', 'Ale', 'A Baltic Porter often has the malt flavors reminiscent of an English brown porter and the restrained roast of a schwarzbier, but with a higher OG and alcohol content than either. Very complex, with multi-layered flavors.', 'http://www.bjcp.org/2008styles/style12.php#1c', '12', 'Y', 'bcoe', 'BJCP2008', 0, 0, 0, 0, '', 'Sinebrychoff Porter (Finland), Okocim Porter (Poland), Zywiec Porter (Poland), Baltika #6 Porter (Russia), Carnegie Stark Porter (Sweden), Aldaris Porteris (Latvia), Utenos Porter (Lithuania), Stepan Razin Porter (Russia), N&oslash;gne o porter (Norway), Neuzeller Kloster-Brau Neuzeller Porter (Germany), Southampton Imperial Baltic Porter.', ''), ";
 		$updateSQL .= "(42, 'A', 'Dry Stout', 'Stout', '1.036', '1.05', '1.007', '1.011', '4', '5', '30', '45', '25', '40', 'Ale', 'A very dark, roasty, bitter, creamy ale.', 'http://www.bjcp.org/2008styles/style13.php#1a', '13', 'Y', 'bcoe', 'BJCP2008', 0, 0, 0, 0, '', 'Guinness Draught Stout (also canned), Murphy&rsquo;s Stout, Beamish Stout, O&rsquo;Hara&rsquo;s Celtic Stout, Russian River O.V.L. Stout, Three Floyd&rsquo;s Black Sun Stout, Dorothy Goodbody&rsquo;s Wholesome Stout, Orkney Dragonhead Stout, Old Dominion Stout, Goose Island Dublin Stout, Brooklyn Dry Stout.', ''), ";
@@ -1109,11 +1109,11 @@ if ($setup_free_access == TRUE) {
 		$updateSQL .= "(48, 'A', 'English IPA', 'India Pale Ale', '1.05', '1.075', '1.01', '1.018', '5', '7.5', '40', '60', '8', '14', 'Ale', 'A hoppy, moderately strong pale ale that features characteristics consistent with the use of English malt, hops and yeast. Has less hop character and a more pronounced malt flavor than American versions.', 'http://www.bjcp.org/2008styles/style14.php#1a', '14', 'Y', 'bcoe', 'BJCP2008', 0, 0, 0, 0, '', 'Meantime India Pale Ale, Freeminer Trafalgar IPA, Fuller&rsquo;s IPA, Ridgeway Bad Elf, Summit India Pale Ale, Samuel Smith&rsquo;s India Ale, Hampshire Pride of Romsey IPA, Burton Bridge Empire IPA,Middle Ages ImPailed Ale, Goose Island IPA, Brooklyn East India Pale Ale.', ''), ";
 		$updateSQL .= "(49, 'B', 'American IPA', 'India Pale Ale', '1.056', '1.075', '1.01', '1.018', '5.5', '7.5', '40', '70', '6', '15', 'Ale', 'A decidedly hoppy and bitter, moderately strong American pale ale', 'http://www.bjcp.org/2008styles/style14.php#1b', '14', 'Y', 'bcoe', 'BJCP2008', 0, 0, 0, 0, '', 'Bell&rsquo;s Two-Hearted Ale, AleSmith IPA, Russian River Blind Pig IPA, Stone IPA, Three Floyds Alpha King, Great Divide Titan IPA, Bear Republic Racer 5 IPA, Victory Hop Devil, Sierra Nevada Celebration Ale, Anderson Valley Hop Ottin&rsquo;, Dogfish Head 60 Minute IPA, Founder&rsquo;s Centennial IPA, Anchor Liberty Ale, Harpoon IPA, Avery IPA.', ''), ";
 		$updateSQL .= "(50, 'C', 'Imperial IPA', 'India Pale Ale', '1.075', '1.09', '1.01', '1.02', '7.5', '10', '60', '120', '8', '15', 'Ale', 'An intensely hoppy, very strong pale ale without the big maltiness and/or deeper malt flavors of an American barleywine. Strongly hopped, but clean, lacking harshness, and a tribute to historical IPAs. Drinkability is an important characteristic; this should not be a heavy, sipping beer. It should also not have much residual sweetness or a heavy character grain profile.', 'http://www.bjcp.org/2008styles/style14.php#1c', '14', 'Y', 'bcoe', 'BJCP2008', 0, 0, 0, 0, '', 'Russian River Pliny the Elder, Three Floyd&rsquo;s Dreadnaught, Avery Majaraja, Bell&rsquo;s Hop Slam, Stone Ruination IPA, Great Divide Hercules Double IPA, Surly Furious, Rogue I2PA, Moylan&rsquo;s Hopsickle Imperial India Pale Ale, Stoudt&rsquo;s Double IPA, Dogfish Head 90-minute IPA, Victory Hop Wallop.', ''); ";
-		
+
 		mysqli_select_db($connection,$database);
 		mysqli_real_escape_string($connection,$updateSQL);
-		$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));	
-		
+		$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+
 		$updateSQL = "INSERT INTO ".$prefix."styles (id, brewStyleNum, brewStyle, brewStyleCategory, brewStyleOG, brewStyleOGMax, brewStyleFG, brewStyleFGMax, brewStyleABV, brewStyleABVMax, brewStyleIBU, brewStyleIBUMax, brewStyleSRM, brewStyleSRMMax, brewStyleType, brewStyleInfo, brewStyleLink, brewStyleGroup, brewStyleActive, brewStyleOwn, brewStyleVersion, brewStyleReqSpec, brewStyleStrength, brewStyleCarb, brewStyleSweet, brewStyleTags, brewStyleComEx, brewStyleEntry) VALUES ";
 		$updateSQL .= "(51, 'A', 'Weizen/Weissbier', 'German Wheat and Rye Beer', '1.044', '1.052', '1.01', '1.014', '4.3', '5.6', '8', '15', '2', '8', 'Ale', 'A pale, spicy, fruity, refreshing wheat-based ale.', 'http://www.bjcp.org/2008styles/style15.php#1a', '15', 'Y', 'bcoe', 'BJCP2008', 0, 0, 0, 0, '', 'Weihenstephaner Hefeweissbier, Schneider Weisse Weizenhell, Paulaner Hefe-Weizen, Hacker-Pschorr Weisse, Plank Bavarian Hefeweizen, Ayinger Brau Weisse, Ettaler Weissbier Hell, Franziskaner Hefe-Weisse, Andechser Weissbier Hefetrub, Kapuziner Weissbier, Erdinger Weissbier, Penn Weizen, Barrelhouse Hocking Hills HefeWeizen, Eisenbahn Weizenbier.', ''), ";
 		$updateSQL .= "(52, 'B', 'Dunkelweizen', 'German Wheat and Rye Beer', '1.044', '1.056', '1.01', '1.014', '4.3', '5.6', '10', '18', '14', '23', 'Ale', 'A moderately dark, spicy, fruity, malty, refreshing wheat-based ale. Reflecting the best yeast and wheat character of a hefe-weizen blended with the malty richness of a Munich dunkel.', 'http://www.bjcp.org/2008styles/style15.php#1b', '15', 'Y', 'bcoe', 'BJCP2008', 0, 0, 0, 0, '', 'Weihenstephaner Hefeweissbier Dunkel, Ayinger Ur-Weisse, Franziskaner Dunkel Hefe-Weisse, Schneider Weisse (Original), Ettaler Weissbier Dunkel, Hacker-Pschorr Weisse Dark, Tucher Dunkles Hefe Weizen, Edelweiss Dunkel Weissbier, Erdinger Weissbier Dunkel, Kapuziner Weissbier Schwarz. ', ''), ";
@@ -1125,11 +1125,11 @@ if ($setup_free_access == TRUE) {
 		$updateSQL .= "(58, 'D', 'Biere de Garde', 'Belgian and French Ale', '1.06', '1.08', '1.008', '1.016', '6', '8.5', '18', '28', '6', '19', 'Ale', 'A fairly strong, malt-accentuated, lagered artisanal farmhouse beer.', 'http://www.bjcp.org/2008styles/style16.php#1d', '16', 'Y', 'bcoe', 'BJCP2008', 0, 0, 0, 0, '', 'Jenlain (amber), Jenlain Biere de Printemps (blond), St. Amand (brown), Ch&rsquo;Ti Brun (brown), Ch&rsquo;Ti Blond (blond), La Choulette (all 3 versions), La Choulette Biere des Sans Culottes (blond), Saint Sylvestre 3 Monts (blond), Biere Nouvelle (brown), Castelain (blond), Jade (amber), Brasseurs Biere de Garde (amber), Southampton Biere de Garde (amber), Lost Abbey Avante Garde (blond).', ''), ";
 		$updateSQL .= "(59, 'E', 'Belgian Specialty Ale', 'Belgian and French Ale', '', '', '', '', '', '', '', '', '', '', 'Ale', 'Variable. This category encompasses a wide range of Belgian ales produced by truly artisanal brewers more concerned with creating unique products than in increasing sales.', 'http://www.bjcp.org/2008styles/style16.php#1e', '16', 'Y', 'bcoe', 'BJCP2008', 1, 0, 0, 0, '', 'Orval; De Dolle&rsquo;s Arabier, Oerbier, Boskeun and Stille Nacht; La Chouffe, McChouffe, Chouffe Bok and N&rsquo;ice Chouffe; Ellezelloise Hercule Stout and Quintine Amber; Unibroue Ephemere, Maudite, Don de Dieu, etc.; Minty; Zatte Bie; Caracole Amber, Saxo and Nostradamus; Silenrieu Sara and Joseph; Fantôme Black Ghost and Speciale Noel; Dupont Moinette, Moinette Brune, and Avec Les Bons Voeux de la Brasserie Dupont; St. Fullien Noel; Gouden Carolus Noel; Affligem Noel; Guldenburg and Pere Noel; De Ranke XX Bitter and Guldenberg; Poperings Hommelbier; Bush (Scaldis); Moinette Brune; Grottenbier; La Trappe Quadrupel; Weyerbacher QUAD; Biere de Miel; Verboden Vrucht; New Belgium 1554 Black Ale; Cantillon Iris; Russian River Temptation; Lost Abbey Cuvee de Tomme and Devotion, Lindemans Kriek and Framboise, and many more.', 'Entrant must specify the beer being cloned, the new style being produced, or the special ingredients or process used. Beers fitting other Belgian categories should not be entered in this category.'), ";
 		$updateSQL .= "(60, 'A', 'Berliner Weisse', 'Sour Ale', '1.028', '1.032', '1.003', '1.006', '2.8', '3.8', '3', '8', '2', '3', 'Ale', 'A very pale, sour, refreshing, low-alcohol wheat ale.', 'http://www.bjcp.org/2008styles/style17.php#1a', '17', 'Y', 'bcoe', 'BJCP2008', 0, 0, 0, 0, '', 'Schultheiss Berliner Weisse, Berliner Kindl Weisse, Nodding Head Berliner Weisse, Weihenstephan 1809, Bahnhof Berliner Style Weisse, Southampton Berliner Weisse, Bethlehem Berliner Weisse, Three Floyds Deesko.', ''); ";
-		
+
 		mysqli_select_db($connection,$database);
 		mysqli_real_escape_string($connection,$updateSQL);
-		$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));	
-		
+		$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+
 		$updateSQL = "INSERT INTO ".$prefix."styles (id, brewStyleNum, brewStyle, brewStyleCategory, brewStyleOG, brewStyleOGMax, brewStyleFG, brewStyleFGMax, brewStyleABV, brewStyleABVMax, brewStyleIBU, brewStyleIBUMax, brewStyleSRM, brewStyleSRMMax, brewStyleType, brewStyleInfo, brewStyleLink, brewStyleGroup, brewStyleActive, brewStyleOwn, brewStyleVersion, brewStyleReqSpec, brewStyleStrength, brewStyleCarb, brewStyleSweet, brewStyleTags, brewStyleComEx, brewStyleEntry) VALUES ";
 		$updateSQL .= "(61, 'B', 'Flanders Red Ale', 'Sour Ale', '1.048', '1.057', '1.002', '1.012', '4.6', '6.5', '10', '25', '10', '16', 'Ale', 'A complex, sour, red wine-like Belgian-style ale.', 'http://www.bjcp.org/2008styles/style17.php#1b', '17', 'Y', 'bcoe', 'BJCP2008', 0, 0, 0, 0, '', 'Rodenbach Klassiek, Rodenbach Grand Cru, Bellegems Bruin, Duchesse de Bourgogne, New Belgium La Folie, Petrus Oud Bruin, Southampton Flanders Red Ale, Verhaege Vichtenaar, Monk&rsquo;s Cafe Flanders Red Ale, New Glarus Enigma, Panil Barriquee, Mestreechs Aajt.', ''), ";
 		$updateSQL .= "(62, 'C', 'Flanders Brown Ale/Oud Bruin', 'Sour Ale', '1.04', '1.074', '1.008', '1.012', '4', '8', '20', '25', '15', '22', 'Ale', 'A malty, fruity, aged, somewhat sour Belgian-style brown ale.', 'http://www.bjcp.org/2008styles/style17.php#1c', '17', 'Y', 'bcoe', 'BJCP2008', 0, 0, 0, 0, '', 'Liefman&rsquo;s Goudenband, Liefman&rsquo;s Odnar, Liefman&rsquo;s Oud Bruin, Ichtegem Old Brown, Riva Vondel. ', ''), ";
@@ -1141,11 +1141,11 @@ if ($setup_free_access == TRUE) {
 		$updateSQL .= "(68, 'C', 'Belgian Tripel', 'Belgian Strong Ale', '1.075', '1.085', '1.008', '1.014', '7.5', '9.5', '20', '40', '4.5', '7', 'Ale', 'Strongly resembles a Strong Golden Ale but slightly darker and somewhat fuller-bodied. Usually has a more rounded malt flavor but should not be sweet.', 'http://www.bjcp.org/2008styles/style18.php#1c', '18', 'Y', 'bcoe', 'BJCP2008', 0, 0, 0, 0, '', 'Westmalle Tripel, La Rulles Tripel, St. Bernardus Tripel, Chimay Cinq Cents (White), Watou Tripel, Val-Dieu Triple, Affligem Tripel, Grimbergen Tripel, La Trappe Tripel, Witkap Pater Tripel, Corsendonk Abbey Pale Ale, St. Feuillien Tripel, Bink Tripel, Tripel Karmeliet, New Belgium Trippel, Unibroue La Fin du Monde, Dragonmead Final Absolution, Allagash Tripel Reserve, Victory Golden Monkey.', ''), ";
 		$updateSQL .= "(69, 'D', 'Belgian Golden Strong Ale', 'Belgian Strong Ale', '1.07', '1.095', '1.005', '1.016', '7.5', '10.5', '22', '35', '3', '6', 'Ale', 'A golden, complex, effervescent, strong Belgian-style ale.', 'http://www.bjcp.org/2008styles/style18.php#1d', '18', 'Y', 'bcoe', 'BJCP2008', 0, 0, 0, 0, '', 'Duvel, Russian River Damnation, Hapkin, Lucifer, Brigand, Judas, Delirium Tremens, Dulle Teve, Piraat, Great Divide Hades, Avery Salvation, North Coast Pranqster, Unibroue Eau Benite, AleSmith Horny Devil.', ''), ";
 		$updateSQL .= "(70, 'E', 'Belgian Dark Strong Ale', 'Belgian Strong Ale', '1.075', '1.11', '1.01', '1.024', '8', '11', '20', '35', '12', '22', 'Ale', 'A dark, very rich, complex, very strong Belgian ale. Complex, rich, smooth and dangerous.', 'http://www.bjcp.org/2008styles/style18.php#1e', '18', 'Y', 'bcoe', 'BJCP2008', 0, 0, 0, 0, '', 'Westvleteren 12 (yellow cap), Rochefort 10 (blue cap), St. Bernardus Abt 12, Gouden Carolus Grand Cru of the Emperor, Achel Extra Brune, Rochefort 8 (green cap), Southampton Abbot 12, Chimay Grande Reserve (Blue), Brasserie des Rocs Grand Cru, Gulden Draak, Kasteelbier Biere du Chateau Donker, Lost Abbey Judgment Day, Russian River Salvation.', ''); ";
-		
+
 		mysqli_select_db($connection,$database);
 		mysqli_real_escape_string($connection,$updateSQL);
-		$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));	
-		
+		$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+
 		$updateSQL = "INSERT INTO ".$prefix."styles (id, brewStyleNum, brewStyle, brewStyleCategory, brewStyleOG, brewStyleOGMax, brewStyleFG, brewStyleFGMax, brewStyleABV, brewStyleABVMax, brewStyleIBU, brewStyleIBUMax, brewStyleSRM, brewStyleSRMMax, brewStyleType, brewStyleInfo, brewStyleLink, brewStyleGroup, brewStyleActive, brewStyleOwn, brewStyleVersion, brewStyleReqSpec, brewStyleStrength, brewStyleCarb, brewStyleSweet, brewStyleTags, brewStyleComEx, brewStyleEntry) VALUES ";
 		$updateSQL .= "(71, 'A', 'Old Ale', 'Strong Ale', '1.06', '1.09', '1.015', '1.022', '6', '9', '30', '60', '10', '22', 'Ale', 'An ale of significant alcoholic strength, bigger than strong bitters and brown porters, though usually not as strong or rich as barleywine. Usually tilted toward a sweeter, maltier balance. &ldquo;It should be a warming beer of the type that is best drunk in half pints by a warm fire on a cold winter&rsquo;s night&rdquo; &ndash; Michael Jackson.', 'http://www.bjcp.org/2008styles/style19.php#1a', '19', 'Y', 'bcoe', 'BJCP2008', 0, 0, 0, 0, '', 'Gale&rsquo;s Prize Old Ale, Burton Bridge Olde Expensive, Marston Owd Roger, Greene King Olde Suffolk Ale , J.W. Lees Moonraker, Harviestoun Old Engine Oil, Fuller&rsquo;s Vintage Ale, Harvey&rsquo;s Elizabethan Ale, Theakston Old Peculier (peculiar at OG 1.057), Young&rsquo;s Winter Warmer, Sarah Hughes Dark Ruby Mild, Samuel Smith&rsquo;s Winter Welcome, Fuller&rsquo;s 1845, Fuller&rsquo;s Old Winter Ale, Great Divide Hibernation Ale, Founders Curmudgeon, Cooperstown Pride of Milford Special Ale, Coniston Old Man Ale, Avery Old Jubilation.', ''), ";
 		$updateSQL .= "(72, 'B', 'English Barleywine', 'Strong Ale', '1.08', '1.12', '1.018', '1.03', '8', '12', '35', '70', '8', '22', 'Ale', 'The richest and strongest of the English Ales. A showcase of malty richness and complex, intense flavors. The character of these ales can change significantly over time; both young and old versions should be appreciated for what they are. The malt profile can vary widely; not all examples will have all possible flavors or aromas.', 'http://www.bjcp.org/2008styles/style19.php#1b', '19', 'Y', 'bcoe', 'BJCP2008', 0, 0, 0, 0, '', 'Thomas Hardy&rsquo;s Ale, Burton Bridge Thomas Sykes Old Ale, J.W. Lee&rsquo;s Vintage Harvest Ale, Robinson&rsquo;s Old Tom, Fuller&rsquo;s Golden Pride, AleSmith Old Numbskull, Young&rsquo;s Old Nick (unusual in its 7.2% ABV), Whitbread Gold Label, Old Dominion Millenium, North Coast Old Stock Ale (when aged), Weyerbacher Blithering Idiot.', ''), ";
@@ -1157,11 +1157,11 @@ if ($setup_free_access == TRUE) {
 		$updateSQL .= "(78, 'B', 'Other Smoked Beer', 'Smoke-Flavored and Wood-Aged Beer', '', '', '', '', '', '', '', '', '', '', '', 'This is any beer that is exhibiting smoke as a principle flavor and aroma characteristic other than the Bamberg-style Rauchbier (i.e. beechwood-smoked Marzen). Balance in the use of smoke, hops and malt character is exhibited by the better examples.', 'http://www.bjcp.org/2008styles/style22.php#1b', '22', 'Y', 'bcoe', 'BJCP2008', 1, 0, 0, 0, '', 'Alaskan Smoked Porter, O&rsquo;Fallons Smoked Porter, Spezial Lagerbier, Weissbier and Bockbier, Stone Smoked Porter, Schlenkerla Weizen Rauchbier and Ur-Bock Rauchbier, Rogue Smoke, Oskar Blues Old Chub, Left Hand Smoke Jumper, Dark Horse Fore Smoked Stout, Magic Hat Jinx. ', 'Entrant must specify the type of wood or other source of smoke. If the beer is based on a classic style then the specific style must be specified. Classic styles do not have to be cited.'), ";
 		$updateSQL .= "(79, 'C', 'Wood-Aged Beer', 'Smoke-Flavored and Wood-Aged Beer', '', '', '', '', '', '', '', '', '', '', '', 'A harmonious blend of the base beer style with characteristics from aging in contact with wood (including any alcoholic products previously in contact with the wood). The best examples will be smooth, flavorful, well-balanced and well-aged. ', 'http://www.bjcp.org/2008styles/style22.php#1c', '22', 'Y', 'bcoe', 'BJCP2008', 1, 0, 0, 0, '', 'The Lost Abbey Angel&rsquo;s Share Ale, J.W. Lees Harvest Ale in Port, Sherry, Lagavulin Whisky or Calvados Casks, Bush Prestige, Petrus Aged Pale, Firestone Walker Double Barrel Ale, Dominion Oak Barrel Stout, New Holland Dragons Milk, Great Divide Oak Aged Yeti Imperial Stout, Goose Island Bourbon County Stout, Le Coq Imperial Extra Double Stout, Harviestoun Old Engine Oil Special Reserve, many microbreweries have specialty beers served only on premises often directly from the cask.', 'Entrant must specify the type of wood if a varietal character is noticeable. If the beer is based on a classic style then the specific style must be specified. Classic styles do not have to be cited.'), ";
 		$updateSQL .= "(80, 'A', 'Specialty Beer', 'Specialty Beer', '', '', '', '', '', '', '', '', '', '', '', 'A harmonious marriage of ingredients, processes and beer. The key attributes of the underlying style (if declared) will be atypical due to the addition of special ingredients or techniques; do not expect the base beer to taste the same as the unadulterated version. Judge the beer based on the pleasantness and harmony of the resulting combination. The overall uniqueness of the process, ingredients used, and creativity should be considered. The overall rating of the beer depends heavily on the inherently subjective assessment of distinctiveness and drinkability. Entry Instructions: The brewer must specify the experimental nature of the beer (e.g., the type of special ingredients used, process utilized, or historical style being brewed), or why the beer doesn&rsquo;t fit into an established style.', 'http://www.bjcp.org/2008styles/style23.php#1a', '23', 'Y', 'bcoe', 'BJCP2008', 1, 0, 0, 0, '', 'Bell&rsquo;s Rye Stout, Bell&rsquo;s Eccentric Ale, Samuel Adams Triple Bock and Utopias, Hair of the Dog Adam, Great Alba Scots Pine, Tommyknocker Maple Nut Brown Ale, Great Divide Bee Sting Honey Ale, Stoudt&rsquo;s Honey Double Mai Bock, Rogue Dad&rsquo;s Little Helper, Rogue Honey Cream Ale, Dogfish Head India Brown Ale, Zum Uerige Sticke and Doppel Sticke Altbier, Yards Brewing Company General Washington Tavern Porter, Rauchenfels Steinbier, Odells 90 Shilling Ale, Bear Republic Red Rocket Ale, Stone Arrogant Bastard.', 'The brewer must specify the experimental nature of the beer (e.g., the type of special ingredients used, process utilized, or historical style being brewed), or why the beer doesn&rsquo;t fit into an established style.'); ";
-		
+
 		mysqli_select_db($connection,$database);
 		mysqli_real_escape_string($connection,$updateSQL);
 		$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
-		
+
 		$updateSQL = "INSERT INTO ".$prefix."styles (id, brewStyleNum, brewStyle, brewStyleCategory, brewStyleOG, brewStyleOGMax, brewStyleFG, brewStyleFGMax, brewStyleABV, brewStyleABVMax, brewStyleIBU, brewStyleIBUMax, brewStyleSRM, brewStyleSRMMax, brewStyleType, brewStyleInfo, brewStyleLink, brewStyleGroup, brewStyleActive, brewStyleOwn, brewStyleVersion, brewStyleReqSpec, brewStyleStrength, brewStyleCarb, brewStyleSweet, brewStyleTags, brewStyleComEx, brewStyleEntry) VALUES ";
 		$updateSQL .= "(81, 'A', 'Dry Mead', 'Traditional Mead', '', '', '', '', '', '', 'N/A', 'N/A', 'N/A', 'N/A', 'Mead', 'Similar in balance, body, finish and flavor intensity to a dry white wine, with a pleasant mixture of subtle honey character, soft fruity esters, and clean alcohol. Complexity, harmony, and balance of sensory elements are most desirable, with no inconsistencies in color, aroma, flavor or aftertaste. The proper balance of sweetness, acidity, alcohol and honey character is the essential final measure of any mead.', 'http://www.bjcp.org/2008styles/style24.php#1a', '24', 'Y', 'bcoe', 'BJCP2008', 0, 1, 1, 1, '', 'White Winter Dry Mead, Sky River Dry Mead, Intermiel Bouquet Printanier.', ''), ";
 		$updateSQL .= "(82, 'B', 'Semi-Sweet Mead', 'Traditional Mead', '', '', '', '', '', '', 'N/A', 'N/A', 'N/A', 'N/A', 'Mead', 'Similar in balance, body, finish and flavor intensity to a semisweet (or medium-dry) white wine, with a pleasant mixture of honey character, light sweetness, soft fruity esters, and clean alcohol. Complexity, harmony, and balance of sensory elements are most desirable, with no inconsistencies in color, aroma, flavor or aftertaste. The proper balance of sweetness, acidity, alcohol and honey character is the essential final measure of any mead.', 'http://www.bjcp.org/2008styles/style24.php#1b', '24', 'Y', 'bcoe', 'BJCP2008', 0, 1, 1, 0, '', 'Lurgashall English Mead, Redstone Traditional Mountain Honey Wine, Sky River Semi-Sweet Mead, Intermiel Verge d&rsquo;Or and Melilot. ', ''), ";
@@ -1173,11 +1173,11 @@ if ($setup_free_access == TRUE) {
 		$updateSQL .= "(88, 'B', 'Braggot', 'Other Mead', '', '', '', '', '', '', 'N/A', 'N/A', 'N/A', 'N/A', 'Mead', 'A harmonious blend of mead and beer, with the distinctive characteristics of both. A wide range of results are possible, depending on the base style of beer, variety of honey and overall sweetness and strength. Beer flavors tend to somewhat mask typical honey flavors found in other meads.', 'http://www.bjcp.org/2008styles/style26.php#1b', '26', 'Y', 'bcoe', 'BJCP2008', 0, 1, 1, 1, '', 'Rabbit&rsquo;s Foot Diabhal and Biere de Miele, Magic Hat Braggot, Brother Adams Braggot Barleywine Ale, White Winter Traditional Brackett.', ''), ";
 		$updateSQL .= "(89, 'C', 'Open Category Mead', 'Other Mead', '', '', '', '', '', '', 'N/A', 'N/A', 'N/A', 'N/A', 'Mead', 'See standard description for entrance requirements. Entrants MUST specify carbonation level, strength, and sweetness. Entrants MAY specify honey varieties.', 'http://www.bjcp.org/2008styles/style26.php#1c', '26', 'Y', 'bcoe', 'BJCP2008', 1, 1, 1, 1, '', 'Jadwiga, Hanssens/Lurgashall Mead the Gueuze, Rabbit&rsquo;s Foot Private Reserve Pear Mead, White Winter Cherry Bracket, Saba Tej, Mountain Meadows Trickster&rsquo;s Treat Agave Mead, Intermiel Rosee.', 'See standard description for entrance requirements. Entrants must specify carbonation level, strength, and sweetness. Entrants may specify honey varieties. Entrants must specify the special nature of the mead, whether it is a combination of existing styles, an experimental mead, a historical mead, or some other creation. Any special ingredients that impart an identifiable character may be declared.'), ";
 		$updateSQL .= "(90, 'A', 'Common Cider', 'Standard Cider and Perry', '1.045', '1.065', '1', '1.02', '5', '8', 'N/A', 'N/A', 'N/A', 'N/A', 'Cider', 'Variable, but should be a medium, refreshing drink. Sweet ciders must not be cloying. Dry ciders must not be too austere. An ideal cider serves well as a &quot;session&quot; drink, and suitably accompanies a wide variety of food.', 'http://www.bjcp.org/2008styles/style27.php#1a', '27', 'Y', 'bcoe', 'BJCP2008', 0, 0, 1, 1, '', '[US] Red Barn Cider Jonagold Semi-Dry and Sweetie Pie (WA), AEppelTreow Barn Swallow Draft Cider (WI), Wandering Aengus Heirloom Blend Cider (OR), Uncle John&rsquo;s Fruit House Winery Apple Hard Cider (MI), Bellwether Spyglass (NY), West County Pippin (MA), White Winter Hard Apple Cider (WI), Harpoon Cider (MA)', ''); ";
-		
+
 		mysqli_select_db($connection,$database);
 		mysqli_real_escape_string($connection,$updateSQL);
 		$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
-		
+
 		$updateSQL = "INSERT INTO ".$prefix."styles (id, brewStyleNum, brewStyle, brewStyleCategory, brewStyleOG, brewStyleOGMax, brewStyleFG, brewStyleFGMax, brewStyleABV, brewStyleABVMax, brewStyleIBU, brewStyleIBUMax, brewStyleSRM, brewStyleSRMMax, brewStyleType, brewStyleInfo, brewStyleLink, brewStyleGroup, brewStyleActive, brewStyleOwn, brewStyleVersion, brewStyleReqSpec, brewStyleStrength, brewStyleCarb, brewStyleSweet, brewStyleTags, brewStyleComEx, brewStyleEntry) VALUES ";
 		$updateSQL .= "(91, 'B', 'English Cider', 'Standard Cider and Perry', '1.05', '1.075', '0.995', '1.01', '6', '9', 'N/A', 'N/A', 'N/A', 'N/A', 'Cider', 'Generally dry, full-bodied, austere.', 'http://www.bjcp.org/2008styles/style27.php#1b', '27', 'Y', 'bcoe', 'BJCP2008', 0, 0, 1, 1, '', '[US] Westcott Bay Traditional Very Dry, Traditional Dry and Traditional Medium Sweet (WA), Farnum Hill Extra-Dry, Dry, and Farmhouse (NH), Wandering Aengus Dry Cider (OR), Red Barn Cider Burro Loco (WA), Bellwether Heritage (NY); [UK] Oliver&rsquo;s Herefordshire Dry Cider, various from Hecks, Dunkerton, Burrow Hill, Gwatkin Yarlington Mill, Aspall Dry Cider', ''), ";
 		$updateSQL .= "(92, 'C', 'French Cider', 'Standard Cider and Perry', '1.05', '1.065', '1.01', '1.02', '3', '6', 'N/A', 'N/A', 'N/A', 'N/A', 'Cider', 'Medium to sweet, full-bodied, rich.', 'http://www.bjcp.org/2008styles/style27.php#1c', '27', 'Y', 'bcoe', 'BJCP2008', 0, 0, 1, 1, '', '[US] West County Reine de Pomme (MA), Rhyne Cider (CA); [France] Eric Bordelet (various), Etienne Dupont, Etienne Dupont Organic, Bellot.', ''), ";
@@ -1187,11 +1187,11 @@ if ($setup_free_access == TRUE) {
 		$updateSQL .= "(96, 'B', 'Fruit Cider', 'Specialty Cider and Perry', '1.045', '1.07', '0.995', '1.01', '5', '9', 'N/A', 'N/A', 'N/A', 'N/A', 'Cider', 'Like a dry wine with complex flavors. The apple character must marry with the added fruit so that neither dominates the other. ', 'http://www.bjcp.org/2008styles/style28.php#1b', '28', 'Y', 'bcoe', 'BJCP2008', 1, 0, 1, 1, '', '[US] West County Blueberry-Apple Wine (MA), AEppelTreow Red Poll Cran-Apple Draft Cider (WI), Bellwether Cherry Street (NY), Uncle John&rsquo;s Fruit Farm Winery Apple Cherry Hard Cider (MI).', 'Entrants must specify what fruit(s) and/or fruit juice(s) were added.'), ";
 		$updateSQL .= "(97, 'C', 'Applewine', 'Specialty Cider and Perry', '1.07', '1.1', '0.995', '1.01', '9', '12', 'N/A', 'N/A', 'N/A', 'N/A', 'Cider', 'Like a dry white wine, balanced, and with low astringency and bitterness.', 'http://www.bjcp.org/2008styles/style28.php#1c', '28', 'Y', 'bcoe', 'BJCP2008', 1, 0, 1, 1, '', '[US] AEppelTreow Summer&rsquo;s End (WI), Wandering Aengus Pommeau (OR), Uncle John&rsquo;s Fruit House Winery Fruit House Apple (MI), Irvine&rsquo;s Vintage Ciders (WA).', ''), ";
 		$updateSQL .= "(98, 'D', 'Other Specialty Cider or Perry', 'Specialty Cider and Perry', '1.045', '1.1', '0.995', '1.02', '5', '12', 'N/A', 'N/A', 'N/A', 'N/A', 'Cider', '', 'http://www.bjcp.org/2008styles/style28.php#1d', '28', 'Y', 'bcoe', 'BJCP2008', 1, 0, 1, 1, '', '[US] Red Barn Cider Fire Barrel (WA), AEppelTreow Pear Wine and Sparrow Spiced Cider (WI).', 'Entrants must specify all major ingredients and adjuncts. Entrants must specify carbonation level (still, petillant, or sparkling). Entrants must specify sweetness (dry or medium).'); ";
-		
+
 		mysqli_select_db($connection,$database);
 		mysqli_real_escape_string($connection,$updateSQL);
 		$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
-		
+
 		$updateSQL = "INSERT INTO ".$prefix."styles (id, brewStyleNum, brewStyle, brewStyleCategory, brewStyleOG, brewStyleOGMax, brewStyleFG, brewStyleFGMax, brewStyleABV, brewStyleABVMax, brewStyleIBU, brewStyleIBUMax, brewStyleSRM, brewStyleSRMMax, brewStyleType, brewStyleInfo, brewStyleLink, brewStyleGroup, brewStyleActive, brewStyleOwn, brewStyleVersion, brewStyleReqSpec, brewStyleStrength, brewStyleCarb, brewStyleSweet, brewStyleTags, brewStyleComEx, brewStyleEntry) VALUES ";
 		$updateSQL = "INSERT INTO ".$prefix."styles (id, brewStyleNum, brewStyle, brewStyleCategory, brewStyleOG, brewStyleOGMax, brewStyleFG, brewStyleFGMax, brewStyleABV, brewStyleABVMax, brewStyleIBU, brewStyleIBUMax, brewStyleSRM, brewStyleSRMMax, brewStyleType, brewStyleInfo, brewStyleLink, brewStyleGroup, brewStyleActive, brewStyleOwn, brewStyleVersion, brewStyleReqSpec, brewStyleStrength, brewStyleCarb, brewStyleSweet, brewStyleTags, brewStyleComEx, brewStyleEntry) VALUES ";
 		$updateSQL .= "(99, 'A', 'American Light Lager', 'Standard American Beer', '1.028', '1.04', '0.998', '1.008', '2.8', '4.2', '8', '12', '2', '3', 'Lager', 'Highly carbonated, very light-bodied, nearly flavorless lager designed to be consumed very cold. Very refreshing and thirst quenching. ', 'http://bjcp.org/stylecenter.php', '01', 'Y', 'bcoe', 'BJCP2015', 0, 0, 0, 0, 'session-strength, pale-color, bottom-fermented, lagered, north-america, traditional-style, pale-lager-family, balanced', 'Miller Lite, Bud Light, Coors Light, Old Milwaukee Light, Keystone Light, Michelob Light.', ''), ";
@@ -1206,11 +1206,11 @@ if ($setup_free_access == TRUE) {
 		$updateSQL .= "(108, 'C', 'Czech Amber Lager', 'Czech Lager', '1.044', '1.056', '1.013', '1.017', '4.4', '5.8', '20', '35', '10', '16', 'Lager', 'Malt-driven amber Czech lager with hop character that can vary from low to quite significant. The malt flavors can vary quite a bit, leading to different interpretations ranging from drier, bready, and slightly biscuity to sweeter and somewhat caramelly. ', 'http://bjcp.org/stylecenter.php', '03', 'Y', 'bcoe', 'BJCP2015', 0, 0, 0, 0, 'standard-strength, amber-color, bottom-fermented, lagered, central-europe, traditional-style, amber-lager-family, balanced', 'Cerny Orel polotmava 12&deg;, Primator polotmavy 13&deg;, Jihlavsky Radnicni Pivovar Zikmund, Pivovar Vysoky Chlumec Demon, Pivovar Benesov Sedm kuli, Bernard Jantar.', ''), ";
 		$updateSQL .= "(109, 'D', 'Czech Dark Lager', 'Czech Lager', '1.044', '1.056', '1.013', '1.017', '4.4', '5.8', '18', '38', '14', '35', 'Lager', 'A rich, dark, malty Czech lager with a roast character that can vary from almost absent to quite prominent. Malty with an interesting and complex flavor profile, with variable levels of hopping providing a range of possible interpretations. ', 'http://bjcp.org/stylecenter.php', '03', 'Y', 'bcoe', 'BJCP2015', 0, 0, 0, 0, 'standard-strength, dark-color, bottom-fermented, lagered, central-europe, traditional-style, dark-lager-family, balanced', 'Kout na Sumav Tmavy 14&deg;, Pivovar Breznice Herold, U Fleku, Budvar Tmavy Lezak, Bohemian Brewery Cherny Bock 4, Devils Backbone Moran, Notch Cerne Pivo.', ''), ";
 		$updateSQL .= "(110, 'A', 'Munich Helles', 'Pale Malty European Lager', '1.044', '1.048', '1.006', '1.012', '4.7', '5.4', '16', '22', '3', '5', 'Lager', 'A clean, malty, gold-colored German lager with a smooth grainy-sweet malty flavor and a soft, dry finish. Subtle spicy, floral, or herbal hops and restrained bitterness help keep the balance malty but not sweet, which helps make this beer a refreshing, everyday drink.', 'http://bjcp.org/stylecenter.php', '04', 'Y', 'bcoe', 'BJCP2015', 0, 0, 0, 0, 'standard-strength, pale-color, bottom-fermented, lagered, central-europe, traditional-style, pale-lager-family, malty', 'Weihenstephaner Original, Hacker-Pschorr Munchner Gold, Burgerbrau Wolznacher Hell Naturtrub, Paulaner Premium Lager, Spaten Premium Lager, Lowenbrau Original.', ''); ";
-		
+
 		mysqli_select_db($connection,$database);
 		mysqli_real_escape_string($connection,$updateSQL);
 		$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
-		
+
 		$updateSQL = "INSERT INTO ".$prefix."styles (id, brewStyleNum, brewStyle, brewStyleCategory, brewStyleOG, brewStyleOGMax, brewStyleFG, brewStyleFGMax, brewStyleABV, brewStyleABVMax, brewStyleIBU, brewStyleIBUMax, brewStyleSRM, brewStyleSRMMax, brewStyleType, brewStyleInfo, brewStyleLink, brewStyleGroup, brewStyleActive, brewStyleOwn, brewStyleVersion, brewStyleReqSpec, brewStyleStrength, brewStyleCarb, brewStyleSweet, brewStyleTags, brewStyleComEx, brewStyleEntry) VALUES ";
 		$updateSQL .= "(111, 'B', 'Festbier', 'Pale Malty European Lager', '1.054', '1.057', '1.01', '1.012', '5.8', '6.3', '18', '24', '4', '6', 'Lager', 'A smooth, clean, pale German lager with a moderately strong malty flavor and a light hop character. Deftly balances strength and drinkability, with a palate impression and finish that encourages drinking. Showcases elegant German malt flavors without becoming too heavy or filling.', 'http://bjcp.org/stylecenter.php', '04', 'Y', 'bcoe', 'BJCP2015', 0, 0, 0, 0, 'standard-strength, pale-color, bottom-fermented, lagered, central-europe, traditional-style, pale-lager-family, malty', 'Paulaner Wiesn, Lowenbrau Oktoberfestbier, Hofbrau Festbier, Hacker-Pschorr Superior Festbier, Augustiner Oktoberfest, Schonramer Gold.', ''), ";
 		$updateSQL .= "(112, 'C', 'Helles Bock', 'Pale Malty European Lager', '1.064', '1.072', '1.011', '1.008', '6.3', '7.4', '23', '35', '6', '11', 'Lager', 'A relatively pale, strong, malty German lager beer with a nicely attenuated finish that enhances drinkability. The hop character is generally more apparent than in other bocks.', 'http://bjcp.org/stylecenter.php', '04', 'Y', 'bcoe', 'BJCP2015', 0, 0, 0, 0, 'high-strength, pale-color, bottom-fermented, lagered, central-europe, traditional-style, bock-family, malty', 'Ayinger Maibock, Mahr&rsquo;s Bock, Hacker-Pschorr Hubertus Bock, Altenmunster Maibock, Capital Maibock, Einbecker Mai-Urbock, Blind Tiger Maibock.', ''), ";
@@ -1225,7 +1225,7 @@ if ($setup_free_access == TRUE) {
 		mysqli_select_db($connection,$database);
 		mysqli_real_escape_string($connection,$updateSQL);
 		$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
-		
+
 		$updateSQL = "INSERT INTO ".$prefix."styles (id, brewStyleNum, brewStyle, brewStyleCategory, brewStyleOG, brewStyleOGMax, brewStyleFG, brewStyleFGMax, brewStyleABV, brewStyleABVMax, brewStyleIBU, brewStyleIBUMax, brewStyleSRM, brewStyleSRMMax, brewStyleType, brewStyleInfo, brewStyleLink, brewStyleGroup, brewStyleActive, brewStyleOwn, brewStyleVersion, brewStyleReqSpec, brewStyleStrength, brewStyleCarb, brewStyleSweet, brewStyleTags, brewStyleComEx, brewStyleEntry) VALUES ";
 		$updateSQL .= "(121, 'B', 'Altbier', 'Amber Bitter European Beer', '1.044', '1.052', '1.008', '1.014', '4.3', '5.5', '25', '50', '11', '17', 'Ale', 'A well-balanced, well-attenuated, bitter yet malty, clean, and smooth, amber- to copper-colored German beer. The bitterness is balanced by the malt richness, but the malt intensity and character can range from moderate to high (the bitterness increases with the malt richness). ', 'http://bjcp.org/stylecenter.php', '07', 'Y', 'bcoe', 'BJCP2015', 0, 0, 0, 0, 'standard-strength, amber-color, top-fermented, lagered, central-europe, traditional-style, amber-ale-family, bitter', 'Zum Uerige, Im Fuuchschen, Schumacher, Zum Schluussel, Schlosser Alt, Bolten Alt, Diebels Alt, Frankenheim Alt, Southampton Alt, BluCreek Altbier.', ''), ";
 		$updateSQL .= "(122, 'C', 'Kellerbier', 'Amber Bitter European Beer', '', '', '', '', '', '', '', '', '', '', 'Lager', 'Young, unfiltered, unpasteurized versions of the traditional German beer styles, traditionally served on tap from the lagering vessel. The name literally means &quot;cellar beer&quot; - implying a young, fresh beer served straight from the lagering cellar. Since this serving method can be applied to a wide range of beers, the style is somewhat hard to pin down. However, there are several common variants that can be described and used as templates for other versions. Sometimes described as Naturtrub or naturally cloudy. Also sometimes called Zwickelbier, after the name of the tap used to sample from a lagering tank.', 'http://bjcp.org/stylecenter.php', '07', 'Y', 'bcoe', 'BJCP2015', 1, 0, 0, 0, 'standard-strength, pale-color, amber-color, bottom-fermented, central-europe, traditional-style, balanced, pale-lager-family, amber-lager-family', '', 'The entrant must specify whether the entry is a Munich Kellerbier (pale, based on Helles) or a Franconian Kellerbier (amber, based on Marzen). The entrant may specify another type of Kellerbier based on other base styles such as Pils, Bock, Schwarzbier, but should supply a style description for judges.'), ";
@@ -1240,7 +1240,7 @@ if ($setup_free_access == TRUE) {
 		mysqli_select_db($connection,$database);
 		mysqli_real_escape_string($connection,$updateSQL);
 		$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
-		
+
 		$updateSQL = "INSERT INTO ".$prefix."styles (id, brewStyleNum, brewStyle, brewStyleCategory, brewStyleOG, brewStyleOGMax, brewStyleFG, brewStyleFGMax, brewStyleABV, brewStyleABVMax, brewStyleIBU, brewStyleIBUMax, brewStyleSRM, brewStyleSRMMax, brewStyleType, brewStyleInfo, brewStyleLink, brewStyleGroup, brewStyleActive, brewStyleOwn, brewStyleVersion, brewStyleReqSpec, brewStyleStrength, brewStyleCarb, brewStyleSweet, brewStyleTags, brewStyleComEx, brewStyleEntry) VALUES ";
 		$updateSQL .= "(131, 'A', 'Ordinary Bitter', 'British Beer', '1.03', '1.038', '1.007', '1.011', '3.2', '3.8', '25', '35', '8', '14', 'Ale', 'Low gravity, low alcohol levels, and low carbonation make this an easy-drinking session beer. The malt profile can vary in flavor and intensity, but should never override the overall bitter impression. Drinkability is a critical component of the style. ', 'http://bjcp.org/stylecenter.php', '11', 'Y', 'bcoe', 'BJCP2015', 0, 0, 0, 0, 'session-strength, amber-color, top-fermented, british-isles, traditional-style, amber-ale-family, bitter', 'Fuller&rsquo;s Chiswick Bitter, Adnams Bitter, Young&rsquo;s Bitter, Greene King IPA, Brains Bitter, Tetley&rsquo;s Original Bitter.', ''), ";
 		$updateSQL .= "(132, 'B', 'Best Bitter', 'British Beer', '1.04', '1.048', '1.008', '1.012', '3.8', '4.6', '25', '40', '8', '16', 'Ale', 'A flavorful, yet refreshing, session beer. Some examples can be more malt balanced, but this should not override the overall bitter impression. Drinkability is a critical component of the style. ', 'http://bjcp.org/stylecenter.php', '11', 'Y', 'bcoe', 'BJCP2015', 0, 0, 0, 0, 'standard-strength, amber-color, top-fermented, british-isles, traditional-style, amber-ale-family, bitter', 'Timothy Taylor Landlord, Fuller&rsquo;s London Pride, Coniston Bluebird Bitter, Adnams SSB, Young&rsquo;s Special, Shepherd Neame Masterbrew Bitter.', ''), ";
@@ -1255,7 +1255,7 @@ if ($setup_free_access == TRUE) {
 		mysqli_select_db($connection,$database);
 		mysqli_real_escape_string($connection,$updateSQL);
 		$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
-		
+
 		$updateSQL = "INSERT INTO ".$prefix."styles (id, brewStyleNum, brewStyle, brewStyleCategory, brewStyleOG, brewStyleOGMax, brewStyleFG, brewStyleFGMax, brewStyleABV, brewStyleABVMax, brewStyleIBU, brewStyleIBUMax, brewStyleSRM, brewStyleSRMMax, brewStyleType, brewStyleInfo, brewStyleLink, brewStyleGroup, brewStyleActive, brewStyleOwn, brewStyleVersion, brewStyleReqSpec, brewStyleStrength, brewStyleCarb, brewStyleSweet, brewStyleTags, brewStyleComEx, brewStyleEntry) VALUES ";
 		$updateSQL .= "(141, 'B', 'Scottish Heavy', 'Scottish Ale', '1.035', '1.04', '1.01', '1.015', '3.2', '3.9', '10', '20', '13', '22', 'Ale', 'A malt-focused, generally caramelly beer with perhaps a few esters and occasionally a butterscotch aftertaste. Hops only to balance and support the malt. The malt character can range from dry and grainy to rich, toasty, and caramelly, but is never roasty and especially never has a peat smoke character. ', 'http://bjcp.org/stylecenter.php', '14', 'Y', 'bcoe', 'BJCP2015', 0, 0, 0, 0, 'session-strength, amber-color, top-fermented, british-isles, traditional-style, amber-ale-family, malty', 'Caledonia Smooth, Orkney Raven ale, Broughton Greenmantle Ale, McEwan&rsquo;s 70, Tennent&rsquo;s Special Ale.', ''), ";
 		$updateSQL .= "(142, 'C', 'Scottish Export', 'Scottish Ale', '1.04', '1.06', '1.01', '1.016', '3.9', '6', '15', '30', '13', '22', 'Ale', 'A malt-focused, generally caramelly beer with perhaps a few esters and occasionally a butterscotch aftertaste. Hops only to balance and support the malt. The malt character can range from dry and grainy to rich, toasty, and caramelly, but is never roasty and especially never has a peat smoke character. ', 'http://bjcp.org/stylecenter.php', '14', 'Y', 'bcoe', 'BJCP2015', 0, 0, 0, 0, 'standard-strength, amber-color, top-fermented, british-isles, traditional-style, amber-ale-family, malty', 'Orkney Dark Island, Belhaven Scottish ale, Broughton Exciseman&rsquo;s ale, Weasel Boy Plaid Ferret Scottish ale.', ''), ";
@@ -1270,7 +1270,7 @@ if ($setup_free_access == TRUE) {
 		mysqli_select_db($connection,$database);
 		mysqli_real_escape_string($connection,$updateSQL);
 		$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
-		
+
 		$updateSQL = "INSERT INTO ".$prefix."styles (id, brewStyleNum, brewStyle, brewStyleCategory, brewStyleOG, brewStyleOGMax, brewStyleFG, brewStyleFGMax, brewStyleABV, brewStyleABVMax, brewStyleIBU, brewStyleIBUMax, brewStyleSRM, brewStyleSRMMax, brewStyleType, brewStyleInfo, brewStyleLink, brewStyleGroup, brewStyleActive, brewStyleOwn, brewStyleVersion, brewStyleReqSpec, brewStyleStrength, brewStyleCarb, brewStyleSweet, brewStyleTags, brewStyleComEx, brewStyleEntry) VALUES ";
 		$updateSQL .= "(151, 'B', 'Old Ale', 'Strong British Ale', '1.055', '1.088', '1.015', '1.022', '5.5', '9', '30', '60', '10', '22', 'Ale', 'An ale of moderate to fairly significant alcoholic strength, bigger than standard beers, though usually not as strong or rich as barleywine. Often tilted towards a maltier balance. &quot;It should be a warming beer of the type that is best drunk in half pints by a warm fire on a cold winter&rsquo;s night&quot; - Michael Jackson. ', 'http://bjcp.org/stylecenter.php', '17', 'Y', 'bcoe', 'BJCP2015', 0, 0, 0, 0, 'high-strength, amber-color, top-fermented, british-isles, traditional-style, strong-ale-family, malty, aged', 'Gale&rsquo;s Prize Old Ale, Burton Bridge Olde Expensive, Marston Owd Roger, Greene King Strong Suffolk Ale, Theakston Old Peculier.', ''), ";
 		$updateSQL .= "(152, 'C', 'Wee Heavy', 'Strong British Ale', '1.07', '1.013', '1.018', '1.04', '6.5', '10', '17', '35', '14', '25', 'Ale', 'Rich, malty, dextrinous, and usually caramel-sweet, these beers can give an impression that is suggestive of a dessert. Complex secondary malt and alcohol flavors prevent a one-dimensional quality. Strength and maltiness can vary, but should not be cloying or syrupy. ', 'http://bjcp.org/stylecenter.php', '17', 'Y', 'bcoe', 'BJCP2015', 0, 0, 0, 0, 'high-strength, amber-color, top-fermented, british-isles, traditional-style, strong-ale-family, malty', 'Traquair House Ale, Belhaven Wee Heavy, McEwan&rsquo;s Scotch Ale, MacAndrew&rsquo;s Scotch Ale, Orkney Skull Splitter, Inveralmond Black Friar, Broughton Old Jock, Gordon Highland Scotch Ale, AleSmith Wee Heavy.', ''), ";
@@ -1285,7 +1285,7 @@ if ($setup_free_access == TRUE) {
 		mysqli_select_db($connection,$database);
 		mysqli_real_escape_string($connection,$updateSQL);
 		$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
-		
+
 		$updateSQL = "INSERT INTO ".$prefix."styles (id, brewStyleNum, brewStyle, brewStyleCategory, brewStyleOG, brewStyleOGMax, brewStyleFG, brewStyleFGMax, brewStyleABV, brewStyleABVMax, brewStyleIBU, brewStyleIBUMax, brewStyleSRM, brewStyleSRMMax, brewStyleType, brewStyleInfo, brewStyleLink, brewStyleGroup, brewStyleActive, brewStyleOwn, brewStyleVersion, brewStyleReqSpec, brewStyleStrength, brewStyleCarb, brewStyleSweet, brewStyleTags, brewStyleComEx, brewStyleEntry) VALUES ";
 		$updateSQL .= "(161, 'C', 'Imperial Stout', 'American Porter and Stout', '1.075', '1.115', '1.018', '1.03', '8', '12', '50', '90', '30', '40', 'Ale', 'An intensely-flavored, big, dark ale with a wide range of flavor balances and regional interpretations. Roasty-burnt malt with deep dark or dried fruit flavors, and a warming, bittersweet finish. Despite the intense flavors, the components need to meld together to create a complex, harmonious beer, not a hot mess.', 'http://bjcp.org/stylecenter.php', '20', 'Y', 'bcoe', 'BJCP2015', 0, 0, 0, 0, 'very-high-strength, dark-color, top-fermented, british-isles, north-america, traditional-style, craft-style, stout-family, malty, bitter, roasty', 'American - North Coast Old Rasputin Imperial Stout, Cigar City Marshal Zhukov&rsquo;s Imperial Stout; English - Courage Imperial Russian Stout, Le Coq Imperial Extra Double Stout, Samuel Smith Imperial Stout.', ''), ";
 		$updateSQL .= "(162, 'A', 'American IPA', 'IPA', '1.056', '1.07', '1.008', '1.014', '5.5', '7.5', '40', '70', '6', '14', 'Ale', 'A decidedly hoppy and bitter, moderately strong American pale ale, showcasing modern American and New World hop varieties. The balance is hop-forward, with a clean fermentation profile, dryish finish, and clean, supporting malt allowing a creative range of hop character to shine through.', 'http://bjcp.org/stylecenter.php', '21', 'Y', 'bcoe', 'BJCP2015', 0, 0, 0, 0, 'high-strength, pale-color, top-fermented, north-america, craft-style, ipa-family, bitter, hoppy', 'Russian River Blind Pig IPA, Bell&rsquo;s Two-Hearted Ale, Firestone Walker Union Jack, Alpine Duet, New Belgium Ranger IPA, Fat Heads Head Hunter, Stone IPA, Lagunitas IPA.', ''), ";
@@ -1300,7 +1300,7 @@ if ($setup_free_access == TRUE) {
 		mysqli_select_db($connection,$database);
 		mysqli_real_escape_string($connection,$updateSQL);
 		$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
-		
+
 		$updateSQL = "INSERT INTO ".$prefix."styles (id, brewStyleNum, brewStyle, brewStyleCategory, brewStyleOG, brewStyleOGMax, brewStyleFG, brewStyleFGMax, brewStyleABV, brewStyleABVMax, brewStyleIBU, brewStyleIBUMax, brewStyleSRM, brewStyleSRMMax, brewStyleType, brewStyleInfo, brewStyleLink, brewStyleGroup, brewStyleActive, brewStyleOwn, brewStyleVersion, brewStyleReqSpec, brewStyleStrength, brewStyleCarb, brewStyleSweet, brewStyleTags, brewStyleComEx, brewStyleEntry) VALUES ";
 		$updateSQL .= "(171, 'D', 'Lambic', 'European Sour Ale', '1.04', '1.054', '1.001', '1.01', '5', '6.5', '0', '10', '3', '7', 'Ale', 'A fairly sour, often moderately funky wild Belgian wheat beer with sourness taking the place of hop bitterness in the balance. Traditionally spontaneously fermented in the Brussels area and served uncarbonated, the refreshing acidity makes for a very pleasant cafe drink.', 'http://bjcp.org/stylecenter.php', '23', 'Y', 'bcoe', 'BJCP2015', 0, 0, 0, 0, 'standard-strength, pale-color, wild-fermented, western-europe, traditional-style, wheat-beer-family, sour', 'The only bottled version readily available is Cantillon Grand Cru Bruocsella of whatever single batch vintage the brewer deems worthy to bottle. De Cam sometimes bottles their very old (5 years) lambic. In and around Brussels there are specialty cafes that often have draught lambics from traditional brewers or blenders such as Boon, De Cam, Cantillon, Drie Fonteinen, Lindemans, Timmermans and Girardin.', ''), ";
 		$updateSQL .= "(172, 'E', 'Gueuze', 'European Sour Ale', '1.04', '1.06', '1', '1.006', '5', '8', '0', '10', '3', '7', 'Ale', 'A complex, pleasantly sour but balanced wild Belgian wheat beer that is highly carbonated and very refreshing. The spontaneous fermentation character can provide a very interesting complexity, with a wide range of wild barnyard, horse blanket, or leather characteristics intermingling with citrusy-fruity flavors and acidity', 'http://bjcp.org/stylecenter.php', '23', 'Y', 'bcoe', 'BJCP2015', 0, 0, 0, 0, 'high-strength, pale-color, wild-fermented, western-europe, traditional-style, wheat-beer-family, aged, sour', 'Boon Oude Gueuze, Boon Oude Gueuze Mariage Parfait, De Cam Gueuze, De Cam/Drei Fonteinen Millennium Gueuze, Drie Fonteinen Oud Gueuze, Cantillon Gueuze, Hanssens Oude Gueuze, Lindemans Gueuze Cuvee Rene, Girardin Gueuze (Black Label), Mort Subite (Unfiltered) Gueuze, Oud Beersel Oude Gueuze.', ''), ";
@@ -1315,7 +1315,7 @@ if ($setup_free_access == TRUE) {
 		mysqli_select_db($connection,$database);
 		mysqli_real_escape_string($connection,$updateSQL);
 		$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
-		
+
 		$updateSQL = "INSERT INTO ".$prefix."styles (id, brewStyleNum, brewStyle, brewStyleCategory, brewStyleOG, brewStyleOGMax, brewStyleFG, brewStyleFGMax, brewStyleABV, brewStyleABVMax, brewStyleIBU, brewStyleIBUMax, brewStyleSRM, brewStyleSRMMax, brewStyleType, brewStyleInfo, brewStyleLink, brewStyleGroup, brewStyleActive, brewStyleOwn, brewStyleVersion, brewStyleReqSpec, brewStyleStrength, brewStyleCarb, brewStyleSweet, brewStyleTags, brewStyleComEx, brewStyleEntry) VALUES ";
 		$updateSQL .= "(181, 'B', 'Belgian Dubbel', 'Trappist Ale', '1.062', '1.075', '1.008', '1.018', '6', '7.6', '15', '25', '10', '17', 'Ale', 'A deep reddish-copper, moderately strong, malty, complex Trappist ale with rich malty flavors, dark or dried fruit esters, and light alcohol blended together in a malty presentation that still finishes fairly dry. Comments: Most commercial examples are in the 6.5 - 7% ABV range. Traditionally bottle-conditioned (&quot;refermented in the bottle&quot;). ', 'http://bjcp.org/stylecenter.php', '26', 'Y', 'bcoe', 'BJCP2015', 0, 0, 0, 0, 'high-strength, amber-color, top-fermented, western-europe, traditional-style, malty', 'Westmalle Dubbel, St. Bernardus Pater 6, La Trappe Dubbel, Corsendonk Abbey Brown Ale, Grimbergen Double, Affligem Dubbel, Chimay Premiere (Red), Pater Lieven Bruin, Duinen Dubbel, St. Feuillien Brune, New Belgium Abbey Belgian Style Ale, Stoudts Abbey Double Ale, Russian River Benediction, Flying Fish Dubbel, Lost Abbey Lost and Found Abbey Ale, Allagash Double.', ''), ";
 		$updateSQL .= "(182, 'C', 'Belgian Tripel', 'Trappist Ale', '1.075', '1.085', '1.008', '1.014', '7.5', '9.5', '20', '40', '4.5', '7', 'Ale', 'A pale, somewhat spicy, dry, strong Trappist ale with a pleasant rounded malt flavor and firm bitterness. Quite aromatic, with spicy, fruity, and light alcohol notes combining with the supportive clean malt character to produce a surprisingly drinkable beverage considering the high alcohol level.', 'http://bjcp.org/stylecenter.php', '26', 'Y', 'bcoe', 'BJCP2015', 0, 0, 0, 0, 'high-strength, pale-color, top-fermented, western-europe, traditional-style, bitter', 'Westmalle Tripel, La Rulles Tripel, St. Bernardus Tripel, Chimay Cinq Cents (White), Watou Tripel, Val-Dieu Triple, Affligem Tripel, Grimbergen Tripel, La Trappe Tripel, Witkap Pater Tripel, Corsendonk Abbey Pale Ale, St. Feuillien Tripel.', ''), ";
@@ -1330,7 +1330,7 @@ if ($setup_free_access == TRUE) {
 		mysqli_select_db($connection,$database);
 		mysqli_real_escape_string($connection,$updateSQL);
 		$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
-		
+
 		$updateSQL = "INSERT INTO ".$prefix."styles (id, brewStyleNum, brewStyle, brewStyleCategory, brewStyleOG, brewStyleOGMax, brewStyleFG, brewStyleFGMax, brewStyleABV, brewStyleABVMax, brewStyleIBU, brewStyleIBUMax, brewStyleSRM, brewStyleSRMMax, brewStyleType, brewStyleInfo, brewStyleLink, brewStyleGroup, brewStyleActive, brewStyleOwn, brewStyleVersion, brewStyleReqSpec, brewStyleStrength, brewStyleCarb, brewStyleSweet, brewStyleTags, brewStyleComEx, brewStyleEntry) VALUES ";
 		$updateSQL .= "(191, 'A', 'Spice, Herb, or Vegetable Beer', 'Spiced Beer', '', '', '', '', '', '', '', '', '', '', '', 'A harmonious marriage of SHV and beer, but still recognizable as a beer. The SHV character should be evident but in balance with the beer, not so forward as to suggest an artificial product.', 'http://bjcp.org/stylecenter.php', '30', 'Y', 'bcoe', 'BJCP2015', 1, 0, 0, 0, 'specialty-beer, spice', 'Alesmith Speedway Stout, Founders Breakfast Stout, Traquair Jacobite Ale, Rogue Chipotle Ale, Young&rsquo;s Double Chocolate Stout, Bell&rsquo;s Java Stout, Elysian Avatar IPA.', 'The entrant must specify a base style; the declared style does not have to be a Classic Style. The entrant must specify the type of spices, herbs, or vegetables used; individual ingredients do not need to be specified if a well-known blend of spices is used (e.g., apple pie spice).'), ";
 		$updateSQL .= "(192, 'B', 'Autumn Seasonal Beer', 'Spiced Beer', '', '', '', '', '', '', '', '', '', '', '', 'An amber to copper, spiced beer that often has a moderately rich body and slightly warming finish suggesting a good accompaniment for the cool fall season, and often evocative of Thanksgiving traditions.', 'http://bjcp.org/stylecenter.php', '30', 'Y', 'bcoe', 'BJCP2015', 1, 0, 0, 0, 'specialty-beer, spice', 'Dogfish Head Punkin Ale, Southampton Pumpkin Ale.', 'The entrant must specify a base style; the declared style does not have to be a Classic Style. The entrant must specify the type of spices, herbs, or vegetables used; individual ingredients do not need to be specified if a well-known blend of spices is used (e.g., pumpkin pie spice). The beer must contain spices, and may contain vegetables and/or sugars.'), ";
@@ -1345,7 +1345,7 @@ if ($setup_free_access == TRUE) {
 		mysqli_select_db($connection,$database);
 		mysqli_real_escape_string($connection,$updateSQL);
 		$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
-		
+
 		$updateSQL = "INSERT INTO ".$prefix."styles (id, brewStyleNum, brewStyle, brewStyleCategory, brewStyleOG, brewStyleOGMax, brewStyleFG, brewStyleFGMax, brewStyleABV, brewStyleABVMax, brewStyleIBU, brewStyleIBUMax, brewStyleSRM, brewStyleSRMMax, brewStyleType, brewStyleInfo, brewStyleLink, brewStyleGroup, brewStyleActive, brewStyleOwn, brewStyleVersion, brewStyleReqSpec, brewStyleStrength, brewStyleCarb, brewStyleSweet, brewStyleTags, brewStyleComEx, brewStyleEntry) VALUES ";
 		$updateSQL .= "(201, 'B', 'Mixed-Style Beer', 'Specialty Beer', '', '', '', '', '', '', '', '', '', '', '', 'Based on the declared base styles. As with all Specialty-Type Beers, the resulting combination of beer styles needs to be harmonious and balanced, and be pleasant to drink.', 'http://bjcp.org/stylecenter.php', '34', 'Y', 'bcoe', 'BJCP2015', 1, 0, 0, 0, 'specialty-beer', '', 'The entrant must specify the styles being mixed. The entrant may provide an additional description of the sensory profile of the beer or the vital statistics of the resulting beer.'), ";
 		$updateSQL .= "(202, 'C', 'Experimental Beer', 'Specialty Beer', '', '', '', '', '', '', '', '', '', '', '', 'This style is the ultimate in creativity, since it cannot represent a well-known commercial beer (otherwise it would be a clone beer) and cannot fit into any other existing Specialty-Type style (including those within this major category).', 'http://bjcp.org/stylecenter.php', '34', 'Y', 'bcoe', 'BJCP2015', 1, 0, 0, 0, 'specialty-beer', '', ' The entrant must specify the special nature of the experimental beer, including the special ingredients or processes that make it not fit elsewhere in the guidelines. The entrant must provide vital statistics for the beer, and either a brief sensory description or a list of ingredients used in making the beer. Without this information, judges will have no basis for comparison.'), ";
@@ -1360,7 +1360,7 @@ if ($setup_free_access == TRUE) {
 		mysqli_select_db($connection,$database);
 		mysqli_real_escape_string($connection,$updateSQL);
 		$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
-		
+
 		$updateSQL = "INSERT INTO ".$prefix."styles (id, brewStyleNum, brewStyle, brewStyleCategory, brewStyleOG, brewStyleOGMax, brewStyleFG, brewStyleFGMax, brewStyleABV, brewStyleABVMax, brewStyleIBU, brewStyleIBUMax, brewStyleSRM, brewStyleSRMMax, brewStyleType, brewStyleInfo, brewStyleLink, brewStyleGroup, brewStyleActive, brewStyleOwn, brewStyleVersion, brewStyleReqSpec, brewStyleStrength, brewStyleCarb, brewStyleSweet, brewStyleTags, brewStyleComEx, brewStyleEntry) VALUES ";
 		$updateSQL .= "(211, 'A', 'Fruit and Spice Mead', 'Spiced Mead', '', '', '', '', '', '', 'N/A', 'N/A', 'N/A', 'N/A', 'Mead', 'In well-made examples of the style, the fruits and spices are both distinctive and well-incorporated into the honey-sweet-acid-tannin-alcohol balance of the mead. Different types of fruits and spices can result in widely different characteristics; allow for significant variation in the final product.', 'http://bjcp.org/stylecenter.php', 'M3', 'Y', 'bcoe', 'BJCP2015', 1, 1, 1, 1, '', 'Moonlight Kurt&rsquo;s Apple Pie, Mojo, Flame, Fling, and Deviant, Celestial Meads Scheherazade, Rabbit&rsquo;s Foot Private Reserve Pear Mead, Intermiel Rosee.', 'Entrants must specify carbonation level, strength, and sweetness. Entrants may specify honey varieties. Entrants must specify the types of spices used, (although well-known spice blends may be referred to by common name, such as apple pie spices). Entrants must specify the types of fruits used. If only combinations of spices are used, enter as a Spice, Herb, or Vegetable Mead. If only combinations of fruits are used, enter as a Melomel. If other types of ingredients are used, enter as an Experimental Mead.'), ";
 		$updateSQL .= "(212, 'B', 'Spice, Herb, or Vegetable Mead', 'Spiced Mead', '', '', '', '', '', '', 'N/A', 'N/A', 'N/A', 'N/A', 'Mead', 'In well-made examples of the style, the spices are both distinctive and well-incorporated into the honey-sweet-acid-tannin-alcohol balance of the mead. Different types of spices can result in widely different characteristics; allow for a variation in the final product. ', 'http://bjcp.org/stylecenter.php', 'M3', 'Y', 'bcoe', 'BJCP2015', 1, 1, 1, 1, '', 'Moonlight Wicked, Breathless, Madagascar, and Seduction, Redstone Vanilla Beans and Cinnamon Sticks Mountain Honey Wine, Bonair Chili.', 'Entrants MUST specify carbonation level, strength, and sweetness. Entrants MAY specify honey varieties. Entrants MUST specify the types of spices used (although well-known spice blends may be referred to by common name, such as apple pie spices)'), ";
@@ -1375,7 +1375,7 @@ if ($setup_free_access == TRUE) {
 		mysqli_select_db($connection,$database);
 		mysqli_real_escape_string($connection,$updateSQL);
 		$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
-		
+
 		$updateSQL = "INSERT INTO ".$prefix."styles (id, brewStyleNum, brewStyle, brewStyleCategory, brewStyleOG, brewStyleOGMax, brewStyleFG, brewStyleFGMax, brewStyleABV, brewStyleABVMax, brewStyleIBU, brewStyleIBUMax, brewStyleSRM, brewStyleSRMMax, brewStyleType, brewStyleInfo, brewStyleLink, brewStyleGroup, brewStyleActive, brewStyleOwn, brewStyleVersion, brewStyleReqSpec, brewStyleStrength, brewStyleCarb, brewStyleSweet, brewStyleTags, brewStyleComEx, brewStyleEntry) VALUES ";
 		$updateSQL .= "(221, 'A', 'New England Cider', 'Specialty Cider and Perry', '1.06', '1.1', '0.995', '1.02', '7', '13', 'N/A', 'N/A', 'N/A', 'N/A', 'Cider', 'Substantial body and character. Typically relatively dry, but can be somewhat sweet if in balance and not containing hot alcohol.', 'http://bjcp.org/stylecenter.php', 'C2', 'Y', 'bcoe', 'BJCP2015', 1, 0, 1, 1, '', '[US] Snowdrift Semi-Dry (WA), Blackbird Cider Works New England Style (NY).', 'Entrants MUST specify if the cider was barrel-fermented or aged. Entrants MUST specify carbonation level (3 levels). Entrants MUST specify sweetness (5 levels).'), ";
 		$updateSQL .= "(222, 'B', 'Cider with Other Fruit', 'Specialty Cider and Perry', '1.045', '1.07', '0.995', '1.01', '5', '9', 'N/A', 'N/A', 'N/A', 'N/A', 'Cider', 'Substantial. May be significantly tannic, depending on fruit added.', 'http://bjcp.org/stylecenter.php', 'C2', 'Y', 'bcoe', 'BJCP2015', 1, 0, 1, 1, '', '[US] West County Blueberry-Apple Wine (MA), Bellwether Cherry Street (NY), Uncle John&rsquo;s Fruit Farm Winery Apple Cherry, Apple Blueberry, and Apricot Apple Hard Cider (MI).', 'Entrants MUST specify carbonation level (3 levels). Entrants MUST specify sweetness (5 categories). Entrants MUST specify all fruit(s) and/or fruit juice(s) added.'), ";
@@ -1383,7 +1383,7 @@ if ($setup_free_access == TRUE) {
 		$updateSQL .= "(224, 'D', 'Ice Cider', 'Specialty Cider and Perry', '1.13', '1.18', '1.06', '1.085', '7', '13', 'N/A', 'N/A', 'N/A', 'N/A', 'Cider', 'This is a cider style in which the juice is concentrated before fermentation either by freezing fruit before pressing or freezing juice and removing water.', 'http://bjcp.org/stylecenter.php', 'C2', 'Y', 'bcoe', 'BJCP2015', 1, 0, 1, 0, '', '[US] various from Eden Ice Cider Company and Champlain Orchards. [Canada] Domaine Pinnacle, Les Vergers de la Colline, and Cidrerie St-Nicolas (Quebec).', 'Entrants MUST specify starting gravity, final gravity or residual sugar, and alcohol level. Entrants MUST specify carbonation level (3 levels).'), ";
 		$updateSQL .= "(225, 'E', 'Cider with Herbs/Spices', 'Specialty Cider and Perry', '1.045', '1.07', '0.995', '1.01', '5', '9', 'N/A', 'N/A', 'N/A', 'N/A', 'Cider', 'Like a white wine with complex flavors. The apple character must marry with the botanicals and give a balanced result.', 'http://bjcp.org/stylecenter.php', 'C2', 'Y', 'bcoe', 'BJCP2015', 1, 0, 1, 1, '', '[US] Colorado Cider Grasshop-ah (CO), Wandering Aengus Anthem Hops (OR).', 'Entrants MUST specify carbonation level (3 levels). Entrants MUST specify sweetness (5 categories). Entrants MUST specify all botanicals added. If hops are used, entrant must specify variety/varieties used.'), ";
 		$updateSQL .= "(226, 'F', 'Specialty Cider/Perry', 'Specialty Cider and Perry', '1.045', '1.1', '0.995', '1.02', '5', '12', 'N/A', 'N/A', 'N/A', 'N/A', 'Cider', 'This is an open-ended category for cider or perry with other ingredients such that it does not fit any of the other BJCP categories.', 'http://bjcp.org/stylecenter.php', 'C2', 'Y', 'bcoe', 'BJCP2015', 1, 0, 1, 1, '', '', 'Entrants MUST specify all ingredients. Entrants MUST specify carbonation level (3 levels). Entrants MUST specify sweetness (5 categories).'),";
-		
+
 		$updateSQL .= "(227, 'B3', 'Brown IPA', 'Specialty IPA', '1.056', '1.070', '1.008', '1.016', '5.5', '7.5', '40', '70', '11', '19', '1', 'Hoppy, bitter, and moderately strong like an American IPA, but with some caramel, chocolate, toffee, and/or dark fruit malt character as in an American Brown Ale. Retaining the dryish finish and lean body that makes IPAs so drinkable, a Brown IPA is a little more flavorful and malty than an American IPA without being sweet or heavy.', 'http://bjcp.org/stylecenter.php', '21', 'Y', 'bcoe', 'BJCP2015', 1, 0, 0, 0, 'high-strength, dark-color, top-fermented, north-america, craft-style, ipa-family, specialty-family, bitter, hoppy', 'Dogfish Head Indian Brown Ale, Grand Teton Bitch Creek, Harpoon Brown IPA, Russian River Janet’s Brown Ale', 'Entrant MUST specify a strength (session: 3.0-5.0%, standard: 5.0-7.5%, double: 7.5-9.5%).'),
 (228, 'B4', 'Red IPA', 'Specialty IPA', '1.056', '1.070', '1.008', '1.016', '5.5', '7.5', '40', '70', '11', '19', '1', 'Hoppy, bitter, and moderately strong like an American IPA, but with some caramel, toffee, and/or dark fruit malt character. Retaining the dryish finish and lean body that makes IPAs so drinkable, a Red IPA is a little more flavorful and malty than an American IPA without being sweet or heavy.', 'http://bjcp.org/stylecenter.php', '21', 'Y', 'bcoe', 'BJCP2015', 1, 0, 0, 0, 'high-strength, amber-color, top-fermented, north-america, craft-style, ipa-family, specialty-family, bitter, hoppy', 'Green Flash Hop Head Red Double Red IPA (double), Midnight Sun Sockeye Red, Sierra Nevada Flipside Red IPA, Summit Horizon Red IPA, Odell Runoff Red IPA', 'Entrant MUST specify a strength (session: 3.0-5.0%, standard: 5.0-7.5%, double: 7.5-9.5%).'),
 (229, 'B5', 'Rye IPA', 'Specialty IPA', '1.056', '1.075', '1.008', '1.014', '5.5', '8.0', '50', '75', '6', '14', '1', 'A decidedly hoppy and bitter, moderately strong American pale ale, showcasing modern American and New World hop varieties and rye malt. The balance is hop-forward, with a clean fermentation profile, dry finish, and clean, supporting malt allowing a creative range of hop character to shine through.', 'http://bjcp.org/stylecenter.php', '21', 'Y', 'bcoe', 'BJCP2015', 1, 0, 0, 0, 'high-strength, amber-color, top-fermented, north-america, craft-style, ipa-family, specialty-family, bitter, hoppy', 'Arcadia Sky High Rye, Bear Republic Hop Rod Rye, Founders Reds Rye, Great Lakes Rye of the Tiger, Sierra Nevada Ruthless Rye', 'Entrant MUST specify a strength (session: 3.0-5.0%, standard: 5.0-7.5%, double: 7.5-9.5%).'),
@@ -1399,17 +1399,17 @@ if ($setup_free_access == TRUE) {
 (239, 'A1', 'Gose', 'Historical Beer', '1.036', '1.056', '1.006', '1.010', '4.2', '4.8', '5', '12', '3', '4', '1', 'A highly-carbonated, tart and fruity wheat ale with a restrained coriander and salt character and low bitterness. Very refreshing, with bright flavors and high attenuation.', 'http://bjcp.org/stylecenter.php', '27', 'Y', 'bcoe', 'BJCP2015', 0, 0, 0, 0, 'standard-strength, pale-color, top-fermented, centraleurope, historical-style, wheat-beer-family, sour, spice', 'Anderson Valley Gose, Bayerisch Bahnhof Leipziger Gose, Dollnitzer Ritterguts Gose', NULL),
 (240, 'A2', 'Piwo Grodziskie', 'Historical Beer', '1.028', '1.032', '1.010', '1.015', '4.5', '6.0', '25', '40', '3', '6', '1', 'A low-gravity, highly-carbonated, light bodied ale combining an oak-smoked flavor with a clean hop bitterness. Highly sessionable.', 'http://bjcp.org/stylecenter.php', '27', 'Y', 'bcoe', 'BJCP2015', 0, 0, 0, 0, 'standard-strength, pale-color, bottom-fermented,lagered, north-america, historical-style, pilsner-family, bitter, hoppy', NULL, NULL),
 (241, 'A3', 'Lichtenhainer', 'Historical Beer', '1.032', '1.040', '1.004', '1.008', '3.5', '4.7', '5', '12', '3', '6', '1', 'A sour, smoked, lower-gravity historical German wheat beer. Complex yet refreshing character due to high attenuation and carbonation, along with low bitterness and moderate sourness. ', 'http://bjcp.org/stylecenter.php', '27', 'Y', 'bcoe', 'BJCP2015', 0, 0, 0, 0, 'standard-strength, pale-color, top-fermented, centraleurope, historical-style, wheat-beer-family, sour, smoke', NULL, NULL);";
-		
+
 		mysqli_select_db($connection,$database);
 		mysqli_real_escape_string($connection,$updateSQL);
-		$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));			
-		
+		$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+
 		$output .= "<li class=\"list-group-item\"><span class=\"fa fa-lg fa-check text-success\"></span> <strong>Styles</strong> data installed successfully.</li>";
-		
-		// ------------------- 
+
+		// -------------------
 		// Style Types Table
 		// -------------------
-		
+
 		$sql = "
 		CREATE TABLE IF NOT EXISTS `$style_types_db_table` (
 			`id` int(11) NOT NULL AUTO_INCREMENT,
@@ -1424,7 +1424,7 @@ if ($setup_free_access == TRUE) {
 		mysqli_real_escape_string($connection,$sql);
 		$result = mysqli_query($connection,$sql) or die (mysqli_error($connection));
 		$output .= "<li class=\"list-group-item\"><span class=\"fa fa-lg fa-check text-success\"></span> The <strong>Style Types</strong> table was installed successfully.</li>";
-		
+
 		$sql = "
 		INSERT INTO `$style_types_db_table` (`id`, `styleTypeName`, `styleTypeOwn`, `styleTypeBOS`, `styleTypeBOSMethod`) VALUES
 		(1, 'Beer', 'bcoe', 'Y', 1),
@@ -1435,14 +1435,14 @@ if ($setup_free_access == TRUE) {
 		mysqli_real_escape_string($connection,$sql);
 		$result = mysqli_query($connection,$sql) or die (mysqli_error($connection));
 		 //echo "<p>".$sql."</p>";
-		
+
 		$output .= "<li class=\"list-group-item\"><span class=\"fa fa-lg fa-check text-success\"></span> <strong>Style Types</strong> data installed successfully.</li>";
-		
-		
-		// ------------------- 
+
+
+		// -------------------
 		// System Table
 		// -------------------
-		
+
 		$sql = "
 		CREATE TABLE IF NOT EXISTS `$system_db_table` (
 			`id` int(11) NOT NULL AUTO_INCREMENT,
@@ -1458,19 +1458,19 @@ if ($setup_free_access == TRUE) {
 		mysqli_real_escape_string($connection,$sql);
 		$result = mysqli_query($connection,$sql) or die (mysqli_error($connection));
 		$output .= "<li class=\"list-group-item\"><span class=\"fa fa-lg fa-check text-success\"></span> The <strong>System</strong> table was installed successfully.</li>";
-		
+
 		$sql = "INSERT INTO `$system_db_table` (`id`, `version`, `version_date`, `data_check`,`setup`, `setup_last_step`) VALUES (1, '2.1.9.0', '2017-02-01', NOW( ),'0','0');";
 		mysqli_select_db($connection,$database);
 		mysqli_real_escape_string($connection,$sql);
 		$result = mysqli_query($connection,$sql) or die (mysqli_error($connection));
 		 //echo "<p>".$sql."</p>";
-		
-		$output .= "<li class=\"list-group-item\"><span class=\"fa fa-lg fa-check text-success\"></span> <strong>System</strong> data installed successfully.</li>";	
-		
-		// ------------------- 
+
+		$output .= "<li class=\"list-group-item\"><span class=\"fa fa-lg fa-check text-success\"></span> <strong>System</strong> data installed successfully.</li>";
+
+		// -------------------
 		// Users Table
 		// -------------------
-		
+
 		$sql = "
 		CREATE TABLE IF NOT EXISTS `$users_db_table` (
 			`id` int(8) NOT NULL AUTO_INCREMENT,
@@ -1483,12 +1483,12 @@ if ($setup_free_access == TRUE) {
 			PRIMARY KEY (`id`)
 		) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci ;
 		";
-		
+
 		mysqli_select_db($connection,$database);
 		mysqli_real_escape_string($connection,$sql);
 		$result = mysqli_query($connection,$sql) or die (mysqli_error($connection));
 		 //echo "<p>".$sql."</p>";
-		
+
 		if (HOSTED) {
 			$gh_user_name = "geoff@zkdigital.com";
 			$gh_password = "d9efb18ba2bc4a434ddf85013dbe58f8";
@@ -1503,25 +1503,25 @@ if ($setup_free_access == TRUE) {
 			mysqli_select_db($connection,$database);
 			mysqli_real_escape_string($connection,$sql);
 			$result = mysqli_query($connection,$sql) or die (mysqli_error($connection));
-			
-			// For hosted accounts on brewcompetition.com or brewcomp.com 
+
+			// For hosted accounts on brewcompetition.com or brewcomp.com
 			$sql = sprintf("INSERT INTO `%s` (`id`, `user_name`, `password`, `userLevel`, `userQuestion`, `userQuestionAnswer`,`userCreated`) VALUES (NULL, '%s', '%s', '0', '%s', '%s', NOW());", $users_db_table,$gh_user_name,$hash,$random1,$random2);
 			mysqli_select_db($connection,$database);
 			mysqli_real_escape_string($connection,$sql);
 			$result = mysqli_query($connection,$sql) or die (mysqli_error($connection));
 		}
-		
+
 		$output .= "<li class=\"list-group-item\"><span class=\"fa fa-lg fa-check text-success\"></span> The <strong>Users</strong> table was installed successfully.</li>";
-	
+
 		$output .=  "</ul>";
 		$output .=  "</div>";
-		
-		
+
+
 		// ------------------------------
 		// Need to add DB structure check
 		// -------------------------------
-		
-		
+
+
 		// -------------------------------
 
 	}

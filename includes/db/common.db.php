@@ -26,42 +26,42 @@ if (((!empty($_SESSION['session_set_'.$prefix_session])) && ($_SESSION['session_
 }
 
 if (($section != "update") && (empty($_SESSION['dataCheck'.$prefix_session]))) {
-	if (strstr($url['path'],"index.php")) { 
-		
+	if (strstr($url['path'],"index.php")) {
+
 		// only for version 1.2.1.0; REMOVE for subsequent version
-		$data_check_date = strtotime($row_version1['data_check']); 
+		$data_check_date = strtotime($row_version1['data_check']);
 		$_SESSION['dataCheck'.$prefix_session] = $data_check_date;
 	}
 }
 
 // Get the general info for the competition from the DB and store in session variables
 if (empty($_SESSION['contest_info_general'.$prefix_session])) {
-	
+
 	$query_contest_info = sprintf("SELECT * FROM %s", $prefix."contest_info");
 	if (SINGLE) $query_contest_info .= sprintf(" WHERE id='%s'", $_POST['comp_id']);
 	else $query_contest_info .= " WHERE id='1'";
 	$contest_info = mysqli_query($connection,$query_contest_info) or die (mysqli_error($connection));
-	$row_contest_info = mysqli_fetch_assoc($contest_info); 
-	
+	$row_contest_info = mysqli_fetch_assoc($contest_info);
+
 	$_SESSION['comp_id'] = $row_contest_info['id'];
 
 	// Comp Name
 	$_SESSION['contestName'] = $row_contest_info['contestName'];
 	$_SESSION['contestLogo'] = $row_contest_info['contestLogo'];
 	$_SESSION['contestID'] = $row_contest_info['contestID'];
-	 
+
 	// Comp Host Info
 	$_SESSION['contestHost'] = $row_contest_info['contestHost'];
 	$_SESSION['contestHostWebsite'] = $row_contest_info['contestHostWebsite'];
 	$_SESSION['contestShippingName'] = $row_contest_info['contestShippingName'];
 	$_SESSION['contestShippingAddress'] = $row_contest_info['contestShippingAddress'];
 	$_SESSION['contestHostLocation'] = $row_contest_info['contestHostLocation'];
-	
+
 	// Awards Information
 	$_SESSION['contestAwardsLocation'] = $row_contest_info['contestAwardsLocation'];
 	$_SESSION['contestAwardsLocName'] = $row_contest_info['contestAwardsLocName'];
 	$_SESSION['contestAwardsLocTime'] = $row_contest_info['contestAwardsLocTime'];
-	
+
 	// Entry Fees
 	$_SESSION['contestEntryFee'] = $row_contest_info['contestEntryFee'];
 	$_SESSION['contestEntryFee2'] = $row_contest_info['contestEntryFee2'];
@@ -69,24 +69,24 @@ if (empty($_SESSION['contest_info_general'.$prefix_session])) {
 	$_SESSION['contestEntryCap'] = $row_contest_info['contestEntryCap'];
 	$_SESSION['contestEntryFeeDiscount'] = $row_contest_info['contestEntryFeeDiscount'];
 	$_SESSION['contestEntryFeeDiscountNum'] = $row_contest_info['contestEntryFeeDiscountNum'];
-		
+
 	$_SESSION['contest_info_general'.$prefix_session] = $prefix_session;
 
 }
 
 // Get the general info for the competition from the DB and store in cookies
-if (empty($_SESSION['prefs'.$prefix_session])) {	
+if (empty($_SESSION['prefs'.$prefix_session])) {
 
 	if (SINGLE) $query_prefs = sprintf("SELECT * FROM %s WHERE comp_id='%s'", $prefix."preferences",$_SESSION['comp_id']);
 	else $query_prefs = sprintf("SELECT * FROM %s WHERE id='1'", $prefix."preferences");
 	$prefs = mysqli_query($connection,$query_prefs) or die (mysqli_error($connection));
 	$row_prefs = mysqli_fetch_assoc($prefs);
 	$totalRows_prefs = mysqli_num_rows($prefs);
-	
+
 	// prefsDisplaySpecial appears to be unused
 	if (isset($row_prefs['prefsDisplaySpecial'])) $_SESSION['prefsDisplaySpecial'] = $row_prefs['prefsDisplaySpecial'];
 	else $_SESSION['prefsDisplaySpecial'] = "N";
-	
+
 	// For all preferences, check to see if their value is NULL, if so, provide default value
 	// This prevents "breaking" of UI elements
 	if (isset($row_prefs['prefsTemp'])) $_SESSION['prefsTemp'] = $row_prefs['prefsTemp'];
@@ -108,7 +108,7 @@ if (empty($_SESSION['prefs'.$prefix_session])) {
 	if (isset($row_prefs['prefsCheckPayee'])) $_SESSION['prefsCheckPayee'] = $row_prefs['prefsCheckPayee'];
 	else {
 		$_SESSION['prefsCheckPayee'] = "";
-		$_SESSION['prefsCheck'] = "N";	
+		$_SESSION['prefsCheck'] = "N";
 	}
 	if (isset($row_prefs['prefsPaypal'])) $_SESSION['prefsPaypal'] = $row_prefs['prefsPaypal'];
 	else $_SESSION['prefsPaypal'] = "N";
@@ -136,7 +136,7 @@ if (empty($_SESSION['prefs'.$prefix_session])) {
 	if (isset($row_prefs['prefsWinnerDelay'])) $_SESSION['prefsWinnerDelay'] = $row_prefs['prefsWinnerDelay'];
 	else $_SESSION['prefsWinnerDelay'] = "8";
 	if (isset($row_prefs['prefsWinnerMethod'])) $_SESSION['prefsWinnerMethod'] = $row_prefs['prefsWinnerMethod'];
-	else $_SESSION['prefsWinnerMethod'] = "0";	
+	else $_SESSION['prefsWinnerMethod'] = "0";
 	if (isset($row_prefs['prefsEntryForm'])) $_SESSION['prefsEntryForm'] = $row_prefs['prefsEntryForm'];
 	else $_SESSION['prefsEntryForm'] = "C";
 	if (isset($row_prefs['prefsRecordLimit'])) $_SESSION['prefsRecordLimit'] = $row_prefs['prefsRecordLimit'];
@@ -183,8 +183,8 @@ if (empty($_SESSION['prefs'.$prefix_session])) {
 	if (SINGLE) $query_judging_prefs = sprintf("SELECT * FROM %s WHERE id='%s'", $prefix."judging_preferences",$_SESSION['comp_id']);
 	else $query_judging_prefs = sprintf("SELECT * FROM %s WHERE id='1'", $prefix."judging_preferences");
 	$judging_prefs = mysqli_query($connection,$query_judging_prefs) or die (mysqli_error($connection));
-	$row_judging_prefs = mysqli_fetch_assoc($judging_prefs);	
-	
+	$row_judging_prefs = mysqli_fetch_assoc($judging_prefs);
+
 	if (isset($row_judging_prefs['jPrefsQueued'])) $_SESSION['jPrefsQueued'] = $row_judging_prefs['jPrefsQueued'];
 	else $_SESSION['jPrefsQueued'] = "Y";
 	if (isset($row_judging_prefs['jPrefsFlightEntries'])) $_SESSION['jPrefsFlightEntries'] = $row_judging_prefs['jPrefsFlightEntries'];
@@ -199,32 +199,35 @@ if (empty($_SESSION['prefs'.$prefix_session])) {
 	else $_SESSION['jPrefsCapStewards'] = "";
 	if (isset($row_judging_prefs['jPrefsCapJudges'])) $_SESSION['jPrefsCapJudges'] = $row_judging_prefs['jPrefsCapJudges'];
 	else $_SESSION['jPrefsCapJudges'] = "";
-	
+
 	// Get counts for common, mostly static items
 	$query_sponsor_count = sprintf("SELECT COUNT(*) as 'count' FROM %s", $prefix."sponsors");
 	if (SINGLE) $query_sponsor_count .= sprintf(" WHERE comp_id='%s'",$_SESSION['comp_id']);
 	$result_sponsor_count = mysqli_query($connection,$query_sponsor_count) or die (mysqli_error($connection));
 	$row_sponsor_count = mysqli_fetch_assoc($result_sponsor_count);
 	$_SESSION['sponsorCount'] = $row_sponsor_count['count'];
-	
+
 	$_SESSION['prefs'.$prefix_session] = "1";
 	$_SESSION['prefix'] = $prefix;
 }
 
-// Set global pagination variables 
-$display = $_SESSION['prefsRecordPaging']; 
-$pg = (isset($_REQUEST['pg']) && ctype_digit($_REQUEST['pg'])) ?  $_REQUEST['pg'] : 1;
-$start = $display * $pg - $display;
-if ($start == 0) $start_display = "1"; else $start_display = $start;
+/* Set global pagination variables
+if (strpos($section, 'step') === FALSE) {
+	$display = $_SESSION['prefsRecordPaging'];
+	$pg = (isset($_REQUEST['pg']) && ctype_digit($_REQUEST['pg'])) ?  $_REQUEST['pg'] : 1;
+	$start = $display * $pg - $display;
+	if ($start == 0) $start_display = "1"; else $start_display = $start;
+}
+*/
 
 // Session specific queries
 if ((isset($_SESSION['loginUsername'])) && (empty($_SESSION['user_info'.$prefix_session])))  {
-	
+
 	$query_user = sprintf("SELECT * FROM %s WHERE user_name = '%s'", $prefix."users", $_SESSION['loginUsername']);
 	$user = mysqli_query($connection,$query_user) or die (mysqli_error($connection));
 	$row_user = mysqli_fetch_assoc($user);
 	$totalRows_user = mysqli_num_rows($user);
-	
+
 	$_SESSION['user_id'] = $row_user['id'];
 	$_SESSION['userCreated'] = $row_user['userCreated'];
 	$_SESSION['user_name'] = $row_user['user_name'];
@@ -236,7 +239,7 @@ if ((isset($_SESSION['loginUsername'])) && (empty($_SESSION['user_info'.$prefix_
 	$query_name = sprintf("SELECT * FROM %s WHERE uid='%s'", $prefix."brewer", $_SESSION['user_id']);
 	$name = mysqli_query($connection,$query_name) or die (mysqli_error($connection));
 	$row_name = mysqli_fetch_assoc($name);
-	
+
 	$_SESSION['brewerID']  = $row_name['id'];
 	$_SESSION['brewerFirstName'] = $row_name['brewerFirstName'];
 	$_SESSION['brewerLastName'] = $row_name['brewerLastName'];
@@ -263,27 +266,27 @@ if ((isset($_SESSION['loginUsername'])) && (empty($_SESSION['user_info'.$prefix_
 	$_SESSION['brewerDiscount'] = $row_name['brewerDiscount'];
 	$_SESSION['brewerDropOff'] = $row_name['brewerDropOff'];
 	$_SESSION['brewerAHA'] = $row_name['brewerAHA'];
-	
+
 	if ($_SESSION['prefsProEdition'] == 1) {
 		$_SESSION['brewerBreweryName'] = $row_name['brewerBreweryName'];
 		$_SESSION['brewerBreweryTTB'] = $row_name['brewerBreweryTTB'];
 	}
-	
+
 	$_SESSION['user_info'.$prefix_session] = "1";
-	
+
 	if (($go == "make_admin") || (($go == "participants") && ($action == "add"))) {
 		$query_user_level = sprintf("SELECT * FROM %s WHERE user_name = '%s'", $prefix."users", $username);
 		$user_level = mysqli_query($connection,$query_user_level) or die (mysqli_error($connection));
 		$row_user_level = mysqli_fetch_assoc($user_level);
 		$totalRows_user_level = mysqli_num_rows($user_level);
 		}
-	elseif (($section == "brewer") && ($action == "edit")) { 
+	elseif (($section == "brewer") && ($action == "edit")) {
 		$query_user_level = sprintf("SELECT * FROM %s WHERE user_name = '%s'", $prefix."users",$row_name['brewerEmail']);
 		$user_level = mysqli_query($connection,$query_user_level) or die (mysqli_error($connection));
 		$row_user_level = mysqli_fetch_assoc($user_level);
 		$totalRows_user_level = mysqli_num_rows($user_level);
-		}	
-	
+		}
+
 }
 
 /*
@@ -381,11 +384,11 @@ if ($section == "default") {
 	$check = mysqli_query($connection,$query_check) or die (mysqli_error($connection));
 	$row_check = mysqli_fetch_assoc($check);
 }
-	
+
 if (SINGLE) $query_contest_rules = sprintf("SELECT contestRules FROM %s WHERE id='%s'", $prefix."contest_info",$_SESSION['comp_id']);
 else $query_contest_rules = sprintf("SELECT contestRules FROM %s WHERE id='1'", $prefix."contest_info");
 $contest_rules = mysqli_query($connection,$query_contest_rules) or die (mysqli_error($connection));
-$row_contest_rules = mysqli_fetch_assoc($contest_rules);	
+$row_contest_rules = mysqli_fetch_assoc($contest_rules);
 
 if ($section == "volunteers") {
 	$query_contest_info = sprintf("SELECT contestVolunteers FROM %s", $prefix."contest_info");
@@ -398,30 +401,30 @@ if ($section == "volunteers") {
 // If using BA Styles, use the BreweryDB API to get all styles and store the resulting array as a session variable
 
 if (strpos($_SESSION['prefsStyleSet'],"BABDB") !== false) {
-	
+
 	if (!isset($_SESSION['styles'])) {
-		
+
 		$bdb_api_key = explode("|",$_SESSION['prefsStyleSet']);
-		
+
 		include (INCLUDES.'brewerydb/brewerydb.inc.php');
 		include (INCLUDES.'brewerydb/exception.inc.php');
-		
+
 		$apikey = $bdb_api_key[1];
 		$bdb = new Pintlabs_Service_Brewerydb($apikey);
 		$bdb->setFormat('php');
 		$params = array();
-		
+
 		try {
 				$results = $bdb->request('styles', $params, 'GET'); // where $params is a keyed array of parameters to send with the API call.
-			} 
-			
-		catch (Exception $e) { 
-				$results = array('error' => $e->getMessage()); 
 			}
-			
+
+		catch (Exception $e) {
+				$results = array('error' => $e->getMessage());
+			}
+
 		$_SESSION['styles'] = $results; // store results in a session variable
 	}
-	
+
 }
 
 $prefs_barcode_labels = array("N","C","2","0","3","4");

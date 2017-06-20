@@ -26,9 +26,6 @@ do {
 	
 	include(DB.'output_participant_summary.db.php');
 	
-
-	
-	
 	if ($totalRows_log > 0) { ?>
 		<div class="page-header">
             <h1><?php echo sprintf("%s %s %s %s",$_SESSION['contestName'],$output_text_002,$row_brewer['brewerFirstName'],$row_brewer['brewerLastName']); ?></h1>
@@ -51,6 +48,7 @@ do {
 					{ "asSorting": [  ] },
 					{ "asSorting": [  ] },
 					{ "asSorting": [  ] },
+					{ "asSorting": [  ] },
 					{ "asSorting": [  ] }
 					]
 				} );
@@ -64,6 +62,7 @@ do {
 			<th width="25%"><?php echo $label_name; ?></th>
 			<th><?php echo $label_style; ?></th>
 			<th width="5%" nowrap><?php echo $label_score; ?></th>
+			<th width="5%" nowrap><?php echo $label_mini_bos; ?></th>
 			<th width="20%"><?php echo $label_place; ?></th>
 		</tr>
     </thead>
@@ -73,11 +72,12 @@ do {
 			<td><?php echo sprintf("%04s",$row_log['id']); ?></td>
 			<td><?php echo readable_judging_number($row_log['brewCategory'],$row_log['brewJudgingNumber']); ?></td>
 			<td><?php echo $row_log['brewName']; ?></td>
-			<td><?php echo $row_log['brewCategorySort'].$row_log['brewSubCategory'].": ".$row_log['brewStyle'] ?></td>
+			<td><?php if (strpos($_SESSION['prefsStyleSet'],"BABDB") === false) echo $row_log['brewCategorySort'].$row_log['brewSubCategory'].": "; echo $row_log['brewStyle'] ?></td>
 			<td><?php echo score_check($row_log['id'],$judging_scores_db_table,1); ?></td>
+			<td><?php if (minibos_check($row_log['id'],$judging_scores_db_table)) echo "<span class =\"fa fa-lg fa-check text-success\"></span>"; ?></td>
 			<td><?php echo winner_check($row_log['id'],$judging_scores_db_table,$judging_tables_db_table,$brewing_db_table,$_SESSION['prefsWinnerMethod']); ?></td>
 		</tr>
-	<?php } while ($row_log = mysqli_fetch_assoc($log)); ?>
+		<?php } while ($row_log = mysqli_fetch_assoc($log)); ?>
     </tbody>
     </table>
     <?php if ($totalRows_organizer > 0) { ?>

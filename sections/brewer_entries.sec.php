@@ -253,7 +253,7 @@ do {
 		if (minibos_check($row_log['id'],$judging_scores_db_table)) { 
 			if ($action != "print") $entry_output .= "<span class =\"fa fa-lg fa-check text-success\"></span>"; 
 			else $entry_output .= $label_yes; 
-			}
+		}
 		else $entry_output .= "&nbsp;";
 		$entry_output .= "</td>";
 		
