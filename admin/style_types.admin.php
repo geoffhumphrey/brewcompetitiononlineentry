@@ -21,7 +21,7 @@
 		<span class="caret"></span>
 		</button>
 		<ul class="dropdown-menu">
-			<li class="small"><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=styles&amp;action=add">A Custom Style Category</a></li>
+			<li class="small"><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=styles&amp;action=add">A Custom Style Style</a></li>
 			<li class="small"><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=style_types&amp;action=add">Add a Style Type</a><li>
 		</ul>
 	</div>

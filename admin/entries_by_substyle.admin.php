@@ -207,7 +207,7 @@ if ($total_style_count > 0) { ?>
 <thead>
 	<tr>
 		<th>Sub-Style</th>
-        <th class="hidden-xs hidden-sm">Category</th>
+        <th class="hidden-xs hidden-sm">Style</th>
         <th>Logged</th>
 		<th>Paid &amp; Received</th>
         <th class="hidden-xs hidden-sm">Style Type</th>

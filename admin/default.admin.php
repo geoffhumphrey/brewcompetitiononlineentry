@@ -262,7 +262,7 @@
                                         <li><a data-toggle="tooltip" title="6 judging numbers per label" href="<?php echo $base_url; ?>output/labels.output.php?section=admin&amp;go=entries&amp;action=bottle-judging&amp;filter=default&amp;psort=5160">Judging Numbers</a></li>
                                     </ul>
 									<ul class="list-unstyled">
-										<li>With Required Info - All Categories (Entry Numbers)
+										<li>With Required Info - All Styles (Entry Numbers)
 										    <div class="dropdown bcoem-admin-dashboard-select">
 												<button class="btn btn-default dropdown-toggle" type="button" id="sortingMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Number of Labels per Entry <span class="caret"></span>
 												</button>
@@ -273,7 +273,7 @@
 												</ul>
 											</div>
 										</li>
-                                        <li>With Required Info - Only Categories Where Required (Entry Numbers)
+                                        <li>With Required Info - Only Styles Where Required (Entry Numbers)
 										    <div class="dropdown bcoem-admin-dashboard-select">
 												<button class="btn btn-default dropdown-toggle" type="button" id="sortingMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Number of Labels per Entry <span class="caret"></span>
 												</button>
@@ -287,7 +287,7 @@
 										
 									</ul>
                                     <ul class="list-unstyled">
-										<li>With Required Info - All Categories (Judging Numbers)
+										<li>With Required Info - All Styles (Judging Numbers)
 										    <div class="dropdown bcoem-admin-dashboard-select">
 												<button class="btn btn-default dropdown-toggle" type="button" id="sortingMenu3" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Number of Labels per Entry <span class="caret"></span>
 												</button>
@@ -298,7 +298,7 @@
 												</ul>
 											</div>
 										</li>
-										<li>With Required Info - Only Categories Where Required (Judging Numbers)
+										<li>With Required Info - Only Styles Where Required (Judging Numbers)
 										    <div class="dropdown bcoem-admin-dashboard-select">
 												<button class="btn btn-default dropdown-toggle" type="button" id="sortingMenu4" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Number of Labels per Entry <span class="caret"></span>
 												</button>
@@ -323,7 +323,7 @@
                                         <li><a data-toggle="tooltip" title="6 judging numbers per label" href="<?php echo $base_url; ?>output/labels.output.php?section=admin&amp;go=entries&amp;action=bottle-judging&amp;filter=default&amp;psort=3422">Judging Numbers</a></li>
                                     </ul>
                                     <ul class="list-unstyled">
-										<li>With Required Info - All Categories (Entry Numbers)
+										<li>With Required Info - All Styles (Entry Numbers)
 										    <div class="dropdown bcoem-admin-dashboard-select">
 												<button class="btn btn-default dropdown-toggle" type="button" id="sortingMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Number of Labels per Entry <span class="caret"></span>
 												</button>
@@ -334,7 +334,7 @@
 												</ul>
 											</div>
 										</li>
-                                        <li>With Required Info - Only Categories Where Required (Entry Numbers)
+                                        <li>With Required Info - Only Styles Where Required (Entry Numbers)
 										    <div class="dropdown bcoem-admin-dashboard-select">
 												<button class="btn btn-default dropdown-toggle" type="button" id="sortingMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Number of Labels per Entry <span class="caret"></span>
 												</button>
@@ -348,7 +348,7 @@
 										
 									</ul>
                                     <ul class="list-unstyled">
-										<li>With Required Info - All Categories (Judging Numbers)
+										<li>With Required Info - All Styles (Judging Numbers)
 										    <div class="dropdown bcoem-admin-dashboard-select">
 												<button class="btn btn-default dropdown-toggle" type="button" id="sortingMenu3" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Number of Labels per Entry <span class="caret"></span>
 												</button>
@@ -359,7 +359,7 @@
 												</ul>
 											</div>
 										</li>
-										<li>With Required Info - Only Categories Where Required (Judging Numbers)
+										<li>With Required Info - Only Styles Where Required (Judging Numbers)
 										    <div class="dropdown bcoem-admin-dashboard-select">
 												<button class="btn btn-default dropdown-toggle" type="button" id="sortingMenu4" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Number of Labels per Entry <span class="caret"></span>
 												</button>

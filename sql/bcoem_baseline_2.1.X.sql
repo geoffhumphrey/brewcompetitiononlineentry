@@ -68,8 +68,8 @@ DROP TABLE IF EXISTS `baseline_archive`, `baseline_brewer`, `baseline_brewing`, 
 
 CREATE TABLE IF NOT EXISTS `baseline_archive` (
   `id` int(11) NOT NULL,
-  `archiveUserTableName` varchar(255) DEFAULT NULL,
-  `archiveBrewerTableName` varchar(255) DEFAULT NULL,
+  `archiveProEdition` TINYINT(1) DEFAULT NULL,
+  `archiveStyleSet` varchar(25) DEFAULT NULL,
   `archiveBrewingTableName` varchar(255) DEFAULT NULL,
   `archiveSuffix` varchar(255) DEFAULT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -475,7 +475,7 @@ CREATE TABLE IF NOT EXISTS `baseline_brewing` (
   `brewPaid` tinyint(1) DEFAULT NULL COMMENT '1=true; 0=false',
   `brewWinner` char(1) DEFAULT NULL,
   `brewWinnerCat` varchar(5) DEFAULT NULL,
-  `brewWinnerSubCat` varchar(3) DEFAULT NULL,
+  `brewInfoOptional` TEXT DEFAULT NULL,
   `brewWinnerPlace` varchar(3) DEFAULT NULL,
   `brewBOSRound` char(1) DEFAULT NULL,
   `brewBOSPlace` varchar(3) DEFAULT NULL,
@@ -780,7 +780,7 @@ CREATE TABLE IF NOT EXISTS `baseline_preferences` (
   `prefsUseMods` char(1) DEFAULT NULL,
   `prefsSEF` char(1) DEFAULT NULL,
   `prefsSpecialCharLimit` int(3) DEFAULT NULL,
-  `prefsStyleSet` varchar(20) DEFAULT NULL,
+  `prefsStyleSet` TEXT DEFAULT NULL,
   `prefsAutoPurge` tinyint(1) DEFAULT NULL,
   `prefsEntryLimitPaid` int(4) DEFAULT NULL,
   `prefsEmailRegConfirm` tinyint(1) DEFAULT NULL,

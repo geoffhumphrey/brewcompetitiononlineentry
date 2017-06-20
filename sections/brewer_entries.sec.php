@@ -109,6 +109,8 @@ do {
 		$required_info .= " <a tabindex=\"0\" role=\"button\" data-toggle=\"popover\" data-placement=\"right\" data-trigger=\"hover focus\" title=\"Required Info\" data-content=\"".$brewInfo."\"><span class=\"fa fa-comment\"></span></a>";
 	}
 	
+	if (!empty($row_log['brewInfoOptional'])) $required_info .= " <a tabindex=\"0\" role=\"button\" data-toggle=\"popover\" data-placement=\"right\" data-trigger=\"hover focus\" title=\"Optional Info\" data-content=\"".$row_log['brewInfoOptional']."\"><span class=\"fa fa-lg fa-comment-o\"></span></a>";
+	
 	$entry_number = sprintf("%04s",$row_log['id']);
 	$judging_number = sprintf("%06s",$row_log['brewJudgingNumber']);
 	

@@ -303,7 +303,7 @@
 		<p>The competition organizers reserve the right to combine styles for judging and to restructure awards as needed depending upon the quantity and quality of entries.</p>
 		<p>Qualified judging of all entries is the primary goal of our event. Judges will evaluate and score each entry. The average of the scores will rank each entry in its category. Each flight will have at least one BJCP judge.</p>
 		<p>Brewers are not limited to one entry in each category but may only enter each subcategory once.</p>
-		<p>The competition committee reserves the right to combine categories based on number of entries. All possible effort will be made to combine similar styles. All brews in combined categories will be judged according to the style they were originally entered in.</p>
+		<p>The competition committee reserves the right to combine overall style categories based on number of entries. All possible effort will be made to combine similar styles. All brews in combined categories will be judged according to the style they were originally entered in.</p>
 		<p>The Best of Show judging will be determined by a Best of Show panel based on a second judging of the top winners.</p>
 		<p>Bottles will not be returned to entrants.</p>
        <?php } ?>

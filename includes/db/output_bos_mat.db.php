@@ -1,6 +1,6 @@
 <?php
 
-$query_scores = sprintf("SELECT b.id, a.scorePlace, b.brewJudgingNumber, b.brewCategory, b.brewCategorySort, b.brewSubCategory, b.brewStyle, b.brewInfo, b.brewMead1, b.brewMead2, b.brewMead3, b.brewComments FROM %s a, %s b, %s c WHERE a.eid = b.id AND c.uid = b.brewBrewerID AND a.scoreType='%s'", $judging_scores_db_table, $brewing_db_table, $brewer_db_table, $type);
+$query_scores = sprintf("SELECT b.id, a.scorePlace, b.brewJudgingNumber, b.brewCategory, b.brewCategorySort, b.brewSubCategory, b.brewStyle, b.brewInfo, b.brewMead1, b.brewMead2, b.brewMead3, b.brewComments, b.brewInfoOptional FROM %s a, %s b, %s c WHERE a.eid = b.id AND c.uid = b.brewBrewerID AND a.scoreType='%s'", $judging_scores_db_table, $brewing_db_table, $brewer_db_table, $type);
 if ($style_type_info[1] == "1") $query_scores .= "  AND scorePlace='1'";
 if ($style_type_info[1] == "2") $query_scores .= "  AND (scorePlace='1' OR scorePlace='2')";
 if ($style_type_info[1] == "3") $query_scores .= "  AND (scorePlace='1' OR scorePlace='2' OR scorePlace='3')";

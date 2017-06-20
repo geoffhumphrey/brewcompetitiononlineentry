@@ -28,7 +28,10 @@ if ((!pay_to_print($_SESSION['prefsPayToPrint'],$brewing_info['brewPaid'])) && (
 }
 
 if ($_SESSION['prefsStyleSet'] == "BJCP2008") $category_end = 23; else $category_end = 34;
-
+if (strpos($_SESSION['prefsStyleSet'],"BABDB") !== false) {
+	$brewing_info['brewCategory'] = "";
+	$brewing_info['brewSubCategory'] = "";
+}
 $brewing_id = sprintf("%04s",$brewing_info['id']);
 $brewer_info['brewerFirstName'] = strtr($brewer_info['brewerFirstName'],$html_remove);
 $brewing_info['brewName'] = strtr($brewing_info['brewName'],$html_remove);

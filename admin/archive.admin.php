@@ -29,6 +29,13 @@ $table_header7 = $label_actions;
     <span id="helpBlock" class="help-block"><?php echo $archive_text_009; ?></span>
 </div>
 <?php } else { ?>
+<?php if ($action == "default") { ?>
+<p><a href="<?php echo $base_url."index.php?section=admin&amp;go=archive&amp;action=add"; ?>" class="btn btn-primary">Archive Current Data</a></p>
+<?php } ?>
+<?php if ($action == "add") { ?>
+<div class="btn-group" role="group" aria-label="...">
+	<a class="btn btn-default" href="<?php echo $base_url; ?>index.php?section=admin&amp;go=archive"><span class="fa fa-arrow-circle-left"></span> Archives</a>
+</div><!-- ./button group -->
 <form data-toggle="validator" role="form" id="formfield" class="form-horizontal" action="<?php echo $base_url; ?>includes/process.inc.php?action=archive" method="post" name="form1">
 <input type="hidden" name="action" value="add_form" /> 
 <p><?php echo $archive_text_010; ?></p>
@@ -123,9 +130,9 @@ $table_header7 = $label_actions;
         </div>
     </div>
 </div>
-
+<?php } ?>
+<?php if ($action == "default") { ?>
 <?php if ($totalRows_archive > 0) { ?>
-
 <script type="text/javascript" language="javascript">
 	 $(document).ready(function() {
 		$('#sortable').dataTable( {
@@ -148,8 +155,6 @@ $table_header7 = $label_actions;
 			} );
 		} );
 	</script>
-
-
 <h3><?php echo $label_admin_archives; ?></h3>
 <table class="table table-responsive table-striped table-bordered" id="sortable">
 <thead>
@@ -217,5 +222,6 @@ $table_header7 = $label_actions;
   <?php } while ($row_archive = mysqli_fetch_assoc($archive)); ?>
 </tbody>
 </table>
-<?php } // end else ?>
+<?php } else echo "<p>No archive data is present.</p>"; // end else ?>
+<?php } ?>
 <?php } ?>

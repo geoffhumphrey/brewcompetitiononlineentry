@@ -154,5 +154,5 @@ if ($totalRows_dropoff > 0) { ?>
   <?php } while($row_dropoff = mysqli_fetch_assoc($dropoff)) ?>
 </tbody>
 </table>
-<?php } else echo "No drop-off locations have been specified."; 
+<?php } else echo "<p>".$alert_text_005."</p>"; 
 } ?>

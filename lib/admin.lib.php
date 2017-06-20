@@ -82,12 +82,14 @@ function bos_entry_info($eid,$table_id,$filter) {
 		$entry_db_table = $prefix."brewing_".$filter;
 		$judging_tables_db_table = $prefix."judging_tables_".$filter;
 		$bos_scores_db_table = $prefix."judging_scores_bos_".$filter;
+		$brewer_db_table = $prefix."brewer_".$filter;
 	}
 	
 	else {
 		$entry_db_table = $prefix."brewing";
 		$judging_tables_db_table = $prefix."judging_tables";
 		$bos_scores_db_table = $prefix."judging_scores_bos";
+		$brewer_db_table = $prefix."brewer";
 	}
 	
 	$query_entries_1 = sprintf("SELECT id,brewStyle,brewCategorySort,brewCategory,brewSubCategory,brewName,brewBrewerFirstName,brewBrewerLastName,brewJudgingNumber,brewBrewerID FROM %s WHERE id='%s'", $entry_db_table, $eid);
@@ -102,15 +104,19 @@ function bos_entry_info($eid,$table_id,$filter) {
 		
 	$query_bos_place_1 = sprintf("SELECT id,scorePlace,scoreEntry FROM %s WHERE eid='%s'", $bos_scores_db_table, $eid);
 	$bos_place_1 = mysqli_query($connection,$query_bos_place_1) or die (mysqli_error($connection));
-	$row_bos_place_1 = mysqli_fetch_assoc($bos_place_1);	
+	$row_bos_place_1 = mysqli_fetch_assoc($bos_place_1);
+	
+	$query_brewer = sprintf("SELECT brewerLastName,brewerFirstName,brewerBreweryName FROM %s WHERE id='%s'", $brewer_db_table, $row_entries_1['brewBrewerID']);
+	$brewer = mysqli_query($connection,$query_brewer) or die (mysqli_error($connection));
+	$row_brewer = mysqli_fetch_assoc($brewer);
 	
 	$return = 
 	$row_entries_1['brewStyle']."^".  			// 0
 	$row_entries_1['brewCategorySort']."^".  	// 1
 	$row_entries_1['brewCategory']."^".  		// 2
 	$row_entries_1['brewSubCategory']."^".  		// 3
-	$row_entries_1['brewBrewerFirstName']."^".  	// 4
-	$row_entries_1['brewBrewerLastName']."^".  	// 5
+	$row_brewer['brewerFirstName']."^".  	// 4
+	$row_brewer['brewerLastName']."^".  	// 5
 	$row_entries_1['brewJudgingNumber']."^".   	// 6
 	$row_tables_1['id']."^".  					// 7
 	$row_tables_1['tableName']."^".   			// 8
@@ -120,7 +126,8 @@ function bos_entry_info($eid,$table_id,$filter) {
 	$row_entries_1['brewName']."^".  			// 12
 	$row_entries_1['id']."^".   					// 13
 	$row_bos_place_1['id']."^".   				// 14
-	$row_entries_1['brewBrewerID']; 				// 15
+	$row_entries_1['brewBrewerID']."^". 				// 15
+	$row_brewer['brewerBreweryName']; //16
 	
 	return $return;
 }
@@ -425,7 +432,7 @@ function score_custom_winning_choose($special_best_info_db_table,$special_best_d
 	else { 
 		$r = "<li class=\"disabled small\"><a href=\"#\">No custom categories have been defined</a></li>";
 		$r .= "<li role=\"separator\" class=\"divider\"></li>";
-		$r .= "<li class=\"small\"><a href=\"".$base_url."index.php?section=admin&amp;go=special_best&amp;action=add\">Add a Custom Category</a></li>";
+		$r .= "<li class=\"small\"><a href=\"".$base_url."index.php?section=admin&amp;go=special_best&amp;action=add\">Add a Custom Style</a></li>";
 	}
 	return $r;
 }
@@ -735,7 +742,7 @@ function table_score_data($eid,$score_table,$suffix) {
 	$row_tables = mysqli_fetch_assoc($tables);
 	$totalRows_tables = mysqli_num_rows($tables);
 	
-	$query_brewer = sprintf("SELECT brewerLastName,brewerFirstName FROM %s WHERE id='%s'", $prefix."brewer".$suffix, $row_entries['brewBrewerID']);
+	$query_brewer = sprintf("SELECT brewerLastName,brewerFirstName,brewerBreweryName FROM %s WHERE id='%s'", $prefix."brewer".$suffix, $row_entries['brewBrewerID']);
 	$brewer = mysqli_query($connection,$query_brewer) or die (mysqli_error($connection));
 	$row_brewer = mysqli_fetch_assoc($brewer);
 	
@@ -753,7 +760,8 @@ function table_score_data($eid,$score_table,$suffix) {
 	$row_tables['tableName']."^". //10
 	$row_tables['tableNumber']."^". //11
 	$style."^". //12
-	$style_name; //13
+	$style_name."^". //13
+	$row_brewer['brewerBreweryName']; //14
 	
 	return $return;
 

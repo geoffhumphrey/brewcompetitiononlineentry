@@ -74,6 +74,12 @@ $output_assignment_modals = "";
 $output_user_question_modals = "";
 $assignment_modal_body = "";
 
+if ($dbTable == "default") $pro_edition = $_SESSION['prefsProEdition'];
+else $pro_edition = $row_archive_prefs['archiveProEdition'];
+
+if ($pro_edition == 0) $edition = $label_amateur." ".$label_edition;
+if ($pro_edition == 1) $edition = $label_pro." ".$label_edition;
+
 if ($action == "print") {
 	$output_hide_print .= "hidden-print";
 }
@@ -140,7 +146,7 @@ if ($action == "print") {
 else {
 
 	if ($filter == "default") 	{ 
-		if ($_SESSION['prefsProEdition'] == 1) $output_datatables_aaSorting .= "[1,'asc']";
+		if ($pro_edition == 1) $output_datatables_aaSorting .= "[1,'asc']";
 		else  $output_datatables_aaSorting .= "[0,'asc']";
 		$output_datatables_aoColumns .= "null, null, { \"asSorting\": [  ] }, { \"asSorting\": [  ] }, null, null";
 		if ($dbTable == "default") 	$output_datatables_aoColumns .= ",  { \"asSorting\": [  ] }";
@@ -175,14 +181,14 @@ if ($filter == "with_entries") {
 	
 else {
 	$output_datatables_head .= "<tr>";
-	if ($_SESSION['prefsProEdition'] == 1) $output_datatables_head .= "<th>Contact Name</th>";
+	if ($pro_edition == 1) $output_datatables_head .= "<th>Contact Name</th>";
 	else $output_datatables_head .= "<th>Name</th>";
 	if ($action == "print") $output_datatables_head .= "<th>Info</th>";
 	$output_datatables_head .= "<th class=\"".$output_hide_print."\">";
 	if (($totalRows_judging > 0) && (($filter == "judges") || ($filter == "stewards"))) $output_datatables_head .= "Location(s) Available"; 
 	else { 
-		if ($_SESSION['prefsProEdition'] == 1) $output_datatables_head .= "Brewery";
-		else $output_datatables_head .= "Club";
+		if ($pro_edition == 1) $output_datatables_head .= $label_organization;
+		else $output_datatables_head .= $label_club;
 	}
 	$output_datatables_head .= "</th>";
 	if ($filter == "default") { 
@@ -313,7 +319,7 @@ do {
 					if (!empty($table_assign_steward))  $assignment_modal_body = "<p>".$row_brewer['brewerFirstName']." is assigned as a <strong>steward</strong> to table(s): ".$table_assign_steward."<p>";
 					else $assignment_modal_body = "<p>".$row_brewer['brewerFirstName']." has been added to the <strong>steward</strong> pool, but has not been assigned to a table yet.<p>";
 				}
-				if (!empty($judge_entries)) $assignment_modal_body .= "<p>Has entries in the following categories: ".$judge_entries."</p>";
+				if (!empty($judge_entries)) $assignment_modal_body .= "<p>Has entries in: ".$judge_entries."</p>";
 				$output_assignment_modals .= "<div class=\"modal fade\" id=\"assignment-modal-".$row_brewer['uid']."\" tabindex=\"-1\" role=\"dialog\" aria-labelledby=\"assignment-modal-label-".$row_brewer['uid']."\">\n";
 				$output_assignment_modals .= "\t<div class=\"modal-dialog modal-lg\" role=\"document\">\n";
 				$output_assignment_modals .= "\t\t<div class=\"modal-content\">\n";
@@ -415,7 +421,7 @@ do {
 			$output_datatables_body .= $output; 
 		}	
 		else { 
-			if ($_SESSION['prefsProEdition'] == 1) $output_datatables_body .= $row_brewer['brewerBreweryName'];
+			if ($pro_edition == 1) $output_datatables_body .= $row_brewer['brewerBreweryName'];
 			else $output_datatables_body .= $row_brewer['brewerClubs'];
 		}
 		$output_datatables_body .= "</td>";
@@ -480,6 +486,8 @@ do {
 	}
 	
 } while ($row_brewer = mysqli_fetch_assoc($brewer));
+
+if ($dbTable != "default") $subtitle .= "<p>".$edition."</p>";
 
 // ----------------------------------------- Presentation ------------------------------------------
 

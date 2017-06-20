@@ -297,7 +297,7 @@ $label_entry_fees = "Entry Fees";
 $label_entry_limit = "Entry Limit";
 $label_entry_info = "Entry Info";
 $label_entry_per_entrant = "Per Entrant Limits";
-$label_categories_accepted = "Categories Accepted";
+$label_categories_accepted = "Styles Accepted";
 $label_judging_categories = "Judging Categories";
 $label_entry_acceptance_rules = "Entry Acceptance Rules";
 $label_shipping_info = "Shipping Info";
@@ -337,8 +337,8 @@ $label_custom_style_types = "Custom Style Types";
 $label_assigned_to_table = "Assigned to Table";
 $label_organizer = "Organizer";
 $label_by_table = "By Table";
-$label_by_category = "By Category";
-$label_by_subcategory = "By Sub-Category";
+$label_by_category = "By Style";
+$label_by_subcategory = "By Sub-Style";
 $label_by_last_name = "By Last Name";
 $label_by_table = "By Table";
 $label_by_location = "By Location";
@@ -481,10 +481,11 @@ $label_secret_24 = "In what city or town did you meet your spouse/significant ot
 $label_secret_25 = "What street did you live on in first grade?";
 $label_secret_26 = "What is the air speed velocity of an unladen swallow?";
 $label_secret_27 = "What is the name of your favorite canceled TV show?";
-
 $label_pro = "Professional Brewer";
+$label_amateur = "Amateur Brewer";
 $label_hosted = "Hosted";
 $label_edition = "Edition";
+$label_optional_info = "Optional Info";
 
 // -------------------- Headers --------------------
 // Missing punctuation intentional for all

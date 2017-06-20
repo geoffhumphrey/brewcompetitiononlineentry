@@ -112,8 +112,16 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 			}
 	 	}
 		
+		// Optional Ingredients
+		$brewInfoOptional = "";
+		
 		// Process specialized info from form for certain styles
 		if ($_SESSION['prefsStyleSet'] == "BJCP2015") {
+			
+			if (!isset($_POST['brewInfoOptional'])) {
+				$brewInfoOptional = strip_tags($_POST['brewInfoOptional']);
+				$brewInfoOptional = filter_var($brewInfoOptional,FILTER_SANITIZE_STRING);
+			}
 			
 			// Pale or Dark Variant
 			if (($index == "09-A") || ($index == "10-C") || ($index == "07-C"))  $brewInfo = $_POST['darkLightColor'];
@@ -378,7 +386,8 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 			brewUpdated,
 			brewConfirmed,
 			brewPaid,
-			brewReceived
+			brewReceived,
+			brewInfoOptional
 			) VALUES (";
 			
 			if ($_SESSION['prefsHideRecipe'] == "N") { 
@@ -494,7 +503,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 			else $insertSQL .= GetSQLValueString($_POST['brewConfirmed'],"text").", ";
 			$insertSQL .= GetSQLValueString($brewPaid,"text").", ";
 			$insertSQL .= GetSQLValueString("0","text");
-	
+			$insertSQL .= GetSQLValueString($brewInfoOptional,"text");
 			$insertSQL .= ")";
 			
 		mysqli_real_escape_string($connection,$insertSQL);
@@ -757,6 +766,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 			$updateSQL .= "brewJudgingNumber=".GetSQLValueString($_POST['brewJudgingNumber'],"text").", ";
 			$updateSQL .= "brewPaid=".GetSQLValueString($brewPaid,"text").", ";
 			$updateSQL .= "brewConfirmed=".GetSQLValueString($_POST['brewConfirmed'],"text");
+			$updateSQL .= "brewInfoOptional=".GetSQLValueString($brewInfoOptional,"text");
 			$updateSQL .= " WHERE id ='".$id."'";
 		
 		mysqli_real_escape_string($connection,$updateSQL);

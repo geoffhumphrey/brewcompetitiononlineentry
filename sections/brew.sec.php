@@ -560,6 +560,16 @@ $(document).ready(function()
         </div>
     </div><!-- ./Form Group -->
     
+    <div id="optional" class="form-group"><!-- Form Group REQUIRED Text Input -->
+        <label for="brewInfoOptional" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label"><?php echo $label_optional_info; ?></label>
+        	<div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">  
+        		<textarea class="form-control" rows="8" name="brewInfoOptional" id="brewInfoOptional" data-error="<?php echo $brew_text_010; ?>" maxlength="<?php echo $_SESSION['prefsSpecialCharLimit']; ?>" <?php if ($highlight_special) echo "autofocus"; elseif (($action == "edit") && ($special_required)) echo "autofocus"; ?>><?php echo $row_log['brewInfoOptional']; ?></textarea>      	
+            	 
+            <div class="help-block with-errors"><?php if ((strpos($styleSet,"BABDB") !== false) && ($view_explodies[0] < 28)) echo $brew_text_027; ?></div>
+            <div id="helpBlock" class="help-block"><p><?php echo $_SESSION['prefsSpecialCharLimit'].$label_character_limit; ?><span id="count"><?php echo $_SESSION['prefsSpecialCharLimit']; ?></span></p></div>
+        </div>
+    </div><!-- ./Form Group -->
+    
     <div id="carbLambic" class="form-group">
     	<label for="carbLambic" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label"><?php echo $label_carbonation; ?></label>
         <div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">

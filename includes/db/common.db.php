@@ -348,6 +348,15 @@ if ((($section == "admin") && ($go == "preferences")) || ($section == "step3")) 
 	$totalRows_prefs = mysqli_num_rows($prefs);
 }
 
+// If Archive DB table, get pertinent info
+if ($dbTable != "default") {
+	$suffix = strrchr($dbTable,"_");
+	$suffix = ltrim($suffix, "_");
+	$query_archive_prefs = sprintf("SELECT archiveStyleSet,archiveProEdition FROM %s WHERE archiveSuffix='%s'", $prefix."archive", $suffix);
+	$archive_prefs = mysqli_query($connection,$query_archive_prefs) or die (mysqli_error($connection));
+	$row_archive_prefs = mysqli_fetch_assoc($archive_prefs);
+}
+
 // Do not rely on session data to populate Competition Organization Preferences (Judging Preferences) for editing in Admin or in Setup
 if (SINGLE) $query_judging_prefs = sprintf("SELECT * FROM %s WHERE id='%s'", $prefix."judging_preferences",$_SESSION['comp_id']);
 else $query_judging_prefs = sprintf("SELECT * FROM %s WHERE id='1'", $prefix."judging_preferences");
@@ -366,13 +375,11 @@ $row_steward_count = mysqli_fetch_assoc($steward_count);
 
 
 if ($section == "default") {
-		
 	$query_check = sprintf("SELECT judgingDate FROM %s",$prefix."judging_locations");
 	if (SINGLE) $query_judge_count .= sprintf(" WHERE comp_id='%s'",$_SESSION['comp_id']);
 	$query_check .= " ORDER BY judgingDate DESC LIMIT 1";
 	$check = mysqli_query($connection,$query_check) or die (mysqli_error($connection));
 	$row_check = mysqli_fetch_assoc($check);
-
 }
 	
 if (SINGLE) $query_contest_rules = sprintf("SELECT contestRules FROM %s WHERE id='%s'", $prefix."contest_info",$_SESSION['comp_id']);
@@ -381,13 +388,11 @@ $contest_rules = mysqli_query($connection,$query_contest_rules) or die (mysqli_e
 $row_contest_rules = mysqli_fetch_assoc($contest_rules);	
 
 if ($section == "volunteers") {
-
 	$query_contest_info = sprintf("SELECT contestVolunteers FROM %s", $prefix."contest_info");
 	if (SINGLE) $query_contest_info .= sprintf(" WHERE id='%s'", $_SESSION['comp_id']);
 	else $query_contest_info .= " WHERE id='1'";
 	$contest_info = mysqli_query($connection,$query_contest_info) or die (mysqli_error($connection));
 	$row_contest_info = mysqli_fetch_assoc($contest_info);
-
 }
 
 // If using BA Styles, use the BreweryDB API to get all styles and store the resulting array as a session variable

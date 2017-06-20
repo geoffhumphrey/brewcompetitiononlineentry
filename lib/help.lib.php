@@ -315,7 +315,7 @@ function bcoem_help($section,$go,$action,$filter) {
 		
 		if ($go == "special_best") {
 			$bcoem_help_title .= "Custom Categories Help";
-			$bcoem_help_body .= "<p>View and define a winning category unique to your competition. (e.g., Steward's Choice, Best Name, etc.). This is especially useful to define and display Pro-Am winners.</p><p>Click the &ldquo;Add a Custom Category&rdquo; button to define a new category.<p>";
+			$bcoem_help_body .= "<p>View and define a winning category unique to your competition. (e.g., Steward's Choice, Best Name, etc.). This is especially useful to define and display Pro-Am winners.</p><p>Click the &ldquo;Add a Custom Style&rdquo; button to define a new category.<p>";
 			$content = TRUE;	
 		}
 		

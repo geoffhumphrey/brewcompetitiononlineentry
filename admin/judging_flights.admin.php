@@ -63,6 +63,7 @@ if (($filter != "default") && ($filter != "rounds"))  {
 			$flight_table_tbody .= "</td>\n";
 			$flight_table_tbody .= "<td>";
 			$flight_table_tbody .= str_replace("^","; ",$row_entries['brewInfo']);
+			if (!empty($row_entries['brewInfoOptional'])) $flight_table_tbody .= $row_entries['brewInfoOptional'];
 			$flight_table_tbody .= "</td>\n";
 			$flight_table_tbody .= "</tr>\n";
 	

@@ -1,4 +1,11 @@
-<?php if ($_SESSION['prefsWinnerMethod'] == "0") { ?>
+<?php 
+if ($dbTable == "default") $pro_edition = $_SESSION['prefsProEdition'];
+else $pro_edition = $row_archive_prefs['archiveProEdition'];
+
+if ($pro_edition == 0) $edition = $label_amateur." ".$label_edition;
+if ($pro_edition == 1) $edition = $label_pro." ".$label_edition;
+
+if ($_SESSION['prefsWinnerMethod'] == "0") { ?>
 <script>
 $(document).ready(function () {
 	$('select').change(function () {
@@ -34,6 +41,9 @@ else echo " Scores";
 if ($dbTable != "default") echo ": All Scores (Archive ".get_suffix($dbTable).")"; 
 $totalRows_entry_count = total_paid_received($go,"default");
 ?></p>
+<?php if ($dbTable != "default") { ?>
+<p><?php echo $edition; ?></p>
+<?php } ?>
 
 <div class="bcoem-admin-element hidden-print">
 	<?php if  ($dbTable != "default") { ?>
@@ -152,7 +162,7 @@ $totalRows_entry_count = total_paid_received($go,"default");
         <th class="hidden-xs hidden-sm">Table Name</th>
         <th class="hidden-xs hidden-sm">Style</th>
         <?php if ($dbTable != "default") { ?>
-        <th>Brewer</th>
+        <th><?php if ($pro_edition == 1) echo $label_organization; else echo $label_brewer; ?></th>
         <th>Entry Name</th>
         <?php } ?>
     	<th>Score</th>
@@ -204,7 +214,7 @@ $totalRows_entry_count = total_paid_received($go,"default");
         <td class="hidden-xs hidden-sm"><?php echo $entry_category; ?></td>
         
         <?php if ($dbTable != "default") { ?>
-        <td><?php echo $table_score_data[5].", ".$table_score_data[4]; ?></td>
+        <td><?php if ($pro_edition == 1) echo $table_score_data[14]; else echo $table_score_data[5].", ".$table_score_data[4]; ?></td>
         <td><?php echo $table_score_data[3]; ?></td>
         <?php } ?>
         <td><?php echo $row_scores['scoreEntry']; ?></td>

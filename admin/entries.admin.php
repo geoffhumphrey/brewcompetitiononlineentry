@@ -34,6 +34,15 @@ else {
 	$sidebar_unpaid_entries .= ($totalRows_log_confirmed - $totalRows_log_paid);
 }
 
+// If Archive, use archive preference
+if ($dbTable == "default") $pro_edition = $_SESSION['prefsProEdition'];
+else $pro_edition = $row_archive_prefs['archiveProEdition'];
+
+if ($pro_edition == 0) $edition = $label_amateur." ".$label_edition;
+if ($pro_edition == 1) $edition = $label_pro." ".$label_edition;
+
+if ($dbTable != "default") $header .= "<p>".$edition."</p>";
+
 if ($action != "print") { ?>
 	<?php 
     if (($dbTable == "default") && ($totalRows_entry_count > $_SESSION['prefsRecordLimit']))	{ 
@@ -67,7 +76,7 @@ if ($action != "print") { ?>
 				null,
 				null,
 				null,
-				<?php if ($_SESSION['prefsProEdition'] == 0) { ?>null,<?php } ?>
+				<?php if ($pro_edition == 0) { ?>null,<?php } ?>
 				null,
 				null,
 				null,
@@ -103,7 +112,7 @@ if ($action != "print") { ?>
 				null,
 				null,
 				null,
-				<?php if ($_SESSION['prefsProEdition'] == 0) { ?>null<?php } ?>
+				<?php if ($pro_edition == 0) { ?>null<?php } ?>
 				]
 			} );
 		} );
@@ -113,7 +122,6 @@ if ($action != "print") { ?>
 <h1><?php echo $header; ?></h1>
 <?php } else { ?>
 <p class="lead"><?php echo $header; ?></p>
-
 <?php } ?>
 <form name="form1" method="post" action="<?php echo $base_url; ?>includes/process.inc.php?action=update&amp;dbTable=<?php echo $brewing_db_table; ?>&amp;filter=<?php echo $filter; ?>">
 <?php if ($action != "print") { ?>
@@ -126,9 +134,9 @@ if ($action != "print") { ?>
 	<?php if ($dbTable == "default") { ?>
 	<?php if (($filter != "default") || ($bid != "default") || ($view != "default")) { ?>
     <div class="btn-group" role="group" aria-label="allEntriesNav">
-        <a class="btn btn-default" href="<?php echo $base_url; ?>index.php?section=admin&amp;go=entries"><span class="fa fa-arrow-circle-left"></span> <?php if ($filter != "default") echo "All Categories"; if ($bid != "default") echo "All Entries"; if ($view != "default") echo "All Entries"; ?></a>
+        <a class="btn btn-default" href="<?php echo $base_url; ?>index.php?section=admin&amp;go=entries"><span class="fa fa-arrow-circle-left"></span> <?php if ($filter != "default") echo "All Styles"; if ($bid != "default") echo "All Entries"; if ($view != "default") echo "All Entries"; ?></a>
     </div><!-- ./button group -->
-    <?php } ?>
+    <?php } // end if (($filter != "default") || ($bid != "default") || ($view != "default")) ?>
     <?php if ($totalRows_log > 0) { ?>
     <!-- View Entries Dropdown -->
     <div class="btn-group" role="group">
@@ -150,7 +158,7 @@ if ($action != "print") { ?>
 	</div><!-- ./button group -->
     <?php } ?>
     <div class="btn-group" role="group" aria-label="chooseParticipants">
-        <?php echo participant_choose($brewer_db_table,$_SESSION['prefsProEdition']); ?>
+        <?php echo participant_choose($brewer_db_table,$pro_edition); ?>
     </div><!-- ./button group -->
     <?php if ($totalRows_log > 0) { ?>
     <div class="btn-group hidden-xs hidden-sm" role="group" aria-label="printCurrent">
@@ -162,7 +170,7 @@ if ($action != "print") { ?>
             <ul class="dropdown-menu">
                 <li class="small"><a id="modal_window_link" href="<?php echo $base_url; ?>output/print.output.php?section=admin&amp;go=entries&amp;action=print&amp;psort=entry_number">By Entry Number</a></li>
                 <li class="small"><a id="modal_window_link" href="<?php echo $base_url; ?>output/print.output.php?section=admin&amp;go=entries&amp;action=print&amp;psort=judging_number">By Judging Number</a></li>
-                <li class="small"><a id="modal_window_link" href="<?php echo $base_url; ?>output/print.output.php?section=admin&amp;go=entries&amp;action=print&amp;psort=category">By Category</a></li>
+                <li class="small"><a id="modal_window_link" href="<?php echo $base_url; ?>output/print.output.php?section=admin&amp;go=entries&amp;action=print&amp;psort=category">By Style</a></li>
                 <li class="small"><a id="modal_window_link" href="<?php echo $base_url; ?>output/print.output.php?section=admin&amp;go=entries&amp;action=print&amp;psort=brewer_name">By Brewer Last Name</a></li>
                 <li class="small"><a id="modal_window_link" href="<?php echo $base_url; ?>output/print.output.php?section=admin&amp;go=entries&amp;action=print&amp;psort=entry_name">By Entry Name</a></li>
             </ul>
@@ -176,7 +184,7 @@ if ($action != "print") { ?>
             <ul class="dropdown-menu">
                 <li class="small"><a id="modal_window_link" href="<?php echo $base_url; ?>output/print.output.php?section=admin&amp;go=entries&amp;action=print&amp;view=all&amp;psort=entry_number">By Entry Number</a></li>
                 <li class="small"><a id="modal_window_link" href="<?php echo $base_url; ?>output/print.output.php?section=admin&amp;go=entries&amp;action=print&amp;view=all&amp;psort=judging_number">By Judging Number</a></li>
-                <li class="small"><a id="modal_window_link" href="<?php echo $base_url; ?>output/print.output.php?section=admin&amp;go=entries&amp;action=print&amp;view=all&amp;psort=category">By Category</a></li>
+                <li class="small"><a id="modal_window_link" href="<?php echo $base_url; ?>output/print.output.php?section=admin&amp;go=entries&amp;action=print&amp;view=all&amp;psort=category">By Style</a></li>
                 <li class="small"><a id="modal_window_link" href="<?php echo $base_url; ?>output/print.output.php?section=admin&amp;go=entries&amp;action=print&amp;view=all&amp;psort=brewer_name">By Brewer Last Name</a></li>
                 <li class="small"><a id="modal_window_link" href="<?php echo $base_url; ?>output/print.output.php?section=admin&amp;go=entries&amp;action=print&amp;view=all&amp;psort=entry_name">By Entry Name</a></li>
             </ul>
@@ -184,7 +192,6 @@ if ($action != "print") { ?>
         <?php } ?>
     </div><!-- ./button group -->
     <?php } ?>
-    
     <?php if (($filter == "default") && ($bid == "default") && ($view == "default") && ($totalRows_log > 0)) { ?>
     <div class="btn-group" role="group" aria-label="markEntriesAs">
         <div class="btn-group" role="group">
@@ -207,7 +214,6 @@ if ($action != "print") { ?>
         </div>
     </div><!-- ./button group -->
 	<?php } ?>
-    
     <!-- Entry status modal -->
     <div class="btn-group pull-right hidden-xs" role="group" aria-label="entryStatus">
         <div class="btn-group" role="group">
@@ -262,9 +268,9 @@ if ($action != "print") { ?>
         	</div>
       	</div>
     </div><!-- ./modal -->
-    <?php } ?>
+    <?php }// end if ($dbTable == "default") ?>
 </div>
-<?php } // end if ($action != "print")?>
+<?php } // end if ($action != "print") ?>
 
 <?php if ($totalRows_log > 0) { ?>
 <table class="table table-responsive table-bordered" id="sortable">
@@ -273,9 +279,9 @@ if ($action != "print") { ?>
         <th nowrap>Entry</th>
         <th nowrap>Judging <?php if ($action != "print") { ?><a href="#" tabindex="0" role="button" data-toggle="popover" data-trigger="hover" data-placement="auto top" data-container="body" title="Judging Numbers" data-content="Judging numbers are random six-digit numbers that are automatically assigned by the system. You can override each judging number when scanning in barcodes, QR Codes, or by entering it in the field provided."><span class="hidden-xs hidden-sm hidden-md hidden-print fa fa-question-circle"></span></a><?php } ?></th>
         <th class="hidden-xs hidden-sm hidden-md">Name</th>
-        <th class="hidden-xs">Category</th>
-        <th class="hidden-xs"><?php if ($_SESSION['prefsProEdition'] == 1) echo "Organization"; else echo "Brewer"; ?></th>
-        <?php if ($_SESSION['prefsProEdition'] == 0) { ?>
+        <th class="hidden-xs">Style</th>
+        <th class="hidden-xs"><?php if ($pro_edition == 1) echo "Organization"; else echo "Brewer"; ?></th>
+        <?php if ($pro_edition == 0) { ?>
         <th class="hidden-xs hidden-sm hidden-md hidden-print">Club</th>
         <?php } ?>
         <th class="hidden-xs hidden-sm hidden-md hidden-print">Updated</th>
@@ -325,6 +331,8 @@ if ($action != "print") { ?>
 			$required_info .= " <a tabindex=\"0\" role=\"button\" data-toggle=\"popover\" data-placement=\"right\" data-trigger=\"hover focus\" title=\"Required Info\" data-content=\"".$brewInfo."\"><span class=\"fa fa-lg fa-comment\"></span></a>";
 		}
 		
+		if (!empty($row_log['brewInfoOptional'])) $required_info .= " <a tabindex=\"0\" role=\"button\" data-toggle=\"popover\" data-placement=\"right\" data-trigger=\"hover focus\" title=\"Optional Info\" data-content=\"".$row_log['brewInfoOptional']."\"><span class=\"fa fa-lg fa-comment-o\"></span></a>";
+		
 		if (($row_log['brewConfirmed'] == 0) || ($row_log['brewConfirmed'] == "")) $entry_unconfirmed_row = "bg-danger";
 		elseif ((strpos($_SESSION['prefsStyleSet'],"BABDB") === false) && ((check_special_ingredients($entry_style,$row_styles['brewStyleVersion']))) && ($row_log['brewInfo'] == "")) $entry_unconfirmed_row = "bg-warning";
 		
@@ -350,14 +358,14 @@ if ($action != "print") { ?>
 		}
 		
 		// Brewer Info
-		if (($brewer_info[0] != "") && ($brewer_info[1] != "") && ($_SESSION['prefsProEdition'] == 0)) { 
+		if (($brewer_info[0] != "") && ($brewer_info[1] != "") && ($pro_edition == 0)) { 
 			if (($bid == "default") && ($dbTable == "default")) { 
 				$entry_brewer_display .= "<a href=\"".$base_url."index.php?section=admin&amp;go=entries&amp;bid=".$row_log['brewBrewerID']."\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"See only ".$brewer_info[0]." ".$brewer_info[1]."&rsquo;s entries\">";
 				}
 			$entry_brewer_display .=  $brewer_info[1].", ".$brewer_info[0]; 
 			if (($bid == "default") && ($dbTable == "default")) $entry_brewer_display .= "</a>";
 		 } 
-		 elseif (($brewer_info[15] != "&nbsp;") && ($_SESSION['prefsProEdition'] == 1)) { 
+		 elseif (($brewer_info[15] != "&nbsp;") && ($pro_edition == 1)) { 
 			if (($bid == "default") && ($dbTable == "default")) { 
 				$entry_brewer_display .= "<a href=\"".$base_url."index.php?section=admin&amp;go=entries&amp;bid=".$row_log['brewBrewerID']."\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"See only ".$brewer_info[15]."&rsquo;s entries\">";
 				}
@@ -424,11 +432,11 @@ if ($action != "print") { ?>
     <tr class="<?php echo $entry_unconfirmed_row; ?>">
         <input type="hidden" name="id[]" value="<?php echo $row_log['id']; ?>" />
         <td><?php echo sprintf("%04s",$row_log['id']); ?></td>
-        <td nowrap="nowrap"><?php echo $entry_judging_num_display; echo $required_info; ?></td>
-        <td class="hidden-xs hidden-sm hidden-md"><?php if (!empty($entry_unconfirmed_row)) echo "<a href=\"".$base_url."index.php?section=brew&amp;go=".$go."&amp;filter=".$row_log['brewBrewerID']."&amp;action=edit&amp;id=".$row_log['id']."&amp;view=".$row_log['brewCategory']."-".$row_log['brewSubCategory']."\" data-toggle=\"tooltip\" title=\"Unconfirmed Entry - Click to Edit\"><span class=\"fa fa-lg fa-exclamation-triangle text-danger\"></span></a> "; echo $row_log['brewName']; ?></td>
+        <td nowrap="nowrap"><?php echo $entry_judging_num_display; ?></td>
+        <td class="hidden-xs hidden-sm hidden-md"><?php if (!empty($entry_unconfirmed_row)) echo "<a href=\"".$base_url."index.php?section=brew&amp;go=".$go."&amp;filter=".$row_log['brewBrewerID']."&amp;action=edit&amp;id=".$row_log['id']."&amp;view=".$row_log['brewCategory']."-".$row_log['brewSubCategory']."\" data-toggle=\"tooltip\" title=\"Unconfirmed Entry - Click to Edit\"><span class=\"fa fa-lg fa-exclamation-triangle text-danger\"></span></a> "; echo $row_log['brewName'];  echo $required_info; ?></td>
         <td class="hidden-xs"><?php echo $entry_style_display; ?></td>
         <td class="hidden-xs"><?php echo $entry_brewer_display; ?></td>
-        <?php if ($_SESSION['prefsProEdition'] == 0) { ?><td class="hidden-xs hidden-sm hidden-md hidden-print"><?php echo $brewer_info[8] ; ?></td><?php } ?>
+        <?php if ($pro_edition == 0) { ?><td class="hidden-xs hidden-sm hidden-md hidden-print"><?php echo $brewer_info[8] ; ?></td><?php } ?>
         <td class="hidden-xs hidden-sm hidden-md hidden-print"><?php echo $entry_updated_display; ?></td>
         <td><?php echo $entry_paid_display; ?></td>
         <td><?php echo $entry_received_display; ?></td>

@@ -4,9 +4,6 @@
 Checked Single
 2016-06-06
 
-
-
-
 */
 
 if (($section == "admin") && ($go == "styles") && ($action != "default")) { 
@@ -14,8 +11,7 @@ if (($section == "admin") && ($go == "styles") && ($action != "default")) {
 	if (strpos($styleSet,"BABDB") === false) {
 		$specialty_ipa_subs = array("21-B1","21-B2","21-B3","21-B4","21-B5","21-B6");
 		$historical_subs = array("27-A1","27-A2","27-A3","27-A4","27-A5","27-A6","27-A7","27-A8","27-A9");
-	}
-	
+	}	
 ?>
 <!-- Load Show/Hide Configuration -->
 <script type="text/javascript">
@@ -30,12 +26,15 @@ $(document).ready(function() {
 <?php } ?>
 
 
-<?php if ($section == "brew") { ?>
+<?php if ($section == "brew") { 
+$optional_info_styles = array("21-B","28-A","30-B","33-A","33-B","34-B","M2-C","M2-D","M2-E","M3-A","M3-B","M4-B","M4-C","07-C","M1-A","M1-B","M1-C","M2-A","M2-B","M4-A","C1-B","C1-C");
+?>
 <!-- Load Show/Hide Configuration -->
 <script type="text/javascript">//<![CDATA[
 $(document).ready(function() {
 	 <?php if ($action == "add") { ?>
 		$("#special").hide("fast");
+		$("#optional").hide("fast");
 		$("#carbonation").hide("fast");
 		$("#sweetness").hide("fast");
 		$("#strength").hide("fast");
@@ -57,6 +56,7 @@ $(document).ready(function() {
 		$("#BDGColor").removeClass("has-error");
 		
 		$("#brewInfo").prop("required", false);
+		$("#brewInfoOptional").prop("required", false);
 		$("input[name='brewMead1']").prop("required", false);
 		$("input[name='brewMead2']").prop("required", false);
 		$("input[name='brewMead3']").prop("required", false);
@@ -71,6 +71,7 @@ $(document).ready(function() {
 	$("#type").change(function() {	
 		
 	 	$("#special").hide("fast");
+		$("#optional").hide("fast");
 		$("#carbonation").hide("fast");
 		$("#sweetness").hide("fast");
 		$("#strength").hide("fast");
@@ -93,6 +94,7 @@ $(document).ready(function() {
 		$("#BDGColor").removeClass("has-error");
 		
 		$("#brewInfo").prop("required", false);
+		$("#brewInfoOptional").prop("required", false);
 		$("input[name='brewMead1']").prop("required", false);
 		$("input[name='brewMead2']").prop("required", false);
 		$("input[name='brewMead3']").prop("required", false);
@@ -107,6 +109,7 @@ $(document).ready(function() {
 			$("#type").val() == "00-A"){
 			<?php if ($action == "edit") { ?>
 			$("#brewInfo").val("");
+			$("#brewInfoOptional").prop("required", false);
 			$("#brewComments").val("");
 			$("input[name='brewMead1']").removeAttr('checked');
 			$("input[name='brewMead2']").removeAttr('checked');
@@ -119,6 +122,7 @@ $(document).ready(function() {
 			$("input[name='BDGColor']").removeAttr('checked');
 			<?php } ?>
 			$("#special").hide("fast");
+			$("#optional").hide("fast");
 			$("#carbonation").hide("fast");
 			$("#sweetness").hide("fast");
 			$("#strength").hide("fast");
@@ -595,9 +599,14 @@ $(document).ready(function() {
 				$("#specialInfo").show("fast");
 				$("#specialInfoText").html("<?php echo $value; ?>");
 				$("#specialInfoName").html("<a href='#' data-tooltip='true' title='Click for specifics for this style.' data-toggle='modal' data-target='#<?php echo $key; ?>'>Style <?php echo str_replace("-","",$key); ?></a>");
-			<?php if ($_SESSION['prefsStyleSet'] == "BJCP2015") { 
-				if (($key == "09-A") || ($key == "10-C") || ($key == "07-C")){
-			?>
+			<?php if ($_SESSION['prefsStyleSet'] == "BJCP2015") { ?>
+			
+			<?php if (in_array($key,$optional_info_styles)) { ?>
+				$("#optional").show("fast");
+			<?php } ?>
+			
+			
+			<?php if (($key == "09-A") || ($key == "10-C") || ($key == "07-C")){ ?>
 				$("#darkLightColor").show("fast");
 				$("input[name='darkLightColor']").prop("required", true);
 			<?php } elseif ($key == "24-C") { ?>
@@ -683,6 +692,10 @@ $(document).ready(function() {
 			$("input[name='BDGColor']").removeAttr('checked');
 			<?php } ?>
 			
+			<?php if (in_array($key,$optional_info_styles)) { ?>
+			$("#optional").show("fast");
+			<?php } ?>
+			
 			$("#special").hide("fast");
 			$("#carbonation").hide("fast");
 			$("#sweetness").hide("fast");
@@ -749,6 +762,10 @@ $(document).ready(function() {
 			$("input[name='carbLambic']").removeAttr('checked');
 			$("input[name='BDGColor']").removeAttr('checked');
 			<?php } ?>
+			
+			<?php if (in_array($value,$optional_info_styles)) { ?>
+			$("#optional").show("fast");
+			<?php } ?>
 				
 			$("#special").hide("fast");
 			$("#carbonation").hide("fast");
@@ -803,6 +820,10 @@ $(document).ready(function() {
 			$("input[name='BDGColor']").removeAttr('checked');
 			<?php } ?>
 			
+			<?php if (in_array($value,$optional_info_styles)) { ?>
+			$("#optional").show("fast");
+			<?php } ?>
+			
 			$("#special").hide("fast");
 			$("#carbonation").hide("fast");
 			$("#sweetness").hide("fast");
@@ -852,6 +873,10 @@ $(document).ready(function() {
 			$("input[name='sweetnessLambic']").removeAttr('checked');
 			$("input[name='carbLambic']").removeAttr('checked');
 			$("input[name='BDGColor']").removeAttr('checked');
+			<?php } ?>
+			
+			<?php if (in_array($value,$optional_info_styles)) { ?>
+			$("#optional").show("fast");
 			<?php } ?>
 			
 			$("#special").hide("fast");
@@ -907,6 +932,11 @@ $(document).ready(function() {
 			$("input[name='carbLambic']").removeAttr('checked');
 			$("input[name='BDGColor']").removeAttr('checked');
 			<?php } ?>
+			
+			<?php if (in_array($key,$optional_info_styles)) { ?>
+			$("#optional").show("fast");
+			<?php } ?>
+			
 			$("#special").hide("fast");
 			$("#carbonation").hide("fast");
 			$("#sweetness").hide("fast");
@@ -961,6 +991,11 @@ $(document).ready(function() {
 			$("input[name='carbLambic']").removeAttr('checked');
 			$("input[name='BDGColor']").removeAttr('checked');
 			<?php } ?>
+			
+			<?php if (in_array($key,$optional_info_styles)) { ?>
+			$("#optional").show("fast");
+			<?php } ?>
+			
 			$("#special").hide("fast");
 			$("#carbonation").hide("fast");
 			$("#sweetness").hide("fast");

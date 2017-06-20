@@ -1,3 +1,10 @@
+<?php 
+if ($dbTable == "default") $pro_edition = $_SESSION['prefsProEdition'];
+else $pro_edition = $row_archive_prefs['archiveProEdition'];
+
+if ($pro_edition == 0) $edition = $label_amateur." ".$label_edition;
+if ($pro_edition == 1) $edition = $label_pro." ".$label_edition;
+?>
 <script type="text/javascript">
 <!--
 // From http://www.dynamicdrive.com/forums/showthread.php?33533-No-Duplicates-Chosen-in-Drop-Down-lists
@@ -37,12 +44,13 @@ else if(typeof window.attachEvent!='undefined')
 window.attachEvent('onload', uniqueCoicesSetup);
 // -->
 </script>
-
 <p class="lead"><?php echo $_SESSION['contestName']; 
 if ($action == "enter") echo ": Add or Update BOS Places for ".$row_style_type['styleTypeName']; else echo ": Best of Show (BOS) Entries and Places"; 
 if ($dbTable != "default") echo " (Archive ".get_suffix($dbTable).")"; 
 ?></p>
-
+<?php if ($dbTable != "default") { ?>
+<p><?php echo $edition; ?></p>
+<?php } ?>
 <div class="bcoem-admin-element hidden-print">
 	<?php if  ($dbTable != "default") { ?>
     <!-- Postion 1: View All Button -->
@@ -166,7 +174,7 @@ include(DB.'admin_judging_scores_bos.db.php');
         <th class="hidden-xs hidden-sm">Table Place</th>
         <?php } ?>
         <?php if ($dbTable != "default") { ?>
-        <th>Brewer</th>
+        <th><?php if ($pro_edition == 1) echo $label_organization; else echo $label_brewer; ?></th>
         <th>Entry Name</th>
         <?php } ?>
         <th>BOS Score</th>
@@ -205,7 +213,7 @@ include(DB.'admin_judging_scores_bos.db.php');
         <td class="hidden-xs hidden-sm"><?php echo $row_bos['scorePlace']; ?></td>
         <?php } ?>
         <?php if ($dbTable != "default") { ?>
-        <td><?php echo $bos_entry_info[5].", ".$bos_entry_info[4]; ?></td>
+        <td><?php if ($pro_edition == 1) echo $bos_entry_info[16]; else echo $bos_entry_info[5].", ".$bos_entry_info[4]; ?></td>
         <td><?php echo $bos_entry_info[12]; ?></td>
         
         <?php } ?>

@@ -9,7 +9,7 @@
 
 
 ?> 
-<p class="lead"><?php echo $_SESSION['contestName']; if ($action == "add") echo ": Add Entries to the ".$row_sbi['sbi_name']." Custom Category"; elseif ($action == "edit") echo ": Edit Entries in the ".$row_sbi['sbi_name']." Custom Category"; else echo " Custom Category Entries"; ?></p>
+<p class="lead"><?php echo $_SESSION['contestName']; if ($action == "add") echo ": Add Entries to the ".$row_sbi['sbi_name']." Custom Style"; elseif ($action == "edit") echo ": Edit Entries in the ".$row_sbi['sbi_name']." Custom Style"; else echo " Custom Style Entries"; ?></p>
 
 <div class="bcoem-admin-element hidden-print">
 <!-- View Button Group Dropdown -->
@@ -21,7 +21,7 @@
         <ul class="dropdown-menu">
 			<li class="small"><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=special_best">All Custom Categories</a></li>
 			<?php if ($totalRows_sbd > 0) { ?>
-            <li class="small"><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=special_best_data">All Custom Category Entries</a><li>
+            <li class="small"><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=special_best_data">All Custom Style Entries</a><li>
 			<?php } ?>
         </ul>
     </div><!-- ./button group -->
@@ -68,7 +68,7 @@
     <table class="table table-responsive table-bordered table-striped" id="sortable">
      <thead>
      <tr>
-      <th>Custom Category</th>
+      <th>Custom Style</th>
       <th>Place</th>
       <th>Entry</th>
       <th>Judging</th>
@@ -97,8 +97,8 @@
       <td><?php echo $brewer_info[0]." ".$brewer_info[1]; ?></td>
       <td nowrap="nowrap">
 	  
-	  <a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=<?php echo $go; ?>&amp;action=edit&amp;id=<?php echo $row_sbd['sid']; ?>" data-toggle="tooltip" data-placement="top" title="Edit the <?php echo $special_best_info[1]; ?> Custom Category entries"><span class="fa fa-lg fa-pencil"></span></a> 
-	  <a href="<?php echo $base_url; ?>includes/process.inc.php?section=admin&amp;go=<?php echo $go; ?>&amp;dbTable=<?php echo $special_best_data_db_table; ?>&amp;action=delete&amp;id=<?php echo $row_sbd['id']; ?>" data-toggle="tooltip" data-placement="top" title="Delete &ldquo;<?php echo $info[0]; ?>&rdquo; as a winner for the <?php echo $special_best_info[1]; ?> Custom Category"  data-confirm="Are you sure you want to delete <?php echo $info[0]; ?>? This cannot be undone."><span class="fa fa-lg fa-trash-o"></span></a> 
+	  <a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=<?php echo $go; ?>&amp;action=edit&amp;id=<?php echo $row_sbd['sid']; ?>" data-toggle="tooltip" data-placement="top" title="Edit the <?php echo $special_best_info[1]; ?> Custom Style entries"><span class="fa fa-lg fa-pencil"></span></a> 
+	  <a href="<?php echo $base_url; ?>includes/process.inc.php?section=admin&amp;go=<?php echo $go; ?>&amp;dbTable=<?php echo $special_best_data_db_table; ?>&amp;action=delete&amp;id=<?php echo $row_sbd['id']; ?>" data-toggle="tooltip" data-placement="top" title="Delete &ldquo;<?php echo $info[0]; ?>&rdquo; as a winner for the <?php echo $special_best_info[1]; ?> Custom Style"  data-confirm="Are you sure you want to delete <?php echo $info[0]; ?>? This cannot be undone."><span class="fa fa-lg fa-trash-o"></span></a> 
       </td>
      </tr>
     <?php

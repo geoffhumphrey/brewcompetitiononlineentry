@@ -243,7 +243,7 @@ if ($total_style_count > 0) { ?>
 <table class="table table-responsive table-striped table-bordered " id="sortable2">
 <thead>
 	<tr>
-		<th>Category</th>
+		<th>Style</th>
         <th>Logged</th>
 		<th>Paid &amp; Received</th>
         <th class="hidden-xs hidden-sm">Style Type</th>

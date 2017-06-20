@@ -124,6 +124,7 @@ if ($go == "judging_scores_bos") {
 						$special = explode("^",$special);
 						if (strpos($_SESSION['prefsStyleSet'],"BABDB") === false) {
 							if (($row_entries_1['brewInfo'] != "") && ($special[4] == "1")) $table_flight_tbody .= "<p><strong>Required Info: </strong>".str_replace("^","; ",$row_entries_1['brewInfo'])."</p>";
+							if ($row_entries_1['brewInfoOptional'] != "") $table_flight_tbody .= "<p><strong>Optional Info: </strong>".$row_entries_1['brewInfoOptional']."</p>";
 							if ($row_entries_1['brewComments'] != "") $table_flight_tbody .= "<p><strong>Specifics: </strong>".$row_entries_1['brewComments']."</p>";
 							if (style_convert($style,"5")) {
 								$table_flight_tbody .= "<p>";
@@ -138,6 +139,7 @@ if ($go == "judging_scores_bos") {
 							include(INCLUDES.'ba_constants.inc.php');
 							$value = $row_entries_1['id'];
 							if (in_array($value,$ba_special_ids)) $table_flight_tbody .= "<p><strong>Required Info: </strong>".str_replace("^","; ",$row_entries_1['brewInfo'])."</p>";
+							if ($row_entries_1['brewInfoOptional'] != "") $table_flight_tbody .= "<p><strong>Optional Info: </strong>".$row_entries_1['brewInfoOptional']."</p>";
 							if ($row_entries_1['brewComments'] != "") $table_flight_tbody .= "<p><strong>Specifics: </strong>".$row_entries_1['brewComments']."</p>";
 							if (in_array($value,$ba_mead_cider)) {
 								$table_flight_tbody .= "<p>";
@@ -300,6 +302,7 @@ else {
 									$special = explode("^",$special);
 									if (strpos($_SESSION['prefsStyleSet'],"BABDB") === false) {
 										if (($row_entries['brewInfo'] != "") && ($special[4] == "1")) $table_flight_tbody .= "<p><strong>Required Info: </strong>".str_replace("^","; ",$row_entries['brewInfo'])."</p>";
+										if ($row_entries['brewInfoOptional'] != "") $table_flight_tbody .= "<p><strong>Optional Info: </strong>".$row_entries['brewInfoOptional']."</p>";
 										if ($row_entries['brewComments'] != "") $table_flight_tbody .= "<p><strong>Specifics: </strong>".$row_entries['brewComments']."</p>";
 										if (style_convert($style,"5")) {
 											$table_flight_tbody .= "<p>";
@@ -312,6 +315,7 @@ else {
 									else {
 										include(INCLUDES.'ba_constants.inc.php');
 										if (in_array($value,$ba_special_ids)) $table_flight_tbody .= "<p><strong>Required Info: </strong>".str_replace("^","; ",$row_entries['brewInfo'])."</p>";
+										if ($row_entries['brewInfoOptional'] != "") $table_flight_tbody .= "<p><strong>Optional Info: </strong>".$row_entries['brewInfoOptional']."</p>";
 										if ($row_entries['brewComments'] != "") $table_flight_tbody .= "<p><strong>Specifics: </strong>".$row_entries['brewComments']."</p>";
 										if (in_array($value,$ba_mead_cider)) {
 											$table_flight_tbody .= "<p>";
@@ -467,6 +471,7 @@ else {
 								$special = explode("^",$special);
 								if (strpos($_SESSION['prefsStyleSet'],"BABDB") === false) {
 									if (($row_entries['brewInfo'] != "") && ($special[4] == "1")) $table_flight_tbody .= "<p><strong>Required Info: </strong>".str_replace("^","; ",$row_entries['brewInfo'])."</p>";
+									if ($row_entries['brewInfoOptional'] != "") $table_flight_tbody .= "<p><strong>Optional Info: </strong>".$row_entries['brewInfoOptional']."</p>";
 									if ($row_entries['brewComments'] != "") $table_flight_tbody .= "<p><strong>Specifics: </strong>".$row_entries['brewComments']."</p>";
 									if (style_convert($style,"5")) {
 										$table_flight_tbody .= "<p>";
@@ -479,6 +484,7 @@ else {
 								else {
 									include(INCLUDES.'ba_constants.inc.php');
 									if (in_array($value,$ba_special_ids)) $table_flight_tbody .= "<p><strong>Required Info: </strong>".str_replace("^","; ",$row_entries['brewInfo'])."</p>";
+									if ($row_entries['brewInfoOptional'] != "") $table_flight_tbody .= "<p><strong>Optional Info: </strong>".$row_entries['brewInfoOptional']."</p>";
 									if ($row_entries['brewComments'] != "") $table_flight_tbody .= "<p><strong>Specifics: </strong>".$row_entries['brewComments']."</p>";
 									if (in_array($value,$ba_mead_cider)) {
 										$table_flight_tbody .= "<p>";
@@ -649,6 +655,7 @@ else {
 								$special = explode("^",$special);
 								if (strpos($_SESSION['prefsStyleSet'],"BABDB") === false) {
 									if (($row_entries['brewInfo'] != "") && ($special[4] == "1")) $table_flight_tbody .= "<p><strong>Required Info: </strong>".str_replace("^","; ",$row_entries['brewInfo'])."</p>";
+									if ($row_entries['brewInfoOptional'] != "") $table_flight_tbody .= "<p><strong>Optional Info: </strong>".$row_entries['brewInfoOptional']."</p>";
 									if ($row_entries['brewComments'] != "") $table_flight_tbody .= "<p><strong>Specifics: </strong>".$row_entries['brewComments']."</p>";
 									if (style_convert($style,"5")) {
 										$table_flight_tbody .= "<p>";
@@ -825,6 +832,7 @@ else {
 							$special = explode("^",$special);
 							if (strpos($_SESSION['prefsStyleSet'],"BABDB") === false) {
 								if (($row_entries['brewInfo'] != "") && ($special[4] == "1")) $table_flight_tbody .= "<p><strong>Required Info: </strong>".str_replace("^","; ",$row_entries['brewInfo'])."</p>";
+								if ($row_entries['brewInfoOptional'] != "") $table_flight_tbody .= "<p><strong>Optional Info: </strong>".$row_entries['brewInfoOptional']."</p>";
 								if ($row_entries['brewComments'] != "") $table_flight_tbody .= "<p><strong>Specifics: </strong>".$row_entries['brewComments']."</p>";
 								if (style_convert($style,"5")) {
 									$table_flight_tbody .= "<p>";
@@ -837,6 +845,7 @@ else {
 							else {
 								include(INCLUDES.'ba_constants.inc.php');
 								if (in_array($value,$ba_special_ids)) $table_flight_tbody .= "<p><strong>Required Info: </strong>".str_replace("^","; ",$row_entries['brewInfo'])."</p>";
+								if ($row_entries['brewInfoOptional'] != "") $table_flight_tbody .= "<p><strong>Optional Info: </strong>".$row_entries['brewInfoOptional']."</p>";
 								if ($row_entries['brewComments'] != "") $table_flight_tbody .= "<p><strong>Specifics: </strong>".$row_entries['brewComments']."</p>";
 								if (in_array($value,$ba_mead_cider)) {
 									$table_flight_tbody .= "<p>";

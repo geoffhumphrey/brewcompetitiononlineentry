@@ -86,9 +86,9 @@ if (((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) || ((
 		
 		else {
 			//first name, last name, email, category, subcategory, entry #, judging #, brewinfo, brewmead1, brewmead2, brewmead3, address, city, state, zip
-			if (($go == "csv") && ($action == "hccp") && ($filter != "winners")) $a[] = array('First Name','Last Name','Email','Category','Sub Category','Style','Entry Number','Judging Number','Brew Name','Required Info','Sweetness','Carb','Strength');
-			if (($go == "csv") && (($action == "default") || ($action == "email")) && ($filter != "winners")) $a[] = array('First Name','Last Name','Email','Category','Sub Category','Style','Entry Number','Judging Number','Brew Name','Required Info','Specifics','Sweetness','Carb','Strength','Address','City','State/Province','Zip/Postal Code','Country','Table','Flight','Round','Score','Place','BOS Place','Style Type','Location');
-			if (($go == "csv") && ($action == "default") && ($filter == "winners")) $a[] = array('Table Number','Table Name','Category','Sub-Category','Style','Place','Last Name','First Name','Email','Address','City','State/Province','Zip/Postal Code','Country','Phone','Entry Name','Club','Co Brewer');
+			if (($go == "csv") && ($action == "hccp") && ($filter != "winners")) $a[] = array('First Name','Last Name','Email','Category','Style','Style Name','Entry Number','Judging Number','Brew Name','Required Info','Sweetness','Carb','Strength');
+			if (($go == "csv") && (($action == "default") || ($action == "email")) && ($filter != "winners")) $a[] = array('First Name','Last Name','Email','Category','Style','Style Name','Entry Number','Judging Number','Brew Name','Required Info','Specifics','Sweetness','Carb','Strength','Address','City','State/Province','Zip/Postal Code','Country','Table','Flight','Round','Score','Place','BOS Place','Style Type','Location');
+			if (($go == "csv") && ($action == "default") && ($filter == "winners")) $a[] = array('Table Number','Table Name','Category','Style','Style Name','Place','Last Name','First Name','Email','Address','City','State/Province','Zip/Postal Code','Country','Phone','Entry Name','Club','Co Brewer');
 			
 			do {
 				
@@ -517,8 +517,8 @@ if (((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) || ((
 							$style_trimmed = ltrim($style,"0");
 							
 							if (strpos($_SESSION['prefsStyleSet'],"BABDB") === false) {
-								if ($view == "pdf") $html .= '<br><br><strong>Category '.ltrim($style,"0").': '.style_convert($style,"1").' ('.$row_entry_count['count'].' '.$entries.')</strong><br>';
-								else $html .= '<h2>Category '.$style_trimmed.': '.style_convert($style,"1").' ('.$row_entry_count['count'].' '.$entries.')</h2>';
+								if ($view == "pdf") $html .= '<br><br><strong>Style '.ltrim($style,"0").': '.style_convert($style,"1").' ('.$row_entry_count['count'].' '.$entries.')</strong><br>';
+								else $html .= '<h2>Style '.$style_trimmed.': '.style_convert($style,"1").' ('.$row_entry_count['count'].' '.$entries.')</h2>';
 							}
 							
 							else {
@@ -581,8 +581,8 @@ if (((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) || ((
 						
 						
 						if (strpos($_SESSION['prefsStyleSet'],"BABDB") === false) {
-							if ($view == "pdf") $html .= '<br><br><strong>Category '.ltrim($style[0],"0").$style[1].': '.$style[2].' ('.$row_entry_count['count'].' '.$entries.')</strong><br>';
-							else $html .= '<h2>Category '.ltrim($style[0],"0").$style[1].': '.$style[2].' ('.$row_entry_count['count'].' '.$entries.')</h2>';
+							if ($view == "pdf") $html .= '<br><br><strong>Style '.ltrim($style[0],"0").$style[1].': '.$style[2].' ('.$row_entry_count['count'].' '.$entries.')</strong><br>';
+							else $html .= '<h2>Style '.ltrim($style[0],"0").$style[1].': '.$style[2].' ('.$row_entry_count['count'].' '.$entries.')</h2>';
 						}
 						
 						else {

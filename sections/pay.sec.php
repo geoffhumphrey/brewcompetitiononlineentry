@@ -105,7 +105,7 @@ Declare all variables empty at the top of the script. Add on later...
 				do { 
 					if ($row_log_confirmed['brewPaid'] != "1") {
 						$entry_no = sprintf("%04s",$row_log_confirmed['id']);
-						$primary_page_info .= sprintf("<li>Entry #%s: %s (Category %s)</li>",$entry_no,$row_log_confirmed['brewName'],$row_log_confirmed['brewCategory'].$row_log_confirmed['brewSubCategory']);
+						$primary_page_info .= sprintf("<li>Entry #%s: %s (Style %s)</li>",$entry_no,$row_log_confirmed['brewName'],$row_log_confirmed['brewCategory'].$row_log_confirmed['brewSubCategory']);
 						$entries .= sprintf("%04s",$row_log_confirmed['id']).", ";
 						$return_entries .= $row_log_confirmed['id']."-";
 					}

@@ -57,8 +57,8 @@ if ($setup_free_access == TRUE) {
 		$sql = "
 		CREATE TABLE IF NOT EXISTS `$archive_db_table` (
 			`id` int(8) NOT NULL AUTO_INCREMENT,
-			`archiveUserTableName` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
-			`archiveBrewerTableName` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
+			`archiveProEdition` tinyint(1) NULL DEFAULT NULL,
+			`archiveStyleSet` varchar(25) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
 			`archiveBrewingTableName` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
 			`archiveSuffix` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
 			PRIMARY KEY (`id`)
@@ -475,7 +475,7 @@ if ($setup_free_access == TRUE) {
 			`brewPaid` tinyint(1) DEFAULT NULL COMMENT '1=true; 0=false',
 			`brewWinner` char(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
 			`brewWinnerCat` varchar(5) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
-			`brewWinnerSubCat` varchar(3) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
+			`brewInfoOptional` TEXT utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
 			`brewWinnerPlace` varchar(3) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
 			`brewBOSRound` char(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
 			`brewBOSPlace` varchar(3) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
@@ -870,7 +870,7 @@ if ($setup_free_access == TRUE) {
 			`prefsUseMods` char(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT 'Use the custom modules function (advanced users)',
 			`prefsSEF` char(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT 'Use search engine friendly URLs.',
 			`prefsSpecialCharLimit` int(3) NULL DEFAULT NULL COMMENT 'Character limit for special ingredients field',
-			`prefsStyleSet` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
+			`prefsStyleSet` TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
 			`prefsAutoPurge` tinyint(1) DEFAULT NULL,
 			`prefsEntryLimitPaid` int(4) DEFAULT NULL,
 			`prefsEmailRegConfirm` tinyint(1) DEFAULT NULL,

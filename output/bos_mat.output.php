@@ -58,8 +58,9 @@ foreach ($a as $type) {
 				
 				if ($filter == "entry") $output .= '<p>#'.sprintf("%06s",$row_scores['id']).'</p>';
 				else $output .= '<p>#'.sprintf("%06s",$row_scores['brewJudgingNumber']).'</p>';
-				$output .= '<p><small><em>'.str_replace("^","; ",$row_scores['brewInfo']).'</em></small></p>';
-				$output .= '<p><small><em>'.$row_scores['brewComments'].'</em></small></p>';
+				if (!empty($row_scores['brewInfo'])) $output .= '<p><small><em>'.str_replace("^","; ",$row_scores['brewInfo']).'</em></small></p>';
+				if (!empty($row_scores['brewInfoOptional'])) $output .= '<p><small><em>'.str_replace("^","; ",$row_scores['brewInfoOptional']).'</em></small></p>';
+				if (!empty($row_scores['brewComments'])) $output .= '<p><small><em>'.$row_scores['brewComments'].'</em></small></p>';
 				if ($type == 2) $output .= '<p><small><em>'.$row_scores['brewMead1'].', '.$row_scores['brewMead2'].'</small></p>';
 				if ($type == 3) $output .= '<p><small><em>'.$row_scores['brewMead1'].', '.$row_scores['brewMead2'].', '.$row_scores['brewMead3'].'</small></p>';
 				$output .= '</td>';
