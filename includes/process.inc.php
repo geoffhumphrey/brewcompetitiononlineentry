@@ -31,7 +31,7 @@ $timezone_raw = "0";
 
 // Check if setup is running, if so, check whether prefs have been established
 // If so, get time zone setup by admin
-if ($section == "setup") {
+if (($section == "setup") && ($dbTable != $prefix."preferences")) {
 
 	include (LIB.'update.lib.php');
 

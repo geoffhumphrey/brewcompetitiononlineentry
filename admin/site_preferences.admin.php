@@ -256,8 +256,6 @@ $(document).ready(function(){
     </div>
 </div><!-- ./modal -->
 
-
-
 <div class="form-group"><!-- Form Group Radio INLINE -->
     <label for="EmailRegConfirm" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Confirmation Emails</label>
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
@@ -479,17 +477,17 @@ $(document).ready(function(){
 	<div class="col-lg-6 col-md-3 col-sm-8 col-xs-12">
 	<!-- Input Here -->
 	<select class="selectpicker" name="prefsEntryForm" id="prefsEntryForm" data-size="12" data-width="auto">
-		<option value="1" <?php if ($_SESSION['prefsEntryForm'] == "1") echo " SELECTED"; ?> />BCOE&amp;M (Bottle Labels Only)</option>
-		<option value="2" <?php if (($section == "step3") ||  ($_SESSION['prefsEntryForm'] == "2")) echo " SELECTED"; ?> />BCOE&amp;M with Barcode/QR Code (Bottle Labels Only)</option>
-        <option value="0" <?php if ($_SESSION['prefsEntryForm'] == "0") echo " SELECTED"; ?> />BCOE&amp;M Anonymous with Barcode/QR Code (Bottle Labels Only)</option>
-        <option value="B" <?php if ($_SESSION['prefsEntryForm'] == "B") echo " SELECTED"; ?> />BJCP Official</option>
-        <option value="E" <?php if ($_SESSION['prefsEntryForm'] == "E") echo " SELECTED"; ?> />BJCP Official (Bottle Labels Only)</option>
-        <option value="N" <?php if ($_SESSION['prefsEntryForm'] == "N") echo " SELECTED"; ?> />BJCP Official with Barcode/QR Code</option>
-        <option value="C" <?php if ($_SESSION['prefsEntryForm'] == "C") echo " SELECTED"; ?> />BJCP Official with Barcode/QR Code (Bottle Labels Only)</option>
-		<option value="M" <?php if ($_SESSION['prefsEntryForm'] == "M") echo " SELECTED"; ?> />Simple Metric</option>
-        <option value="3" <?php if ($_SESSION['prefsEntryForm'] == "3") echo " SELECTED"; ?> />Simple Metric with Barcode/QR Code</option>
-        <option value="U" <?php if ($_SESSION['prefsEntryForm'] == "U") echo " SELECTED"; ?> />Simple U.S.</option>
-        <option value="4" <?php if ($_SESSION['prefsEntryForm'] == "4") echo " SELECTED"; ?> />Simple U.S. with Barcode/QR Code</option>
+		<option value="1" <?php if (($section != "step3") && ($_SESSION['prefsEntryForm'] == "1")) echo " SELECTED"; ?> />BCOE&amp;M (Bottle Labels Only)</option>
+		<option value="2" <?php if (($section == "step3") || ($_SESSION['prefsEntryForm'] == "2")) echo " SELECTED"; ?> />BCOE&amp;M with Barcode/QR Code (Bottle Labels Only)</option>
+        <option value="0" <?php if (($section != "step3") && ($_SESSION['prefsEntryForm'] == "0")) echo " SELECTED"; ?> />BCOE&amp;M Anonymous with Barcode/QR Code (Bottle Labels Only)</option>
+        <option value="B" <?php if (($section != "step3") && ($_SESSION['prefsEntryForm'] == "B")) echo " SELECTED"; ?> />BJCP Official</option>
+        <option value="E" <?php if (($section != "step3") && ($_SESSION['prefsEntryForm'] == "E")) echo " SELECTED"; ?> />BJCP Official (Bottle Labels Only)</option>
+        <option value="N" <?php if (($section != "step3") && ($_SESSION['prefsEntryForm'] == "N")) echo " SELECTED"; ?> />BJCP Official with Barcode/QR Code</option>
+        <option value="C" <?php if (($section != "step3") && ($_SESSION['prefsEntryForm'] == "C")) echo " SELECTED"; ?> />BJCP Official with Barcode/QR Code (Bottle Labels Only)</option>
+		<option value="M" <?php if (($section != "step3") && ($_SESSION['prefsEntryForm'] == "M")) echo " SELECTED"; ?> />Simple Metric</option>
+        <option value="3" <?php if (($section != "step3") && ($_SESSION['prefsEntryForm'] == "3")) echo " SELECTED"; ?> />Simple Metric with Barcode/QR Code</option>
+        <option value="U" <?php if (($section != "step3") && ($_SESSION['prefsEntryForm'] == "U")) echo " SELECTED"; ?> />Simple U.S.</option>
+        <option value="4" <?php if (($section != "step3") && ($_SESSION['prefsEntryForm'] == "4")) echo " SELECTED"; ?> />Simple U.S. with Barcode/QR Code</option>
 	</select>
 	<span id="helpBlock" class="help-block">
 		<div class="btn-group" role="group" aria-label="entryFormModal">
@@ -773,6 +771,9 @@ $(document).ready(function(){
         </div>
     </div>
 </div><!-- ./modal -->
+<?php } else { ?>
+<input type="hidden" name="prefsUserSubCatLimit" value="">
+<input type="hidden" name="prefsUSCLExLimit" value="">
 <?php } ?>
 <h3>Performance and Data Clean-Up</h3>
 <div class="form-group"><!-- Form Group NOT REQUIRED Text Input -->

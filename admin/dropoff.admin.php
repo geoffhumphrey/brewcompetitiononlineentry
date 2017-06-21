@@ -1,14 +1,14 @@
-<?php include(DB.'dropoff.db.php'); 
+<?php include(DB.'dropoff.db.php');
 $dropoff_loc_url_yes = "";
 $dropoff_loc_url_no = "";
-if ($_SESSION['brewerCountry'] == "United States") $us_phone = TRUE; else $us_phone = FALSE;
+if (($section != "step6") && ($_SESSION['brewerCountry'] != "United States")) $us_phone = TRUE; else $us_phone = FALSE;
 if ($section != "step6") {
 ?>
 <p class="lead"><?php echo $_SESSION['contestName']; if ($action == "add") echo ": Add a Drop-Off Location"; elseif ($action == "edit") echo ": Edit a Drop-Off Location"; else echo " Drop-Off Locations"; ?></p>
-<?php  } if ($msg == "11") { 
-	if ($section == "step6") $dropoff_loc_url_yes .= "setup.php?section=step6"; 
-	else $dropoff_loc_url_yes .= "index.php?section=admin&amp;go=judging"; 
-	if ($section == "step6") $dropoff_loc_url_no .= "setup.php?section=step7"; 
+<?php  } if ($msg == "11") {
+	if ($section == "step6") $dropoff_loc_url_yes .= "setup.php?section=step6";
+	else $dropoff_loc_url_yes .= "index.php?section=admin&amp;go=judging";
+	if ($section == "step6") $dropoff_loc_url_no .= "setup.php?section=step7";
 	else $dropoff_loc_url_no .= "index.php?section=admin";
 ?>
 <p class="lead">Add another drop-off location?</p>
@@ -22,7 +22,9 @@ if ($section != "step6") {
 <?php if (($action == "update") || ($action == "assign")) { ?>
 <p><?php if ($bid == "default") echo "Choose ".$filter." to assign.";  else echo "Check below which ".$filter." will be assigned to the ".$row_dropoff['dropLocationName']. " location."; ?></p>
 <?php }?>
-
+<?php if (($totalRows_dropoff == 0) && ($section == "step6")) { ?>
+<a class="btn btn-primary" type="button" role="button" data-toggle="popover" data-trigger="hover" data-placement="auto right" data-container="body"  data-content="Skip this step if your competition does not have any drop-off locations." href="<?php echo $base_url; ?>includes/process.inc.php?section=setup&amp;action=add&amp;dbTable=<?php echo $drop_off_db_table; ?>&amp;go=skip">Skip This Step&nbsp;&nbsp;<span class="fa fa-lg fa-arrow-circle-right"></span></a>
+<?php } ?>
 <div class="bcoem-admin-element hidden-print">
 <?php if ((($action == "add") || ($action == "edit")) && ($section != "step6")) { ?>
 <div class="btn-group" role="group" aria-label="...">
@@ -101,9 +103,9 @@ if ($section != "step6") {
 </div>
 <input type="hidden" name="relocate" value="<?php echo relocate($base_url."index.php?section=admin","default",$msg,$id); ?>">
 </form>
-<?php } 
- } 
-if (($action == "default") && ($section != "step6")) { 
+<?php }
+ }
+if (($action == "default") && ($section != "step6")) {
 if ($totalRows_dropoff > 0) { ?>
 <script type="text/javascript" language="javascript">
 	 $(document).ready(function() {
@@ -137,7 +139,7 @@ if ($totalRows_dropoff > 0) { ?>
  </tr>
 </thead>
 <tbody>
- <?php do { 
+ <?php do {
  if ($us_phone) $phone = format_phone_us($row_dropoff['dropLocationPhone']);
  else $phone = $row_dropoff['dropLocationPhone'];
  ?>
@@ -147,12 +149,12 @@ if ($totalRows_dropoff > 0) { ?>
 	<td><?php echo $row_dropoff['dropLocation']; ?></td>
 	<td><?php echo $row_dropoff['dropLocationNotes']; ?></td>
 	<td>
-		<a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=<?php echo $go; ?>&amp;action=edit&amp;id=<?php echo $row_dropoff['id']; ?>" data-toggle="tooltip" data-placement="top" title="Edit <?php echo $row_dropoff['dropLocationName']; ?>"><span class="fa fa-lg fa-pencil"></span></a> 
-		<a href="<?php echo $base_url; ?>includes/process.inc.php?section=admin&amp;go=<?php echo $go; ?>&amp;dbTable=<?php echo $drop_off_db_table; ?>&amp;action=delete&amp;id=<?php echo $row_dropoff['id']; ?>" data-toggle="tooltip" data-placement="top" title="Delete <?php echo $row_dropoff['dropLocationName']; ?>"  data-confirm="Are you sure you want to delete the <?php echo $row_dropoff['dropLocationName']; ?> location? This cannot be undone."><span class="fa fa-lg fa-trash-o"></span></a> 
-		<?php if ($row_dropoff['dropLocationWebsite'] !="") echo "<a href=\"".$row_dropoff['dropLocationWebsite']."\" target=\"_blank\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Visit the ".$row_dropoff['dropLocationName']." website\"><span class=\"fa fa-lg fa-link\"></span></a> "; ?> 
+		<a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=<?php echo $go; ?>&amp;action=edit&amp;id=<?php echo $row_dropoff['id']; ?>" data-toggle="tooltip" data-placement="top" title="Edit <?php echo $row_dropoff['dropLocationName']; ?>"><span class="fa fa-lg fa-pencil"></span></a>
+		<a href="<?php echo $base_url; ?>includes/process.inc.php?section=admin&amp;go=<?php echo $go; ?>&amp;dbTable=<?php echo $drop_off_db_table; ?>&amp;action=delete&amp;id=<?php echo $row_dropoff['id']; ?>" data-toggle="tooltip" data-placement="top" title="Delete <?php echo $row_dropoff['dropLocationName']; ?>"  data-confirm="Are you sure you want to delete the <?php echo $row_dropoff['dropLocationName']; ?> location? This cannot be undone."><span class="fa fa-lg fa-trash-o"></span></a>
+		<?php if ($row_dropoff['dropLocationWebsite'] !="") echo "<a href=\"".$row_dropoff['dropLocationWebsite']."\" target=\"_blank\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Visit the ".$row_dropoff['dropLocationName']." website\"><span class=\"fa fa-lg fa-link\"></span></a> "; ?>
 	</tr>
   <?php } while($row_dropoff = mysqli_fetch_assoc($dropoff)) ?>
 </tbody>
 </table>
-<?php } else echo "<p>".$alert_text_005."</p>"; 
+<?php } else echo "<p>".$alert_text_005."</p>";
 } ?>

@@ -250,7 +250,9 @@ $(document).ready(function(){
         </div>
     </div><!-- ./Form Group -->
 <?php } ?>
-
+<?php if ($section == "step2") { ?>
+<input type="hidden" name="brewerBreweryName" value="">
+<?php } ?>
 	<div class="form-group"><!-- Form Group REQUIRED Text Input -->
         <label for="brewerFirstName" class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label"><?php if ($_SESSION['prefsProEdition'] == 1) echo $label_contact." "; echo $label_first_name; ?></label>
         <div class="col-lg-9 col-md-9 col-sm-8 col-xs-12">
@@ -381,11 +383,14 @@ $(document).ready(function(){
         <div class="col-lg-9 col-md-9 col-sm-8 col-xs-12">
         <!-- Input Here -->
         <select class="selectpicker" name="brewerDropOff" id="brewerDropOff" data-live-search="true" data-size="10" data-width="auto" data-show-tick="true" data-header="<?php echo $label_select_dropoff; ?>" title="<?php echo $label_select_dropoff; ?>">
-        <?php do { ?>
+        <?php if ($section != "step2") {
+        do { ?>
             <option value="<?php echo $row_dropoff['id']; ?>" <?php if (($action == "edit") && ($row_brewer['brewerDropOff'] == $row_dropoff['id'])) echo "SELECTED"; ?>><?php echo $row_dropoff['dropLocationName']; ?></option>
-        <?php } while ($row_dropoff = mysqli_fetch_assoc($dropoff)); ?>
+        <?php } while ($row_dropoff = mysqli_fetch_assoc($dropoff));
+            }
+        ?>
             <option disabled="disabled">-------------</option>
-    		<option value="0" <?php if (($action == "edit") && ($row_brewer['brewerDropOff'] == "0")) echo "SELECTED"; ?>><?php echo $brewer_text_005; ?></option>
+    		<option value="0" <?php if (($section == "step2") || (($action == "edit") && ($row_brewer['brewerDropOff'] == "0"))) echo "SELECTED"; ?>><?php echo $brewer_text_005; ?></option>
         </select>
         </div>
     </div><!-- ./Form Group -->

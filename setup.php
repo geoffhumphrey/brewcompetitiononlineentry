@@ -4,7 +4,7 @@ require('paths.php');
 require(INCLUDES.'url_variables.inc.php');
 require(LANG.'language.lang.php');
 require(LIB.'common.lib.php');
-require(LIB.'help.lib.php'); // OK
+require(LIB.'help.lib.php');
 require(LIB.'update.lib.php');
 require(DB.'setup.db.php');
 require(INCLUDES.'db_tables.inc.php');
@@ -60,23 +60,22 @@ else $timezone_offset = number_format($timezone_raw,0);
 $setup_alerts = "";
 $setup_body = "";
 
+if ($msg == 1) $setup_alerts .= "<div class=\"alert alert-danger\"><span class=\"fa fa-lg fa-exclamation-circle\"></span> <strong>Setup Has Not Been Completed.</strong> Continue setting up your BCOE&amp;M installation.</div>";
+
 if ($setup_free_access == FALSE) {
 
 	$setup_alerts .= "<div class=\"alert alert-danger\"><span class=\"fa fa-lg fa-exclamation-circle\"></span> <strong>Setup Cannot Run.</strong> The variable called &#36;setup_free_access is set to FALSE.</div>";
-	$setup_body .= "<p>The &#36;setup_free_access variable is in the config.php file, which is located in the &ldquo;site&rdquo; folder on your server.</p>
-	<p>For the install and setup scripts to run, <strong>the &#36;setup_free_access variable must be set to TRUE</strong>. Server access is required to change the config.php file.</p>
-	<p>Once the installation has finished, you should change the &#36;setup_free_access variable back to FALSE for security reasons.</p>
-	";
+	$setup_body .= "<p>The &#36;setup_free_access variable is in the config.php file, which is located in the &ldquo;site&rdquo; folder on your server.</p>";
+	$setup_body .= "<p>For the install and setup scripts to run, <strong>the &#36;setup_free_access variable must be set to TRUE</strong>. Server access is required to change the config.php file.</p>";
+	$setup_body .= "<p>Once the installation has finished, you should change the &#36;setup_free_access variable back to FALSE for security reasons.</p>";
 }
 
 else {
-
 	if ($section != "step0") require(DB.'common.db.php');
 	require(INCLUDES.'version.inc.php');
 	if ((!table_exists($prefix."system")) && ($section == "step0"))	include(SETUP.'install_db.setup.php');
 	$setup_body .= $output;
 }
-
 
 ?>
 <!DOCTYPE html>
@@ -88,55 +87,48 @@ else {
         <title>Setup BCOE&amp;M <?php echo $current_version; ?></title>
 
 		<!-- Load jQuery / http://jquery.com/ -->
-		<script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
 
-		<!-- Load Bootstrap / http://www.getbootsrap.com -->
-		<link rel="stylesheet" type="text/css" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
-		<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-		<!--[if lt IE 9]>
-		  <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
-		  <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-		<![endif]-->
+        <!-- Load Bootstrap / http://www.getbootsrap.com -->
+        <link rel="stylesheet" type="text/css" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
+        <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
         <!-- Load DataTables / https://www.datatables.net -->
-		<link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.10/css/dataTables.bootstrap.min.css" />
-		<link rel="stylesheet" type="text/css" href="//cdn.datatables.net/plug-ins/1.10.10/integration/font-awesome/dataTables.fontAwesome.css" />
-		<script type="text/javascript" src="//cdn.datatables.net/1.10.10/js/jquery.dataTables.min.js"></script>
-		<script type="text/javascript" src="//cdn.datatables.net/1.10.10/js/dataTables.bootstrap.min.js"></script>
+        <link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.10/css/dataTables.bootstrap.min.css" />
+        <link rel="stylesheet" type="text/css" href="//cdn.datatables.net/plug-ins/1.10.10/integration/font-awesome/dataTables.fontAwesome.css" />
+        <script type="text/javascript" src="//cdn.datatables.net/1.10.10/js/jquery.dataTables.min.js"></script>
+        <script type="text/javascript" src="//cdn.datatables.net/1.10.10/js/dataTables.bootstrap.min.js"></script>
 
         <!-- Load Fancybox / http://www.fancyapps.com -->
-		<link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.5/jquery.fancybox.min.css" media="screen" />
-		<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.3/jquery.easing.min.js"></script>
-		<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery-mousewheel/3.1.13/jquery.mousewheel.min.js"></script>
-		<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.5/jquery.fancybox.pack.js"></script>
+        <link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.5/jquery.fancybox.min.css" media="screen" />
+        <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.3/jquery.easing.min.js"></script>
+        <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery-mousewheel/3.1.13/jquery.mousewheel.min.js"></script>
+        <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.5/jquery.fancybox.pack.js"></script>
 
         <!-- Load TinyMCE -->
         <script src="//cdn.tinymce.com/4/tinymce.min.js"></script>
 
          <!-- Load Bootstrap DateTime Picker / http://eonasdan.github.io/bootstrap-datetimepicker/ -->
-		<link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/css/bootstrap-datetimepicker.min.css" />
-		<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.11.1/moment-with-locales.min.js"></script>
-		<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/js/bootstrap-datetimepicker.min.js"></script>
-
-		<!-- Load Off-Canvas Menu for Admin -->
-		<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/jasny-bootstrap/3.1.3/css/jasny-bootstrap.min.css">
-		<script src="//cdnjs.cloudflare.com/ajax/libs/jasny-bootstrap/3.1.3/js/jasny-bootstrap.min.js"></script>
+        <link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/css/bootstrap-datetimepicker.min.css" />
+        <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.11.1/moment-with-locales.min.js"></script>
+        <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/js/bootstrap-datetimepicker.min.js"></script>
 
         <!-- Load Bootstrap Form Validator / http://1000hz.github.io/bootstrap-validator -->
-		<script src="//cdnjs.cloudflare.com/ajax/libs/1000hz-bootstrap-validator/0.9.0/validator.min.js"></script>
+        <script src="//cdnjs.cloudflare.com/ajax/libs/1000hz-bootstrap-validator/0.9.0/validator.min.js"></script>
 
-		<!-- Load Bootstrap-Select / http://silviomoreto.github.io/bootstrap-select -->
-		<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.9.3/css/bootstrap-select.min.css">
-		<script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.9.3/js/bootstrap-select.min.js"></script>
+        <!-- Load Bootstrap-Select / http://silviomoreto.github.io/bootstrap-select -->
+        <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.9.3/css/bootstrap-select.min.css">
+        <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.9.3/js/bootstrap-select.min.js"></script>
 
-		<!-- Load Font Awesome / https://fortawesome.github.io/Font-Awesome -->
-		<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+        <!-- Load Font Awesome / https://fortawesome.github.io/Font-Awesome -->
+        <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
 
         <!-- Load BCOE&M Custom CSS -->
         <link rel="stylesheet" type="text/css" href="<?php echo $base_url; ?>css/default.min.css">
 
-		<!-- Load BCOE&M Custom JS -->
-		<script src="<?php echo $base_url; ?>js_includes/bcoem_custom.min.js"></script>
+        <!-- Load BCOE&M Custom JS -->
+        <script src="<?php echo $base_url; ?>js_includes/bcoem_custom.min.js"></script>
+
 	</head>
 	<body>
 	<!-- MAIN NAV -->
@@ -161,36 +153,32 @@ else {
     <div class="container-fluid bcoem-warning-container">
     	<?php echo $setup_alerts; ?>
     </div><!-- ./container -->
-    <!-- ./ALERTS -->
-    <!-- Update Pages (Fluid Layout) -->
+
+    <!-- Setup Pages (Fluid Layout) -->
     <div class="container-fluid">
-
-    <?php if ($msg == 99) { ?>
-
+        <!-- ./ALERTS -->
+    	<?php if ($msg == 99) { ?>
    		<div class="alert alert-danger alert-dismissible hidden-print fade in" role="alert">
         	<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
         	<span class="fa fa-lg fa-exclamation-circle"></span> <strong>There was an error in processing your input.</strong> Please re-enter the information.
-        </div>
-
-    <?php } ?>
-
-    <?php if ($msg == 100) { ?>
-
+		</div>
+    	<?php } ?>
+    	<?php if ($msg == 100) { ?>
    		<div class="alert alert-danger alert-dismissible hidden-print fade in" role="alert">
         	<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
         	<span class="fa fa-lg fa-exclamation-circle"></span> <strong>Set Up has not been completed.</strong> For your installation to function properly, set up must be completed.
         </div>
-
-    <?php } ?>
-
-    <div class="row">
+    	<?php } ?>
+    	<div class="row">
         	<div class="col col-lg-9 col-md-12 col-sm-12 col-xs-12">
             <div class="page-header">
 				<h1>BCOE&amp;M <?php echo $current_version." ".$header_output; ?></h1>
 			</div>
-			<?php echo $setup_body; ?>
 			<?php
-			if ($setup_free_access == TRUE) {
+
+            echo $setup_body;
+
+            if ($setup_free_access == TRUE) {
 
 				if (table_exists($prefix."system")) {
 
@@ -212,6 +200,7 @@ else {
 				} // end if (table_exists($prefix."system"))
 
 			}
+
 			?>
             </div><!-- ./left column -->
             <div class="sidebar col col-lg-3 col-md-12 col-sm-12 col-xs-12">
@@ -257,10 +246,10 @@ else {
 							<span class="<?php echo $sidebar_status_icon_8; ?> pull-right"></span>
 						</div>
 					</div><!-- ./sidebar -->
-				</div><!-- ./row -->
-			</div><!-- ./container-fluid -->
-    <!-- ./Container -->
-    <!-- Footer -->
+			</div><!-- ./row -->
+	</div><!-- ./container-fluid -->
+	<!-- ./Container -->
+	<!-- Footer -->
     <footer class="footer hidden-xs hidden-sm hidden-md">
     	<nav class="navbar navbar-inverse navbar-fixed-bottom">
             <div class="container-fluid text-center">

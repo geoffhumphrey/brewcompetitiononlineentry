@@ -1,21 +1,39 @@
-<?php if ($section == "admin") { ?>
+<?php if ($section == "step4") {
+
+    $currency = explode("^",currency_info($row_prefs['prefsCurrency'],1));
+    $currency_symbol = $currency[0];
+    $currency_code = $currency[1];
+
+    $query_brewer = sprintf("SELECT brewerFirstName,brewerLastName,brewerEmail FROM %s ORDER BY id ASC LIMIT 1",$prefix."brewer");
+    $brewer = mysqli_query($connection,$query_brewer) or die (mysqli_error($connection));
+    $row_brewer = mysqli_fetch_assoc($brewer);
+
+    $query_comp_info = sprintf("SELECT COUNT(*) as 'count' FROM %s ORDER BY id ASC LIMIT 1",$prefix."contest_info");
+    $comp_info = mysqli_query($connection,$query_comp_info) or die (mysqli_error($connection));
+    $row_comp_info = mysqli_fetch_assoc($comp_info);
+
+    if ($row_comp_info['count'] >= 1) {
+        $action = "edit";
+    }
+    else {
+        $action = "add";
+    }
+}
+
+if ($section == "admin") { ?>
 <p class="lead"><?php echo $_SESSION['contestName'].": Update Competition Information"; ?></p>
 <?php } ?>
-<form data-toggle="validator" role="form" class="form-horizontal" method="post" action="<?php echo $base_url; ?>includes/process.inc.php?section=<?php if ($section == "step4") echo "setup"; else echo $section; ?>&amp;action=<?php if ($section == "step4") echo "add"; else echo "edit"; ?>&amp;dbTable=<?php echo $prefix; ?>contest_info&amp;id=1" name="form1">
-<?php if ($section == "step4") { 
-	$currency = explode("^",currency_info($row_prefs['prefsCurrency'],1));
-	$currency_symbol = $currency[0];
-	$currency_code = $currency[1];
-?>
-<h3>Competition Coordinator</h3>
+<form data-toggle="validator" role="form" class="form-horizontal" method="post" action="<?php echo $base_url; ?>includes/process.inc.php?section=<?php if ($section == "step4") echo "setup"; else echo $section; ?>&amp;action=<?php echo $action; ?>&amp;dbTable=<?php echo $prefix; ?>contest_info&amp;id=1" name="form1">
 
+<?php if ($section == "step4") { ?>
+<h3>Competition Coordinator</h3>
 <div class="form-group"><!-- Form Group REQUIRED Text Input -->
     <label for="contactFirstName" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">First Name</label>
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
         <div class="input-group has-warning">
             <span class="input-group-addon" id="contactFirstName-addon1"><span class="fa fa-user"></span></span>
             <!-- Input Here -->
-            <input class="form-control" id="contactFirstName" name="contactFirstName" type="text" value="<?php echo $_SESSION['brewerFirstName']; ?>" placeholder="" autofocus required>
+            <input class="form-control" id="contactFirstName" name="contactFirstName" type="text" value="<?php echo $row_brewer['brewerFirstName']; ?>" placeholder="" autofocus required>
             <span class="input-group-addon" id="contactFirstName-addon2"><span class="fa fa-star"></span></span>
         </div>
     </div>
@@ -27,7 +45,7 @@
         <div class="input-group has-warning">
             <span class="input-group-addon" id="contactLastName-addon1"><span class="fa fa-user"></span></span>
             <!-- Input Here -->
-            <input class="form-control" id="contactLastName" name="contactLastName" type="text" value="<?php echo $_SESSION['brewerLastName']; ?>" placeholder="" required>
+            <input class="form-control" id="contactLastName" name="contactLastName" type="text" value="<?php echo $row_brewer['brewerLastName']; ?>" placeholder="" required>
             <span class="input-group-addon" id="contactLastName-addon2"><span class="fa fa-star"></span></span>
         </div>
     </div>
@@ -39,7 +57,7 @@
         <div class="input-group has-warning">
             <span class="input-group-addon" id="contactEmail-addon1"><span class="fa fa-envelope"></span></span>
             <!-- Input Here -->
-            <input class="form-control" id="contactEmail" name="contactEmail" type="email" value="<?php echo $_SESSION['brewerEmail']; ?>" placeholder="" aria-describedby="helpBlock" required>
+            <input class="form-control" id="contactEmail" name="contactEmail" type="email" value="<?php echo $row_brewer['brewerEmail']; ?>" placeholder="" aria-describedby="helpBlock" required>
             <span class="input-group-addon" id="contactEmail-addon2"><span class="fa fa-star"></span></span>
         </div>
         <span id="helpBlock" class="help-block">You will be able to enter more contact names after setup.</span>
@@ -66,7 +84,7 @@
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
         <!-- Input Here -->
         <input class="form-control" id="contestID" name="contestID" type="text" value="<?php if ($section != "step4") echo $row_contest_info['contestID']; ?>" placeholder="">
-    
+
     	<span id="helpBlock" class="help-block">
         <div class="btn-group" role="group" aria-label="BJCPCompIDModal">
 			<div class="btn-group" role="group">
@@ -145,7 +163,7 @@
         <!-- Input Here -->
         <input class="form-control" id="contestCheckInPassword" name="contestCheckInPassword" type="text" value="" placeholder="">
     </div>
-</div><!-- ./Form Group --->
+</div><!-- ./Form Group -->
 <?php } else { ?>
 <div class="form-group"><!-- Form Group NOT REQUIRED Text Input -->
     <label for="contestCheckInPassword" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">QR Code Log On Password</label>
@@ -154,7 +172,7 @@
         <a  href="#" class="btn btn-info" data-toggle="modal" data-target="#QRModal">Add, Update, or Change QR Code Log On Password</a>
         <span id="helpBlock" class="help-block">For use with the <a href="<?php echo $base_url; ?>qr.php">QR Code Entry Check-In</a> function.</span>
     </div>
-</div><!-- ./Form Group --->
+</div><!-- ./Form Group -->
 <?php } ?>
 
 <h3>Entry Window</h3>
@@ -164,7 +182,7 @@
         <!-- Input Here -->
         <div class="input-group has-warning">
         	<input class="form-control" id="contestEntryOpen" name="contestEntryOpen" type="text" value="<?php if ($section != "step4") echo
-	getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_contest_dates['contestEntryOpen'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "system", "date-time-system"); ?>" placeholder="<?php if (strpos($section, "step") === FALSE) echo $current_date; ?>" required>
+	getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_contest_dates['contestEntryOpen'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "system", "date-time-system"); ?>" placeholder="<?php echo $current_date; ?>" required>
         	<span class="input-group-addon" id="contestHost-addon2"><span class="fa fa-star"></span></span>
         </div>
     </div>
@@ -234,7 +252,7 @@
         <!-- Input Here -->
         <input class="form-control" id="contestShippingDeadline" name="contestShippingDeadline" type="text" value="<?php if ($section != "step4") echo
 	getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_contest_dates['contestShippingDeadline'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "system", "date-time-system"); ?>" placeholder="<?php echo $current_date; ?>" >
-     <span id="helpBlock" class="help-block">This window only applies to the Shipping Location above.</span> 
+     <span id="helpBlock" class="help-block">This window only applies to the Shipping Location above.</span>
     </div>
 </div><!-- ./Form Group -->
 
@@ -351,7 +369,7 @@
             <!-- Input Here -->
             <input class="form-control" id="contestEntryFee" name="contestEntryFee" type="number" maxlength="3" value="<?php if ($section != "step4") echo $row_contest_info['contestEntryFee']; ?>" placeholder="" required>
             <span class="input-group-addon" id="contestEntryFee-addon2"><span class="fa fa-star"></span></span>
-            
+
         </div>
         <span id="helpBlock" class="help-block">Fee for a single entry. Enter a zero (0) for a free entry fee.</span>
     </div>
@@ -366,7 +384,7 @@
         	<input class="form-control" id="contestEntryCap" name="contestEntryCap" type="text" value="<?php if ($section != "step4") echo $row_contest_info['contestEntryCap']; ?>" placeholder="">
         </div>
         <span id="helpBlock" class="help-block">Enter the maximum amount for each entrant. Leave blank if no cap.
-        <a tabindex="0"  type="button" class="btn btn-xs btn-primary" role="button" data-toggle="popover" data-trigger="focus" data-placement="right" data-content="Useful for competitions with &ldquo;unlimited&rdquo; entries for a single fee (e.g., <?php if ($section != "step4") echo $currency_symbol; ?>X for the first X number of entries, <?php if ($section != "step4") echo $currency_symbol; ?>X for unlimited entries, etc.). ">?</a>
+        <a tabindex="0"  type="button" role="button" data-toggle="popover" data-trigger="hover" data-placement="auto right" data-container="body"  data-content="Useful for competitions with &ldquo;unlimited&rdquo; entries for a single fee (e.g., <?php if ($section != "step4") echo $currency_symbol; ?>X for the first X number of entries, <?php if ($section != "step4") echo $currency_symbol; ?>X for unlimited entries, etc.). "><span class="fa fa-question-circle"></span></a>
         </span>
     </div>
 </div><!-- ./Form Group -->
