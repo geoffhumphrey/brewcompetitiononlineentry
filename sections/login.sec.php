@@ -74,7 +74,7 @@ else $verify_form_display = FALSE;
 
 if ($section != "update") {
 	if (($msg != "default") && ($registration_open < "2") && (!$verify_form_display)) $primary_links .= sprintf("<p class=\"lead\"><span class=\"fa fa-lg fa-exlamation-circle\"></span> <a href=\"%s\">%s</a></p>",build_public_url("register","default","default","default",$sef,$base_url),$login_text_003);
-	if ($login_form_display) $primary_links .= sprintf("<p class=\"lead\"><span class=\"fa fa-lg fa-exlamation-circle\"></span> %s <a href=\"%s\">%s</a></p>",$login_text_004,$base_url."index.php?section=login&amp;go=password&amp;action=forgot",$login_text_005);
+	if ($login_form_display) $primary_links .= sprintf("<p class=\"lead\"><span class=\"fa fa-lg fa-exlamation-circle\"></span> %s <a href=\"%s\">%s</a>.</p>",$login_text_004,$base_url."index.php?section=login&amp;go=password&amp;action=forgot",$login_text_005);
 }
 echo $message0;
 echo $message1;
@@ -83,16 +83,17 @@ echo $primary_links;
 ?>
 
 <?php if ($login_form_display) { ?>
-<form class="form-horizontal" action="<?php echo $base_url; ?>includes/logincheck.inc.php?section=<?php echo $section; ?>" method="POST" name="form1" id="form1">
+<form data-toggle="validator" role="form" class="form-horizontal" action="<?php echo $base_url; ?>includes/logincheck.inc.php?section=<?php echo $section; ?>" method="POST" name="form1" id="form1">
 	<div class="form-group">
 		<label for="" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label_email; ?></label>
 		<div class="col-lg-10 col-md-9 col-sm-8 col-xs-12">
 			<div class="input-group has-warning">
 				<span class="input-group-addon" id="login-addon1"><span class="fa fa-envelope"></span></span>
 				<!-- Input Here -->
-				<input class="form-control" name="loginUsername" type="email" value="<?php if ($username != "default") echo $username; ?>" autofocus required>
+				<input class="form-control" name="loginUsername" type="email" value="<?php if ($username != "default") echo $username; ?>" autofocus required data-error="<?php echo $login_text_018; ?>">
 				<span class="input-group-addon" id="login-addon2"><span class="fa fa-star"></span></span>
 			</div>
+			<span class="help-block with-errors"></span>
 		</div>
 	</div><!-- Form Group -->
 	<div class="form-group">
@@ -101,9 +102,10 @@ echo $primary_links;
 			<div class="input-group has-warning">
 				<span class="input-group-addon" id="login-addon3"><span class="fa fa-key"></span></span>
 				<!-- Input Here -->
-				<input class="form-control" name="loginPassword" type="password" required>
+				<input class="form-control" name="loginPassword" type="password" required data-error="<?php echo $login_text_019; ?>">
 				<span class="input-group-addon" id="login-addon4"><span class="fa fa-star"></span></span>
 			</div>
+			<span class="help-block with-errors"></span>
 		</div>
 	</div>
 	<div class="form-group">
@@ -156,8 +158,8 @@ echo $primary_links;
 	<?php } ?>
 <form class="form-horizontal" action="<?php echo $base_url; ?>includes/forgot_password.inc.php" method="POST" name="form1" id="form1">
 	<div class="form-group">
-		<label for="" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label_security_answer; ?></label>
-		<div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
+		<label for="" class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label_security_answer; ?></label>
+		<div class="col-lg-9 col-md-9 col-sm-9 col-xs-12">
 			<div class="input-group">
 				<span class="input-group-addon" id="id-verify-addon1"><span class="fa fa-bullhorn"></span></span>
 				<!-- Input Here -->
@@ -166,7 +168,7 @@ echo $primary_links;
 		</div>
 	</div><!-- Form Group -->
 	<div class="form-group">
-		<div class="col-lg-offset-2 col-md-offset-3 col-sm-offset-4">
+		<div class="col-lg-offset-3 col-md-offset-3 col-sm-offset-4">
 			<!-- Input Here -->
 			<button name="submit" type="submit" class="btn btn-primary" ><?php echo $label_reset_password; ?> <span class="fa fa-key" aria-hidden="true"></span></button>
 		</div>

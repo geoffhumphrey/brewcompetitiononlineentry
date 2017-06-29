@@ -226,7 +226,7 @@ if ($totalRows_log_unpaid > 0) {
 	do {
 		$copy_paste_unpaid_emails [] = $row_log_unpaid['brewerEmail'];
 	} while ($row_log_unpaid = mysqli_fetch_assoc($log_unpaid));
-} 
+}
 
 if ($action != "print") { ?>
 	<?php 
@@ -402,11 +402,11 @@ if ($action != "print") { ?>
 		<?php } ?>
 	</div>
 </div>
-<div class="bcoem-admin-element hidden-print row">
+<div class="bcoem-admin-element hidden-print row hidden-xs hidden-sm">
 	<div class="col-md-12">
 	<!-- All Participant Email Addresses Modal -->
-	   <div class="btn-group hidden-xs" role="group" aria-label="...">
-			<button type="button" class="btn btn-sm btn-info" data-toggle="modal" data-target="#allEmailModal">
+	   <div class="btn-group hidden-xs hidden-sm" role="group" aria-label="...">
+			<button type="button" class="btn btn-info" data-toggle="modal" data-target="#allEmailModal">
 				  All Participant Email Addresses
 				</button>
 		</div><!-- ./button group -->
@@ -420,12 +420,8 @@ if ($action != "print") { ?>
 					</div>
 					<div class="modal-body">
 						<p>Copy and paste the list below into your favorite email program to contact all particpants with entries.</p>
-						<textarea class="form-control" rows="8">
-						<?php
-							$all_email_display = implode(", ",array_unique($copy_paste_all_emails));
-							echo ltrim($all_email_display); 
-						?>
-						</textarea>
+						<textarea class="form-control" rows="8"><?php $all_email_display = implode(", ",array_unique($copy_paste_all_emails)); echo ltrim($all_email_display," ")
+						?></textarea>
 					</div>
 					<div class="modal-footer">
 					<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
@@ -434,8 +430,8 @@ if ($action != "print") { ?>
 			</div>
 		</div><!-- ./modal -->
 		<!-- All Participants with Paid Entries Email Addresses Modal -->
-		<div class="btn-group hidden-xs" role="group" aria-label="...">
-			<button type="button" class="btn btn-sm btn-info" data-toggle="modal" data-target="#paidEmailModal">
+		<div class="btn-group hidden-xs hidden-sm" role="group" aria-label="...">
+			<button type="button" class="btn btn-info" data-toggle="modal" data-target="#paidEmailModal">
 				  All Participants with Paid Entries Email Addresses
 				</button>
 		</div><!-- ./button group -->
@@ -449,12 +445,7 @@ if ($action != "print") { ?>
 					</div>
 					<div class="modal-body">
 						<p>Copy and paste the list below into your favorite email program to contact particpants with <strong>PAID</strong> entries.</p>
-						<textarea class="form-control" rows="8">
-						<?php
-							$paid_email_display = implode(", ",array_unique($copy_paste_paid_emails));
-							echo ltrim($paid_email_display); 
-						?>
-						</textarea>
+						<textarea class="form-control" rows="8"><?php $paid_email_display = implode(", ",array_unique($copy_paste_paid_emails)); echo ltrim($paid_email_display); ?></textarea>
 					</div>
 					<div class="modal-footer">
 					<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
@@ -462,8 +453,8 @@ if ($action != "print") { ?>
 				</div>
 			</div>
 		</div><!-- ./modal -->
-		<div class="btn-group hidden-xs" role="group" aria-label="...">
-			<button type="button" class="btn btn-sm btn-info" data-toggle="modal" data-target="#unpaidEmailModal">
+		<div class="btn-group hidden-xs hidden-sm" role="group" aria-label="...">
+			<button type="button" class="btn btn-info" data-toggle="modal" data-target="#unpaidEmailModal">
 				  All Participants with Unpaid Entries Email Addresses
 				</button>
 		</div><!-- ./button group -->
@@ -477,12 +468,7 @@ if ($action != "print") { ?>
 					</div>
 					<div class="modal-body">
 						<p>Copy and paste the list below into your favorite email program to contact particpants with <strong>UNPAID</strong> entries.</p>
-						<textarea class="form-control" rows="8">
-						<?php
-							$unpaid_email_display = implode(", ",array_unique($copy_paste_unpaid_emails));
-							echo ltrim($unpaid_email_display); 
-						?>
-						</textarea>
+						<textarea class="form-control" rows="8"><?php $unpaid_email_display = implode(", ",array_unique($copy_paste_unpaid_emails)); echo ltrim($unpaid_email_display); ?></textarea>
 					</div>
 					<div class="modal-footer">
 					<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
@@ -491,9 +477,9 @@ if ($action != "print") { ?>
 			</div>
 		</div><!-- ./modal -->
 		<!-- Entry status modal -->
-    <div class="btn-group pull-right hidden-xs" role="group" aria-label="entryStatus">
+    <div class="btn-group pull-right hidden-xs hidden-sm" role="group" aria-label="entryStatus">
         <div class="btn-group" role="group">
-            <button type="button" class="btn btn-sm btn-success" data-toggle="modal" data-target="#entryStatusModal">
+            <button type="button" class="btn btn-success" data-toggle="modal" data-target="#entryStatusModal">
               <?php if ($view == "paid") echo "Paid"; elseif ($view == "unpaid") echo "Unpaid"; else echo "All" ?> Entry Status
             </button>
         </div>

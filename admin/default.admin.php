@@ -8,10 +8,20 @@
 ?>
 <div class="bcoem-admin-dashboard-accordion">
     <p class="lead">Hello, <?php echo $_SESSION['brewerFirstName']; ?>. <span class="small">Click or tap the headings or icons below to view the options available in each category.</span></p>
+    <?php if ((judging_date_return() == 0) && ($_SESSION['prefsWinnerDelay'] > 0))  { ?>
+    <div class="bcoem-admin-element">
+		<div class="row">
+			<div class="col col-md-12">
+				<a class="btn btn-primary" href="<?php echo $base_url; ?>includes/process.inc.php?action=publish" data-confirm="Are you sure? This will immediately publish any and all results that have been entered into the database.">Publish Results Now&nbsp;&nbsp;<span class="fa fa-bullhorn"></span></a>
+			</div>
+		</div>
+	</div>
+   	<?php } ?>
     <div class="row">
         <div class="col col-lg-6 col-md-12 col-sm-12 col-xs-12">
             <div class="panel-group" id="accordion">
 				<?php if ($_SESSION['userLevel'] == "0") { ?>
+               
                 <!-- Preparing Panel -->
                 <div class="panel panel-default">
                     <div class="panel-heading">
@@ -124,12 +134,14 @@
                         </div>
                     </div>
                 </div><!-- ./ Preparing Panel -->
+                
 				<?php } ?>
+               
                 <!-- Entry and Data Gathering Panel -->
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         <h4 class="panel-title">
-                            <a data-toggle="collapse" data-parent="#accordion" href="#collapseEntry">Entries and Participants<span class="fa fa-beer pull-right"></span></a>
+                            <a data-toggle="collapse" data-parent="#accordion" href="#collapseEntry">Entries<?php if ($_SESSION['prefsPaypalIPN'] == 1) echo ", Payments,";?> and Participants<span class="fa fa-beer pull-right"></span></a>
                         </h4>
                     </div>
                     <div id="collapseEntry" class="panel-collapse collapse">
@@ -145,6 +157,22 @@
                                     </ul>
                                 </div>
                             </div><!-- ./row -->
+                            
+                            <?php if ($_SESSION['prefsPaypalIPN'] == 1) { ?>
+                            
+                            <div class="row">
+                                <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                                    <strong>Payments</strong>
+                                </div>
+                                <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-8">
+                                    <ul class="list-inline">
+                                        <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=payments">Manage</a></li>
+                                    </ul>
+                                </div>
+                            </div><!-- ./row -->
+                            
+                            <?php } ?>
+                            
                             <div class="row">
                                 <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-4">
                                     <strong>Participants</strong>
@@ -1120,6 +1148,9 @@
                             <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-8">
                                 <ul class="list-inline">
                                     <li><a href="<?php echo $base_url; ?>includes/data_cleanup.inc.php?action=purge&amp;go=entries" data-confirm="Are you sure you want to delete all entries and associated data including scores and bos scores? This cannot be undone.">Entries</a></li>
+                                    <?php if (check_setup($prefix."payments",$database)) { ?>
+                                    <li><a href="<?php echo $base_url; ?>includes/data_cleanup.inc.php?action=purge&amp;go=payments" data-confirm="Are you sure you want to delete all payment records? This cannot be undone.">Payments</a></li>
+                                    <?php } ?>
                                     <li><a href="<?php echo $base_url; ?>includes/data_cleanup.inc.php?action=purge&amp;go=participants" data-confirm="Are you sure you want to delete all non-admin participants and associated data? This cannot be undone.">Participants</a></li>
                                     <li><a href="<?php echo $base_url; ?>includes/data_cleanup.inc.php?action=purge&amp;go=tables" data-confirm="Are you sure you want to delete all judging tables and associated data including judging/stewarding table assignments? This cannot be undone.">Judging Tables</a></li>
                                     <li><a href="<?php echo $base_url; ?>includes/data_cleanup.inc.php?action=purge&amp;go=scores" data-confirm="Are you sure you want to delete all scoring data from the database including best of show? This cannot be undone.">Scores</a></li>

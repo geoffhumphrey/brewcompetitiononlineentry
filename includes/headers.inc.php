@@ -38,6 +38,7 @@ switch($section) {
 	elseif ($msg == "2") $output = sprintf("<strong>%s</strong>",$header_text_006);
 	elseif ($msg == "3") $output = sprintf("<strong>%s</strong> %s",$header_text_007,$header_text_008);
 	elseif ($msg == "4") $output = sprintf("<strong>%s</strong>",$header_text_009);
+	elseif ($msg == "5") $output = sprintf("<strong>%s</strong> <a href=\#\"  role=\"button\" data-toggle=\"modal\" data-target=\"#loginModal\">%s</a>",$header_text_036,$header_text_037);
 	break;
 
 	case "user":
@@ -83,7 +84,7 @@ switch($section) {
 	if ($msg == "0") $output = sprintf("<strong>%s</strong> ",$header_text_031);
 	elseif ($msg == "1") { $output = sprintf("<strong>%s</strong> %s",$header_text_032,$header_text_033); $output_extend = ""; }
 	elseif ($msg == "2") { $output = sprintf("<strong>%s</strong> %s</p>",$header_text_034,$header_text_035); $output_extend = ""; }
-	elseif ($msg == "3") $output = sprintf("<strong>%s</strong> %s",$header_text_036,$header_text_037);
+	elseif ($msg == "3") $output = sprintf("<strong>%s</strong> <a href=\#\"  role=\"button\" data-toggle=\"modal\" data-target=\"#loginModal\">%s</a>",$header_text_036,$header_text_037);
 	elseif ($msg == "4") $output = sprintf("<strong>%s</strong> %s",$header_text_038,$header_text_008);
 	elseif ($msg == "5") $output = sprintf("<strong>%s</strong>",$header_text_039);
 	else $output = "";
@@ -567,6 +568,10 @@ switch($section) {
 			case "change_user_password":
 			$header_output .= ": ".$label_admin_password;
 			break;
+			
+			case "payments":
+			$header_output .= ": ".$label_admin_payments;
+			break;
 		}
 
 	if     ($msg == "1") $output = sprintf("<strong>%s</strong>",$header_text_005);
@@ -622,6 +627,7 @@ switch($section) {
 	elseif ($msg == "33") $output = sprintf("<strong>%s</strong>",$header_text_093);
 	elseif ($msg == "34") $output = sprintf("<strong>%s</strong>",$header_text_110);
 	elseif ($msg == "35") $output = sprintf("<strong>%s</strong>",$header_text_111);
+	elseif ($msg == "36") $output = sprintf("<strong>%s</strong>",$header_text_115);
 	elseif ($msg == "755") $output = sprintf("<strong>%s</strong> ",$header_text_094,$header_text_095);
 	else $output = "";
 	break;

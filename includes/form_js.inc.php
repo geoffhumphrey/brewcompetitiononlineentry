@@ -27,14 +27,14 @@ $(document).ready(function() {
 
 
 <?php if ($section == "brew") { 
-$optional_info_styles = array("21-B","28-A","30-B","33-A","33-B","34-B","M2-C","M2-D","M2-E","M3-A","M3-B","M4-B","M4-C","07-C","M1-A","M1-B","M1-C","M2-A","M2-B","M4-A","C1-B","C1-C");
+if (strpos($_SESSION['prefsStyleSet'],"BABDB") === false) $optional_info_styles = array("21-B","28-A","30-B","33-A","33-B","34-B","M2-C","M2-D","M2-E","M3-A","M3-B","M4-B","M4-C","07-C","M1-A","M1-B","M1-C","M2-A","M2-B","M4-A","C1-B","C1-C");
+else $optional_info_styles = array();
 ?>
 <!-- Load Show/Hide Configuration -->
 <script type="text/javascript">//<![CDATA[
 $(document).ready(function() {
 	 <?php if ($action == "add") { ?>
 		$("#special").hide("fast");
-		$("#optional").hide("fast");
 		$("#carbonation").hide("fast");
 		$("#sweetness").hide("fast");
 		$("#strength").hide("fast");
@@ -45,6 +45,7 @@ $(document).ready(function() {
 		$("#sweetnessLambic").hide("fast");
 		$("#carbLambic").hide("fast");
 		$("#BDGColor").hide("fast");
+		$("#optional").hide("fast");
 		$("#carbonation").removeClass("has-error");
 		$("#sweetness").removeClass("has-error");
 		$("#strength").removeClass("has-error");
@@ -71,7 +72,6 @@ $(document).ready(function() {
 	$("#type").change(function() {	
 		
 	 	$("#special").hide("fast");
-		$("#optional").hide("fast");
 		$("#carbonation").hide("fast");
 		$("#sweetness").hide("fast");
 		$("#strength").hide("fast");
@@ -80,9 +80,9 @@ $(document).ready(function() {
 		$("#strengthSaison").hide("fast");
 		$("#darkLightColor").hide("fast");
 		$("#BDGColor").hide("fast");
+		$("#optional").hide("fast");
 		$("#sweetnessLambic").hide("fast");
 		$("#carbLambic").hide("fast");
-		
 		$("#carbonation").removeClass("has-error");
 		$("#sweetness").removeClass("has-error");
 		$("#strength").removeClass("has-error");
@@ -122,7 +122,6 @@ $(document).ready(function() {
 			$("input[name='BDGColor']").removeAttr('checked');
 			<?php } ?>
 			$("#special").hide("fast");
-			$("#optional").hide("fast");
 			$("#carbonation").hide("fast");
 			$("#sweetness").hide("fast");
 			$("#strength").hide("fast");
@@ -133,7 +132,7 @@ $(document).ready(function() {
 			$("#sweetnessLambic").hide("fast");
 			$("#carbLambic").hide("fast");
 			$("#BDGColor").hide("fast");
-			
+			$("#optional").hide("fast");
 			$("#carbonation").removeClass("has-error");
 			$("#sweetness").removeClass("has-error");
 			$("#strength").removeClass("has-error");
@@ -184,9 +183,9 @@ $(document).ready(function() {
 				$("#strengthSaison").hide("fast");
 				$("#darkLightColor").hide("fast");
 				$("#BDGColor").hide("fast");
+				$("#optional").hide("fast");
 				$("#sweetnessLambic").hide("fast");
 				$("#carbLambic").hide("fast");
-				
 				$("#special").removeClass("has-error");
 				$("#carbonation").removeClass("has-error");
 				$("#sweetness").removeClass("has-error");
@@ -245,6 +244,7 @@ $(document).ready(function() {
 				$("#strengthSaison").hide("fast");
 				$("#darkLightColor").hide("fast");
 				$("#BDGColor").hide("fast");
+				$("#optional").hide("fast");
 				$("#sweetnessLambic").hide("fast");
 				$("#carbLambic").hide("fast");
 				$("#carbonation").removeClass("has-error");
@@ -312,7 +312,7 @@ $(document).ready(function() {
 				$("#sweetnessLambic").hide("fast");
 				$("#carbLambic").hide("fast");
 				$("#BDGColor").hide("fast");
-				
+				$("#optional").hide("fast");
 				$("#brewInfo").prop("required", false);
 				$("input[name='brewMead1']").prop("required", false);
 				$("input[name='brewMead2']").prop("required", false);
@@ -361,8 +361,9 @@ $(document).ready(function() {
 				$("#sweetnessLambic").hide("fast");
 				$("#carbLambic").hide("fast");
 				$("#BDGColor").hide("fast");
+				$("#optional").hide("fast");
 				$("#specialInfo").hide("fast");
-			
+				
 				$("#brewInfo").prop("required", false);
 				$("input[name='brewMead1']").prop("required", false);
 				$("input[name='brewMead2']").prop("required", false);
@@ -409,7 +410,7 @@ $(document).ready(function() {
 				$("#sweetnessLambic").hide("fast");
 				$("#carbLambic").hide("fast");
 				$("#BDGColor").hide("fast");
-			
+				$("#optional").hide("fast");
 				$("#brewInfo").prop("required", false);
 				$("input[name='brewMead1']").prop("required", false);
 				$("input[name='brewMead2']").prop("required", false);
@@ -460,7 +461,7 @@ $(document).ready(function() {
 				$("#sweetnessLambic").hide("fast");
 				$("#carbLambic").hide("fast");
 				$("#BDGColor").hide("fast");
-			
+				$("#optional").hide("fast");
 				$("#brewInfo").prop("required", false);
 				$("input[name='brewMead1']").prop("required", false);
 				$("input[name='brewMead2']").prop("required", false);
@@ -513,7 +514,7 @@ $(document).ready(function() {
 				$("#sweetnessLambic").hide("fast");
 				$("#carbLambic").hide("fast");
 				$("#BDGColor").hide("fast");
-				
+				$("#optional").hide("fast");	
 				$("#brewInfo").prop("required", false);
 				$("input[name='brewMead1']").prop("required", false);
 				$("input[name='brewMead2']").prop("required", false);
@@ -571,9 +572,9 @@ $(document).ready(function() {
 				$("#strengthSaison").hide("fast");
 				$("#darkLightColor").hide("fast");
 				$("#BDGColor").hide("fast");
+				$("#optional").hide("fast");
 				$("#sweetnessLambic").hide("fast");
 				$("#carbLambic").hide("fast");
-				
 				$("#special").removeClass("has-error");
 				$("#carbonation").removeClass("has-error");
 				$("#sweetness").removeClass("has-error");
@@ -692,10 +693,6 @@ $(document).ready(function() {
 			$("input[name='BDGColor']").removeAttr('checked');
 			<?php } ?>
 			
-			<?php if (in_array($key,$optional_info_styles)) { ?>
-			$("#optional").show("fast");
-			<?php } ?>
-			
 			$("#special").hide("fast");
 			$("#carbonation").hide("fast");
 			$("#sweetness").hide("fast");
@@ -704,6 +701,7 @@ $(document).ready(function() {
 			$("#strengthSaison").hide("fast");
 			$("#darkLightColor").hide("fast");
 			$("#BDGColor").hide("fast");
+			$("#optional").hide("fast");
 			$("#sweetnessLambic").hide("fast");
 			$("#carbLambic").hide("fast");
 			$("#carbonation").removeClass("has-error");
@@ -715,7 +713,6 @@ $(document).ready(function() {
 			$("#sweetnessLambic").removeClass("has-error");
 			$("#carbLambic").removeClass("has-error");
 			$("#BDGColor").removeClass("has-error");
-			
 			$("#brewInfo").prop("required", false);
 			$("input[name='brewMead1']").prop("required", false);
 			$("input[name='brewMead2']").prop("required", false);
@@ -732,6 +729,9 @@ $(document).ready(function() {
 			$("#sweetness").show("fast");
 			$("#strength").show("fast");
 			$("#specialInfo").show("fast");
+			<?php if (in_array($key,$optional_info_styles)) { ?>
+			$("#optional").show("fast");
+			<?php } ?>
 			
 			$("#brewInfo").prop("required", true);
 			$("input[name='brewMead1']").prop("required", true);
@@ -762,10 +762,6 @@ $(document).ready(function() {
 			$("input[name='carbLambic']").removeAttr('checked');
 			$("input[name='BDGColor']").removeAttr('checked');
 			<?php } ?>
-			
-			<?php if (in_array($value,$optional_info_styles)) { ?>
-			$("#optional").show("fast");
-			<?php } ?>
 				
 			$("#special").hide("fast");
 			$("#carbonation").hide("fast");
@@ -777,7 +773,7 @@ $(document).ready(function() {
 			$("#sweetnessLambic").hide("fast");
 			$("#carbLambic").hide("fast");
 			$("#BDGColor").hide("fast");
-			
+			$("#optional").hide("fast");			
 			$("#brewInfo").prop("required", false);
 			$("input[name='brewMead1']").prop("required", false);
 			$("input[name='brewMead2']").prop("required", false);
@@ -792,6 +788,9 @@ $(document).ready(function() {
 			$("#carbonation").show("fast");
 			$("#strength").show("fast");
 			$("#specialInfo").hide("fast");
+			<?php if (in_array($value,$optional_info_styles)) { ?>
+			$("#optional").show("fast");
+			<?php } ?>
 			
 			$("input[name='brewMead1']").prop("required", true);
 			$("input[name='brewMead3']").prop("required", true);
@@ -820,9 +819,7 @@ $(document).ready(function() {
 			$("input[name='BDGColor']").removeAttr('checked');
 			<?php } ?>
 			
-			<?php if (in_array($value,$optional_info_styles)) { ?>
-			$("#optional").show("fast");
-			<?php } ?>
+			
 			
 			$("#special").hide("fast");
 			$("#carbonation").hide("fast");
@@ -834,6 +831,7 @@ $(document).ready(function() {
 			$("#sweetnessLambic").hide("fast");
 			$("#carbLambic").hide("fast");
 			$("#BDGColor").hide("fast");
+			$("#optional").hide("fast");
 			$("#specialInfo").hide("fast");
 		
 			$("#brewInfo").prop("required", false);
@@ -849,6 +847,9 @@ $(document).ready(function() {
 			
 			$("#carbonation").show("fast");
 			$("#sweetness").show("fast");
+			<?php if (in_array($value,$optional_info_styles)) { ?>
+			$("#optional").show("fast");
+			<?php } ?>
 			$("input[name='brewMead1']").prop("required", true);
 			$("input[name='brewMead2']").prop("required", true);
 			
@@ -875,10 +876,6 @@ $(document).ready(function() {
 			$("input[name='BDGColor']").removeAttr('checked');
 			<?php } ?>
 			
-			<?php if (in_array($value,$optional_info_styles)) { ?>
-			$("#optional").show("fast");
-			<?php } ?>
-			
 			$("#special").hide("fast");
 			$("#carbonation").hide("fast");
 			$("#sweetness").hide("fast");
@@ -889,7 +886,8 @@ $(document).ready(function() {
 			$("#sweetnessLambic").hide("fast");
 			$("#carbLambic").hide("fast");
 			$("#BDGColor").hide("fast");
-		
+			$("#optional").hide("fast");
+			
 			$("#brewInfo").prop("required", false);
 			$("input[name='brewMead1']").prop("required", false);
 			$("input[name='brewMead2']").prop("required", false);
@@ -905,6 +903,9 @@ $(document).ready(function() {
 			$("#sweetness").show("fast");
 			$("#strength").show("fast");	
 			$("#specialInfo").hide("fast");
+			<?php if (in_array($value,$optional_info_styles)) { ?>
+			$("#optional").show("fast");
+			<?php } ?>
 			
 			$("input[name='brewMead1']").prop("required", true);
 			$("input[name='brewMead2']").prop("required", true);
@@ -933,10 +934,6 @@ $(document).ready(function() {
 			$("input[name='BDGColor']").removeAttr('checked');
 			<?php } ?>
 			
-			<?php if (in_array($key,$optional_info_styles)) { ?>
-			$("#optional").show("fast");
-			<?php } ?>
-			
 			$("#special").hide("fast");
 			$("#carbonation").hide("fast");
 			$("#sweetness").hide("fast");
@@ -947,7 +944,8 @@ $(document).ready(function() {
 			$("#sweetnessLambic").hide("fast");
 			$("#carbLambic").hide("fast");
 			$("#BDGColor").hide("fast");
-		
+			$("#optional").hide("fast");
+			
 			$("#brewInfo").prop("required", false);
 			$("input[name='brewMead1']").prop("required", false);
 			$("input[name='brewMead2']").prop("required", false);
@@ -963,6 +961,9 @@ $(document).ready(function() {
 			$("#sweetness").show("fast");
 			$("#special").show("fast");	
 			$("#specialInfo").show("fast");
+			<?php if (in_array($key,$optional_info_styles)) { ?>
+			$("#optional").show("fast");
+			<?php } ?>
 			
 			$("input[name='brewMead1']").prop("required", true);
 			$("input[name='brewMead2']").prop("required", true);
@@ -992,10 +993,6 @@ $(document).ready(function() {
 			$("input[name='BDGColor']").removeAttr('checked');
 			<?php } ?>
 			
-			<?php if (in_array($key,$optional_info_styles)) { ?>
-			$("#optional").show("fast");
-			<?php } ?>
-			
 			$("#special").hide("fast");
 			$("#carbonation").hide("fast");
 			$("#sweetness").hide("fast");
@@ -1006,6 +1003,7 @@ $(document).ready(function() {
 			$("#sweetnessLambic").hide("fast");
 			$("#carbLambic").hide("fast");
 			$("#BDGColor").hide("fast");
+			$("#optional").hide("fast");
 			
 			$("#brewInfo").prop("required", false);
 			$("input[name='brewMead1']").prop("required", false);
@@ -1020,6 +1018,9 @@ $(document).ready(function() {
 			
 			$("#carbonation").show("fast");
 			$("#special").show("fast");
+			<?php if (in_array($key,$optional_info_styles)) { ?>
+			$("#optional").show("fast");
+			<?php } ?>
 			$("input[name='brewMead1']").prop("required", true);
 			
 			$("#specialInfo").show("fast");
@@ -1041,7 +1042,7 @@ $(document).ready(function() {
 			$("#sweetnessLambic").hide("fast");
 			$("#carbLambic").hide("fast");
 			$("#BDGColor").hide("fast");
-			
+			$("#optional").hide("fast");
 			$("#brewInfo").prop("required", false);
 			$("input[name='brewMead1']").prop("required", false);
 			$("input[name='brewMead2']").prop("required", false);
@@ -1078,6 +1079,7 @@ if ($action == "edit") {
 		$("#sweetnessLambic").hide("fast");
 		$("#carbLambic").hide("fast");
 		$("#BDGColor").hide("fast");
+		$("#optional").hide("fast");
 		$("#specialInfo").hide("fast");
 		$("#brewInfo").prop("required", false);
 		$("input[name='brewMead1']").prop("required", false);
@@ -1110,6 +1112,7 @@ if ($action == "edit") {
 			$("#sweetnessLambic").hide("fast");
 			$("#carbLambic").hide("fast");
 			$("#BDGColor").hide("fast");
+			$("#optional").hide("fast");
 			$("#brewInfo").prop("required", true);
 			$("input[name='brewMead1']").prop("required", true);
 			$("input[name='brewMead2']").prop("required", true);
@@ -1138,6 +1141,7 @@ if ($action == "edit") {
 			$("#sweetnessLambic").hide("fast");
 			$("#carbLambic").hide("fast");
 			$("#BDGColor").hide("fast");
+			$("#optional").hide("fast");
 			$("#specialInfo").hide("fast");
 			$("#brewInfo").prop("required", false);
 			$("input[name='brewMead1']").prop("required", true);
@@ -1167,6 +1171,7 @@ if ($action == "edit") {
 			$("#sweetnessLambic").hide("fast");
 			$("#carbLambic").hide("fast");
 			$("#BDGColor").hide("fast");
+			$("#optional").hide("fast");
 			$("#specialInfo").hide("fast");
 			$("#brewInfo").prop("required", false);
 			$("input[name='brewMead1']").prop("required", true);
@@ -1196,6 +1201,7 @@ if ($action == "edit") {
 			$("#sweetnessLambic").hide("fast");
 			$("#carbLambic").hide("fast");
 			$("#BDGColor").hide("fast");
+			$("#optional").hide("fast");
 			$("#specialInfo").hide("fast");
 			$("#brewInfo").prop("required", false);
 			$("input[name='brewMead1']").prop("required", true);
@@ -1225,6 +1231,7 @@ if ($action == "edit") {
 			$("#sweetnessLambic").hide("fast");
 			$("#carbLambic").hide("fast");
 			$("#BDGColor").hide("fast");
+			$("#optional").hide("fast");
 			$("#specialInfo").hide("fast");
 			$("#brewInfo").prop("required", true);
 			$("input[name='brewMead1']").prop("required", true);
@@ -1254,6 +1261,7 @@ if ($action == "edit") {
 			$("#sweetnessLambic").hide("fast");
 			$("#carbLambic").hide("fast");
 			$("#BDGColor").hide("fast");
+			$("#optional").hide("fast");
 			$("#specialInfo").hide("fast");
 			$("#brewInfo").prop("required", true);
 			$("input[name='brewMead1']").prop("required", true);
@@ -1283,6 +1291,7 @@ if ($action == "edit") {
 			$("#sweetnessLambic").hide("fast");
 			$("#carbLambic").hide("fast");
 			$("#BDGColor").hide("fast");
+			$("#optional").hide("fast");
 			$("#specialInfo").hide("fast");
 			$("#brewInfo").prop("required", true);
 			$("input[name='brewMead1']").prop("required", false);
@@ -1316,6 +1325,7 @@ if ($action == "edit") {
 			$("#carbLambic").hide("fast");
 			$("#BDGColor").hide("fast");
 			$("#brewInfo").prop("required", true);
+			$("#optional").hide("fast");
 			$("input[name='brewMead1']").prop("required", true);
 			$("input[name='brewMead2']").prop("required", true);
 			$("input[name='brewMead3']").prop("required", true);
@@ -1346,6 +1356,7 @@ if ($action == "edit") {
 			$("#sweetnessLambic").hide("fast");
 			$("#carbLambic").hide("fast");
 			$("#BDGColor").hide("fast");
+			$("#optional").hide("fast");
 			$("#specialInfo").hide("fast");
 			$("#brewInfo").prop("required", false);
 			$("input[name='brewMead1']").prop("required", true);
@@ -1375,6 +1386,7 @@ if ($action == "edit") {
 			$("#sweetnessLambic").hide("fast");
 			$("#carbLambic").hide("fast");
 			$("#BDGColor").hide("fast");
+			$("#optional").hide("fast");
 			$("#specialInfo").hide("fast");
 			$("#brewInfo").prop("required", false);
 			$("input[name='brewMead1']").prop("required", true);
@@ -1404,6 +1416,7 @@ if ($action == "edit") {
 			$("#sweetnessLambic").hide("fast");
 			$("#carbLambic").hide("fast");
 			$("#BDGColor").hide("fast");
+			$("#optional").hide("fast");
 			$("#specialInfo").hide("fast");
 			$("#brewInfo").prop("required", false);
 			$("input[name='brewMead1']").prop("required", true);
@@ -1433,6 +1446,7 @@ if ($action == "edit") {
 			$("#sweetnessLambic").hide("fast");
 			$("#carbLambic").hide("fast");
 			$("#BDGColor").hide("fast");
+			$("#optional").hide("fast");
 			$("#specialInfo").show("fast");
 			$("#brewInfo").prop("required", true);
 			$("input[name='brewMead1']").prop("required", true);
@@ -1464,6 +1478,7 @@ if ($action == "edit") {
 			$("#sweetnessLambic").hide("fast");
 			$("#carbLambic").hide("fast");
 			$("#BDGColor").hide("fast");
+			$("#optional").hide("fast");
 			$("#specialInfo").show("fast");
 			$("#brewInfo").prop("required", true);
 			$("input[name='brewMead1']").prop("required", true);
@@ -1495,6 +1510,7 @@ if ($action == "edit") {
 			$("#sweetnessLambic").hide("fast");
 			$("#carbLambic").hide("fast");
 			$("#BDGColor").hide("fast");
+			$("#optional").hide("fast");
 			$("#brewInfo").prop("required", true);
 			$("input[name='brewMead1']").prop("required", false);
 			$("input[name='brewMead2']").prop("required", false);
@@ -1526,6 +1542,7 @@ if ($action == "edit") {
 					$("#sweetnessLambic").hide("fast");
 					$("#carbLambic").hide("fast");
 					$("#BDGColor").hide("fast");
+					$("#optional").hide("fast");
 					$("#specialInfo").show("fast");
 					$("#specialInfoText").html("<?php echo $special_beer_info["$view"]; ?>");
 					$("#specialInfoName").html("<a href='#' data-tooltip='true' title='Click for specifics for this style.' data-toggle='modal' data-target='#<?php echo $view; ?>'>Style <?php echo str_replace("-","",$view); ?></a>");
@@ -1542,6 +1559,7 @@ if ($action == "edit") {
 					$("#sweetnessLambic").hide("fast");
 					$("#carbLambic").hide("fast");
 					$("#BDGColor").show("fast");
+					$("#optional").hide("fast");
 					$("#specialInfo").show("fast");
 					$("#specialInfoText").html("<?php echo $special_beer_info["$view"]; ?>");
 					$("#specialInfoName").html("<a href='#' data-tooltip='true' title='Click for specifics for this style.' data-toggle='modal' data-target='#<?php echo $view; ?>'>Style <?php echo str_replace("-","",$view); ?></a>");
@@ -1558,6 +1576,7 @@ if ($action == "edit") {
 					$("#sweetnessLambic").hide("fast");
 					$("#carbLambic").hide("fast");
 					$("#BDGColor").hide("fast");
+					$("#optional").show("fast");
 					$("#specialInfo").show("fast");
 					$("#specialInfoText").html("<?php echo $special_beer_info["$view"]; ?>");
 					$("#specialInfoName").html("<a href='#' data-tooltip='true' title='Click for specifics for this style.' data-toggle='modal' data-target='#<?php echo $view; ?>'>Style <?php echo str_replace("-","",$view); ?></a>");
@@ -1714,6 +1733,7 @@ if ($action == "edit") {
 		$("#sweetnessLambic").hide("fast");
 		$("#carbLambic").hide("fast");
 		$("#BDGColor").hide("fast");
+		$("#optional").hide("fast");
 		$("#specialInfo").hide("fast");
 		
 		<?php if ($explodies[2] == 1) { ?>

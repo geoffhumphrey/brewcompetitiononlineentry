@@ -15,7 +15,6 @@
     </div><!-- ./button group -->
 	<?php } ?>
 </div>
-
 <?php if (get_contact_count() > 0) { ?>
 <?php if ($action == "default") { ?>
 <script type="text/javascript" language="javascript">
@@ -65,9 +64,11 @@
 <?php } } else { ?>
 <p>There are no contacts in the database.</p>
 <?php } ?>
-<?php if (($action == "add") || ($action == "edit")) { ?>
-<form data-toggle="validator" role="form" class="form-horizontal" method="post" action="<?php echo $base_url; ?>includes/process.inc.php?action=<?php echo $action; ?>&amp;dbTable=<?php echo $contacts_db_table; ?><?php if ($action == "edit") echo "&amp;id=".$id; ?>" name="form1">
-
+<?php if (($action == "add") || ($action == "edit")) { 
+$form_url = $base_url."includes/process.inc.php?action=".$action."&amp;dbTable=".$contacts_db_table; 
+if ($action == "edit") $form_url .= "&amp;id=".$id;
+?>
+<form data-toggle="validator" role="form" class="form-horizontal" method="post" action="<?php echo $form_url; ?>" name="form1">
 <div class="bcoem-admin-element hidden-print">
 <div class="form-group"><!-- Form Group REQUIRED Text Input -->
 	<label for="contactFirstName" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">First Name</label>
@@ -111,7 +112,7 @@
 			<span class="input-group-addon" id="contactEmail-addon2"><span class="fa fa-star"></span></span>
 		</div>
         <div class="help-block with-errors"></div>
-		<span id="helpBlock" class="help-block">Email addresses are <strong>not</strong> displayed. Used only for contact purposes via the site's <a href="<?php echo $base_url; ?>index.php?section=contact">contact form</a>.</span>
+		<span id="helpBlock" class="help-block">Email addresses are <strong>not</strong> displayed. Used only for contact purposes via the site&rsquo;s <a href="<?php echo $base_url; ?>index.php?section=contact">contact form</a>.</span>
 	</div>
 </div><!-- ./Form Group -->
 <input type="hidden" name="relocate" value="<?php echo relocate($base_url."index.php?section=admin&go=contacts","default",$msg,$id); ?>">

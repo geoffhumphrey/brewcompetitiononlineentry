@@ -19,10 +19,6 @@ if ((!$logged_in) && (in_array($section,$account_pages))) {
 	exit;
 }
 
-// convert_to_ba();
-// convert_to_pro();
-// add_ba_category();
-
 // ---------------------------------------------------------------------------------
 
 // ---------------------------- Admin Only Functions -------------------------------
@@ -58,7 +54,7 @@ if ($section == "admin") {
 // ---------------------------- Various Functions ----------------------------------
 
 // Testing
-if (TESTING) {
+if ((TESTING) || (DEBUG)) {
 	$mtime = microtime();
 	$mtime = explode(" ",$mtime);
 	$mtime = $mtime[1] + $mtime[0];
@@ -83,6 +79,12 @@ else {
 	$container_main = "container";
 	$nav_container = "navbar-default";
 }
+	
+// Load libraries only when needed - for performance
+$tinymce_load = array("contest_info","special_best","styles","default","step4");
+$datetime_load = array("contest_info","judging","testing","preferences","step4","step5","step6");
+if (((strpos($section, "step") === FALSE) && ($section != "setup")) && ((judging_date_return() == 0) && ($registration_open == 2))) $datatables_load = array("admin","list","default");
+else $datatables_load = array("admin","list","step4");
 
 // ---------------------------------------------------------------------------------
 
@@ -97,6 +99,7 @@ else {
     <title><?php echo $_SESSION['contestName']; ?> - Brew Competition Online Entry &amp; Management</title>
 
 	<?php
+	
 	// Default - Use CDN
 	include(INCLUDES.'load_cdn_libraries.inc.php');
 
@@ -181,16 +184,17 @@ else {
 			if ($go == "judging_tables") 	    	include (ADMIN.'judging_tables.admin.php');
 			if ($go == "judging_flights") 	    	include (ADMIN.'judging_flights.admin.php');
 			if ($go == "judging_scores") 	    	include (ADMIN.'judging_scores.admin.php');
-			if ($go == "judging_scores_bos")    		include (ADMIN.'judging_scores_bos.admin.php');
+			if ($go == "judging_scores_bos")    	include (ADMIN.'judging_scores_bos.admin.php');
 			if ($go == "participants") 				include (ADMIN.'participants.admin.php');
 			if ($go == "entries") 					include (ADMIN.'entries.admin.php');
 			if ($go == "contacts") 	    			include (ADMIN.'contacts.admin.php');
 			if ($go == "dropoff") 	    			include (ADMIN.'dropoff.admin.php');
 			if ($go == "checkin") 	    			include (ADMIN.'barcode_check-in.admin.php');
-			if ($go == "count_by_style")				include (ADMIN.'entries_by_style.admin.php');
+			if ($go == "count_by_style")			include (ADMIN.'entries_by_style.admin.php');
 			if ($go == "count_by_substyle")			include (ADMIN.'entries_by_substyle.admin.php');
 			if ($action == "register")				include (SECTIONS.'register.sec.php');
-			if ($go == "upload_scoresheets")			include (ADMIN.'upload_scoresheets.admin.php');
+			if ($go == "upload_scoresheets")		include (ADMIN.'upload_scoresheets.admin.php');
+			if ($go == "payments")					include (ADMIN.'payments.admin.php');
 
 				if ($_SESSION['userLevel'] == "0") {
 					if ($go == "styles") 	    		include (ADMIN.'styles.admin.php');
@@ -201,9 +205,9 @@ else {
 					if ($go == "sponsors") 	   			include (ADMIN.'sponsors.admin.php');
 					if ($go == "style_types")    		include (ADMIN.'style_types.admin.php');
 					if ($go == "special_best") 	    	include (ADMIN.'special_best.admin.php');
-					if ($go == "special_best_data") 		include (ADMIN.'special_best_data.admin.php');
+					if ($go == "special_best_data") 	include (ADMIN.'special_best_data.admin.php');
 					if ($go == "mods") 	    			include (ADMIN.'mods.admin.php');
-					if ($go == "upload")					include (ADMIN.'upload.admin.php');
+					if ($go == "upload")				include (ADMIN.'upload.admin.php');
 					if ($go == "change_user_password") 	include (ADMIN.'change_user_password.admin.php');
 				}
 

@@ -1196,12 +1196,15 @@ $(document).ready(function(){
                 <h4 class="modal-title" id="payPalIPNModalLabel">PayPal IPN Info and Setup</h4>
             </div>
             <div class="modal-body">
-              <p>PayPal's Instant Payment Notification service is a way for your BCOE&amp;M installation to be updated entry status to &quot;paid&quot; <strong>instantly</strong> after a user successfully completes their payment on PayPal.</p>
-                <p>Implementing IPN involves a number of factors and a bit of setup <strong>on your <a href="https://www.paypal.com/us/signin/" target="_blank">PayPal</a> account</strong>.</p>
-              <p class="text-danger"><strong>To implement PayPal IPN, your PayPal account must be a <u>business</u> account.</strong></p>
-              <p>Setting Up IPN Notifications on PayPal instructions <a href="https://developer.paypal.com/docs/classic/ipn/integration-guide/IPNSetup/#id089EG030E5Z" target="_blank"><strong>can be found here</strong></a>. You will need to enter a Notification URL for the function to work. Your notification URL is: <blockquote><strong><?php echo $base_url; ?>ppv.php</strong></blockquote></p>
-                <p>Once you have set up your PayPal account, since environments vary, it is suggested that you perform a test using your own BCOE&amp;M account by adding an entry and paying for it via PayPal.</p>
-              	<p>Transaction details will be saved to your BCOE&amp;M database and are available via your PayPal dashboard as well.</p>
+            
+            	<p>PayPal&rsquo;s Instant Payment Notification (IPN) service is a way for your BCOE&amp;M installation to update entry status to &quot;paid&quot; <strong>instantly</strong> after a user successfully completes their payment on PayPal.</p>
+				<p>No more fielding questions from entrants about whether their entries have been marked as paid, or why their entries haven't been.</p>
+				<p>Transaction details will be saved to your BCOE&amp;M database and will be available via your PayPal dashboard as well.</p>
+				<p class="text-primary"><strong>First, it is suggested that you have a dedicated PayPal account for your competition.</strong></p>
+				<p class="text-danger"><strong>Second, to implement PayPal IPN, your PayPal account must be a <u>business</u> account.</strong></p>
+				<p><strong>Third, set up your PayPal account to process Instant Payment Notifications. Complete instructions are <a href="http://brewcompetition.com/paypal-ipn" target="_blank">available here</a>.</strong></p>
+            	<p>Your notification URL is: <blockquote><strong><?php echo $base_url; ?>ppv.php</strong></blockquote></p>
+				<p>Your Auto Return URL is: <blockquote><strong><?php echo $base_url; ?>index.php?section=pay&amp;msg=10</strong></blockquote></p>
             </div>
             <div class="modal-footer">
             	<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>

@@ -497,7 +497,7 @@ if ((($action == "add") || ($action == "edit")) || ($section == "step5")) {
     <?php } ?>
     
     <?php if ($filter == "judges") { ?>
-    <div class="btn-group" role="group" aria-label="...">
+    <div class="btn-group hidden-xs" role="group" aria-label="...">
         <button type="button" class="btn btn-info" data-toggle="modal" data-target="#judgeEmailModal">
               Assigned Judge Email Addresses
             </button>
@@ -523,7 +523,7 @@ if ((($action == "add") || ($action == "edit")) || ($section == "step5")) {
     <?php } ?>
     
     <?php if ($filter == "stewards") { ?>
-    <div class="btn-group" role="group" aria-label="...">
+    <div class="btn-group hidden-xs" role="group" aria-label="...">
         <button type="button" class="btn btn-info" data-toggle="modal" data-target="#judgeEmailModal">
               Assigned Steward Email Addresses
             </button>
@@ -547,9 +547,35 @@ if ((($action == "add") || ($action == "edit")) || ($section == "step5")) {
       	</div>
     </div><!-- ./modal -->
     <?php } ?>
+    
+    <?php if ($filter == "staff") { ?>
+    <div class="btn-group hidden-xs" role="group" aria-label="...">
+        <button type="button" class="btn btn-info" data-toggle="modal" data-target="#staffEmailModal">
+              Assigned Staff Email Addresses
+            </button>
+    </div><!-- ./button group -->
+    <!-- Modal -->
+    <div class="modal fade" id="staffEmailModal" tabindex="-1" role="dialog" aria-labelledby="staffEmailModalLabel">
+      	<div class="modal-dialog" role="document">
+        	<div class="modal-content">
+          		<div class="modal-header bcoem-admin-modal">
+            		<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            		<h4 class="modal-title" id="staffEmailModalLabel">Assigned Staff Email Addresses</h4>
+          		</div>
+                <div class="modal-body">
+                	<p>Copy and paste the list below into your favorite email program to contact all assigned judges.</p>
+                    <textarea class="form-control" rows="8"><?php echo rtrim($copy_paste_emails,", "); ?></textarea>
+                </div>
+                <div class="modal-footer">
+            	<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+            </div>
+        	</div>
+      	</div>
+    </div><!-- ./modal -->
+    <?php } ?>
 	
 	<?php if ($filter != "default") { ?>
-	<div class="btn-group pull-right" role="group" aria-label="...">
+	<div class="btn-group hidden-xs pull-right" role="group" aria-label="...">
         <div class="btn-group" role="group">
             <button type="button" class="btn btn-success" data-toggle="modal" data-target="#bjcpStatusModal">
               BJCP Rules

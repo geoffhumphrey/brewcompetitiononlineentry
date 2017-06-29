@@ -13,7 +13,7 @@ include (LIB.'date_time.lib.php');
 include (INCLUDES.'version.inc.php');
 
 // ------------------ VERSION CHECK ------------------  
-// Current version is 2.1.9.0, change version in system table if not
+// Current version is 2.1.10.0, change version in system table if not
 // If there are NO database structure or data updates for the current version,
 // USE THIS FUNCTION ONLY IF THERE ARE *NOT* ANY DB TABLE OR DATA UPDATES
 // OTHERWISE, DEFINE/UPDATE THE VERSION VIA THE UPDATE PROCEDURE
@@ -25,7 +25,7 @@ function version_check($version,$current_version) {
 	if ($version != $current_version) {
 				
 		// Fix typo in styles
-		$updateSQL = sprintf("UPDATE %s SET version='%s', version_date='%s' WHERE id=%s",$prefix."system","2.1.9.0","2017-01-031","1");
+		$updateSQL = sprintf("UPDATE %s SET version='%s', version_date='%s' WHERE id=%s",$prefix."system","2.1.10.0","2017-07-01","1");
 		mysqli_real_escape_string($connection,$updateSQL);
 		$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 		
@@ -2668,10 +2668,10 @@ function brewer_assignment($user_id,$method,$id,$dbTable,$filter,$archive="defau
 	else $r = "";
 	
 	if ($method == "3") {
-		if ($uid == "judges") $r = $label_judges; 
-		elseif ($uid == "stewards") $r = $label_stewards; 
-		elseif ($uid == "staff") $r = $label_staff;
-		elseif ($uid == "bos") $r = "BOS ".$label_judges;
+		if ($filter == "judges") $r = $label_judges; 
+		elseif ($filter == "stewards") $r = $label_stewards; 
+		elseif ($filter == "staff") $r = $label_staff;
+		elseif ($filter == "bos") $r = "BOS ".$label_judges;
 		else $r = "";
 	}
 

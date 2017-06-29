@@ -242,34 +242,61 @@ if (strpos($_SESSION['prefsStyleSet'],"BABDB") !== false) {
 	$styles_options = "";
 			
 	$ba_styleSet_explodies = explode("|",$_SESSION['prefsStyleSet']);
-	$ba_style_explodies = explode(",",$ba_styleSet_explodies[2]);
 	
-	foreach ($_SESSION['styles'] as $ba_styles => $ba_stylesData) {
-		if (is_array($ba_stylesData) || is_object($ba_stylesData)) {
-			foreach ($ba_stylesData as $key => $ba_style) { 
-				if (in_array($ba_style['id'],$ba_style_explodies)) {
-						$ba_accepted_styles[] .= $ba_style['name']."|".$ba_style['id'];
-				}
-			} // end foreach ($stylesData as $data => $style)	
-		} // end if (is_array($stylesData) || is_object($stylesData))
-	} // end foreach ($_SESSION['styles'] as $styles => $stylesData)
+	if (isset($ba_styleSet_explodies[2])) {
+		$ba_style_explodies = explode(",",$ba_styleSet_explodies[2]);
+		foreach ($_SESSION['styles'] as $ba_styles => $ba_stylesData) {
+			if (is_array($ba_stylesData) || is_object($ba_stylesData)) {
+				foreach ($ba_stylesData as $key => $ba_style) { 
+					if (in_array($ba_style['id'],$ba_style_explodies)) {
+							$ba_accepted_styles[] .= $ba_style['name']."|".$ba_style['id'];
+					}
+				} // end foreach ($stylesData as $data => $style)	
+			} // end if (is_array($stylesData) || is_object($stylesData))
+		} // end foreach ($_SESSION['styles'] as $styles => $stylesData)
+	}
 	
 	sort($ba_accepted_styles);
 	
 	foreach ($ba_accepted_styles as $value) {
 		$ba_style_explodies = explode("|",$value);
+		
 		if (($styles_endRow == 0) && ($styles_hloopRow1++ != 0)) $page_info8 .= "<tr>";
-		if (!empty($value)) {		
+		
+		if (!empty($value)) {
+			
 			$page_info8 .= "<td width=\"33%\">";
 			if (in_array($ba_style_explodies[1],$ba_special_ids)) $page_info8 .= "<a href=\"https://www.brewersassociation.org/resources/brewers-association-beer-style-guidelines/\" target=\"_blank\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"".$entry_info_text_045." - ".$ba_style_explodies[0]." \">".$ba_style_explodies[0]."</a>"; 
 			else $page_info8 .= $ba_style_explodies[0];
 			$page_info8 .= "</td>";
+			
 			$styles_endRow++;
 		}
+		
 		if ($styles_endRow >= $styles_columns) { 
 			$styles_endRow = 0; 
 		}
 	}
+	
+	if ($totalRows_styles_custom > 0) {
+		
+		do {
+			
+			if (($styles_endRow == 0) && ($styles_hloopRow1++ != 0)) $page_info8 .= "<tr>";
+			$page_info8 .= "<td width=\"33%\">";
+			$page_info8 .= $row_styles_custom['brewStyle']." (Custom Style)";
+			$page_info8 .= "</td>";
+			
+			$styles_endRow++;
+			
+			if ($styles_endRow >= $styles_columns) { 
+				$styles_endRow = 0;
+			}
+			
+		} while ($row_styles_custom = mysqli_fetch_assoc($styles_custom));
+		
+	}
+	
 }
 
 else {
@@ -290,7 +317,6 @@ else {
 			
 			$brewStyleEntry = str_replace("<p>","",$row_styles['brewStyleEntry']);
 			$brewStyleEntry = str_replace("</p>","",$brewStyleEntry);
-			
 			
 			if (!empty($row_styles['brewStyleInfo'])) $style_info_modal_body .= "<p>".$brewStyleInfo."</p>";
 			if (!empty($row_styles['brewStyleEntry'])) $style_info_modal_body .= "<p><strong class=\"text-primary\">".$label_entry_info.":</strong> ".$brewStyleEntry."</p>";
@@ -320,7 +346,10 @@ else {
 		
 		$page_info8 .= "</td>";
 		$styles_endRow++;
-		if ($styles_endRow >= $styles_columns) { $styles_endRow = 0; }
+		
+		if ($styles_endRow >= $styles_columns) { 
+			$styles_endRow = 0; 
+		}
 			
 	} while ($row_styles = mysqli_fetch_assoc($styles));
 

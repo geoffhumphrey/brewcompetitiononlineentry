@@ -5,7 +5,7 @@ Website:     http://www.brewcompetition.com
 GitHub:      https://github.com/geoffhumphrey/brewcompetitiononlineentry
 SourceForge: http://sourceforge.net/projects/brewcompetition [Archives ONLY]
 
-Release 2.1.9, 2017-02-01
+Release 2.1.10, 2017-07-01
 
 Developed utilizing a number of extensions and functions, with gratitude to their
 respective developers and online communities. Tested with the following versions:
@@ -39,12 +39,14 @@ Direct inquiries to http://www.brewcompetition.com/contact
 PLEASE READ!
 ***********************************************************************************
 Please read this entire document before attempting to install or use the 
-application. Step-by-step installation instructions are available at
-http://www.brewcompetition.com/install.
+application. 
+
+Step-by-step installation instructions are available at
+http://brewcompetition.com/install-instructions.
 
 This software utilizes PHP 5.6.X and MySQL 5.5.X to process and store data.
 
-Your web server needs both of these installed and ready for use. 
+Your web server needs both of these installed, configured, and ready for use. 
 
 Contact your web host if you have any questions.
 
@@ -62,9 +64,21 @@ Microsoft Edge, and Safari render BCOE&M correctly.
 ***********************************************************************************
 Help
 ***********************************************************************************
+Installation Instructions: 
+http://brewcompetition.com/install-instructions
+
+Upgrade Instructinos:
+http://brewcompetition.com/upgrade-instructions
+
+Competition Organization with BCOE&M:
+http://brewcompetition.com/comp-org
+
+Load Libraries Locally (No CDNs):
+http://brewcompetition.com/local-load
+
 Starting with version 2.0.0, online documentation/help is available within the 
 application. Click the question mark icon on the top navigation bar when available.
-In-app help will be expanded in future release versions.
+In-app help will be augmented and expanded in future releases.
 
 Other info can be found on the GitHub repository page.
 

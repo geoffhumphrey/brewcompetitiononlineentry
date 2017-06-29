@@ -17,5 +17,4 @@ To convert for translation:
 // A future version will have full conversions for Admin, Update, and Setup
 include (LANG.'en/en-US.lang.php');
 include (LANG.'en/en-US_admin.lang.php');
-
 ?>

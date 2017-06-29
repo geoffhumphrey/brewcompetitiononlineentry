@@ -38,8 +38,8 @@ define('MAINT', FALSE);
 define('NHC', FALSE);
 define('TESTING', FALSE);
 define('SINGLE', FALSE);
-define('DEBUG', TRUE);
-define('DEBUG_SESSION_VARS', TRUE);
+define('DEBUG', FALSE);
+define('DEBUG_SESSION_VARS', FALSE);
 
 // --------------------------------------------------------
 // Error Reporting

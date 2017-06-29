@@ -19,42 +19,10 @@ if (strpos($styleSet,"BABDB") !== false) {
 	$row_styles = mysqli_fetch_assoc($styles);
 	$totalRows_styles = mysqli_num_rows($styles);
 	
-	$query_styles_custom = sprintf("SELECT * FROM %s WHERE brewStyleOwn='custom'",$styles_db_table);
+	$query_styles_custom = sprintf("SELECT * FROM %s WHERE brewStyleOwn='custom' AND brewStyleActive='Y'",$styles_db_table);
 	$styles_custom = mysqli_query($connection,$query_styles_custom) or die (mysqli_error($connection));
 	$row_styles_custom = mysqli_fetch_assoc($styles_custom);
 	$totalRows_styles_custom = mysqli_num_rows($styles_custom);
-	
-	/*
-	$query_styles = "";
-	
-	// Get the API Key from preferences variable
-	$styleKey = explode("|",$styleSet);
-	
-	// Connect to API
-	include (INCLUDES.'brewerydb/brewerydb.inc.php');
-	include (INCLUDES.'brewerydb/exception.inc.php');
-	
-	// Grab all styles and store in a session
-	if (!isset($_SESSION['styles'])) {
-		
-		// $apikey = $styleKey[1];
-		$apikey = "9b986a69d8803dfcaedd2bbdabbf9169";
-		$bdb = new Pintlabs_Service_Brewerydb($apikey);
-		$bdb->setFormat('php'); // if you want to get php back.  'xml' and 'json' are also valid options.
-		$params = array();
-		
-		try {
-				$results = $bdb->request('styles', $params, 'GET'); // where $params is a keyed array of parameters to send with the API call.
-			} 
-			
-		catch (Exception $e) { 
-				$results = array('error' => $e->getMessage()); 
-			}
-			
-		$_SESSION['styles'] = $results;
-	}
-	*/
-	
 	
 }
 

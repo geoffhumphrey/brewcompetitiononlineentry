@@ -233,9 +233,17 @@ if (!check_update("userToken", $prefix."users")) {
 // If not, add it and perform other associated DB changes
 if (!check_update("brewerBreweryName", $prefix."brewer")) {
 
-	// ALTER TABLE `bigbeers_preferences` CHANGE `prefsStyleSet` `prefsStyleSet` TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL;
-
+	$updateSQL = sprintf("ALTER TABLE `%s` ADD `assignRoles` varchar(25) COLLATE utf8_unicode_ci DEFAULT NULL;", $prefix."judging_assignments");
+	mysqli_select_db($connection,$database);
+	mysqli_real_escape_string($connection,$updateSQL);
+	$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+	
 	$updateSQL = sprintf("ALTER TABLE `%s` ADD `brewerBreweryName` VARCHAR(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL, ADD `brewerBreweryTTB` VARCHAR(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL;", $prefix."brewer");
+	mysqli_select_db($connection,$database);
+	mysqli_real_escape_string($connection,$updateSQL);
+	$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+	
+	$updateSQL = sprintf("ALTER TABLE `%s` ADD `userToken` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL, ADD `userTokenTime` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL, ADD `userFailedLogins` int(11) DEFAULT NULL, ADD `userFailedLoginTime` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL;", $prefix."users");
 	mysqli_select_db($connection,$database);
 	mysqli_real_escape_string($connection,$updateSQL);
 	$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));

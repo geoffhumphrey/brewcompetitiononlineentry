@@ -1,3 +1,25 @@
+<?php 
+if (TESTING) {
+	if ($_SESSION['prefsPaypalIPN'] == 1) $paypal_env = $base_url."includes/process.inc.php?action=paypal";
+	else $paypal_env = "https://www.sandbox.paypal.com/cgi-bin/webscr";
+}
+else {
+	if ($_SESSION['prefsPayPalIPN'] == 1) $paypal_env = $base_url."includes/process.inc.php?action=paypal";
+	else $paypal_env = "https://www.paypal.com/cgi-bin/webscr";
+}
+?>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/jquery.loadingoverlay/latest/loadingoverlay.min.js"></script>
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/jquery.loadingoverlay/latest/loadingoverlay_progress.min.js" />
+<script>
+window.onload=function(){
+$(function(){
+  $("#submit").on("click", function(event){
+      $.LoadingOverlay("show");
+	 // window.location = "<?php echo $paypal_env; ?>";
+  });
+});
+}
+</script>
 <?php
 /**
  * Module:      pay.sec.php 
@@ -104,8 +126,10 @@ Declare all variables empty at the top of the script. Add on later...
 			$primary_page_info .= "<ol>";
 				do { 
 					if ($row_log_confirmed['brewPaid'] != "1") {
+						if (strpos($_SESSION['prefsStyleSet'],"BABDB") !== false) $style = $row_log_confirmed['brewStyle'];
+						else $style = "Style ".$row_log_confirmed['brewCategory'].$row_log_confirmed['brewSubCategory'];
 						$entry_no = sprintf("%04s",$row_log_confirmed['id']);
-						$primary_page_info .= sprintf("<li>Entry #%s: %s (Style %s)</li>",$entry_no,$row_log_confirmed['brewName'],$row_log_confirmed['brewCategory'].$row_log_confirmed['brewSubCategory']);
+						$primary_page_info .= sprintf("<li>Entry #%s: %s (%s)</li>",$entry_no,$row_log_confirmed['brewName'],$style);
 						$entries .= sprintf("%04s",$row_log_confirmed['id']).", ";
 						$return_entries .= $row_log_confirmed['id']."-";
 					}
@@ -147,28 +171,50 @@ Declare all variables empty at the top of the script. Add on later...
 				$page_info4 .= sprintf("<p>%s",$pay_text_018);
 				if ($_SESSION['prefsTransFee'] == "Y") $page_info4 .= sprintf(" %s %s %s",$pay_text_019,$currency_symbol.$fee,$pay_text_020);
 				$page_info4 .= "</p>";
+				
+				$page_info4 .= "<form role=\"form\" id=\"formfield\" name=\"PayPal\" action=\"".$paypal_env."\" method=\"post\">\n";
+				$page_info4 .= "<input type=\"hidden\" name=\"action\" value=\"add_form\" />\n";
+				$page_info4 .= "<input type=\"hidden\" name=\"cmd\" value=\"_xclick\">\n";
+				$page_info4 .= sprintf("<input type=\"hidden\" name=\"business\" value=\"%s\">\n",$_SESSION['prefsPaypalAccount']);
+				$page_info4 .= sprintf("<input type=\"hidden\" name=\"item_name\" value=\"%s, %s - %s Payment\">\n",$_SESSION['brewerLastName'],$_SESSION['brewerFirstName'],$_SESSION['contestName']);
+				$page_info4 .= sprintf("<input type=\"hidden\" name=\"amount\" value=\"%s\">\n",$payment_amount);
+				$page_info4 .= sprintf("<input type=\"hidden\" name=\"currency_code\" value=\"%s\">\n",$currency_code);
+				$page_info4 .= "<input type=\"hidden\" name=\"button_subtype\" value=\"services\">\n";
+				$page_info4 .= "<input type=\"hidden\" name=\"no_note\" value=\"0\">\n";
+				$page_info4 .= "<input type=\"hidden\" name=\"cn\" value=\"Add special instructions\">\n";
+				$page_info4 .= "<input type=\"hidden\" name=\"no_shipping\" value=\"1\">\n";
+				$page_info4 .= "<input type=\"hidden\" name=\"rm\" value=\"1\">\n";
+				$page_info4 .= sprintf("<input type=\"hidden\" name=\"custom\" value=\"%s|%s\">\n",$_SESSION['user_id'],rtrim($return_entries, '-'));
+				$page_info4 .= sprintf("<input type=\"hidden\" name=\"return\" value=\"%s\">\n",rtrim($return, '-'));
+				$page_info4 .= sprintf("<input type=\"hidden\" name=\"cancel_return\" value=\"%s\">\n",$base_url."index.php?section=pay&msg=11");
+				if (($_SESSION['prefsPaypalIPN'] == 1) && (TESTING)) $page_info4 .= "<input type=\"hidden\" name=\"test_ipn\" value=\"1\">\n";
+				$page_info4 .= "<input type=\"hidden\" name=\"bn\" value=\"PP-BuyNowBF:btn_paynowCC_LG.gif:NonHosted\">\n";
+				$page_info4 .= "<button type=\"button\" name=\"btn\" id=\"submitBtn\" data-toggle=\"modal\" data-target=\"#confirm-submit\" class=\"btn btn-primary\" /><span class=\"fa fa-paypal\"></span> ".$label_pay_with_paypal."</button>\n";
+				$page_info4 .= "</form>\n";
+				
+				/*
 				// If IPN is NOT enabled show this:
-				// $page_info4 .= "<form role=\"form\" id=\"formfield\" name=\"PayPal\" action=\"https://www.paypal.com/cgi-bin/webscr\" method=\"post\">";
-				$page_info4 .= "<form role=\"form\" id=\"formfield\" name=\"PayPal\" action=\"".$base_url."includes/process.inc.php?action=paypal\" method=\"post\">";
-				$page_info4 .= "<input type=\"hidden\" name=\"action\" value=\"add_form\" />";
-				$page_info4 .= "<input type=\"hidden\" name=\"cmd\" value=\"_xclick\">";
-				$page_info4 .= sprintf("<input type=\"hidden\" name=\"business\" value=\"%s\">",$_SESSION['prefsPaypalAccount']);
-				$page_info4 .= sprintf("<input type=\"hidden\" name=\"item_name\" value=\"%s, %s - %s Payment\">",$_SESSION['brewerLastName'],$_SESSION['brewerFirstName'],$_SESSION['contestName']);
-				$page_info4 .= sprintf("<input type=\"hidden\" name=\"amount\" value=\"%s\">",$payment_amount);
-				$page_info4 .= sprintf("<input type=\"hidden\" name=\"currency_code\" value=\"%s\">",$currency_code);
-				$page_info4 .= "<input type=\"hidden\" name=\"button_subtype\" value=\"services\">";
-				$page_info4 .= "<input type=\"hidden\" name=\"no_note\" value=\"0\">";
-				$page_info4 .= "<input type=\"hidden\" name=\"cn\" value=\"Add special instructions\">";
-				$page_info4 .= "<input type=\"hidden\" name=\"no_shipping\" value=\"1\">";
-				$page_info4 .= "<input type=\"hidden\" name=\"rm\" value=\"1\">";
-				$page_info4 .= sprintf("<input type=\"hidden\" name=\"custom\" value=\"%s|%s\">",$_SESSION['user_id'],rtrim($return_entries, '-'));
-				$page_info4 .= sprintf("<input type=\"hidden\" name=\"return\" value=\"%s\">",rtrim($return, '-'));
-				$page_info4 .= sprintf("<input type=\"hidden\" name=\"cancel_return\" value=\"%s\">",$base_url."index.php?section=pay&msg=11");
-				$page_info4 .= "<input type=\"hidden\" name=\"bn\" value=\"PP-BuyNowBF:btn_paynowCC_LG.gif:NonHosted\">";
-				$page_info4 .= "<button type=\"button\" name=\"btn\" id=\"submitBtn\" data-toggle=\"modal\" data-target=\"#confirm-submit\" class=\"btn btn-primary\" /><span class=\"fa fa-paypal\"></span> Pay with PayPal</button>";
+				$page_info4 .= "<form role=\"form\" id=\"formfield\" name=\"PayPal\" action=\"https://www.paypal.com/cgi-bin/webscr\" method=\"post\">";
+				//$page_info4 .= "<form role=\"form\" id=\"formfield\" name=\"PayPal\" action=\"".$base_url."includes/process.inc.php?action=paypal\" method=\"post\">\n";
+				$page_info4 .= "<input type=\"hidden\" name=\"action\" value=\"add_form\" />\n";
+				$page_info4 .= "<input type=\"hidden\" name=\"cmd\" value=\"_xclick\">\n";
+				$page_info4 .= sprintf("<input type=\"hidden\" name=\"business\" value=\"%s\">\n",$_SESSION['prefsPaypalAccount']);
+				$page_info4 .= sprintf("<input type=\"hidden\" name=\"item_name\" value=\"%s, %s - %s Payment\">\n",$_SESSION['brewerLastName'],$_SESSION['brewerFirstName'],$_SESSION['contestName']);
+				$page_info4 .= sprintf("<input type=\"hidden\" name=\"amount\" value=\"%s\">\n",$payment_amount);
+				$page_info4 .= sprintf("<input type=\"hidden\" name=\"currency_code\" value=\"%s\">\n",$currency_code);
+				$page_info4 .= "<input type=\"hidden\" name=\"button_subtype\" value=\"services\">\n";
+				$page_info4 .= "<input type=\"hidden\" name=\"no_note\" value=\"0\">\n";
+				$page_info4 .= "<input type=\"hidden\" name=\"cn\" value=\"Add special instructions\">\n";
+				$page_info4 .= "<input type=\"hidden\" name=\"no_shipping\" value=\"1\">\n";
+				$page_info4 .= "<input type=\"hidden\" name=\"rm\" value=\"1\">\n";
+				if (($_SESSION['prefsPaypalIPN'] == 1) && (TESTING)) $page_info4 .= "<input type=\"hidden\" name=\"test_ipn\" value=\"1\">\n";
+				$page_info4 .= sprintf("<input type=\"hidden\" name=\"custom\" value=\"%s|%s\">\n",$_SESSION['user_id'],rtrim($return_entries, '-'));
+				$page_info4 .= sprintf("<input type=\"hidden\" name=\"return\" value=\"%s\">\n",rtrim($return, '-'));
+				$page_info4 .= sprintf("<input type=\"hidden\" name=\"cancel_return\" value=\"%s\">\n",$base_url."index.php?section=pay&msg=11");
+				$page_info4 .= "<input type=\"hidden\" name=\"bn\" value=\"PP-BuyNowBF:btn_paynowCC_LG.gif:NonHosted\">\n";
+				$page_info4 .= "<button type=\"button\" name=\"btn\" id=\"submitBtn\" data-toggle=\"modal\" data-target=\"#confirm-submit\" class=\"btn btn-primary\" /><span class=\"fa fa-paypal\"></span> Pay with PayPal</button>\n";
 				$page_info4 .= "</form>";
-				
-				
+				*/
 				
 				$page_info4 .= "<!-- Form submit confirmation modal -->";
 				$page_info4 .= "<!-- Refer to bcoem_custom.js for configuration -->";
@@ -271,5 +317,4 @@ Declare all variables empty at the top of the script. Add on later...
 		else echo $page_info6;
 	
 	} // end pay not disabled
-	
 ?>

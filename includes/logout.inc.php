@@ -10,8 +10,8 @@ require('../paths.php');
 require(INCLUDES.'url_variables.inc.php');
 require(LIB.'common.lib.php');
 
-if (NHC) $logout_location = "http://www.brewingcompetition.com/index.php?msg=3";
-else $logout_location = $base_url."index.php?section=login&action=logout&msg=3";
+if (NHC) $logout_location = "http://www.brewingcompetition.com/index.php?msg=5";
+else $logout_location = $base_url."index.php?msg=5";
 
 session_name($prefix_session);
 session_start();

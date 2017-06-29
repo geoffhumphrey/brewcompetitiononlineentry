@@ -104,45 +104,8 @@ if (((isset($_SERVER['HTTP_REFERER'])) && ($referrer['host'] == $_SERVER['SERVER
 		require(DB.'common.db.php');
 	}
 
-
 	// --------------------------- // -------------------------------- //
 
-	if ($action != "purge") {
-		/*
-		function relocate($referer,$page,$msg,$id) {
-			include(CONFIG."config.php");
-
-			// Break URL into an array
-			$parts = parse_url($referer);
-			$referer = $parts['query'];
-
-			// Remove $msg=X from query string
-			$pattern = array("/[0-9]/", "/&msg=/");
-			$referer = preg_replace($pattern, "", $referer);
-
-			// Remove $id=X from query string
-			$pattern = array("/[0-9]/", "/&id=/");
-			$referer = preg_replace($pattern, "", $referer);
-
-			// Remove $pg=X from query string and add back in
-			if ($page != "default") {
-				$pattern = array("/[0-9]/", "/&pg=/");
-				$referer = str_replace($pattern,"",$referer);
-				$referer .= "&pg=".$page;
-			}
-
-			$pattern = array('\'', '"');
-			$referer = str_replace($pattern,"",$referer);
-			$referer = stripslashes($referer);
-
-			// Reconstruct the URL
-			$output = $base_url."index.php?".$referer;
-			return $output;
-		}
-
-
-		*/
-	}
 
 	if (NHC) {
 		$insertGoTo = "../";
@@ -269,6 +232,21 @@ if (((isset($_SERVER['HTTP_REFERER'])) && ($referrer['host'] == $_SERVER['SERVER
 		if (HOSTED) include_once (PROCESS.'process_archive_hosted.inc.php');
 		else include_once (PROCESS.'process_archive.inc.php');
 
+	}
+	
+	elseif ($action == "publish") {
+		
+		$update = sprintf("UPDATE %s SET prefsDisplayWinners='%s', prefsWinnerDelay='%s' WHERE id='%s'",$prefix."preferences","Y","0","1");
+		mysqli_real_escape_string($connection,$update);
+		$result = mysqli_query($connection,$update) or die (mysqli_error($connection));
+
+		session_name($prefix_session);
+		session_start();
+		unset($_SESSION['prefs'.$prefix_session]);
+		
+		$updateGoTo = $base_url."index.php?section=admin&msg=36";
+		header(sprintf("Location: %s", $updateGoTo));
+		
 	}
 
 	elseif (($action == "email") && ($dbTable == "default")) {

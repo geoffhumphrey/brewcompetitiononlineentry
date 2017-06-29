@@ -480,13 +480,17 @@ $label_secret_23 = "What was the name of your first stuffed animal, doll, or act
 $label_secret_24 = "In what city or town did you meet your spouse/significant other?";
 $label_secret_25 = "What street did you live on in first grade?";
 $label_secret_26 = "What is the air speed velocity of an unladen swallow?";
-$label_secret_27 = "What is the name of your favorite canceled TV show?";
+$label_secret_27 = "What is the name of your favorite cancelled TV show?";
 $label_pro = "Professional Brewer";
 $label_amateur = "Amateur Brewer";
 $label_hosted = "Hosted";
 $label_edition = "Edition";
 $label_optional_info = "Optional Info";
-
+$label_or = "Or";
+$label_admin_payments = "Payments";
+$label_payer = "Payer";
+$label_pay_with_paypal = "Pay with PayPal";
+	
 // -------------------- Headers --------------------
 // Missing punctuation intentional for all
 $header_text_000 = "Setup was successful.";
@@ -606,6 +610,7 @@ $header_text_111 = "All entries have been un-marked as received.";
 $header_text_112 = "You do not have sufficient access privileges to perform this action.";
 $header_text_113 = "You can only edit your own account information.";
 $header_text_114 = "As an admin, you can change a user's account information via Admin > Entries and Particpants > Manage Participants.";
+$header_text_115 = "Results have been published.";
 
 // -------------------- Navigation --------------------
 
@@ -1241,31 +1246,29 @@ if ($section == "volunteers") {
 
 }
 
-if ($section == "login") {
-	$login_text_000 = "You are already logged in.";
-	$login_text_001 = "There is no email address in the system that matches the one you entered.";
-	$login_text_002 = "Try again?";
-	$login_text_003 = "Have you registered your account yet?";
-	$login_text_004 = "Did you forget your password?";
-	$login_text_005 = "If so, click here to reset it.";
-	$login_text_006 = "To reset your password, enter the email address you used when you registered.";
-	$login_text_007 = "Verify";
-	$login_text_008 = "Randomly generated.";
-	$login_text_009 = "<strong>Unavailable.</strong> Your account was created by an administrator and your &quot;secret answer&quot; was randomly generated. Please contact a website administrator to recover or change your password.";
-	$login_text_010 = "Or, use the email option below.";
-	$login_text_011 = "Your security question is...";
-	$login_text_012 = "If you didn't receive the email,";
-	$login_text_013 = "An email will be sent to you with your verification question and answer. Be sure to check your SPAM folder.";
-	$login_text_014 = "click here to resend it to";
-	$login_text_015 = "Can't remember the answer to your security question?";
-	$login_text_016 = "Get it emailed to";
+$login_text_000 = "You are already logged in.";
+$login_text_001 = "There is no email address in the system that matches the one you entered.";
+$login_text_002 = "Try again?";
+$login_text_003 = "Have you registered your account yet?";
+$login_text_004 = "Forgot your password?";
+$login_text_005 = "Reset it";
+$login_text_006 = "To reset your password, enter the email address you used when you registered.";
+$login_text_007 = "Verify";
+$login_text_008 = "Randomly generated.";
+$login_text_009 = "<strong>Unavailable.</strong> Your account was created by an administrator and your &quot;secret answer&quot; was randomly generated. Please contact a website administrator to recover or change your password.";
+$login_text_010 = "Or, use the email option below.";
+$login_text_011 = "Your security question is...";
+$login_text_012 = "If you didn't receive the email,";
+$login_text_013 = "An email will be sent to you with your verification question and answer. Be sure to check your SPAM folder.";
+$login_text_014 = "click here to resend it to";
+$login_text_015 = "Can't remember the answer to your security question?";
+$login_text_016 = "Get it emailed to";
 
-	//v2.1.10
-	$login_text_017 = "Email Me My Security Question Response";
-	$login_text_018 = "";
-	$login_text_019 = "";
-	$login_text_020 = "";
-}
+//v2.1.10
+$login_text_017 = "Email Me My Security Question Response";
+$login_text_018 = "Your user name (email address) is required.";
+$login_text_019 = "Your password is required.";
+$login_text_020 = "";
 
 // -------------------- Winners --------------------
 
@@ -1318,15 +1321,18 @@ $output_text_030 = "";
 $maintenance_text_000 = "The site administrator has taken the site offline to undergo maintenance.";
 $maintenance_text_001 = "Please check back later.";
 
+// v2.1.10
 // PayPal Response
 $paypal_response_text_000 = "Your payment has been completed. The transaction details are provided here for your convience.";
-$paypal_response_text_001 = "Please note that you will receive an official receipt from PayPal at the email address listed below.";
+$paypal_response_text_001 = "Please note that you will receive an official commuication from PayPal at the email address listed below.";
 $paypal_response_text_002 = "Best of luck in the competition!";
 $paypal_response_text_003 = "Please do not reply to this email as it is automatically generated. The originating account is not active or monitored.";
-$paypal_response_text_004 = "";
-$paypal_response_text_005 = "";
-$paypal_response_text_006 = "";
-$paypal_response_text_007 = "";
+$paypal_response_text_004 = "PayPal has processed your transaction.";
+$paypal_response_text_005 = "The status of your PayPal payment is:";
+$paypal_response_text_006 = "Paypal response was &quot;invalid.&quot;. Please try to make your payment again.";
+$paypal_response_text_007 = "Please contact the competition organizer if you have any questions.";
+$paypal_response_text_008 = "Invalid PayPal Payment";
+$paypal_response_text_009 = "PayPal Payment Details";
 
 // ----------------------------------------------------------------------------------
 // Admin Pages - Admin pages will be included in a future release

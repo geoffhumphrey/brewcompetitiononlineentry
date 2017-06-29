@@ -147,7 +147,6 @@ if ($logged_in)  {
 	$add_entry_beerxml_link = "index.php?section=beerxml";
 	
 }
-
 if (($logged_in) && ($admin_user) && ($go != "error_page")) { ?>
 <!-- Admin Push Menu -->
 <div class="navbar-inverse navmenu navmenu-inverse navmenu-fixed-right offcanvas">
@@ -173,9 +172,12 @@ if (($logged_in) && ($admin_user) && ($go != "error_page")) { ?>
             </li>
 			<?php } ?>
             <li class="dropdown">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Entries and Participants <span class="caret"></span></a>
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Entries<?php if ($_SESSION['prefsPaypalIPN'] == 1) echo ", Payments,";?> and Participants <span class="caret"></span></a>
                 <ul class="dropdown-menu navmenu-nav">
                     <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=entries">Manage Entries</a></li>
+                    <?php if ($_SESSION['prefsPaypalIPN'] == 1) { ?>
+                    <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=payments">Manage Payments</a></li>
+                    <?php } ?>
                     <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=participants">Manage Participants</a></li>
                     <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging&amp;action=assign&amp;filter=judges">Assign Judges</a></li>
                     <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging&amp;action=assign&amp;filter=stewards">Assign Stewards</a></li>
@@ -235,6 +237,70 @@ if (($logged_in) && ($admin_user) && ($go != "error_page")) { ?>
     </div>
 <!-- ./ Admin Push Menu -->
 <?php } ?>
+<script>
+$(document).ready(function(){
+	$('#loginModal').on('shown.bs.modal', function() {
+		 $(this).find('#loginUsername').focus();
+	});
+});
+</script>
+<!-- Login Form Modal -->
+<?php if ((!$logged_in) && (($section != "login") || (($section == "login") && ($go != "default")))) { ?>
+<!-- Modal -->
+<div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="loginModalLabel">
+	<div class="modal-dialog modal-sm" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<h4 class="modal-title" id="loginModalLabel">Log In</h4>
+			</div>
+			<div class="modal-body">
+				<form class="form-horizontal" data-toggle="validator" role="form" action="<?php echo $base_url; ?>includes/logincheck.inc.php?section=login" method="POST" name="form1" id="form1">
+					<div class="form-group">
+						<div class="col-md-12">
+							<div class="input-group has-warning">
+								<span class="input-group-addon" id="login-addon1"><span class="fa fa-envelope"></span></span>
+								<!-- Input Here -->
+								<input id="loginUsername" class="form-control" name="loginUsername" type="email" required placeholder="<?php echo $label_email; ?>" data-error="<?php echo $login_text_018; ?>">
+								<span class="input-group-addon" id="login-addon2"><span class="fa fa-star"></span></span>
+							</div>
+							<span class="help-block with-errors"></span>
+						</div>
+					</div><!-- Form Group -->
+					<div class="form-group">
+						<div class="col-md-12">
+							<div class="input-group has-warning">
+								<span class="input-group-addon" id="login-addon3"><span class="fa fa-key"></span></span>
+								<!-- Input Here -->
+								<input class="form-control" name="loginPassword" type="password" required placeholder="<?php echo $label_password; ?>" data-error="<?php echo $login_text_019; ?>">
+								<span class="input-group-addon" id="login-addon4"><span class="fa fa-star"></span></span>
+							</div>
+							<span class="help-block with-errors"></span>
+						</div>
+					</div>
+					<div class="form-group">
+						<div class="col-md-12">
+							<!-- Input Here -->
+							<button name="submit" type="submit" class="btn btn-primary btn-block" ><?php echo $label_log_in; ?> <span class="fa fa-sign-in" aria-hidden="true"></span> </button>
+						</div>
+					</div><!-- Form Group -->
+				</form>
+			</div>
+			<div class="modal-footer">
+				<p align="center"><?php echo sprintf("<span class=\"fa fa-lg fa-exlamation-circle\"></span> %s <a href=\"%s\">%s</a>.", $login_text_004, $base_url."index.php?section=login&amp;go=password&amp;action=forgot", $login_text_005); ?></p>
+				<?php if ((!$logged_in) && (($registration_open == 1) || ($judge_window_open == 1))) { ?>
+				<p align="center" class="small"><?php echo $label_or; ?></p>
+				<a class="btn btn-block btn-default" href="<?php echo build_public_url("register","entrant","default","default",$sef,$base_url); ?>"><?php echo $label_register; ?></a>
+				<?php } ?>
+			</div>
+		</div>
+	</div>
+</div>
+
+<?php } ?>
+
+
+
 	<!-- Fixed navbar -->
     <div class="navbar <?php echo $nav_container; ?> navbar-fixed-top">
       <div class="<?php echo $container_main; ?>">
@@ -308,12 +374,11 @@ if (($logged_in) && ($admin_user) && ($go != "error_page")) { ?>
             <li id="admin-arrow"><a href="<?php if ($go == "error_page") echo $base_url."index.php?section=admin"; else echo "#"; ?>" class="admin-offcanvas" data-toggle="offcanvas" data-target=".navmenu" data-canvas="body" title="<?php echo $admin_tooltip; ?>"><i class="fa fa-chevron-circle-left"></i> <?php echo $label_admin_short; ?></a></li>
             <?php } ?>
             <?php } else { ?>
-            <li<?php if ($section == "login") echo $active_class; ?>><a href="<?php echo $link_login; ?>" role="button"><?php echo $label_log_in; ?></a></li>
+            <li<?php if ($section == "login") echo $active_class; ?>><a href="#" role="button" data-toggle="modal" data-target="#loginModal"><?php echo $label_log_in; ?></a></li>
             <?php } ?>
             </ul>
           </div>
         </div><!--/.nav-collapse -->
       </div>
     </div>
-    
     <?php if ($help_icon) echo $help; ?>

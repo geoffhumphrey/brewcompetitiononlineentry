@@ -12,13 +12,13 @@ elseif ((HOSTED) && ($_SESSION['prefsProEdition'] == 1)) $footer .= $current_ver
 elseif ((!HOSTED) && ($_SESSION['prefsProEdition'] == 1)) $footer .= $current_version_display." ".$label_pro." ".$label_edition;
 else $footer .= $current_version_display;
 $footer .= " <span class=\"fa fa-copyright\"></span>2009-".date('Y');
-if (TESTING) {
+if ((TESTING) || (DEBUG)) {
 		$mtime = microtime(); 
 		$mtime = explode(" ",$mtime); 
 		$mtime = $mtime[1] + $mtime[0]; 
 		$endtime = $mtime; 
 		$totaltime = ($endtime - $starttime); 
-		$footer .= "&nbsp;Page created in ".number_format($totaltime, 3)." seconds."; 
+		$footer .= " &ndash; This page was created in ".number_format($totaltime, 3)." seconds."; 
 	}
 echo $footer;
 ?>

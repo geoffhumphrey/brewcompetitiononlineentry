@@ -217,7 +217,7 @@ do {
 	$entry_output .= "</td>";
 		
 	if (!$show_scores) {
-	$entry_output .= "<td class=\"hidden-xs hidden-sm\">";
+	$entry_output .= "<td class=\"hidden-xs hidden-md\">";
 	if ($row_log['brewConfirmed'] == "0")  $entry_output .= "<span class=\"fa fa-lg fa-exclamation-circle text-danger\"></span>";
 	elseif ((check_special_ingredients($entry_style,$_SESSION['prefsStyleSet'])) && ($row_log['brewInfo'] == "")) $entry_output .= "<span class=\"fa fa-lg fa-exclamation-circle text-danger\"></span>";
 	else $entry_output .= yes_no($row_log['brewConfirmed'],$base_url,1);
@@ -387,7 +387,7 @@ if (($totalRows_log > 0) && ($entry_window_open >= 1)) {
   	<th>Name</th>
   	<th><?php echo $label_style; ?></th>
     <?php if (!$show_scores) { ?>
-  	<th class="hidden-xs hidden-sm"><?php echo $label_confirmed; ?></th> 
+  	<th class="hidden-xs hidden-md"><?php echo $label_confirmed; ?></th> 
   	<th class="hidden-xs"><?php echo $label_paid; ?></th> 
     <th class="hidden-xs" nowrap><?php echo $label_received; ?> <a tabindex="0" role="button" title="<?php echo $label_received." ".$label_entries." ".$label_info; ?>" data-placement="auto right" data-toggle="popover" data-trigger="hover focus" data-content="<?php echo $brewer_entries_text_017; ?>" data-container="body"><span class="fa fa-question-circle"></span></a></th>
     <th class="hidden-xs hidden-sm"><?php echo $label_updated; ?></th>
