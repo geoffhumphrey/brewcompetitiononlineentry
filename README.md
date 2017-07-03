@@ -32,7 +32,7 @@ There is also a growing number of instructive resources available on the [compan
 - [Load Libraries Locally](http://brewcompetition.com/local-load) - disable CDN loading of external libraries such as jQuery, Bootstrap, DataTables, etc.
 - [Upload Scanned Judges' Scoresheets](http://brewcompetition.com/upload-scoresheets) - procedure for scanning and uploading scoresheets to make available to entrants via BCOE&M
 - [Reset Competition Information](http://brewcompetition.com/reset-comp) - get your site ready for your next competition iteration
-- [Barcode or QR Code Entry Check-in](http://brewcompetition.com/paypal-ipn) - utilize the barcode/QR code enabled bottle labels to efficiently check-in entries
+- [Barcode or QR Code Entry Check-in](http://brewcompetition.com/barcode-check-in) - utilize the barcode/QR code enabled bottle labels to efficiently check-in entries
 - [Implement PayPal Instant Payment Notifications](http://brewcompetition.com/paypal-ipn) - receive and process PayPal payment data to update entrant payment status instantly (releasing with version 2.1.10)
 
 ## Wanna Help?
