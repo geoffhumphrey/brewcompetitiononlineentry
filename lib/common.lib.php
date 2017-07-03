@@ -2633,9 +2633,7 @@ function brewer_assignment($user_id,$method,$id,$dbTable,$filter,$archive="defau
 	
 	if ($row_staff_check['staff_judge'] == "1") $assignment = strtolower($label_judges);
 	elseif ($row_staff_check['staff_steward'] == "1") $assignment = strtolower($label_stewards);
-	else $assignment = "";
-	
-	
+	else $assignment = "";	
 	
 	if ($totalRows_staff_check > 0) {
 		$r[] = "";
@@ -2644,8 +2642,8 @@ function brewer_assignment($user_id,$method,$id,$dbTable,$filter,$archive="defau
 					if ($row_staff_check['staff_organizer'] == "1") $r[] .= strtolower($label_organizer);
 					if ($row_staff_check['staff_judge_bos'] == "1") $r[] .= "BOS";
 					if (($id == "default") && ($dbTable == "default") && ($filter != $assignment)) {
-						if ($row_staff_check['staff_judge'] == "1") $r[] .= "<a href=\"#\" data-toggle=\"modal\" data-target=\"#assignment-modal-".$uid."\">".$label_judge."</a>";
-						if ($row_staff_check['staff_steward'] == "1") $r[] .= "<a href=\"#\" data-toggle=\"modal\" data-target=\"#assignment-modal-".$uid."\">".$label_steward."</a>";
+						if ($row_staff_check['staff_judge'] == "1") $r[] .= "<a href=\"#\" data-toggle=\"modal\" data-target=\"#assignment-modal-".$user_id."\">".$label_judge."</a>";
+						if ($row_staff_check['staff_steward'] == "1") $r[] .= "<a href=\"#\" data-toggle=\"modal\" data-target=\"#assignment-modal-".$user_id."\">".$label_steward."</a>";
 					}
 					else {
 						if ($row_staff_check['staff_judge'] == "1") $r[] .= $label_judge;

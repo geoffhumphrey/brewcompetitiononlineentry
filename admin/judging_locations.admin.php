@@ -615,7 +615,7 @@ echo $output_assignment_modals;
 			"sPaginationType" : "<?php echo $output_datatables_sPaginationType; ?>",
 			"bLengthChange" : <?php echo $output_datatables_bLengthChange; ?>,
 			"iDisplayLength" : <?php echo round($_SESSION['prefsRecordPaging']); ?>,
-			"sDom": 'rtp',
+			"sDom": 'fprtp',
 			"bStateSave" : <?php echo $output_datatables_bStateSave; ?>,
 			"aaSorting": [<?php echo $output_datatables_aaSorting; ?>],
 			"bProcessing" : <?php echo $output_datatables_bProcessing; ?>,

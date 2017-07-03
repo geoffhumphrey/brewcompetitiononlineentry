@@ -220,10 +220,10 @@ else {
 	
 					if ((!empty($row_tables['tableLocation'])) && ($filter != "mini_bos")) {
 	
-						$table_info_location .= "<h3>";
+						$table_info_location .= "<h2>";
 						$table_info_location .= table_location($row_tables['id'],$_SESSION['prefsDateFormat'],$_SESSION['prefsTimeZone'],$_SESSION['prefsTimeFormat'],"default");
 						if ($round != "default") $table_info_location .= sprintf("<br>%s %s",$label_round,$round);
-						$table_info_location .= "</h3>";
+						$table_info_location .= "</h2>";
 						$table_info_location .= "<p class=\"lead\">";
 						$table_info_location .= sprintf("%s: %s",$label_entries,$entry_count);
 						$table_info_location .= "</p>";
@@ -389,10 +389,10 @@ else {
 	
 				if ((!empty($row_tables['tableLocation'])) && ($filter != "mini_bos")) {
 	
-					$table_info_location .= "<h3>";
+					$table_info_location .= "<h2>";
 					$table_info_location .= table_location($row_tables['id'],$_SESSION['prefsDateFormat'],$_SESSION['prefsTimeZone'],$_SESSION['prefsTimeFormat'],"default");
 					if ($round != "default") $table_info_location .= sprintf("<br>%s %s",$label_round,$round);
-					$table_info_location .= "</h3>";
+					$table_info_location .= "</h2>";
 					$table_info_location .= "<p class=\"lead\">";
 					$table_info_location .= sprintf("%s: %s",$label_entries,$entry_count);
 					$table_info_location .= "</p>";
@@ -559,13 +559,13 @@ else {
 	
 				if (!empty($row_tables['tableLocation'])) {
 	
-					$table_info_location .= "<p class=\"lead\">";
+					$table_info_location .= "<h2>";
 					$table_info_location .= table_location($row_tables['id'],$_SESSION['prefsDateFormat'],$_SESSION['prefsTimeZone'],$_SESSION['prefsTimeFormat'],"default");
 					if ($round != "default") $table_info_location .= sprintf("<br>%s %s",$label_round,$round);
-					$table_info_location .= "</p>";
-					$table_info_location .= "<p class=\"lead\"><small>";
+					$table_info_location .= "</h2>";
+					$table_info_location .= "<p class=\"lead\">";
 					$table_info_location .= sprintf("%s: %s<br>%s: %s",$label_entries,get_table_info(1,"count_total",$row_tables['id'],$dbTable,"default"),$label_flights,$flights);
-					$table_info_location .= "</small></p>";
+					$table_info_location .= "</p>";
 					$table_info_location .= "<p>".$label_please_note."</p>";
 					$table_info_location .= "<ul>";
 					$table_info_location .= "<li>".$output_text_017."</li>";
@@ -587,7 +587,7 @@ else {
 					$round_check = mysqli_query($connection,$query_round_check) or die (mysqli_error($connection));
 					$row_round_check = mysqli_fetch_assoc($round_check);
 					
-					$table_flight .= "<h4>".sprintf("%s %s: %s - %s %s, %s %s",$label_table,$row_tables['tableNumber'],$row_tables['tableName'],$label_flight,$i,$label_round,$row_round_check['flightRound'])."</h4>";
+					$table_flight .= "<h3>".sprintf("%s %s: %s - %s %s, %s %s",$label_table,$row_tables['tableNumber'],$row_tables['tableName'],$label_flight,$i,$label_round,$row_round_check['flightRound'])."</h3>";
 					
 					$table_flight_datatables .= "<script>";
 					$table_flight_datatables .= "$(document).ready(function() {";
@@ -605,7 +605,7 @@ else {
 					$table_flight_datatables .= "{ \"asSorting\": [  ] },";
 					$table_flight_datatables .= "{ \"asSorting\": [  ] },";
 					$table_flight_datatables .= "{ \"asSorting\": [  ] },";
-					$table_flight_datatables .= "{ \"asSorting\": [  ] },";
+					if ($filter != "mini_bos") $table_flight_datatables .= "{ \"asSorting\": [  ] },";
 					$table_flight_datatables .= "{ \"asSorting\": [  ] }";
 					$table_flight_datatables .= "]";
 					$table_flight_datatables .= "} );";
@@ -705,11 +705,11 @@ else {
 					$table_flight .= "</tbody>";
 					$table_flight .= "</table>";
 					$pullsheet_output .= $table_flight;
-					if ($flights > 0) $pullsheet_output .= "<div style=\"page-break-after:always;\"></div>";
+					if (($flights > 0) && ($filter != "mini_bos")) $pullsheet_output .= "<div style=\"page-break-after:always;\"></div>";
 					
 				} // end for($i=1; $i<$flights+1; $i++)
 				
-				if ($flights == 0) $pullsheet_output .= "<div style=\"page-break-after:always;\"></div>";
+				if (($flights == 0) || ($filter == "mini_bos")) $pullsheet_output .= "<div style=\"page-break-after:always;\"></div>";
 	
 			} while ($row_tables = mysqli_fetch_assoc($tables));
 	
@@ -736,13 +736,13 @@ else {
 	
 			if (!empty($row_tables['tableLocation'])) {
 	
-				$table_info_location .= "<p class=\"lead\">";
+				$table_info_location .= "<h2>";
 				$table_info_location .= table_location($row_tables['id'],$_SESSION['prefsDateFormat'],$_SESSION['prefsTimeZone'],$_SESSION['prefsTimeFormat'],"default");
 				if ($round != "default") $table_info_location .= sprintf("<br>%s %s",$label_round,$round);
-				$table_info_location .= "</p>";
-				$table_info_location .= "<p class=\"lead\"><small>";
+				$table_info_location .= "</h2>";
+				$table_info_location .= "<p class=\"lead\">";
 				$table_info_location .= sprintf("%s: %s<br>%s: %s",$label_entries,get_table_info(1,"count_total",$row_tables['id'],$dbTable,"default"),$label_flights,$flights);
-				$table_info_location .= "</small></p>";
+				$table_info_location .= "</p>";
 				$table_info_location .= "<p>".$label_please_note."</p>";
 				$table_info_location .= "<ul>";
 				$table_info_location .= "<li>".$output_text_017."</li>";
@@ -764,7 +764,7 @@ else {
 				$round_check = mysqli_query($connection,$query_round_check) or die (mysqli_error($connection));
 				$row_round_check = mysqli_fetch_assoc($round_check);
 				
-				$table_flight .= "<h4>".sprintf("%s %s: %s - %s %s, %s %s",$label_table,$row_tables['tableNumber'],$row_tables['tableName'],$label_flight,$i,$label_round,$row_round_check['flightRound'])."</h4>";
+				$table_flight .= "<h3>".sprintf("%s %s: %s - %s %s, %s %s",$label_table,$row_tables['tableNumber'],$row_tables['tableName'],$label_flight,$i,$label_round,$row_round_check['flightRound'])."</h3>";
 				
 				$table_flight_datatables .= "<script>";
 				$table_flight_datatables .= "$(document).ready(function() {";

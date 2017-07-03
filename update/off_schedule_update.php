@@ -1,7 +1,64 @@
 <?php
 
-// For 2.1.8, check for setup_last_step and add
+// ----------------------------------------------- 2.1.5 -----------------------------------------------
+// Make sure all items are present from last "official" update
+// -----------------------------------------------------------------------------------------------------
+if (!check_update("prefsLanguage", $prefix."preferences")) {
+	$updateSQL = sprintf("ALTER TABLE `%s` ADD `prefsLanguage` VARCHAR(25) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL;",$prefix."preferences");
+	mysqli_select_db($connection,$database);
+	mysqli_real_escape_string($connection,$updateSQL);
+	$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+
+	$updateSQL = sprintf("ALTER TABLE `%s` ADD `prefsSpecific` TINYINT(1) NULL;",$prefix."preferences");
+	mysqli_select_db($connection,$database);
+	mysqli_real_escape_string($connection,$updateSQL);
+	$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+
+	$updateSQL = sprintf("ALTER TABLE `%s` ADD `prefsEntryLimitPaid` INT(4) NULL DEFAULT NULL;",$prefix."preferences");
+	mysqli_select_db($connection,$database);
+	mysqli_real_escape_string($connection,$updateSQL);
+	$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+
+	$updateSQL = sprintf("ALTER TABLE `%s` ADD `prefsEmailRegConfirm` TINYINT(1) NULL DEFAULT NULL;",$prefix."preferences");
+	mysqli_select_db($connection,$database);
+	mysqli_real_escape_string($connection,$updateSQL);
+	$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+
+	$updateSQL = sprintf("ALTER TABLE `%s` ADD `jPrefsCapJudges` INT(3) NULL DEFAULT NULL;", $prefix."judging_preferences");
+	mysqli_select_db($connection,$database);
+	mysqli_real_escape_string($connection,$updateSQL);
+	$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+
+	$updateSQL = sprintf(" ALTER TABLE `%s` ADD `jPrefsCapStewards` INT(3) NULL DEFAULT NULL;",	$prefix."judging_preferences");
+	mysqli_select_db($connection,$database);
+	mysqli_real_escape_string($connection,$updateSQL);
+	$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+
+	$updateSQL = sprintf(" ALTER TABLE `%s` ADD `jPrefsBottleNum` INT(3) NULL DEFAULT NULL;",$prefix."judging_preferences");
+	mysqli_select_db($connection,$database);
+	mysqli_real_escape_string($connection,$updateSQL);
+	$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+
+	$updateSQL= sprintf("ALTER TABLE  `%s` ADD `contestCheckInPassword` VARCHAR(255) NULL CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL;",$prefix."contest_info");
+	mysqli_select_db($connection,$database);
+	mysqli_real_escape_string($connection,$updateSQL);
+	$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+
+	$updateSQL= sprintf("ALTER TABLE  `%s` ADD `brewStyleEntry` TEXT CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL;",$prefix."styles");
+	mysqli_select_db($connection,$database);
+	mysqli_real_escape_string($connection,$updateSQL);
+	$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+
+	$updateSQL= sprintf("ALTER TABLE  `%s` ADD `brewStyleComEx` TEXT CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL;",$prefix."styles");
+	mysqli_select_db($connection,$database);
+	mysqli_real_escape_string($connection,$updateSQL);
+	$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+}
+
+// ----------------------------------------------- 2.1.8 -----------------------------------------------
+// Check for setup_last_step and add
 // Also add "example" sub-styles for BJCP2015 21A (Specialty IPA) and 27A (Historical Beer)
+// -----------------------------------------------------------------------------------------------------
 if (!check_update("setup_last_step", $prefix."system")) {
 
 	require(CONFIG.'config.php');
@@ -161,14 +218,13 @@ if (!check_update("setup_last_step", $prefix."system")) {
 	mysqli_select_db($connection,$database);
 	mysqli_real_escape_string($connection,$updateSQL);
 	$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
-	// echo $updateSQL."<br>";
-
-	//exit;
-
+	
 }
 
-// For 2.1.9, check to see if brewerNickname is still present, if so, change to brewerStaff
+// ----------------------------------------------- 2.1.9 -----------------------------------------------
+// Check to see if brewerNickname is still present, if so, change to brewerStaff and perform other changes
 // And correct the problem with new BJCP "example" substyles not being saved correctly
+// -----------------------------------------------------------------------------------------------------
 if (check_update("brewerNickname", $prefix."brewer")) {
 
 	// Change brewerNickname to brewerStaff for ability for users to identify that they are interested in being a staff member
@@ -185,8 +241,6 @@ if (check_update("brewerNickname", $prefix."brewer")) {
 
 }
 
-// For 2.1.9, check if assignRoles is present in judging_assingments table
-// If not, add it
 if (!check_update("assignRoles", $prefix."judging_assignments")) {
 	$updateSQL = sprintf("ALTER TABLE `%s` ADD `assignRoles` VARCHAR(25) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL;",$prefix."judging_assignments");
 	mysqli_select_db($connection,$database);
@@ -194,9 +248,17 @@ if (!check_update("assignRoles", $prefix."judging_assignments")) {
 	$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 }
 
-// For 2.1.10, check if prefsPaypalIPN is present in preferences table
-// If not, add it and add new Payments db table
-if (!check_update("prefsPaypalIPN", $prefix."preferences")) {
+// ----------------------------------------------- 2.1.10 -----------------------------------------------
+// Check if brewerBreweryName is present in brewer table
+// If not, add it and perform other associated DB changes
+// ------------------------------------------------------------------------------------------------------
+if (!check_update("brewerBreweryName", $prefix."brewer")) {
+	
+	$updateSQL = sprintf("ALTER TABLE `%s` ADD `brewerBreweryName` VARCHAR(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL, ADD `brewerBreweryTTB` VARCHAR(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL;", $prefix."brewer");
+	mysqli_select_db($connection,$database);
+	mysqli_real_escape_string($connection,$updateSQL);
+	$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+	
 	$updateSQL = sprintf("ALTER TABLE `%s` ADD `prefsPaypalIPN` TINYINT(1) NULL DEFAULT NULL AFTER `prefsPaypalAccount`;",$prefix."preferences");
 	mysqli_select_db($connection,$database);
 	mysqli_real_escape_string($connection,$updateSQL);
@@ -206,15 +268,7 @@ if (!check_update("prefsPaypalIPN", $prefix."preferences")) {
 	mysqli_select_db($connection,$database);
 	mysqli_real_escape_string($connection,$updateSQL);
 	$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
-
-
-}
-
-// For 2.1.10, check if userToken is present in preferences table
-// If not, add it and other associated
-if (!check_update("userToken", $prefix."users")) {
-
-	// Add
+	
 	$updateSQL = sprintf("ALTER TABLE `%s` ADD `userToken` VARCHAR(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL, ADD `userTokenTime` VARCHAR(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL, ADD `userFailedLogins` INT(11) NULL DEFAULT NULL, ADD `userFailedLoginTime` VARCHAR(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL;",$prefix."users");
 	mysqli_select_db($connection,$database);
 	mysqli_real_escape_string($connection,$updateSQL);
@@ -222,28 +276,6 @@ if (!check_update("userToken", $prefix."users")) {
 
 	// Set failed logins to 0 for all users
 	$updateSQL = sprintf("UPDATE `%s` SET userFailedLogins='0';",$prefix."users");
-	mysqli_select_db($connection,$database);
-	mysqli_real_escape_string($connection,$updateSQL);
-	$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
-
-
-}
-
-// For 2.1.10, check if brewerBreweryName is present in brewer table
-// If not, add it and perform other associated DB changes
-if (!check_update("brewerBreweryName", $prefix."brewer")) {
-
-	$updateSQL = sprintf("ALTER TABLE `%s` ADD `assignRoles` varchar(25) COLLATE utf8_unicode_ci DEFAULT NULL;", $prefix."judging_assignments");
-	mysqli_select_db($connection,$database);
-	mysqli_real_escape_string($connection,$updateSQL);
-	$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
-	
-	$updateSQL = sprintf("ALTER TABLE `%s` ADD `brewerBreweryName` VARCHAR(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL, ADD `brewerBreweryTTB` VARCHAR(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL;", $prefix."brewer");
-	mysqli_select_db($connection,$database);
-	mysqli_real_escape_string($connection,$updateSQL);
-	$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
-	
-	$updateSQL = sprintf("ALTER TABLE `%s` ADD `userToken` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL, ADD `userTokenTime` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL, ADD `userFailedLogins` int(11) DEFAULT NULL, ADD `userFailedLoginTime` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL;", $prefix."users");
 	mysqli_select_db($connection,$database);
 	mysqli_real_escape_string($connection,$updateSQL);
 	$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
@@ -309,7 +341,4 @@ if (!check_update("brewerBreweryName", $prefix."brewer")) {
 	}
 
 }
-
-
-
 ?>

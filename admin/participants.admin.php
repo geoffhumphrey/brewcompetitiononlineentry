@@ -651,7 +651,7 @@ echo $output_user_question_modals;
 
 <?php
 if (($action == "default") || ($action == "print")) { 
-if ($row_participant_count['count'] > 0) { ?>
+if ($totalRows_brewer > 0) { ?>
 	<script type="text/javascript" language="javascript">
 	 $(document).ready(function() {
 		$('#sortable').dataTable( {

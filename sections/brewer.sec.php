@@ -158,14 +158,15 @@ if ($go != "admin") echo $info_msg;
 
 <script type='text/javascript'>//<![CDATA[
 $(document).ready(function(){
+	
+	// hide divs on load if no value
+	$("#brewerClubsOther").hide("fast");
+	$("#brewerJudgeFields").hide("fast");
+	$("#brewerStewardFields").hide("fast");
 
 	<?php if (($action == "edit") && ($club_other)) { ?>
 	$("#brewerClubsOther").show("slow");
-	<?php } else { ?>
-	// hide divs on load if no value
-	$("#brewerClubsOther").hide("fast");
 	<?php } ?>
-
 
 	$("#brewerClubs").change(function() {
 
@@ -185,42 +186,39 @@ $(document).ready(function(){
 			$("#brewerJudgeFields").show("slow");
 		}
 
-		else  {
-			$("#brewerJudgeFields").hide("fast");
-		}
-
 	});
 
 	<?php if (($action == "edit") && ($row_brewer['brewerJudge'] == "Y")) { ?>
 	$("#brewerJudgeFields").show("slow");
-	<?php } else { ?>
-	$("#brewerJudgeFields").hide("fast");
 	<?php } ?>
 
 	$('input[type="radio"]').click(function() {
-       if($(this).attr('id') == 'brewerJudge_0') {
-            $("#brewerJudgeFields").show("slow");
-       }
+		
+		if($(this).attr('id') == 'brewerJudge_0') {
+			$("#brewerJudgeFields").show("slow");
+		}
+		
+		if($(this).attr('id') == 'brewerJudge_1') {
+            $("#brewerJudgeFields").hide("fast");
+       	}
 
-       else {
-         	$("#brewerJudgeFields").hide("fast");
-       }
    	});
-
+	
+	
 	<?php if (($action == "edit") && ($row_brewer['brewerSteward'] == "Y")) { ?>
 	$("#brewerStewardFields").show("slow");
-	<?php } else { ?>
-	$("#brewerStewardFields").hide("fast");
 	<?php } ?>
-
+	
 	$('input[type="radio"]').click(function() {
-       if($(this).attr('id') == 'brewerSteward_0') {
-            $("#brewerStewardFields").show("slow");
-       }
-
-       else {
-         	$("#brewerStewardFields").hide("fast");
-       }
+		
+		if($(this).attr('id') == 'brewerSteward_0') {
+			$("#brewerStewardFields").show("slow");
+		}
+		
+		if($(this).attr('id') == 'brewerSteward_1') {
+            $("#brewerStewardFields").hide("fast");
+       	}
+		
    	});
 
 });
