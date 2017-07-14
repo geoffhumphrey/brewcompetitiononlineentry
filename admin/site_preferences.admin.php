@@ -1,7 +1,10 @@
 <?php if ($go == "preferences") {
 include (DB.'styles.db.php');
 $prefsUSCLEx = "";
+	
 if (strpos($styleSet,"BABDB") === false) {
+	
+	//$prefsUSCLEx = $query_styles;
 
 	do {
 	$checked = "";
@@ -13,7 +16,7 @@ if (strpos($styleSet,"BABDB") === false) {
 		}
 	}
 
-	if ($row_styles['id'] != "") $$prefsUSCLEx .= "<div class=\"checkbox\"><label><input name=\"prefsUSCLEx[]\" type=\"checkbox\" value=\"".$row_styles['id']."\" ".$checked."> ".ltrim($row_styles['brewStyleGroup'], "0").$row_styles['brewStyleNum'].": ".$row_styles['brewStyle']."</label></div>";
+	if ($row_styles['id'] != "") $prefsUSCLEx .= "<div class=\"checkbox\"><label><input name=\"prefsUSCLEx[]\" type=\"checkbox\" value=\"".$row_styles['id']."\" ".$checked."> ".ltrim($row_styles['brewStyleGroup'], "0").$row_styles['brewStyleNum'].": ".$row_styles['brewStyle']."</label></div>";
 
 	} while ($row_styles = mysqli_fetch_assoc($styles));
 

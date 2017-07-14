@@ -27,7 +27,6 @@ if (strpos($styleSet,"BABDB") !== false) {
 }
 
 if (strpos($styleSet,"BABDB") === false) {
-
 	
 	$query_styles = sprintf("SELECT * FROM %s WHERE (brewStyleVersion='%s' OR brewStyleOwn='custom')",$styles_db_table,$styleSet);
 	

@@ -808,7 +808,7 @@ function assigned_judges($tid,$dbTable,$judging_assignments_db_table){
 		$icon = "fa-edit";
 		$title = "Edit judges assigned to this table.";
 	}
-	if ($dbTable == "default") $r = '<a href="'.$base_url.'index.php?section=admin&action=assign&go=judging_tables&filter=judges&id='.$tid.'" data-toggle="tooltip" data-placement="top" title="'.$title.'"><span class="fa fa-lg '.$icon.'"></span></a> '.$row_assignments['count'];
+	if ($dbTable == "default") $r = $row_assignments['count'].' <a href="'.$base_url.'index.php?section=admin&action=assign&go=judging_tables&filter=judges&id='.$tid.'" data-toggle="tooltip" data-placement="top" title="'.$title.'"><span class="fa fa-lg '.$icon.'"></span></a>';
 	else $r = $row_assignments['count'];
 	return $r;
 }
@@ -827,7 +827,7 @@ function assigned_stewards($tid,$dbTable,$judging_assignments_db_table){
 		$icon = "fa-edit";
 		$title = "Edit stewards assigned to this table.";
 	}
-	if ($dbTable == "default") $r = '<a href="'.$base_url.'index.php?section=admin&action=assign&go=judging_tables&filter=stewards&id='.$tid.'" data-toggle="tooltip" data-placement="top" title="'.$title.'"><span class="fa fa-lg '.$icon.'"></span></a> '.$row_assignments['count'];
+	if ($dbTable == "default") $r = $row_assignments['count'].' <a href="'.$base_url.'index.php?section=admin&action=assign&go=judging_tables&filter=stewards&id='.$tid.'" data-toggle="tooltip" data-placement="top" title="'.$title.'"><span class="fa fa-lg '.$icon.'"></span></a>';
 	else $r = $row_assignments['count'];
 	return $r;
 }
@@ -1221,7 +1221,6 @@ function not_assigned($method) {
 		}
 		
 		// Return the modal body text
-		
 		
 		if (!empty($assignment)) {
 			$return .= "<p>These ".$human_readable."s have not been assigned to any table.</p>";

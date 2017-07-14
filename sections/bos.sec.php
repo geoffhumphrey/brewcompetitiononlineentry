@@ -74,7 +74,7 @@ require(DB.'winners.db.php');
 				$table_head1 .= sprintf("<th width=\"25%%\">%s</th>",$label_brewer);
 				$table_head1 .= sprintf("<th width=\"25%%\">%s</th>",$label_entry_name);
 				$table_head1 .= sprintf("<th width=\"25%%\">%s</th>",$label_style);
-				$table_head1 .= sprintf("<th>%s</th>",$label_club);
+				if ($_SESSION['prefsProEdition'] == 0) $table_head1 .= sprintf("<th>%s</th>",$label_club);
 				$table_head1 .= "</tr>";
 				
 				do {
@@ -86,8 +86,9 @@ require(DB.'winners.db.php');
 					$table_body1 .= "</td>";
 					
 					$table_body1 .= "<td>";
-					$table_body1 .= $row_bos['brewerFirstName']." ".$row_bos['brewerLastName'];
-					if ($row_bos['brewCoBrewer'] != "") $table_body1 .= sprintf("<br>%s: %s",$label_cobrewer,$row_bos['brewCoBrewer']);
+					if ($_SESSION['prefsProEdition'] == 1) $table_body1 .= $row_bos['brewerBreweryName'];
+					else $table_body1 .= $row_bos['brewerFirstName']." ".$row_bos['brewerLastName'];
+					if (($_SESSION['prefsProEdition'] == 0) && ($row_bos['brewCoBrewer'] != "")) $table_body1 .= sprintf("<br>%s: %s",$label_cobrewer,$row_bos['brewCoBrewer']);
 					$table_body1 .= "</td>";
 					
 					if ($action == "print") $table_body1 .= "<td>";
@@ -101,10 +102,11 @@ require(DB.'winners.db.php');
 					else $table_body1 .= $row_bos['brewStyle'];
 					$table_body1 .= "</td>";
 					
-					if ($action == "print") $table_body1 .= "<td>";
-					else $table_body1 .= "<td>";
-					$table_body1 .= $row_bos['brewerClubs'];
-					$table_body1 .= "</td>";
+					if ($_SESSION['prefsProEdition'] == 0) {
+						$table_body1 .= "<td>";
+						$table_body1 .= $row_bos['brewerClubs'];
+						$table_body1 .= "</td>";
+					}
 					
 					$table_body1 .= "</tr>";
 					
@@ -135,7 +137,7 @@ echo $header1_1;
 			{ "asSorting": [  ] },
 			{ "asSorting": [  ] },
 			{ "asSorting": [  ] },
-			{ "asSorting": [  ] },
+			<?php if ($_SESSION['prefsProEdition'] == 0) { ?>{ "asSorting": [  ] },<?php } ?>
 			{ "asSorting": [  ] }
 			]
 		} );
@@ -152,7 +154,6 @@ echo $header1_1;
 <?php 	
 	} 
 }
-  
 // Special/Custom "Best of" Display
 if ($totalRows_sbi > 0) { 
 	do { 
@@ -170,12 +171,15 @@ if ($totalRows_sbi > 0) {
 				if ($row_sbi['sbi_description'] != "") $header2_1 .= "<p>".$row_sbi['sbi_description']."</p>";
 				
 				// Build table headers
+				
+				
 				$table_head2 .= "<tr>";
-				if ($row_sbi['sbi_display_places'] == "1") $table_head2 .= "<th width='5%' nowrap>Place</th>";
-				$table_head2 .= "<th width='25%'>Brewer(s)</th>";
-				$table_head2 .= "<th width='20%'>Entry Name</th>";
-				$table_head2 .= "<th width='25%'>Style</th>";
-				$table_head2 .= "<th>Club</th>";
+				if ($row_sbi['sbi_display_places'] == "1") $table_head2 .= sprintf("<th width=\"5%%\" nowrap>%s</th>",$label_place);
+				$table_head2 .= sprintf("<th width=\"25%%\">%s</th>",$label_brewer);
+				$table_head2 .= sprintf("<th width=\"25%%\">%s</th>",$label_entry_name);
+				$table_head2 .= sprintf("<th width=\"25%%\">%s</th>",$label_style);
+				if ($_SESSION['prefsProEdition'] == 0) $table_head2 .= sprintf("<th>%s</th>",$label_club);
+				$table_head2 .= "</tr>";
 				
 				// Build table body
 				do {
@@ -201,26 +205,25 @@ if ($totalRows_sbi > 0) {
 						
 					}
 					
-					if ($action == "print") $table_body2 .= "<td>";
-					else $table_body2 .= "<td>";
-					$table_body2 .= $brewer_info['0']." ".$brewer_info['1'];
-					if (!empty($entry_info['4'])) $table_body2 .=  "<br />Co-Brewer: ".$entry_info['4'];
+					$table_body2 .= "<td>";
+					if ($_SESSION['prefsProEdition'] == 1) $table_body2 .= $brewer_info['0']." ".$brewer_info['1'];
+					else $table_body2 .= $brewer_info[15];
+					if (($_SESSION['prefsProEdition'] == 0) && (!empty($entry_info['4']))) $table_body2 .=  "<br />".$label_cobrewer.": ".$entry_info['4'];
 					$table_body2 .= "</td>";
 					
-					if ($action == "print") $table_body2 .= "<td>";
-					else $table_body2 .= "<td>";
+					$table_body2 .= "<td>";
 					$table_body2 .= $entry_info['0'];
 					$table_body2 .= "</td>";
 					
-					if ($action == "print") $table_body2 .= "<td>";
-					else $table_body2 .= "<td>";
+					$table_body2 .= "<td>";
 					$table_body2 .= $style.": ".$entry_info['3'];
 					$table_body2 .= "</td>";
 					
-					if ($action == "print") $table_body2 .= "<td>";
-					else $table_body2 .= "<td>";
-					$table_body2 .= $brewer_info['8'];
-					$table_body2 .= "</td>";
+					if ($_SESSION['prefsProEdition'] == 0) {
+						$table_body2 .= "<td>";
+						$table_body2 .= $brewer_info['8'];
+						$table_body2 .= "</td>";
+					}
 					
 					$table_body2 .= "</tr>";
 					
@@ -248,12 +251,10 @@ echo $header2_1;
 			"aaSorting": [],
 			"bProcessing" : false,
 			"aoColumns": [
-				<?php if ($row_sbi['sbi_display_places'] == "1") { ?>		  
-				{ "asSorting": [  ] },
-				<?php } ?>
+				<?php if ($row_sbi['sbi_display_places'] == "1") { ?>{ "asSorting": [  ] },<?php } ?>
 				{ "asSorting": [  ] },
 				{ "asSorting": [  ] },
-				{ "asSorting": [  ] },
+				<?php if ($_SESSION['prefsProEdition'] == 0) { ?>{ "asSorting": [  ] },<?php } ?>
 				{ "asSorting": [  ] }
 				]
 			} );
@@ -270,8 +271,6 @@ echo $header2_1;
 <?php }
 	} while ($row_sbi = mysqli_fetch_assoc($sbi));
 }
-
-if (!$display_bos_style_type) echo "<p>".$winners_text_001."</p>";
 ?>
 
 

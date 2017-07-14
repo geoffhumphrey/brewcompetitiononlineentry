@@ -39,6 +39,7 @@ switch($section) {
 	elseif ($msg == "3") $output = sprintf("<strong>%s</strong> %s",$header_text_007,$header_text_008);
 	elseif ($msg == "4") $output = sprintf("<strong>%s</strong>",$header_text_009);
 	elseif ($msg == "5") $output = sprintf("<strong>%s</strong> <a href=\#\"  role=\"button\" data-toggle=\"modal\" data-target=\"#loginModal\">%s</a>",$header_text_036,$header_text_037);
+	elseif ($msg == "9") $output = sprintf("<strong>%s</strong>",$header_text_066);
 	break;
 
 	case "user":
@@ -578,7 +579,7 @@ switch($section) {
 	elseif ($msg == "2") $output = sprintf("<strong>%s</strong>",$header_text_006);
 	elseif ($msg == "3") $output = sprintf("<strong>%s</strong> %s",$header_text_007,$header_text_008);
 	elseif ($msg == "4") $output = sprintf("<strong>%s</strong>",$header_text_065);
-	elseif ($msg == "5") $output = sprintf("<strong>%s</strong>",$header_text_066);
+	elseif ($msg == "5") $output = sprintf("<strong>%s</strong>",$header_text_044);
 	elseif ($msg == "6") $output = sprintf("<strong>%s</strong>",$header_text_067);
 	elseif ($msg == "7") {
 		if (HOSTED) $output = sprintf("<strong>%s</strong>",$header_text_068);

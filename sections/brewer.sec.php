@@ -380,7 +380,7 @@ $(document).ready(function(){
         <label for="brewerDropOff" class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label_drop_off; ?></label>
         <div class="col-lg-9 col-md-9 col-sm-8 col-xs-12">
         <!-- Input Here -->
-        <select class="selectpicker" name="brewerDropOff" id="brewerDropOff" data-live-search="true" data-size="10" data-width="auto" data-show-tick="true" data-header="<?php echo $label_select_dropoff; ?>" title="<?php echo $label_select_dropoff; ?>">
+        <select class="selectpicker" name="brewerDropOff" id="brewerDropOff" data-live-search="true" data-size="10" data-width="fit" data-show-tick="true" data-header="<?php echo $label_select_dropoff; ?>" title="<?php echo $label_select_dropoff; ?>">
         <?php if ($section != "step2") {
         do { ?>
             <option value="<?php echo $row_dropoff['id']; ?>" <?php if (($action == "edit") && ($row_brewer['brewerDropOff'] == $row_dropoff['id'])) echo "SELECTED"; ?>><?php echo $row_dropoff['dropLocationName']; ?></option>
@@ -407,7 +407,7 @@ $(document).ready(function(){
         <label for="brewerClubs" class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label_club; ?></label>
         <div class="col-lg-9 col-md-6 col-sm-8 col-xs-12">
         <!-- Input Here -->
-        <select class="selectpicker" name="brewerClubs" id="brewerClubs" data-live-search="true" data-size="10" data-width="auto" data-show-tick="true" data-header="<?php echo $label_select_club; ?>" title="<?php echo $label_select_club; ?>">
+        <select class="selectpicker" name="brewerClubs" id="brewerClubs" data-live-search="true" data-size="10" data-width="fit" data-show-tick="true" data-header="<?php echo $label_select_club; ?>" title="<?php echo $label_select_club; ?>">
         	<option value="" <?php if (($action == "edit") && (empty($row_brewer['brewerClubs']))) echo "SELECTED"; ?>>None</option>
             <option value="Other" <?php if ($club_other) echo "SELECTED"; ?>>Other</option>
             <option data-divider="true"></option>
@@ -497,6 +497,9 @@ $(document).ready(function(){
             </div>
         </div><!-- ./Form Group -->
         <div id="brewerJudgeFields">
+        <?php if ($totalRows_judging == 1) { ?>
+		<input name="brewerJudgeLocation" type="hidden" value="<?php echo "Y-".$row_judging3['id']; ?>" />
+        <?php } ?>
         <?php if ($totalRows_judging > 1) { ?>
         <div class="form-group"><!-- Form Group NOT REQUIRED Select -->
             <label for="brewerJudgeLocation" class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label_judging_avail; ?></label>
@@ -511,10 +514,6 @@ $(document).ready(function(){
             <?php }  while ($row_judging3 = mysqli_fetch_assoc($judging3)); ?>
             </div>
         </div><!-- ./Form Group -->
-        <?php }
-		else {	?>
-        <input name="brewerJudgeLocation" type="hidden" value="<?php echo "Y-".$row_judging3['id']; ?>" />
-        <input name="brewerStewardLocation" type="hidden" value="<?php echo "Y-".$row_judging3['id']; ?>" />
         <?php } ?>
         <div class="form-group"><!-- Form Group Text Input -->
             <label for="brewerJudgeID" class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label_bjcp_id; ?></label>
@@ -708,6 +707,11 @@ $(document).ready(function(){
         </div>
         </div><!-- ./ brewerJudgeFields -->
         <?php } // end if (!$judge_limit) ?>
+        
+        
+        
+        
+        
         <?php if (!$steward_limit) { ?>
         <!-- Stewarding preferences -->
         <div class="form-group"><!-- Form Group Radio INLINE -->
@@ -725,26 +729,26 @@ $(document).ready(function(){
                 <span class="help-block"><?php echo $brewer_text_015; ?></span>
             </div>
         </div><!-- ./Form Group -->
-
-        <div id="brewerStewardFields">
+        <?php if ($totalRows_judging == 1) { ?>
+		<input name="brewerStewardLocation" type="hidden" value="<?php echo "Y-".$row_judging3['id']; ?>" />
+        <?php } ?>
         <?php if ($totalRows_judging > 1) { ?>
-        <div class="form-group"><!-- Form Group NOT REQUIRED Select -->
-            <label for="brewerStewardLocation" class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label_stewarding_avail; ?></label>
-            <div class="col-lg-9 col-md-9 col-sm-8 col-xs-12">
-            <!-- Input Here -->
-            <?php do { ?>
-            <p class="bcoem-form-info"><?php echo $row_stewarding['judgingLocName']." ("; echo getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_stewarding['judgingDate'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "short", "date-time").")"; ?></p>
-            <select class="selectpicker" name="brewerStewardLocation[]" id="brewerStewardLocation" data-width="auto">
-                <option value="<?php echo "N-".$row_stewarding['id']; ?>"   <?php $a = explode(",", $row_brewer['brewerStewardLocation']); $b = "N-".$row_stewarding['id']; foreach ($a as $value) { if ($value == $b) { echo "SELECTED"; } } ?>>No</option>
-                <option value="<?php echo "Y-".$row_stewarding['id']; ?>"   <?php $a = explode(",", $row_brewer['brewerStewardLocation']); $b = "Y-".$row_stewarding['id']; foreach ($a as $value) { if ($value == $b) { echo "SELECTED"; } } ?>>Yes</option>
-            </select>
-
-            <?php }  while ($row_stewarding = mysqli_fetch_assoc($stewarding));  ?>
-            </div>
-        </div><!-- ./Form Group -->
-
-        </div><!-- ./brewerStewardFields -->
-        <?php } // end if (!$steward_limit) ?>
+        <div id="brewerStewardFields">
+			<div class="form-group"><!-- Form Group NOT REQUIRED Select -->
+				<label for="brewerStewardLocation" class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label_stewarding_avail; ?></label>
+				<div class="col-lg-9 col-md-9 col-sm-8 col-xs-12">
+				<!-- Input Here -->
+				<?php do { ?>
+				<p class="bcoem-form-info"><?php echo $row_stewarding['judgingLocName']." ("; echo getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_stewarding['judgingDate'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "short", "date-time").")"; ?></p>
+				<select class="selectpicker" name="brewerStewardLocation[]" id="brewerStewardLocation" data-width="auto">
+					<option value="<?php echo "N-".$row_stewarding['id']; ?>"   <?php $a = explode(",", $row_brewer['brewerStewardLocation']); $b = "N-".$row_stewarding['id']; foreach ($a as $value) { if ($value == $b) { echo "SELECTED"; } } ?>>No</option>
+					<option value="<?php echo "Y-".$row_stewarding['id']; ?>"   <?php $a = explode(",", $row_brewer['brewerStewardLocation']); $b = "Y-".$row_stewarding['id']; foreach ($a as $value) { if ($value == $b) { echo "SELECTED"; } } ?>>Yes</option>
+				</select>
+				<?php }  while ($row_stewarding = mysqli_fetch_assoc($stewarding));  ?>
+				</div>
+			</div><!-- ./Form Group -->
+        </div>
+        <?php } ?>
         <?php } ?>
         <?php if (($go != "entrant") &&  (($row_brewer['brewerJudge'] == "Y") || ($row_brewer['brewerSteward'] == "Y"))) { ?>
     <div class="form-group"><!-- Form Group REQUIRED Radio Group -->

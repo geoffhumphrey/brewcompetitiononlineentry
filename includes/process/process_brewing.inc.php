@@ -310,9 +310,9 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 		while($judging_number_looper) {
 		
 			$generated_judging_number = generate_judging_num(1,$styleTrim);
-			$scoresheetfilename_judging = $generated_judging_number.".pdf";
+			$scoresheet_file_name_judging = $generated_judging_number.".pdf";
 		
-			if (!in_array($scoresheetfilename_judging,$files))  { 
+			if (!in_array($scoresheet_file_name_judging,$files))  { 
 				$brewJudgingNumber = $generated_judging_number;
 				$judging_number_looper = FALSE;
 			}

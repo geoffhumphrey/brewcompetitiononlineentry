@@ -88,7 +88,7 @@ if ($row_scored_entries['count'] > 0) {
 				$table_head1 .= sprintf("<th width=\"24%%\">%s</th>",$label_brewer);
 				$table_head1 .= sprintf("<th width=\"24%%\"><span class=\"hidden-xs hidden-sm hidden-md\">%s </span>%s</th>",$label_entry,$label_name);
 				$table_head1 .= sprintf("<th width=\"24%%\">%s</th>",$label_style);
-				$table_head1 .= sprintf("<th width=\"24%%\" class=\"hidden-xs hidden-sm hidden-md\">%s</th>",$label_club);
+				if ($_SESSION['prefsProEdition'] == 0) $table_head1 .= sprintf("<th width=\"24%%\" class=\"hidden-xs hidden-sm hidden-md\">%s</th>",$label_club);
 				if ($filter == "scores") $table_head1 .= sprintf("<th width=\"1%%\" nowrap>Score</th>",$label_score);
 				$table_head1 .= "</tr>";
 				
@@ -114,8 +114,9 @@ if ($row_scored_entries['count'] > 0) {
 					}
 					
 					$table_body1 .= "<td>";
-					$table_body1 .= $row_scores['brewerFirstName']." ".$row_scores['brewerLastName'];
-					if ($row_scores['brewCoBrewer'] != "") $table_body1 .= "<br>Co-Brewer: ".$row_scores['brewCoBrewer'];
+					if ($_SESSION['prefsProEdition'] == 1) $table_body1 .= $row_scores['brewerBreweryName'];
+					else $table_body1 .= $row_scores['brewerFirstName']." ".$row_scores['brewerLastName'];
+					if (($_SESSION['prefsProEdition'] == 0) && ($row_scores['brewCoBrewer'] != "")) $table_body1 .= "<br>".$label_cobrewer.": ".$row_scores['brewCoBrewer'];
 					$table_body1 .= "</td>";
 					
 					$table_body1 .= "<td>";
@@ -127,9 +128,11 @@ if ($row_scored_entries['count'] > 0) {
 					else $table_body1 .= $row_scores['brewStyle'];
 					$table_body1 .= "</td>";
 					
-					$table_body1 .= "<td class=\"hidden-xs hidden-sm hidden-md\">";
-					$table_body1 .= $row_scores['brewerClubs'];
-					$table_body1 .= "</td>";
+					if ($_SESSION['prefsProEdition'] == 0) {
+						$table_body1 .= "<td class=\"hidden-xs hidden-sm hidden-md\">";
+						$table_body1 .= $row_scores['brewerClubs'];
+						$table_body1 .= "</td>";
+					}
 					
 					if ($filter == "scores") { 
 						$table_body1 .= "<td class=\"hidden-xs hidden-sm hidden-md\">";
@@ -164,7 +167,7 @@ if ($row_scored_entries['count'] > 0) {
 				{ "asSorting": [  ] },
 				{ "asSorting": [  ] },
 				{ "asSorting": [  ] },
-				{ "asSorting": [  ] },
+				<?php if ($_SESSION['prefsProEdition'] == 0) { ?>{ "asSorting": [  ] },<?php } ?>
 				{ "asSorting": [  ] }<?php if ($filter == "scores") { ?>,
 				{ "asSorting": [  ] }
 				<?php } ?>

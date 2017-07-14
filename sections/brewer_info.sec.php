@@ -350,6 +350,8 @@ $account_display .= sprintf("<div class=\"".$display_left_cols."\"><strong>%s</s
 $account_display .= "<div class=\"".$display_right_cols."\">".$country."</div>";
 $account_display .= "</div>";
 
+if (($_SESSION['prefsProEdition'] == 1) && (!$show_judge_steward_fields)) $account_display .= "<hr>";
+
 $account_display .= "<div class=\"row bcoem-account-info\">";
 $account_display .= sprintf("<div class=\"".$display_left_cols."\"><strong>%s</strong></div>",$label_security_question);
 $account_display .= "<div class=\"".$display_right_cols."\">".$_SESSION['userQuestion']."</div>";
@@ -366,6 +368,8 @@ if ($show_judge_steward_fields) {
 	$account_display .= sprintf("<div class=\"".$display_right_cols."\"><a href=\"http://www.homebrewersassociation.org/membership/join-or-renew/\" target=\"_blank\" data-toggle=\"tooltip\" title=\"%s\" data-placement=\"right\">".$aha_number."</a></div>",$brewer_info_005);
 	$account_display .= "</div>";
 }
+
+if (($_SESSION['prefsProEdition'] == 1) && (!$show_judge_steward_fields)) $account_display .= "<hr>";
 
 $account_display .= "<div class=\"row bcoem-account-info\">";
 $account_display .= sprintf("<div class=\"".$display_left_cols."\"><strong>%s</strong></div>",$label_drop_off);

@@ -15,9 +15,12 @@ $ba_category_names = array(
 	"13" => "Other Origin",
 	"14" => "Malternative Beverages"
 );
+
 $ba_beer_categories = array(1,2,3,4,5,6,7,8,9,10,11,13,14);
 $ba_mead_cider_categories = array(12);
 $ba_all_categories = array_merge($ba_beer_categories,$ba_mead_cider_categories);
+$ba_category_end = 14; // 2015 had 14 style categories
+$ba_id_end = 180; // 2015 had 170 styles - padding by 10 for future
 
 // First number is the cat number, second is style id
 $ba_special = array("3-27","3-28","3-44","4-56","5-70","11-114","11-117","11-119","11-120","11-121","11-124","11-125","11-126","11-128","11-130","11-131","11-132","11-133","11-134","11-135","11-136","11-137","12-145","12-146","12-148","12-151","12-153","12-154","12-155","12-157","14-161","14-162","12-170");

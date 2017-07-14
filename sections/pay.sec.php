@@ -3,24 +3,12 @@ if (TESTING) {
 	if ($_SESSION['prefsPaypalIPN'] == 1) $paypal_env = $base_url."includes/process.inc.php?action=paypal";
 	else $paypal_env = "https://www.sandbox.paypal.com/cgi-bin/webscr";
 }
+
 else {
 	if ($_SESSION['prefsPayPalIPN'] == 1) $paypal_env = $base_url."includes/process.inc.php?action=paypal";
 	else $paypal_env = "https://www.paypal.com/cgi-bin/webscr";
 }
-?>
-<script type="text/javascript" src="https://cdn.jsdelivr.net/jquery.loadingoverlay/latest/loadingoverlay.min.js"></script>
-<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/jquery.loadingoverlay/latest/loadingoverlay_progress.min.js" />
-<script>
-window.onload=function(){
-$(function(){
-  $("#submit").on("click", function(event){
-      $.LoadingOverlay("show");
-	 // window.location = "<?php echo $paypal_env; ?>";
-  });
-});
-}
-</script>
-<?php
+
 /**
  * Module:      pay.sec.php 
  * Description: This module dispays payment information based upon the competition-

@@ -113,7 +113,7 @@ if ($entry_window_open < 2) {
 	$page_info4 .= "</p>";
 	
 	// Entry Limit
-	if ($row_limits['prefsEntryLimit'] != "") {
+	if (!empty($row_limits['prefsEntryLimit'])) {
 		$header1_5 .= sprintf("<a name=\"entry_limit\"></a><h2>%s</h2>",$label_entry_limit);
 		$page_info5 .= sprintf("<p>%s %s %s</p>",$entry_info_text_019,$row_limits['prefsEntryLimit'],$entry_info_text_020);
 	}
@@ -128,8 +128,8 @@ if ($entry_window_open < 2) {
 		
 		if (!empty($row_limits['prefsUserSubCatLimit'])) { 
 			$page_info16 .= "<p>";
-			if ($row_limits['prefsUserSubCatLimit'] == 1) $page_info16 .= sprintf("%s %s %s ",$entry_info_text_021,$row_limits['prefsUserSubCatLimit'],$entry_info_text_024);
-			else $page_info16 .= sprintf("%s %s %s ",$entry_info_text_021,$row_limits['prefsUserSubCatLimit'],$entry_info_text_025);
+			if ($row_limits['prefsUserSubCatLimit'] == 1) $page_info16 .= sprintf("%s %s %s",$entry_info_text_021,$row_limits['prefsUserSubCatLimit'],$entry_info_text_024);
+			else $page_info16 .= sprintf("%s %s %s",$entry_info_text_021,$row_limits['prefsUserSubCatLimit'],$entry_info_text_025);
 			if (!empty($row_limits['prefsUSCLExLimit'])) $page_info16 .= sprintf(" &ndash; %s",$entry_info_text_026);
 			$page_info16 .= ".";
 			$page_info16 .= "</p>";
@@ -148,6 +148,8 @@ if ($entry_window_open < 2) {
 			if (strpos($_SESSION['prefsStyleSet'],"BABDB") !== false) {
 				
 				$ba_style[] = "";
+				
+				$page_info16 .= "<ul>";
 				
 				// Check for any custom styles 
 				if ($totalRows_styles > 0) {
@@ -172,7 +174,7 @@ if ($entry_window_open < 2) {
 				sort($ba_style);
 				
 				foreach ($ba_style as $value) {
-					if (!empty($value)) $page_info16 .= "<li class=\"list-group-item small\">".$value."</li>";
+					if (!empty($value)) $page_info16 .= "<li>".$value."</li>";
 				}
 				
 				$page_info16 .= "</ul>";
@@ -189,15 +191,19 @@ if ($entry_window_open < 2) {
 		
 	}
 	
-	// Payment
-	$header1_6 .= sprintf("<a name=\"payment\"></a><h2>%s</h2>",$label_pay);
-	$page_info6 .= sprintf("<p>%s</p>",$entry_info_text_031);
-	$page_info6 .= "<ul>";
-	if ($_SESSION['prefsCash'] == "Y") $page_info6 .= sprintf("<li>%s</li>",$entry_info_text_032);
-	if ($_SESSION['prefsCheck'] == "Y") $page_info6 .= sprintf("<li>%s <em>%s</em></li>",$entry_info_text_033,$_SESSION['prefsCheckPayee']);
-	if ($_SESSION['prefsPaypal'] == "Y") $page_info6 .= sprintf("<li>%s</li>",$entry_info_text_034);
-	//if ($_SESSION['prefsGoogle'] == "Y") $page_info6 .= "<li>Google Wallet</li>"; 
-	$page_info6 .= "</ul>";
+	if ($_SESSION['contestEntryFee'] > 0) {
+		
+		// Payment
+		$header1_6 .= sprintf("<a name=\"payment\"></a><h2>%s</h2>",$label_pay);
+		$page_info6 .= sprintf("<p>%s</p>",$entry_info_text_031);
+		$page_info6 .= "<ul>";
+		if ($_SESSION['prefsCash'] == "Y") $page_info6 .= sprintf("<li>%s</li>",$entry_info_text_032);
+		if ($_SESSION['prefsCheck'] == "Y") $page_info6 .= sprintf("<li>%s <em>%s</em></li>",$entry_info_text_033,$_SESSION['prefsCheckPayee']);
+		if ($_SESSION['prefsPaypal'] == "Y") $page_info6 .= sprintf("<li>%s</li>",$entry_info_text_034);
+		//if ($_SESSION['prefsGoogle'] == "Y") $page_info6 .= "<li>Google Wallet</li>"; 
+		$page_info6 .= "</ul>";
+	
+	}
 
 }
 
@@ -442,6 +448,9 @@ if (isset($row_contest_info['contestCircuit'])) {
 	$page_info15 .= $row_contest_info['contestCircuit'];
 }
 
+//echo $row_limits['prefsUserEntryLimit']."<br>";
+//echo $row_limits['prefsUserSubCatLimit']."<br>";
+//echo $row_limits['prefsUSCLExLimit']."<br>";
 
 // --------------------------------------------------------------
 // Display

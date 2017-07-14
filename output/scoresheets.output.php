@@ -13,42 +13,46 @@ require (LANG.'language.lang.php');
 
 if (isset($_SESSION['loginUsername'])) {
 
-	if (($brewer_info['brewerEmail'] != $_SESSION['loginUsername']) && ($row_logged_in_user['userLevel'] > 1)) { 
+	if (($brewer_info['brewerEmail'] != $_SESSION['loginUsername']) && ($_SESSION['userLevel'] > 1)) { 
 	  	echo sprintf("<html><head><title>%s</title></head><body>",$label_error);
   		echo sprintf("<p>%s</p>",$header_text_104);
 	  	echo "</body></html>";
   		exit();
 	}
-   
-	// Decode the file names
-	$scoresheetfilename = decryptString($_GET['scoresheetfilename']);
-	$scoresheetfile = USER_DOCS.$scoresheetfilename;
-	$randomfilename = decryptString($_GET['randomfilename']);
-	$scoresheetrandomfilerelative = "user_temp/".$randomfilename;
-	$scoresheetrandomfile = USER_TEMP.$randomfilename;
-									
-	if (copy($scoresheetfile, $scoresheetrandomfile)) {
-		header('Content-type: application/pdf');
-		
-		// Force Download
-		if (isset($_GET['download'])) header("Content-disposition: attachment; filename=$scoresheetfilename"); 
-		else header('Content-Disposition: inline; filename="' . $scoresheetfilename . '"');
 	
-		header('Content-Transfer-Encoding: binary');
-		header('Content-Length: ' . filesize($scoresheetrandomfile));
-		header('Accept-Ranges: bytes');
-   		ob_clean();
-	    flush();
-		
-		
-    	readfile($scoresheetrandomfile);
-		
-	}
-	else {
-  		echo sprintf("<html><head><title>%s</title><meta http-equiv=\"refresh\" content=\"0;URL='".$base_url."index.php?section=list&msg=11'\" /></head><body>",$label_error);
-	  	echo sprintf("<p>%s</p>",$output_text_004);
-  		echo "</body></html>";
-	  	exit();
+   	else {
+		// Decode the file names
+		$scoresheet_file_name = decryptString($_GET['scoresheetfilename']);
+		$scoresheetfile = USER_DOCS.$scoresheet_file_name;
+		$random_file_name = decryptString($_GET['randomfilename']);
+		$scoresheet_random_file_relative = "user_temp/".$random_file_name;
+		$scoresheet_random_file = USER_TEMP.$random_file_name;
+
+		if (copy($scoresheetfile, $scoresheet_random_file)) {
+			header('Content-type: application/pdf');
+
+			// Force Download
+			if (isset($_GET['download'])) header("Content-disposition: attachment; filename=$scoresheet_file_name"); 
+			else header('Content-Disposition: inline; filename="' . $scoresheet_file_name . '"');
+
+			header('Content-Transfer-Encoding: binary');
+			header('Content-Length: ' . filesize($scoresheet_random_file));
+			header('Accept-Ranges: bytes');
+			ob_clean();
+			flush();
+
+
+			readfile($scoresheet_random_file);
+
+		}
+
+		else {
+			echo sprintf("<html><head><title>%s</title><meta http-equiv=\"refresh\" content=\"0;URL='".$base_url."index.php?section=list&msg=11'\" /></head><body>",$label_error);
+			echo sprintf("<p>%s</p>",$output_text_004);
+			echo "</body></html>";
+			exit();
+		}
+	
 	}
 //	exit();
 } // end if logged in

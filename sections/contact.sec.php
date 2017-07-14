@@ -95,7 +95,7 @@ if ($_SESSION['prefsContact'] == "Y") {
             	<label for="" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label1; ?></label>
                 <div class="col-lg-10 col-md-9 col-sm-8 col-xs-12">
                 <!-- Input Here -->
-                <select class="selectpicker" name="to" data-live-search="true" data-size="10" data-width="auto">
+                <select class="selectpicker" name="to" data-live-search="true" data-width="auto">
                     <?php echo $option; ?>
                 </select>
                 </div>

@@ -67,25 +67,25 @@ if ($section != "admin") {
 	if ((isset($_SESSION['loginUsername'])) && ($_SESSION['brewerDiscount'] == "Y") && ($_SESSION['contestEntryFeePasswordNum'] != "")) $discount = TRUE; else $discount = FALSE;
 
 		// Conditional display of panel colors based upon open/closed dates
-		if (($registration_open == 0) && ($judge_window_open == 0)) $reg_panel_display = "panel-default";
+		if (($registration_open == 0) && ($judge_window_open == 0)) $reg_panel_display = "panel-danger";
 		elseif (($registration_open != 1) && ($judge_window_open == 1)) $reg_panel_display = "panel-success";
 		elseif (($registration_open == 1) && ($judge_window_open == 1)) $reg_panel_display = "panel-success";
 		elseif (($registration_open == 2) && ($judge_window_open == 2)) $reg_panel_display = "panel-danger";
 		else $reg_panel_display = "panel-default";
 		
-		if ($entry_window_open == 0) $entry_panel_display = "panel-default";
+		if ($entry_window_open == 0) $entry_panel_display = "panel-danger";
 		elseif ($entry_window_open == 1) $entry_panel_display = "panel-success";
 		elseif ($entry_window_open == 2) $entry_panel_display = "panel-danger";
 		else $entry_panel_display = "panel-default";
 		
 		if (($comp_entry_limit) || ($comp_paid_entry_limit)) $entry_panel_display = "panel-danger";
 		
-		if ($dropoff_window_open == 0) $dropoff_panel_display = "panel-default";
+		if ($dropoff_window_open == 0) $dropoff_panel_display = "panel-danger";
 		elseif ($dropoff_window_open == 1) $dropoff_panel_display = "panel-success";
 		elseif ($dropoff_window_open == 2) $dropoff_panel_display = "panel-danger";
 		else $dropoff_panel_display = "panel-default";
 		
-		if ($shipping_window_open == 0) $shipping_panel_display = "panel-default";
+		if ($shipping_window_open == 0) $shipping_panel_display = "panel-danger";
 		elseif ($shipping_window_open == 1) $shipping_panel_display = "panel-success";
 		elseif ($shipping_window_open == 2) $shipping_panel_display = "panel-danger";
 		else $shipping_panel_display = "panel-default";

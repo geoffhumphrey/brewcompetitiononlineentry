@@ -63,12 +63,21 @@ if ((judging_date_return() == 0) && ($registration_open == 2) && ($entry_window_
 	include (DB.'winners.db.php');
 	
 	$style_types_active = styles_active(1);
+	$bos_data_available = FALSE;
+	
+	if ($row_bos_scores['count'] > 0) $bos_data_available = TRUE;
 	
 	if ($style_types_active > 0) {
 		$header1_10 .= "<h2>".$default_page_text_009;
 		if ($section == "past_winners") $header1_10 .= ": ".$trimmed;
-		$header1_10 .= sprintf(" <a href=\"%soutput/export.output.php?section=results&amp;go=judging_scores_bos&amp;action=download&amp;filter=default&amp;view=pdf\" data-toggle=\"tooltip\" title=\"%s\"><span class=\"fa fa-file-pdf-o hidden-print\"></span></a> <a href=\"%soutput/export.output.php?section=results&amp;go=judging_scores_bos&amp;action=download&amp;filter=default&amp;view=html\" data-toggle=\"tooltip\" title=\"%s\"><span class=\"fa fa-file-code-o hidden-print\"></span></a>",$base_url,$default_page_text_018,$base_url,$default_page_text_019);
+		
+		if ($bos_data_available) {
+			$header1_10 .= sprintf(" <a href=\"%soutput/export.output.php?section=results&amp;go=judging_scores_bos&amp;action=download&amp;filter=default&amp;view=pdf\" data-toggle=\"tooltip\" title=\"%s\"><span class=\"fa fa-file-pdf-o hidden-print\"></span></a> <a href=\"%soutput/export.output.php?section=results&amp;go=judging_scores_bos&amp;action=download&amp;filter=default&amp;view=html\" data-toggle=\"tooltip\" title=\"%s\"><span class=\"fa fa-file-code-o hidden-print\"></span></a>",$base_url,$default_page_text_018,$base_url,$default_page_text_019);
+		}
+		
 		$header1_10 .= "</h2>";
+		
+		if (!$bos_data_available) $page_info10 .= "<p>".$winners_text_005."</p>";
 	}
 	
 	$header1_20 .= "<h2>".$default_page_text_010;
@@ -140,12 +149,15 @@ if ((judging_date_return() == 0) && ($registration_open == 2) && ($entry_window_
 	
 	if ($_SESSION['prefsDisplayWinners'] == "Y") {
 		
+		if ($_SESSION['prefsProEdition'] == 1) $label_brewer = $label_organization; else $label_brewer = $label_brewer;
+		
 		include(DB.'score_count.db.php');
 		
 		if (judging_winner_display($delay)) {
 			
-			if (((NHC) && ($prefix == "final_")) || (!NHC)) { 
+			if (((NHC) && ($prefix == "final_")) || (!NHC)) {
 				echo $header1_10;
+				echo $page_info10;
 				include (SECTIONS.'bos.sec.php');  
 				} 
 				

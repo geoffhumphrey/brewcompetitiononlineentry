@@ -21,6 +21,7 @@ require('paths.php');
 require(INCLUDES.'url_variables.inc.php');
 include(INCLUDES.'scrubber.inc.php');
 require(LANG.'language.lang.php');
+include(LIB.'date_time.lib.php');
 mysqli_select_db($connection,$database);
 
 $query_prefs = sprintf("SELECT prefsPayPalAccount FROM %s WHERE id='1'", $prefix."preferences");
@@ -32,6 +33,10 @@ $query_logo = sprintf("SELECT contestName,contestLogo FROM %s WHERE id='1'", $pr
 $logo = mysqli_query($connection,$query_logo) or die (mysqli_error($connection));
 $row_logo = mysqli_fetch_assoc($logo);
 $totalRows_logo = mysqli_num_rows($logo);
+
+$current_date = getTimeZoneDateTime($_SESSION['prefsTimeZone'], time(), $_SESSION['prefsDateFormat'], $_SESSION['prefsTimeFormat'], "system", "date");
+$current_date_time_display = getTimeZoneDateTime($_SESSION['prefsTimeZone'], time(), $_SESSION['prefsDateFormat'], $_SESSION['prefsTimeFormat'], "long", "date-time");
+$current_time = getTimeZoneDateTime($_SESSION['prefsTimeZone'], time(), $_SESSION['prefsDateFormat'], $_SESSION['prefsTimeFormat'], "system", "time");
 
 $custom_parts = explode("|",$_POST['custom']);
 
@@ -54,7 +59,6 @@ $user_info = mysqli_query($connection,$query_user_info) or die (mysqli_error($co
 $row_user_info = mysqli_fetch_assoc($user_info);
 $totalRows_user_info = mysqli_num_rows($user_info);
 
-
 // Set this to true to use the sandbox endpoint during testing:
 if ((DEBUG) || (TESTING)) {
 	$enable_sandbox = TRUE;
@@ -66,15 +70,24 @@ else {
 	$send_confirmation_email = FALSE;
 }
 
-$paypal_email_address = $row_prefs['prefsPayPalAccount'];
-
-$confirmation_email_address = "Payment Test Confirmation <".$row_prefs['prefsPayPalAccount'].">";
-$url = str_replace("www.","",$_SERVER['SERVER_NAME']);
-$from_email_address = $row_logo['contestName']." Server <noreply@".$url.">";
-
-// Set this to true to save a log file:
 $save_log_file = TRUE;
 
+$url = str_replace("www.","",$_SERVER['SERVER_NAME']);
+
+$paypal_email_address = $row_prefs['prefsPayPalAccount'];
+
+$confirm_to_email_address = "PayPal IPN Confirmation <".$row_prefs['prefsPayPalAccount'].">";
+$confirm_from_email_address = $row_logo['contestName']." Server <noreply@".$url.">";
+
+$to_email = "";
+$to_recipient = "";
+$cc_email = "";
+$cc_recipient = "";
+
+$test_text = "";
+$data_text = "";
+
+// Instantiate the PayPal IPN Class
 require(CLASSES.'paypal/paypalIPN.php');
 
 $ipn = new PaypalIPN();
@@ -84,16 +97,15 @@ if ($enable_sandbox) {
 }
 
 $verified = $ipn->verifyIPN();
-$data_text = "";
 
-foreach ($_POST as $key => $value) {
-    $data_text .= $key . " = " . $value . "<br>";
+if ($send_confirmation_email) {
+	foreach ($_POST as $key => $value) {
+		$data_text .= "<tr><td width=\"150\">".$key."</td><td>".$value."</td></tr>";
+	}
 }
 
-$test_text = "";
-
 if ($_POST['test_ipn'] == 1) {
-    $test_text = "Test ";
+    $test_text = "Test: ";
 }
 
 // Check the receiver email to see if it matches
@@ -170,7 +182,7 @@ if ($verified) {
 		
 
 		// Send the email message
-		$subject = $data['item_name']." - ".ucwords($paypal_response_text_009);
+		$subject = $test_text." ".$data['item_name']." - ".ucwords($paypal_response_text_009);
 		mail($to_email, $subject, $message_all, $headers);
 		
     }
@@ -178,9 +190,7 @@ if ($verified) {
 } 
 
 elseif ($enable_sandbox) {
-    if ($_POST['test_ipn'] != 1) {
-        $paypal_ipn_status = "RECEIVED FROM LIVE WHILE SANDBOXED";
-    }
+    if ($_POST['test_ipn'] != 1) $paypal_ipn_status = "RECEIVED FROM LIVE WHILE SANDBOXED";
 } 
 
 elseif ($_POST['test_ipn'] == 1) {
@@ -201,8 +211,8 @@ if ($send_confirmation_email) {
 	
 	$headers_confirm  = "MIME-Version: 1.0" . "\r\n";
 	$headers_confirm .= "Content-type: text/html; charset=iso-8859-1" . "\r\n";
-	$headers_confirm .= "To: BCOE&M Confirm <".$confirmation_email_address.">, " . "\r\n";
-	$headers_confirm .= "From: ".$from_email_address."\r\n";
+	$headers_confirm .= "To: ".$confirm_to_email_address.", " . "\r\n";
+	$headers_confirm .= "From: ".$confirm_from_email_address."\r\n";
 
 	$message_top_confirm = "";
 	$message_body_confirm = "";
@@ -211,21 +221,26 @@ if ($send_confirmation_email) {
 	$message_top_confirm .= "<body>";
 	$message_top_confirm .= "<html>";
 	
+	if (!empty($to_email)) {
+		$message_body_confirm .= "<p>To: ".$to_recipient. "<br>" . "To Email: ".$to_email. "<br>" . "CC: ".$cc_recipient. "<br>" . "CC Email: ".$cc_email."</p>";
+		$message_body_confirm .= $message_body;
+		$message_body_confirm .= "<br>-----------------------------------</p>";
+	}
 	
-	$message_body_confirm .= "<p>To: ".$to_recipient. "<br>" . "To Email: ".$to_email. "<br>" . "CC: ".$cc_recipient. "<br>" . "CC Email: ".$cc_email."</p>";
-	$message_body_confirm .= $message_body;
-	$message_body_confirm .= "<br>-----------------------------------</p><p>";
-	$message_body_confirm .= "paypal_ipn_status = " . $paypal_ipn_status . "<br>" . "paypal_ipn_date = " . time() . "<br>";
-	$message_body_confirm .= $data_text;
-	$message_body_confirm .= "</p>";
+	$message_body_confirm .= "<table border=\"0\" cellpadding=\"5\" cellspacing=\"0\">";
+	$message_body_confirm .= "<tr><th>Variable</th><th>Value</th></tr>";
+	$message_body_confirm .= "<tr><td width=\"150\">paypal_ipn_status</td><td>".$paypal_ipn_status."</td></tr>"; 
+	$message_body_confirm .= "<tr><td width=\"150\">paypal_ipn_date</td><td>".$current_date_time_display."</td></tr>";
+	if (!empty($data_text))	$message_body_confirm .= $data_text;
+	$message_body_confirm .= "</table>";
 	
 	$message_bottom_confirm .= "</body>";
 	$message_bottom_confirm .= "</html>";
 	
 	$message_all_confirm = $message_top_confirm.$message_body_confirm.$message_bottom_confirm;
 	
-	$subject_confirm = "PayPal IPN : " . $paypal_ipn_status;
-	mail($confirmation_email_address, $subject_confirm, $message_all_confirm, $headers_confirm);
+	$subject_confirm = "PayPal IPN: ".$paypal_ipn_status;
+	mail($confirm_to_email_address, $subject_confirm, $message_all_confirm, $headers_confirm);
 		
 }
 

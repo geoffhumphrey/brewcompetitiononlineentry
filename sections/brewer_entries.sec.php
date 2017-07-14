@@ -88,6 +88,12 @@ if (($totalRows_log > 0) && ($action != "print")) {
 	if (entries_no_special($_SESSION['user_id'])) {
 		$warnings .= sprintf("<div class=\"alert alert-warning\"><span class=\"fa fa-lg fa-exclamation-triangle\"></span> <strong>%s</strong> %s</div>",$brewer_entries_text_004,$brewer_entries_text_005);
 	}
+	
+	if (($_SESSION['prefsPayToPrint'] == "Y") && (judging_date_return() > 0) && (!$disable_pay)) {
+		
+		$warnings .= sprintf("<div class=\"alert alert-warning\"><span class=\"fa fa-lg fa-exclamation-triangle\"></span> <strong>%s!</strong> %s</div>",$label_please_note, $alert_text_085);
+		
+	}
 }
 
 // Build user's entry information
@@ -96,7 +102,7 @@ $entry_output = "";
 
 do {
 	
-	if ($row_log['brewCategorySort'] > 28) include(DB.'styles.db.php');
+	if ((strpos($_SESSION['prefsStyleSet'],"BABDB") === false) || ((strpos($_SESSION['prefsStyleSet'],"BABDB") !== false) && ($row_log['brewCategorySort'] > 28))) include(DB.'styles.db.php');
 	
 	$required_info = "";
 	if ((!empty($row_log['brewInfo'])) || (!empty($row_log['brewMead1'])) || (!empty($row_log['brewMead2'])) || (!empty($row_log['brewMead3']))) {
@@ -129,60 +135,63 @@ do {
 	$entry_output .= "</td>";
 
 	$scoresheet = FALSE;
-	if ($show_scores) {
-
-		$entry_output .= "<td class=\"hidden-xs\">";
-		$entry_output .= $judging_number; 
-		$entry_output .= "</td>";
-
-		// Check whether scoresheet file exists, and, if so, provide link.
-		$scoresheetfilename_entry = sprintf("%06s",$entry_number).".pdf";
-		$scoresheetfilename_judging = $judging_number.".pdf";
-		$scoresheetfile_entry = USER_DOCS.$scoresheetfilename_entry;
-		$scoresheetfile_judging = USER_DOCS.$scoresheetfilename_judging;
-		
-		if (file_exists($scoresheetfile_entry)) $scoresheetfilename = $scoresheetfilename_entry;
-		elseif (file_exists($scoresheetfile_judging)) $scoresheetfilename = $scoresheetfilename_judging;
-		else $scoresheetfilename = "";
 	
+	if ($show_scoresheets) {
+	
+		// Check whether scoresheet file exists, and, if so, provide link.
+		$scoresheet_file_name_entry = sprintf("%06s",$entry_number).".pdf";
+		$scoresheet_file_name_judging = $judging_number.".pdf";
+		$scoresheetfile_entry = USER_DOCS.$scoresheet_file_name_entry;
+		$scoresheetfile_judging = USER_DOCS.$scoresheet_file_name_judging;
+
+		if (file_exists($scoresheetfile_entry)) $scoresheet_file_name = $scoresheet_file_name_entry;
+		elseif (file_exists($scoresheetfile_judging)) $scoresheet_file_name = $scoresheet_file_name_judging;
+		else $scoresheet_file_name = "";
+
 		if ((file_exists($scoresheetfile_entry)) || (file_exists($scoresheetfile_judging))) {
 			$scoresheet = TRUE;
-			
+
 			// The pseudo-random number and the corresponding name of the temporary file are defined each time 
 			// this brewer_entries.sec.php script is accessed (or refreshed), but the temporary file is created
 			// only when the entrant clicks on the gavel icon to access the scoresheet. 
 			$random_num_str = random_generator(8,2);
-			$randomfilename = $random_num_str.".pdf";
-			$scoresheetrandomfilerelative = "user_temp/".$randomfilename;
-			$scoresheetrandomfile = USER_TEMP.$randomfilename;
-			$scoresheetrandomfilehtml = $base_url.$scoresheetrandomfilerelative;
-		
-			if (($scoresheet) && (!empty($scoresheetfilename))) {
+			$random_file_name = $random_num_str.".pdf";
+			$scoresheet_random_file_relative = "user_temp/".$random_file_name;
+			$scoresheet_random_file = USER_TEMP.$random_file_name;
+			$scoresheet_random_file_html = $base_url.$scoresheet_random_file_relative;
+
+			if (($scoresheet) && (!empty($scoresheet_file_name))) {
 				$scoresheet_link = "";
 				$scoresheet_link .= "<a href=\"".$base_url."output/scoresheets.output.php?";
-				
+
 				// Obfuscate the *ACTUAL* file names. 
 				// Prevents casual users from right clicking on scoresheet download link and changing
 				// the entry or judging number pdf name passed via the URL to force downloads of files 
 				// they shouldn't have access to. Can I get a harumph?!
-				$scoresheet_link .= "scoresheetfilename=".encryptString($scoresheetfilename);
-				$scoresheet_link .= "&amp;randomfilename=".encryptString($randomfilename)."&amp;download=true";
+				$scoresheet_link .= "scoresheetfilename=".encryptString($scoresheet_file_name);
+				$scoresheet_link .= "&amp;randomfilename=".encryptString($random_file_name)."&amp;download=true";
 				$scoresheet_link .= sprintf("\" data-toggle=\"tooltip\" title=\"%s '".$row_log['brewName']."'.\">",$brewer_entries_text_006);
 				$scoresheet_link .= "<span class=\"fa fa-lg fa-gavel\"></a>&nbsp;&nbsp;";
 			}
 		}
-		
+
 		// Clean up temporary scoresheets created for other brewers, when they are at least 1 minute old (just to avoid problems when two entrants try accessing their scoresheets at practically the same time, and clean up previously created scoresheets for the same brewer, regardless of how old they are.
 		$tempfiles = array_diff(scandir(USER_TEMP), array('..', '.'));
 		foreach ($tempfiles as $file) {
 			if ((filectime(USER_TEMP.$file) < time() - 1*60) || ((strpos($file, $judging_number) !== FALSE))) {
 				unlink(USER_TEMP.$file);
 			}
-			
+
 			if ((filectime(USER_TEMP.$file) < time() - 1*60) || ((strpos($file, $entry_number) !== FALSE))) {
 				unlink(USER_TEMP.$file);
 			}
 		}
+	}
+	
+	if ($show_scores) {
+		$entry_output .= "<td class=\"hidden-xs\">";
+		$entry_output .= $judging_number; 
+		$entry_output .= "</td>";
 	}
 	
 	$entry_output .= "<td>";
@@ -213,7 +222,8 @@ do {
 			else $entry_output .= sprintf("<strong class=\"text-danger\">%s</strong>",$brewer_entries_text_016);
 		}
 	
-	}	
+	}
+	
 	$entry_output .= "</td>";
 		
 	if (!$show_scores) {
@@ -222,7 +232,6 @@ do {
 	elseif ((check_special_ingredients($entry_style,$_SESSION['prefsStyleSet'])) && ($row_log['brewInfo'] == "")) $entry_output .= "<span class=\"fa fa-lg fa-exclamation-circle text-danger\"></span>";
 	else $entry_output .= yes_no($row_log['brewConfirmed'],$base_url,1);
 	$entry_output .= "</td>";
-	
 	
 	$entry_output .= "<td class=\"hidden-xs\">";
 	$entry_output .= yes_no($row_log['brewPaid'],$base_url,1);
@@ -285,12 +294,19 @@ do {
 	if ((!NHC) && (($_SESSION['prefsEntryForm'] == "B") || ($_SESSION['prefsEntryForm'] == "M") || ($_SESSION['prefsEntryForm'] == "U") || ($_SESSION['prefsEntryForm'] == "N"))) $alt_title .= sprintf("%s ",$brewer_entries_text_008);
 	$alt_title .= sprintf("%s ",$brewer_entries_text_009);
 	$alt_title .= "for ".$row_log['brewName'];
-	$print_forms_link = "";	
-	$print_forms_link .= "<a id=\"modal_window_link\" href=\"".$base_url."output/entry.output.php?";
-	$print_forms_link .= "id=".$row_log['id'];
-	$print_forms_link .= "&amp;bid=".$_SESSION['user_id'];
-	$print_forms_link .= "\" data-toggle=\"tooltip\" title=\"".$alt_title."\">";
-	$print_forms_link .= "<span class=\"fa fa-lg fa-print\"></a>&nbsp;&nbsp;";
+	
+	$print_forms_link = "";
+	
+	if (pay_to_print($_SESSION['prefsPayToPrint'],$row_log['brewPaid'])) {
+		
+		$print_forms_link .= "<a id=\"modal_window_link\" href=\"".$base_url."output/entry.output.php?";
+		$print_forms_link .= "id=".$row_log['id'];
+		$print_forms_link .= "&amp;bid=".$_SESSION['user_id'];
+		$print_forms_link .= "\" data-toggle=\"tooltip\" title=\"".$alt_title."\">";
+		$print_forms_link .= "<span class=\"fa fa-lg fa-print\"></a>&nbsp;&nbsp;";
+		
+	}
+	else $print_forms_link .= "<span data-toggle=\"tooltip\" title=\"".$brewer_entries_text_018."\" data-placement=\"auto top\" data-container=\"body\" class=\"fa fa-lg fa-print text-muted\"></span>&nbsp;&nbsp;";
 	
 	// Print Recipe
 	$print_recipe_link = sprintf("<a id=\"modal_window_link\" href=\"".$base_url."output/entry.output.php?go=recipe&amp;id=".$row_log['id']."&amp;bid=".$_SESSION['brewerID']."\" title=\"%s ".$row_log['brewName']."\"><span class=\"fa fa-lg fa-book\"><span></a>&nbsp;&nbsp;",$brewer_entries_text_010);
@@ -308,7 +324,7 @@ do {
 	
 	if ((judging_date_return() > 0) && ($action != "print")) {
 		if (($registration_open == 1) || ($entry_window_open == 1)) $entry_output .= $edit_link;
-		if (pay_to_print($_SESSION['prefsPayToPrint'],$row_log['brewPaid'])) $entry_output .= $print_forms_link;
+		$entry_output .= $print_forms_link;
 		
 		if ((NHC) && ($prefix == "final_")) $entry_output .= $print_recipe_link;
 		if ($row_log['brewPaid'] != 1) $entry_output .= $delete_link;

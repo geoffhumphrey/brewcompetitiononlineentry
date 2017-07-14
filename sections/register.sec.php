@@ -306,8 +306,6 @@ echo $page_info1;
         <input type="hidden" name="brewerPhone1" value="1234567890">
     <?php } // end if ($view == "quick")?>
 <?php } // end if ($section == "admin") ?>
-
-
 <?php if (($_SESSION['prefsProEdition'] == 1) && ($go == "entrant")) { ?>
     <div class="form-group"><!-- Form Group REQUIRED Text Input -->
         <label for="brewerBreweryName" class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label_organization." ".$label_name; ?></label>
@@ -318,7 +316,6 @@ echo $page_info1;
                 <input class="form-control" id="brewerBreweryName" name="brewerBreweryName" type="text" value="<?php if ($msg > 0) echo $_COOKIE['brewerBreweryName']; ?>" data-error="<?php echo $register_text_044; ?>" placeholder="" required autofocus>
                 <span class="input-group-addon" id="brewerBreweryName-addon2"><span class="fa fa-star"></span></span>
             </div>
-            <div class="help-block"><?php echo $register_text_045; ?></div>
             <div class="help-block with-errors"></div>            
         </div>
     </div><!-- ./Form Group -->
@@ -588,7 +585,7 @@ echo $page_info1;
 		<label for="" class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label"><?php if (($_SESSION['prefsProEdition'] == 1) && ($go == "entrant")) echo $label_organization." "; echo $label_country; ?></label>
 		<div class="col-lg-9 col-md-9 col-sm-8 col-xs-12 has-warning">
 		<!-- Input Here -->
-		<select class="selectpicker" name="brewerCountry" id="brewerCountry" data-live-search="true" data-size="10" data-width="auto">
+		<select class="selectpicker" name="brewerCountry" id="brewerCountry" data-live-search="true" data-size="10" data-width="fit">
     		<?php echo $country_select; ?>
     	</select>
 		</div>
@@ -623,7 +620,7 @@ echo $page_info1;
 		<label for="" class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label_drop_off; ?></label>
 		<div class="col-lg-9 col-md-9 col-sm-8 col-xs-12 has-warning">
 			<!-- Input Here -->
-			<select class="selectpicker" name="brewerDropOff" id="brewerDropOff" data-size="10" data-width="auto">
+			<select class="selectpicker" name="brewerDropOff" id="brewerDropOff" data-size="10" data-width="fit">
 				<option value="0"><?php echo $brewer_text_005; ?></option> 
 				<option disabled="disabled">-------------</option>
 				<?php echo $dropoff_select; ?>
@@ -639,7 +636,7 @@ echo $page_info1;
         <label for="brewerClubs" class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label_club; ?></label>
         <div class="col-lg-9 col-md-6 col-sm-8 col-xs-12">
         <!-- Input Here -->
-        <select class="selectpicker" name="brewerClubs" id="brewerClubs" data-live-search="true" data-size="10" data-width="auto" data-show-tick="true" data-header="<?php echo $label_select_club; ?>" title="<?php echo $label_select_club; ?>">
+        <select class="selectpicker" name="brewerClubs" id="brewerClubs" data-live-search="true" data-size="10" data-width="fit" data-show-tick="true" data-header="<?php echo $label_select_club; ?>" title="<?php echo $label_select_club; ?>">
         	<option value="">None</option>
             <option value="Other">Other</option>
             <option data-divider="true"></option>

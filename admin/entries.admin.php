@@ -402,7 +402,9 @@ if ($action != "print") { ?>
 		<?php } ?>
 	</div>
 </div>
-<div class="bcoem-admin-element hidden-print row hidden-xs hidden-sm">
+<div class="bcoem-admin-element hidden-print row hidden-xs">
+	<?php $all_email_display = implode(", ",array_unique($copy_paste_all_emails));
+	if (!empty($all_email_display))	{ ?>								  
 	<div class="col-md-12">
 	<!-- All Participant Email Addresses Modal -->
 	   <div class="btn-group hidden-xs hidden-sm" role="group" aria-label="...">
@@ -420,7 +422,7 @@ if ($action != "print") { ?>
 					</div>
 					<div class="modal-body">
 						<p>Copy and paste the list below into your favorite email program to contact all particpants with entries.</p>
-						<textarea class="form-control" rows="8"><?php $all_email_display = implode(", ",array_unique($copy_paste_all_emails)); echo ltrim($all_email_display," ")
+						<textarea class="form-control" rows="8"><?php echo ltrim($all_email_display," ")
 						?></textarea>
 					</div>
 					<div class="modal-footer">
@@ -429,6 +431,9 @@ if ($action != "print") { ?>
 				</div>
 			</div>
 		</div><!-- ./modal -->
+		<?php }
+		$paid_email_display = implode(", ",array_unique($copy_paste_paid_emails)); 
+		if (!empty($paid_email_display)) { ?>
 		<!-- All Participants with Paid Entries Email Addresses Modal -->
 		<div class="btn-group hidden-xs hidden-sm" role="group" aria-label="...">
 			<button type="button" class="btn btn-info" data-toggle="modal" data-target="#paidEmailModal">
@@ -445,7 +450,7 @@ if ($action != "print") { ?>
 					</div>
 					<div class="modal-body">
 						<p>Copy and paste the list below into your favorite email program to contact particpants with <strong>PAID</strong> entries.</p>
-						<textarea class="form-control" rows="8"><?php $paid_email_display = implode(", ",array_unique($copy_paste_paid_emails)); echo ltrim($paid_email_display); ?></textarea>
+						<textarea class="form-control" rows="8"><?php echo ltrim($paid_email_display); ?></textarea>
 					</div>
 					<div class="modal-footer">
 					<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
@@ -453,6 +458,9 @@ if ($action != "print") { ?>
 				</div>
 			</div>
 		</div><!-- ./modal -->
+		<?php }
+		$unpaid_email_display = implode(", ",array_unique($copy_paste_unpaid_emails));								  
+		if (!empty($unpaid_email_display)) { ?>
 		<div class="btn-group hidden-xs hidden-sm" role="group" aria-label="...">
 			<button type="button" class="btn btn-info" data-toggle="modal" data-target="#unpaidEmailModal">
 				  All Participants with Unpaid Entries Email Addresses
@@ -468,7 +476,7 @@ if ($action != "print") { ?>
 					</div>
 					<div class="modal-body">
 						<p>Copy and paste the list below into your favorite email program to contact particpants with <strong>UNPAID</strong> entries.</p>
-						<textarea class="form-control" rows="8"><?php $unpaid_email_display = implode(", ",array_unique($copy_paste_unpaid_emails)); echo ltrim($unpaid_email_display); ?></textarea>
+						<textarea class="form-control" rows="8"><?php echo ltrim($unpaid_email_display); ?></textarea>
 					</div>
 					<div class="modal-footer">
 					<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
@@ -476,6 +484,7 @@ if ($action != "print") { ?>
 				</div>
 			</div>
 		</div><!-- ./modal -->
+		<?php } ?>
 		<!-- Entry status modal -->
     <div class="btn-group pull-right hidden-xs hidden-sm" role="group" aria-label="entryStatus">
         <div class="btn-group" role="group">

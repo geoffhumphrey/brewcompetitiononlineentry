@@ -30,9 +30,9 @@ function check_judging_num($input) {
 	$row_brewing_styles = mysqli_fetch_assoc($brewing_styles);
 	
 	$files = array_slice(scandir(USER_DOCS), 2);
-	$scoresheetfilename_judging = $input.".pdf";
+	$scoresheet_file_name_judging = $input.".pdf";
 	
-	if (($row_brewing_styles['count'] == 0) && (!in_array($scoresheetfilename_judging,$files))) return TRUE;
+	if (($row_brewing_styles['count'] == 0) && (!in_array($scoresheet_file_name_judging,$files))) return TRUE;
 	else return FALSE;
 	
 }
@@ -219,9 +219,9 @@ function generate_judging_numbers($brewing_db_table,$method) {
 			while($judging_number_looper) {
 				
 				$generated_judging_number = generate_judging_num(1,"default");
-				$scoresheetfilename_judging = $generated_judging_number.".pdf";
+				$scoresheet_file_name_judging = $generated_judging_number.".pdf";
 			
-				if (!in_array($scoresheetfilename_judging,$files))  { 
+				if (!in_array($scoresheet_file_name_judging,$files))  { 
 					$brewJudgingNumber = $generated_judging_number;
 					$updateSQL = sprintf("UPDATE %s SET brewJudgingNumber=%s WHERE id=%s",
 						$brewing_db_table,
