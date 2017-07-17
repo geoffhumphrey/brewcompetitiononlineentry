@@ -329,9 +329,9 @@ $(document).ready(function(){
                     	<?php if (($registration_open == 1) && (!$ua) && (!isset($_SESSION['loginUsername']))) { ?>
                     	<li><a href="<?php echo build_public_url("register","entrant","default","default",$sef,$base_url); ?>"><?php echo $label_entrant; ?></a></li>
                         <?php } ?>
-                        <?php if (!$judge_limit) { ?>
+                        <?php if ((!$judge_limit) && ($judge_window_open == 1)) { ?>
                         <li><a href="<?php echo build_public_url("register","judge","default","default",$sef,$base_url); ?>"><?php echo $label_judge; ?></a></li>
-                        <?php } if (!$steward_limit) { ?>
+                        <?php } if ((!$steward_limit) && ($judge_window_open == 1)) { ?>
                         <li><a href="<?php echo build_public_url("register","steward","default","default",$sef,$base_url); ?>"><?php echo $label_steward; ?></a></li>
                         <?php } ?>
                     </ul>

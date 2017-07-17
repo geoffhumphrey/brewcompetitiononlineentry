@@ -225,7 +225,7 @@ $security_question = array($label_secret_01,$label_secret_05,$label_secret_06,$l
         		<h1><?php echo $header_output; ?></h1>
         	</div>
         	<?php
-
+				
 				if ($section == "default") 		include (SECTIONS.'default.sec.php');
 				if ($section == "entry") 		include (SECTIONS.'entry_info.sec.php');
 				if ($section == "contact") 		include (SECTIONS.'contact.sec.php');
