@@ -75,7 +75,13 @@ if (isset($_GET['sort'])) {
   $sort = (get_magic_quotes_gpc()) ? $_GET['sort'] : addslashes($_GET['sort']);
 }
 
-// ------------------ Only apply to print functions
+// ------------------ Token for authorized password changes ------------------
+$token = "default";
+if (isset($_GET['token'])) {
+  $token = (get_magic_quotes_gpc()) ? $_GET['token'] : addslashes($_GET['token']);
+}
+
+// ------------------ Only apply to print functions ------------------
 $tb = "default";
 if (isset($_GET['tb'])) {
   $tb = (get_magic_quotes_gpc()) ? $_GET['tb'] : addslashes($_GET['tb']);
@@ -86,19 +92,19 @@ if (isset($_GET['psort'])) {
   $psort = (get_magic_quotes_gpc()) ? $_GET['psort'] : addslashes($_GET['psort']);
 }
 
-// ------------------ Only applies to process funtions
+// ------------------ Only applies to process funtions ------------------
 $limit = "999999";
 if (isset($_GET['limit'])) {
   $limit = (get_magic_quotes_gpc()) ? $_GET['limit'] : addslashes($_GET['limit']);
 }
 
-// ------------------ Only applies to function utilized in the /includes/data_cleanup.inc.php file
+// ------------------ Only applies to function utilized in the /includes/data_cleanup.inc.php file ------------------
 $purge = "default";
 if (isset($_GET['purge'])) {
   $purge = (get_magic_quotes_gpc()) ? $_GET['purge'] : addslashes($_GET['purge']);
 }
 
-// ------------------ The following only apply to printing of specific location and rounds in admin/default.admin.php
+// ------------------ The following only apply to printing of specific location and rounds in admin/default.admin.php ------------------
 $round = "default";
 if (isset($_GET['round'])) {
   $round = (get_magic_quotes_gpc()) ? $_GET['round'] : addslashes($_GET['round']);
@@ -109,7 +115,7 @@ if (isset($_GET['location'])) {
   $location = (get_magic_quotes_gpc()) ? $_GET['location'] : addslashes($_GET['location']);
 }
 
-// ------------------ Apparently unused
+// ------------------ Apparently unused ------------------
 $inserted = "default";
 if (isset($_GET['inserted'])) {
   $inserted = (get_magic_quotes_gpc()) ? $_GET['inserted'] : addslashes($_GET['inserted']);

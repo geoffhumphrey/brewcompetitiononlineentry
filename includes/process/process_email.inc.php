@@ -34,7 +34,7 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 		$message .= "<p>".$first_name.",</p>";
 		$message .= "<p>A request was made to verify ability to send system-generated emails from the  ".$_SESSION['contestName']." competition website. If you are reading this, the test was <strong>successful</strong>!</p>";
 		$message .= "<p>Thank you,</p><p>The  ".$_SESSION['contestName']." Competition Server</p>";
-		$message .= "<p><small>Please do not reply to this email as it is automatically generated. The originating account is not active or monitored.</small></p>";
+		$message .= "<p><small>".$paypal_response_text_003."</small></p>";
 		$message .= "</body>" . "\r\n";
 		$message .= "</html>";
 		
@@ -105,7 +105,7 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 				$message .= "<p>Cheers,</p>";
 				$message .= "<p>".$row_organizer['brewerFirstName']." ".$row_organizer['brewerLastName'].", Organizer";
 				$message .= sprintf("<br><a href=\"%s\">%s</a></p>",$base_url,$_SESSION['contestName']);
-				$message .= "<p><small>Please do not reply to this email as it is automatically generated. The originating account is not active or monitored.</small></p>";
+				$message .= "<p><small>".$paypal_response_text_003."</small></p>";
 				$message .= "</body>" . "\r\n";
 				$message .= "</html>";
 				

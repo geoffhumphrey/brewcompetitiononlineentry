@@ -56,6 +56,32 @@ httpxml.send(null);
 }
 //-->
 </script>
+<script type="text/javascript">
+        $(document).ready(function () {
+            "use strict";
+            var options = {};
+            options.ui = {
+                container: "#pwd-container",
+				showErrors: true,
+				useVerdictCssClass: true,
+                showVerdictsInsideProgressBar: true,
+                viewports: {
+                    progress: ".pwd-strength-viewport-progress"
+                },
+				progressBarExtraCssClasses: "progress-bar-striped active",
+				progressBarEmptyPercentage: 2,
+				progressBarMinPercentage: 6
+            };
+            options.common = {
+                zxcvbn: true,
+				minChar: 8,
+				onKeyUp: function (evt, data) {
+					$("#length-help-text").text("<?php echo $label_length; ?>: " + $(evt.target).val().length + " - <?php echo $label_score; ?>: " + data.score.toFixed(2));
+				},
+            };
+            $('#password').pwstrength(options);
+        });
+</script>
 <?php
 $security_questions_display = (array_rand($security_question, 8));
 $security = "";
@@ -93,6 +119,14 @@ if (($action != "print") && ($msg != "default")) echo $msg_output; ?>
 			</div>
 		</div>
 	</div><!-- ./Form Group -->
+	
+	<div class="form-group" id="pwd-container">
+		<label class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label_password_strength; ?></label>
+		<div class="col-lg-6 col-md-9 col-sm-8 col-xs-12">
+			<div class="pwd-strength-viewport-progress"></div>
+			<div id="length-help-text" class="small"></div>
+		</div>
+	</div>
 
 	<div class="form-group"><!-- Form Group REQUIRED Radio Group -->
 		<label for="" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label_security_question; ?></label>

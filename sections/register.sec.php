@@ -82,7 +82,6 @@ $(document).ready(function(){
 });
 </script>
 
-
 <?php 
 $warning1 = "";
 $warning2 = "";
@@ -260,7 +259,6 @@ echo $page_info1;
 <input type="hidden" name="relocate" value="<?php echo relocate($relocate,"default",$msg,$id); ?>">
 </form>
 <?php } else { ?>
-
 <!-- Begin the Form -->
 <form data-toggle="validator" role="form" class="form-horizontal" action="<?php echo $base_url; ?>includes/process.inc.php?action=add&amp;dbTable=<?php echo $users_db_table; ?>&amp;section=register&amp;go=<?php echo $go; if ($section == "admin") echo "&amp;filter=admin"; echo "&amp;view=".$view; ?>" method="POST" name="form1" id="form1">
 
@@ -316,6 +314,7 @@ echo $page_info1;
                 <input class="form-control" id="brewerBreweryName" name="brewerBreweryName" type="text" value="<?php if ($msg > 0) echo $_COOKIE['brewerBreweryName']; ?>" data-error="<?php echo $register_text_044; ?>" placeholder="" required autofocus>
                 <span class="input-group-addon" id="brewerBreweryName-addon2"><span class="fa fa-star"></span></span>
             </div>
+            <div class="help-block"><?php echo $register_text_045; ?></div>
             <div class="help-block with-errors"></div>            
         </div>
     </div><!-- ./Form Group -->
@@ -348,7 +347,6 @@ echo $page_info1;
 	</div><!-- ./Form Group -->
     
     <?php if ($view == "default") { // Show if not using quick add judge/steward feature ?>
-	<!-- Password -->
     <div class="form-group"><!-- Form Group REQUIRED Text Input -->
 		<label for="" class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label_re_enter; if (($_SESSION['prefsProEdition'] == 1) && ($go == "entrant")) echo " ".$label_contact." "; echo " ".$label_email; ?></label>
 		<div class="col-lg-9 col-md-9 col-sm-8 col-xs-12">
@@ -361,18 +359,52 @@ echo $page_info1;
             <div class="help-block with-errors"></div>
 		</div>
 	</div><!-- ./Form Group -->
+	<script type="text/javascript">
+		$(document).ready(function () {
+			"use strict";
+			var options = {};
+			options.ui = {
+				container: "#pwd-container",
+				showErrors: true,
+				useVerdictCssClass: true,
+				showVerdictsInsideProgressBar: true,
+				viewports: {
+					progress: ".pwd-strength-viewport-progress"
+				},
+				progressBarExtraCssClasses: "progress-bar-striped active",
+				progressBarEmptyPercentage: 2,
+				progressBarMinPercentage: 6
+			};
+			options.common = {
+				zxcvbn: true,
+				minChar: 8,
+				onKeyUp: function (evt, data) {
+					$("#length-help-text").text("<?php echo $label_length; ?>: " + $(evt.target).val().length + " - <?php echo $label_score; ?>: " + data.score.toFixed(2));
+				},
+			};
+			$('#password1').pwstrength(options);
+		});
+	</script>
+	<!-- Password -->
 	<div class="form-group"><!-- Form Group REQUIRED Text Input -->
 		<label for="" class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label_password; ?></label>
 		<div class="col-lg-9 col-md-9 col-sm-8 col-xs-12">
 			<div class="input-group has-warning">
 				<span class="input-group-addon" id="password-addon1"><span class="fa fa-key"></span></span>
 				<!-- Input Here -->
-				<input class="form-control" name="password" id="password" type="password" placeholder="Password" value="<?php if ($msg > 0) echo $_COOKIE['password']; ?>" data-error="<?php echo $register_text_022; ?>" required>
+				<input class="form-control" name="password" id="password1" type="password" placeholder="<?php echo $label_password; ?>" value="<?php if ($msg > 0) echo $_COOKIE['password']; ?>" data-error="<?php echo $register_text_022; ?>" required>
 				<span class="input-group-addon" id="password-addon2"><span class="fa fa-star"></span></span>
 			</div>
             <div class="help-block with-errors"></div>
 		</div>
 	</div><!-- ./Form Group -->
+	<div class="form-group" id="pwd-container">
+		<label class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label_password_strength; ?></label>
+		<div class="col-lg-9 col-md-9 col-sm-8 col-xs-12">
+			<div class="pwd-strength-viewport-progress"></div>
+			<div id="length-help-text" class="small"></div>
+		</div>
+	</div>
 	<?php } // end if ($view == "default") ?>
     
     <?php if ($section != "admin") { // Show only when NOT being added by an administrator ?>

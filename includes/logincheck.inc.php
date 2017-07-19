@@ -12,6 +12,7 @@ mysqli_select_db($connection,$database);
 //require(CONFIG.'bootstrap.php');
 //require(INCLUDES.'url_variables.inc.php'); 
 //require(INCLUDES.'db_tables.inc.php');
+require(LIB.'common.lib.php');
 
 $section = "default";
 if (isset($_GET['section'])) {
@@ -26,20 +27,6 @@ header('Pragma: no-cache');
 
 require(CLASSES.'phpass/PasswordHash.php');
 $hasher = new PasswordHash(8, false);
-
-// Clean the data collected in the <form>
-function sterilize ($sterilize=NULL) {
-	if ($sterilize==NULL) { return NULL; }
-	$check = array (1 => "'", 2 => '"', 3 => '<', 4 => '>');
-	foreach ($check as $value) {
-	$sterilize=str_replace($value, '', $sterilize);
-		}
-		$sterilize=strip_tags ($sterilize);
-		$sterilize=stripcslashes ($sterilize);
-		$sterilize=stripslashes ($sterilize);
-		$sterilize=addslashes ($sterilize);
-	return $sterilize;
-}
 
 $loginUsername = sterilize($_POST['loginUsername']);
 $password = sterilize($_POST['loginPassword']);
@@ -76,9 +63,8 @@ else {
 	
 	if ($section == "update") {
 		
-		$loginUsername = strtolower($loginUsername);
-		
 		$loginUsername = strtolower($loginUsername);	
+		
 		$query_login = sprintf("SELECT * FROM %s WHERE user_name = '%s'",$prefix."users",$loginUsername);
 		$login = mysqli_query($connection,$query_login) or die (mysqli_error($connection));
 		$row_login = mysqli_fetch_assoc($login);
@@ -156,7 +142,7 @@ if ($check == 1) {
 	
 	} // end else NHC
 	
-	// Regiseter the session variable
+	// Register the session variable
 	$_SESSION['loginUsername'] = $loginUsername;
 	
 	// Set the relocation variables

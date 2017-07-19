@@ -236,10 +236,10 @@ $(document).ready(function(){
                 <input class="form-control" id="brewerBreweryName" name="brewerBreweryName" type="text" value="<?php if ($action == "edit") echo $row_brewer['brewerBreweryName']; ?>" data-error="<?php echo $register_text_044; ?>" placeholder="" required autofocus>
                 <span class="input-group-addon" id="brewerBreweryName-addon2"><span class="fa fa-star"></span></span>
             </div>
+            <div class="help-block"><?php echo $register_text_045; ?></div>
             <div class="help-block with-errors"></div>
         </div>
     </div><!-- ./Form Group -->
-
 	<div class="form-group"><!-- Form Group Text Input -->
         <label for="brewerBreweryTTB" class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label_ttb; ?></label>
         <div class="col-lg-9 col-md-9 col-sm-8 col-xs-12">

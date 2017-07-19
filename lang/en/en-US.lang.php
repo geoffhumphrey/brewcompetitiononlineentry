@@ -397,6 +397,7 @@ $label_continue = "Continue";
 $label_host = "Host";
 $label_closing_soon = "Closing Soon";
 $label_access = "Access";
+$label_length = "Length";
 
 // Admin
 $label_admin = "Administration";
@@ -501,7 +502,17 @@ $label_or = "Or";
 $label_admin_payments = "Payments";
 $label_payer = "Payer";
 $label_pay_with_paypal = "Pay with PayPal";
-	
+$label_submit = "Submit";
+$label_id_verification_question = "ID Verfication Question";
+$label_id_verification_answer = "ID Verification Answer";
+$label_server = "Server";
+$label_password_reset = "Password Reset";
+$label_id_verification_request = "ID Verification Request";
+$label_new_password = "New Password";
+$label_confirm_password = "Confirm Password";
+$label_with_token = "With Token";
+$label_password_strength = "Password Strength";
+
 // -------------------- Headers --------------------
 // Missing punctuation intentional for all
 $header_text_000 = "Setup was successful.";
@@ -538,7 +549,7 @@ $header_text_030 = "Sorry, the code you entered was incorrect.";
 $header_text_031 = "You must log in and have admin privileges to access administration functions.";
 $header_text_032 = "Sorry, there was a problem with your last login attempt.";
 $header_text_033 = "Please make sure your email address and password are correct.";
-$header_text_034 = "Your password has been randomly generated and reset to ".$go;
+$header_text_034 = "A password reset token has been generated and emailed to the address associated with your account. If you do not receive the email within a reasonable amount of time, contact a competition official to reset your password for you.";
 $header_text_035 = "- you can now log in using your current username and the new password.";
 $header_text_036 = "You have been logged out.";
 $header_text_037 = "Log in again?";
@@ -1117,8 +1128,8 @@ if (($section == "register") || ($action == "register") || ($go == "account") ||
 	$register_text_041 = "log in to your account";
 	$register_text_042 = "and make the necessary changes. Best of luck in the competition!";
 	$register_text_043 = "Please do not reply to this email as it is automatically generated. The originating account is not active or monitored.";
-	$register_text_044 = "Please provide an organization name (brewery, meadery, cidery, distillery, etc.).";
-	$register_text_045 = "Brewery, meadery, cidery, distillery, etc. Be sure to check the competition information for types of beverages accepted.";
+	$register_text_044 = "Please provide an organization name.";
+	$register_text_045 = "Provide a brewery name, brewpub name, etc. Be sure to check the competition information for types of beverages accepted.";
 	$register_text_046 = "For U.S. organizations only.";
 	$register_text_047 = "";
 	$register_text_048 = "";
@@ -1263,7 +1274,14 @@ $login_text_016 = "Get it emailed to";
 $login_text_017 = "Email Me My Security Question Response";
 $login_text_018 = "Your user name (email address) is required.";
 $login_text_019 = "Your password is required.";
-$login_text_020 = "";
+$login_text_020 = "The token provided is invalid or has already been used. Please use the forgot password function again to generate a new password reset token.";
+$login_text_021 = "The token provided has expired. Please use the forgot password function again to generate a new password reset token.";
+$login_text_022 = "The email you entered is not associated with the provided token. Please try again.";
+$login_text_023 = "The passwords do not match. Please try again.";
+$login_text_024 = "A confirmation password is required.";
+$login_text_025 = "Forgot your password?";
+$login_text_026 = "Enter your account email address and new password below.";
+$login_text_027 = "Your password has been reset successfully. You may now log in with the new password.";
 
 // -------------------- Winners --------------------
 
@@ -1331,6 +1349,20 @@ $paypal_response_text_006 = "Paypal response was &quot;invalid.&quot;. Please tr
 $paypal_response_text_007 = "Please contact the competition organizer if you have any questions.";
 $paypal_response_text_008 = "Invalid PayPal Payment";
 $paypal_response_text_009 = "PayPal Payment Details";
+
+// v2.1.10
+// Password reset email text
+$pwd_email_reset_text_000 = "A request was made to verify the account at the";
+$pwd_email_reset_text_001 = "website using the ID Verfication email function. If you did not initiate this, please contact the competition's organizer.";
+$pwd_email_reset_text_002 = "The ID verification answer is case sensitive";
+$pwd_email_reset_text_003 = "A request was made to change your password at the";
+$pwd_email_reset_text_004 = "website. If you did not initiate this, don't worry. Your password cannot be reset without the link below.";
+$pwd_email_reset_text_005 = "To reset your password, click the link below or copy/paste it into your browser.";
+$pwd_email_reset_text_006 = "";
+$pwd_email_reset_text_007 = "";
+$pwd_email_reset_text_008 = "";
+$pwd_email_reset_text_009 = "";
+$pwd_email_reset_text_010 = "";
 
 // ----------------------------------------------------------------------------------
 // Various conditionals

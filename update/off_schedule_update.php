@@ -268,17 +268,6 @@ if (!check_update("brewerBreweryName", $prefix."brewer")) {
 	mysqli_select_db($connection,$database);
 	mysqli_real_escape_string($connection,$updateSQL);
 	$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
-	
-	$updateSQL = sprintf("ALTER TABLE `%s` ADD `userToken` VARCHAR(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL, ADD `userTokenTime` VARCHAR(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL, ADD `userFailedLogins` INT(11) NULL DEFAULT NULL, ADD `userFailedLoginTime` VARCHAR(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL;",$prefix."users");
-	mysqli_select_db($connection,$database);
-	mysqli_real_escape_string($connection,$updateSQL);
-	$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
-
-	// Set failed logins to 0 for all users
-	$updateSQL = sprintf("UPDATE `%s` SET userFailedLogins='0';",$prefix."users");
-	mysqli_select_db($connection,$database);
-	mysqli_real_escape_string($connection,$updateSQL);
-	$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 
 	// Change unused prefsCompOrg to new prefsProEdition pref
 	$updateSQL = sprintf("ALTER TABLE `%s` CHANGE `prefsCompOrg` `prefsProEdition` TINYINT(1) NULL DEFAULT NULL;",$prefix."preferences");
@@ -341,4 +330,25 @@ if (!check_update("brewerBreweryName", $prefix."brewer")) {
 	}
 
 }
+
+// ----------------------------------------------- 2.1.10 -----------------------------------------------
+// Check if userToken is present in users table
+// If not, add it and perform other associated DB changes
+// ------------------------------------------------------------------------------------------------------
+
+if (!check_update("userToken", $prefix."users")) {
+
+	$updateSQL = sprintf("ALTER TABLE `%s` ADD `userToken` VARCHAR(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL, ADD `userTokenTime` VARCHAR(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL, ADD `userFailedLogins` INT(11) NULL DEFAULT NULL, ADD `userFailedLoginTime` VARCHAR(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL;",$prefix."users");
+	mysqli_select_db($connection,$database);
+	mysqli_real_escape_string($connection,$updateSQL);
+	$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+
+	// Set failed logins to 0 for all users
+	$updateSQL = sprintf("UPDATE `%s` SET userFailedLogins='0';",$prefix."users");
+	mysqli_select_db($connection,$database);
+	mysqli_real_escape_string($connection,$updateSQL);
+	$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+
+}
+
 ?>

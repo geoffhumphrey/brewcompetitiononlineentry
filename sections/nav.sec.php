@@ -252,7 +252,7 @@ $(document).ready(function(){
 		<div class="modal-content">
 			<div class="modal-header">
 				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-				<h4 class="modal-title" id="loginModalLabel">Log In</h4>
+				<h4 class="modal-title" id="loginModalLabel"><?php echo $label_log_in; ?></h4>
 			</div>
 			<div class="modal-body">
 				<form class="form-horizontal" data-toggle="validator" role="form" action="<?php echo $base_url; ?>includes/logincheck.inc.php?section=login" method="POST" name="form1" id="form1">

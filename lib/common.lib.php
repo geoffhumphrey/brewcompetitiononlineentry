@@ -3754,7 +3754,7 @@ function remove_sensitive_data() {
 	
 	require(CONFIG.'config.php');
 	mysqli_select_db($connection,$database);
-        include(INCLUDES.'constants.inc.php');
+    include(INCLUDES.'constants.inc.php');
 	
 	$result = "";
 	
@@ -3907,4 +3907,61 @@ function remove_sensitive_data() {
 	return $result;
 		
 }
+
+function verify_token($token,$time) {
+	
+	require(CONFIG.'config.php');
+	mysqli_select_db($connection,$database);
+	
+	// Token is not valid by default
+	$return = 1;
+	
+	$query_check_user = sprintf("SELECT userToken, userTokenTime FROM %s WHERE userToken='%s'", $prefix."users", $token);
+	$check_user = mysqli_query($connection,$query_check_user) or die (mysqli_error($connection));
+	$row_check_user = mysqli_fetch_assoc($check_user);
+	$totalRows_check_user = mysqli_num_rows($check_user);
+	
+	if ($totalRows_check_user == 1) {
+		
+		// Give the user 24 hours to reset their password
+		if (isset($row_check_user['userTokenTime'])) $expired_time = ($row_check_user['userTokenTime'] + 86400);
+		
+		// If the token time wasn't recorded for some reason, default to 4 hours
+		else $expired_time = ($time + 14400);
+		
+		// If within the prescribed timeframe, valid
+		if ($time <= $expired_time) $return = 0; 
+		
+		// Otherwise, expired
+		else $return = 2;
+		
+	}
+	
+	return $return;
+	
+}
+
+// Moved from logincheck.inc.php
+// Clean the data collected in the <form>
+
+function sterilize ($sterilize = NULL) {
+	
+	if ($sterilize == NULL) { 
+		return NULL; 
+	}
+	
+	$check = array (1 => "'", 2 => '"', 3 => '<', 4 => '>');
+	
+	foreach ($check as $value) {
+		$sterilize = str_replace($value, '', $sterilize);
+	}
+	
+	$sterilize = strip_tags($sterilize);
+	$sterilize = stripcslashes($sterilize);
+	$sterilize = stripslashes($sterilize);
+	$sterilize = addslashes($sterilize);
+	
+	return $sterilize;
+}
+
 ?>
