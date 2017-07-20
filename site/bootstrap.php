@@ -9,24 +9,11 @@
 
 /*
 
-reCaptcha Global Keys for BCOE&M
-
---- Version 1 ---
-Public Key: 	6LdquuQSAAAAAC3rsksvtjRmR9yPFmflBF4OWNS7
-Private Key:	6LdquuQSAAAAAHkf3dDRqZckRb_RIjrkofxE8Knd 
-
-Future Version
---- No CAPTCHA (Version 2) ---
-Public Key:		6LdUsBATAAAAAEJYbnqmygjGK-S6CHCoGcLALg5W
-Private Key:	6LdUsBATAAAAAMPhk5yRSmY5BMXlBgcTjiLjiyPb
-
-http://www.codediesel.com/security/integrating-googles-new-nocaptcha-recaptcha-in-php/
-
 */
 
 // ---------------------------- reCAPTCHA Public Key ----------------------------
 
-$publickey = "6LdquuQSAAAAAC3rsksvtjRmR9yPFmflBF4OWNS7";
+$publickey = "6LdUsBATAAAAAEJYbnqmygjGK-S6CHCoGcLALg5W";
 
 // ---------------------------- Base URL ----------------------------
 
@@ -53,7 +40,7 @@ if ($setup_success) {
 	
 	// ---------------------------- Check if Valid Section -----------------------------
 	
-	$section_array = array("default","rules","entry","volunteers","contact","pay","list","admin","login","logout","check","brewer","user","setup","judge","beerxml","register","sponsors","past_winners","brew","step1","step2","step3","step4","step5","step6","step7","step8","update","confirm","delete","table_cards","participant_summary","loc","sorting","output_styles","map","driving","scores","entries","participants","emails","assignments","bos-mat","dropoff","summary","inventory","pullsheets","results","sorting","staff","styles","promo","table-cards","testing","notes","qr","shipping-label","particpant-entries");
+	$section_array = array("default","rules","entry","volunteers","contact","pay","list","admin","login","logout","check","brewer","user","setup","judge","beerxml","register","sponsors","past_winners","brew","step1","step2","step3","step4","step5","step6","step7","step8","update","confirm","delete","table_cards","participant_summary","loc","sorting","output_styles","map","driving","scores","entries","participants","emails","assignments","bos-mat","dropoff","summary","inventory","pullsheets","results","sorting","staff","styles","promo","table-cards","testing","notes","qr","shipping-label","particpant-entries","qr");
 	
 	// Redirect to 404 if section not the array	
 	if (!in_array($section,$section_array)) { 

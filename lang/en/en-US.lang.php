@@ -538,7 +538,7 @@ $header_text_019 = "Perhaps you have already created an account?";
 $header_text_020 = "If so, log in here.";
 $header_text_021 = "The user name provided is not a valid email address.";
 $header_text_022 = "Please enter a valid email address.";
-$header_text_023 = "The characters you entered in the CAPTCHA section below were not correct.";
+$header_text_023 = "CAPTCHA was not successful.";
 $header_text_024 = "The email addresses you entered do not match.";
 $header_text_025 = "The AHA number you entered is already in the system.";
 $header_text_026 = "Your online payment has been received and the transaction has been completed. Please note that you may need to wait a few minutes for the payment status to be updated here - be sure to refresh this page or access your entries list. You will receive a payment receipt via email from PayPal.";
@@ -549,14 +549,14 @@ $header_text_030 = "Sorry, the code you entered was incorrect.";
 $header_text_031 = "You must log in and have admin privileges to access administration functions.";
 $header_text_032 = "Sorry, there was a problem with your last login attempt.";
 $header_text_033 = "Please make sure your email address and password are correct.";
-$header_text_034 = "A password reset token has been generated and emailed to the address associated with your account. If you do not receive the email within a reasonable amount of time, contact a competition official to reset your password for you.";
+$header_text_034 = "A password reset token has been generated and emailed to the address associated with your account.";
 $header_text_035 = "- you can now log in using your current username and the new password.";
 $header_text_036 = "You have been logged out.";
 $header_text_037 = "Log in again?";
 $header_text_038 = "Your verification question does not match what is in the database.";
 $header_text_039 = "Your ID verification information has been sent to the email address associated with your account.";
 $header_text_040 = "Your message has been sent to";
-$header_text_041 = "The characters you entered in the CAPTCHA section below were not correct.";
+$header_text_041 = $header_text_023;
 $header_text_042 = "Your email address has been updated.";
 $header_text_043 = "Your password has been updated.";
 $header_text_044 = "Info deleted successfully.";
@@ -632,6 +632,7 @@ $header_text_112 = "You do not have sufficient access privileges to perform this
 $header_text_113 = "You can only edit your own account information.";
 $header_text_114 = "As an admin, you can change a user's account information via Admin > Entries and Particpants > Manage Participants.";
 $header_text_115 = "Results have been published.";
+$header_text_116 = "If you do not receive the email within a reasonable amount of time, contact a competition official or site administrator to reset your password for you.";
 
 // -------------------- Navigation --------------------
 
@@ -1044,20 +1045,17 @@ if ($section == "pay") {
 
 // -------------------- QR --------------------
 
-if ($section == "qr") {
 
-	$qr_text_017 = sprintf("%04d",$view[0]);
-	$qr_text_018 = $view[1];
-	$qr_text_019 = sprintf("%06d",$view[1]);
-	$qr_text_020 = sprintf("%04d",$view[0]);
+	$qr_text_019 = sprintf("%04d",$view[0]);
+	$qr_text_020 = sprintf("%06d",$view[1]);
 
 	$qr_text_000 = $alert_text_080;
 	$qr_text_001 = $alert_text_081;
-	$qr_text_002 = sprintf("Entry number %s is checked in with <span class=\"text-danger\">%s</span> as its judging number.",$qr_text_017,$qr_text_018);
+	$qr_text_002 = sprintf("Entry number %s is checked in with <span class=\"text-danger\">%s</span> as its judging number.",$qr_text_020,$qr_text_018);
 	$qr_text_003 = "If this judging number is <em>not</em> correct, <strong>re-scan the code and re-enter the correct judging number.";
-	$qr_text_004 = sprintf("Entry number %s is checked in.",$qr_text_018);
-	$qr_text_005 = sprintf("Entry number %s was not found in the database. Set the bottle(s) aside and alert the competition organizer.",$qr_text_018);
-	$qr_text_006 = sprintf("The judging number you entered - %s - is already assigned to entry number %s.",$qr_text_019,$qr_text_020);
+	$qr_text_004 = sprintf("Entry number %s is checked in.",$qr_text_019);
+	$qr_text_005 = sprintf("Entry number %s was not found in the database. Set the bottle(s) aside and alert the competition organizer.",$qr_text_019);
+	$qr_text_006 = sprintf("The judging number you entered - %s - is already assigned to entry number %s.",$qr_text_020,$qr_text_019);
 	$qr_text_007 = "QR Code Entry Check-In";
 	$qr_text_008 = "To check in entries via QR code, please provide the correct password. You will only need to provide the password once per session - be sure to keep the QR Code scanning app open.";
 	$qr_text_009 = "Assign a judging number and/or box number to entry";
@@ -1070,9 +1068,7 @@ if ($section == "qr") {
 	$qr_text_016 = "Need a QR Code scanning app? Search <a href=\"https://play.google.com/store/search?q=qr%20code%20scanner&c=apps&hl=en\" target=\"_blank\">Google Play</a> (Android) or <a href=\"https://itunes.apple.com/store/\" target=\"_blank\">iTunes</a> (iOS).";
 	$qr_text_017 = "A QR Code scanning app is required to utilize this feature.";
 	$qr_text_018 = "Launch the app on your mobile device, scan a QR Code located on a bottle label, enter the required password, and check in the entry.";
-
-}
-
+	
 
 // -------------------- Registration Open --------------------
 
@@ -1267,11 +1263,11 @@ $login_text_011 = "Your security question is...";
 $login_text_012 = "If you didn't receive the email,";
 $login_text_013 = "An email will be sent to you with your verification question and answer. Be sure to check your SPAM folder.";
 $login_text_014 = "click here to resend it to";
-$login_text_015 = "Can't remember the answer to your security question?";
+$login_text_015 = "If you can't remember the answer to your security question, contact a competition official or site administrator.";
 $login_text_016 = "Get it emailed to";
 
 //v2.1.10
-$login_text_017 = "Email Me My Security Question Response";
+$login_text_017 = "Email Me My Security Question Answer";
 $login_text_018 = "Your user name (email address) is required.";
 $login_text_019 = "Your password is required.";
 $login_text_020 = "The token provided is invalid or has already been used. Please use the forgot password function again to generate a new password reset token.";

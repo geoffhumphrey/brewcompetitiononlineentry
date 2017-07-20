@@ -44,7 +44,6 @@ Declare all variables empty at the top of the script. Add on later...
  * ---------------- END Rebuild Info --------------------- */
 
 include(DB.'contacts.db.php');
-require_once(INCLUDES.'recaptchalib.inc.php');
 
 if ($_SESSION['prefsContact'] == "N") {
 	$page_info = "";
@@ -95,7 +94,7 @@ if ($_SESSION['prefsContact'] == "Y") {
             	<label for="" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label1; ?></label>
                 <div class="col-lg-10 col-md-9 col-sm-8 col-xs-12">
                 <!-- Input Here -->
-                <select class="selectpicker" name="to" data-live-search="true" data-width="auto">
+                <select class="selectpicker" name="to" data-live-search="true" data-size="10" data-width="fit">
                     <?php echo $option; ?>
                 </select>
                 </div>
@@ -158,7 +157,7 @@ if ($_SESSION['prefsContact'] == "Y") {
                 <div class="col-lg-10 col-md-9 col-sm-8 col-xs-12">
                 	<div class="input-group">
                         <!-- Input Here -->
-                        <?php echo recaptcha_get_html($publickey, null, true); ?>
+                        <div class="g-recaptcha" data-sitekey="<?php echo $publickey; ?>"></div>
                     </div>
                 </div>
             </div><!-- Form Group -->
@@ -175,7 +174,8 @@ if ($_SESSION['prefsContact'] == "Y") {
         <?php } else { ?>
         <input type="hidden" name="relocate" value="<?php echo relocate($base_url,"default",$msg,$id); ?>">
         <?php } ?>
-        </form>    
+        </form>
+<script src="https://www.google.com/recaptcha/api.js"></script>
 <?php } // end if ($msg != 1);
 } // end if ($_SESSION['prefsContact'] == "Y")
  

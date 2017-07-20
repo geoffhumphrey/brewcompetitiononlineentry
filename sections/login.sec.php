@@ -63,6 +63,7 @@ if (isset($_SESSION['loginUsername'])) $message1 .= sprintf("<p class=\"lead\">%
 if ((($action == "default") || ($action == "login") || ($action == "logout")) && (!isset($_SESSION['loginUsername']))) $login_form_display = TRUE; 
 if (($action == "forgot") && ($go == "password") && (!isset($_SESSION['loginUsername']))) $forget_form_display = TRUE;
 if (($action == "forgot") && ($go == "verify") && (!isset($_SESSION['loginUsername']))) { 
+	
 	$verify_form_display = TRUE;
 	if ($username == "default") $username_check = $_POST['loginUsername'];
 	else $username_check = $username;
@@ -186,14 +187,7 @@ echo $primary_links;
 	else $secret_question = $user_check[1];
 	?>	
 	<p class="lead"><?php echo $login_text_011; ?> <small class="text-muted"><em><?php echo $secret_question; ?></em></small></p>
-	<?php if ($_SESSION['prefsContact'] == "Y") { ?>
-	<?php if ($msg =="5") { ?>
-	<p class='lead'><small><?php echo $login_text_012; ?> <a href="<?php echo $base_url; ?>includes/forgot_password.inc.php?action=email&amp;id=<?php echo $user_check[2]; ?>" data-confirm="<?php echo $login_text_013; ?>"><?php echo $login_text_014." ".$username_check; ?></a>.</small></p>
-	<?php } else { ?>
-	<p class="lead"><small><?php echo $login_text_015." ".$login_text_016." ".$username_check; ?>.</small></p>
-    <p class="bcoem-admin-element"><a class="btn btn-block btn-info" href="<?php echo $base_url; ?>includes/forgot_password.inc.php?action=email&amp;id=<?php echo $user_check[2]; ?>" data-confirm="<?php echo $login_text_013; ?>"><?php echo $login_text_017; ?></a>
-	<?php } ?>
-	<?php } ?>
+	<p class="lead"><small><?php echo $login_text_015; ?></small></p>
 <form class="form-horizontal" action="<?php echo $base_url; ?>includes/forgot_password.inc.php?action=forgot" method="POST" name="form1" id="form1">
 	<div class="form-group">
 		<label for="" class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label_security_answer; ?></label>

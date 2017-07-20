@@ -2,6 +2,7 @@
 $section = "sorting";
 include(DB.'styles.db.php');
 
+
 do { $s[] = $row_styles['brewStyleGroup']; } while ($row_styles = mysqli_fetch_assoc($styles));
 sort($s);
  
@@ -11,7 +12,7 @@ if ($totalRows_entries > 0) {
 	if ($totalRows_entries == 1) $total_entries = $totalRows_entries." Entry"; else $total_entries = $totalRows_entries." Entries";
 ?>
     <div class="page-header">
-       <h2><?php echo sprintf("%s %s: %s<br><small><em class=\"text-muted\">%s</em></small>",$label_category,ltrim($style,"0"),style_convert($style,1),$total_entries); ?></h2>
+       <h2><?php echo sprintf("%s %s: %s<br><small><em class=\"text-muted\">%s</em></small>", $label_category, ltrim($style,"0"), style_convert($style,1), $total_entries); ?></h2>
 	</div>
     <?php if ($go == "default") { ?>
      <script type="text/javascript" language="javascript">

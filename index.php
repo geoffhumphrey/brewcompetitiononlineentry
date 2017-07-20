@@ -102,13 +102,8 @@ $security_question = array($label_secret_01,$label_secret_05,$label_secret_06,$l
 
 	<?php
 	
-	// Default - Use CDN
-	include(INCLUDES.'load_cdn_libraries.inc.php');
-
-	// Load Locally
-	// Refer to instructions at http://brewcompetition.com/local-load
-	// To load libraries locally uncomment the line below and comment out line 102 above
-	// include(INCLUDES.'load_local_libraries.inc.php');
+	if (CDN) include(INCLUDES.'load_cdn_libraries.inc.php');
+	else include(INCLUDES.'load_local_libraries.inc.php');
 
 	?>
 

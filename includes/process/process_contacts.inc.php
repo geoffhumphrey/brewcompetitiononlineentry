@@ -4,18 +4,24 @@
  * Module:      process_contacts.inc.php
  * Description: This module does all the heavy lifting for adding/editing info in the "contacts" table
  */
+$captcha_success = FALSE;
 
 if (isset($_SERVER['HTTP_REFERER'])) { 
 	
 	if ($action == "email") { 
-	
-		require_once(INCLUDES.'recaptchalib.inc.php');
-		$privatekey = "6LdquuQSAAAAAHkf3dDRqZckRb_RIjrkofxE8Knd";
-		$resp = recaptcha_check_answer ($privatekey, $_SERVER["REMOTE_ADDR"], $_POST["recaptcha_challenge_field"], $_POST["recaptcha_response_field"]);
 		
-		if (!$resp->is_valid) {
-			// What happens when the CAPTCHA was entered incorrectly
-			//die ("The reCAPTCHA wasn't entered correctly. Go back and try it again."."(reCAPTCHA said: " . $resp->error . ")");
+		if ((isset($_POST['g-recaptcha-response'])) && (!empty($_POST['g-recaptcha-response']))) {
+			
+			$privatekey = "6LdUsBATAAAAAMPhk5yRSmY5BMXlBgcTjiLjiyPb";
+			
+			$verify_response = file_get_contents('https://www.google.com/recaptcha/api/siteverify?secret='.$privatekey.'&response='.$_POST['g-recaptcha-response']);
+			$response_data = json_decode($verify_response);
+			
+			if (($_SERVER['SERVER_NAME'] = $response_data->hostname) && ($response_data->success)) $captcha_success = TRUE;
+			
+		}
+		
+		if (!$captcha_success) {
 			
 			setcookie("to", $_POST['to'], 0, "/"); // $id of contact record in contacts table
 			setcookie("from_email", strtolower(filter_var($_POST['from_email'], FILTER_SANITIZE_EMAIL)), 0, "/");
@@ -24,8 +30,8 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 			setcookie("message", $_POST['message'], 0, "/");
 			header(sprintf("Location: %s", $base_url."index.php?section=contact&action=email&msg=2"));
 			
-		} // end if (!$resp->is_valid)
-		//filter_var($_POST['email'], FILTER_SANITIZE_EMAIL)
+		} 
+		
 		else {
 			
 			$query_contact = sprintf("SELECT * FROM $contacts_db_table WHERE id='%s'", $_POST['to']);
@@ -71,7 +77,7 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 			mail($to_email, $subject, $message, $headers);
 			header(sprintf("Location: %s", $base_url."index.php?section=contact&action=email&id=".$row_contact['id']."&msg=1"));
 			
-		} // end else if (!$resp->is_valid)
+		}
 	
 	} // end if ($action == "email")
 	

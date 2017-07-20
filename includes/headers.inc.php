@@ -39,6 +39,7 @@ switch($section) {
 	elseif ($msg == "3") $output = sprintf("<strong>%s</strong> %s",$header_text_007,$header_text_008);
 	elseif ($msg == "4") $output = sprintf("<strong>%s</strong>",$header_text_009);
 	elseif ($msg == "5") $output = sprintf("<strong>%s</strong> <a href=\#\"  role=\"button\" data-toggle=\"modal\" data-target=\"#loginModal\">%s</a>",$header_text_036,$header_text_037);
+	elseif ($msg == "6") { $output = sprintf("<strong>%s</strong> %s",$header_text_034,$header_text_116); $output_extend = ""; }
 	elseif ($msg == "9") $output = sprintf("<strong>%s</strong>",$header_text_066);
 	break;
 
@@ -85,7 +86,7 @@ switch($section) {
 	else $header_output = $_SESSION['contestName']." - ".$label_log_in;
 	if ($msg == "0") $output = sprintf("<strong>%s</strong> ",$header_text_031);
 	elseif ($msg == "1") { $output = sprintf("<strong>%s</strong> %s",$header_text_032,$header_text_033); $output_extend = ""; }
-	elseif ($msg == "2") { $output = sprintf("<strong>%s</strong></p>",$header_text_034); $output_extend = ""; }
+	elseif ($msg == "2") { $output = sprintf("<strong>%s</strong> %s",$header_text_034,$header_text_116); $output_extend = ""; }
 	elseif ($msg == "3") $output = sprintf("<strong>%s</strong> <a href=\#\"  role=\"button\" data-toggle=\"modal\" data-target=\"#loginModal\">%s</a>",$header_text_036,$header_text_037);
 	elseif ($msg == "4") $output = sprintf("<strong>%s</strong> %s",$header_text_038,$header_text_008);
 	elseif ($msg == "5") $output = sprintf("<strong>%s</strong>",$header_text_039);

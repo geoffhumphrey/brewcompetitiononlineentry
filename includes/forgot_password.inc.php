@@ -145,7 +145,7 @@ if ($action == "forgot") {
 		exit;
 		*/
 		
-		$updateGoTo = $base_url."index.php?section=login&msg=2";
+		$updateGoTo = $base_url."index.php?msg=6";
 		header(sprintf("Location: %s", $updateGoTo)); 
 		exit;
 	

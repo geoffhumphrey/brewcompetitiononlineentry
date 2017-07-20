@@ -841,8 +841,7 @@ echo $page_info1;
 		<div class="col-lg-9 col-md-9 col-sm-8 col-xs-12">
 			<div class="input-group">
 				<!-- Input Here -->
-                <!-- <div class="g-recaptcha" data-sitekey="6LdUsBATAAAAAEJYbnqmygjGK-S6CHCoGcLALg5W"></div> -->
-				<?php echo recaptcha_get_html($publickey, null, true); ?>
+                <div class="g-recaptcha" data-sitekey="<?php echo $publickey; ?>"></div>
 			</div>
 		</div>
 	</div><!-- Form Group -->
@@ -863,5 +862,6 @@ echo $page_info1;
   		$('#user_screen_name').focus();
 	});
 </script>
+<script src="https://www.google.com/recaptcha/api.js"></script>
 <?php } // end else ?>
 <?php } // end else ?>

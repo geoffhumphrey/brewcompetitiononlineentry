@@ -1,11 +1,43 @@
 <?php
-require('paths.php');
-require(CONFIG.'bootstrap.php');
-session_name($prefix_session);
+define('ROOT',dirname( __FILE__ ).DIRECTORY_SEPARATOR);
+define('CLASSES',ROOT.'classes'.DIRECTORY_SEPARATOR);
+define('CONFIG',ROOT.'site'.DIRECTORY_SEPARATOR);
+define('INCLUDES',ROOT.'includes'.DIRECTORY_SEPARATOR);
+define('LIB',ROOT.'lib'.DIRECTORY_SEPARATOR);
+define('LANG',ROOT.'lang'.DIRECTORY_SEPARATOR);
+define('DEBUGGING',ROOT.'includes'.DIRECTORY_SEPARATOR.'debug'.DIRECTORY_SEPARATOR);
+define('TESTING', FALSE);
+define('DEBUG', FALSE);
+define('DEBUG_SESSION_VARS', FALSE);
+define('SINGLE', FALSE);
+
 session_start();
-$section = "qr";
-// Load language file
-require(LANG.'language.lang.php');
+
+require (CONFIG.'config.php');
+require (INCLUDES.'current_version.inc.php'); 
+include (INCLUDES.'url_variables.inc.php');
+if ($view != "default") $view = explode("-",$view);
+include (LANG.'language.lang.php');
+include (LIB.'common.lib.php');
+
+$query_contest_info = sprintf("SELECT * FROM %s", $prefix."contest_info");
+if (SINGLE) $query_contest_info .= sprintf(" WHERE id='%s'", $_POST['comp_id']);
+else $query_contest_info .= " WHERE id='1'";
+$contest_info = mysqli_query($connection,$query_contest_info) or die (mysqli_error($connection));
+$row_contest_info = mysqli_fetch_assoc($contest_info);
+
+if (SINGLE) $query_prefs = sprintf("SELECT * FROM %s WHERE comp_id='%s'", $prefix."preferences",$row_contest_info['id']);
+else $query_prefs = sprintf("SELECT * FROM %s WHERE id='1'", $prefix."preferences");
+$prefs = mysqli_query($connection,$query_prefs) or die (mysqli_error($connection));
+$row_prefs = mysqli_fetch_assoc($prefs);
+$totalRows_prefs = mysqli_num_rows($prefs);
+
+$header_output = $row_contest_info['contestName'];
+
+ini_set('display_errors','On');
+
+$base_url = "http://".$_SERVER['SERVER_NAME'].$sub_directory."/";
+$theme = $base_url."css/".$row_prefs['prefsTheme'].".min.css";
 
 // Validate user input against password in DB
 if ($action == "password-check") {
@@ -23,20 +55,6 @@ if ($action == "password-check") {
 		
 		require(CLASSES.'phpass/PasswordHash.php');
 		$hasher = new PasswordHash(8, false);
-		
-		// Clean the data collected in the <form>
-		function sterilize ($sterilize=NULL) {
-			if ($sterilize==NULL) { return NULL; }
-			$check = array (1 => "'", 2 => '"', 3 => '<', 4 => '>');
-			foreach ($check as $value) {
-			$sterilize=str_replace($value, '', $sterilize);
-				}
-				$sterilize=strip_tags ($sterilize);
-				$sterilize=stripcslashes ($sterilize);
-				$sterilize=stripslashes ($sterilize);
-				$sterilize=addslashes ($sterilize);
-			return $sterilize;
-		}
 		
 		$password = sterilize($_POST['inputPassword']);
 		
@@ -67,65 +85,57 @@ if ($action == "password-check") {
 			$check = $hasher->CheckPassword($password, $stored_hash);
 		}
 		
-		
-		
-		// If successful, start session and redirect
+		// If successful, register a session variable and set the redirect
 		if ($check == 1) {
-			// Start the session and regenerate the session ID
-			session_regenerate_id(true); 
 			$password_redirect .= "&msg=2";
-			$_SESSION['qrPasswordOK'] = "1";
-			
-			/*
-			// If id was passed in URL, check in that entry
-			if ($id != "default") {
-				
-				$updateSQL = sprintf("UPDATE %s SET brewReceived='1' WHERE id='%s';",$brewing_db_table,$id);
-				mysqli_real_escape_string($connection,$updateSQL);
-				$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
-				
-			}
-			*/
+			$_SESSION['qrPasswordOK'] = $password;
 		}
 		
 		// If not successful, destroy session and redirect
-		else {
+		if ($check == 0) {
 			session_destroy();
 			$password_redirect .= "&msg=1";
-			
 		}
 		
 		header(sprintf("Location: %s", $password_redirect));
 		exit;
+		
 	}
 	
 	else {
 		$password_redirect .= "&msg=1";
 		header(sprintf("Location: %s", $password_redirect));
+		exit;
 	}
+	
 }
 
 if (($go == "default") && ($id != "default") && (isset($_SESSION['qrPasswordOK']))) {
 	
 	$checkin_redirect = $base_url."qr.php?action=default&go=success";
+	$paid_checked = "";
 	
 	// Check to see if the entry is in the DB
-	$query_entry = sprintf("SELECT id,brewName,brewStyle,brewCategory,brewSubCategory FROM %s WHERE id='%s'",$prefix."brewing",$id);
+	$query_entry = sprintf("SELECT id,brewName,brewStyle,brewCategory,brewSubCategory,brewPaid,brewJudgingNumber FROM %s WHERE id='%s'",$prefix."brewing",$id);
 	$entry = mysqli_query($connection,$query_entry) or die (mysqli_error($connection));
 	$row_entry = mysqli_fetch_assoc($entry);
 	$totalRows_entry = mysqli_num_rows($entry);
+	
 	$entry_found = FALSE;
+	
 	if ($totalRows_entry > 0) $entry_found = TRUE;
 	
 	// If so, mark the entry as "received" and redirect (message 3)
 	if ($entry_found) {
 		
+		if ($row_entry['brewPaid'] == 1) $paid_checked = "checked disabled";
 		
 		if ($action == "update") {
 			
 			// Check if judging number has been input
 			// If so, add to update query and perform redirect
 			if ((isset($_POST['brewJudgingNumber'])) && ($_POST['brewJudgingNumber'] != "")) {
+				
 				$judgingNumber = sprintf("%06s",$_POST['brewJudgingNumber']);
 				
 				// Check to see if judging number has already been assigned
@@ -142,8 +152,9 @@ if (($go == "default") && ($id != "default") && (isset($_SESSION['qrPasswordOK']
 				}
 				
 				// If not, update DB		
-				$updateSQL = sprintf("UPDATE %s SET brewReceived='1',brewJudgingNumber='%s'",$brewing_db_table,$judgingNumber);
-				if ((isset($_POST['brewBoxNum'])) && ($_POST['brewBoxNum'] != "")) $updateSQL .= sprintf(",brewBoxNum='%s'",$_POST['brewBoxNum']);
+				$updateSQL = sprintf("UPDATE %s SET brewReceived='1', brewJudgingNumber='%s'",$prefix."brewing",$judgingNumber);
+				if ((isset($_POST['brewBoxNum'])) && ($_POST['brewBoxNum'] != "")) $updateSQL .= sprintf(", brewBoxNum='%s'",$_POST['brewBoxNum']);
+				if ((isset($_POST['brewPaid'])) && ($_POST['brewPaid'] != "")) $updateSQL .= sprintf(", brewPaid='%s'",$_POST['brewPaid']);
 				$updateSQL .= sprintf(" WHERE id='%s';",$id);
 				mysqli_real_escape_string($connection,$updateSQL);
 				$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
@@ -156,13 +167,14 @@ if (($go == "default") && ($id != "default") && (isset($_SESSION['qrPasswordOK']
 			
 			else {
 				
-				$updateSQL = sprintf("UPDATE %s SET brewReceived='1'",$brewing_db_table,$judgingNumber);
-				if ((isset($_POST['brewBoxNum'])) && ($_POST['brewBoxNum'] != "")) $updateSQL .= sprintf(",brewBoxNum='%s'",$_POST['brewBoxNum']);
+				$updateSQL = sprintf("UPDATE %s SET brewReceived='1'",$prefix."brewing");
+				if ((isset($_POST['brewBoxNum'])) && ($_POST['brewBoxNum'] != "")) $updateSQL .= sprintf(", brewBoxNum='%s'",$_POST['brewBoxNum']);
+				if ((isset($_POST['brewPaid'])) && ($_POST['brewPaid'] != "")) $updateSQL .= sprintf(", brewPaid='%s'",$_POST['brewPaid']);
 				$updateSQL .= sprintf(" WHERE id='%s';",$id);
 				mysqli_real_escape_string($connection,$updateSQL);
 				$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 			
-				$checkin_redirect .= "&view=".$id."-".$judgingNumber."&msg=6";
+				$checkin_redirect .= "&view=".$id."-".$row_entry['brewJudgingNumber']."&msg=6";
 				header(sprintf("Location: %s", $checkin_redirect));
 				exit;
 				
@@ -175,14 +187,13 @@ if (($go == "default") && ($id != "default") && (isset($_SESSION['qrPasswordOK']
 	// If not, redirect to alert the user (message 4)
 	else {
 		
-		$checkin_redirect .= "&view=".$id."&msg=4";
+		$checkin_redirect .= "&view=".$id."-000000&msg=4";
 		header(sprintf("Location: %s", $checkin_redirect));
 		exit;
 
 	}
 	
 }
-
 
 // Messages
 $message = "";
@@ -198,7 +209,6 @@ if ($msg == "2") {
 }
 
 if ($msg == "3") {
-	$view = explode("-",$view);
 	$message .= sprintf("<p><span class=\"fa fa-check-circle\"></span> <strong>%s</strong></p><p>%s<p>",$qr_text_002,$qr_text_003);
 	$alert_type = "alert-success";
 }
@@ -213,7 +223,6 @@ if ($msg == "4") {
 }
 
 if ($msg == "5") {
-	$view = explode("-",$view);
 	$message .= sprintf("<span class=\"fa fa-exclamation-circle\"></span> <strong>%s</strong> %s",$qr_text_000,$header_text_008);
 }
 
@@ -225,7 +234,7 @@ if ($msg == "5") {
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title><?php echo $_SESSION['contestName']; ?> - Brew Competition Online Entry &amp; Management</title>
+    <title><?php echo $row_contest_info['contestName']; ?> - Brew Competition Online Entry &amp; Management</title>
     
 	<!-- Load jQuery / http://jquery.com/ -->
 	<script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
@@ -252,48 +261,48 @@ if ($msg == "5") {
     <script src="<?php echo $base_url; ?>js_includes/bcoem_custom.min.js"></script>
     
     <style>
-body {
-	margin: 0;
-	padding: 0;
-}
+	body {
+		margin: 0;
+		padding: 0;
+	}
 
-.container-signin {
-  max-width: 400px;
-  padding: 15px;
-  margin: 0 auto;
-}
+	.container-signin {
+	  max-width: 400px;
+	  padding: 15px;
+	  margin: 0 auto;
+	}
 
-.container-signin .container-signin-heading,
-.container-signin .checkbox {
-  margin-bottom: 10px;
-}
+	.container-signin .container-signin-heading,
+	.container-signin .checkbox {
+	  margin-bottom: 10px;
+	}
 
-.container-signin .checkbox {
-  font-weight: normal;
-}
+	.container-signin .checkbox {
+	  font-weight: normal;
+	}
 
-.container-signin .form-control {
-  position: relative;
-  height: auto;
-  -webkit-box-sizing: border-box;
-     -moz-box-sizing: border-box;
-          box-sizing: border-box;
-  padding: 10px;
-  font-size: 16px;
-}
+	.container-signin .form-control {
+	  position: relative;
+	  height: auto;
+	  -webkit-box-sizing: border-box;
+		 -moz-box-sizing: border-box;
+			  box-sizing: border-box;
+	  padding: 10px;
+	  font-size: 16px;
+	}
 
-.container-signin .form-control:focus {
-  z-index: 2;
-}
+	.container-signin .form-control:focus {
+	  z-index: 2;
+	}
 
-.container-signin input[type="password"],.container-signin input[type="tel"] {
-  margin-bottom: 10px;
-}
-
+	.container-signin input[type="password"],.container-signin input[type="tel"] {
+	  margin-bottom: 10px;
+	}
 </style>
 </head>
 <body>
 <div class="container">
+   	<?php if (DEBUG_SESSION_VARS) include (DEBUGGING.'session_vars.debug.php');	?>
     <div class="container-signin">
     
     <?php if ($msg != "default") { ?>
@@ -346,8 +355,11 @@ body {
         </div>
         <div class="form-group">
             <label for="inputBoxNumber"><?php echo $label_box_number; ?></label>
-            <input type="number" name="brewBoxNum" id="brewBoxNum" class="form-control" placeholder="">
+            <input type="text" name="brewBoxNum" id="brewBoxNum" class="form-control" placeholder="">
             <div class="help-block with-errors"></div>
+        </div>
+        <div class="form-group">
+            <label for="inputPaid"><input type="checkbox" name="brewPaid" id="brewPaid" value="1" <?php echo $paid_checked; ?>> <?php echo $label_paid; ?></label>
         </div>
         <button class="btn btn-lg btn-primary btn-block" type="submit"><?php echo $label_check_in; ?></button>
    	</form>	    

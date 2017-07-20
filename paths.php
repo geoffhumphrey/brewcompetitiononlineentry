@@ -33,13 +33,14 @@ define('DEBUGGING',ROOT.'includes'.DIRECTORY_SEPARATOR.'debug'.DIRECTORY_SEPARAT
 // --------------------------------------------------------
 // Global Definitions
 // --------------------------------------------------------
-define('HOSTED', FALSE);
-define('MAINT', FALSE);
-define('NHC', FALSE);
-define('TESTING', FALSE);
-define('SINGLE', FALSE);
-define('DEBUG', FALSE);
-define('DEBUG_SESSION_VARS', FALSE);
+define('HOSTED', FALSE); // default FALSE
+define('MAINT', FALSE); // default FALSE
+define('NHC', FALSE); // default FALSE
+define('TESTING', FALSE); // default FALSE
+define('SINGLE', FALSE); // default FALSE
+define('DEBUG', FALSE); // default FALSE
+define('DEBUG_SESSION_VARS', FALSE); // default FALSE
+define('CDN', TRUE); // default TRUE
 
 // --------------------------------------------------------
 // Error Reporting
