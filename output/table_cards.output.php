@@ -1,6 +1,6 @@
 <?php 
 $section = "table_cards";
-include(DB.'admin_common.db.php');
+include (DB.'admin_common.db.php');
 
 if ($totalRows_tables == 0) { 
 	echo "<h2>"; 
@@ -19,7 +19,7 @@ $role_replace2 = array("<span class=\"fa fa-gavel\"></span> Head Judge","<span c
 if ($id == "default") { ?>
 
     <?php do { 
-          include(DB.'output_table_cards.db.php');
+          include (DB.'output_table_cards.db.php');
         ?>
 <div class="table_card">
     <h1><?php echo sprintf("%s %s",$label_table, $row_tables['tableNumber']); ?></h1>
@@ -76,7 +76,7 @@ if ($id == "default") { ?>
 <?php } while ($row_tables = mysqli_fetch_assoc($tables)); 
 } 
 if ($id != "default") { 
-	include(DB.'output_table_cards.db.php');
+	include (DB.'output_table_cards.db.php');
 ?>
 <div class="table_card">
     <h1><?php echo sprintf("%s %s",$label_table, $row_tables_edit['tableNumber']); ?></h1>

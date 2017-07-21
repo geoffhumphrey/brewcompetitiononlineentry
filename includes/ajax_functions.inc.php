@@ -6,11 +6,11 @@ Checked Single
 */
 
 include('../paths.php');
-include(CONFIG.'config.php');  
-include(INCLUDES.'url_variables.inc.php');
-include(INCLUDES.'db_tables.inc.php');
-include(LIB.'common.lib.php');
-include(LANG.'language.lang.php');
+include (CONFIG.'config.php');  
+include (INCLUDES.'url_variables.inc.php');
+include (INCLUDES.'db_tables.inc.php');
+include (LIB.'common.lib.php');
+include (LANG.'language.lang.php');
 mysqli_select_db($connection,$database);
 
 if ($action == "username") {

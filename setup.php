@@ -73,7 +73,7 @@ if ($setup_free_access == FALSE) {
 else {
 	if ($section != "step0") require(DB.'common.db.php');
 	require(INCLUDES.'version.inc.php');
-	if ((!table_exists($prefix."system")) && ($section == "step0"))	include(SETUP.'install_db.setup.php');
+	if ((!table_exists($prefix."system")) && ($section == "step0"))	include (SETUP.'install_db.setup.php');
 	$setup_body .= $output;
 }
 
@@ -191,14 +191,14 @@ else {
 					$row_system = mysqli_fetch_assoc($system);
 
 					if (($row_system['setup'] == 0) && ($section != "step0")) {
-						if ($section == "step1") 	include(SETUP.'admin_user.setup.php');
-						if ($section == "step2") 	include(SETUP.'admin_user_info.setup.php');
-						if ($section == "step3") 	include(SETUP.'site_preferences.setup.php');
-						if ($section == "step4") 	include(SETUP.'competition_info.setup.php');
-						if ($section == "step5") 	include(SETUP.'judging_locations.setup.php');
-						if ($section == "step6") 	include(SETUP.'drop-off.setup.php');
-						if ($section == "step7") 	include(SETUP.'accepted_styles.setup.php');
-						if ($section == "step8") 	include(SETUP.'judging_preferences.setup.php');
+						if ($section == "step1") 	include (SETUP.'admin_user.setup.php');
+						if ($section == "step2") 	include (SETUP.'admin_user_info.setup.php');
+						if ($section == "step3") 	include (SETUP.'site_preferences.setup.php');
+						if ($section == "step4") 	include (SETUP.'competition_info.setup.php');
+						if ($section == "step5") 	include (SETUP.'judging_locations.setup.php');
+						if ($section == "step6") 	include (SETUP.'drop-off.setup.php');
+						if ($section == "step7") 	include (SETUP.'accepted_styles.setup.php');
+						if ($section == "step8") 	include (SETUP.'judging_preferences.setup.php');
 					}
 
 				} // end if (table_exists($prefix."system"))

@@ -48,7 +48,7 @@ All Admin pages have certain variables in common that build the page:
 
  * ---------------- END Rebuild Info --------------------- */
 
-include(DB.'admin_participants.db.php');
+include (DB.'admin_participants.db.php');
 
 // Set Vars
 $subtitle = "";

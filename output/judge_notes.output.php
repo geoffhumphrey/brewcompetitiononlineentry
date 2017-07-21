@@ -1,6 +1,6 @@
 <?php
-include(DB.'brewer.db.php');
-include(LIB.'output.lib.php');
+include (DB.'brewer.db.php');
+include (LIB.'output.lib.php');
 ?>
 <div class="page-header">
 	<h1><?php echo sprintf("%s %s",$_SESSION['contestName'],$label_org_notes); ?></h1>

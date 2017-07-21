@@ -66,7 +66,7 @@ if (check_setup($prefix."system",$database)) {
 
 
 	// Perform various checks and update various DB
-	include(UPDATE.'off_schedule_update.php');
+	include (UPDATE.'off_schedule_update.php');
 
 	if ($row_system['version'] != $current_version) {
 

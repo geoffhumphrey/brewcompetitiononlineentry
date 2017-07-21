@@ -6,9 +6,9 @@ require(CLASSES.'fpdf/pdf_label.php');
 
 mysqli_select_db($connection,$database);
 
-include(DB.'output_labels.db.php');
-include(LIB.'output.lib.php');
-include(DB.'styles.db.php');
+include (DB.'output_labels.db.php');
+include (LIB.'output.lib.php');
+include (DB.'styles.db.php');
 
 $filename = "";
 
@@ -733,7 +733,7 @@ if (isset($_SESSION['loginUsername'])) {
 			else 						$filename .= "_Avery5160";
 			$filename .= ".pdf";
 
-			include(DB.'output_labels_awards.db.php');
+			include (DB.'output_labels_awards.db.php');
 			ob_end_clean();
 			$pdf->Output($filename,'D');
 
@@ -750,7 +750,7 @@ if (isset($_SESSION['loginUsername'])) {
 			else $filename .= "_OL5375";
 			$filename .= ".pdf";
 
-			include(DB.'output_labels_awards.db.php');
+			include (DB.'output_labels_awards.db.php');
 			ob_end_clean();
 			$pdf->Output($filename,'D');
 		}

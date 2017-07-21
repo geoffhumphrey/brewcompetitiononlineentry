@@ -43,7 +43,7 @@ All Admin pages have certain variables in common that build the page:
 $queued = $_SESSION['jPrefsQueued'];
 $location = $row_tables_edit['tableLocation'];
 
-include(DB.'admin_judging_assign.db.php');
+include (DB.'admin_judging_assign.db.php');
 
  // --------------- END Custom Functions --------------------- //
 

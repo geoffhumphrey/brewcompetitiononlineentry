@@ -46,7 +46,7 @@ if ((NHC) && ($prefix == "final_")) $maxlength = 6; else $maxlength = 4;
 
 // Update upon submitting the form
 if ($action == "add") {
-	include(INCLUDES.'process/process_barcode_check_in.inc.php');
+	include (INCLUDES.'process/process_barcode_check_in.inc.php');
 }
 ?>
 <script type="text/javascript">

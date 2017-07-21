@@ -2,7 +2,7 @@
 if (NHC) $base_url = "../";
 if ($filter == "stewards") $filter = "S"; else $filter = "J";
 
-include(DB.'output_assignments.db.php');
+include (DB.'output_assignments.db.php');
 $count = round((get_entry_count('received')/($_SESSION['jPrefsFlightEntries'])),0);
 $role_replace1 = array("HJ","LJ","MBOS",", ");
 $role_replace2 = array("<span class=\"fa fa-gavel\"></span> Head Judge","<span class=\"fa fa-star\"></span> Lead Judge","<span class=\"fa fa-trophy\"></span> Mini-BOS Judge","<br>");

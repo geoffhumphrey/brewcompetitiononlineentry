@@ -439,7 +439,7 @@ switch($section) {
 
 
 	case "beerxml":
-	include(DB.'styles.db.php');
+	include (DB.'styles.db.php');
 	$header_output = $header_text_058;
 	if ($msg == "1") $output = sprintf("<strong>%s</strong>",$header_text_060);
 	if ($msg == "2") $output = sprintf("<strong>%s</strong>",$header_text_061);

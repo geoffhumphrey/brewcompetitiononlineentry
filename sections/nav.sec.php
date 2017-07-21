@@ -96,7 +96,32 @@ if (!empty($row_contest_dates['contestCheckInPassword'])) {
 
 // Session specific
 
+$show_judge_steward_fields = TRUE;
+$show_entires = TRUE;
+
 if ($logged_in)  {
+
+	if ($_SESSION['prefsProEdition'] == 1) {
+
+		if (isset($_SESSION['brewerBreweryName'])) {
+			$label_contact = $label_contact." ";
+			$label_organization = $label_organization." ";
+
+			// If registered as a brewery, will not be a judge/stewards/staff and may have entries
+			// Only individuals can be judges, stewards, or staff; individuals will not have entries
+			$show_judge_steward_fields = FALSE;
+			$show_entires = TRUE;
+			$add_entry_link_show = FALSE;
+
+		}
+
+		else {
+			$label_contact = "";
+			$label_organization = "";
+			$show_entires = FALSE;
+		}
+
+	}
 	
 	if ($admin_user) {
 		$link_admin = $base_url."index.php?section=admin";
@@ -343,27 +368,29 @@ $(document).ready(function(){
               </ul>
           <ul class="nav navbar-nav navbar-right">
           	<?php if ($help_icon) { ?>
-            <li><a href="#" role="button" data-tooltip="true" data-toggle="modal" data-placement="bottom" title="<?php echo $label_help; ?>" data-target="#helpModal"><span class="fa fa-question-circle"></span></a></li>
+            <li><a href="#" role="button" data-tooltip="true" data-toggle="modal" data-target="#helpModal"><span class="fa fa-question-circle"></span></a></li>
             <?php } ?>
           	<?php if ($print_icon) { ?>
-          	<li><a href="javascript:window.print()" role="button" data-toggle="tooltip" data-placement="bottom" title="<?php echo $label_print; ?>"><span class="fa fa-print"></span></a></li>
+          	<li><a href="javascript:window.print()" role="button"><span class="fa fa-print"></span></a></li>
             <?php } ?>
           	<?php if ($logged_in) { ?>
             <li class="dropdown">
-                <a href="#" title="My Account" class="my-dropdown" data-toggle="dropdown" data-placement="bottom"><span class="fa fa-user"></span> <span class="caret"></span></a>
+                <a href="#" class="my-dropdown" data-toggle="dropdown"><span class="fa fa-user"></span> <span class="caret"></span></a>
                 <ul class="dropdown-menu">
                 	<li class="dropdown-header"><strong><?php if (($_SESSION['prefsProEdition'] == 1) && (!empty($_SESSION['brewerBreweryName']))) echo $_SESSION['brewerBreweryName']; else echo $_SESSION['loginUsername']; ?></strong></li>
                     <li role="separator" class="divider"></li>
                     <li><a href="<?php echo $link_list; ?>" tabindex="-1"><?php echo $label_my_account; ?></a></li>
                     <li><a href="<?php echo $edit_user_info_link; ?>" tabindex="-1"><?php echo $label_edit_account; ?></a></li>
                     <li><a href="<?php echo $edit_user_email_link; ?>" tabindex="-1"><?php echo $label_change_email; ?></a></li>
-                    <li><a href="<?php echo $edit_user_password_link; ?>" tabindex="-1"><?php echo $label_change_password; ?></a></li> 
+                    <li><a href="<?php echo $edit_user_password_link; ?>" tabindex="-1"><?php echo $label_change_password; ?></a></li>
+                    <?php if ($show_entires) { ?>
                     <li><a href="<?php echo $link_user_entries; ?>" tabindex="-1"><?php echo $label_entries; ?></a></li>
                     <?php if ($add_entry_link_show) { ?>
                     <li><a href="<?php echo $add_entry_link; ?>" tabindex="-1"><?php echo $label_add_entry; ?></a></li>
                     <?php if ((!NHC) && ($_SESSION['prefsHideRecipe'] == "N")) { ?><li tabindex="-1"><a href="<?php echo $add_entry_beerxml_link; ?>"><?php echo $label_add_beerXML; ?></a><?php } ?>
-                    <?php } ?> 
-                    <?php if (!$disable_pay) { ?>
+                    <?php } ?>
+                    <?php } ?>
+                    <?php if ((!$disable_pay) && ($show_entires)) { ?>
                     <li><a href="<?php echo $link_pay; ?>"><?php echo $label_pay; ?></a></li>
                     <?php } ?>
                     <li role="separator" class="divider"></li>
@@ -371,7 +398,7 @@ $(document).ready(function(){
                 </ul>
             </li>
             <?php if ($admin_user) { ?>
-            <li id="admin-arrow"><a href="<?php if ($go == "error_page") echo $base_url."index.php?section=admin"; else echo "#"; ?>" class="admin-offcanvas" data-toggle="offcanvas" data-target=".navmenu" data-canvas="body" title="<?php echo $admin_tooltip; ?>"><i class="fa fa-chevron-circle-left"></i> <?php echo $label_admin_short; ?></a></li>
+            <li id="admin-arrow"><a href="<?php if ($go == "error_page") echo $base_url."index.php?section=admin"; else echo "#"; ?>" class="admin-offcanvas" data-toggle="offcanvas" data-target=".navmenu" data-canvas="body"><i class="fa fa-chevron-circle-left"></i> <?php echo $label_admin_short; ?></a></li>
             <?php } ?>
             <?php } else { ?>
             <li<?php if ($section == "login") echo $active_class; ?>><a href="#" role="button" data-toggle="modal" data-target="#loginModal"><?php echo $label_log_in; ?></a></li>

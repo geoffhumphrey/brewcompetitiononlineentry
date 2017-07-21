@@ -131,7 +131,7 @@ foreach ($a as $type) {
 	
 if ($style_type_info[0] == "Y") { 
 
-include(DB.'admin_judging_scores_bos.db.php');
+include (DB.'admin_judging_scores_bos.db.php');
 
 ?>
 <a name="<?php echo $type; ?>"></a><h3>BOS Entries and Places for <?php echo $style_type_info[2]; ?></h3>
@@ -236,7 +236,7 @@ include(DB.'admin_judging_scores_bos.db.php');
 
 <?php if ($action == "enter") { 
 
-include(DB.'admin_judging_scores_bos.db.php');
+include (DB.'admin_judging_scores_bos.db.php');
 ?>
 <?php if ($totalRows_enter_bos > 0) { ?>
 <form name="scores" method="post" action="<?php echo $base_url; ?>includes/process.inc.php?action=<?php echo $action; ?>&amp;dbTable=<?php echo $judging_scores_bos_db_table; ?>">

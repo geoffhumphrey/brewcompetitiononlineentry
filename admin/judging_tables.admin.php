@@ -1,8 +1,8 @@
 <?php 
 // Rebuild 04.27.17
 
-include(DB.'styles.db.php');
-include(DB.'admin_judging_tables.db.php');
+include (DB.'styles.db.php');
+include (DB.'admin_judging_tables.db.php');
 
 if (strpos($section, "step") === FALSE) {
 	

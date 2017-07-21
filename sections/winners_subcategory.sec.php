@@ -55,7 +55,7 @@ if ($row_scored_entries['count'] > 0) {
 		
 		$style = explode("^",$style);
 		
-		include(DB.'winners_subcategory.db.php');
+		include (DB.'winners_subcategory.db.php');
 		
 		// Display all winners 
 		if ($row_entry_count['count'] > 0) {
@@ -88,7 +88,7 @@ if ($row_scored_entries['count'] > 0) {
 			
 			// Build table body
 			
-			include(DB.'scores.db.php');
+			include (DB.'scores.db.php');
 				
 			do {
 				

@@ -1,7 +1,7 @@
 <?php 
 // Set up variables
 
-include(DB.'styles.db.php');
+include (DB.'styles.db.php');
 $header1_1 = "";
 $header1_2 = "";
 $sidebar_extension = "";

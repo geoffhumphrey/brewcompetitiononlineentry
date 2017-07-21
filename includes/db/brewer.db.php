@@ -4,7 +4,7 @@
  * Description: This module houses all participant (brewer) related queries
  */
 
-include(DB.'admin_participants.db.php');
+include (DB.'admin_participants.db.php');
 
 if (NHC) {
 	// Custom code for AHA - possiblity of inclusion in a future version
@@ -68,7 +68,7 @@ elseif ((($section == "admin") && ($go == "participants") && ($filter == "with_e
 elseif (($section == "admin") && ($go == "participants") && ($filter == "judges") && ($dbTable == "default")) {
 	
 	// @single
-	if (SINGLE) include(SSO.'available_judges.db.php');
+	if (SINGLE) include (SSO.'available_judges.db.php');
 	
 	else {
 		
@@ -87,7 +87,7 @@ elseif (($section == "admin") && ($go == "participants") && ($filter == "steward
 	
 	
 	// @single
-	if (SINGLE) include(SSO.'available_stewards.db.php');
+	if (SINGLE) include (SSO.'available_stewards.db.php');
 	
 	else {
 		
@@ -116,7 +116,7 @@ elseif (($section == "admin") && ($go == "judging") && ($filter == "judges")  &&
 	
 	
 	// @single
-	if (SINGLE) include(SSO.'assigned_judges.db.php');
+	if (SINGLE) include (SSO.'assigned_judges.db.php');
 	
 	else {
 	
@@ -133,7 +133,7 @@ elseif (($section == "admin") && ($go == "judging") && ($filter == "judges")  &&
 elseif (($section == "admin") && ($go == "judging") && ($filter == "stewards")  && ($dbTable == "default") && ($action == "update")) {
 	
 	// @single
-	if (SINGLE) include(SSO.'assigned_stewards.db.php');
+	if (SINGLE) include (SSO.'assigned_stewards.db.php');
 	
 	else {
 	
@@ -149,7 +149,7 @@ elseif (($section == "admin") && ($go == "judging") && ($filter == "stewards")  
 // Assign Judge query
 elseif (($section == "admin") && ($go == "judging") && ($filter == "judges")  && ($dbTable == "default") && ($action == "assign")) { 
 
-	if (SINGLE) include(SSO.'available_judges.db.php');
+	if (SINGLE) include (SSO.'available_judges.db.php');
 	
 	else {
 	
@@ -164,7 +164,7 @@ elseif (($section == "admin") && ($go == "judging") && ($filter == "judges")  &&
 // Assign Steward query
 elseif (($section == "admin") && ($go == "judging") && ($filter == "stewards")  && ($dbTable == "default") && ($action == "assign")) {
 	
-	if (SINGLE) include(SSO.'available_stewards.db.php');
+	if (SINGLE) include (SSO.'available_stewards.db.php');
 	
 	else {
 		

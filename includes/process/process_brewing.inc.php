@@ -9,7 +9,7 @@
 
 if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) && (isset($_SESSION['userLevel'])))) { 
 	
-	include(DB.'common.db.php');
+	include (DB.'common.db.php');
 	
 	$query_user = sprintf("SELECT userLevel FROM $users_db_table WHERE user_name = '%s'", $_SESSION['loginUsername']);
 	$user = mysqli_query($connection,$query_user) or die (mysqli_error($connection));
@@ -36,7 +36,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 		
 		if (strpos($_SESSION['prefsStyleSet'],"BABDB") !== false) include (INCLUDES.'ba_constants.inc.php');
 		
-		include(DB.'styles_special.db.php');
+		include (DB.'styles_special.db.php');
 		
 		// Comments
 		$brewComments = "";

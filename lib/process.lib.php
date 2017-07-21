@@ -126,7 +126,7 @@ function strip_newline($input) {
 
 function clean_up_url($referer) {
 	
-	include(CONFIG."config.php");
+	include (CONFIG."config.php");
 	mysqli_select_db($connection,$database);
 	
 	if (NHC) $base_url = "../";
@@ -266,14 +266,14 @@ function generate_judging_numbers($brewing_db_table,$method) {
 
 function check_sweetness($style,$styleSet) {
 	
-	include(CONFIG.'config.php');
+	include (CONFIG.'config.php');
 	mysqli_select_db($connection,$database);
 	
 	$style_explodies = explode("-",$style);
 		
 	if (($style_explodies[0]< 34) && (strpos($styleSet,"BABDB") !== false)) {
 		
-		include(INCLUDES.'ba_constants.inc.php');
+		include (INCLUDES.'ba_constants.inc.php');
 		
 		if (in_array($style,$ba_sweetness)) return TRUE;
 		else return FALSE;
@@ -299,14 +299,14 @@ function check_sweetness($style,$styleSet) {
 
 function check_carb($style,$styleSet) {
 	
-	include(CONFIG.'config.php');
+	include (CONFIG.'config.php');
 	mysqli_select_db($connection,$database);
 	
 	$style_explodies = explode("-",$style);
 		
 	if (($style_explodies[0] < 34) && (strpos($styleSet,"BABDB") !== false)) {
 		
-		include(INCLUDES.'ba_constants.inc.php');
+		include (INCLUDES.'ba_constants.inc.php');
 		
 		if (in_array($style,$ba_carb)) return TRUE;
 		else return FALSE;
@@ -331,14 +331,14 @@ function check_carb($style,$styleSet) {
 	
 function check_mead_strength($style,$styleSet) {
 	
-	include(CONFIG.'config.php');
+	include (CONFIG.'config.php');
 	mysqli_select_db($connection,$database);
 		
 	$style_explodies = explode("-",$style);
 	
 	if (($style_explodies[0] < 34) && (strpos($styleSet,"BABDB") !== false)) {
 		
-		include(INCLUDES.'ba_constants.inc.php');
+		include (INCLUDES.'ba_constants.inc.php');
 		
 		if (in_array($style,$ba_strength)) return TRUE;
 		else return FALSE;
@@ -366,7 +366,7 @@ function check_mead_strength($style,$styleSet) {
 // Map BJCP2008 Styles to BJCP2015 Styles
 function bjcp_convert() {
 	
-	include(CONFIG.'config.php');
+	include (CONFIG.'config.php');
 	mysqli_select_db($connection,$database);
 	
 	$query_brews = sprintf("SELECT id,brewName,brewCategory,brewCategorySort,brewSubCategory,brewStyle FROM %s ORDER BY brewCategorySort,brewSubCategory", $prefix."brewing");

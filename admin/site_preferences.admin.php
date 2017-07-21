@@ -22,7 +22,7 @@ if (strpos($styleSet,"BABDB") === false) {
 
 } else {
 
-	include(INCLUDES.'ba_constants.inc.php');
+	include (INCLUDES.'ba_constants.inc.php');
 
 	$ba_exceptions = "";
 

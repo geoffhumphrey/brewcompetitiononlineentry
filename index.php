@@ -5,13 +5,11 @@
  *
  */
 
-// $locale = system('locale -a');
+// ---------------------------- Load require_onced Scripts ------------------------------
 
-// ---------------------------- Load Required Scripts ------------------------------
-
-require('paths.php');
-require(CONFIG.'bootstrap.php');
-require(DB.'mods.db.php');
+require_once ('paths.php');
+require_once (CONFIG.'bootstrap.php');
+require_once (DB.'mods.db.php');
 
 $account_pages = array("list","pay","brewer","user","brew","beerxml","pay");
 if ((!$logged_in) && (in_array($section,$account_pages))) {
@@ -37,12 +35,12 @@ if ($section == "admin") {
 		exit;
 	}
 
-	include(LIB.'admin.lib.php');
-	include(DB.'admin_common.db.php');
-	include(DB.'judging_locations.db.php');
-	include(DB.'stewarding.db.php');
-	include(DB.'dropoff.db.php');
-	include(DB.'contacts.db.php');
+	require_once (LIB.'admin.lib.php');
+	require_once (DB.'admin_common.db.php');
+	require_once (DB.'judging_locations.db.php');
+	require_once (DB.'stewarding.db.php');
+	require_once (DB.'dropoff.db.php');
+	require_once (DB.'contacts.db.php');
 
 	if (($go == "default") || ($go == "entries")) {
 		$totalRows_entry_count = total_paid_received("default","default");
@@ -102,8 +100,8 @@ $security_question = array($label_secret_01,$label_secret_05,$label_secret_06,$l
 
 	<?php
 	
-	if (CDN) include(INCLUDES.'load_cdn_libraries.inc.php');
-	else include(INCLUDES.'load_local_libraries.inc.php');
+	if (CDN) include (INCLUDES.'load_cdn_libraries.inc.php');
+	else include (INCLUDES.'load_local_libraries.inc.php');
 
 	?>
 
@@ -113,7 +111,7 @@ $security_question = array($label_secret_01,$label_secret_05,$label_secret_06,$l
 	<!-- Load BCOE&M Custom JS -->
     <script src="<?php echo $base_url; ?>js_includes/bcoem_custom.min.js"></script>
 
-    <?php if (($section == "admin") && (in_array($go,$tinymce_load))) include(INCLUDES."tinymce_init_js.inc.php"); ?>
+    <?php if (($section == "admin") && (in_array($go,$tinymce_load))) include (INCLUDES."tinymce_init_js.inc.php"); ?>
 
     <!-- Opengraph Implementation -->
     <?php if (!empty($_SESSION['contestName'])) { ?>
@@ -149,7 +147,7 @@ $security_question = array($label_secret_01,$label_secret_05,$label_secret_06,$l
 
     <?php if ($_SESSION['prefsUseMods'] == "Y") { ?>
     <!-- MODS TOP -->
-    <?php include(INCLUDES.'mods_top.inc.php'); ?>
+    <?php include (INCLUDES.'mods_top.inc.php'); ?>
     <!-- ./MODS TOP -->
     <?php } ?>
 
@@ -176,36 +174,36 @@ $security_question = array($label_secret_01,$label_secret_05,$label_secret_06,$l
         	</div>
             <?php
 
-			if ($go == "judging") 	    			include (ADMIN.'judging_locations.admin.php');
-			if ($go == "judging_preferences") 	    include (ADMIN.'judging_preferences.admin.php');
-			if ($go == "judging_tables") 	    	include (ADMIN.'judging_tables.admin.php');
-			if ($go == "judging_flights") 	    	include (ADMIN.'judging_flights.admin.php');
-			if ($go == "judging_scores") 	    	include (ADMIN.'judging_scores.admin.php');
-			if ($go == "judging_scores_bos")    	include (ADMIN.'judging_scores_bos.admin.php');
-			if ($go == "participants") 				include (ADMIN.'participants.admin.php');
-			if ($go == "entries") 					include (ADMIN.'entries.admin.php');
-			if ($go == "contacts") 	    			include (ADMIN.'contacts.admin.php');
-			if ($go == "dropoff") 	    			include (ADMIN.'dropoff.admin.php');
-			if ($go == "checkin") 	    			include (ADMIN.'barcode_check-in.admin.php');
-			if ($go == "count_by_style")			include (ADMIN.'entries_by_style.admin.php');
-			if ($go == "count_by_substyle")			include (ADMIN.'entries_by_substyle.admin.php');
-			if ($action == "register")				include (SECTIONS.'register.sec.php');
-			if ($go == "upload_scoresheets")		include (ADMIN.'upload_scoresheets.admin.php');
-			if ($go == "payments")					include (ADMIN.'payments.admin.php');
+			if ($go == "judging") include (ADMIN.'judging_locations.admin.php');
+			if ($go == "judging_preferences") include (ADMIN.'judging_preferences.admin.php');
+			if ($go == "judging_tables") include (ADMIN.'judging_tables.admin.php');
+			if ($go == "judging_flights") include (ADMIN.'judging_flights.admin.php');
+			if ($go == "judging_scores") include (ADMIN.'judging_scores.admin.php');
+			if ($go == "judging_scores_bos") include (ADMIN.'judging_scores_bos.admin.php');
+			if ($go == "participants") include (ADMIN.'participants.admin.php');
+			if ($go == "entries") include (ADMIN.'entries.admin.php');
+			if ($go == "contacts") include (ADMIN.'contacts.admin.php');
+			if ($go == "dropoff") include (ADMIN.'dropoff.admin.php');
+			if ($go == "checkin") include (ADMIN.'barcode_check-in.admin.php');
+			if ($go == "count_by_style") include (ADMIN.'entries_by_style.admin.php');
+			if ($go == "count_by_substyle") include (ADMIN.'entries_by_substyle.admin.php');
+			if ($action == "register") include (SECTIONS.'register.sec.php');
+			if ($go == "upload_scoresheets") include (ADMIN.'upload_scoresheets.admin.php');
+			if ($go == "payments") include (ADMIN.'payments.admin.php');
 
 				if ($_SESSION['userLevel'] == "0") {
-					if ($go == "styles") 	    		include (ADMIN.'styles.admin.php');
-					if ($go == "archive") 	    		include (ADMIN.'archive.admin.php');
-					if ($go == "make_admin") 			include (ADMIN.'make_admin.admin.php');
-					if ($go == "contest_info") 			include (ADMIN.'competition_info.admin.php');
-					if ($go == "preferences") 			include (ADMIN.'site_preferences.admin.php');
-					if ($go == "sponsors") 	   			include (ADMIN.'sponsors.admin.php');
-					if ($go == "style_types")    		include (ADMIN.'style_types.admin.php');
-					if ($go == "special_best") 	    	include (ADMIN.'special_best.admin.php');
-					if ($go == "special_best_data") 	include (ADMIN.'special_best_data.admin.php');
-					if ($go == "mods") 	    			include (ADMIN.'mods.admin.php');
-					if ($go == "upload")				include (ADMIN.'upload.admin.php');
-					if ($go == "change_user_password") 	include (ADMIN.'change_user_password.admin.php');
+					if ($go == "styles") include (ADMIN.'styles.admin.php');
+					if ($go == "archive") include (ADMIN.'archive.admin.php');
+					if ($go == "make_admin") include (ADMIN.'make_admin.admin.php');
+					if ($go == "contest_info") include (ADMIN.'competition_info.admin.php');
+					if ($go == "preferences") include (ADMIN.'site_preferences.admin.php');
+					if ($go == "sponsors") include (ADMIN.'sponsors.admin.php');
+					if ($go == "style_types") include (ADMIN.'style_types.admin.php');
+					if ($go == "special_best") include (ADMIN.'special_best.admin.php');
+					if ($go == "special_best_data") include (ADMIN.'special_best_data.admin.php');
+					if ($go == "mods") include (ADMIN.'mods.admin.php');
+					if ($go == "upload") include (ADMIN.'upload.admin.php');
+					if ($go == "change_user_password") include (ADMIN.'change_user_password.admin.php');
 				}
 
 			} ?>
@@ -221,21 +219,21 @@ $security_question = array($label_secret_01,$label_secret_05,$label_secret_06,$l
         	</div>
         	<?php
 				
-				if ($section == "default") 		include (SECTIONS.'default.sec.php');
-				if ($section == "entry") 		include (SECTIONS.'entry_info.sec.php');
-				if ($section == "contact") 		include (SECTIONS.'contact.sec.php');
-				if ($section == "volunteers")	include (SECTIONS.'volunteers.sec.php');
-				if ($section == "sponsors") 		include (SECTIONS.'sponsors.sec.php');
-				if ($section == "register")		include (SECTIONS.'register.sec.php');
-				if ($section == "brewer") 		include (SECTIONS.'brewer.sec.php');
-				if ($section == "login")			include (SECTIONS.'login.sec.php');
+				if ($section == "default") include (SECTIONS.'default.sec.php');
+				if ($section == "entry") include (SECTIONS.'entry_info.sec.php');
+				if ($section == "contact") include (SECTIONS.'contact.sec.php');
+				if ($section == "volunteers") include (SECTIONS.'volunteers.sec.php');
+				if ($section == "sponsors") include (SECTIONS.'sponsors.sec.php');
+				if ($section == "register") include (SECTIONS.'register.sec.php');
+				if ($section == "brewer") include (SECTIONS.'brewer.sec.php');
+				if ($section == "login") include (SECTIONS.'login.sec.php');
 
 				if ($logged_in) {
-					if ($section == "list") 		include (SECTIONS.'list.sec.php');
-					if ($section == "brew") 		include (SECTIONS.'brew.sec.php');
-					if ($section == "pay") 		include (SECTIONS.'pay.sec.php');
-					if ($section == "user") 		include (SECTIONS.'user.sec.php');
-					if ($section == "beerxml") 	include (SECTIONS.'beerxml.sec.php');
+					if ($section == "list") include (SECTIONS.'list.sec.php');
+					if ($section == "brew") include (SECTIONS.'brew.sec.php');
+					if ($section == "pay") include (SECTIONS.'pay.sec.php');
+					if ($section == "user") include (SECTIONS.'user.sec.php');
+					if ($section == "beerxml") include (SECTIONS.'beerxml.sec.php');
 				}
 			?>
             </div><!-- ./left column -->
@@ -250,7 +248,7 @@ $security_question = array($label_secret_01,$label_secret_05,$label_secret_06,$l
 
     <?php if ($_SESSION['prefsUseMods'] == "Y") { ?>
     <!-- Mods Bottom -->
-    <?php include(INCLUDES.'mods_bottom.inc.php'); ?>
+    <?php include (INCLUDES.'mods_bottom.inc.php'); ?>
     <!-- ./Mods Bottom -->
     <?php } ?>
 

@@ -56,7 +56,7 @@ if ($row_scored_entries['count'] > 0) {
 	
 		if ($style > 0) {
 			
-			include(DB.'winners_category.db.php');
+			include (DB.'winners_category.db.php');
 			
 			//echo $style."<br>";
 			//echo $row_entry_count['count']."<br>";
@@ -79,7 +79,7 @@ if ($row_scored_entries['count'] > 0) {
 				// Build headers		
 				if (strpos($_SESSION['prefsStyleSet'],"BABDB") === false) $header1_1 .= sprintf("<h3>%s %s: %s (%s %s)</h3>",$label_category,ltrim($style,"0"),style_convert($style,"1"),$row_entry_count['count'],$entries);
 				else {
-					include(INCLUDES.'ba_constants.inc.php');
+					include (INCLUDES.'ba_constants.inc.php');
 					$header1_1 .= sprintf("<h3>%s (%s %s)</h3>",$ba_category_names[$style],$row_entry_count['count'],$entries);
 				}
 				// Build table headers
@@ -94,7 +94,7 @@ if ($row_scored_entries['count'] > 0) {
 				
 				// Build table body
 				
-				include(DB.'scores.db.php');
+				include (DB.'scores.db.php');
 					
 				do { 
 					$style = $row_scores['brewCategory'].$row_scores['brewSubCategory'];

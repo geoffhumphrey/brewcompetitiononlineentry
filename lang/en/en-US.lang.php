@@ -70,7 +70,7 @@ Note that the <em>...</em> tags were not altered. Just the word "Upload" to "Car
 
 */
 
-include(INCLUDES.'url_variables.inc.php');
+include (INCLUDES.'url_variables.inc.php');
 
 if (isset($entry_open)) $entry_open = $entry_open;
 else $entry_open = "";
@@ -1051,7 +1051,7 @@ if ($section == "pay") {
 
 	$qr_text_000 = $alert_text_080;
 	$qr_text_001 = $alert_text_081;
-	$qr_text_002 = sprintf("Entry number %s is checked in with <span class=\"text-danger\">%s</span> as its judging number.",$qr_text_020,$qr_text_018);
+	$qr_text_002 = sprintf("Entry number %s is checked in with <span class=\"text-danger\">%s</span> as its judging number.",$qr_text_020,$qr_text_019);
 	$qr_text_003 = "If this judging number is <em>not</em> correct, <strong>re-scan the code and re-enter the correct judging number.";
 	$qr_text_004 = sprintf("Entry number %s is checked in.",$qr_text_019);
 	$qr_text_005 = sprintf("Entry number %s was not found in the database. Set the bottle(s) aside and alert the competition organizer.",$qr_text_019);
@@ -1383,6 +1383,6 @@ if (strpos($section, "step") === FALSE) $beerxml_text_007 = $beerxml_text_007; e
 // ----------------------------------------------------------------------------------
 // Admin Pages - Admin pages will be included in a future release
 // ----------------------------------------------------------------------------------
-// if ($section == "admin") include(LANG.'en_admin.lang.php');
+// if ($section == "admin") include (LANG.'en_admin.lang.php');
 
 ?>

@@ -1,9 +1,9 @@
 <?php
 
 require(DB.'admin_common.db.php');
-include(LIB.'output.lib.php');
-include(DB.'output_pullsheets.db.php');
-include(INCLUDES.'scrubber.inc.php');
+include (LIB.'output.lib.php');
+include (DB.'output_pullsheets.db.php');
+include (INCLUDES.'scrubber.inc.php');
 
 $queued = FALSE;
 $tables_none = FALSE;
@@ -50,7 +50,7 @@ if ($go == "judging_scores_bos") {
 		
 		if ($style_type_info[0] == "Y") { 
 		
-			include(DB.'output_pullsheets_bos.db.php');
+			include (DB.'output_pullsheets_bos.db.php');
 			
 			$table_info_header = "";
 	
@@ -95,7 +95,7 @@ if ($go == "judging_scores_bos") {
 				
 				do {
 					
-					include(DB.'output_pullsheets_bos_entries.db.php');
+					include (DB.'output_pullsheets_bos_entries.db.php');
 					
 					$style = $row_entries_1['brewCategorySort'].$row_entries_1['brewSubCategory'];
 					$style_special = $row_entries_1['brewCategorySort']."^".$row_entries_1['brewSubCategory']."^".$_SESSION['prefsStyleSet'];
@@ -136,7 +136,7 @@ if ($go == "judging_scores_bos") {
 						}
 						
 						else {
-							include(INCLUDES.'ba_constants.inc.php');
+							include (INCLUDES.'ba_constants.inc.php');
 							$value = $row_entries_1['id'];
 							if (in_array($value,$ba_special_ids)) $table_flight_tbody .= "<p><strong>Required Info: </strong>".str_replace("^","; ",$row_entries_1['brewInfo'])."</p>";
 							if ($row_entries_1['brewInfoOptional'] != "") $table_flight_tbody .= "<p><strong>Optional Info: </strong>".$row_entries_1['brewInfoOptional']."</p>";
@@ -199,7 +199,7 @@ else {
 			do {
 	
 				$entry_count = get_table_info(1,"count_total",$row_tables['id'],$dbTable,"default");
-				include(DB.'output_pullsheets_queued.db.php');
+				include (DB.'output_pullsheets_queued.db.php');
 				$round_count[] = $row_table_round['count'];
 	
 				$table_flight = "";
@@ -273,7 +273,7 @@ else {
 						
 						foreach (array_unique($a) as $value) {
 							
-							include(DB.'output_pullsheets_entries.db.php');
+							include (DB.'output_pullsheets_entries.db.php');
 							$style = $row_entries['brewCategorySort'].$row_entries['brewSubCategory'];
 							$style_special = $row_entries['brewCategorySort']."^".$row_entries['brewSubCategory']."^".$_SESSION['prefsStyleSet'];					
 							
@@ -313,7 +313,7 @@ else {
 										}
 									}
 									else {
-										include(INCLUDES.'ba_constants.inc.php');
+										include (INCLUDES.'ba_constants.inc.php');
 										if (in_array($value,$ba_special_ids)) $table_flight_tbody .= "<p><strong>Required Info: </strong>".str_replace("^","; ",$row_entries['brewInfo'])."</p>";
 										if ($row_entries['brewInfoOptional'] != "") $table_flight_tbody .= "<p><strong>Optional Info: </strong>".$row_entries['brewInfoOptional']."</p>";
 										if ($row_entries['brewComments'] != "") $table_flight_tbody .= "<p><strong>Specifics: </strong>".$row_entries['brewComments']."</p>";
@@ -368,7 +368,7 @@ else {
 			$pullsheet_output = "";
 			
 			$entry_count = get_table_info(1,"count_total",$row_tables['id'],$dbTable,"default");
-			include(DB.'output_pullsheets_queued.db.php');
+			include (DB.'output_pullsheets_queued.db.php');
 			$round_count[] = $row_table_round['count'];
 	
 			$table_flight = "";
@@ -442,7 +442,7 @@ else {
 					
 					foreach (array_unique($a) as $value) {
 						
-						include(DB.'output_pullsheets_entries.db.php');
+						include (DB.'output_pullsheets_entries.db.php');
 						$style = $row_entries['brewCategorySort'].$row_entries['brewSubCategory'];
 						$style_special = $row_entries['brewCategorySort']."^".$row_entries['brewSubCategory']."^".$_SESSION['prefsStyleSet'];					
 						
@@ -482,7 +482,7 @@ else {
 									}
 								}
 								else {
-									include(INCLUDES.'ba_constants.inc.php');
+									include (INCLUDES.'ba_constants.inc.php');
 									if (in_array($value,$ba_special_ids)) $table_flight_tbody .= "<p><strong>Required Info: </strong>".str_replace("^","; ",$row_entries['brewInfo'])."</p>";
 									if ($row_entries['brewInfoOptional'] != "") $table_flight_tbody .= "<p><strong>Optional Info: </strong>".$row_entries['brewInfoOptional']."</p>";
 									if ($row_entries['brewComments'] != "") $table_flight_tbody .= "<p><strong>Specifics: </strong>".$row_entries['brewComments']."</p>";
@@ -624,7 +624,7 @@ else {
 					//print_r($a);
 					foreach (array_unique($a) as $value) {
 		
-						include(DB.'output_pullsheets_entries.db.php');
+						include (DB.'output_pullsheets_entries.db.php');
 						$style = $row_entries['brewCategorySort'].$row_entries['brewSubCategory'];
 						$style_special = $row_entries['brewCategorySort']."^".$row_entries['brewSubCategory']."^".$_SESSION['prefsStyleSet'];
 						
@@ -666,7 +666,7 @@ else {
 									}
 								}
 								else {
-									include(INCLUDES.'ba_constants.inc.php');
+									include (INCLUDES.'ba_constants.inc.php');
 									if (in_array($value,$ba_special_ids)) $table_flight_tbody .= "<p><strong>Required Info: </strong>".str_replace("^","; ",$row_entries['brewInfo'])."</p>";
 									if ($row_entries['brewComments'] != "") $table_flight_tbody .= "<p><strong>Specifics: </strong>".$row_entries['brewComments']."</p>";
 									if (in_array($value,$ba_mead_cider)) {
@@ -801,7 +801,7 @@ else {
 				//print_r($a);
 				foreach (array_unique($a) as $value) {
 	
-					include(DB.'output_pullsheets_entries.db.php');
+					include (DB.'output_pullsheets_entries.db.php');
 					$style = $row_entries['brewCategorySort'].$row_entries['brewSubCategory'];
 					$style_special = $row_entries['brewCategorySort']."^".$row_entries['brewSubCategory']."^".$_SESSION['prefsStyleSet'];
 					
@@ -843,7 +843,7 @@ else {
 								}
 							}
 							else {
-								include(INCLUDES.'ba_constants.inc.php');
+								include (INCLUDES.'ba_constants.inc.php');
 								if (in_array($value,$ba_special_ids)) $table_flight_tbody .= "<p><strong>Required Info: </strong>".str_replace("^","; ",$row_entries['brewInfo'])."</p>";
 								if ($row_entries['brewInfoOptional'] != "") $table_flight_tbody .= "<p><strong>Optional Info: </strong>".$row_entries['brewInfoOptional']."</p>";
 								if ($row_entries['brewComments'] != "") $table_flight_tbody .= "<p><strong>Specifics: </strong>".$row_entries['brewComments']."</p>";

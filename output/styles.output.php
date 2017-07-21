@@ -1,6 +1,6 @@
 <?php 
 $section = "styles";
-include(DB.'styles.db.php');
+include (DB.'styles.db.php');
 ?>
     <div class="page-header"><a name="top"></a>
     <?php if ($go == "default") { ?>

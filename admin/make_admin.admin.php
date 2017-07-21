@@ -1,4 +1,4 @@
-<?php include(DB.'admin_make_admin.db.php'); 
+<?php include (DB.'admin_make_admin.db.php'); 
 
 if ($_SESSION['userLevel'] == 0) $edit_user_enable = 1;
 else $edit_user_enable = 0;

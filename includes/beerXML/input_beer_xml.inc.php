@@ -80,7 +80,7 @@ class InputBeerXML {
     //}}}
     //{{{ insertRecipe
     function insertRecipe($recipe){  // inserts into `recipes` DB table
-	include(CONFIG.'config.php');
+	include (CONFIG.'config.php');
 	include (INCLUDES.'scrubber.inc.php');
 	//include (INCLUDES.'url_variables.inc.php');
 	mysqli_select_db($connection,$database);

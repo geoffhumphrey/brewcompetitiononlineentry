@@ -5,8 +5,8 @@
  *              judging information. 
  * 
  */
-include(DB.'brewer.db.php');
-include(DB.'styles.db.php'); 
+include (DB.'brewer.db.php');
+include (DB.'styles.db.php'); 
 ?>
 <form action="<?php echo $base_url; ?>includes/process.inc.php?action=edit&amp;dbTable=<?php echo $brewer_db_table; ?>&amp;go=<?php echo $go; ?>&amp;id=<?php echo $row_brewer['id']; ?>" method="POST" name="form1" onSubmit="return CheckRequiredFields()">
 <table class="dataTable">

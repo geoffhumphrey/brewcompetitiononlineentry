@@ -5,10 +5,10 @@
  *              entries - references the "brewing" database table.
  *
  */
-include(DB.'styles.db.php'); 
-include(DB.'entries.db.php');
+include (DB.'styles.db.php'); 
+include (DB.'entries.db.php');
 if (strpos($styleSet,"BABDB") !== false) include (INCLUDES.'ba_constants.inc.php');
-include(DB.'styles_special.db.php');
+include (DB.'styles_special.db.php');
 
 // Disable fields trigger
 if ((($action == "add") && ($remaining_entries <= 0) && ($_SESSION['userLevel'] == 2)) || (($action == "add") && ($entry_window_open == "2") && ($_SESSION['userLevel'] == 2))) $disable_fields = TRUE; else $disable_fields = FALSE;
@@ -172,7 +172,7 @@ else {
 	
 	// Define custom functions
 	function display_array_content_style($arrayname,$method,$base_url) {
-		include(LANG.'language.lang.php'); 
+		include (LANG.'language.lang.php'); 
 		$a = "";
 		sort($arrayname);
 		while(list($key, $value) = each($arrayname)) {
@@ -1341,6 +1341,6 @@ if ($action == "edit") {
 </form>
 <?php
 // Load Show/Hide
-include(INCLUDES.'form_js.inc.php');
+include (INCLUDES.'form_js.inc.php');
 }  // end adding and editing allowed (line 52 or so)
 ?>

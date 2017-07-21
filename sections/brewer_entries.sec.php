@@ -102,7 +102,7 @@ $entry_output = "";
 
 do {
 	
-	if ((strpos($_SESSION['prefsStyleSet'],"BABDB") === false) || ((strpos($_SESSION['prefsStyleSet'],"BABDB") !== false) && ($row_log['brewCategorySort'] > 28))) include(DB.'styles.db.php');
+	if ((strpos($_SESSION['prefsStyleSet'],"BABDB") === false) || ((strpos($_SESSION['prefsStyleSet'],"BABDB") !== false) && ($row_log['brewCategorySort'] > 28))) include (DB.'styles.db.php');
 	
 	$required_info = "";
 	if ((!empty($row_log['brewInfo'])) || (!empty($row_log['brewMead1'])) || (!empty($row_log['brewMead2'])) || (!empty($row_log['brewMead3']))) {

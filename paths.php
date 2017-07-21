@@ -54,8 +54,13 @@ else ini_set('display_errors','Off');
 // --------------------------------------------------------
 // Load Configuration
 // --------------------------------------------------------
-require (CONFIG.'config.php');
-require (INCLUDES.'current_version.inc.php'); 
+require_once (CONFIG.'config.php');
+require_once (INCLUDES.'current_version.inc.php');
+
+if (HOSTED) {
+	$installation_id = $prefix;
+	$session_expire_after = 30;
+}
 
 /** Using an MD5 of __FILE__ will ensure a different session name for multiple
  * installs on the same domain name.

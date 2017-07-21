@@ -1,5 +1,5 @@
 <?php 
-include(DB.'payments.db.php'); 
+include (DB.'payments.db.php'); 
 if ($totalRows_payments > 0) { 
 ?>
 <script type="text/javascript" language="javascript">

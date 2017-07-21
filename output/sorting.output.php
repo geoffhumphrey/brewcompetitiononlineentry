@@ -1,18 +1,35 @@
 <?php 
 $section = "sorting";
-include(DB.'styles.db.php');
+include (DB.'styles.db.php');
 
+do { $a[] = $row_styles['brewStyleGroup']; } while ($row_styles = mysqli_fetch_assoc($styles));
 
-do { $s[] = $row_styles['brewStyleGroup']; } while ($row_styles = mysqli_fetch_assoc($styles));
-sort($s);
+if (strpos($styleSet,"BABDB") !== false) {
+	include (INCLUDES.'ba_constants.inc.php');
+	$s = array_merge($a,$ba_beer_categories);
+}
+else $s = $a;
+
+sort($s,SORT_NUMERIC);
+
+// print_r($s);
  
 foreach (array_unique($s) as $style) { 
-include(DB.'output_sorting.db.php');
+include (DB.'output_sorting.db.php');
+	
+// echo $query_entries."<br>";
+	
 if ($totalRows_entries > 0) {
 	if ($totalRows_entries == 1) $total_entries = $totalRows_entries." Entry"; else $total_entries = $totalRows_entries." Entries";
+	
+	if ((strpos($styleSet,"BABDB") !== false) && ($style < 28))  $title = sprintf("%s<br><small><em class=\"text-muted\">%s</em></small>", $ba_category_names[$style], $total_entries);
+	elseif ((strpos($styleSet,"BABDB") !== false) && ($style > 28))  $title = sprintf("%s<br><small><em class=\"text-muted\">%s</em></small>", style_convert($style,1), $total_entries);
+	else $title = sprintf("%s %s: %s<br><small><em class=\"text-muted\">%s</em></small>", $label_category, ltrim($style,"0"), style_convert($style,1), $total_entries);
+	
+	
 ?>
     <div class="page-header">
-       <h2><?php echo sprintf("%s %s: %s<br><small><em class=\"text-muted\">%s</em></small>", $label_category, ltrim($style,"0"), style_convert($style,1), $total_entries); ?></h2>
+       <h2><?php echo $title; ?></h2>
 	</div>
     <?php if ($go == "default") { ?>
      <script type="text/javascript" language="javascript">
@@ -102,7 +119,7 @@ if ($totalRows_entries > 0) {
 			"aaSorting": [[0,'asc'],[1,'asc']],
 			"bProcessing" : false,
 			"aoColumns": [
-				{ "asSorting": [  ] },
+				<?php if (strpos($styleSet,"BABDB") === false) { ?>{ "asSorting": [  ] },<?php } ?>
 				{ "asSorting": [  ] },
 				{ "asSorting": [  ] },
 				{ "asSorting": [  ] }
@@ -113,7 +130,7 @@ if ($totalRows_entries > 0) {
     <table class="table table-striped table-bordered" id="sortable<?php echo $style; ?>">
     <thead>
     <tr>
-		<th width="5%" nowrap><?php echo $label_subcategory; ?></th>
+		<?php if (strpos($styleSet,"BABDB") === false) { ?><th width="5%" nowrap><?php echo $label_subcategory; ?></th><?php } ?>
     	<th width="20%" nowrap><?php echo $label_entry; ?></th>
         <th width="20%" nowrap><?php echo $label_judging; ?></th>
         <th><?php echo $label_affixed; ?></th>
@@ -125,7 +142,7 @@ if ($totalRows_entries > 0) {
 	$brewer_info = explode("^",$info);
 	?>
     <tr>
-		<td><span class="hidden"><?php echo $row_entries['brewCategorySort'].$row_entries['brewSubCategory']; ?></span><?php echo $row_entries['brewSubCategory']; ?></td>
+		<?php if (strpos($styleSet,"BABDB") === false) { ?><td><span class="hidden"><?php echo $row_entries['brewCategorySort'].$row_entries['brewSubCategory']; ?></span><?php echo $row_entries['brewSubCategory']; ?></td><?php } ?>
         <td><?php echo sprintf("%04s",$row_entries['id']); ?></td>
         <td><?php echo readable_judging_number($row_entries['brewCategory'],$row_entries['brewJudgingNumber']);  ?></td>
         <td><p class="box_small">&nbsp;</p></td>

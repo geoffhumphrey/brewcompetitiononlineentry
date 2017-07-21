@@ -1,4 +1,4 @@
-<?php include(DB.'contacts.db.php'); ?>
+<?php include (DB.'contacts.db.php'); ?>
 <p class="lead"><?php echo $_SESSION['contestName']; if ($action == "add") echo ": Add a Contact"; elseif ($action == "edit") echo ": Edit a Contact"; else echo " Contacts"; ?></p>
 
 <!-- Button Element Container -->

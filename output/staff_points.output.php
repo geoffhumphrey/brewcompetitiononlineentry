@@ -12,11 +12,11 @@
  */
 
 
-include(DB.'judging_locations.db.php');
-include(DB.'styles.db.php');
-include(DB.'admin_common.db.php');
-include(LIB.'output.lib.php');
-include(DB.'output_staff_points.db.php');
+include (DB.'judging_locations.db.php');
+include (DB.'styles.db.php');
+include (DB.'admin_common.db.php');
+include (LIB.'output.lib.php');
+include (DB.'output_staff_points.db.php');
 // Get total amount of paid and received entries
 $total_entries = total_paid_received("judging_scores","default");
 //$total_entries = 750;

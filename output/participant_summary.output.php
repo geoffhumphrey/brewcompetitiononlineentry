@@ -1,10 +1,10 @@
 <?php 
 $section = "participant_summary";
-include(DB.'brewer.db.php');
-include(DB.'winners.db.php');
+include (DB.'brewer.db.php');
+include (DB.'winners.db.php');
 $total_entries_judged = get_entry_count('received');
 if (NHC) $base_url = "../";
-include(LIB.'output.lib.php');
+include (LIB.'output.lib.php');
 
 // Get custom winning category info
 do { $sbi_categories[] = $row_sbi['id']."|".$row_sbi['sbi_name']; } while ($row_sbi = mysqli_fetch_assoc($sbi));
@@ -24,7 +24,7 @@ foreach ($sbi_categories as $special_best_cat) {
 
 do {
 	
-	include(DB.'output_participant_summary.db.php');
+	include (DB.'output_participant_summary.db.php');
 	
 	if ($totalRows_log > 0) { ?>
 		<div class="page-header">

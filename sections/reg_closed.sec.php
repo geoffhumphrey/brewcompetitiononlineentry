@@ -44,8 +44,8 @@ Declare all variables empty at the top of the script. Add on later...
  * ---------------- END Rebuild Info --------------------- */
 
 
-include(DB.'judging_locations.db.php'); 
-include(DB.'entries.db.php');
+include (DB.'judging_locations.db.php'); 
+include (DB.'entries.db.php');
 
 $primary_page_info = "";
 $header1_1 = "";

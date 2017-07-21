@@ -55,7 +55,7 @@ require(DB.'winners.db.php');
 		
 		foreach ($a as $type) {
 	
-			include(DB.'output_results_download_bos.db.php');
+			include (DB.'output_results_download_bos.db.php');
 			
 			if ($totalRows_bos > 0) { 
 			
@@ -157,7 +157,7 @@ echo $header1_1;
 // Special/Custom "Best of" Display
 if ($totalRows_sbi > 0) { 
 	do { 
-		include(DB.'output_results_download_sbd.db.php');
+		include (DB.'output_results_download_sbd.db.php');
 			if ($totalRows_sbd > 0) {
 				
 				$display_bos_style_type = TRUE;

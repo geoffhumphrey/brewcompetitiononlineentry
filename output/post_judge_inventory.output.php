@@ -5,7 +5,7 @@
  * 
  */
 
-include(DB.'output_post_judge_inventory.db.php');
+include (DB.'output_post_judge_inventory.db.php');
 
 if (NHC) $base_url = "../";
 ?>
@@ -52,7 +52,7 @@ if (NHC) $base_url = "../";
     <tbody>
     <?php do { 
 
-		include(DB.'output_post_judge.db.php');
+		include (DB.'output_post_judge.db.php');
 		if ((($totalRows_post_inventory_entry > 0) && ($row_post_inventory_entry['scorePlace'] == "")) || ($totalRows_post_inventory_entry == 0)) {
 		
 	?>

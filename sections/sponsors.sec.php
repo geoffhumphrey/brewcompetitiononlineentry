@@ -39,7 +39,7 @@ Declare all variables empty at the top of the script. Add on later...
 	etc., etc., etc.
  * ---------------- END Rebuild Info --------------------- */
  
-include(DB.'sponsors.db.php');
+include (DB.'sponsors.db.php');
 $page_info1 = "";
 
 $sponsors_endRow = 0;

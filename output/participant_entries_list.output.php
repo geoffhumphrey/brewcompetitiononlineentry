@@ -5,17 +5,17 @@ Currently editing:
 
 <?php 
 $section = "participant_entry_list";
-include(DB.'brewer.db.php');
-//include(DB.'winners.db.php');
+include (DB.'brewer.db.php');
+//include (DB.'winners.db.php');
 //$total_entries_judged = get_entry_count('received');
 //if (NHC) $base_url = "../";
-include(LIB.'output.lib.php');
+include (LIB.'output.lib.php');
 
 $table_body = "";
 
 do {
 	
-	include(DB.'output_participant_summary.db.php');
+	include (DB.'output_participant_summary.db.php');
 	
 	unset($entry_numbers);
 	unset($judging_numbers);

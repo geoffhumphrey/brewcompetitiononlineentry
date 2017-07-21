@@ -32,7 +32,7 @@ if ($_SESSION['prefsStyleSet'] == "BJCP2015") {
 
 if (strpos($_SESSION['prefsStyleSet'],"BABDB") !== false) {
 	
-	include(INCLUDES.'ba_constants.inc.php');
+	include (INCLUDES.'ba_constants.inc.php');
 	
 	for ($i=1; $i<=$ba_id_end; $i++) {
 		
@@ -46,7 +46,7 @@ if (strpos($_SESSION['prefsStyleSet'],"BABDB") !== false) {
 		
 		$cat = $_SESSION['styles']['data'][$i-1]['category']['id'];
 		
-		include(DB.'entries_by_substyle.db.php');
+		include (DB.'entries_by_substyle.db.php');
 		
 		// $html_testing .= "Cat No: ".$_SESSION['styles']['data'][$i-1]['id']." Query: ".$query_substyle_count_logged."<br>";
 		
@@ -73,7 +73,7 @@ if (strpos($_SESSION['prefsStyleSet'],"BABDB") !== false) {
 	
 }
 
-include(DB.'styles.db.php');
+include (DB.'styles.db.php');
 
 do { 
 	$subcats[] = $row_styles['brewStyleGroup']."|".$row_styles['brewStyleNum']."|".$row_styles['brewStyle']."|".$row_styles['brewStyleCategory']."|".$row_styles['brewStyleActive']; 
@@ -91,7 +91,7 @@ foreach ($subcats as $subcat) {
 		if (SINGLE) $query_substyle_count_logged = sprintf("SELECT COUNT(*) AS 'count' FROM %s WHERE brewCategorySort='%s' AND brewSubCategory='%s' AND brewConfirmed='1' AND comp_id='%s'",$prefix."brewing",$substyle[0],$substyle[1], $_SESSION['comp_id']);
 		else $query_substyle_count_logged = sprintf("SELECT COUNT(*) AS 'count' FROM %s WHERE brewCategorySort='%s' AND brewSubCategory='%s' AND brewConfirmed='1'",$prefix."brewing",$substyle[0],$substyle[1]);
 		
-		include(DB.'entries_by_substyle.db.php');
+		include (DB.'entries_by_substyle.db.php');
 		
 	}
 	

@@ -43,7 +43,7 @@ if ($msg != "default") { ?>
 
 	if (($totalRows_log  > 0) && ($_SESSION['prefsStyleSet'] == "BJCP2008") && ($_SESSION['userLevel'] == 0) && ($go == "default")) {
 		
-		include(DB.'admin_judging_tables.db.php');		
+		include (DB.'admin_judging_tables.db.php');		
 		$bjcp_2008 = TRUE;
 		
 	} // end if (($totalRows_log  > 0) && ($_SESSION['prefsStyleSet'] == "BJCP2008") && ($_SESSION['userLevel'] == 0))

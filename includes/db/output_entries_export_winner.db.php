@@ -36,7 +36,7 @@ if ($_SESSION['prefsWinnerMethod'] == 1) {
 	
 	foreach (array_unique($z) as $style) {
 		
-		include(DB.'winners_category.db.php');
+		include (DB.'winners_category.db.php');
 		
 		//echo $row_score_count['count']."<br>";
 		
@@ -77,7 +77,7 @@ if ($_SESSION['prefsWinnerMethod'] == 2) {
 		
 		$style = explode("^",$style);
 		
-		include(DB.'winners_subcategory.db.php');
+		include (DB.'winners_subcategory.db.php');
 		
 		if ($row_entry_count['count'] > 0) {
 			

@@ -44,10 +44,10 @@ Declare all variables empty at the top of the script. Add on later...
  * ---------------- END Rebuild Info --------------------- */
 
  
-include(DB.'dropoff.db.php');
-include(DB.'judging_locations.db.php');
-include(DB.'styles.db.php');
-include(DB.'entry_info.db.php');
+include (DB.'dropoff.db.php');
+include (DB.'judging_locations.db.php');
+include (DB.'styles.db.php');
+include (DB.'entry_info.db.php');
 
 $primary_page_info = "";
 $header1_1 = "";
@@ -95,116 +95,119 @@ if (!$logged_in) {
 }
 else $page_info2 .= sprintf("<p class=\"lead\">%s %s! <small><a href=\"%s\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"%s\">%s</a></small></p>",$entry_info_text_010,$_SESSION['brewerFirstName'],build_public_url("list","default","default","default",$sef,$base_url),$entry_info_text_011,$entry_info_text_012);
 
-// Entry Window
-$header1_3 .= sprintf("<a name=\"entry_window\"></a><h2>%s</h2>",$label_entry_registration);
-if ($entry_window_open == 0) $page_info3 .= sprintf("<p>%s <strong class=\"text-success\">%s</strong> %s <strong class=\"text-success\">%s</strong>.</p>",$entry_info_text_014,$entry_open,$entry_info_text_001,$entry_closed);
-elseif ($entry_window_open == 1) $page_info3 .= sprintf("<p>%s <strong class=\"text-success\">%s</strong>.</p>",$entry_info_text_015,$entry_closed);
-else $page_info3 .= sprintf("<p>%s</p>",$entry_info_text_016);
+if ($show_entires) {
+	// Entry Window
+	$header1_3 .= sprintf("<a name=\"entry_window\"></a><h2>%s</h2>",$label_entry_registration);
+	if ($entry_window_open == 0) $page_info3 .= sprintf("<p>%s <strong class=\"text-success\">%s</strong> %s <strong class=\"text-success\">%s</strong>.</p>",$entry_info_text_014,$entry_open,$entry_info_text_001,$entry_closed);
+	elseif ($entry_window_open == 1) $page_info3 .= sprintf("<p>%s <strong class=\"text-success\">%s</strong>.</p>",$entry_info_text_015,$entry_closed);
+	else $page_info3 .= sprintf("<p>%s</p>",$entry_info_text_016);
 
+	if ($entry_window_open < 2) {
+	
+	
+		// Entry Fees
+		$header1_4 .= sprintf("<a name=\"entry\"></a><h2>%s</h2>",$label_entry_fees);
+		$page_info4 .= sprintf("<p>%s%s (%s) %s. ",$currency_symbol,number_format($_SESSION['contestEntryFee'],2),$currency_code,$entry_info_text_003);
+		if ($_SESSION['contestEntryFeeDiscount'] == "Y") $page_info4 .= sprintf("%s%s %s %s %s. ",$currency_symbol,number_format($_SESSION['contestEntryFee2'],2),$entry_info_text_013,addOrdinalNumberSuffix($_SESSION['contestEntryFeeDiscountNum']),strtolower($label_entry));
+		if ($_SESSION['contestEntryCap'] != "") $page_info4 .= sprintf("%s%s %s ",$currency_symbol,number_format($_SESSION['contestEntryCap'],2),$entry_info_text_017);
+		if (NHC) $page_info4 .= sprintf("%s%s %s",$currency_symbol,number_format($_SESSION['contestEntryFeePasswordNum'],2),$entry_info_text_018);
+		$page_info4 .= "</p>";
 
-if ($entry_window_open < 2) {
-	
-	// Entry Fees
-	$header1_4 .= sprintf("<a name=\"entry\"></a><h2>%s</h2>",$label_entry_fees);
-	$page_info4 .= sprintf("<p>%s%s (%s) %s. ",$currency_symbol,number_format($_SESSION['contestEntryFee'],2),$currency_code,$entry_info_text_003);
-	if ($_SESSION['contestEntryFeeDiscount'] == "Y") $page_info4 .= sprintf("%s%s %s %s %s. ",$currency_symbol,number_format($_SESSION['contestEntryFee2'],2),$entry_info_text_013,addOrdinalNumberSuffix($_SESSION['contestEntryFeeDiscountNum']),strtolower($label_entry));
-	if ($_SESSION['contestEntryCap'] != "") $page_info4 .= sprintf("%s%s %s ",$currency_symbol,number_format($_SESSION['contestEntryCap'],2),$entry_info_text_017);
-	if (NHC) $page_info4 .= sprintf("%s%s %s",$currency_symbol,number_format($_SESSION['contestEntryFeePasswordNum'],2),$entry_info_text_018);
-	$page_info4 .= "</p>";
-	
-	// Entry Limit
-	if (!empty($row_limits['prefsEntryLimit'])) {
-		$header1_5 .= sprintf("<a name=\"entry_limit\"></a><h2>%s</h2>",$label_entry_limit);
-		$page_info5 .= sprintf("<p>%s %s %s</p>",$entry_info_text_019,$row_limits['prefsEntryLimit'],$entry_info_text_020);
-	}
-	
-	if ((!empty($row_limits['prefsUserEntryLimit'])) || (!empty($row_limits['prefsUserSubCatLimit'])) || (!empty($row_limits['prefsUSCLExLimit']))) {
-		$header1_16 .= sprintf("<h2>%s</h2>",$label_entry_per_entrant);
-		
-		if (!empty($row_limits['prefsUserEntryLimit'])) {
-			if ($row_limits['prefsUserEntryLimit'] == 1) $page_info16 .= sprintf("<p>%s %s %s.</p>",$entry_info_text_021,$row_limits['prefsUserEntryLimit'],$entry_info_text_022);
-			else $page_info16 .= sprintf("<p>%s %s %s.</p>",$entry_info_text_021,$row_limits['prefsUserEntryLimit'],$entry_info_text_023);
+		// Entry Limit
+		if (!empty($row_limits['prefsEntryLimit'])) {
+			$header1_5 .= sprintf("<a name=\"entry_limit\"></a><h2>%s</h2>",$label_entry_limit);
+			$page_info5 .= sprintf("<p>%s %s %s</p>",$entry_info_text_019,$row_limits['prefsEntryLimit'],$entry_info_text_020);
 		}
-		
-		if (!empty($row_limits['prefsUserSubCatLimit'])) { 
-			$page_info16 .= "<p>";
-			if ($row_limits['prefsUserSubCatLimit'] == 1) $page_info16 .= sprintf("%s %s %s",$entry_info_text_021,$row_limits['prefsUserSubCatLimit'],$entry_info_text_024);
-			else $page_info16 .= sprintf("%s %s %s",$entry_info_text_021,$row_limits['prefsUserSubCatLimit'],$entry_info_text_025);
-			if (!empty($row_limits['prefsUSCLExLimit'])) $page_info16 .= sprintf(" &ndash; %s",$entry_info_text_026);
-			$page_info16 .= ".";
-			$page_info16 .= "</p>";
-	
-		}
-		
-		if (!empty($row_limits['prefsUSCLExLimit'])) { 
-		$excepted_styles = explode(",",$row_limits['prefsUSCLEx']);
-		if (count($excepted_styles) == 1) $sub = $entry_info_text_027; else $sub = $entry_info_text_028;
-			if ($row_limits['prefsUSCLExLimit'] == 1) $page_info16 .= sprintf("<p>%s to %s %s %s: </p>",$entry_info_text_021,$row_limits['prefsUSCLExLimit'],$entry_info_text_029,$sub);
-			else $page_info16 .= sprintf("<p>%s %s %s %s: </p>",$entry_info_text_021,$row_limits['prefsUSCLExLimit'],$entry_info_text_030,$sub);
-			
-			$page_info16 .= "<div class=\"row\">";
-			$page_info16 .= "<div class=\"col col-lg-6 col-md-8 col-sm-10 col-xs-12\">";
-			
-			if (strpos($_SESSION['prefsStyleSet'],"BABDB") !== false) {
-				
-				$ba_style[] = "";
-				
-				$page_info16 .= "<ul>";
-				
-				// Check for any custom styles 
-				if ($totalRows_styles > 0) {
-			
-					do {
-						
-						if ((isset($row_styles['id'])) && ($row_styles['brewStyleActive'] == "Y")) {
-							$ba_style[] .= $row_styles['brewStyle']." (".$label_custom_style.")";
-							$ba_accepted_styles[] .= $row_styles['brewStyle']." (".$label_custom_style.")"."|".$row_styles['id'];
-						}
-						
-					} while($row_styles = mysqli_fetch_assoc($styles));
-				
-				}
-				
-				foreach ($excepted_styles as $ba_excepted_style) {
-					// Hack - cannot figure out why the id of the style in the array is returning the NEXT style's name as a value
-					$ba_style[] .= $_SESSION['styles']['data'][$ba_excepted_style-1]['name'];
-					
-				}
-				
-				sort($ba_style);
-				
-				foreach ($ba_style as $value) {
-					if (!empty($value)) $page_info16 .= "<li>".$value."</li>";
-				}
-				
-				$page_info16 .= "</ul>";
-				
-				
-			} else {
-				$page_info16 .= style_convert($row_limits['prefsUSCLEx'],"7");
+
+		if ((!empty($row_limits['prefsUserEntryLimit'])) || (!empty($row_limits['prefsUserSubCatLimit'])) || (!empty($row_limits['prefsUSCLExLimit']))) {
+			$header1_16 .= sprintf("<h2>%s</h2>",$label_entry_per_entrant);
+
+			if (!empty($row_limits['prefsUserEntryLimit'])) {
+				if ($row_limits['prefsUserEntryLimit'] == 1) $page_info16 .= sprintf("<p>%s %s %s.</p>",$entry_info_text_021,$row_limits['prefsUserEntryLimit'],$entry_info_text_022);
+				else $page_info16 .= sprintf("<p>%s %s %s.</p>",$entry_info_text_021,$row_limits['prefsUserEntryLimit'],$entry_info_text_023);
 			}
-			
-			$page_info16 .= "</div>";
-			$page_info16 .= "</div>";
-	
-		}
-		
-	}
-	
-	if ($_SESSION['contestEntryFee'] > 0) {
-		
-		// Payment
-		$header1_6 .= sprintf("<a name=\"payment\"></a><h2>%s</h2>",$label_pay);
-		$page_info6 .= sprintf("<p>%s</p>",$entry_info_text_031);
-		$page_info6 .= "<ul>";
-		if ($_SESSION['prefsCash'] == "Y") $page_info6 .= sprintf("<li>%s</li>",$entry_info_text_032);
-		if ($_SESSION['prefsCheck'] == "Y") $page_info6 .= sprintf("<li>%s <em>%s</em></li>",$entry_info_text_033,$_SESSION['prefsCheckPayee']);
-		if ($_SESSION['prefsPaypal'] == "Y") $page_info6 .= sprintf("<li>%s</li>",$entry_info_text_034);
-		//if ($_SESSION['prefsGoogle'] == "Y") $page_info6 .= "<li>Google Wallet</li>"; 
-		$page_info6 .= "</ul>";
-	
-	}
 
+			if (!empty($row_limits['prefsUserSubCatLimit'])) { 
+				$page_info16 .= "<p>";
+				if ($row_limits['prefsUserSubCatLimit'] == 1) $page_info16 .= sprintf("%s %s %s",$entry_info_text_021,$row_limits['prefsUserSubCatLimit'],$entry_info_text_024);
+				else $page_info16 .= sprintf("%s %s %s",$entry_info_text_021,$row_limits['prefsUserSubCatLimit'],$entry_info_text_025);
+				if (!empty($row_limits['prefsUSCLExLimit'])) $page_info16 .= sprintf(" &ndash; %s",$entry_info_text_026);
+				$page_info16 .= ".";
+				$page_info16 .= "</p>";
+
+			}
+
+			if (!empty($row_limits['prefsUSCLExLimit'])) { 
+			$excepted_styles = explode(",",$row_limits['prefsUSCLEx']);
+			if (count($excepted_styles) == 1) $sub = $entry_info_text_027; else $sub = $entry_info_text_028;
+				if ($row_limits['prefsUSCLExLimit'] == 1) $page_info16 .= sprintf("<p>%s to %s %s %s: </p>",$entry_info_text_021,$row_limits['prefsUSCLExLimit'],$entry_info_text_029,$sub);
+				else $page_info16 .= sprintf("<p>%s %s %s %s: </p>",$entry_info_text_021,$row_limits['prefsUSCLExLimit'],$entry_info_text_030,$sub);
+
+				$page_info16 .= "<div class=\"row\">";
+				$page_info16 .= "<div class=\"col col-lg-6 col-md-8 col-sm-10 col-xs-12\">";
+
+				if (strpos($_SESSION['prefsStyleSet'],"BABDB") !== false) {
+
+					$ba_style[] = "";
+
+					$page_info16 .= "<ul>";
+
+					// Check for any custom styles 
+					if ($totalRows_styles > 0) {
+
+						do {
+
+							if ((isset($row_styles['id'])) && ($row_styles['brewStyleActive'] == "Y")) {
+								$ba_style[] .= $row_styles['brewStyle']." (".$label_custom_style.")";
+								$ba_accepted_styles[] .= $row_styles['brewStyle']." (".$label_custom_style.")"."|".$row_styles['id'];
+							}
+
+						} while($row_styles = mysqli_fetch_assoc($styles));
+
+					}
+
+					foreach ($excepted_styles as $ba_excepted_style) {
+						// Hack - cannot figure out why the id of the style in the array is returning the NEXT style's name as a value
+						$ba_style[] .= $_SESSION['styles']['data'][$ba_excepted_style-1]['name'];
+
+					}
+
+					sort($ba_style);
+
+					foreach ($ba_style as $value) {
+						if (!empty($value)) $page_info16 .= "<li>".$value."</li>";
+					}
+
+					$page_info16 .= "</ul>";
+
+
+				} else {
+					$page_info16 .= style_convert($row_limits['prefsUSCLEx'],"7");
+				}
+
+				$page_info16 .= "</div>";
+				$page_info16 .= "</div>";
+
+			}
+
+		}
+
+		if ($_SESSION['contestEntryFee'] > 0) {
+
+			// Payment
+			$header1_6 .= sprintf("<a name=\"payment\"></a><h2>%s</h2>",$label_pay);
+			$page_info6 .= sprintf("<p>%s</p>",$entry_info_text_031);
+			$page_info6 .= "<ul>";
+			if ($_SESSION['prefsCash'] == "Y") $page_info6 .= sprintf("<li>%s</li>",$entry_info_text_032);
+			if ($_SESSION['prefsCheck'] == "Y") $page_info6 .= sprintf("<li>%s <em>%s</em></li>",$entry_info_text_033,$_SESSION['prefsCheckPayee']);
+			if ($_SESSION['prefsPaypal'] == "Y") $page_info6 .= sprintf("<li>%s</li>",$entry_info_text_034);
+			//if ($_SESSION['prefsGoogle'] == "Y") $page_info6 .= "<li>Google Wallet</li>"; 
+			$page_info6 .= "</ul>";
+
+		}
+
+	}
+	
 }
 
 $header1_7 .= sprintf("<h2>%s</h2>",$label_admin_judging_loc);
@@ -240,7 +243,6 @@ $styles_columns = 3;   // number of columns
 $styles_hloopRow1 = 0; // first row flag
 
 // BA Styles
-
 if (strpos($_SESSION['prefsStyleSet'],"BABDB") !== false) {
 	
 	include (INCLUDES.'ba_constants.inc.php');
@@ -372,52 +374,55 @@ if ($styles_endRow != 0) {
 
 $page_info8 .= "</table>";
 
-// Show bottle acceptance, shipping location, and dropoff locations if open
-
-// Bottle Acceptance
-if ((isset($row_contest_info['contestBottles'])) && (($dropoff_window_open < 2) || ($shipping_window_open < 2))) {
-	$header1_9 .= sprintf("<a name=\"bottle\"></a><h2>%s</h2>",$label_entry_acceptance_rules);
-	$page_info9 .= $row_contest_info['contestBottles'];
-}
-
-
-// Shipping Locations
-if (((isset($_SESSION['contestShippingAddress'])) && ($shipping_window_open < 2)) && ($_SESSION['prefsShipping'] == 1)) {
-	$header1_10 .= sprintf("<a name=\"shipping\"></a><h2>%s</h2>",$label_shipping_info);
-	$page_info10 .= sprintf("<p>%s <strong class=\"text-success\">%s</strong> %s <strong class=\"text-success\">%s</strong>.</p>",$entry_info_text_036,$shipping_open,$entry_info_text_001,$shipping_closed);
-	$page_info10 .= sprintf("<p>%s</p>",$entry_info_text_037);
-	$page_info10 .= "<p>";
-	$page_info10 .= $_SESSION['contestShippingName'];
-	$page_info10 .= "<br>";
-	$page_info10 .= $_SESSION['contestShippingAddress'];
-	$page_info10 .= "</p>";
-    $page_info10 .= sprintf("<h3>%s</h3>",$label_packing_shipping);
-    $page_info10 .= sprintf("<p><strong>%s</strong></p>",$entry_info_text_038);
-	$page_info10 .= sprintf("<p>%s</p>",$entry_info_text_039);
-    $page_info10 .= sprintf("<p>%s</p>",$entry_info_text_040);
-    $page_info10 .= sprintf("<p>%s</p>",$entry_info_text_041);
-    $page_info10 .= sprintf("<p>%s</p>",$entry_info_text_042);
-}
-
-// Drop-Off
-if ((($totalRows_dropoff > 0) && ($dropoff_window_open < 2)) && ($_SESSION['prefsDropOff'] == 1)) {
-	if ($totalRows_dropoff == 1) $header1_11 .= sprintf("<a name=\"drop\"></a><h2>%s</h2>",$label_drop_off);
-	else $header1_11 .= sprintf("<a name=\"drop\"></a><h2>%s</h2>",$label_drop_offs);
-	$page_info11 .= sprintf("<p>%s <strong class=\"text-success\">%s</strong> %s <strong class=\"text-success\">%s</strong>.</p>",$entry_info_text_043,$dropoff_open,$entry_info_text_001,$dropoff_closed);
+if ($show_entires) {
 	
-	do {
-		
-		$page_info11 .= "<p>";
-		if ($row_dropoff['dropLocationWebsite'] != "") $page_info11 .= sprintf("<a href=\"%s\" target=\"_blank\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"".$row_dropoff['dropLocationName']." %s\"><strong>%s</strong></a> <span class=\"fa fa-lg fa-external-link\"></span>",$row_dropoff['dropLocationWebsite'],$label_website,$row_dropoff['dropLocationName']);
-		else $page_info11 .= sprintf("<strong>%s</strong>",$row_dropoff['dropLocationName']);
-		$page_info11 .= "<br />";
-		$page_info11 .= sprintf("<a href=\"".$base_url."output/maps.output.php?section=driving&amp;id=".str_replace(' ', '+', $row_dropoff['dropLocation'])."\" target=\"_blank\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"%s ".$row_dropoff['dropLocationName']."\">".$row_dropoff['dropLocation']."</a> <span class=\"fa fa-lg fa-map-marker\"></span>",$entry_info_text_044);
-		$page_info11 .= "<br />";
-		$page_info11 .= $row_dropoff['dropLocationPhone'];
-		$page_info11 .= "<br />";
-		if ($row_dropoff['dropLocationNotes'] != "") $page_info11 .= sprintf("*<em>%s</em>",$row_dropoff['dropLocationNotes']);
-		$page_info11 .= "</p>";
-	 } while ($row_dropoff = mysqli_fetch_assoc($dropoff));
+	// Show bottle acceptance, shipping location, and dropoff locations if open
+	// Bottle Acceptance
+	if ((isset($row_contest_info['contestBottles'])) && (($dropoff_window_open < 2) || ($shipping_window_open < 2))) {
+		$header1_9 .= sprintf("<a name=\"bottle\"></a><h2>%s</h2>",$label_entry_acceptance_rules);
+		$page_info9 .= $row_contest_info['contestBottles'];
+	}
+	
+	// Shipping Locations
+	if (((isset($_SESSION['contestShippingAddress'])) && ($shipping_window_open < 2)) && ($_SESSION['prefsShipping'] == 1)) {
+		$header1_10 .= sprintf("<a name=\"shipping\"></a><h2>%s</h2>",$label_shipping_info);
+		$page_info10 .= sprintf("<p>%s <strong class=\"text-success\">%s</strong> %s <strong class=\"text-success\">%s</strong>.</p>",$entry_info_text_036,$shipping_open,$entry_info_text_001,$shipping_closed);
+		$page_info10 .= sprintf("<p>%s</p>",$entry_info_text_037);
+		$page_info10 .= "<p>";
+		$page_info10 .= $_SESSION['contestShippingName'];
+		$page_info10 .= "<br>";
+		$page_info10 .= $_SESSION['contestShippingAddress'];
+		$page_info10 .= "</p>";
+		$page_info10 .= sprintf("<h3>%s</h3>",$label_packing_shipping);
+		$page_info10 .= sprintf("<p><strong>%s</strong></p>",$entry_info_text_038);
+		$page_info10 .= sprintf("<p>%s</p>",$entry_info_text_039);
+		$page_info10 .= sprintf("<p>%s</p>",$entry_info_text_040);
+		$page_info10 .= sprintf("<p>%s</p>",$entry_info_text_041);
+		$page_info10 .= sprintf("<p>%s</p>",$entry_info_text_042);
+	}
+
+	// Drop-Off
+	if ((($totalRows_dropoff > 0) && ($dropoff_window_open < 2)) && ($_SESSION['prefsDropOff'] == 1)) {
+		if ($totalRows_dropoff == 1) $header1_11 .= sprintf("<a name=\"drop\"></a><h2>%s</h2>",$label_drop_off);
+		else $header1_11 .= sprintf("<a name=\"drop\"></a><h2>%s</h2>",$label_drop_offs);
+		$page_info11 .= sprintf("<p>%s <strong class=\"text-success\">%s</strong> %s <strong class=\"text-success\">%s</strong>.</p>",$entry_info_text_043,$dropoff_open,$entry_info_text_001,$dropoff_closed);
+
+		do {
+
+			$page_info11 .= "<p>";
+			if ($row_dropoff['dropLocationWebsite'] != "") $page_info11 .= sprintf("<a href=\"%s\" target=\"_blank\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"".$row_dropoff['dropLocationName']." %s\"><strong>%s</strong></a> <span class=\"fa fa-lg fa-external-link\"></span>",$row_dropoff['dropLocationWebsite'],$label_website,$row_dropoff['dropLocationName']);
+			else $page_info11 .= sprintf("<strong>%s</strong>",$row_dropoff['dropLocationName']);
+			$page_info11 .= "<br />";
+			$page_info11 .= sprintf("<a href=\"".$base_url."output/maps.output.php?section=driving&amp;id=".str_replace(' ', '+', $row_dropoff['dropLocation'])."\" target=\"_blank\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"%s ".$row_dropoff['dropLocationName']."\">".$row_dropoff['dropLocation']."</a> <span class=\"fa fa-lg fa-map-marker\"></span>",$entry_info_text_044);
+			$page_info11 .= "<br />";
+			$page_info11 .= $row_dropoff['dropLocationPhone'];
+			$page_info11 .= "<br />";
+			if ($row_dropoff['dropLocationNotes'] != "") $page_info11 .= sprintf("*<em>%s</em>",$row_dropoff['dropLocationNotes']);
+			$page_info11 .= "</p>";
+		 } while ($row_dropoff = mysqli_fetch_assoc($dropoff));
+
+	}
+
 }
 
 // Best of Show
@@ -442,12 +447,13 @@ if (isset($_SESSION['contestAwardsLocName'])) {
 	
 }
 
-// Circuit Qualification
-if (isset($row_contest_info['contestCircuit'])) {
-	$header1_15 .= sprintf("<a name=\"circuit\"></a><h2>%s</h2>",$label_circuit);
-	$page_info15 .= $row_contest_info['contestCircuit'];
+if ($show_entires) {
+	// Circuit Qualification
+	if (isset($row_contest_info['contestCircuit'])) {
+		$header1_15 .= sprintf("<a name=\"circuit\"></a><h2>%s</h2>",$label_circuit);
+		$page_info15 .= $row_contest_info['contestCircuit'];
+	}
 }
-
 //echo $row_limits['prefsUserEntryLimit']."<br>";
 //echo $row_limits['prefsUserSubCatLimit']."<br>";
 //echo $row_limits['prefsUSCLExLimit']."<br>";

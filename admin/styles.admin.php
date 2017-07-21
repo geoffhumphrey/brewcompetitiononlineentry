@@ -1,7 +1,7 @@
 <?php
 
-if ($section != "step7") include(DB.'judging_locations.db.php');
-include(DB.'styles.db.php');
+if ($section != "step7") include (DB.'judging_locations.db.php');
+include (DB.'styles.db.php');
 //echo $query_styles;
 //echo $row_styles['brewStyle'];
 
@@ -19,7 +19,7 @@ if (strpos($_SESSION['prefsStyleSet'],"BABDB") !== false) {
 		// print_r($style_explodies);
 		// print_r($_SESSION['styles']);
 
-		include(INCLUDES.'ba_constants.inc.php');
+		include (INCLUDES.'ba_constants.inc.php');
 
 		foreach ($_SESSION['styles'] as $ba_styles => $stylesData) {
 
@@ -501,7 +501,7 @@ $style_type_2 = style_type($row_styles['brewStyleType'],"1","bcoe");
 <?php
 
 // Load Show/Hide
-include(INCLUDES.'form_js.inc.php');
+include (INCLUDES.'form_js.inc.php');
 
 } ?>
 <?php if (($action == "default") && ($filter == "judging") && ($bid == "default")) { ?>

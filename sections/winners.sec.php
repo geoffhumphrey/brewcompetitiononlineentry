@@ -91,7 +91,7 @@ if ($row_scored_entries['count'] > 0) {
 				$table_head1 .= "</tr>";
 				
 				// Build table body
-				include(DB.'scores.db.php');
+				include (DB.'scores.db.php');
 				
 				do { 
 					$style = $row_scores['brewCategory'].$row_scores['brewSubCategory'];

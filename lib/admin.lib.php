@@ -168,7 +168,7 @@ function score_style_data($value) {
 	
 	else {
 		
-		include(INCLUDES.'ba_constants.inc.php');
+		include (INCLUDES.'ba_constants.inc.php');
 		
 		$value1 = ($value - 1);
 		
@@ -769,8 +769,8 @@ function table_score_data($eid,$score_table,$suffix) {
 
 
 function received_entries() {
-	include(CONFIG.'config.php');
-	//include(INCLUDES.'db_tables.inc.php');
+	include (CONFIG.'config.php');
+	//include (INCLUDES.'db_tables.inc.php');
 	mysqli_select_db($connection,$database);
 	$style_array = array();
 	
@@ -794,8 +794,8 @@ function received_entries() {
 
 
 function assigned_judges($tid,$dbTable,$judging_assignments_db_table){
-	include(CONFIG.'config.php');
-	//include(INCLUDES.'db_tables.inc.php');
+	include (CONFIG.'config.php');
+	//include (INCLUDES.'db_tables.inc.php');
 	mysqli_select_db($connection,$database);
 	$query_assignments = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE assignTable='%s' AND assignment='J'", $judging_assignments_db_table, $tid);
 	$assignments = mysqli_query($connection,$query_assignments) or die (mysqli_error($connection));
@@ -814,7 +814,7 @@ function assigned_judges($tid,$dbTable,$judging_assignments_db_table){
 }
 
 function assigned_stewards($tid,$dbTable,$judging_assignments_db_table){
-	include(CONFIG.'config.php');	
+	include (CONFIG.'config.php');	
 	mysqli_select_db($connection,$database);
 	$query_assignments = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE assignTable='%s' AND assignment='S'", $judging_assignments_db_table, $tid);
 	$assignments = mysqli_query($connection,$query_assignments) or die (mysqli_error($connection));
@@ -833,7 +833,7 @@ function assigned_stewards($tid,$dbTable,$judging_assignments_db_table){
 }
 
 function date_created($uid,$date_format,$time_format,$timezone,$dbTable) {
-	include(CONFIG.'config.php');	
+	include (CONFIG.'config.php');	
 	mysqli_select_db($connection,$database);
 	if ($dbTable != "default") $dbTable = $dbTable; else $dbTable = $prefix."users";
 	$query1 = sprintf("SHOW COLUMNS FROM %s LIKE 'userCreated'",$dbTable);
@@ -858,7 +858,7 @@ function date_created($uid,$date_format,$time_format,$timezone,$dbTable) {
 }
 
 function user_info($uid) {
-	include(CONFIG.'config.php');	
+	include (CONFIG.'config.php');	
 	mysqli_select_db($connection,$database);
 	$query_user1 = sprintf("SELECT id,userLevel FROM %s WHERE id = '%s'", $prefix."users", $uid);
 	$user1 = mysqli_query($connection,$query_user1) or die (mysqli_error($connection));
@@ -870,7 +870,7 @@ function user_info($uid) {
 }
 
 function sbd_count($id) {
-	include(CONFIG.'config.php');	
+	include (CONFIG.'config.php');	
 	mysqli_select_db($connection,$database);
 	$query_sbd = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE sid='%s'",$prefix."special_best_data",$id);
 	$sbd = mysqli_query($connection,$query_sbd) or die (mysqli_error($connection));
@@ -879,7 +879,7 @@ function sbd_count($id) {
 }
 
 function special_best_info($sid) {
-	include(CONFIG.'config.php');	
+	include (CONFIG.'config.php');	
 	mysqli_select_db($connection,$database);
 	$query_sbi = sprintf("SELECT id,sbi_name FROM %s WHERE id='%s'",$prefix."special_best_info",$sid); 
 	$sbi = mysqli_query($connection,$query_sbi) or die (mysqli_error($connection));

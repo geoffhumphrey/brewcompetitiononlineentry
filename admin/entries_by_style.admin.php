@@ -12,11 +12,11 @@ $style_other_count_logged[] = 0;
 
 if (strpos($_SESSION['prefsStyleSet'],"BABDB") !== false) {
 	
-	include(INCLUDES.'ba_constants.inc.php');
+	include (INCLUDES.'ba_constants.inc.php');
 	
 	foreach ($ba_all_categories as $cat) {
 			
-		include(DB.'entries_by_style.db.php');
+		include (DB.'entries_by_style.db.php');
 		
 		if ($action == "print") $html .= "<tr>"; 
 		else $html .= "<tr>";
@@ -44,7 +44,7 @@ if ($_SESSION['prefsStyleSet'] == "BJCP2015") {
 	$category_end = 34;
 }
 
-include(DB.'styles.db.php');
+include (DB.'styles.db.php');
 	
 do { 
 	$accepted_categories[] = $row_styles['brewStyleGroup']; 
@@ -55,7 +55,7 @@ $total_cat = array_unique($accepted_categories);
 
 foreach ($total_cat as $cat) {
 
-	include(DB.'entries_by_style.db.php');	
+	include (DB.'entries_by_style.db.php');	
 
 	if (!empty($cat_name)) { 
 

@@ -43,7 +43,7 @@ Declare all variables empty at the top of the script. Add on later...
 
  * ---------------- END Rebuild Info --------------------- */
 
-include(DB.'contacts.db.php');
+include (DB.'contacts.db.php');
 
 if ($_SESSION['prefsContact'] == "N") {
 	$page_info = "";

@@ -1,4 +1,4 @@
-<?php include(DB.'sponsors.db.php'); ?>
+<?php include (DB.'sponsors.db.php'); ?>
 <p class="lead"><?php echo $_SESSION['contestName']; if ($action == "add") echo ": Add a Sponsor"; elseif ($action == "edit") echo ": Edit a Sponsor"; else echo " Sponsors"; ?></p>
 
 <div class="bcoem-admin-element hidden-print">

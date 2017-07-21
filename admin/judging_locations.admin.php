@@ -48,7 +48,7 @@ All Admin pages have certain variables in common that build the page:
 
 */
 
-include(DB.'judging_locations.db.php');
+include (DB.'judging_locations.db.php');
 
 // Set Vars
 $output_datatables_head = "";

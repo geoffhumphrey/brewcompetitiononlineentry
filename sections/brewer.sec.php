@@ -7,12 +7,12 @@
  */
 
 if ($section != "step2") {
-	include(DB.'judging_locations.db.php');
-	include(DB.'stewarding.db.php');
-	include(DB.'styles.db.php');
+	include (DB.'judging_locations.db.php');
+	include (DB.'stewarding.db.php');
+	include (DB.'styles.db.php');
 }
 
-include(DB.'brewer.db.php');
+include (DB.'brewer.db.php');
 include (DB.'dropoff.db.php');
 
 if ($section != "step2") {
@@ -80,7 +80,7 @@ else {
 
 if (strpos($_SESSION['prefsStyleSet'],"BABDB") !== false) {
 
-	include(INCLUDES.'ba_constants.inc.php');
+	include (INCLUDES.'ba_constants.inc.php');
 
 	$brewer_ba_likes = "";
 	$brewer_ba_dislikes = "";

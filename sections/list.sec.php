@@ -66,30 +66,6 @@ if (NHC) {
 $judging_date = judging_date_return();
 $total_not_paid = total_not_paid_brewer($_SESSION['user_id']);
 
-$show_judge_steward_fields = TRUE;
-$show_entires = TRUE;
-
-if ($_SESSION['prefsProEdition'] == 1) {
-	
-	if (isset($_SESSION['brewerBreweryName'])) {
-		$label_contact = $label_contact." ";
-		$label_organization = $label_organization." ";
-		
-		// If registered as a brewery, will not be a judge/stewards/staff and may have entries
-		// Only individuals can be judges, stewards, or staff; individuals will not have entries
-		$show_judge_steward_fields = FALSE;
-		$show_entires = TRUE;
-		
-	}
-	
-	else {
-		$label_contact = "";
-		$label_organization = "";
-		$show_entires = FALSE;
-	}
-	
-}
-
 // Call the brewer's info information
 include (SECTIONS.'brewer_info.sec.php');
 

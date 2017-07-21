@@ -19,9 +19,9 @@ To implement:
 session_start();
 require('paths.php');
 require(INCLUDES.'url_variables.inc.php');
-include(INCLUDES.'scrubber.inc.php');
+include (INCLUDES.'scrubber.inc.php');
 require(LANG.'language.lang.php');
-include(LIB.'date_time.lib.php');
+include (LIB.'date_time.lib.php');
 mysqli_select_db($connection,$database);
 
 $query_prefs = sprintf("SELECT prefsPayPalAccount FROM %s WHERE id='1'", $prefix."preferences");

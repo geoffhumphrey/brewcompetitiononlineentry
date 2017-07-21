@@ -1,4 +1,4 @@
-<?php include(DB.'brewer.db.php'); ?>
+<?php include (DB.'brewer.db.php'); ?>
 <script type="text/javascript">
         $(document).ready(function () {
             "use strict";

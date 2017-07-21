@@ -107,11 +107,10 @@ if (($registration_open == 2) && ($judge_window_open == 2) && (!$logged_in) || (
 
 else {
 
-	include(DB.'judging_locations.db.php');
-	include(DB.'stewarding.db.php'); 
-	include(DB.'styles.db.php'); 
-	include(DB.'brewer.db.php');
-	require_once(INCLUDES.'recaptchalib.inc.php');
+	include (DB.'judging_locations.db.php');
+	include (DB.'stewarding.db.php'); 
+	include (DB.'styles.db.php'); 
+	include (DB.'brewer.db.php');
 	if (NHC) $totalRows_log = $totalRows_entry_count;
 	else $totalRows_log = $totalRows_log;
 	if ($go != "default") {
@@ -126,7 +125,7 @@ else {
 	$random_country = array_rand($countries);
 	$random_country = $countries[$random_country];
 	
-	include(DB.'dropoff.db.php');
+	include (DB.'dropoff.db.php');
 	
 	if ($totalRows_dropoff > 0) {
 		$dropoff_select = "";

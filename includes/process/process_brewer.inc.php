@@ -27,7 +27,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 	else $brewerAHA = "";
 
 	if (isset($_POST['brewerClubs'])) {
-		include(INCLUDES.'constants.inc.php');
+		include (INCLUDES.'constants.inc.php');
 		$brewerClubs = strip_tags($_POST['brewerClubs']);
 		$brewerClubsConcat = $brewerClubs."|".$brewerClubs;
 		if (!in_array($brewerClubsConcat,$club_array))  {

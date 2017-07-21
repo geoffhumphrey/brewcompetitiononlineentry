@@ -39,9 +39,9 @@ Declare all variables empty at the top of the script. Add on later...
 
  * ---------------- END Rebuild Info --------------------- */
 
-include(DB.'dropoff.db.php');
-include(DB.'sponsors.db.php');
-include(DB.'contacts.db.php');
+include (DB.'dropoff.db.php');
+include (DB.'sponsors.db.php');
+include (DB.'contacts.db.php');
 
 $primary_page_info = "";
 $page_info = "";
@@ -151,7 +151,7 @@ if ((judging_date_return() == 0) && ($registration_open == 2) && ($entry_window_
 		
 		if ($_SESSION['prefsProEdition'] == 1) $label_brewer = $label_organization; else $label_brewer = $label_brewer;
 		
-		include(DB.'score_count.db.php');
+		include (DB.'score_count.db.php');
 		
 		if (judging_winner_display($delay)) {
 			
@@ -178,7 +178,7 @@ else {
 	echo $page_info;
 	
 	
-	if ((($registration_open == 2) && ($entry_window_open == 2)) || ($comp_entry_limit) || ($comp_paid_entry_limit)) include(SECTIONS.'reg_closed.sec.php');
+	if ((($registration_open == 2) && ($entry_window_open == 2)) || ($comp_entry_limit) || ($comp_paid_entry_limit)) include (SECTIONS.'reg_closed.sec.php');
 	else include('reg_open.sec.php');
 	
 	// Display Competition Official(s)
@@ -188,7 +188,7 @@ else {
 	if (($_SESSION['prefsSponsors'] == "Y") && ($totalRows_sponsors > 0)) {
 		echo $header1_30;
 		echo $page_info30;
-		include(SECTIONS.'sponsors.sec.php');
+		include (SECTIONS.'sponsors.sec.php');
 	}
 }
 

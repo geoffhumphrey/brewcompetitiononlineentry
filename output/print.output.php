@@ -68,12 +68,12 @@ $role_replace2 = array("<span class=\"fa fa-gavel\"></span> Head Judge","<span c
 		if ($section == "shipping-label")	include (OUTPUT.'shipping_label.output.php'); 
 		
 		if ($section == "admin") {
-			include(LIB.'admin.lib.php');
-			include(DB.'admin_common.db.php');
-			include(DB.'judging_locations.db.php'); 
-			include(DB.'stewarding.db.php'); 
-			include(DB.'dropoff.db.php'); 
-			include(DB.'contacts.db.php');
+			include (LIB.'admin.lib.php');
+			include (DB.'admin_common.db.php');
+			include (DB.'judging_locations.db.php'); 
+			include (DB.'stewarding.db.php'); 
+			include (DB.'dropoff.db.php'); 
+			include (DB.'contacts.db.php');
 			if ($go == "entries") 		include (ADMIN.'entries.admin.php'); 
 			if ($go == "participants") 	include (ADMIN.'participants.admin.php');
 		}

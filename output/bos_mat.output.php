@@ -28,7 +28,7 @@ foreach ($a as $type) {
 	
 	if ($style_type_info[0] == "Y") { 
 	
-		include(DB.'output_bos_mat.db.php');
+		include (DB.'output_bos_mat.db.php');
 		//$output .= $query_scores;
 		
 		$endRow = 0;

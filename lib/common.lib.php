@@ -134,7 +134,7 @@ function build_form_action($base_url,$section,$go,$action,$filter,$id,$dbTable,$
 
 function build_public_url($section="default",$go="default",$action="default",$id="default",$sef,$base_url) {
 	
-	include(CONFIG.'config.php');
+	include (CONFIG.'config.php');
 	if (NHC) {
 		$url = "index.php?section=".$section;
 		if ($go != "default") $url .= "&amp;go=".$go;
@@ -284,7 +284,7 @@ function random_generator($digits,$method){
 
 function relocate($referer,$page,$msg,$id,$keep_id="default") {
 	
-	include(CONFIG.'config.php');
+	include (CONFIG.'config.php');
 	
 	// Break URL into an array
 	$parts = parse_url($referer);
@@ -2695,13 +2695,13 @@ function entries_unconfirmed($user_id) {
 
 function check_special_ingredients($style,$style_version) {
 	
-	include(CONFIG.'config.php');
+	include (CONFIG.'config.php');
 	mysqli_select_db($connection,$database);
 	$style_explodies = explode("-",$style);
 	
 	if (($style_explodies[0] < 34) && (strpos($style_version,"BABDB") !== false)) {
 		
-		include(INCLUDES.'ba_constants.inc.php');
+		include (INCLUDES.'ba_constants.inc.php');
 		
 		if (in_array($style,$ba_special)) return TRUE;
 		else return FALSE;
@@ -3143,7 +3143,7 @@ function judge_entries($uid,$method) {
 }
 
 function judging_winner_display($delay) {
-			include(CONFIG.'config.php');
+			include (CONFIG.'config.php');
 			mysqli_select_db($connection,$database);
 			$query_check = sprintf("SELECT judgingDate FROM %s ORDER BY judgingDate DESC LIMIT 1", $prefix."judging_locations");
 			$check = mysqli_query($connection,$query_check) or die (mysqli_error($connection));
@@ -3214,7 +3214,7 @@ function check_judging_flights() {
 	// If so, return TRUE
 	// If not, return FALSE
 	
-	include(CONFIG.'config.php');
+	include (CONFIG.'config.php');
 	mysqli_select_db($connection,$database);
 	
 	$query_check_tables = sprintf("SELECT COUNT(*) AS 'count' FROM %s", $prefix."judging_tables");
@@ -3235,7 +3235,7 @@ function check_judging_flights() {
 }
 
 function get_archive_count($table) {
-	include(CONFIG.'config.php'); 	
+	include (CONFIG.'config.php'); 	
 	mysqli_select_db($connection,$database);
 	$query_archive_count = "SELECT COUNT(*) as 'count' FROM `$table`";
 	$archive_count = mysqli_query($connection,$query_archive_count) or die (mysqli_error($connection));
@@ -3632,7 +3632,7 @@ function convert_to_ba() {
 	require(CONFIG.'config.php');
 	mysqli_select_db($connection,$database);
 	
-	include(INCLUDES.'ba_constants.inc.php');
+	include (INCLUDES.'ba_constants.inc.php');
 	
 	$query_check = sprintf("SELECT id, brewCategory, brewCategorySort, brewSubCategory, brewStyle, brewMead1, brewMead2, brewMead3, brewInfo FROM %s", $prefix."brewing");
 	$check = mysqli_query($connection,$query_check) or die (mysqli_error($connection));
@@ -3719,7 +3719,7 @@ function convert_to_pro() {
 	require(CONFIG.'config.php');
 	mysqli_select_db($connection,$database);
 	
-	include(INCLUDES.'ba_constants.inc.php');
+	include (INCLUDES.'ba_constants.inc.php');
 	
 	$query_check = sprintf("SELECT id FROM %s", $prefix."brewer");
 	$check = mysqli_query($connection,$query_check) or die (mysqli_error($connection));
@@ -3754,7 +3754,7 @@ function remove_sensitive_data() {
 	
 	require(CONFIG.'config.php');
 	mysqli_select_db($connection,$database);
-    include(INCLUDES.'constants.inc.php');
+    include (INCLUDES.'constants.inc.php');
 	
 	$result = "";
 	

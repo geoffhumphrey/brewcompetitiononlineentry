@@ -3,8 +3,8 @@ require('../paths.php');
 session_name($prefix_session);
 require(CONFIG.'bootstrap.php');
 require(LIB.'output.lib.php');
-include(CLASSES.'tiny_but_strong/tbs_class.php');
-include(DB.'output_entry.db.php');
+include (CLASSES.'tiny_but_strong/tbs_class.php');
+include (DB.'output_entry.db.php');
 
 $entry_closed = getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_contest_dates['contestEntryDeadline'], $_SESSION['prefsDateFormat'],$_SESSION['prefsTimeFormat'], "long", "date-no-gmt");
 $contest_name = $contest_info['contestName'];

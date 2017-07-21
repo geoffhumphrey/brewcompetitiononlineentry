@@ -247,19 +247,21 @@ function bcoem_help($section,$go,$action,$filter) {
 	// My account
 	if ($section == "list") { 
 		$bcoem_help_title .= "My Account Help";
-		$bcoem_help_body .= "<p>This is a comprehensive snapshot of your personal information and entries.</p>";
+		$bcoem_help_body .= "<p>This is a comprehensive snapshot of your account information.</p>";
 		$bcoem_help_body .= "<p>Here, you can view your personal information including name, address, phone number(s), clubs, AHA member number, BJCP ID, BJCP judge rank, judging preferences, and stewarding preferences.</p>";
 		$bcoem_help_body .= "<ul>";
 		$bcoem_help_body .= "<li>Click the &ldquo;Edit Account&rdquo; button to update your personal information.</li>";
 		$bcoem_help_body .= "<li>Click the &ldquo;Change Email&rdquo; button to update your email address. <strong>Note:</strong> your email address is also your user name.</li>";
 		$bcoem_help_body .= "<li>Click the &ldquo;Change Password&rdquo; button to update your account password.</li>";
 		$bcoem_help_body .= "</ul>";
-		$bcoem_help_body .= "<p>At the bottom of the page is your list of entries.</p>";
-		$bcoem_help_body .= "<ul>";
-		$bcoem_help_body .= "<li>Click the printer icon <span class=\"fa fa-print\"></span> to print the necessary documentation for each entry (bottle labels, etc.).</li>";
-		$bcoem_help_body .= "<li>Click the pencil icon <span class=\"fa fa-pencil\"></span> to edit the entry.</li>";
-		$bcoem_help_body .= "<li>Click the trash can icon <span class=\"fa fa-trash-o\"></span> to delete the entry.</li>";
-		$bcoem_help_body .= "</ul>";
+		if ($show_entires) {
+			$bcoem_help_body .= "<p>At the bottom of the page is your list of entries.</p>";
+			$bcoem_help_body .= "<ul>";
+			$bcoem_help_body .= "<li>Click the printer icon <span class=\"fa fa-print\"></span> to print the necessary documentation for each entry (bottle labels, etc.).</li>";
+			$bcoem_help_body .= "<li>Click the pencil icon <span class=\"fa fa-pencil\"></span> to edit the entry.</li>";
+			$bcoem_help_body .= "<li>Click the trash can icon <span class=\"fa fa-trash-o\"></span> to delete the entry.</li>";
+			$bcoem_help_body .= "</ul>";
+		}
 		$content = TRUE;
 	}
 	

@@ -48,7 +48,7 @@ $row_judging3 = mysqli_fetch_assoc($judging3);
 $totalRows_judging3 = mysqli_num_rows($judging3);
 
 // Make DB Connections
-//if ($section != "step5") include(DB.'judging_locations.db.php');
+//if ($section != "step5") include (DB.'judging_locations.db.php');
 
 if ((($action == "default") || ($action == "assign")) && ($section != "step5")) {
 	
