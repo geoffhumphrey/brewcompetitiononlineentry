@@ -34,8 +34,6 @@ $totalRows_prefs = mysqli_num_rows($prefs);
 
 $header_output = $row_contest_info['contestName'];
 
-ini_set('display_errors','On');
-
 $base_url = "http://".$_SERVER['SERVER_NAME'].$sub_directory."/";
 $theme = $base_url."css/".$row_prefs['prefsTheme'].".min.css";
 
@@ -304,7 +302,6 @@ if ($msg == "5") {
 <div class="container">
    	<?php if (DEBUG_SESSION_VARS) include (DEBUGGING.'session_vars.debug.php');	?>
     <div class="container-signin">
-    
     <?php if ($msg != "default") { ?>
     <!-- Alerts -->
     <div class="alert <?php echo $alert_type; ?> alert-dismissible hidden-print fade in" role="alert">
@@ -312,7 +309,6 @@ if ($msg == "5") {
         <?php echo $message; ?>
     </div>
     <?php } ?>
-    
     <div class="page-header clearfix">
     	<?php if (isset($_SESSION['qrPasswordOK'])) { ?>
         <h3><?php echo $header_output.": ".$qr_text_007; ?></h3>
@@ -321,12 +317,10 @@ if ($msg == "5") {
         <?php } ?>
     </div> 
     <?php if (!isset($_SESSION['qrPasswordOK'])) { ?>
-    
-        <div align="center" class="text-primary"><span class="fa fa-qrcode fa-5x"></span></div>
-    	<p class="lead"><small><?php echo sprintf("<strong class=\"text-danger\">%s</strong> %s",$qr_text_017,$qr_text_018); ?></small></p>
-        <p class="lead"><small><?php echo sprintf("%s",$qr_text_016); ?></small></p>
-        <p class="lead container-signin-heading"><small><?php echo $qr_text_008; ?></small></p>
-        
+	<div align="center" class="text-primary"><span class="fa fa-qrcode fa-5x"></span></div>
+	<p class="lead"><small><?php echo sprintf("<strong class=\"text-danger\">%s</strong> %s",$qr_text_017,$qr_text_018); ?></small></p>
+	<p class="lead"><small><?php echo sprintf("%s",$qr_text_016); ?></small></p>
+	<p class="lead container-signin-heading"><small><?php echo $qr_text_008; ?></small></p> 
     <!-- Password Form if Not Signed In -->
 	<form data-toggle="validator" name="form1" action="<?php echo $base_url; ?>qr.php?action=password-check<?php if ($id != "default") echo "&amp;id=".$id; ?>" method="post">
         <div class="form-group">
@@ -337,7 +331,6 @@ if ($msg == "5") {
         <button class="btn btn-lg btn-primary btn-block" type="submit"><?php echo $label_log_in; ?></button>
    	</form>
     <?php } ?>
-    
     <?php if (isset($_SESSION['qrPasswordOK'])) { ?>    
 	<?php if (($id == "default") && ($action == "default")) { ?>
     <p class="lead text-primary"><span class="fa fa-spinner fa-spin"></span> <strong><?php echo $qr_text_014; ?></strong></p>
@@ -364,10 +357,8 @@ if ($msg == "5") {
         <button class="btn btn-lg btn-primary btn-block" type="submit"><?php echo $label_check_in; ?></button>
    	</form>	    
     <?php } ?>
-    
     <?php } ?>
     </div><!-- /container-signin -->
-    
 </div> <!-- /container -->
 </body>
 </html>

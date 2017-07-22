@@ -62,3 +62,9 @@
     
     <!-- Load Font Awesome / https://fortawesome.github.io/Font-Awesome -->
     <link rel="stylesheet" href="<?php echo $base_url; ?>libraries/font-awesome/css/font-awesome.min.css">
+    
+	<?php if (($section == "register") || (($section == "login") && ($go == "password") && ($action == "reset-password")) || (($section == "user") && ($go == "account") && ($action == "password")) || (($section == "admin") && ($go == "change_user_password") && ($action == "edit")) || (($section == "admin") && ($action == "register"))) { ?>
+	<!-- Load jQuery Password Strength Meter for Twitter Bootstrap / https://github.com/ablanco/jquery.pwstrength.bootstrap -->
+	<script type="text/javascript" src="<?php echo $base_url; ?>libraries/zxcvbn/dist/zxcvbn.js"></script>
+	<script type="text/javascript" src="<?php echo $base_url; ?>libraries/pwstrength-bootstrap/dist/pwstrength-bootstrap.min.js"></script>
+	<?php } ?>
