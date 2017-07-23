@@ -80,7 +80,7 @@ if (check_setup($prefix."system",$database)) {
 
 		else {
 
-			$updateSQL = sprintf("UPDATE %s SET version='%s', version_date='%s' WHERE id='1'",$prefix."system",$current_version,"2016-09-10");
+			$updateSQL = sprintf("UPDATE %s SET version='%s', version_date='%s', setup='1' WHERE id='1'",$prefix."system",$current_version,"2017-07-22");
 			mysqli_select_db($connection,$database);
 			mysqli_real_escape_string($connection,$updateSQL);
 			$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
