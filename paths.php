@@ -33,7 +33,7 @@ define('DEBUGGING',ROOT.'includes'.DIRECTORY_SEPARATOR.'debug'.DIRECTORY_SEPARAT
 // --------------------------------------------------------
 // Global Definitions
 // --------------------------------------------------------
-define('HOSTED', FALSE); // default FALSE
+define('HOSTED', TRUE); // default FALSE
 define('MAINT', FALSE); // default FALSE
 define('NHC', FALSE); // default FALSE
 define('TESTING', FALSE); // default FALSE
@@ -99,6 +99,18 @@ if (isset($_SESSION['last_action'])) {
 }
 
 $_SESSION['last_action'] = time();
+
+// ---------------------------- reCAPTCHA Keys ----------------------------
+
+if (HOSTED) {
+	$publickey = "6LdUsBATAAAAAEJYbnqmygjGK-S6CHCoGcLALg5W";
+	$privatekey = "6LdUsBATAAAAAMPhk5yRSmY5BMXlBgcTjiLjiyPb";	
+}
+
+else {
+	$publickey = "6LfHUCoUAAAAACHsPn8hpzbtzcpXatm-GXTTWuR3";
+	$privatekey = "6LfHUCoUAAAAACNL-wzpAG3eIWQC-PpX6X3a0iaM";
+}
 
 // Uncomment to display paths
 /*

@@ -11,10 +11,6 @@
 
 */
 
-// ---------------------------- reCAPTCHA Public Key ----------------------------
-
-$publickey = "6LdUsBATAAAAAEJYbnqmygjGK-S6CHCoGcLALg5W";
-
 // ---------------------------- Base URL ----------------------------
 
 if (NHC) $base_url = ""; 

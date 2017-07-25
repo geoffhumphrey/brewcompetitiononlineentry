@@ -124,8 +124,8 @@ $security_question = array($label_secret_01,$label_secret_05,$label_secret_06,$l
 
 </head>
 <body>
-
-    <!-- MAIN NAV -->
+	
+	<!-- MAIN NAV -->
 	<div class="<?php echo $container_main; ?> hidden-print">
 		<?php include (SECTIONS.'nav.sec.php'); ?>
 	</div><!-- container -->

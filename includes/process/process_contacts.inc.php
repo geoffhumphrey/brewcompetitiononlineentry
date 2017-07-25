@@ -12,12 +12,10 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 		
 		if ((isset($_POST['g-recaptcha-response'])) && (!empty($_POST['g-recaptcha-response']))) {
 			
-			$privatekey = "6LdUsBATAAAAAMPhk5yRSmY5BMXlBgcTjiLjiyPb";
-			
 			$verify_response = file_get_contents('https://www.google.com/recaptcha/api/siteverify?secret='.$privatekey.'&response='.$_POST['g-recaptcha-response']);
 			$response_data = json_decode($verify_response);
 			
-			if (($_SERVER['SERVER_NAME'] = $response_data->hostname) && ($response_data->success)) $captcha_success = TRUE;
+			if (($_SERVER['SERVER_NAME'] == $response_data->hostname) && ($response_data->success)) $captcha_success = TRUE;
 			
 		}
 		

@@ -171,7 +171,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 		if (strpos($_SESSION['prefsStyleSet'],"BABDB") === false) {
 			
 			// check if style requires strength, carbonation, and/or sweetness
-			$query_str_carb_sweet = sprintf("SELECT * FROM %s WHERE brewStyleGroup='%s' AND brewStyleNum='%s'", $styles_db_table,$index,$style[1]);
+			$query_str_carb_sweet = sprintf("SELECT * FROM %s WHERE brewStyleGroup='%s' AND brewStyleNum='%s'", $styles_db_table,$style[0],$style[1]);
 			$str_carb_sweet = mysqli_query($connection,$query_str_carb_sweet) or die (mysqli_error($connection));
 			$row_str_carb_sweet = mysqli_fetch_assoc($str_carb_sweet);
 			$totalRows_str_carb_sweet = mysqli_num_rows($str_carb_sweet);

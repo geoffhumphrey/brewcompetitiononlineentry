@@ -520,7 +520,7 @@ switch($section) {
 			break;
 
 			case "judging_scores_bos":
-			$header_output .= ": ".$label_admin_web_prefs;
+			$header_output .= ": ".$label_admin_bos;
 			break;
 
 			case "style_types":
@@ -532,7 +532,7 @@ switch($section) {
 			break;
 
 			case "special_best_data":
-			$header_output .= ": ".$label_admin_custom_cat_date;
+			$header_output .= ": ".$label_admin_custom_cat_data;
 			break;
 
 			case "sponsors":

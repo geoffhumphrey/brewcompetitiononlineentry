@@ -12,8 +12,8 @@ require (CONFIG.'bootstrap.php');
 require (LANG.'language.lang.php');
 
 if (isset($_SESSION['loginUsername'])) {
-
-	if (($brewer_info['brewerEmail'] != $_SESSION['loginUsername']) && ($_SESSION['userLevel'] > 1)) { 
+	
+	if (($_SESSION['brewerEmail'] != $_SESSION['loginUsername']) && ($_SESSION['userLevel'] > 1)) { 
 	  	echo sprintf("<html><head><title>%s</title></head><body>",$label_error);
   		echo sprintf("<p>%s</p>",$header_text_104);
 	  	echo "</body></html>";
