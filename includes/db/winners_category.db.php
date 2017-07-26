@@ -1,5 +1,6 @@
 <?php
-$style_pad = sprintf("%02d", $style);
+if ((isset($style)) && (is_numeric($style))) $style_pad = sprintf("%02d", $style);
+else $style_pad = $style;
 if (strpos($_SESSION['prefsStyleSet'],"BABDB") === false) $query_entry_count = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE brewCategorySort='%s' AND brewReceived='1'", $brewing_db_table,  $style_pad);
 else $query_entry_count = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE brewCategory='%s' AND brewReceived='1'", $brewing_db_table,  $style);
 $entry_count = mysqli_query($connection,$query_entry_count) or die (mysqli_error($connection));

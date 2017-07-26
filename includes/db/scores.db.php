@@ -1,5 +1,6 @@
 <?php
-if (isset($style)) $style_pad = sprintf("%02d", $style);
+if ((isset($style)) && (is_numeric($style))) $style_pad = sprintf("%02d", $style);
+else $style_pad = $style;
 // Display by Table
 if ($_SESSION['prefsWinnerMethod'] == 0) $query_scores = sprintf("SELECT a.scorePlace, a.scoreEntry, b.brewName, b.brewCategory, b.brewCategorySort, b.brewSubCategory, b.brewStyle, b.brewCoBrewer, c.brewerLastName, c.brewerFirstName, c.brewerBreweryName, c.brewerClubs FROM %s a, %s b, %s c WHERE scoreTable='%s' AND a.eid = b.id AND c.uid = b.brewBrewerID", $judging_scores_db_table, $brewing_db_table, $brewer_db_table,  $row_tables['id']);
 

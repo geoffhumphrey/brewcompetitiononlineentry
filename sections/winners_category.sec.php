@@ -51,20 +51,23 @@ if ($row_scored_entries['count'] > 0) {
 
 	$a = styles_active(0);
 	
+	
+	
 	// print_r($a);
 	foreach (array_unique($a) as $style) {
 	
-		if ($style > 0) {
+		if (!empty($style)) {
 			
 			include (DB.'winners_category.db.php');
 			
 			//echo $style."<br>";
+			//echo $query_entry_count."<br>";
 			//echo $row_entry_count['count']."<br>";
 			//echo $row_score_count['count']."<br><br>";
 			
 			// Display all winners 
 			if ($row_entry_count['count'] > 1) $entries = strtolower($label_entries); else $entries = strtolower($label_entry);
-			if ($row_score_count['count'] > 0)   {
+			if ($row_score_count['count'] > 0) {
 				
 				$primary_page_info = "";
 				$header1_1 = "";

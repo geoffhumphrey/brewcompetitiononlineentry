@@ -25,7 +25,7 @@ function version_check($version,$current_version) {
 	if ($version != $current_version) {
 				
 		// Fix typo in styles
-		$updateSQL = sprintf("UPDATE %s SET version='%s', version_date='%s' WHERE id=%s",$prefix."system","2.1.10.0","2017-07-15","1");
+		$updateSQL = sprintf("UPDATE %s SET version='%s', version_date='%s' WHERE id=%s", $prefix."system", "2.1.10.0", $current_version_date_display, "1");
 		mysqli_real_escape_string($connection,$updateSQL);
 		$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 		
