@@ -87,7 +87,7 @@ if (($registration_open == 1) && (!isset($_SESSION['brewerBreweryName'])) && (is
 if ($registration_open != 1) $page_info1 .= sprintf("<p>%s %s.</p>",$reg_open_text_009,$judge_open);
 
 
-if (($entry_window_open == 1) && ($show_entires)) {
+if (($entry_window_open == 1) && ($show_entries)) {
 	$header1_2 .= sprintf("<h2>%s <span class='text-success'>%s</a></h2>",$reg_open_text_010,$reg_open_text_001); 
 	
 	if ($_SESSION['prefsProEdition'] == 0)  {

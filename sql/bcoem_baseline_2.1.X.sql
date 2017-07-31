@@ -885,7 +885,7 @@ CREATE TABLE IF NOT EXISTS `baseline_styles` (
   `brewStyleSRM` varchar(250) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `brewStyleSRMMax` varchar(25) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `brewStyleType` varchar(25) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewStyleInfo` mediumtext COLLATE utf8mb4_unicode_ci,
+  `brewStyleInfo` text COLLATE utf8mb4_unicode_ci,
   `brewStyleLink` varchar(200) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `brewStyleGroup` varchar(3) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `brewStyleActive` char(1) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
@@ -896,9 +896,9 @@ CREATE TABLE IF NOT EXISTS `baseline_styles` (
   `brewStyleCarb` int(1) DEFAULT NULL COMMENT 'Requires carbonation? 0=No, 1=Yes',
   `brewStyleSweet` int(1) DEFAULT NULL COMMENT 'Requires sweetness? 0=No, 1=Yes',
   `brewStyleTags` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewStyleComEx` mediumtext COLLATE utf8mb4_unicode_ci,
-  `brewStyleEntry` mediumtext COLLATE utf8mb4_unicode_ci
-) ENGINE=MyISAM AUTO_INCREMENT=296 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+  `brewStyleComEx` text COLLATE utf8mb4_unicode_ci,
+  `brewStyleEntry` text COLLATE utf8mb4_unicode_ci
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `baseline_styles`

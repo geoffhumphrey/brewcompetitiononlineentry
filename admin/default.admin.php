@@ -1141,7 +1141,7 @@
                             </div>
                             <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-8">
                                 <ul class="list-inline">
-                                    <li><a href="<?php echo $base_url; ?>includes/data_cleanup.inc.php?action=cleanup" data-toggle="tooltip" data-placement="top" title="Check and clear the database of duplicate entries, etc." data-confirm="Are you sure? This will check the database for duplicate entries, duplicate scores for a single entry, users without associated personal data [no first name, no last name], etc.">Clean-Up Data</a></li>
+                                    <li><a href="<?php echo $base_url; ?>includes/process.inc.php?action=cleanup" data-toggle="tooltip" data-placement="top" title="Check and clear the database of duplicate entries, etc." data-confirm="Are you sure? This will check the database for duplicate entries, duplicate scores for a single entry, users without associated personal data [no first name, no last name], etc.">Clean-Up Data</a></li>
                                 </ul>
                             </div>
                         </div><!-- ./row -->
@@ -1152,7 +1152,7 @@
                             <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-8">
                                 <ul class="list-inline">
                                     <li><a href="<?php echo $base_url; ?>includes/process.inc.php?action=confirmed&amp;dbTable=<?php echo $brewing_db_table; ?>" data-toggle="tooltip" data-placement="top" title="Mark ALL unconfirmed entries as confirmed even if entries are incomplete" data-confirm="Are you sure? This will mark ALL entries as confirmed even if the entry is incomplete. It could be a large pain to undo.">Confirm All Unconfirmed</a></li>
-                                    <li><a href="<?php echo $base_url; ?>includes/data_cleanup.inc.php?action=purge&amp;go=unconfirmed" data-toggle="tooltip" data-placement="top" title="Delete all unconfirmed entries" data-confirm="Are you sure? This will delete ALL unconfirmed entries and/or entries without special ingredients/classic style info that require them from the database - even those that are less than 24 hours old. This cannot be undone.">Purge All Unconfirmed</a></li>
+                                    <li><a href="<?php echo $base_url; ?>includes/process.inc.php?action=purge&amp;go=unconfirmed" data-toggle="tooltip" data-placement="top" title="Delete all unconfirmed entries" data-confirm="Are you sure? This will delete ALL unconfirmed entries and/or entries without special ingredients/classic style info that require them from the database - even those that are less than 24 hours old. This cannot be undone.">Purge All Unconfirmed</a></li>
                                 </ul>
                             </div>
                         </div>
@@ -1162,21 +1162,134 @@
                         </div>
                             <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-8">
                                 <ul class="list-inline">
-                                    <li><a href="<?php echo $base_url; ?>includes/data_cleanup.inc.php?action=purge&amp;go=entries" data-confirm="Are you sure you want to delete all entries and associated data including scores and bos scores? This cannot be undone.">Entries</a></li>
+                                    <li><a href="#" data-toggle="modal" data-target="#purgeEntries">Entries</a></li>
                                     <?php if (check_setup($prefix."payments",$database)) { ?>
-                                    <li><a href="<?php echo $base_url; ?>includes/data_cleanup.inc.php?action=purge&amp;go=payments" data-confirm="Are you sure you want to delete all payment records? This cannot be undone.">Payments</a></li>
+                                    <li><a href="#" data-toggle="modal" data-target="#purgePayments">Payments</a></li>
                                     <?php } ?>
-                                    <li><a href="<?php echo $base_url; ?>includes/data_cleanup.inc.php?action=purge&amp;go=participants" data-confirm="Are you sure you want to delete all non-admin participants and associated data? This cannot be undone.">Participants</a></li>
-                                    <li><a href="<?php echo $base_url; ?>includes/data_cleanup.inc.php?action=purge&amp;go=tables" data-confirm="Are you sure you want to delete all judging tables and associated data including judging/stewarding table assignments? This cannot be undone.">Judging Tables</a></li>
-                                    <li><a href="<?php echo $base_url; ?>includes/data_cleanup.inc.php?action=purge&amp;go=scores" data-confirm="Are you sure you want to delete all scoring data from the database including best of show? This cannot be undone.">Scores</a></li>
-                                    <li><a href="<?php echo $base_url; ?>includes/data_cleanup.inc.php?action=purge&amp;go=custom" data-confirm="Are you sure you want to delete all custom categories and associated data? This cannot be undone.">Custom Categories</a></li>
-                                    <li><a href="<?php echo $base_url; ?>includes/data_cleanup.inc.php?action=purge&amp;go=availability" data-confirm="Are you sure you want to reset all entrant availability? All current judge, steward, and staff assignments will be cleared, judge/steward availability will be set to &ldquo;No,&rdquo; location preferences will be set to to &ldquo;No,&rdquo; and entrant staff interest will be set to &ldquo;No&rdquo; for all entrants. This is useful for sites that are carrying over user data to another competition instance, however, it is critical that all entrants be notified to update their judge, steward, and staff availability. This cannot be undone.">Entrant Availability</a></li>
+                                    <li><a href="#" data-toggle="modal" data-target="#purgeParticipants">Participants</a></li>
+                                    <li><a href="<?php echo $base_url; ?>includes/process.inc.php?action=purge&amp;go=tables" data-confirm="Are you sure you want to delete all judging tables and associated data including judging/stewarding table assignments? This cannot be undone.">Judging Tables</a></li>
+                                    <li><a href="<?php echo $base_url; ?>includes/process.inc.php?action=purge&amp;go=scores" data-confirm="Are you sure you want to delete all scoring data from the database including best of show? This cannot be undone.">Scores</a></li>
+                                    <li><a href="<?php echo $base_url; ?>includes/process.inc.php?action=purge&amp;go=custom" data-confirm="Are you sure you want to delete all custom categories and associated data? This cannot be undone.">Custom Categories</a></li>
+                                    <li><a href="<?php echo $base_url; ?>includes/process.inc.php?action=purge&amp;go=availability" data-confirm="Are you sure you want to reset all entrant availability? All current judge, steward, and staff assignments will be cleared, judge/steward availability will be set to &ldquo;No,&rdquo; location preferences will be set to to &ldquo;No,&rdquo; and entrant staff interest will be set to &ldquo;No&rdquo; for all entrants. This is useful for sites that are carrying over user data to another competition instance, however, it is critical that all entrants be notified to update their judge, steward, and staff availability. This cannot be undone.">Entrant Availability</a></li>
                                 </ul>
                                 <ul class="list-inline">
-                                    <li><a href="<?php echo $base_url; ?>includes/data_cleanup.inc.php?action=purge&amp;go=purge-all" data-confirm="Are you sure you want to delete entry, participant, judging table, score, and custom category data? This cannot be undone.">All of the Above</a> <span class="fa fa-hand-o-up small"></span></li>
+                                    <li><a href="<?php echo $base_url; ?>includes/process.inc.php?action=purge&amp;go=purge-all" data-confirm="Are you sure you want to delete entry, participant, judging table, score, and custom category data? This cannot be undone.">All of the Above</a> <span class="fa fa-hand-o-up small"></span></li>
                                 </ul>
                             </div>
                         </div><!-- ./row -->
+                        
+                        
+                        <!-- Purge Modals -->
+                        <script>
+							$(function () {
+
+								$('#dateThresholdParticipants').datetimepicker({
+									format: 'YYYY-MM-DD'
+								});
+								
+								$('#dateThresholdPayments').datetimepicker({
+									format: 'YYYY-MM-DD'
+								});
+								
+								$('#dateThresholdEntries').datetimepicker({
+									format: 'YYYY-MM-DD'
+								});
+
+							});
+						</script>
+                        <div class="modal fade" id="purgeParticipants" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                        	<form class="form-horizontal" action="<?php echo $base_url; ?>includes/process.inc.php?action=purge&amp;go=participants" method="POST" name="form1" id="form1">
+							<div class="modal-dialog" role="document">
+							<div class="modal-content">
+								<div class="modal-header">
+									<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+									<h4 class="modal-title" id="myModalLabel">Please Confirm</h4>
+								</div>
+								<div class="modal-body">
+									<p>Are you sure you want to delete non-admin participants and associated data (including each user's entries, as well as their judge, steward, and staff assignments)? This cannot be undone.
+									<p>Optionally, choose a date threshold. User accounts and associated data will not be purged if they were <strong><em>updated</em> on or after</strong> the date you choose.</p>
+									<p>Leave the field blank to purge all non-admin participants.</p>
+									<div class="input-group">
+										<input class="form-control" id="dateThresholdParticipants" name="dateThreshold" type="text" value="" placeholder="">
+									</div>
+								</div>
+								<div class="modal-footer">
+									<button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+									<input type="submit" class="btn btn-success" value="Yes">
+								</div>
+								</div>
+							</div>
+							</form>
+						</div>
+                       
+                       <div class="modal fade" id="purgePayments" tabindex="-1" role="dialog" aria-labelledby="purgePaymentsLabel">
+                        	<form class="form-horizontal" action="<?php echo $base_url; ?>includes/process.inc.php?action=purge&amp;go=payments" method="POST" name="form1" id="form1">
+							<div class="modal-dialog" role="document">
+							<div class="modal-content">
+								<div class="modal-header">
+									<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+									<h4 class="modal-title" id="purgePaymentsLabel">Please Confirm</h4>
+								</div>
+								<div class="modal-body">
+									<p>Are you sure you want to delete payments and associated data? This cannot be undone.
+									<p>Optionally, choose a date threshold. Payments and associated data will not be purged if they were <strong><em>updated</em> on or after</strong> the date you choose.</p>
+									<p>Leave the field blank to purge all payment data.</p>
+									<div class="input-group">
+										<input class="form-control" id="dateThresholdPayments" name="dateThreshold" type="text" value="" placeholder="">
+									</div>
+								</div>
+								<div class="modal-footer">
+									<button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+									<input type="submit" class="btn btn-success" value="Yes">
+								</div>
+								</div>
+							</div>
+							</form>
+						</div>
+                       
+                       <div class="modal fade" id="purgeEntries" tabindex="-1" role="dialog" aria-labelledby="purgeEntriesLabel">
+                        	<form class="form-horizontal" action="<?php echo $base_url; ?>includes/process.inc.php?action=purge&amp;go=entries" method="POST" name="form1" id="form1">
+							<div class="modal-dialog" role="document">
+							<div class="modal-content">
+								<div class="modal-header">
+									<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+									<h4 class="modal-title" id="purgeEntriesLabel">Please Confirm</h4>
+								</div>
+								<div class="modal-body">
+									<p>Are you sure you want to delete entries and associated data including scores and bos scores? This cannot be undone.
+									<p>Optionally, choose a date threshold. Entries and associated data will not be purged if they were <strong><em>updated</em> on or after</strong> the date you choose.</p>
+									<p>Leave the field blank to purge all entries.</p>
+									<div class="input-group">
+										<input class="form-control" id="dateThresholdEntries" name="dateThreshold" type="text" value="" placeholder="">
+									</div>
+								</div>
+								<div class="modal-footer">
+									<button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+									<input type="submit" class="btn btn-success" value="Yes">
+								</div>
+								</div>
+							</div>
+							</form>
+						</div>
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
                         <?php if ($_SESSION['userLevel'] == "0") { ?>
                         <div class="row">
                             <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-4">

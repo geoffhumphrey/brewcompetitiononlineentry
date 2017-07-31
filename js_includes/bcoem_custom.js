@@ -333,4 +333,8 @@ $(function () {
 		format: 'YYYY-MM-DD'
 	});
 	
+	$('#dateThresholdParticipants').datetimepicker({
+		format: 'YYYY-MM-DD hh:mm A'
+	});
+	
 });

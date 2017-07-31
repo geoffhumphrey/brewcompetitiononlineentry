@@ -23,6 +23,8 @@ require(DB.'common.db.php');
 include (LIB.'common.lib.php');
 include (LANG.'language.lang.php');
 
+session_start();
+
 if (NHC) $base_url = "../";
 else $base_url = $base_url;
 
@@ -69,8 +71,6 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 	// echo $referrer['host']."<br>".$_SERVER['SERVER_NAME']; exit;
 }
 
-
-
 if (((isset($_SERVER['HTTP_REFERER'])) && ($referrer['host'] == $_SERVER['SERVER_NAME'])) && ((isset($_SESSION['prefs'.$prefix_session])) || ($setup_free_access))) {
 
 	require(LIB.'process.lib.php');
@@ -112,6 +112,7 @@ if (((isset($_SERVER['HTTP_REFERER'])) && ($referrer['host'] == $_SERVER['SERVER
 		$updateGoTo = "../";
 		$massUpdateGoTo = "../";
 	}
+	
 	else {
 		$insertGoTo = "";
 		$updateGoTo = "";
@@ -179,8 +180,9 @@ if (((isset($_SERVER['HTTP_REFERER'])) && ($referrer['host'] == $_SERVER['SERVER
 		}
 	}
 
-	elseif ($action == "purge") {
-
+	elseif (($action == "purge") || ($action == "cleanup")) {
+		
+		include(INCLUDES.'data_cleanup.inc.php');
 
 	}
 

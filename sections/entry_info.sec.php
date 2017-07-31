@@ -95,7 +95,7 @@ if (!$logged_in) {
 }
 else $page_info2 .= sprintf("<p class=\"lead\">%s %s! <small><a href=\"%s\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"%s\">%s</a></small></p>",$entry_info_text_010,$_SESSION['brewerFirstName'],build_public_url("list","default","default","default",$sef,$base_url),$entry_info_text_011,$entry_info_text_012);
 
-if ($show_entires) {
+if ($show_entries) {
 	// Entry Window
 	$header1_3 .= sprintf("<a name=\"entry_window\"></a><h2>%s</h2>",$label_entry_registration);
 	if ($entry_window_open == 0) $page_info3 .= sprintf("<p>%s <strong class=\"text-success\">%s</strong> %s <strong class=\"text-success\">%s</strong>.</p>",$entry_info_text_014,$entry_open,$entry_info_text_001,$entry_closed);
@@ -374,7 +374,7 @@ if ($styles_endRow != 0) {
 
 $page_info8 .= "</table>";
 
-if ($show_entires) {
+if ($show_entries) {
 	
 	// Show bottle acceptance, shipping location, and dropoff locations if open
 	// Bottle Acceptance
@@ -447,7 +447,7 @@ if (isset($_SESSION['contestAwardsLocName'])) {
 	
 }
 
-if ($show_entires) {
+if ($show_entries) {
 	// Circuit Qualification
 	if (isset($row_contest_info['contestCircuit'])) {
 		$header1_15 .= sprintf("<a name=\"circuit\"></a><h2>%s</h2>",$label_circuit);

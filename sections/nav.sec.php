@@ -97,7 +97,7 @@ if (!empty($row_contest_dates['contestCheckInPassword'])) {
 // Session specific
 
 $show_judge_steward_fields = TRUE;
-$show_entires = TRUE;
+$show_entries = TRUE;
 
 if ($logged_in)  {
 
@@ -110,15 +110,15 @@ if ($logged_in)  {
 			// If registered as a brewery, will not be a judge/stewards/staff and may have entries
 			// Only individuals can be judges, stewards, or staff; individuals will not have entries
 			$show_judge_steward_fields = FALSE;
-			$show_entires = TRUE;
-			$add_entry_link_show = FALSE;
+			$show_entries = TRUE;
+			$add_entry_link_show = TRUE;
 
 		}
 
 		else {
 			$label_contact = "";
 			$label_organization = "";
-			$show_entires = FALSE;
+			$show_entries = FALSE;
 		}
 
 	}
@@ -383,14 +383,14 @@ $(document).ready(function(){
                     <li><a href="<?php echo $edit_user_info_link; ?>" tabindex="-1"><?php echo $label_edit_account; ?></a></li>
                     <li><a href="<?php echo $edit_user_email_link; ?>" tabindex="-1"><?php echo $label_change_email; ?></a></li>
                     <li><a href="<?php echo $edit_user_password_link; ?>" tabindex="-1"><?php echo $label_change_password; ?></a></li>
-                    <?php if ($show_entires) { ?>
+                    <?php if ($show_entries) { ?>
                     <li><a href="<?php echo $link_user_entries; ?>" tabindex="-1"><?php echo $label_entries; ?></a></li>
                     <?php if ($add_entry_link_show) { ?>
                     <li><a href="<?php echo $add_entry_link; ?>" tabindex="-1"><?php echo $label_add_entry; ?></a></li>
                     <?php if ((!NHC) && ($_SESSION['prefsHideRecipe'] == "N")) { ?><li tabindex="-1"><a href="<?php echo $add_entry_beerxml_link; ?>"><?php echo $label_add_beerXML; ?></a><?php } ?>
                     <?php } ?>
                     <?php } ?>
-                    <?php if ((!$disable_pay) && ($show_entires)) { ?>
+                    <?php if ((!$disable_pay) && ($show_entries)) { ?>
                     <li><a href="<?php echo $link_pay; ?>"><?php echo $label_pay; ?></a></li>
                     <?php } ?>
                     <li role="separator" class="divider"></li>

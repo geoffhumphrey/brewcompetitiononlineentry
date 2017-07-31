@@ -126,7 +126,7 @@ if ($section != "admin") {
 
 	}
 	
-	if ($show_entires) {
+	if ($show_entries) {
 		
 		// Entry Window Dates
 		$header1_200 .= "<div class=\"panel ".$entry_panel_display."\">";

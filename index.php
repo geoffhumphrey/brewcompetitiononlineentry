@@ -80,7 +80,7 @@ else {
 	
 // Load libraries only when needed - for performance
 $tinymce_load = array("contest_info","special_best","styles","default","step4");
-$datetime_load = array("contest_info","judging","testing","preferences","step4","step5","step6");
+$datetime_load = array("contest_info","judging","testing","preferences","step4","step5","step6","default");
 if (((strpos($section, "step") === FALSE) && ($section != "setup")) && ((judging_date_return() == 0) && ($registration_open == 2))) $datatables_load = array("admin","list","default");
 else $datatables_load = array("admin","list","step4");
 
@@ -139,9 +139,7 @@ $security_question = array($label_secret_01,$label_secret_05,$label_secret_06,$l
 
     <!-- DEBUG -->
     <div class="<?php echo $container_main; ?> hidden-print">
-    <?php
-	if (DEBUG_SESSION_VARS) include (DEBUGGING.'session_vars.debug.php');
-	?>
+    <?php if (DEBUG_SESSION_VARS) include (DEBUGGING.'session_vars.debug.php');	?>
     </div>
     <!-- ./DEBUG -->
 

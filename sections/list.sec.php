@@ -70,5 +70,5 @@ $total_not_paid = total_not_paid_brewer($_SESSION['user_id']);
 include (SECTIONS.'brewer_info.sec.php');
 
 // Call the brewer's entry information
-if ($show_entires) include (SECTIONS.'brewer_entries.sec.php');  
+if ($show_entries) include (SECTIONS.'brewer_entries.sec.php');  
 ?>
