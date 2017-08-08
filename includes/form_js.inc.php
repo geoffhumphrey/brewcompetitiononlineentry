@@ -12,14 +12,58 @@ if (($section == "admin") && ($go == "styles") && ($action != "default")) {
 		$specialty_ipa_subs = array("21-B1","21-B2","21-B3","21-B4","21-B5","21-B6");
 		$historical_subs = array("27-A1","27-A2","27-A3","27-A4","27-A5","27-A6","27-A7","27-A8","27-A9");
 	}	
+	
+	// print_r($custom_entry_information); exit;
 ?>
 <!-- Load Show/Hide Configuration -->
-<script type="text/javascript">
-										  
+<script type="text/javascript">									  
 $(document).ready(function() {
+	
 	$("#mead-cider").hide("fast");
 	$("#mead").hide("fast");
 	$("#brewStyleEntry").hide("fast");
+	
+	$("#brewStyleType").change(function() {
+		
+		$("#mead-cider").hide("fast");
+		$("#mead").hide("fast");
+		
+		if ($("#brewStyleType").val() == "3") {
+			$("#mead-cider").show("fast");
+			$("#mead").show("fast");
+		}
+		
+		else if ($("#brewStyleType").val() == "2") {
+			$("#mead").hide("fast");
+			$("#mead-cider").show("fast");
+		}
+		
+	});
+	
+	$('input[name=brewStyleReqSpec]').click(function() {
+       if($(this).attr('id') == 'brewStyleReqSpec_0') {
+            $("#brewStyleEntry").show("fast");        
+       }
+
+       else {
+         	$("#brewStyleEntry").hide("fast");
+       }
+   	});
+	
+	<?php if (($action == "edit") && ($row_styles['brewStyleReqSpec'] == 1)) { ?>
+	$("#brewStyleEntry").show("fast");	
+	<?php } ?>
+	
+	<?php if (($action == "edit") && ($row_styles['brewStyleType'] == 2)) { ?>
+	$("#mead-cider").show("fast");
+	<?php } ?>
+	
+	<?php if (($action == "edit") && ($row_styles['brewStyleType'] == 3)) { ?>
+	$("#mead-cider").show("fast");
+	$("#mead").show("fast");
+	<?php } ?>
+	
+	
 });
 
 </script>
@@ -1030,6 +1074,98 @@ $(document).ready(function() {
 		<?php } 
 		}
 		?>
+		
+		
+		
+		<?php if (is_array($custom_entry_information)) { 
+			
+			foreach ($custom_entry as $key => $value) { 
+			$explodies = explode("|",$value);
+		?>
+		
+		else if ($("#type").val() == "<?php echo ltrim($key,"0"); ?>") {
+			
+			<?php if ($action == "edit") { ?>
+			$("#brewInfo").val("");
+			$("#brewComments").val("");
+			$("input[name='brewMead1']").removeAttr('checked');
+			$("input[name='brewMead2']").removeAttr('checked');
+			$("input[name='brewMead3']").removeAttr('checked');
+			$("input[name='strengthIPA']").removeAttr('checked');
+			$("input[name='strengthSaison']").removeAttr('checked');
+			$("input[name='darkLightColor']").removeAttr('checked');
+			$("input[name='sweetnessLambic']").removeAttr('checked');
+			$("input[name='carbLambic']").removeAttr('checked');
+			$("input[name='BDGColor']").removeAttr('checked');
+			<?php } ?>
+			
+			$("#special").hide("fast");
+			$("#carbonation").hide("fast");
+			$("#sweetness").hide("fast");
+			$("#strength").hide("fast");
+			$("#strengthIPA").hide("fast");
+			$("#strengthSaison").hide("fast");
+			$("#darkLightColor").hide("fast");
+			$("#sweetnessLambic").hide("fast");
+			$("#carbLambic").hide("fast");
+			$("#BDGColor").hide("fast");
+			$("#optional").hide("fast");
+			
+			<?php if ($explodies[2] == 1) { ?>
+			$("#brewInfo").prop("required", true);
+			$("#special").show("fast");
+			<?php } ?>
+			
+			<?php if ($explodies[3] == 1) { ?>
+			$("input[name='brewMead3']").prop("required", true);
+			$("#strength").show("fast");
+			<?php } ?>
+			
+			<?php if ($explodies[4] == 1) { ?>
+			$("input[name='brewMead1']").prop("required", true);
+			$("#carbonation").show("fast");			
+			<?php } ?>
+			
+			<?php if ($explodies[5] == 1) { ?>
+			$("input[name='brewMead2']").prop("required", true);
+			$("#sweetness").show("fast");
+			<?php } ?>
+			
+			<?php if (!empty($value)) { 
+			$special_info_text = $custom_entry_information["$key"];
+			$special_info_text = strtr($special_info_text,$html_replace);
+			//$special_info_text = preg_replace('/^<br><br>/', '', $special_info_text);
+			$special_info_text = "<p>".$special_info_text."</p>";
+			?>
+			$("#specialInfo").show("fast");
+			$("#specialInfoText").html("<?php echo $special_info_text; ?>");
+			$("#specialInfoName").html("<a href='#' data-tooltip='true' title='Click for specifics for this style.' data-toggle='modal' data-target='#<?php echo $key; ?>'>Style <?php echo str_replace("-","",$key); ?></a>");
+			<?php } ?>
+			
+		}
+		<?php }	// end foreach
+		} // end if (is_array($custom_entry_information)) 
+		?>
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
 				
 		else {
 			$("#special").hide("fast");
@@ -1743,7 +1879,7 @@ if ($action == "edit") {
 			
 			<?php if (!empty($value)) { ?>
 			$("#specialInfo").show("fast");
-			$("#specialInfoText").html("<?php echo $custom_entry_information["$view"]; ?>");
+			$("#specialInfoText").html("<?php echo strtr($custom_entry_information["$view"],$html_replace); ?>");
 			$("#specialInfoName").html("<a href='#' data-tooltip='true' title='Click for specifics for this style.' data-toggle='modal' data-target='#<?php echo $view; ?>'>Style <?php echo str_replace("-","",$view); ?></a>");
 			<?php } ?>
 			

@@ -164,7 +164,8 @@ Declare all variables empty at the top of the script. Add on later...
 				$page_info4 .= "<input type=\"hidden\" name=\"action\" value=\"add_form\" />\n";
 				$page_info4 .= "<input type=\"hidden\" name=\"cmd\" value=\"_xclick\">\n";
 				$page_info4 .= sprintf("<input type=\"hidden\" name=\"business\" value=\"%s\">\n",$_SESSION['prefsPaypalAccount']);
-				$page_info4 .= sprintf("<input type=\"hidden\" name=\"item_name\" value=\"%s, %s - %s Payment\">\n",$_SESSION['brewerLastName'],$_SESSION['brewerFirstName'],$_SESSION['contestName']);
+				if ($_SESSION['prefsProEdition'] == 1) $page_info4 .= sprintf("<input type=\"hidden\" name=\"item_name\" value=\"%s - %s Payment\">\n",$_SESSION['brewerBreweryName'],ucwords($_SESSION['contestName']));
+				else $page_info4 .= sprintf("<input type=\"hidden\" name=\"item_name\" value=\"%s, %s - %s Payment\">\n",$_SESSION['brewerLastName'],$_SESSION['brewerFirstName'],ucwords($_SESSION['contestName']));
 				$page_info4 .= sprintf("<input type=\"hidden\" name=\"amount\" value=\"%s\">\n",$payment_amount);
 				$page_info4 .= sprintf("<input type=\"hidden\" name=\"currency_code\" value=\"%s\">\n",$currency_code);
 				$page_info4 .= "<input type=\"hidden\" name=\"button_subtype\" value=\"services\">\n";

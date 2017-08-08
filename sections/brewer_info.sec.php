@@ -142,15 +142,15 @@ $judgeLikesModals = "";
 $judgeDislikesDisplay = "";
 $judgeDislikesModals = "";
 
-$show_judge_steward_fields = FALSE;
+$show_judge_steward_fields = TRUE;
 
 if (($_SESSION['prefsProEdition'] == 1) && (isset($row_brewer['brewerBreweryName']))) {
+	$show_judge_steward_fields = FALSE;
 	$label_contact = $label_contact." ";
 	$label_organization = $label_organization." ";
 }
 
 else {
-	$show_judge_steward_fields = TRUE;
 	$label_contact = "";
 	$label_organization = "";
 }
@@ -320,7 +320,7 @@ if (($_SESSION['prefsProEdition'] == 1) && (!$show_judge_steward_fields)) {
 	$account_display .= "</div>";
 
 	$account_display .= "<div class=\"row bcoem-account-info\">";
-	$account_display .= sprintf("<div class=\"".$display_left_cols."\"><strong>%s</strong></div>",$label_ttb);
+	$account_display .= sprintf("<div class=\"".$display_left_cols."\"><strong>%s</strong></div>",$label_organization.$label_ttb);
 	$account_display .= "<div class=\"".$display_right_cols."\">".$_SESSION['brewerBreweryTTB']."</div>";
 	$account_display .= "</div>";
 }

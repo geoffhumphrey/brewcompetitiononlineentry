@@ -27,7 +27,6 @@ if (((!empty($_SESSION['session_set_'.$prefix_session])) && ($_SESSION['session_
 
 if (($section != "update") && (empty($_SESSION['dataCheck'.$prefix_session]))) {
 	if (strstr($url['path'],"index.php")) {
-
 		// only for version 1.2.1.0; REMOVE for subsequent version
 		$data_check_date = strtotime($row_version1['data_check']);
 		$_SESSION['dataCheck'.$prefix_session] = $data_check_date;
@@ -266,11 +265,8 @@ if ((isset($_SESSION['loginUsername'])) && (empty($_SESSION['user_info'.$prefix_
 	$_SESSION['brewerDiscount'] = $row_name['brewerDiscount'];
 	$_SESSION['brewerDropOff'] = $row_name['brewerDropOff'];
 	$_SESSION['brewerAHA'] = $row_name['brewerAHA'];
-
-	if ($_SESSION['prefsProEdition'] == 1) {
-		$_SESSION['brewerBreweryName'] = $row_name['brewerBreweryName'];
-		$_SESSION['brewerBreweryTTB'] = $row_name['brewerBreweryTTB'];
-	}
+	$_SESSION['brewerBreweryName'] = $row_name['brewerBreweryName'];
+	$_SESSION['brewerBreweryTTB'] = $row_name['brewerBreweryTTB'];
 
 	$_SESSION['user_info'.$prefix_session] = "1";
 

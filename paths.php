@@ -1,12 +1,16 @@
 <?php 
 /**
-
  * Module:      paths.php 
  * Description: This module sets global file folder paths. Also houses
  *              specific, site-wide variables.
  * 
  */
- 
+
+/**
+ * The following are file path definitions for various
+ * script and document storage folders used/accessed by the 
+ * application.
+ */
 define('ROOT',dirname( __FILE__ ).DIRECTORY_SEPARATOR);
 define('ADMIN',ROOT.'admin'.DIRECTORY_SEPARATOR);
 define('SSO',ROOT.'sso'.DIRECTORY_SEPARATOR);
@@ -30,30 +34,84 @@ define('USER_TEMP',ROOT.'user_temp'.DIRECTORY_SEPARATOR);
 define('LANG',ROOT.'lang'.DIRECTORY_SEPARATOR);
 define('DEBUGGING',ROOT.'includes'.DIRECTORY_SEPARATOR.'debug'.DIRECTORY_SEPARATOR);
 
-// --------------------------------------------------------
-// Global Definitions
-// --------------------------------------------------------
-define('HOSTED', TRUE); // default FALSE
-define('MAINT', FALSE); // default FALSE
+/**
+ * --------------------------------------------------------
+ * Global Definitions
+ * --------------------------------------------------------
+ */
+
+/**
+ * The following are for use by the developer
+ * Default for all is FALSE
+ */
+define('HOSTED', FALSE); // default FALSE
 define('NHC', FALSE); // default FALSE
-define('TESTING', FALSE); // default FALSE
 define('SINGLE', FALSE); // default FALSE
-define('DEBUG', FALSE); // default FALSE
-define('DEBUG_SESSION_VARS', FALSE); // default FALSE
+
+/*
+ * Enable to following to put your installation into
+ * "mainenance mode" - bypasses the default index.php script
+ * and displays the maintenance.php file to alert visitors.
+ * Default is FALSE
+ */
+define('MAINT', FALSE); // default FALSE
+
+/**
+ * Disable the following to utilize the Load Libraries
+ * Locally option if your installation is having trouble
+ * loading libraries via CDN.
+ * See http://www.brewcompetition.com/local-load
+ * Default is TRUE
+ */
 define('CDN', TRUE); // default TRUE
 
-// --------------------------------------------------------
-// Error Reporting
-// --------------------------------------------------------
+/**
+ * Enable the following to put the site into "test mode"
+ * Useful for testing the PayPal IPN functions in their
+ * sandbox enfvironment, etc.
+ * Default is FALSE
+ */
+define('TESTING', FALSE);
 
+/** 
+ * Enable the following to display php errors on screen.
+ * Default is FALSE
+ */
+define('DEBUG', FALSE);
+
+/**
+ * Enable the following to show a collapsable table of all 
+ * session variables on screen
+ * Default is FALSE
+ */
+define('DEBUG_SESSION_VARS', FALSE);
+
+/**
+ * Enable the following when receiving mySQL "column does 
+ * not exist" errors and the like.
+ * This will trigger DB structure updates contained in the
+ * off_schedule_update.php file.
+ * ONLY enbable for a single refresh of the index.php
+ * page for performance issues.
+ * Default is FALSE
+ */
+define('FORCE_UPDATE', FALSE);
+
+/**
+ * --------------------------------------------------------
+ * Error Reporting
+ * --------------------------------------------------------
+ */
 ini_set('error_reporting', E_ALL ^ E_DEPRECATED);
 ini_set('log_errors','On');
 if (DEBUG)  ini_set('display_errors','On');
 else ini_set('display_errors','Off');
 
-// --------------------------------------------------------
-// Load Configuration
-// --------------------------------------------------------
+/**
+ * --------------------------------------------------------
+ * Load Configuration
+ * --------------------------------------------------------
+ */
 require_once (CONFIG.'config.php');
 require_once (INCLUDES.'current_version.inc.php');
 
@@ -62,8 +120,8 @@ if (HOSTED) {
 	$session_expire_after = 30;
 }
 
-/** Using an MD5 of __FILE__ will ensure a different session name for multiple
- * installs on the same domain name.
+/** Using an MD5 of __FILE__ will ensure a different session
+ * name for multiple installs on the same domain name.
  * 
  * @fixes https://github.com/geoffhumphrey/brewcompetitiononlineentry/issues/781
  */
@@ -100,7 +158,16 @@ if (isset($_SESSION['last_action'])) {
 
 $_SESSION['last_action'] = time();
 
-// ---------------------------- reCAPTCHA Keys ----------------------------
+/**
+ * --------------------------------------------------------
+ * RECAPTCHA Keys
+ * One set is for hosted installations on brewcomp.com or
+ * brewcompetition.com - the other is for outside use.
+ * Per Google guidelines, all keys validate the domain from
+ * which it was generated:
+ * https://developers.google.com/recaptcha/docs/domain_validation
+ * --------------------------------------------------------
+ */
 
 if (HOSTED) {
 	$publickey = "6LdUsBATAAAAAEJYbnqmygjGK-S6CHCoGcLALg5W";
@@ -112,7 +179,7 @@ else {
 	$privatekey = "6LfHUCoUAAAAACNL-wzpAG3eIWQC-PpX6X3a0iaM";
 }
 
-// Uncomment to display paths
+/** Uncomment to display paths */
 /*
 echo ROOT."<br>";
 echo ADMIN."<br>";
@@ -132,7 +199,10 @@ echo SETUP."<br>";
 echo UPDATE."<br>";
 echo OUTPUT."<br>";
 echo USER_IMAGES."<br>";
-echo USER_DOCS;
+echo USER_DOCS."<br>";
+echo USER_TEMP."<br>";
+echo LANG."<br>";
+echo DEBUGGING."<br>";
 */
 
 ?>

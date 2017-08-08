@@ -1,12 +1,16 @@
 <?php
-
 $html = "";
+$html_testing = "";
+
 $style_other_count[] = 0;
 $style_beer_count[] = 0;
 $style_mead_count[] = 0;
+$style_mead_cider_count[] = 0;
 $style_cider_count[] = 0;
+
 $style_beer_count_logged[] = 0;
 $style_mead_count_logged[] = 0;
+$style_mead_cider_count_logged[] = 0;
 $style_cider_count_logged[] = 0;
 $style_other_count_logged[] = 0;
 

@@ -7,11 +7,7 @@
  * - fixed point output errors for judges and BOS judges
  * - programming now accounts for multiple roles (e.g., judge/staff, steward/staff, bos judge/staff, etc.)
  * - XML output is fully compliant with the BJCP Database Interface Specifications 
- *   -- http://www.bjcp.org/it/docs/BJCP%20Database%20XML%20Interface%20Spec%202.1.pdf
- 
- There is no mysql_field_name equivalent in mysqli
- Research a new way...
- 
+ *   -- http://www.bjcp.org/it/docs/BJCP%20Database%20XML%20Interface%20Spec%202.1.pdf 
  */
 
 require('../paths.php');
@@ -86,28 +82,51 @@ if (((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) || ((
 		
 		else {
 			//first name, last name, email, category, subcategory, entry #, judging #, brewinfo, brewmead1, brewmead2, brewmead3, address, city, state, zip
-			if (($go == "csv") && ($action == "hccp") && ($filter != "winners")) $a[] = array('First Name','Last Name','Email','Category','Style','Style Name','Entry Number','Judging Number','Brew Name','Required Info','Sweetness','Carb','Strength');
-			if (($go == "csv") && (($action == "default") || ($action == "email")) && ($filter != "winners")) $a[] = array('First Name','Last Name','Email','Category','Style','Style Name','Entry Number','Judging Number','Brew Name','Required Info','Specifics','Sweetness','Carb','Strength','Address','City','State/Province','Zip/Postal Code','Country','Table','Flight','Round','Score','Place','BOS Place','Style Type','Location');
-			if (($go == "csv") && ($action == "default") && ($filter == "winners")) $a[] = array('Table Number','Table Name','Category','Style','Style Name','Place','Last Name','First Name','Email','Address','City','State/Province','Zip/Postal Code','Country','Phone','Entry Name','Club','Co Brewer');
+			if (($go == "csv") && ($action == "hccp") && ($filter != "winners")) {
+				$a[] = array('First Name','Last Name','Email','Category','Style','Style Name','Entry Number','Judging Number','Brew Name','Required Info','Sweetness','Carb','Strength');
+			}
+			
+			if (($go == "csv") && (($action == "default") || ($action == "email")) && ($filter != "winners")) {
+				$a[] = array('First Name','Last Name','Email','Category','Style','Style Name','Entry Number','Judging Number','Brew Name','Required Info','Specifics','Sweetness','Carb','Strength','Address','City','State/Province','Zip/Postal Code','Country','Table','Flight','Round','Score','Place','BOS Place','Style Type','Location');
+			}
+			
+			if (($go == "csv") && ($action == "default") && ($filter == "winners")) {
+				$a[] = array('Table Number','Table Name','Category','Style','Style Name','Place','Last Name','First Name','Email','Address','City','State/Province','Zip/Postal Code','Country','Phone','Entry Name','Club','Co Brewer');
+			}
+			
+			// Required and optional info only headers
+			if (($go == "csv") && ($action == "required") && ($filter == "required")) {
+				$a[] = array('Entry Number','Judging Number','Category','Style','Style Name','Required Info','Optional Info','Specifics','Sweetness','Carb','Strength');
+			}
 			
 			do {
 				
 				if (isset($row_sql['brewBrewerFirstName'])) $brewerFirstName = strtr($row_sql['brewBrewerFirstName'],$html_remove);
 				else $brewerFirstName = "";
+				
 				if (isset($row_sql['brewBrewerLastName'])) $brewerLastName = strtr($row_sql['brewBrewerLastName'],$html_remove);
 				else $brewerLastName = "";
+				
 				if (isset($row_sql['brewBrewerLastName'])) $brewName = strtr($row_sql['brewName'],$html_remove);
 				else $brewName = "";
+				
 				if (isset($row_sql['brewInfo'])) {
 					$brewInfo = str_replace("^","; ",$row_sql['brewInfo']);
 					$brewInfo = strtr($brewInfo,$html_remove);
 				}
 				else $brewInfo = "";
+				
 				if (isset($row_sql['brewComments'])) $brewSpecifics = strtr($row_sql['brewComments'],$html_remove); 
 				else $brewSpecifics = "";
+				
+				if (isset($row_sql['brewInfoOptional'])) $brewInfoOptional = strtr($row_sql['brewInfoOptional'],$html_remove); 
+				else $brewInfoOptional = "";
+				
 				$entryNo = sprintf("%04s",$row_sql['id']);
+				
 				if (isset($row_sql['brewCategory'])) $judgingNo = readable_judging_number($row_sql['brewCategory'],$row_sql['brewJudgingNumber']);
 				else $judgingNo = "";
+				
 				if (isset($row_sql['brewBrewerID'])) $brewer_info = explode("^", brewer_info($row_sql['brewBrewerID']));
 				else $brewer_info = "";
 				
@@ -126,11 +145,30 @@ if (((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) || ((
 					$a[] = array($brewerFirstName,$brewerLastName,$brewer_info[6],$row_sql['brewCategory'],$row_sql['brewSubCategory'],$row_sql['brewStyle'],$entryNo,$judgingNo,$brewName,$brewInfo,$brewSpecifics,$row_sql['brewMead1'],$row_sql['brewMead2'],$row_sql['brewMead3'],$brewer_info[10],$brewer_info[11],$brewer_info[12],$brewer_info[13],$brewer_info[14],$table_name,$row_flight['flightNumber'],$row_flight['flightRound'],sprintf("%02s",$row_scores['scoreEntry']),$row_scores['scorePlace'],$bos_place,$style_type,$location[2]);
 				}
 				
+				if (($go == "csv") && ($action == "required") && ($filter == "required")) {
+				
+					$a[] = array($entryNo,
+								 $judgingNo,
+								 $row_sql['brewCategory'],
+								 $row_sql['brewSubCategory'],
+								 $row_sql['brewStyle'],
+								 $brewInfo,
+								 $brewInfoOptional,
+								 $brewSpecifics,
+								 $row_sql['brewMead1'],
+								 $row_sql['brewMead2'],
+								 $row_sql['brewMead3']
+								);
+
+				}
+				
 			} while ($row_sql = mysqli_fetch_assoc($sql));
 			
 			if (($action == "default") && ($filter == "winners") && ($_SESSION['prefsWinnerMethod'] > 0)) {
 				include (DB.'output_entries_export_winner.db.php');
 			}
+			
+			
 			
 			header('Content-type: application/x-msdownload');
 			header('Content-Disposition: attachment;filename="'.$filename.'"');

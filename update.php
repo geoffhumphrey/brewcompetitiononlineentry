@@ -4,8 +4,6 @@
 // -----------------------------------------------------------
 require('paths.php');
 require(INCLUDES.'authentication_nav.inc.php');  
-session_name($prefix_session);
-session_start(); 
 require(INCLUDES.'url_variables.inc.php');
 require(INCLUDES.'db_tables.inc.php');
 require(LANG.'language.lang.php'); 
@@ -45,8 +43,7 @@ $bool = date("I");
 if ($bool == 1) $timezone_offset = number_format(($timezone_raw + 1.000),0); 
 else $timezone_offset = number_format($timezone_raw,0);
 
-$sub_folder = str_replace("http://".$_SERVER['SERVER_NAME'],"",$base_url);
-$filename = $_SERVER['DOCUMENT_ROOT'].$sub_folder."/includes/version.inc.php";
+$filename = INCLUDES."version.inc.php";
 $update_alerts = "";
 $update_body = "";
 $output = "";

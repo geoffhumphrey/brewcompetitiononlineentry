@@ -325,7 +325,7 @@ $style_type_2 = style_type($row_styles['brewStyleType'],"1","bcoe");
 				<input type="radio" name="brewStyleReqSpec" value="1" id="brewStyleReqSpec_0" <?php if ($row_styles['brewStyleReqSpec'] == 1) echo "CHECKED"; ?> />Yes
 			</label>
 			<label class="radio-inline">
-				<input type="radio" name="brewStyleReqSpec" value="0" id="brewStyleReqSpec_1" <?php if (($action == "add") ||  ($row_styles['brewStyleReqSpec'] == 0)) echo "CHECKED"; ?> />No
+				<input type="radio" name="brewStyleReqSpec" value="0" id="brewStyleReqSpec_1" <?php if (($action == "add") || ($row_styles['brewStyleReqSpec'] == 0)) echo "CHECKED"; ?> />No
 			</label>
 		</div>
 	</div>
@@ -396,7 +396,7 @@ $style_type_2 = style_type($row_styles['brewStyleType'],"1","bcoe");
 		<textarea class="form-control" name="brewStyleInfo" rows="6"><?php if ($action == "edit") echo $row_styles['brewStyleInfo']; ?></textarea>
 	 </div>
 </div><!-- ./Form Group -->
-
+	</div>
 <div class="form-group"><!-- Form Group NOT REQUIRED Text Input -->
 	<label for="brewStyleOG" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">OG Minimum</label>
 	<div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">

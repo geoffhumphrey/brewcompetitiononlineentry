@@ -104,9 +104,6 @@ if ($logged_in)  {
 	if ($_SESSION['prefsProEdition'] == 1) {
 
 		if (isset($_SESSION['brewerBreweryName'])) {
-			$label_contact = $label_contact." ";
-			$label_organization = $label_organization." ";
-
 			// If registered as a brewery, will not be a judge/stewards/staff and may have entries
 			// Only individuals can be judges, stewards, or staff; individuals will not have entries
 			$show_judge_steward_fields = FALSE;
@@ -116,8 +113,6 @@ if ($logged_in)  {
 		}
 
 		else {
-			$label_contact = "";
-			$label_organization = "";
 			$show_entries = FALSE;
 		}
 
@@ -313,7 +308,7 @@ $(document).ready(function(){
 			</div>
 			<div class="modal-footer">
 				<p align="center"><?php echo sprintf("<span class=\"fa fa-lg fa-exlamation-circle\"></span> %s <a href=\"%s\">%s</a>.", $login_text_004, $base_url."index.php?section=login&amp;go=password&amp;action=forgot", $login_text_005); ?></p>
-				<?php if ((!$logged_in) && (($registration_open == 1) || ($judge_window_open == 1))) { ?>
+				<?php if ((!$logged_in) && ($registration_open == 1)) { ?>
 				<p align="center" class="small"><?php echo $label_or; ?></p>
 				<a class="btn btn-block btn-default" href="<?php echo build_public_url("register","entrant","default","default",$sef,$base_url); ?>"><?php echo $label_register; ?></a>
 				<?php } ?>

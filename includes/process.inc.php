@@ -265,8 +265,6 @@ if (((isset($_SERVER['HTTP_REFERER'])) && ($referrer['host'] == $_SERVER['SERVER
 
 	else {
 
-		// include (DEBUGGING.'session_vars.debug.php');
-
 		// --------------------------- Entries -------------------------------- //
 
 		if ($dbTable == $prefix."brewing")				include (PROCESS.'process_brewing.inc.php');

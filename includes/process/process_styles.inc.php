@@ -207,7 +207,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 							   GetSQLValueString($_POST['brewStyleSRM'], "text"),
 							   GetSQLValueString($_POST['brewStyleSRMMax'], "text"),
 							   GetSQLValueString($_POST['brewStyleType'], "text"),
-							   GetSQLValueString($_POST['brewStyleInfo'], "text"),
+							   GetSQLValueString(strip_tags($_POST['brewStyleInfo']), "text"),
 							   GetSQLValueString($brew_style_link, "text"),
 							   GetSQLValueString($style_add_one, "text"),
 							   GetSQLValueString($_POST['brewStyleActive'], "text"),
@@ -217,7 +217,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 							   GetSQLValueString($_POST['brewStyleStrength'], "text"),
 							   GetSQLValueString($_POST['brewStyleCarb'], "text"),
 							   GetSQLValueString($_POST['brewStyleSweet'], "text"),
-							   GetSQLValueString(strtr($_POST['brewStyleEntry'],$quote_convert), "text")
+							   GetSQLValueString(strip_tags($_POST['brewStyleEntry']), "text")
 							   );
 			
 			
@@ -275,7 +275,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 							   GetSQLValueString($_POST['brewStyleSRM'], "text"),
 							   GetSQLValueString($_POST['brewStyleSRMMax'], "text"),
 							   GetSQLValueString($_POST['brewStyleType'], "text"),
-							   GetSQLValueString($_POST['brewStyleInfo'], "text"),
+							   GetSQLValueString(strip_tags($_POST['brewStyleInfo']), "text"),
 							   GetSQLValueString($brew_style_link, "text"),
 							   GetSQLValueString($style_add_one, "text"),
 							   GetSQLValueString($_POST['brewStyleActive'], "text"),
@@ -285,7 +285,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 							   GetSQLValueString($_POST['brewStyleStrength'], "text"),
 							   GetSQLValueString($_POST['brewStyleCarb'], "text"),
 							   GetSQLValueString($_POST['brewStyleSweet'], "text"),
-							   GetSQLValueString(strtr($_POST['brewStyleEntry'],$quote_convert), "text")
+							   GetSQLValueString(strip_tags($_POST['brewStyleEntry']), "text")
 							   );		
 			
 		}
@@ -358,7 +358,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 						   GetSQLValueString($_POST['brewStyleSRM'], "text"),
 						   GetSQLValueString($_POST['brewStyleSRMMax'], "text"),
 						   GetSQLValueString($_POST['brewStyleType'], "text"),
-						   GetSQLValueString($_POST['brewStyleInfo'], "text"),
+						   GetSQLValueString(strip_tags($_POST['brewStyleInfo']), "text"),
 						   GetSQLValueString($brew_style_link, "text"),
 						   GetSQLValueString($_POST['brewStyleGroup'], "text"),
 						   GetSQLValueString($_POST['brewStyleActive'], "text"),
@@ -367,7 +367,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 						   GetSQLValueString($styleStrength, "text"),
 						   GetSQLValueString($_POST['brewStyleCarb'], "text"),
 						   GetSQLValueString($_POST['brewStyleSweet'], "text"),
-						   GetSQLValueString(strtr($_POST['brewStyleEntry'],$quote_convert), "text"),
+						   GetSQLValueString(strip_tags($_POST['brewStyleEntry']), "text"),
 						   GetSQLValueString($id, "int"));
 		}
 		
@@ -415,7 +415,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 						   GetSQLValueString($_POST['brewStyleSRM'], "text"),
 						   GetSQLValueString($_POST['brewStyleSRMMax'], "text"),
 						   GetSQLValueString($_POST['brewStyleType'], "text"),
-						   GetSQLValueString($_POST['brewStyleInfo'], "text"),
+						   GetSQLValueString(strip_tags($_POST['brewStyleInfo']), "text"),
 						   GetSQLValueString($brew_style_link, "text"),
 						   GetSQLValueString($_POST['brewStyleGroup'], "text"),
 						   GetSQLValueString($_POST['brewStyleActive'], "text"),
@@ -424,7 +424,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 						   GetSQLValueString($styleStrength, "text"),
 						   GetSQLValueString($_POST['brewStyleCarb'], "text"),
 						   GetSQLValueString($_POST['brewStyleSweet'], "text"),
-						   GetSQLValueString(strtr($_POST['brewStyleEntry'],$quote_convert), "text"),
+						   GetSQLValueString(strip_tags($_POST['brewStyleEntry']), "text"),
 						   GetSQLValueString($id, "int"));
 						   
 		}

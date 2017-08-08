@@ -1092,7 +1092,7 @@
 									<li><a href="<?php echo $base_url; ?>output/export.output.php?section=entries&amp;go=csv&amp;filter=paid">Paid &amp; Received Entries</a></li>
 									<li><a href="<?php echo $base_url; ?>output/export.output.php?section=entries&amp;go=csv&amp;filter=nopay&amp;view=all">Non-Paid Entries</a></li>
 									<li><a href="<?php echo $base_url; ?>output/export.output.php?section=entries&amp;go=csv&amp;filter=nopay">Non-Paid &amp; Received Entries</a></li>
-									
+									<li><a href="<?php echo $base_url; ?>output/export.output.php?section=entries&amp;go=csv&amp;action=required&amp;filter=required">Entries with Required &amp; Optional Info</a></li>
                                 </ul>
                             </div>
                         </div><!-- ./row -->
@@ -1180,23 +1180,6 @@
                         
                         
                         <!-- Purge Modals -->
-                        <script>
-							$(function () {
-
-								$('#dateThresholdParticipants').datetimepicker({
-									format: 'YYYY-MM-DD'
-								});
-								
-								$('#dateThresholdPayments').datetimepicker({
-									format: 'YYYY-MM-DD'
-								});
-								
-								$('#dateThresholdEntries').datetimepicker({
-									format: 'YYYY-MM-DD'
-								});
-
-							});
-						</script>
                         <div class="modal fade" id="purgeParticipants" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
                         	<form class="form-horizontal" action="<?php echo $base_url; ?>includes/process.inc.php?action=purge&amp;go=participants" method="POST" name="form1" id="form1">
 							<div class="modal-dialog" role="document">
@@ -1404,6 +1387,7 @@
         </div><!-- ./ right column -->
     </div>
 </div><!-- end bcoem-admin-dashboard-accordion -->
+
 
 <!-- For a Future Release -->
 <!--

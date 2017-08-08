@@ -56,7 +56,7 @@ if ($setup_free_access == TRUE) {
 
 		$sql = "
 		CREATE TABLE IF NOT EXISTS `$archive_db_table` (
-			`id` int(8) NOT NULL,
+			`id` int(11) NOT NULL AUTO_INCREMENT,
 			`archiveProEdition` tinyint(1) DEFAULT NULL,
 			`archiveStyleSet` varchar(25) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
 			`archiveBrewingTableName` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
@@ -79,7 +79,7 @@ if ($setup_free_access == TRUE) {
 
 		$sql = "
 		CREATE TABLE IF NOT EXISTS `$brewer_db_table` (
-			`id` int(8) NOT NULL,
+			`id` int(11) NOT NULL AUTO_INCREMENT,
 			`uid` int(8) DEFAULT NULL,
 			`brewerFirstName` varchar(200) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
 			`brewerLastName` varchar(200) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
@@ -128,7 +128,7 @@ if ($setup_free_access == TRUE) {
 		// -------------------
 
 		$sql = "CREATE TABLE IF NOT EXISTS `$brewing_db_table` (
-			`id` int(8) NOT NULL,
+			`id` int(11) NOT NULL AUTO_INCREMENT,
 			`brewName` varchar(250) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
 			`brewStyle` varchar(250) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
 			`brewCategory` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
@@ -504,7 +504,7 @@ if ($setup_free_access == TRUE) {
 
 		$sql = "
 		CREATE TABLE IF NOT EXISTS `$contacts_db_table` (
-			`id` int(8) NOT NULL,
+			`id` int(11) NOT NULL AUTO_INCREMENT,
 			`contactFirstName` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
 			`contactLastName` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
 			`contactPosition` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
@@ -526,7 +526,7 @@ if ($setup_free_access == TRUE) {
 
 		$sql = "
 		CREATE TABLE IF NOT EXISTS `$contest_info_db_table` (
-			`id` int(1) NOT NULL,
+			`id` int(11) NOT NULL AUTO_INCREMENT,
 			`contestName` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
 			`contestHost` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
 			`contestHostWebsite` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
@@ -544,8 +544,8 @@ if ($setup_free_access == TRUE) {
 			`contestAwardsLocTime` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
 			`contestShippingOpen` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
 			`contestShippingDeadline` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-			`contestEntryFee` int(11) DEFAULT NULL,
-			`contestEntryFee2` int(11) DEFAULT NULL,
+			`contestEntryFee` float(6,2) DEFAULT NULL,
+			`contestEntryFee2` float(6,2) DEFAULT NULL,
 			`contestEntryFeeDiscount` char(1) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
 			`contestEntryFeeDiscountNum` char(4) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
 			`contestDropoffOpen` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
@@ -580,7 +580,7 @@ if ($setup_free_access == TRUE) {
 
 		$sql = "
 		CREATE TABLE IF NOT EXISTS `$drop_off_db_table` (
-			`id` int(8) NOT NULL,
+			`id` int(11) NOT NULL AUTO_INCREMENT,
 			`dropLocation` mediumtext COLLATE utf8mb4_unicode_ci,
 			`dropLocationName` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
 			`dropLocationPhone` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
@@ -603,7 +603,7 @@ if ($setup_free_access == TRUE) {
 
 		$sql = "
 		CREATE TABLE `$judging_assignments_db_table` (
-			`id` int(11) NOT NULL,
+			`id` int(11) NOT NULL AUTO_INCREMENT,
 			`bid` int(11) DEFAULT NULL COMMENT 'id from brewer',
 			`assignment` char(1) COLLATE utf8_unicode_ci DEFAULT NULL,
 			`assignTable` int(11) DEFAULT NULL COMMENT 'id from judging_tables',
@@ -628,7 +628,7 @@ if ($setup_free_access == TRUE) {
 
 		$sql = "
 		CREATE TABLE IF NOT EXISTS `$judging_flights_db_table` (
-			`id` int(8) NOT NULL,
+			`id` int(11) NOT NULL AUTO_INCREMENT,
 			`flightTable` int(8) DEFAULT NULL COMMENT 'id of Table from tables',
 			`flightNumber` int(8) DEFAULT NULL,
 			`flightEntryID` int(11) DEFAULT NULL COMMENT 'id of entry from the brewing table',
@@ -650,7 +650,7 @@ if ($setup_free_access == TRUE) {
 
 		$sql = "
 		CREATE TABLE IF NOT EXISTS `$judging_locations_db_table` (
-			`id` int(8) NOT NULL,
+			`id` int(11) NOT NULL AUTO_INCREMENT,
 			`judgingDate` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
 			`judgingTime` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
 			`judgingLocName` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
@@ -674,7 +674,7 @@ if ($setup_free_access == TRUE) {
 
 		$sql = "
 		CREATE TABLE IF NOT EXISTS `$judging_preferences_db_table` (
-			`id` int(11) NOT NULL,
+			`id` int(11) NOT NULL AUTO_INCREMENT,
 			`jPrefsQueued` char(1) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
 			`jPrefsFlightEntries` int(11) DEFAULT NULL COMMENT 'Maximum amount of entries per flight',
 			`jPrefsMaxBOS` int(11) DEFAULT NULL COMMENT 'Maximum amount of places awarded for each BOS style type',
@@ -707,12 +707,12 @@ if ($setup_free_access == TRUE) {
 
 		$sql = "
 		CREATE TABLE IF NOT EXISTS `$judging_scores_db_table` (
-			`id` int(11) NOT NULL,
+			`id` int(11) NOT NULL AUTO_INCREMENT,
 			`eid` int(11) DEFAULT NULL COMMENT 'entry id from brewing table',
 			`bid` int(11) DEFAULT NULL COMMENT 'brewer id from brewer table',
 			`scoreTable` int(11) DEFAULT NULL COMMENT 'id of table from judging_tables table',
 			`scoreEntry` float DEFAULT NULL COMMENT 'Numerical score assigned by judges',
-			`scorePlace` int(11) DEFAULT NULL COMMENT 'place of entry as assigned by judges',
+			`scorePlace` varchar(3) DEFAULT NULL COMMENT 'place of entry as assigned by judges',
 			`scoreType` char(1) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
 			`scoreMiniBOS` tinyint(1) DEFAULT NULL COMMENT 'Did the entry go to the MiniBOS? 1=Yes, 0=No',
 			PRIMARY KEY (`id`)
@@ -733,12 +733,12 @@ if ($setup_free_access == TRUE) {
 
 		$sql = "
 		CREATE TABLE IF NOT EXISTS `$judging_scores_bos_db_table` (
-			`id` int(11) NOT NULL,
+			`id` int(11) NOT NULL AUTO_INCREMENT,
 			`eid` int(11) DEFAULT NULL COMMENT 'entry id from brewing table',
 			`bid` int(11) DEFAULT NULL COMMENT 'brewer id from brewer table',
 			`scoreEntry` varchar(3) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
 			`scorePlace` varchar(3) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-			`scoreType` char(1) COLLATE utf8mb4_unicode_ci DEFAULT NULL
+			`scoreType` char(1) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
 			PRIMARY KEY (`id`)
 		) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci;
 		";
@@ -757,7 +757,7 @@ if ($setup_free_access == TRUE) {
 
 		$sql = "
 		CREATE TABLE IF NOT EXISTS `$judging_tables_db_table` (
-			`id` int(8) NOT NULL,
+			`id` int(11) NOT NULL AUTO_INCREMENT,
 			`tableName` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
 			`tableStyles` mediumtext COLLATE utf8mb4_unicode_ci,
 			`tableNumber` int(5) DEFAULT NULL COMMENT 'User defined for sorting',
@@ -780,7 +780,7 @@ if ($setup_free_access == TRUE) {
 		// -------------------
 
 		$sql = "CREATE TABLE IF NOT EXISTS `$mods_db_table` (
-			`id` int(11) NOT NULL,
+			`id` int(11) NOT NULL AUTO_INCREMENT,
 			`mod_name` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
 			`mod_type` tinyint(2) DEFAULT NULL COMMENT 'Type of module: 0=informational 1=report 2=export 3=other',
 			`mod_extend_function` tinyint(2) DEFAULT NULL COMMENT 'If the custom module extends a core function. 0=all 1=home 2=rules 3=volunteer 4=sponsors 5=contact 6=register 7=pay 8=list 9=admin',
@@ -803,7 +803,7 @@ if ($setup_free_access == TRUE) {
 
 		$sql = "
 		CREATE TABLE IF NOT EXISTS `$preferences_db_table` (
-			`id` int(8) NOT NULL,
+			`id` int(11) NOT NULL AUTO_INCREMENT,
 			`prefsTemp` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
 			`prefsWeight1` varchar(20) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
 			`prefsWeight2` varchar(20) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
@@ -873,7 +873,7 @@ if ($setup_free_access == TRUE) {
 
 		$sql = "
 		CREATE TABLE IF NOT EXISTS `$special_best_data_db_table` (
-			`id` int(11) NOT NULL,
+			`id` int(11) NOT NULL AUTO_INCREMENT,
 			`sid` int(11) DEFAULT NULL COMMENT 'relational to special_best_info table',
 			`bid` int(11) DEFAULT NULL COMMENT 'relational to brewer table - bid row',
 			`eid` int(11) DEFAULT NULL COMMENT 'relational to brewing table - id (entry number)',
@@ -896,7 +896,7 @@ if ($setup_free_access == TRUE) {
 
 		$sql = "
 		CREATE TABLE IF NOT EXISTS `$special_best_info_db_table` (
-			`id` int(11) NOT NULL,
+			`id` int(11) NOT NULL AUTO_INCREMENT,
 			`sbi_name` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
 			`sbi_description` mediumtext COLLATE utf8mb4_unicode_ci,
 			`sbi_places` int(11) DEFAULT NULL,
@@ -919,7 +919,7 @@ if ($setup_free_access == TRUE) {
 
 		$sql = "
 		CREATE TABLE IF NOT EXISTS `$sponsors_db_table` (
-			`id` int(8) NOT NULL,
+			`id` int(11) NOT NULL AUTO_INCREMENT,
 			`sponsorName` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
 			`sponsorURL` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
 			`sponsorImage` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
@@ -944,7 +944,7 @@ if ($setup_free_access == TRUE) {
 
 		$sql = "
 		CREATE TABLE IF NOT EXISTS `$staff_db_table` (
-			`id` int(11) NOT NULL,
+			`id` int(11) NOT NULL AUTO_INCREMENT,
 			`uid` int(11) DEFAULT NULL COMMENT 'user''s id from user table',
 			`staff_judge` tinyint(2) DEFAULT '0' COMMENT '0=no; 1=yes',
 			`staff_judge_bos` tinyint(2) DEFAULT '0' COMMENT '0=no; 1=yes',
@@ -973,7 +973,7 @@ if ($setup_free_access == TRUE) {
 
 		$updateSQL = "
 		CREATE TABLE ".$prefix."styles (
-			`id` int(8) NOT NULL,
+			`id` int(11) NOT NULL AUTO_INCREMENT,
 			`brewStyleNum` varchar(3) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
 			`brewStyle` varchar(250) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
 			`brewStyleCategory` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
@@ -1388,7 +1388,7 @@ if ($setup_free_access == TRUE) {
 
 		$sql = "
 		CREATE TABLE IF NOT EXISTS `$style_types_db_table` (
-			`id` int(11) NOT NULL,
+			`id` int(11) NOT NULL AUTO_INCREMENT,
 			`styleTypeName` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
 			`styleTypeOwn` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
 			`styleTypeBOS` char(1) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
@@ -1421,7 +1421,7 @@ if ($setup_free_access == TRUE) {
 
 		$sql = "
 		CREATE TABLE IF NOT EXISTS `$system_db_table` (
-			`id` int(11) NOT NULL,
+			`id` int(11) NOT NULL AUTO_INCREMENT,
 			`version` varchar(12) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
 			`version_date` date DEFAULT NULL,
 			`data_check` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
@@ -1449,7 +1449,7 @@ if ($setup_free_access == TRUE) {
 
 		$sql = "
 		CREATE TABLE IF NOT EXISTS `$users_db_table` (
-			`id` int(8) NOT NULL AUTO_INCREMENT,
+			`id` int(11) NOT NULL AUTO_INCREMENT,
 			`user_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
 			`password` varchar(250) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
 			`userLevel` char(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,

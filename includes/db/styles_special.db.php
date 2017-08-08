@@ -511,88 +511,98 @@ if (strpos($_SESSION['prefsStyleSet'],"BABDB") === false) {
 		do { 
 		
 			$all_entry_info = "";
+			$info = "";
+			
 			if (!empty($row_custom_entry_info['brewStyleEntry'])) $all_entry_info .= $row_custom_entry_info['brewStyleEntry'];
 			if ($row_custom_entry_info['brewStyleStrength'] == 1) $all_entry_info .= " Entrant must specify strength.";
 			if ($row_custom_entry_info['brewStyleCarb'] == 1) $all_entry_info .= " Entrant must specify carbonation level.";
 			if ($row_custom_entry_info['brewStyleSweet'] == 1) $all_entry_info .= " Entrant must specify sweetness level.";
 			
-			$value = $row_custom_entry_info['brewStyleGroup']."|".$row_custom_entry_info['brewStyleNum']."|".$row_custom_entry_info['brewStyleReqSpec']."|".$row_custom_entry_info['brewStyleStrength']."|".$row_custom_entry_info['brewStyleCarb']."|".$row_custom_entry_info['brewStyleSweet'];
+			// Get values from record and concat
+			$value = $row_custom_entry_info['brewStyleGroup'] ."|". $row_custom_entry_info['brewStyleNum'] ."|". $row_custom_entry_info['brewStyleReqSpec']."|". $row_custom_entry_info['brewStyleStrength'] ."|". $row_custom_entry_info['brewStyleCarb'] ."|". $row_custom_entry_info['brewStyleSweet'];
+			
+			// Set the index
 			$index = $row_custom_entry_info['brewStyleGroup']."-".$row_custom_entry_info['brewStyleNum'];
-			$info = str_replace($replacement1,$replacement2,$row_custom_entry_info['brewStyleInfo']);
+			
+			// if special info is present, add to $info variable
+			if (!empty($row_custom_entry_info['brewStyleInfo'])) $info .= str_replace($replacement1,$replacement2,$row_custom_entry_info['brewStyleInfo']);
+			
+			// Add to the custom_entry array with this style's values
 			$custom_entry["$index"] = $value;
-			$custom_entry_information["$index"] = str_replace($replacement1,$replacement3,$all_entry_info);
 			
-				if (!empty($row_custom_entry_info['brewStyleEntry'])) $info .= str_replace($replacement1,$replacement2,"<p>Entry Instructions: ".$all_entry_info."</p>");
-				
-				if (empty($row_custom_entry_info['brewStyleOG'])) $styleOG = "Varies";
-				else $styleOG = number_format((float)$row_custom_entry_info['brewStyleOG'], 3, '.', '')." &ndash; ".number_format((float)$row_custom_entry_info['brewStyleOGMax'], 3, '.', '');
+			if (!empty($all_entry_info)) $custom_entry_information["$index"] = str_replace($replacement1,$replacement3,$all_entry_info);
 			
-				if (empty($row_custom_entry_info['brewStyleFG'])) $styleFG = "Varies";
-				else $styleFG = number_format((float)$row_custom_entry_info['brewStyleFG'], 3, '.', '')." &ndash; ".number_format((float)$row_custom_entry_info['brewStyleFGMax'], 3, '.', '');
-				
-				if (empty($row_custom_entry_info['brewStyleABV'])) $styleABV = "Varies";
-				else $styleABV = $row_custom_entry_info['brewStyleABV']." &ndash; ".$row_custom_entry_info['brewStyleABVMax'];
-				
-				if (empty($row_custom_entry_info['brewStyleIBU']))  $styleIBU = "Varies";
-				elseif ($row_custom_entry_info['brewStyleIBU'] == "N/A") $styleIBU =  "N/A"; 
-				elseif (!empty($row_custom_entry_info['brewStyleIBU'])) $styleIBU = ltrim($row_custom_entry_info['brewStyleIBU'], "0")." &ndash; ".ltrim($row_custom_entry_info['brewStyleIBUMax'], "0")." IBU";
-				else $styleIBU = "&nbsp;";
-				
-				if (empty($row_custom_entry_info['brewStyleSRM'])) $styleColor = "Varies";
-				elseif ($row_custom_entry_info['brewStyleSRM'] == "N/A") $styleColor = "N/A";
-				elseif (!empty($row_custom_entry_info['brewStyleSRM'])) { 
-							$SRMmin = ltrim ($row_custom_entry_info['brewStyleSRM'], "0"); 
-							$SRMmax = ltrim ($row_custom_entry_info['brewStyleSRMMax'], "0"); 
-							if ($SRMmin >= "15") $color1 = "#ffffff"; else $color1 = "#000000"; 
-							if ($SRMmax >= "15") $color2 = "#ffffff"; else $color2 = "#000000";
-							
-							$styleColor = "<span class=\"badge\" style=\"background-color: ".srm_color($SRMmin,"srm")."; color: ".$color1."\">&nbsp;".$SRMmin."&nbsp;</span>";
-							$styleColor .= " &ndash; ";
-							$styleColor .= "<span class=\"badge\" style=\"background-color: ".srm_color($SRMmax,"srm")."; color: ".$color2."\">&nbsp;".$SRMmax."&nbsp;</span> <small class=\"text-muted\"><em>SRM</em></small>";
-							
-						} 
-						else $styleColor = "&nbsp;";
-				
-				
-				$info .= "
-				<table class=\"table table-bordered table-striped\">
-				<tr>
-					<th class=\"dataLabel data bdr1B\">OG Range</th>
-					<th class=\"dataLabel data bdr1B\">FG Range</th>
-					<th class=\"dataLabel data bdr1B\">ABV Range</th>
-					<th class=\"dataLabel data bdr1B\">Bitterness Range</th>
-					<th class=\"dataLabel data bdr1B\">Color Range</th>
-				</tr>
-				<tr>
-					<td nowrap>".$styleOG."</td>
-					<td nowrap>".$styleFG."</td>
-					<td nowrap>".$styleABV."</td>
-					<td nowrap>".$styleIBU."</td>
-					<td>".$styleColor."</td>
-				</tr>
-			</table>";
-				
-				if ($section == "brew") {
-					
-					$custom_entry_info_modal[] = $row_custom_entry_info['brewStyleGroup']."-".$row_custom_entry_info['brewStyleNum']."|".$row_custom_entry_info['brewStyle'];
-					$modals .= "
-							<!-- Modal -->
-							<div class=\"modal fade\" id=\"".$index."\" tabindex=\"-1\" role=\"dialog\" aria-labelledby=\"".$index."Label\">
-							  <div class=\"modal-dialog modal-lg\" role=\"document\">
-								<div class=\"modal-content\">
-								  <div class=\"modal-header\">
-									<button type=\"button\" class=\"close\" data-dismiss=\"modal\" aria-label=\"Close\"><span aria-hidden=\"true\">&times;</span></button>
-									<h4 class=\"modal-title\" id=\"".$index."Label\">Custom Style ".$row_custom_entry_info['brewStyleGroup'].$row_custom_entry_info['brewStyleNum'].": ".$row_custom_entry_info['brewStyle']."</h4>
-								  </div>
-								  <div class=\"modal-body\"><p>".$info."</div>
-								  <div class=\"modal-footer\">
-									<button type=\"button\" class=\"btn btn-default\" data-dismiss=\"modal\">Close</button>
-								  </div>
-								</div>
+			if (!empty($row_custom_entry_info['brewStyleEntry'])) $info .= str_replace($replacement1,$replacement2,"<p>Entry Instructions: ".$all_entry_info."</p>");
+
+			if (empty($row_custom_entry_info['brewStyleOG'])) $styleOG = "Varies";
+			else $styleOG = number_format((float)$row_custom_entry_info['brewStyleOG'], 3, '.', '')." &ndash; ".number_format((float)$row_custom_entry_info['brewStyleOGMax'], 3, '.', '');
+
+			if (empty($row_custom_entry_info['brewStyleFG'])) $styleFG = "Varies";
+			else $styleFG = number_format((float)$row_custom_entry_info['brewStyleFG'], 3, '.', '')." &ndash; ".number_format((float)$row_custom_entry_info['brewStyleFGMax'], 3, '.', '');
+
+			if (empty($row_custom_entry_info['brewStyleABV'])) $styleABV = "Varies";
+			else $styleABV = $row_custom_entry_info['brewStyleABV']." &ndash; ".$row_custom_entry_info['brewStyleABVMax'];
+
+			if (empty($row_custom_entry_info['brewStyleIBU']))  $styleIBU = "Varies";
+			elseif ($row_custom_entry_info['brewStyleIBU'] == "N/A") $styleIBU =  "N/A"; 
+			elseif (!empty($row_custom_entry_info['brewStyleIBU'])) $styleIBU = ltrim($row_custom_entry_info['brewStyleIBU'], "0")." &ndash; ".ltrim($row_custom_entry_info['brewStyleIBUMax'], "0")." IBU";
+			else $styleIBU = "&nbsp;";
+
+			if (empty($row_custom_entry_info['brewStyleSRM'])) $styleColor = "Varies";
+			elseif ($row_custom_entry_info['brewStyleSRM'] == "N/A") $styleColor = "N/A";
+			elseif (!empty($row_custom_entry_info['brewStyleSRM'])) { 
+						$SRMmin = ltrim ($row_custom_entry_info['brewStyleSRM'], "0"); 
+						$SRMmax = ltrim ($row_custom_entry_info['brewStyleSRMMax'], "0"); 
+						if ($SRMmin >= "15") $color1 = "#ffffff"; else $color1 = "#000000"; 
+						if ($SRMmax >= "15") $color2 = "#ffffff"; else $color2 = "#000000";
+
+						$styleColor = "<span class=\"badge\" style=\"background-color: ".srm_color($SRMmin,"srm")."; color: ".$color1."\">&nbsp;".$SRMmin."&nbsp;</span>";
+						$styleColor .= " &ndash; ";
+						$styleColor .= "<span class=\"badge\" style=\"background-color: ".srm_color($SRMmax,"srm")."; color: ".$color2."\">&nbsp;".$SRMmax."&nbsp;</span> <small class=\"text-muted\"><em>SRM</em></small>";
+
+					} 
+					else $styleColor = "&nbsp;";
+
+
+			$info .= "
+			<table class=\"table table-bordered table-striped\">
+			<tr>
+				<th class=\"dataLabel data bdr1B\">OG Range</th>
+				<th class=\"dataLabel data bdr1B\">FG Range</th>
+				<th class=\"dataLabel data bdr1B\">ABV Range</th>
+				<th class=\"dataLabel data bdr1B\">Bitterness Range</th>
+				<th class=\"dataLabel data bdr1B\">Color Range</th>
+			</tr>
+			<tr>
+				<td nowrap>".$styleOG."</td>
+				<td nowrap>".$styleFG."</td>
+				<td nowrap>".$styleABV."</td>
+				<td nowrap>".$styleIBU."</td>
+				<td>".$styleColor."</td>
+			</tr>
+		</table>";
+
+			if ($section == "brew") {
+
+				$custom_entry_info_modal[] = $row_custom_entry_info['brewStyleGroup']."-".$row_custom_entry_info['brewStyleNum']."|".$row_custom_entry_info['brewStyle'];
+				$modals .= "
+						<!-- Modal -->
+						<div class=\"modal fade\" id=\"".$index."\" tabindex=\"-1\" role=\"dialog\" aria-labelledby=\"".$index."Label\">
+						  <div class=\"modal-dialog modal-lg\" role=\"document\">
+							<div class=\"modal-content\">
+							  <div class=\"modal-header\">
+								<button type=\"button\" class=\"close\" data-dismiss=\"modal\" aria-label=\"Close\"><span aria-hidden=\"true\">&times;</span></button>
+								<h4 class=\"modal-title\" id=\"".$index."Label\">Custom Style ".$row_custom_entry_info['brewStyleGroup'].$row_custom_entry_info['brewStyleNum'].": ".$row_custom_entry_info['brewStyle']."</h4>
+							  </div>
+							  <div class=\"modal-body\"><p>".$info."</div>
+							  <div class=\"modal-footer\">
+								<button type=\"button\" class=\"btn btn-default\" data-dismiss=\"modal\">Close</button>
 							  </div>
 							</div>
-							";
-				}
+						  </div>
+						</div>
+						";
+			}
 			
 		} while ($row_custom_entry_info = mysqli_fetch_assoc($custom_entry_info));
 	

@@ -56,7 +56,8 @@ switch($section) {
 
 	case "register":
 	$header_output = $_SESSION['contestName'];
-	if (($registration_open != 1) && (!$ua) && (!isset($_SESSION['loginUsername'])) && ($judge_window_open == 1) && ($msg == "default")) $header_output .= " - ".$label_judge_steward_reg;
+	if ($go == "judge") $header_output .= " - ".$label_judge_reg;
+	elseif ($go == "steward") $header_output .= " - ".$label_steward_reg;
 	else $header_output .= " - ".$label_reg;
 	if     ($msg == "1") $output = sprintf("<strong>%s</strong> %s",$header_text_017, $header_text_008);
 	elseif ($msg == "2") { $output = sprintf("<strong>%s</strong>",$header_text_018); $output_extend = sprintf("<p>%s <a href=\"index.php?section=login\">%s</a></p>",$header_text_019,$header_text_020); }

@@ -57,7 +57,7 @@ elseif ((($section == "admin") && ($go == "participants") && ($filter == "defaul
 
 // @single
 elseif ((($section == "admin") && ($go == "participants") && ($filter == "with_entries")  && ($dbTable == "default"))) {
-	$query_brewer = sprintf("SELECT b.uid, b.brewerEmail AS 'Email', cb . *	FROM (SELECT brewBrewerLastName, brewBrewerFirstName, brewBrewerID, GROUP_CONCAT( id ORDER BY id ) AS 'Entries' FROM %s GROUP BY brewBrewerLastName, brewBrewerFirstName, brewBrewerID) cb, %s b WHERE cb.brewBrewerID = b.uid", $prefix."brewing", $prefix."brewer");
+	$query_brewer = sprintf("SELECT b.id, b.uid, b.brewerEmail, b.brewerLastName, b.brewerFirstName, b.brewerPhone1, b.brewerBreweryName, cb . *	FROM (SELECT brewBrewerLastName, brewBrewerFirstName, brewBrewerID, GROUP_CONCAT( id ORDER BY id ) AS 'Entries' FROM %s GROUP BY brewBrewerLastName, brewBrewerFirstName, brewBrewerID) cb, %s b WHERE cb.brewBrewerID = b.uid", $prefix."brewing", $prefix."brewer");
 	if (SINGLE) $query_brewer .= sprintf(" AND FIND_IN_SET('%s',brewerCompParticipant) > 0", $_SESSION['comp_id']);
 	$brewer = mysqli_query($connection,$query_brewer) or die (mysqli_error($connection));
 	$row_brewer = mysqli_fetch_assoc($brewer);

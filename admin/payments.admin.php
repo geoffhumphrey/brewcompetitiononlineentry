@@ -42,8 +42,8 @@ if ($totalRows_payments > 0) {
  <tbody>
  <?php do { ?>
  <tr>
-  <td><?php echo $row_payments['last_name'].", ".$row_payments['first_name']; ?></td>
-  <td class="hidden-xs"><?php echo $row_payments['item_name']; ?></td>
+  <td><?php echo ucwords($row_payments['last_name']).", ".ucwords($row_payments['first_name']); ?></td>
+  <td class="hidden-xs"><?php echo ucwords($row_payments['item_name']); ?></td>
   <td><?php echo $row_payments['payment_gross']." ".$row_payments['currency_code']; ?></td>
   <td><?php echo $row_payments['payment_status']; ?></td>
   <td><?php echo $row_payments['txn_id']; ?></td>

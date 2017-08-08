@@ -71,7 +71,6 @@ if (is_array($spec_sweet_carb_only_info)) $all_special_ing_styles_info = array_m
 
 $all_special_ing_styles_info = array_unique($all_special_ing_styles_info);
 
-
 $proEdition = FALSE;
 if ($_SESSION['prefsProEdition'] == 1) $proEdition = TRUE;
 
@@ -328,8 +327,8 @@ else {
 	else {
 		// get information from database
 		
-		$specials = display_array_content_style($all_special_ing_styles,3,$base_url); 
-		$specials = rtrim($specials,", "); 
+		//$specials = display_array_content_style($all_special_ing_styles,3,$base_url); 
+		//$specials = rtrim($specials,", "); 
 		
 		if (($action == "edit") && ($msg != "default")) {
 			$view = ltrim($msg,"1-"); 

@@ -18,18 +18,18 @@ include (INCLUDES.'version.inc.php');
 // USE THIS FUNCTION ONLY IF THERE ARE *NOT* ANY DB TABLE OR DATA UPDATES
 // OTHERWISE, DEFINE/UPDATE THE VERSION VIA THE UPDATE PROCEDURE
 
-function version_check($version,$current_version) {
+function version_check($version,$current_version,$current_version_date_display) {
 	
 	require(CONFIG.'config.php');
-	mysqli_select_db($connection,$database);
+	
 	if ($version != $current_version) {
 				
-		// Fix typo in styles
-		$updateSQL = sprintf("UPDATE %s SET version='%s', version_date='%s' WHERE id=%s", $prefix."system", "2.1.10.0", $current_version_date_display, "1");
+		$updateSQL = sprintf("UPDATE %s SET version='%s', version_date='%s' WHERE id=%s", $prefix."system", $current_version, $current_version_date_display, "1");
 		mysqli_real_escape_string($connection,$updateSQL);
 		$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 		
 	}
+	
 }
 
 // ---------------------------------------------------  
