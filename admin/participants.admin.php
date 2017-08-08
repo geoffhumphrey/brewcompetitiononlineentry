@@ -241,7 +241,7 @@ do {
 	// build_action_link($icon,$base_url,$section,$go,$action,$filter,$id,$dbTable,$alt_title) {
 	
 	if ($pro_edition == 1) $brewer_tooltip_display_name = $row_brewer['brewerBreweryName'];
-	else $brewer_tooltip_display_name = $row_brewer['brewBrewerFirstName']." ".$row_brewer['brewBrewerLastName'];
+	else $brewer_tooltip_display_name = $row_brewer['brewerFirstName']." ".$row_brewer['brewerLastName'];
 	
 	if (!$archive_display) {
 		$output_datatables_add_link = build_action_link("fa-beer",$base_url,"brew","entries","add",$row_brewer['uid'],"default","default","default",0,"Add an entry for ".$brewer_tooltip_display_name);

@@ -311,7 +311,9 @@ if ($section != "step5") {
 				if (empty($output)) $output_location = "<span class=\"fa fa-lg fa-ban text-danger\"></span> <a href=\"".$base_url."index.php?section=brewer&amp;go=admin&amp;action=edit&amp;filter=".$row_brewer['uid']."&amp;id=".$row_brewer['uid']."\" data-toggle=\"tooltip\" title=\"Enter ".$row_brewer['brewerFirstName']." ".$row_brewer['brewerLastName']."&rsquo;s location preferences\">None specified</a>.";
 				else $output_location = $output;
 				
-				$output_datatables_body .= "<tr>";
+				if (($filter == "bos") && (!empty($bos_judge_eligible))) $output_datatables_body .= "<tr class=\"bg-danger text-danger\">";
+				elseif (($filter == "bos") && (empty($bos_judge_eligible))) $output_datatables_body .= "<tr class=\"bg-success text-success\">";
+				else $output_datatables_body .= "<tr>";
 				$output_datatables_body .= "<td>";
 				$output_datatables_body .= "<input type=\"hidden\" name=\"uid[]\" value=\"".$row_brewer['uid']."\" />";
 				$output_datatables_body .= "<div class=\"checkbox\"><label><input name=\"".$staff_row_field.$row_brewer['uid']."\" type=\"checkbox\" value=\"1\" ".$checked; 
@@ -630,7 +632,7 @@ echo $output_assignment_modals;
 	});
 //]]>	
 </script>
-<table class="table table-responsive table-bordered table-striped" id="sortable">
+<table class="table table-responsive table-bordered <?php if ($filter != "bos") echo "table-striped"; ?>" id="sortable">
 <thead>
 <?php echo $output_datatables_head; ?>
 </thead>

@@ -189,7 +189,7 @@ elseif (($section == "admin") && ($go == "judging") && ($filter == "staff")  && 
 
 // Assign BOS judges query
 elseif (($section == "admin") && ($go == "judging") && ($filter == "bos")  && ($dbTable == "default") && ($action == "assign")) {
-	$query_brewer = "SELECT * FROM $brewer_db_table WHERE (brewerJudgeRank LIKE '%Certified%' OR brewerJudgeRank LIKE'%National%' OR brewerJudgeRank LIKE '%Master%')";
+	$query_brewer = "SELECT * FROM $brewer_db_table WHERE (brewerJudgeRank LIKE 'Recognized%' OR brewerJudgeRank LIKE 'Certified%' OR brewerJudgeRank LIKE 'National%' OR brewerJudgeRank LIKE 'Master%'  OR brewerJudgeRank LIKE '%Cicerone')";
 	if (SINGLE) $query_brewer .= sprintf(" AND brewerJudge='%s' AND FIND_IN_SET('%s',brewerCompParticipant) > 0", "Y-".$_SESSION['comp_id'], $_SESSION['comp_id']);
 	else $query_brewer .= " AND brewerJudge='Y'";
 	$brewer = mysqli_query($connection,$query_brewer) or die (mysqli_error($connection));

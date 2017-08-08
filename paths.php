@@ -44,9 +44,9 @@ define('DEBUGGING',ROOT.'includes'.DIRECTORY_SEPARATOR.'debug'.DIRECTORY_SEPARAT
  * The following are for use by the developer
  * Default for all is FALSE
  */
-define('HOSTED', FALSE); // default FALSE
-define('NHC', FALSE); // default FALSE
-define('SINGLE', FALSE); // default FALSE
+define('HOSTED', FALSE);
+define('NHC', FALSE);
+define('SINGLE', FALSE);
 
 /*
  * Enable to following to put your installation into
@@ -54,7 +54,7 @@ define('SINGLE', FALSE); // default FALSE
  * and displays the maintenance.php file to alert visitors.
  * Default is FALSE
  */
-define('MAINT', FALSE); // default FALSE
+define('MAINT', FALSE);
 
 /**
  * Disable the following to utilize the Load Libraries
@@ -63,7 +63,7 @@ define('MAINT', FALSE); // default FALSE
  * See http://www.brewcompetition.com/local-load
  * Default is TRUE
  */
-define('CDN', TRUE); // default TRUE
+define('CDN', TRUE);
 
 /**
  * Enable the following to put the site into "test mode"
