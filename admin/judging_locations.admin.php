@@ -312,7 +312,10 @@ if ($section != "step5") {
 				else $output_location = $output;
 				
 				if (($filter == "bos") && (!empty($bos_judge_eligible))) $output_datatables_body .= "<tr class=\"bg-danger text-danger\">";
-				elseif (($filter == "bos") && (empty($bos_judge_eligible))) $output_datatables_body .= "<tr class=\"bg-success text-success\">";
+				elseif (($filter == "bos") && (empty($bos_judge_eligible))) {
+					if (strpos($brewer_assignment,'BOS') !== false) $output_datatables_body .= "<tr class=\"bg-info text-info\">";
+					else $output_datatables_body .= "<tr class=\"bg-success text-success\">";
+				}
 				else $output_datatables_body .= "<tr>";
 				$output_datatables_body .= "<td>";
 				$output_datatables_body .= "<input type=\"hidden\" name=\"uid[]\" value=\"".$row_brewer['uid']."\" />";
