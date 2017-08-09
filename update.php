@@ -84,10 +84,12 @@ if (file_exists($filename)) {
 						$version = str_replace(".","",$version);
 						
 						if ($version == "200") $version = "2000";
+					
 						if ($version < "113") {
 							$update_alerts .= "<div class=\"alert alert-danger\"><span class=\"fa fa-lg fa-exclamation-circle\"></span> Your installed version is incompatible with this update script.</div>";
 							$output .= "<p>Please update your database and files manually through version 1.1.2.0 to utilize the update feature.</p>";
 						}
+					
 						if (($version == "113") || ($version == "1130")) {
 							include (UPDATE.'1.1.4.0_update.php');
 							include (UPDATE.'1.1.5.0_update.php');
@@ -201,7 +203,7 @@ if (file_exists($filename)) {
 							include (UPDATE.'current_update.php');
 						}
 						
-						// If current version is 2.1.0.0 or later, only perform the current update
+						// If current version is 2.1.5, only perform the current update
 						// Last update that required this script was 2.1.6
 						if (($version >= "2150") && ($version < "2170"))  {
 							include (UPDATE.'current_update.php');
@@ -287,11 +289,11 @@ else {
         <title><?php echo $row_contest_info['contestName']; ?>: Update to BCOE&amp;M <?php echo $current_version_display; ?></title>
         
         <!-- Load jQuery / http://jquery.com/ -->
-		<script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
         
         <!-- Load Bootstrap / http://www.getbootsrap.com -->
-        <link rel="stylesheet" type="text/css" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
-        <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+        <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
         
         <!--[if lt IE 9]>
           <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
@@ -299,7 +301,7 @@ else {
         <![endif]-->
         
         <!-- Load Font Awesome / https://fortawesome.github.io/Font-Awesome -->
-        <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
         
         <!-- Load BCOE&M Custom Theme CSS - Contains Bootstrap overrides and custom classes -->
         <link rel="stylesheet" type="text/css" href="<?php echo $base_url; ?>/css/default.min.css" />

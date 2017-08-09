@@ -30,8 +30,6 @@ if ($section == "step0") {
 
 }
 
-if (($section == "step2") || ($section == "step3")) require(INCLUDES.'constants.inc.php');
-
 // Set default timezone for setup steps before configuration of installation default timezone
 $timezone_raw = "0";
 
@@ -77,6 +75,8 @@ else {
 	$setup_body .= $output;
 }
 
+$security_question = array($label_secret_01, $label_secret_05, $label_secret_06, $label_secret_07, $label_secret_08, $label_secret_09, $label_secret_10, $label_secret_11, $label_secret_12, $label_secret_13, $label_secret_14, $label_secret_15, $label_secret_16, $label_secret_17, $label_secret_18, $label_secret_19, $label_secret_20, $label_secret_21, $label_secret_22, $label_secret_23, $label_secret_25, $label_secret_26, $label_secret_27);
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -107,11 +107,13 @@ else {
 
         <!-- Load TinyMCE -->
         <script src="https://cdn.tinymce.com/4/tinymce.min.js"></script>
+		<script src="<?php echo $base_url;?>js_includes/tinymce-init.js"></script>
 
-         <!-- Load Bootstrap DateTime Picker / http://eonasdan.github.io/bootstrap-datetimepicker/ -->
-        <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/css/bootstrap-datetimepicker.min.css" />
-        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.11.1/moment-with-locales.min.js"></script>
-        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/js/bootstrap-datetimepicker.min.js"></script>
+        <!-- Load Bootstrap DateTime Picker / http://eonasdan.github.io/bootstrap-datetimepicker/ -->
+		<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/css/bootstrap-datetimepicker.min.css" />
+		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.11.1/moment-with-locales.min.js"></script>
+		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/js/bootstrap-datetimepicker.min.js"></script>
+		<script src="<?php echo $base_url;?>js_includes/date-time.js"></script>
 
         <!-- Load Bootstrap Form Validator / http://1000hz.github.io/bootstrap-validator -->
         <script src="https://cdnjs.cloudflare.com/ajax/libs/1000hz-bootstrap-validator/0.9.0/validator.min.js"></script>

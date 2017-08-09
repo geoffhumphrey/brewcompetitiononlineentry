@@ -23,8 +23,6 @@ require(DB.'common.db.php');
 include (LIB.'common.lib.php');
 include (LANG.'language.lang.php');
 
-session_start();
-
 if (NHC) $base_url = "../";
 else $base_url = $base_url;
 
@@ -100,9 +98,11 @@ if (((isset($_SERVER['HTTP_REFERER'])) && ($referrer['host'] == $_SERVER['SERVER
 	$themes_db_table = $prefix."themes";
 	$users_db_table = $prefix."users";
 
+	/*
 	if (($section == "setup") && (($dbTable == $contest_info_db_table) || ($dbTable == $drop_off_db_table) || ($dbTable == $judging_locations_db_table) || ($dbTable == $styles_db_table) || ($dbTable == $judging_preferences_db_table) || ($dbTable == $brewer_db_table) || ($dbTable == $preferences_db_table))) {
 		require(DB.'common.db.php');
 	}
+	*/
 
 	// --------------------------- // -------------------------------- //
 
@@ -238,7 +238,7 @@ if (((isset($_SERVER['HTTP_REFERER'])) && ($referrer['host'] == $_SERVER['SERVER
 	
 	elseif ($action == "publish") {
 		
-		$update = sprintf("UPDATE %s SET prefsDisplayWinners='%s', prefsWinnerDelay='%s' WHERE id='%s'",$prefix."preferences","Y","0","1");
+		$update = sprintf("UPDATE %s SET prefsDisplayWinners='%s', prefsWinnerDelay='%s' WHERE id='%s'",$prefix."preferences","Y",time(),"1");
 		mysqli_real_escape_string($connection,$update);
 		$result = mysqli_query($connection,$update) or die (mysqli_error($connection));
 

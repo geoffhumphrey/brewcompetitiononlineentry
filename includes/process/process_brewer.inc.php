@@ -113,7 +113,6 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 
 	}
 
-	require(DB.'common.db.php');
 	require(DB.'brewer.db.php');
 	require(DB.'judging_locations.db.php');
 

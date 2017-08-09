@@ -1465,6 +1465,7 @@ if ($setup_free_access == TRUE) {
 		$result = mysqli_query($connection,$sql) or die (mysqli_error($connection));
 		 //echo "<p>".$sql."</p>";
 
+		/*
 		if (HOSTED) {
 			$gh_user_name = "geoff@zkdigital.com";
 			$gh_password = "d9efb18ba2bc4a434ddf85013dbe58f8";
@@ -1486,6 +1487,7 @@ if ($setup_free_access == TRUE) {
 			mysqli_real_escape_string($connection,$sql);
 			$result = mysqli_query($connection,$sql) or die (mysqli_error($connection));
 		}
+		*/
 
 		$output .= "<li class=\"list-group-item\"><span class=\"fa fa-lg fa-check text-success\"></span> The <strong>Users</strong> table was installed successfully.</li>";
 

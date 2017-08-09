@@ -22,45 +22,74 @@ $(document).ready(function() {
 	$("#mead-cider").hide("fast");
 	$("#mead").hide("fast");
 	$("#brewStyleEntry").hide("fast");
+	$("#brewStyleEntryTextArea").prop("required", false);
+	$("input[name='brewStyleCarb']").prop("required", false);
+	$("input[name='brewStyleSweet']").prop("required", false);
+	$("input[name='brewStyleStrength']").prop("required", false);
 	
 	$("#brewStyleType").change(function() {
 		
 		$("#mead-cider").hide("fast");
 		$("#mead").hide("fast");
+		/*
+		$("#brewStyleEntryTextArea").prop("required", false);
+		$("input[name='brewStyleCarb']").prop("required", false);
+		$("input[name='brewStyleSweet']").prop("required", false);
+		$("input[name='brewStyleStrength']").prop("required", false);
+		$("input[name='brewStyleCarb']").removeAttr('checked');
+		$("input[name='brewStyleSweet']").removeAttr('checked');
+		$("input[name='brewStyleStrength']").removeAttr('checked');
+		$("#brewStyleEntryTextArea").val("");
+		$("#brewStyleInfoTextArea").val("");
+		*/
 		
 		if ($("#brewStyleType").val() == "3") {
 			$("#mead-cider").show("fast");
 			$("#mead").show("fast");
+			$("input[name='brewStyleCarb']").prop("required", true);
+			$("input[name='brewStyleSweet']").prop("required", true);
+			$("input[name='brewStyleStrength']").prop("required", true);
 		}
 		
 		else if ($("#brewStyleType").val() == "2") {
 			$("#mead").hide("fast");
 			$("#mead-cider").show("fast");
+			$("input[name='brewStyleCarb']").prop("required", true);
+			$("input[name='brewStyleSweet']").prop("required", true);
 		}
 		
 	});
 	
 	$('input[name=brewStyleReqSpec]').click(function() {
        if($(this).attr('id') == 'brewStyleReqSpec_0') {
-            $("#brewStyleEntry").show("fast");        
+            $("#brewStyleEntry").show("fast");
+		   	$("#brewStyleEntryTextArea").prop("required", true);
        }
 
        else {
          	$("#brewStyleEntry").hide("fast");
+		    $("#brewStyleEntryTextArea").prop("required", false);
+		    $("#brewStyleEntryTextArea").val("");
        }
    	});
 	
 	<?php if (($action == "edit") && ($row_styles['brewStyleReqSpec'] == 1)) { ?>
-	$("#brewStyleEntry").show("fast");	
+	$("#brewStyleEntry").show("fast");
+	$("textarea[name='brewStyleEntry']").prop("required", true);
 	<?php } ?>
 	
 	<?php if (($action == "edit") && ($row_styles['brewStyleType'] == 2)) { ?>
 	$("#mead-cider").show("fast");
+	$("input[name='brewStyleCarb']").prop("required", true);
+	$("input[name='brewStyleSweet']").prop("required", true);
 	<?php } ?>
 	
 	<?php if (($action == "edit") && ($row_styles['brewStyleType'] == 3)) { ?>
 	$("#mead-cider").show("fast");
 	$("#mead").show("fast");
+	$("input[name='brewStyleCarb']").prop("required", true);
+	$("input[name='brewStyleSweet']").prop("required", true);
+	$("input[name='brewStyleStrength']").prop("required", true);
 	<?php } ?>
 	
 	
@@ -99,7 +128,6 @@ $(document).ready(function() {
 		$("#sweetnessLambic").removeClass("has-error");
 		$("#carbLambic").removeClass("has-error");
 		$("#BDGColor").removeClass("has-error");
-		
 		$("#brewInfo").prop("required", false);
 		$("#brewInfoOptional").prop("required", false);
 		$("input[name='brewMead1']").prop("required", false);
@@ -136,7 +164,6 @@ $(document).ready(function() {
 		$("#sweetnessLambic").removeClass("has-error");
 		$("#carbLambic").removeClass("has-error");
 		$("#BDGColor").removeClass("has-error");
-		
 		$("#brewInfo").prop("required", false);
 		$("#brewInfoOptional").prop("required", false);
 		$("input[name='brewMead1']").prop("required", false);
@@ -187,7 +214,6 @@ $(document).ready(function() {
 			$("#carbLambic").removeClass("has-error");
 			$("#BDGColor").removeClass("has-error");
 			$("#brewInfo").prop("required", false);
-			
 			$("input[name='brewMead1']").prop("required", false);
 			$("input[name='brewMead2']").prop("required", false);
 			$("input[name='brewMead3']").prop("required", false);
@@ -198,11 +224,10 @@ $(document).ready(function() {
 			$("input[name='carbLambic']").prop("required", false);
 			$("input[name='BDGColor']").prop("required", false);
 		}
-		
+		// BA beer styles that special ingredients
 		<?php if (strpos($styleSet,"BABDB") !== false) { 
 		
 		foreach ($ba_special_beer as $value) { ?>
-		
 		else if ( 
 			$("#type").val() == "<?php echo $value; ?>"){
 				<?php if ($action == "edit") { ?>
@@ -218,7 +243,6 @@ $(document).ready(function() {
 				$("input[name='carbLambic']").removeAttr('checked');
 				$("input[name='BDGColor']").removeAttr('checked');
 				<?php } ?>
-				
 				$("#special").hide("fast");
 				$("#carbonation").hide("fast");
 				$("#sweetness").hide("fast");
@@ -240,7 +264,6 @@ $(document).ready(function() {
 				$("#sweetnessLambic").removeClass("has-error");
 				$("#carbLambic").removeClass("has-error");
 				$("#BDGColor").removeClass("has-error");
-				
 				$("#brewInfo").prop("required", false);
 				$("input[name='brewMead1']").prop("required", false);
 				$("input[name='brewMead2']").prop("required", false);
@@ -251,18 +274,12 @@ $(document).ready(function() {
 				$("input[name='sweetnessLambic']").prop("required", false);
 				$("input[name='carbLambic']").prop("required", false);
 				$("input[name='BDGColor']").prop("required", false);
-				
 				$("#special").show("fast");
 				$("#brewInfo").prop("required", true);
-				
-				
-				// $("#specialInfo").show("fast");
-				// $("#specialInfoText").html("<?php echo $value; ?>");
-				// $("#specialInfoName").html("<a href='#' data-tooltip='true' title='Click for specifics for this style.' data-toggle='modal' data-target='#<?php echo $key; ?>'>Style <?php echo str_replace("-","",$key); ?></a>");
 			}
 		<?php } ?>
 		
-		// Styles requiring special ing, strength, sweetness, and carb
+		// BA styles that require special ingredients, strength, carbonation and sweetness
 		<?php foreach ($ba_special_carb_str_sweet as $value) { ?>
 		else if ( 
 			$("#type").val() == "<?php echo $value; ?>"){
@@ -279,7 +296,6 @@ $(document).ready(function() {
 				$("input[name='carbLambic']").removeAttr('checked');
 				$("input[name='BDGColor']").removeAttr('checked');
 				<?php } ?>
-				
 				$("#special").hide("fast");
 				$("#carbonation").hide("fast");
 				$("#sweetness").hide("fast");
@@ -300,7 +316,6 @@ $(document).ready(function() {
 				$("#sweetnessLambic").removeClass("has-error");
 				$("#carbLambic").removeClass("has-error");
 				$("#BDGColor").removeClass("has-error");
-				
 				$("#brewInfo").prop("required", false);
 				$("input[name='brewMead1']").prop("required", false);
 				$("input[name='brewMead2']").prop("required", false);
@@ -311,24 +326,18 @@ $(document).ready(function() {
 				$("input[name='sweetnessLambic']").prop("required", false);
 				$("input[name='carbLambic']").prop("required", false);
 				$("input[name='BDGColor']").prop("required", false);
-				
 				$("#special").show("fast");
 				$("#carbonation").show("fast");
 				$("#sweetness").show("fast");
 				$("#strength").show("fast");
-				
 				$("#brewInfo").prop("required", true);
 				$("input[name='brewMead1']").prop("required", true);
 				$("input[name='brewMead2']").prop("required", true);
 				$("input[name='brewMead3']").prop("required", true);
-				
-				//$("#specialInfo").show("fast");
-				//$("#specialInfoText").html("<?php echo $value; ?>");
-				//$("#specialInfoName").html("<a href='#' data-tooltip='true' title='Click for specifics for this style.' data-toggle='modal' data-target='#<?php echo $key; ?>'>Style <?php echo str_replace("-","",$key); ?></a>");
 		}
 		<?php } ?>
 		
-		
+		// BA styles that require carbonation and strength
 		<?php foreach ($ba_carb_str as $value) { ?>
 		else if ( 
 			$("#type").val() == "<?php echo $value; ?>"){
@@ -345,7 +354,6 @@ $(document).ready(function() {
 				$("input[name='carbLambic']").removeAttr('checked');
 				$("input[name='BDGColor']").removeAttr('checked');
 				<?php } ?>
-					
 				$("#special").hide("fast");
 				$("#carbonation").hide("fast");
 				$("#sweetness").hide("fast");
@@ -367,17 +375,15 @@ $(document).ready(function() {
 				$("input[name='sweetnessLambic']").prop("required", false);
 				$("input[name='carbLambic']").prop("required", false);
 				$("input[name='BDGColor']").prop("required", false);
-				
 				$("#carbonation").show("fast");
 				$("#strength").show("fast");
 				$("#specialInfo").hide("fast");
-				
-				$("input[name='brewMead1']").prop("required", true);
+			    $("input[name='brewMead1']").prop("required", true);
 				$("input[name='brewMead3']").prop("required", true);
-		
 		}
 		<?php } ?>
 		
+		// BA styles that require carbonation and sweetness
 		<?php foreach ($ba_carb_sweet as $value) { ?>
 		else if ( 
 			$("#type").val() == "<?php echo ltrim($value,"0"); ?>"){
@@ -394,7 +400,6 @@ $(document).ready(function() {
 				$("input[name='carbLambic']").removeAttr('checked');
 				$("input[name='BDGColor']").removeAttr('checked');
 				<?php } ?>
-				
 				$("#special").hide("fast");
 				$("#carbonation").hide("fast");
 				$("#sweetness").hide("fast");
@@ -407,7 +412,6 @@ $(document).ready(function() {
 				$("#BDGColor").hide("fast");
 				$("#optional").hide("fast");
 				$("#specialInfo").hide("fast");
-				
 				$("#brewInfo").prop("required", false);
 				$("input[name='brewMead1']").prop("required", false);
 				$("input[name='brewMead2']").prop("required", false);
@@ -418,7 +422,6 @@ $(document).ready(function() {
 				$("input[name='sweetnessLambic']").prop("required", false);
 				$("input[name='carbLambic']").prop("required", false);
 				$("input[name='BDGColor']").prop("required", false);
-				
 				$("#carbonation").show("fast");
 				$("#sweetness").show("fast");
 				$("input[name='brewMead1']").prop("required", true);
@@ -426,7 +429,7 @@ $(document).ready(function() {
 		}
 		<?php } ?>
 		
-		// Styles requiring strength, carbonation, and sweetness (no special)
+		// BA styles requiring strength, carbonation, and sweetness (no special)
 		<?php foreach ($ba_carb_str_sweet as $value) { ?>
 		else if ( 
 			$("#type").val() == "<?php echo $value; ?>"){
@@ -465,12 +468,10 @@ $(document).ready(function() {
 				$("input[name='sweetnessLambic']").prop("required", false);
 				$("input[name='carbLambic']").prop("required", false);
 				$("input[name='BDGColor']").prop("required", false);
-				
 				$("#carbonation").show("fast");
 				$("#sweetness").show("fast");
 				$("#strength").show("fast");	
 				$("#specialInfo").hide("fast");
-				
 				$("input[name='brewMead1']").prop("required", true);
 				$("input[name='brewMead2']").prop("required", true);
 				$("input[name='brewMead3']").prop("required", true);
@@ -478,7 +479,7 @@ $(document).ready(function() {
 		}
 		<?php } ?>
 		
-		// Styles requiring special ingredients, carbonation, and sweetness
+		// BA styles requiring special ingredients, carbonation, and sweetness
 		<?php foreach ($ba_carb_sweet_special as $value) { ?>
 		else if ( 
 			$("#type").val() == "<?php echo $value; ?>"){
@@ -516,23 +517,15 @@ $(document).ready(function() {
 				$("input[name='sweetnessLambic']").prop("required", false);
 				$("input[name='carbLambic']").prop("required", false);
 				$("input[name='BDGColor']").prop("required", false);
-				
 				$("#carbonation").show("fast");
 				$("#sweetness").show("fast");
 				$("#special").show("fast");	
-				
-				
 				$("input[name='brewMead1']").prop("required", true);
 				$("input[name='brewMead2']").prop("required", true);
-				
-				//$("#specialInfo").show("fast");
-				//$("#specialInfoText").html("<?php echo $value; ?>");
-				//$("#specialInfoName").html("<a href='#' data-tooltip='true' title='Click for specifics for this style.' data-toggle='modal' data-target='#<?php echo $key; ?>'>Style <?php echo str_replace("-","",$key); ?></a>");
 		}
 		<?php } ?>
-		
+		// BA styles requiring special ingredients and carbonation
 		<?php foreach ($ba_carb_special as $key => $value) { ?>
-		// Styles requiring special ingredients and carbonation
 		else if ( 
 			$("#type").val() == "<?php echo ltrim($key,"0"); ?>"){
 				<?php if ($action == "edit") { ?>
@@ -581,16 +574,12 @@ $(document).ready(function() {
 		<?php } ?>
 		
 		<?php } // END if (strpos($styleSet,"BABDB") !== false) ?>	
-			
 		
-		<?php 
 		
-		// --------------------------------------------------------------------------------------- //
-		
+		// Beer styles that require special ingredients
+		<?php 		
 		if (is_array($special_beer_info)) {
 		foreach ($special_beer_info as $key => $value) { ?>
-		
-		// Special Beer
 		else if ( 
 			$("#type").val() == "<?php echo ltrim($key,"0"); ?>"){
 				
@@ -607,7 +596,6 @@ $(document).ready(function() {
 				$("input[name='carbLambic']").removeAttr('checked');
 				$("input[name='BDGColor']").removeAttr('checked');
 				<?php } ?>
-				
 				$("#special").hide("fast");
 				$("#carbonation").hide("fast");
 				$("#sweetness").hide("fast");
@@ -629,7 +617,6 @@ $(document).ready(function() {
 				$("#sweetnessLambic").removeClass("has-error");
 				$("#carbLambic").removeClass("has-error");
 				$("#BDGColor").removeClass("has-error");
-				
 				$("#brewInfo").prop("required", false);
 				$("input[name='brewMead1']").prop("required", false);
 				$("input[name='brewMead2']").prop("required", false);
@@ -640,17 +627,13 @@ $(document).ready(function() {
 				$("input[name='sweetnessLambic']").prop("required", false);
 				$("input[name='carbLambic']").prop("required", false);
 				$("input[name='BDGColor']").prop("required", false);
-				
 				$("#specialInfo").show("fast");
 				$("#specialInfoText").html("<?php echo $value; ?>");
 				$("#specialInfoName").html("<a href='#' data-tooltip='true' title='Click for specifics for this style.' data-toggle='modal' data-target='#<?php echo $key; ?>'>Style <?php echo str_replace("-","",$key); ?></a>");
 			<?php if ($_SESSION['prefsStyleSet'] == "BJCP2015") { ?>
-			
 			<?php if (in_array($key,$optional_info_styles)) { ?>
 				$("#optional").show("fast");
 			<?php } ?>
-			
-			
 			<?php if (($key == "09-A") || ($key == "10-C") || ($key == "07-C")){ ?>
 				$("#darkLightColor").show("fast");
 				$("input[name='darkLightColor']").prop("required", true);
@@ -716,11 +699,12 @@ $(document).ready(function() {
 			
 		}
 		<?php } 
-		}
+		} ?>
 		
-		if (is_array($carb_str_sweet_special_info)) {
+		// Styles requiring special ingredients, strength, sweetness, and carbonation
+		<?php if (is_array($carb_str_sweet_special_info)) {
 		foreach ($carb_str_sweet_special_info as $key => $value) { ?>
-		// Styles requiring special ing, strength, sweetness, and carb
+		
 		else if ( 
 			$("#type").val() == "<?php echo ltrim($key,"0"); ?>"){
 			<?php if ($action == "edit") { ?>
@@ -736,7 +720,6 @@ $(document).ready(function() {
 			$("input[name='carbLambic']").removeAttr('checked');
 			$("input[name='BDGColor']").removeAttr('checked');
 			<?php } ?>
-			
 			$("#special").hide("fast");
 			$("#carbonation").hide("fast");
 			$("#sweetness").hide("fast");
@@ -767,7 +750,6 @@ $(document).ready(function() {
 			$("input[name='sweetnessLambic']").prop("required", false);
 			$("input[name='carbLambic']").prop("required", false);
 			$("input[name='BDGColor']").prop("required", false);
-			
 			$("#special").show("fast");
 			$("#carbonation").show("fast");
 			$("#sweetness").show("fast");
@@ -776,21 +758,18 @@ $(document).ready(function() {
 			<?php if (in_array($key,$optional_info_styles)) { ?>
 			$("#optional").show("fast");
 			<?php } ?>
-			
 			$("#brewInfo").prop("required", true);
 			$("input[name='brewMead1']").prop("required", true);
 			$("input[name='brewMead2']").prop("required", true);
 			$("input[name='brewMead3']").prop("required", true);
-			
 			$("#specialInfoText").html("<?php echo $value; ?>");
 			$("#specialInfoName").html("<a href='#' data-tooltip='true' title='Click for specifics for this style.' data-toggle='modal' data-target='#<?php echo $key; ?>'>Style <?php echo str_replace("-","",$key); ?></a>");
 		}
 		<?php } 
-		}
-		
-		if (is_array($carb_str_only)) { 
-		foreach ($carb_str_only as $value) { ?>
+		} ?>
 		// Styles requiring strength and carb only
+		<?php if (is_array($carb_str_only)) { 
+		foreach ($carb_str_only as $value) { ?>
 		else if ( 
 			$("#type").val() == "<?php echo ltrim($value,"0"); ?>"){
 			<?php if ($action == "edit") { ?>
@@ -844,7 +823,7 @@ $(document).ready(function() {
 		<?php }
 		} 
 		?>
-		
+		// Styles requiring sweetness and carb only
 		<?php if (is_array($sweet_carb_only)) {
 		foreach ($sweet_carb_only as $value) { ?>
 		else if ( 
@@ -862,9 +841,6 @@ $(document).ready(function() {
 			$("input[name='carbLambic']").removeAttr('checked');
 			$("input[name='BDGColor']").removeAttr('checked');
 			<?php } ?>
-			
-			
-			
 			$("#special").hide("fast");
 			$("#carbonation").hide("fast");
 			$("#sweetness").hide("fast");
@@ -877,7 +853,6 @@ $(document).ready(function() {
 			$("#BDGColor").hide("fast");
 			$("#optional").hide("fast");
 			$("#specialInfo").hide("fast");
-		
 			$("#brewInfo").prop("required", false);
 			$("input[name='brewMead1']").prop("required", false);
 			$("input[name='brewMead2']").prop("required", false);
@@ -888,7 +863,6 @@ $(document).ready(function() {
 			$("input[name='sweetnessLambic']").prop("required", false);
 			$("input[name='carbLambic']").prop("required", false);
 			$("input[name='BDGColor']").prop("required", false);
-			
 			$("#carbonation").show("fast");
 			$("#sweetness").show("fast");
 			<?php if (in_array($value,$optional_info_styles)) { ?>
@@ -896,14 +870,12 @@ $(document).ready(function() {
 			<?php } ?>
 			$("input[name='brewMead1']").prop("required", true);
 			$("input[name='brewMead2']").prop("required", true);
-			
 		}
 		<?php } 
-		}
-		
-		if (is_array($sweet_carb_str_only)) { 
-		foreach ($sweet_carb_str_only as $value) { ?>
+		} ?>
 		// Styles requiring strength, carbonation, and sweetness (no special)
+		<?php if (is_array($sweet_carb_str_only)) { 
+		foreach ($sweet_carb_str_only as $value) { ?>
 		else if ( 
 			$("#type").val() == "<?php echo ltrim($value,"0"); ?>"){
 			<?php if ($action == "edit") { ?>
@@ -919,7 +891,6 @@ $(document).ready(function() {
 			$("input[name='carbLambic']").removeAttr('checked');
 			$("input[name='BDGColor']").removeAttr('checked');
 			<?php } ?>
-			
 			$("#special").hide("fast");
 			$("#carbonation").hide("fast");
 			$("#sweetness").hide("fast");
@@ -931,7 +902,6 @@ $(document).ready(function() {
 			$("#carbLambic").hide("fast");
 			$("#BDGColor").hide("fast");
 			$("#optional").hide("fast");
-			
 			$("#brewInfo").prop("required", false);
 			$("input[name='brewMead1']").prop("required", false);
 			$("input[name='brewMead2']").prop("required", false);
@@ -942,7 +912,6 @@ $(document).ready(function() {
 			$("input[name='sweetnessLambic']").prop("required", false);
 			$("input[name='carbLambic']").prop("required", false);
 			$("input[name='BDGColor']").prop("required", false);
-			
 			$("#carbonation").show("fast");
 			$("#sweetness").show("fast");
 			$("#strength").show("fast");	
@@ -950,18 +919,15 @@ $(document).ready(function() {
 			<?php if (in_array($value,$optional_info_styles)) { ?>
 			$("#optional").show("fast");
 			<?php } ?>
-			
 			$("input[name='brewMead1']").prop("required", true);
 			$("input[name='brewMead2']").prop("required", true);
 			$("input[name='brewMead3']").prop("required", true);
-			
 		}
 		<?php }
-		} 
-		
-		if (is_array($spec_sweet_carb_only)) {
-		foreach ($spec_sweet_carb_only_info as $key => $value) { ?>
+		} ?>
 		// Styles requiring special ingredients, carbonation, and sweetness
+		<?php if (is_array($spec_sweet_carb_only)) {
+		foreach ($spec_sweet_carb_only_info as $key => $value) { ?>
 		else if ( 
 			$("#type").val() == "<?php echo ltrim($key,"0"); ?>"){
 			<?php if ($action == "edit") { ?>
@@ -977,7 +943,6 @@ $(document).ready(function() {
 			$("input[name='carbLambic']").removeAttr('checked');
 			$("input[name='BDGColor']").removeAttr('checked');
 			<?php } ?>
-			
 			$("#special").hide("fast");
 			$("#carbonation").hide("fast");
 			$("#sweetness").hide("fast");
@@ -989,7 +954,6 @@ $(document).ready(function() {
 			$("#carbLambic").hide("fast");
 			$("#BDGColor").hide("fast");
 			$("#optional").hide("fast");
-			
 			$("#brewInfo").prop("required", false);
 			$("input[name='brewMead1']").prop("required", false);
 			$("input[name='brewMead2']").prop("required", false);
@@ -1000,7 +964,6 @@ $(document).ready(function() {
 			$("input[name='sweetnessLambic']").prop("required", false);
 			$("input[name='carbLambic']").prop("required", false);
 			$("input[name='BDGColor']").prop("required", false);
-			
 			$("#carbonation").show("fast");
 			$("#sweetness").show("fast");
 			$("#special").show("fast");	
@@ -1008,19 +971,16 @@ $(document).ready(function() {
 			<?php if (in_array($key,$optional_info_styles)) { ?>
 			$("#optional").show("fast");
 			<?php } ?>
-			
 			$("input[name='brewMead1']").prop("required", true);
 			$("input[name='brewMead2']").prop("required", true);
-			
 			$("#specialInfoText").html("<?php echo $value; ?>");
 			$("#specialInfoName").html("<a href='#' data-tooltip='true' title='Click for specifics for this style.' data-toggle='modal' data-target='#<?php echo $key; ?>'>Style <?php echo str_replace("-","",$key); ?></a>");
 		}
 		<?php }
 		} ?>
-		
+		// Styles requiring special ingredients and carbonation
 		<?php if (is_array($spec_carb_only_info)) {
 		foreach ($spec_carb_only_info as $key => $value) { ?>
-		// Styles requiring special ingredients and carbonation
 		else if ( 
 			$("#type").val() == "<?php echo ltrim($key,"0"); ?>"){
 			<?php if ($action == "edit") { ?>
@@ -1036,7 +996,6 @@ $(document).ready(function() {
 			$("input[name='carbLambic']").removeAttr('checked');
 			$("input[name='BDGColor']").removeAttr('checked');
 			<?php } ?>
-			
 			$("#special").hide("fast");
 			$("#carbonation").hide("fast");
 			$("#sweetness").hide("fast");
@@ -1048,7 +1007,6 @@ $(document).ready(function() {
 			$("#carbLambic").hide("fast");
 			$("#BDGColor").hide("fast");
 			$("#optional").hide("fast");
-			
 			$("#brewInfo").prop("required", false);
 			$("input[name='brewMead1']").prop("required", false);
 			$("input[name='brewMead2']").prop("required", false);
@@ -1059,14 +1017,12 @@ $(document).ready(function() {
 			$("input[name='sweetnessLambic']").prop("required", false);
 			$("input[name='carbLambic']").prop("required", false);
 			$("input[name='BDGColor']").prop("required", false);
-			
 			$("#carbonation").show("fast");
 			$("#special").show("fast");
 			<?php if (in_array($key,$optional_info_styles)) { ?>
 			$("#optional").show("fast");
 			<?php } ?>
 			$("input[name='brewMead1']").prop("required", true);
-			
 			$("#specialInfo").show("fast");
 			$("#specialInfoText").html("<?php echo $value; ?>");
 			$("#specialInfoName").html("<a href='#' data-tooltip='true' title='Click for specifics for this style.' data-toggle='modal' data-target='#<?php echo $key; ?>'>Style <?php echo str_replace("-","",$key); ?></a>");
@@ -1076,9 +1032,8 @@ $(document).ready(function() {
 		?>
 		
 		
-		
+		// Custom styles
 		<?php if (is_array($custom_entry_information)) { 
-			
 			foreach ($custom_entry as $key => $value) { 
 			$explodies = explode("|",$value);
 		?>
@@ -1098,7 +1053,6 @@ $(document).ready(function() {
 			$("input[name='carbLambic']").removeAttr('checked');
 			$("input[name='BDGColor']").removeAttr('checked');
 			<?php } ?>
-			
 			$("#special").hide("fast");
 			$("#carbonation").hide("fast");
 			$("#sweetness").hide("fast");
@@ -1110,63 +1064,43 @@ $(document).ready(function() {
 			$("#carbLambic").hide("fast");
 			$("#BDGColor").hide("fast");
 			$("#optional").hide("fast");
-			
 			<?php if ($explodies[2] == 1) { ?>
 			$("#brewInfo").prop("required", true);
 			$("#special").show("fast");
-			<?php } ?>
-			
-			<?php if ($explodies[3] == 1) { ?>
-			$("input[name='brewMead3']").prop("required", true);
-			$("#strength").show("fast");
-			<?php } ?>
-			
-			<?php if ($explodies[4] == 1) { ?>
-			$("input[name='brewMead1']").prop("required", true);
-			$("#carbonation").show("fast");			
-			<?php } ?>
-			
-			<?php if ($explodies[5] == 1) { ?>
-			$("input[name='brewMead2']").prop("required", true);
-			$("#sweetness").show("fast");
-			<?php } ?>
-			
-			<?php if (!empty($value)) { 
-			$special_info_text = $custom_entry_information["$key"];
-			$special_info_text = strtr($special_info_text,$html_replace);
-			//$special_info_text = preg_replace('/^<br><br>/', '', $special_info_text);
-			$special_info_text = "<p>".$special_info_text."</p>";
+			<?php if (!empty($value)) {
+			$special_info_text = "";
+			if(!empty($custom_entry_information["$key"])) {
+				$special_info_text = $custom_entry_information["$key"];
+				$special_info_text = strtr($special_info_text,$html_replace);
+				//$special_info_text = preg_replace('/^<br><br>/', '', $special_info_text);
+				$special_info_text = "<p>".$special_info_text."</p>";
+			}
+			else $special_info_text = $brew_text_010;
 			?>
 			$("#specialInfo").show("fast");
 			$("#specialInfoText").html("<?php echo $special_info_text; ?>");
 			$("#specialInfoName").html("<a href='#' data-tooltip='true' title='Click for specifics for this style.' data-toggle='modal' data-target='#<?php echo $key; ?>'>Style <?php echo str_replace("-","",$key); ?></a>");
 			<?php } ?>
+			<?php } ?>
+			<?php if ($explodies[3] == 1) { ?>
+			$("input[name='brewMead3']").prop("required", true);
+			$("#strength").show("fast");
+			<?php } ?>
+			<?php if ($explodies[4] == 1) { ?>
+			$("input[name='brewMead1']").prop("required", true);
+			$("#carbonation").show("fast");			
+			<?php } ?>
+			<?php if ($explodies[5] == 1) { ?>
+			$("input[name='brewMead2']").prop("required", true);
+			$("#sweetness").show("fast");
+			<?php } ?>
+			
 			
 		}
 		<?php }	// end foreach
 		} // end if (is_array($custom_entry_information)) 
 		?>
 		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-				
 		else {
 			$("#special").hide("fast");
 			$("#carbonation").hide("fast");
@@ -1189,8 +1123,6 @@ $(document).ready(function() {
 			$("input[name='sweetnessLambic']").prop("required", false);
 			$("input[name='carbLambic']").prop("required", false);
 			$("input[name='BDGColor']").prop("required", false);
-			
-			
 		}
 	}
 	);
@@ -1230,12 +1162,15 @@ if ($action == "edit") {
 	});
 	
 	
-	<?php if (strpos($styleSet,"BABDB") !== false) { 	?>
+	<?php 
+	// --------------------------------------------------------------
+	// Brewers Association
+	// --------------------------------------------------------------
+	if (strpos($styleSet,"BABDB") !== false) { 	?>
 	
 		<?php if (in_array($view,$ba_special_carb_str_sweet)) { ?>
 		// Show fields for styles that require special ingredients, carb, sweetness, strength, etc.
-		
-		// 1 - carb, sweetness, strength, and special styles
+		// BA carb, sweetness, strength, and special styles
 		$(document).ready(function() {
 			$("#special").show("fast");
 			$("#specialInfo").hide("fast");
@@ -1264,8 +1199,7 @@ if ($action == "edit") {
 		<?php } ?>
 		
 		<?php if (in_array($view,$ba_carb_str)) { ?>
-		
-		// 2 - carb and strength only styles
+		// BA carb and strength only styles
 		$(document).ready(function() {
 			$("#special").hide("fast");
 			$("#carbonation").show("fast");
@@ -1294,8 +1228,7 @@ if ($action == "edit") {
 		<?php } ?>
 		
 		<?php if (in_array($view,$ba_carb_sweet)) { ?>
-		
-		// 3 - carb and strength only styles
+		// BA carb and strength only styles
 		$(document).ready(function() {
 			$("#special").hide("fast");
 			$("#carbonation").show("fast");
@@ -1324,8 +1257,7 @@ if ($action == "edit") {
 		<?php } ?>
 		
 		<?php if (in_array($view,$ba_carb_str_sweet)) { ?>
-		
-		// 4 - sweet, carb, and strength only styles 
+		// BA sweet, carb, and strength only styles 
 		$(document).ready(function() {
 			$("#special").hide("fast");
 			$("#carbonation").show("fast");
@@ -1350,12 +1282,10 @@ if ($action == "edit") {
 			$("input[name='carbLambic']").prop("required", false);
 			$("input[name='BDGColor']").prop("required", false);
 		});
-		
 		<?php } ?>
 		
 		<?php if (in_array($view,$ba_carb_sweet_special)) { ?>
-		
-		// 5 - sweet and sweet only styles with special ingredients
+		// BA carb and sweet only styles with special ingredients
 		$(document).ready(function() {
 			$("#special").show("fast");
 			$("#carbonation").show("fast");
@@ -1384,8 +1314,7 @@ if ($action == "edit") {
 		<?php } ?>
 		
 		<?php if (in_array($view,$ba_carb_special)) { ?>
-		
-		// 6 - carb with special ingredients only styles
+		// BA carb with special ingredients only styles
 		$(document).ready(function() {
 			$("#special").show("fast");
 			$("#carbonation").show("fast");
@@ -1410,12 +1339,9 @@ if ($action == "edit") {
 			$("input[name='carbLambic']").prop("required", false);
 			$("input[name='BDGColor']").prop("required", false);
 		});
-		
 		<?php } ?>
-		
 		<?php if (in_array($view,$ba_special_beer)) { ?>
-		
-		// 7 - beer styles with special ingredients only
+		// BA beer styles with special ingredients only
 		$(document).ready(function() {
 			$("#special").show("fast");
 			$("#carbonation").hide("fast");
@@ -1440,15 +1366,13 @@ if ($action == "edit") {
 			$("input[name='carbLambic']").prop("required", false);
 			$("input[name='BDGColor']").prop("required", false);
 		});
-		
 		<?php } ?>
 		
-	<?php }  ?>
+	<?php } // End if Brewers Association ?>
 	
 		<?php if ((is_array($carb_str_sweet_special_info)) && (array_key_exists($view,$carb_str_sweet_special_info))) { ?>
 		// Show fields for styles that require special ingredients, carb, sweetness, strength, etc.
-		
-		// 1 - carb, sweetness, strength, and special styles
+		// Carb, sweetness, strength, and special info styles
 		$(document).ready(function() {
 			$("#special").show("fast");
 			$("#carbonation").show("fast");
@@ -1475,12 +1399,9 @@ if ($action == "edit") {
 			$("#specialInfoText").html("<?php echo $carb_str_sweet_special_info["$view"]; ?>");
 			$("#specialInfoName").html("<a href='#' data-tooltip='true' title='Click for specifics for this style.' data-toggle='modal' data-target='#<?php echo $view; ?>'>Style <?php echo str_replace("-","",$view); ?></a>");
 		});
-		
 		<?php } ?>
-		
 		<?php if ((is_array($carb_str_only)) && (in_array($view,$carb_str_only))) { ?>
-		
-		// 2 - carb and strength only styles
+		// Carb and strength only styles
 		$(document).ready(function() {
 			$("#special").hide("fast");
 			$("#carbonation").show("fast");
@@ -1505,12 +1426,9 @@ if ($action == "edit") {
 			$("input[name='carbLambic']").prop("required", false);
 			$("input[name='BDGColor']").prop("required", false);
 		});
-		
 		<?php } ?>
-		
 		<?php if ((is_array($sweet_carb_only)) && (in_array($view,$sweet_carb_only))) { ?>
-		
-		// 3 - carb and strength only styles
+		// Carb and strength only styles
 		$(document).ready(function() {
 			$("#special").hide("fast");
 			$("#carbonation").show("fast");
@@ -1535,12 +1453,9 @@ if ($action == "edit") {
 			$("input[name='carbLambic']").prop("required", false);
 			$("input[name='BDGColor']").prop("required", false);
 		});
-		
 		<?php } ?>
-		
 		<?php if ((is_array($sweet_carb_str_only)) && (in_array($view,$sweet_carb_str_only))) { ?>
-		
-		// 4 - sweet, carb, and strength only styles 
+		// Sweet, carb, and strength only styles 
 		$(document).ready(function() {
 			$("#special").hide("fast");
 			$("#carbonation").show("fast");
@@ -1565,12 +1480,9 @@ if ($action == "edit") {
 			$("input[name='carbLambic']").prop("required", false);
 			$("input[name='BDGColor']").prop("required", false);
 		});
-		
 		<?php } ?>
-		
 		<?php if ((is_array($spec_sweet_carb_only_info)) && (array_key_exists($view,$spec_sweet_carb_only_info))) { ?>
-		
-		// 5 - sweet and sweet only styles with special ingredients
+		// Sweet and sweet only styles with special ingredients
 		$(document).ready(function() {
 			$("#special").show("fast");
 			$("#carbonation").show("fast");
@@ -1597,12 +1509,9 @@ if ($action == "edit") {
 			$("#specialInfoText").html("<?php echo $spec_sweet_carb_only_info["$view"]; ?>");
 			$("#specialInfoName").html("<a href='#' data-tooltip='true' title='Click for specifics for this style.' data-toggle='modal' data-target='#<?php echo $view; ?>'>Style <?php echo str_replace("-","",$view); ?></a>");
 		});
-		
 		<?php } ?>
-		
 		<?php if ((is_array($spec_carb_only_info)) && (array_key_exists($view,$spec_carb_only_info))) { ?>
-		
-		// 6 - carb with special ingredients only styles
+		// Carb with special ingredients only styles
 		$(document).ready(function() {
 			$("#special").show("fast");
 			$("#carbonation").show("fast");
@@ -1629,12 +1538,9 @@ if ($action == "edit") {
 			$("#specialInfoText").html("<?php echo $spec_carb_only_info["$view"]; ?>");
 			$("#specialInfoName").html("<a href='#' data-tooltip='true' title='Click for specifics for this style.' data-toggle='modal' data-target='#<?php echo $view; ?>'>Style <?php echo str_replace("-","",$view); ?></a>");
 		});
-		
 		<?php } ?>
-		
 		<?php if ((is_array($special_beer_info)) && (array_key_exists($view,$special_beer_info))) { ?>
-		
-		// 7 - beer styles with special ingredients only
+		// Beer styles with special ingredients only
 		$(document).ready(function() {
 			$("#special").show("fast");
 			$("#carbonation").hide("fast");
@@ -1661,11 +1567,8 @@ if ($action == "edit") {
 			$("#specialInfoText").html("<?php echo $special_beer_info["$view"]; ?>");
 			$("#specialInfoName").html("<a href='#' data-tooltip='true' title='Click for specifics for this style.' data-toggle='modal' data-target='#<?php echo $view; ?>'>Style <?php echo str_replace("-","",$view); ?></a>");
 		});
-		
 		<?php } ?>
-		
 		<?php if ($_SESSION['prefsStyleSet'] == "BJCP2015") { ?>
-		
 			<?php if (($view == "09-A") || ($view == "10-C") || ($view == "07-C")) { ?>
 				$(document).ready(function() {
 					$("#special").hide("fast");
@@ -1846,23 +1749,17 @@ if ($action == "edit") {
 					$("#specialInfoName").html("<a href='#' data-tooltip='true' title='Click for specifics for this style.' data-toggle='modal' data-target='#<?php echo $view; ?>'>Style <?php echo str_replace("-","",$view); ?></a>");
 				});
 			<?php }	?>
-		
 		<?php } // if ($_SESSION['prefsStyleSet'] == "BJCP2015") ?>		
-		
-	<?php if (is_array($custom_entry_information)) { 
-	if (array_key_exists($view,$custom_entry_information)) { 
-	
-		// Custom styles
-		
+	<?php 
+	if ((is_array($custom_entry_information)) && (array_key_exists($view,$custom_entry_information))) { 
 		$explodies = explode("|",$custom_entry["$view"]);
-		//print_r($explodies);
 		?>
-		
+		// Custom styles
 		$(document).ready(function() {
-		$("#special").show("fast");
-		$("#carbonation").show("fast");
-		$("#sweetness").show("fast");
-		$("#strength").show("fast");
+		$("#special").hide("fast");
+		$("#carbonation").hide("fast");
+		$("#sweetness").hide("fast");
+		$("#strength").hide("fast");
 		$("#strengthIPA").hide("fast");
 		$("#strengthSaison").hide("fast");
 		$("#darkLightColor").hide("fast");
@@ -1871,38 +1768,27 @@ if ($action == "edit") {
 		$("#BDGColor").hide("fast");
 		$("#optional").hide("fast");
 		$("#specialInfo").hide("fast");
-		
 		<?php if ($explodies[2] == 1) { ?>
-			$("#brewInfo").prop("required", true);
-			$("#special").show("fast");
-			<?php } ?>
-			
-			<?php if (!empty($value)) { ?>
-			$("#specialInfo").show("fast");
-			$("#specialInfoText").html("<?php echo strtr($custom_entry_information["$view"],$html_replace); ?>");
-			$("#specialInfoName").html("<a href='#' data-tooltip='true' title='Click for specifics for this style.' data-toggle='modal' data-target='#<?php echo $view; ?>'>Style <?php echo str_replace("-","",$view); ?></a>");
-			<?php } ?>
-			
-			<?php if ($explodies[3] == 1) { ?>
-			$("input[name='brewMead3']").prop("required", true);
-			$("#strength").show("fast");
-			<?php } ?>
-			
-			<?php if ($explodies[4] == 1) { ?>
-			$("input[name='brewMead1']").prop("required", true);
-			$("#carbonation").show("fast");			
-			<?php } ?>
-			
-			<?php if ($explodies[5] == 1) { ?>
-			$("input[name='brewMead2']").prop("required", true);
-			$("#sweetness").show("fast");
-			<?php } ?>
-		
+		$("#brewInfo").prop("required", true);
+		$("#special").show("fast");
+		$("#specialInfo").show("fast");
+		$("#specialInfoText").html("<?php echo strtr($custom_entry_information["$view"],$html_replace); ?>");
+		$("#specialInfoName").html("<a href='#' data-tooltip='true' title='Click for specifics for this style.' data-toggle='modal' data-target='#<?php echo $view; ?>'>Style <?php echo str_replace("-","",$view); ?></a>");
+		<?php } ?>
+		<?php if ($explodies[3] == 1) { ?>
+		$("input[name='brewMead3']").prop("required", true);
+		$("#strength").show("fast");
+		<?php } ?>
+		<?php if ($explodies[4] == 1) { ?>
+		$("input[name='brewMead1']").prop("required", true);
+		$("#carbonation").show("fast");			
+		<?php } ?>
+		<?php if ($explodies[5] == 1) { ?>
+		$("input[name='brewMead2']").prop("required", true);
+		$("#sweetness").show("fast");
+		<?php } ?>
 		});
-		<?php }
-		}
-		?>
-	
+		<?php }	?>
 <?php } // end if ($action == "edit") ?>
 </script>
 <?php } // end if ($section == "brew") ?>

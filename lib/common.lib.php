@@ -3142,17 +3142,10 @@ function judge_entries($uid,$method) {
 	return $return;
 }
 
-function judging_winner_display($delay) {
-			include (CONFIG.'config.php');
-			mysqli_select_db($connection,$database);
-			$query_check = sprintf("SELECT judgingDate FROM %s ORDER BY judgingDate DESC LIMIT 1", $prefix."judging_locations");
-			$check = mysqli_query($connection,$query_check) or die (mysqli_error($connection));
-			$row_check = mysqli_fetch_assoc($check);
-			$today = strtotime("now");
-			$r = $row_check['judgingDate'] + $delay;
-			if ($r > $today) return FALSE; else return TRUE;
-		}
-		
+function judging_winner_display($display_date) {
+			if (time() > $display_date) return TRUE;
+			else return FALSE;
+	}	
 		
 function format_phone_us($phone = '', $convert = true, $trim = true) {
 	// If we have not entered a phone number just return empty

@@ -755,7 +755,7 @@ if ($section == "brew") {
 	$brew_text_007 = "Sweetness level required"; // missing punctuation intentional
 	$brew_text_008 = "This style requires that you provide specific information for entry.";
 	$brew_text_009 = "Requirements for"; // missing punctuation intentional
-	$brew_text_010 = "This style requires more information. Please provide above.";
+	$brew_text_010 = "This style requires more information. Please enter in the provided area.";
 	$brew_text_011 = "The entry's name is required.";
 	$brew_text_012 = "***NOT REQUIRED*** Provide ONLY if you wish the judges to fully consider what you write here when evaluating and scoring your entry. Use to record specifics that you would like judges to consider when evaluating your entry that you have NOT SPECIFIED in other fields (e.g., mash technique, hop variety, honey variety, grape variety, pear variety, etc.).";
 	$brew_text_013 = "DO NOT use this field to specify special ingredients, classic style, strength (for beer entries), or color.";

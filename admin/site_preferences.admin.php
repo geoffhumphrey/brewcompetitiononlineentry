@@ -175,24 +175,13 @@ $(document).ready(function(){
 </div><!-- ./Form Group -->
 
 <div class="form-group"><!-- Form Group NOT REQUIRED Text Input -->
-    <label for="prefsWinnerDelay" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Winner Display Delay</label>
-    <div class="col-lg-6 col-md-4 col-sm-8 col-xs-12">
-    	<!-- Input Here -->
-        	<input class="form-control" id="prefsWinnerDelay" name="prefsWinnerDelay" type="text" value="<?php if ($section == "step3") echo "24"; else echo $_SESSION['prefsWinnerDelay']; ?>" placeholder="">
-        <span id="helpBlock" class="help-block">Hours to delay displaying winners after the <em>start</em> time of the final judging session.</span>
-    </div>
-</div><!-- ./Form Group -->
-
-<!--
-<div class="form-group">
     <label for="prefsWinnerDelay" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Winner Display Date/Time</label>
     <div class="col-lg-6 col-md-4 col-sm-8 col-xs-12">
-        	<input class="form-control" id="prefsWinnerDelay" name="prefsWinnerDelay" type="text" value="<?php if ($section == "step3") echo getTimeZoneDateTime($_SESSION['prefsTimeZone'], time(), $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "system", "date-time-system"); else echo getTimeZoneDateTime($_SESSION['prefsTimeZone'], $_SESSION['prefsWinnerDelay'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "system", "date-time-system"); ?>" placeholder="<?php if (strpos($section, "step") === FALSE) { echo $current_date." ".$current_time; } ?>">
-        <span id="helpBlock" class="help-block">Date and time to display winners on the home page of the site.</span>
+    	<!-- Input Here -->
+        	<input class="form-control" id="prefsWinnerDelay" name="prefsWinnerDelay" type="text" value="<?php if ($section == "step3") echo getTimeZoneDateTime($_SESSION['prefsTimeZone'], (time() + 4838400), $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "system", "date-time-system"); else echo getTimeZoneDateTime($_SESSION['prefsTimeZone'], $_SESSION['prefsWinnerDelay'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "system", "date-time-system"); ?>" placeholder="<?php if (strpos($section, "step") === FALSE) { echo $current_date." ".$current_time; } ?>">
+        <span id="helpBlock" class="help-block">Date and time when the system will display winners if Winner Display is enabled.</span>
     </div>
-</div>
--->
-
+</div><!-- ./Form Group -->
 <div class="form-group"><!-- Form Group Radio STACKED -->
 	<label for="prefsWinnerMethod" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Winner Place Distribution Method</label>
 	<div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">

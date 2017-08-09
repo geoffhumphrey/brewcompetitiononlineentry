@@ -133,9 +133,9 @@ if (empty($_SESSION['prefs'.$prefix_session])) {
 	if (isset($row_prefs['prefsDisplayWinners'])) $_SESSION['prefsDisplayWinners'] = $row_prefs['prefsDisplayWinners'];
 	else $_SESSION['prefsDisplayWinners'] = "N";
 	if (isset($row_prefs['prefsWinnerDelay'])) $_SESSION['prefsWinnerDelay'] = $row_prefs['prefsWinnerDelay'];
-	else $_SESSION['prefsWinnerDelay'] = "8";
+	else $_SESSION['prefsWinnerDelay'] = 2145916800;
 	if (isset($row_prefs['prefsWinnerMethod'])) $_SESSION['prefsWinnerMethod'] = $row_prefs['prefsWinnerMethod'];
-	else $_SESSION['prefsWinnerMethod'] = "0";
+	else $_SESSION['prefsWinnerMethod'] = 0;
 	if (isset($row_prefs['prefsEntryForm'])) $_SESSION['prefsEntryForm'] = $row_prefs['prefsEntryForm'];
 	else $_SESSION['prefsEntryForm'] = "C";
 	if (isset($row_prefs['prefsRecordLimit'])) $_SESSION['prefsRecordLimit'] = $row_prefs['prefsRecordLimit'];

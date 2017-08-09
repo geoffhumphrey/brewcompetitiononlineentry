@@ -439,6 +439,38 @@ if ((!check_update("brewerBreweryName", $prefix."brewer")) || (FORCE_UPDATE)) {
 	mysqli_real_escape_string($connection,$updateSQL);
 	$result = mysqli_query($connection,$updateSQL);
 	
+	// Alter winner delay to accept a timestamp instead of round number hour delay
+	$updateSQL = sprintf("ALTER TABLE `%s` CHANGE `prefsWinnerDelay` `prefsWinnerDelay` VARCHAR(15) NULL DEFAULT NULL COMMENT 'Unix timestamp to display winners';",$prefix."preferences");
+	mysqli_select_db($connection,$database);
+	mysqli_real_escape_string($connection,$updateSQL);
+	$result = mysqli_query($connection,$updateSQL);
+	
+	// Get the delay value from DB
+	$query_delay = sprintf("SELECT prefsWinnerDelay FROM %s WHERE id='1'", $prefix."preferences");
+	$delay = mysqli_query($connection,$query_delay) or die (mysqli_error($connection));
+	$row_delay = mysqli_fetch_assoc($delay);
+	
+	// Check if the length is less than 10 (Unix timestamp is 10)
+	// If so, convert to timestamp
+	if ((strlen($row_delay['prefsWinnerDelay'])) < 10) {
+		
+		$query_check = sprintf("SELECT judgingDate FROM %s ORDER BY judgingDate DESC LIMIT 1", $prefix."judging_locations");
+		$check = mysqli_query($connection,$query_check) or die (mysqli_error($connection));
+		$row_check = mysqli_fetch_assoc($check);
+
+		// Add the hour delay to the latest judging date
+		$new_timestamp = ($row_delay['prefsWinnerDelay'] * 3600) + $row_check['judgingDate'];
+		
+		$updateSQL = sprintf("UPDATE `%s` SET prefsWinnerDelay='%s';",$prefix."preferences",$new_timestamp);
+		mysqli_select_db($connection,$database);
+		mysqli_real_escape_string($connection,$updateSQL);
+		$result = mysqli_query($connection,$updateSQL);
+		
+		// Update the session variable
+		$_SESSION['prefsWinnerDelay'] = $new_timestamp;
+		
+	}
+	
 	// Change the version and version date in the system table
 	$updateSQL = sprintf("UPDATE %s SET version='%s', version_date='%s' WHERE id=1", $prefix."system", $current_version, $current_version_date_display);
 	mysqli_real_escape_string($connection,$updateSQL);

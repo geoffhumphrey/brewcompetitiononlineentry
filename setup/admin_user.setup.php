@@ -83,7 +83,7 @@ httpxml.send(null);
         });
 </script>
 <?php
-$security_questions_display = (array_rand($security_question, 8));
+$security_questions_display = (array_rand($security_question, 10));
 $security = "";
 foreach ($security_questions_display as $key => $value) {
 	$security .= "<div class=\"radio\"><label><input type=\"radio\" name=\"userQuestion\" value=\"".$security_question[$value]."\"> ".$security_question[$value]."</label></div>";

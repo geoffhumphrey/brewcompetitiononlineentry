@@ -80,7 +80,7 @@ if ((strpos($section, "step") === FALSE) && ($section != "setup")) {
 	$current_date_display = getTimeZoneDateTime($_SESSION['prefsTimeZone'], time(), $_SESSION['prefsDateFormat'], $_SESSION['prefsTimeFormat'], "long", "date");
 	$current_time = getTimeZoneDateTime($_SESSION['prefsTimeZone'], time(), $_SESSION['prefsDateFormat'], $_SESSION['prefsTimeFormat'], "system", "time");
 
-	$delay = $_SESSION['prefsWinnerDelay'] * 3600;
+	$delay = $_SESSION['prefsWinnerDelay'];
 
 }
 
@@ -135,9 +135,6 @@ if (isset($_SESSION['loginUsername']))  {
 		if ((judging_date_return() == 0) && ($entry_window_open == 2) && ($registration_open == 2) && ($judge_window_open == 2)) $show_scoresheets = TRUE;
 
 	}
-	
-	
-	
 
 }
 

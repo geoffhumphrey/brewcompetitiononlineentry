@@ -25,6 +25,9 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 	}
 
 	else $prefsStyleSet = $_POST['prefsStyleSet'];
+	
+	if (!empty($_POST['prefsWinnerDelay'])) $prefsWinnerDelay = strtotime($_POST['prefsWinnerDelay']);
+	else $prefsWinnerDelay = 2145916800;
 
 	if ($action == "add") {
 		$insertSQL = sprintf("INSERT INTO $preferences_db_table (
@@ -111,7 +114,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 
 							   GetSQLValueString($_POST['prefsSponsorLogos'], "text"),
 							   GetSQLValueString($_POST['prefsDisplayWinners'], "text"),
-							   GetSQLValueString($_POST['prefsWinnerDelay'], "text"),
+							   GetSQLValueString($prefsWinnerDelay, "text"),
 
 							   GetSQLValueString($_POST['prefsWinnerMethod'], "text"),
 							   GetSQLValueString($_POST['prefsEntryForm'], "text"),
@@ -277,7 +280,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 							   GetSQLValueString($_POST['prefsTransFee'], "text"),
 							   GetSQLValueString($_POST['prefsSponsors'], "text"),
 							   GetSQLValueString($_POST['prefsDisplayWinners'], "text"),
-							   GetSQLValueString($_POST['prefsWinnerDelay'], "text"),
+							   GetSQLValueString($prefsWinnerDelay, "text"),
 
 							   GetSQLValueString($_POST['prefsWinnerMethod'], "int"),
 							   GetSQLValueString($_POST['prefsEntryForm'], "text"),

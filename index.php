@@ -84,7 +84,7 @@ $datetime_load = array("contest_info","judging","testing","preferences","step4",
 if (((strpos($section, "step") === FALSE) && ($section != "setup")) && ((judging_date_return() == 0) && ($registration_open == 2))) $datatables_load = array("admin","list","default");
 else $datatables_load = array("admin","list","step4");
 
-$security_question = array($label_secret_01,$label_secret_05,$label_secret_06,$label_secret_07,$label_secret_08,$label_secret_09,$label_secret_10,$label_secret_11,$label_secret_12,$label_secret_13,$label_secret_14,$label_secret_15,$label_secret_16,$label_secret_17,$label_secret_18,$label_secret_19,$label_secret_20,$label_secret_21,$label_secret_22,$label_secret_23,$label_secret_25,$label_secret_26,$label_secret_27);
+$security_question = array($label_secret_01, $label_secret_05, $label_secret_06, $label_secret_07, $label_secret_08, $label_secret_09, $label_secret_10, $label_secret_11, $label_secret_12, $label_secret_13, $label_secret_14, $label_secret_15, $label_secret_16, $label_secret_17, $label_secret_18, $label_secret_19, $label_secret_20, $label_secret_21, $label_secret_22, $label_secret_23, $label_secret_25, $label_secret_26, $label_secret_27);
 
 // ---------------------------------------------------------------------------------
 

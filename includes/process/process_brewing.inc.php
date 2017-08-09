@@ -9,8 +9,6 @@
 
 if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) && (isset($_SESSION['userLevel'])))) { 
 	
-	include (DB.'common.db.php');
-	
 	$query_user = sprintf("SELECT userLevel FROM $users_db_table WHERE user_name = '%s'", $_SESSION['loginUsername']);
 	$user = mysqli_query($connection,$query_user) or die (mysqli_error($connection));
 	$row_user = mysqli_fetch_assoc($user);
@@ -48,6 +46,8 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 		
 		// Style
 		$styleBreak = $_POST['brewStyle'];
+		
+		
 				
 		$style = explode('-', $styleBreak);
 		if (preg_match("/^[[:digit:]]+$/",$style[0])) $index = sprintf('%02d',$style[0])."-".$style[1];
@@ -70,6 +70,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 				$style_name = mysqli_query($connection,$query_style_name) or die (mysqli_error($connection));
 				$row_style_name = mysqli_fetch_assoc($style_name);
 				$styleName = $row_style_name['brewStyle'];
+				$styleID = $row_style_name['id'];
 			}
 			
 			else $styleName = $_SESSION['styles']['data'][$style[1]-1]['name'];
@@ -96,8 +97,24 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 			if (is_array($spec_sweet_carb_only)) $all_special_ing_styles = array_merge($all_special_ing_styles,$spec_sweet_carb_only);
 			if (is_array($spec_carb_only)) $all_special_ing_styles = array_merge($all_special_ing_styles,$spec_carb_only);
 		}
-		else { 
-			$all_special_ing_styles = array_merge($all_special_ing_styles,$ba_special_ids);
+		else {
+			
+			// Get any custom styles
+			$custom_special_ing_styles = array();
+			$query_custom_special = sprintf("SELECT id FROM %s WHERE brewStyleOwn='custom' AND brewStyleReqSpec='1'",$styles_db_table);
+			$custom_special = mysqli_query($connection,$query_custom_special) or die (mysqli_error($connection));
+			$row_custom_special = mysqli_fetch_assoc($custom_special);
+			$totalRows_custom_special = mysqli_num_rows($custom_special);
+			
+			
+			if ($totalRows_custom_special > 0) {
+				
+				do { $custom_special_ing_styles[] = $row_custom_special['id']; } while($row_custom_special = mysqli_fetch_assoc($custom_special));
+				
+			}
+			
+			$all_special_ing_styles = array_merge($custom_special_ing_styles,$ba_special_ids);
+			
 		}
 		
 		$brewName = $_POST['brewName'];
@@ -111,10 +128,11 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 		
 		if (strpos($_SESSION['prefsStyleSet'],"BABDB") === false) {
 			if (in_array($styleReturn,$all_special_ing_styles)) $brewInfo .= strip_tags($_POST['brewInfo']);
+			//echo $styleReturn; print_r($all_special_ing_styles); echo $brewInfo; exit;
 		}
 		else {
-			if (in_array($style[1],$all_special_ing_styles)) $brewInfo .= strip_tags($_POST['brewInfo']);
-			//echo $style[1]; print_r($all_special_ing_styles); echo $brewInfo; exit;
+			if (in_array($styleID,$all_special_ing_styles)) $brewInfo .= strip_tags($_POST['brewInfo']);
+			//echo $styleID."<br>"; print_r($all_special_ing_styles); echo $brewInfo; exit;
 		}
 		if (is_array($custom_entry_information)) {
 			if (array_key_exists($index,$custom_entry_information)) { 
@@ -148,7 +166,6 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 			elseif ($index == "21-B5") $brewInfo = $row_style_name['brewStyle']."^".$_POST['strengthIPA'];
 			elseif ($index == "21-B6") $brewInfo = $row_style_name['brewStyle']."^".$_POST['strengthIPA'];
 			
-			
 			// Fruit Lambic carb/sweetness
 			elseif ($index == "23-F") $brewInfo .= "^".$_POST['sweetnessLambic']."^".$_POST['carbLambic'];
 			
@@ -167,6 +184,8 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 		$brewMead1 = "";
 		$brewMead2 = "";
 		$brewMead3 = "";
+		
+		if ($style[0] > 34) $styleID = $styleID; else $styleID = $style[1];
 		
 		if (strpos($_SESSION['prefsStyleSet'],"BABDB") === false) {
 			
@@ -189,15 +208,58 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 		
 		else {
 			
-			if ((isset($_POST['brewMead1'])) && (in_array($style[1],$ba_carb_ids))) $brewMead1 .= $_POST['brewMead1']; // Carbonation
-			if ((isset($_POST['brewMead2'])) && (in_array($style[1],$ba_sweetness_ids)))  $brewMead2 .= $_POST['brewMead2']; // Sweetness
-			if ((isset($_POST['brewMead3'])) && (in_array($style[1],$ba_strength_ids)))  $brewMead3 .= $_POST['brewMead3']; // Strength
+			// Check if any custom styles have mead1, mead2, or mead3 requirements. If so, add to appropriate array.
+			
+			// Carbonation
+			$custom_carb_ids = array();
+			$query_custom_carb = sprintf("SELECT id FROM %s WHERE brewStyleOwn='custom' AND brewStyleCarb='1'",$styles_db_table);
+			$custom_carb = mysqli_query($connection,$query_custom_carb) or die (mysqli_error($connection));
+			$row_custom_carb = mysqli_fetch_assoc($custom_carb);
+			$totalRows_custom_carb = mysqli_num_rows($custom_carb);
+			
+			if ($totalRows_custom_carb > 0) {
+				do { $custom_carb_ids[] = $row_custom_carb['id']; } while($row_custom_carb = mysqli_fetch_assoc($custom_carb));			
+			}
+			
+			$all_carb_ids = array_merge($custom_carb_ids,$ba_carb_ids);
+			
+			// Sweetness
+			$custom_sweet_ids = array();
+			$query_custom_sweet = sprintf("SELECT id FROM %s WHERE brewStyleOwn='custom' AND brewStyleSweet='1'",$styles_db_table);
+			$custom_sweet = mysqli_query($connection,$query_custom_sweet) or die (mysqli_error($connection));
+			$row_custom_sweet = mysqli_fetch_assoc($custom_sweet);
+			$totalRows_custom_sweet = mysqli_num_rows($custom_sweet);
+			
+			if ($totalRows_custom_sweet > 0) {
+				do { $custom_sweet_ids[] = $row_custom_sweet['id']; } while($row_custom_sweet = mysqli_fetch_assoc($custom_sweet));			
+			}
+			
+			$all_sweet_ids = array_merge($custom_sweet_ids,$ba_sweetness_ids);
+			
+			// Strength
+			$custom_strength_ids = array();
+			$query_custom_strength = sprintf("SELECT id FROM %s WHERE brewStyleOwn='custom' AND brewStyleStrength='1'",$styles_db_table);
+			$custom_strength = mysqli_query($connection,$query_custom_strength) or die (mysqli_error($connection));
+			$row_custom_strength = mysqli_fetch_assoc($custom_strength);
+			$totalRows_custom_strength = mysqli_num_rows($custom_strength);
+			
+			if ($totalRows_custom_strength > 0) {
+				do { $custom_strength_ids[] = $row_custom_strength['id']; } while($row_custom_strength = mysqli_fetch_assoc($custom_strength));			
+			}
+			
+			$all_strength_ids = array_merge($custom_strength_ids,$ba_strength_ids);
+			
+			if ((isset($_POST['brewMead1'])) && (in_array($styleID,$all_carb_ids))) $brewMead1 .= $_POST['brewMead1']; // Carbonation
+			if ((isset($_POST['brewMead2'])) && (in_array($styleID,$all_sweet_ids)))  $brewMead2 .= $_POST['brewMead2']; // Sweetness
+			if ((isset($_POST['brewMead3'])) && (in_array($styleID,$all_strength_ids)))  $brewMead3 .= $_POST['brewMead3']; // Strength
 			
 		}
 		
-		
-		
 		/*
+		print_r($all_carb_ids);
+		print_r($all_sweet_ids);
+		print_r($all_strength_ids);
+		echo "ID: ".$styleID."<br>";
 		echo "Carb: ".$brewMead1."<br>";
 		echo "Sweet: ".$brewMead2."<br>";
 		echo "Strength: ".$brewMead3;
@@ -542,7 +604,6 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 			$insertSQL .= GetSQLValueString($brewInfoOptional,"text");
 			$insertSQL .= ")";
 		
-		
 		// echo $insertSQL; exit;
 		mysqli_real_escape_string($connection,$insertSQL);
 		$result = mysqli_query($connection,$insertSQL) or die (mysqli_error($connection));
@@ -581,12 +642,12 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 			}
 			
 			if ($section == "admin") {
-				if (empty($brewInfo)) $insertGoTo = $base_url."index.php?section=brew&go=entries&filter=$filter&action=edit&id=$id&msg=1-".$styleReturn;
+				if (empty($brewInfo)) $insertGoTo = $base_url."index.php?section=brew&go=entries&filter=$filter&action=edit&id=$id&view=$styleReturn&msg=1-".$styleReturn;
 				else $insertGoTo = $base_url."index.php?section=admin&go=entries&msg=2";
 			}
 			
 			else {
-				if (empty($brewInfo)) $insertGoTo = $base_url."index.php?section=brew&action=edit&id=$id&msg=1-".$styleReturn;
+				if (empty($brewInfo)) $insertGoTo = $base_url."index.php?section=brew&action=edit&id=$id&view=$styleReturn&msg=1-".$styleReturn;
 				else $insertGoTo = $base_url."index.php?section=list&msg=2";
 			}
 			  
@@ -603,12 +664,12 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 			}
 			
 			if ($section == "admin") {
-				if ((empty($brewMead1)) || (empty($brewMead2))) $insertGoTo = $base_url."index.php?section=brew&go=entries&filter=$filter&action=edit&id=$id&msg=1-".$styleReturn;
+				if ((empty($brewMead1)) || (empty($brewMead2))) $insertGoTo = $base_url."index.php?section=brew&go=entries&filter=$filter&action=edit&id=$id&view=$styleReturn&msg=1-".$styleReturn;
 				else $insertGoTo = $base_url."index.php?section=admin&go=entries&msg=2";
 			}
 			
 			else {
-				if (empty($brewMead1)) $insertGoTo = $base_url."index.php?section=brew&action=edit&id=$id&msg=1-".$styleReturn;
+				if (empty($brewMead1)) $insertGoTo = $base_url."index.php?section=brew&action=edit&id=$id&view=$styleReturn&msg=1-".$styleReturn;
 				else $insertGoTo = $base_url."index.php?section=list&msg=2";
 			}
 			  
@@ -624,12 +685,12 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 			}
 			
 			if ($section == "admin") {
-				if (empty($brewMead2)) $insertGoTo = $base_url."index.php?section=brew&go=entries&filter=$filter&action=edit&id=$id&msg=1-".$styleReturn;
+				if (empty($brewMead2)) $insertGoTo = $base_url."index.php?section=brew&go=entries&filter=$filter&action=edit&id=$id&view=$styleReturn&msg=1-".$styleReturn;
 				else $insertGoTo = $base_url."index.php?section=admin&go=entries&msg=2";
 			}
 			
 			else {
-				if (empty($brewMead2)) $insertGoTo = $base_url."index.php?section=brew&action=edit&id=$id&msg=1-".$styleReturn;
+				if (empty($brewMead2)) $insertGoTo = $base_url."index.php?section=brew&action=edit&id=$id&view=$styleReturn&msg=1-".$styleReturn;
 				else $insertGoTo = $base_url."index.php?section=list&msg=2";
 			}
 			  
@@ -646,12 +707,12 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 			}
 			
 			if ($section == "admin") {
-				if (empty($brewMead3)) $insertGoTo = $base_url."index.php?section=brew&go=entries&filter=$filter&action=edit&id=$id&msg=1-".$styleReturn;
+				if (empty($brewMead3)) $insertGoTo = $base_url."index.php?section=brew&go=entries&filter=$filter&action=edit&id=$id&view=$styleReturn&msg=1-".$styleReturn;
 				else $insertGoTo = $base_url."index.php?section=admin&go=entries&msg=2";
 			}
 			
 			else {
-				if (empty($brewMead3)) $insertGoTo = $base_url."index.php?section=brew&action=edit&id=$id&msg=1-".$styleReturn;
+				if (empty($brewMead3)) $insertGoTo = $base_url."index.php?section=brew&action=edit&id=$id&view=$styleReturn&msg=1-".$styleReturn;
 				else $insertGoTo = $base_url."index.php?section=list&msg=2";
 			}
 		}
@@ -665,12 +726,12 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 			}
 			
 			if ($section == "admin") {
-				if ((empty($brewMead1)) || (empty($brewMead2)) || (empty($brewMead3)))  $insertGoTo = $base_url."index.php?section=brew&go=entries&filter=$filter&action=edit&id=$id&msg=1-".$styleReturn;
+				if ((empty($brewMead1)) || (empty($brewMead2)) || (empty($brewMead3)))  $insertGoTo = $base_url."index.php?section=brew&go=entries&filter=$filter&action=edit&id=$id&view=$styleReturn&msg=1-".$styleReturn;
 				else $insertGoTo = $base_url."index.php?section=admin&go=entries&msg=2";
 			}
 			
 			else {
-				if ((empty($brewMead1)) || (empty($brewMead2)) || (empty($brewMead3))) $insertGoTo = $base_url."index.php?section=brew&action=edit&id=$id&msg=1-".$styleReturn;
+				if ((empty($brewMead1)) || (empty($brewMead2)) || (empty($brewMead3))) $insertGoTo = $base_url."index.php?section=brew&action=edit&id=$id&view=$styleReturn&msg=1-".$styleReturn;
 				else $insertGoTo = $base_url."index.php?section=list&msg=2";
 			}
 			  
@@ -837,12 +898,12 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 			}
 			
 			if ($section == "admin") {
-				if (empty($brewInfo)) $updateGoTo = $base_url."index.php?section=brew&go=entries&filter=$filter&action=edit&id=$id&msg=1-".$styleReturn;
+				if (empty($brewInfo)) $updateGoTo = $base_url."index.php?section=brew&go=entries&filter=$filter&action=edit&id=$id&view=$styleReturn&msg=1-".$styleReturn;
 				else $updateGoTo = $base_url."index.php?section=admin&go=entries&msg=2";
 			}
 			
 			else {
-				if (empty($brewInfo)) $updateGoTo = $base_url."index.php?section=brew&action=edit&id=$id&msg=1-".$styleReturn;
+				if (empty($brewInfo)) $updateGoTo = $base_url."index.php?section=brew&action=edit&id=$id&view=$styleReturn&msg=1-".$styleReturn;
 				else $updateGoTo = $base_url."index.php?section=list&msg=2";
 			}
 			  
@@ -859,12 +920,12 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 			}
 			
 			if ($section == "admin") {
-				if (empty($brewMead1)) $updateGoTo = $base_url."index.php?section=brew&go=entries&filter=$filter&action=edit&id=$id&msg=1-".$styleReturn;
+				if (empty($brewMead1)) $updateGoTo = $base_url."index.php?section=brew&go=entries&filter=$filter&action=edit&id=$id&view=$styleReturn&msg=1-".$styleReturn;
 				else $updateGoTo = $base_url."index.php?section=admin&go=entries&msg=2";
 			}
 			
 			else {
-				if (empty($brewMead1)) $updateGoTo = $base_url."index.php?section=brew&action=edit&id=$id&msg=1-".$styleReturn;
+				if (empty($brewMead1)) $updateGoTo = $base_url."index.php?section=brew&action=edit&id=$id&view=$styleReturn&msg=1-".$styleReturn;
 				else $updateGoTo = $base_url."index.php?section=list&msg=2";
 			}
 			  
@@ -879,12 +940,12 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 			}
 			
 			if ($section == "admin") {
-				if (empty($brewMead2)) $updateGoTo = $base_url."index.php?section=brew&go=entries&filter=$filter&action=edit&id=$id&msg=1-".$styleReturn;
+				if (empty($brewMead2)) $updateGoTo = $base_url."index.php?section=brew&go=entries&filter=$filter&action=edit&id=$id&view=$styleReturn&msg=1-".$styleReturn;
 				else $updateGoTo = $base_url."index.php?section=admin&go=entries&msg=2";
 			}
 			
 			else {
-				if (empty($brewMead2)) $updateGoTo = $base_url."index.php?section=brew&action=edit&id=$id&msg=1-".$styleReturn;
+				if (empty($brewMead2)) $updateGoTo = $base_url."index.php?section=brew&action=edit&id=$id&view=$styleReturn&msg=1-".$styleReturn;
 				else $updateGoTo = $base_url."index.php?section=list&msg=2";
 			}
 			  
@@ -900,12 +961,12 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 			}
 			
 			if ($section == "admin") {
-				if (empty($brewMead3)) $updateGoTo = $base_url."index.php?section=brew&go=entries&filter=$filter&action=edit&id=$id&msg=1-".$styleReturn;
+				if (empty($brewMead3)) $updateGoTo = $base_url."index.php?section=brew&go=entries&filter=$filter&action=edit&id=$id&view=$styleReturn&msg=1-".$styleReturn;
 				else $updateGoTo = $base_url."index.php?section=admin&go=entries&msg=2";
 			}
 			
 			else {
-				if (empty($brewMead3)) $updateGoTo = $base_url."index.php?section=brew&action=edit&id=$id&msg=1-".$styleReturn;
+				if (empty($brewMead3)) $updateGoTo = $base_url."index.php?section=brew&action=edit&id=$id&view=$styleReturn&msg=1-".$styleReturn;
 				else $updateGoTo = $base_url."index.php?section=list&msg=2";
 			}
 		}

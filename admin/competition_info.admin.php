@@ -367,7 +367,7 @@ if ($section == "admin") { ?>
         <div class="input-group has-warning">
         	<span class="input-group-addon" id="contestEntryFee-addon1"><?php echo $currency_symbol; ?></span>
             <!-- Input Here -->
-            <input class="form-control" id="contestEntryFee" name="contestEntryFee" type="number" maxlength="3" value="<?php if ($section != "step4") echo $row_contest_info['contestEntryFee']; ?>" placeholder="" required>
+            <input class="form-control" id="contestEntryFee" name="contestEntryFee" type="number" maxlength="5" step=".01" value="<?php if ($section != "step4") echo $row_contest_info['contestEntryFee']; ?>" placeholder="" required>
             <span class="input-group-addon" id="contestEntryFee-addon2"><span class="fa fa-star"></span></span>
 
         </div>

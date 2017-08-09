@@ -501,7 +501,7 @@ $custom_entry_information = "";
 if (strpos($_SESSION['prefsStyleSet'],"BABDB") === false) {
 	
 	// Check for custom styles
-	$query_custom_entry_info = sprintf("SELECT * FROM %s WHERE brewStyleOwn='custom'", $styles_db_table, $_SESSION['prefsStyleSet']);
+	$query_custom_entry_info = sprintf("SELECT * FROM %s WHERE brewStyleOwn='custom'", $styles_db_table);
 	$custom_entry_info = mysqli_query($connection,$query_custom_entry_info) or die (mysqli_error($connection));
 	$row_custom_entry_info = mysqli_fetch_assoc($custom_entry_info);
 	$totalRows_custom_entry_info = mysqli_num_rows($custom_entry_info); 
