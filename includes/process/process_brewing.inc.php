@@ -46,8 +46,6 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 		
 		// Style
 		$styleBreak = $_POST['brewStyle'];
-		
-		
 				
 		$style = explode('-', $styleBreak);
 		if (preg_match("/^[[:digit:]]+$/",$style[0])) $index = sprintf('%02d',$style[0])."-".$style[1];
@@ -119,6 +117,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 		
 		$brewName = $_POST['brewName'];
 		$brewName = strip_tags($brewName);
+		$brewName = strtr($brewName,$quote_convert);
 		$brewName = filter_var($brewName,FILTER_SANITIZE_STRING);
 		$brewName = strtolower($brewName);
 		$brewName = ucwords($brewName);
@@ -149,6 +148,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 			
 			if (!isset($_POST['brewInfoOptional'])) {
 				$brewInfoOptional = strip_tags($_POST['brewInfoOptional']);
+				$brewInfoOptional  = strtr($brewInfoOptional ,$quote_convert);
 				$brewInfoOptional = filter_var($brewInfoOptional,FILTER_SANITIZE_STRING);
 			}
 			
@@ -179,6 +179,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 		}
 		
 		$brewInfo = strip_tags($brewInfo);
+		$brewInfo = strtr($brewInfo,$quote_convert);
 		$brewInfo = filter_var($brewInfo,FILTER_SANITIZE_STRING);
 		
 		$brewMead1 = "";

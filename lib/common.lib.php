@@ -394,11 +394,16 @@ if ($v == "milliliters") { // fluid ounces to milliliters
 }
 
 function GetSQLValueString($theValue, $theType, $theDefinedValue = "", $theNotDefinedValue = "")  {
-  $theValue = (!get_magic_quotes_gpc()) ? addslashes($theValue) : $theValue;
-  require (INCLUDES.'scrubber.inc.php');
-  switch ($theType) {
-  
+	$theValue = (!get_magic_quotes_gpc()) ? addslashes($theValue) : $theValue;
+	
+	require (INCLUDES.'scrubber.inc.php');
+	
+	$theValue = strip_tags($theValue);
+	$theValue = filter_var($theValue,FILTER_SANITIZE_STRING);
+
+	switch ($theType) {
 	case "text":
+	  $theValue = strtr($theValue,$quote_convert);
 	  $theValue = ($theValue != "") ? "'" . $theValue . "'" : "NULL";
 	  break;     
 	case "long":
@@ -416,8 +421,8 @@ function GetSQLValueString($theValue, $theType, $theDefinedValue = "", $theNotDe
 	  break;
 	case "scrubbed":
 	  $theValue = ($theValue != "") ? "'" . strtr($theValue, $html_string) . "'" : "NULL";
-  }
-  return $theValue;
+	}
+	return $theValue;
 }
 
 function currency_info($input,$method) {

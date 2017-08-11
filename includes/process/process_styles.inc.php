@@ -130,6 +130,14 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 	} // end if ($action == "update");
 	
 	if ($action == "add") {
+		
+		$brewStyleEntry = strip_tags($_POST['brewStyleEntry']);
+		$brewStyleEntry = filter_var($brewStyleEntry,FILTER_SANITIZE_STRING);
+		$brewStyleEntry = strtr($brewStyleEntry,$quote_convert);
+		
+		$brewStyleInfo = strip_tags($_POST['brewStyleInfo']);
+		$brewStyleInfo = filter_var($brewStyleInfo,FILTER_SANITIZE_STRING);
+		$brewStyleInfo = strtr($brewStyleInfo,$quote_convert);
 	
 		if ($_SESSION['prefsStyleSet'] == "BJCP2008") $category_end = 28;		
 		else $category_end = 34;	
@@ -207,7 +215,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 							   GetSQLValueString($_POST['brewStyleSRM'], "text"),
 							   GetSQLValueString($_POST['brewStyleSRMMax'], "text"),
 							   GetSQLValueString($_POST['brewStyleType'], "text"),
-							   GetSQLValueString(strip_tags($_POST['brewStyleInfo']), "text"),
+							   GetSQLValueString($brewStyleInfo, "text"),
 							   GetSQLValueString($brew_style_link, "text"),
 							   GetSQLValueString($style_add_one, "text"),
 							   GetSQLValueString($_POST['brewStyleActive'], "text"),
@@ -217,7 +225,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 							   GetSQLValueString($_POST['brewStyleStrength'], "text"),
 							   GetSQLValueString($_POST['brewStyleCarb'], "text"),
 							   GetSQLValueString($_POST['brewStyleSweet'], "text"),
-							   GetSQLValueString(strip_tags($_POST['brewStyleEntry']), "text")
+							   GetSQLValueString($brewStyleEntry, "text")
 							   );
 			
 			
@@ -275,7 +283,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 							   GetSQLValueString($_POST['brewStyleSRM'], "text"),
 							   GetSQLValueString($_POST['brewStyleSRMMax'], "text"),
 							   GetSQLValueString($_POST['brewStyleType'], "text"),
-							   GetSQLValueString(strip_tags($_POST['brewStyleInfo']), "text"),
+							   GetSQLValueString($brewStyleInfo, "text"),
 							   GetSQLValueString($brew_style_link, "text"),
 							   GetSQLValueString($style_add_one, "text"),
 							   GetSQLValueString($_POST['brewStyleActive'], "text"),
@@ -285,7 +293,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 							   GetSQLValueString($_POST['brewStyleStrength'], "text"),
 							   GetSQLValueString($_POST['brewStyleCarb'], "text"),
 							   GetSQLValueString($_POST['brewStyleSweet'], "text"),
-							   GetSQLValueString(strip_tags($_POST['brewStyleEntry']), "text")
+							   GetSQLValueString($brewStyleEntry, "text")
 							   );		
 			
 		}
@@ -302,6 +310,14 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 	} // end if ($action == "add");
 	
 	if ($action == "edit") {
+		
+		$brewStyleEntry = strip_tags($_POST['brewStyleEntry']);
+		$brewStyleEntry = filter_var($brewStyleEntry,FILTER_SANITIZE_STRING);
+		$brewStyleEntry = strtr($brewStyleEntry,$quote_convert);
+		
+		$brewStyleInfo = strip_tags($_POST['brewStyleInfo']);
+		$brewStyleInfo = filter_var($brewStyleInfo,FILTER_SANITIZE_STRING);
+		$brewStyleInfo = strtr($brewStyleInfo,$quote_convert);
 		
 		if ($_POST['brewStyleType'] == 2) $styleStrength = 0; else $styleStrength = $_POST['brewStyleStrength'];
 		
@@ -358,7 +374,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 						   GetSQLValueString($_POST['brewStyleSRM'], "text"),
 						   GetSQLValueString($_POST['brewStyleSRMMax'], "text"),
 						   GetSQLValueString($_POST['brewStyleType'], "text"),
-						   GetSQLValueString(strip_tags($_POST['brewStyleInfo']), "text"),
+						   GetSQLValueString($brewStyleInfo, "text"),
 						   GetSQLValueString($brew_style_link, "text"),
 						   GetSQLValueString($_POST['brewStyleGroup'], "text"),
 						   GetSQLValueString($_POST['brewStyleActive'], "text"),
@@ -367,7 +383,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 						   GetSQLValueString($styleStrength, "text"),
 						   GetSQLValueString($_POST['brewStyleCarb'], "text"),
 						   GetSQLValueString($_POST['brewStyleSweet'], "text"),
-						   GetSQLValueString(strip_tags($_POST['brewStyleEntry']), "text"),
+						   GetSQLValueString($brewStyleEntry, "text"),
 						   GetSQLValueString($id, "int"));
 		}
 		
@@ -415,7 +431,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 						   GetSQLValueString($_POST['brewStyleSRM'], "text"),
 						   GetSQLValueString($_POST['brewStyleSRMMax'], "text"),
 						   GetSQLValueString($_POST['brewStyleType'], "text"),
-						   GetSQLValueString(strip_tags($_POST['brewStyleInfo']), "text"),
+						   GetSQLValueString($brewStyleInfo, "text"),
 						   GetSQLValueString($brew_style_link, "text"),
 						   GetSQLValueString($_POST['brewStyleGroup'], "text"),
 						   GetSQLValueString($_POST['brewStyleActive'], "text"),
@@ -424,7 +440,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 						   GetSQLValueString($styleStrength, "text"),
 						   GetSQLValueString($_POST['brewStyleCarb'], "text"),
 						   GetSQLValueString($_POST['brewStyleSweet'], "text"),
-						   GetSQLValueString(strip_tags($_POST['brewStyleEntry']), "text"),
+						   GetSQLValueString($brewStyleEntry, "text"),
 						   GetSQLValueString($id, "int"));
 						   
 		}
