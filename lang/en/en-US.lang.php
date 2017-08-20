@@ -1047,17 +1047,18 @@ if ($section == "pay") {
 // -------------------- QR --------------------
 
 	if (strpos($view, "-") !== FALSE) {
-	$qr_text_019 = sprintf("%04d",$view[0]);
-	$qr_text_020 = sprintf("%06d",$view[1]);
+	$qr_text_019 = sprintf("%04d",$checked_in_numbers [0]);
+	//$qr_text_019 = $view;
+	$qr_text_020 = sprintf("%06d",$checked_in_numbers [1]);
 	}
 
 	$qr_text_000 = $alert_text_080;
 	$qr_text_001 = $alert_text_081;
-	if (strpos($view, "-") !== FALSE) $qr_text_002 = sprintf("Entry number %s is checked in with <span class=\"text-danger\">%s</span> as its judging number.",$qr_text_020,$qr_text_019);
+	if (strpos($view, "-") !== FALSE) $qr_text_002 = sprintf("Entry number <span class=\"text-danger\">%s</span> is checked in with <span class=\"text-danger\">%s</span> as its judging number.",$qr_text_019,$qr_text_020); else $qr_text_002 = "";
 	$qr_text_003 = "If this judging number is <em>not</em> correct, <strong>re-scan the code and re-enter the correct judging number.";
-	if (strpos($view, "-") !== FALSE) $qr_text_004 = sprintf("Entry number %s is checked in.",$qr_text_019);
-	if (strpos($view, "-") !== FALSE) $qr_text_005 = sprintf("Entry number %s was not found in the database. Set the bottle(s) aside and alert the competition organizer.",$qr_text_019);
-	if (strpos($view, "-") !== FALSE) $qr_text_006 = sprintf("The judging number you entered - %s - is already assigned to entry number %s.",$qr_text_020,$qr_text_019);
+	if (strpos($view, "-") !== FALSE) $qr_text_004 = sprintf("Entry number %s is checked in.",$qr_text_019); else $qr_text_004 = "";
+	if (strpos($view, "-") !== FALSE) $qr_text_005 = sprintf("Entry number %s was not found in the database. Set the bottle(s) aside and alert the competition organizer.",$qr_text_019); else $qr_text_005 = "";
+	if (strpos($view, "-") !== FALSE) $qr_text_006 = sprintf("The judging number you entered - %s - is already assigned to entry number %s.",$qr_text_020,$qr_text_019); else $qr_text_006 = "";
 	$qr_text_007 = "QR Code Entry Check-In";
 	$qr_text_008 = "To check in entries via QR code, please provide the correct password. You will only need to provide the password once per session - be sure to keep the QR Code scanning app open.";
 	$qr_text_009 = "Assign a judging number and/or box number to entry";

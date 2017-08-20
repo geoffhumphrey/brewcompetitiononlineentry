@@ -16,7 +16,7 @@ session_start();
 require (CONFIG.'config.php');
 require (INCLUDES.'current_version.inc.php'); 
 include (INCLUDES.'url_variables.inc.php');
-if ($view != "default") $view = explode("-",$view);
+if ($view != "default") $checked_in_numbers = explode("-",$view);
 include (LANG.'language.lang.php');
 include (LIB.'common.lib.php');
 
