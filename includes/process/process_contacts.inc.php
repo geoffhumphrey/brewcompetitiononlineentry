@@ -23,9 +23,9 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 			
 			setcookie("to", $_POST['to'], 0, "/"); // $id of contact record in contacts table
 			setcookie("from_email", strtolower(filter_var($_POST['from_email'], FILTER_SANITIZE_EMAIL)), 0, "/");
-			setcookie("from_name", capitalize($_POST['from_name']), 0, "/");
-			setcookie("subject", capitalize($_POST['subject']), 0, "/");
-			setcookie("message", $_POST['message'], 0, "/");
+			setcookie("from_name", sterilize(ucwords($_POST['from_name'])), 0, "/");
+			setcookie("subject", sterilize(ucwords($_POST['subject'])), 0, "/");
+			setcookie("message", sterlize($_POST['message']), 0, "/");
 			header(sprintf("Location: %s", $base_url."index.php?section=contact&action=email&msg=2"));
 			
 		} 
@@ -41,9 +41,9 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 			$to_email = $row_contact['contactEmail'];
 			$to_name = $row_contact['contactFirstName']." ".$row_contact['contactLastName'];
 			$from_email = strtolower(filter_var($_POST['from_email'], FILTER_SANITIZE_EMAIL));
-			$from_name = capitalize($_POST['from_name']);
-			$subject = capitalize($_POST['subject']);
-			$message_post = $_POST['message'];
+			$from_name = sterilize(ucwords($_POST['from_name']));
+			$subject = sterlizie(ucwords($_POST['subject']));
+			$message_post = sterilize($_POST['message']);
 			
 			// Build the message
 			$message = "<html>" . "\r\n";
@@ -90,9 +90,9 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 			) 
 			VALUES 
 			(%s, %s, %s, %s)",
-							   GetSQLValueString(capitalize($_POST['contactFirstName']), "text"),
-							   GetSQLValueString(capitalize($_POST['contactLastName']), "text"),
-							   GetSQLValueString(capitalize($_POST['contactPosition']), "text"),
+							   GetSQLValueString(sterilize(ucwords($_POST['contactFirstName'])), "text"),
+							   GetSQLValueString(sterilize(ucwords($_POST['contactLastName'])), "text"),
+							   GetSQLValueString(sterilize(ucwords($_POST['contactPosition'])), "text"),
 							   GetSQLValueString(strtolower(filter_var($_POST['contactEmail'], FILTER_SANITIZE_EMAIL)), "text"));
 			//echo $insertSQL;				   
 			mysqli_real_escape_string($connection,$insertSQL);
@@ -110,9 +110,9 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 			contactPosition=%s, 
 			contactEmail=%s
 			WHERE id=%s",
-							   GetSQLValueString(capitalize($_POST['contactFirstName']), "text"),
-							   GetSQLValueString(capitalize($_POST['contactLastName']), "text"),
-							   GetSQLValueString(capitalize($_POST['contactPosition']), "text"),
+							   GetSQLValueString(sterilize(ucwords($_POST['contactFirstName'])), "text"),
+							   GetSQLValueString(sterilize(ucwords($_POST['contactLastName'])), "text"),
+							   GetSQLValueString(sterilize(ucwords($_POST['contactPosition'])), "text"),
 							   GetSQLValueString(strtolower(filter_var($_POST['contactEmail'], FILTER_SANITIZE_EMAIL)), "text"),
 							   GetSQLValueString($id, "int"));
 							   

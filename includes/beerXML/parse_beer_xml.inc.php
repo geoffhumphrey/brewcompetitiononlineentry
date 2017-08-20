@@ -38,10 +38,12 @@ include("recipe.php");
 //}}}
 //{{{ BeerXMLParser
 class BeerXMLParser {
+	
 	public $inNode = false;
    	public $insideitem = false;
 	public $tag = "";
 	public $recipes = array();
+	
 	function startElement($parser,$tagName,$attrs) {
 		$this->tag = $tagName;
 		switch($tagName){
@@ -54,18 +56,21 @@ class BeerXMLParser {
 				break;
 		}
 	}
-	function endElement($parser,$tagName){
 	
+	function endElement($parser,$tagName){
     }
+	
 	function nodeData($parser,$data) {
     }
-	function BeerXMLParser($filename)
-	{
+	
+	function BeerXMLParser($filename) {
+		
 		$xml_parser = xml_parser_create();
 		xml_set_object($xml_parser,$this);
 		xml_set_element_handler($xml_parser, "startElement", "endElement");
 		xml_set_character_data_handler($xml_parser, "nodeData");
         xml_parser_set_option($xml_parser,XML_OPTION_TARGET_ENCODING,"UTF-8");
+		
 		if (!($fp = fopen($filename,"r"))) {
 		  die ("could not open RSS for input");
 		  }
@@ -76,9 +81,10 @@ class BeerXMLParser {
 			    	xml_get_current_line_number($xml_parser)));
 			}
 		  }
-         xml_parser_free($xml_parser);
-         fclose($fp);
-         return $this->recipes;
+        
+		xml_parser_free($xml_parser);
+        fclose($fp);
+        return $this->recipes;
 	}
 }
 //}}}

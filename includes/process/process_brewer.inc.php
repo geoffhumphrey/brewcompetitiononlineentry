@@ -10,29 +10,30 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 
 	// Gather, convert, and/or sanitize info from the form
 	if (isset($_POST['brewerJudgeID'])) {
-		$brewerJudgeID = strip_tags($_POST['brewerJudgeID']);
+		$brewerJudgeID = sterilize($_POST['brewerJudgeID']);
 		$brewerJudgeID = strtoupper($brewerJudgeID);
 	}
 	else $brewerJudgeID = "";
 
-	if (isset($_POST['brewerJudgeMead'])) $brewerJudgeMead = $_POST['brewerJudgeMead'];
+	if (isset($_POST['brewerJudgeMead'])) $brewerJudgeMead = sterilize($_POST['brewerJudgeMead']);
 	else $brewerJudgeMead = "";
 
-	if (isset($_POST['brewerJudgeRank'])) $brewerJudgeRank = $_POST['brewerJudgeRank'];
+	if (isset($_POST['brewerJudgeRank'])) $brewerJudgeRank = sterilize($_POST['brewerJudgeRank']);
 	else $brewerJudgeRank = "";
 
 	if (isset($_POST['brewerAHA'])) {
-		$brewerAHA = filter_var($_POST['brewerAHA'],FILTER_SANITIZE_NUMBER_INT);
+		$brewerAHA = sterilize($_POST['brewerAHA']);
 	}
 	else $brewerAHA = "";
 
 	if (isset($_POST['brewerClubs'])) {
 		include (INCLUDES.'constants.inc.php');
-		$brewerClubs = strip_tags($_POST['brewerClubs']);
+		$brewerClubs = sterilize($_POST['brewerClubs']);
 		$brewerClubsConcat = $brewerClubs."|".$brewerClubs;
 		if (!in_array($brewerClubsConcat,$club_array))  {
 			if (($_POST['brewerClubs'] == "Other") && (!empty($_POST['brewerClubsOther']))) {
-				$brewerClubs = strip_tags($_POST['brewerClubsOther']);
+				$brewerClubs = strtr($_POST['brewerClubsOther'],$quote_convert);
+				$brewerClubs = sterilize($brewerClubs);
 				$brewerClubs = ucwords($brewerClubs);
 			}
 			else $brewerClubs = "";
@@ -41,63 +42,73 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 	}
 	else $brewerClubs = "";
 
-	$brewerPhone1 = strip_tags($_POST['brewerPhone1']);
+	$brewerPhone1 = sterilize($_POST['brewerPhone1']);
 
 	if (isset($_POST['brewerPhone2'])) {
-		$brewerPhone2 = strip_tags($_POST['brewerPhone2']);
+		$brewerPhone2 = sterilize($_POST['brewerPhone2']);
 	}
 	else $brewerPhone2 = "";
 
-	if (isset($_POST['brewerJudgeWaiver'])) $brewerJudgeWaiver = $_POST['brewerJudgeWaiver'];
+	if (isset($_POST['brewerJudgeWaiver'])) $brewerJudgeWaiver = sterilize($_POST['brewerJudgeWaiver']);
 	else $brewerJudgeWaiver = "";
 
-	if (isset($_POST['brewerDropOff'])) $brewerDropOff = $_POST['brewerDropOff'];
+	if (isset($_POST['brewerDropOff'])) $brewerDropOff = sterilize($_POST['brewerDropOff']);
 	else $brewerDropOff = "0";
 
 	if (isset($_POST['brewerBreweryName'])) {
-		$brewerBreweryName = strip_tags($_POST['brewerBreweryName']);
+		$brewerBreweryName = strtr($_POST['brewerBreweryName'],$quote_convert);
+		$brewerBreweryName = sterilize($brewerBreweryName);
 		$brewerBreweryName = strtolower($brewerBreweryName);
 		$brewerBreweryName = ucwords($brewerBreweryName);
 	}
 	else $brewerBreweryName = "";
 
 	if (isset($_POST['brewerBreweryTTB'])) {
-		$brewerBreweryTTB = strip_tags($_POST['brewerBreweryTTB']);
+		$brewerBreweryTTB = sterilize($_POST['brewerBreweryTTB']);
 	}
 	else $brewerBreweryTTB = "";
 
-	if (isset($_POST['brewerJudge'])) $brewerJudge = $_POST['brewerJudge'];
+	if (isset($_POST['brewerJudge'])) $brewerJudge = sterilize($_POST['brewerJudge']);
 	else $brewerJudge = "";
 
-	if (isset($_POST['brewerSteward'])) $brewerSteward = $_POST['brewerSteward'];
+	if (isset($_POST['brewerSteward'])) $brewerSteward = sterilize($_POST['brewerSteward']);
 	else $brewerSteward = "";
 
-	if (isset($_POST['brewerStaff'])) $brewerStaff = $_POST['brewerStaff'];
+	if (isset($_POST['brewerStaff'])) $brewerStaff = sterilize($_POST['brewerStaff']);
 	else $brewerStaff = "";
 
-	if (isset($_POST['brewerJudgeExp'])) $brewerJudgeExp = $_POST['brewerJudgeExp'];
+	if (isset($_POST['brewerJudgeExp'])) $brewerJudgeExp = sterilize($_POST['brewerJudgeExp']);
 	else $brewerJudgeExp = "";
 
 	if (isset($_POST['brewerJudgeNotes'])) {
-		$brewerJudgeNotes = strip_tags($_POST['brewerJudgeNotes']);
+		$brewerJudgeNotes = sterilize($_POST['brewerJudgeNotes']);
 	}
 	else $brewerJudgeNotes = "";
 
-	$first_name = strip_tags($_POST['brewerFirstName']);
+	$first_name = strtr($_POST['brewerFirstName'],$quote_convert);
+	$first_name = sterilize($first_name);
 	$first_name = strtolower($first_name);
 	$first_name = ucwords($first_name);
 
-	$last_name = strip_tags($_POST['brewerLastName']);
+	$last_name = strtr($_POST['brewerLastName'],$quote_convert);
+	$last_name = sterilize($last_name);
 	$last_name = strtolower($last_name);
 	$last_name = ucwords($last_name);
 
-	$address = strip_tags($_POST['brewerAddress']);
+	$address = strtr($_POST['brewerAddress'],$quote_convert);
+	$address = sterilize($address);
 	$address = strtolower($address);
 	$address = ucwords($address);
 
-	$city = strip_tags($_POST['brewerCity']);
+	$city = strtr($_POST['brewerCity'],$quote_convert);
+	$city = sterilize($city);
 	$city = strtolower($city);
 	$city = ucwords($city);
+	
+	$state = strtr($_POST['brewerState'],$quote_convert);
+	$state = sterilize($state);
+	$state = strtolower($state);
+	$state = ucwords($state);
 
 	if ($_SESSION['userLevel'] == 2) {
 
@@ -285,7 +296,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 					$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 					//echo $updateSQL."<br>";
 
-					$query_staff_org = sprintf("SELECT uid FROM %s WHERE uid='%s'",$prefix."staff",$_POST['Organizer']);
+					$query_staff_org = sprintf("SELECT uid FROM %s WHERE uid='%s'",$prefix."staff",sterilize($_POST['Organizer']));
 					$staff_org = mysqli_query($connection,$query_staff_org) or die (mysqli_error($connection));
 					$row_staff_org = mysqli_fetch_assoc($staff_org);
 					$totalRows_staff_org = mysqli_num_rows($staff_org);
@@ -298,7 +309,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 				}
 
 				if ($_POST['Organizer'] == $row_org['uid']) {
-					$updateSQL = sprintf("UPDATE %s SET staff_organizer='1' WHERE uid='%s'", $prefix."staff", $_POST['Organizer']);
+					$updateSQL = sprintf("UPDATE %s SET staff_organizer='1' WHERE uid='%s'", $prefix."staff", sterilize($_POST['Organizer']));
 					mysqli_real_escape_string($connection,$updateSQL);
 					$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 					//echo $updateSQL."<br>";
@@ -321,15 +332,15 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 
 	if ($action == "add") {
 		if ($brewerJudge == "Y") {
-			if (($_POST['brewerJudgeLocation'] != "") && (is_array($_POST['brewerJudgeLocation']))) $location_pref1 = implode(",",$_POST['brewerJudgeLocation']);
-			elseif (($_POST['brewerJudgeLocation'] != "") && (!is_array($_POST['brewerJudgeLocation']))) $location_pref1 = $_POST['brewerJudgeLocation'];
+			if (($_POST['brewerJudgeLocation'] != "") && (is_array($_POST['brewerJudgeLocation']))) $location_pref1 = implode(",",sterilize($_POST['brewerJudgeLocation']));
+			elseif (($_POST['brewerJudgeLocation'] != "") && (!is_array($_POST['brewerJudgeLocation']))) $location_pref1 = sterilize($_POST['brewerJudgeLocation']);
 
 		}
 		else $location_pref1 = "";
 
 		if ($brewerSteward == "Y") {
-			if (($_POST['brewerStewardLocation'] != "") && (is_array($_POST['brewerStewardLocation']))) $location_pref2 = implode(",",$_POST['brewerStewardLocation']);
-			elseif (($_POST['brewerJudgeLocation'] != "") && (!is_array($_POST['brewerStewardLocation']))) $location_pref2 = $_POST['brewerStewardLocation'];
+			if (($_POST['brewerStewardLocation'] != "") && (is_array($_POST['brewerStewardLocation']))) $location_pref2 = implode(",",sterilize($_POST['brewerStewardLocation']));
+			elseif (($_POST['brewerJudgeLocation'] != "") && (!is_array($_POST['brewerStewardLocation']))) $location_pref2 = sterilize($_POST['brewerStewardLocation']);
 		}
 		else $location_pref2 = "";
 
@@ -403,8 +414,8 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 							   GetSQLValueString($last_name, "text"),
 							   GetSQLValueString($address, "text"),
 							   GetSQLValueString($city, "text"),
-							   GetSQLValueString(strip_tags($_POST['brewerState']), "text"),
-							   GetSQLValueString(strip_tags($_POST['brewerZip']), "text"),
+							   GetSQLValueString($state, "text"),
+							   GetSQLValueString(sterilize($_POST['brewerZip']), "text"),
 							   GetSQLValueString($_POST['brewerCountry'], "text"),
 							   GetSQLValueString($brewerPhone1, "text"),
 							   GetSQLValueString($brewerPhone2, "text"),
@@ -493,8 +504,8 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 							   GetSQLValueString($last_name, "text"),
 							   GetSQLValueString($address, "text"),
 							   GetSQLValueString($city, "text"),
-							   GetSQLValueString(strip_tags($_POST['brewerState']), "text"),
-							   GetSQLValueString(strip_tags($_POST['brewerZip']), "text"),
+							   GetSQLValueString($state, "text"),
+							   GetSQLValueString(sterilize($_POST['brewerZip']), "text"),
 							   GetSQLValueString($_POST['brewerCountry'], "text"),
 							   GetSQLValueString($_POST['brewerPhone1'], "text"),
 							   GetSQLValueString($brewerPhone2, "text"),
@@ -567,23 +578,23 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 
 		if ($brewerJudge == "Y") {
 			if ($_POST['brewerJudgeLocation'] != "") {
-				if (is_array($_POST['brewerJudgeLocation'])) $location_pref1 = implode(",",$_POST['brewerJudgeLocation']);
-				else $location_pref1 = $_POST['brewerJudgeLocation'];
+				if (is_array($_POST['brewerJudgeLocation'])) $location_pref1 = implode(",",sterilize($_POST['brewerJudgeLocation']));
+				else $location_pref1 = sterilize($_POST['brewerJudgeLocation']);
 			}
 		}
 		else $location_pref1 = "";
 
 		if ($brewerSteward == "Y") {
 			if ($_POST['brewerStewardLocation'] != "") {
-				if (is_array($_POST['brewerStewardLocation'])) $location_pref2 = implode(",",$_POST['brewerStewardLocation']);
-				else $location_pref2 = $_POST['brewerStewardLocation'];
+				if (is_array($_POST['brewerStewardLocation'])) $location_pref2 = implode(",",sterilize($_POST['brewerStewardLocation']));
+				else $location_pref2 = sterilize($_POST['brewerStewardLocation']);
 			}
 		}
 		else $location_pref2 = "";
 
 		if (isset($_POST['brewerJudgeLikes'])) {
-			if (is_array($_POST['brewerJudgeLikes'])) $likes = implode(",",$_POST['brewerJudgeLikes']);
-			else $likes = $_POST['brewerJudgeLikes'];
+			if (is_array($_POST['brewerJudgeLikes'])) $likes = implode(",",sterilize($_POST['brewerJudgeLikes']));
+			else $likes = sterilize($_POST['brewerJudgeLikes']);
 			}
 		else $likes = "";
 
@@ -720,13 +731,13 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 			brewerBreweryName=%s,
 			brewerBreweryTTB=%s
 			",
-							   GetSQLValueString($_POST['uid'], "int"),
+							   GetSQLValueString(sterilize($_POST['uid']), "int"),
 							   GetSQLValueString($first_name, "text"),
 							   GetSQLValueString($last_name, "text"),
 							   GetSQLValueString($address, "text"),
 							   GetSQLValueString($city, "text"),
-							   GetSQLValueString(strip_tags($_POST['brewerState']), "text"),
-							   GetSQLValueString(strip_tags($_POST['brewerZip']), "text"),
+							   GetSQLValueString($state, "text"),
+							   GetSQLValueString(sterilize($_POST['brewerZip']), "text"),
 							   GetSQLValueString($_POST['brewerCountry'], "text"),
 							   GetSQLValueString($_POST['brewerPhone1'], "text"),
 							   GetSQLValueString($brewerPhone2, "text"),
@@ -758,13 +769,13 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 		$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 
 		if (isset($_POST['userQuestion'])) {
-			$updateSQL = sprintf("UPDATE $users_db_table SET userQuestion=%s WHERE id=%s",GetSQLValueString($_POST['userQuestion'],"text"),GetSQLValueString($_SESSION['user_id'],"int"));
+			$updateSQL = sprintf("UPDATE $users_db_table SET userQuestion=%s WHERE id=%s",GetSQLValueString(sterilize($_POST['userQuestion']),"text"),GetSQLValueString($_SESSION['user_id'],"int"));
 			mysqli_real_escape_string($connection,$updateSQL);
 			$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 		}
 
 		if (isset($_POST['userQuestionAnswer'])) {
-			$updateSQL = sprintf("UPDATE $users_db_table SET userQuestionAnswer=%s WHERE id=%s",GetSQLValueString($_POST['userQuestionAnswer'],"text"),GetSQLValueString($_SESSION['user_id'],"int"));
+			$updateSQL = sprintf("UPDATE $users_db_table SET userQuestionAnswer=%s WHERE id=%s",GetSQLValueString(sterilize($_POST['userQuestionAnswer']),"text"),GetSQLValueString($_SESSION['user_id'],"int"));
 			mysqli_real_escape_string($connection,$updateSQL);
 			$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 		}

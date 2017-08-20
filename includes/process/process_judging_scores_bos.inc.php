@@ -17,12 +17,12 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 				scorePlace=%s,
 				scoreType=%s
 				WHERE id=%s",
-								   GetSQLValueString($_POST['eid'.$score_id], "text"),
-								   GetSQLValueString($_POST['bid'.$score_id], "text"),
-								   GetSQLValueString($_POST['scoreEntry'.$score_id], "text"),
-								   GetSQLValueString($_POST['scorePlace'.$score_id], "text"),
-								   GetSQLValueString($_POST['scoreType'.$score_id], "text"),
-								   GetSQLValueString($_POST['id'.$score_id], "text")
+								   GetSQLValueString(sterilize($_POST['eid'.$score_id]), "text"),
+								   GetSQLValueString(sterilize($_POST['bid'.$score_id]), "text"),
+								   GetSQLValueString(sterilize($_POST['scoreEntry'.$score_id]), "text"),
+								   GetSQLValueString(sterilize($_POST['scorePlace'.$score_id]), "text"),
+								   GetSQLValueString(sterilize($_POST['scoreType'.$score_id]), "text"),
+								   GetSQLValueString(sterilize($_POST['id'.$score_id]), "text")
 								   );
 			
 				mysqli_real_escape_string($connection,$updateSQL);
@@ -38,11 +38,11 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 				scorePlace,
 				scoreType
 				) VALUES (%s, %s, %s, %s, %s)",
-								   GetSQLValueString($_POST['eid'.$score_id], "text"),
-								   GetSQLValueString($_POST['bid'.$score_id], "text"),
-								   GetSQLValueString($_POST['scoreEntry'.$score_id], "text"),
-								   GetSQLValueString($_POST['scorePlace'.$score_id], "text"),
-								   GetSQLValueString($_POST['scoreType'.$score_id], "text")
+								   GetSQLValueString(sterilize($_POST['eid'.$score_id]), "text"),
+								   GetSQLValueString(sterilize($_POST['bid'.$score_id]), "text"),
+								   GetSQLValueString(sterilize($_POST['scoreEntry'.$score_id]), "text"),
+								   GetSQLValueString(sterilize($_POST['scorePlace'.$score_id]), "text"),
+								   GetSQLValueString(sterilize($_POST['scoreType'.$score_id]), "text")
 								   );
 			
 				mysqli_real_escape_string($connection,$insertSQL);

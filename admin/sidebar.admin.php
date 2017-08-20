@@ -122,12 +122,12 @@ if ($logged_in) {
 
 	$page_info100 .= "<div class=\"bcoem-sidebar-panel\">";
 	$page_info100 .= "<strong class=\"text-info\">Total Fees</strong>";
-	$page_info100 .= "<span class=\"pull-right\">".$currency_symbol.$total_fees."</span>";
+	$page_info100 .= "<span class=\"pull-right\">".$currency_symbol.number_format($total_fees,2)."</span>";
 	$page_info100 .= "</div>";
 
 	$page_info100 .= "<div class=\"bcoem-sidebar-panel\">";
 	$page_info100 .= "<strong class=\"text-info\">Total Fees Paid</strong>";
-	$page_info100 .= "<span class=\"pull-right\"><a href=\"".$base_url."index.php?section=admin&amp;go=entries&amp;view=paid\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"View all paid entries\">".$currency_symbol.$total_fees_paid."</a></span>";
+	$page_info100 .= "<span class=\"pull-right\"><a href=\"".$base_url."index.php?section=admin&amp;go=entries&amp;view=paid\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"View all paid entries\">".$currency_symbol.number_format($total_fees_paid,2)."</a></span>";
 	$page_info100 .= "</div>";
 
 	$page_info100 .= "<div class=\"bcoem-sidebar-panel\">";

@@ -2,14 +2,20 @@
 if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] == 0))) {
 	session_name($prefix_session);
 	session_start();
+	
 	require(INCLUDES.'scrubber.inc.php');
 	require(INCLUDES.'db_tables.inc.php');
+	require(LIB.'common.lib.php');
+	
 	$dbTable = "default";
+	
 	$suffix = strtr($_POST['archiveSuffix'], $space_remove);
 	$suffix = preg_replace("/[^a-zA-Z0-9]+/", "", $suffix);
+	
 	$query_suffix_check = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE archiveSuffix = '%s';", $archive_db_table, $suffix);
 	$suffix_check = mysqli_query($connection,$query_suffix_check) or die (mysqli_error($connection));
 	$row_suffix_check = mysqli_fetch_assoc($suffix_check);
+	
 	if ($row_suffix_check['count'] > 0) { 
 			header(sprintf("Location: %s", $base_url."index.php?section=admin&go=archive&msg=6"));
 			exit;
@@ -23,21 +29,21 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 			$user = mysqli_query($connection,$query_user) or die (mysqli_error($connection));
 			$row_user = mysqli_fetch_assoc($user);
 			
-			$user_name = strip_tags($row_user['user_name']);
+			$user_name = sterilize($row_user['user_name']);
 			$password = $row_user['password'];
 			$userLevel = $row_user['userLevel'];
-			$userQuestion = strip_tags($row_user['userQuestion']);
-			$userQuestionAnswer = strip_tags($row_user['userQuestionAnswer']);
+			$userQuestion = sterilize($row_user['userQuestion']);
+			$userQuestionAnswer = sterilize($row_user['userQuestionAnswer']);
 			$userCreated = $row_user['userCreated'];
 			  
 			$query_name = sprintf("SELECT * FROM %s WHERE uid='%s'", $prefix."brewer", $row_user['id']);
 			$name = mysqli_query($connection,$query_name) or die (mysqli_error($connection));
 			$row_name = mysqli_fetch_assoc($name);
 			
-			$brewerFirstName = strip_tags($row_name['brewerFirstName']);
-			$brewerLastName = strip_tags($row_name['brewerLastName']);
-			$brewerAddress = strip_tags($row_name['brewerAddress']);
-			$brewerCity = strip_tags($row_name['brewerCity']);
+			$brewerFirstName = sterilize($row_name['brewerFirstName']);
+			$brewerLastName = sterilize($row_name['brewerLastName']);
+			$brewerAddress = sterilize($row_name['brewerAddress']);
+			$brewerCity = sterilize($row_name['brewerCity']);
 			$brewerState = $row_name['brewerState'];
 			$brewerZip = $row_name['brewerZip'];
 			$brewerCountry = $row_name['brewerCountry'];

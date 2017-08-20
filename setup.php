@@ -105,9 +105,11 @@ $security_question = array($label_secret_01, $label_secret_05, $label_secret_06,
         <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery-mousewheel/3.1.13/jquery.mousewheel.min.js"></script>
         <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.5/jquery.fancybox.pack.js"></script>
 
+		<?php if ($section == "step4") { ?>
         <!-- Load TinyMCE -->
         <script src="https://cdn.tinymce.com/4/tinymce.min.js"></script>
 		<script src="<?php echo $base_url;?>js_includes/tinymce-init.js"></script>
+		<?php } ?>
 
         <!-- Load Bootstrap DateTime Picker / http://eonasdan.github.io/bootstrap-datetimepicker/ -->
 		<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/css/bootstrap-datetimepicker.min.css" />

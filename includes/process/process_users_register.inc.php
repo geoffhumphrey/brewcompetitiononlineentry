@@ -11,86 +11,84 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 	
 	// Gather, convert, and/or sanitize info from the form
 	if (isset($_POST['brewerJudgeID'])) {
-		$brewerJudgeID = $_POST['brewerJudgeID'];
-		$brewerJudgeID = strip_tags($brewerJudgeID);
+		$brewerJudgeID = sterilize($_POST['brewerJudgeID']);
 		$brewerJudgeID = strtoupper($brewerJudgeID);
 	}
 	else $brewerJudgeID = "";
 	
-	if (isset($_POST['brewerJudgeMead'])) $brewerJudgeMead = $_POST['brewerJudgeMead'];
+	if (isset($_POST['brewerJudgeMead'])) $brewerJudgeMead = sterilize($_POST['brewerJudgeMead']);
 	else $brewerJudgeMead = "";
 	
-	if (isset($_POST['brewerJudgeRank'])) $brewerJudgeRank = $_POST['brewerJudgeRank'];
+	if (isset($_POST['brewerJudgeRank'])) $brewerJudgeRank = sterilize($_POST['brewerJudgeRank']);
 	else $brewerJudgeRank = "";
 	
 	if (isset($_POST['brewerAHA'])) {
-		$brewerAHA = filter_var($_POST['brewerAHA'],FILTER_SANITIZE_NUMBER_INT);		
+		$brewerAHA = sterilize($_POST['brewerAHA']);		
 	}
 	else $brewerAHA = "";
 	
 	if (isset($_POST['brewerClubs'])) {
-		$brewerClubs = strip_tags($_POST['brewerClubs']);
+		$brewerClubs = sterilize($_POST['brewerClubs']);
 	}
 	else $brewerClubs = "";
 	
-	$brewerPhone1 = strip_tags($_POST['brewerPhone1']);
+	$brewerPhone1 = sterilize($_POST['brewerPhone1']);
 	
 	if (isset($_POST['brewerPhone2'])) { 
-		$brewerPhone2 = strip_tags($_POST['brewerPhone2']);
+		$brewerPhone2 = sterilize($_POST['brewerPhone2']);
 	}
 	else $brewerPhone2 = "";
 	
-	if (isset($_POST['brewerJudgeWaiver'])) $brewerJudgeWaiver = $_POST['brewerJudgeWaiver'];
+	if (isset($_POST['brewerJudgeWaiver'])) $brewerJudgeWaiver = sterilize($_POST['brewerJudgeWaiver']);
 	else $brewerJudgeWaiver = "";
 	
-	if (isset($_POST['brewerDropOff'])) $brewerDropOff = $_POST['brewerDropOff'];
+	if (isset($_POST['brewerDropOff'])) $brewerDropOff = sterilize($_POST['brewerDropOff']);
 	else $brewerDropOff = "0";
 	
 	if (isset($_POST['brewerBreweryName'])) {
-		$brewerBreweryName = $_POST['brewerBreweryName'];
-		$brewerBreweryName = strip_tags($brewerBreweryName);
+		$brewerBreweryName = sterilize($_POST['brewerBreweryName']);
 		$brewerBreweryName = strtolower($brewerBreweryName);
 		$brewerBreweryName = ucwords($brewerBreweryName);
 	}
 	else $brewerBreweryName = "";
 	
 	if (isset($_POST['brewerBreweryTTB'])) {
-		$brewerBreweryTTB = strip_tags($_POST['brewerBreweryTTB']);
+		$brewerBreweryTTB = sterilize($_POST['brewerBreweryTTB']);
 	}
 	else $brewerBreweryTTB = "";
 	
-	if (isset($_POST['brewerJudge'])) $brewerJudge = $_POST['brewerJudge'];
+	if (isset($_POST['brewerJudge'])) $brewerJudge = sterilize($_POST['brewerJudge']);
 	else $brewerJudge = "";
 	
-	if (isset($_POST['brewerSteward'])) $brewerSteward = $_POST['brewerSteward'];
+	if (isset($_POST['brewerSteward'])) $brewerSteward = sterilize($_POST['brewerSteward']);
 	else $brewerSteward = "";
 	
-	if (isset($_POST['brewerStaff'])) $brewerStaff = $_POST['brewerStaff'];
+	if (isset($_POST['brewerStaff'])) $brewerStaff = sterilize($_POST['brewerStaff']);
 	else $brewerStaff = "";
 	
-	if (isset($_POST['brewerJudgeExp'])) $brewerJudgeExp = $_POST['brewerJudgeExp'];
+	if (isset($_POST['brewerJudgeExp'])) $brewerJudgeExp = sterilize($_POST['brewerJudgeExp']);
 	else $brewerJudgeExp = "";
 	
 	if (isset($_POST['brewerJudgeNotes'])) {
-		$brewerJudgeNotes = strip_tags($_POST['brewerJudgeNotes']);
+		$brewerJudgeNotes = sterilize($_POST['brewerJudgeNotes']);
 	}
 	else $brewerJudgeNotes = "";
 	
-	$userQuestionAnswer = strip_tags($_POST['userQuestionAnswer']);
+	$userQuestionAnswer = sterilize($_POST['userQuestionAnswer']);
 	
-	$first_name = strip_tags($_POST['brewerFirstName']);
+	$first_name = sterilize($_POST['brewerFirstName']);
 	$first_name = strtolower($first_name);
 	$first_name = ucwords($first_name);
 	
-	$last_name = strip_tags($_POST['brewerLastName']);
+	$last_name = sterilize($_POST['brewerLastName']);
 	$last_name = strtolower($last_name);
 	$last_name = ucwords($last_name);
 	
-	$address = strip_tags($_POST['brewerAddress']);
+	$address = sterilize($_POST['brewerAddress']);
 	$address = strtolower($address);
 	$address = ucwords($address);
 	
-	$city = strip_tags($_POST['brewerCity']);
+	$city = sterilize($_POST['brewerCity']);
 	$city = strtolower($city);
 	$city = ucwords($city);
 	
@@ -105,19 +103,19 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 		$brewerSteward = "N";
 	}
 	else {
-		$brewerJudge = $_POST['brewerJudge'];
-		$brewerSteward = $_POST['brewerSteward'];
+		$brewerJudge = sterilize($_POST['brewerJudge']);
+		$brewerSteward = sterilize($_POST['brewerSteward']);
 	}
 	
 	if ($brewerJudge == "Y") {
-		if (($_POST['brewerJudgeLocation'] != "") && (is_array($_POST['brewerJudgeLocation']))) $location_pref1 = implode(",",$_POST['brewerJudgeLocation']);
-		elseif (($_POST['brewerJudgeLocation'] != "") && (!is_array($_POST['brewerJudgeLocation']))) $location_pref1 = $_POST['brewerJudgeLocation'];
+		if (($_POST['brewerJudgeLocation'] != "") && (is_array($_POST['brewerJudgeLocation']))) $location_pref1 = implode(",",sterilize($_POST['brewerJudgeLocation']));
+		elseif (($_POST['brewerJudgeLocation'] != "") && (!is_array($_POST['brewerJudgeLocation']))) $location_pref1 = sterilize($_POST['brewerJudgeLocation']);
 	}
 	else $location_pref1 = "";
 	
 	if ($brewerSteward == "Y") {
-		if (($_POST['brewerStewardLocation'] != "") && (is_array($_POST['brewerStewardLocation']))) $location_pref2 = implode(",",$_POST['brewerStewardLocation']);
-		elseif (($_POST['brewerStewardLocation'] != "") && (!is_array($_POST['brewerStewardLocation']))) $location_pref2 = $_POST['brewerStewardLocation'];
+		if (($_POST['brewerStewardLocation'] != "") && (is_array($_POST['brewerStewardLocation']))) $location_pref2 = implode(",",sterilize($_POST['brewerStewardLocation']));
+		elseif (($_POST['brewerStewardLocation'] != "") && (!is_array($_POST['brewerStewardLocation']))) $location_pref2 = sterilize($_POST['brewerStewardLocation']);
 	}
 	else $location_pref2 = "";
 	
@@ -145,14 +143,14 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 		setcookie("brewerLastName", $last_name, 0, "/");
 		setcookie("brewerAddress", $address, 0, "/");
 		setcookie("brewerCity", $city, 0, "/");
-		setcookie("brewerState", strip_tags($_POST['brewerState']), 0, "/");
-		setcookie("brewerZip", strip_tags($_POST['brewerZip']), 0, "/");
+		setcookie("brewerState", sterilize($_POST['brewerState']), 0, "/");
+		setcookie("brewerZip", sterilize($_POST['brewerZip']), 0, "/");
 		setcookie("brewerCountry", $_POST['brewerCountry'], 0, "/");
 		setcookie("brewerPhone1", $brewerPhone1, 0, "/");
 		setcookie("brewerPhone2", $brewerPhone2, 0, "/");
 		setcookie("brewerClubs", $brewerClubs, 0, "/");
 		setcookie("brewerAHA", $brewerAHA, 0, "/");
-		setcookie("brewerStaff", $_POST['brewerStaff'], 0, "/");
+		setcookie("brewerStaff", sterilize($_POST['brewerStaff']), 0, "/");
 		setcookie("brewerSteward", $brewerSteward, 0, "/");
 		setcookie("brewerJudge", $brewerJudge, 0, "/");
 		setcookie("brewerDropOff", $brewerDropOff, 0, "/");
@@ -177,14 +175,14 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 		setcookie("brewerLastName", $last_name, 0, "/");
 		setcookie("brewerAddress", $address, 0, "/");
 		setcookie("brewerCity", $city, 0, "/");
-		setcookie("brewerState", strip_tags($_POST['brewerState']), 0, "/");
-		setcookie("brewerZip", strip_tags($_POST['brewerZip']), 0, "/");
+		setcookie("brewerState", sterilize($_POST['brewerState']), 0, "/");
+		setcookie("brewerZip", sterilize($_POST['brewerZip']), 0, "/");
 		setcookie("brewerCountry", $_POST['brewerCountry'], 0, "/");
 		setcookie("brewerPhone1", $brewerPhone1, 0, "/");
 		setcookie("brewerPhone2", $brewerPhone2, 0, "/");
 		setcookie("brewerClubs", $brewerClubs, 0, "/");
 		setcookie("brewerAHA", $brewerAHA, 0, "/");
-		setcookie("brewerStaff", $_POST['brewerStaff'], 0, "/");
+		setcookie("brewerStaff", sterilize($_POST['brewerStaff']), 0, "/");
 		setcookie("brewerSteward", $brewerSteward, 0, "/");
 		setcookie("brewerJudge", $brewerJudge, 0, "/");
 		setcookie("brewerDropOff", $brewerDropOff, 0, "/");
@@ -217,14 +215,14 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 			setcookie("brewerLastName", $last_name, 0, "/");
 			setcookie("brewerAddress", $address, 0, "/");
 			setcookie("brewerCity", $city, 0, "/");
-			setcookie("brewerState", strip_tags($_POST['brewerState']), 0, "/");
-			setcookie("brewerZip", strip_tags($_POST['brewerZip']), 0, "/");
+			setcookie("brewerState", sterilize($_POST['brewerState']), 0, "/");
+			setcookie("brewerZip", sterilize($_POST['brewerZip']), 0, "/");
 			setcookie("brewerCountry", $_POST['brewerCountry'], 0, "/");
 			setcookie("brewerPhone1", $brewerPhone1, 0, "/");
 			setcookie("brewerPhone2", $brewerPhone2, 0, "/");
 			setcookie("brewerClubs", $brewerClubs, 0, "/");
 			setcookie("brewerAHA", $brewerAHA, 0, "/");
-			setcookie("brewerStaff", $_POST['brewerStaff'], 0, "/");
+			setcookie("brewerStaff", sterilize($_POST['brewerStaff']), 0, "/");
 			setcookie("brewerSteward", $brewerSteward, 0, "/");
 			setcookie("brewerJudge", $brewerJudge, 0, "/");
 			setcookie("brewerDropOff", $brewerDropOff, 0, "/");
@@ -251,9 +249,9 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 			
 			$insertSQL = sprintf("INSERT INTO $users_db_table (user_name, userLevel, password, userQuestion, userQuestionAnswer, userCreated) VALUES (%s, %s, %s, %s, %s, %s)", 
 						   GetSQLValueString($username, "text"),
-						   GetSQLValueString($_POST['userLevel'], "int"),
+						   GetSQLValueString(sterilize($_POST['userLevel']), "int"),
 						   GetSQLValueString($hash, "text"),
-						   GetSQLValueString($_POST['userQuestion'], "text"),
+						   GetSQLValueString(sterilize($_POST['userQuestion']), "text"),
 						   GetSQLValueString($userQuestionAnswer, "text"),
 						   "NOW( )"					   
 						   );
@@ -313,9 +311,9 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 							   GetSQLValueString($last_name, "text"),
 							   GetSQLValueString($address, "text"),
 							   GetSQLValueString($city, "text"),
-							   GetSQLValueString(strip_tags($_POST['brewerState']), "text"),
-							   GetSQLValueString(strip_tags($_POST['brewerZip']), "text"),
-							   GetSQLValueString($_POST['brewerCountry'], "text"),
+							   GetSQLValueString(sterilize($_POST['brewerState']), "text"),
+							   GetSQLValueString(sterilize($_POST['brewerZip']), "text"),
+							   GetSQLValueString(sterilize($_POST['brewerCountry']), "text"),
 							   GetSQLValueString($brewerPhone1, "text"),
 							   GetSQLValueString($brewerPhone2, "text"),
 							   GetSQLValueString($brewerClubs, "text"),
@@ -330,7 +328,7 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 							   GetSQLValueString($brewerAHA, "int"),
 							   GetSQLValueString($brewerJudgeWaiver, "text"),
 							   GetSQLValueString($brewerDropOff, "text"),
-							   GetSQLValueString($_POST['brewerStaff'], "text"),
+							   GetSQLValueString(sterilize($_POST['brewerStaff']), "text"),
 							   GetSQLValueString($brewerBreweryName, "text"),
 							   GetSQLValueString($brewerBreweryTTB, "text")
 							   );
@@ -379,9 +377,9 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 							   GetSQLValueString($last_name, "text"),
 							   GetSQLValueString($address, "text"),
 							   GetSQLValueString($city, "text"),
-							   GetSQLValueString(strip_tags($_POST['brewerState']), "text"),
-							   GetSQLValueString(strip_tags($_POST['brewerZip']), "text"),
-							   GetSQLValueString($_POST['brewerCountry'], "text"),
+							   GetSQLValueString(sterilize($_POST['brewerState']), "text"),
+							   GetSQLValueString(sterilize($_POST['brewerZip']), "text"),
+							   GetSQLValueString(sterilize($_POST['brewerCountry']), "text"),
 							   GetSQLValueString($brewerPhone1, "text"),
 							   GetSQLValueString($brewerPhone2, "text"),
 							   GetSQLValueString($brewerClubs, "text"),
@@ -395,7 +393,7 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 							   GetSQLValueString($location_pref2, "text"),
 							   GetSQLValueString($brewerJudgeWaiver, "text"),
 							   GetSQLValueString($brewerDropOff, "text"),
-							   GetSQLValueString($_POST['brewerStaff'], "text"),
+							   GetSQLValueString(sterilize($_POST['brewerStaff']), "text"),
 							   GetSQLValueString($brewerBreweryName, "text"),
 							   GetSQLValueString($brewerBreweryTTB, "text")
 							   );
@@ -439,13 +437,13 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 				if ($filter == "admin") $message .= sprintf("<p>%s</p>",$register_text_038);
 				else $message .= sprintf("<p>%s</p>",$register_text_039);
 				$message .= "<table cellpadding='5' border='0'>";
-				if (isset($_POST['brewerBreweryName'])) $message .= sprintf("<tr><td valign='top'><strong>%s:</strong></td><td valign='top'>%s</td></tr>",$label_organization,$_POST['brewerBreweryName']);
-				if (isset($_POST['brewerBreweryTTB'])) 	$message .= sprintf("<tr><td valign='top'><strong>%s:</strong></td><td valign='top'>%s</td></tr>",$label_ttb,$_POST['brewerBreweryTTB']);
+				if (isset($_POST['brewerBreweryName'])) $message .= sprintf("<tr><td valign='top'><strong>%s:</strong></td><td valign='top'>%s</td></tr>",$label_organization,sterilize($_POST['brewerBreweryName']));
+				if (isset($_POST['brewerBreweryTTB'])) 	$message .= sprintf("<tr><td valign='top'><strong>%s:</strong></td><td valign='top'>%s</td></tr>",$label_ttb,sterilize($_POST['brewerBreweryTTB']));
 				$message .= sprintf("<tr><td valign='top'><strong>%s:</strong></td><td valign='top'>%s</td></tr>",$label_name,$first_name." ".$last_name);
 				$message .= sprintf("<tr><td valign='top'><strong>%s (%s):</strong></td><td valign='top'>%s</td></tr>",$label_username,$label_email,$username);
-				$message .= sprintf("<tr><td valign='top'><strong>%s:</strong></td><td valign='top'>%s</td></tr>",$label_security_question,$_POST['userQuestion']);
+				$message .= sprintf("<tr><td valign='top'><strong>%s:</strong></td><td valign='top'>%s</td></tr>",$label_security_question,sterilize($_POST['userQuestion']));
 				$message .= sprintf("<tr><td valign='top'><strong>%s:</strong></td><td valign='top'>%s</td></tr>",$label_security_answer,$userQuestionAnswer);
-				$message .= sprintf("<tr><td valign='top'><strong>%s:</strong></td><td valign='top'>%s<br>%s, %s %s</td></tr>",$label_address,$address,$city,strip_tags($_POST['brewerState']),strip_tags($_POST['brewerZip']));
+				$message .= sprintf("<tr><td valign='top'><strong>%s:</strong></td><td valign='top'>%s<br>%s, %s %s</td></tr>",$label_address,$address,$city,sterilize($_POST['brewerState']),sterilize($_POST['brewerZip']));
 				$message .= sprintf("<tr><td valign='top'><strong>%s:</strong></td><td valign='top'>%s</td></tr>",$label_phone_primary,$brewerPhone1);
 				if (isset($brewerPhone2)) $message .= sprintf("<tr><td valign='top'><strong>%s:</strong></td><td valign='top'>%s</td></tr>",$label_phone_secondary,$brewerPhone2);
 				

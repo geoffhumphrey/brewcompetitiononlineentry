@@ -5,8 +5,8 @@
  */
 if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) || ($section == "setup"))) {
 
-	$dropLocationWebsite = check_http($_POST['dropLocationWebsite']);
-	$dropLocationName = strip_tags($_POST['dropLocationName']);
+	$dropLocationWebsite = check_http(sterilize($_POST['dropLocationWebsite']));
+	$dropLocationName = sterilize($_POST['dropLocationName']);
 
 	if ($action == "add") {
 
@@ -14,10 +14,10 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 
 			$insertSQL = sprintf("INSERT INTO $drop_off_db_table (dropLocationName, dropLocation, dropLocationPhone, dropLocationWebsite, dropLocationNotes) VALUES (%s, %s, %s, %s, %s)",
 							   GetSQLValueString(capitalize($dropLocationName), "text"),
-							   GetSQLValueString(strip_tags($_POST['dropLocation']), "text"),
-							   GetSQLValueString($_POST['dropLocationPhone'], "text"),
+							   GetSQLValueString(sterilize($_POST['dropLocation']), "text"),
+							   GetSQLValueString(sterilize($_POST['dropLocationPhone']), "text"),
 							   GetSQLValueString(strtolower($dropLocationWebsite), "text"),
-							   GetSQLValueString(strip_tags($_POST['dropLocationNotes']), "text")
+							   GetSQLValueString(sterilize($_POST['dropLocationNotes']), "text")
 							   );
 
 			mysqli_real_escape_string($connection,$insertSQL);
@@ -47,10 +47,10 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 	if ($action == "edit") {
 		$updateSQL = sprintf("UPDATE $drop_off_db_table SET dropLocationName=%s, dropLocation=%s, dropLocationPhone=%s, dropLocationWebsite=%s, dropLocationNotes=%s WHERE id=%s",
 						   GetSQLValueString(capitalize($dropLocationName), "text"),
-						   GetSQLValueString(strip_tags($_POST['dropLocation']), "text"),
-						   GetSQLValueString($_POST['dropLocationPhone'], "text"),
+						   GetSQLValueString(sterilize($_POST['dropLocation']), "text"),
+						   GetSQLValueString(sterilize($_POST['dropLocationPhone']), "text"),
 						   GetSQLValueString(strtolower($dropLocationWebsite), "text"),
-						   GetSQLValueString(strip_tags($_POST['dropLocationNotes']), "text"),
+						   GetSQLValueString(sterilize($_POST['dropLocationNotes']), "text"),
 						   GetSQLValueString($id, "int"));
 
 		mysqli_real_escape_string($connection,$updateSQL);

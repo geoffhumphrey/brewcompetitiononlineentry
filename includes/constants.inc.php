@@ -27,7 +27,15 @@ if ((strpos($section, "step") === FALSE) && ($section != "setup")) {
 	$judge_window_open = open_or_closed(time(),$row_contest_dates['contestJudgeOpen'],$row_contest_dates['contestJudgeDeadline']);
 	$dropoff_window_open = open_or_closed(time(),$row_contest_dates['contestDropoffOpen'],$row_contest_dates['contestDropoffDeadline']);
 	$shipping_window_open = open_or_closed(time(),$row_contest_dates['contestShippingOpen'],$row_contest_dates['contestShippingDeadline']);
-
+	
+	/*
+	echo $registration_open;
+	echo $entry_window_open;
+	echo $judge_window_open;
+	echo $dropoff_window_open;
+	echo $shipping_window_open;
+	*/
+	
 	$reg_open = getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_contest_dates['contestRegistrationOpen'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "long", "date-time");
 	$reg_closed = getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_contest_dates['contestRegistrationDeadline'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "long", "date-time");
 	$reg_open_sidebar = getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_contest_dates['contestRegistrationOpen'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "short", "date-time");
@@ -129,7 +137,7 @@ if (isset($_SESSION['loginUsername']))  {
 		if (($registration_open == 2) && ($shipping_window_open == 2) && ($dropoff_window_open == 2) && ($entry_window_open == 2)) $disable_pay = TRUE;
 
 		// Show Scores?
-		if ((judging_date_return() == 0) && ($entry_window_open == 2) && ($registration_open == 2) && ($judge_window_open == 2) && ($_SESSION['prefsDisplayWinners'] == "Y") && (judging_winner_display($delay))) $show_scores = TRUE;
+		if ((judging_date_return() == 0) && ($entry_window_open == 2) && ($registration_open == 2) && ($judge_window_open == 2) && ($_SESSION['prefsDisplayWinners'] == "Y") && (judging_winner_display($delay))) $show_scores = TRUE; echo $show_scores;
 	
 		// Show Scoresheets?
 		if ((judging_date_return() == 0) && ($entry_window_open == 2) && ($registration_open == 2) && ($judge_window_open == 2)) $show_scoresheets = TRUE;

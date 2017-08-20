@@ -6,7 +6,6 @@
  *
  */
 include (DB.'styles.db.php'); 
-include (DB.'entries.db.php');
 if (strpos($styleSet,"BABDB") !== false) include (INCLUDES.'ba_constants.inc.php');
 include (DB.'styles_special.db.php');
 
@@ -133,19 +132,32 @@ if (($proEdition) && (!isset($_SESSION['brewerBreweryName'])) && ($adminUser) &&
 	$adminUserAddDisable = TRUE;
 }
 
-if (($add_entry_disable) || ($edit_entry_disable))  echo "<p class=\"lead\">".$alert_text_083."</p>";
-//if ($add_entry_disable) echo "<p>Add disabled.</p>";
-//if ($edit_entry_disable) echo "<p>Editing disabled.</p>";
-if (($adminUser) && ($adminUserAddDisable)) echo "<p>".$brew_text_029."</p>";
+// Disable display of add/edit form elements
+// Display messaging if adding and/or editing is disabled
+if (($add_entry_disable) && ($edit_entry_disable))  {
+	
+	echo "<p class=\"lead\">".$alert_text_083."</p>";
+	if (($_SESSION['userLevel'] > 1) && ($remaining_entries <= 0)) echo sprintf("<p>%s</p>",$alert_text_031);
+	if (($adminUser) && ($adminUserAddDisable)) echo "<p>".$brew_text_029."</p>";
+	
+}
+
 elseif (($add_entry_disable) && (!$edit_entry_disable))  {
+	
 	if (($proEdition) && (!isset($_SESSION['brewerBreweryName']))) { 
 		echo "<p class=\"lead\">".$alert_text_082."</p>";
 		if ($adminUser) echo "<p class=\"lead\"><small>".$alert_text_084."</small></p>";
 	}
+	
 	else echo "<p class=\"lead\">".$alert_text_029."</p>";
+	if (($_SESSION['userLevel'] > 1) && ($remaining_entries <= 0)) echo sprintf("<p>%s</p>",$alert_text_031);
+	if (($adminUser) && ($adminUserAddDisable)) echo "<p>".$brew_text_029."</p>";
+	
 }
 
+// Run normally
 else {	
+	
 	// Decalre variables
 	if ($_SESSION['prefsStyleSet'] == "BJCP2008") $beer_end = 23;
 	if ($_SESSION['prefsStyleSet'] == "BJCP2015") $beer_end = 34;
@@ -925,10 +937,10 @@ else {
                         </div>
                     </div><!-- ./Form Group -->
                 	<div class="form-group form-group-sm"><!-- Form Group NOT REQUIRED Text Input -->
-                        <label for="brewAddition<?php echo $i; ?>Weight" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label"><?php echo $label_misc." ".$i." ".$label_weight; ?></label>
+                        <label for="brewAddition<?php echo $i; ?>Amt" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label"><?php echo $label_misc." ".$i." ".$label_weight; ?></label>
                         <div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
                             <!-- Input Here -->
-                            <input class="form-control" type="text" id="brewAddition<?php echo $i; ?>Weight" name="brewAddition<?php echo $i; ?>Weight" value="<?php if (($action == "edit") && (isset($row_log['brewAddition'.$i.'Weight']))) echo $row_log['brewAddition'.$i.'Weight']; ?>" placeholder="<?php echo ucwords($_SESSION['prefsWeight2']); ?>" ?>
+                            <input class="form-control" type="text" id="brewAddition<?php echo $i; ?>Amt" name="brewAddition<?php echo $i; ?>Amt" value="<?php if (($action == "edit") && (isset($row_log['brewAddition'.$i.'Amt']))) echo $row_log['brewAddition'.$i.'Amt']; ?>" placeholder="<?php echo ucwords($_SESSION['prefsWeight2']); ?>" ?>
                         </div>
                     </div><!-- ./Form Group -->
                     <div class="form-group form-group-sm"><!-- Form Group Radio INLINE -->

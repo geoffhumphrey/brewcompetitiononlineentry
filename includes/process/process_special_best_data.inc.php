@@ -14,7 +14,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 			
 					$cleaned = str_replace("-","",$_POST['sbd_judging_no'.$id]); // remove dash if present
 					$cleaned = ltrim($cleaned,"0"); // remove leading zero if present
-					$cleaned = sprintf('%05d',$cleaned); // standard in DB is to store a 5 digit number
+					$cleaned = sprintf('%05d',$cleaned); // standard in DB is to store a 6 digit number
 					
 					$query_entry = sprintf("SELECT * FROM $brewing_db_table WHERE brewJudgingNumber='%s'", $cleaned);
 					$entry = mysqli_query($connection,$query_entry) or die (mysqli_error($connection));
@@ -34,14 +34,14 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 					
 					if ($totalRows_entry == 1) {
 						
-						if (isset($_POST['sbd_place'.$id])) $sbd_place = $_POST['sbd_place'.$id];
+						if (isset($_POST['sbd_place'.$id])) $sbd_place = sterilize($_POST['sbd_place'.$id]);
 						else $sbd_place = "";
 						
-						if (isset($_POST['sbd_comments'.$id])) $sbd_comments = $_POST['sbd_comments'.$id];
+						if (isset($_POST['sbd_comments'.$id])) $sbd_comments = sterilize($_POST['sbd_comments'.$id]);
 						else $sbd_comments = "";
 					
 						$insertSQL = sprintf("INSERT INTO $special_best_data_db_table (sid, bid, eid, sbd_place, sbd_comments) VALUES (%s, %s, %s, %s, %s)",
-										   GetSQLValueString($_POST['sid'.$id], "int"),
+										   GetSQLValueString(sterilize($_POST['sid'.$id]), "int"),
 										   GetSQLValueString($row_entry['brewBrewerID'], "int"),
 										   GetSQLValueString($row_entry['id'], "int"),
 										   GetSQLValueString($sbd_place, "int"),
@@ -105,14 +105,14 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 					
 					if ($totalRows_entry == 1) {
 						
-						if (isset($_POST['sbd_place'.$id])) $sbd_place = $_POST['sbd_place'.$id];
+						if (isset($_POST['sbd_place'.$id])) $sbd_place = sterilize($_POST['sbd_place'.$id]);
 						else $sbd_place = "";
 						
-						if (isset($_POST['sbd_comments'.$id])) $sbd_comments = $_POST['sbd_comments'.$id];
+						if (isset($_POST['sbd_comments'.$id])) $sbd_comments = sterilize($_POST['sbd_comments'.$id]);
 						else $sbd_comments = "";
 						
 						$updateSQL = sprintf("UPDATE $special_best_data_db_table SET sid=%s, bid=%s, eid=%s, sbd_place=%s, sbd_comments=%s WHERE id=%s",
-											GetSQLValueString($_POST['sid'.$id], "int"),
+											GetSQLValueString(sterilize($_POST['sid'.$id]), "int"),
 											GetSQLValueString($row_entry['brewBrewerID'], "int"),
 											GetSQLValueString($row_entry['id'], "int"),
 											GetSQLValueString($sbd_place, "int"),
@@ -134,14 +134,14 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 					
 					if ($totalRows_entry == 1) {
 						
-						if (isset($_POST['sbd_place'.$id])) $sbd_place = $_POST['sbd_place'.$id];
+						if (isset($_POST['sbd_place'.$id])) $sbd_place = sterilize($_POST['sbd_place'.$id]);
 						else $sbd_place = "";
 						
-						if (isset($_POST['sbd_comments'.$id])) $sbd_comments = $_POST['sbd_comments'.$id];
+						if (isset($_POST['sbd_comments'.$id])) $sbd_comments = sterilize($_POST['sbd_comments'.$id]);
 						else $sbd_comments = "";
 					
 						$insertSQL = sprintf("INSERT INTO $special_best_data_db_table (sid, bid, eid, sbd_place, sbd_comments) VALUES (%s, %s, %s, %s, %s)",
-										   GetSQLValueString($_POST['sid'.$id], "int"),
+										   GetSQLValueString(sterilize($_POST['sid'.$id]), "int"),
 										   GetSQLValueString($row_entry['brewBrewerID'], "int"),
 										   GetSQLValueString($row_entry['id'], "int"),
 										   GetSQLValueString($sbd_place, "int"),

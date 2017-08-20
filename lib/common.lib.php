@@ -397,9 +397,6 @@ function GetSQLValueString($theValue, $theType, $theDefinedValue = "", $theNotDe
 	$theValue = (!get_magic_quotes_gpc()) ? addslashes($theValue) : $theValue;
 	
 	require (INCLUDES.'scrubber.inc.php');
-	
-	$theValue = strip_tags($theValue);
-	$theValue = filter_var($theValue,FILTER_SANITIZE_STRING);
 
 	switch ($theType) {
 	case "text":
@@ -3247,14 +3244,21 @@ function number_pad($number,$n) {
 
 	
 function open_or_closed($now,$date1,$date2) {
-		// First date has not passed yet
-		if ($now < $date1) $output = "0";
 		
-		// First date has passed, but second has not
-		if (($now >= $date1) && ($now < $date2)) $output = "1";
+		$output = 0;
 		
-		// Both dates have passed
-		if ($now >= $date2) $output = "2";
+		if ((isset($date1)) && (isset($date2))) {
+			
+			// First date has not passed yet
+			if ($now < $date1) $output = 0;
+		
+			// First date has passed, but second has not
+			if (($now >= $date1) && ($now < $date2)) $output = 1;
+
+			// Both dates have passed
+			if ($now > $date2) $output = 2;
+		
+		}
 		
 		return $output;
 }
@@ -3277,7 +3281,7 @@ function limit_subcategory($style,$pref_num,$pref_exception_sub_num,$pref_except
 	// BA Styles
 	if (strpos($_SESSION['prefsStyleSet'],"BABDB") !== false) {
 		
-		if ($style_break[2] == "Custom") {
+		if ((isset($style_break[2])) && (($style_break[2] == "Custom"))) {
 			
 			$query_check = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE brewBrewerID='%s' AND brewCategory='%s'", $prefix."brewing", $uid, $style_break[0]);
 			$check = mysqli_query($connection,$query_check) or die (mysqli_error($connection));
@@ -3948,12 +3952,17 @@ function sterilize ($sterilize = NULL) {
 		return NULL; 
 	}
 	
+	$sterilize = trim($sterilize);
+	
 	$check = array (1 => "'", 2 => '"', 3 => '<', 4 => '>');
 	
 	foreach ($check as $value) {
 		$sterilize = str_replace($value, '', $sterilize);
 	}
 	
+	if ((is_float($sterilize)) || (is_numeric($sterilize))) $sterilize = filter_var(abs($sterilize),FILTER_SANITIZE_NUMBER_FLOAT,FILTER_FLAG_ALLOW_FRACTION);
+	elseif (is_int($sterilize)) $sterilize = filter_var(abs($sterilize),FILTER_SANITIZE_NUMBER_INT);
+	else $sterilize = filter_var($sterilize,FILTER_SANITIZE_STRING);
 	$sterilize = strip_tags($sterilize);
 	$sterilize = stripcslashes($sterilize);
 	$sterilize = stripslashes($sterilize);

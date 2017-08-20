@@ -1,32 +1,37 @@
 <?php
 if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] == 0))) { 
+	
 	session_name($prefix_session);
 	session_start();
+	
 	require(INCLUDES.'scrubber.inc.php');
 	require(INCLUDES.'db_tables.inc.php');
+	require(LIB.'common.lib.php');
+	
 	$dbTable = "default";
 	
 	if ($filter == "default") {
+		
 		// Gather current User's information from the current "users" AND current "brewer" tables and store in variables
 		$query_user = sprintf("SELECT * FROM %s WHERE user_name = '%s'", $prefix."users", $_SESSION['loginUsername']);
 		$user = mysqli_query($connection,$query_user) or die (mysqli_error($connection));
 		$row_user = mysqli_fetch_assoc($user);
-		$user_name = strip_tags($row_user['user_name']);
+		$user_name = sterilize($row_user['user_name']);
 		
 		$password = $row_user['password'];
 		$userLevel = $row_user['userLevel'];
-		$userQuestion = strip_tags($row_user['userQuestion']);
-		$userQuestionAnswer = strip_tags($row_user['userQuestionAnswer']);
+		$userQuestion = sterilize($row_user['userQuestion']);
+		$userQuestionAnswer = sterilize($row_user['userQuestionAnswer']);
 		$userCreated = $row_user['userCreated'];
 		
 		$query_name = sprintf("SELECT * FROM %s WHERE uid='%s'", $prefix."brewer", $row_user['id']);
 		$name = mysqli_query($connection,$query_name) or die (mysqli_error($connection));
 		$row_name = mysqli_fetch_assoc($name);
 		
-		$brewerFirstName = strip_tags($row_name['brewerFirstName']);
-		$brewerLastName = strip_tags($row_name['brewerLastName']);
-		$brewerAddress = strip_tags($row_name['brewerAddress']);
-		$brewerCity = strip_tags($row_name['brewerCity']);
+		$brewerFirstName = sterilize($row_name['brewerFirstName']);
+		$brewerLastName = sterilize($row_name['brewerLastName']);
+		$brewerAddress = sterilize($row_name['brewerAddress']);
+		$brewerCity = sterilize($row_name['brewerCity']);
 		$brewerState = $row_name['brewerState'];
 		$brewerZip = $row_name['brewerZip'];
 		$brewerCountry = $row_name['brewerCountry'];

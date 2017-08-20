@@ -79,7 +79,7 @@ else {
 }
 	
 // Load libraries only when needed - for performance
-$tinymce_load = array("contest_info","special_best","default","step4");
+$tinymce_load = array("contest_info","default","step4");
 $datetime_load = array("contest_info","judging","testing","preferences","step4","step5","step6","default");
 if (((strpos($section, "step") === FALSE) && ($section != "setup")) && ((judging_date_return() == 0) && ($registration_open == 2))) $datatables_load = array("admin","list","default");
 else $datatables_load = array("admin","list","step4");

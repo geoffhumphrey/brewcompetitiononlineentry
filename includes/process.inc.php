@@ -19,7 +19,7 @@ require('../paths.php');
 require(INCLUDES.'url_variables.inc.php');
 include (INCLUDES.'scrubber.inc.php');
 mysqli_select_db($connection,$database);
-require(DB.'common.db.php');
+require (DB.'common.db.php');
 include (LIB.'common.lib.php');
 include (LANG.'language.lang.php');
 
@@ -97,7 +97,7 @@ if (((isset($_SERVER['HTTP_REFERER'])) && ($referrer['host'] == $_SERVER['SERVER
 	$system_db_table = $prefix."system";
 	$themes_db_table = $prefix."themes";
 	$users_db_table = $prefix."users";
-
+	
 	/*
 	if (($section == "setup") && (($dbTable == $contest_info_db_table) || ($dbTable == $drop_off_db_table) || ($dbTable == $judging_locations_db_table) || ($dbTable == $styles_db_table) || ($dbTable == $judging_preferences_db_table) || ($dbTable == $brewer_db_table) || ($dbTable == $preferences_db_table))) {
 		require(DB.'common.db.php');
@@ -201,7 +201,7 @@ if (((isset($_SERVER['HTTP_REFERER'])) && ($referrer['host'] == $_SERVER['SERVER
 			$contest_info1 = mysqli_query($connection,$query_contest_info1) or die (mysqli_error($connection));
 			$row_contest_info1 = mysqli_fetch_assoc($contest_info1);
 
-			if ($_POST['brewerDiscount'] == $row_contest_info1['contestEntryFeePassword']) {
+			if (sterilize($_POST['brewerDiscount']) == $row_contest_info1['contestEntryFeePassword']) {
 				$updateSQL = sprintf("UPDATE $brewer_db_table SET brewerDiscount=%s WHERE uid=%s",
 							   GetSQLValueString("Y", "text"),
 							   GetSQLValueString($id, "text"));

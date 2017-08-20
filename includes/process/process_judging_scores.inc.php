@@ -49,13 +49,13 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 					scoreType,
 					scoreMiniBOS
 					) VALUES (%s, %s, %s, %s, %s, %s, %s);",
-									   GetSQLValueString($_POST['eid'.$score_id], "text"),
-									   GetSQLValueString($_POST['bid'.$score_id], "text"),
-									   GetSQLValueString($_POST['scoreTable'.$score_id], "text"),
-									   GetSQLValueString($_POST['scoreEntry'.$score_id], "text"),
-									   GetSQLValueString($_POST['scorePlace'.$score_id], "text"),
-									   GetSQLValueString($_POST['scoreType'.$score_id], "text"),
-									   GetSQLValueString($score_mini_bos, "int")
+									   GetSQLValueString(sterilize($_POST['eid'.$score_id]), "text"),
+									   GetSQLValueString(sterilize($_POST['bid'.$score_id]), "text"),
+									   GetSQLValueString(sterilize($_POST['scoreTable'.$score_id]), "text"),
+									   GetSQLValueString(sterilize($_POST['scoreEntry'.$score_id]), "text"),
+									   GetSQLValueString(sterilize($_POST['scorePlace'.$score_id]), "text"),
+									   GetSQLValueString(sterilize($_POST['scoreType'.$score_id]), "text"),
+									   GetSQLValueString(sterilize($score_mini_bos), "int")
 									   );
 				
 					mysqli_real_escape_string($connection,$insertSQL);

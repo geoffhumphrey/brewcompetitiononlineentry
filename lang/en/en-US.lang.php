@@ -977,7 +977,8 @@ if (($section == "list") || ($section == "account")) {
 	
 	//v2.1.10
 	$brewer_entries_text_018 = "You will not be able to print this entry's paperwork (bottle labels, etc.) until it has been marked as paid.";
-
+	$brewer_entries_text_019 = "Printing of entry paperwork is not available at this time.";
+	$brewer_entries_text_020 = "Editing of entries is not available at this time.";
 
 	if (SINGLE) $brewer_info_000 = "Hello";
 	else $brewer_info_000 = "Thank you for participating in the";

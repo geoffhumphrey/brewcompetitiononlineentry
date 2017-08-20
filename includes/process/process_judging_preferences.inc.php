@@ -6,10 +6,6 @@
  
 if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1))  || ($section == "setup"))) {
 	
-	if ($action == "add") {
-		
-	}
-	
 	if (($action == "edit") || ($section == "setup")) {
 	
 	// Empty the prefs session variable
@@ -22,6 +18,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 	else $jPrefsBottleNum = "";
 	
 	if ($_POST['jPrefsQueued'] == "N") $flight_ent = $_POST['jPrefsFlightEntries']; else $flight_ent = $_SESSION['jPrefsFlightEntries'];
+	
 	$updateSQL = sprintf("UPDATE $judging_preferences_db_table SET
 					 
 	jPrefsQueued=%s,
@@ -32,22 +29,19 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 	jPrefsCapStewards=%s,
 	jPrefsCapJudges=%s
 	WHERE id=%s",
-					   GetSQLValueString($_POST['jPrefsQueued'], "text"),
-					   GetSQLValueString($_POST['jPrefsFlightEntries'], "int"),
-					   GetSQLValueString($_POST['jPrefsMaxBOS'], "int"),
-					   GetSQLValueString($_POST['jPrefsRounds'], "int"),
-					   GetSQLValueString($jPrefsBottleNum, "int"),
-					   GetSQLValueString($_POST['jPrefsCapStewards'], "int"),
-					   GetSQLValueString($_POST['jPrefsCapJudges'], "int"),
+					   GetSQLValueString(sterilize($_POST['jPrefsQueued']), "text"),
+					   GetSQLValueString(sterilize($_POST['jPrefsFlightEntries']), "int"),
+					   GetSQLValueString(sterilize($_POST['jPrefsMaxBOS']), "int"),
+					   GetSQLValueString(sterilize($_POST['jPrefsRounds']), "int"),
+					   GetSQLValueString(sterilize($jPrefsBottleNum), "int"),
+					   GetSQLValueString(sterilize($_POST['jPrefsCapStewards']), "int"),
+					   GetSQLValueString(sterilize($_POST['jPrefsCapJudges']), "int"),
 					   GetSQLValueString($id, "int"));
 					   
 	mysqli_real_escape_string($connection,$updateSQL);
 	$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 	
 	if ($section == "setup") {
-		
-		// Lock down the config file
-		//if (@chmod("/site/config.php", 0555)) $message = "success"; else $message = "chmod";
 		
 		$updateSQL = sprintf("UPDATE %s SET setup='1', setup_last_step='8' WHERE id='1'",$prefix."system");			   
 		mysqli_real_escape_string($connection,$updateSQL);

@@ -40,7 +40,8 @@ else {
 	
 		if ($msg == "10") {
 			// If redirected from PayPal, update the brewer table to mark entries as paid
-			$a = explode('-', $view);
+			$b = sterilize($view);
+			$a = explode('-', $b);
 			foreach (array_unique($a) as $value) {
 				$updateSQL = "UPDATE $brewing_db_table SET brewPaid='1' WHERE id='".$value."';";
 				mysqli_real_escape_string($connection,$updateSQL);
@@ -80,7 +81,7 @@ else {
 			
 			$query_log = sprintf("SELECT * FROM %s WHERE brewBrewerID = '%s' AND comp_id='%s'", $brewing_db_table, $_SESSION['user_id'], $_SESSION['comp_id']); 
 			$query_log_paid = sprintf("SELECT * FROM %s WHERE brewPaid='1' AND comp_id='%s'", $brewing_db_table, $_SESSION['user_id'], $_SESSION['comp_id']); 
-			$query_log_confirmed = sprintf("SELECT * FROM %s WHERE brewBrewerID = '%s' AND comp_id='%s' AND brewConfirmed='1'", $brewing_db_table, $_SESSION['user_id'], $_SESSION['comp_id']); 
+			$query_log_confirmed = sprintf("SELECT * FROM %s WHERE brewBrewerID = '%s' AND comp_id='%s' AND brewConfirmed='1'", $brewing_db_table, $_SESSION['user_id'], $_SESSION['comp_id']);
 			
 		}
 		

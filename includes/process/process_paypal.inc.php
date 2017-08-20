@@ -7,11 +7,8 @@ $cancel_url = $_POST['cancel_return'];
 if ((TESTING) || (DEBUG)) $paypal_url = "https://www.sandbox.paypal.com/cgi-bin/webscr";
 else $paypal_url = "https://www.paypal.com/cgi-bin/webscr";
 
-$item_name = $_POST['item_name'];
-$item_amount = $_POST['amount'];
-
-// Include Functions
-// include("../sections/functions.php");
+$item_name = sterilize($_POST['item_name']);
+$item_amount = sterilize($_POST['amount']);
 
 // ---------------------------- Check if paypal request or response  ---------------------------
 

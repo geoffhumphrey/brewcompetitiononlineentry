@@ -224,13 +224,19 @@ class InputBeerXML {
 		
 		$vf["brewBrewerID"] = $_POST["brewBrewerID"];
 		$vf["brewConfirmed"] = "0";
-		if (!empty($vf["brewStyle"])) $vf["brewJudgingNumber"] = generate_judging_num($vf["brewCategory"]);
-		else $vf["brewJudgingNumber"] = "";
+		$vf["brewJudgingNumber"] = generate_judging_num("1",$vf["brewCategory"]);
 		
         foreach($vf as $field=>$value){
-            $fields .= ", " . $field;
-            $values .= ", '" . $value . "'";
+            
+			$fields .= ", " . $field;
+			
+			if (is_numeric($value)) $value = filter_var($value,FILTER_SANITIZE_NUMBER_FLOAT,FILTER_FLAG_ALLOW_FRACTION);
+			else $value = filter_var($value,FILTER_SANITIZE_STRING);
+			
+            $values .= ", '".$value."'";
+			
         }
+		
 		mysqli_select_db($connection,$database);
         $fields .= ", brewUpdated";
         $fields .= ")";

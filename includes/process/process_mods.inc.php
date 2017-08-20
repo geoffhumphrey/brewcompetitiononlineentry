@@ -46,16 +46,16 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 					%s, %s, %s, %s, %s,
 					%s, %s, %s, %s, %s
 					)",
-					GetSQLValueString(strip_tags($_POST['mod_name']), "text"),
-					GetSQLValueString($_POST['mod_type'], "int"),
-					GetSQLValueString($_POST['mod_extend_function'], "int"),
-					GetSQLValueString($mod_extend_function_admin, "text"),
-					GetSQLValueString($_POST['mod_filename'], "text"),			   
-					GetSQLValueString(strip_newline($_POST['mod_description']), "text"),
-					GetSQLValueString($_POST['mod_permission'], "int"),
-					GetSQLValueString($_POST['mod_rank'], "int"),
-					GetSQLValueString($_POST['mod_display_rank'], "int"),
-					GetSQLValueString($_POST['mod_enable'], "int")
+					GetSQLValueString(sterilize($_POST['mod_name']), "text"),
+					GetSQLValueString(sterilize($_POST['mod_type']), "int"),
+					GetSQLValueString(sterilize($_POST['mod_extend_function']), "int"),
+					GetSQLValueString(sterilize($mod_extend_function_admin), "text"),
+					GetSQLValueString(sterilize($_POST['mod_filename']), "text"),			   
+					GetSQLValueString(sterilize(strip_newline($_POST['mod_description'])), "text"),
+					GetSQLValueString(sterilize($_POST['mod_permission']), "int"),
+					GetSQLValueString(sterilize($_POST['mod_rank']), "int"),
+					GetSQLValueString(sterilize($_POST['mod_display_rank']), "int"),
+					GetSQLValueString(sterilize($_POST['mod_enable']), "int")
 					);
 	
 		mysqli_real_escape_string($connection,$insertSQL);
@@ -80,16 +80,16 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 				mod_display_rank=%s,
 				mod_enable=%s
 				WHERE id=%s",
-				GetSQLValueString(strip_tags($_POST['mod_name']), "text"),
-				GetSQLValueString($_POST['mod_type'], "int"),
-				GetSQLValueString($_POST['mod_extend_function'], "int"),
-				GetSQLValueString($mod_extend_function_admin, "text"),
-				GetSQLValueString($_POST['mod_filename'], "text"),			   
-				GetSQLValueString(strip_newline($_POST['mod_description']), "text"),
-				GetSQLValueString($_POST['mod_permission'], "int"),
-				GetSQLValueString($_POST['mod_rank'], "int"),
-				GetSQLValueString($_POST['mod_display_rank'], "int"),
-				GetSQLValueString($_POST['mod_enable'], "int"),
+				GetSQLValueString(sterilize($_POST['mod_name']), "text"),
+				GetSQLValueString(sterilize($_POST['mod_type']), "int"),
+				GetSQLValueString(sterilize($_POST['mod_extend_function']), "int"),
+				GetSQLValueString(sterilize($mod_extend_function_admin), "text"),
+				GetSQLValueString(sterilize($_POST['mod_filename']), "text"),			   
+				GetSQLValueString(sterilize(strip_newline($_POST['mod_description'])), "text"),
+				GetSQLValueString(sterilize($_POST['mod_permission']), "int"),
+				GetSQLValueString(sterilize($_POST['mod_rank']), "int"),
+				GetSQLValueString(sterilize($_POST['mod_display_rank']), "int"),
+				GetSQLValueString(sterilize($_POST['mod_enable']), "int"),
 				GetSQLValueString($id, "int"));
 	
 		mysqli_real_escape_string($connection,$updateSQL);

@@ -67,8 +67,8 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 			$message = "";
 			$table_assignments = "";
 		
-			if ($row_brewer['staff_judge'] == 1) 		$table_assignments = table_assignments($row_brewer['uid'],"J",$_SESSION['prefsTimeZone'],$_SESSION['prefsDateFormat'],$_SESSION['prefsTimeFormat'],0);
-			if ($row_brewer['staff_steward'] == 1) 	$table_assignments = table_assignments($row_brewer['uid'],"S",$_SESSION['prefsTimeZone'],$_SESSION['prefsDateFormat'],$_SESSION['prefsTimeFormat'],0);
+			if ($row_brewer['staff_judge'] == 1) $table_assignments = table_assignments($row_brewer['uid'],"J",$_SESSION['prefsTimeZone'],$_SESSION['prefsDateFormat'],$_SESSION['prefsTimeFormat'],0);
+			if ($row_brewer['staff_steward'] == 1) $table_assignments = table_assignments($row_brewer['uid'],"S",$_SESSION['prefsTimeZone'],$_SESSION['prefsDateFormat'],$_SESSION['prefsTimeFormat'],0);
 		
 			if (!empty($table_assignments)) {
 				

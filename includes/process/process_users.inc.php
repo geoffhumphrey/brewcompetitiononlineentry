@@ -42,10 +42,10 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 				$hash = $hasher->HashPassword($password);
 				$insertSQL = sprintf("INSERT INTO $users_db_table (user_name, userLevel, password, userQuestion, userQuestionAnswer, userCreated) VALUES (%s, %s, %s, %s, %s, %s)", 
 								   GetSQLValueString($username, "text"),
-								   GetSQLValueString($_POST['userLevel'], "text"),
+								   GetSQLValueString(sterilize($_POST['userLevel']), "text"),
 								   GetSQLValueString($hash, "text"),
-								   GetSQLValueString($_POST['userQuestion'], "text"),
-								   GetSQLValueString(strip_tags($_POST['userQuestionAnswer']), "text"),
+								   GetSQLValueString(sterilize($_POST['userQuestion']), "text"),
+								   GetSQLValueString(sterilize($_POST['userQuestionAnswer']), "text"),
 								   "NOW( )"					   
 								   );
 				
@@ -119,7 +119,7 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 				
 				$updateGoTo = $base_url."index.php?section=admin&go=participants&msg=2";
 				$updateSQL = sprintf("UPDATE $users_db_table SET userLevel=%s,userCreated=%s WHERE user_name=%s", 
-								   GetSQLValueString($_POST['userLevel'], "text"),
+								   GetSQLValueString(sterilize($_POST['userLevel']), "text"),
 								   "NOW( )",
 								   GetSQLValueString($username, "text")
 								   );
@@ -208,8 +208,8 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 			require(CLASSES.'phpass/PasswordHash.php');
 			$hasher = new PasswordHash(8, false);
 			
-			$password_old = md5($_POST['passwordOld']);
-			$password_new = md5($_POST['password']);
+			$password_old = md5(sterilize($_POST['passwordOld']));
+			$password_new = md5(sterilize($_POST['password']));
 			
 			$query_userPass = sprintf("SELECT password FROM $users_db_table WHERE id = '%s'",$id);
 			$userPass = mysqli_query($connection,$query_userPass) or die (mysqli_error($connection));
@@ -239,7 +239,7 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 			require(CLASSES.'phpass/PasswordHash.php');
 			$hasher = new PasswordHash(8, false);
 		
-			$password_new = md5($_POST['password']);
+			$password_new = md5(sterilize($_POST['password']));
 			$hash_new = $hasher->HashPassword($password_new);
 		
 			$updateSQL = sprintf("UPDATE $users_db_table SET password=%s,userCreated=%s WHERE id=%s", 

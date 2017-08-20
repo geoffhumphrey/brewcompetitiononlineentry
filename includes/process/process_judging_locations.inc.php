@@ -4,14 +4,16 @@
  * Description: This module does all the heavy lifting for adding/editing info in the "judging_locations" table
  */
 if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) || ($section == "setup"))) {
-	$judgingDate = strtotime($_POST['judgingDate']);
+	$judgingDate = strtotime(sterilize($_POST['judgingDate']));
+	$judgingLocName = strtr($judgingLocName,$quote_convert);
+	$judgingLocName = sterilize($_POST['judgingLocName']);
 	
 	if ($action == "add") {
 		$insertSQL = sprintf("INSERT INTO $judging_locations_db_table (judgingDate, judgingLocation, judgingLocName, judgingRounds) VALUES (%s, %s, %s, %s)",
 						   GetSQLValueString($judgingDate, "text"),
-						   GetSQLValueString($_POST['judgingLocation'], "scrubbed"),
-						   GetSQLValueString($_POST['judgingLocName'], "scrubbed"),
-						   GetSQLValueString($_POST['judgingRounds'], "text")
+						   GetSQLValueString(sterilize($_POST['judgingLocation']), "text"),
+						   GetSQLValueString($judgingLocName, "text"),
+						   GetSQLValueString(sterilize($_POST['judgingRounds']), "text")
 						   );
 	
 		//echo $insertSQL;
@@ -40,13 +42,11 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 	if ($action == "edit") {
 		$updateSQL = sprintf("UPDATE $judging_locations_db_table SET judgingDate=%s, judgingLocation=%s, judgingLocName=%s, judgingRounds=%s WHERE id=%s",
 						   GetSQLValueString($judgingDate, "text"),
-						   GetSQLValueString($_POST['judgingLocation'], "scrubbed"),
-						   GetSQLValueString($_POST['judgingLocName'], "scrubbed"),
-						   GetSQLValueString($_POST['judgingRounds'], "text"),
+						   GetSQLValueString(sterilize($_POST['judgingLocation']), "text"),
+						   GetSQLValueString($judgingLocName, "text"),
+						   GetSQLValueString(sterilize($_POST['judgingRounds']), "text"),
 						   GetSQLValueString($id, "int"));   
 						   
-		//echo $judgingDate; echo "<br>".$tz; echo "<br>".$timezone_offset; echo "<br>".$_SESSION['prefsTimeZone'];
-		//echo $updateSQL;
 		mysqli_real_escape_string($connection,$updateSQL);
 		$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 		$pattern = array('\'', '"');

@@ -134,7 +134,7 @@ if (($go == "default") && ($id != "default") && (isset($_SESSION['qrPasswordOK']
 			// If so, add to update query and perform redirect
 			if ((isset($_POST['brewJudgingNumber'])) && ($_POST['brewJudgingNumber'] != "")) {
 				
-				$judgingNumber = sprintf("%06s",$_POST['brewJudgingNumber']);
+				$judgingNumber = sprintf("%06s",sterilize($_POST['brewJudgingNumber']));
 				
 				// Check to see if judging number has already been assigned
 				$query_judging_number = sprintf("SELECT id FROM %s WHERE brewJudgingNumber='%s' AND id <> %s ",$prefix."brewing",$judgingNumber,$id);
@@ -151,8 +151,8 @@ if (($go == "default") && ($id != "default") && (isset($_SESSION['qrPasswordOK']
 				
 				// If not, update DB		
 				$updateSQL = sprintf("UPDATE %s SET brewReceived='1', brewJudgingNumber='%s'",$prefix."brewing",$judgingNumber);
-				if ((isset($_POST['brewBoxNum'])) && ($_POST['brewBoxNum'] != "")) $updateSQL .= sprintf(", brewBoxNum='%s'",$_POST['brewBoxNum']);
-				if ((isset($_POST['brewPaid'])) && ($_POST['brewPaid'] != "")) $updateSQL .= sprintf(", brewPaid='%s'",$_POST['brewPaid']);
+				if ((isset($_POST['brewBoxNum'])) && ($_POST['brewBoxNum'] != "")) $updateSQL .= sprintf(", brewBoxNum='%s'",sterilize($_POST['brewBoxNum']));
+				if ((isset($_POST['brewPaid'])) && ($_POST['brewPaid'] != "")) $updateSQL .= sprintf(", brewPaid='%s'",sterilize($_POST['brewPaid']));
 				$updateSQL .= sprintf(" WHERE id='%s';",$id);
 				mysqli_real_escape_string($connection,$updateSQL);
 				$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
@@ -166,8 +166,8 @@ if (($go == "default") && ($id != "default") && (isset($_SESSION['qrPasswordOK']
 			else {
 				
 				$updateSQL = sprintf("UPDATE %s SET brewReceived='1'",$prefix."brewing");
-				if ((isset($_POST['brewBoxNum'])) && ($_POST['brewBoxNum'] != "")) $updateSQL .= sprintf(", brewBoxNum='%s'",$_POST['brewBoxNum']);
-				if ((isset($_POST['brewPaid'])) && ($_POST['brewPaid'] != "")) $updateSQL .= sprintf(", brewPaid='%s'",$_POST['brewPaid']);
+				if ((isset($_POST['brewBoxNum'])) && ($_POST['brewBoxNum'] != "")) $updateSQL .= sprintf(", brewBoxNum='%s'",sterilize($_POST['brewBoxNum']));
+				if ((isset($_POST['brewPaid'])) && ($_POST['brewPaid'] != "")) $updateSQL .= sprintf(", brewPaid='%s'",sterilize($_POST['brewPaid']));
 				$updateSQL .= sprintf(" WHERE id='%s';",$id);
 				mysqli_real_escape_string($connection,$updateSQL);
 				$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));

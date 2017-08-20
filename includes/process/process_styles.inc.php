@@ -6,9 +6,6 @@
  
 if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) || ($section == "setup"))) {
 	
-	if (isset($_POST['brewStyleLink'])) $brew_style_link = $_POST['brewStyleLink'];
-	else $brew_style_link = "";
-	
 	$ba_styles_accepted = "";
 	
 	if ($action == "update") {
@@ -131,14 +128,12 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 	
 	if ($action == "add") {
 		
-		$brewStyleEntry = strip_tags($_POST['brewStyleEntry']);
-		$brewStyleEntry = filter_var($brewStyleEntry,FILTER_SANITIZE_STRING);
-		$brewStyleEntry = strtr($brewStyleEntry,$quote_convert);
+		$brewStyleEntry = strtr($_POST['brewStyleEntry'],$quote_convert);
+		$brewStyleEntry = sterilize($brewStyleEntry);
+
+		$brewStyleInfo = strtr($_POST['brewStyleInfo'],$quote_convert);
+		$brewStyleInfo = sterilize($brewStyleInfo);
 		
-		$brewStyleInfo = strip_tags($_POST['brewStyleInfo']);
-		$brewStyleInfo = filter_var($brewStyleInfo,FILTER_SANITIZE_STRING);
-		$brewStyleInfo = strtr($brewStyleInfo,$quote_convert);
-	
 		if ($_SESSION['prefsStyleSet'] == "BJCP2008") $category_end = 28;		
 		else $category_end = 34;	
 	
@@ -157,7 +152,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 		// $style_difference = ($row_style_name['brewStyleGroup'] - $category_end);
 		$style_add_one = $row_style_name['brewStyleGroup'] + 1;
 		
-		if (isset($_POST['brewStyleLink'])) $brew_style_link = $_POST['brewStyleLink']; else $brew_style_link = "";
+		if (isset($_POST['brewStyleLink'])) $brew_style_link = sterilize($_POST['brewStyleLink']); else $brew_style_link = "";
 		
 		// Going to start IDs for custom styles at 500
 		// Allows for expansion of BA styles and saves conflicts with special requirement styles and subcategory limit exception styles
@@ -203,28 +198,28 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 			)",
 							   GetSQLValueString("500", "text"),
 							   GetSQLValueString("A", "text"),
-							   GetSQLValueString($_POST['brewStyle'], "scrubbed"),
-							   GetSQLValueString($_POST['brewStyleOG'], "text"),
-							   GetSQLValueString($_POST['brewStyleOGMax'], "text"),
-							   GetSQLValueString($_POST['brewStyleFG'], "text"),
-							   GetSQLValueString($_POST['brewStyleFGMax'], "text"),
-							   GetSQLValueString($_POST['brewStyleABV'], "text"),
-							   GetSQLValueString($_POST['brewStyleABVMax'], "text"),
-							   GetSQLValueString($_POST['brewStyleIBU'], "text"),
-							   GetSQLValueString($_POST['brewStyleIBUMax'], "text"),
-							   GetSQLValueString($_POST['brewStyleSRM'], "text"),
-							   GetSQLValueString($_POST['brewStyleSRMMax'], "text"),
-							   GetSQLValueString($_POST['brewStyleType'], "text"),
+							   GetSQLValueString(sterilize($_POST['brewStyle']), "scrubbed"),
+							   GetSQLValueString(sterilize($_POST['brewStyleOG']), "text"),
+							   GetSQLValueString(sterilize($_POST['brewStyleOGMax']), "text"),
+							   GetSQLValueString(sterilize($_POST['brewStyleFG']), "text"),
+							   GetSQLValueString(sterilize($_POST['brewStyleFGMax']), "text"),
+							   GetSQLValueString(sterilize($_POST['brewStyleABV']), "text"),
+							   GetSQLValueString(sterilize($_POST['brewStyleABVMax']), "text"),
+							   GetSQLValueString(sterilize($_POST['brewStyleIBU']), "text"),
+							   GetSQLValueString(sterilize($_POST['brewStyleIBUMax']), "text"),
+							   GetSQLValueString(sterilize($_POST['brewStyleSRM']), "text"),
+							   GetSQLValueString(sterilize($_POST['brewStyleSRMMax']), "text"),
+							   GetSQLValueString(sterilize($_POST['brewStyleType']), "text"),
 							   GetSQLValueString($brewStyleInfo, "text"),
 							   GetSQLValueString($brew_style_link, "text"),
-							   GetSQLValueString($style_add_one, "text"),
-							   GetSQLValueString($_POST['brewStyleActive'], "text"),
-							   GetSQLValueString($_POST['brewStyleOwn'], "text"),
+							   GetSQLValueString(sterilize($style_add_one), "text"),
+							   GetSQLValueString(sterilize($_POST['brewStyleActive']), "text"),
+							   GetSQLValueString(sterilize($_POST['brewStyleOwn']), "text"),
 							   GetSQLValueString($_SESSION['prefsStyleSet'], "text"),
-							   GetSQLValueString($_POST['brewStyleReqSpec'], "text"),
-							   GetSQLValueString($_POST['brewStyleStrength'], "text"),
-							   GetSQLValueString($_POST['brewStyleCarb'], "text"),
-							   GetSQLValueString($_POST['brewStyleSweet'], "text"),
+							   GetSQLValueString(sterilize($_POST['brewStyleReqSpec']), "text"),
+							   GetSQLValueString(sterilize($_POST['brewStyleStrength']), "text"),
+							   GetSQLValueString(sterilize($_POST['brewStyleCarb']), "text"),
+							   GetSQLValueString(sterilize($_POST['brewStyleSweet']), "text"),
 							   GetSQLValueString($brewStyleEntry, "text")
 							   );
 			
@@ -271,28 +266,28 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 			%s, %s, %s, %s
 			)",
 							   GetSQLValueString("A", "text"),
-							   GetSQLValueString($_POST['brewStyle'], "scrubbed"),
-							   GetSQLValueString($_POST['brewStyleOG'], "text"),
-							   GetSQLValueString($_POST['brewStyleOGMax'], "text"),
-							   GetSQLValueString($_POST['brewStyleFG'], "text"),
-							   GetSQLValueString($_POST['brewStyleFGMax'], "text"),
-							   GetSQLValueString($_POST['brewStyleABV'], "text"),
-							   GetSQLValueString($_POST['brewStyleABVMax'], "text"),
-							   GetSQLValueString($_POST['brewStyleIBU'], "text"),
-							   GetSQLValueString($_POST['brewStyleIBUMax'], "text"),
-							   GetSQLValueString($_POST['brewStyleSRM'], "text"),
-							   GetSQLValueString($_POST['brewStyleSRMMax'], "text"),
-							   GetSQLValueString($_POST['brewStyleType'], "text"),
+							   GetSQLValueString(sterilize($_POST['brewStyle']), "scrubbed"),
+							   GetSQLValueString(sterilize($_POST['brewStyleOG']), "text"),
+							   GetSQLValueString(sterilize($_POST['brewStyleOGMax']), "text"),
+							   GetSQLValueString(sterilize($_POST['brewStyleFG']), "text"),
+							   GetSQLValueString(sterilize($_POST['brewStyleFGMax']), "text"),
+							   GetSQLValueString(sterilize($_POST['brewStyleABV']), "text"),
+							   GetSQLValueString(sterilize($_POST['brewStyleABVMax']), "text"),
+							   GetSQLValueString(sterilize($_POST['brewStyleIBU']), "text"),
+							   GetSQLValueString(sterilize($_POST['brewStyleIBUMax']), "text"),
+							   GetSQLValueString(sterilize($_POST['brewStyleSRM']), "text"),
+							   GetSQLValueString(sterilize($_POST['brewStyleSRMMax']), "text"),
+							   GetSQLValueString(sterilize($_POST['brewStyleType']), "text"),
 							   GetSQLValueString($brewStyleInfo, "text"),
 							   GetSQLValueString($brew_style_link, "text"),
-							   GetSQLValueString($style_add_one, "text"),
-							   GetSQLValueString($_POST['brewStyleActive'], "text"),
-							   GetSQLValueString($_POST['brewStyleOwn'], "text"),
+							   GetSQLValueString(sterilize($style_add_one), "text"),
+							   GetSQLValueString(sterilize($_POST['brewStyleActive']), "text"),
+							   GetSQLValueString(sterilize($_POST['brewStyleOwn']), "text"),
 							   GetSQLValueString($_SESSION['prefsStyleSet'], "text"),
-							   GetSQLValueString($_POST['brewStyleReqSpec'], "text"),
-							   GetSQLValueString($_POST['brewStyleStrength'], "text"),
-							   GetSQLValueString($_POST['brewStyleCarb'], "text"),
-							   GetSQLValueString($_POST['brewStyleSweet'], "text"),
+							   GetSQLValueString(sterilize($_POST['brewStyleReqSpec']), "text"),
+							   GetSQLValueString(sterilize($_POST['brewStyleStrength']), "text"),
+							   GetSQLValueString(sterilize($_POST['brewStyleCarb']), "text"),
+							   GetSQLValueString(sterilize($_POST['brewStyleSweet']), "text"),
 							   GetSQLValueString($brewStyleEntry, "text")
 							   );		
 			
@@ -311,15 +306,13 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 	
 	if ($action == "edit") {
 		
-		$brewStyleEntry = strip_tags($_POST['brewStyleEntry']);
-		$brewStyleEntry = filter_var($brewStyleEntry,FILTER_SANITIZE_STRING);
-		$brewStyleEntry = strtr($brewStyleEntry,$quote_convert);
+		$brewStyleEntry = strtr($_POST['brewStyleEntry'],$quote_convert);
+		$brewStyleEntry = sterilize($brewStyleEntry);
+
+		$brewStyleInfo = strtr($_POST['brewStyleInfo'],$quote_convert);
+		$brewStyleInfo = sterilize($brewStyleInfo);
 		
-		$brewStyleInfo = strip_tags($_POST['brewStyleInfo']);
-		$brewStyleInfo = filter_var($brewStyleInfo,FILTER_SANITIZE_STRING);
-		$brewStyleInfo = strtr($brewStyleInfo,$quote_convert);
-		
-		if ($_POST['brewStyleType'] == 2) $styleStrength = 0; else $styleStrength = $_POST['brewStyleStrength'];
+		if ($_POST['brewStyleType'] == 2) $styleStrength = 0; else $styleStrength = sterilize($_POST['brewStyleStrength']);
 		
 		if ($id < 500) {
 			
@@ -360,29 +353,29 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 			brewStyleEntry=%s
 			
 			WHERE id=%s",
-						   GetSQLValueString($new_id, "int"), 
-						   GetSQLValueString($_POST['brewStyleNum'], "text"),
-						   GetSQLValueString($_POST['brewStyle'], "scrubbed"),
-						   GetSQLValueString($_POST['brewStyleOG'], "text"),
-						   GetSQLValueString($_POST['brewStyleOGMax'], "text"),
-						   GetSQLValueString($_POST['brewStyleFG'], "text"),
-						   GetSQLValueString($_POST['brewStyleFGMax'], "text"),
-						   GetSQLValueString($_POST['brewStyleABV'], "text"),
-						   GetSQLValueString($_POST['brewStyleABVMax'], "text"),
-						   GetSQLValueString($_POST['brewStyleIBU'], "text"),
-						   GetSQLValueString($_POST['brewStyleIBUMax'], "text"),
-						   GetSQLValueString($_POST['brewStyleSRM'], "text"),
-						   GetSQLValueString($_POST['brewStyleSRMMax'], "text"),
-						   GetSQLValueString($_POST['brewStyleType'], "text"),
+						   GetSQLValueString(sterilize($new_id), "int"), 
+						   GetSQLValueString(sterilize($_POST['brewStyleNum']), "text"),
+						   GetSQLValueString(sterilize($_POST['brewStyle']), "scrubbed"),
+						   GetSQLValueString(sterilize($_POST['brewStyleOG']), "text"),
+						   GetSQLValueString(sterilize($_POST['brewStyleOGMax']), "text"),
+						   GetSQLValueString(sterilize($_POST['brewStyleFG']), "text"),
+						   GetSQLValueString(sterilize($_POST['brewStyleFGMax']), "text"),
+						   GetSQLValueString(sterilize($_POST['brewStyleABV']), "text"),
+						   GetSQLValueString(sterilize($_POST['brewStyleABVMax']), "text"),
+						   GetSQLValueString(sterilize($_POST['brewStyleIBU']), "text"),
+						   GetSQLValueString(sterilize($_POST['brewStyleIBUMax']), "text"),
+						   GetSQLValueString(sterilize($_POST['brewStyleSRM']), "text"),
+						   GetSQLValueString(sterilize($_POST['brewStyleSRMMax']), "text"),
+						   GetSQLValueString(sterilize($_POST['brewStyleType']), "text"),
 						   GetSQLValueString($brewStyleInfo, "text"),
 						   GetSQLValueString($brew_style_link, "text"),
-						   GetSQLValueString($_POST['brewStyleGroup'], "text"),
-						   GetSQLValueString($_POST['brewStyleActive'], "text"),
-						   GetSQLValueString($_POST['brewStyleOwn'], "text"),
-						   GetSQLValueString($_POST['brewStyleReqSpec'], "text"),
+						   GetSQLValueString(sterilize($_POST['brewStyleGroup']), "text"),
+						   GetSQLValueString(sterilize($_POST['brewStyleActive']), "text"),
+						   GetSQLValueString(sterilize($_POST['brewStyleOwn']), "text"),
+						   GetSQLValueString(sterilize($_POST['brewStyleReqSpec']), "text"),
 						   GetSQLValueString($styleStrength, "text"),
-						   GetSQLValueString($_POST['brewStyleCarb'], "text"),
-						   GetSQLValueString($_POST['brewStyleSweet'], "text"),
+						   GetSQLValueString(sterilize($_POST['brewStyleCarb']), "text"),
+						   GetSQLValueString(sterilize($_POST['brewStyleSweet']), "text"),
 						   GetSQLValueString($brewStyleEntry, "text"),
 						   GetSQLValueString($id, "int"));
 		}
@@ -418,28 +411,28 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 			brewStyleEntry=%s
 			
 			WHERE id=%s",
-						   GetSQLValueString($_POST['brewStyleNum'], "text"),
-						   GetSQLValueString($_POST['brewStyle'], "scrubbed"),
-						   GetSQLValueString($_POST['brewStyleOG'], "text"),
-						   GetSQLValueString($_POST['brewStyleOGMax'], "text"),
-						   GetSQLValueString($_POST['brewStyleFG'], "text"),
-						   GetSQLValueString($_POST['brewStyleFGMax'], "text"),
-						   GetSQLValueString($_POST['brewStyleABV'], "text"),
-						   GetSQLValueString($_POST['brewStyleABVMax'], "text"),
-						   GetSQLValueString($_POST['brewStyleIBU'], "text"),
-						   GetSQLValueString($_POST['brewStyleIBUMax'], "text"),
-						   GetSQLValueString($_POST['brewStyleSRM'], "text"),
-						   GetSQLValueString($_POST['brewStyleSRMMax'], "text"),
-						   GetSQLValueString($_POST['brewStyleType'], "text"),
+						   GetSQLValueString(sterilize($_POST['brewStyleNum']), "text"),
+						   GetSQLValueString(sterilize($_POST['brewStyle']), "scrubbed"),
+						   GetSQLValueString(sterilize($_POST['brewStyleOG']), "text"),
+						   GetSQLValueString(sterilize($_POST['brewStyleOGMax']), "text"),
+						   GetSQLValueString(sterilize($_POST['brewStyleFG']), "text"),
+						   GetSQLValueString(sterilize($_POST['brewStyleFGMax']), "text"),
+						   GetSQLValueString(sterilize($_POST['brewStyleABV']), "text"),
+						   GetSQLValueString(sterilize($_POST['brewStyleABVMax']), "text"),
+						   GetSQLValueString(sterilize($_POST['brewStyleIBU']), "text"),
+						   GetSQLValueString(sterilize($_POST['brewStyleIBUMax']), "text"),
+						   GetSQLValueString(sterilize($_POST['brewStyleSRM']), "text"),
+						   GetSQLValueString(sterilize($_POST['brewStyleSRMMax']), "text"),
+						   GetSQLValueString(sterilize($_POST['brewStyleType']), "text"),
 						   GetSQLValueString($brewStyleInfo, "text"),
 						   GetSQLValueString($brew_style_link, "text"),
-						   GetSQLValueString($_POST['brewStyleGroup'], "text"),
-						   GetSQLValueString($_POST['brewStyleActive'], "text"),
-						   GetSQLValueString($_POST['brewStyleOwn'], "text"),
-						   GetSQLValueString($_POST['brewStyleReqSpec'], "text"),
+						   GetSQLValueString(sterilize($_POST['brewStyleGroup']), "text"),
+						   GetSQLValueString(sterilize($_POST['brewStyleActive']), "text"),
+						   GetSQLValueString(sterilize($_POST['brewStyleOwn']), "text"),
+						   GetSQLValueString(sterilize($_POST['brewStyleReqSpec']), "text"),
 						   GetSQLValueString($styleStrength, "text"),
-						   GetSQLValueString($_POST['brewStyleCarb'], "text"),
-						   GetSQLValueString($_POST['brewStyleSweet'], "text"),
+						   GetSQLValueString(sterilize($_POST['brewStyleCarb']), "text"),
+						   GetSQLValueString(sterilize($_POST['brewStyleSweet']), "text"),
 						   GetSQLValueString($brewStyleEntry, "text"),
 						   GetSQLValueString($id, "int"));
 						   

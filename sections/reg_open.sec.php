@@ -96,11 +96,13 @@ if (($entry_window_open == 1) && ($show_entries)) {
 		$page_info2 .= "</p>";
 	}
 	
+	
 	$page_info2 .= "<p>";
 	$page_info2 .= sprintf("%s, ",$reg_open_text_011);
 	if (!isset($_SESSION['loginUsername'])) $page_info2 .= sprintf("%s or %s %s",$reg_open_text_012,strtolower($label_log_in),$reg_open_text_013);
 	else $page_info2 .= sprintf("<a href=\"%s\">%s</a>.",build_public_url("brew","entry","add","default",$sef,$base_url),$reg_open_text_014);
 	$page_info2 .= "</p>";
+	
 }
 
 $header1_3 .= sprintf("<a name='rules'></a><h2>%s</h2>",$label_rules);

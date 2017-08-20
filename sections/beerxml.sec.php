@@ -69,7 +69,7 @@ $message9 = "";
 
 // Disaable entry add/edit if registration closed and entry window closed
 if (($registration_open != 1) && ($entry_window_open != 1) && ($_SESSION['userLevel'] > 1)) {
-	$message1 .= sprintf("<div class=\"alert alert-danger hidden-print fade in\"><strong>%s</strong></div>",$beerxml_text_000);
+	$message1 .= sprintf("<p class=\"lead\">%s</p>",$beerxml_text_000);
 	if ($registration_open == "0") $message1 .= sprintf("<p>%s</p>",$alert_text_027);
 	if ($registration_open == "2") $message1 .= sprintf("<p>%s</p>",$alert_text_028);
 }
@@ -77,35 +77,35 @@ if (($registration_open != 1) && ($entry_window_open != 1) && ($_SESSION['userLe
 // Open but entry limit reached
 // No importing
 elseif (($registration_open == 1) && ($_SESSION['userLevel'] > 1) && ($comp_entry_limit) && ($comp_paid_entry_limit)) {
-	$message2 .= sprintf("<div class=\"alert alert-danger hidden-print fade in\"><strong>%s</strong></div>",$beerxml_text_000);
+	$message2 .= sprintf("<p class=\"lead\">%s</p>",$beerxml_text_000);
 	$message2 .= sprintf("<p>%s</p>",$alert_text_030);
 }
 
 // Open but personal entry limit reached
 // No importing
 elseif (($registration_open == 1) && ($entry_window_open == 1) && ($_SESSION['userLevel'] > 1) && ($remaining_entries <= 0)) {
-	$message3 .= sprintf("<div class=\"alert alert-danger hidden-print fade in\"><strong>%s</strong></div>",$beerxml_text_000);
+	$message3 .= sprintf("<p class=\"lead\">%s</p>",$beerxml_text_000);
 	$message3 .= sprintf("<p>%s</p>",$alert_text_031);
 }
 
 // Registration open, but entry window not
 // No importing
 elseif (($registration_open == 1) && ($entry_window_open != 1) && ($_SESSION['userLevel'] > 1)) {
-	$message4 .= sprintf("<div class=\"alert alert-danger hidden-print fade in\"><strong>%s</strong></div>",$beerxml_text_000);
+	$message4 .= sprintf("<p class=\"lead\">%s</p>",$beerxml_text_000);
 	$message4 .= sprintf("<p>%s</p>",$alert_text_032);
 }
 
 // Special for NHC
 // No importing
 elseif ((NHC) && ($_SESSION['userLevel'] > 1) && ($registration_open != 1) && ($prefix != "final_")) {
-	$message5 .= sprintf("<div class=\"alert alert-danger hidden-print fade in\"><strong>%s</strong></div>",$beerxml_text_000);
+	$message5 .= sprintf("<p class=\"lead\">%s</p>",$beerxml_text_000);
 	$message5 .= sprintf("<p>%s</p>",$alert_text_028);
 }
 
 // Special for NHC
 // Close adding or editing during the entry window as well
 elseif ((NHC) && ($_SESSION['userLevel'] > 1) && ($registration_open != 1) && ($entry_window_open != 1) && ($prefix == "final_")) {
-	$message6 .= sprintf("<div class=\"alert alert-danger hidden-print fade in\"><strong>%s</strong></div>",$beerxml_text_000);
+	$message6 .= sprintf("<p class=\"lead\">%s</p>",$beerxml_text_000);
 	$message6 .= sprintf("<p>%s</p>",$alert_text_028);
 }
 
@@ -148,11 +148,11 @@ else {
 					
 					if($_POST["insert_type"] == "recipes"){
 						$insertedRecipes = $input->insertRecipes();
-						if (count($insertedRecipes) > 1) $message .= ucwords(readable_number(count($insertedRecipes))) . " ".$beerxml_text_011.".";
-						else $message .= ucwords(readable_number(count($insertedRecipes))) . " ".$beerxml_text_012.".";
+						// if (count($insertedRecipes) > 1) $message .= ucwords(readable_number(count($insertedRecipes))) . " ".$beerxml_text_011.".";
+						// else $message .= ucwords(readable_number(count($insertedRecipes))) . " ".$beerxml_text_012.".";
 					} 
 					
-					//$_SESSION['recipes'] = $recipes;
+					// $_SESSION['recipes'] = $recipes;
 					$message .= sprintf(" ".$_FILES['userfile']['name']." %s", $beerxml_text_001);
 				}
 				

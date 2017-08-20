@@ -5,24 +5,33 @@
  *              "contest_info" table.
  */
 if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] == 0)) || ($section == "setup"))) {
+	
+	// Instantiate HTMLPurifier
+	require (CLASSES.'htmlpurifier/HTMLPurifier.standalone.php');
+	$config_html_purifier = HTMLPurifier_Config::createDefault();
+	$purifier = new HTMLPurifier($config_html_purifier);
+	
 	// Constants
 	if ($go == "default") {
-		$contestRegistrationOpen = strtotime($_POST['contestRegistrationOpen']);
-		$contestRegistrationDeadline = strtotime($_POST['contestRegistrationDeadline']);
-		$contestEntryOpen = strtotime($_POST['contestEntryOpen']);
-		$contestEntryDeadline = strtotime($_POST['contestEntryDeadline']);
-		$contestJudgeOpen = strtotime($_POST['contestJudgeOpen']);
-		$contestJudgeDeadline = strtotime($_POST['contestJudgeDeadline']);
-		$contestAwardsLocDate = strtotime($_POST['contestAwardsLocDate']);
-		$contestShippingOpen = strtotime($_POST['contestShippingOpen']);
-		$contestShippingDeadline = strtotime($_POST['contestShippingDeadline']);
-		$contestDropoffOpen = strtotime($_POST['contestDropoffOpen']);
-		$contestDropoffDeadline = strtotime($_POST['contestDropoffDeadline']);
-		$contestHostWebsite = check_http($_POST['contestHostWebsite']);
+		$contestRegistrationOpen = strtotime(filter_var($_POST['contestRegistrationOpen'],FILTER_SANITIZE_STRING));
+		$contestRegistrationDeadline = strtotime(filter_var($_POST['contestRegistrationDeadline'],FILTER_SANITIZE_STRING));
+		$contestEntryOpen = strtotime(filter_var($_POST['contestEntryOpen'],FILTER_SANITIZE_STRING));
+		$contestEntryDeadline = strtotime(filter_var($_POST['contestEntryDeadline'],FILTER_SANITIZE_STRING));
+		$contestJudgeOpen = strtotime(filter_var($_POST['contestJudgeOpen'],FILTER_SANITIZE_STRING));
+		$contestJudgeDeadline = strtotime(filter_var($_POST['contestJudgeDeadline'],FILTER_SANITIZE_STRING));
+		$contestAwardsLocDate = strtotime(filter_var($_POST['contestAwardsLocDate'],FILTER_SANITIZE_STRING));
+		$contestShippingOpen = strtotime(filter_var($_POST['contestShippingOpen'],FILTER_SANITIZE_STRING));
+		$contestShippingDeadline = strtotime(filter_var($_POST['contestShippingDeadline'],FILTER_SANITIZE_STRING));
+		$contestDropoffOpen = strtotime(filter_var($_POST['contestDropoffOpen'],FILTER_SANITIZE_STRING));
+		$contestDropoffDeadline = strtotime(filter_var($_POST['contestDropoffDeadline'],FILTER_SANITIZE_STRING));
+		$contestHostWebsite = check_http(filter_var($_POST['contestHostWebsite'],FILTER_SANITIZE_STRING));
 	}
 
-	//echo $contestRegistrationOpen."<br>"; echo $contestRegistrationDeadline."<br>"; echo $contestEntryOpen ."<br>"; echo $contestEntryDeadline."<br>"; echo $judgingDate."<br>";
-	//echo "<br>".$tz; echo "<br>".$timezone_offset; echo "<br>".$_SESSION['prefsTimeZone'];
+	/** DEBUG
+	    echo $contestRegistrationOpen."<br>"; echo $contestRegistrationDeadline."<br>"; echo $contestEntryOpen ."<br>"; echo $contestEntryDeadline."<br>"; echo $judgingDate."<br>";
+	    echo "<br>".$tz; echo "<br>".$timezone_offset; echo "<br>".$_SESSION['prefsTimeZone'];
+	 **/
+	
 	if (NHC) {
 		// Place NHC SQL calls below
 
@@ -31,18 +40,51 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 	// end if (NHC)
 
 	else {
-
+		
+	$contestBottles = "";
+	$contestShippingName = "";
+	$contestShippingAddress = "";
+	$contestAwards = "";
+	$contestRules = "";
+	$contestHostLocation = "";
+	$contestHost = "";
+	$contestName = "";
+	$contestAwardsLocName = "";
+	$contestAwardsLocation = "";
+	$contestBOSAward = "";
+	$contestEntryFeePassword = "";
+	$contestCircuit = "";
+	$contestVolunteers = "";
+	$contestCheckInPassword = "";
+	$contestLogo = "";
+	
+	if (isset($_POST['contestBottles'])) $contestBottles = $purifier->purify($_POST['contestBottles']);
+	if (isset($_POST['contestShippingName'])) $contestShippingName = sterilize($_POST['contestShippingName']);
+	if (isset($_POST['contestShippingAddress'])) $contestShippingAddress = sterilize($_POST['contestShippingAddress']);
+	if (isset($_POST['contestAwards'])) $contestAwards = $purifier->purify($_POST['contestAwards']);
+	if (isset($_POST['contestRules'])) $contestRules = $purifier->purify($_POST['contestRules']);
+	if (isset($_POST['contestHostLocation'])) $contestHostLocation = sterilize($_POST['contestHostLocation']);
+	if (isset($_POST['contestHost'])) $contestHost = sterilize($_POST['contestHost']);
+	if (isset($_POST['contestName'])) $contestName = sterilize($_POST['contestName']);
+	if (isset($_POST['contestAwardsLocName'])) $contestAwardsLocName = sterilize($_POST['contestAwardsLocName']);
+	if (isset($_POST['contestAwardsLocation'])) $contestAwardsLocation = sterilize($_POST['contestAwardsLocation']);
+	if (isset($_POST['contestBOSAward'])) $contestBOSAward = $purifier->purify($_POST['contestBOSAward']);
+	if (isset($_POST['contestEntryFeePassword'])) $contestEntryFeePassword = sterilize($_POST['contestEntryFeePassword']);
+	if (isset($_POST['contestCircuit'])) $contestCircuit = $purifier->purify($_POST['contestCircuit']);
+	if (isset($_POST['contestVolunteers'])) $contestVolunteers = $purifier->purify($_POST['contestVolunteers']);
+	if (isset($_POST['contestCheckInPassword'])) $contestCheckInPassword = sterilize($_POST['contestCheckInPassword']);
+	if (isset($_POST['contestLogo'])) $contestLogo = sterilize($_POST['contestLogo']);
+	if ((empty($_POST['contestEntryFee2'])) || (empty($_POST['contestEntryFeeDiscountNum']))) $contestEntryFeeDiscount = "N";
+	if ((!empty($_POST['contestEntryFee2'])) && (!empty($_POST['contestEntryFeeDiscountNum']))) $contestEntryFeeDiscount = "Y";
 
 	// --------------------------------------- Adding (SETUP ONLY) ----------------------------------------
 
 	if ($action == "add") {
-		if (($_POST['contestEntryFee2'] == "") || ($_POST['contestEntryFeeDiscountNum'] == "")) $contestEntryFeeDiscount = "N";
-		if (($_POST['contestEntryFee2'] != "") && ($_POST['contestEntryFeeDiscountNum'] != "")) $contestEntryFeeDiscount = "Y";
 
 		if (isset($_POST['contestCheckInPassword'])) {
 			require(CLASSES.'phpass/PasswordHash.php');
 			$hasher = new PasswordHash(8, false);
-			$password = md5($_POST['contestCheckInPassword']);
+			$password = md5(sterilize($_POST['contestCheckInPassword']));
 			$hash = $hasher->HashPassword($password);
 		}
 
@@ -99,38 +141,38 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 		%s, %s, %s, %s, %s,
 		%s, %s, %s, %s, %s,
 		%s)",
-							   GetSQLValueString($_POST['contestName'], "text"),
-							   GetSQLValueString($_POST['contestID'], "text"),
-							   GetSQLValueString($_POST['contestHost'], "text"),
+							   GetSQLValueString($contestName, "text"),
+							   GetSQLValueString(filter_var($_POST['contestID'],FILTER_SANITIZE_NUMBER_INT), "text"),
+							   GetSQLValueString($contestHost, "text"),
 							   GetSQLValueString($contestHostWebsite, "text"),
-							   GetSQLValueString($_POST['contestHostLocation'], "text"),
+							   GetSQLValueString($contestHostLocation, "text"),
 							   GetSQLValueString($contestRegistrationOpen, "text"),
 							   GetSQLValueString($contestRegistrationDeadline, "text"),
 							   GetSQLValueString($contestEntryOpen, "text"),
 							   GetSQLValueString($contestEntryDeadline, "text"),
 							   GetSQLValueString($contestJudgeOpen, "text"),
 							   GetSQLValueString($contestJudgeDeadline, "text"),
-							   GetSQLValueString($_POST['contestRules'], "text"),
-							   GetSQLValueString($_POST['contestAwardsLocation'], "text"),
-							   GetSQLValueString($_POST['contestEntryFee'], "text"),
-							   GetSQLValueString($_POST['contestBottles'], "text"),
-							   GetSQLValueString($_POST['contestShippingAddress'], "text"),
-							   GetSQLValueString($_POST['contestShippingName'], "text"),
-							   GetSQLValueString($_POST['contestAwards'], "text"),
+							   GetSQLValueString($contestRules, "text"),
+							   GetSQLValueString($contestAwardsLocation, "text"),
+							   GetSQLValueString(filter_var($_POST['contestEntryFee'],FILTER_SANITIZE_NUMBER_FLOAT,FILTER_FLAG_ALLOW_FRACTION), "text"),
+							   GetSQLValueString($contestBottles, "text"),
+							   GetSQLValueString($contestShippingAddress, "text"),
+							   GetSQLValueString($contestShippingName, "text"),
+							   GetSQLValueString($contestAwards, "text"),
 							   GetSQLValueString($contestDropoffOpen, "text"),
 							   GetSQLValueString($contestDropoffDeadline, "text"),
-							   GetSQLValueString($_POST['contestEntryCap'], "text"),
-							   GetSQLValueString($_POST['contestAwardsLocName'], "text"),
+							   GetSQLValueString(filter_var($_POST['contestEntryCap'],FILTER_SANITIZE_NUMBER_FLOAT,FILTER_FLAG_ALLOW_FRACTION), "text"),
+							   GetSQLValueString($contestAwardsLocName, "text"),
 							   GetSQLValueString($contestAwardsLocDate, "text"),
-							   GetSQLValueString($_POST['contestEntryFee2'], "text"),
+							   GetSQLValueString(filter_var($_POST['contestEntryFee2'],FILTER_SANITIZE_NUMBER_FLOAT,FILTER_FLAG_ALLOW_FRACTION), "text"),
 							   GetSQLValueString($contestEntryFeeDiscount, "text"),
-							   GetSQLValueString($_POST['contestEntryFeeDiscountNum'], "text"),
-							   GetSQLValueString($_POST['contestLogo'], "text"),
-							   GetSQLValueString($_POST['contestBOSAward'], "text"),
-							   GetSQLValueString($_POST['contestEntryFeePassword'], "text"),
-							   GetSQLValueString($_POST['contestEntryFeePasswordNum'], "text"),
-							   GetSQLValueString($_POST['contestCircuit'], "text"),
-							   GetSQLValueString($_POST['contestVolunteers'], "text"),
+							   GetSQLValueString(filter_var($_POST['contestEntryFeeDiscountNum'],FILTER_SANITIZE_NUMBER_FLOAT,FILTER_FLAG_ALLOW_FRACTION), "text"),
+							   GetSQLValueString($contestLogo, "text"),
+							   GetSQLValueString($contestBOSAward, "text"),
+							   GetSQLValueString($contestEntryFeePassword, "text"),
+							   GetSQLValueString(filter_var($_POST['contestEntryFeePasswordNum'],FILTER_SANITIZE_NUMBER_FLOAT,FILTER_FLAG_ALLOW_FRACTION), "text"),
+							   GetSQLValueString($contestCircuit, "text"),
+							   GetSQLValueString($contestVolunteers, "text"),
 							   GetSQLValueString($contestShippingOpen, "text"),
 							   GetSQLValueString($contestShippingDeadline, "text"),
 							   GetSQLValueString($hash, "text"),
@@ -148,10 +190,10 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 			)
 			VALUES
 			(%s, %s, %s, %s)",
-							   GetSQLValueString($_POST['contactFirstName'], "text"),
-							   GetSQLValueString($_POST['contactLastName'], "text"),
-							   GetSQLValueString($_POST['contactPosition'], "text"),
-							   GetSQLValueString($_POST['contactEmail'], "text"));
+							   GetSQLValueString(sterilize($_POST['contactFirstName']), "text"),
+							   GetSQLValueString(sterilize($_POST['contactLastName']), "text"),
+							   GetSQLValueString(sterilize($_POST['contactPosition']), "text"),
+							   GetSQLValueString(sterilize($_POST['contactEmail']), "text"));
 
 			mysqli_real_escape_string($connection,$insertSQL);
 			$result = mysqli_query($connection,$insertSQL) or die (mysqli_error($connection));
@@ -168,7 +210,6 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 				mysqli_select_db($connection,$database);
 				mysqli_real_escape_string($connection,$sql);
 				$result = mysqli_query($connection,$sql) or die (mysqli_error($connection));
-
 				$insertGoTo = $base_url."setup.php?section=step5";
 
 			}
@@ -187,15 +228,17 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 		if ($go == "qr") {
 
 			if (isset($_POST['contestCheckInPassword'])) {
+				
 				require(CLASSES.'phpass/PasswordHash.php');
 				$hasher = new PasswordHash(8, false);
-				$password = md5($_POST['contestCheckInPassword']);
+				$password = md5(sterilize($_POST['contestCheckInPassword']));
 				$hash = $hasher->HashPassword($password);
+				
 			}
 
 			else $hash = "";
 
-			$updateSQL = sprintf("UPDATE $contest_info_db_table SET 	contestCheckInPassword=%s WHERE id=%s", GetSQLValueString($hash, "text"), GetSQLValueString($id, "int"));
+			$updateSQL = sprintf("UPDATE $contest_info_db_table SET contestCheckInPassword=%s WHERE id=%s", GetSQLValueString($hash, "text"), GetSQLValueString($id, "int"));
 
 		}
 
@@ -205,9 +248,6 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 			session_name($prefix_session);
 			session_start();
 			unset($_SESSION['contest_info_general'.$prefix_session]);
-
-			if ((empty($_POST['contestEntryFee2'])) || (empty($_POST['contestEntryFeeDiscountNum']))) $contestEntryFeeDiscount = "N";
-			if ((!empty($_POST['contestEntryFee2'])) && (!empty($_POST['contestEntryFeeDiscountNum']))) $contestEntryFeeDiscount = "Y";
 
 			$updateSQL = sprintf("UPDATE $contest_info_db_table SET
 			contestName=%s,
@@ -248,42 +288,44 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 			contestShippingOpen=%s,
 			contestShippingDeadline=%s
 			WHERE id=%s",
-								   GetSQLValueString($_POST['contestName'], "text"),
-								   GetSQLValueString($_POST['contestID'], "text"),
-								   GetSQLValueString($_POST['contestHost'], "text"),
-								   GetSQLValueString($contestHostWebsite, "text"),
-								   GetSQLValueString($_POST['contestHostLocation'], "text"),
-								   GetSQLValueString($contestRegistrationOpen, "text"),
-								   GetSQLValueString($contestRegistrationDeadline, "text"),
-								   GetSQLValueString($contestEntryOpen, "text"),
-								   GetSQLValueString($contestEntryDeadline, "text"),
-								   GetSQLValueString($contestJudgeOpen, "text"),
-								   GetSQLValueString($contestJudgeDeadline, "text"),
-								   GetSQLValueString($_POST['contestRules'], "text"),
-								   GetSQLValueString($_POST['contestAwardsLocation'], "text"),
-								   GetSQLValueString($_POST['contestEntryFee'], "text"),
-								   GetSQLValueString($_POST['contestBottles'], "text"),
-								   GetSQLValueString($_POST['contestShippingAddress'], "text"),
-								   GetSQLValueString($_POST['contestShippingName'], "text"),
-								   GetSQLValueString($_POST['contestAwards'], "text"),
-								   GetSQLValueString($contestDropoffOpen, "text"),
-								   GetSQLValueString($contestDropoffDeadline, "text"),
-								   GetSQLValueString($_POST['contestEntryCap'], "text"),
-								   GetSQLValueString($_POST['contestAwardsLocName'], "text"),
-								   GetSQLValueString($contestAwardsLocDate, "text"),
-								   GetSQLValueString($_POST['contestEntryFee2'], "text"),
-								   GetSQLValueString($contestEntryFeeDiscount, "text"),
-								   GetSQLValueString($_POST['contestEntryFeeDiscountNum'], "text"),
-								   GetSQLValueString($_POST['contestLogo'], "text"),
-								   GetSQLValueString($_POST['contestBOSAward'], "text"),
-								   GetSQLValueString($_POST['contestEntryFeePassword'], "text"),
-								   GetSQLValueString($_POST['contestEntryFeePasswordNum'], "text"),
-								   GetSQLValueString($_POST['contestCircuit'], "text"),
-								   GetSQLValueString($_POST['contestVolunteers'], "text"),
-								   GetSQLValueString($contestShippingOpen, "text"),
-								   GetSQLValueString($contestShippingDeadline, "text"),
-								   GetSQLValueString($id, "int"));
-
+								 
+								 
+								 
+			GetSQLValueString($contestName, "text"),
+			GetSQLValueString(filter_var($_POST['contestID'],FILTER_SANITIZE_NUMBER_INT), "text"),
+			GetSQLValueString($contestHost, "text"),
+			GetSQLValueString($contestHostWebsite, "text"),
+			GetSQLValueString($contestHostLocation, "text"),
+			GetSQLValueString($contestRegistrationOpen, "text"),
+			GetSQLValueString($contestRegistrationDeadline, "text"),
+			GetSQLValueString($contestEntryOpen, "text"),
+			GetSQLValueString($contestEntryDeadline, "text"),
+			GetSQLValueString($contestJudgeOpen, "text"),
+			GetSQLValueString($contestJudgeDeadline, "text"),
+			GetSQLValueString($contestRules, "text"),
+			GetSQLValueString($contestAwardsLocation, "text"),
+			GetSQLValueString(filter_var($_POST['contestEntryFee'],FILTER_SANITIZE_NUMBER_FLOAT,FILTER_FLAG_ALLOW_FRACTION), "text"),
+			GetSQLValueString($contestBottles, "text"),
+			GetSQLValueString($contestShippingAddress, "text"),
+			GetSQLValueString($contestShippingName, "text"),
+			GetSQLValueString($contestAwards, "text"),
+			GetSQLValueString($contestDropoffOpen, "text"),
+			GetSQLValueString($contestDropoffDeadline, "text"),
+			GetSQLValueString(filter_var($_POST['contestEntryCap'],FILTER_SANITIZE_NUMBER_FLOAT,FILTER_FLAG_ALLOW_FRACTION), "text"),
+			GetSQLValueString($contestAwardsLocName, "text"),
+			GetSQLValueString($contestAwardsLocDate, "text"),
+			GetSQLValueString(filter_var($_POST['contestEntryFee2'],FILTER_SANITIZE_NUMBER_FLOAT,FILTER_FLAG_ALLOW_FRACTION), "text"),
+			GetSQLValueString($contestEntryFeeDiscount, "text"),
+			GetSQLValueString(filter_var($_POST['contestEntryFeeDiscountNum'],FILTER_SANITIZE_NUMBER_FLOAT,FILTER_FLAG_ALLOW_FRACTION), "text"),
+			GetSQLValueString($contestLogo, "text"),
+			GetSQLValueString($contestBOSAward, "text"),
+			GetSQLValueString($contestEntryFeePassword, "text"),
+			GetSQLValueString(filter_var($_POST['contestEntryFeePasswordNum'],FILTER_SANITIZE_NUMBER_FLOAT,FILTER_FLAG_ALLOW_FRACTION), "text"),
+			GetSQLValueString($contestCircuit, "text"),
+			GetSQLValueString($contestVolunteers, "text"),
+			GetSQLValueString($contestShippingOpen, "text"),
+			GetSQLValueString($contestShippingDeadline, "text"),
+			GetSQLValueString($id, "int"));
 			//echo $updateSQL;
 
 		}

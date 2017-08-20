@@ -22,18 +22,18 @@ elseif ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] == "0") &
 	
 	// Define variables directory to upload to
 	$ds = DIRECTORY_SEPARATOR; // Directory separator
-	if (($action == "default") || ($action == "html")) $storeFolder = USER_IMAGES;
-	if (($action == "docs") || ($action == "html_docs")) $storeFolder = USER_DOCS;
+	if (($action == "default") || ($action == "html")) $target_path = USER_IMAGES;
+	if (($action == "docs") || ($action == "html_docs")) $target_path = USER_DOCS;
 	$backlist = array('php', 'php3', 'php4', 'phtml', 'exe'); // Restrict file extensions
 	$valid_chars_regex = "A-Za-z0-9_-\s "; // Characters allowed in the file name (in a Regular Expression format)
 	
 	/* 
 	// Commenting out by request - GitHub Issue #623
 	// Change chmod permission if needed
-	chmod($storeFolder, 0755);
+	chmod($target_path, 0755);
 	
 	// Redirect if chmod can't be changed via php
-	if (!chmod($storeFolder,0755)) {
+	if (!chmod($target_path,0755)) {
 		$errorGoTo = "index.php?section=admin&go=upload&msg=755";
 		header(sprintf("Location: %s", $errorGoTo));
 		exit;
@@ -55,7 +55,7 @@ elseif ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] == "0") &
 		echo $file_type."<br>";
 		echo $file_ext."<br>";
 		echo $_FILES['file']['name']."<br>";
-		echo $storeFolder;
+		echo $target_path;
 		*/
 		
 		// If file type is on the blacklist
@@ -68,12 +68,22 @@ elseif ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] == "0") &
 		}
 		
 		// Do upload if all parameters met
-		if (($_FILES['file']['size'] <= $max_size) && (in_array($file_type, $file_mimes)) && (in_array($file_ext, $file_exts)))  {
-			$tempFile = $_FILES['file']['tmp_name'];          
-			$targetPath = $storeFolder;
-			$targetFile =  $targetPath. $_FILES['file']['name'];
-			//echo $targetFile;
-			move_uploaded_file($tempFile,$targetFile);
+		if (($_FILES['file']['size'] <= $max_size) && (in_array($file_type, $file_mimes)) && (in_array($file_ext, $file_exts)))  {		
+			
+			// Generate temp file
+			$temp_file = $_FILES['file']['tmp_name']; 
+			
+			// Define the target file and path, convert to lowercase
+			$target_file = $target_path.strtolower($_FILES['file']['name']);
+			
+			// Delete any file that has the same name as uploaded file in the target directory
+			if (file_exists($target_path.$_FILES['file']['name'])) unlink($target_path.$_FILES['file']['name']);
+			
+			// Delete any file that has the same name as the target file in the target directory
+			if (file_exists($target_file)) unlink($target_file);
+			
+			// Move the temp file to the target directory
+			move_uploaded_file($temp_file,$target_file);
 			
 			// Redirect if using single upload option
 			if ($action == "html") {
@@ -82,6 +92,7 @@ elseif ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] == "0") &
 				exit;
 			}
 			
+			// Redirect if using multiple download option
 			if ($action == "html_docs") {
 				$updateGoTo = "index.php?section=admin&go=upload_scoresheets&action=html&msg=29";
 				header(sprintf("Location: %s", $updateGoTo));

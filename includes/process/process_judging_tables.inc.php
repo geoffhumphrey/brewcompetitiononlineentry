@@ -20,10 +20,10 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 		tableNumber,
 		tableLocation
 		) VALUES (%s, %s, %s, %s)",
-						   GetSQLValueString($_POST['tableName'], "text"),
-						   GetSQLValueString($table_styles, "text"),
-						   GetSQLValueString($_POST['tableNumber'], "text"),
-						   GetSQLValueString($_POST['tableLocation'], "text")
+						   GetSQLValueString(sterilize($_POST['tableName']), "text"),
+						   GetSQLValueString(sterilize($table_styles), "text"),
+						   GetSQLValueString(sterilize($_POST['tableNumber']), "text"),
+						   GetSQLValueString(sterilize($_POST['tableLocation']), "text")
 						   );
 		
 		mysqli_real_escape_string($connection,$insertSQL);
@@ -218,10 +218,10 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 		tableLocation=%s
 		WHERE id=%s",
 						
-							GetSQLValueString($_POST['tableName'], "text"),
-							GetSQLValueString($table_styles, "text"),
-							GetSQLValueString($_POST['tableNumber'], "text"),
-							GetSQLValueString($_POST['tableLocation'], "text"),
+							GetSQLValueString(sterilize($_POST['tableName']), "text"),
+							GetSQLValueString(sterilize($table_styles), "text"),
+							GetSQLValueString(sterilize($_POST['tableNumber']), "text"),
+							GetSQLValueString(sterilize($_POST['tableLocation']), "text"),
 							GetSQLValueString($id, "text"));
 	
 		mysqli_real_escape_string($connection,$updateSQL);

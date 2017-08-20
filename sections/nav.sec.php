@@ -10,12 +10,13 @@ if ($section >= 400) $sef = "false";
 else $sef = $sef;
 
 $add_entry_link_show = FALSE;
+$show_entries = TRUE;
 
 if ($entry_window_open == 1) {
-	$add_entry_link_show = TRUE;
 	if ($comp_entry_limit) $add_entry_link_show = FALSE;
 	elseif ($comp_paid_entry_limit) $add_entry_link_show = FALSE;
 	elseif ($remaining_entries <= 0) $add_entry_link_show = FALSE;
+	else $add_entry_link_show = TRUE;
 }
 
 $active_class = " class=\"active\"";
@@ -97,7 +98,6 @@ if (!empty($row_contest_dates['contestCheckInPassword'])) {
 // Session specific
 
 $show_judge_steward_fields = TRUE;
-$show_entries = TRUE;
 
 if ($logged_in)  {
 

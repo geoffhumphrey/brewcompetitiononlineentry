@@ -15,10 +15,10 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 		) 
 		VALUES 
 		(%s, %s, %s, %s)",
-						   GetSQLValueString(capitalize($_POST['styleTypeName']), "text"),
-						   GetSQLValueString($_POST['styleTypeOwn'], "text"),
-						   GetSQLValueString($_POST['styleTypeBOS'], "text"),
-						   GetSQLValueString($_POST['styleTypeBOSMethod'], "text"));
+						   GetSQLValueString(capitalize(sterilize($_POST['styleTypeName'])), "text"),
+						   GetSQLValueString(sterilize($_POST['styleTypeOwn']), "text"),
+						   GetSQLValueString(sterilize($_POST['styleTypeBOS']), "text"),
+						   GetSQLValueString(sterilize($_POST['styleTypeBOSMethod']), "text"));
 		
 		mysqli_real_escape_string($connection,$insertSQL);
 		$result = mysqli_query($connection,$insertSQL) or die (mysqli_error($connection));
@@ -37,10 +37,10 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 		styleTypeBOS=%s, 
 		styleTypeBOSMethod=%s
 		WHERE id=%s",
-						   GetSQLValueString($_POST['styleTypeName'], "text"),
-						   GetSQLValueString($_POST['styleTypeOwn'], "text"),
-						   GetSQLValueString($_POST['styleTypeBOS'], "text"),
-						   GetSQLValueString($_POST['styleTypeBOSMethod'], "text"),
+						   GetSQLValueString(sterilize($_POST['styleTypeName']), "text"),
+						   GetSQLValueString(sterilize($_POST['styleTypeOwn']), "text"),
+						   GetSQLValueString(sterilize($_POST['styleTypeBOS']), "text"),
+						   GetSQLValueString(sterilize($_POST['styleTypeBOSMethod']), "text"),
 						   GetSQLValueString($id, "int"));
 		
 		mysqli_real_escape_string($connection,$updateSQL);

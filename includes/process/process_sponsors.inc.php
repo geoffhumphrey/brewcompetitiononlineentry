@@ -4,8 +4,8 @@
  * Description: This module does all the heavy lifting for adding/editing info in the "sponsors" table
  */
 if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1))) {
-	$sponsorURL = check_http($_POST['sponsorURL']);
-	$sponsor_name = capitalize($_POST['sponsorName']);
+	$sponsorURL = check_http(sterilize($_POST['sponsorURL']));
+	$sponsor_name = capitalize(sterilize($_POST['sponsorName']));
 	
 	if ($action == "update") {
 		
@@ -28,11 +28,11 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 		$insertSQL = sprintf("INSERT INTO $sponsors_db_table (sponsorName, sponsorURL, sponsorImage, sponsorText, sponsorLocation, sponsorLevel, sponsorEnable) VALUES (%s, %s, %s, %s, %s, %s, %s)",
 						   GetSQLValueString($sponsor_name, "text"),
 						   GetSQLValueString($sponsorURL, "text"), 
-						   GetSQLValueString($_POST['sponsorImage'], "text"),
-						   GetSQLValueString($_POST['sponsorText'], "text"),
-						   GetSQLValueString($_POST['sponsorLocation'], "text"),
-						   GetSQLValueString($_POST['sponsorLevel'], "int"),
-						   GetSQLValueString($_POST['sponsorEnable'], "int")
+						   GetSQLValueString(sterilize($_POST['sponsorImage']), "text"),
+						   GetSQLValueString(sterilize($_POST['sponsorText']), "text"),
+						   GetSQLValueString(sterilize($_POST['sponsorLocation']), "text"),
+						   GetSQLValueString(sterilize($_POST['sponsorLevel']), "int"),
+						   GetSQLValueString(sterilize($_POST['sponsorEnable']), "int")
 						   );
 	
 		
@@ -50,11 +50,11 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 		$updateSQL = sprintf("UPDATE $sponsors_db_table SET sponsorName=%s, sponsorURL=%s, sponsorImage=%s, sponsorText=%s, sponsorLocation=%s , sponsorLevel=%s, sponsorEnable=%s WHERE id=%s",
 						   GetSQLValueString($sponsor_name, "text"),
 						   GetSQLValueString($sponsorURL, "text"), 
-						   GetSQLValueString($_POST['sponsorImage'], "text"),
-						   GetSQLValueString($_POST['sponsorText'], "text"),
-						   GetSQLValueString($_POST['sponsorLocation'], "text"),
-						   GetSQLValueString($_POST['sponsorLevel'], "int"),
-						   GetSQLValueString($_POST['sponsorEnable'], "int"),
+						   GetSQLValueString(sterilize($_POST['sponsorImage']), "text"),
+						   GetSQLValueString(sterilize($_POST['sponsorText']), "text"),
+						   GetSQLValueString(sterilize($_POST['sponsorLocation']), "text"),
+						   GetSQLValueString(sterilize($_POST['sponsorLevel']), "int"),
+						   GetSQLValueString(sterilize($_POST['sponsorEnable']), "int"),
 						   GetSQLValueString($id, "int"));
 	
 		mysqli_real_escape_string($connection,$updateSQL);

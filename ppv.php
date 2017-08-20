@@ -17,11 +17,11 @@ To implement:
 */
 
 session_start();
-require('paths.php');
-require(INCLUDES.'url_variables.inc.php');
+require ('paths.php');
+require (INCLUDES.'url_variables.inc.php');
 include (INCLUDES.'scrubber.inc.php');
-require(LANG.'language.lang.php');
-include (LIB.'date_time.lib.php');
+require (LANG.'language.lang.php');
+include (LIB.'common.lib.php');
 mysqli_select_db($connection,$database);
 
 $query_prefs = sprintf("SELECT prefsPayPalAccount FROM %s WHERE id='1'", $prefix."preferences");
@@ -41,18 +41,18 @@ $current_time = getTimeZoneDateTime($_SESSION['prefsTimeZone'], time(), $_SESSIO
 $custom_parts = explode("|",$_POST['custom']);
 
 // Assign posted variables to local variables
-$data['payment_status']		= $_POST['payment_status'];
-$data['item_name']			= $_POST['item_name'];
-$data['item_number'] 		= $_POST['item_number'];
-$data['payment_status'] 	= $_POST['payment_status'];
-$data['payment_amount'] 	= $_POST['mc_gross'];
-$data['payment_currency']	= $_POST['mc_currency'];
-$data['txn_id']				= $_POST['txn_id'];
-$data['receiver_email'] 	= $_POST['receiver_email'];
-$data['first_name'] 		= $_POST['first_name'];
-$data['last_name'] 			= $_POST['last_name'];
-$data['payer_email'] 		= $_POST['payer_email'];
-$data['custom'] 			= $_POST['custom'];
+$data['payment_status']		= sterilize($_POST['payment_status']);
+$data['item_name']			= sterilize($_POST['item_name']);
+$data['item_number'] 		= sterilize($_POST['item_number']);
+$data['payment_status'] 	= sterilize($_POST['payment_status']);
+$data['payment_amount'] 	= sterilize($_POST['mc_gross']);
+$data['payment_currency']	= sterilize($_POST['mc_currency']);
+$data['txn_id']				= sterilize($_POST['txn_id']);
+$data['receiver_email'] 	= sterilize($_POST['receiver_email']);
+$data['first_name'] 		= sterilize($_POST['first_name']);
+$data['last_name'] 			= sterilize($_POST['last_name']);
+$data['payer_email'] 		= sterilize($_POST['payer_email']);
+$data['custom'] 			= sterilize($_POST['custom']);
 
 $query_user_info = sprintf("SELECT brewerFirstName,brewerLastName,brewerEmail FROM %s WHERE uid='%s'", $prefix."brewer",$custom_parts[0]);
 $user_info = mysqli_query($connection,$query_user_info) or die (mysqli_error($connection));
