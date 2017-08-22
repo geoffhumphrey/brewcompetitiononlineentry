@@ -3,6 +3,8 @@ include (LIB.'update.lib.php');
 
 $update_required = FALSE;
 $setup_success = TRUE;
+$force_update = FALSE;
+if (FORCE_UPDATE) $force_update = TRUE;
 
 // The following line will need to change with future conversions
 if ((!check_setup($prefix."mods",$database)) && (!check_setup($prefix."preferences",$database))) {
@@ -61,12 +63,14 @@ if (check_setup($prefix."system",$database)) {
 
 		$setup_relocate .= "&msg=1";
 	}
-
-	// If not, flag as such and define relation var
-
-
-	// Perform various checks and update various DB
-	include (UPDATE.'off_schedule_update.php');
+	
+	
+	if ($row_system['version'] == $current_version) {
+		// If the current version is the same as what is in the DB, trigger a force update 
+		// if system version date in DB is prior to the current version date 
+		// covers updates made in between pre-releases and full version
+		if ((strtotime($row_system['version_date'])) < ($current_version_date)) $force_update = TRUE;
+	}
 
 	if ($row_system['version'] != $current_version) {
 

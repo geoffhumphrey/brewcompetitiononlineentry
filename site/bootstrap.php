@@ -86,9 +86,9 @@ if ($setup_success) {
 	
 	if (SINGLE) require_once(SSO.'sso.inc.php');
 		
-	require_once (LIB.'common.lib.php'); // OK
-	require_once (INCLUDES.'db_tables.inc.php'); // OK
-	require_once (LIB.'help.lib.php'); // OK
+	require_once (LIB.'common.lib.php');
+	require_once (INCLUDES.'db_tables.inc.php');
+	require_once (LIB.'help.lib.php');
 	require_once (DB.'common.db.php');
 	require_once (DB.'brewer.db.php');
 	require_once (DB.'entries.db.php');

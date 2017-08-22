@@ -8,7 +8,6 @@
 
 
 // Define the current version
-include (INCLUDES.'current_version.inc.php'); 
 include (LIB.'date_time.lib.php');
 include (INCLUDES.'version.inc.php');
 

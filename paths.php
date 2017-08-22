@@ -1,14 +1,14 @@
-<?php 
+<?php
 /**
- * Module:      paths.php 
+ * Module:      paths.php
  * Description: This module sets global file folder paths. Also houses
  *              specific, site-wide variables.
- * 
+ *
  */
 
 /**
  * The following are file path definitions for various
- * script and document storage folders used/accessed by the 
+ * script and document storage folders used/accessed by the
  * application.
  */
 define('ROOT',dirname( __FILE__ ).DIRECTORY_SEPARATOR);
@@ -71,23 +71,23 @@ define('CDN', TRUE);
  * sandbox enfvironment, etc.
  * Default is FALSE
  */
-define('TESTING', TRUE);
+define('TESTING', FALSE);
 
-/** 
+/**
  * Enable the following to display php errors on screen.
  * Default is FALSE
  */
-define('DEBUG', TRUE);
+define('DEBUG', FALSE);
 
 /**
- * Enable the following to show a collapsable table of all 
+ * Enable the following to show a collapsable table of all
  * session variables on screen
  * Default is FALSE
  */
-define('DEBUG_SESSION_VARS', TRUE);
+define('DEBUG_SESSION_VARS', FALSE);
 
 /**
- * Enable the following when receiving mySQL "column does 
+ * Enable the following when receiving mySQL "column does
  * not exist" errors and the like.
  * This will trigger DB structure updates contained in the
  * off_schedule_update.php file.
@@ -122,7 +122,7 @@ if (HOSTED) {
 
 /** Using an MD5 of __FILE__ will ensure a different session
  * name for multiple installs on the same domain name.
- * 
+ *
  * @fixes https://github.com/geoffhumphrey/brewcompetitiononlineentry/issues/781
  */
 if (empty($installation_id)) {
@@ -171,7 +171,7 @@ $_SESSION['last_action'] = time();
 
 if (HOSTED) {
 	$publickey = "6LdUsBATAAAAAEJYbnqmygjGK-S6CHCoGcLALg5W";
-	$privatekey = "6LdUsBATAAAAAMPhk5yRSmY5BMXlBgcTjiLjiyPb";	
+	$privatekey = "6LdUsBATAAAAAMPhk5yRSmY5BMXlBgcTjiLjiyPb";
 }
 
 else {

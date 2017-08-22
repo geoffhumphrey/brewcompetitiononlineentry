@@ -3,7 +3,7 @@
 // ----------------------------------------------- 2.1.5 -----------------------------------------------
 // Make sure all items are present from last "official" update
 // -----------------------------------------------------------------------------------------------------
-if ((!check_update("prefsLanguage", $prefix."preferences")) || (FORCE_UPDATE)) {
+if (!check_update("prefsLanguage", $prefix."preferences")) {
 	
 	if (!check_update("prefsLanguage", $prefix."preferences")) {
 		$updateSQL = sprintf("ALTER TABLE `%s` ADD `prefsLanguage` VARCHAR(25) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL;",$prefix."preferences");
@@ -80,7 +80,7 @@ if ((!check_update("prefsLanguage", $prefix."preferences")) || (FORCE_UPDATE)) {
 // Check for setup_last_step and add
 // Also add "example" sub-styles for BJCP2015 21A (Specialty IPA) and 27A (Historical Beer)
 // -----------------------------------------------------------------------------------------------------
-if ((!check_update("setup_last_step", $prefix."system")) || (FORCE_UPDATE)) {
+if (!check_update("setup_last_step", $prefix."system")) {
 
 	if (!check_update("setup_last_step", $prefix."system")) {
 		// Add setup_last_step column to system table
@@ -228,7 +228,7 @@ if ((!check_update("setup_last_step", $prefix."system")) || (FORCE_UPDATE)) {
 // Correct the problem with new BJCP "example" substyles not being saved correctly
 // -----------------------------------------------------------------------------------------------------
 
-if ((check_update("brewerNickname", $prefix."brewer")) || (FORCE_UPDATE)) {
+if (check_update("brewerNickname", $prefix."brewer")) {
 	
 	if (check_update("brewerNickname", $prefix."brewer")) {
 		// Change brewerNickname to brewerStaff for ability for users to identify that they are interested in being a staff member
@@ -268,7 +268,7 @@ if ((check_update("brewerNickname", $prefix."brewer")) || (FORCE_UPDATE)) {
 // Update archive db tables to accommodate Pro Edition and BA Styles
 // -----------------------------------------------------------------------------------------------------
 
-if ((!check_update("brewerBreweryName", $prefix."brewer")) || (FORCE_UPDATE)) {
+if (!check_update("brewerBreweryName", $prefix."brewer")) {
 	
 	if (!check_update("brewerBreweryName", $prefix."brewer")) {
 		$updateSQL = sprintf("ALTER TABLE `%s` ADD `brewerBreweryName` VARCHAR(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL, ADD `brewerBreweryTTB` VARCHAR(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL;", $prefix."brewer");

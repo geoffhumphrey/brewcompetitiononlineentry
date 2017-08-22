@@ -1,4 +1,4 @@
-<?php 
+<?php
 // Set up variables
 
 include (DB.'styles.db.php');
@@ -22,12 +22,12 @@ if ($pro_edition == 1) $edition = $label_pro." ".$label_edition;
 if ($dbTable != "default") $header .= "<p>".$edition."</p>";
 
 if ($view == "paid") $header1_1 = "Paid ";
-if ($view == "unpaid") $header1_1 = "Unpaid "; 
+if ($view == "unpaid") $header1_1 = "Unpaid ";
 if ($dbTable != "default") $header1_2 = " (Archive ".get_suffix($dbTable).")";
 
-$header = $_SESSION['contestName'].": "; 
-if ($view == "paid") $header .= "Paid"; 
-elseif ($view == "unpaid") $header .=  "Unpaid"; 
+$header = $_SESSION['contestName'].": ";
+if ($view == "paid") $header .= "Paid";
+elseif ($view == "unpaid") $header .=  "Unpaid";
 else $header .=  "All";
 $header .= " Entries ".$header1_2;
 
@@ -35,30 +35,30 @@ if (($filter == "default") && ($bid == "default") && ($view == "default")) $entr
 if ($filter != "default") $sidebar_extension .= " in this Category";
 if ($bid != "default") $sidebar_extension .= " for this Participant";
 
-if (($filter == "default") && ($bid == "default")) { 
+if (($filter == "default") && ($bid == "default")) {
   	if ($totalRows_log_paid > 0) $sidebar_paid_entries .= "<a href=\"index.php?section=".$section."&amp;go=".$go."&amp;view=paid\" title=\"View All Paid Entries\">".$totalRows_log_paid."</a>";
  	else $sidebar_paid_entries .= $totalRows_log_paid;
-	
-	if (($totalRows_entry_count - $totalRows_log_paid) > 0) $sidebar_unpaid_entries .= "<a href=\"index.php?section=".$section."&amp;go=".$go."&amp;view=unpaid\" title=\"View All Unpaid Entries\">".($totalRows_entry_count - $totalRows_log_paid)."</a>"; 
+
+	if (($totalRows_entry_count - $totalRows_log_paid) > 0) $sidebar_unpaid_entries .= "<a href=\"index.php?section=".$section."&amp;go=".$go."&amp;view=unpaid\" title=\"View All Unpaid Entries\">".($totalRows_entry_count - $totalRows_log_paid)."</a>";
 	else $sidebar_unpaid_entries .=  ($totalRows_entry_count - $totalRows_log_paid);
 	}
-else { 
+else {
 	$sidebar_paid_entries .= $totalRows_log_paid." (".$currency_symbol.$total_fees_paid.")";
 	$sidebar_unpaid_entries .= ($totalRows_log_confirmed - $totalRows_log_paid);
 }
 // Build table body and associated arrays
 
-do {  
-	
+do {
+
 	if ($dbTable == "default") $brewer_info_filter = "default";
 	else $brewer_info_filter = get_suffix($dbTable);
 	$brewer_info = brewer_info($row_log['brewBrewerID'],$brewer_info_filter);
 	$brewer_info = explode("^",$brewer_info);
-	
+
 	$styleConvert = style_convert($row_log['brewCategorySort'], 1);
 	if (strpos($_SESSION['prefsStyleSet'],"BABDB") !== false) $entry_style = "";
 	else $entry_style = $row_log['brewCategorySort']."-".$row_log['brewSubCategory'];
-	
+
 	$entry_style_display = "";
 	$entry_brewer_display = "";
 	$entry_updated_display = "";
@@ -73,7 +73,7 @@ do {
 	$required_info = "";
 	$entry_judging_num = "";
 	$entry_judging_num_display = "";
-	
+
 	$scoresheet = FALSE;
 	$filename = USER_DOCS.$row_log['brewJudgingNumber'].".pdf";
 	if (file_exists($filename)) $scoresheet = TRUE;
@@ -107,60 +107,62 @@ do {
 	}
 
 	else {
-		if ((!empty($row_log['brewCategorySort'])) && ($filter == "default") && ($bid == "default") && ($dbTable == "default")) 
+		if ((!empty($row_log['brewCategorySort'])) && ($filter == "default") && ($bid == "default") && ($dbTable == "default"))
 		$entry_style_display .= "<a href=\"".$base_url."index.php?section=admin&amp;go=entries&amp;filter=".$row_log['brewCategorySort']."\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"See only the ".$styleConvert." entries\" >";
-		if ((!empty($row_log['brewCategorySort'])) && ($row_log['brewCategorySort'] != "00")) $entry_style_display .= $row_log['brewCategorySort'].$row_log['brewSubCategory'].": ".$row_log['brewStyle']; 
-		else $entry_style_display .= "<span class=\"hidden\">".$row_log['brewCategorySort']."</span><span class=\"text-danger\"><strong>Style NOT Specified</strong></span>"; 
+		if ((!empty($row_log['brewCategorySort'])) && ($row_log['brewCategorySort'] != "00")) $entry_style_display .= $row_log['brewCategorySort'].$row_log['brewSubCategory'].": ".$row_log['brewStyle'];
+		else $entry_style_display .= "<span class=\"hidden\">".$row_log['brewCategorySort']."</span><span class=\"text-danger\"><strong>Style NOT Specified</strong></span>";
 		if ((!empty($row_log['brewCategorySort'])) && ($filter == "default") && ($bid == "default") && ($dbTable == "default")) $entry_style_display .= "</a>";
 	}
 
 	// Brewer Info
-	if (($brewer_info[0] != "") && ($brewer_info[1] != "") && ($pro_edition == 0)) { 
-		if (($bid == "default") && ($dbTable == "default")) { 
+	if (($brewer_info[0] != "") && ($brewer_info[1] != "") && ($pro_edition == 0)) {
+		if (($bid == "default") && ($dbTable == "default")) {
 			$entry_brewer_display .= "<a href=\"".$base_url."index.php?section=admin&amp;go=entries&amp;bid=".$row_log['brewBrewerID']."\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"See only ".$brewer_info[0]." ".$brewer_info[1]."&rsquo;s entries\">";
 			}
-		$entry_brewer_display .=  $brewer_info[1].", ".$brewer_info[0]; 
+		$entry_brewer_display .=  $brewer_info[1].", ".$brewer_info[0];
 		if (($bid == "default") && ($dbTable == "default")) $entry_brewer_display .= "</a>";
-	 } 
-	 elseif (($brewer_info[15] != "&nbsp;") && ($pro_edition == 1)) { 
-		if (($bid == "default") && ($dbTable == "default")) { 
+		// $entry_brewer_display .=  "<br>".$brewer_info[11].", ".$brewer_info[12];
+	 }
+	 elseif (($brewer_info[15] != "&nbsp;") && ($pro_edition == 1)) {
+		if (($bid == "default") && ($dbTable == "default")) {
 			$entry_brewer_display .= "<a href=\"".$base_url."index.php?section=admin&amp;go=entries&amp;bid=".$row_log['brewBrewerID']."\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"See only ".$brewer_info[15]."&rsquo;s entries\">";
 			}
-		$entry_brewer_display .=  $brewer_info[15]; 
+		$entry_brewer_display .=  $brewer_info[15];
 		if (($bid == "default") && ($dbTable == "default")) $entry_brewer_display .= "</a>";
-	 } 
+		// $entry_brewer_display .=  "<br>".$brewer_info[11].", ".$brewer_info[12];
+	 }
 	else $entry_brewer_display .= "&nbsp;";
 
-	if ($row_log['brewUpdated'] != "") $entry_updated_display .= "<span class=\"hidden\">".strtotime($row_log['brewUpdated'])."</span>".getTimeZoneDateTime($_SESSION['prefsTimeZone'], strtotime($row_log['brewUpdated']), $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "short", "date-time-no-gmt"); 
+	if ($row_log['brewUpdated'] != "") $entry_updated_display .= "<span class=\"hidden\">".strtotime($row_log['brewUpdated'])."</span>".getTimeZoneDateTime($_SESSION['prefsTimeZone'], strtotime($row_log['brewUpdated']), $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "short", "date-time-no-gmt");
 	else $entry_updated_display .= "&nbsp;";
 
 	if (($action != "print") && ($dbTable == "default")) {
 		$entry_paid_display .= "<div class=\"checkbox\"><label>";
 		$entry_paid_display .= "<input id=\"brewPaid\" name=\"brewPaid".$row_log['id']."\" type=\"checkbox\" value=\"1\"";
-		if ($row_log['brewPaid'] == "1") $entry_paid_display .= "checked>"; 
+		if ($row_log['brewPaid'] == "1") $entry_paid_display .= "checked>";
 		else $entry_paid_display .= ">";
 		$entry_paid_display .= "</label></div>";
-		$entry_paid_display .= "<span class=\"hidden\">".$row_log['brewPaid']."</span>"; 
-		if ($brewer_info[9] == "Y") $entry_paid_display .= "&nbsp;<a tabindex=\"0\" role=\"button\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"This entry has been discounted to ".$currency_symbol.number_format($_SESSION['contestEntryFeePasswordNum'], 2).".\"><span class=\"fa fa-lg fa-star\"></span></a>"; 
+		$entry_paid_display .= "<span class=\"hidden\">".$row_log['brewPaid']."</span>";
+		if ($brewer_info[9] == "Y") $entry_paid_display .= "&nbsp;<a tabindex=\"0\" role=\"button\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"This entry has been discounted to ".$currency_symbol.number_format($_SESSION['contestEntryFeePasswordNum'], 2).".\"><span class=\"fa fa-lg fa-star\"></span></a>";
 	}
 
-	else { 
+	else {
 		if ($row_log['brewPaid'] == "1") $entry_paid_display .= "<span class=\"fa fa-lg fa-check text-success\"></span>";
 		else $entry_paid_display .= "<span class=\"fa fa-lg fa-times text-danger\"></span>";
 	}
 
-	if (($action != "print") && ($dbTable == "default")) { 
+	if (($action != "print") && ($dbTable == "default")) {
 		$entry_received_display .= "<div class=\"checkbox\"><label><input id=\"brewReceived\" name=\"brewReceived".$row_log['id']."\" type=\"checkbox\" value=\"1\"";
-		if ($row_log['brewReceived'] == "1") $entry_received_display .= "checked>"; 
+		if ($row_log['brewReceived'] == "1") $entry_received_display .= "checked>";
 		else $entry_received_display .= ">";
 		$entry_received_display .= "</label></div>";
-		$entry_received_display .= "<span class=\"hidden\">".$row_log['brewReceived']."</span>"; 
-	} 
+		$entry_received_display .= "<span class=\"hidden\">".$row_log['brewReceived']."</span>";
+	}
 
-	else { 
-		if ($row_log['brewReceived'] == "1") $entry_received_display .= "<span class=\"fa fa-lg fa-check text-success\"></span>"; 
+	else {
+		if ($row_log['brewReceived'] == "1") $entry_received_display .= "<span class=\"fa fa-lg fa-check text-success\"></span>";
 		else $entry_received_display .= "<span class=\"fa fa-lg fa-times text-danger\"></span>";
-	}		
+	}
 
 	if ($dbTable == "default") { $entry_box_num_display .= "<input class=\"form-control input-sm hidden-print\" id=\"brewBoxNum\" name=\"brewBoxNum".$row_log['id']."\" type=\"text\" size=\"5\" maxlength=\"10\" value=\"".$row_log['brewBoxNum']."\" />";
 	$entry_box_num_display .= "<span class=\"hidden visible-print-inline\">".$row_log['brewBoxNum']."</span>";
@@ -169,9 +171,9 @@ do {
 
 
 	if ($dbTable == "default") {
-		$entry_actions .= "<a href=\"".$base_url."index.php?section=brew&amp;go=".$go."&amp;action=edit&amp;filter=".$row_log['brewBrewerID']."&amp;id=".$row_log['id']; 
-		if ($row_log['brewConfirmed'] == 0) $entry_actions .= "&amp;msg=1-".$row_log['brewCategorySort']."-".$row_log['brewSubCategory']; 
-		else $entry_actions .= "&amp;view=".$row_log['brewCategorySort']."-".$row_log['brewSubCategory']; 
+		$entry_actions .= "<a href=\"".$base_url."index.php?section=brew&amp;go=".$go."&amp;action=edit&amp;filter=".$row_log['brewBrewerID']."&amp;id=".$row_log['id'];
+		if ($row_log['brewConfirmed'] == 0) $entry_actions .= "&amp;msg=1-".$row_log['brewCategorySort']."-".$row_log['brewSubCategory'];
+		else $entry_actions .= "&amp;view=".$row_log['brewCategorySort']."-".$row_log['brewSubCategory'];
 		$entry_actions .= "\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Edit &ldquo;".$row_log['brewName']."&rdquo;\">";
 		$entry_actions .= "<span class=\"fa fa-lg fa-pencil\"></span>";
 		$entry_actions .= "</a> ";
@@ -180,16 +182,16 @@ do {
 		$entry_actions .= "<a href=\"mailto:".$brewer_info[6]."\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Email the entry&rsquo;s owner, ".$brewer_info[0]." ".$brewer_info[1].", at ".$brewer_info[6]."\"><span class=\"fa fa-lg fa-envelope\"></span></a> ";
 	}
 
-	if ($scoresheet) { 
+	if ($scoresheet) {
 		$entry_actions .= " <a href = \"".$base_url."handle.php?section=pdf-download&amp;id=".$row_log['brewJudgingNumber']."\" data-toggle=\"tooltip\" title=\"Download judges&rsquo; scoresheets for the entry named ".$row_log['brewName'].".\"><span class=\"fa fa-lg fa-gavel\"></span></a> ";
 	}
-	
+
 	$tbody_rows .= "<tr class=\"".$entry_unconfirmed_row."\">";
 	$tbody_rows .= "<input type=\"hidden\" name=\"id[]\" value=\"".$row_log['id']."\" />";
 	$tbody_rows .= "<td>".sprintf("%04s",$row_log['id'])."</td>";
 	$tbody_rows .= "<td nowrap=\"nowrap\">".$entry_judging_num_display."</td>";
 	$tbody_rows .= "<td class=\"hidden-xs hidden-sm hidden-md\">";
-	if (!empty($entry_unconfirmed_row)) $tbody_rows .= "<a href=\"".$base_url."index.php?section=brew&amp;go=".$go."&amp;filter=".$row_log['brewBrewerID']."&amp;action=edit&amp;id=".$row_log['id']."&amp;view=".$row_log['brewCategory']."-".$row_log['brewSubCategory']."\" data-toggle=\"tooltip\" title=\"Unconfirmed Entry - Click to Edit\"><span class=\"fa fa-lg fa-exclamation-triangle text-danger\"></span></a> "; 
+	if (!empty($entry_unconfirmed_row)) $tbody_rows .= "<a href=\"".$base_url."index.php?section=brew&amp;go=".$go."&amp;filter=".$row_log['brewBrewerID']."&amp;action=edit&amp;id=".$row_log['id']."&amp;view=".$row_log['brewCategory']."-".$row_log['brewSubCategory']."\" data-toggle=\"tooltip\" title=\"Unconfirmed Entry - Click to Edit\"><span class=\"fa fa-lg fa-exclamation-triangle text-danger\"></span></a> ";
 	$tbody_rows .= $row_log['brewName'];
 	$tbody_rows .= $required_info."</td>";
 	$tbody_rows .= "<td class=\"hidden-xs\">".$entry_style_display."</td>";
@@ -201,10 +203,10 @@ do {
 	$tbody_rows .= "<td>".$entry_box_num_display."</td>";
 	$tbody_rows .= "<td>".$entry_actions."</td>";
 	$tbody_rows .= "</tr>";
-	
+
 	// Build all brewer email array
 	if (!empty($brewer_info[6])) $copy_paste_all_emails[] = $brewer_info[6];
-	
+
 } while($row_log = mysqli_fetch_assoc($log));
 
 do {
@@ -212,7 +214,7 @@ do {
 	else $brewer_info_filter = get_suffix($dbTable);
 	$brewer_info = brewer_info($row_log_paid['brewBrewerID'],$brewer_info_filter);
 	$brewer_info = explode("^",$brewer_info);
-	if (!empty($brewer_info[6])) $copy_paste_paid_emails[] = $brewer_info[6]; 
+	if (!empty($brewer_info[6])) $copy_paste_paid_emails[] = $brewer_info[6];
 } while ($row_log_paid = mysqli_fetch_assoc($log_paid));
 
 // Unpaid email addresses
@@ -229,8 +231,8 @@ if ($totalRows_log_unpaid > 0) {
 }
 
 if ($action != "print") { ?>
-	<?php 
-    if (($dbTable == "default") && ($totalRows_entry_count > $_SESSION['prefsRecordLimit']))	{ 
+	<?php
+    if (($dbTable == "default") && ($totalRows_entry_count > $_SESSION['prefsRecordLimit']))	{
         $of = $start + $totalRows_log;
         echo "<div id=\"sortable_info\" class=\"dataTables_info\">Showing ".$start_display." to ".$of;
         if ($bid != "default") echo " of ".$totalRows_log." entries</div>";
@@ -280,13 +282,13 @@ if ($action != "print") { ?>
 			"sDom": 'rt',
 			"bStateSave": false,
 			"bLengthChange" : false,
-			
+
 			<?php if ($psort == "entry_number") { ?>"aaSorting": [[0,'asc']],<?php } ?>
 			<?php if ($psort == "judging_number") { ?>"aaSorting": [[1,'asc']],<?php } ?>
 			<?php if ($psort == "entry_name") { ?>"aaSorting": [[2,'asc']],<?php } ?>
 			<?php if ($psort == "category") { ?>"aaSorting": [[3,'asc']],<?php } ?>
 			<?php if ($psort == "brewer_name") { ?>"aaSorting": [[4,'asc']],<?php } ?>
-			
+
 			"aoColumns": [
 				null,
 				null,
@@ -327,7 +329,7 @@ if ($action != "print") { ?>
 		<!-- View Entries Dropdown -->
 		<div class="btn-group" role="group">
 			<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-			<span class="fa fa-eye"></span> View...   
+			<span class="fa fa-eye"></span> View...
 			<span class="caret"></span>
 			</button>
 			<ul class="dropdown-menu">
@@ -350,7 +352,7 @@ if ($action != "print") { ?>
 		<div class="btn-group hidden-xs hidden-sm" role="group" aria-label="printCurrent">
 			<div class="btn-group" role="group">
 				<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-				<span class="fa fa-print"></span> Print Current View...   
+				<span class="fa fa-print"></span> Print Current View...
 				<span class="caret"></span>
 				</button>
 				<ul class="dropdown-menu">
@@ -364,7 +366,7 @@ if ($action != "print") { ?>
 			<?php if (($totalRows_entry_count > $limit) && ($filter == "default")) { ?>
 				<div class="btn-group" role="group">
 				<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-				<span class="fa fa-print"></span> Print All...   
+				<span class="fa fa-print"></span> Print All...
 				<span class="caret"></span>
 				</button>
 				<ul class="dropdown-menu">
@@ -382,7 +384,7 @@ if ($action != "print") { ?>
 		<div class="btn-group" role="group" aria-label="markEntriesAs">
 			<div class="btn-group" role="group">
 				<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-				<span class="fa fa-check-circle"></span> Admin Actions  
+				<span class="fa fa-check-circle"></span> Admin Actions
 				<span class="caret"></span>
 				</button>
 				<ul class="dropdown-menu">
@@ -404,7 +406,7 @@ if ($action != "print") { ?>
 </div>
 <div class="bcoem-admin-element hidden-print row hidden-xs">
 	<?php $all_email_display = implode(", ",array_unique($copy_paste_all_emails));
-	if (!empty($all_email_display))	{ ?>								  
+	if (!empty($all_email_display))	{ ?>
 	<div class="col-md-12">
 	<!-- All Participant Email Addresses Modal -->
 	   <div class="btn-group hidden-xs hidden-sm" role="group" aria-label="...">
@@ -432,7 +434,7 @@ if ($action != "print") { ?>
 			</div>
 		</div><!-- ./modal -->
 		<?php }
-		$paid_email_display = implode(", ",array_unique($copy_paste_paid_emails)); 
+		$paid_email_display = implode(", ",array_unique($copy_paste_paid_emails));
 		if (!empty($paid_email_display)) { ?>
 		<!-- All Participants with Paid Entries Email Addresses Modal -->
 		<div class="btn-group hidden-xs hidden-sm" role="group" aria-label="...">
@@ -459,7 +461,7 @@ if ($action != "print") { ?>
 			</div>
 		</div><!-- ./modal -->
 		<?php }
-		$unpaid_email_display = implode(", ",array_unique($copy_paste_unpaid_emails));								  
+		$unpaid_email_display = implode(", ",array_unique($copy_paste_unpaid_emails));
 		if (!empty($unpaid_email_display)) { ?>
 		<div class="btn-group hidden-xs hidden-sm" role="group" aria-label="...">
 			<button type="button" class="btn btn-info" data-toggle="modal" data-target="#unpaidEmailModal">
@@ -565,10 +567,10 @@ if ($action != "print") { ?>
     </tr>
 </thead>
 <tbody>
-<?php echo $tbody_rows; ?> 
+<?php echo $tbody_rows; ?>
 </tbody>
 </table>
-<?php if ($action != "print") {  
+<?php if ($action != "print") {
 	if (($dbTable == "default") && ($totalRows_entry_count >= $_SESSION['prefsRecordLimit']))	{
 	if (($filter == "default") && ($bid == "default")) $total_paginate = $totalRows_entry_count;
 	else $total_paginate = $totalRows_log;
