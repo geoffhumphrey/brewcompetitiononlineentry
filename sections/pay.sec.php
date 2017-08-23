@@ -98,7 +98,7 @@ Declare all variables empty at the top of the script. Add on later...
 		if ($_SESSION['contestEntryFeeDiscount'] == "Y") $primary_page_info .= sprintf(" %s %s %s %s. ",$currency_symbol.number_format($_SESSION['contestEntryFee2'], 2), $pay_text_005,addOrdinalNumberSuffix($_SESSION['contestEntryFeeDiscountNum']), strtolower($label_entry)); 
 		if ($_SESSION['contestEntryCap'] > 0) $primary_page_info .= sprintf(" %s %s. ",$currency_symbol.number_format($_SESSION['contestEntryCap'], 2),$pay_text_006);
 		$primary_page_info .= "</small></p>";
-		if ($row_brewer['brewerDiscount'] == "Y") {
+		if (($row_brewer['brewerDiscount'] == "Y") && (isset($_SESSION['contestEntryFeePasswordNum']))) {
 			$primary_page_info .= sprintf("<p class=\"lead\"><small><span class=\"fa fa-lg fa-star-o text-primary\"></span> %s <strong class=\"text-success\">%s</strong> %s.</small></p>",$pay_text_007,$currency_symbol.number_format($_SESSION['contestEntryFeePasswordNum'], 2),$pay_text_004);
 		}
 		$primary_page_info .= sprintf("<p class=\"lead\"><small><span class=\"fa fa-lg fa-exclamation-triangle text-danger\"></span> %s <strong class=\"text-success\">%s</strong>. %s <strong class=\"text-danger\">%s</strong>.</small></p>",$pay_text_008,$currency_symbol.number_format($total_entry_fees,2),$pay_text_009,$currency_symbol.number_format($total_to_pay,2));
@@ -270,7 +270,8 @@ Declare all variables empty at the top of the script. Add on later...
 		}
 		
 		if (($total_entry_fees > 0) && ($total_entry_fees == $total_paid_entry_fees)) $page_info6 .= sprintf("<span class=\"fa fa-lg fa-thumbs-o-up\"></span> %s</p>",$pay_text_024);
-		if ($total_entry_fees == 0) $page_info6 .= sprintf("<p>%s</p>",$pay_text_025);
+		if (($total_entry_fees == 0) && ($_SESSION['contestEntryFee'] > 0)) $page_info6 .= sprintf("<p>%s</p>",$pay_text_025);
+		else $page_info6 .= sprintf("<span class=\"fa fa-lg fa-thumbs-o-up\"></span> %s</p>",$pay_text_032);
 		
 		if (($_SESSION['prefsPayToPrint'] == "Y") && ($unconfirmed > 0)) $warning1 .= sprintf("<div class=\"alert alert-danger\"><span class=\"fa fa-lg fa-exclamation-circle\"></span> <strong>%s</strong> %s</div>",$pay_text_026,$pay_text_027); 
 		

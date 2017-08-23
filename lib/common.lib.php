@@ -3959,9 +3959,13 @@ function sterilize ($sterilize = NULL) {
 		$sterilize = str_replace($value, '', $sterilize);
 	}
 	
-	if ((is_float($sterilize)) || (is_numeric($sterilize))) $sterilize = filter_var(abs($sterilize),FILTER_SANITIZE_NUMBER_FLOAT,FILTER_FLAG_ALLOW_FRACTION);
-	elseif (is_int($sterilize)) $sterilize = filter_var(abs($sterilize),FILTER_SANITIZE_NUMBER_INT);
+	if (is_numeric($sterilize)) {
+		if (is_float($sterilize)) $sterilize = filter_var($sterilize,FILTER_SANITIZE_NUMBER_FLOAT,FILTER_FLAG_ALLOW_FRACTION);
+		if (is_int($sterilize)) $sterilize = filter_var($sterilize,FILTER_SANITIZE_NUMBER_INT);	
+	}
+	
 	else $sterilize = filter_var($sterilize,FILTER_SANITIZE_STRING);
+	
 	$sterilize = strip_tags($sterilize);
 	$sterilize = stripcslashes($sterilize);
 	$sterilize = stripslashes($sterilize);

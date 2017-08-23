@@ -771,7 +771,7 @@ CREATE TABLE IF NOT EXISTS `baseline_preferences` (
   `prefsTheme` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `prefsDateFormat` char(1) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `prefsContact` char(1) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `prefsTimeZone` int(11) DEFAULT NULL,
+  `prefsTimeZone` decimal(10,3) DEFAULT NULL,
   `prefsEntryLimit` int(11) DEFAULT NULL,
   `prefsTimeFormat` tinyint(1) DEFAULT NULL,
   `prefsUserEntryLimit` varchar(4) COLLATE utf8mb4_unicode_ci DEFAULT NULL,

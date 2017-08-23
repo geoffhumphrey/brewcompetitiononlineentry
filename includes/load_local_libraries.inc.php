@@ -31,13 +31,13 @@
     <link rel="stylesheet" type="text/css" href="<?php echo $base_url; ?>libraries/date-time-picker/css/bootstrap-datetimepicker.min.css" />
     <script type="text/javascript" src="<?php echo $base_url; ?>libraries/date-time-picker/js/moment-with-locales.js"></script>
     <script type="text/javascript" src="<?php echo $base_url; ?>libraries/date-time-picker/js/bootstrap-datetimepicker.min.js"></script>
-    <script src="<?php echo $base_url;?>js_includes/date-time.js"></script>
+    <script src="<?php echo $base_url;?>js_includes/date-time.min.js"></script>
     <?php } ?>
     
     <?php if (($section == "admin") && (in_array($go,$tinymce_load))) { ?>
     <!-- Load TinyMCE / https://www.tinymce.com/ -->
     <script src="<?php echo $base_url; ?>libraries/tinymce/js/tinymce/tinymce.min.js"></script>
-	<script src="<?php echo $base_url;?>js_includes/tinymce-init.js"></script>    
+	<script src="<?php echo $base_url;?>js_includes/tinymce-init.min.js"></script>    
     <?php } ?>
     
     <?php if ((($logged_in) && ($_SESSION['userLevel'] <= 1)) || (($logged_in) && ($section == "beerxml"))) { ?>

@@ -1040,6 +1040,7 @@ if ($section == "pay") {
 	// v2.1.10
 	$pay_text_030 = "By clicking the &quot;I Understand&quot; button below, you will be directed to PayPal to make your payment. Once you have <strong>completed</strong> your payment, PayPal will redirect you back to this site and will email you a receipt for the transaction. <strong>If your payment was successful, your paid status will be updated automatically. Please note that you may need wait a few minutes for the payment status to be updated.</strong> Be sure to refresh the pay page or access your entries list.";
 	$pay_text_031 = "About to Leave this Site";
+	$pay_text_032 = "No payment is necessary. Thank you!";
 
 
 }

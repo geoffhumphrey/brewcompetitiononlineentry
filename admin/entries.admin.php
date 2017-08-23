@@ -121,7 +121,7 @@ do {
 			}
 		$entry_brewer_display .=  $brewer_info[1].", ".$brewer_info[0];
 		if (($bid == "default") && ($dbTable == "default")) $entry_brewer_display .= "</a>";
-		// $entry_brewer_display .=  "<br>".$brewer_info[11].", ".$brewer_info[12];
+		//$entry_brewer_display .=  "<br>".$brewer_info[11].", ".$brewer_info[12];
 	 }
 	 elseif (($brewer_info[15] != "&nbsp;") && ($pro_edition == 1)) {
 		if (($bid == "default") && ($dbTable == "default")) {
@@ -129,7 +129,7 @@ do {
 			}
 		$entry_brewer_display .=  $brewer_info[15];
 		if (($bid == "default") && ($dbTable == "default")) $entry_brewer_display .= "</a>";
-		// $entry_brewer_display .=  "<br>".$brewer_info[11].", ".$brewer_info[12];
+		//$entry_brewer_display .=  "<br>".$brewer_info[11].", ".$brewer_info[12];
 	 }
 	else $entry_brewer_display .= "&nbsp;";
 
@@ -521,17 +521,17 @@ if ($action != "print") { ?>
                         <strong class="text-info">Received Entries</strong><span class="pull-right"><?php echo $total_nopay_received; ?></span>
                     </div>
                     <div class="bcoem-sidebar-panel">
-                        <strong class="text-info">Total Fees<?php echo $sidebar_extension; ?></strong><span class="pull-right"><?php echo $currency_symbol.$total_fees; ?></span>
+                        <strong class="text-info">Total Fees<?php echo $sidebar_extension; ?></strong><span class="pull-right"><?php echo $currency_symbol.number_format($total_fees,2); ?></span>
                     </div>
                     <?php } ?>
                     <?php if (($view == "paid") || ($view == "default")) { ?>
                     <div class="bcoem-sidebar-panel">
-                        <strong class="text-info">Total Fees Paid<?php echo $sidebar_extension; ?></strong><span class="pull-right"><?php echo $currency_symbol.$total_fees_paid; ?></span>
+                        <strong class="text-info">Total Fees Paid<?php echo $sidebar_extension; ?></strong><span class="pull-right"><?php echo $currency_symbol.number_format($total_fees_paid,2); ?></span>
                     </div>
                     <?php } ?>
                     <?php if (($view == "unpaid") || ($view == "default")) { ?>
                     <div class="bcoem-sidebar-panel">
-                        <strong class="text-info">Total Fees Unpaid <?php echo $sidebar_extension; ?></strong><span class="pull-right"><?php echo $currency_symbol.$total_fees_unpaid; ?></span>
+                        <strong class="text-info">Total Fees Unpaid <?php echo $sidebar_extension; ?></strong><span class="pull-right"><?php echo $currency_symbol.number_format($total_fees_unpaid,2); ?></span>
                     </div>
                     <?php } ?>
                 </div>

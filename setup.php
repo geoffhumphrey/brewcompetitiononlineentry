@@ -108,14 +108,14 @@ $security_question = array($label_secret_01, $label_secret_05, $label_secret_06,
 		<?php if ($section == "step4") { ?>
         <!-- Load TinyMCE -->
         <script src="https://cdn.tinymce.com/4/tinymce.min.js"></script>
-		<script src="<?php echo $base_url;?>js_includes/tinymce-init.js"></script>
+		<script src="<?php echo $base_url;?>js_includes/tinymce-init.min.js"></script>
 		<?php } ?>
 
         <!-- Load Bootstrap DateTime Picker / http://eonasdan.github.io/bootstrap-datetimepicker/ -->
 		<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/css/bootstrap-datetimepicker.min.css" />
 		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.11.1/moment-with-locales.min.js"></script>
 		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/js/bootstrap-datetimepicker.min.js"></script>
-		<script src="<?php echo $base_url;?>js_includes/date-time.js"></script>
+		<script src="<?php echo $base_url;?>js_includes/date-time.min.js"></script>
 
         <!-- Load Bootstrap Form Validator / http://1000hz.github.io/bootstrap-validator -->
         <script src="https://cdnjs.cloudflare.com/ajax/libs/1000hz-bootstrap-validator/0.9.0/validator.min.js"></script>
