@@ -84,7 +84,7 @@ define('DEBUG', FALSE);
  * session variables on screen
  * Default is FALSE
  */
-define('DEBUG_SESSION_VARS', TRUE);
+define('DEBUG_SESSION_VARS', FALSE);
 
 /**
  * Enable the following when receiving mySQL "column does
