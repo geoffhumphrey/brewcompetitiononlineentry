@@ -7,6 +7,10 @@
 
 if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) && (isset($_SESSION['userLevel']))) || ($section == "setup"))) {
 
+	// Instantiate HTMLPurifier
+	require (CLASSES.'htmlpurifier/HTMLPurifier.standalone.php');
+	$config_html_purifier = HTMLPurifier_Config::createDefault();
+	$purifier = new HTMLPurifier($config_html_purifier);
 
 	// Gather, convert, and/or sanitize info from the form
 	if (isset($_POST['brewerJudgeID'])) {
@@ -28,12 +32,10 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 
 	if (isset($_POST['brewerClubs'])) {
 		include (INCLUDES.'constants.inc.php');
-		$brewerClubs = sterilize($_POST['brewerClubs']);
+		$brewerClubs = $purifier->purify($_POST['brewerClubs']);
 		$brewerClubsConcat = $brewerClubs."|".$brewerClubs;
 		if (!in_array($brewerClubsConcat,$club_array))  {
 			if (($_POST['brewerClubs'] == "Other") && (!empty($_POST['brewerClubsOther']))) {
-				$brewerClubs = strtr($_POST['brewerClubsOther'],$quote_convert);
-				$brewerClubs = sterilize($brewerClubs);
 				$brewerClubs = ucwords($brewerClubs);
 			}
 			else $brewerClubs = "";
@@ -56,15 +58,14 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 	else $brewerDropOff = "0";
 
 	if (isset($_POST['brewerBreweryName'])) {
-		$brewerBreweryName = strtr($_POST['brewerBreweryName'],$quote_convert);
-		$brewerBreweryName = sterilize($brewerBreweryName);
+		$brewerBreweryName = $purifier->purify($_POST['brewerBreweryName']);
 		$brewerBreweryName = strtolower($brewerBreweryName);
 		$brewerBreweryName = ucwords($brewerBreweryName);
 	}
 	else $brewerBreweryName = "";
 
 	if (isset($_POST['brewerBreweryTTB'])) {
-		$brewerBreweryTTB = sterilize($_POST['brewerBreweryTTB']);
+		$brewerBreweryTTB = $purifier->purify($_POST['brewerBreweryTTB']);
 	}
 	else $brewerBreweryTTB = "";
 
@@ -81,32 +82,27 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 	else $brewerJudgeExp = "";
 
 	if (isset($_POST['brewerJudgeNotes'])) {
-		$brewerJudgeNotes = sterilize($_POST['brewerJudgeNotes']);
+		$brewerJudgeNotes = $purifier->purify($_POST['brewerJudgeNotes']);
 	}
 	else $brewerJudgeNotes = "";
 
-	$first_name = strtr($_POST['brewerFirstName'],$quote_convert);
-	$first_name = sterilize($first_name);
+	$first_name = $purifier->purify($_POST['brewerFirstName']);
 	$first_name = strtolower($first_name);
 	$first_name = ucwords($first_name);
 
-	$last_name = strtr($_POST['brewerLastName'],$quote_convert);
-	$last_name = sterilize($last_name);
+	$last_name = $purifier->purify($_POST['brewerLastName']);
 	$last_name = strtolower($last_name);
 	$last_name = ucwords($last_name);
 
-	$address = strtr($_POST['brewerAddress'],$quote_convert);
-	$address = sterilize($address);
+	$address = $purifier->purify($_POST['brewerAddress']);
 	$address = strtolower($address);
 	$address = ucwords($address);
 
-	$city = strtr($_POST['brewerCity'],$quote_convert);
-	$city = sterilize($city);
+	$city = $purifier->purify($_POST['brewerCity']);
 	$city = strtolower($city);
 	$city = ucwords($city);
-	
-	$state = strtr($_POST['brewerState'],$quote_convert);
-	$state = sterilize($state);
+
+	$state = $purifier->purify($_POST['brewerState']);
 	$state = strtolower($state);
 	$state = ucwords($state);
 
@@ -296,7 +292,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 					$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 					//echo $updateSQL."<br>";
 
-					$query_staff_org = sprintf("SELECT uid FROM %s WHERE uid='%s'",$prefix."staff",sterilize($_POST['Organizer']));
+					$query_staff_org = sprintf("SELECT uid FROM %s WHERE uid='%s'",$prefix."staff",$purifier->purify($_POST['Organizer']));
 					$staff_org = mysqli_query($connection,$query_staff_org) or die (mysqli_error($connection));
 					$row_staff_org = mysqli_fetch_assoc($staff_org);
 					$totalRows_staff_org = mysqli_num_rows($staff_org);
@@ -309,7 +305,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 				}
 
 				if ($_POST['Organizer'] == $row_org['uid']) {
-					$updateSQL = sprintf("UPDATE %s SET staff_organizer='1' WHERE uid='%s'", $prefix."staff", sterilize($_POST['Organizer']));
+					$updateSQL = sprintf("UPDATE %s SET staff_organizer='1' WHERE uid='%s'", $prefix."staff", $purifier->purify($_POST['Organizer']));
 					mysqli_real_escape_string($connection,$updateSQL);
 					$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 					//echo $updateSQL."<br>";
@@ -769,13 +765,13 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 		$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 
 		if (isset($_POST['userQuestion'])) {
-			$updateSQL = sprintf("UPDATE $users_db_table SET userQuestion=%s WHERE id=%s",GetSQLValueString(sterilize($_POST['userQuestion']),"text"),GetSQLValueString($_SESSION['user_id'],"int"));
+			$updateSQL = sprintf("UPDATE $users_db_table SET userQuestion=%s WHERE id=%s",GetSQLValueString($purifier->purify($_POST['userQuestion']),"text"),GetSQLValueString($_SESSION['user_id'],"int"));
 			mysqli_real_escape_string($connection,$updateSQL);
 			$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 		}
 
 		if (isset($_POST['userQuestionAnswer'])) {
-			$updateSQL = sprintf("UPDATE $users_db_table SET userQuestionAnswer=%s WHERE id=%s",GetSQLValueString(sterilize($_POST['userQuestionAnswer']),"text"),GetSQLValueString($_SESSION['user_id'],"int"));
+			$updateSQL = sprintf("UPDATE $users_db_table SET userQuestionAnswer=%s WHERE id=%s",GetSQLValueString($purifier->purify($_POST['userQuestionAnswer']),"text"),GetSQLValueString($_SESSION['user_id'],"int"));
 			mysqli_real_escape_string($connection,$updateSQL);
 			$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 		}

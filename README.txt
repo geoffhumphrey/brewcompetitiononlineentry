@@ -24,6 +24,7 @@ respective developers and online communities. Tested with the following versions
 - FPDF 1.6                        http://www.fpdf.org
 - PHPass 0.3                      http://www.openwall.com/phpass
 - Tiny But Strong 3.10.1          http://www.tinybutstrong.com
+- HTML Purifier 4.9.3             http://htmlpurifier.org/
 
 This software is free, open source, and is covered under the General Public
 License (GPL) from the Open Source Initiative. Therefore, you are permitted to 

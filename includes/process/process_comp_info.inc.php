@@ -5,12 +5,12 @@
  *              "contest_info" table.
  */
 if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] == 0)) || ($section == "setup"))) {
-	
+
 	// Instantiate HTMLPurifier
 	require (CLASSES.'htmlpurifier/HTMLPurifier.standalone.php');
 	$config_html_purifier = HTMLPurifier_Config::createDefault();
 	$purifier = new HTMLPurifier($config_html_purifier);
-	
+
 	// Constants
 	if ($go == "default") {
 		$contestRegistrationOpen = strtotime(filter_var($_POST['contestRegistrationOpen'],FILTER_SANITIZE_STRING));
@@ -31,7 +31,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 	    echo $contestRegistrationOpen."<br>"; echo $contestRegistrationDeadline."<br>"; echo $contestEntryOpen ."<br>"; echo $contestEntryDeadline."<br>"; echo $judgingDate."<br>";
 	    echo "<br>".$tz; echo "<br>".$timezone_offset; echo "<br>".$_SESSION['prefsTimeZone'];
 	 **/
-	
+
 	if (NHC) {
 		// Place NHC SQL calls below
 
@@ -40,7 +40,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 	// end if (NHC)
 
 	else {
-		
+
 	$contestBottles = "";
 	$contestShippingName = "";
 	$contestShippingAddress = "";
@@ -57,23 +57,23 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 	$contestVolunteers = "";
 	$contestCheckInPassword = "";
 	$contestLogo = "";
-	
+
 	if (isset($_POST['contestBottles'])) $contestBottles = $purifier->purify($_POST['contestBottles']);
-	if (isset($_POST['contestShippingName'])) $contestShippingName = sterilize($_POST['contestShippingName']);
-	if (isset($_POST['contestShippingAddress'])) $contestShippingAddress = sterilize($_POST['contestShippingAddress']);
+	if (isset($_POST['contestShippingName'])) $contestShippingName = $purifier->purify($_POST['contestShippingName']);
+	if (isset($_POST['contestShippingAddress'])) $contestShippingAddress = $purifier->purify($_POST['contestShippingAddress']);
 	if (isset($_POST['contestAwards'])) $contestAwards = $purifier->purify($_POST['contestAwards']);
 	if (isset($_POST['contestRules'])) $contestRules = $purifier->purify($_POST['contestRules']);
-	if (isset($_POST['contestHostLocation'])) $contestHostLocation = sterilize($_POST['contestHostLocation']);
-	if (isset($_POST['contestHost'])) $contestHost = sterilize($_POST['contestHost']);
-	if (isset($_POST['contestName'])) $contestName = sterilize($_POST['contestName']);
-	if (isset($_POST['contestAwardsLocName'])) $contestAwardsLocName = sterilize($_POST['contestAwardsLocName']);
-	if (isset($_POST['contestAwardsLocation'])) $contestAwardsLocation = sterilize($_POST['contestAwardsLocation']);
+	if (isset($_POST['contestHostLocation'])) $contestHostLocation = $purifier->purify($_POST['contestHostLocation']);
+	if (isset($_POST['contestHost'])) $contestHost = $purifier->purify($_POST['contestHost']);
+	if (isset($_POST['contestName'])) $contestName = $purifier->purify($_POST['contestName']);
+	if (isset($_POST['contestAwardsLocName'])) $contestAwardsLocName = $purifier->purify($_POST['contestAwardsLocName']);
+	if (isset($_POST['contestAwardsLocation'])) $contestAwardsLocation = $purifier->purify($_POST['contestAwardsLocation']);
 	if (isset($_POST['contestBOSAward'])) $contestBOSAward = $purifier->purify($_POST['contestBOSAward']);
 	if (isset($_POST['contestEntryFeePassword'])) $contestEntryFeePassword = sterilize($_POST['contestEntryFeePassword']);
 	if (isset($_POST['contestCircuit'])) $contestCircuit = $purifier->purify($_POST['contestCircuit']);
 	if (isset($_POST['contestVolunteers'])) $contestVolunteers = $purifier->purify($_POST['contestVolunteers']);
 	if (isset($_POST['contestCheckInPassword'])) $contestCheckInPassword = sterilize($_POST['contestCheckInPassword']);
-	if (isset($_POST['contestLogo'])) $contestLogo = sterilize($_POST['contestLogo']);
+	if (isset($_POST['contestLogo'])) $contestLogo = $purifier->purify($_POST['contestLogo']);
 	if ((empty($_POST['contestEntryFee2'])) || (empty($_POST['contestEntryFeeDiscountNum']))) $contestEntryFeeDiscount = "N";
 	if ((!empty($_POST['contestEntryFee2'])) && (!empty($_POST['contestEntryFeeDiscountNum']))) $contestEntryFeeDiscount = "Y";
 
@@ -228,12 +228,12 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 		if ($go == "qr") {
 
 			if (isset($_POST['contestCheckInPassword'])) {
-				
+
 				require(CLASSES.'phpass/PasswordHash.php');
 				$hasher = new PasswordHash(8, false);
 				$password = md5(sterilize($_POST['contestCheckInPassword']));
 				$hash = $hasher->HashPassword($password);
-				
+
 			}
 
 			else $hash = "";
@@ -288,9 +288,9 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 			contestShippingOpen=%s,
 			contestShippingDeadline=%s
 			WHERE id=%s",
-								 
-								 
-								 
+
+
+
 			GetSQLValueString($contestName, "text"),
 			GetSQLValueString(filter_var($_POST['contestID'],FILTER_SANITIZE_NUMBER_INT), "text"),
 			GetSQLValueString($contestHost, "text"),

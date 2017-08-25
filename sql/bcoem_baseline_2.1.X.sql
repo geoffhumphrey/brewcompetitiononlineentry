@@ -4,7 +4,7 @@
 -- Use *ONLY* if you experience problems with the browser-based setup.
 --
 -- ------------------------------------------------------------------------------------
--- 
+--
 -- UPDATED 2017-07-25 for Version 2.1.10.0 Beta
 --
 -- ------------------------------------------------------------------------------------
@@ -17,11 +17,7 @@
 --   - Security question: What is your favorite all-time beer to drink?
 --   - Answer: pabst
 -- !! CHANGE THIS USER'S PASSWORD *IMMEDIATELY* FOR SECURITY !!
--- !! CHANGE THIS USER's SECURITY ANSWER IMMEDIATELY **VIA PHPMYADMIN** OR 
---    ON THE LAST LINE OF THIS DOCUMENT !!
--- If the password above does not work, use the password forgot/reset
--- function:
--- www.yoursite.com/index.php?section=login&go=password&action=forgot
+-- !! CHANGE THIS USER'S SECURITY ANSWER *IMMEDIATELY* !!
 --
 -- ------------------------------------------------------------------------------------
 --
@@ -32,7 +28,7 @@
 -- Be sure to update/alter the $prefix variable in config.php.
 --
 -- ------------------------------------------------------------------------------------
--- 
+--
 -- Once you have installed the DB tables, browse to your site and log in.
 -- Update the default information to suit your own needs. Be sure to update:
 --   -  Site Preferences
@@ -46,7 +42,7 @@
 --   -  Sponsors
 --
 -- ------------------------------------------------------------------------------------
--- 
+--
 -- BEGIN MYSQL
 --
 -- --------------------------------------------------------
@@ -54,25 +50,20 @@
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
 
---
--- Drop existing tables if present
--- 
-
-DROP TABLE IF EXISTS `baseline_archive`, `baseline_brewer`, `baseline_brewing`, `baseline_contacts`, `baseline_contest_info`, `baseline_drop_off`, `baseline_judging_assignments`, `baseline_judging_flights`, `baseline_judging_locations`, `baseline_judging_preferences`, `baseline_judging_scores`, `baseline_judging_scores_bos`, `baseline_judging_tables`, `baseline_mods`, `baseline_preferences`, `baseline_special_best_data`, `baseline_special_best_info`, `baseline_sponsors`, `baseline_staff`, `baseline_styles`, `baseline_style_types`, `baseline_system`, `baseline_users`;
-
 -- --------------------------------------------------------
 
 --
 -- Table structure for table `baseline_archive`
 --
 
-CREATE TABLE IF NOT EXISTS `baseline_archive` (
-  `id` int(8) NOT NULL,
+DROP TABLE IF EXISTS `baseline_archive`;
+CREATE TABLE `baseline_archive` (
+  `id` int(11) NOT NULL,
   `archiveProEdition` tinyint(1) DEFAULT NULL,
-  `archiveStyleSet` varchar(25) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `archiveBrewingTableName` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `archiveSuffix` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+  `archiveStyleSet` varchar(25) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `archiveBrewingTableName` varchar(255) DEFAULT NULL,
+  `archiveSuffix` varchar(255) DEFAULT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -80,48 +71,49 @@ CREATE TABLE IF NOT EXISTS `baseline_archive` (
 -- Table structure for table `baseline_brewer`
 --
 
-CREATE TABLE IF NOT EXISTS `baseline_brewer` (
-  `id` int(8) NOT NULL,
+DROP TABLE IF EXISTS `baseline_brewer`;
+CREATE TABLE `baseline_brewer` (
+  `id` int(11) NOT NULL,
   `uid` int(8) DEFAULT NULL,
-  `brewerFirstName` varchar(200) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewerLastName` varchar(200) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewerAddress` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewerCity` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewerState` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewerZip` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewerCountry` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewerPhone1` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewerPhone2` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewerClubs` mediumtext COLLATE utf8mb4_unicode_ci,
-  `brewerEmail` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewerStaff` char(1) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewerSteward` char(1) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewerJudge` char(1) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewerJudgeID` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewerJudgeMead` char(1) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewerJudgeRank` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewerJudgeLikes` mediumtext COLLATE utf8mb4_unicode_ci,
-  `brewerJudgeDislikes` mediumtext COLLATE utf8mb4_unicode_ci,
-  `brewerJudgeLocation` mediumtext COLLATE utf8mb4_unicode_ci,
-  `brewerStewardLocation` mediumtext COLLATE utf8mb4_unicode_ci,
-  `brewerJudgeExp` varchar(25) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewerJudgeNotes` mediumtext COLLATE utf8mb4_unicode_ci,
-  `brewerAssignment` char(1) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewerJudgeWaiver` char(1) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `brewerFirstName` varchar(200) DEFAULT NULL,
+  `brewerLastName` varchar(200) DEFAULT NULL,
+  `brewerAddress` varchar(255) DEFAULT NULL,
+  `brewerCity` varchar(255) DEFAULT NULL,
+  `brewerState` varchar(255) DEFAULT NULL,
+  `brewerZip` varchar(10) DEFAULT NULL,
+  `brewerCountry` varchar(255) DEFAULT NULL,
+  `brewerPhone1` varchar(25) DEFAULT NULL,
+  `brewerPhone2` varchar(25) DEFAULT NULL,
+  `brewerClubs` text,
+  `brewerEmail` varchar(255) DEFAULT NULL,
+  `brewerStaff` char(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `brewerSteward` char(1) DEFAULT NULL,
+  `brewerJudge` char(1) DEFAULT NULL,
+  `brewerJudgeID` varchar(25) DEFAULT NULL,
+  `brewerJudgeMead` char(1) DEFAULT NULL,
+  `brewerJudgeRank` varchar(255) DEFAULT NULL,
+  `brewerJudgeLikes` text,
+  `brewerJudgeDislikes` text,
+  `brewerJudgeLocation` text,
+  `brewerStewardLocation` text,
+  `brewerJudgeExp` varchar(25) DEFAULT NULL,
+  `brewerJudgeNotes` text,
+  `brewerAssignment` char(1) DEFAULT NULL,
+  `brewerJudgeWaiver` char(1) DEFAULT NULL,
   `brewerAHA` int(11) DEFAULT NULL,
-  `brewerDiscount` char(1) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewerJudgeBOS` char(1) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `brewerDiscount` char(1) DEFAULT NULL,
+  `brewerJudgeBOS` char(1) DEFAULT NULL,
   `brewerDropOff` int(4) DEFAULT NULL COMMENT 'Location where brewer will drop off their entries; 0=shipping or relational to dropoff table',
-  `brewerBreweryName` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewerBreweryTTB` varchar(20) COLLATE utf8mb4_unicode_ci DEFAULT NULL
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+  `brewerBreweryName` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `brewerBreweryTTB` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `baseline_brewer`
 --
 
 INSERT INTO `baseline_brewer` (`id`, `uid`, `brewerFirstName`, `brewerLastName`, `brewerAddress`, `brewerCity`, `brewerState`, `brewerZip`, `brewerCountry`, `brewerPhone1`, `brewerPhone2`, `brewerClubs`, `brewerEmail`, `brewerStaff`, `brewerSteward`, `brewerJudge`, `brewerJudgeID`, `brewerJudgeMead`, `brewerJudgeRank`, `brewerJudgeLikes`, `brewerJudgeDislikes`, `brewerJudgeLocation`, `brewerStewardLocation`, `brewerJudgeExp`, `brewerJudgeNotes`, `brewerAssignment`, `brewerJudgeWaiver`, `brewerAHA`, `brewerDiscount`, `brewerJudgeBOS`, `brewerDropOff`, `brewerBreweryName`, `brewerBreweryTTB`) VALUES
-(1, 1, 'Default', 'Admin', '1234 Main Street', 'Anytown', 'CO', '80001', 'United States', '123.456.7890', NULL, NULL, 'user.baseline@brewcompetition.com', 'N', 'N', 'N', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, NULL);
+(1, 1, 'Default', 'Admin', '1234 Main Street', 'Anytown', 'CO', '80001', 'United States', '123.456.7890', NULL, NULL, 'user.baseline@brewcompetition.com', NULL, 'N', 'N', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -129,366 +121,367 @@ INSERT INTO `baseline_brewer` (`id`, `uid`, `brewerFirstName`, `brewerLastName`,
 -- Table structure for table `baseline_brewing`
 --
 
-CREATE TABLE IF NOT EXISTS `baseline_brewing` (
-  `id` int(8) NOT NULL,
-  `brewName` varchar(250) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewStyle` varchar(250) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewCategory` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewCategorySort` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewSubCategory` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+DROP TABLE IF EXISTS `baseline_brewing`;
+CREATE TABLE `baseline_brewing` (
+  `id` int(11) NOT NULL,
+  `brewName` varchar(255) DEFAULT NULL,
+  `brewStyle` varchar(255) DEFAULT NULL,
+  `brewCategory` varchar(4) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `brewCategorySort` varchar(4) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `brewSubCategory` varchar(4) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `brewBottleDate` date DEFAULT NULL,
   `brewDate` date DEFAULT NULL,
-  `brewYield` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewInfo` mediumtext COLLATE utf8mb4_unicode_ci,
-  `brewMead1` varchar(25) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewMead2` varchar(25) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewMead3` varchar(25) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewExtract1` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewExtract1Weight` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewExtract2` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewExtract2Weight` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewExtract3` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewExtract3Weight` varchar(4) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewExtract4` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewExtract4Weight` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewExtract5` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewExtract5Weight` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewGrain1` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewGrain1Weight` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewGrain2` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewGrain2Weight` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewGrain3` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewGrain3Weight` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewGrain4` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewGrain4Weight` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewGrain5` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewGrain5Weight` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewGrain6` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewGrain6Weight` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewGrain7` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewGrain7Weight` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewGrain8` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewGrain8Weight` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewGrain9` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewGrain10` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewGrain11` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewGrain12` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewGrain13` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewGrain14` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewGrain15` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewGrain16` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewGrain17` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewGrain18` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewGrain19` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewGrain20` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewGrain9Weight` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewGrain10Weight` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewGrain11Weight` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewGrain12Weight` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewGrain13Weight` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewGrain14Weight` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewGrain15Weight` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewGrain16Weight` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewGrain17Weight` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewGrain18Weight` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewGrain19Weight` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewGrain20Weight` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewAddition1` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewAddition1Amt` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewAddition2` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewAddition2Amt` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewAddition3` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewAddition3Amt` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewAddition4` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewAddition4Amt` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewAddition5` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewAddition5Amt` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewAddition6` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewAddition6Amt` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewAddition7` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewAddition7Amt` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewAddition8` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewAddition8Amt` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewAddition9` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewAddition10` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewAddition11` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewAddition12` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewAddition13` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewAddition14` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewAddition15` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewAddition16` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewAddition17` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewAddition18` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewAddition19` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewAddition20` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewAddition9Amt` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewAddition10Amt` varchar(25) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewAddition11Amt` varchar(25) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewAddition12Amt` varchar(25) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewAddition13Amt` varchar(25) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewAddition14Amt` varchar(25) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewAddition15Amt` varchar(25) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewAddition16Amt` varchar(25) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewAddition17Amt` varchar(25) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewAddition18Amt` varchar(25) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewAddition19Amt` varchar(25) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewAddition20Amt` varchar(25) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewHops1` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewHops1Weight` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewHops1IBU` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewHops1Time` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewHops2` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewHops2Weight` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewHops2IBU` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewHops2Time` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewHops3` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewHops3Weight` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewHops3IBU` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewHops3Time` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewHops4` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewHops4Weight` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewHops4IBU` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewHops4Time` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewHops5` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewHops5Weight` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewHops5IBU` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewHops5Time` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewHops6` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewHops6Weight` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewHops6IBU` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewHops6Time` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewHops7` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewHops7Weight` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewHops7IBU` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewHops7Time` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewHops8` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewHops8Weight` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewHops8IBU` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewHops8Time` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewHops9` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewHops10` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewHops11` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewHops12` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewHops13` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewHops14` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewHops15` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewHops16` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewHops17` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewHops18` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewHops19` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewHops20` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewHops9Weight` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewHops10Weight` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewHops11Weight` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewHops12Weight` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewHops13Weight` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewHops14Weight` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewHops15Weight` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewHops16Weight` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewHops17Weight` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewHops18Weight` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewHops19Weight` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewHops20Weight` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewHops9IBU` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewHops10IBU` varchar(6) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewHops11IBU` varchar(6) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewHops12IBU` varchar(6) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewHops13IBU` varchar(6) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewHops14IBU` varchar(6) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewHops15IBU` varchar(6) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewHops16IBU` varchar(6) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewHops17IBU` varchar(6) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewHops18IBU` varchar(6) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewHops19IBU` varchar(6) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewHops20IBU` varchar(6) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewHops9Time` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewHops10Time` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewHops11Time` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewHops12Time` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewHops13Time` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewHops14Time` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewHops15Time` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewHops16Time` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewHops17Time` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewHops18Time` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewHops19Time` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewHops20Time` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewHops1Use` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewHops2Use` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewHops3Use` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewHops4Use` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewHops5Use` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewHops6Use` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewHops7Use` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewHops8Use` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewHops9Use` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewHops10Use` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewHops11Use` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewHops12Use` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewHops13Use` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewHops14Use` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewHops15Use` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewHops16Use` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewHops17Use` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewHops18Use` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewHops19Use` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewHops20Use` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewHops1Type` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewHops2Type` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewHops3Type` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewHops4Type` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewHops5Type` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewHops6Type` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewHops7Type` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewHops8Type` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewHops9Type` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewHops10Type` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewHops11Type` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewHops12Type` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewHops13Type` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewHops14Type` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewHops15Type` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewHops16Type` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewHops17Type` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewHops18Type` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewHops19Type` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewHops20Type` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewHops1Form` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewHops2Form` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewHops3Form` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewHops4Form` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewHops5Form` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewHops6Form` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewHops7Form` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewHops8Form` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewHops9Form` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewHops10Form` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewHops11Form` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewHops12Form` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewHops13Form` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewHops14Form` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewHops15Form` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewHops16Form` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewHops17Form` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewHops18Form` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewHops19Form` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewHops20Form` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewYeast` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewYeastMan` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewYeastForm` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewYeastType` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewYeastAmount` varchar(25) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewYeastStarter` char(1) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewYeastNutrients` mediumtext COLLATE utf8mb4_unicode_ci,
-  `brewOG` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewFG` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewPrimary` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewPrimaryTemp` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewSecondary` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewSecondaryTemp` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewOther` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewOtherTemp` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewComments` mediumtext COLLATE utf8mb4_unicode_ci,
-  `brewMashStep1Name` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewMashStep1Temp` char(3) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewMashStep1Time` char(3) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewMashStep2Name` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewMashStep2Temp` char(3) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewMashStep2Time` char(3) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewMashStep3Name` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewMashStep3Temp` char(3) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewMashStep3Time` char(3) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewMashStep4Name` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewMashStep4Temp` char(3) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewMashStep4Time` char(3) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewMashStep5Name` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewMashStep6Name` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewMashStep7Name` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewMashStep8Name` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewMashStep9Name` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewMashStep10Name` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewMashStep5Temp` char(3) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewMashStep6Temp` char(3) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewMashStep7Temp` char(3) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewMashStep8Temp` char(3) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewMashStep9Temp` char(3) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewMashStep10Temp` char(3) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewMashStep5Time` char(3) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewMashStep6Time` char(3) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewMashStep7Time` char(3) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewMashStep8Time` char(3) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewMashStep9Time` char(3) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewMashStep10Time` char(3) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewFinings` mediumtext COLLATE utf8mb4_unicode_ci,
-  `brewWaterNotes` mediumtext COLLATE utf8mb4_unicode_ci,
-  `brewBrewerID` varchar(8) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewCarbonationMethod` char(1) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewCarbonationVol` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewCarbonationNotes` mediumtext COLLATE utf8mb4_unicode_ci,
-  `brewBoilHours` varchar(5) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewBoilMins` varchar(5) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewBrewerFirstName` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewBrewerLastName` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewExtract1Use` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewExtract2Use` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewExtract3Use` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewExtract4Use` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewExtract5Use` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewGrain1Use` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewGrain2Use` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewGrain3Use` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewGrain4Use` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewGrain5Use` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewGrain6Use` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewGrain7Use` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewGrain8Use` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewGrain9Use` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewGrain10Use` varchar(25) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewGrain11Use` varchar(25) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewGrain12Use` varchar(25) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewGrain13Use` varchar(25) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewGrain14Use` varchar(25) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewGrain15Use` varchar(25) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewGrain16Use` varchar(25) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewGrain17Use` varchar(25) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewGrain18Use` varchar(25) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewGrain19Use` varchar(25) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewGrain20Use` varchar(25) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewAddition1Use` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewAddition2Use` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewAddition3Use` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewAddition4Use` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewAddition5Use` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewAddition6Use` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewAddition7Use` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewAddition8Use` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewAddition9Use` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewAddition10Use` varchar(25) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewAddition11Use` varchar(25) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewAddition12Use` varchar(25) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewAddition13Use` varchar(25) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewAddition14Use` varchar(25) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewAddition15Use` varchar(25) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewAddition16Use` varchar(25) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewAddition17Use` varchar(25) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewAddition18Use` varchar(25) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewAddition19Use` varchar(25) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewAddition20Use` varchar(25) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `brewYield` varchar(10) DEFAULT NULL,
+  `brewInfo` text,
+  `brewMead1` varchar(25) DEFAULT NULL,
+  `brewMead2` varchar(25) DEFAULT NULL,
+  `brewMead3` varchar(25) DEFAULT NULL,
+  `brewExtract1` varchar(100) DEFAULT NULL,
+  `brewExtract2` varchar(100) DEFAULT NULL,
+  `brewExtract3` varchar(100) DEFAULT NULL,
+  `brewExtract4` varchar(100) DEFAULT NULL,
+  `brewExtract5` varchar(100) DEFAULT NULL,
+  `brewExtract1Weight` varchar(10) DEFAULT NULL,
+  `brewExtract2Weight` varchar(10) DEFAULT NULL,
+  `brewExtract3Weight` varchar(10) DEFAULT NULL,
+  `brewExtract4Weight` varchar(10) DEFAULT NULL,
+  `brewExtract5Weight` varchar(10) DEFAULT NULL,
+  `brewExtract1Use` varchar(10) DEFAULT NULL,
+  `brewExtract2Use` varchar(10) DEFAULT NULL,
+  `brewExtract3Use` varchar(10) DEFAULT NULL,
+  `brewExtract4Use` varchar(10) DEFAULT NULL,
+  `brewExtract5Use` varchar(10) DEFAULT NULL,
+  `brewGrain1` varchar(100) DEFAULT NULL,
+  `brewGrain2` varchar(100) DEFAULT NULL,
+  `brewGrain3` varchar(100) DEFAULT NULL,
+  `brewGrain4` varchar(100) DEFAULT NULL,
+  `brewGrain5` varchar(100) DEFAULT NULL,
+  `brewGrain6` varchar(100) DEFAULT NULL,
+  `brewGrain7` varchar(100) DEFAULT NULL,
+  `brewGrain8` varchar(100) DEFAULT NULL,
+  `brewGrain9` varchar(100) DEFAULT NULL,
+  `brewGrain10` varchar(100) DEFAULT NULL,
+  `brewGrain11` varchar(100) DEFAULT NULL,
+  `brewGrain12` varchar(100) DEFAULT NULL,
+  `brewGrain13` varchar(100) DEFAULT NULL,
+  `brewGrain14` varchar(100) DEFAULT NULL,
+  `brewGrain15` varchar(100) DEFAULT NULL,
+  `brewGrain16` varchar(100) DEFAULT NULL,
+  `brewGrain17` varchar(100) DEFAULT NULL,
+  `brewGrain18` varchar(100) DEFAULT NULL,
+  `brewGrain19` varchar(100) DEFAULT NULL,
+  `brewGrain20` varchar(100) DEFAULT NULL,
+  `brewGrain1Weight` varchar(10) DEFAULT NULL,
+  `brewGrain2Weight` varchar(10) DEFAULT NULL,
+  `brewGrain3Weight` varchar(10) DEFAULT NULL,
+  `brewGrain4Weight` varchar(10) DEFAULT NULL,
+  `brewGrain5Weight` varchar(10) DEFAULT NULL,
+  `brewGrain6Weight` varchar(10) DEFAULT NULL,
+  `brewGrain7Weight` varchar(10) DEFAULT NULL,
+  `brewGrain8Weight` varchar(10) DEFAULT NULL,
+  `brewGrain9Weight` varchar(10) DEFAULT NULL,
+  `brewGrain10Weight` varchar(10) DEFAULT NULL,
+  `brewGrain11Weight` varchar(10) DEFAULT NULL,
+  `brewGrain12Weight` varchar(10) DEFAULT NULL,
+  `brewGrain13Weight` varchar(10) DEFAULT NULL,
+  `brewGrain14Weight` varchar(10) DEFAULT NULL,
+  `brewGrain15Weight` varchar(10) DEFAULT NULL,
+  `brewGrain16Weight` varchar(10) DEFAULT NULL,
+  `brewGrain17Weight` varchar(10) DEFAULT NULL,
+  `brewGrain18Weight` varchar(10) DEFAULT NULL,
+  `brewGrain19Weight` varchar(10) DEFAULT NULL,
+  `brewGrain20Weight` varchar(10) DEFAULT NULL,
+  `brewGrain1Use` varchar(10) DEFAULT NULL,
+  `brewGrain2Use` varchar(10) DEFAULT NULL,
+  `brewGrain3Use` varchar(10) DEFAULT NULL,
+  `brewGrain4Use` varchar(10) DEFAULT NULL,
+  `brewGrain5Use` varchar(10) DEFAULT NULL,
+  `brewGrain6Use` varchar(10) DEFAULT NULL,
+  `brewGrain7Use` varchar(10) DEFAULT NULL,
+  `brewGrain8Use` varchar(10) DEFAULT NULL,
+  `brewGrain9Use` varchar(10) DEFAULT NULL,
+  `brewGrain10Use` varchar(10) DEFAULT NULL,
+  `brewGrain11Use` varchar(10) DEFAULT NULL,
+  `brewGrain12Use` varchar(10) DEFAULT NULL,
+  `brewGrain13Use` varchar(10) DEFAULT NULL,
+  `brewGrain14Use` varchar(10) DEFAULT NULL,
+  `brewGrain15Use` varchar(10) DEFAULT NULL,
+  `brewGrain16Use` varchar(10) DEFAULT NULL,
+  `brewGrain17Use` varchar(10) DEFAULT NULL,
+  `brewGrain18Use` varchar(10) DEFAULT NULL,
+  `brewGrain19Use` varchar(10) DEFAULT NULL,
+  `brewGrain20Use` varchar(10) DEFAULT NULL,
+  `brewAddition1` varchar(100) DEFAULT NULL,
+  `brewAddition2` varchar(100) DEFAULT NULL,
+  `brewAddition3` varchar(100) DEFAULT NULL,
+  `brewAddition4` varchar(100) DEFAULT NULL,
+  `brewAddition5` varchar(100) DEFAULT NULL,
+  `brewAddition6` varchar(100) DEFAULT NULL,
+  `brewAddition7` varchar(100) DEFAULT NULL,
+  `brewAddition8` varchar(100) DEFAULT NULL,
+  `brewAddition9` varchar(100) DEFAULT NULL,
+  `brewAddition10` varchar(100) DEFAULT NULL,
+  `brewAddition11` varchar(100) DEFAULT NULL,
+  `brewAddition12` varchar(100) DEFAULT NULL,
+  `brewAddition13` varchar(100) DEFAULT NULL,
+  `brewAddition14` varchar(100) DEFAULT NULL,
+  `brewAddition15` varchar(100) DEFAULT NULL,
+  `brewAddition16` varchar(100) DEFAULT NULL,
+  `brewAddition17` varchar(100) DEFAULT NULL,
+  `brewAddition18` varchar(100) DEFAULT NULL,
+  `brewAddition19` varchar(100) DEFAULT NULL,
+  `brewAddition20` varchar(100) DEFAULT NULL,
+  `brewAddition1Amt` varchar(20) DEFAULT NULL,
+  `brewAddition2Amt` varchar(20) DEFAULT NULL,
+  `brewAddition3Amt` varchar(20) DEFAULT NULL,
+  `brewAddition4Amt` varchar(20) DEFAULT NULL,
+  `brewAddition5Amt` varchar(20) DEFAULT NULL,
+  `brewAddition6Amt` varchar(20) DEFAULT NULL,
+  `brewAddition7Amt` varchar(20) DEFAULT NULL,
+  `brewAddition8Amt` varchar(20) DEFAULT NULL,
+  `brewAddition9Amt` varchar(20) DEFAULT NULL,
+  `brewAddition10Amt` varchar(10) DEFAULT NULL,
+  `brewAddition11Amt` varchar(10) DEFAULT NULL,
+  `brewAddition12Amt` varchar(10) DEFAULT NULL,
+  `brewAddition13Amt` varchar(10) DEFAULT NULL,
+  `brewAddition14Amt` varchar(10) DEFAULT NULL,
+  `brewAddition15Amt` varchar(10) DEFAULT NULL,
+  `brewAddition16Amt` varchar(10) DEFAULT NULL,
+  `brewAddition17Amt` varchar(10) DEFAULT NULL,
+  `brewAddition18Amt` varchar(10) DEFAULT NULL,
+  `brewAddition19Amt` varchar(10) DEFAULT NULL,
+  `brewAddition20Amt` varchar(10) DEFAULT NULL,
+  `brewAddition1Use` varchar(10) DEFAULT NULL,
+  `brewAddition2Use` varchar(10) DEFAULT NULL,
+  `brewAddition3Use` varchar(10) DEFAULT NULL,
+  `brewAddition4Use` varchar(10) DEFAULT NULL,
+  `brewAddition5Use` varchar(10) DEFAULT NULL,
+  `brewAddition6Use` varchar(10) DEFAULT NULL,
+  `brewAddition7Use` varchar(10) DEFAULT NULL,
+  `brewAddition8Use` varchar(10) DEFAULT NULL,
+  `brewAddition9Use` varchar(10) DEFAULT NULL,
+  `brewAddition10Use` varchar(10) DEFAULT NULL,
+  `brewAddition11Use` varchar(10) DEFAULT NULL,
+  `brewAddition12Use` varchar(10) DEFAULT NULL,
+  `brewAddition13Use` varchar(10) DEFAULT NULL,
+  `brewAddition14Use` varchar(10) DEFAULT NULL,
+  `brewAddition15Use` varchar(10) DEFAULT NULL,
+  `brewAddition16Use` varchar(10) DEFAULT NULL,
+  `brewAddition17Use` varchar(10) DEFAULT NULL,
+  `brewAddition18Use` varchar(10) DEFAULT NULL,
+  `brewAddition19Use` varchar(10) DEFAULT NULL,
+  `brewAddition20Use` varchar(10) DEFAULT NULL,
+  `brewHops1` varchar(100) DEFAULT NULL,
+  `brewHops2` varchar(100) DEFAULT NULL,
+  `brewHops3` varchar(100) DEFAULT NULL,
+  `brewHops4` varchar(100) DEFAULT NULL,
+  `brewHops5` varchar(100) DEFAULT NULL,
+  `brewHops6` varchar(100) DEFAULT NULL,
+  `brewHops7` varchar(100) DEFAULT NULL,
+  `brewHops8` varchar(100) DEFAULT NULL,
+  `brewHops9` varchar(100) DEFAULT NULL,
+  `brewHops10` varchar(100) DEFAULT NULL,
+  `brewHops11` varchar(100) DEFAULT NULL,
+  `brewHops12` varchar(100) DEFAULT NULL,
+  `brewHops13` varchar(100) DEFAULT NULL,
+  `brewHops14` varchar(100) DEFAULT NULL,
+  `brewHops15` varchar(100) DEFAULT NULL,
+  `brewHops16` varchar(100) DEFAULT NULL,
+  `brewHops17` varchar(100) DEFAULT NULL,
+  `brewHops18` varchar(100) DEFAULT NULL,
+  `brewHops19` varchar(100) DEFAULT NULL,
+  `brewHops20` varchar(100) DEFAULT NULL,
+  `brewHops1Weight` varchar(10) DEFAULT NULL,
+  `brewHops2Weight` varchar(10) DEFAULT NULL,
+  `brewHops3Weight` varchar(10) DEFAULT NULL,
+  `brewHops4Weight` varchar(10) DEFAULT NULL,
+  `brewHops5Weight` varchar(10) DEFAULT NULL,
+  `brewHops6Weight` varchar(10) DEFAULT NULL,
+  `brewHops7Weight` varchar(10) DEFAULT NULL,
+  `brewHops8Weight` varchar(10) DEFAULT NULL,
+  `brewHops9Weight` varchar(10) DEFAULT NULL,
+  `brewHops10Weight` varchar(10) DEFAULT NULL,
+  `brewHops11Weight` varchar(10) DEFAULT NULL,
+  `brewHops12Weight` varchar(10) DEFAULT NULL,
+  `brewHops13Weight` varchar(10) DEFAULT NULL,
+  `brewHops14Weight` varchar(10) DEFAULT NULL,
+  `brewHops15Weight` varchar(10) DEFAULT NULL,
+  `brewHops16Weight` varchar(10) DEFAULT NULL,
+  `brewHops17Weight` varchar(10) DEFAULT NULL,
+  `brewHops18Weight` varchar(10) DEFAULT NULL,
+  `brewHops19Weight` varchar(10) DEFAULT NULL,
+  `brewHops20Weight` varchar(10) DEFAULT NULL,
+  `brewHops1IBU` varchar(10) DEFAULT NULL,
+  `brewHops2IBU` varchar(10) DEFAULT NULL,
+  `brewHops3IBU` varchar(10) DEFAULT NULL,
+  `brewHops4IBU` varchar(10) DEFAULT NULL,
+  `brewHops5IBU` varchar(10) DEFAULT NULL,
+  `brewHops6IBU` varchar(10) DEFAULT NULL,
+  `brewHops7IBU` varchar(10) DEFAULT NULL,
+  `brewHops8IBU` varchar(10) DEFAULT NULL,
+  `brewHops9IBU` varchar(6) DEFAULT NULL,
+  `brewHops10IBU` varchar(6) DEFAULT NULL,
+  `brewHops11IBU` varchar(6) DEFAULT NULL,
+  `brewHops12IBU` varchar(6) DEFAULT NULL,
+  `brewHops13IBU` varchar(6) DEFAULT NULL,
+  `brewHops14IBU` varchar(6) DEFAULT NULL,
+  `brewHops15IBU` varchar(6) DEFAULT NULL,
+  `brewHops16IBU` varchar(6) DEFAULT NULL,
+  `brewHops17IBU` varchar(6) DEFAULT NULL,
+  `brewHops18IBU` varchar(6) DEFAULT NULL,
+  `brewHops19IBU` varchar(6) DEFAULT NULL,
+  `brewHops20IBU` varchar(6) DEFAULT NULL,
+  `brewHops1Time` varchar(10) DEFAULT NULL,
+  `brewHops2Time` varchar(10) DEFAULT NULL,
+  `brewHops3Time` varchar(10) DEFAULT NULL,
+  `brewHops4Time` varchar(10) DEFAULT NULL,
+  `brewHops5Time` varchar(10) DEFAULT NULL,
+  `brewHops6Time` varchar(10) DEFAULT NULL,
+  `brewHops7Time` varchar(10) DEFAULT NULL,
+  `brewHops8Time` varchar(10) DEFAULT NULL,
+  `brewHops9Time` varchar(10) DEFAULT NULL,
+  `brewHops10Time` varchar(10) DEFAULT NULL,
+  `brewHops11Time` varchar(10) DEFAULT NULL,
+  `brewHops12Time` varchar(10) DEFAULT NULL,
+  `brewHops13Time` varchar(10) DEFAULT NULL,
+  `brewHops14Time` varchar(10) DEFAULT NULL,
+  `brewHops15Time` varchar(10) DEFAULT NULL,
+  `brewHops16Time` varchar(10) DEFAULT NULL,
+  `brewHops17Time` varchar(10) DEFAULT NULL,
+  `brewHops18Time` varchar(10) DEFAULT NULL,
+  `brewHops19Time` varchar(10) DEFAULT NULL,
+  `brewHops20Time` varchar(10) DEFAULT NULL,
+  `brewHops1Use` varchar(10) DEFAULT NULL,
+  `brewHops2Use` varchar(10) DEFAULT NULL,
+  `brewHops3Use` varchar(10) DEFAULT NULL,
+  `brewHops4Use` varchar(10) DEFAULT NULL,
+  `brewHops5Use` varchar(10) DEFAULT NULL,
+  `brewHops6Use` varchar(10) DEFAULT NULL,
+  `brewHops7Use` varchar(10) DEFAULT NULL,
+  `brewHops8Use` varchar(10) DEFAULT NULL,
+  `brewHops9Use` varchar(10) DEFAULT NULL,
+  `brewHops10Use` varchar(10) DEFAULT NULL,
+  `brewHops11Use` varchar(10) DEFAULT NULL,
+  `brewHops12Use` varchar(10) DEFAULT NULL,
+  `brewHops13Use` varchar(10) DEFAULT NULL,
+  `brewHops14Use` varchar(10) DEFAULT NULL,
+  `brewHops15Use` varchar(10) DEFAULT NULL,
+  `brewHops16Use` varchar(10) DEFAULT NULL,
+  `brewHops17Use` varchar(10) DEFAULT NULL,
+  `brewHops18Use` varchar(10) DEFAULT NULL,
+  `brewHops19Use` varchar(10) DEFAULT NULL,
+  `brewHops20Use` varchar(10) DEFAULT NULL,
+  `brewHops1Type` varchar(10) DEFAULT NULL,
+  `brewHops2Type` varchar(10) DEFAULT NULL,
+  `brewHops3Type` varchar(10) DEFAULT NULL,
+  `brewHops4Type` varchar(10) DEFAULT NULL,
+  `brewHops5Type` varchar(10) DEFAULT NULL,
+  `brewHops6Type` varchar(10) DEFAULT NULL,
+  `brewHops7Type` varchar(10) DEFAULT NULL,
+  `brewHops8Type` varchar(10) DEFAULT NULL,
+  `brewHops9Type` varchar(10) DEFAULT NULL,
+  `brewHops10Type` varchar(10) DEFAULT NULL,
+  `brewHops11Type` varchar(10) DEFAULT NULL,
+  `brewHops12Type` varchar(10) DEFAULT NULL,
+  `brewHops13Type` varchar(10) DEFAULT NULL,
+  `brewHops14Type` varchar(10) DEFAULT NULL,
+  `brewHops15Type` varchar(10) DEFAULT NULL,
+  `brewHops16Type` varchar(10) DEFAULT NULL,
+  `brewHops17Type` varchar(10) DEFAULT NULL,
+  `brewHops18Type` varchar(10) DEFAULT NULL,
+  `brewHops19Type` varchar(10) DEFAULT NULL,
+  `brewHops20Type` varchar(10) DEFAULT NULL,
+  `brewHops1Form` varchar(10) DEFAULT NULL,
+  `brewHops2Form` varchar(10) DEFAULT NULL,
+  `brewHops3Form` varchar(10) DEFAULT NULL,
+  `brewHops4Form` varchar(10) DEFAULT NULL,
+  `brewHops5Form` varchar(10) DEFAULT NULL,
+  `brewHops6Form` varchar(10) DEFAULT NULL,
+  `brewHops7Form` varchar(10) DEFAULT NULL,
+  `brewHops8Form` varchar(10) DEFAULT NULL,
+  `brewHops9Form` varchar(10) DEFAULT NULL,
+  `brewHops10Form` varchar(10) DEFAULT NULL,
+  `brewHops11Form` varchar(10) DEFAULT NULL,
+  `brewHops12Form` varchar(10) DEFAULT NULL,
+  `brewHops13Form` varchar(10) DEFAULT NULL,
+  `brewHops14Form` varchar(10) DEFAULT NULL,
+  `brewHops15Form` varchar(10) DEFAULT NULL,
+  `brewHops16Form` varchar(10) DEFAULT NULL,
+  `brewHops17Form` varchar(10) DEFAULT NULL,
+  `brewHops18Form` varchar(10) DEFAULT NULL,
+  `brewHops19Form` varchar(10) DEFAULT NULL,
+  `brewHops20Form` varchar(10) DEFAULT NULL,
+  `brewMashStep1Name` varchar(100) DEFAULT NULL,
+  `brewMashStep2Name` varchar(100) DEFAULT NULL,
+  `brewMashStep3Name` varchar(100) DEFAULT NULL,
+  `brewMashStep4Name` varchar(100) DEFAULT NULL,
+  `brewMashStep5Name` varchar(100) DEFAULT NULL,
+  `brewMashStep6Name` varchar(100) DEFAULT NULL,
+  `brewMashStep7Name` varchar(100) DEFAULT NULL,
+  `brewMashStep8Name` varchar(100) DEFAULT NULL,
+  `brewMashStep9Name` varchar(100) DEFAULT NULL,
+  `brewMashStep10Name` varchar(100) DEFAULT NULL,
+  `brewMashStep1Temp` varchar(10) DEFAULT NULL,
+  `brewMashStep2Temp` varchar(10) DEFAULT NULL,
+  `brewMashStep3Temp` varchar(10) DEFAULT NULL,
+  `brewMashStep4Temp` varchar(10) DEFAULT NULL,
+  `brewMashStep5Temp` varchar(10) DEFAULT NULL,
+  `brewMashStep6Temp` varchar(10) DEFAULT NULL,
+  `brewMashStep7Temp` varchar(10) DEFAULT NULL,
+  `brewMashStep8Temp` varchar(10) DEFAULT NULL,
+  `brewMashStep9Temp` varchar(10) DEFAULT NULL,
+  `brewMashStep10Temp` varchar(10) DEFAULT NULL,
+  `brewMashStep1Time` varchar(10) DEFAULT NULL,
+  `brewMashStep2Time` varchar(10) DEFAULT NULL,
+  `brewMashStep3Time` varchar(10) DEFAULT NULL,
+  `brewMashStep4Time` varchar(10) DEFAULT NULL,
+  `brewMashStep5Time` varchar(10) DEFAULT NULL,
+  `brewMashStep6Time` varchar(10) DEFAULT NULL,
+  `brewMashStep7Time` varchar(10) DEFAULT NULL,
+  `brewMashStep8Time` varchar(10) DEFAULT NULL,
+  `brewMashStep9Time` varchar(10) DEFAULT NULL,
+  `brewMashStep10Time` varchar(10) DEFAULT NULL,
+  `brewYeast` varchar(100) DEFAULT NULL,
+  `brewYeastMan` varchar(100) DEFAULT NULL,
+  `brewYeastForm` varchar(10) DEFAULT NULL,
+  `brewYeastType` varchar(10) DEFAULT NULL,
+  `brewYeastAmount` varchar(25) DEFAULT NULL,
+  `brewYeastStarter` char(1) DEFAULT NULL,
+  `brewYeastNutrients` text,
+  `brewOG` varchar(10) DEFAULT NULL,
+  `brewFG` varchar(10) DEFAULT NULL,
+  `brewPrimary` varchar(10) DEFAULT NULL,
+  `brewPrimaryTemp` varchar(10) DEFAULT NULL,
+  `brewSecondary` varchar(10) DEFAULT NULL,
+  `brewSecondaryTemp` varchar(10) DEFAULT NULL,
+  `brewOther` varchar(10) DEFAULT NULL,
+  `brewOtherTemp` varchar(10) DEFAULT NULL,
+  `brewComments` text,
+  `brewFinings` text,
+  `brewWaterNotes` text,
+  `brewBrewerID` varchar(8) DEFAULT NULL,
+  `brewCarbonationMethod` char(1) DEFAULT NULL,
+  `brewCarbonationVol` varchar(10) DEFAULT NULL,
+  `brewCarbonationNotes` text,
+  `brewBoilHours` varchar(5) DEFAULT NULL,
+  `brewBoilMins` varchar(5) DEFAULT NULL,
+  `brewBrewerFirstName` varchar(255) DEFAULT NULL,
+  `brewBrewerLastName` varchar(255) DEFAULT NULL,
   `brewPaid` tinyint(1) DEFAULT NULL COMMENT '1=true; 0=false',
-  `brewWinner` char(1) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewWinnerCat` varchar(3) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewInfoOptional` text COLLATE utf8mb4_unicode_ci,
-  `brewWinnerPlace` varchar(3) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewBOSRound` char(1) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewBOSPlace` varchar(3) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `brewWinner` char(1) DEFAULT NULL,
+  `brewWinnerCat` varchar(5) DEFAULT NULL,
+  `brewInfoOptional` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
+  `brewWinnerPlace` varchar(3) DEFAULT NULL,
+  `brewBOSRound` char(1) DEFAULT NULL,
+  `brewBOSPlace` varchar(3) DEFAULT NULL,
   `brewReceived` tinyint(1) DEFAULT NULL COMMENT '1=true; 0=false',
   `brewJudgingLocation` int(8) DEFAULT NULL,
-  `brewCoBrewer` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewJudgingNumber` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `brewCoBrewer` varchar(255) DEFAULT NULL,
+  `brewJudgingNumber` varchar(10) DEFAULT NULL,
   `brewUpdated` timestamp NULL DEFAULT NULL COMMENT 'Timestamp of when the entry was last updated',
   `brewConfirmed` tinyint(1) DEFAULT NULL COMMENT '1=true - 2=false',
-  `brewBoxNum` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+  `brewBoxNum` varchar(10) DEFAULT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -496,13 +489,14 @@ CREATE TABLE IF NOT EXISTS `baseline_brewing` (
 -- Table structure for table `baseline_contacts`
 --
 
-CREATE TABLE IF NOT EXISTS `baseline_contacts` (
-  `id` int(8) NOT NULL,
-  `contactFirstName` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `contactLastName` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `contactPosition` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `contactEmail` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+DROP TABLE IF EXISTS `baseline_contacts`;
+CREATE TABLE `baseline_contacts` (
+  `id` int(11) NOT NULL,
+  `contactFirstName` varchar(255) DEFAULT NULL,
+  `contactLastName` varchar(255) DEFAULT NULL,
+  `contactPosition` varchar(255) DEFAULT NULL,
+  `contactEmail` varchar(255) DEFAULT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `baseline_contacts`
@@ -517,52 +511,53 @@ INSERT INTO `baseline_contacts` (`id`, `contactFirstName`, `contactLastName`, `c
 -- Table structure for table `baseline_contest_info`
 --
 
-CREATE TABLE IF NOT EXISTS `baseline_contest_info` (
-  `id` int(1) NOT NULL DEFAULT '0',
-  `contestName` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `contestHost` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `contestHostWebsite` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `contestHostLocation` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `contestRegistrationOpen` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `contestRegistrationDeadline` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `contestEntryOpen` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `contestEntryDeadline` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `contestJudgeOpen` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `contestJudgeDeadline` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `contestRules` mediumtext COLLATE utf8mb4_unicode_ci,
-  `contestAwardsLocation` mediumtext COLLATE utf8mb4_unicode_ci,
-  `contestAwardsLocName` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `contestAwardsLocDate` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `contestAwardsLocTime` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `contestShippingOpen` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `contestShippingDeadline` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `contestEntryFee` int(11) DEFAULT NULL,
-  `contestEntryFee2` int(11) DEFAULT NULL,
-  `contestEntryFeeDiscount` char(1) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `contestEntryFeeDiscountNum` char(4) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `contestDropoffOpen` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `contestBottles` mediumtext COLLATE utf8mb4_unicode_ci,
-  `contestShippingAddress` mediumtext COLLATE utf8mb4_unicode_ci,
-  `contestShippingName` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `contestAwards` mediumtext COLLATE utf8mb4_unicode_ci,
-  `contestLogo` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `contestBOSAward` mediumtext COLLATE utf8mb4_unicode_ci,
-  `contestDropoffDeadline` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+DROP TABLE IF EXISTS `baseline_contest_info`;
+CREATE TABLE `baseline_contest_info` (
+  `id` int(11) NOT NULL,
+  `contestName` varchar(255) DEFAULT NULL,
+  `contestHost` varchar(255) DEFAULT NULL,
+  `contestHostWebsite` varchar(255) DEFAULT NULL,
+  `contestHostLocation` varchar(255) DEFAULT NULL,
+  `contestRegistrationOpen` varchar(255) DEFAULT NULL,
+  `contestRegistrationDeadline` varchar(255) DEFAULT NULL,
+  `contestEntryOpen` varchar(255) DEFAULT NULL,
+  `contestEntryDeadline` varchar(255) DEFAULT NULL,
+  `contestJudgeOpen` varchar(255) DEFAULT NULL,
+  `contestJudgeDeadline` varchar(255) DEFAULT NULL,
+  `contestRules` text,
+  `contestAwardsLocation` text,
+  `contestAwardsLocName` varchar(255) DEFAULT NULL,
+  `contestAwardsLocDate` varchar(255) DEFAULT NULL,
+  `contestAwardsLocTime` varchar(255) DEFAULT NULL,
+  `contestShippingOpen` varchar(255) DEFAULT NULL,
+  `contestShippingDeadline` varchar(255) DEFAULT NULL,
+  `contestEntryFee` float(6,2) DEFAULT NULL,
+  `contestEntryFee2` float(6,2) DEFAULT NULL,
+  `contestEntryFeeDiscount` char(1) DEFAULT NULL,
+  `contestEntryFeeDiscountNum` char(4) DEFAULT NULL,
+  `contestDropoffOpen` varchar(255) DEFAULT NULL,
+  `contestBottles` text,
+  `contestShippingAddress` text,
+  `contestShippingName` varchar(255) DEFAULT NULL,
+  `contestAwards` text,
+  `contestLogo` varchar(255) DEFAULT NULL,
+  `contestBOSAward` text,
+  `contestDropoffDeadline` varchar(255) DEFAULT NULL,
   `contestEntryCap` int(8) DEFAULT NULL,
-  `contestEntryFeePassword` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `contestEntryFeePasswordNum` int(11) DEFAULT NULL,
-  `contestID` varchar(11) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `contestCircuit` mediumtext COLLATE utf8mb4_unicode_ci,
-  `contestVolunteers` mediumtext COLLATE utf8mb4_unicode_ci,
-  `contestCheckInPassword` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+  `contestEntryFeePassword` varchar(255) DEFAULT NULL,
+  `contestEntryFeePasswordNum` float(6,2) DEFAULT NULL,
+  `contestID` varchar(11) DEFAULT NULL,
+  `contestCircuit` text,
+  `contestVolunteers` text,
+  `contestCheckInPassword` varchar(255) DEFAULT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `baseline_contest_info`
 --
 
 INSERT INTO `baseline_contest_info` (`id`, `contestName`, `contestHost`, `contestHostWebsite`, `contestHostLocation`, `contestRegistrationOpen`, `contestRegistrationDeadline`, `contestEntryOpen`, `contestEntryDeadline`, `contestJudgeOpen`, `contestJudgeDeadline`, `contestRules`, `contestAwardsLocation`, `contestAwardsLocName`, `contestAwardsLocDate`, `contestAwardsLocTime`, `contestShippingOpen`, `contestShippingDeadline`, `contestEntryFee`, `contestEntryFee2`, `contestEntryFeeDiscount`, `contestEntryFeeDiscountNum`, `contestDropoffOpen`, `contestBottles`, `contestShippingAddress`, `contestShippingName`, `contestAwards`, `contestLogo`, `contestBOSAward`, `contestDropoffDeadline`, `contestEntryCap`, `contestEntryFeePassword`, `contestEntryFeePasswordNum`, `contestID`, `contestCircuit`, `contestVolunteers`, `contestCheckInPassword`) VALUES
-(1, 'Baseline Data Installation', 'Baseline', 'http://www.brewcompetition.com', 'Denver, CO', '1438322400', '1483253940', '1438322400', '1483253940', '1438322400', '1483253940', '<p>This competition is AHA sanctioned and open to any amateur homebrewer age 21 or older.</p>\r\n<p>All mailed entries must <strong>received</strong> at the mailing location by the entry deadline - please allow for shipping time.</p>\r\n<p>All entries will be picked up from drop-off locations the day of the entry deadline.</p>\r\n<p>All entries must be handcrafted products, containing ingredients available to the general public, and made using private equipment by hobbyist brewers (i.e., no use of commercial facilities or Brew on Premises operations, supplies, etc.).</p>\r\n<p>The competition organizers are not responsible for mis-categorized entries, mailed entries that are not received by the entry deadline, or entries that arrived damaged.</p>\r\n<p>The competition organizers reserve the right to combine styles for judging and to restructure awards as needed depending upon the quantity and quality of entries.</p>\r\n<p>Qualified judging of all entries is the primary goal of our event. Judges will evaluate and score each entry. The average of the scores will rank each entry in its category. Each flight will have at least one BJCP judge.</p>\r\n<p>Brewers are not limited to one entry in each category but may only enter each subcategory once.</p>\r\n<p>The competition committee reserves the right to combine categories based on number of entries. All possible effort will be made to combine similar styles. All brews in combined categories will be judged according to the style they were originally entered in.</p>\r\n<p>The Best of Show judging will be determined by a Best of Show panel based on a second judging of the top winners.</p>\r\n<p>Bottles will not be returned to entrants.</p>', '200 E Colfax Ave, Denver, CO 80203', 'Baseline Awards Location', NULL, '1483798980', '1438322400', '1483253940', 8, NULL, 'N', NULL, '1438322400', '<p>Each entry will consist of 12 to 22 ounce capped bottles or corked bottles that are void of all identifying information, including labels and embossing. Printed caps are allowed, but must be blacked out completely.</p>\r\n<p>12oz brown glass bottles are preferred; however, green and clear glass will be accepted. Swing top bottles will likewise be accepted as well as corked bottles.</p>\r\n<p>Bottles will not be returned to contest entrants.</p>\r\n<p>Completed entry forms and recipe sheets must be submitted with all entries, and can be printed directly from this website. Entry forms should be attached to bottle labels by the method specified on the bottle label.</p>\r\n<p>Please fill out the entry forms completely. Be meticulous about noting any special ingredients that must be specified. Failure to note such ingredients may impact the judges'' scoring of your entry.</p>\r\n<p>Brewers are not limited to one entry in each category but may only enter each subcategory once.</p>', '200 E Colfax Ave, Denver, CO 80203', 'Shipping Location', '<p>The awards ceremony will take place once judging is completed.</p>\r\n<p>Places will be awarded to 1st, 2nd, and 3rd place in each category/table.</p>\r\n<p>The 1st place entry in each category will advance to the Best of Show (BOS) round with a single, overall Best of Show beer selected.</p>\r\n<p>Additional prizes may be awarded to those winners present at the awards ceremony at the discretion of the competition organizers.</p>\r\n<p>Both score sheets and awards will be available for pick up that night after the ceremony concludes. Awards and score sheets not picked up will be mailed back to participants. Results will be posted to the competition web site after the ceremony concludes.</p>', NULL, NULL, '1483253940', NULL, NULL, NULL, '000000', NULL, '<p>Volunteer information coming soon!</p>', NULL);
+(1, 'Baseline Data Installation', 'Baseline', 'http://www.brewcompetition.com', 'Denver, CO', '1438322400', '1483253940', '1438322400', '1483253940', '1438322400', '1483253940', '<p>This competition is AHA sanctioned and open to any amateur homebrewer age 21 or older.</p>\r\n<p>All mailed entries must <strong>received</strong> at the mailing location by the entry deadline - please allow for shipping time.</p>\r\n<p>All entries will be picked up from drop-off locations the day of the entry deadline.</p>\r\n<p>All entries must be handcrafted products, containing ingredients available to the general public, and made using private equipment by hobbyist brewers (i.e., no use of commercial facilities or Brew on Premises operations, supplies, etc.).</p>\r\n<p>The competition organizers are not responsible for mis-categorized entries, mailed entries that are not received by the entry deadline, or entries that arrived damaged.</p>\r\n<p>The competition organizers reserve the right to combine styles for judging and to restructure awards as needed depending upon the quantity and quality of entries.</p>\r\n<p>Qualified judging of all entries is the primary goal of our event. Judges will evaluate and score each entry. The average of the scores will rank each entry in its category. Each flight will have at least one BJCP judge.</p>\r\n<p>Brewers are not limited to one entry in each category but may only enter each subcategory once.</p>\r\n<p>The competition committee reserves the right to combine categories based on number of entries. All possible effort will be made to combine similar styles. All brews in combined categories will be judged according to the style they were originally entered in.</p>\r\n<p>The Best of Show judging will be determined by a Best of Show panel based on a second judging of the top winners.</p>\r\n<p>Bottles will not be returned to entrants.</p>', '200 E Colfax Ave, Denver, CO 80203', 'Baseline Awards Location', NULL, '1483798980', '1438322400', '1483253940', 8.00, NULL, 'N', NULL, '1438322400', '<p>Each entry will consist of 12 to 22 ounce capped bottles or corked bottles that are void of all identifying information, including labels and embossing. Printed caps are allowed, but must be blacked out completely.</p>\r\n<p>12oz brown glass bottles are preferred; however, green and clear glass will be accepted. Swing top bottles will likewise be accepted as well as corked bottles.</p>\r\n<p>Bottles will not be returned to contest entrants.</p>\r\n<p>Completed entry forms and recipe sheets must be submitted with all entries, and can be printed directly from this website. Entry forms should be attached to bottle labels by the method specified on the bottle label.</p>\r\n<p>Please fill out the entry forms completely. Be meticulous about noting any special ingredients that must be specified. Failure to note such ingredients may impact the judges\' scoring of your entry.</p>\r\n<p>Brewers are not limited to one entry in each category but may only enter each subcategory once.</p>', '200 E Colfax Ave, Denver, CO 80203', 'Shipping Location', '<p>The awards ceremony will take place once judging is completed.</p>\r\n<p>Places will be awarded to 1st, 2nd, and 3rd place in each category/table.</p>\r\n<p>The 1st place entry in each category will advance to the Best of Show (BOS) round with a single, overall Best of Show beer selected.</p>\r\n<p>Additional prizes may be awarded to those winners present at the awards ceremony at the discretion of the competition organizers.</p>\r\n<p>Both score sheets and awards will be available for pick up that night after the ceremony concludes. Awards and score sheets not picked up will be mailed back to participants. Results will be posted to the competition web site after the ceremony concludes.</p>', NULL, NULL, '1483253940', NULL, NULL, NULL, '000000', NULL, '<p>Volunteer information coming soon!</p>', NULL);
 
 -- --------------------------------------------------------
 
@@ -570,14 +565,15 @@ INSERT INTO `baseline_contest_info` (`id`, `contestName`, `contestHost`, `contes
 -- Table structure for table `baseline_drop_off`
 --
 
-CREATE TABLE IF NOT EXISTS `baseline_drop_off` (
-  `id` int(8) NOT NULL,
-  `dropLocation` mediumtext COLLATE utf8mb4_unicode_ci,
-  `dropLocationName` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `dropLocationPhone` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `dropLocationWebsite` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `dropLocationNotes` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+DROP TABLE IF EXISTS `baseline_drop_off`;
+CREATE TABLE `baseline_drop_off` (
+  `id` int(11) NOT NULL,
+  `dropLocation` text,
+  `dropLocationName` varchar(255) DEFAULT NULL,
+  `dropLocationPhone` varchar(255) DEFAULT NULL,
+  `dropLocationWebsite` varchar(255) DEFAULT NULL,
+  `dropLocationNotes` varchar(255) DEFAULT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `baseline_drop_off`
@@ -592,16 +588,17 @@ INSERT INTO `baseline_drop_off` (`id`, `dropLocation`, `dropLocationName`, `drop
 -- Table structure for table `baseline_judging_assignments`
 --
 
-CREATE TABLE IF NOT EXISTS `baseline_judging_assignments` (
+DROP TABLE IF EXISTS `baseline_judging_assignments`;
+CREATE TABLE `baseline_judging_assignments` (
   `id` int(11) NOT NULL,
-  `bid` int(11) DEFAULT NULL COMMENT 'id from brewer',
-  `assignment` char(1) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `assignTable` int(11) DEFAULT NULL COMMENT 'id from judging_tables',
+  `bid` int(11) DEFAULT NULL COMMENT 'id from brewer table',
+  `assignment` char(1) DEFAULT NULL,
+  `assignTable` int(11) DEFAULT NULL COMMENT 'id from judging_tables table',
   `assignFlight` int(11) DEFAULT NULL,
   `assignRound` int(11) DEFAULT NULL,
   `assignLocation` int(11) DEFAULT NULL,
-  `assignRoles` varchar(25) COLLATE utf8_unicode_ci DEFAULT NULL
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+  `assignRoles` varchar(25) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -609,13 +606,14 @@ CREATE TABLE IF NOT EXISTS `baseline_judging_assignments` (
 -- Table structure for table `baseline_judging_flights`
 --
 
-CREATE TABLE IF NOT EXISTS `baseline_judging_flights` (
-  `id` int(8) NOT NULL,
-  `flightTable` int(8) DEFAULT NULL COMMENT 'id of Table from tables',
-  `flightNumber` int(8) DEFAULT NULL,
-  `flightEntryID` int(11) DEFAULT NULL COMMENT 'id of entry from the brewing table',
-  `flightRound` int(8) DEFAULT NULL
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+DROP TABLE IF EXISTS `baseline_judging_flights`;
+CREATE TABLE `baseline_judging_flights` (
+  `id` int(11) NOT NULL,
+  `flightTable` int(11) DEFAULT NULL COMMENT 'id of Table from tables',
+  `flightNumber` int(11) DEFAULT NULL,
+  `flightEntryID` text,
+  `flightRound` int(11) DEFAULT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -623,14 +621,15 @@ CREATE TABLE IF NOT EXISTS `baseline_judging_flights` (
 -- Table structure for table `baseline_judging_locations`
 --
 
-CREATE TABLE IF NOT EXISTS `baseline_judging_locations` (
-  `id` int(8) NOT NULL,
-  `judgingDate` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `judgingTime` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `judgingLocName` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `judgingLocation` mediumtext COLLATE utf8mb4_unicode_ci,
+DROP TABLE IF EXISTS `baseline_judging_locations`;
+CREATE TABLE `baseline_judging_locations` (
+  `id` int(11) NOT NULL,
+  `judgingDate` varchar(255) DEFAULT NULL,
+  `judgingTime` varchar(255) DEFAULT NULL,
+  `judgingLocName` varchar(255) DEFAULT NULL,
+  `judgingLocation` text,
   `judgingRounds` int(11) DEFAULT '1' COMMENT 'number of rounds at location'
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `baseline_judging_locations`
@@ -645,16 +644,17 @@ INSERT INTO `baseline_judging_locations` (`id`, `judgingDate`, `judgingTime`, `j
 -- Table structure for table `baseline_judging_preferences`
 --
 
-CREATE TABLE IF NOT EXISTS `baseline_judging_preferences` (
+DROP TABLE IF EXISTS `baseline_judging_preferences`;
+CREATE TABLE `baseline_judging_preferences` (
   `id` int(11) NOT NULL,
-  `jPrefsQueued` char(1) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `jPrefsQueued` char(1) DEFAULT NULL,
   `jPrefsFlightEntries` int(11) DEFAULT NULL COMMENT 'Maximum amount of entries per flight',
   `jPrefsMaxBOS` int(11) DEFAULT NULL COMMENT 'Maximum amount of places awarded for each BOS style type',
   `jPrefsRounds` int(11) DEFAULT NULL COMMENT 'Maximum amount of rounds per judging location',
   `jPrefsCapJudges` int(3) DEFAULT NULL,
   `jPrefsCapStewards` int(3) DEFAULT NULL,
   `jPrefsBottleNum` int(3) DEFAULT NULL
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `baseline_judging_preferences`
@@ -669,16 +669,17 @@ INSERT INTO `baseline_judging_preferences` (`id`, `jPrefsQueued`, `jPrefsFlightE
 -- Table structure for table `baseline_judging_scores`
 --
 
-CREATE TABLE IF NOT EXISTS `baseline_judging_scores` (
+DROP TABLE IF EXISTS `baseline_judging_scores`;
+CREATE TABLE `baseline_judging_scores` (
   `id` int(11) NOT NULL,
   `eid` int(11) DEFAULT NULL COMMENT 'entry id from brewing table',
   `bid` int(11) DEFAULT NULL COMMENT 'brewer id from brewer table',
   `scoreTable` int(11) DEFAULT NULL COMMENT 'id of table from judging_tables table',
-  `scoreEntry` float DEFAULT NULL COMMENT 'Numerical score assigned by judges',
-  `scorePlace` int(11) DEFAULT NULL COMMENT 'place of entry as assigned by judges',
-  `scoreType` char(1) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `scoreMiniBOS` tinyint(1) DEFAULT NULL COMMENT 'Did the entry go to the MiniBOS? 1=Yes, 0=No'
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+  `scoreEntry` float DEFAULT NULL COMMENT 'numerical score assigned by judges',
+  `scorePlace` float DEFAULT NULL COMMENT 'place of entry as assigned by judges',
+  `scoreType` char(1) DEFAULT NULL,
+  `scoreMiniBOS` int(4) DEFAULT NULL COMMENT 'Did the entry go to the MiniBOS? 1=Yes, 0=No'
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -686,14 +687,15 @@ CREATE TABLE IF NOT EXISTS `baseline_judging_scores` (
 -- Table structure for table `baseline_judging_scores_bos`
 --
 
-CREATE TABLE IF NOT EXISTS `baseline_judging_scores_bos` (
+DROP TABLE IF EXISTS `baseline_judging_scores_bos`;
+CREATE TABLE `baseline_judging_scores_bos` (
   `id` int(11) NOT NULL,
   `eid` int(11) DEFAULT NULL COMMENT 'entry id from brewing table',
   `bid` int(11) DEFAULT NULL COMMENT 'brewer id from brewer table',
-  `scoreEntry` varchar(3) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `scorePlace` varchar(3) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `scoreType` char(1) COLLATE utf8mb4_unicode_ci DEFAULT NULL
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+  `scoreEntry` int(11) DEFAULT NULL COMMENT 'numerical score assigned by judges',
+  `scorePlace` varchar(3) DEFAULT NULL,
+  `scoreType` char(1) DEFAULT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -701,15 +703,16 @@ CREATE TABLE IF NOT EXISTS `baseline_judging_scores_bos` (
 -- Table structure for table `baseline_judging_tables`
 --
 
-CREATE TABLE IF NOT EXISTS `baseline_judging_tables` (
-  `id` int(8) NOT NULL,
-  `tableName` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `tableStyles` mediumtext COLLATE utf8mb4_unicode_ci,
-  `tableNumber` int(5) DEFAULT NULL COMMENT 'User defined for sorting',
-  `tableLocation` int(5) DEFAULT NULL COMMENT 'Physical location of table (if more than one judging location) - relational to judging table',
-  `tableJudges` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `tableStewards` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+DROP TABLE IF EXISTS `baseline_judging_tables`;
+CREATE TABLE `baseline_judging_tables` (
+  `id` int(11) NOT NULL,
+  `tableName` varchar(255) DEFAULT NULL,
+  `tableStyles` text,
+  `tableNumber` int(11) DEFAULT NULL COMMENT 'User defined for sorting',
+  `tableLocation` int(11) DEFAULT NULL COMMENT 'Physical location of table (if more than one judging location) - relational to judging table',
+  `tableJudges` varchar(255) DEFAULT NULL,
+  `tableStewards` varchar(255) DEFAULT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -717,19 +720,20 @@ CREATE TABLE IF NOT EXISTS `baseline_judging_tables` (
 -- Table structure for table `baseline_mods`
 --
 
-CREATE TABLE IF NOT EXISTS `baseline_mods` (
+DROP TABLE IF EXISTS `baseline_mods`;
+CREATE TABLE `baseline_mods` (
   `id` int(11) NOT NULL,
-  `mod_name` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `mod_type` tinyint(2) DEFAULT NULL COMMENT 'Type of module: 0=informational 1=report 2=export 3=other',
-  `mod_extend_function` tinyint(2) DEFAULT NULL COMMENT 'If the custom module extends a core function. 0=all 1=home 2=rules 3=volunteer 4=sponsors 5=contact 6=register 7=pay 8=list 9=admin',
-  `mod_extend_function_admin` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `mod_filename` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `mod_description` mediumtext COLLATE utf8mb4_unicode_ci,
+  `mod_name` varchar(255) DEFAULT NULL,
+  `mod_type` tinyint(1) DEFAULT NULL COMMENT 'Type of module: 0=informational 1=report 2=export 3=other',
+  `mod_extend_function` tinyint(1) DEFAULT NULL COMMENT 'If the custom module extends a core function. 0=all 1=home 2=rules 3=volunteer 4=sponsors 5=contact 6=register 7=pay 8=list 9=admin',
+  `mod_extend_function_admin` varchar(255) DEFAULT NULL,
+  `mod_filename` varchar(255) DEFAULT NULL,
+  `mod_description` text,
   `mod_permission` tinyint(1) DEFAULT NULL COMMENT 'Who has permission to view the module. 0=uber-admin 1=admin 2=all',
   `mod_rank` int(3) DEFAULT NULL COMMENT 'Rank order of the mod on the admin mods list',
   `mod_display_rank` tinyint(1) DEFAULT NULL COMMENT '0=normal 1=above default content',
-  `mod_enable` tinyint(1) DEFAULT NULL COMMENT '0=no 1=yes'
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+  `mod_enable` tinyint(1) DEFAULT NULL COMMENT '1=yes 0=no'
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -737,68 +741,69 @@ CREATE TABLE IF NOT EXISTS `baseline_mods` (
 -- Table structure for table `baseline_preferences`
 --
 
-CREATE TABLE IF NOT EXISTS `baseline_preferences` (
-  `id` int(8) NOT NULL,
-  `prefsTemp` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `prefsWeight1` varchar(20) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `prefsWeight2` varchar(20) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `prefsLiquid1` varchar(20) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `prefsLiquid2` varchar(20) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `prefsPaypal` char(1) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `prefsPaypalAccount` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+DROP TABLE IF EXISTS `baseline_preferences`;
+CREATE TABLE `baseline_preferences` (
+  `id` int(11) NOT NULL,
+  `prefsTemp` varchar(255) DEFAULT NULL,
+  `prefsWeight1` varchar(20) DEFAULT NULL,
+  `prefsWeight2` varchar(20) DEFAULT NULL,
+  `prefsLiquid1` varchar(20) DEFAULT NULL,
+  `prefsLiquid2` varchar(20) DEFAULT NULL,
+  `prefsPaypal` char(1) DEFAULT NULL,
+  `prefsPaypalAccount` varchar(255) DEFAULT NULL,
   `prefsPaypalIPN` tinyint(1) DEFAULT NULL,
-  `prefsCurrency` varchar(20) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `prefsCash` char(1) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `prefsCheck` char(1) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `prefsCheckPayee` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `prefsTransFee` char(1) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `prefsGoogle` char(1) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `prefsGoogleAccount` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `prefsSponsors` char(1) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `prefsSponsorLogos` char(1) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `prefsSponsorLogoSize` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `prefsCompLogoSize` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `prefsDisplayWinners` char(1) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `prefsWinnerDelay` int(11) DEFAULT NULL COMMENT 'Hours after last judging date beginning time to delay displaying winners',
+  `prefsCurrency` varchar(20) DEFAULT NULL,
+  `prefsCash` char(1) DEFAULT NULL,
+  `prefsCheck` char(1) DEFAULT NULL,
+  `prefsCheckPayee` varchar(255) DEFAULT NULL,
+  `prefsTransFee` char(1) DEFAULT NULL,
+  `prefsGoogle` char(1) DEFAULT NULL,
+  `prefsGoogleAccount` varchar(255) DEFAULT NULL,
+  `prefsSponsors` char(1) DEFAULT NULL,
+  `prefsSponsorLogos` char(1) DEFAULT NULL,
+  `prefsSponsorLogoSize` varchar(255) DEFAULT NULL,
+  `prefsCompLogoSize` varchar(255) DEFAULT NULL,
+  `prefsDisplayWinners` char(1) DEFAULT NULL,
+  `prefsWinnerDelay` varchar(15) DEFAULT NULL COMMENT 'Unix timestamp to display winners',
   `prefsWinnerMethod` int(11) DEFAULT NULL COMMENT 'Method comp uses to choose winners: 0=by table; 1=by category; 2=by sub-category',
-  `prefsDisplaySpecial` char(1) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `prefsBOSMead` char(1) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `prefsBOSCider` char(1) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `prefsEntryForm` char(1) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `prefsRecordLimit` int(11) DEFAULT '300' COMMENT 'User defined record limit for using DataTables vs. PHP paging',
-  `prefsRecordPaging` int(11) DEFAULT '100' COMMENT 'User defined per page record limit',
+  `prefsDisplaySpecial` char(1) DEFAULT NULL,
+  `prefsBOSMead` char(1) DEFAULT NULL,
+  `prefsBOSCider` char(1) DEFAULT NULL,
+  `prefsEntryForm` char(1) DEFAULT NULL,
+  `prefsRecordLimit` int(11) DEFAULT '500' COMMENT 'User defined record limit for using DataTables vs. PHP paging',
+  `prefsRecordPaging` int(11) DEFAULT '30' COMMENT 'User defined per page record limit',
   `prefsProEdition` tinyint(1) DEFAULT NULL,
-  `prefsTheme` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `prefsDateFormat` char(1) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `prefsContact` char(1) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `prefsTheme` varchar(255) DEFAULT NULL,
+  `prefsDateFormat` char(1) DEFAULT NULL,
+  `prefsContact` char(1) DEFAULT NULL,
   `prefsTimeZone` decimal(10,3) DEFAULT NULL,
   `prefsEntryLimit` int(11) DEFAULT NULL,
   `prefsTimeFormat` tinyint(1) DEFAULT NULL,
-  `prefsUserEntryLimit` varchar(4) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `prefsUserSubCatLimit` varchar(4) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `prefsUSCLEx` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `prefsUSCLExLimit` varchar(4) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `prefsPayToPrint` char(1) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `prefsHideRecipe` char(1) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `prefsUseMods` char(1) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `prefsSEF` char(1) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `prefsSpecialCharLimit` int(3) DEFAULT NULL COMMENT 'Character limit for special ingredients field',
-  `prefsStyleSet` text COLLATE utf8mb4_unicode_ci,
+  `prefsUserEntryLimit` varchar(4) DEFAULT NULL,
+  `prefsUserSubCatLimit` varchar(4) DEFAULT NULL,
+  `prefsUSCLEx` varchar(255) DEFAULT NULL,
+  `prefsUSCLExLimit` varchar(4) DEFAULT NULL,
+  `prefsPayToPrint` char(1) DEFAULT NULL,
+  `prefsHideRecipe` char(1) DEFAULT NULL,
+  `prefsUseMods` char(1) DEFAULT NULL,
+  `prefsSEF` char(1) DEFAULT NULL,
+  `prefsSpecialCharLimit` int(3) DEFAULT NULL,
+  `prefsStyleSet` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
   `prefsAutoPurge` tinyint(1) DEFAULT NULL,
   `prefsEntryLimitPaid` int(4) DEFAULT NULL,
   `prefsEmailRegConfirm` tinyint(1) DEFAULT NULL,
-  `prefsLanguage` varchar(25) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `prefsLanguage` varchar(25) DEFAULT NULL,
   `prefsSpecific` tinyint(1) DEFAULT NULL,
-  `prefsDropOff` tinyint(1) DEFAULT NULL,
-  `prefsShipping` tinyint(1) DEFAULT NULL
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+  `prefsShipping` tinyint(1) DEFAULT NULL,
+  `prefsDropOff` tinyint(1) DEFAULT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `baseline_preferences`
 --
 
-INSERT INTO `baseline_preferences` (`id`, `prefsTemp`, `prefsWeight1`, `prefsWeight2`, `prefsLiquid1`, `prefsLiquid2`, `prefsPaypal`, `prefsPaypalAccount`, `prefsCurrency`, `prefsCash`, `prefsCheck`, `prefsCheckPayee`, `prefsTransFee`, `prefsGoogle`, `prefsGoogleAccount`, `prefsSponsors`, `prefsSponsorLogos`, `prefsSponsorLogoSize`, `prefsCompLogoSize`, `prefsDisplayWinners`, `prefsWinnerDelay`, `prefsWinnerMethod`, `prefsDisplaySpecial`, `prefsBOSMead`, `prefsBOSCider`, `prefsEntryForm`, `prefsRecordLimit`, `prefsRecordPaging`, `prefsProEdition`, `prefsTheme`, `prefsDateFormat`, `prefsContact`, `prefsTimeZone`, `prefsEntryLimit`, `prefsTimeFormat`, `prefsUserEntryLimit`, `prefsUserSubCatLimit`, `prefsUSCLEx`, `prefsUSCLExLimit`, `prefsPayToPrint`, `prefsHideRecipe`, `prefsUseMods`, `prefsSEF`, `prefsSpecialCharLimit`, `prefsStyleSet`, `prefsAutoPurge`, `prefsEntryLimitPaid`, `prefsEmailRegConfirm`, `prefsLanguage`, `prefsSpecific`, `prefsDropOff`, `prefsShipping`, `prefsPaypalIPN`) VALUES
-(1, 'Fahrenheit', 'ounces', 'pounds', 'ounces', 'gallons', 'Y', 'user.baseline@brewcompetition.com', '$', 'N', 'N', NULL, 'Y', 'N', NULL, 'Y', 'Y', '250', '300', 'N', 8, 0, NULL, 'N', 'N', 'B', 9999, 150, 0, 'default', '1', 'Y', '-7.000', NULL, 0, NULL, NULL, NULL, NULL, 'N', 'Y', 'N', 'N', 150, 'BJCP2015', 0, NULL, NULL, 'English', 1, 1, 1, 0);
+INSERT INTO `baseline_preferences` (`id`, `prefsTemp`, `prefsWeight1`, `prefsWeight2`, `prefsLiquid1`, `prefsLiquid2`, `prefsPaypal`, `prefsPaypalAccount`, `prefsPaypalIPN`, `prefsCurrency`, `prefsCash`, `prefsCheck`, `prefsCheckPayee`, `prefsTransFee`, `prefsGoogle`, `prefsGoogleAccount`, `prefsSponsors`, `prefsSponsorLogos`, `prefsSponsorLogoSize`, `prefsCompLogoSize`, `prefsDisplayWinners`, `prefsWinnerDelay`, `prefsWinnerMethod`, `prefsDisplaySpecial`, `prefsBOSMead`, `prefsBOSCider`, `prefsEntryForm`, `prefsRecordLimit`, `prefsRecordPaging`, `prefsProEdition`, `prefsTheme`, `prefsDateFormat`, `prefsContact`, `prefsTimeZone`, `prefsEntryLimit`, `prefsTimeFormat`, `prefsUserEntryLimit`, `prefsUserSubCatLimit`, `prefsUSCLEx`, `prefsUSCLExLimit`, `prefsPayToPrint`, `prefsHideRecipe`, `prefsUseMods`, `prefsSEF`, `prefsSpecialCharLimit`, `prefsStyleSet`, `prefsAutoPurge`, `prefsEntryLimitPaid`, `prefsEmailRegConfirm`, `prefsLanguage`, `prefsSpecific`, `prefsShipping`, `prefsDropOff`) VALUES
+(1, 'Fahrenheit', 'ounces', 'pounds', 'ounces', 'gallons', 'Y', 'user.baseline@brewcompetition.com', 0, '$', 'N', 'N', NULL, 'Y', 'N', NULL, 'Y', 'Y', '250', '300', 'N', '1483831800', 0, NULL, 'N', 'N', 'B', 9999, 150, 0, 'default', '1', 'Y', '-7.000', NULL, 0, NULL, NULL, NULL, NULL, 'N', 'Y', 'N', 'N', 150, 'BJCP2015', 0, NULL, NULL, 'English', 1, 1, 1);
 
 -- --------------------------------------------------------
 
@@ -806,14 +811,15 @@ INSERT INTO `baseline_preferences` (`id`, `prefsTemp`, `prefsWeight1`, `prefsWei
 -- Table structure for table `baseline_special_best_data`
 --
 
-CREATE TABLE IF NOT EXISTS `baseline_special_best_data` (
-   `id` int(11) NOT NULL,
+DROP TABLE IF EXISTS `baseline_special_best_data`;
+CREATE TABLE `baseline_special_best_data` (
+  `id` int(11) NOT NULL,
   `sid` int(11) DEFAULT NULL COMMENT 'relational to special_best_info table',
   `bid` int(11) DEFAULT NULL COMMENT 'relational to brewer table - bid row',
   `eid` int(11) DEFAULT NULL COMMENT 'relational to brewing table - id (entry number)',
   `sbd_place` int(11) DEFAULT NULL,
-  `sbd_comments` mediumtext COLLATE utf8mb4_unicode_ci
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+  `sbd_comments` text
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -821,14 +827,15 @@ CREATE TABLE IF NOT EXISTS `baseline_special_best_data` (
 -- Table structure for table `baseline_special_best_info`
 --
 
-CREATE TABLE IF NOT EXISTS `baseline_special_best_info` (
+DROP TABLE IF EXISTS `baseline_special_best_info`;
+CREATE TABLE `baseline_special_best_info` (
   `id` int(11) NOT NULL,
-  `sbi_name` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `sbi_description` mediumtext COLLATE utf8mb4_unicode_ci,
+  `sbi_name` varchar(255) DEFAULT NULL,
+  `sbi_description` text,
   `sbi_places` int(11) DEFAULT NULL,
   `sbi_rank` int(11) DEFAULT NULL,
-  `sbi_display_places` tinyint(1) DEFAULT NULL COMMENT '1=true; 0=false'
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+  `sbi_display_places` int(1) DEFAULT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -836,16 +843,17 @@ CREATE TABLE IF NOT EXISTS `baseline_special_best_info` (
 -- Table structure for table `baseline_sponsors`
 --
 
-CREATE TABLE IF NOT EXISTS `baseline_sponsors` (
-  `id` int(8) NOT NULL,
-  `sponsorName` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `sponsorURL` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `sponsorImage` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `sponsorText` mediumtext COLLATE utf8mb4_unicode_ci,
-  `sponsorLocation` mediumtext COLLATE utf8mb4_unicode_ci,
-  `sponsorLevel` mediumtext COLLATE utf8mb4_unicode_ci,
+DROP TABLE IF EXISTS `baseline_sponsors`;
+CREATE TABLE `baseline_sponsors` (
+  `id` int(11) NOT NULL,
+  `sponsorName` varchar(255) DEFAULT NULL,
+  `sponsorURL` varchar(255) DEFAULT NULL,
+  `sponsorImage` varchar(255) DEFAULT NULL,
+  `sponsorText` text,
+  `sponsorLocation` text,
+  `sponsorLevel` tinyint(1) DEFAULT NULL,
   `sponsorEnable` tinyint(1) DEFAULT NULL
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -853,15 +861,16 @@ CREATE TABLE IF NOT EXISTS `baseline_sponsors` (
 -- Table structure for table `baseline_staff`
 --
 
-CREATE TABLE IF NOT EXISTS `baseline_staff` (
+DROP TABLE IF EXISTS `baseline_staff`;
+CREATE TABLE `baseline_staff` (
   `id` int(11) NOT NULL,
   `uid` int(11) DEFAULT NULL COMMENT 'user''s id from user table',
-  `staff_judge` tinyint(2) DEFAULT '0' COMMENT '0=no; 1=yes',
-  `staff_judge_bos` tinyint(2) DEFAULT '0' COMMENT '0=no; 1=yes',
-  `staff_steward` tinyint(2) DEFAULT '0' COMMENT '0=no; 1=yes',
-  `staff_organizer` tinyint(2) DEFAULT '0' COMMENT '0=no; 1=yes',
-  `staff_staff` tinyint(2) DEFAULT '0' COMMENT '0=no; 1=yes'
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+  `staff_judge` int(2) DEFAULT '0' COMMENT '0=no; 1=yes',
+  `staff_judge_bos` int(2) DEFAULT '0' COMMENT '0=no; 1=yes',
+  `staff_steward` int(2) DEFAULT '0' COMMENT '0=no; 1=yes',
+  `staff_organizer` int(2) DEFAULT '0' COMMENT '0=no; 1=yes',
+  `staff_staff` int(2) DEFAULT '0' COMMENT '0=no; 1=yes'
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -869,36 +878,37 @@ CREATE TABLE IF NOT EXISTS `baseline_staff` (
 -- Table structure for table `baseline_styles`
 --
 
-CREATE TABLE IF NOT EXISTS `baseline_styles` (
-  `id` int(8) NOT NULL,
-  `brewStyleNum` varchar(3) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewStyle` varchar(250) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewStyleCategory` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewStyleOG` varchar(20) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewStyleOGMax` varchar(25) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewStyleFG` varchar(20) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewStyleFGMax` varchar(25) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewStyleABV` varchar(250) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewStyleABVMax` varchar(25) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewStyleIBU` varchar(250) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewStyleIBUMax` varchar(25) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewStyleSRM` varchar(250) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewStyleSRMMax` varchar(25) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewStyleType` varchar(25) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewStyleInfo` text COLLATE utf8mb4_unicode_ci,
-  `brewStyleLink` varchar(200) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewStyleGroup` varchar(3) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewStyleActive` char(1) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewStyleOwn` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewStyleVersion` varchar(20) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+DROP TABLE IF EXISTS `baseline_styles`;
+CREATE TABLE `baseline_styles` (
+  `id` int(11) NOT NULL,
+  `brewStyleNum` varchar(3) DEFAULT NULL,
+  `brewStyle` varchar(250) DEFAULT NULL,
+  `brewStyleCategory` varchar(255) DEFAULT NULL,
+  `brewStyleOG` varchar(20) DEFAULT NULL,
+  `brewStyleOGMax` varchar(25) DEFAULT NULL,
+  `brewStyleFG` varchar(20) DEFAULT NULL,
+  `brewStyleFGMax` varchar(25) DEFAULT NULL,
+  `brewStyleABV` varchar(250) DEFAULT NULL,
+  `brewStyleABVMax` varchar(25) DEFAULT NULL,
+  `brewStyleIBU` varchar(250) DEFAULT NULL,
+  `brewStyleIBUMax` varchar(25) DEFAULT NULL,
+  `brewStyleSRM` varchar(250) DEFAULT NULL,
+  `brewStyleSRMMax` varchar(25) DEFAULT NULL,
+  `brewStyleType` varchar(25) DEFAULT NULL,
+  `brewStyleInfo` text,
+  `brewStyleLink` varchar(200) DEFAULT NULL,
+  `brewStyleGroup` varchar(3) DEFAULT NULL,
+  `brewStyleActive` char(1) DEFAULT NULL,
+  `brewStyleOwn` varchar(255) DEFAULT NULL,
+  `brewStyleVersion` varchar(20) DEFAULT NULL,
   `brewStyleReqSpec` tinyint(1) DEFAULT NULL COMMENT 'Does the style require special ingredients be input? 1=yes 0=no',
   `brewStyleStrength` int(1) DEFAULT NULL COMMENT 'Requires strength? 0=No, 1=Yes',
   `brewStyleCarb` int(1) DEFAULT NULL COMMENT 'Requires carbonation? 0=No, 1=Yes',
   `brewStyleSweet` int(1) DEFAULT NULL COMMENT 'Requires sweetness? 0=No, 1=Yes',
-  `brewStyleTags` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `brewStyleComEx` text COLLATE utf8mb4_unicode_ci,
-  `brewStyleEntry` text COLLATE utf8mb4_unicode_ci
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+  `brewStyleTags` varchar(255) DEFAULT NULL,
+  `brewStyleComEx` text,
+  `brewStyleEntry` text
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `baseline_styles`
@@ -1057,32 +1067,32 @@ INSERT INTO `baseline_styles` (`id`, `brewStyleNum`, `brewStyle`, `brewStyleCate
 (148, 'C', 'Tropical Stout', 'Dark British Beer', '1.056', '1.075', '1.01', '1.018', '5.5', '8', '30', '50', '30', '40', 'Ale', 'A very dark, sweet, fruity, moderately strong ale with smooth roasty flavors without a burnt harshness. ', 'http://bjcp.org/stylecenter.php', '16', 'Y', 'bcoe', 'BJCP2015', 0, 0, 0, 0, 'high-strength, dark-color, top-fermented, british-isles, traditional-style, stout-family, malty, roasty, sweet', 'Lion Stout (Sri Lanka), Dragon Stout (Jamaica), ABC Stout (Singapore), Royal Extra &quot;The Lion Stout&quot; (Trinidad), Jamaica Stout (Jamaica).', ''),
 (149, 'D', 'Foreign Extra Stout', 'Dark British Beer', '1.056', '1.075', '1.01', '1.018', '6.5', '8', '50', '70', '30', '40', 'Ale', 'A very dark, moderately strong, fairly dry, stout with prominent roast flavors.', 'http://bjcp.org/stylecenter.php', '16', 'Y', 'bcoe', 'BJCP2015', 0, 0, 0, 0, 'high-strength, dark-color, top-fermented, british-isles, traditional-style, stout-family, balanced, roasty', 'Guinness Foreign Extra Stout, Ridgeway Foreign Export Stout, Coopers Best Extra Stout, Elysian Dragonstooth Stout.', ''),
 (150, 'A', 'English Strong Ale', 'Strong British Ale', '1.055', '1.08', '1.015', '1.022', '5.5', '8', '30', '60', '8', '22', 'Ale', 'An ale of respectable alcoholic strength, traditionally bottled-conditioned and cellared. Can have a wide range of interpretations, but most will have varying degrees of malty richness, late hops and bitterness, fruity esters, and alcohol warmth. Judges should allow for a significant range in character, as long as the beer is within the alcohol strength range and has an interesting &quot;English&quot; character, it likely fits the style. The malt and adjunct flavors and intensity can vary widely, but any combination should result in an agreeable palate experience.', 'http://bjcp.org/stylecenter.php', '17', 'Y', 'bcoe', 'BJCP2015', 0, 0, 0, 0, 'high-strength, amber-color, top-fermented, british-isles, traditional-style, strong-ale-family, malty', 'Fuller&rsquo;s 1845, Young&rsquo;s Special London Ale, Harvey&rsquo;s Elizabethan Ale, J.W. Lees Manchester Star, Sarah Hughes Dark Ruby Mild, Samuel Smith&rsquo;s Winter Welcome, Fuller&rsquo;s ESB, Adnams Broadside, Young&rsquo;s Winter Warmer.', ''),
-(151, 'B', 'Old Ale', 'Strong British Ale', '1.055', '1.088', '1.015', '1.022', '5.5', '9', '30', '60', '10', '22', 'Ale', 'An ale of moderate to fairly significant alcoholic strength, bigger than standard beers, though usually not as strong or rich as barleywine. Often tilted towards a maltier balance. &quot;It should be a warming beer of the type that is best drunk in half pints by a warm fire on a cold winter&rsquo;s night&quot; - Michael Jackson. ', 'http://bjcp.org/stylecenter.php', '17', 'Y', 'bcoe', 'BJCP2015', 0, 0, 0, 0, 'high-strength, amber-color, top-fermented, british-isles, traditional-style, strong-ale-family, malty, aged', 'Gale''s Prize Old Ale, Burton Bridge Olde Expensive, Marston Owd Roger, Greene King Strong Suffolk Ale, Theakston Old Peculier.', ''),
+(151, 'B', 'Old Ale', 'Strong British Ale', '1.055', '1.088', '1.015', '1.022', '5.5', '9', '30', '60', '10', '22', 'Ale', 'An ale of moderate to fairly significant alcoholic strength, bigger than standard beers, though usually not as strong or rich as barleywine. Often tilted towards a maltier balance. &quot;It should be a warming beer of the type that is best drunk in half pints by a warm fire on a cold winter&rsquo;s night&quot; - Michael Jackson. ', 'http://bjcp.org/stylecenter.php', '17', 'Y', 'bcoe', 'BJCP2015', 0, 0, 0, 0, 'high-strength, amber-color, top-fermented, british-isles, traditional-style, strong-ale-family, malty, aged', 'Gale\'s Prize Old Ale, Burton Bridge Olde Expensive, Marston Owd Roger, Greene King Strong Suffolk Ale, Theakston Old Peculier.', ''),
 (152, 'C', 'Wee Heavy', 'Strong British Ale', '1.07', '1.013', '1.018', '1.04', '6.5', '10', '17', '35', '14', '25', 'Ale', 'Rich, malty, dextrinous, and usually caramel-sweet, these beers can give an impression that is suggestive of a dessert. Complex secondary malt and alcohol flavors prevent a one-dimensional quality. Strength and maltiness can vary, but should not be cloying or syrupy. ', 'http://bjcp.org/stylecenter.php', '17', 'Y', 'bcoe', 'BJCP2015', 0, 0, 0, 0, 'high-strength, amber-color, top-fermented, british-isles, traditional-style, strong-ale-family, malty', 'Traquair House Ale, Belhaven Wee Heavy, McEwan&rsquo;s Scotch Ale, MacAndrew&rsquo;s Scotch Ale, Orkney Skull Splitter, Inveralmond Black Friar, Broughton Old Jock, Gordon Highland Scotch Ale, AleSmith Wee Heavy.', ''),
-(153, 'D', 'English Barleywine', 'Strong British Ale', '1.08', '1.12', '1.018', '1.03', '8', '12', '35', '70', '8', '22', 'Ale', 'A showcase of malty richness and complex, intense flavors. Chewy and rich in body, with warming alcohol and a pleasant fruity or hoppy interest. When aged, it can take on port-like flavors. A wintertime sipper. ', 'http://bjcp.org/stylecenter.php', '17', 'Y', 'bcoe', 'BJCP2015', 0, 0, 0, 0, 'very-high-strength, amber-color, top-fermented, british-isles, traditional-style, strong-ale-family, malty', 'Adnam''s Tally Ho, Burton Bridge Thomas Sykes Old Ale, J.W. Lee''s Vintage Harvest Ale, Fuller''s Vintage Ale, Robinson''s Old Tom, Fuller''s Golden Pride, Whitbread Gold Label.', ''),
+(153, 'D', 'English Barleywine', 'Strong British Ale', '1.08', '1.12', '1.018', '1.03', '8', '12', '35', '70', '8', '22', 'Ale', 'A showcase of malty richness and complex, intense flavors. Chewy and rich in body, with warming alcohol and a pleasant fruity or hoppy interest. When aged, it can take on port-like flavors. A wintertime sipper. ', 'http://bjcp.org/stylecenter.php', '17', 'Y', 'bcoe', 'BJCP2015', 0, 0, 0, 0, 'very-high-strength, amber-color, top-fermented, british-isles, traditional-style, strong-ale-family, malty', 'Adnam\'s Tally Ho, Burton Bridge Thomas Sykes Old Ale, J.W. Lee\'s Vintage Harvest Ale, Fuller\'s Vintage Ale, Robinson\'s Old Tom, Fuller\'s Golden Pride, Whitbread Gold Label.', ''),
 (154, 'A', 'Blonde Ale', 'Pale American Ale', '1.038', '1.054', '1.008', '1.013', '3.8', '5.5', '15', '28', '3', '6', 'Ale', 'Easy-drinking, approachable, malt-oriented American craft beer, often with interesting fruit, hop, or character malt notes. Well-balanced and clean, is a refreshing pint without aggressive flavors.', 'http://bjcp.org/stylecenter.php', '18', 'Y', 'bcoe', 'BJCP2015', 0, 0, 0, 0, 'standard-strength, pale-color, any-fermentation, north-america, craft-style, pale-ale-family, balanced', 'Kona Big Wave, Pelican Kiwanda Cream Ale, Victory Summer Love, Russian River Aud Blonde, Widmer Blonde Ale.', ''),
 (155, 'B', 'American Pale Ale', 'Pale American Ale', '1.045', '1.06', '1.01', '1.015', '4.5', '6.2', '30', '50', '5', '10', 'Ale', 'A pale, refreshing and hoppy ale, yet with sufficient supporting malt to make the beer balanced and drinkable. The clean hop presence can reflect classic or modern American or New World hop varieties with a wide range of characteristics. An average-strength hop-forward pale American craft beer, generally balanced to be more accessible than modern American IPAs. ', 'http://bjcp.org/stylecenter.php', '18', 'Y', 'bcoe', 'BJCP2015', 0, 0, 0, 0, 'standard-strength, pale-color, top-fermented, north-america, craft-style, pale-ale-family, bitter, hoppy', 'Sierra Nevada Pale Ale, Firestone Walker Pale 31, Deschutes Mirror Pond, Great Lakes Burning River, Flying Dog Doggie Style, Troegs Pale Ale, Big Sky Scape Goat.', ''),
-(156, 'A', 'American Amber Ale', 'Amber and Brown American Beer', '1.045', '1.06', '1.01', '1.015', '4.5', '6.2', '25', '40', '10', '17', 'Ale', 'An amber, hoppy, moderate-strength American craft beer with a caramel malty flavor. The balance can vary quite a bit, with some versions being fairly malty and others being aggressively hoppy. Hoppy and bitter versions should not have clashing flavors with the caramel malt profile. ', 'http://bjcp.org/stylecenter.php', '19', 'Y', 'bcoe', 'BJCP2015', 0, 0, 0, 0, 'standard-strength, amber-color, top-fermented, north-america, craft-style, amber-ale-family, balanced, hoppy', 'Troegs HopBack Amber Ale, Kona Lavaman Red Ale, Full Sail Amber, Deschutes Cinder Cone Red, Rogue American Amber Ale, Anderson Valley Boont Amber Ale, McNeill''s Firehouse Amber Ale, Mendocino Red Tail Ale.', ''),
+(156, 'A', 'American Amber Ale', 'Amber and Brown American Beer', '1.045', '1.06', '1.01', '1.015', '4.5', '6.2', '25', '40', '10', '17', 'Ale', 'An amber, hoppy, moderate-strength American craft beer with a caramel malty flavor. The balance can vary quite a bit, with some versions being fairly malty and others being aggressively hoppy. Hoppy and bitter versions should not have clashing flavors with the caramel malt profile. ', 'http://bjcp.org/stylecenter.php', '19', 'Y', 'bcoe', 'BJCP2015', 0, 0, 0, 0, 'standard-strength, amber-color, top-fermented, north-america, craft-style, amber-ale-family, balanced, hoppy', 'Troegs HopBack Amber Ale, Kona Lavaman Red Ale, Full Sail Amber, Deschutes Cinder Cone Red, Rogue American Amber Ale, Anderson Valley Boont Amber Ale, McNeill\'s Firehouse Amber Ale, Mendocino Red Tail Ale.', ''),
 (157, 'B', 'California Common', 'Amber and Brown American Beer', '1.048', '1.054', '1.011', '1.014', '4.5', '5.5', '30', '45', '10', '14', 'Ale', 'A lightly fruity beer with firm, grainy maltiness, interesting toasty and caramel flavors, and showcasing the signature Northern Brewer varietal hop character.', 'http://bjcp.org/stylecenter.php', '19', 'Y', 'bcoe', 'BJCP2015', 0, 0, 0, 0, 'standard-strength, amber-color, bottom-fermented, north-america, traditional-style, amber-lager-family, bitter, hoppy', 'Anchor Steam, Steamworks Steam Engine Lager, Flying Dog Old Scratch Amber Lager, Schlafly Pi Common.', ''),
-(158, 'C', 'American Brown Ale', 'Amber and Brown American Beer', '1.045', '1.06', '1.01', '1.016', '4.3', '6.2', '20', '30', '18', '35', 'Ale', 'A malty but hoppy beer frequently with chocolate and caramel flavors. The hop flavor and aroma complements and enhances the malt rather than clashing with it. ', 'http://bjcp.org/stylecenter.php', '19', 'Y', 'bcoe', 'BJCP2015', 0, 0, 0, 0, 'standard-strength, dark-color, top-fermented, north-america, craft-style, brown-ale-family, balanced, hoppy', 'Big Sky Moose Drool Brown Ale, Cigar City Maduro Brown Ale, Bell''s Best Brown, Smuttynose Old Brown Dog Ale, Brooklyn Brown Ale, Lost Coast Downtown Brown, Avery Ellie&rsquo;s Brown Ale.', ''),
+(158, 'C', 'American Brown Ale', 'Amber and Brown American Beer', '1.045', '1.06', '1.01', '1.016', '4.3', '6.2', '20', '30', '18', '35', 'Ale', 'A malty but hoppy beer frequently with chocolate and caramel flavors. The hop flavor and aroma complements and enhances the malt rather than clashing with it. ', 'http://bjcp.org/stylecenter.php', '19', 'Y', 'bcoe', 'BJCP2015', 0, 0, 0, 0, 'standard-strength, dark-color, top-fermented, north-america, craft-style, brown-ale-family, balanced, hoppy', 'Big Sky Moose Drool Brown Ale, Cigar City Maduro Brown Ale, Bell\'s Best Brown, Smuttynose Old Brown Dog Ale, Brooklyn Brown Ale, Lost Coast Downtown Brown, Avery Ellie&rsquo;s Brown Ale.', ''),
 (159, 'A', 'American Porter', 'American Porter and Stout', '1.05', '1.07', '1.012', '1.018', '4.8', '6.5', '25', '50', '22', '40', 'Ale', 'A substantial, malty dark beer with a complex and flavorful dark malt character.', 'http://bjcp.org/stylecenter.php', '20', 'Y', 'bcoe', 'BJCP2015', 0, 0, 0, 0, 'standard-strength, dark-color, top-fermented, north-america, craft-style, porter-family, bitter, roasty, hoppy', 'Great Lakes Edmund Fitzgerald Porter, Anchor Porter, Smuttynose Robust Porter, Sierra Nevada Porter, Deschutes Black Butte Porter, Boulevard Bully! Porter.', ''),
 (160, 'B', 'American Stout', 'American Porter and Stout', '1.05', '1.075', '1.01', '1.022', '5', '7', '35', '75', '30', '40', 'Ale', 'A fairly strong, highly roasted, bitter, hoppy dark stout. Has the body and dark flavors typical of stouts with a more aggressive American hop character and bitterness.', 'http://bjcp.org/stylecenter.php', '20', 'Y', 'bcoe', 'BJCP2015', 0, 0, 0, 0, 'high-strength, dark-color, top-fermented, north-america, craft-style, stout-family, bitter, roasty, hoppy', 'Rogue Shakespeare Stout, Deschutes Obsidian Stout, Sierra Nevada Stout, North Coast Old No. 38, Avery Out of Bounds Stout.', ''),
 (161, 'C', 'Imperial Stout', 'American Porter and Stout', '1.075', '1.115', '1.018', '1.03', '8', '12', '50', '90', '30', '40', 'Ale', 'An intensely-flavored, big, dark ale with a wide range of flavor balances and regional interpretations. Roasty-burnt malt with deep dark or dried fruit flavors, and a warming, bittersweet finish. Despite the intense flavors, the components need to meld together to create a complex, harmonious beer, not a hot mess.', 'http://bjcp.org/stylecenter.php', '20', 'Y', 'bcoe', 'BJCP2015', 0, 0, 0, 0, 'very-high-strength, dark-color, top-fermented, british-isles, north-america, traditional-style, craft-style, stout-family, malty, bitter, roasty', 'American - North Coast Old Rasputin Imperial Stout, Cigar City Marshal Zhukov&rsquo;s Imperial Stout; English - Courage Imperial Russian Stout, Le Coq Imperial Extra Double Stout, Samuel Smith Imperial Stout.', ''),
 (162, 'A', 'American IPA', 'IPA', '1.056', '1.07', '1.008', '1.014', '5.5', '7.5', '40', '70', '6', '14', 'Ale', 'A decidedly hoppy and bitter, moderately strong American pale ale, showcasing modern American and New World hop varieties. The balance is hop-forward, with a clean fermentation profile, dryish finish, and clean, supporting malt allowing a creative range of hop character to shine through.', 'http://bjcp.org/stylecenter.php', '21', 'Y', 'bcoe', 'BJCP2015', 0, 0, 0, 0, 'high-strength, pale-color, top-fermented, north-america, craft-style, ipa-family, bitter, hoppy', 'Russian River Blind Pig IPA, Bell&rsquo;s Two-Hearted Ale, Firestone Walker Union Jack, Alpine Duet, New Belgium Ranger IPA, Fat Heads Head Hunter, Stone IPA, Lagunitas IPA.', ''),
-(163, 'B', 'Specialty IPA', 'IPA', '', '', '', '', '', '', '', '', '', '', 'Ale', 'Recognizable as an IPA by balance - a hop-forward, bitter, dryish beer - with something else present to distinguish it from the standard categories. Should have good drinkability, regardless of the form. Excessive harshness and heaviness are typically faults, as are strong flavor clashes between the hops and the other specialty ingredients.', 'http://bjcp.org/stylecenter.php', '21', 'Y', 'bcoe', 'BJCP2015', 1, 0, 0, 0, 'high-strength, pale-color, top-fermented, north-america, craft-style, ipa-family, specialty-family, bitter, hoppy', '', 'Entrant MUST specify a strength (session: 3.0-5.0%, standard: 5.0-7.5%, double: 7.5-9.5%); if no strength is specified, standard will be assumed. This subcategory is a catch-all for entries that DO NOT fit into one of the defined BJCP Specialty IPA types: Black IPA, Brown IPA, White IPA, Rye IPA, Belgian IPA, or Red IPA. Entrant must describe the type of Specialty IPA and its key characteristics in comment form so judges will know what to expect. Entrants may specify specific hop varieties used, if entrants feel that judges may not recognize the varietal characteristics of newer hops. Entrants may specify a combination of defined IPA types (e.g., Black Rye IPA) without providing additional descriptions. Entrants may use this category for a different strength version of an IPA defined by its own BJCP subcategory (e.g., session-strength American or English IPA) - except where an existing BJCP subcategory already exists for that style (e.g., double [American] IPA). If the entry falls into one of the currently defined types (Black IPA, Brown IPA, White IPA, Rye IPA, Belgian IPA, Red IPA), it should be entered into that salient subcategory type'),
-(164, 'A', 'Double IPA', 'Strong American Ale', '1.065', '1.085', '1.008', '1.018', '7.5', '10', '60', '120', '6', '14', 'Ale', 'An intensely hoppy, fairly strong pale ale without the big, rich, complex maltiness and residual sweetness and body of an American barleywine. Strongly hopped, but clean, dry, and lacking harshness. Drinkability is an important characteristic; this should not be a heavy, sipping beer.', 'http://bjcp.org/stylecenter.php', '22', 'Y', 'bcoe', 'BJCP2015', 0, 0, 0, 0, 'very-high-strength, pale-color, top-fermented, north-america, craft-style, ipa-family, bitter, hoppy', 'Russian River Pliny the Elder, Port Brewing Hop 15, Three Floyds Dreadnaught, Avery Majaraja, Firestone Walker Double Jack, Alchemist Heady Topper, Bell''s Hopslam, Stone Ruination IPA, Great Divide Hercules Double IPA, Rogue XS Imperial India Pale Ale, Fat Heads Hop Juju, Alesmith Yulesmith Summer, Sierra Nevada Hoptimum.', ''),
+(163, 'B', 'Specialty IPA', 'IPA', '', '', '', '', '', '', '', '', '', '', 'Ale', 'Recognizable as an IPA by balance - a hop-forward, bitter, dryish beer - with something else present to distinguish it from the standard categories. Should have good drinkability, regardless of the form. Excessive harshness and heaviness are typically faults, as are strong flavor clashes between the hops and the other specialty ingredients.', 'http://bjcp.org/stylecenter.php', '21', 'Y', 'bcoe', 'BJCP2015', 1, 0, 0, 0, 'high-strength, pale-color, top-fermented, north-america, craft-style, ipa-family, specialty-family, bitter, hoppy', '', 'Entrant MUST specify a strength (session: 3.0-5.0%, standard: 5.0-7.5%, double: 7.5-9.5%); if no strength is specified, standard will be assumed. This subcategory is a catch-all for entries that DO NOT fit into one of the defined BJCP Specialty IPA types: Black IPA, Brown IPA, White IPA, Rye IPA, Belgian IPA, or Red IPA. Entrant must describe the type of Specialty IPA and its key characteristics in comment form so judges will know what to expect. Entrants may specify specific hop varieties used, if entrants feel that judges may not recognize the varietal characteristics of newer hops. Entrants may specify a combination of defined IPA types (e.g., Black Rye IPA) without providing additional descriptions. Entrants may use this category for a different strength version of an IPA defined by its own BJCP subcategory (e.g., session-strength American or English IPA) - except where an existing BJCP subcategory already exists for that style (e.g., double [American] IPA). If the entry falls into one of the currently defined types (Black IPA, Brown IPA, White IPA, Rye IPA, Belgian IPA, Red IPA), it should be entered into that salient subcategory type.'),
+(164, 'A', 'Double IPA', 'Strong American Ale', '1.065', '1.085', '1.008', '1.018', '7.5', '10', '60', '120', '6', '14', 'Ale', 'An intensely hoppy, fairly strong pale ale without the big, rich, complex maltiness and residual sweetness and body of an American barleywine. Strongly hopped, but clean, dry, and lacking harshness. Drinkability is an important characteristic; this should not be a heavy, sipping beer.', 'http://bjcp.org/stylecenter.php', '22', 'Y', 'bcoe', 'BJCP2015', 0, 0, 0, 0, 'very-high-strength, pale-color, top-fermented, north-america, craft-style, ipa-family, bitter, hoppy', 'Russian River Pliny the Elder, Port Brewing Hop 15, Three Floyds Dreadnaught, Avery Majaraja, Firestone Walker Double Jack, Alchemist Heady Topper, Bell\'s Hopslam, Stone Ruination IPA, Great Divide Hercules Double IPA, Rogue XS Imperial India Pale Ale, Fat Heads Hop Juju, Alesmith Yulesmith Summer, Sierra Nevada Hoptimum.', ''),
 (165, 'B', 'American Strong Ale', 'Strong American Ale', '1.062', '1.09', '1.014', '1.024', '6.3', '10', '50', '100', '7', '19', 'Ale', 'A strong, full-flavored American ale that challenges and rewards the palate with full malty and hoppy flavors and substantial bitterness. The flavors are bold but complementary, and are stronger and richer than average-strength pale and amber American ales.', 'http://bjcp.org/stylecenter.php', '22', 'Y', 'bcoe', 'BJCP2015', 0, 0, 0, 0, 'high-strength, amber-color, top-fermented, north-america, craft-style, strong-ale-family, bitter, hoppy', 'Stone Arrogant Bastard, Great Lakes Nosferatu, Bear Republic Red Rocket Ale, Terrapin Big Hoppy Monster, Lagunitas Censored, Port Brewing Shark Attack Double Red.', ''),
-(166, 'C', 'American Barleywine', 'Strong American Ale', '1.08', '1.12', '1.016', '1.03', '8', '12', '50', '100', '10', '19', 'Ale', 'A well-hopped American interpretation of the richest and strongest of the English ales. The hop character should be evident throughout, but does not have to be unbalanced. The alcohol strength and hop bitterness often combine to leave a very long finish.', 'http://bjcp.org/stylecenter.php', '22', 'Y', 'bcoe', 'BJCP2015', 0, 0, 0, 0, 'very-high-strength, amber-color, top-fermented, north-america, craft-style, strong-ale-family, bitter, hoppy', 'Sierra Nevada Bigfoot, Great Divide Old Ruffian, Victory Old Horizontal, Rogue Old Crustacean, Avery Hog Heaven Barleywine, Bell''s Third Coast Old Ale, Anchor Old Foghorn, Three Floyds Behemoth, Stone Old Guardian, Bridgeport Old Knucklehead, Hair of the Dog Doggie Claws, Lagunitas Olde GnarleyWine, Smuttynose Barleywine, Flying Dog Horn Dog.', ''),
+(166, 'C', 'American Barleywine', 'Strong American Ale', '1.08', '1.12', '1.016', '1.03', '8', '12', '50', '100', '10', '19', 'Ale', 'A well-hopped American interpretation of the richest and strongest of the English ales. The hop character should be evident throughout, but does not have to be unbalanced. The alcohol strength and hop bitterness often combine to leave a very long finish.', 'http://bjcp.org/stylecenter.php', '22', 'Y', 'bcoe', 'BJCP2015', 0, 0, 0, 0, 'very-high-strength, amber-color, top-fermented, north-america, craft-style, strong-ale-family, bitter, hoppy', 'Sierra Nevada Bigfoot, Great Divide Old Ruffian, Victory Old Horizontal, Rogue Old Crustacean, Avery Hog Heaven Barleywine, Bell\'s Third Coast Old Ale, Anchor Old Foghorn, Three Floyds Behemoth, Stone Old Guardian, Bridgeport Old Knucklehead, Hair of the Dog Doggie Claws, Lagunitas Olde GnarleyWine, Smuttynose Barleywine, Flying Dog Horn Dog.', ''),
 (167, 'D', 'Wheatwine', 'Strong American Ale', '1.08', '1.12', '1.016', '1.03', '8', '12', '30', '60', '8', '15', 'Ale', 'A richly textured, high alcohol sipping beer with a significant grainy, bready flavor and sleek body. The emphasis is first on the bready, wheaty flavors with interesting complexity from malt, hops, fruity yeast character and alcohol complexity.', 'http://bjcp.org/stylecenter.php', '22', 'Y', 'bcoe', 'BJCP2015', 0, 0, 0, 0, 'very-high-strength, amber-color, top-fermented, north-america, craft-style, strong-ale-family, wheat-beer-family, balanced, hoppy', 'Rubicon Brewing Company Winter Wheat Wine, Two Brothers Bare Trees Weiss Wine, Smuttynose Wheat Wine, Boulevard Brewing Company Harvest Dance, Portsmouth Wheat Wine.', ''),
 (168, 'A', 'Berliner Weisse', 'European Sour Ale', '1.028', '1.032', '1.003', '1.006', '2.8', '3.8', '3', '8', '2', '3', 'Ale', 'A very pale, refreshing, low-alcohol German wheat beer with a clean lactic sourness and a very high carbonation level. A light bread dough malt flavor supports the sourness, which shouldn&rsquo;t seem artificial or funky.', 'http://bjcp.org/stylecenter.php', '23', 'Y', 'bcoe', 'BJCP2015', 0, 0, 0, 0, 'session-beer, pale-color, top-fermented, central-europe, traditional-style, wheat-beer-family, sour', 'Schultheiss Berliner Weisse, Berliner Kindl Weisse, Nodding Head Berliner Weisse, Bahnhof Berliner Style Weisse, New Glarus Berliner Weiss.', ''),
 (169, 'B', 'Flanders Red Ale', 'European Sour Ale', '1.048', '1.057', '1.002', '1.012', '4.6', '6.5', '10', '25', '10', '16', 'Ale', 'A complex, sour, fruity, red wine-like Belgian-style ale with interesting supportive malt flavors and a melange of fruit complexity. The dry finish and tannin completes the mental image of a fine red wine.', 'http://bjcp.org/stylecenter.php', '23', 'Y', 'bcoe', 'BJCP2015', 0, 0, 0, 0, 'standard-strength, amber-color, top-fermenting, western-europe, traditional-style, sour-ale-family, balanced, sour, wood', 'Rodenbach Grand Cru, Rodenbach Klassiek, Bellegems Bruin, Duchesse de Bourgogne, Petrus Oud Bruin, Southampton Flanders Red Ale.', ''),
-(170, 'C', 'Oud Bruin', 'European Sour Ale', '1.04', '1.074', '1.008', '1.012', '4', '8', '20', '25', '15', '22', 'Ale', 'A malty, fruity, aged, somewhat sour Belgian-style brown ale.', 'http://bjcp.org/stylecenter.php', '23', 'Y', 'bcoe', 'BJCP2015', 0, 0, 0, 0, 'standard-strength, dark-color, top-fermented, western-europe, traditional-style, sour-ale-family, malty, sour', 'Liefman''s Goudenband, Liefman''s Odnar, Liefman''s Oud Bruin, Ichtegem Old Brown, Riva Vondel.', ''),
+(170, 'C', 'Oud Bruin', 'European Sour Ale', '1.04', '1.074', '1.008', '1.012', '4', '8', '20', '25', '15', '22', 'Ale', 'A malty, fruity, aged, somewhat sour Belgian-style brown ale.', 'http://bjcp.org/stylecenter.php', '23', 'Y', 'bcoe', 'BJCP2015', 0, 0, 0, 0, 'standard-strength, dark-color, top-fermented, western-europe, traditional-style, sour-ale-family, malty, sour', 'Liefman\'s Goudenband, Liefman\'s Odnar, Liefman\'s Oud Bruin, Ichtegem Old Brown, Riva Vondel.', ''),
 (171, 'D', 'Lambic', 'European Sour Ale', '1.04', '1.054', '1.001', '1.01', '5', '6.5', '0', '10', '3', '7', 'Ale', 'A fairly sour, often moderately funky wild Belgian wheat beer with sourness taking the place of hop bitterness in the balance. Traditionally spontaneously fermented in the Brussels area and served uncarbonated, the refreshing acidity makes for a very pleasant cafe drink.', 'http://bjcp.org/stylecenter.php', '23', 'Y', 'bcoe', 'BJCP2015', 0, 0, 0, 0, 'standard-strength, pale-color, wild-fermented, western-europe, traditional-style, wheat-beer-family, sour', 'The only bottled version readily available is Cantillon Grand Cru Bruocsella of whatever single batch vintage the brewer deems worthy to bottle. De Cam sometimes bottles their very old (5 years) lambic. In and around Brussels there are specialty cafes that often have draught lambics from traditional brewers or blenders such as Boon, De Cam, Cantillon, Drie Fonteinen, Lindemans, Timmermans and Girardin.', ''),
 (172, 'E', 'Gueuze', 'European Sour Ale', '1.04', '1.06', '1', '1.006', '5', '8', '0', '10', '3', '7', 'Ale', 'A complex, pleasantly sour but balanced wild Belgian wheat beer that is highly carbonated and very refreshing. The spontaneous fermentation character can provide a very interesting complexity, with a wide range of wild barnyard, horse blanket, or leather characteristics intermingling with citrusy-fruity flavors and acidity', 'http://bjcp.org/stylecenter.php', '23', 'Y', 'bcoe', 'BJCP2015', 0, 0, 0, 0, 'high-strength, pale-color, wild-fermented, western-europe, traditional-style, wheat-beer-family, aged, sour', 'Boon Oude Gueuze, Boon Oude Gueuze Mariage Parfait, De Cam Gueuze, De Cam/Drei Fonteinen Millennium Gueuze, Drie Fonteinen Oud Gueuze, Cantillon Gueuze, Hanssens Oude Gueuze, Lindemans Gueuze Cuvee Rene, Girardin Gueuze (Black Label), Mort Subite (Unfiltered) Gueuze, Oud Beersel Oude Gueuze.', ''),
 (173, 'F', 'Fruit Lambic', 'European Sour Ale', '1.04', '1.06', '1', '1.006', '5', '7', '0', '10', '3', '7', 'Ale', 'A complex, fruity, pleasantly sour, wild wheat ale fermented by a variety of Belgian microbiota, and showcasing the fruit contributions blended with the wild character.', 'http://bjcp.org/stylecenter.php', '23', 'Y', 'bcoe', 'BJCP2015', 1, 0, 0, 0, 'standard-strength, pale-color, wild-fermented, western-europe, traditional-style, wheat-beer-family, sour, fruit', 'Boon Framboise Marriage Parfait, Boon Kriek Mariage Parfait, Boon Oude Kriek, Cantillon Fou&rsquo; Foune, Cantillon Kriek, Cantillon Lou Pepe Kriek, Cantillon Lou Pepe Framboise, Cantillon Rose de Gambrinus, Cantillon St. Lamvinus, Cantillon Vigneronne, De Cam Oude Kriek, Drie Fonteinen Kriek, Girardin Kriek, Hanssens Oude Kriek, Oud Beersel Kriek, Mort Subite Kriek.', 'The type of fruit used must be specified. The brewer must declare a carbonation level (low, medium, high) and a sweetness level (low/none, medium, high).'),
 (174, 'A', 'Witbier', 'Belgian Ale', '1.044', '1.052', '1.008', '1.012', '4.5', '5.5', '8', '20', '2', '4', 'Ale', 'A refreshing, elegant, tasty, moderate-strength wheat-based ale.', 'http://bjcp.org/stylecenter.php', '24', 'Y', 'bcoe', 'BJCP2015', 0, 0, 0, 0, 'standard-strength, pale-color, top-fermented, western-europe, traditional-style, wheat-beer-family, spice', 'Hoegaarden Wit, St. Bernardus Blanche, Celis White, Vuuve 5, Brugs Tarwebier (Blanche de Bruges), Wittekerke, Allagash White, Blanche de Bruxelles, Ommegang Witte, Avery White Rascal, Unibroue Blanche de Chambly, Sterkens White Ale, Bell&rsquo;s Winter White Ale, Victory Whirlwind Witbier, Hitachino Nest White Ale.', ''),
 (175, 'B', 'Belgian Pale Ale', 'Belgian Ale', '1.048', '1.055', '1.01', '1.014', '4.8', '5.5', '20', '30', '8', '14', 'Ale', 'A moderately malty, somewhat fruity-spicy, easy-drinking, copper-colored Belgian ale that is somewhat less aggressive in flavor profile than many other Belgian beers. The malt character tends to be a bit biscuity with light toasty, honey-like, or caramelly components; the fruit character is noticeable and complementary to the malt. The bitterness level is generally moderate, but may not seem as high due to the flavorful malt profile.', 'http://bjcp.org/stylecenter.php', '24', 'Y', 'bcoe', 'BJCP2015', 0, 0, 0, 0, 'standard-strength, amber-color, top-fermented, western-europe, traditional-style, pale-ale-family, balanced', 'De Koninck, Speciale Palm, Dobble Palm, Russian River Perdition, Ginder Ale, Op-Ale, St. Pieters Zinnebir, Brewer&rsquo;s Art House Pale Ale, Avery Karma, Eisenbahn Pale Ale, Blue Moon Pale Moon.', ''),
-(176, 'C', 'Biere de Garde', 'Belgian Ale', '1.06', '1.08', '1.008', '1.016', '6', '8.5', '18', '28', '6', '19', 'Ale', 'A fairly strong, malt-accentuated, lagered artisanal beer with a range of malt flavors appropriate for the color. All are malty yet dry, with clean flavors and a smooth character. Three main variations are included in the style: the brown (brune), the blond (blonde), and the amber (ambree). The darker versions will have more malt character, while the paler versions can have more hops (but still are malt-focused beers). A related style is Biere de Mars, which is brewed in March (Mars) for present use and will not age as well. Attenuation rates are in the 80-85% range. Some fuller-bodied examples exist, but these are somewhat rare. Age and oxidation in imports often increases fruitiness, caramel flavors, and adds corked and musty notes; these are all signs of mishandling, not characteristic elements of the style.', 'http://bjcp.org/stylecenter.php', '24', 'Y', 'bcoe', 'BJCP2015', 1, 0, 0, 0, 'high-strength, pale-color, amber-color, any-fermentation, lagered, western-europe, traditional-style, amber-ale-family, malty', 'Ch''Ti (brown and blond), Jenlain (amber and blond), La Choulette (all 3 versions), St. Amand (brown), Saint Sylvestre 3 Monts (blond), Russian River Perdition.', 'Entrant must specify blond, amber, or brown biere de garde. If no color is specified, the judge should attempt to judge based on initial observation, expecting a malt flavor and balance that matches the color.'),
+(176, 'C', 'Biere de Garde', 'Belgian Ale', '1.06', '1.08', '1.008', '1.016', '6', '8.5', '18', '28', '6', '19', 'Ale', 'A fairly strong, malt-accentuated, lagered artisanal beer with a range of malt flavors appropriate for the color. All are malty yet dry, with clean flavors and a smooth character. Three main variations are included in the style: the brown (brune), the blond (blonde), and the amber (ambree). The darker versions will have more malt character, while the paler versions can have more hops (but still are malt-focused beers). A related style is Biere de Mars, which is brewed in March (Mars) for present use and will not age as well. Attenuation rates are in the 80-85% range. Some fuller-bodied examples exist, but these are somewhat rare. Age and oxidation in imports often increases fruitiness, caramel flavors, and adds corked and musty notes; these are all signs of mishandling, not characteristic elements of the style.', 'http://bjcp.org/stylecenter.php', '24', 'Y', 'bcoe', 'BJCP2015', 1, 0, 0, 0, 'high-strength, pale-color, amber-color, any-fermentation, lagered, western-europe, traditional-style, amber-ale-family, malty', 'Ch\'Ti (brown and blond), Jenlain (amber and blond), La Choulette (all 3 versions), St. Amand (brown), Saint Sylvestre 3 Monts (blond), Russian River Perdition.', 'Entrant must specify blond, amber, or brown biere de garde. If no color is specified, the judge should attempt to judge based on initial observation, expecting a malt flavor and balance that matches the color.'),
 (177, 'A', 'Belgian Blond Ale', 'Strong Belgian Ale', '1.062', '1.075', '1.008', '1.018', '6', '7.5', '15', '30', '4', '7', 'Ale', 'A moderate-strength golden ale that has a subtle fruity-spicy Belgian yeast complexity, slightly malty-sweet flavor, and dry finish.', 'http://bjcp.org/stylecenter.php', '25', 'Y', 'bcoe', 'BJCP2015', 0, 0, 0, 0, 'high-strength, pale-color, top-fermented, western-europe, traditional-style, balanced', 'Leffe Blond, Affligem Blond, La Trappe (Koningshoeven) Blond, Grimbergen Blond, Val-Dieu Blond.', ''),
 (178, 'B', 'Saison', 'Strong Belgian Ale', '1.048', '1.065', '1.002', '1.008', '3.5', '9.5', '20', '35', '5', '22', 'Ale', 'Most commonly, a pale, refreshing, highly-attenuated, moderately-bitter, moderate-strength Belgian ale with a very dry finish. Typically highly carbonated, and using non-barley cereal grains and optional spices for complexity, as complements the expressive yeast character that is fruity, spicy, and not overly phenolic. Less common variations include both lower-alcohol and higher-alcohol products, as well as darker versions with additional malt character.', 'http://bjcp.org/stylecenter.php', '25', 'Y', 'bcoe', 'BJCP2015', 1, 0, 0, 0, 'standard-strength, pale-color, top-fermented, western-europe, traditional-style, bitter', 'Ellezelloise Saison, Fanome Saison, Lefebvre Saison 1900, Saison Dupont Vieille Provision, Saison de Pipaix, Saison Regal, Saison Voisin, Boulevard Tank 7 Farmhouse Ale.', 'The entrant must specify the strength (table, standard, super) and the color (pale, dark). '),
 (179, 'C', 'Belgian Golden Strong Ale', 'Strong Belgian Ale', '1.07', '1.095', '1.005', '1.016', '7.5', '10.5', '22', '35', '3', '6', 'Ale', 'A pale, complex, effervescent, strong Belgian-style ale that is highly attenuated and features fruity and hoppy notes in preference to phenolics.', 'http://bjcp.org/stylecenter.php', '25', 'Y', 'bcoe', 'BJCP2015', 0, 0, 0, 0, 'very-high-strength, pale-color, top-fermented, western-europe, traditional-style, bitter', 'Duvel, Russian River Damnation, Hapkin, Lucifer, Brigand, Judas, Delirium Tremens, Dulle Teve, Piraat, Great Divide Hades, Avery Salvation, North Coast Pranqster, Unibroue Eau Benite, AleSmith Horny Devil.', ''),
@@ -1094,7 +1104,7 @@ INSERT INTO `baseline_styles` (`id`, `brewStyleNum`, `brewStyle`, `brewStyleCate
 (185, 'A', 'Brett Beer', 'American Wild Ale', '', '', '', '', '', '', '', '', '', '', '', 'An interesting and refreshing variation on the base style, often drier and fruitier than expected, with at most a light acidity. Funky notes are generally restrained in 100% Brett examples, except in older examples.', 'http://bjcp.org/stylecenter.php', '28', 'Y', 'bcoe', 'BJCP2015', 1, 0, 0, 0, 'wild-fermentation, north-america, craft-style, specialty-beer', '', 'The entrant must specify either a base beer style (classic BJCP style, or a generic style family) or provide a description of the ingredients/specs/desired character. The entrant must specify if a 100% Brett fermentation was conducted. The entrant may specify the strain(s) of Brettanomyces used, along with a brief description of its character.'),
 (186, 'B', 'Mixed Fermentation Sour Beer', 'American Wild Ale', '', '', '', '', '', '', '', '', '', '', '', 'A sour and/or funky version of a base style of beer.', 'http://bjcp.org/stylecenter.php', '28', 'Y', 'bcoe', 'BJCP2015', 1, 0, 0, 0, 'wild-fermentation, north-america, craft-style, specialty-beer, sour', 'Bruery Tart of Darkness, Jolly Pumpkin Calabaza Blanca, Cascade Vlad the Imp Aler, Russian River Temptation, Boulevard Love Child, Hill Farmstead Bi', 'The entrant must specify a description of the beer, identifying the yeast/bacteria used and either a base style or the ingredients/specs/target character of the beer.'),
 (187, 'C', 'Wild Specialty Beer', 'American Wild Ale', '', '', '', '', '', '', '', '', '', '', '', 'A sour and/or funky version of a fruit, herb, or spice beer, or a wild beer aged in wood. If wood-aged, the wood should not be the primary or dominant character.', 'http://bjcp.org/stylecenter.php', '28', 'Y', 'bcoe', 'BJCP2015', 1, 0, 0, 0, 'wild-fermentation, north-america, craft-style, specialty-beer, sour, fruit', 'Cascade Bourbonic Plague, Jester King Atrial Rubicite, New Glarus Belgian Red, Russian River Supplication, The Lost Abbey Cuvee de Tomme.', 'Entrant must specify the type of fruit, spice, herb, or wood used. Entrant must specify a description of the beer, identifying the yeast/bacteria used and either a base style or the ingredients/specs/target character of the beer. A general description of the special nature of the beer can cover all the required items.'),
-(188, 'A', 'Fruit Beer', 'Fruit Beer', '', '', '', '', '', '', '', '', '', '', '', 'A harmonious marriage of fruit and beer, but still recognizable as a beer. The fruit character should be evident but in balance with the beer, not so forward as to suggest an artificial product.', 'http://bjcp.org/stylecenter.php', '29', 'Y', 'bcoe', 'BJCP2015', 1, 0, 0, 0, 'specialty-beer, fruit', 'Bell''s Cherry Stout, Dogfish Head Aprihop, Great Divide Wild Raspberry Ale, Ebulum Elderberry Black Ale.', 'The entrant must specify a base style; the declared style does not have to be a Classic Style. The entrant must specify the type of fruit used. Soured fruit beers that aren''t lambics should be entered in the American Wild Ale category.'),
+(188, 'A', 'Fruit Beer', 'Fruit Beer', '', '', '', '', '', '', '', '', '', '', '', 'A harmonious marriage of fruit and beer, but still recognizable as a beer. The fruit character should be evident but in balance with the beer, not so forward as to suggest an artificial product.', 'http://bjcp.org/stylecenter.php', '29', 'Y', 'bcoe', 'BJCP2015', 1, 0, 0, 0, 'specialty-beer, fruit', 'Bell\'s Cherry Stout, Dogfish Head Aprihop, Great Divide Wild Raspberry Ale, Ebulum Elderberry Black Ale.', 'The entrant must specify a base style; the declared style does not have to be a Classic Style. The entrant must specify the type of fruit used. Soured fruit beers that aren\'t lambics should be entered in the American Wild Ale category.'),
 (189, 'B', 'Fruit and Spice Beer', 'Fruit Beer', '', '', '', '', '', '', '', '', '', '', '', 'A harmonious marriage of fruit, spice, and beer, but still recognizable as a beer. The fruit and spice character should each be evident but in balance with the beer, not so forward as to suggest an artificial product.', 'http://bjcp.org/stylecenter.php', '29', 'Y', 'bcoe', 'BJCP2015', 1, 0, 0, 0, 'specialty-beer, fruit, spice', '', 'The entrant must specify a base style; the declared style does not have to be a Classic Style. The entrant must specify the type of fruit and spices, herbs, or vegetables (SHV) used; individual SHV ingredients do not need to be specified if a well-known blend of spices is used (e.g., apple pie spice).'),
 (190, 'C', 'Speciality Fruit Beer', 'Fruit Beer', '', '', '', '', '', '', '', '', '', '', '', 'A harmonious marriage of fruit, sugar, and beer, but still recognizable as a beer. The fruit and sugar character should both be evident but in balance with the beer, not so forward as to suggest an artificial product.', 'http://bjcp.org/stylecenter.php', '29', 'Y', 'bcoe', 'BJCP2015', 1, 0, 0, 0, 'specialty-beer, fruit', '', 'The entrant must specify a base style; the declared style does not have to be a Classic Style. The entrant must specify the type of fruit used. The entrant must specify the type of additional fermentable sugar or special process employed.'),
 (191, 'A', 'Spice, Herb, or Vegetable Beer', 'Spiced Beer', '', '', '', '', '', '', '', '', '', '', '', 'A harmonious marriage of SHV and beer, but still recognizable as a beer. The SHV character should be evident but in balance with the beer, not so forward as to suggest an artificial product.', 'http://bjcp.org/stylecenter.php', '30', 'Y', 'bcoe', 'BJCP2015', 1, 0, 0, 0, 'specialty-beer, spice', 'Alesmith Speedway Stout, Founders Breakfast Stout, Traquair Jacobite Ale, Rogue Chipotle Ale, Young&rsquo;s Double Chocolate Stout, Bell&rsquo;s Java Stout, Elysian Avatar IPA.', 'The entrant must specify a base style; the declared style does not have to be a Classic Style. The entrant must specify the type of spices, herbs, or vegetables used; individual ingredients do not need to be specified if a well-known blend of spices is used (e.g., apple pie spice).'),
@@ -1105,22 +1115,22 @@ INSERT INTO `baseline_styles` (`id`, `brewStyleNum`, `brewStyle`, `brewStyleCate
 (196, 'A', 'Classic Style Smoked Beer', 'Smoked Beer', '', '', '', '', '', '', '', '', '', '', '', 'A smoke-enhanced beer showing good balance between the smoke and beer character, while remaining pleasant to drink. Balance in the use of smoke, hops and malt character is exhibited by the better examples.', 'http://bjcp.org/stylecenter.php', '32', 'Y', 'bcoe', 'BJCP2015', 1, 0, 0, 0, 'specialty-beer, smoke', 'Alaskan Smoked Porter, Spezial Lagerbier, Weissbier and Bockbier, Stone Smoked Porter, Schlenkerla Weizen Rauchbier and Ur-Bock Rauchbier.', 'The entrant must specify a Classic Style base beer. The entrant must specify the type of wood or smoke if a varietal smoke character is noticeable.'),
 (197, 'B', 'Specialty Smoked Beer', 'Smoked Beer', '', '', '', '', '', '', '', '', '', '', '', 'A smoke-enhanced beer showing good balance between the smoke, the beer character, and the added ingredients, while remaining pleasant to drink. Balance in the use of smoke, hops and malt character is exhibited by the better examples.', 'http://bjcp.org/stylecenter.php', '32', 'Y', 'bcoe', 'BJCP2015', 1, 0, 0, 0, 'specialty-beer, smoke', '', 'The entrant must specify a base beer style; the base beer does not have to be a Classic Style. The entrant must specify the type of wood or smoke if a varietal smoke character is noticeable. The entrant must specify the additional ingredients or processes that make this a specialty smoked beer.'),
 (198, 'A', 'Wood-Aged Beer', 'Wood Beer', '', '', '', '', '', '', '', '', '', '', '', 'A harmonious blend of the base beer style with characteristics from aging in contact with wood. The best examples will be smooth, flavorful, well-balanced and well-aged.', 'http://bjcp.org/stylecenter.php', '33', 'Y', 'bcoe', 'BJCP2015', 1, 0, 0, 0, 'specialty-beer, wood', '', 'The entrant must specify the type of wood used and the char level (if charred). The entrant must specify the base style; the base style can be either a classic BJCP style (i.e., a named subcategory) or may be a generic type of beer (e.g., porter, brown ale). If an unusual wood has been used, the entrant must supply a brief description of the sensory aspects the wood adds to beer.'),
-(199, 'B', 'Specialty Wood-Aged Beer', 'Wood Beer', '', '', '', '', '', '', '', '', '', '', '', 'A harmonious blend of the base beer style with characteristics from aging in contact with wood (including alcoholic products previously in contact with the wood). The best examples will be smooth, flavorful, well-balanced and well-aged.', 'http://bjcp.org/stylecenter.php', '33', 'Y', 'bcoe', 'BJCP2015', 1, 0, 0, 0, 'specialty-beer, wood', 'The Lost Abbey Angel''s Share Ale, J.W. Lees Harvest Ale in Port, Sherry, Lagavulin Whisky or Calvados Casks, Founders Kentucky Breakfast Stout, Goose Island Bourbon County Stout, many microbreweries have specialty beers served only on premises often directly from the cask.', 'The entrant must specify the additional alcohol character, with information about the barrel if relevant to the finished flavor profile. The entrant must specify the base style; the base style can be either a classic BJCP style (i.e., a named subcategory) or may be a generic type of beer (e.g., porter, brown ale). If an unusual wood or ingredient has been used, the entrant must supply a brief description of the sensory aspects the ingredients adds to the beer.'),
+(199, 'B', 'Specialty Wood-Aged Beer', 'Wood Beer', '', '', '', '', '', '', '', '', '', '', '', 'A harmonious blend of the base beer style with characteristics from aging in contact with wood (including alcoholic products previously in contact with the wood). The best examples will be smooth, flavorful, well-balanced and well-aged.', 'http://bjcp.org/stylecenter.php', '33', 'Y', 'bcoe', 'BJCP2015', 1, 0, 0, 0, 'specialty-beer, wood', 'The Lost Abbey Angel\'s Share Ale, J.W. Lees Harvest Ale in Port, Sherry, Lagavulin Whisky or Calvados Casks, Founders Kentucky Breakfast Stout, Goose Island Bourbon County Stout, many microbreweries have specialty beers served only on premises often directly from the cask.', 'The entrant must specify the additional alcohol character, with information about the barrel if relevant to the finished flavor profile. The entrant must specify the base style; the base style can be either a classic BJCP style (i.e., a named subcategory) or may be a generic type of beer (e.g., porter, brown ale). If an unusual wood or ingredient has been used, the entrant must supply a brief description of the sensory aspects the ingredients adds to the beer.'),
 (200, 'A', 'Clone Beer', 'Specialty Beer', '', '', '', '', '', '', '', '', '', '', '', 'Based on declared clone beer.', 'http://bjcp.org/stylecenter.php', '34', 'Y', 'bcoe', 'BJCP2015', 1, 0, 0, 0, 'specialty-beer', '', 'The entrant must specify the name of the commercial beer being cloned, specifications (vital statistics) for the beer, and either a brief sensory description or a list of ingredients used in making the beer. Without this information, judges who are unfamiliar with the beer will have no basis for comparison.'),
 (201, 'B', 'Mixed-Style Beer', 'Specialty Beer', '', '', '', '', '', '', '', '', '', '', '', 'Based on the declared base styles. As with all Specialty-Type Beers, the resulting combination of beer styles needs to be harmonious and balanced, and be pleasant to drink.', 'http://bjcp.org/stylecenter.php', '34', 'Y', 'bcoe', 'BJCP2015', 1, 0, 0, 0, 'specialty-beer', '', 'The entrant must specify the styles being mixed. The entrant may provide an additional description of the sensory profile of the beer or the vital statistics of the resulting beer.');
 INSERT INTO `baseline_styles` (`id`, `brewStyleNum`, `brewStyle`, `brewStyleCategory`, `brewStyleOG`, `brewStyleOGMax`, `brewStyleFG`, `brewStyleFGMax`, `brewStyleABV`, `brewStyleABVMax`, `brewStyleIBU`, `brewStyleIBUMax`, `brewStyleSRM`, `brewStyleSRMMax`, `brewStyleType`, `brewStyleInfo`, `brewStyleLink`, `brewStyleGroup`, `brewStyleActive`, `brewStyleOwn`, `brewStyleVersion`, `brewStyleReqSpec`, `brewStyleStrength`, `brewStyleCarb`, `brewStyleSweet`, `brewStyleTags`, `brewStyleComEx`, `brewStyleEntry`) VALUES
 (202, 'C', 'Experimental Beer', 'Specialty Beer', '', '', '', '', '', '', '', '', '', '', '', 'This style is the ultimate in creativity, since it cannot represent a well-known commercial beer (otherwise it would be a clone beer) and cannot fit into any other existing Specialty-Type style (including those within this major category).', 'http://bjcp.org/stylecenter.php', '34', 'Y', 'bcoe', 'BJCP2015', 1, 0, 0, 0, 'specialty-beer', '', ' The entrant must specify the special nature of the experimental beer, including the special ingredients or processes that make it not fit elsewhere in the guidelines. The entrant must provide vital statistics for the beer, and either a brief sensory description or a list of ingredients used in making the beer. Without this information, judges will have no basis for comparison.'),
 (203, 'A', 'Dry Mead', 'Traditional Mead', '', '', '', '', '', '', 'N/A', 'N/A', 'N/A', 'N/A', 'Mead', 'Similar in balance, body, finish and flavor intensity to a dry white wine, with a pleasant mixture of subtle honey character, soft fruity esters, and clean alcohol. Complexity, harmony, and balance of sensory elements are most desirable, with no inconsistencies in color, aroma, flavor or aftertaste. The proper balance of sweetness, acidity, alcohol, and honey character is the essential final measure of any mead.', 'http://bjcp.org/stylecenter.php', 'M1', 'Y', 'bcoe', 'BJCP2015', 0, 1, 1, 0, '', 'White Winter Dry Mead, Sky River Dry Mead, Intermiel Bouquet Printanier.', 'Entry Instructions: Entrants must specify carbonation level and strength. Sweetness is assumed to be DRY in this category. Entrants may specify honey varieties.'),
 (204, 'B', 'Semi-Sweet Mead', 'Traditional Mead', '', '', '', '', '', '', 'N/A', 'N/A', 'N/A', 'N/A', 'Mead', 'Similar in balance, body, finish and flavor intensity to a semisweet (or medium-dry) white wine, with a pleasant mixture of honey character, light sweetness, soft fruity esters, and clean alcohol. Complexity, harmony, and balance of sensory elements are most desirable, with no inconsistencies in color, aroma, flavor or aftertaste. The proper balance of sweetness, acidity, alcohol, and honey character is the essential final measure of any mead.', 'http://bjcp.org/stylecenter.php', 'M1', 'Y', 'bcoe', 'BJCP2015', 0, 1, 1, 0, '', 'Lurgashall English Mead, Redstone Traditional Mountain Honey Wine, Sky River Semi-Sweet Mead, Intermiel Verge d&rsquo;Or and Melilot.', 'Entrants must specify carbonation level and strength. Sweetness is assumed to be SEMI-SWEET in this category. Entrants MAY specify honey varieties.'),
-(205, 'C', 'Sweet Mead', 'Traditional Mead', '', '', '', '', '', '', 'N/A', 'N/A', 'N/A', 'N/A', 'Mead', 'Similar in balance, body, finish and flavor intensity to a well-made dessert wine (such as Sauternes), with a pleasant mixture of honey character, residual sweetness, soft fruity esters, and clean alcohol. Complexity, harmony, and balance of sensory elements are most desirable, with no inconsistencies in color, aroma, flavor or aftertaste. The proper balance of sweetness, acidity, alcohol, and honey character is the essential final measure of any mead.', 'http://bjcp.org/stylecenter.php', 'M1', 'Y', 'bcoe', 'BJCP2015', 0, 1, 1, 0, '', 'Moonlight Sensual, Lurgashall Christmas Mead, Chaucer''s Mead, Rabbit''s Foot Sweet Wildflower Honey Mead, Intermiel Benoite.', 'Entrants MUST specify carbonation level and strength. Sweetness is assumed to be SWEET in this category. Entrants MAY specify honey varieties.'),
+(205, 'C', 'Sweet Mead', 'Traditional Mead', '', '', '', '', '', '', 'N/A', 'N/A', 'N/A', 'N/A', 'Mead', 'Similar in balance, body, finish and flavor intensity to a well-made dessert wine (such as Sauternes), with a pleasant mixture of honey character, residual sweetness, soft fruity esters, and clean alcohol. Complexity, harmony, and balance of sensory elements are most desirable, with no inconsistencies in color, aroma, flavor or aftertaste. The proper balance of sweetness, acidity, alcohol, and honey character is the essential final measure of any mead.', 'http://bjcp.org/stylecenter.php', 'M1', 'Y', 'bcoe', 'BJCP2015', 0, 1, 1, 0, '', 'Moonlight Sensual, Lurgashall Christmas Mead, Chaucer\'s Mead, Rabbit\'s Foot Sweet Wildflower Honey Mead, Intermiel Benoite.', 'Entrants MUST specify carbonation level and strength. Sweetness is assumed to be SWEET in this category. Entrants MAY specify honey varieties.'),
 (206, 'A', 'Cyser', 'Fruit Mead', '', '', '', '', '', '', 'N/A', 'N/A', 'N/A', 'N/A', 'Mead', 'In well-made examples of the style, the fruit is both distinctive and well-incorporated into the honey-sweet-acid-tannin-alcohol balance of the mead. Some of the best strong examples have the taste and aroma of an aged Calvados (apple brandy from northern France), while subtle, dry versions can taste similar to many fine white wines. There should be an appealing blend of the fruit and honey character but not necessarily an even balance. Generally a good tannin-sweetness balance is desired, though very dry and very sweet examples do exist.', 'http://bjcp.org/stylecenter.php', 'M2', 'Y', 'bcoe', 'BJCP2015', 0, 1, 1, 1, '', 'Moonlight Blossom, White Winter Cyser, Rabbit&rsquo;s Foot Apple Cyser.', 'Entrants must specify carbonation level, strength, and sweetness. Entrants may specify honey varieties. Entrants may specify the varieties of apple used; if specified, a varietal character will be expected. Products with a relatively low proportion of honey are better entered as a Specialty Cider. A spiced cyser should be entered as a Fruit and Spice Mead. A cyser with other fruit should be entered as a Melomel. A cyser with additional ingredients should be entered as an Experimental mead.'),
 (207, 'B', 'Pyment', 'Fruit Mead', '', '', '', '', '', '', 'N/A', 'N/A', 'N/A', 'N/A', 'Mead', 'In well-made examples of the style, the grape is both distinctively vinous and well-incorporated into the honey-sweet-acid-tannin-alcohol balance of the mead. White and red versions can be quite different, and the overall impression should be characteristic of the type of grapes used and suggestive of a similar variety wine. There should be an appealing blend of the fruit and honey character but not necessarily an even balance. Generally a good tannin-sweetness balance is desired, though very dry and very sweet examples do exist.', 'http://bjcp.org/stylecenter.php', 'M2', 'Y', 'bcoe', 'BJCP2015', 0, 1, 1, 1, '', 'Celestial Meads Que Syrah, Moonlight Slow Dance, Redstone Pinot Noir and White Pyment Mountain Honey Wines.', 'Entrants must specify carbonation level, strength, and sweetness. Entrants may specify honey varieties. Entrants may specify the varieties of grape used; if specified, a varietal character will be expected. A spiced pyment (hippocras) should be entered as a Fruit and Spice Mead. A pyment made with other fruit should be entered as a Melomel. A pyment with other ingredients should be entered as an Experimental Mead. '),
 (208, 'C', 'Berry Mead', 'Fruit Mead', '', '', '', '', '', '', 'N/A', 'N/A', 'N/A', 'N/A', 'Mead', 'In well-made examples of the style, the fruit is both distinctive and well-incorporated into the honey-sweet-acid-tannin-alcohol balance of the mead. Different types of fruit can result in widely different characteristics; allow for a variation in the final product.', 'http://bjcp.org/stylecenter.php', 'M2', 'Y', 'bcoe', 'BJCP2015', 1, 1, 1, 1, '', 'Moonlight Blissful, Wild, Caress, and Mischief, White Winter Blueberry, Raspberry and Strawberry Melomels, Celestial Meads Miel Noir, Redstone Black Raspberry Nectar, Bees Brothers Raspberry Mead, Intermiel Honey Wine and Raspberries, Honey Wine and Blueberries, and Honey Wine and Blackcurrants, Mountain Meadows Cranberry Mead.', 'Entrants must specify carbonation level, strength, and sweetness. Entrants may specify honey varieties. Entrants must specify the varieties of fruit used. A mead made with both berries and non-berry fruit (including apples and grapes) should be entered as a Melomel. A berry mead that is spiced should be entered as a Fruit and Spice Mead. A berry mead containing other ingredients should be entered as an Experimental Mead.'),
 (209, 'D', 'Stone Fruit Mead', 'Fruit Mead', '', '', '', '', '', '', 'N/A', 'N/A', 'N/A', 'N/A', 'Mead', 'In well-made examples of the style, the fruit is both distinctive and well-incorporated into the honey-sweet-acid-tannin-alcohol balance of the mead. Different types of fruit can result in widely different characteristics; allow for a variation in the final product.', 'http://bjcp.org/stylecenter.php', 'M2', 'Y', 'bcoe', 'BJCP2015', 1, 1, 1, 1, '', 'Mountain Meadows Cherry Mead, Moonlight Entice, Sumptuous, Flirt, and Smitten, Redstone Sunshine Nectar.', 'Entrants must specify carbonation level, strength, and sweetness. Entrants may specify honey varieties. Entrants must specify the varieties of fruit used. A stone fruit mead that is spiced should be entered as a Fruit and Spice Mead. A stone fruit mead that contains non-stone fruit should be entered as a Melomel. A stone fruit mead that contains other ingredients should be entered as an Experimental Mead.'),
 (210, 'E', 'Melomel', 'Fruit Mead', '', '', '', '', '', '', 'N/A', 'N/A', 'N/A', 'N/A', 'Mead', 'In well-made examples of the style, the fruit is both distinctive and well-incorporated into the honey-sweet-acid-tannin-alcohol balance of the mead. Different types of fruit can result in widely different characteristics; allow for a variation in the final product.', 'http://bjcp.org/stylecenter.php', 'M2', 'Y', 'bcoe', 'BJCP2015', 1, 1, 1, 1, '', 'Moonlight Desire, Paramour, and Iniquity.', 'Entrants must specify carbonation level, strength, and sweetness. Entrants may specify honey varieties. Entrants must specify the varieties of fruit used. A melomel that is spiced should be entered as a Fruit and Spice Mead. A melomel containing other ingredients should be entered as an Experimental Mead. Melomels made with either apples or grapes as the only fruit source should be entered as Cysers and Pyments, respectively. Melomels with apples or grapes, plus other fruit should be entered in this category, not Experimental.'),
-(211, 'A', 'Fruit and Spice Mead', 'Spiced Mead', '', '', '', '', '', '', 'N/A', 'N/A', 'N/A', 'N/A', 'Mead', 'In well-made examples of the style, the fruits and spices are both distinctive and well-incorporated into the honey-sweet-acid-tannin-alcohol balance of the mead. Different types of fruits and spices can result in widely different characteristics; allow for significant variation in the final product.', 'http://bjcp.org/stylecenter.php', 'M3', 'Y', 'bcoe', 'BJCP2015', 1, 1, 1, 1, '', 'Moonlight Kurt&rsquo;s Apple Pie, Mojo, Flame, Fling, and Deviant, Celestial Meads Scheherazade, Rabbit''s Foot Private Reserve Pear Mead, Intermiel Rosee.', 'Entrants must specify carbonation level, strength, and sweetness. Entrants may specify honey varieties. Entrants must specify the types of spices used, (although well-known spice blends may be referred to by common name, such as apple pie spices). Entrants must specify the types of fruits used. If only combinations of spices are used, enter as a Spice, Herb, or Vegetable Mead. If only combinations of fruits are used, enter as a Melomel. If other types of ingredients are used, enter as an Experimental Mead.'),
+(211, 'A', 'Fruit and Spice Mead', 'Spiced Mead', '', '', '', '', '', '', 'N/A', 'N/A', 'N/A', 'N/A', 'Mead', 'In well-made examples of the style, the fruits and spices are both distinctive and well-incorporated into the honey-sweet-acid-tannin-alcohol balance of the mead. Different types of fruits and spices can result in widely different characteristics; allow for significant variation in the final product.', 'http://bjcp.org/stylecenter.php', 'M3', 'Y', 'bcoe', 'BJCP2015', 1, 1, 1, 1, '', 'Moonlight Kurt&rsquo;s Apple Pie, Mojo, Flame, Fling, and Deviant, Celestial Meads Scheherazade, Rabbit\'s Foot Private Reserve Pear Mead, Intermiel Rosee.', 'Entrants must specify carbonation level, strength, and sweetness. Entrants may specify honey varieties. Entrants must specify the types of spices used, (although well-known spice blends may be referred to by common name, such as apple pie spices). Entrants must specify the types of fruits used. If only combinations of spices are used, enter as a Spice, Herb, or Vegetable Mead. If only combinations of fruits are used, enter as a Melomel. If other types of ingredients are used, enter as an Experimental Mead.'),
 (212, 'B', 'Spice, Herb, or Vegetable Mead', 'Spiced Mead', '', '', '', '', '', '', 'N/A', 'N/A', 'N/A', 'N/A', 'Mead', 'In well-made examples of the style, the spices are both distinctive and well-incorporated into the honey-sweet-acid-tannin-alcohol balance of the mead. Different types of spices can result in widely different characteristics; allow for a variation in the final product. ', 'http://bjcp.org/stylecenter.php', 'M3', 'Y', 'bcoe', 'BJCP2015', 1, 1, 1, 1, '', 'Moonlight Wicked, Breathless, Madagascar, and Seduction, Redstone Vanilla Beans and Cinnamon Sticks Mountain Honey Wine, Bonair Chili.', 'Entrants MUST specify carbonation level, strength, and sweetness. Entrants MAY specify honey varieties. Entrants MUST specify the types of spices used (although well-known spice blends may be referred to by common name, such as apple pie spices)'),
-(213, 'A', 'Braggot', 'Specialty Mead', '', '', '', '', '', '', 'N/A', 'N/A', 'N/A', 'N/A', 'Mead', 'A harmonious blend of mead and beer, with the distinctive characteristics of both. A wide range of results are possible, depending on the base style of beer, variety of honey and overall sweetness and strength. Beer flavors tend to somewhat mask typical honey flavors found in other meads. and honey, although the specific balance is open to creative interpretation by brewers.', 'http://bjcp.org/stylecenter.php', 'M4', 'Y', 'bcoe', 'BJCP2015', 0, 1, 1, 1, '', 'Rabbit''s Foot Diabhal and Biere de Miele, Magic Hat Braggot, Brother Adams Braggot Barleywine Ale, White Winter Traditional Brackett.', 'Entrants MUST specify carbonation level, strength, and sweetness. Entrants MAY specify honey varieties. Entrants MAY specify the base style or beer or types of malt used. Products with a relatively low proportion of honey should be entered in the Spiced Beer category as a Honey Beer.'),
+(213, 'A', 'Braggot', 'Specialty Mead', '', '', '', '', '', '', 'N/A', 'N/A', 'N/A', 'N/A', 'Mead', 'A harmonious blend of mead and beer, with the distinctive characteristics of both. A wide range of results are possible, depending on the base style of beer, variety of honey and overall sweetness and strength. Beer flavors tend to somewhat mask typical honey flavors found in other meads. and honey, although the specific balance is open to creative interpretation by brewers.', 'http://bjcp.org/stylecenter.php', 'M4', 'Y', 'bcoe', 'BJCP2015', 0, 1, 1, 1, '', 'Rabbit\'s Foot Diabhal and Biere de Miele, Magic Hat Braggot, Brother Adams Braggot Barleywine Ale, White Winter Traditional Brackett.', 'Entrants MUST specify carbonation level, strength, and sweetness. Entrants MAY specify honey varieties. Entrants MAY specify the base style or beer or types of malt used. Products with a relatively low proportion of honey should be entered in the Spiced Beer category as a Honey Beer.'),
 (214, 'B', 'Historical Mead', 'Specialty Mead', '', '', '', '', '', '', 'N/A', 'N/A', 'N/A', 'N/A', 'Mead', 'This mead should exhibit the character of all of the ingredients in varying degrees, and should show a good blending or balance between the various flavor elements. Whatever ingredients are included, the result should be identifiable as a honey-based fermented beverage.', 'http://bjcp.org/stylecenter.php', 'M4', 'Y', 'bcoe', 'BJCP2015', 1, 1, 1, 1, '', 'Jadwiga, Saba Tej.', 'Entrants MUST specify carbonation level, strength, and sweetness. Entrants MAY specify honey varieties. Entrants MUST specify the special nature of the mead, providing a description of the mead for judges if no such description is available from the BJCP.'),
 (215, 'C', 'Experimental Mead', 'Specialty Mead', '', '', '', '', '', '', 'N/A', 'N/A', 'N/A', 'N/A', 'Mead', 'This mead should exhibit the character of all of the ingredients in varying degrees, and should show a good blending or balance between the various flavor elements. Whatever ingredients are included, the result should be identifiable as a honey-based fermented beverage.', 'http://bjcp.org/stylecenter.php', 'M4', 'Y', 'bcoe', 'BJCP2015', 1, 1, 1, 1, '', 'Moonlight Utopian, Hanssens/Lurgashall Mead the Gueuze, White Winter Cherry Bracket, Mountain Meadows Trickster&rsquo;s Treat Agave Mead.', 'Entrants MUST specify carbonation level, strength, and sweetness. Entrants MAY specify honey varieties. Entrants MUST specify the special nature of the mead, whether it is a combination of existing styles, an experimental mead, or some other creation. Any special ingredients that impart an identifiable character MAY be declared.'),
 (216, 'A', 'New World Cider', 'Standard Cider and Perry', '1.045', '1.065', '0.995', '1.02', '5', '8', 'N/A', 'N/A', 'N/A', 'N/A', 'Cider', 'A refreshing drink of some substance - not bland or watery. Sweet ciders must not be cloying. Dry ciders must not be too austere. ', 'http://bjcp.org/stylecenter.php', 'C1', 'Y', 'bcoe', 'BJCP2015', 0, 0, 1, 1, '', '[US] Uncle John&rsquo;s Fruit House Winery Apple Hard Cider, Tandem Ciders Pretty Penny (MI), Bellwether Spyglass (NY), West County Pippin (MA), White Winter Hard Apple Cider (WI), Wandering Aengus Ciderworks Bloom (OR), &Aelig;ppeltreow Appely Brut and Doux (WI).', ''),
@@ -1130,25 +1140,25 @@ INSERT INTO `baseline_styles` (`id`, `brewStyleNum`, `brewStyle`, `brewStyleCate
 (220, 'E', 'Traditional Perry', 'Standard Cider and Perry', '1.05', '1.07', '1', '1.02', '5', '9', 'N/A', 'N/A', 'N/A', 'N/A', 'Cider', 'Tannic. Medium to medium-sweet. Still to lightly sparkling. Only very slight acetification is acceptable. Mousiness and ropy/oily characters are serious faults.', 'http://bjcp.org/stylecenter.php', 'C1', 'Y', 'bcoe', 'BJCP2015', 1, 0, 1, 1, '', '[US] Appeltreow Orchard Oriole Perry (WI); [France] Bordelet Poire Authentique and Poire Granit, Christian Drouin Poire, [UK] Oliver&rsquo;s Classic, Blakeney Red, and Herefordshire Dry; Hogan&rsquo;s Vintage Perry.', 'Entrants MUST specify carbonation level (3 levels). Entrants MUST specify sweetness (5 categories). Entrants MUST state variety of pear(s) used.'),
 (221, 'A', 'New England Cider', 'Specialty Cider and Perry', '1.06', '1.1', '0.995', '1.02', '7', '13', 'N/A', 'N/A', 'N/A', 'N/A', 'Cider', 'Substantial body and character. Typically relatively dry, but can be somewhat sweet if in balance and not containing hot alcohol.', 'http://bjcp.org/stylecenter.php', 'C2', 'Y', 'bcoe', 'BJCP2015', 1, 0, 1, 1, '', '[US] Snowdrift Semi-Dry (WA), Blackbird Cider Works New England Style (NY).', 'Entrants MUST specify if the cider was barrel-fermented or aged. Entrants MUST specify carbonation level (3 levels). Entrants MUST specify sweetness (5 levels).'),
 (222, 'B', 'Cider with Other Fruit', 'Specialty Cider and Perry', '1.045', '1.07', '0.995', '1.01', '5', '9', 'N/A', 'N/A', 'N/A', 'N/A', 'Cider', 'Substantial. May be significantly tannic, depending on fruit added.', 'http://bjcp.org/stylecenter.php', 'C2', 'Y', 'bcoe', 'BJCP2015', 1, 0, 1, 1, '', '[US] West County Blueberry-Apple Wine (MA), Bellwether Cherry Street (NY), Uncle John&rsquo;s Fruit Farm Winery Apple Cherry, Apple Blueberry, and Apricot Apple Hard Cider (MI).', 'Entrants MUST specify carbonation level (3 levels). Entrants MUST specify sweetness (5 categories). Entrants MUST specify all fruit(s) and/or fruit juice(s) added.'),
-(223, 'C', 'Applewine', 'Specialty Cider and Perry', '1.07', '1.1', '0.995', '1.02', '9', '12', 'N/A', 'N/A', 'N/A', 'N/A', 'Cider', 'Typically like a dry white wine, balanced, and with low astringency and bitterness. ', 'http://bjcp.org/stylecenter.php', 'C2', 'Y', 'bcoe', 'BJCP2015', 0, 0, 1, 1, '', '[US] Uncle John''s Fruit House Winery Fruit House Apple (MI), McClure&rsquo;s Sweet Apple Wine (IN).', 'Entrants MUST specify carbonation level (3 levels). Entrants MUST specify sweetness (5 levels).'),
+(223, 'C', 'Applewine', 'Specialty Cider and Perry', '1.07', '1.1', '0.995', '1.02', '9', '12', 'N/A', 'N/A', 'N/A', 'N/A', 'Cider', 'Typically like a dry white wine, balanced, and with low astringency and bitterness. ', 'http://bjcp.org/stylecenter.php', 'C2', 'Y', 'bcoe', 'BJCP2015', 0, 0, 1, 1, '', '[US] Uncle John\'s Fruit House Winery Fruit House Apple (MI), McClure&rsquo;s Sweet Apple Wine (IN).', 'Entrants MUST specify carbonation level (3 levels). Entrants MUST specify sweetness (5 levels).'),
 (224, 'D', 'Ice Cider', 'Specialty Cider and Perry', '1.13', '1.18', '1.06', '1.085', '7', '13', 'N/A', 'N/A', 'N/A', 'N/A', 'Cider', 'This is a cider style in which the juice is concentrated before fermentation either by freezing fruit before pressing or freezing juice and removing water.', 'http://bjcp.org/stylecenter.php', 'C2', 'Y', 'bcoe', 'BJCP2015', 1, 0, 1, 0, '', '[US] various from Eden Ice Cider Company and Champlain Orchards. [Canada] Domaine Pinnacle, Les Vergers de la Colline, and Cidrerie St-Nicolas (Quebec).', 'Entrants MUST specify starting gravity, final gravity or residual sugar, and alcohol level. Entrants MUST specify carbonation level (3 levels).'),
 (225, 'E', 'Cider with Herbs/Spices', 'Specialty Cider and Perry', '1.045', '1.07', '0.995', '1.01', '5', '9', 'N/A', 'N/A', 'N/A', 'N/A', 'Cider', 'Like a white wine with complex flavors. The apple character must marry with the botanicals and give a balanced result.', 'http://bjcp.org/stylecenter.php', 'C2', 'Y', 'bcoe', 'BJCP2015', 1, 0, 1, 1, '', '[US] Colorado Cider Grasshop-ah (CO), Wandering Aengus Anthem Hops (OR).', 'Entrants MUST specify carbonation level (3 levels). Entrants MUST specify sweetness (5 categories). Entrants MUST specify all botanicals added. If hops are used, entrant must specify variety/varieties used.'),
 (226, 'F', 'Specialty Cider/Perry', 'Specialty Cider and Perry', '1.045', '1.1', '0.995', '1.02', '5', '12', 'N/A', 'N/A', 'N/A', 'N/A', 'Cider', 'This is an open-ended category for cider or perry with other ingredients such that it does not fit any of the other BJCP categories.', 'http://bjcp.org/stylecenter.php', 'C2', 'Y', 'bcoe', 'BJCP2015', 1, 0, 1, 1, '', '', 'Entrants MUST specify all ingredients. Entrants MUST specify carbonation level (3 levels). Entrants MUST specify sweetness (5 categories).'),
-(227, 'B3', 'Brown IPA', 'Specialty IPA', '1.056', '1.070', '1.008', '1.016', '5.5', '7.5', '40', '70', '11', '19', '1', 'Hoppy, bitter, and moderately strong like an American IPA, but with some caramel, chocolate, toffee, and/or dark fruit malt character as in an American Brown Ale. Retaining the dryish finish and lean body that makes IPAs so drinkable, a Brown IPA is a little more flavorful and malty than an American IPA without being sweet or heavy.', 'http://bjcp.org/stylecenter.php', '21', 'Y', 'bcoe', 'BJCP2015', 1, 0, 0, 0, 'high-strength, dark-color, top-fermented, north-america, craft-style, ipa-family, specialty-family, bitter, hoppy', 'Dogfish Head Indian Brown Ale, Grand Teton Bitch Creek, Harpoon Brown IPA, Russian River Janet’s Brown Ale', 'Entrant MUST specify a strength (session: 3.0-5.0%, standard: 5.0-7.5%, double: 7.5-9.5%).'),
-(228, 'B4', 'Red IPA', 'Specialty IPA', '1.056', '1.070', '1.008', '1.016', '5.5', '7.5', '40', '70', '11', '19', '1', 'Hoppy, bitter, and moderately strong like an American IPA, but with some caramel, toffee, and/or dark fruit malt character. Retaining the dryish finish and lean body that makes IPAs so drinkable, a Red IPA is a little more flavorful and malty than an American IPA without being sweet or heavy.', 'http://bjcp.org/stylecenter.php', '21', 'Y', 'bcoe', 'BJCP2015', 1, 0, 0, 0, 'high-strength, amber-color, top-fermented, north-america, craft-style, ipa-family, specialty-family, bitter, hoppy', 'Green Flash Hop Head Red Double Red IPA (double), Midnight Sun Sockeye Red, Sierra Nevada Flipside Red IPA, Summit Horizon Red IPA, Odell Runoff Red IPA', 'Entrant MUST specify a strength (session: 3.0-5.0%, standard: 5.0-7.5%, double: 7.5-9.5%).'),
-(229, 'B5', 'Rye IPA', 'Specialty IPA', '1.056', '1.075', '1.008', '1.014', '5.5', '8.0', '50', '75', '6', '14', '1', 'A decidedly hoppy and bitter, moderately strong American pale ale, showcasing modern American and New World hop varieties and rye malt. The balance is hop-forward, with a clean fermentation profile, dry finish, and clean, supporting malt allowing a creative range of hop character to shine through.', 'http://bjcp.org/stylecenter.php', '21', 'Y', 'bcoe', 'BJCP2015', 1, 0, 0, 0, 'high-strength, amber-color, top-fermented, north-america, craft-style, ipa-family, specialty-family, bitter, hoppy', 'Arcadia Sky High Rye, Bear Republic Hop Rod Rye, Founders Reds Rye, Great Lakes Rye of the Tiger, Sierra Nevada Ruthless Rye', 'Entrant MUST specify a strength (session: 3.0-5.0%, standard: 5.0-7.5%, double: 7.5-9.5%).'),
-(230, 'B6', 'White IPA', 'Specialty IPA', '1.056', '1.065', '1.010', '1.016', '5.5', '7.0', '40', '70', '5', '8', '1', 'A fruity, spicy, refreshing version of an American IPA, but with a lighter color, less body, and featuring either the distinctive yeast and/or spice additions typical of a Belgian witbier.', 'http://bjcp.org/stylecenter.php', '21', 'Y', 'bcoe', 'BJCP2015', 1, 0, 0, 0, 'high-strength, pale-color, top-fermented, north-america, craft-style, ipa-family, specialty-family, bitter, hoppy, spice', 'Blue Point White IPA, Deschutes Chainbreaker IPA, Harpoon The Long Thaw, New Belgium Accumulation', 'Entrant MUST specify a strength (session: 3.0-5.0%, standard: 5.0-7.5%, double: 7.5-9.5%).'),
-(231, 'A9', 'London Brown Ale', 'Historical Beer', '1.033', '1.038', '1.012', '1.015', '2.8', '3.6', '15', '20', '22', '35', '1', 'A luscious, sweet, malt-oriented dark brown ale, with caramel and toffee malt complexity and a sweet finish.', 'http://bjcp.org/stylecenter.php', '27', 'Y', 'bcoe', 'BJCP2015', 0, 0, 0, 0, 'session-strength, dark-color, top-fermented, britishisles, historical-style, brown-ale-family, malty, sweet', 'Harveys Bloomsbury Brown Ale, Mann''s Brown Ale', 'Entrant MUST specify a strength (session: 3.0-5.0%, standard: 5.0-7.5%, double: 7.5-9.5%).'),
-(232, 'B1', 'Belgian IPA', 'Specialty IPA', '1.058', '1.080', '1.008', '1.016', '6.2', '9.5', '50', '100', '5', '15', '1', 'An IPA with the fruitiness and spiciness derived from the use of Belgian yeast. The examples from Belgium tend to be lighter in color and more attenuated, similar to a tripel that has been brewed with more hops. This beer has a more complex flavor profile and may be higher in alcohol than a typical IPA.', 'http://bjcp.org/stylecenter.php', '21', 'Y', 'bcoe', 'BJCP2015', 1, 0, 0, 0, 'high-strength, pale-color, top-fermented, north-america, craft-style, ipa-family, specialty-family, bitter, hoppy', 'Brewery Vivant Triomphe, Houblon Chouffe, Epic Brainless IPA, Green Flash Le Freak, Stone Cali-Belgique, Urthel Hop It', 'Entrant MUST specify a strength (session: 3.0-5.0%, standard: 5.0-7.5%, double: 7.5-9.5%).'),
-(233, 'B2', 'Black IPA', 'Specialty IPA', '1.050', '1.085', '1.010', '1.018', '5.5', '9.0', '50', '90', '25', '40', '1', 'A beer with the dryness, hop-forward balance, and flavor characteristics of an American IPA, only darker in color – but without strongly roasted or burnt flavors. The flavor of darker malts is gentle and supportive, not a major flavor component. Drinkability is a key characteristic.', 'http://bjcp.org/stylecenter.php', '21', 'Y', 'bcoe', 'BJCP2015', 1, 0, 0, 0, 'high-strength, dark-color, top-fermented, north-america, craft-style, ipa-family, specialty-family, bitter, hoppy', '21st Amendment Back in Black (standard), Deschutes Hop in the Dark CDA (standard), Rogue Dad’s Little Helper (standard), Southern Tier Iniquity (double), Widmer Pitch Black IPA (standard)', 'Entrant MUST specify a strength (session: 3.0-5.0%, standard: 5.0-7.5%, double: 7.5-9.5%).'),
+(227, 'A1', 'Gose', 'Historical Beer', '1.036', '1.056', '1.006', '1.010', '4.2', '4.8', '5', '12', '3', '4', '1', 'A highly-carbonated, tart and fruity wheat ale with a restrained coriander and salt character and low bitterness. Very refreshing, with bright flavors and high attenuation.', 'http://bjcp.org/stylecenter.php', '27', 'Y', 'bcoe', 'BJCP2015', 0, 0, 0, 0, 'standard-strength, pale-color, top-fermented, centraleurope, historical-style, wheat-beer-family, sour, spice', 'Anderson Valley Gose, Bayerisch Bahnhof Leipziger Gose, Dollnitzer Ritterguts Gose', NULL),
+(228, 'A2', 'Piwo Grodziskie', 'Historical Beer', '1.028', '1.032', '1.010', '1.015', '4.5', '6.0', '25', '40', '3', '6', '1', 'A low-gravity, highly-carbonated, light bodied ale combining an oak-smoked flavor with a clean hop bitterness. Highly sessionable.', 'http://bjcp.org/stylecenter.php', '27', 'Y', 'bcoe', 'BJCP2015', 0, 0, 0, 0, 'standard-strength, pale-color, bottom-fermented,lagered, north-america, historical-style, pilsner-family, bitter, hoppy', NULL, NULL),
+(229, 'A3', 'Lichtenhainer', 'Historical Beer', '1.032', '1.040', '1.004', '1.008', '3.5', '4.7', '5', '12', '3', '6', '1', 'A sour, smoked, lower-gravity historical German wheat beer. Complex yet refreshing character due to high attenuation and carbonation, along with low bitterness and moderate sourness. ', 'http://bjcp.org/stylecenter.php', '27', 'Y', 'bcoe', 'BJCP2015', 0, 0, 0, 0, 'standard-strength, pale-color, top-fermented, centraleurope, historical-style, wheat-beer-family, sour, smoke', NULL, NULL),
+(230, 'A4', 'Roggenbier', 'Historical Beer', '1.046', '1.056', '1.010', '1.014', '4.5', '6.0', '10', '20', '14', '19', '1', 'A dunkelweizen made with rye rather than wheat, but with a greater body and light finishing hops.', 'http://bjcp.org/stylecenter.php', '27', 'Y', 'bcoe', 'BJCP2015', 0, 0, 0, 0, 'standard-strength, amber-color, top-fermenting, central-europe, historical-style, wheat-beer-family', 'Thurn und Taxis Roggen', NULL),
+(231, 'A5', 'Sahti', 'Historical Beer', '1.076', '1.120', '1.016', '1.020', '7.0', '11.0', '7', '15', '4', '22', '1', 'A sweet, heavy, strong traditional Finnish beer with a rye, juniper, and juniper berry flavor and a strong banana-clove yeast character.', 'http://bjcp.org/stylecenter.php', '27', 'Y', 'bcoe', 'BJCP2015', 0, 0, 0, 0, 'high-strength, amber-color, top-fermented, centraleurope, historical-style, spice', NULL, NULL),
+(232, 'A6', 'Kentucky Common', 'Historical Beer', '1.044', '1.055', '1.010', '1.018', '4.0', '5.5', '15', '30', '11', '20', '1', 'A darker-colored, light-flavored, malt-accented beer with a dry finish and interesting character malt flavors. Refreshing due to its high carbonation and mild flavors, and highly  sessionable due to being served very fresh and with restrained alcohol levels.', 'http://bjcp.org/stylecenter.php', '27', 'Y', 'bcoe', 'BJCP2015', 0, 0, 0, 0, 'standard-strength, amber-color, top-fermented, north america,historical-style, balanced', 'Apocalypse Brew Works Ortel\'s 1912', NULL),
+(233, 'A7', 'Pre-Prohibition Lager', 'Historical Beer', '1.044', '1.060', '1.010', '1.015', '4.5', '6.0', '25', '40', '3', '6', '1', 'A clean, refreshing, but bitter pale lager, often showcasing a grainy-sweet corn flavor. All malt or rice-based versions have a crisper, more neutral character. The higher bitterness level is the largest differentiator between this style and most modern mass-market pale lagers, but the more robust flavor profile also sets it apart.', 'http://bjcp.org/stylecenter.php', '27', 'Y', 'bcoe', 'BJCP2015', 0, 0, 0, 0, 'standard-strength, pale-color, bottom-fermented, lagered, north-america, historical-style, pilsner-family, bitter, hoppy', 'Anchor California Lager, Coors Batch 19, Little Harpeth Chicken Scratch', NULL),
 (234, 'A8', 'Pre-Prohibition Porter', 'Historical Beer', '1.046', '1.060', '1.010', '1.016', '4.5', '6.0', '20', '30', '18', '30', '1', 'An American adaptation of English Porter using American ingredients, including adjuncts.', 'http://bjcp.org/stylecenter.php', '27', 'Y', 'bcoe', 'BJCP2015', 0, 0, 0, 0, 'standard-strength, dark-color, any-fermentation, northamerica, historical-style, porter-family, malty', 'Stegmaier Porter, Yuengling Porter', NULL),
-(235, 'A4', 'Roggenbier', 'Historical Beer', '1.046', '1.056', '1.010', '1.014', '4.5', '6.0', '10', '20', '14', '19', '1', 'A dunkelweizen made with rye rather than wheat, but with a greater body and light finishing hops.', 'http://bjcp.org/stylecenter.php', '27', 'Y', 'bcoe', 'BJCP2015', 0, 0, 0, 0, 'standard-strength, amber-color, top-fermenting, central-europe, historical-style, wheat-beer-family', 'Thurn und Taxis Roggen', NULL),
-(236, 'A5', 'Sahti', 'Historical Beer', '1.076', '1.120', '1.016', '1.020', '7.0', '11.0', '7', '15', '4', '22', '1', 'A sweet, heavy, strong traditional Finnish beer with a rye, juniper, and juniper berry flavor and a strong banana-clove yeast character.', 'http://bjcp.org/stylecenter.php', '27', 'Y', 'bcoe', 'BJCP2015', 0, 0, 0, 0, 'high-strength, amber-color, top-fermented, centraleurope, historical-style, spice', NULL, NULL),
-(237, 'A6', 'Kentucky Common', 'Historical Beer', '1.044', '1.055', '1.010', '1.018', '4.0', '5.5', '15', '30', '11', '20', '1', 'A darker-colored, light-flavored, malt-accented beer with a dry finish and interesting character malt flavors. Refreshing due to its high carbonation and mild flavors, and highly  sessionable due to being served very fresh and with restrained alcohol levels.', 'http://bjcp.org/stylecenter.php', '27', 'Y', 'bcoe', 'BJCP2015', 0, 0, 0, 0, 'standard-strength, amber-color, top-fermented, north america,historical-style, balanced', 'Apocalypse Brew Works Ortel''s 1912', NULL),
-(238, 'A7', 'Pre-Prohibition Lager', 'Historical Beer', '1.044', '1.060', '1.010', '1.015', '4.5', '6.0', '25', '40', '3', '6', '1', 'A clean, refreshing, but bitter pale lager, often showcasing a grainy-sweet corn flavor. All malt or rice-based versions have a crisper, more neutral character. The higher bitterness level is the largest differentiator between this style and most modern mass-market pale lagers, but the more robust flavor profile also sets it apart.', 'http://bjcp.org/stylecenter.php', '27', 'Y', 'bcoe', 'BJCP2015', 0, 0, 0, 0, 'standard-strength, pale-color, bottom-fermented, lagered, north-america, historical-style, pilsner-family, bitter, hoppy', 'Anchor California Lager, Coors Batch 19, Little Harpeth Chicken Scratch', NULL),
-(239, 'A1', 'Gose', 'Historical Beer', '1.036', '1.056', '1.006', '1.010', '4.2', '4.8', '5', '12', '3', '4', '1', 'A highly-carbonated, tart and fruity wheat ale with a restrained coriander and salt character and low bitterness. Very refreshing, with bright flavors and high attenuation.', 'http://bjcp.org/stylecenter.php', '27', 'Y', 'bcoe', 'BJCP2015', 0, 0, 0, 0, 'standard-strength, pale-color, top-fermented, centraleurope, historical-style, wheat-beer-family, sour, spice', 'Anderson Valley Gose, Bayerisch Bahnhof Leipziger Gose, Dollnitzer Ritterguts Gose', NULL),
-(240, 'A2', 'Piwo Grodziskie', 'Historical Beer', '1.028', '1.032', '1.010', '1.015', '4.5', '6.0', '25', '40', '3', '6', '1', 'A low-gravity, highly-carbonated, light bodied ale combining an oak-smoked flavor with a clean hop bitterness. Highly sessionable.', 'http://bjcp.org/stylecenter.php', '27', 'Y', 'bcoe', 'BJCP2015', 0, 0, 0, 0, 'standard-strength, pale-color, bottom-fermented,lagered, north-america, historical-style, pilsner-family, bitter, hoppy', NULL, NULL),
-(241, 'A3', 'Lichtenhainer', 'Historical Beer', '1.032', '1.040', '1.004', '1.008', '3.5', '4.7', '5', '12', '3', '6', '1', 'A sour, smoked, lower-gravity historical German wheat beer. Complex yet refreshing character due to high attenuation and carbonation, along with low bitterness and moderate sourness. ', 'http://bjcp.org/stylecenter.php', '27', 'Y', 'bcoe', 'BJCP2015', 0, 0, 0, 0, 'standard-strength, pale-color, top-fermented, centraleurope, historical-style, wheat-beer-family, sour, smoke', NULL, NULL);
+(235, 'A9', 'London Brown Ale', 'Historical Beer', '1.033', '1.038', '1.012', '1.015', '2.8', '3.6', '15', '20', '22', '35', '1', 'A luscious, sweet, malt-oriented dark brown ale, with caramel and toffee malt complexity and a sweet finish.', 'http://bjcp.org/stylecenter.php', '27', 'Y', 'bcoe', 'BJCP2015', 0, 0, 0, 0, 'session-strength, dark-color, top-fermented, britishisles, historical-style, brown-ale-family, malty, sweet', 'Harveys Bloomsbury Brown Ale, Mann\'s Brown Ale', 'Entrant MUST specify a strength (session: 3.0-5.0%, standard: 5.0-7.5%, double: 7.5-9.5%).'),
+(236, 'B1', 'Belgian IPA', 'Specialty IPA', '1.058', '1.080', '1.008', '1.016', '6.2', '9.5', '50', '100', '5', '15', '1', 'An IPA with the fruitiness and spiciness derived from the use of Belgian yeast. The examples from Belgium tend to be lighter in color and more attenuated, similar to a tripel that has been brewed with more hops. This beer has a more complex flavor profile and may be higher in alcohol than a typical IPA.', 'http://bjcp.org/stylecenter.php', '21', 'Y', 'bcoe', 'BJCP2015', 1, 0, 0, 0, 'high-strength, pale-color, top-fermented, north-america, craft-style, ipa-family, specialty-family, bitter, hoppy', 'Brewery Vivant Triomphe, Houblon Chouffe, Epic Brainless IPA, Green Flash Le Freak, Stone Cali-Belgique, Urthel Hop It', 'Entrant MUST specify a strength (session: 3.0-5.0%, standard: 5.0-7.5%, double: 7.5-9.5%).'),
+(237, 'B2', 'Black IPA', 'Specialty IPA', '1.050', '1.085', '1.010', '1.018', '5.5', '9.0', '50', '90', '25', '40', '1', 'A beer with the dryness, hop-forward balance, and flavor characteristics of an American IPA, only darker in color – but without strongly roasted or burnt flavors. The flavor of darker malts is gentle and supportive, not a major flavor component. Drinkability is a key characteristic.', 'http://bjcp.org/stylecenter.php', '21', 'Y', 'bcoe', 'BJCP2015', 1, 0, 0, 0, 'high-strength, dark-color, top-fermented, north-america, craft-style, ipa-family, specialty-family, bitter, hoppy', '21st Amendment Back in Black (standard), Deschutes Hop in the Dark CDA (standard), Rogue Dad’s Little Helper (standard), Southern Tier Iniquity (double), Widmer Pitch Black IPA (standard)', 'Entrant MUST specify a strength (session: 3.0-5.0%, standard: 5.0-7.5%, double: 7.5-9.5%).'),
+(238, 'B3', 'Brown IPA', 'Specialty IPA', '1.056', '1.070', '1.008', '1.016', '5.5', '7.5', '40', '70', '11', '19', '1', 'Hoppy, bitter, and moderately strong like an American IPA, but with some caramel, chocolate, toffee, and/or dark fruit malt character as in an American Brown Ale. Retaining the dryish finish and lean body that makes IPAs so drinkable, a Brown IPA is a little more flavorful and malty than an American IPA without being sweet or heavy.', 'http://bjcp.org/stylecenter.php', '21', 'Y', 'bcoe', 'BJCP2015', 1, 0, 0, 0, 'high-strength, dark-color, top-fermented, north-america, craft-style, ipa-family, specialty-family, bitter, hoppy', 'Dogfish Head Indian Brown Ale, Grand Teton Bitch Creek, Harpoon Brown IPA, Russian River Janet’s Brown Ale', 'Entrant MUST specify a strength (session: 3.0-5.0%, standard: 5.0-7.5%, double: 7.5-9.5%).'),
+(239, 'B4', 'Red IPA', 'Specialty IPA', '1.056', '1.070', '1.008', '1.016', '5.5', '7.5', '40', '70', '11', '19', '1', 'Hoppy, bitter, and moderately strong like an American IPA, but with some caramel, toffee, and/or dark fruit malt character. Retaining the dryish finish and lean body that makes IPAs so drinkable, a Red IPA is a little more flavorful and malty than an American IPA without being sweet or heavy.', 'http://bjcp.org/stylecenter.php', '21', 'Y', 'bcoe', 'BJCP2015', 1, 0, 0, 0, 'high-strength, amber-color, top-fermented, north-america, craft-style, ipa-family, specialty-family, bitter, hoppy', 'Green Flash Hop Head Red Double Red IPA (double), Midnight Sun Sockeye Red, Sierra Nevada Flipside Red IPA, Summit Horizon Red IPA, Odell Runoff Red IPA', 'Entrant MUST specify a strength (session: 3.0-5.0%, standard: 5.0-7.5%, double: 7.5-9.5%).'),
+(240, 'B5', 'Rye IPA', 'Specialty IPA', '1.056', '1.075', '1.008', '1.014', '5.5', '8.0', '50', '75', '6', '14', '1', 'A decidedly hoppy and bitter, moderately strong American pale ale, showcasing modern American and New World hop varieties and rye malt. The balance is hop-forward, with a clean fermentation profile, dry finish, and clean, supporting malt allowing a creative range of hop character to shine through.', 'http://bjcp.org/stylecenter.php', '21', 'Y', 'bcoe', 'BJCP2015', 1, 0, 0, 0, 'high-strength, amber-color, top-fermented, north-america, craft-style, ipa-family, specialty-family, bitter, hoppy', 'Arcadia Sky High Rye, Bear Republic Hop Rod Rye, Founders Reds Rye, Great Lakes Rye of the Tiger, Sierra Nevada Ruthless Rye', 'Entrant MUST specify a strength (session: 3.0-5.0%, standard: 5.0-7.5%, double: 7.5-9.5%).'),
+(241, 'B6', 'White IPA', 'Specialty IPA', '1.056', '1.065', '1.010', '1.016', '5.5', '7.0', '40', '70', '5', '8', '1', 'A fruity, spicy, refreshing version of an American IPA, but with a lighter color, less body, and featuring either the distinctive yeast and/or spice additions typical of a Belgian witbier.', 'http://bjcp.org/stylecenter.php', '21', 'Y', 'bcoe', 'BJCP2015', 1, 0, 0, 0, 'high-strength, pale-color, top-fermented, north-america, craft-style, ipa-family, specialty-family, bitter, hoppy, spice', 'Blue Point White IPA, Deschutes Chainbreaker IPA, Harpoon The Long Thaw, New Belgium Accumulation', 'Entrant MUST specify a strength (session: 3.0-5.0%, standard: 5.0-7.5%, double: 7.5-9.5%).');
 
 -- --------------------------------------------------------
 
@@ -1156,19 +1166,23 @@ INSERT INTO `baseline_styles` (`id`, `brewStyleNum`, `brewStyle`, `brewStyleCate
 -- Table structure for table `baseline_style_types`
 --
 
-CREATE TABLE IF NOT EXISTS `baseline_style_types` (
+DROP TABLE IF EXISTS `baseline_style_types`;
+CREATE TABLE `baseline_style_types` (
   `id` int(11) NOT NULL,
-  `styleTypeName` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `styleTypeOwn` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `styleTypeBOS` char(1) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `styleTypeName` varchar(255) DEFAULT NULL,
+  `styleTypeOwn` varchar(255) DEFAULT NULL,
+  `styleTypeBOS` char(1) DEFAULT NULL,
   `styleTypeBOSMethod` int(11) DEFAULT NULL
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `baseline_style_types`
 --
 
-INSERT INTO `baseline_style_types` (`id`, `styleTypeName`, `styleTypeOwn`, `styleTypeBOS`, `styleTypeBOSMethod`) VALUES (1, 'Beer', 'bcoe', 'Y', 1), (2, 'Cider', 'bcoe', 'Y', 1), (3, 'Mead', 'bcoe', 'Y', 1);
+INSERT INTO `baseline_style_types` (`id`, `styleTypeName`, `styleTypeOwn`, `styleTypeBOS`, `styleTypeBOSMethod`) VALUES
+(1, 'Beer', 'bcoe', 'Y', 1),
+(2, 'Cider', 'bcoe', 'Y', 1),
+(3, 'Mead', 'bcoe', 'Y', 1);
 
 -- --------------------------------------------------------
 
@@ -1176,21 +1190,22 @@ INSERT INTO `baseline_style_types` (`id`, `styleTypeName`, `styleTypeOwn`, `styl
 -- Table structure for table `baseline_system`
 --
 
-CREATE TABLE IF NOT EXISTS `baseline_system` (
+DROP TABLE IF EXISTS `baseline_system`;
+CREATE TABLE `baseline_system` (
   `id` int(11) NOT NULL,
-  `version` varchar(12) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `version` varchar(12) DEFAULT NULL,
   `version_date` date DEFAULT NULL,
-  `data_check` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `data_check` varchar(255) DEFAULT NULL,
   `setup` tinyint(1) DEFAULT NULL COMMENT 'Has setup run? 1=true, 0=false.',
   `setup_last_step` int(3) DEFAULT NULL
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `baseline_system`
 --
 
 INSERT INTO `baseline_system` (`id`, `version`, `version_date`, `data_check`, `setup`, `setup_last_step`) VALUES
-(1, '2.1.10.0', '2017-07-25', '2017-07-25 00:00:01', 1, 8);
+(1, '2.1.10.0', '2017-09-01', '2016-08-31 00:00:01', 1, 8);
 
 -- --------------------------------------------------------
 
@@ -1198,26 +1213,27 @@ INSERT INTO `baseline_system` (`id`, `version`, `version_date`, `data_check`, `s
 -- Table structure for table `baseline_users`
 --
 
-CREATE TABLE IF NOT EXISTS `baseline_users` (
-  `id` int(8) NOT NULL,
-  `user_name` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `password` varchar(250) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `userLevel` char(1) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `userQuestion` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `userQuestionAnswer` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+DROP TABLE IF EXISTS `baseline_users`;
+CREATE TABLE `baseline_users` (
+  `id` int(11) NOT NULL,
+  `user_name` varchar(255) DEFAULT NULL,
+  `password` varchar(250) DEFAULT NULL,
+  `userLevel` char(1) DEFAULT NULL,
+  `userQuestion` varchar(255) DEFAULT NULL,
+  `userQuestionAnswer` varchar(255) DEFAULT NULL,
   `userCreated` timestamp NULL DEFAULT NULL COMMENT 'Timestamp of when the user was created.',
-  `userToken` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `userTokenTime` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `userToken` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `userTokenTime` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `userFailedLogins` int(11) DEFAULT NULL,
-  `userFailedLoginTime` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+  `userFailedLoginTime` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `baseline_users`
 --
 
-INSERT INTO `baseline_users` (`id`, `user_name`, `password`, `userLevel`, `userQuestion`, `userQuestionAnswer`, `userCreated`) VALUES
-(1, 'user.baseline@brewcompetition.com', '$2a$08$2qgODWiSaYfLTVhu.2qVSer30aG7cLQZX0To01CqinyFyUbwdO64C', '0', 'What is your favorite all-time beer to drink?', 'pabst', '2016-09-01 01:00:01');
+INSERT INTO `baseline_users` (`id`, `user_name`, `password`, `userLevel`, `userQuestion`, `userQuestionAnswer`, `userCreated`, `userToken`, `userTokenTime`, `userFailedLogins`, `userFailedLoginTime`) VALUES
+(1, 'user.baseline@brewcompetition.com', '$2a$08$2qgODWiSaYfLTVhu.2qVSer30aG7cLQZX0To01CqinyFyUbwdO64C', '0', 'What is your favorite all-time beer to drink?', 'pabst', '2016-08-31 19:00:01', NULL, NULL, 0, NULL);
 
 --
 -- Indexes

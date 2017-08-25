@@ -42,6 +42,80 @@ $orphan_modal_body_1 = "";
 $orphan_modal_body_2 = "";
 
 if (($action == "default") && ($filter == "default")) {
+	
+	// Orphans styles not assigned to tables yet
+	
+	if ($totalRows_tables > 0) {
+		
+		$a[] = "";
+		$y[] = "";
+		$z[] = 0;
+			
+		// BJCP Styles
+		if (strpos($_SESSION['prefsStyleSet'],"BABDB") === false) {
+
+			do {
+				if (get_table_info($row_styles['brewStyleNum']."^".$row_styles['brewStyleGroup'],"count","default","default","default")) {
+					if (!get_table_info($row_styles['id'],"styles","default","default","default")) {
+						$a[] = $row_styles['id'];
+						$z[] = 1;
+						$orphan_modal_body_2 .= "<li>".$row_styles['brewStyleGroup'].$row_styles['brewStyleNum']." ".style_convert($row_styles['brewStyleGroup'],"1").": ".$row_styles['brewStyle']." (".get_table_info($row_styles['brewStyleNum']."^".$row_styles['brewStyleGroup'],"count","default",$dbTable,"default")." entries)</li>";
+					}
+				}
+			} while ($row_styles = mysqli_fetch_assoc($styles));
+
+		}
+		
+		// BA Styles
+        if (strpos($_SESSION['prefsStyleSet'],"BABDB") !== false) {
+			
+			// Get custom style ids
+			if ($totalRows_styles_custom > 0) {
+				do {
+					if (get_table_info($row_styles_custom['brewStyleNum']."^".$row_styles_custom['brewStyleGroup']."^Custom","count","",$dbTable,"default")) {
+						
+						$a[] = $row_styles_custom['id']."c"; // Need to add differentiator for custom styles
+						$y[] = $row_styles_custom['id']."^".$row_styles_custom['brewStyle']."^Custom";
+						
+						if (!get_table_info($row_styles_custom['id'],"styles","default","default","default")) {
+							$z[] = 1;
+							$orphan_modal_body_2 .= "<li>".$row_styles_custom['brewStyleGroup'].$row_styles_custom['brewStyleNum']." ".style_convert($row_styles_custom['brewStyleGroup'],"1").": ".$row_styles_custom['brewStyle']." (".get_table_info($row_styles_custom['brewStyleNum']."^".$row_styles_custom['brewStyleGroup']."^Custom","count","default",$dbTable,"default")." entries)</li>";
+						}
+					}
+				} while ($row_styles_custom = mysqli_fetch_assoc($styles_custom));
+			}
+			
+			// Get BA style ids
+            foreach ($_SESSION['styles'] as $ba_styles => $stylesData) {
+                if (is_array($stylesData) || is_object($stylesData)) {
+                    foreach ($stylesData as $key => $ba_style) {
+                        $style_value = $ba_style['category']['id']."^".$ba_style['id'];
+                        if (get_table_info($style_value,"count","default",$dbTable,"default")) {
+							
+							$a[] = $ba_style['id'];
+							$y[] = $ba_style['id']."^".$ba_style['name']."^".$ba_style['category']['name'];
+							
+                            if (!get_table_info($ba_style['id'],"styles","default","default","default")) {
+                                $z[] = 1;
+                                $orphan_modal_body_2 .= "<li>".$ba_style['name']." (".get_table_info($style_value,"count","default",$dbTable,"default")." entries)</li>";
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        $b = array_sum($z);
+        if ($b == 0) $orphan_modal_body_1 .= "<p>All styles with entries have been assigned to tables.</p>";
+        else $orphan_modal_body_1 .= "<p>The following styles with entries have not been assigned to tables:</p>";
+		
+    } // end if ($totalRows_tables > 0)
+
+    else {
+        $orphan_modal_body_1 .= "<p>No tables have been defined.";
+        if ($go == "judging_tables") $orphan_modal_body_1 .= " <a href='index.php?section=admin&amp;go=judging_tables&amp;action=add'>Add a table?</a>";
+        $orphan_modal_body_1 .= "</p>";
+    } // end else
 
     $manage_tables_default = TRUE;
     $sub_lead_text .= "<p>To ensure accuracy, verify that all paid and received entries have been marked as such via the <a href=\"".$base_url."index.php?section=admin&amp;go=entries\">Manage Entries</a> screen.</p>";
@@ -196,72 +270,6 @@ if (($action == "default") && ($filter == "default")) {
         $bos_modal_body .= "</li>";
 
     } while ($row_style_type = mysqli_fetch_assoc($style_type));
-
-    if ($totalRows_tables > 0) {
-		
-		$a[] = "";
-		$y[] = "";
-		$z[] = 0;
-			
-        if (strpos($_SESSION['prefsStyleSet'],"BABDB") !== false) {
-			
-			// Get custom style ids
-			if ($totalRows_styles_custom > 0) {
-				do {
-					if (get_table_info($row_styles_custom['brewStyleNum']."^".$row_styles_custom['brewStyleGroup'],"count","",$dbTable,"default")) {
-						
-						$a[] = $row_styles_custom['id']."c"; // Need to add differentiator for custom styles
-						$y[] = $row_styles_custom['id']."^".$row_styles_custom['brewStyle']."^Custom";
-						
-						if (!get_table_info($row_styles_custom['id'],"styles","default","default","default")) {
-							$z[] = 1;
-							$orphan_modal_body_2 .= "<li>".$row_styles_custom['brewStyleGroup'].$row_styles_custom['brewStyleNum']." ".style_convert($row_styles_custom['brewStyleGroup'],"1").": ".$row_styles_custom['brewStyle']." (".get_table_info($row_styles_custom['brewStyleNum']."^".$row_styles_custom['brewStyleGroup'],"count","default",$dbTable,"default")." entries)</li>";
-						}
-					}
-				} while ($row_styles_custom = mysqli_fetch_assoc($styles_custom));
-			}
-			
-			// Get BA style ids
-            foreach ($_SESSION['styles'] as $ba_styles => $stylesData) {
-                if (is_array($stylesData) || is_object($stylesData)) {
-                    foreach ($stylesData as $key => $ba_style) {
-                        $style_value = $ba_style['category']['id']."^".$ba_style['id'];
-                        if (get_table_info($style_value,"count","default",$dbTable,"default")) {
-							
-							$a[] = $ba_style['id'];
-							$y[] = $ba_style['id']."^".$ba_style['name']."^".$ba_style['category']['name'];
-							
-                            if (!get_table_info($ba_style['id'],"styles","default","default","default")) {
-                                $z[] = 1;
-                                $orphan_modal_body_2 .= "<li>".$ba_style['name']." (".get_table_info($style_value,"count","default",$dbTable,"default")." entries)</li>";
-                            }
-                        }
-                    }
-                }
-            }
-        } else {
-            do {
-                if (get_table_info($row_styles['brewStyleNum']."^".$row_styles['brewStyleGroup'],"count","","default","default")) {
-                    if (!get_table_info($row_styles['id'],"styles","styles","default","default","default")) {
-                        $a[] = $row_styles['id'];
-						$z[] = 1;
-                        $orphan_modal_body_2 .= "<li>".$row_styles['brewStyleGroup'].$row_styles['brewStyleNum']." ".style_convert($row_styles['brewStyleGroup'],"1").": ".$row_styles['brewStyle']." (".get_table_info($row_styles['brewStyleNum']."^".$row_styles['brewStyleGroup'],"count","default",$dbTable,"default")." entries)</li>";
-                    }
-                }
-            } while ($row_styles = mysqli_fetch_assoc($styles));
-        }
-
-        $b = array_sum($z);
-        if ($b == 0) $orphan_modal_body_1 .= "<p>All styles with entries have been assigned to tables.</p>";
-        else $orphan_modal_body_1 .= "<p>The following styles with entries have not been assigned to tables:</p>";
-		
-    } // end if ($totalRows_tables > 0)
-
-    else {
-        $orphan_modal_body_1 .= "<p>No tables have been defined.";
-        if ($go == "judging_tables") $orphan_modal_body_1 .= " <a href='index.php?section=admin&amp;go=judging_tables&amp;action=add'>Add a table?</a>";
-        $orphan_modal_body_1 .= "</p>";
-    } // end else
 
 } // end if (($action == "default") && ($dbTable == "default"))
 
@@ -902,7 +910,7 @@ if ($manage_tables_default) { ?>
                 </div>
                 <div class="modal-body">
                     <?php
-                    echo $orphan_modal_body;
+                    echo $orphan_modal_body_1;
                     if (!empty($orphan_modal_body_2)) echo "<ul>".$orphan_modal_body_2."</ul>"; 
                     ?>
                 </div>
