@@ -1080,7 +1080,7 @@ if ($section == "pay") {
 
 // -------------------- Register --------------------
 
-if (($section == "register") || ($action == "register") || ($go == "account") || ($section == "step2")) {
+if (($section == "register") || ($section == "brewer") || ($action == "register") || ($go == "account") || ($section == "step2")) {
 
 	$register_text_000 = "Is the volunteer ";
 	$register_text_001 = "Are you ";

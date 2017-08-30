@@ -308,7 +308,7 @@ else {
 	/*
 	echo $query_log."<br>";
 	echo $query_log_paid."<br>";
-	echo $query_confirmed."<br>";
+	echo $query_log_confirmed."<br>";
 	echo $brewing_db_table."<br>";
 	echo $dbTable."<br>";
 	*/

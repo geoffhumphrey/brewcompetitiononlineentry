@@ -3952,12 +3952,6 @@ function sterilize ($sterilize = NULL) {
 
 	$sterilize = trim($sterilize);
 
-	$check = array (1 => "'", 2 => '"', 3 => '<', 4 => '>');
-
-	foreach ($check as $value) {
-		$sterilize = str_replace($value, '', $sterilize);
-	}
-
 	if (is_numeric($sterilize)) {
 		if (is_float($sterilize)) $sterilize = filter_var($sterilize,FILTER_SANITIZE_NUMBER_FLOAT,FILTER_FLAG_ALLOW_FRACTION);
 		if (is_int($sterilize)) $sterilize = filter_var($sterilize,FILTER_SANITIZE_NUMBER_INT);

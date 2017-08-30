@@ -22,7 +22,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 	if (isset($_POST['brewerJudgeMead'])) $brewerJudgeMead = sterilize($_POST['brewerJudgeMead']);
 	else $brewerJudgeMead = "";
 
-	if (isset($_POST['brewerJudgeRank'])) $brewerJudgeRank = sterilize($_POST['brewerJudgeRank']);
+	if (isset($_POST['brewerJudgeRank'])) $brewerJudgeRank = $_POST['brewerJudgeRank'];
 	else $brewerJudgeRank = "";
 
 	if (isset($_POST['brewerAHA'])) {
@@ -31,6 +31,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 	else $brewerAHA = "";
 
 	if (isset($_POST['brewerClubs'])) {
+		include (DB.'entries.db.php');
 		include (INCLUDES.'constants.inc.php');
 		$brewerClubs = $purifier->purify($_POST['brewerClubs']);
 		$brewerClubsConcat = $brewerClubs."|".$brewerClubs;
@@ -85,6 +86,43 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 		$brewerJudgeNotes = $purifier->purify($_POST['brewerJudgeNotes']);
 	}
 	else $brewerJudgeNotes = "";
+	
+	if ($brewerJudge == "Y") {
+		if (($_POST['brewerJudgeLocation'] != "") && (is_array($_POST['brewerJudgeLocation']))) $location_pref1 = sterilize(implode(",",$_POST['brewerJudgeLocation']));
+		elseif (($_POST['brewerJudgeLocation'] != "") && (!is_array($_POST['brewerJudgeLocation']))) $location_pref1 = sterilize($_POST['brewerJudgeLocation']);
+
+	}
+	else $location_pref1 = "";
+
+	if ($brewerSteward == "Y") {
+		if (($_POST['brewerStewardLocation'] != "") && (is_array($_POST['brewerStewardLocation']))) $location_pref2 = sterilize(implode(",",$_POST['brewerStewardLocation']));
+		elseif (($_POST['brewerJudgeLocation'] != "") && (!is_array($_POST['brewerStewardLocation']))) $location_pref2 = sterilize($_POST['brewerStewardLocation']);
+	}
+	else $location_pref2 = "";
+
+	if (isset($_POST['brewerJudgeLikes'])) {
+		if (is_array($_POST['brewerJudgeLikes'])) $likes = implode(",",$_POST['brewerJudgeLikes']);
+		else $likes = $_POST['brewerJudgeLikes'];
+		}
+	else $likes = "";
+	
+	$likes = sterilize($likes);
+
+	if (isset($_POST['brewerJudgeDislikes'])) {
+		if (is_array($_POST['brewerJudgeDislikes'])) $dislikes = implode(",",$_POST['brewerJudgeDislikes']);
+		else $dislikes = $_POST['brewerJudgeDislikes'];
+		}
+	else $dislikes = "";
+	
+	$dislikes = sterilize($dislikes);
+
+	if (isset($brewerJudgeRank)) {
+		if (is_array($brewerJudgeRank)) $rank = implode(",",$brewerJudgeRank);
+		else $rank = $brewerJudgeRank;
+	}
+	else $rank = "";
+	
+	$rank = sterilize($rank);
 
 	$first_name = $purifier->purify($_POST['brewerFirstName']);
 	$first_name = strtolower($first_name);
@@ -103,8 +141,11 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 	$city = ucwords($city);
 
 	$state = $purifier->purify($_POST['brewerState']);
-	$state = strtolower($state);
-	$state = ucwords($state);
+	if (strlen($state) > 2) {
+		$state = strtolower($state);
+		$state = ucwords($state);
+	}
+	else $state = strtoupper($state);
 
 	if ($_SESSION['userLevel'] == 2) {
 
@@ -327,27 +368,11 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 	// --------------------------------------- Adding a Participant ----------------------------------------
 
 	if ($action == "add") {
-		if ($brewerJudge == "Y") {
-			if (($_POST['brewerJudgeLocation'] != "") && (is_array($_POST['brewerJudgeLocation']))) $location_pref1 = implode(",",sterilize($_POST['brewerJudgeLocation']));
-			elseif (($_POST['brewerJudgeLocation'] != "") && (!is_array($_POST['brewerJudgeLocation']))) $location_pref1 = sterilize($_POST['brewerJudgeLocation']);
-
-		}
-		else $location_pref1 = "";
-
-		if ($brewerSteward == "Y") {
-			if (($_POST['brewerStewardLocation'] != "") && (is_array($_POST['brewerStewardLocation']))) $location_pref2 = implode(",",sterilize($_POST['brewerStewardLocation']));
-			elseif (($_POST['brewerJudgeLocation'] != "") && (!is_array($_POST['brewerStewardLocation']))) $location_pref2 = sterilize($_POST['brewerStewardLocation']);
-		}
-		else $location_pref2 = "";
-
-		if ($brewerJudgeRank != "") $rank = implode(",",$brewerJudgeRank); else $rank = "";
 
 		$query_user = sprintf("SELECT id FROM $users_db_table WHERE id = '%s'", $_POST['uid']);
 		$user = mysqli_query($connection,$query_user) or die (mysqli_error($connection));
 		$row_user = mysqli_fetch_assoc($user);
 		$totalRows_user = mysqli_num_rows($user);
-
-
 
 		if ($totalRows_user == 0) {
 			//header(sprintf("Location: %s", $base_url."index.php?section=brewer&go=".$go."&msg=2"));
@@ -569,43 +594,6 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 	if ($action == "edit") {
 
 
-		// Check whether the id passed belongs to the current user; if not, redirect; if so, continue.
-		// Does not apply to admins
-
-		if ($brewerJudge == "Y") {
-			if ($_POST['brewerJudgeLocation'] != "") {
-				if (is_array($_POST['brewerJudgeLocation'])) $location_pref1 = implode(",",sterilize($_POST['brewerJudgeLocation']));
-				else $location_pref1 = sterilize($_POST['brewerJudgeLocation']);
-			}
-		}
-		else $location_pref1 = "";
-
-		if ($brewerSteward == "Y") {
-			if ($_POST['brewerStewardLocation'] != "") {
-				if (is_array($_POST['brewerStewardLocation'])) $location_pref2 = implode(",",sterilize($_POST['brewerStewardLocation']));
-				else $location_pref2 = sterilize($_POST['brewerStewardLocation']);
-			}
-		}
-		else $location_pref2 = "";
-
-		if (isset($_POST['brewerJudgeLikes'])) {
-			if (is_array($_POST['brewerJudgeLikes'])) $likes = implode(",",sterilize($_POST['brewerJudgeLikes']));
-			else $likes = sterilize($_POST['brewerJudgeLikes']);
-			}
-		else $likes = "";
-
-		if (isset($_POST['brewerJudgeDislikes'])) {
-			if (is_array($_POST['brewerJudgeDislikes'])) $dislikes = implode(",",$_POST['brewerJudgeDislikes']);
-			else $dislikes = $_POST['brewerJudgeDislikes'];
-			}
-		else $dislikes = "";
-
-		if (isset($brewerJudgeRank)) {
-			if (is_array($brewerJudgeRank)) $rank = implode(",",$brewerJudgeRank);
-			else $rank = $brewerJudgeRank;
-		}
-		else $rank = "";
-
 		// Check for and clear assignments in staff DB table and judge assignments table if
 		if ($brewerJudge == "N") {
 
@@ -763,6 +751,8 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 		$updateSQL .= sprintf(" WHERE id=%s",GetSQLValueString($id, "int"));
 		mysqli_real_escape_string($connection,$updateSQL);
 		$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+		//echo $updateSQL."<br>";
+		//exit;
 
 		if (isset($_POST['userQuestion'])) {
 			$updateSQL = sprintf("UPDATE $users_db_table SET userQuestion=%s WHERE id=%s",GetSQLValueString($purifier->purify($_POST['userQuestion']),"text"),GetSQLValueString($_SESSION['user_id'],"int"));
@@ -782,9 +772,6 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 							);
 		mysqli_real_escape_string($connection,$updateSQL);
 		$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
-
-		//echo $updateSQL."<br>";
-		//exit;
 
 		if ($go == "register") $updateGoTo = $base_url."index.php?section=brew&msg=2";
 		elseif (($go == "judge") && ($filter == "default")) $updateGoTo = $base_url."index.php?section=list&go=".$go."&filter=default&msg=7";
