@@ -35,12 +35,21 @@ If you haven't set up the database yet, please refer to http://www.brewcompetiti
 
 $database = "";
 
-/* 
-This line strings the information together and connects to MySQL.  
+/*
+If the database port is different from the default then overwrite as the port integer
+
+EG:
+    $database_port = 3308;
+ */
+
+$database_port = ini_get("mysqli.default_port");
+
+/*
+This line strings the information together and connects to MySQL.
 If MySQL is not found or the username/password combo is not correct an error will be returned.
 */
 
-$connection = new mysqli($hostname, $username, $password, $database);
+$connection = new mysqli($hostname, $username, $password, $database, $database_port);
 mysqli_set_charset($connection,'utf8mb4');
 mysqli_query($connection, "SET NAMES 'utf8mb4';");
 mysqli_query($connection, "SET CHARACTER SET 'utf8mb4';");
