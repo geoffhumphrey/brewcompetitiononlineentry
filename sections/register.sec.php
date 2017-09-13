@@ -216,16 +216,19 @@ if (($_SESSION['prefsProEdition'] == 0) || (($_SESSION['prefsProEdition'] == 1) 
 
 $security_questions_display = (array_rand($security_question, 5));
 $security = "";
+	
+if (isset($_COOKIE['userQuestion'])) $security .= "<div class=\"radio\"><label><input type=\"radio\" name=\"userQuestion\" value=\"".$_COOKIE['userQuestion']."\" CHECKED> ".$_COOKIE['userQuestion']."</label></div>";
 
 foreach ($security_questions_display as $key => $value) {
 	
 	$security_checked = "";
-	if (($msg > 0) && ($_COOKIE['userQuestion'] == $security_question[$value]))  $security_checked = "CHECKED";
 	if (($msg == "default") && ($key == 0)) $security_checked = "CHECKED";
 	
-	$security .= "<div class=\"radio\"><label><input type=\"radio\" name=\"userQuestion\" value=\"".$security_question[$value]."\" ".$security_checked."> ".$security_question[$value]."</label></div>";
+	if ((isset($_COOKIE['userQuestion'])) && ($_COOKIE['userQuestion'] != $security_question[$value])) $security .= "<div class=\"radio\"><label><input type=\"radio\" name=\"userQuestion\" value=\"".$security_question[$value]."\" ".$security_checked."> ".$security_question[$value]."</label></div>";
 	
 }
+
+
 
 // --------------------------------------------------------------
 // Display

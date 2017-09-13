@@ -123,28 +123,12 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 	else $rank = "";
 	
 	$rank = sterilize($rank);
-
-	$first_name = $purifier->purify($_POST['brewerFirstName']);
-	$first_name = strtolower($first_name);
-	$first_name = ucwords($first_name);
-
-	$last_name = $purifier->purify($_POST['brewerLastName']);
-	$last_name = strtolower($last_name);
-	$last_name = ucwords($last_name);
-
-	$address = $purifier->purify($_POST['brewerAddress']);
-	$address = strtolower($address);
-	$address = ucwords($address);
-
-	$city = $purifier->purify($_POST['brewerCity']);
-	$city = strtolower($city);
-	$city = ucwords($city);
-
+	$first_name = standardize_name($purifier->purify($_POST['brewerFirstName']));
+	$last_name = standardize_name($purifier->purify($_POST['brewerLastName']));
+	$address = standardize_name($purifier->purify($_POST['brewerAddress']));
+	$city = standardize_name($purifier->purify($_POST['brewerCity']));
 	$state = $purifier->purify($_POST['brewerState']);
-	if (strlen($state) > 2) {
-		$state = strtolower($state);
-		$state = ucwords($state);
-	}
+	if (strlen($state) > 2) $state = standardize_name($state);
 	else $state = strtoupper($state);
 
 	if ($_SESSION['userLevel'] == 2) {

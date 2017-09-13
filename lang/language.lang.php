@@ -2,7 +2,7 @@
 
 /*
 ---------------------------------------------
-To convert for translation:
+TODO - convert the following for translation:
 ---------------------------------------------
 - All Admin screens and functions
 - All update screens and functions
@@ -11,10 +11,10 @@ To convert for translation:
   -- Be sure to also update function in common.lib.php
 */
 
-// Load language file
-// Future releases will use a function to load language files for translations other than English
-// For now, it's just English
+// Load public pages language file
+include (LANG.$_SESSION['prefsLanguageFolder'].DIRECTORY_SEPARATOR.$_SESSION['prefsLanguage'].'.lang.php');
+
+// Load admin pages language file
 // A future version will have full conversions for Admin, Update, and Setup
-include (LANG.'en/en-US.lang.php');
-include (LANG.'en/en-US_admin.lang.php');
+include (LANG.$_SESSION['prefsLanguageFolder'].DIRECTORY_SEPARATOR.$_SESSION['prefsLanguage'].'_admin.lang.php');
 ?>

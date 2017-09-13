@@ -1,14 +1,6 @@
 <?php
 /**
- * Module:      en-us_admin.lang.php 
- * Description: This module houses all display text in the English language.
- * 
- */
-
-/* 
-
-/**
- * Module:      en-US.lang.php 
+ * Module:      en-US_admin.lang.php 
  * Description: This module houses all display text in the English language.
  * 
  */

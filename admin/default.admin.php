@@ -9,7 +9,7 @@
 <p class="lead">Hello, <?php echo $_SESSION['brewerFirstName']; ?>. <span class="small">Click or tap the headings or icons below to view the options available in each category.</span></p>
 <?php if ((judging_date_return() == 0) && ($_SESSION['userLevel'] == 0))  { ?>
 <div class="row">
-	<?php if ($_SESSION['prefsWinnerDelay'] > 0) { ?>
+	<?php if ($_SESSION['prefsWinnerDelay'] > time()) { ?>
 	<div class="col col-lg-6 col-md-12 col-sm-12 col-xs-12">
 		<div class="bcoem-admin-element">
 			<div class="row">

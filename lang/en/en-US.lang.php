@@ -25,19 +25,39 @@ https://www.w3.org/International/articles/language-tags/
 WWW3 Choosing a Language Tag:
 https://www.w3.org/International/questions/qa-choosing-language-tags
 
+To determine a subtag, go to the IANA Language Subtag Registry:
+http://www.iana.org/assignments/language-subtag-registry
+
 According to the WWW3:
 
 "Always bear in mind that the golden rule is to keep your language tag as short as possible. Only
 add further subtags to your language tag *if they are needed to distinguish the language from
-something else in the context where your content is used...*
+something else in the context where your content is used..."
 
 "Unless you specifically need to highlight that you are talking about Italian as spoken in Italy
-you should use it for Italian, and not it-IT. The same goes for any other possible combination."
+you should use it 'for Italian, and not it-IT. The same goes for any other possible combination."
 
-To determine a subtag, go to the IANA Language Subtag Registry:
-http://www.iana.org/assignments/language-subtag-registry
+"You should only use a region subtag if it contributes information needed in a particular context 
+to distinguish this language tag from another one; otherwise leave it out."
 
-==============================
+================ FORMAT =================
+
+Always indicate the primary languge subtag first, then a dash (-) and then the region subtag. The 
+region subtag is in all capital letters or a three digit number.
+
+Examples:
+en-US
+English spoken in the United States
+en is the PRIMARY language subtag
+US is the REGION subtag (note the capitalization)
+
+es-ES
+Spanish spoken in Spain
+
+es-419
+Spanish spoken in Latin America
+
+========================================
 
 Items that need translation into other languages are housed here in PHP variables - each start with
 a dollar sign ($). The words, phrases, etc. (called strings) that need to be translated are housed
@@ -54,7 +74,7 @@ $label_volunteer_info = "Información de Voluntarios";
 Portuguese translated:
 $label_volunteer_info = "Informações Voluntário";
 
-==============================
+========================================
 
 Please note: the strings that need to be translated MAY contain HTML code. Please leave this code intact! For example:
 
@@ -939,7 +959,7 @@ if ($section == "entry") {
 	$entry_info_text_043 = "Entry bottles accepted at our drop-off locations from";
 	$entry_info_text_044 = "Map to";
 	$entry_info_text_045 = "Click/Tap for Required Entry Info";
-	$entry_info_text_046 = "If a styles's name is hyperlinked, it has specific entry requirements. Click or tap on the name to view the subcategory's requirements.";
+	$entry_info_text_046 = "If a style's name is hyperlinked, it has specific entry requirements. Click or tap on the name to view the subcategory's requirements.";
 
 	// v2.1.10
 	$entry_info_text_047 = "If a style's name is hyperlinked, it has specific entry requirements. Click or tap on the name to access the Brewers Association styles as listed on their website.";
@@ -952,7 +972,7 @@ if ($section == "entry") {
 
 // -------------------- List (User Entry List) --------------------
 
-if (($section == "list") || ($section == "account")) {
+if (($section == "list") || ($section == "account") || ($go == "entries")) {
 
 	$brewer_entries_text_000 = "There is a known issue with printing from the Firefox browser.";
 	$brewer_entries_text_001 = "You have unconfirmed entries.";
@@ -1047,26 +1067,26 @@ if ($section == "pay") {
 
 // -------------------- QR --------------------
 
-	if (strpos($view, "-") !== FALSE) {
-	$qr_text_019 = sprintf("%04d",$checked_in_numbers [0]);
-	//$qr_text_019 = $view;
-	$qr_text_020 = sprintf("%06d",$checked_in_numbers [1]);
+	if (strpos($view, "^") !== FALSE) {
+		$qr_text_019 = sprintf("%04d",$checked_in_numbers[0]);
+		if (is_numeric($checked_in_numbers[1])) $qr_text_020 = sprintf("%06d",$checked_in_numbers[1]);
+		else $qr_text_020 = $checked_in_numbers[1];
 	}
 
 	$qr_text_000 = $alert_text_080;
 	$qr_text_001 = $alert_text_081;
-	if (strpos($view, "-") !== FALSE) $qr_text_002 = sprintf("Entry number <span class=\"text-danger\">%s</span> is checked in with <span class=\"text-danger\">%s</span> as its judging number.",$qr_text_019,$qr_text_020); else $qr_text_002 = "";
+	if (strpos($view, "^") !== FALSE) $qr_text_002 = sprintf("Entry number <span class=\"text-danger\">%s</span> is checked in with <span class=\"text-danger\">%s</span> as its judging number.",$qr_text_019,$qr_text_020); else $qr_text_002 = "";
 	$qr_text_003 = "If this judging number is <em>not</em> correct, <strong>re-scan the code and re-enter the correct judging number.";
-	if (strpos($view, "-") !== FALSE) $qr_text_004 = sprintf("Entry number %s is checked in.",$qr_text_019); else $qr_text_004 = "";
-	if (strpos($view, "-") !== FALSE) $qr_text_005 = sprintf("Entry number %s was not found in the database. Set the bottle(s) aside and alert the competition organizer.",$qr_text_019); else $qr_text_005 = "";
-	if (strpos($view, "-") !== FALSE) $qr_text_006 = sprintf("The judging number you entered - %s - is already assigned to entry number %s.",$qr_text_020,$qr_text_019); else $qr_text_006 = "";
+	if (strpos($view, "^") !== FALSE) $qr_text_004 = sprintf("Entry number %s is checked in.",$qr_text_019); else $qr_text_004 = "";
+	if (strpos($view, "^") !== FALSE) $qr_text_005 = sprintf("Entry number %s was not found in the database. Set the bottle(s) aside and alert the competition organizer.",$qr_text_019); else $qr_text_005 = "";
+	if (strpos($view, "^") !== FALSE) $qr_text_006 = sprintf("The judging number you entered - %s - is already assigned to entry number %s.",$qr_text_020,$qr_text_019); else $qr_text_006 = "";
 	$qr_text_007 = "QR Code Entry Check-In";
 	$qr_text_008 = "To check in entries via QR code, please provide the correct password. You will only need to provide the password once per session - be sure to keep the QR Code scanning app open.";
 	$qr_text_009 = "Assign a judging number and/or box number to entry";
 	$qr_text_010 = "ONLY inupt a judging number if your competition is using judging number labels at sorting.";
 	$qr_text_011 = "Six numbers with leading zeros - e.g., 000021.";
 	$qr_text_012 = "Be sure to double-check your input and affix the appropriate judging number labels to each bottle and bottle label (if applicable).";
-	$qr_text_013 = "Judging number must be six digits.";
+	$qr_text_013 = "Judging numbers must be six characters and cannot include the ^ character.";
 	$qr_text_014 = "Waiting for scanned QR code input.";
 	$qr_text_015 = "Launch or go back to your mobile device's scanning app to scan a QR code.";
 	$qr_text_016 = "Need a QR Code scanning app? Search <a href=\"https://play.google.com/store/search?q=qr%20code%20scanner&c=apps&hl=en\" target=\"_blank\">Google Play</a> (Android) or <a href=\"https://itunes.apple.com/store/\" target=\"_blank\">iTunes</a> (iOS).";

@@ -68,12 +68,11 @@ if (empty($_SESSION['contest_info_general'.$prefix_session])) {
 	$_SESSION['contestEntryCap'] = $row_contest_info['contestEntryCap'];
 	$_SESSION['contestEntryFeeDiscount'] = $row_contest_info['contestEntryFeeDiscount'];
 	$_SESSION['contestEntryFeeDiscountNum'] = $row_contest_info['contestEntryFeeDiscountNum'];
-
 	$_SESSION['contest_info_general'.$prefix_session] = $prefix_session;
 
 }
 
-// Get the general info for the competition from the DB and store in cookies
+// Get the general preferences info for the competition from the DB and store in cookies
 if (empty($_SESSION['prefs'.$prefix_session])) {
 
 	if (SINGLE) $query_prefs = sprintf("SELECT * FROM %s WHERE comp_id='%s'", $prefix."preferences",$_SESSION['comp_id']);
@@ -81,6 +80,17 @@ if (empty($_SESSION['prefs'.$prefix_session])) {
 	$prefs = mysqli_query($connection,$query_prefs) or die (mysqli_error($connection));
 	$row_prefs = mysqli_fetch_assoc($prefs);
 	$totalRows_prefs = mysqli_num_rows($prefs);
+	
+	// Language - in current version only English is available. Future versions will feature translations.
+	$_SESSION['prefsLanguage'] = "en-US";
+	
+	// Check if variation used (demarked with a dash)
+	if (strpos($_SESSION['prefsLanguage'], '-') !== FALSE) {
+		$lang_folder = explode("-",$_SESSION['prefsLanguage']);
+		$_SESSION['prefsLanguageFolder'] = strtolower($lang_folder[0]);
+	}
+	
+	else $_SESSION['prefsLanguageFolder'] = strtolower($_SESSION['prefsLanguage']);
 
 	// prefsDisplaySpecial appears to be unused
 	if (isset($row_prefs['prefsDisplaySpecial'])) $_SESSION['prefsDisplaySpecial'] = $row_prefs['prefsDisplaySpecial'];

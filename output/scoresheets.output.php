@@ -21,6 +21,7 @@ if (isset($_SESSION['loginUsername'])) {
 	}
 	
    	else {
+		
 		// Decode the file names
 		$scoresheet_file_name = decryptString($_GET['scoresheetfilename']);
 		$scoresheetfile = USER_DOCS.$scoresheet_file_name;
@@ -29,19 +30,13 @@ if (isset($_SESSION['loginUsername'])) {
 		$scoresheet_random_file = USER_TEMP.$random_file_name;
 
 		if (copy($scoresheetfile, $scoresheet_random_file)) {
-			header('Content-type: application/pdf');
-
-			// Force Download
-			if (isset($_GET['download'])) header("Content-disposition: attachment; filename=$scoresheet_file_name"); 
+			
+			header('Content-Type: application/pdf');
+			if (isset($_GET['download'])) header("Content-Disposition: attachment; filename=$scoresheet_file_name"); 
 			else header('Content-Disposition: inline; filename="' . $scoresheet_file_name . '"');
-
-			header('Content-Transfer-Encoding: binary');
-			header('Content-Length: ' . filesize($scoresheet_random_file));
-			header('Accept-Ranges: bytes');
 			ob_clean();
 			flush();
-
-
+			
 			readfile($scoresheet_random_file);
 
 		}

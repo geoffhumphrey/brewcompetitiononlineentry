@@ -119,28 +119,18 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 
 		}
 
-		$brewName = $_POST['brewName'];
-		//$brewName = strtr($brewName,$quote_convert);
-		$brewName = $purifier->purify($brewName);
-		$brewName = strtolower($brewName);
-		$brewName = ucwords($brewName);
-
+		$brewName = standardize_name($purifier->purify($_POST['brewName']));
 		$brewInfo = "";
 
 		if (strpos($_SESSION['prefsStyleSet'],"BABDB") === false) {
 			if (in_array($styleReturn,$all_special_ing_styles)) {
-				$brewInfo = $_POST['brewInfo'];
-				//$brewInfo = strtr($brewInfo,$quote_convert);
-				$brewInfo = $purifier->purify($brewInfo);
+				$brewInfo = $purifier->purify($_POST['brewInfo']);
 			}
-
 		}
 
 		else {
 			if (in_array($styleID,$all_special_ing_styles)) {
-				$brewInfo = $_POST['brewInfo'];
-				//$brewInfo = strtr($brewInfo,$quote_convert);
-				$brewInfo = $purifier->purify($brewInfo);
+				$brewInfo = $purifier->purify($_POST['brewInfo']);
 			}
 		}
 
@@ -152,42 +142,31 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 	 	}
 
 		// Process specialized info from form for certain styles
+		
+		
+		// If optional info is present
 		$brewInfoOptional = "";
+		if (!empty($_POST['brewInfoOptional'])) {
+			$brewInfoOptional = $purifier->purify($_POST['brewInfoOptional']);
+		}
 
 		if ($_SESSION['prefsStyleSet'] == "BJCP2015") {
-
-			$strengthIPA = sterilize($_POST['strengthIPA']);
-
-			if (!isset($_POST['brewInfoOptional'])) {
-				$brewInfoOptional = $_POST['brewInfoOptional'];
-				//$brewInfoOptional = strtr($brewInfoOptional ,$quote_convert);
-				$brewInfoOptional = $purifier->purify($brewInfoOptional);
-			}
+			
+			// IPA strength for 21B styles	
+			if (strlen(strstr($index,"21-B")) > 0) $brewInfo .= "^".sterilize($_POST['strengthIPA']);
 
 			// Pale or Dark Variant
 			if (($index == "09-A") || ($index == "10-C") || ($index == "07-C"))  $brewInfo = sterilize($_POST['darkLightColor']);
 
-			// IPA strength for 21B (standalone)
-			elseif ($index == "21-B") $brewInfo .= "^".$strengthIPA;
-
-			// IPA strength for other Specialty IPA styles
-			elseif ($index == "21-B1") $brewInfo = $row_style_name['brewStyle']."^".$strengthIPA;
-			elseif ($index == "21-B2") $brewInfo = $row_style_name['brewStyle']."^".$strengthIPA;
-			elseif ($index == "21-B3") $brewInfo = $row_style_name['brewStyle']."^".$strengthIPA;
-			elseif ($index == "21-B4") $brewInfo = $row_style_name['brewStyle']."^".$strengthIPA;
-			elseif ($index == "21-B5") $brewInfo = $row_style_name['brewStyle']."^".$strengthIPA;
-			elseif ($index == "21-B6") $brewInfo = $row_style_name['brewStyle']."^".$strengthIPA;
-
 			// Fruit Lambic carb/sweetness
-			elseif ($index == "23-F") $brewInfo .= "^".$_POST['sweetnessLambic']."^".sterilize($_POST['carbLambic']);
+			if ($index == "23-F") $brewInfo .= "^".sterilize($_POST['sweetnessLambic'])."^".sterilize($_POST['carbLambic']);
 
 			// Biere de Garde color
-			elseif ($index == "24-C") $brewInfo = sterilize($_POST['BDGColor']);
+			if ($index == "24-C") $brewInfo = sterilize($_POST['BDGColor']);
 
 			// Saison strength/color
-			elseif ($index == "25-B") $brewInfo = sterilize($_POST['strengthSaison'])."^".sterilize($_POST['darkLightColor']);
+			if ($index == "25-B") $brewInfo = sterilize($_POST['strengthSaison'])."^".sterilize($_POST['darkLightColor']);
 
-			else $brewInfo .= "";
 		}
 
 		$brewMead1 = "";
@@ -1016,12 +995,14 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 			if (!isset($_POST["brewPaid".$id])) $brewPaid = "0";
 			if ((isset($_POST["brewReceived".$id])) && ($_POST["brewReceived".$id] == "1")) $brewReceived = "1";
 			if (!isset($_POST["brewReceived".$id])) $brewReceived = "0";
+			
+			$brewJudgingNumber = str_replace("^","-",$_POST["brewJudgingNumber".$id]);
 
 			$updateSQL = "UPDATE $brewing_db_table SET
 			brewPaid='".$brewPaid."',
 			brewReceived='".$brewReceived."',
 			brewBoxNum='".$_POST["brewBoxNum".$id]."',
-			brewJudgingNumber='".$_POST["brewJudgingNumber".$id]."'
+			brewJudgingNumber='".$brewJudgingNumber."'
 			WHERE id='".$id."'";
 			mysqli_real_escape_string($connection,$updateSQL);
 			$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));

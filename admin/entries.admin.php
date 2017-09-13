@@ -73,10 +73,25 @@ do {
 	$required_info = "";
 	$entry_judging_num = "";
 	$entry_judging_num_display = "";
-
+	
+	$entry_number = sprintf("%04s",$row_log['id']);
+	$judging_number = sprintf("%06s",$row_log['brewJudgingNumber']);
+	
+	// Check whether scoresheet file exists, and, if so, provide link.
+	$scoresheet_file_name_entry = sprintf("%06s",$entry_number).".pdf";
+	$scoresheet_file_name_judging = $judging_number.".pdf";
+	$scoresheetfile_entry = USER_DOCS.$scoresheet_file_name_entry;
+	$scoresheetfile_judging = USER_DOCS.$scoresheet_file_name_judging;
+	
 	$scoresheet = FALSE;
-	$filename = USER_DOCS.$row_log['brewJudgingNumber'].".pdf";
-	if (file_exists($filename)) $scoresheet = TRUE;
+	if ((file_exists($scoresheetfile_entry)) || (file_exists($scoresheetfile_judging))) $scoresheet = TRUE;
+	
+	if (file_exists($scoresheetfile_entry)) $scoresheet_file_name = $scoresheet_file_name_entry;
+	elseif (file_exists($scoresheetfile_judging)) $scoresheet_file_name = $scoresheet_file_name_judging;
+	else $scoresheet_file_name = "";
+	
+	$filename_judging = USER_DOCS.$judging_number.".pdf";
+	if (file_exists($filename_judging)) $scoresheet = TRUE;
 
 	if ((!empty($row_log['brewInfo'])) || (!empty($row_log['brewMead1'])) || (!empty($row_log['brewMead2'])) || (!empty($row_log['brewMead3']))) {
 		$brewInfo = "";
@@ -94,11 +109,11 @@ do {
 	elseif ((strpos($_SESSION['prefsStyleSet'],"BABDB") === false) && ((check_special_ingredients($entry_style,$row_styles['brewStyleVersion']))) && ($row_log['brewInfo'] == "")) $entry_unconfirmed_row = "bg-warning";
 
 	if (isset($row_log['brewJudgingNumber'])) {
-		$entry_judging_num_hidden .= "<span class=\"hidden visible-print-inline\">".sprintf("%06s",$row_log['brewJudgingNumber'])."</span>";
-		$entry_judging_num .= sprintf("%06s",$row_log['brewJudgingNumber']);
+		$entry_judging_num_hidden .= "<span class=\"hidden visible-print-inline\">".$judging_number."</span>";
+		$entry_judging_num .= $judging_number;
 	}
 
-	if ($dbTable == "default") $entry_judging_num_display .= "<input class=\"form-control input-sm hidden-print\" id=\"brewJudgingNumber\" name=\"brewJudgingNumber".$row_log['id']."\" type=\"text\" size=\"6\" maxlength=\"6\" value=\"".$entry_judging_num."\" /> ".$entry_judging_num_hidden;
+	if ($dbTable == "default") $entry_judging_num_display .= "<input class=\"form-control input-sm hidden-print\" id=\"brewJudgingNumber\" name=\"brewJudgingNumber".$row_log['id']."\" type=\"text\" pattern=\".{6,}\" title=\"Judging numbers must be six characters and cannot include the ^ character. The ^ character will be converted to a dash (-) upon submit. Use leading zeroes (e.g., 000123 or 01-001, etc.)\" size=\"6\" maxlength=\"6\" value=\"".$entry_judging_num."\" /> ".$entry_judging_num_hidden;
 	else $entry_judging_num_display = $entry_judging_num;
 
 	// Entry Style
@@ -121,7 +136,7 @@ do {
 			}
 		$entry_brewer_display .=  $brewer_info[1].", ".$brewer_info[0];
 		if (($bid == "default") && ($dbTable == "default")) $entry_brewer_display .= "</a>";
-		//$entry_brewer_display .=  "<br>".$brewer_info[11].", ".$brewer_info[12];
+		$entry_brewer_display .=  "<br>".$brewer_info[11].", ".$brewer_info[12];
 	 }
 	 elseif (($brewer_info[15] != "&nbsp;") && ($pro_edition == 1)) {
 		if (($bid == "default") && ($dbTable == "default")) {
@@ -129,7 +144,7 @@ do {
 			}
 		$entry_brewer_display .=  $brewer_info[15];
 		if (($bid == "default") && ($dbTable == "default")) $entry_brewer_display .= "</a>";
-		//$entry_brewer_display .=  "<br>".$brewer_info[11].", ".$brewer_info[12];
+		$entry_brewer_display .=  "<br>".$brewer_info[11].", ".$brewer_info[12];
 	 }
 	else $entry_brewer_display .= "&nbsp;";
 
@@ -183,7 +198,43 @@ do {
 	}
 
 	if ($scoresheet) {
-		$entry_actions .= " <a href = \"".$base_url."handle.php?section=pdf-download&amp;id=".$row_log['brewJudgingNumber']."\" data-toggle=\"tooltip\" title=\"Download judges&rsquo; scoresheets for the entry named ".$row_log['brewName'].".\"><span class=\"fa fa-lg fa-gavel\"></span></a> ";
+		
+		// The pseudo-random number and the corresponding name of the temporary file are defined each time 
+		// this brewer_entries.sec.php script is accessed (or refreshed), but the temporary file is created
+		// only when the entrant clicks on the gavel icon to access the scoresheet. 
+		$random_num_str = random_generator(8,2);
+		$random_file_name = $random_num_str.".pdf";
+		$scoresheet_random_file_relative = "user_temp/".$random_file_name;
+		$scoresheet_random_file = USER_TEMP.$random_file_name;
+		$scoresheet_random_file_html = $base_url.$scoresheet_random_file_relative;
+
+		if (!empty($scoresheet_file_name)) {
+			$scoresheet_link = "";
+			$scoresheet_link .= "<a href=\"".$base_url."output/scoresheets.output.php?";
+
+			// Obfuscate the *ACTUAL* file names. 
+			// Prevents casual users from right clicking on scoresheet download link and changing
+			// the entry or judging number pdf name passed via the URL to force downloads of files 
+			// they shouldn't have access to. Can I get a harumph?!
+			$scoresheet_link .= "scoresheetfilename=".encryptString($scoresheet_file_name);
+			$scoresheet_link .= "&amp;randomfilename=".encryptString($random_file_name)."&amp;download=true";
+			$scoresheet_link .= sprintf("\" data-toggle=\"tooltip\" title=\"%s '".$row_log['brewName']."'.\">",$brewer_entries_text_006);
+			$scoresheet_link .= "<span class=\"fa fa-lg fa-gavel\"></a>&nbsp;&nbsp;";
+		}
+
+		// Clean up temporary scoresheets created for other brewers, when they are at least 1 minute old (just to avoid problems when two entrants try accessing their scoresheets at practically the same time, and clean up previously created scoresheets for the same brewer, regardless of how old they are.
+		$tempfiles = array_diff(scandir(USER_TEMP), array('..', '.'));
+		foreach ($tempfiles as $file) {
+			if ((filectime(USER_TEMP.$file) < time() - 1*60) || ((strpos($file, $scoresheet_file_name_judging) !== FALSE))) {
+				unlink(USER_TEMP.$file);
+			}
+
+			if ((filectime(USER_TEMP.$file) < time() - 1*60) || ((strpos($file, $scoresheet_file_name_entry) !== FALSE))) {
+				unlink(USER_TEMP.$file);
+			}
+		}
+		
+		$entry_actions .= $scoresheet_link;
 	}
 
 	$tbody_rows .= "<tr class=\"".$entry_unconfirmed_row."\">";

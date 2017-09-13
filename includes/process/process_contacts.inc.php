@@ -42,7 +42,7 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 			$to_name = $row_contact['contactFirstName']." ".$row_contact['contactLastName'];
 			$from_email = strtolower(filter_var($_POST['from_email'], FILTER_SANITIZE_EMAIL));
 			$from_name = sterilize(ucwords($_POST['from_name']));
-			$subject = sterlizie(ucwords($_POST['subject']));
+			$subject = sterilize(ucwords($_POST['subject']));
 			$message_post = sterilize($_POST['message']);
 			
 			// Build the message

@@ -137,7 +137,7 @@ do {
 	$scoresheet = FALSE;
 	
 	if ($show_scoresheets) {
-	
+		
 		// Check whether scoresheet file exists, and, if so, provide link.
 		$scoresheet_file_name_entry = sprintf("%06s",$entry_number).".pdf";
 		$scoresheet_file_name_judging = $judging_number.".pdf";
@@ -178,11 +178,11 @@ do {
 		// Clean up temporary scoresheets created for other brewers, when they are at least 1 minute old (just to avoid problems when two entrants try accessing their scoresheets at practically the same time, and clean up previously created scoresheets for the same brewer, regardless of how old they are.
 		$tempfiles = array_diff(scandir(USER_TEMP), array('..', '.'));
 		foreach ($tempfiles as $file) {
-			if ((filectime(USER_TEMP.$file) < time() - 1*60) || ((strpos($file, $judging_number) !== FALSE))) {
+			if ((filectime(USER_TEMP.$file) < time() - 1*60) || ((strpos($file, $scoresheet_file_name_judging) !== FALSE))) {
 				unlink(USER_TEMP.$file);
 			}
 
-			if ((filectime(USER_TEMP.$file) < time() - 1*60) || ((strpos($file, $entry_number) !== FALSE))) {
+			if ((filectime(USER_TEMP.$file) < time() - 1*60) || ((strpos($file, $scoresheet_file_name_entry) !== FALSE))) {
 				unlink(USER_TEMP.$file);
 			}
 		}

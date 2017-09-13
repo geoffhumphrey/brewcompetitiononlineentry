@@ -7,12 +7,12 @@
 
 if (isset($_SERVER['HTTP_REFERER'])) {
 
+	$captcha_success = FALSE;
+
 	// Instantiate HTMLPurifier
 	require (CLASSES.'htmlpurifier/HTMLPurifier.standalone.php');
 	$config_html_purifier = HTMLPurifier_Config::createDefault();
 	$purifier = new HTMLPurifier($config_html_purifier);
-
-	$captcha_success = FALSE;
 
 	// Gather, convert, and/or sanitize info from the form
 	if (isset($_POST['brewerJudgeID'])) {
@@ -24,7 +24,7 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 	if (isset($_POST['brewerJudgeMead'])) $brewerJudgeMead = sterilize($_POST['brewerJudgeMead']);
 	else $brewerJudgeMead = "";
 
-	if (isset($_POST['brewerJudgeRank'])) $brewerJudgeRank = sterilize($_POST['brewerJudgeRank']);
+	if (isset($_POST['brewerJudgeRank'])) $brewerJudgeRank = $_POST['brewerJudgeRank'];
 	else $brewerJudgeRank = "";
 
 	if (isset($_POST['brewerAHA'])) {
@@ -33,7 +33,17 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 	else $brewerAHA = "";
 
 	if (isset($_POST['brewerClubs'])) {
-		$brewerClubs = sterilize($_POST['brewerClubs']);
+		include (DB.'entries.db.php');
+		include (INCLUDES.'constants.inc.php');
+		$brewerClubs = $purifier->purify($_POST['brewerClubs']);
+		$brewerClubsConcat = $brewerClubs."|".$brewerClubs;
+		if (!in_array($brewerClubsConcat,$club_array))  {
+			if (($_POST['brewerClubs'] == "Other") && (!empty($_POST['brewerClubsOther']))) {
+				$brewerClubs = ucwords($brewerClubs);
+			}
+			else $brewerClubs = "";
+		}
+		else $brewerClubs = $brewerClubs;
 	}
 	else $brewerClubs = "";
 
@@ -62,67 +72,78 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 	}
 	else $brewerBreweryTTB = "";
 
-	if (isset($_POST['brewerJudge'])) $brewerJudge = sterilize($_POST['brewerJudge']);
-	else $brewerJudge = "";
-
 	if (isset($_POST['brewerSteward'])) $brewerSteward = sterilize($_POST['brewerSteward']);
 	else $brewerSteward = "";
 
 	if (isset($_POST['brewerStaff'])) $brewerStaff = sterilize($_POST['brewerStaff']);
 	else $brewerStaff = "";
 
-	if (isset($_POST['brewerJudgeExp'])) $brewerJudgeExp = sterilize($_POST['brewerJudgeExp']);
-	else $brewerJudgeExp = "";
 
-	if (isset($_POST['brewerJudgeNotes'])) {
-		$brewerJudgeNotes = $purifier->purify($_POST['brewerJudgeNotes']);
+	if (($_SESSION['prefsProEdition'] == 1) && ($go == "entrant")) {
+		$brewerJudge = "N";
+		$brewerSteward = "N";
 	}
-	else $brewerJudgeNotes = "";
 
-	$userQuestionAnswer = $purifier->purify($_POST['userQuestionAnswer']);
+	else {
+		$brewerJudge = $_POST['brewerJudge'];
+		$brewerSteward = $_POST['brewerSteward'];
+	}
 
-	$first_name = $purifier->purify($_POST['brewerFirstName']);
-	$first_name = strtolower($first_name);
-	$first_name = ucwords($first_name);
+	if ($brewerJudge == "Y") {
+		if (($_POST['brewerJudgeLocation'] != "") && (is_array($_POST['brewerJudgeLocation']))) $location_pref1 = sterilize(implode(",",$_POST['brewerJudgeLocation']));
+		elseif (($_POST['brewerJudgeLocation'] != "") && (!is_array($_POST['brewerJudgeLocation']))) $location_pref1 = sterilize($_POST['brewerJudgeLocation']);
+	}
+	
+	else $location_pref1 = "";
 
-	$last_name = $purifier->purify($_POST['brewerLastName']);
-	$last_name = strtolower($last_name);
-	$last_name = ucwords($last_name);
+	if ($brewerSteward == "Y") {
+		if (($_POST['brewerStewardLocation'] != "") && (is_array($_POST['brewerStewardLocation']))) $location_pref2 = sterilize(implode(",",$_POST['brewerStewardLocation']));
+		elseif (($_POST['brewerJudgeLocation'] != "") && (!is_array($_POST['brewerStewardLocation']))) $location_pref2 = sterilize($_POST['brewerStewardLocation']);
+	}
+	
+	else $location_pref2 = "";
 
-	$address = $purifier->purify($_POST['brewerAddress']);
-	$address = strtolower($address);
-	$address = ucwords($address);
+	if (isset($_POST['brewerJudgeLikes'])) {
+		if (is_array($_POST['brewerJudgeLikes'])) $likes = implode(",",$_POST['brewerJudgeLikes']);
+		else $likes = $_POST['brewerJudgeLikes'];
+	}
+	
+	else $likes = "";
 
-	$city = $purifier->purify($_POST['brewerCity']);
-	$city = strtolower($city);
-	$city = ucwords($city);
+	$likes = sterilize($likes);
+
+	if (isset($_POST['brewerJudgeDislikes'])) {
+		if (is_array($_POST['brewerJudgeDislikes'])) $dislikes = implode(",",$_POST['brewerJudgeDislikes']);
+		else $dislikes = $_POST['brewerJudgeDislikes'];
+	}
+	
+	else $dislikes = "";
+
+	$dislikes = sterilize($dislikes);
+
+	if (isset($brewerJudgeRank)) {
+		if (is_array($brewerJudgeRank)) $rank = implode(",",$brewerJudgeRank);
+		else $rank = $brewerJudgeRank;
+	}
+	
+	else $rank = "";
+
+	$rank = sterilize($rank);
+	$first_name = standardize_name($purifier->purify($_POST['brewerFirstName']));
+	$last_name = standardize_name($purifier->purify($_POST['brewerLastName']));
+	$address = standardize_name($purifier->purify($_POST['brewerAddress']));
+	$city = standardize_name($purifier->purify($_POST['brewerCity']));
+	$state = $purifier->purify($_POST['brewerState']);
+	if (strlen($state) > 2) $state = standardize_name($state);
+	else $state = strtoupper($state);
 
 	$username = strtolower($_POST['user_name']);
 	$username = filter_var($username,FILTER_SANITIZE_EMAIL);
 
 	$username2 = strtolower($_POST['user_name2']);
 	$username2 = filter_var($username2,FILTER_SANITIZE_EMAIL);
-
-	if (($_SESSION['prefsProEdition'] == 1) && ($go == "entrant")) {
-		$brewerJudge = "N";
-		$brewerSteward = "N";
-	}
-	else {
-		$brewerJudge = sterilize($_POST['brewerJudge']);
-		$brewerSteward = sterilize($_POST['brewerSteward']);
-	}
-
-	if ($brewerJudge == "Y") {
-		if (($_POST['brewerJudgeLocation'] != "") && (is_array($_POST['brewerJudgeLocation']))) $location_pref1 = implode(",",sterilize($_POST['brewerJudgeLocation']));
-		elseif (($_POST['brewerJudgeLocation'] != "") && (!is_array($_POST['brewerJudgeLocation']))) $location_pref1 = sterilize($_POST['brewerJudgeLocation']);
-	}
-	else $location_pref1 = "";
-
-	if ($brewerSteward == "Y") {
-		if (($_POST['brewerStewardLocation'] != "") && (is_array($_POST['brewerStewardLocation']))) $location_pref2 = implode(",",sterilize($_POST['brewerStewardLocation']));
-		elseif (($_POST['brewerStewardLocation'] != "") && (!is_array($_POST['brewerStewardLocation']))) $location_pref2 = sterilize($_POST['brewerStewardLocation']);
-	}
-	else $location_pref2 = "";
+	
+	$userQuestionAnswer = $purifier->purify($_POST['userQuestionAnswer']);
 
 	// CAPCHA check
 	if ($filter != "admin") {
@@ -263,6 +284,7 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 
 			mysqli_real_escape_string($connection,$insertSQL);
 			$result = mysqli_query($connection,$insertSQL) or die (mysqli_error($connection));
+			//echo $insertSQL."<br>";
 
 			// Get the id from the "users" table to insert as the uid in the "brewer" table
 			$query_user= "SELECT * FROM $users_db_table WHERE user_name = '$username'";
@@ -406,6 +428,7 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 
 			mysqli_real_escape_string($connection,$insertSQL);
 			$result = mysqli_query($connection,$insertSQL) or die (mysqli_error($connection));
+			//echo $insertSQL."<br>";
 
 			// Stop Gap for random staff assignments
 			$updateSQL = sprintf("UPDATE %s  SET  staff_judge='0', staff_judge_bos='0', staff_steward='0', staff_organizer='0', staff_staff='0' WHERE uid=%s",$prefix."staff",$row_user['id']);
@@ -454,15 +477,15 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 
 				if ($show_entrant_fields) {
 
-					if ($brewerJudge == "Y") $brewerJudge = $label_yes; else $brewerJudge = $label_no;
-					if ($brewerSteward == "Y") $brewerSteward = $label_yes; else $brewerSteward = $label_no;
-					if ($_POST['brewerStaff'] == "Y") $brewerStaff = $label_yes; else $brewerStaff = $label_no;
+					if ($brewerJudge == "Y") $brewerJudge1 = $label_yes; else $brewerJudge1 = $label_no;
+					if ($brewerSteward == "Y") $brewerSteward1 = $label_yes; else $brewerSteward1 = $label_no;
+					if ($_POST['brewerStaff'] == "Y") $brewerStaff1 = $label_yes; else $brewerStaff1 = $label_no;
 
 					if (isset($brewerClubs)) $message .= sprintf("<tr><td valign='top'><strong>%s:</strong></td><td valign='top'>%s</td></tr>",$label_club,$brewerClubs);
 					if (isset($brewerAHA)) $message .= sprintf("<tr><td valign='top'><strong>%s:</strong></td><td valign='top'>%s</td></tr>",$label_aha_number,$brewerAHA);
-					if (isset($_POST['brewerStaff']))$message .= sprintf("<tr><td valign='top'><strong>%s:</strong></td><td valign='top'>%s</td></tr>",$label_staff,$brewerStaff);
-					if (isset($_POST['brewerJudge'])) $message .= sprintf("<tr><td valign='top'><strong>%s:</strong></td><td valign='top'>%s</td></tr>",$label_judge,$brewerJudge);
-					if (isset($_POST['brewerSteward'])) $message .= sprintf("<tr><td valign='top'><strong>%s:</strong></td><td valign='top'>%s</td></tr>",$label_steward,$brewerSteward);
+					if (isset($_POST['brewerStaff']))$message .= sprintf("<tr><td valign='top'><strong>%s:</strong></td><td valign='top'>%s</td></tr>",$label_staff,$brewerStaff1);
+					if (isset($_POST['brewerJudge'])) $message .= sprintf("<tr><td valign='top'><strong>%s:</strong></td><td valign='top'>%s</td></tr>",$label_judge,$brewerJudge1);
+					if (isset($_POST['brewerSteward'])) $message .= sprintf("<tr><td valign='top'><strong>%s:</strong></td><td valign='top'>%s</td></tr>",$label_steward,$brewerSteward1);
 
 				}
 
@@ -492,7 +515,6 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 
 			}
 
-
 		if ($filter == "default") {
 			// Log in the user and redirect
 
@@ -501,7 +523,7 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 			$_SESSION['loginUsername'] = $username;
 
 			// Redirect to Judge Info section if willing to judge
-			if (($brewerJudge == "Y") && ($go == "judge")) {
+			if ($brewerJudge == "Y") {
 
 				$query_brewer= sprintf("SELECT id FROM $brewer_db_table WHERE uid = '%s'", $row_user['id']);
 				$brewer = mysqli_query($connection,$query_brewer) or die (mysqli_error($connection));

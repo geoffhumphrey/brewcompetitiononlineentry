@@ -813,4 +813,42 @@ function bjcp_convert() {
 	} while ($row_brews = mysqli_fetch_assoc($brews));
 			
 }
- ?>
+
+function standardize_name($string) {
+		
+	// Modified version of Armand Niculescu's function
+	// See http://www.media-division.com/correct-name-capitalization-in-php/
+	// Only applies to latin characters
+	
+	// Major latin-character languages that will apply the standardization
+	$name_check_langs = array("en", "fr", "es", "pt", "it", "de");
+	
+	if (in_array($_SESSION['prefsLanguageFolder'], $name_check_langs)) {
+		
+		$word_splitters = array(" ", "-", "O'", "L'", "D'", "St.", "Mc", "Mac", ".");
+		$lowercase_exceptions = array("the", "van", "den", "ter", "von", "und", "des", "der", "de", "da", "of", "and", "l'", "d'", "de", "la", "vit", "dos", "das", "do");
+		$uppercase_exceptions = array("II", "III", "IV", "VI", "VII", "VIII", "IX", "IPA", "DIPA", "NE", "SHV");
+
+		$string = strtolower($string);
+
+		foreach ($word_splitters as $delimiter) { 
+
+			$words = explode($delimiter, $string); 
+			$newwords = array(); 
+
+			foreach ($words as $word) { 
+				if (in_array(strtoupper($word), $uppercase_exceptions)) $word = strtoupper($word);
+				elseif (!in_array($word, $lowercase_exceptions)) $word = ucfirst($word);
+				$newwords[] = $word;
+			}
+
+			if (in_array(strtolower($delimiter), $lowercase_exceptions)) $delimiter = strtolower($delimiter);
+			$string = join($delimiter, $newwords);
+			
+		}
+		
+	}
+	
+	return $string; 
+}
+?>

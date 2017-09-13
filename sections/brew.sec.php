@@ -366,43 +366,43 @@ else {
 			// if ($view == "21-B") {
 				$exploder = explode("^",$row_log['brewInfo']);
 				$brewInfo = $exploder[0];
-				if ($exploder[1] == "Session Strength") $IPASession = "CHECKED";
-				if ($exploder[1] == "Standard Strength") $IPAStandard = "CHECKED";
-				if ($exploder[1] == "Double Strength") $IPADouble = "CHECKED";
+				if ($exploder[1] == "Session Strength") $IPASession = "CHECKED"; else $IPASession = "";
+				if ($exploder[1] == "Standard Strength") $IPAStandard = "CHECKED"; else $IPAStandard = "";
+				if ($exploder[1] == "Double Strength") $IPADouble = "CHECKED"; else $IPADouble = "";
 			}
 			
 			elseif ($view == "23-F") {
 				$exploder = explode("^",$row_log['brewInfo']);
 				$brewInfo = $exploder[0];
-				if ($exploder[1] == "Low/None Sweetness") $lambicSweetLow = "CHECKED";
-				if ($exploder[1] == "Medium Sweetness") $lambicSweetMed = "CHECKED";
-				if ($exploder[1] == "High Sweetness") $lambicSweetHigh = "CHECKED";
-				if ($exploder[2] == "Low Carbonation") $lambicCarbLow = "CHECKED";
-				if ($exploder[2] == "Medium Carbonation") $lambicCarbMed = "CHECKED";
-				if ($exploder[2] == "High Carbonation") $lambicCarbHigh = "CHECKED";
+				if ($exploder[1] == "Low/None Sweetness") $lambicSweetLow = "CHECKED"; else $lambicSweetLow = "";
+				if ($exploder[1] == "Medium Sweetness") $lambicSweetMed = "CHECKED"; else $lambicSweetMed = "";
+				if ($exploder[1] == "High Sweetness") $lambicSweetHigh = "CHECKED"; else $lambicSweetHigh = "";
+				if ($exploder[2] == "Low Carbonation") $lambicCarbLow = "CHECKED"; else $lambicCarbLow = "";
+				if ($exploder[2] == "Medium Carbonation") $lambicCarbMed = "CHECKED"; else $lambicCarbMed = "";
+				if ($exploder[2] == "High Carbonation") $lambicCarbHigh = "CHECKED"; else $lambicCarbHigh = "";
 				
 			}
 			
 			elseif ($view == "25-B") {
 				$exploder = explode("^",$row_log['brewInfo']);
-				if ($exploder[0] == "Table Strength") $saisonTable = "CHECKED";
-				if ($exploder[0] == "Standard Strength") $saisonStandard = "CHECKED";
-				if ($exploder[0] == "Super Strength") $saisonSuper = "CHECKED";
-				if ($exploder[1] == "Pale Color") $darkLightPale = "CHECKED";
-				if ($exploder[1] == "Amber/Dark Color") $darkLightAmber = "CHECKED";
+				if ($exploder[0] == "Table Strength") $saisonTable = "CHECKED"; else $saisonTable = "";
+				if ($exploder[0] == "Standard Strength") $saisonStandard = "CHECKED"; else $saisonStandard = "";
+				if ($exploder[0] == "Super Strength") $saisonSuper = "CHECKED"; else $saisonSuper = "";
+				if ($exploder[1] == "Pale Color") $darkLightPale = "CHECKED"; else $darkLightPale = "";
+				if ($exploder[1] == "Amber/Dark Color") $darkLightAmber = "CHECKED"; else $darkLightAmber = "";
 				$brewInfo = "";
 			}
 			
 			elseif ($view == "24-C") {
-				if ($row_log['brewInfo'] == "Blonde Color") $BDGBlonde .= "CHECKED"; 
-				if ($row_log['brewInfo'] == "Amber Color") $BDGAmber .= "CHECKED"; 
-				if ($row_log['brewInfo'] == "Brown Color") $BDGBrown .= "CHECKED"; 
+				if ($row_log['brewInfo'] == "Blonde Color") $BDGBlonde .= "CHECKED"; else $BDGBlonde = "";
+				if ($row_log['brewInfo'] == "Amber Color") $BDGAmber .= "CHECKED"; else $BDGAmber = "";
+				if ($row_log['brewInfo'] == "Brown Color") $BDGBrown .= "CHECKED"; else $BDGBrown = "";
 				$brewInfo = "";
 			}
 			
 			else {
-				if ($row_log['brewInfo'] == "Pale Color") $darkLightPale .= "CHECKED"; 
-				if ($row_log['brewInfo'] == "Amber/Dark Color") $darkLightAmber .= "CHECKED";
+				if ($row_log['brewInfo'] == "Pale Color") $darkLightPale .= "CHECKED"; else $darkLightPale = "";
+				if ($row_log['brewInfo'] == "Amber/Dark Color") $darkLightAmber .= "CHECKED"; else $darkLightAmber = "";
 				$brewInfo = $row_log['brewInfo'];
 			}
 			

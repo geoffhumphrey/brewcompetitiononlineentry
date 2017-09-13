@@ -16,7 +16,7 @@ session_start();
 require (CONFIG.'config.php');
 require (INCLUDES.'current_version.inc.php');
 include (INCLUDES.'url_variables.inc.php');
-if ($view != "default") $checked_in_numbers = explode("-",$view);
+if ($view != "default") $checked_in_numbers = explode("^",$view);
 include (LANG.'language.lang.php');
 include (LIB.'common.lib.php');
 
@@ -142,7 +142,7 @@ if (($go == "default") && ($id != "default") && (isset($_SESSION['qrPasswordOK']
 
 				// If so, redirect with message
 				if ($totalRows_judging_number > 0) {
-					$redirect = $base_url."qr.php?action=default&go=default&view=".$row_judging_number['id']."-".$judgingNumber."&msg=5";
+					$redirect = $base_url."qr.php?action=default&go=default&view=".$row_judging_number['id']."^".$judgingNumber."&msg=5";
 					header(sprintf("Location: %s", $redirect));
 					exit;
 				}
@@ -155,7 +155,7 @@ if (($go == "default") && ($id != "default") && (isset($_SESSION['qrPasswordOK']
 				mysqli_real_escape_string($connection,$updateSQL);
 				$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 
-				$checkin_redirect .= "&view=".$id."-".$judgingNumber."&msg=3";
+				$checkin_redirect .= "&view=".$id."^".$judgingNumber."&msg=3";
 				header(sprintf("Location: %s", $checkin_redirect));
 				exit;
 
@@ -340,7 +340,7 @@ if ($msg == "5") {
     <form name="form1" data-toggle="validator" action="<?php echo $base_url; ?>qr.php?action=update<?php if ($id != "default") echo "&amp;id=".$id; ?>" method="post">
     	<div class="form-group">
             <label for="inputJudgingNumber"><?php echo $label_judging_number; ?></label>
-            <input type="tel" maxlength="6" data-minlength="6" name="brewJudgingNumber" id="brewJudgingNumber" class="form-control" placeholder="<?php echo $qr_text_011; ?>" data-error="<?php echo $qr_text_013; ?>" autofocus>
+            <input type="tel" pattern="[^^]+"  maxlength="6" data-minlength="6" name="brewJudgingNumber" id="brewJudgingNumber" class="form-control" placeholder="<?php echo $qr_text_011; ?>" data-error="<?php echo $qr_text_013; ?>" autofocus>
             <div class="help-block with-errors"></div>
             <div class="help-block small"><?php echo $qr_text_012; ?></div>
         </div>
