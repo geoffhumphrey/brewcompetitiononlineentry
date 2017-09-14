@@ -356,7 +356,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 			WHERE id=%s",
 						   GetSQLValueString(sterilize($new_id), "int"),
 						   GetSQLValueString(sterilize($_POST['brewStyleNum']), "text"),
-						   GetSQLValueString($purifier->purify(_POST['brewStyle']), "scrubbed"),
+						   GetSQLValueString($purifier->purify($_POST['brewStyle']), "scrubbed"),
 						   GetSQLValueString(sterilize($_POST['brewStyle']), "scrubbed"),
 						   GetSQLValueString(sterilize($_POST['brewStyleOG']), "text"),
 						   GetSQLValueString(sterilize($_POST['brewStyleOGMax']), "text"),
@@ -414,7 +414,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 
 			WHERE id=%s",
 						   GetSQLValueString(sterilize($_POST['brewStyleNum']), "text"),
-						   GetSQLValueString($purifier->purify(_POST['brewStyle']), "scrubbed"),
+						   GetSQLValueString($purifier->purify($_POST['brewStyle']), "scrubbed"),
 						   GetSQLValueString(sterilize($_POST['brewStyleOG']), "text"),
 						   GetSQLValueString(sterilize($_POST['brewStyleOGMax']), "text"),
 						   GetSQLValueString(sterilize($_POST['brewStyleFG']), "text"),
