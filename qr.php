@@ -1,24 +1,100 @@
 <?php
 define('ROOT',dirname( __FILE__ ).DIRECTORY_SEPARATOR);
+define('ADMIN',ROOT.'admin'.DIRECTORY_SEPARATOR);
+define('SSO',ROOT.'sso'.DIRECTORY_SEPARATOR);
 define('CLASSES',ROOT.'classes'.DIRECTORY_SEPARATOR);
 define('CONFIG',ROOT.'site'.DIRECTORY_SEPARATOR);
+define('DB',ROOT.'includes'.DIRECTORY_SEPARATOR.'db'.DIRECTORY_SEPARATOR);
+define('IMAGES',ROOT.'images'.DIRECTORY_SEPARATOR);
 define('INCLUDES',ROOT.'includes'.DIRECTORY_SEPARATOR);
 define('LIB',ROOT.'lib'.DIRECTORY_SEPARATOR);
+define('MODS',ROOT.'mods'.DIRECTORY_SEPARATOR);
+define('PROCESS',ROOT.'includes'.DIRECTORY_SEPARATOR.'process'.DIRECTORY_SEPARATOR);
+define('SECTIONS',ROOT.'sections'.DIRECTORY_SEPARATOR);
+define('COMPONENTS',ROOT.'components'.DIRECTORY_SEPARATOR);
+define('TEMPLATES',ROOT.'templates'.DIRECTORY_SEPARATOR);
+define('SETUP',ROOT.'setup'.DIRECTORY_SEPARATOR);
+define('UPDATE',ROOT.'update'.DIRECTORY_SEPARATOR);
+define('OUTPUT',ROOT.'output'.DIRECTORY_SEPARATOR);
+define('USER_IMAGES',ROOT.'user_images'.DIRECTORY_SEPARATOR);
+define('USER_DOCS',ROOT.'user_docs'.DIRECTORY_SEPARATOR);
+define('USER_TEMP',ROOT.'user_temp'.DIRECTORY_SEPARATOR);
 define('LANG',ROOT.'lang'.DIRECTORY_SEPARATOR);
 define('DEBUGGING',ROOT.'includes'.DIRECTORY_SEPARATOR.'debug'.DIRECTORY_SEPARATOR);
+define('HOSTED', FALSE);
+define('NHC', FALSE);
+define('SINGLE', FALSE);
+define('MAINT', FALSE);
+define('CDN', TRUE);
 define('TESTING', FALSE);
 define('DEBUG', FALSE);
 define('DEBUG_SESSION_VARS', FALSE);
-define('SINGLE', FALSE);
+define('FORCE_UPDATE', FALSE);
 
-session_start();
+ini_set('error_reporting', E_ALL ^ E_DEPRECATED);
+ini_set('log_errors','On');
+if (DEBUG)  ini_set('display_errors','On');
+else ini_set('display_errors','Off');
 
-require (CONFIG.'config.php');
-require (INCLUDES.'current_version.inc.php');
-include (INCLUDES.'url_variables.inc.php');
+require_once (CONFIG.'config.php');
+$prefix_session = md5(__FILE__);
+
+function is_session_started() {
+    if (php_sapi_name() !== 'cli' ) {
+        if (version_compare(phpversion(), '5.4.0', '>=')) {
+            return session_status() === PHP_SESSION_ACTIVE ? TRUE : FALSE;
+        } else {
+            return session_id() === '' ? FALSE : TRUE;
+        }
+    }
+    return FALSE;
+}
+
+if (is_session_started() === FALSE) {
+	session_name($prefix_session);
+    session_start();
+}
+
+require_once (INCLUDES.'url_variables.inc.php');
+
+// **PREVENTING SESSION HIJACKING**
+// Prevents javascript XSS attacks aimed to steal the session ID
+ini_set('session.cookie_httponly', 1);
+
+// **PREVENTING SESSION FIXATION**
+// Session ID cannot be passed through URLs
+ini_set('session.use_only_cookies', 1);
+
+// Uses a secure connection (HTTPS) if possible
+ini_set('session.cookie_secure', 1);
+
+require_once (LIB.'common.lib.php');
+require_once (INCLUDES.'db_tables.inc.php');
 if ($view != "default") $checked_in_numbers = explode("^",$view);
-include (LANG.'language.lang.php');
-include (LIB.'common.lib.php');
+
+// Set language preferences in session variables
+if (empty($_SESSION['prefsLang'.$prefix_session])) {
+
+	// Language - in current version only English is available. Future versions will feature translations.
+	$_SESSION['prefsLanguage'] = "en-US";
+
+	// Check if variation used (demarked with a dash)
+	if (strpos($_SESSION['prefsLanguage'], '-') !== FALSE) {
+		$lang_folder = explode("-",$_SESSION['prefsLanguage']);
+		$_SESSION['prefsLanguageFolder'] = strtolower($lang_folder[0]);
+	}
+
+	else $_SESSION['prefsLanguageFolder'] = strtolower($_SESSION['prefsLanguage']);
+	
+	$_SESSION['prefsLang'.$prefix_session] = "1";
+	
+}
+
+require_once (LANG.'language.lang.php');
+
+$logged_in = FALSE;
+if (!isset($_SESSION['qrPasswordOK'])) $logged_in = TRUE;
+
 
 $query_contest_info = sprintf("SELECT * FROM %s", $prefix."contest_info");
 if (SINGLE) $query_contest_info .= sprintf(" WHERE id='%s'", $_POST['comp_id']);
@@ -170,7 +246,7 @@ if (($go == "default") && ($id != "default") && (isset($_SESSION['qrPasswordOK']
 				mysqli_real_escape_string($connection,$updateSQL);
 				$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 
-				$checkin_redirect .= "&view=".$id."-".$row_entry['brewJudgingNumber']."&msg=6";
+				$checkin_redirect .= "&view=".$id."^".$row_entry['brewJudgingNumber']."&msg=6";
 				header(sprintf("Location: %s", $checkin_redirect));
 				exit;
 
@@ -183,7 +259,7 @@ if (($go == "default") && ($id != "default") && (isset($_SESSION['qrPasswordOK']
 	// If not, redirect to alert the user (message 4)
 	else {
 
-		$checkin_redirect .= "&view=".$id."-000000&msg=4";
+		$checkin_redirect .= "&view=".$id."^000000&msg=4";
 		header(sprintf("Location: %s", $checkin_redirect));
 		exit;
 
@@ -221,6 +297,20 @@ if ($msg == "4") {
 if ($msg == "5") {
 	$message .= sprintf("<span class=\"fa fa-exclamation-circle\"></span> <strong>%s</strong> %s",$qr_text_000,$header_text_008);
 }
+
+if (isset($_SESSION['last_action'])) {
+    $seconds_inactive = time() - $_SESSION['last_action'];
+    $session_expire_after_seconds = $session_expire_after * 60;
+    if ($seconds_inactive >= $session_expire_after_seconds) {
+        session_unset();
+		session_destroy();
+		session_write_close();
+		setcookie(session_name($prefix_session),'',0,'/');
+		session_regenerate_id(true);
+    }
+}
+
+$_SESSION['last_action'] = time();
 
 ?>
 
@@ -322,8 +412,8 @@ if ($msg == "5") {
     <!-- Password Form if Not Signed In -->
 	<form data-toggle="validator" name="form1" action="<?php echo $base_url; ?>qr.php?action=password-check<?php if ($id != "default") echo "&amp;id=".$id; ?>" method="post">
         <div class="form-group">
-            <label for="inputPassword" class="sr-only"><?php $label_password; ?></label>
-            <input type="password" name="inputPassword" id="inputPassword" class="form-control" placeholder="Password" autofocus required>
+            <label for="inputPassword" class="sr-only"><?php echo $label_password; ?></label>
+            <input type="password" name="inputPassword" id="inputPassword" class="form-control" placeholder="<?php echo $label_password; ?>" autofocus required>
             <div class="help-block with-errors"></div>
         </div>
         <button class="btn btn-lg btn-primary btn-block" type="submit"><?php echo $label_log_in; ?></button>

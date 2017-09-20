@@ -1,9 +1,9 @@
 <?php
 
-/*
+/**
  This file is shared with two scripts:
- /includes/process/process_brewer.inc.php
- /includes/process/process_users_registration.inc.php
+ includes/process/process_brewer.inc.php
+ includes/process/process_users_registration.inc.php
  */
 
 // Instantiate HTMLPurifier

@@ -148,7 +148,7 @@ $security_questions_display = (array_rand($security_question, 5));
 $security = "";
 if ($section != "step2") $security .= "<div class=\"radio\"><label><input type=\"radio\" name=\"userQuestion\" value=\"".$_SESSION['userQuestion']."\" CHECKED> ".$_SESSION['userQuestion']."</label></div>";
 foreach ($security_questions_display as $key => $value) {
-	if ($security_question[$value] != $_SESSION['userQuestion']) $security .= "<div class=\"radio\"><label><input type=\"radio\" name=\"userQuestion\" value=\"".$security_question[$value]."\"> ".$security_question[$value]."</label></div>";
+	if ($security_question[$value] != $_SESSION['userQuestion']) $security .= "<div class=\"radio\"><label><input type=\"radio\" name=\"userQuestion\" value=\"".$security_question[$value]."\" data-error=\"".$brewer_text_033."\" required> ".$security_question[$value]."</label></div>";
 }
 
 if ($go != "admin") echo $info_msg;
@@ -222,7 +222,7 @@ $(document).ready(function(){
 });
 </script>
 
-<form class="form-horizontal" action="<?php echo $form_action; ?>" method="POST" name="form1" id="form1">
+<form class="form-horizontal" data-toggle="validator" action="<?php echo $form_action; ?>" method="POST" name="form1" id="form1">
 
 <?php if (($_SESSION['prefsProEdition'] == 1) && (!$show_judge_steward_fields)) { ?>
     <div class="form-group"><!-- Form Group REQUIRED Text Input -->
@@ -231,7 +231,7 @@ $(document).ready(function(){
             <div class="input-group has-warning">
                 <span class="input-group-addon" id="brewerBreweryName-addon1"><span class="fa fa-beer"></span></span>
                 <!-- Input Here -->
-                <input class="form-control" id="brewerBreweryName" name="brewerBreweryName" type="text" value="<?php if ($action == "edit") echo $row_brewer['brewerBreweryName']; ?>" data-error="<?php echo $register_text_044; ?>" placeholder="" required autofocus>
+                <input class="form-control" id="brewerBreweryName" name="brewerBreweryName" type="text" value="<?php if ($action == "edit") echo $row_brewer['brewerBreweryName']; ?>" data-error="<?php echo $register_text_044; ?>" placeholder="" data-error="<?php echo $brewer_text_032; ?>" required autofocus>
                 <span class="input-group-addon" id="brewerBreweryName-addon2"><span class="fa fa-star"></span></span>
             </div>
             <div class="help-block"><?php echo $register_text_045; ?></div>
@@ -255,9 +255,10 @@ $(document).ready(function(){
             <div class="input-group has-warning">
                 <span class="input-group-addon" id="brewerFirstName-addon1"><span class="fa fa-user"></span></span>
                 <!-- Input Here -->
-                <input class="form-control" id="brewerFirstName" name="brewerFirstName" type="text" value="<?php if ($action == "edit") echo $row_brewer['brewerFirstName']; ?>" placeholder="" <?php if (($_SESSION['prefsProEdition'] == 0) && ($psort == "default")) echo "autofocus"; ?>>
+                <input class="form-control" id="brewerFirstName" name="brewerFirstName" type="text" value="<?php if ($action == "edit") echo $row_brewer['brewerFirstName']; ?>" placeholder="" <?php if (($_SESSION['prefsProEdition'] == 0) && ($psort == "default")) echo "autofocus"; ?> data-error="<?php echo $brewer_text_024; ?>" required>
                 <span class="input-group-addon" id="brewerFirstName-addon2"><span class="fa fa-star"></span></span>
             </div>
+            <div class="help-block with-errors"></div>
         </div>
     </div><!-- ./Form Group -->
     <div class="form-group"><!-- Form Group REQUIRED Text Input -->
@@ -266,10 +267,11 @@ $(document).ready(function(){
             <div class="input-group has-warning">
                 <span class="input-group-addon" id="brewerLastName-addon1"><span class="fa fa-user"></span></span>
                 <!-- Input Here -->
-                <input class="form-control" id="brewerLastName" name="brewerLastName" type="text" value="<?php if ($action == "edit") echo $row_brewer['brewerLastName']; ?>" placeholder="">
+                <input class="form-control" id="brewerLastName" name="brewerLastName" type="text" value="<?php if ($action == "edit") echo $row_brewer['brewerLastName']; ?>" placeholder="" data-error="<?php echo $brewer_text_025; ?>" required>
                 <span class="input-group-addon" id="brewerLastName-addon2"><span class="fa fa-star"></span></span>
             </div>
-            <span class="help-block"><?php if ($_SESSION['prefsProEdition'] == 0) echo $brewer_text_000; ?></span>
+            <div class="help-block"><?php if ($_SESSION['prefsProEdition'] == 0) echo $brewer_text_000; ?></div>
+            <div class="help-block with-errors"></div>
         </div>
     </div><!-- ./Form Group -->
      <?php if (($go != "admin") && ($section != "step2")) { ?>
@@ -280,6 +282,7 @@ $(document).ready(function(){
             	<?php echo $security; ?>
             </div>
             <span class="help-block"><?php echo $brewer_text_001; ?></span>
+            <div class="help-block with-errors"></div>
 		</div>
 	</div><!-- ./Form Group -->
 	<div class="form-group"><!-- Form Group REQUIRED Text Input -->
@@ -288,7 +291,7 @@ $(document).ready(function(){
 			<div class="input-group has-warning">
 				<span class="input-group-addon" id="security-question-answer-addon1"><span class="fa fa-bullhorn"></span></span>
 				<!-- Input Here -->
-				<input class="form-control" name="userQuestionAnswer" id="userQuestionAnswer" type="text" placeholder="" value="<?php if ($action == "edit") echo $_SESSION['userQuestionAnswer']; ?>" required>
+				<input class="form-control" name="userQuestionAnswer" id="userQuestionAnswer" type="text" placeholder="" value="<?php if ($action == "edit") echo $_SESSION['userQuestionAnswer']; ?>" data-error="<?php echo $brewer_text_034; ?>" required>
 				<span class="input-group-addon" id="security-question-answer-addon2"><span class="fa fa-star"></span></span>
 			</div>
             <div class="help-block with-errors"></div>
@@ -302,9 +305,10 @@ $(document).ready(function(){
             <div class="input-group has-warning">
                 <span class="input-group-addon" id="brewerPhone1-addon1"><span class="fa fa-phone"></span></span>
                 <!-- Input Here -->
-                <input class="form-control" id="brewerPhone1" name="brewerPhone1" type="text" value="<?php if ($action == "edit") echo $phone1; ?>" placeholder="">
+                <input class="form-control" id="brewerPhone1" name="brewerPhone1" type="text" value="<?php if ($action == "edit") echo $phone1; ?>" placeholder="" data-error="<?php echo $brewer_text_026; ?>" required>
                 <span class="input-group-addon" id="brewerPhone1-addon2"><span class="fa fa-star"></span></span>
             </div>
+            <div class="help-block with-errors"></div>
         </div>
     </div><!-- ./Form Group -->
 
@@ -322,9 +326,10 @@ $(document).ready(function(){
             <div class="input-group has-warning">
                 <span class="input-group-addon" id="brewerAddress-addon1"><span class="fa fa-home"></span></span>
                 <!-- Input Here -->
-                <input class="form-control" id="brewerAddress" name="brewerAddress" type="text" value="<?php if ($action == "edit") echo $row_brewer['brewerAddress']; ?>" placeholder="">
+                <input class="form-control" id="brewerAddress" name="brewerAddress" type="text" value="<?php if ($action == "edit") echo $row_brewer['brewerAddress']; ?>" placeholder="" data-error="<?php echo $brewer_text_027; ?>" required>
                 <span class="input-group-addon" id="brewerAddress-addon2"><span class="fa fa-star"></span></span>
             </div>
+            <div class="help-block with-errors"></div>
         </div>
     </div><!-- ./Form Group -->
 
@@ -333,9 +338,10 @@ $(document).ready(function(){
         <div class="col-lg-9 col-md-9 col-sm-8 col-xs-12">
             <div class="input-group has-warning">
                 <!-- Input Here -->
-                <input class="form-control" id="brewerCity" name="brewerCity" type="text" value="<?php if ($action == "edit") echo $row_brewer['brewerCity']; ?>" placeholder="">
+                <input class="form-control" id="brewerCity" name="brewerCity" type="text" value="<?php if ($action == "edit") echo $row_brewer['brewerCity']; ?>" placeholder="" data-error="<?php echo $brewer_text_028; ?>" required>
                 <span class="input-group-addon" id="brewerCity-addon2"><span class="fa fa-star"></span></span>
             </div>
+            <div class="help-block with-errors"></div>
         </div>
     </div><!-- ./Form Group -->
 
@@ -344,9 +350,10 @@ $(document).ready(function(){
         <div class="col-lg-9 col-md-9 col-sm-8 col-xs-12">
             <div class="input-group has-warning">
                 <!-- Input Here -->
-                <input class="form-control" id="brewerState" name="brewerState" type="text" value="<?php if ($action == "edit") echo $row_brewer['brewerState']; ?>" placeholder="">
+                <input class="form-control" id="brewerState" name="brewerState" type="text" value="<?php if ($action == "edit") echo $row_brewer['brewerState']; ?>" placeholder="" data-error="<?php echo $brewer_text_029; ?>" required>
                 <span class="input-group-addon" id="brewerState-addon2"><span class="fa fa-star"></span></span>
             </div>
+            <div class="help-block with-errors"></div>
         </div>
     </div><!-- ./Form Group -->
 
@@ -355,22 +362,26 @@ $(document).ready(function(){
         <div class="col-lg-9 col-md-9 col-sm-8 col-xs-12">
             <div class="input-group has-warning">
                 <!-- Input Here -->
-                <input class="form-control" id="brewerZip" name="brewerZip" type="text" value="<?php if ($action == "edit") echo $row_brewer['brewerZip']; ?>" placeholder="">
+                <input class="form-control" id="brewerZip" name="brewerZip" type="text" value="<?php if ($action == "edit") echo $row_brewer['brewerZip']; ?>" placeholder="" data-error="<?php echo $brewer_text_030; ?>" required>
                 <span class="input-group-addon" id="brewerZip-addon2"><span class="fa fa-star"></span></span>
             </div>
+            <div class="help-block with-errors"></div>
         </div>
     </div><!-- ./Form Group -->
 
 	<div class="form-group"><!-- Form Group REQUIRED Select -->
         <label for="brewerCountry" class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label"><?php if ($_SESSION['prefsProEdition'] == 1) echo $label_organization." "; echo $label_country; ?></label>
-        <div class="col-lg-9 col-md-6 col-sm-8 col-xs-12 has-warning">
-        <!-- Input Here -->
-        <select class="selectpicker" name="brewerCountry" id="brewerCountry" data-live-search="true" data-size="10" data-width="auto" data-show-tick="true" data-header="<?php echo $label_select_country; ?>" title="<?php echo $label_select_country; ?>">
-            <?php foreach ($countries as $country) {  ?>
-            <option value="<?php echo $country; ?>" <?php if (($action == "edit") && ($row_brewer['brewerCountry'] == $country)) echo "selected"; ?>><?php echo $country; ?></option>
-            <?php } ?>
-        </select>
-        </div>
+        <div class="col-lg-9 col-md-6 col-sm-8 col-xs-12">
+        	<div class="input-group has-warning">
+				<!-- Input Here -->
+				<select class="selectpicker" name="brewerCountry" id="brewerCountry" data-live-search="true" data-size="10" data-width="auto" data-show-tick="true" data-header="<?php echo $label_select_country; ?>" title="<?php echo $label_select_country; ?>" data-error="<?php echo $brewer_text_031; ?>" required>
+				<?php foreach ($countries as $country) {  ?>
+				<option value="<?php echo $country; ?>" <?php if (($action == "edit") && ($row_brewer['brewerCountry'] == $country)) echo "selected"; ?>><?php echo $country; ?></option>
+				<?php } ?>
+				</select>
+        	</div>
+        	<div class="help-block with-errors"></div>
+		</div>
     </div><!-- ./Form Group -->
 
  	<?php if (($_SESSION['prefsProEdition'] == 0) || (($_SESSION['prefsProEdition'] == 1) && ($entrant_type_brewery))) { ?>

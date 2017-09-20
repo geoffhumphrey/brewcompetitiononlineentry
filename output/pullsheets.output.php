@@ -123,26 +123,26 @@ if ($go == "judging_scores_bos") {
 						$special = style_convert($style_special,"9");
 						$special = explode("^",$special);
 						if (strpos($_SESSION['prefsStyleSet'],"BABDB") === false) {
-							if (($row_entries_1['brewInfo'] != "") && ($special[4] == "1")) $table_flight_tbody .= "<p><strong>Required Info: </strong>".str_replace("^","; ",$row_entries_1['brewInfo'])."</p>";
-							if ($row_entries_1['brewInfoOptional'] != "") $table_flight_tbody .= "<p><strong>Optional Info: </strong>".$row_entries_1['brewInfoOptional']."</p>";
-							if ($row_entries_1['brewComments'] != "") $table_flight_tbody .= "<p><strong>Specifics: </strong>".$row_entries_1['brewComments']."</p>";
+							if (($row_entries_1['brewInfo'] != "") && ($special[4] == "1")) $table_flight_tbody .= "<p><strong>".$label_required_info.": </strong>".str_replace("^","; ",$row_entries_1['brewInfo'])."</p>";
+							if ($row_entries_1['brewInfoOptional'] != "") $table_flight_tbody .= "<p><strong>".$label_optional_info.": </strong>".$row_entries_1['brewInfoOptional']."</p>";
+							if ($row_entries_1['brewComments'] != "") $table_flight_tbody .= "<p><strong>".$label_brewer_specifics.": </strong>".$row_entries_1['brewComments']."</p>";
 							$table_flight_tbody .= "<p>";
-							if (!empty($row_entries_1['brewMead1'])) $table_flight_tbody .= "<strong>Carbonation:</strong> ".$row_entries_1['brewMead1']."<br>";
-							if (!empty($row_entries_1['brewMead2'])) $table_flight_tbody .= "<strong>Sweetness:</strong> ".$row_entries_1['brewMead2']."<br>";
-							if (!empty($row_entries_1['brewMead3'])) $table_flight_tbody .= "<strong>Strength:</strong> ".$row_entries_1['brewMead3'];
+							if (!empty($row_entries_1['brewMead1'])) $table_flight_tbody .= "<strong>".$label_carbonation.":</strong> ".$row_entries_1['brewMead1']."<br>";
+							if (!empty($row_entries_1['brewMead2'])) $table_flight_tbody .= "<strong>".$label_sweetness.":</strong> ".$row_entries_1['brewMead2']."<br>";
+							if (!empty($row_entries_1['brewMead3'])) $table_flight_tbody .= "<strong>".$label_strength.":</strong> ".$row_entries_1['brewMead3'];
 							$table_flight_tbody .= "</p>";
 						}
 						
 						else {
 							include (INCLUDES.'ba_constants.inc.php');
 							$value = $row_entries_1['id'];
-							if (in_array($value,$ba_special_ids)) $table_flight_tbody .= "<p><strong>Required Info: </strong>".str_replace("^","; ",$row_entries_1['brewInfo'])."</p>";
-							if ($row_entries_1['brewInfoOptional'] != "") $table_flight_tbody .= "<p><strong>Optional Info: </strong>".$row_entries_1['brewInfoOptional']."</p>";
-							if ($row_entries_1['brewComments'] != "") $table_flight_tbody .= "<p><strong>Specifics: </strong>".$row_entries_1['brewComments']."</p>";
+							if (in_array($value,$ba_special_ids)) $table_flight_tbody .= "<p><strong>".$label_required_info.": </strong>".str_replace("^","; ",$row_entries_1['brewInfo'])."</p>";
+							if ($row_entries_1['brewInfoOptional'] != "") $table_flight_tbody .= "<p><strong>".$label_optional_info.": </strong>".$row_entries_1['brewInfoOptional']."</p>";
+							if ($row_entries_1['brewComments'] != "") $table_flight_tbody .= "<p><strong>".$label_brewer_specifics.": </strong>".$row_entries_1['brewComments']."</p>";
 							$table_flight_tbody .= "<p>";
-							if (!empty($row_entries_1['brewMead1'])) $table_flight_tbody .= "<strong>Carbonation:</strong> ".$row_entries_1['brewMead1']."<br>";
-							if (!empty($row_entries_1['brewMead2'])) $table_flight_tbody .= "<strong>Sweetness:</strong> ".$row_entries_1['brewMead2']."<br>";
-							if (!empty($row_entries_1['brewMead3'])) $table_flight_tbody .= "<strong>Strength:</strong> ".$row_entries_1['brewMead3'];
+							if (!empty($row_entries_1['brewMead1'])) $table_flight_tbody .= "<strong>".$label_carbonation.":</strong> ".$row_entries_1['brewMead1']."<br>";
+							if (!empty($row_entries_1['brewMead2'])) $table_flight_tbody .= "<strong>".$label_sweetness.":</strong> ".$row_entries_1['brewMead2']."<br>";
+							if (!empty($row_entries_1['brewMead3'])) $table_flight_tbody .= "<strong>".$label_strength.":</strong> ".$row_entries_1['brewMead3'];
 							$table_flight_tbody .= "</p>";
 							
 						}

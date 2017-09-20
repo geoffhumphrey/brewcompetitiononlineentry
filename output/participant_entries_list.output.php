@@ -1,8 +1,3 @@
-
-Currently editing:  
-/home5/rhbcco/public_html/bierederock/output/participant_entries_list.output.php
- Encoding:    Reopen  Switch to Code Editor     Close  Save
-
 <?php 
 $section = "participant_entry_list";
 include (DB.'brewer.db.php');
@@ -17,6 +12,8 @@ do {
 	
 	include (DB.'output_participant_summary.db.php');
 	
+	$entry_numbers = array();
+	$judging_numbers = array();
 	unset($entry_numbers);
 	unset($judging_numbers);
 	
@@ -27,8 +24,8 @@ do {
 		
 		do {		
 		
-			$entry_numbers[] .= sprintf("%04s",$row_log['id']);
-			$judging_numbers[] .= sprintf("%06s",$row_log['brewJudgingNumber']);
+			$entry_numbers[] = sprintf("%04s",$row_log['id']);
+			$judging_numbers[] = sprintf("%06s",$row_log['brewJudgingNumber']);
 			
 		} while ($row_log = mysqli_fetch_assoc($log));
 		

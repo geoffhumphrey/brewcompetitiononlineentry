@@ -11,11 +11,6 @@ $flag_jnum = "";
 $flag_enum = "";
 $jnum_info = "";
 
-
-
-
-
-
 $barcode_text_000 = "Check-In Entries with a Barcode Reader/Scanner";
 $barcode_text_001 = "The following entries have been checked in";
 $barcode_text_002 = "The following judging number(s) have already been assigned to entries. Please use another judging number for each.";
@@ -37,10 +32,6 @@ $barcode_text_017 = "";
 $barcode_text_018 = "";
 $barcode_text_019 = "";
 $barcode_text_020 = "";
-
-
-
-
 
 if ((NHC) && ($prefix == "final_")) $maxlength = 6; else $maxlength = 4;
 
@@ -76,8 +67,8 @@ if (!empty($entry_list)) {
 $entry_list = rtrim($entry_list,", ");
 $entry_list = ltrim($entry_list, ", ");
 ?>
-<div class="well">
-	<p><span class="fa fa-info-circle"></span> <?php echo sprintf("%s: %s", $barcode_text_001, rtrim($entry_list,", ")); ?></p>
+<div class="alert alert-info">
+<span class="fa fa-info-circle"></span> <?php echo sprintf("%s: %s", $barcode_text_001, $entry_list); ?>
 </div>
 <?php } 
 if (!empty($flag_jnum)) { 
@@ -90,8 +81,8 @@ if (!empty($flag_jnum)) {
 		}
 	}
 ?>
-<div class="well">
-	<p><span class="fa fa-info-circle"></span> <?php echo $barcode_text_002; ?></p>
+<div class="alert alert-warning">
+	<span class="fa fa-exclamation-circle"></span> <?php echo $barcode_text_002; ?>
 	<ul class="small">
 	<?php echo $jnum_info; ?>
     </ul>
@@ -150,9 +141,7 @@ foreach ($flag_enum as $num) {
 </div>
 <form method="post" action="<?php echo $base_url; ?>index.php?section=admin&amp;go=checkin&amp;action=add" id="form1" onsubmit = "return(p)">
 <div class="form-inline">
-	<?php for ($i=1; $i <= $fields; $i++) { 
-	
-	?>
+	<?php for ($i=1; $i <= $fields; $i++) { ?>
     <div class="bcoem-admin-element hidden-print">
     <input type="hidden" name="id[]" value="<?php echo $i; ?>">
 	<div class="form-group">
@@ -165,7 +154,7 @@ foreach ($flag_enum as $num) {
   	</div>
     <div class="form-group">
     	<label for="">Box Number</label>
-    	<input type="text" class="form-control" maxlength="5" id="box<?php echo $i; ?>" name="box<?php echo $i; ?>"  onkeyup="moveOnMax(this,'brewPaid<?php echo ($i); ?>')" />
+    	<input type="text" class="form-control" maxlength="5" id="box<?php echo $i; ?>" name="box<?php echo $i; ?>" onkeyup="moveOnMax(this,'brewPaid<?php echo ($i); ?>')" />
   	</div>
 	<?php if ($_SESSION['prefsPayToPrint'] == "N") { ?>
     <div class="form-group">

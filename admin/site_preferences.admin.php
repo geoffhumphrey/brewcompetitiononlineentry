@@ -200,7 +200,56 @@ $(document).ready(function(){
 		<span id="helpBlock" class="help-block">How the competition will award places for winning entries.</span>
 	</div>
 </div><!-- ./Form Group -->
-
+<div class="form-group"><!-- Form Group Radio STACKED -->
+	<label for="prefsDisplaySpecial" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Scoresheet Upload File Names</label>
+	<div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
+		<div class="input-group">
+			<!-- Input Here -->
+			<label class="radio-inline">
+				<input type="radio" name="prefsDisplaySpecial" value="J" id="prefsDisplaySpecial_0" <?php if (($section == "step3") || ($_SESSION['prefsDisplaySpecial'] == "J")) echo "CHECKED"; ?>> 6-Character Judging Number
+			</label>
+			<label class="radio-inline">
+				<input type="radio" name="prefsDisplaySpecial" value="E" id="prefsDisplaySpecial_1" <?php if ($_SESSION['prefsDisplaySpecial'] == "E") echo "CHECKED"; ?>> 6-Digit Entry Number
+			</label>
+		</div>
+		<div id="helpBlock" class="help-block">
+			<p>The way scoresheet PDF files will be named for use by the system when uploaded. <span class="text-primary"><strong>Using the random, system-generated judging numbers ensures unique file names for live and archived entry data.</strong></span></p>
+			<div class="btn-group" role="group" aria-label="ScoresheetsModal">
+				<button type="button" class="btn btn-xs btn-info" data-toggle="modal" data-target="#scoresheetModal">
+				   Scoresheet Upload File Name Info/Examples
+				</button>
+			</div>
+		</div>
+	</div>
+</div><!-- ./Form Group -->
+<!-- Modal -->
+<div class="modal fade" id="scoresheetModal" tabindex="-1" role="dialog" aria-labelledby="scoresheetModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header bcoem-admin-modal">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="scoresheetModalLabel">Scoresheet Upload File Name Info/Examples</h4>
+            </div>
+            <div class="modal-body">
+				<h4>Judging Numbers</h4>
+				<p>If using <strong>judging numbers</strong>, the file names would be:</p>
+					<ul>
+						<li>562113.pdf (system-generated random 6-digit number) - this is the best method to ensure a unique number is used for archived and live data</li>
+						<li>000369.pdf (six-digit judging number corresponding to a scanned barcode label)</li>
+						<li>08-024.pdf, 01a-19.pdf, etc. (customized six-character judging id, input manually)</li>
+					</ul>
+				<p class="text-danger"><span class="fa fa-exclamation-circle"></span> <strong>Keep in mind</strong> that any judging number or judging id that you use as a judging number <strong>should be unique for both live and archive entry data</strong>. If unique combinations are not used, archived data will display the currently available file.</p>
+				<h4>Entry Numbers</h4>
+          		<p>If using <strong>entry numbers</strong>, the numbers <strong>must use leading zeroes</strong> to form a six-digit number. For example, if the entry number is 0193, the scoresheet PDF file should be named 000193.pdf.</p>
+           		<p class="text-danger"><span class="fa fa-exclamation-circle"></span> <strong>Caution:</strong> if using Entry Numbers, the numbers will not be unique if you reset, purge, or archive the current set of entries. When the current set of entries is purged or archived, entry numbers begin again at 0001.</p>
+           		<p>Therefore, it is advised that you use entry numbers only if you plan on purging and/or overwriting the PDF scoresheet files on the server for each competition iteration.</p>
+            </div>
+            <div class="modal-footer">
+            	<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div><!-- ./modal -->
 <div class="form-group"><!-- Form Group Radio INLINE -->
     <label for="prefsContact" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Contact Form</label>
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
@@ -333,12 +382,10 @@ $(document).ready(function(){
         </div>
 		<span id="helpBlock" class="help-block">
 		<div class="btn-group" role="group" aria-label="SEFModal">
-        <div class="btn-group" role="group">
             <button type="button" class="btn btn-xs btn-info" data-toggle="modal" data-target="#SEFModal">
                SEF URLs Info
             </button>
         </div>
-		</div>
     </div>
 </div><!-- ./Form Group -->
 <!-- Modal -->
@@ -536,7 +583,6 @@ $(document).ready(function(){
 		</span>
     </div>
 </div><!-- ./Form Group -->
-
 <!-- Modal -->
 <div class="modal fade" id="hideRecipeModal" tabindex="-1" role="dialog" aria-labelledby="hideRecipeModalLabel">
     <div class="modal-dialog" role="document">

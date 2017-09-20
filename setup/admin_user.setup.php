@@ -86,13 +86,13 @@ httpxml.send(null);
 $security_questions_display = (array_rand($security_question, 10));
 $security = "";
 foreach ($security_questions_display as $key => $value) {
-	$security .= "<div class=\"radio\"><label><input type=\"radio\" name=\"userQuestion\" value=\"".$security_question[$value]."\"> ".$security_question[$value]."</label></div>";
+	$security .= "<div class=\"radio\"><label><input type=\"radio\" name=\"userQuestion\" value=\"".$security_question[$value]."\" required> ".$security_question[$value]."</label></div>";
 }
 
 if (($action != "print") && ($msg != "default")) echo $msg_output; ?>
 <p class="lead">This will be the Administrator's account with full access to <em>all</em> of the installation's features and functions.</p>
 <p class="lead"><small>The owner of this account will be able to add, edit, and delete any entry and participant, grant administration privileges to other users, define custom styles, define tables and flights, add scores, print reports, etc. This user will also be able to add, edit, and delete their own entries into the competition.</small></p>
-<form class="form-horizontal" action="<?php echo $base_url; ?>includes/process.inc.php?section=<?php if ($section == "step1") echo "setup"; else echo $section; ?>&amp;action=add&amp;dbTable=<?php echo $users_db_table; ?>" method="POST" name="form1" id="form1" onSubmit="return CheckRequiredFields()">
+<form class="form-horizontal" data-toggle="validator" action="<?php echo $base_url; ?>includes/process.inc.php?section=<?php if ($section == "step1") echo "setup"; else echo $section; ?>&amp;action=add&amp;dbTable=<?php echo $users_db_table; ?>" method="POST" name="form1" id="form1" onSubmit="return CheckRequiredFields()">
 <input name="userLevel" type="hidden" value="0" />
 <div class="form-group"><!-- Form Group REQUIRED Text Input -->
 		<label for="" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Email Address</label>
@@ -100,7 +100,7 @@ if (($action != "print") && ($msg != "default")) echo $msg_output; ?>
 			<div class="input-group has-warning">
 				<span class="input-group-addon" id="email-addon1"><span class="fa fa-envelope"></span></span>
 				<!-- Input Here -->
-				<input class="form-control" name="user_name" id="user_name" type="email" placeholder="Your email address is your user name" onBlur="checkAvailability()" onkeyup="twitter.updateUrl(this.value)" onchange="AjaxFunction(this.value);" value="<?php if ($msg > 0) echo $_COOKIE['user_name']; ?>">
+				<input class="form-control" name="user_name" id="user_name" type="email" placeholder="Your email address is your user name" onBlur="checkAvailability()" onkeyup="twitter.updateUrl(this.value)" onchange="AjaxFunction(this.value);" value="<?php if ($msg > 0) echo $_COOKIE['user_name']; ?>" required>
 				<span class="input-group-addon" id="email-addon2"><span class="fa fa-star"></span>
 			</div>
 			<div id="msg_email" class="help-block"></div>
@@ -114,12 +114,12 @@ if (($action != "print") && ($msg != "default")) echo $msg_output; ?>
 			<div class="input-group has-warning">
 				<span class="input-group-addon" id="password-addon1"><span class="fa fa-key"></span></span>
 				<!-- Input Here -->
-				<input class="form-control" name="password" id="password" type="password" placeholder="Password" value="<?php if ($msg > 0) echo $_COOKIE['password']; ?>">
+				<input class="form-control" name="password" id="password" type="password" placeholder="Password" value="<?php if ($msg > 0) echo $_COOKIE['password']; ?>" required>
 				<span class="input-group-addon" id="password-addon2"><span class="fa fa-star"></span>
 			</div>
 		</div>
 	</div><!-- ./Form Group -->
-	
+
 	<div class="form-group" id="pwd-container">
 		<label class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label_password_strength; ?></label>
 		<div class="col-lg-6 col-md-9 col-sm-8 col-xs-12">
@@ -143,7 +143,7 @@ if (($action != "print") && ($msg != "default")) echo $msg_output; ?>
 			<div class="input-group has-warning">
 				<span class="input-group-addon" id="security-question-answer-addon1"><span class="fa fa-bullhorn"></span></span>
 				<!-- Input Here -->
-				<input class="form-control" name="userQuestionAnswer" id="userQuestionAnswer" type="text" placeholder="" value="<?php if ($msg > 0) echo $_COOKIE['userQuestionAnswer']; ?>">
+				<input class="form-control" name="userQuestionAnswer" id="userQuestionAnswer" type="text" placeholder="" value="<?php if ($msg > 0) echo $_COOKIE['userQuestionAnswer']; ?>" required>
 				<span class="input-group-addon" id="security-question-answer-addon2"><span class="fa fa-star"></span>
 			</div>
 		</div>

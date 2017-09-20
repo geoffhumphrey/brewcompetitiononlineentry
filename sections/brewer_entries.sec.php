@@ -144,11 +144,12 @@ do {
 		$scoresheetfile_entry = USER_DOCS.$scoresheet_file_name_entry;
 		$scoresheetfile_judging = USER_DOCS.$scoresheet_file_name_judging;
 
-		if (file_exists($scoresheetfile_entry)) $scoresheet_file_name = $scoresheet_file_name_entry;
-		elseif (file_exists($scoresheetfile_judging)) $scoresheet_file_name = $scoresheet_file_name_judging;
+		if ((file_exists($scoresheetfile_entry)) && ($_SESSION['prefsDisplaySpecial'] == "E")) $scoresheet_file_name = $scoresheet_file_name_entry;
+		elseif ((file_exists($scoresheetfile_judging)) && ($_SESSION['prefsDisplaySpecial'] == "J")) $scoresheet_file_name = $scoresheet_file_name_judging;
 		else $scoresheet_file_name = "";
 
-		if ((file_exists($scoresheetfile_entry)) || (file_exists($scoresheetfile_judging))) {
+		if (!empty($scoresheet_file_name)) {
+			
 			$scoresheet = TRUE;
 
 			// The pseudo-random number and the corresponding name of the temporary file are defined each time 
@@ -177,15 +178,19 @@ do {
 
 		// Clean up temporary scoresheets created for other brewers, when they are at least 1 minute old (just to avoid problems when two entrants try accessing their scoresheets at practically the same time, and clean up previously created scoresheets for the same brewer, regardless of how old they are.
 		$tempfiles = array_diff(scandir(USER_TEMP), array('..', '.'));
-		foreach ($tempfiles as $file) {
-			if ((filectime(USER_TEMP.$file) < time() - 1*60) || ((strpos($file, $scoresheet_file_name_judging) !== FALSE))) {
-				unlink(USER_TEMP.$file);
-			}
+		
+		if (is_array($tempfiles)) {
+			foreach ($tempfiles as $file) {
+				if ((filectime(USER_TEMP.$file) < time() - 1*60) || ((strpos($file, $scoresheet_file_name_judging) !== FALSE))) {
+					unlink(USER_TEMP.$file);
+				}
 
-			if ((filectime(USER_TEMP.$file) < time() - 1*60) || ((strpos($file, $scoresheet_file_name_entry) !== FALSE))) {
-				unlink(USER_TEMP.$file);
+				if ((filectime(USER_TEMP.$file) < time() - 1*60) || ((strpos($file, $scoresheet_file_name_entry) !== FALSE))) {
+					unlink(USER_TEMP.$file);
+				}
 			}
 		}
+		
 	}
 	
 	if ($show_scores) {

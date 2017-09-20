@@ -12,11 +12,11 @@
  */
 
 
-include (DB.'judging_locations.db.php');
-include (DB.'styles.db.php');
-include (DB.'admin_common.db.php');
-include (LIB.'output.lib.php');
-include (DB.'output_staff_points.db.php');
+require (DB.'judging_locations.db.php');
+require (DB.'styles.db.php');
+require (DB.'admin_common.db.php');
+require (LIB.'output.lib.php');
+require (DB.'output_staff_points.db.php');
 // Get total amount of paid and received entries
 $total_entries = total_paid_received("judging_scores","default");
 //$total_entries = 750;
@@ -169,7 +169,7 @@ if ($view == "default") {
 	<div class="page-header">
         	<h1><?php echo sprintf("%s %s",$_SESSION['contestName'],$output_text_024); ?> </h1>
     </div>
-    <p class="lead"><?php echo sprintf("%s <a href=\"%s\">%s</a>.",$output_text_022,"http://www.bjcp.org/rules.php"); ?></p>
+    <p class="lead"><?php echo sprintf("%s %s.",$output_text_022,"http://www.bjcp.org/rules.php"); ?></p>
     <ul class="list-unstyled">
         <li><?php echo sprintf("<strong>%s:</strong> %s",$label_comp_id,$_SESSION['contestID']); ?></li>
         <li><?php echo sprintf("<strong>%s:</strong> %s",$label_entries,$total_entries); ?></li>

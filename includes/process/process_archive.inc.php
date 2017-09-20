@@ -5,7 +5,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 
 	require(INCLUDES.'scrubber.inc.php');
 	require(INCLUDES.'db_tables.inc.php');
-	require(LIB.'common.lib.php');
+	//require(LIB.'common.lib.php');
 
 	// Instantiate HTMLPurifier
 	require (CLASSES.'htmlpurifier/HTMLPurifier.standalone.php');

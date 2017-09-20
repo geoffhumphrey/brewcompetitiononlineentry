@@ -470,69 +470,6 @@ $label_cellar = "My Cellar";
 $label_verify = "Verify";
 $label_entry_number = "Entry Number";
 
-// v2.1.10
-$label_entry_numbers = "Entry Number(s)"; // For PayPal IPN Email
-$label_status = "Status"; // For PayPal IPN Email
-$label_amount = "Amount"; // For PayPal IPN Email
-$label_transaction_id = "Transaction ID"; // For PayPal IPN Email
-$label_organization = "Organization";
-$label_ttb = "TTB Number";
-$label_username = "Username";
-$label_from = "From"; // For email headers
-$label_to = "To"; // For email headers
-$label_varies = "Varies";
-$label_styles_accepted = "Styles Accepted";
-$label_judging_styles = "Judging Styles";
-$label_select_club = "Select or Search for Your Club";
-$label_select_style = "Select or Search for Your Entry's Style";
-$label_select_country = "Select or Search Your Country";
-$label_select_dropoff = "Select Your Drop-Off Location";
-$label_club_enter = "Enter Club Name";
-$label_secret_05 = "What is your maternal grandmother&rsquo;s maiden name?";
-$label_secret_06 = "What was the first name of your first girlfriend or boyfriend?";
-$label_secret_07 = "What was the make and model of your first vehicle?";
-$label_secret_08 = "What was the last name of your third grade teacher?";
-$label_secret_09 = "In what city or town did you meet your significant other?";
-$label_secret_10 = "What was the first name of your best friend in sixth grade?";
-$label_secret_11 = "What is the name your favorite musical artist or group?";
-$label_secret_12 = "What was your childhood nickname?";
-$label_secret_13 = "What is the last name of the teacher who gave you your first failing grade?";
-$label_secret_14 = "What is the name of your favorite childhood friend?";
-$label_secret_15 = "In what town or city did your mother and father meet?";
-$label_secret_16 = "What was childhood telephone number that you remember most including area code?";
-$label_secret_17 = "What was your favorite place to visit as a child?";
-$label_secret_18 = "Where were you when you had your first kiss?";
-$label_secret_19 = "In what city or town was your first job?";
-$label_secret_20 = "In what city or town were you on New Year&rsquo;s 2000?";
-$label_secret_21 = "What is the name of a college you applied to but did not attend?";
-$label_secret_22 = "What is the first name of the boy or girl that you first kissed?";
-$label_secret_23 = "What was the name of your first stuffed animal, doll, or action figure?";
-$label_secret_24 = "In what city or town did you meet your spouse/significant other?";
-$label_secret_25 = "What street did you live on in first grade?";
-$label_secret_26 = "What is the air speed velocity of an unladen swallow?";
-$label_secret_27 = "What is the name of your favorite cancelled TV show?";
-$label_pro = "Professional";
-$label_amateur = "Amateur";
-$label_hosted = "Hosted";
-$label_edition = "Edition";
-$label_pro_comp_edition = "Professional Competition Edition";
-$label_amateur_comp_edition = "Amateur Competition Edition";
-$label_optional_info = "Optional Info";
-$label_or = "Or";
-$label_admin_payments = "Payments";
-$label_payer = "Payer";
-$label_pay_with_paypal = "Pay with PayPal";
-$label_submit = "Submit";
-$label_id_verification_question = "ID Verfication Question";
-$label_id_verification_answer = "ID Verification Answer";
-$label_server = "Server";
-$label_password_reset = "Password Reset";
-$label_id_verification_request = "ID Verification Request";
-$label_new_password = "New Password";
-$label_confirm_password = "Confirm Password";
-$label_with_token = "With Token";
-$label_password_strength = "Password Strength";
-
 // -------------------- Headers --------------------
 // Missing punctuation intentional for all
 $header_text_000 = "Setup was successful.";
@@ -647,13 +584,6 @@ $header_text_109 = "You have registered as a steward.";
 $header_text_110 = "All entries have been un-marked as paid.";
 $header_text_111 = "All entries have been un-marked as received.";
 
-// v2.1.10
-$header_text_112 = "You do not have sufficient access privileges to perform this action.";
-$header_text_113 = "You can only edit your own account information.";
-$header_text_114 = "As an admin, you can change a user's account information via Admin > Entries and Particpants > Manage Participants.";
-$header_text_115 = "Results have been published.";
-$header_text_116 = "If you do not receive the email within a reasonable amount of time, contact a competition official or site administrator to reset your password for you.";
-
 // -------------------- Navigation --------------------
 
 
@@ -726,12 +656,6 @@ $alert_email_not_valid = "Email format is not valid!";
 $alert_email_in_use = "The email address you entered is already in use. Please choose another.";
 $alert_email_not_in_use = "Congratulations! The email address you entered is not in use.";
 
-// v2.1.10
-$alert_text_082 = "Since you signed up as a judge or steward, you are not allowed to add entries to your account. Only representatives of an organization are able to add entries to their accounts.";
-$alert_text_083 = "Adding and edting of entries is not available.";
-$alert_text_084 = "As an Administrator, you can add an entry to an organization's account by using the &quot;Add Entry For...&quot; dropdown menu on the Admin &gt; Entries and Participants &gt; Manage Entries page.";
-$alert_text_085 = "You will not be able to print any entry's paperwork (bottle labels, etc.) until payment for it has been confirmed and it has been marked as &quot;paid&quot; below.";
-
 // ----------------------------------------------------------------------------------
 // Public Pages
 // ----------------------------------------------------------------------------------
@@ -793,10 +717,6 @@ if ($section == "brew") {
 	$brew_text_025 = "Secondary fermentation in days.";
 	$brew_text_026 = "Other fermentation in days.";
 
-	//v2.1.10
-	$brew_text_027 = "This Brewers Association style requires a statement from the brewer regarding the special nature of the product. See the <a href=\"https://www.brewersassociation.org/resources/brewers-association-beer-style-guidelines/\" target=\"_blank\">BA Style Guidelines</a> for specific guidance.";
-	$brew_text_028 = "***NOT REQUIRED*** Add information here that is detailed in the style guidelines as a characteristic that you MAY declare.";
-	$brew_text_029 = "Admin editing disabled. Your profile is considered a personal profile and not a organizational profile, and thus, not eligible to add entries. To add an entry for an organization, access the Manage Entries list and choose an organization from the &quot;Add an Entry For...&quot; dropdown.";
 }
 
 // -------------------- Brewer (Account) --------------------
@@ -825,10 +745,6 @@ if (($section == "brewer") || ($section == "register") || ($section == "step2") 
 	$brewer_text_019 = "If you are planning to serve as a judge in any competition, click or tap the button above to enter your judge-related information.";
 	$brewer_text_020 = "Are you willing to serve as a staff member in this competition?";
 	$brewer_text_021 = "Competition staff are people that serve in various roles to assist in the organization and execution of the competition before, during, and after judging. Judges and stewards can also serve as staff members. Staff members can earn BJCP points if the competition is sanctioned.";
-
-	// v2.1.10
-	$brewer_text_022 = "You will be able to identify a co-brewer when adding your entries.";
-	$brewer_text_023 = "Select &quot;None&quot; if you are not affiliated with a club. Select &quot;Other&quot; if your club is not on the list - <strong>be sure to use the search box</strong>.";
 
 }
 
@@ -891,7 +807,6 @@ if ($section == "default") {
 	// v2.1.9
 	$reg_open_text_015 = "Judge Registration is";
 	$reg_open_text_016 = "Steward Registration is";
-
 	$reg_closed_text_000 = "Thanks and Good Luck To All Who Entered the";
 	$reg_closed_text_001 = "There are";
 	$reg_closed_text_002 = "registered participants, judges, and stewards.";
@@ -901,7 +816,6 @@ if ($section == "default") {
 	$reg_closed_text_006 = "received and processed entries (this number will update as entries are picked up from drop-off locations and organized for judging).";
 	$reg_closed_text_007 = "Competition judging dates are yet to be determined. Please check back later.";
 	$reg_closed_text_008 = "Map to";
-
 	$judge_closed_000 = "Thanks to all who participated in the";
 	$judge_closed_001 = "There were";
 	$judge_closed_002 = "entries judged and";
@@ -961,9 +875,6 @@ if ($section == "entry") {
 	$entry_info_text_045 = "Click/Tap for Required Entry Info";
 	$entry_info_text_046 = "If a style's name is hyperlinked, it has specific entry requirements. Click or tap on the name to view the subcategory's requirements.";
 
-	// v2.1.10
-	$entry_info_text_047 = "If a style's name is hyperlinked, it has specific entry requirements. Click or tap on the name to access the Brewers Association styles as listed on their website.";
-
 }
 
 // -------------------- Footer --------------------
@@ -991,28 +902,6 @@ if (($section == "list") || ($section == "account") || ($go == "entries")) {
 	$brewer_entries_text_014 = "You have not added any entries to the system.";
 	$brewer_entries_text_015 = "You cannot delete your entry at this time.";
 
-	// v2.1.10
-	$brewer_entries_text_016 = "Style Entered NOT Accepted";
-	$brewer_entries_text_017 = "Entries will not be displayed as received until the competition staff has marked them as such in the system. Typically, this occurs AFTER all entries have been collected from all drop-off and shipping locations and sorted.";
-	
-	//v2.1.10
-	$brewer_entries_text_018 = "You will not be able to print this entry's paperwork (bottle labels, etc.) until it has been marked as paid.";
-	$brewer_entries_text_019 = "Printing of entry paperwork is not available at this time.";
-	$brewer_entries_text_020 = "Editing of entries is not available at this time.";
-
-	if (SINGLE) $brewer_info_000 = "Hello";
-	else $brewer_info_000 = "Thank you for participating in the";
-	$brewer_info_001 = "Your account details were last updated";
-	$brewer_info_002 = "Take a moment to <a href=\"#entries\">review your entries</a>";
-	$brewer_info_003 = "pay your entry fees</a>";
-	$brewer_info_004 = "per entry";
-	$brewer_info_005 = "An American Homebrewers Association (AHA) membership is required if one of your entries is selected for a Great American Beer Festival Pro-Am.";
-	$brewer_info_006 = "Print shipping labels to attach to your box(es) of bottles.";
-	$brewer_info_007 = "Print Shipping Labels";
-	$brewer_info_008 = "You have already been assigned to a table as a";
-	$brewer_info_009 = "If you wish to change your availabilty and/or withdraw your role, contact the competition organizer or judge coordinator.";
-	$brewer_info_010 = "You have already been assigned as a";
-	$brewer_info_011 = "or";
 }
 
 // -------------------- Login --------------------
@@ -1056,12 +945,6 @@ if ($section == "pay") {
 	$pay_text_027 = "Click <em>My Account</em> above to review your unconfirmed entries.";
 	$pay_text_028 = "You have unconfirmed entries that are <em>not</em> reflected in your fee totals below.";
 	$pay_text_029 = "Please go to your entry list to confirm all your entry data. Unconfirmed entries may be deleted from the system without warning.";
-
-	// v2.1.10
-	$pay_text_030 = "By clicking the &quot;I Understand&quot; button below, you will be directed to PayPal to make your payment. Once you have <strong>completed</strong> your payment, PayPal will redirect you back to this site and will email you a receipt for the transaction. <strong>If your payment was successful, your paid status will be updated automatically. Please note that you may need wait a few minutes for the payment status to be updated.</strong> Be sure to refresh the pay page or access your entries list.";
-	$pay_text_031 = "About to Leave this Site";
-	$pay_text_032 = "No payment is necessary. Thank you!";
-
 
 }
 
@@ -1138,23 +1021,6 @@ if (($section == "register") || ($section == "brewer") || ($action == "register"
 	$register_text_033 = "Only American Homebrewers Association members are eligible for a Great American Beer Festival Pro-Am opportunity.";
 	$register_text_034 = "To register, you must check the box, indicating that you agree to the waiver statement.";
 
-	// v2.1.10
-	$register_text_035 = "The information you provide beyond your organization's name is strictly for record-keeping and contact purposes.";
-	$register_text_036 = "A condition of entry into the competition is providing this information, including a contact person's email address and phone number. Your organization's name may be displayed should one of your entries place, but no other information will be made public.";
-	$register_text_037 = "Registration Confirmation";
-	$register_text_038 = "An administrator has registerd you for an account. The following is confirmation of the information input:";
-	$register_text_039 = "Thank you for registering an account. The following is confirmation of the information you provided:";
-	$register_text_040 = "If any of the above information is incorrect,";
-	$register_text_041 = "log in to your account";
-	$register_text_042 = "and make the necessary changes. Best of luck in the competition!";
-	$register_text_043 = "Please do not reply to this email as it is automatically generated. The originating account is not active or monitored.";
-	$register_text_044 = "Please provide an organization name.";
-	$register_text_045 = "Provide a brewery name, brewpub name, etc. Be sure to check the competition information for types of beverages accepted.";
-	$register_text_046 = "For U.S. organizations only.";
-	$register_text_047 = "";
-	$register_text_048 = "";
-	$register_text_049 = "";
-
 }
 
 // -------------------- Sidebar --------------------
@@ -1185,7 +1051,6 @@ $sidebar_text_022 = "Entry bottles accepted at";
 $sidebar_text_023 = "the shipping location";
 $sidebar_text_024 = "Competition judging dates are yet to be determined. Please check back later.";
 $sidebar_text_025 = "have been added to the system as of";
-
 
 // -------------------- Sponsors --------------------
 // NONE
@@ -1248,10 +1113,6 @@ $user_text_001 = "Enter the old password.";
 $user_text_002 = "Enter the new password.";
 $user_text_003 = "Please check this box if you wish to proceed with changing your email address.";
 
-// v2.1.10
-$user_text_004 = "Be sure to use upper and lower case letters, numbers, and special characters for a stronger password.";
-$user_text_005 = "Your current email address is";
-
 // -------------------- Volunteers --------------------
 
 if ($section == "volunteers") {
@@ -1290,19 +1151,6 @@ $login_text_014 = "click here to resend it to";
 $login_text_015 = "If you can't remember the answer to your security question, contact a competition official or site administrator.";
 $login_text_016 = "Get it emailed to";
 
-//v2.1.10
-$login_text_017 = "Email Me My Security Question Answer";
-$login_text_018 = "Your user name (email address) is required.";
-$login_text_019 = "Your password is required.";
-$login_text_020 = "The token provided is invalid or has already been used. Please use the forgot password function again to generate a new password reset token.";
-$login_text_021 = "The token provided has expired. Please use the forgot password function again to generate a new password reset token.";
-$login_text_022 = "The email you entered is not associated with the provided token. Please try again.";
-$login_text_023 = "The passwords do not match. Please try again.";
-$login_text_024 = "A confirmation password is required.";
-$login_text_025 = "Forgot your password?";
-$login_text_026 = "Enter your account email address and new password below.";
-$login_text_027 = "Your password has been reset successfully. You may now log in with the new password.";
-
 // -------------------- Winners --------------------
 
 $winners_text_000 = "No winners have been entered for this table. Please check back later.";
@@ -1310,10 +1158,6 @@ $winners_text_001 = "Winning entries have not been posted yet. Please check back
 $winners_text_002 = "Your chosen award structure is to award places by table. Select the award places for the table as a whole below.";
 $winners_text_003 = "Your chosen award structure is to award places by category. Select the award places for each overall category below (there may be more than one at this table).";
 $winners_text_004 = "Your chosen award structure is to award places by subcategory. Select the award places for each subcategory below (there may be more than one at this table).";
-
-//v 2.1.10
-$winners_text_005 = "Best of Show winner(s) have not been posted yet. Please check back later.";
-
 
 // ----------------------------------------------------------------------------------
 // Output
@@ -1351,14 +1195,186 @@ $output_text_028 = "";
 $output_text_029 = "";
 $output_text_030 = "";
 
+// ----------------------------------------------------------------------------------
 // Maintenance
+// ----------------------------------------------------------------------------------
 
 // v2.1.9
 $maintenance_text_000 = "The site administrator has taken the site offline to undergo maintenance.";
 $maintenance_text_001 = "Please check back later.";
 
-// v2.1.10
-// PayPal Response
+// ----------------------------------------------------------------------------------
+// END initial release translation variables
+// ----------------------------------------------------------------------------------
+
+/***********************************************************************************/
+
+// ----------------------------------------------------------------------------------
+// Version 2.1.10 Additions
+// ----------------------------------------------------------------------------------
+
+// -------------------- Labels --------------------
+$label_entry_numbers = "Entry Number(s)"; // For PayPal IPN Email
+$label_status = "Status"; // For PayPal IPN Email
+$label_amount = "Amount"; // For PayPal IPN Email
+$label_transaction_id = "Transaction ID"; // For PayPal IPN Email
+$label_organization = "Organization";
+$label_ttb = "TTB Number";
+$label_username = "Username";
+$label_from = "From"; // For email headers
+$label_to = "To"; // For email headers
+$label_varies = "Varies";
+$label_styles_accepted = "Styles Accepted";
+$label_judging_styles = "Judging Styles";
+$label_select_club = "Select or Search for Your Club";
+$label_select_style = "Select or Search for Your Entry's Style";
+$label_select_country = "Select or Search Your Country";
+$label_select_dropoff = "Select Your Drop-Off Location";
+$label_club_enter = "Enter Club Name";
+$label_secret_05 = "What is your maternal grandmother&rsquo;s maiden name?";
+$label_secret_06 = "What was the first name of your first girlfriend or boyfriend?";
+$label_secret_07 = "What was the make and model of your first vehicle?";
+$label_secret_08 = "What was the last name of your third grade teacher?";
+$label_secret_09 = "In what city or town did you meet your significant other?";
+$label_secret_10 = "What was the first name of your best friend in sixth grade?";
+$label_secret_11 = "What is the name your favorite musical artist or group?";
+$label_secret_12 = "What was your childhood nickname?";
+$label_secret_13 = "What is the last name of the teacher who gave you your first failing grade?";
+$label_secret_14 = "What is the name of your favorite childhood friend?";
+$label_secret_15 = "In what town or city did your mother and father meet?";
+$label_secret_16 = "What was childhood telephone number that you remember most including area code?";
+$label_secret_17 = "What was your favorite place to visit as a child?";
+$label_secret_18 = "Where were you when you had your first kiss?";
+$label_secret_19 = "In what city or town was your first job?";
+$label_secret_20 = "In what city or town were you on New Year&rsquo;s 2000?";
+$label_secret_21 = "What is the name of a college you applied to but did not attend?";
+$label_secret_22 = "What is the first name of the boy or girl that you first kissed?";
+$label_secret_23 = "What was the name of your first stuffed animal, doll, or action figure?";
+$label_secret_24 = "In what city or town did you meet your spouse/significant other?";
+$label_secret_25 = "What street did you live on in first grade?";
+$label_secret_26 = "What is the air speed velocity of an unladen swallow?";
+$label_secret_27 = "What is the name of your favorite cancelled TV show?";
+$label_pro = "Professional";
+$label_amateur = "Amateur";
+$label_hosted = "Hosted";
+$label_edition = "Edition";
+$label_pro_comp_edition = "Professional Competition Edition";
+$label_amateur_comp_edition = "Amateur Competition Edition";
+$label_optional_info = "Optional Info";
+$label_or = "Or";
+$label_admin_payments = "Payments";
+$label_payer = "Payer";
+$label_pay_with_paypal = "Pay with PayPal";
+$label_submit = "Submit";
+$label_id_verification_question = "ID Verfication Question";
+$label_id_verification_answer = "ID Verification Answer";
+$label_server = "Server";
+$label_password_reset = "Password Reset";
+$label_id_verification_request = "ID Verification Request";
+$label_new_password = "New Password";
+$label_confirm_password = "Confirm Password";
+$label_with_token = "With Token";
+$label_password_strength = "Password Strength";
+$label_entry_shipping = "Entry Shipping";
+
+// -------------------- Headers --------------------
+$header_text_112 = "You do not have sufficient access privileges to perform this action.";
+$header_text_113 = "You can only edit your own account information.";
+$header_text_114 = "As an admin, you can change a user's account information via Admin > Entries and Particpants > Manage Participants.";
+$header_text_115 = "Results have been published.";
+$header_text_116 = "If you do not receive the email within a reasonable amount of time, contact a competition official or site administrator to reset your password for you.";
+
+// -------------------- Alerts --------------------
+$alert_text_082 = "Since you signed up as a judge or steward, you are not allowed to add entries to your account. Only representatives of an organization are able to add entries to their accounts.";
+$alert_text_083 = "Adding and edting of entries is not available.";
+$alert_text_084 = "As an Administrator, you can add an entry to an organization's account by using the &quot;Add Entry For...&quot; dropdown menu on the Admin &gt; Entries and Participants &gt; Manage Entries page.";
+$alert_text_085 = "You will not be able to print any entry's paperwork (bottle labels, etc.) until payment for it has been confirmed and it has been marked as &quot;paid&quot; below.";
+
+// -------------------- Brew (Add Entry) --------------------
+if ($section == "brew") {
+	$brew_text_027 = "This Brewers Association style requires a statement from the brewer regarding the special nature of the product. See the <a href=\"https://www.brewersassociation.org/resources/brewers-association-beer-style-guidelines/\" target=\"_blank\">BA Style Guidelines</a> for specific guidance.";
+	$brew_text_028 = "***NOT REQUIRED*** Add information here that is detailed in the style guidelines as a characteristic that you MAY declare.";
+	$brew_text_029 = "Admin editing disabled. Your profile is considered a personal profile and not a organizational profile, and thus, not eligible to add entries. To add an entry for an organization, access the Manage Entries list and choose an organization from the &quot;Add an Entry For...&quot; dropdown.";
+}
+
+// -------------------- Brewer (Account) --------------------
+if (($section == "brewer") || ($section == "register") || ($section == "step2") || (($section == "admin") && ($go == "entrant")) || (($section == "admin") && ($go == "judge"))) {
+	$brewer_text_022 = "You will be able to identify a co-brewer when adding your entries.";
+	$brewer_text_023 = "Select &quot;None&quot; if you are not affiliated with a club. Select &quot;Other&quot; if your club is not on the list - <strong>be sure to use the search box</strong>.";
+}
+
+// -------------------- Entry Info --------------------
+if ($section == "entry") {
+	$entry_info_text_047 = "If a style's name is hyperlinked, it has specific entry requirements. Click or tap on the name to access the Brewers Association styles as listed on their website.";
+}
+
+// -------------------- List (User Entry List) --------------------
+if (($section == "list") || ($section == "account") || ($go == "entries")) {
+	$brewer_entries_text_016 = "Style Entered NOT Accepted";
+	$brewer_entries_text_017 = "Entries will not be displayed as received until the competition staff has marked them as such in the system. Typically, this occurs AFTER all entries have been collected from all drop-off and shipping locations and sorted.";
+	$brewer_entries_text_018 = "You will not be able to print this entry's paperwork (bottle labels, etc.) until it has been marked as paid.";
+	$brewer_entries_text_019 = "Printing of entry paperwork is not available at this time.";
+	$brewer_entries_text_020 = "Editing of entries is not available at this time.";
+}
+
+if (SINGLE) $brewer_info_000 = "Hello";
+else $brewer_info_000 = "Thank you for participating in the";
+$brewer_info_001 = "Your account details were last updated";
+$brewer_info_002 = "Take a moment to <a href=\"#entries\">review your entries</a>";
+$brewer_info_003 = "pay your entry fees</a>";
+$brewer_info_004 = "per entry";
+$brewer_info_005 = "An American Homebrewers Association (AHA) membership is required if one of your entries is selected for a Great American Beer Festival Pro-Am.";
+$brewer_info_006 = "Print shipping labels to attach to your box(es) of bottles.";
+$brewer_info_007 = "Print Shipping Labels";
+$brewer_info_008 = "You have already been assigned to a table as a";
+$brewer_info_009 = "If you wish to change your availabilty and/or withdraw your role, contact the competition organizer or judge coordinator.";
+$brewer_info_010 = "You have already been assigned as a";
+$brewer_info_011 = "or";
+
+// -------------------- Pay --------------------
+if ($section == "pay") {
+	$pay_text_030 = "By clicking the &quot;I Understand&quot; button below, you will be directed to PayPal to make your payment. Once you have <strong>completed</strong> your payment, PayPal will redirect you back to this site and will email you a receipt for the transaction. <strong>If your payment was successful, your paid status will be updated automatically. Please note that you may need wait a few minutes for the payment status to be updated.</strong> Be sure to refresh the pay page or access your entries list.";
+	$pay_text_031 = "About to Leave this Site";
+	$pay_text_032 = "No payment is necessary. Thank you!";
+}
+
+// -------------------- Register --------------------
+if (($section == "register") || ($section == "brewer") || ($action == "register") || ($go == "account") || ($section == "step2")) {
+	$register_text_035 = "The information you provide beyond your organization's name is strictly for record-keeping and contact purposes.";
+	$register_text_036 = "A condition of entry into the competition is providing this information, including a contact person's email address and phone number. Your organization's name may be displayed should one of your entries place, but no other information will be made public.";
+	$register_text_037 = "Registration Confirmation";
+	$register_text_038 = "An administrator has registerd you for an account. The following is confirmation of the information input:";
+	$register_text_039 = "Thank you for registering an account. The following is confirmation of the information you provided:";
+	$register_text_040 = "If any of the above information is incorrect,";
+	$register_text_041 = "log in to your account";
+	$register_text_042 = "and make the necessary changes. Best of luck in the competition!";
+	$register_text_043 = "Please do not reply to this email as it is automatically generated. The originating account is not active or monitored.";
+	$register_text_044 = "Please provide an organization name.";
+	$register_text_045 = "Provide a brewery name, brewpub name, etc. Be sure to check the competition information for types of beverages accepted.";
+	$register_text_046 = "For U.S. organizations only.";
+}
+
+// -------------------- User Registration --------------------
+$user_text_004 = "Be sure to use upper and lower case letters, numbers, and special characters for a stronger password.";
+$user_text_005 = "Your current email address is";
+
+// -------------------- Login --------------------
+$login_text_017 = "Email Me My Security Question Answer";
+$login_text_018 = "Your user name (email address) is required.";
+$login_text_019 = "Your password is required.";
+$login_text_020 = "The token provided is invalid or has already been used. Please use the forgot password function again to generate a new password reset token.";
+$login_text_021 = "The token provided has expired. Please use the forgot password function again to generate a new password reset token.";
+$login_text_022 = "The email you entered is not associated with the provided token. Please try again.";
+$login_text_023 = "The passwords do not match. Please try again.";
+$login_text_024 = "A confirmation password is required.";
+$login_text_025 = "Forgot your password?";
+$login_text_026 = "Enter your account email address and new password below.";
+$login_text_027 = "Your password has been reset successfully. You may now log in with the new password.";
+
+// -------------------- Winners --------------------
+$winners_text_005 = "Best of Show winner(s) have not been posted yet. Please check back later.";
+
+// -------------------- Output - PayPal Response --------------------
 $paypal_response_text_000 = "Your payment has been completed. The transaction details are provided here for your convience.";
 $paypal_response_text_001 = "Please note that you will receive an official commuication from PayPal at the email address listed below.";
 $paypal_response_text_002 = "Best of luck in the competition!";
@@ -1370,22 +1386,23 @@ $paypal_response_text_007 = "Please contact the competition organizer if you hav
 $paypal_response_text_008 = "Invalid PayPal Payment";
 $paypal_response_text_009 = "PayPal Payment Details";
 
-// v2.1.10
-// Password reset email text
+// -------------------- Output - Password reset email text --------------------
 $pwd_email_reset_text_000 = "A request was made to verify the account at the";
 $pwd_email_reset_text_001 = "website using the ID Verfication email function. If you did not initiate this, please contact the competition's organizer.";
 $pwd_email_reset_text_002 = "The ID verification answer is case sensitive";
 $pwd_email_reset_text_003 = "A request was made to change your password at the";
 $pwd_email_reset_text_004 = "website. If you did not initiate this, don't worry. Your password cannot be reset without the link below.";
 $pwd_email_reset_text_005 = "To reset your password, click the link below or copy/paste it into your browser.";
-$pwd_email_reset_text_006 = "";
-$pwd_email_reset_text_007 = "";
-$pwd_email_reset_text_008 = "";
-$pwd_email_reset_text_009 = "";
-$pwd_email_reset_text_010 = "";
+
+// ----------------------------------------------------------------------------------
+// END Version 2.1.10 
+// ----------------------------------------------------------------------------------
+
+/***********************************************************************************/
 
 // ----------------------------------------------------------------------------------
 // Various conditionals
+// No translations below this line
 // ----------------------------------------------------------------------------------
 
 if (strpos($section, "step") === FALSE) $alert_text_032 = $alert_text_032; else $alert_text_032 = "";

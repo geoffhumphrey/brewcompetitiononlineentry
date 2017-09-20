@@ -84,6 +84,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 		prefsShipping,
 		prefsPaypalIPN,
 		prefsProEdition,
+		prefsDisplaySpecial,
 		id
 
 		) VALUES (
@@ -95,7 +96,8 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 		%s, %s, %s, %s, %s,
 		%s, %s, %s, %s, %s,
 		%s, %s, %s, %s, %s,
-		%s, %s, %s, %s, %s)",
+		%s, %s, %s, %s, %s,
+		%s)",
 							   GetSQLValueString(sterilize($_POST['prefsTemp']), "text"),
 							   GetSQLValueString(sterilize($_POST['prefsWeight1']), "text"),
 							   GetSQLValueString(sterilize($_POST['prefsWeight2']), "text"),
@@ -147,6 +149,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 							   GetSQLValueString(sterilize($_POST['prefsShipping']), "int"),
 							   GetSQLValueString(sterilize($_POST['prefsPaypalIPN']), "int"),
 							   GetSQLValueString(sterilize($_POST['prefsProEdition']), "int"),
+							   GetSQLValueString(sterilize($_POST['prefsDisplaySpecial']), "text"),
 							   GetSQLValueString($id, "int"));
 
 			mysqli_real_escape_string($connection,$insertSQL);
@@ -261,7 +264,8 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 		prefsDropOff=%s,
 		prefsShipping=%s,
 		prefsPaypalIPN=%s,
-		prefsProEdition=%s
+		prefsProEdition=%s,
+		prefsDisplaySpecial=%s
 
 		WHERE id=%s",
 							   GetSQLValueString(sterilize($_POST['prefsTemp']), "text"),
@@ -316,6 +320,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 							   GetSQLValueString(sterilize($_POST['prefsShipping']), "int"),
 							   GetSQLValueString(sterilize($_POST['prefsPaypalIPN']), "int"),
 							   GetSQLValueString(sterilize($_POST['prefsProEdition']), "int"),
+							   GetSQLValueString(sterilize($_POST['prefsDisplaySpecial']), "text"),
 							   GetSQLValueString($id, "int"));
 
 			mysqli_real_escape_string($connection,$updateSQL);

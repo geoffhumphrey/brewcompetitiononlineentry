@@ -25,7 +25,7 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 			setcookie("from_email", strtolower(filter_var($_POST['from_email'], FILTER_SANITIZE_EMAIL)), 0, "/");
 			setcookie("from_name", sterilize(ucwords($_POST['from_name'])), 0, "/");
 			setcookie("subject", sterilize(ucwords($_POST['subject'])), 0, "/");
-			setcookie("message", sterlize($_POST['message']), 0, "/");
+			setcookie("message", sterilize($_POST['message']), 0, "/");
 			header(sprintf("Location: %s", $base_url."index.php?section=contact&action=email&msg=2"));
 			
 		} 

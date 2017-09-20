@@ -559,13 +559,11 @@ if (isset($_SESSION['loginUsername'])) {
 				if ($row_brewer['staff_steward'] == 1) $brewerAssignment = "Steward";
 				if ($row_brewer['staff_staff'] == 1) $brewerAssignment = "Staff";
 				if ($row_brewer['staff_organizer'] == 1) $brewerAssignment = "Organizer";
-				if (strlen($row_brewer['brewerState']) == 2) $brewerState = strtoupper($row_brewer['brewerState']);
-				else $brewerState = ucwords(strtolower($row_brewer['brewerState']));
-
-				$text = sprintf("\n%s\n%s, %s\n%s",
-				ucfirst(strtolower(strtr($row_brewer['brewerFirstName'],$html_remove)))." ".ucfirst(strtolower(strtr($row_brewer['brewerLastName'],$html_remove))),
-				ucwords(strtolower($row_brewer['brewerCity'])),
-				$brewerState,
+				
+				$text = sprintf("\n%s\n%s, %s\n%s",	
+				$row_brewer['brewerFirstName']." ".$row_brewer['brewerLastName'], 
+				$row_brewer['brewerCity'], 
+				$row_brewer['brewerState'], 
 				$brewerAssignment
 				);
 
@@ -607,11 +605,8 @@ if (isset($_SESSION['loginUsername'])) {
 				$j = preg_replace('/[a-zA-Z]/','',$row_brewer['brewerJudgeID']);
 				//$j = ltrim($row_brewer['brewerJudgeID'],'/[a-z][A-Z]/');
 
-				$first_name = strtr($row_brewer['brewerFirstName'],$html_remove);
-				$first_name = ucfirst(strtolower($first_name));
-
-				$last_name = strtr($row_brewer['brewerLastName'],$html_remove);
-				$last_name = ucfirst(strtolower($last_name));
+				$first_name = $row_brewer['brewerFirstName'];
+				$last_name = $row_brewer['brewerLastName'];
 
 				if ($j > 0) $judge_id = "- ".$row_brewer['brewerJudgeID'];
 				else $judge_id = "";
@@ -660,10 +655,7 @@ if (isset($_SESSION['loginUsername'])) {
 			$filename .= ".pdf";
 
 			do {
-
-				if (strlen($row_brewer['brewerState']) <= 3) $brewerState = strtoupper($row_brewer['brewerState']);
-				else $brewerState = ucwords(strtolower($row_brewer['brewerState']));
-
+				
 					if ($filter == "with_entries") {
 
 						if (in_array($row_brewer['uid'],$with_entries_array)) {
@@ -683,11 +675,11 @@ if (isset($_SESSION['loginUsername'])) {
 							else $last_line = "Attn: ".truncate($entries,166);
 
 							$text = sprintf("\n%s %s\n%s\n%s, %s %s\n%s",
-								ucwords(strtolower(strtr($row_brewer['brewerFirstName'],$html_remove)))." ".ucwords(strtolower(strtr($row_brewer['brewerLastName'],$html_remove))),
+								$row_brewer['brewerFirstName']." ".$row_brewer['brewerLastName'],
 								$entry_count,
-								ucwords(strtolower(strtr($row_brewer['brewerAddress'],$html_remove))),
-								ucwords(strtolower(strtr($row_brewer['brewerCity'],$html_remove))),
-								$brewerState,
+								$row_brewer['brewerAddress'],
+								$row_brewer['brewerCity'],
+								$row_brewer['brewerState'],
 								$row_brewer['brewerZip'],
 								$last_line
 							);
@@ -702,10 +694,10 @@ if (isset($_SESSION['loginUsername'])) {
 						if ($row_brewer['brewerCountry'] != "United States") $brewer_country = $row_brewer['brewerCountry']; else $brewer_country = "";
 
 						$text = sprintf("\n%s\n%s\n%s, %s %s\n%s",
-						ucwords(strtolower(strtr($row_brewer['brewerFirstName'],$html_remove)))." ".ucwords(strtolower(strtr($row_brewer['brewerLastName'],$html_remove))),
-						ucwords(strtolower(strtr($row_brewer['brewerAddress'],$html_remove))),
-						ucwords(strtolower(strtr($row_brewer['brewerCity'],$html_remove))),
-						$brewerState,
+						$row_brewer['brewerFirstName']." ".$row_brewer['brewerLastName'],
+						$row_brewer['brewerAddress'],
+						$row_brewer['brewerCity'],
+						$row_brewer['brewerState'],
 						$row_brewer['brewerZip'],
 						$brewer_country
 						);
@@ -769,10 +761,8 @@ if (isset($_SESSION['loginUsername'])) {
 		$pdf->AddPage();
 		$pdf->SetFont('Arial','',8);
 
-		$first_name = strtr($row_brewer['brewerFirstName'],$html_remove);
-		$first_name = ucfirst(strtolower($first_name));
-		$last_name = strtr($row_brewer['brewerLastName'],$html_remove);
-		$last_name = ucfirst(strtolower($last_name));
+		$first_name = $row_brewer['brewerFirstName'];
+		$last_name = $row_brewer['brewerLastName'];
 
 		//echo $query_brewer;
 

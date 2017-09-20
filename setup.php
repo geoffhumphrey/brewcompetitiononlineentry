@@ -1,16 +1,40 @@
 <?php
 ob_start();
-require('paths.php');
-require(INCLUDES.'url_variables.inc.php');
-require(LANG.'language.lang.php');
-require(LIB.'common.lib.php');
-require(LIB.'help.lib.php');
-require(LIB.'update.lib.php');
-require(DB.'setup.db.php');
-require(INCLUDES.'db_tables.inc.php');
-require(LANG.'language.lang.php');
-require(INCLUDES.'constants.inc.php');
-require(INCLUDES.'headers.inc.php');
+require_once ('paths.php');
+require_once (INCLUDES.'url_variables.inc.php');
+ini_set('session.cookie_httponly', 1);
+ini_set('session.use_only_cookies', 1);
+ini_set('session.cookie_secure', 1);
+if (SINGLE) require_once(SSO.'sso.inc.php');
+require_once (LIB.'common.lib.php');
+require_once (LIB.'update.lib.php');
+require_once (DB.'setup.db.php');
+require_once (INCLUDES.'db_tables.inc.php');
+require_once (LIB.'help.lib.php');
+
+// Set language preferences in session variables
+if (empty($_SESSION['prefsLang'.$prefix_session])) {
+
+    // Language - in current version only English is available. Future versions will feature translations.
+    $_SESSION['prefsLanguage'] = "en-US";
+
+    // Check if variation used (demarked with a dash)
+    if (strpos($_SESSION['prefsLanguage'], '-') !== FALSE) {
+        $lang_folder = explode("-",$_SESSION['prefsLanguage']);
+        $_SESSION['prefsLanguageFolder'] = strtolower($lang_folder[0]);
+    }
+
+    else $_SESSION['prefsLanguageFolder'] = strtolower($_SESSION['prefsLanguage']);
+
+    $_SESSION['prefsLang'.$prefix_session] = "1";
+
+}
+
+// require_once (DB.'common.db.php');
+require_once (INCLUDES.'constants.inc.php');
+require_once (LANG.'language.lang.php');
+require_once (INCLUDES.'headers.inc.php');
+require_once (INCLUDES.'scrubber.inc.php');
 
 if ($section == "step0") {
 
@@ -123,7 +147,7 @@ $security_question = array($label_secret_01, $label_secret_05, $label_secret_06,
         <!-- Load Bootstrap-Select / http://silviomoreto.github.io/bootstrap-select -->
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.9.3/css/bootstrap-select.min.css">
         <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.9.3/js/bootstrap-select.min.js"></script>
-        
+
         <!-- Load jQuery Password Strength Meter for Twitter Bootstrap / https://github.com/ablanco/jquery.pwstrength.bootstrap -->
 		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/zxcvbn/4.4.2/zxcvbn.js"></script>
 		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pwstrength-bootstrap/2.1.0/pwstrength-bootstrap.min.js"></script>
@@ -160,6 +184,7 @@ $security_question = array($label_secret_01, $label_secret_05, $label_secret_06,
     <!-- ALERTS -->
     <div class="container-fluid bcoem-warning-container">
     	<?php echo $setup_alerts; ?>
+        <?php if (DEBUG_SESSION_VARS) include (DEBUGGING.'session_vars.debug.php'); ?>
     </div><!-- ./container -->
 
     <!-- Setup Pages (Fluid Layout) -->

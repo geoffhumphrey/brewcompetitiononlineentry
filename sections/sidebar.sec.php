@@ -256,9 +256,9 @@ if ($section != "admin") {
 		if ($_SESSION['prefsShipping'] == 1) {
 			$header1_500 .= "<div class=\"panel ".$shipping_panel_display."\">";
 			$header1_500 .= "<div class=\"panel-heading\">";
-			$header1_500 .= "<h4 class=\"panel-title\">Entry Shipping is";
-			if ($shipping_window_open == 1) $header1_500 .= " Open";
-			else $header1_500 .= " Closed";
+			$header1_500 .= sprintf("<h4 class=\"panel-title\">%s",$label_entry_shipping);
+			if ($shipping_window_open == 1) $header1_500 .= sprintf(" %s",$label_open);
+			else $header1_500 .= sprintf(" %s",$label_closed);
 			$header1_500 .= "</h4>";
 			$header1_500 .= "</div>";
 			$page_info500 .= "<div class=\"panel-body\">";

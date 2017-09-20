@@ -15,7 +15,7 @@ if (strpos($_SESSION['prefsStyleSet'],"BABDB") !== false) {
 		$sorting_default = "[[3,'asc'],[2,'asc'],[1,'asc']]";
 
 		$styleSet_explodies = explode("|",$_SESSION['prefsStyleSet']);
-		$style_explodies = explode(",",$styleSet_explodies[2]);
+		$style_explodies = explode(",",$styleSet_explodies[1]);
 		// print_r($style_explodies);
 		// print_r($_SESSION['styles']);
 
@@ -61,8 +61,8 @@ if (strpos($_SESSION['prefsStyleSet'],"BABDB") !== false) {
 						$table_body .= "<td>".$categoryName."</td>";
 						$table_body .= "<td>".$styleType."</td>";
 						$table_body .= "<td>".$brewStyleReqSpec.$brewStyleStrength.$brewStyleCarb.$brewStyleSweet."</td>";
-
-						if ($section != "step7")  $table_body .= "<td class=\"hidden-print\"><span class=\"fa fa-lg fa-pencil text-muted\"></span> <span class=\"fa fa-lg fa-trash-o text-muted\"></span> ";
+						$table_body .= "<td>";
+						if ($section != "step7")  $table_body .= "<span class=\"fa fa-lg fa-pencil text-muted\"></span> <span class=\"fa fa-lg fa-trash-o text-muted\"></span> ";
 						$table_body .= "<a href=\"https://www.brewersassociation.org/resources/brewers-association-beer-style-guidelines/\" target=\"_blank\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Link to the Brewers Association style guidelines\"><span class=\"fa fa-lg fa-link\"></span></a>";
 						$table_body .= "</td>";
 						$table_body .= "</tr>";
@@ -393,7 +393,7 @@ $style_type_2 = style_type($row_styles['brewStyleType'],"1","bcoe");
 		<textarea class="form-control" name="brewStyleInfo" id="brewStyleInfoTextArea" rows="6"><?php if ($action == "edit") echo $row_styles['brewStyleInfo']; ?></textarea>
 		<div class="help-block"><strong class="text-primary">Optional:</strong> provide a short description of the style.</div>
 	 </div>
-	 
+
 </div><!-- ./Form Group -->
 	</div>
 <div class="form-group"><!-- Form Group NOT REQUIRED Text Input -->

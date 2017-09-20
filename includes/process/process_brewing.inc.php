@@ -47,7 +47,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 
 		// Co Brewer
 		$brewCoBrewer = "";
-		if (isset($_POST['brewCoBrewer'])) $brewCoBrewer .= $purifier->purify($_POST['brewCoBrewer']);
+		if (isset($_POST['brewCoBrewer'])) $brewCoBrewer .= standardize_name($purifier->purify($_POST['brewCoBrewer']));
 
 		// Style
 		$styleBreak = $_POST['brewStyle'];

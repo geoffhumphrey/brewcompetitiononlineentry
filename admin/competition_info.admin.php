@@ -441,7 +441,7 @@ if ($section == "admin") { ?>
     	<div class="input-group">
         	<span class="input-group-addon" id="contestEntryFeePasswordNum-addon1"><?php echo $currency_symbol; ?></span>
         	<!-- Input Here -->
-        	<input class="form-control" id="contestEntryFeePasswordNum" name="contestEntryFeePasswordNum" type="number" value="<?php if (($section != "step4") && (isset($row_contest_info['contestEntryFeePasswordNum']))) echo number_format($row_contest_info['contestEntryFeePasswordNum'],2); ?>" placeholder="">
+        	<input class="form-control" id="contestEntryFeePasswordNum" name="contestEntryFeePasswordNum" type="number" maxlength="5" step=".01" value="<?php if (($section != "step4") && (isset($row_contest_info['contestEntryFeePasswordNum']))) echo number_format($row_contest_info['contestEntryFeePasswordNum'],2); ?>" placeholder="">
         </div>
         <span id="helpBlock" class="help-block">Fee for a single, discounted member entry. If you wish the member discount to be free, enter a zero (0). Leave blank for no discount.</span>
     </div>

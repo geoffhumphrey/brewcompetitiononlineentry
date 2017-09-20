@@ -1,4 +1,4 @@
-<?php 
+<?php
 /**
  * Module:      default.admin.php
  * Description: This module houses links to all administration functions.
@@ -36,7 +36,7 @@
         <div class="col col-lg-6 col-md-12 col-sm-12 col-xs-12">
             <div class="panel-group" id="accordion">
 				<?php if ($_SESSION['userLevel'] == "0") { ?>
-               
+
                 <!-- Preparing Panel -->
                 <div class="panel panel-default">
                     <div class="panel-heading">
@@ -57,7 +57,7 @@
 									</ul>
                                 </div>
                             </div><!-- ./row -->
-                        
+
                             <div class="row">
                                 <div class="col col-lg-5 col-md-4 col-sm-4 col-xs-4">
                                     <strong>Contacts</strong>
@@ -69,7 +69,7 @@
                                     </ul>
                                 </div>
                             </div><!-- ./row -->
-                            
+
                             <div class="row">
                                 <div class="col col-lg-5 col-md-4 col-sm-4 col-xs-4">
                                     <strong>Custom Categories</strong>
@@ -81,7 +81,7 @@
                                     </ul>
                                 </div>
                             </div><!-- ./row -->
-                            
+
                             <div class="row">
                                 <div class="col col-lg-5 col-md-4 col-sm-4 col-xs-4">
                                     <strong>Drop-Off Locations</strong>
@@ -93,7 +93,7 @@
                                     </ul>
                                 </div>
                             </div><!-- ./row -->
-                            
+
                             <div class="row">
                                 <div class="col col-lg-5 col-md-4 col-sm-4 col-xs-4">
                                     <strong>Judging Locations</strong>
@@ -105,7 +105,7 @@
                                     </ul>
                                 </div>
                             </div><!-- ./row -->
-                            
+
                             <?php if ($_SESSION['userLevel'] == "0") { ?>
                             <div class="row">
                                 <div class="col col-lg-5 col-md-4 col-sm-4 col-xs-4">
@@ -119,7 +119,7 @@
                                     </ul>
                                 </div>
                             </div><!-- ./row -->
-                        
+
                             <div class="row">
                                 <div class="col col-lg-5 col-md-4 col-sm-4 col-xs-4">
                                     <strong>Styles Accepted</strong>
@@ -131,7 +131,7 @@
                                     </ul>
                                 </div>
                             </div><!-- ./row -->
-                            
+
                             <div class="row">
                                 <div class="col col-lg-5 col-md-4 col-sm-4 col-xs-4">
                                     <strong>Style Types</strong>
@@ -143,15 +143,15 @@
                                     </ul>
                                 </div>
                             </div><!-- ./row -->
-                            
+
                             <?php } // end if ($_SESSION['userLevel'] == "0") ?>
-                            
+
                         </div>
                     </div>
                 </div><!-- ./ Preparing Panel -->
-                
+
 				<?php } ?>
-               
+
                 <!-- Entry and Data Gathering Panel -->
                 <div class="panel panel-default">
                     <div class="panel-heading">
@@ -161,7 +161,7 @@
                     </div>
                     <div id="collapseEntry" class="panel-collapse collapse">
                         <div class="panel-body">
-                            
+
                             <div class="row">
                                 <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-4">
                                     <strong>Entries</strong>
@@ -172,9 +172,9 @@
                                     </ul>
                                 </div>
                             </div><!-- ./row -->
-                            
+
                             <?php if ($_SESSION['prefsPaypalIPN'] == 1) { ?>
-                            
+
                             <div class="row">
                                 <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-4">
                                     <strong>Payments</strong>
@@ -185,9 +185,9 @@
                                     </ul>
                                 </div>
                             </div><!-- ./row -->
-                            
+
                             <?php } ?>
-                            
+
                             <div class="row">
                                 <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-4">
                                     <strong>Participants</strong>
@@ -205,7 +205,7 @@
                                     </ul>
                                 </div>
                             </div><!-- ./row -->
-                            
+
                             <div class="row">
                                 <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-4">
                                     <strong>Register</strong>
@@ -220,17 +220,17 @@
                                     </ul>
                                 </div>
                             </div><!-- ./row -->
-                            
+
                         </div>
                     </div>
                 </div><!-- ./ Entry and Data Gathering Panel -->
-                
-                
-                
-                
-                
-                
-                
+
+
+
+
+
+
+
 				<!-- Sorting Panel -->
                 <div class="panel panel-default">
                     <div class="panel-heading">
@@ -327,7 +327,7 @@
 												</ul>
 											</div>
 										</li>
-										
+
 									</ul>
                                     <ul class="list-unstyled">
 										<li>With Required Info - All Styles (Judging Numbers)
@@ -354,9 +354,9 @@
 										</li>
 									</ul>
                                 </div>
-                             </div><!-- ./row --> 
-                             
-                             <div class="row"> 
+                             </div><!-- ./row -->
+
+                             <div class="row">
                                 <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-4">
                                     <a href="http://www.avery.se/avery/en_se/Products/Labels/Multipurpose/White-Multipurpose-Labels-Permanent/General-Usage-Labels-White_3422.htm" target="_blank" data-toggle="tooltip" data-placement="right" title="Avery 3422">A4</a>
                                 </div>
@@ -388,7 +388,7 @@
 												</ul>
 											</div>
 										</li>
-										
+
 									</ul>
                                     <ul class="list-unstyled">
 										<li>With Required Info - All Styles (Judging Numbers)
@@ -415,16 +415,16 @@
 										</li>
 									</ul>
                                 </div>
-                             </div><!-- ./row -->  
-                             
-                             <div class="row"> 
+                             </div><!-- ./row -->
+
+                             <div class="row">
                                 <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-4">
                                     <a href="http://www.onlinelabels.com/Products/OL32.htm" target="_blank" data-toggle="tooltip" data-placement="right" title="Online Lables OL32">0.50 in/13 mm Round</a>
                                 </div>
                                 <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-8">
                                     <ul class="list-unstyled">
-									
-									
+
+
 										<li>Entry Numbers
 											<div class="dropdown bcoem-admin-dashboard-select">
 												<button class="btn btn-default dropdown-toggle" type="button" id="sortingMenu5" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Number of Labels per Entry <span class="caret"></span>
@@ -472,8 +472,8 @@
                                     </ul>
                                 </div>
                             </div><!-- ./row -->
-                            
-                            <div class="row"> 
+
+                            <div class="row">
                                 <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-4">
                                     <a href="http://www.onlinelabels.com/Products/OL5275WR.htm" target="_blank" data-toggle="tooltip" data-placement="right" title="Online Lables OL5275WR">0.75 in/19 mm Round</a>
                                 </div>
@@ -525,14 +525,14 @@
                                         </li>
                                     </ul>
                                 </div>
-                            </div><!-- ./row -->		
-                            
+                            </div><!-- ./row -->
+
                         </div>
                     </div>
                 </div>
                 <!-- ./ Sorting Panel -->
-                
-                
+
+
                 <!-- Organizing Panel -->
                 <div class="panel panel-default">
                     <div class="panel-heading">
@@ -581,8 +581,8 @@
                                 </div>
                             </div><!-- ./row -->
                             <?php } ?>
-                            
-                            
+
+
                             <?php if ($totalRows_tables > 1) { ?>
 							<div class="row">
                                 <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-4">
@@ -599,7 +599,7 @@
                     </div>
                 </div>
                 <!-- ./ Organizing Panel -->
-                
+
                 <!-- Scoring Panel -->
                 <div class="panel panel-default">
                     <div class="panel-heading">
@@ -609,7 +609,7 @@
                     </div>
                     <div id="collapseScoring" class="panel-collapse collapse">
                         <div class="panel-body">
-                        	
+
                             <div class="row">
                                 <div class="col col-lg-5 col-md-4 col-sm-4 col-xs-4">
                                     <strong>Scoresheets and Docs</strong>
@@ -621,8 +621,8 @@
                                     </ul>
                                 </div>
                             </div><!-- ./row -->
-                            
-                            
+
+
                             <div class="row">
                                 <div class="col col-lg-5 col-md-4 col-sm-4 col-xs-4">
                                     <strong>Scores</strong>
@@ -659,7 +659,7 @@
                                     <ul class="list-unstyled">
                                         <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=special_best_data">Manage</a></li>
                                     </ul>
-									
+
 									<div class="dropdown bcoem-admin-dashboard-select">
 										<button class="btn btn-default dropdown-toggle" type="button" id="scoresMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Add Entries to... <span class="caret"></span>
 										</button>
@@ -667,7 +667,7 @@
 											<?php echo score_custom_winning_choose($special_best_info_db_table,$special_best_data_db_table); ?>
 										</ul>
 									</div>
-									
+
 								</div>
                             </div><!-- ./row -->
                             <?php } ?>
@@ -675,15 +675,15 @@
                     </div>
                 </div>
                 <!-- ./ Scoring Panel -->
-                
+
 
             </div><!-- ./ panel-group -->
         </div><!-- ./left column -->
-        
+
 		<div class="col col-lg-6 col-md-12 col-sm-12 col-xs-12">
             <div class="panel-group" id="accordion2">
-            
-            
+
+
 			<!-- Reports Panel -->
 			<div class="panel panel-default">
 				<div class="panel-heading">
@@ -750,16 +750,16 @@
 									<button class="btn btn-default dropdown-toggle" type="button" id="pullsheetMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Entry Numbers for Location...<span class="caret"></span>
 									</button>
 									<ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-										<?php 
-										do { 
-											for ($round=1; $round <= $row_judging['judgingRounds']; $round++) { 
+										<?php
+										do {
+											for ($round=1; $round <= $row_judging['judgingRounds']; $round++) {
 										 $location_date = getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_judging['judgingDate'], $_SESSION['prefsDateFormat'], $_SESSION['prefsTimeFormat'], "short", "date-time-no-gmt");
 										 ?>
 										<li class="small"><a id="modal_window_link" href="<?php echo $base_url; ?>output/print.output.php?section=pullsheets&amp;go=judging_locations&amp;view=entry&amp;location=<?php echo $row_judging['id']?>&amp;round=<?php echo $round; ?>" data-toggle="tooltip" data-placement="top" title="Print Pullsheet for Location <?php echo $row_judging['judgingLocName'] . " - " . $location_date. ", Round " . $round; ?>"><?php echo $row_judging['judgingLocName'] . " - " . $location_date. ", Round " . $round; ?></a>
                                         <li class="small"><a id="modal_window_link" href="<?php echo $base_url; ?>output/print.output.php?section=pullsheets&amp;go=judging_locations&amp;view=entry&amp;filter=mini_bos&amp;location=<?php echo $row_judging['id']?>&amp;round=<?php echo $round; ?>" data-toggle="tooltip" data-placement="top" title="Print Pullsheet for Location <?php echo $row_judging['judgingLocName'] . " - " . $location_date. ", Round " . $round; ?>"><?php echo $row_judging['judgingLocName'] . " - " . $location_date. ", Round " . $round . " (Mini-BOS)"; ?></a>
 										<?php }
-										} 
-										while ($row_judging = mysqli_fetch_assoc($judging)); 
+										}
+										while ($row_judging = mysqli_fetch_assoc($judging));
 										?>
 									</ul>
 								</div>
@@ -767,18 +767,18 @@
 									<button class="btn btn-default dropdown-toggle" type="button" id="pullsheetMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Judging Numbers for Location...<span class="caret"></span>
 									</button>
 									<ul class="dropdown-menu" aria-labelledby="pullsheetMenu2">
-										<?php 
-										do { 
-											for ($round=1; $round <= $row_judging1['judgingRounds']; $round++) { 
+										<?php
+										do {
+											for ($round=1; $round <= $row_judging1['judgingRounds']; $round++) {
 												$location_date = getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_judging1['judgingDate'], $_SESSION['prefsDateFormat'], $_SESSION['prefsTimeFormat'], "short", "date-time-no-gmt");
 										 ?>
 										<li class="small"><a id="modal_window_link" href="<?php echo $base_url; ?>output/print.output.php?section=pullsheets&amp;go=judging_locations&amp;view=default&amp;location=<?php echo $row_judging1['id']?>&amp;round=<?php echo $round; ?>" data-toggle="tooltip" data-placement="top" title="Print Pullsheet for Location <?php echo $row_judging1['judgingLocName'] . " - " . $location_date. ", Round " . $round; ?>"><?php echo $row_judging1['judgingLocName'] . " - " . $location_date. ", Round " . $round; ?></a></li>
                                         <li class="small"><a id="modal_window_link" href="<?php echo $base_url; ?>output/print.output.php?section=pullsheets&amp;go=judging_locations&amp;view=default&amp;filter=mini_bos&amp;location=<?php echo $row_judging1['id']?>&amp;round=<?php echo $round; ?>" data-toggle="tooltip" data-placement="top" title="Print Pullsheet for Location <?php echo $row_judging1['judgingLocName'] . " - " . $location_date. ", Round " . $round; ?>"><?php echo $row_judging1['judgingLocName'] . " - " . $location_date. ", Round " . $round . " (Mini-BOS)"; ?></a>
 										<?php }
-										} while ($row_judging1 = mysqli_fetch_assoc($judging1)); 
+										} while ($row_judging1 = mysqli_fetch_assoc($judging1));
 										?>
 									</ul>
-								</div>	
+								</div>
 							</div>
 						</div><!-- ./row -->
 						<div class="row">
@@ -800,32 +800,34 @@
 									<button class="btn btn-default dropdown-toggle" type="button" id="cardsMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">For Location...<span class="caret"></span>
 									</button>
 									<ul class="dropdown-menu" aria-labelledby="cardsMenu2">
-										<?php 
-										do { 
+										<?php
+										do {
 											for ($round=1; $round <= $row_judging2['judgingRounds']; $round++) {
 												$location_date = getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_judging2['judgingDate'], $_SESSION['prefsDateFormat'], $_SESSION['prefsTimeFormat'], "short", "date-time-no-gmt");
 										?>
 											<li class="small"><a id="modal_window_link" href="<?php echo $base_url; ?>output/print.output.php?section=table-cards&amp;go=judging_locations&amp;location=<?php echo $row_judging2['id']?>&amp;round=<?php echo $round; ?>" data-toggle="tooltip" data-placement="top" title="Print Table Cards for <?php echo $row_judging2['judgingLocName']. " - " . $location_date . ", Round " . $round; ?>"><?php echo $row_judging2['judgingLocName']. " - " . $location_date . ", Round " . $round; ?></a></li>
-										<?php 
+										<?php
 											}
-										} while ($row_judging2 = mysqli_fetch_assoc($judging2));   
+										} while ($row_judging2 = mysqli_fetch_assoc($judging2));
 										?>
-										
+
 									</ul>
 								</div>
 							</div>
 						</div><!-- ./row -->
+                        <?php } ?>
 						<div class="row">
 							<div class="col col-lg-4 col-md-4 col-sm-4 col-xs-4">
 								<strong>Sign In Sheets</strong>
 							</div>
 							<div class="col col-lg-8 col-md-8 col-sm-8 col-xs-8">
 								<ul class="list-inline">
-									<li><a id="modal_window_link" href="<?php echo $base_url; ?>output/print.output.php?section=assignments&amp;go=judging_assignments&amp;filter=judges&amp;view=sign-in" data-toggle="tooltip" data-placement="top" title="Print a Judge Sign-in Sheet">Judges</a></li>   
+									<li><a id="modal_window_link" href="<?php echo $base_url; ?>output/print.output.php?section=assignments&amp;go=judging_assignments&amp;filter=judges&amp;view=sign-in" data-toggle="tooltip" data-placement="top" title="Print a Judge Sign-in Sheet">Judges</a></li>
 									<li><a id="modal_window_link" href="<?php echo $base_url; ?>output/print.output.php?section=assignments&amp;go=judging_assignments&amp;filter=stewards&amp;view=sign-in" data-toggle="tooltip" data-placement="top" title="Print a Steward Sign-in Sheet">Stewards</a></li>
 								</ul>
 							</div>
 						</div><!-- ./row -->
+                        <?php if ($totalRows_tables > 0) { ?>
 						<div class="row">
 							<div class="col col-lg-4 col-md-4 col-sm-4 col-xs-4">
 								<strong>Assignments</strong>
@@ -841,6 +843,7 @@
 								</ul>
 							</div>
 						</div><!-- ./row -->
+                        <?php } ?>
 						<div class="row">
 							<div class="col col-lg-4 col-md-4 col-sm-4 col-xs-4">
 								<strong>Scoresheet Labels</strong>
@@ -863,7 +866,7 @@
 								</ul>
 							</div>
 						</div><!-- ./row -->
-						<?php } ?>
+                        <?php if ($totalRows_tables > 0) { ?>
 						<div class="row">
 							<div class="col col-lg-12 col-md-12 col-sm-12 col-xs-12">
 								<h5>During Judging<hr></h5>
@@ -875,22 +878,22 @@
 							</div>
 							<div class="col col-lg-8 col-md-8 col-sm-8 col-xs-8">
 								<ul class="list-unstyled">
-									
+
                                     <li><a id="modal_window_link" href="<?php echo $base_url; ?>output/print.output.php?section=pullsheets&amp;go=judging_scores_bos&amp;view=entry" data-toggle="tooltip" data-placement="top" title="Print All BOS Pullsheets Using Entry Numbers">All Style Types - Entry Numbers</a></li>
                                     <li><a id="modal_window_link" href="<?php echo $base_url; ?>output/print.output.php?section=pullsheets&amp;go=judging_scores_bos" data-toggle="tooltip" data-placement="top" title="Print All BOS Pullsheets Using Judging Numbers">All Style Types - Judging Numbers</a></li>
 								</ul>
-								
-									<?php do { 
-										if ($row_style_type['styleTypeBOS'] == "Y") { 
+
+									<?php do {
+										if ($row_style_type['styleTypeBOS'] == "Y") {
 										?>
                                         <ul class="list-inline">
 										<li><a id="modal_window_link" href="<?php echo $base_url; ?>output/print.output.php?section=pullsheets&amp;go=judging_scores_bos&amp;view=entry&amp;id=<?php echo $row_style_type['id']; ?>"  data-toggle="tooltip" data-placement="top" title="Print the <?php echo $row_style_type['styleTypeName']; ?> BOS Pullsheet Using Entry Numbers"><?php echo $row_style_type['styleTypeName']; ?> - Entry Numbers</a></li>
                                         <li><a id="modal_window_link" href="<?php echo $base_url; ?>output/print.output.php?section=pullsheets&amp;go=judging_scores_bos&amp;id=<?php echo $row_style_type['id']; ?>"  data-toggle="tooltip" data-placement="top" title="Print the <?php echo $row_style_type['styleTypeName']; ?> BOS Pullsheet Using Entry Numbers"><?php echo $row_style_type['styleTypeName']; ?> - Judging Numbers</a></li>
                                         </ul>
-										<?php } 
-										} while ($row_style_type = mysqli_fetch_assoc($style_type)); 
+										<?php }
+										} while ($row_style_type = mysqli_fetch_assoc($style_type));
 									?>
-								
+
 							</div>
 						</div><!-- ./row -->
 						<div class="row">
@@ -904,6 +907,7 @@
 								</ul>
 							</div>
 						</div><!-- ./row -->
+                        <?php } ?>
 						<div class="row">
 							<div class="col col-lg-12 col-md-12 col-sm-12 col-xs-12">
 								<h5>After Judging<hr></h5>
@@ -929,7 +933,6 @@
 								</ul>
 							</div>
 						</div><!-- ./row -->
-                        
                         <div class="row">
 							<div class="col col-lg-4 col-md-4 col-sm-4 col-xs-4">
 								<strong>BOS Results</strong>
@@ -938,9 +941,8 @@
 								<ul class="list-inline">
 									<li><a id="modal_window_link" href="<?php echo $base_url; ?>output/print.output.php?section=results&amp;go=judging_scores_bos&amp;action=print&amp;filter=bos&amp;view=default" title="BOS Round(s) Results Report">Print</a></li>
 									<li><a href="<?php echo $base_url; ?>output/export.output.php?section=results&amp;go=judging_scores_bos&amp;action=download&amp;filter=default&amp;view=pdf">PDF</a></li>
-                                    <li><a href="<?php echo $base_url; ?>output/export.output.php?section=results&amp;go=judging_scores_bos&amp;action=download&amp;filter=default&amp;view=html">HTML</a></li>	
+                                    <li><a href="<?php echo $base_url; ?>output/export.output.php?section=results&amp;go=judging_scores_bos&amp;action=download&amp;filter=default&amp;view=html">HTML</a></li>
 								</ul>
-								
 							</div>
 						</div><!-- ./row -->
                         <?php } ?>
@@ -960,9 +962,9 @@
 								</ul>
 							</div>
 						</div><!-- ./row -->
-                        
+
                         <?php if (empty($_SESSION['contestID'])) { ?>
-                        
+
                         <!-- Modal -->
                         <div class="modal fade" id="BJCPCompIDModal" tabindex="-1" role="dialog" aria-labelledby="BJCPCompIDModalLabel">
                             <div class="modal-dialog" role="document">
@@ -981,9 +983,9 @@
                                 </div>
                             </div>
                         </div><!-- ./modal -->
-                        
+
                         <?php } ?>
-                        
+
                      	<?php if ($totalRows_tables > 0) { ?>
 						<div class="row">
 							<div class="col col-lg-4 col-md-4 col-sm-4 col-xs-4">
@@ -1053,7 +1055,7 @@
 				</div>
 			</div>
 			<!-- ./ Reports Panel -->
-            
+
             <!-- Data Exports Panel -->
             <div class="panel panel-default">
                 <div class="panel-heading">
@@ -1079,7 +1081,7 @@
                                 </ul>
                             </div>
                         </div><!-- ./row -->
-                        
+
                         <div class="row">
                             <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-4">
                                 <strong>Entries (CSV)</strong>
@@ -1096,7 +1098,7 @@
                                 </ul>
                             </div>
                         </div><!-- ./row -->
-                        
+
                         <div class="row">
                             <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-4">
                                 <strong>Participants (CSV)</strong>
@@ -1108,7 +1110,7 @@
                                 </ul>
                             </div>
                         </div><!-- ./row -->
-                        
+
                         <div class="row">
                             <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-4">
                                 <strong>Promo Materials</strong>
@@ -1177,8 +1179,8 @@
                                 </ul>
                             </div>
                         </div><!-- ./row -->
-                        
-                        
+
+
                         <!-- Purge Modals -->
                         <div class="modal fade" id="purgeParticipants" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
                         	<form class="form-horizontal" action="<?php echo $base_url; ?>includes/process.inc.php?action=purge&amp;go=participants" method="POST" name="form1" id="form1">
@@ -1204,7 +1206,7 @@
 							</div>
 							</form>
 						</div>
-                       
+
                        <div class="modal fade" id="purgePayments" tabindex="-1" role="dialog" aria-labelledby="purgePaymentsLabel">
                         	<form class="form-horizontal" action="<?php echo $base_url; ?>includes/process.inc.php?action=purge&amp;go=payments" method="POST" name="form1" id="form1">
 							<div class="modal-dialog" role="document">
@@ -1229,7 +1231,7 @@
 							</div>
 							</form>
 						</div>
-                       
+
                        <div class="modal fade" id="purgeEntries" tabindex="-1" role="dialog" aria-labelledby="purgeEntriesLabel">
                         	<form class="form-horizontal" action="<?php echo $base_url; ?>includes/process.inc.php?action=purge&amp;go=entries" method="POST" name="form1" id="form1">
 							<div class="modal-dialog" role="document">
@@ -1254,25 +1256,25 @@
 							</div>
 							</form>
 						</div>
-                        
-                        
-                        
-                        
-                        
-                        
-                        
-                        
-                        
-                        
-                        
-                        
-                        
-                        
-                        
-                        
-                        
-                        
-                        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
                         <?php if ($_SESSION['userLevel'] == "0") { ?>
                         <div class="row">
                             <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-4">
@@ -1288,7 +1290,7 @@
                     </div>
                 </div>
             </div><!-- ./ Database Maintenance Panel -->
-            
+
             <!-- Preferences Panel -->
             <div class="panel panel-default">
                 <div class="panel-heading">
@@ -1320,7 +1322,7 @@
 									<li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=mods&amp;action=add">Add</a></li>
                                 </ul>
                             </div>
-                        </div><!-- ./row -->						
+                        </div><!-- ./row -->
 						<?php } ?>
                     </div>
                 </div>
@@ -1381,7 +1383,7 @@
                         </div>
                     </div>
                 </div>
-            
+
                 <!-- ./ Help Panel -->
             </div><!--./ panel-group" -->
         </div><!-- ./ right column -->
@@ -1404,7 +1406,7 @@
         </ul>
     </div>
 </div>
-					
+
 <div class="row">
     <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-4">
         <strong>Table Assignments</strong>
