@@ -80,7 +80,7 @@ else {
 	$container_main = "container";
 	$nav_container = "navbar-default";
 }
-	
+
 // Load libraries only when needed - for performance
 $tinymce_load = array("contest_info","default","step4");
 $datetime_load = array("contest_info","judging","testing","preferences","step4","step5","step6","default");
@@ -102,7 +102,7 @@ $security_question = array($label_secret_01, $label_secret_05, $label_secret_06,
     <title><?php echo $_SESSION['contestName']; ?> - Brew Competition Online Entry &amp; Management</title>
 
 	<?php
-	
+
 	if (CDN) include (INCLUDES.'load_cdn_libraries.inc.php');
 	else include (INCLUDES.'load_local_libraries.inc.php');
 
@@ -125,7 +125,7 @@ $security_question = array($label_secret_01, $label_secret_05, $label_secret_06,
 
 </head>
 <body>
-	
+
 	<!-- MAIN NAV -->
 	<div class="<?php echo $container_main; ?> hidden-print">
 		<?php include (SECTIONS.'nav.sec.php'); ?>
@@ -217,7 +217,7 @@ $security_question = array($label_secret_01, $label_secret_05, $label_secret_06,
         		<h1><?php echo $header_output; ?></h1>
         	</div>
         	<?php
-				
+
 				if ($section == "default") include (SECTIONS.'default.sec.php');
 				if ($section == "entry") include (SECTIONS.'entry_info.sec.php');
 				if ($section == "contact") include (SECTIONS.'contact.sec.php');

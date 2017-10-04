@@ -28,6 +28,81 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 	}
 	else {
 
+		function is_dir_empty($dir) {
+			foreach (new DirectoryIterator($dir) as $fileInfo) {
+				if($fileInfo->isDot()) continue;
+				return false;
+			}
+			return true;
+		}
+
+		/*
+
+		function is_dir_empty($dir) {
+			if (!is_readable($dir)) return null;
+			$handle = opendir($dir);
+				while (false !== ($entry = readdir($handle))) {
+					if ($entry !== '.' && $entry !== '..') { // <-- better use strict comparison here
+					closedir($handle);
+					return false;
+				}
+			}
+			closedir($handle);
+			return true;
+		}
+
+		*/
+
+		//Check if any documents are in the user_docs folder
+
+		if (!is_dir_empty(USER_DOCS)) {
+
+
+
+			// Check if a subfolder exists with the given name of the archive
+			// If not, create it
+
+			// Define directories
+			$source = USER_DOCS;
+			$destination = USER_DOCS.$suffix;
+
+			//echo $source."<br>";
+			//echo $destination;
+			//exit;
+
+			if (!is_dir($destination)) {
+
+				$oldmask = umask(0);
+
+				mkdir($destination, 0777, true);
+
+				// Get array of all source files
+				$files = scandir($source);
+
+				// "Move" files from the root folder into the subfolder
+				// Making sure to only move files and NOT directories that exist in the root
+				foreach ($files as $file) {
+
+					$old = $source.$file;
+					$new = $destination.DIRECTORY_SEPARATOR.$file;
+
+					if ((in_array($file, array(".",".."))) && (!is_dir($file))) {
+
+						if (copy($old, $new)) {
+							unlink($file);
+						}
+					}
+
+				}
+
+				umask($oldmask);
+
+			}
+
+
+
+		}
+
 		if (!isset($_POST['keepParticipants'])) {
 
 			// Gather current User's information from the current "users" AND current "brewer" tables and store in variables

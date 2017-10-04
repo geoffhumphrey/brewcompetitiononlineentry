@@ -38,7 +38,7 @@ function stateck() {
 		document.getElementById("msg_email").innerHTML=httpxml.responseText;
 	}
 }
-	
+
 var url="<?php echo $base_url; ?>includes/ajax_functions.inc.php?action=email";
 url=url+"&email="+email;
 url=url+"&sid="+Math.random();
@@ -48,41 +48,41 @@ httpxml.send(null);
 }
 
 $(document).ready(function(){
-		
+
 	$("#brewerClubsOther").hide("fast");
-	
+
 	$("#brewerClubs").change(function() {
-		
+
 		if ($("#brewerClubs").val() == "Other") {
 			$("#brewerClubsOther").show("slow");
 		}
-			
-		else  { 
+
+		else  {
 			$("#brewerClubsOther").hide("fast");
 		}
-		
+
 	});
-	
+
 	<?php if (($action == "edit") && ($row_brewer['brewerSteward'] == "Y")) { ?>
 	$("#brewerStewardFields").show("slow");
 	<?php } else { ?>
 	$("#brewerStewardFields").hide("fast");
 	<?php } ?>
-	
+
 	$('input[type="radio"]').click(function() {
        if($(this).attr('id') == 'brewerSteward_0') {
-            $("#brewerStewardFields").show("slow");         
+            $("#brewerStewardFields").show("slow");
        }
 
        else {
          	$("#brewerStewardFields").hide("fast");
        }
    	});
-	
+
 });
 //-->
 </script>
-<?php 
+<?php
 $warning1 = "";
 $warning2 = "";
 $primary_page_info = "";
@@ -95,9 +95,9 @@ if ($section == "admin") $you_volunteer = $register_text_000;
 else $you_volunteer = $register_text_001;
 
 if (($registration_open == 2) && ($judge_window_open == 2) && (!$logged_in) || (($logged_in) && ($_SESSION['userLevel'] == 2))) {
-	
-	// Show registration closed message if 
-	// 1) registration window is closed, 
+
+	// Show registration closed message if
+	// 1) registration window is closed,
 	// 2) the judge/steward registration window is closed,
 	// 3) the user is not logged in OR the user is logged in and their user level is 2 (non-admin)
 	$page_info1 .= sprintf("<p class=\"lead\">%s <small>%s</small></p>",$register_text_002,$register_text_003);
@@ -107,35 +107,35 @@ if (($registration_open == 2) && ($judge_window_open == 2) && (!$logged_in) || (
 else { // THIS ELSE ENDS at the end of the script
 
 	include (DB.'judging_locations.db.php');
-	include (DB.'stewarding.db.php'); 
-	include (DB.'styles.db.php'); 
+	include (DB.'stewarding.db.php');
+	include (DB.'styles.db.php');
 	include (DB.'brewer.db.php');
 	if (NHC) $totalRows_log = $totalRows_entry_count;
 	else $totalRows_log = $totalRows_log;
 	if ($go != "default") {
 		$country_select = "";
-		foreach ($countries as $country) { 
+		foreach ($countries as $country) {
 			$country_select .= "<option value=\"".$country."\" ";
-			if (($msg > 0) && ($_COOKIE['brewerCountry'] == $country)) $country_select .= "SELECTED";
+			if (($msg > 0) && (isset($_COOKIE['brewerCountry'])) && ($_COOKIE['brewerCountry'] == $country)) $country_select .= "SELECTED";
 			$country_select .= ">";
 			$country_select .= $country."</option>\n";
      	}
-	 
+
 	$random_country = array_rand($countries);
 	$random_country = $countries[$random_country];
-	
+
 	include (DB.'dropoff.db.php');
-	
+
 	if ($totalRows_dropoff > 0) {
 		$dropoff_select = "";
-		do { 
+		do {
     		$dropoff_select .= "<option value=\"".$row_dropoff['id']."\" ";
 			if (($action == "edit") && ($row_brewer['brewerDropOff'] == $row_dropoff['id'])) $dropoff_select .= "SELECTED";
-			if (($msg > 0) && ($_COOKIE['brewerDropOff'] == $row_dropoff['id'])) $dropoff_select .= "SELECTED"; 
+			if (($msg > 0) && (isset($_COOKIE['brewerDropOff'])) && ($_COOKIE['brewerDropOff'] == $row_dropoff['id'])) $dropoff_select .= "SELECTED";
 			$dropoff_select .= ">";
 			$dropoff_select .= $row_dropoff['dropLocationName']."</option>\n";
    		} while ($row_dropoff = mysqli_fetch_assoc($dropoff));
-	} 
+	}
 }
 
 if (($_SESSION['prefsProEdition'] == 1) && ($go == "entrant")) $warning1 .= sprintf("<p class=\"lead\">%s <small>%s</small></p>",$register_text_035,$register_text_036);
@@ -143,11 +143,11 @@ elseif (($_SESSION['prefsProEdition'] == 1) && ($go != "entrant")) $warning1 .= 
 else $warning1 .= sprintf("<p class=\"lead\">%s <small>%s</small></p>",$register_text_004,$register_text_005);
 $warning2 .= sprintf("<div class=\"alert alert-warning\"><span class=\"fa fa-exclamation-triangle\"> <strong>%s</strong></div>",$register_text_006);
 
-if ($section == "admin") { 
+if ($section == "admin") {
 	$header1_1 .= "<p class=\"lead\">";
 	if ($view == "quick") $header1_1 .= sprintf("%s ",$register_text_007);
 	$header1_1 .= sprintf("%s ",$register_text_008);
-	if ($go == "judge") $header1_1 .= sprintf("%s",$register_text_009); 
+	if ($go == "judge") $header1_1 .= sprintf("%s",$register_text_009);
 	else $header1_1 .= sprintf("%s",$register_text_010);
 	$header1_1 .= "</p>";
 }
@@ -165,7 +165,7 @@ if ((($registration_open < 2) || ($judge_window_open < 2)) && ($go == "default")
 		$page_info1 .= sprintf("<li>%s</li>",$register_text_016);
 		$page_info1 .= sprintf("<li>%s</li>",$register_text_017);
 	}
-	$page_info1 .= "</ul>";	
+	$page_info1 .= "</ul>";
 }
 
 if (isset($_SERVER['HTTP_REFERER'])) $relocate = $_SERVER['HTTP_REFERER'];
@@ -179,7 +179,7 @@ if ($registration_open != 1) {
 	$entrant_hidden = TRUE;
 }
 
-if ($go == "entrant") { 
+if ($go == "entrant") {
 	$judge_hidden = TRUE;
 	$steward_hidden = TRUE;
 }
@@ -216,16 +216,21 @@ if (($_SESSION['prefsProEdition'] == 0) || (($_SESSION['prefsProEdition'] == 1) 
 
 $security_questions_display = (array_rand($security_question, 5));
 $security = "";
-	
+
 if (isset($_COOKIE['userQuestion'])) $security .= "<div class=\"radio\"><label><input type=\"radio\" name=\"userQuestion\" value=\"".$_COOKIE['userQuestion']."\" CHECKED> ".$_COOKIE['userQuestion']."</label></div>";
 
 foreach ($security_questions_display as $key => $value) {
-	
+
 	$security_checked = "";
 	if (($msg == "default") && ($key == 0)) $security_checked = "CHECKED";
-	
-	if ((isset($_COOKIE['userQuestion'])) && ($_COOKIE['userQuestion'] != $security_question[$value])) $security .= "<div class=\"radio\"><label><input type=\"radio\" name=\"userQuestion\" value=\"".$security_question[$value]."\" ".$security_checked."> ".$security_question[$value]."</label></div>";
-	
+
+    if (isset($_COOKIE['userQuestion'])) {
+        if ($_COOKIE['userQuestion'] == $security_question[$value]) $security .= "";
+        else $security .= "<div class=\"radio\"><label><input type=\"radio\" name=\"userQuestion\" value=\"".$security_question[$value]."\" ".$security_checked."> ".$security_question[$value]."</label></div>";
+
+    }
+	else $security .= "<div class=\"radio\"><label><input type=\"radio\" name=\"userQuestion\" value=\"".$security_question[$value]."\" ".$security_checked."> ".$security_question[$value]."</label></div>";
+
 }
 
 
@@ -250,11 +255,11 @@ if ($go == "default") {  ?>
                     <option value="<?php echo build_public_url("register","entrant","default","default",$sef,$base_url); ?>"><?php echo $label_entrant; ?></option>
 					<option value="<?php echo build_public_url("register","judge","default","default",$sef,$base_url); ?>"><?php echo $label_judge; ?></option>
 					<option value="<?php echo build_public_url("register","steward","default","default",$sef,$base_url); ?>"><?php echo $label_steward; ?></option>
-					
+
 				</select>
 			</div>
 		</div>
-	</div><!-- Form Group -->	
+	</div><!-- Form Group -->
 <input type="hidden" name="relocate" value="<?php echo relocate($relocate,"default",$msg,$id); ?>">
 </form>
 <?php } else { // THIS ELSE ENDS at the end of the script ?>
@@ -312,14 +317,14 @@ if ($go == "default") {  ?>
                 <span class="input-group-addon" id="brewerBreweryName-addon2"><span class="fa fa-star"></span></span>
             </div>
             <div class="help-block"><?php echo $register_text_045; ?></div>
-            <div class="help-block with-errors"></div>            
+            <div class="help-block with-errors"></div>
         </div>
     </div><!-- ./Form Group -->
 	<div class="form-group"><!-- Form Group Text Input -->
         <label for="brewerBreweryTTB" class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label_ttb; ?></label>
         <div class="col-lg-9 col-md-9 col-sm-8 col-xs-12">
         	<!-- Input Here -->
-       		<input class="form-control" id="brewerBreweryTTB" name="brewerBreweryTTB" type="text" value="<?php if ($msg > 0) echo $_COOKIE['brewerBreweryTTB']; ?>" placeholder="">
+       		<input class="form-control" id="brewerBreweryTTB" name="brewerBreweryTTB" type="text" value="<?php if (($msg > 0) && (isset($_COOKIE['brewerBreweryTTB']))) echo $_COOKIE['brewerBreweryTTB']; ?>" placeholder="">
             <div class="help-block"><?php echo $register_text_046; ?></div>
         </div>
     </div><!-- ./Form Group -->
@@ -331,7 +336,7 @@ if ($go == "default") {  ?>
 			<div class="input-group has-warning">
 				<span class="input-group-addon" id="email-addon1"><span class="fa fa-envelope"></span></span>
 				<!-- Input Here -->
-				<input class="form-control" name="user_name" id="user_name" type="email" placeholder="" data-error="<?php echo $register_text_019; ?>" onBlur="checkAvailability()" onkeyup="twitter.updateUrl(this.value)" onchange="AjaxFunction(this.value);" value="<?php if ($msg > 0) echo $_COOKIE['user_name']; ?>" required <?php if ($_SESSION['prefsProEdition'] == 0) echo "autofocus"; ?>>
+				<input class="form-control" name="user_name" id="user_name" type="email" placeholder="" data-error="<?php echo $register_text_019; ?>" onBlur="checkAvailability()" onkeyup="twitter.updateUrl(this.value)" onchange="AjaxFunction(this.value);" value="<?php if (($msg > 0) && (isset($_COOKIE['user_name']))) echo $_COOKIE['user_name']; ?>" required <?php if ($_SESSION['prefsProEdition'] == 0) echo "autofocus"; ?>>
 				<span class="input-group-addon" id="email-addon2"><span class="fa fa-star"></span>
 			</div>
             <div class="help-block"><?php echo $register_text_021; ?></div>
@@ -347,7 +352,7 @@ if ($go == "default") {  ?>
 			<div class="input-group has-warning">
 				<span class="input-group-addon" id="re-enter-email-addon1"><span class="fa fa-envelope"></span></span>
 				<!-- Input Here -->
-				<input class="form-control" name="user_name2" type="email" placeholder="" id="user_name2" data-match="#user_name" data-error="<?php echo $register_text_019; ?>"; data-match-error="<?php echo $register_text_020; ?>" value="<?php if ($msg > 0) echo $_COOKIE['user_name2']; ?>" required>
+				<input class="form-control" name="user_name2" type="email" placeholder="" id="user_name2" data-match="#user_name" data-error="<?php echo $register_text_019; ?>"; data-match-error="<?php echo $register_text_020; ?>" value="<?php if (($msg > 0) && (isset($_COOKIE['user_name2']))) echo $_COOKIE['user_name2']; ?>" required>
 				<span class="input-group-addon" id="re-enter-email-addon2"><span class="fa fa-star"></span>
 			</div>
             <div class="help-block with-errors"></div>
@@ -386,7 +391,7 @@ if ($go == "default") {  ?>
 			<div class="input-group has-warning">
 				<span class="input-group-addon" id="password-addon1"><span class="fa fa-key"></span></span>
 				<!-- Input Here -->
-				<input class="form-control" name="password" id="password1" type="password" placeholder="<?php echo $label_password; ?>" value="<?php if ($msg > 0) echo $_COOKIE['password']; ?>" data-error="<?php echo $register_text_022; ?>" required>
+				<input class="form-control" name="password" id="password1" type="password" placeholder="<?php echo $label_password; ?>" value="<?php if (($msg > 0)  && (isset($_COOKIE['password']))) echo $_COOKIE['password']; ?>" data-error="<?php echo $register_text_022; ?>" required>
 				<span class="input-group-addon" id="password-addon2"><span class="fa fa-star"></span></span>
 			</div>
             <div class="help-block with-errors"></div>
@@ -416,7 +421,7 @@ if ($go == "default") {  ?>
 			<div class="input-group has-warning">
 				<span class="input-group-addon" id="security-question-answer-addon1"><span class="fa fa-bullhorn"></span></span>
 				<!-- Input Here -->
-				<input class="form-control" name="userQuestionAnswer" id="userQuestionAnswer" type="text" placeholder="" value="<?php if ($msg > 0) echo $_COOKIE['userQuestionAnswer']; ?>" data-error="<?php echo $register_text_023; ?>" required>
+				<input class="form-control" name="userQuestionAnswer" id="userQuestionAnswer" type="text" placeholder="" value="<?php if (($msg > 0) && (isset($_COOKIE['userQuestionAnswer']))) echo $_COOKIE['userQuestionAnswer']; ?>" data-error="<?php echo $register_text_023; ?>" required>
 				<span class="input-group-addon" id="security-question-answer-addon2"><span class="fa fa-star"></span>
 			</div>
             <div class="help-block"><?php echo $register_text_024; ?></div>
@@ -431,7 +436,7 @@ if ($go == "default") {  ?>
 			<div class="input-group has-warning">
 				<span class="input-group-addon" id="first-name-addon1"><span class="fa fa-user"></span></span>
 				<!-- Input Here -->
-				<input class="form-control" name="brewerFirstName" id="brewerFirstName" type="text" placeholder="" value="<?php if ($msg > 0) echo $_COOKIE['brewerFirstName']; ?>" data-error="<?php echo $register_text_025; ?>" required>
+				<input class="form-control" name="brewerFirstName" id="brewerFirstName" type="text" placeholder="" value="<?php if (($msg > 0) && (isset($_COOKIE['brewerFirstName']))) echo $_COOKIE['brewerFirstName']; ?>" data-error="<?php echo $register_text_025; ?>" required>
 				<span class="input-group-addon" id="first-name-addon2"><span class="fa fa-star"></span>
 			</div>
             <div class="help-block with-errors"></div>
@@ -443,7 +448,7 @@ if ($go == "default") {  ?>
 			<div class="input-group has-warning">
 				<span class="input-group-addon" id="last-name-addon1"><span class="fa fa-user"></span></span>
 				<!-- Input Here -->
-				<input class="form-control" name="brewerLastName" id="brewerLastName" type="text" placeholder="" value="<?php if ($msg > 0) echo $_COOKIE['brewerLastName']; ?>" data-error="<?php echo $register_text_026; ?>" required>
+				<input class="form-control" name="brewerLastName" id="brewerLastName" type="text" placeholder="" value="<?php if (($msg > 0) && (isset($_COOKIE['brewerFirstName']))) echo $_COOKIE['brewerFirstName']; ?>" data-error="<?php echo $register_text_026; ?>" required>
 				<span class="input-group-addon" id="last-name-addon2"><span class="fa fa-star"></span>
 			</div>
             <?php if ($section != "admin") { ?><div id="helpBlock" class="help-block"><?php echo $brewer_text_000; if ($_SESSION['prefsProEdition'] == 0) echo " ".$brewer_text_022; ?></div><?php } ?>
@@ -520,7 +525,7 @@ if ($go == "default") {  ?>
                         </label>
                     </div>
                 </div>
-                
+
             </div>
         </div><!-- ./Form Group -->
     <?php } // END if ($view == "quick") ?>
@@ -532,7 +537,7 @@ if ($go == "default") {  ?>
 			<div class="input-group has-warning">
 				<span class="input-group-addon" id="street-addon1"><span class="fa fa-home"></span></span>
 				<!-- Input Here -->
-				<input class="form-control" name="brewerAddress" id="brewerAddress" type="text" placeholder="" value="<?php if ($msg > 0) echo $_COOKIE['brewerAddress']; ?>" data-error="<?php echo $register_text_028; ?>" required>
+				<input class="form-control" name="brewerAddress" id="brewerAddress" type="text" placeholder="" value="<?php if (($msg > 0) && (isset($_COOKIE['brewerAddress']))) echo $_COOKIE['brewerAddress']; ?>" data-error="<?php echo $register_text_028; ?>" required>
 				<span class="input-group-addon" id="street-addon2"><span class="fa fa-star"></span>
 			</div>
             <div class="help-block with-errors"></div>
@@ -544,7 +549,7 @@ if ($go == "default") {  ?>
 			<div class="input-group has-warning">
 				<span class="input-group-addon" id="city-addon1"><span class="fa fa-home"></span></span>
 				<!-- Input Here -->
-				<input class="form-control" name="brewerCity" id="brewerCity" type="text" placeholder="" value="<?php if ($msg > 0) echo $_COOKIE['brewerCity']; ?>" data-error="<?php echo $register_text_029; ?>" required>
+				<input class="form-control" name="brewerCity" id="brewerCity" type="text" placeholder="" value="<?php if (($msg > 0) && (isset($_COOKIE['brewerCity']))) echo $_COOKIE['brewerCity']; ?>" data-error="<?php echo $register_text_029; ?>" required>
 				<span class="input-group-addon" id="city-addon2"><span class="fa fa-star"></span>
 			</div>
             <div class="help-block with-errors"></div>
@@ -556,7 +561,7 @@ if ($go == "default") {  ?>
 			<div class="input-group has-warning">
 				<span class="input-group-addon" id="state-addon1"><span class="fa fa-home"></span></span>
 				<!-- Input Here -->
-				<input class="form-control" name="brewerState" id="brewerState" type="text" placeholder="" value="<?php if ($msg > 0) echo $_COOKIE['brewerState']; ?>" data-error="<?php echo $register_text_030; ?>" required>
+				<input class="form-control" name="brewerState" id="brewerState" type="text" placeholder="" value="<?php if (($msg > 0) && (isset($_COOKIE['brewerState']))) echo $_COOKIE['brewerState']; ?>" data-error="<?php echo $register_text_030; ?>" required>
 				<span class="input-group-addon" id="state-addon2"><span class="fa fa-star"></span>
 			</div>
             <div class="help-block with-errors"></div>
@@ -568,7 +573,7 @@ if ($go == "default") {  ?>
 			<div class="input-group has-warning">
 				<span class="input-group-addon" id="zip-addon1"><span class="fa fa-home"></span></span>
 				<!-- Input Here -->
-				<input class="form-control" name="brewerZip" id="brewerZip" type="text" placeholder="" value="<?php if ($msg > 0) echo $_COOKIE['brewerZip']; ?>" data-error="<?php echo $register_text_031; ?>" required>
+				<input class="form-control" name="brewerZip" id="brewerZip" type="text" placeholder="" value="<?php if (($msg > 0) && (isset($_COOKIE['brewerZip']))) echo $_COOKIE['brewerZip']; ?>" data-error="<?php echo $register_text_031; ?>" required>
 				<span class="input-group-addon" id="zip-addon2"><span class="fa fa-star"></span>
 			</div>
             <div class="help-block with-errors"></div>
@@ -589,7 +594,7 @@ if ($go == "default") {  ?>
 			<div class="input-group has-warning">
 				<span class="input-group-addon" id="phone1-addon1"><span class="fa fa-phone"></span></span>
 				<!-- Input Here -->
-				<input class="form-control" name="brewerPhone1" id="brewerPhone1" type="tel" placeholder="" value="<?php if ($msg > 0) echo $_COOKIE['brewerPhone1']; ?>" data-error="<?php echo $register_text_032; ?>" required>
+				<input class="form-control" name="brewerPhone1" id="brewerPhone1" type="tel" placeholder="" value="<?php if (($msg > 0) && (isset($_COOKIE['brewerPhone1']))) echo $_COOKIE['brewerPhone1']; ?>" data-error="<?php echo $register_text_032; ?>" required>
 				<span class="input-group-addon" id="phone1-addon2"><span class="fa fa-star"></span>
 			</div>
             <div class="help-block with-errors"></div>
@@ -601,7 +606,7 @@ if ($go == "default") {  ?>
 			<div class="input-group">
 				<span class="input-group-addon" id="phone2-addon1"><span class="fa fa-phone"></span></span>
 				<!-- Input Here -->
-				<input class="form-control" name="brewerPhone2" id="brewerPhone2" type="tel" placeholder="" value="<?php if ($msg > 0) echo $_COOKIE['brewerPhone2']; ?>">
+				<input class="form-control" name="brewerPhone2" id="brewerPhone2" type="tel" placeholder="" value="<?php if (($msg > 0) && (isset($_COOKIE['brewerPhone2']))) echo $_COOKIE['brewerPhone2']; ?>">
 			</div>
 		</div>
 	</div><!-- ./Form Group -->
@@ -611,11 +616,11 @@ if ($go == "default") {  ?>
 		<div class="col-lg-9 col-md-9 col-sm-8 col-xs-12 has-warning">
 			<!-- Input Here -->
 			<select class="selectpicker" name="brewerDropOff" id="brewerDropOff" data-size="10" data-width="fit">
-				<option value="0"><?php echo $brewer_text_005; ?></option> 
+				<option value="0"><?php echo $brewer_text_005; ?></option>
 				<option disabled="disabled">-------------</option>
 				<?php echo $dropoff_select; ?>
 			</select>
-		
+
 		</div>
 	</div><!-- ./Form Group -->
     <?php } // END if (($_SESSION['prefsProEdition'] == 0) || (($_SESSION['prefsProEdition'] == 1) && ($go == "entrant"))) ?>
@@ -632,20 +637,20 @@ if ($go == "default") {  ?>
         </select>
         <span class="help-block"><?php echo $brewer_text_023; ?></span>
         </div>
-    </div><!-- ./Form Group --> 
+    </div><!-- ./Form Group -->
     <div id="brewerClubsOther" class="form-group">
         <label for="brewerClubsOther" class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label_club_enter; ?></label>
         <div class="col-lg-9 col-md-9 col-sm-8 col-xs-12">
        		<input class="form-control" name="brewerClubsOther" type="text" value="<?php if ($action == "edit") echo $row_brewer['brewerClubs']; ?>" placeholder="">
         </div>
-    </div>    
+    </div>
 	<div class="form-group"><!-- Form Group Text Input -->
 		<label for="" class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label_aha_number; ?></label>
 		<div class="col-lg-9 col-md-9 col-sm-8 col-xs-12">
 			<div class="input-group">
 				<span class="input-group-addon" id="aha-addon1"><span class="fa fa-beer"></span></span>
 				<!-- Input Here -->
-				<input class="form-control" name="brewerAHA" id="brewerAHA" type="number" placeholder="" value="<?php if ($msg > 0) echo $_COOKIE['brewerAHA']; ?>">
+				<input class="form-control" name="brewerAHA" id="brewerAHA" type="number" placeholder="" value="<?php if (($msg > 0) && (isset($_COOKIE['brewerAHA']))) echo $_COOKIE['brewerAHA']; ?>">
 			</div>
             <div class="help-block"><?php echo $register_text_033; ?></div>
 		</div>
@@ -660,17 +665,17 @@ if ($go == "default") {  ?>
             <div class="input-group">
                 <!-- Input Here -->
                 <label class="radio-inline">
-                    <input type="radio" name="brewerStaff" value="Y" id="brewerStaff_0" <?php if (($msg > 0) && ($_COOKIE['brewerStaff'] == "Y")) echo "CHECKED"; ?>> <?php echo $label_yes; ?>
+                    <input type="radio" name="brewerStaff" value="Y" id="brewerStaff_0" <?php if (($msg > 0) && (isset($_COOKIE['brewerStaff'])) && ($_COOKIE['brewerStaff'] == "Y")) echo "CHECKED"; ?>> <?php echo $label_yes; ?>
                 </label>
                 <label class="radio-inline">
-                    <input type="radio" name="brewerStaff" value="N" id="brewerStaff_1" <?php if (($msg > 0) && ($_COOKIE['brewerStaff'] == "N")) echo "CHECKED"; if ($msg == "default") echo "CHECKED"; ?>> <?php echo $label_no; ?>
+                    <input type="radio" name="brewerStaff" value="N" id="brewerStaff_1" <?php if (($msg > 0) && (isset($_COOKIE['brewerStaff'])) && ($_COOKIE['brewerStaff'] == "N")) echo "CHECKED"; if ($msg == "default") echo "CHECKED"; ?>> <?php echo $label_no; ?>
                 </label>
             </div>
             <span class="help-block"><?php echo $brewer_text_021; ?></span>
         </div>
     </div><!-- ./Form Group -->
     <?php } // END if (($_SESSION['prefsProEdition'] == 0) || (($_SESSION['prefsProEdition'] == 1) && (($go == "judge") || ($go == "steward"))))?>
-    <?php } // END if ($view == "default") ?>    
+    <?php } // END if ($view == "default") ?>
     <?php if (!$judge_hidden) { ?>
     <!-- Show Judge Fields if Registering as a Judge -->
     <div class="form-group"><!-- Form Group REQUIRED Radio Group -->
@@ -680,10 +685,10 @@ if ($go == "default") {  ?>
             <div class="input-group">
                 <!-- Input Here -->
                 <label class="radio-inline">
-                    <input type="radio" name="brewerJudge" value="Y" id="brewerJudge_0"  <?php if ($msg != "4") echo "CHECKED"; elseif (($msg > 0) && ($_COOKIE['brewerJudge'] == "Y")) echo "CHECKED"; ?> rel="judge_no" /> <?php echo $label_yes; ?>
+                    <input type="radio" name="brewerJudge" value="Y" id="brewerJudge_0"  <?php if ($msg != "4") echo "CHECKED"; elseif (($msg > 0) && (isset($_COOKIE['brewerJudge'])) && ($_COOKIE['brewerJudge'] == "Y")) echo "CHECKED"; ?> rel="judge_no" /> <?php echo $label_yes; ?>
                 </label>
                 <label class="radio-inline">
-                    <input type="radio" name="brewerJudge" value="N" id="brewerJudge_1" <?php if (($msg > 0) && ($_COOKIE['brewerJudge'] == "N")) echo "CHECKED"; if ($go == "steward") echo "CHECKED"; if ($go == "judge") echo "DISABLED"; ?> rel="none" /> <?php echo $label_no; ?>
+                    <input type="radio" name="brewerJudge" value="N" id="brewerJudge_1" <?php if (($msg > 0) && (isset($_COOKIE['brewerJudge'])) && ($_COOKIE['brewerJudge'] == "N")) echo "CHECKED"; if ($go == "steward") echo "CHECKED"; if ($go == "judge") echo "DISABLED"; ?> rel="none" /> <?php echo $label_no; ?>
                 </label>
             </div>
         </div>
@@ -692,7 +697,7 @@ if ($go == "default") {  ?>
 	if ($action == "edit") $judging_locations = explode(",",$row_brewer['brewerJudgeLocation']);
 	elseif (isset($_COOKIE['brewerJudgeLocation'])) $judging_locations = explode(",",$_COOKIE['brewerJudgeLocation']);
 	else $judging_locations = array("","");
-	?>		
+	?>
     <div class="form-group"><!-- Form Group REQUIRED Radio Group -->
         <label for="" class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label_judging_avail; ?></label>
         <div class="col-lg-9 col-md-9 col-sm-8 col-xs-12">
@@ -722,15 +727,15 @@ if ($go == "default") {  ?>
             <div class="input-group">
                 <!-- Input Here -->
                 <label class="radio-inline">
-                    <input type="radio" name="brewerSteward" value="Y" id="brewerSteward_0" <?php if ($msg != "4") echo "CHECKED"; elseif (($msg > 0) && ($_COOKIE['brewerSteward'] == "Y")) echo "CHECKED"; ?> rel="steward_no" /><?php echo $label_yes; ?>
+                    <input type="radio" name="brewerSteward" value="Y" id="brewerSteward_0" <?php if ($msg != "4") echo "CHECKED"; elseif (($msg > 0) && (isset($_COOKIE['brewerSteward'])) && ($_COOKIE['brewerSteward'] == "Y")) echo "CHECKED"; ?> rel="steward_no" /><?php echo $label_yes; ?>
                 </label>
                 <label class="radio-inline">
-                    <input type="radio" name="brewerSteward" value="N" id="brewerSteward_1" <?php if (($msg > 0) && ($_COOKIE['brewerSteward'] == "N")) echo "CHECKED"; if ($go == "steward") echo "DISABLED"; ?> rel="none" /> <?php echo $label_no; ?>
+                    <input type="radio" name="brewerSteward" value="N" id="brewerSteward_1" <?php if (($msg > 0) && (isset($_COOKIE['brewerSteward'])) && ($_COOKIE['brewerSteward'] == "N")) echo "CHECKED"; if ($go == "steward") echo "DISABLED"; ?> rel="none" /> <?php echo $label_no; ?>
                 </label>
             </div>
         </div>
     </div><!-- ./Form Group -->
-	<?php if ($totalRows_judging > 1) { 
+	<?php if ($totalRows_judging > 1) {
 	if ($action == "edit") $stewarding_locations = explode(",",$row_brewer['brewerStewardLocation']);
 	elseif (isset($_COOKIE['brewerStewardLocation'])) $stewarding_locations = explode(",",$_COOKIE['brewerStewardLocation']);
 	else $stewarding_locations = array("","");
@@ -752,7 +757,7 @@ if ($go == "default") {  ?>
         <?php }  while ($row_stewarding = mysqli_fetch_assoc($stewarding));  ?>
         </div>
     </div><!-- ./Form Group -->
-	<?php } // END if ($totalRows_judging > 1) 
+	<?php } // END if ($totalRows_judging > 1)
 	else { ?>
    	<input name="brewerStewardLocation" type="hidden" value="<?php echo "Y-".$row_judging3['id']; ?>" />
    	<?php } // END else ?>
@@ -772,7 +777,7 @@ if ($go == "default") {  ?>
             <div class="help-block with-errors"></div>
         </div>
     </div><!-- ./Form Group -->
-    
+
     <?php } // END if (((!$judge_hidden) || (!$steward_hidden)) && ($section != "admin")) ?>
     <!-- CAPTCHA -->
     <!-- <script src="https://www.google.com/recaptcha/api.js"></script> -->
@@ -781,7 +786,7 @@ if ($go == "default") {  ?>
 		<div class="col-lg-9 col-md-9 col-sm-8 col-xs-12">
 			<div class="input-group">
 				<!-- Input Here -->
-                <div class="g-recaptcha" data-sitekey="<?php echo $publickey; ?>"></div>
+                <div class="g-recaptcha" data-sitekey="<?php echo $public_captcha_key; ?>"></div>
 			</div>
 		</div>
 	</div><!-- Form Group -->

@@ -1,12 +1,12 @@
-<?php 
+<?php
 /**
- * Module:      nav.sec.php 
- * Description: This module houses the main navigation. 
- * 
+ * Module:      nav.sec.php
+ * Description: This module houses the main navigation.
+ *
  */
 
 // Turn off SEF for error pages
-if ($section >= 400) $sef = "false"; 
+if ($section >= 400) $sef = "false";
 else $sef = $sef;
 
 $add_entry_link_show = FALSE;
@@ -38,24 +38,24 @@ if (!empty($help)) $help_icon = TRUE;
 else $help_icon = FALSE;
 
 // Set up general nav link variables
-if ($section == "default") { 
-	$link_home= "#";  
-	$print_icon = TRUE; 
+if ($section == "default") {
+	$link_home= "#";
+	$print_icon = TRUE;
 	$active_class = " class=\"active\"";
 	}
-else { 
+else {
 	if (empty($base_url)) $link_home= "index.php";
 	else $link_home = $base_url;
 }
 
-if ($section == "rules") { 
-	$link_rules = "#"; 
-	$print_icon = TRUE; 
+if ($section == "rules") {
+	$link_rules = "#";
+	$print_icon = TRUE;
 }
 else $link_rules = build_public_url("rules","default","default","default",$sef,$base_url);
 
-if ($section == "entry") { 
-	$link_entry_info = "#";  
+if ($section == "entry") {
+	$link_entry_info = "#";
 	$print_icon = TRUE;
 }
 else $link_entry_info = build_public_url("entry","default","default","default",$sef,$base_url);
@@ -63,29 +63,29 @@ else $link_entry_info = build_public_url("entry","default","default","default",$
 if ($section == "volunteers") { $link_volunteer_info = "#";  $print_icon = TRUE; }
 else $link_volunteer_info = build_public_url("volunteers","default","default","default",$sef,$base_url);
 
-if (($_SESSION['prefsSponsors'] == "Y") && ($_SESSION['sponsorCount'] > 0)) { 
-	if ($section == "sponsors") { 
-		$link_sponsors = "#";  
-		$print_icon = TRUE; 
+if (($_SESSION['prefsSponsors'] == "Y") && ($_SESSION['sponsorCount'] > 0)) {
+	if ($section == "sponsors") {
+		$link_sponsors = "#";
+		$print_icon = TRUE;
 	}
 	else $link_sponsors = build_public_url("sponsors","default","default","default",$sef,$base_url);
 	$sponsors = TRUE;
 }
 else $sponsors = FALSE;
 
-if ($section == "contact") $link_contacts = "#"; 
+if ($section == "contact") $link_contacts = "#";
 else $link_contacts = build_public_url("contact","default","default","default",$sef,$base_url);
 
-if ($section == "register") $link_register = "#"; 
+if ($section == "register") $link_register = "#";
 elseif (($judge_limit) && ($steward_limit)) $link_register = build_public_url("register","entrant","default","default",$sef,$base_url);
 elseif (($registration_open != 1) && (!$ua) && (!isset($_SESSION['loginUsername'])) && ($judge_window_open == 1) && ($msg == "default")) $link_register = build_public_url("register","judge","default","default",$sef,$base_url);
 elseif (($judge_window_open == "1") && ($registration_open == "2")) $link_register = build_public_url("register","judge","default","default",$sef,$base_url);
 else $link_register = build_public_url("register","default","default","default",$sef,$base_url);
 
-if ($section == "login") $link_login = "#"; 
+if ($section == "login") $link_login = "#";
 else $link_login = build_public_url("login","default","default","default",$sef,$base_url);
 
-if ($section == "logout") $link_logout = "#"; 
+if ($section == "logout") $link_logout = "#";
 else $link_logout = build_public_url("logout","default","default","default",$sef,$base_url);
 
 $qr_enable = FALSE;
@@ -117,55 +117,56 @@ if ($logged_in)  {
 		}
 
 	}
-	
+
 	if ($admin_user) {
 		$link_admin = $base_url."index.php?section=admin";
 		$print_icon = TRUE;
 	}
-	
+
 	// Build Pay Link
-	if ($section == "pay") { 
-		$link_pay = "#"; 
-		if ($msg != "default") $print_icon = TRUE; 
+	if ($section == "pay") {
+		$link_pay = "#";
+		if ($msg != "default") $print_icon = TRUE;
 		}
 	else $link_pay = build_public_url("pay","default","default","default",$sef,$base_url);
-	
+
 	// Build My Account Link
-	if ($section == "list") { 
-		$link_list = "#"; 
-		$print_icon = TRUE; 
+	if ($section == "list") {
+		$link_list = "#";
+		$print_icon = TRUE;
 	}
 	else $link_list = build_public_url("list","default","default","default",$sef,$base_url);
-	
+
 	// Build My Entries Link
 	$link_user_entries = build_public_url("list","default","default","default",$sef,$base_url)."#entries";
-	
+
 	// Build Edit My Info link
-	if ($_SESSION['brewerID'] != "") $edit_user_info_link = build_public_url("brewer","account","edit",$_SESSION['brewerID'],$sef,$base_url);
-	
+    $edit_user_info_link = "";
+	if ($_SESSION['brewerID'] != "") $edit_user_info_link .= build_public_url("brewer","account","edit",$_SESSION['brewerID'],$sef,$base_url);
+
 	/*
 	$edit_user_info_link = $base_url."index.php?";
-	if ($_SESSION['brewerID'] != "") $edit_user_info_link .= "section=brewer&amp;action=edit&amp;id=".$_SESSION['brewerID']; 
+	if ($_SESSION['brewerID'] != "") $edit_user_info_link .= "section=brewer&amp;action=edit&amp;id=".$_SESSION['brewerID'];
 	else $edit_user_info_link .= "action=add&amp;section=brewer&amp;go=judge";
 	*/
-	
+
 	// Build Change My Email Address link
 	$edit_user_email_link = build_public_url("user","account","username",$_SESSION['user_id'],$sef,$base_url);
 	//$edit_user_email_link = $base_url."index.php?section=user&amp;action=username&amp;id=".$_SESSION['brewerID'];
-	
+
 	// Build Change My Email Address link
 	$edit_user_password_link = build_public_url("user","account","password",$_SESSION['user_id'],$sef,$base_url);
 	//$edit_user_password_link = $base_url."index.php?section=user&amp;action=password&amp;id=".$_SESSION['brewerID'];
-	
+
 	// Build Add Entry Link
 	$add_entry_link = "";
 	$add_entry_link .= $base_url;
-	if ($_SESSION['userLevel'] <= "1") $add_entry_link .= "index.php?section=brew&amp;go=entries&amp;action=add&amp;filter=admin"; 
+	if ($_SESSION['userLevel'] <= "1") $add_entry_link .= "index.php?section=brew&amp;go=entries&amp;action=add&amp;filter=admin";
 	else $add_entry_link .= "index.php?section=brew&amp;action=add";
-	
+
 	// Build Add Entry BeerXML Link
 	$add_entry_beerxml_link = "index.php?section=beerxml";
-	
+
 }
 if (($logged_in) && ($admin_user) && ($go != "error_page")) { ?>
 <!-- Admin Push Menu -->
@@ -187,7 +188,7 @@ if (($logged_in) && ($admin_user) && ($go != "error_page")) { ?>
                     <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=styles">Manage Styles Accepted</a></li>
                     <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=style_types">Manage Style Types</a></li>
 					<li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=upload">Upload Logo Images</a></li>
-                    
+
                 </ul>
             </li>
 			<?php } ?>
@@ -212,7 +213,7 @@ if (($logged_in) && ($admin_user) && ($go != "error_page")) { ?>
                     <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=checkin">Entry Check-in Via Barcode Scanner</a></li>
                     <li><a href="<?php echo $base_url; ?>qr.php" target="_blank">Entry Check-in Via Mobile Devices <span class="fa fa-external-link"></span></a></li>
                     <?php } ?>
-                </ul> 
+                </ul>
             </li>
             <li class="dropdown">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">Organizing <span class="caret"></span></a>

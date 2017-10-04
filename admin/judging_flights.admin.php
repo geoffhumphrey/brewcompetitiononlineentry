@@ -1,40 +1,40 @@
 <?php
 
-if (($filter != "default") && ($filter != "rounds"))  { 
+if (($filter != "default") && ($filter != "rounds"))  {
 
 	// get variables
 	$entry_count = get_table_info(1,"count_total",$row_tables_edit['id'],$dbTable,"default");
 	$flight_count = ceil($entry_count/$_SESSION['jPrefsFlightEntries']);
-	
+
 	$a = explode(",", $row_tables_edit['tableStyles']);
 	$flight_table_tbody = "";
-	
+
 	foreach (array_unique($a) as $value) {
-		
-		
-	
+
+
+
 		if (strpos($_SESSION['prefsStyleSet'],"BABDB") === false) $style_name = style_convert($value,"8");
-	
+
 		include (DB.'admin_judging_flights.db.php');
-	
+
 		do {
-			
+
 			$random = random_generator(7,2);
 			$flight_number_entry = "";
 			$flight_number_value = "";
-	
+
 			if ($action == "edit") {
 				$flight_number_entry = flight_entry_info($row_entries['id']);
 				$flight_number_value = explode("^",$flight_number_entry);
 			}
-	
+
 			$hidden_input_id = "";
 			$checked = "";
-	
+
 			if ($action == "add") $hidden_input_id = $row_entries['id'];
 			elseif (($action == "edit") && (!empty($flight_number_value[0]))) $hidden_input_id = $flight_number_value[0];
 			else $hidden_input_id = $random;
-	
+
 			$flight_table_tbody .= "<tr>\n";
 			$flight_table_tbody .= "<td>";
 			$flight_table_tbody .= readable_judging_number($row_entries['brewCategory'],$row_entries['brewJudgingNumber']);;
@@ -42,12 +42,12 @@ if (($filter != "default") && ($filter != "rounds"))  {
 			$flight_table_tbody .= "<input type=\"hidden\" name=\"flightTable\" value=\"".$row_tables_edit['id']."\">";
 			$flight_table_tbody .= "<input type=\"hidden\" name=\"flightEntryID".$hidden_input_id."\" value=\"".$row_entries['id']."\">";
 			$flight_table_tbody .= "</td>\n";
-	
+
 			$flight_table_tbody .= "<td>";
 			if (strpos($_SESSION['prefsStyleSet'],"BABDB") !== false) $flight_table_tbody .= $row_entries['brewStyle'];
 			else $flight_table_tbody .= $row_entries['brewCategorySort'].$row_entries['brewSubCategory']." ".style_convert($row_entries['brewCategorySort'],1).": ".$row_entries['brewStyle'];
 			$flight_table_tbody .= "</td>\n";
-	
+
 			for($i=1; $i<$flight_count+1; $i++) {
 				if (($action == "add") && ($i == 1)) $checked = "checked";
 				elseif (($action == "edit") && ($flight_number_value[1] == $i)) $checked = "checked";
@@ -56,27 +56,27 @@ if (($filter != "default") && ($filter != "rounds"))  {
 				$flight_table_tbody .= "<input type=\"radio\" name=\"flightNumber".$hidden_input_id."\" value=\"flight".$i."\" ".$checked.">";
 				$flight_table_tbody .= "</td>\n";
 			}
-	
+
 			$flight_table_tbody .= "<td>";
 			if ($action == "edit") $flight_table_tbody .= $flight_number_value[3];
 			else $flight_table_tbody .= "&nbsp;";
 			$flight_table_tbody .= "</td>\n";
 			$flight_table_tbody .= "<td>";
-			$flight_table_tbody .= str_replace("^","; ",$row_entries['brewInfo']);
+			$flight_table_tbody .= str_replace("^"," | ",$row_entries['brewInfo']);
 			if (!empty($row_entries['brewInfoOptional'])) $flight_table_tbody .= $row_entries['brewInfoOptional'];
 			$flight_table_tbody .= "</td>\n";
 			$flight_table_tbody .= "</tr>\n";
-	
+
 		}  while ($row_entries = mysqli_fetch_assoc($entries));
-	
+
 	}
 
 }
 
 $title = "";
-if (($action == "edit") && ($id != "default") && ($filter == "default")) $title = ": Edit Flights for Table ".$row_tables_edit['tableNumber']." &ndash; ".$row_tables_edit['tableName']; 
+if (($action == "edit") && ($id != "default") && ($filter == "default")) $title = ": Edit Flights for Table ".$row_tables_edit['tableNumber']." &ndash; ".$row_tables_edit['tableName'];
 elseif (($action == "add") && ($id != "default") && ($filter == "default")) $title = ": Define Flights for Table ".$row_tables_edit['tableNumber']." &ndash; ".$row_tables_edit['tableName'];
-elseif (($action == "assign") && ($filter == "rounds"))  $title = ": Assign $assign_to to Rounds"; 
+elseif (($action == "assign") && ($filter == "rounds"))  $title = ": Assign $assign_to to Rounds";
 else $title =  ": Define/Edit Flights"; ?>
 <p onload="updateButCount(event);" class="lead"><?php echo $_SESSION['contestName'].$title;  ?></p>
 
@@ -98,8 +98,8 @@ else $title =  ": Define/Edit Flights"; ?>
     </div><!-- ./button group -->
     <?php } ?>
 </div>
-<?php 
-if ($filter == "default") { 
+<?php
+if ($filter == "default") {
 if ($totalRows_tables > 0) {
 ?>
 <div class="bcoem-admin-element hidden-print">
@@ -110,15 +110,15 @@ if ($totalRows_tables > 0) {
 		<!-- Input Here -->
 		<select class="selectpicker" name="table_choice" id="table_choice" onchange="jumpMenu('self',this,0)" data-width="auto">
 			<option value=""></option>
-				<?php do { 
-				
+				<?php do {
+
 				$table_choose = table_choose($section,$go,$action,$row_tables_edit['id'],$view,"default","flight_choose");
 				$table_choose = explode("^",$table_choose);
 				if ($table_choose[0] > 0) $table_choose_display = "edit&amp;id=".$table_choose[1]; else $table_choose_display = "add&amp;id=".$table_choose[1];
-				
+
 				?>
 				<option value="index.php?section=admin&amp;go=judging_flights&amp;filter=define&amp;action=<?php echo $table_choose_display; ?>"><?php echo "Table ".$row_tables_edit['tableNumber'].": ".$row_tables_edit['tableName']; ?></option>
-				<?php 
+				<?php
 				} while ($row_tables_edit = mysqli_fetch_assoc($tables_edit)); ?>
 		</select>
 		</div>
@@ -132,7 +132,7 @@ if ($totalRows_tables > 0) {
 function updateButCount(e) {
 
 	// Get event from W3C or IE event model
-	var e = e || window.event; 
+	var e = e || window.event;
 
 	// Test that appropriate features are supported
 	if (!document.getElementsByTagName || !document.getElementById) return;
@@ -185,7 +185,7 @@ document.getElementById('<?php echo "flight".$i; ?>').innerHTML = butCount.<?php
 // document.getElementById('summary').innerHTML = butSummary;
 }
 </script>
-<?php 
+<?php
 echo "<p><strong>Table Location:</strong> ".table_location($row_tables_edit['id'],$_SESSION['prefsDateFormat'],$_SESSION['prefsTimeZone'],$_SESSION['prefsTimeFormat'],"default")."</p>"; ?>
 <p onload="updateButCount(event);">Based upon your <a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging_preferences">competition organization preferences</a>,  <?php if ($flight_count == 1) echo " this table only requires one flight."; else echo " this table can be divided into ".readable_number($flight_count)." flights.  For each entry below, designate the flight in which it will be judged."; ?></p>
 <form name="flights" method="post" action="<?php echo $base_url; ?>includes/process.inc.php?action=<?php echo $action; ?>&amp;dbTable=<?php echo $judging_flights_db_table; ?>" onreset="updateButCount(event);">
@@ -245,46 +245,46 @@ echo "<p><strong>Table Location:</strong> ".table_location($row_tables_edit['id'
 <input type="hidden" name="relocate" value="<?php echo relocate($base_url."index.php?section=admin&go=judging_tables","default",$msg,$id); ?>">
 <?php } ?>
 </form>
-<?php } // end if ($filter !="default") 
+<?php } // end if ($filter !="default")
 ?>
 
-<?php 
-if (($action == "assign") && ($filter == "rounds")) { 
-	if ($totalRows_tables > 0) { 
+<?php
+if (($action == "assign") && ($filter == "rounds")) {
+	if ($totalRows_tables > 0) {
 ?>
 <form class="form-horizontal" name="form1" role="form" id="formfield" method="post" action="<?php echo $base_url; ?>includes/process.inc.php?action=<?php echo $action; ?>&amp;dbTable=<?php echo $judging_flights_db_table; ?>&amp;filter=<?php echo $filter; ?>">
-<?php 
+<?php
 		do { $a[] = $row_tables_edit['id']; } while ($row_tables_edit = mysqli_fetch_assoc($tables_edit));
-		
+
 		//print_r($a);
-		
+
 		foreach (array_unique($a) as $flight_table) {
-			
+
 			include (DB.'admin_judging_flights.db.php');
 			//echo $query_flights."<br>";
 			//echo $totalRows_flights."<br>";
-			
-			
-			
+
+
+
 			$judging_location_rounds = "";
 			if ($row_table_location['judgingRounds'] > 1) $judging_location_rounds = $row_table_location['judgingRounds']." rounds";
 			else $judging_location_rounds = $judging_location_rounds = $row_table_location['judgingRounds']." round";
-			
+
 			$judging_table_name = "Table ".$row_tables['tableNumber']." &ndash; ".$row_tables['tableName'];
 			if ($_SESSION['jPrefsQueued'] == "N") $judging_table_name .= " <small><a href=\"".$base_url."index.php?section=admin&amp;go=judging_flights&amp;filter=define&amp;action=edit&amp;id=".$flight_table." data-toggle=\"tooltip\" data-placement=\"top\" title=\"Define/Edit the ".$row_tables['tableName']." Flights\"><span class=\"fa fa-lg fa-pencil-square-o\"></span></a></small>";
-			
+
 			$judging_location_string = $row_table_location['judgingLocName']." &ndash; ".getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_table_location['judgingDate'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "long", "date-time")."(".$judging_location_rounds." <a href=\"".$base_url."index.php?section=admin&amp;go=judging&amp;action=edit&amp;id=".$row_table_location['id']."\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Edit the ".$row_table_location['judgingLocName']." location\">defined for this location</a>)";
 			?>
-            
-            
+
+
 	<h4><?php echo $judging_table_name; ?></h4>
 
 	<p><strong>Location:</strong> <?php echo $judging_location_string; ?></p>
-	<?php 
+	<?php
 	if ($totalRows_flights > 0) {
 		if ($_SESSION['jPrefsQueued'] == "N") $flight_no_total = $row_flights['flightNumber']; else $flight_no_total = 1;
-	
-		for($i=1; $i<$flight_no_total+1; $i++) { 
+
+		for($i=1; $i<$flight_no_total+1; $i++) {
 			$flight_round_number = flight_round_number($flight_table,$i);
 			$random = random_generator(7,2);
 		?>

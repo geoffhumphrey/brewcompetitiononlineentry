@@ -396,7 +396,7 @@ if (($action == "add") || ($action == "edit")) {
 
 			$disabled_selected_styles = $selected_styles." ".$disabled_styles;
 
-			if ((($action == "add") && (!$show)) || ($action == "edit")) {
+			if ((($action == "add") && (empty($disabled_styles))) || ($action == "edit")) {
 
 				$table_styles_available .= "<tr class=\"".$table_row_class."\">";
 				$table_styles_available .= "<td><input type=\"checkbox\" name=\"tableStyles[]\" value=\"".$row_styles['id']."\" ".$disabled_selected_styles."></td>";

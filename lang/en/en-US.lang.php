@@ -37,12 +37,12 @@ something else in the context where your content is used..."
 "Unless you specifically need to highlight that you are talking about Italian as spoken in Italy
 you should use it 'for Italian, and not it-IT. The same goes for any other possible combination."
 
-"You should only use a region subtag if it contributes information needed in a particular context 
+"You should only use a region subtag if it contributes information needed in a particular context
 to distinguish this language tag from another one; otherwise leave it out."
 
 ================ FORMAT =================
 
-Always indicate the primary languge subtag first, then a dash (-) and then the region subtag. The 
+Always indicate the primary languge subtag first, then a dash (-) and then the region subtag. The
 region subtag is in all capital letters or a three digit number.
 
 Examples:
@@ -320,7 +320,7 @@ $label_subject = "Subject";
 $label_message = "Message";
 $label_send_message = "Send Message";
 $label_email = "Email Address";
-$label_account_registration = "Registration";
+$label_account_registration = "Account Registration";
 $label_entry_registration = "Entry Registration";
 $label_entry_fees = "Entry Fees";
 $label_entry_limit = "Entry Limit";
@@ -614,8 +614,8 @@ $alert_text_028 = "Entry registration has closed.";
 $alert_text_029 = "Adding entries is not available.";
 $alert_text_030 = "The competition entry limit has been reached.";
 $alert_text_031 = "Your personal entry limit has been reached.";
-$alert_text_032 = "You will be able to add entries on or after ".$entry_open."."; 
-$alert_text_033 = "Registration will open ".$reg_open.".";
+$alert_text_032 = "You will be able to add entries on or after ".$entry_open.".";
+$alert_text_033 = "Account registration will open ".$reg_open.".";
 $alert_text_034 = "Please return then to register your account.";
 $alert_text_036 = "Entry registration will open ".$entry_open.".";
 $alert_text_037 = "Please return then to add your entries to the system.";
@@ -975,7 +975,7 @@ if ($section == "pay") {
 	$qr_text_016 = "Need a QR Code scanning app? Search <a href=\"https://play.google.com/store/search?q=qr%20code%20scanner&c=apps&hl=en\" target=\"_blank\">Google Play</a> (Android) or <a href=\"https://itunes.apple.com/store/\" target=\"_blank\">iTunes</a> (iOS).";
 	$qr_text_017 = "A QR Code scanning app is required to utilize this feature.";
 	$qr_text_018 = "Launch the app on your mobile device, scan a QR Code located on a bottle label, enter the required password, and check in the entry.";
-	
+
 
 // -------------------- Registration Open --------------------
 
@@ -1030,7 +1030,7 @@ $sidebar_text_001 = "Registrations for stewards";
 $sidebar_text_002 = "Registrations for judges";
 $sidebar_text_003 = "Registrations are no longer accepted. The limit of judges and stewards has been reached.";
 $sidebar_text_004 = "through";
-$sidebar_text_005 = "Registrations accepted";
+$sidebar_text_005 = "Account registrations accepted";
 $sidebar_text_006 = "is Open for Judges or Stewards Only";
 $sidebar_text_007 = "is Open for Stewards Only";
 $sidebar_text_008 = "is Open for Judges Only";
@@ -1295,12 +1295,25 @@ if ($section == "brew") {
 	$brew_text_027 = "This Brewers Association style requires a statement from the brewer regarding the special nature of the product. See the <a href=\"https://www.brewersassociation.org/resources/brewers-association-beer-style-guidelines/\" target=\"_blank\">BA Style Guidelines</a> for specific guidance.";
 	$brew_text_028 = "***NOT REQUIRED*** Add information here that is detailed in the style guidelines as a characteristic that you MAY declare.";
 	$brew_text_029 = "Admin editing disabled. Your profile is considered a personal profile and not a organizational profile, and thus, not eligible to add entries. To add an entry for an organization, access the Manage Entries list and choose an organization from the &quot;Add an Entry For...&quot; dropdown.";
+
+
 }
 
 // -------------------- Brewer (Account) --------------------
 if (($section == "brewer") || ($section == "register") || ($section == "step2") || (($section == "admin") && ($go == "entrant")) || (($section == "admin") && ($go == "judge"))) {
 	$brewer_text_022 = "You will be able to identify a co-brewer when adding your entries.";
 	$brewer_text_023 = "Select &quot;None&quot; if you are not affiliated with a club. Select &quot;Other&quot; if your club is not on the list - <strong>be sure to use the search box</strong>.";
+    $brewer_text_024 = "Please provide your first name.";
+    $brewer_text_025 = "Please provide your last name.";
+    $brewer_text_026 = "Please provide your phone number.";
+    $brewer_text_027 = "Please provide your address.";
+    $brewer_text_028 = "Please provide your city.";
+    $brewer_text_029 = "Please provide your state or province.";
+    $brewer_text_030 = "Pleaee provide your zip or postal code.";
+    $brewer_text_031 = "Please choose your country.";
+    $brewer_text_032 = "Please provide your organization name.";
+    $brewer_text_033 = "Please provide choose a security question.";
+    $brewer_text_034 = "Please provide a response to your security question.";
 }
 
 // -------------------- Entry Info --------------------
@@ -1395,7 +1408,7 @@ $pwd_email_reset_text_004 = "website. If you did not initiate this, don't worry.
 $pwd_email_reset_text_005 = "To reset your password, click the link below or copy/paste it into your browser.";
 
 // ----------------------------------------------------------------------------------
-// END Version 2.1.10 
+// END Version 2.1.10
 // ----------------------------------------------------------------------------------
 
 /***********************************************************************************/

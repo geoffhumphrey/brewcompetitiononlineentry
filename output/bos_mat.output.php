@@ -1,8 +1,8 @@
-<?php 
+<?php
 /**
- * Module:      bos_mat.php 
+ * Module:      bos_mat.php
  * Description: Template for custom reports.
- * 
+ *
  */
 
 $go = "output";
@@ -25,16 +25,16 @@ $output = "";
 foreach ($a as $type) {
 	$style_type_info = style_type_info($type);
 	$style_type_info = explode("^",$style_type_info);
-	
-	if ($style_type_info[0] == "Y") { 
-	
+
+	if ($style_type_info[0] == "Y") {
+
 		include (DB.'output_bos_mat.db.php');
 		//$output .= $query_scores;
-		
+
 		$endRow = 0;
 		$columns = 3;  // number of columns
 		$hloopRow1 = 0; // first row flag
-		
+
 		$output .= '<table class="BOS-mat">';
 		do {
 			if ($row_scores['brewJudgingNumber'] > 0) {
@@ -42,9 +42,9 @@ foreach ($a as $type) {
 				else {
 					if (is_numeric($row_scores['brewSubCategory'])) {
 					$style = $_SESSION['styles']['data'][$row_scores['brewSubCategory'] - 1]['category']['name'];
-					if ($style == "Hybrid/mixed Beer") $style = "Hybrid/Mixed Beer"; 
+					if ($style == "Hybrid/mixed Beer") $style = "Hybrid/Mixed Beer";
 					elseif ($style == "European-germanic Lager") $style = "European-Germanic Lager";
-					else $style = ucwords($style);	
+					else $style = ucwords($style);
 					}
 					else $style = "Custom Style";
 				}
@@ -55,16 +55,16 @@ foreach ($a as $type) {
 					$output .= '<p class="lead">'.$style.': '.$row_scores['brewStyle'].'</p>';
 				}
 				else $output .= '<h3>'.$style.": ".$row_scores['brewStyle'].'</h3>';
-				
+
 				if ($filter == "entry") $output .= '<p>#'.sprintf("%06s",$row_scores['id']).'</p>';
 				else $output .= '<p>#'.sprintf("%06s",$row_scores['brewJudgingNumber']).'</p>';
-				if (!empty($row_scores['brewInfo'])) $output .= '<p><small><em>'.str_replace("^","; ",$row_scores['brewInfo']).'</em></small></p>';
-				if (!empty($row_scores['brewInfoOptional'])) $output .= '<p><small><em>'.str_replace("^","; ",$row_scores['brewInfoOptional']).'</em></small></p>';
+				if (!empty($row_scores['brewInfo'])) $output .= '<p><small><em>'.str_replace("^"," | ",$row_scores['brewInfo']).'</em></small></p>';
+				if (!empty($row_scores['brewInfoOptional'])) $output .= '<p><small><em>'.str_replace("^"," | ",$row_scores['brewInfoOptional']).'</em></small></p>';
 				if (!empty($row_scores['brewComments'])) $output .= '<p><small><em>'.$row_scores['brewComments'].'</em></small></p>';
 				if ($type == 2) $output .= '<p><small><em>'.$row_scores['brewMead1'].', '.$row_scores['brewMead2'].'</small></p>';
 				if ($type == 3) $output .= '<p><small><em>'.$row_scores['brewMead1'].', '.$row_scores['brewMead2'].', '.$row_scores['brewMead3'].'</small></p>';
 				$output .= '</td>';
-				
+
 				$endRow++;
 				if ($endRow >= $columns) {
 					$output .= '</tr>';
@@ -72,21 +72,21 @@ foreach ($a as $type) {
 					$endRow = 0;
 				}
 			}
-			
+
 		} while ($row_scores = mysqli_fetch_assoc($scores));
-		
+
 		if ($endRow != 0) {
 			while ($endRow < $columns) {
 			$output .= '<td>&nbsp;</td>';
 			$endRow++;
 		}
-		
+
 		$output .= '</table>';
-		
+
 		}
-		
+
 	} // end if ($style_type_info[0] == "Y")
-	
+
 	$output .= '<div style="page-break-after:always;"></div>';
 } // end foreach
 ?>
@@ -104,7 +104,7 @@ foreach ($a as $type) {
 </style>
 <?php } ?>
 
-<?php 
+<?php
 if (empty($output)) {
 	echo '<h1>';
 	echo 'No BOS entries are present';
@@ -112,5 +112,5 @@ if (empty($output)) {
 	echo '.';
 	echo '</h1>';
 }
-else echo $output; 
+else echo $output;
 ?>

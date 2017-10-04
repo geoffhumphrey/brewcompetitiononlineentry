@@ -27,6 +27,7 @@
 </script>
 <p class="lead">Change Password for <?php echo $row_brewer['brewerFirstName']." ".$row_brewer['brewerLastName']; ?></p>
 <form role="form" name="form1" id="formfield" data-toggle="validator" class="form-horizontal" action="<?php echo $base_url; ?>includes/process.inc.php?section=admin&amp;go=change_user_password&amp;action=edit&amp;dbTable=<?php echo $users_db_table; ?>&amp;id=<?php echo $id; ?>" method="post">
+<input type="hidden" name="userEdit" value="1">
 <div class="form-group"><!-- Form Group REQUIRED Text Input -->
     <label for="password1" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label">New Password</label>
     <div class="col-lg-6 col-md-6 col-sm-9 col-xs-12">

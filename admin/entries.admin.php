@@ -97,7 +97,7 @@ do {
 	if ((!empty($row_log['brewInfo'])) || (!empty($row_log['brewMead1'])) || (!empty($row_log['brewMead2'])) || (!empty($row_log['brewMead3']))) {
 		$brewInfo = "";
 		//$brewInfo .= "Required Info: ";
-		if (!empty($row_log['brewInfo'])) $brewInfo .= str_replace("^", "; ", $row_log['brewInfo']);
+		if (!empty($row_log['brewInfo'])) $brewInfo .= str_replace("^", " | ", $row_log['brewInfo']);
 		if (!empty($row_log['brewMead1'])) $brewInfo .= "&nbsp;&nbsp;".$row_log['brewMead1'];
 		if (!empty($row_log['brewMead2'])) $brewInfo .= "&nbsp;&nbsp;".$row_log['brewMead2'];
 		if (!empty($row_log['brewMead3'])) $brewInfo .= "&nbsp;&nbsp;".$row_log['brewMead3'];
@@ -253,7 +253,7 @@ do {
 
 		// Clean up temporary scoresheets created for other brewers, when they are at least 1 minute old (just to avoid problems when two entrants try accessing their scoresheets at practically the same time, and clean up previously created scoresheets for the same brewer, regardless of how old they are.
 		$tempfiles = array_diff(scandir(USER_TEMP), array('..', '.'));
-		
+
 		if (is_array($tempfiles)) {
 			foreach ($tempfiles as $file) {
 				if ((filectime(USER_TEMP.$file) < time() - 1*60) || ((strpos($file, $scoresheet_file_name_judging) !== FALSE))) {

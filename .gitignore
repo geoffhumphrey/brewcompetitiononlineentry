@@ -47,3 +47,6 @@ iframe.html
 
 site/config.reset.php
 *.zip
+*.sublime-project
+bcoem-dev.sublime-workspace
+sftp-config.json

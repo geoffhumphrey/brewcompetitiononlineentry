@@ -77,14 +77,14 @@ define('TESTING', FALSE);
  * Enable the following to display php errors on screen.
  * Default is FALSE
  */
-define('DEBUG', TRUE);
+define('DEBUG', FALSE);
 
 /**
  * Enable the following to show a collapsable table of all
  * session variables on screen
  * Default is FALSE
  */
-define('DEBUG_SESSION_VARS', TRUE);
+define('DEBUG_SESSION_VARS', FALSE);
 
 /**
  * Enable the following when receiving mySQL "column does
@@ -170,13 +170,13 @@ $_SESSION['last_action'] = time();
  */
 
 if (HOSTED) {
-	$publickey = "6LdUsBATAAAAAEJYbnqmygjGK-S6CHCoGcLALg5W";
-	$privatekey = "6LdUsBATAAAAAMPhk5yRSmY5BMXlBgcTjiLjiyPb";
+	$public_captcha_key = "6LdUsBATAAAAAEJYbnqmygjGK-S6CHCoGcLALg5W";
+	$private_captcha_key = "6LdUsBATAAAAAMPhk5yRSmY5BMXlBgcTjiLjiyPb";
 }
 
 else {
-	$publickey = "6LfHUCoUAAAAACHsPn8hpzbtzcpXatm-GXTTWuR3";
-	$privatekey = "6LfHUCoUAAAAACNL-wzpAG3eIWQC-PpX6X3a0iaM";
+	$public_captcha_key = "6LfHUCoUAAAAACHsPn8hpzbtzcpXatm-GXTTWuR3";
+	$private_captcha_key = "6LfHUCoUAAAAACNL-wzpAG3eIWQC-PpX6X3a0iaM";
 }
 
 /** Uncomment to display paths */

@@ -142,8 +142,8 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 	 	}
 
 		// Process specialized info from form for certain styles
-		
-		
+
+
 		// If optional info is present
 		$brewInfoOptional = "";
 		if (!empty($_POST['brewInfoOptional'])) {
@@ -151,9 +151,12 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 		}
 
 		if ($_SESSION['prefsStyleSet'] == "BJCP2015") {
-			
-			// IPA strength for 21B styles	
-			if (strlen(strstr($index,"21-B")) > 0) $brewInfo .= "^".sterilize($_POST['strengthIPA']);
+
+			// IPA strength for 21B styles
+			if (strlen(strstr($index,"21-B")) > 0) {
+				if ($index == "21-B") $brewInfo .= "^".sterilize($_POST['strengthIPA']);
+				else $brewInfo .= sterilize($_POST['strengthIPA']);
+			}
 
 			// Pale or Dark Variant
 			if (($index == "09-A") || ($index == "10-C") || ($index == "07-C"))  $brewInfo = sterilize($_POST['darkLightColor']);
@@ -995,7 +998,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 			if (!isset($_POST["brewPaid".$id])) $brewPaid = "0";
 			if ((isset($_POST["brewReceived".$id])) && ($_POST["brewReceived".$id] == "1")) $brewReceived = "1";
 			if (!isset($_POST["brewReceived".$id])) $brewReceived = "0";
-			
+
 			$brewJudgingNumber = str_replace("^","-",$_POST["brewJudgingNumber".$id]);
 
 			$updateSQL = "UPDATE $brewing_db_table SET
