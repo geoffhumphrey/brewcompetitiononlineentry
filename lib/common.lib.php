@@ -2136,8 +2136,8 @@ function get_table_info($input,$method,$table_id,$dbTable,$param) {
 			if (isset($input[2])) $query = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE brewCategorySort='%s' AND brewSubCategory='%s' AND brewReceived='1'", $brewing_db_table, $input[1], $input[0]);
 			else $query = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE brewSubCategory='%s' AND brewReceived='1'", $prefix."brewing", $input[1]);
 		}
-		
-		else $query = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE brewCategorySort='%s' AND brewSubCategory='%s' AND brewReceived='1'", $prefix."brewing", 
+
+		else $query = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE brewCategorySort='%s' AND brewSubCategory='%s' AND brewReceived='1'", $prefix."brewing",
 		$input[1], $input[0]);
 		$result = mysqli_query($connection,$query) or die (mysqli_error($connection));
 		$num_rows = mysqli_fetch_array($result);
@@ -2421,7 +2421,11 @@ function brewer_info($uid,$filter="default") {
 	$r .= $row_brewer_info['brewerFirstName']."^"; 		// 0
 	$r .= $row_brewer_info['brewerLastName']."^"; 		// 1
 	$r .= $row_brewer_info['brewerPhone1']."^"; 		// 2
-	if (isset($row_brewer_info['brewerJudgeRank'])) $r .= $row_brewer_info['brewerJudgeRank']."^"; else $r .= "Non-BJCP^"; // 3
+	if (isset($row_brewer_info['brewerJudgeRank'])) {
+		if (($row_brewer_info['brewerJudgeMead'] == "Y") && ($row_brewer_info['brewerJudgeRank'] == "Non-BJCP")) $r .= "Non-BJCP Beer^";
+		else $r .= $row_brewer_info['brewerJudgeRank']."^";
+	}
+	else $r .= "Non-BJCP^"; // 3
 	if (isset($row_brewer_info['brewerJudgeID'])) $r .= $row_brewer_info['brewerJudgeID']."^"; else $r .= "&nbsp;^"; // 4
 	if (isset($row_brewer_info['brewerJudgeBOS'])) $r .= $row_brewer_info['brewerJudgeBOS']."^"; else $r .= "&nbsp;^"; // 5
 	$r .= $row_brewer_info['brewerEmail']."^";			// 6
@@ -2434,6 +2438,7 @@ function brewer_info($uid,$filter="default") {
 	$r .= $row_brewer_info['brewerZip']."^";			// 13
 	$r .= $row_brewer_info['brewerCountry']."^";		// 14
 	if (isset($row_brewer_info['brewerBreweryName'])) $r .= $row_brewer_info['brewerBreweryName']; else $r .= "&nbsp;^"; // 15
+	if ($row_brewer_info['brewerJudgeMead'] == "Y") $r .= "Certified Mead Judge"; else $r .= "&nbsp;^"; // 16
 	return $r;
 }
 
@@ -3656,13 +3661,13 @@ function convert_to_ba() {
 		$ba_style_info = "";
 		$ba_category_id = "";
 
+/*
 		if (isset($row_check['brewInfo'])) {
 
 			// Mead or Cider
 			if ((isset($row_check['brewMead1'])) || (isset($row_check['brewMead2'])) || (isset($row_check['brewMead3']))) {
 
 				$ba_category_id = $ba_special_mead_cider_ids[array_rand($ba_special_mead_cider_ids, 1)];
-				$ba_style_info = get_ba_style_info($ba_category_id);
 				$brew_info = $row_check['brewInfo'];
 
 			}
@@ -3671,7 +3676,6 @@ function convert_to_ba() {
 			else {
 
 				$ba_category_id = $ba_special_beer_ids[array_rand($ba_special_beer_ids, 1)];
-				$ba_style_info = get_ba_style_info($ba_category_id);
 				$brew_info = $row_check['brewInfo'];
 
 			}
@@ -3679,26 +3683,23 @@ function convert_to_ba() {
 		}
 
 		else {
-
+*/
 			$ba_category_id = (rand(1,170));
-			$ba_style_info = get_ba_style_info($ba_category_id);
-
 			if (in_array($ba_category_id,$ba_special)) $brew_info = "Special ingredients, yo";
 			else $brew_info = "";
 
-		}
+//		}
 
-		$ba_style_info_from_id = explode("|",$ba_style_info);
-		$ba_category = $ba_style_info_from_id[1];
-		$ba_style = $ba_style_info_from_id[0];
+		$ba_category_id_correction = $ba_category_id - 1; // To return correct style, correction needed. Why? No clue.
+		$ba_category = $_SESSION['styles']['data'][$ba_category_id_correction]['categoryId'];
+		$ba_style = $_SESSION['styles']['data'][$ba_category_id_correction]['name'];
 		$ba_sub_category = $ba_category_id;
 
 		if (in_array($ba_category_id,$ba_carb_ids)) $ba_carb = $carb[array_rand($carb,1)];
 		if (in_array($ba_category_id,$ba_strength_ids)) $ba_strength = $strength[array_rand($strength,1)];
 		if (in_array($ba_category_id,$ba_sweetness_ids)) $ba_sweetness = $sweet[array_rand($sweet,1)];
 
-		if ($ba_category_id < 10) $ba_category_sort = "0".$ba_category_id;
-		else $ba_category_sort = $ba_category_id;
+		$ba_category_sort = sprintf("%02s",$ba_category);
 
 		$updateSQL = sprintf("UPDATE %s SET brewCategory='%s', brewCategorySort='%s', brewSubCategory='%s', brewStyle='%s', brewMead1='%s', brewMead2='%s', brewMead3='%s', brewInfo='%s' WHERE id=%s;",$prefix."brewing",$ba_category,$ba_category_sort,$ba_sub_category,$ba_style,$ba_carb,$ba_sweetness,$ba_strength,$brew_info,$row_check['id']);
 		mysqli_real_escape_string($connection,$updateSQL);
@@ -3706,7 +3707,7 @@ function convert_to_ba() {
 
 		$return .= $updateSQL."<br>";
 
-		// $return .= $ba_style_info."<br>";
+		//$return .= $ba_style_info."<br>";
 
 	} while ($row_check = mysqli_fetch_assoc($check));
 
@@ -3736,19 +3737,34 @@ function convert_to_pro() {
 		$key = (array_rand($breweries,1));
 		$value = $breweries[$key];
 
-			$updateSQL = sprintf("UPDATE %s SET brewerBreweryName='%s' WHERE id=%s;",$prefix."brewer",$value,$row_check['id']);
-			mysqli_real_escape_string($connection,$updateSQL);
-			$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+		$query_check_brewery = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE brewerBreweryName='%s'", $prefix."brewer",$value);
+		$check_brewery = mysqli_query($connection,$query_check_brewery) or die (mysqli_error($connection));
+		$row_check_brewery = mysqli_fetch_assoc($check_brewery);
 
-			// $return .= $updateSQL."<br>";
+		$update = TRUE;
+
+		//while ($update) {
+
+			if ($row_check_brewery['count'] > 0) {
+				$update = TRUE;
+			}
+
+			else {
+				$update = FALSE;
+				$updateSQL = sprintf("UPDATE %s SET brewerBreweryName='%s' WHERE id=%s;",$prefix."brewer",$value,$row_check['id']);
+				mysqli_real_escape_string($connection,$updateSQL);
+				$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+			}
+
+		//}
+
+	// $return .= $updateSQL."<br>";
 
 	} while ($row_check = mysqli_fetch_assoc($check));
 
 	return $return;
 
 }
-
-//convert_to_pro();
 
 function remove_sensitive_data() {
 
@@ -3966,5 +3982,6 @@ function sterilize ($sterilize = NULL) {
 
 	return $sterilize;
 }
+
 
 ?>

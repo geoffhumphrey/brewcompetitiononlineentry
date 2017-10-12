@@ -12,6 +12,8 @@ require_once (DB.'setup.db.php');
 require_once (INCLUDES.'db_tables.inc.php');
 require_once (LIB.'help.lib.php');
 
+if ($section == "step4") unset($_SESSION['prefs'.$prefix_session]);
+
 // Set language preferences in session variables
 if (empty($_SESSION['prefsLang'.$prefix_session])) {
 

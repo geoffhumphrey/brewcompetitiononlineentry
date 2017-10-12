@@ -1343,6 +1343,7 @@ $brewer_info_008 = "You have already been assigned to a table as a";
 $brewer_info_009 = "If you wish to change your availabilty and/or withdraw your role, contact the competition organizer or judge coordinator.";
 $brewer_info_010 = "You have already been assigned as a";
 $brewer_info_011 = "or";
+$brewer_info_012 = "Print your judging scoresheet labels ";
 
 // -------------------- Pay --------------------
 if ($section == "pay") {

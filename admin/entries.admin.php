@@ -2,6 +2,7 @@
 // Set up variables
 
 include (DB.'styles.db.php');
+include (INCLUDES.'ba_constants.inc.php');
 $header1_1 = "";
 $header1_2 = "";
 $sidebar_extension = "";
@@ -114,12 +115,13 @@ do {
 		$entry_judging_num .= $judging_number;
 	}
 
-	if ($dbTable == "default") $entry_judging_num_display .= "<input class=\"form-control input-sm hidden-print\" id=\"brewJudgingNumber\" name=\"brewJudgingNumber".$row_log['id']."\" type=\"text\" pattern=\".{6,}\" title=\"Judging numbers must be six characters and cannot include the ^ character. The ^ character will be converted to a dash (-) upon submit. Use leading zeroes (e.g., 000123 or 01-001, etc.)\" size=\"6\" maxlength=\"6\" value=\"".$entry_judging_num."\" /> ".$entry_judging_num_hidden;
+	if (($action != "print") && ($dbTable == "default")) $entry_judging_num_display .= "<input class=\"form-control input-sm hidden-print\" id=\"brewJudgingNumber\" name=\"brewJudgingNumber".$row_log['id']."\" type=\"text\" pattern=\".{6,}\" title=\"Judging numbers must be six characters and cannot include the ^ character. The ^ character will be converted to a dash (-) upon submit. Use leading zeroes (e.g., 000123 or 01-001, etc.)\" size=\"6\" maxlength=\"6\" value=\"".$entry_judging_num."\" /> ".$entry_judging_num_hidden;
 	else $entry_judging_num_display = $entry_judging_num;
 
 	// Entry Style
 	if (strpos($_SESSION['prefsStyleSet'],"BABDB") !== false) {
-		$entry_style_display .= $row_log['brewStyle'];
+		if ($row_log['brewCategory'] <= 14) $entry_style_display .= $ba_category_names[$row_log['brewCategory']].": ".$row_log['brewStyle'];
+		else $entry_style_display .= "Custom: ".$row_log['brewStyle'];
 	}
 
 	else {
@@ -149,9 +151,11 @@ do {
 	 }
 	else $entry_brewer_display .= "&nbsp;";
 
+	// Updated
 	if ($row_log['brewUpdated'] != "") $entry_updated_display .= "<span class=\"hidden\">".strtotime($row_log['brewUpdated'])."</span>".getTimeZoneDateTime($_SESSION['prefsTimeZone'], strtotime($row_log['brewUpdated']), $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "short", "date-time-no-gmt");
 	else $entry_updated_display .= "&nbsp;";
 
+	// Paid
 	if (($action != "print") && ($dbTable == "default")) {
 		$entry_paid_display .= "<div class=\"checkbox\"><label>";
 		$entry_paid_display .= "<input id=\"brewPaid\" name=\"brewPaid".$row_log['id']."\" type=\"checkbox\" value=\"1\"";
@@ -167,6 +171,7 @@ do {
 		else $entry_paid_display .= "<span class=\"fa fa-lg fa-times text-danger\"></span>";
 	}
 
+	// Received
 	if (($action != "print") && ($dbTable == "default")) {
 		$entry_received_display .= "<div class=\"checkbox\"><label><input id=\"brewReceived\" name=\"brewReceived".$row_log['id']."\" type=\"checkbox\" value=\"1\"";
 		if ($row_log['brewReceived'] == "1") $entry_received_display .= "checked>";
@@ -180,13 +185,14 @@ do {
 		else $entry_received_display .= "<span class=\"fa fa-lg fa-times text-danger\"></span>";
 	}
 
-	if ($dbTable == "default") { $entry_box_num_display .= "<input class=\"form-control input-sm hidden-print\" id=\"brewBoxNum\" name=\"brewBoxNum".$row_log['id']."\" type=\"text\" size=\"5\" maxlength=\"10\" value=\"".$row_log['brewBoxNum']."\" />";
+	// Box Number
+	if (($action != "print") && ($dbTable == "default")) { $entry_box_num_display .= "<input class=\"form-control input-sm hidden-print\" id=\"brewBoxNum\" name=\"brewBoxNum".$row_log['id']."\" type=\"text\" size=\"5\" maxlength=\"10\" value=\"".$row_log['brewBoxNum']."\" />";
 	$entry_box_num_display .= "<span class=\"hidden visible-print-inline\">".$row_log['brewBoxNum']."</span>";
 	}
 	else $entry_box_num_display = $row_log['brewBoxNum'];
 
 
-	if ($dbTable == "default") {
+	if (($action != "print") && ($dbTable == "default")) {
 		$entry_actions .= "<a href=\"".$base_url."index.php?section=brew&amp;go=".$go."&amp;action=edit&amp;filter=".$row_log['brewBrewerID']."&amp;id=".$row_log['id'];
 		if ($row_log['brewConfirmed'] == 0) $entry_actions .= "&amp;msg=1-".$row_log['brewCategorySort']."-".$row_log['brewSubCategory'];
 		else $entry_actions .= "&amp;view=".$row_log['brewCategorySort']."-".$row_log['brewSubCategory'];
@@ -201,7 +207,7 @@ do {
 	$scoresheet_link_1 = "";
 	$scoresheet_link_2 = "";
 
-	if ($scoresheet) {
+	if (($scoresheet) && ($action != "print")) {
 
 		if (!empty($scoresheet_file_name_1))  {
 
@@ -285,7 +291,7 @@ do {
 	$tbody_rows .= "<td>".$entry_paid_display."</td>";
 	$tbody_rows .= "<td>".$entry_received_display."</td>";
 	$tbody_rows .= "<td>".$entry_box_num_display."</td>";
-	$tbody_rows .= "<td>".$entry_actions."</td>";
+	if ($action != "print") $tbody_rows .= "<td>".$entry_actions."</td>";
 	$tbody_rows .= "</tr>";
 
 	// Build all brewer email array
@@ -382,8 +388,8 @@ if ($action != "print") { ?>
 				null,
 				null,
 				null,
-				null,
-				<?php if ($pro_edition == 0) { ?>null<?php } ?>
+				null<?php if ($pro_edition == 0) { ?>,
+				null<?php } ?>
 				]
 			} );
 		} );
@@ -443,7 +449,7 @@ if ($action != "print") { ?>
 					<li class="small"><a id="modal_window_link" href="<?php echo $base_url; ?>output/print.output.php?section=admin&amp;go=entries&amp;action=print&amp;psort=entry_number">By Entry Number</a></li>
 					<li class="small"><a id="modal_window_link" href="<?php echo $base_url; ?>output/print.output.php?section=admin&amp;go=entries&amp;action=print&amp;psort=judging_number">By Judging Number</a></li>
 					<li class="small"><a id="modal_window_link" href="<?php echo $base_url; ?>output/print.output.php?section=admin&amp;go=entries&amp;action=print&amp;psort=category">By Style</a></li>
-					<li class="small"><a id="modal_window_link" href="<?php echo $base_url; ?>output/print.output.php?section=admin&amp;go=entries&amp;action=print&amp;psort=brewer_name">By Brewer Last Name</a></li>
+					<li class="small"><a id="modal_window_link" href="<?php echo $base_url; ?>output/print.output.php?section=admin&amp;go=entries&amp;action=print&amp;psort=brewer_name"><?php if ($pro_edition == 0) echo "By Brewer Last Name"; else echo "By Organization Name"; ?></a></li>
 					<li class="small"><a id="modal_window_link" href="<?php echo $base_url; ?>output/print.output.php?section=admin&amp;go=entries&amp;action=print&amp;psort=entry_name">By Entry Name</a></li>
 				</ul>
 			</div>
@@ -647,7 +653,7 @@ if ($action != "print") { ?>
         <th width="3%">Paid?</th>
         <th width="3%">Rec'd?</th>
         <th>Loc/Box</th>
-        <th class="hidden-print">Actions</th>
+        <?php if ($action != "print") { ?><th class="hidden-print">Actions</th><?php } ?>
     </tr>
 </thead>
 <tbody>

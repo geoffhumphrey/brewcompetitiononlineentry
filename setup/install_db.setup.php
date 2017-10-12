@@ -2,6 +2,13 @@
 
 if ($setup_free_access == TRUE) {
 
+	// Clear out any previous sessions. Just in case.
+	session_unset();
+	session_destroy();
+	session_write_close();
+	setcookie(session_name($prefix_session),'',0,'/');
+	session_regenerate_id(true);
+
 	$output = "";
 
 	if ($action == "default") {

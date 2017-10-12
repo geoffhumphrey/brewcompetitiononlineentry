@@ -204,5 +204,4 @@ echo USER_TEMP."<br>";
 echo LANG."<br>";
 echo DEBUGGING."<br>";
 */
-
 ?>

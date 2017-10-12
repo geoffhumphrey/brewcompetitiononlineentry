@@ -559,11 +559,11 @@ if (isset($_SESSION['loginUsername'])) {
 				if ($row_brewer['staff_steward'] == 1) $brewerAssignment = "Steward";
 				if ($row_brewer['staff_staff'] == 1) $brewerAssignment = "Staff";
 				if ($row_brewer['staff_organizer'] == 1) $brewerAssignment = "Organizer";
-				
-				$text = sprintf("\n%s\n%s, %s\n%s",	
-				$row_brewer['brewerFirstName']." ".$row_brewer['brewerLastName'], 
-				$row_brewer['brewerCity'], 
-				$row_brewer['brewerState'], 
+
+				$text = sprintf("\n%s\n%s, %s\n%s",
+				$row_brewer['brewerFirstName']." ".$row_brewer['brewerLastName'],
+				$row_brewer['brewerCity'],
+				$row_brewer['brewerState'],
 				$brewerAssignment
 				);
 
@@ -592,34 +592,64 @@ if (isset($_SESSION['loginUsername'])) {
 
 				$bjcp_rank = explode(",",$row_brewer['brewerJudgeRank']);
 				$rank = bjcp_rank($bjcp_rank[0],2);
-
-				/*
-				$bjcp_rank1 = $bjcp_rank[0].",";
-				$other_ranks = str_replace($bjcp_rank1,"",$row_brewer['brewerJudgeRank']);
-				$other_ranks = str_replace(",",", ",$other_ranks);
-				if (!empty($other_ranks)) $rank .= ", ".$other_ranks;
-				if (!empty($bjcp_rank[1])) $rank .= ", ".$bjcp_rank[1];
-				if (!empty($bjcp_rank[2])) $rank .= ", ".$bjcp_rank[2];
-				*/
+				$mead = "";
+				$pro = "";
+				$cert_cicerone = "";
+				$adv_cicerone = "";
+				$mast_cicerone = "";
 
 				$j = preg_replace('/[a-zA-Z]/','',$row_brewer['brewerJudgeID']);
-				//$j = ltrim($row_brewer['brewerJudgeID'],'/[a-z][A-Z]/');
+				if ($j > 0) $judge_id = " (".$row_brewer['brewerJudgeID'].")";
+				else $judge_id = "";
+				$rank .= strtoupper($judge_id);
+
+				if ($row_brewer['brewerJudgeMead'] == "Y") $mead = "Certified Mead Judge";
+				if (in_array("Professional Brewer", $bjcp_rank)) $pro = "Professional Brewer";
+				if (in_array("Certified Cicerone", $bjcp_rank)) $cert_cicerone = "Certified Cicerone";
+				if (in_array("Advanced Cicerone", $bjcp_rank)) $adv_cicerone = "Advanced Cicerone";
+				if (in_array("Master Cicerone", $bjcp_rank)) $mast_cicerone = "Master Cicerone";
+
+				$cicerone = "";
+				$other = "";
+				$other_ranks = "";
+
+				if (!empty($mast_cicerone))  $cicerone[] = $mast_cicerone;
+				elseif ((empty($mast_cicerone)) && (empty($cert_cicerone)) && (!empty($adv_cicerone))) $cicerone[] = $adv_cicerone;
+				elseif ((empty($mast_cicerone)) && (empty($adv_cicerone)) && (!empty($cert_cicerone))) $cicerone[] = $cert_cicerone;
+
+				if (!empty($mead)) $other[] = $mead;
+				if (!empty($pro)) $other[] = $pro;
+
+				if ((!empty($cicerone)) && (!empty($other))) $other_combined = array_merge($cicerone, $other);
+				elseif ((!empty($cicerone)) && (empty($other))) $other_combined = $cicerone;
+				elseif ((empty($cicerone)) && (!empty($other))) $other_combined = $other;
+				else $other_combined = "";
+				if (!empty($other_combined)) $other_ranks = implode(", ", $other_combined);
 
 				$first_name = $row_brewer['brewerFirstName'];
 				$last_name = $row_brewer['brewerLastName'];
 
-				if ($j > 0) $judge_id = "- ".$row_brewer['brewerJudgeID'];
-				else $judge_id = "";
-
 				for($i=0; $i<$number_of_labels; $i++) {
 
-					$text = sprintf("\n%s %s\n%s %s\n%s",
-					$first_name,
-					$last_name,
-					truncate($rank,50),
-					strtoupper($judge_id),
-					strtolower($row_brewer['brewerEmail'])
-					);
+					if (!empty($other_ranks)) {
+						$text = sprintf("\n%s %s\n%s\n%s\n%s",
+						$first_name,
+						$last_name,
+						truncate($rank,50),
+						truncate($other_ranks,50),
+						strtolower($row_brewer['brewerEmail'])
+						);
+					}
+
+					else {
+						$text = sprintf("\n%s %s\n%s\n%s",
+						$first_name,
+						$last_name,
+						truncate($rank,50),
+						strtolower($row_brewer['brewerEmail'])
+						);
+					}
+
 
 					$text = iconv('UTF-8', 'windows-1252', $text);
 					$pdf->Add_Label($text);
@@ -655,7 +685,7 @@ if (isset($_SESSION['loginUsername'])) {
 			$filename .= ".pdf";
 
 			do {
-				
+
 					if ($filter == "with_entries") {
 
 						if (in_array($row_brewer['uid'],$with_entries_array)) {
@@ -771,6 +801,8 @@ if (isset($_SESSION['loginUsername'])) {
 		else 						$filename .= "_Avery5160";
 		$filename .= ".pdf";
 
+		/*
+
 		$bjcp_rank = explode(",",$row_brewer['brewerJudgeRank']);
 		$rank = bjcp_rank($bjcp_rank[0],2);
 		//$rank = str_replace(",",", ",$row_brewer['brewerJudgeRank']);
@@ -785,15 +817,64 @@ if (isset($_SESSION['loginUsername'])) {
 		if ($j > 0) $judge_id = " (".$row_brewer['brewerJudgeID'].")";
 		else $judge_id = "";
 
+		*/
+
+		$bjcp_rank = explode(",",$row_brewer['brewerJudgeRank']);
+		$rank = bjcp_rank($bjcp_rank[0],2);
+		$mead = "";
+		$pro = "";
+		$cert_cicerone = "";
+		$adv_cicerone = "";
+		$mast_cicerone = "";
+
+		$j = preg_replace('/[a-zA-Z]/','',$row_brewer['brewerJudgeID']);
+		if ($j > 0) $judge_id = " (".$row_brewer['brewerJudgeID'].")";
+		else $judge_id = "";
+		$rank .= strtoupper($judge_id);
+
+		if ($row_brewer['brewerJudgeMead'] == "Y") $mead = "Certified Mead Judge";
+		if (in_array("Professional Brewer", $bjcp_rank)) $pro = "Professional Brewer";
+		if (in_array("Certified Cicerone", $bjcp_rank)) $cert_cicerone = "Certified Cicerone";
+		if (in_array("Advanced Cicerone", $bjcp_rank)) $adv_cicerone = "Advanced Cicerone";
+		if (in_array("Master Cicerone", $bjcp_rank)) $mast_cicerone = "Master Cicerone";
+
+		$cicerone = array();
+		$other = array();
+		$other_ranks = "";
+
+		if (!empty($mast_cicerone))  $cicerone[] .= $mast_cicerone;
+		elseif ((empty($mast_cicerone)) && (empty($cert_cicerone)) && (!empty($adv_cicerone))) $cicerone[] .= $adv_cicerone;
+		elseif ((empty($mast_cicerone)) && (empty($adv_cicerone)) && (!empty($cert_cicerone))) $cicerone[] .= $cert_cicerone;
+		else $cicerone[] .= "";
+		if (!empty($mead)) $other[] .= $mead;
+		if (!empty($pro)) $other[] .= $pro;
+
+		if ((!empty($cicerone)) && (!empty($other))) $other_combined = array_merge($cicerone, $other);
+		elseif ((!empty($cicerone)) && (empty($other))) $other_combined = $cicerone;
+		elseif ((empty($cicerone)) && (!empty($other))) $other_combined = $other;
+		else $other_combined = "";
+		if (!empty($other_combined)) $other_ranks = implode(", ", $other_combined);
+
 		for($i=0; $i<$number_of_labels; $i++) {
 
-			$text = sprintf("\n%s %s\n%s %s\n%s",
-			$first_name,
-			$last_name,
-			truncate($rank,50),
-			strtoupper($judge_id),
-			strtolower($row_brewer['brewerEmail'])
-			);
+			if (!empty($other_ranks)) {
+				$text = sprintf("\n%s %s\n%s\n%s\n%s",
+				$first_name,
+				$last_name,
+				truncate($rank,50),
+				truncate($other_ranks,50),
+				strtolower($row_brewer['brewerEmail'])
+				);
+			}
+
+			else {
+				$text = sprintf("\n%s %s\n%s\n%s",
+				$first_name,
+				$last_name,
+				truncate($rank,50),
+				strtolower($row_brewer['brewerEmail'])
+				);
+			}
 
 			$text = iconv('UTF-8', 'windows-1252', $text);
 			$pdf->Add_Label($text);

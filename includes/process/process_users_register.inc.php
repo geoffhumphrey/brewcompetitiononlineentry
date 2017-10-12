@@ -419,7 +419,7 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 				$brewer = mysqli_query($connection,$query_brewer) or die (mysqli_error($connection));
 				$row_brewer = mysqli_fetch_assoc($brewer);
 				if ($view == "quick") $insertGoTo = $base_url."index.php?section=admin&go=participants&msg=28";
-				else $insertGoTo = $base_url."index.php?section=participants=edit&go=admin&filter=".$row_brewer['id']."&psort=judge&id=".$row_brewer['id'];
+				else $insertGoTo = $base_url."index.php?section=brewer&go=admin&action=edit&filter=".$row_brewer['id']."&psort=judge&id=".$row_brewer['id'];
 				header(sprintf("Location: %s", stripslashes($insertGoTo)));
 
 			}
