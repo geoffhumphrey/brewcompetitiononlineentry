@@ -59,11 +59,12 @@
 			"aoColumns": [
 				null,
 				null,
+				null,
 				{ "asSorting": [  ] }
 				]
 			} );
 		} );
-			
+
 		$("a.user_images").fancybox(
 			{
 			nextClick   : true,
@@ -79,34 +80,37 @@
 					}
 				}
 			}
-			
+
 		);
 	</script>
-<?php 
-$upload_dir = (USER_DOCS);
-if (!is_dir_empty($upload_dir)) {
-	
-	// List Files in the directory
-	$handle = opendir($upload_dir);
-	$filelist = "<h2>Files in the Directory</h2>";
-	$filelist .= "<a class=\"btn btn-danger btn-sm\" href=\"".$base_url."includes/process.php?action=delete-scoresheets\" data-confirm=\"Are you sure? This will delete all scoresheets listed below. This cannot be undone.\"><span class=\"fa fa-trash\"></span> Delete All Scoresheets</a>";
-	$filelist .= "<table class=\"table table-bordered table-responsive table-striped\" id=\"sortable\">\n";
-	$filelist .= "<thead>\n";
-	$filelist .= "<tr>\n";
-	$filelist .= "<th>File Name</th>\n";
-	$filelist .= "<th>Date/Time Uploaded</th>\n";
-	$filelist .= "<th>Actions</th>\n";
-	$filelist .= "</thead>\n";
-	$filelist .= "<tbody>\n";
-	
-	while ($file = readdir($handle)) {
-	   
-	   if(!is_dir($file) && !is_link($file)) {
+<?php
 
-			// The pseudo-random number and the corresponding name of the temporary file are defined each time 
-			// this brewer_entries.sec.php script is accessed (or refreshed), but the temporary file is created
-			// only when the entrant clicks the link to access the scoresheet. 
-			$scoresheet_file_name = $file;
+$filelist_heading = "<h2>Files in the Directory</h2>";
+
+if (!is_dir_empty(USER_DOCS)) {
+
+	// List Files in the directory
+	//$handle = opendir($upload_dir);
+	$filelist_head = "<p><a class=\"btn btn-danger btn-sm\" href=\"".$base_url."includes/process.inc.php?action=delete_scoresheets&amp;filter=".$action."\" data-confirm=\"Are you sure? This will delete all scoresheets listed below. This cannot be undone.\"><span class=\"fa fa-trash\"></span> Delete All Scoresheets</a></p>";
+	$filelist_head .= "<table class=\"table table-bordered table-responsive table-striped\" id=\"sortable\">\n";
+	$filelist_head .= "<thead>\n";
+	$filelist_head .= "<tr>\n";
+	$filelist_head .= "<th>File Name</th>\n";
+	$filelist_head .= "<th>Size</th>\n";
+	$filelist_head .= "<th>Date</th>\n";
+	$filelist_head .= "<th>Actions</th>\n";
+	$filelist_head .= "</thead>\n";
+	$filelist_head .= "<tbody>\n";
+
+	$files = new FilesystemIterator(USER_DOCS);
+
+	foreach($files as $file) {
+
+		$mime = mime_content_type($file->getPathname());
+
+		if (stripos($mime, "pdf") !== false) {
+
+			$scoresheet_file_name = $file->getFilename();
 			$random_num_str = random_generator(8,2);
 			$random_file_name = $random_num_str.".pdf";
 			$scoresheet_random_file_relative = "user_temp/".$random_file_name;
@@ -116,22 +120,28 @@ if (!is_dir_empty($upload_dir)) {
 			$scoresheet_link .= "<a href=\"".$base_url."output/scoresheets.output.php?";
 			$scoresheet_link .= "scoresheetfilename=".encryptString($scoresheet_file_name);
 			$scoresheet_link .= "&amp;randomfilename=".encryptString($random_file_name)."&amp;download=true";
-			$scoresheet_link .= "\">".$file."</a>";
+			$scoresheet_link .= "\">".$scoresheet_file_name."</a>";
+			$scoresheet_file_size = number_format($file->getSize()/1000000,2);
 
 			$filelist .= "<tr>\n";
 			$filelist .= "<td>".$scoresheet_link."</td>\n";
-			$filelist .= "<td>".date("l, F j, Y H:i", filemtime($upload_dir.$file))."</td>\n";
-			$filelist .= "<td><a href=\"".$base_url."includes/process.inc.php?action=delete&amp;go=doc&amp;filter=".$file."&amp;view=".$action."\" data-confirm=\"Are you sure? This will remove the file named ".$file." from the server.\"><span class=\"fa fa-lg fa-trash\"></span></a></td>\n";
+			$filelist .= "<td>".$scoresheet_file_size." MB</td>";
+			$filelist .= "<td>".getTimeZoneDateTime($_SESSION['prefsTimeZone'], filemtime($file), $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "long", "date-time")."</td>\n";
+			$filelist .= "<td><a href=\"".$base_url."includes/process.inc.php?action=delete&amp;go=doc&amp;filter=".$scoresheet_file_name."&amp;view=".$action."\" data-confirm=\"Are you sure? This will remove the file named ".$scoresheet_file_name." from the server.\"><span class=\"fa fa-lg fa-trash\"></span></a></td>\n";
 			$filelist .= "</tr>\n";
-			
-	   	}
-	}
-	
-	$filelist .= "</tbody>\n";
-	$filelist .= "</table>\n";
-		
-	echo $filelist;
 
+		}
+
+	}
+
+	$filelist_foot .= "</tbody>\n";
+	$filelist_foot .= "</table>\n";
+
+	if (!empty($filelist)) echo $filelist_heading.$filelist_head.$filelist.$filelist_foot;
+	else {
+		echo $filelist_heading;
+		echo "<p>The directory does not contain any PDF files.</p>";
+	}
 }
 
 ?>

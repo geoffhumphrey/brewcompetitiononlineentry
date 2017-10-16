@@ -556,11 +556,11 @@ $header_text_083 = "All unconfirmed entries are now marked as confirmed.";
 $header_text_084 = "All participant assignments have been cleared.";
 $header_text_085 = "A judging number you entered wasn't found in the database.";
 $header_text_086 = "All entry styles have been converted from BJCP 2008 to BJCP 2015.";
-$header_text_087 = "Data has been deleted from the database.";
+$header_text_087 = "Data deleted successfully.";
 $header_text_088 = "The judge/steward has been added successfully. Remember to assign the user as a judge or steward before assigning to tables.";
 $header_text_089 = "The file has been uploaded successfully. Check the list to verify.";
 $header_text_090 = "The file that was attempted to be uploaded is not an accepted file type.";
-$header_text_091 = "The file has been deleted.";
+$header_text_091 = "File(s) deleted successfully.";
 $header_text_092 = "The test email has been generated. Be sure to check your spam folder.";
 $header_text_093 = "The user&rsquo;s password has been changed. Be sure to let them know what their new password is!";
 $header_text_094 = "Change permission of user_images folder to 755 has failed.";
@@ -1276,6 +1276,8 @@ $label_confirm_password = "Confirm Password";
 $label_with_token = "With Token";
 $label_password_strength = "Password Strength";
 $label_entry_shipping = "Entry Shipping";
+$label_jump_to = "Jump to...";
+$label_top = "Top";
 
 // -------------------- Headers --------------------
 $header_text_112 = "You do not have sufficient access privileges to perform this action.";

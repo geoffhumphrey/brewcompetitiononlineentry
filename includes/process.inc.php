@@ -97,7 +97,7 @@ if (((isset($_SERVER['HTTP_REFERER'])) && ($referrer['host'] == $_SERVER['SERVER
 	$system_db_table = $prefix."system";
 	$themes_db_table = $prefix."themes";
 	$users_db_table = $prefix."users";
-	
+
 	/*
 	if (($section == "setup") && (($dbTable == $contest_info_db_table) || ($dbTable == $drop_off_db_table) || ($dbTable == $judging_locations_db_table) || ($dbTable == $styles_db_table) || ($dbTable == $judging_preferences_db_table) || ($dbTable == $brewer_db_table) || ($dbTable == $preferences_db_table))) {
 		require(DB.'common.db.php');
@@ -112,7 +112,7 @@ if (((isset($_SERVER['HTTP_REFERER'])) && ($referrer['host'] == $_SERVER['SERVER
 		$updateGoTo = "../";
 		$massUpdateGoTo = "../";
 	}
-	
+
 	else {
 		$insertGoTo = "";
 		$updateGoTo = "";
@@ -142,15 +142,8 @@ if (((isset($_SERVER['HTTP_REFERER'])) && ($referrer['host'] == $_SERVER['SERVER
 		elseif 	(strstr($_SERVER['HTTP_REFERER'], $base_url."rules")) 		$deleteGoTo = $base_url."index.php?section=rules&msg=5";
 		elseif 	(strstr($_SERVER['HTTP_REFERER'], $base_url."volunteers")) 	$deleteGoTo = $base_url."index.php?section=volunteers&msg=5";
 		elseif 	(strstr($_SERVER['HTTP_REFERER'], $base_url."sponsors")) 	$deleteGoTo = $base_url."index.php?section=sponsors&msg=5";
-		elseif 	(strstr($_SERVER['HTTP_REFERER'], $base_url."pay")) 			$deleteGoTo = $base_url."index.php?section=pay&msg=5";
+		elseif 	(strstr($_SERVER['HTTP_REFERER'], $base_url."pay")) 		$deleteGoTo = $base_url."index.php?section=pay&msg=5";
 		else $deleteGoTo = clean_up_url($_SERVER['HTTP_REFERER'])."&msg=5";
-
-		//echo $insertGoTo;
-		//echo $updateGoTo;
-		//echo $deleteGoTo;
-		//exit;
-		//session_start();
-
 
 	// --------------------------- Various Actions ------------------------------- //
 
@@ -158,40 +151,33 @@ if (((isset($_SERVER['HTTP_REFERER'])) && ($referrer['host'] == $_SERVER['SERVER
 	elseif ($action == "beerxml") include (PROCESS.'process_beerxml.inc.php');
 	elseif ($action == "update_judging_flights") include (PROCESS.'process_judging_flight_check.inc.php');
 
-	elseif ($action == "delete-scoresheets") {
+	elseif ($action == "delete_scoresheets") {
 
-		$upload_dir = (USER_DOCS);
-		$file_mimes = array('image/jpeg','image/jpg','image/gif','image/png','application/pdf'); // Allowable file mime types
-		$file_exts  = array('.jpeg','.jpg','.png','.gif','.pdf'); // Allowable file extensions
+		$file_mimes = array('image/jpeg','image/jpg','image/gif','image/png','application/pdf');
 
-		if (!is_dir_empty($upload_dir)) {
+		$files = new FilesystemIterator(USER_DOCS);
 
-			$handle = opendir($upload_dir);
-
-			while ($file = readdir($handle)) {
-
-	   			if(!is_dir($file) && !is_link($file)) {
-
-					$file_extension = explode('.', $_FILES['file']['name']);
-
-				}
-
-			}
+		foreach($files as $file) {
+			$mime = mime_content_type($file->getPathname());
+			if (in_array($mime, $file_mimes)) unlink($file);
 		}
-	}
 
-	elseif (($action == "purge") || ($action == "cleanup")) {
-		
-		include(INCLUDES.'data_cleanup.inc.php');
+		$updateGoTo = $base_url."index.php?section=admin&go=upload_scoresheets&action=".$filter."&msg=31";
+		header(sprintf("Location: %s", $updateGoTo));
 
 	}
+
+	elseif (($action == "purge") || ($action == "cleanup")) include(INCLUDES.'data_cleanup.inc.php');
 
 	elseif ($action == "generate_judging_numbers") {
+
 		generate_judging_numbers($prefix."brewing",$sort);
+
 		if ($go == "hidden") $updateGoTo = $base_url."index.php";
 		elseif ($go == "entries") $updateGoTo = $base_url."index.php?section=admin&go=entries&msg=14";
 		else $updateGoTo = $base_url."index.php?section=admin&msg=14";
 		header(sprintf("Location: %s", $updateGoTo));
+
 	}
 
 	elseif ($action == "check_discount") {
@@ -235,9 +221,9 @@ if (((isset($_SERVER['HTTP_REFERER'])) && ($referrer['host'] == $_SERVER['SERVER
 		else include (PROCESS.'process_archive.inc.php');
 
 	}
-	
+
 	elseif ($action == "publish") {
-		
+
 		$update = sprintf("UPDATE %s SET prefsDisplayWinners='%s', prefsWinnerDelay='%s' WHERE id='%s'",$prefix."preferences","Y",time(),"1");
 		mysqli_real_escape_string($connection,$update);
 		$result = mysqli_query($connection,$update) or die (mysqli_error($connection));
@@ -245,23 +231,15 @@ if (((isset($_SERVER['HTTP_REFERER'])) && ($referrer['host'] == $_SERVER['SERVER
 		session_name($prefix_session);
 		session_start();
 		unset($_SESSION['prefs'.$prefix_session]);
-		
+
 		$updateGoTo = $base_url."index.php?section=admin&msg=36";
 		header(sprintf("Location: %s", $updateGoTo));
-		
-	}
-
-	elseif (($action == "email") && ($dbTable == "default")) {
-
-		include (PROCESS.'process_email.inc.php');
 
 	}
 
-	elseif (($action == "paypal") && ($dbTable == "default")) {
+	elseif (($action == "email") && ($dbTable == "default")) include (PROCESS.'process_email.inc.php');
 
-		include (PROCESS.'process_paypal.inc.php');
-
-	}
+	elseif (($action == "paypal") && ($dbTable == "default")) include (PROCESS.'process_paypal.inc.php');
 
 	else {
 

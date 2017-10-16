@@ -121,7 +121,14 @@ $security_question = array($label_secret_01, $label_secret_05, $label_secret_06,
     <meta property="og:image" content="<?php echo $base_url."user_images/".$_SESSION['contestLogo']?>" />
     <?php } ?>
     <meta property="og:url" content="<?php echo "http" . ((!empty($_SERVER['HTTPS'])) ? "s://" : "://") . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']; ?>" />
-
+    <style>
+    :target:before {
+        content:"";
+        display:block;
+        height:50px;
+        margin:-50px 0 0;
+    }
+    </style>
 </head>
 <body>
 
