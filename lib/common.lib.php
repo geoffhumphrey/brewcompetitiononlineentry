@@ -2311,6 +2311,68 @@ function score_count($table_id,$method) {
 
 }
 
+function best_brewer_points($bid, $places, $entry_scores, $points_prefs, $tiebreaker) {
+	// Main points
+	$pts_first = $points_prefs[0]*$places[0]; // points for each first place position
+	$pts_second = $points_prefs[1]*$places[1]; // points for each secon place position
+	$pts_third = $points_prefs[2]*$places[2]; // points for each third place position
+	$pts_fourth = $points_prefs[3]*$places[3]; // points for each fourth place position
+	$pts_hm = $points_prefs[4]*$places[4]; // points for each honorable mention
+	// Tie breakers
+
+	$pts_tb_num_places = 0;
+	$pts_tb_first_places = 0;
+	$pts_tb_num_entries = 0;
+	$pts_tb_min_score = 0;
+	$pts_tb_max_score = 0;
+	$pts_tb_avg_score = 0;
+	$pts_tb_bos = 0;
+
+	$power = 0;
+
+	$imax = count($tiebreaker) - 1;
+
+	$number_of_entries = total_paid_received("",$bid);
+
+	for ($i = 0; $i<= $imax; $i++) {
+		switch ($tiebreaker[$i]) {
+			case "TBTotalPlaces" :
+				$power  += 2;
+				$pts_tb_num_places = array_sum(array_slice($places,0,3))/pow(10,$power); // points for the number of 1st, 2nd, and 3rd places
+				break;
+			case "TBTotalExtendedPlaces" :
+				$power  += 2;
+				$pts_tb_num_places = array_sum($places)/pow(10,$power); // points for the number of 1st, 2nd, 3rd, 4th, HM places
+				break;
+			case "TBFirstPlaces" :
+				$power  += 2;
+				$pts_tb_first_places = $places[0]/pow(10,$power); // points for number of first places
+				break;
+			case "TBNumEntries" :
+				$power  += 4;
+				$pts_tb_num_entries = floor(100/$number_of_entries)/pow(10,$power); // points for the number of competing entries (the smallest the better, of course)
+				break;
+			case "TBMinScore" :
+				$power  += 4;
+				$pts_tb_min_score = floor(10*min($entry_scores))/pow(10,$power); // points for the minimum score
+				break;
+			case "TBMaxScore" :
+				$power  += 4;
+				$pts_tb_max_score = floor(10*max($entry_scores))/pow(10,$power); // points for the maximum score
+				break;
+			case "TBAvgScore" :
+				$power  += 4;
+				$pts_avg_score = floor(10*array_sum($entry_scores)/$number_of_entries)/pow(10,$power); // points for the average score
+				break;
+		}
+	}
+
+	$points = $pts_first + $pts_second + $pts_third + $pts_fourth + $pts_hm + $pts_tb_num_places + $pts_tb_first_places + $pts_tb_num_entries + $pts_tb_min_score + $pts_tb_max_score + $pts_tb_avg_score;
+	return $points;
+	break;
+
+}
+
 function bjcp_rank($rank,$method) {
     if ($method == "1") {
 		switch($rank) {
@@ -2465,6 +2527,7 @@ function get_participant_count($type) {
 	if ($type == 'default') $query_participant_count = sprintf("SELECT COUNT(*) as 'count' FROM %s",$prefix."brewer");
 	if ($type == 'judge') $query_participant_count = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE brewerJudge='Y'",$prefix."brewer");
 	if ($type == 'steward') $query_participant_count = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE brewerSteward='Y'",$prefix."brewer");
+	if ($type == 'received-entrant') $query_participant_count = sprintf("SELECT COUNT(DISTINCT brewBrewerID) as 'count' FROM %s WHERE brewReceived='1'",$prefix."brewing");
 	$participant_count = mysqli_query($connection,$query_participant_count) or die (mysqli_error($connection));
 	$row_participant_count = mysqli_fetch_assoc($participant_count);
 
@@ -2509,6 +2572,7 @@ function display_place($place,$method) {
 			case "1": $place = "<span class='fa fa-lg fa-trophy text-gold'></span> ".addOrdinalNumberSuffix($place); break;
 			case "2": $place = "<span class='fa fa-lg fa-trophy text-silver'></span> ".addOrdinalNumberSuffix($place); break;
 			case "3": $place = "<span class='fa fa-lg fa-trophy text-bronze'></span> ".addOrdinalNumberSuffix($place); break;
+			case "4": $place = "<span class='fa fa-lg fa-trophy text-purple'></span> ".addOrdinalNumberSuffix($place); break;
 			case "HM":  $place = "<span class='fa fa-lg fa-trophy text-teal'></span> HM"; break;
 			default: $place = "<span class='fa fa-lg fa-trophy text-forest-green'></span> ".addOrdinalNumberSuffix($place);
 			}
@@ -3983,5 +4047,35 @@ function sterilize ($sterilize = NULL) {
 	return $sterilize;
 }
 
+function tiebreak_rule($rule) {
+	require (LANG.'language.lang.php');
+	switch ($rule) {
+		case "TBTotalPlaces" :
+			$return = $best_brewer_text_006;
+			break;
+		case "TBTotalExtendedPlaces" :
+			$return = $best_brewer_text_007;
+			break;
+		case "TBFirstPlaces" :
+			$return = $best_brewer_text_008;
+			break;
+		case "TBNumEntries" :
+			$return = $best_brewer_text_009;
+			break;
+		case "TBMinScore" :
+			$return = $best_brewer_text_010;
+			break;
+		case "TBMaxScore" :
+			$return = $best_brewer_text_011;
+			break;
+		case "TBAvgScore" :
+			$return = $best_brewer_text_012;
+			break;
+		default:
+			$return = $best_brewer_text_013;
+			break;
+	}
+	return $return;
+}
 
 ?>

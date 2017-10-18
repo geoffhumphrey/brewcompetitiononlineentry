@@ -50,3 +50,5 @@ site/config.reset.php
 *.sublime-project
 bcoem-dev.sublime-workspace
 sftp-config.json
+lang/en/en.lang.php
+lang/en/en.lang.php

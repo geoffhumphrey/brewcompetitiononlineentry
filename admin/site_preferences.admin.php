@@ -1,9 +1,9 @@
 <?php if ($go == "preferences") {
 include (DB.'styles.db.php');
 $prefsUSCLEx = "";
-	
+
 if (strpos($styleSet,"BABDB") === false) {
-	
+
 	//$prefsUSCLEx = $query_styles;
 
 	do {
@@ -148,10 +148,10 @@ $(document).ready(function(){
         <div class="input-group">
             <!-- Input Here -->
             <label class="radio-inline">
-                <input type="radio" name="prefsProEdition" value="0" id="prefsProEdition_0"  <?php if (($section != "step3") && ($_SESSION['prefsProEdition'] == "0")) echo "CHECKED"; if ($section == "step3") echo "CHECKED"; ?> /> Amateur
+                <input type="radio" name="prefsProEdition" value="0" id="prefsProEdition_0"  <?php if (($section != "step3") && ($row_prefs['prefsProEdition'] == "0")) echo "CHECKED"; if ($section == "step3") echo "CHECKED"; ?> /> Amateur
             </label>
             <label class="radio-inline">
-                <input type="radio" name="prefsProEdition" value="1" id="prefsProEdition_1" <?php if (($section != "step3") && ($_SESSION['prefsProEdition'] == "1")) echo "CHECKED"; ?>/> Professional
+                <input type="radio" name="prefsProEdition" value="1" id="prefsProEdition_1" <?php if (($section != "step3") && ($row_prefs['prefsProEdition'] == "1")) echo "CHECKED"; ?>/> Professional
             </label>
         </div>
         <span id="helpBlock" class="help-block">Indicate whether the participants in the competition will be individual amateur brewers or licensed breweries with designated points of contact.</span>
@@ -164,10 +164,10 @@ $(document).ready(function(){
         <div class="input-group">
             <!-- Input Here -->
             <label class="radio-inline">
-                <input type="radio" name="prefsDisplayWinners" value="Y" id="prefsDisplayWinners_0"  <?php if (($section != "step3") && ($_SESSION['prefsDisplayWinners'] == "Y")) echo "CHECKED"; ?> /> Enable
+                <input type="radio" name="prefsDisplayWinners" value="Y" id="prefsDisplayWinners_0"  <?php if (($section != "step3") && ($row_prefs['prefsDisplayWinners'] == "Y")) echo "CHECKED"; ?> /> Enable
             </label>
             <label class="radio-inline">
-                <input type="radio" name="prefsDisplayWinners" value="N" id="prefsDisplayWinners_1" <?php if (($section != "step3") && ($_SESSION['prefsDisplayWinners'] == "N")) echo "CHECKED"; if ($section == "step3") echo "CHECKED"; ?>/> Disable
+                <input type="radio" name="prefsDisplayWinners" value="N" id="prefsDisplayWinners_1" <?php if (($section != "step3") && ($row_prefs['prefsDisplayWinners'] == "N")) echo "CHECKED"; if ($section == "step3") echo "CHECKED"; ?>/> Disable
             </label>
         </div>
         <span id="helpBlock" class="help-block">Indicate if the winners of the competition for each category and Best of Show Style Type will be displayed.</span>
@@ -178,7 +178,7 @@ $(document).ready(function(){
     <label for="prefsWinnerDelay" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Winner Display Date/Time</label>
     <div class="col-lg-6 col-md-4 col-sm-8 col-xs-12">
     	<!-- Input Here -->
-        	<input class="form-control" id="prefsWinnerDelay" name="prefsWinnerDelay" type="text" value="<?php if ($section == "step3") echo getTimeZoneDateTime($_SESSION['prefsTimeZone'], (time() + 4838400), $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "system", "date-time-system"); else echo getTimeZoneDateTime($_SESSION['prefsTimeZone'], $_SESSION['prefsWinnerDelay'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "system", "date-time-system"); ?>" placeholder="<?php if (strpos($section, "step") === FALSE) { echo $current_date." ".$current_time; } ?>">
+        	<input class="form-control" id="prefsWinnerDelay" name="prefsWinnerDelay" type="text" value="<?php if ($section == "step3") echo getTimeZoneDateTime($row_prefs['prefsTimeZone'], (time() + 4838400), $row_prefs['prefsDateFormat'],  $row_prefs['prefsTimeFormat'], "system", "date-time-system"); else echo getTimeZoneDateTime($row_prefs['prefsTimeZone'], $row_prefs['prefsWinnerDelay'], $row_prefs['prefsDateFormat'],  $row_prefs['prefsTimeFormat'], "system", "date-time-system"); ?>" placeholder="<?php if (strpos($section, "step") === FALSE) { echo $current_date." ".$current_time; } ?>">
         <span id="helpBlock" class="help-block">Date and time when the system will display winners if Winner Display is enabled.</span>
     </div>
 </div><!-- ./Form Group -->
@@ -188,28 +188,132 @@ $(document).ready(function(){
 		<div class="input-group">
 			<!-- Input Here -->
 			<label class="radio-inline">
-				<input type="radio" name="prefsWinnerMethod" value="0" id="prefsWinnerMethod_0" <?php if (($section == "step3") || ($_SESSION['prefsWinnerMethod'] == "0")) echo "CHECKED"; ?>> By Table
+				<input type="radio" name="prefsWinnerMethod" value="0" id="prefsWinnerMethod_0" <?php if (($section == "step3") || ($row_prefs['prefsWinnerMethod'] == "0")) echo "CHECKED"; ?>> By Table
 			</label>
 			<label class="radio-inline">
-				<input type="radio" name="prefsWinnerMethod" value="1" id="prefsWinnerMethod_1" <?php if ($_SESSION['prefsWinnerMethod'] == "1") echo "CHECKED"; ?>> By Style
+				<input type="radio" name="prefsWinnerMethod" value="1" id="prefsWinnerMethod_1" <?php if ($row_prefs['prefsWinnerMethod'] == "1") echo "CHECKED"; ?>> By Style
 			</label>
 			<label class="radio-inline">
-				<input type="radio" name="prefsWinnerMethod" value="2" id="prefsWinnerMethod_2" <?php if ($_SESSION['prefsWinnerMethod'] == "2") echo "CHECKED"; ?>> By Sub-Style
+				<input type="radio" name="prefsWinnerMethod" value="2" id="prefsWinnerMethod_2" <?php if ($row_prefs['prefsWinnerMethod'] == "2") echo "CHECKED"; ?>> By Sub-Style
 			</label>
 		</div>
 		<span id="helpBlock" class="help-block">How the competition will award places for winning entries.</span>
 	</div>
 </div><!-- ./Form Group -->
+
+<div class="form-group"><!-- Form Group NOT REQUIRED Select -->
+    <label for="prefsShowBestBrewer" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Best Brewer Display? Up to which Position?</label>
+    <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
+    <!-- Input Here -->
+    <select class="selectpicker" name="prefsShowBestBrewer" id="prefsShowBestBrewer" data-size="10" data-width="auto">
+        <?php for ($i=-1; $i <= 50; $i++) { ?>
+        <option value="<?php echo $i; ?>" <?php if ($row_prefs['prefsShowBestBrewer'] == $i) echo "SELECTED"; elseif (($i == -1) && ($section == "step3")) echo "SELECTED"; ?>><?php if ($i == -1) echo "Display all"; elseif ($i == 0) echo "Do not display"; else echo "Up to ".addOrdinalNumberSuffix($i). " position"; ?></option>
+        <?php } ?>
+    </select>
+    <span id="helpBlock" class="help-block">Indicate whether you want to display the list of best brewers according to the points and tie break rules defined below and, if so, up to which position. They will be showed at the same time indicated above for the Winners Display.</span>
+    </div>
+</div><!-- ./Form Group -->
+
+<div class="form-group"><!-- Form Group NOT REQUIRED Text Input -->
+    <label for="prefsBestBrewerTitle" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Best Brewer Title</label>
+    <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
+        <!-- Input Here -->
+            <input class="form-control" id="prefsBestBrewerTitle" name="prefsBestBrewerTitle" type="text" value="<?php if ($section == "step3") echo ""; else echo $row_prefs['prefsBestBrewerTitle']; ?>" placeholder="">
+        <span id="helpBlock" class="help-block">Enter the title for the Best Brewer award (e.g. Ninkasi Award).</span>
+    </div>
+</div><!-- ./Form Group -->
+
+<div class="form-group"><!-- Form Group NOT REQUIRED Select -->
+    <label for="prefsFirstPlacePts" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Points for First Place</label>
+    <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
+    <!-- Input Here -->
+    <select class="selectpicker" name="prefsFirstPlacePts" id="prefsFirstPlacePts" data-size="10" data-width="auto">
+        <?php for ($i=0; $i <= 25; $i++) { ?>
+        <option value="<?php echo $i; ?>" <?php if ($row_prefs['prefsFirstPlacePts'] == $i) echo "SELECTED"; elseif (($i == 0) && ($section == "step3")) echo "SELECTED"; ?>><?php echo $i; ?></option>
+        <?php } ?>
+    </select>
+    <span id="helpBlock" class="help-block">Enter the number of points awarded for each First Place that an entrant gets.</span>
+    </div>
+</div><!-- ./Form Group -->
+
+<div class="form-group"><!-- Form Group NOT REQUIRED Select -->
+    <label for="prefsSecondPlacePts" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Points for Second Place</label>
+    <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
+    <!-- Input Here -->
+    <select class="selectpicker" name="prefsSecondPlacePts" id="prefsSecondPlacePts" data-size="10" data-width="auto">
+        <?php for ($i=0; $i <= 25; $i++) { ?>
+        <option value="<?php echo $i; ?>" <?php if ($row_prefs['prefsSecondPlacePts'] == $i) echo "SELECTED"; elseif (($i == 0) && ($section == "step3")) echo "SELECTED"; ?>><?php echo $i; ?></option>
+        <?php } ?>
+    </select>
+    <span id="helpBlock" class="help-block">Enter the number of points awarded for each Second Place that an entrant gets.</span>
+    </div>
+</div><!-- ./Form Group -->
+
+<div class="form-group"><!-- Form Group NOT REQUIRED Select -->
+    <label for="prefsThirdPlacePts" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Points for Third Place</label>
+    <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
+    <!-- Input Here -->
+    <select class="selectpicker" name="prefsThirdPlacePts" id="prefsThirdPlacePts" data-size="10" data-width="auto">
+        <?php for ($i=0; $i <= 25; $i++) { ?>
+        <option value="<?php echo $i; ?>" <?php if ($row_prefs['prefsThirdPlacePts'] == $i) echo "SELECTED"; elseif (($i == 0) && ($section == "step3")) echo "SELECTED"; ?>><?php echo $i; ?></option>
+        <?php } ?>
+    </select>
+    <span id="helpBlock" class="help-block">Enter the number of points awarded for each Third Place that an entrant gets.</span>
+    </div>
+</div><!-- ./Form Group -->
+
+<div class="form-group"><!-- Form Group NOT REQUIRED Select -->
+    <label for="prefsFourthPlacePts" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Points for Fourth Place</label>
+    <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
+    <!-- Input Here -->
+    <select class="selectpicker" name="prefsFourthPlacePts" id="prefsFourthPlacePts" data-size="10" data-width="auto">
+        <?php for ($i=0; $i <= 25; $i++) { ?>
+        <option value="<?php echo $i; ?>" <?php if ($row_prefs['prefsFourthPlacePts'] == $i) echo "SELECTED"; elseif (($i == 0) && ($section == "step3")) echo "SELECTED"; ?>><?php echo $i; ?></option>
+        <?php } ?>
+    </select>
+    <span id="helpBlock" class="help-block">Enter the number of points awarded for each Fourth Place that an entrant gets.</span>
+    </div>
+</div><!-- ./Form Group -->
+
+<div class="form-group"><!-- Form Group NOT REQUIRED Select -->
+    <label for="prefsHMPts" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Points for Honorable Mention</label>
+    <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
+    <!-- Input Here -->
+    <select class="selectpicker" name="prefsHMPts" id="prefsHMPts" data-size="10" data-width="auto">
+        <?php for ($i=0; $i <= 25; $i++) { ?>
+        <option value="<?php echo $i; ?>" <?php if ($row_prefs['prefsHMPts'] == $i) echo "SELECTED"; elseif (($i == 0) && ($section == "step3")) echo "SELECTED"; ?>><?php echo $i; ?></option>
+        <?php } ?>
+    </select>
+    <span id="helpBlock" class="help-block">Enter the number of points awarded for each Honorable Mention that an entrant obtains.</span>
+    </div>
+</div><!-- ./Form Group -->
+
+<?php for ($i=1; $i<=6; $i++) { ?>
+<div class="form-group"><!-- Form Group NOT REQUIRED Select -->
+    <label for="<?php echo 'prefsTieBreakRule'.$i;?>" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Tie Break Rule #<?php echo $i; ?></label>
+    <div class="col-lg-6 col-md-5 col-sm-8 col-xs-12">
+    <!-- Input Here -->
+    <select class="selectpicker" name="<?php echo 'prefsTieBreakRule'.$i;?>" id="<?php echo 'prefsTieBreakRule'.$i;?>" data-width="auto">
+        <?php foreach ($tie_break_rules as $rule) {
+           //$rule_info = explode("|",$rule);
+        ?>
+        <option value="<?php echo $rule; ?>" <?php if ($row_prefs['prefsTieBreakRule'.$i] ==  $rule) echo "SELECTED"; elseif (($rule == "") && ($section == "step3")) echo " SELECTED"; ?> /><?php echo tiebreak_rule($rule); ?></option>
+        <?php } ?>
+    </select>
+    </div>
+</div><!-- ./Form Group -->
+<?php } ?>
+
 <div class="form-group"><!-- Form Group Radio STACKED -->
 	<label for="prefsDisplaySpecial" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Scoresheet Upload File Names</label>
 	<div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
 		<div class="input-group">
 			<!-- Input Here -->
 			<label class="radio-inline">
-				<input type="radio" name="prefsDisplaySpecial" value="J" id="prefsDisplaySpecial_0" <?php if (($section == "step3") || ($_SESSION['prefsDisplaySpecial'] == "J")) echo "CHECKED"; ?>> 6-Character Judging Number
+				<input type="radio" name="prefsDisplaySpecial" value="J" id="prefsDisplaySpecial_0" <?php if (($section == "step3") || ($row_prefs['prefsDisplaySpecial'] == "J")) echo "CHECKED"; ?>> 6-Character Judging Number
 			</label>
 			<label class="radio-inline">
-				<input type="radio" name="prefsDisplaySpecial" value="E" id="prefsDisplaySpecial_1" <?php if ($_SESSION['prefsDisplaySpecial'] == "E") echo "CHECKED"; ?>> 6-Digit Entry Number
+				<input type="radio" name="prefsDisplaySpecial" value="E" id="prefsDisplaySpecial_1" <?php if ($row_prefs['prefsDisplaySpecial'] == "E") echo "CHECKED"; ?>> 6-Digit Entry Number
 			</label>
 		</div>
 		<div id="helpBlock" class="help-block">
@@ -256,10 +360,10 @@ $(document).ready(function(){
         <div class="input-group">
             <!-- Input Here -->
             <label class="radio-inline">
-                <input type="radio" name="prefsContact" value="Y" id="prefsContact_0"  <?php if ($_SESSION['prefsContact'] == "Y") echo "CHECKED"; elseif ($section == "step3") echo "CHECKED"; ?> /> Enable
+                <input type="radio" name="prefsContact" value="Y" id="prefsContact_0"  <?php if ($row_prefs['prefsContact'] == "Y") echo "CHECKED"; elseif ($section == "step3") echo "CHECKED"; ?> /> Enable
             </label>
             <label class="radio-inline">
-                <input type="radio" name="prefsContact" value="N" id="prefsContact_1" <?php if ($_SESSION['prefsContact'] == "N") echo "CHECKED"; ?>/> Disable
+                <input type="radio" name="prefsContact" value="N" id="prefsContact_1" <?php if ($row_prefs['prefsContact'] == "N") echo "CHECKED"; ?>/> Disable
             </label>
         </div>
         <span id="helpBlock" class="help-block">
@@ -303,10 +407,10 @@ $(document).ready(function(){
         <div class="input-group">
             <!-- Input Here -->
             <label class="radio-inline">
-                <input type="radio" name="prefsEmailRegConfirm" value="1" id="prefsEmailRegConfirm_1"  <?php if ($_SESSION['prefsEmailRegConfirm'] == "1") echo "CHECKED"; elseif ($section == "step3") echo "CHECKED"; ?> /> Enable
+                <input type="radio" name="prefsEmailRegConfirm" value="1" id="prefsEmailRegConfirm_1"  <?php if ($row_prefs['prefsEmailRegConfirm'] == "1") echo "CHECKED"; elseif ($section == "step3") echo "CHECKED"; ?> /> Enable
           </label>
             <label class="radio-inline">
-                <input type="radio" name="prefsEmailRegConfirm" value="0" id="prefsEmailRegConfirm_0" <?php if ($_SESSION['prefsEmailRegConfirm'] == "0") echo "CHECKED"; ?>/> Disable
+                <input type="radio" name="prefsEmailRegConfirm" value="0" id="prefsEmailRegConfirm_0" <?php if ($row_prefs['prefsEmailRegConfirm'] == "0") echo "CHECKED"; ?>/> Disable
             </label>
         </div>
         <span id="helpBlock" class="help-block">
@@ -361,7 +465,7 @@ $(document).ready(function(){
 		<?php foreach ($theme_name as $theme) {
 			$themes = explode("|",$theme);
 		?>
-    	<option value="<?php echo $themes['0']; ?>" <?php if ($_SESSION['prefsTheme'] ==  $themes['0']) echo " SELECTED"; ?> /><?php echo  $themes['1']; ?></option>
+    	<option value="<?php echo $themes['0']; ?>" <?php if ($row_prefs['prefsTheme'] ==  $themes['0']) echo " SELECTED"; ?> /><?php echo  $themes['1']; ?></option>
     	<?php } ?>
 	</select>
 	</div>
@@ -374,10 +478,10 @@ $(document).ready(function(){
         <div class="input-group">
             <!-- Input Here -->
             <label class="radio-inline">
-                <input type="radio" name="prefsSEF" value="Y" id="prefsSEF_0"  <?php if ($_SESSION['prefsSEF'] == "Y") echo "CHECKED"; ?> />Enable
+                <input type="radio" name="prefsSEF" value="Y" id="prefsSEF_0"  <?php if ($row_prefs['prefsSEF'] == "Y") echo "CHECKED"; ?> />Enable
             </label>
             <label class="radio-inline">
-                <input type="radio" name="prefsSEF" value="N" id="prefsSEF_1" <?php if ($_SESSION['prefsSEF'] == "N") echo "CHECKED"; elseif ($section == "step3") echo "CHECKED"; ?>/>Disable
+                <input type="radio" name="prefsSEF" value="N" id="prefsSEF_1" <?php if ($row_prefs['prefsSEF'] == "N") echo "CHECKED"; elseif ($section == "step3") echo "CHECKED"; ?>/>Disable
             </label>
         </div>
 		<span id="helpBlock" class="help-block">
@@ -412,10 +516,10 @@ $(document).ready(function(){
         <div class="input-group">
             <!-- Input Here -->
             <label class="radio-inline">
-                <input type="radio" name="prefsUseMods" value="Y" id="prefsUseMods_0"  <?php if ($_SESSION['prefsUseMods'] == "Y") echo "CHECKED"; ?> /> Enable
+                <input type="radio" name="prefsUseMods" value="Y" id="prefsUseMods_0"  <?php if ($row_prefs['prefsUseMods'] == "Y") echo "CHECKED"; ?> /> Enable
             </label>
             <label class="radio-inline">
-                <input type="radio" name="prefsUseMods" value="N" id="prefsUseMods_1" <?php if ($_SESSION['prefsUseMods'] == "N") echo "CHECKED"; elseif ($section == "step3") echo "CHECKED"; ?>/> Disable
+                <input type="radio" name="prefsUseMods" value="N" id="prefsUseMods_1" <?php if ($row_prefs['prefsUseMods'] == "N") echo "CHECKED"; elseif ($section == "step3") echo "CHECKED"; ?>/> Disable
             </label>
         </div>
         <span id="helpBlock" class="help-block"><strong>FOR ADVANCED USERS.</strong> Utilize the ability to add custom modules that extend BCOE&amp;M's core functionality.</span>
@@ -432,10 +536,10 @@ $(document).ready(function(){
         <div class="input-group">
             <!-- Input Here -->
             <label class="radio-inline">
-                <input type="radio" name="prefsDropOff" value="1" id="prefsDropOff_0"  <?php if (($section != "step3") && ($_SESSION['prefsDropOff'] == "1")) echo "CHECKED"; if ($section == "step3") echo "CHECKED";  ?> /> Enable
+                <input type="radio" name="prefsDropOff" value="1" id="prefsDropOff_0"  <?php if (($section != "step3") && ($row_prefs['prefsDropOff'] == "1")) echo "CHECKED"; if ($section == "step3") echo "CHECKED";  ?> /> Enable
             </label>
             <label class="radio-inline">
-                <input type="radio" name="prefsDropOff" value="0" id="prefsDropOff_1" <?php if (($section != "step3") && ($_SESSION['prefsDropOff'] == "0")) echo "CHECKED";?>/> Disable
+                <input type="radio" name="prefsDropOff" value="0" id="prefsDropOff_1" <?php if (($section != "step3") && ($row_prefs['prefsDropOff'] == "0")) echo "CHECKED";?>/> Disable
             </label>
         </div>
         <span id="helpBlock" class="help-block">Disable if your competition does not have drop-off locations.</span>
@@ -448,10 +552,10 @@ $(document).ready(function(){
         <div class="input-group">
             <!-- Input Here -->
             <label class="radio-inline">
-                <input type="radio" name="prefsShipping" value="1" id="prefsShipping_0"  <?php if (($section != "step3") && ($_SESSION['prefsShipping'] == "1")) echo "CHECKED"; if ($section == "step3") echo "CHECKED";  ?> /> Enable
+                <input type="radio" name="prefsShipping" value="1" id="prefsShipping_0"  <?php if (($section != "step3") && ($row_prefs['prefsShipping'] == "1")) echo "CHECKED"; if ($section == "step3") echo "CHECKED";  ?> /> Enable
             </label>
             <label class="radio-inline">
-                <input type="radio" name="prefsShipping" value="0" id="prefsShipping_1" <?php if (($section != "step3") && ($_SESSION['prefsShipping'] == "0")) echo "CHECKED"; ?>/> Disable
+                <input type="radio" name="prefsShipping" value="0" id="prefsShipping_1" <?php if (($section != "step3") && ($row_prefs['prefsShipping'] == "0")) echo "CHECKED"; ?>/> Disable
             </label>
         </div>
         <span id="helpBlock" class="help-block">Disable if your competition does not have an entry shipping location.</span>
@@ -499,7 +603,7 @@ $(document).ready(function(){
             <div class="modal-body">
                 <p>The Brewers Association styles are available via the <a href="https://www.brewerydb.com" target="_blank">Brewery DB</a>'s API. To utilize these styles in BCOE&amp;M, you will need an API key issued by Brewery DB.</p>
                 <p>To obtain an API key from the Brewery DB project website, you will need to <a href="https://www.brewerydb.com/auth/signup" target="_blank">create an account on the Brewery DB website</a> and register your installation as an app.</p>
-                <p>After creating your account, click the &quot;Register New App&quot; button, provide a name for the app (something like &quot;BCOE&amp;M <?php echo $_SESSION['contestName']; ?>&quot;), web address, and platform (choose &quot;Web Application&quot;). Once you have your API key, enter it here in the designated field.</p>
+                <p>After creating your account, click the &quot;Register New App&quot; button, provide a name for the app (something like &quot;BCOE&amp;M <?php echo $row_prefs['contestName']; ?>&quot;), web address, and platform (choose &quot;Web Application&quot;). Once you have your API key, enter it here in the designated field.</p>
                 <p><strong>Please note:</strong> The Brewers Association styles will not populate without a valid API key issued by the Brewery DB.</p>
             </div>
             <div class="modal-footer">
@@ -516,17 +620,17 @@ $(document).ready(function(){
 	<div class="col-lg-6 col-md-3 col-sm-8 col-xs-12">
 	<!-- Input Here -->
 	<select class="selectpicker" name="prefsEntryForm" id="prefsEntryForm" data-size="12" data-width="auto">
-		<option value="1" <?php if (($section != "step3") && ($_SESSION['prefsEntryForm'] == "1")) echo " SELECTED"; ?> />BCOE&amp;M (Bottle Labels Only)</option>
-		<option value="2" <?php if (($section == "step3") || ($_SESSION['prefsEntryForm'] == "2")) echo " SELECTED"; ?> />BCOE&amp;M with Barcode/QR Code (Bottle Labels Only)</option>
-        <option value="0" <?php if (($section != "step3") && ($_SESSION['prefsEntryForm'] == "0")) echo " SELECTED"; ?> />BCOE&amp;M Anonymous with Barcode/QR Code (Bottle Labels Only)</option>
-        <option value="B" <?php if (($section != "step3") && ($_SESSION['prefsEntryForm'] == "B")) echo " SELECTED"; ?> />BJCP Official</option>
-        <option value="E" <?php if (($section != "step3") && ($_SESSION['prefsEntryForm'] == "E")) echo " SELECTED"; ?> />BJCP Official (Bottle Labels Only)</option>
-        <option value="N" <?php if (($section != "step3") && ($_SESSION['prefsEntryForm'] == "N")) echo " SELECTED"; ?> />BJCP Official with Barcode/QR Code</option>
-        <option value="C" <?php if (($section != "step3") && ($_SESSION['prefsEntryForm'] == "C")) echo " SELECTED"; ?> />BJCP Official with Barcode/QR Code (Bottle Labels Only)</option>
-		<option value="M" <?php if (($section != "step3") && ($_SESSION['prefsEntryForm'] == "M")) echo " SELECTED"; ?> />Simple Metric</option>
-        <option value="3" <?php if (($section != "step3") && ($_SESSION['prefsEntryForm'] == "3")) echo " SELECTED"; ?> />Simple Metric with Barcode/QR Code</option>
-        <option value="U" <?php if (($section != "step3") && ($_SESSION['prefsEntryForm'] == "U")) echo " SELECTED"; ?> />Simple U.S.</option>
-        <option value="4" <?php if (($section != "step3") && ($_SESSION['prefsEntryForm'] == "4")) echo " SELECTED"; ?> />Simple U.S. with Barcode/QR Code</option>
+		<option value="1" <?php if (($section != "step3") && ($row_prefs['prefsEntryForm'] == "1")) echo " SELECTED"; ?> />BCOE&amp;M (Bottle Labels Only)</option>
+		<option value="2" <?php if (($section == "step3") || ($row_prefs['prefsEntryForm'] == "2")) echo " SELECTED"; ?> />BCOE&amp;M with Barcode/QR Code (Bottle Labels Only)</option>
+        <option value="0" <?php if (($section != "step3") && ($row_prefs['prefsEntryForm'] == "0")) echo " SELECTED"; ?> />BCOE&amp;M Anonymous with Barcode/QR Code (Bottle Labels Only)</option>
+        <option value="B" <?php if (($section != "step3") && ($row_prefs['prefsEntryForm'] == "B")) echo " SELECTED"; ?> />BJCP Official</option>
+        <option value="E" <?php if (($section != "step3") && ($row_prefs['prefsEntryForm'] == "E")) echo " SELECTED"; ?> />BJCP Official (Bottle Labels Only)</option>
+        <option value="N" <?php if (($section != "step3") && ($row_prefs['prefsEntryForm'] == "N")) echo " SELECTED"; ?> />BJCP Official with Barcode/QR Code</option>
+        <option value="C" <?php if (($section != "step3") && ($row_prefs['prefsEntryForm'] == "C")) echo " SELECTED"; ?> />BJCP Official with Barcode/QR Code (Bottle Labels Only)</option>
+		<option value="M" <?php if (($section != "step3") && ($row_prefs['prefsEntryForm'] == "M")) echo " SELECTED"; ?> />Simple Metric</option>
+        <option value="3" <?php if (($section != "step3") && ($row_prefs['prefsEntryForm'] == "3")) echo " SELECTED"; ?> />Simple Metric with Barcode/QR Code</option>
+        <option value="U" <?php if (($section != "step3") && ($row_prefs['prefsEntryForm'] == "U")) echo " SELECTED"; ?> />Simple U.S.</option>
+        <option value="4" <?php if (($section != "step3") && ($row_prefs['prefsEntryForm'] == "4")) echo " SELECTED"; ?> />Simple U.S. with Barcode/QR Code</option>
 	</select>
 	<span id="helpBlock" class="help-block">
 		<div class="btn-group" role="group" aria-label="entryFormModal">
@@ -566,10 +670,10 @@ $(document).ready(function(){
         <div class="input-group">
             <!-- Input Here -->
             <label class="radio-inline">
-                <input type="radio" name="prefsHideRecipe" value="Y" id="prefsHideRecipe_0"  <?php if ($_SESSION['prefsHideRecipe'] == "Y") echo "CHECKED"; elseif ($section == "step3") echo "CHECKED"; ?> /> Yes
+                <input type="radio" name="prefsHideRecipe" value="Y" id="prefsHideRecipe_0"  <?php if ($row_prefs['prefsHideRecipe'] == "Y") echo "CHECKED"; elseif ($section == "step3") echo "CHECKED"; ?> /> Yes
             </label>
             <label class="radio-inline">
-                <input type="radio" name="prefsHideRecipe" value="N" id="prefsHideRecipe_1" <?php if ($_SESSION['prefsHideRecipe'] == "N") echo "CHECKED"; ?>/> No
+                <input type="radio" name="prefsHideRecipe" value="N" id="prefsHideRecipe_1" <?php if ($row_prefs['prefsHideRecipe'] == "N") echo "CHECKED"; ?>/> No
             </label>
         </div>
         <span id="helpBlock" class="help-block">
@@ -606,10 +710,10 @@ $(document).ready(function(){
         <div class="input-group">
             <!-- Input Here -->
             <label class="radio-inline">
-                <input type="radio" name="prefsSpecific" value="1" id="prefsSpecific_0"  <?php if ($_SESSION['prefsSpecific'] == "1") echo "CHECKED"; ?> /> Yes
+                <input type="radio" name="prefsSpecific" value="1" id="prefsSpecific_0"  <?php if ($row_prefs['prefsSpecific'] == "1") echo "CHECKED"; ?> /> Yes
             </label>
             <label class="radio-inline">
-                <input type="radio" name="prefsSpecific" value="0" id="prefsSpecific_1" <?php if ($_SESSION['prefsSpecific'] == "0") echo "CHECKED"; elseif ($section == "step3") echo "CHECKED"; ?>/> No
+                <input type="radio" name="prefsSpecific" value="0" id="prefsSpecific_1" <?php if ($row_prefs['prefsSpecific'] == "0") echo "CHECKED"; elseif ($section == "step3") echo "CHECKED"; ?>/> No
             </label>
         </div>
         <span id="helpBlock" class="help-block">
@@ -818,7 +922,7 @@ $(document).ready(function(){
     <label for="prefsRecordPaging" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Records Displayed</label>
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
     	<!-- Input Here -->
-        	<input class="form-control" id="prefsRecordPaging" name="prefsRecordPaging" type="text" value="<?php if ($section == "step3") echo "150"; else echo $_SESSION['prefsRecordPaging']; ?>" placeholder="12">
+        	<input class="form-control" id="prefsRecordPaging" name="prefsRecordPaging" type="text" value="<?php if ($section == "step3") echo "150"; else echo $row_prefs['prefsRecordPaging']; ?>" placeholder="12">
         <span id="helpBlock" class="help-block">The number of records displayed per page when viewing lists.</span>
     </div>
 </div><!-- ./Form Group -->
@@ -828,10 +932,10 @@ $(document).ready(function(){
         <div class="input-group">
             <!-- Input Here -->
             <label class="radio-inline">
-                <input type="radio" name="prefsAutoPurge" value="1" id="prefsAutoPurge_0"  <?php if ($_SESSION['prefsAutoPurge'] == "1") echo "CHECKED";  ?> /> Enable
+                <input type="radio" name="prefsAutoPurge" value="1" id="prefsAutoPurge_0"  <?php if ($row_prefs['prefsAutoPurge'] == "1") echo "CHECKED";  ?> /> Enable
             </label>
             <label class="radio-inline">
-                <input type="radio" name="prefsAutoPurge" value="0" id="prefsAutoPurge_1" <?php if ($_SESSION['prefsAutoPurge'] == "0") echo "CHECKED"; elseif ($section == "step3") echo "CHECKED"; ?>/> Disable
+                <input type="radio" name="prefsAutoPurge" value="0" id="prefsAutoPurge_1" <?php if ($row_prefs['prefsAutoPurge'] == "0") echo "CHECKED"; elseif ($section == "step3") echo "CHECKED"; ?>/> Disable
             </label>
         </div>
         <span id="helpBlock" class="help-block">
@@ -869,13 +973,13 @@ $(document).ready(function(){
         <div class="input-group">
             <!-- Input Here -->
             <label class="radio-inline">
-                <input type="radio" name="prefsDateFormat" value="1" id="prefsDateFormat_0"  <?php if ($_SESSION['prefsDateFormat'] == "1") echo "CHECKED"; elseif ($section == "step3") echo "CHECKED"; ?> /> MM/DD/YYYY
+                <input type="radio" name="prefsDateFormat" value="1" id="prefsDateFormat_0"  <?php if ($row_prefs['prefsDateFormat'] == "1") echo "CHECKED"; elseif ($section == "step3") echo "CHECKED"; ?> /> MM/DD/YYYY
             </label>
             <label class="radio-inline">
-                <input type="radio" name="prefsDateFormat" value="2" id="prefsDateFormat_1" <?php if ($_SESSION['prefsDateFormat'] == "2") echo "CHECKED"; ?> /> DD/MM/YYYY
+                <input type="radio" name="prefsDateFormat" value="2" id="prefsDateFormat_1" <?php if ($row_prefs['prefsDateFormat'] == "2") echo "CHECKED"; ?> /> DD/MM/YYYY
             </label>
 			<label class="radio-inline">
-                <input type="radio" name="prefsDateFormat" value="3" id="prefsDateFormat_2" <?php if ($_SESSION['prefsDateFormat'] == "3") echo "CHECKED"; ?> /> YYYY/MM/DD
+                <input type="radio" name="prefsDateFormat" value="3" id="prefsDateFormat_2" <?php if ($row_prefs['prefsDateFormat'] == "3") echo "CHECKED"; ?> /> YYYY/MM/DD
             </label>
         </div>
     </div>
@@ -887,10 +991,10 @@ $(document).ready(function(){
         <div class="input-group">
             <!-- Input Here -->
             <label class="radio-inline">
-                <input type="radio" name="prefsTimeFormat" value="0" id="prefsTimeFormat_0"  <?php if ($_SESSION['prefsTimeFormat'] == "0") echo "CHECKED"; elseif ($section == "step3") echo "CHECKED"; ?> /> 12 Hour
+                <input type="radio" name="prefsTimeFormat" value="0" id="prefsTimeFormat_0"  <?php if ($row_prefs['prefsTimeFormat'] == "0") echo "CHECKED"; elseif ($section == "step3") echo "CHECKED"; ?> /> 12 Hour
             </label>
             <label class="radio-inline">
-                <input type="radio" name="prefsTimeFormat" value="1" id="prefsTimeFormat_1" <?php if ($_SESSION['prefsTimeFormat'] == "1") echo "CHECKED"; ?> /> 24 Hour
+                <input type="radio" name="prefsTimeFormat" value="1" id="prefsTimeFormat_1" <?php if ($row_prefs['prefsTimeFormat'] == "1") echo "CHECKED"; ?> /> 24 Hour
             </label>
         </div>
     </div>
@@ -901,44 +1005,44 @@ $(document).ready(function(){
 	<div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
 		<!-- Input Here -->
 		<select class="selectpicker" name="prefsTimeZone" id="prefsTimeZone" data-live-search="true" data-size="10" data-width="auto">
-			<option value="-12.000" <?php if ($_SESSION['prefsTimeZone'] == "-12.000") echo "SELECTED"; ?>>(GMT -12:00) International Date Line West, Eniwetok, Kwajalein</option>
-			<option value="-11.000" <?php if ($_SESSION['prefsTimeZone'] == "-11.000") echo "SELECTED"; ?>>(GMT -11:00) Midway Island, Samoa</option>
-			<option value="-10.000" <?php if ($_SESSION['prefsTimeZone'] == "-10.000") echo "SELECTED"; ?>>(GMT -10:00) Hawaii</option>
-			<option value="-9.000" <?php if ($_SESSION['prefsTimeZone'] == "-9.000") echo "SELECTED"; ?>>(GMT -9:00) Alaska</option>
-			<option value="-8.000" <?php if ($_SESSION['prefsTimeZone'] == "-8.000") echo "SELECTED"; ?>>(GMT -8:00) Pacific Time (US &amp; Canada), Tiajuana</option>
-			<option value="-7.000" <?php if ($_SESSION['prefsTimeZone'] == "-7.000") echo "SELECTED"; ?>>(GMT -7:00) Mountain Time (US &amp; Canada)</option>
-			<option value="-7.001" <?php if ($_SESSION['prefsTimeZone'] == "-7.001") echo "SELECTED"; ?>>(GMT -7:00) Arizona (No Daylight Savings)</option>
-			<option value="-6.000" <?php if ($_SESSION['prefsTimeZone'] == "-6.000") echo "SELECTED"; ?>>(GMT -6:00) Central Time (US &amp; Canada), Central America, Mexico City</option>
-			<option value="-6.001" <?php if ($_SESSION['prefsTimeZone'] == "-6.001") echo "SELECTED"; ?>>(GMT -6:00) Sonora, Mexico (No Daylight Savings)</option>
-			<option value="-6.002" <?php if ($_SESSION['prefsTimeZone'] == "-6.002") echo "SELECTED"; ?>>(GMT -6:00) Canada Central Time (No Daylight Savings)</option>
-			<option value="-5.000" <?php if ($_SESSION['prefsTimeZone'] == "-5.000") echo "SELECTED"; ?>>(GMT -5:00) Eastern Time (US &amp; Canada), Bogota, Lima</option>
-			<option value="-4.000" <?php if ($_SESSION['prefsTimeZone'] == "-4.000") echo "SELECTED"; ?>>(GMT -4:00) Atlantic Time (Canada), Caracas, La Paz</option>
-			<option value="-4.001" <?php if ($_SESSION['prefsTimeZone'] == "-4.001") echo "SELECTED"; ?>>(GMT -4:00) Paraguay</option>
-			<option value="-3.500" <?php if ($_SESSION['prefsTimeZone'] == "-3.500") echo "SELECTED"; ?>>(GMT -3:30) Newfoundland</option>
-			<option value="-3.000" <?php if ($_SESSION['prefsTimeZone'] == "-3.000") echo "SELECTED"; ?>>(GMT -3:00) Buenos Aires, Georgetown, Greenland</option>
-			<option value="-3.001" <?php if ($_SESSION['prefsTimeZone'] == "-3.001") echo "SELECTED"; ?>>(GMT -3:00) Brazil (Brasilia)</option>
-			<option value="-2.000" <?php if ($_SESSION['prefsTimeZone'] == "-2.000") echo "SELECTED"; ?>>(GMT -2:00) Mid-Atlantic</option>
-			<option value="-1.000" <?php if ($_SESSION['prefsTimeZone'] == "-1.000") echo "SELECTED"; ?>>(GMT -1:00 hour) Azores, Cape Verde Islands</option>
-			<option value="0.000" <?php if ($_SESSION['prefsTimeZone'] == "0.000") echo "SELECTED"; ?>>(GMT) Western Europe Time, London, Lisbon, Casablanca, Monrovia</option>
-			<option value="1.000" <?php if ($_SESSION['prefsTimeZone'] == "1.000") echo "SELECTED"; ?>>(GMT +1:00 hour) Brussels, Copenhagen, Madrid, Paris</option>
-			<option value="2.000" <?php if ($_SESSION['prefsTimeZone'] == "2.000") echo "SELECTED"; ?>>(GMT +2:00) Kaliningrad, South Africa</option>
-			<option value="3.000" <?php if ($_SESSION['prefsTimeZone'] == "3.000") echo "SELECTED"; ?>>(GMT +3:00) Baghdad, Riyadh, Moscow, St. Petersburg, Nairobi</option>
-			<option value="3.500" <?php if ($_SESSION['prefsTimeZone'] == "3.500") echo "SELECTED"; ?>>(GMT +3:30) Tehran</option>
-			<option value="4.000" <?php if ($_SESSION['prefsTimeZone'] == "4.000") echo "SELECTED"; ?>>(GMT +4:00) Abu Dhabi, Muscat, Baku, Tbilisi</option>
-			<option value="4.500" <?php if ($_SESSION['prefsTimeZone'] == "4.500") echo "SELECTED"; ?>>(GMT +4:30) Kabul</option>
-			<option value="5.000" <?php if ($_SESSION['prefsTimeZone'] == "5.000") echo "SELECTED"; ?>>(GMT +5:00) Ekaterinburg, Islamabad, Karachi, Tashkent</option>
-			<option value="5.000" <?php if ($_SESSION['prefsTimeZone'] == "5.500") echo "SELECTED"; ?>>(GMT +5:30) Bombay, Calcutta, Madras, New Delhi</option>
-			<option value="5.750" <?php if ($_SESSION['prefsTimeZone'] == "5.750") echo "SELECTED"; ?>>(GMT +5:45) Kathmandu</option>
-			<option value="6.000" <?php if ($_SESSION['prefsTimeZone'] == "6.000") echo "SELECTED"; ?>>(GMT +6:00) Almaty, Dhaka, Colombo, Krasnoyarsk</option>
-			<option value="7.000" <?php if ($_SESSION['prefsTimeZone'] == "7.000") echo "SELECTED"; ?>>(GMT +7:00) Bangkok, Hanoi, Jakarta</option>
-			<option value="8.000" <?php if ($_SESSION['prefsTimeZone'] == "8.000") echo "SELECTED"; ?>>(GMT +8:00) Beijing, Singapore, Hong Kong</option>
-			<option value="8.001" <?php if ($_SESSION['prefsTimeZone'] == "8.001") echo "SELECTED"; ?>>(GMT +8:00) Queensland, Perth, the Northern Territory, Western Australia</option>
-			<option value="9.000" <?php if ($_SESSION['prefsTimeZone'] == "9.000") echo "SELECTED"; ?>>(GMT +9:00) Tokyo, Seoul, Osaka, Sapporo, Yakutsk</option>
-			<option value="9.500" <?php if ($_SESSION['prefsTimeZone'] == "9.500") echo "SELECTED"; ?>>(GMT +9:30) Adelaide, Darwin</option>
-			<option value="10.000" <?php if ($_SESSION['prefsTimeZone'] == "10.000") echo "SELECTED"; ?>>(GMT +10:00) Eastern Australia, Guam, Vladivostok</option>
-			<option value="10.001" <?php if ($_SESSION['prefsTimeZone'] == "10.001") echo "SELECTED"; ?>>(GMT +10:00) Brisbane</option>
-			<option value="11.000" <?php if ($_SESSION['prefsTimeZone'] == "11.000") echo "SELECTED"; ?>>(GMT +11:00) Magadan, Solomon Islands, New Caledonia</option>
-			<option value="12.000" <?php if ($_SESSION['prefsTimeZone'] == "12.000") echo "SELECTED"; ?>>(GMT +12:00) Auckland, Wellington, Fiji, Kamchatka</option>
+			<option value="-12.000" <?php if ($row_prefs['prefsTimeZone'] == "-12.000") echo "SELECTED"; ?>>(GMT -12:00) International Date Line West, Eniwetok, Kwajalein</option>
+			<option value="-11.000" <?php if ($row_prefs['prefsTimeZone'] == "-11.000") echo "SELECTED"; ?>>(GMT -11:00) Midway Island, Samoa</option>
+			<option value="-10.000" <?php if ($row_prefs['prefsTimeZone'] == "-10.000") echo "SELECTED"; ?>>(GMT -10:00) Hawaii</option>
+			<option value="-9.000" <?php if ($row_prefs['prefsTimeZone'] == "-9.000") echo "SELECTED"; ?>>(GMT -9:00) Alaska</option>
+			<option value="-8.000" <?php if ($row_prefs['prefsTimeZone'] == "-8.000") echo "SELECTED"; ?>>(GMT -8:00) Pacific Time (US &amp; Canada), Tiajuana</option>
+			<option value="-7.000" <?php if ($row_prefs['prefsTimeZone'] == "-7.000") echo "SELECTED"; ?>>(GMT -7:00) Mountain Time (US &amp; Canada)</option>
+			<option value="-7.001" <?php if ($row_prefs['prefsTimeZone'] == "-7.001") echo "SELECTED"; ?>>(GMT -7:00) Arizona (No Daylight Savings)</option>
+			<option value="-6.000" <?php if ($row_prefs['prefsTimeZone'] == "-6.000") echo "SELECTED"; ?>>(GMT -6:00) Central Time (US &amp; Canada), Central America, Mexico City</option>
+			<option value="-6.001" <?php if ($row_prefs['prefsTimeZone'] == "-6.001") echo "SELECTED"; ?>>(GMT -6:00) Sonora, Mexico (No Daylight Savings)</option>
+			<option value="-6.002" <?php if ($row_prefs['prefsTimeZone'] == "-6.002") echo "SELECTED"; ?>>(GMT -6:00) Canada Central Time (No Daylight Savings)</option>
+			<option value="-5.000" <?php if ($row_prefs['prefsTimeZone'] == "-5.000") echo "SELECTED"; ?>>(GMT -5:00) Eastern Time (US &amp; Canada), Bogota, Lima</option>
+			<option value="-4.000" <?php if ($row_prefs['prefsTimeZone'] == "-4.000") echo "SELECTED"; ?>>(GMT -4:00) Atlantic Time (Canada), Caracas, La Paz</option>
+			<option value="-4.001" <?php if ($row_prefs['prefsTimeZone'] == "-4.001") echo "SELECTED"; ?>>(GMT -4:00) Paraguay</option>
+			<option value="-3.500" <?php if ($row_prefs['prefsTimeZone'] == "-3.500") echo "SELECTED"; ?>>(GMT -3:30) Newfoundland</option>
+			<option value="-3.000" <?php if ($row_prefs['prefsTimeZone'] == "-3.000") echo "SELECTED"; ?>>(GMT -3:00) Buenos Aires, Georgetown, Greenland</option>
+			<option value="-3.001" <?php if ($row_prefs['prefsTimeZone'] == "-3.001") echo "SELECTED"; ?>>(GMT -3:00) Brazil (Brasilia)</option>
+			<option value="-2.000" <?php if ($row_prefs['prefsTimeZone'] == "-2.000") echo "SELECTED"; ?>>(GMT -2:00) Mid-Atlantic</option>
+			<option value="-1.000" <?php if ($row_prefs['prefsTimeZone'] == "-1.000") echo "SELECTED"; ?>>(GMT -1:00 hour) Azores, Cape Verde Islands</option>
+			<option value="0.000" <?php if ($row_prefs['prefsTimeZone'] == "0.000") echo "SELECTED"; ?>>(GMT) Western Europe Time, London, Lisbon, Casablanca, Monrovia</option>
+			<option value="1.000" <?php if ($row_prefs['prefsTimeZone'] == "1.000") echo "SELECTED"; ?>>(GMT +1:00 hour) Brussels, Copenhagen, Madrid, Paris</option>
+			<option value="2.000" <?php if ($row_prefs['prefsTimeZone'] == "2.000") echo "SELECTED"; ?>>(GMT +2:00) Kaliningrad, South Africa</option>
+			<option value="3.000" <?php if ($row_prefs['prefsTimeZone'] == "3.000") echo "SELECTED"; ?>>(GMT +3:00) Baghdad, Riyadh, Moscow, St. Petersburg, Nairobi</option>
+			<option value="3.500" <?php if ($row_prefs['prefsTimeZone'] == "3.500") echo "SELECTED"; ?>>(GMT +3:30) Tehran</option>
+			<option value="4.000" <?php if ($row_prefs['prefsTimeZone'] == "4.000") echo "SELECTED"; ?>>(GMT +4:00) Abu Dhabi, Muscat, Baku, Tbilisi</option>
+			<option value="4.500" <?php if ($row_prefs['prefsTimeZone'] == "4.500") echo "SELECTED"; ?>>(GMT +4:30) Kabul</option>
+			<option value="5.000" <?php if ($row_prefs['prefsTimeZone'] == "5.000") echo "SELECTED"; ?>>(GMT +5:00) Ekaterinburg, Islamabad, Karachi, Tashkent</option>
+			<option value="5.000" <?php if ($row_prefs['prefsTimeZone'] == "5.500") echo "SELECTED"; ?>>(GMT +5:30) Bombay, Calcutta, Madras, New Delhi</option>
+			<option value="5.750" <?php if ($row_prefs['prefsTimeZone'] == "5.750") echo "SELECTED"; ?>>(GMT +5:45) Kathmandu</option>
+			<option value="6.000" <?php if ($row_prefs['prefsTimeZone'] == "6.000") echo "SELECTED"; ?>>(GMT +6:00) Almaty, Dhaka, Colombo, Krasnoyarsk</option>
+			<option value="7.000" <?php if ($row_prefs['prefsTimeZone'] == "7.000") echo "SELECTED"; ?>>(GMT +7:00) Bangkok, Hanoi, Jakarta</option>
+			<option value="8.000" <?php if ($row_prefs['prefsTimeZone'] == "8.000") echo "SELECTED"; ?>>(GMT +8:00) Beijing, Singapore, Hong Kong</option>
+			<option value="8.001" <?php if ($row_prefs['prefsTimeZone'] == "8.001") echo "SELECTED"; ?>>(GMT +8:00) Queensland, Perth, the Northern Territory, Western Australia</option>
+			<option value="9.000" <?php if ($row_prefs['prefsTimeZone'] == "9.000") echo "SELECTED"; ?>>(GMT +9:00) Tokyo, Seoul, Osaka, Sapporo, Yakutsk</option>
+			<option value="9.500" <?php if ($row_prefs['prefsTimeZone'] == "9.500") echo "SELECTED"; ?>>(GMT +9:30) Adelaide, Darwin</option>
+			<option value="10.000" <?php if ($row_prefs['prefsTimeZone'] == "10.000") echo "SELECTED"; ?>>(GMT +10:00) Eastern Australia, Guam, Vladivostok</option>
+			<option value="10.001" <?php if ($row_prefs['prefsTimeZone'] == "10.001") echo "SELECTED"; ?>>(GMT +10:00) Brisbane</option>
+			<option value="11.000" <?php if ($row_prefs['prefsTimeZone'] == "11.000") echo "SELECTED"; ?>>(GMT +11:00) Magadan, Solomon Islands, New Caledonia</option>
+			<option value="12.000" <?php if ($row_prefs['prefsTimeZone'] == "12.000") echo "SELECTED"; ?>>(GMT +12:00) Auckland, Wellington, Fiji, Kamchatka</option>
 		</select>
 	</div>
 </div><!-- ./Form Group -->
@@ -950,10 +1054,10 @@ $(document).ready(function(){
         <div class="input-group">
             <!-- Input Here -->
             <label class="radio-inline">
-                <input type="radio" name="prefsTemp" value="Fahrenheit" id="prefsTemp_0"  <?php if ($_SESSION['prefsTemp'] == "Fahrenheit") echo "CHECKED"; elseif ($section == "step3") echo "CHECKED"; ?> /> Fahrenheit
+                <input type="radio" name="prefsTemp" value="Fahrenheit" id="prefsTemp_0"  <?php if ($row_prefs['prefsTemp'] == "Fahrenheit") echo "CHECKED"; elseif ($section == "step3") echo "CHECKED"; ?> /> Fahrenheit
             </label>
             <label class="radio-inline">
-                <input type="radio" name="prefsTemp" value="Celsius" id="prefsTemp_1" <?php if ($_SESSION['prefsTemp'] == "Celsius") echo "CHECKED"; ?> /> Celsius
+                <input type="radio" name="prefsTemp" value="Celsius" id="prefsTemp_1" <?php if ($row_prefs['prefsTemp'] == "Celsius") echo "CHECKED"; ?> /> Celsius
             </label>
         </div>
     </div>
@@ -965,10 +1069,10 @@ $(document).ready(function(){
         <div class="input-group">
             <!-- Input Here -->
             <label class="radio-inline">
-                <input type="radio" name="prefsWeight1" value="ounces" id="prefsWeight1_0"  <?php if ($_SESSION['prefsWeight1'] == "ounces") echo "CHECKED"; elseif ($section == "step3") echo "CHECKED"; ?> /> Ounces (oz)
+                <input type="radio" name="prefsWeight1" value="ounces" id="prefsWeight1_0"  <?php if ($row_prefs['prefsWeight1'] == "ounces") echo "CHECKED"; elseif ($section == "step3") echo "CHECKED"; ?> /> Ounces (oz)
             </label>
             <label class="radio-inline">
-                <input type="radio" name="prefsWeight1" value="grams" id="prefsWeight1_1" <?php if ($_SESSION['prefsWeight1'] == "grams") echo "CHECKED"; ?> /> Grams (gr)
+                <input type="radio" name="prefsWeight1" value="grams" id="prefsWeight1_1" <?php if ($row_prefs['prefsWeight1'] == "grams") echo "CHECKED"; ?> /> Grams (gr)
             </label>
         </div>
     </div>
@@ -980,10 +1084,10 @@ $(document).ready(function(){
         <div class="input-group">
             <!-- Input Here -->
             <label class="radio-inline">
-                <input type="radio" name="prefsWeight2" value="pounds" id="prefsWeight2_0"  <?php if ($_SESSION['prefsWeight2'] == "pounds") echo "CHECKED"; elseif ($section == "step3") echo "CHECKED"; ?> /> Pounds (lb)
+                <input type="radio" name="prefsWeight2" value="pounds" id="prefsWeight2_0"  <?php if ($row_prefs['prefsWeight2'] == "pounds") echo "CHECKED"; elseif ($section == "step3") echo "CHECKED"; ?> /> Pounds (lb)
             </label>
             <label class="radio-inline">
-                <input type="radio" name="prefsWeight2" value="kilograms" id="prefsWeight2_1" <?php if ($_SESSION['prefsWeight2'] == "kilograms") echo "CHECKED";  ?> /> Kilograms (kg)
+                <input type="radio" name="prefsWeight2" value="kilograms" id="prefsWeight2_1" <?php if ($row_prefs['prefsWeight2'] == "kilograms") echo "CHECKED";  ?> /> Kilograms (kg)
             </label>
         </div>
     </div>
@@ -995,10 +1099,10 @@ $(document).ready(function(){
         <div class="input-group">
             <!-- Input Here -->
             <label class="radio-inline">
-                <input type="radio" name="prefsLiquid1" value="ounces" id="prefsLiquid1_0"  <?php if ($_SESSION['prefsLiquid1'] == "ounces") echo "CHECKED"; elseif ($section == "step3") echo "CHECKED"; ?> /> Ounces (oz)
+                <input type="radio" name="prefsLiquid1" value="ounces" id="prefsLiquid1_0"  <?php if ($row_prefs['prefsLiquid1'] == "ounces") echo "CHECKED"; elseif ($section == "step3") echo "CHECKED"; ?> /> Ounces (oz)
             </label>
             <label class="radio-inline">
-                <input type="radio" name="prefsLiquid1" value="millilitres" id="prefsLiquid1_1" <?php if ($_SESSION['prefsLiquid1'] == "millilitres") echo "CHECKED";  ?> />
+                <input type="radio" name="prefsLiquid1" value="millilitres" id="prefsLiquid1_1" <?php if ($row_prefs['prefsLiquid1'] == "millilitres") echo "CHECKED";  ?> />
                 Milliliters (ml)
             </label>
         </div>
@@ -1011,10 +1115,10 @@ $(document).ready(function(){
         <div class="input-group">
             <!-- Input Here -->
             <label class="radio-inline">
-                <input type="radio" name="prefsLiquid2" value="gallons" id="prefsLiquid2_0"  <?php if ($_SESSION['prefsLiquid2'] == "gallons") echo "CHECKED"; elseif ($section == "step3") echo "CHECKED"; ?> /> Gallons (gal)
+                <input type="radio" name="prefsLiquid2" value="gallons" id="prefsLiquid2_0"  <?php if ($row_prefs['prefsLiquid2'] == "gallons") echo "CHECKED"; elseif ($section == "step3") echo "CHECKED"; ?> /> Gallons (gal)
             </label>
             <label class="radio-inline">
-                <input type="radio" name="prefsLiquid2" value="litres" id="prefsLiquid2_1" <?php if ($_SESSION['prefsLiquid2'] == "litres") echo "CHECKED"; ?> />
+                <input type="radio" name="prefsLiquid2" value="litres" id="prefsLiquid2_1" <?php if ($row_prefs['prefsLiquid2'] == "litres") echo "CHECKED"; ?> />
                 Liters (lt)
             </label>
         </div>
@@ -1028,13 +1132,13 @@ $(document).ready(function(){
 		<!-- Input Here -->
 		<select class="selectpicker" name="prefsCurrency" id="prefsCurrency" data-live-search="true" data-size="10" data-width="auto">
 			<?php
-				$currency = currency_info($_SESSION['prefsCurrency'],2);
+				$currency = currency_info($row_prefs['prefsCurrency'],2);
 				$currency_dropdown = "";
 
 				foreach($currency as $curr) {
 					$curr = explode("^",$curr);
 					$currency_dropdown .= '<option value="'.$curr[0].'"';
-					if ($_SESSION['prefsCurrency'] == $curr[0]) $currency_dropdown .= ' SELECTED';
+					if ($row_prefs['prefsCurrency'] == $curr[0]) $currency_dropdown .= ' SELECTED';
 					$currency_dropdown .= '>';
 					$currency_dropdown .= $curr[1]."</option>";
 				}
@@ -1077,10 +1181,10 @@ $(document).ready(function(){
         <div class="input-group">
             <!-- Input Here -->
             <label class="radio-inline">
-                <input type="radio" name="prefsPayToPrint" value="Y" id="prefsPayToPrint_0"  <?php if ($_SESSION['prefsPayToPrint'] == "Y") echo "CHECKED"; ?> />Enable
+                <input type="radio" name="prefsPayToPrint" value="Y" id="prefsPayToPrint_0"  <?php if ($row_prefs['prefsPayToPrint'] == "Y") echo "CHECKED"; ?> />Enable
             </label>
             <label class="radio-inline">
-                <input type="radio" name="prefsPayToPrint" value="N" id="prefsPayToPrint_1" <?php if ($_SESSION['prefsPayToPrint'] == "N") echo "CHECKED"; elseif ($section == "step3") echo "CHECKED"; ?>/>
+                <input type="radio" name="prefsPayToPrint" value="N" id="prefsPayToPrint_1" <?php if ($row_prefs['prefsPayToPrint'] == "N") echo "CHECKED"; elseif ($section == "step3") echo "CHECKED"; ?>/>
                 Disable
             </label>
         </div>
@@ -1120,10 +1224,10 @@ $(document).ready(function(){
         <div class="input-group">
             <!-- Input Here -->
             <label class="radio-inline">
-                <input type="radio" name="prefsCash" value="Y" id="prefsCash_0"  <?php if ($_SESSION['prefsCash'] == "Y") echo "CHECKED"; ?> />Enable
+                <input type="radio" name="prefsCash" value="Y" id="prefsCash_0"  <?php if ($row_prefs['prefsCash'] == "Y") echo "CHECKED"; ?> />Enable
             </label>
           <label class="radio-inline">
-                <input type="radio" name="prefsCash" value="N" id="prefsCash_1" <?php if ($_SESSION['prefsCash'] == "N") echo "CHECKED"; elseif ($section == "step3") echo "CHECKED"; ?>/>
+                <input type="radio" name="prefsCash" value="N" id="prefsCash_1" <?php if ($row_prefs['prefsCash'] == "N") echo "CHECKED"; elseif ($section == "step3") echo "CHECKED"; ?>/>
               Disable
           </label>
         </div>
@@ -1136,10 +1240,10 @@ $(document).ready(function(){
         <div class="input-group">
             <!-- Input Here -->
             <label class="radio-inline">
-                <input type="radio" name="prefsCheck" value="Y" id="prefsCheck_0"  <?php if ($_SESSION['prefsCheck'] == "Y") echo "CHECKED"; ?> />Enable
+                <input type="radio" name="prefsCheck" value="Y" id="prefsCheck_0"  <?php if ($row_prefs['prefsCheck'] == "Y") echo "CHECKED"; ?> />Enable
             </label>
             <label class="radio-inline">
-                <input type="radio" name="prefsCheck" value="N" id="prefsCheck_1" <?php if ($_SESSION['prefsCheck'] == "N") echo "CHECKED"; elseif ($section == "step3") echo "CHECKED"; ?>/>
+                <input type="radio" name="prefsCheck" value="N" id="prefsCheck_1" <?php if ($row_prefs['prefsCheck'] == "N") echo "CHECKED"; elseif ($section == "step3") echo "CHECKED"; ?>/>
                 Disable</label>
         </div>
     </div>
@@ -1150,7 +1254,7 @@ $(document).ready(function(){
     <label for="prefsCheckPayee" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Checks Payee</label>
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
     	<!-- Input Here -->
-        <input class="form-control" id="prefsCheckPayee" name="prefsCheckPayee" type="text" value="<?php echo $_SESSION['prefsCheckPayee']; ?>" placeholder="">
+        <input class="form-control" id="prefsCheckPayee" name="prefsCheckPayee" type="text" value="<?php echo $row_prefs['prefsCheckPayee']; ?>" placeholder="">
     </div>
 </div><!-- ./Form Group -->
 
@@ -1160,10 +1264,10 @@ $(document).ready(function(){
         <div class="input-group">
             <!-- Input Here -->
             <label class="radio-inline">
-                <input type="radio" name="prefsPaypal" value="Y" id="prefsPaypal_0"  <?php if ($_SESSION['prefsPaypal'] == "Y") echo "CHECKED"; ?> />Enable
+                <input type="radio" name="prefsPaypal" value="Y" id="prefsPaypal_0"  <?php if ($row_prefs['prefsPaypal'] == "Y") echo "CHECKED"; ?> />Enable
             </label>
             <label class="radio-inline">
-                <input type="radio" name="prefsPaypal" value="N" id="prefsPaypal_1" <?php if ($_SESSION['prefsPaypal'] == "N") echo "CHECKED"; elseif ($section == "step3") echo "CHECKED"; ?>/>
+                <input type="radio" name="prefsPaypal" value="N" id="prefsPaypal_1" <?php if ($row_prefs['prefsPaypal'] == "N") echo "CHECKED"; elseif ($section == "step3") echo "CHECKED"; ?>/>
                 Disable</label>
         </div>
     </div>
@@ -1173,7 +1277,7 @@ $(document).ready(function(){
     <label for="prefsPaypalAccount" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">PayPal Account Email</label>
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
     	<!-- Input Here -->
-        <input class="form-control" id="prefsPaypalAccount" name="prefsPaypalAccount" type="text" value="<?php echo $_SESSION['prefsPaypalAccount']; ?>" placeholder="">
+        <input class="form-control" id="prefsPaypalAccount" name="prefsPaypalAccount" type="text" value="<?php echo $row_prefs['prefsPaypalAccount']; ?>" placeholder="">
 		<span id="helpBlock" class="help-block">
 		<div class="btn-group" role="group" aria-label="payPalPrintModal">
             <button type="button" class="btn btn-xs btn-info" data-toggle="modal" data-target="#payPalPrintModal">
@@ -1209,10 +1313,10 @@ $(document).ready(function(){
         <div class="input-group">
             <!-- Input Here -->
             <label class="radio-inline">
-                <input type="radio" name="prefsPaypalIPN" value="1" id="prefsPaypalIPN_0"  <?php if ($_SESSION['prefsPaypalIPN'] == 1) echo "CHECKED"; ?> />Enable
+                <input type="radio" name="prefsPaypalIPN" value="1" id="prefsPaypalIPN_0"  <?php if ($row_prefs['prefsPaypalIPN'] == 1) echo "CHECKED"; ?> />Enable
             </label>
             <label class="radio-inline">
-                <input type="radio" name="prefsPaypalIPN" value="0" id="prefsPaypalIPN_1" <?php if ($_SESSION['prefsPaypalIPN'] == 0) echo "CHECKED"; elseif ($section == "step3") echo "CHECKED"; ?>/>
+                <input type="radio" name="prefsPaypalIPN" value="0" id="prefsPaypalIPN_1" <?php if ($row_prefs['prefsPaypalIPN'] == 0) echo "CHECKED"; elseif ($section == "step3") echo "CHECKED"; ?>/>
                 Disable</label>
         </div>
         <span id="helpBlock" class="help-block">
@@ -1234,7 +1338,7 @@ $(document).ready(function(){
                 <h4 class="modal-title" id="payPalIPNModalLabel">PayPal IPN Info and Setup</h4>
             </div>
             <div class="modal-body">
-            
+
             	<p>PayPal&rsquo;s Instant Payment Notification (IPN) service is a way for your BCOE&amp;M installation to update entry status to &quot;paid&quot; <strong>instantly</strong> after a user successfully completes their payment on PayPal.</p>
 				<p>No more fielding questions from entrants about whether their entries have been marked as paid, or why their entries haven't been.</p>
 				<p>Transaction details will be saved to your BCOE&amp;M database and will be available via your PayPal dashboard as well.</p>
@@ -1257,10 +1361,10 @@ $(document).ready(function(){
         <div class="input-group">
             <!-- Input Here -->
             <label class="radio-inline">
-                <input type="radio" name="prefsTransFee" value="Y" id="prefsTransFee_0"  <?php if ($_SESSION['prefsTransFee'] == "Y") echo "CHECKED"; ?> />Enable
+                <input type="radio" name="prefsTransFee" value="Y" id="prefsTransFee_0"  <?php if ($row_prefs['prefsTransFee'] == "Y") echo "CHECKED"; ?> />Enable
             </label>
             <label class="radio-inline">
-                <input type="radio" name="prefsTransFee" value="N" id="prefsTransFee_1" <?php if ($_SESSION['prefsTransFee'] == "N") echo "CHECKED"; elseif ($section == "step3") echo "CHECKED"; ?>/>
+                <input type="radio" name="prefsTransFee" value="N" id="prefsTransFee_1" <?php if ($row_prefs['prefsTransFee'] == "N") echo "CHECKED"; elseif ($section == "step3") echo "CHECKED"; ?>/>
                 Disable</label>
         </div>
 		<span id="helpBlock" class="help-block">
@@ -1298,10 +1402,10 @@ $(document).ready(function(){
         <div class="input-group">
             <!-- Input Here -->
             <label class="radio-inline">
-                <input type="radio" name="prefsSponsors" value="Y" id="prefs0" <?php if (($section != "step3") && ($_SESSION['prefsSponsors'] == "Y")) echo "CHECKED"; if ($section == "step3") echo "CHECKED"; ?> /> Enable
+                <input type="radio" name="prefsSponsors" value="Y" id="prefs0" <?php if (($section != "step3") && ($row_prefs['prefsSponsors'] == "Y")) echo "CHECKED"; if ($section == "step3") echo "CHECKED"; ?> /> Enable
             </label>
             <label class="radio-inline">
-                <input type="radio" name="prefsSponsors" value="N" id="prefs1" <?php if (($section != "step3") && ($_SESSION['prefsSponsors'] == "N")) echo "CHECKED"; ?> /> Disable
+                <input type="radio" name="prefsSponsors" value="N" id="prefs1" <?php if (($section != "step3") && ($row_prefs['prefsSponsors'] == "N")) echo "CHECKED"; ?> /> Disable
             </label>
         </div>
     </div>
@@ -1313,10 +1417,10 @@ $(document).ready(function(){
         <div class="input-group">
             <!-- Input Here -->
             <label class="radio-inline">
-                <input type="radio" name="prefsSponsorLogos" value="Y" id="prefsSponsorLogos_0"  <?php if (($section != "step3") && ($_SESSION['prefsSponsorLogos'] == "Y")) echo "CHECKED"; if ($section == "step3") echo "CHECKED"; ?> /> Enable
+                <input type="radio" name="prefsSponsorLogos" value="Y" id="prefsSponsorLogos_0"  <?php if (($section != "step3") && ($row_prefs['prefsSponsorLogos'] == "Y")) echo "CHECKED"; if ($section == "step3") echo "CHECKED"; ?> /> Enable
             </label>
             <label class="radio-inline">
-                <input type="radio" name="prefsSponsorLogos" value="N" id="prefsSponsorLogos_1" <?php if (($section != "step3") && ($_SESSION['prefsSponsorLogos'] == "N")) echo "CHECKED"; ?>/> Disable
+                <input type="radio" name="prefsSponsorLogos" value="N" id="prefsSponsorLogos_1" <?php if (($section != "step3") && ($row_prefs['prefsSponsorLogos'] == "N")) echo "CHECKED"; ?>/> Disable
             </label>
         </div>
     </div>

@@ -43,7 +43,6 @@ Declare all variables empty at the top of the script. Add on later...
 
  * ---------------- END Rebuild Info --------------------- */
 
-
 include (DB.'dropoff.db.php');
 include (DB.'judging_locations.db.php');
 include (DB.'styles.db.php');

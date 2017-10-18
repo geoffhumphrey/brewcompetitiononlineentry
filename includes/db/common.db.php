@@ -134,6 +134,32 @@ if (empty($_SESSION['prefs'.$prefix_session])) {
 	else $_SESSION['prefsWinnerDelay'] = 2145916800;
 	if (isset($row_prefs['prefsWinnerMethod'])) $_SESSION['prefsWinnerMethod'] = $row_prefs['prefsWinnerMethod'];
 	else $_SESSION['prefsWinnerMethod'] = 0;
+	if (isset($_SESSION['prefsShowBestBrewer'])) $_SESSION['prefsShowBestBrewer'] = $row_prefs['prefsShowBestBrewer'];
+	else $_SESSION['prefsShowBestBrewer'] = 0;
+	if (isset($_SESSION['prefsBestBrewerTitle'])) $_SESSION['prefsBestBrewerTitle'] = $row_prefs['prefsBestBrewerTitle'];
+	else $_SESSION['prefsBestBrewerTitle'] = "";
+	if (isset($_SESSION['prefsFirstPlacePts'])) $_SESSION['prefsFirstPlacePts'] = $row_prefs['prefsFirstPlacePts'];
+	else $_SESSION['prefsFirstPlacePts'] = 0;
+	if (isset($_SESSION['prefsSecondPlacePts'])) $_SESSION['prefsSecondPlacePts'] = $row_prefs['prefsSecondPlacePts'];
+	else $_SESSION['prefsSecondPlacePts'] = 0;
+	if (isset($_SESSION['prefsThirdPlacePts'])) $_SESSION['prefsThirdPlacePts'] = $row_prefs['prefsThirdPlacePts'];
+	else $_SESSION['prefsThirdPlacePts'] = 0;
+	if (isset($_SESSION['prefsFourthPlacePts'])) $_SESSION['prefsFourthPlacePts'] = $row_prefs['prefsFourthPlacePts'];
+	else $_SESSION['prefsFourthPlacePts'] = 0;
+	if (isset($_SESSION['prefsHMPts'])) $_SESSION['prefsHMPts'] = $row_prefs['prefsHMPts'];
+	else $_SESSION['prefsHMPts'] = 0;
+	if (isset($_SESSION['prefsTieBreakRule1'])) $_SESSION['prefsTieBreakRule1'] = $row_prefs['prefsTieBreakRule1'];
+	else $_SESSION['prefsTieBreakRule1'] = "";
+	if (isset($_SESSION['prefsTieBreakRule2'])) $_SESSION['prefsTieBreakRule2'] = $row_prefs['prefsTieBreakRule2'];
+	else $_SESSION['prefsTieBreakRule2'] = "";
+	if (isset($_SESSION['prefsTieBreakRule3'])) $_SESSION['prefsTieBreakRule3'] = $row_prefs['prefsTieBreakRule3'];
+	else $_SESSION['prefsTieBreakRule3'] = "";
+	if (isset($_SESSION['prefsTieBreakRule4'])) $_SESSION['prefsTieBreakRule4'] = $row_prefs['prefsTieBreakRule4'];
+	else $_SESSION['prefsTieBreakRule4'] = "";
+	if (isset($_SESSION['prefsTieBreakRule5'])) $_SESSION['prefsTieBreakRule5'] = $row_prefs['prefsTieBreakRule5'];
+	else $_SESSION['prefsTieBreakRule5'] = "";
+	if (isset($_SESSION['prefsTieBreakRule6'])) $_SESSION['prefsTieBreakRule6'] = $row_prefs['prefsTieBreakRule6'];
+	else $_SESSION['prefsTieBreakRule6'] = "";
 	if (isset($row_prefs['prefsEntryForm'])) $_SESSION['prefsEntryForm'] = $row_prefs['prefsEntryForm'];
 	else $_SESSION['prefsEntryForm'] = "C";
 	if (isset($row_prefs['prefsRecordLimit'])) $_SESSION['prefsRecordLimit'] = $row_prefs['prefsRecordLimit'];
@@ -305,7 +331,7 @@ session_write_close();
 
 // Some limits and dates may need to be changed by admin and propagated instantly to all users
 // These will be called on every page load instead of being stored in a session variable
-$query_limits = sprintf("SELECT prefsStyleSet, prefsEntryLimit, prefsUserEntryLimit, prefsSpecialCharLimit, prefsUserSubCatLimit, prefsUSCLEx, prefsUSCLExLimit, prefsEntryLimitPaid FROM %s WHERE id='1'", $prefix."preferences");
+$query_limits = sprintf("SELECT prefsStyleSet, prefsEntryLimit, prefsUserEntryLimit, prefsSpecialCharLimit, prefsUserSubCatLimit, prefsUSCLEx, prefsUSCLExLimit, prefsEntryLimitPaid, prefsShowBestBrewer FROM %s WHERE id='1'", $prefix."preferences");
 $limits = mysqli_query($connection,$query_limits) or die (mysqli_error($connection));
 $row_limits = mysqli_fetch_assoc($limits);
 
@@ -384,6 +410,14 @@ if ($section == "volunteers") {
 	else $query_contest_info .= " WHERE id='1'";
 	$contest_info = mysqli_query($connection,$query_contest_info) or die (mysqli_error($connection));
 	$row_contest_info = mysqli_fetch_assoc($contest_info);
+}
+
+if (($section == "admin") && ($go == "default")) {
+	if (SINGLE) $query_prefs = sprintf("SELECT * FROM %s WHERE comp_id='%s'", $prefix."preferences",$_SESSION['comp_id']);
+	else $query_prefs = sprintf("SELECT * FROM %s WHERE id='1'", $prefix."preferences");
+	$prefs = mysqli_query($connection,$query_prefs) or die (mysqli_error($connection));
+	$row_prefs = mysqli_fetch_assoc($prefs);
+	$totalRows_prefs = mysqli_num_rows($prefs);
 }
 
 // If using BA Styles, use the BreweryDB API to get all styles and store the resulting array as a session variable

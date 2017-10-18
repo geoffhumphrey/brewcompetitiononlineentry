@@ -1410,6 +1410,22 @@ $pwd_email_reset_text_003 = "A request was made to change your password at the";
 $pwd_email_reset_text_004 = "website. If you did not initiate this, don't worry. Your password cannot be reset without the link below.";
 $pwd_email_reset_text_005 = "To reset your password, click the link below or copy/paste it into your browser.";
 
+// -------------------- Best Brewer --------------------
+$best_brewer_text_000 = "brewers";
+$best_brewer_text_001 = "HM";
+$best_brewer_text_002 = "Tie-breakers have been applied in accordance with the <a href=\"#\" data-toggle=\"modal\" data-target=\"#scoreMethod\">scoring methodology</a>.";
+$best_brewer_text_003 = "Scoring Methodology";
+$best_brewer_text_004 = "Each placing entry is given the following points:";
+$best_brewer_text_005 = "The following tie-breakers have been applied, in order of priority:";
+$best_brewer_text_006 = "The highest total number of first, second and third places.";
+$best_brewer_text_007 = "The highest total number of first, second, third, fourth, and honorable mention places.";
+$best_brewer_text_008 = "The highest number of first places.";
+$best_brewer_text_009 = "The lowest number of entries.";
+$best_brewer_text_010 = "The highest minimum score.";
+$best_brewer_text_011 = "The highest maximum score.";
+$best_brewer_text_012 = "The highest average score.";
+$best_brewer_text_013 = "Unused.";
+
 // ----------------------------------------------------------------------------------
 // END Version 2.1.10
 // ----------------------------------------------------------------------------------

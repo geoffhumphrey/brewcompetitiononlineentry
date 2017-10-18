@@ -152,7 +152,9 @@ $security_question = array($label_secret_01, $label_secret_05, $label_secret_06,
 
     <?php if ($_SESSION['prefsUseMods'] == "Y") { ?>
     <!-- MODS TOP -->
+    <div class="<?php echo $container_main; ?> hidden-print">
     <?php include (INCLUDES.'mods_top.inc.php'); ?>
+    </div>
     <!-- ./MODS TOP -->
     <?php } ?>
 
@@ -253,7 +255,9 @@ $security_question = array($label_secret_01, $label_secret_05, $label_secret_06,
 
     <?php if ($_SESSION['prefsUseMods'] == "Y") { ?>
     <!-- Mods Bottom -->
+    <div class="<?php echo $container_main; ?> hidden-print">
     <?php include (INCLUDES.'mods_bottom.inc.php'); ?>
+    </div>
     <!-- ./Mods Bottom -->
     <?php } ?>
 

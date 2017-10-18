@@ -167,6 +167,15 @@ if (((isset($_SERVER['HTTP_REFERER'])) && ($referrer['host'] == $_SERVER['SERVER
 
 	}
 
+	elseif ($action == "clear_session") {
+		unset($_SESSION['session_set_'.$prefix_session]);
+		unset($_SESSION['prefs'.$prefix_session]);
+		unset($_SESSION['user_info'.$prefix_session]);
+		unset($_SESSION['contest_info_general'.$prefix_session]);
+		$updateGoTo = $base_url."index.php?section=admin";
+		header(sprintf("Location: %s", $updateGoTo));
+	}
+
 	elseif (($action == "purge") || ($action == "cleanup")) include(INCLUDES.'data_cleanup.inc.php');
 
 	elseif ($action == "generate_judging_numbers") {

@@ -292,16 +292,41 @@ if (!check_update("assignRoles", $prefix."judging_assignments")) {
 	$result = mysqli_query($connection,$updateSQL);
 }
 
-// ----------------------------------------------- 2.1.10 -----------------------------------------------
+// ----------------------------------------------- 2.1.10 ----------------------------------------------
 // Add db columns to store Pro Edition data such as Brewery Name and TTB Number
 // Add db columns to allow for PayPal IPN use
+// Add db columns for best brewer preferences
 // Alter prefsStyleSet to accommodate BA style data and BreweryDB key
 // Update archive db tables to accommodate Pro Edition and BA Styles
 // -----------------------------------------------------------------------------------------------------
 
 
 if (!check_update("brewerBreweryName", $prefix."brewer")) {
-	$updateSQL = sprintf("ALTER TABLE `%s` ADD `brewerBreweryName` VARCHAR(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL, ADD `brewerBreweryTTB` VARCHAR(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL;", $prefix."brewer");
+	$updateSQL = sprintf("ALTER TABLE `%s`
+		ADD `brewerBreweryName` VARCHAR(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
+		ADD `brewerBreweryTTB` VARCHAR(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL;",
+		$prefix."brewer");
+	mysqli_select_db($connection,$database);
+	mysqli_real_escape_string($connection,$updateSQL);
+	$result = mysqli_query($connection,$updateSQL);
+}
+
+if (!check_update("prefsShowBestBrewer", $prefix."preferences")) {
+	$updateSQL = sprintf("ALTER TABLE `%s`
+		ADD `prefsShowBestBrewer` int(1) DEFAULT NULL,
+		ADD `prefsBestBrewerTitle` varchar(255) DEFAULT NULL,
+		ADD `prefsFirstPlacePts` int(1) DEFAULT 0,
+		ADD `prefsSecondPlacePts` int(1) DEFAULT 0,
+		ADD `prefsThirdPlacePts` int(1) DEFAULT 0,
+		ADD `prefsFourthPlacePts` int(1) DEFAULT 0,
+		ADD `prefsHMPts` int(1) DEFAULT 0,
+		ADD `prefsTieBreakRule1` varchar(255) DEFAULT NULL,
+		ADD `prefsTieBreakRule2` varchar(255) DEFAULT NULL,
+		ADD `prefsTieBreakRule3` varchar(255) DEFAULT NULL,
+		ADD `prefsTieBreakRule4` varchar(255) DEFAULT NULL,
+		ADD `prefsTieBreakRule5` varchar(255) DEFAULT NULL,
+		ADD `prefsTieBreakRule6` varchar(255) DEFAULT NULL;",
+		$prefix."preferences");
 	mysqli_select_db($connection,$database);
 	mysqli_real_escape_string($connection,$updateSQL);
 	$result = mysqli_query($connection,$updateSQL);

@@ -40,6 +40,7 @@ $manage_tables_default_tbody = "";
 $bos_modal_body = "";
 $orphan_modal_body_1 = "";
 $orphan_modal_body_2 = "";
+$style_assigned_this = "";
 
 if (($action == "default") && ($filter == "default")) {
 
@@ -386,8 +387,8 @@ if (($action == "add") || ($action == "edit")) {
 			}
 
 			if ($action == "edit")  $style_assigned_this = get_table_info($row_styles['id'],"styles",$row_tables_edit['id'],$dbTable,"default");
-            if (in_array($row_styles['id'],$all_table_styles_array)) $disabled_styles = "DISABLED";
-            if (in_array($row_styles['id'],$current_table_styles_array)) $disabled_styles = "";
+            if ((is_array($all_table_styles_array)) && (in_array($row_styles['id'],$all_table_styles_array))) $disabled_styles = "DISABLED";
+            if ((is_array($current_table_styles_array)) && (in_array($row_styles['id'],$current_table_styles_array))) $disabled_styles = "";
             if ($style_assigned_this) {
                 $table_row_class = "bg-warning";
                 $selected_styles = "CHECKED";
@@ -441,8 +442,8 @@ if (($action == "add") || ($action == "edit")) {
 				}
 
 				if ($action == "edit")
-                if (in_array($row_styles_custom['id'],$all_table_styles_array)) $disabled_styles = "DISABLED";
-                if (in_array($row_styles_custom['id'],$current_table_styles_array)) $disabled_styles = "";
+                if ((is_array($all_table_styles_array)) && (in_array($row_styles_custom['id'],$all_table_styles_array))) $disabled_styles = "DISABLED";
+                if ((is_array($current_table_styles_array)) && (in_array($row_styles_custom['id'],$current_table_styles_array))) $disabled_styles = "";
                 if ($style_assigned_this) {
                     $table_row_class = "bg-warning";
                     $selected_styles = "CHECKED";
@@ -501,7 +502,7 @@ if (($action == "add") || ($action == "edit")) {
 					}
 
 					if ($action == "edit")  $style_assigned_this = get_table_info($ba_style['id'],"styles",$row_tables_edit['id'],$dbTable,"default");
-                    if (in_array($ba_style['id'],$current_table_styles_array)) $disabled_ba_styles = "";
+                    if ((is_array($current_table_styles_array)) && (in_array($ba_style['id'],$current_table_styles_array))) $disabled_ba_styles = "";
                     if ($style_assigned_this) {
                         $table_row_class = "bg-warning";
                         $selected_ba_styles = "CHECKED";
