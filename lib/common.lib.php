@@ -1590,7 +1590,7 @@ function style_convert($number,$type,$base_url="") {
 							</table>";
 
 
-							$style_convert[] = "<a href=\"#\" data-target=\"#".$ba_style['id']."\" data-toggle=\"modal\" data-tooltip=\"true\" title=\"".$ba_style['name']."\">".$ba_style['id']."</a>";
+							$style_convert_1[] = "<a href=\"#\" data-target=\"#".$ba_style['id']."\" data-toggle=\"modal\" data-tooltip=\"true\" title=\"".$ba_style['name']."\">".$ba_style['id']."</a>";
 
 							$style_modal[] = "
 							<!-- Modal -->
@@ -1619,7 +1619,7 @@ function style_convert($number,$type,$base_url="") {
 
 			} // end foreach ($_SESSION['styles'] as $styles => $stylesData)
 
-			$style_convert = rtrim(implode(", ",$style_convert),", ")."|".implode("^",$style_modal);
+			$style_convert = rtrim(implode(", ",$style_convert_1),", ")."|".implode("^",$style_modal);
 		}
 
 		if (strpos($_SESSION['prefsStyleSet'],"BABDB") === false) {
@@ -1687,7 +1687,7 @@ function style_convert($number,$type,$base_url="") {
 				</tr>
 				</table>";
 
-				$style_convert[] = "<a href=\"#\" data-target=\"#".$trimmed.$row_style['brewStyleNum']."\" data-toggle=\"modal\" data-tooltip=\"true\" title=\"".$row_style['brewStyle']."\">".$trimmed.$row_style['brewStyleNum']."</a>";
+				$style_convert_1[] = "<a href=\"#\" data-target=\"#".$trimmed.$row_style['brewStyleNum']."\" data-toggle=\"modal\" data-tooltip=\"true\" title=\"".$row_style['brewStyle']."\">".$trimmed.$row_style['brewStyleNum']."</a>";
 				$style_modal[] = "
 					<!-- Modal -->
 					<div class=\"modal fade\" id=\"".$trimmed.$row_style['brewStyleNum']."\" tabindex=\"-1\" role=\"dialog\" aria-labelledby=\"".$trimmed.$row_style['brewStyleNum']."Label\">
@@ -1707,7 +1707,7 @@ function style_convert($number,$type,$base_url="") {
 
 			} // end foreach
 
-			$style_convert = rtrim(implode(", ",$style_convert),", ")."|".implode("^",$style_modal);
+			$style_convert = rtrim(implode(", ",$style_convert_1),", ")."|".implode("^",$style_modal);
 
 		} // end
 
@@ -2369,8 +2369,6 @@ function best_brewer_points($bid, $places, $entry_scores, $points_prefs, $tiebre
 
 	$points = $pts_first + $pts_second + $pts_third + $pts_fourth + $pts_hm + $pts_tb_num_places + $pts_tb_first_places + $pts_tb_num_entries + $pts_tb_min_score + $pts_tb_max_score + $pts_tb_avg_score;
 	return $points;
-	break;
-
 }
 
 function bjcp_rank($rank,$method) {
