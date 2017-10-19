@@ -88,6 +88,8 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 
 		prefsShowBestBrewer,
 		prefsBestBrewerTitle,
+		prefsShowBestClub,
+		prefsBestClubTitle,
 		prefsFirstPlacePts,
 		prefsSecondPlacePts,
 		prefsThirdPlacePts,
@@ -115,7 +117,8 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 		%s, %s, %s, %s, %s,
 		%s, %s, %s, %s, %s,
 		%s, %s, %s, %s, %s,
-		%s, %s, %s, %s)",
+		%s, %s, %s, %s, %s,
+		%s)",
 
 			GetSQLValueString(sterilize($_POST['prefsTemp']), "text"),
 			GetSQLValueString(sterilize($_POST['prefsWeight1']), "text"),
@@ -172,6 +175,8 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 
 			GetSQLValueString(sterilize($_POST['prefsShowBestBrewer']), "int"),
 			GetSQLValueString(sterilize($_POST['prefsBestBrewerTitle']), "text"),
+			GetSQLValueString(sterilize($_POST['prefsShowBestClub']), "int"),
+			GetSQLValueString(sterilize($_POST['prefsBestClubTitle']), "text"),
 			GetSQLValueString(sterilize($_POST['prefsFirstPlacePts']), "int"),
 			GetSQLValueString(sterilize($_POST['prefsSecondPlacePts']), "int"),
 			GetSQLValueString(sterilize($_POST['prefsThirdPlacePts']), "int"),
@@ -305,6 +310,8 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 
 		prefsShowBestBrewer=%s,
 		prefsBestBrewerTitle=%s,
+		prefsShowBestClub=%s,
+		prefsBestClubTitle=%s,
 		prefsFirstPlacePts=%s,
 		prefsSecondPlacePts=%s,
 		prefsThirdPlacePts=%s,
@@ -376,6 +383,8 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 
 			GetSQLValueString(sterilize($_POST['prefsShowBestBrewer']), "int"),
 			GetSQLValueString(sterilize($_POST['prefsBestBrewerTitle']), "text"),
+			GetSQLValueString(sterilize($_POST['prefsShowBestClub']), "int"),
+			GetSQLValueString(sterilize($_POST['prefsBestClubTitle']), "text"),
 			GetSQLValueString(sterilize($_POST['prefsFirstPlacePts']), "int"),
 			GetSQLValueString(sterilize($_POST['prefsSecondPlacePts']), "int"),
 			GetSQLValueString(sterilize($_POST['prefsThirdPlacePts']), "int"),

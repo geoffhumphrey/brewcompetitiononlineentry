@@ -838,6 +838,8 @@ if ($setup_free_access == TRUE) {
 			`prefsBOSCider` char(1) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
 			`prefsShowBestBrewer` int(1) DEFAULT NULL,
 			`prefsBestBrewerTitle` varchar(255) DEFAULT NULL,
+			`prefsShowBestClub` int(1) DEFAULT NULL,
+			`prefsBestClubTitle` varchar(255) DEFAULT NULL,
 			`prefsFirstPlacePts` int(1) DEFAULT 0,
 			`prefsSecondPlacePts` int(1) DEFAULT 0,
 			`prefsThirdPlacePts` int(1) DEFAULT 0,

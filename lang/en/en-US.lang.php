@@ -1411,7 +1411,7 @@ $pwd_email_reset_text_004 = "website. If you did not initiate this, don't worry.
 $pwd_email_reset_text_005 = "To reset your password, click the link below or copy/paste it into your browser.";
 
 // -------------------- Best Brewer --------------------
-$best_brewer_text_000 = "brewers";
+$best_brewer_text_000 = "participating brewers";
 $best_brewer_text_001 = "HM";
 $best_brewer_text_002 = "Tie-breakers have been applied in accordance with the <a href=\"#\" data-toggle=\"modal\" data-target=\"#scoreMethod\">scoring methodology</a>.";
 $best_brewer_text_003 = "Scoring Methodology";
@@ -1425,6 +1425,7 @@ $best_brewer_text_010 = "The highest minimum score.";
 $best_brewer_text_011 = "The highest maximum score.";
 $best_brewer_text_012 = "The highest average score.";
 $best_brewer_text_013 = "Unused.";
+$best_brewer_text_014 = "participating clubs";
 
 // ----------------------------------------------------------------------------------
 // END Version 2.1.10

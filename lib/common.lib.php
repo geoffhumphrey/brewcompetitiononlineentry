@@ -2526,6 +2526,7 @@ function get_participant_count($type) {
 	if ($type == 'judge') $query_participant_count = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE brewerJudge='Y'",$prefix."brewer");
 	if ($type == 'steward') $query_participant_count = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE brewerSteward='Y'",$prefix."brewer");
 	if ($type == 'received-entrant') $query_participant_count = sprintf("SELECT COUNT(DISTINCT brewBrewerID) as 'count' FROM %s WHERE brewReceived='1'",$prefix."brewing");
+	if ($type == 'received-club') $query_participant_count = sprintf("SELECT COUNT(DISTINCT b.brewerClubs) as 'count' FROM %s a, %s b WHERE b.uid = a.brewBrewerID AND b.brewerClubs IS NOT NULL", $prefix."brewing", $prefix."brewer");
 	$participant_count = mysqli_query($connection,$query_participant_count) or die (mysqli_error($connection));
 	$row_participant_count = mysqli_fetch_assoc($participant_count);
 

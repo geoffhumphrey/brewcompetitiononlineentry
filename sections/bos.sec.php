@@ -103,7 +103,7 @@ require(DB.'winners.db.php');
 					$table_body1 .= "</td>";
 
 					if ($_SESSION['prefsProEdition'] == 0) {
-						$table_body1 .= "<td>";
+						$table_body1 .= "<td class=\"hidden-xs hidden-sm hidden-md\">";
 						$table_body1 .= $row_bos['brewerClubs'];
 						$table_body1 .= "</td>";
 					}

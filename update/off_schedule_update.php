@@ -315,6 +315,8 @@ if (!check_update("prefsShowBestBrewer", $prefix."preferences")) {
 	$updateSQL = sprintf("ALTER TABLE `%s`
 		ADD `prefsShowBestBrewer` int(1) DEFAULT NULL,
 		ADD `prefsBestBrewerTitle` varchar(255) DEFAULT NULL,
+		ADD `prefsShowBestClub` int(1) DEFAULT NULL,
+		ADD `prefsBestClubTitle` varchar(255) DEFAULT NULL,
 		ADD `prefsFirstPlacePts` int(1) DEFAULT 0,
 		ADD `prefsSecondPlacePts` int(1) DEFAULT 0,
 		ADD `prefsThirdPlacePts` int(1) DEFAULT 0,

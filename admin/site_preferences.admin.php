@@ -136,6 +136,22 @@ $(document).ready(function(){
 
     }); // end $("#prefsUserSubCatLimit").change(function()
 
+    <?php if ($row_prefs['prefsProEdition'] == "1") { ?>
+    $("#bestClub").hide("fast");
+    <?php } ?>
+
+    $('input[type="radio"]').click(function() {
+
+        if($(this).attr('id') == 'prefsProEdition_0') {
+            $("#bestClub").show("slow");
+        }
+
+        if($(this).attr('id') == 'prefsProEdition_1') {
+            $("#bestClub").hide("fast");
+        }
+
+    });
+
 }); // end $(document).ready(function(){
 </script>
 <form class="form-horizontal" method="post" action="<?php echo $base_url; ?>includes/process.inc.php?section=<?php if ($section == "step3") echo "setup"; else echo $section; ?>&amp;action=<?php if ($section == "step3") echo "add"; else echo "edit"; ?>&amp;dbTable=<?php echo $preferences_db_table; ?>&amp;id=1" name="form1">
@@ -213,16 +229,36 @@ $(document).ready(function(){
     <span id="helpBlock" class="help-block">Indicate whether you want to display the list of best brewers according to the points and tie break rules defined below and, if so, up to which position. They will be showed at the same time indicated above for the Winners Display.</span>
     </div>
 </div><!-- ./Form Group -->
-
 <div class="form-group"><!-- Form Group NOT REQUIRED Text Input -->
     <label for="prefsBestBrewerTitle" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Best Brewer Title</label>
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
         <!-- Input Here -->
             <input class="form-control" id="prefsBestBrewerTitle" name="prefsBestBrewerTitle" type="text" value="<?php if ($section == "step3") echo ""; else echo $row_prefs['prefsBestBrewerTitle']; ?>" placeholder="">
-        <span id="helpBlock" class="help-block">Enter the title for the Best Brewer award (e.g. Ninkasi Award).</span>
+        <span id="helpBlock" class="help-block">Enter the title for the Best Brewer award (e.g., Heavy Medal, Ninkasi Award).</span>
     </div>
 </div><!-- ./Form Group -->
-
+<div id="bestClub">
+    <div class="form-group"><!-- Form Group NOT REQUIRED Select -->
+        <label for="prefsShowBestClub" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Best Club Display? Up to which Position?</label>
+        <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
+        <!-- Input Here -->
+        <select class="selectpicker" name="prefsShowBestClub" id="prefsShowBestClub" data-size="10" data-width="auto">
+            <?php for ($i=-1; $i <= 50; $i++) { ?>
+            <option value="<?php echo $i; ?>" <?php if ($row_prefs['prefsShowBestClub'] == $i) echo "SELECTED"; elseif (($i == -1) && ($section == "step3")) echo "SELECTED"; ?>><?php if ($i == -1) echo "Display all"; elseif ($i == 0) echo "Do not display"; else echo "Up to ".addOrdinalNumberSuffix($i). " position"; ?></option>
+            <?php } ?>
+        </select>
+        <span id="helpBlock" class="help-block">Indicate whether you want to display the list of best clubs according to the points and tie break rules defined below and, if so, up to which position. They will be showed at the same time indicated above for the Winners Display. Applies ONLY to the amateur edition.</span>
+        </div>
+    </div><!-- ./Form Group -->
+    <div class="form-group"><!-- Form Group NOT REQUIRED Text Input -->
+        <label for="prefsBestClubTitle" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Best Club Title</label>
+        <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
+            <!-- Input Here -->
+                <input class="form-control" id="prefsBestClubTitle" name="prefsBestClubTitle" type="text" value="<?php if ($section == "step3") echo ""; else echo $row_prefs['prefsBestClubTitle']; ?>" placeholder="">
+            <span id="helpBlock" class="help-block">Enter the title for the Best Club award.</span>
+        </div>
+    </div><!-- ./Form Group -->
+</div>
 <div class="form-group"><!-- Form Group NOT REQUIRED Select -->
     <label for="prefsFirstPlacePts" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Points for First Place</label>
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
@@ -232,10 +268,9 @@ $(document).ready(function(){
         <option value="<?php echo $i; ?>" <?php if ($row_prefs['prefsFirstPlacePts'] == $i) echo "SELECTED"; elseif (($i == 0) && ($section == "step3")) echo "SELECTED"; ?>><?php echo $i; ?></option>
         <?php } ?>
     </select>
-    <span id="helpBlock" class="help-block">Enter the number of points awarded for each First Place that an entrant gets.</span>
+    <span id="helpBlock" class="help-block">Enter the number of points awarded for each first place that an entrant receives.</span>
     </div>
 </div><!-- ./Form Group -->
-
 <div class="form-group"><!-- Form Group NOT REQUIRED Select -->
     <label for="prefsSecondPlacePts" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Points for Second Place</label>
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
@@ -245,10 +280,9 @@ $(document).ready(function(){
         <option value="<?php echo $i; ?>" <?php if ($row_prefs['prefsSecondPlacePts'] == $i) echo "SELECTED"; elseif (($i == 0) && ($section == "step3")) echo "SELECTED"; ?>><?php echo $i; ?></option>
         <?php } ?>
     </select>
-    <span id="helpBlock" class="help-block">Enter the number of points awarded for each Second Place that an entrant gets.</span>
+    <span id="helpBlock" class="help-block">Enter the number of points awarded for each second place that an entrant receives.</span>
     </div>
 </div><!-- ./Form Group -->
-
 <div class="form-group"><!-- Form Group NOT REQUIRED Select -->
     <label for="prefsThirdPlacePts" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Points for Third Place</label>
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
@@ -258,10 +292,9 @@ $(document).ready(function(){
         <option value="<?php echo $i; ?>" <?php if ($row_prefs['prefsThirdPlacePts'] == $i) echo "SELECTED"; elseif (($i == 0) && ($section == "step3")) echo "SELECTED"; ?>><?php echo $i; ?></option>
         <?php } ?>
     </select>
-    <span id="helpBlock" class="help-block">Enter the number of points awarded for each Third Place that an entrant gets.</span>
+    <span id="helpBlock" class="help-block">Enter the number of points awarded for each third place that an entrant receives.</span>
     </div>
 </div><!-- ./Form Group -->
-
 <div class="form-group"><!-- Form Group NOT REQUIRED Select -->
     <label for="prefsFourthPlacePts" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Points for Fourth Place</label>
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
@@ -271,10 +304,9 @@ $(document).ready(function(){
         <option value="<?php echo $i; ?>" <?php if ($row_prefs['prefsFourthPlacePts'] == $i) echo "SELECTED"; elseif (($i == 0) && ($section == "step3")) echo "SELECTED"; ?>><?php echo $i; ?></option>
         <?php } ?>
     </select>
-    <span id="helpBlock" class="help-block">Enter the number of points awarded for each Fourth Place that an entrant gets.</span>
+    <span id="helpBlock" class="help-block">Enter the number of points awarded for each fourth place that an entrant receives.</span>
     </div>
 </div><!-- ./Form Group -->
-
 <div class="form-group"><!-- Form Group NOT REQUIRED Select -->
     <label for="prefsHMPts" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Points for Honorable Mention</label>
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
@@ -284,10 +316,9 @@ $(document).ready(function(){
         <option value="<?php echo $i; ?>" <?php if ($row_prefs['prefsHMPts'] == $i) echo "SELECTED"; elseif (($i == 0) && ($section == "step3")) echo "SELECTED"; ?>><?php echo $i; ?></option>
         <?php } ?>
     </select>
-    <span id="helpBlock" class="help-block">Enter the number of points awarded for each Honorable Mention that an entrant obtains.</span>
+    <span id="helpBlock" class="help-block">Enter the number of points awarded for each Honorable Mention that an entrant receives.</span>
     </div>
 </div><!-- ./Form Group -->
-
 <?php for ($i=1; $i<=6; $i++) { ?>
 <div class="form-group"><!-- Form Group NOT REQUIRED Select -->
     <label for="<?php echo 'prefsTieBreakRule'.$i;?>" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Tie Break Rule #<?php echo $i; ?></label>

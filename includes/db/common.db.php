@@ -138,6 +138,10 @@ if (empty($_SESSION['prefs'.$prefix_session])) {
 	else $_SESSION['prefsShowBestBrewer'] = 0;
 	if (isset($_SESSION['prefsBestBrewerTitle'])) $_SESSION['prefsBestBrewerTitle'] = $row_prefs['prefsBestBrewerTitle'];
 	else $_SESSION['prefsBestBrewerTitle'] = "";
+	if (isset($_SESSION['prefsShowBestClub'])) $_SESSION['prefsShowBestClub'] = $row_prefs['prefsShowBestClub'];
+	else $_SESSION['prefsShowBestClub'] = 0;
+	if (isset($_SESSION['prefsBestBClubTitle'])) $_SESSION['prefsBestClubTitle'] = $row_prefs['prefsBestClubTitle'];
+	else $_SESSION['prefsBestClubTitle'] = "";
 	if (isset($_SESSION['prefsFirstPlacePts'])) $_SESSION['prefsFirstPlacePts'] = $row_prefs['prefsFirstPlacePts'];
 	else $_SESSION['prefsFirstPlacePts'] = 0;
 	if (isset($_SESSION['prefsSecondPlacePts'])) $_SESSION['prefsSecondPlacePts'] = $row_prefs['prefsSecondPlacePts'];
@@ -331,7 +335,7 @@ session_write_close();
 
 // Some limits and dates may need to be changed by admin and propagated instantly to all users
 // These will be called on every page load instead of being stored in a session variable
-$query_limits = sprintf("SELECT prefsStyleSet, prefsEntryLimit, prefsUserEntryLimit, prefsSpecialCharLimit, prefsUserSubCatLimit, prefsUSCLEx, prefsUSCLExLimit, prefsEntryLimitPaid, prefsShowBestBrewer FROM %s WHERE id='1'", $prefix."preferences");
+$query_limits = sprintf("SELECT prefsStyleSet, prefsEntryLimit, prefsUserEntryLimit, prefsSpecialCharLimit, prefsUserSubCatLimit, prefsUSCLEx, prefsUSCLExLimit, prefsEntryLimitPaid, prefsShowBestBrewer, prefsShowBestClub FROM %s WHERE id='1'", $prefix."preferences");
 $limits = mysqli_query($connection,$query_limits) or die (mysqli_error($connection));
 $row_limits = mysqli_fetch_assoc($limits);
 

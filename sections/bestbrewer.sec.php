@@ -7,11 +7,15 @@
  */
 
 $header1_1 = "";
+$header1_2 = "";
 $table_head1 = "";
+$table_head2 = "";
 $table_body1 = "";
+$table_body2 = "";
 $page_info_1 = "";
 
 $bestbrewer = array();
+$bestbrewer_clubs = array();
 
 include(DB.'scores_bestbrewer.db.php');
 
@@ -26,7 +30,7 @@ do {
 
 	else {
 		if ($_SESSION['prefsProEdition'] == 1) $bestbrewer[$bb_row_scores['uid']]['Name'] = $bb_row_scores['brewerBreweryName'];
-		if ($_SESSION['prefsProEdition'] == 0)  {
+		if ($_SESSION['prefsProEdition'] == 0) {
 			$bestbrewer[$bb_row_scores['uid']]['Name'] = $bb_row_scores['brewerFirstName']." ".$bb_row_scores['brewerLastName'];
 			if ($bb_row_scores['brewCoBrewer'] != "") $bestbrewer[$bb_row_scores['uid']]['Name'] .= "<br>".$label_cobrewer.": ".$bb_row_scores['brewCoBrewer'];
 		}
@@ -40,6 +44,26 @@ do {
 		if (($place == $bb_row_scores['scorePlace']) && ($place >= 1) && ($place <= 5)) $bestbrewer[$bb_row_scores['uid']]['Places'][$place-1] = 1;
 		$bestbrewer[$bb_row_scores['uid']]['Scores'][0] = $bb_row_scores['scoreEntry'];
 
+		// -- Compile separate vars for clubs --
+		if (!empty($bb_row_scores['brewerClubs'])) {
+
+			$club_name = strtolower($bb_row_scores['brewerClubs']);
+
+			if (array_key_exists($club_name, $bestbrewer_clubs)) {
+				$bestbrewer_clubs[$club_name]['Places'][$place-1] += 1;
+			}
+
+			else {
+				$bestbrewer_clubs[$club_name]['Places'] = array(0,0,0,0,0);
+				$bestbrewer_clubs[$club_name]['Places'][$place-1] = 1;
+			}
+
+			$bestbrewer_clubs[$club_name]['Scores'][0] = $bb_row_scores['scoreEntry'];
+			$bestbrewer_clubs[$club_name]['Clubs'] = $club_name;
+
+		}
+		// -- end clubs --
+
 	}
 
 } while ($bb_row_scores = mysqli_fetch_assoc($bb_scores));
@@ -52,6 +76,25 @@ do {
 		if (($place == $bb_row_bos_scores['scorePlace']) && ($place >= 1) && ($place <= 5)) $bestbrewer[$bb_row_bos_scores['uid']]['Places'][$place-1] += 1;
 		$bestbrewer[$bb_row_bos_scores['uid']]['Scores'][] = $bb_row_bos_scores['scoreEntry'];
 		$bestbrewer[$bb_row_bos_scores['uid']]['TypeBOS'][] += 1;
+
+		// -- Compile separate vars for clubs --
+		if (!empty($bb_row_bos_scores['brewerClubs'])) {
+
+			$club_name_bos = strtolower($bb_row_bos_scores['brewerClubs']);
+
+			if (array_key_exists($club_name_bos, $bestbrewer_clubs)) {
+				$bestbrewer_clubs[$club_name_bos]['Places'][$place-1] += 1;
+			}
+
+			else {
+				$bestbrewer_clubs[$club_name_bos]['Places'] = array(0,0,0,0,0);
+				$bestbrewer_clubs[$club_name_bos]['Places'][$place-1] = 1;
+			}
+
+			$bestbrewer_clubs[$club_name_bos]['Scores'][0] = $bb_row_bos_scores['scoreEntry'];
+			$bestbrewer_clubs[$club_name_bos]['Clubs'] = $club_name_bos;
+		}
+		// -- end clubs --
 	}
 
 	else {
@@ -63,88 +106,221 @@ do {
 		if (($place == $bb_row_bos_scores['scorePlace']) && ($place >= 1) && ($place <= 5)) $bestbrewer[$bb_row_bos_scores['uid']]['Places'][$place-1] = 1;
 		$bestbrewer[$bb_row_bos_scores['uid']]['Scores'][0] = $bb_row_bos_scores['scoreEntry'];
 		$bestbrewer[$bb_row_bos_scores['uid']]['TypeBOS'][0] = 1;
+
+		// -- Compile separate vars for clubs --
+		if (!empty($bb_row_bos_scores['brewerClubs'])) {
+
+			$club_name_bos = strtolower($bb_row_bos_scores['brewerClubs']);
+
+			if (array_key_exists($club_name_bos, $bestbrewer_clubs)) {
+				$bestbrewer_clubs[$club_name_bos]['Places'][$place-1] += 1;
+			}
+
+			else {
+				$bestbrewer_clubs[$club_name_bos]['Places'] = array(0,0,0,0,0);
+				$bestbrewer_clubs[$club_name_bos]['Places'][$place-1] = 1;
+			}
+
+			$bestbrewer_clubs[$club_name_bos]['Scores'][0] = $bb_row_bos_scores['scoreEntry'];
+			$bestbrewer_clubs[$club_name_bos]['Clubs'] = $club_name_bos;
+		}
+		// -- end clubs --
+
 	}
 
 } while ($bb_row_bos_scores = mysqli_fetch_assoc($bb_bos_scores));
 
-foreach (array_keys($bestbrewer) as $key) {
-	$points = best_brewer_points($key,$bestbrewer[$key]['Places'],$bestbrewer[$key]['Scores'],$bb_points_prefs,$bb_tiebreaker_prefs);
-	$bestbrewer[$key]['Points'] = $points;
-	$bb_sorter[$key] = $points;
+if ($row_limits['prefsShowBestBrewer'] != 0) {
+
+	foreach (array_keys($bestbrewer) as $key) {
+		$points = best_brewer_points($key,$bestbrewer[$key]['Places'],$bestbrewer[$key]['Scores'],$bb_points_prefs,$bb_tiebreaker_prefs);
+		$bestbrewer[$key]['Points'] = $points;
+		$bb_sorter[$key] = $points;
+	}
+
+	arsort($bb_sorter);
+
+	$show_4th = FALSE;
+	$show_HM = FALSE;
+	$bb_count = 0;
+	$bb_position = 0;
+	$bb_previouspoints = 0;
+	if ($row_limits['prefsShowBestBrewer'] == -1) $bb_max_position = count(array_keys($bb_sorter));
+	else $bb_max_position = $row_limits['prefsShowBestBrewer'];
+
+	foreach (array_keys($bb_sorter) as $key) {
+		$bb_count += 1;
+		$points = $bestbrewer[$key]['Points'];
+		if ($points != $bb_previouspoints) {
+			$bb_position = $bb_count;
+			$bb_previouspoints = $points;
+		}
+		if ($bb_position <= $bb_max_position) {
+			if ($bestbrewer[$key]['Places'][3] > 0) $show_4th = TRUE;
+			if ($bestbrewer[$key]['Places'][4] > 0) $show_HM = TRUE;
+		}
+		else break;
+	}
+
 }
 
-arsort($bb_sorter);
+if (($_SESSION['prefsProEdition'] == 0) && ($row_limits['prefsShowBestClub'] != 0)) {
 
-$show_4th = FALSE;
-$show_HM = FALSE;
-$bb_count = 0;
-$bb_position = 0;
-$bb_previouspoints = 0;
-if ($row_limits['prefsShowBestBrewer'] == -1) $bb_max_position = count(array_keys($bb_sorter));
-else $bb_max_position = $row_limits['prefsShowBestBrewer'];
+	// Compile the Best Club points
+	foreach (array_keys($bestbrewer_clubs) as $key) {
+		$points_clubs = best_brewer_points($key,$bestbrewer_clubs[$key]['Places'],$bestbrewer_clubs[$key]['Scores'],$bb_points_prefs,$bb_tiebreaker_prefs);
+		$bestbrewer_clubs[$key]['Points'] = $points_clubs;
+		$bb_sorter_clubs[$key] = $points_clubs;
+	}
 
-foreach (array_keys($bb_sorter) as $key) {
-	$bb_count += 1;
-	$points = $bestbrewer[$key]['Points'];
-	if ($points != $bb_previouspoints) {
-		$bb_position = $bb_count;
-		$bb_previouspoints = $points;
+	arsort($bb_sorter_clubs);
+
+	$show_4th_clubs = FALSE;
+	$show_HM_clubs = FALSE;
+	$bb_count_clubs = 0;
+	$bb_position_clubs = 0;
+	$bb_previouspoints_clubs = 0;
+	if ($row_limits['prefsShowBestClub'] == -1) $bb_max_position_clubs = count(array_keys($bb_sorter_clubs));
+	else $bb_max_position_clubs = $row_limits['prefsShowBestClub'];
+
+	foreach (array_keys($bb_sorter_clubs) as $key) {
+		$bb_count_clubs += 1;
+		$points_clubs = $bestbrewer_clubs[$key]['Points'];
+		if ($points_clubs != $bb_previouspoints_clubs) {
+			$bb_position_clubs = $bb_count_clubs;
+			$bb_previouspoints_clubs = $points_clubs;
+		}
+		if ($bb_position_clubs <= $bb_max_position_clubs) {
+			if ($bestbrewer_clubs[$key]['Places'][3] > 0) $show_4th_clubs = TRUE;
+			if ($bestbrewer_clubs[$key]['Places'][4] > 0) $show_HM_clubs = TRUE;
+		}
+
+		else break;
 	}
-	if ($bb_position <= $bb_max_position) {
-		if ($bestbrewer[$key]['Places'][3] > 0) $show_4th = TRUE;
-		if ($bestbrewer[$key]['Places'][4] > 0) $show_HM = TRUE;
+
+	// Build clubs table body
+	$bb_count_clubs = 0;
+	$bb_position_clubs = 0;
+	$bb_previouspoints_clubs = 0;
+
+	foreach (array_keys($bb_sorter_clubs) as $key) {
+
+		$points_clubs = $bestbrewer_clubs[$key]['Points'];
+		$output .= $bestbrewer_clubs[$key]['Clubs']." - ".$points_clubs. " - Places... ";
+		$output .= "1: ".$bestbrewer_clubs[$key]['Places'][0]." ";
+		$output .= "2: ".$bestbrewer_clubs[$key]['Places'][1]." ";
+		$output .= "3: ".$bestbrewer_clubs[$key]['Places'][2]." ";
+		if ($show_4th_clubs) $output .= "4: ".$bestbrewer_clubs[$key]['Places'][3]." ";
+		if ($show_HM_clubs) $output .= "HM: ".$bestbrewer_clubs[$key]['Places'][4]." ";
+		$output .= "<br>";
+
+		$bb_count_clubs += 1;
+		$points_clubs = $bestbrewer_clubs[$key]['Points'];
+
+		if ($points_clubs != $bb_previouspoints_clubs) {
+			$bb_position_clubs = $bb_count_clubs;
+			$bb_previouspoints_clubs = $points_clubs;
+			$bb_display_position_clubs = display_place($bb_position_clubs,3);
+		}
+
+		else $bb_display_position_clubs = "";
+
+		if ($bb_position_clubs <= $bb_max_position_clubs) {
+
+			// Build club points table body
+			$table_body2 .= "<tr>";
+			$table_body2 .= "<td nowrap>".$bb_display_position_clubs."</td>";
+			$table_body2 .= "<td>".ucwords($bestbrewer_clubs[$key]['Clubs'])."</td>";
+			$table_body2 .= "<td>".$bestbrewer_clubs[$key]['Places'][0]."</td>";
+			$table_body2 .= "<td>".$bestbrewer_clubs[$key]['Places'][1]."</td>";
+			$table_body2 .= "<td>".$bestbrewer_clubs[$key]['Places'][2]."</td>";
+			if ($show_4th_clubs) $table_body2 .= "<td>".$bestbrewer_clubs[$key]['Places'][3]."</td>";
+			if ($show_HM_clubs) $table_body2 .= "<td>".$bestbrewer_clubs[$key]['Places'][4]."</td>";
+			if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= "1")) $table_body2 .= "<td>".$points_clubs."</td>";
+			else $table_body2 .= "<td>".floor($points_clubs)."</td>";
+			$table_body2 .= "</tr>";
+
+		}
+
+		else break;
 	}
-	else break;
+
 }
 
 // Build page headers
-$header1_1 .= "<h3>".$row_bb_prefs['prefsBestBrewerTitle'];
-$header1_1 .= sprintf(" (".get_participant_count('received-entrant')." %s)", ucwords($best_brewer_text_000));
-$header1_1 .= "</h3>";
+if ($row_limits['prefsShowBestBrewer'] != 0) {
+	$header1_1 .= "<h3>".$row_bb_prefs['prefsBestBrewerTitle'];
+	$header1_1 .= sprintf(" (%s %s)", get_participant_count('received-entrant'), ucwords($best_brewer_text_000));
+	$header1_1 .= "</h3>";
+}
 
-// Build table headers
-$table_head1 .= "<tr>";
-$table_head1 .= sprintf("<th width=\"1%%\" nowrap>%s</th>",$label_place);
-$table_head1 .= sprintf("<th width=\"24%%\">%s</th>",$label_brewer);
-$table_head1 .= "<th width=\"10%%\">".addOrdinalNumberSuffix(1)."</th>";
-$table_head1 .= "<th width=\"10%%\">".addOrdinalNumberSuffix(2)."</th>";
-$table_head1 .= "<th width=\"10%%\">".addOrdinalNumberSuffix(3)."</th>";
-if ($show_4th) $table_head1 .= "<th width=\"10%%\">".addOrdinalNumberSuffix(4)."</th>";
-if ($show_HM) $table_head1 .= sprintf("<th width=\"10%%\">%s</th>",$best_brewer_text_001);
-$table_head1 .= sprintf("<th width=\"1%%\" nowrap>%s</th>",$label_score);
-if ($_SESSION['prefsProEdition'] == 0) $table_head1 .= sprintf("<th width=\"24%%\" class=\"hidden-xs hidden-sm hidden-md\">%s</th>",$label_club);
+if (($_SESSION['prefsProEdition'] == 0) && ($row_limits['prefsShowBestClub'] != 0)) {
+	$header1_2 .= "<h3>".$row_bb_prefs['prefsBestClubTitle'];
+	$header1_2 .= sprintf(" (%s %s)", get_participant_count('received-club'), ucwords($best_brewer_text_014));
+	$header1_2 .= "</h3>";
+}
 
-$bb_count = 0;
-$bb_position = 0;
-$bb_previouspoints = 0;
+if ($row_limits['prefsShowBestBrewer'] != 0) {
+	// Build best brewer table headers
+	$table_head1 .= "<tr>";
+	$table_head1 .= sprintf("<th width=\"1%%\" nowrap>%s</th>",$label_place);
+	$table_head1 .= sprintf("<th width=\"24%%\">%s</th>",$label_brewer);
+	$table_head1 .= "<th width=\"10%%\">".addOrdinalNumberSuffix(1)."</th>";
+	$table_head1 .= "<th width=\"10%%\">".addOrdinalNumberSuffix(2)."</th>";
+	$table_head1 .= "<th width=\"10%%\">".addOrdinalNumberSuffix(3)."</th>";
+	if ($show_4th) $table_head1 .= "<th width=\"10%%\">".addOrdinalNumberSuffix(4)."</th>";
+	if ($show_HM) $table_head1 .= sprintf("<th width=\"10%%\">%s</th>",$best_brewer_text_001);
+	$table_head1 .= sprintf("<th width=\"1%%\" nowrap>%s</th>",$label_score);
+	if ($_SESSION['prefsProEdition'] == 0) $table_head1 .= sprintf("<th width=\"24%%\" class=\"hidden-xs hidden-sm hidden-md\">%s</th>",$label_club);
+}
 
-foreach (array_keys($bb_sorter) as $key) {
-	$bb_count += 1;
-	$points = $bestbrewer[$key]['Points'];
-	if ($points != $bb_previouspoints) {
-		$bb_position = $bb_count;
-		$bb_previouspoints = $points;
-		$bb_display_position = display_place($bb_position,3);
+if (($_SESSION['prefsProEdition'] == 0) && ($row_limits['prefsShowBestClub'] != 0))  {
+	// Clubs table headers
+	$table_head2 .= "<tr>";
+	$table_head2 .= sprintf("<th width=\"1%%\" nowrap>%s</th>",$label_place);
+	$table_head2 .= sprintf("<th width=\"24%%\">%s</th>",$label_club);
+	$table_head2 .= "<th width=\"10%%\">".addOrdinalNumberSuffix(1)."</th>";
+	$table_head2 .= "<th width=\"10%%\">".addOrdinalNumberSuffix(2)."</th>";
+	$table_head2 .= "<th width=\"10%%\">".addOrdinalNumberSuffix(3)."</th>";
+	if ($show_4th_clubs) $table_head2 .= "<th width=\"10%%\">".addOrdinalNumberSuffix(4)."</th>";
+	if ($show_HM_clubs) $table_head2 .= sprintf("<th width=\"10%%\">%s</th>",$best_brewer_text_001);
+	$table_head2 .= sprintf("<th width=\"1%%\" nowrap>%s</th>",$label_score);
+	$table_head2 .= "</tr>";
+}
+
+if ($row_limits['prefsShowBestBrewer'] != 0) {
+	$bb_count = 0;
+	$bb_position = 0;
+	$bb_previouspoints = 0;
+
+	foreach (array_keys($bb_sorter) as $key) {
+		$bb_count += 1;
+		$points = $bestbrewer[$key]['Points'];
+		if ($points != $bb_previouspoints) {
+			$bb_position = $bb_count;
+			$bb_previouspoints = $points;
+			$bb_display_position = display_place($bb_position,3);
+		}
+		else $bb_display_position = "";
+		if ($bb_position <= $bb_max_position) {
+			$table_body1 .= "<tr>";
+			$table_body1 .= "<td nowrap>".$bb_display_position."</td>";
+			$table_body1 .= "<td>".$bestbrewer[$key]['Name'];
+			if (array_sum($bestbrewer[$key]['TypeBOS']) > 0) $table_body1 .= sprintf("<small><em><br>** %s %s **</em></small>",$label_bos,$label_participant);
+			$table_body1 .= "</td>";
+			$table_body1 .= "<td>".$bestbrewer[$key]['Places'][0]."</td>";
+			$table_body1 .= "<td>".$bestbrewer[$key]['Places'][1]."</td>";
+			$table_body1 .= "<td>".$bestbrewer[$key]['Places'][2]."</td>";
+			if ($show_4th) $table_body1 .= "<td>".$bestbrewer[$key]['Places'][3]."</td>";
+			if ($show_HM) $table_body1 .= "<td>".$bestbrewer[$key]['Places'][4]."</td>";
+			// $table_body1 .= "<td>".$points."</td>";
+			if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= "1")) $table_body1 .= "<td>".$points."</td>";
+			else $table_body1 .= "<td>".floor($points)."</td>";
+			if ($_SESSION['prefsProEdition'] == 0) $table_body1 .= "<td class=\"hidden-xs hidden-sm hidden-md\">".$bestbrewer[$key]['Clubs']."</td>";
+			$table_body1 .= "</tr>";
+		}
+		else break;
 	}
-	else $bb_display_position = "";
-	if ($bb_position <= $bb_max_position) {
-		$table_body1 .= "<tr>";
-		$table_body1 .= "<td nowrap>".$bb_display_position."</td>";
-		$table_body1 .= "<td>".$bestbrewer[$key]['Name'];
-		if (array_sum($bestbrewer[$key]['TypeBOS']) > 0) $table_body1 .= sprintf("<small><em><br>** %s %s **</em></small>",$label_bos,$label_participant);
-		$table_body1 .= "</td>";
-		$table_body1 .= "<td>".$bestbrewer[$key]['Places'][0]."</td>";
-		$table_body1 .= "<td>".$bestbrewer[$key]['Places'][1]."</td>";
-		$table_body1 .= "<td>".$bestbrewer[$key]['Places'][2]."</td>";
-		if ($show_4th) $table_body1 .= "<td>".$bestbrewer[$key]['Places'][3]."</td>";
-		if ($show_HM) $table_body1 .= "<td>".$bestbrewer[$key]['Places'][4]."</td>";
-		// $table_body1 .= "<td>".$points."</td>";
-		if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= "1")) $table_body1 .= "<td>".$points."</td>";
-		else $table_body1 .= "<td>".floor($points)."</td>";
-		if ($_SESSION['prefsProEdition'] == 0) $table_body1 .= "<td class=\"hidden-xs hidden-sm hidden-md\">".$bestbrewer[$key]['Clubs']."</td>";
-		$table_body1 .= "</tr>";
-	}
-	else break;
 }
 
 $page_info_1 .= "<p>".$best_brewer_text_002."</p>";
@@ -154,6 +330,7 @@ $page_info_1 .= "<p>".$best_brewer_text_002."</p>";
 // --------------------------------------------------------------
 
 ?>
+<?php if ($row_limits['prefsShowBestBrewer'] != 0) { ?>
 <div class="bcoem-winner-table">
 	<?php echo $header1_1; ?>
     <table class="table table-responsive table-striped table-bordered"  id="sortable">
@@ -166,6 +343,21 @@ $page_info_1 .= "<p>".$best_brewer_text_002."</p>";
     </table>
     <?php echo $page_info_1; ?>
 </div>
+<?php } ?>
+<?php if (($_SESSION['prefsProEdition'] == 0) && ($row_limits['prefsShowBestClub'] != 0)) { ?>
+<div class="bcoem-winner-table">
+	<?php echo $header1_2; ?>
+    <table class="table table-responsive table-striped table-bordered"  id="sortable">
+    <thead>
+        <?php echo $table_head2; ?>
+    </thead>
+    <tbody>
+        <?php echo $table_body2; ?>
+    </tbody>
+    </table>
+    <?php echo $page_info_1; ?>
+</div>
+<?php } ?>
 <div class="modal fade" id="scoreMethod" tabindex="-1" role="dialog">
 	<div class="modal-dialog" role="document">
 		<div class="modal-content">

@@ -161,7 +161,7 @@ if ((judging_date_return() == 0) && ($registration_open == 2) && ($entry_window_
 				include (SECTIONS.'bos.sec.php');
 				}
 
-			if ($row_limits['prefsShowBestBrewer'] != 0) include (SECTIONS.'bestbrewer.sec.php');
+			if (($row_limits['prefsShowBestBrewer'] != 0) || ($row_limits['prefsShowBestClub'] != 0)) include (SECTIONS.'bestbrewer.sec.php');
 
 			echo $header1_20;
 			if ($_SESSION['prefsWinnerMethod'] == "1") include (SECTIONS.'winners_category.sec.php');
