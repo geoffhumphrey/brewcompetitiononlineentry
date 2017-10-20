@@ -152,9 +152,39 @@ $(document).ready(function(){
 
     });
 
+    <?php if ($row_prefs['prefsShowBestBrewer'] == 0) { ?>
+        $("input[name='prefsBestBrewerTitle']").prop("required", false);
+    <?php } else { ?>
+        $("input[name='prefsBestBrewerTitle']").prop("required", true);
+    <?php } ?>
+
+    <?php if ($row_prefs['prefsShowBestClub'] == 0) { ?>
+        $("input[name='prefsBestClubTitle']").prop("required", false);
+    <?php } else { ?>
+        $("input[name='prefsBestClubTitle']").prop("required", true);
+    <?php } ?>
+
+    $("#prefsShowBestBrewer").change(function() {
+        if ($("#prefsShowBestBrewer").val() == "0"){
+            $("input[name='prefsBestBrewerTitle']").prop("required", false);
+        }
+        else {
+            $("input[name='prefsBestBrewerTitle']").prop("required", true);
+        }
+    });
+
+    $("#prefsShowBestClub").change(function() {
+        if ($("#prefsShowBestClub").val() == "0"){
+            $("input[name='prefsBestClubTitle']").prop("required", false);
+        }
+        else {
+            $("input[name='prefsBestClubTitle']").prop("required", true);
+        }
+    });
+
 }); // end $(document).ready(function(){
 </script>
-<form class="form-horizontal" method="post" action="<?php echo $base_url; ?>includes/process.inc.php?section=<?php if ($section == "step3") echo "setup"; else echo $section; ?>&amp;action=<?php if ($section == "step3") echo "add"; else echo "edit"; ?>&amp;dbTable=<?php echo $preferences_db_table; ?>&amp;id=1" name="form1">
+<form data-toggle="validator" role="form" class="form-horizontal" method="post" action="<?php echo $base_url; ?>includes/process.inc.php?section=<?php if ($section == "step3") echo "setup"; else echo $section; ?>&amp;action=<?php if ($section == "step3") echo "add"; else echo "edit"; ?>&amp;dbTable=<?php echo $preferences_db_table; ?>&amp;id=1" name="form1">
 <input type="hidden" name="prefsRecordLimit" value="9999" />
 <h3>General</h3>
 
@@ -194,8 +224,9 @@ $(document).ready(function(){
     <label for="prefsWinnerDelay" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Winner Display Date/Time</label>
     <div class="col-lg-6 col-md-4 col-sm-8 col-xs-12">
     	<!-- Input Here -->
-        	<input class="form-control" id="prefsWinnerDelay" name="prefsWinnerDelay" type="text" value="<?php if ($section == "step3") echo getTimeZoneDateTime($row_prefs['prefsTimeZone'], (time() + 4838400), $row_prefs['prefsDateFormat'],  $row_prefs['prefsTimeFormat'], "system", "date-time-system"); else echo getTimeZoneDateTime($row_prefs['prefsTimeZone'], $row_prefs['prefsWinnerDelay'], $row_prefs['prefsDateFormat'],  $row_prefs['prefsTimeFormat'], "system", "date-time-system"); ?>" placeholder="<?php if (strpos($section, "step") === FALSE) { echo $current_date." ".$current_time; } ?>">
+        	<input class="form-control" id="prefsWinnerDelay" name="prefsWinnerDelay" type="text" value="<?php if ($section == "step3") echo getTimeZoneDateTime($row_prefs['prefsTimeZone'], (time() + 4838400), $row_prefs['prefsDateFormat'],  $row_prefs['prefsTimeFormat'], "system", "date-time-system"); else echo getTimeZoneDateTime($row_prefs['prefsTimeZone'], $row_prefs['prefsWinnerDelay'], $row_prefs['prefsDateFormat'],  $row_prefs['prefsTimeFormat'], "system", "date-time-system"); ?>" placeholder="<?php if (strpos($section, "step") === FALSE) { echo $current_date." ".$current_time; } ?>" required>
         <span id="helpBlock" class="help-block">Date and time when the system will display winners if Winner Display is enabled.</span>
+        <div class="help-block with-errors"></div>
     </div>
 </div><!-- ./Form Group -->
 <div class="form-group"><!-- Form Group Radio STACKED -->
@@ -235,6 +266,7 @@ $(document).ready(function(){
         <!-- Input Here -->
             <input class="form-control" id="prefsBestBrewerTitle" name="prefsBestBrewerTitle" type="text" value="<?php if ($section == "step3") echo ""; else echo $row_prefs['prefsBestBrewerTitle']; ?>" placeholder="">
         <span id="helpBlock" class="help-block">Enter the title for the Best Brewer award (e.g., Heavy Medal, Ninkasi Award).</span>
+        <div class="help-block with-errors"></div>
     </div>
 </div><!-- ./Form Group -->
 <div id="bestClub">
@@ -256,6 +288,7 @@ $(document).ready(function(){
             <!-- Input Here -->
                 <input class="form-control" id="prefsBestClubTitle" name="prefsBestClubTitle" type="text" value="<?php if ($section == "step3") echo ""; else echo $row_prefs['prefsBestClubTitle']; ?>" placeholder="">
             <span id="helpBlock" class="help-block">Enter the title for the Best Club award.</span>
+            <div class="help-block with-errors"></div>
         </div>
     </div><!-- ./Form Group -->
 </div>
@@ -953,8 +986,9 @@ $(document).ready(function(){
     <label for="prefsRecordPaging" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Records Displayed</label>
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
     	<!-- Input Here -->
-        	<input class="form-control" id="prefsRecordPaging" name="prefsRecordPaging" type="text" value="<?php if ($section == "step3") echo "150"; else echo $row_prefs['prefsRecordPaging']; ?>" placeholder="12">
+        	<input class="form-control" id="prefsRecordPaging" name="prefsRecordPaging" type="text" value="<?php if ($section == "step3") echo "150"; else echo $row_prefs['prefsRecordPaging']; ?>" placeholder="12" required>
         <span id="helpBlock" class="help-block">The number of records displayed per page when viewing lists.</span>
+        <div class="help-block with-errors"></div>
     </div>
 </div><!-- ./Form Group -->
 <div class="form-group"><!-- Form Group Radio INLINE -->

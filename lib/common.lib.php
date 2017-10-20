@@ -4076,5 +4076,4 @@ function tiebreak_rule($rule) {
 	}
 	return $return;
 }
-
 ?>

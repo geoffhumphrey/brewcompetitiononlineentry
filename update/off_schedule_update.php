@@ -568,7 +568,7 @@ if ($totalRows_names > 0) {
 		else $brewerJudgeID = "";
 
 		if (!empty($row_names['brewerClubs'])) {
-			$brewerClubs = standardize_name($purifier->purify($row_names['brewerClubs']));
+			$brewerClubs = $purifier->purify($row_names['brewerClubs']);
 		}
 		else $brewerClubs = "";
 

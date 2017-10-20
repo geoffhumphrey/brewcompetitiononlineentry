@@ -59,7 +59,7 @@ do {
 			}
 
 			$bestbrewer_clubs[$club_name]['Scores'][0] = $bb_row_scores['scoreEntry'];
-			$bestbrewer_clubs[$club_name]['Clubs'] = $club_name;
+			$bestbrewer_clubs[$club_name]['Clubs'] = $bb_row_scores['brewerClubs'];
 
 		}
 		// -- end clubs --
@@ -92,7 +92,7 @@ do {
 			}
 
 			$bestbrewer_clubs[$club_name_bos]['Scores'][0] = $bb_row_bos_scores['scoreEntry'];
-			$bestbrewer_clubs[$club_name_bos]['Clubs'] = $club_name_bos;
+			$bestbrewer_clubs[$club_name_bos]['Clubs'] = $bb_row_bos_scores['brewerClubs'];
 		}
 		// -- end clubs --
 	}
@@ -122,7 +122,7 @@ do {
 			}
 
 			$bestbrewer_clubs[$club_name_bos]['Scores'][0] = $bb_row_bos_scores['scoreEntry'];
-			$bestbrewer_clubs[$club_name_bos]['Clubs'] = $club_name_bos;
+			$bestbrewer_clubs[$club_name_bos]['Clubs'] = $bb_row_scores['brewerClubs'];
 		}
 		// -- end clubs --
 
@@ -230,7 +230,7 @@ if (($_SESSION['prefsProEdition'] == 0) && ($row_limits['prefsShowBestClub'] != 
 			// Build club points table body
 			$table_body2 .= "<tr>";
 			$table_body2 .= "<td nowrap>".$bb_display_position_clubs."</td>";
-			$table_body2 .= "<td>".ucwords($bestbrewer_clubs[$key]['Clubs'])."</td>";
+			$table_body2 .= "<td>".$bestbrewer_clubs[$key]['Clubs']."</td>";
 			$table_body2 .= "<td>".$bestbrewer_clubs[$key]['Places'][0]."</td>";
 			$table_body2 .= "<td>".$bestbrewer_clubs[$key]['Places'][1]."</td>";
 			$table_body2 .= "<td>".$bestbrewer_clubs[$key]['Places'][2]."</td>";
