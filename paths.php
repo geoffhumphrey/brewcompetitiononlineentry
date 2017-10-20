@@ -77,14 +77,14 @@ define('TESTING', FALSE);
  * Enable the following to display php errors on screen.
  * Default is FALSE
  */
-define('DEBUG', FALSE);
+define('DEBUG', TRUE);
 
 /**
  * Enable the following to show a collapsable table of all
  * session variables on screen
  * Default is FALSE
  */
-define('DEBUG_SESSION_VARS', FALSE);
+define('DEBUG_SESSION_VARS', TRUE);
 
 /**
  * Enable the following when receiving mySQL "column does
@@ -95,7 +95,7 @@ define('DEBUG_SESSION_VARS', FALSE);
  * page for performance issues.
  * Default is FALSE
  */
-define('FORCE_UPDATE', FALSE);
+define('FORCE_UPDATE', TRUE);
 
 /**
  * --------------------------------------------------------
@@ -167,6 +167,10 @@ $_SESSION['last_action'] = time();
  * which it was generated:
  * https://developers.google.com/recaptcha/docs/domain_validation
  * --------------------------------------------------------
+
+ Legacy
+ Public Key:    6LdquuQSAAAAAC3rsksvtjRmR9yPFmflBF4OWNS7
+ Private Key:    6LdquuQSAAAAAHkf3dDRqZckRb_RIjrkofxE8Knd
  */
 
 if (HOSTED) {
@@ -175,8 +179,14 @@ if (HOSTED) {
 }
 
 else {
-	$public_captcha_key = "6LfHUCoUAAAAACHsPn8hpzbtzcpXatm-GXTTWuR3";
-	$private_captcha_key = "6LfHUCoUAAAAACNL-wzpAG3eIWQC-PpX6X3a0iaM";
+    if ((isset($_SESSION['prefsCAPTCHA'])) && ($_SESSION['prefsCAPTCHA'] == 1)) {
+        $public_captcha_key = "6LdquuQSAAAAAC3rsksvtjRmR9yPFmflBF4OWNS7";
+        $private_captcha_key = "6LdquuQSAAAAAHkf3dDRqZckRb_RIjrkofxE8Knd";
+    }
+    else {
+        $public_captcha_key = "6LfHUCoUAAAAACHsPn8hpzbtzcpXatm-GXTTWuR3";
+        $private_captcha_key = "6LfHUCoUAAAAACNL-wzpAG3eIWQC-PpX6X3a0iaM";
+    }
 }
 
 /** Uncomment to display paths */

@@ -187,7 +187,6 @@ $(document).ready(function(){
 <form data-toggle="validator" role="form" class="form-horizontal" method="post" action="<?php echo $base_url; ?>includes/process.inc.php?section=<?php if ($section == "step3") echo "setup"; else echo $section; ?>&amp;action=<?php if ($section == "step3") echo "add"; else echo "edit"; ?>&amp;dbTable=<?php echo $preferences_db_table; ?>&amp;id=1" name="form1">
 <input type="hidden" name="prefsRecordLimit" value="9999" />
 <h3>General</h3>
-
 <div class="form-group"><!-- Form Group Radio INLINE -->
     <label for="prefsProEdition" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Competition Type</label>
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
@@ -203,7 +202,6 @@ $(document).ready(function(){
         <span id="helpBlock" class="help-block">Indicate whether the participants in the competition will be individual amateur brewers or licensed breweries with designated points of contact.</span>
     </div>
 </div><!-- ./Form Group -->
-
 <div class="form-group"><!-- Form Group Radio INLINE -->
     <label for="prefsDisplayWinners" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Winner Display</label>
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
@@ -219,7 +217,6 @@ $(document).ready(function(){
         <span id="helpBlock" class="help-block">Indicate if the winners of the competition for each category and Best of Show Style Type will be displayed.</span>
     </div>
 </div><!-- ./Form Group -->
-
 <div class="form-group"><!-- Form Group NOT REQUIRED Text Input -->
     <label for="prefsWinnerDelay" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Winner Display Date/Time</label>
     <div class="col-lg-6 col-md-4 col-sm-8 col-xs-12">
@@ -247,7 +244,6 @@ $(document).ready(function(){
 		<span id="helpBlock" class="help-block">How the competition will award places for winning entries.</span>
 	</div>
 </div><!-- ./Form Group -->
-
 <div class="form-group"><!-- Form Group NOT REQUIRED Select -->
     <label for="prefsShowBestBrewer" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Best Brewer Display? Up to which Position?</label>
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
@@ -367,7 +363,6 @@ $(document).ready(function(){
     </div>
 </div><!-- ./Form Group -->
 <?php } ?>
-
 <div class="form-group"><!-- Form Group Radio STACKED -->
 	<label for="prefsDisplaySpecial" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Scoresheet Upload File Names</label>
 	<div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
@@ -445,8 +440,6 @@ $(document).ready(function(){
 		</span>
     </div>
 </div><!-- ./Form Group -->
-
-
 <!-- Modal -->
 <div class="modal fade" id="contactFormModal" tabindex="-1" role="dialog" aria-labelledby="contactFormModalLabel">
     <div class="modal-dialog" role="document">
@@ -464,7 +457,6 @@ $(document).ready(function(){
         </div>
     </div>
 </div><!-- ./modal -->
-
 <div class="form-group"><!-- Form Group Radio INLINE -->
     <label for="EmailRegConfirm" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Confirmation Emails</label>
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
@@ -492,7 +484,6 @@ $(document).ready(function(){
 		</span>
     </div>
 </div><!-- ./Form Group -->
-
 <!-- Modal -->
 <div class="modal fade" id="regEmailFormModalLabel" tabindex="-1" role="dialog" aria-labelledby="regEmailFormModalLabel">
     <div class="modal-dialog" role="document">
@@ -520,7 +511,6 @@ $(document).ready(function(){
         </div>
     </div>
 </div><!-- ./modal -->
-
 <div class="form-group"><!-- Form Group NOT REQUIRED Select -->
 	<label for="prefsTheme" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Site Theme</label>
 	<div class="col-lg-6 col-md-5 col-sm-8 col-xs-12">
@@ -534,7 +524,6 @@ $(document).ready(function(){
 	</select>
 	</div>
 </div><!-- ./Form Group -->
-
 <?php if (!HOSTED) { ?>
 <div class="form-group"><!-- Form Group Radio INLINE -->
     <label for="prefsSEF" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Search Engine Friendly URLs</label>
@@ -589,9 +578,25 @@ $(document).ready(function(){
         <span id="helpBlock" class="help-block"><strong>FOR ADVANCED USERS.</strong> Utilize the ability to add custom modules that extend BCOE&amp;M's core functionality.</span>
     </div>
 </div><!-- ./Form Group -->
+<div class="form-group"><!-- Form Group Radio INLINE -->
+    <label for="prefsCAPTCHA" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">reCAPTCHA Version</label>
+    <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
+        <div class="input-group">
+            <!-- Input Here -->
+            <label class="radio-inline">
+                <input type="radio" name="prefsCAPTCHA" value="1" id="prefsCAPTCHA_1" <?php if (($section != "step3") && ($row_prefs['prefsCAPTCHA'] == "1")) echo "CHECKED"; ?>/> Version 1
+            </label>
+            <label class="radio-inline">
+                <input type="radio" name="prefsCAPTCHA" value="0" id="prefsCAPTCHA_0"  <?php if (($section != "step3") && ($row_prefs['prefsCAPTCHA'] == "0")) echo "CHECKED"; if ($section == "step3") echo "CHECKED"; ?> /> Version 2
+            </label>
+        </div>
+        <span id="helpBlock" class="help-block">Indicate the reCAPTCHA version to use for account registrations and contact forms. Version 1 should be considered a fallback.</span>
+    </div>
+</div><!-- ./Form Group -->
 <?php } else { ?>
 <input type="hidden" name="prefsSEF" value="N" />
 <input type="hidden" name="prefsUseMods" value="N" />
+<input type="hidden" name="prefsCAPTCHA" value="0" />
 <?php } ?>
 
 <div class="form-group"><!-- Form Group Radio INLINE -->

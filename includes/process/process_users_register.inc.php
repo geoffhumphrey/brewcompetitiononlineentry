@@ -22,12 +22,22 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 	// CAPCHA check
 	if ($filter != "admin") {
 
-		if ((isset($_POST['g-recaptcha-response'])) && (!empty($_POST['g-recaptcha-response']))) {
+		if ($_SESSION['prefsCAPTCHA'] == 1) {
+			require_once(INCLUDES.'recaptchalib.inc.php');
+			$resp = recaptcha_check_answer ($private_captcha_key, $_SERVER["REMOTE_ADDR"], $_POST["recaptcha_challenge_field"], $_POST["recaptcha_response_field"]);
+			if ($resp->is_valid) $captcha_success = TRUE;
+		}
 
-			$verify_response = file_get_contents('https://www.google.com/recaptcha/api/siteverify?secret='.$private_captcha_key.'&response='.$_POST['g-recaptcha-response']);
-			$response_data = json_decode($verify_response);
+		else {
 
-			if (($_SERVER['SERVER_NAME'] == $response_data->hostname) && ($response_data->success)) $captcha_success = TRUE;
+			if ((isset($_POST['g-recaptcha-response'])) && (!empty($_POST['g-recaptcha-response']))) {
+
+				$verify_response = file_get_contents('https://www.google.com/recaptcha/api/siteverify?secret='.$private_captcha_key.'&response='.$_POST['g-recaptcha-response']);
+				$response_data = json_decode($verify_response);
+
+				if (($_SERVER['SERVER_NAME'] == $response_data->hostname) && ($response_data->success)) $captcha_success = TRUE;
+
+			}
 
 		}
 

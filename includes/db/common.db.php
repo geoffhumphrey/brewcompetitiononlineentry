@@ -206,6 +206,8 @@ if (empty($_SESSION['prefs'.$prefix_session])) {
 	else $_SESSION['prefsShipping'] = "0";
 	if (isset($row_prefs['prefsProEdition'])) $_SESSION['prefsProEdition'] = $row_prefs['prefsProEdition'];
 	else $_SESSION['prefsProEdition'] = "0";
+	if (isset($row_prefs['prefsCAPTCHA'])) $_SESSION['prefsCAPTCHA'] = $row_prefs['prefsCAPTCHA'];
+	else $_SESSION['prefsCAPTCHA'] = "0";
 
 	if (SINGLE) $query_judging_prefs = sprintf("SELECT * FROM %s WHERE id='%s'", $prefix."judging_preferences",$_SESSION['comp_id']);
 	else $query_judging_prefs = sprintf("SELECT * FROM %s WHERE id='1'", $prefix."judging_preferences");

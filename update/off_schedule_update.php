@@ -334,6 +334,16 @@ if (!check_update("prefsShowBestBrewer", $prefix."preferences")) {
 	$result = mysqli_query($connection,$updateSQL);
 }
 
+if (check_update("prefsGoogle", $prefix."brewing")) {
+
+	// Change unused prefsGoogle to new brewCAPTCHA pref to allow for fallback CAPTCHA
+	$updateSQL = sprintf("ALTER TABLE `%s` CHANGE `prefsGoogle` `prefsCAPTCHA` tinyint(1) COLLATE utf8mb4_unicode_ci DEFAULT NULL;",$prefix."preferences");
+	mysqli_select_db($connection,$database);
+	mysqli_real_escape_string($connection,$updateSQL);
+	$result = mysqli_query($connection,$updateSQL);
+
+}
+
 if (!check_update("prefsPaypalIPN", $prefix."preferences")) {
 	$updateSQL = sprintf("ALTER TABLE `%s` ADD `prefsPaypalIPN` TINYINT(1) NULL DEFAULT NULL AFTER `prefsPaypalAccount`;",$prefix."preferences");
 	mysqli_select_db($connection,$database);

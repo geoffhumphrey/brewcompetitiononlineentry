@@ -157,7 +157,14 @@ if ($_SESSION['prefsContact'] == "Y") {
                 <div class="col-lg-10 col-md-9 col-sm-8 col-xs-12">
                 	<div class="input-group">
                         <!-- Input Here -->
+                        <?php
+                        if ($_SESSION['prefsCAPTCHA'] == 1) {
+                        require_once(INCLUDES.'recaptchalib.inc.php');
+                        ?>
+                        <?php echo recaptcha_get_html($public_captcha_key, null, true); ?>
+                        <?php } else { ?>
                         <div class="g-recaptcha" data-sitekey="<?php echo $public_captcha_key; ?>"></div>
+                        <?php } ?>
                     </div>
                 </div>
             </div><!-- Form Group -->

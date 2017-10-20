@@ -824,7 +824,7 @@ if ($setup_free_access == TRUE) {
 			`prefsCheck` char(1) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
 			`prefsCheckPayee` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
 			`prefsTransFee` char(1) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-			`prefsGoogle` char(1) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+			`prefsCAPTCHA` tinyint(1) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
 			`prefsGoogleAccount` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
 			`prefsSponsors` char(1) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
 			`prefsSponsorLogos` char(1) COLLATE utf8mb4_unicode_ci DEFAULT NULL,

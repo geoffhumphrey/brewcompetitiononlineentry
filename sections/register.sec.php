@@ -448,7 +448,7 @@ if ($go == "default") {  ?>
 			<div class="input-group has-warning">
 				<span class="input-group-addon" id="last-name-addon1"><span class="fa fa-user"></span></span>
 				<!-- Input Here -->
-				<input class="form-control" name="brewerLastName" id="brewerLastName" type="text" placeholder="" value="<?php if (($msg > 0) && (isset($_COOKIE['brewerFirstName']))) echo $_COOKIE['brewerFirstName']; ?>" data-error="<?php echo $register_text_026; ?>" required>
+				<input class="form-control" name="brewerLastName" id="brewerLastName" type="text" placeholder="" value="<?php if (($msg > 0) && (isset($_COOKIE['brewerFirstName']))) echo $_COOKIE['brewerLastName']; ?>" data-error="<?php echo $register_text_026; ?>" required>
 				<span class="input-group-addon" id="last-name-addon2"><span class="fa fa-star"></span>
 			</div>
             <?php if ($section != "admin") { ?><div id="helpBlock" class="help-block"><?php echo $brewer_text_000; if ($_SESSION['prefsProEdition'] == 0) echo " ".$brewer_text_022; ?></div><?php } ?>
@@ -786,7 +786,14 @@ if ($go == "default") {  ?>
 		<div class="col-lg-9 col-md-9 col-sm-8 col-xs-12">
 			<div class="input-group">
 				<!-- Input Here -->
+                <?php
+                if ($_SESSION['prefsCAPTCHA'] == 1) {
+                require_once(INCLUDES.'recaptchalib.inc.php');
+                ?>
+                <?php echo recaptcha_get_html($public_captcha_key, null, true); ?>
+                <?php } else { ?>
                 <div class="g-recaptcha" data-sitekey="<?php echo $public_captcha_key; ?>"></div>
+                <?php } ?>
 			</div>
 		</div>
 	</div><!-- Form Group -->
