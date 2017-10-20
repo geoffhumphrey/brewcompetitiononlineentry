@@ -167,10 +167,6 @@ $_SESSION['last_action'] = time();
  * which it was generated:
  * https://developers.google.com/recaptcha/docs/domain_validation
  * --------------------------------------------------------
-
- Legacy
- Public Key:    6LdquuQSAAAAAC3rsksvtjRmR9yPFmflBF4OWNS7
- Private Key:    6LdquuQSAAAAAHkf3dDRqZckRb_RIjrkofxE8Knd
  */
 
 if (HOSTED) {
@@ -179,10 +175,12 @@ if (HOSTED) {
 }
 
 else {
+    // Version 1 reCAPTCHA (deprecated, fallback)
     if ((isset($_SESSION['prefsCAPTCHA'])) && ($_SESSION['prefsCAPTCHA'] == 1)) {
         $public_captcha_key = "6LdquuQSAAAAAC3rsksvtjRmR9yPFmflBF4OWNS7";
         $private_captcha_key = "6LdquuQSAAAAAHkf3dDRqZckRb_RIjrkofxE8Knd";
     }
+    // Version 2 reCAPTCHA
     else {
         $public_captcha_key = "6LfHUCoUAAAAACHsPn8hpzbtzcpXatm-GXTTWuR3";
         $private_captcha_key = "6LfHUCoUAAAAACNL-wzpAG3eIWQC-PpX6X3a0iaM";
