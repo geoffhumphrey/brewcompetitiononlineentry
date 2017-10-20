@@ -129,7 +129,7 @@ if (($action == "default") && ($filter == "default")) {
 			$flight_count = explode("^",$flight_count);
 
 			$flight_choose .= "<option value=\"".$base_url;
-			$flight_choose .= "index.php?section=admin&amp;go=judging_flights&amp;action=";
+			$flight_choose .= "index.php?section=admin&amp;go=judging_flights&amp;filter=define&amp;action=";
 			if ($flight_count[0] > 0) $flight_choose .= "edit";
 			else $flight_choose .= "add";
 			$flight_choose .= "&amp;id=".$row_tables_edit['id']."\">";
@@ -310,7 +310,6 @@ if (($action == "add") || ($action == "edit")) {
     $all_table_styles = mysqli_query($connection,$query_all_table_styles) or die (mysqli_error($connection));
     $row_all_table_styles = mysqli_fetch_assoc($all_table_styles);
     $totalRows_all_table_styles = mysqli_num_rows($all_table_styles);
-
 
     // Get the table numbers and sub-style ids from the tables that have been defined and put into arrays
     if ($totalRows_all_table_styles > 0) {

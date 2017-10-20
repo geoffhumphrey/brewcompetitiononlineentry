@@ -667,11 +667,32 @@ function flight_round_number($flight_table,$flight_number) {
 	require(CONFIG.'config.php');
 	mysqli_select_db($connection,$database);
 
-	$query_round_no = sprintf("SELECT flightRound FROM %s WHERE flightTable='%s' AND flightNumber='%s' ORDER BY id DESC LIMIT 1", $prefix."judging_flights", $flight_table, $flight_number);
+	// $received = get_table_info("1","count_total",$flight_table,"default","default");
+
+	$query_round_no = sprintf("SELECT flightRound FROM %s WHERE flightTable='%s' AND flightNumber='%s'", $prefix."judging_flights", $flight_table, $flight_number);
 	$round_no = mysqli_query($connection,$query_round_no) or die (mysqli_error($connection));
 	$row_round_no = mysqli_fetch_assoc($round_no);
+	$totalRows_round_no = mysqli_num_rows($round_no);
 
-	$return = $row_round_no['flightRound'];
+	$all_recorded = array();
+
+	do {
+
+		if (!empty($row_round_no['flightRound'])) $all_recorded[] = 1;
+		else $all_recorded[] = 0;
+
+	} while ($row_round_no = mysqli_fetch_assoc($round_no));
+
+	$all_recorded_sum = array_sum($all_recorded);
+
+	if ($totalRows_round_no == $all_recorded_sum) {
+		$query_round_no = sprintf("SELECT flightRound FROM %s WHERE flightTable='%s' AND flightNumber='%s' ORDER BY id DESC LIMIT 1", $prefix."judging_flights", $flight_table, $flight_number);
+		$round_no = mysqli_query($connection,$query_round_no) or die (mysqli_error($connection));
+		$row_round_no = mysqli_fetch_assoc($round_no);
+		$return = $row_round_no['flightRound'];
+	}
+
+	else $return = "";
 	return $return;
 
 }

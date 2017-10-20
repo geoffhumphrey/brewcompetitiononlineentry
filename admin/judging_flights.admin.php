@@ -297,7 +297,7 @@ if (($action == "assign") && ($filter == "rounds")) {
 			<div class="col-sm-3">
 			<!-- Input Here -->
 			<select class="selectpicker" name="flightRound<?php echo $random ?>" id="flightRound<?php echo $random ?>" data-width="auto">
-				<option value="" disabled selected>Choose Below...</option>
+				<option value="">Not Assigned to a Round</option>
 				<?php for($r=1; $r<$row_table_location['judgingRounds']+1; $r++) { ?>
 				<option value="<?php echo $r; ?>" <?php if ($flight_round_number == $r) echo "selected"; ?>>Round <?php echo $r; ?></option>
 				<?php } ?>
