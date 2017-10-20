@@ -62,9 +62,6 @@ if ((TESTING) || (DEBUG)) {
 // Hosted installations
 if (HOSTED) check_hosted_gh();
 
-// Perform various checks and update various DB tables and elements
-if ($force_update) include (UPDATE.'off_schedule_update.php');
-
 // Perform version check if NOT going into setup
 if (strpos($section, 'step') === FALSE)  {
 	version_check($version,$current_version,$current_version_date_display);

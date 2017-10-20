@@ -63,11 +63,11 @@ if (check_setup($prefix."system",$database)) {
 
 		$setup_relocate .= "&msg=1";
 	}
-	
-	
+
+
 	if ($row_system['version'] == $current_version) {
-		// If the current version is the same as what is in the DB, trigger a force update 
-		// if system version date in DB is prior to the current version date 
+		// If the current version is the same as what is in the DB, trigger a force update
+		// if system version date in DB is prior to the current version date
 		// covers updates made in between pre-releases and full version
 		if ((strtotime($row_system['version_date'])) < ($current_version_date)) $force_update = TRUE;
 	}
@@ -80,19 +80,10 @@ if (check_setup($prefix."system",$database)) {
 			$setup_relocate = "Location: ".$base_url."update.php";
 		}
 
-		// Change version number in DB only if there is no need to run the update scripts
-
 		else {
-
-			$updateSQL = sprintf("UPDATE %s SET version='%s', version_date='%s', setup='1' WHERE id='1'", $prefix."system", $current_version, $current_version_date_display);
-			mysqli_select_db($connection,$database);
-			mysqli_real_escape_string($connection,$updateSQL);
-			$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
-			// echo $updateSQL."<br>";
-
+			$force_update = TRUE;
 			$setup_success = TRUE;
 			$setup_relocate = "Location: ".$base_url;
-
 		}
 
 	}

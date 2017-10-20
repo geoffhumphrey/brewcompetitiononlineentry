@@ -2,6 +2,7 @@
 // -----------------------------------------------------------
 // Version 2.1.10
 // -----------------------------------------------------------
+
 require_once ('paths.php');
 require_once (INCLUDES.'url_variables.inc.php');
 ini_set('session.cookie_httponly', 1);
@@ -10,17 +11,23 @@ ini_set('session.cookie_secure', 1);
 if (SINGLE) require_once(SSO.'sso.inc.php');
 require_once (LIB.'common.lib.php');
 require_once (LIB.'update.lib.php');
-require_once (DB.'setup.db.php');
 require_once (INCLUDES.'db_tables.inc.php');
 require_once (LIB.'help.lib.php');
-require_once (DB.'common.db.php');
-require_once (DB.'brewer.db.php');
-require_once (DB.'entries.db.php');
 require_once (INCLUDES.'constants.inc.php');
 require_once (LANG.'language.lang.php');
 require_once (INCLUDES.'headers.inc.php');
 require_once (INCLUDES.'scrubber.inc.php');
 if (HOSTED) check_hosted_gh();
+
+// Get current version from DB
+if (table_exists($prefix."system")) {
+
+	$query_system = sprintf("SELECT version FROM %s", $prefix."system");
+	$system = mysqli_query($connection,$query_system) or die (mysqli_error($connection));
+	$row_system = mysqli_fetch_assoc($system);
+    $version = $row_system['version'];
+
+}
 
 // Define vars
 $section = "update";
@@ -77,7 +84,7 @@ if (file_exists($filename)) {
 				$update_body .= "<p class=\"lead\">";
 				$update_body .= "This script will update your BCOE&amp;M database from its current version, ";
 				$update_body .= $version;
-				if (($version == $current_version) && ($version_date < $current_version_date)) $update_body .= " (Build ".$row_version['version_date'].")";
+                if (($version == $current_version) && ($version_date < $current_version_date)) $update_body .= " (Build ".$row_version['version_date'].")";
 				$update_body .= ", to the latest version, ";
 				$update_body .= $current_version;
 				if (($version == $current_version) && ($version_date < $current_version_date)) $update_body .= " (Build ".$current_version_date_display.")";
@@ -85,7 +92,7 @@ if (file_exists($filename)) {
 
 				$update_body .= "<p class=\"lead\"><small><strong class=\"text-danger\">Please note!</strong> This update contains a conversion script that affects each table in your database. Therefore, it may take a while to run. Please be patient!</small></p>";
 
-				$update_body .= "<div class=\"bcoem-admin-element-bottom\"><a class=\"btn btn-primary btn-lg btn-block\" href=\"update.php?action=update\" data-confirm=\"Are you sure? Have you backed up your MySQL database? This will update your current installation and cannot be stopped once begun.\"><span class=\"fa fa-lg fa-cog\"></span> Begin The Update</a></div>";
+				$update_body .= "<div class=\"bcoem-admin-element-bottom\"><a class=\"btn btn-primary btn-lg btn-block\" href=\"update.php?action=update\" data-confirm=\"Are you sure? Have you backed up your MySQL database? This will update your current installation and cannot be stopped once begun.\"><span class=\"fa fa-cog fa-spin\"></span> Begin The Update</a></div>";
 				}
 
 				if ($action == "update") {
@@ -296,7 +303,7 @@ else {
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title><?php echo $row_contest_info['contestName']; ?>: Update to BCOE&amp;M <?php echo $current_version_display; ?></title>
+        <title>Update to BCOE&amp;M <?php echo $current_version_display; ?></title>
 
         <!-- Load jQuery / http://jquery.com/ -->
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>

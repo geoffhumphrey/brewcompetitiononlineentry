@@ -554,7 +554,7 @@ $config_html_purifier = HTMLPurifier_Config::createDefault();
 $purifier = new HTMLPurifier($config_html_purifier);
 
 // Standardize the proper names of entrants and locations
-$query_names = sprintf("SELECT * FROM %s",$brewer_db_table);
+$query_names = sprintf("SELECT * FROM %s",$prefix."brewer");
 $names = mysqli_query($connection,$query_names) or die (mysqli_error($connection));
 $row_names = mysqli_fetch_assoc($names);
 $totalRows_names = mysqli_num_rows($names);
@@ -585,7 +585,7 @@ if ($totalRows_names > 0) {
 		if (!empty($row_names['brewerJudgeNotes'])) $brewerJudgeNotes = $purifier->purify($row_names['brewerJudgeNotes']);
 		else $brewerJudgeNotes = "";
 
-		$updateSQL = sprintf("UPDATE $brewer_db_table SET
+		$updateSQL = sprintf("UPDATE %s SET
 			brewerFirstName=%s,
 			brewerLastName=%s,
 			brewerAddress=%s,
@@ -596,15 +596,16 @@ if ($totalRows_names > 0) {
 			brewerJudgeID=%s,
 			brewerJudgeNotes=%s
 			",
-							   GetSQLValueString($first_name, "text"),
-							   GetSQLValueString($last_name, "text"),
-							   GetSQLValueString($address, "text"),
-							   GetSQLValueString($city, "text"),
-							   GetSQLValueString($state, "text"),
-							   GetSQLValueString($brewerClubs, "text"),
-							   GetSQLValueString(filter_var($row_names['brewerEmail'],FILTER_SANITIZE_EMAIL), "text"),
-							   GetSQLValueString($brewerJudgeID, "text"),
-							   GetSQLValueString($brewerJudgeNotes, "text")
+							$prefix."brewer",
+							GetSQLValueString($first_name, "text"),
+							GetSQLValueString($last_name, "text"),
+							GetSQLValueString($address, "text"),
+							GetSQLValueString($city, "text"),
+							GetSQLValueString($state, "text"),
+							GetSQLValueString($brewerClubs, "text"),
+							GetSQLValueString(filter_var($row_names['brewerEmail'],FILTER_SANITIZE_EMAIL), "text"),
+							GetSQLValueString($brewerJudgeID, "text"),
+							GetSQLValueString($brewerJudgeNotes, "text")
 							   );
 		$updateSQL .= sprintf(" WHERE id=%s",GetSQLValueString($row_names['id'], "int"));
 		mysqli_real_escape_string($connection,$updateSQL);
@@ -615,7 +616,7 @@ if ($totalRows_names > 0) {
 }
 
 // Standardize the names of entries
-$query_entry_names = sprintf("SELECT id,brewName,brewInfo,brewComments,brewCoBrewer FROM %s",$brewing_db_table);
+$query_entry_names = sprintf("SELECT id,brewName,brewInfo,brewComments,brewCoBrewer FROM %s",$prefix."brewing");
 $entry_names = mysqli_query($connection,$query_entry_names) or die (mysqli_error($connection));
 $row_entry_names = mysqli_fetch_assoc($entry_names);
 $totalRows_entry_names = mysqli_num_rows($entry_names);
@@ -635,17 +636,18 @@ if ($totalRows_entry_names > 0) {
 
 		$brewName = standardize_name($purifier->purify($row_entry_names['brewName']));
 
-		$updateSQL = sprintf("UPDATE $brewing_db_table SET
+		$updateSQL = sprintf("UPDATE %s SET
 				brewComments=%s,
 				brewCoBrewer=%s,
 				brewInfo=%s,
 				brewName=%s
 				",
-								   GetSQLValueString($brewComments, "text"),
-								   GetSQLValueString($brewCoBrewer, "text"),
-								   GetSQLValueString($brewInfo, "text"),
-								   GetSQLValueString($brewName, "text")
-								   );
+							$prefix."brewing",
+							GetSQLValueString($brewComments, "text"),
+							GetSQLValueString($brewCoBrewer, "text"),
+							GetSQLValueString($brewInfo, "text"),
+							GetSQLValueString($brewName, "text")
+							);
 
 		$updateSQL .= sprintf(" WHERE id=%s",GetSQLValueString($row_entry_names['id'], "int"));
 		mysqli_real_escape_string($connection,$updateSQL);
@@ -656,7 +658,7 @@ if ($totalRows_entry_names > 0) {
 }
 
 // Change the version and version date in the system table
-$updateSQL = sprintf("UPDATE %s SET version='%s', version_date='%s' WHERE id=1", $prefix."system", $current_version, $current_version_date_display);
+$updateSQL = sprintf("UPDATE %s SET version='%s', version_date='%s', data_check=%s WHERE id=1", $prefix."system", $current_version, $current_version_date_display,"NOW()");
 mysqli_real_escape_string($connection,$updateSQL);
 $result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 
