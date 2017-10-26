@@ -2226,8 +2226,6 @@ function style_type($type,$method,$source) {
 
 			case "Mixed": $type = "Beer"; break;
 
-			case "": $type = "Beer"; break;
-
 			default: $type = $type; break;
 		}
 	}

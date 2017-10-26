@@ -17,7 +17,7 @@ $totalRows_bos = mysqli_num_rows($bos);
 
 if ($totalRows_bos > 0) $bos_place = $row_bos['scorePlace']; else $bos_place = "";
 
-$style_type = style_type($row_scores['scoreType'],2,"bcoe");
+$style_type_entry = style_type($row_scores['scoreType'],2,"bcoe");
 
 if (isset($row_flight['flightTable'])) {
 	$table_info = explode("^",get_table_info(1,"basic",$row_flight['flightTable'],"default","default"));

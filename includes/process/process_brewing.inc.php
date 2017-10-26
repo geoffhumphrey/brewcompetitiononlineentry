@@ -994,94 +994,92 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 	if ($action == "update") {
 
 		foreach($_POST['id'] as $id) {
-			if ((isset($_POST["brewPaid".$id])) && ($_POST["brewPaid".$id] == "1")) $brewPaid = "1";
-			if (!isset($_POST["brewPaid".$id])) $brewPaid = "0";
-			if ((isset($_POST["brewReceived".$id])) && ($_POST["brewReceived".$id] == "1")) $brewReceived = "1";
-			if (!isset($_POST["brewReceived".$id])) $brewReceived = "0";
 
-			$brewJudgingNumber = str_replace("^","-",$_POST["brewJudgingNumber".$id]);
+			if ((isset($_POST['brewPaid'.$id])) && ($_POST['brewPaid'.$id] == 1)) $brewPaid = 1;
+			else $brewPaid = 0;
+			if ((isset($_POST['brewReceived'.$id])) && ($_POST['brewReceived'.$id] == 1)) $brewReceived = 1;
+			else $brewReceived = 0;
 
-			$updateSQL = "UPDATE $brewing_db_table SET
-			brewPaid='".$brewPaid."',
-			brewReceived='".$brewReceived."',
-			brewBoxNum='".$_POST["brewBoxNum".$id]."',
-			brewJudgingNumber='".$brewJudgingNumber."'
-			WHERE id='".$id."'";
+			$brewJudgingNumber = str_replace("^","-",$_POST['brewJudgingNumber'.$id]);
+
+			$updateSQL = sprintf("UPDATE %s SET brewPaid='%s', brewReceived='%s', brewBoxNum='%s', brewJudgingNumber='%s' WHERE id='%s'",$brewing_db_table, $brewPaid, $brewReceived, $_POST['brewBoxNum'.$id], $brewJudgingNumber, $id);
 			mysqli_real_escape_string($connection,$updateSQL);
 			$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 
 		}
+
 		//echo $massUpdateGoTo;
 		$massUpdateGoTo = $base_url."index.php?section=admin&go=entries&msg=9";
 		$pattern = array('\'', '"');
 		$massUpdateGoTo = str_replace($pattern, "", $massUpdateGoTo);
 		header(sprintf("Location: %s", stripslashes($massUpdateGoTo)));
-		} // end if ($action == "update")
 
-		if ($action == "paid") {
+	} // end if ($action == "update")
 
-			$updateSQL = "UPDATE $brewing_db_table SET brewPaid='1'";
-			mysqli_real_escape_string($connection,$updateSQL);
-			$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+	if ($action == "paid") {
 
-			$massUpdateGoTo = $base_url."index.php?section=admin&go=entries&msg=20";
-			$pattern = array('\'', '"');
-			$massUpdateGoTo = str_replace($pattern, "", $massUpdateGoTo);
-			header(sprintf("Location: %s", stripslashes($massUpdateGoTo)));
+		$updateSQL = "UPDATE $brewing_db_table SET brewPaid='1'";
+		mysqli_real_escape_string($connection,$updateSQL);
+		$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 
-		}
+		$massUpdateGoTo = $base_url."index.php?section=admin&go=entries&msg=20";
+		$pattern = array('\'', '"');
+		$massUpdateGoTo = str_replace($pattern, "", $massUpdateGoTo);
+		header(sprintf("Location: %s", stripslashes($massUpdateGoTo)));
 
-		if ($action == "unpaid") {
+	}
 
-			$updateSQL = "UPDATE $brewing_db_table SET brewPaid='0'";
-			mysqli_real_escape_string($connection,$updateSQL);
-			$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+	if ($action == "unpaid") {
 
-			$massUpdateGoTo = $base_url."index.php?section=admin&go=entries&msg=34";
-			$pattern = array('\'', '"');
-			$massUpdateGoTo = str_replace($pattern, "", $massUpdateGoTo);
-			header(sprintf("Location: %s", stripslashes($massUpdateGoTo)));
+		$updateSQL = "UPDATE $brewing_db_table SET brewPaid='0'";
+		mysqli_real_escape_string($connection,$updateSQL);
+		$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 
-		}
+		$massUpdateGoTo = $base_url."index.php?section=admin&go=entries&msg=34";
+		$pattern = array('\'', '"');
+		$massUpdateGoTo = str_replace($pattern, "", $massUpdateGoTo);
+		header(sprintf("Location: %s", stripslashes($massUpdateGoTo)));
 
-		if ($action == "received") {
+	}
 
-			$updateSQL = "UPDATE $brewing_db_table SET brewReceived='1'";
-			mysqli_real_escape_string($connection,$updateSQL);
-			$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+	if ($action == "received") {
 
-			$massUpdateGoTo = $base_url."index.php?section=admin&go=entries&msg=21";
-			$pattern = array('\'', '"');
-			$massUpdateGoTo = str_replace($pattern, "", $massUpdateGoTo);
-			header(sprintf("Location: %s", stripslashes($massUpdateGoTo)));
+		$updateSQL = "UPDATE $brewing_db_table SET brewReceived='1'";
+		mysqli_real_escape_string($connection,$updateSQL);
+		$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 
-		}
+		$massUpdateGoTo = $base_url."index.php?section=admin&go=entries&msg=21";
+		$pattern = array('\'', '"');
+		$massUpdateGoTo = str_replace($pattern, "", $massUpdateGoTo);
+		header(sprintf("Location: %s", stripslashes($massUpdateGoTo)));
 
-		if ($action == "not-received") {
+	}
 
-			$updateSQL = "UPDATE $brewing_db_table SET brewReceived='0'";
-			mysqli_real_escape_string($connection,$updateSQL);
-			$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+	if ($action == "not-received") {
 
-			$massUpdateGoTo = $base_url."index.php?section=admin&go=entries&msg=35";
-			$pattern = array('\'', '"');
-			$massUpdateGoTo = str_replace($pattern, "", $massUpdateGoTo);
-			header(sprintf("Location: %s", stripslashes($massUpdateGoTo)));
+		$updateSQL = "UPDATE $brewing_db_table SET brewReceived='0'";
+		mysqli_real_escape_string($connection,$updateSQL);
+		$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 
-		}
+		$massUpdateGoTo = $base_url."index.php?section=admin&go=entries&msg=35";
+		$pattern = array('\'', '"');
+		$massUpdateGoTo = str_replace($pattern, "", $massUpdateGoTo);
+		header(sprintf("Location: %s", stripslashes($massUpdateGoTo)));
 
-		if ($action == "confirmed") {
+	}
 
-			$updateSQL = "UPDATE $brewing_db_table SET brewConfirmed='1'";
-			mysqli_real_escape_string($connection,$updateSQL);
-			$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+	if ($action == "confirmed") {
 
-			$massUpdateGoTo = $base_url."index.php?section=admin&go=entries&msg=22";
-			$pattern = array('\'', '"');
-			$massUpdateGoTo = str_replace($pattern, "", $massUpdateGoTo);
-			header(sprintf("Location: %s", stripslashes($massUpdateGoTo)));
+		$updateSQL = "UPDATE $brewing_db_table SET brewConfirmed='1'";
+		mysqli_real_escape_string($connection,$updateSQL);
+		$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 
-		}
+		$massUpdateGoTo = $base_url."index.php?section=admin&go=entries&msg=22";
+		$pattern = array('\'', '"');
+		$massUpdateGoTo = str_replace($pattern, "", $massUpdateGoTo);
+		header(sprintf("Location: %s", stripslashes($massUpdateGoTo)));
+
+	}
 
 } else {
 	header(sprintf("Location: %s", $base_url."index.php?msg=98"));

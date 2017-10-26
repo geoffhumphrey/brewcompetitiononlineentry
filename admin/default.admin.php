@@ -1077,19 +1077,29 @@
 									<li><a href="<?php echo $base_url; ?>output/export.output.php?section=emails&amp;go=csv&amp;filter=judges&amp;action=email">Assigned Judges</a></li>
 									<li><a href="<?php echo $base_url; ?>output/export.output.php?section=emails&amp;go=csv&amp;filter=stewards&amp;action=email">Assigned Stewards</a></li>
 									<li><a href="<?php echo $base_url; ?>output/export.output.php?section=emails&amp;go=csv&amp;filter=staff&amp;action=email">Assigned Staff</a></li>
-									<li><a href="<?php echo $base_url; ?>output/export.output.php?section=entries&amp;go=csv&amp;filter=winners">Winners</a></li>
                                 </ul>
                             </div>
                         </div><!-- ./row -->
-
+                        <div class="row">
+                            <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                                <strong>Participants (CSV)</strong>
+                            </div>
+                            <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-8">
+                                <ul class="list-unstyled">
+                                    <li><a href="<?php echo $base_url; ?>output/export.output.php?section=participants&amp;go=csv">All Participants</a></li>
+                                    <li><a href="<?php echo $base_url; ?>output/export.output.php?section=entries&amp;go=csv&amp;filter=winners">Winners</a></li>
+                                </ul>
+                            </div>
+                        </div><!-- ./row -->
                         <div class="row">
                             <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-4">
                                 <strong>Entries (CSV)</strong>
                             </div>
                             <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-8">
                                 <ul class="list-unstyled">
-									<li><a href="<?php echo $base_url; ?>output/export.output.php?section=entries&amp;go=csv&amp;action=all&amp;filter=all">All Entries</a></li>
-									<li><a href="<?php echo $base_url; ?>output/export.output.php?section=entries&amp;go=csv">All Entries - Limited Data</a></li>
+									<li><a href="<?php echo $base_url; ?>output/export.output.php?section=entries&amp;go=csv&amp;action=all&amp;filter=all">All Entries: All Data</a></li>
+									<li><a href="<?php echo $base_url; ?>output/export.output.php?section=entries&amp;go=csv">All Entries: Limited Data</a></li>
+                                    <li><a href="<?php echo $base_url; ?>output/export.output.php?section=entries&amp;go=csv&amp;filter=brewer_contact_info">All Entries: Limited Data with Brewer Contact Info</a></li>
 									<li><a href="<?php echo $base_url; ?>output/export.output.php?section=entries&amp;go=csv&amp;filter=paid&amp;view=all">Paid Entries</a></li>
 									<li><a href="<?php echo $base_url; ?>output/export.output.php?section=entries&amp;go=csv&amp;filter=paid">Paid &amp; Received Entries</a></li>
 									<li><a href="<?php echo $base_url; ?>output/export.output.php?section=entries&amp;go=csv&amp;filter=nopay&amp;view=all">Non-Paid Entries</a></li>
@@ -1098,19 +1108,6 @@
                                 </ul>
                             </div>
                         </div><!-- ./row -->
-
-                        <div class="row">
-                            <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-4">
-                                <strong>Participants (CSV)</strong>
-                            </div>
-                            <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-8">
-                                <ul class="list-inline">
-                                    <li><a href="<?php echo $base_url; ?>output/export.output.php?section=participants&amp;go=csv">All Participants</a></li>
-									<li><a href="<?php echo $base_url; ?>output/export.output.php?section=entries&amp;go=csv&amp;filter=winners">Winners</a></li>
-                                </ul>
-                            </div>
-                        </div><!-- ./row -->
-
                         <div class="row">
                             <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-4">
                                 <strong>Promo Materials</strong>

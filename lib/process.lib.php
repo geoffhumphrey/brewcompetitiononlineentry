@@ -30,7 +30,7 @@ function check_judging_num($input) {
 	$row_brewing_styles = mysqli_fetch_assoc($brewing_styles);
 
 	$files = array_slice(scandir(USER_DOCS), 2);
-	$scoresheet_file_name_judging = $input.".pdf";
+	$scoresheet_file_name_judging = strtolower($input).".pdf";
 
 	if (($row_brewing_styles['count'] == 0) && (!in_array($scoresheet_file_name_judging,$files))) return TRUE;
 	else return FALSE;

@@ -26,6 +26,93 @@ $td_width_entry = 200;
 $td_width_style = 200;
 $td_width_club = 175;
 
+$BOM = "\xEF\xBB\xBF"; // UTF-8 byte order mark (BOM)
+
+if (!function_exists('fputcsv')) {
+    function fputcsv(&$handle, $fields = array(), $delimiter = ',', $enclosure = '"') {
+
+        // Sanity Check
+        if (!is_resource($handle)) {
+            trigger_error('fputcsv() expects parameter 1 to be resource, ' .
+                gettype($handle) . ' given', E_USER_WARNING);
+            return false;
+        }
+
+        if ($delimiter!=NULL) {
+            if( strlen($delimiter) < 1 ) {
+                trigger_error('delimiter must be a character', E_USER_WARNING);
+                return false;
+            }elseif( strlen($delimiter) > 1 ) {
+                trigger_error('delimiter must be a single character', E_USER_NOTICE);
+            }
+
+            /* use first character from string */
+            $delimiter = $delimiter[0];
+        }
+
+        if( $enclosure!=NULL ) {
+             if( strlen($enclosure) < 1 ) {
+                trigger_error('enclosure must be a character', E_USER_WARNING);
+                return false;
+            }elseif( strlen($enclosure) > 1 ) {
+                trigger_error('enclosure must be a single character', E_USER_NOTICE);
+            }
+
+            /* use first character from string */
+            $enclosure = $enclosure[0];
+       }
+
+        $i = 0;
+        $csvline = '';
+        $escape_char = '\\';
+        $field_cnt = count($fields);
+        $enc_is_quote = in_array($enclosure, array('"',"'"));
+        reset($fields);
+
+        foreach( $fields AS $field ) {
+
+            /* enclose a field that contains a delimiter, an enclosure character, or a newline */
+            if( is_string($field) && (
+                strpos($field, $delimiter)!==false ||
+                strpos($field, $enclosure)!==false ||
+                strpos($field, $escape_char)!==false ||
+                strpos($field, "\n")!==false ||
+                strpos($field, "\r")!==false ||
+                strpos($field, "\t")!==false ||
+                strpos($field, ' ')!==false ) ) {
+
+                $field_len = strlen($field);
+                $escaped = 0;
+
+                $csvline .= $enclosure;
+                for( $ch = 0; $ch < $field_len; $ch++ )    {
+                    if( $field[$ch] == $escape_char && $field[$ch+1] == $enclosure && $enc_is_quote ) {
+                        continue;
+                    }elseif( $field[$ch] == $escape_char ) {
+                        $escaped = 1;
+                    }elseif( !$escaped && $field[$ch] == $enclosure ) {
+                        $csvline .= $enclosure;
+                    }else{
+                        $escaped = 0;
+                    }
+                    $csvline .= $field[$ch];
+                }
+                $csvline .= $enclosure;
+            } else {
+                $csvline .= $field;
+            }
+
+            if( $i++ != $field_cnt ) {
+                $csvline .= $delimiter;
+            }
+        }
+
+        $csvline .= "\n";
+
+        return fwrite($handle, $csvline);
+    }
+}
+
 if (((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) || (((judging_date_return() == 0) && ($registration_open == 2) && ($entry_window_open == 2)))) {
 
 /* -------------- ENTRY Exports -------------- */
@@ -52,38 +139,75 @@ if (((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) || ((
 		if (($go == "csv") && ($action == "all") && ($filter == "all")) {
 			$headers = array();
 
+            $headers[] = "Last Name";
+            $headers[] = "First Name";
+            $headers[] = "Email";
+            $headers[] = "Address";
+            $headers[] = "City";
+            $headers[] = "State/Province";
+            $headers[] = "Zip/Postal Code";
+            $headers[] = "Country";
+
 			for ($i = 0; $i < $num_fields; $i++) {
-				//$headers[] = mysql_field_name($sql,$i);
-				$headers[] = mysqli_fetch_field_direct($sql, $i)->name;
+				$header_name = mysqli_fetch_field_direct($sql, $i)->name;
+                $header_name = ltrim($header_name,"brew");
+                if ($header_name == "id") $headers[] = "Entry Number";
+                elseif ($header_name == "Name") $headers[] = "Entry Name";
+                elseif ($header_name == "Info") $headers[] = "Required Info";
+                elseif ($header_name == "InfoOptional") $headers[] = "Optional Info";
+                elseif ($header_name == "Mead1") $headers[] = "Carbonation";
+                elseif ($header_name == "Mead2") $headers[] = "Sweetness";
+                elseif ($header_name == "Mead3") $headers[] = "Strength";
+                elseif ($header_name == "Comments") $headers[] = "Brewer Specifics";
+                elseif ($header_name == "Updated") $headers[] = "Date/Time Updated";
+                else $headers[] = preg_replace(array('/(?<=[^A-Z])([A-Z])/', '/(?<=[^0-9])([0-9])/'), ' $0', $header_name);
 			 }
-				$headers[] .= "Table";
-				$headers[] .= "Flight";
-				$headers[] .= "Round";
-				$headers[] .= "Score";
-				$headers[] .= "Place";
-				$headers[] .= "BOS Place";
-				$headers[] .= "Style Type";
-				$headers[] .= "Location";
+
+				$headers[] = "Table";
+				$headers[] = "Flight";
+				$headers[] = "Round";
+				$headers[] = "Score";
+				$headers[] = "Place";
+				$headers[] = "BOS Place";
+				$headers[] = "Style Type";
+				$headers[] = "Location";
+
+			header("Content-Type: text/csv; charset=utf-8");
+			header('Content-Disposition: attachment;filename="'.$filename.'"');
+			header('Pragma: no-cache');
+			header('Expires: 0');
 
 			$fp = fopen('php://output', 'w');
+			fwrite($fp, $BOM);
 
 			if ($fp && $sql) {
-
-				header('Content-Type: text/csv');
-				header('Content-Disposition: attachment;filename="'.$filename.'"');
-				header('Pragma: no-cache');
-				header('Expires: 0');
 
 				fputcsv($fp, $headers);
 
 				do {
-					include (DB.'output_entries_export_extend.db.php');
-					$fields1 = array_values($row_sql);
-					$fields2 = array($table_name,$row_flight['flightNumber'],$row_flight['flightRound'],sprintf("%02s",$row_scores['scoreEntry']),$row_scores['scorePlace'],$bos_place,$style_type,$location[2]);
-					$fields = array_merge($fields1,$fields2);
 
-					fputcsv($fp, $fields);
+                    include (DB.'output_entries_export_extend.db.php');
+
+                    if (isset($row_sql['brewBrewerID'])) $brewer_info = explode("^", brewer_info($row_sql['brewBrewerID']));
+                    else $brewer_info = "";
+
+                    if (isset($row_sql['brewBrewerFirstName'])) $brewerFirstName = strtr($row_sql['brewBrewerFirstName'],$html_remove);
+                    else $brewerFirstName = "";
+
+                    if (isset($row_sql['brewBrewerLastName'])) $brewerLastName = strtr($row_sql['brewBrewerLastName'],$html_remove);
+                    else $brewerLastName = "";
+
+                    if (!empty($brewer_info)) $fields0 = array($brewerFirstName,$brewerLastName,$brewer_info[6],$brewer_info[10],$brewer_info[11],$brewer_info[12],$brewer_info[13],$brewer_info[14]);
+                    else $fields0 = array($brewerFirstName,$brewerLastName,"","","","","","");
+
+                    $fields1 = array_values($row_sql);
+					$fields2 = array($table_name,$row_flight['flightNumber'],$row_flight['flightRound'],sprintf("%02s",$row_scores['scoreEntry']),$row_scores['scorePlace'],$bos_place,$style_type_entry,$location[2]);
+					$fields = array_merge($fields0,$fields1,$fields2);
+
+                    fputcsv($fp, $fields);
+
 				}
+
 				while ($row_sql = mysqli_fetch_assoc($sql));
 			die;
 			}
@@ -92,12 +216,12 @@ if (((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) || ((
 		else {
 			//first name, last name, email, category, subcategory, entry #, judging #, brewinfo, brewmead1, brewmead2, brewmead3, address, city, state, zip
 			if (($go == "csv") && ($action == "hccp") && ($filter != "winners")) {
-				$a[] = array('First Name','Last Name','Email','Category','Style','Style Name','Entry Number','Judging Number','Brew Name','Required Info','Sweetness','Carb','Strength');
+				$a[] = array('First Name','Last Name','Entry Number','Category','Style','Style Name','Entry Number','Judging Number','Brew Name','Required Info','Sweetness','Carb','Strength');
 			}
 
 			if (($go == "csv") && (($action == "default") || ($action == "email")) && ($filter != "winners")) {
-				$a[] = array('First Name','Last Name','Email','Category','Style','Style Name','Entry Number','Judging Number','Brew Name','Required Info','Specifics','Sweetness','Carb','Strength','Address','City','State/Province','Zip/Postal Code','Country','Table','Flight','Round','Score','Place','BOS Place','Style Type','Location');
-			}
+                $a[] = array('First Name','Last Name','Email', 'Address','City','State/Province','Zip/Postal Code','Country','Entry Number','Judging Number','Category','SubCategory','Style Name','Brew Name', 'Required Info','Specifics','Sweetness','Carb','Strength','Table','Location','Flight','Round','Score','Place','BOS Place');
+            }
 
 			if (($go == "csv") && ($action == "default") && ($filter == "winners")) {
 				$a[] = array('Table Number','Table Name','Category','Style','Style Name','Place','Last Name','First Name','Email','Address','City','State/Province','Zip/Postal Code','Country','Phone','Entry Name','Club','Co Brewer');
@@ -133,7 +257,7 @@ if (((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) || ((
 
 				$entryNo = sprintf("%04s",$row_sql['id']);
 
-				if (isset($row_sql['brewCategory'])) $judgingNo = readable_judging_number($row_sql['brewCategory'],$row_sql['brewJudgingNumber']);
+				if (isset($row_sql['brewJudgingNumber'])) $judgingNo = sprintf("%06s",$row_sql['brewJudgingNumber']);
 				else $judgingNo = "";
 
 				if (isset($row_sql['brewBrewerID'])) $brewer_info = explode("^", brewer_info($row_sql['brewBrewerID']));
@@ -151,8 +275,10 @@ if (((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) || ((
 				// With email addresses of participants.
 				if ((($action == "default") || ($action == "email")) && ($go == "csv") && ($filter != "winners")) {
 					include (DB.'output_entries_export_extend.db.php');
-					$a[] = array($brewerFirstName,$brewerLastName,$brewer_info[6],$row_sql['brewCategory'],$row_sql['brewSubCategory'],$row_sql['brewStyle'],$entryNo,$judgingNo,$brewName,$brewInfo,$brewSpecifics,$row_sql['brewMead1'],$row_sql['brewMead2'],$row_sql['brewMead3'],$brewer_info[10],$brewer_info[11],$brewer_info[12],$brewer_info[13],$brewer_info[14],$table_name,$row_flight['flightNumber'],$row_flight['flightRound'],sprintf("%02s",$row_scores['scoreEntry']),$row_scores['scorePlace'],$bos_place,$style_type,$location[2]);
+					if (!empty($brewer_info)) $a[] = array($brewerFirstName,$brewerLastName,$brewer_info[6],$brewer_info[10],$brewer_info[11],$brewer_info[12],$brewer_info[13],$brewer_info[14],$entryNo,$judgingNo,$row_sql['brewCategory'],$row_sql['brewSubCategory'],$row_sql['brewStyle'],$brewName,$brewInfo,$brewSpecifics,$row_sql['brewMead1'],$row_sql['brewMead2'],$row_sql['brewMead3'],$table_name,$location[2],$row_flight['flightNumber'],$row_flight['flightRound'],sprintf("%02s",$row_scores['scoreEntry']),$row_scores['scorePlace'],$bos_place);
 				}
+
+
 
 				if (($go == "csv") && ($action == "required") && ($filter == "required")) {
 
@@ -173,21 +299,22 @@ if (((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) || ((
 
 			} while ($row_sql = mysqli_fetch_assoc($sql));
 
-			if (($action == "default") && ($filter == "winners") && ($_SESSION['prefsWinnerMethod'] > 0)) {
+			if (($action == "default") && ($filter == "winners") && ($_SESSION['prefsWinnerMethod'] >= 0)) {
 				include (DB.'output_entries_export_winner.db.php');
 			}
 
-
-
-			header('Content-type: application/x-msdownload');
+			header("Content-Type: text/csv; charset=utf-8");
 			header('Content-Disposition: attachment;filename="'.$filename.'"');
 			header('Pragma: no-cache');
 			header('Expires: 0');
+
 			$fp = fopen('php://output', 'w');
+			fwrite($fp, $BOM);
 
 			foreach ($a as $fields) {
 				fputcsv($fp,$fields,$separator);
 			}
+
 			fclose($fp);
 
 		}
@@ -199,8 +326,6 @@ if (((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) || ((
 	if ($section == "emails") {
 
 		include (DB.'output_email_export.db.php');
-
-		//echo $query_sql;
 
 		$separator = ",";
 		$extension = ".csv";
@@ -251,15 +376,18 @@ if (((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) || ((
 
 		} while ($row_sql = mysqli_fetch_assoc($sql));
 
-		header('Content-type: application/x-msdownload');
+		header("Content-Type: text/csv; charset=utf-8");
 		header('Content-Disposition: attachment;filename="'.$filename.'"');
 		header('Pragma: no-cache');
 		header('Expires: 0');
+
 		$fp = fopen('php://output', 'w');
+		fwrite($fp, $BOM);
 
 		foreach ($a as $fields) {
 			fputcsv($fp,$fields,$separator);
 		}
+
 		fclose($fp);
 
 
@@ -288,19 +416,38 @@ if (((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) || ((
 			$brewerAddress = strtr($row_sql['brewerAddress'],$html_remove);
 			$brewerCity = strtr($row_sql['brewerCity'],$html_remove);
 			$assignment = brewer_assignment($row_sql['uid'],"1","blah","default","default");
+			$assignment = strtolower($assignment);
+			$assignment = str_replace(", ", ",", $assignment);
+			$assignment = explode(",", $assignment);
+			$assign = array();
+
+			foreach ($assignment as $value) {
+				if (strpos($value,"judge") !== false) $assign[] = "Judge";
+				if (strpos($value,"bos") !== false) $assign[] = "BOS";
+				if (strpos($value,"steward") !== false) $assign[] = "Steward";
+			}
+
+			$assignment = implode(", ", $assign);
+
 			if ($row_sql['brewerCountry'] == "United States") $phone = format_phone_us($row_sql['brewerPhone1']); else $phone = $row_sql['brewerPhone1'];
 			$a[] = array($brewerFirstName,$brewerLastName,$brewerAddress,$brewerCity,$row_sql['brewerState'],$row_sql['brewerZip'],$row_sql['brewerCountry'],$phone,$row_sql['brewerEmail'],$row_sql['brewerClubs'],judge_entries($row_sql['uid'],0),$assignment,$row_sql['brewerJudgeID'],str_replace(",",", ",$row_sql['brewerJudgeRank']),style_convert($row_sql['brewerJudgeLikes'],'6'),style_convert($row_sql['brewerJudgeDislikes'],'6'));
 		} while ($row_sql = mysqli_fetch_assoc($sql));
 
 		$filename = ltrim(filename($contest)."_Participants".filename($date).$loc.$extension,"_");
-		header('Content-type: application/x-msdownload');
+
+		header("Content-Type: text/csv; charset=utf-8");
 		header('Content-Disposition: attachment;filename="'.$filename.'"');
 		header('Pragma: no-cache');
 		header('Expires: 0');
+
 		$fp = fopen('php://output', 'w');
+
+		fwrite($fp, $BOM);
+
 		foreach ($a as $fields) {
 			fputcsv($fp,$fields,$separator);
 		}
+
 		fclose($fp);
 	}
 
@@ -455,7 +602,6 @@ if (((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) || ((
 		echo $output;
 
 	} // END if ($section == "promo")
-
 
 
 /* -------------- RESULTS Exports -------------- */
@@ -1021,11 +1167,9 @@ if (((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) || ((
 
 
 		// ------------------------------------------------------------------------------------------------------
-		# BJCP XML Output
-		// ------------------------------------------------------------------------------------------------------
-
+		// BJCP XML Output
 		// BJCP XML Specification: http://www.bjcp.org/it/docs/BJCP%20Database%20XML%20Interface%20Spec%202.1.pdf
-
+		// ------------------------------------------------------------------------------------------------------
 
 		if ($view == "xml") {
 			$total_days = total_days();
@@ -1046,7 +1190,6 @@ if (((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) || ((
 			$output .= "\t\t<CompFlights>".total_flights()."</CompFlights>\n";
 			$output .= "\t</CompData>\n";
 			$output .= "\t<BJCPpoints>\n";
-
 
 				// Judges with a properly formatted BJCP IDs in the system
 				foreach (array_unique($j) as $uid) {
@@ -1195,7 +1338,6 @@ if (((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) || ((
 						}
 					}
 				}
-
 
 				// Staff Members without a properly formatted BJCP IDs in the system
 				foreach (array_unique($st) as $uid) {

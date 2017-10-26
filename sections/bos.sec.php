@@ -207,7 +207,7 @@ if ($totalRows_sbi > 0) {
 					}
 
 					$table_body2 .= "<td>";
-					if ($_SESSION['prefsProEdition'] == 1) $table_body2 .= $brewer_info['0']." ".$brewer_info['1'];
+					if ($_SESSION['prefsProEdition'] == 0) $table_body2 .= $brewer_info['0']." ".$brewer_info['1'];
 					else $table_body2 .= $brewer_info[15];
 					if (($_SESSION['prefsProEdition'] == 0) && (!empty($entry_info['4']))) $table_body2 .=  "<br />".$label_cobrewer.": ".$entry_info['4'];
 					$table_body2 .= "</td>";

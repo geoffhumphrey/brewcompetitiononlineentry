@@ -3,7 +3,7 @@
  * Module:        config.php
  * Description:   This module houses configuration variables for DB connection, etc.
  *
- * Last Modified: September 21, 2017
+ * Last Modified: October 20, 2017
  */
 
 /**

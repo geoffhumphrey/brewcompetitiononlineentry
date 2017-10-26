@@ -334,10 +334,14 @@ if (!check_update("prefsShowBestBrewer", $prefix."preferences")) {
 	$result = mysqli_query($connection,$updateSQL);
 }
 
-if (check_update("prefsGoogle", $prefix."brewing")) {
+if (!check_update("prefsCAPTCHA", $prefix."brewing")) {
 
-	// Change unused prefsGoogle to new brewCAPTCHA pref to allow for fallback CAPTCHA
-	$updateSQL = sprintf("ALTER TABLE `%s` CHANGE `prefsGoogle` `prefsCAPTCHA` tinyint(1) COLLATE utf8mb4_unicode_ci DEFAULT NULL;",$prefix."preferences");
+	$updateSQL = sprintf("ALTER TABLE `%s` ADD `prefsCAPTCHA` tinyint(1) COLLATE utf8mb4_unicode_ci DEFAULT NULL;",$prefix."preferences");
+	mysqli_select_db($connection,$database);
+	mysqli_real_escape_string($connection,$updateSQL);
+	$result = mysqli_query($connection,$updateSQL);
+
+	$updateSQL = sprintf("UPDATE `%s` SET prefsCAPTCHA='0' WHERE id='1';",$prefix."preferences");
 	mysqli_select_db($connection,$database);
 	mysqli_real_escape_string($connection,$updateSQL);
 	$result = mysqli_query($connection,$updateSQL);
@@ -366,11 +370,6 @@ if (check_update("prefsCompOrg", $prefix."preferences")) {
 
 }
 
-$updateSQL = sprintf("ALTER TABLE `%s` SET prefsProEdition='0' WHERE id='1';",$prefix."preferences");
-mysqli_select_db($connection,$database);
-mysqli_real_escape_string($connection,$updateSQL);
-$result = mysqli_query($connection,$updateSQL);
-
 if ((!check_update("prefsCompOrg", $prefix."preferences")) && (!check_update("prefsProEdition", $prefix."preferences"))) {
 	// If not there add it
 	$updateSQL = sprintf("ALTER TABLE `%s` ADD `prefsProEdition` TINYINT(1) NULL DEFAULT NULL AFTER `prefsPaypalAccount`;",$prefix."preferences");
@@ -378,13 +377,13 @@ if ((!check_update("prefsCompOrg", $prefix."preferences")) && (!check_update("pr
 	mysqli_real_escape_string($connection,$updateSQL);
 	$result = mysqli_query($connection,$updateSQL);
 
-}
+	// Set the new pref to false
+	$updateSQL = sprintf("UPDATE `%s` SET prefsProEdition='0' WHERE id='1';",$prefix."preferences");
+	mysqli_select_db($connection,$database);
+	mysqli_real_escape_string($connection,$updateSQL);
+	$result = mysqli_query($connection,$updateSQL);
 
-// Set the new pref to false
-$updateSQL = sprintf("UPDATE `%s` SET prefsProEdition='0' WHERE id='1';",$prefix."preferences");
-mysqli_select_db($connection,$database);
-mysqli_real_escape_string($connection,$updateSQL);
-$result = mysqli_query($connection,$updateSQL);
+}
 
 // Alter the prefsStyleSet to TEXT to accommodate storing a BreweryDB API Key and chosen styles
 $updateSQL = sprintf("ALTER TABLE `%s` CHANGE `prefsStyleSet` `prefsStyleSet` TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL;",$prefix."preferences");
@@ -616,7 +615,7 @@ if ($totalRows_names > 0) {
 }
 
 // Standardize the names of entries
-$query_entry_names = sprintf("SELECT id,brewName,brewInfo,brewComments,brewCoBrewer FROM %s",$prefix."brewing");
+$query_entry_names = sprintf("SELECT id,brewName,brewInfo,brewComments,brewCoBrewer,brewJudgingNumber FROM %s",$prefix."brewing");
 $entry_names = mysqli_query($connection,$query_entry_names) or die (mysqli_error($connection));
 $row_entry_names = mysqli_fetch_assoc($entry_names);
 $totalRows_entry_names = mysqli_num_rows($entry_names);
@@ -637,12 +636,14 @@ if ($totalRows_entry_names > 0) {
 		$brewName = standardize_name($purifier->purify($row_entry_names['brewName']));
 
 		$updateSQL = sprintf("UPDATE %s SET
+				brewJudgingNumber=%s,
 				brewComments=%s,
 				brewCoBrewer=%s,
 				brewInfo=%s,
 				brewName=%s
 				",
 							$prefix."brewing",
+							GetSQLValueString(strtolower($row_entry_names['brewJudgingNumber']), "text"),
 							GetSQLValueString($brewComments, "text"),
 							GetSQLValueString($brewCoBrewer, "text"),
 							GetSQLValueString($brewInfo, "text"),
@@ -654,6 +655,24 @@ if ($totalRows_entry_names > 0) {
 		$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 
 	} while ($row_entry_names = mysqli_fetch_assoc($entry_names));
+
+}
+
+// ----------------------------------------------- 2.1.11 ----------------------------------------------
+// All PDF files in the user_docs directory must be converted to all lowercase (including extension)
+// -----------------------------------------------------------------------------------------------------
+
+$files = new FilesystemIterator(USER_DOCS);
+
+foreach($files as $file) {
+
+	$mime = mime_content_type($file->getPathname());
+
+	if (stripos($mime, "pdf") !== false) {
+		$file_name_current = $file->getFilename();
+		$file_name_new = strtolower($file->getFilename());
+		rename(USER_DOCS.$file_name_current, USER_DOCS.$file_name_new);
+	}
 
 }
 
