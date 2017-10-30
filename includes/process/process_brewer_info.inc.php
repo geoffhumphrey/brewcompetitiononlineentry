@@ -33,8 +33,9 @@ if (isset($_POST['brewerClubs'])) {
     $brewerClubs = $purifier->purify($_POST['brewerClubs']);
     $brewerClubsConcat = $brewerClubs."|".$brewerClubs;
     if (!in_array($brewerClubsConcat,$club_array)) {
-        if (($_POST['brewerClubs'] == "Other") && (!empty($_POST['brewerClubsOther']))) {
-            $brewerClubs = ucwords($brewerClubs);
+        if ($_POST['brewerClubs'] == "Other") {
+            if (!empty($_POST['brewerClubsOther'])) $brewerClubs = ucwords($purifier->purify($_POST['brewerClubsOther']));
+            else $brewerClubs = "Other";
         }
         else $brewerClubs = "";
     }
