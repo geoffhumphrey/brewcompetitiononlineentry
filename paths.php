@@ -125,11 +125,8 @@ if (HOSTED) {
  *
  * @fixes https://github.com/geoffhumphrey/brewcompetitiononlineentry/issues/781
  */
-if (empty($installation_id)) {
-	$prefix_session = md5(__FILE__);
-} else {
-	$prefix_session = md5($installation_id);
-}
+if (empty($installation_id)) $prefix_session = md5(__FILE__);
+else $prefix_session = md5($installation_id);
 
 function is_session_started() {
     if (php_sapi_name() !== 'cli' ) {
