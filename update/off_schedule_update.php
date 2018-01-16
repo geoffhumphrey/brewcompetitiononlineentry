@@ -341,7 +341,7 @@ if (!check_update("prefsCAPTCHA", $prefix."brewing")) {
 	mysqli_real_escape_string($connection,$updateSQL);
 	$result = mysqli_query($connection,$updateSQL);
 
-	$updateSQL = sprintf("UPDATE `%s` SET prefsCAPTCHA='0' WHERE id='1';",$prefix."preferences");
+	$updateSQL = sprintf("UPDATE `%s` SET prefsCAPTCHA='0';",$prefix."preferences");
 	mysqli_select_db($connection,$database);
 	mysqli_real_escape_string($connection,$updateSQL);
 	$result = mysqli_query($connection,$updateSQL);
@@ -354,7 +354,7 @@ if (!check_update("prefsPaypalIPN", $prefix."preferences")) {
 	mysqli_real_escape_string($connection,$updateSQL);
 	$result = mysqli_query($connection,$updateSQL);
 
-	$updateSQL = sprintf("UPDATE `%s` SET prefsPayPalIPN='0' WHERE id='1';",$prefix."preferences");
+	$updateSQL = sprintf("UPDATE `%s` SET prefsPayPalIPN='0';",$prefix."preferences");
 	mysqli_select_db($connection,$database);
 	mysqli_real_escape_string($connection,$updateSQL);
 	$result = mysqli_query($connection,$updateSQL);
@@ -378,7 +378,7 @@ if ((!check_update("prefsCompOrg", $prefix."preferences")) && (!check_update("pr
 	$result = mysqli_query($connection,$updateSQL);
 
 	// Set the new pref to false
-	$updateSQL = sprintf("UPDATE `%s` SET prefsProEdition='0' WHERE id='1';",$prefix."preferences");
+	$updateSQL = sprintf("UPDATE `%s` SET prefsProEdition='0';",$prefix."preferences");
 	mysqli_select_db($connection,$database);
 	mysqli_real_escape_string($connection,$updateSQL);
 	$result = mysqli_query($connection,$updateSQL);
@@ -673,6 +673,37 @@ foreach($files as $file) {
 		$file_name_new = strtolower($file->getFilename());
 		rename(USER_DOCS.$file_name_current, USER_DOCS.$file_name_new);
 	}
+
+}
+
+if (SINGLE) {
+
+	// Get the delay value from DB
+	$query_delay = sprintf("SELECT id,prefsWinnerDelay,comp_id FROM %s", $prefix."preferences");
+	$delay = mysqli_query($connection,$query_delay) or die (mysqli_error($connection));
+	$row_delay = mysqli_fetch_assoc($delay);
+
+	do {
+
+		// Check if the length is less than 10 (Unix timestamp is 10)
+		// If so, convert to timestamp
+		if ((strlen($row_delay['prefsWinnerDelay'])) < 10) {
+
+			$query_check = sprintf("SELECT judgingDate FROM %s WHERE comp_id='%s' ORDER BY judgingDate DESC LIMIT 1", $prefix."judging_locations",$row_delay['comp_id']);
+			$check = mysqli_query($connection,$query_check) or die (mysqli_error($connection));
+			$row_check = mysqli_fetch_assoc($check);
+
+			// Add the hour delay to the latest judging date
+			$new_timestamp = ($row_delay['prefsWinnerDelay'] * 3600) + $row_check['judgingDate'];
+
+			$updateSQL = sprintf("UPDATE `%s` SET prefsWinnerDelay='%s' WHERE id='%s';",$prefix."preferences",$new_timestamp,$row_delay['id']);
+			mysqli_select_db($connection,$database);
+			mysqli_real_escape_string($connection,$updateSQL);
+			$result = mysqli_query($connection,$updateSQL);
+
+		}
+
+	} while($row_delay = mysqli_fetch_assoc($delay));
 
 }
 

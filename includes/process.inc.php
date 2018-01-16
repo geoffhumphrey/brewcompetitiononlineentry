@@ -29,6 +29,12 @@ else $base_url = $base_url;
 // Set timezone as Europe/London just in case
 $timezone_raw = "0";
 
+// Set up redirect var
+$redirect_go_to = "";
+
+// Track queries if debugging
+if (DEBUG) include(DEBUGGING.'query_count_begin.debug.php');
+
 // Check if setup is running, if so, check whether prefs have been established
 // If so, get time zone setup by admin
 if (($section == "setup") && ($dbTable != $prefix."preferences")) {
@@ -98,14 +104,7 @@ if (((isset($_SERVER['HTTP_REFERER'])) && ($referrer['host'] == $_SERVER['SERVER
 	$themes_db_table = $prefix."themes";
 	$users_db_table = $prefix."users";
 
-	/*
-	if (($section == "setup") && (($dbTable == $contest_info_db_table) || ($dbTable == $drop_off_db_table) || ($dbTable == $judging_locations_db_table) || ($dbTable == $styles_db_table) || ($dbTable == $judging_preferences_db_table) || ($dbTable == $brewer_db_table) || ($dbTable == $preferences_db_table))) {
-		require(DB.'common.db.php');
-	}
-	*/
-
 	// --------------------------- // -------------------------------- //
-
 
 	if (NHC) {
 		$insertGoTo = "../";
@@ -153,7 +152,7 @@ if (((isset($_SERVER['HTTP_REFERER'])) && ($referrer['host'] == $_SERVER['SERVER
 
 	elseif ($action == "delete_scoresheets") {
 
-		$file_mimes = array('image/jpeg','image/jpg','image/gif','image/png','application/pdf');
+		$file_mimes = array('image/jpeg','image/jpg','image/gif','image/png','application/pdf','image/bmp','image/tiff','image/svg+xml');
 
 		$files = new FilesystemIterator(USER_DOCS);
 
@@ -162,18 +161,19 @@ if (((isset($_SERVER['HTTP_REFERER'])) && ($referrer['host'] == $_SERVER['SERVER
 			if (in_array($mime, $file_mimes)) unlink($file);
 		}
 
-		$updateGoTo = $base_url."index.php?section=admin&go=upload_scoresheets&action=".$filter."&msg=31";
-		header(sprintf("Location: %s", $updateGoTo));
+		$redirect_go_to = sprintf("Location: %s", $base_url."index.php?section=admin&go=upload_scoresheets&action=".$filter."&msg=31");
 
 	}
 
 	elseif ($action == "clear_session") {
+
 		unset($_SESSION['session_set_'.$prefix_session]);
 		unset($_SESSION['prefs'.$prefix_session]);
 		unset($_SESSION['user_info'.$prefix_session]);
 		unset($_SESSION['contest_info_general'.$prefix_session]);
-		$updateGoTo = $base_url."index.php?section=admin";
-		header(sprintf("Location: %s", $updateGoTo));
+
+		$redirect_go_to = sprintf("Location: %s", $base_url."index.php?section=admin");
+
 	}
 
 	elseif (($action == "purge") || ($action == "cleanup")) include(INCLUDES.'data_cleanup.inc.php');
@@ -182,31 +182,27 @@ if (((isset($_SERVER['HTTP_REFERER'])) && ($referrer['host'] == $_SERVER['SERVER
 
 		generate_judging_numbers($prefix."brewing",$sort);
 
-		if ($go == "hidden") $updateGoTo = $base_url."index.php";
-		elseif ($go == "entries") $updateGoTo = $base_url."index.php?section=admin&go=entries&msg=14";
-		else $updateGoTo = $base_url."index.php?section=admin&msg=14";
-		header(sprintf("Location: %s", $updateGoTo));
+		if ($go == "hidden") $redirect_go_to =  sprintf("Location: %s", $base_url."index.php");
+		elseif ($go == "entries") $redirect_go_to =  sprintf("Location: %s", $base_url."index.php?section=admin&go=entries&msg=14");
+		else $redirect_go_to =  sprintf("Location: %s", $base_url."index.php?section=admin&msg=14");
 
 	}
 
 	elseif ($action == "check_discount") {
 
-			$query_contest_info1 = sprintf("SELECT contestEntryFeePassword FROM %s WHERE id=1",$prefix."contest_info");
-			if (SINGLE) $query_contest_info1 .= sprintf(" WHERE comp_id='%s'",$_SESSION['comp_id']);
-			$contest_info1 = mysqli_query($connection,$query_contest_info1) or die (mysqli_error($connection));
-			$row_contest_info1 = mysqli_fetch_assoc($contest_info1);
+		$query_contest_info1 = sprintf("SELECT contestEntryFeePassword FROM %s WHERE id=1",$prefix."contest_info");
+		if (SINGLE) $query_contest_info1 .= sprintf(" WHERE comp_id='%s'",$_SESSION['comp_id']);
+		$contest_info1 = mysqli_query($connection,$query_contest_info1) or die (mysqli_error($connection));
+		$row_contest_info1 = mysqli_fetch_assoc($contest_info1);
 
-			if (sterilize($_POST['brewerDiscount']) == $row_contest_info1['contestEntryFeePassword']) {
-				$updateSQL = sprintf("UPDATE $brewer_db_table SET brewerDiscount=%s WHERE uid=%s",
-							   GetSQLValueString("Y", "text"),
-							   GetSQLValueString($id, "text"));
+		if (sterilize($_POST['brewerDiscount']) == $row_contest_info1['contestEntryFeePassword']) {
+			$updateSQL = sprintf("UPDATE $brewer_db_table SET brewerDiscount=%s WHERE uid=%s", GetSQLValueString("Y", "text"), GetSQLValueString($id, "text"));
+			mysqli_real_escape_string($connection,$updateSQL);
+			$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+			$redirect_go_to = sprintf("Location: %s", $base_url."index.php?section=pay&bid=".$id."&msg=12");
+		}
 
-				mysqli_real_escape_string($connection,$updateSQL);
-				$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
-				header(sprintf("Location: %s", $base_url."index.php?section=pay&bid=".$id."&msg=12"));
-			}
-
-			else header(sprintf("Location: %s", $base_url."index.php?section=pay&bid=".$id."&msg=13"));
+		else $redirect_go_to = sprintf("Location: %s", $base_url."index.php?section=pay&bid=".$id."&msg=13");
 	}
 
 	elseif ($action == "convert_bjcp") {
@@ -220,8 +216,8 @@ if (((isset($_SERVER['HTTP_REFERER'])) && ($referrer['host'] == $_SERVER['SERVER
 		mysqli_real_escape_string($connection,$updateSQL);
 		$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 
-		$updateGoTo = $base_url."index.php?section=admin&go=entries&msg=25";
-		header(sprintf("Location: %s", $updateGoTo));
+		$redirect_go_to = sprintf("Location: %s", $base_url."index.php?section=admin&go=entries&msg=25");
+
 	}
 
 	elseif ($action == "archive") {
@@ -241,8 +237,7 @@ if (((isset($_SERVER['HTTP_REFERER'])) && ($referrer['host'] == $_SERVER['SERVER
 		session_start();
 		unset($_SESSION['prefs'.$prefix_session]);
 
-		$updateGoTo = $base_url."index.php?section=admin&msg=36";
-		header(sprintf("Location: %s", $updateGoTo));
+		$redirect_go_to = sprintf("Location: %s", $base_url."index.php?section=admin&msg=36");
 
 	}
 
@@ -334,11 +329,17 @@ if (((isset($_SERVER['HTTP_REFERER'])) && ($referrer['host'] == $_SERVER['SERVER
 
 	}
 
+	if (DEBUG) include (DEBUGGING.'query_count_end.debug.php');
+	session_write_close();
+	header($redirect_go_to);
+
 }
+
+
 
 else {
 	header(sprintf("Location: %s", $base_url."index.php?msg=98"));
-	exit;
 }
 
+exit;
 ?>

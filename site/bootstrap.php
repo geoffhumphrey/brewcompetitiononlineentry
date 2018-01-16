@@ -71,7 +71,7 @@ if ($setup_success) {
 
 	}
 
-	// ---------------------------- Load require_onced Scripts ----------------------------
+	// ---------------------------- Load Required Scripts ----------------------------
 
 	// **PREVENTING SESSION HIJACKING**
 	// Prevents javascript XSS attacks aimed to steal the session ID

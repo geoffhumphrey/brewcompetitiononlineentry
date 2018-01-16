@@ -18,7 +18,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 
 		if ($id != $row_brewer_id['id']) {
 			$redirectGoTo = $base_url."index.php?section=list&msg=12";
-			header(sprintf("Location: %s", stripslashes($redirectGoTo)));
+			$redirect_go_to = sprintf("Location: %s", stripslashes($redirectGoTo));
 		}
 
 	}
@@ -223,7 +223,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 		else $massUpdateGoTo = $base_url."index.php?section=admin&action=assign&go=judging&filter=".$filter."&msg=9";
 		$massUpdateGoTo = str_replace($pattern, "", $massUpdateGoTo);
 		//echo $massUpdateGoTo;
-		header(sprintf("Location: %s", stripslashes($massUpdateGoTo)));
+		$redirect_go_to = sprintf("Location: %s", stripslashes($massUpdateGoTo));
 
 	} // end if ($action == "update")
 
@@ -237,7 +237,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 		$totalRows_user = mysqli_num_rows($user);
 
 		if ($totalRows_user == 0) {
-			//header(sprintf("Location: %s", $base_url."index.php?section=brewer&go=".$go."&msg=2"));
+			//$redirect_go_to = sprintf("Location: %s", $base_url."index.php?section=brewer&go=".$go."&msg=2");
 			$updateSQL = sprintf("UPDATE $users_db_table SET user_name='%s' WHERE id='%s'",
 						   GetSQLValueString(filter_var($_POST['brewerEmail'],FILTER_SANITIZE_EMAIL), "text"),
 						   GetSQLValueString($_POST['uid'], "text"));
@@ -446,7 +446,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 
 		$pattern = array('\'', '"');
 		$insertGoTo = str_replace($pattern, "", $insertGoTo);
-		header(sprintf("Location: %s", stripslashes($insertGoTo)));
+		$redirect_go_to = sprintf("Location: %s", stripslashes($insertGoTo));
 
 		}
 
@@ -644,14 +644,13 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 		$pattern = array('\'', '"');
 		$updateGoTo = str_replace($pattern, "", $updateGoTo);
 
-		header(sprintf("Location: %s", stripslashes($updateGoTo)));
+		$redirect_go_to = sprintf("Location: %s", stripslashes($updateGoTo));
 
 	}
 
 } else {
 
-	header(sprintf("Location: %s", $base_url."index.php?msg=98"));
-	exit;
+	$redirect_go_to = sprintf("Location: %s", $base_url."index.php?msg=98");
 
 }
 ?>

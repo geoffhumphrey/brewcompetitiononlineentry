@@ -18,7 +18,6 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 	$user = mysqli_query($connection,$query_user) or die (mysqli_error($connection));
 	$row_user = mysqli_fetch_assoc($user);
 
-
 	if ($row_limits['prefsUserEntryLimit'] != "") {
 
 		// Check if user has reached the limit of entries in a particular sub-category. If so, redirect.
@@ -30,7 +29,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 				$insertGoTo = $base_url."index.php?section=list&msg=8";
 				$pattern = array('\'', '"');
 				$insertGoTo = str_replace($pattern, "", $insertGoTo);
-				header(sprintf("Location: %s", stripslashes($insertGoTo)));
+				$redirect_go_to = sprintf("Location: %s", stripslashes($insertGoTo));
 			}
 
 	}
@@ -89,7 +88,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 
 		// Mark as paid if free entry fee
 		if ($_SESSION['contestEntryFee'] == 0) $brewPaid = "1";
-		elseif (isset($_POST['brewPaid'])) $brewPaid = sterilize($_POST['brewPaid']);
+		elseif (isset($_POST['brewPaid'])) $brewPaid = $_POST['brewPaid'];
 		else $brewPaid = "0";
 
 		$all_special_ing_styles = array();
@@ -741,7 +740,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 		//echo $insertSQL."<br>";
 		//echo $insertGoTo;
 		//exit;
-		header(sprintf("Location: %s", stripslashes($insertGoTo)));
+		$redirect_go_to = sprintf("Location: %s", stripslashes($insertGoTo));
 
 	} // end if ($action == "add")
 
@@ -966,7 +965,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 
 		$pattern = array('\'', '"');
 		$updateGoTo = str_replace($pattern, "", $updateGoTo);
-		header(sprintf("Location: %s", stripslashes($updateGoTo)));
+		$redirect_go_to = sprintf("Location: %s", stripslashes($updateGoTo));
 
 		/*
 		echo $updateGoTo."<br>";
@@ -1012,7 +1011,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 		$massUpdateGoTo = $base_url."index.php?section=admin&go=entries&msg=9";
 		$pattern = array('\'', '"');
 		$massUpdateGoTo = str_replace($pattern, "", $massUpdateGoTo);
-		header(sprintf("Location: %s", stripslashes($massUpdateGoTo)));
+		$redirect_go_to = sprintf("Location: %s", stripslashes($massUpdateGoTo));
 
 	} // end if ($action == "update")
 
@@ -1025,7 +1024,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 		$massUpdateGoTo = $base_url."index.php?section=admin&go=entries&msg=20";
 		$pattern = array('\'', '"');
 		$massUpdateGoTo = str_replace($pattern, "", $massUpdateGoTo);
-		header(sprintf("Location: %s", stripslashes($massUpdateGoTo)));
+		$redirect_go_to = sprintf("Location: %s", stripslashes($massUpdateGoTo));
 
 	}
 
@@ -1038,7 +1037,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 		$massUpdateGoTo = $base_url."index.php?section=admin&go=entries&msg=34";
 		$pattern = array('\'', '"');
 		$massUpdateGoTo = str_replace($pattern, "", $massUpdateGoTo);
-		header(sprintf("Location: %s", stripslashes($massUpdateGoTo)));
+		$redirect_go_to = sprintf("Location: %s", stripslashes($massUpdateGoTo));
 
 	}
 
@@ -1051,7 +1050,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 		$massUpdateGoTo = $base_url."index.php?section=admin&go=entries&msg=21";
 		$pattern = array('\'', '"');
 		$massUpdateGoTo = str_replace($pattern, "", $massUpdateGoTo);
-		header(sprintf("Location: %s", stripslashes($massUpdateGoTo)));
+		$redirect_go_to = sprintf("Location: %s", stripslashes($massUpdateGoTo));
 
 	}
 
@@ -1064,7 +1063,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 		$massUpdateGoTo = $base_url."index.php?section=admin&go=entries&msg=35";
 		$pattern = array('\'', '"');
 		$massUpdateGoTo = str_replace($pattern, "", $massUpdateGoTo);
-		header(sprintf("Location: %s", stripslashes($massUpdateGoTo)));
+		$redirect_go_to = sprintf("Location: %s", stripslashes($massUpdateGoTo));
 
 	}
 
@@ -1077,12 +1076,11 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 		$massUpdateGoTo = $base_url."index.php?section=admin&go=entries&msg=22";
 		$pattern = array('\'', '"');
 		$massUpdateGoTo = str_replace($pattern, "", $massUpdateGoTo);
-		header(sprintf("Location: %s", stripslashes($massUpdateGoTo)));
+		$redirect_go_to = sprintf("Location: %s", stripslashes($massUpdateGoTo));
 
 	}
 
 } else {
-	header(sprintf("Location: %s", $base_url."index.php?msg=98"));
-	exit;
+	$redirect_go_to = sprintf("Location: %s", $base_url."index.php?msg=98");
 }
 ?>

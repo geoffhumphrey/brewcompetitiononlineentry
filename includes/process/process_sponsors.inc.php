@@ -26,7 +26,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 		$massUpdateGoTo = $base_url."index.php?section=admin&go=sponsors&msg=9";
 		$pattern = array('\'', '"');
 		$massUpdateGoTo = str_replace($pattern, "", $massUpdateGoTo);
-		header(sprintf("Location: %s", stripslashes($massUpdateGoTo)));
+		$redirect_go_to = sprintf("Location: %s", stripslashes($massUpdateGoTo));
 	}
 
 	if ($action == "add") {
@@ -47,7 +47,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 
 		$pattern = array('\'', '"');
 		$insertGoTo = str_replace($pattern, "", $insertGoTo);
-		header(sprintf("Location: %s", stripslashes($insertGoTo)));
+		$redirect_go_to = sprintf("Location: %s", stripslashes($insertGoTo));
 
 	}
 
@@ -68,12 +68,11 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 
 		$pattern = array('\'', '"');
 		$updateGoTo = str_replace($pattern, "", $updateGoTo);
-		header(sprintf("Location: %s", stripslashes($updateGoTo)));
+		$redirect_go_to = sprintf("Location: %s", stripslashes($updateGoTo));
 
 	}
 
 } else {
-	header(sprintf("Location: %s", $base_url."index.php?msg=98"));
-	exit;
+	$redirect_go_to = sprintf("Location: %s", $base_url."index.php?msg=98");
 }
 ?>

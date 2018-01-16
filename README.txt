@@ -5,7 +5,7 @@ Website:     http://www.brewcompetition.com
 GitHub:      https://github.com/geoffhumphrey/brewcompetitiononlineentry
 SourceForge: http://sourceforge.net/projects/brewcompetition [Archives ONLY]
 
-Release 2.1.10, 2017-10-21
+Release 2.1.11, 2017-10-31
 
 Developed utilizing a number of extensions and functions, with gratitude to their
 respective developers and online communities. Tested with the following versions:

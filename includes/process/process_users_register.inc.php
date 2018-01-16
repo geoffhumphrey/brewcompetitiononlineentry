@@ -159,7 +159,7 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 
 			$insertSQL = sprintf("INSERT INTO $users_db_table (user_name, userLevel, password, userQuestion, userQuestionAnswer, userCreated) VALUES (%s, %s, %s, %s, %s, %s)",
 						   GetSQLValueString($username, "text"),
-						   GetSQLValueString(sterilize($_POST['userLevel']), "int"),
+						   GetSQLValueString($_POST['userLevel'], "int"),
 						   GetSQLValueString($hash, "text"),
 						   GetSQLValueString(sterilize($_POST['userQuestion']), "text"),
 						   GetSQLValueString($userQuestionAnswer, "text"),

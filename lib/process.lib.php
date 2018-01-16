@@ -138,6 +138,7 @@ function clean_up_url($referer) {
 	// Remove $msg=X from query string
 	$pattern = array("/[0-9]/", "/&msg=/");
 	$referer = preg_replace($pattern, "", $referer);
+
 	// Remove $id=X from query string
 	$pattern = array("/[0-9]/", "/&id=/");
 	$referer = preg_replace($pattern, "", $referer);

@@ -23,8 +23,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 	$row_suffix_check = mysqli_fetch_assoc($suffix_check);
 
 	if ($row_suffix_check['count'] > 0) {
-			header(sprintf("Location: %s", $base_url."index.php?section=admin&go=archive&msg=6"));
-			exit;
+			$redirect_go_to = sprintf("Location: %s", $base_url."index.php?section=admin&go=archive&msg=6");
 	}
 	else {
 
@@ -36,39 +35,13 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 			return true;
 		}
 
-		/*
-
-		function is_dir_empty($dir) {
-			if (!is_readable($dir)) return null;
-			$handle = opendir($dir);
-				while (false !== ($entry = readdir($handle))) {
-					if ($entry !== '.' && $entry !== '..') { // <-- better use strict comparison here
-					closedir($handle);
-					return false;
-				}
-			}
-			closedir($handle);
-			return true;
-		}
-
-		*/
-
 		//Check if any documents are in the user_docs folder
 
 		if (!is_dir_empty(USER_DOCS)) {
 
-
-
-			// Check if a subfolder exists with the given name of the archive
-			// If not, create it
-
 			// Define directories
 			$source = USER_DOCS;
 			$destination = USER_DOCS.$suffix;
-
-			//echo $source."<br>";
-			//echo $destination;
-			//exit;
 
 			if (!is_dir($destination)) {
 
@@ -98,8 +71,6 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 				umask($oldmask);
 
 			}
-
-
 
 		}
 
@@ -275,7 +246,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 				$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 			}
 
-			header(sprintf("Location: %s", $base_url."index.php?section=admin&go=archive&msg=7"));
+			$redirect_go_to = sprintf("Location: %s", $base_url."index.php?section=admin&go=archive&msg=7");
 			exit;
 		}
 
@@ -298,15 +269,6 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 
 				if ($prefix != "") $prefix_session = md5(rtrim($prefix,"_"));
 				else $prefix_session = md5("BCOEM12345");
-
-				/*
-				session_unset();
-				session_destroy();
-				session_write_close();
-				session_regenerate_id(true);
-				session_name($prefix_session);
-				*/
-				session_start();
 
 				$_SESSION['session_set_'.$prefix_session] = $prefix_session;
 				$_SESSION['loginUsername'] = $user_name;
@@ -439,16 +401,13 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 				$_SESSION['brewerAHA'] = $row_name['brewerAHA'];
 				$_SESSION['user_info'.$prefix_session] = "1";
 
-				session_write_close();
-				header(sprintf("Location: %s", $base_url."index.php?section=admin&go=archive&msg=7"));
-				exit;
-				}
+				$redirect_go_to = sprintf("Location: %s", $base_url."index.php?section=admin&go=archive&msg=7");
+			}
 
 			else {
 				// If the username/password combo is incorrect or not found, relocate to the login error page
-				header(sprintf("Location: %s", $base_url."index.php?section=login&msg=1"));
+				$redirect_go_to = sprintf("Location: %s", $base_url."index.php?section=login&msg=1");
 				session_destroy();
-				exit;
 			}
 		}
 

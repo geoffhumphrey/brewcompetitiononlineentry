@@ -32,7 +32,7 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 			if ($totalRows_userCheck > 0) {
 
 				if ($section == "admin") $msg = "10"; else $msg = "2";
-				header(sprintf("Location:  %s", $base_url."index.php?section=".$section."&go=".$go."&action=".$action."&msg=".$msg));
+				$redirect_go_to = sprintf("Location:  %s", $base_url."index.php?section=".$section."&go=".$go."&action=".$action."&msg=".$msg);
 			}
 
 			else  {
@@ -42,7 +42,7 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 				$hash = $hasher->HashPassword($password);
 				$insertSQL = sprintf("INSERT INTO $users_db_table (user_name, userLevel, password, userQuestion, userQuestionAnswer, userCreated) VALUES (%s, %s, %s, %s, %s, %s)",
 								   GetSQLValueString($username, "text"),
-								   GetSQLValueString(sterilize($_POST['userLevel']), "text"),
+								   GetSQLValueString($_POST['userLevel'], "text"),
 								   GetSQLValueString($hash, "text"),
 								   GetSQLValueString(sterilize($_POST['userQuestion']), "text"),
 								   GetSQLValueString(sterilize($_POST['userQuestionAnswer']), "text"),
@@ -67,23 +67,23 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 						$_SESSION['loginUsername'] = $username;
 
 						// If the username/password combo is OK, relocate to the "protected" content index page
-						header(sprintf("Location: %s", $base_url."index.php?action=add&section=brewer&go=".$go."&msg=1"));
+						$redirect_go_to = sprintf("Location: %s", $base_url."index.php?action=add&section=brewer&go=".$go."&msg=1");
 						exit;
 					}
 					else {
 						// If the username/password combo is incorrect or not found, relocate to the login error page
-						header(sprintf("Location: %s", $base_url."index.php?section=login&go=".$go."&msg=1"));
+						$redirect_go_to = sprintf("Location: %s", $base_url."index.php?section=login&go=".$go."&msg=1");
 						session_destroy();
 						exit;
 					}
 				}
 
 				if ($section == "admin") {
-					header(sprintf("Location: %s", $base_url."index.php?section=".$section."&go=".$go."&action=".$action."&filter=info&msg=1&username=".urlencode($username)));
+					$redirect_go_to = sprintf("Location: %s", $base_url."index.php?section=".$section."&go=".$go."&action=".$action."&filter=info&msg=1&username=".urlencode($username));
 				}
 			}
 		}
-		else header(sprintf("Location: %s", $base_url."index.php?section=".$section."&go=".$go."&action=".$action."&view=".$view."&msg=3"));
+		else $redirect_go_to = sprintf("Location: %s", $base_url."index.php?section=".$section."&go=".$go."&action=".$action."&view=".$view."&msg=3");
 	}
 
 	// ---------------------------  Editing a User -------------------------------------------
@@ -119,7 +119,7 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 
 				$updateGoTo = $base_url."index.php?section=admin&go=participants&msg=2";
 				$updateSQL = sprintf("UPDATE $users_db_table SET userLevel=%s,userCreated=%s WHERE user_name=%s",
-								   GetSQLValueString(sterilize($_POST['userLevel']), "text"),
+								   GetSQLValueString($_POST['userLevel'], "text"),
 								   "NOW( )",
 								   GetSQLValueString($username, "text")
 								   );
@@ -130,13 +130,13 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 
 				$pattern = array('\'', '"');
 				$updateGoTo = str_replace($pattern, "", $updateGoTo);
-				header(sprintf("Location: %s", stripslashes($updateGoTo)));
+				$redirect_go_to = sprintf("Location: %s", stripslashes($updateGoTo));
 			}
 
 			// --------------------------- If Changing a Participant's User Name ------------------------------- //
 			if ($go == "username") {
 			if ($totalRows_userCheck > 0) {
-			  header("Location: ".$base_url."index.php?section=user&action=username&id=".$id."&msg=1");
+			  $redirect_go_to = sprintf("Location: %s", $base_url."index.php?section=user&action=username&id=".$id."&msg=1");
 			  }
 			  else  {
 
@@ -159,7 +159,7 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 				if ($filter == "admin") {
 					$pattern = array('\'', '"');
 					$updateGoTo = str_replace($pattern, "", $updateGoTo);
-					header(sprintf("Location: %s", stripslashes($updateGoTo)));
+					$redirect_go_to = sprintf("Location: %s", stripslashes($updateGoTo));
 				}
 
 				else {
@@ -178,12 +178,12 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 						unset($_SESSION['user_info'.$prefix_session]);
 						//$_SESSION['session_set_'.$prefix_session] = "";
 						// If the username/password combo is OK, relocate to the "protected" content index page
-						header(sprintf("Location: %s", $base_url."index.php?section=list&msg=3"));
+						$redirect_go_to = sprintf("Location: %s", $base_url."index.php?section=list&msg=3");
 						exit;
 					}
 					else {
 						// If the username/password combo is incorrect or not found, relocate to the login error page
-						header(sprintf("Location: %s", $base_url."index.php?section=user&action=username&msg=2"));
+						$redirect_go_to = sprintf("Location: %s", $base_url."index.php?section=user&action=username&msg=2");
 						exit;
 					}
 
@@ -191,14 +191,14 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 					$insertGoTo = $base_url."index.php?section=login&username=".$username;
 					$pattern = array('\'', '"');
 					$insertGoTo = str_replace($pattern, "", $insertGoTo);
-					header(sprintf("Location: %s", stripslashes($insertGoTo)));
+					$redirect_go_to = sprintf("Location: %s", stripslashes($insertGoTo));
 				} //end if ($filter !="admin")
 			  }
 			 }
 		}
 		 else {
 
-			header(sprintf("Location: %s", $base_url."index.php?section=user&action=username&msg=4&id=".$id));
+			$redirect_go_to = sprintf("Location: %s", $base_url."index.php?section=user&action=username&msg=4&id=".$id);
 		 }
 
 		// --------------------------- If a participant is changing their password ------------------------------- //
@@ -218,7 +218,7 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 			$check = $hasher->CheckPassword($password_old, $row_userPass['password']);
 			$hash_new = $hasher->HashPassword($password_new);
 
-			if (!$check) header(sprintf("Location: %s", $base_url."index.php?section=user&action=password&msg=3&id=".$id));
+			if (!$check) $redirect_go_to = sprintf("Location: %s", $base_url."index.php?section=user&action=password&msg=3&id=".$id);
 
 			if ($check)  {
 				$updateSQL = sprintf("UPDATE $users_db_table SET password=%s,userCreated=%s WHERE id=%s",
@@ -229,7 +229,7 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 
 				mysqli_real_escape_string($connection,$updateSQL);
 				$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
-				header(sprintf("Location: %s", $base_url."index.php?section=list&id=".$id."&msg=4"));
+				$redirect_go_to = sprintf("Location: %s", $base_url."index.php?section=list&id=".$id."&msg=4");
 			}
 		 }
 
@@ -250,14 +250,13 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 
 			mysqli_real_escape_string($connection,$updateSQL);
 			$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
-			header(sprintf("Location: %s", $base_url."index.php?section=admin&go=participants&msg=33"));
+			$redirect_go_to = sprintf("Location: %s", $base_url."index.php?section=admin&go=participants&msg=33");
 		 }
 
 	} // end if ($action == "edit")
 
 } else {
-	header(sprintf("Location: %s", $base_url."index.php?msg=98"));
-	exit;
+	$redirect_go_to = sprintf("Location: %s", $base_url."index.php?msg=98");
 }
 
 ?>

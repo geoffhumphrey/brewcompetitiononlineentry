@@ -22,7 +22,7 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 		$hash = $hasher->HashPassword($password);
 		$insertSQL = sprintf("INSERT INTO $users_db_table (user_name, userLevel, password, userQuestion, userQuestionAnswer, userCreated) VALUES (%s, %s, %s, %s, %s, %s)",
 						   GetSQLValueString($username, "text"),
-						   GetSQLValueString(sterilize($_POST['userLevel']), "text"),
+						   GetSQLValueString($_POST['userLevel'], "text"),
 						   GetSQLValueString($hash, "text"),
 						   GetSQLValueString($purifier->purify($_POST['userQuestion']), "text"),
 						   GetSQLValueString($userQuestionAnswer, "text"),

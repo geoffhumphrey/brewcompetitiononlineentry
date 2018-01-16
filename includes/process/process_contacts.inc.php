@@ -36,7 +36,7 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 			setcookie("from_name", sterilize(ucwords($_POST['from_name'])), 0, "/");
 			setcookie("subject", sterilize(ucwords($_POST['subject'])), 0, "/");
 			setcookie("message", sterilize($_POST['message']), 0, "/");
-			header(sprintf("Location: %s", $base_url."index.php?section=contact&action=email&msg=2"));
+			$redirect_go_to = sprintf("Location: %s", $base_url."index.php?section=contact&action=email&msg=2");
 
 		}
 
@@ -83,7 +83,7 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 			*/
 
 			mail($to_email, $subject, $message, $headers);
-			header(sprintf("Location: %s", $base_url."index.php?section=contact&action=email&id=".$row_contact['id']."&msg=1"));
+			$redirect_go_to = sprintf("Location: %s", $base_url."index.php?section=contact&action=email&id=".$row_contact['id']."&msg=1");
 
 		}
 
@@ -109,7 +109,7 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 			$result = mysqli_query($connection,$insertSQL) or die (mysqli_error($connection));
 			$pattern = array('\'', '"');
 			$insertGoTo = str_replace($pattern, "", $insertGoTo);
-			header(sprintf("Location: %s", stripslashes($insertGoTo)));
+			$redirect_go_to = sprintf("Location: %s", stripslashes($insertGoTo));
 
 		}
 
@@ -130,15 +130,14 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 			$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 			$pattern = array('\'', '"');
 			$updateGoTo = str_replace($pattern, "", $updateGoTo);
-			header(sprintf("Location: %s", stripslashes($updateGoTo)));
+			$redirect_go_to = sprintf("Location: %s", stripslashes($updateGoTo));
 
 		}
 
 
 	}
 } else {
-	header(sprintf("Location: %s", $base_url."index.php?msg=98"));
-	exit;
+	$redirect_go_to = sprintf("Location: %s", $base_url."index.php?msg=98");
 }
 
 

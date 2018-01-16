@@ -59,6 +59,8 @@ if ((TESTING) || (DEBUG)) {
 	$starttime = $mtime;
 }
 
+if (DEBUG) include(DEBUGGING.'query_count_begin.debug.php');
+
 // Hosted installations
 if (HOSTED) check_hosted_gh();
 
@@ -143,7 +145,11 @@ $security_question = array($label_secret_01, $label_secret_05, $label_secret_06,
 
     <!-- DEBUG -->
     <div class="<?php echo $container_main; ?> hidden-print">
-    <?php if (DEBUG_SESSION_VARS) include (DEBUGGING.'session_vars.debug.php');	?>
+    <?php
+    if (DEBUG_SESSION_VARS) include (DEBUGGING.'session_vars.debug.php');
+    //if (isset($total_paid_entry_fees)) echo "total_paid_entry_fees ".$total_paid_entry_fees;
+    //if (isset($total_fees_paid)) echo " total_fees_paid ".$total_fees_paid;
+    ?>
     </div>
     <!-- ./DEBUG -->
 
@@ -223,22 +229,29 @@ $security_question = array($label_secret_01, $label_secret_05, $label_secret_06,
         	</div>
         	<?php
 
-				if ($section == "default") include (SECTIONS.'default.sec.php');
-				if ($section == "entry") include (SECTIONS.'entry_info.sec.php');
-				if ($section == "contact") include (SECTIONS.'contact.sec.php');
-				if ($section == "volunteers") include (SECTIONS.'volunteers.sec.php');
-				if ($section == "sponsors") include (SECTIONS.'sponsors.sec.php');
-				if ($section == "register") include (SECTIONS.'register.sec.php');
-				if ($section == "brewer") include (SECTIONS.'brewer.sec.php');
-				if ($section == "login") include (SECTIONS.'login.sec.php');
+                if (SINGLE) include (SSO.'sections/default.sec.php');
 
-				if ($logged_in) {
-					if ($section == "list") include (SECTIONS.'list.sec.php');
-					if ($section == "brew") include (SECTIONS.'brew.sec.php');
-					if ($section == "pay") include (SECTIONS.'pay.sec.php');
-					if ($section == "user") include (SECTIONS.'user.sec.php');
-					if ($section == "beerxml") include (SECTIONS.'beerxml.sec.php');
-				}
+                else {
+
+                    if ($section == "default") include (SECTIONS.'default.sec.php');
+                    if ($section == "entry") include (SECTIONS.'entry_info.sec.php');
+                    if ($section == "contact") include (SECTIONS.'contact.sec.php');
+                    if ($section == "volunteers") include (SECTIONS.'volunteers.sec.php');
+                    if ($section == "sponsors") include (SECTIONS.'sponsors.sec.php');
+                    if ($section == "register") include (SECTIONS.'register.sec.php');
+                    if ($section == "login") include (SECTIONS.'login.sec.php');
+
+                    if ($logged_in) {
+                        if ($section == "brewer") include (SECTIONS.'brewer.sec.php');
+                        if ($section == "list") include (SECTIONS.'list.sec.php');
+                        if ($section == "brew") include (SECTIONS.'brew.sec.php');
+                        if ($section == "pay") include (SECTIONS.'pay.sec.php');
+                        if ($section == "user") include (SECTIONS.'user.sec.php');
+                        if ($section == "beerxml") include (SECTIONS.'beerxml.sec.php');
+                    }
+
+                }
+
 			?>
             </div><!-- ./left column -->
             <div class="sidebar col col-lg-3 col-md-4 col-sm-12 col-xs-12">
@@ -247,8 +260,18 @@ $security_question = array($label_secret_01, $label_secret_05, $label_secret_06,
         </div><!-- ./row -->
     	<!-- ./Public Pages -->
         <?php } ?>
+
     </div><!-- ./container -->
     <!-- ./Public Pages -->
+
+    <?php if (DEBUG) { ?>
+    <div class="<?php echo $container_main; ?> hidden-print">
+    <?php
+    include(DEBUGGING.'query_count_end.debug.php');
+    echo $output_query_count;
+    ?>
+    </div>
+    <?php } ?>
 
     <?php if ($_SESSION['prefsUseMods'] == "Y") { ?>
     <!-- Mods Bottom -->
@@ -267,6 +290,6 @@ $security_question = array($label_secret_01, $label_secret_05, $label_secret_06,
     	</div>
     </footer><!-- ./footer -->
 	<!-- ./ Footer -->
-
+    <?php session_write_close(); ?>
 </body>
 </html>

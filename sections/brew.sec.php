@@ -1,25 +1,69 @@
-<?php 
+<?php
 /**
  * Module:      brew.sec.php
  * Description: This module houses the functionality for users to add/edit individual competition
  *              entries - references the "brewing" database table.
  *
  */
-include (DB.'styles.db.php'); 
+include (DB.'styles.db.php');
 if (strpos($styleSet,"BABDB") !== false) include (INCLUDES.'ba_constants.inc.php');
 include (DB.'styles_special.db.php');
 
+// Define custom functions
+function display_array_content_style($arrayname,$method,$base_url) {
+	include (LANG.'language.lang.php');
+	$a = "";
+	sort($arrayname);
+	while(list($key, $value) = each($arrayname)) {
+
+		if (is_array($value)) {
+			$c = display_array_content($value,'');
+			$d = ltrim($c,"0");
+			$d = str_replace("-","",$c);
+			$a .= "<a href=\"#\" data-toggle=\"modal\" data-target=\"#".$d."\">".$d."</a>";
+		}
+
+		else {
+			$value = explode("|",$value);
+			$e = str_replace("-","",$value[0]);
+			$e = ltrim($e,"0");
+			$a .= sprintf("<a href=\"#\" data-toggle=\"modal\" data-target=\"#".$value[0]."\" data-tooltip=\"true\" title=\"%s ".$e.": ".$value[1]."\">".$e."</a>",$brew_text_000);
+			//$a .= "<a id='modal_window_link' href='".$base_url."output/print.output.php?section=styles&amp;view=".$value."&amp;tb=true'>".$e."</a>";
+		}
+		if ($method == "1") $a .= "";
+		if ($method == "2") $a .= "&nbsp;&nbsp;";
+		if ($method == "3") $a .= ", ";
+	}
+	$b = rtrim($a, "&nbsp;&nbsp;");
+	$b = rtrim($a, ", ;");
+	$b = rtrim($b, "  ");
+
+	return $b;
+}
+
+function admin_relocate($user_level,$go,$referrer) {
+	$list = FALSE;
+	if (strstr($referrer,"list")) $list = TRUE;
+	if (strstr($referrer,"entries")) $list = FALSE;
+	if (strstr($referrer,"0-A")) $list = FALSE;
+	if (($user_level <= 1) && ($go == "entries") && (!$list)) $output = "admin";
+	elseif (($user_level <= 1) && ($go == "entries") && ($list)) $output = "list";
+	else $output = "list";
+	return $output;
+}
+
 // Disable fields trigger
 if ((($action == "add") && ($remaining_entries <= 0) && ($_SESSION['userLevel'] == 2)) || (($action == "add") && ($entry_window_open == "2") && ($_SESSION['userLevel'] == 2))) $disable_fields = TRUE; else $disable_fields = FALSE;
-	
+
 // Specific code for Style select
 if (strpos($_SESSION['prefsStyleSet'],"BABDB") !== false) {
 	$style_set = "Brewers Association";
 }
 else $style_set = str_ireplace("2"," 2",$_SESSION['prefsStyleSet']);
+
 if (empty($row_limits['prefsUserSubCatLimit'])) $user_subcat_limit = "99999";
 else $user_subcat_limit = $row_limits['prefsUserSubCatLimit'];
-	
+
 if (empty($row_limits['prefsUSCLExLimit'])) $user_subcat_limit_exception = "99999";
 else $user_subcat_limit_exception = $row_limits['prefsUSCLExLimit'];
 
@@ -79,33 +123,33 @@ if ($_SESSION['userLevel'] <= 1) $adminUser = TRUE;
 $adminUserAddDisable = FALSE;
 
 if (($_SESSION['userLevel'] == 2) && ($action == "edit")) {
-	
+
 	$user_entries = "";
-	
+
 	// Check whether user is "authorized" to edit the entry in DB
 	$query_brews = sprintf("SELECT id FROM $brewing_db_table WHERE brewBrewerId = '%s'", $_SESSION['user_id']);
 	$brews = mysqli_query($connection,$query_brews) or die (mysqli_error($connection));
 	$row_brews = mysqli_fetch_assoc($brews);
-	
+
 	do { $user_entries[] = $row_brews['id'];  } while ($row_brews = mysqli_fetch_assoc($brews));
-	
-	if (!in_array($id,$user_entries)) { 
+
+	if (!in_array($id,$user_entries)) {
 		$edit_entry_disable = TRUE; echo "<p>You are only able to edit your own entries.</p>";
 	}
 }
 
 // Adding an entry not allowed conditionals for non-admins
 if ($action == "add") {
-	
+
 	// Registration and entry windows open; comp entry limit reached
-	if (($registration_open == 1) && ($entry_window_open == 1) && ($_SESSION['userLevel'] == 2)) { 
+	if (($registration_open == 1) && ($entry_window_open == 1) && ($_SESSION['userLevel'] == 2)) {
 		if ($comp_entry_limit) $add_entry_disable = TRUE;
 		elseif ($remaining_entries <= 0) $add_entry_disable = TRUE;
 		elseif ($comp_paid_entry_limit) $add_entry_disable = TRUE;
 		elseif (($proEdition) && (!isset($_SESSION['brewerBreweryName'])))  $add_entry_disable = TRUE;
 		else $add_entry_disable = FALSE;
 	}
-	
+
 	// Registration closed and entry window open; comp entry limit reached
 	elseif ((($registration_open == 0) || ($registration_open == 2)) && ($entry_window_open == 1) && ($_SESSION['userLevel'] == 2)) {
 		if ($comp_entry_limit) $add_entry_disable = TRUE;
@@ -114,20 +158,20 @@ if ($action == "add") {
 		elseif (($proEdition) && (!isset($_SESSION['brewerBreweryName']))) $add_entry_disable = TRUE;
 		else $add_entry_disable = FALSE;
 	}
-	
+
 }
 // Registration and entry not open
-if (($registration_open == 0) && ($entry_window_open == 0) && ($_SESSION['userLevel'] == 2)) { 
+if (($registration_open == 0) && ($entry_window_open == 0) && ($_SESSION['userLevel'] == 2)) {
 	$add_entry_disable = TRUE;
-	$edit_entry_disable = TRUE; 
+	$edit_entry_disable = TRUE;
 }
 // Registration and entry windows closed
-if (($registration_open == 2) && ($entry_window_open == 2) && ($_SESSION['userLevel'] == 2)) { 
+if (($registration_open == 2) && ($entry_window_open == 2) && ($_SESSION['userLevel'] == 2)) {
 	$add_entry_disable = TRUE;
-	$edit_entry_disable = TRUE; 
+	$edit_entry_disable = TRUE;
 }
 
-if (($proEdition) && (!isset($_SESSION['brewerBreweryName'])) && ($adminUser) && ($filter == "admin")) {
+if (($proEdition) && (!isset($_SESSION['brewerBreweryName'])) && ($adminUser)) {
 	$add_entry_disable = TRUE;
 	$adminUserAddDisable = TRUE;
 }
@@ -135,183 +179,132 @@ if (($proEdition) && (!isset($_SESSION['brewerBreweryName'])) && ($adminUser) &&
 // Disable display of add/edit form elements
 // Display messaging if adding and/or editing is disabled
 if (($add_entry_disable) && ($edit_entry_disable))  {
-	
+
 	echo "<p class=\"lead\">".$alert_text_083."</p>";
 	if (($_SESSION['userLevel'] > 1) && ($remaining_entries <= 0)) echo sprintf("<p>%s</p>",$alert_text_031);
 	if (($adminUser) && ($adminUserAddDisable)) echo "<p>".$brew_text_029."</p>";
-	
+
 }
 
 elseif (($add_entry_disable) && (!$edit_entry_disable))  {
-	
-	if (($proEdition) && (!isset($_SESSION['brewerBreweryName']))) { 
+
+	if (($proEdition) && (!isset($_SESSION['brewerBreweryName']))) {
 		echo "<p class=\"lead\">".$alert_text_082."</p>";
 		if ($adminUser) echo "<p class=\"lead\"><small>".$alert_text_084."</small></p>";
 	}
-	
+
 	else echo "<p class=\"lead\">".$alert_text_029."</p>";
 	if (($_SESSION['userLevel'] > 1) && ($remaining_entries <= 0)) echo sprintf("<p>%s</p>",$alert_text_031);
 	if (($adminUser) && ($adminUserAddDisable)) echo "<p>".$brew_text_029."</p>";
-	
+
 }
 
 // Run normally
-else {	
-	
-	// Decalre variables
-	if ($_SESSION['prefsStyleSet'] == "BJCP2008") $beer_end = 23;
-	if ($_SESSION['prefsStyleSet'] == "BJCP2015") $beer_end = 34;
-	
+else {
+
+	// Define vars
 	if ($action == "edit") $collapse_icon = "fa-plus-circle";
 	else $collapse_icon = "fa-pencil";
-	
-	if (($filter == "admin") || ($filter == "default")) $brewer_id = $_SESSION['user_id']; else $brewer_id = $filter; 
+
+	// Get the brewer's information from the function
+	if ((($filter == "admin") || ($filter == "default")) && ($bid == "default")) $brewer_id = $_SESSION['user_id'];
+	elseif ((($filter == "admin") || ($filter == "default")) && ($bid != "default")) $brewer_id = $bid;
+	else $brewer_id = $filter;
 	$brewer_info = brewer_info($brewer_id);
 	$brewer_info = explode("^",$brewer_info);
 	if (($action == "edit") && (!empty($row_log['brewInfo']))) $brewInfo = $row_log['brewInfo'];
-	
+
+	// Define whether the entry has been paid or not, default is 0 (no)
 	$brewPaid = 0;
-	
+
 	// Check to see if the amount the entrant has paid is equal to or exceeds the entry fee cap (if defined)
-	if (isset($_SESSION['contestEntryCap'])) {
+	if ((isset($_SESSION['contestEntryCap'])) && ($_SESSION['contestEntryCap'] > 0)) {
 		// if so, mark this entry as paid
-		if ($total_paid_entry_fees >= $_SESSION['contestEntryCap']) $brewPaid = 1;
+		 if ($total_paid_entry_fees >= $_SESSION['contestEntryCap']) $brewPaid = 1;
 	}
-	
+
+	// If there's no entry fee (zero), mark as paid
 	if ($_SESSION['contestEntryFee'] == 0) $brewPaid = 1;
+
+	// If editing the entry, grab the value from the recordset
 	if ($action == "edit") $brewPaid = $row_log['brewPaid'];
-	
-	// Define custom functions
-	function display_array_content_style($arrayname,$method,$base_url) {
-		include (LANG.'language.lang.php'); 
-		$a = "";
-		sort($arrayname);
-		while(list($key, $value) = each($arrayname)) {
-			if (is_array($value)) {
-				$c = display_array_content($value,'');
-				$d = ltrim($c,"0");
-				$d = str_replace("-","",$c);
-				$a .= "<a href=\"#\" data-toggle=\"modal\" data-target=\"#".$d."\">".$d."</a>";
-				
-			}
-			else {
-				
-				$value = explode("|",$value);
-				
-				$e = str_replace("-","",$value[0]);
-				$e = ltrim($e,"0");
-				$a .= sprintf("<a href=\"#\" data-toggle=\"modal\" data-target=\"#".$value[0]."\" data-tooltip=\"true\" title=\"%s ".$e.": ".$value[1]."\">".$e."</a>",$brew_text_000);
-				//$a .= "<a id='modal_window_link' href='".$base_url."output/print.output.php?section=styles&amp;view=".$value."&amp;tb=true'>".$e."</a>"; 
-			}
-			if ($method == "1") $a .= "";
-			if ($method == "2") $a .= "&nbsp;&nbsp;";
-			if ($method == "3") $a .= ", ";
-		}
-		$b = rtrim($a, "&nbsp;&nbsp;");
-		$b = rtrim($a, ", ;");
-		$b = rtrim($b, "  ");
-		
-		return $b;
-	}
-	
-	function admin_relocate($user_level,$go,$referrer) {
-		$list = FALSE;
-		if (strstr($referrer,"list")) $list = TRUE;
-		if (strstr($referrer,"entries")) $list = FALSE;
-		if (strstr($referrer,"0-A")) $list = FALSE;
-		if (($user_level <= 1) && ($go == "entries") && (!$list)) $output = "admin";
-		elseif (($user_level <= 1) && ($go == "entries") && ($list)) $output = "list";
-		else $output = "list";
-		return $output;
-	}
-	
+
+	// Style set where beer styles end
+	if ($_SESSION['prefsStyleSet'] == "BJCP2008") $beer_end = 23;
+	if ($_SESSION['prefsStyleSet'] == "BJCP2015") $beer_end = 34;
+
 	// BA
 	if (strpos($_SESSION['prefsStyleSet'],"BABDB") !== false) {
-		
+
 		$styles_options = "";
-		
 		$styleSet_explodies = explode("|",$_SESSION['prefsStyleSet']);
 		$style_explodies = explode(",",$styleSet_explodies[2]);
-		
 		$ba_styles_accepted[] = "";
-		
-		foreach ($_SESSION['styles'] as $styles => $stylesData) {
-			
-			if (is_array($stylesData) || is_object($stylesData)) {
-				
-				foreach ($stylesData as $key => $style) { 
-					
-					if (in_array($style['id'],$style_explodies)) {
-					
-						   $ba_styles_accepted[] .= $style['name']."|".$style['id']."|".$style['category']['name']."|".$style['category']['id'];
 
+		foreach ($_SESSION['styles'] as $styles => $stylesData) {
+			if (is_array($stylesData) || is_object($stylesData)) {
+				foreach ($stylesData as $key => $style) {
+					if (in_array($style['id'],$style_explodies)) {
+						   $ba_styles_accepted[] .= $style['name']."|".$style['id']."|".$style['category']['name']."|".$style['category']['id'];
 					}
-				
 				} // end foreach ($stylesData as $data => $style)
-				
 			} // end if (is_array($stylesData) || is_object($stylesData))
-			
 		} // end foreach ($_SESSION['styles'] as $styles => $stylesData)
-			
-		// Check for any custom styles 
+
+		// Check for any custom styles
 		if ($totalRows_styles_custom > 0) {
-	
 			do {
-				
 				if ($row_styles['brewStyleActive'] == "Y") {
 					$ba_styles_accepted[] .= $row_styles['brewStyle']." (".$label_custom_style.")"."|".$row_styles['id']."|Custom|".$row_styles['brewStyleGroup']."|".$row_styles['brewStyleReqSpec']."|".$row_styles['brewStyleStrength']."|".$row_styles['brewStyleCarb']."|".$row_styles['brewStyleSweet'];
 				}
-
 			} while($row_styles = mysqli_fetch_assoc($styles_custom));
-		
 		}
-		
+
 		sort($ba_styles_accepted);
-		
+
 		foreach ($ba_styles_accepted as $value) {
-			
+
 			if (!empty($value)) {
-				
+
 				$ba_style_explodies = explode("|",$value);
 				if ($ba_style_explodies[2] == "Custom") $style_value = $ba_style_explodies[3]."-A";
 				else $style_value = $ba_style_explodies[3]."-".$ba_style_explodies[1];
 				$style_value_lookup = $ba_style_explodies[3]."-".$ba_style_explodies[1]."-".$ba_style_explodies[2]."-".$ba_style_explodies[0];
 				/*
-				if ($ba_style_explodies[2] == "Hybrid/mixed Beer") $categoryName = "Hybrid/Mixed Beer"; 
+				if ($ba_style_explodies[2] == "Hybrid/mixed Beer") $categoryName = "Hybrid/Mixed Beer";
 				elseif ($ba_style_explodies[2] == "European-germanic Lager") $categoryName = "European-Germanic Lager";
 				else $categoryName = ucwords($ba_style_explodies[2]);
 				*/
-				
+
 				$selected_disabled = "";
-							
+
 				// Determine if the subcategory limit has been reached for various conditions
-				if ($_SESSION['userLevel'] == 2) $subcat_limit = limit_subcategory($style_value_lookup,$user_subcat_limit,$user_subcat_limit_exception,$row_limits['prefsUSCLEx'],$_SESSION['user_id']);
-				elseif (($_SESSION['userLevel'] <= 1) && ($filter != "admin") && ($id == "default")) $subcat_limit = limit_subcategory($style_value_lookup,$user_subcat_limit,$user_subcat_limit_exception,$row_limits['prefsUSCLEx'],$filter);
-				elseif (($_SESSION['userLevel'] <= 1) && ($filter != "admin") && ($id != "default")) $subcat_limit = limit_subcategory($style_value_lookup,$user_subcat_limit,$user_subcat_limit_exception,$row_limits['prefsUSCLEx'],$row_log['brewBrewerID']);
-				elseif (($_SESSION['userLevel'] <= 1) && ($filter == "admin")) $subcat_limit = limit_subcategory($style_value_lookup,$user_subcat_limit,$user_subcat_limit_exception,$row_limits['prefsUSCLEx'],$_SESSION['user_id']);
-				
+				if (($_SESSION['userLevel'] <= 1) && ($bid != "default"))  $subcat_limit = limit_subcategory($style_value_lookup,$user_subcat_limit,$user_subcat_limit_exception,$row_limits['prefsUSCLEx'],$bid);
+				else $subcat_limit = limit_subcategory($style_value_lookup,$user_subcat_limit,$user_subcat_limit_exception,$row_limits['prefsUSCLEx'],$_SESSION['user_id']);
+
 				// Build selected/disabled variable
-				if ($action == "edit") { 
-				   if (sprintf('%02d',$ba_style_explodies[1]) == $row_log['brewSubCategory']) $selected_disabled = "SELECTED"; 
-				   if (sprintf('%02d',$ba_style_explodies[1]) != $row_log['brewSubCategory']) $selected_disabled = $subcat_limit; 
-				} 
-				if (($action == "add") && ($remaining_entries > 0) && (!$disable_fields) && ($_SESSION['userLevel'] == 2)) $selected_disabled = $subcat_limit; 
-				elseif (($disable_fields) && ($view != $style_value)) $selected_disabled = "DISABLED";		
-				
+				if ($action == "edit") {
+				   if (sprintf('%02d',$ba_style_explodies[1]) == $row_log['brewSubCategory']) $selected_disabled = "SELECTED";
+				   if (sprintf('%02d',$ba_style_explodies[1]) != $row_log['brewSubCategory']) $selected_disabled = $subcat_limit;
+				}
+
+				if (($action == "add") && ($remaining_entries > 0) && (!$disable_fields)) $selected_disabled = $subcat_limit;
+				elseif ($disable_fields) $selected_disabled = "DISABLED";
+
 				// Determine if style should be selected if editing
 				$selected = "";
-				
-				if (($action == "edit") && ($view == $style_value)) { 
+
+				if (($action == "edit") && ($view == $style_value)) {
 					$selected = " SELECTED";
 					$selected_disabled = "";
 				}
-				
+
 				// Build display name for drop-down
 				$selection = "";
 				// $selection .= $style['id']." ";
 				$selection .= $ba_style_explodies[0];
 				// $selection .= "(".$categoryName.") ";
-				
+
 				// Add indicators for special ingredients, strength, carbonation, sweetness
 				if ($ba_style_explodies[2] == "Custom") {
 					if ($ba_style_explodies[4] == 1) $selection .= " &spades;";
@@ -319,49 +312,49 @@ else {
 					if ($ba_style_explodies[6] == 1) $selection .= " &clubs;";
 					if ($ba_style_explodies[7] == 1) $selection .= " &hearts;";
 				}
-				
+
 				else {
 					if (in_array($style_value,$ba_special)) $selection .= " &spades;";
 					if (in_array($style_value,$ba_strength)) $selection .= " &diams;";
 					if (in_array($style_value,$ba_carb)) $selection .= " &clubs;";
-					if (in_array($style_value,$ba_sweetness)) $selection .= " &hearts;";	
-				}			
-				
-				if ($view != $style_value) {
-					if (($selected_disabled == "DISABLED") && ($filter == "default")) $selection .= " ".$brew_text_002;
-					if (($selected_disabled == "DISABLED") && ($filter != "default")) $selection .= " ".$brew_text_003;
+					if (in_array($style_value,$ba_sweetness)) $selection .= " &hearts;";
 				}
-				
+
+				if ($view != $style_value) {
+					if (($selected_disabled == "DISABLED") && ($bid == "default")) $selection .= " ".$brew_text_002;
+					if (($selected_disabled == "DISABLED") && ($bid != "default")) $selection .= " ".$brew_text_003;
+				}
+
 				$styles_options .= "<option value=\"".$style_value."\" ".$selected_disabled.$selected.">".$selection."</option>\n";
 			}
 		}
-		
+
 	}
-	
+
 	// BJCP Styles housed in local DB
 	else {
+
 		// get information from database
-		
-		//$specials = display_array_content_style($all_special_ing_styles,3,$base_url); 
-		//$specials = rtrim($specials,", "); 
-		
+
+		//$specials = display_array_content_style($all_special_ing_styles,3,$base_url);
+		//$specials = rtrim($specials,", ");
+
 		if (($action == "edit") && ($msg != "default")) {
-			$view = ltrim($msg,"1-"); 
+			$view = ltrim($msg,"1-");
 			$highlight_sweetness  = highlight_required($msg,0,$_SESSION['prefsStyleSet']);
 			$highlight_special    = highlight_required($msg,1,$_SESSION['prefsStyleSet']);
 			$highlight_carb       = highlight_required($msg,2,$_SESSION['prefsStyleSet']);
 			$highlight_strength   = highlight_required($msg,3,$_SESSION['prefsStyleSet']);
 		}
-		
-		elseif ($action == "edit") { 
+
+		elseif ($action == "edit") {
 			$view = $view;
-			if (in_array($view,$all_special_ing_styles)) $special_required = TRUE; 
+			if (in_array($view,$all_special_ing_styles)) $special_required = TRUE;
 			else $special_required = FALSE;
 		}
-		
+
 		if ($action == "edit") {
-			
-			
+
 			if (strlen(strstr($view,"21-B")) > 0) {
 			// if ($view == "21-B") {
 				$exploder = explode("^",$row_log['brewInfo']);
@@ -370,7 +363,7 @@ else {
 				if ($exploder[1] == "Standard Strength") $IPAStandard = "CHECKED"; else $IPAStandard = "";
 				if ($exploder[1] == "Double Strength") $IPADouble = "CHECKED"; else $IPADouble = "";
 			}
-			
+
 			elseif ($view == "23-F") {
 				$exploder = explode("^",$row_log['brewInfo']);
 				$brewInfo = $exploder[0];
@@ -380,9 +373,9 @@ else {
 				if ($exploder[2] == "Low Carbonation") $lambicCarbLow = "CHECKED"; else $lambicCarbLow = "";
 				if ($exploder[2] == "Medium Carbonation") $lambicCarbMed = "CHECKED"; else $lambicCarbMed = "";
 				if ($exploder[2] == "High Carbonation") $lambicCarbHigh = "CHECKED"; else $lambicCarbHigh = "";
-				
+
 			}
-			
+
 			elseif ($view == "25-B") {
 				$exploder = explode("^",$row_log['brewInfo']);
 				if ($exploder[0] == "Table Strength") $saisonTable = "CHECKED"; else $saisonTable = "";
@@ -392,26 +385,26 @@ else {
 				if ($exploder[1] == "Amber/Dark Color") $darkLightAmber = "CHECKED"; else $darkLightAmber = "";
 				$brewInfo = "";
 			}
-			
+
 			elseif ($view == "24-C") {
 				if ($row_log['brewInfo'] == "Blonde Color") $BDGBlonde .= "CHECKED"; else $BDGBlonde = "";
 				if ($row_log['brewInfo'] == "Amber Color") $BDGAmber .= "CHECKED"; else $BDGAmber = "";
 				if ($row_log['brewInfo'] == "Brown Color") $BDGBrown .= "CHECKED"; else $BDGBrown = "";
 				$brewInfo = "";
 			}
-			
+
 			else {
 				if ($row_log['brewInfo'] == "Pale Color") $darkLightPale .= "CHECKED"; else $darkLightPale = "";
 				if ($row_log['brewInfo'] == "Amber/Dark Color") $darkLightAmber .= "CHECKED"; else $darkLightAmber = "";
 				$brewInfo = $row_log['brewInfo'];
 			}
-			
+
 		}
-	
+
 	}
 ?>
 <script>
-	
+
 	$(document).ready(function() {
 
 		$("#brewInfo").keyup(function()	{
@@ -443,17 +436,22 @@ else {
 			var cs = $(this).val().length;
 			$('#countComments').text(cs);
 		});
-	
+
 	});
 
 </script>
-<?php echo $modals; ?>
-<form data-toggle="validator" role="form" class="form-horizontal" action="<?php echo $base_url; ?>includes/process.inc.php?section=<?php echo admin_relocate($_SESSION['userLevel'],$go,$_SERVER['HTTP_REFERER']);?>&amp;action=<?php echo $action; ?>&amp;go=<?php echo $go;?>&amp;dbTable=<?php echo $brewing_db_table; ?>&amp;filter=<?php echo $filter; if ($id != "default") echo "&amp;id=".$id; ?>" method="POST" name="form1" id="form1" onSubmit="return CheckRequiredFields()">
+<?php
+echo $modals;
+if (!isset($_SERVER['HTTP_REFERER'])) $relocate_referrer = "list";
+else $relocate_referrer = $_SERVER['HTTP_REFERER'];
+// echo $brewPaid; echo $row_limits['prefsUserSubCatLimit'];
+?>
+<form data-toggle="validator" role="form" class="form-horizontal" action="<?php echo $base_url; ?>includes/process.inc.php?section=<?php echo admin_relocate($_SESSION['userLevel'],$go,$relocate_referrer);?>&amp;action=<?php echo $action; ?>&amp;go=<?php echo $go;?>&amp;dbTable=<?php echo $brewing_db_table; ?>&amp;filter=<?php echo $filter; if ($id != "default") echo "&amp;id=".$id; ?>" method="POST" name="form1" id="form1" onSubmit="return CheckRequiredFields()">
 <?php if ($_SESSION['userLevel'] > 1) { ?>
 <input type="hidden" name="brewBrewerID" value="<?php echo $_SESSION['user_id']; ?>">
 <input type="hidden" name="brewBrewerFirstName" value="<?php echo $_SESSION['brewerFirstName']; ?>">
 <input type="hidden" name="brewBrewerLastName" value="<?php echo $_SESSION['brewerLastName']; ?>">
-<?php } ?> 
+<?php } ?>
 <input type="hidden" name="brewJudgingNumber" value="<?php echo $row_log['brewJudgingNumber']; ?>">
 	<?php if ($_SESSION['prefsProEdition'] == 0) { ?>
 	<!-- Enter or Select Brewer Name -->
@@ -500,7 +498,7 @@ else {
             </div>
             <div class="help-block with-errors"></div>
             <div class="help-block"><?php echo $brew_text_001; ?></div>
-            
+
         </div>
     </div><!-- ./Form Group -->
     <!-- Choose Style -->
@@ -517,21 +515,26 @@ else {
 				do {
 					// Option value variable
 					$style_value = ltrim($row_styles['brewStyleGroup'], "0")."-".$row_styles['brewStyleNum'];
-					
-					// Determine if the subcategory limit has been reached for various conditions
-					if ($_SESSION['userLevel'] == 2) $subcat_limit = limit_subcategory($style_value,$user_subcat_limit,$user_subcat_limit_exception,$row_limits['prefsUSCLEx'],$_SESSION['user_id']);
-					elseif (($_SESSION['userLevel'] <= 1) && ($filter != "admin") && ($id == "default")) $subcat_limit = limit_subcategory($style_value,$user_subcat_limit,$user_subcat_limit_exception,$row_limits['prefsUSCLEx'],$filter);
-					elseif (($_SESSION['userLevel'] <= 1) && ($filter != "admin") && ($id != "default")) $subcat_limit = limit_subcategory($style_value,$user_subcat_limit,$user_subcat_limit_exception,$row_limits['prefsUSCLEx'],$row_log['brewBrewerID']);
-					elseif (($_SESSION['userLevel'] <= 1) && ($filter == "admin")) $subcat_limit = limit_subcategory($style_value,$user_subcat_limit,$user_subcat_limit_exception,$row_limits['prefsUSCLEx'],$_SESSION['user_id']);
-					
+					$selected_disabled = "";
+					$selected = "";
+
+					if (($_SESSION['userLevel'] <= 1) && ($bid != "default"))  $subcat_limit = limit_subcategory($style_value,$user_subcat_limit,$user_subcat_limit_exception,$row_limits['prefsUSCLEx'],$bid);
+					else $subcat_limit = limit_subcategory($style_value,$user_subcat_limit,$user_subcat_limit_exception,$row_limits['prefsUSCLEx'],$_SESSION['user_id']);
+
 					// Build selected/disabled variable
-					if ($action == "edit") { 
-					   if ($row_styles['brewStyleGroup'].$row_styles['brewStyleNum'] == $row_log['brewCategorySort'].$row_log['brewSubCategory']) $selected_disabled = "SELECTED"; 
-					   if ($row_styles['brewStyleGroup'].$row_styles['brewStyleNum'] != $row_log['brewCategorySort'].$row_log['brewSubCategory']) $selected_disabled = $subcat_limit; 
-					} 
-					if (($action == "add") && ($remaining_entries > 0) && (!$disable_fields) && ($_SESSION['userLevel'] == 2)) $selected_disabled = $subcat_limit; 
+					if ($action == "edit") {
+						if ($row_styles['brewStyleGroup'].$row_styles['brewStyleNum'] == $row_log['brewCategorySort'].$row_log['brewSubCategory']) $selected_disabled = "SELECTED";
+						if ($row_styles['brewStyleGroup'].$row_styles['brewStyleNum'] != $row_log['brewCategorySort'].$row_log['brewSubCategory']) $selected_disabled = $subcat_limit;
+					}
+
+					if (($remaining_entries > 0) && (!$disable_fields)) $selected_disabled = $subcat_limit;
 					elseif ($disable_fields) $selected_disabled = "DISABLED";
-					
+
+					if (($action == "edit") && ($view == $style_value)) {
+						$selected = " SELECTED";
+						$selected_disabled = "";
+					}
+
 					// Build selection variable
 					if (preg_match("/^[[:digit:]]+$/",$row_styles['brewStyleGroup'])) $selection = sprintf('%02d',$row_styles['brewStyleGroup']).$row_styles['brewStyleNum']." ".$row_styles['brewStyle'];
 					else $selection = $row_styles['brewStyleGroup'].$row_styles['brewStyleNum']." ".$row_styles['brewStyle'];
@@ -539,15 +542,15 @@ else {
 					if ($row_styles['brewStyleStrength'] == 1) $selection .= " &diams;";
 					if ($row_styles['brewStyleCarb'] == 1) $selection .= " &clubs;";
 					if ($row_styles['brewStyleSweet'] == 1) $selection .= " &hearts;";
-					if (($selected_disabled == "DISABLED") && ($filter == "default")) $selection .= " ".$brew_text_002;
-					if (($selected_disabled == "DISABLED") && ($filter != "default")) $selection .= " ".$brew_text_003;
-					
+					if (($selected_disabled == "DISABLED") && ($bid == "default")) $selection .= " ".$brew_text_002;
+					if (($selected_disabled == "DISABLED") && ($bid != "default")) $selection .= " ".$brew_text_003;
+
 				if (!empty($row_styles['brewStyleGroup'])) {
 				// Display
 				 ?>
-				<option value="<?php echo $style_value; ?>" <?php echo $selected_disabled; ?>><?php echo $selection; ?></option>
+				<option value="<?php echo $style_value; ?>" <?php echo $selected_disabled.$selected; ?>><?php echo $selection; ?></option>
 				<?php }
-				} while ($row_styles = mysqli_fetch_assoc($styles)); 
+				} while ($row_styles = mysqli_fetch_assoc($styles));
 			} ?>
         </select>
         <span id="helpBlock" class="help-block">&spades; = <?php echo $brew_text_004; ?><br />&diams; = <?php echo $brew_text_005; ?><br />&clubs; = <?php echo $brew_text_006; ?><br />&hearts; = <?php echo $brew_text_007; ?></p></span>
@@ -564,7 +567,7 @@ else {
     <!-- Enter Special Ingredients -->
 	<div id="special" class="form-group <?php if ($highlight_special) echo "has-error"; elseif (($action == "edit") && ($special_required)) echo "has-warning"; ?>"><!-- Form Group REQUIRED Text Input -->
         <label for="brewInfo" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label"><?php echo $label_required_info; ?></label>
-        	<div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">  
+        	<div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
         		<textarea class="form-control" rows="8" name="brewInfo" id="brewInfo" data-error="<?php echo $brew_text_010; ?>" maxlength="<?php echo $_SESSION['prefsSpecialCharLimit']; ?>" <?php if ($highlight_special) echo "autofocus"; elseif (($action == "edit") && ($special_required)) echo "autofocus"; ?>><?php echo $brewInfo; ?></textarea>
             <div class="help-block with-errors"><?php if ((strpos($styleSet,"BABDB") !== false) && ($view_explodies[0] < 28)) echo $brew_text_027; ?></div>
             <div id="helpBlock" class="help-block"><p><?php echo $_SESSION['prefsSpecialCharLimit'].$label_character_limit; ?><span id="countInfo"><?php echo $_SESSION['prefsSpecialCharLimit']; ?></span></p></div>
@@ -573,9 +576,9 @@ else {
     <!-- Optional Information -->
     <div id="optional" class="form-group"><!-- Form Group REQUIRED Text Input -->
         <label for="brewInfoOptional" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label"><?php echo $label_optional_info; ?></label>
-        	<div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">  
-        		<textarea class="form-control" rows="8" name="brewInfoOptional" id="brewInfoOptional" data-error="<?php echo $brew_text_010; ?>" maxlength="<?php echo $_SESSION['prefsSpecialCharLimit']; ?>" placeholder="<?php echo $brew_text_028; ?>"><?php echo $row_log['brewInfoOptional']; ?></textarea>      	
-            	 
+        	<div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
+        		<textarea class="form-control" rows="8" name="brewInfoOptional" id="brewInfoOptional" data-error="<?php echo $brew_text_010; ?>" maxlength="<?php echo $_SESSION['prefsSpecialCharLimit']; ?>" placeholder="<?php echo $brew_text_028; ?>"><?php echo $row_log['brewInfoOptional']; ?></textarea>
+
             <div class="help-block with-errors"><?php if ((strpos($styleSet,"BABDB") !== false) && ($view_explodies[0] < 28)) echo $brew_text_027; ?></div>
             <div id="helpBlock" class="help-block"><p><?php echo $_SESSION['prefsSpecialCharLimit'].$label_character_limit; ?><span id="countInfoOptional"><?php echo $_SESSION['prefsSpecialCharLimit']; ?></span></p></div>
         </div>
@@ -672,9 +675,9 @@ else {
             </label>
             <div class="help-block with-errors"></div>
         </div>
-    </div>    
+    </div>
     <!-- Select Strength -->
-    <div id="strength">	
+    <div id="strength">
     	<div class="form-group"><!-- Form Group Radio INLINE -->
             <label for="brewMead3" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label <?php if ($highlight_strength) echo "text-danger"; ?>"><?php echo $label_strength; ?></label>
             <div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
@@ -914,7 +917,7 @@ else {
                         </div>
                     </div>
                 </div><!-- ./Form Group -->
-                <?php } ?>  
+                <?php } ?>
                 </div>
             </div>
         </div><!-- ./New Panel -->
@@ -1019,7 +1022,7 @@ else {
                             <label class="radio-inline">
                                 <input type="radio" name="brewHops<?php echo $i; ?>Use" id="brewHops<?php echo $i; ?>Use" value="Aroma" <?php if ($action == "edit") { if (!(strcmp($row_log['brewHops'.$i.'Use'], "Aroma"))) echo "CHECKED"; }?>> <?php echo $label_aroma; ?>
                             </label>
-                            
+
                             <label class="radio-inline">
                                 <input type="radio" name="brewHops<?php echo $i; ?>Use" id="brewHops<?php echo $i; ?>Use" value="Dry Hop" <?php if ($action == "edit") { if (!(strcmp($row_log['brewHops'.$i.'Use'], "Dry Hop"))) echo "CHECKED"; }?>> <?php echo $label_dry_hop; ?>
                             </label>
@@ -1083,8 +1086,8 @@ else {
                         <!-- Input Here -->
                         <input class="form-control" name="brewMashStep<?php echo $i; ?>Name" type="text" value="<?php if ($action == "edit") echo $row_log['brewMashStep'.$i.'Name']; ?>" placeholder="<?php echo $brew_text_024; ?>">
                     </div>
-                </div><!-- ./Form Group -->    
-                    
+                </div><!-- ./Form Group -->
+
                 <div class="form-group form-group-sm"><!-- Form Group Text Input -->
                     <label for="brewMashStep<?php echo $i; ?>Time" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label"><?php echo $label_step." ".$i." ".$label_time; ?></label>
                     <div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
@@ -1092,7 +1095,7 @@ else {
                         <input class="form-control" name="brewMashStep<?php echo $i; ?>Time" type="text" value="<?php if ($action == "edit") echo $row_log['brewMashStep'.$i.'Time']; ?>" placeholder="<?php echo $label_minutes;?>">
                     </div>
                 </div><!-- ./Form Group -->
-                
+
                 <div class="form-group form-group-sm"><!-- Form Group Text Input -->
                     <label for="brewMashStep<?php echo $i; ?>Temp" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label"><?php echo $label_step." ".$i." ".$label_temperature; ?></label>
                     <div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
@@ -1131,7 +1134,7 @@ else {
                 </h4>
             </div>
             <div id="collapseYeast" class="panel-collapse collapse">
-                <div class="panel-body">                
+                <div class="panel-body">
                 <div class="form-group form-group-sm"><!-- Form Group Text Input -->
                     <label for="brewYeast" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label"><?php echo $label_yeast." ".$label_name; ?></label>
                     <div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
@@ -1199,7 +1202,7 @@ else {
                             <label class="radio-inline">
                                 <input type="radio" name="brewYeastType" id="brewYeastType" value="Lager" <?php if ($action == "edit") { if (!(strcmp($row_log['brewYeastType'], "Mash"))) echo "CHECKED"; }?>> <?php echo $label_lager; ?>
                             </label>
-                            
+
                             <label class="radio-inline">
                                 <input type="radio" name="brewYeastType" id="brewYeastType" value="Wine" <?php if ($action == "edit") { if (!(strcmp($row_log['brewYeastType'], "Wine"))) echo "CHECKED"; }?>> <?php echo $label_wine; ?>
                             </label>
@@ -1224,7 +1227,7 @@ else {
             </div>
             <div id="collapseBoil" class="panel-collapse collapse">
                 <div class="panel-body">
-                
+
                 <!-- Boil -->
                 <div class="form-group form-group-sm"><!-- Form Group Text Input -->
                     <label for="brewBoilHours" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label"><?php echo $label_boil." ".$label_hours; ?></label>
@@ -1232,15 +1235,15 @@ else {
                         <!-- Input Here -->
                         <input class="form-control" name="brewBoilHours" type="text" value="<?php if ($action == "edit") echo $row_log['brewBoilHours']; ?>" placeholder="">
                     </div>
-                </div><!-- ./Form Group -->   
+                </div><!-- ./Form Group -->
                 <div class="form-group form-group-sm"><!-- Form Group Text Input -->
                     <label for="brewBoilMins" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label"><?php echo $label_boil." ".$label_minutes; ?></label>
                     <div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
                         <!-- Input Here -->
                         <input class="form-control" name="brewBoilMins" type="text" value="<?php if ($action == "edit") echo $row_log['brewBoilMins']; ?>" placeholder="">
                     </div>
-                </div><!-- ./Form Group --> 
-                
+                </div><!-- ./Form Group -->
+
                 <!-- Finings -->
                 <div class="form-group form-group-sm"><!-- Form Group Text Input -->
                     <label for="brewFinings" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label"><?php echo $label_finings; ?></label>
@@ -1256,42 +1259,42 @@ else {
                         <!-- Input Here -->
                         <input class="form-control" name="brewPrimary" type="text" value="<?php if ($action == "edit") echo $row_log['brewPrimary']; ?>" placeholder="<?php echo $brew_text_023; ?>">
                     </div>
-                </div><!-- ./Form Group -->   
+                </div><!-- ./Form Group -->
                 <div class="form-group form-group-sm"><!-- Form Group Text Input -->
                     <label for="brewPrimaryTemp" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label"><?php echo $label_primary." ".$label_temperature; ?></label>
                     <div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
                         <!-- Input Here -->
                         <input class="form-control" name="brewPrimaryTemp" type="text" value="<?php if ($action == "edit") echo $row_log['brewPrimaryTemp']; ?>" placeholder="&deg;<?php echo $_SESSION['prefsTemp']; ?>">
                     </div>
-                </div><!-- ./Form Group --> 
+                </div><!-- ./Form Group -->
                 <div class="form-group form-group-sm"><!-- Form Group Text Input -->
                     <label for="brewSecondary" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label"><?php echo $label_secondary." ".$label_fermentation; ?></label>
                     <div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
                         <!-- Input Here -->
                         <input class="form-control" name="brewSecondary" type="text" value="<?php if ($action == "edit") echo $row_log['brewSecondary']; ?>" placeholder="<?php echo $brew_text_025; ?>">
                     </div>
-                </div><!-- ./Form Group -->   
+                </div><!-- ./Form Group -->
                 <div class="form-group form-group-sm"><!-- Form Group Text Input -->
                     <label for="brewSecondaryTemp" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label"><?php echo $label_secondary." ".$label_temperature; ?></label>
                     <div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
                         <!-- Input Here -->
                         <input class="form-control" name="brewSecondaryTemp" type="text" value="<?php if ($action == "edit") echo $row_log['brewSecondaryTemp']; ?>" placeholder="&deg;<?php echo $_SESSION['prefsTemp']; ?>">
                     </div>
-                </div><!-- ./Form Group --> 
+                </div><!-- ./Form Group -->
                 <div class="form-group form-group-sm"><!-- Form Group Text Input -->
                     <label for="brewOther" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label"><?php echo $label_other." ".$label_fermentation; ?></label>
                     <div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
                         <!-- Input Here -->
                         <input class="form-control" name="brewOther" type="text" value="<?php if ($action == "edit") echo $row_log['brewOther']; ?>" placeholder="<?php echo $brew_text_026; ?>">
                     </div>
-                </div><!-- ./Form Group -->   
+                </div><!-- ./Form Group -->
                 <div class="form-group form-group-sm"><!-- Form Group Text Input -->
                     <label for="brewOtherTemp" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label"><?php echo $label_other." ".$label_temperature; ?></label>
                     <div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
                         <!-- Input Here -->
                         <input class="form-control" name="brewOtherTemp" type="text" value="<?php if ($action == "edit") echo $row_log['brewOtherTemp']; ?>" placeholder="&deg;<?php echo $_SESSION['prefsTemp']; ?>">
                     </div>
-                </div><!-- ./Form Group --> 
+                </div><!-- ./Form Group -->
                 <!-- Carbonation -->
                 <div class="form-group form-group-sm"><!-- Form Group Radio INLINE -->
                     <label for="brewCarbonationMethod" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label"><?php echo $label_carbonation; ?></label>
@@ -1313,7 +1316,7 @@ else {
                         <!-- Input Here -->
                         <input class="form-control" name="brewCarbonationVol" type="text" value="<?php if ($action == "edit") echo $row_log['brewCarbonationVol']; ?>" placeholder="">
                     </div>
-                </div><!-- ./Form Group --> 
+                </div><!-- ./Form Group -->
                 <div class="form-group form-group-sm"><!-- Form Group NOT-REQUIRED Text Area -->
                     <label for="brewCarbonationNotes" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label"><?php echo $label_carbonation." ".$label_type."/".$label_amount; ?></label>
                     <div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
@@ -1326,7 +1329,7 @@ else {
         </div><!-- ./New Panel -->
     </div>
 </div>
-<?php } // end if ($_SESSION['prefsHideRecipe'] == "N") 
+<?php } // end if ($_SESSION['prefsHideRecipe'] == "N")
 if ($action == "add") {
 	$submit_icon = "plus";
 	$submit_text = $label_add_entry;

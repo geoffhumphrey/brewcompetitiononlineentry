@@ -12,6 +12,14 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 	$purifier = new HTMLPurifier($config_html_purifier);
 
 	$ba_styles_accepted = "";
+	$brewStyleEntry = "";
+	$brewStyleInfo = "";
+	$brewStyleLink = "";
+	$brewStyleStrength = "";
+	if (isset($_POST['brewStyleEntry'])) $brewStyleEntry = $purifier->purify($_POST['brewStyleEntry']);
+	if (isset($_POST['brewStyleInfo'])) $brewStyleInfo = $purifier->purify($_POST['brewStyleInfo']);
+	if (isset($_POST['brewStyleLink'])) $brewStyleLink = sterilize($_POST['brewStyleLink']);
+	if ((isset($_POST['brewStyleType'])) && ($_POST['brewStyleType'] == 2)) $brewStyleStrength = 0; else $brewStyleStrength = sterilize($_POST['brewStyleStrength']);
 
 	if ($action == "update") {
 
@@ -117,14 +125,14 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 				$massUpdateGoTo = $base_url."setup.php?section=step8";
 				$pattern = array('\'', '"');
 				$massUpdateGoTo = str_replace($pattern, "", $massUpdateGoTo);
-				header(sprintf("Location: %s", stripslashes($massUpdateGoTo)));
+				$redirect_go_to = sprintf("Location: %s", stripslashes($massUpdateGoTo));
 
 			}
 
 			else {
 				$pattern = array('\'', '"');
 				$massUpdateGoTo = str_replace($pattern, "", $massUpdateGoTo);
-				header(sprintf("Location: %s", stripslashes($massUpdateGoTo)));
+				$redirect_go_to = sprintf("Location: %s", stripslashes($massUpdateGoTo));
 			}
 
 		} // end if($result)
@@ -132,10 +140,6 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 	} // end if ($action == "update");
 
 	if ($action == "add") {
-
-		$brewStyleEntry = $purifier->purify($brewStyleEntry);
-
-		$brewStyleInfo = $purifier->purify($brewStyleInfo);
 
 		if ($_SESSION['prefsStyleSet'] == "BJCP2008") $category_end = 28;
 		else $category_end = 34;
@@ -155,8 +159,6 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 		// $style_difference = ($row_style_name['brewStyleGroup'] - $category_end);
 		$style_add_one = $row_style_name['brewStyleGroup'] + 1;
 
-		if (isset($_POST['brewStyleLink'])) $brew_style_link = sterilize($_POST['brewStyleLink']); else $brew_style_link = "";
-
 		// Going to start IDs for custom styles at 500
 		// Allows for expansion of BA styles and saves conflicts with special requirement styles and subcategory limit exception styles
 		if ($row_style_name['id'] < 500) {
@@ -167,26 +169,26 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 			brewStyle,
 			brewStyleOG,
 			brewStyleOGMax,
-			brewStyleFG,
 
+			brewStyleFG,
 			brewStyleFGMax,
 			brewStyleABV,
 			brewStyleABVMax,
 			brewStyleIBU,
-			brewStyleIBUMax,
 
+			brewStyleIBUMax,
 			brewStyleSRM,
 			brewStyleSRMMax,
 			brewStyleType,
 			brewStyleInfo,
-			brewStyleLink,
 
+			brewStyleLink,
 			brewStyleGroup,
 			brewStyleActive,
 			brewStyleOwn,
 			brewStyleVersion,
-			brewStyleReqSpec,
 
+			brewStyleReqSpec,
 			brewStyleStrength,
 			brewStyleCarb,
 			brewStyleSweet,
@@ -214,7 +216,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 							   GetSQLValueString(sterilize($_POST['brewStyleSRMMax']), "text"),
 							   GetSQLValueString(sterilize($_POST['brewStyleType']), "text"),
 							   GetSQLValueString($brewStyleInfo, "text"),
-							   GetSQLValueString($brew_style_link, "text"),
+							   GetSQLValueString($brewStyleLink, "text"),
 							   GetSQLValueString(sterilize($style_add_one), "text"),
 							   GetSQLValueString(sterilize($_POST['brewStyleActive']), "text"),
 							   GetSQLValueString(sterilize($_POST['brewStyleOwn']), "text"),
@@ -282,7 +284,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 							   GetSQLValueString(sterilize($_POST['brewStyleSRMMax']), "text"),
 							   GetSQLValueString(sterilize($_POST['brewStyleType']), "text"),
 							   GetSQLValueString($brewStyleInfo, "text"),
-							   GetSQLValueString($brew_style_link, "text"),
+							   GetSQLValueString($brewStyleLink, "text"),
 							   GetSQLValueString(sterilize($style_add_one), "text"),
 							   GetSQLValueString(sterilize($_POST['brewStyleActive']), "text"),
 							   GetSQLValueString(sterilize($_POST['brewStyleOwn']), "text"),
@@ -302,18 +304,12 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 
 		$pattern = array('\'', '"');
 		$insertGoTo = str_replace($pattern, "", $insertGoTo);
-		header(sprintf("Location: %s", stripslashes($insertGoTo)));
+		$redirect_go_to = sprintf("Location: %s", stripslashes($insertGoTo));
 
 
 	} // end if ($action == "add");
 
 	if ($action == "edit") {
-
-		$brewStyleEntry = $purifier->purify($brewStyleEntry);
-
-		$brewStyleInfo = $purifier->purify($brewStyleInfo);
-
-		if ($_POST['brewStyleType'] == 2) $styleStrength = 0; else $styleStrength = sterilize($_POST['brewStyleStrength']);
 
 		if ($id < 500) {
 
@@ -370,12 +366,12 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 						   GetSQLValueString(sterilize($_POST['brewStyleSRMMax']), "text"),
 						   GetSQLValueString(sterilize($_POST['brewStyleType']), "text"),
 						   GetSQLValueString($brewStyleInfo, "text"),
-						   GetSQLValueString($brew_style_link, "text"),
+						   GetSQLValueString($brewStyleLink, "text"),
 						   GetSQLValueString(sterilize($_POST['brewStyleGroup']), "text"),
 						   GetSQLValueString(sterilize($_POST['brewStyleActive']), "text"),
 						   GetSQLValueString(sterilize($_POST['brewStyleOwn']), "text"),
 						   GetSQLValueString(sterilize($_POST['brewStyleReqSpec']), "text"),
-						   GetSQLValueString($styleStrength, "text"),
+						   GetSQLValueString($brewStyleStrength, "text"),
 						   GetSQLValueString(sterilize($_POST['brewStyleCarb']), "text"),
 						   GetSQLValueString(sterilize($_POST['brewStyleSweet']), "text"),
 						   GetSQLValueString($brewStyleEntry, "text"),
@@ -427,12 +423,12 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 						   GetSQLValueString(sterilize($_POST['brewStyleSRMMax']), "text"),
 						   GetSQLValueString(sterilize($_POST['brewStyleType']), "text"),
 						   GetSQLValueString($brewStyleInfo, "text"),
-						   GetSQLValueString($brew_style_link, "text"),
+						   GetSQLValueString($brewStyleLink, "text"),
 						   GetSQLValueString(sterilize($_POST['brewStyleGroup']), "text"),
 						   GetSQLValueString(sterilize($_POST['brewStyleActive']), "text"),
 						   GetSQLValueString(sterilize($_POST['brewStyleOwn']), "text"),
 						   GetSQLValueString(sterilize($_POST['brewStyleReqSpec']), "text"),
-						   GetSQLValueString($styleStrength, "text"),
+						   GetSQLValueString($brewStyleStrength, "text"),
 						   GetSQLValueString(sterilize($_POST['brewStyleCarb']), "text"),
 						   GetSQLValueString(sterilize($_POST['brewStyleSweet']), "text"),
 						   GetSQLValueString($brewStyleEntry, "text"),
@@ -458,11 +454,10 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 
 		$pattern = array('\'', '"');
 		$updateGoTo = str_replace($pattern, "", $updateGoTo);
-		header(sprintf("Location: %s", stripslashes($updateGoTo)));
+		$redirect_go_to = sprintf("Location: %s", stripslashes($updateGoTo));
 	}
 
 } else {
-	header(sprintf("Location: %s", $base_url."index.php?msg=98"));
-	exit;
+	$redirect_go_to = sprintf("Location: %s", $base_url."index.php?msg=98");
 }
 ?>

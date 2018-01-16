@@ -15,7 +15,7 @@ $item_amount = sterilize($_POST['amount']);
 // Request payment
 
 $query_string = "";
-	
+
 // Append PayPal account to querystring
 $query_string .= "?business=".urlencode($paypal_email)."&";
 
@@ -33,7 +33,6 @@ $query_string .= "&cancel_return=".urlencode(stripslashes($cancel_url));
 // $query_string .= "&notify_url=".urlencode($notify_url);
 
 // Redirect to PayPal IPN
-header(sprintf('location:%s%s',$paypal_url,$query_string));
-exit();
+$redirect_go_to = sprintf('location:%s%s',$paypal_url,$query_string);
 
 ?>

@@ -4045,7 +4045,9 @@ function sterilize ($sterilize = NULL) {
 }
 
 function tiebreak_rule($rule) {
+
 	require (LANG.'language.lang.php');
+
 	switch ($rule) {
 		case "TBTotalPlaces" :
 			$return = $best_brewer_text_006;
@@ -4072,6 +4074,78 @@ function tiebreak_rule($rule) {
 			$return = $best_brewer_text_013;
 			break;
 	}
+
 	return $return;
+}
+
+if (!function_exists('mime_content_type')) {
+
+    function mime_content_type($filename) {
+
+        $mime_types = array(
+            'txt' => 'text/plain',
+            'png' => 'image/png',
+            'jpe' => 'image/jpeg',
+            'jpeg' => 'image/jpeg',
+            'jpg' => 'image/jpeg',
+            'gif' => 'image/gif',
+            'bmp' => 'image/bmp',
+            'ico' => 'image/vnd.microsoft.icon',
+            'tiff' => 'image/tiff',
+            'tif' => 'image/tiff',
+            'svg' => 'image/svg+xml',
+            'svgz' => 'image/svg+xml',
+            'pdf' => 'application/pdf',
+            /*
+            'doc' => 'application/msword',
+            'docx' => 'application/msword',
+            'rtf' => 'application/rtf',
+            'xls' => 'application/vnd.ms-excel',
+            'ppt' => 'application/vnd.ms-powerpoint',
+            'odt' => 'application/vnd.oasis.opendocument.text',
+            'ods' => 'application/vnd.oasis.opendocument.spreadsheet',
+            'zip' => 'application/zip',
+            'rar' => 'application/x-rar-compressed',
+            'exe' => 'application/x-msdownload',
+            'msi' => 'application/x-msdownload',
+            'cab' => 'application/vnd.ms-cab-compressed',
+            'mp3' => 'audio/mpeg',
+            'qt' => 'video/quicktime',
+            'mov' => 'video/quicktime',
+            'htm' => 'text/html',
+            'html' => 'text/html',
+            'php' => 'text/html',
+            'css' => 'text/css',
+            'js' => 'application/javascript',
+            'json' => 'application/json',
+            'xml' => 'application/xml',
+            'swf' => 'application/x-shockwave-flash',
+            'flv' => 'video/x-flv',
+            'psd' => 'image/vnd.adobe.photoshop',
+            'ai' => 'application/postscript',
+            'eps' => 'application/postscript',
+            'ps' => 'application/postscript',
+            */
+        );
+
+        $ext = strtolower(array_pop(explode('.',$filename)));
+
+        if (array_key_exists($ext, $mime_types)) {
+            return $mime_types[$ext];
+        }
+
+        elseif (function_exists('finfo_open')) {
+            $finfo = finfo_open(FILEINFO_MIME);
+            $mimetype = finfo_file($finfo, $filename);
+            finfo_close($finfo);
+            return $mimetype;
+        }
+
+        else {
+            return 'application/octet-stream';
+        }
+
+    }
+
 }
 ?>

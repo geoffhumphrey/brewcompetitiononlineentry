@@ -112,7 +112,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 		if ($_POST['tableStyles'] != "") $insertGoTo = $insertGoTo; else $insertGoTo = $insertGoTo = $_POST['relocate']."&msg=13";
 		$pattern = array('\'', '"');
 		$insertGoTo = str_replace($pattern, "", $insertGoTo);
-		header(sprintf("Location: %s", stripslashes($insertGoTo)));
+		$redirect_go_to = sprintf("Location: %s", stripslashes($insertGoTo));
 
 	}
 
@@ -120,7 +120,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 
 
 		// Check to see if table styles are different.
-		$query_table = sprintf("SELECT tableStyles FROM %s WHERE id='%s'", $judging_tables_db_table, $id);
+		$query_table = sprintf("SELECT id,tableStyles FROM %s WHERE id='%s'", $judging_tables_db_table, $id);
 		$table = mysqli_query($connection,$query_table) or die (mysqli_error($connection));
 		$row_table = mysqli_fetch_assoc($table);
 
@@ -139,7 +139,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 			$result = mysqli_query($connection,$deleteSQL) or die (mysqli_error($connection));
 
 			// Add back in
-			$query_table = sprintf("SELECT tableLocation FROM %s WHERE id=%s", $judging_tables_db_table, $id);
+			$query_table = sprintf("SELECT id,tableLocation FROM %s WHERE id=%s", $judging_tables_db_table, $id);
 			$table = mysqli_query($connection,$query_table) or die (mysqli_error($connection));
 			$row_table = mysqli_fetch_assoc($table);
 
@@ -296,7 +296,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 		}
 
 		// Remove all flight rows if unassigning ALL present table styles
-		if (($totalRows_flight_count > 0) && ($table_styles == "")) {
+		if (empty($_POST['tableStyles'])) {
 
 			do { $a[] = $row_flight_count['id']; } while ($row_flight_count = mysqli_fetch_assoc($flight_count));
 
@@ -313,12 +313,11 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 		$updateGoTo = $base_url."index.php?section=admin&go=judging_tables&msg=2";
 		$pattern = array('\'', '"');
 		$updateGoTo = str_replace($pattern, "", $updateGoTo);
-		header(sprintf("Location: %s", stripslashes($updateGoTo)));
+		$redirect_go_to = sprintf("Location: %s", stripslashes($updateGoTo));
 
 		}
 
 } else {
-	header(sprintf("Location: %s", $base_url."index.php?msg=98"));
-	exit;
+	$redirect_go_to = sprintf("Location: %s", $base_url."index.php?msg=98");
 }
 ?>
