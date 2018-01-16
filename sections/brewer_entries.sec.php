@@ -282,7 +282,7 @@ do {
 
 	$edit_link = "";
 
-	if ($entry_window_open == 1) {
+	if (($entry_window_open == 1) || (($entry_window_open != 1) && (time() < $row_contest_dates['contestEntryDeadline']))){
 
 		$edit_link .= "<a href=\"".$base_url."index.php?section=brew&amp;action=edit&amp;id=".$row_log['id'];
 		if ($row_log['brewConfirmed'] == 0) $edit_link .= "&amp;msg=1-".$brewCategory."-".$row_log['brewSubCategory'];

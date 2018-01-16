@@ -515,6 +515,7 @@ else $relocate_referrer = $_SERVER['HTTP_REFERER'];
 				do {
 					// Option value variable
 					$style_value = ltrim($row_styles['brewStyleGroup'], "0")."-".$row_styles['brewStyleNum'];
+					$style_value_edit = $row_styles['brewStyleGroup']."-".$row_styles['brewStyleNum'];
 					$selected_disabled = "";
 					$selected = "";
 
@@ -530,7 +531,7 @@ else $relocate_referrer = $_SERVER['HTTP_REFERER'];
 					if (($remaining_entries > 0) && (!$disable_fields)) $selected_disabled = $subcat_limit;
 					elseif ($disable_fields) $selected_disabled = "DISABLED";
 
-					if (($action == "edit") && ($view == $style_value)) {
+					if (($action == "edit") && ($view == $style_value_edit)) {
 						$selected = " SELECTED";
 						$selected_disabled = "";
 					}
