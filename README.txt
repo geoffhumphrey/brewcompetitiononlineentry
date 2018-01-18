@@ -10,6 +10,8 @@ Release 2.1.11, 2017-10-31
 Developed utilizing a number of extensions and functions, with gratitude to their
 respective developers and online communities. Tested with the following versions:
 - PHP 5.6.24                      http://www.php.net
+  -- PHP's Fileinfo extension must be installed and enabled
+  -- see http://php.net/manual/en/fileinfo.setup.php
 - MySQL 5.5.42                    http://www.mysql.com
 - jQuery 3.1.0                    http://jquery.com
 - Bootstrap 3.3.7                 http://getbootstrap.com

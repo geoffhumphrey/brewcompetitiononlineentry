@@ -68,13 +68,11 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 
 						// If the username/password combo is OK, relocate to the "protected" content index page
 						$redirect_go_to = sprintf("Location: %s", $base_url."index.php?action=add&section=brewer&go=".$go."&msg=1");
-						exit;
 					}
 					else {
 						// If the username/password combo is incorrect or not found, relocate to the login error page
 						$redirect_go_to = sprintf("Location: %s", $base_url."index.php?section=login&go=".$go."&msg=1");
 						session_destroy();
-						exit;
 					}
 				}
 
@@ -184,7 +182,6 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 					else {
 						// If the username/password combo is incorrect or not found, relocate to the login error page
 						$redirect_go_to = sprintf("Location: %s", $base_url."index.php?section=user&action=username&msg=2");
-						exit;
 					}
 
 

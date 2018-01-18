@@ -60,8 +60,8 @@ $output_available_modal_body = "";
 $output_at_table_modal_body = "";
 $ranked = 0;
 $nonranked = 0;
-$ranked_judge = "";
-$nonranked_judge = "";
+$ranked_judge = array();
+$nonranked_judge = array();
 
 
 // Build DataTables Header

@@ -1,5 +1,6 @@
 <?php
 // ---------------- DEBUG SESSION VARS --------------------
+// echo phpinfo();
 $table_body = "";
 foreach ($_SESSION as $key => $value) {
 	if (is_array($value)) {

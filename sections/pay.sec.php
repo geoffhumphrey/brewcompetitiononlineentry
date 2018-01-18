@@ -101,7 +101,7 @@ else {
 	}
 	$primary_page_info .= sprintf("<p class=\"lead\"><small><span class=\"fa fa-lg fa-exclamation-triangle text-danger\"></span> %s <strong class=\"text-success\">%s</strong>. %s <strong class=\"text-danger\">%s</strong>.</small></p>",$pay_text_008,$currency_symbol.number_format($total_entry_fees,2),$pay_text_009,$currency_symbol.number_format($total_to_pay,2));
 
-	if (($total_not_paid == 0) || ($total_to_pay == 0)) $primary_page_info .= sprintf("<p class=\"lead\"><small><span class=\"fa fa-lg fa-thumbs-o-up text-danger\"></span> %s</p></small></p>",$pay_text_010);
+	if (($total_not_paid == 0) || ($total_to_pay == 0)) $primary_page_info .= sprintf("<p class=\"lead\"><small><span class=\"fa fa-lg fa-check-circle text-success\"></span> %s</p></small></p>",$pay_text_010);
 
 
 	else {
@@ -252,9 +252,6 @@ else {
 
 	}
 
-
-
-
 	if (($row_brewer['brewerDiscount'] != "Y") && ($row_contest_info['contestEntryFeePassword'] != "") && ((($total_entry_fees > 0) && ($total_entry_fees != $total_paid_entry_fees)))) {
 		$header1_7 .= sprintf("<h2>%s</h2>",$label_fee_discount);
 		$page_info7 .= sprintf("<p>%s</p>",$pay_text_023);
@@ -270,9 +267,9 @@ else {
 		$page_info7 .= "</form>";
 	}
 
-	if (($total_entry_fees > 0) && ($total_entry_fees == $total_paid_entry_fees)) $page_info6 .= sprintf("<span class=\"fa fa-lg fa-thumbs-o-up\"></span> %s</p>",$pay_text_024);
+	if (($total_entry_fees > 0) && ($total_entry_fees == $total_paid_entry_fees)) $page_info6 .= sprintf("<span class=\"fa fa-lg fa-check-circle text-success\"></span> %s</p>",$pay_text_024);
 	if (($total_entry_fees == 0) && ($_SESSION['contestEntryFee'] > 0)) $page_info6 .= sprintf("<p>%s</p>",$pay_text_025);
-	else $page_info6 .= sprintf("<span class=\"fa fa-lg fa-thumbs-o-up\"></span> %s</p>",$pay_text_032);
+	else $page_info6 .= sprintf("<span class=\"fa fa-lg fa-check-circle text-success\"></span> %s</p>",$pay_text_032);
 
 	if (($_SESSION['prefsPayToPrint'] == "Y") && ($unconfirmed > 0)) $warning1 .= sprintf("<div class=\"alert alert-danger\"><span class=\"fa fa-lg fa-exclamation-circle\"></span> <strong>%s</strong> %s</div>",$pay_text_026,$pay_text_027);
 

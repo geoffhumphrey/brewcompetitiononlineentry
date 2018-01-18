@@ -189,4 +189,7 @@ if ((strpos($section, "step") === FALSE) && ($section != "setup")) {
 
 $barcode_qrcode_array = array("0","2","N","C","3","4");
 $no_entry_form_array = array("0","1","2","E","C");
+
+if ($logged_in) $location_target = "_blank";
+else $location_target = "_self";
 ?>

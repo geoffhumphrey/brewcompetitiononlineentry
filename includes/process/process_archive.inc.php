@@ -247,7 +247,6 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 			}
 
 			$redirect_go_to = sprintf("Location: %s", $base_url."index.php?section=admin&go=archive&msg=7");
-			exit;
 		}
 
 		// If no participants were kept except admin users, log the user in and redirect

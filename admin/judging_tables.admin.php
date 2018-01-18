@@ -41,6 +41,7 @@ $bos_modal_body = "";
 $orphan_modal_body_1 = "";
 $orphan_modal_body_2 = "";
 $style_assigned_this = "";
+$all_loc_total = array();
 
 if (($action == "default") && ($filter == "default")) {
 
@@ -48,8 +49,8 @@ if (($action == "default") && ($filter == "default")) {
 
 	if ($totalRows_tables > 0) {
 
-		$a[] = "";
-		$y[] = "";
+		$a[] = array();
+		$y[] = array();
 		$z[] = 0;
 
 		// BJCP Styles

@@ -31,11 +31,10 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 				$assignRoles = implode(", ",$roles);
 			}
 
-			*/
-
 			if ((!isset($_POST['unassign'.$random])) && (($_POST['rolesPrevDefined'.$random] == 1) || ($_POST['rolesPrevDefined'.$random] == 0)) && (!empty($assignRoles))) $roles_only_update = TRUE;
 			elseif ((!isset($_POST['unassign'.$random])) && ($_POST['rolesPrevDefined'.$random] == 1) && (empty($assignRoles))) $roles_only_update = TRUE;
-			else $roles_only_update = FALSE;
+			else */
+			$roles_only_update = FALSE;
 
 			if (isset($_POST['unassign'.$random])) $unassign = $_POST['unassign'.$random];
 			else $unassign = 0;
@@ -144,11 +143,13 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 					$assignRoles = implode(", ",$roles);
 				}
 
-				*/
+
 
 				if ((!isset($_POST['unassign'.$random])) && (($_POST['rolesPrevDefined'.$random] == 1) || ($_POST['rolesPrevDefined'.$random] == 0)) && (!empty($assignRoles))) $roles_only_update = TRUE;
 				elseif ((!isset($_POST['unassign'.$random])) && ($_POST['rolesPrevDefined'.$random] == 1) && (empty($assignRoles))) $roles_only_update = TRUE;
-				else $roles_only_update = FALSE;
+				else
+				*/
+				$roles_only_update = FALSE;
 
 				// Check to see if participant is 1) not being "unassigned" and reassigned, and 2) being assigned.
 				if (((isset($_POST['unassign'.$random])) && ($_POST['unassign'.$random] == 0)) && ((isset($_POST['assignRound'.$random])) && ($_POST['assignRound'.$random] > 0)))  {
@@ -217,11 +218,11 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 	 }  // end if ($_SESSION['jPrefsQueued'] == "Y")
 
 	$redirect_go_to = sprintf("Location: %s", $base_url."index.php?section=admin&go=judging_tables&msg=2");
-	exit;
 
 	}
 
 } else {
 	$redirect_go_to = sprintf("Location: %s", $base_url."index.php?msg=98");
 }
+
 ?>

@@ -84,9 +84,9 @@ $page_info16 = "";
 $header1_17 = "";
 $page_info17 = "";
 $style_info_modals = "";
-$ba_accepted_styles[] = "";
+$ba_accepted_styles = array();
 $anchor_links_nav = "";
-$anchor_links = "";
+$anchor_links = array();
 $anchor_top = "<p><a href=\"#top\">".$label_top." <span class=\"fa fa-arrow-circle-up\"></span></a></p>";
 
 // Registration Window
@@ -235,15 +235,27 @@ if ($totalRows_judging == 0) $page_info7 .= sprintf("<p>%s</p>",$entry_info_text
 else {
 	do {
 		$page_info7 .= "<p>";
+
 		if ($row_judging['judgingLocName'] != "") $page_info7 .= "<strong>".$row_judging['judgingLocName']."</strong>";
-		if ($row_judging['judgingLocation'] != "") $page_info7 .= "<br><a href=\"".$base_url."output/maps.output.php?section=driving&amp;id=".str_replace(' ', '+', $row_judging['judgingLocation'])."\" target=\"_blank\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Map to ".$row_judging['judgingLocName']."\">".$row_judging['judgingLocation']."</a> <span class=\"fa fa-lg fa-map-marker\"></span>";
-		else $page_info7 .= $row_judging['judgingLocName'];
+
+		if ($logged_in) {
+			$location_link = $base_url."output/maps.output.php?section=driving&amp;id=".str_replace(' ', '+', $row_judging['judgingLocation']);
+			$location_tooltip = "Map to ".$row_judging['judgingLocName'];
+		}
+
+		else {
+			$location_link = "#";
+			$location_tooltip = "Log in to view the ".$row_judging['judgingLocName']." location";
+		}
+
+		if ($row_judging['judgingLocation'] != "") $page_info7 .= "<br>".$row_judging['judgingLocation']." <a href=\"".$location_link."\" target=\"".$location_target."\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"".$location_tooltip."\"><span class=\"fa fa-lg fa-map-marker\"></span></a>";
+
 		if ($row_judging['judgingDate'] != "") $page_info7 .=  "<br />".getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_judging['judgingDate'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "long", "date-time");
+
 		$page_info7 .= "</p>";
 	} while ($row_judging = mysqli_fetch_assoc($judging));
 	$page_info7 .= $anchor_top;
 }
-
 
 // Categories Accepted
 $header1_8 .= "";
@@ -451,7 +463,7 @@ if ($show_entries) {
 			if ($row_dropoff['dropLocationWebsite'] != "") $page_info11 .= sprintf("<a href=\"%s\" target=\"_blank\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"".$row_dropoff['dropLocationName']." %s\"><strong>%s</strong></a> <span class=\"fa fa-lg fa-external-link\"></span>",$row_dropoff['dropLocationWebsite'],$label_website,$row_dropoff['dropLocationName']);
 			else $page_info11 .= sprintf("<strong>%s</strong>",$row_dropoff['dropLocationName']);
 			$page_info11 .= "<br />";
-			$page_info11 .= sprintf("<a href=\"".$base_url."output/maps.output.php?section=driving&amp;id=".str_replace(' ', '+', $row_dropoff['dropLocation'])."\" target=\"_blank\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"%s ".$row_dropoff['dropLocationName']."\">".$row_dropoff['dropLocation']."</a> <span class=\"fa fa-lg fa-map-marker\"></span>",$entry_info_text_044);
+			$page_info11 .= sprintf("%s <a href=\"".$base_url."output/maps.output.php?section=driving&amp;id=%s\" target=\"_blank\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"%s\"><span class=\"fa fa-lg fa-map-marker\"></span></a>",$row_dropoff['dropLocation'],str_replace(' ', '+', $row_dropoff['dropLocation']),$entry_info_text_044." ".$row_dropoff['dropLocationName']);
 			$page_info11 .= "<br />";
 			$page_info11 .= $row_dropoff['dropLocationPhone'];
 			$page_info11 .= "<br />";
@@ -487,7 +499,9 @@ if (isset($_SESSION['contestAwardsLocName'])) {
 	$header1_14 .= sprintf("<a name=\"%s\"></a><h2>%s</h2>",strtolower($anchor_name),$label_awards_ceremony);
 	$page_info14 .= "<p>";
 	$page_info14 .= sprintf("<strong>%s</strong>",$_SESSION['contestAwardsLocName']);
-	if ($_SESSION['contestAwardsLocation'] != "") $page_info14 .= sprintf("<br /><a href=\"".$base_url."output/maps.output.php?section=driving&amp;id=".str_replace(' ', '+', $_SESSION['contestAwardsLocation'])."\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Map to ".$_SESSION['contestAwardsLocName']." \" target=\"_blank\">%s</a> <span class=\"fa fa-lg fa-map-marker\"></span>",$_SESSION['contestAwardsLocation']);
+
+	if ($_SESSION['contestAwardsLocation'] != "") $page_info14 .= sprintf("<br />%s <a href=\"".$base_url."output/maps.output.php?section=driving&amp;id=".str_replace(' ', '+', $_SESSION['contestAwardsLocation'])."\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Map to ".$_SESSION['contestAwardsLocName']." \" target=\"_blank\"><span class=\"fa fa-lg fa-map-marker\"></span></a>",$_SESSION['contestAwardsLocation']);
+
 	if ($_SESSION['contestAwardsLocTime'] != "") $page_info14 .= sprintf("<br />%s",getTimeZoneDateTime($_SESSION['prefsTimeZone'], $_SESSION['contestAwardsLocTime'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "long", "date-time"));
 	$page_info14 .= "</p>";
 	$page_info14 .= $anchor_top;
