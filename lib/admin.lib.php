@@ -998,9 +998,19 @@ function like_dislike($likes,$dislikes,$styles) {
 
 	else $f = 0;
 
-	if (($c > 0) && ($f == 0)) $r .= "bg-success text-success|<span class=\"text-success\"><span class=\"fa fa-thumbs-o-up\"></span> <strong>Available and Preferred Style(s).</strong> Paricipant is available for this round. One or more styles at the table are on the participant&rsquo;s &ldquo;likes&rdquo; list.<span>"; // 1 or more likes matched, color table cell green
-	elseif (($c == 0) && ($f > 0)) $r .= "bg-danger text-danger|<span class=\"text-danger\"><span class=\"fa fa-thumbs-o-down\"></span> <strong>Available but Non-Preferred Style(s).</strong> Paricipant is available for this round. One or more styles are on the participant&rsquo;s &ldquo;dislikes&rdquo; list.</span>"; // 1 or more dislikes matched, color table cell red
-	else $r .="bg-grey text-grey|<span class=\"text-orange\"><span class=\"fa fa-star-o\"></span> <strong>Available.</strong> Paricipant is available for this round.</span>";
+	if (($c > 0) && ($f == 0)) {
+		$r .= "bg-success text-success|<span class=\"text-success\" style=\"margin: 0 0 10px 0;\"><span class=\"fa fa-thumbs-o-up\"></span> <strong>Available and Preferred Style(s).</strong><span>"; // 1 or more likes matched, color table cell green
+		$r .= " <a tabindex=\"0\" role=\"button\" data-toggle=\"popover\" data-placement=\"right\" data-trigger=\"hover focus\" data-content=\"Paricipant is available for this round. One or more styles at the table are on the participant&rsquo;s &ldquo;likes&rdquo; list.\"><span class=\"fa fa-lg fa-info-circle\"></span></a>";
+	}
+	elseif (($c == 0) && ($f > 0)) {
+		$r .= "bg-danger text-danger|<span class=\"text-danger\"><span class=\"fa fa-thumbs-o-down\"></span> <strong>Available but Non-Preferred Style(s).</strong></span>";
+		$r .= " <a tabindex=\"0\" role=\"button\" data-toggle=\"popover\" data-placement=\"right\" data-trigger=\"hover focus\" data-content=\"Paricipant is available for this round. One or more styles are on the participant&rsquo;s &ldquo;dislikes&rdquo; list.\"><span class=\"fa fa-lg fa-info-circle\"></span></a>";
+		// 1 or more dislikes matched, color table cell red
+	}
+	else {
+		$r .="bg-grey text-grey|<span class=\"text-orange\"><span class=\"fa fa-star-o\"></span> <strong>Available.</strong></span>";
+		$r .= " <a tabindex=\"0\" role=\"button\" data-toggle=\"popover\" data-placement=\"right\" data-trigger=\"hover focus\" data-content=\"Paricipant is available for this round.\"><span class=\"fa fa-lg fa-info-circle\"></span></a>";
+	}
 
 	return $r;
 }

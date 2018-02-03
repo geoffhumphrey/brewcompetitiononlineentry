@@ -1,12 +1,12 @@
 <p class="lead"><?php echo $_SESSION['contestName']; if ($action == "add") echo ": Add a Style Type"; elseif ($action == "edit") echo ": Edit the ".$row_style_type['styleTypeName']." Style Type";  else echo " Style Types";  ?></p>
 
 <div class="bcoem-admin-element hidden-print">
-	
+
 	<!-- Postion 1: View All Button -->
 	<div class="btn-group" role="group" aria-label="all-styles">
         <a class="btn btn-default" href="<?php echo $base_url; ?>index.php?section=admin&amp;go=styles"><span class="fa fa-arrow-circle-left"></span> All Styles</a>
     </div><!-- ./button group -->
-	
+
 	<?php if (($action == "add") || ($action == "edit")) { ?>
 	<!-- Postion 1: View All Button -->
 	<div class="btn-group" role="group" aria-label="all-styles">
@@ -17,12 +17,12 @@
 	<!-- Position 2: Add Dropdown Button Group -->
 	<div class="btn-group" role="group">
 		<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-		<span class="fa fa-plus-circle"></span> Add...  
+		<span class="fa fa-plus-circle"></span> Add...
 		<span class="caret"></span>
 		</button>
 		<ul class="dropdown-menu">
-			<li class="small"><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=styles&amp;action=add">A Custom Style Style</a></li>
 			<li class="small"><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=style_types&amp;action=add">Add a Style Type</a><li>
+			<li class="small"><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=styles&amp;action=add">A Custom Style</a></li>
 		</ul>
 	</div>
 	<?php } ?>
@@ -62,7 +62,7 @@
         <td class="data"><?php if ($row_style_type['styleTypeBOS'] == "Y") echo "<span class=\"fa fa-lg fa-check text-success\"></span>"; else echo "<span class=\"fa fa-lg fa-times text-danger\"></span>"; ?></td>
         <td class="data"><?php echo bos_method($row_style_type['styleTypeBOSMethod']); ?></td>
         <td class="data">
-  		<a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=<?php echo $go; ?>&amp;action=edit&amp;id=<?php echo $row_style_type['id']; ?>" data-toggle="tooltip" data-placement="top" title="Edit <?php echo $row_style_type['styleTypeName']; ?>"><span class="fa fa-lg fa-pencil"></a> 
+  		<a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=<?php echo $go; ?>&amp;action=edit&amp;id=<?php echo $row_style_type['id']; ?>" data-toggle="tooltip" data-placement="top" title="Edit <?php echo $row_style_type['styleTypeName']; ?>"><span class="fa fa-lg fa-pencil"></a>
 		<?php if ($row_style_type['styleTypeOwn'] != "bcoe") { ?>
 		<a href="<?php echo $base_url; ?>includes/process.inc.php?section=admin&amp;go=<?php echo $go; ?>&amp;dbTable=<?php echo $style_types_db_table; ?>&amp;action=delete&amp;id=<?php echo $row_style_type['id']; ?>" data-toggle="tooltip" data-placement="top" title="Delete <?php echo $row_style_type['styleTypeName']; ?>" data-confirm="Are you sure you want to delete <?php echo $row_style_type['styleTypeName']; ?>? This cannot be undone."><span class="fa fa-lg fa-trash-o"></a>
   		<?php } else { ?>
@@ -112,7 +112,7 @@
 			<!-- Input Here -->
 			<div class="radio">
 				<label>
-					<input type="radio" name="styleTypeBOSMethod" value="1" id="styleTypeBOSMethod_0" <?php if (($action == "edit") && ($row_style_type['styleTypeBOSMethod'] == "1")) echo "checked"; if ($action == "add") echo "checked"; ?> />1st place only     	
+					<input type="radio" name="styleTypeBOSMethod" value="1" id="styleTypeBOSMethod_0" <?php if (($action == "edit") && ($row_style_type['styleTypeBOSMethod'] == "1")) echo "checked"; if ($action == "add") echo "checked"; ?> />1st place only
 				</label>
 			</div>
 			<div class="radio">

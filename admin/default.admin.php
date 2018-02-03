@@ -96,7 +96,7 @@
 
                             <div class="row">
                                 <div class="col col-lg-5 col-md-4 col-sm-4 col-xs-4">
-                                    <strong>Judging Locations</strong>
+                                    <strong>Judging Sessions</strong>
                                 </div>
                                 <div class="col col-lg-7 col-md-8 col-sm-8 col-xs-8">
                                     <ul class="list-inline">
@@ -878,22 +878,18 @@
 							</div>
 							<div class="col col-lg-8 col-md-8 col-sm-8 col-xs-8">
 								<ul class="list-unstyled">
-
                                     <li><a id="modal_window_link" href="<?php echo $base_url; ?>output/print.output.php?section=pullsheets&amp;go=judging_scores_bos&amp;view=entry" data-toggle="tooltip" data-placement="top" title="Print All BOS Pullsheets Using Entry Numbers">All Style Types - Entry Numbers</a></li>
                                     <li><a id="modal_window_link" href="<?php echo $base_url; ?>output/print.output.php?section=pullsheets&amp;go=judging_scores_bos" data-toggle="tooltip" data-placement="top" title="Print All BOS Pullsheets Using Judging Numbers">All Style Types - Judging Numbers</a></li>
-								</ul>
-
 									<?php do {
 										if ($row_style_type['styleTypeBOS'] == "Y") {
 										?>
-                                        <ul class="list-inline">
+
 										<li><a id="modal_window_link" href="<?php echo $base_url; ?>output/print.output.php?section=pullsheets&amp;go=judging_scores_bos&amp;view=entry&amp;id=<?php echo $row_style_type['id']; ?>"  data-toggle="tooltip" data-placement="top" title="Print the <?php echo $row_style_type['styleTypeName']; ?> BOS Pullsheet Using Entry Numbers"><?php echo $row_style_type['styleTypeName']; ?> - Entry Numbers</a></li>
                                         <li><a id="modal_window_link" href="<?php echo $base_url; ?>output/print.output.php?section=pullsheets&amp;go=judging_scores_bos&amp;id=<?php echo $row_style_type['id']; ?>"  data-toggle="tooltip" data-placement="top" title="Print the <?php echo $row_style_type['styleTypeName']; ?> BOS Pullsheet Using Entry Numbers"><?php echo $row_style_type['styleTypeName']; ?> - Judging Numbers</a></li>
-                                        </ul>
+
 										<?php }
 										} while ($row_style_type = mysqli_fetch_assoc($style_type));
 									?>
-
 							</div>
 						</div><!-- ./row -->
 						<div class="row">
@@ -901,9 +897,16 @@
 								<strong>BOS Cup Mats</strong>
 							</div>
 							<div class="col col-lg-8 col-md-8 col-sm-8 col-xs-8">
-								<ul class="list-inline">
-									<li><a id="modal_window_link" href="<?php echo $base_url; ?>output/print.output.php?section=bos-mat&amp;filter=entry" data-toggle="tooltip" data-placement="top" title="Print BOS Cup Mats with entry numbers only">Entry Numbers</a></li>
-                                    <li><a id="modal_window_link" href="<?php echo $base_url; ?>output/print.output.php?section=bos-mat" data-toggle="tooltip" data-placement="top" title="Print BOS Cup Mats with judging numbers only">Judging Numbers</a></li>
+								<ul class="list-unstyled">
+									<li><a id="modal_window_link" href="<?php echo $base_url; ?>output/print.output.php?section=bos-mat&amp;filter=entry" data-toggle="tooltip" data-placement="top" title="Print all BOS Cup Mats with entry numbers only">All Style Types - Entry Numbers</a></li>
+                                    <li><a id="modal_window_link" href="<?php echo $base_url; ?>output/print.output.php?section=bos-mat" data-toggle="tooltip" data-placement="top" title="Print all BOS Cup Mats with judging numbers only">All Style Types - Judging Numbers</a></li>
+
+                                    <?php do {
+                                        if ($row_style_types['styleTypeBOS'] == "Y") { ?>
+                                        <li><a id="modal_window_link" href="<?php echo $base_url; ?>output/print.output.php?section=bos-mat&amp;filter=entry&amp;view=<?php echo $row_style_types['id']; ?>" data-toggle="tooltip" data-placement="top" title="Print BOS Cup Mats with entry numbers only for <?php echo $row_style_types['styleTypeName'];?>"><?php echo $row_style_types['styleTypeName'];?> - Entry Numbers</a></li>
+                                        <li><a id="modal_window_link" href="<?php echo $base_url; ?>output/print.output.php?section=bos-mat&amp;view=<?php echo $row_style_types['id']; ?>" data-toggle="tooltip" data-placement="top" title="Print BOS Cup Mats with judging numbers only for <?php echo $row_style_types['styleTypeName'];?>"><?php echo $row_style_types['styleTypeName'];?> - Judging Numbers</a></li>
+                                    <?php }
+                                } while ($row_style_types = mysqli_fetch_assoc($style_types)); ?>
 								</ul>
 							</div>
 						</div><!-- ./row -->
@@ -1102,7 +1105,8 @@
                                     <li><a href="<?php echo $base_url; ?>output/export.output.php?section=entries&amp;go=csv&amp;filter=brewer_contact_info">All Entries: Limited Data with Brewer Contact Info</a></li>
 									<li><a href="<?php echo $base_url; ?>output/export.output.php?section=entries&amp;go=csv&amp;filter=paid&amp;view=all">Paid Entries</a></li>
 									<li><a href="<?php echo $base_url; ?>output/export.output.php?section=entries&amp;go=csv&amp;filter=paid">Paid &amp; Received Entries</a></li>
-									<li><a href="<?php echo $base_url; ?>output/export.output.php?section=entries&amp;go=csv&amp;filter=nopay&amp;view=all">Non-Paid Entries</a></li>
+									<li><a href="<?php echo $base_url; ?>output/export.output.php?section=entries&amp;go=csv&amp;filter=paid&amp;view=not_received">Paid Entries Not Received</a></li>
+                                    <li><a href="<?php echo $base_url; ?>output/export.output.php?section=entries&amp;go=csv&amp;filter=nopay&amp;view=all">Non-Paid Entries</a></li>
 									<li><a href="<?php echo $base_url; ?>output/export.output.php?section=entries&amp;go=csv&amp;filter=nopay">Non-Paid &amp; Received Entries</a></li>
 									<li><a href="<?php echo $base_url; ?>output/export.output.php?section=entries&amp;go=csv&amp;action=required&amp;filter=required">Entries with Required &amp; Optional Info</a></li>
                                 </ul>

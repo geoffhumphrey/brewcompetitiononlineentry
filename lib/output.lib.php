@@ -239,7 +239,7 @@ function total_sessions() {
 
 }
 
-function total_flights () {
+function total_flights() {
 	include (CONFIG.'config.php');
 	mysqli_select_db($connection,$database);
 	$query_tables = sprintf("SELECT id FROM %s", $prefix."judging_tables");
@@ -332,6 +332,8 @@ function judge_points($uid,$bos) {
 	require(DB.'judging_locations.db.php');
 
 	// Judges earn a 0.5 points per *session*
+	// These calculations assume that sessions can consist of one or more flights and one or more rounds
+	// According to the BJCP, a session is "An uninterrupted time period when at least one panel of judges sits to judge one or more flights of entries. Typically, "morning", "afternoon" and "evening" are considered sessions at most competitions."
 	// *minimum* of 1.0 points per competition
 	// *maximum* of 1.5 points per day
 

@@ -9,12 +9,12 @@
 
 .lead {
 	padding: 0;
-	margin: 0;	
+	margin: 0;
 }
 
 h3 {
 	margin: 0 1em 0 0;
-	padding: 0;	
+	padding: 0;
 }
 </style>
 
@@ -22,10 +22,11 @@ h3 {
 	<div class="half-sheet">
         <div class="row">
             <div class="col-md-5">
-                <p class="lead">	<?php echo $_SESSION['brewerFirstName']." ".$_SESSION['brewerLastName']; ?></p>
-                <p><?php 
+                <p class="lead">	<?php if (isset($_SESSION['brewerBreweryName'])) echo $_SESSION['brewerBreweryName']."<br>";
+                    echo $_SESSION['brewerFirstName']." ".$_SESSION['brewerLastName']; ?></p>
+                <p><?php
                 echo $_SESSION['brewerAddress']."<br>".$_SESSION['brewerCity'].", ".$_SESSION['brewerState']." ".$_SESSION['brewerZip'];
-                if ($_SESSION['brewerCountry'] != "United States") echo "<br>".$_SESSION['brewerCountry']; 
+                if ($_SESSION['brewerCountry'] != "United States") echo "<br>".$_SESSION['brewerCountry'];
                 ?>
             </div>
             <div class="col-md-7">
@@ -44,10 +45,11 @@ h3 {
 	<div class="half-sheet">
         <div class="row">
             <div class="col-md-5">
-                <p class="lead">	<?php echo $_SESSION['brewerFirstName']." ".$_SESSION['brewerLastName']; ?></p>
-                <p><?php 
+                <p class="lead">	<?php if (isset($_SESSION['brewerBreweryName'])) echo $_SESSION['brewerBreweryName']."<br>";
+                    echo $_SESSION['brewerFirstName']." ".$_SESSION['brewerLastName']; ?></p>
+                <p><?php
                 echo $_SESSION['brewerAddress']."<br>".$_SESSION['brewerCity'].", ".$_SESSION['brewerState']." ".$_SESSION['brewerZip'];
-                if ($_SESSION['brewerCountry'] != "United States") echo "<br>".$_SESSION['brewerCountry']; 
+                if ($_SESSION['brewerCountry'] != "United States") echo "<br>".$_SESSION['brewerCountry'];
                 ?>
             </div>
             <div class="col-md-7">

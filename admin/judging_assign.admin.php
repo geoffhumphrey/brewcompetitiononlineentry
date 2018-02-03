@@ -66,12 +66,12 @@ $nonranked_judge = array();
 
 // Build DataTables Header
 $output_datatables_head .= "<tr>";
-$output_datatables_head .= "<th>Name</th>";
+$output_datatables_head .= "<th width=\"15%\">Name</th>";
 if ($filter == "judges") {
-	$output_datatables_head .= "<th>BJCP Rank</th>";
-	$output_datatables_head .= "<th class=\"hidden-xs hidden-sm hidden-md\">BJCP #</th>";
-	$output_datatables_head .= "<th>Comps Judged</th>";
-	// $output_datatables_head .= "<th>Judge Role(s) <a href=\"#\" role=\"button\" data-toggle=\"modal\" data-target=\"#rolesModal\"><span class=\"fa fa-lg fa-question-circle\"></span></a></th>";
+	$output_datatables_head .= "<th width=\"15%\">BJCP Rank</th>";
+	$output_datatables_head .= "<th width=\"10%\" class=\"hidden-xs hidden-sm hidden-md\">BJCP #</th>";
+	// $output_datatables_head .= "<th width=\"10%\">Comps Judged</th>";
+	//$output_datatables_head .= "<th width=\"10%\">Judge Role(s) <a href=\"#\" role=\"button\" data-toggle=\"modal\" data-target=\"#rolesModal\"><span class=\"fa fa-lg fa-question-circle\"></span></a></th>";
 }
 
 if ($queued == "Y") $output_datatables_head .= "<th>Round ".$row_flights['flightRound']."</th>";
@@ -80,7 +80,6 @@ else {
 			$output_datatables_head .= "<th>Round ".$i."</th>";
 	}
 }
-
 
 $output_datatables_head .= "</tr>";
 
@@ -95,19 +94,21 @@ do {
 	$flights_display = "";
 	$assign_flag = "";
 
+    $checked_head_judge = "";
+    $checked_lead_judge = "";
+    $checked_minibos_judge = "";
+    $roles_previously_defined = 0;
+
+    $random = random_generator(6,2);
+
 	for($i=1; $i<$row_flights['flightRound']+1; $i++) {
 
 		// Get role from judging_assignments table
+        /*
 		$query_judge_roles = sprintf("SELECT assignRoles FROM %s WHERE (bid='%s' AND assignTable='%s' AND assignRound='%s')", $prefix."judging_assignments", $row_brewer['uid'], $row_tables_edit['id'], $i);
 		$judge_roles = mysqli_query($connection,$query_judge_roles) or die (mysqli_error($connection));
 		$row_judge_roles = mysqli_fetch_assoc($judge_roles);
 
-		$checked_head_judge = "";
-		$checked_lead_judge = "";
-		$checked_minibos_judge = "";
-		$roles_previously_defined = 0;
-
-		/*
 		if (!empty($row_judge_roles['assignRoles'])) {
 			$roles_previously_defined = 1;
 		}
@@ -123,7 +124,7 @@ do {
 		if (strpos($row_judge_roles['assignRoles'],"MBOS") !== FALSE) {
 			$checked_minibos_judge = "CHECKED";
 		}
-		*/
+        */
 
 		if  (table_round($row_tables_edit['id'],$i)) {
 
@@ -177,7 +178,7 @@ do {
 		$output_datatables_body .= "<tr class=\"".$assign_row_color."\">\n";
 
 		$output_datatables_body .= "<td nowrap>";
-		$output_datatables_body .= "<a href=\"".$base_url."index.php?section=brewer&amp;go=admin&amp;action=edit&amp;filter=".$row_brewer['uid']."&amp;id=".$judge_info[11]."\" data-toggle=\"tooltip\" title=\"Edit ".$judge_info[0]." ".$judge_info[1]."&rsquo;s account info\">".$judge_info[1].", ".$judge_info[0]."</a>";
+		$output_datatables_body .= "<a href=\"".$base_url."index.php?section=brewer&amp;go=admin&amp;action=edit&amp;filter=".$row_brewer['uid']."&amp;id=".$judge_info[11]."\" data-toggle=\"tooltip\" title=\"Edit ".$judge_info[0]." ".$judge_info[1]."&rsquo;s account info\">".$judge_info[1].", ".$judge_info[0]."</a><br>Comps Judged: ".$judge_info[9];
 		$output_datatables_body .= "</td>";
 
 		if ($filter == "judges") {
@@ -187,15 +188,17 @@ do {
 			else $output_datatables_body .= "N/A";
 			if (!empty($judge_info[10])) $output_datatables_body .= "<br><strong>Judge&rsquo;s Notes to Organizers:</strong> <em>".$judge_info[10]."</em>";
 			$output_datatables_body .= "</td>";
-			$output_datatables_body .= "<td>".$judge_info[9]."</td>";
-			/*
+			// $output_datatables_body .= "<td>".$judge_info[9]."</td>";
+            /*
 			$output_datatables_body .= "<td>";
 			$output_datatables_body .= "<input type=\"hidden\" name=\"rolesPrevDefined".$random."\" value=\"".$roles_previously_defined."\">";
-			$output_datatables_body .= "<div class=\"checkbox\"><label><input name=\"head_judge".$random."\" type=\"checkbox\" value=\"HJ\" ".$checked_head_judge." /> Head Judge</label></div><br>";
-			$output_datatables_body .= "<div class=\"checkbox\"><label><input name=\"lead_judge".$random."\" type=\"checkbox\" value=\"LJ\" ".$checked_lead_judge." /> Lead Judge</label></div><br>";
-			$output_datatables_body .= "<div class=\"checkbox\"><label><input name=\"minibos_judge".$random."\" type=\"checkbox\" value=\"MBOS\" ".$checked_minibos_judge." /> Mini-BOS Judge</label></div><br>";
+            $output_datatables_body .= "<div class=\"checkbox\">";
+			$output_datatables_body .= "<label><input name=\"head_judge".$random."\" type=\"checkbox\" value=\"HJ\" ".$checked_head_judge." /> Head Judge</label>";
+			$output_datatables_body .= "<label><input name=\"lead_judge".$random."\" type=\"checkbox\" value=\"LJ\" ".$checked_lead_judge." /> Lead Judge</label>";
+			$output_datatables_body .= "<label><input name=\"minibos_judge".$random."\" type=\"checkbox\" value=\"MBOS\" ".$checked_minibos_judge." /> Mini-BOS Judge</label>";
+            $output_datatables_body .= "</div>";
 			$output_datatables_body .= "</td>";
-			*/
+            */
 		}
 
 		$modal_rank = $bjcp_rank[0];
@@ -294,7 +297,7 @@ if (is_array($nonranked_judge)) $nonranked = array_sum($nonranked_judge); else $
 			"aoColumns": [
 				null,
 				null,
-				null,
+				//null,
 				null<?php for($i=1; $i<$row_flights['flightRound']+1; $i++) {
 			    if  (table_round($row_tables_edit['id'],$i)) {
 				?>, null<?php } } ?>

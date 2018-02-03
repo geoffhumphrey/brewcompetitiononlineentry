@@ -409,7 +409,7 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] == 0)) {
 
 		}
 
-		if (($go == "payments") || ($go == "purge-all")) {
+		if (($go == "payments") || (($go == "purge-all") && (table_exists($prefix."payments")))) {
 
 			// Purge back from posted date
 			if ((isset($_POST['dateThreshold'])) && (!empty($_POST['dateThreshold']))) {

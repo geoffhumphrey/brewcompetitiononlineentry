@@ -279,10 +279,10 @@ if (($action == "default") && ($filter == "default")) {
 if (($action == "add") || ($action == "edit")) {
 
     $all_table_styles_concat = "";
-    $all_table_numbers_array = "";
-    $all_table_styles_array = "";
+    $all_table_numbers_array = array();
+    $all_table_styles_array = array();
     $table_styles_available = "";
-	$current_table_styles_array = "";
+	$current_table_styles_array = array();
     $table_numbers_available = "";
     $table_locations_available = "";
     $table_numbers = "";

@@ -4,10 +4,10 @@
  * Module:      staff_points.php
  * Description: This module calculates the BJCP points for staff, judges, and stewards
  *	            using the guidelines provided by the BJCP at http://www.bjcp.org/rules.php.
- * Revision History: 
+ * Revision History:
  * - fixed point output errors for judges and BOS judges
  * - programming now accounts for multiple roles (e.g., judge/staff, steward/staff, bos judge/staff, etc.)
- * - XML output is fully compliant with the BJCP Database Interface Specifications 
+ * - XML output is fully compliant with the BJCP Database Interface Specifications
  *   -- http://www.bjcp.org/it/docs/BJCP%20Database%20XML%20Interface%20Spec%202.1.pdf
  */
 
@@ -23,6 +23,9 @@ $total_entries = total_paid_received("judging_scores","default");
 
 // Figure out whether BOS Judge Points are awarded or not
 // "BOS points may only be awarded if a competition has at least 30 entries in at least five beer and/or three mead/cider categories."
+$beer_styles = array();
+$mead_styles = array();
+$cider_styles = array();
 $beer_styles[] = 0;
 $mead_styles[] = 0;
 $cider_styles[] = 0;
@@ -32,7 +35,7 @@ do {
 	if ($row_styles2['brewStyleType'] = "Cider") { $beer_syles[] = 0; $mead_styles[] = 0; $cider_styles[] = 1; }
 	elseif ($row_styles2['brewStyleType'] = "Mead") { $beer_syles[] = 0; $mead_styles[] = 1; $cider_styles[] = 0; }
 	else { $beer_syles[] = 1; $mead_styles[] = 0; $cider_styles[] = 0; }
-	
+
 } while ($row_styles2 = mysqli_fetch_assoc($styles2));
 
 $beer_styles_total = array_sum($beer_styles);
@@ -48,10 +51,10 @@ if ($view == "default") {
 	$output_judges = "";
 	$output_stewards = "";
 	$output_staff = "";
-	
-	if ($totalRows_organizer > 0) { 
-		
-		
+
+	if ($totalRows_organizer > 0) {
+
+
 		$org_name = ucwords(strtolower($row_org['brewerLastName'])).", ".ucwords(strtolower($row_org['brewerFirstName']));
 		$output_organizer .= "<tr>";
 		$output_organizer .= "<td>".$org_name."</td>";
@@ -61,10 +64,11 @@ if ($view == "default") {
 		$output_organizer .= "<td>".$organ_max_points."</td>";
 		$output_organizer .= "</tr>";
 	}
-	
+
 	if ($totalRows_judges > 0) {
+        $j = array();
 		do { $j[] = $row_judges['uid']; } while ($row_judges = mysqli_fetch_assoc($judges));
-		foreach (array_unique($j) as $uid) { 
+		foreach (array_unique($j) as $uid) {
 			$judge_info = explode("^",brewer_info($uid));
 			$judge_points = judge_points($uid,$judge_info['5']);
 			if ($judge_points > 0) {
@@ -77,7 +81,7 @@ if ($view == "default") {
 					if (validate_bjcp_id($judge_info['4'])) $output_judges .= strtoupper(strtr($judge_info['4'],$bjcp_num_replace));
 					$output_judges .= "</td>";
 					$output_judges .= "<td>";
-					if ($bos_judge) $output_judges .= number_format((judge_points($uid,$judge_info['5'])+$bos_judge_points),1); 
+					if ($bos_judge) $output_judges .= number_format((judge_points($uid,$judge_info['5'])+$bos_judge_points),1);
 					else $output_judges .=  judge_points($uid,$judge_info['5']);
 					$output_judges .= "</td>";
 					$output_judges .= "<td>";
@@ -88,19 +92,19 @@ if ($view == "default") {
 				}
 			}
 		}
-		
-		foreach (array_unique($bos_judge_no_assignment) as $uid) { 
+
+		foreach (array_unique($bos_judge_no_assignment) as $uid) {
 			$judge_info = explode("^",brewer_info($uid));
 			if ((!empty($uid)) && (!empty($judge_info['1']))) {
 				$judge_name = ucwords(strtolower($judge_info['1'])).", ".ucwords(strtolower($judge_info['0']));
-				
+
 				$output_judges .= "<tr>";
 				$output_judges .= "<td>".$judge_name."</td>";
 				$output_judges .= "<td>";
 				if (validate_bjcp_id($judge_info['4'])) $output_judges .= strtoupper(strtr($judge_info['4'],$bjcp_num_replace));
 				$output_judges .= "</td>";
 				$output_judges .= "<td>";
-				$output_judges .= "1.0"; 
+				$output_judges .= "1.0";
 				$output_judges .= "</td>";
 				$output_judges .= "<td>";
 				$output_judges .= "<span class=\"fa fa-lg fa-check\"></span>";
@@ -109,13 +113,13 @@ if ($view == "default") {
 			}
 		}
 	}
-	
-	
-	if ($totalRows_stewards > 0) { 
-	
+
+
+	if ($totalRows_stewards > 0) {
+        $s = array();
 		do { $s[] = $row_stewards['uid']; } while ($row_stewards = mysqli_fetch_assoc($stewards));
-		
-		foreach (array_unique($s) as $uid) { 
+
+		foreach (array_unique($s) as $uid) {
 			$steward_points = steward_points($uid);
 			if ($steward_points > 0) {
 				$steward_info = explode("^",brewer_info($uid));
@@ -131,29 +135,30 @@ if ($view == "default") {
 					$output_stewards .= "</tr>";
 				}
 			}
-	
+
 		}
-		
+
 	}
-	
-	
-	if ($totalRows_staff > 0) { 
+
+
+	if ($totalRows_staff > 0) {
+        $st = array();
 		do { $st[] = $row_staff['uid']; } while ($row_staff = mysqli_fetch_assoc($staff));
 		$st_running_total[] = "";
-		foreach (array_unique($st) as $uid) { 
-		
+		foreach (array_unique($st) as $uid) {
+
 			if (array_sum($st_running_total) < $staff_max_points) {
 				$staff_info = explode("^",brewer_info($uid));
 				$st_running_total[] = $staff_points;
-				
+
 				if (!empty($staff_info['1'])) {
 					$staff_name = ucwords(strtolower($staff_info['1'])).", ".ucwords(strtolower($staff_info['0']));
-				
+
 					$output_staff .= "<tr>";
 					$output_staff .= "<td>".$staff_name."</td>";
 					$output_staff .= "<td>";
 					if (validate_bjcp_id($staff_info['4'])) $output_staff .= strtoupper(strtr($staff_info['4'],$bjcp_num_replace));
-					
+
 					$output_staff .= "</td>";
 					$output_staff .= "<td>";
 					if ((array_sum($st_running_total) <= $staff_max_points) && ($staff_points < $organ_max_points)) $output_staff .= $staff_points;
@@ -311,5 +316,5 @@ if ($view == "default") {
 	</div>
 </div>
 </body>
-</html>	
+</html>
 <?php } // end if ($view == "print") ?>

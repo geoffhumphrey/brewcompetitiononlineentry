@@ -2,7 +2,7 @@
 /**
  * Module:      en-US.lang.php
  * Description: This module houses all display text in the English language.
- *
+ * Updated:     January 31, 2018
  */
 
 /*
@@ -84,7 +84,7 @@ $beerxml_text_008 = "Browse for your BeerXML compliant file on your hard drive a
 Spanish:
 $beerxml_text_008 = "Buscar su archivo compatible BeerXML en su disco duro y haga clic en <em>Cargar</em>.";
 
-Note that the <em>...</em> tags were not altered. Just the word "Upload" to "Cargar" betewen those tags.
+Note that the <em>...</em> tags were not altered. Just the word "Upload" to "Cargar" between those tags.
 
 ==============================
 
@@ -120,6 +120,10 @@ if (isset($row_limits['prefsEntryLimitPaid'])) $row_limits['prefsEntryLimitPaid'
 else $row_limits['prefsEntryLimitPaid'] = "";
 
 $php_version = phpversion();
+
+// ***********************************************************************************
+// BEGIN TRANSLATIONS BELOW!
+// ***********************************************************************************
 
 $j_s_text = "";
 if (strpos($section, "step") === FALSE) {
@@ -286,9 +290,9 @@ $label_aha_number = "AHA Member Number";
 $label_org_notes = "Notes to Organizer";
 $label_avail = "Availability";
 $label_location = "Location";
-$label_judging_avail = "Judging Location Availability";
+$label_judging_avail = "Judging Session Availability";
 $label_stewarding = "Stewarding";
-$label_stewarding_avail = "Stewarding Location Availability";
+$label_stewarding_avail = "Stewarding Session Availability";
 $label_bjcp_id = "BJCP ID";
 $label_bjcp_mead = "Mead Judge";
 $label_bjcp_rank = "BJCP Rank";
@@ -349,7 +353,7 @@ $label_register_judge_quick = "Register a Judge or Steward (Quick)";
 $label_all_participants = "All Participants";
 $label_open = "Open";
 $label_closed = "Closed";
-$label_judging_loc = "Judging Locations and Dates";
+$label_judging_loc = "Judging Session Locations and Dates";
 $label_new = "New";
 $label_old = "Old";
 $label_sure = "Are You Sure?";
@@ -370,7 +374,7 @@ $label_by_category = "By Style";
 $label_by_subcategory = "By Sub-Style";
 $label_by_last_name = "By Last Name";
 $label_by_table = "By Table";
-$label_by_location = "By Location";
+$label_by_location = "By Session Location";
 $label_shipping_entries = "Shipping Entries";
 $label_no_availability = "No Availability Defined";
 $label_error = "Error";
@@ -527,7 +531,7 @@ $header_text_051 = "Set Up: Create Admin User";
 $header_text_052 = "Set Up: Add Admin User Info";
 $header_text_053 = "Set Up: Set Website Preferences";
 $header_text_054 = "Set Up: Add Competition Info";
-$header_text_055 = "Set Up: Add Judging Locations";
+$header_text_055 = "Set Up: Add Judging Session Locations";
 $header_text_056 = "Set Up: Add Drop-Off Locations";
 $header_text_057 = "Set Up: Designate Accepted Styles";
 $header_text_058 = "Set Up: Set Judging Preferences";
@@ -913,43 +917,40 @@ if ($section == "past_winners") {
 
 // -------------------- Pay for Entries --------------------
 
-if ($section == "pay") {
-
-	$pay_text_000 = "the payment window has passed.";
-	$pay_text_001 = "Contact a competition official if you have any questions.";
-	$pay_text_002 = "the following are your options for paying your entry fees.";
-	$pay_text_003 = "Fees are";
-	$pay_text_004 = "per entry";
-	$pay_text_005 = "per entry after the";
-	$pay_text_006 = "for unlimited entries";
-	$pay_text_007 = "Your fees have been discounted to";
-	$pay_text_008 = "Your total entry fees are";
-	$pay_text_009 = "You need to pay";
-	$pay_text_010 = "Your fees have been paid. Thank you!";
-	$pay_text_011 = "You currently have";
-	$pay_text_012 = "unpaid confirmed";
-	$pay_text_013 = "Attach a check for the entire entry amount to one of your bottles. Checks should be made out to";
-	$pay_text_014 = "Your check carbon or cashed check is your entry receipt.";
-	$pay_text_015 = "Attach cash payment for the entire entry amount in a <em>sealed envelope</em> to one of  your bottles.";
-	$pay_text_016 = "Your returned score sheets will serve as your entry receipt.";
-	$pay_text_017 = "Your payment confirmation email is your entry receipt. Include a copy with your entries as proof of payment.";
-	$pay_text_018 = "Click the <em>Pay with PayPal</em> button below to pay online.";
-	$pay_text_019 = "Please note that a transaction fee of";
-	$pay_text_020 = "will be added into your total.";
-	$pay_text_021 = "To make sure your PayPal payment is marked <strong>paid</strong> on <strong>this site</strong>, make sure to click the <em>Return to...</em> link on PayPal&rsquo;s confirmation screen <strong>after</strong> you have sent your payment. Also, make sure to print your payment receipt and attach it to one of your entry bottles.";
-	$pay_text_022 = "Make Sure to Click <em>Return To...</em> After Paying Your Fees";
-	$pay_text_023 = "Enter the code supplied by the competition organizers for a discounted entry fee.";
-	$pay_text_024 = "Your fees have been paid. Thank you!";
-	$pay_text_025 = "You have not logged any entries yet.";
-	$pay_text_026 = "You cannot pay for your entries because one or more of your entries is unconfirmed.";
-	$pay_text_027 = "Click <em>My Account</em> above to review your unconfirmed entries.";
-	$pay_text_028 = "You have unconfirmed entries that are <em>not</em> reflected in your fee totals below.";
-	$pay_text_029 = "Please go to your entry list to confirm all your entry data. Unconfirmed entries may be deleted from the system without warning.";
-
-}
+$pay_text_000 = "the payment window has passed.";
+$pay_text_001 = "Contact a competition official if you have any questions.";
+$pay_text_002 = "the following are your options for paying your entry fees.";
+$pay_text_003 = "Fees are";
+$pay_text_004 = "per entry";
+$pay_text_005 = "per entry after the";
+$pay_text_006 = "for unlimited entries";
+$pay_text_007 = "Your fees have been discounted to";
+$pay_text_008 = "Your total entry fees are";
+$pay_text_009 = "You need to pay";
+$pay_text_010 = "Your fees have been marked as paid. Thank you!";
+$pay_text_011 = "You currently have";
+$pay_text_012 = "unpaid confirmed";
+$pay_text_013 = "Attach a check for the entire entry amount to one of your bottles. Checks should be made out to";
+$pay_text_014 = "Your check carbon or cashed check is your entry receipt.";
+$pay_text_015 = "Attach cash payment for the entire entry amount in a <em>sealed envelope</em> to one of  your bottles.";
+$pay_text_016 = "Your returned score sheets will serve as your entry receipt.";
+$pay_text_017 = "Your payment confirmation email is your entry receipt. Include a copy with your entries as proof of payment.";
+$pay_text_018 = "Click the <em>Pay with PayPal</em> button below to pay online.";
+$pay_text_019 = "Please note that a transaction fee of";
+$pay_text_020 = "will be added into your total.";
+$pay_text_021 = "To make sure your PayPal payment is marked <strong>paid</strong> on <strong>this site</strong>, make sure to click the <em>Return to...</em> link on PayPal&rsquo;s confirmation screen <strong>after</strong> you have sent your payment. Also, make sure to print your payment receipt and attach it to one of your entry bottles.";
+$pay_text_022 = "Make Sure to Click <em>Return To...</em> After Paying Your Fees";
+$pay_text_023 = "Enter the code supplied by the competition organizers for a discounted entry fee.";
+$pay_text_024 = $pay_text_010;
+$pay_text_025 = "You have not logged any entries yet.";
+$pay_text_026 = "You cannot pay for your entries because one or more of your entries is unconfirmed.";
+$pay_text_027 = "Click <em>My Account</em> above to review your unconfirmed entries.";
+$pay_text_028 = "You have unconfirmed entries that are <em>not</em> reflected in your fee totals below.";
+$pay_text_029 = "Please go to your entry list to confirm all your entry data. Unconfirmed entries may be deleted from the system without warning.";
 
 // -------------------- QR --------------------
 
+    // Ignore the next four lines
 	if (strpos($view, "^") !== FALSE) {
 		$qr_text_019 = sprintf("%04d",$checked_in_numbers[0]);
 		if (is_numeric($checked_in_numbers[1])) $qr_text_020 = sprintf("%06d",$checked_in_numbers[1]);
@@ -958,6 +959,8 @@ if ($section == "pay") {
 
 	$qr_text_000 = $alert_text_080;
 	$qr_text_001 = $alert_text_081;
+
+    // Begin translations here
 	if (strpos($view, "^") !== FALSE) $qr_text_002 = sprintf("Entry number <span class=\"text-danger\">%s</span> is checked in with <span class=\"text-danger\">%s</span> as its judging number.",$qr_text_019,$qr_text_020); else $qr_text_002 = "";
 	$qr_text_003 = "If this judging number is <em>not</em> correct, <strong>re-scan the code and re-enter the correct judging number.";
 	if (strpos($view, "^") !== FALSE) $qr_text_004 = sprintf("Entry number %s is checked in.",$qr_text_019); else $qr_text_004 = "";
@@ -1204,13 +1207,7 @@ $maintenance_text_000 = "The site administrator has taken the site offline to un
 $maintenance_text_001 = "Please check back later.";
 
 // ----------------------------------------------------------------------------------
-// END initial release translation variables
-// ----------------------------------------------------------------------------------
-
-/***********************************************************************************/
-
-// ----------------------------------------------------------------------------------
-// Version 2.1.10 Additions
+// Version 2.1.12 Additions
 // ----------------------------------------------------------------------------------
 
 // -------------------- Labels --------------------
@@ -1297,8 +1294,6 @@ if ($section == "brew") {
 	$brew_text_027 = "This Brewers Association style requires a statement from the brewer regarding the special nature of the product. See the <a href=\"https://www.brewersassociation.org/resources/brewers-association-beer-style-guidelines/\" target=\"_blank\">BA Style Guidelines</a> for specific guidance.";
 	$brew_text_028 = "***NOT REQUIRED*** Add information here that is detailed in the style guidelines as a characteristic that you MAY declare.";
 	$brew_text_029 = "Admin editing disabled. Your profile is considered a personal profile and not a organizational profile, and thus, not eligible to add entries. To add an entry for an organization, access the Manage Entries list and choose an organization from the &quot;Add an Entry For...&quot; dropdown.";
-
-
 }
 
 // -------------------- Brewer (Account) --------------------
@@ -1329,7 +1324,7 @@ if (($section == "list") || ($section == "account") || ($go == "entries")) {
 	$brewer_entries_text_017 = "Entries will not be displayed as received until the competition staff has marked them as such in the system. Typically, this occurs AFTER all entries have been collected from all drop-off and shipping locations and sorted.";
 	$brewer_entries_text_018 = "You will not be able to print this entry's paperwork (bottle labels, etc.) until it has been marked as paid.";
 	$brewer_entries_text_019 = "Printing of entry paperwork is not available at this time.";
-	$brewer_entries_text_020 = "Editing of entries is not available at this time.";
+	$brewer_entries_text_020 = "Editing of entries is not available at this time. If you wish to edit your entry, contact a competition official.";
 }
 
 if (SINGLE) $brewer_info_000 = "Hello";
@@ -1348,11 +1343,10 @@ $brewer_info_011 = "or";
 $brewer_info_012 = "Print your judging scoresheet labels ";
 
 // -------------------- Pay --------------------
-if ($section == "pay") {
-	$pay_text_030 = "By clicking the &quot;I Understand&quot; button below, you will be directed to PayPal to make your payment. Once you have <strong>completed</strong> your payment, PayPal will redirect you back to this site and will email you a receipt for the transaction. <strong>If your payment was successful, your paid status will be updated automatically. Please note that you may need wait a few minutes for the payment status to be updated.</strong> Be sure to refresh the pay page or access your entries list.";
-	$pay_text_031 = "About to Leave this Site";
-	$pay_text_032 = "No payment is necessary. Thank you!";
-}
+$pay_text_030 = "By clicking the &quot;I Understand&quot; button below, you will be directed to PayPal to make your payment. Once you have <strong>completed</strong> your payment, PayPal will redirect you back to this site and will email you a receipt for the transaction. <strong>If your payment was successful, your paid status will be updated automatically. Please note that you may need wait a few minutes for the payment status to be updated.</strong> Be sure to refresh the pay page or access your entries list.";
+$pay_text_031 = "About to Leave this Site";
+$pay_text_032 = "No payment is necessary. Thank you!";
+$pay_text_033 = "You have unpaid entries. Click or tap to pay for your entries.";
 
 // -------------------- Register --------------------
 if (($section == "register") || ($section == "brewer") || ($action == "register") || ($go == "account") || ($section == "step2")) {
@@ -1427,11 +1421,9 @@ $best_brewer_text_012 = "The highest average score.";
 $best_brewer_text_013 = "Unused.";
 $best_brewer_text_014 = "participating clubs";
 
-// ----------------------------------------------------------------------------------
-// END Version 2.1.10
-// ----------------------------------------------------------------------------------
-
-/***********************************************************************************/
+// ***********************************************************************************
+// END TRANSLATIONS
+// ***********************************************************************************
 
 // ----------------------------------------------------------------------------------
 // Various conditionals

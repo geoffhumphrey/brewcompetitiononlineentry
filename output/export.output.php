@@ -862,7 +862,9 @@ if (((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) || ((
 			}
 			$filename = str_replace(" ","_",$_SESSION['contestName']).'_BOS_Results.'.$view;
 
-			do { $a[] = $row_style_types['id']; } while ($row_style_types = mysqli_fetch_assoc($style_types));
+            $a = array();
+
+            do { $a[] = $row_style_types['id']; } while ($row_style_types = mysqli_fetch_assoc($style_types));
 
 			if ($view == "html") $html .= '<h1>BOS - '.$_SESSION['contestName'].'</h1>';
 
@@ -1007,6 +1009,10 @@ if (((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) || ((
 
 		// Figure out whether BOS Judge Points are awarded or not
 		// "BOS points may only be awarded if a competition has at least 30 entries in at least five beer and/or three mead/cider categories."
+        $beer_styles = array();
+        $mead_styles = array();
+        $cider_styles = array();
+
 		$beer_styles[] = 0;
 		$mead_styles[] = 0;
 		$cider_styles[] = 0;
@@ -1069,6 +1075,7 @@ if (((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) || ((
 				$html .= '<td width="'.$td_width_name.'" align="center"  bgcolor="#cccccc">BJCP ID</td>';
 				$html .= '<td width="'.$td_width_name.'" align="center"  bgcolor="#cccccc">Points</td>';
 				$html .= '</tr>';
+                $j = array();
 				do { $j[] = $row_judges['uid']; } while ($row_judges = mysqli_fetch_assoc($judges));
 				sort($j);
 				foreach (array_unique($j) as $uid) {
@@ -1115,6 +1122,7 @@ if (((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) || ((
 				$html .= '<td width="'.$td_width_name.'" align="center" bgcolor="#cccccc">BJCP ID</td>';
 				$html .= '<td width="'.$td_width_name.'" align="center" bgcolor="#cccccc">Points</td>';
 				$html .= '</tr>';
+                $s = array();
 				do { $s[] = $row_stewards['uid']; } while ($row_stewards = mysqli_fetch_assoc($stewards));
 				foreach (array_unique($s) as $uid) {
 					$steward_info = explode("^",brewer_info($uid));
@@ -1141,6 +1149,7 @@ if (((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) || ((
 				$html .= '<td width="'.$td_width_name.'" align="center" bgcolor="#cccccc">BJCP ID</td>';
 				$html .= '<td width="'.$td_width_name.'" align="center" bgcolor="#cccccc">Points</td>';
 				$html .= '</tr>';
+                $st = array();
 				do { $st[] = $row_staff['uid']; } while ($row_staff = mysqli_fetch_assoc($staff));
 				foreach (array_unique($st) as $uid) {
 					if (array_sum($st_running_total) < $staff_max_points) {
@@ -1173,6 +1182,10 @@ if (((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) || ((
 
 		if ($view == "xml") {
 			$total_days = total_days();
+            $j = array();
+            $s = array();
+            $st = array();
+            $o = array();
 			do { $j[] = $row_judges['uid']; } while ($row_judges = mysqli_fetch_assoc($judges));
 			do { $s[] = $row_stewards['uid']; } while ($row_stewards = mysqli_fetch_assoc($stewards));
 			do { $st[] = $row_staff['uid']; } while ($row_staff = mysqli_fetch_assoc($staff));
@@ -1375,8 +1388,9 @@ if (((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) || ((
 				$output .= "\t<Comments>\n";
 				$output .= "Submitter Email: ".$_SESSION['user_name']."\n";
 
-				/*
-				do { $a[] = $row_style_types['id']; } while ($row_style_types = mysqli_fetch_assoc($style_types));
+
+                $a = array();
+				do { $a[] = $row_style_type['id']; } while ($row_style_type = mysqli_fetch_assoc($style_type));
 				sort($a);
 
 				foreach ($a as $type) {
@@ -1384,13 +1398,12 @@ if (((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) || ((
 					include (DB.'output_results_download_bos.db.php');
 
 					if ($totalRows_bos > 0) {
-						$output .= "BOS Winner: ".."\n";
-						$output .= "BOS Style: ".."\n";
-						$output .= "BOS City: ".."\n";
-						$output .= "BOS State: ".."\n";
+						$output .= "BOS Winner, Brewer's Name: ".$row_bos['brewerFirstName']." ".$row_bos['brewerLastName']."\n";
+						$output .= "BOS Winner, BJCP Style: ".$row_bos['brewCategory'].$row_bos['brewSubCategory']." ".$row_bos['brewStyle']."\n";
+						$output .= "BOS Winner, City & State: ".$row_bos['brewerCity'].", ".$row_bos['brewerState']."\n";
 					}
 				}
-				*/
+
 
 				$output .= "\t</Comments>\n";
 
