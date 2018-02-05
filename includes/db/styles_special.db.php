@@ -1,11 +1,17 @@
 <?php
 
-if ($section == "brew") {
-	$modals = "";
-	$carb_str_sweet_special = "";
-	$spec_carb_only = "";
-	$carb_str_only = "";
-}
+$modals = "";
+$special_beer = array();
+$special_beer_info = array();
+$carb_str_only = array();
+$carb_str_sweet_special = array();
+$carb_str_sweet_special_info = array();
+$sweet_carb_only = array();
+$sweet_carb_str_only = array();
+$spec_sweet_carb_only = array();
+$spec_sweet_carb_only_info = array();
+$spec_carb_only = array();
+$spec_carb_only_info = array();
 
 $replacement1 = array('Entry Instructions:','Commercial Examples:','must specify','may specify','MUST specify','MAY specify','must provide','must be specified','must declare','must either','must supply','may provide','MUST state');
 	if ($go == "default") $replacement2 = array('<strong class="text-danger">Entry Instructions:</strong>','<strong class="text-info">Commercial Examples:</strong>','<strong><u>MUST</u></strong> specify','<strong><u>MAY</u></strong> specify','<strong><u>MUST</u></strong> specify','<strong><u>MAY</u></strong> specify','<strong><u>MUST</u></strong> provide','<strong><u>MUST</u></strong> declare','<strong><u>MUST</u></strong> either','<strong><u>MUST</u></strong> supply','<strong><u>MAY</u></strong> provide','<strong><u>MUST</u></strong> state');
@@ -41,14 +47,10 @@ $spec_beer = mysqli_query($connection,$query_spec_beer) or die (mysqli_error($co
 $row_spec_beer = mysqli_fetch_assoc($spec_beer);
 $totalRows_spec_beer = mysqli_num_rows($spec_beer);
 
-$special_beer = array();
-$special_beer_info = array();
-
 if ($totalRows_spec_beer > 0) {
 
 	do {
 		$value = $row_spec_beer['brewStyleGroup']."-".$row_spec_beer['brewStyleNum'];
-		$special_beer = array();
 		$special_beer[] = $value;
 		$special_beer_info[$value] = str_replace($replacement1,$replacement3,$row_spec_beer['brewStyleEntry']);
 		$info = str_replace($replacement1,$replacement2,"<p>".$row_spec_beer['brewStyleInfo']."</p>");
@@ -87,7 +89,6 @@ if ($totalRows_spec_beer > 0) {
 				}
 				else $styleColor = "&nbsp;";
 
-
 		$info .= "
 		<table class=\"table table-bordered table-striped\">
 		<tr>
@@ -105,7 +106,6 @@ if ($totalRows_spec_beer > 0) {
 			<td>".$styleColor."</td>
 		</tr>
 	</table>";
-
 
 		if ($section == "brew") {
 			$special_beer_modal[] = $row_spec_beer['brewStyleGroup']."-".$row_spec_beer['brewStyleNum']."|".$row_spec_beer['brewStyle'];
@@ -140,9 +140,6 @@ else $query_spec_all = sprintf("SELECT * FROM %s WHERE brewStyleVersion='%s' AND
 $spec_all = mysqli_query($connection,$query_spec_all) or die (mysqli_error($connection));
 $row_spec_all = mysqli_fetch_assoc($spec_all);
 $totalRows_spec_all = mysqli_num_rows($spec_all);
-
-$carb_str_sweet_special = array();
-$carb_str_sweet_special_info = array();
 
 if ($totalRows_spec_all > 0) {
 	do {
@@ -184,7 +181,6 @@ if ($totalRows_spec_all > 0) {
 
 				}
 				else $styleColor = "&nbsp;";
-
 
 		$info .= "
 		<table class=\"table table-bordered table-striped\">
@@ -237,8 +233,6 @@ $str_carb = mysqli_query($connection,$query_str_carb) or die (mysqli_error($conn
 $row_str_carb = mysqli_fetch_assoc($str_carb);
 $totalRows_str_carb = mysqli_num_rows($str_carb);
 
-$carb_str_only = array();
-
 if ($totalRows_str_carb > 0) {
 	do {
 		$carb_str_only[] = $row_str_carb['brewStyleGroup']."-".$row_str_carb['brewStyleNum'];
@@ -252,8 +246,6 @@ else $query_sweet_carb = sprintf("SELECT brewStyle,brewStyleGroup,brewStyleNum,b
 $sweet_carb = mysqli_query($connection,$query_sweet_carb) or die (mysqli_error($connection));
 $row_sweet_carb = mysqli_fetch_assoc($sweet_carb);
 $totalRows_sweet_carb = mysqli_num_rows($sweet_carb);
-
-$sweet_carb_only = array();
 
 if ($totalRows_sweet_carb > 0) {
 
@@ -270,8 +262,6 @@ $str_sweet_carb = mysqli_query($connection,$query_str_sweet_carb) or die (mysqli
 $row_str_sweet_carb = mysqli_fetch_assoc($str_sweet_carb);
 $totalRows_str_sweet_carb = mysqli_num_rows($str_sweet_carb);
 
-$sweet_carb_str_only = array();
-
 if ($totalRows_str_sweet_carb > 0) {
 
 	do {
@@ -286,9 +276,6 @@ else $query_spec_sweet_carb = sprintf("SELECT * FROM %s WHERE brewStyleVersion='
 $spec_sweet_carb = mysqli_query($connection,$query_spec_sweet_carb) or die (mysqli_error($connection));
 $row_spec_sweet_carb = mysqli_fetch_assoc($spec_sweet_carb);
 $totalRows_spec_sweet_carb = mysqli_num_rows($spec_sweet_carb);
-
-$spec_sweet_carb_only = array();
-$spec_sweet_carb_only_info = array();
 
 if ($totalRows_spec_sweet_carb > 0) {
 
@@ -385,9 +372,6 @@ else $query_spec_carb = sprintf("SELECT * FROM %s WHERE brewStyleVersion='%s' AN
 $spec_carb = mysqli_query($connection,$query_spec_carb) or die (mysqli_error($connection));
 $row_spec_carb = mysqli_fetch_assoc($spec_carb);
 $totalRows_spec_carb = mysqli_num_rows($spec_carb);
-
-$spec_carb_only = array();
-$spec_carb_only_info = array();
 
 if ($totalRows_spec_carb > 0) {
 
@@ -497,7 +481,8 @@ if (strpos($_SESSION['prefsStyleSet'],"BABDB") !== false) {
 
 } // END if (strpos($_SESSION['prefsStyleSet'],"BABDB") !== false)
 
-$custom_entry_information = "";
+$custom_entry_information = array();
+$custom_entry = array();
 
 if (strpos($_SESSION['prefsStyleSet'],"BABDB") === false) {
 

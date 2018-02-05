@@ -153,21 +153,21 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 
 			// IPA strength for 21B styles
 			if (strlen(strstr($index,"21-B")) > 0) {
-				if ($index == "21-B") $brewInfo .= "^".sterilize($_POST['strengthIPA']);
-				else $brewInfo .= sterilize($_POST['strengthIPA']);
+				if ($index == "21-B") $brewInfo .= "^".filter_var($_POST['strengthIPA'],FILTER_SANITIZE_STRING);
+				else $brewInfo .= filter_var($_POST['strengthIPA'],FILTER_SANITIZE_STRING);
 			}
 
 			// Pale or Dark Variant
-			if (($index == "09-A") || ($index == "10-C") || ($index == "07-C"))  $brewInfo = sterilize($_POST['darkLightColor']);
+			if (($index == "09-A") || ($index == "10-C") || ($index == "07-C"))  $brewInfo = filter_var($_POST['darkLightColor'],FILTER_SANITIZE_STRING);
 
 			// Fruit Lambic carb/sweetness
-			if ($index == "23-F") $brewInfo .= "^".sterilize($_POST['sweetnessLambic'])."^".sterilize($_POST['carbLambic']);
+			if ($index == "23-F") $brewInfo .= "^".filter_var($_POST['sweetnessLambic'],FILTER_SANITIZE_STRING)."^".filter_var($_POST['carbLambic'],FILTER_SANITIZE_STRING);
 
 			// Biere de Garde color
-			if ($index == "24-C") $brewInfo = sterilize($_POST['BDGColor']);
+			if ($index == "24-C") $brewInfo = filter_var($_POST['BDGColor'],FILTER_SANITIZE_STRING);
 
 			// Saison strength/color
-			if ($index == "25-B") $brewInfo = sterilize($_POST['strengthSaison'])."^".sterilize($_POST['darkLightColor']);
+			if ($index == "25-B") $brewInfo = filter_var($_POST['strengthSaison'],FILTER_SANITIZE_STRING)."^".filter_var($_POST['darkLightColor'],FILTER_SANITIZE_STRING);
 
 		}
 
@@ -187,9 +187,9 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 
 			if ($totalRows_str_carb_sweet > 0) {
 
-				if ((isset($_POST['brewMead1'])) && ($row_str_carb_sweet['brewStyleCarb'] == 1)) $brewMead1 .= sterilize($_POST['brewMead1']); // Carbonation
-				if ((isset($_POST['brewMead2'])) && ($row_str_carb_sweet['brewStyleSweet'] == 1))  $brewMead2 .= sterilize($_POST['brewMead2']); // Sweetness
-				if ((isset($_POST['brewMead3'])) && ($row_str_carb_sweet['brewStyleStrength'] == 1))  $brewMead3 .= sterilize($_POST['brewMead3']); // Strength
+				if ((isset($_POST['brewMead1'])) && ($row_str_carb_sweet['brewStyleCarb'] == 1)) $brewMead1 .= filter_var($_POST['brewMead1'],FILTER_SANITIZE_STRING); // Carbonation
+				if ((isset($_POST['brewMead2'])) && ($row_str_carb_sweet['brewStyleSweet'] == 1))  $brewMead2 .= filter_var($_POST['brewMead2'],FILTER_SANITIZE_STRING); // Sweetness
+				if ((isset($_POST['brewMead3'])) && ($row_str_carb_sweet['brewStyleStrength'] == 1))  $brewMead3 .= filter_var($_POST['brewMead3'],FILTER_SANITIZE_STRING); // Strength
 
 			}
 
@@ -239,9 +239,9 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 
 			$all_strength_ids = array_merge($custom_strength_ids,$ba_strength_ids);
 
-			if ((isset($_POST['brewMead1'])) && (in_array($styleID,$all_carb_ids))) $brewMead1 .= sterilize($_POST['brewMead1']); // Carbonation
-			if ((isset($_POST['brewMead2'])) && (in_array($styleID,$all_sweet_ids)))  $brewMead2 .= sterilize($_POST['brewMead2']); // Sweetness
-			if ((isset($_POST['brewMead3'])) && (in_array($styleID,$all_strength_ids)))  $brewMead3 .= sterilize($_POST['brewMead3']); // Strength
+			if ((isset($_POST['brewMead1'])) && (in_array($styleID,$all_carb_ids))) $brewMead1 .= filter_var($_POST['brewMead1'],FILTER_SANITIZE_STRING); // Carbonation
+			if ((isset($_POST['brewMead2'])) && (in_array($styleID,$all_sweet_ids)))  $brewMead2 .= filter_var($_POST['brewMead2'],FILTER_SANITIZE_STRING); // Sweetness
+			if ((isset($_POST['brewMead3'])) && (in_array($styleID,$all_strength_ids)))  $brewMead3 .= filter_var($_POST['brewMead3'],FILTER_SANITIZE_STRING); // Strength
 
 		}
 
@@ -485,14 +485,14 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 				for($i=1; $i<=5; $i++) { $insertSQL .= GetSQLValueString(filter_var($_POST['brewExtract'.$i],FILTER_SANITIZE_STRING),"text").","; }
 				for($i=1; $i<=5; $i++) { $insertSQL .= GetSQLValueString(filter_var($_POST['brewExtract'.$i.'Weight'],FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION),"text").","; }
 				for($i=1; $i<=5; $i++) {
-					if (isset($_POST['brewExtract'.$i.'Use'])) $brewExtractUse = sterilize($_POST['brewGrain'.$i.'Use']); else $brewExtractUse = "";
+					if (isset($_POST['brewExtract'.$i.'Use'])) $brewExtractUse = filter_var($_POST['brewGrain'.$i.'Use'],FILTER_SANITIZE_STRING); else $brewExtractUse = "";
 					$insertSQL .= GetSQLValueString($brewExtractUse,"text").",";
 				}
 
 				for($i=1; $i<=20; $i++) { $insertSQL .= GetSQLValueString(filter_var($_POST['brewGrain'.$i],FILTER_SANITIZE_STRING),"text").","; }
 				for($i=1; $i<=20; $i++) { $insertSQL .= GetSQLValueString(filter_var($_POST['brewGrain'.$i.'Weight'],FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION),"text").","; }
 				for($i=1; $i<=20; $i++) {
-					if (isset($_POST['brewGrain'.$i.'Use'])) $brewGrainUse = sterilize($_POST['brewGrain'.$i.'Use']); else $brewGrainUse = "";
+					if (isset($_POST['brewGrain'.$i.'Use'])) $brewGrainUse = filter_var($_POST['brewGrain'.$i.'Use'],FILTER_SANITIZE_STRING); else $brewGrainUse = "";
 					$insertSQL .= GetSQLValueString($brewGrainUse,"text").",";
 				}
 				for($i=1; $i<=20; $i++) { $insertSQL .= GetSQLValueString(filter_var($_POST['brewAddition'.$i],FILTER_SANITIZE_STRING),"text").","; }
@@ -501,23 +501,23 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 					$insertSQL .= GetSQLValueString($brewAdditionAmt,"text").",";
 					}
 				for($i=1; $i<=20; $i++) {
-					if (isset($_POST['brewAddition'.$i.'Use'])) $brewAdditionUse = sterilize($_POST['brewAddition'.$i.'Use']); else $brewAdditionUse = "";
+					if (isset($_POST['brewAddition'.$i.'Use'])) $brewAdditionUse = filter_var($_POST['brewAddition'.$i.'Use'],FILTER_SANITIZE_STRING); else $brewAdditionUse = "";
 					$insertSQL .= GetSQLValueString($brewAdditionUse,"text").",";
 				}
 				for($i=1; $i<=20; $i++) { $insertSQL .= GetSQLValueString(filter_var($_POST['brewHops'.$i],FILTER_SANITIZE_STRING),"text").","; }
 				for($i=1; $i<=20; $i++) { $insertSQL .= GetSQLValueString(filter_var($_POST['brewHops'.$i.'Weight'],FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION),"text").","; }
 				for($i=1; $i<=20; $i++) { $insertSQL .= GetSQLValueString(filter_var($_POST['brewHops'.$i.'IBU'],FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION),"text").","; }
 				for($i=1; $i<=20; $i++) {
-					if (isset($_POST['brewHops'.$i.'Use'])) $brewHopsUse = sterilize($_POST['brewHops'.$i.'Use']); else $brewHopsUse = "";
+					if (isset($_POST['brewHops'.$i.'Use'])) $brewHopsUse = filter_var($_POST['brewHops'.$i.'Use'],FILTER_SANITIZE_STRING); else $brewHopsUse = "";
 					$insertSQL .= GetSQLValueString($brewHopsUse,"text").",";
 				}
 				for($i=1; $i<=20; $i++) { $insertSQL .= GetSQLValueString(filter_var($_POST['brewHops'.$i.'Time'],FILTER_SANITIZE_STRING),"text").",";}
 				for($i=1; $i<=20; $i++) {
-					if (isset($_POST['brewHops'.$i.'Type'])) $brewHopsType = sterilize($_POST['brewHops'.$i.'Type']); else $brewHopsType = "";
+					if (isset($_POST['brewHops'.$i.'Type'])) $brewHopsType = filter_var($_POST['brewHops'.$i.'Type'],FILTER_SANITIZE_STRING); else $brewHopsType = "";
 					$insertSQL .= GetSQLValueString($brewHopsType,"text").",";
 				}
 				for($i=1; $i<=20; $i++) {
-					if (isset($_POST['brewHops'.$i.'Form'])) $brewHopsForm = sterilize($_POST['brewHops'.$i.'Form']); else $brewHopsForm = "";
+					if (isset($_POST['brewHops'.$i.'Form'])) $brewHopsForm = filter_var($_POST['brewHops'.$i.'Form'],FILTER_SANITIZE_STRING); else $brewHopsForm = "";
 					$insertSQL .= GetSQLValueString($brewHopsForm,"text").",";
 					}
 				for($i=1; $i<=10; $i++) { $insertSQL .= GetSQLValueString(filter_var($_POST['brewMashStep'.$i.'Name'],FILTER_SANITIZE_STRING),"text").","; }
@@ -546,12 +546,12 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 			if ($_SESSION['prefsHideRecipe'] == "N") {
 				$insertSQL .= GetSQLValueString(filter_var($_POST['brewYeast'],FILTER_SANITIZE_STRING),"text").", ";
 				$insertSQL .= GetSQLValueString(filter_var($_POST['brewYeastMan'],FILTER_SANITIZE_STRING),"text").", ";
-				if (isset($_POST['brewYeastForm'])) $brewYeastForm = sterilize($_POST['brewYeastForm']); else $brewYeastForm = "";
+				if (isset($_POST['brewYeastForm'])) $brewYeastForm = filter_var($_POST['brewYeastForm'],FILTER_SANITIZE_STRING); else $brewYeastForm = "";
 				$insertSQL .= GetSQLValueString($brewYeastForm,"text").", ";
-				if (isset($_POST['brewYeastType'])) $brewYeastType = sterilize($_POST['brewYeastType']); else $brewYeastType = "";
+				if (isset($_POST['brewYeastType'])) $brewYeastType = filter_var($_POST['brewYeastType'],FILTER_SANITIZE_STRING); else $brewYeastType = "";
 				$insertSQL .= GetSQLValueString($brewYeastType,"text").", ";
 				$insertSQL .= GetSQLValueString(filter_var($_POST['brewYeastAmount'],FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION),"text").", ";
-				if (isset($_POST['brewYeastStarter'])) $brewYeastStarter = sterilize($_POST['brewYeastStarter']); else $brewYeastStarter = "";
+				if (isset($_POST['brewYeastStarter'])) $brewYeastStarter = filter_var($_POST['brewYeastStarter'],FILTER_SANITIZE_STRING); else $brewYeastStarter = "";
 				$insertSQL .= GetSQLValueString($brewYeastStarter,"text").", ";
 				$insertSQL .= GetSQLValueString(filter_var($_POST['brewYeastNutrients'],FILTER_SANITIZE_STRING),"text").", ";
 				$insertSQL .= GetSQLValueString(filter_var($_POST['brewOG'],FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION),"text").", ";
@@ -591,7 +591,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 			$insertSQL .= GetSQLValueString($brewJudgingNumber,"text").", ";
 			$insertSQL .= "NOW( ), ";
 			if ($_POST['brewStyle'] == "0-A") $insertSQL .= GetSQLValueString("0","text").", ";
-			else $insertSQL .= GetSQLValueString(sterilize($_POST['brewConfirmed']),"text").", ";
+			else $insertSQL .= GetSQLValueString(filter_var($_POST['brewConfirmed'],FILTER_SANITIZE_STRING),"text").", ";
 			$insertSQL .= GetSQLValueString($brewPaid,"text").", ";
 			$insertSQL .= GetSQLValueString("0","text").", ";
 			$insertSQL .= GetSQLValueString($brewInfoOptional,"text");
@@ -748,7 +748,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 
 		if ($row_user['userLevel'] <= 1) {
 
-			$name = sterilize($_POST['brewBrewerID']);
+			$name = filter_var($_POST['brewBrewerID'],FILTER_SANITIZE_STRING);
 
 			$query_brewer = sprintf("SELECT * FROM $brewer_db_table WHERE uid = '%s'", $name);
 			$brewer = mysqli_query($connection,$query_brewer) or die (mysqli_error($connection));
@@ -761,13 +761,13 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 
 		else {
 
-			$brewBrewerID = sterilize($_POST['brewBrewerID']);
-			$brewBrewerLastName = sterilize($_POST['brewBrewerLastName']);
-			$brewBrewerFirstName = sterilize($_POST['brewBrewerFirstName']);
+			$brewBrewerID = filter_var($_POST['brewBrewerID'],FILTER_SANITIZE_STRING);
+			$brewBrewerLastName = filter_var($_POST['brewBrewerLastName'],FILTER_SANITIZE_STRING);
+			$brewBrewerFirstName = filter_var($_POST['brewBrewerFirstName'],FILTER_SANITIZE_STRING);
 
 		}
 
-		$styleBreak = sterilize($_POST['brewStyle']);
+		$styleBreak = filter_var($_POST['brewStyle'],FILTER_SANITIZE_STRING);
 		$style = explode('-', $styleBreak);
 		if (preg_match("/^[[:digit:]]+$/",$style[0])) $styleReturn = sprintf('%02d',$style[0])."-".$style[1];
 		else $styleReturn = $style[0]."-".$style[1];
@@ -790,38 +790,38 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 			if ($_SESSION['prefsHideRecipe'] == "N") {
 				for($i=1; $i<=5; $i++) { $updateSQL .= "brewExtract".$i."=".GetSQLValueString(filter_var($_POST['brewExtract'.$i],FILTER_SANITIZE_STRING),"text").","; }
 				for($i=1; $i<=5; $i++) { $updateSQL .= "brewExtract".$i."Weight=".GetSQLValueString(filter_var($_POST['brewExtract'.$i.'Weight'],FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION),"text").","; }
-				for($i=1; $i<=5; $i++) { $updateSQL .= "brewExtract".$i."Use=".GetSQLValueString(sterilize($_POST['brewExtract'.$i.'Use']),"text").","; }
+				for($i=1; $i<=5; $i++) { $updateSQL .= "brewExtract".$i."Use=".GetSQLValueString(filter_var($_POST['brewExtract'.$i.'Use']),"text").","; }
 
 				for($i=1; $i<=20; $i++) { $updateSQL .= "brewGrain".$i."=".GetSQLValueString(filter_var($_POST['brewGrain'.$i],FILTER_SANITIZE_STRING),"text").","; }
-				for($i=1; $i<=20; $i++) { $updateSQL .= "brewGrain".$i."Weight=".GetSQLValueString(filter_var(sterilize($_POST['brewGrain'.$i.'Weight']),FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION),"text").","; }
+				for($i=1; $i<=20; $i++) { $updateSQL .= "brewGrain".$i."Weight=".GetSQLValueString(filter_var(filter_var($_POST['brewGrain'.$i.'Weight']),FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION),"text").","; }
 				for($i=1; $i<=20; $i++) { $updateSQL .= "brewGrain".$i."Use=".GetSQLValueString($_POST['brewGrain'.$i.'Use'],"text").","; }
 
 				for($i=1; $i<=20; $i++) { $updateSQL .= "brewAddition".$i."=".GetSQLValueString(filter_var($_POST['brewAddition'.$i],FILTER_SANITIZE_STRING),"text").","; }
 				for($i=1; $i<=20; $i++) { $updateSQL .= "brewAddition".$i."Amt=".GetSQLValueString(filter_var($_POST['brewAddition'.$i.'Amt'],FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION),"text").","; }
-				for($i=1; $i<=20; $i++) { $updateSQL .= "brewAddition".$i."Use=".GetSQLValueString(sterilize($_POST['brewAddition'.$i.'Use']),"text").","; }
+				for($i=1; $i<=20; $i++) { $updateSQL .= "brewAddition".$i."Use=".GetSQLValueString(filter_var($_POST['brewAddition'.$i.'Use']),"text").","; }
 
 				for($i=1; $i<=20; $i++) { $updateSQL .= "brewHops".$i."=".GetSQLValueString(filter_var($_POST['brewHops'.$i],FILTER_SANITIZE_STRING),"text").","; }
 				for($i=1; $i<=20; $i++) { $updateSQL .= "brewHops".$i."Weight=".GetSQLValueString(filter_var($_POST['brewHops'.$i.'Weight'],FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION),"text").","; }
 				for($i=1; $i<=20; $i++) { $updateSQL .= "brewHops".$i."IBU=".GetSQLValueString(filter_var($_POST['brewHops'.$i.'IBU'],FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION),"text").","; }
-				for($i=1; $i<=20; $i++) { $updateSQL .= "brewHops".$i."Use=".GetSQLValueString(sterilize($_POST['brewHops'.$i.'Use']),"text").","; }
+				for($i=1; $i<=20; $i++) { $updateSQL .= "brewHops".$i."Use=".GetSQLValueString(filter_var($_POST['brewHops'.$i.'Use']),"text").","; }
 				for($i=1; $i<=20; $i++) { $updateSQL .= "brewHops".$i."Time=".GetSQLValueString(filter_var($_POST['brewHops'.$i.'Time'],FILTER_SANITIZE_STRING),"text").","; }
-				for($i=1; $i<=20; $i++) { $updateSQL .= "brewHops".$i."Type=".GetSQLValueString(sterilize($_POST['brewHops'.$i.'Type']),"text").","; }
-				for($i=1; $i<=20; $i++) { $updateSQL .= "brewHops".$i."Form=".GetSQLValueString(sterilize($_POST['brewHops'.$i.'Form']),"text").","; }
+				for($i=1; $i<=20; $i++) { $updateSQL .= "brewHops".$i."Type=".GetSQLValueString(filter_var($_POST['brewHops'.$i.'Type']),"text").","; }
+				for($i=1; $i<=20; $i++) { $updateSQL .= "brewHops".$i."Form=".GetSQLValueString(filter_var($_POST['brewHops'.$i.'Form']),"text").","; }
 
 				for($i=1; $i<=10; $i++) { $updateSQL .= "brewMashStep".$i."Name=".GetSQLValueString(filter_var($_POST['brewMashStep'.$i.'Name'],FILTER_SANITIZE_STRING),"text").","; }
-				for($i=1; $i<=10; $i++) { $updateSQL .= "brewMashStep".$i."Temp=".GetSQLValueString(sterilize($_POST['brewMashStep'.$i.'Temp']),"text").","; }
-				for($i=1; $i<=10; $i++) { $updateSQL .= "brewMashStep".$i."Time=".GetSQLValueString(sterilize($_POST['brewMashStep'.$i.'Time']),"text").","; }
+				for($i=1; $i<=10; $i++) { $updateSQL .= "brewMashStep".$i."Temp=".GetSQLValueString(filter_var($_POST['brewMashStep'.$i.'Temp']),"text").","; }
+				for($i=1; $i<=10; $i++) { $updateSQL .= "brewMashStep".$i."Time=".GetSQLValueString(filter_var($_POST['brewMashStep'.$i.'Time']),"text").","; }
 
-				$updateSQL .= "brewBottleDate=".GetSQLValueString(sterilize($_POST['brewBottleDate']),"text").", ";
-				$updateSQL .= "brewDate=".GetSQLValueString(sterilize($_POST['brewDate']),"text").", ";
+				$updateSQL .= "brewBottleDate=".GetSQLValueString(filter_var($_POST['brewBottleDate']),"text").", ";
+				$updateSQL .= "brewDate=".GetSQLValueString(filter_var($_POST['brewDate']),"text").", ";
 				$updateSQL .= "brewYield=".GetSQLValueString(filter_var($_POST['brewYield'],FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION),"text").", ";
 				$updateSQL .= "brewWinnerCat=".GetSQLValueString(round(filter_var($_POST['brewWinnerCat'],FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION),0),"text").", "; // WinnerCat being used for SRM
 				$updateSQL .= "brewYeast=".GetSQLValueString(filter_var($_POST['brewYeast'],FILTER_SANITIZE_STRING),"text").", ";
 				$updateSQL .= "brewYeastMan=".GetSQLValueString(filter_var($_POST['brewYeastMan'],FILTER_SANITIZE_STRING),"text").", ";
-				$updateSQL .= "brewYeastForm=".GetSQLValueString(sterilize($_POST['brewYeastForm']),"text").", ";
-				$updateSQL .= "brewYeastType=".GetSQLValueString(sterilize($_POST['brewYeastType']),"text").", ";
+				$updateSQL .= "brewYeastForm=".GetSQLValueString(filter_var($_POST['brewYeastForm']),"text").", ";
+				$updateSQL .= "brewYeastType=".GetSQLValueString(filter_var($_POST['brewYeastType']),"text").", ";
 				$updateSQL .= "brewYeastAmount=". GetSQLValueString(filter_var($_POST['brewYeastAmount'],FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION),"text").", ";
-				$updateSQL .= "brewYeastStarter=". GetSQLValueString(sterilize($_POST['brewYeastStarter']),"text").", ";
+				$updateSQL .= "brewYeastStarter=". GetSQLValueString(filter_var($_POST['brewYeastStarter']),"text").", ";
 				$updateSQL .= "brewYeastNutrients=". GetSQLValueString(filter_var($_POST['brewYeastNutrients'],FILTER_SANITIZE_STRING),"text").", ";
 				$updateSQL .= "brewOG=". GetSQLValueString(filter_var($_POST['brewOG'],FILTER_SANITIZE_STRING),"text").", ";
 				$updateSQL .= "brewFG=".GetSQLValueString(filter_var($_POST['brewFG'],FILTER_SANITIZE_STRING),"text").", ";
@@ -849,7 +849,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 			$updateSQL .= "brewMead1=".GetSQLValueString($brewMead1,"text").", ";
 			$updateSQL .= "brewMead2=".GetSQLValueString($brewMead2,"text").", ";
 			$updateSQL .= "brewMead3=".GetSQLValueString($brewMead3,"text").", ";
-			$updateSQL .= "brewComments=". GetSQLValueString(sterilize($brewComments,FILTER_SANITIZE_STRING),"text").", ";
+			$updateSQL .= "brewComments=". GetSQLValueString(filter_var($brewComments,FILTER_SANITIZE_STRING),"text").", ";
 			$updateSQL .= "brewBrewerID=".GetSQLValueString($brewBrewerID,"text").", ";
 			$updateSQL .= "brewBrewerFirstName=". GetSQLValueString($brewBrewerFirstName,"text").", ";
 			$updateSQL .= "brewBrewerLastName=".GetSQLValueString($brewBrewerLastName,"text").", ";
@@ -857,7 +857,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 			$updateSQL .= "brewUpdated="."NOW( ), ";
 			$updateSQL .= "brewJudgingNumber=".GetSQLValueString(filter_var($_POST['brewJudgingNumber'],FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION),"text").", ";
 			$updateSQL .= "brewPaid=".GetSQLValueString($brewPaid,"text").", ";
-			$updateSQL .= "brewConfirmed=".GetSQLValueString(sterilize($_POST['brewConfirmed']),"text").", ";
+			$updateSQL .= "brewConfirmed=".GetSQLValueString(filter_var($_POST['brewConfirmed'],FILTER_SANITIZE_STRING),"text").", ";
 			$updateSQL .= "brewInfoOptional=".GetSQLValueString($brewInfoOptional,"text");
 			$updateSQL .= " WHERE id ='".$id."'";
 
