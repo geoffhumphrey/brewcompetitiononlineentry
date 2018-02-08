@@ -1207,7 +1207,7 @@ $maintenance_text_000 = "The site administrator has taken the site offline to un
 $maintenance_text_001 = "Please check back later.";
 
 // ----------------------------------------------------------------------------------
-// Version 2.1.12 Additions
+// Version 2.1.10-2.1.12 Additions
 // ----------------------------------------------------------------------------------
 
 // -------------------- Labels --------------------
@@ -1420,6 +1420,9 @@ $best_brewer_text_011 = "The highest maximum score.";
 $best_brewer_text_012 = "The highest average score.";
 $best_brewer_text_013 = "Unused.";
 $best_brewer_text_014 = "participating clubs";
+
+// Version 2.1.12
+$dropoff_qualifier_text_001 = "Please pay attention to the notes provided for each drop-off location. There could be earlier deadlines for some drop-off locations listed, particular hours when entries are accepted, certain individuals to leave your entries with, etc. <strong class=\"text-danger\">All entrants are responsible for reading the information provided by the organizers for each drop-off location.</strong>";
 
 // ***********************************************************************************
 // END TRANSLATIONS

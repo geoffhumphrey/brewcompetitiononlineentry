@@ -40,6 +40,7 @@ Declare all variables empty at the top of the script. Add on later...
  * ---------------- END Rebuild Info --------------------- */
 
 include (DB.'judging_locations.db.php');
+include (DB.'dropoff.db.php');
 
 if ($section != "admin") {
 
@@ -240,8 +241,14 @@ if ($section != "admin") {
 			$header1_300 .= "</h4>";
 			$header1_300 .= "</div>";
 			$page_info300 .= "<div class=\"panel-body\">";
-			$page_info300 .= sprintf("%s <a href=\"%s\">%s</a> %s %s %s.",$sidebar_text_022,build_public_url("entry","default","default","default",$sef,$base_url)."#".str_replace(" ", "-", strtolower($label_drop_off)),strtolower($label_drop_offs),$dropoff_open_sidebar,$sidebar_text_004, $dropoff_closed_sidebar);
+			if ($totalRows_dropoff == 1) {
+				$page_info300 .= sprintf("%s <a href=\"%s\">%s</a> %s %s %s.",$sidebar_text_022,build_public_url("entry","default","default","default",$sef,$base_url)."#".str_replace(" ", "-", strtolower($label_drop_off)),strtolower($label_drop_offs),$dropoff_open_sidebar,$sidebar_text_004, $dropoff_closed_sidebar);
+			}
+			else {
+				$page_info300 .= sprintf("%s <a href=\"%s\">%s</a> %s %s %s.",$sidebar_text_022,build_public_url("entry","default","default","default",$sef,$base_url)."#".str_replace(" ", "-", strtolower($label_drop_offs)),strtolower($label_drop_offs),$dropoff_open_sidebar,$sidebar_text_004, $dropoff_closed_sidebar);
+			}
 			$page_info300 .= "</p>";
+			$page_info300 .= "<p><small>".$dropoff_qualifier_text_001."</small></p>";
 			$page_info300 .= "</div>";
 			$page_info300 .= "</div>";
 

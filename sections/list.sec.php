@@ -1,12 +1,3 @@
-<style>
-:target:before {
-content:"";
-display:block;
-height:90px; /* fixed header height*/
-margin:-90px 0 0; /* negative fixed header height */
-}
-</style>
-
 <?php
 /**
  * Module:      list.sec.php
@@ -81,3 +72,4 @@ include (SECTIONS.'brewer_info.sec.php');
 // Call the brewer's entry information
 if ($show_entries) include (SECTIONS.'brewer_entries.sec.php');
 ?>
+<script src="<?php echo $base_url; ?>js_includes/scroll.js"></script>

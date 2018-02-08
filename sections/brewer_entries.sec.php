@@ -69,7 +69,7 @@ $pay_fees_message = "";
 
 
 // Build Headers
-$header1_1 .= sprintf("<a name=\"entries\"></a><h2>%s</h2>",$label_entries);
+$header1_1 .= sprintf("<a class=\"anchor-offset\"name=\"entries\"></a><h2>%s</h2>",$label_entries);
 
 // Build Warnings
 $warnings = "";
@@ -79,20 +79,18 @@ if (($totalRows_log > 0) && ($action != "print")) {
 	$entries_unconfirmed_sum = array_sum($entries_unconfirmed);
 
 	if (($totalRows_log - $totalRows_log_confirmed) > 0) {
-			$warnings .= "<div class=\"alert alert-warning\">";
-			$warnings .= sprintf("<span class=\"fa fa-lg fa-exclamation-triangle\"></span> <strong>%s</strong> %s",$brewer_entries_text_001,$brewer_entries_text_002);
-			if ($_SESSION['prefsPayToPrint'] == "Y") $warnings .= sprintf(" %s",$brewer_entries_text_003);
-			$warnings .= "</div>";
-		}
+		$warnings .= "<div class=\"alert alert-warning\">";
+		$warnings .= sprintf("<span class=\"fa fa-lg fa-exclamation-triangle\"></span> <strong>%s</strong> %s",$brewer_entries_text_001,$brewer_entries_text_002);
+		if ($_SESSION['prefsPayToPrint'] == "Y") $warnings .= sprintf(" %s",$brewer_entries_text_003);
+		$warnings .= "</div>";
+	}
 
 	if (entries_no_special($_SESSION['user_id'])) {
 		$warnings .= sprintf("<div class=\"alert alert-warning\"><span class=\"fa fa-lg fa-exclamation-triangle\"></span> <strong>%s</strong> %s</div>",$brewer_entries_text_004,$brewer_entries_text_005);
 	}
 
 	if (($_SESSION['prefsPayToPrint'] == "Y") && (judging_date_return() > 0) && (!$disable_pay)) {
-
 		$warnings .= sprintf("<div class=\"alert alert-warning\"><span class=\"fa fa-lg fa-exclamation-triangle\"></span> <strong>%s!</strong> %s</div>",$label_please_note, $alert_text_085);
-
 	}
 }
 
@@ -112,7 +110,7 @@ do {
 		if (!empty($row_log['brewMead1'])) $brewInfo .= "&nbsp;&nbsp;".$row_log['brewMead1'];
 		if (!empty($row_log['brewMead2'])) $brewInfo .= "&nbsp;&nbsp;".$row_log['brewMead2'];
 		if (!empty($row_log['brewMead3'])) $brewInfo .= "&nbsp;&nbsp;".$row_log['brewMead3'];
-		$required_info .= " <a tabindex=\"0\" role=\"button\" data-toggle=\"popover\" data-placement=\"right\" data-trigger=\"hover focus\" title=\"Required Info\" data-content=\"".$brewInfo."\"><span class=\"fa fa-comment\"></span></a>";
+		$required_info .= " <a tabindex=\"0\" role=\"button\" data-toggle=\"popover\" data-placement=\"right\" data-trigger=\"hover focus\" title=\"Required Info\" data-content=\"".$brewInfo."\"><span class=\"fa fa-lg fa-comment\"></span></a>";
 	}
 
 	if (!empty($row_log['brewInfoOptional'])) $required_info .= " <a tabindex=\"0\" role=\"button\" data-toggle=\"popover\" data-placement=\"right\" data-trigger=\"hover focus\" title=\"Optional Info\" data-content=\"".$row_log['brewInfoOptional']."\"><span class=\"fa fa-lg fa-comment-o\"></span></a>";

@@ -98,20 +98,14 @@ $security_question = array($label_secret_01, $label_secret_05, $label_secret_06,
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title><?php echo $_SESSION['contestName']; ?> - Brew Competition Online Entry &amp; Management</title>
-
 	<?php
-
 	if (CDN) include (INCLUDES.'load_cdn_libraries.inc.php');
 	else include (INCLUDES.'load_local_libraries.inc.php');
-
 	?>
-
     <!-- Load BCOE&M Custom Theme CSS - Contains Bootstrap overrides and custom classes -->
     <link rel="stylesheet" type="text/css" href="<?php echo $theme; ?>" />
-
 	<!-- Load BCOE&M Custom JS -->
     <script src="<?php echo $base_url; ?>js_includes/bcoem_custom.min.js"></script>
-
     <!-- Opengraph Implementation -->
     <?php if (!empty($_SESSION['contestName'])) { ?>
     <meta property="og:title" content="<?php echo $_SESSION['contestName']?>" />
@@ -121,12 +115,8 @@ $security_question = array($label_secret_01, $label_secret_05, $label_secret_06,
     <?php } ?>
     <meta property="og:url" content="<?php echo "http" . ((!empty($_SERVER['HTTPS'])) ? "s://" : "://") . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']; ?>" />
     <style>
-    :target:before {
-        content:"";
-        display:block;
-        height:50px;
-        margin:-50px 0 0;
-    }
+        :target:before {content:"";display:block;height:50px;margin:-50px 0 0;}
+        a.anchor-offset {display: block;position: relative;top: -60px;visibility: hidden;}
     </style>
 </head>
 <body>

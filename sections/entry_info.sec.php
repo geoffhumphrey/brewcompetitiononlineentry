@@ -87,7 +87,7 @@ $style_info_modals = "";
 $ba_accepted_styles = array();
 $anchor_links_nav = "";
 $anchor_links = array();
-$anchor_top = "<p><a href=\"#top\">".$label_top." <span class=\"fa fa-arrow-circle-up\"></span></a></p>";
+$anchor_top = "<p><a href=\"#top-page\">".$label_top." <span class=\"fa fa-arrow-circle-up\"></span></a></p>";
 
 // Registration Window
 if (!$logged_in) {
@@ -103,7 +103,7 @@ if ($show_entries) {
 	// Entry Window
 	$anchor_links[] = $label_entry_registration;
 	$anchor_name = str_replace(" ", "-", $label_entry_registration);
-	$header1_3 .= sprintf("<a name=\"%s\"></a><h2>%s</h2>",strtolower($anchor_name),$label_entry_registration);
+	$header1_3 .= sprintf("<a class=\"anchor-offset\" name=\"%s\"></a><h2>%s</h2>",strtolower($anchor_name),$label_entry_registration);
 	if ($entry_window_open == 0) $page_info3 .= sprintf("<p>%s <strong class=\"text-success\">%s</strong> %s <strong class=\"text-success\">%s</strong>.</p>",$entry_info_text_014,$entry_open,$entry_info_text_001,$entry_closed);
 	elseif ($entry_window_open == 1) $page_info3 .= sprintf("<p>%s <strong class=\"text-success\">%s</strong>.</p>",$entry_info_text_015,$entry_closed);
 	else $page_info3 .= sprintf("<p>%s</p>",$entry_info_text_016);
@@ -114,7 +114,7 @@ if ($show_entries) {
 		// Entry Fees
 		$anchor_links[] = $label_entry_fees;
 		$anchor_name = str_replace(" ", "-", $label_entry_fees);
-		$header1_4 .= sprintf("<a name=\"%s\"></a><h2>%s</h2>",strtolower($anchor_name),$label_entry_fees);
+		$header1_4 .= sprintf("<a class=\"anchor-offset\" name=\"%s\"></a><h2>%s</h2>",strtolower($anchor_name),$label_entry_fees);
 		$page_info4 .= sprintf("<p>%s%s (%s) %s. ",$currency_symbol,number_format($_SESSION['contestEntryFee'],2),$currency_code,$entry_info_text_003);
 		if ($_SESSION['contestEntryFeeDiscount'] == "Y") $page_info4 .= sprintf("%s%s %s %s %s. ",$currency_symbol,number_format($_SESSION['contestEntryFee2'],2),$entry_info_text_013,addOrdinalNumberSuffix($_SESSION['contestEntryFeeDiscountNum']),strtolower($label_entry));
 		if ($_SESSION['contestEntryCap'] != "") $page_info4 .= sprintf("%s%s %s ",$currency_symbol,number_format($_SESSION['contestEntryCap'],2),$entry_info_text_017);
@@ -126,7 +126,7 @@ if ($show_entries) {
 		if (!empty($row_limits['prefsEntryLimit'])) {
 			$anchor_links[] = $label_entry_limit;
 			$anchor_name = str_replace(" ", "-", $label_entry_limit);
-			$header1_5 .= sprintf("<a name=\"%s\"></a><h2>%s</h2>",strtolower($anchor_name),$label_entry_limit);
+			$header1_5 .= sprintf("<a class=\"anchor-offset\" name=\"%s\"></a><h2>%s</h2>",strtolower($anchor_name),$label_entry_limit);
 			$page_info5 .= sprintf("<p>%s %s %s</p>",$entry_info_text_019,$row_limits['prefsEntryLimit'],$entry_info_text_020);
 			$page_info5 .= $anchor_top;
 		}
@@ -134,7 +134,7 @@ if ($show_entries) {
 		if ((!empty($row_limits['prefsUserEntryLimit'])) || (!empty($row_limits['prefsUserSubCatLimit'])) || (!empty($row_limits['prefsUSCLExLimit']))) {
 			$anchor_links[] = $label_entry_per_entrant;
 			$anchor_name = str_replace(" ", "-", $label_entry_per_entrant);
-			$header1_16 .= sprintf("<a name=\"%s\"></a><h2>%s</h2>",strtolower($anchor_name),$label_entry_per_entrant);
+			$header1_16 .= sprintf("<a class=\"anchor-offset\" name=\"%s\"></a><h2>%s</h2>",strtolower($anchor_name),$label_entry_per_entrant);
 
 			if (!empty($row_limits['prefsUserEntryLimit'])) {
 				if ($row_limits['prefsUserEntryLimit'] == 1) $page_info16 .= sprintf("<p>%s %s %s.</p>",$entry_info_text_021,$row_limits['prefsUserEntryLimit'],$entry_info_text_022);
@@ -211,7 +211,7 @@ if ($show_entries) {
 			// Payment
 			$anchor_links[] = $label_pay;
 			$anchor_name = str_replace(" ", "-", $label_pay);
-			$header1_6 .= sprintf("<a name=\"%s\"></a><h2>%s</h2>",strtolower($anchor_name),$label_pay);
+			$header1_6 .= sprintf("<a class=\"anchor-offset\" name=\"%s\"></a><h2>%s</h2>",strtolower($anchor_name),$label_pay);
 			$page_info6 .= sprintf("<p>%s</p>",$entry_info_text_031);
 			$page_info6 .= "<ul>";
 			if ($_SESSION['prefsCash'] == "Y") $page_info6 .= sprintf("<li>%s</li>",$entry_info_text_032);
@@ -230,7 +230,7 @@ if ($show_entries) {
 $anchor_links[] = $label_admin_judging_loc;
 $anchor_name = str_replace(" ", "-", $label_admin_judging_loc);
 
-$header1_7 .= sprintf("<a name=\"%s\"></a><h2>%s</h2>",strtolower($anchor_name),$label_admin_judging_loc);
+$header1_7 .= sprintf("<a class=\"anchor-offset\" name=\"%s\"></a><h2>%s</h2>",strtolower($anchor_name),$label_admin_judging_loc);
 if ($totalRows_judging == 0) $page_info7 .= sprintf("<p>%s</p>",$entry_info_text_035);
 else {
 	do {
@@ -268,8 +268,8 @@ else $style_set = str_replace("2"," 2",$row_styles['brewStyleVersion']);
 $anchor_links[] = $label_judging_styles;
 $anchor_name = str_replace(" ", "-", $label_judging_styles);
 
-if ($entry_window_open < 2) $header1_8 .= sprintf("<a name=\"%s\"></a><h2>%s %s</h2>",strtolower($anchor_name),$style_set,$label_styles_accepted);
-else $header1_8 .= sprintf("<a name=\"%s\"></a><h2>%s %s</h2>",strtolower($anchor_name),$style_set,$label_judging_styles);
+if ($entry_window_open < 2) $header1_8 .= sprintf("<a class=\"anchor-offset\" name=\"%s\"></a><h2>%s %s</h2>",strtolower($anchor_name),$style_set,$label_styles_accepted);
+else $header1_8 .= sprintf("<a class=\"anchor-offset\" name=\"%s\"></a><h2>%s %s</h2>",strtolower($anchor_name),$style_set,$label_judging_styles);
 
 $page_info8 .= "<table class=\"table table-striped table-bordered table-responsive\">";
 $page_info8 .= "<tr>";
@@ -417,7 +417,7 @@ if ($show_entries) {
 	if ((isset($row_contest_info['contestBottles'])) && (($dropoff_window_open < 2) || ($shipping_window_open < 2))) {
 		$anchor_links[] = $label_entry_acceptance_rules;
 		$anchor_name = str_replace(" ", "-", $label_entry_acceptance_rules);
-		$header1_9 .= sprintf("<a name=\"%s\"></a><h2>%s</h2>",strtolower($anchor_name),$label_entry_acceptance_rules);
+		$header1_9 .= sprintf("<a class=\"anchor-offset\" name=\"%s\"></a><h2>%s</h2>",strtolower($anchor_name),$label_entry_acceptance_rules);
 		$page_info9 .= $row_contest_info['contestBottles'];
 		$page_info9 .= $anchor_top;
 	}
@@ -426,7 +426,7 @@ if ($show_entries) {
 	if (((isset($_SESSION['contestShippingAddress'])) && ($shipping_window_open < 2)) && ($_SESSION['prefsShipping'] == 1)) {
 		$anchor_links[] = $label_shipping_info;
 		$anchor_name = str_replace(" ", "-", $label_shipping_info);
-		$header1_10 .= sprintf("<a name=\"%s\"></a><h2>%s</h2>",strtolower($anchor_name),$label_shipping_info);
+		$header1_10 .= sprintf("<a class=\"anchor-offset\" name=\"%s\"></a><h2>%s</h2>",strtolower($anchor_name),$label_shipping_info);
 		$page_info10 .= sprintf("<p>%s <strong class=\"text-success\">%s</strong> %s <strong class=\"text-success\">%s</strong>.</p>",$entry_info_text_036,$shipping_open,$entry_info_text_001,$shipping_closed);
 		$page_info10 .= sprintf("<p>%s</p>",$entry_info_text_037);
 		$page_info10 .= "<p>";
@@ -448,27 +448,55 @@ if ($show_entries) {
 		if ($totalRows_dropoff == 1) {
 			$anchor_links[] = $label_drop_off;
 			$anchor_name = str_replace(" ", "-", $label_drop_off);
-			$header1_11 .= sprintf("<a name=\"%s\"></a><h2>%s</h2>",strtolower($anchor_name),$label_drop_off);
+			$header1_11 .= sprintf("<a class=\"anchor-offset\" name=\"%s\"></a><h2>%s</h2>",strtolower($anchor_name),$label_drop_off);
 		}
 		else {
 			$anchor_links[] = $label_drop_offs;
 			$anchor_name = str_replace(" ", "-", $label_drop_offs);
-			$header1_11 .= sprintf("<a name=\"%s\"></a><h2>%s</h2>",strtolower($anchor_name),$label_drop_offs);
+			$header1_11 .= sprintf("<a class=\"anchor-offset\" name=\"%s\"></a><h2>%s</h2>",strtolower($anchor_name),$label_drop_offs);
 		}
 		$page_info11 .= sprintf("<p>%s <strong class=\"text-success\">%s</strong> %s <strong class=\"text-success\">%s</strong>.</p>",$entry_info_text_043,$dropoff_open,$entry_info_text_001,$dropoff_closed);
-
+		$page_info11 .= "<p>".$dropoff_qualifier_text_001."</p>";
 		do {
 
 			$page_info11 .= "<p>";
 			if ($row_dropoff['dropLocationWebsite'] != "") $page_info11 .= sprintf("<a href=\"%s\" target=\"_blank\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"".$row_dropoff['dropLocationName']." %s\"><strong>%s</strong></a> <span class=\"fa fa-lg fa-external-link\"></span>",$row_dropoff['dropLocationWebsite'],$label_website,$row_dropoff['dropLocationName']);
 			else $page_info11 .= sprintf("<strong>%s</strong>",$row_dropoff['dropLocationName']);
 			$page_info11 .= "<br />";
+			if (empty($row_dropoff['dropLocationNotes'])) {
 			$page_info11 .= sprintf("%s <a href=\"".$base_url."output/maps.output.php?section=driving&amp;id=%s\" target=\"_blank\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"%s\"><span class=\"fa fa-lg fa-map-marker\"></span></a>",$row_dropoff['dropLocation'],str_replace(' ', '+', $row_dropoff['dropLocation']),$entry_info_text_044." ".$row_dropoff['dropLocationName']);
+			}
+			else {
+				$page_info11 .= sprintf("%s <a href=\"#\" data-toggle=\"modal\" data-target=\"#dropoff-loc".$row_dropoff['id']."\" title=\"%s\"><span class=\"fa fa-lg fa-map-marker\"></span></a>",$row_dropoff['dropLocation'],$row_dropoff['dropLocation'],$entry_info_text_044." ".$row_dropoff['dropLocationName']);
+			}
 			$page_info11 .= "<br />";
 			$page_info11 .= $row_dropoff['dropLocationPhone'];
 			$page_info11 .= "<br />";
 			if ($row_dropoff['dropLocationNotes'] != "") $page_info11 .= sprintf("*<em>%s</em>",$row_dropoff['dropLocationNotes']);
+
 			$page_info11 .= "</p>";
+
+			if ($row_dropoff['dropLocationNotes'] != "") {
+				$page_info11 .= "<!-- Form submit confirmation modal -->";
+				$page_info11 .= "<!-- Refer to bcoem_custom.js for configuration -->";
+				$page_info11 .= "<div class=\"modal fade\" id=\"dropoff-loc".$row_dropoff['id']."\" tabindex=\"-1\" role=\"dialog\" aria-hidden=\"true\">";
+				$page_info11 .= "<div class=\"modal-dialog\">";
+				$page_info11 .= "<div class=\"modal-content\">";
+				$page_info11 .= "<div class=\"modal-header\">";
+				$page_info11 .= "<button type=\"button\" class=\"close\" data-dismiss=\"modal\" aria-label=\"Close\"><span aria-hidden=\"true\">&times;</span></button>";
+				$page_info11 .= sprintf("<h4 class=\"modal-title\">%s &ndash; %s %s</h4>",$label_please_note,$row_dropoff['dropLocationName'],$label_drop_off);
+				$page_info11 .= "</div>";
+				$page_info11 .= sprintf("<div class=\"modal-body\"><p>%s</p>",$row_dropoff['dropLocationNotes']);
+				$page_info11 .= "</div>";
+				$page_info11 .= "<div class=\"modal-footer\">";
+				$page_info11 .= sprintf("<button type=\"button\" class=\"btn btn-danger\" data-dismiss=\"modal\">%s</button>",$label_cancel);
+				$page_info11 .= sprintf("<a href=\"%s%s\" target=\"_blank\" class=\"btn btn-success\">%s</a>",$base_url."output/maps.output.php?section=driving&amp;id=",str_replace(' ', '+', $row_dropoff['dropLocation']),$label_understand);
+				$page_info11 .= "</div>";
+				$page_info11 .= "</div>";
+				$page_info11 .= "</div>";
+				$page_info11 .= "</div>";
+			}
+
 		 } while ($row_dropoff = mysqli_fetch_assoc($dropoff));
 		 $page_info11 .= $anchor_top;
 	}
@@ -479,7 +507,7 @@ if ($show_entries) {
 if (isset($row_contest_info['contestBOSAward'])) {
 	$anchor_links[] = $label_bos;
 	$anchor_name = str_replace(" ", "-", $label_bos);
-	$header1_12 .= sprintf("<a name=\"%s\"></a><h2>%s</h2>",strtolower($anchor_name),$label_bos);
+	$header1_12 .= sprintf("<a class=\"anchor-offset\" name=\"%s\"></a><h2>%s</h2>",strtolower($anchor_name),$label_bos);
 	$page_info12 .= $row_contest_info['contestBOSAward'];
 	$page_info12 .= $anchor_top;
 }
@@ -488,7 +516,7 @@ if (isset($row_contest_info['contestBOSAward'])) {
 if (isset($row_contest_info['contestAwards'])) {
 	$anchor_links[] = $label_awards;
 	$anchor_name = str_replace(" ", "-", $label_awards);
-	$header1_13 .= sprintf("<a name=\"%s\"></a><h2>%s</h2>",strtolower($anchor_name),$label_awards);
+	$header1_13 .= sprintf("<a class=\"anchor-offset\" name=\"%s\"></a><h2>%s</h2>",strtolower($anchor_name),$label_awards);
 	$page_info13 .= $row_contest_info['contestAwards'];
 	$page_info13 .= $anchor_top;
 }
@@ -496,7 +524,7 @@ if (isset($row_contest_info['contestAwards'])) {
 if (isset($_SESSION['contestAwardsLocName'])) {
 	$anchor_links[] = $label_awards_ceremony;
 	$anchor_name = str_replace(" ", "-", $label_awards_ceremony);
-	$header1_14 .= sprintf("<a name=\"%s\"></a><h2>%s</h2>",strtolower($anchor_name),$label_awards_ceremony);
+	$header1_14 .= sprintf("<a class=\"anchor-offset\" name=\"%s\"></a><h2>%s</h2>",strtolower($anchor_name),$label_awards_ceremony);
 	$page_info14 .= "<p>";
 	$page_info14 .= sprintf("<strong>%s</strong>",$_SESSION['contestAwardsLocName']);
 
@@ -512,7 +540,7 @@ if ($show_entries) {
 	if (isset($row_contest_info['contestCircuit'])) {
 		$anchor_links[] = $label_circuit;
 		$anchor_name = str_replace(" ", "-", $label_circuit);
-		$header1_15 .= sprintf("<a name=\"%s\"></a><h2>%s</h2>",strtolower($anchor_name),$label_circuit);
+		$header1_15 .= sprintf("<a class=\"anchor-offset\" name=\"%s\"></a><h2>%s</h2>",strtolower($anchor_name),$label_circuit);
 		$page_info15 .= $row_contest_info['contestCircuit'];
 		$page_info15 .= $anchor_top;
 	}
@@ -522,16 +550,18 @@ if ($show_entries) {
 if ((judging_date_return() == 0) && ($registration_open == 2) && ($entry_window_open == 2)) {
 	$anchor_links[] = $label_rules;
 	$anchor_name = str_replace(" ", "-", $label_rules);
-	$header1_17 .= sprintf("<a name=\"%s\"></a><h2>%s</h2>",strtolower($anchor_name),$label_rules);
+	$header1_17 .= sprintf("<a class=\"anchor-offset\" name=\"%s\"></a><h2>%s</h2>",strtolower($anchor_name),$label_rules);
 	$page_info17 .= $row_contest_rules['contestRules'];
 	$page_info17 .= $anchor_top;
 }
+
 
 // --------------------------------------------------------------
 // Display
 // --------------------------------------------------------------
 
 // Display anchor links
+echo "<p><a class=\"anchor-offset\" name=\"top-page\"></a>";
 $anchor_link_display = "";
 
 if (is_array($anchor_links)) {
@@ -625,3 +655,4 @@ echo $page_info15;
 echo $style_info_modals;
 
 ?>
+<script src="<?php echo $base_url; ?>js_includes/scroll.js"></script>
