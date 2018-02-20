@@ -12,7 +12,7 @@ include (LIB.'date_time.lib.php');
 include (INCLUDES.'version.inc.php');
 
 // ------------------ VERSION CHECK ------------------
-// Current version is 2.1.10.0, change version in system table if not
+// Current version is 2.1.12.0, change version in system table if not
 // If there are NO database structure or data updates for the current version,
 // USE THIS FUNCTION ONLY IF THERE ARE *NOT* ANY DB TABLE OR DATA UPDATES
 // OTHERWISE, DEFINE/UPDATE THE VERSION VIA THE UPDATE PROCEDURE
@@ -113,8 +113,6 @@ function build_output_link($icon,$base_url,$filename,$section,$go,$action,$filte
 	$return .= "</a>";
 	return $return;
 }
-
-
 
 function build_form_action($base_url,$section,$go,$action,$filter,$id,$dbTable,$check_required) {
 	$return = "";

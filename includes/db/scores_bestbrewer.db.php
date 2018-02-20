@@ -4,7 +4,7 @@ $bb_scores = mysqli_query($connection, $query_scores) or die(mysqli_error($conne
 $bb_row_scores = mysqli_fetch_assoc($bb_scores);
 $bb_totalRows_scores = mysqli_num_rows($bb_scores);
 
-$query_bos_scores = sprintf("SELECT a.scorePlace, a.scoreEntry, c.brewerClubs, c.uid FROM %s a, %s b, %s c WHERE a.eid = b.id AND c.uid = a.bid AND a.scorePlace IS NOT NULL ", $judging_scores_bos_db_table, $brewing_db_table, $brewer_db_table);
+$query_bos_scores = sprintf("SELECT a.scorePlace, a.scoreEntry, c.brewerClubs, c.uid FROM %s a, %s b, %s c WHERE a.eid = b.id AND c.uid = a.bid AND a.scorePlace IS NOT NULL", $judging_scores_bos_db_table, $brewing_db_table, $brewer_db_table);
 $bb_bos_scores = mysqli_query($connection, $query_bos_scores) or die(mysqli_error($connection));
 $bb_row_bos_scores = mysqli_fetch_assoc($bb_bos_scores);
 $bb_totalRows_bos_scores = mysqli_num_rows($bb_bos_scores);

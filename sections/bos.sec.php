@@ -168,7 +168,7 @@ if ($totalRows_sbi > 0) {
 				$table_body2 = "";
 
 				// Build page headers
-				$header2_1 .= sprintf("<h3>%s &ndash; %s</h3>",$label_bos, $row_sbi['sbi_name']);
+				$header2_1 .= sprintf("<h3>%s</h3>", $row_sbi['sbi_name']);
 				if ($row_sbi['sbi_description'] != "") $header2_1 .= "<p>".$row_sbi['sbi_description']."</p>";
 
 				// Build table headers
