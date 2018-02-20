@@ -264,8 +264,7 @@ if (($_SESSION['prefsProEdition'] == 0) && ($row_limits['prefsShowBestClub'] != 
 			$table_body2 .= "<td>".$bestbrewer_clubs[$key]['Places'][2]."</td>";
 			if ($show_4th_clubs) $table_body2 .= "<td>".$bestbrewer_clubs[$key]['Places'][3]."</td>";
 			if ($show_HM_clubs) $table_body2 .= "<td>".$bestbrewer_clubs[$key]['Places'][4]."</td>";
-			if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= "1")) $table_body2 .= "<td>".$points_clubs."</td>";
-			else $table_body2 .= "<td>".floor($points_clubs)."</td>";
+			$table_body2 .= "<td>".floor($points_clubs)." <a href=\"#\" tabindex=\"0\" role=\"button\" data-toggle=\"popover\" data-trigger=\"hover\" data-placement=\"auto top\" data-container=\"body\" title=\"Actual Calculated Value\" data-content=\"".$points_clubs."\"><span class=\"hidden-xs hidden-sm hidden-md hidden-print fa fa-question-circle\"></span></a></td>";
 			$table_body2 .= "</tr>";
 
 		}
@@ -341,9 +340,7 @@ if ($row_limits['prefsShowBestBrewer'] != 0) {
 			$table_body1 .= "<td>".$bestbrewer[$key]['Places'][2]."</td>";
 			if ($show_4th) $table_body1 .= "<td>".$bestbrewer[$key]['Places'][3]."</td>";
 			if ($show_HM) $table_body1 .= "<td>".$bestbrewer[$key]['Places'][4]."</td>";
-			// $table_body1 .= "<td>".$points."</td>";
-			if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= "1")) $table_body1 .= "<td>".$points."</td>";
-			else $table_body1 .= "<td>".floor($points)."</td>";
+			$table_body1 .= "<td>".floor($points)." <a href=\"#\" tabindex=\"0\" role=\"button\" data-toggle=\"popover\" data-trigger=\"hover\" data-placement=\"auto top\" data-container=\"body\" title=\"Actual Calculated Value\" data-content=\"".$points."\"><span class=\"hidden-xs hidden-sm hidden-md hidden-print fa fa-question-circle\"></span></a></td>";
 			if ($_SESSION['prefsProEdition'] == 0) $table_body1 .= "<td class=\"hidden-xs hidden-sm hidden-md\">".$bestbrewer[$key]['Clubs']."</td>";
 			$table_body1 .= "</tr>";
 		}
@@ -391,7 +388,7 @@ $page_info_1 .= "<p>".$best_brewer_text_002."</p>";
 		<div class="modal-content">
 			<div class="modal-header">
 				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-				<h4 class="modal-title"><?php echo $row_bb_prefs['prefsBestBrewerTitle']." ".$best_brewer_text_003; ?></h4>
+				<h4 class="modal-title"><?php echo $row_bb_prefs['prefsBestBrewerTitle']." / ".$row_bb_prefs['prefsBestClubTitle']." ".$best_brewer_text_003; ?></h4>
 			</div>
 			<div class="modal-body">
 				<p><?php echo $best_brewer_text_004; ?></p>

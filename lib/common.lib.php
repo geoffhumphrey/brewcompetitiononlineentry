@@ -12,7 +12,7 @@ include (LIB.'date_time.lib.php');
 include (INCLUDES.'version.inc.php');
 
 // ------------------ VERSION CHECK ------------------
-// Current version is 2.1.12.0, change version in system table if not
+// Current version is 2.1.10.0, change version in system table if not
 // If there are NO database structure or data updates for the current version,
 // USE THIS FUNCTION ONLY IF THERE ARE *NOT* ANY DB TABLE OR DATA UPDATES
 // OTHERWISE, DEFINE/UPDATE THE VERSION VIA THE UPDATE PROCEDURE
@@ -115,6 +115,7 @@ function build_output_link($icon,$base_url,$filename,$section,$go,$action,$filte
 }
 
 function build_form_action($base_url,$section,$go,$action,$filter,$id,$dbTable,$check_required) {
+
 	$return = "";
 	if (strpos($section, 'step') !== FALSE) $section = "setup"; else $section = $section;
 	$return .= "<form class=\"form-horizontal\" method=\"post\" id=\"form1\" name=\"form1\" action=\"".$base_url."includes/process.inc.php?section=".$section."&amp;dbTable=".$dbTable;
@@ -257,23 +258,25 @@ function random_generator($digits,$method){
 	if ($method == "3") $input = array ("0","1","2","3","4");
 
 	$random_generator = "";// Initialize the string to store random numbers
+
 	for ($i=1;$i<$digits+1;$i++) { // Loop the number of times of required digits
+
 		if(rand(1,2) == 1){ // to decide the digit should be numeric or alphabet
-		// Add one random alphabet
-		$rand_index = array_rand($input);
-		$random_generator .=$input[$rand_index]; // One char is added
+			// Add one random alphabet
+			$rand_index = array_rand($input);
+			$random_generator .=$input[$rand_index]; // One char is added
 		}
 
-		if ($method == "3")
-		{
-		// Add one numeric digit between 0 and 4
-		$random_generator = rand(1,4); // one number is added
+		if ($method == "3") {
+			// Add one numeric digit between 0 and 4
+			$random_generator = rand(1,4); // one number is added
 		}
 
 		else {
-		// Add one numeric digit between 0 and 9
-		$random_generator .=rand(1,10); // one number is added
+			// Add one numeric digit between 0 and 9
+			$random_generator .=rand(1,10); // one number is added
 		} // end of if else
+
 	} // end of for loop
 
 	return $random_generator;
@@ -452,9 +455,7 @@ function currency_info($input,$method) {
 			case "R": $currency_code = "R^ZAR"; break;
 			case "rupee": $currency_code = "&#8360;^INR"; break;
 
-
 			/*
-
 			case "&pound;": $currency_code = $input."^GBP"; break;
 			case "&euro;": $currency_code = $input."^EUR"; break;
 			case "&yen;": $currency_code = $input."^JPY"; break;
@@ -480,8 +481,6 @@ function currency_info($input,$method) {
 			case "phpeso": $currency_code = "&#8369;^PHP"; break;
 			default: $currency_code = $input."^USD";
 			*/
-
-
 		}
 
 	}
@@ -687,7 +686,6 @@ function currency_info($input,$method) {
 	Vietnam, Dong (VND)
 	Yemen, Rials (YER)
 	Zimbabwe, Zimbabwe Dollars (ZWD)
-
 	*/
 
 }
@@ -708,7 +706,6 @@ function total_fees($entry_fee, $entry_fee_discount, $entry_discount, $entry_dis
 		sort($user_id_1);
 
 		foreach ($user_id_1 as $id_1) {
-
 			// Get each entrant's number of entries
 			mysqli_select_db($connection,$database);
 			$query_entries = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE brewBrewerID='%s'",$prefix."brewing", $id_1);
@@ -1587,7 +1584,6 @@ function style_convert($number,$type,$base_url="") {
 							</tr>
 							</table>";
 
-
 							$style_convert_1[] = "<a href=\"#\" data-target=\"#".$ba_style['id']."\" data-toggle=\"modal\" data-tooltip=\"true\" title=\"".$ba_style['name']."\">".$ba_style['id']."</a>";
 
 							$style_modal[] = "
@@ -1607,9 +1603,7 @@ function style_convert($number,$type,$base_url="") {
 							  </div>
 							</div>";
 
-
 						}
-
 
 					} // end foreach ($stylesData as $data => $ba_style)
 
@@ -1990,6 +1984,7 @@ function get_table_info($input,$method,$table_id,$dbTable,$param) {
 			return $d;
 
 		}
+
 	}
 
 	// Get count of entries
@@ -2049,6 +2044,7 @@ function get_table_info($input,$method,$table_id,$dbTable,$param) {
 		// $d = $debug;
 
 	return $d;
+
 	}
 
 	// Get total number of scored entries at table
@@ -2197,15 +2193,10 @@ function style_type($type,$method,$source) {
 	if ($method == "1") {
 		switch($type) {
 			case "Mead": $type = "3"; break;
-
 			case "Cider": $type = "2"; break;
-
 			case "Mixed": $type = "1"; break;
-
 			case "Ale": $type = "1"; break;
-
 			case "Lager": $type = "1"; break;
-
 			default: $type = $type; break;
 		}
 	}
@@ -2213,17 +2204,11 @@ function style_type($type,$method,$source) {
 	if (($method == "2") && ($source == "bcoe")) {
 		switch($type) {
 			case "3": $type = "Mead"; break;
-
 			case "2": $type = "Cider"; break;
-
 			case "1": $type = "Beer"; break;
-
 			case "Lager": $type = "Beer"; break;
-
 			case "Ale": $type = "Beer"; break;
-
 			case "Mixed": $type = "Beer"; break;
-
 			default: $type = $type; break;
 		}
 	}
@@ -2332,35 +2317,43 @@ function best_brewer_points($bid, $places, $entry_scores, $points_prefs, $tiebre
 
 	for ($i = 0; $i<= $imax; $i++) {
 		switch ($tiebreaker[$i]) {
+			// points for the number of 1st, 2nd, and 3rd places
 			case "TBTotalPlaces" :
 				$power  += 2;
-				$pts_tb_num_places = array_sum(array_slice($places,0,3))/pow(10,$power); // points for the number of 1st, 2nd, and 3rd places
+				$pts_tb_num_places = array_sum(array_slice($places,0,3))/pow(10,$power);
 				break;
+			// points for the number of 1st, 2nd, 3rd, 4th, HM places
 			case "TBTotalExtendedPlaces" :
 				$power  += 2;
-				$pts_tb_num_places = array_sum($places)/pow(10,$power); // points for the number of 1st, 2nd, 3rd, 4th, HM places
+				$pts_tb_num_places = array_sum($places)/pow(10,$power);
 				break;
+			// points for number of first places
 			case "TBFirstPlaces" :
 				$power  += 2;
-				$pts_tb_first_places = $places[0]/pow(10,$power); // points for number of first places
+				$pts_tb_first_places = $places[0]/pow(10,$power);
 				break;
+			// points for the number of competing entries (the smallest the better, of course)
 			case "TBNumEntries" :
 				$power  += 4;
-				$pts_tb_num_entries = floor(100/$number_of_entries)/pow(10,$power); // points for the number of competing entries (the smallest the better, of course)
+				$pts_tb_num_entries = floor(100/$number_of_entries)/pow(10,$power);
 				break;
+			// points for the minimum score
 			case "TBMinScore" :
 				$power  += 4;
-				$pts_tb_min_score = floor(10*min($entry_scores))/pow(10,$power); // points for the minimum score
+				$pts_tb_min_score = floor(10*min($entry_scores))/pow(10,$power);
 				break;
+			// points for the maximum score
 			case "TBMaxScore" :
 				$power  += 4;
-				$pts_tb_max_score = floor(10*max($entry_scores))/pow(10,$power); // points for the maximum score
+				$pts_tb_max_score = floor(10*max($entry_scores))/pow(10,$power);
 				break;
+			// points for the average score
 			case "TBAvgScore" :
 				$power  += 4;
-				$pts_avg_score = floor(10*array_sum($entry_scores)/$number_of_entries)/pow(10,$power); // points for the average score
+				$pts_avg_score = floor(10*array_sum($entry_scores)/$number_of_entries)/pow(10,$power);
 				break;
 		}
+
 	}
 
 	$points = $pts_first + $pts_second + $pts_third + $pts_fourth + $pts_hm + $pts_tb_num_places + $pts_tb_first_places + $pts_tb_num_entries + $pts_tb_min_score + $pts_tb_max_score + $pts_tb_avg_score;
@@ -2370,7 +2363,6 @@ function best_brewer_points($bid, $places, $entry_scores, $points_prefs, $tiebre
 function bjcp_rank($rank,$method) {
     if ($method == "1") {
 		switch($rank) {
-
 			case "Apprentice":
 			case "Provisional":
 			case "Rank Pending":
@@ -2518,6 +2510,7 @@ function get_entry_count($method) {
 function get_participant_count($type) {
 	require(CONFIG.'config.php');
 	mysqli_select_db($connection,$database);
+
 	if ($type == 'default') $query_participant_count = sprintf("SELECT COUNT(*) as 'count' FROM %s",$prefix."brewer");
 	if ($type == 'judge') $query_participant_count = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE brewerJudge='Y'",$prefix."brewer");
 	if ($type == 'steward') $query_participant_count = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE brewerSteward='Y'",$prefix."brewer");
@@ -2527,7 +2520,6 @@ function get_participant_count($type) {
 	$row_participant_count = mysqli_fetch_assoc($participant_count);
 
 	return $row_participant_count['count'];
-
 }
 
 function display_place($place,$method) {
@@ -2621,7 +2613,6 @@ function winner_check($id,$judging_scores_db_table,$judging_tables_db_table,$bre
 	if ($method == 6) { // reserved for NHC admin advance
 		$r = "Administrative Advance";
 	}
-
 
 	if ($method < 6) {
 	$query_scores = sprintf("SELECT eid,scorePlace,scoreTable FROM %s WHERE eid='%s'",$judging_scores_db_table,$id);
@@ -2957,12 +2948,15 @@ function readable_number($a){
 	$bits_b = array("ten", "twenty", "thirty", "forty", "fifty", "sixty", "seventy", "eighty", "ninety");
 	$bits_c = array("one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten", "eleven", "twelve", "thirteen", "fourteen", "fifteen", "sixteen", "seventeen", "eighteen", "nineteen");
 
-	if ($a==0){return 'zero';}
+	if ($a == 0){
+		return 'zero';
+	}
 
-	$out = ($a<0)?'minus ':'';
+	$out = ($a < 0) ? 'minus ' : '';
 
 	$a = abs($a);
-	for($i=count($bits_a); $i>0; $i--){
+
+	for($i=count($bits_a); $i>0; $i--) {
 		$p = pow(1000, $i);
 		if ($a > $p){
 			$b = floor($a/$p);
@@ -2971,19 +2965,23 @@ function readable_number($a){
 			$out .= (($a)?', ':'');
 		}
 	}
+
 	if ($a > 100){
 		$b = floor($a/100);
 		$a -= 100 * $b;
 		$out .= readable_number($b).' hundred'.(($a)?' and ':' ');
 	}
+
 	if ($a >= 20){
 		$b = floor($a/10);
 		$a -= 10 * $b;
 		$out .= $bits_b[$b-1].' ';
 	}
-	if ($a){
+
+	if ($a) {
 		$out .= $bits_c[$a-1];
 	}
+
 	return $out;
 }
 
@@ -3008,6 +3006,7 @@ function winner_method($type,$output_type) {
 			case 3: $output = sprintf("<p>%s</p>",$winners_text_004); break;
 		}
 	}
+
 	return $output;
 }
 
@@ -3027,7 +3026,6 @@ function table_exists($table_name) {
 function table_assignments($uid,$method,$time_zone,$date_format,$time_format,$method2=0) {
 
 	// Gather and output the judging or stewarding assignments for a user
-
 	require(CONFIG.'config.php');
 	mysqli_select_db($connection,$database);
 
@@ -3072,7 +3070,6 @@ function table_assignments($uid,$method,$time_zone,$date_format,$time_format,$me
 	}
 
 	//if (($totalRows_table_assignments == 0) && ($method2 == "1")) $output_extend = "No assignment(s)";
-
 	return $output.$output_extend;
 }
 
@@ -3148,30 +3145,33 @@ function judge_steward_availability($input,$method,$prefix) {
 		else $return = "";
 	}
 	else {
+
 		$a = explode(",",$input);
 		//$a = explode(",",$row_sql['brewerJudgeLocation']);
-			$return = "";
-			foreach ($a as $value) {
-				$b = explode("-",$value);
 
-				if ($b[0] == "Y") {
-				require(CONFIG.'config.php');
-				mysqli_select_db($connection,$database);
-				$query_location = sprintf("SELECT judgingLocName FROM %s WHERE id='%s'", $prefix."judging_locations", $b[1]);
-				$location = mysqli_query($connection,$query_location) or die (mysqli_error($connection));
-				$row_location = mysqli_fetch_assoc($location);
-					if (!empty($row_location['judgingLocName'])) {
-						$return .= $row_location['judgingLocName']." ";
-						if ($method == "1") $return .= "<br>";
-						elseif ($method == "2") $return .= " | ";
-						else $return .= " ";
-					 }
-					else $return .= "";
-				}
+		$return = "";
+		foreach ($a as $value) {
+			$b = explode("-",$value);
 
+			if ($b[0] == "Y") {
+			require(CONFIG.'config.php');
+			mysqli_select_db($connection,$database);
+			$query_location = sprintf("SELECT judgingLocName FROM %s WHERE id='%s'", $prefix."judging_locations", $b[1]);
+			$location = mysqli_query($connection,$query_location) or die (mysqli_error($connection));
+			$row_location = mysqli_fetch_assoc($location);
+				if (!empty($row_location['judgingLocName'])) {
+					$return .= $row_location['judgingLocName']." ";
+					if ($method == "1") $return .= "<br>";
+					elseif ($method == "2") $return .= " | ";
+					else $return .= " ";
+				 }
+				else $return .= "";
 			}
 
+		}
+
 	}
+
 	if ($method == "1")	return rtrim($return,"<br>");
 	elseif ($method == "2") return rtrim($return," | ");
 	else return $return;
@@ -3265,7 +3265,6 @@ function format_phone_us($phone = '', $convert = true, $trim = true) {
 	}
 }
 
-
 function check_judging_flights() {
 	// Checks if the count of received entries is the same as the count in judging_flights table
 	// If so, return TRUE
@@ -3307,25 +3306,27 @@ function number_pad($number,$n) {
 
 function open_or_closed($now,$date1,$date2) {
 
-		$output = 0;
+	$output = 0;
 
-		if ((isset($date1)) && (isset($date2))) {
+	if ((isset($date1)) && (isset($date2))) {
 
-			// First date has not passed yet
-			if ($now < $date1) $output = 0;
+		// First date has not passed yet
+		if ($now < $date1) $output = 0;
 
-			// First date has passed, but second has not
-			if (($now >= $date1) && ($now < $date2)) $output = 1;
+		// First date has passed, but second has not
+		if (($now >= $date1) && ($now < $date2)) $output = 1;
 
-			// Both dates have passed
-			if ($now > $date2) $output = 2;
+		// Both dates have passed
+		if ($now > $date2) $output = 2;
 
-		}
+	}
 
-		return $output;
+	return $output;
+
 }
 
 function limit_subcategory($style,$pref_num,$pref_exception_sub_num,$pref_exception_sub_array,$uid) {
+
 	/*
 	$style = Style category and subcategory number
 	$pref_num = Subcategory limit number from preferences
@@ -3383,8 +3384,6 @@ function limit_subcategory($style,$pref_num,$pref_exception_sub_num,$pref_except
 
 	}
 
-
-
 	if ($row_check['count'] >= $pref_num) $return = "DISABLED";
 	else $return = "";
 
@@ -3416,7 +3415,6 @@ function highlight_required($msg,$method,$style_version) {
 
 		if ($row_check['brewStyleSweet'] == 1) return TRUE;
 		else return FALSE;
-
 
 	}
 
@@ -3450,7 +3448,6 @@ function highlight_required($msg,$method,$style_version) {
 
 		if ($row_check['brewStyleStrength'] == 1) return TRUE;
 		else return FALSE;
-
 
 	}
 
@@ -3496,23 +3493,28 @@ function judging_location_info($id) {
 function yes_no($input,$base_url,$method=0) {
 	require(LANG.'language.lang.php');
 	$output = "";
+
 	if ($method != 3) {
+
 		if (($input == "Y") || ($input == 1)) {
 			$output = "<span class=\"fa fa-lg fa-check text-success\"></span> ";
 			if ($method == 0) $output = $label_yes;
-
 		}
+
 		else {
 			$output .= "<span class=\"fa fa-lg fa-times text-danger\"></span> ";
 			if ($method == 0) $output = $label_no;
-
 		}
+
 	}
+
 	if ($method == 3) {
+
 		if (($input == "Y") || ($input == 1)) $output = $label_yes;
 		else $output = $label_no;
 
 	}
+
 	return $output;
 }
 
@@ -3520,7 +3522,6 @@ function styles_active($method) {
 
 	require(CONFIG.'config.php');
 	mysqli_select_db($connection,$database);
-
 
 	if ($method == 0) { // Active Styles
 
@@ -3544,7 +3545,6 @@ function styles_active($method) {
 		sort($a);
 		return $a;
 	}
-
 
 	if ($method == 1) { // Style Types
 
@@ -3580,11 +3580,11 @@ function styles_active($method) {
 
 	}
 
-
 }
 
 
 function check_exension($file_ext) {
+
 	switch($file_ext) {
 		case "xml": return TRUE;
 		break;
