@@ -11,8 +11,6 @@ if (($filter != "default") && ($filter != "rounds"))  {
 
 	foreach (array_unique($a) as $value) {
 
-
-
 		if (strpos($_SESSION['prefsStyleSet'],"BABDB") === false) $style_name = style_convert($value,"8");
 
 		include (DB.'admin_judging_flights.db.php');
@@ -79,7 +77,6 @@ elseif (($action == "add") && ($id != "default") && ($filter == "default")) $tit
 elseif (($action == "assign") && ($filter == "rounds"))  $title = ": Assign $assign_to to Rounds";
 else $title =  ": Define/Edit Flights"; ?>
 <p onload="updateButCount(event);" class="lead"><?php echo $_SESSION['contestName'].$title;  ?></p>
-
 <div class="bcoem-admin-element hidden-print">
    	<!-- Postion 1: View All Button -->
     <div class="btn-group" role="group" aria-label="...">
@@ -103,27 +100,22 @@ if ($filter == "default") {
 if ($totalRows_tables > 0) {
 ?>
 <div class="bcoem-admin-element hidden-print">
-<form class="form-horizontal">
-	<div class="form-group"><!-- Form Group NOT REQUIRED Select -->
-		<label for="table_choice" class="col-sm-2 control-label">Choose a Table</label>
-		<div class="col-sm-4">
-		<!-- Input Here -->
-		<select class="selectpicker" name="table_choice" id="table_choice" onchange="jumpMenu('self',this,0)" data-width="auto">
-			<option value=""></option>
-				<?php do {
+    <div class="btn-group" role="group" aria-label="modals">
+        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Choose a Table <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu">
+            <?php do {
 
-				$table_choose = table_choose($section,$go,$action,$row_tables_edit['id'],$view,"default","flight_choose");
-				$table_choose = explode("^",$table_choose);
-				if ($table_choose[0] > 0) $table_choose_display = "edit&amp;id=".$table_choose[1]; else $table_choose_display = "add&amp;id=".$table_choose[1];
+                $table_choose = table_choose($section,$go,$action,$row_tables_edit['id'],$view,"default","flight_choose");
+                $table_choose = explode("^",$table_choose);
+                if ($table_choose[0] > 0) $table_choose_display = "edit&amp;id=".$table_choose[1]; else $table_choose_display = "add&amp;id=".$table_choose[1];
 
-				?>
-				<option value="index.php?section=admin&amp;go=judging_flights&amp;filter=define&amp;action=<?php echo $table_choose_display; ?>"><?php echo "Table ".$row_tables_edit['tableNumber'].": ".$row_tables_edit['tableName']; ?></option>
-				<?php
-				} while ($row_tables_edit = mysqli_fetch_assoc($tables_edit)); ?>
-		</select>
-		</div>
-	</div><!-- ./Form Group -->
-</form>
+                ?>
+            <li class="small"><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging_flights&amp;filter=define&amp;action=<?php echo $table_choose_display; ?>"><?php echo "Table ".$row_tables_edit['tableNumber'].": ".$row_tables_edit['tableName']; ?></a></li>
+            <?php } while ($row_tables_edit = mysqli_fetch_assoc($tables_edit)); ?>
+        </ul>
+    </div>
 </div>
 <?php } else echo "<p>No tables have been defined. <a href='".$base_url."index.php?section=admin&amp;go=judging_tables&amp;action=add'>Tables must be defined</a> before flights can be assigned to them.</p>";
 } if (($filter != "default") && ($filter != "rounds"))  { ?>

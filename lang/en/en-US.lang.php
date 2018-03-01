@@ -1276,6 +1276,9 @@ $label_entry_shipping = "Entry Shipping";
 $label_jump_to = "Jump to...";
 $label_top = "Top";
 
+// v2.1.12
+$label_bjcp_cider = "Cider Judge";
+
 // -------------------- Headers --------------------
 $header_text_112 = "You do not have sufficient access privileges to perform this action.";
 $header_text_113 = "You can only edit your own account information.";
@@ -1311,6 +1314,9 @@ if (($section == "brewer") || ($section == "register") || ($section == "step2") 
     $brewer_text_032 = "Please provide your organization name.";
     $brewer_text_033 = "Please provide choose a security question.";
     $brewer_text_034 = "Please provide a response to your security question.";
+
+    // v2.1.12
+    $brewer_text_035 = "Have you passed the BJCP Cider Judge exam?";
 }
 
 // -------------------- Entry Info --------------------

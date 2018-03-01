@@ -387,13 +387,10 @@ function score_table_choose($dbTable,$judging_tables_db_table,$judging_scores_db
 	$tables = mysqli_query($connection,$query_tables) or die (mysqli_error($connection));
 	$row_tables = mysqli_fetch_assoc($tables);
 	$totalRows_tables = mysqli_num_rows($tables);
-	//echo $query_tables;
 
 	$r = "";
 
 	if ($totalRows_tables > 0) {
-	//$r = "<select class=\"form-control input-sm bcoem-admin-dashboard-select\" name=\"table_choice_1\" id=\"table_choice_1\" onchange=\"jumpMenu('self',this,0)\">";
-	//$r .= "<option selected disabled>Add scores to...</option>";
 		do {
 		$query_scores = sprintf("SELECT COUNT(*) as 'count' FROM $judging_scores_db_table WHERE scoreTable='%s'", $row_tables['id']);
 		$scores = mysqli_query($connection,$query_scores) or die (mysqli_error($connection));
@@ -401,7 +398,6 @@ function score_table_choose($dbTable,$judging_tables_db_table,$judging_scores_db
 		if ($row_scores['count'] > 0) $a = "edit"; else $a = "add";
         	$r .= "<li class=\"small\"><a href=\"index.php?section=admin&amp;&go=judging_scores&amp;action=".$a."&amp;id=".$row_tables['id']."\">Table ".$row_tables['tableNumber'].": ".$row_tables['tableName']."</a></li>";
 		} while ($row_tables = mysqli_fetch_assoc($tables));
-     //$r .= "</select>";
 	}
 	 else $r = "<li class=\"disabled small\"><a href=\"#\">No tables have been defined</a></li>";
 	 return $r;
@@ -418,8 +414,7 @@ function score_custom_winning_choose($special_best_info_db_table,$special_best_d
 	$r = "";
 
 	if ($totalRows_sbi > 0) {
-	//$r = "<select class=\"form-control input-sm bcoem-admin-dashboard-select\" name=\"sbi_choice_1\" id=\"sbi_choice_1\" onchange=\"jumpMenu('self',this,0)\">";
-	//$r .= "<option>Choose Below:</option>";
+
 		do {
 		$query_scores = sprintf("SELECT COUNT(*) as 'count' FROM $special_best_data_db_table WHERE sid='%s'", $row_sbi['id']);
 		$scores = mysqli_query($connection,$query_scores) or die (mysqli_error($connection));
@@ -427,7 +422,7 @@ function score_custom_winning_choose($special_best_info_db_table,$special_best_d
 		if ($row_scores['count'] > 0) $a = "edit"; else $a = "add";
         	$r .= "<li class=\"small\"><a href=\"index.php?section=admin&amp;&go=special_best_data&amp;action=".$a."&amp;id=".$row_sbi['id']."\">".$row_sbi['sbi_name']."</a></li>";
 		} while ($row_sbi = mysqli_fetch_assoc($sbi));
-     //$r .= "</select>";
+
 	}
 	else {
 		$r = "<li class=\"disabled small\"><a href=\"#\">No custom categories have been defined</a></li>";

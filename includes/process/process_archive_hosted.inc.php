@@ -6,7 +6,6 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 
 	require(INCLUDES.'scrubber.inc.php');
 	require(INCLUDES.'db_tables.inc.php');
-	require(LIB.'common.lib.php');
 
 	$dbTable = "default";
 
@@ -59,10 +58,14 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 	foreach ($tables_array as $table) {
 
 		$updateSQL = "TRUNCATE ".$table.";";
+		if ($table == $brwer_db_table)
 		mysqli_real_escape_string($connection,$updateSQL);
 		$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 
 	}
+
+	// Delete any uploaded scoresheets in the user_docs directory
+	rdelete(USER_DOCS);
 
 	// If not retaining participant data, insert current user's info into new "users" and "brewer" table
 	if ($filter == "default") {

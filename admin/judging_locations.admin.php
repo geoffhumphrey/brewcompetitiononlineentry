@@ -714,7 +714,7 @@ if (($output_add_edit) && ($msg != 9)) { ?>
         	<span class="input-group-addon"><span class="fa fa-star"></span></span>
         </div>
         <span class="help-block with-errors"></span>
-		<span id="helpBlock" class="help-block">Provide the number of judging rounds anticipated for this location (<strong>not</strong> including Best of Show).</span>
+		<span id="helpBlock" class="help-block">Provide the number of judging rounds anticipated for this session (see the <a href="https://www.bjcp.org/rules.php" target="_blank">BJCP's definition of a session</a> in their rules).</span>
 	</div>
 </div><!-- ./Form Group -->
 
@@ -730,20 +730,3 @@ if (($output_add_edit) && ($msg != 9)) { ?>
 <input type="hidden" name="relocate" value="<?php echo $base_url."index.php?section=admin&amp;go=judging"; ?>">
 </form>
 <?php } ?>
-
-
-<?php if (($action == "update") && ($bid == "default")) {  ?>
-<table>
- <tr>
-   <td class="dataLabel">Assign <?php echo brewer_assignment($filter,"3","default","default","default"); ?> To:</td>
-   <td class="data">
-   <select class="selectpicker" name="judge_loc" id="judge_loc" onchange="jumpMenu('self',this,0)" data-width="auto">
-	<option value=""></option>
-    <?php do { ?>
-	<option value="index.php?section=admin&amp;action=update&amp;go=judging&amp;filter=<?php echo $filter; ?>&amp;bid=<?php echo $row_judging['id']; ?>"><?php  echo $row_judging['judgingLocName']." ("; echo getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_judging['judgingDate'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "long", "date-time").")"; ?></option>
-    <?php } while ($row_judging = mysqli_fetch_assoc($judging)); ?>
-   </select>
-  </td>
-</tr>
-</table>
-<?php } // end if (($action == "update") && ($bid == "default")) ?>

@@ -71,13 +71,13 @@ define('CDN', TRUE);
  * sandbox enfvironment, etc.
  * Default is FALSE
  */
-define('TESTING', FALSE);
+define('TESTING', TRUE);
 
 /**
  * Enable the following to display php errors on screen.
  * Default is FALSE
  */
-define('DEBUG', FALSE);
+define('DEBUG', TRUE);
 
 /**
  * Enable the following to show a collapsable table of all

@@ -156,7 +156,7 @@ if ($go != "admin") echo $info_msg;
 
 <script type='text/javascript'>//<![CDATA[
 $(document).ready(function(){
-	
+
 	// hide divs on load if no value
 	$("#brewerClubsOther").hide("fast");
 	$("#brewerJudgeFields").hide("fast");
@@ -191,32 +191,32 @@ $(document).ready(function(){
 	<?php } ?>
 
 	$('input[type="radio"]').click(function() {
-		
+
 		if($(this).attr('id') == 'brewerJudge_0') {
 			$("#brewerJudgeFields").show("slow");
 		}
-		
+
 		if($(this).attr('id') == 'brewerJudge_1') {
             $("#brewerJudgeFields").hide("fast");
        	}
 
    	});
-	
-	
+
+
 	<?php if (($action == "edit") && ($row_brewer['brewerSteward'] == "Y")) { ?>
 	$("#brewerStewardFields").show("slow");
 	<?php } ?>
-	
+
 	$('input[type="radio"]').click(function() {
-		
+
 		if($(this).attr('id') == 'brewerSteward_0') {
 			$("#brewerStewardFields").show("slow");
 		}
-		
+
 		if($(this).attr('id') == 'brewerSteward_1') {
             $("#brewerStewardFields").hide("fast");
        	}
-		
+
    	});
 
 });
@@ -547,6 +547,22 @@ $(document).ready(function(){
                 <span class="help-block"><?php echo $brewer_text_007; ?></span>
             </div>
         </div><!-- ./Form Group -->
+
+        <div class="form-group"><!-- Form Group Radio INLINE -->
+            <label for="brewerJudgeMead" class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label_bjcp_cider; ?></label>
+            <div class="col-lg-9 col-md-9 col-sm-8 col-xs-12">
+                <div class="input-group">
+                    <!-- Input Here -->
+                    <label class="radio-inline">
+                        <input type="radio" name="brewerJudgeCider" value="Y" id="brewerJudgeCider_0" <?php if (($action == "edit") && ($row_brewer['brewerJudgeCider'] == "Y")) echo "CHECKED"; ?>> <?php echo $label_yes; ?>
+                    </label>
+                    <label class="radio-inline">
+                        <input type="radio" name="brewerJudgeCider" value="N" id="brewerJudgeCider_1" <?php if (($action == "edit") && (($row_brewer['brewerJudgeCider'] == "N") || ($row_brewer['brewerJudgeCider'] == ""))) echo "CHECKED"; ?>> <?php echo $label_no; ?>
+                    </label>
+                </div>
+                <span class="help-block"><?php echo $brewer_text_035; ?></span>
+            </div>
+        </div><!-- ./Form Group -->
         <?php $judge_array = explode(",",$row_brewer['brewerJudgeRank']); ?>
         <div class="form-group"><!-- Form Group Radio STACKED -->
             <label for="brewerJudgeRank" class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label_bjcp_rank; ?></label>
@@ -624,6 +640,16 @@ $(document).ready(function(){
                     <div class="checkbox">
                         <label>
                             <input type="checkbox" name="brewerJudgeRank[]" value="Professional Brewer" <?php if (($action == "edit") && in_array("Professional Brewer",$judge_array)) echo "CHECKED"; ?>> Professional Brewer
+                        </label>
+                    </div>
+                    <div class="checkbox">
+                        <label>
+                            <input type="checkbox" name="brewerJudgeRank[]" value="Professional Mead Maker" <?php if (($action == "edit") && in_array("Professional Mead Maker",$judge_array)) echo "CHECKED"; ?>> Professional Mead Maker
+                        </label>
+                    </div>
+                    <div class="checkbox">
+                        <label>
+                            <input type="checkbox" name="brewerJudgeRank[]" value="Professional Cider Maker" <?php if (($action == "edit") && in_array("Professional Cider Maker",$judge_array)) echo "CHECKED"; ?>> Professional Cider Maker
                         </label>
                     </div>
                     <div class="checkbox">
@@ -716,11 +742,11 @@ $(document).ready(function(){
         </div>
         </div><!-- ./ brewerJudgeFields -->
         <?php } // end if (!$judge_limit) ?>
-        
-        
-        
-        
-        
+
+
+
+
+
         <?php if (!$steward_limit) { ?>
         <!-- Stewarding preferences -->
         <div class="form-group"><!-- Form Group Radio INLINE -->

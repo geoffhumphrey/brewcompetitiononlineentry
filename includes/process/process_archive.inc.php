@@ -11,6 +11,8 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 	$config_html_purifier = HTMLPurifier_Config::createDefault();
 	$purifier = new HTMLPurifier($config_html_purifier);
 
+
+
 	$dbTable = "default";
 
 	$suffix = strtr($_POST['archiveSuffix'], $space_remove);
@@ -24,53 +26,23 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 	if ($row_suffix_check['count'] > 0) {
 			$redirect_go_to = sprintf("Location: %s", $base_url."index.php?section=admin&go=archive&msg=6");
 	}
-	else {
 
-		function is_dir_empty($dir) {
-			foreach (new DirectoryIterator($dir) as $fileInfo) {
-				if($fileInfo->isDot()) continue;
-				return false;
-			}
-			return true;
-		}
+	else {
 
 		//Check if any documents are in the user_docs folder
 
-		if (!is_dir_empty(USER_DOCS)) {
+		if ((isset($_POST['keepScoresheets'])) && (!is_dir_empty(USER_DOCS))) {
 
-			// Define directories
-			$source = USER_DOCS;
-			$destination = USER_DOCS.$suffix;
+			// Define directories and run function
+			$src = USER_DOCS;
+			$dest = USER_DOCS.$suffix;
+			rmove($src, $dest);
 
-			if (!is_dir($destination)) {
+		}
 
-				$oldmask = umask(0);
-
-				mkdir($destination, 0777, true);
-
-				// Get array of all source files
-				$files = scandir($source);
-
-				// "Move" files from the root folder into the subfolder
-				// Making sure to only move files and NOT directories that exist in the root
-				foreach ($files as $file) {
-
-					$old = $source.$file;
-					$new = $destination.DIRECTORY_SEPARATOR.$file;
-
-					if ((in_array($file, array(".",".."))) && (!is_dir($file))) {
-
-						if (copy($old, $new)) {
-							unlink($file);
-						}
-					}
-
-				}
-
-				umask($oldmask);
-
-			}
-
+		if (!isset($_POST['keepScoresheets'])) {
+			// Erase all files in the user_docs directory
+			rdelete(USER_DOCS);
 		}
 
 		if (!isset($_POST['keepParticipants'])) {

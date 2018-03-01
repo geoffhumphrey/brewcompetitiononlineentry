@@ -152,16 +152,9 @@ if (((isset($_SERVER['HTTP_REFERER'])) && ($referrer['host'] == $_SERVER['SERVER
 
 	elseif ($action == "delete_scoresheets") {
 
-		$file_mimes = array('image/jpeg','image/jpg','image/gif','image/png','application/pdf','image/bmp','image/tiff','image/svg+xml');
-
-		$files = new FilesystemIterator(USER_DOCS);
-
-		foreach($files as $file) {
-			$mime = mime_content_type($file->getPathname());
-			if (in_array($mime, $file_mimes)) unlink($file);
-		}
-
-		$redirect_go_to = sprintf("Location: %s", $base_url."index.php?section=admin&go=upload_scoresheets&action=".$filter."&msg=31");
+		rdelete(USER_DOCS);
+		if ($filter == "admin-dashboard") $redirect_go_to = sprintf("Location: %s", $base_url."index.php?section=admin&msg=31");
+		else $redirect_go_to = sprintf("Location: %s", $base_url."index.php?section=admin&go=upload_scoresheets&action=".$filter."&msg=31");
 
 	}
 

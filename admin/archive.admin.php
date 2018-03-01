@@ -1,5 +1,5 @@
 <?php
-require(DB.'archive.db.php'); 
+require(DB.'archive.db.php');
 
 $table_header1 = $label_users;
 $table_header2 = $label_participants;
@@ -37,7 +37,7 @@ $table_header7 = $label_actions;
 	<a class="btn btn-default" href="<?php echo $base_url; ?>index.php?section=admin&amp;go=archive"><span class="fa fa-arrow-circle-left"></span> Archives</a>
 </div><!-- ./button group -->
 <form data-toggle="validator" role="form" id="formfield" class="form-horizontal" action="<?php echo $base_url; ?>includes/process.inc.php?action=archive" method="post" name="form1">
-<input type="hidden" name="action" value="add_form" /> 
+<input type="hidden" name="action" value="add_form" />
 <p><?php echo $archive_text_010; ?></p>
 <!-- Form Group REQUIRED Text Input -->
 <div class="form-group">
@@ -91,6 +91,11 @@ $table_header7 = $label_actions;
             <div class="checkbox">
                 <label>
                     <input type="checkbox" name="keepSponsors" id="retain_3" value="Y"> <?php echo $label_sponsors; ?>
+                </label>
+            </div>
+            <div class="checkbox">
+                <label>
+                    <input type="checkbox" name="keepScoresheets" id="retain_6" value="Y"> Uploaded Scoresheets <small>(files will be moved to a sub-folder of the user_docs directory)</small>
                 </label>
             </div>
         </div>
@@ -169,53 +174,53 @@ $table_header7 = $label_actions;
   <?php do { ?>
   <tr>
     <td>
-    <?php 
+    <?php
 	$db = $prefix."brewer_".$row_archive['archiveSuffix'];
 	$count = get_archive_count($db);
 	if ($count > 0) { ?>
     	<a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=participants&amp;dbTable=<?php echo $db;  ?>"><?php echo $row_archive['archiveSuffix']; ?></a> (<?php echo $count; ?>)
-    <?php } else echo $row_archive['archiveSuffix']. " - Not Archived"; 
+    <?php } else echo $row_archive['archiveSuffix']. " - Not Archived";
 	?>
     </td>
     <td>
-    <?php 
+    <?php
 	$db = $prefix."brewing_".$row_archive['archiveSuffix'];
 	$count = get_archive_count($db);
 	if ($count > 0) { ?>
     	<a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=entries&amp;dbTable=<?php echo $db; ?>"><?php echo $row_archive['archiveSuffix']; ?></a> (<?php echo $count; ?>)
-    <?php }  else echo $row_archive['archiveSuffix']. " - Not Archived";  
+    <?php }  else echo $row_archive['archiveSuffix']. " - Not Archived";
 	?>
     </td>
     <td>
-    <?php 
+    <?php
 	$db = $prefix."judging_tables_".$row_archive['archiveSuffix'];
 	if (table_exists($db)) {
 	$count = get_archive_count($db);
 	if ($count > 0) { ?>
     	<a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging_tables&amp;dbTable=<?php echo $db; ?>"><?php echo $row_archive['archiveSuffix']; ?></a> (<?php echo $count; ?>)
-    <?php } 
-	} else echo $row_archive['archiveSuffix']. " - Not Archived"; 
+    <?php }
+	} else echo $row_archive['archiveSuffix']. " - Not Archived";
 	?>
     </td>
     <td>
-    <?php 
+    <?php
 	$db = $prefix."judging_scores_".$row_archive['archiveSuffix'];
 	if (table_exists($db)) {
 	if (get_archive_count($db) > 0) { ?>
     	<a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging_scores&amp;dbTable=<?php echo $db."&amp;filter=".$row_archive['archiveSuffix']; ?>"><?php echo $row_archive['archiveSuffix']; ?></a>
-    <?php } 
-	} else echo $row_archive['archiveSuffix']. " - Not Archived"; 
+    <?php }
+	} else echo $row_archive['archiveSuffix']. " - Not Archived";
 	?>
     </td>
     <td>
-    <?php 
+    <?php
 	$db = $prefix."judging_scores_bos_".$row_archive['archiveSuffix'];
 	if (table_exists($db)) {
 	if (get_archive_count($db) > 0) { ?>
     	<a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging_scores_bos&amp;dbTable=<?php echo $db."&amp;filter=".$row_archive['archiveSuffix']; ?>"><?php echo $row_archive['archiveSuffix']; ?></a>
     </td>
-    <?php } 
-	} else echo $row_archive['archiveSuffix']. " - Not Archived"; 
+    <?php }
+	} else echo $row_archive['archiveSuffix']. " - Not Archived";
 	?>
     <td><a href="<?php echo $base_url; ?>includes/process.inc.php?section=<?php echo $section; ?>&amp;go=<?php echo $go; ?>&amp;filter=<?php echo $row_archive['archiveSuffix']; ?>&amp;dbTable=<?php echo $archive_db_table; ?>&amp;action=delete&amp;id=<?php echo $row_archive['id']; ?>" data-toggle="tooltip" data-placement="top" title=" <?php echo $label_delete." ".$row_archive['archiveSuffix']; ?>" data-confirm="<?php echo $archive_text_015." ".$row_archive['archiveSuffix']; ?>"><span class="fa fa-lg fa-trash-o"></span></a></td>
   </tr>

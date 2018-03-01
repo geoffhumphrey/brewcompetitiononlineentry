@@ -54,7 +54,7 @@
     <label for="jPrefsBottleNum" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Number of Bottles Required per Entry</label>
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
             <input class="form-control" id="jPrefsBottleNum" name="jPrefsBottleNum" type="text" value="<?php // if ($section == "step8") echo "2"; else echo $_SESSION['jPrefsBottleNum']; ?>" placeholder="" required>
-            
+
         <span id="helpBlock" class="help-block"><p>Most competitions require between two and four bottles.</span>
     </div>
 </div>
@@ -64,7 +64,7 @@
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
         <!-- Input Here -->
             <input class="form-control" id="jPrefsCapJudges" name="jPrefsCapJudges" type="text" value="<?php echo $_SESSION['jPrefsCapJudges']; ?>" placeholder="">
-            
+
         <span id="helpBlock" class="help-block"><p>Limit to the number of judges that may sign up. Leave blank for no limit.</span>
     </div>
 </div><!-- ./Form Group -->
@@ -74,7 +74,7 @@
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
         <!-- Input Here -->
             <input class="form-control" id="jPrefsCapStewards" name="jPrefsCapStewards" type="text" value="<?php echo $_SESSION['jPrefsCapStewards']; ?>" placeholder="">
-            
+
         <span id="helpBlock" class="help-block"><p>Limit to the number of stewards that may sign up. Leave blank for no limit.</span>
     </div>
 </div><!-- ./Form Group -->
@@ -89,7 +89,7 @@
 	</div><!-- ./Form Group -->
 </div>
 <div class="form-group"><!-- Form Group NOT REQUIRED Text Input -->
-	<label for="jPrefsRounds" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Maximum Rounds per Location</label>
+	<label for="jPrefsRounds" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Maximum Rounds per Session</label>
 	<div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
 		<!-- Input Here -->
 			<input class="form-control" id="jPrefsRounds" name="jPrefsRounds" type="text" value="<?php echo $_SESSION['jPrefsRounds']; ?>" placeholder="" required>

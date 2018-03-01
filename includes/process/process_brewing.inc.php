@@ -823,7 +823,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 				if (isset($_POST['brewYeastForm'])) $updateSQL .= "brewYeastForm=".GetSQLValueString(filter_var($_POST['brewYeastForm'],FILTER_SANITIZE_STRING),"text").", ";
 				if (isset($_POST['brewYeastType'])) $updateSQL .= "brewYeastType=".GetSQLValueString(filter_var($_POST['brewYeastType'],FILTER_SANITIZE_STRING),"text").", ";
 				$updateSQL .= "brewYeastAmount=". GetSQLValueString(filter_var($_POST['brewYeastAmount'],FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION),"text").", ";
-				if (isset($_POST['brewYeastStarter'])) $updateSQL .= "brewYeastStarter=". GetSQLValueString(filter_var($_POST['brewYeastStarter']),FILTER_SANITIZE_STRING,"text").", ";
+				if (isset($_POST['brewYeastStarter'])) $updateSQL .= "brewYeastStarter=". GetSQLValueString(filter_var($_POST['brewYeastStarter'],FILTER_SANITIZE_STRING),"text").", ";
 				$updateSQL .= "brewYeastNutrients=". GetSQLValueString(filter_var($_POST['brewYeastNutrients'],FILTER_SANITIZE_STRING),"text").", ";
 				$updateSQL .= "brewOG=". GetSQLValueString(filter_var($_POST['brewOG'],FILTER_SANITIZE_STRING),"text").", ";
 				$updateSQL .= "brewFG=".GetSQLValueString(filter_var($_POST['brewFG'],FILTER_SANITIZE_STRING),"text").", ";

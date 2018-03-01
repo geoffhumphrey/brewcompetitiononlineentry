@@ -707,6 +707,24 @@ if (SINGLE) {
 
 }
 
+// ----------------------------------------------- 2.1.12 ----------------------------------------------
+// Add Certified Cider Judge designation
+// -----------------------------------------------------------------------------------------------------
+if (!check_update("brewerJudgeCider", $prefix."brewer")) {
+
+	$updateSQL = sprintf("ALTER TABLE `%s` ADD `brewerJudgeCider` CHAR(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL;",$prefix."brewer");
+	mysqli_select_db($connection,$database);
+	mysqli_real_escape_string($connection,$updateSQL);
+	$result = mysqli_query($connection,$updateSQL);
+
+	// Set failed logins to 0 for all users
+	$updateSQL = sprintf("UPDATE `%s` SET brewerJudgeCider='N';",$prefix."brewer");
+	mysqli_select_db($connection,$database);
+	mysqli_real_escape_string($connection,$updateSQL);
+	$result = mysqli_query($connection,$updateSQL);
+
+}
+
 // Change the version and version date in the system table
 $updateSQL = sprintf("UPDATE %s SET version='%s', version_date='%s', data_check=%s WHERE id=1", $prefix."system", $current_version, $current_version_date_display,"NOW()");
 mysqli_real_escape_string($connection,$updateSQL);

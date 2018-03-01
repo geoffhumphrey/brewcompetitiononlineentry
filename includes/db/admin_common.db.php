@@ -42,7 +42,7 @@ if (table_exists($judging_tables_db_table)) {
 		if (SINGLE) {
 
 			$query_tables = sprintf("SELECT * FROM $judging_tables_db_table WHERE comp_id='%s'", $_SESSION['comp_id']);
-			if (($go == "judging_scores") || (($section == "table_cards") && ($go == "judging_tables"))) $query_tables .= " ORDER BY tableNumber ASC";
+			if (($go == "judging_tables") || ($go == "judging_scores") || (($section == "table_cards") && ($go == "judging_tables"))) $query_tables .= " ORDER BY tableNumber ASC";
 			if (($section == "table_cards") && ($go == "judging_locations")) $query_tables = sprintf("SELECT a.*, b.assignRound FROM $judging_tables_db_table a, $judging_assignments_db_table b WHERE a.comp_id = '%s' AND b.comp_id = '%s' AND a.id = b.assignTable AND a.tableLocation = '%s' AND b.assignRound = '%s' GROUP BY b.assignTable ORDER BY tableNumber", $_SESSION['comp_id'], $_SESSION['comp_id'], $location, $round);
 
 			$query_tables_edit = sprintf("SELECT * FROM $judging_tables_db_table WHERE comp_id='%s'", $_SESSION['comp_id']);
@@ -54,7 +54,7 @@ if (table_exists($judging_tables_db_table)) {
 		else {
 
 			$query_tables = "SELECT * FROM $judging_tables_db_table";
-			if (($go == "judging_scores") || (($section == "table_cards") && ($go == "judging_tables"))) $query_tables .= " ORDER BY tableNumber ASC";
+			if (($go == "judging_tables") || ($go == "judging_scores") || (($section == "table_cards") && ($go == "judging_tables"))) $query_tables .= " ORDER BY tableNumber ASC";
 			if (($section == "table_cards") && ($go == "judging_locations")) $query_tables = sprintf("SELECT a.*, b.assignRound FROM $judging_tables_db_table a, $judging_assignments_db_table b WHERE a.id = b.assignTable AND a.tableLocation = '%s' AND b.assignRound = '%s' GROUP BY b.assignTable ORDER BY tableNumber", $location, $round);
 
 			$query_tables_edit = "SELECT * FROM $judging_tables_db_table";

@@ -129,22 +129,22 @@ if (($action == "default") && ($filter == "default")) {
 			$flight_count = table_choose($section,$go,$action,$row_tables_edit['id'],$view,"default","flight_choose");
 			$flight_count = explode("^",$flight_count);
 
-			$flight_choose .= "<option value=\"".$base_url;
+			$flight_choose .= "<li class=\"small\"><a href=\"".$base_url;
 			$flight_choose .= "index.php?section=admin&amp;go=judging_flights&amp;filter=define&amp;action=";
 			if ($flight_count[0] > 0) $flight_choose .= "edit";
 			else $flight_choose .= "add";
 			$flight_choose .= "&amp;id=".$row_tables_edit['id']."\">";
 			$flight_choose .= "#".$row_tables_edit['tableNumber'].": ".$row_tables_edit['tableName'];
-			$flight_choose .= "</option>";
+			$flight_choose .= "</a></li>";
 
 			$score_count = table_count_total($row_tables_edit['id']);
-			$score_choose .= "<option value=\"".$base_url;
+			$score_choose .= "<li class=\"small\"><a href=\"".$base_url;
 			$score_choose .= "index.php?section=admin&amp;go=judging_scores&amp;action=";
 			if ($score_count  > 0) $score_choose .= "edit";
 			else $score_choose .= "add";
 			$score_choose .= "&amp;id=".$row_tables_edit['id']."\">";
 			$score_choose .= "#".$row_tables_edit['tableNumber'].": ".$row_tables_edit['tableName'];
-			$score_choose .= "</option>";
+			$score_choose .= "</a></li>";
 
 		} while ($row_tables_edit = mysqli_fetch_assoc($tables_edit));
 
@@ -152,8 +152,8 @@ if (($action == "default") && ($filter == "default")) {
 
 	else {
 
-		$score_choose .= "<option disabled>No tables have been defined.</option>";
-		$flight_choose .= "<option disabled>No tables have been defined.</option>";
+		$score_choose .= "<li class=\"small\"><a class=\"disabled\">No tables have been defined.</a></li>";
+		$flight_choose .= "<li class=\"small\"><a class=\"disabled\">No tables have been defined.</a></li>";
 
 	}
 
@@ -706,16 +706,14 @@ $(document).ready(function() {
 							<div class="panel-body">
                             	<div class="row">
                                 	<div class="col col-lg-8 col-md-12 col-sm-12 col-xs-12">
-                                     <?php if ($_SESSION['jPrefsQueued'] == "N") { ?>
-                                        <select class="selectpicker" name="tables" id="tables" onchange="jumpMenu('self',this,0)" data-size="10" data-width="auto">
-                                        <option value="" selected disabled>For Table...</option>
-                                         <?php echo $flight_choose; ?>
-                                        </select>
-                                     <?php } else { ?>
-                                        <ul class="list-unstyled">
-											<li>Disabled... Queued judging selected</li>
-                                    	</ul>
-                                   	<?php } ?>
+                                        <div class="btn-group" role="group" aria-label="modals">
+                                            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                For Table... <span class="caret"></span>
+                                            </button>
+                                            <ul class="dropdown-menu">
+                                                <?php echo $flight_choose; ?>
+                                            </ul>
+                                        </div>
                                 	</div>
                                 </div><!-- ./row -->
 							</div>
@@ -765,18 +763,17 @@ $(document).ready(function() {
 								<ul class="list-unstyled">
                                 	<li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging_scores">All Scores</a></li>
                                 </ul>
-                            	<div class="row">
-                                	<div class="col col-lg-6 col-md-12 col-sm-12 col-xs-12">
-                                        <select class="selectpicker" name="tables" id="tables" onchange="jumpMenu('self',this,0)" data-size="10" data-width="auto">
-                                        <option value="" selected disabled>For Table...</option>
-                                            <?php echo $score_choose; ?>
-                                        </select>
-                                	</div>
-                                </div><!-- ./row -->
+                                <div class="btn-group" role="group" aria-label="modals">
+                                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        For Table... <span class="caret"></span>
+                                    </button>
+                                    <ul class="dropdown-menu">
+                                        <?php echo $score_choose; ?>
+                                    </ul>
+                                </div>
 							</div>
 						</div>
 					</div><!-- ./accordion -->
-
                     <div class="panel panel-default">
 						<div class="panel-heading">
 							<h4 class="panel-title">
@@ -1165,36 +1162,27 @@ if ($already_scored) {
     });
 </script>
 <?php }
-} // end if ($action == "edit") ?>
-
-
-<?php if (($action == "assign") && ($filter == "default")) { ?>
-<div class="form-horizontal">
-    <div class="form-group"><!-- Form Group NOT REQUIRED Select -->
-        <label for="assign_judges" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Assign Judges To</label>
-        <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
-        <!-- Input Here -->
-        <select class="selectpicker" name="assign_judges" id="assign_judges" onchange="jumpMenu('self',this,0)" data-live-search="true" data-size="10" data-width="auto">
-            <option value="" disabled selected>Choose Below...</option>
-            <?php do { ?>
-            <option value="index.php?section=admin&amp;action=assign&amp;go=judging_tables&amp;filter=judges&amp;id=<?php echo $row_tables['id']; ?>"><?php echo "Table ".$row_tables['tableNumber'].": ".$row_tables['tableName']; ?></option>
-            <?php } while ($row_tables = mysqli_fetch_assoc($tables)); ?>
-       </select>
-        </div>
-    </div><!-- ./Form Group -->
-
-    <div class="form-group"><!-- Form Group NOT REQUIRED Select -->
-        <label for="assign_judges" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Assign Stewards To</label>
-        <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
-        <!-- Input Here -->
-        <select class="selectpicker" name="assign_judges" id="assign_judges" onchange="jumpMenu('self',this,0)" data-live-search="true" data-size="10" data-width="auto">
-            <option value="" disabled selected>Choose Below...</option>
-            <?php do { ?>
-            <option value="index.php?section=admin&amp;action=assign&amp;go=judging_tables&amp;filter=stewards&amp;id=<?php echo $row_tables_edit['id']; ?>"><?php echo "Table ".$row_tables_edit['tableNumber']." ".$row_tables_edit['tableName']; ?></option>
-            <?php } while ($row_tables_edit = mysqli_fetch_assoc($tables_edit)); ?>
-       </select>
-        </div>
-    </div><!-- ./Form Group -->
+} // end if ($action == "edit")
+if (($action == "assign") && ($filter == "default")) { ?>
+<div class="btn-group" role="group" aria-label="modals">
+    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        Assign Judges To... <span class="caret"></span>
+    </button>
+    <ul class="dropdown-menu">
+        <?php do { ?>
+        <li class="small"><a href="<?php echo $base_url; ?>index.php?section=admin&amp;action=assign&amp;go=judging_tables&amp;filter=judges&amp;id=<?php echo $row_tables['id']; ?>"><?php echo "Table ".$row_tables['tableNumber'].": ".$row_tables['tableName']; ?></a></li>
+        <?php } while ($row_tables = mysqli_fetch_assoc($tables)); ?>
+    </ul>
+</div>
+<div class="btn-group" role="group" aria-label="modals">
+    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        Assign Stewards To... <span class="caret"></span>
+    </button>
+    <ul class="dropdown-menu">
+        <?php do { ?>
+        <li class="small"><a href="<?php echo $base_url; ?>index.php?section=admin&amp;action=assign&amp;go=judging_tables&amp;filter=stewards&amp;id=<?php echo $row_tables_edit['id']; ?>"><?php echo "Table ".$row_tables_edit['tableNumber'].": ".$row_tables_edit['tableName']; ?></a></li>
+        <?php } while ($row_tables_edit = mysqli_fetch_assoc($tables_edit)); ?>
+    </ul>
 </div>
 <?php } ?>
 <?php if (($action == "assign") && ($filter != "default") && ($id != "default")) include ('judging_assign.admin.php'); ?>

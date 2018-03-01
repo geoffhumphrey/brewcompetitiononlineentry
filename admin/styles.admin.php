@@ -503,22 +503,6 @@ $style_type_2 = style_type($row_styles['brewStyleType'],"1","bcoe");
 include (INCLUDES.'form_js.inc.php');
 
 } ?>
-<?php if (($action == "default") && ($filter == "judging") && ($bid == "default")) { ?>
-<table>
- <tr>
-   <td class="dataLabel">Choose a judging location:</td>
-   <td class="data">
-   <select class="selectpicker" name="judge_loc" id="judge_loc" onchange="jumpMenu('self',this,0)" data-size="10" data-width="auto">
-	<option value=""></option>
-    <?php do { ?>
-	<option value="index.php?section=admin&amp;go=styles&amp;filter=judging&amp;bid=<?php echo $row_judging['id']; ?>"><?php  echo $row_judging['judgingLocName']." ("; echo getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_judging['judgingDate'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "long", "date-time").")"; ?></option>
-    <?php } while ($row_judging = mysqli_fetch_assoc($judging)); ?>
-  </select>
-  </td>
-</tr>
-</table>
-<?php } ?>
-
 <?php if (($action == "default") && ($filter == "orphans") && ($bid == "default")) { ?>
 <h3>Styles Without a Valid Style Type</h3>
 <?php

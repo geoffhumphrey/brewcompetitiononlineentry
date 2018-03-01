@@ -231,13 +231,14 @@ if (is_array($nonranked_judge)) $nonranked = array_sum($nonranked_judge); else $
 ?>
 <div class="bcoem-admin-element hidden-print">
 	<div class="btn-group" role="group" aria-label="modals">
-        <!-- Input Here -->
-        <select class="selectpicker" name="assign_table" id="assign_table" onchange="jumpMenu('self',this,0)" data-width="auto">
-        <option value="" disabled selected>Assign <?php if ($filter == "stewards") echo "Stewards"; else echo "Judges"; ?> to Another Table...</option>
+        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Assign <?php if ($filter == "stewards") echo "Stewards"; else echo "Judges"; ?> to Another Table... <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu">
             <?php do { ?>
-				<option value="index.php?section=admin&amp;action=assign&amp;go=judging_tables&amp;filter=<?php echo $filter; ?>&amp;id=<?php echo $row_tables['id']; ?>"><?php echo "Table ".$row_tables['tableNumber'].": ".$row_tables['tableName']; ?></option>
-    		<?php } while ($row_tables = mysqli_fetch_assoc($tables)); ?>
-        </select>
+            <li class="small"><a href="<?php echo $base_url; ?>index.php?section=admin&amp;action=assign&amp;go=judging_tables&amp;filter=<?php echo $filter; ?>&amp;id=<?php echo $row_tables['id']; ?>"><?php echo "Table ".$row_tables['tableNumber'].": ".$row_tables['tableName']; ?></a></li>
+            <?php } while ($row_tables = mysqli_fetch_assoc($tables)); ?>
+        </ul>
     </div>
     <div class="btn-group" role="group" aria-label="modals">
     		<?php if (!empty($output_available_modal_body)) { ?>

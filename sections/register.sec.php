@@ -242,24 +242,20 @@ if (($section != "admin") && ($action != "print")) echo $warning1;
 if (NHC) echo $warning2;
 echo $header1_1;
 echo $page_info1;
-
 if ($go == "default") {  ?>
 <!-- DEFAULT screen to choose role - Will be deprecated in 2.1.9 -->
-<form class="form-horizontal" name="judgeChoice" id="judgeChoice">
-	<div class="form-group">
-		<label for="judge_steward" class="col-lg-6 col-md-6 col-sm-6 col-xs-12 control-label"><?php echo $label_register_judge; ?></label>
-		<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-			<div class="input-group">
-				<select class="selectpicker" name="judge_steward" id="judge_steward" onchange="jumpMenu('self',this,0)" data-width="auto">
-					<option value=""></option>
-                    <option value="<?php echo build_public_url("register","entrant","default","default",$sef,$base_url); ?>"><?php echo $label_entrant; ?></option>
-					<option value="<?php echo build_public_url("register","judge","default","default",$sef,$base_url); ?>"><?php echo $label_judge; ?></option>
-					<option value="<?php echo build_public_url("register","steward","default","default",$sef,$base_url); ?>"><?php echo $label_steward; ?></option>
-
-				</select>
-			</div>
-		</div>
-	</div><!-- Form Group -->
+<p><strong><?php echo $label_register_judge; ?></strong></p>
+<div class="row">
+    <div class="col col-sm-4">
+        <a class="btn btn-primary btn-block" href="<?php echo build_public_url("register","entrant","default","default",$sef,$base_url); ?>">Entrant</a>
+    </div>
+    <div class="col col-sm-4">
+        <a class="btn btn-warning btn-block" href="<?php echo build_public_url("register","judge","default","default",$sef,$base_url); ?>">Judge</a>
+    </div>
+    <div class="col col-sm-4">
+        <a class="btn btn-info btn-block" href="<?php echo build_public_url("register","steward","default","default",$sef,$base_url); ?>">Steward</a>
+    </div>
+</div>
 <input type="hidden" name="relocate" value="<?php echo relocate($relocate,"default",$msg,$id); ?>">
 </form>
 <?php } else { // THIS ELSE ENDS at the end of the script ?>
