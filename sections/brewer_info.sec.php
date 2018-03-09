@@ -474,6 +474,12 @@ if ($show_judge_steward_fields) {
 		$account_display .= "</div>";
 		$account_display .= "</div>";
 		$account_display .= "<div class=\"row bcoem-account-info\">";
+		$account_display .= sprintf("<div class=\"".$display_left_cols."\"><strong>%s</strong></div>",$label_bjcp_cider);
+		$account_display .= "<div class=\"".$display_right_cols."\">";
+		if ($action == "print") $account_display .= yes_no($_SESSION['brewerJudgeCider'],$base_url,3); else $account_display .= yes_no($_SESSION['brewerJudgeCider'],$base_url);
+		$account_display .= "</div>";
+		$account_display .= "</div>";
+		$account_display .= "<div class=\"row bcoem-account-info\">";
 		$account_display .= sprintf("<div class=\"".$display_left_cols."\"><strong>Preferred</strong></div>",$label_judge_preferred);
 		$account_display .= "<div class=\"".$display_right_cols."\">";
 		$account_display .= $judgeLikesDisplay;

@@ -21,6 +21,9 @@ else $brewerJudgeID = "";
 if (isset($_POST['brewerJudgeMead'])) $brewerJudgeMead = sterilize($_POST['brewerJudgeMead']);
 else $brewerJudgeMead = "";
 
+if (isset($_POST['brewerJudgeCider'])) $brewerJudgeCider = sterilize($_POST['brewerJudgeCider']);
+else $brewerJudgeCider = "";
+
 if (isset($_POST['brewerJudgeRank'])) $brewerJudgeRank = $_POST['brewerJudgeRank'];
 else $brewerJudgeRank = "";
 

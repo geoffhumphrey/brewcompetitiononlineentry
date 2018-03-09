@@ -283,7 +283,8 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 				  brewerStaff,
 				  brewerBreweryName,
 
-				  brewerBreweryTTB
+				  brewerBreweryTTB,
+				  brewerJudgeCider
 
 				) VALUES (
 				%s, %s, %s, %s, %s,
@@ -291,7 +292,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 				%s, %s, %s, %s, %s,
 				%s, %s, %s, %s, %s,
 				%s, %s, %s, %s, %s,
-				%s)",
+				%s, %s)",
 							   GetSQLValueString($_POST['uid'], "int"),
 							   GetSQLValueString($first_name, "text"),
 							   GetSQLValueString($last_name, "text"),
@@ -317,7 +318,8 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 							   GetSQLValueString($brewerJudgeNotes, "text"),
 							   GetSQLValueString($brewerStaff, "text"),
 							   GetSQLValueString($brewerBreweryName, "text"),
-							   GetSQLValueString($brewerBreweryTTB, "text")
+							   GetSQLValueString($brewerBreweryTTB, "text"),
+							   GetSQLValueString($brewerJudgeCider, "text")
 				);
 
 				// only if added by an admin.
@@ -374,14 +376,16 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 				  brewerJudgeNotes,
 				  brewerStaff,
 				  brewerBreweryName,
-				  brewerBreweryTTB
+				  brewerBreweryTTB,
+				  brewerJudgeCider
 
 				) VALUES (
 				%s, %s, %s, %s, %s,
 				%s, %s, %s, %s, %s,
 				%s, %s, %s, %s, %s,
 				%s, %s, %s, %s, %s,
-				%s, %s, %s, %s, %s)",
+				%s, %s, %s, %s, %s
+				%s)",
 							   GetSQLValueString($_POST['uid'], "int"),
 							   GetSQLValueString($first_name, "text"),
 							   GetSQLValueString($last_name, "text"),
@@ -406,7 +410,8 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 							   GetSQLValueString($brewerJudgeNotes, "text"),
 							   GetSQLValueString($brewerStaff, "text"),
 							   GetSQLValueString($brewerBreweryName, "text"),
-							   GetSQLValueString($brewerBreweryTTB, "text")
+							   GetSQLValueString($brewerBreweryTTB, "text"),
+							   GetSQLValueString($brewerJudgeMead, "text")
 							   );
 			}
 			//echo $insertSQL;
@@ -575,7 +580,8 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 			brewerJudgeWaiver=%s,
 			brewerStaff=%s,
 			brewerBreweryName=%s,
-			brewerBreweryTTB=%s
+			brewerBreweryTTB=%s,
+			brewerJudgeCider=%s
 			",
 							   GetSQLValueString(sterilize($_POST['uid']), "int"),
 							   GetSQLValueString($first_name, "text"),
@@ -604,7 +610,8 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 							   GetSQLValueString($judgeWaiver, "text"),
 							   GetSQLValueString($brewerStaff, "text"),
 							   GetSQLValueString($brewerBreweryName, "text"),
-							   GetSQLValueString($brewerBreweryTTB, "text")
+							   GetSQLValueString($brewerBreweryTTB, "text"),
+							   GetSQLValueString($brewerJudgeMead, "text")
 							   );
 		// Numbers 999999994 through 999999999 are reserved for NHC applications.
 		if (($brewerAHA < "999999994") || ($brewerAHA == "")) {

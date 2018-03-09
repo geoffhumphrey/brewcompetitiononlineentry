@@ -3,7 +3,7 @@
  * Module:        config.php
  * Description:   This module houses configuration variables for DB connection, etc.
  *
- * Last Modified: October 20, 2017
+ * Last Modified: March 8, 2018
  */
 
 /**
@@ -13,14 +13,19 @@
  */
 
 /**
- * Generally, this line is left alone.
+ * Generally, "localhost" will work for most environments. 
+ * However, some environments may require another hostname.
+ * *** This has been confirmed for GO DADDY shared hosting users.         
+ * *** This article details how to change "localhost" to suit your Go Daddy 
+ *     enviornment.
+ * *** https://www.godaddy.com/help/viewing-your-database-details-with-shared-hosting-accounts-39
  */
 
 $hostname = "localhost";
 
 /**
- * Change the word root to the username for your database (generally the same as
- * your login code for your web hosting company).
+ * Enter the username for your database (generally the same as your login code 
+ * for your web hosting company).
  * INSERT YOUR USERNAME BETWEEN THE DOUBLE-QUOTATION MARKS ("").
  * For example, if your username is fred then the line should read $username = "fred".
  */
@@ -29,7 +34,8 @@ $username = "";
 
 /**
  * INSERT YOUR PASSWORD BETWEEN THE DOUBLE-QUOTATION MARKS ("").
- * For example, if your password is flintstone then the line should read $password = "flintsone".
+ * For example, if your password is flintstone then the line should read 
+ & $password = "flintsone".
  */
 
 $password = "";
@@ -43,7 +49,8 @@ $password = "";
 $database = "";
 
 /**
- * If the database port is different from the default then overwrite as the port integer
+ * If the database port is different from the default then overwrite as the 
+ * port integer
  * Example: $database_port = 3308;
  */
 
@@ -51,8 +58,8 @@ $database_port = ini_get('mysqli.default_port');
 
 /**
  * This line strings the information together and connects to MySQL.
- * If MySQL is not found or the username/password combo is not correct an error will
- * be returned.
+ * If MySQL is not found or the username/password combo is not correct an
+ * error will be returned.
  */
 
 $connection = new mysqli($hostname, $username, $password, $database, $database_port);

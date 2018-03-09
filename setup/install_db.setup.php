@@ -7,7 +7,6 @@ if ($setup_free_access == TRUE) {
 	session_destroy();
 	session_write_close();
 	setcookie(session_name($prefix_session),'',0,'/');
-	session_regenerate_id(true);
 
 	$output = "";
 
@@ -104,6 +103,7 @@ if ($setup_free_access == TRUE) {
 			`brewerJudge` char(1) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
 			`brewerJudgeID` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
 			`brewerJudgeMead` char(1) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+			`brewerJudgeCider` char(1) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
 			`brewerJudgeRank` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
 			`brewerJudgeLikes` mediumtext COLLATE utf8mb4_unicode_ci,
 			`brewerJudgeDislikes` mediumtext COLLATE utf8mb4_unicode_ci,
