@@ -1413,7 +1413,7 @@ $pwd_email_reset_text_005 = "To reset your password, click the link below or cop
 // -------------------- Best Brewer --------------------
 $best_brewer_text_000 = "participating brewers";
 $best_brewer_text_001 = "HM";
-$best_brewer_text_002 = "Scores and tie-breakers have been applied in accordance with the <a href=\"#\" data-toggle=\"modal\" data-target=\"#scoreMethod\">scoring methodology</a>. Numbers reflected are rounded. Hover over or tap the question mark icon (<span class=\"fa fa-question-circle\"></span>) for the actual calculated value.";
+$best_brewer_text_002 = "Scores and tie-breakers have been applied in accordance with the <a href=\"#\" data-toggle=\"modal\" data-target=\"#scoreMethod\">scoring methodology</a>. Numbers reflected are rounded to the hundredth place. Hover over or tap the question mark icon (<span class=\"fa fa-question-circle\"></span>) for the actual calculated value.";
 $best_brewer_text_003 = "Scoring Methodology";
 $best_brewer_text_004 = "Each placing entry is given the following points:";
 $best_brewer_text_005 = "The following tie-breakers have been applied, in order of priority:";
@@ -1429,6 +1429,12 @@ $best_brewer_text_014 = "participating clubs";
 
 // Version 2.1.12
 $dropoff_qualifier_text_001 = "Please pay attention to the notes provided for each drop-off location. There could be earlier deadlines for some drop-off locations listed, particular hours when entries are accepted, certain individuals to leave your entries with, etc. <strong class=\"text-danger\">All entrants are responsible for reading the information provided by the organizers for each drop-off location.</strong>";
+
+$brewer_text_036 = "Since you have chosen \"<em>Other</em>,\" please make sure the club you have entered is not on our list in some similar form.";
+$brewer_text_037 = "For example, you may have entered the acronnym of your club instead of the full name.";
+$brewer_text_038 = "Consistent club names across users is essential if for \"Best Club\" calculations if implemented for this competition.";
+$brewer_text_039 = "The club you entered previously does not match one on our list.";
+$brewer_text_040 = "Please choose from the list or choose <em>Other</em> and enter your club name.";
 
 // ***********************************************************************************
 // END TRANSLATIONS

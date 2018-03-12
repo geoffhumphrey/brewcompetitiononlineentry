@@ -133,6 +133,7 @@ if (!empty($tabs)) {
 		$res = mysqli_query($connection,"show index from {$tab}");
 		$output .= MysqlError($connection);
 		$indicies = array();
+		$count = array();
 
 		while (($row = mysqli_fetch_array($res)) != null) {
 
@@ -331,7 +332,7 @@ $output .= "<li>Style data updated.</li>";
 // Data Update: Update Version in System Table
 // -----------------------------------------------------------
 
-$updateSQL = sprintf("UPDATE %s SET version='%s', version_date='%s' WHERE id='1'",$prefix."system",$current_version,"2016-08-31");
+$updateSQL = sprintf("UPDATE %s SET version='%s', version_date='%s' WHERE id='1'",$prefix."system","2.1.5.0","2016-08-31");
 mysqli_select_db($connection,$database);
 mysqli_real_escape_string($connection,$updateSQL);
 $result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));

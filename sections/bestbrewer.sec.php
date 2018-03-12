@@ -257,14 +257,14 @@ if (($_SESSION['prefsProEdition'] == 0) && ($row_limits['prefsShowBestClub'] != 
 
 			// Build club points table body
 			$table_body2 .= "<tr>";
-			$table_body2 .= "<td nowrap>".$bb_display_position_clubs."</td>";
+			$table_body2 .= "<td nowrap><a name=\"club-".$points_clubs."\"></a>".$bb_display_position_clubs."</td>";
 			$table_body2 .= "<td>".$bestbrewer_clubs[$key]['Clubs']."</td>";
 			$table_body2 .= "<td>".$bestbrewer_clubs[$key]['Places'][0]."</td>";
 			$table_body2 .= "<td>".$bestbrewer_clubs[$key]['Places'][1]."</td>";
 			$table_body2 .= "<td>".$bestbrewer_clubs[$key]['Places'][2]."</td>";
 			if ($show_4th_clubs) $table_body2 .= "<td>".$bestbrewer_clubs[$key]['Places'][3]."</td>";
 			if ($show_HM_clubs) $table_body2 .= "<td>".$bestbrewer_clubs[$key]['Places'][4]."</td>";
-			$table_body2 .= "<td>".floor($points_clubs)." <a href=\"#\" tabindex=\"0\" role=\"button\" data-toggle=\"popover\" data-trigger=\"hover\" data-placement=\"auto top\" data-container=\"body\" title=\"Actual Calculated Value\" data-content=\"".$points_clubs."\"><span class=\"hidden-xs hidden-sm hidden-md hidden-print fa fa-question-circle\"></span></a></td>";
+			$table_body2 .= "<td nowrap>".number_format($points_clubs,2)." <a href=\"#club-".$points_clubs."\"  tabindex=\"0\" role=\"button\" data-toggle=\"popover\" data-trigger=\"hover\" data-placement=\"auto top\" data-container=\"body\" title=\"Actual Calculated Value\" data-content=\"".$points_clubs."\"><span class=\"hidden-xs hidden-sm hidden-md hidden-print fa fa-question-circle\"></span></a></td>";
 			$table_body2 .= "</tr>";
 
 		}
@@ -331,7 +331,7 @@ if ($row_limits['prefsShowBestBrewer'] != 0) {
 		else $bb_display_position = "";
 		if ($bb_position <= $bb_max_position) {
 			$table_body1 .= "<tr>";
-			$table_body1 .= "<td nowrap>".$bb_display_position."</td>";
+			$table_body1 .= "<td nowrap><a name=\"".$points."\"></a>".$bb_display_position."</td>";
 			$table_body1 .= "<td>".$bestbrewer[$key]['Name'];
 			if (array_sum($bestbrewer[$key]['TypeBOS']) > 0) $table_body1 .= sprintf("<small><em><br>** %s %s **</em></small>",$label_bos,$label_participant);
 			$table_body1 .= "</td>";
@@ -340,7 +340,7 @@ if ($row_limits['prefsShowBestBrewer'] != 0) {
 			$table_body1 .= "<td>".$bestbrewer[$key]['Places'][2]."</td>";
 			if ($show_4th) $table_body1 .= "<td>".$bestbrewer[$key]['Places'][3]."</td>";
 			if ($show_HM) $table_body1 .= "<td>".$bestbrewer[$key]['Places'][4]."</td>";
-			$table_body1 .= "<td>".floor($points)." <a href=\"#\" tabindex=\"0\" role=\"button\" data-toggle=\"popover\" data-trigger=\"hover\" data-placement=\"auto top\" data-container=\"body\" title=\"Actual Calculated Value\" data-content=\"".$points."\"><span class=\"hidden-xs hidden-sm hidden-md hidden-print fa fa-question-circle\"></span></a></td>";
+			$table_body1 .= "<td nowrap>".number_format($points,2)." <a href=\"#".$points."\" tabindex=\"0\" role=\"button\" data-toggle=\"popover\" data-trigger=\"hover\" data-placement=\"auto top\" data-container=\"body\" title=\"Actual Calculated Value\" data-content=\"".$points."\"><span class=\"hidden-xs hidden-sm hidden-md hidden-print fa fa-question-circle\"></span></a></td>";
 			if ($_SESSION['prefsProEdition'] == 0) $table_body1 .= "<td class=\"hidden-xs hidden-sm hidden-md\">".$bestbrewer[$key]['Clubs']."</td>";
 			$table_body1 .= "</tr>";
 		}

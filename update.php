@@ -119,6 +119,7 @@ if (file_exists($filename)) {
 							include (UPDATE.'2.0.0.0_update.php');
 							include (UPDATE.'2.1.0.0_update.php');
 							include (UPDATE.'2.1.5.0_update.php');
+							include (UPDATE.'2.1.8.0_update.php');
 							include (UPDATE.'current_update.php');
 						}
 
@@ -133,6 +134,7 @@ if (file_exists($filename)) {
 							include (UPDATE.'2.0.0.0_update.php');
 							include (UPDATE.'2.1.0.0_update.php');
 							include (UPDATE.'2.1.5.0_update.php');
+							include (UPDATE.'2.1.8.0_update.php');
 							include (UPDATE.'current_update.php');
 						}
 
@@ -146,6 +148,7 @@ if (file_exists($filename)) {
 							include (UPDATE.'2.0.0.0_update.php');
 							include (UPDATE.'2.1.0.0_update.php');
 							include (UPDATE.'2.1.5.0_update.php');
+							include (UPDATE.'2.1.8.0_update.php');
 							include (UPDATE.'current_update.php');
 						}
 
@@ -158,6 +161,7 @@ if (file_exists($filename)) {
 							include (UPDATE.'2.0.0.0_update.php');
 							include (UPDATE.'2.1.0.0_update.php');
 							include (UPDATE.'2.1.5.0_update.php');
+							include (UPDATE.'2.1.8.0_update.php');
 							include (UPDATE.'current_update.php');
 						}
 
@@ -169,6 +173,7 @@ if (file_exists($filename)) {
 							include (UPDATE.'2.0.0.0_update.php');
 							include (UPDATE.'2.1.0.0_update.php');
 							include (UPDATE.'2.1.5.0_update.php');
+							include (UPDATE.'2.1.8.0_update.php');
 							include (UPDATE.'current_update.php');
 						}
 
@@ -180,6 +185,7 @@ if (file_exists($filename)) {
 							include (UPDATE.'2.0.0.0_update.php');
 							include (UPDATE.'2.1.0.0_update.php');
 							include (UPDATE.'2.1.5.0_update.php');
+							include (UPDATE.'2.1.8.0_update.php');
 							include (UPDATE.'current_update.php');
 						}
 
@@ -189,6 +195,7 @@ if (file_exists($filename)) {
 							include (UPDATE.'2.0.0.0_update.php');
 							include (UPDATE.'2.1.0.0_update.php');
 							include (UPDATE.'2.1.5.0_update.php');
+							include (UPDATE.'2.1.8.0_update.php');
 							include (UPDATE.'current_update.php');
 						}
 
@@ -197,6 +204,7 @@ if (file_exists($filename)) {
 							include (UPDATE.'2.0.0.0_update.php');
 							include (UPDATE.'2.1.0.0_update.php');
 							include (UPDATE.'2.1.5.0_update.php');
+							include (UPDATE.'2.1.8.0_update.php');
 							include (UPDATE.'current_update.php');
 						}
 
@@ -205,6 +213,7 @@ if (file_exists($filename)) {
 							include (UPDATE.'2.0.0.0_update.php');
 							include (UPDATE.'2.1.0.0_update.php');
 							include (UPDATE.'2.1.5.0_update.php');
+							include (UPDATE.'2.1.8.0_update.php');
 							include (UPDATE.'current_update.php');
 						}
 
@@ -212,17 +221,23 @@ if (file_exists($filename)) {
 						if (($version >= "2000") && ($version < "2100"))  {
 							include (UPDATE.'2.1.0.0_update.php');
 							include (UPDATE.'2.1.5.0_update.php');
+							include (UPDATE.'2.1.8.0_update.php');
 							include (UPDATE.'current_update.php');
 						}
 
 						if (($version >= "2100") && ($version < "2150"))  {
 							include (UPDATE.'2.1.5.0_update.php');
+							include (UPDATE.'2.1.8.0_update.php');
 							include (UPDATE.'current_update.php');
 						}
 
-						// If current version is 2.1.5, only perform the current update
-						// Last update that required this script was 2.1.6
-						if (($version >= "2150") && ($version < "2170"))  {
+
+						if (($version >= "2150") && ($version < "2180"))  {
+							include (UPDATE.'2.1.8.0_update.php');
+							include (UPDATE.'current_update.php');
+						}
+
+						if (($version >= "2180") && ($version < "21120"))  {
 							include (UPDATE.'current_update.php');
 						}
 

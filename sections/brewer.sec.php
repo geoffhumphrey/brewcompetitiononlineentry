@@ -126,11 +126,18 @@ if (($_SESSION['prefsProEdition'] == 0) || (($_SESSION['prefsProEdition'] == 1) 
 
 	// Build Clubs dropdown
 	$club_options = "";
+    $club_alert = "";
     $club_other = FALSE;
 
+    $club_concat = $row_brewer['brewerClubs']."|".$row_brewer['brewerClubs'];
+
 	if ($section != "step2") {
-        $club_concat = $row_brewer['brewerClubs']."|".$row_brewer['brewerClubs'];
-        if  ((!empty($row_brewer['brewerClubs'])) && (!in_array($club_concat,$club_array))) $club_other = TRUE;
+        if ((!empty($row_brewer['brewerClubs'])) && (!in_array($club_concat,$club_array))) {
+            $club_other = TRUE;
+            $club_alert .= sprintf("<div id=\"clubOther\" class=\"alert alert-warning\"><span class=\"fa fa-exclamation-circle\"></span> <strong>%s</strong> %s %s</div>",$brewer_text_036,$brewer_text_037,$brewer_text_038);
+        }
+        // Fail safe from previous versions
+        if ((!$club_other) && (!in_array($club_concat,$club_array))) $club_alert .= sprintf("<div class=\"alert alert-warning\"><span class=\"fa fa-exclamation-circle\"></span> <strong>%s</strong> %s %s</div>",$brewer_text_039,$brewer_text_040,$brewer_text_038);
     }
 
 	foreach ($club_array as $club) {
@@ -141,6 +148,8 @@ if (($_SESSION['prefsProEdition'] == 0) || (($_SESSION['prefsProEdition'] == 1) 
         }
 		$club_options .= "<option value=\"".$club_option[0]."\"".$club_selected.">".$club_option[1]."</option>\n";
 	}
+
+
 
 }
 
@@ -164,16 +173,19 @@ $(document).ready(function(){
 
 	<?php if (($action == "edit") && ($club_other)) { ?>
 	$("#brewerClubsOther").show("slow");
+    $("#clubOther").show("slow");
 	<?php } ?>
 
 	$("#brewerClubs").change(function() {
 
 		if ($("#brewerClubs").val() == "Other") {
 			$("#brewerClubsOther").show("slow");
+            $("#clubOther").show("slow");
 		}
 
 		else  {
 			$("#brewerClubsOther").hide("fast");
+            $("#clubOther").hide("fast");
 		}
 
 	});
@@ -423,6 +435,7 @@ $(document).ready(function(){
             <?php echo $club_options; ?>
         </select>
         <span class="help-block"><?php echo $brewer_text_023; ?></span>
+        <?php echo $club_alert; ?>
         </div>
     </div><!-- ./Form Group -->
 
