@@ -27,7 +27,7 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] == 0)) {
 
 				$date_threshold = sterilize($_POST['dateThreshold']);
 
-				$query_purge_entries = sprintf("SELECT id FROM %s", $brewing_db_table);
+				$query_purge_entries = sprintf("SELECT id,brewJudgingNumber FROM %s", $brewing_db_table);
 				$query_purge_entries .= sprintf(" WHERE brewUpdated < '%s' OR brewUpdated IS NULL", $date_threshold);
 				if (SINGLE) $query_purge_entries .= sprintf(" AND comp_id='%s'",$_SESSION['comp_id']);
 				$purge_entries = mysqli_query($connection,$query_purge_entries) or die (mysqli_error($connection));
@@ -54,6 +54,19 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] == 0)) {
 						mysqli_real_escape_string($connection,$updateSQL);
 						$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 
+						// Delete any associated scoresheet
+						$scoresheet_file_name_entry = sprintf("%06s",$row_purge_entries['id']).".pdf";
+						$scoresheet_file_name_judging = sprintf("%06s",$row_purge_entries['brewJudgingNumber']).".pdf";
+						$scoresheetfile_entry = USER_DOCS.strtolower($scoresheet_file_name_entry);
+						$scoresheetfile_judging = USER_DOCS.strtolower($scoresheet_file_name_judging);
+
+						if ((file_exists($scoresheetfile_entry)) && ($_SESSION['prefsDisplaySpecial'] == "E")) {
+							unlink($scoresheetfile_entry);
+						}
+
+						elseif ((file_exists($scoresheetfile_judging)) && ($_SESSION['prefsDisplaySpecial'] == "J")) {
+							unlink($scoresheetfile_judging);
+						}
 
 					} while ($row_purge_entries = mysqli_fetch_assoc($purge_entries));
 
@@ -179,7 +192,7 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] == 0)) {
 						$row_stray2 = mysqli_fetch_assoc($stray2);
 
 						if ($row_stray2['count'] == 0) {
-							$updateSQL = sprintf("DELETE FROM %s WHERE id='%s'", $user_db_table, $row_strays2['id']);
+							$updateSQL = sprintf("DELETE FROM %s WHERE id='%s'", $users_db_table, $row_strays2['id']);
 							mysqli_real_escape_string($connection,$updateSQL);
 							$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 						}
@@ -348,7 +361,7 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] == 0)) {
 			$row_judge_locations = mysqli_fetch_assoc($judge_locations);
 			$totalRows_judge_locations = mysqli_num_rows($judge_locations);
 
-			$locations = "";
+			$locations = array();
 
 			if ($totalRows_judge_locations > 0) {
 

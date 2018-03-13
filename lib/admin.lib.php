@@ -1,10 +1,5 @@
 <?php
 
-function is_dir_empty ($dir){
-     return (($files = @scandir($dir)) && count($files) <= 2);
-}
-
-
 function directory_contents_dropdown($directory,$file_name_selected) {
 
 	$handle = opendir($directory);

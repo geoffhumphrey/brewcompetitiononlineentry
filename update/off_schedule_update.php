@@ -1,5 +1,7 @@
 <?php
 
+if (!isset($output)) $output = "";
+
 // ----------------------------------------------- 2.1.5 -----------------------------------------------
 // Make sure all items are present from last "official" update
 // -----------------------------------------------------------------------------------------------------
@@ -91,6 +93,8 @@ if (!check_update("setup_last_step", $prefix."system")) {
 	mysqli_real_escape_string($connection,$updateSQL);
 	$result = mysqli_query($connection,$updateSQL);
 }
+
+$output .= "<li>System table updated.</li>";
 
 // Make sure styles table is auto increment
 $updateSQL = sprintf("ALTER TABLE `%s` CHANGE `id` `id` INT(11) NOT NULL AUTO_INCREMENT;",$prefix."styles");
@@ -259,6 +263,9 @@ if (!check_new_style("21","B6","White IPA")) {
 
 }
 
+$output .= "<li>Styles table updated with current sub-style information.</li>";
+
+
 // ----------------------------------------------- 2.1.9 -----------------------------------------------
 // Correct the problem with new BJCP "example" substyles not being saved correctly
 // -----------------------------------------------------------------------------------------------------
@@ -285,12 +292,18 @@ mysqli_select_db($connection,$database);
 mysqli_real_escape_string($connection,$updateSQL);
 $result = mysqli_query($connection,$updateSQL);
 
+$output .= "<li>Entry table updated to correct style saving bug.</li>";
+
+
 if (!check_update("assignRoles", $prefix."judging_assignments")) {
 	$updateSQL = sprintf("ALTER TABLE `%s` ADD `assignRoles` VARCHAR(25) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL;",$prefix."judging_assignments");
 	mysqli_select_db($connection,$database);
 	mysqli_real_escape_string($connection,$updateSQL);
 	$result = mysqli_query($connection,$updateSQL);
 }
+
+$output .= "<li>Judging Assignments table updated.</li>";
+
 
 // ----------------------------------------------- 2.1.10 ----------------------------------------------
 // Add db columns to store Pro Edition data such as Brewery Name and TTB Number
@@ -658,6 +671,12 @@ if ($totalRows_entry_names > 0) {
 
 }
 
+$output .= "<li>Added db columns in Brewer table to store Pro Edition data such as Brewery Name and TTB Number.</li>";
+$output .= "<li>Added db columns in Preferences table to allow for PayPal IPN use.</li>";
+$output .= "<li>Added db columns in Preferences table to accommodate best brewer preferences.</li>";
+$output .= "<li>Altered prefsStyleSet in Preferences table to accommodate BA style data and BreweryDB key.</li>";
+$output .= "<li>Updated Archive tables to accommodate Pro Edition and BA Styles.</li>";
+
 // ----------------------------------------------- 2.1.11 ----------------------------------------------
 // All PDF files in the user_docs directory must be converted to all lowercase (including extension)
 // -----------------------------------------------------------------------------------------------------
@@ -707,6 +726,8 @@ if (SINGLE) {
 
 }
 
+$output .= "<li>PDF file name in the user_docs directory converted to lowercase (including extension).</li>";
+
 // ----------------------------------------------- 2.1.12 ----------------------------------------------
 // Add Certified Cider Judge designation
 // -----------------------------------------------------------------------------------------------------
@@ -724,6 +745,8 @@ if (!check_update("brewerJudgeCider", $prefix."brewer")) {
 	$result = mysqli_query($connection,$updateSQL);
 
 }
+
+$output .= "<li>Added Certified Cider Judge designation.</li>";
 
 // Change the version and version date in the system table
 $updateSQL = sprintf("UPDATE %s SET version='%s', version_date='%s', data_check=%s WHERE id=1", $prefix."system", $current_version, $current_version_date_display,"NOW()");

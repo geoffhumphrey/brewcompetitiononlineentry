@@ -274,30 +274,37 @@ if (empty($_SESSION['prefsLang'.$prefix_session])) {
 	$_SESSION['prefsLanguage'] = "en-US";
 
 	// Check if variation used (demarked with a dash)
+
+
+	$_SESSION['prefsLang'.$prefix_session] = $prefix_session;
+
+}
+
+if (empty($_SESSION['prefsLanguageFolder'.$prefix_session])) {
+
 	if (strpos($_SESSION['prefsLanguage'], '-') !== FALSE) {
 		$lang_folder = explode("-",$_SESSION['prefsLanguage']);
 		$_SESSION['prefsLanguageFolder'] = strtolower($lang_folder[0]);
 	}
 
 	else $_SESSION['prefsLanguageFolder'] = strtolower($_SESSION['prefsLanguage']);
-
-	$_SESSION['prefsLang'.$prefix_session] = $prefix_session;
-
 }
 
-// Some limits and dates may need to be changed by admin and propagated instantly to all users
-// These will be called on every page load instead of being stored in a session variable
-$query_limits = sprintf("SELECT prefsStyleSet, prefsEntryLimit, prefsUserEntryLimit, prefsSpecialCharLimit, prefsUserSubCatLimit, prefsUSCLEx, prefsUSCLExLimit, prefsEntryLimitPaid, prefsShowBestBrewer, prefsShowBestClub FROM %s WHERE id='1'", $prefix."preferences");
-$limits = mysqli_query($connection,$query_limits) or die (mysqli_error($connection));
-$row_limits = mysqli_fetch_assoc($limits);
+if ($section != "update") {
+	// Some limits and dates may need to be changed by admin and propagated instantly to all users
+	// These will be called on every page load instead of being stored in a session variable
+	$query_limits = sprintf("SELECT prefsStyleSet, prefsEntryLimit, prefsUserEntryLimit, prefsSpecialCharLimit, prefsUserSubCatLimit, prefsUSCLEx, prefsUSCLExLimit, prefsEntryLimitPaid, prefsShowBestBrewer, prefsShowBestClub FROM %s WHERE id='1'", $prefix."preferences");
+	$limits = mysqli_query($connection,$query_limits) or die (mysqli_error($connection));
+	$row_limits = mysqli_fetch_assoc($limits);
 
-$query_judge_limits = sprintf("SELECT jprefsCapJudges,jprefsCapStewards FROM %s WHERE id='1'", $prefix."judging_preferences");
-$judge_limits = mysqli_query($connection,$query_judge_limits) or die (mysqli_error($connection));
-$row_judge_limits = mysqli_fetch_assoc($judge_limits);
+	$query_judge_limits = sprintf("SELECT jprefsCapJudges,jprefsCapStewards FROM %s WHERE id='1'", $prefix."judging_preferences");
+	$judge_limits = mysqli_query($connection,$query_judge_limits) or die (mysqli_error($connection));
+	$row_judge_limits = mysqli_fetch_assoc($judge_limits);
 
-$query_contest_dates = sprintf("SELECT contestCheckInPassword, contestRegistrationOpen, contestRegistrationDeadline, contestJudgeOpen, contestJudgeDeadline, contestEntryOpen, contestEntryDeadline, contestShippingOpen, contestShippingDeadline, contestDropoffOpen, contestDropoffDeadline FROM %s WHERE id=1", $prefix."contest_info");
-$contest_dates = mysqli_query($connection,$query_contest_dates) or die (mysqli_error($connection));
-$row_contest_dates = mysqli_fetch_assoc($contest_dates);
+	$query_contest_dates = sprintf("SELECT contestCheckInPassword, contestRegistrationOpen, contestRegistrationDeadline, contestJudgeOpen, contestJudgeDeadline, contestEntryOpen, contestEntryDeadline, contestShippingOpen, contestShippingDeadline, contestDropoffOpen, contestDropoffDeadline FROM %s WHERE id=1", $prefix."contest_info");
+	$contest_dates = mysqli_query($connection,$query_contest_dates) or die (mysqli_error($connection));
+	$row_contest_dates = mysqli_fetch_assoc($contest_dates);
+}
 
 // Only used for initial setup of installation
 if ($section == "step4") {

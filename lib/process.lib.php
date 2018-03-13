@@ -853,14 +853,6 @@ function standardize_name($string) {
 	return $string;
 }
 
-function is_dir_empty($dir) {
-	foreach (new DirectoryIterator($dir) as $fileInfo) {
-		if($fileInfo->isDot()) continue;
-		return false;
-	}
-	return true;
-}
-
 function rmove($src, $dest){
 
     // If source is not a directory stop processing

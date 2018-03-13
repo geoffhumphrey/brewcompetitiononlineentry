@@ -1,22 +1,27 @@
 <?php
 // -----------------------------------------------------------
-// Version 2.1.10
+// Version 2.1.12
 // -----------------------------------------------------------
 
 require_once ('paths.php');
 require_once (INCLUDES.'url_variables.inc.php');
+$section = "update";
 ini_set('session.cookie_httponly', 1);
 ini_set('session.use_only_cookies', 1);
+
+// Uses a secure connection (HTTPS) if possible
 ini_set('session.cookie_secure', 1);
+
 if (SINGLE) require_once(SSO.'sso.inc.php');
 require_once (LIB.'common.lib.php');
 require_once (LIB.'update.lib.php');
 require_once (INCLUDES.'db_tables.inc.php');
-require_once (LIB.'help.lib.php');
-require_once (INCLUDES.'constants.inc.php');
-require_once (LANG.'language.lang.php');
-require_once (INCLUDES.'headers.inc.php');
-require_once (INCLUDES.'scrubber.inc.php');
+	require_once (LIB.'help.lib.php');
+	require_once (DB.'common.db.php');
+	require_once (INCLUDES.'constants.inc.php');
+	require_once (LANG.'language.lang.php');
+	require_once (INCLUDES.'headers.inc.php');
+	require_once (INCLUDES.'scrubber.inc.php');
 if (HOSTED) check_hosted_gh();
 
 // Get current version from DB
@@ -74,7 +79,7 @@ if (file_exists($filename)) {
 
 	if (check_setup($prefix."preferences",$database)) {
 
-		if ((isset($_SESSION['loginUsername'])) && ($row_user_level['userLevel'] <= 1)) {
+		if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) {
 
 			if (($current_version != $version) || (($current_version == $version) && ($version_date < $current_version_date))) {
 
@@ -92,7 +97,7 @@ if (file_exists($filename)) {
 
 				$update_body .= "<p class=\"lead\"><small><strong class=\"text-danger\">Please note!</strong> This update contains a conversion script that affects each table in your database. Therefore, it may take a while to run. Please be patient!</small></p>";
 
-				$update_body .= "<div class=\"bcoem-admin-element-bottom\"><a class=\"btn btn-primary btn-lg btn-block\" href=\"update.php?action=update\" data-confirm=\"Are you sure? Have you backed up your MySQL database? This will update your current installation and cannot be stopped once begun.\"><span class=\"fa fa-cog fa-spin\"></span> Begin The Update</a></div>";
+				$update_body .= "<div class=\"bcoem-admin-element-bottom\"><a class=\"btn btn-primary btn-lg btn-block\" href=\"update.php?action=update\" data-confirm=\"Are you sure? Have you backed up your MySQL database? This will update your current installation and cannot be stopped once begun. Please note that the update may take some time to complete, so patience is warranted!\"><span class=\"fa fa-cog fa-spin\"></span> Begin The Update</a></div>";
 				}
 
 				if ($action == "update") {
@@ -381,6 +386,7 @@ else {
     <!-- Update Pages (Fluid Layout) -->
     <div class="container-fluid">
 
+    	<?php if (DEBUG_SESSION_VARS) include (DEBUGGING.'session_vars.debug.php'); ?>
     	<div class="page-header">
         	<h1>BCOE&amp;M <?php echo $current_version_display; ?> Update</h1>
         </div>

@@ -165,7 +165,8 @@ if (((isset($_SERVER['HTTP_REFERER'])) && ($referrer['host'] == $_SERVER['SERVER
 		unset($_SESSION['user_info'.$prefix_session]);
 		unset($_SESSION['contest_info_general'.$prefix_session]);
 
-		$redirect_go_to = sprintf("Location: %s", $base_url."index.php?section=admin");
+		if ($section == "update") $redirect_go_to = sprintf("Location: %s", $base_url."update.php");
+		else $redirect_go_to = sprintf("Location: %s", $base_url."index.php?section=admin");
 
 	}
 

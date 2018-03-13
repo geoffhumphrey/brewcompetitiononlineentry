@@ -20,7 +20,7 @@ else $pro_edition = $row_archive_prefs['archiveProEdition'];
 if ($pro_edition == 0) $edition = $label_amateur." ".$label_edition;
 if ($pro_edition == 1) $edition = $label_pro." ".$label_edition;
 
-if ($dbTable != "default") $header .= "<p>".$edition."</p>";
+if ($dbTable != "default") $header1_1 .= "<p>".$edition."</p>";
 
 if ($view == "paid") $header1_1 = "Paid ";
 if ($view == "unpaid") $header1_1 = "Unpaid ";
@@ -492,6 +492,13 @@ if ($action != "print") { ?>
 		<?php } ?>
 	</div>
 </div>
+<div class="btn-group pull-right hidden-xs hidden-sm" role="group" aria-label="entryStatus">
+        <div class="btn-group" role="group">
+            <button type="button" class="btn btn-success" data-toggle="modal" data-target="#entryStatusModal">
+              <?php if ($view == "paid") echo "Paid"; elseif ($view == "unpaid") echo "Unpaid"; else echo "All" ?> Entry Status
+            </button>
+        </div>
+    </div>
 <div class="bcoem-admin-element hidden-print row hidden-xs">
 	<?php $all_email_display = implode(", ",array_unique($copy_paste_all_emails));
 	if (!empty($all_email_display))	{ ?>
@@ -576,17 +583,11 @@ if ($action != "print") { ?>
 		</div><!-- ./modal -->
 		<?php } ?>
 		<!-- Entry status modal -->
-    <div class="btn-group pull-right hidden-xs hidden-sm" role="group" aria-label="entryStatus">
-        <div class="btn-group" role="group">
-            <button type="button" class="btn btn-success" data-toggle="modal" data-target="#entryStatusModal">
-              <?php if ($view == "paid") echo "Paid"; elseif ($view == "unpaid") echo "Unpaid"; else echo "All" ?> Entry Status
-            </button>
-        </div>
-    </div>
+
     <!-- Modal -->
     <div class="modal fade" id="entryStatusModal" tabindex="-1" role="dialog" aria-labelledby="entryStatusModalLabel">
-      	<div class="modal-dialog<?php if (($filter == "default") && ($bid == "default")) echo " modal-sm"; ?>" role="document">
-        	<div class="modal-content">
+      	<div class="modal-dialog" role="document">
+        	<div class="modal-content modal-sm">
           		<div class="modal-header bcoem-admin-modal">
             		<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
             		<h4 class="modal-title" id="entryStatusModalLabel"><?php if ($view == "paid") echo "Paid"; elseif ($view == "unpaid") echo "Unpaid"; else echo "All" ?> Entry Status</h4>
@@ -673,4 +674,4 @@ if ($action != "print") { ?>
 <input type="hidden" name="relocate" value="<?php echo relocate($base_url."index.php?section=admin&go=entries","default",$msg,$id); ?>">
 </form>
 <?php } ?>
-<?php } else echo "<p>No entries have been added to the database yet.</p>"; ?>
+<?php } else echo "<div class=\"container-fluid\"><div class=\"row\"><div class=\"col-md-12\"><p>No entries have been added to the database yet.</p></div></div></div>"; ?>

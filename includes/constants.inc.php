@@ -37,7 +37,7 @@ $club_array = array("1.090|1.090","#sovai|#sovai","10 Paces Brewing|10 Paces Bre
 
 asort($club_array);
 
-if ((strpos($section, "step") === FALSE) && ($section != "setup")) {
+if (((strpos($section, "step") === FALSE) && ($section != "setup")) && ($section != "update")) {
 
 	$registration_open = open_or_closed(time(),$row_contest_dates['contestRegistrationOpen'],$row_contest_dates['contestRegistrationDeadline']);
 	$entry_window_open = open_or_closed(time(),$row_contest_dates['contestEntryOpen'],$row_contest_dates['contestEntryDeadline']);
@@ -83,11 +83,13 @@ if ((strpos($section, "step") === FALSE) && ($section != "setup")) {
 	$currency_symbol = $currency[0];
 	$currency_code = $currency[1];
 
-	$total_entries = $totalRows_entry_count;
-	if (open_limit($totalRows_entry_count,$row_limits['prefsEntryLimit'],$entry_window_open)) $comp_entry_limit = TRUE; else $comp_entry_limit = FALSE;
-
-	$total_paid = get_entry_count("paid");
-	if (open_limit($total_paid,$row_limits['prefsEntryLimitPaid'],$entry_window_open)) $comp_paid_entry_limit = TRUE; else $comp_paid_entry_limit = FALSE;
+    if (isset($totalRows_entry_count)) {
+        $total_entries = $totalRows_entry_count;
+        if (open_limit($totalRows_entry_count,$row_limits['prefsEntryLimit'],$entry_window_open)) $comp_entry_limit = TRUE;
+        else $comp_entry_limit = FALSE;
+        $total_paid = get_entry_count("paid");
+        if (open_limit($total_paid,$row_limits['prefsEntryLimitPaid'],$entry_window_open)) $comp_paid_entry_limit = TRUE; else $comp_paid_entry_limit = FALSE;
+    }
 
 	if (!empty($row_limits['prefsEntryLimit'])) $comp_entry_limit_near = ($row_limits['prefsEntryLimit']*.9); else $comp_entry_limit_near = "";
 	if ((!empty($row_limits['prefsEntryLimit'])) && (($total_entries > $comp_entry_limit_near) && ($total_entries < $row_limits['prefsEntryLimit']))) $comp_entry_limit_near_warning = TRUE; else $comp_entry_limit_near_warning = FALSE;
@@ -96,8 +98,12 @@ if ((strpos($section, "step") === FALSE) && ($section != "setup")) {
 	if ((($section == "brew") || ($section == "beerxml")|| ($section == "list") || ($section == "pay")) && (!empty($row_limits['prefsUserEntryLimit']))) $remaining_entries = ($row_limits['prefsUserEntryLimit'] - $totalRows_log);
 	else $remaining_entries = 1;
 
-	if (open_limit($row_judge_count['count'],$row_judging_prefs['jPrefsCapJudges'],$judge_window_open)) $judge_limit = TRUE; else $judge_limit = FALSE;
-	if (open_limit($row_steward_count['count'],$row_judging_prefs['jPrefsCapStewards'],$judge_window_open)) $steward_limit = TRUE; else $steward_limit = FALSE;
+    if (open_limit($row_judge_count['count'],$row_judging_prefs['jPrefsCapJudges'],$judge_window_open)) $judge_limit = TRUE;
+    else $judge_limit = FALSE;
+
+    if (open_limit($row_steward_count['count'],$row_judging_prefs['jPrefsCapStewards'],$judge_window_open)) $steward_limit = TRUE;
+    else $steward_limit = FALSE;
+
 	if (($judge_limit) && ($steward_limit)) $judge_window_open = 2;
 	if (($comp_entry_limit) || ($comp_paid_entry_limit)) $entry_window_open = 2;
 
@@ -137,7 +143,7 @@ if (isset($_SESSION['loginUsername']))  {
 	$logged_in = TRUE;
 	$logged_in_name = $_SESSION['loginUsername'];
 
-    if ((strpos($section, "step") === FALSE) && ($section != "setup")) {
+    if (((strpos($section, "step") === FALSE) && ($section != "setup")) && ($section != "update")) {
 
     if ($_SESSION['userLevel'] <= "1") {
 		if ($section == "admin") $link_admin = "#";
@@ -182,7 +188,7 @@ if ($dbTable != "default") $archive_display = TRUE;
 $totalRows_mods = "";
 
 // Get unconfirmed entry count
-if ((strpos($section, "step") === FALSE) && ($section != "setup")) {
+if (((strpos($section, "step") === FALSE) && ($section != "setup")) && ($section != "update")) {
     if (($section == "admin") && (($filter == "default") && ($bid == "default") && ($view == "default"))) $entries_unconfirmed = ($totalRows_entry_count - $totalRows_log_confirmed);
     else $entries_unconfirmed = ($totalRows_log - $totalRows_log_confirmed);
 }

@@ -163,12 +163,9 @@ do {
 
 	}
 
-
 	if ($judge_info[4] == "Y") $display_rank .= "<br /><em>Certified Mead Judge</em>";
 
-	if (!empty($bjcp_rank[1])) {
-		$display_rank .= "<em>".designations($judge_info[5],$bjcp_rank[0])."</em>";
-	}
+	if (!empty($bjcp_rank[1])) $display_rank .= "<em>".designations($judge_info[5],$bjcp_rank[0])."</em>";
 
 	if ($filter == "stewards") $locations = explode(",",$judge_info[7]);
 	else $locations = explode(",",$judge_info[8]);
@@ -178,7 +175,10 @@ do {
 		$output_datatables_body .= "<tr class=\"".$assign_row_color."\">\n";
 
 		$output_datatables_body .= "<td nowrap>";
-		$output_datatables_body .= "<a href=\"".$base_url."index.php?section=brewer&amp;go=admin&amp;action=edit&amp;filter=".$row_brewer['uid']."&amp;id=".$judge_info[11]."\" data-toggle=\"tooltip\" title=\"Edit ".$judge_info[0]." ".$judge_info[1]."&rsquo;s account info\">".$judge_info[1].", ".$judge_info[0]."</a><br>Comps Judged: ".$judge_info[9];
+		$output_datatables_body .= "<a href=\"".$base_url."index.php?section=brewer&amp;go=admin&amp;action=edit&amp;filter=".$row_brewer['uid']."&amp;id=".$judge_info[11]."\" data-toggle=\"tooltip\" title=\"Edit ".$judge_info[0]." ".$judge_info[1]."&rsquo;s account info\">".$judge_info[1].", ".$judge_info[0]."</a>";
+        $output_datatables_body .= "<br>Comps Judged: ";
+        if (empty($judge_info[9])) $output_datatables_body .= "0";
+        else $output_datatables_body .= $judge_info[9];
 		$output_datatables_body .= "</td>";
 
 		if ($filter == "judges") {

@@ -1243,7 +1243,7 @@
 									<h4 class="modal-title" id="purgeEntriesLabel">Please Confirm</h4>
 								</div>
 								<div class="modal-body">
-									<p>Are you sure you want to delete entries and associated data including scores and bos scores? This cannot be undone.
+									<p>Are you sure you want to delete entries and associated data, including scores, bos scores, and associated scoresheets (if present)? This cannot be undone.
 									<p>Optionally, choose a date threshold. Entries and associated data will not be purged if they were <strong><em>updated</em> on or after</strong> the date you choose.</p>
 									<p>Leave the field blank to purge all entries.</p>
 									<div class="input-group">

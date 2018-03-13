@@ -33,7 +33,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 
 		if ((isset($_POST['keepScoresheets'])) && (!is_dir_empty(USER_DOCS))) {
 
-			// Define directories and run function
+			// Define directories and run the move function
 			$src = USER_DOCS;
 			$dest = USER_DOCS.$suffix;
 			rmove($src, $dest);

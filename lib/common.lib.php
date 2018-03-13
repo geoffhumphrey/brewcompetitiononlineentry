@@ -4146,4 +4146,13 @@ if (!function_exists('mime_content_type')) {
     }
 
 }
+
+function is_dir_empty($dir) {
+	foreach (new DirectoryIterator($dir) as $fileInfo) {
+		if($fileInfo->isDot()) continue;
+		return false;
+	}
+	return true;
+}
+
 ?>

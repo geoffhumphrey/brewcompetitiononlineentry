@@ -93,6 +93,7 @@ if (check_setup($prefix."system",$database)) {
 if (!$setup_success) {
 
 	header ($setup_relocate);
+	//echo $setup_relocate;
 	exit;
 
 }
