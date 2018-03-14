@@ -4,7 +4,7 @@
 Checked Single
 2016-06-06
 */
- 
+
 /**
  * Module:      db_tables.inc.php
  * Description: This module houses the conversion scripting for db tables
@@ -12,7 +12,11 @@ Checked Single
  */
 
 // echo get_suffix($dbTable);
-if ($dbTable == "default") { 
+
+if (isset($dbTable)) $dbTable = $dbTable;
+else $dbTable = "default";
+
+if ($dbTable == "default") {
 	$archive_db_table = $prefix."archive";
 	$brewer_db_table = $prefix."brewer";
 	$brewing_db_table = $prefix."brewing";
@@ -65,7 +69,7 @@ else {
 	$style_types_db_table = $prefix."style_types".$suffix;
 	$system_db_table = $prefix."system";
 	$users_db_table = $prefix."users".$suffix;
-	}
+}
 
 $db_table_array = array(
 $archive_db_table,

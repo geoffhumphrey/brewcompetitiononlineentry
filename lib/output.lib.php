@@ -226,16 +226,17 @@ function total_sessions() {
 	include (CONFIG.'config.php');
 	mysqli_select_db($connection,$database);
 
-	$query_sessions = sprintf("SELECT judgingRounds FROM %s", $prefix."judging_locations");
+	$query_sessions = sprintf("SELECT COUNT(*) as 'count' FROM %s", $prefix."judging_locations");
 	$sessions = mysqli_query($connection,$query_sessions) or die (mysqli_error($connection));
 	$row_sessions = mysqli_fetch_assoc($sessions);
 
+	/*
 	do {
 		$a[] = $row_sessions['judgingRounds'];
 	} while ($row_sessions = mysqli_fetch_assoc($sessions));
+	*/
 
-	$output = array_sum($a);
-	return $output;
+	return $row_sessions['count'];
 
 }
 
@@ -247,7 +248,7 @@ function total_flights() {
 	$row_tables = mysqli_fetch_assoc($tables);
 
 	do {
-	$a[] = $row_tables['id'];
+		$a[] = $row_tables['id'];
 	} while ($row_tables = mysqli_fetch_assoc($tables));
 
 	foreach ($a as $table_id) {
@@ -328,6 +329,7 @@ function total_points($total_entries,$method) {
 function judge_points($uid,$bos) {
 	include (CONFIG.'config.php');
 	mysqli_select_db($connection,$database);
+	require(INCLUDES.'url_variables.inc.php');
 	require(INCLUDES.'db_tables.inc.php');
 	require(DB.'judging_locations.db.php');
 

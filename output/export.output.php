@@ -1005,7 +1005,7 @@ if (((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) || ((
 		$total_entries = total_paid_received("judging_scores","default");
 		//$total_entries = 750;
 
-		$st_running_total = "";
+		$st_running_total = array();
 
 		// Figure out whether BOS Judge Points are awarded or not
 		// "BOS points may only be awarded if a competition has at least 30 entries in at least five beer and/or three mead/cider categories."
@@ -1174,249 +1174,303 @@ if (((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) || ((
 				$pdf->Output($filename,'D');
 		}
 
-
 		// ------------------------------------------------------------------------------------------------------
 		// BJCP XML Output
 		// BJCP XML Specification: http://www.bjcp.org/it/docs/BJCP%20Database%20XML%20Interface%20Spec%202.1.pdf
 		// ------------------------------------------------------------------------------------------------------
 
 		if ($view == "xml") {
-			$total_days = total_days();
-            $j = array();
-            $s = array();
-            $st = array();
-            $o = array();
-			do { $j[] = $row_judges['uid']; } while ($row_judges = mysqli_fetch_assoc($judges));
-			do { $s[] = $row_stewards['uid']; } while ($row_stewards = mysqli_fetch_assoc($stewards));
-			do { $st[] = $row_staff['uid']; } while ($row_staff = mysqli_fetch_assoc($staff));
-			do { $o[] = $row_organizer['uid']; } while ($row_organizer = mysqli_fetch_assoc($organizer));
-			$filename = str_replace(" ","_",$_SESSION['contestName'])."_BJCP_Points_Report.xml";
-			$output = "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>\n";
-			$output .= "<OrgReport>\n";
-			$output .= "\t<CompData>\n";
-			$output .= "\t\t<CompID>".$_SESSION['contestID']."</CompID>\n";
-			$output .= "\t\t<CompName>".$_SESSION['contestName']."</CompName>\n";
-			$output .= "\t\t<CompDate>".getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_judging['judgingDate'], $_SESSION['prefsDateFormat'], $_SESSION['prefsTimeFormat'], "system", "date-no-gmt")."</CompDate>\n";
-			$output .= "\t\t<CompEntries>".$total_entries."</CompEntries>\n";
-			$output .= "\t\t<CompDays>".$total_days."</CompDays>\n";
-			$output .= "\t\t<CompSessions>".total_sessions()."</CompSessions>\n";
-			$output .= "\t\t<CompFlights>".total_flights()."</CompFlights>\n";
-			$output .= "\t</CompData>\n";
-			$output .= "\t<BJCPpoints>\n";
 
-				// Judges with a properly formatted BJCP IDs in the system
-				foreach (array_unique($j) as $uid) {
-				$judge_info = explode("^",brewer_info($uid));
-				$judge_points = judge_points($uid,$judge_info['5']);
-				if ($judge_points > 0) {
-					$bos_judge = bos_points($uid);
-					if (($bos_judge) && (!in_array($uid,$bos_judge_no_assignment))) $assignment = "Judge + BOS";
-					else $assignment = "Judge";
-						if (($judge_info['0'] != "") && ($judge_info['1'] != "") && (validate_bjcp_id($judge_info['4']))) {
-								$judge_name = strtr(ucwords(strtolower($judge_info['0'])),$html_remove)." ".strtr(ucwords(strtolower($judge_info['1'])),$html_remove);
-								$output .= "\t\t<JudgeData>\n";
-								$output .= "\t\t\t<JudgeName>".$judge_name."</JudgeName>\n";
-								$output .= "\t\t\t<JudgeID>".strtoupper(strtr($judge_info['4'],$bjcp_num_replace))."</JudgeID>\n";
-								$output .= "\t\t\t<JudgeRole>".$assignment."</JudgeRole>\n";
-								if ($bos_judge) $output .= "\t\t\t<JudgePts>".number_format((judge_points($uid,$judge_info['5'])+$bos_judge_points),1)."</JudgePts>\n";
-								else $output .= "\t\t\t<JudgePts>".judge_points($uid,$judge_info['5'])."</JudgePts>\n";
-								$output .= "\t\t\t<NonJudgePts>0.0</NonJudgePts>\n";
-								$output .= "\t\t</JudgeData>\n";
-						}
-					}
-				}
+            $all_rules_applied = TRUE;
+            $rule_org = FALSE;
+            $rule_sessions = FALSE;
+            $rule_comp_id = FALSE;
 
-				// Loner BOS Judges (no assignment to any table)
-				foreach (array_unique($bos_judge_no_assignment) as $uid) {
-					$judge_info = explode("^",brewer_info($uid));
-					if (($judge_info['0'] != "") && ($judge_info['1'] != "") && (validate_bjcp_id($judge_info['4']))) {
-						if (!empty($uid)) {
-							$judge_name = strtr(ucwords(strtolower($judge_info['0'])),$html_remove)." ".strtr(ucwords(strtolower($judge_info['1'])),$html_remove);
-							$output .= "\t\t<JudgeData>\n";
-							$output .= "\t\t\t<JudgeName>".$judge_name."</JudgeName>\n";
-							$output .= "\t\t\t<JudgeID>".strtoupper(strtr($judge_info['4'],$bjcp_num_replace))."</JudgeID>\n";
-							$output .= "\t\t\t<JudgeRole>BOS Judge</JudgeRole>\n";
-							$output .= "\t\t\t<JudgePts>1.0</JudgePts>\n";
-							$output .= "\t\t\t<NonJudgePts>0.0</NonJudgePts>\n";
-							$output .= "\t\t</JudgeData>\n";
-						}
-					}
-				}
+            $total_days = total_days();
 
-				// Stewards with a properly formatted BJCP IDs in the system
-				foreach (array_unique($s) as $uid) {
-				$steward_info = explode("^",brewer_info($uid));
-				$steward_points = steward_points($uid);
-				if ($steward_points > 0) {
-					$steward_name = ucwords(strtolower($steward_info['0']))." ".ucwords(strtolower($steward_info['1']));
-					if (($steward_info['0'] != "") && ($steward_info['1'] != "") && (validate_bjcp_id($steward_info['4']))) {
-						$output .= "\t\t<JudgeData>\n";
-						$output .= "\t\t\t<JudgeName>".$steward_name."</JudgeName>\n";
-						$output .= "\t\t\t<JudgeID>".strtoupper(strtr($steward_info['4'],$bjcp_num_replace))."</JudgeID>\n";
-						$output .= "\t\t\t<JudgeRole>Steward</JudgeRole>\n";
-						$output .= "\t\t\t<JudgePts>0.0</JudgePts>\n";
-						$output .= "\t\t\t<NonJudgePts>".$steward_points."</NonJudgePts>\n";
-						$output .= "\t\t</JudgeData>\n";
-						}
-					}
-				}
+            // Total sessions cannot exceed three per day
+            $total_sessions = total_sessions();
+            $max_sessions = ($total_days * 3);
+            if ($total_sessions > $max_sessions) {
+                $all_rules_applied = FALSE;
+                $rule_sessions = TRUE;
+            }
 
-				//Staff Members with a properly formatted BJCP IDs in the system
-				foreach (array_unique($st) as $uid) {
-				if (array_sum($st_running_total) < $staff_max_points) {
-					$staff_info = explode("^",brewer_info($uid));
-						if (($staff_info['0'] != "") && ($staff_info['1'] != "") && (validate_bjcp_id($staff_info['4']))) {
-							$staff_name = ucwords(strtolower($staff_info['0']))." ".ucwords(strtolower($staff_info['1']));
-							$st_running_total[] .= $staff_points;
-							$output .= "\t\t<JudgeData>\n";
-							$output .= "\t\t\t<JudgeName>".$staff_name."</JudgeName>\n";
-							$output .= "\t\t\t<JudgeID>".strtoupper(strtr($staff_info['4'],$bjcp_num_replace))."</JudgeID>\n";
-							$output .= "\t\t\t<JudgeRole>Staff</JudgeRole>\n";
-							$output .= "\t\t\t<JudgePts>0.0</JudgePts>\n";
-							$output .= "\t\t\t<NonJudgePts>".$staff_points."</NonJudgePts>\n";
-							$output .= "\t\t</JudgeData>\n";
-						}
-					}
-				}
+            // Organizer must be declared
+            if ($totalRows_organizer == 0) {
+                $all_rules_applied = FALSE;
+                $rule_org = TRUE;
+            }
 
-				// Organizer with a properly formatted BJCP ID in the system
-				foreach (array_unique($o) as $uid) {
-				$organizer_info = explode("^",brewer_info($uid));
-					if (($organizer_info['0'] != "") && ($organizer_info['1'] != "") && (validate_bjcp_id($organizer_info['4']))) {
-						$output .= "\t\t<JudgeData>\n";
-						$output .= "\t\t\t<JudgeName>".$organizer_info['0']." ".$organizer_info['1']."</JudgeName>\n";
-						$output .= "\t\t\t<JudgeID>".strtoupper(strtr($organizer_info['4'],$bjcp_num_replace))."</JudgeID>\n";
-						$output .= "\t\t\t<JudgeRole>Organizer</JudgeRole>\n";
-						$output .= "\t\t\t<JudgePts>0.0</JudgePts>\n";
-						$output .= "\t\t\t<NonJudgePts>".$organ_max_points."</NonJudgePts>\n";
-						$output .= "\t\t</JudgeData>\n";
-					}
-				}
+            // Must have a competition ID
+            if (empty($_SESSION['contestID'])) {
+                $all_rules_applied = FALSE;
+                $rule_comp_id = TRUE;
+            }
 
-				$output .= "\t</BJCPpoints>\n";
+            /*
+            // DEBUG
+            $all_rules_applied = FALSE;
+            $rule_comp_id = TRUE;
+            $rule_org = TRUE;
+            $rule_sessions = TRUE;
+            */
 
-				$output .= "\t<NonBJCP>\n";
+            if ($all_rules_applied) {
 
-				// Judges without a properly formatted BJCP IDs in the system
-				foreach (array_unique($j) as $uid) {
-				$judge_info = explode("^",brewer_info($uid));
-				$judge_points = judge_points($uid,$judge_info['5']);
-				if ($judge_points > 0) {
-					$bos_judge = bos_points($uid);
-					if ($bos_judge) $assignment = "Judge + BOS";
-					else $assignment = "Judge";
-						if (($judge_info['0'] != "") && ($judge_info['1'] != "") && (!validate_bjcp_id($judge_info['4']))) {
-							$judge_name = ucwords(strtolower($judge_info['0']))." ".ucwords(strtolower($judge_info['1']));
-								$output .= "\t\t<JudgeData>\n";
-								$output .= "\t\t\t<JudgeName>".$judge_name."</JudgeName>\n";
-								$output .= "\t\t\t<JudgeRole>".$assignment."</JudgeRole>\n";
-								if ($bos_judge) $output .= "\t\t\t<JudgePts>".number_format((judge_points($uid,$judge_info['5'])+$bos_judge_points),1)."</JudgePts>\n";
-								else $output .= "\t\t\t<JudgePts>".judge_points($uid,$judge_info['5'])."</JudgePts>\n";
-								$output .= "\t\t\t<NonJudgePts>0.0</NonJudgePts>\n";
-								$output .= "\t\t</JudgeData>\n";
-						}
-					}
-				}
+                $j = array();
+                $s = array();
+                $st = array();
+                $o = array();
+                do { $j[] = $row_judges['uid']; } while ($row_judges = mysqli_fetch_assoc($judges));
+                do { $s[] = $row_stewards['uid']; } while ($row_stewards = mysqli_fetch_assoc($stewards));
+                do { $st[] = $row_staff['uid']; } while ($row_staff = mysqli_fetch_assoc($staff));
+                do { $o[] = $row_organizer['uid']; } while ($row_organizer = mysqli_fetch_assoc($organizer));
 
-				// Loner BOS Judges (no assignment to any table)
-				foreach (array_unique($bos_judge_no_assignment) as $uid) {
-					$judge_info = explode("^",brewer_info($uid));
-					if (($judge_info['0'] != "") && ($judge_info['1'] != "") && (!validate_bjcp_id($judge_info['4']))) {
-						if (!empty($uid)) {
-							$judge_name = strtr(ucwords(strtolower($judge_info['0'])),$html_remove)." ".strtr(ucwords(strtolower($judge_info['1'])),$html_remove);
-							$output .= "\t\t<JudgeData>\n";
-							$output .= "\t\t\t<JudgeName>".$judge_name."</JudgeName>\n";
-							$output .= "\t\t\t<JudgeID>".strtoupper(strtr($judge_info['4'],$bjcp_num_replace))."</JudgeID>\n";
-							$output .= "\t\t\t<JudgeRole>BOS Judge</JudgeRole>\n";
-							$output .= "\t\t\t<JudgePts>1.0</JudgePts>\n";
-							$output .= "\t\t\t<NonJudgePts>0.0</NonJudgePts>\n";
-							$output .= "\t\t</JudgeData>\n";
-						}
-					}
-				}
+                $filename = str_replace(" ","_",$_SESSION['contestName'])."_BJCP_Points_Report.xml";
+                $output = "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>\n";
+                $output .= "<OrgReport>\n";
+                $output .= "\t<CompData>\n";
+                $output .= "\t\t<CompID>".$_SESSION['contestID']."</CompID>\n";
+                $output .= "\t\t<CompName>".$_SESSION['contestName']."</CompName>\n";
+                $output .= "\t\t<CompDate>".getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_judging['judgingDate'], $_SESSION['prefsDateFormat'], $_SESSION['prefsTimeFormat'], "system", "date-no-gmt")."</CompDate>\n";
+                $output .= "\t\t<CompEntries>".$total_entries."</CompEntries>\n";
+                $output .= "\t\t<CompDays>".$total_days."</CompDays>\n";
+                $output .= "\t\t<CompSessions>".total_sessions()."</CompSessions>\n";
+                $output .= "\t\t<CompFlights>".total_flights()."</CompFlights>\n";
+                $output .= "\t</CompData>\n";
+                $output .= "\t<BJCPpoints>\n";
 
-				// Stewards without a properly formatted BJCP IDs in the system
-				foreach (array_unique($s) as $uid) {
-				$steward_points = steward_points($uid);
-				if ($steward_points > 0) {
-					$steward_info = explode("^",brewer_info($uid));
-						if (($steward_info['0'] != "") && ($steward_info['1'] != "") && (!validate_bjcp_id($steward_info['4']))) {
-								$steward_name = ucwords(strtolower($steward_info['0']))." ".ucwords(strtolower($steward_info['1']));
-								$output .= "\t\t<JudgeData>\n";
-								$output .= "\t\t\t<JudgeName>".$steward_name."</JudgeName>\n";
-								$output .= "\t\t\t<JudgeRole>Steward</JudgeRole>\n";
-								$output .= "\t\t\t<JudgePts>0.0</JudgePts>\n";
-								$output .= "\t\t\t<NonJudgePts>".$steward_points."</NonJudgePts>\n";
-								$output .= "\t\t</JudgeData>\n";
-						}
-					}
-				}
+                // Judges with a properly formatted BJCP IDs in the system
+                foreach (array_unique($j) as $uid) {
+                $judge_info = explode("^",brewer_info($uid));
+                $judge_points = judge_points($uid,$judge_info['5']);
+                    if ($judge_points > 0) {
+                        $bos_judge = bos_points($uid);
+                        if (($bos_judge) && (!in_array($uid,$bos_judge_no_assignment))) $assignment = "Judge + BOS";
+                        else $assignment = "Judge";
+                        if (($judge_info['0'] != "") && ($judge_info['1'] != "") && (validate_bjcp_id($judge_info['4']))) {
+                            $judge_name = strtr(ucwords(strtolower($judge_info['0'])),$html_remove)." ".strtr(ucwords(strtolower($judge_info['1'])),$html_remove);
+                            $output .= "\t\t<JudgeData>\n";
+                            $output .= "\t\t\t<JudgeName>".$judge_name."</JudgeName>\n";
+                            $output .= "\t\t\t<JudgeID>".strtoupper(strtr($judge_info['4'],$bjcp_num_replace))."</JudgeID>\n";
+                            $output .= "\t\t\t<JudgeRole>".$assignment."</JudgeRole>\n";
+                            if ($bos_judge) $output .= "\t\t\t<JudgePts>".number_format((judge_points($uid,$judge_info['5'])+$bos_judge_points),1)."</JudgePts>\n";
+                            else $output .= "\t\t\t<JudgePts>".judge_points($uid,$judge_info['5'])."</JudgePts>\n";
+                            $output .= "\t\t\t<NonJudgePts>0.0</NonJudgePts>\n";
+                            $output .= "\t\t</JudgeData>\n";
+                        }
+                    }
+                }
 
-				// Staff Members without a properly formatted BJCP IDs in the system
-				foreach (array_unique($st) as $uid) {
-				if (array_sum($st_running_total) < $staff_max_points) {
-					$staff_info = explode("^",brewer_info($uid));
-						if (($staff_info['0'] != "") && ($staff_info['1'] != "") && (!validate_bjcp_id($staff_info['4']))) {
-							$st_running_total[] = $staff_points;
-							$staff_name = ucwords(strtolower($staff_info['0']))." ".ucwords(strtolower($staff_info['1']));
-							$output .= "\t\t<JudgeData>\n";
-							$output .= "\t\t\t<JudgeName>".$staff_name."</JudgeName>\n";
-							$output .= "\t\t\t<JudgeRole>Staff</JudgeRole>\n";
-							$output .= "\t\t\t<JudgePts>0.0</JudgePts>\n";
-							if ($staff_points < $organ_max_points) $output .= "\t\t\t<NonJudgePts>".$staff_points."</NonJudgePts>\n";
-							else $output .= "\t\t\t<NonJudgePts>".$organ_max_points."</NonJudgePts>\n";
-							$output .= "\t\t</JudgeData>\n";
-						}
-					}
-				}
 
-				// Organizer without a properly formatted BJCP ID in the system
-				foreach (array_unique($o) as $uid) {
-				$organizer_info = explode("^",brewer_info($uid));
-					if (($organizer_info['0'] != "") && ($organizer_info['1'] != "") && (!validate_bjcp_id($organizer_info['4']))) {
-						$output .= "\t\t<JudgeData>\n";
-						$output .= "\t\t\t<JudgeName>".$organizer_info['0']." ".$organizer_info['1']."</JudgeName>\n";
-						$output .= "\t\t\t<JudgeRole>Organizer</JudgeRole>\n";
-						$output .= "\t\t\t<JudgePts>0.0</JudgePts>\n";
-						$output .= "\t\t\t<NonJudgePts>".$organ_max_points."</NonJudgePts>\n";
-						$output .= "\t\t</JudgeData>\n";
-					}
-				}
-				$output .= "\t</NonBJCP>\n";
+                // Loner BOS Judges (no assignment to any table)
+                foreach (array_unique($bos_judge_no_assignment) as $uid) {
+                    $judge_info = explode("^",brewer_info($uid));
+                    if (($judge_info['0'] != "") && ($judge_info['1'] != "") && (validate_bjcp_id($judge_info['4']))) {
+                        if (!empty($uid)) {
+                            $judge_name = strtr(ucwords(strtolower($judge_info['0'])),$html_remove)." ".strtr(ucwords(strtolower($judge_info['1'])),$html_remove);
+                            $output .= "\t\t<JudgeData>\n";
+                            $output .= "\t\t\t<JudgeName>".$judge_name."</JudgeName>\n";
+                            $output .= "\t\t\t<JudgeID>".strtoupper(strtr($judge_info['4'],$bjcp_num_replace))."</JudgeID>\n";
+                            $output .= "\t\t\t<JudgeRole>BOS Judge</JudgeRole>\n";
+                            $output .= "\t\t\t<JudgePts>1.0</JudgePts>\n";
+                            $output .= "\t\t\t<NonJudgePts>0.0</NonJudgePts>\n";
+                            $output .= "\t\t</JudgeData>\n";
+                        }
+                    }
+                }
 
-				// BOS Reporting
-				$output .= "\t<Comments>\n";
-				$output .= "Submitter Email: ".$_SESSION['user_name']."\n";
+                // Stewards with a properly formatted BJCP IDs in the system
+                foreach (array_unique($s) as $uid) {
+                $steward_info = explode("^",brewer_info($uid));
+                $steward_points = steward_points($uid);
+                if ($steward_points > 0) {
+                    $steward_name = ucwords(strtolower($steward_info['0']))." ".ucwords(strtolower($steward_info['1']));
+                    if (($steward_info['0'] != "") && ($steward_info['1'] != "") && (validate_bjcp_id($steward_info['4']))) {
+                        $output .= "\t\t<JudgeData>\n";
+                        $output .= "\t\t\t<JudgeName>".$steward_name."</JudgeName>\n";
+                        $output .= "\t\t\t<JudgeID>".strtoupper(strtr($steward_info['4'],$bjcp_num_replace))."</JudgeID>\n";
+                        $output .= "\t\t\t<JudgeRole>Steward</JudgeRole>\n";
+                        $output .= "\t\t\t<JudgePts>0.0</JudgePts>\n";
+                        $output .= "\t\t\t<NonJudgePts>".$steward_points."</NonJudgePts>\n";
+                        $output .= "\t\t</JudgeData>\n";
+                        }
+                    }
+                }
 
+                //Staff Members with a properly formatted BJCP IDs in the system
+                foreach (array_unique($st) as $uid) {
+                if (array_sum($st_running_total) < $staff_max_points) {
+                    $staff_info = explode("^",brewer_info($uid));
+                        if (($staff_info['0'] != "") && ($staff_info['1'] != "") && (validate_bjcp_id($staff_info['4']))) {
+                            $staff_name = ucwords(strtolower($staff_info['0']))." ".ucwords(strtolower($staff_info['1']));
+                            $st_running_total[] .= $staff_points;
+                            $output .= "\t\t<JudgeData>\n";
+                            $output .= "\t\t\t<JudgeName>".$staff_name."</JudgeName>\n";
+                            $output .= "\t\t\t<JudgeID>".strtoupper(strtr($staff_info['4'],$bjcp_num_replace))."</JudgeID>\n";
+                            $output .= "\t\t\t<JudgeRole>Staff</JudgeRole>\n";
+                            $output .= "\t\t\t<JudgePts>0.0</JudgePts>\n";
+                            $output .= "\t\t\t<NonJudgePts>".$staff_points."</NonJudgePts>\n";
+                            $output .= "\t\t</JudgeData>\n";
+                        }
+                    }
+                }
+
+                // Organizer with a properly formatted BJCP ID in the system
+                foreach (array_unique($o) as $uid) {
+                $organizer_info = explode("^",brewer_info($uid));
+                    if (($organizer_info['0'] != "") && ($organizer_info['1'] != "") && (validate_bjcp_id($organizer_info['4']))) {
+                        $output .= "\t\t<JudgeData>\n";
+                        $output .= "\t\t\t<JudgeName>".$organizer_info['0']." ".$organizer_info['1']."</JudgeName>\n";
+                        $output .= "\t\t\t<JudgeID>".strtoupper(strtr($organizer_info['4'],$bjcp_num_replace))."</JudgeID>\n";
+                        $output .= "\t\t\t<JudgeRole>Organizer</JudgeRole>\n";
+                        $output .= "\t\t\t<JudgePts>0.0</JudgePts>\n";
+                        $output .= "\t\t\t<NonJudgePts>".$organ_max_points."</NonJudgePts>\n";
+                        $output .= "\t\t</JudgeData>\n";
+                    }
+                }
+
+                $output .= "\t</BJCPpoints>\n";
+
+                $output .= "\t<NonBJCP>\n";
+
+                // Judges without a properly formatted BJCP IDs in the system
+                foreach (array_unique($j) as $uid) {
+                $judge_info = explode("^",brewer_info($uid));
+                $judge_points = judge_points($uid,$judge_info['5']);
+                if ($judge_points > 0) {
+                    $bos_judge = bos_points($uid);
+                    if ($bos_judge) $assignment = "Judge + BOS";
+                    else $assignment = "Judge";
+                        if (($judge_info['0'] != "") && ($judge_info['1'] != "") && (!validate_bjcp_id($judge_info['4']))) {
+                            $judge_name = ucwords(strtolower($judge_info['0']))." ".ucwords(strtolower($judge_info['1']));
+                                $output .= "\t\t<JudgeData>\n";
+                                $output .= "\t\t\t<JudgeName>".$judge_name."</JudgeName>\n";
+                                $output .= "\t\t\t<JudgeRole>".$assignment."</JudgeRole>\n";
+                                if ($bos_judge) $output .= "\t\t\t<JudgePts>".number_format((judge_points($uid,$judge_info['5'])+$bos_judge_points),1)."</JudgePts>\n";
+                                else $output .= "\t\t\t<JudgePts>".judge_points($uid,$judge_info['5'])."</JudgePts>\n";
+                                $output .= "\t\t\t<NonJudgePts>0.0</NonJudgePts>\n";
+                                $output .= "\t\t</JudgeData>\n";
+                        }
+                    }
+                }
+
+                // Loner BOS Judges (no assignment to any table)
+                foreach (array_unique($bos_judge_no_assignment) as $uid) {
+                    $judge_info = explode("^",brewer_info($uid));
+                    if (($judge_info['0'] != "") && ($judge_info['1'] != "") && (!validate_bjcp_id($judge_info['4']))) {
+                        if (!empty($uid)) {
+                            $judge_name = strtr(ucwords(strtolower($judge_info['0'])),$html_remove)." ".strtr(ucwords(strtolower($judge_info['1'])),$html_remove);
+                            $output .= "\t\t<JudgeData>\n";
+                            $output .= "\t\t\t<JudgeName>".$judge_name."</JudgeName>\n";
+                            $output .= "\t\t\t<JudgeID>".strtoupper(strtr($judge_info['4'],$bjcp_num_replace))."</JudgeID>\n";
+                            $output .= "\t\t\t<JudgeRole>BOS Judge</JudgeRole>\n";
+                            $output .= "\t\t\t<JudgePts>1.0</JudgePts>\n";
+                            $output .= "\t\t\t<NonJudgePts>0.0</NonJudgePts>\n";
+                            $output .= "\t\t</JudgeData>\n";
+                        }
+                    }
+                }
+
+                // Stewards without a properly formatted BJCP IDs in the system
+                foreach (array_unique($s) as $uid) {
+                $steward_points = steward_points($uid);
+                if ($steward_points > 0) {
+                    $steward_info = explode("^",brewer_info($uid));
+                        if (($steward_info['0'] != "") && ($steward_info['1'] != "") && (!validate_bjcp_id($steward_info['4']))) {
+                                $steward_name = ucwords(strtolower($steward_info['0']))." ".ucwords(strtolower($steward_info['1']));
+                                $output .= "\t\t<JudgeData>\n";
+                                $output .= "\t\t\t<JudgeName>".$steward_name."</JudgeName>\n";
+                                $output .= "\t\t\t<JudgeRole>Steward</JudgeRole>\n";
+                                $output .= "\t\t\t<JudgePts>0.0</JudgePts>\n";
+                                $output .= "\t\t\t<NonJudgePts>".$steward_points."</NonJudgePts>\n";
+                                $output .= "\t\t</JudgeData>\n";
+                        }
+                    }
+                }
+
+                // Staff Members without a properly formatted BJCP IDs in the system
+                foreach (array_unique($st) as $uid) {
+                if (array_sum($st_running_total) < $staff_max_points) {
+                    $staff_info = explode("^",brewer_info($uid));
+                        if (($staff_info['0'] != "") && ($staff_info['1'] != "") && (!validate_bjcp_id($staff_info['4']))) {
+                            $st_running_total[] = $staff_points;
+                            $staff_name = ucwords(strtolower($staff_info['0']))." ".ucwords(strtolower($staff_info['1']));
+                            $output .= "\t\t<JudgeData>\n";
+                            $output .= "\t\t\t<JudgeName>".$staff_name."</JudgeName>\n";
+                            $output .= "\t\t\t<JudgeRole>Staff</JudgeRole>\n";
+                            $output .= "\t\t\t<JudgePts>0.0</JudgePts>\n";
+                            if ($staff_points < $organ_max_points) $output .= "\t\t\t<NonJudgePts>".$staff_points."</NonJudgePts>\n";
+                            else $output .= "\t\t\t<NonJudgePts>".$organ_max_points."</NonJudgePts>\n";
+                            $output .= "\t\t</JudgeData>\n";
+                        }
+                    }
+                }
+
+                // Organizer without a properly formatted BJCP ID in the system
+                foreach (array_unique($o) as $uid) {
+                $organizer_info = explode("^",brewer_info($uid));
+                    if (($organizer_info['0'] != "") && ($organizer_info['1'] != "") && (!validate_bjcp_id($organizer_info['4']))) {
+                        $output .= "\t\t<JudgeData>\n";
+                        $output .= "\t\t\t<JudgeName>".$organizer_info['0']." ".$organizer_info['1']."</JudgeName>\n";
+                        $output .= "\t\t\t<JudgeRole>Organizer</JudgeRole>\n";
+                        $output .= "\t\t\t<JudgePts>0.0</JudgePts>\n";
+                        $output .= "\t\t\t<NonJudgePts>".$organ_max_points."</NonJudgePts>\n";
+                        $output .= "\t\t</JudgeData>\n";
+                    }
+                }
+                $output .= "\t</NonBJCP>\n";
+
+                // BOS Reporting
+                $output .= "\t<Comments>\n";
+                $output .= "\t\tGenerated by BCOE&M version ".$current_version_display."\n";
+                $output .= "\t\tSubmitter Email: ".$_SESSION['user_name']."\n";
 
                 $a = array();
-				do { $a[] = $row_style_type['id']; } while ($row_style_type = mysqli_fetch_assoc($style_type));
-				sort($a);
+                $query_style_type = sprintf("SELECT id FROM %s",$style_types_db_table);
+                $style_type = mysqli_query($connection,$query_style_type) or die (mysqli_error($connection));
+                $row_style_type = mysqli_fetch_assoc($style_type);
+                $totalRows_style_type = mysqli_num_rows($style_type);
+                do { $a[] = $row_style_type['id']; } while ($row_style_type = mysqli_fetch_assoc($style_type));
+                sort($a);
 
-				foreach ($a as $type) {
+                foreach ($a as $type) {
 
-					include (DB.'output_results_download_bos.db.php');
+                    include (DB.'output_results_download_bos.db.php');
 
-					if ($totalRows_bos > 0) {
-						$output .= "BOS Winner, Brewer's Name: ".$row_bos['brewerFirstName']." ".$row_bos['brewerLastName']."\n";
-						$output .= "BOS Winner, BJCP Style: ".$row_bos['brewCategory'].$row_bos['brewSubCategory']." ".$row_bos['brewStyle']."\n";
-						$output .= "BOS Winner, City & State: ".$row_bos['brewerCity'].", ".$row_bos['brewerState']."\n";
-					}
-				}
+                    if ($totalRows_bos > 0) {
+                        $output .= "\t\tBOS Winner: ".$row_bos['brewerFirstName']." ".$row_bos['brewerFirstName']."\n";
+                        $output .= "\t\tBOS Style: ".$row_bos['brewStyle']."\n";
+                        $output .= "\t\tBOS City: ".$row_bos['brewerCity']."\n";
+                        $output .= "\t\tBOS State: ".$row_bos['brewerState']."\n";
+                    }
+                }
+
+                $output .= "\t</Comments>\n";
+
+                $output .= "\t<SubmissionDate>".date('l j F Y h:i:s A')."</SubmissionDate>\n";
+                $output .= "</OrgReport>";
 
 
-				$output .= "\t</Comments>\n";
 
-				$output .= "\t<SubmissionDate>".date('l j F Y h:i:s A')."</SubmissionDate>\n";
-				$output .= "</OrgReport>";
+            } // end $all_rules_applied
 
-				header('Content-Type: application/force-download');
-				header('Content-Disposition: attachment;filename="'.$filename.'"');
-				header('Pragma: no-cache');
-				header('Expires: 0');
+            else {
+                $output .= "The report cannot be generated for the following reasons:\n";
+                if ($rule_org) $output .= "\t- No organizer has been designated.\n";
+                if ($rule_sessions) $output .= "\t- Judging sessions exceed the maximum of three (3) per day.\n";
+                if ($rule_comp_id) $output .= "\t- The BCJP Competition ID is missing.";
+            }
 
-				echo $output;
-				exit();
+            header('Content-Type: application/force-download');
+            header('Content-Disposition: attachment;filename="'.$filename.'"');
+            header('Pragma: no-cache');
+            header('Expires: 0');
+
+            echo $output;
+            exit();
+
 		}
 
 	} // END if ($section == "staff")

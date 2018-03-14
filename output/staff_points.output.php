@@ -53,8 +53,6 @@ if ($view == "default") {
 	$output_staff = "";
 
 	if ($totalRows_organizer > 0) {
-
-
 		$org_name = ucwords(strtolower($row_org['brewerLastName'])).", ".ucwords(strtolower($row_org['brewerFirstName']));
 		$output_organizer .= "<tr>";
 		$output_organizer .= "<td>".$org_name."</td>";
@@ -114,7 +112,6 @@ if ($view == "default") {
 		}
 	}
 
-
 	if ($totalRows_stewards > 0) {
         $s = array();
 		do { $s[] = $row_stewards['uid']; } while ($row_stewards = mysqli_fetch_assoc($stewards));
@@ -139,7 +136,6 @@ if ($view == "default") {
 		}
 
 	}
-
 
 	if ($totalRows_staff > 0) {
         $st = array();
