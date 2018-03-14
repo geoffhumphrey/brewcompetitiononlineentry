@@ -111,8 +111,6 @@ if (((strpos($section, "step") === FALSE) && ($section != "setup")) && ($section
 	$current_date_display = getTimeZoneDateTime($_SESSION['prefsTimeZone'], time(), $_SESSION['prefsDateFormat'], $_SESSION['prefsTimeFormat'], "long", "date");
 	$current_time = getTimeZoneDateTime($_SESSION['prefsTimeZone'], time(), $_SESSION['prefsDateFormat'], $_SESSION['prefsTimeFormat'], "system", "time");
 
-	$delay = $_SESSION['prefsWinnerDelay'];
-
 }
 
 else {
@@ -133,8 +131,8 @@ else {
 
 $logged_in = FALSE;
 $admin_user = FALSE;
-$show_scores = FALSE;
 $disable_pay = FALSE;
+$show_scores = FALSE;
 $show_scoresheets = FALSE;
 
 // User constants
@@ -158,14 +156,14 @@ if (isset($_SESSION['loginUsername']))  {
 	   $total_paid_entry_fees = total_fees_paid($_SESSION['contestEntryFee'], $_SESSION['contestEntryFee2'], $_SESSION['contestEntryFeeDiscount'], $_SESSION['contestEntryFeeDiscountNum'], $_SESSION['contestEntryCap'], $_SESSION['contestEntryFeePasswordNum'], $user_id_paid, $filter, $_SESSION['comp_id']);
 	   $total_to_pay = $total_entry_fees - $total_paid_entry_fees;
 
-		// Disable Pay?
+		// Disable pay?
 		if (($registration_open == 2) && ($shipping_window_open == 2) && ($dropoff_window_open == 2) && ($entry_window_open == 2)) $disable_pay = TRUE;
 
-		// Show Scores?
-		if ((judging_date_return() == 0) && ($entry_window_open == 2) && ($registration_open == 2) && ($judge_window_open == 2) && ($_SESSION['prefsDisplayWinners'] == "Y") && (judging_winner_display($delay))) $show_scores = TRUE; // echo $show_scores;
-
-		// Show Scoresheets?
-		if ((judging_date_return() == 0) && ($entry_window_open == 2) && ($registration_open == 2) && ($judge_window_open == 2)) $show_scoresheets = TRUE;
+		// Show scores and scoresheets?
+		if ((judging_date_return() == 0) && ($entry_window_open == 2) && ($registration_open == 2) && ($judge_window_open == 2) && ($_SESSION['prefsDisplayWinners'] == "Y") && (judging_winner_display($_SESSION['prefsWinnerDelay']))) {
+            $show_scores = TRUE;
+            $show_scoresheets = TRUE;
+        }
 
 	}
 

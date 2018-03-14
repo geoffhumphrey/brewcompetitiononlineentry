@@ -153,7 +153,7 @@ if ((judging_date_return() == 0) && ($registration_open == 2) && ($entry_window_
 
 		include (DB.'score_count.db.php');
 
-		if (judging_winner_display($delay)) {
+		if (judging_winner_display($_SESSION['prefsWinnerDelay'])) {
 
 			if (((NHC) && ($prefix == "final_")) || (!NHC)) {
 				echo $header1_10;

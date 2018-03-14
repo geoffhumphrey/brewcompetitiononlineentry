@@ -85,6 +85,11 @@
 	</script>
 <?php
 
+$filelist_head = "";
+$filelist_foot = "";
+$filelist = "";
+$filelist_heading = "";
+
 $filelist_heading = "<h2>Files in the Directory</h2>";
 
 if (!is_dir_empty(USER_DOCS)) {
