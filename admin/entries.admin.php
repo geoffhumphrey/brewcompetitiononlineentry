@@ -81,19 +81,37 @@ do {
 	// Check whether scoresheet file exists, and, if so, provide link.
 	$scoresheet_file_name_entry = sprintf("%06s",$entry_number).".pdf";
 	$scoresheet_file_name_judging = strtolower($judging_number).".pdf"; // upon upload, filename is converted to lowercase
-	$scoresheetfile_entry = USER_DOCS.$scoresheet_file_name_entry;
-	$scoresheetfile_judging = USER_DOCS.$scoresheet_file_name_judging;
+
+	if ($dbTable == "default") {
+		$scoresheetfile_entry = USER_DOCS.$scoresheet_file_name_entry;
+		$scoresheetfile_judging = USER_DOCS.$scoresheet_file_name_judging;
+		$scoresheet_prefs = $_SESSION['prefsDisplaySpecial'];
+	}
+
+	else {
+		$scoresheetfile_entry = USER_DOCS.DIRECTORY_SEPARATOR.get_suffix($dbTable).DIRECTORY_SEPARATOR.$scoresheet_file_name_entry;
+		$scoresheetfile_judging = USER_DOCS.DIRECTORY_SEPARATOR.get_suffix($dbTable).DIRECTORY_SEPARATOR.$scoresheet_file_name_judging;
+		$scoresheet_prefs = $row_archive_prefs['archiveScoresheet'];
+	}
 
 	$scoresheet = FALSE;
-	if ((file_exists($scoresheetfile_entry)) || (file_exists($scoresheetfile_judging))) $scoresheet = TRUE;
+	$scoresheet_entry = FALSE;
+	$scoresheet_judging = FALSE;
+
+	if ((file_exists($scoresheetfile_entry)) && ($scoresheet_prefs == "E")) {
+		$scoresheet = TRUE;
+		$scoresheet_entry = TRUE;
+	}
+
+	elseif ((file_exists($scoresheetfile_judging)) && ($scoresheet_prefs == "J")) {
+		$scoresheet = TRUE;
+		$scoresheet_judging = TRUE;
+	}
 
 	$scoresheet_file_name_1 = "";
 	$scoresheet_file_name_2 = "";
-	if (file_exists($scoresheetfile_entry)) $scoresheet_file_name_1 = $scoresheet_file_name_entry;
-	if (file_exists($scoresheetfile_judging)) $scoresheet_file_name_2 = $scoresheet_file_name_judging;
-
-	$filename_judging = USER_DOCS.$judging_number.".pdf";
-	if (file_exists($filename_judging)) $scoresheet = TRUE;
+	if ($scoresheet_entry) $scoresheet_file_name_1 = $scoresheet_file_name_entry;
+	if ($scoresheet_judging) $scoresheet_file_name_2 = $scoresheet_file_name_judging;
 
 	if ((!empty($row_log['brewInfo'])) || (!empty($row_log['brewMead1'])) || (!empty($row_log['brewMead2'])) || (!empty($row_log['brewMead3']))) {
 		$brewInfo = "";
@@ -209,7 +227,7 @@ do {
 
 	if (($scoresheet) && ($action != "print")) {
 
-		if (!empty($scoresheet_file_name_1))  {
+		if ((!empty($scoresheet_file_name_1)) && ($scoresheet_entry)) {
 
 			// The pseudo-random number and the corresponding name of the temporary file are defined each time
 			// this brewer_entries.sec.php script is accessed (or refreshed), but the temporary file is created
@@ -227,11 +245,12 @@ do {
 			// they shouldn't have access to. Can I get a harumph?!
 			$scoresheet_link_1 .= "scoresheetfilename=".encryptString($scoresheet_file_name_1);
 			$scoresheet_link_1 .= "&amp;randomfilename=".encryptString($random_file_name_1)."&amp;download=true";
+			if ($dbTable != "default") $scoresheet_link_1 .= "&amp;view=".get_suffix($dbTable);
 			$scoresheet_link_1 .= sprintf("\" data-toggle=\"tooltip\" title=\"%s '".$row_log['brewName']."'' (by Entry Number).\">",$brewer_entries_text_006);
 			$scoresheet_link_1 .= "<span class=\"fa fa-lg fa-gavel\"></a>&nbsp;&nbsp;";
 		}
 
-		if (!empty($scoresheet_file_name_2))  {
+		if ((!empty($scoresheet_file_name_2)) && ($scoresheet_judging)) {
 
 			// The pseudo-random number and the corresponding name of the temporary file are defined each time
 			// this brewer_entries.sec.php script is accessed (or refreshed), but the temporary file is created
@@ -251,6 +270,7 @@ do {
 			// they shouldn't have access to. Can I get a harumph?!
 			$scoresheet_link_2 .= "scoresheetfilename=".encryptString($scoresheet_file_name_2);
 			$scoresheet_link_2 .= "&amp;randomfilename=".encryptString($random_file_name_2)."&amp;download=true";
+			if ($dbTable != "default") $scoresheet_link_2 .= "&amp;view=".get_suffix($dbTable);
 			$scoresheet_link_2 .= sprintf("\" data-toggle=\"tooltip\" title=\"%s '".$row_log['brewName']."' (by Judging Number).\">",$brewer_entries_text_006);
 			$scoresheet_link_2 .= "<span class=\"fa fa-lg fa-gavel\"></a>&nbsp;&nbsp;";
 		}
@@ -587,7 +607,7 @@ if ($action != "print") { ?>
     <!-- Modal -->
     <div class="modal fade" id="entryStatusModal" tabindex="-1" role="dialog" aria-labelledby="entryStatusModalLabel">
       	<div class="modal-dialog" role="document">
-        	<div class="modal-content modal-sm">
+        	<div class="modal-content">
           		<div class="modal-header bcoem-admin-modal">
             		<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
             		<h4 class="modal-title" id="entryStatusModalLabel"><?php if ($view == "paid") echo "Paid"; elseif ($view == "unpaid") echo "Unpaid"; else echo "All" ?> Entry Status</h4>
@@ -641,7 +661,7 @@ if ($action != "print") { ?>
 <thead>
     <tr>
         <th nowrap>Entry</th>
-        <th nowrap>Judging <?php if ($action != "print") { ?><a href="#" tabindex="0" role="button" data-toggle="popover" data-trigger="hover" data-placement="auto top" data-container="body" title="Judging Numbers" data-content="Judging numbers are random six-digit numbers that are automatically assigned by the system. You can override each judging number when scanning in barcodes, QR Codes, or by entering it in the field provided."><span class="hidden-xs hidden-sm hidden-md hidden-print fa fa-question-circle"></span></a><?php } ?></th>
+        <th nowrap>Judging <?php if (($action != "print") &&  ($dbTable == "default")) { ?><a href="#" tabindex="0" role="button" data-toggle="popover" data-trigger="hover" data-placement="auto top" data-container="body" title="Judging Numbers" data-content="Judging numbers are random six-digit numbers that are automatically assigned by the system. You can override each judging number when scanning in barcodes, QR Codes, or by entering it in the field provided."><span class="hidden-xs hidden-sm hidden-md hidden-print fa fa-question-circle"></span></a><?php } ?></th>
         <th class="hidden-xs hidden-sm hidden-md">Name</th>
         <th class="hidden-xs">Style</th>
         <th class="hidden-xs"><?php if ($pro_edition == 1) echo "Organization"; else echo "Brewer"; ?></th>

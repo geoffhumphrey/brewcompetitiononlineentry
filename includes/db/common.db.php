@@ -332,7 +332,7 @@ if ((($section == "admin") && ($go == "preferences")) || ($section == "step3")) 
 if ($dbTable != "default") {
 	$suffix = strrchr($dbTable,"_");
 	$suffix = ltrim($suffix, "_");
-	$query_archive_prefs = sprintf("SELECT archiveStyleSet,archiveProEdition FROM %s WHERE archiveSuffix='%s'", $prefix."archive", $suffix);
+	$query_archive_prefs = sprintf("SELECT archiveStyleSet,archiveProEdition,archiveScoresheet FROM %s WHERE archiveSuffix='%s'", $prefix."archive", $suffix);
 	$archive_prefs = mysqli_query($connection,$query_archive_prefs) or die (mysqli_error($connection));
 	$row_archive_prefs = mysqli_fetch_assoc($archive_prefs);
 }

@@ -729,8 +729,8 @@ if (SINGLE) {
 $output .= "<li>PDF file name in the user_docs directory converted to lowercase (including extension).</li>";
 
 // ----------------------------------------------- 2.1.12 ----------------------------------------------
+
 // Add Certified Cider Judge designation
-// -----------------------------------------------------------------------------------------------------
 if (!check_update("brewerJudgeCider", $prefix."brewer")) {
 
 	$updateSQL = sprintf("ALTER TABLE `%s` ADD `brewerJudgeCider` CHAR(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL AFTER `brewerJudgeMead`;",$prefix."brewer");
@@ -738,7 +738,7 @@ if (!check_update("brewerJudgeCider", $prefix."brewer")) {
 	mysqli_real_escape_string($connection,$updateSQL);
 	$result = mysqli_query($connection,$updateSQL);
 
-	// Set failed logins to 0 for all users
+	// Set Cider Judge designation to N for all users
 	$updateSQL = sprintf("UPDATE `%s` SET brewerJudgeCider='N';",$prefix."brewer");
 	mysqli_select_db($connection,$database);
 	mysqli_real_escape_string($connection,$updateSQL);
@@ -747,6 +747,25 @@ if (!check_update("brewerJudgeCider", $prefix."brewer")) {
 }
 
 $output .= "<li>Added Certified Cider Judge designation.</li>";
+
+// Change unused archive column to archiveScoresheet
+// Saves the preference from current when archiving for correct display of archived scoresheets
+if (!check_update("archiveScoresheet", $prefix."archive")) {
+
+	$updateSQL = sprintf("ALTER TABLE `%s` CHANGE `archiveBrewingTableName` `archiveScoresheet` CHAR(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL;",$prefix."archive");
+	mysqli_select_db($connection,$database);
+	mysqli_real_escape_string($connection,$updateSQL);
+	$result = mysqli_query($connection,$updateSQL);
+
+	// Set all to 'J'
+	$updateSQL = sprintf("UPDATE `%s` SET archiveScoresheet='J';",$prefix."archive");
+	mysqli_select_db($connection,$database);
+	mysqli_real_escape_string($connection,$updateSQL);
+	$result = mysqli_query($connection,$updateSQL);
+
+}
+
+$output .= "<li>Updated archive table for proper access of archived scoresheets.</li>";
 
 // Change the version and version date in the system table
 $updateSQL = sprintf("UPDATE %s SET version='%s', version_date='%s', data_check=%s WHERE id=1", $prefix."system", $current_version, $current_version_date_display,"NOW()");
