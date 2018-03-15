@@ -146,10 +146,7 @@ foreach ($flag_enum as $num) {
     <input type="hidden" name="id[]" value="<?php echo $i; ?>">
 	<div class="form-group">
     	<label for="">Entry Number</label>
-    	<input type="text" class="form-control" maxlength="<?php echo $maxlength; ?>" id="eid<?php echo $i; ?>" name="eid<?php echo $i; ?>" onkeyup="moveOnMax(this,'judgingNumber<?php echo $i; ?>')" <?php if ($i == "1") echo "data-error=\"Field must have a 4 digit number.\" required"; ?> /><?php if ($i == "1") { ?>
-        <script>document.getElementById('eid1').focus()</script>
-        <div class="help-block with-errors"></div>
-      <?php } ?>
+    	<input type="text" class="form-control" maxlength="<?php echo $maxlength; ?>" id="eid<?php echo $i; ?>" name="eid<?php echo $i; ?>" onkeyup="moveOnMax(this,'judgingNumber<?php echo $i; ?>')" <?php if ($i == "1") echo "data-error=\"Field must have a 4 digit number.\" required"; ?> /><?php if ($i == "1") { ?><script>document.getElementById('eid1').focus()</script><div class="help-block with-errors"></div><?php } ?>
   	</div>
   	<div class="form-group">
     	<label for="">Judging Number</label>

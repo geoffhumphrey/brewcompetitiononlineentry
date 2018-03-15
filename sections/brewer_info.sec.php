@@ -26,7 +26,6 @@
 				]
 			} );
 
-	 $(document).ready(function() {
 		$('#sortable_steward').( {
 			"bPaginate" : false,
 			"sDom": 'rt',
