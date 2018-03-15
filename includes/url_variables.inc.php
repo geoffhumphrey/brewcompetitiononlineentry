@@ -33,7 +33,7 @@ if (isset($_GET['msg'])) {
 $go = "default";
 if (isset($_GET['go'])) {
   $go = (get_magic_quotes_gpc()) ? $_GET['go'] : addslashes($_GET['go']);
-} 
+}
 
 $username = "default";
 if (isset($_GET['username'])) {
@@ -58,21 +58,6 @@ if (isset($_GET['bid'])) {
 $view = "default";
 if (isset($_GET['view'])) {
   $view = (get_magic_quotes_gpc()) ? $_GET['view'] : addslashes($_GET['view']);
-}
-
-$pg = "default";
-if (isset($_GET['pg'])) {
-  $pg = (get_magic_quotes_gpc()) ? $_GET['pg'] : addslashes($_GET['pg']);
-}
-
-$dir = "ASC";
-if (isset($_GET['dir'])) {
-  $dir = (get_magic_quotes_gpc()) ? $_GET['dir'] : addslashes($_GET['dir']);
-}
-
-$sort = "brewCategorySort, brewSubCategory, brewBrewerLastName";
-if (isset($_GET['sort'])) {
-  $sort = (get_magic_quotes_gpc()) ? $_GET['sort'] : addslashes($_GET['sort']);
 }
 
 // ------------------ Token for authorized password changes ------------------
@@ -119,6 +104,21 @@ if (isset($_GET['location'])) {
 $inserted = "default";
 if (isset($_GET['inserted'])) {
   $inserted = (get_magic_quotes_gpc()) ? $_GET['inserted'] : addslashes($_GET['inserted']);
-} 
-// ----------------- 
+}
+
+$dir = "ASC";
+if (isset($_GET['dir'])) {
+  $dir = (get_magic_quotes_gpc()) ? $_GET['dir'] : addslashes($_GET['dir']);
+}
+
+$pg = "default";
+if (isset($_GET['pg'])) {
+  $pg = (get_magic_quotes_gpc()) ? $_GET['pg'] : addslashes($_GET['pg']);
+}
+
+$sort = "brewCategorySort, brewSubCategory, brewBrewerLastName";
+if (isset($_GET['sort'])) {
+  $sort = (get_magic_quotes_gpc()) ? $_GET['sort'] : addslashes($_GET['sort']);
+}
+
 ?>

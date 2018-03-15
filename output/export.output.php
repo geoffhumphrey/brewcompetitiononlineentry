@@ -137,8 +137,8 @@ if (((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) || ((
 		}
 
 		if (($go == "csv") && ($action == "all") && ($filter == "all")) {
-			$headers = array();
 
+            $headers = array();
             $headers[] = "Last Name";
             $headers[] = "First Name";
             $headers[] = "Email";
@@ -184,32 +184,37 @@ if (((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) || ((
 
 				fputcsv($fp, $headers);
 
-				do {
+                if ($totalRows_sql > 0) {
 
-                    include (DB.'output_entries_export_extend.db.php');
+                    do {
 
-                    if (isset($row_sql['brewBrewerID'])) $brewer_info = explode("^", brewer_info($row_sql['brewBrewerID']));
-                    else $brewer_info = "";
+                        include (DB.'output_entries_export_extend.db.php');
 
-                    if (isset($row_sql['brewBrewerFirstName'])) $brewerFirstName = strtr($row_sql['brewBrewerFirstName'],$html_remove);
-                    else $brewerFirstName = "";
+                        if (isset($row_sql['brewBrewerID'])) $brewer_info = explode("^", brewer_info($row_sql['brewBrewerID']));
+                        else $brewer_info = "";
 
-                    if (isset($row_sql['brewBrewerLastName'])) $brewerLastName = strtr($row_sql['brewBrewerLastName'],$html_remove);
-                    else $brewerLastName = "";
+                        if (isset($row_sql['brewBrewerFirstName'])) $brewerFirstName = strtr($row_sql['brewBrewerFirstName'],$html_remove);
+                        else $brewerFirstName = "";
 
-                    if (!empty($brewer_info)) $fields0 = array($brewerFirstName,$brewerLastName,$brewer_info[6],$brewer_info[10],$brewer_info[11],$brewer_info[12],$brewer_info[13],$brewer_info[14]);
-                    else $fields0 = array($brewerFirstName,$brewerLastName,"","","","","","");
+                        if (isset($row_sql['brewBrewerLastName'])) $brewerLastName = strtr($row_sql['brewBrewerLastName'],$html_remove);
+                        else $brewerLastName = "";
 
-                    $fields1 = array_values($row_sql);
-					$fields2 = array($table_name,$row_flight['flightNumber'],$row_flight['flightRound'],sprintf("%02s",$row_scores['scoreEntry']),$row_scores['scorePlace'],$bos_place,$style_type_entry,$location[2]);
-					$fields = array_merge($fields0,$fields1,$fields2);
+                        if (!empty($brewer_info)) $fields0 = array($brewerFirstName,$brewerLastName,$brewer_info[6],$brewer_info[10],$brewer_info[11],$brewer_info[12],$brewer_info[13],$brewer_info[14]);
+                        else $fields0 = array($brewerFirstName,$brewerLastName,"","","","","","");
 
-                    fputcsv($fp, $fields);
+                        $fields1 = array_values($row_sql);
+                        $fields2 = array($table_name,$row_flight['flightNumber'],$row_flight['flightRound'],sprintf("%02s",$row_scores['scoreEntry']),$row_scores['scorePlace'],$bos_place,$style_type_entry,$location[2]);
+                        $fields = array_merge($fields0,$fields1,$fields2);
 
-				}
+                        fputcsv($fp, $fields);
 
-				while ($row_sql = mysqli_fetch_assoc($sql));
+                    }
+
+                    while ($row_sql = mysqli_fetch_assoc($sql));
+                }
+
 			die;
+
 			}
 		}
 
@@ -232,72 +237,74 @@ if (((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) || ((
 				$a[] = array('Entry Number','Judging Number','Category','Style','Style Name','Required Info','Optional Info','Specifics','Sweetness','Carb','Strength');
 			}
 
-			do {
+            if ($totalRows_sql > 0) {
 
-				if (isset($row_sql['brewBrewerFirstName'])) $brewerFirstName = strtr($row_sql['brewBrewerFirstName'],$html_remove);
-				else $brewerFirstName = "";
+    			do {
 
-				if (isset($row_sql['brewBrewerLastName'])) $brewerLastName = strtr($row_sql['brewBrewerLastName'],$html_remove);
-				else $brewerLastName = "";
+    				if (isset($row_sql['brewBrewerFirstName'])) $brewerFirstName = strtr($row_sql['brewBrewerFirstName'],$html_remove);
+    				else $brewerFirstName = "";
 
-				if (isset($row_sql['brewBrewerLastName'])) $brewName = strtr($row_sql['brewName'],$html_remove);
-				else $brewName = "";
+    				if (isset($row_sql['brewBrewerLastName'])) $brewerLastName = strtr($row_sql['brewBrewerLastName'],$html_remove);
+    				else $brewerLastName = "";
 
-				if (isset($row_sql['brewInfo'])) {
-					$brewInfo = str_replace("^"," | ",$row_sql['brewInfo']);
-					$brewInfo = strtr($brewInfo,$html_remove);
-				}
-				else $brewInfo = "";
+    				if (isset($row_sql['brewBrewerLastName'])) $brewName = strtr($row_sql['brewName'],$html_remove);
+    				else $brewName = "";
 
-				if (isset($row_sql['brewComments'])) $brewSpecifics = strtr($row_sql['brewComments'],$html_remove);
-				else $brewSpecifics = "";
+    				if (isset($row_sql['brewInfo'])) {
+    					$brewInfo = str_replace("^"," | ",$row_sql['brewInfo']);
+    					$brewInfo = strtr($brewInfo,$html_remove);
+    				}
+    				else $brewInfo = "";
 
-				if (isset($row_sql['brewInfoOptional'])) $brewInfoOptional = strtr($row_sql['brewInfoOptional'],$html_remove);
-				else $brewInfoOptional = "";
+    				if (isset($row_sql['brewComments'])) $brewSpecifics = strtr($row_sql['brewComments'],$html_remove);
+    				else $brewSpecifics = "";
 
-				$entryNo = sprintf("%04s",$row_sql['id']);
+    				if (isset($row_sql['brewInfoOptional'])) $brewInfoOptional = strtr($row_sql['brewInfoOptional'],$html_remove);
+    				else $brewInfoOptional = "";
 
-				if (isset($row_sql['brewJudgingNumber'])) $judgingNo = sprintf("%06s",$row_sql['brewJudgingNumber']);
-				else $judgingNo = "";
+    				$entryNo = sprintf("%04s",$row_sql['id']);
 
-				if (isset($row_sql['brewBrewerID'])) $brewer_info = explode("^", brewer_info($row_sql['brewBrewerID']));
-				else $brewer_info = "";
+    				if (isset($row_sql['brewJudgingNumber'])) $judgingNo = sprintf("%06s",$row_sql['brewJudgingNumber']);
+    				else $judgingNo = "";
 
-				// Winner Downloads
-				if (($action == "default") && ($filter == "winners") && ($_SESSION['prefsWinnerMethod'] == 0)) {
-					include (DB.'output_entries_export_winner.db.php');
-				} // end if (($action == "default") && ($filter == "winners"))
+    				if (isset($row_sql['brewBrewerID'])) $brewer_info = explode("^", brewer_info($row_sql['brewBrewerID']));
+    				else $brewer_info = "";
 
-				// No participant email addresses
-				if (($action == "hccp") && ($filter != "winners"))
-				$a[] = array($brewerFirstName,$brewerLastName,$row_sql['brewCategory'],$row_sql['brewSubCategory'],$row_sql['brewStyle'],$entryNo,$brewName,$brewInfo,$row_sql['brewMead2'],$row_sql['brewMead1'],$row_sql['brewMead3']);
+    				// Winner Downloads
+    				if (($action == "default") && ($filter == "winners") && ($_SESSION['prefsWinnerMethod'] == 0)) {
+    					include (DB.'output_entries_export_winner.db.php');
+    				} // end if (($action == "default") && ($filter == "winners"))
 
-				// With email addresses of participants.
-				if ((($action == "default") || ($action == "email")) && ($go == "csv") && ($filter != "winners")) {
-					include (DB.'output_entries_export_extend.db.php');
-					if (!empty($brewer_info)) $a[] = array($brewerFirstName,$brewerLastName,$brewer_info[6],$brewer_info[10],$brewer_info[11],$brewer_info[12],$brewer_info[13],$brewer_info[14],$entryNo,$judgingNo,$row_sql['brewCategory'],$row_sql['brewSubCategory'],$row_sql['brewStyle'],$brewName,$brewInfo,$brewSpecifics,$row_sql['brewMead1'],$row_sql['brewMead2'],$row_sql['brewMead3'],$table_name,$location[2],$row_flight['flightNumber'],$row_flight['flightRound'],sprintf("%02s",$row_scores['scoreEntry']),$row_scores['scorePlace'],$bos_place);
-				}
+    				// No participant email addresses
+    				if (($action == "hccp") && ($filter != "winners"))
+    				$a[] = array($brewerFirstName,$brewerLastName,$row_sql['brewCategory'],$row_sql['brewSubCategory'],$row_sql['brewStyle'],$entryNo,$brewName,$brewInfo,$row_sql['brewMead2'],$row_sql['brewMead1'],$row_sql['brewMead3']);
 
+    				// With email addresses of participants.
+    				if ((($action == "default") || ($action == "email")) && ($go == "csv") && ($filter != "winners")) {
+    					include (DB.'output_entries_export_extend.db.php');
+    					if (!empty($brewer_info)) $a[] = array($brewerFirstName,$brewerLastName,$brewer_info[6],$brewer_info[10],$brewer_info[11],$brewer_info[12],$brewer_info[13],$brewer_info[14],$entryNo,$judgingNo,$row_sql['brewCategory'],$row_sql['brewSubCategory'],$row_sql['brewStyle'],$brewName,$brewInfo,$brewSpecifics,$row_sql['brewMead1'],$row_sql['brewMead2'],$row_sql['brewMead3'],$table_name,$location[2],$row_flight['flightNumber'],$row_flight['flightRound'],sprintf("%02s",$row_scores['scoreEntry']),$row_scores['scorePlace'],$bos_place);
+    				}
 
+    				if (($go == "csv") && ($action == "required") && ($filter == "required")) {
 
-				if (($go == "csv") && ($action == "required") && ($filter == "required")) {
+    					$a[] = array($entryNo,
+    								 $judgingNo,
+    								 $row_sql['brewCategory'],
+    								 $row_sql['brewSubCategory'],
+    								 $row_sql['brewStyle'],
+    								 $brewInfo,
+    								 $brewInfoOptional,
+    								 $brewSpecifics,
+    								 $row_sql['brewMead1'],
+    								 $row_sql['brewMead2'],
+    								 $row_sql['brewMead3']
+    								);
 
-					$a[] = array($entryNo,
-								 $judgingNo,
-								 $row_sql['brewCategory'],
-								 $row_sql['brewSubCategory'],
-								 $row_sql['brewStyle'],
-								 $brewInfo,
-								 $brewInfoOptional,
-								 $brewSpecifics,
-								 $row_sql['brewMead1'],
-								 $row_sql['brewMead2'],
-								 $row_sql['brewMead3']
-								);
+    				}
 
-				}
+    			} while ($row_sql = mysqli_fetch_assoc($sql));
 
-			} while ($row_sql = mysqli_fetch_assoc($sql));
+            }
 
 			if (($action == "default") && ($filter == "winners") && ($_SESSION['prefsWinnerMethod'] >= 0)) {
 				include (DB.'output_entries_export_winner.db.php');
@@ -1083,7 +1090,7 @@ if (((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) || ((
 					$judge_points = judge_points($uid,$judge_info['5']);
 					$bos_judge = bos_points($uid);
 					if ($judge_points > 0) {
-						$judge_name = strtr(ucwords(strtolower($judge_info['1'])),$html_remove).", ".strtr(ucwords(strtolower($judge_info['0'])),$html_remove);
+						$judge_name = $judge_info['0']." ".$judge_info['1'];
 						$html .= '<tr>';
 						$html .= '<td width="300">'.$judge_name;
 						if ($bos_judge) $html .= " (BOS Judge)";
@@ -1099,7 +1106,7 @@ if (((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) || ((
 				foreach (array_unique($bos_judge_no_assignment) as $uid) {
 					$judge_info = explode("^",brewer_info($uid));
 					if (!empty($uid)) {
-						$judge_name = strtr(ucwords(strtolower($judge_info['1'])),$html_remove).", ".strtr(ucwords(strtolower($judge_info['0'])),$html_remove);
+						$judge_name = $judge_info['1'].", ".$judge_info['0'];
 						$html .= '<tr>';
 						$html .= '<td width="300">'.$judge_name;
 						$html .= " (BOS Judge)";
@@ -1128,7 +1135,7 @@ if (((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) || ((
 					$steward_info = explode("^",brewer_info($uid));
 					$steward_points = steward_points($uid);
 					if ($steward_points > 0) {
-						$steward_name = ucwords(strtolower($steward_info['1'])).", ".ucwords(strtolower($steward_info['0']));
+						$steward_name = $steward_info['1'].", ".$steward_info['0'];
 						$html .= '<tr>';
 						$html .= '<td width="300">'.$steward_name.'</td>';
 						$html .= '<td width="'.$td_width_name.'">';
@@ -1154,7 +1161,7 @@ if (((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) || ((
 				foreach (array_unique($st) as $uid) {
 					if (array_sum($st_running_total) < $staff_max_points) {
 						$staff_info = explode("^",brewer_info($uid));
-						$staff_name = ucwords(strtolower($staff_info['1'])).", ".ucwords(strtolower($staff_info['0']));
+						$staff_name = $staff_info['1'].", ".$staff_info['0'];
 						$html .= '<tr>';
 						$html .= '<td width="300">'.$staff_name.'</td>';
 						$html .= '<td width="'.$td_width_name.'">';
@@ -1250,7 +1257,7 @@ if (((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) || ((
                         if (($bos_judge) && (!in_array($uid,$bos_judge_no_assignment))) $assignment = "Judge + BOS";
                         else $assignment = "Judge";
                         if (($judge_info['0'] != "") && ($judge_info['1'] != "") && (validate_bjcp_id($judge_info['4']))) {
-                            $judge_name = strtr(ucwords(strtolower($judge_info['0'])),$html_remove)." ".strtr(ucwords(strtolower($judge_info['1'])),$html_remove);
+                            $judge_name = $judge_info['0']." ".$judge_info['1'];
                             $output .= "\t\t<JudgeData>\n";
                             $output .= "\t\t\t<JudgeName>".$judge_name."</JudgeName>\n";
                             $output .= "\t\t\t<JudgeID>".strtoupper(strtr($judge_info['4'],$bjcp_num_replace))."</JudgeID>\n";
@@ -1269,7 +1276,7 @@ if (((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) || ((
                     $judge_info = explode("^",brewer_info($uid));
                     if (($judge_info['0'] != "") && ($judge_info['1'] != "") && (validate_bjcp_id($judge_info['4']))) {
                         if (!empty($uid)) {
-                            $judge_name = strtr(ucwords(strtolower($judge_info['0'])),$html_remove)." ".strtr(ucwords(strtolower($judge_info['1'])),$html_remove);
+                            $judge_name = $judge_info['0']." ".$judge_info['1'];
                             $output .= "\t\t<JudgeData>\n";
                             $output .= "\t\t\t<JudgeName>".$judge_name."</JudgeName>\n";
                             $output .= "\t\t\t<JudgeID>".strtoupper(strtr($judge_info['4'],$bjcp_num_replace))."</JudgeID>\n";
@@ -1286,7 +1293,7 @@ if (((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) || ((
                 $steward_info = explode("^",brewer_info($uid));
                 $steward_points = steward_points($uid);
                 if ($steward_points > 0) {
-                    $steward_name = ucwords(strtolower($steward_info['0']))." ".ucwords(strtolower($steward_info['1']));
+                    $steward_name = $steward_info['0']." ".$steward_info['1'];
                     if (($steward_info['0'] != "") && ($steward_info['1'] != "") && (validate_bjcp_id($steward_info['4']))) {
                         $output .= "\t\t<JudgeData>\n";
                         $output .= "\t\t\t<JudgeName>".$steward_name."</JudgeName>\n";
@@ -1304,7 +1311,7 @@ if (((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) || ((
                 if (array_sum($st_running_total) < $staff_max_points) {
                     $staff_info = explode("^",brewer_info($uid));
                         if (($staff_info['0'] != "") && ($staff_info['1'] != "") && (validate_bjcp_id($staff_info['4']))) {
-                            $staff_name = ucwords(strtolower($staff_info['0']))." ".ucwords(strtolower($staff_info['1']));
+                            $staff_name = $staff_info['0']." ".$staff_info['1'];
                             $st_running_total[] .= $staff_points;
                             $output .= "\t\t<JudgeData>\n";
                             $output .= "\t\t\t<JudgeName>".$staff_name."</JudgeName>\n";
@@ -1323,7 +1330,7 @@ if (((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) || ((
                     if (($organizer_info['0'] != "") && ($organizer_info['1'] != "") && (validate_bjcp_id($organizer_info['4']))) {
                         $output .= "\t\t<JudgeData>\n";
                         $output .= "\t\t\t<JudgeName>".$organizer_info['0']." ".$organizer_info['1']."</JudgeName>\n";
-                        $output .= "\t\t\t<JudgeID>".strtoupper(strtr($organizer_info['4'],$bjcp_num_replace))."</JudgeID>\n";
+                        $output .= "\t\t\t<JudgeID>".$organizer_info['4']."</JudgeID>\n";
                         $output .= "\t\t\t<JudgeRole>Organizer</JudgeRole>\n";
                         $output .= "\t\t\t<JudgePts>0.0</JudgePts>\n";
                         $output .= "\t\t\t<NonJudgePts>".$organ_max_points."</NonJudgePts>\n";
@@ -1344,7 +1351,7 @@ if (((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) || ((
                     if ($bos_judge) $assignment = "Judge + BOS";
                     else $assignment = "Judge";
                         if (($judge_info['0'] != "") && ($judge_info['1'] != "") && (!validate_bjcp_id($judge_info['4']))) {
-                            $judge_name = ucwords(strtolower($judge_info['0']))." ".ucwords(strtolower($judge_info['1']));
+                            $judge_name = $judge_info['0']." ".$judge_info['1'];
                                 $output .= "\t\t<JudgeData>\n";
                                 $output .= "\t\t\t<JudgeName>".$judge_name."</JudgeName>\n";
                                 $output .= "\t\t\t<JudgeRole>".$assignment."</JudgeRole>\n";
@@ -1361,7 +1368,7 @@ if (((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) || ((
                     $judge_info = explode("^",brewer_info($uid));
                     if (($judge_info['0'] != "") && ($judge_info['1'] != "") && (!validate_bjcp_id($judge_info['4']))) {
                         if (!empty($uid)) {
-                            $judge_name = strtr(ucwords(strtolower($judge_info['0'])),$html_remove)." ".strtr(ucwords(strtolower($judge_info['1'])),$html_remove);
+                            $judge_name = $judge_info['0']." ".$judge_info['1'];
                             $output .= "\t\t<JudgeData>\n";
                             $output .= "\t\t\t<JudgeName>".$judge_name."</JudgeName>\n";
                             $output .= "\t\t\t<JudgeID>".strtoupper(strtr($judge_info['4'],$bjcp_num_replace))."</JudgeID>\n";
@@ -1379,7 +1386,7 @@ if (((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) || ((
                 if ($steward_points > 0) {
                     $steward_info = explode("^",brewer_info($uid));
                         if (($steward_info['0'] != "") && ($steward_info['1'] != "") && (!validate_bjcp_id($steward_info['4']))) {
-                                $steward_name = ucwords(strtolower($steward_info['0']))." ".ucwords(strtolower($steward_info['1']));
+                                $steward_name = $steward_info['0']." ".$steward_info['1'];
                                 $output .= "\t\t<JudgeData>\n";
                                 $output .= "\t\t\t<JudgeName>".$steward_name."</JudgeName>\n";
                                 $output .= "\t\t\t<JudgeRole>Steward</JudgeRole>\n";
@@ -1396,7 +1403,7 @@ if (((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) || ((
                     $staff_info = explode("^",brewer_info($uid));
                         if (($staff_info['0'] != "") && ($staff_info['1'] != "") && (!validate_bjcp_id($staff_info['4']))) {
                             $st_running_total[] = $staff_points;
-                            $staff_name = ucwords(strtolower($staff_info['0']))." ".ucwords(strtolower($staff_info['1']));
+                            $staff_name = $staff_info['0']." ".$staff_info['1'];
                             $output .= "\t\t<JudgeData>\n";
                             $output .= "\t\t\t<JudgeName>".$staff_name."</JudgeName>\n";
                             $output .= "\t\t\t<JudgeRole>Staff</JudgeRole>\n";
@@ -1440,7 +1447,7 @@ if (((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) || ((
                     include (DB.'output_results_download_bos.db.php');
 
                     if ($totalRows_bos > 0) {
-                        $output .= "\t\tBOS Winner: ".$row_bos['brewerFirstName']." ".$row_bos['brewerFirstName']."\n";
+                        $output .= "\t\tBOS Winner: ".$row_bos['brewerFirstName']." ".$row_bos['brewerLastName']."\n";
                         $output .= "\t\tBOS Style: ".$row_bos['brewStyle']."\n";
                         $output .= "\t\tBOS City: ".$row_bos['brewerCity']."\n";
                         $output .= "\t\tBOS State: ".$row_bos['brewerState']."\n";

@@ -68,6 +68,7 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 		setcookie("brewerStewardLocation", $location_pref2, 0, "/");
 		setcookie("brewerBreweryName", $brewerBreweryName, 0, "/");
 		setcookie("brewerBreweryTTB", $brewerBreweryTTB, 0, "/");
+		setcookie("brewerJudgeID", $brewerJudgeID, 0, "/");
 
 		$location = $base_url."index.php?section=".$section."&go=".$go."&msg=4";
 		header(sprintf("Location: %s", $location));
@@ -100,6 +101,7 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 		setcookie("brewerStewardLocation", $location_pref2, 0, "/");
 		setcookie("brewerBreweryName", $brewerBreweryName, 0, "/");
 		setcookie("brewerBreweryTTB", $brewerBreweryTTB, 0, "/");
+		setcookie("brewerJudgeID", $brewerJudgeID, 0, "/");
 
 		if ($filter == "admin") $location =  $base_url."index.php?section=admin&go=entrant&action=register&msg=27";
 		else $location = $base_url."index.php?section=".$section."&go=".$go."&msg=5";
@@ -140,7 +142,7 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 			setcookie("brewerStewardLocation", $location_pref2, 0, "/");
 			setcookie("brewerBreweryName", $brewerBreweryName, 0, "/");
 			setcookie("brewerBreweryTTB", $brewerBreweryTTB, 0, "/");
-
+			setcookie("brewerJudgeID", $brewerJudgeID, 0, "/");
 
 			if ($filter == "admin") header(sprintf("Location: %s", $base_url."index.php?section=admin&go=".$go."&action=register&msg=10"));
 			else header(sprintf("Location: %s", $base_url."index.php?section=".$section."&go=".$go."&action=".$action."&msg=2"));

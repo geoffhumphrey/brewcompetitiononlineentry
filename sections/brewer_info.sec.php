@@ -12,10 +12,7 @@
 				null
 				]
 			} );
-		} );
 
-	// Table Assignments
-	 $(document).ready(function() {
 		$('#judge_assignments').( {
 			"bPaginate" : false,
 			"sDom": 'rt',
@@ -28,8 +25,6 @@
 				null
 				]
 			} );
-		} );
-
 
 	 $(document).ready(function() {
 		$('#sortable_steward').( {
@@ -44,9 +39,7 @@
 				null
 				]
 			} );
-		} );
 
-	$(document).ready(function() {
 		$('#steward_assignments').( {
 			"bPaginate" : false,
 			"sDom": 'rt',
@@ -449,12 +442,7 @@ if ($show_judge_steward_fields) {
 		$display_rank = bjcp_rank($bjcp_rank[0],2);
 		if (!empty($bjcp_rank[1])) $display_rank .= designations($row_brewer['brewerJudgeRank'],$bjcp_rank[0]);
 
-		$account_display .= "<div class=\"row bcoem-account-info\">";
-		$account_display .= sprintf("<div class=\"".$display_left_cols."\"><strong>%s</strong></div>",$label_bjcp_id);
-		$account_display .= "<div class=\"".$display_right_cols."\">";
-		if ($_SESSION['brewerJudgeID'] > "0") $account_display .= $_SESSION['brewerJudgeID']; else $account_display .= "N/A";
-		$account_display .= "</div>";
-		$account_display .= "</div>";
+
 		$account_display .= "<div class=\"row bcoem-account-info\">";
 		$account_display .= sprintf("<div class=\"".$display_left_cols."\"><strong>%s</strong></div>",$label_designations);
 		$account_display .= "<div class=\"".$display_right_cols."\">";
@@ -547,7 +535,6 @@ if ($show_judge_steward_fields) {
 	}  // end if ($_SESSION['brewerJudge'] == "Y")
 
 
-
 	$account_display .= "<div class=\"row bcoem-account-info\">";
 	$account_display .= sprintf("<div class=\"".$display_left_cols."\"><strong>Steward</strong></div>",$label_steward);
 	$account_display .= "<div class=\"".$display_right_cols."\">";
@@ -610,6 +597,15 @@ if ($show_judge_steward_fields) {
 	}
 
 	if (($_SESSION['brewerJudge'] == "Y") || ($_SESSION['brewerSteward'] == "Y")) {
+
+		// BJCP ID (show for either judge or steward)
+		$account_display .= "<div class=\"row bcoem-account-info\">";
+		$account_display .= sprintf("<div class=\"".$display_left_cols."\"><strong>%s</strong></div>",$label_bjcp_id);
+		$account_display .= "<div class=\"".$display_right_cols."\">";
+		if ($_SESSION['brewerJudgeID'] > "0") $account_display .= $_SESSION['brewerJudgeID']; else $account_display .= "N/A";
+		$account_display .= "</div>";
+		$account_display .= "</div>";
+
 		$account_display .= "<div class=\"row bcoem-account-info\">";
 		$account_display .= sprintf("<div class=\"".$display_left_cols."\"><strong>%s</strong></div>",$label_waiver);
 		$account_display .= "<div class=\"".$display_right_cols."\">";

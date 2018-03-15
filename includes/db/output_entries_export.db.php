@@ -52,4 +52,5 @@ if ($filter == "winners") {
 $sql = mysqli_query($connection,$query_sql) or die (mysqli_error($connection));
 $row_sql = mysqli_fetch_assoc($sql);
 $num_fields = mysqli_num_fields($sql);
+$totalRows_sql = mysqli_num_rows($sql);
 ?>

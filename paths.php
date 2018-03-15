@@ -48,7 +48,7 @@ define('HOSTED', FALSE);
 define('NHC', FALSE);
 define('SINGLE', FALSE);
 
-/*
+/**
  * Enable to following to put your installation into
  * "mainenance mode" - bypasses the default index.php script
  * and displays the maintenance.php file to alert visitors.
@@ -71,13 +71,13 @@ define('CDN', TRUE);
  * sandbox enfvironment, etc.
  * Default is FALSE
  */
-define('TESTING', TRUE);
+define('TESTING', FALSE);
 
 /**
  * Enable the following to display php errors on screen.
  * Default is FALSE
  */
-define('DEBUG', TRUE);
+define('DEBUG', FALSE);
 
 /**
  * Enable the following to show a collapsable table of all

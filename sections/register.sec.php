@@ -689,6 +689,13 @@ if ($go == "default") {  ?>
             </div>
         </div>
     </div><!-- ./Form Group -->
+    <div class="form-group"><!-- Form Group Text Input -->
+            <label for="brewerJudgeID" class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label_bjcp_id; ?></label>
+            <div class="col-lg-9 col-md-9 col-sm-8 col-xs-12">
+                <!-- Input Here -->
+                <input class="form-control" id="brewerJudgeID" name="brewerJudgeID" type="text" value="<?php if (($msg > 0) && (isset($_COOKIE['brewerJudgeID']))) echo $_COOKIE['brewerJudgeID']; ?>" placeholder="">
+            </div>
+        </div><!-- ./Form Group -->
     <?php if ($totalRows_judging > 1) {
 	if ($action == "edit") $judging_locations = explode(",",$row_brewer['brewerJudgeLocation']);
 	elseif (isset($_COOKIE['brewerJudgeLocation'])) $judging_locations = explode(",",$_COOKIE['brewerJudgeLocation']);
@@ -729,6 +736,13 @@ if ($go == "default") {  ?>
                     <input type="radio" name="brewerSteward" value="N" id="brewerSteward_1" <?php if (($msg > 0) && (isset($_COOKIE['brewerSteward'])) && ($_COOKIE['brewerSteward'] == "N")) echo "CHECKED"; if ($go == "steward") echo "DISABLED"; ?> rel="none" /> <?php echo $label_no; ?>
                 </label>
             </div>
+        </div>
+    </div><!-- ./Form Group -->
+    <div class="form-group"><!-- Form Group Text Input -->
+        <label for="brewerJudgeID" class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label_bjcp_id; ?></label>
+        <div class="col-lg-9 col-md-9 col-sm-8 col-xs-12">
+            <!-- Input Here -->
+            <input class="form-control" id="brewerJudgeID" name="brewerJudgeID" type="text" value="<?php if (($msg > 0) && (isset($_COOKIE['brewerJudgeID']))) echo $_COOKIE['brewerJudgeID']; ?>" placeholder="">
         </div>
     </div><!-- ./Form Group -->
 	<?php if ($totalRows_judging > 1) {

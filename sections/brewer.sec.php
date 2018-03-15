@@ -149,13 +149,12 @@ if (($_SESSION['prefsProEdition'] == 0) || (($_SESSION['prefsProEdition'] == 1) 
 		$club_options .= "<option value=\"".$club_option[0]."\"".$club_selected.">".$club_option[1]."</option>\n";
 	}
 
-
-
 }
 
 $security_questions_display = (array_rand($security_question, 5));
 $security = "";
 if ($section != "step2") $security .= "<div class=\"radio\"><label><input type=\"radio\" name=\"userQuestion\" value=\"".$_SESSION['userQuestion']."\" CHECKED> ".$_SESSION['userQuestion']."</label></div>";
+
 foreach ($security_questions_display as $key => $value) {
 	if ($security_question[$value] != $_SESSION['userQuestion']) $security .= "<div class=\"radio\"><label><input type=\"radio\" name=\"userQuestion\" value=\"".$security_question[$value]."\" data-error=\"".$brewer_text_033."\" required> ".$security_question[$value]."</label></div>";
 }
@@ -499,8 +498,6 @@ $(document).ready(function(){
         <input name="brewerStewardLocation" type="hidden" value="<?php echo $row_brewer['brewerStewardLocation']; ?>" />
         <?php } // end if ($table_assignment)
 		else { ?>
-
-
         <?php if (!$judge_limit) { ?>
         <!-- Judging preferences -->
         <div class="form-group"><!-- Form Group Radio INLINE -->
@@ -516,6 +513,13 @@ $(document).ready(function(){
                     </label>
                 </div>
                 <span class="help-block"><?php echo $brewer_text_006; ?></span>
+            </div>
+        </div><!-- ./Form Group -->
+        <div class="form-group"><!-- Form Group Text Input -->
+            <label for="brewerJudgeID" class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label_bjcp_id; ?></label>
+            <div class="col-lg-9 col-md-9 col-sm-8 col-xs-12">
+                <!-- Input Here -->
+                <input class="form-control" id="brewerJudgeID" name="brewerJudgeID" type="text" value="<?php if ($action == "edit") echo $row_brewer['brewerJudgeID']; ?>" placeholder="" <?php if ($psort == "judge") echo "autofocus"; ?>>
             </div>
         </div><!-- ./Form Group -->
         <div id="brewerJudgeFields">
@@ -537,14 +541,6 @@ $(document).ready(function(){
             </div>
         </div><!-- ./Form Group -->
         <?php } ?>
-        <div class="form-group"><!-- Form Group Text Input -->
-            <label for="brewerJudgeID" class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label_bjcp_id; ?></label>
-            <div class="col-lg-9 col-md-9 col-sm-8 col-xs-12">
-                <!-- Input Here -->
-                <input class="form-control" id="brewerJudgeID" name="brewerJudgeID" type="text" value="<?php if ($action == "edit") echo $row_brewer['brewerJudgeID']; ?>" placeholder="" <?php if ($psort == "judge") echo "autofocus"; ?>>
-            </div>
-        </div><!-- ./Form Group -->
-
         <div class="form-group"><!-- Form Group Radio INLINE -->
             <label for="brewerJudgeMead" class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label_bjcp_mead; ?></label>
             <div class="col-lg-9 col-md-9 col-sm-8 col-xs-12">
