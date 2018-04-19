@@ -5,7 +5,7 @@
 --
 -- ------------------------------------------------------------------------------------
 --
--- UPDATED 2017-10-21 for Version 2.1.10.0
+-- UPDATED 2018-04-19 for Version 2.1.12.0
 --
 -- ------------------------------------------------------------------------------------
 --
@@ -61,7 +61,7 @@ CREATE TABLE `baseline_archive` (
   `id` int(8) NOT NULL,
   `archiveProEdition` tinyint(1) DEFAULT NULL,
   `archiveStyleSet` varchar(25) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `archiveBrewingTableName` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `archiveScoresheet` char(1) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `archiveSuffix` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
@@ -91,6 +91,7 @@ CREATE TABLE `baseline_brewer` (
   `brewerJudge` char(1) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `brewerJudgeID` varchar(25) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `brewerJudgeMead` char(1) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `brewerJudgeCider` char(1) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `brewerJudgeRank` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `brewerJudgeLikes` mediumtext COLLATE utf8mb4_unicode_ci,
   `brewerJudgeDislikes` mediumtext COLLATE utf8mb4_unicode_ci,
@@ -113,7 +114,7 @@ CREATE TABLE `baseline_brewer` (
 --
 
 INSERT INTO `baseline_brewer` (`id`, `uid`, `brewerFirstName`, `brewerLastName`, `brewerAddress`, `brewerCity`, `brewerState`, `brewerZip`, `brewerCountry`, `brewerPhone1`, `brewerPhone2`, `brewerClubs`, `brewerEmail`, `brewerStaff`, `brewerSteward`, `brewerJudge`, `brewerJudgeID`, `brewerJudgeMead`, `brewerJudgeRank`, `brewerJudgeLikes`, `brewerJudgeDislikes`, `brewerJudgeLocation`, `brewerStewardLocation`, `brewerJudgeExp`, `brewerJudgeNotes`, `brewerAssignment`, `brewerJudgeWaiver`, `brewerAHA`, `brewerDiscount`, `brewerJudgeBOS`, `brewerDropOff`, `brewerBreweryName`, `brewerBreweryTTB`) VALUES
-(1, 1, 'Default', 'Admin', '1234 Main Street', 'Anytown', 'CO', '80001', 'United States', '123.456.7890', NULL, NULL, 'user.baseline@brewcompetition.com', NULL, 'N', 'N', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, NULL);
+(1, 1, 'Default', 'Admin', '1234 Main Street', 'Anytown', 'CO', '80001', 'United States', '123.456.7890', NULL, NULL, 'user.baseline@brewcompetition.com', NULL, 'N', 'N', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, NULL);
 
 -- --------------------------------------------------------
 
