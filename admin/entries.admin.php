@@ -2,7 +2,8 @@
 // Set up variables
 
 include (DB.'styles.db.php');
-include (INCLUDES.'ba_constants.inc.php');
+if ($_SESSION['prefsStyleSet'] == "BA") include (INCLUDES.'ba_constants.inc.php');
+
 $header1_1 = "";
 $header1_2 = "";
 $sidebar_extension = "";
@@ -57,7 +58,7 @@ do {
 	$brewer_info = explode("^",$brewer_info);
 
 	$styleConvert = style_convert($row_log['brewCategorySort'], 1);
-	if (strpos($_SESSION['prefsStyleSet'],"BABDB") !== false) $entry_style = "";
+	if ($_SESSION['prefsStyleSet'] == "BA") $entry_style = "";
 	else $entry_style = $row_log['brewCategorySort']."-".$row_log['brewSubCategory'];
 
 	$entry_style_display = "";
@@ -137,7 +138,7 @@ do {
 	else $entry_judging_num_display = $entry_judging_num;
 
 	// Entry Style
-	if (strpos($_SESSION['prefsStyleSet'],"BABDB") !== false) {
+	if ($_SESSION['prefsStyleSet'] == "BA") {
 		if ($row_log['brewCategory'] <= 14) $entry_style_display .= $ba_category_names[$row_log['brewCategory']].": ".$row_log['brewStyle'];
 		else $entry_style_display .= "Custom: ".$row_log['brewStyle'];
 	}

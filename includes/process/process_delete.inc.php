@@ -7,6 +7,20 @@
 
 require(INCLUDES.'url_variables.inc.php');
 
+/*
+function table_exists($table_name) {
+	require(CONFIG.'config.php');
+	mysqli_select_db($connection,$database);
+	// taken from http://snippets.dzone.com/posts/show/3369
+	$query_exists = "SHOW TABLES LIKE '".$table_name."'";
+	$exists = mysqli_query($connection,$query_exists) or die (mysqli_error($connection));
+	$totalRows_exists = mysqli_num_rows($exists);
+	if ($totalRows_exists > 0) return TRUE;
+	else return FALSE;
+}
+*/
+
+
 if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) && (isset($_SESSION['userLevel'])))) {
 
 	if (NHC) {
@@ -18,20 +32,24 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 
 	else {
 
+		$upload_dir = (USER_IMAGES);
+
 		if ($go == "image") {
-			$upload_dir = (USER_IMAGES);
+
 			unlink($upload_dir.$filter);
 			if ($view == "html") $deleteGoTo = $base_url."index.php?section=admin&go=upload&action=html&msg=31";
 			else $deleteGoTo = $base_url."index.php?section=admin&go=upload&msg=31";
 			$redirect_go_to = sprintf("Location: %s", $deleteGoTo);
+
 		}
 
 		if ($go == "doc") {
-			$upload_dir = (USER_DOCS);
+
 			unlink($upload_dir.$filter);
 			if ($view == "html") $deleteGoTo = $base_url."index.php?section=admin&go=upload_scoresheets&action=html&msg=31";
 			else $deleteGoTo = $base_url."index.php?section=admin&go=upload_scoresheets&msg=31";
 			$redirect_go_to = sprintf("Location: %s", $deleteGoTo);
+
 		}
 
 		if ($go == "judging_scores") {
@@ -39,8 +57,8 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 			$deleteSQL = sprintf("DELETE FROM %s WHERE id='%s'", $prefix."judging_scores",$id);
 			mysqli_real_escape_string($connection,$deleteSQL);
 			$result = mysqli_query($connection,$deleteSQL) or die (mysqli_error($connection));
-
 			$redirect_go_to = sprintf("Location: %s", $deleteGoTo);
+
 		}
 
 
@@ -73,13 +91,17 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 			do  {
 
 				if ($row_loc['brewerJudgeLocation'] != "") {
+
 				$a = explode(",",$row_loc['brewerJudgeLocation']);
+
 					if ((in_array("Y-".$id,$a)) || (in_array("N-".$id,$a))) {
+
 						foreach ($a as $b) {
 							if ($b == "Y-".$id) $c[] = "";
 							elseif ($b == "N-".$id) $c[] = "";
 							else $c[] = $b.",";
 						}
+
 						$d = rtrim(implode("",$c),",");
 						$updateSQL = "UPDATE $brewer_db_table SET brewerJudgeLocation='".$d."' WHERE id='".$row_loc['id']."'; ";
 						mysqli_real_escape_string($connection,$updateSQL);
@@ -87,13 +109,17 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 
 						//echo $updateSQL."<br>";
 						unset($c, $d);
+
 					}
+
 				unset($a);
+
 				}
 
 				if ($row_loc['brewerStewardLocation'] != "") {
 				$e = explode(",",$row_loc['brewerStewardLocation']);
 					if ((in_array("Y-".$id,$e)) || (in_array("N-".$id,$e))) {
+
 						foreach ($e as $f) {
 
 							if ($f == "Y-".$id) $g[] = "";
@@ -101,6 +127,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 							else $g[] = $f.",";
 
 						}
+
 						$h = rtrim(implode("",$g),",");
 						$updateSQL = "UPDATE $brewer_db_table SET brewerStewardLocation='".$h."' WHERE id='".$row_loc['id']."'; ";
 						mysqli_real_escape_string($connection,$updateSQL);
@@ -108,13 +135,20 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 
 						//echo $updateSQL."<br>";
 						unset($g, $h);
+
 					}
+
 				unset($e);
+
 				}
+
 			} while ($row_loc = mysqli_fetch_assoc($loc));
 
-		} // end if ($go == "judging")
+			$deleteSQL = sprintf("DELETE FROM %s WHERE id='%s'", $prefix."judging_locations",$id);
+			mysqli_real_escape_string($connection,$deleteSQL);
+			$result = mysqli_query($connection,$deleteSQL) or die (mysqli_error($connection));
 
+		} // end if ($go == "judging")
 
 		if ($go == "participants") {
 
@@ -262,37 +296,29 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 					  }
 					}
 				}
-		  } // end if ($go == "judging_tables")
+		} // end if ($go == "judging_tables")
 
-		$deleteSQL = sprintf("DELETE FROM $dbTable WHERE id='%s'", $id);
-		mysqli_real_escape_string($connection,$deleteSQL);
-		$result = mysqli_query($connection,$deleteSQL) or die (mysqli_error($connection));
+		if ($go == "default") {
 
-		if ($dbTable == $prefix."archive") {
+			$deleteSQL = sprintf("DELETE FROM $dbTable WHERE id='%s'", $id);
+			mysqli_real_escape_string($connection,$deleteSQL);
+			$result = mysqli_query($connection,$deleteSQL) or die (mysqli_error($connection));
 
-			$tables_array = array($brewer_db_table, $brewing_db_table, $judging_assignments_db_table, $judging_flights_db_table, $judging_scores_db_table, $judging_scores_bos_db_table, $judging_tables_db_table, $special_best_info_db_table, $special_best_data_db_table, $sponsors_db_table, $staff_db_table, $style_types_db_table, $users_db_table);
+			if ($dbTable == $prefix."archive") {
 
+				$tables_array = array($brewer_db_table, $brewing_db_table, $judging_assignments_db_table, $judging_flights_db_table, $judging_scores_db_table, $judging_scores_bos_db_table, $judging_tables_db_table, $special_best_info_db_table, $special_best_data_db_table, $sponsors_db_table, $staff_db_table, $style_types_db_table, $users_db_table);
 
-			function table_exists($table_name) {
-				require(CONFIG.'config.php');
-				mysqli_select_db($connection,$database);
-				// taken from http://snippets.dzone.com/posts/show/3369
-				$query_exists = "SHOW TABLES LIKE '".$table_name."'";
-				$exists = mysqli_query($connection,$query_exists) or die (mysqli_error($connection));
-				$totalRows_exists = mysqli_num_rows($exists);
-				if ($totalRows_exists > 0) return TRUE;
-				else return FALSE;
-			}
-
-			foreach ($tables_array as $table) {
-				$table = $table."_".$filter;
-				if (table_exists($table)) {
-					$deleteSQL = sprintf("DROP TABLE %s",$table);
-					mysqli_real_escape_string($connection,$deleteSQL);
-					$result = mysqli_query($connection,$deleteSQL) or die (mysqli_error($connection));
-					//echo $dropTable."<br>";
+				foreach ($tables_array as $table) {
+					$table = $table."_".$filter;
+					if (table_exists($table)) {
+						$deleteSQL = sprintf("DROP TABLE %s",$table);
+						mysqli_real_escape_string($connection,$deleteSQL);
+						$result = mysqli_query($connection,$deleteSQL) or die (mysqli_error($connection));
+						//echo $dropTable."<br>";
+					}
 				}
 			}
+
 		}
 
 		$redirect_go_to = sprintf("Location: %s", $deleteGoTo);

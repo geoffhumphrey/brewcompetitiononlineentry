@@ -100,19 +100,17 @@ $highlight_carb = "";
 $highlight_strength = "";
 
 $all_special_ing_styles = array();
-if (is_array($special_beer)) $all_special_ing_styles = array_merge($all_special_ing_styles,$special_beer);
+if (is_array($special_beer)) $all_special_ing_styles  = array_merge($all_special_ing_styles,$special_beer);
 if (is_array($carb_str_sweet_special)) $all_special_ing_styles = array_merge($all_special_ing_styles,$carb_str_sweet_special);
 if (is_array($spec_sweet_carb_only)) $all_special_ing_styles = array_merge($all_special_ing_styles,$spec_sweet_carb_only);
 if (is_array($spec_carb_only)) $all_special_ing_styles = array_merge($all_special_ing_styles,$spec_carb_only);
-if (strpos($styleSet,"BABDB") !== false) $all_special_ing_styles = array_merge($all_special_ing_styles,$ba_special);
-$all_special_ing_styles = array_unique($all_special_ing_styles);
+array_unique($all_special_ing_styles);
 
 $all_special_ing_styles_info = array();
 if (is_array($special_beer_info)) $all_special_ing_styles_info = array_merge($all_special_ing_styles_info,$special_beer_info);
 if (is_array($carb_str_sweet_special_info)) $all_special_ing_styles_info = array_merge($all_special_ing_styles_info,$carb_str_sweet_special_info);
 if (is_array($spec_sweet_carb_only_info)) $all_special_ing_styles_info = array_merge($all_special_ing_styles_info,$spec_sweet_carb_only_info);
-
-$all_special_ing_styles_info = array_unique($all_special_ing_styles_info);
+array_unique($all_special_ing_styles_info);
 
 $proEdition = FALSE;
 if ($_SESSION['prefsProEdition'] == 1) $proEdition = TRUE;
@@ -234,6 +232,7 @@ else {
 	if ($_SESSION['prefsStyleSet'] == "BJCP2015") $beer_end = 34;
 
 	// BA
+	/*
 	if (strpos($_SESSION['prefsStyleSet'],"BABDB") !== false) {
 
 		$styles_options = "";
@@ -270,11 +269,11 @@ else {
 				if ($ba_style_explodies[2] == "Custom") $style_value = $ba_style_explodies[3]."-A";
 				else $style_value = $ba_style_explodies[3]."-".$ba_style_explodies[1];
 				$style_value_lookup = $ba_style_explodies[3]."-".$ba_style_explodies[1]."-".$ba_style_explodies[2]."-".$ba_style_explodies[0];
-				/*
+
 				if ($ba_style_explodies[2] == "Hybrid/mixed Beer") $categoryName = "Hybrid/Mixed Beer";
 				elseif ($ba_style_explodies[2] == "European-germanic Lager") $categoryName = "European-Germanic Lager";
 				else $categoryName = ucwords($ba_style_explodies[2]);
-				*/
+
 
 				$selected_disabled = "";
 
@@ -314,10 +313,10 @@ else {
 				}
 
 				else {
-					if (in_array($style_value,$ba_special)) $selection .= " &spades;";
-					if (in_array($style_value,$ba_strength)) $selection .= " &diams;";
-					if (in_array($style_value,$ba_carb)) $selection .= " &clubs;";
-					if (in_array($style_value,$ba_sweetness)) $selection .= " &hearts;";
+					if (in_array($style_value,$_SESSION['ba_special'])) $selection .= " &spades;";
+					if (in_array($style_value,$_SESSION['ba_strength'])) $selection .= " &diams;";
+					if (in_array($style_value,$_SESSION['ba_carb'])) $selection .= " &clubs;";
+					if (in_array($style_value,$_SESSION['ba_sweetness'])) $selection .= " &hearts;";
 				}
 
 				if ($view != $style_value) {
@@ -331,8 +330,10 @@ else {
 
 	}
 
+	*/
+
 	// BJCP Styles housed in local DB
-	else {
+	//else {
 
 		// get information from database
 
@@ -401,7 +402,7 @@ else {
 
 		}
 
-	}
+	//}
 ?>
 <script>
 
@@ -509,8 +510,9 @@ else $relocate_referrer = $_SERVER['HTTP_REFERER'];
         <select class="selectpicker" name="brewStyle" id="type" data-live-search="true" data-size="5" data-width="auto" data-show-tick="true" data-header="<?php echo $label_select_style; ?>" title="<?php echo $label_select_style; ?>" required>
 			<option value="0-A" <?php if (($action == "add") || (($action == "edit") && ($view == "00-A"))) echo "selected"; ?>>Choose a Style</option>
             <option data-divider="true"></option>
-            <?php if (strpos($_SESSION['prefsStyleSet'],"BABDB") !== false) echo $styles_options;
-			else {
+            <?php
+            // if (strpos($_SESSION['prefsStyleSet'],"BABDB") !== false) echo $styles_options;
+			//else {
 				// Build style drop-down
 				do {
 					// Option value variable
@@ -537,8 +539,14 @@ else $relocate_referrer = $_SERVER['HTTP_REFERER'];
 					}
 
 					// Build selection variable
-					if (preg_match("/^[[:digit:]]+$/",$row_styles['brewStyleGroup'])) $selection = sprintf('%02d',$row_styles['brewStyleGroup']).$row_styles['brewStyleNum']." ".$row_styles['brewStyle'];
-					else $selection = $row_styles['brewStyleGroup'].$row_styles['brewStyleNum']." ".$row_styles['brewStyle'];
+					if (preg_match("/^[[:digit:]]+$/",$row_styles['brewStyleGroup'])) {
+						if ($_SESSION['prefsStyleSet'] == "BA") $selection = $row_styles['brewStyle'];
+						else $selection = sprintf('%02d',$row_styles['brewStyleGroup']).$row_styles['brewStyleNum']." ".$row_styles['brewStyle'];
+					}
+					else {
+						if ($_SESSION['prefsStyleSet'] == "BA") $selection = $row_styles['brewStyle'];
+						$selection = $row_styles['brewStyleGroup'].$row_styles['brewStyleNum']." ".$row_styles['brewStyle'];
+					}
 					if ($row_styles['brewStyleReqSpec'] == 1) $selection .= " &spades;";
 					if ($row_styles['brewStyleStrength'] == 1) $selection .= " &diams;";
 					if ($row_styles['brewStyleCarb'] == 1) $selection .= " &clubs;";
@@ -552,7 +560,7 @@ else $relocate_referrer = $_SERVER['HTTP_REFERER'];
 				<option value="<?php echo $style_value; ?>" <?php echo $selected_disabled.$selected; ?>><?php echo $selection; ?></option>
 				<?php }
 				} while ($row_styles = mysqli_fetch_assoc($styles));
-			} ?>
+			//} ?>
         </select>
         <span id="helpBlock" class="help-block">&spades; = <?php echo $brew_text_004; ?><br />&diams; = <?php echo $brew_text_005; ?><br />&clubs; = <?php echo $brew_text_006; ?><br />&hearts; = <?php echo $brew_text_007; ?></p></span>
         </div>

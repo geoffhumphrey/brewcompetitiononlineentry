@@ -29,6 +29,8 @@ $pullsheet_output = "";
 
 if ($go == "judging_scores_bos") {
 
+	$a = array();
+
 	if ($id == "default") {
 		do {
 			$a[] = $row_style_types['id'];
@@ -136,7 +138,7 @@ if ($go == "judging_scores_bos") {
 						else {
 							include (INCLUDES.'ba_constants.inc.php');
 							$value = $row_entries_1['id'];
-							if (in_array($value,$ba_special_ids)) $table_flight_tbody .= "<p><strong>".$label_required_info.": </strong>".str_replace("^"," | ",$row_entries_1['brewInfo'])."</p>";
+							if (in_array($value,$_SESSION['ba_special_ids'])) $table_flight_tbody .= "<p><strong>".$label_required_info.": </strong>".str_replace("^"," | ",$row_entries_1['brewInfo'])."</p>";
 							if ($row_entries_1['brewInfoOptional'] != "") $table_flight_tbody .= "<p><strong>".$label_optional_info.": </strong>".$row_entries_1['brewInfoOptional']."</p>";
 							if ($row_entries_1['brewComments'] != "") $table_flight_tbody .= "<p><strong>".$label_brewer_specifics.": </strong>".$row_entries_1['brewComments']."</p>";
 							$table_flight_tbody .= "<p>";
@@ -191,6 +193,7 @@ else {
 		if ($tables_all) {
 
 			$pullsheet_output = "";
+			$round_count = array();
 
 			do {
 
@@ -310,7 +313,7 @@ else {
 									}
 									else {
 										include (INCLUDES.'ba_constants.inc.php');
-										if (in_array($value,$ba_special_ids)) $table_flight_tbody .= "<p><strong>Required Info: </strong>".str_replace("^"," | ",$row_entries['brewInfo'])."</p>";
+										if (in_array($value,$_SESSION['ba_special_ids'])) $table_flight_tbody .= "<p><strong>Required Info: </strong>".str_replace("^"," | ",$row_entries['brewInfo'])."</p>";
 										if ($row_entries['brewInfoOptional'] != "") $table_flight_tbody .= "<p><strong>Optional Info: </strong>".$row_entries['brewInfoOptional']."</p>";
 										if ($row_entries['brewComments'] != "") $table_flight_tbody .= "<p><strong>Specifics: </strong>".$row_entries['brewComments']."</p>";
 
@@ -479,7 +482,7 @@ else {
 								}
 								else {
 									include (INCLUDES.'ba_constants.inc.php');
-									if (in_array($value,$ba_special_ids)) $table_flight_tbody .= "<p><strong>Required Info: </strong>".str_replace("^"," | ",$row_entries['brewInfo'])."</p>";
+									if (in_array($value,$_SESSION['ba_special_ids'])) $table_flight_tbody .= "<p><strong>Required Info: </strong>".str_replace("^"," | ",$row_entries['brewInfo'])."</p>";
 									if ($row_entries['brewInfoOptional'] != "") $table_flight_tbody .= "<p><strong>Optional Info: </strong>".$row_entries['brewInfoOptional']."</p>";
 									if ($row_entries['brewComments'] != "") $table_flight_tbody .= "<p><strong>Specifics: </strong>".$row_entries['brewComments']."</p>";
 
@@ -663,7 +666,7 @@ else {
 								}
 								else {
 									include (INCLUDES.'ba_constants.inc.php');
-									if (in_array($value,$ba_special_ids)) $table_flight_tbody .= "<p><strong>Required Info: </strong>".str_replace("^"," | ",$row_entries['brewInfo'])."</p>";
+									if (in_array($value,$_SESSION['ba_special_ids'])) $table_flight_tbody .= "<p><strong>Required Info: </strong>".str_replace("^"," | ",$row_entries['brewInfo'])."</p>";
 									if ($row_entries['brewComments'] != "") $table_flight_tbody .= "<p><strong>Specifics: </strong>".$row_entries['brewComments']."</p>";
 
 									$table_flight_tbody .= "<p>";
@@ -840,7 +843,7 @@ else {
 							}
 							else {
 								include (INCLUDES.'ba_constants.inc.php');
-								if (in_array($value,$ba_special_ids)) $table_flight_tbody .= "<p><strong>Required Info: </strong>".str_replace("^"," | ",$row_entries['brewInfo'])."</p>";
+								if (in_array($value,$_SESSION['ba_special_ids'])) $table_flight_tbody .= "<p><strong>Required Info: </strong>".str_replace("^"," | ",$row_entries['brewInfo'])."</p>";
 								if ($row_entries['brewInfoOptional'] != "") $table_flight_tbody .= "<p><strong>Optional Info: </strong>".$row_entries['brewInfoOptional']."</p>";
 								if ($row_entries['brewComments'] != "") $table_flight_tbody .= "<p><strong>Specifics: </strong>".$row_entries['brewComments']."</p>";
 

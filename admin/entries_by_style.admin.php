@@ -14,24 +14,26 @@ $style_mead_cider_count_logged[] = 0;
 $style_cider_count_logged[] = 0;
 $style_other_count_logged[] = 0;
 
-if (strpos($_SESSION['prefsStyleSet'],"BABDB") !== false) {
-	
+if ($_SESSION['prefsStyleSet'] == "BA") {
+
 	include (INCLUDES.'ba_constants.inc.php');
-	
+
+	//print_r($ba_all_categories);
+
 	foreach ($ba_all_categories as $cat) {
-			
+
 		include (DB.'entries_by_style.db.php');
-		
-		if ($action == "print") $html .= "<tr>"; 
+
+		if ($action == "print") $html .= "<tr>";
 		else $html .= "<tr>";
 		$html .= "<td>".$ba_category_names[$cat]."</td>";
 		$html .= "<td>".$row_style_count_logged['count']."</td>";
 		$html .= "<td>".$row_style_count['count']."</td>";
 		$html .= "<td class=\"hidden-xs hidden-sm\">".$style_type."</td>";
-		$html .= "</tr>";	
-		
+		$html .= "</tr>";
+
 	}
-	
+
 }
 
 if ($_SESSION['prefsStyleSet'] == "BJCP2008") {
@@ -48,25 +50,26 @@ if ($_SESSION['prefsStyleSet'] == "BJCP2015") {
 	$category_end = 34;
 }
 
+/*
 include (DB.'styles.db.php');
-	
-do { 
-	$accepted_categories[] = $row_styles['brewStyleGroup']; 
+
+do {
+	$accepted_categories[] = $row_styles['brewStyleGroup'];
 } while ($row_styles = mysqli_fetch_assoc($styles));
 
 $total_cat = array_unique($accepted_categories);
-//print_r($total_cat);
+print_r($total_cat);
 
 foreach ($total_cat as $cat) {
 
-	include (DB.'entries_by_style.db.php');	
+	include (DB.'entries_by_style.db.php');
 
-	if (!empty($cat_name)) { 
+	if (!empty($cat_name)) {
 
-		if ($action == "print") $html .= "<tr>"; 
+		if ($action == "print") $html .= "<tr>";
 		else $html .= "<tr>";
 		$html .= "<td>";
-		if (strpos($_SESSION['prefsStyleSet'],"BABDB") !== false) $html .= $cat_name;
+		if ($_SESSION['prefsStyleSet'] == "BA") $html .= $cat_name;
 		else $html .= $cat_convert." - ".$cat_name;
 		$html .= "</td>";
 		$html .= "<td>".$row_style_count_logged['count']."</td>";
@@ -87,7 +90,9 @@ foreach ($total_cat as $cat) {
 	//echo $style_type."<br>";
 	//echo $source."<br>";
 
-} 
+}
+
+*/
 
 $mead_total = array_sum($style_mead_count);
 $mead_total_logged = array_sum($style_mead_count_logged);
@@ -131,23 +136,23 @@ if (($beer_total > 0) || ($beer_total_logged > 0)) {
 	$html_count .= "</tr>";
 }
 
-if (strpos($_SESSION['prefsStyleSet'],"BABDB") !== false) {
-	
+if ($_SESSION['prefsStyleSet'] == "BA") {
+
 	if (($mead_cider_total > 0) || ($mead_cider_total_logged > 0)) {
-		if ($action == "print") $html_count.= "<tr>"; 
+		if ($action == "print") $html_count.= "<tr>";
 		else $html_count .= "<tr>";
 		$html_count .= "<td width='25%' nowrap='nowrap'>Mead/Cider</td>";
 		$html_count .= "<td>".$mead_cider_total_logged."</td>";
 		$html_count .= "<td>".$mead_cider_total."</td>";
 		$html_count .= "</tr>";
 	}
-	
+
 }
 
 else {
 
 	if (($mead_total > 0) || ($mead_total_logged > 0)) {
-		if ($action == "print") $html_count.= "<tr>"; 
+		if ($action == "print") $html_count.= "<tr>";
 		else $html_count .= "<tr>";
 		$html_count .= "<td width='25%' nowrap='nowrap'>Mead</td>";
 		$html_count .= "<td>".$mead_total_logged."</td>";
@@ -157,7 +162,7 @@ else {
 
 	if (($cider_total > 0) || ($cider_total_logged > 0)) {
 
-		if ($action == "print") $html_count.= "<tr>"; 
+		if ($action == "print") $html_count.= "<tr>";
 		else $html_count .= "<tr>";
 		$html_count .= "<td width='25%'>Cider</td>";
 		$html_count .= "<td>".$cider_total_logged."</td>";
@@ -168,16 +173,16 @@ else {
 }
 
 if (($other_total > 0) || ($other_total_logged > 0)) {
-		
-	if ($action == "print") $html_count.= "<tr>"; 
+
+	if ($action == "print") $html_count.= "<tr>";
 	else $html_count .= "<tr>";
 	$html_count .= "<td width='25%'>Other</td>";
 	$html_count .= "<td>".$other_total."</td>";
 	$html_count .= "<td>".$other_total_logged."</td>";
-	$html_count .= "</tr>";		
+	$html_count .= "</tr>";
 }
 
-if (strpos($_SESSION['prefsStyleSet'],"BABDB") !== false) {
+if ($_SESSION['prefsStyleSet'] == "BA") {
 	$total_style_count = $beer_total + $mead_cider_total + $other_total;
 	$total_style_count_logged = $beer_total_logged + $mead_cider_total_logged + $other_total_logged;
 }
@@ -190,17 +195,17 @@ else {
 $total_style_count_all = $total_style_count + $total_style_count_logged;
 
 if (($total_style_count > 0) || ($total_style_count_logged > 0)) {
-	
+
 	$html_count .= "<tfoot>";
-	$html_count .= "<tr class='bdr1T'>"; 
+	$html_count .= "<tr class='bdr1T'>";
 	$html_count .= "<td nowrap='nowrap'><strong>Totals</strong></td>";
 	$html_count .= "<td nowrap='nowrap'>".$total_style_count_logged."</td>";
 	$html_count .= "<td nowrap='nowrap'>".$total_style_count."</td>";
 	$html_count .= "</tr>";
 	$html_count .= "</tfoot>";
-	
+
 	$html .= "<tfoot>";
-	$html .= "<tr>"; 
+	$html .= "<tr>";
 	$html .= "<td><strong>Totals</strong></td>";
 	$html .= "<td>".$total_style_count_logged."</td>";
 	$html .= "<td>".$total_style_count."</td>";
@@ -218,10 +223,10 @@ if (($total_style_count > 0) || ($total_style_count_logged > 0)) {
         <a class="btn btn-default" href="<?php echo $base_url; ?>index.php?section=admin&amp;go=count_by_substyle"><span class="fa fa-eye"></span> View Entry Count by Sub-Style</a>
     </div><!-- ./button group -->
 </div>
-<?php } 
+<?php }
 if ($total_style_count > 0) { ?>
 <script type="text/javascript" language="javascript">
-// The following is for demonstration purposes only. 
+// The following is for demonstration purposes only.
 // Complete documentation and usage at http://www.datatables.net
 	$(document).ready(function() {
 		$('#sortable1').dataTable( {
@@ -264,7 +269,7 @@ if ($total_style_count > 0) { ?>
 			"aaSorting": [[0,'asc']],
 			"aoColumns": [
 				null,
-				null, 
+				null,
 				null,
 				null
 				]

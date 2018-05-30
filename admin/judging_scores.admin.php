@@ -1,4 +1,4 @@
-<?php 
+<?php
 if ($dbTable == "default") $pro_edition = $_SESSION['prefsProEdition'];
 else $pro_edition = $row_archive_prefs['archiveProEdition'];
 
@@ -34,11 +34,11 @@ $(document).ready(function () {
   </div>
 </div>
 <?php } ?>
-<p class="lead"><?php echo $_SESSION['contestName']; 
-if (($action == "edit") && ($id != "default")) echo ": Edit Scores for Table ".$row_tables_edit['tableNumber']." - ".$row_tables_edit['tableName'];  
-elseif (($action == "add") && ($id != "default")) echo ": Add Scores for Table ".$row_tables_edit['tableNumber']." - ".$row_tables_edit['tableName'];  
-else echo " Scores"; 
-if ($dbTable != "default") echo ": All Scores (Archive ".get_suffix($dbTable).")"; 
+<p class="lead"><?php echo $_SESSION['contestName'];
+if (($action == "edit") && ($id != "default")) echo ": Edit Scores for Table ".$row_tables_edit['tableNumber']." - ".$row_tables_edit['tableName'];
+elseif (($action == "add") && ($id != "default")) echo ": Add Scores for Table ".$row_tables_edit['tableNumber']." - ".$row_tables_edit['tableName'];
+else echo " Scores";
+if ($dbTable != "default") echo ": All Scores (Archive ".get_suffix($dbTable).")";
 $totalRows_entry_count = total_paid_received($go,"default");
 ?></p>
 <?php if ($dbTable != "default") { ?>
@@ -52,21 +52,21 @@ $totalRows_entry_count = total_paid_received($go,"default");
         <a class="btn btn-default" href="<?php echo $base_url; ?>index.php?section=admin&amp;go=archive"><span class="fa fa-arrow-circle-left"></span> Archives</a>
     </div><!-- ./button group -->
     <?php } ?>
-    <?php if  ($dbTable == "default") { ?>    
+    <?php if  ($dbTable == "default") { ?>
     <?php if ($action != "default") { ?>
     <!-- Postion 1: View All Button -->
     <div class="btn-group" role="group" aria-label="...">
         <a class="btn btn-default" href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging_scores&amp;dbTable=<?php echo $dbTable; ?>"><span class="fa fa-arrow-circle-left"></span> All Scores</a>
     </div><!-- ./button group -->
     <?php } ?>
-    
+
     <?php if ($dbTable == "default") { ?>
     <!-- Postion 1: View All Button -->
     <div class="btn-group" role="group" aria-label="...">
         <a class="btn btn-default" href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging_tables&amp;dbTable=<?php echo $dbTable; ?>"><span class="fa fa-arrow-circle-left"></span> All Tables</a>
     </div><!-- ./button group -->
     <?php } ?>
-    
+
     <?php if ($dbTable == "default") { ?>
     <!-- Postion 1: View All Button -->
     <div class="btn-group" role="group" aria-label="...">
@@ -78,11 +78,11 @@ $totalRows_entry_count = total_paid_received($go,"default");
 	<!-- Position 2: Enter/Edit Dropdown Button Group -->
     <div class="btn-group" role="group">
             <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            <span class="fa fa-plus-circle"></span> Add or Update Scores For...  
+            <span class="fa fa-plus-circle"></span> Add or Update Scores For...
             <span class="caret"></span>
             </button>
             <ul class="dropdown-menu">
-                <?php do { 
+                <?php do {
                         $table_count_total = table_count_total($row_tables_edit_2['id']);
                     ?>
                     <li class="small"><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging_scores&amp;action=<?php if ($table_count_total > 0) echo "edit&amp;id=".$row_tables_edit_2['id']; else echo "add&amp;id=".$row_tables_edit_2['id']; ?>"><?php echo "Table ".$row_tables_edit_2['tableNumber'].": ".$row_tables_edit_2['tableName']; ?></a></li>
@@ -94,11 +94,11 @@ $totalRows_entry_count = total_paid_received($go,"default");
     <!-- Postion 4: Print Button Dropdown Group -->
     <div class="btn-group hidden-xs hidden-sm" role="group">
         <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-        <span class="fa fa-print"></span> Print...   
+        <span class="fa fa-print"></span> Print...
         <span class="caret"></span>
         </button>
         <ul class="dropdown-menu">
-        	<?php do { 
+        	<?php do {
 			if ($row_style_type['styleTypeBOS'] == "Y") { ?>
 				<li class="small"><a id="modal_window_link" class="menuItem" href="<?php echo $base_url; ?>output/print.output.php?section=pullsheets&amp;go=judging_scores_bos&amp;id=<?php echo $row_style_type['id']; ?>"  title="Print the <?php echo $row_style_type['styleTypeName']; ?> BOS Pullsheet">BOS Pullsheet for <?php echo $row_style_type['styleTypeName']; ?></a></li>
 		<?php }
@@ -176,35 +176,35 @@ $totalRows_entry_count = total_paid_received($go,"default");
 <tbody>
 	<?php
 	do {
-	
-	$table_score_data = table_score_data($row_scores['eid'],$row_scores['scoreTable'],$filter); 
+
+	$table_score_data = table_score_data($row_scores['eid'],$row_scores['scoreTable'],$filter);
 	$table_score_data = explode("^",$table_score_data);
-	
-	if ((NHC) && ($prefix == "final_")) $entry_number = sprintf("%06s",$table_score_data[0]); 
+
+	if ((NHC) && ($prefix == "final_")) $entry_number = sprintf("%06s",$table_score_data[0]);
 	else $entry_number = sprintf("%04s",$table_score_data[0]);
-	
-	if ((NHC) || ($_SESSION['prefsEntryForm'] == "N")) $judging_number = sprintf("%06s",$table_score_data[6]); 
+
+	if ((NHC) || ($_SESSION['prefsEntryForm'] == "N")) $judging_number = sprintf("%06s",$table_score_data[6]);
 	else $judging_number = readable_judging_number($table_score_data[1],$table_score_data[6]);
-	
-	if ($row_scores['scorePlace'] == "5") $score_place = "HM"; 
-	elseif ($row_scores['scorePlace'] == "6") $score_place =  "Admin Advance"; 
-	elseif ($row_scores['scorePlace'] == "") $score_place = "<span style=\"display:none\">N/A</span>"; 
+
+	if ($row_scores['scorePlace'] == "5") $score_place = "HM";
+	elseif ($row_scores['scorePlace'] == "6") $score_place =  "Admin Advance";
+	elseif ($row_scores['scorePlace'] == "") $score_place = "<span style=\"display:none\">N/A</span>";
 	else $score_place =  $row_scores['scorePlace'];
-	
+
 	if ($row_scores['scoreMiniBOS'] == "1") $mini_bos = "<span class=\"fa fa-lg fa-check text-success\"></span>";
 	else $mini_bos = "&nbsp;";
-	
+
 	$entry_category = "";
-	
-	if (strpos($_SESSION['prefsStyleSet'],"BABDB") === false) {
-		if ($filter == "default") $entry_category = $table_score_data[12]." ".style_convert($table_score_data[8],1).": ".$table_score_data[13]; 
-		else $entry_category = $table_score_data[12].": ".$table_score_data[1];
+
+	if ($_SESSION['prefsStyleSet'] == "BA") {
+        $entry_category = $table_score_data[13];
 	}
-	
+
 	else {
-		$entry_category = $table_score_data[13];
+        if ($filter == "default") $entry_category = $table_score_data[12]." ".style_convert($table_score_data[8],1).": ".$table_score_data[13];
+        else $entry_category = $table_score_data[12].": ".$table_score_data[1];
 	}
-	
+
 	?>
 	<tr>
     	<td><?php echo $entry_number; ?></td>
@@ -212,31 +212,31 @@ $totalRows_entry_count = total_paid_received($go,"default");
         <td><?php echo $table_score_data[11]; ?></td>
         <td class="hidden-xs hidden-sm"><?php echo $table_score_data[10]; ?></td>
         <td class="hidden-xs hidden-sm"><?php echo $entry_category; ?></td>
-        
+
         <?php if ($dbTable != "default") { ?>
         <td><?php if ($pro_edition == 1) echo $table_score_data[14]; else echo $table_score_data[5].", ".$table_score_data[4]; ?></td>
         <td><?php echo $table_score_data[3]; ?></td>
         <?php } ?>
         <td><?php echo $row_scores['scoreEntry']; ?></td>
-        <td><?php echo $score_place; ?></td>  
+        <td><?php echo $score_place; ?></td>
         <td><?php echo $mini_bos; ?></td>
 		<?php if ($dbTable == "default") { ?>
-        <td><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=<?php echo $go; ?>&amp;action=edit&amp;id=<?php echo $table_score_data[9]; ?>" data-toggle="tooltip" data-placement="top" title="Edit the <?php echo $table_score_data[10]; ?> scores"><span class="fa fa-lg fa-pencil"></span></a> 
+        <td><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=<?php echo $go; ?>&amp;action=edit&amp;id=<?php echo $table_score_data[9]; ?>" data-toggle="tooltip" data-placement="top" title="Edit the <?php echo $table_score_data[10]; ?> scores"><span class="fa fa-lg fa-pencil"></span></a>
         <a href="<?php echo $base_url; ?>includes/process.inc.php?action=delete&amp;go=<?php echo $go; ?>&amp;id=<?php echo $row_scores['id']; ?>" data-toggle="tooltip" data-placement="top" title="Delete this score for entry #<?php echo $row_scores['eid']; ?>" data-confirm="Are you sure? This will delete the score and/or place for this entry."><span class="fa fa-lg fa-trash-o"></span></a>
         </td>
         <?php } ?>
     </tr>
-    <?php 
+    <?php
 		//}
 	} while ($row_scores = mysqli_fetch_assoc($scores)); ?>
 </tbody>
 </table>
-<?php } // end if ($totalRows_scores > 0) 
+<?php } // end if ($totalRows_scores > 0)
 else echo "<p>No scores have been entered. If tables have been defined, use the &ldquo;Add or Update Scores for...&rdquo; menu above to add scores.</p>"; ?>
 <?php } // end if (($action == "default") && ($id == "default")) ?>
 
 
-<?php if ((($action == "add") || ($action == "edit")) && ($dbTable == "default")) { 
+<?php if ((($action == "add") || ($action == "edit")) && ($dbTable == "default")) {
 if (NHC) echo "<div class='alert alert-danger'><span class=\"fa fa-exclamation-circle\"></span> A requirement for the NHC is to enter scores for <em>all</em> entries and the top three places for each BJCP category. For an entry to advance to the final round, it must be designated here as 1st, 2nd, or 3rd in its category and achieve a score of 30 or more.</div>";
 ?>
 <?php if ($id != "default") { ?>
@@ -274,45 +274,45 @@ $(document).ready(function() {
 </thead>
 <tbody>
 <?php
-	$a = explode(",", $row_tables_edit['tableStyles']); 
-	
+	$a = explode(",", $row_tables_edit['tableStyles']);
+
 	foreach (array_unique($a) as $value) {
-		
+
 		$score_style_data = score_style_data($value);
 		$score_style_data = explode("^",$score_style_data);
-		
+
 		include (DB.'admin_judging_scores.db.php'); // moved to a separate document to not have MySQL queries within loops
 		$style = $row_entries['brewCategorySort'].$row_entries['brewSubCategory'];
-		
+
 		do {
 
 			if ($totalRows_entries > 0) {
-				
+
 				if ($action == "edit") {
 					$score_entry_data = score_entry_data($row_entries['id']);
 					$score_entry_data = explode("^",$score_entry_data);
 				}
-				
-				if (($action == "edit") && (!empty($score_entry_data[0]))) $score_id = $score_entry_data[0]; 
+
+				if (($action == "edit") && (!empty($score_entry_data[0]))) $score_id = $score_entry_data[0];
 				else $score_id = $row_entries['id'];
-				
+
 				if (!empty($score_entry_data[3])) $score_previous = "Y";
 				elseif (!empty($score_entry_data[4])) $score_previous = "Y";
 				else $score_previous = "N";
-				
+
 				$eid = $row_entries['id'];
-				
+
 				// $bid is the brewBrewerID/uid
 				$bid = $row_entries['brewBrewerID'];
-				
+
 				if ((NHC) && ($prefix == "final_")) $entry_number = sprintf("%06s",$row_entries['id']);
 				else $entry_number = sprintf("%04s",$row_entries['id']);
-				
+
 				$judging_number = sprintf("%06s",$row_entries['brewJudgingNumber']);
-				 
-				if (strpos($_SESSION['prefsStyleSet'],"BABDB") === false) $style_display = $style." ".style_convert($row_entries['brewCategorySort'],1).": ".$score_style_data[2];
-				else $style_display = $score_style_data[2];
-			
+
+				if ($_SESSION['prefsStyleSet'] == "BA") $style_display = $score_style_data[2];
+                else $style_display = $style." ".style_convert($row_entries['brewCategorySort'],1).": ".$score_style_data[2];
+
 	?>
 	<tr>
         <input type="hidden" name="score_id[]" value="<?php echo $score_id; ?>" />
@@ -347,13 +347,13 @@ $(document).ready(function() {
 	</tr>
     <?php }
 		} while ($row_entries = mysqli_fetch_assoc($entries));
-	} // end foreach ?> 
+	} // end foreach ?>
 </tbody>
 </table>
 <div class="bcoem-admin-element hidden-print">
 	<input type="submit" name="Submit" id="helpUpdateEntries" class="btn btn-primary" aria-describedby="helpBlock" value="<?php if ($action == "edit") echo "Update Scores"; else echo "Add Scores"; ?>" />
     <span id="helpBlock" class="help-block">Click "<?php if ($action == "edit") echo "Update Scores"; else echo "Add Scores"; ?>" <em>before</em> paging through records.</span>
-</div>	
+</div>
 <?php if (isset($_SERVER['HTTP_REFERER'])) { ?>
 <input type="hidden" name="relocate" value="<?php echo relocate($_SERVER['HTTP_REFERER'],"default",$msg,$id); ?>">
 <?php } else { ?>

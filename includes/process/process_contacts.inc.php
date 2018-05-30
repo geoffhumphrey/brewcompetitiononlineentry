@@ -10,24 +10,23 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 
 	if ($action == "email") {
 
-		if ($_SESSION['prefsCAPTCHA'] == 1) {
-			require_once(INCLUDES.'recaptchalib.inc.php');
-			$resp = recaptcha_check_answer ($private_captcha_key, $_SERVER["REMOTE_ADDR"], $_POST["recaptcha_challenge_field"], $_POST["recaptcha_response_field"]);
-			if ($resp->is_valid) $captcha_success = TRUE;
-		}
+		if (($_SESSION['prefsCAPTCHA'] == 1) && (isset($_POST['g-recaptcha-response'])) && (!empty($_POST['g-recaptcha-response']))) {
 
-		else {
-
-			if ((isset($_POST['g-recaptcha-response'])) && (!empty($_POST['g-recaptcha-response']))) {
-
-				$verify_response = file_get_contents('https://www.google.com/recaptcha/api/siteverify?secret='.$private_captcha_key.'&response='.$_POST['g-recaptcha-response']);
-				$response_data = json_decode($verify_response);
-
-				if (($_SERVER['SERVER_NAME'] == $response_data->hostname) && ($response_data->success)) $captcha_success = TRUE;
-
+			if (!empty($_SESSION['prefsGoogleAccount'])) {
+				$recaptcha_key = explode("|", $_SESSION['prefsGoogleAccount']);
+				$private_captcha_key = $recaptcha_key[1];
 			}
 
+			$verify_response = file_get_contents('https://www.google.com/recaptcha/api/siteverify?secret='.$private_captcha_key.'&response='.$_POST['g-recaptcha-response']);
+			$response_data = json_decode($verify_response);
+
+			// echo $response_data->hostname."<br>"; echo $_SERVER['SERVER_NAME']; exit;
+
+			if (($_SERVER['SERVER_NAME'] == $response_data->hostname) && ($response_data->success)) $captcha_success = TRUE;
+
 		}
+
+		elseif ($_SESSION['prefsCAPTCHA'] == 0) $captcha_success = TRUE;
 
 		if (!$captcha_success) {
 

@@ -1436,6 +1436,18 @@ $brewer_text_038 = "Consistent club names across users is essential if for \"Bes
 $brewer_text_039 = "The club you entered previously does not match one on our list.";
 $brewer_text_040 = "Please choose from the list or choose <em>Other</em> and enter your club name.";
 
+// ----------------------------------------------------------------------------------
+// Version 2.1.13 Additions
+// ----------------------------------------------------------------------------------
+
+$entry_info_text_048 = "To ensure proper judging, the entrant must provide additional information about the beverage.";
+$entry_info_text_049 = "To ensure proper judging, the entrant must provide the strength level of the beverage.";
+$entry_info_text_050 = "To ensure proper judging, the entrant must provide the carbonation level of the beverage.";
+$entry_info_text_051 = "To ensure proper judging, the entrant must provide the sweetness level of the beverage.";
+$entry_info_text_052 = "If entering this category, the entrant must provide further information in order for the entry to be judged accurately. The more information, the better.";
+
+$label_this_style = "This Style";
+
 // ***********************************************************************************
 // END TRANSLATIONS
 // ***********************************************************************************

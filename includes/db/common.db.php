@@ -187,6 +187,8 @@ if (empty($_SESSION['prefs'.$prefix_session])) {
 	else $_SESSION['prefsProEdition'] = "0";
 	if (isset($row_prefs['prefsCAPTCHA'])) $_SESSION['prefsCAPTCHA'] = $row_prefs['prefsCAPTCHA'];
 	else $_SESSION['prefsCAPTCHA'] = "0";
+	if (isset($row_prefs['prefsGoogleAccount'])) $_SESSION['prefsGoogleAccount'] = $row_prefs['prefsGoogleAccount'];
+	else $_SESSION['prefsGoogleAccount'] = "";
 	if (SINGLE) $query_judging_prefs = sprintf("SELECT * FROM %s WHERE id='%s'", $prefix."judging_preferences",$_SESSION['comp_id']);
 	else $query_judging_prefs = sprintf("SELECT * FROM %s WHERE id='1'", $prefix."judging_preferences");
 	$judging_prefs = mysqli_query($connection,$query_judging_prefs) or die (mysqli_error($connection));
@@ -213,6 +215,146 @@ if (empty($_SESSION['prefs'.$prefix_session])) {
 	$_SESSION['sponsorCount'] = $row_sponsor_count['count'];
 	$_SESSION['prefs'.$prefix_session] = "1";
 	$_SESSION['prefix'] = $prefix;
+
+	/*
+	 * If using BA Styles, query DB (as of 2.1.13, BA styles are housed in the styles table)
+	 * As of April 2018, BreweryDB is not issuing any further API keys
+	 */
+
+	if ($_SESSION['prefsStyleSet'] == "BA") {
+
+		include(INCLUDES.'ba_constants.inc.php');
+
+		$query_ba_style = sprintf("SELECT * FROM %s WHERE brewStyleVersion='BA'", $prefix."styles");
+		$ba_style = mysqli_query($connection,$query_ba_style) or die (mysqli_error($connection));
+		$row_ba_style = mysqli_fetch_assoc($ba_style);
+		$totalRows_ba_style = mysqli_num_rows($ba_style);
+
+		$ba_styles_arr_data = array();
+
+		// Build various conditional arrays
+		$ba_special_beer = array();
+		$ba_special_mead_cider = array();
+		$ba_carb = array();
+		$ba_strength = array();
+		$ba_sweetness = array();
+		$ba_special_beer_ids = array();
+		$ba_special_mead_cider_ids = array();
+		$ba_carb_ids = array();
+		$ba_strength_ids = array();
+		$ba_sweetness_ids = array();
+		$ba_beer = array();
+		$ba_mead_cider = array();
+		$ba_special_carb_str_sweet = array();
+		$ba_special_carb_str_sweet_ids = array();
+		$ba_carb_str_sweet = array();
+		$ba_carb_str_sweet_ids = array();
+		$ba_carb_str = array();
+		$ba_carb_str_ids = array();
+		$ba_carb_sweet = array();
+		$ba_carb_sweet_ids = array();
+		$ba_carb_special = array();
+		$ba_carb_special_ids = array();
+		$ba_carb_sweet_special = array();
+		$ba_carb_sweet_special_ids = array();
+
+		do {
+
+			if (in_array($row_ba_style['brewStyleGroup'], $ba_beer_categories)) $ba_beer[] = $row_ba_style['id'];
+
+			if (in_array($row_ba_style['brewStyleGroup'], $ba_mead_cider_categories)) $ba_mead_cider[] = $row_ba_style['id'];
+
+			if ((in_array($row_ba_style['brewStyleGroup'], $ba_beer_categories)) && ($row_ba_style['brewStyleReqSpec'] > 0)) {
+				$ba_special_beer[] = $row_ba_style['brewStyleGroup']."-".$row_ba_style['id'];
+				$ba_special_beer_ids[] = $row_ba_style['id'];
+			}
+
+			if ((in_array($row_ba_style['brewStyleGroup'], $ba_mead_cider_categories)) && ($row_ba_style['brewStyleReqSpec'] > 0)) {
+				$ba_special_mead_cider[] = $row_ba_style['brewStyleGroup']."-".$row_ba_style['id'];
+				$ba_special_mead_cider_ids[] = $row_ba_style['id'];
+			}
+
+			if ($row_ba_style['brewStyleCarb'] > 0) {
+				$ba_carb[] = $row_ba_style['brewStyleGroup']."-".$row_ba_style['id'];
+				$ba_carb_ids[] = $row_ba_style['id'];
+			}
+
+			if ($row_ba_style['brewStyleStrength'] > 0) {
+				$ba_strength[] = $row_ba_style['brewStyleGroup']."-".$row_ba_style['id'];
+				$ba_strength_ids[] = $row_ba_style['id'];
+			}
+
+			if ($row_ba_style['brewStyleSweet'] > 0) {
+				$ba_sweetness[] = $row_ba_style['brewStyleGroup']."-".$row_ba_style['id'];
+				$ba_sweetness_ids[] = $row_ba_style['id'];
+			}
+
+			if (($row_ba_style['brewStyleReqSpec'] > 0) && ($row_ba_style['brewStyleCarb'] > 0) && ($row_ba_style['brewStyleStrength'] > 0) && ($row_ba_style['brewStyleSweet'] > 0)) {
+				$ba_special_carb_str_sweet[] = $row_ba_style['brewStyleGroup']."-".$row_ba_style['id'];
+				$ba_special_carb_str_sweet_ids[] = $row_ba_style['id'];
+			}
+
+			if (($row_ba_style['brewStyleCarb'] > 0) && ($row_ba_style['brewStyleStrength'] > 0) && ($row_ba_style['brewStyleSweet'] > 0)) {
+				$ba_carb_str_sweet[] = $row_ba_style['brewStyleGroup']."-".$row_ba_style['id'];
+				$ba_carb_str_sweet_ids[] = $row_ba_style['id'];
+			}
+
+			if (($row_ba_style['brewStyleCarb'] > 0) && ($row_ba_style['brewStyleStrength'] > 0)) {
+				$ba_carb_str[] = $row_ba_style['brewStyleGroup']."-".$row_ba_style['id'];
+				$ba_carb_str_ids[] = $row_ba_style['id'];
+			}
+
+			if (($row_ba_style['brewStyleCarb'] > 0) && ($row_ba_style['brewStyleSweet'] > 0)) {
+				$ba_carb_sweet[] = $row_ba_style['brewStyleGroup']."-".$row_ba_style['id'];
+				$ba_carb_sweet_ids[] = $row_ba_style['id'];
+			}
+
+			if (($row_ba_style['brewStyleReqSpec'] > 0) && ($row_ba_style['brewStyleCarb'] > 0)) {
+				$ba_carb_special[] = $row_ba_style['brewStyleGroup']."-".$row_ba_style['id'];
+				$ba_carb_special_ids[] = $row_ba_style['id'];
+			}
+
+			if (($row_ba_style['brewStyleReqSpec'] > 0) && ($row_ba_style['brewStyleCarb'] > 0) && ($row_ba_style['brewStyleSweet'] > 0)) {
+				$ba_carb_sweet_special[] = $row_ba_style['brewStyleGroup']."-".$row_ba_style['id'];
+				$ba_carb_sweet_special_ids[] = $row_ba_style['id'];
+			}
+
+		} while ($row_ba_style = mysqli_fetch_assoc($ba_style));
+
+		$ba_special = array_merge($ba_special_beer,$ba_special_mead_cider);
+		$ba_special_ids = array_merge($ba_special_beer_ids,$ba_special_mead_cider_ids);
+
+		// Store only unique values
+		$_SESSION['ba_special_beer'] = array_unique($ba_special_beer);
+		$_SESSION['ba_special_beer_ids'] = array_unique($ba_special_beer_ids);
+		$_SESSION['ba_special_mead_cider'] = array_unique($ba_special_mead_cider);
+		$_SESSION['ba_special_mead_cider_ids'] = array_unique($ba_special_mead_cider_ids);
+		$_SESSION['ba_carb'] = array_unique($ba_carb);
+		$_SESSION['ba_carb_ids'] = array_unique($ba_carb_ids);
+		$_SESSION['ba_strength'] = array_unique($ba_strength);
+		$_SESSION['ba_strength_ids'] = array_unique($ba_strength_ids);
+		$_SESSION['ba_sweetness'] = array_unique($ba_sweetness);
+		$_SESSION['ba_sweetness_ids'] = array_unique($ba_sweetness_ids);
+		$_SESSION['ba_beer'] = array_unique($ba_beer);
+		$_SESSION['ba_mead_cider'] = array_unique($ba_mead_cider);
+		$_SESSION['ba_special'] = array_unique($ba_special);
+		$_SESSION['ba_special_ids'] = array_unique($ba_special_ids);
+		$_SESSION['ba_special_carb_str_sweet'] = array_unique($ba_special_carb_str_sweet);
+		$_SESSION['ba_special_carb_str_sweet_ids'] = array_unique($ba_special_carb_str_sweet_ids);
+		$_SESSION['ba_carb_str_sweet'] = array_unique($ba_carb_str_sweet);
+		$_SESSION['ba_carb_str_sweet_ids'] = array_unique($ba_carb_str_sweet_ids);
+		$_SESSION['ba_carb_str'] = array_unique($ba_carb_str);
+		$_SESSION['ba_carb_str_ids'] = array_unique($ba_carb_str_ids);
+		$_SESSION['ba_carb_sweet'] = array_unique($ba_carb_sweet);
+		$_SESSION['ba_carb_sweet_ids'] = array_unique($ba_carb_sweet_ids);
+		$_SESSION['ba_carb_special'] = array_unique($ba_carb_special);
+		$_SESSION['ba_carb_special_ids'] = array_unique($ba_carb_special_ids);
+		$_SESSION['ba_carb_sweet_special'] = array_unique($ba_carb_sweet_special);
+		$_SESSION['ba_carb_sweet_special_ids'] = array_unique($ba_carb_sweet_special_ids);
+
+	}
+
+
 }
 
 if ((isset($_SESSION['loginUsername'])) && (empty($_SESSION['user_info'.$prefix_session])))  {
@@ -274,8 +416,6 @@ if (empty($_SESSION['prefsLang'.$prefix_session])) {
 	$_SESSION['prefsLanguage'] = "en-US";
 
 	// Check if variation used (demarked with a dash)
-
-
 	$_SESSION['prefsLang'.$prefix_session] = $prefix_session;
 
 }
@@ -382,12 +522,79 @@ if (($section == "admin") && ($go == "default")) {
 	$totalRows_prefs = mysqli_num_rows($prefs);
 }
 
-// If using BA Styles, use the BreweryDB API to get all styles and store the resulting array as a session variable
-if (strpos($_SESSION['prefsStyleSet'],"BABDB") !== false) {
 
-	if (!isset($_SESSION['styles'])) {
+/* *********************************************
+ * Unused
+ * *********************************************
 
-		$bdb_api_key = explode("|",$_SESSION['prefsStyleSet']);
+do {
+
+	$i = "0";
+
+	$ba_styles_arr_data[] = array(
+		"id"=>$row_ba_styles['id'],
+		"category"=>array(
+			"id"=>$i++,
+			"name"=>$row_ba_styles['brewStyleCategory'],
+			"createDate"=>time(),
+		),
+		"name"=>$row_ba_styles['brewStyle'],
+		"shortName"=>$row_ba_styles['brewStyle'],
+		"description"=>$row_ba_styles['brewStyleInfo'],
+		"ibuMin"=>$row_ba_styles['brewStyleIBU'],
+		"ibuMax"=>$row_ba_styles['brewStyleIBUMax'],
+		"abvMin"=>$row_ba_styles['brewStyleABV'],
+		"abvMax"=>$row_ba_styles['brewStyleABVMax'],
+		"srmMin"=>$row_ba_styles['brewStyleSRM'],
+		"srmMax"=>$row_ba_styles['brewStyleSRMMax'],
+		"ogMin"=>$row_ba_styles['brewStyleOG'],
+		"ogMax"=>$row_ba_styles['brewStyleOGMax'],
+		"fgMin"=>$row_ba_styles['brewStyleFG'],
+		"fgMax"=>$row_ba_styles['brewStyleFGMax'],
+		"createDate"=>time(),
+		"categoryID"=>$row_ba_styles['brewStyleGroup'],
+		"brewStyleReqSpec"=>$row_ba_styles['brewStyleReqSpec'],
+		"brewStyleStrength"=>$row_ba_styles['brewStyleStrength'],
+		"brewStyleCarb"=>$row_ba_styles['brewStyleCarb'],
+		"brewStyleSweet"=>$row_ba_styles['brewStyleSweet'],
+		"brewStyleGroup"=>$row_ba_styles['brewStyleGroup']
+	);
+
+	$ba_styles_arr = array(
+		"message"=>"Request Successful",
+		"data"=>$ba_styles_arr_data,
+		"status"=>"success"
+	);
+
+	$_SESSION['styles'] = $ba_styles_arr;
+	$_SESSION['ba_style_count'] = $totalRows_ba_style;
+
+	foreach ($_SESSION['styles'] as $ba_styles => $stylesData) {
+
+		if (is_array($stylesData) || is_object($stylesData)) {
+
+			foreach ($stylesData as $key => $ba_style) {
+
+
+
+			} // end foreach ($stylesData as $key => $ba_style)
+
+		} // end if (is_array($stylesData) || is_object($stylesData))
+
+	} // end foreach ($_SESSION['styles'] as $styles => $stylesData)
+
+} while ($row_ba_style = mysqli_fetch_assoc($ba_style));
+
+$bdb_api_key = explode("|",$_SESSION['prefsStyleSet']);
+if ((isset($bdb_api_key[1])) && ($bdb_api_key[1] != "000000")) $bdb_api_key_check = TRUE;
+else $bdb_api_key_check = FALSE;
+
+if (!isset($_SESSION['styles'])) {
+
+
+
+	// If an API key is found, connect to BreweryDB API and get data
+	if ($bdb_api_key_check) {
 
 		include (INCLUDES.'brewerydb/brewerydb.inc.php');
 		include (INCLUDES.'brewerydb/exception.inc.php');
@@ -405,10 +612,46 @@ if (strpos($_SESSION['prefsStyleSet'],"BABDB") !== false) {
 				$results = array('error' => $e->getMessage());
 			}
 
-		$_SESSION['styles'] = $results; // store results in a session variable
+		// store results in a session variable
+		$_SESSION['styles'] = $results;
+
+		// store related data in session variables
+		$_SESSION['ba_special'] = array("3-27","3-28","3-44","4-56","5-70","11-114","11-117","11-119","11-120","11-121","11-124","11-125","11-126","11-128","11-130","11-131","11-132","11-133","11-134","11-135","11-136","11-137","12-145","12-146","12-148","12-151","12-153","12-154","12-155","12-157","14-161","14-162","12-170");
+		$_SESSION['ba_special_beer'] = array("3-27","3-28","3-44","4-56","5-70","11-114","11-117","11-119","11-120","11-121","11-124","11-125","11-126","11-128","11-130","11-131","11-132","11-133","11-134","11-135","11-136","11-137","14-161","14-162","12-170");
+		$_SESSION['ba_special_mead_cider'] = array("12-146","12-148","12-151","12-153","12-154","12-155","12-157");
+		$_SESSION['ba_carb'] = array("12-140","12-141","12-142","12-143","12-144","12-145","12-146","12-147","12-148","12-149","12-150","12-151","12-152","12-153","12-154","12-155","12-156","12-157");
+		$_SESSION['ba_strength'] = array("12-140","12-141","12-142","12-143","12-144","12-145","12-146","12-147","12-148");
+		$_SESSION['ba_sweetness'] = array("12-143","12-144","12-145","12-146","12-147","12-148","12-149","12-150","12-151","12-152","12-153","12-154","12-155","12-156","12-157");
+		$_SESSION['ba_special_carb_str_sweet'] = array("12-145","12-146","12-148");
+		$_SESSION['ba_carb_str_sweet'] = array("12-143","12-144","12-147");
+		$_SESSION['ba_carb_str'] = array("12-140","12-141","12-142");
+		$_SESSION['ba_carb_sweet'] = array("12-149","12-150","12-152","12-156");
+		$_SESSION['ba_carb_special'] = array();
+		$_SESSION['ba_carb_sweet_special'] = array("12-151","12-153","12-154","12-155","12-157");
+
+		$_SESSION['ba_special_ids'] = array(27,28,44,56,70,114,117,119,120,121,124,125,126,128,130,131,132,133,134,135,136,137,145,146,148,151,153,154,155,157,161,162,170);
+		$_SESSION['ba_special_beer_ids'] = array(27,28,44,56,70,114,117,119,120,121,124,125,126,128,130,131,132,133,134,135,136,137,161,162,170);
+		$_SESSION['ba_special_mead_cider_ids'] = array(145,146,148,151,153,154,155,157);
+		$_SESSION['ba_carb_ids'] = array(140,141,142,143,144,145,146,147,148,149,150,151,152,153,154,155,156,157);
+		$_SESSION['ba_strength_ids'] = array(140,141,142,143,144,145,146,147,148);
+		$_SESSION['ba_sweetness_ids'] = array(143,144,145,146,147,148,149,150,151,152,153,154,155,156,157);
+		$_SESSION['ba_special_carb_str_sweet_ids'] = array(145,146,148);
+		$_SESSION['ba_carb_str_sweet_ids'] = array(143,144,147);
+		$_SESSION['ba_carb_str_ids'] = array(140,141,142);
+		$_SESSION['ba_carb_sweet_ids'] = array(149,150,152,156);
+		$_SESSION['ba_carb_special_ids'] = array();
+		$_SESSION['ba_carb_sweet_special_ids'] = array();
+		$_SESSION['ba_mead_cider'] = array(140,141,142,143,144,145,146,147,148,149,150,151,152,153,154,155,156,157);
+		$_SESSION['ba_mead'] = array(140,141,142,143,144,145,146,147,148);
+		$_SESSION['ba_cider'] = array(149,150,151,152,153,154,155,156,157);
+
 	}
 
 }
 
+ */
+
+
 $prefs_barcode_labels = array("N","C","2","0","3","4");
+
 ?>

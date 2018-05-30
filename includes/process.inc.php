@@ -227,6 +227,26 @@ if (((isset($_SERVER['HTTP_REFERER'])) && ($referrer['host'] == $_SERVER['SERVER
 		mysqli_real_escape_string($connection,$update);
 		$result = mysqli_query($connection,$update) or die (mysqli_error($connection));
 
+		// Do some clean up just in case
+
+		if ($_SESSION['contestRegistrationDeadline'] > time()) {
+			$update = sprintf("UPDATE %s SET contestRegistrationDeadline='%s' WHERE id='%s'",$prefix."contest_info",time(),"1");
+			mysqli_real_escape_string($connection,$update);
+			$result = mysqli_query($connection,$update) or die (mysqli_error($connection));
+		}
+
+		if ($_SESSION['contestEntryDeadline'] > time()) {
+			$update = sprintf("UPDATE %s SET contestEntryDeadline='%s' WHERE id='%s'",$prefix."contest_info",time(),"1");
+			mysqli_real_escape_string($connection,$update);
+			$result = mysqli_query($connection,$update) or die (mysqli_error($connection));
+		}
+
+		if ($_SESSION['contestJudgeDeadline'] > time()) {
+			$update = sprintf("UPDATE %s SET contestJudgeDeadline='%s' WHERE id='%s'",$prefix."contest_info",time(),"1");
+			mysqli_real_escape_string($connection,$update);
+			$result = mysqli_query($connection,$update) or die (mysqli_error($connection));
+		}
+
 		session_name($prefix_session);
 		session_start();
 		unset($_SESSION['prefs'.$prefix_session]);

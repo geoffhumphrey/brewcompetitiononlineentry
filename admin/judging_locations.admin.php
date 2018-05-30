@@ -435,11 +435,10 @@ if ((($action == "add") || ($action == "edit")) || ($section == "step5")) {
     </div><!-- ./button group -->
 	<?php } ?>
 	<?php if (($action == "default") || ($action == "edit")) { ?>
-	<p>BCOE&amp;M figures judge points according to the <a href="https://www.bjcp.org/rules.php" target="_blank">BJCP's definition of a session</a> as "...an uninterrupted time period when at least one panel of judges sits to judge one or more flights of entries. Typically, 'morning', 'afternoon' and 'evening' are considered sessions at most competitions." </p><p>Thus, to correctly calculate BJCP experience points for program participants, it is suggested that each session you set up here follow that guideline (e.g., <em>Session 1: XXX Location - Early Morning</em>, <em>Session 2: XXX Location - Late Morning</em>, <em>Session 3: XXX Location - Afternoon</em>, etc.). A judging session may consist of one or more flights and one or more rounds.</p>
 	<div class="btn-group" role="group" aria-label="...">
         <a class="btn btn-default" href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging&amp;action=add"><span class="fa fa-plus-circle"></span> Add a Judging Session</a>
     </div><!-- ./button group -->
-
+    <p>BCOE&amp;M figures judge points according to the <a href="https://www.bjcp.org/rules.php" target="_blank">BJCP's definition of a session</a> as "...an uninterrupted time period when at least one panel of judges sits to judge one or more flights of entries. Typically, 'morning', 'afternoon' and 'evening' are considered sessions at most competitions." </p><p>Thus, to correctly calculate BJCP experience points for program participants, it is suggested that each session you set up here follow that guideline (e.g., <em>Session 1: XXX Location - Early Morning</em>, <em>Session 2: XXX Location - Late Morning</em>, <em>Session 3: XXX Location - Afternoon</em>, etc.). A judging session may consist of one or more flights and one or more rounds.</p>
 	<?php } ?>
 
 	<?php if ($filter != "default") { ?>

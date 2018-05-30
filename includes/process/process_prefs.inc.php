@@ -7,21 +7,57 @@
 
 if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) || ($section == "setup"))) {
 
+	$prefsGoogleAccount = "";
+	if ((isset($_POST['prefsGoogleAccount0'])) && (isset($_POST['prefsGoogleAccount1']))) $prefsGoogleAccount = $_POST['prefsGoogleAccount0']."|".$_POST['prefsGoogleAccount1'];
+
 	if (isset($_POST['prefsUSCLEx'])) $prefsUSCLEx = implode(",",$_POST['prefsUSCLEx']);
 	else  $prefsUSCLEx = "";
 
 	$prefsStyleSet = "";
-
+	$style_alert = FALSE;
 
 	if (strpos($_SESSION['prefsStyleSet'],"BABDB") !== false) {
-
 		$ba_styleSet_explodies = explode("|",$_SESSION['prefsStyleSet']);
-
+		if (!isset($ba_styleSet_explodies[2])) $style_alert = TRUE;
 	}
 
-	if ((isset($_POST['prefsStyleSetAPIKey'])) && ($_POST['prefsStyleSet'] == "BABDB")) {
-		 $prefsStyleSet = $_POST['prefsStyleSet']."|".$_POST['prefsStyleSetAPIKey'];
-		 if (isset($ba_styleSet_explodies[2])) $prefsStyleSet .= "|".$ba_styleSet_explodies[2];
+	if ($_POST['prefsStyleSet'] == "BABDB") {
+
+		if (empty($_POST['prefsStyleSetAPIKey']))  {
+			$prefsStyleSet = $_POST['prefsStyleSet']."|000000";
+		}
+
+		else {
+			$prefsStyleSet = $_POST['prefsStyleSet']."|".$_POST['prefsStyleSetAPIKey'];
+			if (isset($ba_styleSet_explodies[2])) $prefsStyleSet .= "|".$ba_styleSet_explodies[2];
+		}
+
+		if (isset($ba_styleSet_explodies[2])) {
+
+			// Check the numbers in the array, any are in the 1 to 160 range, API key used
+			// Otherwise, no key
+			$style_id_arr = explode(",",$ba_styleSet_explodies[2]);
+
+			$sum_arr = array();
+
+			foreach ($style_id_arr as $value) {
+				if ($value <= 160) $sum_arr[] = 1;
+				else $sum_arr[] = 0;
+			}
+
+			$sum = array_sum($sum_arr);
+
+			if ((($sum > 0) && (!empty($_POST['prefsStyleSetAPIKey']))) || (($sum == 0) && (empty($_POST['prefsStyleSetAPIKey'])))) $prefsStyleSet .= "|".$ba_styleSet_explodies[2];
+			if ((($sum > 0) && (empty($_POST['prefsStyleSetAPIKey']))) || (($sum == 0) && (!empty($_POST['prefsStyleSetAPIKey'])))) {
+				$prefsStyleSet .= "|";
+				$prefsUSCLEx = "";
+				$style_alert = TRUE;
+			}
+		}
+
+		//echo $prefsStyleSet."<br>";
+		//echo $sum; exit;
+
 	}
 
 	else $prefsStyleSet = sterilize($_POST['prefsStyleSet']);
@@ -104,6 +140,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 		prefsTieBreakRule5,
 		prefsTieBreakRule6,
 		prefsCAPTCHA,
+		prefsGoogleAccount,
 		id
 
 		) VALUES (
@@ -119,7 +156,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 		%s, %s, %s, %s, %s,
 		%s, %s, %s, %s, %s,
 		%s, %s, %s, %s, %s,
-		%s, %s)",
+		%s, %s, %s)",
 
 			GetSQLValueString(sterilize($_POST['prefsTemp']), "text"),
 			GetSQLValueString(sterilize($_POST['prefsWeight1']), "text"),
@@ -192,6 +229,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 			GetSQLValueString(sterilize($_POST['prefsTieBreakRule5']), "text"),
 			GetSQLValueString(sterilize($_POST['prefsTieBreakRule6']), "text"),
 			GetSQLValueString(sterilize($_POST['prefsCAPTCHA']), "text"),
+			GetSQLValueString(sterilize($prefsGoogleAccount), "text"),
 			GetSQLValueString($id, "int"));
 
 			mysqli_real_escape_string($connection,$insertSQL);
@@ -326,7 +364,8 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 		prefsTieBreakRule4=%s,
 		prefsTieBreakRule5=%s,
 		prefsTieBreakRule6=%s,
-		prefsCAPTCHA=%s
+		prefsCAPTCHA=%s,
+		prefsGoogleAccount=%s
 
 		WHERE id=%s",
 			GetSQLValueString(sterilize($_POST['prefsTemp']), "text"),
@@ -401,6 +440,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 			GetSQLValueString(sterilize($_POST['prefsTieBreakRule5']), "text"),
 			GetSQLValueString(sterilize($_POST['prefsTieBreakRule6']), "text"),
 			GetSQLValueString(sterilize($_POST['prefsCAPTCHA']), "text"),
+			GetSQLValueString(sterilize($prefsGoogleAccount), "text"),
 			GetSQLValueString($id, "int"));
 
 			mysqli_real_escape_string($connection,$updateSQL);
@@ -441,6 +481,8 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 			session_name($prefix_session);
 			session_start();
 			unset($_SESSION['prefs'.$prefix_session]);
+
+			if ($style_alert) $updateGoTo .= $_POST['relocate']."&msg=37";
 
 			$pattern = array('\'', '"');
 			$updateGoTo = str_replace($pattern, "", $updateGoTo);

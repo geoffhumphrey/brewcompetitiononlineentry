@@ -4,6 +4,10 @@
  * Description: This module houses links to all administration functions.
  *
  */
+//include(INCLUDES.'brewerydb/ba_style_add.php');
+//print_r($ba_styles_arr);
+//echo "<hr>";
+// print_r($_SESSION['styles']);
 
 ?>
 <p class="lead">Hello, <?php echo $_SESSION['brewerFirstName']; ?>. <span class="small">Click or tap the headings or icons below to view the options available in each category.</span></p>
@@ -224,13 +228,6 @@
                         </div>
                     </div>
                 </div><!-- ./ Entry and Data Gathering Panel -->
-
-
-
-
-
-
-
 				<!-- Sorting Panel -->
                 <div class="panel panel-default">
                     <div class="panel-heading">
@@ -327,7 +324,6 @@
 												</ul>
 											</div>
 										</li>
-
 									</ul>
                                     <ul class="list-unstyled">
 										<li>With Required Info - All Styles (Judging Numbers)
@@ -355,7 +351,6 @@
 									</ul>
                                 </div>
                              </div><!-- ./row -->
-
                              <div class="row">
                                 <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-4">
                                     <a href="http://www.avery.se/avery/en_se/Products/Labels/Multipurpose/White-Multipurpose-Labels-Permanent/General-Usage-Labels-White_3422.htm" target="_blank" data-toggle="tooltip" data-placement="right" title="Avery 3422">A4</a>
@@ -416,15 +411,12 @@
 									</ul>
                                 </div>
                              </div><!-- ./row -->
-
                              <div class="row">
                                 <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-4">
                                     <a href="http://www.onlinelabels.com/Products/OL32.htm" target="_blank" data-toggle="tooltip" data-placement="right" title="Online Lables OL32">0.50 in/13 mm Round</a>
                                 </div>
                                 <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-8">
                                     <ul class="list-unstyled">
-
-
 										<li>Entry Numbers
 											<div class="dropdown bcoem-admin-dashboard-select">
 												<button class="btn btn-default dropdown-toggle" type="button" id="sortingMenu5" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Number of Labels per Entry <span class="caret"></span>

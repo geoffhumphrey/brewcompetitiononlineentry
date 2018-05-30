@@ -159,44 +159,7 @@ if ($show_entries) {
 				$page_info16 .= "<div class=\"row\">";
 				$page_info16 .= "<div class=\"col col-lg-6 col-md-8 col-sm-10 col-xs-12\">";
 
-				if (strpos($_SESSION['prefsStyleSet'],"BABDB") !== false) {
-
-					$ba_style[] = "";
-
-					$page_info16 .= "<ul>";
-
-					// Check for any custom styles
-					if ($totalRows_styles > 0) {
-
-						do {
-
-							if ((isset($row_styles['id'])) && ($row_styles['brewStyleActive'] == "Y")) {
-								$ba_style[] .= $row_styles['brewStyle']." (".$label_custom_style.")";
-								$ba_accepted_styles[] .= $row_styles['brewStyle']." (".$label_custom_style.")"."|".$row_styles['id'];
-							}
-
-						} while($row_styles = mysqli_fetch_assoc($styles));
-
-					}
-
-					foreach ($excepted_styles as $ba_excepted_style) {
-						// Hack - cannot figure out why the id of the style in the array is returning the NEXT style's name as a value
-						$ba_style[] .= $_SESSION['styles']['data'][$ba_excepted_style-1]['name'];
-
-					}
-
-					sort($ba_style);
-
-					foreach ($ba_style as $value) {
-						if (!empty($value)) $page_info16 .= "<li>".$value."</li>";
-					}
-
-					$page_info16 .= "</ul>";
-
-
-				} else {
-					$page_info16 .= style_convert($row_limits['prefsUSCLEx'],"7");
-				}
+				$page_info16 .= style_convert($row_limits['prefsUSCLEx'],"7");
 
 				$page_info16 .= "</div>";
 				$page_info16 .= "</div>";
@@ -278,72 +241,6 @@ $styles_endRow = 0;
 $styles_columns = 3;   // number of columns
 $styles_hloopRow1 = 0; // first row flag
 
-// BA Styles
-if (strpos($_SESSION['prefsStyleSet'],"BABDB") !== false) {
-
-	include (INCLUDES.'ba_constants.inc.php');
-
-	$styles_options = "";
-
-	$ba_styleSet_explodies = explode("|",$_SESSION['prefsStyleSet']);
-
-	if (isset($ba_styleSet_explodies[2])) {
-		$ba_style_explodies = explode(",",$ba_styleSet_explodies[2]);
-		foreach ($_SESSION['styles'] as $ba_styles => $ba_stylesData) {
-			if (is_array($ba_stylesData) || is_object($ba_stylesData)) {
-				foreach ($ba_stylesData as $key => $ba_style) {
-					if (in_array($ba_style['id'],$ba_style_explodies)) {
-							$ba_accepted_styles[] .= $ba_style['name']."|".$ba_style['id'];
-					}
-				} // end foreach ($stylesData as $data => $style)
-			} // end if (is_array($stylesData) || is_object($stylesData))
-		} // end foreach ($_SESSION['styles'] as $styles => $stylesData)
-	}
-
-	sort($ba_accepted_styles);
-
-	foreach ($ba_accepted_styles as $value) {
-		$ba_style_explodies = explode("|",$value);
-
-		if (($styles_endRow == 0) && ($styles_hloopRow1++ != 0)) $page_info8 .= "<tr>";
-
-		if (!empty($value)) {
-
-			$page_info8 .= "<td width=\"33%\">";
-			if (in_array($ba_style_explodies[1],$ba_special_ids)) $page_info8 .= "<a href=\"https://www.brewersassociation.org/resources/brewers-association-beer-style-guidelines/\" target=\"_blank\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"".$entry_info_text_045." - ".$ba_style_explodies[0]." \">".$ba_style_explodies[0]."</a>";
-			else $page_info8 .= $ba_style_explodies[0];
-			$page_info8 .= "</td>";
-
-			$styles_endRow++;
-		}
-
-		if ($styles_endRow >= $styles_columns) {
-			$styles_endRow = 0;
-		}
-	}
-
-	if ($totalRows_styles_custom > 0) {
-
-		do {
-
-			if (($styles_endRow == 0) && ($styles_hloopRow1++ != 0)) $page_info8 .= "<tr>";
-			$page_info8 .= "<td width=\"33%\">";
-			$page_info8 .= $row_styles_custom['brewStyle']." (Custom Style)";
-			$page_info8 .= "</td>";
-
-			$styles_endRow++;
-
-			if ($styles_endRow >= $styles_columns) {
-				$styles_endRow = 0;
-			}
-
-		} while ($row_styles_custom = mysqli_fetch_assoc($styles_custom));
-
-	}
-}
-
-else {
-
 	do {
 		if (($styles_endRow == 0) && ($styles_hloopRow1++ != 0)) $page_info8 .= "<tr>";
 
@@ -351,7 +248,9 @@ else {
 
 		if (!empty($row_styles['brewStyleEntry'])) {
 
-			$page_info8 .= "<a href=\"#\" data-toggle=\"modal\" data-target=\"#custom-modal-".ltrim($row_styles['brewStyleGroup'], "0").$row_styles['brewStyleNum']."\" title=\"".$entry_info_text_045."\">".ltrim($row_styles['brewStyleGroup'], "0").$row_styles['brewStyleNum']." ".$row_styles['brewStyle']."</a>";
+			if ($_SESSION['prefsStyleSet'] == "BA") $page_info8 .= "<a href=\"#\" data-toggle=\"modal\" data-target=\"#custom-modal-".ltrim($row_styles['brewStyleGroup'], "0").$row_styles['brewStyleNum']."\" title=\"".$entry_info_text_045."\">".$row_styles['brewStyle']."</a>";
+
+			else $page_info8 .= "<a href=\"#\" data-toggle=\"modal\" data-target=\"#custom-modal-".ltrim($row_styles['brewStyleGroup'], "0").$row_styles['brewStyleNum']."\" title=\"".$entry_info_text_045."\">".ltrim($row_styles['brewStyleGroup'], "0").$row_styles['brewStyleNum']." ".$row_styles['brewStyle']."</a>";
 
 			$style_info_modal_body = "";
 
@@ -383,9 +282,20 @@ else {
 
 		}
 
-		else $page_info8 .= ltrim($row_styles['brewStyleGroup'], "0").$row_styles['brewStyleNum']." ".$row_styles['brewStyle'];
+		else {
+			if ($_SESSION['prefsStyleSet'] == "BA") $page_info8 .= $row_styles['brewStyle'];
+			else $page_info8 .= ltrim($row_styles['brewStyleGroup'], "0").$row_styles['brewStyleNum']." ".$row_styles['brewStyle'];
+		}
 
 		if ($row_styles['brewStyleOwn'] == "custom") $page_info8 .= " (Custom Style)";
+
+		if ($row_styles['brewStyleReqSpec'] == 1) $page_info8 .= " <span class=\"fa fa-check-circle text-orange\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"".$entry_info_text_048."\"></span>";
+
+		if ($row_styles['brewStyleStrength'] == 1) $page_info8 .= " <span class=\"fa fa-check-circle text-purple\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"".$entry_info_text_049."\"></span>";
+
+		if ($row_styles['brewStyleCarb'] == 1) $page_info8 .= " <span class=\"fa fa-check-circle text-teal\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"".$entry_info_text_050."\"></span>";
+
+		if ($row_styles['brewStyleSweet'] == 1) $page_info8 .= " <span class=\"fa fa-check-circle text-gold\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"".$entry_info_text_051."\"></span>";
 
 		$page_info8 .= "</td>";
 		$styles_endRow++;
@@ -396,7 +306,6 @@ else {
 
 	} while ($row_styles = mysqli_fetch_assoc($styles));
 
-} // end else
 
 if ($styles_endRow != 0) {
 		while ($styles_endRow < $styles_columns) {

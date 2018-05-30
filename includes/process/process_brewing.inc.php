@@ -114,7 +114,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 
 			}
 
-			$all_special_ing_styles = array_merge($custom_special_ing_styles,$ba_special_ids);
+			$all_special_ing_styles = array_merge($custom_special_ing_styles,$_SESSION['ba_special_ids']);
 
 		}
 
@@ -211,7 +211,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 				do { $custom_carb_ids[] = $row_custom_carb['id']; } while($row_custom_carb = mysqli_fetch_assoc($custom_carb));
 			}
 
-			$all_carb_ids = array_merge($custom_carb_ids,$ba_carb_ids);
+			$all_carb_ids = array_merge($custom_carb_ids,$_SESSION['ba_carb_ids']);
 
 			// Sweetness
 			$custom_sweet_ids = array();
@@ -224,7 +224,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 				do { $custom_sweet_ids[] = $row_custom_sweet['id']; } while($row_custom_sweet = mysqli_fetch_assoc($custom_sweet));
 			}
 
-			$all_sweet_ids = array_merge($custom_sweet_ids,$ba_sweetness_ids);
+			$all_sweet_ids = array_merge($custom_sweet_ids,$_SESSION['ba_sweetness_ids']);
 
 			// Strength
 			$custom_strength_ids = array();
@@ -237,7 +237,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 				do { $custom_strength_ids[] = $row_custom_strength['id']; } while($row_custom_strength = mysqli_fetch_assoc($custom_strength));
 			}
 
-			$all_strength_ids = array_merge($custom_strength_ids,$ba_strength_ids);
+			$all_strength_ids = array_merge($custom_strength_ids,$_SESSION['ba_strength_ids']);
 
 			if ((isset($_POST['brewMead1'])) && (in_array($styleID,$all_carb_ids))) $brewMead1 .= filter_var($_POST['brewMead1'],FILTER_SANITIZE_STRING); // Carbonation
 			if ((isset($_POST['brewMead2'])) && (in_array($styleID,$all_sweet_ids)))  $brewMead2 .= filter_var($_POST['brewMead2'],FILTER_SANITIZE_STRING); // Sweetness
@@ -778,7 +778,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 
 		// Get style name from broken parts if BA (currently there are 14 overall BA categories, 34 BJCP 2015, and 28 BJCP 2007)
 		// Custom style overall category will always be greater than 28
-		if ((strpos($_SESSION['prefsStyleSet'],"BABDB") !== false) && ($style[0] > 28)) $query_style_name = sprintf("SELECT * FROM %s WHERE brewStyleOwn='custom' AND brewStyleGroup='%s' AND brewStyleNum='%s'",$styles_db_table,$styleFix,$style[1]);
+		if ((strpos($_SESSION['prefsStyleSet'],"BA") !== false) && ($style[0] > 28)) $query_style_name = sprintf("SELECT * FROM %s WHERE brewStyleOwn='custom' AND brewStyleGroup='%s' AND brewStyleNum='%s'",$styles_db_table,$styleFix,$style[1]);
 
 		// Get style name from broken parts if BJCP
 		else $query_style_name = sprintf("SELECT * FROM %s WHERE (brewStyleVersion='%s' OR brewStyleOwn='custom') AND brewStyleGroup='%s' AND brewStyleNum='%s'",$styles_db_table,$_SESSION['prefsStyleSet'],$styleFix,$style[1]);

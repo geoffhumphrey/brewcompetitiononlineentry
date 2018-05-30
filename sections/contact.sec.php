@@ -45,6 +45,11 @@ Declare all variables empty at the top of the script. Add on later...
 
 include (DB.'contacts.db.php');
 
+if (!empty($_SESSION['prefsGoogleAccount'])) {
+    $recaptcha_key = explode("|", $_SESSION['prefsGoogleAccount']);
+    $public_captcha_key = $recaptcha_key[0];
+}
+
 if ($_SESSION['prefsContact'] == "N") {
 	$page_info = "";
 	$page_info .= sprintf("<p>%s</p>",$contact_text_000);
@@ -151,24 +156,17 @@ if ($_SESSION['prefsContact'] == "Y") {
                     <div class="help-block with-errors"></div>
                 </div>
             </div><!-- Form Group -->
-
+            <?php if ($_SESSION['prefsCAPTCHA'] == "1") { ?>
             <div class="form-group">
             	<label for="" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label6; ?></label>
                 <div class="col-lg-10 col-md-9 col-sm-8 col-xs-12">
                 	<div class="input-group">
                         <!-- Input Here -->
-                        <?php
-                        if ($_SESSION['prefsCAPTCHA'] == 1) {
-                        require_once(INCLUDES.'recaptchalib.inc.php');
-                        ?>
-                        <?php echo recaptcha_get_html($public_captcha_key, null, true); ?>
-                        <?php } else { ?>
-                        <div class="g-recaptcha" data-sitekey="<?php echo $public_captcha_key; ?>"></div>
-                        <?php } ?>
+                            <div class="g-recaptcha" data-sitekey="<?php echo $public_captcha_key; ?>"></div>
                     </div>
                 </div>
             </div><!-- Form Group -->
-
+            <?php } ?>
             <div class="form-group">
                 <div class="col-lg-offset-2 col-md-offset-3 col-sm-offset-4 col-xs-12">
                 	<!-- Input Here -->

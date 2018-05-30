@@ -4,7 +4,7 @@
 $table_body = "";
 foreach ($_SESSION as $key => $value) {
 	if (is_array($value)) {
-		$table_body .=  "<tr><td>".$key."</td><td>Returned an Array</td></tr>";
+		$table_body .=  "<tr><td>".$key."</td><td>".display_array_content($value,2)."</td></tr>";
 	}
 	else $table_body .=  "<tr><td>".$key."</td><td>".$value."</td></tr>";
 }

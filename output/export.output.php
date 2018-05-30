@@ -704,9 +704,9 @@ if (((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) || ((
 							$html .= '<td width="'.$td_width_style.'">';
 							if ($row_scores['brewStyle'] != '') $html .= $row_scores['brewStyle']; else $html .= "&nbsp;";
 							$html .= '</td>';
-							if (($_SESSION['prefsProEdition'] == 0) && ($row_scores['brewerClubs'] != "")) {
+							if ($_SESSION['prefsProEdition'] == 0) {
 								$html .= '<td width="175">';
-								$html .= strtr($row_scores['brewerClubs'],$html_remove);
+								if ($row_scores['brewerClubs'] != "") $html .= strtr($row_scores['brewerClubs'],$html_remove);
 								$html .= '</td>';
 							}
 							$html .= '</tr>';
@@ -771,9 +771,9 @@ if (((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) || ((
 								$html .= '<td width="'.$td_width_style.'">';
 								if ($row_scores['brewStyle'] != '') $html .= $row_scores['brewStyle']; else $html .= "&nbsp;";
 								$html .= '</td>';
-								if (($_SESSION['prefsProEdition'] == 0) && ($row_scores['brewerClubs'] != "")) {
+								if ($_SESSION['prefsProEdition'] == 0) {
 									$html .= '<td width="175">';
-									$html .= strtr($row_scores['brewerClubs'],$html_remove);
+									if ($row_scores['brewerClubs'] != "") $html .= strtr($row_scores['brewerClubs'],$html_remove);
 									$html .= '</td>';
 								}
 								$html .= '</tr>';
@@ -838,9 +838,9 @@ if (((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) || ((
 							$html .= '<td width="'.$td_width_style.'">';
 							if ($row_scores['brewStyle'] != '') $html .= $row_scores['brewStyle']; else $html .= "&nbsp;";
 							$html .= '</td>';
-							if (($_SESSION['prefsProEdition'] == 0) && ($row_scores['brewerClubs'] != "")) {
+							if ($_SESSION['prefsProEdition'] == 0) {
 								$html .= '<td width="175">';
-								$html .= strtr($row_scores['brewerClubs'],$html_remove);
+								if ($row_scores['brewerClubs'] != "") $html .= strtr($row_scores['brewerClubs'],$html_remove);
 								$html .= '</td>';
 							}
 							$html .= '</tr>';

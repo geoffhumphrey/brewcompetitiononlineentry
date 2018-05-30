@@ -276,7 +276,7 @@ function check_sweetness($style,$styleSet) {
 
 		include (INCLUDES.'ba_constants.inc.php');
 
-		if (in_array($style,$ba_sweetness)) return TRUE;
+		if (in_array($style,$_SESSION['ba_sweetness'])) return TRUE;
 		else return FALSE;
 
 	}
@@ -309,7 +309,7 @@ function check_carb($style,$styleSet) {
 
 		include (INCLUDES.'ba_constants.inc.php');
 
-		if (in_array($style,$ba_carb)) return TRUE;
+		if (in_array($style,$_SESSION['ba_carb'])) return TRUE;
 		else return FALSE;
 
 	}
@@ -341,7 +341,7 @@ function check_mead_strength($style,$styleSet) {
 
 		include (INCLUDES.'ba_constants.inc.php');
 
-		if (in_array($style,$ba_strength)) return TRUE;
+		if (in_array($style,$_SESSION['ba_strength'])) return TRUE;
 		else return FALSE;
 
 	}

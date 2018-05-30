@@ -11,12 +11,29 @@ $row_substyle_count = mysqli_fetch_assoc($substyle_count);
 $substyle_count_logged = mysqli_query($connection,$query_substyle_count_logged) or die (mysqli_error($connection));
 $row_substyle_count_logged = mysqli_fetch_assoc($substyle_count_logged);
 
-	
 if (($row_substyle_count_logged > 0) || ($row_substyle_count > 0)) {
-	
-	if (is_array($substyle)) {
-	
-		$substyle_cat_num = ltrim($substyle[0],"0");
+
+	$substyle_cat_num = ltrim($substyle[0],"0");
+
+	if ($_SESSION['prefsStyleSet'] == "BA") {
+
+		if ($substyle_cat_num != 12) {
+
+			$count_mead_cider = FALSE;
+			$count_beer = TRUE;
+
+		}
+
+		else {
+
+			$count_mead_cider = TRUE;
+			$count_beer = FALSE;
+
+		}
+
+	}
+
+	else {
 
 		if ($substyle_cat_num <= $beer_end) {
 			$count_beer = TRUE;
@@ -53,34 +70,16 @@ if (($row_substyle_count_logged > 0) || ($row_substyle_count > 0)) {
 
 	}
 
-	else {
-		
-		if ($cat != 12) {
-			
-			$count_mead_cider = FALSE;
-			$count_beer = TRUE;
-			
-		}
-		
-		else {
-			
-			$count_mead_cider = TRUE;
-			$count_beer = FALSE;
-			
-		}
+	if ($count_beer) {
 
-	}
-
-	if ($count_beer) { 
-
-		$style_type = "Beer"; 
-		$style_beer_count[] .= $row_substyle_count['count']; 
-		$style_beer_count_logged[] .= $row_substyle_count_logged['count'];  
+		$style_type = "Beer";
+		$style_beer_count[] .= $row_substyle_count['count'];
+		$style_beer_count_logged[] .= $row_substyle_count_logged['count'];
 
 	}
 
 
-	if (empty($substyle)) {
+	if ($_SESSION['prefsStyleSet'] == "BA") {
 
 		if ($count_mead_cider)  {
 
@@ -94,11 +93,11 @@ if (($row_substyle_count_logged > 0) || ($row_substyle_count > 0)) {
 
 	else {
 
-		if ($count_mead) { 
+		if ($count_mead) {
 
-			$style_type = "Mead"; 
-			$style_mead_count[] .= $row_substyle_count['count']; 
-			$style_mead_count_logged[] .= $row_substyle_count_logged['count']; 
+			$style_type = "Mead";
+			$style_mead_count[] .= $row_substyle_count['count'];
+			$style_mead_count_logged[] .= $row_substyle_count_logged['count'];
 
 		}
 
@@ -112,21 +111,20 @@ if (($row_substyle_count_logged > 0) || ($row_substyle_count > 0)) {
 
 	}
 
-
 	if ($other_count) {
 
-		if ($row_style_type['brewStyleType'] <= 3) $source = "bcoe"; 
-		else $source = "custom"; 
+		if ($row_style_type['brewStyleType'] <= 3) $source = "bcoe";
+		else $source = "custom";
 
 		$style_type = style_type($row_style_type['brewStyleType'],"2",$source);
 
 		if ($style_type == "Beer") {
-			$style_beer_count[] .= $row_substyle_count['count']; 
-			$style_beer_count_logged[] .= $row_substyle_count_logged['count'];  
+			$style_beer_count[] .= $row_substyle_count['count'];
+			$style_beer_count_logged[] .= $row_substyle_count_logged['count'];
 		}
 
 		elseif ($style_type == "Mead") {
-			$style_mead_count[] .= $row_substyle_count['count']; 
+			$style_mead_count[] .= $row_substyle_count['count'];
 			$style_mead_count_logged[] .= $row_substyle_count_logged['count'];
 			$style_mead_cider_count[] .= $row_substyle_count['count'];
 			$style_mead_cider_count_logged[] .= $row_substyle_count_logged['count'];
@@ -141,10 +139,10 @@ if (($row_substyle_count_logged > 0) || ($row_substyle_count > 0)) {
 
 		else {
 			$style_other_count[] .= $row_substyle_count['count'];
-			$style_other_count_logged[] .= $row_substyle_count_logged['count']; 
+			$style_other_count_logged[] .= $row_substyle_count_logged['count'];
 		}
 
 	}
-	
+
 }
 ?>

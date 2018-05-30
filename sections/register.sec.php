@@ -91,6 +91,11 @@ $page_info1 = "";
 $header1_2 = "";
 $page_info2 = "";
 
+if (!empty($_SESSION['prefsGoogleAccount'])) {
+    $recaptcha_key = explode("|", $_SESSION['prefsGoogleAccount']);
+    $public_captcha_key = $recaptcha_key[0];
+}
+
 if ($section == "admin") $you_volunteer = $register_text_000;
 else $you_volunteer = $register_text_001;
 
@@ -787,26 +792,19 @@ if ($go == "default") {  ?>
             <div class="help-block with-errors"></div>
         </div>
     </div><!-- ./Form Group -->
-
     <?php } // END if (((!$judge_hidden) || (!$steward_hidden)) && ($section != "admin")) ?>
+    <?php if ($_SESSION['prefsCAPTCHA'] == "1") { ?>
     <!-- CAPTCHA -->
-    <!-- <script src="https://www.google.com/recaptcha/api.js"></script> -->
 	<div class="form-group">
 		<label for="recaptcha" class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label">CAPTCHA</label>
 		<div class="col-lg-9 col-md-9 col-sm-8 col-xs-12">
 			<div class="input-group">
 				<!-- Input Here -->
-                <?php
-                if ($_SESSION['prefsCAPTCHA'] == 1) {
-                require_once(INCLUDES.'recaptchalib.inc.php');
-                ?>
-                <?php echo recaptcha_get_html($public_captcha_key, null, true); ?>
-                <?php } else { ?>
                 <div class="g-recaptcha" data-sitekey="<?php echo $public_captcha_key; ?>"></div>
-                <?php } ?>
 			</div>
 		</div>
 	</div><!-- Form Group -->
+    <?php } ?>
 	<!-- Register Button -->
 	<div class="form-group">
 		<div class="col-lg-offset-2 col-md-offset-3 col-sm-offset-4">
