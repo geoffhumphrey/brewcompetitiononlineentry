@@ -145,7 +145,7 @@ function score_style_data($value) {
 	require(CONFIG.'config.php');
 	mysqli_select_db($connection,$database);
 
-	if (strpos($_SESSION['prefsStyleSet'],"BABDB") === false) {
+	if ($_SESSION['prefsStyleSet'] != "BA") {
 
 	$query_styles = sprintf("SELECT brewStyleGroup,brewStyleNum,brewStyle,brewStyleType FROM %s WHERE id='%s'", $prefix."styles", $value);
 	$styles = mysqli_query($connection,$query_styles) or die (mysqli_error($connection));
@@ -737,16 +737,7 @@ function table_score_data($eid,$score_table,$suffix) {
 	$row_entries = mysqli_fetch_assoc($entries);
 	$style = $row_entries['brewCategorySort'].$row_entries['brewSubCategory'];
 
-	if (strpos($_SESSION['prefsStyleSet'],"BABDB") === false) {
-		$query_styles = sprintf("SELECT brewStyle FROM %s WHERE (brewStyleVersion='%s' OR brewStyleOwn='custom') AND brewStyleGroup='%s' AND brewStyleNum='%s'", $prefix."styles",$_SESSION['prefsStyleSet'],$row_entries['brewCategorySort'],$row_entries['brewSubCategory']);
-		$styles = mysqli_query($connection,$query_styles) or die (mysqli_error($connection));
-		$row_styles = mysqli_fetch_assoc($styles);
-		$style_name = $row_styles['brewStyle'];
-	}
-
-	else {
-		$style_name = $row_entries['brewStyle'];
-	}
+	$style_name = $row_entries['brewStyle'];
 
 	$query_tables = sprintf("SELECT id,tableName,tableNumber FROM %s WHERE id='%s'", $prefix."judging_tables".$suffix, $score_table);
 	$tables = mysqli_query($connection,$query_tables) or die (mysqli_error($connection));

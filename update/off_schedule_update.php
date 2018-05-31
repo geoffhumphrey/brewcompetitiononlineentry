@@ -767,15 +767,12 @@ if (!check_update("archiveScoresheet", $prefix."archive")) {
 
 $output .= "<li>Updated archive table for proper access of archived scoresheets.</li>";
 
-// Change the version and version date in the system table
-$updateSQL = sprintf("UPDATE %s SET version='%s', version_date='%s', data_check=%s WHERE id=1", $prefix."system", $current_version, $current_version_date_display,"NOW()");
-mysqli_real_escape_string($connection,$updateSQL);
-$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
-
-// ----------------------------------------------- 2.1.13 ----------------------------------------------
-// Add BA styles to styles DB table
-// As of April 2018, BreweryDB not issuing API keys; installations not able to use BA styles
-// -----------------------------------------------------------------------------------------------------
+/*
+ * ----------------------------------------------- 2.1.13 ----------------------------------------------
+ * Add BA styles to styles DB table
+ * As of April 2018, BreweryDB not issuing API keys; installations not able to use BA styles
+ * -----------------------------------------------------------------------------------------------------
+ */
 
 $ba_styles_present = FALSE;
 
@@ -969,4 +966,34 @@ if (!$ba_styles_present) {
 	mysqli_real_escape_string($connection,$updateSQL);
 	$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 }
+
+/*
+ * ----------------------------------------------- 2.1.13 ----------------------------------------------
+ * Add toggle to allow users to specify whether to use BOS in "Best of" calculations
+ * -----------------------------------------------------------------------------------------------------
+ */
+
+if (!check_update("prefsBestUseBOS", $prefix."preferences")) {
+	$updateSQL = sprintf("ALTER TABLE `%s` ADD `prefsBestUseBOS` TINYINT(1) NULL DEFAULT NULL;",$prefix."preferences");
+	mysqli_select_db($connection,$database);
+	mysqli_real_escape_string($connection,$updateSQL);
+	$result = mysqli_query($connection,$updateSQL);
+
+	$updateSQL = sprintf("UPDATE `%s` SET prefsBestUseBOS='1' WHERE id='1';",$prefix."preferences");
+	mysqli_select_db($connection,$database);
+	mysqli_real_escape_string($connection,$updateSQL);
+	$result = mysqli_query($connection,$updateSQL);
+}
+
+/*
+ * ----------------------------------------------------------------------------------------------------
+ * Change the version number and date
+ * ALWAYS the final script
+ * ----------------------------------------------------------------------------------------------------
+ */
+
+$updateSQL = sprintf("UPDATE %s SET version='%s', version_date='%s', data_check=%s WHERE id=1", $prefix."system", $current_version, $current_version_date_display,"NOW()");
+mysqli_real_escape_string($connection,$updateSQL);
+$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+
 ?>

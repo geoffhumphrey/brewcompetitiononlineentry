@@ -103,25 +103,6 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 
 			} // end foreach($_POST['id'] as $id)
 
-		/*
-		if (strpos($_SESSION['prefsStyleSet'],"BABDB") !== false) {
-
-			$explodies = explode("|",$_SESSION['prefsStyleSet']);
-
-			// Add new list to broken up parts
-			$styles_accepted = $explodies[0]."|".$explodies[1]."|".rtrim($ba_styles_accepted,",");
-
-			$updateSQL = sprintf("UPDATE %s SET prefsStyleSet='%s' WHERE id='1'",$preferences_db_table,$styles_accepted);
-			mysqli_real_escape_string($connection,$updateSQL);
-			$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
-
-			session_name($prefix_session);
-			session_start();
-			unset($_SESSION['prefs'.$prefix_session]);
-
-		} // end if (strpos($_SESSION['prefsStyleSet'],"BABDB") !== false)
-		*/
-
 		if($result) {
 
 			if ($section == "setup") {

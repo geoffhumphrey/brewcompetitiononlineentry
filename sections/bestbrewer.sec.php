@@ -94,69 +94,76 @@ do {
 
 } while ($bb_row_scores = mysqli_fetch_assoc($bb_scores));
 
-// BOS Round
-do {
 
-	$club_name = normalizeClubs($bb_row_bos_scores['brewerClubs']);
+// BOS - do calcs only if pref is true
+if ($_SESSION['prefsBestUseBOS'] == 1) {
 
-	if (array_key_exists($bb_row_bos_scores['uid'], $bestbrewer)) {
-		$place = floor($bb_row_bos_scores['scorePlace']);
-		if (($place == $bb_row_bos_scores['scorePlace']) && ($place >= 1) && ($place <= 5)) $bestbrewer[$bb_row_bos_scores['uid']]['Places'][$place-1] += 1;
-		$bestbrewer[$bb_row_bos_scores['uid']]['Scores'][] = $bb_row_bos_scores['scoreEntry'];
-		$bestbrewer[$bb_row_bos_scores['uid']]['TypeBOS'][] += 1;
+	do {
 
-		// -- Compile separate vars for clubs --
-		if (!empty($bb_row_bos_scores['brewerClubs'])) {
+		$club_name = normalizeClubs($bb_row_bos_scores['brewerClubs']);
 
-			if (array_key_exists($club_name, $bestbrewer_clubs)) {
-				if (($place == $bb_row_bos_scores['scorePlace']) && ($place >= 1) && ($place <= 5)) $bestbrewer_clubs[$club_name]['Places'][$place-1] += 1;
-				$bestbrewer_clubs[$club_name]['Scores'][] = $bb_row_bos_scores['scoreEntry'];
+		if (array_key_exists($bb_row_bos_scores['uid'], $bestbrewer)) {
+			$place = floor($bb_row_bos_scores['scorePlace']);
+			if (($place == $bb_row_bos_scores['scorePlace']) && ($place >= 1) && ($place <= 5)) $bestbrewer[$bb_row_bos_scores['uid']]['Places'][$place-1] += 1;
+			$bestbrewer[$bb_row_bos_scores['uid']]['Scores'][] = $bb_row_bos_scores['scoreEntry'];
+			$bestbrewer[$bb_row_bos_scores['uid']]['TypeBOS'][] += 1;
+
+			// -- Compile separate vars for clubs --
+			if (!empty($bb_row_bos_scores['brewerClubs'])) {
+
+				if (array_key_exists($club_name, $bestbrewer_clubs)) {
+					if (($place == $bb_row_bos_scores['scorePlace']) && ($place >= 1) && ($place <= 5)) $bestbrewer_clubs[$club_name]['Places'][$place-1] += 1;
+					$bestbrewer_clubs[$club_name]['Scores'][] = $bb_row_bos_scores['scoreEntry'];
+				}
+
+				else {
+					$bestbrewer_clubs[$club_name]['Places'] = array(0,0,0,0,0);
+					if (($place == $bb_row_bos_scores['scorePlace']) && ($place >= 1) && ($place <= 5)) $bestbrewer_clubs[$club_name]['Places'][$place-1] = 1;
+					$bestbrewer_clubs[$club_name]['Scores'] = array();
+					$bestbrewer_clubs[$club_name]['Scores'][] = $bb_row_bos_scores['scoreEntry'];
+					$bestbrewer_clubs[$club_name]['Clubs'] = $bb_row_bos_scores['brewerClubs'];
+				}
+
 			}
+			// -- end clubs --
+		}
 
-			else {
-				$bestbrewer_clubs[$club_name]['Places'] = array(0,0,0,0,0);
-				if (($place == $bb_row_bos_scores['scorePlace']) && ($place >= 1) && ($place <= 5)) $bestbrewer_clubs[$club_name]['Places'][$place-1] = 1;
-				$bestbrewer_clubs[$club_name]['Scores'] = array();
-				$bestbrewer_clubs[$club_name]['Scores'][] = $bb_row_bos_scores['scoreEntry'];
-				$bestbrewer_clubs[$club_name]['Clubs'] = $bb_row_bos_scores['brewerClubs'];
+		else {
+			$bestbrewer[$bb_row_bos_scores['uid']]['Places'] = array(0,0,0,0,0);
+			$bestbrewer[$bb_row_bos_scores['uid']]['TypeBOS'] = array();
+			$bestbrewer[$bb_row_bos_scores['uid']]['Scores'] = array();
+
+			$place = floor($bb_row_bos_scores['scorePlace']);
+			if (($place == $bb_row_bos_scores['scorePlace']) && ($place >= 1) && ($place <= 5)) $bestbrewer[$bb_row_bos_scores['uid']]['Places'][$place-1] = 1;
+			$bestbrewer[$bb_row_bos_scores['uid']]['Scores'][0] = $bb_row_bos_scores['scoreEntry'];
+			$bestbrewer[$bb_row_bos_scores['uid']]['TypeBOS'][0] = 1;
+
+			// -- Compile separate vars for clubs --
+			if (!empty($bb_row_bos_scores['brewerClubs'])) {
+
+				if (array_key_exists($club_name, $bestbrewer_clubs)) {
+					if (($place == $bb_row_bos_scores['scorePlace']) && ($place >= 1) && ($place <= 5)) $bestbrewer_clubs[$club_name]['Places'][$place-1] += 1;
+					$bestbrewer_clubs[$club_name]['Scores'][] = $bb_row_bos_scores['scoreEntry'];
+				}
+
+				else {
+					$bestbrewer_clubs[$club_name]['Places'] = array(0,0,0,0,0);
+					if (($place == $bb_row_bos_scores['scorePlace']) && ($place >= 1) && ($place <= 5)) $bestbrewer_clubs[$club_name]['Places'][$place-1] = 1;
+					$bestbrewer_clubs[$club_name]['Scores'] = array();
+					$bestbrewer_clubs[$club_name]['Scores'][] = $bb_row_bos_scores['scoreEntry'];
+					$bestbrewer_clubs[$club_name]['Clubs'] = $bb_row_bos_scores['brewerClubs'];
+				}
+
 			}
+			// -- end clubs --
 
 		}
-		// -- end clubs --
-	}
 
-	else {
-		$bestbrewer[$bb_row_bos_scores['uid']]['Places'] = array(0,0,0,0,0);
-		$bestbrewer[$bb_row_bos_scores['uid']]['TypeBOS'] = array();
-		$bestbrewer[$bb_row_bos_scores['uid']]['Scores'] = array();
+	} while ($bb_row_bos_scores = mysqli_fetch_assoc($bb_bos_scores));
 
-		$place = floor($bb_row_bos_scores['scorePlace']);
-		if (($place == $bb_row_bos_scores['scorePlace']) && ($place >= 1) && ($place <= 5)) $bestbrewer[$bb_row_bos_scores['uid']]['Places'][$place-1] = 1;
-		$bestbrewer[$bb_row_bos_scores['uid']]['Scores'][0] = $bb_row_bos_scores['scoreEntry'];
-		$bestbrewer[$bb_row_bos_scores['uid']]['TypeBOS'][0] = 1;
+}
 
-		// -- Compile separate vars for clubs --
-		if (!empty($bb_row_bos_scores['brewerClubs'])) {
 
-			if (array_key_exists($club_name, $bestbrewer_clubs)) {
-				if (($place == $bb_row_bos_scores['scorePlace']) && ($place >= 1) && ($place <= 5)) $bestbrewer_clubs[$club_name]['Places'][$place-1] += 1;
-				$bestbrewer_clubs[$club_name]['Scores'][] = $bb_row_bos_scores['scoreEntry'];
-			}
-
-			else {
-				$bestbrewer_clubs[$club_name]['Places'] = array(0,0,0,0,0);
-				if (($place == $bb_row_bos_scores['scorePlace']) && ($place >= 1) && ($place <= 5)) $bestbrewer_clubs[$club_name]['Places'][$place-1] = 1;
-				$bestbrewer_clubs[$club_name]['Scores'] = array();
-				$bestbrewer_clubs[$club_name]['Scores'][] = $bb_row_bos_scores['scoreEntry'];
-				$bestbrewer_clubs[$club_name]['Clubs'] = $bb_row_bos_scores['brewerClubs'];
-			}
-
-		}
-		// -- end clubs --
-
-	}
-
-} while ($bb_row_bos_scores = mysqli_fetch_assoc($bb_bos_scores));
 
 if ($row_limits['prefsShowBestBrewer'] != 0) {
 
@@ -264,7 +271,11 @@ if (($_SESSION['prefsProEdition'] == 0) && ($row_limits['prefsShowBestClub'] != 
 			$table_body2 .= "<td>".$bestbrewer_clubs[$key]['Places'][2]."</td>";
 			if ($show_4th_clubs) $table_body2 .= "<td>".$bestbrewer_clubs[$key]['Places'][3]."</td>";
 			if ($show_HM_clubs) $table_body2 .= "<td>".$bestbrewer_clubs[$key]['Places'][4]."</td>";
-			$table_body2 .= "<td nowrap>".number_format($points_clubs,2)." <a href=\"#club-".$points_clubs."\"  tabindex=\"0\" role=\"button\" data-toggle=\"popover\" data-trigger=\"hover\" data-placement=\"auto top\" data-container=\"body\" title=\"Actual Calculated Value\" data-content=\"".$points_clubs."\"><span class=\"hidden-xs hidden-sm hidden-md hidden-print fa fa-question-circle\"></span></a></td>";
+			$table_body2 .= "<td nowrap>";
+			if ($section == "results") $table_body2 .= $points_clubs;
+			else $table_body2 .= number_format($points_clubs,2);
+			if ($section != "results") $table_body2 .= " <a href=\"#club-".$points_clubs."\"  tabindex=\"0\" role=\"button\" data-toggle=\"popover\" data-trigger=\"hover\" data-placement=\"auto top\" data-container=\"body\" title=\"Actual Calculated Value\" data-content=\"".$points_clubs."\"><span class=\"hidden-xs hidden-sm hidden-md hidden-print fa fa-question-circle\"></span></a>";
+			$table_body2 .= "</td>";
 			$table_body2 .= "</tr>";
 
 		}
@@ -340,7 +351,11 @@ if ($row_limits['prefsShowBestBrewer'] != 0) {
 			$table_body1 .= "<td>".$bestbrewer[$key]['Places'][2]."</td>";
 			if ($show_4th) $table_body1 .= "<td>".$bestbrewer[$key]['Places'][3]."</td>";
 			if ($show_HM) $table_body1 .= "<td>".$bestbrewer[$key]['Places'][4]."</td>";
-			$table_body1 .= "<td nowrap>".number_format($points,2)." <a href=\"#".$points."\" tabindex=\"0\" role=\"button\" data-toggle=\"popover\" data-trigger=\"hover\" data-placement=\"auto top\" data-container=\"body\" title=\"Actual Calculated Value\" data-content=\"".$points."\"><span class=\"hidden-xs hidden-sm hidden-md hidden-print fa fa-question-circle\"></span></a></td>";
+			$table_body1 .= "<td nowrap>";
+			if ($section == "results") $table_body1 .= $points;
+			else $table_body1 .= number_format($points,2);
+			if ($section != "results") $table_body1 .= " <a href=\"#".$points."\" tabindex=\"0\" role=\"button\" data-toggle=\"popover\" data-trigger=\"hover\" data-placement=\"auto top\" data-container=\"body\" title=\"Actual Calculated Value\" data-content=\"".$points."\"><span class=\"hidden-xs hidden-sm hidden-md hidden-print fa fa-question-circle\"></span></a>";
+			$table_body1 .= "</td>";
 			if ($_SESSION['prefsProEdition'] == 0) $table_body1 .= "<td class=\"hidden-xs hidden-sm hidden-md\">".$bestbrewer[$key]['Clubs']."</td>";
 			$table_body1 .= "</tr>";
 		}
@@ -348,14 +363,44 @@ if ($row_limits['prefsShowBestBrewer'] != 0) {
 	}
 }
 
-$page_info_1 .= "<p>".$best_brewer_text_002."</p>";
+if ($section == "default") $page_info_1 .= "<p>".$best_brewer_text_002."</p>";
 
 // --------------------------------------------------------------
 // Display
 // --------------------------------------------------------------
 
 ?>
-<?php if ($row_limits['prefsShowBestBrewer'] != 0) { ?>
+
+<?php if ($section == "admin") { ?>
+<div class="bcoem-admin-element">
+<a class="btn btn-info" role="button" data-toggle="collapse" href="#scoreMethodCollapse" aria-expanded="false" aria-controls="scoreMethodCollapse">View the Defined Scoring Methodology</a>
+</div>  <a class="btn btn-primary" role="button" href="<?php echo $base_url."index.php?section=admin&go=preferences"; ?>">Change Scoring Methodology and/or Tiebreakers</a>
+</div>
+<div class="collapse" id="scoreMethodCollapse">
+  <div class="well">
+    <p><?php echo $best_brewer_text_004; ?></p>
+		<ul>
+			<li><?php echo addOrdinalNumberSuffix(1)." ".$label_place.": ".$row_bb_prefs['prefsFirstPlacePts']; ?></li>
+			<li><?php echo addOrdinalNumberSuffix(2)." ".$label_place.": ".$row_bb_prefs['prefsSecondPlacePts']; ?></li>
+			<li><?php echo addOrdinalNumberSuffix(3)." ".$label_place.": ".$row_bb_prefs['prefsThirdPlacePts']; ?></li>
+			<?php if ($row_bb_prefs['prefsFourthPlacePts'] > 0) { ?><li><?php echo addOrdinalNumberSuffix(4)." ".$label_place.": ".$row_bb_prefs['prefsFourthPlacePts']; ?></li><?php } ?>
+			<?php if ($row_bb_prefs['prefsHMPts'] > 0) { ?><li><?php echo $best_brewer_text_001.": ".$row_bb_prefs['prefsHMPts']; ?></li><?php } ?>
+		</ul>
+	<?php if (!empty($row_bb_prefs['prefsTieBreakRule1'])) { ?>
+	<p><?php echo $best_brewer_text_005; ?></p>
+		<ol>
+			<li><?php echo tiebreak_rule($row_bb_prefs['prefsTieBreakRule1']); ?></li>
+			<?php if (!empty($row_bb_prefs['prefsTieBreakRule2'])) { ?><li><?php echo tiebreak_rule($row_bb_prefs['prefsTieBreakRule2']); ?></li><?php } ?>
+			<?php if (!empty($row_bb_prefs['prefsTieBreakRule3'])) { ?><li><?php echo tiebreak_rule($row_bb_prefs['prefsTieBreakRule3']); ?></li><?php } ?>
+			<?php if (!empty($row_bb_prefs['prefsTieBreakRule4'])) { ?><li><?php echo tiebreak_rule($row_bb_prefs['prefsTieBreakRule4']); ?></li><?php } ?>
+			<?php if (!empty($row_bb_prefs['prefsTieBreakRule5'])) { ?><li><?php echo tiebreak_rule($row_bb_prefs['prefsTieBreakRule5']); ?></li><?php } ?>
+			<?php if (!empty($row_bb_prefs['prefsTieBreakRule6'])) { ?><li><?php echo tiebreak_rule($row_bb_prefs['prefsTieBreakRule6']); ?></li><?php } ?>
+		</ol>
+	<?php } ?>
+	</ul>
+  </div>
+</div>
+<?php } if ($row_limits['prefsShowBestBrewer'] != 0) { ?>
 <div class="bcoem-winner-table">
 	<?php echo $header1_1; ?>
     <table class="table table-responsive table-striped table-bordered"  id="sortable">
@@ -382,13 +427,50 @@ $page_info_1 .= "<p>".$best_brewer_text_002."</p>";
     </table>
     <?php echo $page_info_1; ?>
 </div>
-<?php } ?>
+<?php } if ($section == "results")  { ?>
+<h4>
+	<?php
+				if ($row_limits['prefsShowBestBrewer'] != 0) echo $row_bb_prefs['prefsBestBrewerTitle'];
+				if (($row_limits['prefsShowBestClub'] != 0) && ($row_limits['prefsShowBestBrewer'] != 0)) echo " / ";
+				if ($row_limits['prefsShowBestClub'] != 0) echo $row_bb_prefs['prefsBestClubTitle'];
+				echo " ".$best_brewer_text_003;
+				?>
+</h4>
+<div class="small">
+<p><?php echo $best_brewer_text_004; ?></p>
+	<ul>
+		<li><?php echo addOrdinalNumberSuffix(1)." ".$label_place.": ".$row_bb_prefs['prefsFirstPlacePts']; ?></li>
+		<li><?php echo addOrdinalNumberSuffix(2)." ".$label_place.": ".$row_bb_prefs['prefsSecondPlacePts']; ?></li>
+		<li><?php echo addOrdinalNumberSuffix(3)." ".$label_place.": ".$row_bb_prefs['prefsThirdPlacePts']; ?></li>
+		<?php if ($row_bb_prefs['prefsFourthPlacePts'] > 0) { ?><li><?php echo addOrdinalNumberSuffix(4)." ".$label_place.": ".$row_bb_prefs['prefsFourthPlacePts']; ?></li><?php } ?>
+		<?php if ($row_bb_prefs['prefsHMPts'] > 0) { ?><li><?php echo $best_brewer_text_001.": ".$row_bb_prefs['prefsHMPts']; ?></li><?php } ?>
+	</ul>
+	<?php if (!empty($row_bb_prefs['prefsTieBreakRule1'])) { ?>
+	<p><?php echo $best_brewer_text_005; ?></p>
+	<ol>
+		<li><?php echo tiebreak_rule($row_bb_prefs['prefsTieBreakRule1']); ?></li>
+		<?php if (!empty($row_bb_prefs['prefsTieBreakRule2'])) { ?><li><?php echo tiebreak_rule($row_bb_prefs['prefsTieBreakRule2']); ?></li><?php } ?>
+		<?php if (!empty($row_bb_prefs['prefsTieBreakRule3'])) { ?><li><?php echo tiebreak_rule($row_bb_prefs['prefsTieBreakRule3']); ?></li><?php } ?>
+		<?php if (!empty($row_bb_prefs['prefsTieBreakRule4'])) { ?><li><?php echo tiebreak_rule($row_bb_prefs['prefsTieBreakRule4']); ?></li><?php } ?>
+		<?php if (!empty($row_bb_prefs['prefsTieBreakRule5'])) { ?><li><?php echo tiebreak_rule($row_bb_prefs['prefsTieBreakRule5']); ?></li><?php } ?>
+		<?php if (!empty($row_bb_prefs['prefsTieBreakRule6'])) { ?><li><?php echo tiebreak_rule($row_bb_prefs['prefsTieBreakRule6']); ?></li><?php } ?>
+	</ol>
+	<?php } ?>
+</div>
+<?php } if ($section == "default") { ?>
 <div class="modal fade" id="scoreMethod" tabindex="-1" role="dialog">
 	<div class="modal-dialog" role="document">
 		<div class="modal-content">
 			<div class="modal-header">
 				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-				<h4 class="modal-title"><?php echo $row_bb_prefs['prefsBestBrewerTitle']." / ".$row_bb_prefs['prefsBestClubTitle']." ".$best_brewer_text_003; ?></h4>
+				<h4 class="modal-title">
+				<?php
+				if ($row_limits['prefsShowBestBrewer'] != 0) echo $row_bb_prefs['prefsBestBrewerTitle'];
+				if (($row_limits['prefsShowBestClub'] != 0) && ($row_limits['prefsShowBestBrewer'] != 0)) echo " / ";
+				if ($row_limits['prefsShowBestClub'] != 0) echo $row_bb_prefs['prefsBestClubTitle'];
+				echo " ".$best_brewer_text_003;
+				?>
+				</h4>
 			</div>
 			<div class="modal-body">
 				<p><?php echo $best_brewer_text_004; ?></p>
@@ -414,7 +496,8 @@ $page_info_1 .= "<p>".$best_brewer_text_002."</p>";
 			<div class="modal-footer">
 				<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
 			</div>
-		</div><!-- /.modal-content -->
-	</div><!-- /.modal-dialog -->
-</div><!-- /.modal -->
+		</div>
+	</div>
+</div>
+<?php } ?>
 <!-- Public Page Rebuild completed 08.26.15 -->

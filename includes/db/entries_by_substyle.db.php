@@ -18,17 +18,13 @@ if (($row_substyle_count_logged > 0) || ($row_substyle_count > 0)) {
 	if ($_SESSION['prefsStyleSet'] == "BA") {
 
 		if ($substyle_cat_num != 12) {
-
 			$count_mead_cider = FALSE;
 			$count_beer = TRUE;
-
 		}
 
 		else {
-
 			$count_mead_cider = TRUE;
 			$count_beer = FALSE;
-
 		}
 
 	}

@@ -2,7 +2,7 @@
 /* CSS Document */
 @import url(https://fonts.googleapis.com/css?family=Hind:400,500,600,700,300|Montserrat:400,700);
 
-/** 
+/**
 ----------------------------------------------------------------------
 Customized Bootstrap Classes for Claussenii Theme
 ----------------------------------------------------------------------
@@ -113,7 +113,7 @@ html {
 	position: relative;
 	min-height: 100%;
 }
-		
+
 body {
   	color: #005A31;
 	background-color:#fefefe;
@@ -132,21 +132,21 @@ body {
   	a[href]:after {
     	content: none !important;
 	  }
-	 
+
 	body {
-		 
+
 		font-family: Arial, sans-serif;
 		font-weight: 400;
-		font-size: 14px;		
+		font-size: 14px;
 		position: relative;
 		min-height: 100%;
 	}
 }
 
-@page  
-{ 
-    size: auto;   /* auto is the initial value */ 
-	margin: 1.25cm .75cm 1.25cm .75cm; 
+@page
+{
+    size: auto;   /* auto is the initial value */
+	margin: 1.25cm .75cm 1.25cm .75cm;
 }
 
 a,
@@ -179,20 +179,20 @@ h2, h2, h3, h4, h5, h6 {
 
 @media print {
 	h1, h2, h3, h4, h5, h6 {
-		 
+
 		font-family: Arial, sans-serif;
 		font-weight: 800;
 		margin: 0;
 	}
-	
+
 	h1 {
 		padding: 0 0 25px 0;
 	}
-	
+
 	h2, h2, h3, h4, h5, h6 {
 		padding: 0 0 20px 0;
 	}
-	
+
 	.page-header {
 		margin: 0;
 		padding: 0;
@@ -1292,15 +1292,15 @@ fieldset[disabled] .navbar-default .btn-link:focus {
 	color: #A8CD1B; !important
 }
 
-.navmenu { 
+.navmenu {
 	font-size: .9em;
 }
 
-.dropdown-backdrop { 
+.dropdown-backdrop {
 	position: static;
 }
 
-.navmenu-nav.dropdown-menu { 
+.navmenu-nav.dropdown-menu {
 	position:relative;
 	font-size: .9em;
 }
@@ -1336,113 +1336,29 @@ footer .navbar {
 	background-color: #F3FAB6;
 }
 
-.btn-group { 
-	padding: 0 0 3px 0; 
+.btn-group {
+	padding: 0 0 3px 0;
 }
 
 @media (min-width: 768px) {
-  
+
   .dl-horizontal dt, dl {
 	  padding: 0 0 10px 0;
   }
-  
+
   .dl-horizontal dt {
     width: 250px;
   }
-  
+
   .dl-horizontal dd {
     margin-left: 270px;
   }
-   
+
 }
 
 /** --------------------------------------------------- **/
 /** Custom Classes for BCOEM                            **/
-/** Custom Colors Based on Google Materials             **/
-/**	https://www.google.com/design/spec/style/color.html **/
 /** --------------------------------------------------- **/
-
-
-.sidebar .bcoem-comp-logo {
-	margin: 0 0 10px 0;
-}
-
-.sidebar .panel h4 {
-	padding: 5px 0 5px 0;
-	margin: 0;	
-}
-
-.sidebar .bcoem-sidebar-panel {
-	padding: 0 0 5px 0;
-}
-
-.sidebar .bcoem-sidebar-panel .small {
-	line-height: 9px;
-	margin: 0;
-}
-
-.bcoem-warning-container {
-	padding-top: 30px;
-}
-
-/** Info and Entries **/
-
-.bcoem-user-info-table th {
-	border-top: none !important;
-}
-
-.bcoem-user-info-table td {
-	border-top: none !important;
-}
-
-.bcoem-account-info {
-	
-	padding: 0 0 10px 0;
-}
-
-/** Sponsors **/
-
-.bcoem-sponsor-container {
-	padding: 15px;
-}
-
-.bcoem-sponsor-name h5 {
-	font-size: 1.15em;
-	padding: 0;
-}
-
-.bcoem-sponsor-name {
-}
-
-.bcoem-sponsor-location {
-	padding: 0 0 15px 0;
-}
-
-.bcoem-sponsor-text {
-	padding: 10px 0;
-}
-
-/** Forms **/
-
-.bcoem-form-info {
-	word-break: keep-all;
-	margin-top: 10px;
-}
-
-.bcoem-form-accordion {
-	
-}
-
-.bcoem-form-accordion h4 {
-	padding: 0;
-	margin: 0;
-}
-
-/* Winner Display */
-
-.bcoem-winner-table {
-	margin-bottom: 45px;	
-}
 
 /** Admin **/
 
@@ -1451,268 +1367,54 @@ footer .navbar {
 }
 
 .bcoem-admin-dashboard-accordion h5 {
-	font-weight: bold;
-	font-size: 1.1em;
 	color: #005A31;
-	padding: 20px 0;
 }
 
 .bcoem-admin-dashboard-accordion .panel-default .panel-title  a ,
 .bcoem-admin-dashboard-accordion .panel-default .panel-title  a:visited {
   color: #005A31;
-  text-decoration: none;
 }
 .bcoem-admin-dashboard-accordion .panel-default .panel-title  a:hover,
 .bcoem-admin-dashboard-accordion .panel-default .panel-title  a:focus,
 .bcoem-admin-dashboard-accordion .panel-default .panel-title  a:active {
   color: #A8CD1B;
-  text-decoration: none;
 }
 
 .bcoem-admin-dashboard-accordion .glyphicon,
 .bcoem-admin-dashboard-accordion .fa {
-	
 }
 
 .bcoem-admin-dashboard-accordion h4 {
-	padding: 0;
-	margin: 0;
 }
 
 .bcoem-admin-dashboard-accordion hr {
-	padding: 0;
-	margin: 15px 0 0 0;
 }
 
 .bcoem-admin-dashboard-accordion .bcoem-admin-dashboard-select {
-	margin: 3px 0 10px 0;
 }
 
 .bcoem-admin-modal {
-	color: 000;
+	color: #000;
 }
 
 .bcoem-admin-modal h4 {
-	padding: 0;
-	margin: 0;
-	color: 000;
 }
 
 .bcoem-admin-element {
-	padding: 0 0 15px 0;	
+
 }
 
 .bcoem-admin-element-bottom {
-	padding: 15px 0 0 0;	
 }
 
 .panel-group .panel {
-  overflow: visible;
 }
 
-.accordion-body.in:hover { 
-	overflow:visible; 
-	}
-	
+.accordion-body.in:hover {
+
+}
+
 .table {
-	font-size: 14px;	
-}
-
-/* ---------- Gold, Silver, Bronze for Winner Displays ---------- */
-
-/* Gold */
-.text-gold {
-	color: #D4AF37;
-}
-
-/* Silver */
-.text-silver {
-	color: #C0C0C0;
-}
-
-/* Bronze */
-.text-bronze {
-	color: #cd7f32;
-}
-
-/* ---------- Expanded Color Classes ---------- */
-
-/* Forest Green */
-.bg-forest-green {
-	background-color: #a6d0a6;
-}
-	
-a.bg-forest-green:focus, a.bg-forest-green:hover {
-	background-color: #279f27;
-}	
-
-.text-forest-green { 
-	color: #228b22; 
-}
-
-a.forest-green:focus, a.forest-green:hover {
-	color: #176117;
-}
-
-.alert-forest-green {
-	border-color: #bcdcbc;
-	background: #d2e7d2;
-	color: #228b22;
-}
-
-/* Purple */
-.bg-purple {
-	background-color: #EDE7F6; /* 50 Shade */
-}
-	
-a.bg-purple:focus, a.bg-purple:hover {
-	background-color: #B39DBB; /* 200 Shade */
-}	
-
-.text-purple {
-	color: #311B92; /* 900 Shade */
-}
-	
-a.text-purple:focus, a.text-purple:hover {
-	color: #651FFF; /* A400 Shade */
-}
-
-.alert-purple {
-	border-color: #D1C4E9; /* 100 Shade */
-	background: #EDE7F6; /* 50 Shade */
-	color: #311B92; /* 900 Shade */
-}
-
-/* Yellow */
-.bg-yellow {
-	background-color: #FFFDE7;
-}
-	
-a.bg-yellow:focus, a.bg-yellow:hover {
-	background-color: #FFF9C4;
-}
-	
-.text-yellow {
-	color: #F57F17;
-}
-	
-a.text-yellow:focus, a.text-yellow:hover {
-	color: #FFD600;
-}
-
-.alert-yellow {
-	border-color: #FFF9C4; /* 100 Shade */
-	background: #FFFDE7; /* 50 Shade */
-	color: #F57F17; /* 900 Shade */
-}
-
-/* Teal */
-.bg-teal {
-	background-color: #E0F2F1;  /* 50 Shade */
-}
-	
-a.bg-teal:focus, a.bg-teal:hover {
-	background-color: #80CBC4;  /* 200 Shade */
-}
-	
-.text-teal {
-	color: #004D40; /* 900 Shade */
-}
-	
-a.text-teal:focus, a.text-teal:hover {
-	color: #26A69A; /* 400 Shade */
-}
-
-.alert-teal {
-	border-color: #B2DFDB; /* 100 Shade */
-	background: #E0F2F1; /* 50 Shade */
-	color: #004D40; /* 900 Shade */
-}
-
-/* Orange */
-.bg-orange {
-	background-color: #FFF3E0;  /* 50 Shade */
-}
-	
-a.bg-orange:focus, a.bg-orange:hover {
-	background-color: #FFCC80;  /* 200 Shade */
-}
-	
-.text-orange {
-	color: #E65100;  /* 900 Shade */
-}
-	
-a.text-orange:focus, a.text-orange:hover {
-	color: #FF9100;  /* A400 Shade */
-}
-
-/* Indigo */
-.bg-indigo {
-	background-color: #E8EAF6;  /* 50 Shade */
-}
-	
-a.bg-indigo:focus, a.bg-indigo:hover {
-	background-color: #A8CD1B;  /* 200 Shade */
-}
-	
-.text-indigo {
-	color: #303E4B;  /* 900 Shade */
-}
-	
-a.text-indigo:focus, a.text-indigo:hover {
-	color: #3D5AFE;  /* A400 Shade */
-}
-
-.alert-orange {
-	border-color: #FFE0B2; /* 100 Shade */
-	background: #FFF3E0; /* 50 Shade */
-	color: #E65100; /* 900 Shade */
-}
-
-/* Amber */
-.bg-amber {
-	background-color: #FFF8E1;  /* 50 Shade */
-}
-	
-a.bg-amber:focus, a.bg-amber:hover {
-	background-color: #FFE082;  /* 200 Shade */
-}
-	
-.text-amber {
-	color: #FF6F00;  /* 900 Shade */
-}
-	
-a.text-amber:focus, a.text-amber:hover {
-	color: #FFAB00;  /* A400 Shade */
-}
-
-.alert-amber {
-	border-color: #FFECB3; /* 100 Shade */
-	background: #FFF8E1; /* 50 Shade */
-	color: #FF6F00; /* 900 Shade */
-}
-
-/* Grey */
-.bg-grey {
-	background-color: #FAFAFA;  /* 50 Shade */
-}
-	
-a.bg-grey:focus, a.bg-grey:hover {
-	background-color: #EEEEEE;  /* 200 Shade */
-}
-	
-.text-grey {
-	color: #212121;  /* 900 Shade */
-}
-	
-a.text-grey:focus, a.text-amber:grey {
-	color: #BDBDBD;  /* 400 Shade */
-}
-
-.alert-grey {
-	border-color: #F5F5F5; /* 100 Shade */
-	background: #FAFAFA; /* 50 Shade */
-	color: #212121; /* 900 Shade */
 }
 
 /** DataTables Overrides **/
@@ -1723,27 +1425,23 @@ table.dataTable thead th.sorting:after {
 .dataTables_paginate,
 .dataTables_filter {
 	color: #303E4B !important;
-	font-size: 14px !important;
 }
 
 .paging_full_numbers a.paginate_button {
-    color: #303E4B !important;
+  color: #303E4B !important;
 }
 
 .paging_full_numbers a.paginate_active {
-    color: #303E4B !important;
+  color: #303E4B !important;
 }
 
 .dataTables_paginate .paginate_button .active {
-  
   background-color: #EBF4B3;
   border-color: #A8CD1B;
 }
 
 /** Dropzone Overrides **/
 .dropzone {
-	border-radius: 5px;
 	background-color: #EBF4B3;
 	border: 1px solid #A8CD1B;
-	margin: 0 0 15px 0;
 }

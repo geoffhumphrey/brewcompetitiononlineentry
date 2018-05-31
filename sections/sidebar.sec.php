@@ -44,7 +44,7 @@ include (DB.'dropoff.db.php');
 
 if ($section != "admin") {
 
-	$competition_logo = "<img src=\"".$base_url."user_images/".$_SESSION['contestLogo']."\" class=\"bcoem-comp-logo img-responsive hidden-print\" alt=\"Competition Logo\" title=\"Competition Logo\" />";
+	$competition_logo = "<img src=\"".$base_url."user_images/".$_SESSION['contestLogo']."\" class=\"bcoem-comp-logo img-responsive hidden-print center-block\" alt=\"Competition Logo\" title=\"Competition Logo\" />";
 	$page_info = "";
 	$header1_100 = "";
 	$page_info100 = "";

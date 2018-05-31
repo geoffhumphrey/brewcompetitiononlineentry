@@ -1,4 +1,4 @@
-<?php 
+<?php
 if ($dbTable == "default") $pro_edition = $_SESSION['prefsProEdition'];
 else $pro_edition = $row_archive_prefs['archiveProEdition'];
 
@@ -44,9 +44,9 @@ else if(typeof window.attachEvent!='undefined')
 window.attachEvent('onload', uniqueCoicesSetup);
 // -->
 </script>
-<p class="lead"><?php echo $_SESSION['contestName']; 
-if ($action == "enter") echo ": Add or Update BOS Places for ".$row_style_type['styleTypeName']; else echo ": Best of Show (BOS) Entries and Places"; 
-if ($dbTable != "default") echo " (Archive ".get_suffix($dbTable).")"; 
+<p class="lead"><?php echo $_SESSION['contestName'];
+if ($action == "enter") echo ": Add or Update BOS Places for ".$row_style_type['styleTypeName']; else echo ": Best of Show (BOS) Entries and Places";
+if ($dbTable != "default") echo " (Archive ".get_suffix($dbTable).")";
 ?></p>
 <?php if ($dbTable != "default") { ?>
 <p><?php echo $edition; ?></p>
@@ -59,53 +59,53 @@ if ($dbTable != "default") echo " (Archive ".get_suffix($dbTable).")";
     </div><!-- ./button group -->
     <?php } ?>
     <?php if ($dbTable == "default") { ?>
-    
+
 		<?php if ($action == "enter") { ?>
         <!-- Postion 1: View All Button -->
         <div class="btn-group" role="group" aria-label="...">
             <a class="btn btn-default" href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging_scores_bos"><span class="fa fa-arrow-circle-left"></span> All BOS Entries and Places</a>
         </div><!-- ./button group -->
         <?php } ?>
-    
+
     	<!-- Postion 1: View All Button -->
         <div class="btn-group" role="group" aria-label="...">
             <a class="btn btn-default" href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging_scores"><span class="fa fa-arrow-circle-left"></span> All Scores</a>
         </div><!-- ./button group -->
-        
+
         <!-- Postion 1: View All Button -->
         <div class="btn-group" role="group" aria-label="...">
             <a class="btn btn-default" href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging_tables"><span class="fa fa-arrow-circle-left"></span> All Tables</a>
         </div><!-- ./button group -->
-        
+
         <?php if (($action == "default") && ($totalRows_style_type > 0)) { ?>
         <!-- Position 2: Enter/Edit Dropdown Button Group -->
         <div class="btn-group" role="group">
                 <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                <span class="fa fa-plus-circle"></span> Add or Update...  
+                <span class="fa fa-plus-circle"></span> Add or Update...
                 <span class="caret"></span>
                 </button>
                 <ul class="dropdown-menu">
-                
-                <?php do { 
+
+                <?php do {
                     if ($row_style_types_2['styleTypeBOS'] == "Y") { ?>
                     <li class="small"><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging_scores_bos&amp;action=enter&amp;filter=<?php echo $row_style_types_2['id'] ?>">BOS Places for <?php echo $row_style_types_2['styleTypeName']; ?></a>
-                <?php 
+                <?php
                     }
                 } while ($row_style_types_2 = mysqli_fetch_assoc($style_types_2));
                 ?>
                 </ul>
             </div>
         <?php } ?>
-        
-        
+
+
     	<!-- Postion 4: Print Button Dropdown Group -->
         <div class="btn-group hidden-xs hidden-sm" role="group">
             <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            <span class="fa fa-print"></span> Print...   
+            <span class="fa fa-print"></span> Print...
             <span class="caret"></span>
             </button>
             <ul class="dropdown-menu">
-                <?php do { 
+                <?php do {
                 if ($row_style_type['styleTypeBOS'] == "Y") { ?>
                     <li class="small"><a id="modal_window_link" class="menuItem" href="<?php echo $base_url; ?>output/print.output.php?section=pullsheets&amp;go=judging_scores_bos&amp;id=<?php echo $row_style_type['id']; ?>"  title="Print the <?php echo $row_style_type['styleTypeName']; ?> BOS Pullsheet">BOS Pullsheet for <?php echo $row_style_type['styleTypeName']; ?></a></li>
             <?php }
@@ -115,21 +115,21 @@ if ($dbTable != "default") echo " (Archive ".get_suffix($dbTable).")";
                 <li class="small"><a id="modal_window_link" href="<?php echo $base_url; ?>output/print.output.php?section=bos-mat&amp;filter=entry" title="Print BOS Cup Mats">BOS Cup Mats (Entry Numbers)</a></li>
             </ul>
     	</div>
-    
+
     <?php } ?>
 
 </div>
-<?php 
+<?php
 if (($action == "default") && ($totalRows_style_type > 0)) {
 do { $a[] = $row_style_types['id']; } while ($row_style_types = mysqli_fetch_assoc($style_types));
 sort($a);
 
 foreach ($a as $type) {
 	$style_type_info = style_type_info($type);
-	
+
 	$style_type_info = explode("^",$style_type_info);
-	
-if ($style_type_info[0] == "Y") { 
+
+if ($style_type_info[0] == "Y") {
 
 include (DB.'admin_judging_scores_bos.db.php');
 
@@ -183,22 +183,21 @@ include (DB.'admin_judging_scores_bos.db.php');
 </thead>
 <tbody>
 	<?php do {
-	
+
 	$bos_entry_info = bos_entry_info($row_bos['eid'], $row_bos['scoreTable'],$filter);
 	$bos_entry_info = explode("^",$bos_entry_info);
 	$style = $bos_entry_info[1].$bos_entry_info[3];
-	
-	if ((NHC) || ($_SESSION['prefsEntryForm'] == "N")) $judging_number = sprintf("%06s",$bos_entry_info[6]); 
+
+	if ((NHC) || ($_SESSION['prefsEntryForm'] == "N")) $judging_number = sprintf("%06s",$bos_entry_info[6]);
 	else $judging_number = readable_judging_number($bos_entry_info[1],$bos_entry_info[6]);
-	
-	if (strpos($_SESSION['prefsStyleSet'],"BABDB") === false) {
-		
+
+	if ($_SESSION['prefsStyleSet'] == "BA") $style_name = $bos_entry_info[0];
+
+    else  {
 		if ($filter == "default") $style_name = $style." ".style_convert($bos_entry_info[1],1).": ".$bos_entry_info[0];
 		else $style_name = $style.": ".$bos_entry_info[0];
-		
 	}
-	
-	else $style_name = $bos_entry_info[0];
+
 	?>
 	<tr>
     	<td nowrap><?php echo sprintf("%04s",$row_bos['eid']); ?></td>
@@ -215,7 +214,7 @@ include (DB.'admin_judging_scores_bos.db.php');
         <?php if ($dbTable != "default") { ?>
         <td><?php if ($pro_edition == 1) echo $bos_entry_info[16]; else echo $bos_entry_info[5].", ".$bos_entry_info[4]; ?></td>
         <td><?php echo $bos_entry_info[12]; ?></td>
-        
+
         <?php } ?>
         <td><?php echo $bos_entry_info[11]; ?></td>
         <td><?php echo $bos_entry_info[10] ?></td>
@@ -223,18 +222,18 @@ include (DB.'admin_judging_scores_bos.db.php');
     <?php } while ($row_bos = mysqli_fetch_assoc($bos)); ?>
 </tbody>
 </table>
-<?php } else echo "<p style='margin: 0 0 40px 0'>No entries are eligible.</p>"; 
-} 
+<?php } else echo "<p style='margin: 0 0 40px 0'>No entries are eligible.</p>";
+}
 
 ?>
 <?php } ?>
 
-<?php 
+<?php
 //else echo "<p style='margin: 0 0 40px 0'>No Best of Show <a href='".$base_url."index.php?section=admin&amp;go=style_types' title='Enable Best of Show for one or more style types'>has been enabled</a> for any style type.</p>";
 } // end if ($action == "default")
 ?>
 
-<?php if ($action == "enter") { 
+<?php if ($action == "enter") {
 
 include (DB.'admin_judging_scores_bos.db.php');
 ?>
@@ -270,24 +269,22 @@ include (DB.'admin_judging_scores_bos.db.php');
     </tr>
 </thead>
 <tbody>
-	<?php 
+	<?php
 	do {
-		
+
 		$bos_entry_info = bos_entry_info($row_enter_bos['eid'], "default","default");
 		$bos_entry_info = explode("^",$bos_entry_info);
 		$style = $bos_entry_info[1].$bos_entry_info[3];
-		if ((NHC) || ($_SESSION['prefsEntryForm'] == "N")) $judging_number = sprintf("%06s",$bos_entry_info[6]); 
+		if ((NHC) || ($_SESSION['prefsEntryForm'] == "N")) $judging_number = sprintf("%06s",$bos_entry_info[6]);
 		else $judging_number = readable_judging_number($bos_entry_info[1],$bos_entry_info[6]);
-		
-		if (strpos($_SESSION['prefsStyleSet'],"BABDB") === false) {
-		
-		if ($filter == "default") $style_name = $style." ".style_convert($bos_entry_info[1],1).": ".$bos_entry_info[0];
-		else $style_name = $style.": ".$bos_entry_info[0];
-		
-	}
-	
-	else $style_name = $bos_entry_info[0];
-		
+
+		if ($_SESSION['prefsStyleSet'] != "BA") $style_name = $bos_entry_info[0];
+
+        else {
+    		if ($filter == "default") $style_name = $style." ".style_convert($bos_entry_info[1],1).": ".$bos_entry_info[0];
+    		else $style_name = $style.": ".$bos_entry_info[0];
+    	}
+
 	?>
 	<tr>
 		<?php $score_id = $bos_entry_info[13]; ?>
@@ -313,9 +310,9 @@ include (DB.'admin_judging_scores_bos.db.php');
         </select>
         </td>
 	</tr>
-    <?php 
-	} while ($row_enter_bos = mysqli_fetch_assoc($enter_bos)); 
-	?>	
+    <?php
+	} while ($row_enter_bos = mysqli_fetch_assoc($enter_bos));
+	?>
 </tbody>
 </table>
 <div class="bcoem-admin-element hidden-print">
@@ -327,7 +324,7 @@ include (DB.'admin_judging_scores_bos.db.php');
 <input type="hidden" name="relocate" value="<?php echo relocate($base_url."index.php?section=admin&go=judging_tables","default",$msg,$id); ?>">
 <?php } ?>
 </form>
-<?php } 
+<?php }
 else echo "<p>There are no qualifying entries available.</p>";
 }
 ?>

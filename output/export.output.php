@@ -737,7 +737,7 @@ if (((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) || ((
 
 							$style_trimmed = ltrim($style,"0");
 
-							if (strpos($_SESSION['prefsStyleSet'],"BABDB") === false) {
+							if ($_SESSION['prefsStyleSet'] != "BA") {
 								if ($view == "pdf") $html .= '<br><br><strong>Style '.ltrim($style,"0").': '.style_convert($style,"1").' ('.$row_entry_count['count'].' '.$entries.')</strong><br>';
 								else $html .= '<h2>Style '.$style_trimmed.': '.style_convert($style,"1").' ('.$row_entry_count['count'].' '.$entries.')</h2>';
 							}
@@ -803,7 +803,7 @@ if (((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) || ((
 						else $entries = strtolower($label_entry);
 
 
-						if (strpos($_SESSION['prefsStyleSet'],"BABDB") === false) {
+						if ($_SESSION['prefsStyleSet'] != "BA") {
 							if ($view == "pdf") $html .= '<br><br><strong>Style '.ltrim($style[0],"0").$style[1].': '.$style[2].' ('.$row_entry_count['count'].' '.$entries.')</strong><br>';
 							else $html .= '<h2>Style '.ltrim($style[0],"0").$style[1].': '.$style[2].' ('.$row_entry_count['count'].' '.$entries.')</h2>';
 						}

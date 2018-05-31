@@ -102,6 +102,7 @@ $security_question = array($label_secret_01, $label_secret_05, $label_secret_06,
 	else include (INCLUDES.'load_local_libraries.inc.php');
 	?>
     <!-- Load BCOE&M Custom Theme CSS - Contains Bootstrap overrides and custom classes -->
+    <link rel="stylesheet" type="text/css" href="<?php echo $base_url."css/common.min.css"; ?>" />
     <link rel="stylesheet" type="text/css" href="<?php echo $theme; ?>" />
 	<!-- Load BCOE&M Custom JS -->
     <script src="<?php echo $base_url; ?>js_includes/bcoem_custom.min.js"></script>
@@ -169,24 +170,24 @@ $security_question = array($label_secret_01, $label_secret_05, $label_secret_06,
         	</div>
             <?php
 
-			if ($go == "judging") include (ADMIN.'judging_locations.admin.php');
-			if ($go == "judging_preferences") include (ADMIN.'judging_preferences.admin.php');
-			if ($go == "judging_tables") include (ADMIN.'judging_tables.admin.php');
-			if ($go == "judging_flights") include (ADMIN.'judging_flights.admin.php');
-			if ($go == "judging_scores") include (ADMIN.'judging_scores.admin.php');
-			if ($go == "judging_scores_bos") include (ADMIN.'judging_scores_bos.admin.php');
-			if ($go == "participants") include (ADMIN.'participants.admin.php');
-			if ($go == "entries") include (ADMIN.'entries.admin.php');
-			if ($go == "contacts") include (ADMIN.'contacts.admin.php');
-			if ($go == "dropoff") include (ADMIN.'dropoff.admin.php');
-			if ($go == "checkin") include (ADMIN.'barcode_check-in.admin.php');
-			if ($go == "count_by_style") include (ADMIN.'entries_by_style.admin.php');
-			if ($go == "count_by_substyle") include (ADMIN.'entries_by_substyle.admin.php');
-			if ($action == "register") include (SECTIONS.'register.sec.php');
-			if ($go == "upload_scoresheets") include (ADMIN.'upload_scoresheets.admin.php');
-			if ($go == "payments") include (ADMIN.'payments.admin.php');
+    			if ($go == "judging") include (ADMIN.'judging_locations.admin.php');
+    			if ($go == "judging_preferences") include (ADMIN.'judging_preferences.admin.php');
+    			if ($go == "judging_tables") include (ADMIN.'judging_tables.admin.php');
+    			if ($go == "judging_flights") include (ADMIN.'judging_flights.admin.php');
+    			if ($go == "judging_scores") include (ADMIN.'judging_scores.admin.php');
+    			if ($go == "judging_scores_bos") include (ADMIN.'judging_scores_bos.admin.php');
+    			if ($go == "participants") include (ADMIN.'participants.admin.php');
+    			if ($go == "entries") include (ADMIN.'entries.admin.php');
+    			if ($go == "contacts") include (ADMIN.'contacts.admin.php');
+    			if ($go == "dropoff") include (ADMIN.'dropoff.admin.php');
+    			if ($go == "checkin") include (ADMIN.'barcode_check-in.admin.php');
+    			if ($go == "count_by_style") include (ADMIN.'entries_by_style.admin.php');
+    			if ($go == "count_by_substyle") include (ADMIN.'entries_by_substyle.admin.php');
+    			if ($action == "register") include (SECTIONS.'register.sec.php');
+    			if ($go == "upload_scoresheets") include (ADMIN.'upload_scoresheets.admin.php');
+    			if ($go == "payments") include (ADMIN.'payments.admin.php');
 
-				if ($_SESSION['userLevel'] == "0") {
+                if ($_SESSION['userLevel'] == "0") {
 					if ($go == "styles") include (ADMIN.'styles.admin.php');
 					if ($go == "archive") include (ADMIN.'archive.admin.php');
 					if ($go == "make_admin") include (ADMIN.'make_admin.admin.php');

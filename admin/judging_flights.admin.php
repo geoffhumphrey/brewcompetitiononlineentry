@@ -11,7 +11,7 @@ if (($filter != "default") && ($filter != "rounds"))  {
 
 	foreach (array_unique($a) as $value) {
 
-		if (strpos($_SESSION['prefsStyleSet'],"BABDB") === false) $style_name = style_convert($value,"8");
+		if ($_SESSION['prefsStyleSet'] != "BA") $style_name = style_convert($value,"8");
 
 		include (DB.'admin_judging_flights.db.php');
 

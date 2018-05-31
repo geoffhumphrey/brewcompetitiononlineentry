@@ -200,28 +200,9 @@ do {
 
 	$entry_output .= "<td>";
 
-	if (strpos($_SESSION['prefsStyleSet'],"BABDB") === false) {
 		if ($row_styles['brewStyleActive'] == "Y") $entry_output .= $row_styles['brewStyle'];
 		else $entry_output .= sprintf("<strong class=\"text-danger\">%s</strong>",$brewer_entries_text_016);
 		if (empty($row_log['brewCategorySort'])) $entry_output .= sprintf("<strong class=\"text-danger\">%s</strong>",$brewer_entries_text_007);
-	}
-
-	else {
-
-		if ($row_log['brewCategorySort'] < 28) {
-			$styleSet_explodies = explode("|",$_SESSION['prefsStyleSet']);
-			$style_explodies = explode(",",$styleSet_explodies[2]);
-			if (in_array($row_log['brewSubCategory'],$style_explodies)) $entry_output .= $row_log['brewStyle'];
-			else $entry_output .= sprintf("<strong class=\"text-danger\">%s</strong>",$brewer_entries_text_016);
-			if (empty($row_log['brewCategorySort'])) $entry_output .= sprintf("<strong class=\"text-danger\">%s</strong>",$brewer_entries_text_007);
-		}
-
-		else {
-			if ($row_styles['brewStyleActive'] == "Y") $entry_output .= $row_styles['brewStyle']." (".$label_custom_style.")";
-			else $entry_output .= sprintf("<strong class=\"text-danger\">%s</strong>",$brewer_entries_text_016);
-		}
-
-	}
 
 	$entry_output .= "</td>";
 

@@ -231,178 +231,68 @@ else {
 	if ($_SESSION['prefsStyleSet'] == "BJCP2008") $beer_end = 23;
 	if ($_SESSION['prefsStyleSet'] == "BJCP2015") $beer_end = 34;
 
-	// BA
-	/*
-	if (strpos($_SESSION['prefsStyleSet'],"BABDB") !== false) {
+	if (($action == "edit") && ($msg != "default")) {
+		$view = ltrim($msg,"1-");
+		$highlight_sweetness  = highlight_required($msg,0,$_SESSION['prefsStyleSet']);
+		$highlight_special    = highlight_required($msg,1,$_SESSION['prefsStyleSet']);
+		$highlight_carb       = highlight_required($msg,2,$_SESSION['prefsStyleSet']);
+		$highlight_strength   = highlight_required($msg,3,$_SESSION['prefsStyleSet']);
+	}
 
-		$styles_options = "";
-		$styleSet_explodies = explode("|",$_SESSION['prefsStyleSet']);
-		$style_explodies = explode(",",$styleSet_explodies[2]);
-		$ba_styles_accepted[] = "";
+	elseif ($action == "edit") {
+		$view = $view;
+		if (in_array($view,$all_special_ing_styles)) $special_required = TRUE;
+		else $special_required = FALSE;
+	}
 
-		foreach ($_SESSION['styles'] as $styles => $stylesData) {
-			if (is_array($stylesData) || is_object($stylesData)) {
-				foreach ($stylesData as $key => $style) {
-					if (in_array($style['id'],$style_explodies)) {
-						   $ba_styles_accepted[] .= $style['name']."|".$style['id']."|".$style['category']['name']."|".$style['category']['id'];
-					}
-				} // end foreach ($stylesData as $data => $style)
-			} // end if (is_array($stylesData) || is_object($stylesData))
-		} // end foreach ($_SESSION['styles'] as $styles => $stylesData)
+	if ($action == "edit") {
 
-		// Check for any custom styles
-		if ($totalRows_styles_custom > 0) {
-			do {
-				if ($row_styles['brewStyleActive'] == "Y") {
-					$ba_styles_accepted[] .= $row_styles['brewStyle']." (".$label_custom_style.")"."|".$row_styles['id']."|Custom|".$row_styles['brewStyleGroup']."|".$row_styles['brewStyleReqSpec']."|".$row_styles['brewStyleStrength']."|".$row_styles['brewStyleCarb']."|".$row_styles['brewStyleSweet'];
-				}
-			} while($row_styles = mysqli_fetch_assoc($styles_custom));
+		if (strlen(strstr($view,"21-B")) > 0) {
+		// if ($view == "21-B") {
+			$exploder = explode("^",$row_log['brewInfo']);
+			$brewInfo = $exploder[0];
+			if ($exploder[1] == "Session Strength") $IPASession = "CHECKED"; else $IPASession = "";
+			if ($exploder[1] == "Standard Strength") $IPAStandard = "CHECKED"; else $IPAStandard = "";
+			if ($exploder[1] == "Double Strength") $IPADouble = "CHECKED"; else $IPADouble = "";
 		}
 
-		sort($ba_styles_accepted);
+		elseif ($view == "23-F") {
+			$exploder = explode("^",$row_log['brewInfo']);
+			$brewInfo = $exploder[0];
+			if ($exploder[1] == "Low/None Sweetness") $lambicSweetLow = "CHECKED"; else $lambicSweetLow = "";
+			if ($exploder[1] == "Medium Sweetness") $lambicSweetMed = "CHECKED"; else $lambicSweetMed = "";
+			if ($exploder[1] == "High Sweetness") $lambicSweetHigh = "CHECKED"; else $lambicSweetHigh = "";
+			if ($exploder[2] == "Low Carbonation") $lambicCarbLow = "CHECKED"; else $lambicCarbLow = "";
+			if ($exploder[2] == "Medium Carbonation") $lambicCarbMed = "CHECKED"; else $lambicCarbMed = "";
+			if ($exploder[2] == "High Carbonation") $lambicCarbHigh = "CHECKED"; else $lambicCarbHigh = "";
 
-		foreach ($ba_styles_accepted as $value) {
+		}
 
-			if (!empty($value)) {
+		elseif ($view == "25-B") {
+			$exploder = explode("^",$row_log['brewInfo']);
+			if ($exploder[0] == "Table Strength") $saisonTable = "CHECKED"; else $saisonTable = "";
+			if ($exploder[0] == "Standard Strength") $saisonStandard = "CHECKED"; else $saisonStandard = "";
+			if ($exploder[0] == "Super Strength") $saisonSuper = "CHECKED"; else $saisonSuper = "";
+			if ($exploder[1] == "Pale Color") $darkLightPale = "CHECKED"; else $darkLightPale = "";
+			if ($exploder[1] == "Amber/Dark Color") $darkLightAmber = "CHECKED"; else $darkLightAmber = "";
+			$brewInfo = "";
+		}
 
-				$ba_style_explodies = explode("|",$value);
-				if ($ba_style_explodies[2] == "Custom") $style_value = $ba_style_explodies[3]."-A";
-				else $style_value = $ba_style_explodies[3]."-".$ba_style_explodies[1];
-				$style_value_lookup = $ba_style_explodies[3]."-".$ba_style_explodies[1]."-".$ba_style_explodies[2]."-".$ba_style_explodies[0];
+		elseif ($view == "24-C") {
+			if ($row_log['brewInfo'] == "Blonde Color") $BDGBlonde .= "CHECKED"; else $BDGBlonde = "";
+			if ($row_log['brewInfo'] == "Amber Color") $BDGAmber .= "CHECKED"; else $BDGAmber = "";
+			if ($row_log['brewInfo'] == "Brown Color") $BDGBrown .= "CHECKED"; else $BDGBrown = "";
+			$brewInfo = "";
+		}
 
-				if ($ba_style_explodies[2] == "Hybrid/mixed Beer") $categoryName = "Hybrid/Mixed Beer";
-				elseif ($ba_style_explodies[2] == "European-germanic Lager") $categoryName = "European-Germanic Lager";
-				else $categoryName = ucwords($ba_style_explodies[2]);
-
-
-				$selected_disabled = "";
-
-				// Determine if the subcategory limit has been reached for various conditions
-				if (($_SESSION['userLevel'] <= 1) && ($bid != "default"))  $subcat_limit = limit_subcategory($style_value_lookup,$user_subcat_limit,$user_subcat_limit_exception,$row_limits['prefsUSCLEx'],$bid);
-				else $subcat_limit = limit_subcategory($style_value_lookup,$user_subcat_limit,$user_subcat_limit_exception,$row_limits['prefsUSCLEx'],$_SESSION['user_id']);
-
-				// Build selected/disabled variable
-				if ($action == "edit") {
-				   if (sprintf('%02d',$ba_style_explodies[1]) == $row_log['brewSubCategory']) $selected_disabled = "SELECTED";
-				   if (sprintf('%02d',$ba_style_explodies[1]) != $row_log['brewSubCategory']) $selected_disabled = $subcat_limit;
-				}
-
-				if (($action == "add") && ($remaining_entries > 0) && (!$disable_fields)) $selected_disabled = $subcat_limit;
-				elseif ($disable_fields) $selected_disabled = "DISABLED";
-
-				// Determine if style should be selected if editing
-				$selected = "";
-
-				if (($action == "edit") && ($view == $style_value)) {
-					$selected = " SELECTED";
-					$selected_disabled = "";
-				}
-
-				// Build display name for drop-down
-				$selection = "";
-				// $selection .= $style['id']." ";
-				$selection .= $ba_style_explodies[0];
-				// $selection .= "(".$categoryName.") ";
-
-				// Add indicators for special ingredients, strength, carbonation, sweetness
-				if ($ba_style_explodies[2] == "Custom") {
-					if ($ba_style_explodies[4] == 1) $selection .= " &spades;";
-					if ($ba_style_explodies[5] == 1) $selection .= " &diams;";
-					if ($ba_style_explodies[6] == 1) $selection .= " &clubs;";
-					if ($ba_style_explodies[7] == 1) $selection .= " &hearts;";
-				}
-
-				else {
-					if (in_array($style_value,$_SESSION['ba_special'])) $selection .= " &spades;";
-					if (in_array($style_value,$_SESSION['ba_strength'])) $selection .= " &diams;";
-					if (in_array($style_value,$_SESSION['ba_carb'])) $selection .= " &clubs;";
-					if (in_array($style_value,$_SESSION['ba_sweetness'])) $selection .= " &hearts;";
-				}
-
-				if ($view != $style_value) {
-					if (($selected_disabled == "DISABLED") && ($bid == "default")) $selection .= " ".$brew_text_002;
-					if (($selected_disabled == "DISABLED") && ($bid != "default")) $selection .= " ".$brew_text_003;
-				}
-
-				$styles_options .= "<option value=\"".$style_value."\" ".$selected_disabled.$selected.">".$selection."</option>\n";
-			}
+		else {
+			if ($row_log['brewInfo'] == "Pale Color") $darkLightPale .= "CHECKED"; else $darkLightPale = "";
+			if ($row_log['brewInfo'] == "Amber/Dark Color") $darkLightAmber .= "CHECKED"; else $darkLightAmber = "";
+			$brewInfo = $row_log['brewInfo'];
 		}
 
 	}
 
-	*/
-
-	// BJCP Styles housed in local DB
-	//else {
-
-		// get information from database
-
-		//$specials = display_array_content_style($all_special_ing_styles,3,$base_url);
-		//$specials = rtrim($specials,", ");
-
-		if (($action == "edit") && ($msg != "default")) {
-			$view = ltrim($msg,"1-");
-			$highlight_sweetness  = highlight_required($msg,0,$_SESSION['prefsStyleSet']);
-			$highlight_special    = highlight_required($msg,1,$_SESSION['prefsStyleSet']);
-			$highlight_carb       = highlight_required($msg,2,$_SESSION['prefsStyleSet']);
-			$highlight_strength   = highlight_required($msg,3,$_SESSION['prefsStyleSet']);
-		}
-
-		elseif ($action == "edit") {
-			$view = $view;
-			if (in_array($view,$all_special_ing_styles)) $special_required = TRUE;
-			else $special_required = FALSE;
-		}
-
-		if ($action == "edit") {
-
-			if (strlen(strstr($view,"21-B")) > 0) {
-			// if ($view == "21-B") {
-				$exploder = explode("^",$row_log['brewInfo']);
-				$brewInfo = $exploder[0];
-				if ($exploder[1] == "Session Strength") $IPASession = "CHECKED"; else $IPASession = "";
-				if ($exploder[1] == "Standard Strength") $IPAStandard = "CHECKED"; else $IPAStandard = "";
-				if ($exploder[1] == "Double Strength") $IPADouble = "CHECKED"; else $IPADouble = "";
-			}
-
-			elseif ($view == "23-F") {
-				$exploder = explode("^",$row_log['brewInfo']);
-				$brewInfo = $exploder[0];
-				if ($exploder[1] == "Low/None Sweetness") $lambicSweetLow = "CHECKED"; else $lambicSweetLow = "";
-				if ($exploder[1] == "Medium Sweetness") $lambicSweetMed = "CHECKED"; else $lambicSweetMed = "";
-				if ($exploder[1] == "High Sweetness") $lambicSweetHigh = "CHECKED"; else $lambicSweetHigh = "";
-				if ($exploder[2] == "Low Carbonation") $lambicCarbLow = "CHECKED"; else $lambicCarbLow = "";
-				if ($exploder[2] == "Medium Carbonation") $lambicCarbMed = "CHECKED"; else $lambicCarbMed = "";
-				if ($exploder[2] == "High Carbonation") $lambicCarbHigh = "CHECKED"; else $lambicCarbHigh = "";
-
-			}
-
-			elseif ($view == "25-B") {
-				$exploder = explode("^",$row_log['brewInfo']);
-				if ($exploder[0] == "Table Strength") $saisonTable = "CHECKED"; else $saisonTable = "";
-				if ($exploder[0] == "Standard Strength") $saisonStandard = "CHECKED"; else $saisonStandard = "";
-				if ($exploder[0] == "Super Strength") $saisonSuper = "CHECKED"; else $saisonSuper = "";
-				if ($exploder[1] == "Pale Color") $darkLightPale = "CHECKED"; else $darkLightPale = "";
-				if ($exploder[1] == "Amber/Dark Color") $darkLightAmber = "CHECKED"; else $darkLightAmber = "";
-				$brewInfo = "";
-			}
-
-			elseif ($view == "24-C") {
-				if ($row_log['brewInfo'] == "Blonde Color") $BDGBlonde .= "CHECKED"; else $BDGBlonde = "";
-				if ($row_log['brewInfo'] == "Amber Color") $BDGAmber .= "CHECKED"; else $BDGAmber = "";
-				if ($row_log['brewInfo'] == "Brown Color") $BDGBrown .= "CHECKED"; else $BDGBrown = "";
-				$brewInfo = "";
-			}
-
-			else {
-				if ($row_log['brewInfo'] == "Pale Color") $darkLightPale .= "CHECKED"; else $darkLightPale = "";
-				if ($row_log['brewInfo'] == "Amber/Dark Color") $darkLightAmber .= "CHECKED"; else $darkLightAmber = "";
-				$brewInfo = $row_log['brewInfo'];
-			}
-
-		}
-
-	//}
 ?>
 <script>
 

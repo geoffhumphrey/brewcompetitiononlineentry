@@ -16,51 +16,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 	$prefsStyleSet = "";
 	$style_alert = FALSE;
 
-	if (strpos($_SESSION['prefsStyleSet'],"BABDB") !== false) {
-		$ba_styleSet_explodies = explode("|",$_SESSION['prefsStyleSet']);
-		if (!isset($ba_styleSet_explodies[2])) $style_alert = TRUE;
-	}
-
-	if ($_POST['prefsStyleSet'] == "BABDB") {
-
-		if (empty($_POST['prefsStyleSetAPIKey']))  {
-			$prefsStyleSet = $_POST['prefsStyleSet']."|000000";
-		}
-
-		else {
-			$prefsStyleSet = $_POST['prefsStyleSet']."|".$_POST['prefsStyleSetAPIKey'];
-			if (isset($ba_styleSet_explodies[2])) $prefsStyleSet .= "|".$ba_styleSet_explodies[2];
-		}
-
-		if (isset($ba_styleSet_explodies[2])) {
-
-			// Check the numbers in the array, any are in the 1 to 160 range, API key used
-			// Otherwise, no key
-			$style_id_arr = explode(",",$ba_styleSet_explodies[2]);
-
-			$sum_arr = array();
-
-			foreach ($style_id_arr as $value) {
-				if ($value <= 160) $sum_arr[] = 1;
-				else $sum_arr[] = 0;
-			}
-
-			$sum = array_sum($sum_arr);
-
-			if ((($sum > 0) && (!empty($_POST['prefsStyleSetAPIKey']))) || (($sum == 0) && (empty($_POST['prefsStyleSetAPIKey'])))) $prefsStyleSet .= "|".$ba_styleSet_explodies[2];
-			if ((($sum > 0) && (empty($_POST['prefsStyleSetAPIKey']))) || (($sum == 0) && (!empty($_POST['prefsStyleSetAPIKey'])))) {
-				$prefsStyleSet .= "|";
-				$prefsUSCLEx = "";
-				$style_alert = TRUE;
-			}
-		}
-
-		//echo $prefsStyleSet."<br>";
-		//echo $sum; exit;
-
-	}
-
-	else $prefsStyleSet = sterilize($_POST['prefsStyleSet']);
+	$prefsStyleSet = sterilize($_POST['prefsStyleSet']);
 
 	if (!empty($_POST['prefsWinnerDelay'])) $prefsWinnerDelay = strtotime(sterilize($_POST['prefsWinnerDelay']));
 	else $prefsWinnerDelay = 2145916800;
@@ -141,6 +97,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 		prefsTieBreakRule6,
 		prefsCAPTCHA,
 		prefsGoogleAccount,
+		prefsBestUseBOS,
 		id
 
 		) VALUES (
@@ -156,7 +113,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 		%s, %s, %s, %s, %s,
 		%s, %s, %s, %s, %s,
 		%s, %s, %s, %s, %s,
-		%s, %s, %s)",
+		%s, %s, %s, %s)",
 
 			GetSQLValueString(sterilize($_POST['prefsTemp']), "text"),
 			GetSQLValueString(sterilize($_POST['prefsWeight1']), "text"),
@@ -230,6 +187,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 			GetSQLValueString(sterilize($_POST['prefsTieBreakRule6']), "text"),
 			GetSQLValueString(sterilize($_POST['prefsCAPTCHA']), "text"),
 			GetSQLValueString(sterilize($prefsGoogleAccount), "text"),
+			GetSQLValueString(sterilize($_POST['prefsBestUseBOS']), "text"),
 			GetSQLValueString($id, "int"));
 
 			mysqli_real_escape_string($connection,$insertSQL);
@@ -351,6 +309,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 		prefsBestBrewerTitle=%s,
 		prefsShowBestClub=%s,
 		prefsBestClubTitle=%s,
+		prefsBestUseBOS=%s,
 		prefsFirstPlacePts=%s,
 		prefsSecondPlacePts=%s,
 		prefsThirdPlacePts=%s,
@@ -426,6 +385,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 			GetSQLValueString(sterilize($_POST['prefsBestBrewerTitle']), "text"),
 			GetSQLValueString(sterilize($_POST['prefsShowBestClub']), "int"),
 			GetSQLValueString(sterilize($_POST['prefsBestClubTitle']), "text"),
+			GetSQLValueString(sterilize($_POST['prefsBestUseBOS']), "text"),
 			GetSQLValueString(sterilize($_POST['prefsFirstPlacePts']), "int"),
 			GetSQLValueString(sterilize($_POST['prefsSecondPlacePts']), "int"),
 			GetSQLValueString(sterilize($_POST['prefsThirdPlacePts']), "int"),

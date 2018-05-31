@@ -1261,7 +1261,7 @@ function style_convert($number,$type,$base_url="") {
 
 		case "1":
 
-		if (strpos($_SESSION['prefsStyleSet'],"BABDB") !== false) {
+		if ($_SESSION['prefsStyleSet'] == "BA") {
 			$style_convert = $row_style['brewStyle']." (Custom Style)";
 		}
 
@@ -1502,8 +1502,8 @@ function style_convert($number,$type,$base_url="") {
 		$replacement1 = array('Entry Instructions:','Commercial Examples:','must specify','may specify','MUST specify','MAY specify','must provide','must be specified','must declare','must either','must supply','may provide','MUST state');
 		$replacement2 = array('<strong class="text-danger">Entry Instructions:</strong>','<strong class="text-info">Commercial Examples:</strong>','<strong><u>MUST</u></strong> specify','<strong><u>MAY</u></strong> specify','<strong><u>MUST</u></strong> specify','<strong><u>MAY</u></strong> specify','<u>MUST</u> provide','<strong><u>MUST</u></strong> be specified','<strong><u>MUST</u></strong> declare','<strong><u>MUST</u></strong> either','<strong><u>MUST</u></strong> supply','<strong><u>MAY</u></strong> provide','<strong><u>MUST</u></strong> state');
 
-		if (strpos($_SESSION['prefsStyleSet'],"BABDB") === false) $styleSet = str_replace("2"," 2",$_SESSION['prefsStyleSet']);
-		if (strpos($_SESSION['prefsStyleSet'],"BABDB") !== false) $styleSet = "Brewers Association";
+		if ($_SESSION['prefsStyleSet'] == "BA") $styleSet = "Brewers Association";
+		else $styleSet = str_replace("2"," 2",$_SESSION['prefsStyleSet']);
 
 		require(CONFIG.'config.php');
 	    mysqli_select_db($connection,$database);
@@ -1614,7 +1614,7 @@ function style_convert($number,$type,$base_url="") {
 			$style_convert = rtrim(implode(", ",$style_convert_1),", ")."|".implode("^",$style_modal);
 		}
 
-		if (strpos($_SESSION['prefsStyleSet'],"BABDB") === false) {
+		if ($_SESSION['prefsStyleSet'] != "BA") {
 
 			$a = explode(",",$number);
 
@@ -2532,7 +2532,7 @@ function winner_check($id,$judging_scores_db_table,$judging_tables_db_table,$bre
 			$query_entry = sprintf("SELECT brewCategorySort,brewSubCategory FROM $brewing_db_table WHERE id='%s'", $row_scores['eid']);
 			$entry = mysqli_query($connection,$query_entry) or die (mysqli_error($connection));
 			$row_entry = mysqli_fetch_assoc($entry);
-			if (strpos($_SESSION['prefsStyleSet'],"BABDB") === false) $r = display_place($row_scores['scorePlace'],1).": ".style_convert($row_entry['brewCategorySort'],1);
+			if ($_SESSION['prefsStyleSet'] != "BA") $r = display_place($row_scores['scorePlace'],1).": ".style_convert($row_entry['brewCategorySort'],1);
 			else {
 
 					if (is_numeric($row_entry['brewSubCategory'])) {
@@ -3424,23 +3424,12 @@ function styles_active($method) {
 
 	if ($method == 0) { // Active Styles
 
-		if (strpos($_SESSION['prefsStyleSet'],"BABDB") === false) {
-			$query_styles = sprintf("SELECT brewStyleGroup FROM %s WHERE (brewStyleVersion='%s' OR brewStyleOwn='custom') AND brewStyleActive='Y' ORDER BY brewStyleGroup ASC",$prefix."styles",$_SESSION['prefsStyleSet']);
-			$styles = mysqli_query($connection,$query_styles) or die (mysqli_error($connection));
-			$row_styles = mysqli_fetch_assoc($styles);
-			$totalRows_styles = mysqli_num_rows($styles);
-			do { $a[] = $row_styles['brewStyleGroup']; } while ($row_styles = mysqli_fetch_assoc($styles));
-		}
+		$query_styles = sprintf("SELECT brewStyleGroup FROM %s WHERE (brewStyleVersion='%s' OR brewStyleOwn='custom') AND brewStyleActive='Y' ORDER BY brewStyleGroup ASC",$prefix."styles",$_SESSION['prefsStyleSet']);
+		$styles = mysqli_query($connection,$query_styles) or die (mysqli_error($connection));
+		$row_styles = mysqli_fetch_assoc($styles);
+		$totalRows_styles = mysqli_num_rows($styles);
+		do { $a[] = $row_styles['brewStyleGroup']; } while ($row_styles = mysqli_fetch_assoc($styles));
 
-		else {
-			$style_explode = explode("|",$_SESSION['prefsStyleSet']);
-			$styles_active = explode(",",$style_explode[2]);
-			foreach ($styles_active as $value) {
-				if (isset($_SESSION['styles']['data'][$value]['category']['id'])) {
-       				$a[] = $_SESSION['styles']['data'][$value]['category']['id'];
-				}
-			}
-		}
 		sort($a);
 		return $a;
 	}
@@ -3457,23 +3446,11 @@ function styles_active($method) {
 
 	if ($method == 2) {
 
-		if (strpos($_SESSION['prefsStyleSet'],"BABDB") === false) {
-			$query_styles = sprintf("SELECT brewStyleGroup,brewStyleNum,brewStyle FROM %s WHERE (brewStyleVersion='%s' OR brewStyleOwn='custom') AND brewStyleActive='Y' ORDER BY brewStyleGroup,brewStyleNum ASC",$prefix."styles",$_SESSION['prefsStyleSet']);
-			$styles = mysqli_query($connection,$query_styles) or die (mysqli_error($connection));
-			$row_styles = mysqli_fetch_assoc($styles);
-			$totalRows_styles = mysqli_num_rows($styles);
-			do { $a[] = $row_styles['brewStyleGroup']."^".$row_styles['brewStyleNum']."^".$row_styles['brewStyle']; } while ($row_styles = mysqli_fetch_assoc($styles));
-		}
-
-		else {
-			$style_explode = explode("|",$_SESSION['prefsStyleSet']);
-			$styles_active = explode(",",$style_explode[2]);
-			foreach ($styles_active as $value) {
-				if (isset($_SESSION['styles']['data'][$value]['categoryId'])) {
-       				$a[] = $_SESSION['styles']['data'][$value]['categoryId']."^".$value."^".$_SESSION['styles']['data'][$value]['name'];
-				}
-			}
-		}
+		$query_styles = sprintf("SELECT brewStyleGroup,brewStyleNum,brewStyle FROM %s WHERE (brewStyleVersion='%s' OR brewStyleOwn='custom') AND brewStyleActive='Y' ORDER BY brewStyleGroup,brewStyleNum ASC",$prefix."styles",$_SESSION['prefsStyleSet']);
+		$styles = mysqli_query($connection,$query_styles) or die (mysqli_error($connection));
+		$row_styles = mysqli_fetch_assoc($styles);
+		$totalRows_styles = mysqli_num_rows($styles);
+		do { $a[] = $row_styles['brewStyleGroup']."^".$row_styles['brewStyleNum']."^".$row_styles['brewStyle']; } while ($row_styles = mysqli_fetch_assoc($styles));
 
 		return $a;
 

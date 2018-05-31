@@ -71,20 +71,20 @@ define('CDN', TRUE);
  * sandbox enfvironment, etc.
  * Default is FALSE
  */
-define('TESTING', FALSE);
+define('TESTING', TRUE);
 
 /**
  * Enable the following to display php errors on screen.
  * Default is FALSE
  */
-define('DEBUG', FALSE);
+define('DEBUG', TRUE);
 
 /**
  * Enable the following to show a collapsable table of all
  * session variables on screen
  * Default is FALSE
  */
-define('DEBUG_SESSION_VARS', FALSE);
+define('DEBUG_SESSION_VARS', TRUE);
 
 /**
  * Enable the following when receiving mySQL "column does
@@ -95,7 +95,7 @@ define('DEBUG_SESSION_VARS', FALSE);
  * page for performance issues.
  * Default is FALSE
  */
-define('FORCE_UPDATE', FALSE);
+define('FORCE_UPDATE', TRUE);
 
 /**
  * --------------------------------------------------------

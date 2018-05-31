@@ -22,6 +22,29 @@
 				</div>
 			</div>
 		</div>
+        <?php if (($row_limits['prefsShowBestBrewer'] != 0) || ($row_limits['prefsShowBestClub'] != 0)) { ?>
+        <div class="bcoem-admin-element">
+            <div class="row">
+                <div class="col col-md-12">
+                    <button type="button" class="btn btn-success btn-block" data-toggle="modal" data-target="#previewBest">
+                      Preview Best Brewer/Best Club Results <span class="fa fa-trophy"></span>
+                    </button>
+                    <div class="modal fade" id="previewBest" tabindex="-1" role="dialog" aria-labelledby="previewBestLabel">
+                      <div class="modal-dialog modal-lg" role="document">
+                        <div class="modal-content">
+                          <div class="modal-body">
+                            <?php include (SECTIONS.'bestbrewer.sec.php'); ?>
+                          </div>
+                          <div class="modal-footer">
+                            <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    <?php } ?>
 	</div>
 	<?php } ?>
 	<div class="col col-lg-6 col-md-12 col-sm-12 col-xs-12">
@@ -31,7 +54,7 @@
 					<a class="btn btn-info btn-block" href="http://brewcompetition.com/reset-comp" target="_blank">Reset Competition Information&nbsp;&nbsp;<span class="fa fa-info-circle"></span></a>
 				</div>
 			</div>
-		</div>
+        </div>
 	</div>
 </div>
 <?php } ?>
@@ -1176,13 +1199,13 @@
 
 
                         <!-- Purge Modals -->
-                        <div class="modal fade" id="purgeParticipants" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                        <div class="modal fade" id="purgeParticipants" tabindex="-1" role="dialog" aria-labelledby="previewBestLabel">
                         	<form class="form-horizontal" action="<?php echo $base_url; ?>includes/process.inc.php?action=purge&amp;go=participants" method="POST" name="form1" id="form1">
 							<div class="modal-dialog" role="document">
 							<div class="modal-content">
 								<div class="modal-header">
 									<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-									<h4 class="modal-title" id="myModalLabel">Please Confirm</h4>
+									<h4 class="modal-title" id="previewBestLabel">Please Confirm</h4>
 								</div>
 								<div class="modal-body">
 									<p>Are you sure you want to delete non-admin participants and associated data (including each user's entries, as well as their judge, steward, and staff assignments)? This cannot be undone.

@@ -8,6 +8,7 @@
 $go = "output";
 require(DB.'admin_common.db.php');
 require(LIB.'output.lib.php');
+if ($_SESSION['prefsStyleSet'] == "BA") include(INCLUDES.'ba_constants.inc.php');
 
 function check_table_name($id,$judging_tables_db_table) {
 	require(CONFIG.'config.php');
@@ -51,24 +52,19 @@ foreach ($a as $type) {
 		do {
 			if ($row_scores['brewJudgingNumber'] > 0) {
 
-				if (strpos($_SESSION['prefsStyleSet'],"BABDB") === false) $style = $row_scores['brewCategory'].$row_scores['brewSubCategory'];
-
-				else {
-					if (is_numeric($row_scores['brewSubCategory'])) {
-					$style = $_SESSION['styles']['data'][$row_scores['brewSubCategory'] - 1]['category']['name'];
-					if ($style == "Hybrid/mixed Beer") $style = "Hybrid/Mixed Beer";
-					elseif ($style == "European-germanic Lager") $style = "European-Germanic Lager";
-					else $style = ucwords($style);
-					}
-					else $style = "Custom Style";
-				}
+				$style = $row_scores['brewCategory'].$row_scores['brewSubCategory'];
 
 				if (($endRow == 0) && ($hloopRow1++ != 0)) $output .= "<tr>";
 				$output .= '<td>';
 				$output .= '<h3>';
-				if (strpos($_SESSION['prefsStyleSet'],"BABDB") === false) $output .= '<h3>'.$row_scores['brewCategory'].': '.style_convert($row_scores['brewCategorySort'],1);
-				else $output .= '<h3>'.$style.": ".$row_scores['brewStyle'];
-				if (strpos($_SESSION['prefsStyleSet'],"BABDB") === false) $output .= '<br><em><small>'.$style.': '.$row_scores['brewStyle'].'</small></em>';
+				if ($_SESSION['prefsStyleSet'] == "BA") {
+					$output .= $row_scores['brewStyle'];
+					$output .= '<br><em><small>'.$ba_category_names[$row_scores['brewCategory']].'</small></em>';
+				}
+				else {
+					$output .= $row_scores['brewCategory'].': '.style_convert($row_scores['brewCategorySort'],1);
+					$output .= '<br><em><small>'.$style.': '.$row_scores['brewStyle'].'</small></em>';
+				}
 				$output .= '</h3>';
 				$output .= '<p class="lead">'.check_table_name($row_scores['scoreTable'],$judging_tables_db_table).'</p>';
 

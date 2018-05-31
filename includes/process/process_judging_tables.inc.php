@@ -48,13 +48,13 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 		foreach (array_unique($a) as $value) {
 
 
-			if (strpos($_SESSION['prefsStyleSet'],"BABDB") === false) {
+			if ($_SESSION['prefsStyleSet'] != "BA") {
 				$query_styles = sprintf("SELECT brewStyleGroup, brewStyleNum FROM %s WHERE id='%s'", $styles_db_table, $value);
 				$styles = mysqli_query($connection,$query_styles) or die (mysqli_error($connection));
 				$row_styles = mysqli_fetch_assoc($styles);
 			}
 
-			if (strpos($_SESSION['prefsStyleSet'],"BABDB") !== false) $query_entries = sprintf("SELECT id FROM %s WHERE brewSubCategory='%s' AND brewReceived='1'", $brewing_db_table, $value);
+			if ($_SESSION['prefsStyleSet'] == "BA") $query_entries = sprintf("SELECT id FROM %s WHERE brewSubCategory='%s' AND brewReceived='1'", $brewing_db_table, $value);
 			else $query_entries = sprintf("SELECT id FROM %s WHERE brewCategorySort='%s' AND brewSubCategory='%s' AND brewReceived='1'", $brewing_db_table, $row_styles['brewStyleGroup'],$row_styles['brewStyleNum']);
 			$entries = mysqli_query($connection,$query_entries) or die (mysqli_error($connection));
 			$row_entries = mysqli_fetch_assoc($entries);
@@ -152,7 +152,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 
 			foreach (array_unique($a) as $value) {
 
-				if (strpos($_SESSION['prefsStyleSet'],"BABDB") === false) {
+				if ($_SESSION['prefsStyleSet'] != "BA") {
 					$query_styles = sprintf("SELECT brewStyleGroup, brewStyleNum FROM %s WHERE id='%s'", $styles_db_table, $value);
 					$styles = mysqli_query($connection,$query_styles) or die (mysqli_error($connection));
 					$row_styles = mysqli_fetch_assoc($styles);
@@ -254,7 +254,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 
 				//echo $query_entry."<br>";
 
-				if (strpos($_SESSION['prefsStyleSet'],"BABDB") === false) {
+				if ($_SESSION['prefsStyleSet'] != "BA") {
 
 					$query_style = sprintf("SELECT id FROM $styles_db_table WHERE (brewStyleVersion='%s' OR brewStyleOwn='custom') AND brewStyleGroup='%s' AND brewStyleNum='%s'", $styles_db_table,$_SESSION['prefsStyleSet'],$row_entry['brewCategorySort'],$row_entry['brewSubCategory']);
 					$style = mysqli_query($connection,$query_style) or die (mysqli_error($connection));
