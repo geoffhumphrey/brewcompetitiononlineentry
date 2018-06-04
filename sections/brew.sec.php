@@ -384,7 +384,17 @@ else $relocate_referrer = $_SERVER['HTTP_REFERER'];
         <div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
             <div class="input-group has-warning">
                 <!-- Input Here -->
-                <input class="form-control" name="brewName" type="text" value="<?php if ($disable_fields) echo "Not Available"; if ($action == "edit") echo $row_log['brewName']; ?>" <?php if ((($action == "add") && ($remaining_entries <= 0) && ($entry_window_open == 1) && ($filter != "default")) || (($action == "add") && ($entry_window_open == "2") && ($_SESSION['userLevel'] > 1))) echo "disabled";?> placeholder="" data-error="<?php echo $brew_text_011; ?>" required autofocus>
+                <input class="form-control" name="brewName" type="text" value="<?php if ($disable_fields) echo "Not Available"; if ($action == "edit") echo $row_log['brewName']; ?>"
+                <?php
+                $entry_disabled = "";
+                $entry_disabled_placeholder = "";
+                if ((($action == "add") && ($remaining_entries <= 0) && ($entry_window_open == 1) && ($filter != "default") && ($_SESSION['userLevel'] > 1)) || (($action == "add") && ($entry_window_open == "2") && ($_SESSION['userLevel'] > 1))) {
+                	$entry_disabled = "disabled";
+                	$entry_disabled_placeholder = sprintf("%s %s",$sidebar_text_020,$row_limits['prefsUserEntryLimit']);
+  					if ($row_limits['prefsUserEntryLimit'] > 1) $entry_disabled_placeholder .= sprintf(" %s ",strtolower($label_entries));
+  					else $entry_disabled_placeholder .= sprintf(" %s ",strtolower($label_entry));
+  				}
+  				echo $entry_disabled; ?> placeholder="<?php echo $entry_disabled_placeholder; ?>" data-error="<?php echo $brew_text_011; ?>" required autofocus>
                 <span class="input-group-addon" id="brewName-addon2"><span class="fa fa-star"></span></span>
             </div>
             <div class="help-block with-errors"></div>

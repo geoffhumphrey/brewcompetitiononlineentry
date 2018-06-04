@@ -36,21 +36,31 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 
 	if (($action == "add") || ($action == "edit")) {
 
-		if (strpos($_SESSION['prefsStyleSet'],"BABDB") !== false) include (INCLUDES.'ba_constants.inc.php');
-
+		if ($_SESSION['prefsStyleSet'] == "BA") include (INCLUDES.'ba_constants.inc.php');
 		include (DB.'styles_special.db.php');
 
-		// Comments
+		// Set up vars
 		$brewComments = "";
+		$brewCoBrewer = "";
+		$styleBreak = $_POST['brewStyle'];
+		$styleName = "";
+		$brewName = standardize_name($purifier->purify($_POST['brewName']));
+		$brewInfo = "";
+		$brewPaid = "";
+		$brewInfoOptional = "";
+		$index = ""; // Defined with Style
+		$brewMead1 = "";
+		$brewMead2 = "";
+		$brewMead3 = "";
+		$brewJudgingNumber = "";
+
+		// Comments
 		if (isset($_POST['brewComments'])) $brewComments .= $purifier->purify($_POST['brewComments']);
 
 		// Co Brewer
-		$brewCoBrewer = "";
 		if (isset($_POST['brewCoBrewer'])) $brewCoBrewer .= standardize_name($purifier->purify($_POST['brewCoBrewer']));
 
 		// Style
-		$styleBreak = $_POST['brewStyle'];
-
 		$style = explode('-', $styleBreak);
 		if (preg_match("/^[[:digit:]]+$/",$style[0])) $index = sprintf('%02d',$style[0])."-".$style[1];
 		else $index = $style[0]."-".$style[1];
@@ -61,96 +71,31 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 		$styleID = $style[1];
 
 		// Style Name
-		$styleName = "";
-
-		// Get style name from broken parts if BA (currently there are 14 overall BA categories, 34 BJCP 2015, and 28 BJCP 2007)
-		// Custom style overall category will always be greater than 28
-		if (strpos($_SESSION['prefsStyleSet'],"BABDB") !== false) {
-
-			if ($style[0] > 28) {
-				$query_style_name = sprintf("SELECT * FROM %s WHERE brewStyleOwn='custom' AND brewStyleGroup='%s' AND brewStyleNum='%s'",$styles_db_table,$styleFix,$style[1]);
-				$style_name = mysqli_query($connection,$query_style_name) or die (mysqli_error($connection));
-				$row_style_name = mysqli_fetch_assoc($style_name);
-				$styleName = $row_style_name['brewStyle'];
-				$styleID = $row_style_name['id'];
-			}
-
-			else $styleName = $_SESSION['styles']['data'][$style[1]-1]['name'];
-		}
-
-		// Get style name from broken parts if BJCP
-		else {
-			$query_style_name = sprintf("SELECT * FROM %s WHERE (brewStyleVersion='%s' OR brewStyleOwn='custom') AND brewStyleGroup='%s' AND brewStyleNum='%s'",$styles_db_table,$_SESSION['prefsStyleSet'],$styleFix,$style[1]);
-			$style_name = mysqli_query($connection,$query_style_name) or die (mysqli_error($connection));
-			$row_style_name = mysqli_fetch_assoc($style_name);
-			$styleName = $row_style_name['brewStyle'];
-		}
+		$query_style_name = sprintf("SELECT * FROM %s WHERE (brewStyleVersion='%s' OR brewStyleOwn='custom') AND brewStyleGroup='%s' AND brewStyleNum='%s'",$styles_db_table,$_SESSION['prefsStyleSet'],$styleFix,$style[1]);
+		$style_name = mysqli_query($connection,$query_style_name) or die (mysqli_error($connection));
+		$row_style_name = mysqli_fetch_assoc($style_name);
+		$styleName = $row_style_name['brewStyle'];
 
 		// Mark as paid if free entry fee
 		if ($_SESSION['contestEntryFee'] == 0) $brewPaid = "1";
 		elseif (isset($_POST['brewPaid'])) $brewPaid = $_POST['brewPaid'];
 		else $brewPaid = "0";
 
+		// Concat all special ingredient styles
 		$all_special_ing_styles = array();
+		if (is_array($special_beer)) $all_special_ing_styles = array_merge($all_special_ing_styles,$special_beer);
+		if (is_array($carb_str_sweet_special)) $all_special_ing_styles = array_merge($all_special_ing_styles,$carb_str_sweet_special);
+		if (is_array($spec_sweet_carb_only)) $all_special_ing_styles = array_merge($all_special_ing_styles,$spec_sweet_carb_only);
+		if (is_array($spec_carb_only)) $all_special_ing_styles = array_merge($all_special_ing_styles,$spec_carb_only);
 
-		if ($_SESSION['prefsStyleSet'] == "BA") {
+		// Required info
+		// Checked against requirements later
+		if (!empty($_POST['brewInfo'])) $brewInfo = $purifier->purify($_POST['brewInfo']);
 
-			// Get any custom styles
-			$custom_special_ing_styles = array();
-			$query_custom_special = sprintf("SELECT id FROM %s WHERE brewStyleOwn='custom' AND brewStyleReqSpec='1'",$styles_db_table);
-			$custom_special = mysqli_query($connection,$query_custom_special) or die (mysqli_error($connection));
-			$row_custom_special = mysqli_fetch_assoc($custom_special);
-			$totalRows_custom_special = mysqli_num_rows($custom_special);
+		// Specialized/Optional info
+		if (!empty($_POST['brewInfoOptional'])) $brewInfoOptional = $purifier->purify($_POST['brewInfoOptional']);
 
-			if ($totalRows_custom_special > 0) {
-
-				do { $custom_special_ing_styles[] = $row_custom_special['id']; } while($row_custom_special = mysqli_fetch_assoc($custom_special));
-
-			}
-
-			$all_special_ing_styles = array_merge($custom_special_ing_styles,$_SESSION['ba_special_ids']);
-
-		}
-
-		else {
-
-			if (is_array($special_beer)) $all_special_ing_styles = array_merge($all_special_ing_styles,$special_beer);
-			if (is_array($carb_str_sweet_special)) $all_special_ing_styles = array_merge($all_special_ing_styles,$carb_str_sweet_special);
-			if (is_array($spec_sweet_carb_only)) $all_special_ing_styles = array_merge($all_special_ing_styles,$spec_sweet_carb_only);
-			if (is_array($spec_carb_only)) $all_special_ing_styles = array_merge($all_special_ing_styles,$spec_carb_only);
-
-		}
-
-		$brewName = standardize_name($purifier->purify($_POST['brewName']));
-		$brewInfo = "";
-
-		if ($_SESSION['prefsStyleSet'] != "BA") {
-			if (in_array($styleID,$all_special_ing_styles)) {
-				$brewInfo = $purifier->purify($_POST['brewInfo']);
-			}
-		}
-
-		else {
-			if (in_array($styleReturn,$all_special_ing_styles)) {
-				$brewInfo = $purifier->purify($_POST['brewInfo']);
-			}
-		}
-
-		if (is_array($custom_entry_information)) {
-			if (array_key_exists($index,$custom_entry_information)) {
-				$explodies = explode("|",$custom_entry["$index"]);
-				if ($explodies[2] == 1) $brewInfo .= $purifier->purify($_POST['brewInfo']);
-			}
-	 	}
-
-		// Process specialized info from form for certain styles
-
-		// If optional info is present
-		$brewInfoOptional = "";
-		if (!empty($_POST['brewInfoOptional'])) {
-			$brewInfoOptional = $purifier->purify($_POST['brewInfoOptional']);
-		}
-
+		// For BJCP 2015, process addtional info
 		if ($_SESSION['prefsStyleSet'] == "BJCP2015") {
 
 			// IPA strength for 21B styles
@@ -173,83 +118,24 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 
 		}
 
-		$brewMead1 = "";
-		$brewMead2 = "";
-		$brewMead3 = "";
-
 		if ($style[0] > 34) $styleID = $styleID; else $styleID = $style[1];
 
-		if ($_SESSION['prefsStyleSet'] == "BA") {
+		// check if style requires strength, carbonation, and/or sweetness
+		$query_str_carb_sweet = sprintf("SELECT * FROM %s WHERE brewStyleGroup='%s' AND brewStyleNum='%s'", $styles_db_table,$style[0],$style[1]);
+		$str_carb_sweet = mysqli_query($connection,$query_str_carb_sweet) or die (mysqli_error($connection));
+		$row_str_carb_sweet = mysqli_fetch_assoc($str_carb_sweet);
+		$totalRows_str_carb_sweet = mysqli_num_rows($str_carb_sweet);
 
-			// Check if any custom styles have mead1, mead2, or mead3 requirements. If so, add to appropriate array.
+		if ($totalRows_str_carb_sweet > 0) {
 
-			// Carbonation
-			$custom_carb_ids = array();
-			$query_custom_carb = sprintf("SELECT id FROM %s WHERE brewStyleOwn='custom' AND brewStyleCarb='1'",$styles_db_table);
-			$custom_carb = mysqli_query($connection,$query_custom_carb) or die (mysqli_error($connection));
-			$row_custom_carb = mysqli_fetch_assoc($custom_carb);
-			$totalRows_custom_carb = mysqli_num_rows($custom_carb);
-
-			if ($totalRows_custom_carb > 0) {
-				do { $custom_carb_ids[] = $row_custom_carb['id']; } while($row_custom_carb = mysqli_fetch_assoc($custom_carb));
-			}
-
-			$all_carb_ids = array_merge($custom_carb_ids,$_SESSION['ba_carb_ids']);
-
-			// Sweetness
-			$custom_sweet_ids = array();
-			$query_custom_sweet = sprintf("SELECT id FROM %s WHERE brewStyleOwn='custom' AND brewStyleSweet='1'",$styles_db_table);
-			$custom_sweet = mysqli_query($connection,$query_custom_sweet) or die (mysqli_error($connection));
-			$row_custom_sweet = mysqli_fetch_assoc($custom_sweet);
-			$totalRows_custom_sweet = mysqli_num_rows($custom_sweet);
-
-			if ($totalRows_custom_sweet > 0) {
-				do { $custom_sweet_ids[] = $row_custom_sweet['id']; } while($row_custom_sweet = mysqli_fetch_assoc($custom_sweet));
-			}
-
-			$all_sweet_ids = array_merge($custom_sweet_ids,$_SESSION['ba_sweetness_ids']);
-
-			// Strength
-			$custom_strength_ids = array();
-			$query_custom_strength = sprintf("SELECT id FROM %s WHERE brewStyleOwn='custom' AND brewStyleStrength='1'",$styles_db_table);
-			$custom_strength = mysqli_query($connection,$query_custom_strength) or die (mysqli_error($connection));
-			$row_custom_strength = mysqli_fetch_assoc($custom_strength);
-			$totalRows_custom_strength = mysqli_num_rows($custom_strength);
-
-			if ($totalRows_custom_strength > 0) {
-				do { $custom_strength_ids[] = $row_custom_strength['id']; } while($row_custom_strength = mysqli_fetch_assoc($custom_strength));
-			}
-
-			$all_strength_ids = array_merge($custom_strength_ids,$_SESSION['ba_strength_ids']);
-
-			if ((isset($_POST['brewMead1'])) && (in_array($styleID,$all_carb_ids))) $brewMead1 .= filter_var($_POST['brewMead1'],FILTER_SANITIZE_STRING); // Carbonation
-			if ((isset($_POST['brewMead2'])) && (in_array($styleID,$all_sweet_ids)))  $brewMead2 .= filter_var($_POST['brewMead2'],FILTER_SANITIZE_STRING); // Sweetness
-			if ((isset($_POST['brewMead3'])) && (in_array($styleID,$all_strength_ids)))  $brewMead3 .= filter_var($_POST['brewMead3'],FILTER_SANITIZE_STRING); // Strength
-
-		}
-
-		else {
-
-
-			// check if style requires strength, carbonation, and/or sweetness
-			$query_str_carb_sweet = sprintf("SELECT * FROM %s WHERE brewStyleGroup='%s' AND brewStyleNum='%s'", $styles_db_table,$style[0],$style[1]);
-			$str_carb_sweet = mysqli_query($connection,$query_str_carb_sweet) or die (mysqli_error($connection));
-			$row_str_carb_sweet = mysqli_fetch_assoc($str_carb_sweet);
-			$totalRows_str_carb_sweet = mysqli_num_rows($str_carb_sweet);
-
-			if ($totalRows_str_carb_sweet > 0) {
-
-				if ((isset($_POST['brewMead1'])) && ($row_str_carb_sweet['brewStyleCarb'] == 1)) $brewMead1 .= filter_var($_POST['brewMead1'],FILTER_SANITIZE_STRING); // Carbonation
-				if ((isset($_POST['brewMead2'])) && ($row_str_carb_sweet['brewStyleSweet'] == 1))  $brewMead2 .= filter_var($_POST['brewMead2'],FILTER_SANITIZE_STRING); // Sweetness
-				if ((isset($_POST['brewMead3'])) && ($row_str_carb_sweet['brewStyleStrength'] == 1))  $brewMead3 .= filter_var($_POST['brewMead3'],FILTER_SANITIZE_STRING); // Strength
-
-			}
-
-
+			if ((isset($_POST['brewMead1'])) && ($row_str_carb_sweet['brewStyleCarb'] == 1)) $brewMead1 .= filter_var($_POST['brewMead1'],FILTER_SANITIZE_STRING); // Carbonation
+			if ((isset($_POST['brewMead2'])) && ($row_str_carb_sweet['brewStyleSweet'] == 1))  $brewMead2 .= filter_var($_POST['brewMead2'],FILTER_SANITIZE_STRING); // Sweetness
+			if ((isset($_POST['brewMead3'])) && ($row_str_carb_sweet['brewStyleStrength'] == 1))  $brewMead3 .= filter_var($_POST['brewMead3'],FILTER_SANITIZE_STRING); // Strength
 
 		}
 
 		/*
+		// DEBUG
 		print_r($all_carb_ids);
 		print_r($all_sweet_ids);
 		print_r($all_strength_ids);
@@ -260,46 +146,20 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 		exit;
 		*/
 
-		// The following are only enabled when preferences dictate that the recipe fields be shown.
-		if ($_SESSION['prefsHideRecipe'] == "N") {
 
+		// The following are only enabled when preferences dictate that the recipe fields be shown.
+		// DEPRECATE for version 2.2.0
+		if ($_SESSION['prefsHideRecipe'] == "N") {
 
 			$brewExtract = "";
 			$brewExtractWeight = "";
 			$brewExtractUse = "";
-			for($i=1; $i<=5; $i++) {
-				$brewExtract .= "brewExtract".$i.",";
-				$brewExtractWeight .= "brewExtract".$i."Weight,";
-				$brewExtractUse .= "brewExtract".$i."Use,";
-				}
-			$brewExtract = rtrim($brewExtract,",");
-			$brewExtractWeight = rtrim($brewExtractWeight,",");
-			$brewExtractUse = rtrim($brewExtractUse,",");
-
 			$brewGrain = "";
 			$brewGrainWeight = "";
 			$brewGrainUse = "";
-			for($i=1; $i<=20; $i++) {
-				$brewGrain .= "brewGrain".$i.",";
-				$brewGrainWeight .= "brewGrain".$i."Weight,";
-				$brewGrainUse .= "brewGrain".$i."Use,";
-			}
-			$brewGrain = rtrim($brewGrain,",");
-			$brewGrainWeight = rtrim($brewGrainWeight,",");
-			$brewGrainUse = rtrim($brewGrainUse,",");
-
 			$brewAddition = "";
 			$brewAdditionAmt = "";
 			$brewAdditionUse = "";
-			for($i=1; $i<=20; $i++) {
-				$brewAddition .= "brewAddition".$i.",";
-				$brewAdditionAmt .= "brewAddition".$i."Amt,";
-				$brewAdditionUse .= "brewAddition".$i."Use,";
-			}
-			$brewAddition = rtrim($brewAddition,",");
-			$brewAdditionAmt = rtrim($brewAdditionAmt,",");
-			$brewAdditionUse = rtrim($brewAdditionUse,",");
-
 			$brewHops = "";
 			$brewHopsWeight = "";
 			$brewHopsUse = "";
@@ -307,6 +167,40 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 			$brewHopsTime = "";
 			$brewHopsType = "";
 			$brewHopsForm = "";
+			$brewMashStepName = "";
+			$brewMashStepTemp = "";
+			$brewMashStepTime = "";
+
+			for($i=1; $i<=5; $i++) {
+				$brewExtract .= "brewExtract".$i.",";
+				$brewExtractWeight .= "brewExtract".$i."Weight,";
+				$brewExtractUse .= "brewExtract".$i."Use,";
+			}
+
+			$brewExtract = rtrim($brewExtract,",");
+			$brewExtractWeight = rtrim($brewExtractWeight,",");
+			$brewExtractUse = rtrim($brewExtractUse,",");
+
+			for($i=1; $i<=20; $i++) {
+				$brewGrain .= "brewGrain".$i.",";
+				$brewGrainWeight .= "brewGrain".$i."Weight,";
+				$brewGrainUse .= "brewGrain".$i."Use,";
+			}
+
+			$brewGrain = rtrim($brewGrain,",");
+			$brewGrainWeight = rtrim($brewGrainWeight,",");
+			$brewGrainUse = rtrim($brewGrainUse,",");
+
+			for($i=1; $i<=20; $i++) {
+				$brewAddition .= "brewAddition".$i.",";
+				$brewAdditionAmt .= "brewAddition".$i."Amt,";
+				$brewAdditionUse .= "brewAddition".$i."Use,";
+			}
+
+			$brewAddition = rtrim($brewAddition,",");
+			$brewAdditionAmt = rtrim($brewAdditionAmt,",");
+			$brewAdditionUse = rtrim($brewAdditionUse,",");
+
 			for($i=1; $i<=20; $i++) {
 				$brewHops .= "brewHops".$i.",";
 				$brewHopsWeight .= "brewHops".$i."Weight,";
@@ -316,6 +210,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 				$brewHopsType .= "brewHops".$i."Type,";
 				$brewHopsForm .= "brewHops".$i."Form,";
 			}
+
 			$brewHops = rtrim($brewHops,",");
 			$brewHopsWeight = rtrim($brewHopsWeight,",");
 			$brewHopsUse = rtrim($brewHopsUse,",");
@@ -324,14 +219,12 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 			$brewHopsType = rtrim($brewHopsType,",");
 			$brewHopsForm = rtrim($brewHopsForm,",");
 
-			$brewMashStepName = "";
-			$brewMashStepTemp = "";
-			$brewMashStepTime = "";
 			for($i=1; $i<=10; $i++) {
 				$brewMashStepName .= "brewMashStep".$i."Name,";
 				$brewMashStepTemp .= "brewMashStep".$i."Temp,";
 				$brewMashStepTime .= "brewMashStep".$i."Time,";
 			}
+
 			$brewMashStepName = rtrim($brewMashStepName,",");
 			$brewMashStepTemp = rtrim($brewMashStepTemp,",");
 			$brewMashStepTime = rtrim($brewMashStepTime,",");
@@ -361,7 +254,6 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 
 		}
 
-		$brewJudgingNumber = "";
 
 		$files = array_slice(scandir(USER_DOCS), 2);
 		$judging_number_looper = TRUE;
@@ -650,7 +542,6 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 
 		 }
 
-
 		// $brewMead1 - Check if entry style requires carbonation
 		if (check_carb($styleBreak,$_SESSION['prefsStyleSet'])) {
 
@@ -694,7 +585,6 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 		 }
 
 		// $brewMead3 - Check if entry style requires strength
-
 		if (check_mead_strength($styleBreak,$_SESSION['prefsStyleSet'])) {
 
 			if (empty($brewMead3)) {
@@ -738,12 +628,16 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 		$pattern = array('\'', '"');
 		$insertGoTo = str_replace($pattern, "", $insertGoTo);
 
-		//echo $styleTrim."<br>";
-		//echo $brewJudgingNumber."<br>";
-		//echo $_POST['brewStyle']."<br>";
-		//echo $insertSQL."<br>";
-		//echo $insertGoTo;
-		//exit;
+		/*
+		// DEBUG
+		echo $styleTrim."<br>";
+		echo $brewJudgingNumber."<br>";
+		echo $_POST['brewStyle']."<br>";
+		echo $insertSQL."<br>";
+		echo $insertGoTo;
+		exit;
+		*/
+
 		$redirect_go_to = sprintf("Location: %s", stripslashes($insertGoTo));
 
 	} // end if ($action == "add")
@@ -784,7 +678,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 		// Custom style overall category will always be greater than 28
 		if ((strpos($_SESSION['prefsStyleSet'],"BA") !== false) && ($style[0] > 28)) $query_style_name = sprintf("SELECT * FROM %s WHERE brewStyleOwn='custom' AND brewStyleGroup='%s' AND brewStyleNum='%s'",$styles_db_table,$styleFix,$style[1]);
 
-		// Get style name from broken parts if BJCP
+		// Get style name from broken parts
 		else $query_style_name = sprintf("SELECT * FROM %s WHERE (brewStyleVersion='%s' OR brewStyleOwn='custom') AND brewStyleGroup='%s' AND brewStyleNum='%s'",$styles_db_table,$_SESSION['prefsStyleSet'],$styleFix,$style[1]);
 		$style_name = mysqli_query($connection,$query_style_name) or die (mysqli_error($connection));
 		$row_style_name = mysqli_fetch_assoc($style_name);
@@ -908,7 +802,6 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 		 }
 
 		 // Check if mead/cider entry has carbonation and sweetness, if so, override the $updateGoTo variable with another and redirect
-
 		 if (check_carb($styleBreak,$_SESSION['prefsStyleSet'])) {
 
 			if (empty($brewMead1)) {
@@ -974,6 +867,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 		$redirect_go_to = sprintf("Location: %s", stripslashes($updateGoTo));
 
 		/*
+		// DEBUG
 		echo $updateGoTo."<br>";
 		echo $style[0]."<br>";
 		echo $styleTrim."<br>";
@@ -986,12 +880,13 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 		if (!empty($brewMead1)) echo $brewMead1."<br>";
 		if (!empty($brewMead2)) echo $brewMead2."<br>";
 		if (!empty($brewMead3)) echo $brewMead3."<br>";
-		echo $_POST['brewInfo']."<br>";
+		echo $brewInfo."<br>";
 		if (isset($updateSQL)) echo $updateSQL."<br>";
-		if (isset($updateSQL1)) echo $updateSQL1."<br>";
-		if (isset($updateSQL2)) echo $updateSQL2."<br>";
-		if (isset($updateSQL3)) echo $updateSQL3."<br>";
-		if (isset($updateSQL4)) echo $updateSQL4."<br>";
+		if (isset($updateSQL1)) echo "Special: ".$updateSQL1."<br>";
+		if (isset($updateSQL2)) echo "Carb: ".$updateSQL2."<br>";
+		if (isset($updateSQL3)) echo "Sweetness: ".$updateSQL3."<br>";
+		if (isset($updateSQL4)) echo "Strength: ".$updateSQL4."<br>";
+		exit;
 		*/
 
 	} // end if ($action == "edit")

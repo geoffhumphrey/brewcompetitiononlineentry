@@ -531,13 +531,13 @@ if (((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) || ((
 		$output .= "<h3>Payment</h3>\n";
 		$output .= "<p>After registering and inputting entries, all participants must pay their entry fee(s). Accepted payment methods include:</p>\n";
 		$output .= "<ul>\n";
-			if ($_SESSION['prefsCash'] == "Y") $output .= "\t<li>Cash</li>\n";
-			if ($_SESSION['prefsCheck'] == "Y") $output .= "\t<li>Check, made out to <em>".$_SESSION['prefsCheckPayee']."</em></li>\n";
-			if ($_SESSION['prefsPaypal'] == "Y") $output .= "\t<li>PayPal (once registered on the website, click <em>Pay Entry Fees</em> from the main navigation after inputting all entries).</li>\n";
+			if ($_SESSION['prefsCash'] == "Y") $output .= "\t<li>".$entry_info_text_032."</li>\n";
+			if ($_SESSION['prefsCheck'] == "Y") $output .= "\t<li>".$entry_info_text_033." <em>".$_SESSION['prefsCheckPayee']."</em></li>\n";
+			if ($_SESSION['prefsPaypal'] == "Y") $output .= "\t<li>".$entry_info_text_034."</li>\n";
 		$output .= "</ul>\n";
 
 		$output .= "<h3>Competition Date"; if ($totalRows_judging > 1) $output .= "s"; $output .= "</h3>\n";
-		if ($totalRows_judging == 0) $output .= "<p>The competition judging date is yet to be determined. Please check back later.</p>\n"; else {
+		if ($totalRows_judging == 0) $output .= "<p>".$entry_info_text_035."</p>\n"; else {
 		  do {
 		  $output .= "<p>";
 		  $output .= "<strong>".$row_judging['judgingLocName']."</strong><br />";
@@ -550,7 +550,11 @@ if (((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) || ((
 		$output .= "<h3>Styles Accepted</h3>\n";
 		$output .= "<ul>\n";
 		do {
-		  $output .= "\t<li>".ltrim($row_styles['brewStyleGroup'], "0").$row_styles['brewStyleNum']." ".$row_styles['brewStyle']; if ($row_styles['brewStyleOwn'] == "custom") $output .= " (Special style: ".$_SESSION['contestName'].")"; $output .= "</li>\n";
+            $output .= "\t<li>";
+            if ($_SESSION['prefsStyleSet'] != "BA") $output .= ltrim($row_styles['brewStyleGroup'], "0").$row_styles['brewStyleNum']." ";
+            $output .= $row_styles['brewStyle'];
+            if ($row_styles['brewStyleOwn'] == "custom") $output .= " (Special style: ".$_SESSION['contestName'].")";
+            $output .= "</li>\n";
 		} while ($row_styles = mysqli_fetch_assoc($styles));
 		$output .= "</ul>\n";
 
@@ -564,9 +568,11 @@ if (((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) || ((
 			$output .= "<p>".$_SESSION['contestShippingAddress']."</p>\n";
 			$output .= "<h4>Packing &amp; Shipping Hints</h4>\n";
 			$output .= "<ol>\n";
-			$output .= "\t<li>Carefully pack your entries in a sturdy box. Line the inside of your carton with a plastic trash bag. Partition and pack each bottle with adequate packaging material. Do not over pack! Write clearly: \"Fragile. This Side Up.\" on the package. Your package should weigh less than 25 pounds. Please refrain from using &quot;messy&quot; packaging materials such a Styrofoam &quot;peanuts&quot; or pellets; please use packaging material such as bubble wrap.</li>\n";
-			$output .= "\t<li>Every reasonable effort will be made to contact entrants whose bottles have broken to make arrangements for sending replacement bottles.</li>\n";
-			$output .= "\t<li>It is not against any Bureau of Alcohol, Tobacco and Firearms (ATF) regulations or federal laws to ship your entries via privately owned shipping company for analytical purposes. However, <strong>IT IS ILLEGAL TO SHIP ALCOHOLIC BEVERAGES VIA THE U.S. POSTAL SERVICE</strong>. Private shipping companies have the right to refuse your shipment if they are informed that the package contains glass and/or alcoholic beverages. Be aware that entries mailed internationally are often required by customs to have proper documentation. These entries might be opened and/or returned to the shipper by customs' officials at their discretion. It is solely the entrant's responsibility to follow all applicable laws and regulations.</li>\n";
+			$output .= "\t<li>".$entry_info_text_038."</li>\n";
+            $output .= "\t<li>".$entry_info_text_039."</li>\n";
+            $output .= "\t<li>".$entry_info_text_040."</li>\n";
+			$output .= "\t<li>".$entry_info_text_041."</li>\n";
+			$output .= "\t<li>".$entry_info_text_042."</li>\n";
 			$output .= "</ol>\n";
 		}
 
@@ -737,15 +743,15 @@ if (((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) || ((
 
 							$style_trimmed = ltrim($style,"0");
 
-							if ($_SESSION['prefsStyleSet'] != "BA") {
-								if ($view == "pdf") $html .= '<br><br><strong>Style '.ltrim($style,"0").': '.style_convert($style,"1").' ('.$row_entry_count['count'].' '.$entries.')</strong><br>';
-								else $html .= '<h2>Style '.$style_trimmed.': '.style_convert($style,"1").' ('.$row_entry_count['count'].' '.$entries.')</h2>';
+							if ($_SESSION['prefsStyleSet'] == "BA") {
+                                include (INCLUDES.'ba_constants.inc.php');
+                                if ($view == "pdf") $html .= '<br><br><strong>'.$ba_category_names[$style].' ('.$row_entry_count['count'].' '.$entries.')</strong><br>';
+                                else $html .= '<h2>'.$ba_category_names[$style].' ('.$row_entry_count['count'].' '.$entries.')</h2>';
 							}
 
 							else {
-								include (INCLUDES.'ba_constants.inc.php');
-								if ($view == "pdf") $html .= '<br><br><strong>'.$ba_category_names[$style].' ('.$row_entry_count['count'].' '.$entries.')</strong><br>';
-								else $html .= '<h2>'.$ba_category_names[$style].' ('.$row_entry_count['count'].' '.$entries.')</h2>';
+								if ($view == "pdf") $html .= '<br><br><strong>Style '.ltrim($style,"0").': '.style_convert($style,"1").' ('.$row_entry_count['count'].' '.$entries.')</strong><br>';
+                                else $html .= '<h2>Style '.$style_trimmed.': '.style_convert($style,"1").' ('.$row_entry_count['count'].' '.$entries.')</h2>';
 							}
 
 							$html .= '<table border="1" cellpadding="5" cellspacing="0">';
@@ -803,14 +809,14 @@ if (((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) || ((
 						else $entries = strtolower($label_entry);
 
 
-						if ($_SESSION['prefsStyleSet'] != "BA") {
-							if ($view == "pdf") $html .= '<br><br><strong>Style '.ltrim($style[0],"0").$style[1].': '.$style[2].' ('.$row_entry_count['count'].' '.$entries.')</strong><br>';
-							else $html .= '<h2>Style '.ltrim($style[0],"0").$style[1].': '.$style[2].' ('.$row_entry_count['count'].' '.$entries.')</h2>';
+						if ($_SESSION['prefsStyleSet'] == "BA") {
+                            if ($view == "pdf") $html .= '<br><br><strong>'.$style[2].' ('.$row_entry_count['count'].' '.$entries.')</strong><br>';
+                            else $html .= '<h2>'.$style[2].' ('.$row_entry_count['count'].' '.$entries.')</h2>';
 						}
 
 						else {
-							if ($view == "pdf") $html .= '<br><br><strong>'.$style[2].' ('.$row_entry_count['count'].' '.$entries.')</strong><br>';
-							else $html .= '<h2>'.$style[2].' ('.$row_entry_count['count'].' '.$entries.')</h2>';
+                            if ($view == "pdf") $html .= '<br><br><strong>Style '.ltrim($style[0],"0").$style[1].': '.$style[2].' ('.$row_entry_count['count'].' '.$entries.')</strong><br>';
+                            else $html .= '<h2>Style '.ltrim($style[0],"0").$style[1].': '.$style[2].' ('.$row_entry_count['count'].' '.$entries.')</h2>';
 						}
 
 

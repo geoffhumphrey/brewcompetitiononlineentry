@@ -2653,25 +2653,12 @@ function check_special_ingredients($style,$style_version) {
 	mysqli_select_db($connection,$database);
 	$style_explodies = explode("-",$style);
 
-	if (($style_explodies[0] < 34) && (strpos($style_version,"BABDB") !== false)) {
+	$query_brews = sprintf("SELECT brewStyleReqSpec FROM %s WHERE (brewStyleVersion='%s' OR brewStyleOwn='custom') AND brewStyleGroup='%s' AND brewStyleNum='%s'", $prefix."styles", $style_version, $style_explodies[0], $style_explodies[1]);
+	$brews = mysqli_query($connection,$query_brews) or die (mysqli_error($connection));
+	$row_brews = mysqli_fetch_assoc($brews);
 
-		include (INCLUDES.'ba_constants.inc.php');
-
-		if (in_array($style,$_SESSION['ba_special'])) return TRUE;
-		else return FALSE;
-
-	}
-
-	else {
-		if ($_SESSION['prefsStyleSet'] == "BA") $query_brews = sprintf("SELECT brewStyleReqSpec FROM %s WHERE brewStyleOwn='custom' AND brewStyleGroup='%s'", $prefix."styles", $style_explodies[0]);
-		else $query_brews = sprintf("SELECT brewStyleReqSpec FROM %s WHERE (brewStyleVersion='%s' OR brewStyleOwn='custom') AND brewStyleGroup='%s' AND brewStyleNum='%s'", $prefix."styles", $style_version, $style_explodies[0], $style_explodies[1]);
-		$brews = mysqli_query($connection,$query_brews) or die (mysqli_error($connection));
-		$row_brews = mysqli_fetch_assoc($brews);
-
-		if ($row_brews['brewStyleReqSpec'] == 1) return TRUE;
-		else return FALSE;
-
-	}
+	if ($row_brews['brewStyleReqSpec'] == 1) return TRUE;
+	else return FALSE;
 }
 
 function entries_no_special($user_id) {
@@ -3625,7 +3612,7 @@ function convert_to_ba() {
 			$ba_random = mysqli_query($connection,$query_ba_random) or die (mysqli_error($connection));
 			$row_ba_random = mysqli_fetch_assoc($ba_random);
 
-			if (in_array($row_ba_random['id'],$_SESSION['ba_special_ids'])) $brew_info = "Special ingredients, yo.";
+			if ($row_ba_random['brewStyleReqSpec'] == 1) $brew_info = "Special ingredients, yo.";
 			else $brew_info = "";
 
 //		}
@@ -3634,9 +3621,9 @@ function convert_to_ba() {
 		$ba_style = $row_ba_random['brewStyle'];
 		$ba_sub_category = $row_ba_random['brewStyleNum'];
 
-		if (in_array($row_ba_random['id'],$_SESSION['ba_carb_ids'])) $ba_carb = $carb[array_rand($carb,1)];
-		if (in_array($row_ba_random['id'],$_SESSION['ba_strength_ids'])) $ba_strength = $strength[array_rand($strength,1)];
-		if (in_array($row_ba_random['id'],$_SESSION['ba_sweetness_ids'])) $ba_sweetness = $sweet[array_rand($sweet,1)];
+		if ($row_ba_random['brewStyleCarb'] == 1) $ba_carb = $carb[array_rand($carb)];
+		if ($row_ba_random['brewStyleStrength'] == 1) $ba_strength = $strength[array_rand($strength)];
+		if ($row_ba_random['brewStyleSweet'] == 1) $ba_sweetness = $sweet[array_rand($sweet)];
 
 		$ba_category_sort = $row_ba_random['brewStyleGroup'];
 
@@ -3644,7 +3631,7 @@ function convert_to_ba() {
 		mysqli_real_escape_string($connection,$updateSQL);
 		$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 
-		$return .= $updateSQL."<br>";
+		//$return .= $updateSQL."<br>";
 
 		//$return .= $ba_style_info."<br>";
 
@@ -3653,6 +3640,8 @@ function convert_to_ba() {
 	return $return;
 
 }
+
+//convert_to_ba();
 
 function convert_to_pro() {
 

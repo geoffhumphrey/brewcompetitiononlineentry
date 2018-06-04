@@ -38,6 +38,8 @@ if ($_SESSION['prefsStyleSet'] != "BA") {
 	}
 }
 
+else $styleSet = $_SESSION['prefsStyleSet'];
+
 // Beer does not require mead/cider strength, carbonation or sweetness
 // So, gather all beer styles that require special ingredients
 
