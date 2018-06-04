@@ -81,7 +81,7 @@ else {
 }
 
 // Load libraries only when needed - for performance
-$tinymce_load = array("contest_info","default","step4");
+$tinymce_load = array("contest_info","default","step4","default");
 $datetime_load = array("contest_info","judging","testing","preferences","step4","step5","step6","default");
 $datatables_load = array("admin","list","default","step4");
 

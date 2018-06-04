@@ -498,7 +498,7 @@ $(document).ready(function(){
         <input name="brewerStewardLocation" type="hidden" value="<?php echo $row_brewer['brewerStewardLocation']; ?>" />
         <?php } // end if ($table_assignment)
 		else { ?>
-        <?php if (!$judge_limit) { ?>
+        <?php if (((!$judge_limit) && ($go == "account")) || (($_SESSION['userLevel'] <= 1) && (($go == "admin") || ($go == "account")))) { ?>
         <!-- Judging preferences -->
         <div class="form-group"><!-- Form Group Radio INLINE -->
             <label for="brewerJudge" class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label_judging; ?></label>
@@ -745,7 +745,7 @@ $(document).ready(function(){
         </div>
         </div><!-- ./ brewerJudgeFields -->
         <?php } // end if (!$judge_limit) ?>
-        <?php if (!$steward_limit) { ?>
+        <?php if (((!$steward_limit) && ($go == "account")) || (($_SESSION['userLevel'] <= 1) && (($go == "admin") || ($go == "account")))) { ?>
         <!-- Stewarding preferences -->
         <div class="form-group"><!-- Form Group Radio INLINE -->
             <label for="brewerSteward" class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label_stewarding; ?></label>

@@ -32,7 +32,7 @@
     <script src="<?php echo $base_url;?>js_includes/date-time.min.js"></script>
     <?php } ?>
 
-	<?php if (($section == "admin") && (($action == "add") || ($action == "edit")) && (in_array($go,$tinymce_load))) { ?>
+	<?php if (($section == "admin") && (in_array($go,$tinymce_load))) { ?>
     <!-- Load TinyMCE / https://www.tinymce.com/ -->
 	<script src="https://cdn.tinymce.com/4/tinymce.min.js"></script>
 	<script src="<?php echo $base_url;?>js_includes/tinymce-init.min.js"></script>
