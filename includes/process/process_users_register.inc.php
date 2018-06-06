@@ -14,13 +14,13 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 	$username = strtolower($_POST['user_name']);
 	$username = filter_var($username,FILTER_SANITIZE_EMAIL);
 
+	$userQuestionAnswer = $purifier->purify($_POST['userQuestionAnswer']);
+
+	if ($filter != "admin") {
 	$username2 = strtolower($_POST['user_name2']);
 	$username2 = filter_var($username2,FILTER_SANITIZE_EMAIL);
 
-	$userQuestionAnswer = $purifier->purify($_POST['userQuestionAnswer']);
-
 	// CAPCHA check
-	if ($filter != "admin") {
 
 		if (($_SESSION['prefsCAPTCHA'] == 1) && (isset($_POST['g-recaptcha-response'])) && (!empty($_POST['g-recaptcha-response']))) {
 
@@ -314,10 +314,33 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 			$result = mysqli_query($connection,$insertSQL) or die (mysqli_error($connection));
 			//echo $insertSQL."<br>";
 
-			// Stop Gap for random staff assignments
-			$updateSQL = sprintf("UPDATE %s  SET  staff_judge='0', staff_judge_bos='0', staff_steward='0', staff_organizer='0', staff_staff='0' WHERE uid=%s",$prefix."staff",$row_user['id']);
-			mysqli_real_escape_string($connection,$updateSQL);
-			$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+			$staff_judge = 0;
+			$staff_steward = 0;
+			$staff_staff = 0;
+
+			if ($filter == "admin") {
+				if ($go == "judge") $staff_judge = 1;
+				if ($go == "steward") $staff_steward = 1;
+				if ($_POST['brewerStaff'] == "Y") $staff_staff = 1;
+			}
+
+			// Check if UID is in staff table, if so (why is another matter, but hey), clear out assignments and associate with the newly added staff member
+			$query_stray = sprintf("SELECT COUNT(*) AS 'count' FROM %s WHERE uid='%s'", $prefix."staff", $row_user['id']);
+ 			$stray = mysqli_query($connection,$query_stray) or die (mysqli_error($connection));
+ 			$row_stray = mysqli_fetch_assoc($stray);
+
+ 			if ($row_stray['count'] == 0) {
+ 				$insertSQL = sprintf("INSERT INTO %s (uid, staff_judge, staff_judge_bos, staff_steward, staff_organizer, staff_staff) VALUES ('%s', '%s', '%s', '%s', '%s', '%s')", $prefix."staff", $row_user['id'], $staff_judge, "0", $staff_steward, "0", $staff_staff);
+ 				echo $insertSQL;
+ 				mysqli_real_escape_string($connection,$insertSQL);
+				$result = mysqli_query($connection,$insertSQL) or die (mysqli_error($connection));
+ 			}
+
+ 			elseif ($row_stray['count'] == 1) {
+ 				$updateSQL = sprintf("UPDATE %s SET staff_judge='%s', staff_judge_bos='0', staff_steward='%s', staff_organizer='0', staff_staff='%s' WHERE uid= %s",$prefix."staff",$staff_judge,$staff_steward,$staff_staff,$row_user['id']);
+				mysqli_real_escape_string($connection,$updateSQL);
+				$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+ 			}
 
 			// If email registration info option is yes, email registrant their info...
 			if ($_SESSION['prefsEmailRegConfirm'] == 1) {
