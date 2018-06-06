@@ -238,8 +238,12 @@
                                         <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=entrant&amp;action=register">A Participant</a></li>
                                     </ul>
                                     <ul class="list-inline">
-                                        <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judge&amp;action=register" data-toggle="tooltip" title="Add a judge or steward inputting all registration data">A Judge or Steward (Standard)</a><li>
-            							<li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judge&amp;action=register&amp;view=quick" data-toggle="tooltip" title="Add a judge or steward inputting only necessary registration data">A Judge or Steward (Quick)</a><li>
+                                        <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judge&amp;action=register&amp;view=quick" data-toggle="tooltip" title="Add a judge or steward inputting only necessary registration data">A Judge (Quick)</a><li>
+                                        <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judge&amp;action=register" data-toggle="tooltip" title="Add a judge or steward inputting all registration data">A Judge (Standard)</a><li>
+                                    </ul>
+                                    <ul class="list-inline">
+                                        <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=steward&amp;action=register&amp;view=quick" data-toggle="tooltip" title="Add a steward inputting only necessary registration data">A Steward (Quick)</a><li>
+                                        <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=steward&amp;action=register" data-toggle="tooltip" title="Add a steward inputting all registration data">A Steward (Standard)</a><li>
                                     </ul>
                                 </div>
                             </div><!-- ./row -->

@@ -33,6 +33,13 @@ else {
 
 $print_icon = FALSE;
 
+if (isset($_SESSION['loginUsername']))  {
+    $paid_icon = "";
+    $paid_icon .= " <small class=\"text-muted\">".$_SESSION['prefsCurrency'].number_format($total_to_pay,2)."</small>";
+    if ($total_to_pay > 0) $paid_icon .= " <span class=\"fa fa-lg fa-exclamation-circle text-danger\" aria-hidden=\"true\" data-toggle=\"tooltip\" title=\"".$pay_text_033."\" data-placement=\"auto top\" data-container=\"body\"></span>";
+    else $paid_icon .= " <span class=\"fa fa-lg fa-check-circle text-success\" aria-hidden=\"true\" data-toggle=\"tooltip\" title=\"".$pay_text_024."\" data-placement=\"auto top\" data-container=\"body\"></span>";
+}
+
 $help = bcoem_help($section,$go,$action,$filter);
 if (!empty($help)) $help_icon = TRUE;
 else $help_icon = FALSE;
@@ -202,7 +209,8 @@ if (($logged_in) && ($admin_user) && ($go != "error_page")) { ?>
                     <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=participants">Manage Participants</a></li>
                     <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging&amp;action=assign&amp;filter=judges">Assign Judges</a></li>
                     <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging&amp;action=assign&amp;filter=stewards">Assign Stewards</a></li>
-                    <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judge&amp;action=register&amp;view=quick">Quick Register a Judge/Steward</a></li>
+                    <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judge&amp;action=register&amp;view=quick">Quick Register a Judge</a></li>
+                    <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=steward&amp;action=register&amp;view=quick">Quick Register Steward</a></li>
                 </ul>
             </li>
             <li class="dropdown">
@@ -387,7 +395,7 @@ $(document).ready(function(){
                     <?php } ?>
                     <?php } ?>
                     <?php if ((!$disable_pay) && ($show_entries)) { ?>
-                    <li><a href="<?php echo $link_pay; ?>"><?php echo $label_pay; ?></a></li>
+                    <li><a href="<?php echo $link_pay; ?>"><?php echo $label_pay.$paid_icon; ?></a></li>
                     <?php } ?>
                     <li role="separator" class="divider"></li>
                     <li><a href="<?php echo $base_url; ?>includes/logout.inc.php"><?php echo $label_log_out; ?></a></li>

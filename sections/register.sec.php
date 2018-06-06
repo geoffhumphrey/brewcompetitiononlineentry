@@ -153,7 +153,7 @@ if ($section == "admin") {
 	if ($view == "quick") $header1_1 .= sprintf("%s ",$register_text_007);
 	$header1_1 .= sprintf("%s ",$register_text_008);
 	if ($go == "judge") $header1_1 .= sprintf("%s",$register_text_009);
-	else $header1_1 .= sprintf("%s",$register_text_010);
+    if ($go == "steward") $header1_1 .= sprintf("%s",$register_text_027);
 	$header1_1 .= "</p>";
 }
 
@@ -197,12 +197,17 @@ if ($go == "steward") {
 	$judge_hidden = TRUE;
 }
 
-if ($judge_limit) {
+if (($section != "admin") && ($judge_limit)) {
 	$judge_hidden = TRUE;
 }
 
-if ($steward_limit) {
+if (($section != "admin") && ($steward_limit)) {
 	$steward_hidden = TRUE;
+}
+
+if (($section == "admin") && ($_SESSION['userLevel'] <= 1)) {
+    if ($go == "judge") $judge_hidden = FALSE;
+    if ($go == "steward") $steward_hidden = FALSE;
 }
 
 if (($_SESSION['prefsProEdition'] == 0) || (($_SESSION['prefsProEdition'] == 1) && ($go != "entrant"))) {
@@ -238,11 +243,10 @@ foreach ($security_questions_display as $key => $value) {
 
 }
 
-
-
 // --------------------------------------------------------------
 // Display
 // --------------------------------------------------------------
+
 if (($section != "admin") && ($action != "print")) echo $warning1;
 if (NHC) echo $warning2;
 echo $header1_1;
@@ -286,12 +290,22 @@ if ($go == "default") {  ?>
         </div><!-- ./button group -->
         <!-- All Participants Button -->
         <div class="btn-group" role="group" aria-label="...">
-            <?php if ($view == "quick") { ?>
-            <a class="btn btn-default" href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judge&amp;action=register"><span class="fa fa-plus-circle"></span> <?php echo $label_register_judge_standard; ?></a>
-            <?php } ?>
-            <?php if ($view == "default") { ?>
-            <a class="btn btn-default" href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judge&amp;action=register&amp;view=quick"><span class="fa fa-plus-circle"></span> <?php echo $label_register_judge_quick; ?></a>
-            <?php } ?>
+              <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                 <span class="fa fa-plus-circle"></span> <?php echo $label_register_judge_standard; ?> <span class="caret"></span>
+              </button>
+              <ul class="dropdown-menu">
+                <li <?php if (($view == "default") && ($go == "judge")) echo "class=\"disabled\""; ?>><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judge&amp;action=register"><?php echo $label_judge; ?></a></li>
+                <li <?php if (($view == "default") && ($go == "steward")) echo "class=\"disabled\""; ?>><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=steward&amp;action=register"><?php echo $label_steward; ?></a></li>
+              </ul>
+        </div>
+        <div class="btn-group" role="group" aria-label="...">
+              <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                 <span class="fa fa-plus-circle"></span> <?php echo $label_register_judge_quick; ?> <span class="caret"></span>
+              </button>
+              <ul class="dropdown-menu">
+                <li <?php if (($view == "quick") && ($go == "judge")) echo "class=\"disabled\""; ?>><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judge&amp;action=register&amp;view=quick"><?php echo $label_judge; ?></a></li>
+                <li <?php if (($view == "quick") && ($go == "steward")) echo "class=\"disabled\""; ?>><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=steward&amp;action=register&amp;view=quick"><?php echo $label_steward; ?></a></li>
+              </ul>
         </div><!-- ./button group -->
     </div>
     <input type="hidden" name="password" value="bcoem">
@@ -456,80 +470,6 @@ if ($go == "default") {  ?>
             <div class="help-block with-errors"></div>
 		</div>
 	</div><!-- ./Form Group -->
-    <?php if ($view == "quick") { ?>
-    <!-- Admin Quick Register Judge Fields -->
-    <div class="form-group"><!-- Form Group Text Input -->
-        <label for="brewerJudgeID" class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label"><?php if (($_SESSION['prefsProEdition'] == 1) && ($go == "entrant")) echo $label_contact." "; echo $label_bjcp_id; ?></label>
-        <div class="col-lg-9 col-md-9 col-sm-8 col-xs-12">
-            <!-- Input Here -->
-            <input class="form-control" id="brewerJudgeID" name="brewerJudgeID" type="text" value="<?php if ($action == "edit") echo $row_brewer['brewerJudgeID']; ?>" placeholder="">
-        </div>
-    </div><!-- ./Form Group -->
-    <div class="form-group"><!-- Form Group Radio STACKED -->
-            <label for="brewerJudgeRank" class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label"><?php if (($_SESSION['prefsProEdition'] == 1) && ($go == "entrant")) echo $label_contact." "; echo $label_bjcp_rank; ?></label>
-            <div class="col-lg-9 col-md-9 col-sm-8 col-xs-12">
-                <div class="input-group">
-                    <!-- Input Here -->
-                    <div class="radio">
-                        <label>
-                            <input type="radio" name="brewerJudgeRank" value="Non-BJCP" checked> Non-BJCP
-                        </label>
-                    </div>
-                    <div class="radio">
-                        <label>
-                            <input type="radio" name="brewerJudgeRank" value="Rank Pending"> Rank Pending
-                        </label>
-                    </div>
-                    <div class="radio">
-                        <label>
-                            <input type="radio" name="brewerJudgeRank" value="Apprentice"> Apprentice
-                        </label>
-                    </div>
-                    <div class="radio">
-                        <label>
-                             <input type="radio" name="brewerJudgeRank" value="Provisional"> Provisional
-                        </label>
-                    </div>
-                    <div class="radio">
-                        <label>
-                            <input type="radio" name="brewerJudgeRank" value="Recognized"> Recognized
-                        </label>
-                    </div>
-                    <div class="radio">
-                        <label>
-                            <input type="radio" name="brewerJudgeRank" value="Certified"> Certified
-                        </label>
-                    </div>
-                    <div class="radio">
-                        <label>
-                            <input type="radio" name="brewerJudgeRank" value="National"> National
-                        </label>
-                    </div>
-                    <div class="radio">
-                        <label>
-                             <input type="radio" name="brewerJudgeRank" value="Master"> Master
-                        </label>
-                    </div>
-                    <div class="radio">
-                        <label>
-                            <input type="radio" name="brewerJudgeRank" value="Honorary Master"> Honorary Master
-                        </label>
-                    </div>
-                    <div class="radio">
-                        <label>
-                            <input type="radio" name="brewerJudgeRank" value="Grand Master"> Grand Master
-                        </label>
-                    </div>
-                    <div class="radio">
-                        <label>
-                            <input type="radio" name="brewerJudgeRank" value="Honorary Grand Master" <?php if (($action == "edit") && in_array("Honorary Grand Master",$judge_array)) echo "CHECKED"; ?>>Honorary Grand Master
-                        </label>
-                    </div>
-                </div>
-
-            </div>
-        </div><!-- ./Form Group -->
-    <?php } // END if ($view == "quick") ?>
     <?php if ($view == "default") { ?>
     <!-- General Entry Fields: Address, Phone, Dropoff Locations, Club, AHA -->
 	<div class="form-group"><!-- Form Group REQUIRED Text Input -->
@@ -695,10 +635,74 @@ if ($go == "default") {  ?>
         </div>
     </div><!-- ./Form Group -->
     <div class="form-group"><!-- Form Group Text Input -->
-            <label for="brewerJudgeID" class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label_bjcp_id; ?></label>
+        <label for="brewerJudgeID" class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label_bjcp_id; ?></label>
+        <div class="col-lg-9 col-md-9 col-sm-8 col-xs-12">
+            <!-- Input Here -->
+            <input class="form-control" id="brewerJudgeID" name="brewerJudgeID" type="text" value="<?php if (($msg > 0) && (isset($_COOKIE['brewerJudgeID']))) echo $_COOKIE['brewerJudgeID']; ?>" placeholder="">
+        </div>
+    </div><!-- ./Form Group -->
+    <div class="form-group"><!-- Form Group Radio STACKED -->
+            <label for="brewerJudgeRank" class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label"><?php if (($_SESSION['prefsProEdition'] == 1) && ($go == "entrant")) echo $label_contact." "; echo $label_bjcp_rank; ?></label>
             <div class="col-lg-9 col-md-9 col-sm-8 col-xs-12">
-                <!-- Input Here -->
-                <input class="form-control" id="brewerJudgeID" name="brewerJudgeID" type="text" value="<?php if (($msg > 0) && (isset($_COOKIE['brewerJudgeID']))) echo $_COOKIE['brewerJudgeID']; ?>" placeholder="">
+                <div class="input-group">
+                    <!-- Input Here -->
+                    <div class="radio">
+                        <label>
+                            <input type="radio" name="brewerJudgeRank" value="Non-BJCP" checked> Non-BJCP
+                        </label>
+                    </div>
+                    <div class="radio">
+                        <label>
+                            <input type="radio" name="brewerJudgeRank" value="Rank Pending"> Rank Pending
+                        </label>
+                    </div>
+                    <div class="radio">
+                        <label>
+                            <input type="radio" name="brewerJudgeRank" value="Apprentice"> Apprentice
+                        </label>
+                    </div>
+                    <div class="radio">
+                        <label>
+                             <input type="radio" name="brewerJudgeRank" value="Provisional"> Provisional
+                        </label>
+                    </div>
+                    <div class="radio">
+                        <label>
+                            <input type="radio" name="brewerJudgeRank" value="Recognized"> Recognized
+                        </label>
+                    </div>
+                    <div class="radio">
+                        <label>
+                            <input type="radio" name="brewerJudgeRank" value="Certified"> Certified
+                        </label>
+                    </div>
+                    <div class="radio">
+                        <label>
+                            <input type="radio" name="brewerJudgeRank" value="National"> National
+                        </label>
+                    </div>
+                    <div class="radio">
+                        <label>
+                             <input type="radio" name="brewerJudgeRank" value="Master"> Master
+                        </label>
+                    </div>
+                    <div class="radio">
+                        <label>
+                            <input type="radio" name="brewerJudgeRank" value="Honorary Master"> Honorary Master
+                        </label>
+                    </div>
+                    <div class="radio">
+                        <label>
+                            <input type="radio" name="brewerJudgeRank" value="Grand Master"> Grand Master
+                        </label>
+                    </div>
+                    <div class="radio">
+                        <label>
+                            <input type="radio" name="brewerJudgeRank" value="Honorary Grand Master" <?php if (($action == "edit") && in_array("Honorary Grand Master",$judge_array)) echo "CHECKED"; ?>>Honorary Grand Master
+                        </label>
+                    </div>
+                </div>
+
             </div>
         </div><!-- ./Form Group -->
     <?php if ($totalRows_judging > 1) {

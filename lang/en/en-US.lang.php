@@ -725,7 +725,7 @@ if ($section == "brew") {
 
 // -------------------- Brewer (Account) --------------------
 
-if (($section == "brewer") || ($section == "register") || ($section == "step2") || (($section == "admin") && ($go == "entrant")) || (($section == "admin") && ($go == "judge"))) {
+if (($section == "brewer") || ($section == "register") || ($section == "step2") || (($section == "admin") && ($go == "entrant")) || (($section == "admin") && ($go == "judge")) || (($section == "admin") && ($go == "steward"))) {
 	$brewer_text_000 = "Please enter only <em>one</em> person's name.";
 	$brewer_text_001 = "Choose one. This question will be used to verify your identity should you forget your password.";
 	$brewer_text_003 = "To be considered for a GABF Pro-Am brewing opportunity you must be an AHA member.";
@@ -997,7 +997,7 @@ if (($section == "register") || ($section == "brewer") || ($action == "register"
 	$register_text_006 = "Reminder: You are only allowed to enter one region and once you have registered at a location, you will NOT be able to change it.";
 	$register_text_007 = "Quick";
 	$register_text_008 = "Register";
-	$register_text_009 = "a Judge/Steward";
+	$register_text_009 = "a Judge";
 	$register_text_010 = "a Participant";
 	$register_text_011 = "To register, create your online account by filling out the fields below.";
 	$register_text_012 = "Quickly add a participant to the competition&rsquo;s judge/steward pool. A dummy address and phone number will be used and a default password of <em>bcoem</em> will be given to each participant added via this screen.";
@@ -1015,7 +1015,7 @@ if (($section == "register") || ($section == "brewer") || ($action == "register"
 	$register_text_024 = "Make your security answer something only you will easily remember!";
 	$register_text_025 = "Please provide a first name.";
 	$register_text_026 = "Please provide a last name.";
-	$register_text_027 = "";
+	$register_text_027 = "a Steward";
 	$register_text_028 = "Please provide a street address.";
 	$register_text_029 = "Please provide a city.";
 	$register_text_030 = "Please provide a state or province.";
@@ -1300,7 +1300,7 @@ if ($section == "brew") {
 }
 
 // -------------------- Brewer (Account) --------------------
-if (($section == "brewer") || ($section == "register") || ($section == "step2") || (($section == "admin") && ($go == "entrant")) || (($section == "admin") && ($go == "judge"))) {
+if (($section == "brewer") || ($section == "register") || ($section == "step2") || (($section == "admin") && ($go == "entrant")) || (($section == "admin") && ($go == "judge")) || (($section == "admin") && ($go == "steward"))) {
 	$brewer_text_022 = "You will be able to identify a co-brewer when adding your entries.";
 	$brewer_text_023 = "Select &quot;None&quot; if you are not affiliated with a club. Select &quot;Other&quot; if your club is not on the list - <strong>be sure to use the search box</strong>.";
     $brewer_text_024 = "Please provide your first name.";
