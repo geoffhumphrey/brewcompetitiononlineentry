@@ -33,12 +33,13 @@
         <li>Be named with a <strong>six (6) character judging number</strong> (e.g., 000012.pdf, 987654.pdf, 01-012.pdf, abc123.pdf. 123abc.pdf, etc.) that corresponds EXACTLY to the entry's judging number as stored in the system's database.</li>
 	</ul>
 	<ul class="list-unstyled">
-		<li><strong>OR</strong></li>
+		<li style="padding-left: 40px;"><strong>OR</strong></li>
 	</ul>
 	<ul>
         <li>Be named with the <strong>entry number in six (6) digit format</strong> with leading zeroes (e.g., 000198.pdf, 000567.pdf, etc.).</li>
         <li>Have a .pdf or .PDF extension.</li>
     </ul>
+<p>Please note that file names and extensions uploaded with this browser-based function will be converted to lower-case.</p>
 <form id="upload-widget" method="post" action="<?php echo $base_url; ?>handle.php?action=docs" class="dropzone">
 <div class="fallback">
     <input name="file" type="file" multiple />
@@ -123,8 +124,8 @@ if (!is_dir_empty(USER_DOCS)) {
 			$scoresheet_random_file_html = $base_url.$scoresheet_random_file_relative;
 			$scoresheet_link = "";
 			$scoresheet_link .= "<a href=\"".$base_url."output/scoresheets.output.php?";
-			$scoresheet_link .= "scoresheetfilename=".encryptString($scoresheet_file_name);
-			$scoresheet_link .= "&amp;randomfilename=".encryptString($random_file_name)."&amp;download=true";
+			$scoresheet_link .= "scoresheetfilename=".urlencode(obfuscateURL($scoresheet_file_name,$encryption_key));
+			$scoresheet_link .= "&amp;randomfilename=".urlencode(obfuscateURL($random_file_name,$encryption_key))."&amp;download=true";
 			$scoresheet_link .= "\">".$scoresheet_file_name."</a>";
 			$scoresheet_file_size = number_format($file->getSize()/1000000,2);
 

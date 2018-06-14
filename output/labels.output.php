@@ -5,6 +5,7 @@ require(CLASSES.'fpdf/pdf_label.php');
 include (DB.'output_labels.db.php');
 include (LIB.'output.lib.php');
 include (DB.'styles.db.php');
+include (INCLUDES.'scrubber.inc.php');
 
 $filename = "";
 $number_of_labels = "";
@@ -92,6 +93,32 @@ if (isset($_SESSION['loginUsername'])) {
 
 			else {
 
+				$special_strength = array(
+					"Strength" => "",
+					"strength" => "",
+					"Sweetness" => "",
+					"sweetness" => "",
+					"Carbonation" => "",
+					"carbonation" => "",
+					"Session " => "",
+					"session " => "",
+					"Standard " => "",
+					"standard " => "",
+					"Double " => "",
+					"double " => "",
+					"Table " => "",
+					"table " => "",
+					"Super " => "",
+					"super " => "",
+					"Low/None" => "",
+					"Low" => "",
+					"low" => "",
+					"High" => "",
+					"high" => "",
+					"Medium" => "",
+					"medium" => ""
+					);
+
 				$pdf->SetFont('Arial','',9);
 
 				// Assemble the file name
@@ -114,9 +141,11 @@ if (isset($_SESSION['loginUsername'])) {
 					for($i=0; $i<$sort; $i++) {
 
 						$text = "";
+						$entry_info = "";
 						$special = "";
 						$special_only = "";
 						$optional = "";
+						$entry_str_sweet_carb = "";
 						$mead_cider = "";
 						$beer_strength = "";
 						$beer_sweeteness = "";
@@ -127,8 +156,8 @@ if (isset($_SESSION['loginUsername'])) {
 						$style = $row_log['brewCategorySort'].$row_log['brewSubCategory'];
 						$style_name = truncate($row_log['brewStyle'],22);
 
-						if ($ba) $output = sprintf("%s  #%s", $style_name, $entry_no);
-						else $output = sprintf("\n%s: %s  #%s", $style, $style_name, $entry_no);
+						if ($ba) $entry_info = sprintf("%s  #%s", $style_name, $entry_no);
+						else $entry_info = sprintf("\n%s: %s  #%s", $style, $style_name, $entry_no);
 
 						if (empty($row_log['brewInfoOptional'])) {
 							if ($_SESSION['prefsSpecialCharLimit'] > ($character_limit * 2)) $character_limit_adjust = ($character_limit * 2);
@@ -138,42 +167,34 @@ if (isset($_SESSION['loginUsername'])) {
 						else $character_limit_adjust = $character_limit;
 
 						if (in_array($style,$special_ingredients)) {
+
 							$special = $row_log['brewInfo'];
+							$sp_str_sweet_carb = strtolower($row_log['brewInfo']);
 
-							$special_strength = array(
-								"Strength" => "",
-								"Sweetness" => "",
-								"Carbonation" => "",
-								"Sesssion " => "",
-								"Standard " => "",
-								"Double " => "",
-								"Table " => "",
-								"Super " => "",
-								"Low/None" => "",
-								"High" => "",
-								"Medium" => ""
-							);
+							if (strpos($sp_str_sweet_carb,"session strength") !== false) $beer_strength .= "*Str: Session* ";
+							if (strpos($sp_str_sweet_carb,"standard strength") !== false) $beer_strength .= "*Str: Standard* ";
+							if (strpos($sp_str_sweet_carb,"double strength") !== false) $beer_strength .= "*Str: Double* ";
+							if (strpos($sp_str_sweet_carb,"table strength") !== false) $beer_strength .= "*Str: Table* ";
+							if (strpos($sp_str_sweet_carb,"super strength") !== false) $beer_strength .= "*Str: Super* ";
+							if (strpos($sp_str_sweet_carb,"low/none sweetness") !== false) $beer_sweeteness .= "*Sweet: Low/None* ";
+							if (strpos($sp_str_sweet_carb,"medium sweetness") !== false) $beer_sweeteness .= "*Sweet: Med* ";
+							if (strpos($sp_str_sweet_carb,"high sweetness") !== false) $beer_sweeteness .= "*Sweet: High* ";
+							if (strpos($sp_str_sweet_carb,"low carbonation") !== false) $beer_carbonation .= "*Carb: Low* ";
+							if (strpos($sp_str_sweet_carb,"medium carbonation") !== false) $beer_carbonation .= "*Carb: Med* ";
+							if (strpos($sp_str_sweet_carb,"high carbonation") !== false) $beer_carbonation .= "*Carb: High* ";
 
-							if (strpos(strtolower($row_log['brewInfo']),"session strength") !== false) $beer_strength = " *Session*";
-							if (strpos(strtolower($row_log['brewInfo']),"standard strength") !== false) $beer_strength = " *Standard*";
-							if (strpos(strtolower($row_log['brewInfo']),"double strength") !== false) $beer_strength = " *Double*";
-							if (strpos(strtolower($row_log['brewInfo']),"table strength") !== false) $beer_strength = " *Table*";
-							if (strpos(strtolower($row_log['brewInfo']),"super strength") !== false) $beer_strength = " *Super*";
-							if (strpos(strtolower($row_log['brewInfo']),"low/none sweetness") !== false) $beer_sweeteness = " *Sweet: Low/None*";
-							if (strpos(strtolower($row_log['brewInfo']),"medium sweetness") !== false) $beer_sweeteness = " *Sweet: Med*";
-							if (strpos(strtolower($row_log['brewInfo']),"high sweetness") !== false) $beer_sweeteness = " *Sweet: High*";
-							if (strpos(strtolower($row_log['brewInfo']),"low carbonation") !== false) $beer_carbonation = " *Carb: Low*";
-							if (strpos(strtolower($row_log['brewInfo']),"medium carbonation") !== false) $beer_carbonation = " *Carb: Med*";
-							if (strpos(strtolower($row_log['brewInfo']),"high carbonation") !== false) $beer_carbonation = " *Carb: High*";
 							if ((!empty($beer_strength)) || (!empty($beer_sweeteness)) || (!empty($beer_carbonation))) {
 								$character_limit_adjust = $character_limit_adjust - 12;
-								$special = strtr($special,$special_strength);
+								if (!in_array($style,$mead)) $special = strtr($special,$special_strength);
 							}
+
 							$special = str_replace("\n"," ",truncate($special,$character_limit_adjust));
 							$special = strtr($special,$html_remove);
+							$special = str_replace("^", "", $special);
 							$special = rtrim($special," ");
-							$special = sprintf("\nReq: %s%s%s%s", $special,$beer_strength,$beer_sweeteness,$beer_carbonation);
-							$special_only .= $output.$special;
+							$entry_str_sweet_carb .= $beer_carbonation.$beer_sweeteness.$beer_strength;
+
+							if (!empty($special)) $special = sprintf("\nReq: %s", $special);
 						}
 
 						if (empty($special)) {
@@ -184,32 +205,24 @@ if (isset($_SESSION['loginUsername'])) {
 						else $character_limit_adjust = $character_limit;
 
 						if (!empty($row_log['brewInfoOptional'])) {
-
 							$optional = str_replace("\n"," ",truncate($row_log['brewInfoOptional'],$character_limit_adjust));
 							$optional = strtr($optional,$html_remove);
 							$optional = sprintf("\nOp: %s",$optional);
-
-							if (in_array($style,$special_ingredients)) {
-								if (empty($special_only)) $special_only .= $output.$optional;
-								else $special_only .= $optional;
-							}
-
 						}
 
 						if (in_array($style,$mead)) {
-							$mead_cider .= "\n*";
-							if (!empty($row_log['brewMead1'])) $mead_cider .= sprintf("%s",$row_log['brewMead1']);
-							if (!empty($row_log['brewMead2'])) $mead_cider .= sprintf(" / %s",$row_log['brewMead2']);
-							if (!empty($row_log['brewMead3'])) $mead_cider .= sprintf(" / %s",$row_log['brewMead3']);
-							$mead_cider .= "*";
-							if (in_array($style,$special_ingredients)) {
-								if (empty($special_only)) $special_only .= $output.$mead_cider;
-								else $special_only .= $mead_cider;
-							}
+							if (!empty($row_log['brewMead1'])) $entry_str_sweet_carb .= sprintf("*Carb: %s* ",$row_log['brewMead1']);
+							if (!empty($row_log['brewMead2'])) $entry_str_sweet_carb .= sprintf("*Sweet: %s* ",$row_log['brewMead2']);
+							if (!empty($row_log['brewMead3'])) $entry_str_sweet_carb .= sprintf("*Str: %s* ",$row_log['brewMead3']);
 						}
 
-						if ($view == "special") $text = $special_only;
-						else $text = $output.$special.$optional.$mead_cider;
+						if (!empty($entry_str_sweet_carb)) $entry_str_sweet_carb = sprintf("\n%s",$entry_str_sweet_carb);
+
+						if ($view == "special") {
+							if ((in_array($style,$special_ingredients)) || (in_array($style,$mead))) $text = $entry_info.$special.$entry_str_sweet_carb;
+							else $text = "";
+						}
+						else $text = $entry_info.$special.$entry_str_sweet_carb.$optional;
 
 						$text = iconv('UTF-8', 'windows-1252', $text);
 						if (!empty($text)) $pdf->Add_Label($text);

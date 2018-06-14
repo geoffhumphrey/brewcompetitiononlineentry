@@ -373,8 +373,8 @@ if ($section == "default") $page_info_1 .= "<p>".$best_brewer_text_002."</p>";
 
 <?php if ($section == "admin") { ?>
 <div class="bcoem-admin-element">
-<a class="btn btn-info" role="button" data-toggle="collapse" href="#scoreMethodCollapse" aria-expanded="false" aria-controls="scoreMethodCollapse">View the Defined Scoring Methodology</a>
-</div>  <a class="btn btn-primary" role="button" href="<?php echo $base_url."index.php?section=admin&go=preferences"; ?>">Change Scoring Methodology and/or Tiebreakers</a>
+	<a class="btn btn-info" role="button" data-toggle="collapse" href="#scoreMethodCollapse" aria-expanded="false" aria-controls="scoreMethodCollapse">View the Defined Scoring Methodology</a>&nbsp;&nbsp;
+	<a class="btn btn-primary" role="button" href="<?php echo $base_url."index.php?section=admin&go=preferences"; ?>">Change Scoring Methodology and/or Tiebreakers</a>
 </div>
 <div class="collapse" id="scoreMethodCollapse">
   <div class="well">

@@ -138,7 +138,7 @@ do {
 
 		// Check whether scoresheet file exists, and, if so, provide link.
 		$scoresheet_file_name_entry = sprintf("%06s",$entry_number).".pdf";
-		$scoresheet_file_name_judging = strtolower($judging_number).".pdf";
+		$scoresheet_file_name_judging = $judging_number.".pdf";
 		$scoresheetfile_entry = USER_DOCS.$scoresheet_file_name_entry;
 		$scoresheetfile_judging = USER_DOCS.$scoresheet_file_name_judging;
 
@@ -167,8 +167,8 @@ do {
 				// Prevents casual users from right clicking on scoresheet download link and changing
 				// the entry or judging number pdf name passed via the URL to force downloads of files
 				// they shouldn't have access to. Can I get a harumph?!
-				$scoresheet_link .= "scoresheetfilename=".encryptString($scoresheet_file_name);
-				$scoresheet_link .= "&amp;randomfilename=".encryptString($random_file_name)."&amp;download=true";
+				$scoresheet_link .= "scoresheetfilename=".urlencode(obfuscateURL($scoresheet_file_name,$encryption_key));
+				$scoresheet_link .= "&amp;randomfilename=".urlencode(obfuscateURL($random_file_name,$encryption_key)."&amp;download=true";
 				$scoresheet_link .= sprintf("\" data-toggle=\"tooltip\" title=\"%s '".$row_log['brewName']."'.\">",$brewer_entries_text_006);
 				$scoresheet_link .= "<span class=\"fa fa-lg fa-gavel\"></a>&nbsp;&nbsp;";
 			}

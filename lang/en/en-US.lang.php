@@ -917,8 +917,8 @@ if ($section == "past_winners") {
 
 // -------------------- Pay for Entries --------------------
 
-$pay_text_000 = "the payment window has passed.";
-$pay_text_001 = "Contact a competition official if you have any questions.";
+$pay_text_000 = "Since the account registration, entry registration, shipping, and drop-off deadlines have all passed, payments are no longer being accepted.";
+$pay_text_001 = "Please contact a competition official if you have any questions.";
 $pay_text_002 = "the following are your options for paying your entry fees.";
 $pay_text_003 = "Fees are";
 $pay_text_004 = "per entry";

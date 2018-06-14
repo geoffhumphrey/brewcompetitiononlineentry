@@ -3512,19 +3512,71 @@ function check_hosted_gh() {
 }
 
 // Simple encrypt and decrypt
-// Useful for URL passed strings that need to be obfuscated for *casual* users using php's mcrypt_ functions
-// Uses urlencoding and base 64 encoding for universal use and md5 for obfuscation
+// Useful for URL passed strings that need to be obfuscated for *casual* users
+// Thanks to https://bhoover.com/using-php-openssl_encrypt-openssl_decrypt-encrypt-decrypt-data/
+// Thanks to http://markgoldsmith.me/blog/url-safe-php-encryption-and-decryption-script/
 
-function encryptString($value){
-	$salt = "rdwhahb"; // should be the same as the $salt var in the decryptString function
-	$encrypted = base64_encode(urlencode(mcrypt_encrypt(MCRYPT_RIJNDAEL_256, md5($salt), $value, MCRYPT_MODE_CBC, md5(md5($salt)))));
-	return $encrypted;
+function obfuscateURL($data,$key) {
+
+	$dirty = array("+", "/", "=");
+    $clean = array("_p_", "_s_", "_e_");
+
+	// Remove the base64 encoding from our key
+    $encryption_key = base64_decode($key);
+    if (function_exists(openssl_encrypt)) {
+    	// Generate an initialization vector
+	    $iv = openssl_random_pseudo_bytes(openssl_cipher_iv_length('aes-256-cbc'));
+
+	    // Encrypt the data using AES 256 encryption in CBC mode using our encryption key and initialization vector.
+	    $encrypted = openssl_encrypt($data, 'aes-256-cbc', $encryption_key, 0, $iv);
+
+	    // The $iv is just as important as the key for decrypting, so save it with our encrypted data using a unique separator (::)
+	    $encrypted_data = base64_encode($encrypted . '::' . $iv);
+
+	    // Do a little clean up of stuff we don't want in URLs - just in case
+	    return str_replace($dirty, $clean, $encrypted_data);
+    }
+
+    // Use mcrypt if openssl not available; deprecated as of PHP 7.1
+    elseif (function_exists(mcrypt_encrypt)) {
+    	$salt = "rdwhahb"; // should be the same as the $salt var in the deobfuscateURL function
+		$encrypted = base64_encode(mcrypt_encrypt(MCRYPT_RIJNDAEL_256, md5($salt), str_replace($clean, $dirty, $data), MCRYPT_MODE_CBC, md5(md5($salt))));
+		return $encrypted;
+    }
+
+    // Fallback is simple obfuscation with base64 if allowed by function call params
+    else {
+    	return str_replace($dirty, $clean, base64_encode($data));
+   	}
+
 }
 
-function decryptString($value) {
-	$salt = "rdwhahb"; // should be the same as the $salt var in the encryptString function
-	$decode = rtrim(mcrypt_decrypt(MCRYPT_RIJNDAEL_256, md5($salt), urldecode(base64_decode($value)), MCRYPT_MODE_CBC, md5(md5($salt))), "\0");
-	return $decode;
+function deobfuscateURL($data,$key) {
+
+	$dirty = array("+", "/", "=");
+    $clean = array("_p_", "_s_", "_e_");
+
+	// Remove the base64 encoding from our key
+    $encryption_key = base64_decode($key);
+
+    if (function_exists(openssl_encrypt)) {
+    	// To decrypt, split the encrypted data from our IV - our unique separator used was "::"
+    	// Get the data "dirty" again and remove base64 encoding
+    	list($encrypted_data, $iv) = explode('::', base64_decode(str_replace($clean, $dirty, $data)), 2);
+
+    	return openssl_decrypt($encrypted_data, 'aes-256-cbc', $encryption_key, 0, $iv);
+    }
+
+    elseif (function_exists(mcrypt_decrypt)) {
+    	$salt = "rdwhahb"; // should be the same as the $salt var in the encryptString function
+		$decode = rtrim(mcrypt_decrypt(MCRYPT_RIJNDAEL_256, md5($salt), base64_decode(str_replace($clean, $dirty, $data)), MCRYPT_MODE_CBC, md5(md5($salt))), "\0");
+		return $decode;
+   	}
+
+    else {
+    	return base64_decode(str_replace($clean, $dirty, $data));
+    }
+
 }
 
 function get_ba_style_info($id) {

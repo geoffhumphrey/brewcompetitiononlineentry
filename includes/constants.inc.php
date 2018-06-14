@@ -143,11 +143,11 @@ if (isset($_SESSION['loginUsername']))  {
 
     if (((strpos($section, "step") === FALSE) && ($section != "setup")) && ($section != "update")) {
 
-    if ($_SESSION['userLevel'] <= "1") {
-		if ($section == "admin") $link_admin = "#";
-		else $link_admin = "";
-		$admin_user = TRUE;
-	}
+        if ($_SESSION['userLevel'] <= "1") {
+    		if ($section == "admin") $link_admin = "#";
+    		else $link_admin = "";
+    		$admin_user = TRUE;
+    	}
 
 		// Get Entry Fees
 	   $total_entry_fees = total_fees($_SESSION['contestEntryFee'], $_SESSION['contestEntryFee2'], $_SESSION['contestEntryFeeDiscount'], $_SESSION['contestEntryFeeDiscountNum'], $_SESSION['contestEntryCap'], $_SESSION['contestEntryFeePasswordNum'], $_SESSION['user_id'], $filter, $_SESSION['comp_id']);
@@ -196,4 +196,7 @@ $no_entry_form_array = array("0","1","2","E","C");
 
 if ($logged_in) $location_target = "_blank";
 else $location_target = "_self";
+
+// $encryption_key = base64_encode(openssl_random_pseudo_bytes(32));
+$encryption_key = "8sQHfMk8rinRtA/Frhm+AWrSgOmkcbu+FxIUGy9Fq5I=";
 ?>

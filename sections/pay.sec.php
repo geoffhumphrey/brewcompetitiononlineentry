@@ -80,7 +80,7 @@ $return_entries = "";
 $entries = "";
 
 if ($disable_pay) {
-	$primary_page_info .= sprintf("<p class=\"lead\">%s, %s <small><a href=\"%s\">%s</a></small></p>",$_SESSION['brewerFirstName'],$pay_text_000,$link_contacts,$pay_text_001);
+	$primary_page_info .= sprintf("<p class=\"lead\">%s, %s <small><a href=\"%s\">%s</a></small></p>",$_SESSION['brewerFirstName'],strtolower($pay_text_000),$link_contacts,$pay_text_001);
 	echo $primary_page_info;
 }
 

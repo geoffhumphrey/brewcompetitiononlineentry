@@ -81,7 +81,7 @@ do {
 
 	// Check whether scoresheet file exists, and, if so, provide link.
 	$scoresheet_file_name_entry = sprintf("%06s",$entry_number).".pdf";
-	$scoresheet_file_name_judging = strtolower($judging_number).".pdf"; // upon upload, filename is converted to lowercase
+	$scoresheet_file_name_judging = $judging_number.".pdf"; // upon upload via the UI, filename is converted to lowercase
 
 	if ($dbTable == "default") {
 		$scoresheetfile_entry = USER_DOCS.$scoresheet_file_name_entry;
@@ -244,8 +244,18 @@ do {
 			// Prevents casual users from right clicking on scoresheet download link and changing
 			// the entry or judging number pdf name passed via the URL to force downloads of files
 			// they shouldn't have access to. Can I get a harumph?!
-			$scoresheet_link_1 .= "scoresheetfilename=".encryptString($scoresheet_file_name_1);
-			$scoresheet_link_1 .= "&amp;randomfilename=".encryptString($random_file_name_1)."&amp;download=true";
+
+			/*
+			if (function_exists('openssl_encrypt')) {
+				$scoresheet_link_1 .= "scoresheetfilename=".obfuscateURL($scoresheet_file_name_1);
+				$scoresheet_link_1 .= "&amp;randomfilename=".obfuscateURL($random_file_name_1)."&amp;download=true";
+			}
+			*/
+
+
+			$scoresheet_link_1 .= "scoresheetfilename=".urlencode(obfuscateURL($scoresheet_file_name_1,$encryption_key));
+			$scoresheet_link_1 .= "&amp;randomfilename=".urlencode(obfuscateURL($random_file_name_1,$encryption_key))."&amp;download=true";
+
 			if ($dbTable != "default") $scoresheet_link_1 .= "&amp;view=".get_suffix($dbTable);
 			$scoresheet_link_1 .= sprintf("\" data-toggle=\"tooltip\" title=\"%s '".$row_log['brewName']."'' (by Entry Number).\">",$brewer_entries_text_006);
 			$scoresheet_link_1 .= "<span class=\"fa fa-lg fa-gavel\"></a>&nbsp;&nbsp;";
@@ -269,8 +279,8 @@ do {
 			// Prevents casual users from right clicking on scoresheet download link and changing
 			// the entry or judging number pdf name passed via the URL to force downloads of files
 			// they shouldn't have access to. Can I get a harumph?!
-			$scoresheet_link_2 .= "scoresheetfilename=".encryptString($scoresheet_file_name_2);
-			$scoresheet_link_2 .= "&amp;randomfilename=".encryptString($random_file_name_2)."&amp;download=true";
+			$scoresheet_link_2 .= "scoresheetfilename=".urlencode(obfuscateURL($scoresheet_file_name_2,$encryption_key));
+			$scoresheet_link_2 .= "&amp;randomfilename=".urlencode(obfuscateURL($random_file_name_2,$encryption_key))."&amp;download=true";
 			if ($dbTable != "default") $scoresheet_link_2 .= "&amp;view=".get_suffix($dbTable);
 			$scoresheet_link_2 .= sprintf("\" data-toggle=\"tooltip\" title=\"%s '".$row_log['brewName']."' (by Judging Number).\">",$brewer_entries_text_006);
 			$scoresheet_link_2 .= "<span class=\"fa fa-lg fa-gavel\"></a>&nbsp;&nbsp;";
