@@ -122,7 +122,9 @@ $adminUserAddDisable = FALSE;
 
 if (($_SESSION['userLevel'] == 2) && ($action == "edit")) {
 
-	$user_entries = "";
+
+	// Fix fatal error when using [] operator on strings
+	$user_entries = [];
 
 	// Check whether user is "authorized" to edit the entry in DB
 	$query_brews = sprintf("SELECT id FROM $brewing_db_table WHERE brewBrewerId = '%s'", $_SESSION['user_id']);

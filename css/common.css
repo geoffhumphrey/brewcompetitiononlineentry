@@ -4,6 +4,23 @@
 /** https://www.google.com/design/spec/style/color.html **/
 /** --------------------------------------------------- **/
 
+/** For anchor links to help with auto-scroll **/
+
+:target:before {
+    content: "";
+    display: block;
+    height: 50px;
+    margin: -50px 0 0;
+}
+
+a.anchor-offset {
+    display: block;
+    position: relative;
+    top: -60px;
+    visibility: hidden;
+}
+
+/** Sidebar **/
 
 .sidebar .bcoem-comp-logo {
     padding: 0 0 10px 0;

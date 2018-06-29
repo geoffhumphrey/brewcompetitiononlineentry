@@ -985,6 +985,24 @@ if (!check_update("prefsBestUseBOS", $prefix."preferences")) {
 	$result = mysqli_query($connection,$updateSQL);
 }
 
+$query_mead_cider_present = sprintf("SELECT COUNT(*) AS 'count' FROM %s WHERE styleTypeName = 'Mead/Cider'",$prefix."style_types");
+$mead_cider_present = mysqli_query($connection,$query_mead_cider_present) or die (mysqli_error($connection));
+$row_mead_cider_present = mysqli_fetch_assoc($mead_cider_present);
+
+if ($row_mead_cider_present['count'] == 0) {
+	$updateSQL = sprintf("INSERT INTO `%s` (`id`, `styleTypeName`, `styleTypeOwn`, `styleTypeBOS`, `styleTypeBOSMethod`) VALUES (NULL, 'Mead/Cider', 'bcoe', 'N', '1');", $prefix."style_types");
+	mysqli_select_db($connection,$database);
+	mysqli_real_escape_string($connection,$updateSQL);
+	$result = mysqli_query($connection,$updateSQL);
+}
+
+else {
+	$updateSQL = sprintf("UPDATE `%s` SET styleTypeOwn='bcoe' WHERE styleTypeName='Mead/Cider';",$prefix."style_types");
+	mysqli_select_db($connection,$database);
+	mysqli_real_escape_string($connection,$updateSQL);
+	$result = mysqli_query($connection,$updateSQL);
+}
+
 /*
  * ----------------------------------------------------------------------------------------------------
  * Change the version number and date

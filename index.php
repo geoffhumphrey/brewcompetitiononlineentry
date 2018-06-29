@@ -101,7 +101,7 @@ $security_question = array($label_secret_01, $label_secret_05, $label_secret_06,
 	if (CDN) include (INCLUDES.'load_cdn_libraries.inc.php');
 	else include (INCLUDES.'load_local_libraries.inc.php');
 	?>
-    <!-- Load BCOE&M Custom Theme CSS - Contains Bootstrap overrides and custom classes -->
+    <!-- Load BCOE&M Custom CSS - Contains Bootstrap overrides and custom classes common to all BCOE&M themes -->
     <link rel="stylesheet" type="text/css" href="<?php echo $base_url."css/common.min.css"; ?>" />
     <link rel="stylesheet" type="text/css" href="<?php echo $theme; ?>" />
 	<!-- Load BCOE&M Custom JS -->
@@ -114,10 +114,6 @@ $security_question = array($label_secret_01, $label_secret_05, $label_secret_06,
     <meta property="og:image" content="<?php echo $base_url."user_images/".$_SESSION['contestLogo']?>" />
     <?php } ?>
     <meta property="og:url" content="<?php echo "http" . ((!empty($_SERVER['HTTPS'])) ? "s://" : "://") . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']; ?>" />
-    <style>
-        :target:before {content:"";display:block;height:50px;margin:-50px 0 0;}
-        a.anchor-offset {display: block;position: relative;top: -60px;visibility: hidden;}
-    </style>
 </head>
 <body>
 
@@ -207,7 +203,7 @@ $security_question = array($label_secret_01, $label_secret_05, $label_secret_06,
     <!-- ./Admin Pages -->
     <?php } else { ?>
     <!-- Public Pages (Fixed Layout with Sidebar) -->
-    <div class="container">
+    <div id="main-content" class="container">
     	<div class="row">
     		<div class="col col-lg-9 col-md-8 col-sm-12 col-xs-12">
             <div class="page-header">

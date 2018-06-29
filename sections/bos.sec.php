@@ -66,7 +66,7 @@ require(DB.'winners.db.php');
 				$table_body1 = "";
 
 				// Build headers
-				$header1_1 .= sprintf("<h3>%s &ndash; %s</h3>",$label_bos,$row_style_type['styleTypeName']);
+				$header1_1 .= sprintf("<h3>%s &ndash; %s</h3>",$label_bos,$row_style_type_1['styleTypeName']);
 
 				// Build table headers
 				$table_head1 .= "<tr>";

@@ -36,20 +36,73 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 
 	if ($action == "edit") {
 
-		$updateSQL = sprintf("UPDATE $style_types_db_table SET
-		styleTypeName=%s,
-		styleTypeOwn=%s,
-		styleTypeBOS=%s,
-		styleTypeBOSMethod=%s
-		WHERE id=%s",
-						   GetSQLValueString(capitalize($purifier->purify($_POST['styleTypeName'])), "text"),
-						   GetSQLValueString(sterilize($_POST['styleTypeOwn']), "text"),
-						   GetSQLValueString(sterilize($_POST['styleTypeBOS']), "text"),
-						   GetSQLValueString(sterilize($_POST['styleTypeBOSMethod']), "text"),
-						   GetSQLValueString($id, "int"));
+		if ($go == "combine") {
 
-		mysqli_real_escape_string($connection,$updateSQL);
-		$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+			$updateSQL = "UPDATE $style_types_db_table SET styleTypeBOS='Y' WHERE styleTypeName='Mead/Cider'";
+			mysqli_real_escape_string($connection,$updateSQL);
+			$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+
+			$updateSQL = "UPDATE $style_types_db_table SET styleTypeBOS='N' WHERE id='2'";
+			mysqli_real_escape_string($connection,$updateSQL);
+			$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+
+			$updateSQL = "UPDATE $style_types_db_table SET styleTypeBOS='N' WHERE id='3'";
+			mysqli_real_escape_string($connection,$updateSQL);
+			$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+
+			// Delete any BOS score entries with Mead or Cider ids; failsafe
+			$updateSQL = "DELETE FROM $judging_scores_bos_db_table WHERE scoreType='2' OR scoreType='3'";
+			mysqli_real_escape_string($connection,$updateSQL);
+			$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+
+			$updateGoTo = $base_url."index.php?section=admin&go=style_types&msg=2";
+
+		}
+
+		elseif ($go == "separate") {
+
+			$updateSQL = "UPDATE $style_types_db_table SET styleTypeBOS='N' WHERE styleTypeName='Mead/Cider'";
+			mysqli_real_escape_string($connection,$updateSQL);
+			$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+
+			$updateSQL = "UPDATE $style_types_db_table SET styleTypeBOS='Y' WHERE id='2'";
+			mysqli_real_escape_string($connection,$updateSQL);
+			$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+
+			$updateSQL = "UPDATE $style_types_db_table SET styleTypeBOS='Y' WHERE id='3'";
+			mysqli_real_escape_string($connection,$updateSQL);
+			$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+
+			// Delete any BOS score entries with Mead/Cider id; failsafe
+			$query_mead_cider_present = sprintf("SELECT id FROM %s WHERE styleTypeName = 'Mead/Cider'",$prefix."style_types");
+			$mead_cider_present = mysqli_query($connection,$query_mead_cider_present) or die (mysqli_error($connection));
+			$row_mead_cider_present = mysqli_fetch_assoc($mead_cider_present);
+
+			$updateSQL = sprintf("DELETE FROM $judging_scores_bos_db_table WHERE scoreType='%s'",$row_mead_cider_present['id']);
+			mysqli_real_escape_string($connection,$updateSQL);
+			$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+
+			$updateGoTo = $base_url."index.php?section=admin&go=style_types&msg=2";
+
+		}
+
+		else {
+			$updateSQL = sprintf("UPDATE $style_types_db_table SET
+			styleTypeName=%s,
+			styleTypeOwn=%s,
+			styleTypeBOS=%s,
+			styleTypeBOSMethod=%s
+			WHERE id=%s",
+							   GetSQLValueString(capitalize($purifier->purify($_POST['styleTypeName'])), "text"),
+							   GetSQLValueString(sterilize($_POST['styleTypeOwn']), "text"),
+							   GetSQLValueString(sterilize($_POST['styleTypeBOS']), "text"),
+							   GetSQLValueString(sterilize($_POST['styleTypeBOSMethod']), "text"),
+							   GetSQLValueString($id, "int"));
+
+			mysqli_real_escape_string($connection,$updateSQL);
+			$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+
+		}
 
 		$pattern = array('\'', '"');
 		$updateGoTo = str_replace($pattern, "", $updateGoTo);

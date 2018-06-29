@@ -1194,6 +1194,8 @@ if (((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) || ((
 
 		if ($view == "xml") {
 
+            $filename = str_replace(" ","_",$_SESSION['contestName'])."_BJCP_Points_Report.xml";
+
             $all_rules_applied = TRUE;
             $rule_org = FALSE;
             $rule_sessions = FALSE;
@@ -1230,7 +1232,6 @@ if (((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) || ((
             */
 
             if ($all_rules_applied) {
-
                 $j = array();
                 $s = array();
                 $st = array();
@@ -1240,7 +1241,6 @@ if (((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) || ((
                 do { $st[] = $row_staff['uid']; } while ($row_staff = mysqli_fetch_assoc($staff));
                 do { $o[] = $row_organizer['uid']; } while ($row_organizer = mysqli_fetch_assoc($organizer));
 
-                $filename = str_replace(" ","_",$_SESSION['contestName'])."_BJCP_Points_Report.xml";
                 $output = "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>\n";
                 $output .= "<OrgReport>\n";
                 $output .= "\t<CompData>\n";
@@ -1275,7 +1275,6 @@ if (((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) || ((
                         }
                     }
                 }
-
 
                 // Loner BOS Judges (no assignment to any table)
                 foreach (array_unique($bos_judge_no_assignment) as $uid) {
@@ -1345,7 +1344,6 @@ if (((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) || ((
                 }
 
                 $output .= "\t</BJCPpoints>\n";
-
                 $output .= "\t<NonBJCP>\n";
 
                 // Judges without a properly formatted BJCP IDs in the system
@@ -1464,8 +1462,6 @@ if (((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) || ((
 
                 $output .= "\t<SubmissionDate>".date('l j F Y h:i:s A')."</SubmissionDate>\n";
                 $output .= "</OrgReport>";
-
-
 
             } // end $all_rules_applied
 
