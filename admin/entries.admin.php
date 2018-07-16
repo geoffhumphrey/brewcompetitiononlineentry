@@ -75,6 +75,9 @@ do {
 	$required_info = "";
 	$entry_judging_num = "";
 	$entry_judging_num_display = "";
+	$entry_admin_notes_display = "";
+	$entry_staff_notes_display = "";
+	$entry_allergens_display = "";
 
 	$entry_number = sprintf("%04s",$row_log['id']);
 	$judging_number = sprintf("%06s",$row_log['brewJudgingNumber']);
@@ -210,6 +213,19 @@ do {
 	}
 	else $entry_box_num_display = $row_log['brewBoxNum'];
 
+	// Notes to Staff
+	if (($action != "print") && ($dbTable == "default")) { $entry_staff_notes_display .= "<input class=\"form-control input-sm hidden-print\" id=\"brewStaffNotes\" name=\"brewStaffNotes".$row_log['id']."\" type=\"text\" size=\"20\" maxlength=\"255\" placeholder=\"\" value=\"".$row_log['brewStaffNotes']."\" />";
+	$entry_staff_notes_display.= "<span class=\"hidden visible-print-inline\">".$row_log['brewStaffNotes']."</span>";
+	}
+	else $entry_staff_notes_display = $row_log['brewStaffNotes'];
+
+	// Notes to Admin
+	if (($action != "print") && ($dbTable == "default")) { $entry_admin_notes_display .= "<input class=\"form-control input-sm hidden-print\" id=\"brewAdminNotes\" name=\"brewAdminNotes".$row_log['id']."\" type=\"text\" size=\"20\" maxlength=\"255\" placeholder=\"\" value=\"".$row_log['brewAdminNotes']."\" />";
+	$entry_admin_notes_display.= "<span class=\"hidden visible-print-inline\">".$row_log['brewAdminNotes']."</span>";
+	}
+	else $entry_admin_notes_display = $row_log['brewAdminNotes'];
+
+
 
 	if (($action != "print") && ($dbTable == "default")) {
 		$entry_actions .= "<a href=\"".$base_url."index.php?section=brew&amp;go=".$go."&amp;action=edit&amp;bid=".$brewer_info[7]."&amp;id=".$row_log['id'];
@@ -314,11 +330,13 @@ do {
 	$tbody_rows .= $row_log['brewName'];
 	$tbody_rows .= $required_info."</td>";
 	$tbody_rows .= "<td class=\"hidden-xs\">".$entry_style_display."</td>";
-	$tbody_rows .= "<td class=\"hidden-xs\">".$entry_brewer_display."</td>";
+	$tbody_rows .= "<td nowrap=\"nowrap\" class=\"hidden-xs\">".$entry_brewer_display."</td>";
 	if ($pro_edition == 0) $tbody_rows .= "<td class=\"hidden-xs hidden-sm hidden-md hidden-print\">".$brewer_info[8]."</td>";
 	$tbody_rows .= "<td class=\"hidden-xs hidden-sm hidden-md hidden-print\">".$entry_updated_display."</td>";
 	$tbody_rows .= "<td>".$entry_paid_display."</td>";
 	$tbody_rows .= "<td>".$entry_received_display."</td>";
+	$tbody_rows .= "<td>".$entry_admin_notes_display."</td>";
+	$tbody_rows .= "<td>".$entry_staff_notes_display."</td>";
 	$tbody_rows .= "<td>".$entry_box_num_display."</td>";
 	if ($action != "print") $tbody_rows .= "<td>".$entry_actions."</td>";
 	$tbody_rows .= "</tr>";
@@ -387,6 +405,8 @@ if ($action != "print") { ?>
 				null,
 				null,
 				null,
+				null,
+				null,
 				{ "asSorting": [  ] }
 				]
 			} );
@@ -409,6 +429,8 @@ if ($action != "print") { ?>
 			<?php if ($psort == "brewer_name") { ?>"aaSorting": [[4,'asc']],<?php } ?>
 
 			"aoColumns": [
+				null,
+				null,
 				null,
 				null,
 				null,
@@ -682,6 +704,8 @@ if ($action != "print") { ?>
         <th class="hidden-xs hidden-sm hidden-md hidden-print">Updated</th>
         <th width="3%">Paid?</th>
         <th width="3%">Rec'd?</th>
+        <th>Admin Notes <?php if (($action != "print") &&  ($dbTable == "default")) { ?><a href="#" tabindex="0" role="button" data-toggle="popover" data-trigger="hover" data-placement="auto top" data-container="body" title="Admin Notes" data-content="Catch-all for any information Admins may need for individual entries such as 'partial refund needed', 'maybe mis-categorized', etc. 255 character limit."><span class="hidden-xs hidden-sm hidden-md hidden-print fa fa-question-circle"></span></a><?php } ?></th>
+        <th>Staff Notes <?php if (($action != "print") &&  ($dbTable == "default")) { ?><a href="#" tabindex="0" role="button" data-toggle="popover" data-trigger="hover" data-placement="auto top" data-container="body" title="Staff Notes" data-content="Catch-all for any information staff may need to know about individual entries such as 'single 750ml bottle', 'missing MBOS bottle', etc. Notes entered here are printed on pullsheets. 255 character limit."><span class="hidden-xs hidden-sm hidden-md hidden-print fa fa-question-circle"></span></a><?php } ?></th>
         <th>Loc/Box</th>
         <?php if ($action != "print") { ?><th class="hidden-print">Actions</th><?php } ?>
     </tr>

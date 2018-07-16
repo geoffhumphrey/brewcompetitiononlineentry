@@ -62,6 +62,8 @@ $ranked = 0;
 $nonranked = 0;
 $ranked_judge = array();
 $nonranked_judge = array();
+$unavailable = "";
+$at_table = "";
 
 
 // Build DataTables Header
@@ -88,7 +90,7 @@ do {
 	$judge_info = judge_info($row_brewer['uid']);
 	$judge_info = explode("^",$judge_info);
 	$bjcp_rank = explode(",",$judge_info[5]);
-	$display_rank = bjcp_rank($bjcp_rank[0],1);
+	$display_rank = "<strong>".bjcp_rank($bjcp_rank[0],1)."</strong>";
 
 	$assign_row_color = "";
 	$flights_display = "";
@@ -164,6 +166,7 @@ do {
 	}
 
 	if ($judge_info[4] == "Y") $display_rank .= "<br /><em>Certified Mead Judge</em>";
+    if ($judge_info[12] == "Y") $display_rank .= "<br /><em>Certified Cider Judge</em>";
 
 	if (!empty($bjcp_rank[1])) $display_rank .= "<em>".designations($judge_info[5],$bjcp_rank[0])."</em>";
 
@@ -176,9 +179,12 @@ do {
 
 		$output_datatables_body .= "<td nowrap>";
 		$output_datatables_body .= "<a href=\"".$base_url."index.php?section=brewer&amp;go=admin&amp;action=edit&amp;filter=".$row_brewer['uid']."&amp;id=".$judge_info[11]."\" data-toggle=\"tooltip\" title=\"Edit ".$judge_info[0]." ".$judge_info[1]."&rsquo;s account info\">".$judge_info[1].", ".$judge_info[0]."</a>";
-        $output_datatables_body .= "<br>Comps Judged: ";
-        if (empty($judge_info[9])) $output_datatables_body .= "0";
-        else $output_datatables_body .= $judge_info[9];
+        if ($filter == "judges") {
+            $output_datatables_body .= "<br><strong>Comps Judged:</strong> ";
+            if (empty($judge_info[9])) $output_datatables_body .= "0";
+            else $output_datatables_body .= $judge_info[9];
+        }
+        if (!empty($judge_info[10])) $output_datatables_body .= "<br><span class=\"text-danger\"><strong>Notes:</strong> ".$judge_info[10]."</strong>";
 		$output_datatables_body .= "</td>";
 
 		if ($filter == "judges") {
@@ -186,7 +192,6 @@ do {
 			$output_datatables_body .= "<td class=\"hidden-xs hidden-sm hidden-md\">";
 			if (($judge_info[6] != "") && ($judge_info[6] != "0")) $output_datatables_body .= strtoupper($judge_info[6]);
 			else $output_datatables_body .= "N/A";
-			if (!empty($judge_info[10])) $output_datatables_body .= "<br><strong>Judge&rsquo;s Notes to Organizers:</strong> <em>".$judge_info[10]."</em>";
 			$output_datatables_body .= "</td>";
 			// $output_datatables_body .= "<td>".$judge_info[9]."</td>";
             /*

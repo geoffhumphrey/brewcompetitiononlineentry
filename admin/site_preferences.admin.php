@@ -83,10 +83,10 @@ if ($section == "admin") { ?>
 $(document).ready(function(){
     <?php
     $styleKey = "";
-    if ((isset($row_limits['prefsStyleSet'])) && (strpos($row_limits['prefsStyleSet'],"BABDB")) !== false) {
+    if ((isset($row_limits['prefsStyleSet'])) && ($row_limits['prefsStyleSet'] == "BA")) {
 
     // Get API Key if set
-    $styleKey = explode("|",$row_limits['prefsStyleSet']);
+    // $styleKey = explode("|",$row_limits['prefsStyleSet']);
 
     ?>
     $("#helpBlockBAAPI").show("fast");
@@ -1172,6 +1172,19 @@ $(document).ready(function(){
     </div>
 </div><!-- ./modal -->
 <h3>Localization</h3>
+<div class="form-group"><!-- Form Group NOT REQUIRED Select -->
+    <label for="prefsLanguage" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Language</label>
+    <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
+        <!-- Input Here -->
+        <select class="selectpicker" name="prefsLanguage" id="prefsLanguage" data-live-search="false" data-size="10" data-width="auto">
+            <?php foreach ($languages as $lang => $lang_value) { ?>
+            <option value="<?php echo $lang_value; ?>" <?php if ($row_prefs['prefsLanguage'] == $lang_value) echo "SELECTED"; ?>><?php echo $lang; ?></option>
+            <?php } ?>
+        </select>
+        <span id="helpBlock" class="help-block">The language to display on all <em>public</em> areas of your installation (e.g., entry information, volunteers, account pages, etc.).</span>
+        <div class="help-block with-errors"></div>
+    </div>
+</div><!-- ./Form Group -->
 <div class="form-group"><!-- Form Group Radio INLINE -->
     <label for="prefsDateFormat" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Date Format</label>
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
@@ -1204,7 +1217,6 @@ $(document).ready(function(){
         </div>
     </div>
 </div><!-- ./Form Group -->
-
 <div class="form-group"><!-- Form Group NOT REQUIRED Select -->
 	<label for="prefsTimeZone" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Time Zone</label>
 	<div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">

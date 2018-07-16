@@ -895,20 +895,25 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 
 		foreach($_POST['id'] as $id) {
 
-			if ((isset($_POST['brewPaid'.$id])) && ($_POST['brewPaid'.$id] == 1)) $brewPaid = 1;
-			else $brewPaid = 0;
-			if ((isset($_POST['brewReceived'.$id])) && ($_POST['brewReceived'.$id] == 1)) $brewReceived = 1;
-			else $brewReceived = 0;
-
+			$brewAdminNotes = "";
+			$brewStaffNotes = "";
+			$brewPaid = 0;
+			$brewReceived = 0;
+			$brewBoxNum = "";
 			$brewJudgingNumber = str_replace("^","-",$_POST['brewJudgingNumber'.$id]);
 
-			$updateSQL = sprintf("UPDATE %s SET brewPaid='%s', brewReceived='%s', brewBoxNum='%s', brewJudgingNumber='%s' WHERE id='%s'",$brewing_db_table, $brewPaid, $brewReceived, $_POST['brewBoxNum'.$id], $brewJudgingNumber, $id);
+			if (isset($_POST['brewBoxNum'.$id])) $brewBoxNum = $purifier->purify($_POST['brewBoxNum'.$id]);
+			if (isset($_POST['brewAdminNotes'.$id])) $brewAdminNotes .= $purifier->purify($_POST['brewAdminNotes'.$id]);
+			if (isset($_POST['brewStaffNotes'.$id])) $brewStaffNotes .= $purifier->purify($_POST['brewStaffNotes'.$id]);
+			if ((isset($_POST['brewPaid'.$id])) && ($_POST['brewPaid'.$id] == 1)) $brewPaid = 1;
+			if ((isset($_POST['brewReceived'.$id])) && ($_POST['brewReceived'.$id] == 1)) $brewReceived = 1;
+
+			$updateSQL = sprintf("UPDATE %s SET brewPaid='%s', brewReceived='%s', brewBoxNum='%s', brewJudgingNumber='%s', brewAdminNotes='%s', brewStaffNotes='%s' WHERE id='%s'",$brewing_db_table, $brewPaid, $brewReceived, $brewBoxNum, $brewJudgingNumber, $brewAdminNotes, $brewStaffNotes, $id);
 			mysqli_real_escape_string($connection,$updateSQL);
 			$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 
 		}
 
-		//echo $massUpdateGoTo;
 		$massUpdateGoTo = $base_url."index.php?section=admin&go=entries&msg=9";
 		$pattern = array('\'', '"');
 		$massUpdateGoTo = str_replace($pattern, "", $massUpdateGoTo);

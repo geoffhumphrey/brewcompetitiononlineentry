@@ -305,13 +305,15 @@ if (!check_update("assignRoles", $prefix."judging_assignments")) {
 $output .= "<li>Judging Assignments table updated.</li>";
 
 
-// ----------------------------------------------- 2.1.10 ----------------------------------------------
-// Add db columns to store Pro Edition data such as Brewery Name and TTB Number
-// Add db columns to allow for PayPal IPN use
-// Add db columns for best brewer preferences
-// Alter prefsStyleSet to accommodate BA style data and BreweryDB key
-// Update archive db tables to accommodate Pro Edition and BA Styles
-// -----------------------------------------------------------------------------------------------------
+/*
+ * ----------------------------------------------- 2.1.10 ----------------------------------------------
+ * Add db columns to store Pro Edition data such as Brewery Name and TTB Number
+ * Add db columns to allow for PayPal IPN use
+ * Add db columns for best brewer preferences
+ * Alter prefsStyleSet to accommodate BA style data and BreweryDB key
+ * Update archive db tables to accommodate Pro Edition and BA Styles
+ * -----------------------------------------------------------------------------------------------------
+ */
 
 
 if (!check_update("brewerBreweryName", $prefix."brewer")) {
@@ -677,9 +679,11 @@ $output .= "<li>Added db columns in Preferences table to accommodate best brewer
 $output .= "<li>Altered prefsStyleSet in Preferences table to accommodate BA style data and BreweryDB key.</li>";
 $output .= "<li>Updated Archive tables to accommodate Pro Edition and BA Styles.</li>";
 
-// ----------------------------------------------- 2.1.11 ----------------------------------------------
-// All PDF files in the user_docs directory must be converted to all lowercase (including extension)
-// -----------------------------------------------------------------------------------------------------
+/*
+ * ----------------------------------------------- 2.1.11 ----------------------------------------------
+ * All PDF files in the user_docs directory must be converted to all lowercase (including extension)
+ * -----------------------------------------------------------------------------------------------------
+ */
 
 $files = new FilesystemIterator(USER_DOCS);
 
@@ -728,9 +732,14 @@ if (SINGLE) {
 
 $output .= "<li>PDF file name in the user_docs directory converted to lowercase (including extension).</li>";
 
-// ----------------------------------------------- 2.1.12 ----------------------------------------------
+/*
+ * ----------------------------------------------- 2.1.12 ----------------------------------------------
+ * Add Certified Cider Judge designation
+ * Change unused archive column to archiveScoresheet
+ * Saves the preference from current when archiving for correct display of archived scoresheets
+ */
 
-// Add Certified Cider Judge designation
+
 if (!check_update("brewerJudgeCider", $prefix."brewer")) {
 
 	$updateSQL = sprintf("ALTER TABLE `%s` ADD `brewerJudgeCider` CHAR(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL AFTER `brewerJudgeMead`;",$prefix."brewer");
@@ -748,8 +757,6 @@ if (!check_update("brewerJudgeCider", $prefix."brewer")) {
 
 $output .= "<li>Added Certified Cider Judge designation.</li>";
 
-// Change unused archive column to archiveScoresheet
-// Saves the preference from current when archiving for correct display of archived scoresheets
 if (!check_update("archiveScoresheet", $prefix."archive")) {
 
 	$updateSQL = sprintf("ALTER TABLE `%s` CHANGE `archiveBrewingTableName` `archiveScoresheet` CHAR(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL;",$prefix."archive");
@@ -970,6 +977,10 @@ if (!$ba_styles_present) {
 /*
  * ----------------------------------------------- 2.1.13 ----------------------------------------------
  * Add toggle to allow users to specify whether to use BOS in "Best of" calculations
+ * Change unused brewWinnerPlace field to brewAdminNotes field
+ * Change unused brewBOSRound field to brewStaffNotes field
+ * Change unused brewBOSPlace field to brewPossAllergens field
+ * Make sure prefsLanguage is set to en-US - it is now a choice in preferences
  * -----------------------------------------------------------------------------------------------------
  */
 
@@ -1002,6 +1013,142 @@ else {
 	mysqli_real_escape_string($connection,$updateSQL);
 	$result = mysqli_query($connection,$updateSQL);
 }
+
+if (check_update("brewWinnerPlace", $prefix."brewing")) {
+	$updateSQL = sprintf("ALTER TABLE `%s` CHANGE `brewWinnerPlace` `brewAdminNotes` TINYTEXT NULL DEFAULT NULL COMMENT 'Notes about the entry for Admin use';",$prefix."brewing");
+	mysqli_select_db($connection,$database);
+	mysqli_real_escape_string($connection,$updateSQL);
+	$result = mysqli_query($connection,$updateSQL);
+}
+
+if (check_update("brewBOSRound", $prefix."brewing")) {
+	$updateSQL = sprintf("ALTER TABLE `%s` CHANGE `brewBOSRound` `brewStaffNotes` TINYTEXT NULL DEFAULT NULL COMMENT 'Notes about the entry for Staff use';",$prefix."brewing");
+	mysqli_select_db($connection,$database);
+	mysqli_real_escape_string($connection,$updateSQL);
+	$result = mysqli_query($connection,$updateSQL);
+}
+
+if (check_update("brewBOSPlace", $prefix."brewing")) {
+	$updateSQL = sprintf("ALTER TABLE `%s` CHANGE `brewBOSPlace` `brewPossAllergens` TINYTEXT NULL DEFAULT NULL COMMENT 'Notes about the entry from entrant about possible allergens';",$prefix."brewing");
+	mysqli_select_db($connection,$database);
+	mysqli_real_escape_string($connection,$updateSQL);
+	$result = mysqli_query($connection,$updateSQL);
+}
+
+$updateSQL = sprintf("UPDATE `%s` SET prefsLanguage='en-US' WHERE id='1';",$prefix."preferences");
+mysqli_select_db($connection,$database);
+mysqli_real_escape_string($connection,$updateSQL);
+$result = mysqli_query($connection,$updateSQL);
+
+/*
+ * ----------------------------------------------- 2.1.13 ----------------------------------------------
+ * Check for BJCP 2015 Provisional Styles as of July 4, 2018
+ * Provisional Styles:
+ *  17A1 - British Strong Ale: Burton Ale
+ *  21B7 - Specialty IPA: New England IPA
+ * Also adding "Provisional Styles" - adding PR prefix for use in system:
+ *  PRX1 - Dorada Pampeana
+ *  PRX2 - IPA Argenta
+ *  PRX3 - Italian Grape Ale
+ *  PRX4 - Catharina Sour
+ *  PRX5 - New Zealand Pilsner
+ * Finally, convert legacy/outdated brewStyleType values to numerical values
+ * -----------------------------------------------------------------------------------------------------
+ */
+
+if (!check_new_style("17","A1","Burton Ale")) {
+
+	$updateSQL = sprintf("INSERT INTO `%s` (`brewStyleNum`, `brewStyle`, `brewStyleCategory`, `brewStyleOG`, `brewStyleOGMax`, `brewStyleFG`, `brewStyleFGMax`, `brewStyleABV`, `brewStyleABVMax`, `brewStyleIBU`, `brewStyleIBUMax`, `brewStyleSRM`, `brewStyleSRMMax`, `brewStyleType`, `brewStyleInfo`, `brewStyleLink`, `brewStyleGroup`, `brewStyleActive`, `brewStyleOwn`, `brewStyleVersion`, `brewStyleReqSpec`, `brewStyleStrength`, `brewStyleCarb`, `brewStyleSweet`, `brewStyleTags`, `brewStyleComEx`, `brewStyleEntry`) VALUES ('A1', 'Burton Ale', 'British Strong Ale', '1.055', '1.075', '1.018', '1.024', '5.0', '7.5', '40', '50', '14', '22', '1', 'A rich, malty, sweet, and bitter dark ale of moderately strong alcohol. Full bodied and chewy with a balanced hoppy finish and complex malty and hoppy aroma. Fruity notes accentuate the malt richness, while the hops help balance the sweeter finish. Has some similarity in malt flavor to Wee Heavy, but with substantially more bitterness. Less strong than an English Barleywine.', 'http://dev.bjcp.org/beer-styles/17a-british-strong-ale-burton-ale/', '17', 'Y', 'bcoe', 'BJCP2015', 0, 0, 0, 0, 'high-strength, traditional-style, balanced, strong-ale-family, british-isles, brown-color, top-fermented', 'The Laboratory Brewery Gone for a Burton', NULL);",$prefix."styles");
+	mysqli_select_db($connection,$database);
+	mysqli_real_escape_string($connection,$updateSQL);
+	$result = mysqli_query($connection,$updateSQL);
+
+}
+
+if (!check_new_style("21","B7","New England IPA")) {
+
+	$updateSQL = sprintf("INSERT INTO `%s` (`brewStyleNum`, `brewStyle`, `brewStyleCategory`, `brewStyleOG`, `brewStyleOGMax`, `brewStyleFG`, `brewStyleFGMax`, `brewStyleABV`, `brewStyleABVMax`, `brewStyleIBU`, `brewStyleIBUMax`, `brewStyleSRM`, `brewStyleSRMMax`, `brewStyleType`, `brewStyleInfo`, `brewStyleLink`, `brewStyleGroup`, `brewStyleActive`, `brewStyleOwn`, `brewStyleVersion`, `brewStyleReqSpec`, `brewStyleStrength`, `brewStyleCarb`, `brewStyleSweet`, `brewStyleTags`, `brewStyleComEx`, `brewStyleEntry`) VALUES ('B7', 'New England IPA', 'Specialty IPA', '1.060', '1.085', '1.010', '1.015', '6.0', '9.0', '25', '60', '3', '7', '1', 'An American IPA with intense fruit flavors and aromas, a soft body, and smooth mouthfeel, and often opaque with substantial haze. Less perceived bitterness than traditional IPAs but always massively hop forward. This emphasis on late hopping, especially dry hopping, with hops with tropical fruit qualities lends the specific \'juicy\' character for which this style is known. The style is still evolving, but this style is essentially a smoother, hazier, juicier American IPA. In this context, ‘juicy’ refers to a mental impression of fruit juice or eating fresh, fully ripe fruit. Heavy examples suggestive of milkshakes, creamsicles, or fruit smoothies are beyond this range; IPAs should always be drinkable. Haziness comes from the dry hopping regime, not suspended yeast, starch haze, set pectins, or other techniques; a hazy shine is desirable, not a cloudy, murky mess.', 'http://dev.bjcp.org/beer-styles/21b-specialty-ipa-new-england-ipa/', '21', 'Y', 'bcoe', 'BJCP2015', 1, 0, 0, 0, 'bitter, craft-style, pale-color, high-strength, hoppy, ipa-family, north-america, specialty-family, top-fermented', 'Hill Farmstead Susan, Other Half Green Diamonds Double IPA, Tired Hands Alien Church, Tree House Julius, Trillium Congress Street, WeldWerks Juicy Bits', 'Entrant MUST specify a strength (session: 3.0-5.0%%, standard: 5.0-7.5%%, double: 7.5-9.5%%).');",$prefix."styles");
+	mysqli_select_db($connection,$database);
+	mysqli_real_escape_string($connection,$updateSQL);
+	$result = mysqli_query($connection,$updateSQL);
+
+}
+
+if (!check_new_style("PR","X1","Dorada Pampeana")) {
+
+	$updateSQL = sprintf("INSERT INTO `%s` (`brewStyleNum`, `brewStyle`, `brewStyleCategory`, `brewStyleOG`, `brewStyleOGMax`, `brewStyleFG`, `brewStyleFGMax`, `brewStyleABV`, `brewStyleABVMax`, `brewStyleIBU`, `brewStyleIBUMax`, `brewStyleSRM`, `brewStyleSRMMax`, `brewStyleType`, `brewStyleInfo`, `brewStyleLink`, `brewStyleGroup`, `brewStyleActive`, `brewStyleOwn`, `brewStyleVersion`, `brewStyleReqSpec`, `brewStyleStrength`, `brewStyleCarb`, `brewStyleSweet`, `brewStyleTags`, `brewStyleComEx`, `brewStyleEntry`) VALUES ('X1', 'Dorada Pampeana', 'Provisional Styles', '1.042', '1.054', '1.009', '1.013', '4.3', '5.5', '15', '22', '3', '5', '1', 'At the beginning argentine homebrewers were very limited: there wasn\'t extract - they could use only pils malt, Cascade hops and dry yeast, commonly Nottingham, Windsor
+or Safale. With these ingredients, Argentine brewers developed a specific version of Blond Ale, named Dorada Pampeana. Ingredients: usually only pale or pils malt, although may include low rates of caramelized malt. Commonly Cascade hops. Clean American yeast, slightly fruity British or Kölsch, usually packaged in cold.', 'http://dev.bjcp.org/beer-styles/x1-dorada-pampeana/', 'PR', 'Y', 'bcoe', 'BJCP2015', 0, 0, 0, 0, NULL, NULL, NULL);",$prefix."styles");
+	mysqli_select_db($connection,$database);
+	mysqli_real_escape_string($connection,$updateSQL);
+	$result = mysqli_query($connection,$updateSQL);
+
+}
+
+if (!check_new_style("PR","X2","IPA Argenta")) {
+
+	$updateSQL = sprintf("INSERT INTO `%s` (`brewStyleNum`, `brewStyle`, `brewStyleCategory`, `brewStyleOG`, `brewStyleOGMax`, `brewStyleFG`, `brewStyleFGMax`, `brewStyleABV`, `brewStyleABVMax`, `brewStyleIBU`, `brewStyleIBUMax`, `brewStyleSRM`, `brewStyleSRMMax`, `brewStyleType`, `brewStyleInfo`, `brewStyleLink`, `brewStyleGroup`, `brewStyleActive`, `brewStyleOwn`, `brewStyleVersion`, `brewStyleReqSpec`, `brewStyleStrength`, `brewStyleCarb`, `brewStyleSweet`, `brewStyleTags`, `brewStyleComEx`, `brewStyleEntry`) VALUES ('X2', 'IPA Argenta', 'Provisional Styles', '1.055', '1.065', '1.008', '1.015', '5.0', '6.5', '35', '60', '6', '15', '1', 'A decidedly hoppy and bitter, refreshing, and moderately strong Argentine pale ale. The clue is drinkability without harshness and best balance. An Argentine version of the historical English style, developed in 2013 from Somos Cerveceros Association meetings, when its distinctive characteristics were defined. Different from an American IPA in that it is brewed with wheat and using Argentine hops (Cascade, Mapuche and Nugget are typical, although Spalt, Victoria or Bullion may be used to add complexity), with its unique flavor and aroma characteristics. Based on a citrus (from Argetine hops) and wheat pairing idea, like in a Witbier. Low amounts of wheat are similar to a Kölsch grist, as is some fruitiness from fermentation.', 'http://dev.bjcp.org/beer-styles/x2-ipa-argenta/', 'PR', 'Y', 'bcoe', 'BJCP2015', 0, 0, 0, 0, NULL, 'Antares Ipa Argenta, Kerze Ipa Argenta.', NULL);",$prefix."styles");
+	mysqli_select_db($connection,$database);
+	mysqli_real_escape_string($connection,$updateSQL);
+	$result = mysqli_query($connection,$updateSQL);
+
+}
+
+if (!check_new_style("PR","X3","Italian Grape Ale")) {
+
+	$updateSQL = sprintf("INSERT INTO `%s` (`brewStyleNum`, `brewStyle`, `brewStyleCategory`, `brewStyleOG`, `brewStyleOGMax`, `brewStyleFG`, `brewStyleFGMax`, `brewStyleABV`, `brewStyleABVMax`, `brewStyleIBU`, `brewStyleIBUMax`, `brewStyleSRM`, `brewStyleSRMMax`, `brewStyleType`, `brewStyleInfo`, `brewStyleLink`, `brewStyleGroup`, `brewStyleActive`, `brewStyleOwn`, `brewStyleVersion`, `brewStyleReqSpec`, `brewStyleStrength`, `brewStyleCarb`, `brewStyleSweet`, `brewStyleTags`, `brewStyleComEx`, `brewStyleEntry`) VALUES ('X3', 'Italian Grape Ale', 'Provisional Styles', '1.043', '1.090', '1.007', '1.015', '4.8', '10', '10', '30', '5', '30', '1', 'A sometimes refreshing, sometimes more complex Italian ale characterized by different varieties of grapes.', 'http://dev.bjcp.org/beer-styles/x3-italian-grape-ale/', 'PR', 'Y', 'bcoe', 'BJCP2015', 0, 0, 0, 0, NULL, 'Montegioco Tibir, Montegioco Open Mind, Birranova Moscata, LoverBeer BeerBera, Loverbeer D\'uvaBeer, Birra del Borgo Equilibrista, Barley BB10, Barley BBevò, Cudera, Pasturana Filare!, Gedeone PerBacco! Toccalmatto Jadis, Rocca dei Conti Tarì Giacchè', NULL);",$prefix."styles");
+	mysqli_select_db($connection,$database);
+	mysqli_real_escape_string($connection,$updateSQL);
+	$result = mysqli_query($connection,$updateSQL);
+
+}
+
+if (!check_new_style("PR","X4","Catharina Sour")) {
+
+	$updateSQL = sprintf("INSERT INTO `%s` (`brewStyleNum`, `brewStyle`, `brewStyleCategory`, `brewStyleOG`, `brewStyleOGMax`, `brewStyleFG`, `brewStyleFGMax`, `brewStyleABV`, `brewStyleABVMax`, `brewStyleIBU`, `brewStyleIBUMax`, `brewStyleSRM`, `brewStyleSRMMax`, `brewStyleType`, `brewStyleInfo`, `brewStyleLink`, `brewStyleGroup`, `brewStyleActive`, `brewStyleOwn`, `brewStyleVersion`, `brewStyleReqSpec`, `brewStyleStrength`, `brewStyleCarb`, `brewStyleSweet`, `brewStyleTags`, `brewStyleComEx`, `brewStyleEntry`) VALUES ('X4', 'Catharina Sour', 'Provisional Styles', '1.039', '1.048', '1.002', '1.008', '4.0', '5.5', '2', '68', '2', '7', '1', 'A light and refreshing wheat ale with a clean lactic sourness that is balanced by a fresh fruit addition. The low bitterness, light body, moderate alcohol content, and moderately high carbonation allow the flavor and aroma of the fruit to be the primary focus of the beer. The fruit is often, but not always, tropical in nature. This beer is stronger than a Berliner Weiss and typically features fresh fruit. The kettle souring method allows for fast production of the beer, so this is typically a present-use style. It may be bottled or canned, but it should be consumed while fresh.', 'http://dev.bjcp.org/beer-styles/x4-catharina-sour/', 'PR', 'Y', 'bcoe', 'BJCP2015', 1, 0, 0, 0, 'craft-style, fruit, sour, specialty-beer', 'Itajahy Catharina Araca Sour, Blumenau Catharina Sour Sun of a Peach, Lohn Bier Catharina Sour Jaboticaba, Liffey Coroa Real, UNIKA Tangerina, Armada Daenerys.', 'Entrant must specify the types of fresh fruit(s) used.');",$prefix."styles");
+	mysqli_select_db($connection,$database);
+	mysqli_real_escape_string($connection,$updateSQL);
+	$result = mysqli_query($connection,$updateSQL);
+
+}
+
+if (!check_new_style("PR","X5","New Zealand Pilsner")) {
+
+	$updateSQL = sprintf("INSERT INTO `%s` (`brewStyleNum`, `brewStyle`, `brewStyleCategory`, `brewStyleOG`, `brewStyleOGMax`, `brewStyleFG`, `brewStyleFGMax`, `brewStyleABV`, `brewStyleABVMax`, `brewStyleIBU`, `brewStyleIBUMax`, `brewStyleSRM`, `brewStyleSRMMax`, `brewStyleType`, `brewStyleInfo`, `brewStyleLink`, `brewStyleGroup`, `brewStyleActive`, `brewStyleOwn`, `brewStyleVersion`, `brewStyleReqSpec`, `brewStyleStrength`, `brewStyleCarb`, `brewStyleSweet`, `brewStyleTags`, `brewStyleComEx`, `brewStyleEntry`) VALUES ('X5', 'New Zealand Pilsner', 'Provisional Styles', '1.044', '1.046', '1.009', '1.014', '4.5', '5.8', '25', '45', '2', '7', '1', 'A pale, dry, golden-colored, cleanly-fermented beer showcasing the characteristic tropical, citrusy, fruity, grassy New Zealand-type hops. Medium body, soft mouthfeel, and smooth palate and finish, with a neutral to bready malt base provide the support for this very drinkable, refreshing, hop-forward beer.', 'http://dev.bjcp.org/beer-styles/x5-new-zealand-pilsner/', 'PR', 'Y', 'bcoe', 'BJCP2015', 0, 0, 0, 0, 'bitter, pale-color, standard-strength, bottom-fermented, hoppy, pilsner-family, lagered, craft-style, pacific', 'Croucher New Zealand Pilsner, Emerson’s Pilsner, Liberty Halo Pilsner, Panhead Port Road Pilsner, Sawmill Pilsner, Tuatara Mot Eureka', NULL);",$prefix."styles");
+	mysqli_select_db($connection,$database);
+	mysqli_real_escape_string($connection,$updateSQL);
+	$result = mysqli_query($connection,$updateSQL);
+
+}
+
+$updateSQL = sprintf("UPDATE `%s` SET brewStyleType='1' WHERE brewStyleType = 'Lager';",$prefix."styles");
+mysqli_select_db($connection,$database);
+mysqli_real_escape_string($connection,$updateSQL);
+$result = mysqli_query($connection,$updateSQL);
+
+$updateSQL = sprintf("UPDATE `%s` SET brewStyleType='1' WHERE brewStyleType = 'Ale';",$prefix."styles");
+mysqli_select_db($connection,$database);
+mysqli_real_escape_string($connection,$updateSQL);
+$result = mysqli_query($connection,$updateSQL);
+
+$updateSQL = sprintf("UPDATE `%s` SET brewStyleType='1' WHERE brewStyleType = 'Mixed';",$prefix."styles");
+mysqli_select_db($connection,$database);
+mysqli_real_escape_string($connection,$updateSQL);
+$result = mysqli_query($connection,$updateSQL);
+
+$updateSQL = sprintf("UPDATE `%s` SET brewStyleType='1' WHERE brewStyleType = '';",$prefix."styles");
+mysqli_select_db($connection,$database);
+mysqli_real_escape_string($connection,$updateSQL);
+$result = mysqli_query($connection,$updateSQL);
+
+$updateSQL = sprintf("UPDATE `%s` SET brewStyleType='2' WHERE brewStyleType = 'Cider';",$prefix."styles");
+mysqli_select_db($connection,$database);
+mysqli_real_escape_string($connection,$updateSQL);
+$result = mysqli_query($connection,$updateSQL);
+
+$updateSQL = sprintf("UPDATE `%s` SET brewStyleType='3' WHERE brewStyleType = 'Mead';",$prefix."styles");
+mysqli_select_db($connection,$database);
+mysqli_real_escape_string($connection,$updateSQL);
+$result = mysqli_query($connection,$updateSQL);
 
 /*
  * ----------------------------------------------------------------------------------------------------

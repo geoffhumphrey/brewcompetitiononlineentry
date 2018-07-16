@@ -33,7 +33,7 @@ include ('current_data_updates.php');
 // Include Off-schedule Updates
 // -----------------------------------------------------------
 
-include('off_schedule_update.php');
+include ('off_schedule_update.php');
 
 $output .= "</ul>";
 ?>

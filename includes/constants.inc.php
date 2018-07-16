@@ -4,14 +4,31 @@ Checked Single
 2016-06-06
 */
 
-// -------------------------- Theme file names and display name array --------------------------
-// The first item is the the CSS file name (without .css)
-// The second item is the display name for use in Site Preferences
-// The file name will be stored in the preferences DB table row called prefsTheme and called by all pages
+/** -------------------------- Languages Available ----------------------------------------------
+ * Array of languages available for translation
+ * Associative array of available translation languages.
+ * First in the pair is the label name (should be in native language)
+ * Second in the pair is the official WWW3 language tag, exactly as it appears there
+ * This WWW3 language tag should be the beginining of the language file (e.g., en-US.lang.php)
+ * See https://www.loc.gov/standards/iso639-2/php/code_list.php
+ * located in its parent language subfolder in the lang folder (e.g., /lang/en/en-US.lang.php)
+ * More at https://www.w3.org/International/articles/language-tags/
+ *
+ */
+
+$languages = array(
+    "US English" => "en-US"
+);
+
+/** -------------------------- Theme File names and  Display Name -------------------------------
+ * The first item is the the CSS file name (without .css)
+ * The second item is the display name for use in Site Preferences
+ * The file name will be stored in the preferences DB table row called prefsTheme and called by all pages
+ */
 
 $theme_name = array("default|BCOE&amp;M Default (Gray)","bruxellensis|Bruxellensis (Blue-Gray)", "claussenii|Claussenii (Green)", "naardenensis|Naardenensis (Teal)");
 
-// -------------------------- Countries List ---------------------------------------------------
+// -------------------------- Countries List ----------------------------------------------------
 // Array of countries to utilize when users sign up and for competition info
 // Replaces countries DB table for better performance
 $countries = array("United States","Australia","Canada","Ireland","United Kingdom","Afghanistan","Albania","Algeria","American Samoa","Andorra","Angola","Anguilla","Antarctica","Antigua and Barbuda","Argentina","Armenia","Aruba","Austria","Azerbaijan","Bahamas","Bahrain","Bangladesh","Barbados","Belarus","Belgium","Belize","Benin","Bermuda","Bhutan","Bolivia","Bosnia and Herzegovina","Botswana","Bouvet Island","Brazil","British Indian Ocean Territory","Brunei Darussalam","Bulgaria","Burkina Faso","Burundi","Cambodia","Cameroon","Cape Verde","Cayman Islands","Central African Republic","Chad","Chile","China","Christmas Island","Cocos (Keeling) Islands","Colombia","Comoros","Congo","Congo, The Democratic Republic of The","Cook Islands","Costa Rica","Cote D'ivoire","Croatia","Cuba","Cyprus","Czech Republic","Denmark","Djibouti","Dominica","Dominican Republic","Easter Island","Ecuador","Egypt","El Salvador","Equatorial Guinea","Eritrea","Estonia","Ethiopia","Falkland Islands (Malvinas)","Faroe Islands","Fiji","Finland","France","French Guiana","French Polynesia","French Southern Territories","Gabon","Gambia","Georgia","Germany","Ghana","Gibraltar","Greece","Greenland","Grenada","Guadeloupe","Guam","Guatemala","Guinea","Guinea-bissau","Guyana","Haiti","Heard Island and Mcdonald Islands","Honduras","Hong Kong","Hungary","Iceland","India","Indonesia","Iran","Iraq","Israel","Italy","Jamaica","Japan","Jordan","Kazakhstan","Kenya","Kiribati","Korea, North","Korea, South","Kosovo","Kuwait","Kyrgyzstan","Laos","Latvia","Lebanon","Lesotho","Liberia","Libyan Arab Jamahiriya","Liechtenstein","Lithuania","Luxembourg","Macau","Macedonia","Madagascar","Malawi","Malaysia","Maldives","Mali","Malta","Marshall Islands","Martinique","Mauritania","Mauritius","Mayotte","Mexico","Micronesia, Federated States of","Moldova, Republic of","Monaco","Mongolia","Montenegro","Montserrat","Morocco","Mozambique","Myanmar","Namibia","Nauru","Nepal","Netherlands","Netherlands Antilles","New Caledonia","New Zealand","Nicaragua","Niger","Nigeria","Niue","Norfolk Island","Northern Mariana Islands","Norway","Oman","Pakistan","Palau","Palestinian Territory","Panama","Papua New Guinea","Paraguay","Peru","Philippines","Pitcairn","Poland","Portugal","Puerto Rico","Qatar","Reunion","Romania","Russia","Russia","Rwanda","Saint Helena","Saint Kitts and Nevis","Saint Lucia","Saint Pierre and Miquelon","Saint Vincent and The Grenadines","Samoa","San Marino","Sao Tome and Principe","Saudi Arabia","Senegal","Serbia and Montenegro","Seychelles","Sierra Leone","Singapore","Slovakia","Slovenia","Solomon Islands","Somalia","South Africa","South Georgia/South Sandwich Islands","Spain","Sri Lanka","Sudan","Suriname","Svalbard and Jan Mayen","Swaziland","Sweden","Switzerland","Syria","Taiwan","Tajikistan","Tanzania, United Republic of","Thailand","Timor-leste","Togo","Tokelau","Tonga","Trinidad and Tobago","Tunisia","Turkey","Turkmenistan","Turks and Caicos Islands","Tuvalu","Uganda","Ukraine","United Arab Emirates","United States Minor Outlying Islands","Uruguay","Uzbekistan","Vanuatu","Vatican City","Venezuela","Vietnam","Virgin Islands, British","Virgin Islands, U.S.","Wallis and Futuna","Western Sahara","Yemen","Zambia","Zimbabwe","Other");

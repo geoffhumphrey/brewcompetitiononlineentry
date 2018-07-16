@@ -142,16 +142,15 @@ $setup_free_access =  FALSE;
 
 /*
  * ******************************************************************************
- * Set the subdirector of your installation (if necessary).
+ * Set the subdirectory of your installation (if necessary).
  * ******************************************************************************
  * In most cases the default will be OK.
  *
  * IF YOU ARE RUNNING YOUR INSTANCE OF BCOE&M IN A SUBFOLDER...
  *
- * Add the name of the subdirectory between the quotes of the $sub_directory
- * variable.
- *
- * Be sure to INCLUDE a leading slash [/] and NO trailing slash [/]!
+ * - Add the name of the subdirectory between the quotes of the $sub_directory
+ *   variable.
+ * - Be sure to INCLUDE a leading slash [/] and NO trailing slash [/]!
  *
  * Example:
  * $sub_directory = "/bcoem";

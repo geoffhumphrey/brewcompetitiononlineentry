@@ -1,4 +1,7 @@
 <?php
+
+//session_destroy();
+//include ('paths.php');
 define('ROOT',dirname( __FILE__ ).DIRECTORY_SEPARATOR);
 define('ADMIN',ROOT.'admin'.DIRECTORY_SEPARATOR);
 define('SSO',ROOT.'sso'.DIRECTORY_SEPARATOR);
@@ -37,6 +40,7 @@ if (DEBUG)  ini_set('display_errors','On');
 else ini_set('display_errors','Off');
 
 require_once (CONFIG.'config.php');
+
 $prefix_session = md5(__FILE__);
 
 function is_session_started() {
@@ -55,22 +59,26 @@ if (is_session_started() === FALSE) {
     session_start();
 }
 
-require_once (INCLUDES.'url_variables.inc.php');
-
-// **PREVENTING SESSION HIJACKING**
-// Prevents javascript XSS attacks aimed to steal the session ID
 ini_set('session.cookie_httponly', 1);
-
-// **PREVENTING SESSION FIXATION**
-// Session ID cannot be passed through URLs
 ini_set('session.use_only_cookies', 1);
-
-// Uses a secure connection (HTTPS) if possible
 ini_set('session.cookie_secure', 1);
 
+require_once (INCLUDES.'url_variables.inc.php');
 require_once (LIB.'common.lib.php');
 require_once (INCLUDES.'db_tables.inc.php');
 if ($view != "default") $checked_in_numbers = explode("^",$view);
+
+$query_contest_info = sprintf("SELECT * FROM %s", $prefix."contest_info");
+if (SINGLE) $query_contest_info .= sprintf(" WHERE id='%s'", $_POST['comp_id']);
+else $query_contest_info .= " WHERE id='1'";
+$contest_info = mysqli_query($connection,$query_contest_info) or die (mysqli_error($connection));
+$row_contest_info = mysqli_fetch_assoc($contest_info);
+
+if (SINGLE) $query_prefs = sprintf("SELECT * FROM %s WHERE comp_id='%s'", $prefix."preferences",$row_contest_info['id']);
+else $query_prefs = sprintf("SELECT * FROM %s WHERE id='1'", $prefix."preferences");
+$prefs = mysqli_query($connection,$query_prefs) or die (mysqli_error($connection));
+$row_prefs = mysqli_fetch_assoc($prefs);
+$totalRows_prefs = mysqli_num_rows($prefs);
 
 // Set language preferences in session variables
 if (empty($_SESSION['prefsLang'.$prefix_session])) {
@@ -85,28 +93,15 @@ if (empty($_SESSION['prefsLang'.$prefix_session])) {
 	}
 
 	else $_SESSION['prefsLanguageFolder'] = strtolower($_SESSION['prefsLanguage']);
-	
+
 	$_SESSION['prefsLang'.$prefix_session] = "1";
-	
+
 }
 
 require_once (LANG.'language.lang.php');
 
 $logged_in = FALSE;
 if (!isset($_SESSION['qrPasswordOK'])) $logged_in = TRUE;
-
-
-$query_contest_info = sprintf("SELECT * FROM %s", $prefix."contest_info");
-if (SINGLE) $query_contest_info .= sprintf(" WHERE id='%s'", $_POST['comp_id']);
-else $query_contest_info .= " WHERE id='1'";
-$contest_info = mysqli_query($connection,$query_contest_info) or die (mysqli_error($connection));
-$row_contest_info = mysqli_fetch_assoc($contest_info);
-
-if (SINGLE) $query_prefs = sprintf("SELECT * FROM %s WHERE comp_id='%s'", $prefix."preferences",$row_contest_info['id']);
-else $query_prefs = sprintf("SELECT * FROM %s WHERE id='1'", $prefix."preferences");
-$prefs = mysqli_query($connection,$query_prefs) or die (mysqli_error($connection));
-$row_prefs = mysqli_fetch_assoc($prefs);
-$totalRows_prefs = mysqli_num_rows($prefs);
 
 $header_output = $row_contest_info['contestName'];
 $theme = $base_url."css/".$row_prefs['prefsTheme'].".min.css";

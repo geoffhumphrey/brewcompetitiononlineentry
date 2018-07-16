@@ -98,6 +98,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 		prefsCAPTCHA,
 		prefsGoogleAccount,
 		prefsBestUseBOS,
+		prefsLanguage,
 		id
 
 		) VALUES (
@@ -113,7 +114,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 		%s, %s, %s, %s, %s,
 		%s, %s, %s, %s, %s,
 		%s, %s, %s, %s, %s,
-		%s, %s, %s, %s)",
+		%s, %s, %s, %s, %s)",
 
 			GetSQLValueString(sterilize($_POST['prefsTemp']), "text"),
 			GetSQLValueString(sterilize($_POST['prefsWeight1']), "text"),
@@ -188,6 +189,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 			GetSQLValueString(sterilize($_POST['prefsCAPTCHA']), "text"),
 			GetSQLValueString(sterilize($prefsGoogleAccount), "text"),
 			GetSQLValueString(sterilize($_POST['prefsBestUseBOS']), "text"),
+			GetSQLValueString(sterilize($_POST['prefsLanguage']), "text"),
 			GetSQLValueString($id, "int"));
 
 			mysqli_real_escape_string($connection,$insertSQL);
@@ -324,7 +326,8 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 		prefsTieBreakRule5=%s,
 		prefsTieBreakRule6=%s,
 		prefsCAPTCHA=%s,
-		prefsGoogleAccount=%s
+		prefsGoogleAccount=%s,
+		prefsLanguage=%s
 
 		WHERE id=%s",
 			GetSQLValueString(sterilize($_POST['prefsTemp']), "text"),
@@ -401,6 +404,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 			GetSQLValueString(sterilize($_POST['prefsTieBreakRule6']), "text"),
 			GetSQLValueString(sterilize($_POST['prefsCAPTCHA']), "text"),
 			GetSQLValueString(sterilize($prefsGoogleAccount), "text"),
+			GetSQLValueString(sterilize($_POST['prefsBestUseBOS']), "text"),
 			GetSQLValueString($id, "int"));
 
 			mysqli_real_escape_string($connection,$updateSQL);

@@ -415,7 +415,7 @@ if (isset($_SESSION['loginUsername'])) {
 if (empty($_SESSION['prefsLang'.$prefix_session])) {
 
 	// Language - in current version only English is available. Future versions will feature translations.
-	$_SESSION['prefsLanguage'] = "en-US";
+	$_SESSION['prefsLanguage'] = $row_prefs['prefsLanguage'];
 
 	// Check if variation used (demarked with a dash)
 	$_SESSION['prefsLang'.$prefix_session] = $prefix_session;

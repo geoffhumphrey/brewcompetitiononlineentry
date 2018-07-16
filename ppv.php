@@ -16,13 +16,11 @@ To implement:
 
 */
 
-session_start();
 require ('paths.php');
+require (CONFIG.'bootstrap.php');
 require (INCLUDES.'url_variables.inc.php');
 include (INCLUDES.'scrubber.inc.php');
 require (LANG.'language.lang.php');
-include (LIB.'common.lib.php');
-mysqli_select_db($connection,$database);
 
 $query_prefs = sprintf("SELECT prefsPayPalAccount FROM %s WHERE id='1'", $prefix."preferences");
 $prefs = mysqli_query($connection,$query_prefs) or die (mysqli_error($connection));
@@ -167,9 +165,9 @@ if ($verified) {
 		$message_body .= "<table cellpadding=\"5\" cellspacing=\"0\">";
 		$message_body .= sprintf("<tr valign='top'><td nowrap><strong>%s %s:</strong></td><td>".$to_recipient."<td></tr>",$label_payer,$label_name);
 		$message_body .= sprintf("<tr valign='top'><td nowrap><strong>%s %s:</strong></td><td>".$data['payer_email']."<td></tr>",$label_payer,$label_email);
-		$message_body .= sprintf("<tr valign='top'><td nowrap><strong>Status:</strong></td><td>".$data['payment_status']."<td></tr>",$label_status);
-		$message_body .= sprintf("<tr valign='top'><td nowrap><strong>Amount:</strong></td><td>".$data['payment_amount']." ".$data['payment_currency']."<td></tr>",$label_amount);
-		$message_body .= sprintf("<tr valign='top'><td nowrap><strong>Transaction ID:</strong></td><td>".$data['txn_id']."<td></tr>",$label_transaction_id);
+		$message_body .= sprintf("<tr valign='top'><td nowrap><strong>%s:</strong></td><td>".$data['payment_status']."<td></tr>",$label_status);
+		$message_body .= sprintf("<tr valign='top'><td nowrap><strong>%s:</strong></td><td>".$data['payment_amount']." ".$data['payment_currency']."<td></tr>",$label_amount);
+		$message_body .= sprintf("<tr valign='top'><td nowrap><strong>%s:</strong></td><td>".$data['txn_id']."<td></tr>",$label_transaction_id);
 		$message_body .= sprintf("<tr valign='top'><td nowrap><strong>%s %s:</strong></td><td>".str_replace("-",", ",$custom_parts[1])."<td></tr>",$label_entry_numbers,$label_paid);
 		$message_body .= "</table>";
 

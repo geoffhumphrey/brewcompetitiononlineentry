@@ -88,7 +88,7 @@ if ($setup_success) {
 
 	require_once (LIB.'common.lib.php');
 	require_once (INCLUDES.'db_tables.inc.php');
-	if ($force_update) include (UPDATE.'off_schedule_update.php');
+	if (($msg == "16") || ($force_update)) include (UPDATE.'off_schedule_update.php');
 	require_once (LIB.'help.lib.php');
 	require_once (DB.'common.db.php');
 	require_once (DB.'brewer.db.php');

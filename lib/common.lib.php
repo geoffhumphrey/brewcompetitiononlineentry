@@ -1341,6 +1341,7 @@ function style_convert($number,$type,$base_url="") {
 			case "M4": $style_convert = "Specialty Mead"; break;
 			case "C1": $style_convert = "Standard Cider and Perry"; break;
 			case "C2": $style_convert = "Specialty Cider and Perry"; break;
+			case "PR": $style_convert = "Provisional Styles"; break;
 			default: $style_convert = $row_style['brewStyle']." (Custom Style)"; break;
 			}
 		}
@@ -1424,6 +1425,7 @@ function style_convert($number,$type,$base_url="") {
 				case "38": $style_convert = "38A,38B,38C"; break;
 				case "39": $style_convert = "39A,39B,39C,39D,39E"; break;
 				case "40": $style_convert = "40A,40B,40C,40D,40E,40F"; break;
+				case "PR": $style_convert = "X1,X2,X3,X4,X5"; break;
 				default: $style_convert = "Custom Style"; break;
 			}
 		}

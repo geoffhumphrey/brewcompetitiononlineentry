@@ -327,6 +327,11 @@ $(document).ready(function() {
 				$("input[name='strengthIPA']").prop("required", true);
 				$("#special").hide("fast");
 				$("#brewInfo").prop("required", true);
+			<?php } elseif ($key == "21-B7") { ?>
+				$("#strengthIPA").show("fast");
+				$("input[name='strengthIPA']").prop("required", true);
+				$("#special").hide("fast");
+				$("#brewInfo").prop("required", true);
 			<?php } elseif ($key == "23-F") { ?>
 				$("#sweetnessLambic").show("fast");
 				$("#carbLambic").show("fast");

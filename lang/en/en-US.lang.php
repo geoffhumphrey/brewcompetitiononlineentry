@@ -698,9 +698,9 @@ if ($section == "brew") {
 	$brew_text_002 = "[disabled - style entry limit reached]"; // missing punctuation intentional
 	$brew_text_003 = "[disabled - style entry limit reached for user]"; // missing punctuation intentional
 	$brew_text_004 = "Specific type, special ingredients, classic style, strength (for beer styles), and/or color are required.";
-	$brew_text_005 = "Strength required"; // missing punctuation intentional
-	$brew_text_006 = "Carbonation level required"; // missing punctuation intentional
-	$brew_text_007 = "Sweetness level required"; // missing punctuation intentional
+	$brew_text_005 = "Strength required (mead only)"; // missing punctuation intentional
+	$brew_text_006 = "Carbonation level required (mead and cider only)"; // missing punctuation intentional
+	$brew_text_007 = "Sweetness level required (mead and cider only)"; // missing punctuation intentional
 	$brew_text_008 = "This style requires that you provide specific information for entry.";
 	$brew_text_009 = "Requirements for"; // missing punctuation intentional
 	$brew_text_010 = "This style requires more information. Please enter in the provided area.";
@@ -720,7 +720,6 @@ if ($section == "brew") {
 	$brew_text_024 = "Saccharification rest, etc.";
 	$brew_text_025 = "Secondary fermentation in days.";
 	$brew_text_026 = "Other fermentation in days.";
-
 }
 
 // -------------------- Brewer (Account) --------------------
@@ -729,7 +728,7 @@ if (($section == "brewer") || ($section == "register") || ($section == "step2") 
 	$brewer_text_000 = "Please enter only <em>one</em> person's name.";
 	$brewer_text_001 = "Choose one. This question will be used to verify your identity should you forget your password.";
 	$brewer_text_003 = "To be considered for a GABF Pro-Am brewing opportunity you must be an AHA member.";
-	$brewer_text_004 = "Provide any information that you believe the competition organizer should know (e.g., allergies, special dietary restrictions, shirt size, etc.).";
+	$brewer_text_004 = "Provide any information that you believe the competition organizer, judge coordinator, or competition staff should know (e.g., allergies, special dietary restrictions, shirt size, etc.).";
 	$brewer_text_005 = "Not Applicable / Shipping Entries";
 	$brewer_text_006 = "Are you willing and qualified to serve as a judge in this competition?";
 	$brewer_text_007 = "Have you passed the BJCP Mead Judge exam?";
@@ -1213,7 +1212,6 @@ $maintenance_text_001 = "Please check back later.";
 // -------------------- Labels --------------------
 $label_entry_numbers = "Entry Number(s)"; // For PayPal IPN Email
 $label_status = "Status"; // For PayPal IPN Email
-$label_amount = "Amount"; // For PayPal IPN Email
 $label_transaction_id = "Transaction ID"; // For PayPal IPN Email
 $label_organization = "Organization";
 $label_ttb = "TTB Number";
@@ -1279,6 +1277,10 @@ $label_top = "Top";
 // v2.1.12
 $label_bjcp_cider = "Cider Judge";
 
+// v2.1.13
+$label_possible_allergens = "Possible Allergens";
+$label_please_choose = "Please Choose";
+
 // -------------------- Headers --------------------
 $header_text_112 = "You do not have sufficient access privileges to perform this action.";
 $header_text_113 = "You can only edit your own account information.";
@@ -1297,6 +1299,18 @@ if ($section == "brew") {
 	$brew_text_027 = "This Brewers Association style requires a statement from the brewer regarding the special nature of the product. See the <a href=\"https://www.brewersassociation.org/resources/brewers-association-beer-style-guidelines/\" target=\"_blank\">BA Style Guidelines</a> for specific guidance.";
 	$brew_text_028 = "***NOT REQUIRED*** Add information here that is detailed in the style guidelines as a characteristic that you MAY declare.";
 	$brew_text_029 = "Admin editing disabled. Your profile is considered a personal profile and not a organizational profile, and thus, not eligible to add entries. To add an entry for an organization, access the Manage Entries list and choose an organization from the &quot;Add an Entry For...&quot; dropdown.";
+
+    // v2.1.13
+    $brew_text_030 = "milk / lactose";
+    $brew_text_031 = "eggs";
+    $brew_text_032 = "fish";
+    $brew_text_033 = "crustacean shellfish";
+    $brew_text_034 = "tree nuts";
+    $brew_text_035 = "peanuts";
+    $brew_text_036 = "wheat";
+    $brew_text_037 = "soybeans";
+    $brew_text_038 = "Does this entry have possible food allergens? Common food allergens include milk (including lactose), eggs, fish, crustaceans, tree nuts, peanuts, wheat, soybeans, etc. ";
+    $brew_text_039 = "Please specify any and all possible allergen(s)";
 }
 
 // -------------------- Brewer (Account) --------------------
@@ -1312,7 +1326,7 @@ if (($section == "brewer") || ($section == "register") || ($section == "step2") 
     $brewer_text_030 = "Pleaee provide your zip or postal code.";
     $brewer_text_031 = "Please choose your country.";
     $brewer_text_032 = "Please provide your organization name.";
-    $brewer_text_033 = "Please provide choose a security question.";
+    $brewer_text_033 = "Please choose a security question.";
     $brewer_text_034 = "Please provide a response to your security question.";
 
     // v2.1.12

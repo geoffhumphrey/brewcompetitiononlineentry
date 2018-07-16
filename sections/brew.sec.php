@@ -205,6 +205,7 @@ else {
 	// Define vars
 	if ($action == "edit") $collapse_icon = "fa-plus-circle";
 	else $collapse_icon = "fa-pencil";
+	$possible_allergens = array($brew_text_030,$brew_text_031,$brew_text_032,$brew_text_033,$brew_text_034,$brew_text_035,$brew_text_036,$brew_text_037);
 
 	// Get the brewer's information from the function
 	if ((($filter == "admin") || ($filter == "default")) && ($bid == "default")) $brewer_id = $_SESSION['user_id'];
@@ -329,6 +330,36 @@ else {
 			var cs = $(this).val().length;
 			$('#countComments').text(cs);
 		});
+
+		//$("#possible-allergens-freeform").hide();
+		$("#possible-allergens").hide();
+
+		$("input[name$='possible-allergens']").click(function() {
+	        if ($(this).val() == "1") {
+	            $("#possible-allergens").show("fast");
+	            $("input[name='brewPossAllergens']").prop("required", true);
+	        }
+	        else {
+	            $("#possible-allergens").hide("fast");
+	            $("input[name='brewPossAllergens']").prop("required", false);
+	        }
+	    });
+
+		/*
+	    $('input[type="checkbox"]').click(function() {
+	        if ($(this).attr('id') == "brewPossAllergensOther") {
+	            $("#possible-allergens-freeform").show("fast");
+	            $("input[name='brewPossAllergensOther']").prop("required", true);
+	        }
+	    });
+	    */
+
+	    <?php if (($action == "edit") && (!empty($row_log['brewPossAllergens']))) { ?>
+	    	$("#possible-allergens").show("fast");
+	    	<?php if (!in_array($row_log['brewPossAllergens'], $possible_allergens)) { ?>
+	    	$("#possible-allergens-freeform").show("fast");
+	    	<?php } ?>
+		<?php } ?>
 
 	});
 
@@ -656,7 +687,7 @@ else $relocate_referrer = $_SERVER['HTTP_REFERER'];
             </div>
         </div><!-- ./Form Group -->
     </div>
-    <?php if (($_SESSION['prefsSpecific'] == 0) && (strpos($_SESSION['prefsStyleSet'],"BABDB") === false)) { ?>
+    <?php if (($_SESSION['prefsSpecific'] == 0) && ($_SESSION['prefsStyleSet'] != "BA")) { ?>
     <!-- Enter Brewer's Specifics -->
     <div class="form-group"><!-- Form Group NOT REQUIRED Text Input -->
         <label for="brewComments" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label"><?php echo $label_brewer_specifics; ?></label>
@@ -671,575 +702,634 @@ else $relocate_referrer = $_SERVER['HTTP_REFERER'];
         </div>
     </div><!-- ./Form Group -->
     <?php } ?>
+    <div class="form-group"><!-- Form Group Radio INLINE -->
+	    <label for="" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label_possible_allergens; ?></label>
+	    <div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
+	        <div class="input-group">
+	            <!-- Input Here -->
+	            <label class="radio-inline">
+	                <input type="radio" name="possible-allergens" value="1" id="prefsCheck_0"  <?php if (!empty($row_log['brewPossAllergens'])) echo "CHECKED"; ?> />Yes
+	            </label>
+	            <label class="radio-inline">
+	                <input type="radio" name="possible-allergens" value="0" id="prefsCheck_1" <?php if (empty($row_log['brewPossAllergens'])) echo "CHECKED"; ?>/>No
+	    		</label>
+	        </div>
+	        <span id="helpBlockAllergens" class="help-block"><?php echo $brew_text_038; ?></span>
+	    </div>
+	</div><!-- ./Form Group -->
+	<div class="form-group" id="possible-allergens"><!-- Form Group NOT REQUIRED Select -->
+		<label for="brewPossAllergens" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label"></label>
+		<div class="col-lg-10 col-md-9 col-sm-9 col-xs-12" id="possible_allergens-list">
+			<!-- Input Here -->
+			<input type="text" class="form-control" placeholder="<?php echo $brew_text_039; ?>" name="brewPossAllergens">
+			<?php
+
+				/*
+
+				$allergen_list  = "";
+
+				foreach($possible_allergens as $allergy) {
+					$allergen_list  .= "<div class=\"checkbox\">";
+					$allergen_list  .= "<label>";
+					$allergen_list  .= "<input type=\"checkbox\" value=\"".ucwords($allergy)."\"";
+					if ($row_log['brewPossAllergens'] == $allergy) $allergen_list  .= " CHECKED";
+					$allergen_list  .= ">";
+					$allergen_list  .= ucwords($allergy);
+					$allergen_list  .= "</label>";
+					$allergen_list  .= "</div>";
+				}
+
+
+				if (!in_array($row_log['brewPossAllergens'], $possible_allergens)) {
+					$allergen_list  .= "<div class=\"checkbox\">";
+					$allergen_list  .= "<label>";
+					$allergen_list  .= "<input type=\"checkbox\" id=\"brewPossAllergensOther\" value = \"".$label_other."\">".$label_other."";
+					$allergen_list  .= "</label>";
+					$allergen_list  .= "</div>";
+				}
+
+
+				echo $allergen_list ;
+
+				*/
+
+			?>
+		</div>
+	</div><!-- ./Form Group -->
+
+
+
+
 <?php if ($_SESSION['prefsHideRecipe'] == "N") { ?>
-<div class="bcoem-form-accordion">
-    <div class="panel-group" id="accordion">
-    	<!-- General Panel -->
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                <h4 class="panel-title">
-                    <a data-toggle="collapse" data-parent="#accordion" href="#collapseGeneral"><?php echo $label_general; ?></a>
-                </h4>
-            </div>
-            <div id="collapseGeneral" class="panel-collapse collapse in">
-                <div class="panel-body">
-                    <div class="form-group form-group-sm"><!-- Form Group NOT REQUIRED Text Input -->
-                        <label for="brewYield" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label"><?php echo $label_amount_brewed; ?></label>
-                        <div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
-                            <!-- Input Here -->
-                            <input class="form-control" name="brewYield" type="text" value="<?php if ($action == "edit") echo $row_log['brewYield']; ?>" placeholder="<?php echo ucwords($_SESSION['prefsLiquid2']); ?>" ?>
-                        </div>
-            		</div><!-- ./Form Group -->
-                    <div class="form-group form-group-sm"><!-- Form Group NOT REQUIRED Text Input -->
-                        <label for="brewWinnerCat" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label"><?php echo $label_color; ?></label>
-                        <div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
-                            <!-- Input Here -->
-                            <input class="form-control" name="brewWinnerCat" type="text" value="<?php if ($action == "edit") echo $row_log['brewWinnerCat']; ?>" placeholder="SRM" ?>
-                        </div>
-                    </div><!-- ./Form Group -->
-                    <div class="form-group form-group-sm"><!-- Form Group NOT REQUIRED Text Input -->
-                        <label for="brewWinnerCat" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label"><?php echo $label_date; ?></label>
-                        <div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
-                            <!-- Input Here -->
-                            <input class="form-control" type="text" id="brewDate"  name="brewDate" value="<?php if ($action == "edit") echo $row_log['brewDate']; ?>" placeholder="YYYY-MM-DD" ?>
-                        </div>
-                    </div><!-- ./Form Group -->
-                    <div class="form-group form-group-sm"><!-- Form Group NOT REQUIRED Text Input -->
-                        <label for="brewDate" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label"><?php echo $label_bottled; ?></label>
-                        <div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
-                            <!-- Input Here -->
-                            <input class="form-control" type="text" id="brewBottleDate" name="brewBottleDate" value="<?php if ($action == "edit") echo $row_log['brewBottleDate']; ?>" placeholder="YYYY-MM-DD" ?>
-                        </div>
-                    </div><!-- ./Form Group -->
-                </div>
-            </div>
-        </div>
-        <!-- Gravities Panel -->
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                <h4 class="panel-title">
-                    <a data-toggle="collapse" data-parent="#accordion" href="#collapseGrav"><?php echo $label_specific_gravity; ?></a>
-                </h4>
-            </div>
-            <div id="collapseGrav" class="panel-collapse collapse">
-                <div class="panel-body">
-                    <div class="form-group form-group-sm"><!-- Form Group NOT REQUIRED Text Input -->
-                        <label for="brewOG" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label"><?php echo $label_og; ?></label>
-                        <div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
-                            <!-- Input Here -->
-                            <input class="form-control" type="text" id="brewOG" name="brewOG" value="<?php if ($action == "edit") echo $row_log['brewOG']; ?>" placeholder="1.060, 1.078, etc." ?>
-                        </div>
-                    </div><!-- ./Form Group -->
-                    <div class="form-group form-group-sm"><!-- Form Group NOT REQUIRED Text Input -->
-                        <label for="brewDate" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label"><?php echo $label_fg; ?></label>
-                        <div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
-                            <!-- Input Here -->
-                            <input class="form-control" type="text" id="brewFG" name="brewFG" value="<?php if ($action == "edit") echo $row_log['brewFG']; if ($action == "importCalc") echo round ($brewFG, 3); ?>" placeholder="1.010, 1.014, etc" ?>
-                        </div>
-                    </div><!-- ./Form Group -->
-                </div>
-            </div>
-        </div>
-        <!-- Extract Panel -->
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                <h4 class="panel-title">
-                    <a data-toggle="collapse" data-parent="#accordion" href="#collapseExtract"><?php echo $label_fermentables." - ".$label_malt_extract; ?></a>
-                </h4>
-            </div>
-            <div id="collapseExtract" class="panel-collapse collapse">
-                <div class="panel-body">
-                <!-- Form Element(s) Begin -->
-				<?php for($i=1; $i<=5; $i++) { ?>
-                    <div class="form-group form-group-sm"><!-- Form Group NOT REQUIRED Text Input -->
-                        <label for="brewExtract<?php echo $i; ?>" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label"><?php echo $label_extract." ".$i ?></label>
-                        <div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
-                            <!-- Input Here -->
-                            <input class="form-control" type="text" id="brewExtract<?php echo $i; ?>" name="brewExtract<?php echo $i; ?>" value="<?php if ($action == "edit") echo $row_log['brewExtract'.$i]; ?>" placeholder="<?php echo $brew_text_015; ?>" ?>
-                        </div>
-                    </div><!-- ./Form Group -->
-                	<div class="form-group form-group-sm"><!-- Form Group NOT REQUIRED Text Input -->
-                        <label for="brewExtract<?php echo $i; ?>Weight" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label"><?php echo $label_extract." ".$i." ".$label_weight; ?></label>
-                        <div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
-                            <!-- Input Here -->
-                            <input class="form-control" type="text" id="brewExtract<?php echo $i; ?>Weight" name="brewExtract<?php echo $i; ?>Weight" value="<?php if ($action == "edit") echo $row_log['brewExtract'.$i.'Weight']; ?>" placeholder="<?php echo $_SESSION['prefsWeight2']; ?>" ?>
-                        </div>
-                    </div><!-- ./Form Group -->
-                    <div class="form-group form-group-sm"><!-- Form Group Radio INLINE -->
-                    <label for="brewMead3" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label"><?php echo $label_extract." ".$i." ".$label_use; ?></label>
-                    <div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
-                        <div class="input-group small">
-                            <!-- Input Here -->
-                            <label class="radio-inline">
-                                <input type="radio" name="brewExtract<?php echo $i; ?>Use" id="brewExtract<?php echo $i; ?>Use" value="Mash" <?php if ($action == "edit") { if (!(strcmp($row_log['brewExtract'.$i.'Use'], "Mash"))) echo "CHECKED"; }?>> <?php echo $label_mash; ?>
-                            </label>
-                            <label class="radio-inline">
-                                <input type="radio" name="brewExtract<?php echo $i; ?>Use" id="brewExtract<?php echo $i; ?>Use" value="Steep" <?php if ($action == "edit") { if (!(strcmp($row_log['brewExtract'.$i.'Use'], "Steep"))) echo "CHECKED"; }?>> <?php echo $label_steep; ?>
-                            </label>
-                            <label class="radio-inline">
-                                <input type="radio" name="brewExtract<?php echo $i; ?>Use" id="brewExtract<?php echo $i; ?>Use" value="Other" <?php if ($action == "edit") { if (!(strcmp($row_log['brewExtract'.$i.'Use'], "Other"))) echo "CHECKED"; }?>> <?php echo $label_other; ?>
-                            </label>
-                        </div>
-                    </div>
-                </div><!-- ./Form Group -->
-                <?php } ?>
-                </div><!-- ./New Panel -->
-            </div>
-        </div>
-        <!-- Grains Panel -->
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                <h4 class="panel-title">
-                    <a data-toggle="collapse" data-parent="#accordion" href="#collapseGrains"><?php echo $label_fermentables." - ".$label_grain; ?></a>
-                </h4>
-            </div>
-            <div id="collapseGrains" class="panel-collapse collapse">
-                <div class="panel-body">
-                <!-- Form Element(s) Begin -->
-				  <?php for($i=1; $i<=20; $i++) { ?>
-                    <div class="form-group form-group-sm"><!-- Form Group NOT REQUIRED Text Input -->
-                        <label for="brewGrain<?php echo $i; ?>" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label"><?php echo $label_grain." ".$i ?></label>
-                        <div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
-                            <!-- Input Here -->
-                            <input class="form-control" type="text" id="brewGrain<?php echo $i; ?>" name="brewGrain<?php echo $i; ?>" value="<?php if ($action == "edit") echo $row_log['brewGrain'.$i]; ?>" placeholder="<?php echo $brew_text_016; ?>" ?>
-                        </div>
-                    </div><!-- ./Form Group -->
-                	<div class="form-group form-group-sm"><!-- Form Group NOT REQUIRED Text Input -->
-                        <label for="brewGrain<?php echo $i; ?>Weight" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label"><?php echo $label_grain." ".$i." ".$label_weight; ?></label>
-                        <div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
-                            <!-- Input Here -->
-                            <input class="form-control" type="text" id="brewGrain<?php echo $i; ?>Weight" name="brewGrain<?php echo $i; ?>Weight" value="<?php if ($action == "edit") echo $row_log['brewGrain'.$i.'Weight']; ?>" placeholder="<?php echo ucwords($_SESSION['prefsWeight2']); ?>" ?>
-                        </div>
-                    </div><!-- ./Form Group -->
-                    <div class="form-group form-group-sm"><!-- Form Group Radio INLINE -->
-                    <label for="brewMead3" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label"><?php echo $label_grain." ".$i." ".$label_use; ?></label>
-                    <div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
-                        <div class="input-group small">
-                            <!-- Input Here -->
-                            <label class="radio-inline">
-                                <input type="radio" name="brewGrain<?php echo $i; ?>Use" id="brewGrain<?php echo $i; ?>Use" value="Mash" <?php if ($action == "edit") { if (!(strcmp($row_log['brewGrain'.$i.'Use'], "Mash"))) echo "CHECKED"; }?>> <?php echo $label_mash; ?>
-                            </label>
-                            <label class="radio-inline">
-                                <input type="radio" name="brewGrain<?php echo $i; ?>Use" id="brewGrain<?php echo $i; ?>Use" value="Steep" <?php if ($action == "edit") { if (!(strcmp($row_log['brewGrain'.$i.'Use'], "Steep"))) echo "CHECKED"; }?>> <?php echo $label_steep; ?>
-                            </label>
-                            <label class="radio-inline">
-                                <input type="radio" name="brewGrain<?php echo $i; ?>Use" id="brewGrain<?php echo $i; ?>Use" value="Other" <?php if ($action == "edit") { if (!(strcmp($row_log['brewGrain'.$i.'Use'], "Other"))) echo "CHECKED"; }?>> <?php echo $label_other; ?>
-                            </label>
-                        </div>
-                    </div>
-                </div><!-- ./Form Group -->
-                <?php } ?>
-                </div>
-            </div>
-        </div><!-- ./New Panel -->
-        <!-- Misc Panel -->
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                <h4 class="panel-title">
-                    <a data-toggle="collapse" data-parent="#accordion" href="#collapseMisc"><?php echo $label_misc; ?></a>
-                </h4>
-            </div>
-            <div id="collapseMisc" class="panel-collapse collapse">
-                <div class="panel-body">
-                	<!-- Form Element(s) Begin -->
-					<?php for($i=1; $i<=20; $i++) { ?>
-                    <div class="form-group form-group-sm"><!-- Form Group NOT REQUIRED Text Input -->
-                        <label for="brewAddition<?php echo $i; ?>" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label"><?php echo $label_misc." ".$i; ?></label>
-                        <div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
-                            <!-- Input Here -->
-                            <input class="form-control" type="text" id="brewAddition<?php echo $i; ?>" name="brewAddition<?php echo $i; ?>" value="<?php if ($action == "edit") echo $row_log['brewAddition'.$i]; ?>" placeholder="<?php echo $brew_text_017; ?>" ?>
-                        </div>
-                    </div><!-- ./Form Group -->
-                	<div class="form-group form-group-sm"><!-- Form Group NOT REQUIRED Text Input -->
-                        <label for="brewAddition<?php echo $i; ?>Amt" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label"><?php echo $label_misc." ".$i." ".$label_weight; ?></label>
-                        <div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
-                            <!-- Input Here -->
-                            <input class="form-control" type="text" id="brewAddition<?php echo $i; ?>Amt" name="brewAddition<?php echo $i; ?>Amt" value="<?php if (($action == "edit") && (isset($row_log['brewAddition'.$i.'Amt']))) echo $row_log['brewAddition'.$i.'Amt']; ?>" placeholder="<?php echo ucwords($_SESSION['prefsWeight2']); ?>" ?>
-                        </div>
-                    </div><!-- ./Form Group -->
-                    <div class="form-group form-group-sm"><!-- Form Group Radio INLINE -->
-                    <label for="brewMead3" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label"><?php echo $label_misc." ".$i." ".$label_use; ?></label>
-                    <div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
-                        <div class="input-group small">
-                            <!-- Input Here -->
-                            <label class="radio-inline">
-                                <input type="radio" name="brewAddition<?php echo $i; ?>Use" id="brewAddition<?php echo $i; ?>Use" value="Mash" <?php if ($action == "edit") { if (!(strcmp($row_log['brewAddition'.$i.'Use'], "Mash"))) echo "CHECKED"; }?>> <?php echo $label_mash; ?>
-                            </label>
-                            <label class="radio-inline">
-                                <input type="radio" name="brewAddition<?php echo $i; ?>Use" id="brewAddition<?php echo $i; ?>Use" value="Steep" <?php if ($action == "edit") { if (!(strcmp($row_log['brewAddition'.$i.'Use'], "Steep"))) echo "CHECKED"; }?>> <?php echo $label_steep; ?>
-                            </label>
-                            <label class="radio-inline">
-                                <input type="radio" name="brewAddition<?php echo $i; ?>Use" id="brewAddition<?php echo $i; ?>Use" value="Other" <?php if ($action == "edit") { if (!(strcmp($row_log['brewAddition'.$i.'Use'], "Other"))) echo "CHECKED"; }?>> <?php echo $label_other; ?>
-                            </label>
-                        </div>
-                    </div>
-                </div><!-- ./Form Group -->
-                <?php } ?>
-                </div>
-            </div>
-        </div><!-- ./New Panel -->
-        <!-- Hops Panel -->
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                <h4 class="panel-title">
-                    <a data-toggle="collapse" data-parent="#accordion" href="#collapseHops"><?php echo $label_hops; ?></a>
-                </h4>
-            </div>
-            <div id="collapseHops" class="panel-collapse collapse">
-                <div class="panel-body">
-                	<?php for($i=1; $i<=20; $i++) { ?>
-                    <div class="form-group form-group-sm"><!-- Form Group NOT REQUIRED Text Input -->
-                        <label for="brewHops<?php echo $i; ?>" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label"><?php echo $label_hop." ".$i; ?></label>
-                        <div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
-                            <!-- Input Here -->
-                            <input class="form-control" type="text" id="brewHops<?php echo $i; ?>" name="brewHops<?php echo $i; ?>" value="<?php if (($action == "edit") && (isset($row_log['brewHops'.$i]))) echo $row_log['brewHops'.$i]; ?>" placeholder="<?php echo $brew_text_018; ?>" ?>
-                        </div>
-                    </div><!-- ./Form Group -->
-                	<div class="form-group form-group-sm"><!-- Form Group NOT REQUIRED Text Input -->
-                        <label for="brewHops<?php echo $i; ?>Weight" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label"><?php echo $label_hop." ".$i." ".$label_weight; ?></label>
-                        <div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
-                            <!-- Input Here -->
-                            <input class="form-control" type="text" id="brewHops<?php echo $i; ?>Weight" name="brewHops<?php echo $i; ?>Weight" value="<?php if ($action == "edit") echo $row_log['brewHops'.$i.'Weight']; ?>" placeholder="<?php echo ucwords($_SESSION['prefsWeight1']); ?>" ?>
-                        </div>
-                    </div><!-- ./Form Group -->
-                    <div class="form-group form-group-sm"><!-- Form Group NOT REQUIRED Text Input -->
-                        <label for="brewHops<?php echo $i; ?>IBU" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label"><?php echo $label_hop." ".$i; ?> AA%</label>
-                        <div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
-                            <!-- Input Here -->
-                            <input class="form-control" type="text" id="brewHops<?php echo $i; ?>IBU" name="brewHops<?php echo $i; ?>IBU" value="<?php if ($action == "edit") echo $row_log['brewHops'.$i.'IBU']; ?>" placeholder="<?php echo $brew_text_019; ?>" ?>
-                        </div>
-                    </div><!-- ./Form Group -->
-                    <div class="form-group form-group-sm"><!-- Form Group NOT REQUIRED Text Input -->
-                        <label for="brewHops<?php echo $i; ?>Time" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label"><?php echo $label_hop." ".$i." ".$label_time; ?></label>
-                        <div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
-                            <!-- Input Here -->
-                            <input class="form-control" type="text" id="brewHops<?php echo $i; ?>Time" name="brewHops<?php echo $i; ?>Time" value="<?php if ($action == "edit") echo $row_log['brewHops'.$i.'Time']; ?>" placeholder="<?php echo $label_minutes; ?>" ?>
-                        </div>
-                    </div><!-- ./Form Group -->
-                    <div class="form-group form-group-sm"><!-- Form Group Radio INLINE -->
-                    <label for="brewHops<?php echo $i; ?>Use" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label"><?php echo $label_hop." ".$i." ".$label_use; ?></label>
-                    <div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
-                        <div class="input-group small">
-                            <!-- Input Here -->
-                            <label class="radio-inline">
-                                <input type="radio" name="brewHops<?php echo $i; ?>Use" id="brewHops<?php echo $i; ?>Use" value="First Wort" <?php if ($action == "edit") { if (!(strcmp($row_log['brewHops'.$i.'Use'], "First Wort"))) echo "CHECKED"; }?>> <?php echo $label_first_wort; ?>
-                            </label>
-                            <label class="radio-inline">
-                                <input type="radio" name="brewHops<?php echo $i; ?>Use" id="brewHops<?php echo $i; ?>Use" value="Mash" <?php if ($action == "edit") { if (!(strcmp($row_log['brewHops'.$i.'Use'], "Mash"))) echo "CHECKED"; }?>> <?php echo $label_mash; ?>
-                            </label>
-                            <label class="radio-inline">
-                                <input type="radio" name="brewHops<?php echo $i; ?>Use" id="brewHops<?php echo $i; ?>Use" value="Boil" <?php if ($action == "edit") { if (!(strcmp($row_log['brewHops'.$i.'Use'], "Boil"))) echo "CHECKED"; }?>> <?php echo $label_boil; ?>
-                            </label>
-                            <label class="radio-inline">
-                                <input type="radio" name="brewHops<?php echo $i; ?>Use" id="brewHops<?php echo $i; ?>Use" value="Aroma" <?php if ($action == "edit") { if (!(strcmp($row_log['brewHops'.$i.'Use'], "Aroma"))) echo "CHECKED"; }?>> <?php echo $label_aroma; ?>
-                            </label>
+	<!-- Begin Recipe Entry Fields -->
+	<div class="bcoem-form-accordion">
+	    <div class="panel-group" id="accordion">
+	    	<!-- General Panel -->
+	        <div class="panel panel-default">
+	            <div class="panel-heading">
+	                <h4 class="panel-title">
+	                    <a data-toggle="collapse" data-parent="#accordion" href="#collapseGeneral"><?php echo $label_general; ?></a>
+	                </h4>
+	            </div>
+	            <div id="collapseGeneral" class="panel-collapse collapse in">
+	                <div class="panel-body">
+	                    <div class="form-group form-group-sm"><!-- Form Group NOT REQUIRED Text Input -->
+	                        <label for="brewYield" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label"><?php echo $label_amount_brewed; ?></label>
+	                        <div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
+	                            <!-- Input Here -->
+	                            <input class="form-control" name="brewYield" type="text" value="<?php if ($action == "edit") echo $row_log['brewYield']; ?>" placeholder="<?php echo ucwords($_SESSION['prefsLiquid2']); ?>" ?>
+	                        </div>
+	            		</div><!-- ./Form Group -->
+	                    <div class="form-group form-group-sm"><!-- Form Group NOT REQUIRED Text Input -->
+	                        <label for="brewWinnerCat" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label"><?php echo $label_color; ?></label>
+	                        <div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
+	                            <!-- Input Here -->
+	                            <input class="form-control" name="brewWinnerCat" type="text" value="<?php if ($action == "edit") echo $row_log['brewWinnerCat']; ?>" placeholder="SRM" ?>
+	                        </div>
+	                    </div><!-- ./Form Group -->
+	                    <div class="form-group form-group-sm"><!-- Form Group NOT REQUIRED Text Input -->
+	                        <label for="brewWinnerCat" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label"><?php echo $label_date; ?></label>
+	                        <div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
+	                            <!-- Input Here -->
+	                            <input class="form-control" type="text" id="brewDate"  name="brewDate" value="<?php if ($action == "edit") echo $row_log['brewDate']; ?>" placeholder="YYYY-MM-DD" ?>
+	                        </div>
+	                    </div><!-- ./Form Group -->
+	                    <div class="form-group form-group-sm"><!-- Form Group NOT REQUIRED Text Input -->
+	                        <label for="brewDate" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label"><?php echo $label_bottled; ?></label>
+	                        <div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
+	                            <!-- Input Here -->
+	                            <input class="form-control" type="text" id="brewBottleDate" name="brewBottleDate" value="<?php if ($action == "edit") echo $row_log['brewBottleDate']; ?>" placeholder="YYYY-MM-DD" ?>
+	                        </div>
+	                    </div><!-- ./Form Group -->
+	                </div>
+	            </div>
+	        </div>
+	        <!-- Gravities Panel -->
+	        <div class="panel panel-default">
+	            <div class="panel-heading">
+	                <h4 class="panel-title">
+	                    <a data-toggle="collapse" data-parent="#accordion" href="#collapseGrav"><?php echo $label_specific_gravity; ?></a>
+	                </h4>
+	            </div>
+	            <div id="collapseGrav" class="panel-collapse collapse">
+	                <div class="panel-body">
+	                    <div class="form-group form-group-sm"><!-- Form Group NOT REQUIRED Text Input -->
+	                        <label for="brewOG" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label"><?php echo $label_og; ?></label>
+	                        <div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
+	                            <!-- Input Here -->
+	                            <input class="form-control" type="text" id="brewOG" name="brewOG" value="<?php if ($action == "edit") echo $row_log['brewOG']; ?>" placeholder="1.060, 1.078, etc." ?>
+	                        </div>
+	                    </div><!-- ./Form Group -->
+	                    <div class="form-group form-group-sm"><!-- Form Group NOT REQUIRED Text Input -->
+	                        <label for="brewDate" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label"><?php echo $label_fg; ?></label>
+	                        <div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
+	                            <!-- Input Here -->
+	                            <input class="form-control" type="text" id="brewFG" name="brewFG" value="<?php if ($action == "edit") echo $row_log['brewFG']; if ($action == "importCalc") echo round ($brewFG, 3); ?>" placeholder="1.010, 1.014, etc" ?>
+	                        </div>
+	                    </div><!-- ./Form Group -->
+	                </div>
+	            </div>
+	        </div>
+	        <!-- Extract Panel -->
+	        <div class="panel panel-default">
+	            <div class="panel-heading">
+	                <h4 class="panel-title">
+	                    <a data-toggle="collapse" data-parent="#accordion" href="#collapseExtract"><?php echo $label_fermentables." - ".$label_malt_extract; ?></a>
+	                </h4>
+	            </div>
+	            <div id="collapseExtract" class="panel-collapse collapse">
+	                <div class="panel-body">
+	                <!-- Form Element(s) Begin -->
+					<?php for($i=1; $i<=5; $i++) { ?>
+	                    <div class="form-group form-group-sm"><!-- Form Group NOT REQUIRED Text Input -->
+	                        <label for="brewExtract<?php echo $i; ?>" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label"><?php echo $label_extract." ".$i ?></label>
+	                        <div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
+	                            <!-- Input Here -->
+	                            <input class="form-control" type="text" id="brewExtract<?php echo $i; ?>" name="brewExtract<?php echo $i; ?>" value="<?php if ($action == "edit") echo $row_log['brewExtract'.$i]; ?>" placeholder="<?php echo $brew_text_015; ?>" ?>
+	                        </div>
+	                    </div><!-- ./Form Group -->
+	                	<div class="form-group form-group-sm"><!-- Form Group NOT REQUIRED Text Input -->
+	                        <label for="brewExtract<?php echo $i; ?>Weight" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label"><?php echo $label_extract." ".$i." ".$label_weight; ?></label>
+	                        <div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
+	                            <!-- Input Here -->
+	                            <input class="form-control" type="text" id="brewExtract<?php echo $i; ?>Weight" name="brewExtract<?php echo $i; ?>Weight" value="<?php if ($action == "edit") echo $row_log['brewExtract'.$i.'Weight']; ?>" placeholder="<?php echo $_SESSION['prefsWeight2']; ?>" ?>
+	                        </div>
+	                    </div><!-- ./Form Group -->
+	                    <div class="form-group form-group-sm"><!-- Form Group Radio INLINE -->
+	                    <label for="brewMead3" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label"><?php echo $label_extract." ".$i." ".$label_use; ?></label>
+	                    <div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
+	                        <div class="input-group small">
+	                            <!-- Input Here -->
+	                            <label class="radio-inline">
+	                                <input type="radio" name="brewExtract<?php echo $i; ?>Use" id="brewExtract<?php echo $i; ?>Use" value="Mash" <?php if ($action == "edit") { if (!(strcmp($row_log['brewExtract'.$i.'Use'], "Mash"))) echo "CHECKED"; }?>> <?php echo $label_mash; ?>
+	                            </label>
+	                            <label class="radio-inline">
+	                                <input type="radio" name="brewExtract<?php echo $i; ?>Use" id="brewExtract<?php echo $i; ?>Use" value="Steep" <?php if ($action == "edit") { if (!(strcmp($row_log['brewExtract'.$i.'Use'], "Steep"))) echo "CHECKED"; }?>> <?php echo $label_steep; ?>
+	                            </label>
+	                            <label class="radio-inline">
+	                                <input type="radio" name="brewExtract<?php echo $i; ?>Use" id="brewExtract<?php echo $i; ?>Use" value="Other" <?php if ($action == "edit") { if (!(strcmp($row_log['brewExtract'.$i.'Use'], "Other"))) echo "CHECKED"; }?>> <?php echo $label_other; ?>
+	                            </label>
+	                        </div>
+	                    </div>
+	                </div><!-- ./Form Group -->
+	                <?php } ?>
+	                </div><!-- ./New Panel -->
+	            </div>
+	        </div>
+	        <!-- Grains Panel -->
+	        <div class="panel panel-default">
+	            <div class="panel-heading">
+	                <h4 class="panel-title">
+	                    <a data-toggle="collapse" data-parent="#accordion" href="#collapseGrains"><?php echo $label_fermentables." - ".$label_grain; ?></a>
+	                </h4>
+	            </div>
+	            <div id="collapseGrains" class="panel-collapse collapse">
+	                <div class="panel-body">
+	                <!-- Form Element(s) Begin -->
+					  <?php for($i=1; $i<=20; $i++) { ?>
+	                    <div class="form-group form-group-sm"><!-- Form Group NOT REQUIRED Text Input -->
+	                        <label for="brewGrain<?php echo $i; ?>" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label"><?php echo $label_grain." ".$i ?></label>
+	                        <div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
+	                            <!-- Input Here -->
+	                            <input class="form-control" type="text" id="brewGrain<?php echo $i; ?>" name="brewGrain<?php echo $i; ?>" value="<?php if ($action == "edit") echo $row_log['brewGrain'.$i]; ?>" placeholder="<?php echo $brew_text_016; ?>" ?>
+	                        </div>
+	                    </div><!-- ./Form Group -->
+	                	<div class="form-group form-group-sm"><!-- Form Group NOT REQUIRED Text Input -->
+	                        <label for="brewGrain<?php echo $i; ?>Weight" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label"><?php echo $label_grain." ".$i." ".$label_weight; ?></label>
+	                        <div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
+	                            <!-- Input Here -->
+	                            <input class="form-control" type="text" id="brewGrain<?php echo $i; ?>Weight" name="brewGrain<?php echo $i; ?>Weight" value="<?php if ($action == "edit") echo $row_log['brewGrain'.$i.'Weight']; ?>" placeholder="<?php echo ucwords($_SESSION['prefsWeight2']); ?>" ?>
+	                        </div>
+	                    </div><!-- ./Form Group -->
+	                    <div class="form-group form-group-sm"><!-- Form Group Radio INLINE -->
+	                    <label for="brewMead3" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label"><?php echo $label_grain." ".$i." ".$label_use; ?></label>
+	                    <div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
+	                        <div class="input-group small">
+	                            <!-- Input Here -->
+	                            <label class="radio-inline">
+	                                <input type="radio" name="brewGrain<?php echo $i; ?>Use" id="brewGrain<?php echo $i; ?>Use" value="Mash" <?php if ($action == "edit") { if (!(strcmp($row_log['brewGrain'.$i.'Use'], "Mash"))) echo "CHECKED"; }?>> <?php echo $label_mash; ?>
+	                            </label>
+	                            <label class="radio-inline">
+	                                <input type="radio" name="brewGrain<?php echo $i; ?>Use" id="brewGrain<?php echo $i; ?>Use" value="Steep" <?php if ($action == "edit") { if (!(strcmp($row_log['brewGrain'.$i.'Use'], "Steep"))) echo "CHECKED"; }?>> <?php echo $label_steep; ?>
+	                            </label>
+	                            <label class="radio-inline">
+	                                <input type="radio" name="brewGrain<?php echo $i; ?>Use" id="brewGrain<?php echo $i; ?>Use" value="Other" <?php if ($action == "edit") { if (!(strcmp($row_log['brewGrain'.$i.'Use'], "Other"))) echo "CHECKED"; }?>> <?php echo $label_other; ?>
+	                            </label>
+	                        </div>
+	                    </div>
+	                </div><!-- ./Form Group -->
+	                <?php } ?>
+	                </div>
+	            </div>
+	        </div><!-- ./New Panel -->
+	        <!-- Misc Panel -->
+	        <div class="panel panel-default">
+	            <div class="panel-heading">
+	                <h4 class="panel-title">
+	                    <a data-toggle="collapse" data-parent="#accordion" href="#collapseMisc"><?php echo $label_misc; ?></a>
+	                </h4>
+	            </div>
+	            <div id="collapseMisc" class="panel-collapse collapse">
+	                <div class="panel-body">
+	                	<!-- Form Element(s) Begin -->
+						<?php for($i=1; $i<=20; $i++) { ?>
+	                    <div class="form-group form-group-sm"><!-- Form Group NOT REQUIRED Text Input -->
+	                        <label for="brewAddition<?php echo $i; ?>" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label"><?php echo $label_misc." ".$i; ?></label>
+	                        <div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
+	                            <!-- Input Here -->
+	                            <input class="form-control" type="text" id="brewAddition<?php echo $i; ?>" name="brewAddition<?php echo $i; ?>" value="<?php if ($action == "edit") echo $row_log['brewAddition'.$i]; ?>" placeholder="<?php echo $brew_text_017; ?>" ?>
+	                        </div>
+	                    </div><!-- ./Form Group -->
+	                	<div class="form-group form-group-sm"><!-- Form Group NOT REQUIRED Text Input -->
+	                        <label for="brewAddition<?php echo $i; ?>Amt" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label"><?php echo $label_misc." ".$i." ".$label_weight; ?></label>
+	                        <div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
+	                            <!-- Input Here -->
+	                            <input class="form-control" type="text" id="brewAddition<?php echo $i; ?>Amt" name="brewAddition<?php echo $i; ?>Amt" value="<?php if (($action == "edit") && (isset($row_log['brewAddition'.$i.'Amt']))) echo $row_log['brewAddition'.$i.'Amt']; ?>" placeholder="<?php echo ucwords($_SESSION['prefsWeight2']); ?>" ?>
+	                        </div>
+	                    </div><!-- ./Form Group -->
+	                    <div class="form-group form-group-sm"><!-- Form Group Radio INLINE -->
+	                    <label for="brewMead3" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label"><?php echo $label_misc." ".$i." ".$label_use; ?></label>
+	                    <div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
+	                        <div class="input-group small">
+	                            <!-- Input Here -->
+	                            <label class="radio-inline">
+	                                <input type="radio" name="brewAddition<?php echo $i; ?>Use" id="brewAddition<?php echo $i; ?>Use" value="Mash" <?php if ($action == "edit") { if (!(strcmp($row_log['brewAddition'.$i.'Use'], "Mash"))) echo "CHECKED"; }?>> <?php echo $label_mash; ?>
+	                            </label>
+	                            <label class="radio-inline">
+	                                <input type="radio" name="brewAddition<?php echo $i; ?>Use" id="brewAddition<?php echo $i; ?>Use" value="Steep" <?php if ($action == "edit") { if (!(strcmp($row_log['brewAddition'.$i.'Use'], "Steep"))) echo "CHECKED"; }?>> <?php echo $label_steep; ?>
+	                            </label>
+	                            <label class="radio-inline">
+	                                <input type="radio" name="brewAddition<?php echo $i; ?>Use" id="brewAddition<?php echo $i; ?>Use" value="Other" <?php if ($action == "edit") { if (!(strcmp($row_log['brewAddition'.$i.'Use'], "Other"))) echo "CHECKED"; }?>> <?php echo $label_other; ?>
+	                            </label>
+	                        </div>
+	                    </div>
+	                </div><!-- ./Form Group -->
+	                <?php } ?>
+	                </div>
+	            </div>
+	        </div><!-- ./New Panel -->
+	        <!-- Hops Panel -->
+	        <div class="panel panel-default">
+	            <div class="panel-heading">
+	                <h4 class="panel-title">
+	                    <a data-toggle="collapse" data-parent="#accordion" href="#collapseHops"><?php echo $label_hops; ?></a>
+	                </h4>
+	            </div>
+	            <div id="collapseHops" class="panel-collapse collapse">
+	                <div class="panel-body">
+	                	<?php for($i=1; $i<=20; $i++) { ?>
+	                    <div class="form-group form-group-sm"><!-- Form Group NOT REQUIRED Text Input -->
+	                        <label for="brewHops<?php echo $i; ?>" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label"><?php echo $label_hop." ".$i; ?></label>
+	                        <div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
+	                            <!-- Input Here -->
+	                            <input class="form-control" type="text" id="brewHops<?php echo $i; ?>" name="brewHops<?php echo $i; ?>" value="<?php if (($action == "edit") && (isset($row_log['brewHops'.$i]))) echo $row_log['brewHops'.$i]; ?>" placeholder="<?php echo $brew_text_018; ?>" ?>
+	                        </div>
+	                    </div><!-- ./Form Group -->
+	                	<div class="form-group form-group-sm"><!-- Form Group NOT REQUIRED Text Input -->
+	                        <label for="brewHops<?php echo $i; ?>Weight" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label"><?php echo $label_hop." ".$i." ".$label_weight; ?></label>
+	                        <div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
+	                            <!-- Input Here -->
+	                            <input class="form-control" type="text" id="brewHops<?php echo $i; ?>Weight" name="brewHops<?php echo $i; ?>Weight" value="<?php if ($action == "edit") echo $row_log['brewHops'.$i.'Weight']; ?>" placeholder="<?php echo ucwords($_SESSION['prefsWeight1']); ?>" ?>
+	                        </div>
+	                    </div><!-- ./Form Group -->
+	                    <div class="form-group form-group-sm"><!-- Form Group NOT REQUIRED Text Input -->
+	                        <label for="brewHops<?php echo $i; ?>IBU" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label"><?php echo $label_hop." ".$i; ?> AA%</label>
+	                        <div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
+	                            <!-- Input Here -->
+	                            <input class="form-control" type="text" id="brewHops<?php echo $i; ?>IBU" name="brewHops<?php echo $i; ?>IBU" value="<?php if ($action == "edit") echo $row_log['brewHops'.$i.'IBU']; ?>" placeholder="<?php echo $brew_text_019; ?>" ?>
+	                        </div>
+	                    </div><!-- ./Form Group -->
+	                    <div class="form-group form-group-sm"><!-- Form Group NOT REQUIRED Text Input -->
+	                        <label for="brewHops<?php echo $i; ?>Time" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label"><?php echo $label_hop." ".$i." ".$label_time; ?></label>
+	                        <div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
+	                            <!-- Input Here -->
+	                            <input class="form-control" type="text" id="brewHops<?php echo $i; ?>Time" name="brewHops<?php echo $i; ?>Time" value="<?php if ($action == "edit") echo $row_log['brewHops'.$i.'Time']; ?>" placeholder="<?php echo $label_minutes; ?>" ?>
+	                        </div>
+	                    </div><!-- ./Form Group -->
+	                    <div class="form-group form-group-sm"><!-- Form Group Radio INLINE -->
+	                    <label for="brewHops<?php echo $i; ?>Use" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label"><?php echo $label_hop." ".$i." ".$label_use; ?></label>
+	                    <div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
+	                        <div class="input-group small">
+	                            <!-- Input Here -->
+	                            <label class="radio-inline">
+	                                <input type="radio" name="brewHops<?php echo $i; ?>Use" id="brewHops<?php echo $i; ?>Use" value="First Wort" <?php if ($action == "edit") { if (!(strcmp($row_log['brewHops'.$i.'Use'], "First Wort"))) echo "CHECKED"; }?>> <?php echo $label_first_wort; ?>
+	                            </label>
+	                            <label class="radio-inline">
+	                                <input type="radio" name="brewHops<?php echo $i; ?>Use" id="brewHops<?php echo $i; ?>Use" value="Mash" <?php if ($action == "edit") { if (!(strcmp($row_log['brewHops'.$i.'Use'], "Mash"))) echo "CHECKED"; }?>> <?php echo $label_mash; ?>
+	                            </label>
+	                            <label class="radio-inline">
+	                                <input type="radio" name="brewHops<?php echo $i; ?>Use" id="brewHops<?php echo $i; ?>Use" value="Boil" <?php if ($action == "edit") { if (!(strcmp($row_log['brewHops'.$i.'Use'], "Boil"))) echo "CHECKED"; }?>> <?php echo $label_boil; ?>
+	                            </label>
+	                            <label class="radio-inline">
+	                                <input type="radio" name="brewHops<?php echo $i; ?>Use" id="brewHops<?php echo $i; ?>Use" value="Aroma" <?php if ($action == "edit") { if (!(strcmp($row_log['brewHops'.$i.'Use'], "Aroma"))) echo "CHECKED"; }?>> <?php echo $label_aroma; ?>
+	                            </label>
 
-                            <label class="radio-inline">
-                                <input type="radio" name="brewHops<?php echo $i; ?>Use" id="brewHops<?php echo $i; ?>Use" value="Dry Hop" <?php if ($action == "edit") { if (!(strcmp($row_log['brewHops'.$i.'Use'], "Dry Hop"))) echo "CHECKED"; }?>> <?php echo $label_dry_hop; ?>
-                            </label>
-                        </div>
-                    </div>
-                    </div><!-- ./Form Group -->
-                    <div class="form-group form-group-sm"><!-- Form Group Radio INLINE -->
-                    <label for="brewHops<?php echo $i; ?>Type" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label"><?php echo $label_hop." ".$i." ".$label_type; ?></label>
-                    <div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
-                        <div class="input-group small">
-                            <!-- Input Here -->
-                            <label class="radio-inline">
-                                <input type="radio" name="brewHops<?php echo $i; ?>Type" id="brewHops<?php echo $i; ?>Type" value="Bittering" <?php if ($action == "edit") { if (!(strcmp($row_log['brewHops'.$i.'Type'], "Bittering"))) echo "CHECKED"; }?>> <?php echo $label_bittering; ?>
-                            </label>
-                            <label class="radio-inline">
-                                <input type="radio" name="brewHops<?php echo $i; ?>Type" id="brewHops<?php echo $i; ?>Type" value="Aroma" <?php if ($action == "edit") { if (!(strcmp($row_log['brewHops'.$i.'Type'], "Aroma"))) echo "CHECKED"; }?>> <?php echo $label_aroma; ?>
-                            </label>
-                            <label class="radio-inline">
-                                <input type="radio" name="brewHops<?php echo $i; ?>Type" id="brewHops<?php echo $i; ?>Type" value="Both" <?php if ($action == "edit") { if (!(strcmp($row_log['brewHops'.$i.'Type'], "Both"))) echo "CHECKED"; }?>> <?php echo $label_both; ?>
-                            </label>
-                        </div>
-                    </div>
-                    </div><!-- ./Form Group -->
-                    <div class="form-group form-group-sm"><!-- Form Group Radio INLINE -->
-                    <label for="brewHops<?php echo $i; ?>Form" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label"><?php echo $label_hop." ".$i." ".$label_form; ?></label>
-                    <div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
-                        <div class="input-group small">
-                            <!-- Input Here -->
-                            <label class="radio-inline">
-                                <input type="radio" name="brewHops<?php echo $i; ?>Form" id="brewHops<?php echo $i; ?>Form" value="Pellets" <?php if ($action == "edit") { if (!(strcmp($row_log['brewHops'.$i.'Form'], "Pellets"))) echo "CHECKED"; }?>> <?php echo $label_pellets; ?>
-                            </label>
-                            <label class="radio-inline">
-                                <input type="radio" name="brewHops<?php echo $i; ?>Form" id="brewHops<?php echo $i; ?>Form" value="Plug" <?php if ($action == "edit") { if (!(strcmp($row_log['brewHops'.$i.'Form'], "Plug"))) echo "CHECKED"; }?>> <?php echo $label_plug; ?>
-                            </label>
-                            <label class="radio-inline">
-                                <input type="radio" name="brewHops<?php echo $i; ?>Form" id="brewHops<?php echo $i; ?>Form" value="Leaf" <?php if ($action == "edit") { if (!(strcmp($row_log['brewHops'.$i.'Form'], "Leaf"))) echo "CHECKED"; }?>> <?php echo $label_whole; ?>
-                            </label>
-                            <label class="radio-inline">
-                                <input type="radio" name="brewHops<?php echo $i; ?>Form" id="brewHops<?php echo $i; ?>Form" value="Extract" <?php if ($action == "edit") { if (!(strcmp($row_log['brewHops'.$i.'Form'], "Extract"))) echo "CHECKED"; }?>> <?php echo $label_extract; ?>
-                            </label>
-                        </div>
-                    </div>
-                    </div><!-- ./Form Group -->
-                <?php } ?>
-                </div>
-            </div>
-        </div><!-- ./New Panel -->
-        <!-- Mash Panel -->
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                <h4 class="panel-title">
-                    <a data-toggle="collapse" data-parent="#accordion" href="#collapseMash"><?php echo $label_mash; ?></a>
-                </h4>
-            </div>
-            <div id="collapseMash" class="panel-collapse collapse">
-                <div class="panel-body">
-                <?php for($i=1; $i<=10; $i++) { ?>
-				<div class="form-group form-group-sm"><!-- Form Group Text Input -->
-                    <label for="brewMashStep<?php echo $i; ?>Name" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label"><?php echo $label_step." ".$i; ?></label>
-                    <div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
-                        <!-- Input Here -->
-                        <input class="form-control" name="brewMashStep<?php echo $i; ?>Name" type="text" value="<?php if ($action == "edit") echo $row_log['brewMashStep'.$i.'Name']; ?>" placeholder="<?php echo $brew_text_024; ?>">
-                    </div>
-                </div><!-- ./Form Group -->
+	                            <label class="radio-inline">
+	                                <input type="radio" name="brewHops<?php echo $i; ?>Use" id="brewHops<?php echo $i; ?>Use" value="Dry Hop" <?php if ($action == "edit") { if (!(strcmp($row_log['brewHops'.$i.'Use'], "Dry Hop"))) echo "CHECKED"; }?>> <?php echo $label_dry_hop; ?>
+	                            </label>
+	                        </div>
+	                    </div>
+	                    </div><!-- ./Form Group -->
+	                    <div class="form-group form-group-sm"><!-- Form Group Radio INLINE -->
+	                    <label for="brewHops<?php echo $i; ?>Type" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label"><?php echo $label_hop." ".$i." ".$label_type; ?></label>
+	                    <div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
+	                        <div class="input-group small">
+	                            <!-- Input Here -->
+	                            <label class="radio-inline">
+	                                <input type="radio" name="brewHops<?php echo $i; ?>Type" id="brewHops<?php echo $i; ?>Type" value="Bittering" <?php if ($action == "edit") { if (!(strcmp($row_log['brewHops'.$i.'Type'], "Bittering"))) echo "CHECKED"; }?>> <?php echo $label_bittering; ?>
+	                            </label>
+	                            <label class="radio-inline">
+	                                <input type="radio" name="brewHops<?php echo $i; ?>Type" id="brewHops<?php echo $i; ?>Type" value="Aroma" <?php if ($action == "edit") { if (!(strcmp($row_log['brewHops'.$i.'Type'], "Aroma"))) echo "CHECKED"; }?>> <?php echo $label_aroma; ?>
+	                            </label>
+	                            <label class="radio-inline">
+	                                <input type="radio" name="brewHops<?php echo $i; ?>Type" id="brewHops<?php echo $i; ?>Type" value="Both" <?php if ($action == "edit") { if (!(strcmp($row_log['brewHops'.$i.'Type'], "Both"))) echo "CHECKED"; }?>> <?php echo $label_both; ?>
+	                            </label>
+	                        </div>
+	                    </div>
+	                    </div><!-- ./Form Group -->
+	                    <div class="form-group form-group-sm"><!-- Form Group Radio INLINE -->
+	                    <label for="brewHops<?php echo $i; ?>Form" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label"><?php echo $label_hop." ".$i." ".$label_form; ?></label>
+	                    <div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
+	                        <div class="input-group small">
+	                            <!-- Input Here -->
+	                            <label class="radio-inline">
+	                                <input type="radio" name="brewHops<?php echo $i; ?>Form" id="brewHops<?php echo $i; ?>Form" value="Pellets" <?php if ($action == "edit") { if (!(strcmp($row_log['brewHops'.$i.'Form'], "Pellets"))) echo "CHECKED"; }?>> <?php echo $label_pellets; ?>
+	                            </label>
+	                            <label class="radio-inline">
+	                                <input type="radio" name="brewHops<?php echo $i; ?>Form" id="brewHops<?php echo $i; ?>Form" value="Plug" <?php if ($action == "edit") { if (!(strcmp($row_log['brewHops'.$i.'Form'], "Plug"))) echo "CHECKED"; }?>> <?php echo $label_plug; ?>
+	                            </label>
+	                            <label class="radio-inline">
+	                                <input type="radio" name="brewHops<?php echo $i; ?>Form" id="brewHops<?php echo $i; ?>Form" value="Leaf" <?php if ($action == "edit") { if (!(strcmp($row_log['brewHops'.$i.'Form'], "Leaf"))) echo "CHECKED"; }?>> <?php echo $label_whole; ?>
+	                            </label>
+	                            <label class="radio-inline">
+	                                <input type="radio" name="brewHops<?php echo $i; ?>Form" id="brewHops<?php echo $i; ?>Form" value="Extract" <?php if ($action == "edit") { if (!(strcmp($row_log['brewHops'.$i.'Form'], "Extract"))) echo "CHECKED"; }?>> <?php echo $label_extract; ?>
+	                            </label>
+	                        </div>
+	                    </div>
+	                    </div><!-- ./Form Group -->
+	                <?php } ?>
+	                </div>
+	            </div>
+	        </div><!-- ./New Panel -->
+	        <!-- Mash Panel -->
+	        <div class="panel panel-default">
+	            <div class="panel-heading">
+	                <h4 class="panel-title">
+	                    <a data-toggle="collapse" data-parent="#accordion" href="#collapseMash"><?php echo $label_mash; ?></a>
+	                </h4>
+	            </div>
+	            <div id="collapseMash" class="panel-collapse collapse">
+	                <div class="panel-body">
+	                <?php for($i=1; $i<=10; $i++) { ?>
+					<div class="form-group form-group-sm"><!-- Form Group Text Input -->
+	                    <label for="brewMashStep<?php echo $i; ?>Name" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label"><?php echo $label_step." ".$i; ?></label>
+	                    <div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
+	                        <!-- Input Here -->
+	                        <input class="form-control" name="brewMashStep<?php echo $i; ?>Name" type="text" value="<?php if ($action == "edit") echo $row_log['brewMashStep'.$i.'Name']; ?>" placeholder="<?php echo $brew_text_024; ?>">
+	                    </div>
+	                </div><!-- ./Form Group -->
 
-                <div class="form-group form-group-sm"><!-- Form Group Text Input -->
-                    <label for="brewMashStep<?php echo $i; ?>Time" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label"><?php echo $label_step." ".$i." ".$label_time; ?></label>
-                    <div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
-                        <!-- Input Here -->
-                        <input class="form-control" name="brewMashStep<?php echo $i; ?>Time" type="text" value="<?php if ($action == "edit") echo $row_log['brewMashStep'.$i.'Time']; ?>" placeholder="<?php echo $label_minutes;?>">
-                    </div>
-                </div><!-- ./Form Group -->
+	                <div class="form-group form-group-sm"><!-- Form Group Text Input -->
+	                    <label for="brewMashStep<?php echo $i; ?>Time" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label"><?php echo $label_step." ".$i." ".$label_time; ?></label>
+	                    <div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
+	                        <!-- Input Here -->
+	                        <input class="form-control" name="brewMashStep<?php echo $i; ?>Time" type="text" value="<?php if ($action == "edit") echo $row_log['brewMashStep'.$i.'Time']; ?>" placeholder="<?php echo $label_minutes;?>">
+	                    </div>
+	                </div><!-- ./Form Group -->
 
-                <div class="form-group form-group-sm"><!-- Form Group Text Input -->
-                    <label for="brewMashStep<?php echo $i; ?>Temp" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label"><?php echo $label_step." ".$i." ".$label_temperature; ?></label>
-                    <div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
-                        <!-- Input Here -->
-                        <input class="form-control" name="brewMashStep<?php echo $i; ?>Temp" type="text" value="<?php if ($action == "edit") echo $row_log['brewMashStep'.$i.'Temp']; ?>" placeholder="&deg;<?php echo $_SESSION['prefsTemp']; ?>">
-                    </div>
-                </div><!-- ./Form Group -->
-                <?php } ?>
-                </div>
-            </div>
-        </div><!-- ./New Panel -->
-        <!-- Water Panel -->
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                <h4 class="panel-title">
-                    <a data-toggle="collapse" data-parent="#accordion" href="#collapseWater"><?php echo $label_water; ?></a>
-                </h4>
-            </div>
-            <div id="collapseWater" class="panel-collapse collapse">
-                <div class="panel-body">
-                	<div class="form-group form-group-sm"><!-- Form Group NOT-REQUIRED Text Area -->
-                        <label for="brewWaterNotes" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label"><?php echo $label_type."/".$label_amount; ?></label>
-                        <div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
-                            <!-- Input Here -->
-                            <textarea class="form-control" name="brewWaterNotes" id="brewWaterNotes" rows="6"><?php if ($action == "edit") echo $row_log['brewWaterNotes']; ?></textarea>
-                         </div>
-                    </div><!-- ./Form Group -->
-                </div>
-            </div>
-        </div><!-- ./New Panel -->
-        <!-- Yeast Panel -->
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                <h4 class="panel-title">
-                    <a data-toggle="collapse" data-parent="#accordion" href="#collapseYeast"><?php echo $label_yeast; ?></a>
-                </h4>
-            </div>
-            <div id="collapseYeast" class="panel-collapse collapse">
-                <div class="panel-body">
-                <div class="form-group form-group-sm"><!-- Form Group Text Input -->
-                    <label for="brewYeast" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label"><?php echo $label_yeast." ".$label_name; ?></label>
-                    <div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
-                        <!-- Input Here -->
-                        <input class="form-control" name="brewYeast" type="text" value="<?php if ($action == "edit") echo $row_log['brewYeast']; ?>" placeholder="<?php echo $brew_text_020; ?>">
-                    </div>
-                </div><!-- ./Form Group -->
-                <div class="form-group form-group-sm"><!-- Form Group Text Input -->
-                    <label for="brewYeastMan" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label"><?php echo $label_manufacturer; ?></label>
-                    <div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
-                        <!-- Input Here -->
-                        <input class="form-control" name="brewYeastMan" type="text" value="<?php if ($action == "edit") echo $row_log['brewYeastMan']; ?>" placeholder="<?php echo $brew_text_021; ?>">
-                    </div>
-                </div><!-- ./Form Group -->
-                <div class="form-group form-group-sm"><!-- Form Group Radio INLINE -->
-                    <label for="brewYeastStarter" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label"><?php echo $label_starter; ?></label>
-                    <div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
-                        <div class="input-group small">
-                            <!-- Input Here -->
-                            <label class="radio-inline">
-                                <input type="radio" name="brewYeastStarter" id="brewYeastStarter" value="Y" <?php if ($action == "edit") { if (!(strcmp($row_log['brewYeastStarter'], "Y"))) echo "CHECKED"; }?>> <?php echo $label_yes; ?>
-                            </label>
-                            <label class="radio-inline">
-                                <input type="radio" name="brewYeastStarter" id="brewYeastStarter" value="N" <?php if ($action == "edit") { if (!(strcmp($row_log['brewYeastStarter'], "N"))) echo "CHECKED"; }?>> <?php echo $label_no; ?>
-                            </label>
-                        </div>
-                    </div>
-                </div><!-- ./Form Group -->
-                <div class="form-group form-group-sm"><!-- Form Group Text Input -->
-                    <label for="brewYeastAmount" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label"><?php echo $label_amount; ?></label>
-                    <div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
-                    	<!-- Input Here -->
-                    	<input class="form-control" name="brewYeastAmount" type="text" value="<?php if ($action == "edit") echo $row_log['brewYeastAmount']; ?>" placeholder="<?php echo $brew_text_022; ?>">
-                    </div>
-                </div><!-- ./Form Group -->
-                <div class="form-group form-group-sm"><!-- Form Group Text Input -->
-                    <label for="brewYeastNutrients" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label"><?php echo $label_nutrients; ?></label>
-                    <div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
-                    	<!-- Input Here -->
-                    	<input class="form-control" name="brewYeastNutrients" type="text" value="<?php if ($action == "edit") echo $row_log['brewYeastNutrients']; ?>" placeholder="">
-                    </div>
-                </div><!-- ./Form Group -->
-                <div class="form-group form-group-sm"><!-- Form Group Radio INLINE -->
-                    <label for="brewYeastForm" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label"><?php echo $label_form; ?></label>
-                    <div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
-                        <div class="input-group small">
-                            <!-- Input Here -->
-                            <label class="radio-inline">
-                                <input type="radio" name="brewYeastForm" id="brewYeastForm" value="Liquid" <?php if ($action == "edit") { if (!(strcmp($row_log['brewYeastForm'], "Liquid"))) echo "CHECKED"; }?>> <?php echo $label_liquid; ?>
-                            </label>
-                            <label class="radio-inline">
-                                <input type="radio" name="brewYeastForm" id="brewYeastForm" value="Dry" <?php if ($action == "edit") { if (!(strcmp($row_log['brewYeastForm'], "Dry"))) echo "CHECKED"; }?>> <?php echo $label_dry; ?>
-                            </label>
-                        </div>
-                    </div>
-                </div><!-- ./Form Group -->
-                <div class="form-group form-group-sm"><!-- Form Group Radio INLINE -->
-                    <label for="brewYeastType" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label"><?php echo $label_type; ?></label>
-                    <div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
-                        <div class="input-group small">
-                            <!-- Input Here -->
-                            <label class="radio-inline">
-                                <input type="radio" name="brewYeastType" id="brewYeastType" value="Ale" <?php if ($action == "edit") { if (!(strcmp($row_log['brewYeastType'], "Ale"))) echo "CHECKED"; }?>> <?php echo $label_ale; ?>
-                            </label>
-                            <label class="radio-inline">
-                                <input type="radio" name="brewYeastType" id="brewYeastType" value="Lager" <?php if ($action == "edit") { if (!(strcmp($row_log['brewYeastType'], "Mash"))) echo "CHECKED"; }?>> <?php echo $label_lager; ?>
-                            </label>
+	                <div class="form-group form-group-sm"><!-- Form Group Text Input -->
+	                    <label for="brewMashStep<?php echo $i; ?>Temp" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label"><?php echo $label_step." ".$i." ".$label_temperature; ?></label>
+	                    <div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
+	                        <!-- Input Here -->
+	                        <input class="form-control" name="brewMashStep<?php echo $i; ?>Temp" type="text" value="<?php if ($action == "edit") echo $row_log['brewMashStep'.$i.'Temp']; ?>" placeholder="&deg;<?php echo $_SESSION['prefsTemp']; ?>">
+	                    </div>
+	                </div><!-- ./Form Group -->
+	                <?php } ?>
+	                </div>
+	            </div>
+	        </div><!-- ./New Panel -->
+	        <!-- Water Panel -->
+	        <div class="panel panel-default">
+	            <div class="panel-heading">
+	                <h4 class="panel-title">
+	                    <a data-toggle="collapse" data-parent="#accordion" href="#collapseWater"><?php echo $label_water; ?></a>
+	                </h4>
+	            </div>
+	            <div id="collapseWater" class="panel-collapse collapse">
+	                <div class="panel-body">
+	                	<div class="form-group form-group-sm"><!-- Form Group NOT-REQUIRED Text Area -->
+	                        <label for="brewWaterNotes" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label"><?php echo $label_type."/".$label_amount; ?></label>
+	                        <div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
+	                            <!-- Input Here -->
+	                            <textarea class="form-control" name="brewWaterNotes" id="brewWaterNotes" rows="6"><?php if ($action == "edit") echo $row_log['brewWaterNotes']; ?></textarea>
+	                         </div>
+	                    </div><!-- ./Form Group -->
+	                </div>
+	            </div>
+	        </div><!-- ./New Panel -->
+	        <!-- Yeast Panel -->
+	        <div class="panel panel-default">
+	            <div class="panel-heading">
+	                <h4 class="panel-title">
+	                    <a data-toggle="collapse" data-parent="#accordion" href="#collapseYeast"><?php echo $label_yeast; ?></a>
+	                </h4>
+	            </div>
+	            <div id="collapseYeast" class="panel-collapse collapse">
+	                <div class="panel-body">
+	                <div class="form-group form-group-sm"><!-- Form Group Text Input -->
+	                    <label for="brewYeast" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label"><?php echo $label_yeast." ".$label_name; ?></label>
+	                    <div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
+	                        <!-- Input Here -->
+	                        <input class="form-control" name="brewYeast" type="text" value="<?php if ($action == "edit") echo $row_log['brewYeast']; ?>" placeholder="<?php echo $brew_text_020; ?>">
+	                    </div>
+	                </div><!-- ./Form Group -->
+	                <div class="form-group form-group-sm"><!-- Form Group Text Input -->
+	                    <label for="brewYeastMan" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label"><?php echo $label_manufacturer; ?></label>
+	                    <div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
+	                        <!-- Input Here -->
+	                        <input class="form-control" name="brewYeastMan" type="text" value="<?php if ($action == "edit") echo $row_log['brewYeastMan']; ?>" placeholder="<?php echo $brew_text_021; ?>">
+	                    </div>
+	                </div><!-- ./Form Group -->
+	                <div class="form-group form-group-sm"><!-- Form Group Radio INLINE -->
+	                    <label for="brewYeastStarter" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label"><?php echo $label_starter; ?></label>
+	                    <div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
+	                        <div class="input-group small">
+	                            <!-- Input Here -->
+	                            <label class="radio-inline">
+	                                <input type="radio" name="brewYeastStarter" id="brewYeastStarter" value="Y" <?php if ($action == "edit") { if (!(strcmp($row_log['brewYeastStarter'], "Y"))) echo "CHECKED"; }?>> <?php echo $label_yes; ?>
+	                            </label>
+	                            <label class="radio-inline">
+	                                <input type="radio" name="brewYeastStarter" id="brewYeastStarter" value="N" <?php if ($action == "edit") { if (!(strcmp($row_log['brewYeastStarter'], "N"))) echo "CHECKED"; }?>> <?php echo $label_no; ?>
+	                            </label>
+	                        </div>
+	                    </div>
+	                </div><!-- ./Form Group -->
+	                <div class="form-group form-group-sm"><!-- Form Group Text Input -->
+	                    <label for="brewYeastAmount" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label"><?php echo $label_amount; ?></label>
+	                    <div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
+	                    	<!-- Input Here -->
+	                    	<input class="form-control" name="brewYeastAmount" type="text" value="<?php if ($action == "edit") echo $row_log['brewYeastAmount']; ?>" placeholder="<?php echo $brew_text_022; ?>">
+	                    </div>
+	                </div><!-- ./Form Group -->
+	                <div class="form-group form-group-sm"><!-- Form Group Text Input -->
+	                    <label for="brewYeastNutrients" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label"><?php echo $label_nutrients; ?></label>
+	                    <div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
+	                    	<!-- Input Here -->
+	                    	<input class="form-control" name="brewYeastNutrients" type="text" value="<?php if ($action == "edit") echo $row_log['brewYeastNutrients']; ?>" placeholder="">
+	                    </div>
+	                </div><!-- ./Form Group -->
+	                <div class="form-group form-group-sm"><!-- Form Group Radio INLINE -->
+	                    <label for="brewYeastForm" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label"><?php echo $label_form; ?></label>
+	                    <div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
+	                        <div class="input-group small">
+	                            <!-- Input Here -->
+	                            <label class="radio-inline">
+	                                <input type="radio" name="brewYeastForm" id="brewYeastForm" value="Liquid" <?php if ($action == "edit") { if (!(strcmp($row_log['brewYeastForm'], "Liquid"))) echo "CHECKED"; }?>> <?php echo $label_liquid; ?>
+	                            </label>
+	                            <label class="radio-inline">
+	                                <input type="radio" name="brewYeastForm" id="brewYeastForm" value="Dry" <?php if ($action == "edit") { if (!(strcmp($row_log['brewYeastForm'], "Dry"))) echo "CHECKED"; }?>> <?php echo $label_dry; ?>
+	                            </label>
+	                        </div>
+	                    </div>
+	                </div><!-- ./Form Group -->
+	                <div class="form-group form-group-sm"><!-- Form Group Radio INLINE -->
+	                    <label for="brewYeastType" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label"><?php echo $label_type; ?></label>
+	                    <div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
+	                        <div class="input-group small">
+	                            <!-- Input Here -->
+	                            <label class="radio-inline">
+	                                <input type="radio" name="brewYeastType" id="brewYeastType" value="Ale" <?php if ($action == "edit") { if (!(strcmp($row_log['brewYeastType'], "Ale"))) echo "CHECKED"; }?>> <?php echo $label_ale; ?>
+	                            </label>
+	                            <label class="radio-inline">
+	                                <input type="radio" name="brewYeastType" id="brewYeastType" value="Lager" <?php if ($action == "edit") { if (!(strcmp($row_log['brewYeastType'], "Mash"))) echo "CHECKED"; }?>> <?php echo $label_lager; ?>
+	                            </label>
 
-                            <label class="radio-inline">
-                                <input type="radio" name="brewYeastType" id="brewYeastType" value="Wine" <?php if ($action == "edit") { if (!(strcmp($row_log['brewYeastType'], "Wine"))) echo "CHECKED"; }?>> <?php echo $label_wine; ?>
-                            </label>
-                            <label class="radio-inline">
-                                <input type="radio" name="brewYeastType" id="brewYeastType" value="Champagne" <?php if ($action == "edit") { if (!(strcmp($row_log['brewYeastType'], "Champagne"))) echo "CHECKED"; }?>> <?php echo $label_champagne; ?>
-                            </label>
-                            <label class="radio-inline">
-                                <input type="radio" name="brewYeastType" id="brewYeastType" value="Other" <?php if ($action == "edit") { if (!(strcmp($row_log['brewYeastType'], "Other"))) echo "CHECKED"; }?>> <?php echo $label_other; ?>
-                            </label>
-                        </div>
-                    </div>
-                </div><!-- ./Form Group -->
-                </div>
-            </div>
-        </div><!-- ./New Panel -->
-        <!-- Boil, Fermentation, Finishing, Carbonation Panel -->
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                <h4 class="panel-title">
-                    <a data-toggle="collapse" data-parent="#accordion" href="#collapseBoil"><?php echo $label_boil.", ".$label_fermentation.", ".$label_finishing.", ".$label_carbonation; ?></a>
-                </h4>
-            </div>
-            <div id="collapseBoil" class="panel-collapse collapse">
-                <div class="panel-body">
+	                            <label class="radio-inline">
+	                                <input type="radio" name="brewYeastType" id="brewYeastType" value="Wine" <?php if ($action == "edit") { if (!(strcmp($row_log['brewYeastType'], "Wine"))) echo "CHECKED"; }?>> <?php echo $label_wine; ?>
+	                            </label>
+	                            <label class="radio-inline">
+	                                <input type="radio" name="brewYeastType" id="brewYeastType" value="Champagne" <?php if ($action == "edit") { if (!(strcmp($row_log['brewYeastType'], "Champagne"))) echo "CHECKED"; }?>> <?php echo $label_champagne; ?>
+	                            </label>
+	                            <label class="radio-inline">
+	                                <input type="radio" name="brewYeastType" id="brewYeastType" value="Other" <?php if ($action == "edit") { if (!(strcmp($row_log['brewYeastType'], "Other"))) echo "CHECKED"; }?>> <?php echo $label_other; ?>
+	                            </label>
+	                        </div>
+	                    </div>
+	                </div><!-- ./Form Group -->
+	                </div>
+	            </div>
+	        </div><!-- ./New Panel -->
+	        <!-- Boil, Fermentation, Finishing, Carbonation Panel -->
+	        <div class="panel panel-default">
+	            <div class="panel-heading">
+	                <h4 class="panel-title">
+	                    <a data-toggle="collapse" data-parent="#accordion" href="#collapseBoil"><?php echo $label_boil.", ".$label_fermentation.", ".$label_finishing.", ".$label_carbonation; ?></a>
+	                </h4>
+	            </div>
+	            <div id="collapseBoil" class="panel-collapse collapse">
+	                <div class="panel-body">
 
-                <!-- Boil -->
-                <div class="form-group form-group-sm"><!-- Form Group Text Input -->
-                    <label for="brewBoilHours" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label"><?php echo $label_boil." ".$label_hours; ?></label>
-                    <div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
-                        <!-- Input Here -->
-                        <input class="form-control" name="brewBoilHours" type="text" value="<?php if ($action == "edit") echo $row_log['brewBoilHours']; ?>" placeholder="">
-                    </div>
-                </div><!-- ./Form Group -->
-                <div class="form-group form-group-sm"><!-- Form Group Text Input -->
-                    <label for="brewBoilMins" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label"><?php echo $label_boil." ".$label_minutes; ?></label>
-                    <div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
-                        <!-- Input Here -->
-                        <input class="form-control" name="brewBoilMins" type="text" value="<?php if ($action == "edit") echo $row_log['brewBoilMins']; ?>" placeholder="">
-                    </div>
-                </div><!-- ./Form Group -->
+	                <!-- Boil -->
+	                <div class="form-group form-group-sm"><!-- Form Group Text Input -->
+	                    <label for="brewBoilHours" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label"><?php echo $label_boil." ".$label_hours; ?></label>
+	                    <div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
+	                        <!-- Input Here -->
+	                        <input class="form-control" name="brewBoilHours" type="text" value="<?php if ($action == "edit") echo $row_log['brewBoilHours']; ?>" placeholder="">
+	                    </div>
+	                </div><!-- ./Form Group -->
+	                <div class="form-group form-group-sm"><!-- Form Group Text Input -->
+	                    <label for="brewBoilMins" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label"><?php echo $label_boil." ".$label_minutes; ?></label>
+	                    <div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
+	                        <!-- Input Here -->
+	                        <input class="form-control" name="brewBoilMins" type="text" value="<?php if ($action == "edit") echo $row_log['brewBoilMins']; ?>" placeholder="">
+	                    </div>
+	                </div><!-- ./Form Group -->
 
-                <!-- Finings -->
-                <div class="form-group form-group-sm"><!-- Form Group Text Input -->
-                    <label for="brewFinings" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label"><?php echo $label_finings; ?></label>
-                    <div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
-                        <!-- Input Here -->
-                        <input class="form-control" name="brewFinings" type="text" value="<?php if ($action == "edit") echo $row_log['brewFinings']; ?>" placeholder="">
-                    </div>
-                </div><!-- ./Form Group -->
-                <!-- Fermentation -->
-                <div class="form-group form-group-sm"><!-- Form Group Text Input -->
-                    <label for="brewPrimary" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label"><?php echo $label_primary." ".$label_fermentation; ?></label>
-                    <div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
-                        <!-- Input Here -->
-                        <input class="form-control" name="brewPrimary" type="text" value="<?php if ($action == "edit") echo $row_log['brewPrimary']; ?>" placeholder="<?php echo $brew_text_023; ?>">
-                    </div>
-                </div><!-- ./Form Group -->
-                <div class="form-group form-group-sm"><!-- Form Group Text Input -->
-                    <label for="brewPrimaryTemp" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label"><?php echo $label_primary." ".$label_temperature; ?></label>
-                    <div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
-                        <!-- Input Here -->
-                        <input class="form-control" name="brewPrimaryTemp" type="text" value="<?php if ($action == "edit") echo $row_log['brewPrimaryTemp']; ?>" placeholder="&deg;<?php echo $_SESSION['prefsTemp']; ?>">
-                    </div>
-                </div><!-- ./Form Group -->
-                <div class="form-group form-group-sm"><!-- Form Group Text Input -->
-                    <label for="brewSecondary" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label"><?php echo $label_secondary." ".$label_fermentation; ?></label>
-                    <div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
-                        <!-- Input Here -->
-                        <input class="form-control" name="brewSecondary" type="text" value="<?php if ($action == "edit") echo $row_log['brewSecondary']; ?>" placeholder="<?php echo $brew_text_025; ?>">
-                    </div>
-                </div><!-- ./Form Group -->
-                <div class="form-group form-group-sm"><!-- Form Group Text Input -->
-                    <label for="brewSecondaryTemp" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label"><?php echo $label_secondary." ".$label_temperature; ?></label>
-                    <div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
-                        <!-- Input Here -->
-                        <input class="form-control" name="brewSecondaryTemp" type="text" value="<?php if ($action == "edit") echo $row_log['brewSecondaryTemp']; ?>" placeholder="&deg;<?php echo $_SESSION['prefsTemp']; ?>">
-                    </div>
-                </div><!-- ./Form Group -->
-                <div class="form-group form-group-sm"><!-- Form Group Text Input -->
-                    <label for="brewOther" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label"><?php echo $label_other." ".$label_fermentation; ?></label>
-                    <div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
-                        <!-- Input Here -->
-                        <input class="form-control" name="brewOther" type="text" value="<?php if ($action == "edit") echo $row_log['brewOther']; ?>" placeholder="<?php echo $brew_text_026; ?>">
-                    </div>
-                </div><!-- ./Form Group -->
-                <div class="form-group form-group-sm"><!-- Form Group Text Input -->
-                    <label for="brewOtherTemp" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label"><?php echo $label_other." ".$label_temperature; ?></label>
-                    <div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
-                        <!-- Input Here -->
-                        <input class="form-control" name="brewOtherTemp" type="text" value="<?php if ($action == "edit") echo $row_log['brewOtherTemp']; ?>" placeholder="&deg;<?php echo $_SESSION['prefsTemp']; ?>">
-                    </div>
-                </div><!-- ./Form Group -->
-                <!-- Carbonation -->
-                <div class="form-group form-group-sm"><!-- Form Group Radio INLINE -->
-                    <label for="brewCarbonationMethod" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label"><?php echo $label_carbonation; ?></label>
-                    <div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
-                        <div class="input-group small">
-                            <!-- Input Here -->
-                            <label class="radio-inline">
-                                <input type="radio" name="brewCarbonationMethod" id="brewCarbonationMethod_0" value="Y" <?php if ($action == "edit") { if (!(strcmp($row_log['brewCarbonationMethod'], "Y"))) echo "CHECKED"; }?>> <?php echo $label_forced; ?>
-                            </label>
-                            <label class="radio-inline">
-                                <input type="radio" name="brewCarbonationMethod" id="brewCarbonationMethod_1" value="N" <?php if ($action == "edit") { if (!(strcmp($row_log['brewCarbonationMethod'], "N"))) echo "CHECKED"; }?>> <?php echo $label_bottle_cond; ?>
-                            </label>
-                        </div>
-                    </div>
-                </div><!-- ./Form Group -->
-                <div class="form-group form-group-sm"><!-- Form Group Text Input -->
-                    <label for="brewCarbonationVol" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label"><?php echo $label_volume; ?></label>
-                    <div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
-                        <!-- Input Here -->
-                        <input class="form-control" name="brewCarbonationVol" type="text" value="<?php if ($action == "edit") echo $row_log['brewCarbonationVol']; ?>" placeholder="">
-                    </div>
-                </div><!-- ./Form Group -->
-                <div class="form-group form-group-sm"><!-- Form Group NOT-REQUIRED Text Area -->
-                    <label for="brewCarbonationNotes" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label"><?php echo $label_carbonation." ".$label_type."/".$label_amount; ?></label>
-                    <div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
-                        <!-- Input Here -->
-                        <textarea class="form-control" name="brewCarbonationNotes" id="brewCarbonationNotes" rows="6"><?php if ($action == "edit") echo $row_log['brewCarbonationNotes']; ?></textarea>
-                     </div>
-                </div><!-- ./Form Group -->
-                </div>
-            </div>
-        </div><!-- ./New Panel -->
-    </div>
-</div>
+	                <!-- Finings -->
+	                <div class="form-group form-group-sm"><!-- Form Group Text Input -->
+	                    <label for="brewFinings" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label"><?php echo $label_finings; ?></label>
+	                    <div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
+	                        <!-- Input Here -->
+	                        <input class="form-control" name="brewFinings" type="text" value="<?php if ($action == "edit") echo $row_log['brewFinings']; ?>" placeholder="">
+	                    </div>
+	                </div><!-- ./Form Group -->
+	                <!-- Fermentation -->
+	                <div class="form-group form-group-sm"><!-- Form Group Text Input -->
+	                    <label for="brewPrimary" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label"><?php echo $label_primary." ".$label_fermentation; ?></label>
+	                    <div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
+	                        <!-- Input Here -->
+	                        <input class="form-control" name="brewPrimary" type="text" value="<?php if ($action == "edit") echo $row_log['brewPrimary']; ?>" placeholder="<?php echo $brew_text_023; ?>">
+	                    </div>
+	                </div><!-- ./Form Group -->
+	                <div class="form-group form-group-sm"><!-- Form Group Text Input -->
+	                    <label for="brewPrimaryTemp" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label"><?php echo $label_primary." ".$label_temperature; ?></label>
+	                    <div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
+	                        <!-- Input Here -->
+	                        <input class="form-control" name="brewPrimaryTemp" type="text" value="<?php if ($action == "edit") echo $row_log['brewPrimaryTemp']; ?>" placeholder="&deg;<?php echo $_SESSION['prefsTemp']; ?>">
+	                    </div>
+	                </div><!-- ./Form Group -->
+	                <div class="form-group form-group-sm"><!-- Form Group Text Input -->
+	                    <label for="brewSecondary" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label"><?php echo $label_secondary." ".$label_fermentation; ?></label>
+	                    <div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
+	                        <!-- Input Here -->
+	                        <input class="form-control" name="brewSecondary" type="text" value="<?php if ($action == "edit") echo $row_log['brewSecondary']; ?>" placeholder="<?php echo $brew_text_025; ?>">
+	                    </div>
+	                </div><!-- ./Form Group -->
+	                <div class="form-group form-group-sm"><!-- Form Group Text Input -->
+	                    <label for="brewSecondaryTemp" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label"><?php echo $label_secondary." ".$label_temperature; ?></label>
+	                    <div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
+	                        <!-- Input Here -->
+	                        <input class="form-control" name="brewSecondaryTemp" type="text" value="<?php if ($action == "edit") echo $row_log['brewSecondaryTemp']; ?>" placeholder="&deg;<?php echo $_SESSION['prefsTemp']; ?>">
+	                    </div>
+	                </div><!-- ./Form Group -->
+	                <div class="form-group form-group-sm"><!-- Form Group Text Input -->
+	                    <label for="brewOther" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label"><?php echo $label_other." ".$label_fermentation; ?></label>
+	                    <div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
+	                        <!-- Input Here -->
+	                        <input class="form-control" name="brewOther" type="text" value="<?php if ($action == "edit") echo $row_log['brewOther']; ?>" placeholder="<?php echo $brew_text_026; ?>">
+	                    </div>
+	                </div><!-- ./Form Group -->
+	                <div class="form-group form-group-sm"><!-- Form Group Text Input -->
+	                    <label for="brewOtherTemp" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label"><?php echo $label_other." ".$label_temperature; ?></label>
+	                    <div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
+	                        <!-- Input Here -->
+	                        <input class="form-control" name="brewOtherTemp" type="text" value="<?php if ($action == "edit") echo $row_log['brewOtherTemp']; ?>" placeholder="&deg;<?php echo $_SESSION['prefsTemp']; ?>">
+	                    </div>
+	                </div><!-- ./Form Group -->
+	                <!-- Carbonation -->
+	                <div class="form-group form-group-sm"><!-- Form Group Radio INLINE -->
+	                    <label for="brewCarbonationMethod" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label"><?php echo $label_carbonation; ?></label>
+	                    <div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
+	                        <div class="input-group small">
+	                            <!-- Input Here -->
+	                            <label class="radio-inline">
+	                                <input type="radio" name="brewCarbonationMethod" id="brewCarbonationMethod_0" value="Y" <?php if ($action == "edit") { if (!(strcmp($row_log['brewCarbonationMethod'], "Y"))) echo "CHECKED"; }?>> <?php echo $label_forced; ?>
+	                            </label>
+	                            <label class="radio-inline">
+	                                <input type="radio" name="brewCarbonationMethod" id="brewCarbonationMethod_1" value="N" <?php if ($action == "edit") { if (!(strcmp($row_log['brewCarbonationMethod'], "N"))) echo "CHECKED"; }?>> <?php echo $label_bottle_cond; ?>
+	                            </label>
+	                        </div>
+	                    </div>
+	                </div><!-- ./Form Group -->
+	                <div class="form-group form-group-sm"><!-- Form Group Text Input -->
+	                    <label for="brewCarbonationVol" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label"><?php echo $label_volume; ?></label>
+	                    <div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
+	                        <!-- Input Here -->
+	                        <input class="form-control" name="brewCarbonationVol" type="text" value="<?php if ($action == "edit") echo $row_log['brewCarbonationVol']; ?>" placeholder="">
+	                    </div>
+	                </div><!-- ./Form Group -->
+	                <div class="form-group form-group-sm"><!-- Form Group NOT-REQUIRED Text Area -->
+	                    <label for="brewCarbonationNotes" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label"><?php echo $label_carbonation." ".$label_type."/".$label_amount; ?></label>
+	                    <div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
+	                        <!-- Input Here -->
+	                        <textarea class="form-control" name="brewCarbonationNotes" id="brewCarbonationNotes" rows="6"><?php if ($action == "edit") echo $row_log['brewCarbonationNotes']; ?></textarea>
+	                     </div>
+	                </div><!-- ./Form Group -->
+	                </div>
+	            </div>
+	        </div><!-- ./New Panel -->
+	    </div>
+	</div>
 <?php } // end if ($_SESSION['prefsHideRecipe'] == "N")
 if ($action == "add") {
 	$submit_icon = "plus";

@@ -17,7 +17,7 @@ if ($section == "step4") unset($_SESSION['prefs'.$prefix_session]);
 // Set language preferences in session variables
 if (empty($_SESSION['prefsLang'.$prefix_session])) {
 
-    // Language - in current version only English is available. Future versions will feature translations.
+    // Default is US English. Users will choose language when defining preferences.
     $_SESSION['prefsLanguage'] = "en-US";
 
     // Check if variation used (demarked with a dash)

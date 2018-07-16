@@ -1139,12 +1139,25 @@ function judge_alert($round,$bid,$tid,$location,$likes,$dislikes,$table_styles,$
 function judge_info($uid) {
 	require(CONFIG.'config.php');
 	mysqli_select_db($connection,$database);
-	$query_brewer_info = sprintf("SELECT id,brewerFirstName,brewerLastName,brewerJudgeLikes,brewerJudgeDislikes,brewerJudgeMead,brewerJudgeRank,brewerJudgeID,brewerStewardLocation,brewerJudgeLocation,brewerJudgeExp,brewerJudgeNotes FROM %s WHERE uid='%s'", $prefix."brewer", $uid);
+	$query_brewer_info = sprintf("SELECT id,brewerFirstName,brewerLastName,brewerJudgeLikes,brewerJudgeDislikes,brewerJudgeMead,brewerJudgeCider,brewerJudgeRank,brewerJudgeID,brewerStewardLocation,brewerJudgeLocation,brewerJudgeExp,brewerJudgeNotes FROM %s WHERE uid='%s'", $prefix."brewer", $uid);
 	$brewer_info = mysqli_query($connection,$query_brewer_info) or die (mysqli_error($connection));
 	$row_brewer_info = mysqli_fetch_assoc($brewer_info);
 
 
-	$r = $row_brewer_info['brewerFirstName']."^".$row_brewer_info['brewerLastName']."^".$row_brewer_info['brewerJudgeLikes']."^".$row_brewer_info['brewerJudgeDislikes']."^".$row_brewer_info['brewerJudgeMead']."^".$row_brewer_info['brewerJudgeRank']."^".$row_brewer_info['brewerJudgeID']."^".$row_brewer_info['brewerStewardLocation']."^".$row_brewer_info['brewerJudgeLocation']."^".$row_brewer_info['brewerJudgeExp']."^".$row_brewer_info['brewerJudgeNotes']."^".$row_brewer_info['id'];
+	$r =
+	$row_brewer_info['brewerFirstName']
+	."^".$row_brewer_info['brewerLastName']
+	."^".$row_brewer_info['brewerJudgeLikes']
+	."^".$row_brewer_info['brewerJudgeDislikes']
+	."^".$row_brewer_info['brewerJudgeMead']
+	."^".$row_brewer_info['brewerJudgeRank']
+	."^".$row_brewer_info['brewerJudgeID']
+	."^".$row_brewer_info['brewerStewardLocation']
+	."^".$row_brewer_info['brewerJudgeLocation']
+	."^".$row_brewer_info['brewerJudgeExp']
+	."^".$row_brewer_info['brewerJudgeNotes']
+	."^".$row_brewer_info['id']
+	."^".$row_brewer_info['brewerJudgeCider'];
 
 
 	if ($_SESSION['jPrefsQueued'] == "N") {
@@ -1154,7 +1167,6 @@ function judge_info($uid) {
 
 		$r .= "^".$row_judge_info['assignFlight']."^".$row_judge_info['assignRound'];
 	}
-
 
 	return $r;
 }
