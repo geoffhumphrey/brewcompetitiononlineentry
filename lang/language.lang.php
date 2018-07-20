@@ -13,7 +13,7 @@ TODO - convert the following for translation:
 
 // Load public pages language file
 include (LANG.$_SESSION['prefsLanguageFolder'].DIRECTORY_SEPARATOR.$_SESSION['prefsLanguage'].'.lang.php');
-//include (LANG.'fr'.DIRECTORY_SEPARATOR.'fr-FR.lang.php');
+//include (LANG.'en'.DIRECTORY_SEPARATOR.'en-US.lang.php');
 
 // Load admin pages language file
 // A future version will have full conversions for Admin, Update, and Setup

@@ -279,6 +279,7 @@ $(document).ready(function() {
 	foreach (array_unique($a) as $value) {
 
 		$score_style_data = score_style_data($value);
+        //echo $score_style_data."<br>";
 		$score_style_data = explode("^",$score_style_data);
 
 		include (DB.'admin_judging_scores.db.php'); // moved to a separate document to not have MySQL queries within loops

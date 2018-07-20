@@ -172,27 +172,9 @@ if (HOSTED) {
 }
 
 else {
-    // Version 1 reCAPTCHA (deprecated - DISABLED BY GOOGLE 3/31/18)
-    if ((isset($_SESSION['prefsCAPTCHA'])) && ($_SESSION['prefsCAPTCHA'] == 1)) {
-        $public_captcha_key = "6LdquuQSAAAAAC3rsksvtjRmR9yPFmflBF4OWNS7";
-        $private_captcha_key = "6LdquuQSAAAAAHkf3dDRqZckRb_RIjrkofxE8Knd";
-    }
-    // Version 2 reCAPTCHA
-    else {
-        $public_captcha_key = "6LfHUCoUAAAAACHsPn8hpzbtzcpXatm-GXTTWuR3";
-        $private_captcha_key = "6LfHUCoUAAAAACNL-wzpAG3eIWQC-PpX6X3a0iaM";
-    }
     $public_captcha_key = "6LfHUCoUAAAAACHsPn8hpzbtzcpXatm-GXTTWuR3";
     $private_captcha_key = "6LfHUCoUAAAAACNL-wzpAG3eIWQC-PpX6X3a0iaM";
 }
-
-/*
-else {
-    $public_captcha_key = "6LfHUCoUAAAAACHsPn8hpzbtzcpXatm-GXTTWuR3";
-    $private_captcha_key = "6LfHUCoUAAAAACNL-wzpAG3eIWQC-PpX6X3a0iaM";
-}
-*/
-
 
 /** Uncomment to display paths */
 /*

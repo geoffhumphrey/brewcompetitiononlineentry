@@ -11,13 +11,13 @@ Checked Single
  * Second in the pair is the official WWW3 language tag, exactly as it appears there
  * This WWW3 language tag should be the beginining of the language file (e.g., en-US.lang.php)
  * See https://www.loc.gov/standards/iso639-2/php/code_list.php
- * located in its parent language subfolder in the lang folder (e.g., /lang/en/en-US.lang.php)
+ * located in its parent language subfolder in the lang folder (e.g., /lang/en/)
  * More at https://www.w3.org/International/articles/language-tags/
  *
  */
 
 $languages = array(
-    "US English" => "en-US"
+    "en-US" => "US English"
 );
 
 /** -------------------------- Theme File names and  Display Name -------------------------------

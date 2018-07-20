@@ -69,7 +69,7 @@ if (isset($_SESSION['loginUsername'])) {
 				else 						$filename .= "_Avery5160";
 				$filename .= ".pdf";
 
-				$pdf->SetFont('Arial','',8);
+				$pdf->SetFont('Courier','',8);
 
 				// Print labels
 				do {
@@ -119,7 +119,7 @@ if (isset($_SESSION['loginUsername'])) {
 					"medium" => ""
 					);
 
-				$pdf->SetFont('Arial','',9);
+				$pdf->SetFont('Courier','',8);
 
 				// Assemble the file name
 				$filename = str_replace(" ","_",$_SESSION['contestName'])."_Bottle_Labels_";
@@ -171,17 +171,17 @@ if (isset($_SESSION['loginUsername'])) {
 							$special = $row_log['brewInfo'];
 							$sp_str_sweet_carb = strtolower($row_log['brewInfo']);
 
-							if (strpos($sp_str_sweet_carb,"session strength") !== false) $beer_strength .= "*Str: Session* ";
-							if (strpos($sp_str_sweet_carb,"standard strength") !== false) $beer_strength .= "*Str: Standard* ";
-							if (strpos($sp_str_sweet_carb,"double strength") !== false) $beer_strength .= "*Str: Double* ";
-							if (strpos($sp_str_sweet_carb,"table strength") !== false) $beer_strength .= "*Str: Table* ";
-							if (strpos($sp_str_sweet_carb,"super strength") !== false) $beer_strength .= "*Str: Super* ";
-							if (strpos($sp_str_sweet_carb,"low/none sweetness") !== false) $beer_sweeteness .= "*Sweet: Low/None* ";
-							if (strpos($sp_str_sweet_carb,"medium sweetness") !== false) $beer_sweeteness .= "*Sweet: Med* ";
-							if (strpos($sp_str_sweet_carb,"high sweetness") !== false) $beer_sweeteness .= "*Sweet: High* ";
-							if (strpos($sp_str_sweet_carb,"low carbonation") !== false) $beer_carbonation .= "*Carb: Low* ";
-							if (strpos($sp_str_sweet_carb,"medium carbonation") !== false) $beer_carbonation .= "*Carb: Med* ";
-							if (strpos($sp_str_sweet_carb,"high carbonation") !== false) $beer_carbonation .= "*Carb: High* ";
+							if (strpos($sp_str_sweet_carb,"session strength") !== false) $beer_strength .= "*Session* ";
+							if (strpos($sp_str_sweet_carb,"standard strength") !== false) $beer_strength .= "*Standard* ";
+							if (strpos($sp_str_sweet_carb,"double strength") !== false) $beer_strength .= "*Double* ";
+							if (strpos($sp_str_sweet_carb,"table strength") !== false) $beer_strength .= "*Table* ";
+							if (strpos($sp_str_sweet_carb,"super strength") !== false) $beer_strength .= "*Super* ";
+							if (strpos($sp_str_sweet_carb,"low/none sweetness") !== false) $beer_sweeteness .= "*Low/No Sweet* ";
+							if (strpos($sp_str_sweet_carb,"medium sweetness") !== false) $beer_sweeteness .= "*Med Sweet* ";
+							if (strpos($sp_str_sweet_carb,"high sweetness") !== false) $beer_sweeteness .= "*High Sweet* ";
+							if (strpos($sp_str_sweet_carb,"low carbonation") !== false) $beer_carbonation .= "*Low Carb* ";
+							if (strpos($sp_str_sweet_carb,"medium carbonation") !== false) $beer_carbonation .= "*Med Carb* ";
+							if (strpos($sp_str_sweet_carb,"high carbonation") !== false) $beer_carbonation .= "*High Carb* ";
 
 							if ((!empty($beer_strength)) || (!empty($beer_sweeteness)) || (!empty($beer_carbonation))) {
 								$character_limit_adjust = $character_limit_adjust - 12;
@@ -194,7 +194,7 @@ if (isset($_SESSION['loginUsername'])) {
 							$special = rtrim($special," ");
 							$entry_str_sweet_carb .= $beer_carbonation.$beer_sweeteness.$beer_strength;
 
-							if (!empty($special)) $special = sprintf("\nReq: %s", $special);
+							if (!empty($special)) $special = sprintf("\n%s", $special);
 						}
 
 						if (empty($special)) {
@@ -207,16 +207,24 @@ if (isset($_SESSION['loginUsername'])) {
 						if (!empty($row_log['brewInfoOptional'])) {
 							$optional = str_replace("\n"," ",truncate($row_log['brewInfoOptional'],$character_limit_adjust));
 							$optional = strtr($optional,$html_remove);
-							$optional = sprintf("\nOp: %s",$optional);
+							$optional = sprintf("\n%s",$optional);
 						}
 
 						if (in_array($style,$mead)) {
-							if (!empty($row_log['brewMead1'])) $entry_str_sweet_carb .= sprintf("*Carb: %s* ",$row_log['brewMead1']);
-							if (!empty($row_log['brewMead2'])) $entry_str_sweet_carb .= sprintf("*Sweet: %s* ",$row_log['brewMead2']);
-							if (!empty($row_log['brewMead3'])) $entry_str_sweet_carb .= sprintf("*Str: %s* ",$row_log['brewMead3']);
+							if (!empty($row_log['brewMead1'])) $entry_str_sweet_carb .= sprintf("*%s* ",$row_log['brewMead1']);
+							if (!empty($row_log['brewMead2'])) $entry_str_sweet_carb .= sprintf("*%s* ",$row_log['brewMead2']);
+							if (!empty($row_log['brewMead3'])) $entry_str_sweet_carb .= sprintf("*%s* ",$row_log['brewMead3']);
 						}
 
-						if (!empty($entry_str_sweet_carb)) $entry_str_sweet_carb = sprintf("\n%s",$entry_str_sweet_carb);
+						if (!empty($entry_str_sweet_carb)) {
+							$entry_str_sweet_carb = str_replace("Medium Sweet", "Med Sweet", $entry_str_sweet_carb);
+							$entry_str_sweet_carb = str_replace("Medium Dry", "Med Dry", $entry_str_sweet_carb);
+							$entry_str_sweet_carb = str_replace("Sparkling", "Spark", $entry_str_sweet_carb);
+							$entry_str_sweet_carb = str_replace("Hydromel", "Hydro", $entry_str_sweet_carb);
+							$entry_str_sweet_carb = str_replace("Petillant", "Petill", $entry_str_sweet_carb);
+							$entry_str_sweet_carb = sprintf("\n%s",$entry_str_sweet_carb);
+
+						}
 
 						if ($view == "special") {
 							if ((in_array($style,$special_ingredients)) || (in_array($style,$mead))) $text = $entry_info.$special.$entry_str_sweet_carb;
@@ -254,8 +262,8 @@ if (isset($_SESSION['loginUsername'])) {
 
 			$pdf = new PDF_Label($psort);
 			$pdf->AddPage();
-			if ($psort == "OL32") $pdf->SetFont('Arial','',6);
-			else $pdf->SetFont('Arial','',10);
+			if ($psort == "OL32") $pdf->SetFont('Courier','',6);
+			else $pdf->SetFont('Courier','',9);
 
 			// Print labels
 			do {
@@ -297,8 +305,8 @@ if (isset($_SESSION['loginUsername'])) {
 
 			$pdf = new PDF_Label($psort);
 			$pdf->AddPage();
-			if ($psort == "OL32") $pdf->SetFont('Arial','',7);
-			else $pdf->SetFont('Arial','',10);
+			if ($psort == "OL32") $pdf->SetFont('Courier','',6);
+			else $pdf->SetFont('Courier','',9);
 
 			// Print labels
 			do {
@@ -559,11 +567,11 @@ if (isset($_SESSION['loginUsername'])) {
 			if ($psort == "3422") $pdf = new PDF_Label('3422');
 			else $pdf = new PDF_Label('5160');
 			$pdf->AddPage();
-			$pdf->SetFont('Arial','',9);
+			$pdf->SetFont('Courier','',8);
 
 			$filename .= str_replace(" ","_",$_SESSION['contestName'])."_Award_Labels";
-			if ($psort == "3422") 		$filename .= "_Avery3422";
-			else 						$filename .= "_Avery5160";
+			if ($psort == "3422") $filename .= "_Avery3422";
+			else $filename .= "_Avery5160";
 			$filename .= ".pdf";
 
 			include (DB.'output_labels_awards.db.php');
@@ -573,14 +581,15 @@ if (isset($_SESSION['loginUsername'])) {
 		}
 
 		if (($go == "judging_scores") && ($action == "awards") && ($filter == "round")) {
-			if ($psort == "EU30095") $pdf = new PDF_Label('EU30095');
+			if ($psort == "OL3012") $pdf = new PDF_Label('OL3012');
+			elseif ($psort == "EU30095") $pdf = new PDF_Label('EU30095');
+			elseif ($psort == "5293") $pdf = new PDF_Label('5293');
 			else $pdf = new PDF_Label('OL5375');
 			$pdf->AddPage();
-			$pdf->SetFont('Arial','',9);
+			$pdf->SetFont('Courier','',8);
 
-			$filename .= str_replace(" ","_",$_SESSION['contestName'])."_Medal_Labels";
-			if ($psort == "EU30095") $filename .= "_EU30095";
-			else $filename .= "_OL5375";
+			$filename .= str_replace(" ","_",$_SESSION['contestName'])."_Medal_Labels_";
+			$filename .= ucwords($psort);
 			$filename .= ".pdf";
 
 			include (DB.'output_labels_awards.db.php');

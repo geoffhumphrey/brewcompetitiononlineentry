@@ -4,12 +4,12 @@
  * Description: This module does all the heavy lifting for adding/editing info in the "styles" table
  */
 
-if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) || ($section == "setup"))) {
+// Instantiate HTMLPurifier
+require (CLASSES.'htmlpurifier/HTMLPurifier.standalone.php');
+$config_html_purifier = HTMLPurifier_Config::createDefault();
+$purifier = new HTMLPurifier($config_html_purifier);
 
-	// Instantiate HTMLPurifier
-	require (CLASSES.'htmlpurifier/HTMLPurifier.standalone.php');
-	$config_html_purifier = HTMLPurifier_Config::createDefault();
-	$purifier = new HTMLPurifier($config_html_purifier);
+if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) || ($section == "setup"))) {
 
 	$ba_styles_accepted = "";
 	$brewStyleEntry = "";
@@ -191,7 +191,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 		%s, %s, %s, %s
 		)",
 					   GetSQLValueString($style_num_add_one, "text"),
-					   GetSQLValueString($purifier->purify($_POST['brewStyle']), "scrubbed"),
+					   GetSQLValueString($purifier->purify($_POST['brewStyle']), "text"),
 					   GetSQLValueString(sterilize($_POST['brewStyleOG']), "text"),
 					   GetSQLValueString(sterilize($_POST['brewStyleOGMax']), "text"),
 					   GetSQLValueString(sterilize($_POST['brewStyleFG']), "text"),
@@ -259,7 +259,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 
 		WHERE id=%s",
 					   GetSQLValueString(sterilize($_POST['brewStyleNum']), "text"),
-					   GetSQLValueString($purifier->purify($_POST['brewStyle']), "scrubbed"),
+					   GetSQLValueString($purifier->purify($_POST['brewStyle']), "text"),
 					   GetSQLValueString(sterilize($_POST['brewStyleOG']), "text"),
 					   GetSQLValueString(sterilize($_POST['brewStyleOGMax']), "text"),
 					   GetSQLValueString(sterilize($_POST['brewStyleFG']), "text"),
@@ -291,7 +291,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 		$row_log = mysqli_fetch_assoc($log);
 		$totalRows_log = mysqli_num_rows($log);
 
-	  do {
+		do {
 
 			$updateSQL = sprintf("UPDATE $brewing_db_table SET brewStyle='%s' WHERE id='%s'", $_POST['brewStyle'],$row_log['id']);
 			mysqli_real_escape_string($connection,$updateSQL);

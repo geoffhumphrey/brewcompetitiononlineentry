@@ -145,7 +145,7 @@ function score_style_data($value) {
 	require(CONFIG.'config.php');
 	mysqli_select_db($connection,$database);
 
-	if ($_SESSION['prefsStyleSet'] != "BA") {
+	//if ($_SESSION['prefsStyleSet'] != "BA") {
 
 	$query_styles = sprintf("SELECT brewStyleGroup,brewStyleNum,brewStyle,brewStyleType FROM %s WHERE id='%s'", $prefix."styles", $value);
 	$styles = mysqli_query($connection,$query_styles) or die (mysqli_error($connection));
@@ -158,7 +158,7 @@ function score_style_data($value) {
 	$row_styles['brewStyleNum']."^". //1
 	$row_styles['brewStyle']."^". //2
 	$styleType; //3
-
+/*
 	}
 
 	else {
@@ -194,6 +194,8 @@ function score_style_data($value) {
 		}
 
 	}
+
+	*/
 
 	return $return;
 
@@ -784,7 +786,7 @@ function received_entries() {
 
 	foreach ($style_array as $style) {
 
-		$query_entry_count = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE brewStyle='%s' AND brewReceived='1'",$prefix."brewing",$style);
+		$query_entry_count = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE brewStyle='%s' AND brewReceived='1'",$prefix."brewing",mysqli_real_escape_string($style));
 		$result = mysqli_query($connection,$query_entry_count) or die (mysqli_error($connection));
 		$row = mysqli_fetch_array($result);
 		if ($row['count'] > 0) $a[] = $style;

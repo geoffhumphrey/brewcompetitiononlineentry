@@ -11,7 +11,7 @@ $ba_category_names = array(
 	"9" => "Other Origin Lagers",
 	"10" => "International Styles",
 	"11" => "Hybrid/Mixed Lagers or Ales",
-	"12" => "Mead, Cider, & Perry",
+	"12" => "Mead, Cider, and Perry",
 	"13" => "Other Origin", // Deprecated in 2018
 	"14" => "Malternative Beverages" // Deprecated in 2018
 );

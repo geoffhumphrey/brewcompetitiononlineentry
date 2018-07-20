@@ -11,7 +11,9 @@ if (($filter != "default") && ($filter != "rounds"))  {
 
 	foreach (array_unique($a) as $value) {
 
-		if ($_SESSION['prefsStyleSet'] != "BA") $style_name = style_convert($value,"8");
+		//if ($_SESSION['prefsStyleSet'] != "BA")
+        $style_name = style_convert($value,"8");
+        //echo $style_name;
 
 		include (DB.'admin_judging_flights.db.php');
 
@@ -35,14 +37,14 @@ if (($filter != "default") && ($filter != "rounds"))  {
 
 			$flight_table_tbody .= "<tr>\n";
 			$flight_table_tbody .= "<td>";
-			$flight_table_tbody .= readable_judging_number($row_entries['brewCategory'],$row_entries['brewJudgingNumber']);;
+			$flight_table_tbody .= $row_entries['brewJudgingNumber'];
 			$flight_table_tbody .= "<input type=\"hidden\" name=\"id[]\" value=\"".$hidden_input_id."\">";
 			$flight_table_tbody .= "<input type=\"hidden\" name=\"flightTable\" value=\"".$row_tables_edit['id']."\">";
 			$flight_table_tbody .= "<input type=\"hidden\" name=\"flightEntryID".$hidden_input_id."\" value=\"".$row_entries['id']."\">";
 			$flight_table_tbody .= "</td>\n";
 
 			$flight_table_tbody .= "<td>";
-			if (strpos($_SESSION['prefsStyleSet'],"BABDB") !== false) $flight_table_tbody .= $row_entries['brewStyle'];
+			if ($_SESSION['prefsStyleSet'] == "BA") $flight_table_tbody .= $row_entries['brewStyle'];
 			else $flight_table_tbody .= $row_entries['brewCategorySort'].$row_entries['brewSubCategory']." ".style_convert($row_entries['brewCategorySort'],1).": ".$row_entries['brewStyle'];
 			$flight_table_tbody .= "</td>\n";
 

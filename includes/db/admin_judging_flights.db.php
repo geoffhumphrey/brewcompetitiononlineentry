@@ -1,21 +1,18 @@
-<?php 
-if (($filter != "default") && ($filter != "rounds"))  { 
-	
-	if (strpos($_SESSION['prefsStyleSet'],"BABDB") !== false) {
-		$query_entries = sprintf("SELECT id,brewStyle,brewCategorySort,brewCategory,brewSubCategory,brewInfo,brewJudgingNumber FROM %s WHERE brewSubcategory='%s' AND brewReceived='1' ORDER BY brewCategorySort,brewSubCategory", $brewing_db_table, $value);
-	}
-	else {
+<?php
+if (($filter != "default") && ($filter != "rounds"))  {
+
+
 		$style_name = explode(",",$style_name);
 		if (SINGLE) $query_entries = sprintf("SELECT id,brewStyle,brewCategorySort,brewCategory,brewSubCategory,brewInfo,brewJudgingNumber FROM %s WHERE comp_id='%s' AND brewCategorySort='%s' AND brewSubcategory='%s' AND brewReceived='1' ORDER BY brewCategorySort,brewSubCategory", $brewing_db_table, $_SESSION['comp_id'], $style_name[0],$style_name[1]);
 		else $query_entries = sprintf("SELECT id,brewStyle,brewCategorySort,brewCategory,brewSubCategory,brewInfo,brewJudgingNumber FROM %s WHERE brewCategorySort='%s' AND brewSubcategory='%s' AND brewReceived='1' ORDER BY brewCategorySort,brewSubCategory", $brewing_db_table, $style_name[0],$style_name[1]);
-	}
+
 	$entries = mysqli_query($connection,$query_entries) or die (mysqli_error($connection));
 	$row_entries = mysqli_fetch_assoc($entries);
-	
+
 	//echo $query_entries;
 }
 
-if (($action == "assign") && ($filter == "rounds")) { 
+if (($action == "assign") && ($filter == "rounds")) {
 
 	// Query based upon unique variable (id of record from "judging_tables" table)
 	$query_flights = sprintf("SELECT * FROM $judging_flights_db_table WHERE flightTable='%s' ORDER BY flightNumber DESC LIMIT 1", $flight_table);

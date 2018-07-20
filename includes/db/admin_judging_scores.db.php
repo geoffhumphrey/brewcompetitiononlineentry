@@ -15,7 +15,7 @@ if ($_SESSION['prefsStyleSet'] == "BA") {
 
 	else {
 
-		$query_entries = sprintf("SELECT id,brewBrewerID,brewStyle,brewCategorySort,brewCategory,brewSubCategory,brewInfo,brewJudgingNumber,brewName FROM %s WHERE brewSubCategory='%s' AND brewReceived='1'", $dbTable, $value);
+		$query_entries = sprintf("SELECT id,brewBrewerID,brewStyle,brewCategorySort,brewCategory,brewSubCategory,brewInfo,brewJudgingNumber,brewName FROM %s WHERE brewSubCategory='%s' AND brewReceived='1'", $dbTable, $score_style_data[1]);
 
 		if (SINGLE) $query_entries .= sprintf(" AND comp_id='%s'",$_SESSION['comp_id']);
 
@@ -35,5 +35,5 @@ $entries = mysqli_query($connection,$query_entries) or die (mysqli_error($connec
 $row_entries = mysqli_fetch_assoc($entries);
 $totalRows_entries = mysqli_num_rows($entries);
 
-// echo  $query_entries." ".$totalRows_entries."<br>";
+//echo  $query_entries." ".$totalRows_entries."<br>";
 ?>

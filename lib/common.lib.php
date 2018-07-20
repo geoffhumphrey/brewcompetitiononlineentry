@@ -3637,39 +3637,12 @@ function convert_to_ba() {
 		$ba_style_info = "";
 		$ba_category_id = "";
 
-/*
-		if (isset($row_check['brewInfo'])) {
+		$query_ba_random = sprintf("SELECT * FROM %s WHERE brewStyleVersion='BA' ORDER BY RAND() LIMIT 1", $prefix."styles");
+		$ba_random = mysqli_query($connection,$query_ba_random) or die (mysqli_error($connection));
+		$row_ba_random = mysqli_fetch_assoc($ba_random);
 
-			// Mead or Cider
-			if ((isset($row_check['brewMead1'])) || (isset($row_check['brewMead2'])) || (isset($row_check['brewMead3']))) {
-
-				$ba_category_id = $ba_special_mead_cider_ids[array_rand($_SESSION['ba_special_mead_cider_ids'], 1)];
-				$brew_info = $row_check['brewInfo'];
-
-			}
-
-			// Beer
-			else {
-
-				$ba_category_id = $ba_special_beer_ids[array_rand($_SESSION['ba_special_beer_ids'], 1)];
-				$brew_info = $row_check['brewInfo'];
-
-			}
-
-		}
-
-		else {
-*/
-
-
-			$query_ba_random = sprintf("SELECT * FROM %s WHERE brewStyleVersion='BA' ORDER BY RAND() LIMIT 1", $prefix."styles");
-			$ba_random = mysqli_query($connection,$query_ba_random) or die (mysqli_error($connection));
-			$row_ba_random = mysqli_fetch_assoc($ba_random);
-
-			if ($row_ba_random['brewStyleReqSpec'] == 1) $brew_info = "Special ingredients, yo.";
-			else $brew_info = "";
-
-//		}
+		if ($row_ba_random['brewStyleReqSpec'] == 1) $brew_info = "Special ingredients, yo.";
+		else $brew_info = "";
 
 		$ba_category = ltrim($row_ba_random['brewStyleGroup'],"0");
 		$ba_style = $row_ba_random['brewStyle'];
@@ -3690,6 +3663,14 @@ function convert_to_ba() {
 		//$return .= $ba_style_info."<br>";
 
 	} while ($row_check = mysqli_fetch_assoc($check));
+
+	// Change preference
+	session_start();
+	$_SESSION['prefsStyleSet'] = "BA";
+
+	$updateSQL = sprintf("UPDATE %s SET brewStyleActive='Y' WHERE brewStyleVersion='BA';",$prefix."brewing");
+	mysqli_real_escape_string($connection,$updateSQL);
+	$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 
 	return $return;
 
