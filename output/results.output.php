@@ -14,7 +14,11 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) {
 
 	if (($go == "judging_scores_bos") && ($action == "print")) {
         include (SECTIONS.'bos.sec.php');
-        if (($_SESSION['prefsShowBestBrewer'] != 0) || ($_SESSION['prefsShowBestClub'] != 0)) include (SECTIONS.'bestbrewer.sec.php');
+        // if (($_SESSION['prefsShowBestBrewer'] != 0) || ($_SESSION['prefsShowBestClub'] != 0)) include (SECTIONS.'bestbrewer.sec.php');
+    }
+
+    if (($go == "best") && ($action == "print") && (($_SESSION['prefsShowBestBrewer'] != 0) || ($_SESSION['prefsShowBestClub'] != 0)))  {
+        include (SECTIONS.'bestbrewer.sec.php');
     }
 }
 ?>

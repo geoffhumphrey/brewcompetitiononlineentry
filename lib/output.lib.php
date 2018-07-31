@@ -494,4 +494,32 @@ function results_count($style) {
 
 }
 
+function get_flight_info($id) {
+	require(CONFIG.'config.php');
+    mysqli_select_db($connection,$database);
+
+    $query_flights = sprintf("SELECT * FROM %s WHERE flightEntryID='%s'", $prefix."judging_flights", $id);
+    $flights = mysqli_query($connection,$query_flights) or die (mysqli_error($connection));
+    $row_flights = mysqli_fetch_assoc($flights);
+    $totalRows_flights = mysqli_num_rows($flights);
+
+    if ($totalRows_flights > 0) {
+	    $query_tables = sprintf("SELECT tableName,tableNumber FROM %s WHERE id='%s'", $prefix."judging_tables", $row_flights['flightTable']);
+		$tables = mysqli_query($connection,$query_tables) or die (mysqli_error($connection));
+		$row_tables = mysqli_fetch_assoc($tables);
+
+		$return = array(
+			"response" => "Assigned",
+			"tableName" => $row_tables['tableName'],
+			"tableNumber" => $row_tables['tableNumber'],
+			"flightNumber" => $row_flights['flightNumber'],
+			"flightRound" => $row_flights['flightRound']
+		);
+	}
+
+	else $return = array("response" => "Not assigned to a table.");
+
+	return $return;
+}
+
 ?>

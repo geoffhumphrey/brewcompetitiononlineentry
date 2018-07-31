@@ -201,7 +201,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 
 		// Insert a new record into the "archive" table containing the newly created archives names (allows access to archived tables)
 
-		if (strpos($_SESSION['prefsStyleSet'],"BABDB") !== false) $styleSet = "BABDB"; else $styleSet = $_SESSION['prefsStyleSet'];
+		$styleSet = $_SESSION['prefsStyleSet'];
 
 		$insertSQL = sprintf("INSERT INTO %s (archiveSuffix,archiveProEdition,archiveStyleSet) VALUES ('%s','%s','%s');",$archive_db_table,$suffix,$_SESSION['prefsProEdition'],$styleSet);
 		mysqli_real_escape_string($connection,$insertSQL);

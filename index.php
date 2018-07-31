@@ -41,10 +41,6 @@ if ($section == "admin") {
 	require_once (DB.'stewarding.db.php');
 	require_once (DB.'dropoff.db.php');
 	require_once (DB.'contacts.db.php');
-
-	if (($go == "default") || ($go == "entries")) {
-		$totalRows_entry_count = total_paid_received("default","default");
-	}
 }
 
 // ---------------------------------------------------------------------------------

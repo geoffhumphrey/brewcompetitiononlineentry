@@ -112,7 +112,7 @@ else {
 		$primary_page_info .= "<ol>";
 			do {
 				if ($row_log_confirmed['brewPaid'] != "1") {
-					if (strpos($_SESSION['prefsStyleSet'],"BABDB") !== false) $style = $row_log_confirmed['brewStyle'];
+					if ($_SESSION['prefsStyleSet'] == "BA") $style = $row_log_confirmed['brewStyle'];
 					else $style = "Style ".$row_log_confirmed['brewCategory'].$row_log_confirmed['brewSubCategory'];
 					$entry_no = sprintf("%04s",$row_log_confirmed['id']);
 					$primary_page_info .= sprintf("<li>Entry #%s: %s (%s)</li>",$entry_no,$row_log_confirmed['brewName'],$style);

@@ -8,7 +8,7 @@ Checked Single
 
 if (($section == "admin") && ($go == "styles") && ($action != "default")) {
 
-	if (strpos($styleSet,"BA") === false) {
+	if ($styleSet != "BA") {
 		$specialty_ipa_subs = array("21-B1","21-B2","21-B3","21-B4","21-B5","21-B6");
 		$historical_subs = array("27-A1","27-A2","27-A3","27-A4","27-A5","27-A6","27-A7","27-A8","27-A9");
 	}
@@ -99,10 +99,7 @@ $(document).ready(function() {
 <?php } ?>
 
 
-<?php if ($section == "brew") {
-if (strpos($_SESSION['prefsStyleSet'],"BA") === false) $optional_info_styles = array("21-B","28-A","30-B","33-A","33-B","34-B","M2-C","M2-D","M2-E","M3-A","M3-B","M4-B","M4-C","07-C","M1-A","M1-B","M1-C","M2-A","M2-B","M4-A","C1-B","C1-C");
-else $optional_info_styles = array();
-?>
+<?php if ($section == "brew") { ?>
 <!-- Load Show/Hide Configuration -->
 <script type="text/javascript">//<![CDATA[
 $(document).ready(function() {
@@ -224,9 +221,6 @@ $(document).ready(function() {
 			$("input[name='carbLambic']").prop("required", false);
 			$("input[name='BDGColor']").prop("required", false);
 		}
-
-
-
 
 		// Beer styles that require special ingredients
 		<?php

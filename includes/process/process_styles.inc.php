@@ -33,38 +33,6 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 					$updateSQL = "UPDATE $styles_db_table SET brewStyleActive='".$brewStyleActive."' WHERE id='".$id."'";
 					mysqli_real_escape_string($connection,$updateSQL);
 					$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
-					// echo $updateSQL."<br>";
-
-					/*
-					DEPRECATED CODE
-					BrewerDB not allowing any more API keys as of April 2018
-					Added 2015 BA styles to BCOE&M styles DB table
-
-					if (strpos($_SESSION['prefsStyleSet'],"BABDB") !== false) {
-
-						// If the record is from the BreweryDB (not a custom style), add to the list
-						if ($_POST['ba_brewerydb'.$id] == 1) {
-
-							if ($brewStyleActive == "Y") $ba_styles_accepted .= $id.",";
-
-						}
-
-						// If the record is a custom style, update the local DB
-						if ($_POST['ba_brewerydb'.$id] == 0) {
-
-							$updateSQL = "UPDATE $styles_db_table SET brewStyleActive='".$brewStyleActive."' WHERE id='".$id."'";
-							mysqli_real_escape_string($connection,$updateSQL);
-							$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
-
-						}
-
-					} // end if (strpos($_SESSION['prefsStyleSet'],"BABDB") !== false)
-
-					else {
-
-					}
-
-					*/
 
 				 } // end if ($filter == "default")
 

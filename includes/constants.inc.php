@@ -100,6 +100,8 @@ if (((strpos($section, "step") === FALSE) && ($section != "setup")) && ($section
 	$currency_symbol = $currency[0];
 	$currency_code = $currency[1];
 
+    $totalRows_entry_count = total_paid_received("default","default");
+
     if (isset($totalRows_entry_count)) {
         $total_entries = $totalRows_entry_count;
         if (open_limit($totalRows_entry_count,$row_limits['prefsEntryLimit'],$entry_window_open)) $comp_entry_limit = TRUE;
@@ -216,4 +218,7 @@ else $location_target = "_self";
 
 // $encryption_key = base64_encode(openssl_random_pseudo_bytes(32));
 $encryption_key = "8sQHfMk8rinRtA/Frhm+AWrSgOmkcbu+FxIUGy9Fq5I=";
+
+if ($_SESSION['prefsStyleSet'] == "BA") $optional_info_styles = array();
+else $optional_info_styles = array("21-B","28-A","30-B","33-A","33-B","34-B","M2-C","M2-D","M2-E","M3-A","M3-B","M4-B","M4-C","07-C","M1-A","M1-B","M1-C","M2-A","M2-B","M4-A","C1-B","C1-C");
 ?>

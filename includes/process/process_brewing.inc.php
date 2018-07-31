@@ -9,6 +9,9 @@
 
 if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) && (isset($_SESSION['userLevel'])))) {
 
+	if ($_SESSION['prefsStyleSet'] == "BA") $optional_info_styles = array();
+	else $optional_info_styles = array("21-B","28-A","30-B","33-A","33-B","34-B","M2-C","M2-D","M2-E","M3-A","M3-B","M4-B","M4-C","07-C","M1-A","M1-B","M1-C","M2-A","M2-B","M4-A","C1-B","C1-C");
+
 	// Instantiate HTMLPurifier
 	require (CLASSES.'htmlpurifier/HTMLPurifier.standalone.php');
 	$config_html_purifier = HTMLPurifier_Config::createDefault();
@@ -53,12 +56,16 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 		$brewMead2 = "";
 		$brewMead3 = "";
 		$brewJudgingNumber = "";
+		$brewPossAllergens = "";
 
 		// Comments
 		if (isset($_POST['brewComments'])) $brewComments .= $purifier->purify($_POST['brewComments']);
 
 		// Co Brewer
 		if (isset($_POST['brewCoBrewer'])) $brewCoBrewer .= standardize_name($purifier->purify($_POST['brewCoBrewer']));
+
+		// Possible Allergens
+		if (isset($_POST['brewPossAllergens'])) $brewPossAllergens .= $purifier->purify($_POST['brewPossAllergens']);
 
 		// Style
 		$style = explode('-', $styleBreak);
@@ -93,7 +100,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 		if (!empty($_POST['brewInfo'])) $brewInfo = $purifier->purify($_POST['brewInfo']);
 
 		// Specialized/Optional info
-		if (!empty($_POST['brewInfoOptional'])) $brewInfoOptional = $purifier->purify($_POST['brewInfoOptional']);
+		if ((!empty($_POST['brewInfoOptional'])) && (in_array($styleBreak, $optional_info_styles))) $brewInfoOptional = $purifier->purify($_POST['brewInfoOptional']);
 
 		// For BJCP 2015, process addtional info
 		if ($_SESSION['prefsStyleSet'] == "BJCP2015") {
@@ -374,7 +381,8 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 			brewConfirmed,
 			brewPaid,
 			brewReceived,
-			brewInfoOptional
+			brewInfoOptional,
+			brewPossAllergens
 			) VALUES (";
 
 			if ($_SESSION['prefsHideRecipe'] == "N") {
@@ -490,7 +498,8 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 			else $insertSQL .= GetSQLValueString(filter_var($_POST['brewConfirmed'],FILTER_SANITIZE_STRING),"text").", ";
 			$insertSQL .= GetSQLValueString($brewPaid,"text").", ";
 			$insertSQL .= GetSQLValueString("0","text").", ";
-			$insertSQL .= GetSQLValueString($brewInfoOptional,"text");
+			$insertSQL .= GetSQLValueString($brewInfoOptional,"text").", ";
+			$insertSQL .= GetSQLValueString($brewPossAllergens,"text");
 			$insertSQL .= ")";
 
 		// echo $insertSQL; exit;
@@ -758,7 +767,8 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 			$updateSQL .= "brewJudgingNumber=".GetSQLValueString(filter_var($_POST['brewJudgingNumber'],FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION),"text").", ";
 			$updateSQL .= "brewPaid=".GetSQLValueString($brewPaid,"text").", ";
 			$updateSQL .= "brewConfirmed=".GetSQLValueString(filter_var($_POST['brewConfirmed'],FILTER_SANITIZE_STRING),"text").", ";
-			$updateSQL .= "brewInfoOptional=".GetSQLValueString($brewInfoOptional,"text");
+			$updateSQL .= "brewInfoOptional=".GetSQLValueString($brewInfoOptional,"text").", ";
+			$updateSQL .= "brewPossAllergens=".GetSQLValueString($brewPossAllergens,"text");
 			$updateSQL .= " WHERE id ='".$id."'";
 
 		//echo $updateSQL; exit;

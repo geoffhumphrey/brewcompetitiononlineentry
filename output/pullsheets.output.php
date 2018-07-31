@@ -124,7 +124,7 @@ if ($go == "judging_scores_bos") {
 						$table_flight_tbody .= "<td>";
 						$special = style_convert($style_special,"9");
 						$special = explode("^",$special);
-						if ($_SESSION['prefsStyleSet'] != "BA") {
+
 							if (($row_entries_1['brewInfo'] != "") && ($special[4] == "1")) $table_flight_tbody .= "<p><strong>".$label_required_info.": </strong>".str_replace("^"," | ",$row_entries_1['brewInfo'])."</p>";
 							if ($row_entries_1['brewInfoOptional'] != "") $table_flight_tbody .= "<p><strong>".$label_optional_info.": </strong>".$row_entries_1['brewInfoOptional']."</p>";
 							if ($row_entries_1['brewComments'] != "") $table_flight_tbody .= "<p><strong>".$label_brewer_specifics.": </strong>".$row_entries_1['brewComments']."</p>";
@@ -133,21 +133,12 @@ if ($go == "judging_scores_bos") {
 							if (!empty($row_entries_1['brewMead2'])) $table_flight_tbody .= "<strong>".$label_sweetness.":</strong> ".$row_entries_1['brewMead2']."<br>";
 							if (!empty($row_entries_1['brewMead3'])) $table_flight_tbody .= "<strong>".$label_strength.":</strong> ".$row_entries_1['brewMead3'];
 							$table_flight_tbody .= "</p>";
-						}
 
-						else {
-							include (INCLUDES.'ba_constants.inc.php');
-							$value = $row_entries_1['id'];
-							if (in_array($value,$_SESSION['ba_special_ids'])) $table_flight_tbody .= "<p><strong>".$label_required_info.": </strong>".str_replace("^"," | ",$row_entries_1['brewInfo'])."</p>";
-							if ($row_entries_1['brewInfoOptional'] != "") $table_flight_tbody .= "<p><strong>".$label_optional_info.": </strong>".$row_entries_1['brewInfoOptional']."</p>";
-							if ($row_entries_1['brewComments'] != "") $table_flight_tbody .= "<p><strong>".$label_brewer_specifics.": </strong>".$row_entries_1['brewComments']."</p>";
-							$table_flight_tbody .= "<p>";
-							if (!empty($row_entries_1['brewMead1'])) $table_flight_tbody .= "<strong>".$label_carbonation.":</strong> ".$row_entries_1['brewMead1']."<br>";
-							if (!empty($row_entries_1['brewMead2'])) $table_flight_tbody .= "<strong>".$label_sweetness.":</strong> ".$row_entries_1['brewMead2']."<br>";
-							if (!empty($row_entries_1['brewMead3'])) $table_flight_tbody .= "<strong>".$label_strength.":</strong> ".$row_entries_1['brewMead3'];
-							$table_flight_tbody .= "</p>";
+							if (!empty($row_entries['brewPossAllergens'])) $table_flight_tbody .= "<p><strong>".$label_possible_allergens.":</strong> ".$row_entries['brewPossAllergens']."</p>";
 
-						}
+							if (!empty($row_entries['brewStaffNotes'])) $table_flight_tbody .= "<p><strong>".$label_notes.":</strong> ".$row_entries['brewStaffNotes']."</p>";
+
+
 						$table_flight_tbody .= "</td>";
 						$table_flight_tbody .= "<td>";
 						$table_flight_tbody .= $row_entries_1['brewBoxNum'];
@@ -300,15 +291,18 @@ else {
 									$special = style_convert($style_special,"9");
 									$special = explode("^",$special);
 
-										if (($row_entries['brewInfo'] != "") && ($special[4] == "1")) $table_flight_tbody .= "<p><strong>Required Info: </strong>".str_replace("^"," | ",$row_entries['brewInfo'])."</p>";
-										if ($row_entries['brewInfoOptional'] != "") $table_flight_tbody .= "<p><strong>Optional Info: </strong>".$row_entries['brewInfoOptional']."</p>";
-										if ($row_entries['brewComments'] != "") $table_flight_tbody .= "<p><strong>Specifics: </strong>".$row_entries['brewComments']."</p>";
+									if (($row_entries['brewInfo'] != "") && ($special[4] == "1")) $table_flight_tbody .= "<p><strong>Required Info: </strong>".str_replace("^"," | ",$row_entries['brewInfo'])."</p>";
+									if ($row_entries['brewInfoOptional'] != "") $table_flight_tbody .= "<p><strong>Optional Info: </strong>".$row_entries['brewInfoOptional']."</p>";
+									if ($row_entries['brewComments'] != "") $table_flight_tbody .= "<p><strong>Specifics: </strong>".$row_entries['brewComments']."</p>";
 
-										$table_flight_tbody .= "<p>";
-										if (!empty($row_entries['brewMead1'])) $table_flight_tbody .= "<strong>Carbonation:</strong> ".$row_entries['brewMead1']."<br>";
-										if (!empty($row_entries['brewMead2'])) $table_flight_tbody .= "<strong>Sweetness:</strong> ".$row_entries['brewMead2']."<br>";
-										if (!empty($row_entries['brewMead3'])) $table_flight_tbody .= "<strong>Strength:</strong> ".$row_entries['brewMead3'];
-										$table_flight_tbody .= "</p>";
+									$table_flight_tbody .= "<p>";
+									if (!empty($row_entries['brewMead1'])) $table_flight_tbody .= "<strong>Carbonation:</strong> ".$row_entries['brewMead1']."<br>";
+									if (!empty($row_entries['brewMead2'])) $table_flight_tbody .= "<strong>Sweetness:</strong> ".$row_entries['brewMead2']."<br>";
+									if (!empty($row_entries['brewMead3'])) $table_flight_tbody .= "<strong>Strength:</strong> ".$row_entries['brewMead3'];
+									$table_flight_tbody .= "</p>";
+									if (!empty($row_entries['brewPossAllergens'])) $table_flight_tbody .= "<p><strong>".$label_possible_allergens.":</strong> ".$row_entries['brewPossAllergens']."</p>";
+
+									if (!empty($row_entries['brewStaffNotes'])) $table_flight_tbody .= "<p><strong>".$label_notes.":</strong> ".$row_entries['brewStaffNotes']."</p>";
 
 									$table_flight_tbody .= "</td>";
 									$table_flight_tbody .= "<td>";
@@ -454,31 +448,22 @@ else {
 
 								$special = style_convert($style_special,"9");
 								$special = explode("^",$special);
-								if ($_SESSION['prefsStyleSet'] != "BA") {
-									if (($row_entries['brewInfo'] != "") && ($special[4] == "1")) $table_flight_tbody .= "<p><strong>Required Info: </strong>".str_replace("^"," | ",$row_entries['brewInfo'])."</p>";
-									if ($row_entries['brewInfoOptional'] != "") $table_flight_tbody .= "<p><strong>Optional Info: </strong>".$row_entries['brewInfoOptional']."</p>";
-									if ($row_entries['brewComments'] != "") $table_flight_tbody .= "<p><strong>Specifics: </strong>".$row_entries['brewComments']."</p>";
 
-									$table_flight_tbody .= "<p>";
-									if (!empty($row_entries['brewMead1'])) $table_flight_tbody .= "<strong>Carbonation:</strong> ".$row_entries['brewMead1']."<br>";
-									if (!empty($row_entries['brewMead2'])) $table_flight_tbody .= "<strong>Sweetness:</strong> ".$row_entries['brewMead2']."<br>";
-									if (!empty($row_entries['brewMead3'])) $table_flight_tbody .= "<strong>Strength:</strong> ".$row_entries['brewMead3'];
-									$table_flight_tbody .= "</p>";
+								if (($row_entries['brewInfo'] != "") && ($special[4] == "1")) $table_flight_tbody .= "<p><strong>Required Info: </strong>".str_replace("^"," | ",$row_entries['brewInfo'])."</p>";
+								if ($row_entries['brewInfoOptional'] != "") $table_flight_tbody .= "<p><strong>Optional Info: </strong>".$row_entries['brewInfoOptional']."</p>";
+								if ($row_entries['brewComments'] != "") $table_flight_tbody .= "<p><strong>Specifics: </strong>".$row_entries['brewComments']."</p>";
 
-								}
-								else {
-									include (INCLUDES.'ba_constants.inc.php');
-									if (in_array($value,$_SESSION['ba_special_ids'])) $table_flight_tbody .= "<p><strong>Required Info: </strong>".str_replace("^"," | ",$row_entries['brewInfo'])."</p>";
-									if ($row_entries['brewInfoOptional'] != "") $table_flight_tbody .= "<p><strong>Optional Info: </strong>".$row_entries['brewInfoOptional']."</p>";
-									if ($row_entries['brewComments'] != "") $table_flight_tbody .= "<p><strong>Specifics: </strong>".$row_entries['brewComments']."</p>";
+								$table_flight_tbody .= "<p>";
+								if (!empty($row_entries['brewMead1'])) $table_flight_tbody .= "<strong>Carbonation:</strong> ".$row_entries['brewMead1']."<br>";
+								if (!empty($row_entries['brewMead2'])) $table_flight_tbody .= "<strong>Sweetness:</strong> ".$row_entries['brewMead2']."<br>";
+								if (!empty($row_entries['brewMead3'])) $table_flight_tbody .= "<strong>Strength:</strong> ".$row_entries['brewMead3'];
+								$table_flight_tbody .= "</p>";
 
-									$table_flight_tbody .= "<p>";
-									if (!empty($row_entries['brewMead1'])) $table_flight_tbody .= "<strong>Carbonation:</strong> ".$row_entries['brewMead1']."<br>";
-									if (!empty($row_entries['brewMead2'])) $table_flight_tbody .= "<strong>Sweetness:</strong> ".$row_entries['brewMead2']."<br>";
-									if (!empty($row_entries['brewMead3'])) $table_flight_tbody .= "<strong>Strength:</strong> ".$row_entries['brewMead3'];
-									$table_flight_tbody .= "</p>";
+								if (!empty($row_entries['brewPossAllergens'])) $table_flight_tbody .= "<p><strong>".$label_possible_allergens.":</strong> ".$row_entries['brewPossAllergens']."</p>";
 
-								}
+								if (!empty($row_entries['brewStaffNotes'])) $table_flight_tbody .= "<p><strong>".$label_notes.":</strong> ".$row_entries['brewStaffNotes']."</p>";
+
+
 								$table_flight_tbody .= "</td>";
 								$table_flight_tbody .= "<td>";
 								$table_flight_tbody .= $row_entries['brewBoxNum'];;
@@ -638,7 +623,7 @@ else {
 
 								$special = style_convert($style_special,"9");
 								$special = explode("^",$special);
-								if ($_SESSION['prefsStyleSet'] != "BA") {
+
 									if (($row_entries['brewInfo'] != "") && ($special[4] == "1")) $table_flight_tbody .= "<p><strong>Required Info: </strong>".str_replace("^"," | ",$row_entries['brewInfo'])."</p>";
 									if ($row_entries['brewInfoOptional'] != "") $table_flight_tbody .= "<p><strong>Optional Info: </strong>".$row_entries['brewInfoOptional']."</p>";
 									if ($row_entries['brewComments'] != "") $table_flight_tbody .= "<p><strong>Specifics: </strong>".$row_entries['brewComments']."</p>";
@@ -649,19 +634,10 @@ else {
 									if (!empty($row_entries['brewMead3'])) $table_flight_tbody .= "<strong>Strength:</strong> ".$row_entries['brewMead3'];
 									$table_flight_tbody .= "</p>";
 
-								}
-								else {
-									include (INCLUDES.'ba_constants.inc.php');
-									if (in_array($value,$_SESSION['ba_special_ids'])) $table_flight_tbody .= "<p><strong>Required Info: </strong>".str_replace("^"," | ",$row_entries['brewInfo'])."</p>";
-									if ($row_entries['brewComments'] != "") $table_flight_tbody .= "<p><strong>Specifics: </strong>".$row_entries['brewComments']."</p>";
+									if (!empty($row_entries['brewPossAllergens'])) $table_flight_tbody .= "<p><strong>".$label_possible_allergens.":</strong> ".$row_entries['brewPossAllergens']."</p>";
 
-									$table_flight_tbody .= "<p>";
-									if (!empty($row_entries['brewMead1'])) $table_flight_tbody .= "<strong>Carbonation:</strong> ".$row_entries['brewMead1']."<br>";
-									if (!empty($row_entries['brewMead2'])) $table_flight_tbody .= "<strong>Sweetness:</strong> ".$row_entries['brewMead2']."<br>";
-									if (!empty($row_entries['brewMead3'])) $table_flight_tbody .= "<strong>Strength:</strong> ".$row_entries['brewMead3'];
-									$table_flight_tbody .= "</p>";
+									if (!empty($row_entries['brewStaffNotes'])) $table_flight_tbody .= "<p><strong>".$label_notes.":</strong> ".$row_entries['brewStaffNotes']."</p>";
 
-								}
 								$table_flight_tbody .= "</td>";
 								$table_flight_tbody .= "<td>";
 								$table_flight_tbody .= $row_entries['brewBoxNum'];;
@@ -815,7 +791,7 @@ else {
 
 							$special = style_convert($style_special,"9");
 							$special = explode("^",$special);
-							if ($_SESSION['prefsStyleSet'] != "BA") {
+
 								if (($row_entries['brewInfo'] != "") && ($special[4] == "1")) $table_flight_tbody .= "<p><strong>Required Info: </strong>".str_replace("^"," | ",$row_entries['brewInfo'])."</p>";
 								if ($row_entries['brewInfoOptional'] != "") $table_flight_tbody .= "<p><strong>Optional Info: </strong>".$row_entries['brewInfoOptional']."</p>";
 								if ($row_entries['brewComments'] != "") $table_flight_tbody .= "<p><strong>Specifics: </strong>".$row_entries['brewComments']."</p>";
@@ -826,20 +802,10 @@ else {
 								if (!empty($row_entries['brewMead3'])) $table_flight_tbody .= "<strong>Strength:</strong> ".$row_entries['brewMead3'];
 								$table_flight_tbody .= "</p>";
 
-							}
-							else {
-								include (INCLUDES.'ba_constants.inc.php');
-								if (in_array($value,$_SESSION['ba_special_ids'])) $table_flight_tbody .= "<p><strong>Required Info: </strong>".str_replace("^"," | ",$row_entries['brewInfo'])."</p>";
-								if ($row_entries['brewInfoOptional'] != "") $table_flight_tbody .= "<p><strong>Optional Info: </strong>".$row_entries['brewInfoOptional']."</p>";
-								if ($row_entries['brewComments'] != "") $table_flight_tbody .= "<p><strong>Specifics: </strong>".$row_entries['brewComments']."</p>";
+								if (!empty($row_entries['brewPossAllergens'])) $table_flight_tbody .= "<p><strong>".$label_possible_allergens.":</strong> ".$row_entries['brewPossAllergens']."</p>";
 
-									$table_flight_tbody .= "<p>";
-									if (!empty($row_entries['brewMead1'])) $table_flight_tbody .= "<strong>Carbonation:</strong> ".$row_entries['brewMead1']."<br>";
-									if (!empty($row_entries['brewMead2'])) $table_flight_tbody .= "<strong>Sweetness:</strong> ".$row_entries['brewMead2']."<br>";
-									if (!empty($row_entries['brewMead3'])) $table_flight_tbody .= "<strong>Strength:</strong> ".$row_entries['brewMead3'];
-									$table_flight_tbody .= "</p>";
+								if (!empty($row_entries['brewStaffNotes'])) $table_flight_tbody .= "<p><strong>".$label_notes.":</strong> ".$row_entries['brewStaffNotes']."</p>";
 
-							}
 							$table_flight_tbody .= "</td>";
 							$table_flight_tbody .= "<td>";
 							$table_flight_tbody .= $row_entries['brewBoxNum'];;

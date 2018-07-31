@@ -56,9 +56,7 @@ function admin_relocate($user_level,$go,$referrer) {
 if ((($action == "add") && ($remaining_entries <= 0) && ($_SESSION['userLevel'] == 2)) || (($action == "add") && ($entry_window_open == "2") && ($_SESSION['userLevel'] == 2))) $disable_fields = TRUE; else $disable_fields = FALSE;
 
 // Specific code for Style select
-if (strpos($_SESSION['prefsStyleSet'],"BABDB") !== false) {
-	$style_set = "Brewers Association";
-}
+if ($_SESSION['prefsStyleSet'] == "BA") $style_set = "Brewers Association";
 else $style_set = str_ireplace("2"," 2",$_SESSION['prefsStyleSet']);
 
 if (empty($row_limits['prefsUserSubCatLimit'])) $user_subcat_limit = "99999";
@@ -342,6 +340,7 @@ else {
 	        else {
 	            $("#possible-allergens").hide("fast");
 	            $("input[name='brewPossAllergens']").prop("required", false);
+	            $("input[name='brewPossAllergens']").val("");
 	        }
 	    });
 
@@ -443,6 +442,7 @@ else $relocate_referrer = $_SERVER['HTTP_REFERER'];
         <select class="selectpicker" name="brewStyle" id="type" data-live-search="true" data-size="5" data-width="auto" data-show-tick="true" data-header="<?php echo $label_select_style; ?>" title="<?php echo $label_select_style; ?>" required>
 			<option value="0-A" <?php if (($action == "add") || (($action == "edit") && ($view == "00-A"))) echo "selected"; ?>>Choose a Style</option>
             <option data-divider="true"></option>
+
             <?php
             // if (strpos($_SESSION['prefsStyleSet'],"BABDB") !== false) echo $styles_options;
 			//else {
@@ -721,7 +721,7 @@ else $relocate_referrer = $_SERVER['HTTP_REFERER'];
 		<label for="brewPossAllergens" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label"></label>
 		<div class="col-lg-10 col-md-9 col-sm-9 col-xs-12" id="possible_allergens-list">
 			<!-- Input Here -->
-			<input type="text" class="form-control" placeholder="<?php echo $brew_text_039; ?>" name="brewPossAllergens">
+			<input type="text" class="form-control" placeholder="<?php echo $brew_text_039; ?>" name="brewPossAllergens" value="<?php echo $row_log['brewPossAllergens']; ?>">
 			<?php
 
 				/*

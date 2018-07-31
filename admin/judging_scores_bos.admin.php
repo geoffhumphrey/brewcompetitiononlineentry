@@ -278,7 +278,7 @@ include (DB.'admin_judging_scores_bos.db.php');
 		if ((NHC) || ($_SESSION['prefsEntryForm'] == "N")) $judging_number = sprintf("%06s",$bos_entry_info[6]);
 		else $judging_number = readable_judging_number($bos_entry_info[1],$bos_entry_info[6]);
 
-		if ($_SESSION['prefsStyleSet'] != "BA") $style_name = $bos_entry_info[0];
+		if ($_SESSION['prefsStyleSet'] == "BA") $style_name = $bos_entry_info[0];
 
         else {
     		if ($filter == "default") $style_name = $style." ".style_convert($bos_entry_info[1],1).": ".$bos_entry_info[0];

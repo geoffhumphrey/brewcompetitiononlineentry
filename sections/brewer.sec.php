@@ -74,54 +74,6 @@ else {
 	if ($action == "edit") $form_action .= "&amp;id=".$row_brewer['id'];
 }
 
-// If BA, build likes/dislikes
-
-if (strpos($_SESSION['prefsStyleSet'],"BABDB") !== false) {
-
-	include (INCLUDES.'ba_constants.inc.php');
-
-	$brewer_ba_likes = "";
-	$brewer_ba_dislikes = "";
-
-	$brewer_likes = explode(",",$row_brewer['brewerJudgeLikes']);
-	$brewer_dislikes = explode(",",$row_brewer['brewerJudgeDislikes']);
-
-	foreach ($_SESSION['styles'] as $ba_styles => $stylesData) {
-
-		if (is_array($stylesData) || is_object($stylesData)) {
-
-			foreach ($stylesData as $key => $ba_style) {
-
-				// Likes
-				$brewer_ba_likes_selected = "";
-				if (in_array($ba_style['id'],$brewer_likes)) $brewer_ba_likes_selected = "CHECKED";
-
-				$brewer_ba_likes .= "<div class=\"checkbox\">";
-				$brewer_ba_likes .= "<label>";
-				$brewer_ba_likes .= "<input name=\"brewerJudgeLikes[]\" type=\"checkbox\" value=\"".$ba_style['id']."\" ".$brewer_ba_likes_selected.">";
-				$brewer_ba_likes .= $ba_style['name'];
-				$brewer_ba_likes .= "</label>";
-				$brewer_ba_likes .= "</div>";
-
-				// Dislikes
-				$brewer_ba_dislikes_selected = "";
-				if (in_array($ba_style['id'],$brewer_dislikes)) $brewer_ba_dislikes_selected = "CHECKED";
-
-				$brewer_ba_dislikes .= "<div class=\"checkbox\">";
-				$brewer_ba_dislikes .= "<label>";
-				$brewer_ba_dislikes .= "<input name=\"brewerJudgeDislikes[]\" type=\"checkbox\" value=\"".$ba_style['id']."\" ".$brewer_ba_dislikes_selected.">";
-				$brewer_ba_dislikes .= $ba_style['name'];
-				$brewer_ba_dislikes .= "</label>";
-				$brewer_ba_dislikes .= "</div>";
-
-			} // end foreach ($stylesData as $data => $ba_style)
-
-		} // end if (is_array($stylesData) || is_object($stylesData))
-
-	} // end foreach ($_SESSION['styles'] as $styles => $stylesData)
-
-}
-
 if (($_SESSION['prefsProEdition'] == 0) || (($_SESSION['prefsProEdition'] == 1) && ($show_judge_steward_fields))) {
 
 	// Build Clubs dropdown
@@ -693,25 +645,31 @@ $(document).ready(function(){
             </select>
             <span class="help-block"><?php echo $brewer_text_011; ?></span>
             </div>
-
         </div><!-- ./Form Group -->
         <div class="form-group">
-        <label for="brewerJudgeLikes" class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label">&nbsp;</label>
-                <div class="col-lg-9 col-md-9 col-sm-8 col-xs-12">
-        			<button class="btn btn-info btn-block" type="button" data-toggle="collapse" data-target="#collapsePref" aria-expanded="false" aria-controls="collapsePref"><?php echo $label_judge_preferred; ?></button>
-        			<span class="help-block"><?php echo $brewer_text_017; ?></span>
-                </div>
-
+            <label for="brewerJudgeLikes" class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label">&nbsp;</label>
+            <div class="col-lg-9 col-md-9 col-sm-8 col-xs-12">
+    			<button class="btn btn-info btn-block" type="button" data-toggle="collapse" data-target="#collapsePref" aria-expanded="false" aria-controls="collapsePref"><?php echo $label_judge_preferred; ?></button>
+    			<span class="help-block"><?php echo $brewer_text_017; ?></span>
+            </div>
         </div><!-- ./Form Group -->
         <div class="collapse" id="collapsePref">
           	<div class="form-group"><!-- Form Group Checkbox  -->
                 <label for="brewerJudgeLikes" class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label_judge_preferred; ?></label>
                 <div class="col-lg-9 col-md-9 col-sm-8 col-xs-12">
                 <p><strong class="text-danger"><?php echo $brewer_text_012; ?></strong></p>
-                    <?php do { ?>
+                    <?php do {
+                        $style_display = "";
+                        if ($_SESSION['prefsStyleSet'] == "BA") {
+                            if ($row_styles['brewStyleOwn'] == "bcoe") $style_display .= $row_styles['brewStyleCategory'].": ".$row_styles['brewStyle'];
+                            elseif ($row_styles['brewStyleOwn'] == "custom") $style_display .= "Custom: ".$row_styles['brewStyle'];
+                            else $style_display .= $row_styles['brewStyle'];
+                        }
+                        else $style_display .= ltrim($row_styles['brewStyleGroup'], "0").$row_styles['brewStyleNum'].": ".$row_styles['brewStyle'];
+                        ?>
                         <div class="checkbox">
                             <label>
-                                <input name="brewerJudgeLikes[]" type="checkbox" value="<?php echo $row_styles['id']; ?>" <?php if (isset($row_brewer['brewerJudgeLikes'])) { $a = explode(",", $row_brewer['brewerJudgeLikes']); $b = $row_styles['id']; foreach ($a as $value) { if ($value == $b) echo "CHECKED"; } } ?>> <?php if ($_SESSION['prefsStyleSet'] == "BA") echo $row_styles['brewStyleCategory'].": ".$row_styles['brewStyle']; else echo ltrim($row_styles['brewStyleGroup'], "0").$row_styles['brewStyleNum'].": ".$row_styles['brewStyle']; ?>
+                                <input name="brewerJudgeLikes[]" type="checkbox" value="<?php echo $row_styles['id']; ?>" <?php if (isset($row_brewer['brewerJudgeLikes'])) { $a = explode(",", $row_brewer['brewerJudgeLikes']); $b = $row_styles['id']; foreach ($a as $value) { if ($value == $b) echo "CHECKED"; } } ?>> <?php echo $style_display; ?>
                             </label>
                         </div>
                     <?php } while ($row_styles = mysqli_fetch_assoc($styles)); ?>
@@ -731,11 +689,19 @@ $(document).ready(function(){
                 <div class="col-lg-9 col-md-9 col-sm-8 col-xs-12">
                     <p><strong class="text-danger"><?php echo $brewer_text_014; ?></strong></p>
                     <!-- <div class="row"> -->
-					<?php do { ?>
+					<?php do {
+                        $style_display = "";
+                        if ($_SESSION['prefsStyleSet'] == "BA") {
+                            if ($row_styles2['brewStyleOwn'] == "bcoe") $style_display .= $row_styles2['brewStyleCategory'].": ".$row_styles2['brewStyle'];
+                            elseif ($row_styles2['brewStyleOwn'] == "custom") $style_display .= "Custom: ".$row_styles2['brewStyle'];
+                            else $style_display .= $row_styles2['brewStyle'];
+                        }
+                        else $style_display .= ltrim($row_styles2['brewStyleGroup'], "0").$row_styles2['brewStyleNum'].": ".$row_styles2['brewStyle'];
+                        ?>
                     <!-- Input Here -->
                         <div class="checkbox">
                             <label>
-                                <input name="brewerJudgeDislikes[]" type="checkbox" value="<?php echo $row_styles2['id']; ?>" <?php if (isset($row_brewer['brewerJudgeDislikes'])) { $a = explode(",", $row_brewer['brewerJudgeDislikes']); $b = $row_styles2['id']; foreach ($a as $value) { if ($value == $b) echo "CHECKED"; } } ?>> <?php if ($_SESSION['prefsStyleSet'] == "BA") echo $row_styles2['brewStyleCategory'].": ".$row_styles2['brewStyle']; else echo ltrim($row_styles2['brewStyleGroup'], "0").$row_styles2['brewStyleNum'].": ".$row_styles2['brewStyle']; ?>
+                                <input name="brewerJudgeDislikes[]" type="checkbox" value="<?php echo $row_styles2['id']; ?>" <?php if (isset($row_brewer['brewerJudgeDislikes'])) { $a = explode(",", $row_brewer['brewerJudgeDislikes']); $b = $row_styles2['id']; foreach ($a as $value) { if ($value == $b) echo "CHECKED"; } } ?>> <?php echo $style_display; ?>
                             </label>
                         </div>
                     <?php } while ($row_styles2 = mysqli_fetch_assoc($styles2)); ?>

@@ -11,7 +11,7 @@ $filename = "";
 $number_of_labels = "";
 $ba = FALSE;
 
-if ((strpos($_SESSION['prefsStyleSet'],"BABDB") !== false) || ($_SESSION['prefsStyleSet'] == "BA")) $ba = TRUE;
+if ($_SESSION['prefsStyleSet'] == "BA") $ba = TRUE;
 
 // Define a character limit. 34 characters per line appears to be the limit for 5160, the smaller
 // of the two label sizes available.

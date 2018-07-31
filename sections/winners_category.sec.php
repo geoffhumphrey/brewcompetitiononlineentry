@@ -78,10 +78,13 @@ if ($row_scored_entries['count'] > 0) {
 
 
 				// Build headers
-				if ($_SESSION['prefsStyleSet'] != "BA") $header1_1 .= sprintf("<h3>%s %s: %s (%s %s)</h3>",$label_category,ltrim($style,"0"),style_convert($style,"1"),$row_entry_count['count'],$entries);
-				else {
+				if ($_SESSION['prefsStyleSet'] == "BA") {
 					include (INCLUDES.'ba_constants.inc.php');
 					$header1_1 .= sprintf("<h3>%s (%s %s)</h3>",$ba_category_names[$style],$row_entry_count['count'],$entries);
+
+				}
+				else {
+					$header1_1 .= sprintf("<h3>%s %s: %s (%s %s)</h3>",$label_category,ltrim($style,"0"),style_convert($style,"1"),$row_entry_count['count'],$entries);
 				}
 				// Build table headers
 				$table_head1 .= "<tr>";
@@ -125,8 +128,8 @@ if ($row_scored_entries['count'] > 0) {
 					$table_body1 .= "</td>";
 
 					$table_body1 .= "<td>";
-					if ($_SESSION['prefsStyleSet'] != "BA") $table_body1 .= $style.": ".$row_scores['brewStyle'];
-					else $table_body1 .= $row_scores['brewStyle'];
+					if ($_SESSION['prefsStyleSet'] == "BA") $table_body1 .= $row_scores['brewStyle'];
+					else $table_body1 .= $style.": ".$row_scores['brewStyle'];
 					$table_body1 .= "</td>";
 
 					if ($_SESSION['prefsProEdition'] == 0) {

@@ -785,8 +785,8 @@ function received_entries() {
 	do { $style_array[] = $row_styles['brewStyle']; } while ($row_styles = mysqli_fetch_array($styles));
 
 	foreach ($style_array as $style) {
-
-		$query_entry_count = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE brewStyle='%s' AND brewReceived='1'",$prefix."brewing",mysqli_real_escape_string($style));
+		$style = mysqli_real_escape_string($connection,$style);
+		$query_entry_count = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE brewStyle='%s' AND brewReceived='1'", $prefix."brewing", $style);
 		$result = mysqli_query($connection,$query_entry_count) or die (mysqli_error($connection));
 		$row = mysqli_fetch_array($result);
 		if ($row['count'] > 0) $a[] = $style;

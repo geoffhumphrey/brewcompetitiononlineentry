@@ -158,8 +158,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 					$row_styles = mysqli_fetch_assoc($styles);
 				}
 
-				if (strpos($_SESSION['prefsStyleSet'],"BABDB") !== false) $query_entries = sprintf("SELECT id FROM %s WHERE brewSubCategory='%s' AND brewReceived='1'", $brewing_db_table, $value);
-				else $query_entries = sprintf("SELECT id FROM %s WHERE brewCategorySort='%s' AND brewSubCategory='%s' AND brewReceived='1'", $brewing_db_table, $row_styles['brewStyleGroup'],$row_styles['brewStyleNum']);
+				$query_entries = sprintf("SELECT id FROM %s WHERE brewCategorySort='%s' AND brewSubCategory='%s' AND brewReceived='1'", $brewing_db_table, $row_styles['brewStyleGroup'],$row_styles['brewStyleNum']);
 				$entries = mysqli_query($connection,$query_entries) or die (mysqli_error($connection));
 				$row_entries = mysqli_fetch_assoc($entries);
 

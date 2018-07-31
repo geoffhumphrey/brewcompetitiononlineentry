@@ -70,6 +70,7 @@ do {
 	$entry_box_num_display = "";
 	$entry_actions = "";
 	$entry_unconfirmed_row = "";
+	$entry_allergen_row = "";
 	$entry_judging_num = "";
 	$entry_judging_num_hidden = "";
 	$required_info = "";
@@ -128,6 +129,12 @@ do {
 	}
 
 	if (!empty($row_log['brewInfoOptional'])) $required_info .= " <a tabindex=\"0\" role=\"button\" data-toggle=\"popover\" data-placement=\"right\" data-trigger=\"hover focus\" title=\"Optional Info\" data-content=\"".$row_log['brewInfoOptional']."\"><span class=\"fa fa-lg fa-comment-o\"></span></a>";
+
+	if (!empty($row_log['brewPossAllergens'])) {
+		$required_info .= "<br><strong class=\"text-danger\">".$label_possible_allergens.": ".$row_log['brewPossAllergens']."</strong>";
+		//$required_info .= " <a tabindex=\"0\" role=\"button\" data-toggle=\"popover\" data-placement=\"right\" data-trigger=\"hover focus\" title=\"Possible Allergen(s)\" data-content=\"".$row_log['brewPossAllergens']."\"><span class=\"fa fa-lg fa-medkit\"></span></a>";
+		$entry_allergen_row = "bg-danger";
+	}
 
 	if (($row_log['brewConfirmed'] == 0) || ($row_log['brewConfirmed'] == "")) $entry_unconfirmed_row = "bg-danger";
 	elseif (($_SESSION['prefsStyleSet'] != "BA") && ((check_special_ingredients($entry_style,$row_styles['brewStyleVersion']))) && ($row_log['brewInfo'] == "")) $entry_unconfirmed_row = "bg-warning";
@@ -321,12 +328,23 @@ do {
 		if ((($dbTable == "default") && ($_SESSION['prefsDisplaySpecial'] == "J")) || ($dbTable != "default")) $entry_actions .= $scoresheet_link_2;
 	}
 
-	$tbody_rows .= "<tr class=\"".$entry_unconfirmed_row."\">";
+	if ((empty($entry_allergen_row)) && (!empty($entry_unconfirmed_row))) $entry_row_color = $entry_unconfirmed_row;
+	elseif ((!empty($entry_allergen_row)) && (empty($entry_unconfirmed_row))) $entry_row_color = $entry_allergen_row;
+	elseif ((!empty($entry_allergen_row)) && (!empty($entry_unconfirmed_row))) $entry_row_color = $entry_unconfirmed_row;
+	else $entry_row_color = "";
+
+	$tbody_rows .= "<tr class=\"".$entry_row_color."\">";
 	$tbody_rows .= "<input type=\"hidden\" name=\"id[]\" value=\"".$row_log['id']."\" />";
 	$tbody_rows .= "<td>".sprintf("%04s",$row_log['id'])."</td>";
 	$tbody_rows .= "<td nowrap=\"nowrap\">".$entry_judging_num_display."</td>";
 	$tbody_rows .= "<td class=\"hidden-xs hidden-sm hidden-md\">";
-	if (!empty($entry_unconfirmed_row)) $tbody_rows .= "<a href=\"".$base_url."index.php?section=brew&amp;go=".$go."&amp;bid=".$brewer_info[7]."&amp;action=edit&amp;id=".$row_log['id']."&amp;view=".$row_log['brewCategory']."-".$row_log['brewSubCategory']."\" data-toggle=\"tooltip\" title=\"Unconfirmed Entry - Click to Edit\"><span class=\"fa fa-lg fa-exclamation-triangle text-danger\"></span></a> ";
+
+	if ((!empty($entry_unconfirmed_row)) || (!empty($entry_allergen_row))) {
+		if (!empty($entry_unconfirmed_row)) $tbody_rows .= "<a href=\"".$base_url."index.php?section=brew&amp;go=".$go."&amp;bid=".$brewer_info[7]."&amp;action=edit&amp;id=".$row_log['id']."&amp;view=".$row_log['brewCategory']."-".$row_log['brewSubCategory']."\" data-toggle=\"tooltip\" title=\"Unconfirmed Entry - Click to Edit\">";
+		$tbody_rows .= "<span class=\"fa fa-lg fa-exclamation-triangle text-danger\"></span>";
+		if (!empty($entry_unconfirmed_row)) $tbody_rows .= "</a>";
+		$tbody_rows .= " ";
+	}
 	$tbody_rows .= $row_log['brewName'];
 	$tbody_rows .= $required_info."</td>";
 	$tbody_rows .= "<td class=\"hidden-xs\">".$entry_style_display."</td>";

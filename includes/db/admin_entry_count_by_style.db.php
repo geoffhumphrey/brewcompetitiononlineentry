@@ -1,27 +1,12 @@
 <?php
-
-if (strpos($_SESSION['prefsStyleSet'],"BABDB") !== false) {
-	if (SINGLE) $query_style_count = sprintf("SELECT COUNT(*) AS 'count' FROM %s WHERE comp_id='%s' AND brewCategorySort='%s' AND brewPaid='1' AND brewReceived='1'",$prefix."brewing", $_SESSION['comp_id'], $value);
-	else $query_style_count = sprintf("SELECT COUNT(*) AS 'count' FROM %s WHERE brewCategorySort='%s' AND brewPaid='1' AND brewReceived='1'", $prefix."brewing", $style['category']['id']);
-}
-
-else {
-	if (SINGLE) $query_style_count = sprintf("SELECT COUNT(*) AS 'count' FROM %s WHERE comp_id='%s' AND brewCategorySort='%s' AND brewPaid='1' AND brewReceived='1'",$prefix."brewing", $_SESSION['comp_id'], $cat_convert);
+if (SINGLE) $query_style_count = sprintf("SELECT COUNT(*) AS 'count' FROM %s WHERE comp_id='%s' AND brewCategorySort='%s' AND brewPaid='1' AND brewReceived='1'",$prefix."brewing", $_SESSION['comp_id'], $cat_convert);
 	else $query_style_count = sprintf("SELECT COUNT(*) AS 'count' FROM %s WHERE brewCategorySort='%s' AND brewPaid='1' AND brewReceived='1'", $prefix."brewing", $cat_convert);
-}
 
 $style_count = mysqli_query($connection,$query_style_count) or die (mysqli_error($connection));
 $row_style_count = mysqli_fetch_assoc($style_count);
 
-if (strpos($_SESSION['prefsStyleSet'],"BABDB") !== false) {
-	if (SINGLE) $query_style_count_logged = sprintf("SELECT COUNT(*) AS 'count' FROM %s WHERE comp_id='%s' AND brewCategorySort='%s'", $prefix."brewing", $_SESSION['comp_id'], $style['category']['id']);
-	else $query_style_count_logged = sprintf("SELECT COUNT(*) AS 'count' FROM %s WHERE brewCategorySort='%s'", $prefix."brewing", $style['category']['id']);
-}
-
-else {
 	if (SINGLE) $query_style_count_logged = sprintf("SELECT COUNT(*) AS 'count' FROM %s WHERE comp_id='%s' AND brewCategorySort='%s'", $prefix."brewing", $_SESSION['comp_id'], $cat_convert);
 	else $query_style_count_logged = sprintf("SELECT COUNT(*) AS 'count' FROM %s WHERE brewCategorySort='%s'", $prefix."brewing", $cat_convert);
-}
 
 $style_count_logged = mysqli_query($connection,$query_style_count_logged) or die (mysqli_error($connection));
 $row_style_count_logged = mysqli_fetch_assoc($style_count_logged);

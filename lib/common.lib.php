@@ -1510,200 +1510,91 @@ function style_convert($number,$type,$base_url="") {
 		require(CONFIG.'config.php');
 	    mysqli_select_db($connection,$database);
 
-		if (strpos($_SESSION['prefsStyleSet'],"BABDB") !== false) {
+		$a = explode(",",$number);
 
-			$styleSet = "Brewers Association";
+		foreach ($a as $value) {
 
-			// $style_convert = str_replace(",",", ",$number);
+			$styles_db_table = $prefix."styles";
+			$query_style = sprintf("SELECT * FROM %s WHERE id='%s'",$styles_db_table,$value);
+			$style = mysqli_query($connection,$query_style) or die (mysqli_error($connection));
+			$row_style = mysqli_fetch_assoc($style);
+			$trimmed = ltrim($row_style['brewStyleGroup'],"0");
 
-			$number = explode(",",$number);
+			if ($row_style['brewStyleOwn'] == "custom") $styleSet = "Custom"; else $styleSet = $styleSet;
 
-			foreach ($_SESSION['styles'] as $ba_styles => $stylesData) {
+			$info = str_replace($replacement1,$replacement2,"<p>".$row_style['brewStyleInfo']."</p>");
 
-				if (is_array($stylesData) || is_object($stylesData)) {
+			if (!empty($row_style['brewStyleComEx'])) $info .= str_replace($replacement1,$replacement2,"<p>Commercial Examples: ".$row_style['brewStyleComEx']."</p>");
+			if (!empty($row_style['brewStyleEntry'])) $info .= str_replace($replacement1,$replacement2,"<p>Entry Instructions: ".$row_style['brewStyleEntry']."</p>");
 
-					foreach ($stylesData as $key => $ba_style) {
+			if (empty($row_style['brewStyleOG'])) $styleOG = "Varies";
+			else $styleOG = number_format((float)$row_style['brewStyleOG'], 3, '.', '')." &ndash; ".number_format((float)$row_style['brewStyleOGMax'], 3, '.', '');
 
-						// Likes
-						$brewer_ba_likes_selected = "";
+			if (empty($row_style['brewStyleFG'])) $styleFG = "Varies";
+			else $styleFG = number_format((float)$row_style['brewStyleFG'], 3, '.', '')." &ndash; ".number_format((float)$row_style['brewStyleFGMax'], 3, '.', '');
 
-						if (in_array($ba_style['id'],$number)) {
+			if (empty($row_style['brewStyleABV'])) $styleABV = "Varies";
+			else $styleABV = $row_style['brewStyleABV']." &ndash; ".$row_style['brewStyleABVMax'];
 
-							$info = "";
-							$minABV = "";
-							$maxABV = "";
-							$minIBU = "";
-							$maxIBU = "";
-							$minSRM = "";
-							$maxSRM = "";
-							$minOG = "";
-							$maxOG = "";
+			if (empty($row_style['brewStyleIBU']))  $styleIBU = "Varies";
+			elseif ($row_style['brewStyleIBU'] == "N/A") $styleIBU =  "N/A";
+			elseif (!empty($row_style['brewStyleIBU'])) $styleIBU = ltrim($row_style['brewStyleIBU'], "0")." &ndash; ".ltrim($row_style['brewStyleIBUMax'], "0")." IBU";
+			else $styleIBU = "&nbsp;";
 
-							// if (isset($ba_style['updateDate'])) $updated = getTimeZoneDateTime($timezone_offset, strtotime($ba_style['updateDate']), 1, 2, "short", "date-time");
-							if (isset($ba_style['abvMin'])) $minABV = number_format($ba_style['abvMin'],1); else $minABV = $label_varies;
-							if (isset($ba_style['abvMax'])) $maxABV = " - ".number_format($ba_style['abvMax'],1);  else $maxABV = " - ".$label_varies;
-							if (isset($ba_style['ibuMin'])) $minIBU = $ba_style['ibuMin']; else $minIBU = $label_varies;
-							if (isset($ba_style['ibuMax'])) $maxIBU = " - ".$ba_style['ibuMax']; else $maxIBU = " - ".$label_varies;
+			if (empty($row_style['brewStyleSRM'])) $styleColor = "Varies";
+			elseif ($row_style['brewStyleSRM'] == "N/A") $styleColor = "N/A";
+			elseif (!empty($row_style['brewStyleSRM'])) {
+				$SRMmin = ltrim ($row_style['brewStyleSRM'], "0");
+				$SRMmax = ltrim ($row_style['brewStyleSRMMax'], "0");
+				if ($SRMmin >= "15") $color1 = "#ffffff"; else $color1 = "#000000";
+				if ($SRMmax >= "15") $color2 = "#ffffff"; else $color2 = "#000000";
 
-							if (isset($ba_style['srmMin'])) {
-								if ($ba_style['srmMin'] >= "15") $color1 = "#ffffff"; else $color1 = "#000000";
-								$minSRM = "<span class=\"badge\" style=\"background-color: ".srm_color($ba_style['srmMin'],"srm")."; color: ".$color1."\">".$ba_style['srmMin']."</span>";
-							}
-							else $minSRM = $label_varies;
+				$styleColor = "<span class=\"badge\" style=\"background-color: ".srm_color($SRMmin,"srm")."; color: ".$color1."\">&nbsp;".$SRMmin."&nbsp;</span>";
+				$styleColor .= " &ndash; ";
+				$styleColor .= "<span class=\"badge\" style=\"background-color: ".srm_color($SRMmax,"srm")."; color: ".$color2."\">&nbsp;".$SRMmax."&nbsp;</span> <small class=\"text-muted\"><em>SRM</em></small>";
+			}
+			else $styleColor = "&nbsp;";
 
-							if (isset($ba_style['srmMax'])) {
-								if ($ba_style['srmMax'] >= "15") $color2 = "#ffffff"; else $color2 = "#000000";
-								$maxSRM = " - <span class=\"badge\" style=\"background-color: ".srm_color($ba_style['srmMax'],"srm")."; color: ".$color2."\">".$ba_style['srmMax']."</span>";
-							}
-							else $maxSRM = " - ".$label_varies;
+			$info .= "
+			<table class=\"table table-bordered table-striped\">
+			<tr>
+				<th class=\"dataLabel data bdr1B\">OG</th>
+				<th class=\"dataLabel data bdr1B\">FG</th>
+				<th class=\"dataLabel data bdr1B\">ABV</th>
+				<th class=\"dataLabel data bdr1B\">".$label_bitterness."</th>
+				<th class=\"dataLabel data bdr1B\">".$label_color."</th>
+			</tr>
+			<tr>
+				<td nowrap>".$styleOG."</td>
+				<td nowrap>".$styleFG."</td>
+				<td nowrap>".$styleABV."</td>
+				<td nowrap>".$styleIBU."</td>
+				<td>".$styleColor."</td>
+			</tr>
+			</table>";
 
-							if (!empty($ba_style['ogMin'])) $minOG = number_format($ba_style['ogMin'],3); else $minOG = $label_varies;
-							if (!empty($ba_style['ogMax'])) $maxOG = " - ".number_format($ba_style['ogMax'],3); else $maxOG = " - ".$label_varies;
-							if (!empty($ba_style['fgMin'])) $minFG = number_format($ba_style['fgMin'],3); else $minFG = $label_varies;
-							if (!empty($ba_style['fgMax'])) $maxFG = " - ".number_format($ba_style['fgMax'],3); else $maxFG = " - ".$label_varies;
-
-							if ($ba_style['category']['name'] == "Hybrid/mixed Beer") $categoryName = "Hybrid/Mixed Beer";
-							elseif ($ba_style['category']['name'] == "European-germanic Lager") $categoryName = "European-Germanic Lager";
-							else $categoryName = ucwords($ba_style['category']['name']);
-
-							$info .= "<p>".$ba_style['description']."</p>";
-
-							$info .= "
-							<table class=\"table table-bordered table-striped\">
-							<tr>
-								<th class=\"dataLabel data bdr1B\">OG</th>
-								<th class=\"dataLabel data bdr1B\">FG</th>
-								<th class=\"dataLabel data bdr1B\">% ABV</th>
-								<th class=\"dataLabel data bdr1B\">".$label_bitterness." (IBU)</th>
-								<th class=\"dataLabel data bdr1B\">".$label_color."</th>
-							</tr>
-							<tr>
-								<td nowrap>".$minOG.$maxOG."</td>
-								<td nowrap>".$minFG.$maxFG."</td>
-								<td nowrap>".$minABV.$maxABV."</td>
-								<td nowrap>".$minIBU.$maxIBU."</td>
-								<td>".$minSRM.$maxSRM."</td>
-							</tr>
-							</table>";
-
-							$style_convert_1[] = "<a href=\"#\" data-target=\"#".$ba_style['id']."\" data-toggle=\"modal\" data-tooltip=\"true\" title=\"".$ba_style['name']."\">".$ba_style['id']."</a>";
-
-							$style_modal[] = "
-							<!-- Modal -->
-							<div class=\"modal fade\" id=\"".$ba_style['id']."\" tabindex=\"-1\" role=\"dialog\" aria-labelledby=\"".$ba_style['id']."Label\">
-							  <div class=\"modal-dialog modal-lg\" role=\"document\">
-								<div class=\"modal-content\">
-								  <div class=\"modal-header\">
-									<button type=\"button\" class=\"close\" data-dismiss=\"modal\" aria-label=\"".$label_close."\"><span aria-hidden=\"true\">&times;</span></button>
-									<h4 class=\"modal-title\" id=\"".$ba_style['id']."Label\">".$styleSet." Style - ".$ba_style['name']." (".$categoryName.")</h4>
-								  </div>
-								  <div class=\"modal-body\">".$info."</div>
-								  <div class=\"modal-footer\">
-									<button type=\"button\" class=\"btn btn-danger\" data-dismiss=\"modal\">".$label_close."</button>
-								  </div>
-								</div>
-							  </div>
-							</div>";
-
-						}
-
-					} // end foreach ($stylesData as $data => $ba_style)
-
-				} // end if (is_array($stylesData) || is_object($stylesData))
-
-			} // end foreach ($_SESSION['styles'] as $styles => $stylesData)
-
-			$style_convert = rtrim(implode(", ",$style_convert_1),", ")."|".implode("^",$style_modal);
-		}
-
-		if ($_SESSION['prefsStyleSet'] != "BA") {
-
-			$a = explode(",",$number);
-
-			foreach ($a as $value) {
-
-				$styles_db_table = $prefix."styles";
-				$query_style = sprintf("SELECT * FROM %s WHERE id='%s'",$styles_db_table,$value);
-				$style = mysqli_query($connection,$query_style) or die (mysqli_error($connection));
-				$row_style = mysqli_fetch_assoc($style);
-				$trimmed = ltrim($row_style['brewStyleGroup'],"0");
-
-				if ($row_style['brewStyleOwn'] == "custom") $styleSet = "Custom"; else $styleSet = $styleSet;
-
-				$info = str_replace($replacement1,$replacement2,"<p>".$row_style['brewStyleInfo']."</p>");
-
-				if (!empty($row_style['brewStyleComEx'])) $info .= str_replace($replacement1,$replacement2,"<p>Commercial Examples: ".$row_style['brewStyleComEx']."</p>");
-				if (!empty($row_style['brewStyleEntry'])) $info .= str_replace($replacement1,$replacement2,"<p>Entry Instructions: ".$row_style['brewStyleEntry']."</p>");
-
-				if (empty($row_style['brewStyleOG'])) $styleOG = "Varies";
-				else $styleOG = number_format((float)$row_style['brewStyleOG'], 3, '.', '')." &ndash; ".number_format((float)$row_style['brewStyleOGMax'], 3, '.', '');
-
-				if (empty($row_style['brewStyleFG'])) $styleFG = "Varies";
-				else $styleFG = number_format((float)$row_style['brewStyleFG'], 3, '.', '')." &ndash; ".number_format((float)$row_style['brewStyleFGMax'], 3, '.', '');
-
-				if (empty($row_style['brewStyleABV'])) $styleABV = "Varies";
-				else $styleABV = $row_style['brewStyleABV']." &ndash; ".$row_style['brewStyleABVMax'];
-
-				if (empty($row_style['brewStyleIBU']))  $styleIBU = "Varies";
-				elseif ($row_style['brewStyleIBU'] == "N/A") $styleIBU =  "N/A";
-				elseif (!empty($row_style['brewStyleIBU'])) $styleIBU = ltrim($row_style['brewStyleIBU'], "0")." &ndash; ".ltrim($row_style['brewStyleIBUMax'], "0")." IBU";
-				else $styleIBU = "&nbsp;";
-
-				if (empty($row_style['brewStyleSRM'])) $styleColor = "Varies";
-				elseif ($row_style['brewStyleSRM'] == "N/A") $styleColor = "N/A";
-				elseif (!empty($row_style['brewStyleSRM'])) {
-					$SRMmin = ltrim ($row_style['brewStyleSRM'], "0");
-					$SRMmax = ltrim ($row_style['brewStyleSRMMax'], "0");
-					if ($SRMmin >= "15") $color1 = "#ffffff"; else $color1 = "#000000";
-					if ($SRMmax >= "15") $color2 = "#ffffff"; else $color2 = "#000000";
-
-					$styleColor = "<span class=\"badge\" style=\"background-color: ".srm_color($SRMmin,"srm")."; color: ".$color1."\">&nbsp;".$SRMmin."&nbsp;</span>";
-					$styleColor .= " &ndash; ";
-					$styleColor .= "<span class=\"badge\" style=\"background-color: ".srm_color($SRMmax,"srm")."; color: ".$color2."\">&nbsp;".$SRMmax."&nbsp;</span> <small class=\"text-muted\"><em>SRM</em></small>";
-				}
-				else $styleColor = "&nbsp;";
-
-				$info .= "
-				<table class=\"table table-bordered table-striped\">
-				<tr>
-					<th class=\"dataLabel data bdr1B\">OG</th>
-					<th class=\"dataLabel data bdr1B\">FG</th>
-					<th class=\"dataLabel data bdr1B\">ABV</th>
-					<th class=\"dataLabel data bdr1B\">".$label_bitterness."</th>
-					<th class=\"dataLabel data bdr1B\">".$label_color."</th>
-				</tr>
-				<tr>
-					<td nowrap>".$styleOG."</td>
-					<td nowrap>".$styleFG."</td>
-					<td nowrap>".$styleABV."</td>
-					<td nowrap>".$styleIBU."</td>
-					<td>".$styleColor."</td>
-				</tr>
-				</table>";
-
-				$style_convert_1[] = "<a href=\"#\" data-target=\"#".$trimmed.$row_style['brewStyleNum']."\" data-toggle=\"modal\" data-tooltip=\"true\" title=\"".$row_style['brewStyle']."\">".$trimmed.$row_style['brewStyleNum']."</a>";
-				$style_modal[] = "
-					<!-- Modal -->
-					<div class=\"modal fade\" id=\"".$trimmed.$row_style['brewStyleNum']."\" tabindex=\"-1\" role=\"dialog\" aria-labelledby=\"".$trimmed.$row_style['brewStyleNum']."Label\">
-					  <div class=\"modal-dialog modal-lg\" role=\"document\">
-						<div class=\"modal-content\">
-						  <div class=\"modal-header\">
-							<button type=\"button\" class=\"close\" data-dismiss=\"modal\" aria-label=\"".$label_close."\"><span aria-hidden=\"true\">&times;</span></button>
-							<h4 class=\"modal-title\" id=\"".$trimmed.$row_style['brewStyleNum']."Label\">".$styleSet." Style ".$trimmed.$row_style['brewStyleNum'].": ".$row_style['brewStyle']."</h4>
-						  </div>
-						  <div class=\"modal-body\">".$info."</div>
-						  <div class=\"modal-footer\">
-							<button type=\"button\" class=\"btn btn-danger\" data-dismiss=\"modal\">".$label_close."</button>
-						  </div>
-						</div>
+			$style_convert_1[] = "<a href=\"#\" data-target=\"#".$trimmed.$row_style['brewStyleNum']."\" data-toggle=\"modal\" data-tooltip=\"true\" title=\"".$row_style['brewStyle']."\">".$trimmed.$row_style['brewStyleNum']."</a>";
+			$style_modal[] = "
+				<!-- Modal -->
+				<div class=\"modal fade\" id=\"".$trimmed.$row_style['brewStyleNum']."\" tabindex=\"-1\" role=\"dialog\" aria-labelledby=\"".$trimmed.$row_style['brewStyleNum']."Label\">
+				  <div class=\"modal-dialog modal-lg\" role=\"document\">
+					<div class=\"modal-content\">
+					  <div class=\"modal-header\">
+						<button type=\"button\" class=\"close\" data-dismiss=\"modal\" aria-label=\"".$label_close."\"><span aria-hidden=\"true\">&times;</span></button>
+						<h4 class=\"modal-title\" id=\"".$trimmed.$row_style['brewStyleNum']."Label\">".$styleSet." Style ".$trimmed.$row_style['brewStyleNum'].": ".$row_style['brewStyle']."</h4>
 					  </div>
-					</div>";
+					  <div class=\"modal-body\">".$info."</div>
+					  <div class=\"modal-footer\">
+						<button type=\"button\" class=\"btn btn-danger\" data-dismiss=\"modal\">".$label_close."</button>
+					  </div>
+					</div>
+				  </div>
+				</div>";
 
-			} // end foreach
+		} // end foreach
 
-			$style_convert = rtrim(implode(", ",$style_convert_1),", ")."|".implode("^",$style_modal);
+		$style_convert = rtrim(implode(", ",$style_convert_1),", ")."|".implode("^",$style_modal);
 
-		} // end
 
 		break;
 
@@ -3229,52 +3120,31 @@ function limit_subcategory($style,$pref_num,$pref_exception_sub_num,$pref_except
 
 	$pref_exception_sub_array = explode(",",$pref_exception_sub_array);
 
+	if ($style_break[0] <= 9) $style_num = sprintf('%02d',$style_break[0]);
+	else $style_num = $style_break[0];
+
+	$query_style = sprintf("SELECT id FROM %s WHERE (brewStyleVersion='%s' OR brewStyleOwn='custom') AND brewStyleGroup='%s' AND brewStyleNum='%s'",$prefix."styles",$_SESSION['prefsStyleSet'],$style_num,$style_break[1]);
+	$style = mysqli_query($connection,$query_style) or die (mysqli_error($connection));
+	$row_style = mysqli_fetch_assoc($style);
+
+	$style_id = $row_style['id'];
+
 	// BA Styles
-	if (strpos($_SESSION['prefsStyleSet'],"BABDB") !== false) {
-
-		if ((isset($style_break[2])) && (($style_break[2] == "Custom"))) {
-
-			$query_check = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE brewBrewerID='%s' AND brewCategory='%s'", $prefix."brewing", $uid, $style_break[0]);
-			$check = mysqli_query($connection,$query_check) or die (mysqli_error($connection));
-			$row_check = mysqli_fetch_assoc($check);
-
-		}
-
-		else {
-
-			$query_check = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE brewBrewerID='%s' AND brewSubCategory='%s'", $prefix."brewing", $uid, $style_break[1]);
-			$check = mysqli_query($connection,$query_check) or die (mysqli_error($connection));
-			$row_check = mysqli_fetch_assoc($check);
-
-		}
-
-		$style_id = $style_break[1];
-
+	if ($_SESSION['prefsStyleSet'] == "BA") {
+		$query_check = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE brewBrewerID='%s' AND brewSubCategory='%s'", $prefix."brewing", $uid, $style_break[1]);
+		$check = mysqli_query($connection,$query_check) or die (mysqli_error($connection));
+		$row_check = mysqli_fetch_assoc($check);
 	}
 
 	// Others
 	else {
-
-		if ($style_break[0] <= 9) $style_num = sprintf('%02d',$style_break[0]);
-		else $style_num = $style_break[0];
-
-		$query_style = sprintf("SELECT id FROM %s WHERE (brewStyleVersion='%s' OR brewStyleOwn='custom') AND brewStyleGroup='%s' AND brewStyleNum='%s'",$prefix."styles",$_SESSION['prefsStyleSet'],$style_num,$style_break[1]);
-		$style = mysqli_query($connection,$query_style) or die (mysqli_error($connection));
-		$row_style = mysqli_fetch_assoc($style);
-
-		$style_id = $row_style['id'];
-
 		$query_check = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE brewBrewerID='%s' AND brewCategorySort='%s' AND brewSubCategory='%s'", $prefix."brewing", $uid, $style_num, $style_break[1]);
 		$check = mysqli_query($connection,$query_check) or die (mysqli_error($connection));
 		$row_check = mysqli_fetch_assoc($check);
-
-		// Check if the user has a entry in the system in the subcategory
-
 	}
 
 	if ($row_check['count'] >= $pref_num) $return = "DISABLED";
 	else $return = "";
-
 
 	// Check for exceptions
 	if (($return == "DISABLED") && (!empty($pref_exception_sub_array))) {

@@ -100,7 +100,7 @@ $entry_output = "";
 
 do {
 
-	if ((strpos($_SESSION['prefsStyleSet'],"BABDB") === false) || ((strpos($_SESSION['prefsStyleSet'],"BABDB") !== false) && ($row_log['brewCategorySort'] > 28))) include (DB.'styles.db.php');
+	if (($_SESSION['prefsStyleSet'] == "BA") || (($_SESSION['prefsStyleSet'] != "BA") && ($row_log['brewCategorySort'] > 28))) include (DB.'styles.db.php');
 
 	$required_info = "";
 	if ((!empty($row_log['brewInfo'])) || (!empty($row_log['brewMead1'])) || (!empty($row_log['brewMead2'])) || (!empty($row_log['brewMead3']))) {
@@ -168,7 +168,7 @@ do {
 				// the entry or judging number pdf name passed via the URL to force downloads of files
 				// they shouldn't have access to. Can I get a harumph?!
 				$scoresheet_link .= "scoresheetfilename=".urlencode(obfuscateURL($scoresheet_file_name,$encryption_key));
-				$scoresheet_link .= "&amp;randomfilename=".urlencode(obfuscateURL($random_file_name,$encryption_key)."&amp;download=true";
+				$scoresheet_link .= "&amp;randomfilename=".urlencode(obfuscateURL($random_file_name,$encryption_key))."&amp;download=true";
 				$scoresheet_link .= sprintf("\" data-toggle=\"tooltip\" title=\"%s '".$row_log['brewName']."'.\">",$brewer_entries_text_006);
 				$scoresheet_link .= "<span class=\"fa fa-lg fa-gavel\"></a>&nbsp;&nbsp;";
 			}

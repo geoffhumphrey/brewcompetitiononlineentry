@@ -1179,7 +1179,7 @@ $output_text_010 = "To receive judging credit, please be sure to enter your BJCP
 $output_text_011 = "No assignments have been made.";
 $output_text_012 = "Total entries at this location";
 $output_text_013 = "No participants provided notes to organizers.";
-$output_text_014 = "The following are the notes to organizers entered by judges.";
+$output_text_014 = "The following are the notes to organizers entered by judges or stewards.";
 $output_text_015 = "No participants provided notes to organizers.";
 $output_text_016 = "Post-Judging Entry Inventory";
 $output_text_017 = "If there are no entries showing below, flights at this table have not been assigned to rounds.";
@@ -1193,9 +1193,6 @@ $output_text_024 = "BJCP Points Report";
 $output_text_025 = "Total Staff Points Available";
 $output_text_026 = "Styles in this category are not accepted in this competition.";
 $output_text_027 = "link to Beer Judge Certification Program Style Guidelines";
-$output_text_028 = "";
-$output_text_029 = "";
-$output_text_030 = "";
 
 // ----------------------------------------------------------------------------------
 // Maintenance
@@ -1273,13 +1270,7 @@ $label_password_strength = "Password Strength";
 $label_entry_shipping = "Entry Shipping";
 $label_jump_to = "Jump to...";
 $label_top = "Top";
-
-// v2.1.12
 $label_bjcp_cider = "Cider Judge";
-
-// v2.1.13
-$label_possible_allergens = "Possible Allergens";
-$label_please_choose = "Please Choose";
 
 // -------------------- Headers --------------------
 $header_text_112 = "You do not have sufficient access privileges to perform this action.";
@@ -1460,7 +1451,13 @@ $entry_info_text_050 = "To ensure proper judging, the entrant must provide the c
 $entry_info_text_051 = "To ensure proper judging, the entrant must provide the sweetness level of the beverage.";
 $entry_info_text_052 = "If entering this category, the entrant must provide further information in order for the entry to be judged accurately. The more information, the better.";
 
+$output_text_028 = "The following entries have possible allergens - as input by particpants.";
+$output_text_029 = "No participants provided allergen information for their entries.";
+
 $label_this_style = "This Style";
+$label_notes = "Notes";
+$label_possible_allergens = "Possible Allergens";
+$label_please_choose = "Please Choose";
 
 // ***********************************************************************************
 // END TRANSLATIONS

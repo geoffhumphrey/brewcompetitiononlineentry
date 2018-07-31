@@ -73,8 +73,8 @@ if ($row_scored_entries['count'] > 0) {
 			$table_body1 = "";
 
 			// Build headers
-			if ($_SESSION['prefsStyleSet'] != "BA") $header1_1 .= sprintf("<h3>%s %s%s: %s (%s %s)</h3>",$label_category,ltrim($style[0],"0"),$style[1],$style[2],$row_entry_count['count'],$entries);
-			else $header1_1 .= sprintf("<h3>%s (%s %s)</h3>",$style[2],$row_entry_count['count'],$entries);
+			if ($_SESSION['prefsStyleSet'] == "BA") $header1_1 .= sprintf("<h3>%s (%s %s)</h3>",$style[2],$row_entry_count['count'],$entries);
+			else $header1_1 .= sprintf("<h3>%s %s%s: %s (%s %s)</h3>",$label_category,ltrim($style[0],"0"),$style[1],$style[2],$row_entry_count['count'],$entries);
 
 			// Build table headers
 			$table_head1 .= "<tr>";
@@ -92,13 +92,7 @@ if ($row_scored_entries['count'] > 0) {
 
 			do {
 
-				if ($_SESSION['prefsStyleSet'] != "BA") {
-					$style = $row_scores['brewCategory'].$row_scores['brewSubCategory'];
-					if ($row_scores['brewCategorySort'] > $category_end) $style_long = style_convert($row_scores['brewCategorySort'],1);
-					else $style_long = $row_scores['brewStyle'];
-				}
-
-				else {
+				if ($_SESSION['prefsStyleSet'] == "BA") {
 
 					if (is_numeric($row_scores['brewSubCategory'])) {
 						$style = $_SESSION['styles']['data'][$row_scores['brewSubCategory'] - 1]['category']['name'];
@@ -108,8 +102,16 @@ if ($row_scored_entries['count'] > 0) {
 					}
 
 					else $style = "Custom Style";
-
 					$style_long = $row_scores['brewStyle'];
+
+				}
+
+				else {
+
+					$style = $row_scores['brewCategory'].$row_scores['brewSubCategory'];
+					if ($row_scores['brewCategorySort'] > $category_end) $style_long = style_convert($row_scores['brewCategorySort'],1);
+					else $style_long = $row_scores['brewStyle'];
+
 				}
 
 				$table_body1 .= "<tr>";

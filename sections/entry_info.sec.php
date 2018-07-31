@@ -222,10 +222,10 @@ else {
 
 // Categories Accepted
 $header1_8 .= "";
-if (strpos($_SESSION['prefsStyleSet'],"BABDB") !== false) $page_info8 .= sprintf("<p>%s</p>",$entry_info_text_047);
+if ($_SESSION['prefsStyleSet'] == "BA") $page_info8 .= sprintf("<p>%s</p>",$entry_info_text_047);
 else $page_info8 .= sprintf("<p>%s</p>",$entry_info_text_046);
 
-if (strpos($_SESSION['prefsStyleSet'],"BABDB") !== false) $style_set = "Brewers Association";
+if ($_SESSION['prefsStyleSet'] == "BA") $style_set = "Brewers Association";
 else $style_set = str_replace("2"," 2",$row_styles['brewStyleVersion']);
 
 $anchor_links[] = $label_judging_styles;

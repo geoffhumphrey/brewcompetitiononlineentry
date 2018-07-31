@@ -9,23 +9,26 @@
 <p class="lead">Hello, <?php echo $_SESSION['brewerFirstName']; ?>. <span class="small">Click or tap the headings or icons below to view the options available in each category.</span></p>
 
 <?php if ((judging_date_return() == 0) && ($_SESSION['userLevel'] == 0))  { ?>
-<div class="bcoem-admin-element">
     <div class="row">
         <div class="col col-lg-6 col-md-12 col-sm-12 col-xs-12">
-            <a class="btn btn-primary btn-block" href="<?php echo $base_url; ?>includes/process.inc.php?action=publish" data-confirm="Are you sure? This will immediately publish any and all results that have been entered into the database. Results will be displayed on the home page.">Publish Results Now&nbsp;&nbsp;<span class="fa fa-bullhorn"></span></a>
+            <div class="bcoem-admin-element">
+                <a class="btn btn-primary btn-block" href="<?php echo $base_url; ?>includes/process.inc.php?action=publish" data-confirm="Are you sure? This will immediately publish any and all results that have been entered into the database. Results will be displayed on the home page.">Publish Results Now&nbsp;&nbsp;<span class="fa fa-bullhorn"></span></a>
+            </div>
         </div>
         <div class="col col-lg-6 col-md-12 col-sm-12 col-xs-12">
+            <div class="bcoem-admin-element">
                 <a class="btn btn-info btn-block" href="http://brewcompetition.com/reset-comp" target="_blank">Reset Competition Information&nbsp;&nbsp;<span class="fa fa-info-circle"></span></a>
+            </div>
         </div>
     </div>
-</div>
 <?php if (($row_limits['prefsShowBestBrewer'] != 0) || ($row_limits['prefsShowBestClub'] != 0)) { ?>
 <div class="bcoem-admin-element">
     <div class="row">
         <div class="col col-lg-6 col-md-12 col-sm-12 col-xs-12">
-            <button type="button" class="btn btn-success btn-block" data-toggle="modal" data-target="#previewBest">
-                Preview Best Brewer/Best Club Results <span class="fa fa-trophy"></span>
+            <div class="bcoem-admin-element">
+                    <button type="button" class="btn btn-success btn-block" data-toggle="modal" data-target="#previewBest">Preview Best Brewer/Best Club Results <span class="fa fa-trophy"></span>
             </button>
+            </div>
         </div>
         <div class="modal fade" id="previewBest" tabindex="-1" role="dialog" aria-labelledby="previewBestLabel">
             <div class="modal-dialog modal-lg" role="document">
@@ -781,9 +784,20 @@
 							</div>
 							<div class="col col-lg-8 col-md-8 col-sm-8 col-xs-8">
 								<ul class="list-inline">
-									<li><a id="modal_window_link" href="<?php echo $base_url; ?>output/print.output.php?section=notes" data-toggle="tooltip" data-placement="top" title="A List of Notes Individual Judges Have Provided to the Organizers">Judges&rsquo; Notes to Organizers</a></li></ul>
+									<li><a id="modal_window_link" href="<?php echo $base_url; ?>output/print.output.php?section=notes&amp;go=org_notes" data-toggle="tooltip" data-placement="top" title="A List of Notes Individual Judges Have Provided to the Organizer - Includes Reports of Allergies">Notes to Organizer</a></li>
+                                </ul>
 							</div>
 						</div><!-- ./row -->
+                        <div class="row">
+                            <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                                <strong>Allergens</strong>
+                            </div>
+                            <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-8">
+                                <ul class="list-inline">
+                                    <li><a id="modal_window_link" href="<?php echo $base_url; ?>output/print.output.php?section=notes&amp;go=allergens" data-toggle="tooltip" data-placement="top" title="A List of Entries with Allergen Information">Possible Allergens in Entries</a></li>
+                                </ul>
+                            </div>
+                        </div><!-- ./row -->
 						<div class="row">
 							<div class="col col-lg-4 col-md-4 col-sm-4 col-xs-4">
 								<strong>Drop-Off</strong>
@@ -1025,6 +1039,20 @@
 								</ul>
 							</div>
 						</div><!-- ./row -->
+                        <div class="row">
+                            <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                                <strong>Best Brewer and/or Club</strong>
+                            </div>
+                            <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-8">
+                                <ul class="list-inline">
+                                    <li><a id="modal_window_link" href="<?php echo $base_url; ?>output/print.output.php?section=results&amp;go=best&amp;action=print&amp;filter=bos&amp;view=default" title="Best Brewer and/or Club Results Report">Print</a></li>
+                                    <!--
+                                    <li><a href="<?php echo $base_url; ?>output/export.output.php?section=results&amp;go=best&amp;action=download&amp;filter=default&amp;view=pdf">PDF</a></li>
+                                    <li><a href="<?php echo $base_url; ?>output/export.output.php?section=results&amp;go=best&amp;action=download&amp;filter=default&amp;view=html">HTML</a></li>
+                                    -->
+                                </ul>
+                            </div>
+                        </div><!-- ./row -->
                         <?php } ?>
                         <div class="row">
 							<div class="col col-lg-4 col-md-4 col-sm-4 col-xs-4">

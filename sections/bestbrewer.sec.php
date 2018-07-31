@@ -372,10 +372,24 @@ if ($section == "default") $page_info_1 .= "<p>".$best_brewer_text_002."</p>";
 ?>
 
 <?php if ($section == "admin") { ?>
-<div class="bcoem-admin-element">
-	<a class="btn btn-info" role="button" data-toggle="collapse" href="#scoreMethodCollapse" aria-expanded="false" aria-controls="scoreMethodCollapse">View the Defined Scoring Methodology</a>&nbsp;&nbsp;
-	<a class="btn btn-primary" role="button" href="<?php echo $base_url."index.php?section=admin&go=preferences"; ?>">Change Scoring Methodology and/or Tiebreakers</a>
-</div>
+
+	<div class="row">
+		<div class="col col-md-4 col-sm-12">
+			<div class="bcoem-admin-element">
+			<a class="btn btn-primary btn-block" role="button" data-toggle="collapse" href="#scoreMethodCollapse" aria-expanded="false" aria-controls="scoreMethodCollapse">View Scoring Methodology</a>
+			</div>
+		</div>
+		<div class="col col-md-4 col-sm-12">
+			<div class="bcoem-admin-element">
+			<a class="btn btn-info btn-block" role="button" href="<?php echo $base_url."index.php?section=admin&go=preferences"; ?>">Edit Settings</a>
+		</div>
+		</div>
+		<div class="col col-md-4 col-sm-12">
+			<div class="bcoem-admin-element">
+			<a class="btn btn-success btn-block" role="button" id="modal_window_link" href="<?php echo $base_url; ?>output/print.output.php?section=results&amp;go=best&amp;action=print&amp;filter=bos&amp;view=default" title="Best Brewer and/or Club Results Report">Print Results</a>
+		</div>
+		</div>
+	</div><!-- ./row -->
 <div class="collapse" id="scoreMethodCollapse">
   <div class="well">
     <p><?php echo $best_brewer_text_004; ?></p>
