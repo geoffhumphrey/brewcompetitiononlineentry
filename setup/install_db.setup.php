@@ -1485,31 +1485,6 @@ if ($setup_free_access == TRUE) {
 		mysqli_select_db($connection,$database);
 		mysqli_real_escape_string($connection,$sql);
 		$result = mysqli_query($connection,$sql) or die (mysqli_error($connection));
-		 //echo "<p>".$sql."</p>";
-
-		/*
-		if (HOSTED) {
-			$gh_user_name = "geoff@zkdigital.com";
-			$gh_password = "d9efb18ba2bc4a434ddf85013dbe58f8";
-			$random1 = random_generator(7,2);
-			$random2 = random_generator(7,2);
-			require(CLASSES.'phpass/PasswordHash.php');
-			$hasher = new PasswordHash(8, false);
-			$hash = $hasher->HashPassword($gh_password);
-			// For hosted accounts on brewcompetition.com and brewcomp.com
-			$sql = sprintf("INSERT INTO `%s` (`id`, `uid`, `brewerFirstName`, `brewerLastName`, `brewerAddress`, `brewerCity`, `brewerState`, `brewerZip`, `brewerCountry`, `brewerPhone1`, `brewerPhone2`, `brewerClubs`, `brewerEmail`, `brewerStaff`, `brewerSteward`, `brewerJudge`, `brewerJudgeID`, `brewerJudgeMead`, `brewerJudgeRank`, `brewerJudgeLikes`, `brewerJudgeDislikes`, `brewerJudgeLocation`, `brewerStewardLocation`, `brewerJudgeExp`, `brewerJudgeNotes`, `brewerAssignment`, `brewerJudgeWaiver`, `brewerDiscount`, `brewerJudgeBOS`, `brewerAHA`) VALUES
-			(NULL, 1, 'Geoff', 'Humphrey', '1234 Main Street', 'Anytown', 'CO', '80126', 'United States', '303-555-5555', '303-555-5555', NULL, '%s', 'N', 'N', 'N', 'A0000', NULL, 'Certified', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0);",$brewer_db_table,$gh_user_name);
-			mysqli_select_db($connection,$database);
-			mysqli_real_escape_string($connection,$sql);
-			$result = mysqli_query($connection,$sql) or die (mysqli_error($connection));
-
-			// For hosted accounts on brewcompetition.com or brewcomp.com
-			$sql = sprintf("INSERT INTO `%s` (`id`, `user_name`, `password`, `userLevel`, `userQuestion`, `userQuestionAnswer`,`userCreated`) VALUES (NULL, '%s', '%s', '0', '%s', '%s', NOW());", $users_db_table,$gh_user_name,$hash,$random1,$random2);
-			mysqli_select_db($connection,$database);
-			mysqli_real_escape_string($connection,$sql);
-			$result = mysqli_query($connection,$sql) or die (mysqli_error($connection));
-		}
-		*/
 
 		$output .= "<li class=\"list-group-item\"><span class=\"fa fa-lg fa-check text-success\"></span> The <strong>Users</strong> table was installed successfully.</li>";
 
@@ -1517,18 +1492,18 @@ if ($setup_free_access == TRUE) {
 		$output .=  "</div>";
 
 
-		// ------------------------------
-		// Need to add DB structure check
-		// -------------------------------
+		/* -------------------------------------------------
+		 * Make sure all off-schedule updates have also
+		 * been instantiated.
+		 * -------------------------------------------------
+		 */
 
-
-		// -------------------------------
+		include(UPDATE.'off_schedule_update.php');
 
 	}
 
 	//echo $output;
 
 }
-
 
 ?>
