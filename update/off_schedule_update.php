@@ -1035,6 +1035,11 @@ if (check_update("brewBOSPlace", $prefix."brewing")) {
 	$result = mysqli_query($connection,$updateSQL);
 }
 
+$updateSQL = sprintf("ALTER TABLE `%s` CHANGE `prefsLanguage` `prefsLanguage` VARCHAR(25) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL",$prefix."preferences");
+mysqli_select_db($connection,$database);
+mysqli_real_escape_string($connection,$updateSQL);
+$result = mysqli_query($connection,$updateSQL);
+
 $updateSQL = sprintf("UPDATE `%s` SET prefsLanguage='en-US' WHERE id='1';",$prefix."preferences");
 mysqli_select_db($connection,$database);
 mysqli_real_escape_string($connection,$updateSQL);
@@ -1159,5 +1164,8 @@ $result = mysqli_query($connection,$updateSQL);
 $updateSQL = sprintf("UPDATE %s SET version='%s', version_date='%s', data_check=%s WHERE id=1", $prefix."system", $current_version, $current_version_date_display,"NOW()");
 mysqli_real_escape_string($connection,$updateSQL);
 $result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+
+// Force reset of preferences
+unset($_SESSION['prefs'.$prefix_session]);
 
 ?>
