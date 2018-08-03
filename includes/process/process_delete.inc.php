@@ -229,6 +229,11 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 		} // end if ($go == "participants")
 
 		if ($go == "entries") {
+
+			$deleteSQL = sprintf("DELETE FROM $dbTable WHERE id='%s'", $id);
+			mysqli_real_escape_string($connection,$deleteSQL);
+			$result = mysqli_query($connection,$deleteSQL) or die (mysqli_error($connection));
+
 			$query_delete_entry = sprintf("SELECT id FROM $judging_scores_db_table WHERE eid='%s'", $id);
 			$delete_entry = mysqli_query($connection,$query_delete_entry) or die (mysqli_error($connection));
 			$row_delete_entry = mysqli_fetch_assoc($delete_entry);
@@ -236,6 +241,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 			$deleteSQL = sprintf("DELETE FROM $judging_scores_db_table WHERE id='%s'", $row_delete_entry['id']);
 			mysqli_real_escape_string($connection,$deleteSQL);
 			$result = mysqli_query($connection,$deleteSQL) or die (mysqli_error($connection));
+
 		} // end if ($go == "entries")
 
 		if ($go == "judging_tables") {
