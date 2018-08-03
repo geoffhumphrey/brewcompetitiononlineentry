@@ -30,5 +30,4 @@ $query_scores .= " ORDER BY a.scorePlace ASC";
 $scores = mysqli_query($connection,$query_scores) or die (mysqli_error($connection));
 $row_scores = mysqli_fetch_assoc($scores);
 $totalRows_scores = mysqli_num_rows($scores);
-
 ?>

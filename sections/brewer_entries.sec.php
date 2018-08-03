@@ -200,7 +200,7 @@ do {
 
 	$entry_output .= "<td>";
 
-		if ($row_styles['brewStyleActive'] == "Y") $entry_output .= $row_styles['brewStyle'];
+		if ($row_styles['brewStyleActive'] == "Y") $entry_output .= $row_log['brewStyle'];
 		else $entry_output .= sprintf("<strong class=\"text-danger\">%s</strong>",$brewer_entries_text_016);
 		if (empty($row_log['brewCategorySort'])) $entry_output .= sprintf("<strong class=\"text-danger\">%s</strong>",$brewer_entries_text_007);
 
