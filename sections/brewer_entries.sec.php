@@ -100,7 +100,7 @@ $entry_output = "";
 
 do {
 
-	if (($_SESSION['prefsStyleSet'] == "BA") || (($_SESSION['prefsStyleSet'] != "BA") && ($row_log['brewCategorySort'] > 28))) include (DB.'styles.db.php');
+	include (DB.'styles.db.php');
 
 	$required_info = "";
 	if ((!empty($row_log['brewInfo'])) || (!empty($row_log['brewMead1'])) || (!empty($row_log['brewMead2'])) || (!empty($row_log['brewMead3']))) {
@@ -200,7 +200,10 @@ do {
 
 	$entry_output .= "<td>";
 
-		if ($row_styles['brewStyleActive'] == "Y") $entry_output .= $row_log['brewStyle'];
+		if ($row_styles['brewStyleActive'] == "Y") {
+			if ($_SESSION['prefsStyleSet'] == "BA") $entry_output .= $row_log['brewStyle'];
+			else $entry_output .= $row_log['brewCategorySort'].$row_log['brewSubCategory'].": ".$row_log['brewStyle'];
+		}
 		else $entry_output .= sprintf("<strong class=\"text-danger\">%s</strong>",$brewer_entries_text_016);
 		if (empty($row_log['brewCategorySort'])) $entry_output .= sprintf("<strong class=\"text-danger\">%s</strong>",$brewer_entries_text_007);
 
@@ -361,6 +364,7 @@ if (($action != "print") && ($entry_window_open > 0)) {
 }
 if (($totalRows_log == 0) && ($entry_window_open >= 1)) echo sprintf("<p>%s</p>",$brewer_entries_text_014);
 if (($totalRows_log > 0) && ($entry_window_open >= 1)) {
+
 ?>
 <script type="text/javascript" language="javascript">
 	 $(document).ready(function() {
@@ -371,6 +375,7 @@ if (($totalRows_log > 0) && ($entry_window_open >= 1)) {
 			"bLengthChange" : false,
 			"aaSorting": [[0,'asc']],
 			"aoColumns": [
+
 				null,
 				<?php if ($show_scores) { ?>
 				null,
@@ -378,6 +383,7 @@ if (($totalRows_log > 0) && ($entry_window_open >= 1)) {
 				null,
 				null,
 				<?php if (!$show_scores) { ?>
+					null,
 				null,
 				null,
 				null,
@@ -390,7 +396,6 @@ if (($totalRows_log > 0) && ($entry_window_open >= 1)) {
 				<?php if ($action != "print") { ?>
 				{ "asSorting": [  ] }
 				<?php } ?>
-
 				]
 			} );
 		} );

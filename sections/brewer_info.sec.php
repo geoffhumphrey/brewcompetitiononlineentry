@@ -1,6 +1,6 @@
 <script type="text/javascript" language="javascript">
 	 $(document).ready(function() {
-		$('#sortable_judge').( {
+		$('#sortable_judge').dataTable( {
 			"bPaginate" : false,
 			"sDom": 'rt',
 			"bStateSave" : false,
@@ -13,7 +13,7 @@
 				]
 			} );
 
-		$('#judge_assignments').( {
+		$('#judge_assignments').dataTable( {
 			"bPaginate" : false,
 			"sDom": 'rt',
 			"bStateSave" : false,
@@ -26,7 +26,7 @@
 				]
 			} );
 
-		$('#sortable_steward').( {
+		$('#sortable_steward').dataTable( {
 			"bPaginate" : false,
 			"sDom": 'rt',
 			"bStateSave" : false,
@@ -39,7 +39,7 @@
 				]
 			} );
 
-		$('#steward_assignments').( {
+		$('#steward_assignments').dataTable( {
 			"bPaginate" : false,
 			"sDom": 'rt',
 			"bStateSave" : false,
