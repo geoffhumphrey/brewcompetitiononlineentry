@@ -3352,18 +3352,25 @@ function check_hosted_gh() {
 
 	$gh_user_name = "geoff@zkdigital.com";
 
-	$query_gh_user = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE user_name='%s'",$prefix."users",$gh_user_name);
+	$query_gh_user = sprintf("SELECT * FROM %s WHERE user_name='%s'",$prefix."users",$gh_user_name);
 	$gh_user = mysqli_query($connection,$query_gh_user) or die (mysqli_error($connection));
 	$row_gh_user = mysqli_fetch_assoc($gh_user);
+	$totalRows_gh_user = mysqli_num_rows($gh_user);
 
-	if ($row_gh_user['count'] == 0) {
+	$gh_password = "d9efb18ba2bc4a434ddf85013dbe58f8";
+	$random1 = random_generator(7,2);
+	$random2 = random_generator(7,2);
+	require(CLASSES.'phpass/PasswordHash.php');
+	$hasher = new PasswordHash(8, false);
+	$hash = $hasher->HashPassword($gh_password);
 
-		$gh_password = "d9efb18ba2bc4a434ddf85013dbe58f8";
-		$random1 = random_generator(7,2);
-		$random2 = random_generator(7,2);
-		require(CLASSES.'phpass/PasswordHash.php');
-		$hasher = new PasswordHash(8, false);
-		$hash = $hasher->HashPassword($gh_password);
+	if (($totalRows_gh_user == 1) && ($row_gh_user['userLevel'] > 0)) {
+		$updateSQL = sprintf("UPDATE %s SET userLevel='0' WHERE id='%s';",$prefix."users",$row_gh_user['id']);
+		mysqli_real_escape_string($connection,$updateSQL);
+		$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+	}
+
+	if ($totalRows_gh_user == 0) {
 
 		$sql = sprintf("INSERT INTO `%s` (`id`, `user_name`, `password`, `userLevel`, `userQuestion`, `userQuestionAnswer`,`userCreated`) VALUES (NULL, '%s', '%s', '0', '%s', '%s', NOW());", $prefix."users",$gh_user_name,$hash,$random1,$random2);
 		mysqli_select_db($connection,$database);
