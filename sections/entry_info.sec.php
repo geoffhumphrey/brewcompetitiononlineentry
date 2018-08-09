@@ -204,6 +204,7 @@ else {
 		if ($logged_in) {
 			$location_link = $base_url."output/maps.output.php?section=driving&amp;id=".str_replace(' ', '+', $row_judging['judgingLocation']);
 			$location_tooltip = "Map to ".$row_judging['judgingLocName'];
+			$page_info7 .= "<br>".$row_judging['judgingLocation'];
 		}
 
 		else {
@@ -211,7 +212,7 @@ else {
 			$location_tooltip = "Log in to view the ".$row_judging['judgingLocName']." location";
 		}
 
-		if ($row_judging['judgingLocation'] != "") $page_info7 .= "<br>".$row_judging['judgingLocation']." <a href=\"".$location_link."\" target=\"".$location_target."\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"".$location_tooltip."\"><span class=\"fa fa-lg fa-map-marker\"></span></a>";
+		if ($row_judging['judgingLocation'] != "") $page_info7 .= " <a href=\"".$location_link."\" target=\"".$location_target."\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"".$location_tooltip."\"><span class=\"fa fa-lg fa-map-marker\"></span></a>";
 
 		if ($row_judging['judgingDate'] != "") $page_info7 .=  "<br />".getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_judging['judgingDate'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "long", "date-time");
 

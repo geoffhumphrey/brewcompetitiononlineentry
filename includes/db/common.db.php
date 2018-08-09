@@ -122,7 +122,7 @@ if (empty($_SESSION['prefs'.$prefix_session])) {
 	if (isset($_SESSION['prefsBestClubTitle'])) $_SESSION['prefsBestClubTitle'] = $row_prefs['prefsBestClubTitle'];
 	else $_SESSION['prefsBestClubTitle'] = "";
 	if (isset($_SESSION['prefsBestUseBOS'])) $_SESSION['prefsBestUseBOS'] = $row_prefs['prefsBestUseBOS'];
-	else $_SESSION['prefsBestUseBOS'] = "";
+	else $_SESSION['prefsBestUseBOS'] = 0;
 	if (isset($_SESSION['prefsFirstPlacePts'])) $_SESSION['prefsFirstPlacePts'] = $row_prefs['prefsFirstPlacePts'];
 	else $_SESSION['prefsFirstPlacePts'] = 0;
 	if (isset($_SESSION['prefsSecondPlacePts'])) $_SESSION['prefsSecondPlacePts'] = $row_prefs['prefsSecondPlacePts'];
