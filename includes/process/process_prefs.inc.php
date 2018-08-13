@@ -188,7 +188,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 			GetSQLValueString(sterilize($_POST['prefsTieBreakRule6']), "text"),
 			GetSQLValueString(sterilize($_POST['prefsCAPTCHA']), "text"),
 			GetSQLValueString(sterilize($prefsGoogleAccount), "text"),
-			GetSQLValueString(sterilize($_POST['prefsBestUseBOS']), "text"),
+			GetSQLValueString($_POST['prefsBestUseBOS'], "int"),
 			GetSQLValueString(sterilize($_POST['prefsLanguage']), "text"),
 			GetSQLValueString($id, "int"));
 
@@ -388,7 +388,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 			GetSQLValueString(sterilize($_POST['prefsBestBrewerTitle']), "text"),
 			GetSQLValueString(sterilize($_POST['prefsShowBestClub']), "int"),
 			GetSQLValueString(sterilize($_POST['prefsBestClubTitle']), "text"),
-			GetSQLValueString(sterilize($_POST['prefsBestUseBOS']), "text"),
+			GetSQLValueString($_POST['prefsBestUseBOS'], "int"),
 			GetSQLValueString(sterilize($_POST['prefsFirstPlacePts']), "int"),
 			GetSQLValueString(sterilize($_POST['prefsSecondPlacePts']), "int"),
 			GetSQLValueString(sterilize($_POST['prefsThirdPlacePts']), "int"),

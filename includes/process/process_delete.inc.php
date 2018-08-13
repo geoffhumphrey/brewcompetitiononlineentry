@@ -43,7 +43,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 
 		}
 
-		if ($go == "doc") {
+		elseif ($go == "doc") {
 
 			unlink($upload_dir.$filter);
 			if ($view == "html") $deleteGoTo = $base_url."index.php?section=admin&go=upload_scoresheets&action=html&msg=31";
@@ -52,7 +52,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 
 		}
 
-		if ($go == "judging_scores") {
+		elseif ($go == "judging_scores") {
 
 			$deleteSQL = sprintf("DELETE FROM %s WHERE id='%s'", $prefix."judging_scores",$id);
 			mysqli_real_escape_string($connection,$deleteSQL);
@@ -62,7 +62,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 		}
 
 
-		if ($go == "special_best") {
+		elseif ($go == "special_best") {
 
 			$query_delete_assign = sprintf("SELECT id FROM $special_best_data_db_table WHERE sid='%s'", $id);
 			$delete_assign = mysqli_query($connection,$query_delete_assign) or die (mysqli_error($connection));
@@ -81,7 +81,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 
 		}
 
-		if ($go == "judging") {
+		elseif ($go == "judging") {
 		  // remove relational location ids from affected rows in brewer's table
 			$query_loc = "SELECT id,brewerJudgeLocation,brewerStewardLocation from $brewer_db_table";
 			$loc = mysqli_query($connection,$query_loc) or die (mysqli_error($connection));
@@ -150,7 +150,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 
 		} // end if ($go == "judging")
 
-		if ($go == "participants") {
+		elseif ($go == "participants") {
 
 			if ($uid != "") {
 
@@ -228,7 +228,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 			//exit;
 		} // end if ($go == "participants")
 
-		if ($go == "entries") {
+		elseif ($go == "entries") {
 
 			$deleteSQL = sprintf("DELETE FROM $dbTable WHERE id='%s'", $id);
 			mysqli_real_escape_string($connection,$deleteSQL);
@@ -244,7 +244,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 
 		} // end if ($go == "entries")
 
-		if ($go == "judging_tables") {
+		elseif ($go == "judging_tables") {
 
 			$query_delete_assign = sprintf("SELECT id FROM $judging_scores_db_table WHERE scoreTable='%s'", $id);
 			$delete_assign = mysqli_query($connection,$query_delete_assign) or die (mysqli_error($connection));
@@ -304,7 +304,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 				}
 		} // end if ($go == "judging_tables")
 
-		if ($go == "default") {
+		elseif ($go == "default") {
 
 			$deleteSQL = sprintf("DELETE FROM $dbTable WHERE id='%s'", $id);
 			mysqli_real_escape_string($connection,$deleteSQL);
@@ -320,11 +320,17 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 						$deleteSQL = sprintf("DROP TABLE %s",$table);
 						mysqli_real_escape_string($connection,$deleteSQL);
 						$result = mysqli_query($connection,$deleteSQL) or die (mysqli_error($connection));
-						//echo $dropTable."<br>";
 					}
 				}
+
 			}
 
+		}
+
+		else {
+			$deleteSQL = sprintf("DELETE FROM $dbTable WHERE id='%s'", $id);
+			mysqli_real_escape_string($connection,$deleteSQL);
+			$result = mysqli_query($connection,$deleteSQL) or die (mysqli_error($connection));
 		}
 
 		$redirect_go_to = sprintf("Location: %s", $deleteGoTo);

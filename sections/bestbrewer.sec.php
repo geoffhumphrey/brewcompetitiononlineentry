@@ -96,7 +96,7 @@ do {
 
 
 // BOS - do calcs only if pref is true
-if ($_SESSION['prefsBestUseBOS'] == 1) {
+if ($row_bb_prefs['prefsBestUseBOS'] == 1) {
 
 	do {
 
