@@ -158,6 +158,7 @@ $security_question = array($label_secret_01, $label_secret_05, $label_secret_06,
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
 
         <!-- Load BCOE&M Custom CSS -->
+        <link rel="stylesheet" type="text/css" href="<?php echo $base_url; ?>css/common.min.css">
         <link rel="stylesheet" type="text/css" href="<?php echo $base_url; ?>css/default.min.css">
 
         <!-- Load BCOE&M Custom JS -->

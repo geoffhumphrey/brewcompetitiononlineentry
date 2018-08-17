@@ -406,7 +406,7 @@ if ((($action == "add") || ($action == "edit")) || ($section == "step5")) {
 //if (!empty($output_no_records)) echo $output_no_records;
 ?>
 <?php if (!empty($form_submit_url)) echo $form_submit_url; ?>
-<p class="lead"><?php echo $_SESSION['contestName'].$subtitle; ?></p>
+<?php if ($section != "step5") { ?><p class="lead"><?php echo $_SESSION['contestName'].$subtitle; ?></p><?php } ?>
 <?php if (($filter == "default") && ($msg == "9"))  {
 	if ($section == "step5") $judge_loc_url_yes .= "setup.php?section=step5";
 	else $judge_loc_url_yes .= "index.php?section=admin&amp;go=judging";

@@ -1498,7 +1498,10 @@ if ($setup_free_access == TRUE) {
 		 * -------------------------------------------------
 		 */
 
+		$output .=  "<h3>Other Installation Items</h3>";
+		$output .=  "<ul>";
 		include(UPDATE.'off_schedule_update.php');
+		$output .=  "</ul>";
 
 	}
 

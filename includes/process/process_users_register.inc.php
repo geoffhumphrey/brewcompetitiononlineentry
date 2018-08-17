@@ -16,9 +16,10 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 
 	$userQuestionAnswer = $purifier->purify($_POST['userQuestionAnswer']);
 
-	if ($filter != "admin") {
 	$username2 = strtolower($_POST['user_name2']);
 	$username2 = filter_var($username2,FILTER_SANITIZE_EMAIL);
+
+	if ($filter != "admin") {
 
 	// CAPCHA check
 

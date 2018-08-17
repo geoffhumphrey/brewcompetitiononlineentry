@@ -205,7 +205,7 @@ if ($section == "admin") { ?>
     <label for="contestDropoffOpen" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Open Date</label>
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
         <!-- Input Here -->
-        	<input class="form-control" id="contestDropoffOpen" name="contestDropoffOpen" type="text" value="<?php if if (($section != "step4") && (isset($row_contest_dates['contestDropoffOpen']))) echo
+        	<input class="form-control" id="contestDropoffOpen" name="contestDropoffOpen" type="text" value="<?php if (($section != "step4") && (isset($row_contest_dates['contestDropoffOpen']))) echo
 	getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_contest_dates['contestDropoffOpen'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "system", "date-time-system"); ?>" placeholder="<?php echo $current_date." ".$current_time; ?>">
     </div>
 </div><!-- ./Form Group -->

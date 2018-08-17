@@ -974,6 +974,8 @@ if (!$ba_styles_present) {
 	$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 }
 
+$output .= "<li>BA styles added.</li>";
+
 /*
  * ----------------------------------------------- 2.1.13 ----------------------------------------------
  * Add toggle to allow users to specify whether to use BOS in "Best of" calculations
@@ -1153,6 +1155,8 @@ $updateSQL = sprintf("UPDATE `%s` SET brewStyleType='3' WHERE brewStyleType = 'M
 mysqli_select_db($connection,$database);
 mysqli_real_escape_string($connection,$updateSQL);
 $result = mysqli_query($connection,$updateSQL);
+
+$output .= "<li>BJCP Provisional styles added.</li>";
 
 /*
  * ----------------------------------------------------------------------------------------------------
