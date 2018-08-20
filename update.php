@@ -18,12 +18,12 @@ if (SINGLE) require_once(SSO.'sso.inc.php');
 require_once (LIB.'common.lib.php');
 require_once (LIB.'update.lib.php');
 require_once (INCLUDES.'db_tables.inc.php');
-	require_once (LIB.'help.lib.php');
-	require_once (DB.'common.db.php');
-	require_once (INCLUDES.'constants.inc.php');
-	require_once (LANG.'language.lang.php');
-	require_once (INCLUDES.'headers.inc.php');
-	require_once (INCLUDES.'scrubber.inc.php');
+require_once (LIB.'help.lib.php');
+require_once (DB.'common.db.php');
+require_once (INCLUDES.'constants.inc.php');
+require_once (LANG.'language.lang.php');
+require_once (INCLUDES.'headers.inc.php');
+require_once (INCLUDES.'scrubber.inc.php');
 if (HOSTED) check_hosted_gh();
 
 // Get current version from DB
@@ -360,7 +360,7 @@ else {
 
         <!-- Load BCOE&M Custom Theme CSS - Contains Bootstrap overrides and custom classes -->
         <link rel="stylesheet" type="text/css" href="<?php echo $base_url; ?>css/common.min.css">
-        <link rel="stylesheet" type="text/css" href="<?php echo $base_url; ?>/css/default.min.css" />
+        <link rel="stylesheet" type="text/css" href="<?php echo $base_url; ?>css/default.min.css" />
 
         <!-- Load BCOE&M Custom JS -->
     	<script src="<?php echo $base_url; ?>js_includes/bcoem_custom.min.js"></script>

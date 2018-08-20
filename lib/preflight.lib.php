@@ -22,7 +22,7 @@ if ((!check_setup($prefix."mods",$database)) && (check_setup($prefix."preference
 
 }
 
-elseif (MAINT) {
+elseif ((MAINT) && ($section != "maintenance")) {
 
 	$setup_success = FALSE;
 	$setup_relocate = "Location: ".$base_url."maintenance.php";
