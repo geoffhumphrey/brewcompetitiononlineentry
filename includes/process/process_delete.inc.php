@@ -5,32 +5,7 @@
  *              new users, organization, etc.
  */
 
-require(INCLUDES.'url_variables.inc.php');
-
-/*
-function table_exists($table_name) {
-	require(CONFIG.'config.php');
-	mysqli_select_db($connection,$database);
-	// taken from http://snippets.dzone.com/posts/show/3369
-	$query_exists = "SHOW TABLES LIKE '".$table_name."'";
-	$exists = mysqli_query($connection,$query_exists) or die (mysqli_error($connection));
-	$totalRows_exists = mysqli_num_rows($exists);
-	if ($totalRows_exists > 0) return TRUE;
-	else return FALSE;
-}
-*/
-
-
 if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) && (isset($_SESSION['userLevel'])))) {
-
-	if (NHC) {
-		// Place NHC SQL calls below
-
-
-	}
-	// end if (NHC)
-
-	else {
 
 		$upload_dir = (USER_IMAGES);
 
@@ -334,8 +309,6 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 		}
 
 		$redirect_go_to = sprintf("Location: %s", $deleteGoTo);
-
-	} // end else NHC
 
 } else {
 	$redirect_go_to = sprintf("Location: %s", $base_url."index.php?msg=98");
