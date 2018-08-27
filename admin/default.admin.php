@@ -1008,25 +1008,6 @@
 							</div>
 						</div><!-- ./row -->
 						<?php if ($totalRows_tables > 0) { ?>
-						<div class="row">
-							<div class="col col-lg-4 col-md-4 col-sm-4 col-xs-4">
-								<strong>Results</strong>
-							</div>
-							<div class="col col-lg-8 col-md-8 col-sm-8 col-xs-8">
-								<ul class="list-inline">
-									<li><a id="modal_window_link" href="<?php echo $base_url; ?>output/print.output.php?section=results&amp;go=judging_scores&amp;action=print&amp;filter=scores&amp;view=default" data-toggle="tooltip" data-placement="top" title="Print all entry results with scores listed">All with Scores</a></li>
-									<li><a id="modal_window_link" href="<?php echo $base_url; ?>output/print.output.php?section=results&amp;go=judging_scores&amp;action=print&amp;filter=scores&amp;view=winners" data-toggle="tooltip" data-placement="top" title="Print winners only results with scores listed">Winners Only with Scores</a></li>
-								</ul>
-								<ul class="list-inline">
-									<li><a id="modal_window_link" href="<?php echo $base_url; ?>output/print.output.php?section=results&amp;go=judging_scores&amp;action=print&amp;filter=none&amp;view=default" data-toggle="tooltip" data-placement="top" title="Print all entry results without scores listed">All without Scores</a></li>
-									<li><a id="modal_window_link" href="<?php echo $base_url; ?>output/print.output.php?section=results&amp;go=judging_scores&amp;action=print&amp;filter=none&amp;view=winners" data-toggle="tooltip" data-placement="top" title="Print winners only results without scores listed">Winners Only without Scores</a></li>
-                                </ul>
-								<ul class="list-inline">
-									<li><a href="<?php echo $base_url; ?>output/export.output.php?section=results&amp;go=judging_scores&amp;action=default&amp;filter=none&amp;view=pdf" data-toggle="tooltip" data-placement="top" title="Download a PDF report of results - winners only without scores">PDF</a></li>
-									<li><a href="<?php echo $base_url; ?>output/export.output.php?section=results&amp;go=judging_scores&amp;action=default&amp;filter=none&amp;view=html" data-toggle="tooltip" data-placement="top" title="Download a HTML report of results to copy/paste into another website - winners only without scores">HTML</a></li>
-								</ul>
-							</div>
-						</div><!-- ./row -->
                         <div class="row">
 							<div class="col col-lg-4 col-md-4 col-sm-4 col-xs-4">
 								<strong>BOS Results</strong>
@@ -1039,6 +1020,7 @@
 								</ul>
 							</div>
 						</div><!-- ./row -->
+                        <?php if (($_SESSION['prefsShowBestBrewer'] != 0) || ($_SESSION['prefsShowBestClub'] != 0)) { ?>
                         <div class="row">
                             <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-4">
                                 <strong>Best Brewer and/or Club</strong>
@@ -1051,6 +1033,47 @@
                                     <li><a href="<?php echo $base_url; ?>output/export.output.php?section=results&amp;go=best&amp;action=download&amp;filter=default&amp;view=html">HTML</a></li>
                                     -->
                                 </ul>
+                            </div>
+                        </div><!-- ./row -->
+                        <?php } ?>
+                        <div class="row">
+                            <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                                <strong>Table Results</strong>
+                            </div>
+                            <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-8">
+                                <ul class="list-inline">
+                                    <li><a id="modal_window_link" href="<?php echo $base_url; ?>output/print.output.php?section=results&amp;go=judging_scores&amp;action=print&amp;filter=scores&amp;view=default" data-toggle="tooltip" data-placement="top" title="Print all entry results with scores listed">All with Scores</a></li>
+                                    <li><a id="modal_window_link" href="<?php echo $base_url; ?>output/print.output.php?section=results&amp;go=judging_scores&amp;action=print&amp;filter=scores&amp;view=winners" data-toggle="tooltip" data-placement="top" title="Print winners only results with scores listed">Winners Only with Scores</a></li>
+                                </ul>
+                                <ul class="list-inline">
+                                    <li><a id="modal_window_link" href="<?php echo $base_url; ?>output/print.output.php?section=results&amp;go=judging_scores&amp;action=print&amp;filter=none&amp;view=default" data-toggle="tooltip" data-placement="top" title="Print all entry results without scores listed">All without Scores</a></li>
+                                    <li><a id="modal_window_link" href="<?php echo $base_url; ?>output/print.output.php?section=results&amp;go=judging_scores&amp;action=print&amp;filter=none&amp;view=winners" data-toggle="tooltip" data-placement="top" title="Print winners only results without scores listed">Winners Only without Scores</a></li>
+                                </ul>
+                                <ul class="list-inline">
+                                    <li><a href="<?php echo $base_url; ?>output/export.output.php?section=results&amp;go=judging_scores&amp;action=default&amp;filter=none&amp;view=pdf" data-toggle="tooltip" data-placement="top" title="Download a PDF report of results - winners only without scores">PDF</a></li>
+                                    <li><a href="<?php echo $base_url; ?>output/export.output.php?section=results&amp;go=judging_scores&amp;action=default&amp;filter=none&amp;view=html" data-toggle="tooltip" data-placement="top" title="Download a HTML report of results to copy/paste into another website - winners only without scores">HTML</a></li>
+                                </ul>
+                            </div>
+                        </div><!-- ./row -->
+                        <div class="row">
+                            <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                                <strong>All Results (Single Report)</strong>
+                            </div>
+                            <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-8">
+                                <ul class="list-inline">
+                                    <li><a id="modal_window_link" href="<?php echo $base_url; ?>output/print.output.php?section=results&amp;go=all&amp;action=print&amp;filter=scores&amp;view=default" data-toggle="tooltip" data-placement="top" title="Print all entry results with scores listed">All with Scores</a></li>
+                                    <li><a id="modal_window_link" href="<?php echo $base_url; ?>output/print.output.php?section=results&amp;go=all&amp;action=print&amp;filter=scores&amp;view=winners" data-toggle="tooltip" data-placement="top" title="Print winners only results with scores listed">Winners Only with Scores</a></li>
+                                </ul>
+                                <ul class="list-inline">
+                                    <li><a id="modal_window_link" href="<?php echo $base_url; ?>output/print.output.php?section=results&amp;go=all&amp;action=print&amp;filter=none&amp;view=default" data-toggle="tooltip" data-placement="top" title="Print all entry results without scores listed">All without Scores</a></li>
+                                    <li><a id="modal_window_link" href="<?php echo $base_url; ?>output/print.output.php?section=results&amp;go=all&amp;action=print&amp;filter=none&amp;view=winners" data-toggle="tooltip" data-placement="top" title="Print winners only results without scores listed">Winners Only without Scores</a></li>
+                                </ul>
+                                <!--
+                                <ul class="list-inline">
+                                    <li><a href="<?php echo $base_url; ?>output/export.output.php?section=results&amp;go=judging_scores&amp;action=default&amp;filter=none&amp;view=pdf" data-toggle="tooltip" data-placement="top" title="Download a PDF report of results - winners only without scores">PDF</a></li>
+                                    <li><a href="<?php echo $base_url; ?>output/export.output.php?section=results&amp;go=judging_scores&amp;action=default&amp;filter=none&amp;view=html" data-toggle="tooltip" data-placement="top" title="Download a HTML report of results to copy/paste into another website - winners only without scores">HTML</a></li>
+                                </ul>
+                            -->
                             </div>
                         </div><!-- ./row -->
                         <?php } ?>

@@ -42,14 +42,10 @@ if (empty($_SESSION['contest_info_general'.$prefix_session])) {
 	else $query_contest_info .= " WHERE id='1'";
 	$contest_info = mysqli_query($connection,$query_contest_info) or die (mysqli_error($connection));
 	$row_contest_info = mysqli_fetch_assoc($contest_info);
-	$contest_info_columns = array_keys($row_contest_info);
 
-    foreach ($contest_info_columns as $contest_info_column_name) {
-        if ($contest_info_column_name != "id") {
-            if (isset($row_contest_info[$contest_info_column_name])) $_SESSION[$contest_info_column_name] = $row_contest_info[$contest_info_column_name];
-            else $_SESSION[$contest_info_column_name] = "";
-        }
-    }
+    foreach ($row_contest_info as $key => $value) {
+		if ($key != "id") $_SESSION[$key] = $value;
+	}
 
 	$_SESSION['comp_id'] = $row_contest_info['id'];
 	$_SESSION['contest_info_general'.$prefix_session] = $prefix_session;
@@ -61,154 +57,20 @@ if (empty($_SESSION['prefs'.$prefix_session])) {
 	$prefs = mysqli_query($connection,$query_prefs) or die (mysqli_error($connection));
 	$row_prefs = mysqli_fetch_assoc($prefs);
 	$totalRows_prefs = mysqli_num_rows($prefs);
-	if (isset($row_prefs['prefsDisplaySpecial'])) $_SESSION['prefsDisplaySpecial'] = $row_prefs['prefsDisplaySpecial'];
-	else $_SESSION['prefsDisplaySpecial'] = "J"; // Default to use judging number for scoresheet downloads
-	// For all preferences, check to see if their value is NULL, if so, provide default value
-	// This prevents "breaking" of UI elements
-	if (isset($row_prefs['prefsTemp'])) $_SESSION['prefsTemp'] = $row_prefs['prefsTemp'];
-	else $_SESSION['prefsTemp'] = "Fahrenheit";
-	if (isset($row_prefs['prefsWeight1'])) $_SESSION['prefsWeight1'] = $row_prefs['prefsWeight1'];
-	else $_SESSION['prefsWeight1'] = "ounces";
-	if (isset($row_prefs['prefsWeight2'])) $_SESSION['prefsWeight2'] = $row_prefs['prefsWeight2'];
-	else $_SESSION['prefsWeight2'] = "pounds";
-	if (isset($row_prefs['prefsLiquid1'])) $_SESSION['prefsLiquid1'] = $row_prefs['prefsLiquid1'];
-	else $_SESSION['prefsLiquid1'] = "ounces";
-	if (isset($row_prefs['prefsLiquid2'])) $_SESSION['prefsLiquid2'] = $row_prefs['prefsLiquid2'];
-	else $_SESSION['prefsLiquid2'] = "gallons";
-	if (isset($row_prefs['prefsCurrency'])) $_SESSION['prefsCurrency'] = $row_prefs['prefsCurrency'];
-	else $_SESSION['prefsCurrency'] = "$";
-	if (isset($row_prefs['prefsCash'])) $_SESSION['prefsCash'] = $row_prefs['prefsCash'];
-	else $_SESSION['prefsCash'] = "N";
-	if (isset($row_prefs['prefsCheck'])) $_SESSION['prefsCheck'] = $row_prefs['prefsCheck'];
-	else $_SESSION['prefsCheck'] = "N";
-	if (isset($row_prefs['prefsCheckPayee'])) $_SESSION['prefsCheckPayee'] = $row_prefs['prefsCheckPayee'];
-	else {
-		$_SESSION['prefsCheckPayee'] = "";
-		$_SESSION['prefsCheck'] = "N";
+
+	foreach ($row_prefs as $key => $value) {
+		if ($key != "id") $_SESSION[$key] = $value;
 	}
-	if (isset($row_prefs['prefsPaypal'])) $_SESSION['prefsPaypal'] = $row_prefs['prefsPaypal'];
-	else $_SESSION['prefsPaypal'] = "N";
-	if (isset($row_prefs['prefsTransFee'])) $_SESSION['prefsTransFee'] = $row_prefs['prefsTransFee'];
-	else $_SESSION['prefsTransFee'] = "N";
-	if (isset($row_prefs['prefsPaypalIPN'])) $_SESSION['prefsPaypalIPN'] = $row_prefs['prefsPaypalIPN'];
-	else $_SESSION['prefsPaypalIPN'] = "0";
-	if (isset($row_prefs['prefsPaypalAccount'])) $_SESSION['prefsPaypalAccount'] = $row_prefs['prefsPaypalAccount'];
-	else {
-		$_SESSION['prefsPaypalAccount'] = "";
-		$_SESSION['prefsPaypal'] = "N";
-		$_SESSION['prefsTransFee'] = "N";
-		$_SESSION['prefsPaypalIPN'] = "0";
-	}
-	if (isset($row_prefs['prefsSponsors'])) $_SESSION['prefsSponsors'] = $row_prefs['prefsSponsors'];
-	else $SESSION['prefsSponsors'] = "N";
-	if (isset($row_prefs['prefsSponsorLogos'])) $_SESSION['prefsSponsorLogos'] = $row_prefs['prefsSponsorLogos'];
-	else $_SESSION['prefsSponsorLogos'] = "N";
-	if (isset($row_prefs['prefsSponsorLogoSize'])) $_SESSION['prefsSponsorLogoSize'] = $row_prefs['prefsSponsorLogoSize'];
-	else $_SESSION['prefsSponsorLogoSize'] = "250";
-	if (isset($row_prefs['prefsCompLogoSize'])) $_SESSION['prefsCompLogoSize'] = $row_prefs['prefsCompLogoSize'];
-	else $_SESSION['prefsCompLogoSize'] = "300";
-	if (isset($row_prefs['prefsDisplayWinners'])) $_SESSION['prefsDisplayWinners'] = $row_prefs['prefsDisplayWinners'];
-	else $_SESSION['prefsDisplayWinners'] = "N";
-	if (isset($row_prefs['prefsWinnerDelay'])) $_SESSION['prefsWinnerDelay'] = $row_prefs['prefsWinnerDelay'];
-	else $_SESSION['prefsWinnerDelay'] = 2145916800;
-	if (isset($row_prefs['prefsWinnerMethod'])) $_SESSION['prefsWinnerMethod'] = $row_prefs['prefsWinnerMethod'];
-	else $_SESSION['prefsWinnerMethod'] = 0;
-	if (isset($_SESSION['prefsShowBestBrewer'])) $_SESSION['prefsShowBestBrewer'] = $row_prefs['prefsShowBestBrewer'];
-	else $_SESSION['prefsShowBestBrewer'] = 0;
-	if (isset($_SESSION['prefsBestBrewerTitle'])) $_SESSION['prefsBestBrewerTitle'] = $row_prefs['prefsBestBrewerTitle'];
-	else $_SESSION['prefsBestBrewerTitle'] = "";
-	if (isset($_SESSION['prefsShowBestClub'])) $_SESSION['prefsShowBestClub'] = $row_prefs['prefsShowBestClub'];
-	else $_SESSION['prefsShowBestClub'] = 0;
-	if (isset($_SESSION['prefsBestClubTitle'])) $_SESSION['prefsBestClubTitle'] = $row_prefs['prefsBestClubTitle'];
-	else $_SESSION['prefsBestClubTitle'] = "";
-	if (isset($_SESSION['prefsBestUseBOS'])) $_SESSION['prefsBestUseBOS'] = $row_prefs['prefsBestUseBOS'];
-	else $_SESSION['prefsBestUseBOS'] = 0;
-	if (isset($_SESSION['prefsFirstPlacePts'])) $_SESSION['prefsFirstPlacePts'] = $row_prefs['prefsFirstPlacePts'];
-	else $_SESSION['prefsFirstPlacePts'] = 0;
-	if (isset($_SESSION['prefsSecondPlacePts'])) $_SESSION['prefsSecondPlacePts'] = $row_prefs['prefsSecondPlacePts'];
-	else $_SESSION['prefsSecondPlacePts'] = 0;
-	if (isset($_SESSION['prefsThirdPlacePts'])) $_SESSION['prefsThirdPlacePts'] = $row_prefs['prefsThirdPlacePts'];
-	else $_SESSION['prefsThirdPlacePts'] = 0;
-	if (isset($_SESSION['prefsFourthPlacePts'])) $_SESSION['prefsFourthPlacePts'] = $row_prefs['prefsFourthPlacePts'];
-	else $_SESSION['prefsFourthPlacePts'] = 0;
-	if (isset($_SESSION['prefsHMPts'])) $_SESSION['prefsHMPts'] = $row_prefs['prefsHMPts'];
-	else $_SESSION['prefsHMPts'] = 0;
-	if (isset($_SESSION['prefsTieBreakRule1'])) $_SESSION['prefsTieBreakRule1'] = $row_prefs['prefsTieBreakRule1'];
-	else $_SESSION['prefsTieBreakRule1'] = "";
-	if (isset($_SESSION['prefsTieBreakRule2'])) $_SESSION['prefsTieBreakRule2'] = $row_prefs['prefsTieBreakRule2'];
-	else $_SESSION['prefsTieBreakRule2'] = "";
-	if (isset($_SESSION['prefsTieBreakRule3'])) $_SESSION['prefsTieBreakRule3'] = $row_prefs['prefsTieBreakRule3'];
-	else $_SESSION['prefsTieBreakRule3'] = "";
-	if (isset($_SESSION['prefsTieBreakRule4'])) $_SESSION['prefsTieBreakRule4'] = $row_prefs['prefsTieBreakRule4'];
-	else $_SESSION['prefsTieBreakRule4'] = "";
-	if (isset($_SESSION['prefsTieBreakRule5'])) $_SESSION['prefsTieBreakRule5'] = $row_prefs['prefsTieBreakRule5'];
-	else $_SESSION['prefsTieBreakRule5'] = "";
-	if (isset($_SESSION['prefsTieBreakRule6'])) $_SESSION['prefsTieBreakRule6'] = $row_prefs['prefsTieBreakRule6'];
-	else $_SESSION['prefsTieBreakRule6'] = "";
-	if (isset($row_prefs['prefsEntryForm'])) $_SESSION['prefsEntryForm'] = $row_prefs['prefsEntryForm'];
-	else $_SESSION['prefsEntryForm'] = "C";
-	if (isset($row_prefs['prefsRecordLimit'])) $_SESSION['prefsRecordLimit'] = $row_prefs['prefsRecordLimit'];
-	else $_SESSION['prefsRecordLimit'] = 9999;
-	if (isset($row_prefs['prefsRecordLimit'])) $_SESSION['prefsRecordPaging'] = $row_prefs['prefsRecordPaging'];
-	else $row_prefs['prefsRecordPaging'] = 150;
-	if (isset($row_prefs['prefsTheme'])) $_SESSION['prefsTheme'] = $row_prefs['prefsTheme'];
-	else $_SESSION['prefsTheme'] = "default";
-	if (isset($row_prefs['prefsDateFormat'])) $_SESSION['prefsDateFormat'] = $row_prefs['prefsDateFormat'];
-	else $_SESSION['prefsDateFormat'] = "1";
-	if (isset($row_prefs['prefsContact'])) $_SESSION['prefsContact'] = $row_prefs['prefsContact'];
-	else $_SESSION['prefsContact'] = "N";
-	if (isset($row_prefs['prefsTimeZone'])) $_SESSION['prefsTimeZone'] = $row_prefs['prefsTimeZone'];
-	else $_SESSION['prefsTimeZone'] = "0";
-	if (isset($row_prefs['prefsTimeFormat'])) $_SESSION['prefsTimeFormat'] = $row_prefs['prefsTimeFormat'];
-	else $_SESSION['prefsTimeFormat'] = "0";
-	if (isset($row_prefs['prefsPayToPrint'])) $_SESSION['prefsPayToPrint'] = $row_prefs['prefsPayToPrint'];
-	else $_SESSION['prefsPayToPrint'] = "N";
-	if (isset($row_prefs['prefsHideRecipe'])) $_SESSION['prefsHideRecipe'] = $row_prefs['prefsHideRecipe'];
-	else $_SESSION['prefsHideRecipe'] = "Y";
-	if (isset($row_prefs['prefsUseMods'])) $_SESSION['prefsUseMods'] = $row_prefs['prefsUseMods'];
-	else $_SESSION['prefsUseMods'] = "N";
-	if (isset($row_prefs['prefsSEF'])) $_SESSION['prefsSEF'] = $row_prefs['prefsSEF'];
-	else $_SESSION['prefsSEF'] = "N";
-	if (isset($row_prefs['prefsSpecialCharLimit'])) $_SESSION['prefsSpecialCharLimit'] = $row_prefs['prefsSpecialCharLimit'];
-	else $_SESSION['prefsSpecialCharLimit'] = "150";
-	if (isset($row_prefs['prefsStyleSet'])) $_SESSION['prefsStyleSet'] = $row_prefs['prefsStyleSet'];
-	else $_SESSION['prefsStyleSet'] = "BJCP2015";
-	if (isset($row_prefs['prefsAutoPurge'])) $_SESSION['prefsAutoPurge'] = $row_prefs['prefsAutoPurge'];
-	else $_SESSION['prefsAutoPurge'] = "N";
-	if (isset($row_prefs['prefsEntryLimitPaid'])) $_SESSION['prefsEntryLimitPaid'] = $row_prefs['prefsEntryLimitPaid'];
-	else $_SESSION['prefsEntryLimitPaid'] = "";
-	if (isset($row_prefs['prefsEmailRegConfirm'])) $_SESSION['prefsEmailRegConfirm'] = $row_prefs['prefsEmailRegConfirm'];
-	else $_SESSION['prefsEmailRegConfirm'] = "0";
-	if (isset($row_prefs['prefsSpecific'])) $_SESSION['prefsSpecific'] = $row_prefs['prefsSpecific'];
-	else $_SESSION['prefsSpecific'] = "0";
-	if (isset($row_prefs['prefsDropOff'])) $_SESSION['prefsDropOff'] = $row_prefs['prefsDropOff'];
-	else $_SESSION['prefsDropOff'] = "0";
-	if (isset($row_prefs['prefsShipping'])) $_SESSION['prefsShipping'] = $row_prefs['prefsShipping'];
-	else $_SESSION['prefsShipping'] = "0";
-	if (isset($row_prefs['prefsProEdition'])) $_SESSION['prefsProEdition'] = $row_prefs['prefsProEdition'];
-	else $_SESSION['prefsProEdition'] = "0";
-	if (isset($row_prefs['prefsCAPTCHA'])) $_SESSION['prefsCAPTCHA'] = $row_prefs['prefsCAPTCHA'];
-	else $_SESSION['prefsCAPTCHA'] = "0";
-	if (isset($row_prefs['prefsGoogleAccount'])) $_SESSION['prefsGoogleAccount'] = $row_prefs['prefsGoogleAccount'];
-	else $_SESSION['prefsGoogleAccount'] = "";
+
 	if (SINGLE) $query_judging_prefs = sprintf("SELECT * FROM %s WHERE id='%s'", $prefix."judging_preferences",$_SESSION['comp_id']);
 	else $query_judging_prefs = sprintf("SELECT * FROM %s WHERE id='1'", $prefix."judging_preferences");
 	$judging_prefs = mysqli_query($connection,$query_judging_prefs) or die (mysqli_error($connection));
 	$row_judging_prefs = mysqli_fetch_assoc($judging_prefs);
-	if (isset($row_judging_prefs['jPrefsQueued'])) $_SESSION['jPrefsQueued'] = $row_judging_prefs['jPrefsQueued'];
-	else $_SESSION['jPrefsQueued'] = "Y";
-	if (isset($row_judging_prefs['jPrefsFlightEntries'])) $_SESSION['jPrefsFlightEntries'] = $row_judging_prefs['jPrefsFlightEntries'];
-	else $_SESSION['jPrefsFlightEntries'] = "12";
-	if (isset($row_judging_prefs['jPrefsMaxBOS'])) $_SESSION['jPrefsMaxBOS'] = $row_judging_prefs['jPrefsMaxBOS'];
-	else $_SESSION['jPrefsMaxBOS'] = "7";
-	if (isset($row_judging_prefs['jPrefsRounds'])) $_SESSION['jPrefsRounds'] = $row_judging_prefs['jPrefsRounds'];
-	else $_SESSION['jPrefsRounds'] = "3";
-	if (isset($row_judging_prefs['jPrefsBottleNum'])) $_SESSION['jPrefsBottleNum'] = $row_judging_prefs['jPrefsBottleNum'];
-	else $_SESSION['jPrefsBottleNum'] = "3";
-	if (isset($row_judging_prefs['jPrefsCapStewards'])) $_SESSION['jPrefsCapStewards'] = $row_judging_prefs['jPrefsCapStewards'];
-	else $_SESSION['jPrefsCapStewards'] = "";
-	if (isset($row_judging_prefs['jPrefsCapJudges'])) $_SESSION['jPrefsCapJudges'] = $row_judging_prefs['jPrefsCapJudges'];
-	else $_SESSION['jPrefsCapJudges'] = "";
+
+	foreach ($row_judging_prefs as $key => $value) {
+		if ($key != "id") $_SESSION[$key] = $value;
+	}
+
 	// Get counts for common, mostly static items
 	$query_sponsor_count = sprintf("SELECT COUNT(*) as 'count' FROM %s", $prefix."sponsors");
 	if (SINGLE) $query_sponsor_count .= sprintf(" WHERE comp_id='%s'",$_SESSION['comp_id']);
@@ -365,14 +227,10 @@ if ((isset($_SESSION['loginUsername'])) && (empty($_SESSION['user_info'.$prefix_
 	$user = mysqli_query($connection,$query_user) or die (mysqli_error($connection));
 	$row_user = mysqli_fetch_assoc($user);
 	$totalRows_user = mysqli_num_rows($user);
-	$user_columns = array_keys($row_user);
 
-    foreach ($user_columns as $user_column_name) {
-        if (($user_column_name != "password") && ($user_column_name != "id")) {
-            if (isset($row_user[$user_column_name])) $_SESSION[$user_column_name] = $row_user[$user_column_name];
-            else $_SESSION[$user_column_name] = "";
-        }
-    }
+    foreach ($row_user as $key => $value) {
+		if ($key != "id") $_SESSION[$key] = $value;
+	}
 
     $_SESSION['user_id'] = $row_user['id'];
 
@@ -381,12 +239,9 @@ if ((isset($_SESSION['loginUsername'])) && (empty($_SESSION['user_info'.$prefix_
 	$row_name = mysqli_fetch_assoc($name);
 	$name_columns = array_keys($row_name);
 
-    foreach ($name_columns as $name_column_name) {
-        if ($name_column_name != "id") {
-            if (isset($row_name[$name_column_name])) $_SESSION[$name_column_name] = $row_name[$name_column_name];
-            else $_SESSION[$name_column_name] = "";
-        }
-    }
+    foreach ($row_name as $key => $value) {
+		if ($key != "id") $_SESSION[$key] = $value;
+	}
 
     $_SESSION['brewerID'] = $row_name['id'];
 	$_SESSION['user_info'.$prefix_session] = $prefix_session;
@@ -523,136 +378,6 @@ if (($section == "admin") && ($go == "default")) {
 	$row_prefs = mysqli_fetch_assoc($prefs);
 	$totalRows_prefs = mysqli_num_rows($prefs);
 }
-
-
-/* *********************************************
- * Unused
- * *********************************************
-
-do {
-
-	$i = "0";
-
-	$ba_styles_arr_data[] = array(
-		"id"=>$row_ba_styles['id'],
-		"category"=>array(
-			"id"=>$i++,
-			"name"=>$row_ba_styles['brewStyleCategory'],
-			"createDate"=>time(),
-		),
-		"name"=>$row_ba_styles['brewStyle'],
-		"shortName"=>$row_ba_styles['brewStyle'],
-		"description"=>$row_ba_styles['brewStyleInfo'],
-		"ibuMin"=>$row_ba_styles['brewStyleIBU'],
-		"ibuMax"=>$row_ba_styles['brewStyleIBUMax'],
-		"abvMin"=>$row_ba_styles['brewStyleABV'],
-		"abvMax"=>$row_ba_styles['brewStyleABVMax'],
-		"srmMin"=>$row_ba_styles['brewStyleSRM'],
-		"srmMax"=>$row_ba_styles['brewStyleSRMMax'],
-		"ogMin"=>$row_ba_styles['brewStyleOG'],
-		"ogMax"=>$row_ba_styles['brewStyleOGMax'],
-		"fgMin"=>$row_ba_styles['brewStyleFG'],
-		"fgMax"=>$row_ba_styles['brewStyleFGMax'],
-		"createDate"=>time(),
-		"categoryID"=>$row_ba_styles['brewStyleGroup'],
-		"brewStyleReqSpec"=>$row_ba_styles['brewStyleReqSpec'],
-		"brewStyleStrength"=>$row_ba_styles['brewStyleStrength'],
-		"brewStyleCarb"=>$row_ba_styles['brewStyleCarb'],
-		"brewStyleSweet"=>$row_ba_styles['brewStyleSweet'],
-		"brewStyleGroup"=>$row_ba_styles['brewStyleGroup']
-	);
-
-	$ba_styles_arr = array(
-		"message"=>"Request Successful",
-		"data"=>$ba_styles_arr_data,
-		"status"=>"success"
-	);
-
-	$_SESSION['styles'] = $ba_styles_arr;
-	$_SESSION['ba_style_count'] = $totalRows_ba_style;
-
-	foreach ($_SESSION['styles'] as $ba_styles => $stylesData) {
-
-		if (is_array($stylesData) || is_object($stylesData)) {
-
-			foreach ($stylesData as $key => $ba_style) {
-
-
-
-			} // end foreach ($stylesData as $key => $ba_style)
-
-		} // end if (is_array($stylesData) || is_object($stylesData))
-
-	} // end foreach ($_SESSION['styles'] as $styles => $stylesData)
-
-} while ($row_ba_style = mysqli_fetch_assoc($ba_style));
-
-$bdb_api_key = explode("|",$_SESSION['prefsStyleSet']);
-if ((isset($bdb_api_key[1])) && ($bdb_api_key[1] != "000000")) $bdb_api_key_check = TRUE;
-else $bdb_api_key_check = FALSE;
-
-if (!isset($_SESSION['styles'])) {
-
-
-
-	// If an API key is found, connect to BreweryDB API and get data
-	if ($bdb_api_key_check) {
-
-		include (INCLUDES.'brewerydb/brewerydb.inc.php');
-		include (INCLUDES.'brewerydb/exception.inc.php');
-
-		$apikey = $bdb_api_key[1];
-		$bdb = new Pintlabs_Service_Brewerydb($apikey);
-		$bdb->setFormat('php');
-		$params = array();
-
-		try {
-				$results = $bdb->request('styles', $params, 'GET'); // where $params is a keyed array of parameters to send with the API call.
-			}
-
-		catch (Exception $e) {
-				$results = array('error' => $e->getMessage());
-			}
-
-		// store results in a session variable
-		$_SESSION['styles'] = $results;
-
-		// store related data in session variables
-		$_SESSION['ba_special'] = array("3-27","3-28","3-44","4-56","5-70","11-114","11-117","11-119","11-120","11-121","11-124","11-125","11-126","11-128","11-130","11-131","11-132","11-133","11-134","11-135","11-136","11-137","12-145","12-146","12-148","12-151","12-153","12-154","12-155","12-157","14-161","14-162","12-170");
-		$_SESSION['ba_special_beer'] = array("3-27","3-28","3-44","4-56","5-70","11-114","11-117","11-119","11-120","11-121","11-124","11-125","11-126","11-128","11-130","11-131","11-132","11-133","11-134","11-135","11-136","11-137","14-161","14-162","12-170");
-		$_SESSION['ba_special_mead_cider'] = array("12-146","12-148","12-151","12-153","12-154","12-155","12-157");
-		$_SESSION['ba_carb'] = array("12-140","12-141","12-142","12-143","12-144","12-145","12-146","12-147","12-148","12-149","12-150","12-151","12-152","12-153","12-154","12-155","12-156","12-157");
-		$_SESSION['ba_strength'] = array("12-140","12-141","12-142","12-143","12-144","12-145","12-146","12-147","12-148");
-		$_SESSION['ba_sweetness'] = array("12-143","12-144","12-145","12-146","12-147","12-148","12-149","12-150","12-151","12-152","12-153","12-154","12-155","12-156","12-157");
-		$_SESSION['ba_special_carb_str_sweet'] = array("12-145","12-146","12-148");
-		$_SESSION['ba_carb_str_sweet'] = array("12-143","12-144","12-147");
-		$_SESSION['ba_carb_str'] = array("12-140","12-141","12-142");
-		$_SESSION['ba_carb_sweet'] = array("12-149","12-150","12-152","12-156");
-		$_SESSION['ba_carb_special'] = array();
-		$_SESSION['ba_carb_sweet_special'] = array("12-151","12-153","12-154","12-155","12-157");
-
-		$_SESSION['ba_special_ids'] = array(27,28,44,56,70,114,117,119,120,121,124,125,126,128,130,131,132,133,134,135,136,137,145,146,148,151,153,154,155,157,161,162,170);
-		$_SESSION['ba_special_beer_ids'] = array(27,28,44,56,70,114,117,119,120,121,124,125,126,128,130,131,132,133,134,135,136,137,161,162,170);
-		$_SESSION['ba_special_mead_cider_ids'] = array(145,146,148,151,153,154,155,157);
-		$_SESSION['ba_carb_ids'] = array(140,141,142,143,144,145,146,147,148,149,150,151,152,153,154,155,156,157);
-		$_SESSION['ba_strength_ids'] = array(140,141,142,143,144,145,146,147,148);
-		$_SESSION['ba_sweetness_ids'] = array(143,144,145,146,147,148,149,150,151,152,153,154,155,156,157);
-		$_SESSION['ba_special_carb_str_sweet_ids'] = array(145,146,148);
-		$_SESSION['ba_carb_str_sweet_ids'] = array(143,144,147);
-		$_SESSION['ba_carb_str_ids'] = array(140,141,142);
-		$_SESSION['ba_carb_sweet_ids'] = array(149,150,152,156);
-		$_SESSION['ba_carb_special_ids'] = array();
-		$_SESSION['ba_carb_sweet_special_ids'] = array();
-		$_SESSION['ba_mead_cider'] = array(140,141,142,143,144,145,146,147,148,149,150,151,152,153,154,155,156,157);
-		$_SESSION['ba_mead'] = array(140,141,142,143,144,145,146,147,148);
-		$_SESSION['ba_cider'] = array(149,150,151,152,153,154,155,156,157);
-
-	}
-
-}
-
- */
-
 
 $prefs_barcode_labels = array("N","C","2","0","3","4");
 

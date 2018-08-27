@@ -130,7 +130,7 @@ if ($row_scored_entries['count'] > 0) {
 					$table_body1 .= "<td>";
 					if ($_SESSION['prefsStyleSet'] == "BA") $table_body1 .= $row_scores['brewStyle'];
 					else $table_body1 .= $style.": ".$row_scores['brewStyle'];
-					if (!empty($row_scores['brewInfo'])) {
+					if ((!empty($row_scores['brewInfo'])) && ($section != "results")) {
 						$table_body1 .= " <a href=\"#".$row_scores['id']."\"  tabindex=\"0\" role=\"button\" data-toggle=\"popover\" data-trigger=\"hover\" data-placement=\"auto top\" data-container=\"body\" title=\"".$label_info."\" data-content=\"".str_replace("^", " ", $row_scores['brewInfo'])."\"><span class=\"hidden-xs hidden-sm hidden-md hidden-print fa fa-info-circle\"></span></a></td>";
 					}
 					$table_body1 .= "</td>";
