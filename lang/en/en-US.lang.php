@@ -764,7 +764,7 @@ if ($section == "contact") {
 
 // -------------------- Default (Home) -------------------
 
-if ($section == "default") {
+if (($section == "default") || ($section == "results")) { // Changed for 2.1.14
 
 	$default_page_text_000 = "No drop-off locations have been specified.";
 	$default_page_text_001 = "Add a drop-off location?";
