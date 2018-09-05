@@ -84,6 +84,11 @@ if ($disable_pay) {
 	echo $primary_page_info;
 }
 
+elseif ($comp_paid_entry_limit) {
+	$primary_page_info .= sprintf("<p class=\"lead\">%s<small> <a href=\"%s\">%s</a></small></p>",$pay_text_034,$link_contacts,$pay_text_001);
+	echo $primary_page_info;
+}
+
 // If payment options are not disabled...
 
 else {

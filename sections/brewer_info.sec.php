@@ -174,9 +174,12 @@ $header1_1 .= sprintf("<h2>%s</h2>",$label_account_info);
 $primary_page_info .= sprintf("<p class=\"lead\">%s %s, %s. <small class=\"text-muted\">%s %s.</small></p>",$brewer_info_000,$_SESSION['contestName'],$_SESSION['brewerFirstName'],$brewer_info_001,getTimeZoneDateTime($_SESSION['prefsTimeZone'], strtotime($_SESSION['userCreated']), $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "long", "date-time-no-gmt"));
 
 if (($totalRows_log > 0) && ($show_entries)) {
-	$primary_page_info .= sprintf("<p class=\"lead hidden-print\"><small>%s",$brewer_info_002);
-	if (!$disable_pay) $primary_page_info .= " ".$brewer_info_011." <a href=\"".build_public_url("pay","default","default","default",$sef,$base_url)."\">".$brewer_info_003."</a>";
-	$primary_page_info .= ".</small></p>";
+	$primary_page_info .= "<p class=\"lead hidden-print\"><small>";
+	$primary_page_info .= sprintf("%s",$brewer_info_002);
+	if (!$disable_pay) {
+		if (!$comp_paid_entry_limit) $primary_page_info .= " ".$brewer_info_011." <a href=\"".build_public_url("pay","default","default","default",$sef,$base_url)."\">".$brewer_info_003."</a>.</small></p>";
+		else $primary_page_info .= sprintf(".</small></p><p class=\"lead hidden-print\"><small><span class=\"text-danger\"><strong>%s:</strong> %s</span> <a href=\"%s\">%s</a></small></p>",ucfirst(strtolower($label_please_note)),$pay_text_034,$link_contacts,$pay_text_001);
+	}
 }
 
 $user_edit_links .= "<div class=\"btn-group hidden-print\" role=\"group\" aria-label=\"EditAccountFunctions\">";

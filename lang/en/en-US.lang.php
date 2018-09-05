@@ -917,7 +917,7 @@ if ($section == "past_winners") {
 // -------------------- Pay for Entries --------------------
 
 $pay_text_000 = "Since the account registration, entry registration, shipping, and drop-off deadlines have all passed, payments are no longer being accepted.";
-$pay_text_001 = "Please contact a competition official if you have any questions.";
+$pay_text_001 = "Contact a competition official if you have any questions.";
 $pay_text_002 = "the following are your options for paying your entry fees.";
 $pay_text_003 = "Fees are";
 $pay_text_004 = "per entry";
@@ -1462,7 +1462,13 @@ $label_please_choose = "Please Choose";
 // ----------------------------------------------------------------------------------
 // Version 2.1.14 Additions
 // ----------------------------------------------------------------------------------
+
+// Labels
 $label_winners = "Winners";
+$label_unconfirmed_entries = "Unconfirmed Entries";
+
+// Pay screen
+$pay_text_034 = "The limit of paid entires has been reached - further entry payments are not being accepted.";
 
 // ***********************************************************************************
 // END TRANSLATIONS

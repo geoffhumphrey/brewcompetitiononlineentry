@@ -89,7 +89,7 @@ if (($totalRows_log > 0) && ($action != "print")) {
 		$warnings .= sprintf("<div class=\"alert alert-warning\"><span class=\"fa fa-lg fa-exclamation-triangle\"></span> <strong>%s</strong> %s</div>",$brewer_entries_text_004,$brewer_entries_text_005);
 	}
 
-	if (($_SESSION['prefsPayToPrint'] == "Y") && (judging_date_return() > 0) && (!$disable_pay)) {
+	if (($_SESSION['prefsPayToPrint'] == "Y") && (judging_date_return() > 0) && (!$disable_pay) && (!$comp_paid_entry_limit)) {
 		$warnings .= sprintf("<div class=\"alert alert-warning\"><span class=\"fa fa-lg fa-exclamation-triangle\"></span> <strong>%s!</strong> %s</div>",$label_please_note, $alert_text_085);
 	}
 }
@@ -287,8 +287,7 @@ do {
 
 	$print_forms_link = "";
 
-	if (pay_to_print($_SESSION['prefsPayToPrint'],$row_log['brewPaid'])) {
-
+	if (((pay_to_print($_SESSION['prefsPayToPrint'],$row_log['brewPaid'])) && (!$comp_paid_entry_limit)) || (($comp_paid_entry_limit) && ($row_log['brewPaid'] == 1))) {
 		$print_forms_link .= "<a id=\"modal_window_link\" href=\"".$base_url."output/entry.output.php?";
 		$print_forms_link .= "id=".$row_log['id'];
 		$print_forms_link .= "&amp;bid=".$_SESSION['user_id'];
@@ -297,7 +296,12 @@ do {
 
 	}
 
-	else $print_forms_link .= "<span data-toggle=\"tooltip\" title=\"".$brewer_entries_text_018."\" data-placement=\"auto top\" data-container=\"body\" class=\"fa fa-lg fa-print text-muted\"></span>&nbsp;&nbsp;";
+	else {
+		$print_forms_link .= "<span data-toggle=\"tooltip\" title=\"";
+		if ($comp_paid_entry_limit) $print_forms_link .= $brewer_entries_text_019." ".$pay_text_034;
+		else $print_forms_link .= $brewer_entries_text_018;
+		$print_forms_link .= "\" data-placement=\"auto top\" data-container=\"body\" class=\"fa fa-lg fa-print text-muted\"></span>&nbsp;&nbsp;";
+	}
 
 	// Print Recipe
 	$print_recipe_link = sprintf("<a id=\"modal_window_link\" href=\"".$base_url."output/entry.output.php?go=recipe&amp;id=".$row_log['id']."&amp;bid=".$_SESSION['brewerID']."\" title=\"%s ".$row_log['brewName']."\"><span class=\"fa fa-lg fa-book\"><span></a>&nbsp;&nbsp;",$brewer_entries_text_010);

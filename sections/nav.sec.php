@@ -11,6 +11,10 @@ else $sef = $sef;
 
 $add_entry_link_show = FALSE;
 $show_entries = TRUE;
+$nav_register_entrant_show = TRUE;
+
+if ($comp_entry_limit) $nav_register_entrant_show = FALSE;
+if ($comp_paid_entry_limit) $nav_register_entrant_show = FALSE;
 
 if ($entry_window_open == 1) {
 	if ($comp_entry_limit) $add_entry_link_show = FALSE;
@@ -356,7 +360,9 @@ $(document).ready(function(){
                 	<a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false"><?php echo $label_register; ?> <span class="caret"></span></a>
                     <ul class="dropdown-menu">
                     	<?php if (($registration_open == 1) && (!$ua) && (!isset($_SESSION['loginUsername']))) { ?>
+                        <?php if ($nav_register_entrant_show) { ?>
                     	<li><a href="<?php echo build_public_url("register","entrant","default","default",$sef,$base_url); ?>"><?php echo $label_entrant; ?></a></li>
+                        <?php } ?>
                         <?php } ?>
                         <?php if ((!$judge_limit) && ($judge_window_open == 1)) { ?>
                         <li><a href="<?php echo build_public_url("register","judge","default","default",$sef,$base_url); ?>"><?php echo $label_judge; ?></a></li>
@@ -395,7 +401,9 @@ $(document).ready(function(){
                     <?php } ?>
                     <?php } ?>
                     <?php if ((!$disable_pay) && ($show_entries)) { ?>
-                    <li><a href="<?php echo $link_pay; ?>"><?php echo $label_pay.$paid_icon; ?></a></li>
+                        <?php if (!$comp_paid_entry_limit) { ?>
+                            <li><a href="<?php echo $link_pay; ?>"><?php echo $label_pay.$paid_icon; ?></a></li>
+                        <?php } ?>
                     <?php } ?>
                     <li role="separator" class="divider"></li>
                     <li><a href="<?php echo $base_url; ?>includes/logout.inc.php"><?php echo $label_log_out; ?></a></li>

@@ -83,6 +83,7 @@ $(document).ready(function(){
 //-->
 </script>
 <?php
+$warning0 = "";
 $warning1 = "";
 $warning2 = "";
 $primary_page_info = "";
@@ -142,6 +143,8 @@ else { // THIS ELSE ENDS at the end of the script
    		} while ($row_dropoff = mysqli_fetch_assoc($dropoff));
 	}
 }
+
+if (($comp_paid_entry_limit) && ($go == "entrant")) $warning0 .= sprintf("<div class=\"alert alert-danger\"><strong>%s:</strong> %s %s</div>",$label_please_note,$alert_text_053);
 
 if (($_SESSION['prefsProEdition'] == 1) && ($go == "entrant")) $warning1 .= sprintf("<p class=\"lead\">%s <small>%s</small></p>",$register_text_035,$register_text_036);
 elseif (($_SESSION['prefsProEdition'] == 1) && ($go != "entrant")) $warning1 .= sprintf("<p class=\"lead\">%s</p>",$register_text_004);
@@ -247,7 +250,10 @@ foreach ($security_questions_display as $key => $value) {
 // Display
 // --------------------------------------------------------------
 
-if (($section != "admin") && ($action != "print")) echo $warning1;
+if (($section != "admin") && ($action != "print")) {
+    echo $warning0;
+    echo $warning1;
+}
 if (NHC) echo $warning2;
 echo $header1_1;
 echo $page_info1;
