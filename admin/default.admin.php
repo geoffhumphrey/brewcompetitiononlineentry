@@ -1038,7 +1038,7 @@
                         <?php } ?>
                         <div class="row">
                             <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-4">
-                                <strong>Table Results</strong>
+                                <strong>Table Results (<?php echo $results_method[$_SESSION['prefsWinnerMethod']]; ?>)</strong>
                             </div>
                             <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-8">
                                 <ul class="list-inline">
@@ -1057,7 +1057,7 @@
                         </div><!-- ./row -->
                         <div class="row">
                             <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-4">
-                                <strong>All Results (Single Report)</strong>
+                                <strong>All Results (<?php echo $results_method[$_SESSION['prefsWinnerMethod']]; ?> - Single Report)</strong>
                             </div>
                             <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-8">
                                 <ul class="list-inline">

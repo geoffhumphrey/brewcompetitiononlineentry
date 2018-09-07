@@ -65,7 +65,8 @@ if ($section != "admin") {
 	$header1_8 = "";
 	$page_info8 = "";
 
-	if ((isset($_SESSION['loginUsername'])) && ($_SESSION['brewerDiscount'] == "Y") && ($_SESSION['contestEntryFeePasswordNum'] != "")) $discount = TRUE; else $discount = FALSE;
+	if ((isset($_SESSION['loginUsername'])) && ($_SESSION['brewerDiscount'] == "Y") && ($_SESSION['contestEntryFeePasswordNum'] != "")) $discount = TRUE;
+	else $discount = FALSE;
 
 		// Conditional display of panel colors based upon open/closed dates
 		if (($registration_open == 0) && ($judge_window_open == 0)) $reg_panel_display = "panel-danger";
@@ -92,21 +93,22 @@ if ($section != "admin") {
 		else $shipping_panel_display = "panel-default";
 
 
-	//if (!$logged_in) {
+	if (!$logged_in) {
 
 		// Account Registration Dates
 		$header1_100 .= "<div class=\"panel ".$reg_panel_display."\">";
 		$header1_100 .= "<div class=\"panel-heading\">";
 		$header1_100 .= sprintf("<h4 class=\"panel-title\">%s",$label_account_registration);
+
 		if ($registration_open == 1) $header1_100 .= sprintf(" %s",$label_open);
 		elseif (($registration_open != 1) && ($judge_window_open == 1) && (!$judge_limit) && (!$steward_limit)) $header1_100 .= sprintf(" %s",$sidebar_text_006);
 		elseif (($registration_open != 1) && ($judge_window_open == 1) && ($judge_limit) && (!$steward_limit)) $header1_100 .= sprintf(" %s",$sidebar_text_007);
 		elseif (($registration_open != 1) && ($judge_window_open == 1) && (!$judge_limit) && ($steward_limit)) $header1_100 .= sprintf(" %s",$sidebar_text_008);
 		else $header1_100 .= sprintf(" %s",$label_closed);
+
 		$header1_100 .= "</h4>";
 		$header1_100 .= "</div>";
 		$page_info100 .= "<div class=\"panel-body\">";
-		//$page_info100 .= "Account";
 
 		if ($nav_register_entrant_show) {
 			if (($registration_open == 2) && ($judge_window_open == 1) && ($judge_limit) && ($steward_limit)) $page_info100 .= sprintf("<p>%s</p>",$sidebar_text_003);
@@ -119,12 +121,10 @@ if ($section != "admin") {
 			elseif ((!$judge_limit) && ($steward_limit)) $page_info100 .= sprintf("<p><a href=\"%s\">%s</a> accepted %s through %s.</p>", build_public_url("register","judge","default","default",$sef,$base_url), $sidebar_text_002, $judge_open_sidebar, $judge_closed_sidebar);
 		}
 
-
-
 		$page_info100 .= "</div>";
 		$page_info100 .= "</div>";
 
-	//}
+	}
 
 	if ($show_entries) {
 

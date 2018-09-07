@@ -222,4 +222,5 @@ $encryption_key = "8sQHfMk8rinRtA/Frhm+AWrSgOmkcbu+FxIUGy9Fq5I=";
 
 if ($_SESSION['prefsStyleSet'] == "BA") $optional_info_styles = array();
 else $optional_info_styles = array("21-B","28-A","30-B","33-A","33-B","34-B","M2-C","M2-D","M2-E","M3-A","M3-B","M4-B","M4-C","07-C","M1-A","M1-B","M1-C","M2-A","M2-B","M4-A","C1-B","C1-C");
+$results_method = array("0" => "By Table", "1" => "By Style", "2" => "By Sub-Style");
 ?>

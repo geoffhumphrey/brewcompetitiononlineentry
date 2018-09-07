@@ -58,10 +58,12 @@ if ($row_scored_entries['count'] > 0) {
 
 			include (DB.'winners_category.db.php');
 
-			//echo $style."<br>";
-			//echo $query_entry_count."<br>";
-			//echo $row_entry_count['count']."<br>";
-			//echo $row_score_count['count']."<br><br>";
+			/*
+			echo $style."<br>";
+			echo $query_entry_count."<br>";
+			echo $row_entry_count['count']."<br>";
+			echo $row_score_count['count']."<br><br>";
+			*/
 
 			// Display all winners
 			if ($row_entry_count['count'] > 1) $entries = strtolower($label_entries); else $entries = strtolower($label_entry);

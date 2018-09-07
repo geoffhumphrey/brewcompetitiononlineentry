@@ -16,6 +16,8 @@ if ($_SESSION['prefsWinnerMethod'] == 1) {
 
 }
 
+
+
 // Display by Subcategory
 if ($_SESSION['prefsWinnerMethod'] == 2) {
 

@@ -300,15 +300,11 @@ $(document).ready(function(){
 	<div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
 		<div class="input-group">
 			<!-- Input Here -->
+            <?php foreach ($results_method as $key => $value) { ?>
 			<label class="radio-inline">
-				<input type="radio" name="prefsWinnerMethod" value="0" id="prefsWinnerMethod_0" <?php if (($section == "step3") || ($row_prefs['prefsWinnerMethod'] == "0")) echo "CHECKED"; ?>> By Table
+				<input type="radio" name="prefsWinnerMethod" value="<?php echo $key; ?>" id="prefsWinnerMethod_<?php echo $key; ?>" <?php if (($section == "step3") || ($row_prefs['prefsWinnerMethod'] == $key)) echo "CHECKED"; ?>> <?php echo $value; ?>
 			</label>
-			<label class="radio-inline">
-				<input type="radio" name="prefsWinnerMethod" value="1" id="prefsWinnerMethod_1" <?php if ($row_prefs['prefsWinnerMethod'] == "1") echo "CHECKED"; ?>> By Style
-			</label>
-			<label class="radio-inline">
-				<input type="radio" name="prefsWinnerMethod" value="2" id="prefsWinnerMethod_2" <?php if ($row_prefs['prefsWinnerMethod'] == "2") echo "CHECKED"; ?>> By Sub-Style
-			</label>
+            <?php } ?>
 		</div>
 		<span id="helpBlock" class="help-block">How the competition will award places for winning entries.</span>
 	</div>
