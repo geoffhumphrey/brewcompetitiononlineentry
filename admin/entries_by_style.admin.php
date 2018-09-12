@@ -50,7 +50,7 @@ if ($_SESSION['prefsStyleSet'] == "BJCP2015") {
 	$category_end = 34;
 }
 
-/*
+
 include (DB.'styles.db.php');
 
 do {
@@ -58,7 +58,7 @@ do {
 } while ($row_styles = mysqli_fetch_assoc($styles));
 
 $total_cat = array_unique($accepted_categories);
-print_r($total_cat);
+//print_r($total_cat);
 
 foreach ($total_cat as $cat) {
 
@@ -92,7 +92,6 @@ foreach ($total_cat as $cat) {
 
 }
 
-*/
 
 $mead_total = array_sum($style_mead_count);
 $mead_total_logged = array_sum($style_mead_count_logged);

@@ -36,8 +36,11 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 
 		}
 
-
 		elseif ($go == "special_best") {
+
+			$deleteSQL = sprintf("DELETE FROM $dbTable WHERE id='%s'", $id);
+			mysqli_real_escape_string($connection,$deleteSQL);
+			$result = mysqli_query($connection,$deleteSQL) or die (mysqli_error($connection));
 
 			$query_delete_assign = sprintf("SELECT id FROM $special_best_data_db_table WHERE sid='%s'", $id);
 			$delete_assign = mysqli_query($connection,$query_delete_assign) or die (mysqli_error($connection));
@@ -57,7 +60,8 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 		}
 
 		elseif ($go == "judging") {
-		  // remove relational location ids from affected rows in brewer's table
+
+			// remove relational location ids from affected rows in brewer's table
 			$query_loc = "SELECT id,brewerJudgeLocation,brewerStewardLocation from $brewer_db_table";
 			$loc = mysqli_query($connection,$query_loc) or die (mysqli_error($connection));
 			$row_loc = mysqli_fetch_assoc($loc);
@@ -249,6 +253,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 					$result = mysqli_query($connection,$deleteSQL) or die (mysqli_error($connection));
 				}
 			}
+
 			$query_delete_flights = sprintf("SELECT id,flightTable FROM $judging_flights_db_table WHERE flightTable='%s'", $id);
 			$delete_flights = mysqli_query($connection,$query_delete_flights) or die (mysqli_error($connection));
 			$row_delete_flights = mysqli_fetch_assoc($delete_flights);
@@ -261,22 +266,29 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 					$deleteSQL = sprintf("DELETE FROM $judging_flights_db_table WHERE id='%s'", $fid);
 					mysqli_real_escape_string($connection,$deleteSQL);
 					$result = mysqli_query($connection,$deleteSQL) or die (mysqli_error($connection));
-					}
+
+				}
+
 				if ($c != "") {
-				foreach ($c as $eid) {
 
-					$query_delete_bos = sprintf("SELECT id,eid FROM $judging_scores_bos_db_table WHERE eid='%s'", $eid);
-					$delete_bos = mysqli_query($connection,$query_delete_bos) or die (mysqli_error($connection));
-					$row_delete_bos = mysqli_fetch_assoc($delete_bos);
+					foreach ($c as $eid) {
+						$query_delete_bos = sprintf("SELECT id,eid FROM $judging_scores_bos_db_table WHERE eid='%s'", $eid);
+						$delete_bos = mysqli_query($connection,$query_delete_bos) or die (mysqli_error($connection));
+						$row_delete_bos = mysqli_fetch_assoc($delete_bos);
 
-					if ($eid == $row_delete_bos['eid']) {
-						$deleteSQL = sprintf("DELETE FROM $judging_scores_bos_db_table WHERE id='%s'", $row_delete_bos['id']);
-						mysqli_real_escape_string($connection,$deleteSQL);
-						$result = mysqli_query($connection,$deleteSQL) or die (mysqli_error($connection));
+						if ($eid == $row_delete_bos['eid']) {
+							$deleteSQL = sprintf("DELETE FROM $judging_scores_bos_db_table WHERE id='%s'", $row_delete_bos['id']);
+							mysqli_real_escape_string($connection,$deleteSQL);
+							$result = mysqli_query($connection,$deleteSQL) or die (mysqli_error($connection));
 						}
-					  }
 					}
 				}
+			}
+
+			$deleteSQL = sprintf("DELETE FROM $dbTable WHERE id='%s'", $id);
+			mysqli_real_escape_string($connection,$deleteSQL);
+			$result = mysqli_query($connection,$deleteSQL) or die (mysqli_error($connection));
+
 		} // end if ($go == "judging_tables")
 
 		elseif ($go == "default") {
@@ -297,9 +309,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 						$result = mysqli_query($connection,$deleteSQL) or die (mysqli_error($connection));
 					}
 				}
-
 			}
-
 		}
 
 		else {
