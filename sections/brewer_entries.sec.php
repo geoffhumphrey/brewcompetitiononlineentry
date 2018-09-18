@@ -68,6 +68,9 @@ $print_list_link = "";
 $pay_fees_message = "";
 
 
+$multiple_bottle_ids = FALSE;
+if (($_SESSION['prefsEntryForm'] == "5") || ($_SESSION['prefsEntryForm'] == "6")) $multiple_bottle_ids = TRUE;
+
 // Build Headers
 $header1_1 .= sprintf("<a class=\"anchor-offset\"name=\"entries\"></a><h2>%s</h2>",$label_entries);
 
@@ -102,7 +105,11 @@ do {
 
 	include (DB.'styles.db.php');
 
+	// Vars
+	$print_forms_link = "";
 	$required_info = "";
+	$edit_link = "";
+
 	if ((!empty($row_log['brewInfo'])) || (!empty($row_log['brewMead1'])) || (!empty($row_log['brewMead2'])) || (!empty($row_log['brewMead3']))) {
 		$brewInfo = "";
 		//$brewInfo .= "Required Info: ";
@@ -134,7 +141,7 @@ do {
 
 	$scoresheet = FALSE;
 
-	if ($show_scoresheets) {
+	if (($show_scores) && ($show_scoresheets)) {
 
 		// Check whether scoresheet file exists, and, if so, provide link.
 		$scoresheet_file_name_entry = sprintf("%06s",$entry_number).".pdf";
@@ -210,25 +217,36 @@ do {
 	$entry_output .= "</td>";
 
 	if (!$show_scores) {
-	$entry_output .= "<td class=\"hidden-xs hidden-md\">";
-	if ($row_log['brewConfirmed'] == "0")  $entry_output .= "<span class=\"fa fa-lg fa-exclamation-circle text-danger\"></span>";
-	elseif ((check_special_ingredients($entry_style,$_SESSION['prefsStyleSet'])) && ($row_log['brewInfo'] == "")) $entry_output .= "<span class=\"fa fa-lg fa-exclamation-circle text-danger\"></span>";
-	else $entry_output .= yes_no($row_log['brewConfirmed'],$base_url,1);
-	$entry_output .= "</td>";
+		$entry_output .= "<td class=\"hidden-xs hidden-md\">";
+		if ($row_log['brewConfirmed'] == "0")  $entry_output .= "<span class=\"fa fa-lg fa-exclamation-circle text-danger\"></span>";
+		elseif ((check_special_ingredients($entry_style,$_SESSION['prefsStyleSet'])) && ($row_log['brewInfo'] == "")) $entry_output .= "<span class=\"fa fa-lg fa-exclamation-circle text-danger\"></span>";
+		else $entry_output .= yes_no($row_log['brewConfirmed'],$base_url,1);
+		$entry_output .= "</td>";
 
-	$entry_output .= "<td class=\"hidden-xs\">";
-	$entry_output .= yes_no($row_log['brewPaid'],$base_url,1);
-	$entry_output .= "</td>";
+		$entry_output .= "<td class=\"hidden-xs\">";
+		$entry_output .= yes_no($row_log['brewPaid'],$base_url,1);
+		$entry_output .= "</td>";
 
-	$entry_output .= "<td class=\"hidden-xs\">";
-	$entry_output .= yes_no($row_log['brewReceived'],$base_url,1);
-	$entry_output .= "</td>";
+		$entry_output .= "<td class=\"hidden-xs\">";
+		$entry_output .= yes_no($row_log['brewReceived'],$base_url,1);
+		$entry_output .= "</td>";
 
-	$entry_output .= "<td class=\"hidden-xs hidden-sm\">";
-	if ($row_log['brewUpdated'] != "") $entry_output .= "<span class=\"hidden\">".strtotime($row_log['brewUpdated'])."</span>".getTimeZoneDateTime($_SESSION['prefsTimeZone'], strtotime($row_log['brewUpdated']), $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "short", "date-time-no-gmt"); else $entry_output .= "&nbsp;";
-	$entry_output .= "</td>";
+		$entry_output .= "<td class=\"hidden-xs hidden-sm\">";
+		if ($row_log['brewUpdated'] != "") $entry_output .= "<span class=\"hidden\">".strtotime($row_log['brewUpdated'])."</span>".getTimeZoneDateTime($_SESSION['prefsTimeZone'], strtotime($row_log['brewUpdated']), $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "short", "date-time-no-gmt"); else $entry_output .= "&nbsp;";
+		$entry_output .= "</td>";
+
+
+		if ($multiple_bottle_ids) {
+			$entry_output .= "<td>";
+			$entry_output .= "<div class=\"checkbox\"><label>";
+			if (((pay_to_print($_SESSION['prefsPayToPrint'],$row_log['brewPaid'])) && (!$comp_paid_entry_limit)) || (($comp_paid_entry_limit) && ($row_log['brewPaid'] == 1))) $entry_output .= "<input class=\"entry-print\" name=\"id[]\" type=\"checkbox\" value=\"".$row_log['id']."\">";
+			else $entry_output .= "<span class=\"fa fa-lg fa-times text-danger\"></span>";
+			$entry_output .= "</label></div>";
+			$entry_output .= "</td>";
+		}
 
 	}
+
 	// Display if Closed, Judging Dates have passed, winner display is enabled, and the winner display delay time period has passed
 	if ($show_scores) {
 
@@ -262,13 +280,10 @@ do {
 	if (($row_log['brewCategory'] < 10) && (preg_match("/^[[:digit:]]+$/",$row_log['brewCategory']))) $brewCategory = "0".$row_log['brewCategory'];
 	else $brewCategory = $row_log['brewCategory'];
 
-	$edit_link = "";
-
 	if (($entry_window_open == 1) || (($entry_window_open != 1) && (time() < $row_contest_dates['contestEntryDeadline']))) {
 
 		$edit_link .= "<a href=\"".$base_url."index.php?section=brew&amp;action=edit&amp;id=".$row_log['id'];
 		if ($row_log['brewConfirmed'] == 0) $edit_link .= "&amp;msg=1-".$brewCategory."-".$row_log['brewSubCategory'];
-
 		$edit_link .= "&amp;view=".$brewCategory."-".$row_log['brewSubCategory'];
 		$edit_link .= "\" data-toggle=\"tooltip\" title=\"Edit ".$row_log['brewName']."\">";
 		$edit_link .= "<span class=\"fa fa-lg fa-pencil\"></a>&nbsp;&nbsp;";
@@ -285,22 +300,23 @@ do {
 	$alt_title .= sprintf("%s ",$brewer_entries_text_009);
 	$alt_title .= "for ".$row_log['brewName'];
 
-	$print_forms_link = "";
+	if (!$multiple_bottle_ids) {
 
-	if (((pay_to_print($_SESSION['prefsPayToPrint'],$row_log['brewPaid'])) && (!$comp_paid_entry_limit)) || (($comp_paid_entry_limit) && ($row_log['brewPaid'] == 1))) {
-		$print_forms_link .= "<a id=\"modal_window_link\" href=\"".$base_url."output/entry.output.php?";
-		$print_forms_link .= "id=".$row_log['id'];
-		$print_forms_link .= "&amp;bid=".$_SESSION['user_id'];
-		$print_forms_link .= "\" data-toggle=\"tooltip\" title=\"".$alt_title."\">";
-		$print_forms_link .= "<span class=\"fa fa-lg fa-print\"></a>&nbsp;&nbsp;";
+		if (((pay_to_print($_SESSION['prefsPayToPrint'],$row_log['brewPaid'])) && (!$comp_paid_entry_limit)) || (($comp_paid_entry_limit) && ($row_log['brewPaid'] == 1))) {
+				$print_forms_link .= "<a id=\"modal_window_link\" href=\"".$base_url."output/entry.output.php?";
+				$print_forms_link .= "id=".$row_log['id'];
+				$print_forms_link .= "&amp;bid=".$_SESSION['user_id'];
+				$print_forms_link .= "\" data-toggle=\"tooltip\" title=\"".$alt_title."\">";
+				$print_forms_link .= "<span class=\"fa fa-lg fa-print\"></span></a>&nbsp;&nbsp;";
+		}
 
-	}
+		else {
+			$print_forms_link .= "<span data-toggle=\"tooltip\" title=\"";
+			if ($comp_paid_entry_limit) $print_forms_link .= $brewer_entries_text_019." ".$pay_text_034;
+			else $print_forms_link .= $brewer_entries_text_018;
+			$print_forms_link .= "\" data-placement=\"auto top\" data-container=\"body\" class=\"fa fa-lg fa-print text-muted\"></span>&nbsp;&nbsp;";
+		}
 
-	else {
-		$print_forms_link .= "<span data-toggle=\"tooltip\" title=\"";
-		if ($comp_paid_entry_limit) $print_forms_link .= $brewer_entries_text_019." ".$pay_text_034;
-		else $print_forms_link .= $brewer_entries_text_018;
-		$print_forms_link .= "\" data-placement=\"auto top\" data-container=\"body\" class=\"fa fa-lg fa-print text-muted\"></span>&nbsp;&nbsp;";
 	}
 
 	// Print Recipe
@@ -372,6 +388,37 @@ if (($totalRows_log > 0) && ($entry_window_open >= 1)) {
 ?>
 <script type="text/javascript" language="javascript">
 	 $(document).ready(function() {
+
+	 	$( ".entry-print" ).on("click", function() {
+			if($(".entry-print:checked").length > 0) {
+				$('#btn').prop('disabled', false);
+			}
+			else {
+				$('#btn').prop('disabled', true);
+			}
+		});
+
+		$('.entry-print').change(function(){
+		    //uncheck "select all", if one of the listed checkbox item is unchecked
+		    if(false == $(this).prop("checked")){ //if this item is unchecked
+		        $("#select_all").prop('checked', false); //change "select all" checked status to false
+		    }
+		    //check "select all" if all checkbox items are checked
+		    if ($('.checkbox:checked').length == $('.checkbox').length ){
+		        $("#select_all").prop('checked', true);
+		    }
+		});
+
+		$("#select_all").change(function () {
+    		$("input:checkbox").prop('checked', $(this).prop("checked"));
+    		if($(".entry-print:checked").length > 0) {
+				$('#btn').prop('disabled', false);
+			}
+			else {
+				$('#btn').prop('disabled', true);
+			}
+		});
+
 		$('#sortable').dataTable( {
 			"bPaginate" : false,
 			"sDom": 'rt',
@@ -391,6 +438,7 @@ if (($totalRows_log > 0) && ($entry_window_open >= 1)) {
 				null,
 				null,
 				null,
+				<?php if ($multiple_bottle_ids) { ?>{ "asSorting": [  ] },<?php } ?>
 				<?php } ?>
 				<?php if ($show_scores) { ?>
 				null,
@@ -403,7 +451,10 @@ if (($totalRows_log > 0) && ($entry_window_open >= 1)) {
 				]
 			} );
 		} );
+
+
 </script>
+<form name="form1" method="post" action="<?php echo $base_url; ?>output/bottle_label.output.php" target="_blank">
 <table class="table table-responsive table-striped table-bordered dataTable" id="sortable">
 <thead>
  <tr>
@@ -416,7 +467,7 @@ if (($totalRows_log > 0) && ($entry_window_open >= 1)) {
     <?php if (!$show_scores) { ?>
   	<th class="hidden-xs hidden-md"><?php echo $label_confirmed; ?></th>
   	<th class="hidden-xs"><?php echo $label_paid; ?></th>
-    <th class="hidden-xs" nowrap><?php echo $label_received; ?> <a tabindex="0" role="button" title="<?php echo $label_received." ".$label_entries." ".$label_info; ?>" data-placement="auto right" data-toggle="popover" data-trigger="hover focus" data-content="<?php echo $brewer_entries_text_017; ?>" data-container="body"><span class="fa fa-question-circle"></span></a></th>
+    <th class="hidden-xs" nowrap><?php echo $label_received; ?> <a tabindex="0" role="button" title="<?php echo $label_received." ".$label_entries." ".$label_info; ?>" data-placement="auto top" data-toggle="popover" data-trigger="hover focus" data-content="<?php echo $brewer_entries_text_017; ?>" data-container="body"><span class="fa fa-question-circle"></span></a></th>
     <th class="hidden-xs hidden-sm"><?php echo $label_updated; ?></th>
     <?php } ?>
   	<?php if ($show_scores) { ?>
@@ -424,6 +475,11 @@ if (($totalRows_log > 0) && ($entry_window_open >= 1)) {
     <th class="hidden-xs" nowrap><?php echo $label_mini_bos; ?></th>
   	<th><?php echo $label_winner; ?></th>
   	<?php } ?>
+  	<?php if ((!$show_scores) && ($multiple_bottle_ids)) { ?>
+    <th class="hidden-print" nowrap>
+    <input type="checkbox" id="select_all"> <a style="cursor: pointer;" data-toggle="popover" data-container="body" data-trigger="hover focus" data-placement="auto" title="Print Bottle Labels" data-content="Check the entries to print their bottle labels. Select the top checkbox to check or uncheck all the boxes in the column."><span class="fa fa-question-circle"></span></a>
+    </th>
+	<?php } ?>
     <th class="hidden-print"><?php echo $label_actions; ?></th>
  </tr>
 </thead>
@@ -431,6 +487,10 @@ if (($totalRows_log > 0) && ($entry_window_open >= 1)) {
 <?php echo $entry_output; ?>
 </tbody>
 </table>
+<?php if ((!$show_scores) && ($multiple_bottle_ids)) { ?>
+<input type="submit" id="btn" class="btn btn-primary pull-right" value="Print Bottle Labels" disabled data-toggle="popover" data-container="body" data-trigger="hover focus" data-placement="auto right" title="Print All Bottle Labels for Checked Entries" data-content="The bottle labels will open in a new tab or window.">
+<?php } ?>
+</form>
 <?php }
 if ($entry_window_open == 0) echo sprintf("<p>%s %s.</p>",$brewer_entries_text_013,$entry_open);
 ?>

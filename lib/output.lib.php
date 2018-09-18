@@ -277,7 +277,11 @@ function validate_bjcp_id($input) {
 // Get possible organizer points
 
 function total_points($total_entries,$method) {
+
+	// Get the maximum allowable points for all roles
+	// According to the Maximum Points Earned (Table 1) table - https://www.bjcp.org/rules.php
 	switch ($method) {
+
 		case "Organizer":
 			if (($total_entries >= 1) && ($total_entries <= 49)) $points = 2;
 			elseif (($total_entries >= 50) && ($total_entries <= 99)) $points = 2.5;
@@ -322,11 +326,14 @@ function total_points($total_entries,$method) {
 			else $points = 0;
 		break;
 	}
+
 	return number_format($points,1);
+
 }
 
+/*
 // calculate a Judge's points
-function judge_points($uid,$bos) {
+function judge_points($uid,$judge_max_points,$days,$sessions) {
 	include (CONFIG.'config.php');
 	mysqli_select_db($connection,$database);
 	require(INCLUDES.'url_variables.inc.php');
@@ -336,26 +343,33 @@ function judge_points($uid,$bos) {
 	// Judges earn a 0.5 points per *session*
 	// These calculations assume that sessions can consist of one or more flights and one or more rounds
 	// According to the BJCP, a session is "An uninterrupted time period when at least one panel of judges sits to judge one or more flights of entries. Typically, "morning", "afternoon" and "evening" are considered sessions at most competitions."
-	// *minimum* of 1.0 points per competition
-	// *maximum* of 1.5 points per day
+	// *minimum* of 1.0 points per *competition*
+	// *maximum* of 1.5 points per *day*
 
-	$days = number_format(total_days(),1);
-	$sessions = number_format(total_sessions(),1);
 
 	do { $a[] = $row_judging['id']; } while ($row_judging = mysqli_fetch_assoc($judging));
 
 	foreach (array_unique($a) as $location) {
-		$query_assignments = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE bid='%s' AND assignLocation='%s' AND assignment='J'", $prefix."judging_assignments", $uid, $location);
-		$assignments = mysqli_query($connection,$query_assignments) or die (mysqli_error($connection));
-		$row_assignments = mysqli_fetch_assoc($assignments);
-		// 0.5 points per session
-		$b[] = ($row_assignments['count'] * 0.5);
-	}
+
+        $query_assignments = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE bid='%s' AND assignLocation='%s' AND assignment='J'", $prefix."judging_assignments", $uid, $location);
+        $assignments = mysqli_query($connection,$query_assignments) or die (mysqli_error($connection));
+        $row_assignments = mysqli_fetch_assoc($assignments);
+
+        // 0.5 points per session
+        $number = $row_assignments['count'] * 0.5;
+        if ($number > 0.5) $b[] = 0.5;
+        else $b[] = $number;
+
+    }
 
 	$points = array_sum($b);
+
+	// Minimum of 0.5 points per session
+	// "Judges earn points at a rate of 0.5 Judge Points per session."
 	$max_comp_points = ($sessions * 0.5);
 
 	// Cannot exceed more than 1.5 points per *day*
+	// "Judges earn a maximum of 1.5 Judge Points per day."
 	if ($points > ($days * 1.5)) $points = ($days * 1.5);
 	else $points = $points;
 
@@ -363,13 +377,19 @@ function judge_points($uid,$bos) {
 	if ($points > $max_comp_points) $points = $max_comp_points;
 	else $points = $points;
 
-	// If points are below the minimum, award minimum
-	if ($points < 1) $points = 1.0;
+	// Cannot exceed the maximum allowable points for judges for the competition
+	if ($points > $judge_max_points) $points = $judge_max_points;
+	else $points = $points;
+
+	// If points are below the 1.0 minimum, award minimum
+	if ($points < 1) $points = 1;
 	else $points = $points;
 
 	return number_format($points,1);
 
 }
+
+*/
 
 // calculate a Steward's points
 function steward_points($uid) {

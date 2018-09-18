@@ -2,13 +2,13 @@
 // Get maximum point values based upon number of entries
 $organ_max_points = number_format(total_points($total_entries,"Organizer"), 1);
 $staff_max_points = number_format(total_points($total_entries,"Staff"), 1);
-$judge_points = number_format(total_points($total_entries,"Judge"), 1);
+$judge_max_points = number_format(total_points($total_entries,"Judge"), 1);
 
 // Divide total staff point pool by amount of staff, round down
 $query_assignments = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE staff_staff='1'",$staff_db_table);
 $assignments = mysqli_query($connection,$query_assignments) or die (mysqli_error($connection));
 $row_assignments = mysqli_fetch_assoc($assignments);
-if ($row_assignments['count'] >= 2) 
+if ($row_assignments['count'] >= 2)
 $staff_points = number_format(round(($staff_max_points/$row_assignments['count']) / 0.5) * 0.5, 1);
 elseif ($row_assignments['count'] == 1) $staff_points = number_format($staff_max_points,1);
 else $staff_points = 0;
@@ -47,28 +47,28 @@ $totalRows_bos_judges_no_assignment = mysqli_num_rows($bos_judges_no_assignment)
 
 $bos_judge_no_assignment[] = "";
 
-if ($totalRows_bos_judges > 0) { 
+if ($totalRows_bos_judges > 0) {
 
 	do {
-		
+
 		$query_bos_judge_assign = sprintf("SELECT COUNT(*) AS 'count' FROM %s WHERE bid='%s'",$judging_assignments_db_table, $row_bos_judges['uid']);
 		$bos_judge_assign = mysqli_query($connection,$query_bos_judge_assign) or die (mysqli_error($connection));
 		$row_bos_judge_assign = mysqli_fetch_assoc($bos_judge_assign);
-		
+
 		if ($row_bos_judge_assign['count'] == 0) $bos_judge_no_assignment[] = $row_bos_judges['uid'];
-	
+
 	} while ($row_bos_judges = mysqli_fetch_assoc($bos_judges));
 
 }
 
 if ($totalRows_bos_judges_no_assignment > 0) {
-	
+
 	do {
-		
-		$bos_judge_no_assignment[] = $row_bos_judges_no_assignment['uid']; 
-		
+
+		$bos_judge_no_assignment[] = $row_bos_judges_no_assignment['uid'];
+
 	} while ($row_bos_judges_no_assignment = mysqli_fetch_assoc($bos_judges_no_assignment));
-	
+
 }
 
 

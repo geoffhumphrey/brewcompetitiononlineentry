@@ -49,16 +49,15 @@
         </div>
     </div>
 </div><!-- ./modal -->
-<!-- Future Release
+
 <div class="form-group">
     <label for="jPrefsBottleNum" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Number of Bottles Required per Entry</label>
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
-            <input class="form-control" id="jPrefsBottleNum" name="jPrefsBottleNum" type="text" value="<?php // if ($section == "step8") echo "2"; else echo $_SESSION['jPrefsBottleNum']; ?>" placeholder="" required>
-
+            <input class="form-control" id="jPrefsBottleNum" name="jPrefsBottleNum" type="text" value="<?php if ($section == "step8") echo "2"; else echo $_SESSION['jPrefsBottleNum']; ?>" placeholder="" required>
         <span id="helpBlock" class="help-block"><p>Most competitions require between two and four bottles.</span>
     </div>
 </div>
--->
+
 <div class="form-group"><!-- Form Group NOT REQUIRED Text Input -->
     <label for="jPrefsCapJudges" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Judge Limit</label>
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
