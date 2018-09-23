@@ -10,12 +10,12 @@
     <link rel="stylesheet" type="text/css" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
     <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
     <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-    
+
     <!--[if lt IE 9]>
       <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
       <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
-    
+
     <!-- Load Font Awesome -->
     <!-- Homepage URL: https://fortawesome.github.io/Font-Awesome -->
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
@@ -29,9 +29,9 @@
 [onshow;block=div;when [var.action]!='print']
 <table>
   <tr>
-    <td><h4 class="text-danger">If any items are missing, close this window and edit the entry.</h4></td>
-    <td width="5%" nowrap="nowrap"><h3><span class="fa fa-eye"></span> <a href="#labels">View Bottle Labels</a></h3></td>
-    <td width="5%" nowrap="nowrap"><h3>&nbsp;&nbsp;&nbsp;<span class="fa fa-print"></span> <a href="entry.output.php?action=print&amp;id=[onshow.id]&amp;bid=[onshow.bid]">Print</a></h3></td>
+    <td><h4 class="text-danger">[onshow.bottle_labels_005]</h4></td>
+    <td width="5%" nowrap="nowrap"><h3><span class="fa fa-eye"></span> <a href="#labels">[onshow.label_view] [onshow.brewer_entries_text_009]</a></h3></td>
+    <td width="5%" nowrap="nowrap"><h3>&nbsp;&nbsp;&nbsp;<span class="fa fa-print"></span> <a href="entry.output.php?action=print&amp;id=[onshow.id]&amp;bid=[onshow.bid]">[onshow.label_print]</a></h3></td>
   </tr>
 </table>
 </div> <!-- end non-print header-->
@@ -41,23 +41,23 @@
     <td width="50%">
     <h2>Brewer</h2>
     <ul>
-     <li>Name(s): [onshow.brewer_info.brewerFirstName] [onshow.brewer_info.brewerLastName]&nbsp;&nbsp;&nbsp;[onshow.brewing_info.brewCoBrewer]</li>
-     <li>Address: [onshow.brewer_info.brewerAddress], [onshow.brewer_info.brewerCity], 
+     <li>[onshow.label_name]: [onshow.brewer_info.brewerFirstName] [onshow.brewer_info.brewerLastName]&nbsp;&nbsp;&nbsp;[onshow.brewing_info.brewCoBrewer]</li>
+     <li>[onshow.label_address]: [onshow.brewer_info.brewerAddress], [onshow.brewer_info.brewerCity],
           [onshow.brewer_info.brewerState] [onshow.brewer_info.brewerZip],
          </li>
-      <li>Phone: [onshow.brewer_info.brewerPhone1]</li>
+      <li>[onshow.label_phone]: [onshow.brewer_info.brewerPhone1]</li>
       <div>
       [onshow;block=div;when [var.brewer_info.brewerClubs]!='']
-       <li>Club: [onshow.brewer_info.brewerClubs]</li>
+       <li>[onshow.label_club] [onshow.brewer_info.brewerClubs]</li>
        </div>
     </ul>
     </td>
     <td>
-    <h2>Style Entered</h2>
+    <h2>[onshow.label_style]</h2>
     <ul>
-      <li>Style number: [onshow.brewing_info.brewCategory] [onshow.brewing_info.brewSubCategory]</li>
-      <li>Style name: [onshow.brewing_info.styleName]</li>
-      
+      <li>[onshow.label_style] [onshow.label_number] [onshow.brewing_info.brewCategory] [onshow.brewing_info.brewSubCategory]</li>
+      <li>[onshow.label_style] [onshow.label_name] [onshow.brewing_info.styleName]</li>
+
       <!-- Better formatting and/or conditional display would greatly improve layout here -->
       <div>
       [onshow;block=div;when [var.brewing_info.brewInfo]!='']
@@ -65,20 +65,20 @@
       </div>
       <div>
       [onshow;block=div;when [var.brewing_info.sweetness]!='']
-      <li>Mead/cider info: [onshow.brewing_info.sweetness] [onshow.brewing_info.meadType]</li>
+      <li>[onshow.label_mead_cider_info]: [onshow.brewing_info.sweetness] [onshow.brewing_info.meadType]</li>
       </div>
     </ul>
 </td>
   </tr>
 </table>
 <div>
-<h2>Recipe</h2>
+<h2>[onshow.label_recipe]</h2>
 [onshow;block=div;when [var.totalFermentables]!='0']
-<h4>Grains and Fermentables</h4>
+<h4>[onshow.label_fermentables]</h4>
 <table>
   <tr>
-    <th>Amount</th>
-    <th>Type</th>
+    <th>[onshow.label_amount]</th>
+    <th>[onshow.label_type]</th>
   </tr>
   <tr>
     <td>[grains.weight.lb;block=tr] lb</td>
@@ -96,14 +96,14 @@
 </div>
 <div>
 [onshow;block=div;when [var.totalHops]!='0']
-<h4>Hops</h4>
+<h4>[onshow.label_hops]</h4>
 <table>
   <tr>
-    <th>Amount (oz)</th>
-    <th>Type</th>
+    <th>[onshow.label_amount] (oz)</th>
+    <th>[onshow.label_type]</th>
     <th>%&#945;</th>
-    <th>Usage</th>
-    <th>Minutes</th>
+    <th>[onshow.label_use]</th>
+    <th>[onshow.label_minutes]</th>
   </tr>
   <tr>
     <td>[hops.weight.oz;block=tr]</td>
@@ -116,7 +116,7 @@
 </div>
 <div>
 [onshow;block=div;when [var.brewing_info.brewYeast]!='']
-<h4>Yeast</h4>
+<h4>[onshow.label_yeast]</h4>
 <p>[onshow.brewing_info.brewYeast] from [onshow.brewing_info.brewYeastMan]</p>
 </div>
 <div>
@@ -128,17 +128,18 @@
 </ul>
 <div>
 [onshow;block=div;when [var.brewing_info.brewPrimaryTemp]>0]
-<p>Fermented at [onshow.brewing_info.brewPrimaryTemp.f]&deg;F for [onshow.brewing_info.brewPrimary]
-days and [onshow.brewing_info.brewSecondaryTemp.f]&deg;F for [onshow.brewing_info.brewSecondary]
-days.</p>
+<p>
+[onshow.brewing_info.brewPrimaryTemp.c]&deg;F - [onshow.brewing_info.brewPrimary] [onshow.label_days]<br>
+[onshow.brewing_info.brewSecondaryTemp.c]&deg;F - [onshow.brewing_info.brewSecondary] [onshow.label_days]
+</p>
 </div>
 </div>
 <div>
 [onshow;block=div;when [var.totalMash]!='0']
 <table>
   <tr>
-    <th width="40%">Mash temperature</th>
-    <th>Minutes</th>
+    <th width="40%">[onshow.label_mash] [onshow.label_temperature]</th>
+    <th>[onshow.label_minutes]</th>
   </tr>
   <tr>
     <td>[mashSteps.temp.f;block=tr]&deg;F</td>
@@ -148,132 +149,136 @@ days.</p>
 </div>
 <div style="page-break-after:always;"></div>
 <a name="labels" id="labels"></a>
-<h1>Bottle Labels</h1>
+<div class="container-fluid">
+  [onshow;block=div;when [var.action]='print']
+  <p class="text-center">[onshow.bottle_labels_004]</p>
+</div>
+<h1>[onshow.brewer_entries_text_009]</h1>
 <table align="center" class="bottleLabel">
   <tr>
     <td align="center">
     <table class="bdr1_thick bottle bottleLabel-inner">
       <tr>
-        <td colspan="4"><div align="center" class="headerTitleSm">ATTACH ONE FORM TO EACH BOTTLE w/ RUBBER BAND ONLY</div></td>
+        <td colspan="4"><div align="center" class="headerTitleSm">[onshow.bottle_labels_001]</div></td>
       </tr>
       <tr>
-        <td nowrap="nowrap">Competition:</td>
+        <td nowrap="nowrap">[onshow.label_comp]:</td>
         <td colspan="3" class="bdr1B">[onshow.contest_info.contestName]</td>
       </tr>
       <tr>
-        <td nowrap="nowrap">Entry #:</td>
+        <td nowrap="nowrap">[onshow.label_entry_number]:</td>
         <td colspan="3" class="bdr1B">[onshow.brewing_id]&nbsp;&nbsp;&nbsp;<strong>[onshow.brewing_paid]</strong> </td>
       </tr>
       <tr>
-        <td width="5%" nowrap="nowrap">Name:</td>
+        <td width="5%" nowrap="nowrap">[onshow.label_name]:</td>
         <td colspan="3" class="bdr1B">[onshow.brewer_info.brewerFirstName] [onshow.brewer_info.brewerLastName]&nbsp;&nbsp;&nbsp;[onshow.brewing_info.brewCoBrewer]</td>
       </tr>
       <tr>
-        <td width="5%" nowrap="nowrap">Street Address:</td>
+        <td width="5%" nowrap="nowrap">[onshow.label_address]:</td>
         <td colspan="3" class="bdr1B">[onshow.brewer_info.brewerAddress]</td>
       </tr>
       <tr>
-        <td width="5%" nowrap="nowrap">City:</td>
+        <td width="5%" nowrap="nowrap">[onshow.label_city]:</td>
         <td colspan="3" class="bdr1B">[onshow.brewer_info.brewerCity]</td>
       </tr>
       <tr>
-        <td width="5%" nowrap="nowrap">State:</td>
+        <td width="5%" nowrap="nowrap">[onshow.label_state_province]:</td>
         <td class="bdr1B">[onshow.brewer_info.brewerState]</td>
-        <td width="5%">Zip</td>
+        <td width="5%" nowrap="nowrap">[onshow.label_zip]:</td>
         <td width="50%" class="bdr1B">[onshow.brewer_info.brewerZip]</td>
       </tr>
       <tr>
-        <td width="5%" nowrap="nowrap">Phone Number:</td>
+        <td width="5%" nowrap="nowrap">[onshow.label_phone]:</td>
         <td colspan="3" class="bdr1B">[onshow.brewer_info.brewerPhone1]</td>
       </tr>
       <tr>
-        <td width="5%" nowrap="nowrap">Email Address:</td>
+        <td width="5%" nowrap="nowrap">[onshow.label_email]:</td>
         <td colspan="3" class="bdr1B">[onshow.brewer_info.brewerEmail]</td>
       </tr>
       <tr>
-        <td width="5%" nowrap="nowrap">Entry Name:</td>
+        <td width="5%" nowrap="nowrap">[onshow.label_entry_name]:</td>
         <td colspan="3" class="bdr1B">[onshow.brewing_info.brewName]</td>
       </tr>
       <tr>
-        <td width="5%" nowrap="nowrap">Category Entered:</td>
+        <td width="5%" nowrap="nowrap">[onshow.label_category]:</td>
         <td colspan="3" class="bdr1B">[onshow.brewing_info.brewCategory]</td>
       </tr>
       <tr>
-        <td width="5%" nowrap="nowrap">Subcategory Entered:</td>
+        <td width="5%" nowrap="nowrap">[onshow.label_subcategory]:</td>
         <td colspan="3" class="bdr1B">[onshow.brewing_info.brewSubCategory]</td>
       </tr>
       <tr>
-        <td nowrap="nowrap">Homebrew Club:</td>
+        <td nowrap="nowrap">[onshow.label_club]:</td>
         <td colspan="3" class="bdr1B">[onshow.brewer_info.brewerClubs]</td>
       </tr>
       <tr>
         <td colspan="4" nowrap="nowrap"><div align="center" style="margin-top: 10px;"><img src="[onshow.barcode_link]">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="[onshow.qrcode_link]"></div></td>
       </tr>
 	  <tr>
-       	<td colspan="4"><div align="center" class="box">Space Reserved for Competition Staff Use</div></td>
+       	<td colspan="4"><div align="center" class="box">[onshow.bottle_labels_006]:</div></td>
       </tr>
     </table>
     </td>
     <td align="center">
     <table class="bdr1_thick bottle bottleLabel-inner">
       <tr>
-        <td colspan="4"><div align="center" class="headerTitleSm">ATTACH ONE FORM TO EACH BOTTLE w/ RUBBER BAND ONLY</div></td>
+        <td colspan="4"><div align="center" class="headerTitleSm">[onshow.bottle_labels_001]</div></td>
       </tr>
       <tr>
-        <td nowrap="nowrap">Competition:</td>
+        <td nowrap="nowrap">[onshow.label_comp]:</td>
         <td colspan="3" class="bdr1B">[onshow.contest_info.contestName]</td>
       </tr>
       <tr>
-        <td nowrap="nowrap">Entry #:</td>
+        <td nowrap="nowrap">[onshow.label_entry_number]:</td>
         <td colspan="3" class="bdr1B">[onshow.brewing_id]&nbsp;&nbsp;&nbsp;<strong>[onshow.brewing_paid]</strong> </td>
       </tr>
       <tr>
-        <td width="5%" nowrap="nowrap">Name:</td>
+        <td width="5%" nowrap="nowrap">[onshow.label_name]:</td>
         <td colspan="3" class="bdr1B">[onshow.brewer_info.brewerFirstName] [onshow.brewer_info.brewerLastName]&nbsp;&nbsp;&nbsp;[onshow.brewing_info.brewCoBrewer]</td>
       </tr>
       <tr>
-        <td width="5%" nowrap="nowrap">Street Address:</td>
+        <td width="5%" nowrap="nowrap">[onshow.label_address]:</td>
         <td colspan="3" class="bdr1B">[onshow.brewer_info.brewerAddress]</td>
       </tr>
       <tr>
-        <td width="5%" nowrap="nowrap">City:</td>
+        <td width="5%" nowrap="nowrap">[onshow.label_city]:</td>
         <td colspan="3" class="bdr1B">[onshow.brewer_info.brewerCity]</td>
       </tr>
       <tr>
-        <td width="5%" nowrap="nowrap">State:</td>
+        <td width="5%" nowrap="nowrap">[onshow.label_state_province]:</td>
         <td class="bdr1B">[onshow.brewer_info.brewerState]</td>
-        <td width="5%">Zip</td>
+        <td width="5%" nowrap="nowrap">[onshow.label_zip]:</td>
         <td width="50%" class="bdr1B">[onshow.brewer_info.brewerZip]</td>
       </tr>
       <tr>
-        <td width="5%" nowrap="nowrap">Phone Number:</td>
+        <td width="5%" nowrap="nowrap">[onshow.label_phone]:</td>
         <td colspan="3" class="bdr1B">[onshow.brewer_info.brewerPhone1]</td>
       </tr>
       <tr>
-        <td width="5%" nowrap="nowrap">Email Address:</td>
+        <td width="5%" nowrap="nowrap">[onshow.label_email]:</td>
         <td colspan="3" class="bdr1B">[onshow.brewer_info.brewerEmail]</td>
       </tr>
       <tr>
-        <td width="5%" nowrap="nowrap">Entry Name:</td>
+        <td width="5%" nowrap="nowrap">[onshow.label_entry_name]:</td>
         <td colspan="3" class="bdr1B">[onshow.brewing_info.brewName]</td>
       </tr>
       <tr>
-        <td width="5%" nowrap="nowrap">Category Entered:</td>
+        <td width="5%" nowrap="nowrap">[onshow.label_category]:</td>
         <td colspan="3" class="bdr1B">[onshow.brewing_info.brewCategory]</td>
       </tr>
       <tr>
-        <td width="5%" nowrap="nowrap">Subcategory Entered:</td>
+        <td width="5%" nowrap="nowrap">[onshow.label_subcategory]:</td>
         <td colspan="3" class="bdr1B">[onshow.brewing_info.brewSubCategory]</td>
       </tr>
       <tr>
-        <td nowrap="nowrap">Homebrew Club:</td>
+        <td nowrap="nowrap">[onshow.label_club]:</td>
         <td colspan="3" class="bdr1B">[onshow.brewer_info.brewerClubs]</td>
       </tr>
       <tr>
         <td colspan="4" nowrap="nowrap"><div align="center" style="margin-top: 10px;"><img src="[onshow.barcode_link]">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="[onshow.qrcode_link]"></div></td>
       </tr>
 	  <tr>
-       	<td colspan="4"><div align="center" class="box">Space Reserved for Competition Staff Use</div></td>
+       	<td colspan="4"><div align="center" class="box">[onshow.bottle_labels_006]:</div></td>
       </tr>
     </table>
     </td>
@@ -282,126 +287,126 @@ days.</p>
     <td align="center">
     <table class="bdr1_thick bottle bottleLabel-inner">
       <tr>
-        <td colspan="4"><div align="center" class="headerTitleSm">ATTACH ONE FORM TO EACH BOTTLE w/ RUBBER BAND ONLY</div></td>
+        <td colspan="4"><div align="center" class="headerTitleSm">[onshow.bottle_labels_001]</div></td>
       </tr>
       <tr>
-        <td nowrap="nowrap">Competition:</td>
+        <td nowrap="nowrap">[onshow.label_comp]:</td>
         <td colspan="3" class="bdr1B">[onshow.contest_info.contestName]</td>
       </tr>
       <tr>
-        <td nowrap="nowrap">Entry #:</td>
+        <td nowrap="nowrap">[onshow.label_entry_number]:</td>
         <td colspan="3" class="bdr1B">[onshow.brewing_id]&nbsp;&nbsp;&nbsp;<strong>[onshow.brewing_paid]</strong> </td>
       </tr>
       <tr>
-        <td width="5%" nowrap="nowrap">Name:</td>
+        <td width="5%" nowrap="nowrap">[onshow.label_name]:</td>
         <td colspan="3" class="bdr1B">[onshow.brewer_info.brewerFirstName] [onshow.brewer_info.brewerLastName]&nbsp;&nbsp;&nbsp;[onshow.brewing_info.brewCoBrewer]</td>
       </tr>
       <tr>
-        <td width="5%" nowrap="nowrap">Street Address:</td>
+        <td width="5%" nowrap="nowrap">[onshow.label_address]:</td>
         <td colspan="3" class="bdr1B">[onshow.brewer_info.brewerAddress]</td>
       </tr>
       <tr>
-        <td width="5%" nowrap="nowrap">City:</td>
+        <td width="5%" nowrap="nowrap">[onshow.label_city]:</td>
         <td colspan="3" class="bdr1B">[onshow.brewer_info.brewerCity]</td>
       </tr>
       <tr>
-        <td width="5%" nowrap="nowrap">State:</td>
+        <td width="5%" nowrap="nowrap">[onshow.label_state_province]:</td>
         <td class="bdr1B">[onshow.brewer_info.brewerState]</td>
-        <td width="5%">Zip</td>
+        <td width="5%" nowrap="nowrap">[onshow.label_zip]:</td>
         <td width="50%" class="bdr1B">[onshow.brewer_info.brewerZip]</td>
       </tr>
       <tr>
-        <td width="5%" nowrap="nowrap">Phone Number:</td>
+        <td width="5%" nowrap="nowrap">[onshow.label_phone]:</td>
         <td colspan="3" class="bdr1B">[onshow.brewer_info.brewerPhone1]</td>
       </tr>
       <tr>
-        <td width="5%" nowrap="nowrap">Email Address:</td>
+        <td width="5%" nowrap="nowrap">[onshow.label_email]:</td>
         <td colspan="3" class="bdr1B">[onshow.brewer_info.brewerEmail]</td>
       </tr>
       <tr>
-        <td width="5%" nowrap="nowrap">Entry Name:</td>
+        <td width="5%" nowrap="nowrap">[onshow.label_entry_name]:</td>
         <td colspan="3" class="bdr1B">[onshow.brewing_info.brewName]</td>
       </tr>
       <tr>
-        <td width="5%" nowrap="nowrap">Category Entered:</td>
+        <td width="5%" nowrap="nowrap">[onshow.label_category]:</td>
         <td colspan="3" class="bdr1B">[onshow.brewing_info.brewCategory]</td>
       </tr>
       <tr>
-        <td width="5%" nowrap="nowrap">Subcategory Entered:</td>
+        <td width="5%" nowrap="nowrap">[onshow.label_subcategory]:</td>
         <td colspan="3" class="bdr1B">[onshow.brewing_info.brewSubCategory]</td>
       </tr>
       <tr>
-        <td nowrap="nowrap">Homebrew Club:</td>
+        <td nowrap="nowrap">[onshow.label_club]:</td>
         <td colspan="3" class="bdr1B">[onshow.brewer_info.brewerClubs]</td>
       </tr>
       <tr>
         <td colspan="4" nowrap="nowrap"><div align="center" style="margin-top: 10px;"><img src="[onshow.barcode_link]">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="[onshow.qrcode_link]"></div></td>
       </tr>
 	  <tr>
-       	<td colspan="4"><div align="center" class="box">Space Reserved for Competition Staff Use</div></td>
+       	<td colspan="4"><div align="center" class="box">[onshow.bottle_labels_006]:</div></td>
       </tr>
     </table>
     </td>
     <td align="center">
       <table class="bdr1_thick bottle bottleLabel-inner">
       <tr>
-        <td colspan="4"><div align="center" class="headerTitleSm">ATTACH ONE FORM TO EACH BOTTLE w/ RUBBER BAND ONLY</div></td>
+        <td colspan="4"><div align="center" class="headerTitleSm">[onshow.bottle_labels_001]</div></td>
       </tr>
       <tr>
-        <td nowrap="nowrap">Competition:</td>
+        <td nowrap="nowrap">[onshow.label_comp]:</td>
         <td colspan="3" class="bdr1B">[onshow.contest_info.contestName]</td>
       </tr>
       <tr>
-        <td nowrap="nowrap">Entry #:</td>
+        <td nowrap="nowrap">[onshow.label_entry_number]:</td>
         <td colspan="3" class="bdr1B">[onshow.brewing_id]&nbsp;&nbsp;&nbsp;<strong>[onshow.brewing_paid]</strong> </td>
       </tr>
       <tr>
-        <td width="5%" nowrap="nowrap">Name:</td>
+        <td width="5%" nowrap="nowrap">[onshow.label_name]:</td>
         <td colspan="3" class="bdr1B">[onshow.brewer_info.brewerFirstName] [onshow.brewer_info.brewerLastName]&nbsp;&nbsp;&nbsp;[onshow.brewing_info.brewCoBrewer]</td>
       </tr>
       <tr>
-        <td width="5%" nowrap="nowrap">Street Address:</td>
+        <td width="5%" nowrap="nowrap">[onshow.label_address]:</td>
         <td colspan="3" class="bdr1B">[onshow.brewer_info.brewerAddress]</td>
       </tr>
       <tr>
-        <td width="5%" nowrap="nowrap">City:</td>
+        <td width="5%" nowrap="nowrap">[onshow.label_city]:</td>
         <td colspan="3" class="bdr1B">[onshow.brewer_info.brewerCity]</td>
       </tr>
       <tr>
-        <td width="5%" nowrap="nowrap">State:</td>
+        <td width="5%" nowrap="nowrap">[onshow.label_state_province]:</td>
         <td class="bdr1B">[onshow.brewer_info.brewerState]</td>
-        <td width="5%">Zip</td>
+        <td width="5%" nowrap="nowrap">[onshow.label_zip]:</td>
         <td width="50%" class="bdr1B">[onshow.brewer_info.brewerZip]</td>
       </tr>
       <tr>
-        <td width="5%" nowrap="nowrap">Phone Number:</td>
+        <td width="5%" nowrap="nowrap">[onshow.label_phone]:</td>
         <td colspan="3" class="bdr1B">[onshow.brewer_info.brewerPhone1]</td>
       </tr>
       <tr>
-        <td width="5%" nowrap="nowrap">Email Address:</td>
+        <td width="5%" nowrap="nowrap">[onshow.label_email]:</td>
         <td colspan="3" class="bdr1B">[onshow.brewer_info.brewerEmail]</td>
       </tr>
       <tr>
-        <td width="5%" nowrap="nowrap">Entry Name:</td>
+        <td width="5%" nowrap="nowrap">[onshow.label_entry_name]:</td>
         <td colspan="3" class="bdr1B">[onshow.brewing_info.brewName]</td>
       </tr>
       <tr>
-        <td width="5%" nowrap="nowrap">Category Entered:</td>
+        <td width="5%" nowrap="nowrap">[onshow.label_category]:</td>
         <td colspan="3" class="bdr1B">[onshow.brewing_info.brewCategory]</td>
       </tr>
       <tr>
-        <td width="5%" nowrap="nowrap">Subcategory Entered:</td>
+        <td width="5%" nowrap="nowrap">[onshow.label_subcategory]:</td>
         <td colspan="3" class="bdr1B">[onshow.brewing_info.brewSubCategory]</td>
       </tr>
       <tr>
-        <td nowrap="nowrap">Homebrew Club:</td>
+        <td nowrap="nowrap">[onshow.label_club]:</td>
         <td colspan="3" class="bdr1B">[onshow.brewer_info.brewerClubs]</td>
       </tr>
       <tr>
         <td colspan="4" nowrap="nowrap"><div align="center" style="margin-top: 10px;"><img src="[onshow.barcode_link]">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="[onshow.qrcode_link]"></div></td>
       </tr>
 	  <tr>
-       	<td colspan="4"><div align="center" class="box">Space Reserved for Competition Staff Use</div></td>
+       	<td colspan="4"><div align="center" class="box">[onshow.bottle_labels_006]:</div></td>
       </tr>
     </table>
     </td>
@@ -411,7 +416,7 @@ days.</p>
 [onshow_c;block=div;when [var.action]!='print']
 <table>
   <tr>
-  	<td width="5%" align="right" nowrap="nowrap"><h3><span class="fa fa-print"></span> <a href="entry.output.php?action=print&amp;id=[onshow.id]&amp;bid=[onshow.bid]">Print</a></h3></td>
+  	<td width="5%" align="right" nowrap="nowrap"><h3><span class="fa fa-print"></span> <a href="entry.output.php?action=print&amp;id=[onshow.id]&amp;bid=[onshow.bid]">[onshow.label_print]</a></h3></td>
   </tr>
 </table>
 </div> <!-- end non-print header -->
@@ -423,7 +428,7 @@ function selfPrint(){
     self.print();
 }
 setTimeout('selfPrint()',2000);
-html.push(''); 
+html.push('');
 </script>
 </div>
 </div>

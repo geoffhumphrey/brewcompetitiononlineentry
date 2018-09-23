@@ -10,40 +10,40 @@
     <link rel="stylesheet" type="text/css" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
     <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
     <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-    
+
     <!--[if lt IE 9]>
       <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
       <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
-    
+
     <!-- Load Font Awesome -->
     <!-- Homepage URL: https://fortawesome.github.io/Font-Awesome -->
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="../css/templates.min.css">
 	<style>
 		@import url(https://fonts.googleapis.com/css?family=Raleway:800|Open+Sans:400);
-		body  { 
-			font-size: 12px; 
+		body  {
+			font-size: 12px;
 			font-family: 'Open Sans', Arial;
 			font-weight: 400;
 		}
-		
+
 		h1 {
-			font-size: 18px; 
+			font-size: 18px;
 			font-family: 'Raleway', Arial;
 			font-weight: 800;
 			margin: 0 0 5px 0;
 			padding: 0;
 		}
-		
-		.text-label { 
+
+		.text-label {
 			font-weight: bold;
 		}
-		
+
 		.box {
 			margin: 12px 0;
 		}
-		
+
 	</style>
 </head>
 <body>
@@ -54,213 +54,212 @@
 [onshow;block=div;when [var.action]!='print']
 <table>
   <tr>
-    <td><h3 class="text-danger">If any items are missing, close this window and edit the entry.</h3></td>
-    <td width="5%" align="right" nowrap="nowrap"><h3><span class="fa fa-print"></span> <a href="entry.output.php?action=print&amp;id=[onshow.id]&amp;bid=[onshow.bid]">Print</a></h3></td>
+    <td><h3 class="text-danger">[onshow.bottle_labels_005]</h3></td>
+    <td width="5%" align="right" nowrap="nowrap"><h3><span class="fa fa-print"></span> <a href="entry.output.php?action=print&amp;id=[onshow.id]&amp;bid=[onshow.bid]">[onshow.label_print]</a></h3></td>
   </tr>
 </table>
 </div> <!-- end non-print header-->
 <a name="labels" id="labels"></a>
+<div class="container-fluid">
+  [onshow;block=div;when [var.action]='print']
+  <p class="text-center">[onshow.bottle_labels_004]</p>
+</div>
 <table align="center" class="bottleLabel">
 	<tr>
     	<td align="center" class="bdr1_thick">
      		<table class="bottle bottleLabel-inner">
       			<tr>
-        			<td colspan="4"><div align="center"><h1>[onshow.contest_info.contestName]</h1>ATTACH TO BOTTLE w/ RUBBER BAND ONLY</div></td>
+        			<td colspan="4"><div align="center"><h1>[onshow.contest_info.contestName]</h1>[onshow.bottle_labels_001]</div></td>
       			</tr>
                 <tr>
        				<td colspan="4"><div align="center"><img src="[onshow.barcode_link]">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="[onshow.qrcode_link]"></div></td>
       			</tr>
       			<tr>
-        			<td nowrap="nowrap"><span class="text-label pull-right">Entry Number:</span></td>
+        			<td nowrap="nowrap"><span class="text-label pull-right">[onshow.label_entry_number]:</span></td>
         			<td colspan="3">[onshow.brewing_id]&nbsp;&nbsp;&nbsp;<strong>[onshow.brewing_paid]</strong></td>
       			</tr>
       			<tr>
-        			<td nowrap="nowrap"><span class="text-label pull-right">Brewer Name:</span></td>
+        			<td nowrap="nowrap"><span class="text-label pull-right">[onshow.label_name]:</span></td>
         			<td colspan="3">[onshow.brewer_info.brewerFirstName] [onshow.brewer_info.brewerLastName]</td>
       			</tr>
       			<tr>
-        			<td nowrap="nowrap"><span class="text-label pull-right">Brewer Phone:</span></td>
+        			<td nowrap="nowrap"><span class="text-label pull-right">[onshow.label_phone]:</span></td>
         			<td colspan="3">[onshow.brewer_info.brewerPhone1]</td>
       			</tr>
       			<tr>
-        			<td nowrap="nowrap"><span class="text-label pull-right">Brewer Email:</span></td>
+        			<td nowrap="nowrap"><span class="text-label pull-right">[onshow.label_email]:</span></td>
         			<td colspan="3">[onshow.brewer_info.brewerEmail]</td>
       			</tr>
       			<tr>
-        			<td nowrap="nowrap"><span class="text-label pull-right">Style:</span></td>
+        			<td nowrap="nowrap"><span class="text-label pull-right">[onshow.label_style]:</span></td>
         			<td colspan="3">[onshow.brewing_info.brewCategory][onshow.brewing_info.brewSubCategory] [onshow.brewing_info.styleName]</td>
       			</tr>
       			<div>
       			[onshow;block=div;when [var.brewing_info.brewInfo]!='']
      			<tr>
-          			<td nowrap="nowrap"><span class="text-label pull-right">Req. Info:</span></td>
+          			<td nowrap="nowrap"><span class="text-label pull-right">[onshow.label_required_info]:</span></td>
           			<td colspan="3">[onshow.brewing_info.brewInfo]</td>
       			</tr>
       			</div>
       			<div>
       			[onshow;block=div;when [var.brewing_info.sparkling]!='']
       			<tr>
-          			<td nowrap="nowrap"><span class="text-label pull-right">Mead/Cider Info:</span></td>
+          			<td nowrap="nowrap"><span class="text-label pull-right">[onshow.label_mead_cider_info]:</span></td>
           			<td colspan="3">[onshow.brewing_info.sparkling], [onshow.brewing_info.sweetness], [onshow.brewing_info.meadType]</td>
       			</tr>
       			</div>
       			<tr>
-       				<td colspan="4"><div align="center" class="box">Space Reserved for Competition Staff Use</div></td>
+       				<td colspan="4"><div align="center" class="box">[onshow.bottle_labels_006]:</div></td>
       			</tr>
     		</table>
     	</td>
     	<td>&nbsp;</td>
    	 	<td align="center" class="bdr1_thick">
-    
     		<table class="bottle bottleLabel-inner">
       			<tr>
-        			<td colspan="4"><div align="center"><h1>[onshow.contest_info.contestName]</h1>ATTACH TO BOTTLE w/ RUBBER BAND ONLY</div></td>
+        			<td colspan="4"><div align="center"><h1>[onshow.contest_info.contestName]</h1>[onshow.bottle_labels_001]</div></td>
       			</tr>
                 <tr>
        				<td colspan="4"><div align="center"><img src="[onshow.barcode_link]">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="[onshow.qrcode_link]"></div></td>
       			</tr>
       			<tr>
-        			<td nowrap="nowrap"><span class="text-label pull-right">Entry Number:</span></td>
+        			<td nowrap="nowrap"><span class="text-label pull-right">[onshow.label_entry_number]:</span></td>
         			<td colspan="3">[onshow.brewing_id]&nbsp;&nbsp;&nbsp;<strong>[onshow.brewing_paid]</strong></td>
       			</tr>
       			<tr>
-        			<td nowrap="nowrap"><span class="text-label pull-right">Brewer Name:</span></td>
+        			<td nowrap="nowrap"><span class="text-label pull-right">[onshow.label_name]:</span></td>
         			<td colspan="3">[onshow.brewer_info.brewerFirstName] [onshow.brewer_info.brewerLastName]</td>
       			</tr>
       			<tr>
-        			<td nowrap="nowrap"><span class="text-label pull-right">Brewer Phone:</span></td>
+        			<td nowrap="nowrap"><span class="text-label pull-right">[onshow.label_phone]:</span></td>
         			<td colspan="3">[onshow.brewer_info.brewerPhone1]</td>
       			</tr>
       			<tr>
-        			<td nowrap="nowrap"><span class="text-label pull-right">Brewer Email:</span></td>
+        			<td nowrap="nowrap"><span class="text-label pull-right">[onshow.label_email]:</span></td>
         			<td colspan="3">[onshow.brewer_info.brewerEmail]</td>
       			</tr>
       			<tr>
-        			<td nowrap="nowrap"><span class="text-label pull-right">Style:</span></td>
+        			<td nowrap="nowrap"><span class="text-label pull-right">[onshow.label_style]:</span></td>
         			<td colspan="3">[onshow.brewing_info.brewCategory][onshow.brewing_info.brewSubCategory] [onshow.brewing_info.styleName]</td>
       			</tr>
       			<div>
       			[onshow;block=div;when [var.brewing_info.brewInfo]!='']
      			<tr>
-          			<td nowrap="nowrap"><span class="text-label pull-right">Req. Info:</span></td>
+          			<td nowrap="nowrap"><span class="text-label pull-right">[onshow.label_required_info]:</span></td>
           			<td colspan="3">[onshow.brewing_info.brewInfo]</td>
       			</tr>
       			</div>
       			<div>
       			[onshow;block=div;when [var.brewing_info.sparkling]!='']
       			<tr>
-          			<td nowrap="nowrap"><span class="text-label pull-right">Mead/Cider Info:</span></td>
+          			<td nowrap="nowrap"><span class="text-label pull-right">[onshow.label_mead_cider_info]:</span></td>
           			<td colspan="3">[onshow.brewing_info.sparkling], [onshow.brewing_info.sweetness], [onshow.brewing_info.meadType]</td>
       			</tr>
       			</div>
       			<tr>
-       				<td colspan="4"><div align="center" class="box">Space Reserved for Competition Staff Use</div></td>
+       				<td colspan="4"><div align="center" class="box">[onshow.bottle_labels_006]:</div></td>
       			</tr>
     		</table>
-    
     	</td>
   	</tr>
 </table>
 <table align="center" class="bottleLabel" style="margin-top: 15px;">
   <tr>
     <td align="center" class="bdr1_thick">
-    
     	<table class="bottle bottleLabel-inner">
       			<tr>
-        			<td colspan="4"><div align="center"><h1>[onshow.contest_info.contestName]</h1>ATTACH TO BOTTLE w/ RUBBER BAND ONLY</div></td>
+        			<td colspan="4"><div align="center"><h1>[onshow.contest_info.contestName]</h1>[onshow.bottle_labels_001]</div></td>
       			</tr>
                 <tr>
        				<td colspan="4"><div align="center"><img src="[onshow.barcode_link]">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="[onshow.qrcode_link]"></div></td>
       			</tr>
       			<tr>
-        			<td nowrap="nowrap"><span class="text-label pull-right">Entry Number:</span></td>
+        			<td nowrap="nowrap"><span class="text-label pull-right">[onshow.label_entry_number]:</span></td>
         			<td colspan="3">[onshow.brewing_id]&nbsp;&nbsp;&nbsp;<strong>[onshow.brewing_paid]</strong></td>
       			</tr>
       			<tr>
-        			<td nowrap="nowrap"><span class="text-label pull-right">Brewer Name:</span></td>
+        			<td nowrap="nowrap"><span class="text-label pull-right">[onshow.label_name]:</span></td>
         			<td colspan="3">[onshow.brewer_info.brewerFirstName] [onshow.brewer_info.brewerLastName]</td>
       			</tr>
       			<tr>
-        			<td nowrap="nowrap"><span class="text-label pull-right">Brewer Phone:</span></td>
+        			<td nowrap="nowrap"><span class="text-label pull-right">[onshow.label_phone]:</span></td>
         			<td colspan="3">[onshow.brewer_info.brewerPhone1]</td>
       			</tr>
       			<tr>
-        			<td nowrap="nowrap"><span class="text-label pull-right">Brewer Email:</span></td>
+        			<td nowrap="nowrap"><span class="text-label pull-right">[onshow.label_email]:</span></td>
         			<td colspan="3">[onshow.brewer_info.brewerEmail]</td>
       			</tr>
       			<tr>
-        			<td nowrap="nowrap"><span class="text-label pull-right">Style:</span></td>
+        			<td nowrap="nowrap"><span class="text-label pull-right">[onshow.label_style]:</span></td>
         			<td colspan="3">[onshow.brewing_info.brewCategory][onshow.brewing_info.brewSubCategory] [onshow.brewing_info.styleName]</td>
       			</tr>
       			<div>
       			[onshow;block=div;when [var.brewing_info.brewInfo]!='']
      			<tr>
-          			<td nowrap="nowrap"><span class="text-label pull-right">Req. Info:</span></td>
+          			<td nowrap="nowrap"><span class="text-label pull-right">[onshow.label_required_info]:</span></td>
           			<td colspan="3">[onshow.brewing_info.brewInfo]</td>
       			</tr>
       			</div>
       			<div>
       			[onshow;block=div;when [var.brewing_info.sparkling]!='']
       			<tr>
-          			<td nowrap="nowrap"><span class="text-label pull-right">Mead/Cider Info:</span></td>
+          			<td nowrap="nowrap"><span class="text-label pull-right">[onshow.label_mead_cider_info]:</span></td>
           			<td colspan="3">[onshow.brewing_info.sparkling], [onshow.brewing_info.sweetness], [onshow.brewing_info.meadType]</td>
       			</tr>
       			</div>
       			<tr>
-       				<td colspan="4"><div align="center" class="box">Space Reserved for Competition Staff Use</div></td>
+       				<td colspan="4"><div align="center" class="box">[onshow.bottle_labels_006]:</div></td>
       			</tr>
     		</table>
-    
     	</td>
     	<td>&nbsp;</td>
     	<td align="center" class="bdr1_thick">
-        
+
         	<table class="bottle bottleLabel-inner">
       			<tr>
-        			<td colspan="4"><div align="center"><h1>[onshow.contest_info.contestName]</h1>ATTACH TO BOTTLE w/ RUBBER BAND ONLY</div></td>
+        			<td colspan="4"><div align="center"><h1>[onshow.contest_info.contestName]</h1>[onshow.bottle_labels_001]</div></td>
       			</tr>
                 <tr>
        				<td colspan="4"><div align="center"><img src="[onshow.barcode_link]">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="[onshow.qrcode_link]"></div></td>
       			</tr>
       			<tr>
-        			<td nowrap="nowrap"><span class="text-label pull-right">Entry Number:</span></td>
+        			<td nowrap="nowrap"><span class="text-label pull-right">[onshow.label_entry_number]:</span></td>
         			<td colspan="3">[onshow.brewing_id]&nbsp;&nbsp;&nbsp;<strong>[onshow.brewing_paid]</strong></td>
       			</tr>
       			<tr>
-        			<td nowrap="nowrap"><span class="text-label pull-right">Brewer Name:</span></td>
+        			<td nowrap="nowrap"><span class="text-label pull-right">[onshow.label_name]:</span></td>
         			<td colspan="3">[onshow.brewer_info.brewerFirstName] [onshow.brewer_info.brewerLastName]</td>
       			</tr>
       			<tr>
-        			<td nowrap="nowrap"><span class="text-label pull-right">Brewer Phone:</span></td>
+        			<td nowrap="nowrap"><span class="text-label pull-right">[onshow.label_phone]:</span></td>
         			<td colspan="3">[onshow.brewer_info.brewerPhone1]</td>
       			</tr>
       			<tr>
-        			<td nowrap="nowrap"><span class="text-label pull-right">Brewer Email:</span></td>
+        			<td nowrap="nowrap"><span class="text-label pull-right">[onshow.label_email]:</span></td>
         			<td colspan="3">[onshow.brewer_info.brewerEmail]</td>
       			</tr>
       			<tr>
-        			<td nowrap="nowrap"><span class="text-label pull-right">Style:</span></td>
+        			<td nowrap="nowrap"><span class="text-label pull-right">[onshow.label_style]:</span></td>
         			<td colspan="3">[onshow.brewing_info.brewCategory][onshow.brewing_info.brewSubCategory] [onshow.brewing_info.styleName]</td>
       			</tr>
       			<div>
       			[onshow;block=div;when [var.brewing_info.brewInfo]!='']
      			<tr>
-          			<td nowrap="nowrap"><span class="text-label pull-right">Req. Info:</span></td>
+          			<td nowrap="nowrap"><span class="text-label pull-right">[onshow.label_required_info]:</span></td>
           			<td colspan="3">[onshow.brewing_info.brewInfo]</td>
       			</tr>
       			</div>
       			<div>
       			[onshow;block=div;when [var.brewing_info.sparkling]!='']
       			<tr>
-          			<td nowrap="nowrap"><span class="text-label pull-right">Mead/Cider Info:</span></td>
+          			<td nowrap="nowrap"><span class="text-label pull-right">[onshow.label_mead_cider_info]:</span></td>
           			<td colspan="3">[onshow.brewing_info.sparkling], [onshow.brewing_info.sweetness], [onshow.brewing_info.meadType]</td>
       			</tr>
       			</div>
       			<tr>
-       				<td colspan="4"><div align="center" class="box">Space Reserved for Competition Staff Use</div></td>
+       				<td colspan="4"><div align="center" class="box">[onshow.bottle_labels_006]:</div></td>
       			</tr>
     		</table>
-        
         </td>
   </tr>
 </table>
@@ -268,7 +267,7 @@
 [onshow_c;block=div;when [var.action]!='print']
 <table>
   <tr>
-  	<td width="5%" align="right" nowrap="nowrap"><h3><span class="fa fa-print"></span> <a href="entry.output.php?action=print&amp;id=[onshow.id]&amp;bid=[onshow.bid]">Print</a></h3></td>
+  	<td width="5%" align="right" nowrap="nowrap"><h3><span class="fa fa-print"></span> <a href="entry.output.php?action=print&amp;id=[onshow.id]&amp;bid=[onshow.bid]">[onshow.label_print]</a></h3></td>
   </tr>
 </table>
 </div> <!-- end non-print header -->

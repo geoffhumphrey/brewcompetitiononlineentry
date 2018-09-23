@@ -152,7 +152,7 @@ function pay_to_print($prefs_pay,$entry_paid) {
 // The following applies to /output/labels.php
 // --------------------------------------------------------
 
-function truncate($string, $your_desired_width) {
+function truncate($string, $your_desired_width, $append="") {
 
   $parts = preg_split('/([\s\n\r]+)/', $string, null, PREG_SPLIT_DELIM_CAPTURE);
   $parts_count = count($parts);
@@ -165,8 +165,9 @@ function truncate($string, $your_desired_width) {
     if ($length > $your_desired_width) { break; }
   }
 
-  return implode(array_slice($parts, 0, $last_part));
-
+  $return = implode(array_slice($parts, 0, $last_part));
+  if (strlen($string) > $your_desired_width) $return .= $append;
+  return $return;
 }
 
 function user_entry_count($uid,$view) {

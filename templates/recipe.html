@@ -10,12 +10,12 @@
     <link rel="stylesheet" type="text/css" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
     <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
     <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-    
+
     <!--[if lt IE 9]>
       <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
       <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
-    
+
     <!-- Load Font Awesome -->
     <!-- Homepage URL: https://fortawesome.github.io/Font-Awesome -->
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
@@ -29,11 +29,11 @@
 [onshow;block=div;when [var.action]!='print']
 <table>
   <tr>
-    <td><h3 class="text-danger">If any items are missing, close this window and edit the entry.</h3></td>
-    <td width="5%" align="right" nowrap="nowrap"><h3><span class="fa fa-print"></span> <a href="entry.output.php?go=recipe&amp;action=print&amp;id=[onshow.id]&amp;bid=[onshow.bid]">Print</a></h3></td>
+    <td><h3 class="text-danger">[onshow.bottle_labels_005]</h3></td>
+    <td width="5%" align="right" nowrap="nowrap"><h3><span class="fa fa-print"></span> <a href="entry.output.php?go=recipe&amp;action=print&amp;id=[onshow.id]&amp;bid=[onshow.bid]">[onshow.label_print]</a></h3></td>
   </tr>
 </table>
-<div class="error">THIS RECIPE FORM IS FOR YOUR RECORDS ONLY - please <u>DO NOT</u> include a copy of it with your entry shipment.</div>
+<div class="error">[onshow.bottle_labels_007]:</div>
 </div> <!-- end non-print header-->
 <table style="margin-bottom: 10px">
  <tr>
@@ -122,7 +122,7 @@
         <td colspan="2">For Mead</td>
         </tr>
       <tr>
-      
+
         <td width="2%">
            <span class="fa fa-check-square-o"></span>
            [onshow_still;block=td;when [var.brewing_info.sparkling]='Still']
@@ -132,22 +132,22 @@
            [onshow_still;block=td;default]
         </td>
         <td width="23%" nowrap="nowrap">Still</td>
-        
+
         <td width="2%">
            <span class="fa fa-check-square-o"></span>
            [onshow_dry;block=td;when [var.brewing_info.sweetness]='dry']
         </td>
         <td width="2%">
-           <span class="fa fa-square-o"></span> 
+           <span class="fa fa-square-o"></span>
            [onshow_dry;block=td;default]
         </td>
         <td width="23%" nowrap="nowrap">Dry</td>
         <td width="2%">
-           <span class="fa fa-check-square-o"></span> 
+           <span class="fa fa-check-square-o"></span>
            [onshow_hydromel;block=td;when [var.brewing_info.meadType]='hydromel']
         </td>
         <td width="2%">
-           <span class="fa fa-square-o"></span> 
+           <span class="fa fa-square-o"></span>
            [onshow_hydromel;block=td;default]
         </td>
         <td width="23%" nowrap="nowrap">Hydromel (light mead)</td>
@@ -158,63 +158,63 @@
            [onshow_petillant;block=td;when [var.brewing_info.sparkling]='Petillant']
         </td>
         <td width="2%">
-           <span class="fa fa-square-o"></span> 
+           <span class="fa fa-square-o"></span>
            [onshow_petillant;block=td;default]
         </td>
         <td width="23%" nowrap="nowrap">Petillant</td>
         <td width="2%">
-           <span class="fa fa-check-square-o"></span> 
+           <span class="fa fa-check-square-o"></span>
            [onshow_ssweet;block=td;when [var.brewing_info.sweetness]='Semi-Sweet']
         </td>
         <td width="2%">
-           <span class="fa fa-square-o"></span> 
+           <span class="fa fa-square-o"></span>
            [onshow_ssweet;block=td;default]
         </td>
         <td width="23%" nowrap="nowrap">Semi-Sweet</td>
-        
+
         <td width="2%">
-           <span class="fa fa-check-square-o"></span> 
+           <span class="fa fa-check-square-o"></span>
            [onshow_stdmead;block=td;when [var.brewing_info.meadType]='standard']
         </td>
         <td width="2%">
-           <span class="fa fa-square-o"></span> 
+           <span class="fa fa-square-o"></span>
            [onshow_stdmead;block=td;default]
         </td>
         <td nowrap="nowrap">Standard Mead</td>
-        
+
       </tr>
-      
+
       <tr>
          <td width="2%">
            <span class="fa fa-check-square-o"></span>
            [onshow_sparkling;block=td;when [var.brewing_info.sparkling]='Sparkling']
         </td>
         <td width="2%">
-           <span class="fa fa-square-o"></span> 
+           <span class="fa fa-square-o"></span>
            [onshow_sparkling;block=td;default]
-        </td>     
+        </td>
         <td width="23%" nowrap="nowrap">Sparkling</td>
-        
+
         <td width="2%">
            <span class="fa fa-check-square-o"></span>
            [onshow_sweet;block=td;when [var.brewing_info.sweetness]='sweet']
         </td>
         <td width="2%">
-           <span class="fa fa-square-o"></span> 
+           <span class="fa fa-square-o"></span>
            [onshow_sweet;block=td;default]
         </td>
         <td width="23%" nowrap="nowrap">Sweet</td>
-        
+
         <td width="2%">
            <span class="fa fa-check-square-o"></span>
            [onshow_sack;block=td;when [var.brewing_info.meadType]='sack']
         </td>
         <td width="2%">
-           <span class="fa fa-square-o"></span> 
+           <span class="fa fa-square-o"></span>
            [onshow_sack;block=td;default]
         </td>
         <td nowrap="nowrap">Sack (strong mead)</td>
-        
+
       </tr>
     </table>
     </td>
@@ -263,23 +263,23 @@
       <table>
         <tr>
           <td colspan="2" nowrap="nowrap"><em><strong>YEAST CULTURE</strong></em></td>
- 
+
           <td width="1%">
              <span class="fa fa-check-square-o"></span>
              [onshow_lyeast;block=td;when [var.brewing_info.brewYeastForm]='Liquid']
           </td>
           <td width="1%">
-             <span class="fa fa-square-o"></span> 
+             <span class="fa fa-square-o"></span>
              [onshow_lyeast;block=td;default]
           </td>
           <td>Liquid</td>
-          
+
           <td width="1%">
              <span class="fa fa-check-square-o"></span>
              [onshow_dyeast;block=td;when [var.brewing_info.brewYeastForm]='Dry']
           </td>
           <td width="1%">
-             <span class="fa fa-square-o"></span> 
+             <span class="fa fa-square-o"></span>
              [onshow_dyeast;block=td;default]
           </td>
           <td>Dried</td>
@@ -291,21 +291,21 @@
              [onshow_withstarter;block=td;when [var.brewing_info.brewYeastStarter]='Y']
           </td>
           <td width="1%">
-             <span class="fa fa-square-o"></span> 
+             <span class="fa fa-square-o"></span>
              [onshow_withstarter;block=td;default]
           </td>
           <td>Yes</td>
-          
+
           <td width="1%">
              <span class="fa fa-check-square-o"></span>
              [onshow_withoutstarter;block=td;when [var.brewing_info.brewYeastStarter]='N']
           </td>
           <td width="1%">
-             <span class="fa fa-square-o"></span> 
+             <span class="fa fa-square-o"></span>
              [onshow_withoutstarter;block=td;default]
           </td>
           <td>No</td>
-          
+
         </tr>
         <tr>
           <td width="5%">Type</td>
@@ -332,21 +332,21 @@
              [onshow_fcarb;block=td;when [var.brewing_info.carbonation]='forced']
           </td>
           <td width="5%">
-             <span class="fa fa-square-o"></span> 
+             <span class="fa fa-square-o"></span>
              [onshow_fcarb;block=td;default]
           </td>
           <td>forced CO<sub>2</sub></td>
-          
-          
+
+
           <td width="5%">
              <span class="fa fa-check-square-o"></span>
              [onshow_carb;block=td;when [var.brewing_info.carbonation]='bottleConditioned']
           </td>
           <td width="5%">
-             <span class="fa fa-square-o"></span> 
+             <span class="fa fa-square-o"></span>
              [onshow_carb;block=td;default]
           </td>
-          
+
           <td>Bottle Conditioned</td>
         </tr>
         <tr>
@@ -410,7 +410,7 @@
           <td align="center" class="bdr1B">onshow.brewing_info.brewLagerTemp</td>
         </tr>
         -->
-        
+
       </table>
       <table>
         <tr>

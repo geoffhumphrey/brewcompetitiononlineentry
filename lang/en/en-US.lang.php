@@ -2,7 +2,7 @@
 /**
  * Module:      en-US.lang.php
  * Description: This module houses all display text in the English language.
- * Updated:     January 31, 2018
+ * Updated:     September 21, 2018
  */
 
 /*
@@ -886,26 +886,22 @@ if ($section == "entry") {
 
 // -------------------- List (User Entry List) --------------------
 
-if (($section == "list") || ($section == "account") || ($go == "entries")) {
-
-	$brewer_entries_text_000 = "There is a known issue with printing from the Firefox browser.";
-	$brewer_entries_text_001 = "You have unconfirmed entries.";
-	$brewer_entries_text_002 = "For each entry below with a <span class=\"fa fa-lg fa-exclamation-circle text-danger\"></span> icon, click the <span class=\"fa fa-lg fa-pencil text-primary\"></span> icon to review and confirm all your entry data. Unconfirmed entries may be deleted from the system without warning.";
-	$brewer_entries_text_003 = "You CANNOT pay for your entries until all entries are confirmed.";
-	$brewer_entries_text_004 = "You have entries that require you to define a specific type, special ingredients, classic style, strength, and/or color.";
-	$brewer_entries_text_005 = "For each entry below with a <span class=\"fa fa-lg fa-exclamation-circle text-danger\"></span> icon, click the <span class=\"fa fa-lg fa-pencil text-primary\"></span> icon to enter the required information. Entries without a specific type, special ingredients, classic style, strength, and/or color in categories that require them may be deleted by the system without warning.";
-	$brewer_entries_text_006 = "Download judges&rsquo; scoresheets for";
-	$brewer_entries_text_007 = "Style NOT Entered";
-	$brewer_entries_text_008 = "Entry Form and";
-	$brewer_entries_text_009 = "Bottle Labels";
-	$brewer_entries_text_010 = "Print Recipe Form for";
-	$brewer_entries_text_011 = "Also, you will not be able to add another entry since the entry limit for the competition has been reached. Click Cancel in this box and then edit the entry instead if you wish to keep it.";
-	$brewer_entries_text_012 = "Are you sure you want to delete the entry called";
-	$brewer_entries_text_013 = "You will be able to add entries on or after";
-	$brewer_entries_text_014 = "You have not added any entries to the system.";
-	$brewer_entries_text_015 = "You cannot delete your entry at this time.";
-
-}
+$brewer_entries_text_000 = "There is a known issue with printing from the Firefox browser.";
+$brewer_entries_text_001 = "You have unconfirmed entries.";
+$brewer_entries_text_002 = "For each entry below with a <span class=\"fa fa-lg fa-exclamation-circle text-danger\"></span> icon, click the <span class=\"fa fa-lg fa-pencil text-primary\"></span> icon to review and confirm all your entry data. Unconfirmed entries may be deleted from the system without warning.";
+$brewer_entries_text_003 = "You CANNOT pay for your entries until all entries are confirmed.";
+$brewer_entries_text_004 = "You have entries that require you to define a specific type, special ingredients, classic style, strength, and/or color.";
+$brewer_entries_text_005 = "For each entry below with a <span class=\"fa fa-lg fa-exclamation-circle text-danger\"></span> icon, click the <span class=\"fa fa-lg fa-pencil text-primary\"></span> icon to enter the required information. Entries without a specific type, special ingredients, classic style, strength, and/or color in categories that require them may be deleted by the system without warning.";
+$brewer_entries_text_006 = "Download judges&rsquo; scoresheets for";
+$brewer_entries_text_007 = "Style NOT Entered";
+$brewer_entries_text_008 = "Entry Form and";
+$brewer_entries_text_009 = "Bottle Labels";
+$brewer_entries_text_010 = "Print Recipe Form for";
+$brewer_entries_text_011 = "Also, you will not be able to add another entry since the entry limit for the competition has been reached. Click Cancel in this box and then edit the entry instead if you wish to keep it.";
+$brewer_entries_text_012 = "Are you sure you want to delete the entry called";
+$brewer_entries_text_013 = "You will be able to add entries on or after";
+$brewer_entries_text_014 = "You have not added any entries to the system.";
+$brewer_entries_text_015 = "You cannot delete your entry at this time.";
 
 // -------------------- Login --------------------
 
@@ -1458,6 +1454,7 @@ $label_this_style = "This Style";
 $label_notes = "Notes";
 $label_possible_allergens = "Possible Allergens";
 $label_please_choose = "Please Choose";
+$label_mead_cider_info = "Mead/Cider Info";
 
 // ----------------------------------------------------------------------------------
 // Version 2.1.14 Additions
@@ -1466,9 +1463,21 @@ $label_please_choose = "Please Choose";
 // Labels
 $label_winners = "Winners";
 $label_unconfirmed_entries = "Unconfirmed Entries";
+$label_recipe = "Recipe";
+$label_view = "View";
 
 // Pay screen
 $pay_text_034 = "The limit of paid entires has been reached - further entry payments are not being accepted.";
+
+// Bottle Labels
+$bottle_labels_000 = "Labels cannot be generated at this time.";
+$bottle_labels_001 = "Attach label ONLY with a rubber band.";
+$bottle_labels_002 = "Use clear packing tape to attach to the barrel of each bottle.";
+$bottle_labels_003 = "Cover the label completely!";
+$bottle_labels_004 = "Please note: 4 labels are provided as a courtesy. This competition requires ".$_SESSION['jPrefsBottleNum']." bottles per entry. Discard any extra labels.";
+$bottle_labels_005 = "If any items are missing, close this window and edit the entry.";
+$bottle_labels_006 = "Space reserved for competition staff use.";
+$bottle_labels_007 = "THIS RECIPE FORM IS FOR YOUR RECORDS ONLY - please DO NOT include a copy of it with your entry shipment.";
 
 // ***********************************************************************************
 // END TRANSLATIONS

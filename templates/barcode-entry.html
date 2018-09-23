@@ -11,29 +11,29 @@
     <link rel="stylesheet" type="text/css" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
     <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
     <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-    
+
     <!--[if lt IE 9]>
       <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
       <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
-    
+
     <!-- Load Font Awesome -->
     <!-- Homepage URL: https://fortawesome.github.io/Font-Awesome -->
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="../css/templates.min.css">
-    
+
 </head>
 <body>
 <a name="labels_top" id="labelsOtop"></a>
 <div id="printContainer">
 <!-- div for non-print header -->
 <div>
-[onshow;block=div;when [var.action]!='print']
+[onshow;block=div;when [var.action]!='[onshow.label_print]']
 <table>
   <tr>
-    <td><h3 class="text-danger">If any items are missing, close this window and edit the entry.</h3></td>
-    <td width="5%" align="right" nowrap="nowrap"><h3><span class="fa fa-eye"></span> <a href="#labels">View Bottle Labels</a></h3></td>
-    <td width="5%" align="right" nowrap="nowrap"><h3>&nbsp;&nbsp;&nbsp;<span class="fa fa-print"></span> <a href="entry.output.php?action=print&amp;id=[onshow.id]&amp;bid=[onshow.bid]">Print</a></h3></td>
+    <td><h3 class="text-danger">[onshow.bottle_labels_005]</h3></td>
+    <td width="5%" align="right" nowrap="nowrap"><h3><span class="fa fa-eye"></span> <a href="#labels">[onshow.label_view] [onshow.brewer_entries_text_009]</a></h3></td>
+    <td width="5%" align="right" nowrap="nowrap"><h3>&nbsp;&nbsp;&nbsp;<span class="fa fa-print"></span> <a href="entry.output.php?action=print&amp;id=[onshow.id]&amp;bid=[onshow.bid]">[onshow.label_print]</a></h3></td>
   </tr>
 </table>
 </div> <!-- end non-print header-->
@@ -137,7 +137,7 @@
            [onshow_still;block=td;default]
         </td>
         <td width="23%" nowrap="nowrap">Still</td>
-        
+
         <td width="2%">
            <span class="fa fa-check-square-o"></span>
            [onshow_dry;block=td;when [var.brewing_info.sweetness]='Dry']
@@ -176,7 +176,7 @@
            [onshow_meddry;block=td;default]
         </td>
         <td width="23%" nowrap="nowrap">Semi-Sweet</td>
-        
+
         <td width="2%">
            <span class="fa fa-check-square-o"></span>
            [onshow_stdmead;block=td;when [var.brewing_info.meadType]='Standard']
@@ -195,9 +195,9 @@
         <td width="2%">
            <span class="fa fa-square-o"></span>
            [onshow_sparkling;block=td;default]
-        </td>     
+        </td>
         <td width="23%" nowrap="nowrap">Sparkling</td>
-        
+
         <td width="2%">
            <span class="fa fa-check-square-o"></span>
            [onshow_med;block=td;when [var.brewing_info.sweetness]='Medium']
@@ -207,7 +207,7 @@
            [onshow_med;block=td;default]
         </td>
         <td width="23%" nowrap="nowrap">Medium</td>
-        
+
         <td width="2%">
            <span class="fa fa-check-square-o"></span>
            [onshow_sack;block=td;when [var.brewing_info.meadType]='Sack']
@@ -218,11 +218,11 @@
         </td>
         <td nowrap="nowrap">Sack (strong mead)</td>
       </tr>
-      
+
       <tr>
-        <td width="2%">&nbsp;</td>   
+        <td width="2%">&nbsp;</td>
         <td width="23%" nowrap="nowrap">&nbsp;</td>
-        
+
         <td width="2%">
            <span class="fa fa-check-square-o"></span>
            [onshow_medsweet;block=td;when [var.brewing_info.sweetness]='Medium Sweet']
@@ -232,15 +232,15 @@
            [onshow_medsweet;block=td;default]
         </td>
         <td width="23%" nowrap="nowrap">Medium Sweet</td>
-        
-        <td width="2%">&nbsp;</td>   
+
+        <td width="2%">&nbsp;</td>
         <td nowrap="nowrap">&nbsp;</td>
       </tr>
-      
+
       <tr>
-        <td width="2%">&nbsp;</td>   
+        <td width="2%">&nbsp;</td>
         <td width="23%" nowrap="nowrap">&nbsp;</td>
-        
+
         <td width="2%">
            <span class="fa fa-check-square-o"></span>
            [onshow_sweet;block=td;when [var.brewing_info.sweetness]='Sweet']
@@ -250,11 +250,11 @@
            [onshow_sweet;block=td;default]
         </td>
         <td width="23%" nowrap="nowrap">Sweet</td>
-        
-        <td width="2%">&nbsp;</td>   
+
+        <td width="2%">&nbsp;</td>
         <td nowrap="nowrap">&nbsp;</td>
       </tr>
-      
+
     </table>
     </td>
     <td width="2%" align="left" valign="top">&nbsp;</td>
@@ -302,7 +302,7 @@
       <table>
         <tr>
           <td colspan="2" nowrap="nowrap"><em><strong>YEAST CULTURE</strong></em></td>
- 
+
           <td width="1%">
              <span class="fa fa-check-square-o"></span>
              [onshow_lyeast;block=td;when [var.brewing_info.brewYeastForm]='Liquid']
@@ -312,7 +312,7 @@
              [onshow_lyeast;block=td;default]
           </td>
           <td>Liquid</td>
-          
+
           <td width="1%">
              <span class="fa fa-check-square-o"></span>
              [onshow_dyeast;block=td;when [var.brewing_info.brewYeastForm]='Dry']
@@ -334,7 +334,7 @@
              [onshow_withstarter;block=td;default]
           </td>
           <td>Yes</td>
-          
+
           <td width="1%">
              <span class="fa fa-check-square-o"></span>
              [onshow_withoutstarter;block=td;when [var.brewing_info.brewYeastStarter]='N']
@@ -344,7 +344,7 @@
              [onshow_withoutstarter;block=td;default]
           </td>
           <td>No</td>
-          
+
         </tr>
         <tr>
           <td width="5%">Type</td>
@@ -375,8 +375,8 @@
              [onshow_fcarb;block=td;default]
           </td>
           <td>forced CO<sub>2</sub></td>
-          
-          
+
+
           <td width="5%">
              <span class="fa fa-check-square-o"></span>
              [onshow_carb;block=td;when [var.brewing_info.sparkling]='bottleConditioned']
@@ -385,7 +385,7 @@
              <span class="fa fa-square-o"></span>
              [onshow_carb;block=td;default]
           </td>
-          
+
           <td>Bottle Conditioned</td>
         </tr>
         <tr>
@@ -449,7 +449,7 @@
           <td align="center" class="bdr1B">onshow.brewing_info.brewLagerTemp</td>
         </tr>
         -->
-        
+
       </table>
       <table>
         <tr>
@@ -725,12 +725,16 @@
 <p class="small" style="margin-top:10px;">This form is emulates the BJCP Entry/Recipe Form Copyright ©2006 Beer Judge Certification Program rev. 070307</p>
 <div style="page-break-after:always; margin-bottom: 20px;"></div>
 <a name="labels" id="labels"></a>
+<div class="container-fluid">
+  [onshow;block=div;when [var.action]='print']
+  <p class="text-center">[onshow.bottle_labels_004]</p>
+</div>
 <table align="center" class="bottleLabel">
   <tr>
     <td align="center" class="bdr1_thick">
      <table class="bottle bottleLabel-inner">
       <tr>
-        <td colspan="4"><div align="center" class="headerTitleSm"><h1>[onshow.contest_info.contestName]</h1>ATTACH TO BOTTLE w/ RUBBER BAND ONLY</div></td>
+        <td colspan="4"><div align="center" class="headerTitleSm"><h1>[onshow.contest_info.contestName]</h1>[onshow.bottle_labels_001]</div></td>
       </tr>
       <tr>
         <td nowrap="nowrap">Entry #:</td>
@@ -748,11 +752,11 @@
       </tr>
       </div>
       <tr>
-        <td width="5%" nowrap="nowrap">Address:</td>
+        <td width="5%" nowrap="nowrap">[onshow.label_address]:</td>
         <td colspan="3" class="bdr1B">[onshow.brewer_info.brewerAddress]<br />[onshow.brewer_info.brewerCity],[onshow.brewer_info.brewerState] [onshow.brewer_info.brewerZip]</td>
       </tr>
       <tr>
-        <td width="5%" nowrap="nowrap">Phone:</td>
+        <td width="5%" nowrap="nowrap">[onshow.label_phone]:</td>
         <td colspan="3" class="bdr1B">[onshow.brewer_info.brewerPhone1]</td>
       </tr>
       <tr>
@@ -760,27 +764,27 @@
         <td colspan="3" class="bdr1B">[onshow.brewer_info.brewerEmail]</td>
       </tr>
       <div>
-      
+
       <tr>
         <td width="5%" nowrap="nowrap">Entry Name:</td>
         <td colspan="3" class="bdr1B">[onshow.brewing_info.brewName]</td>
       </tr>
       </div>
       <tr>
-        <td width="5%" nowrap="nowrap">Style:</td>
+        <td width="5%" nowrap="nowrap">[onshow.label_style]:</td>
         <td colspan="3" class="bdr1B">[onshow.brewing_info.brewCategory][onshow.brewing_info.brewSubCategory] [onshow.brewing_info.styleName]</td>
       </tr>
       <div>
       [onshow;block=div;when [var.brewing_info.brewInfo]!='']
       <tr>
-          <td nowrap="nowrap">Req. Info:</td>
+          <td nowrap="nowrap">[onshow.label_required_info]:</td>
           <td colspan="3" class="bdr1B">[onshow.brewing_info.brewInfo]</td>
       </tr>
       </div>
       <div>
       [onshow;block=div;when [var.brewing_info.sparkling]!='']
       <tr>
-          <td nowrap="nowrap">Mead/Cider Info:</td>
+          <td nowrap="nowrap">[onshow.label_mead_cider_info]:</td>
           <td colspan="3" class="bdr1B">[onshow.brewing_info.sparkling] <br />
             [onshow.brewing_info.sweetness] <br />
             [onshow.brewing_info.meadType]</td>
@@ -803,7 +807,7 @@
       <tr>
         <td colspan="4"><div align="center" class="headerTitleSm">
           <h1>[onshow.contest_info.contestName]</h1>
-          ATTACH TO BOTTLE w/ RUBBER BAND ONLY</div></td>
+          [onshow.bottle_labels_001]</div></td>
       </tr>
       <tr>
         <td nowrap="nowrap">Entry #:</td>
@@ -820,37 +824,37 @@
         </tr>
       </div>
       <tr>
-        <td width="5%" nowrap="nowrap">Address:</td>
+        <td width="5%" nowrap="nowrap">[onshow.label_address]:</td>
         <td colspan="3" class="bdr1B">[onshow.brewer_info.brewerAddress]<br />
           [onshow.brewer_info.brewerCity],[onshow.brewer_info.brewerState] [onshow.brewer_info.brewerZip]</td>
       </tr>
       <tr>
-        <td width="5%" nowrap="nowrap">Phone:</td>
+        <td width="5%" nowrap="nowrap">[onshow.label_phone]:</td>
         <td colspan="3" class="bdr1B">[onshow.brewer_info.brewerPhone1]</td>
       </tr>
       <tr>
         <td width="5%" nowrap="nowrap">Email:</td>
         <td colspan="3" class="bdr1B">[onshow.brewer_info.brewerEmail]</td>
       </tr>
-      <div> 
+      <div>
         <tr>
           <td width="5%" nowrap="nowrap">Entry Name:</td>
           <td colspan="3" class="bdr1B">[onshow.brewing_info.brewName]</td>
         </tr>
       </div>
       <tr>
-        <td width="5%" nowrap="nowrap">Style:</td>
+        <td width="5%" nowrap="nowrap">[onshow.label_style]:</td>
         <td colspan="3" class="bdr1B">[onshow.brewing_info.brewCategory][onshow.brewing_info.brewSubCategory] [onshow.brewing_info.styleName]</td>
       </tr>
       <div> [onshow;block=div;when [var.brewing_info.brewInfo]!='']
         <tr>
-          <td nowrap="nowrap">Req. Info:</td>
+          <td nowrap="nowrap">[onshow.label_required_info]:</td>
           <td colspan="3" class="bdr1B">[onshow.brewing_info.brewInfo]</td>
         </tr>
       </div>
       <div> [onshow;block=div;when [var.brewing_info.sparkling]!='']
         <tr>
-          <td nowrap="nowrap">Mead/Cider Info:</td>
+          <td nowrap="nowrap">[onshow.label_mead_cider_info]:</td>
           <td colspan="3" class="bdr1B">[onshow.brewing_info.sparkling] <br />
             [onshow.brewing_info.sweetness] <br />
             [onshow.brewing_info.meadType]</td>
@@ -875,7 +879,7 @@
       <tr>
         <td colspan="4"><div align="center" class="headerTitleSm">
           <h1>[onshow.contest_info.contestName]</h1>
-          ATTACH TO BOTTLE w/ RUBBER BAND ONLY</div></td>
+          [onshow.bottle_labels_001]</div></td>
       </tr>
       <tr>
         <td nowrap="nowrap">Entry #:</td>
@@ -892,37 +896,37 @@
         </tr>
       </div>
       <tr>
-        <td width="5%" nowrap="nowrap">Address:</td>
+        <td width="5%" nowrap="nowrap">[onshow.label_address]:</td>
         <td colspan="3" class="bdr1B">[onshow.brewer_info.brewerAddress]<br />
           [onshow.brewer_info.brewerCity],[onshow.brewer_info.brewerState] [onshow.brewer_info.brewerZip]</td>
       </tr>
       <tr>
-        <td width="5%" nowrap="nowrap">Phone:</td>
+        <td width="5%" nowrap="nowrap">[onshow.label_phone]:</td>
         <td colspan="3" class="bdr1B">[onshow.brewer_info.brewerPhone1]</td>
       </tr>
       <tr>
         <td width="5%" nowrap="nowrap">Email:</td>
         <td colspan="3" class="bdr1B">[onshow.brewer_info.brewerEmail]</td>
       </tr>
-      <div> 
+      <div>
         <tr>
           <td width="5%" nowrap="nowrap">Entry Name:</td>
           <td colspan="3" class="bdr1B">[onshow.brewing_info.brewName]</td>
         </tr>
       </div>
       <tr>
-        <td width="5%" nowrap="nowrap">Style:</td>
+        <td width="5%" nowrap="nowrap">[onshow.label_style]:</td>
         <td colspan="3" class="bdr1B">[onshow.brewing_info.brewCategory][onshow.brewing_info.brewSubCategory] [onshow.brewing_info.styleName]</td>
       </tr>
       <div> [onshow;block=div;when [var.brewing_info.brewInfo]!='']
         <tr>
-          <td nowrap="nowrap">Req. Info:</td>
+          <td nowrap="nowrap">[onshow.label_required_info]:</td>
           <td colspan="3" class="bdr1B">[onshow.brewing_info.brewInfo]</td>
         </tr>
       </div>
       <div> [onshow;block=div;when [var.brewing_info.sparkling]!='']
         <tr>
-          <td nowrap="nowrap">Mead/Cider Info:</td>
+          <td nowrap="nowrap">[onshow.label_mead_cider_info]:</td>
           <td colspan="3" class="bdr1B">[onshow.brewing_info.sparkling] <br />
             [onshow.brewing_info.sweetness] <br />
             [onshow.brewing_info.meadType]</td>
@@ -944,7 +948,7 @@
       <tr>
         <td colspan="4"><div align="center" class="headerTitleSm">
           <h1>[onshow.contest_info.contestName]</h1>
-          ATTACH TO BOTTLE w/ RUBBER BAND ONLY</div></td>
+          [onshow.bottle_labels_001]</div></td>
       </tr>
       <tr>
         <td nowrap="nowrap">Entry #:</td>
@@ -961,37 +965,37 @@
         </tr>
       </div>
       <tr>
-        <td width="5%" nowrap="nowrap">Address:</td>
+        <td width="5%" nowrap="nowrap">[onshow.label_address]:</td>
         <td colspan="3" class="bdr1B">[onshow.brewer_info.brewerAddress]<br />
           [onshow.brewer_info.brewerCity],[onshow.brewer_info.brewerState] [onshow.brewer_info.brewerZip]</td>
       </tr>
       <tr>
-        <td width="5%" nowrap="nowrap">Phone:</td>
+        <td width="5%" nowrap="nowrap">[onshow.label_phone]:</td>
         <td colspan="3" class="bdr1B">[onshow.brewer_info.brewerPhone1]</td>
       </tr>
       <tr>
         <td width="5%" nowrap="nowrap">Email:</td>
         <td colspan="3" class="bdr1B">[onshow.brewer_info.brewerEmail]</td>
       </tr>
-      <div> 
+      <div>
         <tr>
           <td width="5%" nowrap="nowrap">Entry Name:</td>
           <td colspan="3" class="bdr1B">[onshow.brewing_info.brewName]</td>
         </tr>
       </div>
       <tr>
-        <td width="5%" nowrap="nowrap">Style:</td>
+        <td width="5%" nowrap="nowrap">[onshow.label_style]:</td>
         <td colspan="3" class="bdr1B">[onshow.brewing_info.brewCategory][onshow.brewing_info.brewSubCategory] [onshow.brewing_info.styleName]</td>
       </tr>
       <div> [onshow;block=div;when [var.brewing_info.brewInfo]!='']
         <tr>
-          <td nowrap="nowrap">Req. Info:</td>
+          <td nowrap="nowrap">[onshow.label_required_info]:</td>
           <td colspan="3" class="bdr1B">[onshow.brewing_info.brewInfo]</td>
         </tr>
       </div>
       <div> [onshow;block=div;when [var.brewing_info.sparkling]!='']
         <tr>
-          <td nowrap="nowrap">Mead/Cider Info:</td>
+          <td nowrap="nowrap">[onshow.label_mead_cider_info]:</td>
           <td colspan="3" class="bdr1B">[onshow.brewing_info.sparkling] <br />
             [onshow.brewing_info.sweetness] <br />
             [onshow.brewing_info.meadType]</td>
@@ -1014,7 +1018,7 @@
 [onshow_c;block=div;when [var.action]!='print']
 <table>
   <tr>
-    <td width="5%" align="right" nowrap="nowrap"><h3><span class="fa fa-print"></span> <a href="entry.output.php?action=print&amp;id=[onshow.id]&amp;bid=[onshow.bid]">Print</a></h3></td>
+    <td width="5%" align="right" nowrap="nowrap"><h3><span class="fa fa-print"></span> <a href="entry.output.php?action=print&amp;id=[onshow.id]&amp;bid=[onshow.bid]">[onshow.label_print]</a></h3></td>
   </tr>
 </table>
 </div> <!-- end non-print header -->

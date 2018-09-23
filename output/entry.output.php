@@ -6,6 +6,11 @@ require(LIB.'output.lib.php');
 include (CLASSES.'tiny_but_strong/tbs_class.php');
 include (DB.'output_entry.db.php');
 
+$bottleNum = $_SESSION['jPrefsBottleNum'];
+$bottle_labels_001 = strtoupper($bottle_labels_001);
+$bottle_labels_002 = strtoupper($bottle_labels_002);
+$bottle_labels_003 = strtoupper($bottle_labels_003);
+
 $entry_closed = getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_contest_dates['contestEntryDeadline'], $_SESSION['prefsDateFormat'],$_SESSION['prefsTimeFormat'], "long", "date-no-gmt");
 $contest_name = $contest_info['contestName'];
 
@@ -20,7 +25,7 @@ if ($restricted) {
   	exit();
 }
 
-if ((!pay_to_print($_SESSION['prefsPayToPrint'],$brewing_info['brewPaid'])) && ($go != "recipe")) {
+if ((!pay_to_print($_SESSION['prefsPayToPrint'],$brewing_info['brewPaid'])) && ($go != "recipe") && ($filter != "admin")) {
 	echo "<html><head><title>Error</title></head><body>";
   	echo "<p>You must pay for your entry to print its entry form (if applicable) and any bottle labels.</p>";
   	echo "</body>";
@@ -42,7 +47,15 @@ $brewer_info['brewerCity'] = strtr($brewer_info['brewerCity'],$html_remove);
 $brewer_info['brewerState'] = strtr($brewer_info['brewerState'],$html_remove);
 $brewer_info['brewerClubs'] = strtr($brewer_info['brewerClubs'],$html_remove);
 $brewer_info['brewerEmail'] = strtr($brewer_info['brewerEmail'],$html_remove);
+
+if ($brewer_info['brewerCountry'] = "United States") {
+	$brewer_info['brewerPhone1'] = format_phone_us($brewer_info['brewerPhone1']);
+	$brewer_info['brewerPhone2'] = format_phone_us($brewer_info['brewerPhone2']);
+}
+
 $organizer = $row_brewer_organizer['brewerFirstName']." ".$row_brewer_organizer['brewerLastName'];
+
+
 
 if (in_array($_SESSION['prefsEntryForm'],$barcode_qrcode_array)) {
 
@@ -117,7 +130,7 @@ switch ($brewing_info['brewMead3']) {
 }
 
 // Paid or not
-if ($brewing_info['brewPaid'] == 1) $brewing_paid = "*** PAID ***";
+if ($brewing_info['brewPaid'] == 1) $brewing_paid = sprintf("*** %s ***",strtoupper($label_paid));
 else $brewing_paid = "";
 
 // Style name
@@ -315,46 +328,51 @@ if ($go == "default") {
 		$TBS->LoadTemplate(TEMPLATES.'anon-entry.html');
 	}
 
-	if ($_SESSION['prefsEntryForm'] == "1") {
+	elseif ($_SESSION['prefsEntryForm'] == "1") {
 		$TBS->LoadTemplate(TEMPLATES.'bcoem-entry.html');
 	}
 
-	if ($_SESSION['prefsEntryForm'] == "2") {
+	elseif ($_SESSION['prefsEntryForm'] == "2") {
 		$TBS->LoadTemplate(TEMPLATES.'bcoem-entry-barcode.html');
 	}
 
-	if ($_SESSION['prefsEntryForm'] == "B") {
+	elseif ($_SESSION['prefsEntryForm'] == "B") {
 		$TBS->LoadTemplate(TEMPLATES.'bjcp-entry.html');
 	}
 
-	if ($_SESSION['prefsEntryForm'] == "E") {
+	elseif ($_SESSION['prefsEntryForm'] == "E") {
 		$TBS->LoadTemplate(TEMPLATES.'bjcp-entry-label-only.html');
 	}
 
-	if ($_SESSION['prefsEntryForm'] == "M") {
+	elseif ($_SESSION['prefsEntryForm'] == "M") {
 		$TBS->LoadTemplate(TEMPLATES.'simple-metric-entry.html');
 	}
 
-	if ($_SESSION['prefsEntryForm'] == "3") {
+	elseif ($_SESSION['prefsEntryForm'] == "3") {
 		$TBS->LoadTemplate(TEMPLATES.'simple-metric-entry-barcode.html');
 	}
 
-	if ($_SESSION['prefsEntryForm'] == "U") {
+	elseif ($_SESSION['prefsEntryForm'] == "U") {
 		$TBS->LoadTemplate(TEMPLATES.'simple-us-entry.html');
 	}
 
-	if ($_SESSION['prefsEntryForm'] == "4") {
+	elseif ($_SESSION['prefsEntryForm'] == "4") {
 		$TBS->LoadTemplate(TEMPLATES.'simple-us-entry-barcode.html');
 	}
 
-	if ($_SESSION['prefsEntryForm'] == "N") {
+	elseif ($_SESSION['prefsEntryForm'] == "N") {
 		$TBS->LoadTemplate(TEMPLATES.'barcode-entry.html');
 		$TBS->MergeBlock('dropOffLocation',$brewing,'SELECT * FROM '.$prefix.'drop_off ORDER BY dropLocationName ASC');
 	}
 
-	if ($_SESSION['prefsEntryForm'] == "C") {
+	elseif ($_SESSION['prefsEntryForm'] == "C") {
 		$TBS->LoadTemplate(TEMPLATES.'barcode-entry-label-only.html');
 		$TBS->MergeBlock('dropOffLocation',$brewing,'SELECT * FROM '.$prefix.'drop_off ORDER BY dropLocationName ASC');
+	}
+
+	// If using non-TBS bottle labels, redirect
+	else {
+		header(sprintf("Location: %s?id=%s&bid=%s", $base_url."output/bottle_label.output.php", $id, $bid));
 	}
 }
 
@@ -370,4 +388,5 @@ if (isset($brewing_info['mashSteps'])) $TBS->MergeBlock('mashSteps',$brewing_inf
 
 $TBS->NoErr;
 $TBS->Show();
+
 ?>

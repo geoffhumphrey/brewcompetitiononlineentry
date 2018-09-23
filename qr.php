@@ -290,7 +290,7 @@ if ($msg == "4") {
 }
 
 if ($msg == "5") {
-	$message .= sprintf("<span class=\"fa fa-exclamation-circle\"></span> <strong>%s</strong> %s",$qr_text_000,$header_text_008);
+	$message .= sprintf("<span class=\"fa fa-exclamation-circle\"></span> <strong>%s</strong>",$qr_text_006);
 }
 
 if (isset($_SESSION['last_action'])) {

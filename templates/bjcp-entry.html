@@ -10,12 +10,12 @@
     <link rel="stylesheet" type="text/css" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
     <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
     <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-    
+
     <!--[if lt IE 9]>
       <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
       <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
-    
+
     <!-- Load Font Awesome -->
     <!-- Homepage URL: https://fortawesome.github.io/Font-Awesome -->
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
@@ -29,12 +29,16 @@
 [onshow;block=div;when [var.action]!='print']
 <table>
   <tr>
-    <td><h3 class="text-danger">If any items are missing, close this window and edit the entry.</h3></td>
-    <td width="5%" align="right" nowrap="nowrap"><h3><span class="fa fa-eye"></span> <a href="#labels">View Bottle Labels</a></h3></td>
-    <td width="5%" align="right" nowrap="nowrap"><h3><span class="fa fa-print"></span> <a href="entry.output.php?action=print&amp;id=[onshow.id]&amp;bid=[onshow.bid]">Print</a></h3></td>
+    <td><h3 class="text-danger">[onshow.bottle_labels_005]</h3></td>
+    <td width="5%" align="right" nowrap="nowrap"><h3><span class="fa fa-eye"></span> <a href="#labels">[onshow.label_view] [onshow.brewer_entries_text_009]</a></h3></td>
+    <td width="5%" align="right" nowrap="nowrap"><h3><span class="fa fa-[onshow.label_print]"></span> <a href="entry.output.php?action=print&amp;id=[onshow.id]&amp;bid=[onshow.bid]">[onshow.label_print]</a></h3></td>
   </tr>
 </table>
 </div> <!-- end non-print header-->
+<div class="container-fluid">
+  [onshow;block=div;when [var.action]='print']
+  <p class="text-center">[onshow.bottle_labels_004]</p>
+</div>
 <table>
  <tr>
    <td class="bdr1B_thick" width="10%" valign="top"><img src="../images/bjcp_logo.jpg" alt="BJCP Logo" width="65" height="60" align="left" /></td>
@@ -182,7 +186,7 @@
       <tr>
         <td>Required Info</td>
       </tr>
-      
+
       <tr>
         <td height="50" valign="top" class="bdr1B bdr1L bdr1T bdr1R">[onshow.brewing_info.brewInfo]</td>
       </tr>
@@ -222,7 +226,7 @@
       <table>
         <tr>
           <td colspan="2" nowrap="nowrap"><em><strong>YEAST CULTURE</strong></em></td>
- 
+
           <td width="1%">
              <span class="fa fa-check-square-o"></span>
              [onshow_lyeast;block=td;when [var.brewing_info.brewYeastForm]='Liquid']
@@ -232,7 +236,7 @@
              [onshow_lyeast;block=td;default]
           </td>
           <td>Liquid</td>
-          
+
           <td width="1%">
              <span class="fa fa-check-square-o"></span>
              [onshow_dyeast;block=td;when [var.brewing_info.brewYeastForm]='Dry']
@@ -254,7 +258,7 @@
              [onshow_withstarter;block=td;default]
           </td>
           <td>Yes</td>
-          
+
           <td width="1%">
              <span class="fa fa-check-square-o"></span>
              [onshow_withoutstarter;block=td;when [var.brewing_info.brewYeastStarter]='N']
@@ -264,7 +268,7 @@
              [onshow_withoutstarter;block=td;default]
           </td>
           <td>No</td>
-          
+
         </tr>
         <tr>
           <td width="5%">Type</td>
@@ -295,8 +299,8 @@
              [onshow_fcarb;block=td;default]
           </td>
           <td>forced CO<sub>2</sub></td>
-          
-          
+
+
           <td width="5%">
              <span class="fa fa-check-square-o"></span>
              [onshow_carb;block=td;when [var.brewing_info.sparkling]='bottleConditioned']
@@ -305,7 +309,7 @@
              <span class="fa fa-square-o"></span>
              [onshow_carb;block=td;default]
           </td>
-          
+
           <td>Bottle Conditioned</td>
         </tr>
         <tr>
@@ -369,7 +373,7 @@
           <td align="center" class="bdr1B">onshow.brewing_info.brewLagerTemp</td>
         </tr>
         -->
-        
+
       </table>
       <table>
         <tr>
@@ -880,7 +884,7 @@
 [onshow_c;block=div;when [var.action]!='print']
 <table>
   <tr>
-  	<td width="5%" align="right" nowrap="nowrap"><h3><span class="fa fa-print"></span> <a href="entry.output.php?action=print&amp;id=[onshow.id]&amp;bid=[onshow.bid]">Print</a></h3></td>
+  	<td width="5%" align="right" nowrap="nowrap"><h3><span class="fa fa-print"></span> <a href="entry.output.php?action=print&amp;id=[onshow.id]&amp;bid=[onshow.bid]">[onshow.label_print]</a></h3></td>
   </tr>
 </table>
 </div> <!-- end non-print header -->
