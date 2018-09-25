@@ -1465,6 +1465,7 @@ $label_winners = "Winners";
 $label_unconfirmed_entries = "Unconfirmed Entries";
 $label_recipe = "Recipe";
 $label_view = "View";
+$label_number_bottles = "Number of Bottles Required Per Entry";
 
 // Pay screen
 $pay_text_034 = "The limit of paid entires has been reached - further entry payments are not being accepted.";

@@ -324,9 +324,11 @@ if ($show_entries) {
 
 	// Show bottle acceptance, shipping location, and dropoff locations if open
 	// Bottle Acceptance
+	$anchor_links[] = $label_entry_acceptance_rules;
+	$anchor_name = str_replace(" ", "-", $label_entry_acceptance_rules);
+	$page_info9 .= sprintf("<p><strong>%s: %s</strong></p>", $label_number_bottles, $_SESSION['jPrefsBottleNum']);
+
 	if ((isset($row_contest_info['contestBottles'])) && (($dropoff_window_open < 2) || ($shipping_window_open < 2))) {
-		$anchor_links[] = $label_entry_acceptance_rules;
-		$anchor_name = str_replace(" ", "-", $label_entry_acceptance_rules);
 		$header1_9 .= sprintf("<a class=\"anchor-offset\" name=\"%s\"></a><h2>%s</h2>",strtolower($anchor_name),$label_entry_acceptance_rules);
 		$page_info9 .= $row_contest_info['contestBottles'];
 		$page_info9 .= $anchor_top;

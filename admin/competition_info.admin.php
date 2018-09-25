@@ -336,7 +336,7 @@ if ($section == "admin") { ?>
         <!-- Input Here -->
         <textarea id="contestBottles" class="form-control" name="contestBottles" rows="15" aria-describedby="helpBlock">
 		<?php if ($section != "step4") echo $row_contest_info['contestBottles']; else { ?>
-        <p>Each entry will consist of 12 to 22 ounce capped bottles or corked bottles that are void of all identifying information, including labels and embossing. Printed caps are allowed, but must be blacked out completely.</p>
+        <p>Each entry will consist of capped or corked bottles that are void of all identifying information, including labels and embossing. Printed caps are allowed, but must be blacked out completely.</p>
 		<p>12oz brown glass bottles are preferred; however, green and clear glass will be accepted. Swing top bottles will likewise be accepted as well as corked bottles.</p>
 		<p>Bottles will not be returned to contest entrants.</p>
 		<p>All requisite paperwork must be submitted with each entry and can be printed directly from this website. Entry paperwork should be attached to bottles by the method specified on the bottle label.</p>

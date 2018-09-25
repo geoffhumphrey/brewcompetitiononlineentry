@@ -15,7 +15,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 	unset($_SESSION['prefs'.$prefix_session]);
 
 	if (isset($_POST['jPrefsBottleNum'])) $jPrefsBottleNum = $_POST['jPrefsBottleNum'];
-	else $jPrefsBottleNum = "";
+	else $jPrefsBottleNum = "2";
 
 	if ($_POST['jPrefsQueued'] == "N") $flight_ent = $_POST['jPrefsFlightEntries']; else $flight_ent = $_SESSION['jPrefsFlightEntries'];
 
