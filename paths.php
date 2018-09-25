@@ -44,7 +44,7 @@ define('DEBUGGING',ROOT.'includes'.DIRECTORY_SEPARATOR.'debug'.DIRECTORY_SEPARAT
  * The following are for use by the developer
  * Default for all is FALSE
  */
-define('HOSTED', FALSE);
+define('HOSTED', TRUE);
 define('NHC', FALSE);
 define('SINGLE', FALSE);
 
@@ -71,20 +71,20 @@ define('CDN', TRUE);
  * sandbox enfvironment, etc.
  * Default is FALSE
  */
-define('TESTING', FALSE);
+define('TESTING', TRUE);
 
 /**
  * Enable the following to display php errors on screen.
  * Default is FALSE
  */
-define('DEBUG', FALSE);
+define('DEBUG', TRUE);
 
 /**
  * Enable the following to show a collapsable table of all
  * session variables on screen
  * Default is FALSE
  */
-define('DEBUG_SESSION_VARS', FALSE);
+define('DEBUG_SESSION_VARS', TRUE);
 
 /**
  * Enable the following when receiving mySQL "column does

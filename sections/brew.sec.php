@@ -714,7 +714,7 @@ else $relocate_referrer = $_SERVER['HTTP_REFERER'];
 	                <input type="radio" name="possible-allergens" value="0" id="prefsCheck_1" <?php if (empty($row_log['brewPossAllergens'])) echo "CHECKED"; ?>/>No
 	    		</label>
 	        </div>
-	        <span id="helpBlockAllergens" class="help-block"><?php echo $brew_text_038; ?></span>
+	        <span id="helpBlockAllergens" class="help-block"><?php echo sprintf("<strong>%s</strong> %s",$brew_text_038,$brew_text_040);  ?></span>
 	    </div>
 	</div><!-- ./Form Group -->
 	<div class="form-group" id="possible-allergens"><!-- Form Group NOT REQUIRED Select -->
@@ -722,38 +722,6 @@ else $relocate_referrer = $_SERVER['HTTP_REFERER'];
 		<div class="col-lg-10 col-md-9 col-sm-9 col-xs-12" id="possible_allergens-list">
 			<!-- Input Here -->
 			<input type="text" class="form-control" placeholder="<?php echo $brew_text_039; ?>" name="brewPossAllergens" value="<?php echo $row_log['brewPossAllergens']; ?>">
-			<?php
-
-				/*
-
-				$allergen_list  = "";
-
-				foreach($possible_allergens as $allergy) {
-					$allergen_list  .= "<div class=\"checkbox\">";
-					$allergen_list  .= "<label>";
-					$allergen_list  .= "<input type=\"checkbox\" value=\"".ucwords($allergy)."\"";
-					if ($row_log['brewPossAllergens'] == $allergy) $allergen_list  .= " CHECKED";
-					$allergen_list  .= ">";
-					$allergen_list  .= ucwords($allergy);
-					$allergen_list  .= "</label>";
-					$allergen_list  .= "</div>";
-				}
-
-
-				if (!in_array($row_log['brewPossAllergens'], $possible_allergens)) {
-					$allergen_list  .= "<div class=\"checkbox\">";
-					$allergen_list  .= "<label>";
-					$allergen_list  .= "<input type=\"checkbox\" id=\"brewPossAllergensOther\" value = \"".$label_other."\">".$label_other."";
-					$allergen_list  .= "</label>";
-					$allergen_list  .= "</div>";
-				}
-
-
-				echo $allergen_list ;
-
-				*/
-
-			?>
 		</div>
 	</div><!-- ./Form Group -->
 

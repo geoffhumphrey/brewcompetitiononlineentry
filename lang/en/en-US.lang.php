@@ -1296,7 +1296,7 @@ if ($section == "brew") {
     $brew_text_035 = "peanuts";
     $brew_text_036 = "wheat";
     $brew_text_037 = "soybeans";
-    $brew_text_038 = "Does this entry have possible food allergens? Common food allergens include milk (including lactose), eggs, fish, crustaceans, tree nuts, peanuts, wheat, soybeans, etc. ";
+    $brew_text_038 = "Does this entry have possible food allergens? Common food allergens include milk (including lactose), eggs, fish, crustaceans, tree nuts, peanuts, wheat, soybeans, etc.";
     $brew_text_039 = "Please specify any and all possible allergen(s)";
 }
 
@@ -1480,14 +1480,21 @@ $bottle_labels_005 = "If any items are missing, close this window and edit the e
 $bottle_labels_006 = "Space reserved for competition staff use.";
 $bottle_labels_007 = "THIS RECIPE FORM IS FOR YOUR RECORDS ONLY - please DO NOT include a copy of it with your entry shipment.";
 
-// ***********************************************************************************
-// END TRANSLATIONS
-// ***********************************************************************************
+// Add/Edit Entry
+$brew_text_040 = "There is no need to specify gluten as an allergen any beer styles; it is assumed that it will be present. Gluten-free beers should be entered into the Gluten-Free Beer category (BA) or the Alternative Grain Beer category (BJCP). Only specify gluten as an allergen in mead or cider styles if a source fermentable contains gluten (e.g., barley, wheat, or rye malt) or if a brewer's yeast was used.";
 
-// ----------------------------------------------------------------------------------
-// Various conditionals
-// No translations below this line
-// ----------------------------------------------------------------------------------
+/**
+ * ----------------------------------------------------------------------------------
+ * END TRANSLATIONS
+ * ----------------------------------------------------------------------------------
+ */
+
+/**
+ * ----------------------------------------------------------------------------------
+ * Various conditionals
+ * No translations below this line
+ * ----------------------------------------------------------------------------------
+ */
 
 if (strpos($section, "step") === FALSE) $alert_text_032 = $alert_text_032; else $alert_text_032 = "";
 if (strpos($section, "step") === FALSE) $alert_text_033 = $alert_text_033; else $alert_text_033 = "";

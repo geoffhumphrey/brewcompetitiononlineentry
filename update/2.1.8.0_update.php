@@ -10,7 +10,7 @@
 // Add ability for admins to toggle dropoff and shipping location display
 // -----------------------------------------------------------
 
-$output .= "<h4>Version 2.1.5</h4>";
+$output .= "<h4>Version 2.1.8</h4>";
 $output .= "<ul>";
 
 if (!check_update("prefsShipping", $prefix."preferences")) {
