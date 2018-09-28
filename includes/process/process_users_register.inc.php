@@ -19,6 +19,30 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 	$username2 = strtolower($_POST['user_name2']);
 	$username2 = filter_var($username2,FILTER_SANITIZE_EMAIL);
 
+	setcookie("userQuestion", $_POST['userQuestion'], 0, "/");
+	setcookie("userQuestionAnswer", $userQuestionAnswer, 0, "/");
+	setcookie("brewerFirstName", $first_name, 0, "/");
+	setcookie("brewerLastName", $last_name, 0, "/");
+	setcookie("brewerAddress", $address, 0, "/");
+	setcookie("brewerCity", $city, 0, "/");
+	setcookie("brewerState", sterilize($_POST['brewerState']), 0, "/");
+	setcookie("brewerZip", sterilize($_POST['brewerZip']), 0, "/");
+	setcookie("brewerCountry", $_POST['brewerCountry'], 0, "/");
+	setcookie("brewerPhone1", $brewerPhone1, 0, "/");
+	setcookie("brewerPhone2", $brewerPhone2, 0, "/");
+	setcookie("brewerClubs", $brewerClubs, 0, "/");
+	setcookie("brewerAHA", $brewerAHA, 0, "/");
+	setcookie("brewerStaff", sterilize($_POST['brewerStaff']), 0, "/");
+	setcookie("brewerSteward", $brewerSteward, 0, "/");
+	setcookie("brewerJudge", $brewerJudge, 0, "/");
+	setcookie("brewerDropOff", $brewerDropOff, 0, "/");
+	setcookie("brewerJudgeLocation", $location_pref1, 0, "/");
+	setcookie("brewerStewardLocation", $location_pref2, 0, "/");
+	setcookie("brewerBreweryName", $brewerBreweryName, 0, "/");
+	setcookie("brewerBreweryTTB", $brewerBreweryTTB, 0, "/");
+	setcookie("brewerJudgeID", $brewerJudgeID, 0, "/");
+	setcookie("brewerJudgeID", $brewerProAm, 0, "/");
+
 	if ($filter != "admin") {
 
 	// CAPCHA check
@@ -43,31 +67,6 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 
 
 	if (($view == "default") && ($filter != "admin") && (!$captcha_success)) {
-		setcookie("user_name", $username, 0, "/");
-		setcookie("user_name2", $username2, 0, "/");
-		setcookie("password", $_POST['password'], 0, "/");
-		setcookie("userQuestion", $_POST['userQuestion'], 0, "/");
-		setcookie("userQuestionAnswer", $userQuestionAnswer, 0, "/");
-		setcookie("brewerFirstName", $first_name, 0, "/");
-		setcookie("brewerLastName", $last_name, 0, "/");
-		setcookie("brewerAddress", $address, 0, "/");
-		setcookie("brewerCity", $city, 0, "/");
-		setcookie("brewerState", sterilize($_POST['brewerState']), 0, "/");
-		setcookie("brewerZip", sterilize($_POST['brewerZip']), 0, "/");
-		setcookie("brewerCountry", $_POST['brewerCountry'], 0, "/");
-		setcookie("brewerPhone1", $brewerPhone1, 0, "/");
-		setcookie("brewerPhone2", $brewerPhone2, 0, "/");
-		setcookie("brewerClubs", $brewerClubs, 0, "/");
-		setcookie("brewerAHA", $brewerAHA, 0, "/");
-		setcookie("brewerStaff", sterilize($_POST['brewerStaff']), 0, "/");
-		setcookie("brewerSteward", $brewerSteward, 0, "/");
-		setcookie("brewerJudge", $brewerJudge, 0, "/");
-		setcookie("brewerDropOff", $brewerDropOff, 0, "/");
-		setcookie("brewerJudgeLocation", $location_pref1, 0, "/");
-		setcookie("brewerStewardLocation", $location_pref2, 0, "/");
-		setcookie("brewerBreweryName", $brewerBreweryName, 0, "/");
-		setcookie("brewerBreweryTTB", $brewerBreweryTTB, 0, "/");
-		setcookie("brewerJudgeID", $brewerJudgeID, 0, "/");
 
 		$location = $base_url."index.php?section=".$section."&go=".$go."&msg=4";
 		header(sprintf("Location: %s", $location));
@@ -75,32 +74,6 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 	}
 
 	elseif (($view == "default") && ($username != $username2)) {
-
-		setcookie("user_name", $username, 0, "/");
-		setcookie("user_name2", $username2, 0, "/");
-		setcookie("password", $_POST['password'], 0, "/");
-		setcookie("userQuestion", $_POST['userQuestion'], 0, "/");
-		setcookie("userQuestionAnswer", $userQuestionAnswer, 0, "/");
-		setcookie("brewerFirstName", $first_name, 0, "/");
-		setcookie("brewerLastName", $last_name, 0, "/");
-		setcookie("brewerAddress", $address, 0, "/");
-		setcookie("brewerCity", $city, 0, "/");
-		setcookie("brewerState", sterilize($_POST['brewerState']), 0, "/");
-		setcookie("brewerZip", sterilize($_POST['brewerZip']), 0, "/");
-		setcookie("brewerCountry", $_POST['brewerCountry'], 0, "/");
-		setcookie("brewerPhone1", $brewerPhone1, 0, "/");
-		setcookie("brewerPhone2", $brewerPhone2, 0, "/");
-		setcookie("brewerClubs", $brewerClubs, 0, "/");
-		setcookie("brewerAHA", $brewerAHA, 0, "/");
-		setcookie("brewerStaff", sterilize($_POST['brewerStaff']), 0, "/");
-		setcookie("brewerSteward", $brewerSteward, 0, "/");
-		setcookie("brewerJudge", $brewerJudge, 0, "/");
-		setcookie("brewerDropOff", $brewerDropOff, 0, "/");
-		setcookie("brewerJudgeLocation", $location_pref1, 0, "/");
-		setcookie("brewerStewardLocation", $location_pref2, 0, "/");
-		setcookie("brewerBreweryName", $brewerBreweryName, 0, "/");
-		setcookie("brewerBreweryTTB", $brewerBreweryTTB, 0, "/");
-		setcookie("brewerJudgeID", $brewerJudgeID, 0, "/");
 
 		if ($filter == "admin") $location =  $base_url."index.php?section=admin&go=entrant&action=register&msg=27";
 		else $location = $base_url."index.php?section=".$section."&go=".$go."&msg=5";
@@ -119,29 +92,6 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 		$totalRows_userCheck = mysqli_num_rows($userCheck);
 
 		if ($totalRows_userCheck > 0) {
-
-			setcookie("userQuestion", $_POST['userQuestion'], 0, "/");
-			setcookie("userQuestionAnswer", $userQuestionAnswer, 0, "/");
-			setcookie("brewerFirstName", $first_name, 0, "/");
-			setcookie("brewerLastName", $last_name, 0, "/");
-			setcookie("brewerAddress", $address, 0, "/");
-			setcookie("brewerCity", $city, 0, "/");
-			setcookie("brewerState", sterilize($_POST['brewerState']), 0, "/");
-			setcookie("brewerZip", sterilize($_POST['brewerZip']), 0, "/");
-			setcookie("brewerCountry", $_POST['brewerCountry'], 0, "/");
-			setcookie("brewerPhone1", $brewerPhone1, 0, "/");
-			setcookie("brewerPhone2", $brewerPhone2, 0, "/");
-			setcookie("brewerClubs", $brewerClubs, 0, "/");
-			setcookie("brewerAHA", $brewerAHA, 0, "/");
-			setcookie("brewerStaff", sterilize($_POST['brewerStaff']), 0, "/");
-			setcookie("brewerSteward", $brewerSteward, 0, "/");
-			setcookie("brewerJudge", $brewerJudge, 0, "/");
-			setcookie("brewerDropOff", $brewerDropOff, 0, "/");
-			setcookie("brewerJudgeLocation", $location_pref1, 0, "/");
-			setcookie("brewerStewardLocation", $location_pref2, 0, "/");
-			setcookie("brewerBreweryName", $brewerBreweryName, 0, "/");
-			setcookie("brewerBreweryTTB", $brewerBreweryTTB, 0, "/");
-			setcookie("brewerJudgeID", $brewerJudgeID, 0, "/");
 
 			if ($filter == "admin") header(sprintf("Location: %s", $base_url."index.php?section=admin&go=".$go."&action=register&msg=10"));
 			else header(sprintf("Location: %s", $base_url."index.php?section=".$section."&go=".$go."&action=".$action."&msg=2"));
@@ -209,15 +159,16 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 				  brewerDropOff,
 				  brewerStaff,
 				  brewerBreweryName,
-				  brewerBreweryTTB
+				  brewerBreweryTTB,
+				  brewerProAm
 
 				) VALUES (
 				%s, %s, %s, %s, %s,
 				%s, %s, %s, %s, %s,
 				%s, %s, %s, %s, %s,
 				%s, %s, %s, %s, %s,
-				%s, %s, %s, %s, %s
-				)",
+				%s, %s, %s, %s, %s,
+				%s)",
 							   GetSQLValueString($row_user['id'], "int"),
 							   GetSQLValueString($first_name, "text"),
 							   GetSQLValueString($last_name, "text"),
@@ -242,7 +193,8 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 							   GetSQLValueString($brewerDropOff, "text"),
 							   GetSQLValueString(sterilize($_POST['brewerStaff']), "text"),
 							   GetSQLValueString($brewerBreweryName, "text"),
-							   GetSQLValueString($brewerBreweryTTB, "text")
+							   GetSQLValueString($brewerBreweryTTB, "text"),
+							   GetSQLValueString($brewerProAm, "text")
 							   );
 
 			} else {
@@ -275,14 +227,15 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 				  brewerDropOff,
 				  brewerStaff,
 				  brewerBreweryName,
-				  brewerBreweryTTB
+				  brewerBreweryTTB,
+				  brewerProAm
 
 				) VALUES (
 				%s, %s, %s, %s, %s,
 				%s, %s, %s, %s, %s,
 				%s, %s, %s, %s, %s,
 				%s, %s, %s, %s, %s,
-				%s, %s, %s, %s
+				%s, %s, %s, %s, %s
 				)",
 							   GetSQLValueString($row_user['id'], "int"),
 							   GetSQLValueString($first_name, "text"),
@@ -307,7 +260,8 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 							   GetSQLValueString($brewerDropOff, "text"),
 							   GetSQLValueString(sterilize($_POST['brewerStaff']), "text"),
 							   GetSQLValueString($brewerBreweryName, "text"),
-							   GetSQLValueString($brewerBreweryTTB, "text")
+							   GetSQLValueString($brewerBreweryTTB, "text"),
+							   GetSQLValueString($brewerProAm, "text")
 							   );
 			}
 
@@ -388,9 +342,11 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 					if ($brewerJudge == "Y") $brewerJudge1 = $label_yes; else $brewerJudge1 = $label_no;
 					if ($brewerSteward == "Y") $brewerSteward1 = $label_yes; else $brewerSteward1 = $label_no;
 					if ($_POST['brewerStaff'] == "Y") $brewerStaff1 = $label_yes; else $brewerStaff1 = $label_no;
+					if ($_POST['brewerProAm'] == 1) $brewerProAm1 = $label_yes; else $brewerProAm1 = $label_no;
 
 					if (isset($brewerClubs)) $message .= sprintf("<tr><td valign='top'><strong>%s:</strong></td><td valign='top'>%s</td></tr>",$label_club,$brewerClubs);
 					if (isset($brewerAHA)) $message .= sprintf("<tr><td valign='top'><strong>%s:</strong></td><td valign='top'>%s</td></tr>",$label_aha_number,$brewerAHA);
+					if (isset($brewerAHA)) $message .= sprintf("<tr><td valign='top'><strong>%s:</strong></td><td valign='top'>%s</td></tr>",$label_pro_am,$brewerProAm1);
 					if (isset($_POST['brewerStaff']))$message .= sprintf("<tr><td valign='top'><strong>%s:</strong></td><td valign='top'>%s</td></tr>",$label_staff,$brewerStaff1);
 					if (isset($_POST['brewerJudge'])) $message .= sprintf("<tr><td valign='top'><strong>%s:</strong></td><td valign='top'>%s</td></tr>",$label_judge,$brewerJudge1);
 					if (isset($_POST['brewerSteward'])) $message .= sprintf("<tr><td valign='top'><strong>%s:</strong></td><td valign='top'>%s</td></tr>",$label_steward,$brewerSteward1);

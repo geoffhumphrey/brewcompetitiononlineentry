@@ -11,6 +11,7 @@
  * script and document storage folders used/accessed by the
  * application.
  */
+
 define('ROOT',dirname( __FILE__ ).DIRECTORY_SEPARATOR);
 define('ADMIN',ROOT.'admin'.DIRECTORY_SEPARATOR);
 define('SSO',ROOT.'sso'.DIRECTORY_SEPARATOR);
@@ -48,12 +49,13 @@ define('HOSTED', FALSE);
 define('NHC', FALSE);
 define('SINGLE', FALSE);
 
-/*
+/**
  * Enable to following to put your installation into
  * "mainenance mode" - bypasses the default index.php script
  * and displays the maintenance.php file to alert visitors.
  * Default is FALSE
  */
+
 define('MAINT', FALSE);
 
 /**
@@ -63,6 +65,7 @@ define('MAINT', FALSE);
  * See http://www.brewcompetition.com/local-load
  * Default is TRUE
  */
+
 define('CDN', TRUE);
 
 /**
@@ -71,12 +74,14 @@ define('CDN', TRUE);
  * sandbox enfvironment, etc.
  * Default is FALSE
  */
+
 define('TESTING', FALSE);
 
 /**
  * Enable the following to display php errors on screen.
  * Default is FALSE
  */
+
 define('DEBUG', FALSE);
 
 /**
@@ -84,6 +89,7 @@ define('DEBUG', FALSE);
  * session variables on screen
  * Default is FALSE
  */
+
 define('DEBUG_SESSION_VARS', FALSE);
 
 /**
@@ -95,6 +101,7 @@ define('DEBUG_SESSION_VARS', FALSE);
  * page for performance issues.
  * Default is FALSE
  */
+
 define('FORCE_UPDATE', FALSE);
 
 /**
@@ -102,9 +109,10 @@ define('FORCE_UPDATE', FALSE);
  * Error Reporting
  * --------------------------------------------------------
  */
+
 ini_set('error_reporting', E_ALL ^ E_DEPRECATED);
 ini_set('log_errors','On');
-if (DEBUG)  ini_set('display_errors','On');
+if (DEBUG) ini_set('display_errors','On');
 else ini_set('display_errors','Off');
 
 /**
@@ -112,6 +120,7 @@ else ini_set('display_errors','Off');
  * Load Configuration
  * --------------------------------------------------------
  */
+
 require_once (CONFIG.'config.php');
 require_once (INCLUDES.'current_version.inc.php');
 
@@ -125,6 +134,7 @@ if (HOSTED) {
  *
  * @fixes https://github.com/geoffhumphrey/brewcompetitiononlineentry/issues/781
  */
+
 if (empty($installation_id)) $prefix_session = md5(__FILE__);
 else $prefix_session = md5($installation_id);
 

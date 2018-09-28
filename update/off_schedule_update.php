@@ -2,9 +2,11 @@
 
 if (!isset($output)) $output = "";
 
-// ----------------------------------------------- 2.1.5 -----------------------------------------------
-// Make sure all items are present from last "official" update
-// -----------------------------------------------------------------------------------------------------
+/**
+ * ----------------------------------------------- 2.1.5 -----------------------------------------------
+ * Make sure all items are present from last "official" update
+ * -----------------------------------------------------------------------------------------------------
+ */
 
 if (!check_update("prefsLanguage", $prefix."preferences")) {
 	$updateSQL = sprintf("ALTER TABLE `%s` ADD `prefsLanguage` VARCHAR(25) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL;",$prefix."preferences");
@@ -76,10 +78,12 @@ if (!check_update("brewStyleComEx", $prefix."styles")) {
 	$result = mysqli_query($connection,$updateSQL);
 }
 
-// ----------------------------------------------- 2.1.8 -----------------------------------------------
-// Check for setup_last_step and add
-// Also add "example" sub-styles for BJCP2015 21A (Specialty IPA) and 27A (Historical Beer)
-// -----------------------------------------------------------------------------------------------------
+/**
+ * ----------------------------------------------- 2.1.8 -----------------------------------------------
+ * Check for setup_last_step and add
+ * Also add "example" sub-styles for BJCP2015 21A (Specialty IPA) and 27A (Historical Beer)
+ * -----------------------------------------------------------------------------------------------------
+ */
 
 if (!check_update("setup_last_step", $prefix."system")) {
 	// Add setup_last_step column to system table
@@ -115,7 +119,6 @@ mysqli_real_escape_string($connection,$updateSQL);
 $result = mysqli_query($connection,$updateSQL);
 
 // Add new specialty IPA and historical styles to styles table if not present
-
 function check_new_style($style1, $style2, $style3) {
 
 	require(CONFIG.'config.php');
@@ -265,10 +268,11 @@ if (!check_new_style("21","B6","White IPA")) {
 
 $output .= "<li>Styles table updated with current sub-style information.</li>";
 
-
-// ----------------------------------------------- 2.1.9 -----------------------------------------------
-// Correct the problem with new BJCP "example" substyles not being saved correctly
-// -----------------------------------------------------------------------------------------------------
+/**
+ * ----------------------------------------------- 2.1.9 -----------------------------------------------
+ * Correct the problem with new BJCP "example" substyles not being saved correctly
+ * -----------------------------------------------------------------------------------------------------
+ */
 
 if (check_update("brewerNickname", $prefix."brewer")) {
 	// Change brewerNickname to brewerStaff for ability for users to identify that they are interested in being a staff member
@@ -305,7 +309,7 @@ if (!check_update("assignRoles", $prefix."judging_assignments")) {
 $output .= "<li>Judging Assignments table updated.</li>";
 
 
-/*
+/**
  * ----------------------------------------------- 2.1.10 ----------------------------------------------
  * Add db columns to store Pro Edition data such as Brewery Name and TTB Number
  * Add db columns to allow for PayPal IPN use
@@ -679,7 +683,7 @@ $output .= "<li>Added db columns in Preferences table to accommodate best brewer
 $output .= "<li>Altered prefsStyleSet in Preferences table to accommodate BA style data and BreweryDB key.</li>";
 $output .= "<li>Updated Archive tables to accommodate Pro Edition and BA Styles.</li>";
 
-/*
+/**
  * ----------------------------------------------- 2.1.11 ----------------------------------------------
  * All PDF files in the user_docs directory must be converted to all lowercase (including extension)
  * -----------------------------------------------------------------------------------------------------
@@ -732,7 +736,7 @@ if (SINGLE) {
 
 $output .= "<li>PDF file name in the user_docs directory converted to lowercase (including extension).</li>";
 
-/*
+/**
  * ----------------------------------------------- 2.1.12 ----------------------------------------------
  * Add Certified Cider Judge designation
  * Change unused archive column to archiveScoresheet
@@ -774,7 +778,7 @@ if (!check_update("archiveScoresheet", $prefix."archive")) {
 
 $output .= "<li>Updated archive table for proper access of archived scoresheets.</li>";
 
-/*
+/**
  * ----------------------------------------------- 2.1.13 ----------------------------------------------
  * Add BA styles to styles DB table
  * As of April 2018, BreweryDB not issuing API keys; installations not able to use BA styles
@@ -976,7 +980,7 @@ if (!$ba_styles_present) {
 
 $output .= "<li>BA styles added.</li>";
 
-/*
+/**
  * ----------------------------------------------- 2.1.13 ----------------------------------------------
  * Add toggle to allow users to specify whether to use BOS in "Best of" calculations
  * Change unused brewWinnerPlace field to brewAdminNotes field
@@ -1047,7 +1051,7 @@ mysqli_select_db($connection,$database);
 mysqli_real_escape_string($connection,$updateSQL);
 $result = mysqli_query($connection,$updateSQL);
 
-/*
+/**
  * ----------------------------------------------- 2.1.13 ----------------------------------------------
  * Check for BJCP 2015 Provisional Styles as of July 4, 2018
  * Provisional Styles:
@@ -1158,7 +1162,22 @@ $result = mysqli_query($connection,$updateSQL);
 
 $output .= "<li>BJCP Provisional styles added.</li>";
 
-/*
+/**
+ * ----------------------------------------------- 2.1.14 ----------------------------------------------
+ * Pro-Am indication. Change brewerJudgeBOS to brewerProAm
+ * -----------------------------------------------------------------------------------------------------
+ */
+
+if (check_update("brewerJudgeBOS", $prefix."brewer")) {
+	$updateSQL = sprintf("ALTER TABLE `%s` CHANGE `brewerJudgeBOS` `brewerProAm` TINYINT(2) NULL DEFAULT NULL",$prefix."brewer");
+	mysqli_select_db($connection,$database);
+	mysqli_real_escape_string($connection,$updateSQL);
+	$result = mysqli_query($connection,$updateSQL);
+}
+
+$output .= "<li>Previous Pro-Am award indication from entrants.</li>";
+
+/**
  * ----------------------------------------------------------------------------------------------------
  * Change the version number and date
  * ALWAYS the final script

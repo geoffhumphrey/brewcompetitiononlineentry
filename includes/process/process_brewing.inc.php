@@ -49,7 +49,6 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 		$styleName = "";
 		$brewName = standardize_name($purifier->purify($_POST['brewName']));
 		$brewInfo = "";
-		$brewPaid = "";
 		$brewInfoOptional = "";
 		$index = ""; // Defined with Style
 		$brewMead1 = "";
@@ -57,6 +56,11 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 		$brewMead3 = "";
 		$brewJudgingNumber = "";
 		$brewPossAllergens = "";
+		$brewAdminNotes = "";
+		$brewStaffNotes = "";
+		$brewBoxNum = "";
+		$brewPaid = 0;
+		$brewReceived = 0;
 
 		// Comments
 		if (isset($_POST['brewComments'])) $brewComments .= $purifier->purify($_POST['brewComments']);
@@ -66,6 +70,14 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 
 		// Possible Allergens
 		if (isset($_POST['brewPossAllergens'])) $brewPossAllergens .= $purifier->purify($_POST['brewPossAllergens']);
+
+		// Admin and Staff Notes
+		if (isset($_POST['brewAdminNotes'])) $brewAdminNotes .= $purifier->purify($_POST['brewAdminNotes']);
+		if (isset($_POST['brewStaffNotes'])) $brewStaffNotes .= $purifier->purify($_POST['brewStaffNotes']);
+
+		if (isset($_POST['brewBoxNum'])) $brewBoxNum .= $purifier->purify($_POST['brewBoxNum']);
+		if (isset($_POST['brewReceived'])) $brewReceived = $_POST['brewReceived'];
+		if (isset($_POST['brewPaid'])) $brewPaid = $_POST['brewPaid'];
 
 		// Style
 		$style = explode('-', $styleBreak);
@@ -85,8 +97,6 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 
 		// Mark as paid if free entry fee
 		if ($_SESSION['contestEntryFee'] == 0) $brewPaid = "1";
-		elseif (isset($_POST['brewPaid'])) $brewPaid = $_POST['brewPaid'];
-		else $brewPaid = "0";
 
 		// Concat all special ingredient styles
 		$all_special_ing_styles = array();
@@ -382,6 +392,9 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 			brewPaid,
 			brewReceived,
 			brewInfoOptional,
+			brewBoxNum,
+			brewAdminNotes,
+			brewStaffNotes,
 			brewPossAllergens
 			) VALUES (";
 
@@ -499,6 +512,9 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 			$insertSQL .= GetSQLValueString($brewPaid,"text").", ";
 			$insertSQL .= GetSQLValueString("0","text").", ";
 			$insertSQL .= GetSQLValueString($brewInfoOptional,"text").", ";
+			$insertSQL .= GetSQLValueString($brewBoxNum,"text").", ";
+			$insertSQL .= GetSQLValueString($brewAdminNotes,"text").", ";
+			$insertSQL .= GetSQLValueString($brewStaffNotes,"text").", ";
 			$insertSQL .= GetSQLValueString($brewPossAllergens,"text");
 			$insertSQL .= ")";
 
@@ -768,10 +784,14 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 			$updateSQL .= "brewPaid=".GetSQLValueString($brewPaid,"text").", ";
 			$updateSQL .= "brewConfirmed=".GetSQLValueString(filter_var($_POST['brewConfirmed'],FILTER_SANITIZE_STRING),"text").", ";
 			$updateSQL .= "brewInfoOptional=".GetSQLValueString($brewInfoOptional,"text").", ";
+			if (!empty($brewAdminNotes)) $updateSQL .= "brewAdminNotes=".GetSQLValueString($brewAdminNotes,"text").", ";
+			if (!empty($brewStaffNotes)) $updateSQL .= "brewStaffNotes=".GetSQLValueString($brewStaffNotes,"text").", ";
+			if (!empty($brewBoxNum)) $updateSQL .= "brewBoxNum=".GetSQLValueString($brewBoxNum,"text").", ";
+			$updateSQL .= "brewReceived=".GetSQLValueString($brewReceived,"text").", ";
 			$updateSQL .= "brewPossAllergens=".GetSQLValueString($brewPossAllergens,"text");
 			$updateSQL .= " WHERE id ='".$id."'";
 
-		//echo $updateSQL; exit;
+		// echo $updateSQL; exit;
 		mysqli_real_escape_string($connection,$updateSQL);
 		$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 

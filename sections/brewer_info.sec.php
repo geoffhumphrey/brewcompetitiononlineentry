@@ -218,6 +218,9 @@ if (!empty($_SESSION['brewerAHA'])) {
 	elseif ($_SESSION['brewerAHA'] >= "999999994") $aha_number .= "Pending";
 } else $aha_number .= $label_none_entered;
 
+if ($_SESSION['brewerProAm'] == 1) $pro_am = $label_yes;
+else $pro_am = $label_no;
+
 // Build Judge Info Display
 
 	$judge_info = "";
@@ -368,8 +371,13 @@ $account_display .= "</div>";
 
 if ($show_judge_steward_fields) {
 	$account_display .= "<div class=\"row bcoem-account-info\">";
-	$account_display .= sprintf("<div class=\"".$display_left_cols."\"><strong>AHA Number</strong></div>",$label_aha_number);
+	$account_display .= sprintf("<div class=\"".$display_left_cols."\"><strong>%s</strong></div>",$label_aha_number);
 	$account_display .= sprintf("<div class=\"".$display_right_cols."\"><a href=\"http://www.homebrewersassociation.org/membership/join-or-renew/\" target=\"_blank\" data-toggle=\"tooltip\" title=\"%s\" data-placement=\"right\">".$aha_number."</a></div>",$brewer_info_005);
+	$account_display .= "</div>";
+
+	$account_display .= "<div class=\"row bcoem-account-info\">";
+	$account_display .= sprintf("<div class=\"".$display_left_cols."\"><strong>%s</strong></div>",$label_pro_am);
+	$account_display .= sprintf("<div class=\"".$display_right_cols."\">%s</div>",$pro_am);
 	$account_display .= "</div>";
 }
 

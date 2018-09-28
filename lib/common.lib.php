@@ -3936,4 +3936,17 @@ function is_dir_empty($dir) {
 	return true;
 }
 
+function pro_am_check($uid) {
+
+	require(CONFIG.'config.php');
+	mysqli_select_db($connection,$database);
+
+	$query_check_proam = sprintf("SELECT brewerProAm FROM %s WHERE uid='%s'", $prefix."brewer", $uid);
+	$check_proam = mysqli_query($connection,$query_check_proam) or die (mysqli_error($connection));
+	$row_check_proam = mysqli_fetch_assoc($check_proam);
+
+	return $row_check_proam['brewerProAm'];
+
+}
+
 ?>

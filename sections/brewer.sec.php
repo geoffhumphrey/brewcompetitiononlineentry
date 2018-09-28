@@ -186,7 +186,6 @@ $(document).ready(function(){
 </script>
 
 <form class="form-horizontal" data-toggle="validator" action="<?php echo $form_action; ?>" method="POST" name="form1" id="form1">
-
 <?php if (($_SESSION['prefsProEdition'] == 1) && (!$show_judge_steward_fields)) { ?>
     <div class="form-group"><!-- Form Group REQUIRED Text Input -->
         <label for="brewerBreweryName" class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label_organization." ".$label_name; ?></label>
@@ -394,6 +393,22 @@ $(document).ready(function(){
         <label for="brewerClubsOther" class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label_club_enter; ?></label>
         <div class="col-lg-9 col-md-9 col-sm-8 col-xs-12">
        		<input class="form-control" name="brewerClubsOther" type="text" value="<?php if ($action == "edit") echo $row_brewer['brewerClubs']; ?>" placeholder="">
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label for="" class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label_pro_am; ?></label>
+        <div class="col-lg-9 col-md-9 col-sm-8 col-xs-12">
+            <p><?php echo $brewer_text_041; ?></p>
+            <div class="input-group">
+                <label class="radio-inline">
+                    <input type="radio" name="brewerProAm" value="1" id="brewerProAm_1"  <?php if ($row_brewer['brewerProAm'] == "1") echo "CHECKED"; ?> /> <?php echo $label_yes; ?>
+                </label>
+                <label class="radio-inline">
+                    <input type="radio" name="brewerProAm" value="0" id="brewerProAm_0" <?php if (($row_brewer['brewerProAm'] == "0") || (empty($row_brewer['brewerProAm']))) echo "CHECKED"; ?> /> <?php echo $label_no; ?>
+                </label>
+            </div>
+            <div class="help-block"><?php echo $brewer_text_042; ?></div>
         </div>
     </div>
 

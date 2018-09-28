@@ -703,30 +703,82 @@ else $relocate_referrer = $_SERVER['HTTP_REFERER'];
     </div><!-- ./Form Group -->
     <?php } ?>
     <div class="form-group"><!-- Form Group Radio INLINE -->
-	    <label for="" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label_possible_allergens; ?></label>
+	    <label for="" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label"><?php echo $label_possible_allergens; ?></label>
 	    <div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
 	        <div class="input-group">
 	            <!-- Input Here -->
 	            <label class="radio-inline">
-	                <input type="radio" name="possible-allergens" value="1" id="prefsCheck_0"  <?php if (!empty($row_log['brewPossAllergens'])) echo "CHECKED"; ?> />Yes
+	                <input type="radio" name="possible-allergens" value="1" id="prefsCheck_0"  <?php if (($action == "edit") && (!empty($row_log['brewPossAllergens']))) echo "CHECKED"; ?> />Yes
 	            </label>
 	            <label class="radio-inline">
-	                <input type="radio" name="possible-allergens" value="0" id="prefsCheck_1" <?php if (empty($row_log['brewPossAllergens'])) echo "CHECKED"; ?>/>No
+	                <input type="radio" name="possible-allergens" value="0" id="prefsCheck_1" <?php if (($action == "edit") && (empty($row_log['brewPossAllergens']))) echo "CHECKED"; if ($action == "add") echo "CHECKED"; ?> />No
 	    		</label>
 	        </div>
 	        <span id="helpBlockAllergens" class="help-block"><?php echo sprintf("<strong>%s</strong> %s",$brew_text_038,$brew_text_040);  ?></span>
 	    </div>
 	</div><!-- ./Form Group -->
 	<div class="form-group" id="possible-allergens"><!-- Form Group NOT REQUIRED Select -->
-		<label for="brewPossAllergens" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label"></label>
+		<label for="brewPossAllergens" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label"></label>
 		<div class="col-lg-10 col-md-9 col-sm-9 col-xs-12" id="possible_allergens-list">
 			<!-- Input Here -->
 			<input type="text" class="form-control" placeholder="<?php echo $brew_text_039; ?>" name="brewPossAllergens" value="<?php echo $row_log['brewPossAllergens']; ?>">
 		</div>
 	</div><!-- ./Form Group -->
 
+<?php if ((($filter == "admin") || ($filter == "default")) && ($bid != "default") && ($_SESSION['userLevel'] < 2)) { ?>
 
+	<div class="form-group"><!-- Form Group Radio INLINE -->
+	    <label for="brewPaid" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label"><?php echo $label_paid; ?></label>
+	    <div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
+	        <div class="input-group">
+	            <!-- Input Here -->
+	            <label class="radio-inline">
+	                <input type="radio" name="brewPaid" value="1" id="brewPaid_0" <?php if ($row_log['brewPaid'] == 1) echo "CHECKED"; ?> />Yes
+	            </label>
+	            <label class="radio-inline">
+	                <input type="radio" name="brewPaid" value="0" id="brewPaid_1" <?php if (($action == "edit") && ((empty($row_log['brewPaid'])) || ($row_log['brewPaid'] == 0))) echo "CHECKED"; if ($action == "add") echo "CHECKED"; ?> />No
+	    		</label>
+	        </div>
+	    </div>
+	</div><!-- ./Form Group -->
 
+	<div class="form-group"><!-- Form Group Radio INLINE -->
+	    <label for="brewReceived" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label"><?php echo $label_received; ?></label>
+	    <div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
+	        <div class="input-group">
+	            <!-- Input Here -->
+	            <label class="radio-inline">
+	                <input type="radio" name="brewReceived" value="1" id="brewReceived_0" <?php if ($row_log['brewReceived'] == 1) echo "CHECKED"; ?> />Yes
+	            </label>
+	            <label class="radio-inline">
+	                <input type="radio" name="brewReceived" value="0" id="brewReceived_1" <?php if (($action == "edit") && ((empty($row_log['brewReceived'])) || ($row_log['brewReceived'] == 0))) echo "CHECKED"; if ($action == "add") echo "CHECKED"; ?> />No
+	    		</label>
+	        </div>
+	    </div>
+	</div><!-- ./Form Group -->
+
+	<div class="form-group"><!-- Form Group NOT REQUIRED Text Input -->
+        <label for="brewAdminNotes" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label">Admin Notes</label>
+        <div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
+        	<!-- Input Here -->
+            <textarea rows="6" class="form-control" name="brewAdminNotes" id="brewAdminNotes" maxlength="<?php echo $_SESSION['prefsSpecialCharLimit']; ?>" placeholder=""><?php if ($action == "edit") echo $row_log['brewAdminNotes']; ?></textarea>
+        </div>
+    </div><!-- ./Form Group -->
+    <div class="form-group"><!-- Form Group NOT REQUIRED Text Input -->
+        <label for="brewStaffNotes" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label">Staff Notes</label>
+        <div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
+        	<!-- Input Here -->
+            <textarea rows="6" class="form-control" name="brewStaffNotes" id="brewStaffNotes" maxlength="<?php echo $_SESSION['prefsSpecialCharLimit']; ?>" placeholder=""><?php if ($action == "edit") echo $row_log['brewStaffNotes']; ?></textarea>
+        </div>
+    </div><!-- ./Form Group -->
+    <div class="form-group"><!-- Form Group NOT REQUIRED Select -->
+		<label for="brewBoxNum" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label">Box/Location</label>
+		<div class="col-lg-10 col-md-9 col-sm-9 col-xs-12" id="possible_allergens-list">
+			<!-- Input Here -->
+			<input type="text" class="form-control" placeholder="" name="brewBoxNum" value="<?php echo $row_log['brewBoxNum']; ?>">
+		</div>
+	</div><!-- ./Form Group -->
+<?php } ?>
 
 <?php if ($_SESSION['prefsHideRecipe'] == "N") { ?>
 	<!-- Begin Recipe Entry Fields -->
@@ -1316,7 +1368,7 @@ if ($action == "edit") {
 	</div>
 </div><!-- Form Group -->
 </div>
-<input type="hidden" name="brewPaid" value="<?php echo $brewPaid; ?>">
+<?php if ($bid == "default") { ?><input type="hidden" name="brewPaid" value="<?php echo $brewPaid; ?>"><?php } ?>
 <input type="hidden" name="brewConfirmed" value="1">
 <?php if (isset($_SERVER['HTTP_REFERER'])) { ?>
 <input type="hidden" name="relocate" value="<?php echo relocate($_SERVER['HTTP_REFERER'],"default",$msg,$id); ?>">

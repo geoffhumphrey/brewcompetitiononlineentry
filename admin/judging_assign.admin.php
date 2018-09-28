@@ -426,8 +426,7 @@ if (is_array($nonranked_judge)) $nonranked = array_sum($nonranked_judge); else $
 			null,
 			null
 			<?php } ?>
-
-							]
+            ]
 		} );
 	} );
 </script>

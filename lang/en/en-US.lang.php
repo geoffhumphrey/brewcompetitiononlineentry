@@ -1466,6 +1466,7 @@ $label_unconfirmed_entries = "Unconfirmed Entries";
 $label_recipe = "Recipe";
 $label_view = "View";
 $label_number_bottles = "Number of Bottles Required Per Entry";
+$label_pro_am = "Pro-Am";
 
 // Pay screen
 $pay_text_034 = "The limit of paid entires has been reached - further entry payments are not being accepted.";
@@ -1482,6 +1483,10 @@ $bottle_labels_007 = "THIS RECIPE FORM IS FOR YOUR RECORDS ONLY - please DO NOT 
 
 // Add/Edit Entry
 $brew_text_040 = "There is no need to specify gluten as an allergen for any beer style; it is assumed that it will be present. Gluten-free beers should be entered into the Gluten-Free Beer category (BA) or the Alternative Grain Beer category (BJCP). Only specify gluten as an allergen in mead or cider styles if a source fermentable contains gluten (e.g., barley, wheat, or rye malt) or if a brewer's yeast was used.";
+
+// Pro-Am
+$brewer_text_041 = "Have you already been awarded a Pro-Am opportunity to compete in the upcoming Great American Beer Festival Pro-Am Competition?";
+$brewer_text_042 = "If you have already been awarded a Pro-Am, please indicate so here. This will help competition staff and Pro-Am brewery representatives (if applicable for this competition) to choose Pro-Am entries from brewers that have not secured one.";
 
 /**
  * ----------------------------------------------------------------------------------

@@ -30,6 +30,9 @@ else $brewerJudgeRank = "";
 if (isset($_POST['brewerAHA'])) $brewerAHA = sterilize($_POST['brewerAHA']);
 else $brewerAHA = "";
 
+if (isset($_POST['brewerProAm'])) $brewerProAm = $_POST['brewerProAm'];
+else $brewerProAm = "";
+
 if (isset($_POST['brewerClubs'])) {
     include (DB.'entries.db.php');
     include (INCLUDES.'constants.inc.php');

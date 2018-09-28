@@ -42,7 +42,7 @@ foreach ($a as $type) {
 	if ($style_type_info[0] == "Y") {
 
 		include (DB.'output_bos_mat.db.php');
-		//$output .= $query_scores;
+		// $output .= $query_scores;
 
 		$endRow = 0;
 		$columns = 3;  // number of columns
@@ -75,6 +75,7 @@ foreach ($a as $type) {
 				if (!empty($row_scores['brewComments'])) $output .= '<p><small><em>'.$row_scores['brewComments'].'</em></small></p>';
 				if ($type == 2) $output .= '<p><small><em>'.$row_scores['brewMead1'].', '.$row_scores['brewMead2'].'</small></p>';
 				if ($type == 3) $output .= '<p><small><em>'.$row_scores['brewMead1'].', '.$row_scores['brewMead2'].', '.$row_scores['brewMead3'].'</small></p>';
+				if (pro_am_check($row_scores['brewBrewerID']) == 1) $output .= "<p><small><em>** NOT ELIGIBLE FOR PRO-AM **</em></small></p>";
 				$output .= '</td>';
 
 				$endRow++;
