@@ -612,15 +612,15 @@ if ($action != "print") { ?>
 			</div>
 		</div><!-- ./button group -->
 		<?php } ?>
+		<div class="btn-group pull-right hidden-xs hidden-sm" role="group" aria-label="entryStatus">
+	        <div class="btn-group" role="group">
+	            <button type="button" class="btn btn-success" data-toggle="modal" data-target="#entryStatusModal">
+	              <?php if ($view == "paid") echo "Paid"; elseif ($view == "unpaid") echo "Unpaid"; else echo "All" ?> Entry Status
+	            </button>
+	        </div>
+	    </div>
 	</div>
 </div>
-<div class="btn-group pull-right hidden-xs hidden-sm" role="group" aria-label="entryStatus">
-        <div class="btn-group" role="group">
-            <button type="button" class="btn btn-success" data-toggle="modal" data-target="#entryStatusModal">
-              <?php if ($view == "paid") echo "Paid"; elseif ($view == "unpaid") echo "Unpaid"; else echo "All" ?> Entry Status
-            </button>
-        </div>
-    </div>
 <div class="bcoem-admin-element hidden-print row hidden-xs">
 	<?php $all_email_display = implode(", ",array_unique($copy_paste_all_emails));
 	if (!empty($all_email_display))	{ ?>
