@@ -105,9 +105,12 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 		if (is_array($spec_sweet_carb_only)) $all_special_ing_styles = array_merge($all_special_ing_styles,$spec_sweet_carb_only);
 		if (is_array($spec_carb_only)) $all_special_ing_styles = array_merge($all_special_ing_styles,$spec_carb_only);
 
-		// Required info
+		// print_r($all_special_ing_styles);
+		// echo $index."<br>";
+
+		// -------------------------------- Required info --------------------------------
 		// Checked against requirements later
-		if (!empty($_POST['brewInfo'])) $brewInfo = $purifier->purify($_POST['brewInfo']);
+		if ((!empty($_POST['brewInfo'])) && (in_array($index, $all_special_ing_styles))) $brewInfo = $purifier->purify($_POST['brewInfo']);
 
 		// Specialized/Optional info
 		if ((!empty($_POST['brewInfoOptional'])) && (in_array($styleBreak, $optional_info_styles))) $brewInfoOptional = $purifier->purify($_POST['brewInfoOptional']);
@@ -134,6 +137,8 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 			if ($index == "25-B") $brewInfo = filter_var($_POST['strengthSaison'],FILTER_SANITIZE_STRING)."^".filter_var($_POST['darkLightColor'],FILTER_SANITIZE_STRING);
 
 		}
+
+		// if (!empty($brewInfo)) echo $brewInfo; else echo "Brew info empty"; exit;
 
 		if ($style[0] > 34) $styleID = $styleID; else $styleID = $style[1];
 
@@ -162,7 +167,6 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 		echo "Strength: ".$brewMead3;
 		exit;
 		*/
-
 
 		// The following are only enabled when preferences dictate that the recipe fields be shown.
 		// DEPRECATE for version 2.2.0

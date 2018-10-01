@@ -8,12 +8,15 @@ require(LIB.'output.lib.php');
 $page_info0 = "";
 $page_info1 = "";
 
+$_POST = filter_input_array(INPUT_POST,FILTER_SANITIZE_NUMBER_INT);
+
 if (isset($_SESSION['loginUsername'])) {
 
     // Get id array from $_POST of the entry label(s) user wishes to print.
     if ($id == "default") {
       $entry_arr = array();
       foreach($_POST['id'] as $entry_id) {
+        $entry_id = filter_var($entry_id,FILTER_SANITIZE_NUMBER_INT);
         $entry_arr[] = $entry_id;
       }
     }
@@ -131,7 +134,7 @@ if (isset($_SESSION['loginUsername'])) {
 
             $page_info1 .= "<div align=\"center\" style=\"margin-top: 10px;\"><img src=\"".$barcode_link."\">&nbsp;&nbsp;<img src=\"".$qrcode_link."\"></div>";
 
-            $page_info1 .= "<div align=\"center\" class=\"box\">Space Reserved for Competition Staff Use</div>";
+            $page_info1 .= "<div align=\"center\" class=\"box\">".$bottle_labels_006."</div>";
 
             $page_info1 .= "</div>";
             $page_info1 .= "</div>";
