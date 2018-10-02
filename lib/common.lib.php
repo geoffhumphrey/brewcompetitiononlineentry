@@ -38,12 +38,10 @@ function in_string($haystack,$needle) {
 }
 
 function designations($judge_array,$display) {
-
 	$return = "";
 	$rank1 = explode(",",$judge_array);
 	foreach ($rank1 as $rank2) {
 		 if ($rank2 != $display) $return .= "<br />".$rank2."";
-		 else $return .= "";
 	}
 	return $return;
 }
@@ -198,16 +196,19 @@ function display_array_content($arrayname,$method) {
 }
 
 function addOrdinalNumberSuffix($num) {
-    if (!in_array(($num % 100),array(11,12,13))){
-      switch ($num % 10) {
-        // Handle 1st, 2nd, 3rd
-        case 1:  return $num.'st';
-        case 2:  return $num.'nd';
-        case 3:  return $num.'rd';
-      }
-    }
-    return $num.'th';
-  }
+	if (!is_numeric($num)) return $num;
+	else {
+		if (!in_array(($num % 100),array(11,12,13))) {
+			switch ($num % 10) {
+				// Handle 1st, 2nd, 3rd
+				case 1:  return $num."st";
+				case 2:  return $num."nd";
+				case 3:  return $num."rd";
+			}
+	    }
+	    return $num."th";
+	}
+}
 
 function purge_entries($type, $interval) {
 
