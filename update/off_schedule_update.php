@@ -1175,7 +1175,7 @@ if (check_update("brewerJudgeBOS", $prefix."brewer")) {
 	$result = mysqli_query($connection,$updateSQL);
 }
 
-$output .= "<li>Previous Pro-Am award indication from entrants.</li>";
+$output .= "<li>Previous Pro-Am award indication from entrants added.</li>";
 
 // Correct bug introduced in 2.1.13 regarding display of required info box
 // @ https://github.com/geoffhumphrey/brewcompetitiononlineentry/issues/980

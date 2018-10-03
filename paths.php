@@ -126,8 +126,9 @@ require_once (INCLUDES.'current_version.inc.php');
 
 if (HOSTED) {
 	$installation_id = $prefix;
-	$session_expire_after = 30;
 }
+
+$session_expire_after = 30;
 
 /** Using an MD5 of __FILE__ will ensure a different session
  * name for multiple installs on the same domain name.

@@ -12,8 +12,6 @@ ini_set('session.use_only_cookies', 1);
 // Uses a secure connection (HTTPS) if possible
 ini_set('session.cookie_secure', 1);
 
-$_SESSION['prefsLanguage'] = "en-US";
-
 if (SINGLE) require_once(SSO.'sso.inc.php');
 require_once (LIB.'common.lib.php');
 require_once (LIB.'update.lib.php');
