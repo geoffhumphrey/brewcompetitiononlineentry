@@ -195,6 +195,13 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 			mysqli_real_escape_string($connection,$insertSQL);
 			$result = mysqli_query($connection,$insertSQL) or die (mysqli_error($connection));
 
+			// Update style set of any custom styles to chosen style set
+			// Safeguards against a bug introduced in 2.1.13 scripting
+			$updateSQL = sprintf("UPDATE `%s` SET brewStyleVersion='%s' WHERE brewStyleOwn='custom'",$prefix."styles",$prefsStyleSet);
+			mysqli_select_db($connection,$database);
+			mysqli_real_escape_string($connection,$updateSQL);
+			$result = mysqli_query($connection,$updateSQL);
+
 			if ($_POST['prefsPaypalIPN'] == 1) {
 
 				include (LIB.'update.lib.php');
@@ -410,6 +417,13 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 			mysqli_real_escape_string($connection,$updateSQL);
 			$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 			//echo $updateSQL; exit;
+
+			// Update style set of any custom styles to chosen style set
+			// Safeguards against a bug introduced in 2.1.13 scripting
+			$updateSQL = sprintf("UPDATE `%s` SET brewStyleVersion='%s' WHERE brewStyleOwn='custom'",$prefix."styles",$prefsStyleSet);
+			mysqli_select_db($connection,$database);
+			mysqli_real_escape_string($connection,$updateSQL);
+			$result = mysqli_query($connection,$updateSQL);
 
 			if ($_POST['prefsPaypalIPN'] == 1) {
 
