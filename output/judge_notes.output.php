@@ -63,11 +63,14 @@ if ($go == "allergens") { ?>
 		"sDom": 'rt',
 		"bStateSave" : false,
 		"bLengthChange" : false,
-		"aaSorting": [[0,'asc']],
+		"aaSorting": [[3,'asc'],[0,'asc']],
 		"bProcessing" : false,
 		"aoColumns": [
 			{ "asSorting": [  ] },
-			{ "asSorting": [  ] }
+			{ "asSorting": [  ] },
+			null,
+			null,
+			null
 			]
 		} );
 	} );
@@ -75,8 +78,8 @@ if ($go == "allergens") { ?>
 <table class="table table-bordered table-striped" id="allergens">
 <thead>
 <tr>
-	<th width="5%" nowrap="nowrap"><?php echo $label_entry_number; ?></th>
-	<th width="5%" nowrap="nowrap"><?php echo $label_judging_number; ?></th>
+	<th width="8%" nowrap="nowrap"><?php echo $label_entry_number; ?></th>
+	<th width="8%" nowrap="nowrap"><?php echo $label_judging_number; ?></th>
 	<th><?php echo $label_style; ?></th>
 	<th><?php echo $label_table; ?></th>
 	<th><?php echo $label_possible_allergens; ?></th>

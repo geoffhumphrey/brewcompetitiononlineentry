@@ -2,18 +2,26 @@
 /*
  * Module:      process_judging_assignments.inc.php
  * Description: This module does all the heavy lifting for adding/editing info in the "judging_assignments" table
+ * ----------------------------------------------------
+ * Role functionality commented out
+ * Search for Activate for Roles
  */
+
 if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1))) {
 
 
 	if ($action == "update") {
+
 		if ($_SESSION['jPrefsQueued'] == "N") {
+
 		foreach ($_POST['random'] as $random) {
 
-			$roles = "";
+			$roles = array();
 			$assignRoles = "";
+			$roles_only_update = FALSE;
 
 			/*
+			// Activate for Roles
 
 			if (!empty($_POST['head_judge'.$random])) {
 				$roles[] = $_POST['head_judge'.$random];
@@ -33,8 +41,8 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 
 			if ((!isset($_POST['unassign'.$random])) && (($_POST['rolesPrevDefined'.$random] == 1) || ($_POST['rolesPrevDefined'.$random] == 0)) && (!empty($assignRoles))) $roles_only_update = TRUE;
 			elseif ((!isset($_POST['unassign'.$random])) && ($_POST['rolesPrevDefined'.$random] == 1) && (empty($assignRoles))) $roles_only_update = TRUE;
-			else */
-			$roles_only_update = FALSE;
+
+			*/
 
 			if (isset($_POST['unassign'.$random])) $unassign = $_POST['unassign'.$random];
 			else $unassign = 0;
@@ -86,6 +94,8 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 
 			}
 
+			/*
+			// Activate for Roles
 			// If already assigned but updating judge roles...
 			if (($roles_only_update) && ($_POST['id'.$random] > 0)) {
 
@@ -99,6 +109,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 				//echo $updateSQL."<br>";
 
 			}
+			*/
 
 
 			if (($unassign > 0) && ((isset($_POST['assignFlight'.$random])) && ($_POST['assignFlight'.$random] == 0))) {
@@ -122,11 +133,12 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 		 // print_r($_POST['random']);
 			foreach ($_POST['random'] as $random) {
 
-				$roles = "";
+				$roles = array();
 				$assignRoles = "";
+				$roles_only_update = FALSE;
 
 				/*
-
+				// Activate for Roles
 				if (!empty($_POST['head_judge'.$random])) {
 					$roles[] = $_POST['head_judge'.$random];
 				}
@@ -143,13 +155,10 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 					$assignRoles = implode(", ",$roles);
 				}
 
-
-
 				if ((!isset($_POST['unassign'.$random])) && (($_POST['rolesPrevDefined'.$random] == 1) || ($_POST['rolesPrevDefined'.$random] == 0)) && (!empty($assignRoles))) $roles_only_update = TRUE;
 				elseif ((!isset($_POST['unassign'.$random])) && ($_POST['rolesPrevDefined'.$random] == 1) && (empty($assignRoles))) $roles_only_update = TRUE;
-				else
+
 				*/
-				$roles_only_update = FALSE;
 
 				// Check to see if participant is 1) not being "unassigned" and reassigned, and 2) being assigned.
 				if (((isset($_POST['unassign'.$random])) && ($_POST['unassign'.$random] == 0)) && ((isset($_POST['assignRound'.$random])) && ($_POST['assignRound'.$random] > 0)))  {
@@ -178,6 +187,8 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 					}
 				}
 
+				/*
+				// Activate for Roles
 				// If already assigned but updating judge roles...
 				if (($roles_only_update) && ($_POST['id'.$random] > 0)) {
 
@@ -191,6 +202,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 					//echo $updateSQL."<br>";
 
 				}
+				*/
 
 				if (((isset($_POST['unassign'.$random])) && ($_POST['unassign'.$random] > 0)) && ((isset($_POST['assignRound'.$random])) && ($_POST['assignRound'.$random] > 0))) {
 					$updateSQL = sprintf("UPDATE $judging_assignments_db_table SET bid=%s, assignment=%s, assignTable=%s, assignFlight=%s, assignRound=%s, assignLocation=%s, assignRoles=%s WHERE id=%s",

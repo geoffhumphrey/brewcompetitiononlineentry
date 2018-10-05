@@ -10,10 +10,13 @@
 
 /* ---------------- Rebuild Info ---------------------
 
-Beginning with the 1.3.0 release, an effort was begun to separate the programming
-layer from the presentation layer for all scripts with this header.
+ * Role functionality commented out
+ * Search for Activate for Roles
 
-All Admin pages have certain variables in common that build the page:
+ * Beginning with the 1.3.0 release, an effort was begun to separate the programming
+ * layer from the presentation layer for all scripts with this header.
+
+ * All Admin pages have certain variables in common that build the page:
 
   $output_datatables_head = the output for DataTables placed in the <thead> tag
   $output_datatables_body = the output for DataTables placed in the <tbody> tag
@@ -35,7 +38,7 @@ All Admin pages have certain variables in common that build the page:
   $output_datatables_view_link = "";
   $output_datatables_actions = "";
 
-  ADD/EDIT SCREENS VARIABLE
+   * ADD/EDIT SCREENS VARIABLE
   $output_add_edit = whether to run/display the add/edit functions - default is FALSE
 
  * ---------------- END Rebuild Info --------------------- */
@@ -64,6 +67,7 @@ $ranked_judge = array();
 $nonranked_judge = array();
 $unavailable = "";
 $at_table = "";
+$output_jquery_toggle = "";
 
 
 // Build DataTables Header
@@ -73,7 +77,8 @@ if ($filter == "judges") {
 	$output_datatables_head .= "<th width=\"15%\">BJCP Rank</th>";
 	$output_datatables_head .= "<th width=\"10%\" class=\"hidden-xs hidden-sm hidden-md\">BJCP #</th>";
 	// $output_datatables_head .= "<th width=\"10%\">Comps Judged</th>";
-	//$output_datatables_head .= "<th width=\"10%\">Judge Role(s) <a href=\"#\" role=\"button\" data-toggle=\"modal\" data-target=\"#rolesModal\"><span class=\"fa fa-lg fa-question-circle\"></span></a></th>";
+    // Activate for Roles
+	// $output_datatables_head .= "<th width=\"10%\">Judge Role(s) <a href=\"#\" role=\"button\" data-toggle=\"modal\" data-target=\"#rolesModal\"><span class=\"fa fa-lg fa-question-circle\"></span></a></th>";
 }
 
 if ($queued == "Y") $output_datatables_head .= "<th>Round ".$row_flights['flightRound']."</th>";
@@ -95,6 +100,7 @@ do {
 	$assign_row_color = "";
 	$flights_display = "";
 	$assign_flag = "";
+    $assigned_at_this_table = FALSE;
 
     $checked_head_judge = "";
     $checked_lead_judge = "";
@@ -106,11 +112,12 @@ do {
 	for($i=1; $i<$row_flights['flightRound']+1; $i++) {
 
 		// Get role from judging_assignments table
-        /*
 		$query_judge_roles = sprintf("SELECT assignRoles FROM %s WHERE (bid='%s' AND assignTable='%s' AND assignRound='%s')", $prefix."judging_assignments", $row_brewer['uid'], $row_tables_edit['id'], $i);
 		$judge_roles = mysqli_query($connection,$query_judge_roles) or die (mysqli_error($connection));
 		$row_judge_roles = mysqli_fetch_assoc($judge_roles);
 
+        /*
+        // Activate for Roles
 		if (!empty($row_judge_roles['assignRoles'])) {
 			$roles_previously_defined = 1;
 		}
@@ -126,6 +133,7 @@ do {
 		if (strpos($row_judge_roles['assignRoles'],"MBOS") !== FALSE) {
 			$checked_minibos_judge = "CHECKED";
 		}
+
         */
 
 		if  (table_round($row_tables_edit['id'],$i)) {
@@ -133,6 +141,7 @@ do {
 			$flights_display .= "<td>";
 
 			if (at_table($row_brewer['uid'],$row_tables_edit['id'])) {
+                $assigned_at_this_table = TRUE;
 				$assign_row_color = "bg-orange text-orange";
 				$assign_flag = "<span class=\"fa fa-lg fa-check\"></span> <strong>Assigned.</strong> Participant is assigned to this table.";
 				$rank_number = filter_var($display_rank,FILTER_SANITIZE_NUMBER_FLOAT);
@@ -188,22 +197,53 @@ do {
 		$output_datatables_body .= "</td>";
 
 		if ($filter == "judges") {
+
+            /*
+            // Activate for Roles
+            // Build jQuery function vars
+            if ($assigned_at_this_table) $output_jquery_toggle .= "$(\"#toggleRoles".$random."\").show();\n";
+            else $output_jquery_toggle .= "$(\"#toggleRoles".$random."\").hide();\n";
+
+            $output_jquery_toggle .= "
+            $(\"input[name$='assignRound".$random."']\").click(function() {
+                if ($(this).val() == \"1\") {
+                    $(\"#toggleRoles".$random."\").show();
+                }
+                else {
+                    $(\"#toggleRoles".$random."\").hide();
+                    $(\"input[name='head_judge".$random."']\").prop(\"checked\", false);
+                    $(\"input[name='lead_judge".$random."']\").prop(\"checked\", false);
+                    $(\"input[name='minibos_judge".$random."']\").prop(\"checked\", false);
+                }
+            });\n
+            ";
+            */
+
 			$output_datatables_body .= "<td>".$display_rank."</td>";
 			$output_datatables_body .= "<td class=\"hidden-xs hidden-sm hidden-md\">";
 			if (($judge_info[6] != "") && ($judge_info[6] != "0")) $output_datatables_body .= strtoupper($judge_info[6]);
 			else $output_datatables_body .= "N/A";
 			$output_datatables_body .= "</td>";
 			// $output_datatables_body .= "<td>".$judge_info[9]."</td>";
+
             /*
+            // Activate for Roles
 			$output_datatables_body .= "<td>";
+            $output_datatables_body .= "<div id=\"toggleRoles".$random."\">";
 			$output_datatables_body .= "<input type=\"hidden\" name=\"rolesPrevDefined".$random."\" value=\"".$roles_previously_defined."\">";
             $output_datatables_body .= "<div class=\"checkbox\">";
 			$output_datatables_body .= "<label><input name=\"head_judge".$random."\" type=\"checkbox\" value=\"HJ\" ".$checked_head_judge." /> Head Judge</label>";
-			$output_datatables_body .= "<label><input name=\"lead_judge".$random."\" type=\"checkbox\" value=\"LJ\" ".$checked_lead_judge." /> Lead Judge</label>";
+            $output_datatables_body .= "</div><br>";
+            //$output_datatables_body .= "<div class=\"checkbox\">";
+			//$output_datatables_body .= "<label><input name=\"lead_judge".$random."\" type=\"checkbox\" value=\"LJ\" ".$checked_lead_judge." /> Lead Judge</label>";
+            //$output_datatables_body .= "</div><br>";
+            $output_datatables_body .= "<div class=\"checkbox\">";
 			$output_datatables_body .= "<label><input name=\"minibos_judge".$random."\" type=\"checkbox\" value=\"MBOS\" ".$checked_minibos_judge." /> Mini-BOS Judge</label>";
             $output_datatables_body .= "</div>";
+            $output_datatables_body .= "</div>"; // toggleRoles
 			$output_datatables_body .= "</td>";
             */
+
 		}
 
 		$modal_rank = $bjcp_rank[0];
@@ -234,6 +274,14 @@ do {
 if (is_array($ranked_judge)) $ranked = array_sum($ranked_judge); else $ranked = $ranked;
 if (is_array($nonranked_judge)) $nonranked = array_sum($nonranked_judge); else $nonranked = $nonranked;
 ?>
+<!--
+<script type='text/javascript'>//<![CDATA[
+// Activate for Roles
+$(document).ready(function(){
+    <?php // echo $output_jquery_toggle; ?>
+});
+</script>
+-->
 <div class="bcoem-admin-element hidden-print">
 	<div class="btn-group" role="group" aria-label="modals">
         <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -303,6 +351,7 @@ if (is_array($nonranked_judge)) $nonranked = array_sum($nonranked_judge); else $
 			"aoColumns": [
 				null,
 				null,
+                // Activate for Roles
 				//null,
 				null<?php for($i=1; $i<$row_flights['flightRound']+1; $i++) {
 			    if  (table_round($row_tables_edit['id'],$i)) {
@@ -334,7 +383,6 @@ if (is_array($nonranked_judge)) $nonranked = array_sum($nonranked_judge); else $
 				null,
 				null,
 				<?php if ($_SESSION['jPrefsQueued'] == "N") { ?>,
-				null,
 				null
 				<?php } ?>
 				]
@@ -360,6 +408,7 @@ if (is_array($nonranked_judge)) $nonranked = array_sum($nonranked_judge); else $
 <?php if ($filter == "judges") { ?>
 <!-- Judge Roles Modal -->
 <!-- Modal -->
+<!-- Activate for Roles
 <div class="modal fade" id="rolesModal" tabindex="-1" role="dialog" aria-labelledby="rolesModalLabel">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -379,7 +428,9 @@ if (is_array($nonranked_judge)) $nonranked = array_sum($nonranked_judge); else $
             </div>
         </div>
     </div>
-</div><!-- ./modal -->
+</div>
+-->
+<!-- ./modal -->
 <?php } ?>
 <!-- Available Judges Modal -->
 <!-- Modal -->
