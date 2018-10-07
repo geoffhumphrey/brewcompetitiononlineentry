@@ -591,7 +591,7 @@ if ($go == "default") {  ?>
        		<input class="form-control" name="brewerClubsOther" type="text" value="<?php if ($action == "edit") echo $row_brewer['brewerClubs']; ?>" placeholder="">
         </div>
     </div>
-
+    <?php if ($_SESSION['prefsProEdition'] == 0) { ?>
     <div class="form-group">
         <label for="" class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label_pro_am; ?></label>
         <div class="col-lg-9 col-md-9 col-sm-8 col-xs-12">
@@ -607,7 +607,9 @@ if ($go == "default") {  ?>
             <div class="help-block"><?php echo $brewer_text_042; ?></div>
         </div>
     </div>
-
+    <?php } else { ?>
+    <input type="hidden" name="brewerProAm" value="0">
+    <?php } ?>
 	<div class="form-group"><!-- Form Group Text Input -->
 		<label for="" class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label_aha_number; ?></label>
 		<div class="col-lg-9 col-md-9 col-sm-8 col-xs-12">
