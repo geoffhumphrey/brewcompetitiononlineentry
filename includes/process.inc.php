@@ -278,6 +278,7 @@ if (((isset($_SERVER['HTTP_REFERER'])) && ($referrer['host'] == $_SERVER['SERVER
 		if ($dbTable == $prefix."special_best_info") include (PROCESS.'process_special_best_info.inc.php');
 		if ($dbTable == $prefix."special_best_data") include (PROCESS.'process_special_best_data.inc.php');
 		if ($dbTable == $prefix."mods") include (PROCESS.'process_mods.inc.php');
+		if ($dbTable == $prefix."evaluation") include (EVALS.'process_evals.inc.php');
 
 	}
 

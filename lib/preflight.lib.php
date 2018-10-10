@@ -88,12 +88,15 @@ if (check_setup($prefix."system",$database)) {
 
 	}
 
+	if ((EVALUATION) && (!check_setup($prefix."evaluation",$database)))  {
+		require_once (EVALS.'install_eval_db.inc.php');
+	}
+
 }
 
 if (!$setup_success) {
 
 	header ($setup_relocate);
-	//echo $setup_relocate;
 	exit;
 
 }

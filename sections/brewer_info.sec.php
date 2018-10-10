@@ -154,19 +154,19 @@ $assignment = "";
 
 if (($_SESSION['brewerDiscount'] == "Y") && ($_SESSION['contestEntryFeePasswordNum'] != "")) $entry_discount = TRUE; else $entry_discount = FALSE;
 $brewer_assignment .= brewer_assignment($_SESSION['user_id'],"1","blah",$dbTable,$filter);
+
 $assignment_array = str_replace(", ",",",$brewer_assignment);
 $assignment_array = explode(",", $assignment_array);
 
-if ((in_array("Judge",$assignment_array)) && ($_SESSION['brewerJudge'] == "Y") && ($totalRows_judging3 > 1)) {
+if ((in_array("Judge",$assignment_array)) && ($_SESSION['brewerJudge'] == "Y") && ($totalRows_judging3 > 0)) {
  	$assignment = "judge";
  	$judge_available_not_assigned = TRUE;
 }
 
-if ((in_array("Steward",$assignment_array)) && ($_SESSION['brewerSteward'] == "Y") && ($totalRows_judging3 > 1)) {
+if ((in_array("Steward",$assignment_array)) && ($_SESSION['brewerSteward'] == "Y") && ($totalRows_judging3 > 0)) {
 	$assignment = "steward";
 	$steward_available_not_assigned = TRUE;
 }
-
 
 // Build header
 $header1_1 .= sprintf("<h2>%s</h2>",$label_account_info);
@@ -180,6 +180,7 @@ if (($totalRows_log > 0) && ($show_entries)) {
 		if (!$comp_paid_entry_limit) $primary_page_info .= " ".$brewer_info_011." <a href=\"".build_public_url("pay","default","default","default",$sef,$base_url)."\">".$brewer_info_003."</a>.</small></p>";
 		else $primary_page_info .= sprintf(".</small></p><p class=\"lead hidden-print\"><small><span class=\"text-danger\"><strong>%s:</strong> %s</span> <a href=\"%s\">%s</a></small></p>",ucfirst(strtolower($label_please_note)),$pay_text_034,$link_contacts,$pay_text_001);
 	}
+	else $primary_page_info .= "</small></p>";
 }
 
 $user_edit_links .= "<div class=\"btn-group hidden-print\" role=\"group\" aria-label=\"EditAccountFunctions\">";
@@ -193,6 +194,12 @@ if (($show_entries) && ($add_entry_link_show)) {
 	if ((!NHC) && ($_SESSION['prefsHideRecipe'] == "N")) $user_edit_links .= sprintf("<a class=\"btn btn-default\" href=\"".$add_entry_beerxml_link."\"><span class=\"fa fa-file-code-o\"></span> %s</a>",$label_add_beerXML);
 }
 $user_edit_links .= "</div><!-- ./button group -->";
+
+if ((EVALUATION) && ($assignment == "judge")) {
+	$user_edit_links .= "<div class=\"btn-group hidden-print\" role=\"group\" aria-label=\"JudgingFunctions\">";
+	$user_edit_links .= "<a class=\"btn btn-success btn-block\" href=\"".$base_url."index.php?section=eval\">".$label_judge." ".$label_entries."</a>";
+	$user_edit_links .= "</div><!-- ./button group -->";
+}
 
 // Build User Info
 $name .= $_SESSION['brewerFirstName']." ".$_SESSION['brewerLastName'];

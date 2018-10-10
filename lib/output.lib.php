@@ -525,12 +525,13 @@ function get_flight_info($id) {
     $totalRows_flights = mysqli_num_rows($flights);
 
     if ($totalRows_flights > 0) {
-	    $query_tables = sprintf("SELECT tableName,tableNumber FROM %s WHERE id='%s'", $prefix."judging_tables", $row_flights['flightTable']);
+	    $query_tables = sprintf("SELECT id,tableName,tableNumber FROM %s WHERE id='%s'", $prefix."judging_tables", $row_flights['flightTable']);
 		$tables = mysqli_query($connection,$query_tables) or die (mysqli_error($connection));
 		$row_tables = mysqli_fetch_assoc($tables);
 
 		$return = array(
 			"response" => "Assigned",
+			"id" => $row_tables['id'],
 			"tableName" => $row_tables['tableName'],
 			"tableNumber" => $row_tables['tableNumber'],
 			"flightNumber" => $row_flights['flightNumber'],

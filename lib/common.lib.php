@@ -2487,14 +2487,8 @@ function brewer_assignment($user_id,$method,$id,$dbTable,$filter,$archive="defau
 				case "1": //
 					if ($row_staff_check['staff_organizer'] == "1") $r[] .= strtolower($label_organizer);
 					if ($row_staff_check['staff_judge_bos'] == "1") $r[] .= "BOS";
-					if (($id == "default") && ($dbTable == "default") && ($filter != $assignment)) {
-						if ($row_staff_check['staff_judge'] == "1") $r[] .= "<a href=\"#\" data-toggle=\"modal\" data-target=\"#assignment-modal-".$user_id."\">".$label_judge."</a>";
-						if ($row_staff_check['staff_steward'] == "1") $r[] .= "<a href=\"#\" data-toggle=\"modal\" data-target=\"#assignment-modal-".$user_id."\">".$label_steward."</a>";
-					}
-					else {
-						if ($row_staff_check['staff_judge'] == "1") $r[] .= $label_judge;
-						if ($row_staff_check['staff_steward'] == "1") $r[] .= $label_steward;
-					}
+					if ($row_staff_check['staff_judge'] == "1") $r[] .= $label_judge;
+					if ($row_staff_check['staff_steward'] == "1") $r[] .= $label_steward;
 					if ($row_staff_check['staff_staff'] == "1") $r[] .= $label_staff;
 				break;
 				case "staff_judge": // for $filter URL variable
@@ -2803,14 +2797,20 @@ function table_exists($table_name) {
 }
 
 
-function table_assignments($uid,$method,$time_zone,$date_format,$time_format,$method2=0) {
+function table_assignments($uid,$method,$time_zone,$date_format,$time_format,$method2) {
 
 	// Gather and output the judging or stewarding assignments for a user
 	require(CONFIG.'config.php');
 	mysqli_select_db($connection,$database);
 
-	$output = "";
-	$output_extend = "";
+	if ($method2 == 2) {
+		$output = array();
+	}
+
+	else {
+		$output = "";
+	}
+
 
 	$query_table_assignments = sprintf("SELECT assignTable FROM %s WHERE bid='%s' AND assignment='%s'",$prefix."judging_assignments",$uid,$method);
 	$table_assignments = mysqli_query($connection,$query_table_assignments) or die (mysqli_error($connection));
@@ -2818,6 +2818,7 @@ function table_assignments($uid,$method,$time_zone,$date_format,$time_format,$me
 	$totalRows_table_assignments = mysqli_num_rows($table_assignments);
 
 	if ($totalRows_table_assignments > 0) {
+
 		do {
 			$table_info = explode("^",get_table_info(1,"basic",$row_table_assignments['assignTable'],"default","default"));
 			$location = explode("^",get_table_info($table_info[2],"location",$row_table_assignments['assignTable'],"default","default"));
@@ -2837,6 +2838,10 @@ function table_assignments($uid,$method,$time_zone,$date_format,$time_format,$me
 
 			}
 
+			elseif ($method2 == 2) {
+				$output[] = $table_info[3];
+			}
+
 			else {
 				$output .= "\t\t\t<td class='dataList bdr1B'>".$location[2]."</td>\n";
 				$output .= "\t\t\t<td class='dataList bdr1B'>".getTimeZoneDateTime($time_zone, $location[0], $date_format,  $time_format, "long", "date-time")."</td>\n";
@@ -2847,10 +2852,12 @@ function table_assignments($uid,$method,$time_zone,$date_format,$time_format,$me
 			//$output .= "\t</table>\n";
 
 		} while ($row_table_assignments = mysqli_fetch_assoc($table_assignments));
+
 	}
 
 	//if (($totalRows_table_assignments == 0) && ($method2 == "1")) $output_extend = "No assignment(s)";
-	return $output.$output_extend;
+	if ($method2 == 2) $output = array_unique($output);
+	return $output;
 }
 
 function available_at_location($location,$role,$round) {
