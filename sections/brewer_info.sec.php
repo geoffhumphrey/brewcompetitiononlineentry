@@ -180,6 +180,7 @@ if (($totalRows_log > 0) && ($show_entries)) {
 		if (!$comp_paid_entry_limit) $primary_page_info .= " ".$brewer_info_011." <a href=\"".build_public_url("pay","default","default","default",$sef,$base_url)."\">".$brewer_info_003."</a>.</small></p>";
 		else $primary_page_info .= sprintf(".</small></p><p class=\"lead hidden-print\"><small><span class=\"text-danger\"><strong>%s:</strong> %s</span> <a href=\"%s\">%s</a></small></p>",ucfirst(strtolower($label_please_note)),$pay_text_034,$link_contacts,$pay_text_001);
 	}
+	else $primary_page_info .= "</small></p>";
 }
 
 $user_edit_links .= "<div class=\"btn-group hidden-print\" role=\"group\" aria-label=\"EditAccountFunctions\">";
