@@ -661,5 +661,3 @@ echo $header1_1;
 
 
 <!-- Page Rebuild completed 08.27.15 -->
-
-

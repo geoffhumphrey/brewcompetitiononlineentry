@@ -34,3 +34,4 @@ includes/brewerydb/ba_style_add.php
 js_includes/loading.js
 *.ser
 .github/*
+eval/*

@@ -20,7 +20,7 @@ include (LIB.'admin.lib.php');
 			"sDom": 'rt',
 			"bStateSave" : false,
 			"bLengthChange" : false,
-			<?php if ($view == "default") { ?>
+			<?php if (($view == "default") || ($view == "name")) { ?>
 			"aaSorting": [[0,'asc'],[2,'asc'],[5,'asc']],
 			<?php } ?>
 
@@ -33,13 +33,13 @@ include (LIB.'admin.lib.php');
 			<?php } ?>
 			"bProcessing" : false,
 			"aoColumns": [
-				{ "asSorting": [  ] },
+				null,
 				<?php if ($filter == "J") { ?>{ "asSorting": [  ] },<?php } ?>
-				{ "asSorting": [  ] },
-				{ "asSorting": [  ] },
-				{ "asSorting": [  ] },
-				{ "asSorting": [  ] }<?php if ($_SESSION['jPrefsQueued'] == "N") { ?>,
-				{ "asSorting": [  ] }<?php } ?>
+				null,
+				null,
+				null,
+				null<?php if ($_SESSION['jPrefsQueued'] == "N") { ?>,
+				null<?php } ?>
 				]
 			} );
 		} );
@@ -88,7 +88,7 @@ include (LIB.'admin.lib.php');
 	$role .= str_replace($role_replace1,$role_replace2,$row_assignments['assignRoles']);
 	?>
     <tr>
-    	<td nowrap><?php echo "<strong>".$judge_info['1'].", ".$judge_info['0']."</strong>"; if (!empty($role)) echo "<br>".$role; ?></td>
+    	<td nowrap><?php echo "<span class=\"hidden\">".$judge_info['1']."</span>"; echo "<strong>".$judge_info['1'].", ".$judge_info['0']."</strong>"; if (!empty($role)) echo "<br>".$role; ?></td>
         <?php if ($filter == "J") { ?><td><?php echo $judge_rank[0].$cert_add; ?></td><?php } ?>
         <td><?php echo table_location($row_assignments['assignTable'],$_SESSION['prefsDateFormat'],$_SESSION['prefsTimeZone'],$_SESSION['prefsTimeFormat'],"default"); ?></td>
         <td><?php echo $table_info['0']; ?></td>
