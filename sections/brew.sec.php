@@ -169,8 +169,9 @@ if (($registration_open == 2) && ($entry_window_open == 2) && ($_SESSION['userLe
 	$edit_entry_disable = TRUE;
 }
 
-if (($proEdition) && (!isset($_SESSION['brewerBreweryName'])) && ($adminUser)) {
+if (($proEdition) && (!isset($_SESSION['brewerBreweryName'])) && ($_SESSION['userLevel'] == 2)) {
 	$add_entry_disable = TRUE;
+	$edit_entry_disable = TRUE;
 	$adminUserAddDisable = TRUE;
 }
 

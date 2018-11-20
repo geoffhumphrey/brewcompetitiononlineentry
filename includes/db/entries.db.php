@@ -289,6 +289,12 @@ else {
 		$query_log_confirmed = sprintf("SELECT * FROM %s WHERE brewPossAllergens IS NOT NULL AND brewConfirmed='1'", $brewing_db_table, $bid);
 	}
 
+	elseif (($section == "eval") && ($id != "default")) {
+		$query_log = sprintf("SELECT * FROM %s WHERE id='%s'", $brewing_db_table, $id);
+		$query_log_paid = sprintf("SELECT * FROM %s WHERE brewPossAllergens IS NOT NULL AND brewPaid='1'", $brewing_db_table, $bid);
+		$query_log_confirmed = sprintf("SELECT * FROM %s WHERE brewPossAllergens IS NOT NULL AND brewConfirmed='1'", $brewing_db_table, $bid);
+	}
+
 	else {
 
 		if (SINGLE) {

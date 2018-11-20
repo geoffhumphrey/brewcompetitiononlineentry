@@ -5,7 +5,7 @@ if ($filter == "stewards") $filter = "S"; else $filter = "J";
 include (DB.'output_assignments.db.php');
 $count = round((get_entry_count('received')/($_SESSION['jPrefsFlightEntries'])),0);
 $role_replace1 = array("HJ","LJ","MBOS",", ");
-$role_replace2 = array("<span class=\"fa fa-gavel\"></span> Head Judge","<span class=\"fa fa-star\"></span> Lead Judge","<span class=\"fa fa-trophy\"></span> Mini-BOS Judge","<br>");
+$role_replace2 = array("<span class=\"text-primary\"><span class=\"fa fa-gavel\"></span> Head Judge</span><br>","<span class=\"text-warning\"><span class=\"fa fa-star\"></span> Lead Judge</span><br>","<span class=\"text-success\"><span class=\"fa fa-trophy\"></span> Mini-BOS Judge</span><br>","");
 
 ?>
 
@@ -85,10 +85,10 @@ include (LIB.'admin.lib.php');
     if (in_array("Professional Brewer", $judge_rank)) $cert_add .= ", Professional Brewer";
     // $judge_rank = str_replace(",",", ",$judge_info['3']);
 	$role = "";
-	$role .= str_replace($role_replace1,$role_replace2,$row_assignments['assignRoles']);
+	if (!empty($row_assignments['assignRoles'])) $role .= str_replace($role_replace1,$role_replace2,$row_assignments['assignRoles']);
 	?>
     <tr>
-    	<td nowrap><?php echo "<strong>".$judge_info['1'].", ".$judge_info['0']."</strong>"; if (!empty($role)) echo "<br>".$role; ?></td>
+    	<td nowrap><?php echo "<strong>".$judge_info['1'].", ".$judge_info['0']."</strong>"; if (!empty($role)) echo "<p>".$role."</p>"; ?></td>
         <?php if ($filter == "J") { ?><td><?php echo $judge_rank[0].$cert_add; ?></td><?php } ?>
         <td><?php echo table_location($row_assignments['assignTable'],$_SESSION['prefsDateFormat'],$_SESSION['prefsTimeZone'],$_SESSION['prefsTimeFormat'],"default"); ?></td>
         <td><?php echo $table_info['0']; ?></td>
@@ -101,6 +101,7 @@ include (LIB.'admin.lib.php');
     <?php } while ($row_assignments = mysqli_fetch_assoc($assignments)); ?>
     </tbody>
     </table>
+    <div style="page-break-after: always;"></div>
     <h1>Bull Pen</h1>
     <?php echo not_assigned($filter); ?>
     <?php } else { echo sprintf("<p class=\"lead\">%s</p>",$output_text_011); } ?>
