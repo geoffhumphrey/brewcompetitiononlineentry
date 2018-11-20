@@ -1030,8 +1030,6 @@ if (((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) || ((
 		$mead_styles[] = array();
 		$cider_styles[] = array();
 
-        echo $query_styles2;
-
 		do {
 
 			if (($row_styles2['brewStyleType'] == "Cider") || ($row_styles2['brewStyleType'] == "2")) {
@@ -1075,11 +1073,12 @@ if (((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) || ((
         $s = array();
         $st = array();
         $o = array();
+        $dates = array();
         do { $j[] = $row_judges['uid']; } while ($row_judges = mysqli_fetch_assoc($judges));
         do { $s[] = $row_stewards['uid']; } while ($row_stewards = mysqli_fetch_assoc($stewards));
         do { $st[] = $row_staff['uid']; } while ($row_staff = mysqli_fetch_assoc($staff));
         do { $o[] = $row_organizer['uid']; } while ($row_organizer = mysqli_fetch_assoc($organizer));
-        do { $a[] = $row_judging['id']; } while ($row_judging = mysqli_fetch_assoc($judging));
+        do { $a[] = $row_judging['id']; $dates[] = $row_judging['judgingDate']; } while ($row_judging = mysqli_fetch_assoc($judging));
 
         /*
         // DEBUG
@@ -1339,7 +1338,9 @@ if (((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) || ((
 
 		if ($view == "xml") {
 
-            $filename = str_replace(" ","_",$_SESSION['contestName'])."_BJCP_Points_Report.xml";
+            $filename = "";
+            if (!empty($_SESSION['contestID'])) $filename .= $_SESSION['contestID']."_";
+            $filename .= str_replace(" ","_",$_SESSION['contestName'])."_BJCP_Points_Report.xml";
 
             $all_rules_applied = TRUE;
             $rule_org = FALSE;
@@ -1383,13 +1384,14 @@ if (((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) || ((
                 $output .= "\t<CompData>\n";
                 $output .= "\t\t<CompID>".$_SESSION['contestID']."</CompID>\n";
                 $output .= "\t\t<CompName>".$_SESSION['contestName']."</CompName>\n";
-                $output .= "\t\t<CompDate>".getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_judging['judgingDate'], $_SESSION['prefsDateFormat'], $_SESSION['prefsTimeFormat'], "system", "date-no-gmt")."</CompDate>\n";
+                $output .= "\t\t<CompDate>".getTimeZoneDateTime($_SESSION['prefsTimeZone'], max($dates), $_SESSION['prefsDateFormat'], $_SESSION['prefsTimeFormat'], "system", "date-no-gmt")."</CompDate>\n";
                 $output .= "\t\t<CompEntries>".$total_entries."</CompEntries>\n";
                 $output .= "\t\t<CompDays>".$total_days."</CompDays>\n";
                 $output .= "\t\t<CompSessions>".total_sessions()."</CompSessions>\n";
                 $output .= "\t\t<CompFlights>".total_flights()."</CompFlights>\n";
                 $output .= "\t</CompData>\n";
                 $output .= "\t<BJCPpoints>\n";
+
 
                 // Judges with a properly formatted BJCP IDs in the system
                 foreach (array_unique($j) as $uid) {

@@ -369,25 +369,33 @@ if (isset($_SESSION['loginUsername'])) {
 
 			$pdf = new PDF_Label('5395');
 			$pdf->AddPage();
-			$pdf->SetFont('Arial','B',20);
+			$pdf->SetFont('Arial','B',18);
 			$filename .= str_replace(" ","_",$_SESSION['contestName'])."_Nametags_Avery5395.pdf";
 
 			do {
 
-				if ($row_brewer['staff_judge'] == 1) $brewerAssignment = "Judge";
-				if ($row_brewer['staff_steward'] == 1) $brewerAssignment = "Steward";
-				if ($row_brewer['staff_staff'] == 1) $brewerAssignment = "Staff";
-				if ($row_brewer['staff_organizer'] == 1) $brewerAssignment = "Organizer";
+				$brewerAssignment = "";
+				$brewerLocation = "";
 
-				$text = sprintf("\n%s\n%s, %s\n%s",
-				$row_brewer['brewerFirstName']." ".$row_brewer['brewerLastName'],
-				$row_brewer['brewerCity'],
-				$row_brewer['brewerState'],
-				$brewerAssignment
-				);
+				if (($row_brewer['staff_judge'] == 1) || ($row_brewer['staff_steward'] == 1) || ($row_brewer['staff_staff'] == 1) || ($row_brewer['staff_organizer'] == 1)) {
 
-				$text = iconv('UTF-8', 'windows-1252', $text);
-				$pdf->Add_Label($text);
+					if ($row_brewer['staff_judge'] == 1) $brewerAssignment = "Judge";
+					if ($row_brewer['staff_steward'] == 1) $brewerAssignment = "Steward";
+					if ($row_brewer['staff_staff'] == 1) $brewerAssignment = "Staff";
+					if ($row_brewer['staff_organizer'] == 1) $brewerAssignment = "Organizer";
+
+					if ($row_brewer['brewerCity'] != "Anytown") $brewerLocation = $row_brewer['brewerCity'].", ".$row_brewer['brewerState'];
+
+					$text = sprintf("\n%s\n%s\n%s",
+						$row_brewer['brewerFirstName']." ".$row_brewer['brewerLastName'],
+						$brewerAssignment,
+						$brewerLocation
+					);
+
+					$text = iconv('UTF-8', 'windows-1252', $text);
+					$pdf->Add_Label($text);
+
+				}
 
 			} while ($row_brewer = mysqli_fetch_assoc($brewer));
 

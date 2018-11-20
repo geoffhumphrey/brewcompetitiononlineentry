@@ -154,6 +154,17 @@ do {
 	if (($action != "print") && ($dbTable == "default")) $entry_judging_num_display .= "<input class=\"form-control input-sm hidden-print\" id=\"brewJudgingNumber\" name=\"brewJudgingNumber".$row_log['id']."\" type=\"text\" pattern=\".{6,}\" title=\"Judging numbers must be six characters and cannot include the ^ character. The ^ character will be converted to a dash (-) upon submit. Use leading zeroes (e.g., 000123 or 01-001, etc.)\" size=\"8\" maxlength=\"6\" value=\"".$entry_judging_num."\" /> ".$entry_judging_num_hidden;
 	else $entry_judging_num_display = $entry_judging_num;
 
+	/*
+	$splitter[0] = substr($row_log['brewJudgingNumber'], 0, 2);
+	$splitter[1] = substr($row_log['brewJudgingNumber'], 2);
+	$add_one = $splitter[1] + 1;
+	$entry_judging_num_display .= "<br>".$splitter[0].$add_one;
+
+
+	$splitter = explode("-",$row_log['brewJudgingNumber']);
+			$add_one = $splitter[1] + 1;
+			$entry_judging_num_display .= "<br>".sprintf("%02s",$splitter[0])."-".sprintf("%04s",$add_one);
+*/
 	// Entry Style
 	if ($_SESSION['prefsStyleSet'] == "BA") {
 		if ($row_log['brewCategory'] <= 14) $entry_style_display .= $ba_category_names[$row_log['brewCategory']].": ".$row_log['brewStyle'];
