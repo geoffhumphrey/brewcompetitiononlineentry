@@ -20,7 +20,7 @@ include (LIB.'admin.lib.php');
 			"sDom": 'rt',
 			"bStateSave" : false,
 			"bLengthChange" : false,
-			<?php if ($view == "default") { ?>
+			<?php if (($view == "default") || ($view == "name")) { ?>
 			"aaSorting": [[0,'asc'],[2,'asc'],[5,'asc']],
 			<?php } ?>
 
@@ -33,13 +33,13 @@ include (LIB.'admin.lib.php');
 			<?php } ?>
 			"bProcessing" : false,
 			"aoColumns": [
-				{ "asSorting": [  ] },
+				null,
 				<?php if ($filter == "J") { ?>{ "asSorting": [  ] },<?php } ?>
-				{ "asSorting": [  ] },
-				{ "asSorting": [  ] },
-				{ "asSorting": [  ] },
-				{ "asSorting": [  ] }<?php if ($_SESSION['jPrefsQueued'] == "N") { ?>,
-				{ "asSorting": [  ] }<?php } ?>
+				null,
+				null,
+				null,
+				null<?php if ($_SESSION['jPrefsQueued'] == "N") { ?>,
+				null<?php } ?>
 				]
 			} );
 		} );
