@@ -5,16 +5,39 @@ IndexIgnore *
 DirectoryIndex index.php
 
 RewriteEngine on
+RewriteCond %{HTTPS} off
+RewriteCond %{REQUEST_URI} !^/\.well-known/acme-challenge/[0-9a-zA-Z_-]+$
+RewriteCond %{REQUEST_URI} !^/\.well-known/cpanel-dcv/[0-9a-zA-Z_-]+$
+RewriteCond %{REQUEST_URI} !^/\.well-known/pki-validation/[A-F0-9]{32}\.txt(?:\ Comodo\ DCV)?$
+RewriteRule (.*) https://%{HTTP_HOST}%{REQUEST_URI} [R=301,L]
 
 # If storing your installation in a sub-folder, uncomment the following line (remove the # symbol) and replace [subfolder] with the name of your subfolder
 # RewriteBase /[subfolder]
 
 # SEF URLs
+RewriteCond %{REQUEST_URI} !^/\.well-known/acme-challenge/[0-9a-zA-Z_-]+$
+RewriteCond %{REQUEST_URI} !^/\.well-known/cpanel-dcv/[0-9a-zA-Z_-]+$
+RewriteCond %{REQUEST_URI} !^/\.well-known/pki-validation/[A-F0-9]{32}\.txt(?:\ Comodo\ DCV)?$
 RewriteRule ^$ index.php [L]
+RewriteCond %{REQUEST_URI} !^/\.well-known/acme-challenge/[0-9a-zA-Z_-]+$
+RewriteCond %{REQUEST_URI} !^/\.well-known/cpanel-dcv/[0-9a-zA-Z_-]+$
+RewriteCond %{REQUEST_URI} !^/\.well-known/pki-validation/[A-F0-9]{32}\.txt(?:\ Comodo\ DCV)?$
 RewriteRule ^([A-Za-z0-9-]+)?$ index.php?section=$1 [L]
+RewriteCond %{REQUEST_URI} !^/\.well-known/acme-challenge/[0-9a-zA-Z_-]+$
+RewriteCond %{REQUEST_URI} !^/\.well-known/cpanel-dcv/[0-9a-zA-Z_-]+$
+RewriteCond %{REQUEST_URI} !^/\.well-known/pki-validation/[A-F0-9]{32}\.txt(?:\ Comodo\ DCV)?$
 RewriteRule ^([A-Za-z0-9-]+)/([A-Za-z0-9-]+)/?$ index.php?section=$1&go=$2 [L]
+RewriteCond %{REQUEST_URI} !^/\.well-known/acme-challenge/[0-9a-zA-Z_-]+$
+RewriteCond %{REQUEST_URI} !^/\.well-known/cpanel-dcv/[0-9a-zA-Z_-]+$
+RewriteCond %{REQUEST_URI} !^/\.well-known/pki-validation/[A-F0-9]{32}\.txt(?:\ Comodo\ DCV)?$
 RewriteRule ^([A-Za-z0-9-]+)/([A-Za-z0-9-]+)/([A-Za-z0-9-]+)/?$ index.php?section=$1&go=$2&action=$3 [L]
+RewriteCond %{REQUEST_URI} !^/\.well-known/acme-challenge/[0-9a-zA-Z_-]+$
+RewriteCond %{REQUEST_URI} !^/\.well-known/cpanel-dcv/[0-9a-zA-Z_-]+$
+RewriteCond %{REQUEST_URI} !^/\.well-known/pki-validation/[A-F0-9]{32}\.txt(?:\ Comodo\ DCV)?$
 RewriteRule ^([A-Za-z0-9-]+)/([A-Za-z0-9-]+)/([A-Za-z0-9-]+)/([A-Za-z0-9-]+)/?$ index.php?section=$1&go=$2&action=$3&id=$4 [L]
+RewriteCond %{REQUEST_URI} !^/\.well-known/acme-challenge/[0-9a-zA-Z_-]+$
+RewriteCond %{REQUEST_URI} !^/\.well-known/cpanel-dcv/[0-9a-zA-Z_-]+$
+RewriteCond %{REQUEST_URI} !^/\.well-known/pki-validation/[A-F0-9]{32}\.txt(?:\ Comodo\ DCV)?$
 RewriteRule ^.*user_docs/.*\.pdf$ - [F,NC,L]
 
 # Block bad bots
@@ -94,6 +117,9 @@ RewriteCond %{HTTP_USER_AGENT} ^Widow [OR]
 RewriteCond %{HTTP_USER_AGENT} ^WWWOFFLE [OR]
 RewriteCond %{HTTP_USER_AGENT} ^Xaldon\ WebSpider [OR]
 RewriteCond %{HTTP_USER_AGENT} ^Zeus
+RewriteCond %{REQUEST_URI} !^/\.well-known/acme-challenge/[0-9a-zA-Z_-]+$
+RewriteCond %{REQUEST_URI} !^/\.well-known/cpanel-dcv/[0-9a-zA-Z_-]+$
+RewriteCond %{REQUEST_URI} !^/\.well-known/pki-validation/[A-F0-9]{32}\.txt(?:\ Comodo\ DCV)?$
 RewriteRule ^.* - [F,L]
 
 # Custom error pages
@@ -110,7 +136,9 @@ deny from all
 </Files>
 
 # Prevent directory listings
-Options All -Indexes
+# For security reasons, Option all cannot be overridden.
+#Options All -Indexes
+Options ExecCGI Includes IncludesNOEXEC SymLinksIfOwnerMatch -Indexes
 
 # Caching schema
 <FilesMatch "\.(css|js)$">

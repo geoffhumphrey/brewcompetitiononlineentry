@@ -37,6 +37,10 @@ $(function() {
 
 $(document).ready(function() {
 
+    $("form").submit(function() {
+        $('#loader-submit').show();
+    });
+
     $("#submitBtn").click(function() {
         $("#archiveName").html($("#archiveSuffix").val());
     });

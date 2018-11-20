@@ -14,6 +14,7 @@ sections/nhc_pay.sec.php
 sections/nav_admin.php
 libraries/*
 sso/*
+eval/*
 config_for_test.php
 php_info.php
 .DS_Store
@@ -21,7 +22,7 @@ iframe.html
 site/config.reset.php
 *.zip
 *.sublime-project
-bcoem-dev.sublime-workspace
+*.sublime-workspace
 sftp-config.json
 lang/en/en.lang.php
 lang/en/en.lang.php

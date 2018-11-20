@@ -1488,6 +1488,16 @@ $brew_text_040 = "There is no need to specify gluten as an allergen for any beer
 $brewer_text_041 = "Have you already been awarded a Pro-Am opportunity to compete in the upcoming Great American Beer Festival Pro-Am Competition?";
 $brewer_text_042 = "If you have already been awarded a Pro-Am, please indicate so here. This will help competition staff and Pro-Am brewery representatives (if applicable for this competition) to choose Pro-Am entries from brewers that have not secured one.";
 
+// ----------------------------------------------------------------------------------
+// Version 2.1.15 Additions
+// ----------------------------------------------------------------------------------
+
+$label_submitting = "Submitting";
+$output_text_030 = "Please stand by.";
+
+
+
+
 /**
  * ----------------------------------------------------------------------------------
  * END TRANSLATIONS
