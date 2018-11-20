@@ -12,7 +12,6 @@
 				null
 				]
 			} );
-
 		$('#judge_assignments').dataTable( {
 			"bPaginate" : false,
 			"sDom": 'rt',
@@ -25,7 +24,6 @@
 				null
 				]
 			} );
-
 		$('#sortable_steward').dataTable( {
 			"bPaginate" : false,
 			"sDom": 'rt',
@@ -38,7 +36,6 @@
 				null
 				]
 			} );
-
 		$('#steward_assignments').dataTable( {
 			"bPaginate" : false,
 			"sDom": 'rt',
