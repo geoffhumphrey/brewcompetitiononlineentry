@@ -6,13 +6,17 @@
 <p class="lead">For entrants to be able to view their scoresheets, each PDF should:</p>
 	<ul>
     	<li>Contain all judge scoresheets and other documentation (cover sheet, etc.) in a single file.</li>
-        <li>Be named with a <strong>six (6) character judging number</strong> (e.g., 000012.pdf, 987654.pdf, 01-012.pdf, abc123.pdf. 123abc.pdf, etc.) that corresponds EXACTLY to the entry's judging number as stored in the system's database.</li>
-	</ul>
-	<ul class="list-unstyled">
-		<li><strong>OR</strong></li>
-	</ul>
-	<ul>
-        <li>Be named with the <strong>entry number in six (6) digit format</strong> with leading zeroes (e.g., 000198.pdf, 000567.pdf, etc.).</li>
+        <li>Depending on the setting in website preferences:
+            <ul>
+                <li>Be named with a <strong>six (6) character judging number</strong> (e.g., 000012.pdf, 987654.pdf, 01-012.pdf, abc123.pdf. 123abc.pdf, etc.) that corresponds EXACTLY to the entry's judging number as stored in the system's database.</li>
+	        </ul>
+	        <ul class="list-unstyled">
+		        <li style="padding-left: 40px;"><strong>OR</strong></li>
+	        </ul>
+	        <ul>
+                <li>Be named with the <strong>entry number in six (6) digit format</strong> with leading zeroes (e.g., 000198.pdf, 000567.pdf, etc.).</li>
+            </ul>
+        </li>
         <li>Have a .pdf or .PDF extension.</li>
     </ul>
 <form method="post" action="<?php echo $base_url; ?>handle.php?action=html_docs" ENCTYPE="multipart/form-data">
@@ -30,13 +34,17 @@
 <p class="lead">For entrants to be able to view their scoresheets, each PDF should:</p>
 	<ul>
     	<li>Contain all judge scoresheets and other documentation (cover sheet, etc.) in a single file.</li>
-        <li>Be named with a <strong>six (6) character judging number</strong> (e.g., 000012.pdf, 987654.pdf, 01-012.pdf, abc123.pdf. 123abc.pdf, etc.) that corresponds EXACTLY to the entry's judging number as stored in the system's database.</li>
-	</ul>
-	<ul class="list-unstyled">
-		<li style="padding-left: 40px;"><strong>OR</strong></li>
-	</ul>
-	<ul>
-        <li>Be named with the <strong>entry number in six (6) digit format</strong> with leading zeroes (e.g., 000198.pdf, 000567.pdf, etc.).</li>
+        <li>Depending on the setting in website preferences:
+            <ul>
+                <li>Be named with a <strong>six (6) character judging number</strong> (e.g., 000012.pdf, 987654.pdf, 01-012.pdf, abc123.pdf. 123abc.pdf, etc.) that corresponds EXACTLY to the entry's judging number as stored in the system's database.</li>
+	        </ul>
+	        <ul class="list-unstyled">
+		        <li style="padding-left: 40px;"><strong>OR</strong></li>
+	        </ul>
+	        <ul>
+                <li>Be named with the <strong>entry number in six (6) digit format</strong> with leading zeroes (e.g., 000198.pdf, 000567.pdf, etc.).</li>
+            </ul>
+        </li>
         <li>Have a .pdf or .PDF extension.</li>
     </ul>
 <p>Please note that file names and extensions uploaded with this browser-based function will be converted to lower-case.</p>
