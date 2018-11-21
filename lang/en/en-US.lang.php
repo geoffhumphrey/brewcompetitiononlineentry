@@ -1493,8 +1493,8 @@ $brewer_text_042 = "If you have already been awarded a Pro-Am, please indicate s
 // ----------------------------------------------------------------------------------
 
 $label_submitting = "Submitting";
-$output_text_030 = "Please stand by.";
-
+$output_text_030 = "Please stand by";
+$label_working = "Working";
 
 
 

@@ -49,7 +49,7 @@ define('DEBUGGING',ROOT.'includes'.DIRECTORY_SEPARATOR.'debug'.DIRECTORY_SEPARAT
 define('HOSTED', FALSE);
 define('NHC', FALSE);
 define('SINGLE', FALSE);
-define('EVALUATION', TRUE);
+define('EVALUATION', FALSE);
 
 /**
  * Enable to following to put your installation into

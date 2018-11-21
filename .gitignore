@@ -35,3 +35,4 @@ js_includes/loading.js
 *.ser
 .github/*
 eval/*
+.config/*
