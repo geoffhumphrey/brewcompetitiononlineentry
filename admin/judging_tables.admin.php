@@ -287,7 +287,7 @@ if (($action == "add") || ($action == "edit")) {
 
     // Build the table number values for drop-down
     // Disable those already used
-    for($i=1; $i<=75; $i++) {
+    for($i=1; $i<=100; $i++) {
 
 		$selected_table_number = "";
 		$disabled_table_number = "";

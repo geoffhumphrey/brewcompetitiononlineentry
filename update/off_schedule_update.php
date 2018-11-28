@@ -1185,6 +1185,26 @@ mysqli_real_escape_string($connection,$updateSQL);
 $result = mysqli_query($connection,$updateSQL);
 
 /**
+ * ----------------------------------------------- 2.1.15 ----------------------------------------------
+ * Make sure that the Scoresheet Upload File Names preference is set to J if not set.
+ * Change incorrect BJCP name for style 17A (from English Strong Ale to British Strong Ale)
+ * -----------------------------------------------------------------------------------------------------
+ */
+
+if ((empty($_SESSION['prefsDisplaySpecial'])) || (!isset($_SESSION['prefsDisplaySpecial']))) {
+	$updateSQL = sprintf("UPDATE `%s` SET prefsDisplaySpecial='J'",$prefix."preferences");
+	mysqli_select_db($connection,$database);
+	mysqli_real_escape_string($connection,$updateSQL);
+	$result = mysqli_query($connection,$updateSQL);
+}
+
+$updateSQL = sprintf("UPDATE `%s` SET brewStyle='British Strong Ale' WHERE brewStyle='English Strong Ale' AND brewStyleVersion='BJCP2015'",$prefix."styles");
+mysqli_select_db($connection,$database);
+mysqli_real_escape_string($connection,$updateSQL);
+$result = mysqli_query($connection,$updateSQL);
+
+
+/**
  * ----------------------------------------------------------------------------------------------------
  * Change the version number and date
  * ALWAYS the final script

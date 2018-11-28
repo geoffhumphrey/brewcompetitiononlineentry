@@ -16,14 +16,14 @@ if (!check_update("prefsStyleSet",$prefix."preferences")) {
 	$updateSQL = "ALTER TABLE `".$prefix."preferences` ADD `prefsStyleSet` VARCHAR( 20 ) NULL";
 	mysqli_select_db($connection,$database);
 	mysqli_real_escape_string($connection,$updateSQL);
-	$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection)); 
+	$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 }
 
 if (!check_update("prefsAutoPurge",$prefix."preferences")) {
 	$updateSQL = "ALTER TABLE `".$prefix."preferences` ADD `prefsAutoPurge` TINYINT( 1 ) NULL";
 	mysqli_select_db($connection,$database);
 	mysqli_real_escape_string($connection,$updateSQL);
-	$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection)); 
+	$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 }
 
 $output .=  "<li>Preferences table altered successfully.</li>";
@@ -31,7 +31,7 @@ $output .=  "<li>Preferences table altered successfully.</li>";
 // -----------------------------------------------------------
 // Alter Table: Styles
 // Adding columns to allow for more than one styleset
-// (BJCP2008, BJCP2015, BA for future releases) and to 
+// (BJCP2008, BJCP2015, BA for future releases) and to
 // shift carbonation, sweetnes, and strength to DB side
 // -----------------------------------------------------------
 
@@ -39,14 +39,14 @@ if (check_update("brewStyleJudgingLoc",$prefix."styles")) {
 	$updateSQL = "ALTER TABLE  `".$prefix."styles` CHANGE `brewStyleJudgingLoc` `brewStyleVersion` VARCHAR(20) NULL DEFAULT NULL;";
 	mysqli_select_db($connection,$database);
 	mysqli_real_escape_string($connection,$updateSQL);
-	$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection)); 
+	$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 }
 
 if (!check_update("brewStyleStrength",$prefix."styles")) {
 	$updateSQL = "ALTER TABLE  `".$prefix."styles` ADD `brewStyleStrength` INT(1) NULL COMMENT 'Requires strength? 0=No, 1=Yes';";
 	mysqli_select_db($connection,$database);
 	mysqli_real_escape_string($connection,$updateSQL);
-	$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection)); 
+	$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 }
 
 if (!check_update("brewStyleCarb",$prefix."styles")) {
@@ -60,7 +60,7 @@ if (!check_update("brewStyleSweet",$prefix."styles")) {
 	$updateSQL = "ALTER TABLE  `".$prefix."styles` ADD `brewStyleSweet` INT(1) NULL COMMENT 'Requires sweetness? 0=No, 1=Yes';";
 	mysqli_select_db($connection,$database);
 	mysqli_real_escape_string($connection,$updateSQL);
-	$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection)); 
+	$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 }
 
 if (!check_update("brewStyleCategory",$prefix."styles")) {
@@ -77,7 +77,7 @@ if (!check_update("brewStyleTags",$prefix."styles")) {
 	$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 }
 
-//if (check_db_table_column("preferences","prefsStyleSet")) 
+//if (check_db_table_column("preferences","prefsStyleSet"))
 $output .=  "<li>Styles table altered successfully.</li>";
 //else $output .=  "<li>Styles table NOT altered successfully.</li>";
 
@@ -90,12 +90,12 @@ $output .=  "<li>Styles table altered successfully.</li>";
 $updateSQL = "ALTER TABLE `".$prefix."brewing` CHANGE `brewCategory` `brewCategory` VARCHAR(4) NULL DEFAULT NULL";
 mysqli_select_db($connection,$database);
 mysqli_real_escape_string($connection,$updateSQL);
-$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection)); 
+$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 
 $updateSQL = "ALTER TABLE `".$prefix."brewing` CHANGE `brewCategorySort` `brewCategorySort` VARCHAR(4) NULL DEFAULT NULL";
 mysqli_select_db($connection,$database);
 mysqli_real_escape_string($connection,$updateSQL);
-$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection)); 
+$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 
 $output .=  "<li>Entries table altered successfully.</li>";
 
@@ -131,21 +131,21 @@ $output .=  "<li>Auto purge set to \"Yes.\"</li>";
 // Get any custom styles and hold in variables to insert later
 $query_custom_styles = sprintf("SELECT * FROM %s WHERE brewStyleGroup > 28", $prefix."styles");
 $custom_styles = mysqli_query($connection,$query_custom_styles) or die (mysqli_error($connection));
-$row_custom_styles = mysqli_fetch_assoc($custom_styles); 
+$row_custom_styles = mysqli_fetch_assoc($custom_styles);
 $totalRows_custom_styles = mysqli_num_rows($custom_styles);
 
 //echo $totalRows_custom_styles."<br>";
 
 if ($totalRows_custom_styles > 0) {
-	
+
 	$a = "";
-	
+
 	do {
-		
+
 		$a[] .= $row_custom_styles['id']."|".$row_custom_styles['brewStyleNum']."|".$row_custom_styles['brewStyle']."|".$row_custom_styles['brewStyleCategory']."|".$row_custom_styles['brewStyleOG']."|".$row_custom_styles['brewStyleOGMax']."|".$row_custom_styles['brewStyleFG']."|".$row_custom_styles['brewStyleFGMax']."|".$row_custom_styles['brewStyleABV']."|".$row_custom_styles['brewStyleABVMax']."|".$row_custom_styles['brewStyleIBU']."|".$row_custom_styles['brewStyleIBUMax']."|".$row_custom_styles['brewStyleSRM']."|".$row_custom_styles['brewStyleSRMMax']."|".$row_custom_styles['brewStyleType']."|".$row_custom_styles['brewStyleInfo']."|".$row_custom_styles['brewStyleLink']."|".$row_custom_styles['brewStyleGroup']."|".$row_custom_styles['brewStyleActive']."|".$row_custom_styles['brewStyleOwn'];
-				
+
 	} while ($row_custom_styles = mysqli_fetch_assoc($custom_styles));
-		
+
 }
 
 // Empty the current Styles table
@@ -311,7 +311,7 @@ $sql .= "(134, 'A', 'English Golden Ale', 'Pale Commonwealth Beer', '1.038', '1.
 $sql .= "(135, 'B', 'Australian Sparkling Ale', 'Pale Commonwealth Beer', '1.038', '1.050', '1.004', '1.006', '4.5', '6.0', '20', '35', '4', '7', 'Ale', 'Smooth and balanced, all components merge together with similar intensities. Moderate flavors showcasing Australian ingredients. Large flavor dimension. Very drinkable, suited to a hot climate. Relies on yeast character. Commercial Examples: Coopers Sparkling Ale, Coopers Original Pale Ale.', 'http://bjcp.org/stylecenter.php', '12', 'Y', 'bcoe', 'BJCP2015', 0, 0, 0, 0, 'standard-strength, pale-color, top-fermented, pacific, traditional-style, pale-ale-family, bitter'), ";
 $sql .= "(136, 'C', 'English IPA', 'Pale Commonwealth Beer', '1.050', '1.075', '1.010', '1.018', '5.0', '7.5', '40', '60', '6', '14', 'Ale', 'A hoppy, moderately-strong, very well-attenuated pale English ale with a dry finish and a hoppy aroma and flavor. Classic English ingredients provide the best flavor profile. Commercial Examples: Freeminer Trafalgar IPA, Fuller&rsquo;s Bengal Lancer IPA, Worthington White Shield, Ridgeway IPA, Emerson&rsquo;s 1812 IPA, Meantime India Pale Ale, Summit India Pale Ale, Samuel Smith&rsquo;s India Ale, Hampshire Pride of Romsey IPA, Burton Bridge Empire IPA, Marston&rsquo;s Old Empire, Belhaven Twisted Thistle IPA.', 'http://bjcp.org/stylecenter.php', '12', 'Y', 'bcoe', 'BJCP2015', 0, 0, 0, 0, 'high-strength, pale-color, top-fermented, british-isles, traditional-style, ipa-family, bitter, hoppy'), ";
 $sql .= "(137, 'A', 'Dark Mild', 'Brown British Beer', '1.030', '1.038', '1.008', '1.013', '3.0', '3.8', '10', '25', '12', '25', 'Ale', 'A dark, low-gravity, malt-focused English session ale readily suited to drinking in quantity. Refreshing, yet flavorful, with a wide range of dark malt or dark sugar expression. Commercial Examples: Moorhouse&rsquo;s Black Cat, Cain&rsquo;s Dark Mild, Theakston Traditional Mild, Highgate Mild, Brain&rsquo;s Dark, Banks&rsquo;s Dark Mild.', 'http://bjcp.org/stylecenter.php', '13', 'Y', 'bcoe', 'BJCP2015', 0, 0, 0, 0, 'session-strength, dark-color, top-fermented, british-isles, traditional-style, brown-ale-family, malty'), ";
-$sql .= "(138, 'B', 'English Brown Ale', 'Brown British Beer', '1.040', '1.052', '1.008', '1.013', '4.2', '5.4', '20', '30', '12', '22', 'Ale', 'A malty, brown caramel-centric English ale without the roasted flavors of a Porter. Commercial Examples: Black Sheep Riggwelter Yorkshire Ale, Wychwood Hobgoblin, Maxim Double Maxim, Newcastle Brown Ale, Samuel Smith&rsquo;s Nut Brown Ale.', 'http://bjcp.org/stylecenter.php', '13', 'Y', 'bcoe', 'BJCP2015', 0, 0, 0, 0, 'standard-strength, amber-color, top-fermented, british-isles, traditional-style, brown-ale-family, malty'), "; 
+$sql .= "(138, 'B', 'English Brown Ale', 'Brown British Beer', '1.040', '1.052', '1.008', '1.013', '4.2', '5.4', '20', '30', '12', '22', 'Ale', 'A malty, brown caramel-centric English ale without the roasted flavors of a Porter. Commercial Examples: Black Sheep Riggwelter Yorkshire Ale, Wychwood Hobgoblin, Maxim Double Maxim, Newcastle Brown Ale, Samuel Smith&rsquo;s Nut Brown Ale.', 'http://bjcp.org/stylecenter.php', '13', 'Y', 'bcoe', 'BJCP2015', 0, 0, 0, 0, 'standard-strength, amber-color, top-fermented, british-isles, traditional-style, brown-ale-family, malty'), ";
 $sql .= "(139, 'C', 'English Porter', 'Brown British Beer', '1.040', '1.052', '1.008', '1.014', '4.0', '5.4', '18', '35', '20', '30', 'Ale', 'A moderate-strength brown beer with a restrained roasty character and bitterness. May have a range of roasted flavors, generally without burnt qualities, and often has a chocolate-caramel-malty profile. Commercial Examples: Fuller&rsquo;s London Porter, Samuel Smith Taddy Porter, Burton Bridge Burton Porter, RCH Old Slug Porter, Nethergate Old Growler Porter.', 'http://bjcp.org/stylecenter.php', '13', 'Y', 'bcoe', 'BJCP2015', 0, 0, 0, 0, 'standard-strength, dark-color, top-fermented, british-isles, traditional-style, porter-family, malty, roasty'), ";
 $sql .= "(140, 'A', 'Scottish Light', 'Scottish Ale', '1.030', '1.035', '1.010', '1.013', '2.5', '3.2', '10', '20', '13', '22', 'Ale', 'A malt-focused, generally caramelly beer with perhaps a few esters and occasionally a butterscotch aftertaste. Hops only to balance and support the malt. The malt character can range from dry and grainy to rich, toasty, and caramelly, but is never roasty and especially never has a peat smoke character. Commercial Examples: McEwan&rsquo;s 60.', 'http://bjcp.org/stylecenter.php', '14', 'Y', 'bcoe', 'BJCP2015', 0, 0, 0, 0, 'session-strength, amber-color, top-fermented, british-isles, traditional-style, amber-ale-family, malty'), ";
 $sql .= "(141, 'B', 'Scottish Heavy', 'Scottish Ale', '1.035', '1.040', '1.010', '1.015', '3.2', '3.9', '10', '20', '13', '22', 'Ale', 'A malt-focused, generally caramelly beer with perhaps a few esters and occasionally a butterscotch aftertaste. Hops only to balance and support the malt. The malt character can range from dry and grainy to rich, toasty, and caramelly, but is never roasty and especially never has a peat smoke character. Commercial Examples: Caledonia Smooth, Orkney Raven ale, Broughton Greenmantle Ale, McEwan&rsquo;s 70, Tennent&rsquo;s Special Ale.', 'http://bjcp.org/stylecenter.php', '14', 'Y', 'bcoe', 'BJCP2015', 0, 0, 0, 0, 'session-strength, amber-color, top-fermented, british-isles, traditional-style, amber-ale-family, malty'), ";
@@ -330,7 +330,7 @@ $result = mysqli_query($connection,$sql) or die (mysqli_error($connection));
 $sql = "INSERT INTO `".$styles_db_table."` ";
 $sql .= "(`id`, `brewStyleNum`, `brewStyle`, `brewStyleCategory`, `brewStyleOG`, `brewStyleOGMax`, `brewStyleFG`, `brewStyleFGMax`, `brewStyleABV`, `brewStyleABVMax`, `brewStyleIBU`, `brewStyleIBUMax`, `brewStyleSRM`, `brewStyleSRMMax`, `brewStyleType`, `brewStyleInfo`, `brewStyleLink`, `brewStyleGroup`, `brewStyleActive`, `brewStyleOwn`, `brewStyleVersion`, `brewStyleReqSpec`, `brewStyleStrength`, `brewStyleCarb`, `brewStyleSweet`, `brewStyleTags`) ";
 $sql .= "VALUES ";
-$sql .= "(150, 'A', 'English Strong Ale', 'Strong British Ale', '1.055', '1.080', '1.015', '1.022', '5.5', '8.0', '30', '60', '8', '22', 'Ale', 'An ale of respectable alcoholic strength, traditionally bottled-conditioned and cellared. Can have a wide range of interpretations, but most will have varying degrees of malty richness, late hops and bitterness, fruity esters, and alcohol warmth. Judges should allow for a significant range in character, as long as the beer is within the alcohol strength range and has an interesting &quot;English&quot; character, it likely fits the style. The malt and adjunct flavors and intensity can vary widely, but any combination should result in an agreeable palate experience. Commercial Examples: Fuller&rsquo;s 1845, Young&rsquo;s Special London Ale, Harvey&rsquo;s Elizabethan Ale, J.W. Lees Manchester Star, Sarah Hughes Dark Ruby Mild, Samuel Smith&rsquo;s Winter Welcome, Fuller&rsquo;s ESB, Adnams Broadside, Young&rsquo;s Winter Warmer.', 'http://bjcp.org/stylecenter.php', '17', 'Y', 'bcoe', 'BJCP2015', 0, 0, 0, 0, 'high-strength, amber-color, top-fermented, british-isles, traditional-style, strong-ale-family, malty'), ";
+$sql .= "(150, 'A', 'British Strong Ale', 'Strong British Ale', '1.055', '1.080', '1.015', '1.022', '5.5', '8.0', '30', '60', '8', '22', 'Ale', 'An ale of respectable alcoholic strength, traditionally bottled-conditioned and cellared. Can have a wide range of interpretations, but most will have varying degrees of malty richness, late hops and bitterness, fruity esters, and alcohol warmth. Judges should allow for a significant range in character, as long as the beer is within the alcohol strength range and has an interesting &quot;English&quot; character, it likely fits the style. The malt and adjunct flavors and intensity can vary widely, but any combination should result in an agreeable palate experience. Commercial Examples: Fuller&rsquo;s 1845, Young&rsquo;s Special London Ale, Harvey&rsquo;s Elizabethan Ale, J.W. Lees Manchester Star, Sarah Hughes Dark Ruby Mild, Samuel Smith&rsquo;s Winter Welcome, Fuller&rsquo;s ESB, Adnams Broadside, Young&rsquo;s Winter Warmer.', 'http://bjcp.org/stylecenter.php', '17', 'Y', 'bcoe', 'BJCP2015', 0, 0, 0, 0, 'high-strength, amber-color, top-fermented, british-isles, traditional-style, strong-ale-family, malty'), ";
 $sql .= "(151, 'B', 'Old Ale', 'Strong British Ale', '1.055', '1.088', '1.015', '1.022', '5.5', '9.0', '30', '60', '10', '22', 'Ale', 'An ale of moderate to fairly significant alcoholic strength, bigger than standard beers, though usually not as strong or rich as barleywine. Often tilted towards a maltier balance. &quot;It should be a warming beer of the type that is best drunk in half pints by a warm fire on a cold winter&rsquo;s night&quot; - Michael Jackson. Commercial Examples: Gale&rsquo;s Prize Old Ale, Burton Bridge Olde Expensive, Marston Owd Roger, Greene King Strong Suffolk Ale, Theakston Old Peculier.', 'http://bjcp.org/stylecenter.php', '17', 'Y', 'bcoe', 'BJCP2015', 0, 0, 0, 0, 'high-strength, amber-color, top-fermented, british-isles, traditional-style, strong-ale-family, malty, aged'), ";
 $sql .= "(152, 'C', 'Wee Heavy', 'Strong British Ale', '1.070', '1.013', '1.018', '1.040', '6.5', '10.0', '17', '35', '14', '25', 'Ale', 'Rich, malty, dextrinous, and usually caramel-sweet, these beers can give an impression that is suggestive of a dessert. Complex secondary malt and alcohol flavors prevent a one-dimensional quality. Strength and maltiness can vary, but should not be cloying or syrupy. Commercial Examples: Traquair House Ale, Belhaven Wee Heavy, McEwan&rsquo;s Scotch Ale, MacAndrew&rsquo;s Scotch Ale, Orkney Skull Splitter, Inveralmond Black Friar, Broughton Old Jock, Gordon Highland Scotch Ale, AleSmith Wee Heavy.', 'http://bjcp.org/stylecenter.php', '17', 'Y', 'bcoe', 'BJCP2015', 0, 0, 0, 0, 'high-strength, amber-color, top-fermented, british-isles, traditional-style, strong-ale-family, malty'), ";
 $sql .= "(153, 'D', 'English Barleywine', 'Strong British Ale', '1.080', '1.120', '1.018', '1.030', '8.0', '12.0', '35', '70', '8', '22', 'Ale', 'A showcase of malty richness and complex, intense flavors. Chewy and rich in body, with warming alcohol and a pleasant fruity or hoppy interest. When aged, it can take on port-like flavors. A wintertime sipper. Commercial Examples: Adnam&rsquo;s Tally Ho, Burton Bridge Thomas Sykes Old Ale, J.W. Lee&rsquo;s Vintage Harvest Ale, Fuller&rsquo;s Vintage Ale, Robinson&rsquo;s Old Tom, Fuller&rsquo;s Golden Pride, Whitbread Gold Label.', 'http://bjcp.org/stylecenter.php', '17', 'Y', 'bcoe', 'BJCP2015', 0, 0, 0, 0, 'very-high-strength, amber-color, top-fermented, british-isles, traditional-style, strong-ale-family, malty'), ";
@@ -424,10 +424,10 @@ $output .=  "<li>Style data updated successfully in the database.</li>";
 // Add custom styles to Styles DB
 if ($totalRows_custom_styles > 0) {
 	foreach ($a as $custom_style) {
-		
+
 		$custom_style_data = explode("|",$custom_style);
 		$new_custom = ($custom_style_data[17] + 6);
-		
+
 		$sql = "INSERT INTO `".$styles_db_table."` ";
 		$sql .= "(`id`, `brewStyleNum`, `brewStyle`, `brewStyleCategory`, `brewStyleOG`, `brewStyleOGMax`, `brewStyleFG`, `brewStyleFGMax`, `brewStyleABV`, `brewStyleABVMax`, `brewStyleIBU`, `brewStyleIBUMax`, `brewStyleSRM`, `brewStyleSRMMax`, `brewStyleType`, `brewStyleInfo`, `brewStyleLink`, `brewStyleGroup`, `brewStyleActive`, `brewStyleOwn`) ";
 		$sql .= "VALUES ";
@@ -435,64 +435,64 @@ if ($totalRows_custom_styles > 0) {
 		mysqli_select_db($connection,$database);
 		mysqli_real_escape_string($connection,$sql);
 		$result = mysqli_query($connection,$sql) or die (mysqli_error($connection));
-		
+
 		// Update any defined judging tables with new id
-		
+
 		$query_custom_style_id = sprintf("SELECT id FROM %s ORDER BY id DESC LIMIT 1", $prefix."styles");
 		$custom_style_id = mysqli_query($connection,$query_custom_style_id) or die (mysqli_error($connection));
 		$row_custom_style_id = mysqli_fetch_assoc($custom_style_id);
 		//echo $query_custom_style_id."<br>";
 		//echo $row_custom_style_id['id']."<br>";
-		
+
 		$query_custom_style_table = sprintf("SELECT id,tableStyles FROM %s", $prefix."judging_tables");
 		$custom_style_table = mysqli_query($connection,$query_custom_style_table) or die (mysqli_error($connection));
 		$row_custom_style_table = mysqli_fetch_assoc($custom_style_table);
 		//echo $query_custom_style_table."<br>";
-		
+
 		do {
 			$b = "";
 			$new_table_styles = "";
-			
+
 			//echo $row_custom_style_table['id']."<br>";
 			//echo $row_custom_style_table['tableStyles']."<br>";
-			
+
 			$table_styles = explode(",",$row_custom_style_table['tableStyles']);
 			//print_r($table_styles);
-			
+
 			if (in_array($custom_style_data[0],$table_styles)) {
-				
+
 				foreach ($table_styles as $b) {
 					if ($custom_style_data[0] == $b) $new_table_styles[] .= $row_custom_style_id['id'];
 					else $new_table_styles[] .= $b;
-					
+
 				}
-				
+
 				$insert = implode(",",$new_table_styles);
-				
+
 				$sql = sprintf("UPDATE %s SET tableStyles='%s' WHERE id='%s'",$prefix."judging_tables",$insert,$row_custom_style_table['id']);
 				mysqli_select_db($connection,$database);
 				mysqli_real_escape_string($connection,$sql);
 				$result = mysqli_query($connection,$sql) or die (mysqli_error($connection));
-				
+
 				//echo $sql."<br>";
 			}
-			
+
 			else {
-				
+
 				$insert = $row_custom_style_table['tableStyles'];
-				
-			}	
-			
+
+			}
+
 		} while ($row_custom_style_table = mysqli_fetch_assoc($custom_style_table));
-		
-		
+
+
 		// Update any entries with new style number
-		
+
 		$sql = sprintf("UPDATE %s SET brewCategory='%s', brewCategorySort='%s', brewSubCategory='A', brewStyle='%s' WHERE brewCategorySort='%s'",$prefix."brewing", $new_custom, $new_custom, $custom_style_data[2], $custom_style_data[17]);
 		mysqli_select_db($connection,$database);
 		mysqli_real_escape_string($connection,$sql);
 		$result = mysqli_query($connection,$sql) or die (mysqli_error($connection));
-		
+
 	}
 }
 

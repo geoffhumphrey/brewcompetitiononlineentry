@@ -55,12 +55,13 @@ function bos_method($value) {
 	switch($value) {
 		case "1": $bos_method = "1st place only";
 		break;
-		case "2": $bos_method = "1st and 2nd places only";
+		case "2": $bos_method = "1st and 2nd places";
 		break;
 		case "3": $bos_method = "1st, 2nd, and 3rd places";
 		break;
-		case "4": $bos_method = "Defined by Admin";
+		case "4": $bos_method = "1st, 2nd, and 3rd places with HM";
 		break;
+		default: $bos_method = "Defined by Admin";
 	}
 
 	return $bos_method;

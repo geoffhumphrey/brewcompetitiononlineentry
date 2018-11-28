@@ -47,6 +47,9 @@ if ($go == "mini_bos") {
 
 	if ($totalRows_entries_mini > 0) {
 
+		if (!isset($type)) $type = "1234567890";
+		else $type = $type;
+
 		$table_flight_datatables .= "<script>";
 		$table_flight_datatables .= "$(document).ready(function() {";
 		$table_flight_datatables .= "$('#sortable".$type."').dataTable( {";

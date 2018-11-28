@@ -147,7 +147,7 @@ if ($action == "default") {
 	</div>
 </div><!-- ./Form Group -->
 <div class="form-group"><!-- Form Group Radio STACKED -->
-	<label for="styleTypeBOSMethod" class="col-lg-2 col-md-3 col-sm-4 col-xs-12  control-label">BOS Method</label>
+	<label for="styleTypeBOSMethod" class="col-lg-2 col-md-3 col-sm-4 col-xs-12  control-label">BOS Display Method</label>
 	<div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
 		<div class="input-group">
 			<!-- Input Here -->
@@ -158,12 +158,17 @@ if ($action == "default") {
 			</div>
 			<div class="radio">
 				<label>
-					<input type="radio" name="styleTypeBOSMethod" value="2" id="styleTypeBOSMethod_1" <?php if (($action == "edit") && ($row_style_type['styleTypeBOSMethod'] == "2")) echo "checked"; ?> />1st and 2nd places only
+					<input type="radio" name="styleTypeBOSMethod" value="2" id="styleTypeBOSMethod_1" <?php if (($action == "edit") && ($row_style_type['styleTypeBOSMethod'] == "2")) echo "checked"; ?> />1st and 2nd places
 				</label>
 			</div>
 			<div class="radio">
 				<label>
 					<input type="radio" name="styleTypeBOSMethod" value="3" id="styleTypeBOSMethod_2" <?php if (($action == "edit") && ($row_style_type['styleTypeBOSMethod'] == "3")) echo "checked"; ?> />1st, 2nd, and 3rd places
+				</label>
+			</div>
+			<div class="radio">
+				<label>
+					<input type="radio" name="styleTypeBOSMethod" value="4" id="styleTypeBOSMethod_3" <?php if (($action == "edit") && ($row_style_type['styleTypeBOSMethod'] == "4")) echo "checked"; ?> />1st, 2nd, and 3rd places with Honorable Mention
 				</label>
 			</div>
 		</div>

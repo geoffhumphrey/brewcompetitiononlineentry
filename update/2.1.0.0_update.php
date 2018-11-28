@@ -15,12 +15,12 @@ $output .= "<ul>";
 // -----------------------------------------------------------
 
 if (!check_update("sponsorEnable", $prefix."sponsors")) {
-	
+
 	$updateSQL = "ALTER TABLE `".$prefix."sponsors` ADD `sponsorEnable` TINYINT(1) NULL;";
 	mysqli_select_db($connection,$database);
 	mysqli_real_escape_string($connection,$updateSQL);
 	$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
-	
+
 	$output .=  "<li>XXX.</li>";
 }
 
@@ -46,34 +46,34 @@ $preferences = mysqli_query($connection,$query_preferences) or die (mysqli_error
 $row_preferences = mysqli_fetch_assoc($preferences);
 $totalRows_preferences = mysqli_num_rows($user_preferences);
 
-$updateSQL = sprintf("UPDATE %s SET 
-`prefsCash`='%s', 
-`prefsCheck`='%s', 
-`prefsTransFee`='%s', 
-`prefsCash`='%s', 
-`prefsSponsors`='%s', 
-`prefsSponsorLogos`='%s', 
-`prefsDisplayWinners`='%s', 
-`prefsDisplaySpecial`='%s', 
-`prefsContact`='%s', 
-`prefsPayToPrint`='%s', 
-`prefsHideRecipe`='%s', 
-`prefsUseMods`='%s', 
+$updateSQL = sprintf("UPDATE %s SET
+`prefsCash`='%s',
+`prefsCheck`='%s',
+`prefsTransFee`='%s',
+`prefsCash`='%s',
+`prefsSponsors`='%s',
+`prefsSponsorLogos`='%s',
+`prefsDisplayWinners`='%s',
+`prefsDisplaySpecial`='%s',
+`prefsContact`='%s',
+`prefsPayToPrint`='%s',
+`prefsHideRecipe`='%s',
+`prefsUseMods`='%s',
 `prefsSEF`='%s'
-WHERE `id`=1", 
+WHERE `id`=1",
 $prefix."preferences",
-convert_yes_no($row_preferences['prefsCash']), 
-convert_yes_no($row_preferences['prefsCheck']), 
-convert_yes_no($row_preferences['prefsTransFee']), 
-convert_yes_no($row_preferences['prefsCash']), 
-convert_yes_no($row_preferences['prefsSponsors']), 
-convert_yes_no($row_preferences['prefsSponsorLogos']), 
-convert_yes_no($row_preferences['prefsDisplayWinners']), 
+convert_yes_no($row_preferences['prefsCash']),
+convert_yes_no($row_preferences['prefsCheck']),
+convert_yes_no($row_preferences['prefsTransFee']),
+convert_yes_no($row_preferences['prefsCash']),
+convert_yes_no($row_preferences['prefsSponsors']),
+convert_yes_no($row_preferences['prefsSponsorLogos']),
+convert_yes_no($row_preferences['prefsDisplayWinners']),
 convert_yes_no($row_preferences['prefsDisplaySpecial']),
-convert_yes_no($row_preferences['prefsContact']), 
-convert_yes_no($row_preferences['prefsPayToPrint']), 
-convert_yes_no($row_preferences['prefsHideRecipe']), 
-convert_yes_no($row_preferences['prefsUseMods']), 
+convert_yes_no($row_preferences['prefsContact']),
+convert_yes_no($row_preferences['prefsPayToPrint']),
+convert_yes_no($row_preferences['prefsHideRecipe']),
+convert_yes_no($row_preferences['prefsUseMods']),
 convert_yes_no($row_preferences['prefsSEF'])
 );
 mysqli_select_db($connection,$database);
@@ -82,20 +82,20 @@ $result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection)
 
 // Then alter the table rows to be TINYINT(1)
 $updateSQL = sprintf("
-ALTER TABLE `%s` 
-CHANGE `prefsPaypal` `prefsPaypal` TINYINT(1) NULL DEFAULT NULL, 
-CHANGE `prefsCash` `prefsCash` TINYINT(1) NULL DEFAULT NULL, 
-CHANGE `prefsCheck` `prefsCheck` TINYINT(1) NULL DEFAULT NULL, 
-CHANGE `prefsTransFee` `prefsTransFee` TINYINT(1) NULL DEFAULT NULL, 
-CHANGE `prefsSponsors` `prefsSponsors` TINYINT(1) NULL DEFAULT NULL, 
-CHANGE `prefsSponsorLogos` `prefsSponsorLogos` TINYINT(1) NULL DEFAULT NULL, 
-CHANGE `prefsDisplayWinners` `prefsDisplayWinners` TINYINT(1) NULL DEFAULT NULL, 
-CHANGE `prefsDisplaySpecial` `prefsDisplaySpecial` TINYINT(1) NULL DEFAULT NULL, 
-CHANGE `prefsContact` `prefsContact` TINYINT(1) NULL DEFAULT NULL, 
-CHANGE `prefsPayToPrint` `prefsPayToPrint` TINYINT(1) NULL DEFAULT NULL COMMENT 'Do users need to pay before printing entry paperwork?', 
-CHANGE `prefsHideRecipe` `prefsHideRecipe` TINYINT(1) NULL DEFAULT NULL COMMENT 'Hide the recipe (optional) sections on the add/edit entry form?', 
-CHANGE `prefsUseMods` `prefsUseMods` TINYINT(1) NULL DEFAULT NULL COMMENT 'Use the custom modules function (advanced users)', 
-CHANGE `prefsSEF` `prefsSEF` TINYINT(1) NULL DEFAULT NULL COMMENT 'Use search engine friendly URLs.'", 
+ALTER TABLE `%s`
+CHANGE `prefsPaypal` `prefsPaypal` TINYINT(1) NULL DEFAULT NULL,
+CHANGE `prefsCash` `prefsCash` TINYINT(1) NULL DEFAULT NULL,
+CHANGE `prefsCheck` `prefsCheck` TINYINT(1) NULL DEFAULT NULL,
+CHANGE `prefsTransFee` `prefsTransFee` TINYINT(1) NULL DEFAULT NULL,
+CHANGE `prefsSponsors` `prefsSponsors` TINYINT(1) NULL DEFAULT NULL,
+CHANGE `prefsSponsorLogos` `prefsSponsorLogos` TINYINT(1) NULL DEFAULT NULL,
+CHANGE `prefsDisplayWinners` `prefsDisplayWinners` TINYINT(1) NULL DEFAULT NULL,
+CHANGE `prefsDisplaySpecial` `prefsDisplaySpecial` TINYINT(1) NULL DEFAULT NULL,
+CHANGE `prefsContact` `prefsContact` TINYINT(1) NULL DEFAULT NULL,
+CHANGE `prefsPayToPrint` `prefsPayToPrint` TINYINT(1) NULL DEFAULT NULL COMMENT 'Do users need to pay before printing entry paperwork?',
+CHANGE `prefsHideRecipe` `prefsHideRecipe` TINYINT(1) NULL DEFAULT NULL COMMENT 'Hide the recipe (optional) sections on the add/edit entry form?',
+CHANGE `prefsUseMods` `prefsUseMods` TINYINT(1) NULL DEFAULT NULL COMMENT 'Use the custom modules function (advanced users)',
+CHANGE `prefsSEF` `prefsSEF` TINYINT(1) NULL DEFAULT NULL COMMENT 'Use search engine friendly URLs.'",
 $prefix."preferences"
 );
 mysqli_select_db($connection,$database);
@@ -140,7 +140,7 @@ mysqli_select_db($connection,$database);
 mysqli_real_escape_string($connection,$updateSQL);
 $result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 
-$output .=  "<li>Brewer table updated.</li>"; 
+$output .=  "<li>Brewer table updated.</li>";
 
 
 // -----------------------------------------------------------
@@ -148,8 +148,8 @@ $output .=  "<li>Brewer table updated.</li>";
 // -----------------------------------------------------------
 
 $updateSQL = sprintf("
-ALTER TABLE `%s` 
-ADD `prefsEntryLimitPaid` INT(4) NULL DEFAULT NULL,  
+ALTER TABLE `%s`
+ADD `prefsEntryLimitPaid` INT(4) NULL DEFAULT NULL,
 ADD `prefsEmailRegConfirm` TINYINT(1) NULL DEFAULT NULL;
 ",
 $prefix."preferences");
@@ -164,9 +164,9 @@ $output .=  "<li>Preferences table updated.</li>";
 // -----------------------------------------------------------
 
 $updateSQL = sprintf("
-ALTER TABLE `%s` 
-ADD `jPrefsCapJudges` INT(3) NULL DEFAULT NULL,  
-ADD `jPrefsCapStewards` INT(3) NULL DEFAULT NULL,  
+ALTER TABLE `%s`
+ADD `jPrefsCapJudges` INT(3) NULL DEFAULT NULL,
+ADD `jPrefsCapStewards` INT(3) NULL DEFAULT NULL,
 ADD `jPrefsBottleNum` INT(3) NULL DEFAULT NULL;
 ",
 $prefix."judging_preferences");
@@ -206,7 +206,7 @@ if (!check_update("contestCheckInPassword", $prefix."contest_info")) {
 $updateSQL = sprintf("UPDATE %s SET sponsorEnable = '1';",$sponsors_db_table);
 mysqli_select_db($connection,$database);
 mysqli_real_escape_string($connection,$updateSQL);
-$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));	
+$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 
 $output .= "<li>XXX.</li>";
 */
@@ -221,11 +221,11 @@ $output .= "<li>XXX.</li>";
 $updateSQL = "DROP TABLE IF EXISTS ".$prefix."styles; ";
 mysqli_select_db($connection,$database);
 mysqli_real_escape_string($connection,$updateSQL);
-$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));	
+$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 
 
 $updateSQL = "
-CREATE TABLE ".$prefix."styles 
+CREATE TABLE ".$prefix."styles
 (
   id int(8) NOT NULL AUTO_INCREMENT,
   brewStyleNum varchar(3) DEFAULT NULL,
@@ -256,12 +256,12 @@ CREATE TABLE ".$prefix."styles
   brewStyleComEx text CHARACTER SET utf8 COLLATE utf8_bin,
   brewStyleEntry text CHARACTER SET utf8 COLLATE utf8_bin,
   PRIMARY KEY (id)
-) 
+)
 ENGINE=MyISAM;
 ";
 mysqli_select_db($connection,$database);
 mysqli_real_escape_string($connection,$updateSQL);
-$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));	
+$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 
 
 $updateSQL = "INSERT INTO ".$prefix."styles (id, brewStyleNum, brewStyle, brewStyleCategory, brewStyleOG, brewStyleOGMax, brewStyleFG, brewStyleFGMax, brewStyleABV, brewStyleABVMax, brewStyleIBU, brewStyleIBUMax, brewStyleSRM, brewStyleSRMMax, brewStyleType, brewStyleInfo, brewStyleLink, brewStyleGroup, brewStyleActive, brewStyleOwn, brewStyleVersion, brewStyleReqSpec, brewStyleStrength, brewStyleCarb, brewStyleSweet, brewStyleTags, brewStyleComEx, brewStyleEntry) VALUES ";
@@ -278,7 +278,7 @@ $updateSQL .= "(10, 'B', 'Oktoberfest/Marzen', 'European Amber Lager', '1.05', '
 
 mysqli_select_db($connection,$database);
 mysqli_real_escape_string($connection,$updateSQL);
-$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));	
+$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 
 $updateSQL = "INSERT INTO ".$prefix."styles (id, brewStyleNum, brewStyle, brewStyleCategory, brewStyleOG, brewStyleOGMax, brewStyleFG, brewStyleFGMax, brewStyleABV, brewStyleABVMax, brewStyleIBU, brewStyleIBUMax, brewStyleSRM, brewStyleSRMMax, brewStyleType, brewStyleInfo, brewStyleLink, brewStyleGroup, brewStyleActive, brewStyleOwn, brewStyleVersion, brewStyleReqSpec, brewStyleStrength, brewStyleCarb, brewStyleSweet, brewStyleTags, brewStyleComEx, brewStyleEntry) VALUES ";
 $updateSQL .= "(11, 'A', 'Dark American Lager', 'Dark Lager', '1.044', '1.056', '1.008', '1.012', '4.2', '6', '8', '20', '14', '22', 'Lager', 'A somewhat sweeter version of standard/premium lager with a little more body and flavor.', 'http://www.bjcp.org/2008styles/style04.php#1a', '04', 'Y', 'bcoe', 'BJCP2008', 0, 0, 0, 0, '', 'Dixie Blackened Voodoo, Shiner Bock, San Miguel Dark, Baltika #4, Beck&rsquo;s Dark, Saint Pauli Girl Dark, Warsteiner Dunkel, Heineken Dark Lager, Crystal Diplomat Dark Beer. ', ''), ";
@@ -294,7 +294,7 @@ $updateSQL .= "(20, 'C', 'Kolsch', 'Light Hybrid Beer', '1.044', '1.05', '1.007'
 
 mysqli_select_db($connection,$database);
 mysqli_real_escape_string($connection,$updateSQL);
-$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));	
+$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 
 $updateSQL = "INSERT INTO ".$prefix."styles (id, brewStyleNum, brewStyle, brewStyleCategory, brewStyleOG, brewStyleOGMax, brewStyleFG, brewStyleFGMax, brewStyleABV, brewStyleABVMax, brewStyleIBU, brewStyleIBUMax, brewStyleSRM, brewStyleSRMMax, brewStyleType, brewStyleInfo, brewStyleLink, brewStyleGroup, brewStyleActive, brewStyleOwn, brewStyleVersion, brewStyleReqSpec, brewStyleStrength, brewStyleCarb, brewStyleSweet, brewStyleTags, brewStyleComEx, brewStyleEntry) VALUES ";
 $updateSQL .= "(21, 'D', 'American Wheat or Rye Beer', 'Light Hybrid Beer', '1.04', '1.055', '1.008', '1.013', '4', '5.5', '15', '30', '3', '6', 'Mixed', 'Refreshing wheat or rye beers that can display more hop character and less yeast character than their German cousins.', 'http://www.bjcp.org/2008styles/style06.php#1d', '06', 'Y', 'bcoe', 'BJCP2008', 1, 0, 0, 0, '', 'Bell&rsquo;s Oberon, Harpoon UFO Hefeweizen, Three Floyds Gumballhead, Pyramid Hefe-Weizen, Widmer Hefeweizen, Sierra Nevada Unfiltered Wheat Beer, Anchor Summer Beer, Redhook Sunrye, Real Ale Full Moon Pale Rye.', 'Entrant must specify whether wheat or rye is used.'), ";
@@ -309,7 +309,7 @@ $updateSQL .= "(29, 'B', 'Scottish Heavy 70/-', 'Scottish and Irish Ale', '1.035
 $updateSQL .= "(30, 'C', 'Scottish Export 80/-', 'Scottish and Irish Ale', '1.04', '1.054', '1.01', '1.016', '3.9', '5', '15', '30', '9', '17', 'Ale', 'Cleanly malty with a drying finish, perhaps a few esters, and on occasion a faint bit of peaty earthiness (smoke). Most beers finish fairly dry considering their relatively sweet palate, and as such have a different balance than strong Scotch ales.', 'http://www.bjcp.org/2008styles/style09.php#1c', '09', 'Y', 'bcoe', 'BJCP2008', 0, 0, 0, 0, '', 'Orkney Dark Island, Caledonian 80/- Export Ale, Belhaven 80/- (Belhaven Scottish Ale in the US), Southampton 80 Shilling, Broughton Exciseman&rsquo;s 80/-, Belhaven St. Andrews Ale, McEwan&rsquo;s Export (IPA), Inveralmond Lia Fail, Broughton Merlin&rsquo;s Ale, Arran Dark', ''); ";
 mysqli_select_db($connection,$database);
 mysqli_real_escape_string($connection,$updateSQL);
-$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));	
+$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 
 $updateSQL = "INSERT INTO ".$prefix."styles (id, brewStyleNum, brewStyle, brewStyleCategory, brewStyleOG, brewStyleOGMax, brewStyleFG, brewStyleFGMax, brewStyleABV, brewStyleABVMax, brewStyleIBU, brewStyleIBUMax, brewStyleSRM, brewStyleSRMMax, brewStyleType, brewStyleInfo, brewStyleLink, brewStyleGroup, brewStyleActive, brewStyleOwn, brewStyleVersion, brewStyleReqSpec, brewStyleStrength, brewStyleCarb, brewStyleSweet, brewStyleTags, brewStyleComEx, brewStyleEntry) VALUES ";
 $updateSQL .= "(31, 'D', 'Irish Red Ale', 'Scottish and Irish Ale', '1.044', '1.06', '1.01', '1.014', '4', '6', '17', '28', '9', '18', 'Ale', 'An easy-drinking pint. Malt-focused with an initial sweetness and a roasted dryness in the finish.', 'http://www.bjcp.org/2008styles/style09.php#1d', '09', 'Y', 'bcoe', 'BJCP2008', 0, 0, 0, 0, '', 'Three Floyds Brian Boru Old Irish Ale, Great Lakes Conway&rsquo;s Irish Ale (a bit strong at 6.5%), Kilkenny Irish Beer, O&rsquo;Hara&rsquo;s Irish Red Ale, Smithwick&rsquo;s Irish Ale, Beamish Red Ale, Caffrey&rsquo;s Irish Ale, Goose Island Kilgubbin Red Ale, Murphy&rsquo;s Irish Red (lager), Boulevard Irish Ale, Harpoon Hibernian Ale.', ''), ";
@@ -324,7 +324,7 @@ $updateSQL .= "(39, 'A', 'Brown Porter', 'Porter', '1.04', '1.052', '1.008', '1.
 $updateSQL .= "(40, 'B', 'Robust Porter', 'Porter', '1.048', '1.065', '1.012', '1.016', '4.8', '6.5', '25', '50', '22', '35', 'Ale', 'A substantial, malty dark ale with a complex and flavorful roasty character.', 'http://www.bjcp.org/2008styles/style12.php#1b', '12', 'Y', 'bcoe', 'BJCP2008', 0, 0, 0, 0, '', 'Great Lakes Edmund Fitzgerald Porter, Meantime London Porter, Anchor Porter, Smuttynose Robust Porter, Sierra Nevada Porter, Deschutes Black Butte Porter, Boulevard Bully! Porter, Rogue Mocha Porter, Avery New World Porter, Bell&rsquo;s Porter, Great Divide Saint Bridget&rsquo;s Porter.', ''); ";
 mysqli_select_db($connection,$database);
 mysqli_real_escape_string($connection,$updateSQL);
-$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));	
+$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 
 $updateSQL = "INSERT INTO ".$prefix."styles (id, brewStyleNum, brewStyle, brewStyleCategory, brewStyleOG, brewStyleOGMax, brewStyleFG, brewStyleFGMax, brewStyleABV, brewStyleABVMax, brewStyleIBU, brewStyleIBUMax, brewStyleSRM, brewStyleSRMMax, brewStyleType, brewStyleInfo, brewStyleLink, brewStyleGroup, brewStyleActive, brewStyleOwn, brewStyleVersion, brewStyleReqSpec, brewStyleStrength, brewStyleCarb, brewStyleSweet, brewStyleTags, brewStyleComEx, brewStyleEntry) VALUES ";
 $updateSQL .= "(41, 'C', 'Baltic Porter', 'Porter', '1.06', '1.09', '1.016', '1.024', '5.5', '9.5', '20', '40', '17', '30', 'Ale', 'A Baltic Porter often has the malt flavors reminiscent of an English brown porter and the restrained roast of a schwarzbier, but with a higher OG and alcohol content than either. Very complex, with multi-layered flavors.', 'http://www.bjcp.org/2008styles/style12.php#1c', '12', 'Y', 'bcoe', 'BJCP2008', 0, 0, 0, 0, '', 'Sinebrychoff Porter (Finland), Okocim Porter (Poland), Zywiec Porter (Poland), Baltika #6 Porter (Russia), Carnegie Stark Porter (Sweden), Aldaris Porteris (Latvia), Utenos Porter (Lithuania), Stepan Razin Porter (Russia), Nøgne ø porter (Norway), Neuzeller Kloster-Bräu Neuzeller Porter (Germany), Southampton Imperial Baltic Porter.', ''), ";
@@ -339,7 +339,7 @@ $updateSQL .= "(49, 'B', 'American IPA', 'India Pale Ale', '1.056', '1.075', '1.
 $updateSQL .= "(50, 'C', 'Imperial IPA', 'India Pale Ale', '1.075', '1.09', '1.01', '1.02', '7.5', '10', '60', '120', '8', '15', 'Ale', 'An intensely hoppy, very strong pale ale without the big maltiness and/or deeper malt flavors of an American barleywine. Strongly hopped, but clean, lacking harshness, and a tribute to historical IPAs. Drinkability is an important characteristic; this should not be a heavy, sipping beer. It should also not have much residual sweetness or a heavy character grain profile.', 'http://www.bjcp.org/2008styles/style14.php#1c', '14', 'Y', 'bcoe', 'BJCP2008', 0, 0, 0, 0, '', 'Russian River Pliny the Elder, Three Floyd&rsquo;s Dreadnaught, Avery Majaraja, Bell&rsquo;s Hop Slam, Stone Ruination IPA, Great Divide Hercules Double IPA, Surly Furious, Rogue I2PA, Moylan&rsquo;s Hopsickle Imperial India Pale Ale, Stoudt&rsquo;s Double IPA, Dogfish Head 90-minute IPA, Victory Hop Wallop.', ''); ";
 mysqli_select_db($connection,$database);
 mysqli_real_escape_string($connection,$updateSQL);
-$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));	
+$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 
 $updateSQL = "INSERT INTO ".$prefix."styles (id, brewStyleNum, brewStyle, brewStyleCategory, brewStyleOG, brewStyleOGMax, brewStyleFG, brewStyleFGMax, brewStyleABV, brewStyleABVMax, brewStyleIBU, brewStyleIBUMax, brewStyleSRM, brewStyleSRMMax, brewStyleType, brewStyleInfo, brewStyleLink, brewStyleGroup, brewStyleActive, brewStyleOwn, brewStyleVersion, brewStyleReqSpec, brewStyleStrength, brewStyleCarb, brewStyleSweet, brewStyleTags, brewStyleComEx, brewStyleEntry) VALUES ";
 $updateSQL .= "(51, 'A', 'Weizen/Weissbier', 'German Wheat and Rye Beer', '1.044', '1.052', '1.01', '1.014', '4.3', '5.6', '8', '15', '2', '8', 'Ale', 'A pale, spicy, fruity, refreshing wheat-based ale.', 'http://www.bjcp.org/2008styles/style15.php#1a', '15', 'Y', 'bcoe', 'BJCP2008', 0, 0, 0, 0, '', 'Weihenstephaner Hefeweissbier, Schneider Weisse Weizenhell, Paulaner Hefe-Weizen, Hacker-Pschorr Weisse, Plank Bavarian Hefeweizen, Ayinger Bräu Weisse, Ettaler Weissbier Hell, Franziskaner Hefe-Weisse, Andechser Weissbier Hefetrub, Kapuziner Weissbier, Erdinger Weissbier, Penn Weizen, Barrelhouse Hocking Hills HefeWeizen, Eisenbahn Weizenbier.', ''), ";
@@ -354,7 +354,7 @@ $updateSQL .= "(59, 'E', 'Belgian Specialty Ale', 'Belgian and French Ale', '', 
 $updateSQL .= "(60, 'A', 'Berliner Weisse', 'Sour Ale', '1.028', '1.032', '1.003', '1.006', '2.8', '3.8', '3', '8', '2', '3', 'Ale', 'A very pale, sour, refreshing, low-alcohol wheat ale.', 'http://www.bjcp.org/2008styles/style17.php#1a', '17', 'Y', 'bcoe', 'BJCP2008', 0, 0, 0, 0, '', 'Schultheiss Berliner Weisse, Berliner Kindl Weisse, Nodding Head Berliner Weisse, Weihenstephan 1809, Bahnhof Berliner Style Weisse, Southampton Berliner Weisse, Bethlehem Berliner Weisse, Three Floyds Deesko.', ''); ";
 mysqli_select_db($connection,$database);
 mysqli_real_escape_string($connection,$updateSQL);
-$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));	
+$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 
 $updateSQL = "INSERT INTO ".$prefix."styles (id, brewStyleNum, brewStyle, brewStyleCategory, brewStyleOG, brewStyleOGMax, brewStyleFG, brewStyleFGMax, brewStyleABV, brewStyleABVMax, brewStyleIBU, brewStyleIBUMax, brewStyleSRM, brewStyleSRMMax, brewStyleType, brewStyleInfo, brewStyleLink, brewStyleGroup, brewStyleActive, brewStyleOwn, brewStyleVersion, brewStyleReqSpec, brewStyleStrength, brewStyleCarb, brewStyleSweet, brewStyleTags, brewStyleComEx, brewStyleEntry) VALUES ";
 $updateSQL .= "(61, 'B', 'Flanders Red Ale', 'Sour Ale', '1.048', '1.057', '1.002', '1.012', '4.6', '6.5', '10', '25', '10', '16', 'Ale', 'A complex, sour, red wine-like Belgian-style ale.', 'http://www.bjcp.org/2008styles/style17.php#1b', '17', 'Y', 'bcoe', 'BJCP2008', 0, 0, 0, 0, '', 'Rodenbach Klassiek, Rodenbach Grand Cru, Bellegems Bruin, Duchesse de Bourgogne, New Belgium La Folie, Petrus Oud Bruin, Southampton Flanders Red Ale, Verhaege Vichtenaar, Monk&rsquo;s Cafe Flanders Red Ale, New Glarus Enigma, Panil Barriquée, Mestreechs Aajt.', ''), ";
@@ -369,7 +369,7 @@ $updateSQL .= "(69, 'D', 'Belgian Golden Strong Ale', 'Belgian Strong Ale', '1.0
 $updateSQL .= "(70, 'E', 'Belgian Dark Strong Ale', 'Belgian Strong Ale', '1.075', '1.11', '1.01', '1.024', '8', '11', '20', '35', '12', '22', 'Ale', 'A dark, very rich, complex, very strong Belgian ale. Complex, rich, smooth and dangerous.', 'http://www.bjcp.org/2008styles/style18.php#1e', '18', 'Y', 'bcoe', 'BJCP2008', 0, 0, 0, 0, '', 'Westvleteren 12 (yellow cap), Rochefort 10 (blue cap), St. Bernardus Abt 12, Gouden Carolus Grand Cru of the Emperor, Achel Extra Brune, Rochefort 8 (green cap), Southampton Abbot 12, Chimay Grande Reserve (Blue), Brasserie des Rocs Grand Cru, Gulden Draak, Kasteelbier Biere du Chateau Donker, Lost Abbey Judgment Day, Russian River Salvation.', ''); ";
 mysqli_select_db($connection,$database);
 mysqli_real_escape_string($connection,$updateSQL);
-$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));	
+$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 
 $updateSQL = "INSERT INTO ".$prefix."styles (id, brewStyleNum, brewStyle, brewStyleCategory, brewStyleOG, brewStyleOGMax, brewStyleFG, brewStyleFGMax, brewStyleABV, brewStyleABVMax, brewStyleIBU, brewStyleIBUMax, brewStyleSRM, brewStyleSRMMax, brewStyleType, brewStyleInfo, brewStyleLink, brewStyleGroup, brewStyleActive, brewStyleOwn, brewStyleVersion, brewStyleReqSpec, brewStyleStrength, brewStyleCarb, brewStyleSweet, brewStyleTags, brewStyleComEx, brewStyleEntry) VALUES ";
 $updateSQL .= "(71, 'A', 'Old Ale', 'Strong Ale', '1.06', '1.09', '1.015', '1.022', '6', '9', '30', '60', '10', '22', 'Ale', 'An ale of significant alcoholic strength, bigger than strong bitters and brown porters, though usually not as strong or rich as barleywine. Usually tilted toward a sweeter, maltier balance. &ldquo;It should be a warming beer of the type that is best drunk in half pints by a warm fire on a cold winter&rsquo;s night&rdquo; – Michael Jackson.', 'http://www.bjcp.org/2008styles/style19.php#1a', '19', 'Y', 'bcoe', 'BJCP2008', 0, 0, 0, 0, '', 'Gale&rsquo;s Prize Old Ale, Burton Bridge Olde Expensive, Marston Owd Roger, Greene King Olde Suffolk Ale , J.W. Lees Moonraker, Harviestoun Old Engine Oil, Fuller&rsquo;s Vintage Ale, Harvey&rsquo;s Elizabethan Ale, Theakston Old Peculier (peculiar at OG 1.057), Young&rsquo;s Winter Warmer, Sarah Hughes Dark Ruby Mild, Samuel Smith&rsquo;s Winter Welcome, Fuller&rsquo;s 1845, Fuller&rsquo;s Old Winter Ale, Great Divide Hibernation Ale, Founders Curmudgeon, Cooperstown Pride of Milford Special Ale, Coniston Old Man Ale, Avery Old Jubilation.', ''), ";
@@ -487,7 +487,7 @@ $updateSQL .= "(146, 'A', 'Sweet Stout', 'Dark British Beer', '1.044', '1.06', '
 $updateSQL .= "(147, 'B', 'Oatmeal Stout', 'Dark British Beer', '1.045', '1.065', '1.01', '1.018', '4.2', '5.9', '25', '40', '22', '40', 'Ale', 'A very dark, full-bodied, roasty, malty ale with a complementary oatmeal flavor. The sweetness, balance, and oatmeal impression can vary considerably.', 'http://bjcp.org/stylecenter.php', '16', 'Y', 'bcoe', 'BJCP2015', 0, 0, 0, 0, 'standard-strength, dark-color, top-fermented, british-isles, traditional-style, stout-family, balanced, roasty', 'Samuel Smith Oatmeal Stout, Young&rsquo;s Oatmeal Stout, McAuslan Oatmeal Stout, Maclay&rsquo;s Oat Malt Stout, Broughton Kinmount Willie Oatmeal Stout, Anderson Valley Barney Flats Oatmeal Stout, Troegs Oatmeal Stout, New Holland The Poet, Goose Island Oatmeal Stout, Wolaver&rsquo;s Oatmeal Stout.', ''), ";
 $updateSQL .= "(148, 'C', 'Tropical Stout', 'Dark British Beer', '1.056', '1.075', '1.01', '1.018', '5.5', '8', '30', '50', '30', '40', 'Ale', 'A very dark, sweet, fruity, moderately strong ale with smooth roasty flavors without a burnt harshness. ', 'http://bjcp.org/stylecenter.php', '16', 'Y', 'bcoe', 'BJCP2015', 0, 0, 0, 0, 'high-strength, dark-color, top-fermented, british-isles, traditional-style, stout-family, malty, roasty, sweet', 'Lion Stout (Sri Lanka), Dragon Stout (Jamaica), ABC Stout (Singapore), Royal Extra &quot;The Lion Stout&quot; (Trinidad), Jamaica Stout (Jamaica).', ''), ";
 $updateSQL .= "(149, 'D', 'Foreign Extra Stout', 'Dark British Beer', '1.056', '1.075', '1.01', '1.018', '6.5', '8', '50', '70', '30', '40', 'Ale', 'A very dark, moderately strong, fairly dry, stout with prominent roast flavors.', 'http://bjcp.org/stylecenter.php', '16', 'Y', 'bcoe', 'BJCP2015', 0, 0, 0, 0, 'high-strength, dark-color, top-fermented, british-isles, traditional-style, stout-family, balanced, roasty', 'Guinness Foreign Extra Stout, Ridgeway Foreign Export Stout, Coopers Best Extra Stout, Elysian Dragonstooth Stout.', ''), ";
-$updateSQL .= "(150, 'A', 'English Strong Ale', 'Strong British Ale', '1.055', '1.08', '1.015', '1.022', '5.5', '8', '30', '60', '8', '22', 'Ale', 'An ale of respectable alcoholic strength, traditionally bottled-conditioned and cellared. Can have a wide range of interpretations, but most will have varying degrees of malty richness, late hops and bitterness, fruity esters, and alcohol warmth. Judges should allow for a significant range in character, as long as the beer is within the alcohol strength range and has an interesting &quot;English&quot; character, it likely fits the style. The malt and adjunct flavors and intensity can vary widely, but any combination should result in an agreeable palate experience.', 'http://bjcp.org/stylecenter.php', '17', 'Y', 'bcoe', 'BJCP2015', 0, 0, 0, 0, 'high-strength, amber-color, top-fermented, british-isles, traditional-style, strong-ale-family, malty', 'Fuller&rsquo;s 1845, Young&rsquo;s Special London Ale, Harvey&rsquo;s Elizabethan Ale, J.W. Lees Manchester Star, Sarah Hughes Dark Ruby Mild, Samuel Smith&rsquo;s Winter Welcome, Fuller&rsquo;s ESB, Adnams Broadside, Young&rsquo;s Winter Warmer.', ''); ";
+$updateSQL .= "(150, 'A', 'British Strong Ale', 'Strong British Ale', '1.055', '1.08', '1.015', '1.022', '5.5', '8', '30', '60', '8', '22', 'Ale', 'An ale of respectable alcoholic strength, traditionally bottled-conditioned and cellared. Can have a wide range of interpretations, but most will have varying degrees of malty richness, late hops and bitterness, fruity esters, and alcohol warmth. Judges should allow for a significant range in character, as long as the beer is within the alcohol strength range and has an interesting &quot;English&quot; character, it likely fits the style. The malt and adjunct flavors and intensity can vary widely, but any combination should result in an agreeable palate experience.', 'http://bjcp.org/stylecenter.php', '17', 'Y', 'bcoe', 'BJCP2015', 0, 0, 0, 0, 'high-strength, amber-color, top-fermented, british-isles, traditional-style, strong-ale-family, malty', 'Fuller&rsquo;s 1845, Young&rsquo;s Special London Ale, Harvey&rsquo;s Elizabethan Ale, J.W. Lees Manchester Star, Sarah Hughes Dark Ruby Mild, Samuel Smith&rsquo;s Winter Welcome, Fuller&rsquo;s ESB, Adnams Broadside, Young&rsquo;s Winter Warmer.', ''); ";
 mysqli_select_db($connection,$database);
 mysqli_real_escape_string($connection,$updateSQL);
 $result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
@@ -607,7 +607,7 @@ $updateSQL .= "(226, 'F', 'Specialty Cider/Perry', 'Specialty Cider and Perry', 
 
 mysqli_select_db($connection,$database);
 mysqli_real_escape_string($connection,$updateSQL);
-$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));	
+$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 $output .= "<li>Styles data updated.</li>";
 
 // -----------------------------------------------------------

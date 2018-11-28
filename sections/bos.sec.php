@@ -191,19 +191,9 @@ if ($totalRows_sbi > 0) {
 					$table_body2 .= "<tr>";
 
 					if ($row_sbi['sbi_display_places'] == "1") {
-
-						if ($action == "print") {
-							$table_body2 .= "<td nowrap>";
-							$table_body2 .= display_place($row_sbd['sbd_place'],0);
-							$table_body2 .= "</td>";
-						}
-
-						else {
-							$table_body2 .= "<td nowrap>";
-							$table_body2 .= display_place($row_sbd['sbd_place'],3);
-							$table_body2 .= "</td>";
-						}
-
+						$table_body2 .= "<td nowrap>";
+						$table_body2 .= display_place($row_sbd['sbd_place'],2);
+						$table_body2 .= "</td>";
 					}
 
 					$table_body2 .= "<td>";
