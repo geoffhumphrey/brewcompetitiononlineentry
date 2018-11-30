@@ -10,17 +10,20 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 	$config_html_purifier = HTMLPurifier_Config::createDefault();
 	$purifier = new HTMLPurifier($config_html_purifier);
 
-	$sponsorURL = check_http($purifier->purify($_POST['sponsorURL']));
-	$sponsor_name = capitalize($purifier->purify($_POST['sponsorName']));
-
 	if ($action == "update") {
 
 		foreach($_POST['id'] as $id) {
 
+			// $sponsorURL = check_http($purifier->purify($_POST['sponsorURL'.$id]));
+			$sponsor_info = $purifier->purify($_POST['sponsorText'.$id]);
+
 			if ($_POST['sponsorEnable'.$id] == 1) $enable = 1; else $enable = 0;
-			$updateSQL = sprintf("UPDATE %s SET sponsorEnable='%s' WHERE id='%s'",$sponsors_db_table,$enable,$id);
+			if (isset($_POST['sponsorImage'.$id])) $image = $purifier->purify($_POST['sponsorImage'.$id]); else $image = "";
+			$updateSQL = sprintf("UPDATE %s SET sponsorEnable='%s', sponsorLevel='%s', sponsorImage='%s', sponsorText='%s' WHERE id='%s'",$sponsors_db_table,$enable,$_POST['sponsorLevel'.$id],$image,$sponsor_info,$id);
 			mysqli_real_escape_string($connection,$updateSQL);
 			$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+			//echo $updateSQL."<br>";
+
 		}
 
 		$massUpdateGoTo = $base_url."index.php?section=admin&go=sponsors&msg=9";
@@ -31,11 +34,15 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 
 	if ($action == "add") {
 
+		$sponsorURL = check_http($purifier->purify($_POST['sponsorURL']));
+		$sponsor_name = capitalize($purifier->purify($_POST['sponsorName']));
+		$sponsor_info = $purifier->purify($_POST['sponsorText']);
+
 		$insertSQL = sprintf("INSERT INTO $sponsors_db_table (sponsorName, sponsorURL, sponsorImage, sponsorText, sponsorLocation, sponsorLevel, sponsorEnable) VALUES (%s, %s, %s, %s, %s, %s, %s)",
 						   GetSQLValueString($sponsor_name, "text"),
 						   GetSQLValueString($sponsorURL, "text"),
 						   GetSQLValueString(sterilize($_POST['sponsorImage']), "text"),
-						   GetSQLValueString(sterilize($_POST['sponsorText']), "text"),
+						   GetSQLValueString($sponsor_info, "text"),
 						   GetSQLValueString(sterilize($_POST['sponsorLocation']), "text"),
 						   GetSQLValueString(sterilize($_POST['sponsorLevel']), "int"),
 						   GetSQLValueString(sterilize($_POST['sponsorEnable']), "int")
@@ -53,11 +60,15 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 
 	if ($action == "edit") {
 
+		$sponsorURL = check_http($purifier->purify($_POST['sponsorURL']));
+		$sponsor_name = capitalize($purifier->purify($_POST['sponsorName']));
+		$sponsor_info = $purifier->purify($_POST['sponsorText']);
+
 		$updateSQL = sprintf("UPDATE $sponsors_db_table SET sponsorName=%s, sponsorURL=%s, sponsorImage=%s, sponsorText=%s, sponsorLocation=%s , sponsorLevel=%s, sponsorEnable=%s WHERE id=%s",
 						   GetSQLValueString($sponsor_name, "text"),
 						   GetSQLValueString($sponsorURL, "text"),
 						   GetSQLValueString(sterilize($_POST['sponsorImage']), "text"),
-						   GetSQLValueString(sterilize($_POST['sponsorText']), "text"),
+						   GetSQLValueString($sponsor_info, "text"),
 						   GetSQLValueString(sterilize($_POST['sponsorLocation']), "text"),
 						   GetSQLValueString(sterilize($_POST['sponsorLevel']), "int"),
 						   GetSQLValueString(sterilize($_POST['sponsorEnable']), "int"),

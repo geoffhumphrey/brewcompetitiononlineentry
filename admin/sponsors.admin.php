@@ -1,4 +1,10 @@
-<?php include (DB.'sponsors.db.php'); ?>
+<?php
+include (DB.'sponsors.db.php');
+
+$directory = (USER_IMAGES);
+$empty = is_dir_empty($directory);
+
+?>
 <p class="lead"><?php echo $_SESSION['contestName']; if ($action == "add") echo ": Add a Sponsor"; elseif ($action == "edit") echo ": Edit a Sponsor"; else echo " Sponsors"; ?></p>
 
 <div class="bcoem-admin-element hidden-print">
@@ -10,7 +16,7 @@
 	<div class="btn-group" role="group" aria-label="add-sponsor">
         <a class="btn btn-default" href="<?php echo $base_url; ?>index.php?section=admin&amp;go=sponsors&amp;action=add"><span class="fa fa-plus-circle"></span> Add a Sponsor</a>
     </div><!-- ./button group -->
-    <div class="btn-group" role="group" aria-label="upload-sponsor">		
+    <div class="btn-group" role="group" aria-label="upload-sponsor">
 		<a class="btn btn-primary" href="<?php echo $base_url; ?>index.php?section=admin&amp;go=upload"><span class="fa fa-upload"></span> Upload Sponsor Logo Images</a>
 	</div>
 <?php } ?>
@@ -18,10 +24,12 @@
 
 <?php if ($totalRows_sponsors > 0) { ?>
 <?php if ($action == "default") { ?>
+<!--
 <div class="bcoem-admin-element hidden-print">
 <p><span class="fa fa-lg fa-check text-success"></span> = The logo's image file is present on the server and the name of the file entered matches the file's name on the server.
 <p><span class="fa fa-lg fa-times text-danger"></span> =  No logo.
 </div>
+-->
 <?php } ?>
 <?php if ($action == "default") { ?>
 <form name="form1" method="post" action="<?php echo $base_url; ?>includes/process.inc.php?action=update&amp;dbTable=<?php echo $sponsors_db_table; ?>">
@@ -64,14 +72,34 @@
  <tr>
   <td><?php echo $row_sponsors['sponsorName']; ?></td>
   <td><?php echo $row_sponsors['sponsorLocation']; ?></td>
-  <td><?php echo $row_sponsors['sponsorLevel']; ?></td>
-  <td><?php if (($row_sponsors['sponsorImage'] !="") && (file_exists($_SERVER['DOCUMENT_ROOT'].$sub_directory.'/user_images/'.$row_sponsors['sponsorImage']))) { ?><span class="fa fa-lg fa-check text-success"></span><?php } else { ?><span class="fa fa-lg fa-times text-danger"></span><?php } ?></td>
-  <td><?php echo $row_sponsors['sponsorText']; ?></td>
+  <td><?php // echo $row_sponsors['sponsorLevel']; ?>
+    <select class="selectpicker" name="sponsorLevel<?php echo $row_sponsors['id']; ?>" id="sponsorLevel<?php echo $row_sponsors['id']; ?>" data-width="auto">
+        <option value="1" <?php if ($row_sponsors['sponsorLevel'] == "1") echo " SELECTED"; ?>>1</option>
+        <option value="2" <?php if ($row_sponsors['sponsorLevel'] == "2") echo " SELECTED"; ?>>2</option>
+        <option value="3" <?php if ($row_sponsors['sponsorLevel'] == "3") echo " SELECTED"; ?>>3</option>
+        <option value="4" <?php if ($row_sponsors['sponsorLevel'] == "4") echo " SELECTED"; ?>>4</option>
+        <option value="5" <?php if ($row_sponsors['sponsorLevel'] == "5") echo " SELECTED"; ?>>5</option>
+    </select>
+  </td>
+  <td>
+    <!--
+    <?php if (($row_sponsors['sponsorImage'] !="") && (file_exists($_SERVER['DOCUMENT_ROOT'].$sub_directory.'/user_images/'.$row_sponsors['sponsorImage']))) { ?><span class="fa fa-lg fa-check text-success"></span><?php } else { ?><span class="fa fa-lg fa-times text-danger"></span><?php } ?>
+    -->
+    <?php if (!$empty) { ?>
+    <select class="selectpicker" name="sponsorImage<?php echo $row_sponsors['id']; ?>" id="sponsorImage<?php echo $row_sponsors['id']; ?>" data-live-search="true" data-size="10" data-width="auto">
+       <?php echo directory_contents_dropdown($directory,$row_sponsors['sponsorImage']); ?>
+    </select>
+    <?php } else echo "<p>No images exist in the user_images directory.</p>"; ?>
+  </td>
+  <td>
+    <textarea class="form-control" name="sponsorText<?php echo $row_sponsors['id']; ?>" rows="2" class="mceNoEditor"><?php if (!empty($row_sponsors['sponsorText'])) echo $row_sponsors['sponsorText']; ?></textarea>
+    <?php // echo $row_sponsors['sponsorText']; ?>
+    </td>
   <td><input id="mod_enable" type="checkbox" name="sponsorEnable<?php echo $row_sponsors['id']; ?>" value="1" <?php if ($row_sponsors['sponsorEnable'] == 1) echo 'CHECKED'; ?> /><input type="hidden" id="id" name="id[]" value="<?php echo $row_sponsors['id']; ?>" /></td>
   <td nowrap="nowrap">
-  <a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=<?php echo $go; ?>&amp;action=edit&amp;id=<?php echo $row_sponsors['id']; ?>" data-toggle="tooltip" data-placement="top" title="Edit <?php echo $row_sponsors['sponsorName']; ?>"><span class="fa fa-lg fa-pencil"></span></a> 
-  <a href="<?php echo $base_url; ?>includes/process.inc.php?section=admin&amp;go=<?php echo $go; ?>&amp;dbTable=<?php echo $sponsors_db_table; ?>&amp;action=delete&amp;id=<?php echo $row_sponsors['id']; ?>" data-toggle="tooltip" data-placement="top" title="Delete <?php echo $row_sponsors['sponsorName']; ?> as a sponsor" data-confirm="Are you sure you want to delete <?php echo $row_sponsors['sponsorName']; ?> as a sponsor? This cannot be undone."><span class="fa fa-lg fa-trash-o"></span></a> 
-  <?php if ($row_sponsors['sponsorURL'] !="") echo "<a href=\"".$row_sponsors['sponsorURL']."\" target=\"_blank\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Visit the ".$row_sponsors['sponsorName']." website\"><span class=\"fa fa-lg fa-link\"></span></a> "; ?> 
+  <a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=<?php echo $go; ?>&amp;action=edit&amp;id=<?php echo $row_sponsors['id']; ?>" data-toggle="tooltip" data-placement="top" title="Edit <?php echo $row_sponsors['sponsorName']; ?>"><span class="fa fa-lg fa-pencil"></span></a>
+  <a href="<?php echo $base_url; ?>includes/process.inc.php?section=admin&amp;go=<?php echo $go; ?>&amp;dbTable=<?php echo $sponsors_db_table; ?>&amp;action=delete&amp;id=<?php echo $row_sponsors['id']; ?>" data-toggle="tooltip" data-placement="top" title="Delete <?php echo $row_sponsors['sponsorName']; ?> as a sponsor" data-confirm="Are you sure you want to delete <?php echo $row_sponsors['sponsorName']; ?> as a sponsor? This cannot be undone."><span class="fa fa-lg fa-trash-o"></span></a>
+  <?php if ($row_sponsors['sponsorURL'] !="") echo "<a href=\"".$row_sponsors['sponsorURL']."\" target=\"_blank\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Visit the ".$row_sponsors['sponsorName']." website\"><span class=\"fa fa-lg fa-link\"></span></a> "; ?>
   </td>
  </tr>
 <?php } while($row_sponsors = mysqli_fetch_assoc($sponsors)) ?>
@@ -87,7 +115,7 @@
 <input type="hidden" name="relocate" value="<?php echo relocate($base_url."index.php?section=admin&go=sponsors","default",$msg,$id); ?>">
 <?php } ?>
 </form>
-<?php } } else { 
+<?php } } else {
 if ($action == "default") { ?>
 <p>There are no sponsors in the database.</p>
 <?php } } ?>
@@ -142,11 +170,7 @@ if ($action == "default") { ?>
     <label for="contestLogo" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Logo File Name</label>
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
     <!-- Input Here -->
-    <?php  	
-	$directory = (USER_IMAGES);
-	$empty = is_dir_empty($directory); 
-	
-	if (!$empty) { ?>
+    <?php if (!$empty) { ?>
     <select class="selectpicker" name="sponsorImage" id="sponsorImage" data-live-search="true" data-size="10" data-width="auto">
        <?php echo directory_contents_dropdown($directory,$row_sponsors['sponsorImage']); ?>
     </select>

@@ -37,7 +37,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 
 		}
 
-		else $insertGoTo = $insertGoTo;
+		else $insertGoTo = $base_url."index.php?section=admin&go=dropoff&msg=1";
 		$pattern = array('\'', '"');
 		$insertGoTo = str_replace($pattern, "", $insertGoTo);
 		$redirect_go_to = sprintf("Location: %s", stripslashes($insertGoTo));
@@ -55,6 +55,8 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 
 		mysqli_real_escape_string($connection,$updateSQL);
 		$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+
+		$updateGoTo = $base_url."index.php?section=admin&go=dropoff&msg=2";
 
 		$pattern = array('\'', '"');
 		$updateGoTo = str_replace($pattern, "", $updateGoTo);
