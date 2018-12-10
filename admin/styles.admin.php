@@ -178,9 +178,11 @@ $style_type_2 = style_type($row_styles['brewStyleType'],"1","bcoe");
 	<div class="col-lg-6 col-md-6 col-sm-8 col-xs-12 has-warning">
 	<!-- Input Here -->
 	<select class="selectpicker" name="brewStyleType" id="brewStyleType" data-size="10" data-width="auto">
-        <?php do { ?>
+        <?php do {
+        if ($row_style_type['styleTypeName'] != "Mead/Cider") { ?>
         <option value="<?php echo $row_style_type['id']; ?>" <?php if (($action == "edit") && ($row_styles['brewStyleType'] == $row_style_type['id'])) echo "SELECTED"; ?>><?php echo $row_style_type['styleTypeName']; ?></option>
-    	<?php } while ($row_style_type = mysqli_fetch_assoc($style_type)); ?>
+    	<?php }
+    	} while ($row_style_type = mysqli_fetch_assoc($style_type)); ?>
 	</select>
 	<span id="helpBlock" class="help-block"><a class="btn btn-sm btn-primary" href="<?php echo $base_url; ?>index.php?section=admin&amp;go=style_types&amp;action=add"><span class="fa fa-plus-circle"></span> Add a Style Type</a></span>
 	</div>

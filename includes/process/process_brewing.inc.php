@@ -788,9 +788,9 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 			$updateSQL .= "brewPaid=".GetSQLValueString($brewPaid,"text").", ";
 			$updateSQL .= "brewConfirmed=".GetSQLValueString(filter_var($_POST['brewConfirmed'],FILTER_SANITIZE_STRING),"text").", ";
 			$updateSQL .= "brewInfoOptional=".GetSQLValueString($brewInfoOptional,"text").", ";
-			if (!empty($brewAdminNotes)) $updateSQL .= "brewAdminNotes=".GetSQLValueString($brewAdminNotes,"text").", ";
-			if (!empty($brewStaffNotes)) $updateSQL .= "brewStaffNotes=".GetSQLValueString($brewStaffNotes,"text").", ";
-			if (!empty($brewBoxNum)) $updateSQL .= "brewBoxNum=".GetSQLValueString($brewBoxNum,"text").", ";
+			$updateSQL .= "brewAdminNotes=".GetSQLValueString($brewAdminNotes,"text").", ";
+			$updateSQL .= "brewStaffNotes=".GetSQLValueString($brewStaffNotes,"text").", ";
+			$updateSQL .= "brewBoxNum=".GetSQLValueString($brewBoxNum,"text").", ";
 			$updateSQL .= "brewReceived=".GetSQLValueString($brewReceived,"text").", ";
 			$updateSQL .= "brewPossAllergens=".GetSQLValueString($brewPossAllergens,"text");
 			$updateSQL .= " WHERE id ='".$id."'";

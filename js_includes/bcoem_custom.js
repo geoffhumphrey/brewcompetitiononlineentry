@@ -38,7 +38,7 @@ $(function() {
 $(document).ready(function() {
 
     $("form").submit(function() {
-        $('#loader-submit').show();
+        $('#loader-submit').show(0).delay(10000).hide(0);
     });
 
     $("#submitBtn").click(function() {
