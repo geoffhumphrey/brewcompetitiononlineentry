@@ -2266,7 +2266,7 @@ function brewer_info($uid,$filter="default") {
 		if (($row_brewer_info['brewerJudgeMead'] == "Y") && ($row_brewer_info['brewerJudgeRank'] == "Non-BJCP")) $r .= "Non-BJCP Beer^";
 		else $r .= $row_brewer_info['brewerJudgeRank']."^";
 	}
-	else $r .= "Non-BJCP^"; // 3
+	else $r .= "Non-BJCP^"; 							// 3
 	if (isset($row_brewer_info['brewerJudgeID'])) $r .= $row_brewer_info['brewerJudgeID']."^"; else $r .= "&nbsp;^"; // 4
 	if (isset($row_brewer_info['brewerJudgeBOS'])) $r .= $row_brewer_info['brewerJudgeBOS']."^"; else $r .= "&nbsp;^"; // 5
 	$r .= $row_brewer_info['brewerEmail']."^";			// 6
@@ -2278,8 +2278,9 @@ function brewer_info($uid,$filter="default") {
 	$r .= $row_brewer_info['brewerState']."^";			// 12
 	$r .= $row_brewer_info['brewerZip']."^";			// 13
 	$r .= $row_brewer_info['brewerCountry']."^";		// 14
-	if (isset($row_brewer_info['brewerBreweryName'])) $r .= $row_brewer_info['brewerBreweryName']; else $r .= "&nbsp;^"; // 15
-	if ($row_brewer_info['brewerJudgeMead'] == "Y") $r .= "Certified Mead Judge"; else $r .= "&nbsp;^"; // 16
+	if ($_SESSION['prefsProEdition'] == 1) $r .= $row_brewer_info['brewerBreweryName']."^"; else $r .= "&nbsp;^"; // 15
+	if ($row_brewer_info['brewerJudgeMead'] == "Y") $r .= "Certified Mead Judge"; else $r .= "N/A^"; // 16
+	if ($_SESSION['prefsProEdition'] == 1) $r .= $row_brewer_info['brewerBreweryTTB']."^"; else $r .= "&nbsp;^";// 17
 	return $r;
 }
 

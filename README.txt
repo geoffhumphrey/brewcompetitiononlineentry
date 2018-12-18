@@ -28,10 +28,17 @@ respective developers and online communities. Tested with the following versions
 - Tiny But Strong 3.10.1          http://www.tinybutstrong.com
 - HTML Purifier 4.9.3             http://htmlpurifier.org/
 
+***********************************************************************************
+LICENSE
+***********************************************************************************
 This software is free, open source, and is covered under the General Public
 License (GPL) from the Open Source Initiative. Therefore, you are permitted to
 download the full source code of the software for your own use and customize it
 for your own purposes - see http://www.brewcompetition.com/license for more.
+
+Brew Competition Online Entry & Management (BCOE&M) is distributed in the hope
+that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
 It is suggested that you fork the GitHub repository to make integration of your
 code with version releases easier. We are always looking for contributers!
