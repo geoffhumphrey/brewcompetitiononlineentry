@@ -180,19 +180,19 @@ function build_admin_url ($section="default",$go="default",$action="default",$id
 */
 
 function display_array_content($arrayname,$method) {
- 	$a = "";
- 	while(list($key, $value) = each($arrayname)) {
-  		if (is_array($value)) {
-   		$a .= display_array_content($value,'');
+	$a = "";
+	while(list($key, $value) = each($arrayname)) {
+		if (is_array($value)) {
+		$a .= display_array_content($value,'');
 
-   		}
-  	else $a .= "$value";
+		}
+	else $a .= "$value";
 	if ($method == "1") $a .= "";
 	if ($method == "2") $a .= ", ";
 	if ($method == "3") $a .= ",";
-  	}
+	}
 	$b = rtrim($a, ",&nbsp;");
- 	return $b;
+	return $b;
 }
 
 function addOrdinalNumberSuffix($num) {
@@ -205,8 +205,8 @@ function addOrdinalNumberSuffix($num) {
 				case 2:  return $num."nd";
 				case 3:  return $num."rd";
 			}
-	    }
-	    return $num."th";
+		}
+		return $num."th";
 	}
 }
 
@@ -340,12 +340,12 @@ function check_judging_numbers() {
 function temp_convert($temp,$t) { // $t = desired output, defined at function call
 if ($t == "F") { // Celsius to F if source is C
 	$tcon = (($temp - 32) / 1.8);
-    return round ($tcon, 1);
+	return round ($tcon, 1);
 	}
 
 if ($t == "C") { // F to Celsius
 	$tcon = (($temp - 32) * (5/9));
-    return round ($tcon, 1);
+	return round ($tcon, 1);
 	}
 }
 
@@ -725,21 +725,21 @@ function total_fees($entry_fee, $entry_fee_discount, $entry_discount, $entry_dis
 						if ($entry_fee_discount > $special_discount_number) $b = ($totalRows_entries - $entry_discount_number) * $special_discount_number;
 						else $b = ($totalRows_entries - $entry_discount_number) * $entry_fee_discount;
 						$c = $a + $b;
-				 		$d = $totalRows_entries * $special_discount_number;
-				 		if ($totalRows_entries <= $entry_discount_number) $total = $d;
-				 		if ($totalRows_entries > $entry_discount_number) $total = $c;
+						$d = $totalRows_entries * $special_discount_number;
+						if ($totalRows_entries <= $entry_discount_number) $total = $d;
+						if ($totalRows_entries > $entry_discount_number) $total = $c;
 					} // end if ($entry_discount == "Y")
 					else $total = $totalRows_entries * $special_discount_number;
 				} // end if ($row_brewer['brewerDiscount'] == "Y")
 				if (($row_brewer['brewerDiscount'] != "Y") || ((($row_brewer['brewerDiscount'] == "Y")) && ($special_discount_number == ""))) {
 					if ($entry_discount == "Y") {
-				 		$a = $entry_discount_number * $entry_fee;
-				 		$b = ($totalRows_entries - $entry_discount_number) * $entry_fee_discount;
+						$a = $entry_discount_number * $entry_fee;
+						$b = ($totalRows_entries - $entry_discount_number) * $entry_fee_discount;
 						$c = $a + $b;
-				 		$d = $totalRows_entries * $entry_fee;
-				 		if ($totalRows_entries <= $entry_discount_number) $total = $d;
-				 		if ($totalRows_entries > $entry_discount_number) $total = $c;
-				 	}
+						$d = $totalRows_entries * $entry_fee;
+						if ($totalRows_entries <= $entry_discount_number) $total = $d;
+						if ($totalRows_entries > $entry_discount_number) $total = $c;
+					}
 					else $total = $totalRows_entries * $entry_fee;
 				} // end if ($row_brewer['brewerDiscount'] != "Y")
 				if ($cap_no > 0) {
@@ -752,7 +752,7 @@ function total_fees($entry_fee, $entry_fee_discount, $entry_discount, $entry_dis
 			$total_array[] = $total_calc;
 		} // end foreach
 	$total_fees = array_sum($total_array);
-   	return $total_fees;
+	return $total_fees;
 	} // end if (($bid == "default") && ($filter == "default"))
 	// ----------------------------------------------------------------------
 
@@ -776,22 +776,22 @@ function total_fees($entry_fee, $entry_fee_discount, $entry_discount, $entry_dis
 						if ($entry_fee_discount > $special_discount_number) $b = ($totalRows_entries - $entry_discount_number) * $special_discount_number;
 						else $b = ($totalRows_entries - $entry_discount_number) * $entry_fee_discount;
 						$c = $a + $b;
-				 		$d = $totalRows_entries * $special_discount_number;
-				 		if ($totalRows_entries <= $entry_discount_number) $total = $d;
-				 		if ($totalRows_entries > $entry_discount_number) $total = $c;
+						$d = $totalRows_entries * $special_discount_number;
+						if ($totalRows_entries <= $entry_discount_number) $total = $d;
+						if ($totalRows_entries > $entry_discount_number) $total = $c;
 					} // end if ($entry_discount == "Y")
 					else $total = $totalRows_entries * $special_discount_number;
 					//echo $total."<br>";
 				} // end if ($row_brewer['brewerDiscount'] == "Y")
 				if (($row_brewer['brewerDiscount'] != "Y") || ((($row_brewer['brewerDiscount'] == "Y")) && ($special_discount_number == ""))) {
 					if ($entry_discount == "Y") {
-				 		$a = $entry_discount_number * $entry_fee;
-				 		$b = ($totalRows_entries - $entry_discount_number) * $entry_fee_discount;
+						$a = $entry_discount_number * $entry_fee;
+						$b = ($totalRows_entries - $entry_discount_number) * $entry_fee_discount;
 						$c = $a + $b;
-				 		$d = $totalRows_entries * $entry_fee;
-				 		if ($totalRows_entries <= $entry_discount_number) $total = $d;
-				 		if ($totalRows_entries > $entry_discount_number) $total = $c;
-				 	}
+						$d = $totalRows_entries * $entry_fee;
+						if ($totalRows_entries <= $entry_discount_number) $total = $d;
+						if ($totalRows_entries > $entry_discount_number) $total = $c;
+					}
 					else $total = $totalRows_entries * $entry_fee;
 				} // end if ($row_brewer['brewerDiscount'] != "Y")
 				if ($cap_no > 0) {
@@ -805,7 +805,7 @@ function total_fees($entry_fee, $entry_fee_discount, $entry_discount, $entry_dis
 			//echo $total_calc."<br>";
 			$total_array[] = $total_calc;
 	$total_fees = array_sum($total_array);
-   	return $total_fees;
+	return $total_fees;
 	} // end if (($bid != "default") && ($filter == "default"))
 	// ----------------------------------------------------------------------
 
@@ -840,21 +840,21 @@ function total_fees($entry_fee, $entry_fee_discount, $entry_discount, $entry_dis
 						if ($entry_fee_discount > $special_discount_number) $b = ($totalRows_entries - $entry_discount_number) * $special_discount_number;
 						else $b = ($totalRows_entries - $entry_discount_number) * $entry_fee_discount;
 						$c = $a + $b;
-				 		$d = $totalRows_entries * $special_discount_number;
-				 		if ($totalRows_entries <= $entry_discount_number) $total = $d;
-				 		if ($totalRows_entries > $entry_discount_number) $total = $c;
+						$d = $totalRows_entries * $special_discount_number;
+						if ($totalRows_entries <= $entry_discount_number) $total = $d;
+						if ($totalRows_entries > $entry_discount_number) $total = $c;
 					} // end if ($entry_discount == "Y")
 					else $total = $totalRows_entries * $special_discount_number;
 				} // end if ($row_brewer['brewerDiscount'] == "Y")
 				if (($row_brewer['brewerDiscount'] != "Y") || ((($row_brewer['brewerDiscount'] == "Y")) && ($special_discount_number == ""))) {
 					if ($entry_discount == "Y") {
-				 		$a = $entry_discount_number * $entry_fee;
-				 		$b = ($totalRows_entries - $entry_discount_number) * $entry_fee_discount;
+						$a = $entry_discount_number * $entry_fee;
+						$b = ($totalRows_entries - $entry_discount_number) * $entry_fee_discount;
 						$c = $a + $b;
-				 		$d = $totalRows_entries * $entry_fee;
-				 		if ($totalRows_entries <= $entry_discount_number) $total = $d;
-				 		if ($totalRows_entries > $entry_discount_number) $total = $c;
-				 	}
+						$d = $totalRows_entries * $entry_fee;
+						if ($totalRows_entries <= $entry_discount_number) $total = $d;
+						if ($totalRows_entries > $entry_discount_number) $total = $c;
+					}
 					else $total = $totalRows_entries * $entry_fee;
 				} // end if ($row_brewer['brewerDiscount'] != "Y")
 				if ($cap_no > 0) {
@@ -867,7 +867,7 @@ function total_fees($entry_fee, $entry_fee_discount, $entry_discount, $entry_dis
 			$total_array[] = $total_calc;
 		} // end foreach
 	$total_fees = array_sum($total_array);
-   	return $total_fees;
+	return $total_fees;
 
 	} // end if (($bid != "default") && ($filter == "default"))
 
@@ -876,7 +876,7 @@ function total_fees($entry_fee, $entry_fee_discount, $entry_discount, $entry_dis
 function total_fees_paid($entry_fee, $entry_fee_discount, $entry_discount, $entry_discount_number, $cap_no, $special_discount_number, $bid, $filter, $comp_id) {
 	require(CONFIG.'config.php');
 	mysqli_select_db($connection,$database);
- 	// echo "<br>entry_fee:".$entry_fee."<br>entry_fee_discount:".$entry_fee_discount."<br>entry_discount:".$entry_discount."<br>entry_discount_number:".$entry_discount_number."<br>cap_no:".$cap_no."<br>special_discount_amount:".$special_discount_number."<br>bid:".$bid."<br>filter:".$filter."<br>";
+	// echo "<br>entry_fee:".$entry_fee."<br>entry_fee_discount:".$entry_fee_discount."<br>entry_discount:".$entry_discount."<br>entry_discount_number:".$entry_discount_number."<br>cap_no:".$cap_no."<br>special_discount_amount:".$special_discount_number."<br>bid:".$bid."<br>filter:".$filter."<br>";
 	// ----------------------------------------------------------------------
 	if (($bid == "default") && ($filter == "default")) {
 		$query_users = sprintf("SELECT id,user_name FROM %s", $prefix."users");
@@ -941,7 +941,7 @@ function total_fees_paid($entry_fee, $entry_fee_discount, $entry_discount, $entr
 
 				if (($row_brewer['brewerDiscount'] != "Y") || ((($row_brewer['brewerDiscount'] == "Y")) && ($special_discount_number == ""))) {
 				if ($entry_discount == "Y") {
-				 		// Determine if the amount paid is equal or less than the discount amount
+						// Determine if the amount paid is equal or less than the discount amount
 						// If so, total paid is a simple calculation
 						if ($totalRows_paid <= $entry_discount_number) $total_paid = $totalRows_paid * $entry_fee;
 						// If not...
@@ -959,7 +959,7 @@ function total_fees_paid($entry_fee, $entry_fee_discount, $entry_discount, $entr
 							$total_paid_discount = (($totalRows_entries - $entry_discount_number) * $entry_fee_discount);
 							$total_paid = $total_paid_regular + $total_paid_discount;
 							}
-				 		} // end if ($entry_discount == "Y")
+						} // end if ($entry_discount == "Y")
 					else
 						$total_paid = $totalRows_paid * $entry_fee;
 						//echo $total_paid;
@@ -975,7 +975,7 @@ function total_fees_paid($entry_fee, $entry_fee_discount, $entry_discount, $entr
 			$total_array_paid[] = $total_calc_paid;
 		} // end foreach
 		$total_fees_paid = array_sum($total_array_paid);
-   		return $total_fees_paid;
+		return $total_fees_paid;
 	} // end if (($bid == "default") && ($filter == "default"))
 	// ----------------------------------------------------------------------
 
@@ -1034,7 +1034,7 @@ function total_fees_paid($entry_fee, $entry_fee_discount, $entry_discount, $entr
 
 			if (($row_brewer['brewerDiscount'] != "Y") || ((($row_brewer['brewerDiscount'] == "Y")) && ($special_discount_number == ""))) {
 				if ($entry_discount == "Y") {
-				 		// Determine if the amount paid is equal or less than the discount amount
+						// Determine if the amount paid is equal or less than the discount amount
 						// If so, total paid is a simple calculation
 						if ($totalRows_paid <= $entry_discount_number) $total_paid = $totalRows_paid * $entry_fee;
 						// If not...
@@ -1052,7 +1052,7 @@ function total_fees_paid($entry_fee, $entry_fee_discount, $entry_discount, $entr
 							$total_paid_discount = (($totalRows_entries - $entry_discount_number) * $entry_fee_discount);
 							$total_paid = $total_paid_regular + $total_paid_discount;
 							}
-				 		} // end if ($entry_discount == "Y")
+						} // end if ($entry_discount == "Y")
 					else
 						$total_paid = $totalRows_paid * $entry_fee;
 						//echo $total_paid;
@@ -1068,7 +1068,7 @@ function total_fees_paid($entry_fee, $entry_fee_discount, $entry_discount, $entr
 		$total_array_paid[] = $total_calc_paid;
 		//echo "Total Paid: ".$total_calc_paid."<br>";
 		$total_fees_paid = array_sum($total_array_paid);
-   		return $total_fees_paid;
+		return $total_fees_paid;
 
 	} // end if (($bid != "default") && ($filter == "default"))
 	// ----------------------------------------------------------------------
@@ -1135,7 +1135,7 @@ function total_fees_paid($entry_fee, $entry_fee_discount, $entry_discount, $entr
 
 			if (($row_brewer['brewerDiscount'] != "Y") || ((($row_brewer['brewerDiscount'] == "Y")) && ($special_discount_number == ""))) {
 				if ($entry_discount == "Y") {
-				 		// Determine if the amount paid is equal or less than the discount amount
+						// Determine if the amount paid is equal or less than the discount amount
 						// If so, total paid is a simple calculation
 						if ($totalRows_paid <= $entry_discount_number) $total_paid = $totalRows_paid * $entry_fee;
 						// If not...
@@ -1153,7 +1153,7 @@ function total_fees_paid($entry_fee, $entry_fee_discount, $entry_discount, $entr
 							$total_paid_discount = (($totalRows_entries - $entry_discount_number) * $entry_fee_discount);
 							$total_paid = $total_paid_regular + $total_paid_discount;
 							}
-				 		} // end if ($entry_discount == "Y")
+						} // end if ($entry_discount == "Y")
 					else
 						$total_paid = $totalRows_paid * $entry_fee;
 						//echo $total_paid;
@@ -1171,7 +1171,7 @@ function total_fees_paid($entry_fee, $entry_fee_discount, $entry_discount, $entr
 			$total_array_paid[] = $total_calc_paid;
 		} // end foreach
 		$total_fees_paid = array_sum($total_array_paid);
-   		return $total_fees_paid;
+		return $total_fees_paid;
 
 	} // end if (($bid == "default") && ($filter != "default"))
 	// ----------------------------------------------------------------------
@@ -1509,7 +1509,7 @@ function style_convert($number,$type,$base_url="") {
 		else $styleSet = str_replace("2"," 2",$_SESSION['prefsStyleSet']);
 
 		require(CONFIG.'config.php');
-	    mysqli_select_db($connection,$database);
+		mysqli_select_db($connection,$database);
 
 		$a = explode(",",$number);
 
@@ -1608,7 +1608,7 @@ function style_convert($number,$type,$base_url="") {
 		case "6":
 		$a = explode(",",$number);
 		require(CONFIG.'config.php');
-	    mysqli_select_db($connection,$database);
+		mysqli_select_db($connection,$database);
 		foreach ($a as $value) {
 			$styles_db_table = $prefix."styles";
 			$query_style = sprintf("SELECT brewStyleGroup,brewStyleNum,brewStyle FROM %s WHERE id='%s'",$styles_db_table,$value);
@@ -2154,7 +2154,7 @@ function best_brewer_points($bid, $places, $entry_scores, $points_prefs, $tiebre
 }
 
 function bjcp_rank($rank,$method) {
-    if ($method == "1") {
+	if ($method == "1") {
 		switch($rank) {
 			case "Apprentice":
 			case "Provisional":
@@ -2205,7 +2205,7 @@ function bjcp_rank($rank,$method) {
 function srm_color($srm,$method) {
 	if ($method == "ebc") $srm = (1.97 * $srm); else $srm = $srm;
 
-    if ($srm >= 1 && $srm < 2) $return = "#f3f993";
+	if ($srm >= 1 && $srm < 2) $return = "#f3f993";
 	elseif ($srm >= 2 && $srm < 3) $return = "#f5f75c";
 	elseif ($srm >= 3 && $srm < 4) $return = "#f6f513";
 	elseif ($srm >= 4 && $srm < 5) $return = "#eae615";
@@ -2236,7 +2236,7 @@ function srm_color($srm,$method) {
 	elseif ($srm >= 29 && $srm < 30) $return = "#100b0a";
 	elseif ($srm >= 30 && $srm < 31) $return = "#050b0a";
 	elseif ($srm > 31) $return = "#000000";
-  	else $return = "#ffffff";
+	else $return = "#ffffff";
 return $return;
 }
 
@@ -2287,7 +2287,6 @@ function brewer_info($uid,$filter="default") {
 function get_entry_count($method) {
 	require(CONFIG.'config.php');
 	mysqli_select_db($connection,$database);
-
 	$query_paid = sprintf("SELECT COUNT(*) as 'count' FROM %s",$prefix."brewing");
 	if ($method == "paid") $query_paid .= " WHERE brewPaid='1'";
 	if ($method == "received") $query_paid .= " WHERE brewReceived='1'";
@@ -2621,7 +2620,7 @@ function data_integrity_check() {
 		if ($totalRows_brewer == 0) {
 			$deleteSQL = sprintf("DELETE FROM %s WHERE id='%s'", $prefix."users", $row_user_check['id']);
 			mysqli_real_escape_string($connection,$deleteSQL);
-  			$result = mysqli_query($connection,$deleteSQL) or die (mysqli_error($connection));
+			$result = mysqli_query($connection,$deleteSQL) or die (mysqli_error($connection));
 
 			// Check to see if there are entries under that uid. If so, delete.
 			$query_brewer_entries = sprintf("SELECT id FROM %s WHERE brewBrewerID='%s'",$prefix."brewing",$row_user_check['id']);
@@ -2892,7 +2891,7 @@ function available_at_location($location,$role,$round) {
 }
 
 function str_osplit($string, $offset){
-    return isset($string[$offset]) ? array(substr($string, 0, $offset), substr($string, $offset)) : false;
+	return isset($string[$offset]) ? array(substr($string, 0, $offset), substr($string, $offset)) : false;
  }
 
 function readable_judging_number($style,$number) {
@@ -3407,63 +3406,63 @@ function check_hosted_gh() {
 function obfuscateURL($data,$key) {
 
 	$dirty = array("+", "/", "=");
-    $clean = array("_p_", "_s_", "_e_");
+	$clean = array("_p_", "_s_", "_e_");
 
 	// Remove the base64 encoding from our key
-    $encryption_key = base64_decode($key);
-    if (function_exists(openssl_encrypt)) {
-    	// Generate an initialization vector
-	    $iv = openssl_random_pseudo_bytes(openssl_cipher_iv_length('aes-256-cbc'));
+	$encryption_key = base64_decode($key);
+	if (function_exists(openssl_encrypt)) {
+		// Generate an initialization vector
+		$iv = openssl_random_pseudo_bytes(openssl_cipher_iv_length('aes-256-cbc'));
 
-	    // Encrypt the data using AES 256 encryption in CBC mode using our encryption key and initialization vector.
-	    $encrypted = openssl_encrypt($data, 'aes-256-cbc', $encryption_key, 0, $iv);
+		// Encrypt the data using AES 256 encryption in CBC mode using our encryption key and initialization vector.
+		$encrypted = openssl_encrypt($data, 'aes-256-cbc', $encryption_key, 0, $iv);
 
-	    // The $iv is just as important as the key for decrypting, so save it with our encrypted data using a unique separator (::)
-	    $encrypted_data = base64_encode($encrypted . '::' . $iv);
+		// The $iv is just as important as the key for decrypting, so save it with our encrypted data using a unique separator (::)
+		$encrypted_data = base64_encode($encrypted . '::' . $iv);
 
-	    // Do a little clean up of stuff we don't want in URLs - just in case
-	    return str_replace($dirty, $clean, $encrypted_data);
-    }
+		// Do a little clean up of stuff we don't want in URLs - just in case
+		return str_replace($dirty, $clean, $encrypted_data);
+	}
 
-    // Use mcrypt if openssl not available; deprecated as of PHP 7.1
-    elseif (function_exists(mcrypt_encrypt)) {
-    	$salt = "rdwhahb"; // should be the same as the $salt var in the deobfuscateURL function
+	// Use mcrypt if openssl not available; deprecated as of PHP 7.1
+	elseif (function_exists(mcrypt_encrypt)) {
+		$salt = "rdwhahb"; // should be the same as the $salt var in the deobfuscateURL function
 		$encrypted = base64_encode(mcrypt_encrypt(MCRYPT_RIJNDAEL_256, md5($salt), str_replace($clean, $dirty, $data), MCRYPT_MODE_CBC, md5(md5($salt))));
 		return $encrypted;
-    }
+	}
 
-    // Fallback is simple obfuscation with base64 if allowed by function call params
-    else {
-    	return str_replace($dirty, $clean, base64_encode($data));
-   	}
+	// Fallback is simple obfuscation with base64 if allowed by function call params
+	else {
+		return str_replace($dirty, $clean, base64_encode($data));
+	}
 
 }
 
 function deobfuscateURL($data,$key) {
 
 	$dirty = array("+", "/", "=");
-    $clean = array("_p_", "_s_", "_e_");
+	$clean = array("_p_", "_s_", "_e_");
 
 	// Remove the base64 encoding from our key
-    $encryption_key = base64_decode($key);
+	$encryption_key = base64_decode($key);
 
-    if (function_exists(openssl_encrypt)) {
-    	// To decrypt, split the encrypted data from our IV - our unique separator used was "::"
-    	// Get the data "dirty" again and remove base64 encoding
-    	list($encrypted_data, $iv) = explode('::', base64_decode(str_replace($clean, $dirty, $data)), 2);
+	if (function_exists(openssl_encrypt)) {
+		// To decrypt, split the encrypted data from our IV - our unique separator used was "::"
+		// Get the data "dirty" again and remove base64 encoding
+		list($encrypted_data, $iv) = explode('::', base64_decode(str_replace($clean, $dirty, $data)), 2);
 
-    	return openssl_decrypt($encrypted_data, 'aes-256-cbc', $encryption_key, 0, $iv);
-    }
+		return openssl_decrypt($encrypted_data, 'aes-256-cbc', $encryption_key, 0, $iv);
+	}
 
-    elseif (function_exists(mcrypt_decrypt)) {
-    	$salt = "rdwhahb"; // should be the same as the $salt var in the encryptString function
+	elseif (function_exists(mcrypt_decrypt)) {
+		$salt = "rdwhahb"; // should be the same as the $salt var in the encryptString function
 		$decode = rtrim(mcrypt_decrypt(MCRYPT_RIJNDAEL_256, md5($salt), base64_decode(str_replace($clean, $dirty, $data)), MCRYPT_MODE_CBC, md5(md5($salt))), "\0");
 		return $decode;
-   	}
+	}
 
-    else {
-    	return base64_decode(str_replace($clean, $dirty, $data));
-    }
+	else {
+		return base64_decode(str_replace($clean, $dirty, $data));
+	}
 
 }
 
@@ -3619,7 +3618,7 @@ function remove_sensitive_data() {
 
 	require(CONFIG.'config.php');
 	mysqli_select_db($connection,$database);
-    include (INCLUDES.'constants.inc.php');
+	include (INCLUDES.'constants.inc.php');
 
 	$result = "";
 
@@ -3727,11 +3726,11 @@ function remove_sensitive_data() {
 					$last_name_key = (array_rand($last_name_array,1));
 					$last_name = $last_name_array[$last_name_key];
 
-                    $club_name = "";
+					$club_name = "";
 					if (!empty($row_check_brewer['brewerClubs'])) {
-                         $club_name_key = (array_rand($club_array,1));
-					     $club_name_1 = $club_array[$club_name_key];
-                         $club_name_2 = explode("|",$club_name_1);
+						 $club_name_key = (array_rand($club_array,1));
+						 $club_name_1 = $club_array[$club_name_key];
+						 $club_name_2 = explode("|",$club_name_1);
 						 $club_name = $club_name_2[0];
 					}
 
@@ -3868,72 +3867,72 @@ function tiebreak_rule($rule) {
 
 if (!function_exists('mime_content_type')) {
 
-    function mime_content_type($filename) {
+	function mime_content_type($filename) {
 
-        $mime_types = array(
-            'txt' => 'text/plain',
-            'png' => 'image/png',
-            'jpe' => 'image/jpeg',
-            'jpeg' => 'image/jpeg',
-            'jpg' => 'image/jpeg',
-            'gif' => 'image/gif',
-            'bmp' => 'image/bmp',
-            'ico' => 'image/vnd.microsoft.icon',
-            'tiff' => 'image/tiff',
-            'tif' => 'image/tiff',
-            'svg' => 'image/svg+xml',
-            'svgz' => 'image/svg+xml',
-            'pdf' => 'application/pdf',
-            /*
-            'doc' => 'application/msword',
-            'docx' => 'application/msword',
-            'rtf' => 'application/rtf',
-            'xls' => 'application/vnd.ms-excel',
-            'ppt' => 'application/vnd.ms-powerpoint',
-            'odt' => 'application/vnd.oasis.opendocument.text',
-            'ods' => 'application/vnd.oasis.opendocument.spreadsheet',
-            'zip' => 'application/zip',
-            'rar' => 'application/x-rar-compressed',
-            'exe' => 'application/x-msdownload',
-            'msi' => 'application/x-msdownload',
-            'cab' => 'application/vnd.ms-cab-compressed',
-            'mp3' => 'audio/mpeg',
-            'qt' => 'video/quicktime',
-            'mov' => 'video/quicktime',
-            'htm' => 'text/html',
-            'html' => 'text/html',
-            'php' => 'text/html',
-            'css' => 'text/css',
-            'js' => 'application/javascript',
-            'json' => 'application/json',
-            'xml' => 'application/xml',
-            'swf' => 'application/x-shockwave-flash',
-            'flv' => 'video/x-flv',
-            'psd' => 'image/vnd.adobe.photoshop',
-            'ai' => 'application/postscript',
-            'eps' => 'application/postscript',
-            'ps' => 'application/postscript',
-            */
-        );
+		$mime_types = array(
+			'txt' => 'text/plain',
+			'png' => 'image/png',
+			'jpe' => 'image/jpeg',
+			'jpeg' => 'image/jpeg',
+			'jpg' => 'image/jpeg',
+			'gif' => 'image/gif',
+			'bmp' => 'image/bmp',
+			'ico' => 'image/vnd.microsoft.icon',
+			'tiff' => 'image/tiff',
+			'tif' => 'image/tiff',
+			'svg' => 'image/svg+xml',
+			'svgz' => 'image/svg+xml',
+			'pdf' => 'application/pdf',
+			/*
+			'doc' => 'application/msword',
+			'docx' => 'application/msword',
+			'rtf' => 'application/rtf',
+			'xls' => 'application/vnd.ms-excel',
+			'ppt' => 'application/vnd.ms-powerpoint',
+			'odt' => 'application/vnd.oasis.opendocument.text',
+			'ods' => 'application/vnd.oasis.opendocument.spreadsheet',
+			'zip' => 'application/zip',
+			'rar' => 'application/x-rar-compressed',
+			'exe' => 'application/x-msdownload',
+			'msi' => 'application/x-msdownload',
+			'cab' => 'application/vnd.ms-cab-compressed',
+			'mp3' => 'audio/mpeg',
+			'qt' => 'video/quicktime',
+			'mov' => 'video/quicktime',
+			'htm' => 'text/html',
+			'html' => 'text/html',
+			'php' => 'text/html',
+			'css' => 'text/css',
+			'js' => 'application/javascript',
+			'json' => 'application/json',
+			'xml' => 'application/xml',
+			'swf' => 'application/x-shockwave-flash',
+			'flv' => 'video/x-flv',
+			'psd' => 'image/vnd.adobe.photoshop',
+			'ai' => 'application/postscript',
+			'eps' => 'application/postscript',
+			'ps' => 'application/postscript',
+			*/
+		);
 
-        $ext = strtolower(array_pop(explode('.',$filename)));
+		$ext = strtolower(array_pop(explode('.',$filename)));
 
-        if (array_key_exists($ext, $mime_types)) {
-            return $mime_types[$ext];
-        }
+		if (array_key_exists($ext, $mime_types)) {
+			return $mime_types[$ext];
+		}
 
-        elseif (function_exists('finfo_open')) {
-            $finfo = finfo_open(FILEINFO_MIME);
-            $mimetype = finfo_file($finfo, $filename);
-            finfo_close($finfo);
-            return $mimetype;
-        }
+		elseif (function_exists('finfo_open')) {
+			$finfo = finfo_open(FILEINFO_MIME);
+			$mimetype = finfo_file($finfo, $filename);
+			finfo_close($finfo);
+			return $mimetype;
+		}
 
-        else {
-            return 'application/octet-stream';
-        }
+		else {
+			return 'application/octet-stream';
+		}
 
-    }
+	}
 
 }
 
