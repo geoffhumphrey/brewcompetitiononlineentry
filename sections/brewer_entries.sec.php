@@ -474,7 +474,7 @@ if (($totalRows_log > 0) && ($entry_window_open >= 1)) {
 
 
 </script>
-<form name="form1" method="post" action="<?php echo $base_url; ?>output/bottle_label.output.php" target="_blank">
+<form name="form1" method="post" action="<?php echo $base_url; ?>output/bottle_label.output.php" target="_blank" class="hide-loader-form-submit">
 <table class="table table-responsive table-striped table-bordered dataTable" id="sortable">
 <thead>
  <tr>
@@ -497,7 +497,7 @@ if (($totalRows_log > 0) && ($entry_window_open >= 1)) {
   	<?php } ?>
   	<?php if ((!$show_scores) && ($multiple_bottle_ids)) { ?>
     <th class="hidden-print" nowrap>
-    <input type="checkbox" id="select_all"> <a style="cursor: pointer;" data-toggle="popover" data-container="body" data-trigger="hover focus" data-placement="auto" title="Print Bottle Labels" data-content="Check the entries to print their bottle labels. Select the top checkbox to check or uncheck all the boxes in the column."><span class="fa fa-question-circle"></span></a>
+    <input type="checkbox" id="select_all"> <a style="cursor: pointer;" data-toggle="popover" data-container="body" data-trigger="hover focus" data-placement="auto" title="<?php echo $brewer_entries_text_024; ?>" data-content="<?php echo $brewer_entries_text_021; ?>"><span class="fa fa-question-circle"></span></a>
     </th>
 	<?php } ?>
     <th class="hidden-print"><?php echo $label_actions; ?></th>
@@ -508,7 +508,7 @@ if (($totalRows_log > 0) && ($entry_window_open >= 1)) {
 </tbody>
 </table>
 <?php if ((!$show_scores) && ($multiple_bottle_ids)) { ?>
-<input type="submit" id="btn" class="btn btn-primary pull-right" value="Print Bottle Labels" disabled data-toggle="popover" data-container="body" data-trigger="hover focus" data-placement="auto right" title="Print All Bottle Labels for Checked Entries" data-content="The bottle labels will open in a new tab or window.">
+<input type="submit" id="btn" class="btn btn-primary pull-right" value="Print Bottle Labels" disabled data-toggle="popover" data-container="body" data-trigger="hover focus" data-placement="auto right" title="<?php echo $brewer_entries_text_022; ?>" data-content="<?php echo $brewer_entries_text_023; ?>">
 <?php } ?>
 </form>
 <?php }

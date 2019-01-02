@@ -8,11 +8,11 @@ if ($pro_edition == 1) $edition = $label_pro." ".$label_edition;
 <script type="text/javascript">
 <!--
 // From http://www.dynamicdrive.com/forums/showthread.php?33533-No-Duplicates-Chosen-in-Drop-Down-lists
-function uniqueCoicesSetup(){
+function uniqueChoicesSetup(){
 	var warning = 'The place you specified has already been input. Please choose another place or no place (blank).',
 	s = document.getElementsByTagName('select'),
 	f = function (e){
-		var s = uniqueCoicesSetup.ar;
+		var s = uniqueChoicesSetup.ar;
 		for (var o = this.options.selectedIndex, i = s.length - 1; i > -1; --i)
 		if(this != s[i] && o && o == s[i].options.selectedIndex){
 			this.options.selectedIndex = 0;
@@ -23,7 +23,7 @@ function uniqueCoicesSetup(){
 		}
 	},
 	add = function(el){
-	uniqueCoicesSetup.ar[uniqueCoicesSetup.ar.length] = el;
+	uniqueChoicesSetup.ar[uniqueChoicesSetup.ar.length] = el;
 	if ( typeof window.addEventListener != 'undefined' ) el.addEventListener( 'change', f, false );
 	else if ( typeof window.attachEvent != 'undefined' ){
 			var t = function() {
@@ -32,16 +32,16 @@ function uniqueCoicesSetup(){
 		el.attachEvent( 'onchange', t );
 		}
 	};
-	uniqueCoicesSetup.ar = [];
+	uniqueChoicesSetup.ar = [];
 	for (var i = s.length - 1; i > -1; --i)
 	if(/nodupe/.test(s[i].className))
 	add(s[i]);
 }
 
 if(typeof window.addEventListener!='undefined')
-window.addEventListener('load', uniqueCoicesSetup, false);
+window.addEventListener('load', uniqueChoicesSetup, false);
 else if(typeof window.attachEvent!='undefined')
-window.attachEvent('onload', uniqueCoicesSetup);
+window.attachEvent('onload', uniqueChoicesSetup);
 // -->
 </script>
 <p class="lead"><?php echo $_SESSION['contestName'];
@@ -188,8 +188,7 @@ include (DB.'admin_judging_scores_bos.db.php');
 	$bos_entry_info = explode("^",$bos_entry_info);
 	$style = $bos_entry_info[1].$bos_entry_info[3];
 
-	if ((NHC) || ($_SESSION['prefsEntryForm'] == "N")) $judging_number = sprintf("%06s",$bos_entry_info[6]);
-	else $judging_number = readable_judging_number($bos_entry_info[1],$bos_entry_info[6]);
+    $judging_number = sprintf("%06s",$bos_entry_info[6]);
 
 	if ($_SESSION['prefsStyleSet'] == "BA") $style_name = $bos_entry_info[0];
 
@@ -275,8 +274,7 @@ include (DB.'admin_judging_scores_bos.db.php');
 		$bos_entry_info = bos_entry_info($row_enter_bos['eid'], "default","default");
 		$bos_entry_info = explode("^",$bos_entry_info);
 		$style = $bos_entry_info[1].$bos_entry_info[3];
-		if ((NHC) || ($_SESSION['prefsEntryForm'] == "N")) $judging_number = sprintf("%06s",$bos_entry_info[6]);
-		else $judging_number = readable_judging_number($bos_entry_info[1],$bos_entry_info[6]);
+		$judging_number = sprintf("%06s",$bos_entry_info[6]);
 
 		if ($_SESSION['prefsStyleSet'] == "BA") $style_name = $bos_entry_info[0];
 
@@ -289,11 +287,11 @@ include (DB.'admin_judging_scores_bos.db.php');
 	<tr>
 		<?php $score_id = $bos_entry_info[13]; ?>
         <input type="hidden" name="score_id[]" value="<?php echo $score_id; ?>" />
-        <input type="hidden" name="scorePrevious<?php echo $score_id; ?>" value="<?php if (!empty($bos_entry_info[14])) echo "Y"; else echo "N"; ?>" />
+        <input type="hidden" name="scorePrevious<?php echo $score_id; ?>" value="<?php if (is_numeric($bos_entry_info[14])) echo "Y"; else echo $bos_entry_info[14]; ?>" />
         <input type="hidden" name="eid<?php echo $score_id; ?>" value="<?php echo $score_id; ?>" />
         <input type="hidden" name="bid<?php echo $score_id; ?>" value="<?php echo $bos_entry_info[15]; ?>" />
         <input type="hidden" name="scoreType<?php echo $score_id; ?>" value="<?php echo $filter; ?>" />
-        <?php if (!empty($bos_entry_info[14])) { ?>
+        <?php if (is_numeric($bos_entry_info[14])) { ?>
         <input type="hidden" name="id<?php echo $score_id; ?>" value="<?php echo $bos_entry_info[14]; ?>" />
         <?php } ?>
         <td><?php echo sprintf("%04s",$row_enter_bos['eid']); ?></td>

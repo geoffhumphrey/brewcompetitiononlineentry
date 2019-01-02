@@ -24,6 +24,8 @@ if ($_SESSION['prefsSpecialCharLimit'] < $character_limit) $character_limit = $_
 
 if (isset($_SESSION['loginUsername'])) {
 
+	ob_start();
+
 	if ($psort == "3422") $number_of_labels = 24;
 	if ($psort == "5160") $number_of_labels = 30;
 
@@ -49,9 +51,12 @@ if (isset($_SESSION['loginUsername'])) {
 
 	if ($_SESSION['userLevel'] <= 1) {
 
-		// -----------------------------------------------
-		// Reworked for 2.1.13 - May 7, 2018
-		// -----------------------------------------------
+		/*
+		* -------------------------------------------------------------------
+		* Reworked for 2.1.13 - May 7, 2018
+		* Updated for 2.1.15 to remove special characters - December 19, 2018
+		* -------------------------------------------------------------------
+		*/
 
 		if (($go == "entries") && (($action == "bottle-judging") || ($action == "bottle-entry"))) {
 
@@ -84,7 +89,7 @@ if (isset($_SESSION['loginUsername'])) {
 					$entry_no, $row_log['brewCategory'].$row_log['brewSubCategory'],
 					$entry_no, $row_log['brewCategory'].$row_log['brewSubCategory']
 					);
-					$text = iconv('UTF-8', 'windows-1252', $text);
+					$text = iconv('UTF-8', 'windows-1252//IGNORE', $text);
 					$pdf->Add_Label($text);
 
 				} while ($row_log = mysqli_fetch_assoc($log));
@@ -168,8 +173,9 @@ if (isset($_SESSION['loginUsername'])) {
 
 						if (in_array($style,$special_ingredients)) {
 
-							$special = $row_log['brewInfo'];
-							$sp_str_sweet_carb = strtolower($row_log['brewInfo']);
+							$special = strip_tags($row_log['brewInfo']);
+							$special = html_entity_decode($special);
+							$sp_str_sweet_carb = mb_strtolower($row_log['brewInfo']);
 
 							if (strpos($sp_str_sweet_carb,"session strength") !== false) $beer_strength .= "*Session* ";
 							if (strpos($sp_str_sweet_carb,"standard strength") !== false) $beer_strength .= "*Standard* ";
@@ -204,8 +210,12 @@ if (isset($_SESSION['loginUsername'])) {
 
 						else $character_limit_adjust = $character_limit;
 
+						//echo $character_limit_adjust;
+
 						if (!empty($row_log['brewInfoOptional'])) {
-							$optional = str_replace("\n"," ",truncate($row_log['brewInfoOptional'],$character_limit_adjust));
+							$special_optional = strip_tags($row_log['brewInfo']);
+							$special_optional = html_entity_decode($special_optional);
+							$optional = str_replace("\n"," ",truncate($special_optional,$character_limit_adjust,""));
 							$optional = strtr($optional,$html_remove);
 							$optional = sprintf("\n%s",$optional);
 						}
@@ -232,8 +242,9 @@ if (isset($_SESSION['loginUsername'])) {
 						}
 						else $text = $entry_info.$special.$entry_str_sweet_carb.$optional;
 
-						$text = iconv('UTF-8', 'windows-1252', $text);
+						$text = iconv('UTF-8', 'windows-1252//IGNORE', $text);
 						if (!empty($text)) $pdf->Add_Label($text);
+						//echo $text;
 
 					}
 
@@ -241,7 +252,7 @@ if (isset($_SESSION['loginUsername'])) {
 
 			} // end else
 
-			ob_end_clean();
+			if (ob_get_length()) ob_clean();
 			//$pdf->Output();
 			$pdf->Output($filename,'D');
 
@@ -274,13 +285,13 @@ if (isset($_SESSION['loginUsername'])) {
 
 					if (($entry_no != "") && ($filter == "default")) {
 						$text = sprintf("\n%s\n(%s)",$entry_no, $row_log['brewCategory'].$row_log['brewSubCategory']);
-						$text = iconv('UTF-8', 'windows-1252', $text);
+						$text = iconv('UTF-8', 'windows-1252//IGNORE', $text);
 						$pdf->Add_Label($text);
 					}
 
 					if (($entry_no != "") && ($filter == "recent") && (strtotime($row_log['brewUpdated']) > $row_contest_dates['contestRegistrationDeadline'])) {
 						$text = sprintf("\n%s\n(%s)",$entry_no, $row_log['brewCategory'].$row_log['brewSubCategory']);
-						$text = iconv('UTF-8', 'windows-1252', $text);
+						$text = iconv('UTF-8', 'windows-1252//IGNORE', $text);
 						$pdf->Add_Label($text);
 					}
 
@@ -289,7 +300,7 @@ if (isset($_SESSION['loginUsername'])) {
 			} while ($row_log = mysqli_fetch_assoc($log));
 
 			//$pdf->Output();
-			ob_end_clean();
+			if (ob_get_length()) ob_clean();;
 			$pdf->Output($filename,'D');
 
 		}
@@ -322,7 +333,7 @@ if (isset($_SESSION['loginUsername'])) {
 
 					if ((!empty($entry_no)) && ($filter == "recent") && (strtotime($row_log['brewUpdated']) > $row_contest_dates['contestRegistrationDeadline'])) {
 						$text = sprintf("\n%s\n(%s)",$entry_no, $row_log['brewCategory'].$row_log['brewSubCategory']);
-						$text = iconv('UTF-8', 'windows-1252', $text);
+						$text = iconv('UTF-8', 'windows-1252//IGNORE', $text);
 						$pdf->Add_Label($text);
 					}
 
@@ -331,7 +342,7 @@ if (isset($_SESSION['loginUsername'])) {
 			} while ($row_log = mysqli_fetch_assoc($log));
 
 			//$pdf->Output();
-			ob_end_clean();
+			if (ob_get_length()) ob_clean();;
 			$pdf->Output($filename,'D');
 
 		}
@@ -354,14 +365,14 @@ if (isset($_SESSION['loginUsername'])) {
 
 				for($i=0; $i<$sort; $i++) {
 					$text = sprintf("\n%s",$row_log['brewCategorySort'].$row_log['brewSubCategory']);
-					$text = iconv('UTF-8', 'windows-1252', $text);
+					$text = iconv('UTF-8', 'windows-1252//IGNORE', $text);
 					$pdf->Add_Label($text);
 				}
 
 			} while ($row_log = mysqli_fetch_assoc($log));
 
 			//$pdf->Output();
-			ob_end_clean();
+			if (ob_get_length()) ob_clean();;
 			$pdf->Output($filename,'D');
 		}
 
@@ -392,14 +403,14 @@ if (isset($_SESSION['loginUsername'])) {
 						$brewerLocation
 					);
 
-					$text = iconv('UTF-8', 'windows-1252', $text);
+					$text = iconv('UTF-8', 'windows-1252//IGNORE', $text);
 					$pdf->Add_Label($text);
 
 				}
 
 			} while ($row_brewer = mysqli_fetch_assoc($brewer));
 
-			ob_end_clean();
+			if (ob_get_length()) ob_clean();;
 			$pdf->Output($filename,'D');
 
 		}
@@ -478,13 +489,13 @@ if (isset($_SESSION['loginUsername'])) {
 					}
 
 
-					$text = iconv('UTF-8', 'windows-1252', $text);
+					$text = iconv('UTF-8', 'windows-1252//IGNORE', $text);
 					$pdf->Add_Label($text);
 				}
 
 			} while ($row_brewer = mysqli_fetch_assoc($brewer));
 
-			ob_end_clean();
+			if (ob_get_length()) ob_clean();;
 			$pdf->Output($filename,'D');
 
 		}
@@ -565,7 +576,7 @@ if (isset($_SESSION['loginUsername'])) {
 			} while ($row_brewer = mysqli_fetch_assoc($brewer));
 
 			//$pdf->Output();
-			ob_end_clean();
+			if (ob_get_length()) ob_clean();;
 			$pdf->Output($filename,'D');
 
 		}
@@ -704,7 +715,7 @@ if (isset($_SESSION['loginUsername'])) {
 				);
 			}
 
-			$text = iconv('UTF-8', 'windows-1252', $text);
+			$text = iconv('UTF-8', 'windows-1252//IGNORE', $text);
 			$pdf->Add_Label($text);
 
 		}

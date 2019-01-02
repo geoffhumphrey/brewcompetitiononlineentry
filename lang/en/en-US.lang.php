@@ -1495,9 +1495,10 @@ $brewer_text_042 = "If you have already been awarded a Pro-Am, please indicate s
 $label_submitting = "Submitting";
 $output_text_030 = "Please stand by";
 $label_working = "Working";
-
-
-
+$brewer_entries_text_021 = "Check the entries to print their bottle labels. Select the top checkbox to check or uncheck all the boxes in the column.";
+$brewer_entries_text_022 = "Print All Bottle Labels for Checked Entries";
+$brewer_entries_text_023 = "The bottle labels will open in a new tab or window.";
+$brewer_entries_text_024 = "Print Bottle Labels";
 /**
  * ----------------------------------------------------------------------------------
  * END TRANSLATIONS

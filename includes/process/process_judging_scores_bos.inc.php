@@ -7,10 +7,11 @@
 if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1))) {
 
 	if ($action == "enter") {
+
 		foreach($_POST['score_id'] as $score_id)	{
 
 			if ((!empty($_POST['scorePlace'.$score_id])) && ($_POST['scorePrevious'.$score_id] == "Y")) {
-				$updateSQL = sprintf("UPDATE $judging_scores_bos_db_table SET
+				$sql = sprintf("UPDATE $judging_scores_bos_db_table SET
 				eid=%s,
 				bid=%s,
 				scoreEntry=%s,
@@ -25,13 +26,13 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 								GetSQLValueString(sterilize($_POST['id'.$score_id]), "text")
 								);
 
-				mysqli_real_escape_string($connection,$updateSQL);
-				$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+				mysqli_real_escape_string($connection,$sql);
+				$result = mysqli_query($connection,$sql) or die (mysqli_error($connection));
 
 			}
 
 			if ((!empty($_POST['scorePlace'.$score_id])) && ($_POST['scorePrevious'.$score_id] == "N")) {
-				$insertSQL = sprintf("INSERT INTO $judging_scores_bos_db_table (
+				$sql = sprintf("INSERT INTO $judging_scores_bos_db_table (
 				eid,
 				bid,
 				scoreEntry,
@@ -45,20 +46,25 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 								GetSQLValueString(sterilize($_POST['scoreType'.$score_id]), "text")
 								);
 
-				mysqli_real_escape_string($connection,$insertSQL);
-				$result = mysqli_query($connection,$insertSQL) or die (mysqli_error($connection));
+				mysqli_real_escape_string($connection,$sql);
+				$result = mysqli_query($connection,$sql) or die (mysqli_error($connection));
 
 			}
 
 			if ((empty($_POST['scorePlace'.$score_id])) && ($_POST['scorePrevious'.$score_id] == "Y")) {
 
-				$deleteSQL = sprintf("DELETE FROM $judging_scores_bos_db_table WHERE id='%s'", $_POST['id'.$score_id]);
-				mysqli_real_escape_string($connection,$deleteSQL);
-				$result = mysqli_query($connection,$deleteSQL) or die (mysqli_error($connection));
+				$sql = sprintf("DELETE FROM %s WHERE id='%s'", $judging_scores_bos_db_table, $_POST['id'.$score_id]);
+				mysqli_real_escape_string($connection,$sql);
+				$result = mysqli_query($connection,$sql) or die (mysqli_error($connection));
 
 			}
 
+			//echo $sql."<br>";
+
 		}
+
+		//exit;
+
 		$pattern = array('\'', '"');
 		$updateGoTo = str_replace($pattern, "", $updateGoTo);
 		$redirect_go_to = sprintf("Location: %s", stripslashes($updateGoTo));

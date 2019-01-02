@@ -152,13 +152,11 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] == 0)) {
 
 						// Purge all data from judging_assignments table
 						$updateSQL = sprintf("DELETE FROM %s WHERE bid='%s'",$judging_assignments_db_table, $row_admin['id']);
-						if (SINGLE) $updateSQL .= sprintf(" AND comp_id='%s'",$_SESSION['comp_id']);
 						mysqli_real_escape_string($connection,$updateSQL);
 						$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 
 						// Purge all data from staff table
 						$updateSQL = sprintf("DELETE FROM %s WHERE uid='%s'",$staff_db_table, $row_admin['id']);
-						if (SINGLE) $updateSQL .= sprintf(" AND comp_id='%s'",$_SESSION['comp_id']);
 						mysqli_real_escape_string($connection,$updateSQL);
 						$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 
@@ -183,7 +181,6 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] == 0)) {
 				$totalRows_strays2 = mysqli_num_rows($strays2);
 
 				if ($totalRows_strays2 > 0) {
-
 
 					// Users table
 					do {

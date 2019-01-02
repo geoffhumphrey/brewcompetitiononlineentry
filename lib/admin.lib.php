@@ -106,24 +106,25 @@ function bos_entry_info($eid,$table_id,$filter) {
 	$brewer = mysqli_query($connection,$query_brewer) or die (mysqli_error($connection));
 	$row_brewer = mysqli_fetch_assoc($brewer);
 
-	$return =
-	$row_entries_1['brewStyle']."^".  			// 0
-	$row_entries_1['brewCategorySort']."^".  	// 1
-	$row_entries_1['brewCategory']."^".  		// 2
-	$row_entries_1['brewSubCategory']."^".  		// 3
-	$row_brewer['brewerFirstName']."^".  	// 4
-	$row_brewer['brewerLastName']."^".  	// 5
-	$row_entries_1['brewJudgingNumber']."^".   	// 6
-	$row_tables_1['id']."^".  					// 7
-	$row_tables_1['tableName']."^".   			// 8
-	$row_tables_1['tableNumber']."^".  			// 9
-	$row_bos_place_1['scorePlace']."^".  		// 10
-	$row_bos_place_1['scoreEntry']."^".  		// 11
-	$row_entries_1['brewName']."^".  			// 12
-	$row_entries_1['id']."^".   					// 13
-	$row_bos_place_1['id']."^".   				// 14
-	$row_entries_1['brewBrewerID']."^". 				// 15
-	$row_brewer['brewerBreweryName']; //16
+	$return = "";
+	$return .= $row_entries_1['brewStyle']."^";  			// 0
+	$return .= $row_entries_1['brewCategorySort']."^";  	// 1
+	$return .= $row_entries_1['brewCategory']."^";  		// 2
+	$return .= $row_entries_1['brewSubCategory']."^";  		// 3
+	$return .= $row_brewer['brewerFirstName']."^";  	// 4
+	$return .= $row_brewer['brewerLastName']."^";  	// 5
+	$return .= $row_entries_1['brewJudgingNumber']."^";   	// 6
+	$return .= $row_tables_1['id']."^";  					// 7
+	$return .= $row_tables_1['tableName']."^";   			// 8
+	$return .= $row_tables_1['tableNumber']."^";  			// 9
+	$return .= $row_bos_place_1['scorePlace']."^";  		// 10
+	$return .= $row_bos_place_1['scoreEntry']."^";  		// 11
+	$return .= $row_entries_1['brewName']."^";  			// 12
+	$return .= $row_entries_1['id']."^";   					// 13
+	if (isset($row_bos_place_1['id'])) $return .= $row_bos_place_1['id']."^";   				// 14
+	else $return .= "N^";
+	$return .= $row_entries_1['brewBrewerID']."^"; 				// 15
+	$return .= $row_brewer['brewerBreweryName']; //16
 
 	return $return;
 }
