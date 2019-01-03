@@ -42,17 +42,13 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] == 0)) {
 						mysqli_real_escape_string($connection,$updateSQL);
 						$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 
-						$updateSQL = sprintf("DELETE FROM %s WHERE eid='%s'",$judging_scores_db_table,$row_purge_entries['id']);
-						mysqli_real_escape_string($connection,$updateSQL);
-						$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+						$purge_array = array($judging_scores_db_table,$judging_scores_bos_db_table,$special_best_data_db_table);
 
-						$updateSQL = sprintf("DELETE FROM %s WHERE eid='%s'",$judging_scores_bos_db_table,$row_purge_entries['id']);
-						mysqli_real_escape_string($connection,$updateSQL);
-						$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
-
-						$updateSQL = sprintf("DELETE FROM %s WHERE eid='%s'",$special_best_data_db_table,$row_purge_entries['id']);
-						mysqli_real_escape_string($connection,$updateSQL);
-						$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+						foreach ($purge_array as $db_table) {
+							$updateSQL = sprintf("DELETE FROM %s WHERE eid='%s'",$db_table,$row_purge_entries['id']);
+							mysqli_real_escape_string($connection,$updateSQL);
+							$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+						}
 
 						// Delete any associated scoresheet
 						$scoresheet_file_name_entry = sprintf("%06s",$row_purge_entries['id']).".pdf";
@@ -77,28 +73,14 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] == 0)) {
 			// Purge all entries
 			else {
 
-				$updateSQL = sprintf("TRUNCATE %s",$brewing_db_table);
-				if (SINGLE) $updateSQL .= sprintf(" WHERE comp_id='%s'",$_SESSION['comp_id']);
-				mysqli_real_escape_string($connection,$updateSQL);
-				$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+				$purge_array = array($brewing_db_table,$judging_scores_db_table,$judging_scores_bos_db_table,$special_best_data_db_table);
 
-				// Purge all data from judging_scores table
-				$updateSQL = sprintf("TRUNCATE %s",$judging_scores_db_table);
-				if (SINGLE) $updateSQL .= sprintf(" WHERE comp_id='%s'",$_SESSION['comp_id']);
-				mysqli_real_escape_string($connection,$updateSQL);
-				$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
-
-				// Purge all data from judging_scores bos table
-				$updateSQL = sprintf("TRUNCATE %s",$judging_scores_bos_db_table);
-				if (SINGLE) $updateSQL .= sprintf(" WHERE comp_id='%s'",$_SESSION['comp_id']);
-				mysqli_real_escape_string($connection,$updateSQL);
-				$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
-
-				// Purge all data from special_best_data table
-				$updateSQL = sprintf("TRUNCATE %s",$special_best_data_db_table);
-				if (SINGLE) $updateSQL .= sprintf(" WHERE comp_id='%s'",$_SESSION['comp_id']);
-				mysqli_real_escape_string($connection,$updateSQL);
-				$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+				foreach ($purge_array as $db_table) {
+					$updateSQL = sprintf("TRUNCATE %s",$db_table);
+					if (SINGLE) $updateSQL .= sprintf(" WHERE comp_id='%s'",$_SESSION['comp_id']);
+					mysqli_real_escape_string($connection,$updateSQL);
+					$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+				}
 
 				// Clear judging preferences
 				if (!SINGLE) {
@@ -231,23 +213,14 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] == 0)) {
 		// Purge scores and associated data
 		if (($go == "scores") || ($go == "purge-all")) {
 
-			// Purge all data from judging_scores table
-			$updateSQL = sprintf("TRUNCATE %s",$judging_scores_db_table);
-			if (SINGLE) $updateSQL .= sprintf(" WHERE comp_id='%s'",$_SESSION['comp_id']);
-			mysqli_real_escape_string($connection,$updateSQL);
-			$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+			$purge_array = array($judging_scores_db_table,$judging_scores_bos_db_table,$special_best_data_db_table);
 
-			// Purge all data from judging_scores bos table
-			$updateSQL = sprintf("TRUNCATE %s",$judging_scores_bos_db_table);
-			if (SINGLE) $updateSQL .= sprintf(" WHERE comp_id='%s'",$_SESSION['comp_id']);
-			mysqli_real_escape_string($connection,$updateSQL);
-			$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
-
-			// Purge all daa from special_best_data table
-			$updateSQL = sprintf("TRUNCATE %s",$special_best_data_db_table);
-			if (SINGLE) $updateSQL .= sprintf(" WHERE comp_id='%s'",$_SESSION['comp_id']);
-			mysqli_real_escape_string($connection,$updateSQL);
-			$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+			foreach ($purge_array as $db_table) {
+				$updateSQL = sprintf("TRUNCATE %s",$db_table);
+				if (SINGLE) $updateSQL .= sprintf(" WHERE comp_id='%s'",$_SESSION['comp_id']);
+				mysqli_real_escape_string($connection,$updateSQL);
+				$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+			}
 
 			$redirect_go_to = sprintf("Location: %s", $base_url."index.php?section=admin&msg=26");
 
@@ -256,41 +229,14 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] == 0)) {
 		// Purge judging tables and associated data
 		if (($go == "tables") || ($go == "purge-all")) {
 
-			// Purge all data from judging_tables table
-			$updateSQL = sprintf("TRUNCATE %s",$judging_tables_db_table);
-			if (SINGLE) $updateSQL .= sprintf(" WHERE comp_id='%s'",$_SESSION['comp_id']);
-			mysqli_real_escape_string($connection,$updateSQL);
-			$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+			$purge_array = array($judging_tables_db_table,$judging_assignments_db_table,$judging_flights_db_table,$judging_scores_db_table,$special_best_data_db_table);
 
-			// Purge all data from judging_assignments table
-			$updateSQL = sprintf("TRUNCATE %s",$judging_assignments_db_table);
-			if (SINGLE) $updateSQL .= sprintf(" WHERE comp_id='%s'",$_SESSION['comp_id']);
-			mysqli_real_escape_string($connection,$updateSQL);
-			$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
-
-			// Purge all data from judging_flights table
-			$updateSQL = sprintf("TRUNCATE %s",$judging_flights_db_table);
-			if (SINGLE) $updateSQL .= sprintf(" WHERE comp_id='%s'",$_SESSION['comp_id']);
-			mysqli_real_escape_string($connection,$updateSQL);
-			$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
-
-			// Purge all data from judging_scores table
-			$updateSQL = sprintf("TRUNCATE %s",$judging_scores_db_table);
-			if (SINGLE) $updateSQL .= sprintf(" WHERE comp_id='%s'",$_SESSION['comp_id']);
-			mysqli_real_escape_string($connection,$updateSQL);
-			$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
-
-			// Purge all data from judging_scores_bos table
-			$updateSQL = sprintf("TRUNCATE %s",$judging_scores_bos_db_table);
-			if (SINGLE) $updateSQL .= sprintf(" WHERE comp_id='%s'",$_SESSION['comp_id']);
-			mysqli_real_escape_string($connection,$updateSQL);
-			$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
-
-			// Purge all daa from special_best_data table
-			$updateSQL = sprintf("TRUNCATE %s",$special_best_data_db_table);
-			if (SINGLE) $updateSQL .= sprintf(" WHERE comp_id='%s'",$_SESSION['comp_id']);
-			mysqli_real_escape_string($connection,$updateSQL);
-			$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+			foreach ($purge_array as $db_table) {
+				$updateSQL = sprintf("TRUNCATE %s",$db_table);
+				if (SINGLE) $updateSQL .= sprintf(" WHERE comp_id='%s'",$_SESSION['comp_id']);
+				mysqli_real_escape_string($connection,$updateSQL);
+				$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+			}
 
 			$redirect_go_to = sprintf("Location: %s", $base_url."index.php?section=admin&msg=26");
 
@@ -298,17 +244,14 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] == 0)) {
 
 		if (($go == "custom") || ($go == "purge-all")) {
 
-			// Purge all data from special best info table
-			$updateSQL = sprintf("TRUNCATE %s",$special_best_info_db_table);
-			if (SINGLE) $updateSQL .= sprintf(" WHERE comp_id='%s'",$_SESSION['comp_id']);
-			mysqli_real_escape_string($connection,$updateSQL);
-			$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+			$purge_array = array($special_best_info_db_table,$special_best_data_db_table);
 
-			// Purge all daa from special_best_data table
-			$updateSQL = sprintf("TRUNCATE %s",$special_best_data_db_table);
-			if (SINGLE) $updateSQL .= sprintf(" WHERE comp_id='%s'",$_SESSION['comp_id']);
-			mysqli_real_escape_string($connection,$updateSQL);
-			$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+			foreach ($purge_array as $db_table) {
+				$updateSQL = sprintf("TRUNCATE %s",$db_table);
+				if (SINGLE) $updateSQL .= sprintf(" WHERE comp_id='%s'",$_SESSION['comp_id']);
+				mysqli_real_escape_string($connection,$updateSQL);
+				$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+			}
 
 			$redirect_go_to = sprintf("Location: %s", $base_url."index.php?section=admin&msg=26");
 

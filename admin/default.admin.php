@@ -1308,7 +1308,7 @@
                                     <li><a href="#" data-toggle="modal" data-target="#purgePayments">Payments</a></li>
                                     <?php } ?>
                                     <li><a href="#" data-toggle="modal" data-target="#purgeParticipants">Participants</a></li>
-                                    <li><a href="<?php echo $base_url; ?>includes/process.inc.php?action=purge&amp;go=tables" data-confirm="Are you sure you want to delete all judging tables and associated data including judging/stewarding table assignments? This cannot be undone.">Judging Tables</a></li>
+                                    <li><a href="<?php echo $base_url; ?>includes/process.inc.php?action=purge&amp;go=tables" data-confirm="Are you sure you want to delete all judging tables and associated data including judging/stewarding table assignments and scores? This cannot be undone.">Judging Tables</a></li>
                                     <li><a href="<?php echo $base_url; ?>includes/process.inc.php?action=purge&amp;go=scores" data-confirm="Are you sure you want to delete all scoring data from the database including best of show? This cannot be undone.">Scores</a></li>
                                     <li><a href="<?php echo $base_url; ?>includes/process.inc.php?action=purge&amp;go=custom" data-confirm="Are you sure you want to delete all custom categories and associated data? This cannot be undone.">Custom Categories</a></li>
                                     <li><a href="<?php echo $base_url; ?>includes/process.inc.php?action=purge&amp;go=availability" data-confirm="Are you sure you want to reset all entrant availability? All current judge, steward, and staff assignments will be cleared, judge/steward availability will be set to &ldquo;No,&rdquo; location preferences will be set to to &ldquo;No,&rdquo; and entrant staff interest will be set to &ldquo;No&rdquo; for all entrants. This is useful for sites that are carrying over user data to another competition instance, however, it is critical that all entrants be notified to update their judge, steward, and staff availability. This cannot be undone.">Entrant Availability</a></li>
@@ -1331,8 +1331,8 @@
 									<h4 class="modal-title" id="previewBestLabel">Please Confirm</h4>
 								</div>
 								<div class="modal-body">
-									<p>Are you sure you want to delete non-admin participants and associated data (including each user's entries, as well as their judge, steward, and staff assignments)? This cannot be undone.
-									<p>Optionally, choose a date threshold. User accounts and associated data will not be purged if they were <strong><em>updated</em> on or after</strong> the date you choose.</p>
+									<p>Are you sure you want to delete non-admin participants and associated data (including each user's entries, as well as their judge, steward, and staff assignments)? This cannot be undone.</p>
+									<p>Optionally, choose a date threshold. User accounts and associated data will not be purged <strong>if they were <em>updated</em> on or after</strong> the date you choose.</p>
 									<p>Leave the field blank to purge all non-admin participants.</p>
 									<div class="input-group">
 										<input class="form-control" id="dateThresholdParticipants" name="dateThreshold" type="text" value="" placeholder="">
@@ -1356,8 +1356,8 @@
 									<h4 class="modal-title" id="purgePaymentsLabel">Please Confirm</h4>
 								</div>
 								<div class="modal-body">
-									<p>Are you sure you want to delete payments and associated data? This cannot be undone.
-									<p>Optionally, choose a date threshold. Payments and associated data will not be purged if they were <strong><em>updated</em> on or after</strong> the date you choose.</p>
+									<p>Are you sure you want to delete payments and associated data? This cannot be undone.</p>
+									<p>Optionally, choose a date threshold. Payments and associated data will not be purged <strong>if they were <em>updated</em> on or after</strong> the date you choose.</p>
 									<p>Leave the field blank to purge all payment data.</p>
 									<div class="input-group">
 										<input class="form-control" id="dateThresholdPayments" name="dateThreshold" type="text" value="" placeholder="">
@@ -1381,8 +1381,8 @@
 									<h4 class="modal-title" id="purgeEntriesLabel">Please Confirm</h4>
 								</div>
 								<div class="modal-body">
-									<p>Are you sure you want to delete entries and associated data, including scores, bos scores, and associated scoresheets (if present)? This cannot be undone.
-									<p>Optionally, choose a date threshold. Entries and associated data will not be purged if they were <strong><em>updated</em> on or after</strong> the date you choose.</p>
+									<p>Are you sure you want to delete entries and associated data, including scores, BOS scores, and associated scoresheets (if present)? This cannot be undone.</p>
+									<p>Optionally, choose a date threshold. Entries and associated data will not be purged <strong>if they were <em>updated</em> on or after</strong> the date you choose.</p>
 									<p>Leave the field blank to purge all entries.</p>
 									<div class="input-group">
 										<input class="form-control" id="dateThresholdEntries" name="dateThreshold" type="text" value="" placeholder="">
