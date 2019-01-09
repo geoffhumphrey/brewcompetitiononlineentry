@@ -23,8 +23,8 @@ To use Bootstrap's native icon set, glyphicons, go to http://getbootstrap.com/co
 
 <div class="jumbotron">
   <h1>Welcome to Our Competition Website!</h1>
-  <h2>Important Information Here (with a Bit Less Shouting)</h2> 
+  <h2>Important Information Here (with a Bit Less Shouting)</h2>
   <h3>Less Important Information Here</h3>
-  <p>This notice is a simple, yet nifty example of putting BCOE&amp;M&rsquo;s Custom Module feature to work using <a href="http://getbootstrap.com/components/#jumbotron" target="_blank">Bootstrap&rsquo;s &ldquo;Jumbotron&rdquo; component</a>. All native Bootstrap 3 components and JavaScript widgets will work with BCOE&amp;M.</p>
+  <p>This notice is a simple, yet nifty example of putting BCOE&amp;M&rsquo;s Custom Module feature to work using <a class="hide-loader" href="http://getbootstrap.com/components/#jumbotron" target="_blank">Bootstrap&rsquo;s &ldquo;Jumbotron&rdquo; component</a>. All native Bootstrap 3 components and JavaScript widgets will work with BCOE&amp;M.</p>
   <p><a role="button" class="btn btn-warning btn-lg btn-block" href="<?php echo $base_url; ?>index.php?section=register"><span class="fa fa-beer"></span> Register Now!</a></p>
 </div>

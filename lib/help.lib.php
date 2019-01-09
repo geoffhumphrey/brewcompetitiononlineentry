@@ -49,7 +49,7 @@ function bcoem_dashboard_help($content) {
 		$bcoem_dashboard_help_body .= "<li>Checking-in entries (marking them as paid and received) <a href=\"".$base_url."index.php?section=admin&amp;go=entries\">manually</a> or, if enabled, <a href=\"".$base_url."index.php?section=admin&amp;go=checkin\">via barcode scanner</a>.</li>";
 		$bcoem_dashboard_help_body .= "<li>Printing sorting sheets by entry numbers or judging numbers.</li>";
 		$bcoem_dashboard_help_body .= "<li>Printing entry number/judging number cheat sheets organized by style.</li>";
-		$bcoem_dashboard_help_body .= "<li>Printing labels for individual bottles with their unique entry or judging number. Available formats are letter (<a href=\"http://www.avery.com/avery/en_us/Products/Labels/Addressing-Labels/Easy-Peel-White-Address-Labels_05160.htm\" target=\"_blank\">Avery 5160</a>) and A4 (<a href=\"http://www.avery.se/avery/en_se/Products/Labels/Multipurpose/White-Multipurpose-Labels-Permanent/General-Usage-Labels-White_3422.htm\" target=\"_blank\">Avery 3422</a>) for rectangular labels, 0.50 inch/13mm round (<a href=\"http://www.onlinelabels.com/Products/OL32.htm\" target=\"_blank\">Online Labels OL32</a>) or 0.75 inch/19 mm round (<a href=\"http://www.onlinelabels.com/Products/OL5275WR.htm\" target=\"_blank\">Online Lables OL5275WR</a>).</li>";
+		$bcoem_dashboard_help_body .= "<li>Printing labels for individual bottles with their unique entry or judging number. Available formats are letter (<a class=\"hide-loader\" href=\"http://www.avery.com/avery/en_us/Products/Labels/Addressing-Labels/Easy-Peel-White-Address-Labels_05160.htm\" target=\"_blank\">Avery 5160</a>) and A4 (<a class=\"hide-loader\" href=\"http://www.avery.se/avery/en_se/Products/Labels/Multipurpose/White-Multipurpose-Labels-Permanent/General-Usage-Labels-White_3422.htm\" target=\"_blank\">Avery 3422</a>) for rectangular labels, 0.50 inch/13mm round (<a class=\"hide-loader\" href=\"http://www.onlinelabels.com/Products/OL32.htm\" target=\"_blank\">Online Labels OL32</a>) or 0.75 inch/19 mm round (<a class=\"hide-loader\" href=\"http://www.onlinelabels.com/Products/OL5275WR.htm\" target=\"_blank\">Online Lables OL5275WR</a>).</li>";
 		$bcoem_dashboard_help_body .= "</ul>";
 		$bcoem_dashboard_help_body .= "<p>Of note is the Regenerate Judging Numbers function. If your competition is not utilizing the barcode check-in feature, administrators can make extra sure that all entries in the database are assigned a unique judging number by activating this function.</p>";
 
@@ -94,7 +94,7 @@ function bcoem_dashboard_help($content) {
 		$bcoem_dashboard_help_body .= "<li>Assignment lists for judges and stewards.</li>";
 		$bcoem_dashboard_help_body .= "<li>Sign-in sheets for judges and stewards.</li>";
 		$bcoem_dashboard_help_body .= "<li>Judge, steward, and staff name tags.</li>";
-		$bcoem_dashboard_help_body .= "<li>Judge scoresheet labels in letter (<a href=\"http://www.avery.com/avery/en_us/Products/Labels/Addressing-Labels/Easy-Peel-White-Address-Labels_05160.htm\" target=\"_blank\">Avery 5160</a>) and A4 (<a href=\"http://www.avery.se/avery/en_se/Products/Labels/Multipurpose/White-Multipurpose-Labels-Permanent/General-Usage-Labels-White_3422.htm\" target=\"_blank\">Avery 3422</a>) format.</li>";
+		$bcoem_dashboard_help_body .= "<li>Judge scoresheet labels in letter (<a class=\"hide-loader\" href=\"http://www.avery.com/avery/en_us/Products/Labels/Addressing-Labels/Easy-Peel-White-Address-Labels_05160.htm\" target=\"_blank\">Avery 5160</a>) and A4 (<a class=\"hide-loader\" href=\"http://www.avery.se/avery/en_se/Products/Labels/Multipurpose/White-Multipurpose-Labels-Permanent/General-Usage-Labels-White_3422.htm\" target=\"_blank\">Avery 3422</a>) format.</li>";
 		$bcoem_dashboard_help_body .= "</ul>";
 		$bcoem_dashboard_help_body .= "<p><strong>During Judging</strong></p>";
 		$bcoem_dashboard_help_body .= "<ul>";
@@ -119,7 +119,7 @@ function bcoem_dashboard_help($content) {
 		$bcoem_dashboard_help_body .= "<ul>";
 		$bcoem_dashboard_help_body .= "<li>CSV (comma separated value) files are easily read and manipulated by spreadsheet programs such as Microsoft Excel or Open Office Calc.</li>";
 		$bcoem_dashboard_help_body .= "<li>HTML files are useful for posting to another website or blog using standardized tags.</li>";
-		$bcoem_dashboard_help_body .= "<li>BBC (bulletin board code) files contain specialized markup for forum websites that utilize standardized bulletin board code. The <a href=\"https://www.homebrewersassociation.org/forum/\" target=\"_blank\">AHA Forum</a> accepts BBC code for posts. This is useful if you want to announce your competition using the Promo Materials BBC export option.</li>";
+		$bcoem_dashboard_help_body .= "<li>BBC (bulletin board code) files contain specialized markup for forum websites that utilize standardized bulletin board code. The <a class=\"hide-loader\" href=\"https://www.homebrewersassociation.org/forum/\" target=\"_blank\">AHA Forum</a> accepts BBC code for posts. This is useful if you want to announce your competition using the Promo Materials BBC export option.</li>";
 		$bcoem_dashboard_help_body .= "<li>Word files are downloads that are easily read and edited by word processing programs such as Microsoft Word or Open Office Writer.</li>";
 		$bcoem_dashboard_help_body .= "</ul>";
 		break;
@@ -146,7 +146,7 @@ function bcoem_dashboard_help($content) {
 
 		case "check-in":
 		$bcoem_dashboard_help_title .= "How Do I Check In Received Entries?";
-		$bcoem_dashboard_help_body .= "<p>If your competition is utilizing the <a href=\"http://brewcompetition.com/barcode-labels\" target=\"_blank\">barcode option</a> on bottle labels, you can check-in entries using a barcode scanner via the <a href=\"".$base_url."index.php?section=admin&amp;go=checkin\">Check-In Entries with a Barcode Reader/Scanner</a> function.</p>";
+		$bcoem_dashboard_help_body .= "<p>If your competition is utilizing the <a class=\"hide-loader\" href=\"http://brewcompetition.com/barcode-labels\" target=\"_blank\">barcode option</a> on bottle labels, you can check-in entries using a barcode scanner via the <a href=\"".$base_url."index.php?section=admin&amp;go=checkin\">Check-In Entries with a Barcode Reader/Scanner</a> function.</p>";
 		$bcoem_dashboard_help_body .= "<p>If your competition is <em>not</em> utilizing the barcode option on bottle labels, you can check-in entries via the <a href=\"".$base_url."index.php?section=admin&amp;go=entries\">Manage Entries</a> function.</p>";
 		break;
 

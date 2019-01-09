@@ -396,7 +396,7 @@ $(document).ready(function(){
                 <h4 class="modal-title" id="contactFormModalLabel">Contact Form Info</h4>
             </div>
             <div class="modal-body">
-                <p>Enable or disable your installation's contact form. This may be necessary if your site&rsquo;s server does not support PHP&rsquo;s <a href="http://php.net/manual/en/function.mail.php" target="_blank">mail()</a> function. Admins should test the form before disabling as the form is the more secure option. Admins should use the &ldquo;Send Test Email&rdquo; button to test the function.</p>
+                <p>Enable or disable your installation's contact form. This may be necessary if your site&rsquo;s server does not support PHP&rsquo;s <a class="hide-loader" href="http://php.net/manual/en/function.mail.php" target="_blank">mail()</a> function. Admins should test the form before disabling as the form is the more secure option. Admins should use the &ldquo;Send Test Email&rdquo; button to test the function.</p>
             </div>
             <div class="modal-footer">
             	<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
@@ -450,7 +450,7 @@ $(document).ready(function(){
                 </li>
                 </ul>
                 -->
-                <p>Please note that these system-generated emails may not be possible if your site&rsquo;s server does not support PHP&rsquo;s <a href="http://php.net/manual/en/function.mail.php" target="_blank">mail()</a> function. Admins should use the &ldquo;Send Test Email&rdquo; button to test the function.</p>
+                <p>Please note that these system-generated emails may not be possible if your site&rsquo;s server does not support PHP&rsquo;s <a class="hide-loader" href="http://php.net/manual/en/function.mail.php" target="_blank">mail()</a> function. Admins should use the &ldquo;Send Test Email&rdquo; button to test the function.</p>
             </div>
             <div class="modal-footer">
             	<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
@@ -502,7 +502,7 @@ $(document).ready(function(){
             </div>
             <div class="modal-body">
                 <p>Generally, this can be enabled for most installations. However, if your installation is experiencing multiple &ldquo;Page Not Found&rdquo;  errors (404), select &ldquo;Disable&rdquo; to turn off Search Engine Friendly (SEF) URLs.</p>
-                <p>If you enable this and receive 404 errors, <?php if ($section == "step3") echo "<strong>after setup has been completed</strong>, "; ?>navigate to the login screen at <a href="<?php echo $base_url; ?>index.php?section=login" target="_blank"><?php echo $base_url; ?>index.php?section=login</a> to log back in and &ldquo;turn off&rdquo;  this feature.</p>
+                <p>If you enable this and receive 404 errors, <?php if ($section == "step3") echo "<strong>after setup has been completed</strong>, "; ?>navigate to the login screen at <a class="hide-loader" href="<?php echo $base_url; ?>index.php?section=login" target="_blank"><?php echo $base_url; ?>index.php?section=login</a> to log back in and &ldquo;turn off&rdquo;  this feature.</p>
             </div>
             <div class="modal-footer">
             	<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
@@ -551,7 +551,7 @@ $(document).ready(function(){
         <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
             <input class="form-control" id="prefsGoogleAccount1" name="prefsGoogleAccount1" type="text" value="<?php if (isset($recaptcha_key[1])) echo $recaptcha_key[1]; ?>" placeholder="**OPTIONAL** reCAPTCHA Secret Key (Private)">
             <span id="helpBlock" class="help-block">
-            <div class="help-block"><strong>Specifying reCAPTCHA keys is OPTIONAL.</strong> However, if your installation is experiencing issues processing and/or displaying the reCAPTCHA challenge on the contact and registration pages, you can override the default BCOE&amp;M keys with your own. To get reCAPTCHA API keys, you will need a Google account. You can obtain keys on Google's <a href="https://www.google.com/recaptcha/admin" target="_blank">reCAPTCHA dashboard</a>. Follow all instructions there or unexpected functionality will occur.</div>
+            <div class="help-block"><strong>Specifying reCAPTCHA keys is OPTIONAL.</strong> However, if your installation is experiencing issues processing and/or displaying the reCAPTCHA challenge on the contact and registration pages, you can override the default BCOE&amp;M keys with your own. To get reCAPTCHA API keys, you will need a Google account. You can obtain keys on Google's <a class="hide-loader" href="https://www.google.com/recaptcha/admin" target="_blank">reCAPTCHA dashboard</a>. Follow all instructions there or unexpected functionality will occur.</div>
             </span>
         </div>
     </div>
@@ -739,7 +739,7 @@ $(document).ready(function(){
         <option value="BA" <?php if ($row_limits['prefsStyleSet'] == "BA") echo "SELECTED"; ?>>Brewers Association</option>
 	</select>
     <div id="helpBlockBJCP2008" class="help-block">The BJCP 2008 style guidelines have been deprecated and will be completely removed in a future version. The 2008 guidelines are considered by the BJCP as &quot;obsolete.&quot;</div>
-    <div id="helpBlockBAAPI" class="help-block">Please note that every effort is made to keep the BA style data current; however, the latest <a href="https://www.brewersassociation.org/resources/brewers-association-beer-style-guidelines/" target="_blank">BA style set</a> may <strong>not</strong> be available.</div>
+    <div id="helpBlockBAAPI" class="help-block">Please note that every effort is made to keep the BA style data current; however, the latest <a class="hide-loader" href="https://www.brewersassociation.org/resources/brewers-association-beer-style-guidelines/" target="_blank">BA style set</a> may <strong>not</strong> be available.</div>
     </div>
 </div><!-- ./Form Group -->
 <!--
@@ -755,7 +755,7 @@ $(document).ready(function(){
                Brewery DB API Key Info
             </button>
 		</div>
-        <div class="help-block">Brewers Association style data is also housed and maintained by the <a href="http://www.brewerydb.com/" target="_blank">Brewery DB</a>. If you have an API key, provide it here to utilize the BreweryDB's BA Style data. Otherwise, leave blank.</div>
+        <div class="help-block">Brewers Association style data is also housed and maintained by the <a class="hide-loader" href="http://www.brewerydb.com/" target="_blank">Brewery DB</a>. If you have an API key, provide it here to utilize the BreweryDB's BA Style data. Otherwise, leave blank.</div>
 		</span>
     </div>
 </div>
@@ -767,8 +767,8 @@ $(document).ready(function(){
                 <h4 class="modal-title" id="prefsStyleSetAPIKeyModalLabel">Brewery DB API Key Info</h4>
             </div>
             <div class="modal-body">
-                <p>The Brewers Association styles are available via the <a href="https://www.brewerydb.com" target="_blank">Brewery DB</a>'s API. To utilize these styles in BCOE&amp;M, you will need an API key issued by Brewery DB.</p>
-                <p>To obtain an API key from the Brewery DB project website, you will need to <a href="https://www.brewerydb.com/auth/signup" target="_blank">create an account on the Brewery DB website</a> and register your installation as an app.</p>
+                <p>The Brewers Association styles are available via the <a class="hide-loader" href="https://www.brewerydb.com" target="_blank">Brewery DB</a>'s API. To utilize these styles in BCOE&amp;M, you will need an API key issued by Brewery DB.</p>
+                <p>To obtain an API key from the Brewery DB project website, you will need to <a class="hide-loader" href="https://www.brewerydb.com/auth/signup" target="_blank">create an account on the Brewery DB website</a> and register your installation as an app.</p>
                 <p>After creating your account, click the &quot;Register New App&quot; button, provide a name for the app (something like &quot;BCOE&amp;M <?php echo $row_prefs['contestName']; ?>&quot;), web address, and platform (choose &quot;Web Application&quot;). Once you have your API key, enter it here in the designated field.</p>
                 <p><strong>Please note:</strong> The Brewers Association styles will not populate without a valid API key issued by the Brewery DB.</p>
             </div>
@@ -829,9 +829,9 @@ $(document).ready(function(){
                 <p>The <em>BJCP Official</em> options only display U.S. weights and measures.</p>
                 <p>The <em>Anonymous with Barcode/QR Code</em> options provide bottle labels with only an entry number, style, barcode label, and QR code. These labels are intended to be taped to bottles by entrants before submittal, thereby saving the labor and waste of removing rubberbanded labels by competition staff when sorting. This approach is similar to the method used in the National Homebrew Competition final round.</p>
                 <p>The Barcode options are intended to be used with a USB barcode scanner and the <a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=checkin">barcode entry check-in function</a>.</p>
-                <p>The QR code options are intended to be used with a mobile device and <a href="<?php echo $base_url; ?>qr.php" target="_blank">QR code entry check-in function</a> (requires a QR code reading app).</p>
+                <p>The QR code options are intended to be used with a mobile device and <a class="hide-loader" href="<?php echo $base_url; ?>qr.php" target="_blank">QR code entry check-in function</a> (requires a QR code reading app).</p>
                 <div class="well">
-                <p>Both the QR code and barcode options are intended to be used with the Judging Number Barcode Labels and the Judging Number Round Labels <a href="http://www.brewcompetition.com/barcode-labels" target="_blank"><strong>available for download at brewcompetition.com</strong></a>. BCOE&amp;M utilizes the&nbsp;<strong><a href="http://en.wikipedia.org/wiki/Code_39" target="_blank">Code 39 specification</a></strong> to generate all barcodes. Please make sure your scanner recognizes this type of barcode <em>before</em> implementing in your competition.</p>
+                <p>Both the QR code and barcode options are intended to be used with the Judging Number Barcode Labels and the Judging Number Round Labels <a class="hide-loader" href="http://www.brewcompetition.com/barcode-labels" target="_blank"><strong>available for download at brewcompetition.com</strong></a>. BCOE&amp;M utilizes the&nbsp;<strong><a class="hide-loader" href="http://en.wikipedia.org/wiki/Code_39" target="_blank">Code 39 specification</a></strong> to generate all barcodes. Please make sure your scanner recognizes this type of barcode <em>before</em> implementing in your competition.</p>
                 </div>
             </div>
             <div class="modal-footer">
@@ -1524,7 +1524,7 @@ $(document).ready(function(){
     </div><!-- ./modal -->
 
     <div class="form-group"><!-- Form Group Radio INLINE -->
-        <label for="prefsPaypal" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label"><a href="https://developer.paypal.com/docs/classic/products/instant-payment-notification/" target="_blank">PayPal Instant Payment Notification</a> (IPN)</label>
+        <label for="prefsPaypal" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label"><a class="hide-loader" href="https://developer.paypal.com/docs/classic/products/instant-payment-notification/" target="_blank">PayPal Instant Payment Notification</a> (IPN)</label>
         <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
             <div class="input-group">
                 <!-- Input Here -->
@@ -1564,7 +1564,7 @@ $(document).ready(function(){
     				<p>Transaction details will be saved to your BCOE&amp;M database and will be available via your PayPal dashboard as well.</p>
     				<p class="text-primary"><strong>First, it is suggested that you have a dedicated PayPal account for your competition.</strong></p>
     				<p class="text-danger"><strong>Second, to implement PayPal IPN, your PayPal account must be a <u>business</u> account.</strong></p>
-    				<p><strong>Third, set up your PayPal account to process Instant Payment Notifications. Complete instructions are <a href="http://brewcompetition.com/paypal-ipn" target="_blank">available here</a>.</strong></p>
+    				<p><strong>Third, set up your PayPal account to process Instant Payment Notifications. Complete instructions are <a class="hide-loader" href="http://brewcompetition.com/paypal-ipn" target="_blank">available here</a>.</strong></p>
                 	<p>Your notification URL is: <blockquote><strong><?php echo $base_url; ?>ppv.php</strong></blockquote></p>
     				<p>Your Auto Return URL is: <blockquote><strong><?php echo $base_url; ?>index.php?section=pay&amp;msg=10</strong></blockquote></p>
                 </div>

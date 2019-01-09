@@ -20,13 +20,13 @@ BCOE&M uses Font Awesome icons throughout the core code. To use Font Awesome ico
 
 To use Bootstrap's native icon set, glyphicons, go to http://getbootstrap.com/components/#glyphicons for a list and how to integrate
 -->
-<div class="container"> 
+<div class="container">
 <h2>Explore Further</h2>
-<p>This is an example of a custom module placed at the bottom of the page with <a href="http://getbootstrap.com/" target="_blank">Bootstrap 3</a> markup. In this case, a simple button group with split dropup menu.</p>
+<p>This is an example of a custom module placed at the bottom of the page with <a class="hide-loader" href="http://getbootstrap.com/" target="_blank">Bootstrap 3</a> markup. In this case, a simple button group with split dropup menu.</p>
 <div class="btn-group dropup" role="group" aria-label="...">
-	<a href="http://www.brewcompetition.com" target="_blank" role="button" class="btn btn-default">BCOE&amp;M</a>
-    <a href="http://bjcp.org/stylecenter.php" target="_blank" role="button" class="btn btn-default">BJCP Styles</a>
-    <a href="http://www.homebrewersassociation.org" target="_blank" role="button" class="btn btn-default">American Homebrewers Association</a>
+	<a class="hide-loader" href="http://www.brewcompetition.com" target="_blank" role="button" class="btn btn-default">BCOE&amp;M</a>
+    <a class="hide-loader" href="http://bjcp.org/stylecenter.php" target="_blank" role="button" class="btn btn-default">BJCP Styles</a>
+    <a class="hide-loader" href="http://www.homebrewersassociation.org" target="_blank" role="button" class="btn btn-default">American Homebrewers Association</a>
     <div class="btn-group" role="group">
         <button type="button" class="btn btn-default">More... </span></button>
         <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -34,8 +34,8 @@ To use Bootstrap's native icon set, glyphicons, go to http://getbootstrap.com/co
     		<span class="sr-only">Toggle Dropdown</span>
   		</button>
         <ul class="dropdown-menu">
-            <li><a href="https://www.homebrewersassociation.org/forum/" target="_blank">AHA Forum</a></li>
-            <li><a href="http://www.beerxml.com/" target="_blank">Beer XML Standard</a></li>
+            <li><a class="hide-loader" href="https://www.homebrewersassociation.org/forum/" target="_blank">AHA Forum</a></li>
+            <li><a class="hide-loader" href="http://www.beerxml.com/" target="_blank">Beer XML Standard</a></li>
         </ul>
     </div>
 </div>

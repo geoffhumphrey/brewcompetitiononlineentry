@@ -83,7 +83,7 @@ if ($logged_in) {
 
 	$page_info100 .= "<div class=\"bcoem-sidebar-panel\">";
 	$page_info100 .= "<strong class=\"text-info\">Confirmed Entries</strong>";
-	$page_info100 .= "<span class=\"pull-right\"><a class=\"show-loader-ex-long\" href=\"".$base_url."index.php?section=admin&amp;go=entries\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"View all entries\">".$totalRows_log_confirmed."</a>";
+	$page_info100 .= "<span class=\"pull-right\"><a href=\"".$base_url."index.php?section=admin&amp;go=entries\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"View all entries\">".$totalRows_log_confirmed."</a>";
 	if (!empty($row_limits['prefsEntryLimit'])) {
 		$page_info100 .= " / ";
 		if ($_SESSION['userLevel'] == 0) $page_info100 .= "<a href=\"".$base_url."index.php?section=admin&amp;go=preferences\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Change the limit of total entries\">".$row_limits['prefsEntryLimit']."</a>";

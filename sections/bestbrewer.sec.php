@@ -386,7 +386,7 @@ if ($section == "default") $page_info_1 .= "<p>".$best_brewer_text_002."</p>";
 		</div>
 		<div class="col col-md-4 col-sm-12">
 			<div class="bcoem-admin-element">
-			<a class="btn btn-success btn-block" role="button" id="modal_window_link" href="<?php echo $base_url; ?>output/print.output.php?section=results&amp;go=best&amp;action=print&amp;filter=bos&amp;view=default" title="Best Brewer and/or Club Results Report">Print Results</a>
+			<a class="btn btn-success btn-block" role="button" id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=results&amp;go=best&amp;action=print&amp;filter=bos&amp;view=default" title="Best Brewer and/or Club Results Report">Print Results</a>
 		</div>
 		</div>
 	</div><!-- ./row -->

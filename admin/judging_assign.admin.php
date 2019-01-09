@@ -418,10 +418,10 @@ $(document).ready(function(){
             </div>
             <div class="modal-body">
                 <p>Use the checkboxes to designate the role of the judge at the table.</p>
-            	<p><strong>Head Judge</strong> - <a href="http://www.bjcp.org/judgeprocman.php" target="_blank">According to the BJCP</a>, the head judge is a single judge responsible for reviewing all scores and paperwork for accuracy:</p>
+            	<p><strong>Head Judge</strong> - <a class="hide-loader" href="http://www.bjcp.org/judgeprocman.php" target="_blank">According to the BJCP</a>, the head judge is a single judge responsible for reviewing all scores and paperwork for accuracy:</p>
                 <p><small><em>&ldquo;Once judging is complete, the head judge is responsible for ensuring that scoresheets, cover sheets, and flight summary sheets are filled out and turned in to the judge director or competition organizer as directed by the competition management.&rdquo;</em></small></p>
               	<p><strong>Lead Judge</strong> - the Lead Judge is a role that defines the ranking judge in a judge pair.</p>
-                <p><strong>Mini-BOS Judge</strong> - the Mini-BOS Judge is one of the judges at the table designated to participate in the <a href="http://www.bjcp.org/docs/MiniBOS.pdf" target="_blank">Mini-BOS</a> to determine placing entries.</p>
+                <p><strong>Mini-BOS Judge</strong> - the Mini-BOS Judge is one of the judges at the table designated to participate in the <a class="hide-loader" href="http://www.bjcp.org/docs/MiniBOS.pdf" target="_blank">Mini-BOS</a> to determine placing entries.</p>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>

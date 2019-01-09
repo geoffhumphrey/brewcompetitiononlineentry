@@ -281,6 +281,9 @@ function total_points($total_entries,$method) {
 
 	// Get the maximum allowable points for all roles
 	// According to the Maximum Points Earned (Table 1) table - https://www.bjcp.org/rules.php
+
+	$points = 0;
+
 	switch ($method) {
 
 		case "Organizer":

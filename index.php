@@ -102,7 +102,7 @@ $security_question = array($label_secret_01, $label_secret_05, $label_secret_06,
     <link rel="stylesheet" type="text/css" href="<?php echo $theme; ?>" />
     <!-- Load BCOE&M Custom JS -->
     <script src="<?php echo $base_url; ?>js_includes/bcoem_custom.min.js"></script>
-    <!-- Opengraph Implementation -->
+    <!-- Open Graph Implementation -->
     <?php if (!empty($_SESSION['contestName'])) { ?>
     <meta property="og:title" content="<?php echo $_SESSION['contestName']?>" />
     <?php } ?>
@@ -113,13 +113,14 @@ $security_question = array($label_secret_01, $label_secret_05, $label_secret_06,
 </head>
 <body>
 
-    <!-- Loaders -->
+    <!-- LOADER -->
     <div id="loader-submit">
         <div class="center">
             <span class="fa fa-cog fa-spin fa-5x fa-fw"></span>
             <p><strong><?php echo $label_working; ?>.<br><?php echo $output_text_030; ?>.</strong></p>
         </div>
     </div>
+    <!-- ./LOADER -->
 
     <!-- MAIN NAV -->
     <div class="<?php echo $container_main; ?> hidden-print">

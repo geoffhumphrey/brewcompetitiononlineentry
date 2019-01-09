@@ -107,7 +107,7 @@ if ($section == "admin") { ?>
                 <h4 class="modal-title" id="BJCPCompIDModalLabel">BJCP Competition ID Info</h4>
             </div>
             <div class="modal-body">
-                <p>Enter the Competition ID you received from the BJCP if you <a href="http://bjcp.org/apps/comp_reg/comp_reg.php" target="_blank">registered your competition</a>. The BJCP will <em>not</em> accept an XML competition report without a Competition ID.</p>
+                <p>Enter the Competition ID you received from the BJCP if you <a class="hide-loader" href="http://bjcp.org/apps/comp_reg/comp_reg.php" target="_blank">registered your competition</a>. The BJCP will <em>not</em> accept an XML competition report without a Competition ID.</p>
             </div>
             <div class="modal-footer">
             	<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>

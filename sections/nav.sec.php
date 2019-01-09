@@ -223,7 +223,7 @@ if (($logged_in) && ($admin_user) && ($go != "error_page")) { ?>
                     <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=entries">Manually</a></li>
                     <?php if (in_array($_SESSION['prefsEntryForm'],$barcode_qrcode_array)) { ?>
                     <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=checkin">Entry Check-in Via Barcode Scanner</a></li>
-                    <li><a href="<?php echo $base_url; ?>qr.php" target="_blank">Entry Check-in Via Mobile Devices <span class="fa fa-external-link"></span></a></li>
+                    <li><a class="hide-loader" href="<?php echo $base_url; ?>qr.php" target="_blank">Entry Check-in Via Mobile Devices <span class="fa fa-external-link"></span></a></li>
                     <?php } ?>
                 </ul>
             </li>
@@ -246,14 +246,14 @@ if (($logged_in) && ($admin_user) && ($go != "error_page")) { ?>
             <li class="dropdown">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">Reports <span class="caret"></span></a>
                 <ul class="dropdown-menu navmenu-nav">
-                    <li><a id="modal_window_link" href="<?php echo $base_url; ?>output/print.output.php?section=table-cards&amp;go=judging_tables&amp;id=default">Table Cards</a></li>
-                    <li><a id="modal_window_link" href="<?php echo $base_url; ?>output/print.output.php?section=pullsheets&amp;go=judging_tables&amp;view=entry&amp;id=default">Pullsheets - Entry Numbers</a></li>
-                    <li><a id="modal_window_link" href="<?php echo $base_url; ?>output/print.output.php?section=pullsheets&amp;go=judging_tables&amp;id=default">Pullsheets - Judging Numbers</a></li>
-                    <li><a id="modal_window_link" href="<?php echo $base_url; ?>output/print.output.php?section=pullsheets&amp;go=judging_scores_bos">BOS Pullsheets</a></li>
-                    <li><a id="modal_window_link" href="<?php echo $base_url; ?>output/print.output.php?section=bos-mat">BOS Cup Mats - Judging Numbers</a></li>
-                    <li><a id="modal_window_link" href="<?php echo $base_url; ?>output/print.output.php?section=bos-mat&amp;filter=entry">BOS Cup Mats - Entry Numbers</a></li>
-                    <li><a id="modal_window_link" href="<?php echo $base_url; ?>output/print.output.php?section=results&amp;go=judging_scores&amp;action=print&amp;filter=scores&amp;view=winners">Winners with Scores</a></li>
-                    <li><a id="modal_window_link" href="<?php echo $base_url; ?>output/print.output.php?section=results&amp;go=judging_scores&amp;action=print&amp;filter=none&amp;view=winners">Winners without Scores</a></li>
+                    <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=table-cards&amp;go=judging_tables&amp;id=default">Table Cards</a></li>
+                    <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=pullsheets&amp;go=judging_tables&amp;view=entry&amp;id=default">Pullsheets - Entry Numbers</a></li>
+                    <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=pullsheets&amp;go=judging_tables&amp;id=default">Pullsheets - Judging Numbers</a></li>
+                    <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=pullsheets&amp;go=judging_scores_bos">BOS Pullsheets</a></li>
+                    <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=bos-mat">BOS Cup Mats - Judging Numbers</a></li>
+                    <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=bos-mat&amp;filter=entry">BOS Cup Mats - Entry Numbers</a></li>
+                    <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=results&amp;go=judging_scores&amp;action=print&amp;filter=scores&amp;view=winners">Winners with Scores</a></li>
+                    <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=results&amp;go=judging_scores&amp;action=print&amp;filter=none&amp;view=winners">Winners without Scores</a></li>
                 </ul>
             </li>
 			<?php if ($_SESSION['userLevel'] == "0") { ?>
@@ -265,7 +265,7 @@ if (($logged_in) && ($admin_user) && ($go != "error_page")) { ?>
                 </ul>
             </li>
 			<?php } ?>
-			<li><a href="https://github.com/geoffhumphrey/brewcompetitiononlineentry/issues" target="_blank">Report an Issue</a></li>
+			<li><a class="hide-loader" href="https://github.com/geoffhumphrey/brewcompetitiononlineentry/issues" target="_blank">Report an Issue</a></li>
         </ul>
     </div>
 <!-- ./ Admin Push Menu -->
@@ -347,13 +347,13 @@ $(document).ready(function(){
         </div>
         <div class="collapse navbar-collapse" id="bcoem-navbar-collapse">
               <ul class="nav navbar-nav">
-                <li<?php if ($section == "default") echo $active_class; ?>><a href="<?php echo $link_home; ?>"><?php echo $label_home; ?></a></li>
-                <li<?php if ($section == "entry") echo $active_class; ?>><a href="<?php echo $link_entry_info; ?>"><?php echo $label_info; ?></a></li>
-                <li<?php if ($section == "volunteers") echo $active_class; ?>><a href="<?php echo $link_volunteer_info; ?>"><?php echo $label_volunteers; ?></a></li>
+                <li<?php if ($section == "default") echo $active_class; ?>><a class="hide-loader" href="<?php echo $link_home; ?>"><?php echo $label_home; ?></a></li>
+                <li<?php if ($section == "entry") echo $active_class; ?>><a class="hide-loader" href="<?php echo $link_entry_info; ?>"><?php echo $label_info; ?></a></li>
+                <li<?php if ($section == "volunteers") echo $active_class; ?>><a class="hide-loader" href="<?php echo $link_volunteer_info; ?>"><?php echo $label_volunteers; ?></a></li>
                 <?php if ($sponsors) { ?>
-                <li<?php if ($section == "sponsors") echo $active_class; ?>><a href="<?php echo $link_sponsors ?>"><?php echo $label_sponsors; ?></a></li>
+                <li<?php if ($section == "sponsors") echo $active_class; ?>><a class="hide-loader" href="<?php echo $link_sponsors ?>"><?php echo $label_sponsors; ?></a></li>
                 <?php } ?>
-                <li<?php if ($section == "contact") echo $active_class; ?>><a href="<?php echo $link_contacts; ?>"><?php echo $label_contact; ?></a></li>
+                <li<?php if ($section == "contact") echo $active_class; ?>><a class="hide-loader" href="<?php echo $link_contacts; ?>"><?php echo $label_contact; ?></a></li>
                 <?php if ((!$logged_in) && (($registration_open == 1) || ($judge_window_open == 1))) { ?>
                 <!--<li<?php if ($section == "register") echo $active_class; ?>><a href="<?php echo $link_register; ?>"><?php if (($registration_open != 1) && (!$ua) && (!isset($_SESSION['loginUsername'])) && ($judge_window_open == 1) && ($msg == "default")) echo $label_judge_steward_reg; else echo $label_register; ?></a></li> -->
                 <li class="dropdown">
@@ -361,19 +361,19 @@ $(document).ready(function(){
                     <ul class="dropdown-menu">
                     	<?php if (($registration_open == 1) && (!$ua) && (!isset($_SESSION['loginUsername']))) { ?>
                         <?php if ($nav_register_entrant_show) { ?>
-                    	<li><a href="<?php echo build_public_url("register","entrant","default","default",$sef,$base_url); ?>"><?php echo $label_entrant; ?></a></li>
+                    	<li><a class="hide-loader" href="<?php echo build_public_url("register","entrant","default","default",$sef,$base_url); ?>"><?php echo $label_entrant; ?></a></li>
                         <?php } ?>
                         <?php } ?>
                         <?php if ((!$judge_limit) && ($judge_window_open == 1)) { ?>
-                        <li><a href="<?php echo build_public_url("register","judge","default","default",$sef,$base_url); ?>"><?php echo $label_judge; ?></a></li>
+                        <li><a class="hide-loader" href="<?php echo build_public_url("register","judge","default","default",$sef,$base_url); ?>"><?php echo $label_judge; ?></a></li>
                         <?php } if ((!$steward_limit) && ($judge_window_open == 1)) { ?>
-                        <li><a href="<?php echo build_public_url("register","steward","default","default",$sef,$base_url); ?>"><?php echo $label_steward; ?></a></li>
+                        <li><a class="hide-loader" href="<?php echo build_public_url("register","steward","default","default",$sef,$base_url); ?>"><?php echo $label_steward; ?></a></li>
                         <?php } ?>
                     </ul>
                 </li>
                 <?php } // end if ((!$logged_in) && (($registration_open == 1) || ($judge_window_open == 1))) ?>
                 <?php if ($qr_enable) { ?>
-                <li><a href="<?php echo $link_qr; ?>" target="_blank"><?php echo $label_entry_check_in; ?></a></li>
+                <li><a class="hide-loader" href="<?php echo $link_qr; ?>" target="_blank"><?php echo $label_entry_check_in; ?></a></li>
                 <?php } ?>
               </ul>
           <ul class="nav navbar-nav navbar-right">

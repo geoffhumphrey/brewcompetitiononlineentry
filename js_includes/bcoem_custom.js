@@ -43,20 +43,10 @@ $(document).ready(function() {
         }
     });
 
-    $(".show-loader-ex-long").click(function() {
-        $('#loader-submit').show(0).delay(30000).hide(0);
-    });
-
-    $(".show-loader-long").click(function() {
-        $('#loader-submit').show(0).delay(20000).hide(0);
-    });
-
-    $(".show-loader-short").click(function() {
-        $('#loader-submit').show(0).delay(10000).hide(0);
-    });
-
-    $(".show-loader-ex-short").click(function() {
-        $('#loader-submit').show(0).delay(5000).hide(0);
+    $("a:not([href*='#'],[target='_blank'])").click(function() {
+        if (!$(this).hasClass("hide-loader")) {
+            $('#loader-submit').show(0).delay(30000).hide(0);
+        }
     });
 
     $("#submitBtn").click(function() {

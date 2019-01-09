@@ -267,7 +267,7 @@ function table_choose($section,$go,$action,$filter,$view,$script_name,$method) {
 	}
 
 	else {
-		if ($method == "thickbox") $class = 'class="menuItem" id="modal_window_link"';
+		if ($method == "thickbox") $class = 'class="hide-loader menuItem" id="modal_window_link"';
 		if ($method == "none") $class = 'class="menuItem"';
 
 		$random = random_generator(7,2);
@@ -278,8 +278,8 @@ function table_choose($section,$go,$action,$filter,$view,$script_name,$method) {
 		$totalRows_tables = mysqli_num_rows($tables);
 
 		do {
-			if ($filter == "mini_bos") $table_choose .= '<li class="small"><a id="modal_window_link" href="'.$script_name.'?section='.$section.'&go='.$go.'&action='.$action.'&filter='.$filter.'&view='.$view.'&id='.$row_tables['id'].'" title="Print '.$row_tables['tableName'].'">'.$row_tables['tableNumber'].': '.$row_tables['tableName'].' (Mini-BOS)</a></li>';
-			else $table_choose .= '<li class="small"><a id="modal_window_link" href="'.$script_name.'?section='.$section.'&go='.$go.'&action='.$action.'&filter='.$filter.'&view='.$view.'&id='.$row_tables['id'].'" title="Print '.$row_tables['tableName'].'">'.$row_tables['tableNumber'].': '.$row_tables['tableName'].' </a></li>';
+			if ($filter == "mini_bos") $table_choose .= '<li class="small"><a id="modal_window_link" class="hide-loader" href="'.$script_name.'?section='.$section.'&go='.$go.'&action='.$action.'&filter='.$filter.'&view='.$view.'&id='.$row_tables['id'].'" title="Print '.$row_tables['tableName'].'">'.$row_tables['tableNumber'].': '.$row_tables['tableName'].' (Mini-BOS)</a></li>';
+			else $table_choose .= '<li class="small"><a id="modal_window_link" class="hide-loader" href="'.$script_name.'?section='.$section.'&go='.$go.'&action='.$action.'&filter='.$filter.'&view='.$view.'&id='.$row_tables['id'].'" title="Print '.$row_tables['tableName'].'">'.$row_tables['tableNumber'].': '.$row_tables['tableName'].' </a></li>';
 		} while ($row_tables = mysqli_fetch_assoc($tables));
 
 	}
@@ -296,7 +296,7 @@ function style_choose($section,$go,$action,$filter,$view,$script_name,$method) {
 	if ($_SESSION['prefsStyleSet'] == "BJCP2008") $end = 28;
 	if ($_SESSION['prefsStyleSet'] == "BJCP2015") $end = 34;
 
-	if ($method == "thickbox") { $suffix = ''; $class = 'class="menuItem" id="modal_window_link"'; }
+	if ($method == "thickbox") { $suffix = ''; $class = 'class="hide-loader menuItem" id="modal_window_link"'; }
 
 	if ($method == "none") { $suffix = '';  $class = 'class="menuItem"'; }
 
@@ -590,14 +590,14 @@ function admin_help($go,$header_output,$action,$filter) {
 		break;
 	}
 
-	$return = '<p><span class="icon"><img src="'.$base_url.'/images/help.png" /></span><a id="modal_window_link" href="http://help.brewcompetition.com/files/'.$page.'.html" title="BCOE&amp;M Help for '.$header_output.'">Help</a></p>';
+	$return = '<p><span class="icon"><img src="'.$base_url.'/images/help.png" /></span><a id="modal_window_link" class="hide-loader" href="http://help.brewcompetition.com/files/'.$page.'.html" title="BCOE&amp;M Help for '.$header_output.'">Help</a></p>';
 	return $return;
 }
 
 function custom_modules($type,$method) {
 	require(CONFIG.'config.php');
 
-	if ($type == "reports") { $type = 1; $modal = "id='modal_window_link'"; }
+	if ($type == "reports") { $type = 1; $modal = "id='modal_window_link' class='hide-loader'"; }
 	if ($type == "exports") { $type = 2; $modal = ""; }
 
 	if ($method == 1) {

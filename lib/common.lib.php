@@ -63,7 +63,7 @@ function build_action_link($icon,$base_url,$section,$go,$action,$filter,$id,$dbT
 	else {
 
 		if ($method == 2) { // print form link
-			$return .= "<a id=\"modal_window_link\" href=\"".$base_url."output/entry.output.php?";
+			$return .= "<a id=\"modal_window_link\" class=\"hide-loader\" href=\"".$base_url."output/entry.output.php?";
 			$return .= "id=".$id;
 			$return .= "&amp;bid=".$section;
 			$return .= "\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"".$tooltip_text."\">";
@@ -104,7 +104,7 @@ function build_output_link($icon,$base_url,$filename,$section,$go,$action,$filte
 	if ($filter != "default") $return .= "&amp;filter=".$filter;
 	if ($id != "default") $return .= "&amp;id=".$id;
 	$return .= "\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"".$alt_title."\"";
-	if ($modal_window) $return .= " id=\"modal_window_link\"";
+	if ($modal_window) $return .= " id=\"modal_window_link\" class=\"hide-loader\"";
 	$return .= ">";
 	$return .= "<span class=\"fa ".$icon." text-primary\"></span>";
 	$return .= "</span>";

@@ -60,7 +60,7 @@ do {
 		// Sponsor Name
 		$page_info1 .= "<section class=\"bcoem-sponsor-name\">";
 		$page_info1 .= "<h5>";
-		if ($row_sponsors['sponsorURL'] != "") $page_info1 .= sprintf("<a href=\"%s\" data-toggle=\"tooltip\" title=\"%s %s\" target=\"_blank\">%s</a>",$row_sponsors['sponsorURL'],$row_sponsors['sponsorName'],strtolower($label_website),$row_sponsors['sponsorName']);
+		if ($row_sponsors['sponsorURL'] != "") $page_info1 .= sprintf("<a class=\"hide-loader\" href=\"%s\" data-toggle=\"tooltip\" title=\"%s %s\" target=\"_blank\">%s</a>",$row_sponsors['sponsorURL'],$row_sponsors['sponsorName'],strtolower($label_website),$row_sponsors['sponsorName']);
 		else $page_info1 .= $row_sponsors['sponsorName'];
 		$page_info1 .= "</h5>";
 		$page_info1 .= "</section>";

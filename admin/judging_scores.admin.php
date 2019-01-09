@@ -100,7 +100,7 @@ $totalRows_entry_count = total_paid_received($go,"default");
         <ul class="dropdown-menu">
         	<?php do {
 			if ($row_style_type['styleTypeBOS'] == "Y") { ?>
-				<li class="small"><a id="modal_window_link" class="menuItem" href="<?php echo $base_url; ?>output/print.output.php?section=pullsheets&amp;go=judging_scores_bos&amp;id=<?php echo $row_style_type['id']; ?>"  title="Print the <?php echo $row_style_type['styleTypeName']; ?> BOS Pullsheet">BOS Pullsheet for <?php echo $row_style_type['styleTypeName']; ?></a></li>
+				<li class="small"><a id="modal_window_link" class="hide-loader menuItem" href="<?php echo $base_url; ?>output/print.output.php?section=pullsheets&amp;go=judging_scores_bos&amp;id=<?php echo $row_style_type['id']; ?>"  title="Print the <?php echo $row_style_type['styleTypeName']; ?> BOS Pullsheet">BOS Pullsheet for <?php echo $row_style_type['styleTypeName']; ?></a></li>
 		<?php }
 			} while ($row_style_type = mysqli_fetch_assoc($style_type));
 			?>

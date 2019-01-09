@@ -180,6 +180,10 @@ else {
 			$query_log_paid = sprintf("SELECT * FROM %s WHERE (brewPaid='' OR brewPaid='0' OR brewPaid IS NULL) AND comp_id='%s'", $brewing_db_table, $_SESSION['comp_id']);
 			$query_log_confirmed = sprintf("SELECT * FROM %s WHERE (brewPaid='' OR brewPaid='0' OR brewPaid IS NULL) AND brewConfirmed='1' AND comp_id='%s'", $brewing_db_table, $_SESSION['comp_id']);
 
+			$query_total_count = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE comp_id='%s'", $brewing_db_table, $_SESSION['comp_id']);
+			$total_count = mysqli_query($connection,$query_total_count) or die (mysqli_error($connection));
+			$row_total_count = mysqli_fetch_assoc($total_count);
+
 		}
 
 		else {
@@ -187,6 +191,10 @@ else {
 			$query_log = sprintf("SELECT * FROM %s WHERE brewPaid='' OR brewPaid='0' OR brewPaid IS NULL", $brewing_db_table);
 			$query_log_paid = sprintf("SELECT * FROM %s WHERE brewPaid='' OR brewPaid='0' OR brewPaid IS NULL", $brewing_db_table);
 			$query_log_confirmed = sprintf("SELECT * FROM %s WHERE brewPaid='' OR brewPaid='0' OR brewPaid IS NULL AND brewConfirmed='1'", $brewing_db_table);
+
+			$query_total_count = sprintf("SELECT COUNT(*) as 'count' FROM %s", $brewing_db_table);
+			$total_count = mysqli_query($connection,$query_total_count) or die (mysqli_error($connection));
+			$row_total_count = mysqli_fetch_assoc($total_count);
 
 		}
 
@@ -200,6 +208,10 @@ else {
 			$query_log_paid = sprintf("SELECT * FROM %s WHERE brewCategorySort='%s' AND brewPaid='1' AND brewConfirmed='1' AND comp_id='%s'",$brewing_db_table, $filter, $_SESSION['comp_id']);
 			$query_log_confirmed = sprintf("SELECT * FROM %s WHERE brewCategorySort='%s' AND brewConfirmed='1' AND comp_id='%s'",$brewing_db_table, $filter, $_SESSION['comp_id']);
 
+			$query_total_count = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE comp_id='%s'", $brewing_db_table, $_SESSION['comp_id']);
+			$total_count = mysqli_query($connection,$query_total_count) or die (mysqli_error($connection));
+			$row_total_count = mysqli_fetch_assoc($total_count);
+
 		}
 
 		else {
@@ -207,6 +219,10 @@ else {
 			$query_log = sprintf("SELECT * FROM %s WHERE brewCategorySort='%s'",$brewing_db_table, $filter);
 			$query_log_paid = sprintf("SELECT * FROM %s WHERE brewCategorySort='%s' AND brewPaid='1' AND brewConfirmed='1'",$brewing_db_table,$filter);
 			$query_log_confirmed = sprintf("SELECT * FROM %s WHERE brewCategorySort='%s' AND brewConfirmed='1'",$brewing_db_table,$filter);
+
+			$query_total_count = sprintf("SELECT COUNT(*) as 'count' FROM %s", $brewing_db_table);
+			$total_count = mysqli_query($connection,$query_total_count) or die (mysqli_error($connection));
+			$row_total_count = mysqli_fetch_assoc($total_count);
 
 		}
 
@@ -220,6 +236,10 @@ else {
 			$query_log_paid = sprintf("SELECT * FROM %s WHERE brewPaid='1' AND comp_id='%s'",$brewing_db_table, $_SESSION['comp_id']);
 			$query_log_confirmed = sprintf("SELECT * FROM %s WHERE brewConfirmed='1' AND comp_id='%s'",$brewing_db_table, $_SESSION['comp_id']);
 
+			$query_total_count = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE comp_id='%s'", $brewing_db_table, $_SESSION['comp_id']);
+			$total_count = mysqli_query($connection,$query_total_count) or die (mysqli_error($connection));
+			$row_total_count = mysqli_fetch_assoc($total_count);
+
 		}
 
 		else {
@@ -227,6 +247,10 @@ else {
 			$query_log = sprintf("SELECT * FROM %s",$brewing_db_table);
 			$query_log_paid = sprintf("SELECT * FROM %s WHERE brewPaid='1'",$brewing_db_table);
 			$query_log_confirmed = sprintf("SELECT * FROM %s WHERE brewConfirmed='1'",$brewing_db_table);
+
+			$query_total_count = sprintf("SELECT COUNT(*) as 'count' FROM %s", $brewing_db_table);
+			$total_count = mysqli_query($connection,$query_total_count) or die (mysqli_error($connection));
+			$row_total_count = mysqli_fetch_assoc($total_count);
 
 		}
 
@@ -240,6 +264,10 @@ else {
 			$query_log_paid = sprintf("SELECT * FROM %s WHERE brewCategorySort='%s' AND brewPaid='1' AND comp_id='%s'",$brewing_db_table, $filter, $_SESSION['comp_id']);
 			$query_log_confirmed = sprintf("SELECT * FROM %s WHERE brewCategorySort='%s' AND brewConfirmed='1' AND comp_id='%s'",$brewing_db_table, $filter, $_SESSION['comp_id']);
 
+			$query_total_count = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE comp_id='%s'", $brewing_db_table, $_SESSION['comp_id']);
+			$total_count = mysqli_query($connection,$query_total_count) or die (mysqli_error($connection));
+			$row_total_count = mysqli_fetch_assoc($total_count);
+
 		}
 
 		else {
@@ -247,6 +275,10 @@ else {
 			$query_log = sprintf("SELECT * FROM %s WHERE brewCategorySort='%s'",$brewing_db_table, $filter);
 			$query_log_paid = sprintf("SELECT * FROM %s WHERE brewCategorySort='%s' AND brewPaid='1'",$brewing_db_table,$filter);
 			$query_log_confirmed = sprintf("SELECT * FROM %s WHERE brewCategorySort='%s' AND brewConfirmed='1'",$brewing_db_table,$filter);
+
+			$query_total_count = sprintf("SELECT COUNT(*) as 'count' FROM %s", $brewing_db_table);
+			$total_count = mysqli_query($connection,$query_total_count) or die (mysqli_error($connection));
+			$row_total_count = mysqli_fetch_assoc($total_count);
 
 		}
 
