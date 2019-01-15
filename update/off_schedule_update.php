@@ -353,7 +353,7 @@ if (!check_update("prefsShowBestBrewer", $prefix."preferences")) {
 	$result = mysqli_query($connection,$updateSQL);
 }
 
-if (!check_update("prefsCAPTCHA", $prefix."brewing")) {
+if (!check_update("prefsCAPTCHA", $prefix."preferences")) {
 
 	$updateSQL = sprintf("ALTER TABLE `%s` ADD `prefsCAPTCHA` tinyint(1) COLLATE utf8mb4_unicode_ci DEFAULT NULL;",$prefix."preferences");
 	mysqli_select_db($connection,$database);
