@@ -811,6 +811,30 @@
 						</div><!-- ./row -->
 						<?php if ($totalRows_tables > 0) { ?>
 						<div class="row">
+                            <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                                <strong><?php echo $label_additional_info; ?></strong>
+                            </div>
+                            <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-8">
+                                <ul class="list-unstyled">
+                                    <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=pullsheets&amp;go=all_entry_info&amp;view=entry&amp;id=default" data-toggle="tooltip" data-placement="top" title="Print Entries with Addtional Info by Table">Entry Numbers</a></li>
+                                    <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=pullsheets&amp;go=all_entry_info&amp;id=default" data-toggle="tooltip" data-placement="top" title="Print Entries with Addtional Info by Table">Judging Numbers</a></li>
+                                </ul>
+                                <div class="dropdown bcoem-admin-dashboard-select">
+                                <button class="btn btn-default dropdown-toggle" type="button" id="additionalInfoMenu0" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Entry Numbers for Table... <span class="caret"></span>
+                                    </button>
+                                    <ul class="dropdown-menu" aria-labelledby="additionalInfoMenu0">
+                                        <?php echo table_choose("pullsheets","all_entry_info",$action,$filter,"entry","output/print.output.php","thickbox"); ?>
+                                    </ul>
+                                </div>
+                                <div class="dropdown bcoem-admin-dashboard-select">
+                                    <button class="btn btn-default dropdown-toggle" type="button" id="additionalInfoMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Judging Numbers for Table... <span class="caret"></span>
+                                    </button>
+                                    <ul class="dropdown-menu" aria-labelledby="additionalInfoMenu1">
+                                        <?php echo table_choose("pullsheets","all_entry_info",$action,$filter,"default","output/print.output.php","thickbox"); ?>
+                                    </ul>
+                                </div>
+
+                            </div>
 							<div class="col col-lg-4 col-md-4 col-sm-4 col-xs-4">
 								<strong>Pullsheets</strong>
 							</div>
@@ -826,7 +850,7 @@
                                     <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=pullsheets&amp;go=judging_tables&amp;filter=mini_bos&amp;id=default" data-toggle="tooltip" data-placement="top" title="Print All Mini-BOS Table Pullsheets with Judging Numbers">Judging Numbers (Mini-BOS - by Table)</a></li>
 								</ul>
 								<div class="dropdown bcoem-admin-dashboard-select">
-									<button class="btn btn-default dropdown-toggle" type="button" id="pullsheetMenu3" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Entry Numbers for Table...<span class="caret"></span>
+									<button class="btn btn-default dropdown-toggle" type="button" id="pullsheetMenu3" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Entry Numbers for Table... <span class="caret"></span>
 									</button>
 									<ul class="dropdown-menu" aria-labelledby="pullsheetMenu3">
 										<?php echo table_choose("pullsheets","judging_tables",$action,$filter,"entry","output/print.output.php","thickbox"); ?>
@@ -834,7 +858,7 @@
 									</ul>
 								</div>
 								<div class="dropdown bcoem-admin-dashboard-select">
-									<button class="btn btn-default dropdown-toggle" type="button" id="pullsheetMenu4" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Judging Numbers for Table...<span class="caret"></span>
+									<button class="btn btn-default dropdown-toggle" type="button" id="pullsheetMenu4" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Judging Numbers for Table... <span class="caret"></span>
 									</button>
 									<ul class="dropdown-menu" aria-labelledby="pullsheetnMenu4">
 										<?php echo table_choose("pullsheets","judging_tables",$action,$filter,$view,"output/print.output.php","thickbox"); ?>
@@ -842,7 +866,7 @@
 									</ul>
 								</div>
 								<div class="dropdown bcoem-admin-dashboard-select">
-									<button class="btn btn-default dropdown-toggle" type="button" id="pullsheetMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Entry Numbers for Location...<span class="caret"></span>
+									<button class="btn btn-default dropdown-toggle" type="button" id="pullsheetMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Entry Numbers for Location... <span class="caret"></span>
 									</button>
 									<ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
 										<?php
@@ -885,14 +909,14 @@
 									<li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=table-cards&amp;go=judging_tables&amp;id=default" data-toggle="tooltip" data-placement="top" title="Print Table Cards">All Tables</a></li>
 								</ul>
 								<div class="dropdown bcoem-admin-dashboard-select">
-									<button class="btn btn-default dropdown-toggle" type="button" id="cardsMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">For Table...<span class="caret"></span>
+									<button class="btn btn-default dropdown-toggle" type="button" id="cardsMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">For Table... <span class="caret"></span>
 									</button>
 									<ul class="dropdown-menu" aria-labelledby="cardsMenu1">
 										<?php echo table_choose("table-cards","judging_tables",$action,$filter,$view,"output/print.output.php","thickbox"); ?>
 									</ul>
 								</div>
 								<div class="dropdown bcoem-admin-dashboard-select">
-									<button class="btn btn-default dropdown-toggle" type="button" id="cardsMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">For Location...<span class="caret"></span>
+									<button class="btn btn-default dropdown-toggle" type="button" id="cardsMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">For Location... <span class="caret"></span>
 									</button>
 									<ul class="dropdown-menu" aria-labelledby="cardsMenu2">
 										<?php
