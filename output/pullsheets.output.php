@@ -35,11 +35,11 @@ if ($go == "all_entry_info") {
 	$table_flight_tbody = "";
 
 	$table_flight_thead .= "<tr>";
-	$table_flight_thead .= "<th width=\"10%\">#</th>";
-	$table_flight_thead .= "<th width=\"15%\" nowrap>".$label_style."</th>";
-	$table_flight_thead .= "<th width=\"15%\" nowrap>".$label_required_info."</th>";
-	$table_flight_thead .= "<th width=\"15%\" nowrap>".$label_optional_info."</th>";
-	$table_flight_thead .= "<th width=\"15%\" nowrap>".$label_brewer_specifics."</th>";
+	$table_flight_thead .= "<th width=\"5%\">#</th>";
+	$table_flight_thead .= "<th width=\"10%\" nowrap>".$label_style."</th>";
+	$table_flight_thead .= "<th width=\"20%\" nowrap>".$label_required_info."</th>";
+	$table_flight_thead .= "<th width=\"20%\" nowrap>".$label_optional_info."</th>";
+	$table_flight_thead .= "<th nowrap>".$label_brewer_specifics."</th>";
 	$table_flight_thead .= "<th width=\"15%\" nowrap>".$label_possible_allergens."</th>";
 	$table_flight_thead .= "<th width=\"15%\" nowrap>".$label_notes."</th>";
 	$table_flight_thead .= "</tr>";

@@ -199,6 +199,11 @@ if (($action == "default") && ($filter == "default")) {
             $manage_tables_default_tbody .= "<span class=\"fa fa-lg fa-print\"></span>";
             $manage_tables_default_tbody .= "</a> ";
 
+            // Build print pullsheet link
+            $manage_tables_default_tbody .= "<a id=\"modal_window_link\" class=\"hide-loader\" href=\"".$base_url."output/print.output.php?section=pullsheets&amp;go=all_entry_info&amp;id=".$row_tables['id']."\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Print the Entries with Additional Info Report for Table ".$row_tables['tableNumber'].": ".$row_tables['tableName']."\">";
+            $manage_tables_default_tbody .= "<span class=\"fa fa-lg fa-plus-square\"></span>";
+            $manage_tables_default_tbody .= "</a> ";
+
             // Build flight link
             if (($_SESSION['jPrefsQueued'] == "N") && (flight_count($row_tables['id'],1))) {
                 $manage_tables_default_tbody .= "<a href=\"".$base_url."index.php?section=admin&amp;go=judging_flights&amp;filter=define&amp;action=edit&amp;id=".$row_tables['id']."\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Add/edit flights for Table ".$row_tables['tableNumber'].": ".$row_tables['tableName']."\">";
