@@ -37,6 +37,10 @@ $(function() {
 
 $(document).ready(function() {
 
+    $("[data-confirm!=''][data-confirm]").ready(function() {
+        addClass("hide-loader");
+    });
+
     $("form").submit(function() {
         if (!$(this).hasClass("hide-loader-form-submit")) {
             $('#loader-submit').show(0).delay(30000).hide(0);

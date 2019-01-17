@@ -425,7 +425,7 @@ $(document).ready(function(){
 
     <!-- Staff preferences -->
     <div class="form-group"><!-- Form Group Radio INLINE -->
-        <label for="brewerJudge" class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label_staff; ?></label>
+        <label for="brewerStaff" class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label_staff; ?></label>
         <div class="col-lg-9 col-md-9 col-sm-8 col-xs-12">
             <div class="input-group">
                 <!-- Input Here -->
@@ -466,8 +466,15 @@ $(document).ready(function(){
         <input name="brewerSteward" type="hidden" value="<?php echo $row_brewer['brewerSteward']; ?>" />
         <input name="brewerStewardLocation" type="hidden" value="<?php echo $row_brewer['brewerStewardLocation']; ?>" />
         <?php } // end if ($table_assignment)
-		else { ?>
-        <?php if (((!$judge_limit) && ($go == "account")) || (($_SESSION['userLevel'] <= 1) && (($go == "admin") || ($go == "account")))) { ?>
+		else {
+        if (((!$judge_limit) && ($go == "account")) || (($_SESSION['userLevel'] <= 1) && (($go == "admin") || ($go == "account")))) {
+
+        $judge_checked = FALSE;
+        if ((($action == "add") || ($action == "register")) && ($go == "judge")) $judge_checked = TRUE;
+        if (($action == "edit") && ($row_brewer['brewerJudge'] == "Y")) $judge_checked = TRUE;
+
+        ?>
+
         <!-- Judging preferences -->
         <div class="form-group"><!-- Form Group Radio INLINE -->
             <label for="brewerJudge" class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label_judging; ?></label>
@@ -475,10 +482,10 @@ $(document).ready(function(){
                 <div class="input-group">
                     <!-- Input Here -->
                     <label class="radio-inline">
-                        <input type="radio" name="brewerJudge" value="Y" id="brewerJudge_0" <?php if (($action == "add") && ($go == "judge")) echo "CHECKED"; if (($action == "edit") && ($row_brewer['brewerJudge'] == "Y")) echo "checked"; ?>> <?php echo $label_yes; ?>
+                        <input type="radio" name="brewerJudge" value="Y" id="brewerJudge_0" <?php if ($judge_checked) echo "CHECKED"; ?>> <?php echo $label_yes; ?>
                     </label>
                     <label class="radio-inline">
-                        <input type="radio" name="brewerJudge" value="N" id="brewerJudge_1" <?php if (($action == "add") && ($go == "default")) echo "CHECKED"; if (($action == "edit") && ($row_brewer['brewerJudge'] == "N")) echo "checked"; ?>> <?php echo $label_no; ?>
+                        <input type="radio" name="brewerJudge" value="N" id="brewerJudge_1" <?php if (!$judge_checked) echo "CHECKED"; ?>> <?php echo $label_no; ?>
                     </label>
                 </div>
                 <span class="help-block"><?php echo $brewer_text_006; ?></span>
@@ -757,8 +764,8 @@ $(document).ready(function(){
 				<?php do { ?>
 				<p class="bcoem-form-info"><?php echo $row_stewarding['judgingLocName']." ("; echo getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_stewarding['judgingDate'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "short", "date-time").")"; ?></p>
 				<select class="selectpicker" name="brewerStewardLocation[]" id="brewerStewardLocation" data-width="auto">
-					<option value="<?php echo "N-".$row_stewarding['id']; ?>"   <?php $a = explode(",", $row_brewer['brewerStewardLocation']); $b = "N-".$row_stewarding['id']; foreach ($a as $value) { if ($value == $b) { echo "SELECTED"; } } ?>>No</option>
-					<option value="<?php echo "Y-".$row_stewarding['id']; ?>"   <?php $a = explode(",", $row_brewer['brewerStewardLocation']); $b = "Y-".$row_stewarding['id']; foreach ($a as $value) { if ($value == $b) { echo "SELECTED"; } } ?>>Yes</option>
+					<option value="<?php echo "N-".$row_stewarding['id']; ?>"   <?php $a = explode(",", $row_brewer['brewerStewardLocation']); $b = "N-".$row_stewarding['id']; foreach ($a as $value) { if ($value == $b) { echo "SELECTED"; } } ?>><?php echo $label_no; ?></option>
+                    <option value="<?php echo "Y-".$row_stewarding['id']; ?>"   <?php $a = explode(",", $row_brewer['brewerStewardLocation']); $b = "Y-".$row_stewarding['id']; foreach ($a as $value) { if ($value == $b) { echo "SELECTED"; } } ?>><?php echo $label_yes; ?></option>
 				</select>
 				<?php }  while ($row_stewarding = mysqli_fetch_assoc($stewarding));  ?>
 				</div>

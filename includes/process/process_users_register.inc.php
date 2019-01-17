@@ -41,7 +41,7 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 	setcookie("brewerBreweryName", $brewerBreweryName, 0, "/");
 	setcookie("brewerBreweryTTB", $brewerBreweryTTB, 0, "/");
 	setcookie("brewerJudgeID", $brewerJudgeID, 0, "/");
-	setcookie("brewerJudgeID", $brewerProAm, 0, "/");
+	setcookie("brewerProAm", $brewerProAm, 0, "/");
 
 	if ($filter != "admin") {
 
@@ -119,7 +119,7 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 
 			mysqli_real_escape_string($connection,$insertSQL);
 			$result = mysqli_query($connection,$insertSQL) or die (mysqli_error($connection));
-			//echo $insertSQL."<br>";
+			echo $insertSQL."<br>";
 
 			// Get the id from the "users" table to insert as the uid in the "brewer" table
 			$query_user= "SELECT * FROM $users_db_table WHERE user_name = '$username'";
@@ -127,147 +127,103 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 			$row_user = mysqli_fetch_assoc($user);
 
 			// Add the user's info to the "brewer" table
-			// Numbers 999999994 through 999999999 are reserved for NHC applications.
-			if (($brewerAHA < "999999994") || ($brewerAHA == "")) {
 
-				$insertSQL = sprintf("INSERT INTO $brewer_db_table (
-				  uid,
-				  brewerFirstName,
-				  brewerLastName,
-				  brewerAddress,
-				  brewerCity,
+			$insertSQL = sprintf("INSERT INTO $brewer_db_table (
+			  uid,
+			  brewerFirstName,
+			  brewerLastName,
+			  brewerAddress,
+			  brewerCity,
 
-				  brewerState,
-				  brewerZip,
-				  brewerCountry,
-				  brewerPhone1,
-				  brewerPhone2,
+			  brewerState,
+			  brewerZip,
+			  brewerCountry,
+			  brewerPhone1,
+			  brewerPhone2,
 
-				  brewerClubs,
-				  brewerEmail,
-				  brewerSteward,
-				  brewerJudge,
-				  brewerJudgeID,
+			  brewerClubs,
+			  brewerEmail,
+			  brewerSteward,
+			  brewerJudge,
+			  brewerJudgeID,
 
-				  brewerJudgeMead,
-				  brewerJudgeRank,
-				  brewerJudgeLocation,
-				  brewerStewardLocation,
-				  brewerAHA,
+			  brewerJudgeMead,
+			  brewerJudgeRank,
+			  brewerJudgeLocation,
+			  brewerStewardLocation,
+			  brewerJudgeWaiver,
 
-				  brewerJudgeWaiver,
-				  brewerDropOff,
-				  brewerStaff,
-				  brewerBreweryName,
-				  brewerBreweryTTB,
-				  brewerProAm
+			  brewerDropOff,
+			  brewerStaff,
+			  brewerBreweryName,
+			  brewerBreweryTTB,
+			  brewerProAm
 
-				) VALUES (
-				%s, %s, %s, %s, %s,
-				%s, %s, %s, %s, %s,
-				%s, %s, %s, %s, %s,
-				%s, %s, %s, %s, %s,
-				%s, %s, %s, %s, %s,
-				%s)",
-							   GetSQLValueString($row_user['id'], "int"),
-							   GetSQLValueString($first_name, "text"),
-							   GetSQLValueString($last_name, "text"),
-							   GetSQLValueString($address, "text"),
-							   GetSQLValueString($city, "text"),
-							   GetSQLValueString($purifier->purify($_POST['brewerState']), "text"),
-							   GetSQLValueString(sterilize($_POST['brewerZip']), "text"),
-							   GetSQLValueString($purifier->purify($_POST['brewerCountry']), "text"),
-							   GetSQLValueString($brewerPhone1, "text"),
-							   GetSQLValueString($brewerPhone2, "text"),
-							   GetSQLValueString($brewerClubs, "text"),
-							   GetSQLValueString($username, "text"),
-							   GetSQLValueString($brewerSteward, "text"),
-							   GetSQLValueString($brewerJudge, "text"),
-							   GetSQLValueString($brewerJudgeID, "text"),
-							   GetSQLValueString($brewerJudgeMead, "text"),
-							   GetSQLValueString($brewerJudgeRank, "text"),
-							   GetSQLValueString($location_pref1, "text"),
-							   GetSQLValueString($location_pref2, "text"),
-							   GetSQLValueString($brewerAHA, "int"),
-							   GetSQLValueString($brewerJudgeWaiver, "text"),
-							   GetSQLValueString($brewerDropOff, "text"),
-							   GetSQLValueString(sterilize($_POST['brewerStaff']), "text"),
-							   GetSQLValueString($brewerBreweryName, "text"),
-							   GetSQLValueString($brewerBreweryTTB, "text"),
-							   GetSQLValueString($brewerProAm, "text")
-							   );
-
-			} else {
-
-				$insertSQL = sprintf("INSERT INTO $brewer_db_table (
-				  uid,
-				  brewerFirstName,
-				  brewerLastName,
-				  brewerAddress,
-				  brewerCity,
-
-				  brewerState,
-				  brewerZip,
-				  brewerCountry,
-				  brewerPhone1,
-				  brewerPhone2,
-
-				  brewerClubs,
-				  brewerEmail,
-				  brewerSteward,
-				  brewerJudge,
-				  brewerJudgeID,
-
-				  brewerJudgeMead,
-				  brewerJudgeRank,
-				  brewerJudgeLocation,
-				  brewerStewardLocation,
-				  brewerJudgeWaiver,
-
-				  brewerDropOff,
-				  brewerStaff,
-				  brewerBreweryName,
-				  brewerBreweryTTB,
-				  brewerProAm
-
-				) VALUES (
-				%s, %s, %s, %s, %s,
-				%s, %s, %s, %s, %s,
-				%s, %s, %s, %s, %s,
-				%s, %s, %s, %s, %s,
-				%s, %s, %s, %s, %s
-				)",
-							   GetSQLValueString($row_user['id'], "int"),
-							   GetSQLValueString($first_name, "text"),
-							   GetSQLValueString($last_name, "text"),
-							   GetSQLValueString($address, "text"),
-							   GetSQLValueString($city, "text"),
-							   GetSQLValueString($purifier->purify($_POST['brewerState']), "text"),
-							   GetSQLValueString(sterilize($_POST['brewerZip']), "text"),
-							   GetSQLValueString($purifier->purify($_POST['brewerCountry']), "text"),
-							   GetSQLValueString($brewerPhone1, "text"),
-							   GetSQLValueString($brewerPhone2, "text"),
-							   GetSQLValueString($brewerClubs, "text"),
-							   GetSQLValueString($username, "text"),
-							   GetSQLValueString($brewerSteward, "text"),
-							   GetSQLValueString($brewerJudge, "text"),
-							   GetSQLValueString($brewerJudgeID, "text"),
-							   GetSQLValueString($brewerJudgeMead, "text"),
-							   GetSQLValueString($brewerJudgeRank, "text"),
-							   GetSQLValueString($location_pref1, "text"),
-							   GetSQLValueString($location_pref2, "text"),
-							   GetSQLValueString($brewerJudgeWaiver, "text"),
-							   GetSQLValueString($brewerDropOff, "text"),
-							   GetSQLValueString(sterilize($_POST['brewerStaff']), "text"),
-							   GetSQLValueString($brewerBreweryName, "text"),
-							   GetSQLValueString($brewerBreweryTTB, "text"),
-							   GetSQLValueString($brewerProAm, "text")
-							   );
-			}
+			) VALUES (
+			%s, %s, %s, %s, %s,
+			%s, %s, %s, %s, %s,
+			%s, %s, %s, %s, %s,
+			%s, %s, %s, %s, %s,
+			%s, %s, %s, %s, %s
+			)",
+						   GetSQLValueString($row_user['id'], "int"),
+						   GetSQLValueString($first_name, "text"),
+						   GetSQLValueString($last_name, "text"),
+						   GetSQLValueString($address, "text"),
+						   GetSQLValueString($city, "text"),
+						   GetSQLValueString($state, "text"),
+						   GetSQLValueString($purifier->purify($_POST['brewerZip']), "text"),
+						   GetSQLValueString($purifier->purify($_POST['brewerCountry']), "text"),
+						   GetSQLValueString($brewerPhone1, "text"),
+						   GetSQLValueString($brewerPhone2, "text"),
+						   GetSQLValueString($brewerClubs, "text"),
+						   GetSQLValueString($username, "text"),
+						   GetSQLValueString($brewerSteward, "text"),
+						   GetSQLValueString($brewerJudge, "text"),
+						   GetSQLValueString($brewerJudgeID, "text"),
+						   GetSQLValueString($brewerJudgeMead, "text"),
+						   GetSQLValueString($brewerJudgeRank, "text"),
+						   GetSQLValueString($location_pref1, "text"),
+						   GetSQLValueString($location_pref2, "text"),
+						   GetSQLValueString($brewerJudgeWaiver, "text"),
+						   GetSQLValueString($brewerDropOff, "text"),
+						   GetSQLValueString($brewerStaff, "text"),
+						   GetSQLValueString($brewerBreweryName, "text"),
+						   GetSQLValueString($brewerBreweryTTB, "text"),
+						   GetSQLValueString($brewerProAm, "text")
+						   );
 
 			mysqli_real_escape_string($connection,$insertSQL);
 			$result = mysqli_query($connection,$insertSQL) or die (mysqli_error($connection));
-			//echo $insertSQL."<br>";
+
+			/*
+			echo $_POST['userQuestion']."<br>";
+			echo $userQuestionAnswer."<br>";
+			echo $first_name."<br>";
+			echo $last_name."<br>";
+			echo $address."<br>";
+			echo $city."<br>";
+			echo $state."<br>";
+			echo $purifier->purify($_POST['brewerZip'])."<br>";
+			echo $purifier->purify($_POST['brewerCountry'])."<br>";
+			echo $brewerPhone1."<br>";
+			echo $brewerPhone2."<br>";
+			echo $brewerClubs."<br>";
+			echo $brewerAHA."<br>";
+			echo $brewerStaff."<br>";
+			echo $brewerSteward."<br>";
+			echo $brewerJudge."<br>";
+			echo $brewerDropOff."<br>";
+			echo $location_pref1."<br>";
+			echo $location_pref2."<br>";
+			echo $brewerBreweryName."<br>";
+			echo $brewerBreweryTTB."<br>";
+			echo $brewerJudgeID."<br>";
+			echo $brewerProAm."<br>";
+			echo $brewerJudgeWaiver."<br>";
+			echo $insertSQL."<br>";
+			exit;
+			*/
 
 			$staff_judge = 0;
 			$staff_steward = 0;
@@ -335,22 +291,21 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 				$message .= sprintf("<tr><td valign='top'><strong>%s:</strong></td><td valign='top'>%s</td></tr>",$label_security_answer,$userQuestionAnswer);
 				$message .= sprintf("<tr><td valign='top'><strong>%s:</strong></td><td valign='top'>%s<br>%s, %s %s</td></tr>",$label_address,$address,$city,sterilize($_POST['brewerState']),sterilize($_POST['brewerZip']));
 				$message .= sprintf("<tr><td valign='top'><strong>%s:</strong></td><td valign='top'>%s</td></tr>",$label_phone_primary,$brewerPhone1);
-				if (isset($brewerPhone2)) $message .= sprintf("<tr><td valign='top'><strong>%s:</strong></td><td valign='top'>%s</td></tr>",$label_phone_secondary,$brewerPhone2);
+				if (!empty($brewerPhone2)) $message .= sprintf("<tr><td valign='top'><strong>%s:</strong></td><td valign='top'>%s</td></tr>",$label_phone_secondary,$brewerPhone2);
 
 				if ($show_entrant_fields) {
 
 					if ($brewerJudge == "Y") $brewerJudge1 = $label_yes; else $brewerJudge1 = $label_no;
 					if ($brewerSteward == "Y") $brewerSteward1 = $label_yes; else $brewerSteward1 = $label_no;
-					if ($_POST['brewerStaff'] == "Y") $brewerStaff1 = $label_yes; else $brewerStaff1 = $label_no;
+					if ($brewerStaff == "Y") $brewerStaff1 = $label_yes; else $brewerStaff1 = $label_no;
 					if ($_POST['brewerProAm'] == 1) $brewerProAm1 = $label_yes; else $brewerProAm1 = $label_no;
 
-					if (isset($brewerClubs)) $message .= sprintf("<tr><td valign='top'><strong>%s:</strong></td><td valign='top'>%s</td></tr>",$label_club,$brewerClubs);
-					if (isset($brewerAHA)) $message .= sprintf("<tr><td valign='top'><strong>%s:</strong></td><td valign='top'>%s</td></tr>",$label_aha_number,$brewerAHA);
-					if (isset($brewerAHA)) $message .= sprintf("<tr><td valign='top'><strong>%s:</strong></td><td valign='top'>%s</td></tr>",$label_pro_am,$brewerProAm1);
-					if (isset($_POST['brewerStaff']))$message .= sprintf("<tr><td valign='top'><strong>%s:</strong></td><td valign='top'>%s</td></tr>",$label_staff,$brewerStaff1);
-					if (isset($_POST['brewerJudge'])) $message .= sprintf("<tr><td valign='top'><strong>%s:</strong></td><td valign='top'>%s</td></tr>",$label_judge,$brewerJudge1);
-					if (isset($_POST['brewerSteward'])) $message .= sprintf("<tr><td valign='top'><strong>%s:</strong></td><td valign='top'>%s</td></tr>",$label_steward,$brewerSteward1);
-
+					if (!empty($brewerClubs)) $message .= sprintf("<tr><td valign='top'><strong>%s:</strong></td><td valign='top'>%s</td></tr>",$label_club,$brewerClubs);
+					if (!empty($brewerAHA)) $message .= sprintf("<tr><td valign='top'><strong>%s:</strong></td><td valign='top'>%s</td></tr>",$label_aha_number,$brewerAHA);
+					$message .= sprintf("<tr><td valign='top'><strong>%s:</strong></td><td valign='top'>%s</td></tr>",$label_staff,$brewerStaff1);
+					$message .= sprintf("<tr><td valign='top'><strong>%s:</strong></td><td valign='top'>%s</td></tr>",$label_judge,$brewerJudge1);
+					$message .= sprintf("<tr><td valign='top'><strong>%s:</strong></td><td valign='top'>%s</td></tr>",$label_steward,$brewerSteward1);
+					$message .= sprintf("<tr><td valign='top'><strong>%s:</strong></td><td valign='top'>%s</td></tr>",$label_pro_am,$brewerProAm1);
 				}
 
 				$message .= "</table>";
@@ -392,7 +347,7 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 				$query_brewer= sprintf("SELECT id FROM $brewer_db_table WHERE uid = '%s'", $row_user['id']);
 				$brewer = mysqli_query($connection,$query_brewer) or die (mysqli_error($connection));
 				$row_brewer = mysqli_fetch_assoc($brewer);
-				header(sprintf("Location: %s", $base_url."index.php?section=brewer&action=edit&go=judge&psort=judge&id=".$row_brewer['id']));
+				header(sprintf("Location: %s", $base_url."index.php?section=brewer&action=edit&go=account&psort=judge&id=".$row_brewer['id']));
 
 			}
 

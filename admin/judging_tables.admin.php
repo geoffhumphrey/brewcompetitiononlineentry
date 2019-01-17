@@ -424,7 +424,7 @@ if (($action == "add") || ($action == "edit")) {
         <span class="caret"></span>
         </button>
         <ul class="dropdown-menu">
-            <li class="small"><a href="javascript:window.print()">Tables List</a></li>
+            <li class="small"><a class="hide-loader" href="javascript:window.print()">Tables List</a></li>
     		<li class="small"><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=pullsheets&amp;go=judging_tables&amp;id=default">Pullsheets by Table</a></li>
             <li class="small"><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=assignments&amp;go=judging_assignments&amp;filter=judges&amp;view=name" title="Print Judge Assignments by Name">Judge Assignments By Last Name</a></li>
 			<li class="small"><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output//print.output.php?section=assignments&amp;go=judging_assignments&amp;filter=judges&amp;view=table" title="Print Judge Assignments by Table">Judge Assignments By Table</a></li>

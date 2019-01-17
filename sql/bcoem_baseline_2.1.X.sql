@@ -104,7 +104,7 @@ CREATE TABLE IF NOT EXISTS `baseline_brewer` (
   `brewerJudgeWaiver` char(1) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `brewerAHA` int(11) DEFAULT NULL,
   `brewerDiscount` char(1) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'Y or N if this participant receives a discount',
-  `brewerJudgeBOS` char(1) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'Y if judged in BOS round',
+  `brewerProAm` TINYINT(2) NULL DEFAULT NULL,
   `brewerDropOff` int(4) DEFAULT NULL COMMENT 'Location where brewer will drop off their entries; 0=shipping or relational to dropoff table',
   `brewerBreweryName` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `brewerBreweryTTB` varchar(20) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
@@ -115,7 +115,7 @@ CREATE TABLE IF NOT EXISTS `baseline_brewer` (
 -- Dumping data for table `baseline_brewer`
 --
 
-INSERT INTO `baseline_brewer` (`id`, `uid`, `brewerFirstName`, `brewerLastName`, `brewerAddress`, `brewerCity`, `brewerState`, `brewerZip`, `brewerCountry`, `brewerPhone1`, `brewerPhone2`, `brewerClubs`, `brewerEmail`, `brewerStaff`, `brewerSteward`, `brewerJudge`, `brewerJudgeID`, `brewerJudgeMead`, `brewerJudgeRank`, `brewerJudgeLikes`, `brewerJudgeDislikes`, `brewerJudgeLocation`, `brewerStewardLocation`, `brewerJudgeExp`, `brewerJudgeNotes`, `brewerAssignment`, `brewerJudgeWaiver`, `brewerAHA`, `brewerDiscount`, `brewerJudgeBOS`, `brewerDropOff`, `brewerBreweryName`, `brewerBreweryTTB`) VALUES
+INSERT INTO `baseline_brewer` (`id`, `uid`, `brewerFirstName`, `brewerLastName`, `brewerAddress`, `brewerCity`, `brewerState`, `brewerZip`, `brewerCountry`, `brewerPhone1`, `brewerPhone2`, `brewerClubs`, `brewerEmail`, `brewerStaff`, `brewerSteward`, `brewerJudge`, `brewerJudgeID`, `brewerJudgeMead`, `brewerJudgeRank`, `brewerJudgeLikes`, `brewerJudgeDislikes`, `brewerJudgeLocation`, `brewerStewardLocation`, `brewerJudgeExp`, `brewerJudgeNotes`, `brewerAssignment`, `brewerJudgeWaiver`, `brewerAHA`, `brewerDiscount`, `brewerProAm`, `brewerDropOff`, `brewerBreweryName`, `brewerBreweryTTB`) VALUES
 (1, 1, 'Default', 'Admin', '1234 Main Street', 'Anytown', 'CO', '80001', 'United States', '123.456.7890', NULL, NULL, 'user.baseline@brewcompetition.com', NULL, 'N', 'N', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, NULL);
 -- --------------------------------------------------------
 

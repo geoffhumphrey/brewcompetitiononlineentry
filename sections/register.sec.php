@@ -625,7 +625,12 @@ if ($go == "default") {  ?>
 
     <?php } // END if (($_SESSION['prefsProEdition'] == 0) || (($_SESSION['prefsProEdition'] == 1) && ($go != "entrant"))) ?>
     <?php } // END if ($view == "default") ?>
-    <?php if (($_SESSION['prefsProEdition'] == 0) || (($_SESSION['prefsProEdition'] == 1) && (($go == "judge") || ($go == "steward")))) { ?>
+    <?php if (($_SESSION['prefsProEdition'] == 0) || (($_SESSION['prefsProEdition'] == 1) && (($go == "judge") || ($go == "steward")))) {
+
+
+
+
+    ?>
     <!-- Staff preferences -->
     <div class="form-group"><!-- Form Group Radio INLINE -->
         <label for="brewerStaff" class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label_staff; ?></label>
@@ -645,7 +650,22 @@ if ($go == "default") {  ?>
     </div><!-- ./Form Group -->
     <?php } // END if (($_SESSION['prefsProEdition'] == 0) || (($_SESSION['prefsProEdition'] == 1) && (($go == "judge") || ($go == "steward"))))?>
 
-    <?php if (!$judge_hidden) { ?>
+    <?php if (!$judge_hidden) {
+
+        $judge_checked_yes = FALSE;
+        $judge_checked_no = FALSE;
+        $judge_disabled = FALSE;
+
+        if (($msg > 0) && (isset($_COOKIE['brewerJudge']))) {
+            if ($_COOKIE['brewerJudge'] == "Y") $judge_checked_yes = TRUE;
+            if ($_COOKIE['brewerJudge'] == "N") $judge_checked_no = TRUE;
+        }
+
+        if ($msg != "4") $judge_checked_yes = TRUE;
+        if ($go == "steward") $judge_checked_no = TRUE;
+        if ($go == "judge") $judge_disabled = TRUE;
+
+    ?>
     <!-- Show Judge Fields if Registering as a Judge -->
     <div class="form-group"><!-- Form Group REQUIRED Radio Group -->
         <label for="" class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label_judging; ?></label>
@@ -654,10 +674,10 @@ if ($go == "default") {  ?>
             <div class="input-group">
                 <!-- Input Here -->
                 <label class="radio-inline">
-                    <input type="radio" name="brewerJudge" value="Y" id="brewerJudge_0"  <?php if ($msg != "4") echo "CHECKED"; elseif (($msg > 0) && (isset($_COOKIE['brewerJudge'])) && ($_COOKIE['brewerJudge'] == "Y")) echo "CHECKED"; ?> rel="judge_no" /> <?php echo $label_yes; ?>
+                    <input type="radio" name="brewerJudge" value="Y" id="brewerJudge_0"  <?php if ($judge_checked_yes) echo "CHECKED"; ?> rel="judge_no" /> <?php echo $label_yes; ?>
                 </label>
                 <label class="radio-inline">
-                    <input type="radio" name="brewerJudge" value="N" id="brewerJudge_1" <?php if (($msg > 0) && (isset($_COOKIE['brewerJudge'])) && ($_COOKIE['brewerJudge'] == "N")) echo "CHECKED"; if ($go == "steward") echo "CHECKED"; if ($go == "judge") echo "DISABLED"; ?> rel="none" /> <?php echo $label_no; ?>
+                    <input type="radio" name="brewerJudge" value="N" id="brewerJudge_1" <?php if ($judge_checked_no) echo "CHECKED"; if ($judge_disabled) echo "DISABLED"; ?> rel="none" /> <?php echo $label_no; ?>
                 </label>
             </div>
         </div>
@@ -747,8 +767,9 @@ if ($go == "default") {  ?>
             <div class="input-group input-group-sm">
                 <!-- Input Here -->
                 <select class="selectpicker" name="brewerJudgeLocation[]" id="brewerJudgeLocation" data-width="auto">
-                    <option value="<?php echo "N-".$row_judging3['id']; ?>" <?php if (in_array("N-".$row_judging3['id'],$judging_locations)) echo "SELECTED"; ?>><?php echo $label_no; ?></option>
                     <option value="<?php echo "Y-".$row_judging3['id']; ?>" <?php if (in_array("Y-".$row_judging3['id'],$judging_locations)) echo "SELECTED"; ?>><?php echo $label_yes; ?></option>
+                    <option value="<?php echo "N-".$row_judging3['id']; ?>" <?php if (in_array("N-".$row_judging3['id'],$judging_locations)) echo "SELECTED"; ?>><?php echo $label_no; ?></option>
+
                 </select>
             </div>
             </div>
@@ -758,7 +779,22 @@ if ($go == "default") {  ?>
     <?php } // END if if ($totalRows_judging > 1)
 	else { ?><input name="brewerJudgeLocation" type="hidden" value="<?php echo "Y-".$row_judging3['id']; ?>" /><?php } ?>
     <?php } // END if (!$judge_hidden) ?>
-    <?php if (!$steward_hidden) { ?>
+    <?php if (!$steward_hidden) {
+
+        $steward_checked_yes = FALSE;
+        $steward_checked_no = FALSE;
+        $steward_disabled = FALSE;
+
+        if (($msg > 0) && (isset($_COOKIE['brewerSteward']))) {
+            if ($_COOKIE['brewerSteward'] == "Y") $steward_checked_yes = TRUE;
+            if ($_COOKIE['brewerSteward'] == "N") $steward_checked_no = TRUE;
+        }
+
+        if ($msg != "4") $steward_checked_yes = TRUE;
+        if ($go == "judge") $steward_checked_no = TRUE;
+        if ($go == "steward") $steward_disabled = TRUE;
+
+    ?>
     <!-- Show Steward Fields if Registering as a Judge -->
     <div class="form-group"><!-- Form Group REQUIRED Radio Group -->
         <label for="" class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label_stewarding; ?></label>
@@ -767,10 +803,10 @@ if ($go == "default") {  ?>
             <div class="input-group">
                 <!-- Input Here -->
                 <label class="radio-inline">
-                    <input type="radio" name="brewerSteward" value="Y" id="brewerSteward_0" <?php if ($msg != "4") echo "CHECKED"; elseif (($msg > 0) && (isset($_COOKIE['brewerSteward'])) && ($_COOKIE['brewerSteward'] == "Y")) echo "CHECKED"; ?> rel="steward_no" /><?php echo $label_yes; ?>
+                    <input type="radio" name="brewerSteward" value="Y" id="brewerSteward_0" <?php if ($steward_checked_yes) echo "CHECKED"; ?> rel="steward_no" /><?php echo $label_yes; ?>
                 </label>
                 <label class="radio-inline">
-                    <input type="radio" name="brewerSteward" value="N" id="brewerSteward_1" <?php if (($msg > 0) && (isset($_COOKIE['brewerSteward'])) && ($_COOKIE['brewerSteward'] == "N")) echo "CHECKED"; if ($go == "steward") echo "DISABLED"; ?> rel="none" /> <?php echo $label_no; ?>
+                    <input type="radio" name="brewerSteward" value="N" id="brewerSteward_1" <?php if ($steward_checked_no) echo "CHECKED"; if ($steward_disabled) echo "DISABLED"; ?> rel="none" /> <?php echo $label_no; ?>
                 </label>
             </div>
         </div>
@@ -796,8 +832,8 @@ if ($go == "default") {  ?>
             <div class="input-group input-group-sm">
                 <!-- Input Here -->
                 <select class="selectpicker" name="brewerStewardLocation[]" id="brewerStewardLocation" data-width="auto">
-                    <option value="<?php echo "N-".$row_stewarding['id']; ?>" <?php if (in_array("N-".$row_stewarding['id'],$stewarding_locations)) echo "SELECTED"; ?>><?php echo $label_no; ?></option>
                     <option value="<?php echo "Y-".$row_stewarding['id']; ?>" <?php if (in_array("Y-".$row_stewarding['id'],$stewarding_locations)) echo "SELECTED"; ?>><?php echo $label_yes; ?></option>
+                    <option value="<?php echo "N-".$row_stewarding['id']; ?>" <?php if (in_array("N-".$row_stewarding['id'],$stewarding_locations)) echo "SELECTED"; ?>><?php echo $label_no; ?></option>
                 </select>
             </div>
             </div>

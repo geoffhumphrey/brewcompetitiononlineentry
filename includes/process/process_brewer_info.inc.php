@@ -13,15 +13,15 @@ $purifier = new HTMLPurifier($config_html_purifier);
 
 // Gather, convert, and/or sanitize info from the form
 if (isset($_POST['brewerJudgeID'])) {
-    $brewerJudgeID = sterilize($_POST['brewerJudgeID']);
+    $brewerJudgeID = $purifier->purify($_POST['brewerJudgeID']);
     $brewerJudgeID = strtoupper($brewerJudgeID);
 }
 else $brewerJudgeID = "";
 
-if (isset($_POST['brewerJudgeMead'])) $brewerJudgeMead = sterilize($_POST['brewerJudgeMead']);
+if (isset($_POST['brewerJudgeMead'])) $brewerJudgeMead = $_POST['brewerJudgeMead'];
 else $brewerJudgeMead = "";
 
-if (isset($_POST['brewerJudgeCider'])) $brewerJudgeCider = sterilize($_POST['brewerJudgeCider']);
+if (isset($_POST['brewerJudgeCider'])) $brewerJudgeCider = $_POST['brewerJudgeCider'];
 else $brewerJudgeCider = "";
 
 if (isset($_POST['brewerJudgeRank'])) $brewerJudgeRank = $_POST['brewerJudgeRank'];
@@ -55,7 +55,7 @@ else $brewerPhone1 = "";
 if (isset($_POST['brewerPhone2'])) $brewerPhone2 = sterilize($_POST['brewerPhone2']);
 else $brewerPhone2 = "";
 
-if (isset($_POST['brewerJudgeWaiver'])) $brewerJudgeWaiver = sterilize($_POST['brewerJudgeWaiver']);
+if (isset($_POST['brewerJudgeWaiver'])) $brewerJudgeWaiver = $_POST['brewerJudgeWaiver'];
 else $brewerJudgeWaiver = "";
 
 if (isset($_POST['brewerDropOff'])) $brewerDropOff = sterilize($_POST['brewerDropOff']);
@@ -70,21 +70,21 @@ if (isset($_POST['brewerBreweryTTB'])) {
 }
 else $brewerBreweryTTB = "";
 
-if (isset($_POST['brewerJudge'])) $brewerJudge = sterilize($_POST['brewerJudge']);
-else $brewerJudge = "";
+if (isset($_POST['brewerJudge'])) $brewerJudge = $_POST['brewerJudge'];
+else $brewerJudge = "N";
 
-if (isset($_POST['brewerSteward'])) $brewerSteward = sterilize($_POST['brewerSteward']);
-else $brewerSteward = "";
+if (isset($_POST['brewerSteward'])) $brewerSteward = $_POST['brewerSteward'];
+else $brewerSteward = "N";
 
 if (($_SESSION['prefsProEdition'] == 1) && ($go == "entrant")) {
     $brewerJudge = "N";
     $brewerSteward = "N";
 }
 
-if (isset($_POST['brewerStaff'])) $brewerStaff = sterilize($_POST['brewerStaff']);
+if (isset($_POST['brewerStaff'])) $brewerStaff = $_POST['brewerStaff'];
 else $brewerStaff = "";
 
-if (isset($_POST['brewerJudgeExp'])) $brewerJudgeExp = sterilize($_POST['brewerJudgeExp']);
+if (isset($_POST['brewerJudgeExp'])) $brewerJudgeExp = $_POST['brewerJudgeExp'];
 else $brewerJudgeExp = "";
 
 if (isset($_POST['brewerJudgeNotes'])) $brewerJudgeNotes = $purifier->purify($_POST['brewerJudgeNotes']);
