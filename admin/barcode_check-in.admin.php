@@ -33,7 +33,7 @@ $barcode_text_018 = "";
 $barcode_text_019 = "";
 $barcode_text_020 = "";
 
-if ((NHC) && ($prefix == "final_")) $maxlength = 6; else $maxlength = 4;
+if ($_SESSION['prefsEntryForm'] == "5") $maxlength = 6; else $maxlength = 4;
 
 // Update upon submitting the form
 if ($action == "add") {
@@ -146,7 +146,7 @@ foreach ($flag_enum as $num) {
     <input type="hidden" name="id[]" value="<?php echo $i; ?>">
 	<div class="form-group">
     	<label for="">Entry Number</label>
-    	<input type="text" class="form-control" maxlength="<?php echo $maxlength; ?>" id="eid<?php echo $i; ?>" name="eid<?php echo $i; ?>" onkeyup="moveOnMax(this,'judgingNumber<?php echo $i; ?>')" <?php if ($i == "1") echo "data-error=\"Field must have a 4 digit number.\" required autofocus"; ?> />
+    	<input type="text" class="form-control" maxlength="<?php echo $maxlength; ?>" id="eid<?php echo $i; ?>" name="eid<?php echo $i; ?>" onkeyup="moveOnMax(this,'judgingNumber<?php echo $i; ?>')" <?php if ($i == "1") echo "data-error=\"Field must have a 6 digit number.\" required autofocus"; ?> />
       <?php if ($i == "1") { ?>
       <div class="help-block with-errors"></div>
       <?php } ?>

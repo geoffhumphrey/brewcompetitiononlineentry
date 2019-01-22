@@ -57,7 +57,7 @@ function build_action_link($icon,$base_url,$section,$go,$action,$filter,$id,$dbT
 	}
 
 	if ($icon == "fa-trash-o") {
-		$return .= "<a href=\"".$base_url."includes/process.inc.php?section=".$section."&amp;go=".$go."&amp;dbTable=".$dbTable."&amp;action=".$action."&amp;id=".$id."\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"".$tooltip_text."\" data-confirm=\"".$alt_title."\">";
+		$return .= "<a class=\"hide-loader\" href=\"".$base_url."includes/process.inc.php?section=".$section."&amp;go=".$go."&amp;dbTable=".$dbTable."&amp;action=".$action."&amp;id=".$id."\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"".$tooltip_text."\" data-confirm=\"".$alt_title."\">";
 	}
 
 	else {

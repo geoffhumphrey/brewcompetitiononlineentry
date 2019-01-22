@@ -97,7 +97,7 @@ if (file_exists($filename)) {
 
 				$update_body .= "<p class=\"lead\"><small><strong class=\"text-danger\">Please note!</strong> This update contains a conversion script that affects each table in your database. Therefore, it may take a while to run. Please be patient!</small></p>";
 
-				$update_body .= "<div class=\"bcoem-admin-element-bottom\"><a class=\"btn btn-primary btn-lg btn-block\" href=\"update.php?action=update\" data-confirm=\"Are you sure? Have you backed up your MySQL database? This will update your current installation and cannot be stopped once begun. Please note that the update may take some time to complete, so patience is warranted!\"><span class=\"fa fa-cog fa-spin\"></span> Begin The Update</a></div>";
+				$update_body .= "<div class=\"bcoem-admin-element-bottom\"><a class=\"btn btn-primary btn-lg btn-block hide-loader\" href=\"update.php?action=update\" data-confirm=\"Are you sure? Have you backed up your MySQL database? This will update your current installation and cannot be stopped once begun. Please note that the update may take some time to complete, so patience is warranted!\"><span class=\"fa fa-cog fa-spin\"></span> Begin The Update</a></div>";
 				}
 
 				if ($action == "update") {

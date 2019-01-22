@@ -17,14 +17,14 @@ $table_header7 = $label_actions;
 <h3><?php echo $archive_text_002; ?></h3>
 <div class="bcoem-admin-element hidden-print">
     <div class="btn-group" id="helpArchive1" role="group" aria-label="...">
-        <a class="btn btn-danger" href="<?php echo $base_url; ?>includes/process.inc.php?action=archive" data-confirm="<?php echo $archive_text_003; ?>"><span class="fa fa-exclamation-circle"></span> <?php echo $archive_text_004; ?></a>
+        <a class="btn btn-danger hide-loader" href="<?php echo $base_url; ?>includes/process.inc.php?action=archive" data-confirm="<?php echo $archive_text_003; ?>"><span class="fa fa-exclamation-circle"></span> <?php echo $archive_text_004; ?></a>
     </div><!-- ./button group -->
     <span id="helpBlock" class="help-block"><?php echo $archive_text_005; ?></span>
 </div>
 <h3><?php echo $archive_text_006; ?></h3>
 <div class="bcoem-admin-element hidden-print">
     <div class="btn-group" id="helpArchive1" role="group" aria-label="...">
-        <a class="btn btn-danger" href="<?php echo $base_url; ?>includes/process.inc.php?action=archive&amp;filter=participant" data-confirm="<?php echo $archive_text_007; ?>"><span class="fa fa-exclamation-circle"></span> <?php echo $archive_text_008; ?></a>
+        <a class="btn btn-danger hide-loader" href="<?php echo $base_url; ?>includes/process.inc.php?action=archive&amp;filter=participant" data-confirm="<?php echo $archive_text_007; ?>"><span class="fa fa-exclamation-circle"></span> <?php echo $archive_text_008; ?></a>
     </div><!-- ./button group -->
     <span id="helpBlock" class="help-block"><?php echo $archive_text_009; ?></span>
 </div>
@@ -222,7 +222,7 @@ $table_header7 = $label_actions;
     <?php }
 	} else echo $row_archive['archiveSuffix']. " - Not Archived";
 	?>
-    <td><a href="<?php echo $base_url; ?>includes/process.inc.php?section=<?php echo $section; ?>&amp;go=<?php echo $go; ?>&amp;filter=<?php echo $row_archive['archiveSuffix']; ?>&amp;dbTable=<?php echo $archive_db_table; ?>&amp;action=delete&amp;id=<?php echo $row_archive['id']; ?>" data-toggle="tooltip" data-placement="top" title=" <?php echo $label_delete." ".$row_archive['archiveSuffix']; ?>" data-confirm="<?php echo $archive_text_015." ".$row_archive['archiveSuffix']; ?>"><span class="fa fa-lg fa-trash-o"></span></a></td>
+    <td><a class="hide-loader" href="<?php echo $base_url; ?>includes/process.inc.php?section=<?php echo $section; ?>&amp;go=<?php echo $go; ?>&amp;filter=<?php echo $row_archive['archiveSuffix']; ?>&amp;dbTable=<?php echo $archive_db_table; ?>&amp;action=delete&amp;id=<?php echo $row_archive['id']; ?>" data-toggle="tooltip" data-placement="top" title=" <?php echo $label_delete." ".$row_archive['archiveSuffix']; ?>" data-confirm="<?php echo $archive_text_015." ".$row_archive['archiveSuffix']; ?>"><span class="fa fa-lg fa-trash-o"></span></a></td>
   </tr>
   <?php } while ($row_archive = mysqli_fetch_assoc($archive)); ?>
 </tbody>

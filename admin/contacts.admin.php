@@ -53,8 +53,8 @@
   <td><?php echo $row_contact['contactPosition']; ?></td>
   <td><?php echo $row_contact['contactEmail']; ?></td>
   <td>
-  <a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=<?php echo $go; ?>&amp;action=edit&amp;id=<?php echo $row_contact['id']; ?>" data-toggle="tooltip" data-placement="top" title="Edit <?php echo $row_contact['contactFirstName']." ".$row_contact['contactLastName'] ; ?>&rsquo;s contact information"><span class="fa fa-lg fa-pencil"></span></a> <a href="<?php echo $base_url; ?>includes/process.inc.php?section=admin&amp;go=<?php echo $go; ?>&amp;dbTable=<?php echo $contacts_db_table; ?>&amp;action=delete&amp;id=<?php echo $row_contact['id']; ?>" data-confirm="Are you sure you want to delete <?php echo $row_contact['contactFirstName']." ".$row_contact['contactLastName']; ?> as a contact? This cannot be undone."><span class="fa fa-lg fa-trash-o"></span></a>
-  
+  <a class="hide-loader" href="<?php echo $base_url; ?>index.php?section=admin&amp;go=<?php echo $go; ?>&amp;action=edit&amp;id=<?php echo $row_contact['id']; ?>" data-toggle="tooltip" data-placement="top" title="Edit <?php echo $row_contact['contactFirstName']." ".$row_contact['contactLastName'] ; ?>&rsquo;s contact information"><span class="fa fa-lg fa-pencil"></span></a> <a href="<?php echo $base_url; ?>includes/process.inc.php?section=admin&amp;go=<?php echo $go; ?>&amp;dbTable=<?php echo $contacts_db_table; ?>&amp;action=delete&amp;id=<?php echo $row_contact['id']; ?>" data-confirm="Are you sure you want to delete <?php echo $row_contact['contactFirstName']." ".$row_contact['contactLastName']; ?> as a contact? This cannot be undone."><span class="fa fa-lg fa-trash-o"></span></a>
+
   <!--<img src="<?php echo $base_url; ?>images/bin_closed.png"  border="0" alt="Delete <?php echo $row_contact['contactFirstName']." ".$row_contact['contactLastName'] ; ?>" title="Delete <?php echo $row_contact['contactFirstName']." ".$row_contact['contactLastName'] ; ?>"></a></span>
   --></td>
  </tr>
@@ -64,8 +64,8 @@
 <?php } } else { ?>
 <p>There are no contacts in the database.</p>
 <?php } ?>
-<?php if (($action == "add") || ($action == "edit")) { 
-$form_url = $base_url."includes/process.inc.php?action=".$action."&amp;dbTable=".$contacts_db_table; 
+<?php if (($action == "add") || ($action == "edit")) {
+$form_url = $base_url."includes/process.inc.php?action=".$action."&amp;dbTable=".$contacts_db_table;
 if ($action == "edit") $form_url .= "&amp;id=".$id;
 ?>
 <form data-toggle="validator" role="form" class="form-horizontal" method="post" action="<?php echo $form_url; ?>" name="form1">

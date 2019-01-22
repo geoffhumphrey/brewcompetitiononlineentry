@@ -1,6 +1,6 @@
-<?php 
-include (DB.'payments.db.php'); 
-if ($totalRows_payments > 0) { 
+<?php
+include (DB.'payments.db.php');
+if ($totalRows_payments > 0) {
 ?>
 <script type="text/javascript" language="javascript">
 	 $(document).ready(function() {
@@ -50,7 +50,7 @@ if ($totalRows_payments > 0) {
   <td class="hidden-xs"><?php echo str_replace("-",", ",$row_payments['payment_entries']); ?></td>
   <td><?php echo getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_payments['payment_time'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "short", "date-time-no-gmt"); ?></td>
   <td nowrap="nowrap">
-  <a href="<?php echo $base_url; ?>includes/process.inc.php?section=admin&amp;go=<?php echo $go; ?>&amp;dbTable=<?php echo $payments_db_table; ?>&amp;action=delete&amp;id=<?php echo $row_payments['id']; ?>" data-toggle="tooltip" data-placement="top" title="Delete <?php echo $row_payments['item_name']; ?>" data-confirm="Are you sure you want to delete <?php echo $row_payments['item_name']; ?>? This cannot be undone."><span class="fa fa-lg fa-trash-o"></span></a>
+  <a class="hide-loader" href="<?php echo $base_url; ?>includes/process.inc.php?section=admin&amp;go=<?php echo $go; ?>&amp;dbTable=<?php echo $payments_db_table; ?>&amp;action=delete&amp;id=<?php echo $row_payments['id']; ?>" data-toggle="tooltip" data-placement="top" title="Delete <?php echo $row_payments['item_name']; ?>" data-confirm="Are you sure you want to delete <?php echo $row_payments['item_name']; ?>? This cannot be undone."><span class="fa fa-lg fa-trash-o"></span></a>
   </td>
  </tr>
 <?php } while($row_payments = mysqli_fetch_assoc($payments)) ?>

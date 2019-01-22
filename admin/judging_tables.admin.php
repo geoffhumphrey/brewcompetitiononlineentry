@@ -217,7 +217,7 @@ if (($action == "default") && ($filter == "default")) {
             $manage_tables_default_tbody .= "</a> ";
 
             // Build delete link
-            $manage_tables_default_tbody .= "<a href=\"".$base_url;
+            $manage_tables_default_tbody .= "<a class=\"hide-loader\" href=\"".$base_url;
             $manage_tables_default_tbody .= "includes/process.inc.php?section=".$section."&amp;go=".$go."&amp;filter=".$filter."&amp;dbTable=".$judging_tables_db_table."&amp;action=delete&amp;id=".$row_tables['id']."\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Delete Table ".$row_tables['tableNumber'].": ".$row_tables['tableName']."\" data-confirm=\"Are you sure you want to delete Table ".$row_tables['tableNumber'].": ".$row_tables['tableName']."? ALL associated FLIGHTS and SCORES will be deleted as well. This cannot be undone.\">";
             $manage_tables_default_tbody .= "<span class=\"fa fa-lg fa-trash-o\"></span>";
             $manage_tables_default_tbody .= "</a> ";

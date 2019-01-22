@@ -11,11 +11,11 @@
     <p>Custom categories are useful if your competition features unique &ldquo;best of show&rdquo; categories, such as Pro-Am opportunites, Stewards&rsquo; Choice, Best Name, etc.</p>
 <?php } ?>
 <div class="bcoem-admin-element hidden-print">
-	
+
     <!-- View Button Group Dropdown -->
     <div class="btn-group" role="group">
         <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-        <span class="fa fa-eye"></span> View...   
+        <span class="fa fa-eye"></span> View...
         <span class="caret"></span>
         </button>
         <ul class="dropdown-menu">
@@ -28,7 +28,7 @@
 			<?php } ?>
         </ul>
     </div><!-- ./button group -->
-	
+
 	<?php if ($action == "default") { ?>
 	<div class="btn-group" role="group" aria-label="add-custom-winning">
         <a class="btn btn-default" href="<?php echo $base_url; ?>index.php?section=admin&amp;go=special_best&amp;action=add"><span class="fa fa-plus-circle"></span> Add a Custom Category</a>
@@ -69,7 +69,7 @@
      </tr>
      </thead>
      <tbody>
-     <?php do { 
+     <?php do {
 		$sbd_count = sbd_count($row_sbi['id']);
 	 ?>
      <tr>
@@ -79,14 +79,14 @@
       <td><?php if ($row_sbi['sbi_display_places'] == 1) echo "<span class=\"fa fa-lg fa-check text-success\"></span>"; else echo "<span class=\"fa fa-lg fa-times text-danger\"></span>" ?></td>
       <td><?php echo $row_sbi['sbi_rank']; ?></td>
       <td>
-      <a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=<?php echo $go; ?>&amp;action=edit&amp;id=<?php echo $row_sbi['id']; ?>" data-toggle="tooltip" data-placement="top" title="Edit <?php echo $row_sbi['sbi_name']; ?>"><span class="fa fa-lg fa-pencil"></span></a> 
-	  <a href="<?php echo $base_url; ?>includes/process.inc.php?section=admin&amp;go=<?php echo $go; ?>&amp;dbTable=<?php echo $special_best_info_db_table; ?>&amp;action=delete&amp;id=<?php echo $row_sbi['id']; ?>" data-toggle="tooltip" data-placement="top" title="Delete <?php echo $row_sbi['sbi_name']; ?>."  data-confirm="Are you sure you want to delete <?php echo $row_sbi['sbi_name']; ?>? This cannot be undone. All associated data will be deleted as well."><span class="fa fa-lg fa-trash-o"></span></a> 
+      <a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=<?php echo $go; ?>&amp;action=edit&amp;id=<?php echo $row_sbi['id']; ?>" data-toggle="tooltip" data-placement="top" title="Edit <?php echo $row_sbi['sbi_name']; ?>"><span class="fa fa-lg fa-pencil"></span></a>
+	  <a class="hide-loader" href="<?php echo $base_url; ?>includes/process.inc.php?section=admin&amp;go=<?php echo $go; ?>&amp;dbTable=<?php echo $special_best_info_db_table; ?>&amp;action=delete&amp;id=<?php echo $row_sbi['id']; ?>" data-toggle="tooltip" data-placement="top" title="Delete <?php echo $row_sbi['sbi_name']; ?>."  data-confirm="Are you sure you want to delete <?php echo $row_sbi['sbi_name']; ?>? This cannot be undone. All associated data will be deleted as well."><span class="fa fa-lg fa-trash-o"></span></a>
 	  <?php if ($sbd_count > 0) { ?>
-	  <a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=special_best_data&amp;action=edit&amp;id=<?php echo $row_sbi['id']; ?>" data-toggle="tooltip" data-placement="top" title="Edit winners for <?php echo $row_sbi['sbi_name']; ?>"><span class="fa fa-lg fa-pencil-square-o"></span></a> 
+	  <a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=special_best_data&amp;action=edit&amp;id=<?php echo $row_sbi['id']; ?>" data-toggle="tooltip" data-placement="top" title="Edit winners for <?php echo $row_sbi['sbi_name']; ?>"><span class="fa fa-lg fa-pencil-square-o"></span></a>
 	  <?php } else { ?>
 	  <a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=special_best_data&amp;action=add&amp;id=<?php echo $row_sbi['id']; ?>" data-toggle="tooltip" data-placement="top" title="Enter winners for <?php echo $row_sbi['sbi_name']; ?>"><span class="fa fa-lg fa-plus-circle-sign"></span></a>
 	  <?php } ?>
-	  
+
       </td>
      </tr>
     <?php } while($row_sbi = mysqli_fetch_assoc($sbi)) ?>

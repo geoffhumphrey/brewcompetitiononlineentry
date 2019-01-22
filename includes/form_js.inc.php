@@ -279,6 +279,8 @@ $(document).ready(function() {
 				$("#specialInfoName").html("<a href='#' data-tooltip='true' title='Click for specifics for this style.' data-toggle='modal' data-target='#<?php echo $key; ?>'><?php echo $label_this_style; ?></a>");
 				<?php if (($_SESSION['prefsStyleSet'] == "BJCP2015") && (in_array($key,$optional_info_styles))) { ?>
 				$("#optional").show("fast");
+				// $("#brewInfoOptional").attr("maxlength","65");
+				// $("#brewInfo").attr("maxlength","65");
 				<?php } ?>
 			<?php if ($_SESSION['prefsStyleSet'] == "BJCP2015") { ?>
 			<?php if (($key == "09-A") || ($key == "10-C") || ($key == "07-C")){ ?>
@@ -409,6 +411,8 @@ $(document).ready(function() {
 			$("#specialInfo").show("fast");
 			<?php if (($_SESSION['prefsStyleSet'] == "BJCP2015") && (in_array($key,$optional_info_styles))) { ?>
 			$("#optional").show("fast");
+			// $("#brewInfoOptional").attr("maxlength","65");
+			// $("#brewInfo").attr("maxlength","65");
 			<?php } ?>
 			$("#brewInfo").prop("required", true);
 			$("input[name='brewMead1']").prop("required", true);
@@ -465,6 +469,8 @@ $(document).ready(function() {
 			$("#specialInfo").hide("fast");
 			<?php if (($_SESSION['prefsStyleSet'] == "BJCP2015") && (in_array($value,$optional_info_styles))) { ?>
 			$("#optional").show("fast");
+			// $("#brewInfoOptional").attr("maxlength","65");
+			// $("#brewInfo").attr("maxlength","65");
 			<?php } ?>
 			$("input[name='brewMead1']").prop("required", true);
 			$("input[name='brewMead3']").prop("required", true);
@@ -516,6 +522,8 @@ $(document).ready(function() {
 			$("#sweetness").show("fast");
 			<?php if (($_SESSION['prefsStyleSet'] == "BJCP2015") && (in_array($value,$optional_info_styles))) { ?>
 			$("#optional").show("fast");
+			// $("#brewInfoOptional").attr("maxlength","65");
+			// $("#brewInfo").attr("maxlength","65");
 			<?php } ?>
 			$("input[name='brewMead1']").prop("required", true);
 			$("input[name='brewMead2']").prop("required", true);
@@ -567,6 +575,8 @@ $(document).ready(function() {
 			$("#specialInfo").hide("fast");
 			<?php if (($_SESSION['prefsStyleSet'] == "BJCP2015") && (in_array($value,$optional_info_styles))) { ?>
 			$("#optional").show("fast");
+			// $("#brewInfoOptional").attr("maxlength","65");
+			// $("#brewInfo").attr("maxlength","65");
 			<?php } ?>
 			$("input[name='brewMead1']").prop("required", true);
 			$("input[name='brewMead2']").prop("required", true);
@@ -619,6 +629,8 @@ $(document).ready(function() {
 			$("#specialInfo").show("fast");
 			<?php if (($_SESSION['prefsStyleSet'] == "BJCP2015") && (in_array($key,$optional_info_styles))) { ?>
 			$("#optional").show("fast");
+			// $("#brewInfoOptional").attr("maxlength","65");
+			// $("#brewInfo").attr("maxlength","65");
 			<?php } ?>
 			$("#brewInfo").prop("required", true);
 			$("input[name='brewMead1']").prop("required", true);
@@ -671,6 +683,8 @@ $(document).ready(function() {
 			$("#special").show("fast");
 			<?php if (($_SESSION['prefsStyleSet'] == "BJCP2015") && (in_array($key,$optional_info_styles))) { ?>
 			$("#optional").show("fast");
+			// $("#brewInfoOptional").attr("maxlength","65");
+			// $("#brewInfo").attr("maxlength","65");
 			<?php } ?>
 			$("#brewInfo").prop("required", true);
 			$("input[name='brewMead1']").prop("required", true);
@@ -769,6 +783,8 @@ if ($action == "edit") {
 		$("#specialInfoName").html("<a href='#' data-tooltip='true' title='Click for specifics for this style.' data-toggle='modal' data-target='#<?php echo $view; ?>'><?php echo $label_this_style; ?></a>");
 		<?php if (($_SESSION['prefsStyleSet'] == "BJCP2015") && (in_array($view,$optional_info_styles))) { ?>
 		$("#optional").show("fast");
+		// $("#brewInfoOptional").attr("maxlength","65");
+		// $("#brewInfo").attr("maxlength","65");
 		<?php } ?>
 	});
 	<?php } ?>
@@ -800,6 +816,8 @@ if ($action == "edit") {
 		$("input[name='BDGColor']").prop("required", false);
 		<?php if (($_SESSION['prefsStyleSet'] == "BJCP2015") && (in_array($view,$optional_info_styles))) { ?>
 		$("#optional").show("fast");
+		// $("#brewInfoOptional").attr("maxlength","65");
+		// $("#brewInfo").attr("maxlength","65");
 		<?php } ?>
 	});
 	<?php } ?>
@@ -831,6 +849,8 @@ if ($action == "edit") {
 		$("input[name='BDGColor']").prop("required", false);
 		<?php if (($_SESSION['prefsStyleSet'] == "BJCP2015") && (in_array($view,$optional_info_styles))) { ?>
 		$("#optional").show("fast");
+		// $("#brewInfoOptional").attr("maxlength","65");
+		// $("#brewInfo").attr("maxlength","65");
 		<?php } ?>
 	});
 	<?php } ?>
@@ -862,6 +882,8 @@ if ($action == "edit") {
 		$("input[name='BDGColor']").prop("required", false);
 		<?php if (($_SESSION['prefsStyleSet'] == "BJCP2015") && (in_array($view,$optional_info_styles))) { ?>
 		$("#optional").show("fast");
+		// $("#brewInfoOptional").attr("maxlength","65");
+		// $("#brewInfo").attr("maxlength","65");
 		<?php } ?>
 	});
 	<?php } ?>
@@ -895,6 +917,8 @@ if ($action == "edit") {
 		$("#specialInfoName").html("<a href='#' data-tooltip='true' title='Click for specifics for this style.' data-toggle='modal' data-target='#<?php echo $view; ?>'><?php echo $label_this_style; ?></a>");
 		<?php if (($_SESSION['prefsStyleSet'] == "BJCP2015") && (in_array($view,$optional_info_styles))) { ?>
 		$("#optional").show("fast");
+		// $("#brewInfoOptional").attr("maxlength","65");
+		// $("#brewInfo").attr("maxlength","65");
 		<?php } ?>
 	});
 	<?php } ?>
@@ -928,6 +952,8 @@ if ($action == "edit") {
 		$("#specialInfoName").html("<a href='#' data-tooltip='true' title='Click for specifics for this style.' data-toggle='modal' data-target='#<?php echo $view; ?>'><?php echo $label_this_style; ?></a>");
 		<?php if (($_SESSION['prefsStyleSet'] == "BJCP2015") && (in_array($view,$optional_info_styles))) { ?>
 		$("#optional").show("fast");
+		// $("#brewInfoOptional").attr("maxlength","65");
+		// $("#brewInfo").attr("maxlength","65");
 		<?php } ?>
 	});
 	<?php } ?>
@@ -961,6 +987,8 @@ if ($action == "edit") {
 		$("#specialInfoName").html("<a href='#' data-tooltip='true' title='Click for specifics for this style.' data-toggle='modal' data-target='#<?php echo $view; ?>'><?php echo $label_this_style; ?></a>");
 		<?php if (($_SESSION['prefsStyleSet'] == "BJCP2015") && (in_array($view,$optional_info_styles))) { ?>
 		$("#optional").show("fast");
+		// $("#brewInfoOptional").attr("maxlength","65");
+		// $("#brewInfo").attr("maxlength","65");
 		<?php } ?>
 	});
 	<?php } ?>
@@ -983,6 +1011,8 @@ if ($action == "edit") {
 				$("#specialInfoName").html("<a href='#' data-tooltip='true' title='Click for specifics for this style.' data-toggle='modal' data-target='#<?php echo $view; ?>'><?php echo $label_this_style; ?></a>");
 				<?php if (($_SESSION['prefsStyleSet'] == "BJCP2015") && (in_array($view,$optional_info_styles))) { ?>
 				$("#optional").show("fast");
+				// $("#brewInfoOptional").attr("maxlength","65");
+				// $("#brewInfo").attr("maxlength","65");
 				<?php } ?>
 			});
 		<?php } elseif ($view == "24-C") { ?>
@@ -1003,6 +1033,8 @@ if ($action == "edit") {
 				$("#specialInfoName").html("<a href='#' data-tooltip='true' title='Click for specifics for this style.' data-toggle='modal' data-target='#<?php echo $view; ?>'><?php echo $label_this_style; ?></a>");
 				<?php if (($_SESSION['prefsStyleSet'] == "BJCP2015") && (in_array($view,$optional_info_styles))) { ?>
 				$("#optional").show("fast");
+				// $("#brewInfoOptional").attr("maxlength","65");
+				// $("#brewInfo").attr("maxlength","65");
 				<?php } ?>
 			});
 		<?php } elseif ($view == "21-B") { ?>
@@ -1023,6 +1055,8 @@ if ($action == "edit") {
 				$("#specialInfoName").html("<a href='#' data-tooltip='true' title='Click for specifics for this style.' data-toggle='modal' data-target='#<?php echo $view; ?>'><?php echo $label_this_style; ?></a>");
 				<?php if (($_SESSION['prefsStyleSet'] == "BJCP2015") && (in_array($view,$optional_info_styles))) { ?>
 				$("#optional").show("fast");
+				// $("#brewInfoOptional").attr("maxlength","65");
+				// $("#brewInfo").attr("maxlength","65");
 				<?php } ?>
 			});
 		<?php } elseif ($view == "21-B1") { ?>
@@ -1042,6 +1076,8 @@ if ($action == "edit") {
 				$("#specialInfoName").html("<a href='#' data-tooltip='true' title='Click for specifics for this style.' data-toggle='modal' data-target='#<?php echo $view; ?>'><?php echo $label_this_style; ?></a>");
 				<?php if (($_SESSION['prefsStyleSet'] == "BJCP2015") && (in_array($view,$optional_info_styles))) { ?>
 				$("#optional").show("fast");
+				// $("#brewInfoOptional").attr("maxlength","65");
+				// $("#brewInfo").attr("maxlength","65");
 				<?php } ?>
 			});
 		<?php } elseif ($view == "21-B2") { ?>
@@ -1061,6 +1097,8 @@ if ($action == "edit") {
 				$("#specialInfoName").html("<a href='#' data-tooltip='true' title='Click for specifics for this style.' data-toggle='modal' data-target='#<?php echo $view; ?>'><?php echo $label_this_style; ?></a>");
 				<?php if (($_SESSION['prefsStyleSet'] == "BJCP2015") && (in_array($view,$optional_info_styles))) { ?>
 				$("#optional").show("fast");
+				// $("#brewInfoOptional").attr("maxlength","65");
+				// $("#brewInfo").attr("maxlength","65");
 				<?php } ?>
 			});
 		<?php } elseif ($view == "21-B3") { ?>
@@ -1080,6 +1118,8 @@ if ($action == "edit") {
 				$("#specialInfoName").html("<a href='#' data-tooltip='true' title='Click for specifics for this style.' data-toggle='modal' data-target='#<?php echo $view; ?>'><?php echo $label_this_style; ?></a>");
 				<?php if (($_SESSION['prefsStyleSet'] == "BJCP2015") && (in_array($view,$optional_info_styles))) { ?>
 				$("#optional").show("fast");
+				// $("#brewInfoOptional").attr("maxlength","65");
+				// $("#brewInfo").attr("maxlength","65");
 				<?php } ?>
 			});
 		<?php } elseif ($view == "21-B4") { ?>
@@ -1099,6 +1139,8 @@ if ($action == "edit") {
 				$("#specialInfoName").html("<a href='#' data-tooltip='true' title='Click for specifics for this style.' data-toggle='modal' data-target='#<?php echo $view; ?>'><?php echo $label_this_style; ?></a>");
 				<?php if (($_SESSION['prefsStyleSet'] == "BJCP2015") && (in_array($view,$optional_info_styles))) { ?>
 				$("#optional").show("fast");
+				// $("#brewInfoOptional").attr("maxlength","65");
+				// $("#brewInfo").attr("maxlength","65");
 				<?php } ?>
 			});
 		<?php } elseif ($view == "21-B5") { ?>
@@ -1118,6 +1160,8 @@ if ($action == "edit") {
 				$("#specialInfoName").html("<a href='#' data-tooltip='true' title='Click for specifics for this style.' data-toggle='modal' data-target='#<?php echo $view; ?>'><?php echo $label_this_style; ?></a>");
 				<?php if (($_SESSION['prefsStyleSet'] == "BJCP2015") && (in_array($view,$optional_info_styles))) { ?>
 				$("#optional").show("fast");
+				// $("#brewInfoOptional").attr("maxlength","65");
+				// $("#brewInfo").attr("maxlength","65");
 				<?php } ?>
 			});
 		<?php } elseif ($view == "21-B6") { ?>
@@ -1137,6 +1181,8 @@ if ($action == "edit") {
 				$("#specialInfoName").html("<a href='#' data-tooltip='true' title='Click for specifics for this style.' data-toggle='modal' data-target='#<?php echo $view; ?>'><?php echo $label_this_style; ?></a>");
 				<?php if (($_SESSION['prefsStyleSet'] == "BJCP2015") && (in_array($view,$optional_info_styles))) { ?>
 				$("#optional").show("fast");
+				// $("#brewInfoOptional").attr("maxlength","65");
+				// $("#brewInfo").attr("maxlength","65");
 				<?php } ?>
 			});
 		<?php } elseif ($view == "23-F") { ?>
@@ -1157,6 +1203,8 @@ if ($action == "edit") {
 				$("#specialInfoName").html("<a href='#' data-tooltip='true' title='Click for specifics for this style.' data-toggle='modal' data-target='#<?php echo $view; ?>'><?php echo $label_this_style; ?></a>");
 				<?php if (($_SESSION['prefsStyleSet'] == "BJCP2015") && (in_array($view,$optional_info_styles))) { ?>
 				$("#optional").show("fast");
+				// $("#brewInfoOptional").attr("maxlength","65");
+				// $("#brewInfo").attr("maxlength","65");
 				<?php } ?>
 			});
 		<?php } elseif ($view == "25-B") { ?>
@@ -1176,6 +1224,8 @@ if ($action == "edit") {
 				$("#specialInfoName").html("<a href='#' data-tooltip='true' title='Click for specifics for this style.' data-toggle='modal' data-target='#<?php echo $view; ?>'><?php echo $label_this_style; ?></a>");
 				<?php if (($_SESSION['prefsStyleSet'] == "BJCP2015") && (in_array($view,$optional_info_styles))) { ?>
 				$("#optional").show("fast");
+				// $("#brewInfoOptional").attr("maxlength","65");
+				// $("#brewInfo").attr("maxlength","65");
 				<?php } ?>
 			});
 		<?php }	?>

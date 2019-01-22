@@ -32,7 +32,7 @@ if ($action == "default") {
 			$tbody .= "</td>";
 			$tbody .= "<td>";
 			$tbody .= "<a href=\"".$base_url."index.php?section=admin&amp;go=".$go."&amp;action=edit&amp;id=".$row_style_type['id']."\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Edit ".$row_style_type['styleTypeName']."\"><span class=\"fa fa-lg fa-pencil\"></a>";
-			if ($row_style_type['styleTypeOwn'] != "bcoe") $tbody .= " <a href=\"".$base_url."includes/process.inc.php?section=admin&amp;go=default&amp;dbTable=".$style_types_db_table."&amp;action=delete&amp;id=".$row_style_type['id']."\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Delete ".$row_style_type['styleTypeName']."\" data-confirm=\"Are you sure you want to delete ".$row_style_type['styleTypeName']."? This cannot be undone.\"><span class=\"fa fa-lg fa-trash-o\"></a>";
+			if ($row_style_type['styleTypeOwn'] != "bcoe") $tbody .= " <a class=\"hide-loader\" href=\"".$base_url."includes/process.inc.php?section=admin&amp;go=default&amp;dbTable=".$style_types_db_table."&amp;action=delete&amp;id=".$row_style_type['id']."\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Delete ".$row_style_type['styleTypeName']."\" data-confirm=\"Are you sure you want to delete ".$row_style_type['styleTypeName']."? This cannot be undone.\"><span class=\"fa fa-lg fa-trash-o\"></a>";
 			else $tbody .= " <span class=\"fa fa-lg fa-trash-o text-muted\">";
 			$tbody .= "</td>";
 			$tbody .= "</tr>";
@@ -75,9 +75,9 @@ if ($action == "default") {
 	<!-- Combine/Separate Mead/Cider Buttons -->
 	<div class="btn-group" role="group" aria-label="all-styles">
 		<?php if ($mead_cider_combined) { ?>
-			<a class="btn btn-success" href="<?php echo $base_url; ?>includes/process.inc.php?action=edit&amp;go=separate&amp;dbTable=<?php echo $style_types_db_table ?>" data-confirm="Are you sure you want to separate mead and cider into two distinct style types? This will clear any Mead/Cider BOS scores/places already entered in the database."><span class="fa fa-expand"></span> Separate Mead and Cider?</a>
+			<a class="btn btn-success hide-loader" href="<?php echo $base_url; ?>includes/process.inc.php?action=edit&amp;go=separate&amp;dbTable=<?php echo $style_types_db_table ?>" data-confirm="Are you sure you want to separate mead and cider into two distinct style types? This will clear any Mead/Cider BOS scores/places already entered in the database."><span class="fa fa-expand"></span> Separate Mead and Cider?</a>
 		<?php } else { ?>
-        	<a class="btn btn-success" href="<?php echo $base_url; ?>includes/process.inc.php?action=edit&amp;go=combine&amp;dbTable=<?php echo $style_types_db_table ?>" data-confirm="Are you sure you want to combine mead and cider into a single style type? This will also enable Best of Show (BOS) for the combined style type and clear any Mead or Cider BOS scores/places already in the database."><span class="fa fa-compress"></span> Combine Mead and Cider?</a>
+        	<a class="btn btn-success hide-loader" href="<?php echo $base_url; ?>includes/process.inc.php?action=edit&amp;go=combine&amp;dbTable=<?php echo $style_types_db_table ?>" data-confirm="Are you sure you want to combine mead and cider into a single style type? This will also enable Best of Show (BOS) for the combined style type and clear any Mead or Cider BOS scores/places already in the database."><span class="fa fa-compress"></span> Combine Mead and Cider?</a>
     	<?php } ?>
     </div><!-- ./button group -->
 	<?php } ?>

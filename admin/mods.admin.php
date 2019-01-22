@@ -15,7 +15,7 @@ function mod_info($info,$method) {
 			case "3": $output = "PHP Code or Function"; break;
 		}
 	}
-	
+
 	if ($method == 2) {
 		switch($info) {
 			case "0": $output = "All"; break;
@@ -30,7 +30,7 @@ function mod_info($info,$method) {
 			case "9": $output = "Administration"; break;
 		}
 	}
-	
+
 	if ($method == 3) {
 		switch($info) {
 			case "0": $output = "Top level admins"; break;
@@ -38,7 +38,7 @@ function mod_info($info,$method) {
 			case "2": $output = "All"; break;
 		}
 	}
-	
+
 	if ($method == 4) {
 		switch($info) {
 			case "0": $output = "N/A (Stand-alone)"; break;
@@ -48,9 +48,9 @@ function mod_info($info,$method) {
 			case "4": $output = "After public sidebar content"; break;
 		}
 	}
-	
+
 	return $output;
-} 
+}
 
  ?>
 <p class="lead"><?php echo $_SESSION['contestName']; if ($action == "add") echo ": Add a Custom Module"; elseif ($action == "edit") echo ": Edit a Custom Module"; else echo " Custom Modules";  ?></p>
@@ -126,8 +126,8 @@ function mod_info($info,$method) {
       <td><?php echo mod_info($row_mods['mod_display_rank'],4); ?></td>
       <td><input id="mod_enable" type="checkbox" name="mod_enable<?php echo $row_mods['id']; ?>" value="1" <?php if ($row_mods['mod_enable'] == 1) echo 'checked="checked"'; ?> /><input type="hidden" id="id" name="id[]" value="<?php echo $row_mods['id']; ?>" /></td>
       <td nowrap="nowrap">
-      <a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=<?php echo $go; ?>&amp;action=edit&amp;id=<?php echo $row_mods['id']; ?>" data-toggle="tooltip" data-placement="top" title="Edit <?php echo $row_mods['mod_name']; ?>"><span class="fa fa-pencil"></span></a> 
-      <a href="<?php echo $base_url; ?>includes/process.inc.php?section=admin&amp;go=<?php echo $go; ?>&amp;dbTable=<?php echo $mods_db_table; ?>&amp;action=delete&amp;id=<?php echo $row_mods['id']; ?>" data-toggle="tooltip" data-placement="top" title="Delete <?php echo $row_mods['mod_name']; ?>" data-confirm="Are you sure you want to delete <?php echo $row_mods['mod_name']; ?>? This cannot be undone. All associated data will be deleted as well."><span class="fa fa-trash-o"></span></a>
+      <a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=<?php echo $go; ?>&amp;action=edit&amp;id=<?php echo $row_mods['id']; ?>" data-toggle="tooltip" data-placement="top" title="Edit <?php echo $row_mods['mod_name']; ?>"><span class="fa fa-pencil"></span></a>
+      <a class="hide-loader" href="<?php echo $base_url; ?>includes/process.inc.php?section=admin&amp;go=<?php echo $go; ?>&amp;dbTable=<?php echo $mods_db_table; ?>&amp;action=delete&amp;id=<?php echo $row_mods['id']; ?>" data-toggle="tooltip" data-placement="top" title="Delete <?php echo $row_mods['mod_name']; ?>" data-confirm="Are you sure you want to delete <?php echo $row_mods['mod_name']; ?>? This cannot be undone. All associated data will be deleted as well."><span class="fa fa-trash-o"></span></a>
       </td>
      </tr>
     <?php } while($row_mods = mysqli_fetch_assoc($mods)) ?>
@@ -144,7 +144,7 @@ function mod_info($info,$method) {
 <?php } ?>
 </form>
     <?php } else echo "<p>No custom modules were found in the database.</p>";
-} 
+}
 if (($action == "add") || ($action == "edit")) { ?>
 
 <form class="form-horizontal" method="post" action="<?php echo $base_url; ?>includes/process.inc.php?action=<?php echo $action; ?>&amp;dbTable=<?php echo $mods_db_table; ?><?php if ($action == "edit") echo "&amp;id=".$id; ?>" name="form1">
@@ -242,7 +242,7 @@ if (($action == "add") || ($action == "edit")) { ?>
         <option value="judging_scores" <?php if (($action == "edit") && ($row_mods['mod_extend_function_admin'] == "judging_scores")) echo " SELECTED"; ?>>Scoring</option>
         <option value="judging_scores_bos" <?php if (($action == "edit") && ($row_mods['mod_extend_function_admin'] == "judging_scores_bos")) echo " SELECTED"; ?>>Scoring - Best of Show</option>
         <option value="special_best" <?php if (($action == "edit") && ($row_mods['mod_extend_function_admin'] == "special_best")) echo " SELECTED"; ?>>Scoring - Special Best of Show Categories</option>
-        <option value="styles" <?php if (($action == "edit") && ($row_mods['mod_extend_function_admin'] == "styles")) echo " SELECTED"; ?>>Styles</option>    			
+        <option value="styles" <?php if (($action == "edit") && ($row_mods['mod_extend_function_admin'] == "styles")) echo " SELECTED"; ?>>Styles</option>
         <option value="style_types" <?php if (($action == "edit") && ($row_mods['mod_extend_function_admin'] == "style_types")) echo " SELECTED"; ?>>Style Types</option>
     	<option value="judging_tables" <?php if (($action == "edit") && ($row_mods['mod_extend_function_admin'] == "judging_tables")) echo " SELECTED"; ?>>Table Administration</option>
     	<option value="participants" <?php if (($action == "edit") && ($row_mods['mod_extend_function_admin'] == "participants")) echo " SELECTED"; ?>>Users (Participants)</option>
