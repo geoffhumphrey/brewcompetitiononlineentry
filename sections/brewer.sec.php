@@ -29,14 +29,28 @@ if ($section != "step2") {
 
 }
 
-// Get table assignments and build flags
-$table_assign_judge = table_assignments($_SESSION['user_id'],"J",$_SESSION['prefsTimeZone'],$_SESSION['prefsDateFormat'],$_SESSION['prefsTimeFormat'],0);
-$table_assign_steward = table_assignments($_SESSION['user_id'],"S",$_SESSION['prefsTimeZone'],$_SESSION['prefsDateFormat'],$_SESSION['prefsTimeFormat'],0);
+$show_judge_steward_fields = TRUE;
+$entrant_type_brewery = FALSE;
+
+if ($section == "step2") {
+    $_SESSION['prefsProEdition'] = 0;
+    $show_judge_steward_fields = FALSE;
+    $entrant_type_brewery = FALSE;
+    $table_assign_judge = "";
+    $table_assign_steward = "";
+    $club_alert = "";
+}
+
+else {
+    // Get table assignments and build flags
+    $table_assign_judge = table_assignments($_SESSION['user_id'],"J",$_SESSION['prefsTimeZone'],$_SESSION['prefsDateFormat'],$_SESSION['prefsTimeFormat'],0);
+    $table_assign_steward = table_assignments($_SESSION['user_id'],"S",$_SESSION['prefsTimeZone'],$_SESSION['prefsDateFormat'],$_SESSION['prefsTimeFormat'],0);
+}
+
 if ((!empty($table_assign_judge)) || (!empty($table_assign_steward))) $table_assignment = TRUE;
 if ((empty($table_assign_judge)) && (empty($table_assign_steward))) $table_assignment = FALSE;
 
-$show_judge_steward_fields = TRUE;
-$entrant_type_brewery = FALSE;
+
 
 if ($_SESSION['prefsProEdition'] == 1) {
 
@@ -81,9 +95,8 @@ if (($_SESSION['prefsProEdition'] == 0) || (($_SESSION['prefsProEdition'] == 1) 
     $club_alert = "";
     $club_other = FALSE;
 
-    $club_concat = $row_brewer['brewerClubs']."|".$row_brewer['brewerClubs'];
-
 	if ($section != "step2") {
+        $club_concat = $row_brewer['brewerClubs']."|".$row_brewer['brewerClubs'];
         if ((!empty($row_brewer['brewerClubs'])) && (!in_array($club_concat,$club_array))) {
             $club_other = TRUE;
             $club_alert .= sprintf("<div id=\"clubOther\" class=\"alert alert-warning\"><span class=\"fa fa-exclamation-circle\"></span> <strong>%s</strong> %s %s</div>",$brewer_text_036,$brewer_text_037,$brewer_text_038);
@@ -105,10 +118,11 @@ if (($_SESSION['prefsProEdition'] == 0) || (($_SESSION['prefsProEdition'] == 1) 
 
 $security_questions_display = (array_rand($security_question, 5));
 $security = "";
-if ($section != "step2") $security .= "<div class=\"radio\"><label><input type=\"radio\" name=\"userQuestion\" value=\"".$_SESSION['userQuestion']."\" CHECKED> ".$_SESSION['userQuestion']."</label></div>";
-
-foreach ($security_questions_display as $key => $value) {
-	if ($security_question[$value] != $_SESSION['userQuestion']) $security .= "<div class=\"radio\"><label><input type=\"radio\" name=\"userQuestion\" value=\"".$security_question[$value]."\" data-error=\"".$brewer_text_033."\" required> ".$security_question[$value]."</label></div>";
+if ($section != "step2") {
+    $security .= "<div class=\"radio\"><label><input type=\"radio\" name=\"userQuestion\" value=\"".$_SESSION['userQuestion']."\" CHECKED> ".$_SESSION['userQuestion']."</label></div>";
+    foreach ($security_questions_display as $key => $value) {
+    	if ($security_question[$value] != $_SESSION['userQuestion']) $security .= "<div class=\"radio\"><label><input type=\"radio\" name=\"userQuestion\" value=\"".$security_question[$value]."\" data-error=\"".$brewer_text_033."\" required> ".$security_question[$value]."</label></div>";
+    }
 }
 
 if ($go != "admin") echo $info_msg;
@@ -402,10 +416,10 @@ $(document).ready(function(){
             <p><?php echo $brewer_text_041; ?></p>
             <div class="input-group">
                 <label class="radio-inline">
-                    <input type="radio" name="brewerProAm" value="1" id="brewerProAm_1" <?php if ($row_brewer['brewerProAm'] == "1") echo "CHECKED"; ?> /> <?php echo $label_yes; ?>
+                    <input type="radio" name="brewerProAm" value="1" id="brewerProAm_1" <?php if (($section != "step2") && ($row_brewer['brewerProAm'] == "1")) echo "CHECKED"; ?> /> <?php echo $label_yes; ?>
                 </label>
                 <label class="radio-inline">
-                    <input type="radio" name="brewerProAm" value="0" id="brewerProAm_0" <?php if (($row_brewer['brewerProAm'] == "0") || (empty($row_brewer['brewerProAm']))) echo "CHECKED"; ?> /> <?php echo $label_no; ?>
+                    <input type="radio" name="brewerProAm" value="0" id="brewerProAm_0" <?php if (($section != "step2") && ($row_brewer['brewerProAm'] == "0") || (empty($row_brewer['brewerProAm']))) echo "CHECKED"; ?> /> <?php echo $label_no; ?>
                 </label>
             </div>
             <div class="help-block"><?php echo $brewer_text_042; ?></div>

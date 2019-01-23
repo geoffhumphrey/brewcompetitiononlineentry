@@ -43,6 +43,11 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 
 	if ($section == "setup") {
 
+		session_unset();
+		session_destroy();
+		session_write_close();
+		session_regenerate_id(true);
+
 		$updateSQL = sprintf("UPDATE %s SET setup='1', setup_last_step='8' WHERE id='1'",$prefix."system");
 		mysqli_real_escape_string($connection,$updateSQL);
 		$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
@@ -71,10 +76,6 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 			mail($to_email, $subject, $message, $headers);
 		}
 
-		session_unset();
-		session_destroy();
-		session_write_close();
-		session_regenerate_id(true);
 		$redirect_go_to = sprintf("Location: %s", $base_url."index.php?msg=16");
 	}
 

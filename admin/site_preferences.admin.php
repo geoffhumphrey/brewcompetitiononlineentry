@@ -111,7 +111,7 @@ $(document).ready(function(){
     $("#helpBlockBJCP2008").show("fast");
     <?php } ?>
 
-    <?php if ($row_prefs['prefsCAPTCHA'] == "1") { ?>
+    <?php if (($row_prefs['prefsCAPTCHA'] == "1") || ($section == "step3")) { ?>
      $("#reCAPTCHA-keys").show("fast");
     <?php } ?>
 
@@ -303,7 +303,7 @@ $(document).ready(function(){
 			<!-- Input Here -->
             <?php foreach ($results_method as $key => $value) { ?>
 			<label class="radio-inline">
-				<input type="radio" name="prefsWinnerMethod" value="<?php echo $key; ?>" id="prefsWinnerMethod_<?php echo $key; ?>" <?php if (($section == "step3") || ($row_prefs['prefsWinnerMethod'] == $key)) echo "CHECKED"; ?>> <?php echo $value; ?>
+				<input type="radio" name="prefsWinnerMethod" value="<?php echo $key; ?>" id="prefsWinnerMethod_<?php echo $key; ?>" <?php if ((($section == "step3") && ($key == 0)) || ($row_prefs['prefsWinnerMethod'] == $key)) echo "CHECKED"; ?>> <?php echo $value; ?>
 			</label>
             <?php } ?>
 		</div>

@@ -13,10 +13,10 @@
         <div class="input-group">
             <!-- Input Here -->
             <label class="radio-inline">
-                <input type="radio" name="jPrefsQueued" value="Y" id="jPrefsQueued_0" rel="none"  <?php if ($_SESSION['jPrefsQueued'] == "Y") echo "CHECKED"; elseif ($section == "step8") echo "CHECKED"; ?> /> Yes
+                <input type="radio" name="jPrefsQueued" value="Y" id="jPrefsQueued_0" rel="none"  <?php if ((isset($_SESSION['jPrefsQueued'])) && ($_SESSION['jPrefsQueued'] == "Y")) echo "CHECKED"; elseif ($section == "step8") echo "CHECKED"; ?> /> Yes
             </label>
             <label class="radio-inline">
-                <input type="radio" name="jPrefsQueued" value="N" id="jPrefsQueued_1" rel="queued_no" <?php if ($_SESSION['jPrefsQueued'] == "N") echo "CHECKED"; ?>/> No
+                <input type="radio" name="jPrefsQueued" value="N" id="jPrefsQueued_1" rel="queued_no" <?php if ((isset($_SESSION['jPrefsQueued'])) && ($_SESSION['jPrefsQueued'] == "N")) echo "CHECKED"; ?>/> No
             </label>
         </div>
         <span id="helpBlock" class="help-block">
@@ -62,7 +62,7 @@
     <label for="jPrefsCapJudges" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Judge Limit</label>
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
         <!-- Input Here -->
-            <input class="form-control" id="jPrefsCapJudges" name="jPrefsCapJudges" type="text" value="<?php echo $_SESSION['jPrefsCapJudges']; ?>" placeholder="">
+            <input class="form-control" id="jPrefsCapJudges" name="jPrefsCapJudges" type="text" value="<?php if (isset($_SESSION['jPrefsCapJudges'])) echo $_SESSION['jPrefsCapJudges']; ?>" placeholder="">
 
         <span id="helpBlock" class="help-block"><p>Limit to the number of judges that may sign up. Leave blank for no limit.</span>
     </div>
@@ -72,7 +72,7 @@
     <label for="jPrefsCapStewards" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Steward Limit</label>
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
         <!-- Input Here -->
-            <input class="form-control" id="jPrefsCapStewards" name="jPrefsCapStewards" type="text" value="<?php echo $_SESSION['jPrefsCapStewards']; ?>" placeholder="">
+            <input class="form-control" id="jPrefsCapStewards" name="jPrefsCapStewards" type="text" value="<?php if (isset($_SESSION['jPrefsCapStewards'])) echo $_SESSION['jPrefsCapStewards']; ?>" placeholder="">
 
         <span id="helpBlock" class="help-block"><p>Limit to the number of stewards that may sign up. Leave blank for no limit.</span>
     </div>
@@ -83,7 +83,7 @@
 		<label for="jPrefsFlightEntries" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Maximum Entries per Flight</label>
 		<div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
 			<!-- Input Here -->
-				<input class="form-control" id="jPrefsFlightEntries" name="jPrefsFlightEntries" type="text" value="<?php echo $_SESSION['jPrefsFlightEntries']; ?>" placeholder="" required>
+				<input class="form-control" id="jPrefsFlightEntries" name="jPrefsFlightEntries" type="text" value="<?php if (isset($_SESSION['jPrefsFlightEntries'])) echo $_SESSION['jPrefsFlightEntries']; ?>" placeholder="" required>
 		</div>
 	</div><!-- ./Form Group -->
 </div>
@@ -91,14 +91,14 @@
 	<label for="jPrefsRounds" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Maximum Rounds per Session</label>
 	<div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
 		<!-- Input Here -->
-			<input class="form-control" id="jPrefsRounds" name="jPrefsRounds" type="text" value="<?php echo $_SESSION['jPrefsRounds']; ?>" placeholder="" required>
+			<input class="form-control" id="jPrefsRounds" name="jPrefsRounds" type="text" value="<?php if (isset($_SESSION['jPrefsRounds'])) echo $_SESSION['jPrefsRounds']; ?>" placeholder="" required>
 	</div>
 </div><!-- ./Form Group -->
 <div class="form-group"><!-- Form Group NOT REQUIRED Text Input -->
 	<label for="jPrefsMaxBOS" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Maximum Places in BOS Round</label>
 	<div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
 		<!-- Input Here -->
-			<input class="form-control" id="jPrefsMaxBOS" name="jPrefsMaxBOS" type="text" value="<?php echo $_SESSION['jPrefsMaxBOS']; ?>" placeholder="">
+			<input class="form-control" id="jPrefsMaxBOS" name="jPrefsMaxBOS" type="text" value="<?php if (isset($_SESSION['jPrefsMaxBOS'])) echo $_SESSION['jPrefsMaxBOS']; ?>" placeholder="">
 	</div>
 </div><!-- ./Form Group -->
 <div class="bcoem-admin-element hidden-print">

@@ -1177,12 +1177,14 @@ if (check_update("brewerJudgeBOS", $prefix."brewer")) {
 
 $output .= "<li>Previous Pro-Am award indication from entrants added.</li>";
 
-// Correct bug introduced in 2.1.13 regarding display of required info box
-// @ https://github.com/geoffhumphrey/brewcompetitiononlineentry/issues/980
-$updateSQL = sprintf("UPDATE `%s` SET brewStyleVersion='%s' WHERE brewStyleOwn='custom'",$prefix."styles",$_SESSION['prefsStyleSet']);
-mysqli_select_db($connection,$database);
-mysqli_real_escape_string($connection,$updateSQL);
-$result = mysqli_query($connection,$updateSQL);
+if (isset($_SESSION['prefsStyleSet'])) {
+	// Correct bug introduced in 2.1.13 regarding display of required info box
+	// @ https://github.com/geoffhumphrey/brewcompetitiononlineentry/issues/980
+	$updateSQL = sprintf("UPDATE `%s` SET brewStyleVersion='%s' WHERE brewStyleOwn='custom'",$prefix."styles",$_SESSION['prefsStyleSet']);
+	mysqli_select_db($connection,$database);
+	mysqli_real_escape_string($connection,$updateSQL);
+	$result = mysqli_query($connection,$updateSQL);
+}
 
 /**
  * ----------------------------------------------- 2.1.15 ----------------------------------------------
