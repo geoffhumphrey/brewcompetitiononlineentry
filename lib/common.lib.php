@@ -2279,7 +2279,7 @@ function brewer_info($uid,$filter="default") {
 	$r .= $row_brewer_info['brewerZip']."^";			// 13
 	$r .= $row_brewer_info['brewerCountry']."^";		// 14
 	if ($_SESSION['prefsProEdition'] == 1) $r .= $row_brewer_info['brewerBreweryName']."^"; else $r .= "&nbsp;^"; // 15
-	if ($row_brewer_info['brewerJudgeMead'] == "Y") $r .= "Certified Mead Judge"; else $r .= "N/A^"; // 16
+	if ($row_brewer_info['brewerJudgeMead'] == "Y") $r .= "Certified Mead Judge"; else $r .= "&nbsp;^"; // 16
 	if ($_SESSION['prefsProEdition'] == 1) $r .= $row_brewer_info['brewerBreweryTTB']."^"; else $r .= "&nbsp;^";// 17
 	return $r;
 }
