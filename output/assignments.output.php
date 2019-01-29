@@ -20,8 +20,13 @@ include (LIB.'admin.lib.php');
 			"sDom": 'rt',
 			"bStateSave" : false,
 			"bLengthChange" : false,
+
 			<?php if (($view == "default") || ($view == "name")) { ?>
-			"aaSorting": [[0,'asc'],[2,'asc'],[5,'asc']],
+                <?php if ($filter == "J") { ?>
+			"aaSorting": [[0,'asc'],[3,'asc'],[5,'asc']],
+                <?php } else { ?>
+            "aaSorting": [[0,'asc'],[2,'asc'],[4,'asc']],
+                <?php } ?>
 			<?php } ?>
 
 			<?php if ($view == "table") { ?>
