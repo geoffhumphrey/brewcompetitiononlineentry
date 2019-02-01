@@ -268,7 +268,7 @@ do {
 		$entry_actions .= "</a> ";
 		$entry_actions .= "<a class=\"hide-loader\" href=\"".$base_url."includes/process.inc.php?section=".$section."&amp;go=".$go."&amp;filter=".$filter."&amp;dbTable=".$brewing_db_table."&amp;action=delete&amp;id=".$row_log['id']."\" data-toggle=\"tooltip\" title=\"Delete &ldquo;".$row_log['brewName']."&rdquo;\" data-confirm=\"Are you sure you want to delete the entry called &ldquo;".$row_log['brewName']."?&rdquo; This cannot be undone.\"><span class=\"fa fa-lg fa-trash-o\"></a> ";
 		$entry_actions .= "<a id=\"modal_window_link\" class=\"hide-loader\" href=\"".$base_url."output/entry.output.php?id=".$row_log['id']."&amp;bid=".$brewer_info[7]."&amp;filter=admin\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Print the Entry Forms for &ldquo;".$row_log['brewName']."&rdquo;\"><span class=\"fa fa-lg fa-print hidden-xs hidden-sm\"></a> ";
-		$entry_actions .= "<a href=\"mailto:".$brewer_info[6]."\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Email the entry&rsquo;s owner, ".$brewer_info[0]." ".$brewer_info[1].", at ".$brewer_info[6]."\"><span class=\"fa fa-lg fa-envelope\"></span></a> ";
+		$entry_actions .= "<a class=\"hide-loader\" href=\"mailto:".$brewer_info[6]."\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Email the entry&rsquo;s owner, ".$brewer_info[0]." ".$brewer_info[1].", at ".$brewer_info[6]."\"><span class=\"fa fa-lg fa-envelope\"></span></a> ";
 	}
 
 	$scoresheet_link_1 = "";
@@ -286,7 +286,7 @@ do {
 			$scoresheet_random_file_relative_1 = "user_temp/".$random_file_name_1;
 			$scoresheet_random_file_1 = USER_TEMP.$random_file_name_1;
 			$scoresheet_random_file_html_1 = $base_url.$scoresheet_random_file_relative_1;
-			$scoresheet_link_1 .= "<a href=\"".$base_url."output/scoresheets.output.php?";
+			$scoresheet_link_1 .= "<a class=\"hide-loader\" href=\"".$base_url."output/scoresheets.output.php?";
 
 			// Obfuscate the *ACTUAL* file names.
 			// Prevents casual users from right clicking on scoresheet download link and changing
@@ -321,7 +321,7 @@ do {
 			$scoresheet_random_file_2 = USER_TEMP.$random_file_name_2;
 			$scoresheet_random_file_html_2 = $base_url.$scoresheet_random_file_relative_2;
 
-			$scoresheet_link_2 .= "<a href=\"".$base_url."output/scoresheets.output.php?";
+			$scoresheet_link_2 .= "<a class=\"hide-loader\" href=\"".$base_url."output/scoresheets.output.php?";
 
 			// Obfuscate the *ACTUAL* file names.
 			// Prevents casual users from right clicking on scoresheet download link and changing

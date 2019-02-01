@@ -70,40 +70,38 @@ require(DB.'winners.db.php');
 
 				// Build table headers
 				$table_head1 .= "<tr>";
-				$table_head1 .= sprintf("<th width=\"5%%\" nowrap>%s</th>",$label_place);
-				$table_head1 .= sprintf("<th width=\"25%%\">%s</th>",$label_brewer);
-				$table_head1 .= sprintf("<th width=\"25%%\">%s</th>",$label_entry_name);
-				$table_head1 .= sprintf("<th width=\"25%%\">%s</th>",$label_style);
-				if ($_SESSION['prefsProEdition'] == 0) $table_head1 .= sprintf("<th class=\"hidden-xs hidden-sm hidden-md\">%s</th>",$label_club);
+				$table_head1 .= sprintf("<th nowrap>%s</th>",$label_place);
+				$table_head1 .= sprintf("<th>%s</th>",$label_brewer);
+				$table_head1 .= sprintf("<th>%s</th>",$label_entry_name);
+				$table_head1 .= sprintf("<th>%s</th>",$label_style);
+				if ($_SESSION['prefsProEdition'] == 0) $table_head1 .= sprintf("<th>%s</th>",$label_club);
 				$table_head1 .= "</tr>";
 
 				do {
 
 					$table_body1 .= "<tr>";
 
-					$table_body1 .= "<td nowrap>";
+					$table_body1 .= "<td width=\"1%\" nowrap>";
 					$table_body1 .= display_place($row_bos['scorePlace'],2);
 					$table_body1 .= "</td>";
 
-					$table_body1 .= "<td>";
+					$table_body1 .= "<td width=\"25%\">";
 					if ($_SESSION['prefsProEdition'] == 1) $table_body1 .= $row_bos['brewerBreweryName'];
 					else $table_body1 .= $row_bos['brewerFirstName']." ".$row_bos['brewerLastName'];
 					if (($_SESSION['prefsProEdition'] == 0) && ($row_bos['brewCoBrewer'] != "")) $table_body1 .= sprintf("<br>%s: %s",$label_cobrewer,$row_bos['brewCoBrewer']);
 					$table_body1 .= "</td>";
 
-					if ($action == "print") $table_body1 .= "<td>";
-					else $table_body1 .= "<td>";
+					$table_body1 .= "<td width=\"25%\">";
 					$table_body1 .= $row_bos['brewName'];
 					$table_body1 .= "</td>";
 
-					if ($action == "print") $table_body1 .= "<td>";
-					else $table_body1 .= "<td>";
+					$table_body1 .= "<td>";
 					if ($_SESSION['prefsStyleSet'] == "BA") $table_body1 .= $row_bos['brewStyle'];
 					else $table_body1 .= $row_bos['brewCategory'].$row_bos['brewSubCategory'].": ".$row_bos['brewStyle'];
 					$table_body1 .= "</td>";
 
 					if ($_SESSION['prefsProEdition'] == 0) {
-						$table_body1 .= "<td class=\"hidden-xs hidden-sm hidden-md\">";
+						$table_body1 .= "<td width=\"20%\">";
 						$table_body1 .= $row_bos['brewerClubs'];
 						$table_body1 .= "</td>";
 					}
@@ -176,9 +174,9 @@ if ($totalRows_sbi > 0) {
 
 				$table_head2 .= "<tr>";
 				if ($row_sbi['sbi_display_places'] == "1") $table_head2 .= sprintf("<th width=\"5%%\" nowrap>%s</th>",$label_place);
-				$table_head2 .= sprintf("<th width=\"25%%\">%s</th>",$label_brewer);
-				$table_head2 .= sprintf("<th width=\"25%%\">%s</th>",$label_entry_name);
-				$table_head2 .= sprintf("<th width=\"25%%\">%s</th>",$label_style);
+				$table_head2 .= sprintf("<th>%s</th>",$label_brewer);
+				$table_head2 .= sprintf("<th>%s</th>",$label_entry_name);
+				$table_head2 .= sprintf("<th>%s</th>",$label_style);
 				if ($_SESSION['prefsProEdition'] == 0) $table_head2 .= sprintf("<th>%s</th>",$label_club);
 				$table_head2 .= "</tr>";
 
@@ -191,18 +189,18 @@ if ($totalRows_sbi > 0) {
 					$table_body2 .= "<tr>";
 
 					if ($row_sbi['sbi_display_places'] == "1") {
-						$table_body2 .= "<td nowrap>";
+						$table_body2 .= "<td width=\"1%\" nowrap>";
 						$table_body2 .= display_place($row_sbd['sbd_place'],2);
 						$table_body2 .= "</td>";
 					}
 
-					$table_body2 .= "<td>";
+					$table_body2 .= "<td width=\"25%\">";
 					if ($_SESSION['prefsProEdition'] == 0) $table_body2 .= $brewer_info['0']." ".$brewer_info['1'];
 					else $table_body2 .= $brewer_info[15];
 					if (($_SESSION['prefsProEdition'] == 0) && (!empty($entry_info['4']))) $table_body2 .=  "<br />".$label_cobrewer.": ".$entry_info['4'];
 					$table_body2 .= "</td>";
 
-					$table_body2 .= "<td>";
+					$table_body2 .= "<td width=\"25%\">";
 					$table_body2 .= $entry_info['0'];
 					$table_body2 .= "</td>";
 
@@ -211,7 +209,7 @@ if ($totalRows_sbi > 0) {
 					$table_body2 .= "</td>";
 
 					if ($_SESSION['prefsProEdition'] == 0) {
-						$table_body2 .= "<td>";
+						$table_body2 .= "<td width=\"25%\">";
 						$table_body2 .= $brewer_info['8'];
 						$table_body2 .= "</td>";
 					}

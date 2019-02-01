@@ -175,7 +175,7 @@ do {
 
 			if (($scoresheet) && (!empty($scoresheet_file_name))) {
 				$scoresheet_link = "";
-				$scoresheet_link .= "<a href=\"".$base_url."output/scoresheets.output.php?";
+				$scoresheet_link .= "<a class=\"hide-loader\" href=\"".$base_url."output/scoresheets.output.php?";
 
 				// Obfuscate the *ACTUAL* file names.
 				// Prevents casual users from right clicking on scoresheet download link and changing

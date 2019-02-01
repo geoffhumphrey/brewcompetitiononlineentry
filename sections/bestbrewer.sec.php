@@ -264,14 +264,14 @@ if (($_SESSION['prefsProEdition'] == 0) && ($row_limits['prefsShowBestClub'] != 
 
 			// Build club points table body
 			$table_body2 .= "<tr>";
-			$table_body2 .= "<td nowrap><a name=\"club-".$points_clubs."\"></a>".$bb_display_position_clubs."</td>";
+			$table_body2 .= "<td width=\"1%\" nowrap><a name=\"club-".$points_clubs."\"></a>".$bb_display_position_clubs."</td>";
 			$table_body2 .= "<td>".$bestbrewer_clubs[$key]['Clubs']."</td>";
-			$table_body2 .= "<td>".$bestbrewer_clubs[$key]['Places'][0]."</td>";
-			$table_body2 .= "<td>".$bestbrewer_clubs[$key]['Places'][1]."</td>";
-			$table_body2 .= "<td>".$bestbrewer_clubs[$key]['Places'][2]."</td>";
-			if ($show_4th_clubs) $table_body2 .= "<td>".$bestbrewer_clubs[$key]['Places'][3]."</td>";
-			if ($show_HM_clubs) $table_body2 .= "<td>".$bestbrewer_clubs[$key]['Places'][4]."</td>";
-			$table_body2 .= "<td nowrap>";
+			$table_body2 .= "<td width=\"10%\" nowrap>".$bestbrewer_clubs[$key]['Places'][0]."</td>";
+			$table_body2 .= "<td width=\"10%\" nowrap>".$bestbrewer_clubs[$key]['Places'][1]."</td>";
+			$table_body2 .= "<td width=\"10%\" nowrap>".$bestbrewer_clubs[$key]['Places'][2]."</td>";
+			if ($show_4th_clubs) $table_body2 .= "<td width=\"10%\" nowrap>".$bestbrewer_clubs[$key]['Places'][3]."</td>";
+			if ($show_HM_clubs) $table_body2 .= "<td width=\"10%\" nowrap>".$bestbrewer_clubs[$key]['Places'][4]."</td>";
+			$table_body2 .= "<td width=\"1%\" nowrap>";
 			if ($section == "results") $table_body2 .= $points_clubs;
 			else $table_body2 .= number_format($points_clubs,2);
 			if ($section != "results") $table_body2 .= " <a href=\"#club-".$points_clubs."\"  tabindex=\"0\" role=\"button\" data-toggle=\"popover\" data-trigger=\"hover\" data-placement=\"auto top\" data-container=\"body\" title=\"Actual Calculated Value\" data-content=\"".$points_clubs."\"><span class=\"hidden-xs hidden-sm hidden-md hidden-print fa fa-question-circle\"></span></a>";
@@ -301,28 +301,28 @@ if (($_SESSION['prefsProEdition'] == 0) && ($row_limits['prefsShowBestClub'] != 
 if ($row_limits['prefsShowBestBrewer'] != 0) {
 	// Build best brewer table headers
 	$table_head1 .= "<tr>";
-	$table_head1 .= sprintf("<th width=\"1%%\" nowrap>%s</th>",$label_place);
-	$table_head1 .= sprintf("<th width=\"24%%\">%s</th>",$label_brewer);
-	$table_head1 .= "<th width=\"10%%\">".addOrdinalNumberSuffix(1)."</th>";
-	$table_head1 .= "<th width=\"10%%\">".addOrdinalNumberSuffix(2)."</th>";
-	$table_head1 .= "<th width=\"10%%\">".addOrdinalNumberSuffix(3)."</th>";
-	if ($show_4th) $table_head1 .= "<th width=\"10%%\">".addOrdinalNumberSuffix(4)."</th>";
-	if ($show_HM) $table_head1 .= sprintf("<th width=\"10%%\">%s</th>",$best_brewer_text_001);
-	$table_head1 .= sprintf("<th width=\"1%%\" nowrap>%s</th>",$label_score);
-	if ($_SESSION['prefsProEdition'] == 0) $table_head1 .= sprintf("<th width=\"24%%\" class=\"hidden-xs hidden-sm hidden-md\">%s</th>",$label_club);
+	$table_head1 .= sprintf("<th nowrap>%s</th>",$label_place);
+	$table_head1 .= sprintf("<th>%s</th>",$label_brewer);
+	$table_head1 .= "<th>".addOrdinalNumberSuffix(1)."</th>";
+	$table_head1 .= "<th>".addOrdinalNumberSuffix(2)."</th>";
+	$table_head1 .= "<th>".addOrdinalNumberSuffix(3)."</th>";
+	if ($show_4th) $table_head1 .= "<th>".addOrdinalNumberSuffix(4)."</th>";
+	if ($show_HM) $table_head1 .= sprintf("<th>%s</th>",$best_brewer_text_001);
+	$table_head1 .= sprintf("<th nowrap>%s</th>",$label_score);
+	if ($_SESSION['prefsProEdition'] == 0) $table_head1 .= sprintf("<th>%s</th>",$label_club);
 }
 
 if (($_SESSION['prefsProEdition'] == 0) && ($row_limits['prefsShowBestClub'] != 0))  {
 	// Clubs table headers
 	$table_head2 .= "<tr>";
-	$table_head2 .= sprintf("<th width=\"1%%\" nowrap>%s</th>",$label_place);
-	$table_head2 .= sprintf("<th width=\"24%%\">%s</th>",$label_club);
-	$table_head2 .= "<th width=\"10%%\">".addOrdinalNumberSuffix(1)."</th>";
-	$table_head2 .= "<th width=\"10%%\">".addOrdinalNumberSuffix(2)."</th>";
-	$table_head2 .= "<th width=\"10%%\">".addOrdinalNumberSuffix(3)."</th>";
-	if ($show_4th_clubs) $table_head2 .= "<th width=\"10%%\">".addOrdinalNumberSuffix(4)."</th>";
-	if ($show_HM_clubs) $table_head2 .= sprintf("<th width=\"10%%\">%s</th>",$best_brewer_text_001);
-	$table_head2 .= sprintf("<th width=\"1%%\" nowrap>%s</th>",$label_score);
+	$table_head2 .= sprintf("<th nowrap>%s</th>",$label_place);
+	$table_head2 .= sprintf("<th>%s</th>",$label_club);
+	$table_head2 .= "<th>".addOrdinalNumberSuffix(1)."</th>";
+	$table_head2 .= "<th>".addOrdinalNumberSuffix(2)."</th>";
+	$table_head2 .= "<th>".addOrdinalNumberSuffix(3)."</th>";
+	if ($show_4th_clubs) $table_head2 .= "<th>".addOrdinalNumberSuffix(4)."</th>";
+	if ($show_HM_clubs) $table_head2 .= sprintf("<th>%s</th>",$best_brewer_text_001);
+	$table_head2 .= sprintf("<th nowrap>%s</th>",$label_score);
 	$table_head2 .= "</tr>";
 }
 
@@ -342,21 +342,21 @@ if ($row_limits['prefsShowBestBrewer'] != 0) {
 		else $bb_display_position = "";
 		if ($bb_position <= $bb_max_position) {
 			$table_body1 .= "<tr>";
-			$table_body1 .= "<td nowrap><a name=\"".$points."\"></a>".$bb_display_position."</td>";
-			$table_body1 .= "<td>".$bestbrewer[$key]['Name'];
+			$table_body1 .= "<td width=\"1%\" nowrap><a name=\"".$points."\"></a>".$bb_display_position."</td>";
+			$table_body1 .= "<td width=\"20%\">".$bestbrewer[$key]['Name'];
 			if (array_sum($bestbrewer[$key]['TypeBOS']) > 0) $table_body1 .= sprintf("<small><em><br>** %s %s **</em></small>",$label_bos,$label_participant);
 			$table_body1 .= "</td>";
-			$table_body1 .= "<td>".$bestbrewer[$key]['Places'][0]."</td>";
-			$table_body1 .= "<td>".$bestbrewer[$key]['Places'][1]."</td>";
-			$table_body1 .= "<td>".$bestbrewer[$key]['Places'][2]."</td>";
-			if ($show_4th) $table_body1 .= "<td>".$bestbrewer[$key]['Places'][3]."</td>";
-			if ($show_HM) $table_body1 .= "<td>".$bestbrewer[$key]['Places'][4]."</td>";
-			$table_body1 .= "<td nowrap>";
+			$table_body1 .= "<td width=\"10%\" nowrap>".$bestbrewer[$key]['Places'][0]."</td>";
+			$table_body1 .= "<td width=\"10%\" nowrap>".$bestbrewer[$key]['Places'][1]."</td>";
+			$table_body1 .= "<td width=\"10%\" nowrap>".$bestbrewer[$key]['Places'][2]."</td>";
+			if ($show_4th) $table_body1 .= "<td width=\"10%\" nowrap>".$bestbrewer[$key]['Places'][3]."</td>";
+			if ($show_HM) $table_body1 .= "<td width=\"10%\" nowrap>".$bestbrewer[$key]['Places'][4]."</td>";
+			$table_body1 .= "<td width=\"1%\" nowrap>";
 			if ($section == "results") $table_body1 .= $points;
 			else $table_body1 .= number_format($points,2);
 			if ($section != "results") $table_body1 .= " <a href=\"#".$points."\" tabindex=\"0\" role=\"button\" data-toggle=\"popover\" data-trigger=\"hover\" data-placement=\"auto top\" data-container=\"body\" title=\"Actual Calculated Value\" data-content=\"".$points."\"><span class=\"hidden-xs hidden-sm hidden-md hidden-print fa fa-question-circle\"></span></a>";
 			$table_body1 .= "</td>";
-			if ($_SESSION['prefsProEdition'] == 0) $table_body1 .= "<td class=\"hidden-xs hidden-sm hidden-md\">".$bestbrewer[$key]['Clubs']."</td>";
+			if ($_SESSION['prefsProEdition'] == 0) $table_body1 .= "<td>".$bestbrewer[$key]['Clubs']."</td>";
 			$table_body1 .= "</tr>";
 		}
 		else break;

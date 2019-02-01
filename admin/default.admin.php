@@ -1111,7 +1111,7 @@
 							<div class="col col-lg-8 col-md-8 col-sm-8 col-xs-8">
 								<ul class="list-inline">
 									<li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=staff&amp;go=judging_assignments&amp;action=download&amp;filter=default&amp;view=default" data-toggle="tooltip" data-placement="top" title="Print the BJCP Points report for judges, stewards, and staff">Print</a></li>
-									<li><a href="<?php echo $base_url; ?>output/export.output.php?section=staff&amp;go=judging_assignments&amp;action=download&amp;filter=default&amp;view=pdf" data-toggle="tooltip" data-placement="top" title="Download a PDF of the BJCP points report for judges, stewards, and staff">PDF</a></li>
+									<li><a class="hide-loader" href="<?php echo $base_url; ?>output/export.output.php?section=staff&amp;go=judging_assignments&amp;action=download&amp;filter=default&amp;view=pdf" data-toggle="tooltip" data-placement="top" title="Download a PDF of the BJCP points report for judges, stewards, and staff">PDF</a></li>
                                     <?php if (empty($_SESSION['contestID'])) { ?>
                                     <li><a href="#"  data-toggle="modal" data-target="#BJCPCompIDModal">XML</a></li>
                                     <?php } else { ?>

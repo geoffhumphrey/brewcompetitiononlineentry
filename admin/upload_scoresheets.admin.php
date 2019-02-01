@@ -131,7 +131,7 @@ if (!is_dir_empty(USER_DOCS)) {
 			$scoresheet_random_file = USER_TEMP.$random_file_name;
 			$scoresheet_random_file_html = $base_url.$scoresheet_random_file_relative;
 			$scoresheet_link = "";
-			$scoresheet_link .= "<a href=\"".$base_url."output/scoresheets.output.php?";
+			$scoresheet_link .= "<a class=\"hide-loader\" href=\"".$base_url."output/scoresheets.output.php?";
 			$scoresheet_link .= "scoresheetfilename=".urlencode(obfuscateURL($scoresheet_file_name,$encryption_key));
 			$scoresheet_link .= "&amp;randomfilename=".urlencode(obfuscateURL($random_file_name,$encryption_key))."&amp;download=true";
 			$scoresheet_link .= "\">".$scoresheet_file_name."</a>";

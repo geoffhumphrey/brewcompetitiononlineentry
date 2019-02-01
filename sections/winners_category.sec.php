@@ -90,11 +90,11 @@ if ($row_scored_entries['count'] > 0) {
 				}
 				// Build table headers
 				$table_head1 .= "<tr>";
-				$table_head1 .= sprintf("<th width=\"1%%\" nowrap>%s</th>",$label_place);
-				$table_head1 .= sprintf("<th width=\"24%%\">%s</th>",$label_brewer);
-				$table_head1 .= sprintf("<th width=\"24%%\"><span class=\"hidden-xs hidden-sm hidden-md\">%s </span>%s</th>",$label_entry,$label_name);
-				$table_head1 .= sprintf("<th width=\"24%%\">%s</th>",$label_style);
-				if ($_SESSION['prefsProEdition'] == 0) $table_head1 .= sprintf("<th width=\"24%%\" class=\"hidden-xs hidden-sm hidden-md\">%s</th>",$label_club);
+				$table_head1 .= sprintf("<th nowrap>%s</th>",$label_place);
+				$table_head1 .= sprintf("<th>%s</th>",$label_brewer);
+				$table_head1 .= sprintf("<th><span class=\"hidden-xs hidden-sm hidden-md\">%s </span>%s</th>",$label_entry,$label_name);
+				$table_head1 .= sprintf("<th>%s</th>",$label_style);
+				if ($_SESSION['prefsProEdition'] == 0) $table_head1 .= sprintf("<th width=\"24%%\">%s</th>",$label_club);
 				if ($filter == "scores") $table_head1 .= sprintf("<th width=\"1%%\" nowrap>Score</th>",$label_score);
 				$table_head1 .= "</tr>";
 
@@ -108,18 +108,18 @@ if ($row_scored_entries['count'] > 0) {
 					$table_body1 .= "<tr>";
 
 					if ($action == "print") {
-						$table_body1 .= "<td>";
+						$table_body1 .= "<td width=\"1%\" nowrap>";
 						$table_body1 .= display_place($row_scores['scorePlace'],1);
 						$table_body1 .= "</td>";
 					}
 
 					else {
-						$table_body1 .= "<td>";
+						$table_body1 .= "<td width=\"1%\" nowrap>";
 						$table_body1 .= display_place($row_scores['scorePlace'],2);
 						$table_body1 .= "</td>";
 					}
 
-					$table_body1 .= "<td>";
+					$table_body1 .= "<td width=\"25%\">";
 					if ($_SESSION['prefsProEdition'] == 1) $table_body1 .= $row_scores['brewerBreweryName'];
 					else $table_body1 .= $row_scores['brewerFirstName']." ".$row_scores['brewerLastName'];
 					if (($_SESSION['prefsProEdition'] == 0) && ($row_scores['brewCoBrewer'] != "")) $table_body1 .= "<br>".$label_cobrewer.": ".$row_scores['brewCoBrewer'];
@@ -129,7 +129,7 @@ if ($row_scored_entries['count'] > 0) {
 					$table_body1 .= $row_scores['brewName'];
 					$table_body1 .= "</td>";
 
-					$table_body1 .= "<td>";
+					$table_body1 .= "<td width=\"25%\">";
 					if ($_SESSION['prefsStyleSet'] == "BA") $table_body1 .= $row_scores['brewStyle'];
 					else $table_body1 .= $style.": ".$row_scores['brewStyle'];
 					if ((!empty($row_scores['brewInfo'])) && ($section != "results")) {
@@ -138,13 +138,13 @@ if ($row_scored_entries['count'] > 0) {
 					$table_body1 .= "</td>";
 
 					if ($_SESSION['prefsProEdition'] == 0) {
-						$table_body1 .= "<td class=\"hidden-xs hidden-sm hidden-md\">";
+						$table_body1 .= "<td width=\"25%\">";
 						$table_body1 .= $row_scores['brewerClubs'];
 						$table_body1 .= "</td>";
 					}
 
 					if ($filter == "scores") {
-						$table_body1 .= "<td class=\"hidden-xs hidden-sm hidden-md\">";
+						$table_body1 .= "<td width=\"1%\" nowrap>";
 						if (!empty($row_scores['scoreEntry'])) $table_body1 .= $row_scores['scoreEntry'];
 						else $table_body1 .= "&nbsp;";
 						$table_body1 .= "</td>";

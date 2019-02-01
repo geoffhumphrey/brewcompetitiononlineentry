@@ -180,11 +180,8 @@ $totalRows_entry_count = total_paid_received($go,"default");
 	$table_score_data = table_score_data($row_scores['eid'],$row_scores['scoreTable'],$filter);
 	$table_score_data = explode("^",$table_score_data);
 
-	if ((NHC) && ($prefix == "final_")) $entry_number = sprintf("%06s",$table_score_data[0]);
-	else $entry_number = sprintf("%04s",$table_score_data[0]);
-
-	if ((NHC) || ($_SESSION['prefsEntryForm'] == "N")) $judging_number = sprintf("%06s",$table_score_data[6]);
-	else $judging_number = readable_judging_number($table_score_data[1],$table_score_data[6]);
+	$entry_number = sprintf("%04s",$table_score_data[0]);
+	$judging_number = sprintf("%06s",$table_score_data[6]);
 
 	if ($row_scores['scorePlace'] == "5") $score_place = "HM";
 	elseif ($row_scores['scorePlace'] == "6") $score_place =  "Admin Advance";
@@ -205,6 +202,123 @@ $totalRows_entry_count = total_paid_received($go,"default");
         else $entry_category = $table_score_data[12].": ".$table_score_data[1];
 	}
 
+    // Check whether scoresheet file exists, and, if so, provide link.
+    $scoresheet_file_name_entry = sprintf("%06s",$entry_number).".pdf";
+    $scoresheet_file_name_judging = $judging_number.".pdf"; // upon upload via the UI, filename is converted to lowercase
+
+    if ($dbTable == "default") {
+        $scoresheetfile_entry = USER_DOCS.$scoresheet_file_name_entry;
+        $scoresheetfile_judging = USER_DOCS.$scoresheet_file_name_judging;
+        $scoresheet_prefs = $_SESSION['prefsDisplaySpecial'];
+    }
+
+    else {
+        $scoresheetfile_entry = USER_DOCS.DIRECTORY_SEPARATOR.get_suffix($dbTable).DIRECTORY_SEPARATOR.$scoresheet_file_name_entry;
+        $scoresheetfile_judging = USER_DOCS.DIRECTORY_SEPARATOR.get_suffix($dbTable).DIRECTORY_SEPARATOR.$scoresheet_file_name_judging;
+        $scoresheet_prefs = $row_archive_prefs['archiveScoresheet'];
+    }
+
+    $scoresheet = FALSE;
+    $scoresheet_entry = FALSE;
+    $scoresheet_judging = FALSE;
+
+    if ((file_exists($scoresheetfile_entry)) && ($scoresheet_prefs == "E")) {
+        $scoresheet = TRUE;
+        $scoresheet_entry = TRUE;
+    }
+
+    elseif ((file_exists($scoresheetfile_judging)) && ($scoresheet_prefs == "J")) {
+        $scoresheet = TRUE;
+        $scoresheet_judging = TRUE;
+    }
+
+    $scoresheet_file_name_1 = "";
+    $scoresheet_file_name_2 = "";
+    $scoresheet_link_1 = "";
+    $scoresheet_link_2 = "";
+
+    if ($scoresheet_entry) $scoresheet_file_name_1 = $scoresheet_file_name_entry;
+    if ($scoresheet_judging) $scoresheet_file_name_2 = $scoresheet_file_name_judging;
+
+    if (($scoresheet) && ($action != "print")) {
+
+        if ((!empty($scoresheet_file_name_1)) && ($scoresheet_entry)) {
+
+            // The pseudo-random number and the corresponding name of the temporary file are defined each time
+            // this brewer_entries.sec.php script is accessed (or refreshed), but the temporary file is created
+            // only when the entrant clicks on the gavel icon to access the scoresheet.
+            $random_num_str_1 = random_generator(8,2);
+            $random_file_name_1 = $random_num_str_1.".pdf";
+            $scoresheet_random_file_relative_1 = "user_temp/".$random_file_name_1;
+            $scoresheet_random_file_1 = USER_TEMP.$random_file_name_1;
+            $scoresheet_random_file_html_1 = $base_url.$scoresheet_random_file_relative_1;
+            $scoresheet_link_1 .= "<a class=\"hide-loader\" href=\"".$base_url."output/scoresheets.output.php?";
+
+            // Obfuscate the *ACTUAL* file names.
+            // Prevents casual users from right clicking on scoresheet download link and changing
+            // the entry or judging number pdf name passed via the URL to force downloads of files
+            // they shouldn't have access to. Can I get a harumph?!
+
+            /*
+            if (function_exists('openssl_encrypt')) {
+                $scoresheet_link_1 .= "scoresheetfilename=".obfuscateURL($scoresheet_file_name_1);
+                $scoresheet_link_1 .= "&amp;randomfilename=".obfuscateURL($random_file_name_1)."&amp;download=true";
+            }
+            */
+
+
+            $scoresheet_link_1 .= "scoresheetfilename=".urlencode(obfuscateURL($scoresheet_file_name_1,$encryption_key));
+            $scoresheet_link_1 .= "&amp;randomfilename=".urlencode(obfuscateURL($random_file_name_1,$encryption_key))."&amp;download=true";
+
+            if ($dbTable != "default") $scoresheet_link_1 .= "&amp;view=".get_suffix($dbTable);
+            $scoresheet_link_1 .= sprintf("\" data-toggle=\"tooltip\" title=\"%s '".$table_score_data[3]."'' (by Entry Number).\">",$brewer_entries_text_006);
+            $scoresheet_link_1 .= "<span class=\"fa fa-lg fa-gavel\"></a>&nbsp;&nbsp;";
+        }
+
+        if ((!empty($scoresheet_file_name_2)) && ($scoresheet_judging)) {
+
+            // The pseudo-random number and the corresponding name of the temporary file are defined each time
+            // this brewer_entries.sec.php script is accessed (or refreshed), but the temporary file is created
+            // only when the entrant clicks on the gavel icon to access the scoresheet.
+
+            $random_num_str_2 = random_generator(8,2);
+            $random_file_name_2 = $random_num_str_2.".pdf";
+            $scoresheet_random_file_relative_2 = "user_temp/".$random_file_name_2;
+            $scoresheet_random_file_2 = USER_TEMP.$random_file_name_2;
+            $scoresheet_random_file_html_2 = $base_url.$scoresheet_random_file_relative_2;
+
+            $scoresheet_link_2 .= "<a class=\"hide-loader\" href=\"".$base_url."output/scoresheets.output.php?";
+
+            // Obfuscate the *ACTUAL* file names.
+            // Prevents casual users from right clicking on scoresheet download link and changing
+            // the entry or judging number pdf name passed via the URL to force downloads of files
+            // they shouldn't have access to. Can I get a harumph?!
+            $scoresheet_link_2 .= "scoresheetfilename=".urlencode(obfuscateURL($scoresheet_file_name_2,$encryption_key));
+            $scoresheet_link_2 .= "&amp;randomfilename=".urlencode(obfuscateURL($random_file_name_2,$encryption_key))."&amp;download=true";
+            if ($dbTable != "default") $scoresheet_link_2 .= "&amp;view=".get_suffix($dbTable);
+            $scoresheet_link_2 .= sprintf("\" data-toggle=\"tooltip\" title=\"%s '".$table_score_data[3]."' (by Judging Number).\">",$brewer_entries_text_006);
+            $scoresheet_link_2 .= "<span class=\"fa fa-lg fa-gavel\"></a>&nbsp;&nbsp;";
+        }
+
+        // Clean up temporary scoresheets created for other brewers, when they are at least 1 minute old (just to avoid problems when two entrants try accessing their scoresheets at practically the same time, and clean up previously created scoresheets for the same brewer, regardless of how old they are.
+        $tempfiles = array_diff(scandir(USER_TEMP), array('..', '.'));
+
+        if (is_array($tempfiles)) {
+            foreach ($tempfiles as $file) {
+                if ((filectime(USER_TEMP.$file) < time() - 1*60) || ((strpos($file, $scoresheet_file_name_judging) !== FALSE))) {
+                    unlink(USER_TEMP.$file);
+                }
+
+                if ((filectime(USER_TEMP.$file) < time() - 1*60) || ((strpos($file, $scoresheet_file_name_entry) !== FALSE))) {
+                    unlink(USER_TEMP.$file);
+                }
+            }
+        }
+
+        if ((($dbTable == "default") && ($_SESSION['prefsDisplaySpecial'] == "E")) || ($dbTable != "default")) $entry_actions = $scoresheet_link_1;
+        if ((($dbTable == "default") && ($_SESSION['prefsDisplaySpecial'] == "J")) || ($dbTable != "default")) $entry_actions = $scoresheet_link_2;
+    }
+
 	?>
 	<tr>
     	<td><?php echo $entry_number; ?></td>
@@ -221,9 +335,7 @@ $totalRows_entry_count = total_paid_received($go,"default");
         <td><?php echo $score_place; ?></td>
         <td><?php echo $mini_bos; ?></td>
 		<?php if ($dbTable == "default") { ?>
-        <td><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=<?php echo $go; ?>&amp;action=edit&amp;id=<?php echo $table_score_data[9]; ?>" data-toggle="tooltip" data-placement="top" title="Edit the <?php echo $table_score_data[10]; ?> scores"><span class="fa fa-lg fa-pencil"></span></a>
-        <a class="hide-loader" href="<?php echo $base_url; ?>includes/process.inc.php?action=delete&amp;go=<?php echo $go; ?>&amp;id=<?php echo $row_scores['id']; ?>" data-toggle="tooltip" data-placement="top" title="Delete this score for entry #<?php echo $row_scores['eid']; ?>" data-confirm="Are you sure? This will delete the score and/or place for this entry."><span class="fa fa-lg fa-trash-o"></span></a>
-        </td>
+        <td><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=<?php echo $go; ?>&amp;action=edit&amp;id=<?php echo $table_score_data[9]; ?>" data-toggle="tooltip" data-placement="top" title="Edit the <?php echo $table_score_data[10]; ?> scores"><span class="fa fa-lg fa-pencil"></span></a>&nbsp;<?php echo $entry_actions; ?>&nbsp;<a class="hide-loader" href="<?php echo $base_url; ?>includes/process.inc.php?action=delete&amp;go=<?php echo $go; ?>&amp;id=<?php echo $row_scores['id']; ?>" data-toggle="tooltip" data-placement="top" title="Delete this score for entry #<?php echo $row_scores['eid']; ?>" data-confirm="Are you sure? This will delete the score and/or place for this entry."><span class="fa fa-lg fa-trash-o"></span></a></td>
         <?php } ?>
     </tr>
     <?php
