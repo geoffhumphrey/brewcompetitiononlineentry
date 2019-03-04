@@ -8,7 +8,7 @@ if ($bid != "") {
 }
 
 if ($filter == "judges") {
-	$query_sql = sprintf("SELECT a.brewerEmail, a.brewerFirstName, a.brewerLastName, a.brewerJudgeLocation, a.brewerStewardLocation, a.uid, a.brewerJudgeRank, a.brewerJudgeID, a.brewerJudgeLikes, a.brewerJudgeDislikes, b.uid FROM %s a, %s b WHERE b.staff_judge='1' AND a.uid = b.uid", $prefix."brewer", $prefix."staff");
+	$query_sql = sprintf("SELECT a.brewerEmail, a.brewerFirstName, a.brewerLastName, a.brewerJudgeLocation, a.brewerStewardLocation, a.uid, a.brewerJudgeRank, a.brewerJudgeID, a.brewerJudgeLikes, a.brewerJudgeDislikes, a.brewerJudgeMead, a.brewerJudgeCider, b.uid FROM %s a, %s b WHERE b.staff_judge='1' AND a.uid = b.uid", $prefix."brewer", $prefix."staff");
 	if (SINGLE) $query_sql .= sprintf(" AND b.comp_id='%s'",$_SESSION['comp_id']);
 	$query_sql .= " ORDER BY a.brewerLastName,a.brewerFirstName ASC";
 }
@@ -27,7 +27,7 @@ elseif ($filter == "staff") {
 
 //@single
 elseif ($filter == "avail_judges")  {
-	$query_sql = sprintf("SELECT uid, brewerFirstName, brewerLastName, brewerEmail, brewerJudge, brewerJudgeRank, brewerJudgeID, brewerSteward, brewerJudgeLocation, brewerStewardLocation, brewerJudgeLikes, brewerJudgeDislikes FROM %s WHERE brewerJudge='Y'", $prefix."brewer");
+	$query_sql = sprintf("SELECT uid, brewerFirstName, brewerLastName, brewerEmail, brewerJudge, brewerJudgeRank, brewerJudgeID, brewerSteward, brewerJudgeLocation, brewerStewardLocation, brewerJudgeLikes, brewerJudgeDislikes, brewerJudgeMead, brewerJudgeCider FROM %s WHERE brewerJudge='Y'", $prefix."brewer");
 	$query_sql .= " ORDER BY brewerLastName,brewerFirstName ASC";
 }
 
@@ -39,7 +39,7 @@ elseif ($filter == "avail_stewards") {
 
 //@single
 else {
-	$query_sql = sprintf("SELECT uid, brewerFirstName, brewerLastName, brewerEmail, brewerAddress, brewerCity, brewerState, brewerZip, brewerCountry, brewerPhone1, brewerClubs, brewerJudge, brewerJudgeRank, brewerJudgeID, brewerSteward, brewerJudgeLocation, brewerStewardLocation, brewerBreweryName, brewerBreweryTTB FROM %s", $prefix."brewer");
+	$query_sql = sprintf("SELECT uid, brewerFirstName, brewerLastName, brewerEmail, brewerAddress, brewerCity, brewerState, brewerZip, brewerCountry, brewerPhone1, brewerClubs, brewerJudge, brewerJudgeRank, brewerJudgeID, brewerJudgeMead, brewerJudgeCider, brewerSteward, brewerJudgeLocation, brewerStewardLocation, brewerBreweryName, brewerBreweryTTB FROM %s", $prefix."brewer");
 	$query_sql .= " ORDER BY brewerLastName ASC";
 }
 

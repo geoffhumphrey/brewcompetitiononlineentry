@@ -394,7 +394,19 @@ if (((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) || ((
 		else  									$filename = $contest."_All_Participant_Email_Addresses_".$date.$loc.$extension;
 
 		// Set the header row of the CSV for each type of download
-		if (($filter == "judges") || ($filter == "avail_judges")) $a [] = array($label_first_name,$label_last_name,$label_email,$label_bjcp_rank,$label_bjcp_id,$label_avail,$label_judge_preferred,$label_judge_non_preferred,$label_entries);
+		if (($filter == "judges") || ($filter == "avail_judges")) $a [] = array(
+            $label_first_name,
+            $label_last_name,
+            $label_email,
+            $label_bjcp_rank,
+            $label_bjcp_mead."?",
+            $label_bjcp_cider."?",
+            $label_bjcp_id,
+            $label_avail,
+            $label_judge_preferred,
+            $label_judge_non_preferred,
+            $label_entries
+        );
 
         elseif (($filter == "stewards") || ($filter == "avail_stewards")) $a [] = array($label_first_name,$label_last_name,$label_email,$label_avail,$label_entries);
 
@@ -421,7 +433,23 @@ if (((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) || ((
 			$steward_avail = judge_steward_availability($row_sql['brewerStewardLocation'],2,$prefix);
 
 			if (($filter == "judges") || ($filter == "avail_judges")) {
-                $a [] = array($brewerFirstName,$brewerLastName,$row_sql['brewerEmail'],str_replace(",",", ",$row_sql['brewerJudgeRank']),strtoupper(strtr($row_sql['brewerJudgeID'],$bjcp_num_replace)),$judge_avail,style_convert($row_sql['brewerJudgeLikes'],'6'),style_convert($row_sql['brewerJudgeDislikes'],'6'),judge_entries($row_sql['uid'],0));
+                $brewerJudgeMead = "";
+                $brewerJudgeCider = "";
+                if ((!empty($row_sql['brewerJudgeMead'])) && ($row_sql['brewerJudgeMead'] == "Y")) $brewerJudgeMead = $label_bjcp_mead;
+                if ((!empty($row_sql['brewerJudgeCider'])) && ($row_sql['brewerJudgeCider'] == "Y")) $brewerJudgeCider =
+                    $label_bjcp_cider;
+                $a [] = array(
+                    $brewerFirstName,
+                    $brewerLastName,
+                    $row_sql['brewerEmail'],
+                    str_replace(",",", ",$row_sql['brewerJudgeRank']),
+                    $brewerJudgeMead,
+                    $brewerJudgeCider,
+                    strtoupper(strtr($row_sql['brewerJudgeID'],$bjcp_num_replace)),
+                    $judge_avail,
+                    style_convert($row_sql['brewerJudgeLikes'],'6'),
+                    style_convert($row_sql['brewerJudgeDislikes'],'6'),
+                    judge_entries($row_sql['uid'],0));
             }
 
             elseif (($filter == "stewards") || ($filter == "avail_stewards")) {
@@ -469,8 +497,8 @@ if (((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) || ((
 		else $loc = "";
 		$date = date("m-d-Y");
 
-		if ($_SESSION['prefsProEdition'] == 1) $a[] = array($label_first_name,$label_last_name,$label_organization,$label_ttb,$label_address,$label_city,$label_state_province,$label_zip,$label_country,$label_phone,$label_email,$label_club,$label_entries,$label_assignment,$label_bjcp_id,$label_bjcp_rank,$label_judge_preferred,$label_judge_non_preferred);
-        else $a[] = array($label_first_name,$label_last_name,$label_address,$label_city,$label_state_province,$label_zip,$label_country,$label_phone,$label_email,$label_club,$label_entries,$label_assignment,$label_bjcp_id,$label_bjcp_rank,$label_judge_preferred,$label_judge_non_preferred);
+		if ($_SESSION['prefsProEdition'] == 1) $a[] = array($label_first_name,$label_last_name,$label_organization,$label_ttb,$label_address,$label_city,$label_state_province,$label_zip,$label_country,$label_phone,$label_email,$label_club,$label_entries,$label_assignment,$label_bjcp_id,$label_bjcp_rank,$label_bjcp_mead."?",$label_bjcp_cider."?",$label_judge_preferred,$label_judge_non_preferred);
+        else $a[] = array($label_first_name,$label_last_name,$label_address,$label_city,$label_state_province,$label_zip,$label_country,$label_phone,$label_email,$label_club,$label_entries,$label_assignment,$label_bjcp_id,$label_bjcp_rank,$label_bjcp_mead."?",$label_bjcp_cider."?",$label_judge_preferred,$label_judge_non_preferred);
 
 		//echo $query_sql;
 
@@ -479,6 +507,11 @@ if (((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) || ((
 			$brewerLastName = strtr($row_sql['brewerLastName'],$html_remove);
 			$brewerAddress = strtr($row_sql['brewerAddress'],$html_remove);
 			$brewerCity = strtr($row_sql['brewerCity'],$html_remove);
+            $brewerJudgeMead = "";
+            $brewerJudgeCider = "";
+            if ((!empty($row_sql['brewerJudgeMead'])) && ($row_sql['brewerJudgeMead'] == "Y")) $brewerJudgeMead = $label_bjcp_mead;
+            if ((!empty($row_sql['brewerJudgeCider'])) && ($row_sql['brewerJudgeCider'] == "Y")) $brewerJudgeCider =
+                $label_bjcp_cider;
 			$assignment = brewer_assignment($row_sql['uid'],"1","blah","default","default");
 			$assignment = strtolower($assignment);
 			$assignment = str_replace(", ", ",", $assignment);
@@ -497,7 +530,25 @@ if (((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) || ((
 
             if ($_SESSION['prefsProEdition'] == 1) $a[] = array($brewerFirstName,$brewerLastName,$row_sql['brewerBreweryName'],$row_sql['brewerBreweryTTB'],$brewerAddress,$brewerCity,$row_sql['brewerState'],$row_sql['brewerZip'],$row_sql['brewerCountry'],$phone,$row_sql['brewerEmail'],$row_sql['brewerClubs'],judge_entries($row_sql['uid'],0),$assignment,$row_sql['brewerJudgeID'],str_replace(",",", ",$row_sql['brewerJudgeRank']),style_convert($row_sql['brewerJudgeLikes'],'6'),style_convert($row_sql['brewerJudgeDislikes'],'6'));
 
-            else $a[] = array($brewerFirstName,$brewerLastName,$brewerAddress,$brewerCity,$row_sql['brewerState'],$row_sql['brewerZip'],$row_sql['brewerCountry'],$phone,$row_sql['brewerEmail'],$row_sql['brewerClubs'],judge_entries($row_sql['uid'],0),$assignment,$row_sql['brewerJudgeID'],str_replace(",",", ",$row_sql['brewerJudgeRank']),style_convert($row_sql['brewerJudgeLikes'],'6'),style_convert($row_sql['brewerJudgeDislikes'],'6'));
+            else $a[] = array(
+                $brewerFirstName,
+                $brewerLastName,
+                $brewerAddress,
+                $brewerCity,
+                $row_sql['brewerState'],
+                $row_sql['brewerZip'],
+                $row_sql['brewerCountry'],
+                $phone,$row_sql['brewerEmail'],
+                $row_sql['brewerClubs'],
+                judge_entries($row_sql['uid'],0),
+                $assignment,
+                $row_sql['brewerJudgeID'],
+                str_replace(",",", ",$row_sql['brewerJudgeRank']),
+                $brewerJudgeMead,
+                $brewerJudgeCider,
+                style_convert($row_sql['brewerJudgeLikes'],'6'),
+                style_convert($row_sql['brewerJudgeDislikes'],'6')
+            );
 
 		} while ($row_sql = mysqli_fetch_assoc($sql));
 
