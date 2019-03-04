@@ -2,7 +2,8 @@
 
 if (isset($_SERVER['HTTP_REFERER'])) {
 
-	$entries_updated[] = "";
+	$entries_updated = array();
+	$flag_jnum = array();
 
 	foreach ($_POST['id'] as $id) {
 

@@ -138,9 +138,13 @@ deny from all
 # Prevent directory listings
 # For security reasons, Option all cannot be overridden.
 #Options All -Indexes
-Options ExecCGI Includes IncludesNOEXEC SymLinksIfOwnerMatch -Indexes
+Options +ExecCGI +Includes +IncludesNOEXEC +SymLinksIfOwnerMatch +Indexes
 
 # Caching schema
 <FilesMatch "\.(css|js)$">
 Header set Cache-Control "max-age=3600"
 </FilesMatch>
+
+
+### php handler provided by phpupgrader ###
+AddHandler application/x-httpd-ea-php70 .php
