@@ -414,7 +414,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 							   GetSQLValueString($brewerStaff, "text"),
 							   GetSQLValueString($brewerBreweryName, "text"),
 							   GetSQLValueString($brewerBreweryTTB, "text"),
-							   GetSQLValueString($brewerJudgeMead, "text"),
+							   GetSQLValueString($brewerJudgeCider, "text"),
 							   GetSQLValueString($_POST['brewerProAm'], "int")
 							   );
 			}
@@ -617,7 +617,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 							   GetSQLValueString($brewerStaff, "text"),
 							   GetSQLValueString($brewerBreweryName, "text"),
 							   GetSQLValueString($brewerBreweryTTB, "text"),
-							   GetSQLValueString($brewerJudgeMead, "text"),
+							   GetSQLValueString($brewerJudgeCider, "text"),
 							   GetSQLValueString($_POST['brewerProAm'], "int")
 							   );
 		// Numbers 999999994 through 999999999 are reserved for NHC applications.
