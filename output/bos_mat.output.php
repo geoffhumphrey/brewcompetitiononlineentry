@@ -39,10 +39,12 @@ foreach ($a as $type) {
 	$style_type_info = style_type_info($type);
 	$style_type_info = explode("^",$style_type_info);
 
+	// print_r($style_type_info); exit;
+
 	if ($style_type_info[0] == "Y") {
 
 		include (DB.'output_bos_mat.db.php');
-		// $output .= $query_scores;
+		//$output .= $query_scores;
 
 		$endRow = 0;
 		$columns = 3;  // number of columns
@@ -50,7 +52,7 @@ foreach ($a as $type) {
 
 		$output .= '<table class="BOS-mat">';
 		do {
-			if ($row_scores['brewJudgingNumber'] > 0) {
+			if (!empty($row_scores['brewJudgingNumber'])) {
 
 				$style = $row_scores['brewCategory'].$row_scores['brewSubCategory'];
 

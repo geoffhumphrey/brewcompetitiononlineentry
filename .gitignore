@@ -36,3 +36,4 @@ js_includes/loading.js
 .github/*
 eval/*
 .config/*
+update/move_files.php

@@ -105,7 +105,7 @@ if (!is_dir_empty(USER_DOCS)) {
 
 	// List Files in the directory
 	//$handle = opendir($upload_dir);
-	$filelist_head = "<p><a class=\"btn btn-danger btn-sm\" href=\"".$base_url."includes/process.inc.php?action=delete_scoresheets&amp;filter=".$action."\" data-confirm=\"Are you sure? This will delete all scoresheets listed below. This cannot be undone.\"><span class=\"fa fa-trash\"></span> Delete All Scoresheets</a></p><p>It is advised that you delete or archive scoresheets as you prepare for another competition iteration. Otherwise, your entrants may download incorrect PDFs from previous competition iterations, causing confusion.</p>";
+	$filelist_head = "<p><a class=\"btn btn-danger btn-sm hide-loader\" href=\"".$base_url."includes/process.inc.php?action=delete_scoresheets&amp;filter=".$action."\" data-confirm=\"Are you sure? This will delete all scoresheets listed below. This cannot be undone.\"><span class=\"fa fa-trash\"></span> Delete All Scoresheets</a></p><p>It is advised that you delete or archive scoresheets as you prepare for another competition iteration. Otherwise, your entrants may download incorrect PDFs from previous competition iterations, causing confusion.</p>";
 	$filelist_head .= "<table class=\"table table-bordered table-responsive table-striped\" id=\"sortable\">\n";
 	$filelist_head .= "<thead>\n";
 	$filelist_head .= "<tr>\n";
@@ -141,7 +141,7 @@ if (!is_dir_empty(USER_DOCS)) {
 			$filelist .= "<td>".$scoresheet_link."</td>\n";
 			$filelist .= "<td>".$scoresheet_file_size." MB</td>";
 			$filelist .= "<td>".getTimeZoneDateTime($_SESSION['prefsTimeZone'], filemtime($file), $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "long", "date-time")."</td>\n";
-			$filelist .= "<td><a href=\"".$base_url."includes/process.inc.php?action=delete&amp;go=doc&amp;filter=".$scoresheet_file_name."&amp;view=".$action."\" data-confirm=\"Are you sure? This will remove the file named ".$scoresheet_file_name." from the server.\"><span class=\"fa fa-lg fa-trash\"></span></a></td>\n";
+			$filelist .= "<td><a class=\"hide-loader\" href=\"".$base_url."includes/process.inc.php?action=delete&amp;go=doc&amp;filter=".$scoresheet_file_name."&amp;view=".$action."\" data-confirm=\"Are you sure? This will remove the file named ".$scoresheet_file_name." from the server.\"><span class=\"fa fa-lg fa-trash\"></span></a></td>\n";
 			$filelist .= "</tr>\n";
 
 		}

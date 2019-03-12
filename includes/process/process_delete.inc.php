@@ -7,10 +7,11 @@
 
 if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) && (isset($_SESSION['userLevel'])))) {
 
-		$upload_dir = (USER_IMAGES);
+		
 
 		if ($go == "image") {
-
+			
+			$upload_dir = (USER_IMAGES);
 			unlink($upload_dir.$filter);
 			if ($view == "html") $deleteGoTo = $base_url."index.php?section=admin&go=upload&action=html&msg=31";
 			else $deleteGoTo = $base_url."index.php?section=admin&go=upload&msg=31";
@@ -19,7 +20,8 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 		}
 
 		elseif ($go == "doc") {
-
+			
+			$upload_dir = (USER_DOCS);
 			unlink($upload_dir.$filter);
 			if ($view == "html") $deleteGoTo = $base_url."index.php?section=admin&go=upload_scoresheets&action=html&msg=31";
 			else $deleteGoTo = $base_url."index.php?section=admin&go=upload_scoresheets&msg=31";
