@@ -1421,7 +1421,7 @@ CREATE TABLE IF NOT EXISTS `baseline_system` (
 --
 
 INSERT INTO `baseline_system` (`id`, `version`, `version_date`, `data_check`, `setup`, `setup_last_step`) VALUES
-(1, '2.1.16.0', '2019-02-01', '2019-02-01 00:00:01', 1, 8);
+(1, '2.1.17.0', '2019-03-13', '2019-03-13 00:00:01', 1, 8);
 
 -- --------------------------------------------------------
 
