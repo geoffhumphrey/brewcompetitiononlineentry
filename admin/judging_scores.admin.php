@@ -236,6 +236,7 @@ $totalRows_entry_count = total_paid_received($go,"default");
     $scoresheet_file_name_2 = "";
     $scoresheet_link_1 = "";
     $scoresheet_link_2 = "";
+    $entry_actions = "";
 
     if ($scoresheet_entry) $scoresheet_file_name_1 = $scoresheet_file_name_entry;
     if ($scoresheet_judging) $scoresheet_file_name_2 = $scoresheet_file_name_judging;
@@ -258,15 +259,6 @@ $totalRows_entry_count = total_paid_received($go,"default");
             // Prevents casual users from right clicking on scoresheet download link and changing
             // the entry or judging number pdf name passed via the URL to force downloads of files
             // they shouldn't have access to. Can I get a harumph?!
-
-            /*
-            if (function_exists('openssl_encrypt')) {
-                $scoresheet_link_1 .= "scoresheetfilename=".obfuscateURL($scoresheet_file_name_1);
-                $scoresheet_link_1 .= "&amp;randomfilename=".obfuscateURL($random_file_name_1)."&amp;download=true";
-            }
-            */
-
-
             $scoresheet_link_1 .= "scoresheetfilename=".urlencode(obfuscateURL($scoresheet_file_name_1,$encryption_key));
             $scoresheet_link_1 .= "&amp;randomfilename=".urlencode(obfuscateURL($random_file_name_1,$encryption_key))."&amp;download=true";
 
@@ -280,7 +272,6 @@ $totalRows_entry_count = total_paid_received($go,"default");
             // The pseudo-random number and the corresponding name of the temporary file are defined each time
             // this brewer_entries.sec.php script is accessed (or refreshed), but the temporary file is created
             // only when the entrant clicks on the gavel icon to access the scoresheet.
-
             $random_num_str_2 = random_generator(8,2);
             $random_file_name_2 = $random_num_str_2.".pdf";
             $scoresheet_random_file_relative_2 = "user_temp/".$random_file_name_2;

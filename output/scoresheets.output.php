@@ -48,11 +48,12 @@ if (isset($_SESSION['loginUsername'])) {
 		if (copy($scoresheetfile, $scoresheet_random_file)) {
 
 			header('Content-Type: application/pdf');
-			if (isset($_GET['download'])) header("Content-Disposition: attachment; filename=$scoresheet_file_name");
-			else header('Content-Disposition: inline; filename="' . $scoresheet_file_name . '"');
+			header("Content-Transfer-Encoding: Binary");
+			header("Content-Disposition: attachment; filename=".$scoresheet_file_name);
 			ob_clean();
 			flush();
 			readfile($scoresheet_random_file);
+			exit();
 
 		}
 
