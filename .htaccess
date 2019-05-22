@@ -144,7 +144,3 @@ Options +ExecCGI +Includes +IncludesNOEXEC +SymLinksIfOwnerMatch +Indexes
 <FilesMatch "\.(css|js)$">
 Header set Cache-Control "max-age=3600"
 </FilesMatch>
-
-
-### php handler provided by phpupgrader ###
-AddHandler application/x-httpd-ea-php70 .php
