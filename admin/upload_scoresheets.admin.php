@@ -48,6 +48,12 @@
         <li>Have a .pdf or .PDF extension.</li>
     </ul>
 <p>Please note that file names and extensions uploaded with this browser-based function will be converted to lower-case.</p>
+<script>
+//add additional file types here if needed, per docs: https://www.dropzonejs.com/#configuration-options
+Dropzone.options.uploadWidget = {
+  acceptedFiles: '.pdf'
+};
+</script>
 <form id="upload-widget" method="post" action="<?php echo $base_url; ?>handle.php?action=docs" class="dropzone">
 <div class="fallback">
     <input name="file" type="file" multiple />
