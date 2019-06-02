@@ -4,6 +4,9 @@
  * Description: This module does all the heavy lifting for adding/editing info in the "judging preferences" table
  */
 
+use PHPMailer\PHPMailer\PHPMailer;
+require(LIB.'email.lib.php');
+
 if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1))  || ($section == "setup"))) {
 
 	if (($action == "edit") || ($section == "setup")) {
@@ -73,7 +76,17 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 			$headers .= "To: BCOEM Admin <prost@brewcompetition.com>, " . "\r\n";
 			$headers .= "From: BCOEM Server <noreply@".$server.">" . "\r\n";
 
-			mail($to_email, $subject, $message, $headers);
+			if ($mail_use_smtp) {
+				$mail = new PHPMailer(true);
+				$mail->addAddress($to_email, "BCOEM Admin");
+				$mail->setFrom("noreply@".$server, "BCOEM Server");
+				$mail->Subject = $subject;
+				$mail->Body = $message;
+
+				sendPHPMailerMessage($mail);
+			} else {
+				mail($to_email, $subject, $message, $headers);
+			}
 		}
 
 		$redirect_go_to = sprintf("Location: %s", $base_url."index.php?msg=16");

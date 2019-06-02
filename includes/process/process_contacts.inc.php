@@ -4,6 +4,10 @@
  * Module:      process_contacts.inc.php
  * Description: This module does all the heavy lifting for adding/editing info in the "contacts" table
  */
+
+use PHPMailer\PHPMailer\PHPMailer;
+require(LIB.'email.lib.php');
+
 $captcha_success = FALSE;
 
 if (isset($_SERVER['HTTP_REFERER'])) {
@@ -81,7 +85,19 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 			echo $message;
 			*/
 
-			mail($to_email, $subject, $message, $headers);
+			if ($mail_use_smtp) {				
+				$mail = new PHPMailer(true);
+				$mail->addAddress($to_email, $to_name);
+				$mail->setFrom("noreply@".$_SERVER['SERVER_NAME'], $_SESSION['contestName']);
+				$mail->addReplyTo($from_email, $from_name);
+				$mail->addCC($from_email, $from_name);
+				$mail->Subject = $subject;
+				$mail->Body = $message;
+				sendPHPMailerMessage($mail);
+			} else {
+				mail($to_email, $subject, $message, $headers);
+			}
+
 			$redirect_go_to = sprintf("Location: %s", $base_url."index.php?section=contact&action=email&id=".$row_contact['id']."&msg=1");
 
 		}

@@ -3,7 +3,7 @@
 Checked Single
 2016-06-06
 */
-
+use PHPMailer\PHPMailer\PHPMailer;
 ob_start();
 include('../paths.php');
 require(CONFIG.'config.php');
@@ -15,7 +15,7 @@ require(DB.'common.db.php');
 require(CLASSES.'phpass/PasswordHash.php');
 $hasher = new PasswordHash(8, false);
 mysqli_select_db($connection,$database);
-
+require(LIB.'email.lib.php');
 
 if (($action == "email") && ($id != "default")) {
 		
@@ -52,13 +52,26 @@ if (($action == "email") && ($id != "default")) {
 	
 	$url = str_replace("www.","",$_SERVER['SERVER_NAME']);
 	
+	$contestName = ucwords($_SESSION['contestName']);
+	$from_email = "noreply@".$url;
+
 	$headers  = "MIME-Version: 1.0" . "\r\n";
 	$headers .= "Content-type: text/html; charset=iso-8859-1" . "\r\n";
 	$headers .= "To: ".$to_recipient. " <".$to_email.">, " . "\r\n";
-	$headers .= "From: ".ucwords($_SESSION['contestName'])." Server <noreply@".$url. ">\r\n";
+	$headers .= "From: ".$contestName." Server <".$from_email. ">\r\n";
 	
 	$emails = $to_email;
-	mail($emails, $subject, $message, $headers);
+
+	if ($mail_use_smtp) {
+		$mail = new PHPMailer(true);
+		$mail->addAddress($to_email, $to_recipient);
+		$mail->setFrom($from_email, $contestName);
+		$mail->Subject = $subject;
+		$mail->Body = $message;
+		sendPHPMailerMessage($mail);
+	} else {
+		mail($emails, $subject, $message, $headers);
+	}
 	
 	/*
 	echo $headers."<br>";
@@ -123,13 +136,26 @@ if ($action == "forgot") {
 
 		$url = str_replace("www.","",$_SERVER['SERVER_NAME']);
 
+		$contestName = ucwords($_SESSION['contestName']);
+		$from_email = "noreply@".$url;
+	
 		$headers  = "MIME-Version: 1.0" . "\r\n";
 		$headers .= "Content-type: text/html; charset=iso-8859-1" . "\r\n";
 		$headers .= "To: ".$to_recipient. " <".$to_email.">, " . "\r\n";
-		$headers .= "From: ".ucwords($_SESSION['contestName'])." Server <noreply@".$url. ">\r\n";
+		$headers .= "From: ".$contestName." Server <".$from_email. ">\r\n";
 
 		$emails = $to_email;
-		mail($emails, $subject, $message, $headers);
+
+		if ($mail_use_smtp) {
+			$mail = new PHPMailer(true);
+			$mail->addAddress($to_email, $to_recipient);
+			$mail->setFrom($from_email, $contestName);
+			$mail->Subject = $subject;
+			$mail->Body = $message;
+			sendPHPMailerMessage($mail);
+		} else {
+			mail($emails, $subject, $message, $headers);
+		}
 		
 		/*
 		// Debug

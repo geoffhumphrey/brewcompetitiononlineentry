@@ -16,11 +16,13 @@ To implement:
 
 */
 
+use PHPMailer\PHPMailer\PHPMailer;
 require ('paths.php');
 require (CONFIG.'bootstrap.php');
 require (INCLUDES.'url_variables.inc.php');
 include (INCLUDES.'scrubber.inc.php');
 require (LANG.'language.lang.php');
+require(LIB.'email.lib.php');
 
 $query_prefs = sprintf("SELECT prefsPayPalAccount FROM %s WHERE id='1'", $prefix."preferences");
 $prefs = mysqli_query($connection,$query_prefs) or die (mysqli_error($connection));
@@ -181,7 +183,19 @@ if ($verified) {
 
 		// Send the email message
 		$subject = $test_text." ".$data['item_name']." - ".ucwords($paypal_response_text_009);
-		mail($to_email, $subject, $message_all, $headers);
+
+		if ($mail_use_smtp) {
+			$mail = new PHPMailer(true);
+			$mail->addAddress($to_email, $to_recipient);
+			$mail->addCC($cc_email, $cc_recipient);
+			$mail->setFrom("noreply@".$url, $row_logo['contestName']);
+			$mail->Subject = $subject;
+			$mail->Body = $message_all;
+			sendPHPMailerMessage($mail);
+		} else {
+			mail($to_email, $subject, $message_all, $headers);
+		}
+
 
     }
 
@@ -238,7 +252,19 @@ if ($send_confirmation_email) {
 	$message_all_confirm = $message_top_confirm.$message_body_confirm.$message_bottom_confirm;
 
 	$subject_confirm = "PayPal IPN: ".$paypal_ipn_status;
-	mail($confirm_to_email_address, $subject_confirm, $message_all_confirm, $headers_confirm);
+
+	if ($mail_use_smtp) {
+		$mail = new PHPMailer(true);
+		$mail->addAddress($to_email, "BCOEM Admin");
+		$mail->setFrom("noreply@".$server, "BCOEM Server");
+		$mail->Subject = $subject;
+		$mail->Body = $message;
+
+		sendPHPMailerMessage($mail);
+	} else {
+		mail($confirm_to_email_address, $subject_confirm, $message_all_confirm, $headers_confirm);
+	}
+
 
 }
 
