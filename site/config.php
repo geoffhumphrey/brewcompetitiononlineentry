@@ -209,7 +209,7 @@ $server_root = $_SERVER['DOCUMENT_ROOT'];
  * see: https://github.com/PHPMailer/PHPMailer for examples 
  */
 
-$mail_use_smtp = false;      // Set this to true to use PHPMailer library instead of default mail() function and the variabels below.
+$mail_use_smtp = false;      // Set this to true to use PHPMailer library instead of default mail() function and the variables below.
 $smtp_debug_level = 2;       // Enable verbose debug output
 $smtp_host = "localhost";    // Specify main (and backup, if necessary - ';' separated) SMTP servers
 $smtp_auth = false;          // Enable / Disable SMTP authentication
