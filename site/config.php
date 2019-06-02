@@ -217,6 +217,5 @@ $smtp_username = "";         // SMTP username
 $smtp_password = "";         // SMTP password
 $smtp_secure = "";           // Enable TLS encryption, `tls` and `ssl` are accepted
 $smtp_port = 25;             // TCP port to connect to
-$smtp_default_from = "";     // Default From Address - This will be used instead of the generated noreply@ domain if specified. 
 
 ?>
