@@ -255,11 +255,10 @@ if ($send_confirmation_email) {
 
 	if ($mail_use_smtp) {
 		$mail = new PHPMailer(true);
-		$mail->addAddress($to_email, "BCOEM Admin");
-		$mail->setFrom("noreply@".$server, "BCOEM Server");
-		$mail->Subject = $subject;
-		$mail->Body = $message;
-
+		$mail->addAddress($confirm_to_email_address);
+		$mail->setFrom($confirm_from_email_address);
+		$mail->Subject = $subject_confirm;
+		$mail->Body = $message_all_confirm;
 		sendPHPMailerMessage($mail);
 	} else {
 		mail($confirm_to_email_address, $subject_confirm, $message_all_confirm, $headers_confirm);
