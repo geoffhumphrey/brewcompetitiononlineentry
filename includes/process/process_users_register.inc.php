@@ -320,7 +320,8 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 				$headers .= "Content-type: text/html; charset=iso-8859-1" . "\r\n";
 				$headers .= sprintf("%s: ".$to_recipient. " <".$to_email.">, " . "\r\n",$label_to);
 
-				$from_email = "noreply@".$url;
+				$url = str_replace("www.","",$_SERVER['SERVER_NAME']);
+				$from_email = (!isset($mail_default_from) || trim($mail_default_from) === '') ? "noreply@".$url : $mail_default_from;
 
 				if (strpos($url, 'brewcomp.com') !== false) {
 					$from_email = "noreply@brewcomp.com";

@@ -8,8 +8,8 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 	$url = str_replace("www.","",$_SERVER['SERVER_NAME']);
 
 	$from_name = $_SESSION['contestName']." Competition Server";
-	$from_email = "noreply@".$url;
-
+	$from_email = (!isset($mail_default_from) || trim($mail_default_from) === '') ? "noreply@".$url : $mail_default_from;
+	
 	$headers = "";
 	$message = "";
 

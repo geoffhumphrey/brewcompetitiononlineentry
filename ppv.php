@@ -76,8 +76,10 @@ $url = str_replace("www.","",$_SERVER['SERVER_NAME']);
 
 $paypal_email_address = $row_prefs['prefsPayPalAccount'];
 
-$confirm_to_email_address = "PayPal IPN Confirmation <".$row_prefs['prefsPayPalAccount'].">";
-$confirm_from_email_address = $row_logo['contestName']." Server <noreply@".$url.">";
+$from_email = (!isset($mail_default_from) || trim($mail_default_from) === '') ? "noreply@".$url : $mail_default_from;
+
+$confirm_to_email_address = "PayPal IPN Confirmation <".$paypal_email_address.">";
+$confirm_from_email_address = $row_logo['contestName']." Server <".$from_email.">";
 
 $to_email = "";
 $to_recipient = "";
@@ -152,7 +154,7 @@ if ($verified) {
 		$headers .= "Content-type: text/html; charset=iso-8859-1" . "\r\n";
 		$headers .= "To: ".$to_recipient. " <".$to_email .">, " . "\r\n";
 		$headers .= "CC: ".$cc_recipient. " <".$cc_email.">, " . "\r\n";
-		$headers .= "From: ".$row_logo['contestName']." Server <noreply@".$url.">\r\n";
+		$headers .= "From: ".$row_logo['contestName']." Server <".$from_email.">\r\n";
 
 		$message_top = "";
 		$message_body = "";
@@ -188,7 +190,7 @@ if ($verified) {
 			$mail = new PHPMailer(true);
 			$mail->addAddress($to_email, $to_recipient);
 			$mail->addCC($cc_email, $cc_recipient);
-			$mail->setFrom("noreply@".$url, $row_logo['contestName']);
+			$mail->setFrom($from_email, $row_logo['contestName']);
 			$mail->Subject = $subject;
 			$mail->Body = $message_all;
 			sendPHPMailerMessage($mail);
@@ -255,16 +257,14 @@ if ($send_confirmation_email) {
 
 	if ($mail_use_smtp) {
 		$mail = new PHPMailer(true);
-		$mail->addAddress($confirm_to_email_address);
-		$mail->setFrom($confirm_from_email_address);
+		$mail->addAddress($paypal_email_address, "PayPal IPN Confirmation");
+		$mail->setFrom($from_email, $row_logo['contestName']." Server");
 		$mail->Subject = $subject_confirm;
 		$mail->Body = $message_all_confirm;
 		sendPHPMailerMessage($mail);
 	} else {
 		mail($confirm_to_email_address, $subject_confirm, $message_all_confirm, $headers_confirm);
 	}
-
-
 }
 
 // Reply with an empty 200 response to indicate to paypal the IPN was received correctly

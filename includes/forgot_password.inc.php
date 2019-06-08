@@ -53,8 +53,8 @@ if (($action == "email") && ($id != "default")) {
 	$url = str_replace("www.","",$_SERVER['SERVER_NAME']);
 	
 	$contestName = ucwords($_SESSION['contestName']);
-	$from_email = "noreply@".$url;
-
+	$from_email = (!isset($mail_default_from) || trim($mail_default_from) === '') ? "noreply@".$url : $mail_default_from;
+	
 	$headers  = "MIME-Version: 1.0" . "\r\n";
 	$headers .= "Content-type: text/html; charset=iso-8859-1" . "\r\n";
 	$headers .= "To: ".$to_recipient. " <".$to_email.">, " . "\r\n";
@@ -137,7 +137,7 @@ if ($action == "forgot") {
 		$url = str_replace("www.","",$_SERVER['SERVER_NAME']);
 
 		$contestName = ucwords($_SESSION['contestName']);
-		$from_email = "noreply@".$url;
+		$from_email = (!isset($mail_default_from) || trim($mail_default_from) === '') ? "noreply@".$url : $mail_default_from;
 	
 		$headers  = "MIME-Version: 1.0" . "\r\n";
 		$headers .= "Content-type: text/html; charset=iso-8859-1" . "\r\n";
