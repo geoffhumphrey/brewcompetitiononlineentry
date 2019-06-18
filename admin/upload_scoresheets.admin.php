@@ -18,6 +18,7 @@
             </ul>
         </li>
         <li>Have a .pdf or .PDF extension.</li>
+        <li>Be <strong>less than</strong> 10 MB in size.</li>
     </ul>
 <form method="post" action="<?php echo $base_url; ?>handle.php?action=html_docs" ENCTYPE="multipart/form-data">
 <div class="fileinput fileinput-new" data-provides="fileinput">
@@ -46,8 +47,9 @@
             </ul>
         </li>
         <li>Have a .pdf or .PDF extension.</li>
+        <li>Be <strong>less than</strong> 10 MB in size.</li>
     </ul>
-<p>Please note that file names and extensions uploaded with this browser-based function will be converted to lower-case.</p>
+<p>Please note that file names and extensions uploaded with this browser-based function will be converted to lower-case. Files should be less than 10 MB.</p>
 <form id="upload-widget" method="post" action="<?php echo $base_url; ?>handle.php?action=docs" class="dropzone">
 <div class="fallback">
     <input name="file" type="file" multiple />

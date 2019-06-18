@@ -282,10 +282,10 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 		while($judging_number_looper) {
 
 			$generated_judging_number = generate_judging_num(1,$styleTrim);
-			$scoresheet_file_name_judging = $generated_judging_number.".pdf";
+			$scoresheet_file_name_judging = strtolower($generated_judging_number).".pdf";
 
 			if (!in_array($scoresheet_file_name_judging,$files))  {
-				$brewJudgingNumber = $generated_judging_number;
+				$brewJudgingNumber = strtolower($generated_judging_number);
 				$judging_number_looper = FALSE;
 			}
 
@@ -509,7 +509,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 			$insertSQL .= GetSQLValueString($brewBrewerLastName,"text").", ";
 			$insertSQL .= GetSQLValueString(ucwords($brewCoBrewer),"text").", ";
 
-			$insertSQL .= GetSQLValueString($brewJudgingNumber,"text").", ";
+			$insertSQL .= GetSQLValueString(strtolower($brewJudgingNumber),"text").", ";
 			$insertSQL .= "NOW( ), ";
 			if ($_POST['brewStyle'] == "0-A") $insertSQL .= GetSQLValueString("0","text").", ";
 			else $insertSQL .= GetSQLValueString(filter_var($_POST['brewConfirmed'],FILTER_SANITIZE_STRING),"text").", ";
@@ -942,7 +942,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 			if ((isset($_POST['brewPaid'.$id])) && ($_POST['brewPaid'.$id] == 1)) $brewPaid = 1;
 			if ((isset($_POST['brewReceived'.$id])) && ($_POST['brewReceived'.$id] == 1)) $brewReceived = 1;
 
-			$updateSQL = sprintf("UPDATE %s SET brewPaid='%s', brewReceived='%s', brewBoxNum='%s', brewJudgingNumber='%s', brewAdminNotes='%s', brewStaffNotes='%s' WHERE id='%s'",$brewing_db_table, $brewPaid, $brewReceived, $brewBoxNum, $brewJudgingNumber, $brewAdminNotes, $brewStaffNotes, $id);
+			$updateSQL = sprintf("UPDATE %s SET brewPaid='%s', brewReceived='%s', brewBoxNum='%s', brewJudgingNumber='%s', brewAdminNotes='%s', brewStaffNotes='%s' WHERE id='%s'",$brewing_db_table, $brewPaid, $brewReceived, $brewBoxNum, strtolower($brewJudgingNumber), $brewAdminNotes, $brewStaffNotes, $id);
 			mysqli_real_escape_string($connection,$updateSQL);
 			$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 

@@ -42,7 +42,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 
 		if (!isset($_POST['keepScoresheets'])) {
 			// Erase all files in the user_docs directory
-			rdelete(USER_DOCS);
+			rdelete(USER_DOCS,"");
 		}
 
 		if (!isset($_POST['keepParticipants'])) {

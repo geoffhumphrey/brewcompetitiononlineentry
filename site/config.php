@@ -35,7 +35,7 @@ $username = "";
 /**
  * INSERT YOUR PASSWORD BETWEEN THE DOUBLE-QUOTATION MARKS ("").
  * For example, if your password is flintstone then the line should read 
- & $password = "flintsone".
+ * $password = "flintsone".
  */
 
 $password = "";

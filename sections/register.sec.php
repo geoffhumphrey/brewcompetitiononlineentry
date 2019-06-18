@@ -363,7 +363,7 @@ if ($go == "default") {  ?>
             <div class="help-block"><?php echo $register_text_021; ?></div>
 			<div class="help-block with-errors"></div>
             <div id="msg_email"></div>
-			<div id="status"></div>
+			
 		</div>
 	</div><!-- ./Form Group -->
     <?php if ($view == "default") { // Show if not using quick add judge/steward feature ?>

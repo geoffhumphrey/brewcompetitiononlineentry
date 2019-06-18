@@ -88,15 +88,10 @@
       <td><?php echo $special_best_info[1]; ?></td>
       <td><?php echo $row_sbd['sbd_place']; ?></td>
       <td><?php echo sprintf("%04s",$row_sbd['eid']); ?></td>
-      <td>
-	  <?php
-	  if ((NHC) || ($_SESSION['prefsEntryForm'] == "N")) echo sprintf("%06s",$info[6]);
-	  else echo readable_judging_number($info[3],$info[6]);
-	  ?></td>
+      <td><?php echo readable_judging_number($info[3],$info[6]); ?></td>
       <td><?php echo $info[0]; ?></td>
       <td><?php echo $brewer_info[0]." ".$brewer_info[1]; ?></td>
       <td nowrap="nowrap">
-
 	  <a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=<?php echo $go; ?>&amp;action=edit&amp;id=<?php echo $row_sbd['sid']; ?>" data-toggle="tooltip" data-placement="top" title="Edit the <?php echo $special_best_info[1]; ?> Custom Style entries"><span class="fa fa-lg fa-pencil"></span></a>
 	  <a class="hide-loader" href="<?php echo $base_url; ?>includes/process.inc.php?section=admin&amp;go=<?php echo $go; ?>&amp;dbTable=<?php echo $special_best_data_db_table; ?>&amp;action=delete&amp;id=<?php echo $row_sbd['id']; ?>" data-toggle="tooltip" data-placement="top" title="Delete &ldquo;<?php echo $info[0]; ?>&rdquo; as a winner for the <?php echo $special_best_info[1]; ?> Custom Style"  data-confirm="Are you sure you want to delete <?php echo $info[0]; ?>? This cannot be undone."><span class="fa fa-lg fa-trash-o"></span></a>
       </td>
@@ -146,29 +141,23 @@ if ($action == "add") {
 		do {
 		$info = explode("^", entry_info($row_sbd['eid']));
 		?>
+
+
   <input type="hidden" name="id[]" value="<?php echo $row_sbd['id']; ?>" />
   <input type="hidden" name="bid<?php echo $row_sbd['id']; ?>" value="<?php echo $row_sbd['bid']; ?>" />
   <input type="hidden" name="eid<?php echo $row_sbd['id']; ?>" value="<?php echo $row_sbd['eid']; ?>" />
   <input type="hidden" name="sid<?php echo $row_sbd['id']; ?>" value="<?php echo $id; ?>">
   <input type="hidden" name="entry_exists<?php echo $row_sbd['id']; ?>" value="Y" />
-
-
   <div class="form-group"><!-- Form Group REQUIRED Text Input -->
 		<label for="sbd_judging_no<?php echo $row_sbd['id']; ?>" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Winning Entry's Judging Number</label>
 		<div class="col-lg-3 col-md-6 col-sm-8 col-xs-12">
 			<div class="input-group has-warning">
 				<!-- Input Here -->
-				<input class="form-control" id="sbd_judging_no<?php echo $row_sbd['id']; ?>" name="sbd_judging_no<?php echo $row_sbd['id']; ?>" type="text" size="10" maxlength="255" value="<?php if ($info[6] > 0) {
-	  if ((NHC) || ($_SESSION['prefsEntryForm'] == "N")) echo sprintf("%06s",$info[6]);
-	  else echo readable_judging_number($info[3],$info[6]);
-	}
-	  ?>" placeholder="">
+				<input class="form-control" id="sbd_judging_no<?php echo $row_sbd['id']; ?>" name="sbd_judging_no<?php echo $row_sbd['id']; ?>" type="text" size="10" maxlength="255" value="<?php echo readable_judging_number($info[3],$info[6]); ?>" placeholder="">
 				<span class="input-group-addon" id="sbd_judging_no<?php echo $row_sbd['id']; ?>-2"><span class="fa fa-star"></span></span>
 			</div>
 		</div>
 	</div><!-- ./Form Group -->
-
-
 	<div class="form-group"><!-- Form Group REQUIRED Text Input -->
 		<label for="sbd_place<?php  echo $row_sbd['id']; ?>" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Place</label>
 		<div class="col-lg-3 col-md-6 col-sm-8 col-xs-12">

@@ -87,7 +87,7 @@ do {
 
 	// Check whether scoresheet file exists, and, if so, provide link.
 	$scoresheet_file_name_entry = sprintf("%06s",$entry_number).".pdf";
-	$scoresheet_file_name_judging = $judging_number.".pdf"; // upon upload via the UI, filename is converted to lowercase
+	$scoresheet_file_name_judging = strtolower($judging_number).".pdf"; // upon upload via the UI, filename is converted to lowercase
 
 	if ($dbTable == "default") {
 		$scoresheetfile_entry = USER_DOCS.$scoresheet_file_name_entry;
