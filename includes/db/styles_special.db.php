@@ -43,7 +43,7 @@ else $styleSet = $_SESSION['prefsStyleSet'];
 // Beer does not require mead/cider strength, carbonation or sweetness
 // So, gather all beer styles that require special ingredients
 
-$query_spec_beer = sprintf("SELECT * FROM %s WHERE (brewStyleVersion='%s' OR brewStyleOwn='custom') AND brewStyleType='1' AND brewStyleReqSpec='1'", $styles_db_table, $_SESSION['prefsStyleSet'], $styles_db_table);
+$query_spec_beer = sprintf("SELECT * FROM %s WHERE (brewStyleVersion='%s' OR brewStyleOwn='custom') AND brewStyleReqSpec='1'", $styles_db_table, $_SESSION['prefsStyleSet'], $styles_db_table);
 // else $query_spec_beer = sprintf("SELECT * FROM %s WHERE brewStyleVersion='%s' AND brewStyleGroup <='%s' AND brewStyleReqSpec='1'", $styles_db_table, $_SESSION['prefsStyleSet'],$beer_end);
 $spec_beer = mysqli_query($connection,$query_spec_beer) or die (mysqli_error($connection));
 $row_spec_beer = mysqli_fetch_assoc($spec_beer);
@@ -141,7 +141,7 @@ if ($totalRows_spec_beer > 0) {
 }
 
 // Check for non-beer styles that require all elements: special, carb, strength, sweetness
-$query_spec_all = sprintf("SELECT * FROM %s WHERE (brewStyleVersion='%s' OR brewStyleOwn='custom') AND (brewStyleType='2' OR brewStyleType='3') AND brewStyleStrength='1' AND brewStyleCarb='1' AND brewStyleReqSpec='1' AND brewStyleSweet='1'", $styles_db_table, $_SESSION['prefsStyleSet']);
+$query_spec_all = sprintf("SELECT * FROM %s WHERE (brewStyleVersion='%s' OR brewStyleOwn='custom') AND brewStyleStrength='1' AND brewStyleCarb='1' AND brewStyleReqSpec='1' AND brewStyleSweet='1'", $styles_db_table, $_SESSION['prefsStyleSet']);
 $spec_all = mysqli_query($connection,$query_spec_all) or die (mysqli_error($connection));
 $row_spec_all = mysqli_fetch_assoc($spec_all);
 $totalRows_spec_all = mysqli_num_rows($spec_all);
@@ -264,7 +264,7 @@ if ($totalRows_sweet_carb > 0) {
 }
 
 // Check for non-beer styles that require strength, carbonation, and sweetness only (mostly mead styles - no styles in BJCP strength, carbonation, or sweetness singley)
-$query_str_sweet_carb = sprintf("SELECT brewStyle,brewStyleGroup,brewStyleNum,brewStyleInfo FROM %s WHERE (brewStyleVersion='%s' OR brewStyleOwn='custom') AND (brewStyleType ='2' OR brewStyleType ='3') AND brewStyleReqSpec='0' AND brewStyleStrength='1' AND brewStyleCarb='1' AND brewStyleSweet='1'", $styles_db_table, $_SESSION['prefsStyleSet']);
+$query_str_sweet_carb = sprintf("SELECT brewStyle,brewStyleGroup,brewStyleNum,brewStyleInfo FROM %s WHERE (brewStyleVersion='%s' OR brewStyleOwn='custom')  AND brewStyleReqSpec='0' AND brewStyleStrength='1' AND brewStyleCarb='1' AND brewStyleSweet='1'", $styles_db_table, $_SESSION['prefsStyleSet']);
 $str_sweet_carb = mysqli_query($connection,$query_str_sweet_carb) or die (mysqli_error($connection));
 $row_str_sweet_carb = mysqli_fetch_assoc($str_sweet_carb);
 $totalRows_str_sweet_carb = mysqli_num_rows($str_sweet_carb);
@@ -278,7 +278,7 @@ if ($totalRows_str_sweet_carb > 0) {
 }
 
 // Check for non-beer styles that require special ingredients carbonation, and sweetness only (mostly ciders styles)
-$query_spec_sweet_carb = sprintf("SELECT * FROM %s WHERE (brewStyleVersion='%s' OR brewStyleOwn='custom') AND (brewStyleType ='2' OR brewStyleType ='3') AND brewStyleReqSpec='1' AND brewStyleStrength='0' AND brewStyleCarb='1' AND brewStyleSweet='1'", $styles_db_table, $_SESSION['prefsStyleSet']);
+$query_spec_sweet_carb = sprintf("SELECT * FROM %s WHERE (brewStyleVersion='%s' OR brewStyleOwn='custom') AND brewStyleReqSpec='1' AND brewStyleStrength='0' AND brewStyleCarb='1' AND brewStyleSweet='1'", $styles_db_table, $_SESSION['prefsStyleSet']);
 $spec_sweet_carb = mysqli_query($connection,$query_spec_sweet_carb) or die (mysqli_error($connection));
 $row_spec_sweet_carb = mysqli_fetch_assoc($spec_sweet_carb);
 $totalRows_spec_sweet_carb = mysqli_num_rows($spec_sweet_carb);
@@ -378,7 +378,7 @@ if ($totalRows_spec_sweet_carb > 0) {
 }
 
 // Check for non-beer styles that require special ingredients and carbonation only (mostly ciders styles)
-$query_spec_carb = sprintf("SELECT * FROM %s WHERE (brewStyleVersion='%s' OR brewStyleOwn='custom') AND (brewStyleType ='2' OR brewStyleType ='3') AND brewStyleReqSpec='1' AND brewStyleStrength='0' AND brewStyleCarb='1' AND brewStyleSweet='0'", $styles_db_table, $_SESSION['prefsStyleSet']);
+$query_spec_carb = sprintf("SELECT * FROM %s WHERE (brewStyleVersion='%s' OR brewStyleOwn='custom') AND brewStyleReqSpec='1' AND brewStyleStrength='0' AND brewStyleCarb='1' AND brewStyleSweet='0'", $styles_db_table, $_SESSION['prefsStyleSet']);
 $spec_carb = mysqli_query($connection,$query_spec_carb) or die (mysqli_error($connection));
 $row_spec_carb = mysqli_fetch_assoc($spec_carb);
 $totalRows_spec_carb = mysqli_num_rows($spec_carb);

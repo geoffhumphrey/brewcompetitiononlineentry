@@ -151,7 +151,7 @@ if (((isset($_SERVER['HTTP_REFERER'])) && ($referrer['host'] == $_SERVER['SERVER
 	elseif ($action == "update_judging_flights") include (PROCESS.'process_judging_flight_check.inc.php');
 	elseif ($action == "delete_scoresheets") {
 
-		rdelete(USER_DOCS);
+		rdelete(USER_DOCS,"");
 		if ($filter == "admin-dashboard") $redirect_go_to = sprintf("Location: %s", $base_url."index.php?section=admin&msg=31");
 		else $redirect_go_to = sprintf("Location: %s", $base_url."index.php?section=admin&go=upload_scoresheets&action=".$filter."&msg=31");
 

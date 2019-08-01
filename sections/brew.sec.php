@@ -423,7 +423,6 @@ else $relocate_referrer = $_SERVER['HTTP_REFERER'];
             </div>
             <div class="help-block with-errors"></div>
             <div class="help-block"><?php echo $brew_text_001; ?></div>
-
         </div>
     </div><!-- ./Form Group -->
     <!-- Choose Style -->

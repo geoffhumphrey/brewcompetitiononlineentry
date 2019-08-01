@@ -94,7 +94,7 @@ function generate_judging_num($method,$style_cat_num) {
 			$output = sprintf("%02s",$splitter[0])."-".sprintf("%03s",$add_one);
 		}
 
-		return sprintf("%06s",$output);
+		return sprintf("%06s",strtolower($output));
 
 	}
 
