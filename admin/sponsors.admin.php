@@ -81,10 +81,7 @@ $empty = is_dir_empty($directory);
         <option value="5" <?php if ($row_sponsors['sponsorLevel'] == "5") echo " SELECTED"; ?>>5</option>
     </select>
   </td>
-  <td>
-    <!--
-    <?php if (($row_sponsors['sponsorImage'] !="") && (file_exists($_SERVER['DOCUMENT_ROOT'].$sub_directory.'/user_images/'.$row_sponsors['sponsorImage']))) { ?><span class="fa fa-lg fa-check text-success"></span><?php } else { ?><span class="fa fa-lg fa-times text-danger"></span><?php } ?>
-    -->
+  <td>  
     <?php if (!$empty) { ?>
     <select class="selectpicker" name="sponsorImage<?php echo $row_sponsors['id']; ?>" id="sponsorImage<?php echo $row_sponsors['id']; ?>" data-live-search="true" data-size="10" data-width="auto">
        <?php echo directory_contents_dropdown($directory,$row_sponsors['sponsorImage']); ?>

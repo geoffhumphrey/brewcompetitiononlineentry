@@ -79,8 +79,6 @@ if (!empty($row_contest_info['contestVolunteers'])) {
 // Display
 // --------------------------------------------------------------
 if (($action != "print") && ($msg != "default")) echo $msg_output;
-//if ((($_SESSION['contestLogo'] != "") && (file_exists($_SERVER['DOCUMENT_ROOT'].$sub_directory.'/user_images/'.$_SESSION['contestLogo']))) && ((judging_date_return() > 0) || (NHC))) echo $competition_logo;
-//if ($action != "print") echo $print_page_link;
 
 echo $header_vol_1_1;
 echo $page_info_vol_1;
