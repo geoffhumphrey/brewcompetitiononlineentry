@@ -106,6 +106,17 @@ define('DEBUG_SESSION_VARS', FALSE);
 
 define('FORCE_UPDATE', FALSE);
 
+
+/**
+ * Set the following to TRUE if receiving mod_security 
+ * "Not Acceptable!" errors. This may not alleviate the 
+ * problem, but it's a good first step in diagnosing
+ * why some mod_security errors are occurring.
+ * Default is FALSE
+ */
+
+define('ENABLE_MARKDOWN', TRUE);
+
 /**
  * --------------------------------------------------------
  * Error Reporting
@@ -130,6 +141,8 @@ if (HOSTED) {
     $installation_id = $prefix;
     $session_expire_after = 30;
 }
+
+else $session_expire_after = 60;
 
 /** Using an MD5 of __FILE__ will ensure a different session
  * name for multiple installs on the same domain name.

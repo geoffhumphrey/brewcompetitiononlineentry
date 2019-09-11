@@ -38,3 +38,4 @@ eval/*
 .config/*
 update/move_files.php
 update/move_files.php
+site/config-brewcomp-reset.php

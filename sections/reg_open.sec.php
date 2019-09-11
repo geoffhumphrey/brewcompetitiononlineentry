@@ -106,7 +106,13 @@ if (($entry_window_open == 1) && ($show_entries)) {
 }
 
 $header1_3 .= sprintf("<a name='rules'></a><h2>%s</h2>",$label_rules);
-$page_info3 .= $row_contest_rules['contestRules'];
+if ((ENABLE_MARKDOWN) && (!is_html($row_contest_rules['contestRules']))) { 
+	$page_info3 .= Parsedown::instance()
+			   ->setBreaksEnabled(true) # enables automatic line breaks
+			   ->setMarkupEscaped(true) # escapes markup (HTML)
+			   ->text($row_contest_rules['contestRules']); 
+}
+else $page_info3 .= $row_contest_rules['contestRules'];
 
 // --------------------------------------------------------------
 // Display

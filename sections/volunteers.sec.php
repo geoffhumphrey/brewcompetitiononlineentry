@@ -72,7 +72,14 @@ $page_info_vol_2 .= sprintf("<p>%s",$volunteers_text_009, build_public_url("cont
 
 if (!empty($row_contest_info['contestVolunteers'])) {
 	$header_vol_1_3 .= sprintf("<h2>%s %s</h2>",$label_other,$label_volunteer_info);
-	$page_info_vol_3 .= $row_contest_info['contestVolunteers'];
+
+	if ((ENABLE_MARKDOWN) && (!is_html($row_contest_info['contestVolunteers']))) { 
+		$page_info_vol_3 .= Parsedown::instance()
+					   ->setBreaksEnabled(true) # enables automatic line breaks
+					   ->setMarkupEscaped(true) # escapes markup (HTML)
+					   ->text($row_contest_info['contestVolunteers']); 
+	}
+	else $page_info_vol_3 .= $row_contest_info['contestVolunteers'];
 }
 
 // --------------------------------------------------------------

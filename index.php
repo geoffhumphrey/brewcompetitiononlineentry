@@ -229,6 +229,11 @@ $security_question = array($label_secret_01, $label_secret_05, $label_secret_06,
             </div>
             <?php
 
+                if (ENABLE_MARKDOWN) {
+                    include (CLASSES.'parsedown/Parsedown.php');
+                    $Parsedown = new Parsedown();
+                }
+
                 if (SINGLE) include (SSO.'sections/default.sec.php');
 
                 else {

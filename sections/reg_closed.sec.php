@@ -68,7 +68,13 @@ else {
 }
 
 $header1_3 .= sprintf("<a name='rules'></a><h2>%s</h2>",$label_rules);
-$page_info3 .= $row_contest_rules['contestRules'];
+if ((ENABLE_MARKDOWN) && (!is_html($row_contest_rules['contestRules']))) { 
+	$page_info3 .= Parsedown::instance()
+			   ->setBreaksEnabled(true) # enables automatic line breaks
+			   ->setMarkupEscaped(true) # escapes markup (HTML)
+			   ->text($row_contest_rules['contestRules']); 
+}
+else $page_info3 .= $row_contest_rules['contestRules'];
 
 $header1_2 .= sprintf("<h2>%s</h2>",$label_admin_judging_loc);
 if ($totalRows_judging == 0) $page_info2 .= sprintf("<p>%s</p>",$reg_closed_text_007);
