@@ -106,6 +106,17 @@ define('DEBUG_SESSION_VARS', FALSE);
 
 define('FORCE_UPDATE', FALSE);
 
+
+/**
+ * Set the following to TRUE if receiving mod_security 
+ * "Not Acceptable!" errors. This may not alleviate the 
+ * problem, but it's a good first step in diagnosing
+ * why some mod_security errors are occurring.
+ * Default is FALSE
+ */
+
+define('ENABLE_MARKDOWN', TRUE);
+
 /**
  * --------------------------------------------------------
  * Error Reporting
@@ -131,6 +142,8 @@ if (HOSTED) {
     $session_expire_after = 30;
 }
 
+else $session_expire_after = 60;
+
 /** Using an MD5 of __FILE__ will ensure a different session
  * name for multiple installs on the same domain name.
  *
@@ -139,6 +152,17 @@ if (HOSTED) {
 
 if (empty($installation_id)) $prefix_session = md5(__FILE__);
 else $prefix_session = md5($installation_id);
+
+// **PREVENTING SESSION HIJACKING**
+// Prevents javascript XSS attacks aimed to steal the session ID
+ini_set('session.cookie_httponly', 1);
+
+// **PREVENTING SESSION FIXATION**
+// Session ID cannot be passed through URLs
+ini_set('session.use_only_cookies', 1);
+
+// Uses a secure connection (HTTPS) if possible
+ini_set('session.cookie_secure', 1);
 
 function is_session_started() {
     if (php_sapi_name() !== 'cli' ) {

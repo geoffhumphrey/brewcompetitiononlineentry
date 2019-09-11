@@ -199,13 +199,7 @@ if ($logged_in) {
 // --------------------------------------------------------------
 // Display
 // --------------------------------------------------------------
-//if ((($_SESSION['contestLogo'] != "") && (file_exists($_SERVER['DOCUMENT_ROOT'].$sub_directory.'/user_images/'.$_SESSION['contestLogo'])))) echo $competition_logo;
-//echo $page_info;
 
 echo $header1_100;
 echo $page_info100;
-
-
-
-
 ?>

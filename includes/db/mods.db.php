@@ -2,8 +2,7 @@
 /**
  * Module:      mods.db.php
  * Description: This module houses all custom module related queries
- 
-  0=none 1=home 2=rules 3=volunteer 4=sponsors 5=contact 6=register 7=pay 8=list 9=admin
+ *              0=none 1=home 2=rules 3=volunteer 4=sponsors 5=contact 6=register 7=pay 8=list 9=admin
  */
 		
 $query_mods = "SELECT * FROM $mods_db_table";

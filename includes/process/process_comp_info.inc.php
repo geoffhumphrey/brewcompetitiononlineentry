@@ -13,18 +13,32 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 
 	// Constants
 	if ($go == "default") {
-		$contestRegistrationOpen = strtotime(filter_var($_POST['contestRegistrationOpen'],FILTER_SANITIZE_STRING));
-		$contestRegistrationDeadline = strtotime(filter_var($_POST['contestRegistrationDeadline'],FILTER_SANITIZE_STRING));
-		$contestEntryOpen = strtotime(filter_var($_POST['contestEntryOpen'],FILTER_SANITIZE_STRING));
-		$contestEntryDeadline = strtotime(filter_var($_POST['contestEntryDeadline'],FILTER_SANITIZE_STRING));
-		$contestJudgeOpen = strtotime(filter_var($_POST['contestJudgeOpen'],FILTER_SANITIZE_STRING));
-		$contestJudgeDeadline = strtotime(filter_var($_POST['contestJudgeDeadline'],FILTER_SANITIZE_STRING));
-		$contestAwardsLocDate = strtotime(filter_var($_POST['contestAwardsLocDate'],FILTER_SANITIZE_STRING));
-		$contestShippingOpen = strtotime(filter_var($_POST['contestShippingOpen'],FILTER_SANITIZE_STRING));
-		$contestShippingDeadline = strtotime(filter_var($_POST['contestShippingDeadline'],FILTER_SANITIZE_STRING));
-		$contestDropoffOpen = strtotime(filter_var($_POST['contestDropoffOpen'],FILTER_SANITIZE_STRING));
-		$contestDropoffDeadline = strtotime(filter_var($_POST['contestDropoffDeadline'],FILTER_SANITIZE_STRING));
-		$contestHostWebsite = check_http(filter_var($_POST['contestHostWebsite'],FILTER_SANITIZE_STRING));
+
+		$contestRegistrationOpen = "";
+		$contestRegistrationDeadline = "";
+		$contestEntryOpen = "";
+		$contestEntryDeadline = "";
+		$contestJudgeOpen = "";
+		$contestJudgeDeadline = "";
+		$contestAwardsLocDate = "";
+		$contestShippingOpen = "";
+		$contestShippingDeadline = "";
+		$contestDropoffOpen = "";
+		$contestDropoffDeadline = "";
+		$contestHostWebsite = "";
+
+		if (isset($_POST['contestRegistrationOpen'])) $contestRegistrationOpen = strtotime(filter_var($_POST['contestRegistrationOpen'],FILTER_SANITIZE_STRING));
+		if (isset($_POST['contestRegistrationDeadline'])) $contestRegistrationDeadline = strtotime(filter_var($_POST['contestRegistrationDeadline'],FILTER_SANITIZE_STRING));
+		if (isset($_POST['contestEntryOpen'])) $contestEntryOpen = strtotime(filter_var($_POST['contestEntryOpen'],FILTER_SANITIZE_STRING));
+		if (isset($_POST['contestEntryDeadline'])) $contestEntryDeadline = strtotime(filter_var($_POST['contestEntryDeadline'],FILTER_SANITIZE_STRING));
+		if (isset($_POST['contestJudgeOpen'])) $contestJudgeOpen = strtotime(filter_var($_POST['contestJudgeOpen'],FILTER_SANITIZE_STRING));
+		if (isset($_POST['contestJudgeDeadline'])) $contestJudgeDeadline = strtotime(filter_var($_POST['contestJudgeDeadline'],FILTER_SANITIZE_STRING));
+		if (isset($_POST['contestAwardsLocDate'])) $contestAwardsLocDate = strtotime(filter_var($_POST['contestAwardsLocDate'],FILTER_SANITIZE_STRING));
+		if (isset($_POST['contestShippingOpen'])) $contestShippingOpen = strtotime(filter_var($_POST['contestShippingOpen'],FILTER_SANITIZE_STRING));
+		if (isset($_POST['contestShippingDeadline'])) $contestShippingDeadline = strtotime(filter_var($_POST['contestShippingDeadline'],FILTER_SANITIZE_STRING));
+		if (isset($_POST['contestDropoffOpen'])) $contestDropoffOpen = strtotime(filter_var($_POST['contestDropoffOpen'],FILTER_SANITIZE_STRING));
+		if (isset($_POST['contestDropoffDeadline'])) $contestDropoffDeadline = strtotime(filter_var($_POST['contestDropoffDeadline'],FILTER_SANITIZE_STRING));
+		if (isset($_POST['contestHostWebsite'])) $contestHostWebsite = check_http(filter_var($_POST['contestHostWebsite'],FILTER_SANITIZE_STRING));
 	}
 
 	/** DEBUG
@@ -250,6 +264,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 			unset($_SESSION['contest_info_general'.$prefix_session]);
 
 			$updateSQL = sprintf("UPDATE $contest_info_db_table SET
+			
 			contestName=%s,
 			contestID=%s,
 			contestHost=%s,
@@ -288,8 +303,6 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 			contestShippingOpen=%s,
 			contestShippingDeadline=%s
 			WHERE id=%s",
-
-
 
 			GetSQLValueString($contestName, "text"),
 			GetSQLValueString(filter_var($_POST['contestID'],FILTER_SANITIZE_NUMBER_INT), "text"),

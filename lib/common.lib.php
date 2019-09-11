@@ -3985,4 +3985,8 @@ function pro_am_check($uid) {
 
 }
 
+function is_html($string) {
+	return preg_match("/<[^<]+>/",$string) != 0;
+}
+
 ?>

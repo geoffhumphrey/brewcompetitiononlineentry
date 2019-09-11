@@ -330,7 +330,15 @@ if ($show_entries) {
 
 	if ((isset($row_contest_info['contestBottles'])) && (($dropoff_window_open < 2) || ($shipping_window_open < 2))) {
 		$header1_9 .= sprintf("<a class=\"anchor-offset\" name=\"%s\"></a><h2>%s</h2>",strtolower($anchor_name),$label_entry_acceptance_rules);
-		$page_info9 .= $row_contest_info['contestBottles'];
+
+		if ((ENABLE_MARKDOWN) && (!is_html($row_contest_info['contestBottles']))) { 
+			$page_info9 .= Parsedown::instance()
+						   ->setBreaksEnabled(true) # enables automatic line breaks
+						   ->setMarkupEscaped(true) # escapes markup (HTML)
+						   ->text($row_contest_info['contestBottles']); 
+		}
+		else $page_info9 .= $row_contest_info['contestBottles'];
+
 		$page_info9 .= $anchor_top;
 	}
 
@@ -420,7 +428,15 @@ if (isset($row_contest_info['contestBOSAward'])) {
 	$anchor_links[] = $label_bos;
 	$anchor_name = str_replace(" ", "-", $label_bos);
 	$header1_12 .= sprintf("<a class=\"anchor-offset\" name=\"%s\"></a><h2>%s</h2>",strtolower($anchor_name),$label_bos);
-	$page_info12 .= $row_contest_info['contestBOSAward'];
+
+	if ((ENABLE_MARKDOWN) && (!is_html($row_contest_info['contestBOSAward']))) { 
+		$page_info12 .= Parsedown::instance()
+					   ->setBreaksEnabled(true) # enables automatic line breaks
+					   ->setMarkupEscaped(true) # escapes markup (HTML)
+					   ->text($row_contest_info['contestBOSAward']); 
+	}
+	else $page_info12 .= $row_contest_info['contestBOSAward'];
+
 	$page_info12 .= $anchor_top;
 }
 
@@ -429,7 +445,13 @@ if (isset($row_contest_info['contestAwards'])) {
 	$anchor_links[] = $label_awards;
 	$anchor_name = str_replace(" ", "-", $label_awards);
 	$header1_13 .= sprintf("<a class=\"anchor-offset\" name=\"%s\"></a><h2>%s</h2>",strtolower($anchor_name),$label_awards);
-	$page_info13 .= $row_contest_info['contestAwards'];
+	if ((ENABLE_MARKDOWN) && (!is_html($row_contest_info['contestAwards']))) { 
+		$page_info13 .= Parsedown::instance()
+					   ->setBreaksEnabled(true) # enables automatic line breaks
+					   ->setMarkupEscaped(true) # escapes markup (HTML)
+					   ->text($row_contest_info['contestAwards']); 
+	}
+	else $page_info13 .= $row_contest_info['contestAwards'];
 	$page_info13 .= $anchor_top;
 }
 
@@ -453,7 +475,14 @@ if ($show_entries) {
 		$anchor_links[] = $label_circuit;
 		$anchor_name = str_replace(" ", "-", $label_circuit);
 		$header1_15 .= sprintf("<a class=\"anchor-offset\" name=\"%s\"></a><h2>%s</h2>",strtolower($anchor_name),$label_circuit);
-		$page_info15 .= $row_contest_info['contestCircuit'];
+
+		if ((ENABLE_MARKDOWN) && (!is_html($row_contest_info['contestCircuit']))) {
+			$page_info13 .= Parsedown::instance()
+					   ->setBreaksEnabled(true) # enables automatic line breaks
+					   ->setMarkupEscaped(true) # escapes markup (HTML)
+					   ->text($row_contest_info['contestCircuit']);
+		}
+		else $page_info15 .= $row_contest_info['contestCircuit'];
 		$page_info15 .= $anchor_top;
 	}
 }
@@ -463,7 +492,12 @@ if ((judging_date_return() == 0) && ($registration_open == 2) && ($entry_window_
 	$anchor_links[] = $label_rules;
 	$anchor_name = str_replace(" ", "-", $label_rules);
 	$header1_17 .= sprintf("<a class=\"anchor-offset\" name=\"%s\"></a><h2>%s</h2>",strtolower($anchor_name),$label_rules);
-	$page_info17 .= $row_contest_rules['contestRules'];
+	if ((ENABLE_MARKDOWN) && (!is_html($row_contest_info['contestRules']))) {
+		$page_info17 .= Parsedown::instance()
+						->setBreaksEnabled(true) # enables automatic line breaks
+						->text($row_contest_rules['contestRules']); 
+	}
+	else $page_info17 .= $row_contest_rules['contestRules'];
 	$page_info17 .= $anchor_top;
 }
 
