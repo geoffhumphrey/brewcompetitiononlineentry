@@ -43,7 +43,7 @@ else $styleSet = $_SESSION['prefsStyleSet'];
 // Beer does not require mead/cider strength, carbonation or sweetness
 // So, gather all beer styles that require special ingredients
 
-$query_spec_beer = sprintf("SELECT * FROM %s WHERE (brewStyleVersion='%s' OR brewStyleOwn='custom') AND brewStyleReqSpec='1'", $styles_db_table, $_SESSION['prefsStyleSet'], $styles_db_table);
+$query_spec_beer = sprintf("SELECT * FROM %s WHERE (brewStyleVersion='%s' OR brewStyleOwn='custom') AND brewStyleReqSpec='1' AND brewStyleType='1'", $styles_db_table, $_SESSION['prefsStyleSet'], $styles_db_table);
 // else $query_spec_beer = sprintf("SELECT * FROM %s WHERE brewStyleVersion='%s' AND brewStyleGroup <='%s' AND brewStyleReqSpec='1'", $styles_db_table, $_SESSION['prefsStyleSet'],$beer_end);
 $spec_beer = mysqli_query($connection,$query_spec_beer) or die (mysqli_error($connection));
 $row_spec_beer = mysqli_fetch_assoc($spec_beer);

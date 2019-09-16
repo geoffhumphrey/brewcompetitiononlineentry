@@ -15,11 +15,10 @@ if ($_SESSION['prefsStyleSet'] == "BA") $ba = TRUE;
 
 // Define a character limit. 34 characters per line appears to be the limit for 5160, the smaller
 // of the two label sizes available.
-// 6 lines are available per label for a total of 204 possible characters at 9 pt Arial
+// 6 lines are available per label for a total of 204 possible characters at 8 pt Courier
 $character_limit = 68;
 
-// If the installation's preferences define a shorter character limit, it will
-// be used.
+// If the installation's preferences define a shorter character limit, it will be used.
 if ($_SESSION['prefsSpecialCharLimit'] < $character_limit) $character_limit = $_SESSION['prefsSpecialCharLimit'];
 
 if (isset($_SESSION['loginUsername'])) {
@@ -51,34 +50,31 @@ if (isset($_SESSION['loginUsername'])) {
 
 	if ($_SESSION['userLevel'] <= 1) {
 
-		/*
+				/*
 		* -------------------------------------------------------------------
 		* Reworked for 2.1.13 - May 7, 2018
 		* Updated for 2.1.15 to remove special characters - December 19, 2018
 		* -------------------------------------------------------------------
 		*/
-
 		if (($go == "entries") && (($action == "bottle-judging") || ($action == "bottle-entry"))) {
-
+			
 			// Begin PDF generation
 			if ($psort == "3422") $pdf = new PDF_Label('3422');
 			else $pdf = new PDF_Label('5160');
-
+			
 			$pdf->AddPage();
-
+			
 			if ($view == "default") {
-
+				
 				$filename = str_replace(" ","_",$_SESSION['contestName'])."_Bottle_Labels_Entry_Numbers";
 				if ($filter != "default") 	$filename .= "_Category_".$filter;
 				if ($psort == "3422") 		$filename .= "_Avery3422";
 				else 						$filename .= "_Avery5160";
 				$filename .= ".pdf";
-
 				$pdf->SetFont('Courier','',8);
-
+				
 				// Print labels
 				do {
-
 					if ($action == "bottle-entry") $entry_no = sprintf("%06s",$row_log['id']);
 					else $entry_no = sprintf("%06s",$row_log['brewJudgingNumber']);
 					$text = sprintf("\n%s (%s)   %s (%s)   %s (%s)\n\n\n%s (%s)   %s (%s)   %s (%s)",
@@ -91,13 +87,11 @@ if (isset($_SESSION['loginUsername'])) {
 					);
 					$text = iconv('UTF-8', 'windows-1252//IGNORE', $text);
 					$pdf->Add_Label($text);
-
 				} while ($row_log = mysqli_fetch_assoc($log));
-
 			}
-
+			
 			else {
-
+				
 				$special_strength = array(
 					"Strength" => "",
 					"strength" => "",
@@ -123,28 +117,24 @@ if (isset($_SESSION['loginUsername'])) {
 					"Medium" => "",
 					"medium" => ""
 					);
-
+				
 				$pdf->SetFont('Courier','',8);
-
 				// Assemble the file name
+				
 				$filename = str_replace(" ","_",$_SESSION['contestName'])."_Bottle_Labels_";
 				if ($action == "bottle-entry") $filename .= "Entry_Numbers";
 				else $filename .= "Judging_Numbers";
-
 				if ($filter != "default") $filename .= "_Category_".$filter;
-
 				$filename .= "_Req_Info_Mead-Cider";
-
 				if ($psort == "3422") $filename .= "_Avery3422";
 				else $filename .= "_Avery5160";
-
 				$filename .= ".pdf";
-
+				
 				// Print labels
 				do {
-
+					
 					for($i=0; $i<$sort; $i++) {
-
+						
 						$text = "";
 						$entry_info = "";
 						$special = "";
@@ -155,28 +145,27 @@ if (isset($_SESSION['loginUsername'])) {
 						$beer_strength = "";
 						$beer_sweeteness = "";
 						$beer_carbonation = "";
-
+						
 						if ($action == "bottle-entry") $entry_no = sprintf("%06s",$row_log['id']);
 						else $entry_no = sprintf("%06s",$row_log['brewJudgingNumber']);
+						
 						$style = $row_log['brewCategorySort'].$row_log['brewSubCategory'];
 						$style_name = truncate($row_log['brewStyle'],22);
-
+						
 						if ($ba) $entry_info = sprintf("%s  #%s", $style_name, $entry_no);
 						else $entry_info = sprintf("\n%s: %s  #%s", $style, $style_name, $entry_no);
-
+						
 						if (empty($row_log['brewInfoOptional'])) {
 							if ($_SESSION['prefsSpecialCharLimit'] > ($character_limit * 2)) $character_limit_adjust = ($character_limit * 2);
 							else $character_limit_adjust = $_SESSION['prefsSpecialCharLimit'];
 						}
-
+						
 						else $character_limit_adjust = $character_limit;
-
+						
 						if (in_array($style,$special_ingredients)) {
-
 							$special = strip_tags($row_log['brewInfo']);
-							$special = html_entity_decode($special);
+							$special = iconv('UTF-8', 'windows-1252', html_entity_decode($special));
 							$sp_str_sweet_carb = mb_strtolower($row_log['brewInfo']);
-
 							if (strpos($sp_str_sweet_carb,"session strength") !== false) $beer_strength .= "*Session* ";
 							if (strpos($sp_str_sweet_carb,"standard strength") !== false) $beer_strength .= "*Standard* ";
 							if (strpos($sp_str_sweet_carb,"double strength") !== false) $beer_strength .= "*Double* ";
@@ -188,18 +177,15 @@ if (isset($_SESSION['loginUsername'])) {
 							if (strpos($sp_str_sweet_carb,"low carbonation") !== false) $beer_carbonation .= "*Low Carb* ";
 							if (strpos($sp_str_sweet_carb,"medium carbonation") !== false) $beer_carbonation .= "*Med Carb* ";
 							if (strpos($sp_str_sweet_carb,"high carbonation") !== false) $beer_carbonation .= "*High Carb* ";
-
 							if ((!empty($beer_strength)) || (!empty($beer_sweeteness)) || (!empty($beer_carbonation))) {
 								$character_limit_adjust = $character_limit_adjust - 12;
 								if (!in_array($style,$mead)) $special = strtr($special,$special_strength);
 							}
-
 							$special = str_replace("\n"," ",truncate($special,$character_limit_adjust));
 							$special = strtr($special,$html_remove);
 							$special = str_replace("^", "", $special);
 							$special = rtrim($special," ");
 							$entry_str_sweet_carb .= $beer_carbonation.$beer_sweeteness.$beer_strength;
-
 							if (!empty($special)) $special = sprintf("\n%s", $special);
 						}
 
@@ -209,23 +195,23 @@ if (isset($_SESSION['loginUsername'])) {
 						}
 
 						else $character_limit_adjust = $character_limit;
-
+						
 						//echo $character_limit_adjust;
-
+						
 						if (!empty($row_log['brewInfoOptional'])) {
-							$special_optional = strip_tags($row_log['brewInfo']);
-							$special_optional = html_entity_decode($special_optional);
+							$special_optional = strip_tags($row_log['brewInfoOptional']);
+							$special_optional = iconv('UTF-8', 'windows-1252', html_entity_decode($special_optional));
 							$optional = str_replace("\n"," ",truncate($special_optional,$character_limit_adjust,""));
 							$optional = strtr($optional,$html_remove);
 							$optional = sprintf("\n%s",$optional);
 						}
-
+						
 						if (in_array($style,$mead)) {
 							if (!empty($row_log['brewMead1'])) $entry_str_sweet_carb .= sprintf("*%s* ",$row_log['brewMead1']);
 							if (!empty($row_log['brewMead2'])) $entry_str_sweet_carb .= sprintf("*%s* ",$row_log['brewMead2']);
 							if (!empty($row_log['brewMead3'])) $entry_str_sweet_carb .= sprintf("*%s* ",$row_log['brewMead3']);
 						}
-
+						
 						if (!empty($entry_str_sweet_carb)) {
 							$entry_str_sweet_carb = str_replace("Medium Sweet", "Med Sweet", $entry_str_sweet_carb);
 							$entry_str_sweet_carb = str_replace("Medium Dry", "Med Dry", $entry_str_sweet_carb);
@@ -233,19 +219,18 @@ if (isset($_SESSION['loginUsername'])) {
 							$entry_str_sweet_carb = str_replace("Hydromel", "Hydro", $entry_str_sweet_carb);
 							$entry_str_sweet_carb = str_replace("Petillant", "Petill", $entry_str_sweet_carb);
 							$entry_str_sweet_carb = sprintf("\n%s",$entry_str_sweet_carb);
-
 						}
-
+						
 						if ($view == "special") {
-							if ((in_array($style,$special_ingredients)) || (in_array($style,$mead))) $text = $entry_info.$special.$entry_str_sweet_carb;
+							if ((in_array($style,$special_ingredients)) || (in_array($style,$mead))) $text = $entry_info.$special.$entry_str_sweet_carb.$optional;
 							else $text = "";
 						}
+						
 						else $text = $entry_info.$special.$entry_str_sweet_carb.$optional;
-
 						$text = iconv('UTF-8', 'windows-1252//IGNORE', $text);
+						
 						if (!empty($text)) $pdf->Add_Label($text);
 						//echo $text;
-
 					}
 
 				} while ($row_log = mysqli_fetch_assoc($log));
@@ -253,8 +238,8 @@ if (isset($_SESSION['loginUsername'])) {
 			} // end else
 
 			if (ob_get_length()) ob_clean();
-			//$pdf->Output();
-			$pdf->Output($filename,'D');
+			$pdf->Output();
+			//$pdf->Output($filename,'D');
 
 		}
 
