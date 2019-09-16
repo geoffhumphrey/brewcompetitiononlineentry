@@ -123,7 +123,7 @@ define('ENABLE_MARKDOWN', FALSE);
  * PHPMailer uses your server's SMTP configuration to send
  * emails instead of using PHP's native mail() function,
  * which may be disabled on certain web hosts.
- * Requires configuration in the /sites/config.mail.php file
+ * Requires configuration in the /site/config.mail.php file
  * Default is FALSE.
  */
 
