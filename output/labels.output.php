@@ -238,8 +238,8 @@ if (isset($_SESSION['loginUsername'])) {
 			} // end else
 
 			if (ob_get_length()) ob_clean();
-			$pdf->Output();
-			//$pdf->Output($filename,'D');
+			//$pdf->Output();
+			$pdf->Output($filename,'D');
 
 		}
 
