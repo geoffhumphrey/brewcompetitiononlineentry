@@ -447,8 +447,8 @@ if (isset($_SESSION['loginUsername'])) {
 				if (in_array("Advanced Cicerone", $bjcp_rank)) $adv_cicerone = "Advanced Cicerone";
 				if (in_array("Master Cicerone", $bjcp_rank)) $mast_cicerone = "Master Cicerone";
 
-				$cicerone = "";
-				$other = "";
+				$cicerone = array();
+				$other = array();
 				$other_ranks = "";
 
 				if (!empty($mast_cicerone))  $cicerone[] = $mast_cicerone;
