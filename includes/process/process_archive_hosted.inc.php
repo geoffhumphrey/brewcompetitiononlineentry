@@ -21,7 +21,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 	}
 
 	// Delete any uploaded scoresheets in the user_docs directory
-	rdelete(USER_DOCS);
+	rdelete(USER_DOCS,"");
 
 	// If not retaining participant data, but keeping current admins
 	if ($filter == "default") {
