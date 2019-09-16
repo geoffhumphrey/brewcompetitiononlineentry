@@ -55,7 +55,7 @@ define('EVALUATION', FALSE);
  * Enable to following to put your installation into
  * "mainenance mode" - bypasses the default index.php script
  * and displays the maintenance.php file to alert visitors.
- * Default is FALSE
+ * Default is FALSE.
  */
 
 define('MAINT', FALSE);
@@ -65,7 +65,7 @@ define('MAINT', FALSE);
  * Locally option if your installation is having trouble
  * loading libraries via CDN.
  * See http://www.brewcompetition.com/local-load
- * Default is TRUE
+ * Default is TRUE.
  */
 
 define('CDN', TRUE);
@@ -74,22 +74,22 @@ define('CDN', TRUE);
  * Enable the following to put the site into "test mode"
  * Useful for testing the PayPal IPN functions in their
  * sandbox enfvironment, etc.
- * Default is FALSE
+ * Default is FALSE.
  */
 
 define('TESTING', FALSE);
 
 /**
  * Enable the following to display php errors on screen.
- * Default is FALSE
+ * Default is FALSE.
  */
 
 define('DEBUG', FALSE);
 
 /**
  * Enable the following to show a collapsable table of all
- * session variables on screen
- * Default is FALSE
+ * session variables on screen.
+ * Default is FALSE.
  */
 
 define('DEBUG_SESSION_VARS', FALSE);
@@ -101,7 +101,7 @@ define('DEBUG_SESSION_VARS', FALSE);
  * off_schedule_update.php file.
  * ONLY enbable for a single refresh of the index.php
  * page for performance issues.
- * Default is FALSE
+ * Default is FALSE.
  */
 
 define('FORCE_UPDATE', FALSE);
@@ -112,10 +112,22 @@ define('FORCE_UPDATE', FALSE);
  * "Not Acceptable!" errors. This may not alleviate the 
  * problem, but it's a good first step in diagnosing
  * why some mod_security errors are occurring.
- * Default is FALSE
+ * Default is FALSE.
  */
 
-define('ENABLE_MARKDOWN', TRUE);
+define('ENABLE_MARKDOWN', FALSE);
+
+/**
+ * Set the following to TRUE if you would like to use
+ * PHPMailer to send emails from your BCOE&M installation.
+ * PHPMailer uses your server's SMTP configuration to send
+ * emails instead of using PHP's native mail() function,
+ * which may be disabled on certain web hosts.
+ * Requires configuration in the /sites/config.mail.php file
+ * Default is FALSE.
+ */
+
+define('ENABLE_MAILER', FALSE);
 
 /**
  * --------------------------------------------------------
@@ -135,6 +147,7 @@ else ini_set('display_errors','Off');
  */
 
 require_once (CONFIG.'config.php');
+if (ENABLE_MAILER) require_once (CONFIG.'config.mail.php');
 require_once (INCLUDES.'current_version.inc.php');
 
 if (HOSTED) {
@@ -199,6 +212,9 @@ $_SESSION['last_action'] = time();
  * Per Google guidelines, all keys validate the domain from
  * which it was generated:
  * https://developers.google.com/recaptcha/docs/domain_validation
+ * You may need to change the second set with your own API keys if
+ * reCAPTCHA is not functioning on your self-hosted installation.
+ * Get started at: https://developers.google.com/recaptcha/
  * --------------------------------------------------------
  */
 

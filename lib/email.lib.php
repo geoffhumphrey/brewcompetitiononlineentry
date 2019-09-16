@@ -5,12 +5,14 @@
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
-// Load Composer's autoloader
-require(ROOT.'vendor/autoload.php');
+require (CLASSES.'phpmailer/src/Exception.php');
+require (CLASSES.'phpmailer/src/PHPMailer.php');
+require (CLASSES.'phpmailer/src/SMTP.php');
 
 function sendPHPMailerMessage($mail) {
 
-    require(CONFIG.'config.php');
+    require (CONFIG.'config.php');
+    require (CONFIG.'config.mail.php');
 
     try {
         //Server settings
