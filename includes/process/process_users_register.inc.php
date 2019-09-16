@@ -5,6 +5,8 @@
  *              the "brewer" tables upon registration
  */
 
+use PHPMailer\PHPMailer\PHPMailer;
+require(LIB.'email.lib.php');
 $captcha_success = FALSE;
 
 if (isset($_SERVER['HTTP_REFERER'])) {
@@ -317,12 +319,31 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 				$headers  = "MIME-Version: 1.0" . "\r\n";
 				$headers .= "Content-type: text/html; charset=iso-8859-1" . "\r\n";
 				$headers .= sprintf("%s: ".$to_recipient. " <".$to_email.">, " . "\r\n",$label_to);
-				if (strpos($url, 'brewcomp.com') !== false) $headers .= sprintf("%s: %s <noreply@brewcomp.com>\r\n",$label_from,$_SESSION['contestName']);
-				elseif (strpos($url, 'brewcompetition.com') !== false) $headers .= sprintf("%s: %s <noreply@brewcompetition.com>\r\n",$label_from,$_SESSION['contestName']);
-				else $headers .= sprintf("%s: %s  <noreply@".$url. ">\r\n",$label_from,$_SESSION['contestName']);
 
+				$url = str_replace("www.","",$_SERVER['SERVER_NAME']);
+				$from_email = (!isset($mail_default_from) || trim($mail_default_from) === '') ? "noreply@".$url : $mail_default_from;
+
+				if (strpos($url, 'brewcomp.com') !== false) {
+					$from_email = "noreply@brewcomp.com";
+				} elseif (strpos($url, 'brewcompetition.com') !== false) {
+					$from_email = "noreply@brewcompetition.com";
+				}
+
+				$contestName = $_SESSION['contestName'];
+
+				$headers .= sprintf("%s: %s  <".$from_email. ">\r\n",$label_from,$contestName);
 				$emails = $to_email;
-				mail($emails, $subject, $message, $headers);
+
+				if ($mail_use_smtp) {
+					$mail = new PHPMailer(true);
+					$mail->addAddress($emails, $to_recipient);
+					$mail->setFrom($from_email, $contestName);
+					$mail->Subject = $subject;
+					$mail->Body = $message;
+					sendPHPMailerMessage($mail);
+				} else {
+					mail($emails, $subject, $message, $headers);
+				}
 
 				/*
 				echo $url;

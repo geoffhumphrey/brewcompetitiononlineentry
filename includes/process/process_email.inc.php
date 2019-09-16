@@ -1,12 +1,15 @@
 <?php
 
+use PHPMailer\PHPMailer\PHPMailer;
+require(LIB.'email.lib.php');
+
 if (isset($_SERVER['HTTP_REFERER'])) {
 
 	$url = str_replace("www.","",$_SERVER['SERVER_NAME']);
 
 	$from_name = $_SESSION['contestName']." Competition Server";
-	$from_email = "noreply@".$url;
-
+	$from_email = (!isset($mail_default_from) || trim($mail_default_from) === '') ? "noreply@".$url : $mail_default_from;
+	
 	$headers = "";
 	$message = "";
 
@@ -43,7 +46,16 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 		$headers .= "To: ".$to_recipient. " <".$to_email.">, " . "\r\n";
 		$headers .= "From: ".$from_name." <".$from_email.">" . "\r\n";
 
-		mail($to_email, $subject, $message, $headers);
+		if ($mail_use_smtp) {
+			$mail = new PHPMailer(true);
+			$mail->addAddress($to_email, $to_recipient);
+			$mail->setFrom($from_email, $from_name);
+			$mail->Subject = $subject;
+			$mail->Body = $message;
+			sendPHPMailerMessage($mail);
+		} else {
+			mail($to_email, $subject, $message, $headers);
+		}
 
 		$redirect_go_to = sprintf("Location: %s", $base_url."index.php?section=admin&go=preferences&msg=32");
 
@@ -113,7 +125,16 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 				$headers .= "To: ".$to_recipient. " <".$to_email.">, " . "\r\n";
 				$headers .= "From: ".$from_name." <".$from_email.">" . "\r\n";
 
-				mail($to_email, $subject, $message, $headers);
+				if ($mail_use_smtp) {
+					$mail = new PHPMailer(true);
+					$mail->addAddress($to_email, $to_recipient);
+					$mail->setFrom($from_email, $from_name);
+					$mail->Subject = $subject;
+					$mail->Body = $message;
+					sendPHPMailerMessage($mail);
+				} else {
+					mail($to_email, $subject, $message, $headers);
+				}
 
 				//echo $message."<br><br>";
 				//echo $headers."<br><br><br><br>";

@@ -4,6 +4,10 @@
  * Module:      process_contacts.inc.php
  * Description: This module does all the heavy lifting for adding/editing info in the "contacts" table
  */
+
+use PHPMailer\PHPMailer\PHPMailer;
+require(LIB.'email.lib.php');
+
 $captcha_success = FALSE;
 
 if (isset($_SERVER['HTTP_REFERER'])) {
@@ -62,10 +66,13 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 			$message .= "</body>" . "\r\n";
 			$message .= "</html>";
 
+			$url = str_replace("www.","",$_SERVER['SERVER_NAME']);
+			$from_competition_email = (!isset($mail_default_from) || trim($mail_default_from) === '') ? "noreply@".$url : $mail_default_from;
+
 			$headers  = "MIME-Version: 1.0" . "\r\n";
 			$headers .= "Content-type: text/html; charset=iso-8859-1" . "\r\n";
 			$headers .= "To: ".$to_name." <".$to_email.">" . "\r\n";
-			$headers .= "From: ".$_SESSION['contestName']." Server <noreply@".$_SERVER['SERVER_NAME'].">" . "\r\n"; // needed to change due to more stringent rules and mail send incompatibility with Gmail.
+			$headers .= "From: ".$_SESSION['contestName']." Server <".$from_competition_email.">" . "\r\n"; // needed to change due to more stringent rules and mail send incompatibility with Gmail.
 			$headers .= "Reply-To: ".$from_name." <".$from_email.">" . "\r\n";
 			$headers .= "CC: ".$from_name." <".$from_email.">" . "\r\n";
 
@@ -81,7 +88,19 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 			echo $message;
 			*/
 
-			mail($to_email, $subject, $message, $headers);
+			if ($mail_use_smtp) {				
+				$mail = new PHPMailer(true);
+				$mail->addAddress($to_email, $to_name);
+				$mail->setFrom($from_competition_email, $_SESSION['contestName']);
+				$mail->addReplyTo($from_email, $from_name);
+				$mail->addCC($from_email, $from_name);
+				$mail->Subject = $subject;
+				$mail->Body = $message;
+				sendPHPMailerMessage($mail);
+			} else {
+				mail($to_email, $subject, $message, $headers);
+			}
+
 			$redirect_go_to = sprintf("Location: %s", $base_url."index.php?section=contact&action=email&id=".$row_contact['id']."&msg=1");
 
 		}

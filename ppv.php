@@ -16,11 +16,13 @@ To implement:
 
 */
 
+use PHPMailer\PHPMailer\PHPMailer;
 require ('paths.php');
 require (CONFIG.'bootstrap.php');
 require (INCLUDES.'url_variables.inc.php');
 include (INCLUDES.'scrubber.inc.php');
 require (LANG.'language.lang.php');
+require(LIB.'email.lib.php');
 
 $query_prefs = sprintf("SELECT prefsPayPalAccount FROM %s WHERE id='1'", $prefix."preferences");
 $prefs = mysqli_query($connection,$query_prefs) or die (mysqli_error($connection));
@@ -74,8 +76,10 @@ $url = str_replace("www.","",$_SERVER['SERVER_NAME']);
 
 $paypal_email_address = $row_prefs['prefsPayPalAccount'];
 
-$confirm_to_email_address = "PayPal IPN Confirmation <".$row_prefs['prefsPayPalAccount'].">";
-$confirm_from_email_address = $row_logo['contestName']." Server <noreply@".$url.">";
+$from_email = (!isset($mail_default_from) || trim($mail_default_from) === '') ? "noreply@".$url : $mail_default_from;
+
+$confirm_to_email_address = "PayPal IPN Confirmation <".$paypal_email_address.">";
+$confirm_from_email_address = $row_logo['contestName']." Server <".$from_email.">";
 
 $to_email = "";
 $to_recipient = "";
@@ -150,7 +154,7 @@ if ($verified) {
 		$headers .= "Content-type: text/html; charset=iso-8859-1" . "\r\n";
 		$headers .= "To: ".$to_recipient. " <".$to_email .">, " . "\r\n";
 		$headers .= "CC: ".$cc_recipient. " <".$cc_email.">, " . "\r\n";
-		$headers .= "From: ".$row_logo['contestName']." Server <noreply@".$url.">\r\n";
+		$headers .= "From: ".$row_logo['contestName']." Server <".$from_email.">\r\n";
 
 		$message_top = "";
 		$message_body = "";
@@ -181,7 +185,19 @@ if ($verified) {
 
 		// Send the email message
 		$subject = $test_text." ".$data['item_name']." - ".ucwords($paypal_response_text_009);
-		mail($to_email, $subject, $message_all, $headers);
+
+		if ($mail_use_smtp) {
+			$mail = new PHPMailer(true);
+			$mail->addAddress($to_email, $to_recipient);
+			$mail->addCC($cc_email, $cc_recipient);
+			$mail->setFrom($from_email, $row_logo['contestName']);
+			$mail->Subject = $subject;
+			$mail->Body = $message_all;
+			sendPHPMailerMessage($mail);
+		} else {
+			mail($to_email, $subject, $message_all, $headers);
+		}
+
 
     }
 
@@ -238,8 +254,17 @@ if ($send_confirmation_email) {
 	$message_all_confirm = $message_top_confirm.$message_body_confirm.$message_bottom_confirm;
 
 	$subject_confirm = "PayPal IPN: ".$paypal_ipn_status;
-	mail($confirm_to_email_address, $subject_confirm, $message_all_confirm, $headers_confirm);
 
+	if ($mail_use_smtp) {
+		$mail = new PHPMailer(true);
+		$mail->addAddress($paypal_email_address, "PayPal IPN Confirmation");
+		$mail->setFrom($from_email, $row_logo['contestName']." Server");
+		$mail->Subject = $subject_confirm;
+		$mail->Body = $message_all_confirm;
+		sendPHPMailerMessage($mail);
+	} else {
+		mail($confirm_to_email_address, $subject_confirm, $message_all_confirm, $headers_confirm);
+	}
 }
 
 // Reply with an empty 200 response to indicate to paypal the IPN was received correctly
