@@ -211,7 +211,7 @@ do {
 	$entry_output .= "<td>";
 	$entry_output .= $row_log['brewName'];
 
-	if (!empty($required_info)) $entry_output .= " <a role=\"button\" data-toggle=\"collapse\" data-target=\"#collapseEntryInfo".$row_log['id']."\" aria-expanded=\"false\" aria-controls=\"collapseEntryInfo".$row_log['id']."\"><span class=\"fa fa-lg fa-info-circle\"></span></a> ";
+	if (!empty($required_info)) $entry_output .= " <a class=\"hide-loader\" role=\"button\" data-toggle=\"collapse\" data-target=\"#collapseEntryInfo".$row_log['id']."\" aria-expanded=\"false\" aria-controls=\"collapseEntryInfo".$row_log['id']."\"><span class=\"fa fa-lg fa-info-circle\"></span></a> ";
 
 	if (!empty($required_info)) {
 		$entry_output .= "<div style=\"margin-top: 8px;\" class=\"collapse small well\" id=\"collapseEntryInfo".$row_log['id']."\">";

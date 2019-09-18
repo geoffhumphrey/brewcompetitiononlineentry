@@ -9,18 +9,22 @@ $bos = mysqli_query($connection,$query_bos) or die (mysqli_error($connection));
 $row_bos = mysqli_fetch_assoc($bos);
 $totalRows_bos = mysqli_num_rows($bos);
 
+if ($filter == "round") $character_limit = 18;
+else $character_limit = 31;
+
 do {
 
 	$query_entries = sprintf("SELECT id,brewBrewerFirstName,brewBrewerLastName,brewName,brewStyle,brewCategory,brewSubCategory FROM $brewing_db_table WHERE id='%s'", $row_bos['eid']);
 	$entries = mysqli_query($connection,$query_entries) or die (mysqli_error($connection));
 	$row_entries = mysqli_fetch_assoc($entries);
+	
 	if ($row_bos['scorePlace'] != "") {
 		$text = sprintf("\n%s - %s (%s)\n%s\n'%s' %s",
 		display_place($row_bos['scorePlace'],1),
 		"Best of Show",
 		style_type($row_bos['scoreType'],"3","default"),
 		strtr($row_entries['brewBrewerFirstName'],$html_remove)." ".strtr($row_entries['brewBrewerLastName'],$html_remove),
-		strtr($row_entries['brewName'],$html_remove),
+		strtr(trim($row_entries['brewName']),$html_remove),
 		$row_entries['brewStyle']
 		);
 		$text = iconv('UTF-8', 'windows-1252', $text);
@@ -58,17 +62,39 @@ if ($_SESSION['prefsWinnerMethod'] == "1") { // Output by Category
 
 			do {
 
-			$style = $row_scores['brewCategory'].$row_scores['brewSubCategory'];
+			$display_place = display_place($row_scores['scorePlace'],1);
+			$brewer_name = truncate($row_scores['brewerFirstName']." ".$row_scores['brewerLastName'], $character_limit,"...");
+			$entry_name = truncate(trim($row_scores['brewName']), $character_limit,"...");
+			$style = style_convert($row_scores['brewCategorySort'],1);
+			$style = truncate($style,$character_limit,"...");
+			$style_name = truncate($row_scores['brewStyle'],$character_limit);
 
-				$text = sprintf("\n%s - %s\n%s\n'%s' %s",
-				display_place($row_scores['scorePlace'],1),
-				style_convert($row_scores['brewCategorySort'],1),
-				strtr($row_scores['brewerFirstName'],$html_remove)." ".strtr($row_scores['brewerLastName'],$html_remove),
-				strtr($row_scores['brewName'],$html_remove),
-				$row_scores['brewerStyle']
+			if ($filter == "round") {
+
+				$text = sprintf("\n%s\n%s\n%s\n'%s'\n%s",
+					$display_place,
+					$style,
+					$brewer_name,
+					$entry_name,
+					$style_name
 				);
-				$text = iconv('UTF-8', 'windows-1252', $text);
-				$pdf->Add_Label($text);
+
+			}
+
+			else {
+
+				$text = sprintf("\n%s\n%s\n%s\n'%s'\n%s",
+					$display_place,
+					$style,
+					$brewer_name,
+					$entry_name,
+					$style_name
+				);
+
+			}
+
+			$text = iconv('UTF-8', 'windows-1252', $text);
+			$pdf->Add_Label($text);
 
 			} while ($row_scores = mysqli_fetch_assoc($scores));
 
@@ -94,7 +120,6 @@ elseif ($_SESSION['prefsWinnerMethod'] == "2") { // Output by sub-category
 		$score_count = mysqli_query($connection,$query_score_count) or die (mysqli_error($connection));
 		$row_score_count = mysqli_fetch_assoc($score_count);
 
-
 		if (($row_entry_count['count'] > 0) && ($row_score_count['count'] > 0)) {
 
 			$query_scores = sprintf("SELECT a.scorePlace, b.brewName, b.brewCategory, b.brewSubCategory, b.brewStyle, c.brewerLastName, c.brewerFirstName, c.brewerClubs FROM %s a, %s b, %s c WHERE b.brewCategorySort='%s' AND b.brewSubCategory='%s' AND a.eid = b.id  AND c.uid = b.brewBrewerID  AND (a.scorePlace IS NOT NULL OR a.scorePlace='') ORDER BY a.scorePlace", $judging_scores_db_table, $brewing_db_table, $brewer_db_table, $style[0],$style[1]);
@@ -104,24 +129,32 @@ elseif ($_SESSION['prefsWinnerMethod'] == "2") { // Output by sub-category
 
 			do {
 
+				$display_place = display_place($row_scores['scorePlace'],1);
+				$brewer_name = truncate($row_scores['brewerFirstName']." ".$row_scores['brewerLastName'], $character_limit,"...");
+				$entry_name = truncate(trim($row_scores['brewName']), $character_limit,"...");
+				$subcategory = preg_replace('/[0-9]+/', '', $row_scores['brewSubCategory']);
+				$style = strtoupper($row_scores['brewCategory']).$subcategory;
+				$style_name = truncate($row_scores['brewStyle'],$character_limit,"...");
+
 				if ($filter == "round") {
 
-					$text = sprintf("\n%s - %s\n%s\n'%s'",
-					display_place($row_scores['scorePlace'],1),
-					$row_scores['brewCategory'].$row_scores['brewSubCategory'].": ".$row_scores['brewStyle'],
-					strtr($row_scores['brewerFirstName'],$html_remove)." ".strtr($row_scores['brewerLastName'],$html_remove),
-					strtr($row_scores['brewName'],$html_remove)
+					$text = sprintf("\n%s\n%s\n%s\n'%s'",
+					$display_place,
+					$style_name,
+					$brewer_name,
+					$entry_name
 					);
 
 				}
 
 				else {
 
-					$text = sprintf("\n%s - %s\n%s\n'%s'",
-					display_place($row_scores['scorePlace'],1),
-					$row_scores['brewCategory'].$row_scores['brewSubCategory'].": ".$row_scores['brewStyle'],
-					strtr($row_scores['brewerFirstName'],$html_remove)." ".strtr($row_scores['brewerLastName'],$html_remove),
-					strtr($row_scores['brewName'],$html_remove)
+					$text = sprintf("\n%s\n%s: %s\n%s\n'%s'",
+					$display_place,
+					$style,
+					$style_name,
+					$brewer_name,
+					$entry_name
 					);
 
 				}
@@ -145,19 +178,42 @@ else { // Output by Table.
 	$totalRows_scores = mysqli_num_rows($scores);
 
 		do {
-			$query_entries = sprintf("SELECT id,brewBrewerFirstName,brewBrewerLastName,brewName,brewStyle,brewCategory,brewSubCategory FROM $brewing_db_table WHERE id='%s'", $row_scores['eid']);
+			$query_entries = sprintf("SELECT id,brewBrewerFirstName,brewBrewerLastName,brewName,brewStyle,brewCategorySort,brewSubCategory FROM $brewing_db_table WHERE id='%s'", $row_scores['eid']);
 			$entries = mysqli_query($connection,$query_entries) or die (mysqli_error($connection));
 			$row_entries = mysqli_fetch_assoc($entries);
 
 			$display_place = display_place($row_scores['scorePlace'],1);
+			$table_name = truncate($row_tables['tableName'], ($character_limit - 3));
+			$brewer_name = truncate($row_entries['brewBrewerFirstName']." ".$row_entries['brewBrewerLastName'],$character_limit,"...");
+			$entry_name = truncate(trim($row_entries['brewName']), $character_limit,"...");
+			$subcategory = preg_replace('/[0-9]+/', '', $row_entries['brewSubCategory']);
+			$style_name = truncate($row_entries['brewStyle'],$character_limit,"...");
 
-			$text = sprintf("\n%s - %s\n%s\n'%s' %s",
-			$display_place,
-			truncate($row_tables['tableName'], 35),
-			strtr($row_entries['brewBrewerFirstName'],$html_remove)." ".strtr($row_entries['brewBrewerLastName'],$html_remove),
-			strtr($row_entries['brewName'],$html_remove),
-			$row_entries['brewStyle']
-			);
+			if ($filter == "round") {
+
+				$text = sprintf("\n%s\n%s\n%s\n'%s'\n%s",
+					$display_place,
+					$table_name,
+					strtr($brewer_name,$html_remove),
+					strtr($entry_name,$html_remove),
+					$style_name
+				);
+
+			}
+
+			else {
+
+				$text = sprintf("\n%s\n%s\n%s\n'%s'\n%s",
+					$display_place,
+					$table_name,
+					strtr($brewer_name,$html_remove),
+					strtr($entry_name,$html_remove),
+					$style_name
+				);
+
+			}
+
+			
 
 			$text = iconv('UTF-8', 'windows-1252', $text);
 			if ($display_place != "N/A") $pdf->Add_Label($text);

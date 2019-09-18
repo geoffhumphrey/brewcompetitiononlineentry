@@ -162,12 +162,19 @@ function truncate($string, $your_desired_width, $append="") {
 
   for (; $last_part < $parts_count; ++$last_part) {
     $length += strlen($parts[$last_part]);
-    if ($length > $your_desired_width) { break; }
+    if ($length > $your_desired_width) { 
+    	break; 
+    }
   }
 
-  $return = implode(array_slice($parts, 0, $last_part));
-  if (strlen($string) > $your_desired_width) $return .= $append;
-  return $return;
+  $r = implode(array_slice($parts, 0, $last_part));
+  
+  if (strlen($string) > $your_desired_width) {
+  	$r = rtrim($r);
+  	$r .= $append;
+  }
+
+  return $r;
 }
 
 function user_entry_count($uid,$view) {

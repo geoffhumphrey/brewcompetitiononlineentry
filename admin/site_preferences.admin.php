@@ -951,7 +951,8 @@ $(document).ready(function(){
                 <h4 class="modal-title" id="charLimitModalLabel">Character Limit Info</h4>
             </div>
             <div class="modal-body">
-                <p>Limit of characters allowed for the Required Info section when adding an entry. 50 characters is the maximum recommended when utilizing the &ldquo;Bottle Labels with Required Info&rdquo; report.</p>
+                <p>Limit of characters allowed for the Required Info section when adding an entry.</p>
+                <p><strong>60 characters</strong> is the maximum recommended when utilizing the &ldquo;Bottle Labels with Required Info&rdquo; report. This ensures that the required and optional information added by the entrant will fit on a single address-size label.</p>
             </div>
             <div class="modal-footer">
             	<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
