@@ -3,30 +3,31 @@ Developed by Geoff Humphrey with code contributions by the GitHub community.
 
 Website:     http://www.brewcompetition.com
 GitHub:      https://github.com/geoffhumphrey/brewcompetitiononlineentry
-SourceForge: http://sourceforge.net/projects/brewcompetition [Archives ONLY]
 
-Release 2.1.17, 2019-03-13
+Release 2.1.18, 2019-09-20
 
 Developed utilizing a number of extensions and functions, with gratitude to their
 respective developers and online communities. Tested with the following versions:
-- PHP 5.6.24                      http://www.php.net
+- PHP 7.3.X                       http://www.php.net
   -- PHP's Fileinfo extension must be installed and enabled
   -- see http://php.net/manual/en/fileinfo.setup.php
-- MySQL 5.5.42                    http://www.mysql.com
-- jQuery 3.1.0                    http://jquery.com
-- Bootstrap 3.3.7                 http://getbootstrap.com
-- DataTables 1.10.12              http://www.datatables.net
-- Fancybox 2.1.5                  http://www.fancyapps.com
-- TinyMCE 4.4.0                   http://www.tinymce.com
-- Jasny Bootstrap 3.1.3           http://www.jasny.net/bootstrap
-- DropZone 4.2.0                  http://www.dropzonejs.com
-- Bootstrap Form Validator 0.9.0  http://1000hz.github.io/bootstrap-validator
-- Bootstrap-Select 1.9.3          http://silviomoreto.github.io/bootstrap-select
-- Font Awesome 4.5.0              http://fortawesome.github.io/Font-Awesome
-- FPDF 1.6                        http://www.fpdf.org
-- PHPass 0.3                      http://www.openwall.com/phpass
-- Tiny But Strong 3.10.1          http://www.tinybutstrong.com
-- HTML Purifier 4.9.3             http://htmlpurifier.org/
+- MySQL 5.5.42                    	http://www.mysql.com
+- jQuery 3.1.0                    	http://jquery.com
+- Bootstrap 3.3.7                 	http://getbootstrap.com
+- DataTables 1.10.12              	http://www.datatables.net
+- Fancybox 2.1.5                  	http://www.fancyapps.com
+- TinyMCE 4.4.0                   	http://www.tinymce.com
+- Jasny Bootstrap 3.1.3           	http://www.jasny.net/bootstrap
+- DropZone 4.2.0                  	http://www.dropzonejs.com
+- Bootstrap Form Validator 0.9.0  	http://1000hz.github.io/bootstrap-validator
+- Bootstrap-Select 1.12.0         	http://silviomoreto.github.io/bootstrap-select
+- Font Awesome 4.5.0              	http://fortawesome.github.io/Font-Awesome
+- FPDF 1.6                        	http://www.fpdf.org
+- PHPass 0.3                      	http://www.openwall.com/phpass
+- Tiny But Strong 3.10.1          	http://www.tinybutstrong.com
+- HTML Purifier 4.9.3             	http://htmlpurifier.org/
+- PHPMailer 6.0.7				  	https://github.com/PHPMailer/PHPMailer
+- Bootstrap Markdown Editor 2.0.1	https://github.com/inacho/bootstrap-markdown-editor
 
 ***********************************************************************************
 LICENSE
@@ -69,7 +70,7 @@ free Apache web server package that includes both PHP and MySQL.
 
 A modern web browser is also required to take full advantage of the many HTML 5
 attributes and functions of the application. The latest versions of Chrome, Firefox,
-Microsoft Edge, and Safari render BCOE&M correctly.
+Microsoft Edge, and Safari render BCOE&M correctly. Internet Explorer is not supported.
 
 ***********************************************************************************
 Help
