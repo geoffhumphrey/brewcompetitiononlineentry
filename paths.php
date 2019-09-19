@@ -155,8 +155,6 @@ if (HOSTED) {
     $session_expire_after = 30;
 }
 
-else $session_expire_after = 60;
-
 /** Using an MD5 of __FILE__ will ensure a different session
  * name for multiple installs on the same domain name.
  *

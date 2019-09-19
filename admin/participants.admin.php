@@ -596,6 +596,9 @@ echo $output_user_question_modals;
 			<li class="small"><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=admin&amp;go=participants&amp;filter=judges&amp;action=print&amp;view=default&amp;psort=judge_id">By Judge ID</a><li>
             <li class="small"><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=admin&amp;go=participants&amp;filter=judges&amp;action=print&amp;view=default&amp;psort=judge_rank">By Judge Rank</a><li>
             <?php } ?>
+            <?php if ($filter == "stewards") { ?>
+			<li class="small"><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=admin&amp;go=participants&amp;filter=stewards&amp;action=print&amp;view=default">By Last Name</a><li>
+            <?php } ?>
 		</ul>
 	</div><!-- ./button group -->
     <?php if ($dbTable != "default") { ?>
