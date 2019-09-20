@@ -117,7 +117,7 @@ $security_question = array($label_secret_01, $label_secret_05, $label_secret_06,
     <div id="loader-submit">
         <div class="center">
             <span class="fa fa-cog fa-spin fa-5x fa-fw"></span>
-            <p><strong><?php echo $label_working; ?>.<br><?php echo $output_text_030; ?>.</strong></p>
+            <p><strong><?php echo $label_working; ?>.<br><?php echo $output_text_030." ".$output_text_031; ?></strong></p>
         </div>
     </div>
     <!-- ./LOADER -->

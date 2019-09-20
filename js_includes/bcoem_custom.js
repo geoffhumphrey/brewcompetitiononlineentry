@@ -35,6 +35,12 @@ $(function() {
     $('[data-toggle="popover"]').popover();
 });
 
+var KEYCODE_ESC = 27;
+
+$(document).keyup(function(e) {
+  if (e.which == KEYCODE_ESC) $('#loader-submit').stop();
+});
+
 $(document).ready(function() {
 
     $("[data-confirm!=''][data-confirm]").ready(function() {

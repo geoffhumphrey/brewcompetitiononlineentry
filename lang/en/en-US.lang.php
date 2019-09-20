@@ -1497,13 +1497,18 @@ $label_submitting = "Submitting";
 $label_additional_info = "Entries with Additional Info";
 $label_working = "Working";
 
-$output_text_030 = "Please stand by";
+$output_text_030 = "Please stand by.";
 
 $brewer_entries_text_021 = "Check the entries to print their bottle labels. Select the top checkbox to check or uncheck all the boxes in the column.";
 $brewer_entries_text_022 = "Print All Bottle Labels for Checked Entries";
 $brewer_entries_text_023 = "The bottle labels will open in a new tab or window.";
 $brewer_entries_text_024 = "Print Bottle Labels";
 
+// ----------------------------------------------------------------------------------
+// Version 2.1.18 Additions
+// ----------------------------------------------------------------------------------
+
+$output_text_031 = "Press Esc to hide.";
 
 /**
  * ----------------------------------------------------------------------------------
