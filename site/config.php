@@ -200,25 +200,4 @@ $base_url .= $_SERVER['SERVER_NAME'].$sub_directory."/";
 $server_root = $_SERVER['DOCUMENT_ROOT'];
 //$server_root = $_SERVER['SUBDOMAIN_DOCUMENT_ROOT'];
 
-/*
- * ******************************************************************************
- * Setup the email settings for the application
- * ******************************************************************************
- * In most cases the default mail() will be OK but if you would rather use the PHPMailer class 
- * set the mail_use_smtp variable below to true and fill out the rest of the SMTP fields as required.
- * see: https://github.com/PHPMailer/PHPMailer for examples 
- */
-
-
-$mail_use_smtp = false;      // Set this to true to use PHPMailer library instead of default mail() function and the variables below.
-$mail_default_from = "";     // Set this field if you want to override the from address of 'noreply@[website]' address that gets added by default
-
-$smtp_debug_level = 2;       // Enable verbose debug output
-$smtp_host = "localhost";    // Specify main (and backup, if necessary - ';' separated) SMTP servers
-$smtp_auth = false;          // Enable / Disable SMTP authentication
-$smtp_username = "";         // SMTP username
-$smtp_password = "";         // SMTP password
-$smtp_secure = "";           // Enable TLS encryption, `tls` and `ssl` are accepted
-$smtp_port = 25;             // TCP port to connect to
-
 ?>
