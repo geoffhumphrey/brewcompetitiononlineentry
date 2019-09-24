@@ -1180,7 +1180,7 @@ $(document).ready(function(){
         <!-- Input Here -->
         <select class="selectpicker" name="prefsLanguage" id="prefsLanguage" data-live-search="false" data-size="10" data-width="auto">
             <?php foreach ($languages as $lang => $lang_name) { ?>
-            <option value="<?php echo $lang; ?>" <?php if ($row_prefs['prefsLanguage'] == $lang_name) echo "SELECTED"; ?>><?php echo $lang_name; ?></option>
+            <option value="<?php echo $lang; ?>" <?php if ($row_prefs['prefsLanguage'] == $lang) echo "SELECTED"; ?>><?php echo $lang_name; ?></option>
             <?php } ?>
         </select>
         <span id="helpBlock" class="help-block">The language to display on all <em>public</em> areas of your installation (e.g., entry information, volunteers, account pages, etc.).</span>

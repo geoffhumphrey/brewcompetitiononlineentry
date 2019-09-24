@@ -1505,6 +1505,13 @@ $brewer_entries_text_022 = "Vytisknout štítky lahví všech zaškrtnutých vzo
 $brewer_entries_text_023 = "Štítky lahví se otevřou na nové záložce nebo v novém okně.";
 $brewer_entries_text_024 = "Vytisknout štítky lahví";
 
+// ----------------------------------------------------------------------------------
+// Version 2.1.18 Additions
+// ----------------------------------------------------------------------------------
+
+$output_text_031 = "Stisknutím klávesy Esc skryjete.";
+
+
 // ***********************************************************************************
 // END TRANSLATIONS
 // ***********************************************************************************

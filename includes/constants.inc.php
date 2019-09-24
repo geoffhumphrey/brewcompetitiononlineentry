@@ -17,7 +17,8 @@ Checked Single
  */
 
 $languages = array(
-    "en-US" => "US English"
+    "en-US" => "US English",
+    "cs-CZ" => "Czech"
 );
 
 /** -------------------------- Theme File names and  Display Name -------------------------------
