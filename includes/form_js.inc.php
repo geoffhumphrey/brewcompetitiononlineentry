@@ -6,6 +6,61 @@ Checked Single
 
 */
 
+$styles_entry_text = array(
+    "07-C" => $styles_entry_text_07C,
+    "09-A" => $styles_entry_text_09A,
+    "10-C" => $styles_entry_text_10C,
+    "21-B" => $styles_entry_text_21B,
+    "23-F" => $styles_entry_text_23F,
+    "24-C" => $styles_entry_text_24C,
+    "25-B" => $styles_entry_text_27A,
+    "28-A" => $styles_entry_text_28A,
+    "28-B" => $styles_entry_text_28C,
+    "29-A" => $styles_entry_text_29A,
+    "29-B" => $styles_entry_text_29B,
+    "29-C" => $styles_entry_text_29C,
+    "30-A" => $styles_entry_text_30A,
+    "30-B" => $styles_entry_text_30B,
+    "30-C" => $styles_entry_text_30C,
+    "31-A" => $styles_entry_text_30A,
+    "31-B" => $styles_entry_text_31B,
+    "32-A" => $styles_entry_text_32A,
+    "32-B" => $styles_entry_text_32B,
+    "33-A" => $styles_entry_text_33A,
+    "33-B" => $styles_entry_text_33B,
+    "34-A" => $styles_entry_text_34A,
+    "34-B" => $styles_entry_text_34B,
+    "34-C" => $styles_entry_text_34C,
+    "M1-A" => $styles_entry_text_M1A,
+    "M1-B" => $styles_entry_text_M1B,
+    "M1-C" => $styles_entry_text_M1C,
+    "M2-A" => $styles_entry_text_M2A,
+    "M2-B" => $styles_entry_text_M2B,
+    "M2-C" => $styles_entry_text_M2C,
+    "M2-D" => $styles_entry_text_M2D,
+    "M2-E" => $styles_entry_text_M2E,
+    "M3-A" => $styles_entry_text_M3A,
+    "M3-B" => $styles_entry_text_M3B,
+    "M4-A" => $styles_entry_text_M4A,
+    "M4-B" => $styles_entry_text_M4B,
+    "M4-C" => $styles_entry_text_M4C,
+    "C1-E" => $styles_entry_text_C1E,
+    "C2-A" => $styles_entry_text_C2A,
+    "C2-B" => $styles_entry_text_C2B,
+    "C2-C" => $styles_entry_text_C2C,
+    "C2-D" => $styles_entry_text_C2D,
+    "C2-E" => $styles_entry_text_C2E,
+    "C2-F" => $styles_entry_text_C2F,
+    "21-B1" => $styles_entry_text_21X,
+    "21-B2" => $styles_entry_text_21X,
+    "21-B3" => $styles_entry_text_21X,
+    "21-B4" => $styles_entry_text_21X,
+    "21-B5" => $styles_entry_text_21X,
+    "21-B6" => $styles_entry_text_21X,
+    "21-B7" => $styles_entry_text_21X,
+    "PR-X4" => $styles_entry_text_PRX4,
+);
+
 if (($section == "admin") && ($go == "styles") && ($action != "default")) {
 
 	if ($styleSet != "BA") {
@@ -226,7 +281,10 @@ $(document).ready(function() {
 		// Beer styles that require special ingredients
 		<?php
 		if (is_array($special_beer_info)) {
-		foreach ($special_beer_info as $key => $value) { ?>
+		foreach ($special_beer_info as $key => $value) { 
+			if (array_key_exists($key, $styles_entry_text)) $entry_text = $styles_entry_text["$key"];
+			else $entry_text = $value;
+			?>
 		else if (
 			$("#type").val() == "<?php echo ltrim($key,"0"); ?>"){ // Special Beer
 
@@ -275,7 +333,7 @@ $(document).ready(function() {
 				$("input[name='carbLambic']").prop("required", false);
 				$("input[name='BDGColor']").prop("required", false);
 				$("#specialInfo").show("fast");
-				$("#specialInfoText").html("<?php echo preg_replace( "/\r|\n/", "", $value); ?>");
+				$("#specialInfoText").html("<?php echo preg_replace( "/\r|\n/", "", $entry_text); ?>");
 				$("#specialInfoName").html("<a href='#' data-tooltip='true' title='Click for specifics for this style.' data-toggle='modal' data-target='#<?php echo $key; ?>'><?php echo $label_this_style; ?></a>");
 				<?php if (($_SESSION['prefsStyleSet'] == "BJCP2015") && (in_array($key,$optional_info_styles))) { ?>
 				$("#optional").show("fast");
@@ -357,8 +415,10 @@ $(document).ready(function() {
 
 		// Styles requiring special ingredients, strength, sweetness, and carbonation
 		<?php if (is_array($carb_str_sweet_special_info)) {
-		foreach ($carb_str_sweet_special_info as $key => $value) { ?>
-
+		foreach ($carb_str_sweet_special_info as $key => $value) { 
+			if (array_key_exists($key, $styles_entry_text)) $entry_text = $styles_entry_text["$key"];
+			else $entry_text = $value;
+		?>
 		else if (
 			$("#type").val() == "<?php echo ltrim($key,"0"); ?>"){
 			<?php if ($action == "edit") { ?>
@@ -418,7 +478,7 @@ $(document).ready(function() {
 			$("input[name='brewMead1']").prop("required", true);
 			$("input[name='brewMead2']").prop("required", true);
 			$("input[name='brewMead3']").prop("required", true);
-			$("#specialInfoText").html("<?php echo preg_replace( "/\r|\n/", "", $value); ?>");
+			$("#specialInfoText").html("<?php echo preg_replace( "/\r|\n/", "", $entry_text); ?>");
 			$("#specialInfoName").html("<a href='#' data-tooltip='true' title='Click for specifics for this style.' data-toggle='modal' data-target='#<?php echo $key; ?>'><?php echo $label_this_style; ?></a>");
 		}
 		<?php }
@@ -466,7 +526,13 @@ $(document).ready(function() {
 
 			$("#carbonation").show("fast");
 			$("#strength").show("fast");
+			<?php if (in_array($value, $styles_entry_text)) {
+			$entry_text = $styles_entry_text["$value"]; ?>
+			$("#specialInfo").show("fast");
+			$("#specialInfoText").html("<?php echo preg_replace( "/\r|\n/", "", $entry_text); ?>");
+			<?php } else { ?>
 			$("#specialInfo").hide("fast");
+			<?php } ?>
 			<?php if (($_SESSION['prefsStyleSet'] == "BJCP2015") && (in_array($value,$optional_info_styles))) { ?>
 			$("#optional").show("fast");
 			// $("#brewInfoOptional").attr("maxlength","65");
@@ -586,7 +652,10 @@ $(document).ready(function() {
 		} ?>
 		// Styles requiring special ingredients, carbonation, and sweetness
 		<?php if (is_array($spec_sweet_carb_only)) {
-		foreach ($spec_sweet_carb_only_info as $key => $value) { ?>
+		foreach ($spec_sweet_carb_only_info as $key => $value) { 
+			if (array_key_exists($key, $styles_entry_text)) $entry_text = $styles_entry_text["$key"];
+			else $entry_text = $value;
+			?>
 		else if (
 			$("#type").val() == "<?php echo ltrim($key,"0"); ?>"){
 			<?php if ($action == "edit") { ?>
@@ -635,14 +704,17 @@ $(document).ready(function() {
 			$("#brewInfo").prop("required", true);
 			$("input[name='brewMead1']").prop("required", true);
 			$("input[name='brewMead2']").prop("required", true);
-			$("#specialInfoText").html("<?php echo preg_replace( "/\r|\n/", "", $value); ?>");
+			$("#specialInfoText").html("<?php echo preg_replace( "/\r|\n/", "", $entry_text); ?>");
 			$("#specialInfoName").html("<a href='#' data-tooltip='true' title='Click for specifics for this style.' data-toggle='modal' data-target='#<?php echo $key; ?>'><?php echo $label_this_style; ?></a>");
 		}
 		<?php }
 		} ?>
 		// Styles requiring special ingredients and carbonation
 		<?php if (is_array($spec_carb_only_info)) {
-		foreach ($spec_carb_only_info as $key => $value) { ?>
+		foreach ($spec_carb_only_info as $key => $value) { 
+			if (array_key_exists($key, $styles_entry_text)) $entry_text = $styles_entry_text["$key"];
+			else $entry_text = $value;
+			?>
 		else if (
 			$("#type").val() == "<?php echo ltrim($key,"0"); ?>"){
 			<?php if ($action == "edit") { ?>
@@ -689,7 +761,7 @@ $(document).ready(function() {
 			$("#brewInfo").prop("required", true);
 			$("input[name='brewMead1']").prop("required", true);
 			$("#specialInfo").show("fast");
-			$("#specialInfoText").html("<?php echo preg_replace( "/\r|\n/", "", $value); ?>");
+			$("#specialInfoText").html("<?php echo preg_replace( "/\r|\n/", "", $entry_text); ?>");
 			$("#specialInfoName").html("<a href='#' data-tooltip='true' title='Click for specifics for this style.' data-toggle='modal' data-target='#<?php echo $key; ?>'><?php echo $label_this_style; ?></a>");
 		}
 		<?php }
@@ -753,7 +825,10 @@ if ($action == "edit") {
 		$("input[name='BDGColor']").prop("required", false);
 	});
 
-	<?php if ((is_array($carb_str_sweet_special_info)) && (array_key_exists($view,$carb_str_sweet_special_info))) { ?>
+	<?php if ((is_array($carb_str_sweet_special_info)) && (array_key_exists($view,$carb_str_sweet_special_info))) { 
+		if (in_array($view, $styles_entry_text)) $entry_text = $styles_entry_text["$view"];
+		else $entry_text = $carb_str_sweet_special_info["$view"];
+		?>
 	// Show fields for styles that require special ingredients, carb, sweetness, strength, etc.
 	// Carb, sweetness, strength, and special info styles
 	$(document).ready(function() {
@@ -779,7 +854,7 @@ if ($action == "edit") {
 		$("input[name='carbLambic']").prop("required", false);
 		$("input[name='BDGColor']").prop("required", false);
 		$("#specialInfo").show("fast");
-		$("#specialInfoText").html("<?php echo preg_replace( "/\r|\n/", "", $carb_str_sweet_special_info["$view"]); ?>");
+		$("#specialInfoText").html("<?php echo preg_replace( "/\r|\n/", "", $entry_text); ?>");
 		$("#specialInfoName").html("<a href='#' data-tooltip='true' title='Click for specifics for this style.' data-toggle='modal' data-target='#<?php echo $view; ?>'><?php echo $label_this_style; ?></a>");
 		<?php if (($_SESSION['prefsStyleSet'] == "BJCP2015") && (in_array($view,$optional_info_styles))) { ?>
 		$("#optional").show("fast");
@@ -888,7 +963,10 @@ if ($action == "edit") {
 	});
 	<?php } ?>
 
-	<?php if ((is_array($spec_sweet_carb_only_info)) && (array_key_exists($view,$spec_sweet_carb_only_info))) { ?>
+	<?php if ((is_array($spec_sweet_carb_only_info)) && (array_key_exists($view,$spec_sweet_carb_only_info))) { 
+		if (in_array($view, $styles_entry_text)) $entry_text = $styles_entry_text["$view"];
+		else $entry_text = $spec_sweet_carb_only_info["$view"];
+		?>
 	// Sweet and sweet only styles with special ingredients
 	$(document).ready(function() {
 		$("#special").show("fast");
@@ -913,7 +991,7 @@ if ($action == "edit") {
 		$("input[name='sweetnessLambic']").prop("required", false);
 		$("input[name='carbLambic']").prop("required", false);
 		$("input[name='BDGColor']").prop("required", false);
-		$("#specialInfoText").html("<?php echo preg_replace( "/\r|\n/", "", $spec_sweet_carb_only_info["$view"]); ?>");
+		$("#specialInfoText").html("<?php echo preg_replace( "/\r|\n/", "", $entry_text); ?>");
 		$("#specialInfoName").html("<a href='#' data-tooltip='true' title='Click for specifics for this style.' data-toggle='modal' data-target='#<?php echo $view; ?>'><?php echo $label_this_style; ?></a>");
 		<?php if (($_SESSION['prefsStyleSet'] == "BJCP2015") && (in_array($view,$optional_info_styles))) { ?>
 		$("#optional").show("fast");
@@ -923,7 +1001,10 @@ if ($action == "edit") {
 	});
 	<?php } ?>
 
-	<?php if ((is_array($spec_carb_only_info)) && (array_key_exists($view,$spec_carb_only_info))) { ?>
+	<?php if ((is_array($spec_carb_only_info)) && (array_key_exists($view,$spec_carb_only_info))) { 
+		if (in_array($view, $styles_entry_text)) $entry_text = $styles_entry_text["$view"];
+		else $entry_text = $spec_carb_only_info["$view"];
+		?>
 	// Carb with special ingredients only styles
 	$(document).ready(function() {
 		$("#special").show("fast");
@@ -948,7 +1029,7 @@ if ($action == "edit") {
 		$("input[name='sweetnessLambic']").prop("required", false);
 		$("input[name='carbLambic']").prop("required", false);
 		$("input[name='BDGColor']").prop("required", false);
-		$("#specialInfoText").html("<?php echo preg_replace( "/\r|\n/", "", $spec_carb_only_info["$view"]); ?>");
+		$("#specialInfoText").html("<?php echo preg_replace( "/\r|\n/", "", $entry_text); ?>");
 		$("#specialInfoName").html("<a href='#' data-tooltip='true' title='Click for specifics for this style.' data-toggle='modal' data-target='#<?php echo $view; ?>'><?php echo $label_this_style; ?></a>");
 		<?php if (($_SESSION['prefsStyleSet'] == "BJCP2015") && (in_array($view,$optional_info_styles))) { ?>
 		$("#optional").show("fast");
@@ -958,7 +1039,10 @@ if ($action == "edit") {
 	});
 	<?php } ?>
 
-	<?php if ((is_array($special_beer_info)) && (array_key_exists($view,$special_beer_info))) { ?>
+	<?php if ((is_array($special_beer_info)) && (array_key_exists($view,$special_beer_info))) {
+		if (in_array($view, $styles_entry_text)) $entry_text = $styles_entry_text["$view"];
+		else $entry_text = $special_beer_info["$view"];
+	 ?>
 	// Beer styles with special ingredients only
 	$(document).ready(function() {
 		$("#special").show("fast");
@@ -983,7 +1067,7 @@ if ($action == "edit") {
 		$("input[name='carbLambic']").prop("required", false);
 		$("input[name='BDGColor']").prop("required", false);
 		$("#specialInfo").show("fast");
-		$("#specialInfoText").html("<?php echo preg_replace( "/\r|\n/", "", $special_beer_info["$view"]); ?>");
+		$("#specialInfoText").html("<?php echo preg_replace( "/\r|\n/", "", $entry_text); ?>");
 		$("#specialInfoName").html("<a href='#' data-tooltip='true' title='Click for specifics for this style.' data-toggle='modal' data-target='#<?php echo $view; ?>'><?php echo $label_this_style; ?></a>");
 		<?php if (($_SESSION['prefsStyleSet'] == "BJCP2015") && (in_array($view,$optional_info_styles))) { ?>
 		$("#optional").show("fast");
@@ -1007,7 +1091,7 @@ if ($action == "edit") {
 				$("#BDGColor").hide("fast");
 				$("#optional").hide("fast");
 				$("#specialInfo").show("fast");
-				$("#specialInfoText").html("<?php echo preg_replace( "/\r|\n/", "", $special_beer_info["$view"]); ?>");
+				$("#specialInfoText").html("<?php echo preg_replace( "/\r|\n/", "", $styles_entry_text["$view"]); ?>");
 				$("#specialInfoName").html("<a href='#' data-tooltip='true' title='Click for specifics for this style.' data-toggle='modal' data-target='#<?php echo $view; ?>'><?php echo $label_this_style; ?></a>");
 				<?php if (($_SESSION['prefsStyleSet'] == "BJCP2015") && (in_array($view,$optional_info_styles))) { ?>
 				$("#optional").show("fast");
@@ -1029,7 +1113,7 @@ if ($action == "edit") {
 				$("#BDGColor").show("fast");
 				$("#optional").hide("fast");
 				$("#specialInfo").show("fast");
-				$("#specialInfoText").html("<?php echo preg_replace( "/\r|\n/", "", $special_beer_info["$view"]); ?>");
+				$("#specialInfoText").html("<?php echo preg_replace( "/\r|\n/", "", $styles_entry_text["$view"]); ?>");
 				$("#specialInfoName").html("<a href='#' data-tooltip='true' title='Click for specifics for this style.' data-toggle='modal' data-target='#<?php echo $view; ?>'><?php echo $label_this_style; ?></a>");
 				<?php if (($_SESSION['prefsStyleSet'] == "BJCP2015") && (in_array($view,$optional_info_styles))) { ?>
 				$("#optional").show("fast");
@@ -1051,7 +1135,7 @@ if ($action == "edit") {
 				$("#BDGColor").hide("fast");
 				$("#optional").show("fast");
 				$("#specialInfo").show("fast");
-				$("#specialInfoText").html("<?php echo preg_replace( "/\r|\n/", "", $special_beer_info["$view"]); ?>");
+				$("#specialInfoText").html("<?php echo preg_replace( "/\r|\n/", "", $styles_entry_text["$view"]); ?>");
 				$("#specialInfoName").html("<a href='#' data-tooltip='true' title='Click for specifics for this style.' data-toggle='modal' data-target='#<?php echo $view; ?>'><?php echo $label_this_style; ?></a>");
 				<?php if (($_SESSION['prefsStyleSet'] == "BJCP2015") && (in_array($view,$optional_info_styles))) { ?>
 				$("#optional").show("fast");
@@ -1072,7 +1156,7 @@ if ($action == "edit") {
 				$("#carbLambic").hide("fast");
 				$("#BDGColor").hide("fast");
 				$("#specialInfo").hide("fast");
-				$("#specialInfoText").html("<?php echo preg_replace( "/\r|\n/", "", $special_beer_info["$view"]); ?>");
+				$("#specialInfoText").html("<?php echo preg_replace( "/\r|\n/", "", $styles_entry_text["$view"]); ?>");
 				$("#specialInfoName").html("<a href='#' data-tooltip='true' title='Click for specifics for this style.' data-toggle='modal' data-target='#<?php echo $view; ?>'><?php echo $label_this_style; ?></a>");
 				<?php if (($_SESSION['prefsStyleSet'] == "BJCP2015") && (in_array($view,$optional_info_styles))) { ?>
 				$("#optional").show("fast");
@@ -1093,7 +1177,7 @@ if ($action == "edit") {
 				$("#carbLambic").hide("fast");
 				$("#BDGColor").hide("fast");
 				$("#specialInfo").hide("fast");
-				$("#specialInfoText").html("<?php echo preg_replace( "/\r|\n/", "", $special_beer_info["$view"]); ?>");
+				$("#specialInfoText").html("<?php echo preg_replace( "/\r|\n/", "", $styles_entry_text["$view"]); ?>");
 				$("#specialInfoName").html("<a href='#' data-tooltip='true' title='Click for specifics for this style.' data-toggle='modal' data-target='#<?php echo $view; ?>'><?php echo $label_this_style; ?></a>");
 				<?php if (($_SESSION['prefsStyleSet'] == "BJCP2015") && (in_array($view,$optional_info_styles))) { ?>
 				$("#optional").show("fast");
@@ -1114,7 +1198,7 @@ if ($action == "edit") {
 				$("#carbLambic").hide("fast");
 				$("#BDGColor").hide("fast");
 				$("#specialInfo").hide("fast");
-				$("#specialInfoText").html("<?php echo preg_replace( "/\r|\n/", "", $special_beer_info["$view"]); ?>");
+				$("#specialInfoText").html("<?php echo preg_replace( "/\r|\n/", "", $styles_entry_text["$view"]); ?>");
 				$("#specialInfoName").html("<a href='#' data-tooltip='true' title='Click for specifics for this style.' data-toggle='modal' data-target='#<?php echo $view; ?>'><?php echo $label_this_style; ?></a>");
 				<?php if (($_SESSION['prefsStyleSet'] == "BJCP2015") && (in_array($view,$optional_info_styles))) { ?>
 				$("#optional").show("fast");
@@ -1135,7 +1219,7 @@ if ($action == "edit") {
 				$("#carbLambic").hide("fast");
 				$("#BDGColor").hide("fast");
 				$("#specialInfo").hide("fast");
-				$("#specialInfoText").html("<?php echo preg_replace( "/\r|\n/", "", $special_beer_info["$view"]); ?>");
+				$("#specialInfoText").html("<?php echo preg_replace( "/\r|\n/", "", $styles_entry_text["$view"]); ?>");
 				$("#specialInfoName").html("<a href='#' data-tooltip='true' title='Click for specifics for this style.' data-toggle='modal' data-target='#<?php echo $view; ?>'><?php echo $label_this_style; ?></a>");
 				<?php if (($_SESSION['prefsStyleSet'] == "BJCP2015") && (in_array($view,$optional_info_styles))) { ?>
 				$("#optional").show("fast");
@@ -1156,7 +1240,7 @@ if ($action == "edit") {
 				$("#carbLambic").hide("fast");
 				$("#BDGColor").hide("fast");
 				$("#specialInfo").hide("fast");
-				$("#specialInfoText").html("<?php echo preg_replace( "/\r|\n/", "", $special_beer_info["$view"]); ?>");
+				$("#specialInfoText").html("<?php echo preg_replace( "/\r|\n/", "", $styles_entry_text["$view"]); ?>");
 				$("#specialInfoName").html("<a href='#' data-tooltip='true' title='Click for specifics for this style.' data-toggle='modal' data-target='#<?php echo $view; ?>'><?php echo $label_this_style; ?></a>");
 				<?php if (($_SESSION['prefsStyleSet'] == "BJCP2015") && (in_array($view,$optional_info_styles))) { ?>
 				$("#optional").show("fast");

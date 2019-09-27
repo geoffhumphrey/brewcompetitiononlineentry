@@ -431,7 +431,7 @@ else $relocate_referrer = $_SERVER['HTTP_REFERER'];
         <div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
         <!-- Input Here -->
         <select class="selectpicker" name="brewStyle" id="type" data-live-search="true" data-size="5" data-width="auto" data-show-tick="true" data-header="<?php echo $label_select_style; ?>" title="<?php echo $label_select_style; ?>" required>
-			<option value="0-A" <?php if (($action == "add") || (($action == "edit") && ($view == "00-A"))) echo "selected"; ?>>Choose a Style</option>
+			<option value="0-A" <?php if (($action == "add") || (($action == "edit") && ($view == "00-A"))) echo "selected"; ?>><?php echo $header_text_107; ?></option>
             <option data-divider="true"></option>
 
             <?php

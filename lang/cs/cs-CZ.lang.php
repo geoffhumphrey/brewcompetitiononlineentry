@@ -394,7 +394,7 @@ $label_cheers = "Na zdraví";
 $label_count = "Počet";
 $label_total = "Celkem";
 $label_participant = "Účastník";
-$label_entrant = "Entrant";
+$label_entrant = "Účastník";
 $label_received = "Přijato";
 $label_please_note = "Vezměte prosím na vědomí";
 $label_pull_order = "Pull Order";
@@ -1024,8 +1024,8 @@ if (($section == "register") || ($section == "brewer") || ($action == "register"
 
 // -------------------- Sidebar --------------------
 
-$sidebar_text_000 = "Registrace degustátorů a obsluhy";
-$sidebar_text_001 = "Registrace obsluhy";
+$sidebar_text_000 = "Registrace degustátorů a obsluhy přijímáme od";
+$sidebar_text_001 = "Registrace obsluhy přijímáme od";
 $sidebar_text_002 = "Registrace degustátorů";
 $sidebar_text_003 = "Registrace je uzavřena. Byl dosažen maximální počet degustátorů a obsluhy.";
 $sidebar_text_004 = "do";
@@ -1451,7 +1451,7 @@ $entry_info_text_052 = "Soutěžicí musí zadat dodatečné informace o nápoji
 $output_text_028 = "Následující vzorky obsahují tyto alergeny zadané soutěžícím.";
 $output_text_029 = "Žádní soutěžící neuvedli informace o alergenech ve svých vzorcích.";
 
-$label_this_style = "Tento styl";
+$label_this_style = "Tento styl (V angličtina)";
 $label_notes = "Poznámky";
 $label_possible_allergens = "Možné alergeny";
 $label_please_choose = "Prosím zvolte";
@@ -1510,6 +1510,8 @@ $brewer_entries_text_024 = "Vytisknout štítky lahví";
 // ----------------------------------------------------------------------------------
 
 $output_text_031 = "Stisknutím klávesy Esc skryjete.";
+$styles_entry_text_21X = "Účastník musí zadat sílu (relace: 3,0-5,0%, standard: 5,0-7,5%, dvojnásobek: 7,5-9,5%).";
+$styles_entry_text_PRX4 = "Účastník musí uvést druhy použitých čerstvých plodů.";
 
 
 // ***********************************************************************************

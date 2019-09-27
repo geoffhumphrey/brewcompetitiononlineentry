@@ -1023,8 +1023,8 @@ if (($section == "register") || ($section == "brewer") || ($action == "register"
 
 // -------------------- Sidebar --------------------
 
-$sidebar_text_000 = "Registrations for judges or stewards";
-$sidebar_text_001 = "Registrations for stewards";
+$sidebar_text_000 = "Registrations for judges or stewards accepted";
+$sidebar_text_001 = "Registrations for stewards accepted";
 $sidebar_text_002 = "Registrations for judges";
 $sidebar_text_003 = "Registrations are no longer accepted. The limit of judges and stewards has been reached.";
 $sidebar_text_004 = "through";
@@ -1509,6 +1509,8 @@ $brewer_entries_text_024 = "Print Bottle Labels";
 // ----------------------------------------------------------------------------------
 
 $output_text_031 = "Press Esc to hide.";
+$styles_entry_text_21X = "Entrant MUST specify a strength (session: 3.0-5.0%, standard: 5.0-7.5%, double: 7.5-9.5%).";
+$styles_entry_text_PRX4 = "Entrant must specify the types of fresh fruit(s) used.";
 
 /**
  * ----------------------------------------------------------------------------------
