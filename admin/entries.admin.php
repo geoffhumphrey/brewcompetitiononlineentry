@@ -127,19 +127,16 @@ do {
 		if (!empty($row_log['brewMead1'])) $brewInfo .= "&nbsp;&nbsp;".$row_log['brewMead1'];
 		if (!empty($row_log['brewMead2'])) $brewInfo .= "&nbsp;&nbsp;".$row_log['brewMead2'];
 		if (!empty($row_log['brewMead3'])) $brewInfo .= "&nbsp;&nbsp;".$row_log['brewMead3'];
-		// $required_info .= " <a tabindex=\"0\" role=\"button\" data-toggle=\"popover\" data-placement=\"right\" data-trigger=\"hover focus\" title=\"Required Info\" data-content=\"".$brewInfo."\"><span class=\"fa fa-lg fa-comment\"></span></a>";
 
 		$required_info .= "<p><strong>Req. Info:</strong> ".$brewInfo."</p>";
 	}
 
 	if (!empty($row_log['brewInfoOptional'])) {
-		// $required_info .= " <a tabindex=\"0\" role=\"button\" data-toggle=\"popover\" data-placement=\"right\" data-trigger=\"hover focus\" title=\"Optional Info\" data-content=\"".$row_log['brewInfoOptional']."\"><span class=\"fa fa-lg fa-comment-o\"></span></a>";
 		$required_info .= "<p><strong>Op. Info:</strong> ".$row_log['brewInfoOptional']."</p>";
 	}
 
 	if (!empty($row_log['brewPossAllergens'])) {
 		$entry_allergens_display .= "<br><strong class=\"text-danger small\">".$label_possible_allergens.": ".$row_log['brewPossAllergens']."</strong>";
-		//$required_info .= " <a tabindex=\"0\" role=\"button\" data-toggle=\"popover\" data-placement=\"right\" data-trigger=\"hover focus\" title=\"Possible Allergen(s)\" data-content=\"".$row_log['brewPossAllergens']."\"><span class=\"fa fa-lg fa-medkit\"></span></a>";
 		$entry_allergen_row = "bg-warning";
 	}
 
@@ -206,7 +203,7 @@ do {
 	if (($action != "print") && ($dbTable == "default")) {
 		$entry_paid_display .= "<div class=\"checkbox\"><label>";
 		$entry_paid_display .= "<input id=\"brewPaid\" name=\"brewPaid".$row_log['id']."\" type=\"checkbox\" value=\"1\"";
-		if ($row_log['brewPaid'] == "1") $entry_paid_display .= "checked>";
+		if ($row_log['brewPaid'] == "1") $entry_paid_display .= " checked>";
 		else $entry_paid_display .= ">";
 		$entry_paid_display .= "<span class=\"visible-xs-inline visible-sm-inline\">Received</span>";
 		$entry_paid_display .= "</label></div>";
@@ -222,7 +219,7 @@ do {
 	// Received
 	if (($action != "print") && ($dbTable == "default")) {
 		$entry_received_display .= "<div class=\"checkbox\"><label><input id=\"brewReceived\" name=\"brewReceived".$row_log['id']."\" type=\"checkbox\" value=\"1\"";
-		if ($row_log['brewReceived'] == "1") $entry_received_display .= "checked>";
+		if ($row_log['brewReceived'] == "1") $entry_received_display .= " checked>";
 		else $entry_received_display .= ">";
 		$entry_received_display .= "<span class=\"visible-xs-inline visible-sm-inline\">Paid</span>";
 		$entry_received_display .= "</label></div>";
@@ -358,14 +355,16 @@ do {
 	elseif ((!empty($entry_allergen_row)) && (!empty($entry_unconfirmed_row))) $entry_row_color = $entry_unconfirmed_row;
 	else $entry_row_color = "";
 
-	$tbody_rows .= "<tr class=\"".$entry_row_color."\">";
+	$tbody_rows .= "\n<tr class=\"".$entry_row_color."\">";
+	$tbody_rows .= "\n\t<td>";
 	$tbody_rows .= "<input type=\"hidden\" name=\"id[]\" value=\"".$row_log['id']."\" />";
-	$tbody_rows .= "<td>".sprintf("%04s",$row_log['id'])."</td>";
-	$tbody_rows .= "<td nowrap=\"nowrap\">".$entry_judging_num_display."</td>";
-	$tbody_rows .= "<td class=\"hidden-xs hidden-sm hidden-md\">";
+	$tbody_rows .= sprintf("%04s",$row_log['id']);
+	$tbody_rows .= "</td>";
+	$tbody_rows .= "\n\t<td nowrap=\"nowrap\">".$entry_judging_num_display."</td>";
+	$tbody_rows .= "\n\t<td class=\"hidden-xs hidden-sm hidden-md\">";
 	$tbody_rows .= $row_log['brewName'];
 	$tbody_rows .= "</td>";
-	$tbody_rows .= "<td>";
+	$tbody_rows .= "\n\t<td>";
 
 	$tbody_rows .= "<span class=\"hidden\">".$row_log['brewCategorySort'].$row_log['brewSubCategory']."</span>";
 
@@ -380,14 +379,12 @@ do {
 
 	if (!empty($required_info)) $tbody_rows .= " <a class=\"hide-loader hidden-print\" role=\"button\" data-toggle=\"collapse\" data-target=\"#collapseEntryInfo".$row_log['id']."\" aria-expanded=\"false\" aria-controls=\"collapseEntryInfo".$row_log['id']."\"><span class=\"fa fa-lg fa-info-circle hidden-xs hidden-sm\"></span></a> ";
 
-	// $tbody_rows .= " <a class=\"visible-xs-inline visible-sm-inline\" role=\"button\" data-toggle=\"collapse\" data-target=\"#collapseAdminMenu".$row_log['id']."\" aria-expanded=\"false\" aria-controls=\"collapseAdminMenu".$row_log['id']."\"><span class=\"fa fa-lg fa-cog\"></span></a> ";
-
 	$tbody_rows .= $entry_style_display;
 	$tbody_rows .= $entry_allergens_display;
 
 	if (!empty($required_info)) $tbody_rows .= "<div class=\"visible-xs visible-sm\" style=\"margin: 5px 0 5px 0\"><button class=\"btn btn-primary btn-block btn-xs\" type=\"button\" data-toggle=\"collapse\" data-target=\"#collapseEntryInfo".$row_log['id']."\" aria-expanded=\"false\" aria-controls=\"collapseEntryInfo".$row_log['id']."\">Entry Info <span class=\"fa fa-lg fa-info-circle\"></span></button></div>";
-
-	$tbody_rows .= "<div class=\"collapse small well visible-print-inline-block\" id=\"collapseEntryInfo".$row_log['id']."\">";
+	
+	$tbody_rows .= "<div class=\"collapse small well\" id=\"collapseEntryInfo".$row_log['id']."\">";
     $tbody_rows .= $required_info;
     $tbody_rows .= "</div>";
 
@@ -410,16 +407,16 @@ do {
 
 	if ($brewer_pro_am == 1) $tbody_rows .= "<p><span class=\"label label-info hidden-xs hidden-sm\">NOT PRO-AM ELIGIBLE</span><span class=\"label label-info visible-xs visible-sm\">NO PRO-AM</span></p>";
 	$tbody_rows .= "</td>";
-	$tbody_rows .= "<td nowrap=\"nowrap\" class=\"hidden-xs hidden-sm\">".$entry_brewer_display."</td>";
+	$tbody_rows .= "\n\t<td nowrap=\"nowrap\" class=\"hidden-xs hidden-sm\">".$entry_brewer_display."</td>";
 	if ($pro_edition == 0) $tbody_rows .= "<td class=\"hidden-xs hidden-sm hidden-md hidden-print\">".$brewer_info[8]."</td>";
-	$tbody_rows .= "<td class=\"hidden-xs hidden-sm hidden-md hidden-print\">".$entry_updated_display."</td>";
-	$tbody_rows .= "<td class=\"hidden-xs hidden-sm\">".$entry_paid_display."</td>";
-	$tbody_rows .= "<td class=\"hidden-xs hidden-sm\">".$entry_received_display."</td>";
-	$tbody_rows .= "<td class=\"hidden-xs hidden-sm hidden-md \">".$entry_admin_notes_display."</td>";
-	$tbody_rows .= "<td class=\"hidden-xs hidden-sm hidden-md \">".$entry_staff_notes_display."</td>";
-	$tbody_rows .= "<td class=\"hidden-xs hidden-sm\">".$entry_box_num_display."</td>";
+	$tbody_rows .= "\n\t<td class=\"hidden-xs hidden-sm hidden-md hidden-print\">".$entry_updated_display."</td>";
+	$tbody_rows .= "\n\t<td class=\"hidden-xs hidden-sm\">".$entry_paid_display."</td>";
+	$tbody_rows .= "\n\t<td class=\"hidden-xs hidden-sm\">".$entry_received_display."</td>";
+	$tbody_rows .= "\n\t<td class=\"hidden-xs hidden-sm hidden-md \">".$entry_admin_notes_display."</td>";
+	$tbody_rows .= "\n\t<td class=\"hidden-xs hidden-sm hidden-md \">".$entry_staff_notes_display."</td>";
+	$tbody_rows .= "\n\t<td class=\"hidden-xs hidden-sm\">".$entry_box_num_display."</td>";
 	if ($action != "print") $tbody_rows .= "<td class=\"hidden-xs hidden-sm\">".$entry_actions."</td>";
-	$tbody_rows .= "</tr>";
+	$tbody_rows .= "\n</tr>";
 
 	// Build all brewer email array
 	if (!empty($brewer_info[6])) $copy_paste_all_emails[] = $brewer_info[6];
