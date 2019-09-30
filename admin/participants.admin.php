@@ -641,7 +641,7 @@ echo $output_user_question_modals;
 						<h4 class="modal-title" id="allEmailModalLabel">Participant Email Addresses</h4>
 					</div>
 					<div class="modal-body">
-						<p>Copy and paste the list below into your favorite email program to contact all particpants with entries.</p>
+						<p>Copy and paste the list below into your favorite email program.</p>
 						<textarea class="form-control" rows="8"><?php echo ltrim($all_email_display," ")
 						?></textarea>
 					</div>

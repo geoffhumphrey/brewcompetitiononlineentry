@@ -569,7 +569,7 @@ if ((($action == "add") || ($action == "edit")) || ($section == "step5")) {
             		<h4 class="modal-title" id="staffEmailModalLabel">Assigned Staff Email Addresses</h4>
           		</div>
                 <div class="modal-body">
-                	<p>Copy and paste the list below into your favorite email program to contact all assigned judges.</p>
+                	<p>Copy and paste the list below into your favorite email program to contact all assigned staff.</p>
                     <textarea class="form-control" rows="8"><?php echo rtrim($copy_paste_emails,", "); ?></textarea>
                 </div>
                 <div class="modal-footer">

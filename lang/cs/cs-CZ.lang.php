@@ -1451,7 +1451,7 @@ $entry_info_text_052 = "Soutěžicí musí zadat dodatečné informace o nápoji
 $output_text_028 = "Následující vzorky obsahují tyto alergeny zadané soutěžícím.";
 $output_text_029 = "Žádní soutěžící neuvedli informace o alergenech ve svých vzorcích.";
 
-$label_this_style = "Tento styl (V angličtina)";
+$label_this_style = "Tento styl (možná v angličtině)";
 $label_notes = "Poznámky";
 $label_possible_allergens = "Možné alergeny";
 $label_please_choose = "Prosím zvolte";

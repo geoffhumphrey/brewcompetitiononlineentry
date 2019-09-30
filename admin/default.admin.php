@@ -1230,7 +1230,7 @@
                     <div class="panel-body">
                         <div class="row">
                             <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-4">
-                                <strong>Emails (CSV)</strong>
+                                <strong>Email Addresses and Associated Contact Data (CSV)</strong>
                             </div>
                             <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-8">
                                 <ul class="list-unstyled">
@@ -1245,7 +1245,7 @@
                         </div><!-- ./row -->
                         <div class="row">
                             <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-4">
-                                <strong>Participants (CSV)</strong>
+                                <strong>Participant Data (CSV)</strong>
                             </div>
                             <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-8">
                                 <ul class="list-unstyled">
@@ -1256,7 +1256,7 @@
                         </div><!-- ./row -->
                         <div class="row">
                             <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-4">
-                                <strong>Entries (CSV)</strong>
+                                <strong>Entries and Associated Data (CSV)</strong>
                             </div>
                             <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-8">
                                 <ul class="list-unstyled">
