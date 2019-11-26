@@ -16,10 +16,10 @@ if ($_SESSION['prefsStyleSet'] == "BA") $ba = TRUE;
 /*
  * -------------------------------------------------------------------
  * Define a character limit for address labels. 
- * 34 characters per line appears to be the limit for Avery 5160, 
- * the smaller of the two label sizes available.
- * 6 lines are available per label for a total of 204 possible 
- * characters at 8 pt Courier.
+ * -- 34 characters per line appears to be the limit for Avery 5160, 
+ *    the smaller of the two label sizes available.
+ * -- 6 lines are available per label for a total of 204 possible 
+ *    characters at 8 pt Courier.
  * -------------------------------------------------------------------
  */
 
@@ -72,7 +72,7 @@ if (isset($_SESSION['loginUsername'])) {
 			else $pdf = new PDF_Label('5160');
 			
 			$pdf->AddPage();
-			
+
 			if ($view == "default") {
 				
 				$filename = str_replace(" ","_",$_SESSION['contestName'])."_Bottle_Labels_Entry_Numbers";
@@ -89,7 +89,7 @@ if (isset($_SESSION['loginUsername'])) {
 					else $entry_no = sprintf("%06s",strtoupper($row_log['brewJudgingNumber']));
 
 					$category = sprintf("%02s",$row_log['brewCategorySort']);
-					$subcategory = preg_replace('/[0-9]+/', '', $row_log['brewSubCategory']);
+					$subcategory = $row_log['brewSubCategory'];
 					
 					$text = sprintf("\n%s (%s)  %s (%s)  %s (%s)\n\n\n\n%s (%s)  %s (%s)  %s (%s)",
 					$entry_no, $category.$subcategory,
@@ -108,7 +108,7 @@ if (isset($_SESSION['loginUsername'])) {
 			}
 
 			else {
-				
+
 				$special_strength = array(
 					"Strength" => "",
 					"strength" => "",
@@ -166,10 +166,23 @@ if (isset($_SESSION['loginUsername'])) {
 						if ($action == "bottle-entry") $entry_no = sprintf("%06s",$row_log['id']);
 						else $entry_no = sprintf("%06s",strtoupper($row_log['brewJudgingNumber']));
 
-						$subcategory = preg_replace('/[0-9]+/', '', $row_log['brewSubCategory']);
+						$subcategory = $row_log['brewSubCategory'];
 						
 						$style = strtoupper($row_log['brewCategorySort']).$subcategory;
-						$style_name = truncate($row_log['brewStyle'],21);
+
+						$style_name = $row_log['brewStyle'];
+						if (strpos($style_name,"Pre-Prohibition") !== false) $style_name = str_replace("Pre-Prohibition", "Pre-Prohib.", $style_name);
+						if (strpos($style_name,"Fermentation") !== false) $style_name = str_replace("Fermentation", "Ferm.", $style_name);
+						if (strpos($style_name,"Premium") !== false) $style_name = str_replace("Premium", "Prem.", $style_name);
+						if (strpos($style_name,"Australian") !== false) $style_name = str_replace("Australian", "Aust.", $style_name);
+						if (strpos($style_name,"Spice, Herb, or Vegetable") !== false) $style_name = str_replace("Spice, Herb, or Vegetable", "Spice/Herb/Veg", $style_name);
+						if (strpos($style_name,"Alternative") !== false) $style_name = str_replace("Alternative", "Alt.", $style_name);
+						if (strpos($style_name,"Classic Style") !== false) $style_name = str_replace("Classic Style", "Cl. Style", $style_name);
+						if (strpos($style_name,"Specialty") !== false) $style_name = str_replace("Specialty", "Spec.", $style_name);
+						if (strpos($style_name,"Speciality") !== false) $style_name = str_replace("Speciality", "Spec.", $style_name);
+						if (strpos($style_name,"with") !== false) $style_name = str_replace("with", "w/", $style_name);
+
+						$style_name = truncate($style_name,21);
 						
 						if ($ba) $entry_info = sprintf("%s (%s)", $entry_no, $style_name);
 						else $entry_info = sprintf("\n%s (%s: %s)", $entry_no, $style, $style_name);
@@ -391,11 +404,15 @@ if (isset($_SESSION['loginUsername'])) {
 
 				if (($row_brewer['staff_judge'] == 1) || ($row_brewer['staff_steward'] == 1) || ($row_brewer['staff_staff'] == 1) || ($row_brewer['staff_organizer'] == 1)) {
 
-					if ($row_brewer['staff_judge'] == 1) $brewerAssignment = "Judge";
-					if ($row_brewer['staff_steward'] == 1) $brewerAssignment = "Steward";
-					if ($row_brewer['staff_staff'] == 1) $brewerAssignment = "Staff";
-					if ($row_brewer['staff_organizer'] == 1) $brewerAssignment = "Organizer";
-
+					if ($row_brewer['staff_judge'] == 1) $brewerAssignment .= "Judge, ";
+					if ($row_brewer['staff_steward'] == 1) $brewerAssignment .= "Steward, ";
+					if ($row_brewer['staff_staff'] == 1) $brewerAssignment .= "Staff, ";
+					if ($row_brewer['staff_organizer'] == 1) $brewerAssignment .= "Organizer";
+					
+					$brewerAssignment = rtrim($brewerAssignment,", ");
+					$brewerAssignment = rtrim($brewerAssignment," ");
+					$brewerAssignment = rtrim($brewerAssignment,",");
+					
 					if ($row_brewer['brewerCity'] != "Anytown") $brewerLocation = $row_brewer['brewerCity'].", ".$row_brewer['brewerState'];
 
 					$text = sprintf("\n%s\n%s\n%s",

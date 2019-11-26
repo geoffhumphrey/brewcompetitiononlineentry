@@ -66,7 +66,7 @@ foreach ($total_cat as $cat) {
 
 	if (!empty($cat_name)) {
 
-		if ($action == "print") $html .= "<tr>";
+		if ($row_style_count_logged['count'] > 0) $html .= "<tr class=\"success text-success\">";
 		else $html .= "<tr>";
 		$html .= "<td>";
 		if ($_SESSION['prefsStyleSet'] == "BA") $html .= $cat_name;
@@ -242,7 +242,7 @@ if ($total_style_count > 0) { ?>
 		} );
 	} );
 </script>
-<table class="table table-responsive table-striped table-bordered" id="sortable1">
+<table class="table table-responsive table-bordered" id="sortable1">
 <thead>
 	<tr>
 		<th>Style Type</th>
@@ -275,7 +275,7 @@ if ($total_style_count > 0) { ?>
 		} );
 	} );
 </script>
-<table class="table table-responsive table-striped table-bordered " id="sortable2">
+<table class="table table-responsive table-bordered " id="sortable2">
 <thead>
 	<tr>
 		<th>Style</th>

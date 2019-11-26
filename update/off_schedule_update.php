@@ -1207,6 +1207,24 @@ $result = mysqli_query($connection,$updateSQL);
 
 
 /**
+ * ----------------------------------------------- 2.1.19 ----------------------------------------------
+ * Change mis-spelled BJCP name for style 17A (from English Strong Ale to British Strong Ale)
+ * -----------------------------------------------------------------------------------------------------
+ */
+
+$updateSQL = sprintf("UPDATE `%s` SET brewStyle='Specialty Fruit Beer' WHERE brewStyle='Speciality Fruit Beer' AND brewStyleVersion='BJCP2015'",$prefix."styles");
+mysqli_select_db($connection,$database);
+mysqli_real_escape_string($connection,$updateSQL);
+$result = mysqli_query($connection,$updateSQL);
+
+// Update the entries db table and change it as well.
+$updateSQL = sprintf("UPDATE %s SET brewStyle='Specialty Fruit Beer' WHERE brewStyle='Speciality Fruit Beer'", $prefix."brewing");
+mysqli_select_db($connection,$database);
+mysqli_real_escape_string($connection,$updateSQL);
+$result = mysqli_query($connection,$updateSQL);
+
+
+/**
  * ----------------------------------------------------------------------------------------------------
  * Change the version number and date
  * ALWAYS the final script

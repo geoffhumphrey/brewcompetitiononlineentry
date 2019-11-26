@@ -68,7 +68,7 @@ foreach ($subcats as $subcat) {
 
 	if (!empty($substyle)) {
 		if ($substyle[4] == "Y") {
-			if ($action == "print") $html .= "<tr>";
+			if ($row_substyle_count_logged['count'] > 0) $html .= "<tr class=\"success text-success\">";
 			else $html .= "<tr>";
 			if ($substyle[3] != "") $substyle_cat = $substyle[3];
 			else $substyle_cat = "Custom";
@@ -205,8 +205,6 @@ if (($total_style_count > 0) || ($total_style_count_logged > 0)) {
 <?php } echo $html_testing;
 if ($total_style_count > 0) { ?>
 <script type="text/javascript" language="javascript">
-// The following is for demonstration purposes only.
-// Complete documentation and usage at http://www.datatables.net
 	$(document).ready(function() {
 		$('#sortable5').dataTable( {
 			"bPaginate" : false,
@@ -222,7 +220,7 @@ if ($total_style_count > 0) { ?>
 		} );
 	} );
 </script>
-<table class="table table-responsive table-striped table-bordered" id="sortable5">
+<table class="table table-responsive table-bordered" id="sortable5">
 <thead>
 	<tr>
         <th>Style Type</th>
@@ -236,7 +234,6 @@ if ($total_style_count > 0) { ?>
 </table>
 <div style="margin-bottom: 20px;"></div>
 <?php } ?>
-
 <h3>Breakdown By Sub-Style</h3>
 <script type="text/javascript" language="javascript">
 	$(document).ready(function() {
@@ -257,7 +254,7 @@ if ($total_style_count > 0) { ?>
 		} );
 	} );
 </script>
-<table class="table table-responsive table-striped table-bordered" id="sortable6">
+<table class="table table-responsive table-bordered" id="sortable6">
 <thead>
 	<tr>
 		<th>Sub-Style</th>

@@ -1934,8 +1934,7 @@ function get_table_info($input,$method,$table_id,$dbTable,$param) {
 		//$row_styles['brewStyleNum']."^".$row_styles['brewStyleGroup']
 		$input = explode("^",$input);
 
-		$query = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE brewCategorySort='%s' AND brewSubCategory='%s' AND brewReceived='1'", $prefix."brewing",
-		$input[1], $input[0]);
+		$query = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE brewCategorySort='%s' AND brewSubCategory='%s' AND brewReceived='1'", $prefix."brewing", $input[1], $input[0]);
 		$result = mysqli_query($connection,$query) or die (mysqli_error($connection));
 		$num_rows = mysqli_fetch_array($result);
 
@@ -2306,7 +2305,11 @@ function get_participant_count($type) {
 
 	if ($type == 'default') $query_participant_count = sprintf("SELECT COUNT(*) as 'count' FROM %s",$prefix."brewer");
 	if ($type == 'judge') $query_participant_count = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE brewerJudge='Y'",$prefix."brewer");
+	if ($type == 'judge-assigned') $query_participant_count = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE staff_judge=1",$prefix."staff");
+	if ($type == 'steward-assigned') $query_participant_count = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE staff_steward=1",$prefix."staff");
 	if ($type == 'steward') $query_participant_count = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE brewerSteward='Y'",$prefix."brewer");
+	if ($type == 'staff') $query_participant_count = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE brewerStaff='Y'",$prefix."brewer");
+	if ($type == 'staff-assigned') $query_participant_count = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE staff_staff=1",$prefix."staff");
 	if ($type == 'received-entrant') $query_participant_count = sprintf("SELECT COUNT(DISTINCT brewBrewerID) as 'count' FROM %s WHERE brewReceived='1'",$prefix."brewing");
 	if ($type == 'received-club') $query_participant_count = sprintf("SELECT COUNT(DISTINCT b.brewerClubs) as 'count' FROM %s a, %s b WHERE b.uid = a.brewBrewerID AND b.brewerClubs IS NOT NULL", $prefix."brewing", $prefix."brewer");
 	$participant_count = mysqli_query($connection,$query_participant_count) or die (mysqli_error($connection));

@@ -1,7 +1,6 @@
 <?php
 if (($filter != "default") && ($filter != "rounds"))  {
-
-
+	
 		$style_name = explode(",",$style_name);
 		if (SINGLE) $query_entries = sprintf("SELECT id,brewStyle,brewCategorySort,brewCategory,brewSubCategory,brewInfo,brewJudgingNumber FROM %s WHERE comp_id='%s' AND brewCategorySort='%s' AND brewSubcategory='%s' AND brewReceived='1' ORDER BY brewCategorySort,brewSubCategory", $brewing_db_table, $_SESSION['comp_id'], $style_name[0],$style_name[1]);
 		else $query_entries = sprintf("SELECT id,brewStyle,brewCategorySort,brewCategory,brewSubCategory,brewInfo,brewJudgingNumber FROM %s WHERE brewCategorySort='%s' AND brewSubcategory='%s' AND brewReceived='1' ORDER BY brewCategorySort,brewSubCategory", $brewing_db_table, $style_name[0],$style_name[1]);

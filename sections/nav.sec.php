@@ -199,7 +199,6 @@ if (($logged_in) && ($admin_user) && ($go != "error_page")) { ?>
                     <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=styles">Manage Styles Accepted</a></li>
                     <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=style_types">Manage Style Types</a></li>
 					<li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=upload">Upload Logo Images</a></li>
-
                 </ul>
             </li>
 			<?php } ?>
@@ -207,6 +206,8 @@ if (($logged_in) && ($admin_user) && ($go != "error_page")) { ?>
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">Entries<?php if ($_SESSION['prefsPaypalIPN'] == 1) echo ", Payments,";?> and Participants <span class="caret"></span></a>
                 <ul class="dropdown-menu navmenu-nav">
                     <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=entries">Manage Entries</a></li>
+                    <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=count_by_style">Entry Count By Style</a></li>
+                    <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=count_by_substyle">Entry Count By Sub-Style</a></li>
                     <?php if ($_SESSION['prefsPaypalIPN'] == 1) { ?>
                     <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=payments">Manage Payments</a></li>
                     <?php } ?>

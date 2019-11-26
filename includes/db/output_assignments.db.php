@@ -15,5 +15,18 @@ if ($view == "sign-in") {
 	$brewer = mysqli_query($connection,$query_brewer) or die (mysqli_error($connection));
 	$row_brewer = mysqli_fetch_assoc($brewer);
 	$totalRows_brewer = mysqli_num_rows($brewer);
+
+	$query_sessions .= sprintf("SELECT * from %s ORDER BY judgingLocName ASC",$prefix."judging_locations");
+	$sessions = mysqli_query($connection,$query_sessions) or die (mysqli_error($connection));
+	$row_sessions = mysqli_fetch_assoc($sessions);
+	$totalRows_sessions = mysqli_num_rows($sessions);
+
+	$judging_sessions = array();
+
+	if ($totalRows_sessions > 0) {
+		do {
+			$judging_sessions[] = $row_sessions['judgingLocName'];
+		} while($row_sessions = mysqli_fetch_assoc($sessions));
+	}
 }
 ?>

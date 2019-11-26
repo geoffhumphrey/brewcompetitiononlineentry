@@ -117,7 +117,7 @@ if ($logged_in) {
 
 	$page_info100 .= "<div class=\"bcoem-sidebar-panel\">";
 	$page_info100 .= "<strong class=\"text-info\">Entry Counts</strong>";
-	$page_info100 .= "<span class=\"pull-right\"><a href=\"".$base_url."index.php?section=admin&amp;go=count_by_style\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"View the entry counts broken down by style\">Style</a>&nbsp;&nbsp;<a href=\"".$base_url."index.php?section=admin&amp;go=count_by_substyle\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"View the entry counts broken down by sub-style\">Sub-Style</a></span>";
+	$page_info100 .= "<span class=\"pull-right\"><a href=\"".$base_url."index.php?section=admin&amp;go=count_by_style\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"View the entry counts broken down by style\">By Style</a> / <a href=\"".$base_url."index.php?section=admin&amp;go=count_by_substyle\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"View the entry counts broken down by sub-style\">By Sub-Style</a></span>";
 	$page_info100 .= "</div>";
 
 	$page_info100 .= "<div class=\"bcoem-sidebar-panel\">";
@@ -152,6 +152,12 @@ if ($logged_in) {
 	$page_info100 .= "</div>";
 
 	$page_info100 .= "<div class=\"bcoem-sidebar-panel\">";
+	$page_info100 .= "<strong class=\"text-info\">Assigned Judges</strong>";
+	$page_info100 .= "<span class=\"pull-right\"><a href=\"".$base_url."index.php?section=admin&amp;action=assign&amp;go=judging&amp;filter=judges\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"View assigned judges\">".get_participant_count('judge-assigned')."</a>";
+	$page_info100 .= "</span>";
+	$page_info100 .= "</div>";
+
+	$page_info100 .= "<div class=\"bcoem-sidebar-panel\">";
 	$page_info100 .= "<strong class=\"text-info\">Available Stewards</strong>";
 	$page_info100 .= "<span class=\"pull-right\"><a href=\"".$base_url."index.php?section=admin&amp;go=participants&amp;filter=stewards\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"View available stewards\">".get_participant_count('steward')."</a>";
 	if (!empty($row_judge_limits['jprefsCapStewards'])) {
@@ -161,6 +167,25 @@ if ($logged_in) {
 	}
 	$page_info100 .= "</span>";
 	$page_info100 .= "</div>";
+
+	$page_info100 .= "<div class=\"bcoem-sidebar-panel\">";
+	$page_info100 .= "<strong class=\"text-info\">Assigned Stewards</strong>";
+	$page_info100 .= "<span class=\"pull-right\"><a href=\"".$base_url."index.php?section=admin&amp;action=assign&amp;go=judging&amp;filter=stewards\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"View assigned stewards\">".get_participant_count('steward-assigned')."</a>";
+	$page_info100 .= "</span>";
+	$page_info100 .= "</div>";
+
+	$page_info100 .= "<div class=\"bcoem-sidebar-panel\">";
+	$page_info100 .= "<strong class=\"text-info\">Available Staff</strong>";
+	$page_info100 .= "<span class=\"pull-right\"><a href=\"".$base_url."index.php?section=admin&amp;action=assign&amp;go=judging&amp;filter=staff&amp;view=yes\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"View available staff\">".get_participant_count('staff')."</a>";
+	$page_info100 .= "</span>";
+	$page_info100 .= "</div>";
+
+	$page_info100 .= "<div class=\"bcoem-sidebar-panel\">";
+	$page_info100 .= "<strong class=\"text-info\">Assigned Staff</strong>";
+	$page_info100 .= "<span class=\"pull-right\"><a href=\"".$base_url."index.php?section=admin&amp;action=assign&amp;go=judging&amp;filter=staff\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"View assigned staff\">".get_participant_count('staff-assigned')."</a>";
+	$page_info100 .= "</span>";
+	$page_info100 .= "</div>";
+
 
 	$page_info100 .= "<div class=\"bcoem-sidebar-panel\">";
 	$page_info100 .= "<strong class=\"text-info\">Entry Registration</strong>";
