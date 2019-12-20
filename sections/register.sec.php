@@ -649,22 +649,17 @@ if ($go == "default") {  ?>
         </div>
     </div><!-- ./Form Group -->
     <?php } // END if (($_SESSION['prefsProEdition'] == 0) || (($_SESSION['prefsProEdition'] == 1) && (($go == "judge") || ($go == "steward"))))?>
-
     <?php if (!$judge_hidden) {
-
         $judge_checked_yes = FALSE;
         $judge_checked_no = FALSE;
         $judge_disabled = FALSE;
-
         if (($msg > 0) && (isset($_COOKIE['brewerJudge']))) {
             if ($_COOKIE['brewerJudge'] == "Y") $judge_checked_yes = TRUE;
             if ($_COOKIE['brewerJudge'] == "N") $judge_checked_no = TRUE;
         }
-
         if ($msg != "4") $judge_checked_yes = TRUE;
         if ($go == "steward") $judge_checked_no = TRUE;
         if ($go == "judge") $judge_disabled = TRUE;
-
     ?>
     <!-- Show Judge Fields if Registering as a Judge -->
     <div class="form-group"><!-- Form Group REQUIRED Radio Group -->
@@ -755,21 +750,28 @@ if ($go == "default") {  ?>
         </div><!-- ./Form Group -->
     <?php if ($totalRows_judging > 1) {
 	if ($action == "edit") $judging_locations = explode(",",$row_brewer['brewerJudgeLocation']);
-	elseif (isset($_COOKIE['brewerJudgeLocation'])) $judging_locations = explode(",",$_COOKIE['brewerJudgeLocation']);
+	elseif ((isset($_COOKIE['brewerJudgeLocation'])) && ($section != "admin")) $judging_locations = explode(",",$_COOKIE['brewerJudgeLocation']);
 	else $judging_locations = array("","");
 	?>
     <div class="form-group"><!-- Form Group REQUIRED Radio Group -->
         <label for="" class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label_judging_avail; ?></label>
         <div class="col-lg-9 col-md-9 col-sm-8 col-xs-12">
-        <?php do { ?>
+        <?php do { 
+
+        	$location_yes = "";
+            $location_no = "";
+
+            if (in_array("Y-".$row_judging3['id'],$judging_locations)) $location_yes = "SELECTED";
+            if (in_array("N-".$row_judging3['id'],$judging_locations)) $location_no = "SELECTED"; 
+
+        ?>
             <div class="well well-sm">
             <p><?php echo $row_judging3['judgingLocName']." ("; echo getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_judging3['judgingDate'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "short", "date-time").")"; ?></p>
             <div class="input-group input-group-sm">
                 <!-- Input Here -->
                 <select class="selectpicker" name="brewerJudgeLocation[]" id="brewerJudgeLocation" data-width="auto">
-                    <option value="<?php echo "Y-".$row_judging3['id']; ?>" <?php if (in_array("Y-".$row_judging3['id'],$judging_locations)) echo "SELECTED"; ?>><?php echo $label_yes; ?></option>
-                    <option value="<?php echo "N-".$row_judging3['id']; ?>" <?php if (in_array("N-".$row_judging3['id'],$judging_locations)) echo "SELECTED"; ?>><?php echo $label_no; ?></option>
-
+                	<option value="<?php echo "N-".$row_judging3['id']; ?>" <?php echo $location_no; ?>><?php echo $label_no; ?></option>
+                    <option value="<?php echo "Y-".$row_judging3['id']; ?>" <?php echo $location_yes; ?>><?php echo $label_yes; ?></option>
                 </select>
             </div>
             </div>
@@ -780,20 +782,16 @@ if ($go == "default") {  ?>
 	else { ?><input name="brewerJudgeLocation" type="hidden" value="<?php echo "Y-".$row_judging3['id']; ?>" /><?php } ?>
     <?php } // END if (!$judge_hidden) ?>
     <?php if (!$steward_hidden) {
-
         $steward_checked_yes = FALSE;
         $steward_checked_no = FALSE;
         $steward_disabled = FALSE;
-
         if (($msg > 0) && (isset($_COOKIE['brewerSteward']))) {
             if ($_COOKIE['brewerSteward'] == "Y") $steward_checked_yes = TRUE;
             if ($_COOKIE['brewerSteward'] == "N") $steward_checked_no = TRUE;
         }
-
         if ($msg != "4") $steward_checked_yes = TRUE;
         if ($go == "judge") $steward_checked_no = TRUE;
         if ($go == "steward") $steward_disabled = TRUE;
-
     ?>
     <!-- Show Steward Fields if Registering as a Judge -->
     <div class="form-group"><!-- Form Group REQUIRED Radio Group -->
@@ -820,20 +818,28 @@ if ($go == "default") {  ?>
     </div><!-- ./Form Group -->
 	<?php if ($totalRows_judging > 1) {
 	if ($action == "edit") $stewarding_locations = explode(",",$row_brewer['brewerStewardLocation']);
-	elseif (isset($_COOKIE['brewerStewardLocation'])) $stewarding_locations = explode(",",$_COOKIE['brewerStewardLocation']);
+	elseif ((isset($_COOKIE['brewerStewardLocation'])) && ($section != "admin")) $stewarding_locations = explode(",",$_COOKIE['brewerStewardLocation']);
 	else $stewarding_locations = array("","");
 	?>
     <div class="form-group"><!-- Form Group REQUIRED Radio Group -->
         <label for="" class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label_stewarding_avail; ?></label>
         <div class="col-lg-9 col-md-9 col-sm-8 col-xs-12">
-        <?php do { ?>
+        <?php do { 
+
+        	$location_steward_yes = "";
+            $location_steward_no = "";
+
+            if (in_array("Y-".$row_stewarding['id'],$stewarding_locations)) $location_steward_yes = "SELECTED";
+            if (in_array("N-".$row_stewarding['id'],$stewarding_locations)) $location_steward_no = "SELECTED";
+
+        ?>
             <div class="well well-sm">
             <p><?php echo $row_stewarding['judgingLocName']." ("; echo getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_stewarding['judgingDate'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "short", "date-time").")"; ?></p>
             <div class="input-group input-group-sm">
                 <!-- Input Here -->
                 <select class="selectpicker" name="brewerStewardLocation[]" id="brewerStewardLocation" data-width="auto">
-                    <option value="<?php echo "Y-".$row_stewarding['id']; ?>" <?php if (in_array("Y-".$row_stewarding['id'],$stewarding_locations)) echo "SELECTED"; ?>><?php echo $label_yes; ?></option>
-                    <option value="<?php echo "N-".$row_stewarding['id']; ?>" <?php if (in_array("N-".$row_stewarding['id'],$stewarding_locations)) echo "SELECTED"; ?>><?php echo $label_no; ?></option>
+                    <option value="<?php echo "N-".$row_stewarding['id']; ?>" <?php echo $location_steward_no; ?>><?php echo $label_no; ?></option>
+                    <option value="<?php echo "Y-".$row_stewarding['id']; ?>" <?php echo $location_steward_yes; ?>><?php echo $label_yes; ?></option>
                 </select>
             </div>
             </div>
