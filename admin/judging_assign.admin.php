@@ -179,7 +179,7 @@ do {
 	}
 
 	if ($judge_info[4] == "Y") $display_rank .= "<br /><em>Certified Mead Judge</em>";
-    if ($judge_info[12] == "Y") $display_rank .= "<br /><em>Certified Cider Judge</em>";
+  if ($judge_info[12] == "Y") $display_rank .= "<br /><em>Certified Cider Judge</em>";
 
 	if (!empty($bjcp_rank[1])) $display_rank .= "<em>".designations($judge_info[5],$bjcp_rank[0])."</em>";
 

@@ -21,32 +21,32 @@
             </div>
         </div>
     </div>
-<?php if (($row_limits['prefsShowBestBrewer'] != 0) || ($row_limits['prefsShowBestClub'] != 0)) { ?>
-<div class="bcoem-admin-element">
-    <div class="row">
-        <div class="col col-lg-6 col-md-12 col-sm-12 col-xs-12">
-            <div class="bcoem-admin-element">
-                    <button type="button" class="btn btn-success btn-block" data-toggle="modal" data-target="#previewBest">Preview Best Brewer/Best Club Results <span class="fa fa-trophy"></span>
-            </button>
-            </div>
+<?php } ?>
+
+<?php if ((judging_date_return() == 0) && (($row_limits['prefsShowBestBrewer'] != 0) || ($row_limits['prefsShowBestClub'] != 0))) { ?>
+<div class="row">
+    <div class="col col-lg-6 col-md-12 col-sm-12 col-xs-12">
+        <div class="bcoem-admin-element">
+                <button type="button" class="btn btn-success btn-block" data-toggle="modal" data-target="#previewBest">Preview Best Brewer/Best Club Results <span class="fa fa-trophy"></span>
+        </button>
         </div>
-        <div class="modal fade" id="previewBest" tabindex="-1" role="dialog" aria-labelledby="previewBestLabel">
-            <div class="modal-dialog modal-lg" role="document">
-                <div class="modal-content">
-                    <div class="modal-body">
-                        <?php include (SECTIONS.'bestbrewer.sec.php'); ?>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-                    </div>
+    </div>
+    <div class="modal fade" id="previewBest" tabindex="-1" role="dialog" aria-labelledby="previewBestLabel">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <?php include (SECTIONS.'bestbrewer.sec.php'); ?>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
                 </div>
             </div>
         </div>
     </div>
 </div>
 <?php } ?>
-<?php } ?>
- <div class="bcoem-admin-dashboard-accordion">
+
+<div class="bcoem-admin-dashboard-accordion">
     <div class="row">
         <div class="col col-lg-6 col-md-12 col-sm-12 col-xs-12">
             <div class="panel-group" id="accordion">
@@ -1532,7 +1532,7 @@
     </div>
 </div><!-- end bcoem-admin-dashboard-accordion -->
 <!-- Dashboard Help Modals -->
-<?php foreach ($bcoem_dashboard_help_array as $content)  {
+<?php  foreach ($bcoem_dashboard_help_array as $content)  {
 	echo bcoem_dashboard_help($content);
 }
 ?>

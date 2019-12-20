@@ -346,6 +346,7 @@ if ($section != "step5") {
 					$output_datatables_body .= "<td class=\"hidden-xs hidden-sm\">".strtoupper($row_brewer['brewerJudgeID'])."</td>";
 					$output_datatables_body .= "<td>".$display_rank;
 					if ((isset($row_brewer['brewerJudgeMead'])) && ($row_brewer['brewerJudgeMead'] == "Y")) $output_datatables_body .= "<br /><em>Certified Mead Judge</em>";
+					if ((isset($row_brewer['brewerJudgeCider'])) && ($row_brewer['brewerJudgeCider'] == "Y")) $output_datatables_body .= "<br /><em>Certified Cider Judge</em>";
 					if (!empty($bjcp_rank[1])) {
 						$output_datatables_body .= "<em>".designations($row_brewer['brewerJudgeRank'],$bjcp_rank[0])."</em>";
 					}
