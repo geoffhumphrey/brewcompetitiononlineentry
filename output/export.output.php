@@ -152,6 +152,7 @@ if (((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) || ((
             $headers[] = $label_state_province;
             $headers[] = $label_zip;
             $headers[] = $label_country;
+            if ($_SESSION['prefsProEdition'] != 1) $headers[] = $label_club;
 
 			for ($i = 0; $i < $num_fields; $i++) {
 				$header_name = mysqli_fetch_field_direct($sql, $i)->name;
@@ -210,8 +211,10 @@ if (((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) || ((
                         }
 
                         else {
-                            if (!empty($brewer_info)) $fields0 = array($brewerFirstName,$brewerLastName,$brewer_info[6],$brewer_info[10],$brewer_info[11],$brewer_info[12],$brewer_info[13],$brewer_info[14]);
-                            else $fields0 = array($brewerFirstName,$brewerLastName,"","","","","","");
+                            $brewer_club = "";
+                            if ($brewer_info[8] != "&nbsp;") $brewer_club = $brewer_info[8];
+                            if (!empty($brewer_info)) $fields0 = array($brewerFirstName,$brewerLastName,$brewer_info[6],$brewer_info[10],$brewer_info[11],$brewer_info[12],$brewer_info[13],$brewer_info[14],$brewer_club);
+                            else $fields0 = array($brewerFirstName,$brewerLastName,"","","","","","","");
                         }
 
                         $fields1 = array_values($row_sql);
@@ -242,10 +245,9 @@ if (((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) || ((
 
 			if (($go == "csv") && (($action == "default") || ($action == "email")) && ($filter != "winners")) {
 
-
                 if ($_SESSION['prefsProEdition'] == 1) $a[] = array($label_first_name,$label_last_name,$label_organization,$label_ttb,$label_email,$label_address,$label_city,$label_state_province,$label_zip,$label_country,$label_entry_number,$label_judging_number,$label_category,$label_subcategory,$label_name,$label_entry_name,$label_required_info,$label_brewer_specifics,$label_sweetness,$label_carbonation,$label_strength,$label_table,$label_location,$label_flight,$label_round,$label_score,$label_place,$label_bos);
 
-                else $a[] = array($label_first_name,$label_last_name,$label_email,$label_address,$label_city,$label_state_province,$label_zip,$label_country,$label_entry_number,$label_judging_number,$label_category,$label_subcategory,$label_style,$label_entry_name,$label_required_info,$label_brewer_specifics,$label_sweetness,$label_carbonation,$label_strength,$label_table,$label_location,$label_flight,$label_round,$label_score,$label_place,$label_bos);
+                else $a[] = array($label_first_name,$label_last_name,$label_email,$label_address,$label_city,$label_state_province,$label_zip,$label_country,$label_club,$label_entry_number,$label_judging_number,$label_category,$label_subcategory,$label_style,$label_entry_name,$label_required_info,$label_brewer_specifics,$label_sweetness,$label_carbonation,$label_strength,$label_table,$label_location,$label_flight,$label_round,$label_score,$label_place,$label_bos);
             }
 
 			if (($go == "csv") && ($action == "default") && ($filter == "winners")) {
@@ -293,6 +295,9 @@ if (((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) || ((
     				if (isset($row_sql['brewBrewerID'])) $brewer_info = explode("^", brewer_info($row_sql['brewBrewerID']));
     				else $brewer_info = "";
 
+                    $brewer_club = "";
+                    if ($brewer_info[8] != "&nbsp;") $brewer_club = $brewer_info[8];
+
     				// Winner Downloads
                     /*
     				if (($action == "default") && ($filter == "winners") && ($_SESSION['prefsWinnerMethod'] == 0)) {
@@ -320,7 +325,7 @@ if (((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) || ((
 
                             if ($_SESSION['prefsProEdition'] == 1) $a[] = array($brewerFirstName,$brewerLastName,$brewer_info[15],$brewer_info[17],$brewer_info[6],$brewer_info[10],$brewer_info[11],$brewer_info[12],$brewer_info[13],$brewer_info[14],$entryNo,$judgingNo,$row_sql['brewCategory'],$row_sql['brewSubCategory'],$row_sql['brewStyle'],$brewName,$brewInfo,$brewSpecifics,$row_sql['brewMead1'],$row_sql['brewMead2'],$row_sql['brewMead3'],$table_name,$location[2],$row_flight['flightNumber'],$row_flight['flightRound'],sprintf("%02s",$row_scores['scoreEntry']),$row_scores['scorePlace'],$bos_place);
 
-                            else $a[] = array($brewerFirstName,$brewerLastName,$brewer_info[6],$brewer_info[10],$brewer_info[11],$brewer_info[12],$brewer_info[13],$brewer_info[14],$entryNo,$judgingNo,$row_sql['brewCategory'],$row_sql['brewSubCategory'],$row_sql['brewStyle'],$brewName,$brewInfo,$brewSpecifics,$row_sql['brewMead1'],$row_sql['brewMead2'],$row_sql['brewMead3'],$table_name,$location[2],$row_flight['flightNumber'],$row_flight['flightRound'],sprintf("%02s",$row_scores['scoreEntry']),$row_scores['scorePlace'],$bos_place);
+                            else $a[] = array($brewerFirstName,$brewerLastName,$brewer_info[6],$brewer_info[10],$brewer_info[11],$brewer_info[12],$brewer_info[13],$brewer_info[14],$brewer_club,$entryNo,$judgingNo,$row_sql['brewCategory'],$row_sql['brewSubCategory'],$row_sql['brewStyle'],$brewName,$brewInfo,$brewSpecifics,$row_sql['brewMead1'],$row_sql['brewMead2'],$row_sql['brewMead3'],$table_name,$location[2],$row_flight['flightNumber'],$row_flight['flightRound'],sprintf("%02s",$row_scores['scoreEntry']),$row_scores['scorePlace'],$bos_place);
                         }
 
     				}
@@ -345,8 +350,6 @@ if (((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) || ((
     			} while ($row_sql = mysqli_fetch_assoc($sql));
 
             }
-
-
 
 			header("Content-Type: text/csv; charset=utf-8");
 			header('Content-Disposition: attachment;filename="'.$filename.'"');
