@@ -90,17 +90,118 @@ else $brewerJudgeExp = "";
 if (isset($_POST['brewerJudgeNotes'])) $brewerJudgeNotes = $purifier->purify($_POST['brewerJudgeNotes']);
 else $brewerJudgeNotes = "";
 
+/*
+ * Address GitHub Issue #1113 - https://github.com/geoffhumphrey/brewcompetitiononlineentry/issues/1113
+ * Table assignments not updating if a user or admin indicates they are not
+ * available for a particular judging session.
+ * Need to search through array of location availablities for any that are "N"
+ * and search for the corresponding location/uid combo in the judging_assignments 
+ * table and delete the records.
+ */
+
 if ($brewerJudge == "Y") {
-    if (($_POST['brewerJudgeLocation'] != "") && (is_array($_POST['brewerJudgeLocation']))) $location_pref1 = sterilize(implode(",",$_POST['brewerJudgeLocation']));
-    elseif (($_POST['brewerJudgeLocation'] != "") && (!is_array($_POST['brewerJudgeLocation']))) $location_pref1 = sterilize($_POST['brewerJudgeLocation']);
+    
+    if (($_POST['brewerJudgeLocation'] != "") && (is_array($_POST['brewerJudgeLocation']))) {
+        
+        foreach ($_POST['brewerJudgeLocation'] as $value) {
+            
+            $loc = explode("-",$value);
+            
+            if ($loc[0] == "N") {
+                
+                if ($go == "admin") $id = $filter;
+                else $id = $id;
+                $updateSQL = sprintf("DELETE FROM %s WHERE bid='%s' AND assignment='J' AND assignLocation='%s'",$prefix."judging_assignments",$id,$loc[1]);
+                //echo $updateSQL."<br>";
+                mysqli_real_escape_string($connection,$updateSQL);
+                $result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+
+            }
+        }
+
+        $location_pref1 = sterilize(implode(",",$_POST['brewerJudgeLocation']));
+    }
+
+    elseif (($_POST['brewerJudgeLocation'] != "") && (!is_array($_POST['brewerJudgeLocation']))) {
+
+        $loc = explode("-",$_POST['brewerJudgeLocation']);
+
+        if ($loc[0] == "N") {
+            
+            if ($go == "admin") $id = $filter;
+            else $id = $id;
+            
+            $updateSQL = sprintf("DELETE FROM %s WHERE bid='%s' AND assignment='J' AND assignLocation='%s'",$prefix."judging_assignments",$id,$loc[1]);
+            mysqli_real_escape_string($connection,$updateSQL);
+            $result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+
+        }
+
+        $location_pref1 = sterilize($_POST['brewerJudgeLocation']);
+    }
 }
-else $location_pref1 = "";
+
+if ($brewerJudge == "N") {
+
+    if ($go == "admin") $id = $filter;
+    else $id = $id;
+
+    $updateSQL = sprintf("DELETE FROM %s WHERE bid='%s' AND assignment='J'",$prefix."judging_assignments",$id);
+    mysqli_real_escape_string($connection,$updateSQL);
+    $result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+    $location_pref1 = "";
+
+}
 
 if ($brewerSteward == "Y") {
-    if (($_POST['brewerStewardLocation'] != "") && (is_array($_POST['brewerStewardLocation']))) $location_pref2 = sterilize(implode(",",$_POST['brewerStewardLocation']));
-    elseif (($_POST['brewerJudgeLocation'] != "") && (!is_array($_POST['brewerStewardLocation']))) $location_pref2 = sterilize($_POST['brewerStewardLocation']);
+    
+    if (($_POST['brewerStewardLocation'] != "") && (is_array($_POST['brewerStewardLocation']))) {
+
+        foreach ($_POST['brewerStewardLocation'] as $value) {
+            $loc = explode("-",$value);
+            if ($loc[0] == "N") {
+                if ($go == "admin") $id = $filter;
+                else $id = $id;
+                $updateSQL = sprintf("DELETE FROM %s WHERE bid='%s' AND assignment='S' AND assignLocation='%s'",$prefix."judging_assignments",$id,$loc[1]);
+                mysqli_real_escape_string($connection,$updateSQL);
+                $result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+            }
+        }
+
+        $location_pref2 = sterilize(implode(",",$_POST['brewerStewardLocation']));
+    }
+
+
+    elseif (($_POST['brewerStewardLocation'] != "") && (!is_array($_POST['brewerStewardLocation']))) {
+
+        $loc = explode("-",$_POST['brewerStewardLocation']);
+
+        if ($loc[0] == "N") {
+            if ($go == "admin") $id = $filter;
+            else $id = $id;
+            $updateSQL = sprintf("DELETE FROM %s WHERE bid='%s' AND assignment='S' AND assignLocation='%s'",$prefix."judging_assignments",$id,$loc[1]);
+            mysqli_real_escape_string($connection,$updateSQL);
+            $result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+        }
+
+        $location_pref2 = sterilize($_POST['brewerStewardLocation']);
+
+    }
+
 }
-else $location_pref2 = "";
+
+if ($brewerSteward == "N") { 
+
+    if ($go == "admin") $id = $filter;
+    else $id = $id;
+
+    $updateSQL = sprintf("DELETE FROM %s WHERE bid='%s' AND assignment='S'",$prefix."judging_assignments",$id);
+    mysqli_real_escape_string($connection,$updateSQL);
+    $result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+
+    $location_pref2 = "";
+
+}
 
 if (isset($_POST['brewerJudgeLikes'])) {
     if (is_array($_POST['brewerJudgeLikes'])) $likes = implode(",",$_POST['brewerJudgeLikes']);
