@@ -10,7 +10,8 @@ if ($section == "past_winners") {
 		echo "<p><span class=\"fa fa-star\"></span> ".$past_winners_text_000;
 		do { 
 			if (ltrim($dbTable, "brewing_") != $row_archive['archiveSuffix']) echo "<a href='index.php?section=past_winners&amp;dbTable=".$brewing_db_table."'>"; 
-			else echo "<strong>"; echo $row_archive['archiveSuffix']; 
+			else echo "<strong>"; 
+			echo $row_archive['archiveSuffix']; 
 			if (ltrim($dbTable, "brewing_") != $row_archive['archiveSuffix']) echo "</a>"; 
 			else echo "</strong>"; 
 			echo "&nbsp;&nbsp;&nbsp;"; 

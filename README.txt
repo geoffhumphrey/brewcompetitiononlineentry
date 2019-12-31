@@ -4,7 +4,7 @@ Developed by Geoff Humphrey with code contributions by the GitHub community.
 Website:     http://www.brewcompetition.com
 GitHub:      https://github.com/geoffhumphrey/brewcompetitiononlineentry
 
-Release 2.1.18, 2019-09-20
+Release 2.1.19, 2020-01-01
 
 Developed utilizing a number of extensions and functions, with gratitude to their
 respective developers and online communities. Tested with the following versions:
