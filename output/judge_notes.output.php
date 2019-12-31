@@ -106,7 +106,7 @@ if ($go == "allergens") { ?>
 	<td><?php echo $judging_number; ?></td>
 	<td><?php echo $row_log_paid['brewStyle']; ?></td>
 	<td nowrap="nowrap"><?php echo $table_info_all; ?></td>
-	<td><?php echo $row_log_paid['brewPossAllergens']; ?></td>
+	<td><?php if (!empty($row_log_paid['brewPossAllergens'])) echo $row_log_paid['brewPossAllergens']; ?></td>
 </tr>
 <?php } while ($row_log_paid = mysqli_fetch_assoc($log_paid)); ?>
 </tbody>

@@ -464,7 +464,6 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 	// --------------------------------------- Editing a Participant ----------------------------------------
 	if ($action == "edit") {
 
-
 		// Check for and clear assignments in staff DB table and judge assignments table if entrant
 		// indicates they do not want to judge, steward, or staff
 

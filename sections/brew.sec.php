@@ -250,12 +250,32 @@ else {
 	if ($action == "edit") {
 
 		if (strlen(strstr($view,"21-B")) > 0) {
-		// if ($view == "21-B") {
+			
 			$exploder = explode("^",$row_log['brewInfo']);
-			$brewInfo = $exploder[0];
-			if ($exploder[1] == "Session Strength") $IPASession = "CHECKED"; else $IPASession = "";
-			if ($exploder[1] == "Standard Strength") $IPAStandard = "CHECKED"; else $IPAStandard = "";
-			if ($exploder[1] == "Double Strength") $IPADouble = "CHECKED"; else $IPADouble = "";
+
+			/** If the catch-all specialty IPA category, explode to 
+			 * gather the strength and the required info
+			 */
+			
+			if ($view == "21-B") {
+				$exploder_ipa = $exploder[1];
+				$brewInfo = $exploder[0];
+			}
+
+			/** For the speciality IPA substyles that are pre-defined
+			 * by the BJCP, only grab the strength (info not required)
+			 *
+			 * @fixes https://github.com/geoffhumphrey/brewcompetitiononlineentry/issues/1108
+			 */
+
+			else {
+				$exploder_ipa = $exploder[0];
+				$brewInfo = "";
+			}
+
+			if ($exploder_ipa == "Session Strength") $IPASession = "CHECKED"; else $IPASession = "";
+			if ($exploder_ipa == "Standard Strength") $IPAStandard = "CHECKED"; else $IPAStandard = "";
+			if ($exploder_ipa == "Double Strength") $IPADouble = "CHECKED"; else $IPADouble = "";
 		}
 
 		elseif ($view == "23-F") {
@@ -712,7 +732,7 @@ else $relocate_referrer = $_SERVER['HTTP_REFERER'];
 		<label for="brewPossAllergens" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label"></label>
 		<div class="col-lg-10 col-md-9 col-sm-9 col-xs-12" id="possible_allergens-list">
 			<!-- Input Here -->
-			<input type="text" class="form-control" placeholder="<?php echo $brew_text_039; ?>" name="brewPossAllergens" value="<?php echo $row_log['brewPossAllergens']; ?>">
+			<input type="text" class="form-control" placeholder="<?php echo $brew_text_039; ?>" name="brewPossAllergens" value="<?php if (($action == "edit") && (!empty($row_log['brewPossAllergens']))) echo $row_log['brewPossAllergens']; ?>">
 		</div>
 	</div><!-- ./Form Group -->
 
@@ -764,7 +784,7 @@ else $relocate_referrer = $_SERVER['HTTP_REFERER'];
     </div><!-- ./Form Group -->
     <div class="form-group"><!-- Form Group NOT REQUIRED Select -->
 		<label for="brewBoxNum" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label">Box/Location</label>
-		<div class="col-lg-10 col-md-9 col-sm-9 col-xs-12" id="possible_allergens-list">
+		<div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
 			<!-- Input Here -->
 			<input type="text" class="form-control" placeholder="" name="brewBoxNum" value="<?php echo $row_log['brewBoxNum']; ?>">
 		</div>
