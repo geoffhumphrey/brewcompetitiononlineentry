@@ -173,7 +173,7 @@ if (($action == "default") && ($filter == "default")) {
         $assigned_judges = assigned_judges($row_tables['id'],$dbTable,$judging_assignments_db_table);
         $assigned_stewards = assigned_stewards($row_tables['id'],$dbTable,$judging_assignments_db_table);
 
-        if (score_count($row_tables['id'],1)) $scoreAction = "edit";
+        if (score_count($row_tables['id'],1,$dbTable)) $scoreAction = "edit";
         else $scoreAction = "add";
 
         $manage_tables_default_tbody .= "<tr>";

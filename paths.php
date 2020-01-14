@@ -146,6 +146,26 @@ else ini_set('display_errors','Off');
  * --------------------------------------------------------
  */
 
+/** Function to check for HTTPS protocol (SSL) will be
+ * called when constructing the $base_url variable in the
+ * /sites/config.php file.
+ * 
+ * @fixes https://github.com/geoffhumphrey/brewcompetitiononlineentry/issues/1123
+ *
+ * Un-comment the *second* line of the function if you're
+ * experiencing issues on servers behind a load-balancer, 
+ * servers implementing reverse proxies, if SSL provided 
+ * by CloudFlare, AWS, etc.
+ * 
+ * @refer https://stackoverflow.com/questions/1175096/how-to-find-out-if-youre-using-https-without-serverhttps
+ */
+
+function is_https() {
+    if (((!empty($_SERVER['HTTPS'])) && ($_SERVER['HTTPS'] !== "off")) || ((isset($_SERVER['SERVER_PORT'])) && ($_SERVER['SERVER_PORT'] === "443"))) return true;
+    //elseif (((!empty($_SERVER['HTTP_X_FORWARDED_PROTO'])) && ($_SERVER['HTTP_X_FORWARDED_PROTO'] == "https")) || ((!empty($_SERVER['HTTP_X_FORWARDED_SSL'])) && ($_SERVER['HTTP_X_FORWARDED_SSL'] == "on"))) return TRUE;
+    else return false;
+}
+
 require_once (CONFIG.'config.php');
 if (ENABLE_MAILER) require_once (CONFIG.'config.mail.php');
 require_once (INCLUDES.'current_version.inc.php');

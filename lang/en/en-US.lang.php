@@ -1512,6 +1512,11 @@ $output_text_031 = "Press Esc to hide.";
 $styles_entry_text_21X = "Entrant MUST specify a strength (session: 3.0-5.0%, standard: 5.0-7.5%, double: 7.5-9.5%).";
 $styles_entry_text_PRX4 = "Entrant must specify the types of fresh fruit(s) used.";
 
+// ----------------------------------------------------------------------------------
+// Version 2.1.19 Additions
+// ----------------------------------------------------------------------------------
+$output_text_032 = "Entry count only reflects entrants who indicated a drop-off location in their account profile. The actual number of entries may be higher or lower.";
+
 /**
  * ----------------------------------------------------------------------------------
  * END TRANSLATIONS

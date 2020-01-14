@@ -355,11 +355,16 @@ if ($show_entries) {
 		$page_info10 .= $_SESSION['contestShippingAddress'];
 		$page_info10 .= "</p>";
 		$page_info10 .= sprintf("<h3>%s</h3>",$label_packing_shipping);
-		$page_info10 .= sprintf("<p><strong>%s</strong></p>",$entry_info_text_038);
+		$page_info10 .= sprintf("<p>%s</p>",$entry_info_text_038);
 		$page_info10 .= sprintf("<p>%s</p>",$entry_info_text_039);
 		$page_info10 .= sprintf("<p>%s</p>",$entry_info_text_040);
 		$page_info10 .= sprintf("<p>%s</p>",$entry_info_text_041);
-		$page_info10 .= sprintf("<p>%s</p>",$entry_info_text_042);
+		/**
+		 * Removing USPS instructions. No need to include with global usage of application.
+		 * For 3.0, make a user-definied field to utilize.
+		 * $page_info10 .= sprintf("<p>%s</p>",$entry_info_text_042);
+		 * @fixes https://github.com/geoffhumphrey/brewcompetitiononlineentry/issues/1125
+		 */
 		$page_info10 .= $anchor_top;
 	}
 

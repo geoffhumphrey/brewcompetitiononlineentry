@@ -5,7 +5,7 @@
  *
  */
 
-// ---------------------------- Load require_onced Scripts ------------------------------
+// ---------------------------- Load Config Scripts ------------------------------
 
 require_once ('paths.php');
 require_once (CONFIG.'bootstrap.php');
@@ -28,7 +28,6 @@ if ($section == "admin") {
         header(sprintf("Location: %s", $base_url."index.php?section=login&msg=0"));
         exit;
     }
-
 
     if (($logged_in) && ($_SESSION['userLevel'] > 1)) {
         header(sprintf("Location: %s", $base_url."index.php?msg=4"));
@@ -245,6 +244,7 @@ $security_question = array($label_secret_01, $label_secret_05, $label_secret_06,
                     if ($section == "sponsors") include (SECTIONS.'sponsors.sec.php');
                     if ($section == "register") include (SECTIONS.'register.sec.php');
                     if ($section == "login") include (SECTIONS.'login.sec.php');
+                    if ($section == "past_winners") include (SECTIONS.'past_winners.sec.php');
 
                     if ($logged_in) {
                         if ($section == "brewer") include (SECTIONS.'brewer.sec.php');

@@ -9,6 +9,8 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 
 	$dbTable = "default";
 
+	$gh_user_name = "geoff@zkdigital.com";
+
 	$tables_array = array($special_best_info_db_table, $special_best_data_db_table, $brewing_db_table, $judging_assignments_db_table, $judging_flights_db_table, $judging_scores_db_table, $judging_scores_bos_db_table, $judging_tables_db_table, $staff_db_table);
 
 	foreach ($tables_array as $table) {
@@ -43,7 +45,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 				// Delete the associated brewer record
 				$updateSQL = sprintf("DELETE FROM %s WHERE id='%s'", $users_db_table, $row_admin['id']);
 				mysqli_real_escape_string($connection,$updateSQL);
-				$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection))
+				$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 
 			} while($row_admin = mysqli_fetch_assoc($admin));
 
@@ -97,14 +99,15 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 
 		}
 
-		$query_check_gh = sprintf("SELECT id FROM %s WHERE user_name='%s'", $users_db_table, $gh_user_name);
+		$query_check_gh = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE user_name='%s'", $prefix."users", $gh_user_name);
 		$check_gh = mysqli_query($connection,$query_check_gh) or die (mysqli_error($connection));
 		$row_check_gh = mysqli_fetch_assoc($check_gh);
-		$totalRows_check_gh = mysqli_num_rows($check_gh);
+		
+		//echo $query_check_gh."<br>";
+		//echo $row_check_gh['count']; exit;
 
-		if ($totalRows_check_gh == 0) {
+		if ($row_check_gh['count'] == 0) {
 
-			$gh_user_name = "geoff@zkdigital.com";
 			$gh_password = "d9efb18ba2bc4a434ddf85013dbe58f8";
 			$random1 = random_generator(7,2);
 			$random2 = random_generator(7,2);
@@ -115,7 +118,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 			$updateSQL = sprintf("
 				INSERT INTO `%s` (`user_name`, `password`, `userLevel`, `userQuestion`, `userQuestionAnswer`,`userCreated`)
 				VALUES ('%s', '%s', '0', '%s', '%s', NOW());",
-				$gh_user_name,$users_db_table,$hash,$random1,$random2);
+				$users_db_table,$gh_user_name,$hash,$random1,$random2);
 			mysqli_real_escape_string($connection,$updateSQL);
 			$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 

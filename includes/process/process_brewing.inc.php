@@ -113,7 +113,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 		if ((!empty($_POST['brewInfo'])) && (in_array($index, $all_special_ing_styles))) $brewInfo = $purifier->purify($_POST['brewInfo']);
 
 		// Specialized/Optional info
-		if ((!empty($_POST['brewInfoOptional'])) && (in_array($styleBreak, $optional_info_styles))) $brewInfoOptional = $purifier->purify($_POST['brewInfoOptional']);
+		if ((!empty($_POST['brewInfoOptional'])) && (in_array($index, $optional_info_styles))) $brewInfoOptional = $purifier->purify($_POST['brewInfoOptional']);
 
 		// For BJCP 2015, process addtional info
 		if ($_SESSION['prefsStyleSet'] == "BJCP2015") {

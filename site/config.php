@@ -3,7 +3,7 @@
  * Module:        config.php
  * Description:   This module houses configuration variables for DB connection, etc.
  *
- * Last Modified: March 8, 2018
+ * Last Modified: January 14, 2020
  */
 
 /**
@@ -178,11 +178,16 @@ $sub_directory = "";
  * $base_url .= "147.21.160.5/~brewcompetition/bcoem/";
  * OR:
  * $base_url .= "www.bluehost.com/~brewcompeition/bcoem/";
+ * 
+ * To override the SSL (HTTPS) check if SSL isn't implemented on your
+ * server AND you're experiencing log in or session issues, or if pages are not 
+ * rendering correctly, comment out the second line in the block below (the if
+ * statement).
+ * @fixes https://github.com/geoffhumphrey/brewcompetitiononlineentry/issues/1123 
  */
 
-$base_url = "";
-if ((!empty($_SERVER['HTTPS']) && ($_SERVER['HTTPS'] !== "off")) || ($_SERVER['SERVER_PORT'] == 443)) $base_url .= "https://";
-else $base_url .= "http://";
+$base_url = "http://";
+if (is_https()) $base_url = "https://";
 $base_url .= $_SERVER['SERVER_NAME'].$sub_directory."/";
 
 /*

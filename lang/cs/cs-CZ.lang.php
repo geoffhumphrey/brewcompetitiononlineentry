@@ -1513,6 +1513,10 @@ $output_text_031 = "Stisknutím klávesy Esc skryjete.";
 $styles_entry_text_21X = "Účastník musí zadat sílu (relace: 3,0-5,0%, standard: 5,0-7,5%, dvojnásobek: 7,5-9,5%).";
 $styles_entry_text_PRX4 = "Účastník musí uvést druhy použitých čerstvých plodů.";
 
+// ----------------------------------------------------------------------------------
+// Version 2.1.19 Additions
+// ----------------------------------------------------------------------------------
+$output_text_032 = "Počet vstupů odráží pouze účastníky, kteří ve svém profilu účtu uvedli místo, kde došlo k výpadku. Skutečný počet záznamů může být vyšší nebo nižší.";
 
 // ***********************************************************************************
 // END TRANSLATIONS

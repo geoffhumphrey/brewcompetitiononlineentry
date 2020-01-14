@@ -2067,10 +2067,17 @@ function table_location($table_id,$date_format,$time_zone,$time_format,$method) 
 	return $table_location;
 }
 
-function score_count($table_id,$method) {
+function score_count($table_id,$method,$dbTable) {
 	require(CONFIG.'config.php');
 	mysqli_select_db($connection,$database);
-	$query_scores = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE scoreTable='%s'", $prefix."judging_scores", $table_id);
+
+	$suffix = "";
+	if ($dbTable != "default") {
+		$suffix = ltrim(get_suffix($dbTable), "_");
+		$suffix = "_".$dbTable;
+	}
+
+	$query_scores = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE scoreTable='%s'", $prefix."judging_scores".$suffix, $table_id);
 	$scores = mysqli_query($connection,$query_scores) or die (mysqli_error($connection));
 	$row_scores = mysqli_fetch_assoc($scores);
 

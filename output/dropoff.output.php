@@ -69,10 +69,11 @@ if ($go == "default") {  ?>
     <tfoot>
     	<tr>	
         	<th colspan="2"><span class="pull-right"><?php echo $label_total; ?></span></th>
-            <th><?php echo array_sum($all_location_count); ?></th>
+            <th><?php echo array_sum($all_location_count); ?>*</th>
         </tr>
     </tfoot>
-    </table> 
+    </table>
+    <p class="pull-right"><small>*<?php echo sprintf("%s",$output_text_032); ?></small></p>
 <?php } // end if ($go == "default") ?>
 
 <?php if ($go == "check") { ?>
@@ -85,9 +86,9 @@ if ($go == "default") {  ?>
 	$location_count = location_count($row_dropoff['id']);
 	if ($location_count > 0) {
 	?>
-    <h3>Location: <?php echo $row_dropoff['dropLocationName']; ?></h3>
-    <p class="lead"><?php echo $row_dropoff['dropLocation']; ?></p>
-    <p class="lead"><small><?php echo sprintf("%s: %s",$output_text_012,$location_count); ?></small></p>
+    <h2><?php echo $row_dropoff['dropLocationName']; ?><br><small><?php echo $row_dropoff['dropLocation']; ?></small></h2>
+    <p class="lead"><?php echo sprintf("%s: %s",$output_text_012,$location_count); ?>*</p>
+    <p><small>*<?php echo sprintf("%s",$output_text_032); ?></small></p>
     <script type="text/javascript" language="javascript">
         $(document).ready(function() {
             $('#sortable<?php echo $random; ?>').dataTable( {
