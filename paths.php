@@ -77,14 +77,14 @@ define('CDN', TRUE);
  * Default is FALSE.
  */
 
-define('TESTING', FALSE);
+define('TESTING', TRUE);
 
 /**
  * Enable the following to display php errors on screen.
  * Default is FALSE.
  */
 
-define('DEBUG', FALSE);
+define('DEBUG', TRUE);
 
 /**
  * Enable the following to show a collapsable table of all
@@ -115,7 +115,7 @@ define('FORCE_UPDATE', FALSE);
  * Default is FALSE.
  */
 
-define('ENABLE_MARKDOWN', FALSE);
+define('ENABLE_MARKDOWN', TRUE);
 
 /**
  * Set the following to TRUE if you would like to use
@@ -127,7 +127,7 @@ define('ENABLE_MARKDOWN', FALSE);
  * Default is FALSE.
  */
 
-define('ENABLE_MAILER', FALSE);
+define('ENABLE_MAILER', TRUE);
 
 /**
  * --------------------------------------------------------
@@ -151,18 +151,12 @@ else ini_set('display_errors','Off');
  * /sites/config.php file.
  * 
  * @fixes https://github.com/geoffhumphrey/brewcompetitiononlineentry/issues/1123
- *
- * Un-comment the *second* line of the function if you're
- * experiencing issues on servers behind a load-balancer, 
- * servers implementing reverse proxies, if SSL provided 
- * by CloudFlare, AWS, etc.
- * 
  * @refer https://stackoverflow.com/questions/1175096/how-to-find-out-if-youre-using-https-without-serverhttps
  */
 
 function is_https() {
-    if (((!empty($_SERVER['HTTPS'])) && ($_SERVER['HTTPS'] !== "off")) || ((isset($_SERVER['SERVER_PORT'])) && ($_SERVER['SERVER_PORT'] === "443"))) return true;
-    //elseif (((!empty($_SERVER['HTTP_X_FORWARDED_PROTO'])) && ($_SERVER['HTTP_X_FORWARDED_PROTO'] == "https")) || ((!empty($_SERVER['HTTP_X_FORWARDED_SSL'])) && ($_SERVER['HTTP_X_FORWARDED_SSL'] == "on"))) return TRUE;
+    if (((!empty($_SERVER['HTTPS'])) && (strtolower($_SERVER['HTTPS']) !== "off")) || ((isset($_SERVER['SERVER_PORT'])) && ($_SERVER['SERVER_PORT'] === "443"))) return true;
+    elseif (((!empty($_SERVER['HTTP_X_FORWARDED_PROTO'])) && (strtolower($_SERVER['HTTP_X_FORWARDED_PROTO']) == "https")) || ((!empty($_SERVER['HTTP_X_FORWARDED_SSL'])) && (strtolower($_SERVER['HTTP_X_FORWARDED_SSL']) == "on"))) return TRUE;
     else return false;
 }
 
