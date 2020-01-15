@@ -63,6 +63,7 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 			$message .= "<body>";
 			$message .= "<p>". $message_post. "</p>";
 			$message .= "<p><strong>Sender's Contact Info</strong><br>Name: " . $from_name . "<br>Email: ". $from_email . "<br><em><small>** Use if you try to reply and the email address contains &quot;noreply&quot; in it. Common with web-based mail services such as Gmail.</small></em></p>";
+			if ((DEBUG || TESTING) && ($mail_use_smtp)) $message .= "<p><small>Sent using phpMailer.</small></p>";
 			$message .= "</body>" . "\r\n";
 			$message .= "</html>";
 
@@ -70,7 +71,7 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 			$from_competition_email = (!isset($mail_default_from) || trim($mail_default_from) === '') ? "noreply@".$url : $mail_default_from;
 
 			$headers  = "MIME-Version: 1.0" . "\r\n";
-			$headers .= "Content-type: text/html; charset=iso-8859-1" . "\r\n";
+			$headers .= "Content-type: text/html; charset=utf-8" . "\r\n";
 			$headers .= "To: ".$to_name." <".$to_email.">" . "\r\n";
 			$headers .= "From: ".$_SESSION['contestName']." Server <".$from_competition_email.">" . "\r\n"; // needed to change due to more stringent rules and mail send incompatibility with Gmail.
 			$headers .= "Reply-To: ".$from_name." <".$from_email.">" . "\r\n";
@@ -90,6 +91,8 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 
 			if ($mail_use_smtp) {				
 				$mail = new PHPMailer(true);
+				$mail->CharSet = 'UTF-8';
+				$mail->Encoding = 'base64';
 				$mail->addAddress($to_email, $to_name);
 				$mail->setFrom($from_competition_email, $_SESSION['contestName']);
 				$mail->addReplyTo($from_email, $from_name);

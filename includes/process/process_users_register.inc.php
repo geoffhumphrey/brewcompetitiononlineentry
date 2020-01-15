@@ -280,7 +280,7 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 
 				$message = "<html>" . "\r\n";
 				$message .= "<body>" . "\r\n";
-				if (!empty($_SESSION['contestLogo'])) $message .= "<p align='center'><img src='".$base_url."user_images/".$_SESSION['contestLogo']."' height='150'></p>";
+				if ((!empty($_SESSION['contestLogo'])) && (file_exists(USER_IMAGES.$_SESSION['contestLogo'])))) $message .= "<p><img src='".$base_url."user_images/".$_SESSION['contestLogo']."' height='150'></p>";
 				$message .= "<p>".$first_name.",</p>";
 				if ($filter == "admin") $message .= sprintf("<p>%s</p>",$register_text_038);
 				else $message .= sprintf("<p>%s</p>",$register_text_039);
@@ -313,11 +313,12 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 				$message .= "</table>";
 				$message .= sprintf("<p>%s <a href='".$base_url."index.php?section=login'>%s</a> %s</p>",$register_text_040,$register_text_041,$register_text_042);
 				$message .= sprintf("<p><small>%s</small></p>",$register_text_043);
+				if ((DEBUG || TESTING) && ($mail_use_smtp)) $message .= "<p><small>Sent using phpMailer.</small></p>";
 				$message .= "</body>" . "\r\n";
 				$message .= "</html>";
 
 				$headers  = "MIME-Version: 1.0" . "\r\n";
-				$headers .= "Content-type: text/html; charset=iso-8859-1" . "\r\n";
+				$headers .= "Content-type: text/html; charset=utf-8" . "\r\n";
 				$headers .= sprintf("%s: ".$to_recipient. " <".$to_email.">, " . "\r\n",$label_to);
 
 				$url = str_replace("www.","",$_SERVER['SERVER_NAME']);
@@ -336,6 +337,8 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 
 				if ($mail_use_smtp) {
 					$mail = new PHPMailer(true);
+					$mail->CharSet = 'UTF-8';
+					$mail->Encoding = 'base64';
 					$mail->addAddress($emails, $to_recipient);
 					$mail->setFrom($from_email, $contestName);
 					$mail->Subject = $subject;

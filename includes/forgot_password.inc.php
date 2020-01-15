@@ -56,7 +56,7 @@ if (($action == "email") && ($id != "default")) {
 	$from_email = (!isset($mail_default_from) || trim($mail_default_from) === '') ? "noreply@".$url : $mail_default_from;
 	
 	$headers  = "MIME-Version: 1.0" . "\r\n";
-	$headers .= "Content-type: text/html; charset=iso-8859-1" . "\r\n";
+	$headers .= "Content-type: text/html; charset=utf-8" . "\r\n";
 	$headers .= "To: ".$to_recipient. " <".$to_email.">, " . "\r\n";
 	$headers .= "From: ".$contestName." Server <".$from_email. ">\r\n";
 	
@@ -64,7 +64,8 @@ if (($action == "email") && ($id != "default")) {
 
 	if ($mail_use_smtp) {
 		$mail = new PHPMailer(true);
-		$mail->addAddress($to_email, $to_recipient);
+		$mail->CharSet = 'UTF-8';
+		$mail->Encoding = 'base64';$mail->addAddress($to_email, $to_recipient);
 		$mail->setFrom($from_email, $contestName);
 		$mail->Subject = $subject;
 		$mail->Body = $message;
@@ -140,7 +141,7 @@ if ($action == "forgot") {
 		$from_email = (!isset($mail_default_from) || trim($mail_default_from) === '') ? "noreply@".$url : $mail_default_from;
 	
 		$headers  = "MIME-Version: 1.0" . "\r\n";
-		$headers .= "Content-type: text/html; charset=iso-8859-1" . "\r\n";
+		$headers .= "Content-type: text/html; charset=utf-8" . "\r\n";
 		$headers .= "To: ".$to_recipient. " <".$to_email.">, " . "\r\n";
 		$headers .= "From: ".$contestName." Server <".$from_email. ">\r\n";
 
@@ -148,6 +149,8 @@ if ($action == "forgot") {
 
 		if ($mail_use_smtp) {
 			$mail = new PHPMailer(true);
+			$mail->CharSet = 'UTF-8';
+			$mail->Encoding = 'base64';
 			$mail->addAddress($to_email, $to_recipient);
 			$mail->setFrom($from_email, $contestName);
 			$mail->Subject = $subject;

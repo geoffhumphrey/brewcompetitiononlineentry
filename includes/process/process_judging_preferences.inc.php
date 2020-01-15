@@ -72,12 +72,14 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 			$message .= "</html>";
 
 			$headers  = "MIME-Version: 1.0" . "\r\n";
-			$headers .= "Content-type: text/html; charset=iso-8859-1" . "\r\n";
+			$headers .= "Content-type: text/html; charset=utf-8" . "\r\n";
 			$headers .= "To: BCOEM Admin <prost@brewcompetition.com>, " . "\r\n";
 			$headers .= "From: BCOEM Server <noreply@".$server.">" . "\r\n";
 
 			if ($mail_use_smtp) {
 				$mail = new PHPMailer(true);
+				$mail->CharSet = 'UTF-8';
+				$mail->Encoding = 'base64';
 				$mail->addAddress($to_email, "BCOEM Admin");
 				$mail->setFrom("noreply@".$server, "BCOEM Server");
 				$mail->Subject = $subject;

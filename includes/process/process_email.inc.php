@@ -38,16 +38,19 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 		$message .= "<p>A request was made to verify ability to send system-generated emails from the  ".$_SESSION['contestName']." competition website. If you are reading this, the test was <strong>successful</strong>!</p>";
 		$message .= "<p>Thank you,</p><p>The  ".$_SESSION['contestName']." Competition Server</p>";
 		$message .= "<p><small>".$paypal_response_text_003."</small></p>";
+		if ((DEBUG || TESTING) && ($mail_use_smtp)) $message .= "<p><small>Sent using phpMailer.</small></p>";
 		$message .= "</body>" . "\r\n";
 		$message .= "</html>";
 
 		$headers  = "MIME-Version: 1.0" . "\r\n";
-		$headers .= "Content-type: text/html; charset=iso-8859-1" . "\r\n";
+		$headers .= "Content-type: text/html; charset=utf-8" . "\r\n";
 		$headers .= "To: ".$to_recipient. " <".$to_email.">, " . "\r\n";
 		$headers .= "From: ".$from_name." <".$from_email.">" . "\r\n";
 
 		if ($mail_use_smtp) {
 			$mail = new PHPMailer(true);
+			$mail->CharSet = 'UTF-8';
+			$mail->Encoding = 'base64';
 			$mail->addAddress($to_email, $to_recipient);
 			$mail->setFrom($from_email, $from_name);
 			$mail->Subject = $subject;
@@ -117,16 +120,19 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 				$message .= "<p>".$row_organizer['brewerFirstName']." ".$row_organizer['brewerLastName'].", Organizer";
 				$message .= sprintf("<br><a href=\"%s\">%s</a></p>",$base_url,$_SESSION['contestName']);
 				$message .= "<p><small>".$paypal_response_text_003."</small></p>";
+				if ((DEBUG || TESTING) && ($mail_use_smtp)) $message .= "<p><small>Sent using phpMailer.</small></p>";
 				$message .= "</body>" . "\r\n";
 				$message .= "</html>";
 
 				$headers  = "MIME-Version: 1.0" . "\r\n";
-				$headers .= "Content-type: text/html; charset=iso-8859-1" . "\r\n";
+				$headers .= "Content-type: text/html; charset=utf-8" . "\r\n";
 				$headers .= "To: ".$to_recipient. " <".$to_email.">, " . "\r\n";
 				$headers .= "From: ".$from_name." <".$from_email.">" . "\r\n";
 
 				if ($mail_use_smtp) {
 					$mail = new PHPMailer(true);
+					$mail->CharSet = 'UTF-8';
+					$mail->Encoding = 'base64';
 					$mail->addAddress($to_email, $to_recipient);
 					$mail->setFrom($from_email, $from_name);
 					$mail->Subject = $subject;
