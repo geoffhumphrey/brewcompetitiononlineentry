@@ -165,6 +165,8 @@ if ($check == 1) {
 else {
 	$location = $base_url."index.php?section=login&msg=1";
 	session_destroy();
+	//Works with standard fail2ban apache-auth module to prevent Brute Force login attempts
+	trigger_error('Supplied value is not a valid email', E_USER_WARNING);
 }
 
 // Relocate
