@@ -280,7 +280,7 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 
 				$message = "<html>" . "\r\n";
 				$message .= "<body>" . "\r\n";
-				if ((!empty($_SESSION['contestLogo'])) && (file_exists(USER_IMAGES.$_SESSION['contestLogo'])))) $message .= "<p><img src='".$base_url."user_images/".$_SESSION['contestLogo']."' height='150'></p>";
+				if ((!empty($_SESSION['contestLogo'])) && (file_exists(USER_IMAGES.$_SESSION['contestLogo']))) $message .= "<p><img src='".$base_url."user_images/".$_SESSION['contestLogo']."' height='150'></p>";
 				$message .= "<p>".$first_name.",</p>";
 				if ($filter == "admin") $message .= sprintf("<p>%s</p>",$register_text_038);
 				else $message .= sprintf("<p>%s</p>",$register_text_039);
