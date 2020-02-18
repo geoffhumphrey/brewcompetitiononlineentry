@@ -596,6 +596,7 @@ if ($go == "default") {  ?>
         <label for="" class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label_pro_am; ?></label>
         <div class="col-lg-9 col-md-9 col-sm-8 col-xs-12">
             <p><?php echo $brewer_text_041; ?></p>
+            <p><?php echo $brewer_text_043; ?></p>
             <div class="input-group">
                 <label class="radio-inline">
                     <input type="radio" name="brewerProAm" value="1" id="brewerProAm_1"  <?php if (($msg > 0) && (isset($_COOKIE['brewerProAm'])) && ($_COOKIE['brewerProAm'] == "1")) echo "CHECKED";  ?> /> <?php echo $label_yes; ?>

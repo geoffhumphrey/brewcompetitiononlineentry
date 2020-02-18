@@ -1487,7 +1487,7 @@ $brew_text_040 = "There is no need to specify gluten as an allergen for any beer
 
 // Pro-Am
 $brewer_text_041 = "Have you already been awarded a Pro-Am opportunity to compete in the upcoming Great American Beer Festival Pro-Am Competition?";
-$brewer_text_042 = "If you have already been awarded a Pro-Am, please indicate so here. This will help competition staff and Pro-Am brewery representatives (if applicable for this competition) to choose Pro-Am entries from brewers that have not secured one.";
+$brewer_text_042 = "If you have already been awarded a Pro-Am, or have been on the brewing staff at any brewery, please indicate so here. This will help competition staff and Pro-Am brewery representatives (if applicable for this competition) to choose Pro-Am entries from brewers that have not secured one.";
 
 // ----------------------------------------------------------------------------------
 // Version 2.1.15 Additions
@@ -1516,6 +1516,7 @@ $styles_entry_text_PRX4 = "Entrant must specify the types of fresh fruit(s) used
 // Version 2.1.19 Additions
 // ----------------------------------------------------------------------------------
 $output_text_032 = "Entry count only reflects entrants who indicated a drop-off location in their account profile. The actual number of entries may be higher or lower.";
+$brewer_text_043 = "Or, are you, or have you ever been, employed on the brewing staff at any brewery? This includes brewer positions as well as lab technicians, cellar crew, bottling/canning crew, etc. Current and former brewing staff employees are not eligible to participate in the Great American Beer Festival Pro-Am competition.";
 
 /**
  * ----------------------------------------------------------------------------------

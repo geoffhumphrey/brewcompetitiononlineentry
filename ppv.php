@@ -162,7 +162,7 @@ if ($verified) {
 
 		$message_top .= "<body>";
 		$message_top .= "<html>";
-		if (isset($row_logo['contestLogo'])) $message_body .= "<p align='center'><img src='".$base_url."/user_images/".$row_logo['contestLogo']."' height='150'></p>";
+		if ((isset($row_logo['contestLogo'])) && (file_exists(USER_IMAGES.$row_logo['contestLogo']))) $message_body .= "<p><img src='".$base_url."/user_images/".$row_logo['contestLogo']."' height='150'></p>";
 		$message_body .= "<p>".$row_user_info['brewerFirstName'].",</p>";
 		$message_body .= sprintf("<p>%s</p>",$paypal_response_text_000);
 		$message_body .= sprintf("<p><strong>%s</strong></p>",$paypal_response_text_001);

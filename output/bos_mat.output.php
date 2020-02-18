@@ -105,7 +105,7 @@ foreach ($a as $type) {
 	$output .= '<div style="page-break-after:always;"></div>';
 } // end foreach
 ?>
-<?php if ($_SESSION['contestLogo'] != "") { ?>
+<?php if ((isset($_SESSION['contestLogo'])) && (file_exists(USER_IMAGES.$_SESSION['contestLogo']))) { ?>
 <style>
 <!--
 .BOS-mat td:before {
