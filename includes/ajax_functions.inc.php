@@ -30,8 +30,8 @@ if ($action == "email") {
 	/**
 	 * To validate an email address according to RFCs 5321, 5322 and others
 	 * 
-	 * Copyright © 2008-2011, Dominic Sayers
-	 * Test schema documentation Copyright © 2011, Daniel Marschall
+	 * Copyright © 2008-2011, Dominic Sayers					<br>
+	 * Test schema documentation Copyright © 2011, Daniel Marschall			<br>
 	 * All rights reserved.
 	 * 
 	 * Redistribution and use in source and binary forms, with or without modification,
