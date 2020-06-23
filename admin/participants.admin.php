@@ -734,7 +734,8 @@ if ($filter == "stewards")  echo "<div class='error'>There are no stewards avail
 if ($action == "add")  {
 	if ($filter == "default") { ?>
 <script type="text/javascript">
-function checkAvailability() {
+function checkAvailability()
+{
 	jQuery.ajax({
 		url: "<?php echo $base_url; ?>includes/ajax_functions.inc.php?action=username",
 		data:'user_name='+$("#user_name").val(),
@@ -746,7 +747,8 @@ function checkAvailability() {
 	});
 }
 
-function AjaxFunction(email) {
+function AjaxFunction(email)
+{
 	var httpxml;
 		try
 		{
@@ -773,11 +775,12 @@ function AjaxFunction(email) {
 	}
 	}
 }
-
-function stateck() {
-	if(httpxml.readyState==4) {
-		document.getElementById("msg_email").innerHTML=httpxml.responseText;
-	}
+function stateck()
+{
+if(httpxml.readyState==4)
+{
+document.getElementById("msg_email").innerHTML=httpxml.responseText;
+}
 }
 var url="<?php echo $base_url; ?>includes/ajax_functions.inc.php?action=email";
 url=url+"&email="+email;
