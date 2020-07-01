@@ -2539,10 +2539,4 @@ $tinymce_load = array("contest_info","default","step4","default");
 $datetime_load = array("contest_info","eval","testing","preferences","step4","step5","step6","default","judging");
 $datatables_load = array("admin","list","default","step4","eval");
 
-// Default to English language if prefs not defined
-$prefsLanguage = "en-US";
-$prefsLanguageFolder = "en";
-if (isset($_SESSION['prefsLanguage'])) $prefsLanguage = $_SESSION['prefsLanguage'];
-if (isset($_SESSION['prefsLanguageFolder'])) $prefsLanguageFolder = $_SESSION['prefsLanguageFolder'];
-
 ?>
