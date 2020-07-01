@@ -1660,6 +1660,7 @@ function style_convert($number,$type,$base_url="") {
 
 			if ($row_style['brewStyleOwn'] == "bcoe") {
 				if ($_SESSION['prefsStyleSet'] == "BA") $style_convert .= "<li>".$style_name."</li>";
+				elseif ($_SESSION['prefsStyleSet'] == "AABC") $style_convert .= "<li>".ltrim($row_style['brewStyleGroup'],"0").".".ltrim($row_style['brewStyleNum'],"0").": ".$style_name."</li>";
 				else $style_convert .= "<li>".ltrim($row_style['brewStyleGroup'],"0").$row_style['brewStyleNum'].": ".$style_name."</li>";
 			}
 			else $style_convert .= "<li>".$label_custom_style.": ".$row_style['brewStyle']."</li>";

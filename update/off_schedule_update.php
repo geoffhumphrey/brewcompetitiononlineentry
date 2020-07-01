@@ -1208,7 +1208,7 @@ $result = mysqli_query($connection,$updateSQL);
 
 /**
  * ----------------------------------------------- 2.1.19 ----------------------------------------------
- * Change mis-spelled BJCP name for style 17A (from English Strong Ale to British Strong Ale)
+ * Change mis-spelled BJCP name for Speciality Fruit Beer style
  * -----------------------------------------------------------------------------------------------------
  */
 
@@ -1218,10 +1218,26 @@ mysqli_real_escape_string($connection,$updateSQL);
 $result = mysqli_query($connection,$updateSQL);
 
 // Update the entries db table and change it as well.
-$updateSQL = sprintf("UPDATE %s SET brewStyle='Specialty Fruit Beer' WHERE brewStyle='Speciality Fruit Beer'", $prefix."brewing");
+$updateSQL = sprintf("UPDATE `%s` SET brewStyle='Specialty Fruit Beer' WHERE brewStyle='Speciality Fruit Beer'", $prefix."brewing");
 mysqli_select_db($connection,$database);
 mysqli_real_escape_string($connection,$updateSQL);
 $result = mysqli_query($connection,$updateSQL);
+
+$output .= "<li>Corrected BJCP 2015 Speciality Fruit Beer spelling in DB row.</li>";
+
+/**
+ * ----------------------------------------------- 2.1.19 ----------------------------------------------
+ * Change prefsTimeZone column to FLOAT to accomodate fractional time zone numbers
+ * Reported to GitHub https://github.com/geoffhumphrey/brewcompetitiononlineentry/issues/1150
+ * -----------------------------------------------------------------------------------------------------
+ */
+
+$updateSQL = sprintf("ALTER TABLE `%s` CHANGE `prefsTimeZone` `prefsTimeZone` FLOAT NULL DEFAULT NULL;", $prefix."preferences");
+mysqli_select_db($connection,$database);
+mysqli_real_escape_string($connection,$updateSQL);
+$result = mysqli_query($connection,$updateSQL);
+
+$output .= "<li>Altered prefsTimeZone DB column to FLOAT to accomodate fractional time zone numbers.</li>";
 
 /**
  * ----------------------------------------------- 2.1.19 ----------------------------------------------
@@ -1229,6 +1245,7 @@ $result = mysqli_query($connection,$updateSQL);
  * AABC Styles are largely based upon BJCP 2015, but are categorized differently.
  * As such, much of the following are duplicates of BJCP 2015.
  * In a future release, only add the AABC-specific styles and reference BJCP 2015 already in place.
+ * Requested via GitHub https://github.com/geoffhumphrey/brewcompetitiononlineentry/issues/1153
  * -----------------------------------------------------------------------------------------------------
  */
 
@@ -1364,6 +1381,8 @@ INSERT INTO `$styles_db_table` (`brewStyleNum`, `brewStyle`, `brewStyleCategory`
 mysqli_select_db($connection,$database);
 mysqli_real_escape_string($connection,$updateSQL);
 if (!$aabc_styles_present) $result = mysqli_query($connection,$updateSQL);
+
+$output .= "<li>Added Australian Amateur Brewing Championship (AABC) styles.</li>";
 
 /**
  * ----------------------------------------------------------------------------------------------------
