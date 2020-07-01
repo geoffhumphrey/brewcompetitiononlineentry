@@ -46,6 +46,7 @@ define('DEBUGGING',ROOT.'includes'.DIRECTORY_SEPARATOR.'debug'.DIRECTORY_SEPARAT
  * The following are for use by the developer
  * Default for all is FALSE
  */
+
 define('HOSTED', FALSE);
 define('NHC', FALSE);
 define('SINGLE', FALSE);
@@ -63,7 +64,10 @@ define('MAINT', FALSE);
 /**
  * Disable the following to utilize the Load Libraries
  * Locally option if your installation is having trouble
- * loading libraries via CDN.
+ * loading libraries via CDN or if you wish to host libraries
+ * in the root folder of your installation.
+ * If set to FALSE, the local libraries must be in place
+ * PRIOR to proceeding through the setup process.
  * See http://www.brewcompetition.com/local-load
  * Default is TRUE.
  */
@@ -115,7 +119,7 @@ define('FORCE_UPDATE', FALSE);
  * Default is FALSE.
  */
 
-define('ENABLE_MARKDOWN', TRUE);
+define('ENABLE_MARKDOWN', FALSE);
 
 /**
  * Set the following to TRUE if you would like to use
@@ -127,7 +131,7 @@ define('ENABLE_MARKDOWN', TRUE);
  * Default is FALSE.
  */
 
-define('ENABLE_MAILER', TRUE);
+define('ENABLE_MAILER', FALSE);
 
 /**
  * --------------------------------------------------------
@@ -157,7 +161,7 @@ else ini_set('display_errors','Off');
 function is_https() {
     if (((!empty($_SERVER['HTTPS'])) && (strtolower($_SERVER['HTTPS']) !== "off")) || ((isset($_SERVER['SERVER_PORT'])) && ($_SERVER['SERVER_PORT'] === "443"))) return true;
     elseif (((!empty($_SERVER['HTTP_X_FORWARDED_PROTO'])) && (strtolower($_SERVER['HTTP_X_FORWARDED_PROTO']) == "https")) || ((!empty($_SERVER['HTTP_X_FORWARDED_SSL'])) && (strtolower($_SERVER['HTTP_X_FORWARDED_SSL']) == "on"))) return TRUE;
-    else return false;
+    else return FALSE;
 }
 
 require_once (CONFIG.'config.php');
