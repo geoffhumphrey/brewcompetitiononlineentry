@@ -8,7 +8,9 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 	$url = str_replace("www.","",$_SERVER['SERVER_NAME']);
 
 	$from_name = $_SESSION['contestName']." Competition Server";
+	$from_name = mb_convert_encoding($from_name, "UTF-8");
 	$from_email = (!isset($mail_default_from) || trim($mail_default_from) === '') ? "noreply@".$url : $mail_default_from;
+	$from_email = mb_convert_encoding($from_email, "UTF-8");
 	
 	$headers = "";
 	$message = "";
@@ -28,9 +30,12 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 		$first_name = ucwords(strtolower($row_brewer['brewerFirstName']));
 		$last_name = ucwords(strtolower($row_brewer['brewerLastName']));
 
-		$to_recipient = $first_name." ".$last_name;
+		$to_name = $first_name." ".$last_name;
+		$to_name = mb_convert_encoding($to_name, "UTF-8");
 		$to_email = strtolower($row_forgot['user_name']);
+		$to_email = mb_convert_encoding($to_email, "UTF-8");
 		$subject = $_SESSION['contestName']." - System Generated Email Test";
+		$subject = mb_convert_encoding($subject, "UTF-8");
 
 		$message = "<html>" . "\r\n";
 		$message .= "<body>" . "\r\n";
@@ -44,14 +49,14 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 
 		$headers  = "MIME-Version: 1.0" . "\r\n";
 		$headers .= "Content-type: text/html; charset=utf-8" . "\r\n";
-		$headers .= "To: ".$to_recipient. " <".$to_email.">, " . "\r\n";
+		$headers .= "To: ".$to_name. " <".$to_email.">, " . "\r\n";
 		$headers .= "From: ".$from_name." <".$from_email.">" . "\r\n";
 
 		if ($mail_use_smtp) {
 			$mail = new PHPMailer(true);
 			$mail->CharSet = 'UTF-8';
 			$mail->Encoding = 'base64';
-			$mail->addAddress($to_email, $to_recipient);
+			$mail->addAddress($to_email, $to_name);
 			$mail->setFrom($from_email, $from_name);
 			$mail->Subject = $subject;
 			$mail->Body = $message;
@@ -89,10 +94,12 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 				$first_name = ucwords(strtolower($row_brewer['brewerFirstName']));
 				$last_name = ucwords(strtolower($row_brewer['brewerLastName']));
 
-				$to_recipient = $first_name." ".$last_name;
+				$to_name = $first_name." ".$last_name;
+				$to_name = mb_convert_encoding($to_name, "UTF-8");
 				$to_email = strtolower($row_brewer['brewerEmail']);
 				if ($row_brewer['staff_judge'] == 1) $subject = $_SESSION['contestName']." - Your Judging Assignments";
 				if ($row_brewer['staff_steward'] == 1) $subject = $_SESSION['contestName']." - Your Stewarding Assignments";
+				$subject = mb_convert_encoding($subject, "UTF-8");
 
 				$message = "<html>" . "\r\n";
 				$message .= "<body>" . "\r\n";
@@ -126,14 +133,14 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 
 				$headers  = "MIME-Version: 1.0" . "\r\n";
 				$headers .= "Content-type: text/html; charset=utf-8" . "\r\n";
-				$headers .= "To: ".$to_recipient. " <".$to_email.">, " . "\r\n";
+				$headers .= "To: ".$to_name. " <".$to_email.">, " . "\r\n";
 				$headers .= "From: ".$from_name." <".$from_email.">" . "\r\n";
 
 				if ($mail_use_smtp) {
 					$mail = new PHPMailer(true);
 					$mail->CharSet = 'UTF-8';
 					$mail->Encoding = 'base64';
-					$mail->addAddress($to_email, $to_recipient);
+					$mail->addAddress($to_email, $to_name);
 					$mail->setFrom($from_email, $from_name);
 					$mail->Subject = $subject;
 					$mail->Body = $message;

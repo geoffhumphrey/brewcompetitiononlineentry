@@ -58,6 +58,12 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 			$subject = sterilize(ucwords($_POST['subject']));
 			$message_post = sterilize($_POST['message']);
 
+			$to_email = mb_convert_encoding($to_email, "UTF-8");
+			$to_name = mb_convert_encoding($to_name, "UTF-8");
+			$from_email = mb_convert_encoding($from_email, "UTF-8");
+			$from_name = mb_convert_encoding($from_name, "UTF-8");
+			$subject = mb_convert_encoding($subject, "UTF-8");
+
 			// Build the message
 			$message = "<html>" . "\r\n";
 			$message .= "<body>";
@@ -69,11 +75,13 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 
 			$url = str_replace("www.","",$_SERVER['SERVER_NAME']);
 			$from_competition_email = (!isset($mail_default_from) || trim($mail_default_from) === '') ? "noreply@".$url : $mail_default_from;
+			$from_competition_email = mb_convert_encoding($from_competition_email, "UTF-8");
+			$comp_name = mb_convert_encoding($_SESSION['contestName'], "UTF-8");
 
 			$headers  = "MIME-Version: 1.0" . "\r\n";
 			$headers .= "Content-type: text/html; charset=utf-8" . "\r\n";
 			$headers .= "To: ".$to_name." <".$to_email.">" . "\r\n";
-			$headers .= "From: ".$_SESSION['contestName']." Server <".$from_competition_email.">" . "\r\n"; // needed to change due to more stringent rules and mail send incompatibility with Gmail.
+			$headers .= "From: ".$comp_name." Server <".$from_competition_email.">" . "\r\n"; // needed to change due to more stringent rules and mail send incompatibility with Gmail.
 			$headers .= "Reply-To: ".$from_name." <".$from_email.">" . "\r\n";
 			$headers .= "CC: ".$from_name." <".$from_email.">" . "\r\n";
 
@@ -83,10 +91,11 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 			echo $to_name."<br>";
 			echo $headers."<br>";
 			echo "To: ".$to_name." ".$to_email."<br>";
-			echo "From: ".$_SESSION['contestName']." Server noreply@".$_SERVER['SERVER_NAME']."<br>";
+			echo "From: ".$comp_name." ".$from_competition_email."<br>";
 			echo "Reply-To: ".$from_name." ".$from_email."<br>";
 			echo "CC: ".$from_name." ".$from_email."<br>";
 			echo $message;
+			exit;
 			*/
 
 			if ($mail_use_smtp) {				
@@ -94,7 +103,7 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 				$mail->CharSet = 'UTF-8';
 				$mail->Encoding = 'base64';
 				$mail->addAddress($to_email, $to_name);
-				$mail->setFrom($from_competition_email, $_SESSION['contestName']);
+				$mail->setFrom($from_competition_email, $comp_name);
 				$mail->addReplyTo($from_email, $from_name);
 				$mail->addCC($from_email, $from_name);
 				$mail->Subject = $subject;

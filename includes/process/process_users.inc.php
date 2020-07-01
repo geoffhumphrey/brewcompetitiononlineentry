@@ -100,17 +100,18 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 		}
 		else $usernameOld = "";
 
-		if (strstr($username,'@'))  {
 
-		$query_brewerCheck = "SELECT brewerEmail FROM $brewer_db_table WHERE brewerEmail = '$usernameOld'";
-		$brewerCheck = mysqli_query($connection,$query_brewerCheck) or die (mysqli_error($connection));
-		$row_brewerCheck = mysqli_fetch_assoc($brewerCheck);
-		$totalRows_brewerCheck = mysqli_num_rows($brewerCheck);
+		if (strstr($username,'@')) {
 
-		$query_userCheck = "SELECT * FROM $users_db_table WHERE user_name = '$username'";
-		$userCheck = mysqli_query($connection,$query_userCheck) or die (mysqli_error($connection));
-		$row_userCheck = mysqli_fetch_assoc($userCheck);
-		$totalRows_userCheck = mysqli_num_rows($userCheck);
+			$query_brewerCheck = "SELECT brewerEmail FROM $brewer_db_table WHERE brewerEmail = '$usernameOld'";
+			$brewerCheck = mysqli_query($connection,$query_brewerCheck) or die (mysqli_error($connection));
+			$row_brewerCheck = mysqli_fetch_assoc($brewerCheck);
+			$totalRows_brewerCheck = mysqli_num_rows($brewerCheck);
+
+			$query_userCheck = "SELECT * FROM $users_db_table WHERE user_name = '$username'";
+			$userCheck = mysqli_query($connection,$query_userCheck) or die (mysqli_error($connection));
+			$row_userCheck = mysqli_fetch_assoc($userCheck);
+			$totalRows_userCheck = mysqli_num_rows($userCheck);
 
 			// --------------------------- If Changing a Participant's User Level ------------------------------- //
 			if ($go == "make_admin") {
@@ -121,82 +122,84 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 								   "NOW( )",
 								   GetSQLValueString($username, "text")
 								   );
-
-
 				mysqli_real_escape_string($connection,$updateSQL);
 				$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
-
+				
 				$pattern = array('\'', '"');
 				$updateGoTo = str_replace($pattern, "", $updateGoTo);
 				$redirect_go_to = sprintf("Location: %s", stripslashes($updateGoTo));
-			}
+
+			} // end if ($go == "make_admin")
 
 			// --------------------------- If Changing a Participant's User Name ------------------------------- //
 			if ($go == "username") {
-			if ($totalRows_userCheck > 0) {
-			  $redirect_go_to = sprintf("Location: %s", $base_url."index.php?section=user&action=username&id=".$id."&msg=1");
-			  }
-			  else  {
+				
+				// User name found. Redirect.
+				if ($totalRows_userCheck > 0) $redirect_go_to = sprintf("Location: %s", $base_url."index.php?section=user&action=username&id=".$id."&msg=1");
+				
+				// User name not found. Update.
+				if ($totalRows_userCheck < 1) {
 
-				$updateSQL = sprintf("UPDATE $users_db_table SET user_name=%s,userCreated=%s WHERE id=%s",
+					$updateSQL = sprintf("UPDATE $users_db_table SET user_name=%s,userCreated=%s WHERE id=%s",
 								   GetSQLValueString($username, "text"),
 								   "NOW( )",
 								   GetSQLValueString($id, "text")
 								   );
+					mysqli_real_escape_string($connection,$updateSQL);
+					$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 
-				mysqli_real_escape_string($connection,$updateSQL);
-				$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+					$updateSQL = sprintf("UPDATE $brewer_db_table SET brewerEmail=%s WHERE uid=%s",
+									   GetSQLValueString($username, "text"),
+									   GetSQLValueString($id, "text"));
 
-				$updateSQL = sprintf("UPDATE $brewer_db_table SET brewerEmail=%s WHERE uid=%s",
-								   GetSQLValueString($username, "text"),
-								   GetSQLValueString($id, "text"));
+					mysqli_real_escape_string($connection,$updateSQL);
+					$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 
-				mysqli_real_escape_string($connection,$updateSQL);
-				$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+					if ($filter == "admin") {
+						$pattern = array('\'', '"');
+						$updateGoTo = str_replace($pattern, "", $updateGoTo);
+						$redirect_go_to = sprintf("Location: %s", stripslashes($updateGoTo));
+					} // end if ($filter == "admin")
 
-				if ($filter == "admin") {
-					$pattern = array('\'', '"');
-					$updateGoTo = str_replace($pattern, "", $updateGoTo);
-					$redirect_go_to = sprintf("Location: %s", stripslashes($updateGoTo));
-				}
+					if ($filter != "admin") {
 
-				else {
-				$query_login = "SELECT user_name FROM $users_db_table WHERE user_name = '$username'";
-				$login = mysqli_query($connection,$query_login) or die (mysqli_error($connection));
-				$row_login = mysqli_fetch_assoc($login);
-				$totalRows_login = mysqli_num_rows($login);
-				//echo $query_login;
+						$query_login = "SELECT user_name FROM $users_db_table WHERE user_name = '$username'";
+						$login = mysqli_query($connection,$query_login) or die (mysqli_error($connection));
+						$row_login = mysqli_fetch_assoc($login);
+						$totalRows_login = mysqli_num_rows($login);
+						// echo $query_login;
 
-				session_name($prefix_session);
-				session_start();
-					// Authenticate the user
-					if ($totalRows_login == 1) {
-						// Register the loginUsername
-						$_SESSION['loginUsername'] = $username;
-						unset($_SESSION['user_info'.$prefix_session]);
-						//$_SESSION['session_set_'.$prefix_session] = "";
-						// If the username/password combo is OK, relocate to the "protected" content index page
-						$redirect_go_to = sprintf("Location: %s", $base_url."index.php?section=list&msg=3");
-						exit;
-					}
-					else {
-						// If the username/password combo is incorrect or not found, relocate to the login error page
-						$redirect_go_to = sprintf("Location: %s", $base_url."index.php?section=user&action=username&msg=2");
-					}
+						if (is_session_started() === FALSE) {
+							session_name($prefix_session);
+							session_start();
+						}
 
+						// Authenticate the user
+						if ($totalRows_login == 1) {
+							// Register the loginUsername
+							$_SESSION['loginUsername'] = $username;
+							unset($_SESSION['user_info'.$prefix_session]);
+							//$_SESSION['session_set_'.$prefix_session] = "";
+							// If the username/password combo is OK, relocate to the "protected" content index page
+							$redirect_go_to = sprintf("Location: %s", $base_url."index.php?section=list&msg=3");
 
-					$insertGoTo = $base_url."index.php?section=login&username=".$username;
-					$pattern = array('\'', '"');
-					$insertGoTo = str_replace($pattern, "", $insertGoTo);
-					$redirect_go_to = sprintf("Location: %s", stripslashes($insertGoTo));
-				} //end if ($filter !="admin")
-			  }
-			 }
-		}
-		 else {
+						}
+						else {
+							// If the username/password combo is incorrect or not found, relocate to the login error page
+							$redirect_go_to = sprintf("Location: %s", $base_url."index.php?section=user&action=username&msg=2");
+						}
 
+					} // end if ($filter != "admin")
+
+				} // end if ($totalRows_userCheck < 1)
+
+			} // end if ($go == "username")
+		
+		} // end if (strstr($username,'@'))
+
+		else {
 			$redirect_go_to = sprintf("Location: %s", $base_url."index.php?section=user&action=username&msg=4&id=".$id);
-		 }
+		}
 
 		// --------------------------- If a participant is changing their password ------------------------------- //
 		if ($go == "password") {

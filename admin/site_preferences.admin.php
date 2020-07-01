@@ -420,7 +420,11 @@ $(document).ready(function(){
                 <a href="<?php echo $base_url; ?>includes/process.inc.php?section=admin&amp;&amp;go=default&amp;action=email&amp;filter=test-email&amp;id=<?php echo $_SESSION['brewerID']; ?>" role="button" class="btn btn-xs btn-primary">Send Test Email</a>
 			</div>
 		</div>
-		<p>If you are not sure that your server supports sending email via PHP scripts, click the &ldquo;Send Test Email&rdquo; button above to send an email to <?php echo $_SESSION['loginUsername']; ?>. Be sure to check your spam folder.</p>
+		<?php if (ENABLE_MAILER) {?>
+        <p>You have phpMailer enabled. Make sure it has been properly configured in the /site/config.mail.php file and then click the &ldquo;Send Test Email&rdquo; button above to send an email to <?php echo $_SESSION['loginUsername']; ?>. Be sure to check your spam folder.</p>
+        <?php } else { ?>
+        <p>If you are not sure that your server supports sending email via PHP scripts, click the &ldquo;Send Test Email&rdquo; button above to send an email to <?php echo $_SESSION['loginUsername']; ?>. Be sure to check your spam folder.</p>
+        <?php } ?>
 		</span>
     </div>
 </div><!-- ./Form Group -->
@@ -464,7 +468,11 @@ $(document).ready(function(){
                 <a href="<?php echo $base_url; ?>includes/process.inc.php?section=admin&amp;&amp;go=default&amp;action=email&amp;filter=test-email&amp;id=<?php echo $_SESSION['brewerID']; ?>" role="button" class="btn btn-xs btn-primary">Send Test Email</a>
 			</div>
 		</div>
+        <?php if (ENABLE_MAILER) {?>
+        <p>You have phpMailer enabled. Make sure it has been properly configured in the /site/config.mail.php file and then click the &ldquo;Send Test Email&rdquo; button above to send an email to <?php echo $_SESSION['loginUsername']; ?>. Be sure to check your spam folder.</p>
+        <?php } else { ?>
 		<p>If you are not sure that your server supports sending email via PHP scripts, click the &ldquo;Send Test Email&rdquo; button above to send an email to <?php echo $_SESSION['loginUsername']; ?>. Be sure to check your spam folder.</p>
+        <?php } ?>
 		</span>
     </div>
 </div><!-- ./Form Group -->

@@ -32,7 +32,7 @@ if (($action == "email") && ($id != "default")) {
 	$first_name = ucwords(strtolower($row_brewer['brewerFirstName']));
 	$last_name = ucwords(strtolower($row_brewer['brewerLastName']));
 	
-	$to_recipient = $first_name." ".$last_name;
+	$to_name = $first_name." ".$last_name;
 	$to_email = $row_forgot['user_name'];
 	$subject = sprintf("%s: %s",$_SESSION['contestName'],$label_id_verification_request);
 	
@@ -54,19 +54,25 @@ if (($action == "email") && ($id != "default")) {
 	
 	$contestName = ucwords($_SESSION['contestName']);
 	$from_email = (!isset($mail_default_from) || trim($mail_default_from) === '') ? "noreply@".$url : $mail_default_from;
+
+	$to_email = mb_convert_encoding($to_email, "UTF-8");
+	$to_name = mb_convert_encoding($to_name, "UTF-8");
+	$from_email = mb_convert_encoding($from_email, "UTF-8");
+	$from_name = mb_convert_encoding($contestName, "UTF-8");
+	$subject = mb_convert_encoding($subject, "UTF-8");
 	
 	$headers  = "MIME-Version: 1.0" . "\r\n";
 	$headers .= "Content-type: text/html; charset=utf-8" . "\r\n";
-	$headers .= "To: ".$to_recipient. " <".$to_email.">, " . "\r\n";
-	$headers .= "From: ".$contestName." Server <".$from_email. ">\r\n";
+	$headers .= "To: ".$to_name. " <".$to_email.">, " . "\r\n";
+	$headers .= "From: ".$from_name." Server <".$from_email. ">\r\n";
 	
 	$emails = $to_email;
 
 	if ($mail_use_smtp) {
 		$mail = new PHPMailer(true);
 		$mail->CharSet = 'UTF-8';
-		$mail->Encoding = 'base64';$mail->addAddress($to_email, $to_recipient);
-		$mail->setFrom($from_email, $contestName);
+		$mail->Encoding = 'base64';$mail->addAddress($to_email, $to_name);
+		$mail->setFrom($from_email, $from_name);
 		$mail->Subject = $subject;
 		$mail->Body = $message;
 		sendPHPMailerMessage($mail);
@@ -121,7 +127,7 @@ if ($action == "forgot") {
 		
 		$reset_url = $base_url."index.php?section=login&go=password&action=reset-password&token=".$token;
 		
-		$to_recipient = $first_name." ".$last_name;
+		$to_name = $first_name." ".$last_name;
 		$to_email = $row_forgot['user_name'];
 		$subject = sprintf("%s: %s",$_SESSION['contestName'],$label_password_reset);
 		$message = "<html>" . "\r\n";
@@ -139,11 +145,17 @@ if ($action == "forgot") {
 
 		$contestName = ucwords($_SESSION['contestName']);
 		$from_email = (!isset($mail_default_from) || trim($mail_default_from) === '') ? "noreply@".$url : $mail_default_from;
+
+		$to_email = mb_convert_encoding($to_email, "UTF-8");
+		$to_name = mb_convert_encoding($to_name, "UTF-8");
+		$from_email = mb_convert_encoding($from_email, "UTF-8");
+		$from_name = mb_convert_encoding($contestName, "UTF-8");
+		$subject = mb_convert_encoding($subject, "UTF-8");
 	
 		$headers  = "MIME-Version: 1.0" . "\r\n";
 		$headers .= "Content-type: text/html; charset=utf-8" . "\r\n";
-		$headers .= "To: ".$to_recipient. " <".$to_email.">, " . "\r\n";
-		$headers .= "From: ".$contestName." Server <".$from_email. ">\r\n";
+		$headers .= "To: ".$to_name. " <".$to_email.">, " . "\r\n";
+		$headers .= "From: ".$from_name." Server <".$from_email. ">\r\n";
 
 		$emails = $to_email;
 
@@ -151,8 +163,8 @@ if ($action == "forgot") {
 			$mail = new PHPMailer(true);
 			$mail->CharSet = 'UTF-8';
 			$mail->Encoding = 'base64';
-			$mail->addAddress($to_email, $to_recipient);
-			$mail->setFrom($from_email, $contestName);
+			$mail->addAddress($to_email, $to_name);
+			$mail->setFrom($from_email, $from_name);
 			$mail->Subject = $subject;
 			$mail->Body = $message;
 			sendPHPMailerMessage($mail);
