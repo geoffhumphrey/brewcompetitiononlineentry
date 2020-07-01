@@ -229,6 +229,7 @@ do {
 
 	if ($row_styles['brewStyleActive'] == "Y") {
 		if ($_SESSION['prefsStyleSet'] == "BA") $entry_output .= $row_log['brewStyle'];
+		elseif ($_SESSION['prefsStyleSet'] == "AABC") $entry_output .= ltrim($row_log['brewCategorySort'],"0").".".ltrim($row_log['brewSubCategory'],"0").": ".$row_log['brewStyle'];
 		else $entry_output .= $row_log['brewCategorySort'].$row_log['brewSubCategory'].": ".$row_log['brewStyle'];
 	}
 	else $entry_output .= sprintf("<strong class=\"text-danger\">%s</strong>",$brewer_entries_text_016);

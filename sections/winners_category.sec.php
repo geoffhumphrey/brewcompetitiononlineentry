@@ -103,7 +103,8 @@ if ($row_scored_entries['count'] > 0) {
 				include (DB.'scores.db.php');
 
 				do {
-					$style = $row_scores['brewCategory'].$row_scores['brewSubCategory'];
+					if ($_SESSION['prefsStyleSet'] == "AABC") $style = ltrim($row_scores['brewCategory'],"0").".".ltrim($row_scores['brewSubCategory'],"0");
+       				else $style = $row_scores['brewCategory'].$row_scores['brewSubCategory'];
 
 					$table_body1 .= "<tr>";
 

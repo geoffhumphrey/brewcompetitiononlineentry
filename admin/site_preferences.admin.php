@@ -2,6 +2,7 @@
 
 include (DB.'styles.db.php');
 $ba_exceptions = "";
+$aabc_exceptions = "";
 $bjcp_2008_exceptions = "";
 $bjcp_2015_exceptions = "";
 $custom_exceptions = "";
@@ -10,6 +11,14 @@ $prefsUSCLEx = "";
 foreach ($ba_styles_arr as $value) {
     if ((is_array($value)) && ($value)) {
         $ba_exceptions .= "<div class=\"checkbox\"><label><input name=\"prefsUSCLEx[]\" type=\"checkbox\" class=\"chkbox\" value=\"".$value['id']."\"> ".$value['brewStyle']."</label></div>";
+    }
+}
+
+foreach ($aabc_styles_arr as $value) {
+    if ((is_array($value)) && ($value)) {
+        $aabc_exceptions .= "<div class=\"checkbox\"><label><input name=\"prefsUSCLEx[]\" type=\"checkbox\" class=\"chkbox\" value=\"".$value['id']."\"> ";
+        $aabc_exceptions .= ltrim($value['brewStyleGroup'], "0").".".ltrim($value['brewStyleNum'], "0").": ";
+        $aabc_exceptions .= $value['brewStyle']."</label></div>";
     }
 }
 
@@ -61,10 +70,14 @@ if (($section == "admin") && ($go == "preferences")) {
     	}
 
     	if ($row_styles['id'] != "") {
+            
             $prefsUSCLEx .= "<div class=\"checkbox\"><label><input name=\"prefsUSCLEx[]\" type=\"checkbox\" value=\"".$row_styles['id']."\" ".$checked."> ";
-            if ((strpos($styleSet,"BA") === false) && ($row_styles['brewStyleOwn'] == "bcoe")) $prefsUSCLEx .= ltrim($row_styles['brewStyleGroup'], "0").$row_styles['brewStyleNum'].": ";
+            if (($_SESSION['prefsStyleSet'] == "BA") && ($row_styles['brewStyleOwn'] == "bcoe")) $prefsUSCLEx .= "";
+            elseif (($_SESSION['prefsStyleSet'] == "AABC") && ($row_styles['brewStyleOwn'] == "bcoe")) $prefsUSCLEx .= ltrim($row_styles['brewStyleGroup'], "0").".".ltrim($row_styles['brewStyleNum'], "0").": ";
             elseif ($row_styles['brewStyleOwn'] == "custom") $prefsUSCLEx .= "Custom Style: ";
+            else $prefsUSCLEx .= ltrim($row_styles['brewStyleGroup'], "0").$row_styles['brewStyleNum'].": ";
             $prefsUSCLEx .= $row_styles['brewStyle']."</label></div>";
+
         }
 
     } while ($row_styles = mysqli_fetch_assoc($styles));
@@ -91,9 +104,13 @@ $(document).ready(function(){
     ?>
     $("#helpBlockBAAPI").show("fast");
     $("#prefsHideSpecific").hide("fast");
+    <?php } elseif ((isset($row_limits['prefsStyleSet'])) && ($row_limits['prefsStyleSet'] == "AABC")) { ?>
+    $("#helpBlockAABC").show("fast");
+    $("#helpBlockBAAPI").hide("fast");
     <?php } else { ?>
     // show/hide divs on load if no value
     $("#helpBlockBAAPI").hide("fast");
+    $("#helpBlockAABC").show("fast");
     $("#prefsHideSpecific").show("fast");
     <?php } ?>
 
@@ -102,6 +119,7 @@ $(document).ready(function(){
     $("#paypal-payment").hide();
     $("#checks-payment").hide();
     $("#subStyleExeptionsBA").hide();
+    $("#subStyleExeptionsAABC").hide();
     $("#subStyleExeptionsBJCP2008").hide();
     $("#subStyleExeptionsBJCP2015").hide();
     $("#helpBlockBJCP2008").hide();
@@ -174,33 +192,52 @@ $(document).ready(function(){
         if ($("#prefsStyleSet").val() == "BA") {
             $("#helpBlockBAAPI").show("fast");
             $("#helpBlockBJCP2008").hide("fast");
+            $("#helpBlockAABC").hide("fast");
             $("#prefsHideSpecific").hide("fast");
             $("#subStyleExeptionsEdit").hide("fast");
             $("#subStyleExeptionsBA").show("fast");
             $("#subStyleExeptionsBJCP2008").hide("fast");
             $("#subStyleExeptionsBJCP2015").hide("fast");
+            $("#subStyleExeptionsAABC").hide("fast");
             $("input[name='prefsUSCLEx[]']").prop("checked", false);
         }
 
         else if ($("#prefsStyleSet").val() == "BJCP2008") {
             $("#helpBlockBAAPI").hide("fast");
             $("#helpBlockBJCP2008").show("fast");
+            $("#helpBlockAABC").hide("fast");
             $("#prefsHideSpecific").show("fast");
             $("#subStyleExeptionsEdit").hide("fast");
             $("#subStyleExeptionsBA").hide("fast");
             $("#subStyleExeptionsBJCP2008").show("fast");
             $("#subStyleExeptionsBJCP2015").hide("fast");
+            $("#subStyleExeptionsAABC").hide("fast");
             $("input[name='prefsUSCLEx[]']").prop("checked", false);
         }
 
         else if ($("#prefsStyleSet").val() == "BJCP2015")  {
             $("#helpBlockBAAPI").hide("fast");
             $("#helpBlockBJCP2008").hide("fast");
+            $("#helpBlockAABC").hide("fast");
             $("#prefsHideSpecific").show("fast");
             $("#subStyleExeptionsEdit").hide("fast");
             $("#subStyleExeptionsBA").hide("fast");
             $("#subStyleExeptionsBJCP2008").hide("fast");
             $("#subStyleExeptionsBJCP2015").show("fast");
+            $("#subStyleExeptionsAABC").hide("fast");
+            $("input[name='prefsUSCLEx[]']").prop("checked", false);
+        }
+
+        else if ($("#prefsStyleSet").val() == "AABC")  {
+            $("#helpBlockBAAPI").hide("fast");
+            $("#helpBlockBJCP2008").hide("fast");
+            $("#helpBlockAABC").show("fast");
+            $("#prefsHideSpecific").show("fast");
+            $("#subStyleExeptionsEdit").hide("fast");
+            $("#subStyleExeptionsBA").hide("fast");
+            $("#subStyleExeptionsBJCP2008").hide("fast");
+            $("#subStyleExeptionsBJCP2015").hide("fast");
+            $("#subStyleExeptionsAABC").show("fast");
             $("input[name='prefsUSCLEx[]']").prop("checked", false);
         }
 
@@ -732,14 +769,16 @@ $(document).ready(function(){
 <div class="form-group"><!-- Form Group Radio INLINE -->
     <label for="prefsStyleSet" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Styleset</label>
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
-    <!-- Input Here -->
-	<select class="selectpicker" name="prefsStyleSet" id="prefsStyleSet" data-size="4">
-    	<option value="BJCP2015" <?php if ($section == "step3") echo "SELECTED"; elseif ($row_limits['prefsStyleSet'] == "BJCP2015") echo "SELECTED"; ?>>BJCP 2015</option>
-        <option value="BJCP2008" <?php if ($row_limits['prefsStyleSet'] == "BJCP2008") echo "SELECTED"; ?>>BJCP 2008</option>
-        <option value="BA" <?php if ($row_limits['prefsStyleSet'] == "BA") echo "SELECTED"; ?>>Brewers Association</option>
-	</select>
-    <div id="helpBlockBJCP2008" class="help-block">The BJCP 2008 style guidelines have been deprecated and will be completely removed in a future version. The 2008 guidelines are considered by the BJCP as &quot;obsolete.&quot;</div>
-    <div id="helpBlockBAAPI" class="help-block">Please note that every effort is made to keep the BA style data current; however, the latest <a class="hide-loader" href="https://www.brewersassociation.org/resources/brewers-association-beer-style-guidelines/" target="_blank">BA style set</a> may <strong>not</strong> be available.</div>
+        <!-- Input Here -->
+    	<select class="selectpicker" name="prefsStyleSet" id="prefsStyleSet" data-size="12" data-width="auto">
+        	<option value="BJCP2015" <?php if ($section == "step3") echo "SELECTED"; elseif ($row_limits['prefsStyleSet'] == "BJCP2015") echo "SELECTED"; ?>>BJCP 2015</option>
+            <option value="BJCP2008" <?php if ($row_limits['prefsStyleSet'] == "BJCP2008") echo "SELECTED"; ?>>BJCP 2008</option>
+            <option value="BA" <?php if ($row_limits['prefsStyleSet'] == "BA") echo "SELECTED"; ?>>Brewers Association</option>
+            <option value="AABC" <?php if ($row_limits['prefsStyleSet'] == "AABC") echo "SELECTED"; ?>>Australian Amateur Brewing Championship (AABC)</option>
+    	</select>
+        <div id="helpBlockBJCP2008" class="help-block">The BJCP 2008 style guidelines have been deprecated and will be completely removed in a future version. The 2008 guidelines are considered by the BJCP as &quot;obsolete.&quot;</div>
+        <div id="helpBlockBAAPI" class="help-block">Please note that every effort is made to keep the BA style data current; however, the latest <a class="hide-loader" href="https://www.brewersassociation.org/resources/brewers-association-beer-style-guidelines/" target="_blank">BA style set</a> may <strong>not</strong> be available in this application.</div>
+        <div id="helpBlockAABC" class="help-block">Please note that every effort is made to keep the AABC style data current; however, the latest <a class="hide-loader" href="http://www.aabc.org.au/" target="_blank">AABC style set</a> may <strong>not</strong> be available for use in this application.</div>
     </div>
 </div><!-- ./Form Group -->
 <!--
@@ -1065,17 +1104,16 @@ $(document).ready(function(){
     	</span>
     	</div>
     </div><!-- ./Form Group -->
-    <div class="form-group" id="subStyleExeptionsEdit"><!-- Form Group Checkbox Stacked -->
+    <div class="form-group" id="subStyleExeptionsEdit">
     	<label for="prefsUSCLEx" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Exceptions to Entry Limit per Sub-Style</label>
     	<div class="col-lg-9 col-md-9 col-sm-8 col-xs-12">
     		<div class="input-group">
-    			<!-- Input Here -->
     			<?php echo $prefsUSCLEx; ?>
     		</div>
     	</div>
-    </div><!-- ./Form Group -->
+    </div> 
     <div class="form-group" id="subStyleExeptionsBA"><!-- Form Group Checkbox Stacked -->
-        <label for="prefsUSCLEx" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Exceptions to Entry Limit per Sub-Style</label>
+        <label for="prefsUSCLEx" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Exceptions to Entry Limit per BA Sub-Style</label>
         <div class="col-lg-9 col-md-9 col-sm-8 col-xs-12">
             <div class="input-group">
                 <!-- Input Here -->
@@ -1084,7 +1122,7 @@ $(document).ready(function(){
         </div>
     </div><!-- ./Form Group -->
     <div class="form-group" id="subStyleExeptionsBJCP2008"><!-- Form Group Checkbox Stacked -->
-        <label for="prefsUSCLEx" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Exceptions to Entry Limit per Sub-Style</label>
+        <label for="prefsUSCLEx" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Exceptions to Entry Limit per BJCP 2008 Sub-Style</label>
         <div class="col-lg-9 col-md-9 col-sm-8 col-xs-12">
             <div class="input-group">
                 <!-- Input Here -->
@@ -1092,16 +1130,28 @@ $(document).ready(function(){
             </div>
         </div>
     </div><!-- ./Form Group -->
+
+    <div class="form-group" id="subStyleExeptionsAABC">
+        <label for="prefsUSCLEx" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Exceptions to Entry Limit per AABC Sub-Style</label>
+        <div class="col-lg-9 col-md-9 col-sm-8 col-xs-12">
+            <div class="input-group">
+                <?php echo $aabc_exceptions.$custom_exceptions; ?>
+            </div>
+        </div>
+    </div>
+
 </div>
-<div class="form-group" id="subStyleExeptionsBJCP2015"><!-- Form Group Checkbox Stacked -->
-    <label for="prefsUSCLEx" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Exceptions to Entry Limit per Sub-Style</label>
+
+<div class="form-group" id="subStyleExeptionsBJCP2015">
+    <label for="prefsUSCLEx" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Exceptions to Entry Limit per BJCP 2015 Sub-Style</label>
     <div class="col-lg-9 col-md-9 col-sm-8 col-xs-12">
         <div class="input-group">
-            <!-- Input Here -->
             <?php echo $bjcp_2015_exceptions.$custom_exceptions; ?>
         </div>
     </div>
-</div><!-- ./Form Group -->
+</div>
+
+<!-- ./Form Group -->
 <!-- Modal -->
 <div class="modal fade" id="exceptdSubstylesModal" tabindex="-1" role="dialog" aria-labelledby="exceptdSubstylesModalLabel">
     <div class="modal-dialog" role="document">

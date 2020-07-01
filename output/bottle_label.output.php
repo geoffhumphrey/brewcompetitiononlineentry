@@ -1,6 +1,6 @@
 <?php
 require('../paths.php');
-session_name($prefix_session);
+//session_name($prefix_session);
 require(CONFIG.'bootstrap.php');
 require(LIB.'output.lib.php');
 
@@ -119,6 +119,7 @@ if (isset($_SESSION['loginUsername'])) {
             $page_info1 .= "<p><strong>".$label_entry_number.":</strong> ".$barcode."</br>";
             if (!$anon) $page_info1 .= "<strong>".$label_entry_name.":</strong> ".truncate($row_log['brewName'],30,"&hellip;")."<br>";
             if ($_SESSION['prefsStyleSet'] == "BA") $page_info1 .= "<strong>Cat: ".$row_log['brewStyle']."<br>";
+            elseif ($_SESSION['prefsStyleSet'] == "AABC")  $page_info1 .= "<strong>".$label_category.":</strong> ".ltrim($row_log['brewCategory'],"0").".".ltrim($row_log['brewSubCategory'],"0")." ".$row_log['brewStyle']."<br>";
             else $page_info1 .= "<strong>".$label_category.":</strong> ".$row_log['brewCategory'].$row_log['brewSubCategory']." ".$row_log['brewStyle']."<br>";
             $page_info1 .= "</p>";
 

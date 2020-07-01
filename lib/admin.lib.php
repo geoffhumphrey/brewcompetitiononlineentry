@@ -767,7 +767,8 @@ function table_score_data($eid,$score_table,$suffix) {
 	$row_tables['tableNumber']."^". //11
 	$style."^". //12
 	$style_name."^". //13
-	$row_brewer['brewerBreweryName']; //14
+	$row_brewer['brewerBreweryName']."^". //14
+	$row_entries['brewSubCategory']; //15
 
 	return $return;
 

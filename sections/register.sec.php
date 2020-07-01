@@ -220,9 +220,7 @@ if (($_SESSION['prefsProEdition'] == 0) || (($_SESSION['prefsProEdition'] == 1) 
 	$club_other = FALSE;
 
 	foreach ($club_array as $club) {
-		$club_selected = "";
-		$club_option = explode ("|",$club);
-		$club_options .= "<option value=\"".$club_option[0]."\"".$club_selected.">".$club_option[1]."</option>\n";
+		$club_options .= "<option value=\"".$club."\">".$club."</option>\n";
 	}
 
 }

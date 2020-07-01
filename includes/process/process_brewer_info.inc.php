@@ -37,8 +37,8 @@ if (isset($_POST['brewerClubs'])) {
     include (DB.'entries.db.php');
     include (INCLUDES.'constants.inc.php');
     $brewerClubs = $purifier->purify($_POST['brewerClubs']);
-    $brewerClubsConcat = $brewerClubs."|".$brewerClubs;
-    if (!in_array($brewerClubsConcat,$club_array)) {
+    // $brewerClubsConcat = $brewerClubs."|".$brewerClubs;
+    if (!in_array($brewerClubs,$club_array)) {
         if ($_POST['brewerClubs'] == "Other") {
             if (!empty($_POST['brewerClubsOther'])) $brewerClubs = ucwords($purifier->purify($_POST['brewerClubsOther']));
             else $brewerClubs = "Other";

@@ -186,7 +186,8 @@ include (DB.'admin_judging_scores_bos.db.php');
 
 	$bos_entry_info = bos_entry_info($row_bos['eid'], $row_bos['scoreTable'],$filter);
 	$bos_entry_info = explode("^",$bos_entry_info);
-	$style = $bos_entry_info[1].$bos_entry_info[3];
+    if ($_SESSION['prefsStyleSet'] == "AABC") $style = ltrim($bos_entry_info[1],"0").".".ltrim($bos_entry_info[3],"0");
+	else $style = $bos_entry_info[1].$bos_entry_info[3];
 
     $judging_number = sprintf("%06s",$bos_entry_info[6]);
 
@@ -273,9 +274,10 @@ include (DB.'admin_judging_scores_bos.db.php');
 
 		$bos_entry_info = bos_entry_info($row_enter_bos['eid'], "default","default");
 		$bos_entry_info = explode("^",$bos_entry_info);
-		$style = $bos_entry_info[1].$bos_entry_info[3];
 		$judging_number = sprintf("%06s",$bos_entry_info[6]);
 
+        if ($_SESSION['prefsStyleSet'] == "AABC") $style = ltrim($bos_entry_info[1],"0").".".ltrim($bos_entry_info[3],"0");
+        else $style = $bos_entry_info[1].$bos_entry_info[3];
 		if ($_SESSION['prefsStyleSet'] == "BA") $style_name = $bos_entry_info[0];
 
         else {

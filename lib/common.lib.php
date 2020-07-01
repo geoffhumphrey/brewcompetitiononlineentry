@@ -1347,6 +1347,32 @@ function style_convert($number,$type,$base_url="") {
 			}
 		}
 
+		if ($_SESSION['prefsStyleSet'] == "AABC") {
+		switch ($number) {
+			case "01": $style_convert = "Low Alcohol"; break;
+			case "02": $style_convert = "Pale Lager"; break;
+			case "03": $style_convert = "Amber and Dark Lager"; break;
+			case "04": $style_convert = "Pale Ale"; break;
+			case "05": $style_convert = "American Pale Ale"; break;
+			case "06": $style_convert = "Bitter Ale"; break;
+			case "07": $style_convert = "Brown Ale"; break;
+			case "08": $style_convert = "Porter"; break;
+			case "09": $style_convert = "Stout"; break;
+			case "10": $style_convert = "Strong Stout"; break;
+			case "11": $style_convert = "India Pale Ale"; break;
+			case "12": $style_convert = "Specialty IPA"; break;
+			case "13": $style_convert = "Wheat and Ryle Ale"; break;
+			case "14": $style_convert = "Sour Ale"; break;
+			case "15": $style_convert = "Belgian Ale"; break;
+			case "16": $style_convert = "Strong Ales and Lagers"; break;
+			case "17": $style_convert = "Fruit/Spice/Herb/Vegetable Beer"; break;
+			case "18": $style_convert = "Specialty Beer"; break;
+			case "19": $style_convert = "Mead"; break;
+			case "20": $style_convert = "Cider"; break;
+			default: $style_convert = $row_style['brewStyle']." (Custom Style)"; break;
+			}
+		}
+
 		break;
 
 		case "2":
@@ -1838,7 +1864,8 @@ function get_table_info($input,$method,$table_id,$dbTable,$param) {
 					$query_styles = sprintf("SELECT * FROM %s WHERE id='%s'", $styles_db_table, $value);
 					$styles = mysqli_query($connection,$query_styles) or die (mysqli_error($connection));
 					$row_styles = mysqli_fetch_assoc($styles);
-					if ($styleSet == "BA") $c[] = $row_styles['brewStyle'].",&nbsp;";
+					if ($_SESSION['prefsStyleSet']  == "BA") $c[] = $row_styles['brewStyle'].",&nbsp;";
+					elseif ($_SESSION['prefsStyleSet'] == "AABC") $c[] = ltrim($row_styles['brewStyleGroup'],"0").".".ltrim($row_styles['brewStyleNum'],"0").",&nbsp;";
 					else $c[] = ltrim($row_styles['brewStyleGroup'].$row_styles['brewStyleNum'],"0").",&nbsp;";
 
 				}
@@ -3767,9 +3794,7 @@ function remove_sensitive_data() {
 					$club_name = "";
 					if (!empty($row_check_brewer['brewerClubs'])) {
 						 $club_name_key = (array_rand($club_array,1));
-						 $club_name_1 = $club_array[$club_name_key];
-						 $club_name_2 = explode("|",$club_name_1);
-						 $club_name = $club_name_2[0];
+						 $club_name = $club_array[$club_name_key];
 					}
 
 					$query_check_name = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE brewerFirstName='%s' AND brewerLastName='%s'", $prefix."brewer", $first_name, $last_name);

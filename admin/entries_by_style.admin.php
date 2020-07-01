@@ -50,6 +50,12 @@ if ($_SESSION['prefsStyleSet'] == "BJCP2015") {
 	$category_end = 34;
 }
 
+if ($_SESSION['prefsStyleSet'] == "AABC") {
+	$beer_end = 18;
+	$mead_array = array('19');
+	$cider_array = array('20');
+	$category_end = 20;
+}
 
 include (DB.'styles.db.php');
 

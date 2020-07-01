@@ -151,7 +151,8 @@ if ($totalRows_spec_beer > 0) {
 			$special_beer_modal[] = $row_spec_beer['brewStyleGroup']."-".$row_spec_beer['brewStyleNum']."|".$row_spec_beer['brewStyle'];
 
 			if ($styleSet == "BA") $style_name = $styleSet." Style: ".$row_spec_beer['brewStyle'];
-			else $style_name = $styleSet." Style ".$row_spec_beer['brewStyleGroup'].$row_spec_beer['brewStyleNum'].": ".$row_spec_beer['brewStyle'];
+			elseif ($styleSet == "AABC") $style_name = $styleSet." Style ".ltrim($row_spec_beer['brewStyleGroup'],"0").".".ltrim($row_spec_beer['brewStyleNum'],"0").": ".$row_spec_beer['brewStyle'];
+			else $style_name = $styleSet." Style ".$ltrim($row_spec_beer['brewStyleGroup'],"0").ltrim($row_spec_beer['brewStyleNum'],"0").": ".$row_spec_beer['brewStyle'];
 
 			$modals .= "
 					<!-- Modal -->

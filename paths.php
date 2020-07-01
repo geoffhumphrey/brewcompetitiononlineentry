@@ -77,14 +77,14 @@ define('CDN', TRUE);
  * Default is FALSE.
  */
 
-define('TESTING', TRUE);
+define('TESTING', FALSE);
 
 /**
  * Enable the following to display php errors on screen.
  * Default is FALSE.
  */
 
-define('DEBUG', TRUE);
+define('DEBUG', FALSE);
 
 /**
  * Enable the following to show a collapsable table of all
@@ -150,8 +150,8 @@ else ini_set('display_errors','Off');
  * called when constructing the $base_url variable in the
  * /sites/config.php file.
  * 
- * @fixes https://github.com/geoffhumphrey/brewcompetitiononlineentry/issues/1123
- * @refer https://stackoverflow.com/questions/1175096/how-to-find-out-if-youre-using-https-without-serverhttps
+ * @see https://github.com/geoffhumphrey/brewcompetitiononlineentry/issues/1123
+ * @see https://stackoverflow.com/questions/1175096/how-to-find-out-if-youre-using-https-without-serverhttps
  */
 
 function is_https() {
@@ -172,7 +172,7 @@ if (HOSTED) {
 /** Using an MD5 of __FILE__ will ensure a different session
  * name for multiple installs on the same domain name.
  *
- * @fixes https://github.com/geoffhumphrey/brewcompetitiononlineentry/issues/781
+ * @see https://github.com/geoffhumphrey/brewcompetitiononlineentry/issues/781
  */
 
 if (empty($installation_id)) $prefix_session = md5(__FILE__);

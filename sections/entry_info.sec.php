@@ -249,9 +249,11 @@ $styles_hloopRow1 = 0; // first row flag
 
 		if (!empty($row_styles['brewStyleEntry'])) {
 
-			if ($_SESSION['prefsStyleSet'] == "BA") $page_info8 .= "<a href=\"#\" data-toggle=\"modal\" data-target=\"#custom-modal-".ltrim($row_styles['brewStyleGroup'], "0").$row_styles['brewStyleNum']."\" title=\"".$entry_info_text_045."\">".$row_styles['brewStyle']."</a>";
+			if ($_SESSION['prefsStyleSet'] == "BA") $page_info8 .= "<a href=\"#\" data-toggle=\"modal\" data-target=\"#custom-modal-".$row_styles['id']."\" title=\"".$entry_info_text_045."\">".$row_styles['brewStyle']."</a>";
 
-			else $page_info8 .= "<a href=\"#\" data-toggle=\"modal\" data-target=\"#custom-modal-".ltrim($row_styles['brewStyleGroup'], "0").$row_styles['brewStyleNum']."\" title=\"".$entry_info_text_045."\">".ltrim($row_styles['brewStyleGroup'], "0").$row_styles['brewStyleNum']." ".$row_styles['brewStyle']."</a>";
+			elseif ($_SESSION['prefsStyleSet'] == "AABC") $page_info8 .= "<a href=\"#\" data-toggle=\"modal\" data-target=\"#custom-modal-".$row_styles['id']."\" title=\"".$entry_info_text_045."\">".ltrim($row_styles['brewStyleGroup'], "0").".".ltrim($row_styles['brewStyleNum'], "0")." ".$row_styles['brewStyle']."</a>";
+
+			else $page_info8 .= "<a href=\"#\" data-toggle=\"modal\" data-target=\"#custom-modal-".$row_styles['id']."\" title=\"".$entry_info_text_045."\">".ltrim($row_styles['brewStyleGroup'], "0").$row_styles['brewStyleNum']." ".$row_styles['brewStyle']."</a>";
 
 			$style_info_modal_body = "";
 
@@ -264,7 +266,7 @@ $styles_hloopRow1 = 0; // first row flag
 			if (!empty($row_styles['brewStyleInfo'])) $style_info_modal_body .= "<p>".$brewStyleInfo."</p>";
 			if (!empty($row_styles['brewStyleEntry'])) $style_info_modal_body .= "<p><strong class=\"text-primary\">".$label_entry_info.":</strong> ".$brewStyleEntry."</p>";
 
-			$style_info_modals .= "<div class=\"modal fade\" id=\"custom-modal-".ltrim($row_styles['brewStyleGroup'], "0").$row_styles['brewStyleNum']."\" tabindex=\"-1\" role=\"dialog\" aria-labelledby=\"assignment-modal-label-".$row_styles['brewStyleNum']."\">\n";
+			$style_info_modals .= "<div class=\"modal fade\" id=\"custom-modal-".$row_styles['id']."\" tabindex=\"-1\" role=\"dialog\" aria-labelledby=\"assignment-modal-label-".$row_styles['brewStyleNum']."\">\n";
 			$style_info_modals .= "\t<div class=\"modal-dialog modal-lg\" role=\"document\">\n";
 			$style_info_modals .= "\t\t<div class=\"modal-content\">\n";
 			$style_info_modals .= "\t\t\t<div class=\"modal-header bcoem-admin-modal\">\n";
@@ -285,6 +287,7 @@ $styles_hloopRow1 = 0; // first row flag
 
 		else {
 			if ($_SESSION['prefsStyleSet'] == "BA") $page_info8 .= $row_styles['brewStyle'];
+			elseif ($_SESSION['prefsStyleSet'] == "AABC") $page_info8 .= ltrim($row_styles['brewStyleGroup'], "0").".".ltrim($row_styles['brewStyleNum'], "0")." ".$row_styles['brewStyle'];
 			else $page_info8 .= ltrim($row_styles['brewStyleGroup'], "0").$row_styles['brewStyleNum']." ".$row_styles['brewStyle'];
 		}
 

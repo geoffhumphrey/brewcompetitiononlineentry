@@ -45,6 +45,7 @@ if (($filter != "default") && ($filter != "rounds"))  {
 
 			$flight_table_tbody .= "<td>";
 			if ($_SESSION['prefsStyleSet'] == "BA") $flight_table_tbody .= $row_entries['brewStyle'];
+			elseif ($_SESSION['prefsStyleSet'] == "AABC") $flight_table_tbody .= ltrim($row_entries['brewCategorySort'],"0").".".ltrim($row_entries['brewSubCategory'],"0")." ".style_convert($row_entries['brewCategorySort'],1).": ".$row_entries['brewStyle'];
 			else $flight_table_tbody .= $row_entries['brewCategorySort'].$row_entries['brewSubCategory']." ".style_convert($row_entries['brewCategorySort'],1).": ".$row_entries['brewStyle'];
 			$flight_table_tbody .= "</td>\n";
 

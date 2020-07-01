@@ -10,8 +10,10 @@ include (INCLUDES.'scrubber.inc.php');
 $filename = "";
 $number_of_labels = "";
 $ba = FALSE;
+$aabc = FALSE;
 
 if ($_SESSION['prefsStyleSet'] == "BA") $ba = TRUE;
+if ($_SESSION['prefsStyleSet'] == "AABC") $aabc = TRUE;
 
 /*
  * -------------------------------------------------------------------
@@ -52,6 +54,10 @@ if (isset($_SESSION['loginUsername'])) {
 
 	} while ($row_styles = mysqli_fetch_assoc($styles));
 
+	//print_r($special_ingredients); 
+
+	//print_r($mead); exit;
+
 	if ($_SESSION['userLevel'] <= 1) {
 
 		/*
@@ -90,14 +96,16 @@ if (isset($_SESSION['loginUsername'])) {
 
 					$category = sprintf("%02s",$row_log['brewCategorySort']);
 					$subcategory = $row_log['brewSubCategory'];
+					if ($aabc) $cat_output = ltrim($category,"0").".".ltrim($subcategory,"0");
+					else $cat_output = $category.$subcategory;
 					
 					$text = sprintf("\n%s (%s)  %s (%s)  %s (%s)\n\n\n\n%s (%s)  %s (%s)  %s (%s)",
-					$entry_no, $category.$subcategory,
-					$entry_no, $category.$subcategory,
-					$entry_no, $category.$subcategory,
-					$entry_no, $category.$subcategory,
-					$entry_no, $category.$subcategory,
-					$entry_no, $category.$subcategory
+					$entry_no, $cat_output,
+					$entry_no, $cat_output,
+					$entry_no, $cat_output,
+					$entry_no, $cat_output,
+					$entry_no, $cat_output,
+					$entry_no, $cat_output
 					);
 
 					$text = iconv('UTF-8', 'windows-1252//IGNORE', $text);
@@ -169,8 +177,10 @@ if (isset($_SESSION['loginUsername'])) {
 						$subcategory = $row_log['brewSubCategory'];
 						
 						$style = strtoupper($row_log['brewCategorySort']).$subcategory;
-
+						if ($aabc) $style_display = strtoupper(ltrim($row_log['brewCategorySort'],"0")).".".ltrim($subcategory,"0");
+						else $style_display = $style;
 						$style_name = $row_log['brewStyle'];
+						
 						if (strpos($style_name,"Pre-Prohibition") !== false) $style_name = str_replace("Pre-Prohibition", "Pre-Prohib.", $style_name);
 						if (strpos($style_name,"Fermentation") !== false) $style_name = str_replace("Fermentation", "Ferm.", $style_name);
 						if (strpos($style_name,"Premium") !== false) $style_name = str_replace("Premium", "Prem.", $style_name);
@@ -185,7 +195,7 @@ if (isset($_SESSION['loginUsername'])) {
 						$style_name = truncate($style_name,21);
 						
 						if ($ba) $entry_info = sprintf("%s (%s)", $entry_no, $style_name);
-						else $entry_info = sprintf("\n%s (%s: %s)", $entry_no, $style, $style_name);
+						else $entry_info = sprintf("\n%s (%s: %s)", $entry_no, $style_display, $style_name);
 
 						if (in_array($style,$special_ingredients)) {
 
@@ -298,13 +308,15 @@ if (isset($_SESSION['loginUsername'])) {
 					$entry_no = sprintf("%06s",$row_log['brewJudgingNumber']);
 
 					if (($entry_no != "") && ($filter == "default")) {
-						$text = sprintf("\n%s\n(%s)",$entry_no, $row_log['brewCategory'].$row_log['brewSubCategory']);
+						if ($aabc) $text = sprintf("\n%s\n(%s)",$entry_no, ltrim($row_log['brewCategory'],"0").".".ltrim($row_log['brewSubCategory'],"0"));
+						else $text = sprintf("\n%s\n(%s)",$entry_no, $row_log['brewCategory'].$row_log['brewSubCategory']);
 						$text = iconv('UTF-8', 'windows-1252//IGNORE', $text);
 						$pdf->Add_Label($text);
 					}
 
 					if (($entry_no != "") && ($filter == "recent") && (strtotime($row_log['brewUpdated']) > $row_contest_dates['contestRegistrationDeadline'])) {
-						$text = sprintf("\n%s\n(%s)",$entry_no, $row_log['brewCategory'].$row_log['brewSubCategory']);
+						if ($aabc) $text = sprintf("\n%s\n(%s)",$entry_no, ltrim($row_log['brewCategory'],"0").".".ltrim($row_log['brewSubCategory'],"0"));
+						else $text = sprintf("\n%s\n(%s)",$entry_no, $row_log['brewCategory'].$row_log['brewSubCategory']);
 						$text = iconv('UTF-8', 'windows-1252//IGNORE', $text);
 						$pdf->Add_Label($text);
 					}
@@ -341,12 +353,14 @@ if (isset($_SESSION['loginUsername'])) {
 					$entry_no = sprintf("%04s",$row_log['id']);
 
 					if ((!empty($entry_no)) && ($filter == "default")) {
-						$text = sprintf("\n%s\n(%s)",$entry_no, $row_log['brewCategory'].$row_log['brewSubCategory']);
+						if ($aabc) $text = sprintf("\n%s\n(%s)",$entry_no, ltrim($row_log['brewCategory'],"0").".".ltrim($row_log['brewSubCategory'],"0"));
+						else $text = sprintf("\n%s\n(%s)",$entry_no, $row_log['brewCategory'].$row_log['brewSubCategory']);
 						$pdf->Add_Label($text);
 					}
 
 					if ((!empty($entry_no)) && ($filter == "recent") && (strtotime($row_log['brewUpdated']) > $row_contest_dates['contestRegistrationDeadline'])) {
-						$text = sprintf("\n%s\n(%s)",$entry_no, $row_log['brewCategory'].$row_log['brewSubCategory']);
+						if ($aabc) $text = sprintf("\n%s\n(%s)",$entry_no, ltrim($row_log['brewCategory'],"0").".".ltrim($row_log['brewSubCategory'],"0"));
+						else $text = sprintf("\n%s\n(%s)",$entry_no, $row_log['brewCategory'].$row_log['brewSubCategory']);
 						$text = iconv('UTF-8', 'windows-1252//IGNORE', $text);
 						$pdf->Add_Label($text);
 					}
@@ -378,7 +392,8 @@ if (isset($_SESSION['loginUsername'])) {
 			do {
 
 				for($i=0; $i<$sort; $i++) {
-					$text = sprintf("\n%s",$row_log['brewCategorySort'].$row_log['brewSubCategory']);
+					if ($aabc) $text = sprintf("\n%s",ltrim($row_log['brewCategorySort'],"0").".".ltrim($row_log['brewSubCategory'],"0"));
+					else $text = sprintf("\n%s",$row_log['brewCategorySort'].$row_log['brewSubCategory']);
 					$text = iconv('UTF-8', 'windows-1252//IGNORE', $text);
 					$pdf->Add_Label($text);
 				}

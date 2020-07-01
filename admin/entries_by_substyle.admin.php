@@ -30,6 +30,13 @@ if ($_SESSION['prefsStyleSet'] == "BJCP2015") {
 	$category_end = 34;
 }
 
+if ($_SESSION['prefsStyleSet'] == "AABC") {
+	$beer_end = 18;
+	$mead_array = array('19');
+	$cider_array = array('20');
+	$category_end = 20;
+}
+
 include (DB.'styles.db.php');
 
 $subcats = array();
@@ -37,6 +44,8 @@ $subcats = array();
 do {
 	$subcats[] = $row_styles['brewStyleGroup']."|".$row_styles['brewStyleNum']."|".$row_styles['brewStyle']."|".$row_styles['brewStyleCategory']."|".$row_styles['brewStyleActive'];
 } while ($row_styles = mysqli_fetch_assoc($styles));
+
+sort($subcats);
 
 foreach ($subcats as $subcat) {
 
@@ -74,7 +83,11 @@ foreach ($subcats as $subcat) {
 			else $substyle_cat = "Custom";
 
 			$html .= "<td>";
-			if ($_SESSION['prefsStyleSet'] != "BA") $html .= $substyle[0].$substyle[1]." - ";
+			$html .= "<span class=\"hidden\">".$substyle[0]."</span>";
+			if ($_SESSION['prefsStyleSet'] != "BA") {
+				if ($_SESSION['prefsStyleSet'] == "AABC") $html .= ltrim($substyle[0],"0").".".ltrim($substyle[1],"0")." ";
+				else $html .= $substyle[0].$substyle[1]." - ";
+			}
 			$html .= $substyle[2]."</td>";
 			$html .= "<td class=\"hidden-xs hidden-sm\">".$substyle_cat."</td>";
 			$html .= "<td>".$row_substyle_count_logged['count']."</td>";

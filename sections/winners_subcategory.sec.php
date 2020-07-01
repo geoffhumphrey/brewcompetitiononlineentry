@@ -108,7 +108,8 @@ if ($row_scored_entries['count'] > 0) {
 
 				else {
 
-					$style = $row_scores['brewCategory'].$row_scores['brewSubCategory'];
+					if ($_SESSION['prefsStyleSet'] == "AABC") $style = ltrim($row_scores['brewCategory'],"0").".".ltrim($row_scores['brewSubCategory'],"0");
+       				else $style = $row_scores['brewCategory'].$row_scores['brewSubCategory'];
 					if ($row_scores['brewCategorySort'] > $category_end) $style_long = style_convert($row_scores['brewCategorySort'],1);
 					else $style_long = $row_scores['brewStyle'];
 

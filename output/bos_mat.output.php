@@ -64,7 +64,7 @@ foreach ($a as $type) {
 					$output .= '<br><em><small>'.$ba_category_names[$row_scores['brewCategory']].'</small></em>';
 				}
 				else {
-					$output .= $row_scores['brewCategory'].': '.style_convert($row_scores['brewCategorySort'],1);
+					$output .= ltrim($row_scores['brewCategory'],"0").': '.style_convert($row_scores['brewCategorySort'],1);
 					$output .= '<br><em><small>'.$style.': '.$row_scores['brewStyle'].'</small></em>';
 				}
 				$output .= '</h3>';

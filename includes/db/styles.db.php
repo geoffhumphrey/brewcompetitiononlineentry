@@ -8,38 +8,53 @@ if ((($section == "admin") && ($go == "preferences")) || ($section == "step3")) 
 	$row_styles_all = mysqli_fetch_assoc($styles_all);
 
 	$ba_styles_arr[] = array();
+	$aabc_styles_arr[] = array();
 	$bjcp_2008_styles_arr[] = array();
 	$bjcp_2015_styles_arr[] = array();
 	$custom_styles_arr[] = array();
 
 	do {
 
-		if (($row_styles_all['brewStyleVersion'] == "BA") && ($row_styles_all['brewStyleOwn'] == "bcoe")) {
-			$ba_styles_arr[] = array(
-				"id" => $row_styles_all['id'],
-				"brewStyleGroup" => $row_styles_all['brewStyleGroup'],
-				"brewStyleNum" => $row_styles_all['brewStyleNum'],
-				"brewStyle" => $row_styles_all['brewStyle']
-			);
-		}
+		if ($row_styles_all['brewStyleOwn'] == "bcoe") {
 
-		if (($row_styles_all['brewStyleVersion'] == "BJCP2008") && ($row_styles_all['brewStyleOwn'] == "bcoe")) {
-			$bjcp_2008_styles_arr[] = array(
-				"id" => $row_styles_all['id'],
-				"brewStyleGroup" => $row_styles_all['brewStyleGroup'],
-				"brewStyleNum" => $row_styles_all['brewStyleNum'],
-				"brewStyle" => $row_styles_all['brewStyle']
-			);
-		}
+			if ($row_styles_all['brewStyleVersion'] == "BA") {
+				$ba_styles_arr[] = array(
+					"id" => $row_styles_all['id'],
+					"brewStyleGroup" => $row_styles_all['brewStyleGroup'],
+					"brewStyleNum" => $row_styles_all['brewStyleNum'],
+					"brewStyle" => $row_styles_all['brewStyle']
+				);
+			}
 
-		if (($row_styles_all['brewStyleVersion'] == "BJCP2015") && ($row_styles_all['brewStyleOwn'] == "bcoe")) {
-			$bjcp_2015_styles_arr[] = array(
-				"id" => $row_styles_all['id'],
-				"brewStyleGroup" => $row_styles_all['brewStyleGroup'],
-				"brewStyleNum" => $row_styles_all['brewStyleNum'],
-				"brewStyle" => $row_styles_all['brewStyle']
-			);
+			if ($row_styles_all['brewStyleVersion'] == "AABC") {
+				$aabc_styles_arr[] = array(
+					"id" => $row_styles_all['id'],
+					"brewStyleGroup" => $row_styles_all['brewStyleGroup'],
+					"brewStyleNum" => $row_styles_all['brewStyleNum'],
+					"brewStyle" => $row_styles_all['brewStyle']
+				);
+			}
+
+			if ($row_styles_all['brewStyleVersion'] == "BJCP2008") {
+				$bjcp_2008_styles_arr[] = array(
+					"id" => $row_styles_all['id'],
+					"brewStyleGroup" => $row_styles_all['brewStyleGroup'],
+					"brewStyleNum" => $row_styles_all['brewStyleNum'],
+					"brewStyle" => $row_styles_all['brewStyle']
+				);
+			}
+
+			if ($row_styles_all['brewStyleVersion'] == "BJCP2015") {
+				$bjcp_2015_styles_arr[] = array(
+					"id" => $row_styles_all['id'],
+					"brewStyleGroup" => $row_styles_all['brewStyleGroup'],
+					"brewStyleNum" => $row_styles_all['brewStyleNum'],
+					"brewStyle" => $row_styles_all['brewStyle']
+				);
+			}
+			
 		}
+		
 
 		if ($row_styles_all['brewStyleOwn'] == "custom") {
 			$custom_styles_arr[] = array(

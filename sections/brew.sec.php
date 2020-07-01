@@ -485,10 +485,12 @@ else $relocate_referrer = $_SERVER['HTTP_REFERER'];
 					// Build selection variable
 					if (preg_match("/^[[:digit:]]+$/",$row_styles['brewStyleGroup'])) {
 						if ($_SESSION['prefsStyleSet'] == "BA") $selection = $row_styles['brewStyle'];
+						elseif ($_SESSION['prefsStyleSet'] == "AABC") $selection = ltrim($row_styles['brewStyleGroup'], "0").".".ltrim($row_styles['brewStyleNum'], "0")." ".$row_styles['brewStyle'];
 						else $selection = sprintf('%02d',$row_styles['brewStyleGroup']).$row_styles['brewStyleNum']." ".$row_styles['brewStyle'];
 					}
 					else {
 						if ($_SESSION['prefsStyleSet'] == "BA") $selection = $row_styles['brewStyle'];
+						elseif ($_SESSION['prefsStyleSet'] == "AABC") $selection = ltrim($row_styles['brewStyleGroup'], "0").".".ltrim($row_styles['brewStyleNum'], "0")." ".$row_styles['brewStyle'];
 						$selection = $row_styles['brewStyleGroup'].$row_styles['brewStyleNum']." ".$row_styles['brewStyle'];
 					}
 					if ($row_styles['brewStyleReqSpec'] == 1) $selection .= " &spades;";
