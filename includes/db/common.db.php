@@ -278,8 +278,8 @@ if (isset($_SESSION['loginUsername'])) {
 if ((!isset($_SESSION['prefsLang'.$prefix_session]))|| (empty($_SESSION['prefsLang'.$prefix_session]))) {
 
 	// Language - in current version only English is available. Future versions will feature translations.
-	if ($section != "update") $_SESSION['prefsLanguage'] = $row_prefs['prefsLanguage'];
-	elseif (!isset($row_prefs['prefsLanguage'])) {
+	if (($section != "update") && (empty($row_prefs['prefsLanguage']))) $_SESSION['prefsLanguage'] = $row_prefs['prefsLanguage'];
+	elseif ((!isset($row_prefs['prefsLanguage'])) || (empty($row_prefs['prefsLanguage']))) {
 		$_SESSION['prefsLanguage'] = "en-US";
 	}
 	else $_SESSION['prefsLanguage'] = "en-US";

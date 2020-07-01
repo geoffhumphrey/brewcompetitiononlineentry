@@ -2358,6 +2358,8 @@ $club_array = array(
 );
 asort($club_array);
 
+$sidebar_date_format = "short";
+
 if (((strpos($section, "step") === FALSE) && ($section != "setup")) && ($section != "update")) {
 
 	$registration_open = open_or_closed(time(),$row_contest_dates['contestRegistrationOpen'],$row_contest_dates['contestRegistrationDeadline']);
@@ -2375,7 +2377,6 @@ if (((strpos($section, "step") === FALSE) && ($section != "setup")) && ($section
 	*/
 
     if (strpos($_SESSION['prefsLanguage'],"en-") !== false) $sidebar_date_format = "long";
-    else $sidebar_date_format = "short";
 
 	$reg_open = getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_contest_dates['contestRegistrationOpen'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], $sidebar_date_format, "date-time");
 	$reg_closed = getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_contest_dates['contestRegistrationDeadline'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], $sidebar_date_format, "date-time");
@@ -2532,4 +2533,16 @@ else $optional_info_styles = array("21-B","28-A","30-B","33-A","33-B","34-B","M2
 $results_method = array("0" => "By Table", "1" => "By Style", "2" => "By Sub-Style");
 
 if (HOSTED) $_SESSION['prefsCAPTCHA'] = 1;
+
+// Load libraries only when needed - for performance
+$tinymce_load = array("contest_info","default","step4","default");
+$datetime_load = array("contest_info","eval","testing","preferences","step4","step5","step6","default","judging");
+$datatables_load = array("admin","list","default","step4","eval");
+
+// Default to English language if prefs not defined
+$prefsLanguage = "en-US";
+$prefsLanguageFolder = "en";
+if (isset($_SESSION['prefsLanguage'])) $prefsLanguage = $_SESSION['prefsLanguage'];
+if (isset($_SESSION['prefsLanguageFolder'])) $prefsLanguageFolder = $_SESSION['prefsLanguageFolder'];
+
 ?>
