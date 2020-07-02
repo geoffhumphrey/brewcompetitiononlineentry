@@ -831,8 +831,6 @@ $judge_closed_003 = "participantes registrados, juízes e administradores.";
 
 // -------------------- Info de entrada --------------------
 
-if ($section == "entry") {
-
 $entry_info_text_000 = "Você poderá criar sua conta começando";
 $entry_info_text_001 = "até";
 $entry_info_text_002 = "Juízes e assistentes podem se registrar no começo";
@@ -880,8 +878,6 @@ $entry_info_text_043 = "Amostras aceitas em nossos locais de entrega presencial 
 $entry_info_text_044 = "Abrir mapa";
 $entry_info_text_045 = "Clique para saber informações obrigatórias das amostras";
 $entry_info_text_046 = "Se o nome de um estilo é um link, a amostra possui requisitos específicos. Clique no nome para ver os requisitos da subcategoria.";
-
-}
 
 // -------------------- Rodapé --------------------
 
@@ -1531,6 +1527,8 @@ $styles_entry_text_PRX4 = "O participante deve especificar os tipos de frutas fr
 $output_text_032 = "A contagem de entradas reflete apenas os participantes que indicaram um local de entrega em seu perfil de conta. O número real de entradas pode ser maior ou menor.";
 $brewer_text_043 = "Ou você está ou já trabalhou na equipe de cervejaria de qualquer cervejaria? Isso inclui posições de cervejeiro, bem como técnicos de laboratório, equipe de adega, equipe de engarrafamento / conservas, etc. Os funcionários atuais e antigos da equipe de cervejaria não são elegíveis para participar da competição Pro-Am do Great American Beer Festival.";
 $label_entrant_reg = "Registro de Participantes";
+$sidebar_text_026 = "estão no sistema a partir de";
+$label_paid_entries = "Entradas Pagas";
 
 // ************************************************ ***********************************
 // END TRANSLATIONS

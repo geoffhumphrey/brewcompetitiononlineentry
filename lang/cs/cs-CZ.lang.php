@@ -829,57 +829,54 @@ if (($section == "default") || ($section == "results")) { // Changed for 2.1.14
 
 // -------------------- Entry Info --------------------
 
-if ($section == "entry") {
+$entry_info_text_000 = "Účet si budete moci vytvořit počínaje";
+$entry_info_text_001 = "do";
+$entry_info_text_002 = "Degustátoři a obsluha se mohou registrovat od";
+$entry_info_text_003 = "za vzorek";
+$entry_info_text_004 = "Můžete se zaregistrovat ode dneška do";
+$entry_info_text_005 = "Degustátoři a obsluha se mohou registrovat ode dneška do";
+$entry_info_text_006 = "Registrace";
+$entry_info_text_007 = "degustátorů a obsluhy";
+$entry_info_text_008 = "přijímány do";
+$entry_info_text_009 = "Registrace je <strong class=\"text-danger\">uzavřena</strong>.";
+$entry_info_text_010 = "Vítejte";
+$entry_info_text_011 = "Prohlédněte si podrobnosti svého účtu a seznam vzorků.";
+$entry_info_text_012 = "Prohlédněte si údaje svého účtu níže.";
+$entry_info_text_013 = "na vzorek po";
+$entry_info_text_014 = "Do systému budete moci vkládat své vzorky počínaje";
+$entry_info_text_015 = "Své vzorky můžete vkládat ode dneška do";
+$entry_info_text_016 = "Registrace vzorků je <strong class=\"text-danger\">uzavřena</strong>.";
+$entry_info_text_017 = "for unlimited entries.";
+$entry_info_text_018 = "pro členy AHA";
+$entry_info_text_019 = "Tato soutěž má omezení počtu na";
+$entry_info_text_020 = "vzorků.";
+$entry_info_text_021 = "Každý soutěžící může vložit nejvíce";
+$entry_info_text_022 = strtolower($label_entry);
+$entry_info_text_023 = "vzorků";
+$entry_info_text_024 = "vzorek na podkategorii";
+$entry_info_text_025 = "vzorků na podkategorii";
+$entry_info_text_026 = "výjimky jsou uvedeny níže";
+$entry_info_text_027 = "podkategorii";
+$entry_info_text_028 = "podkategoriích";
+$entry_info_text_029 = "vzorek v následujících";
+$entry_info_text_030 = "vzorků v následující";
+$entry_info_text_031 = "Po vytvoření účtu a vložení vzorků do systému musíte uhradit poplatek za vzorky. Přijímáme tyto druhy plateb:";
+$entry_info_text_032 = $label_cash;
+$entry_info_text_033 = $label_check.", vystavený na";
+$entry_info_text_034 = "Kreditní/debetní karta a e-check (prostřednictvím PayPalu)";
+$entry_info_text_035 = "Data degustace ještě nebyla určena. Prosím, navštivte náš web později.";
+$entry_info_text_036 = "Lahve se vzorky přijímáme na poštovní adrese počínaje";
+$entry_info_text_037 = "Vzorky zasílejte na následující adresu:";
+$entry_info_text_038 = "Pečlivě zabalte své vzorky do pevné krabice. Vnitřek krabice vyložte plastovým pytlem na odpad. Oddělte a zabalte každou lahev odpovídajícím balicím materiálem. S množstvím materiálu to nepřehánějte!";
+$entry_info_text_039 = "Na balík napište: <em>Křehké. Touto stranou vzůhru.</em> Pro balení používejte pouze bublinkovou fólii.";
+$entry_info_text_040 = "<em>Každý</em> ze štítků na vašich lahvích zabalete do malého pytlíku před jeho upevněním na lahev. Tímto způsobem nám usnadníte určení, který vzorek se rozbil, pokud se něco stane při přepravě.";
+$entry_info_text_041 = "Vynasnažíme se kontaktovat soutěžící, jejichž lahve se rozbily, kvůli zaslání nových lahví.";
+$entry_info_text_042 = "Pokud se soutěž koná ve Spojených státech, mějte na paměti, že je <strong>zakázáno</strong> posílat vzorky pomocí United States Postal Service (USPS). <em>Pozn. překl.: Na zásilky zaslané prostřednictvím České pošty se žádný podobný zákaz nevztahuje.</em><br />Soukromé přepravní společnosti vám mohou odmítnout přepravu, pokud se dozví, že zásilka obsahuje sklo nebo alkoholické nápoje. Berte na vědomí, že vzorky zaslané mezinárodně mohou podléhat celnímu řízení. Zásilky mohou být otevřeny a vráceny odesilateli celní správou dle jejího uvážení. Je vaší povinností se řídit příslušnými zákony a nařízeními.";
+$entry_info_text_043 = "Lahve se vzorky přijímáme v místech příjmu vzorků počínaje";
+$entry_info_text_044 = "Zobrazit na mapě místo";
+$entry_info_text_045 = "Klikněte/dotkněte se pro požadované informace o vzorku";
+$entry_info_text_046 = "Pokud je na názvu stylu odkaz, má zvláštní požadavky na vzorek. Klikněte nebo se dotkněte názvu pro zobrazení požadavků podkategorie.";
 
-	$entry_info_text_000 = "Účet si budete moci vytvořit počínaje";
-	$entry_info_text_001 = "do";
-	$entry_info_text_002 = "Degustátoři a obsluha se mohou registrovat od";
-	$entry_info_text_003 = "za vzorek";
-	$entry_info_text_004 = "Můžete se zaregistrovat ode dneška do";
-	$entry_info_text_005 = "Degustátoři a obsluha se mohou registrovat ode dneška do";
-	$entry_info_text_006 = "Registrace";
-	$entry_info_text_007 = "degustátorů a obsluhy";
-	$entry_info_text_008 = "přijímány do";
-	$entry_info_text_009 = "Registrace je <strong class=\"text-danger\">uzavřena</strong>.";
-	$entry_info_text_010 = "Vítejte";
-	$entry_info_text_011 = "Prohlédněte si podrobnosti svého účtu a seznam vzorků.";
-	$entry_info_text_012 = "Prohlédněte si údaje svého účtu níže.";
-	$entry_info_text_013 = "na vzorek po";
-	$entry_info_text_014 = "Do systému budete moci vkládat své vzorky počínaje";
-	$entry_info_text_015 = "Své vzorky můžete vkládat ode dneška do";
-	$entry_info_text_016 = "Registrace vzorků je <strong class=\"text-danger\">uzavřena</strong>.";
-	$entry_info_text_017 = "for unlimited entries.";
-	$entry_info_text_018 = "pro členy AHA";
-	$entry_info_text_019 = "Tato soutěž má omezení počtu na";
-	$entry_info_text_020 = "vzorků.";
-	$entry_info_text_021 = "Každý soutěžící může vložit nejvíce";
-	$entry_info_text_022 = strtolower($label_entry);
-	$entry_info_text_023 = "vzorků";
-	$entry_info_text_024 = "vzorek na podkategorii";
-	$entry_info_text_025 = "vzorků na podkategorii";
-	$entry_info_text_026 = "výjimky jsou uvedeny níže";
-	$entry_info_text_027 = "podkategorii";
-	$entry_info_text_028 = "podkategoriích";
-	$entry_info_text_029 = "vzorek v následujících";
-	$entry_info_text_030 = "vzorků v následující";
-	$entry_info_text_031 = "Po vytvoření účtu a vložení vzorků do systému musíte uhradit poplatek za vzorky. Přijímáme tyto druhy plateb:";
-	$entry_info_text_032 = $label_cash;
-	$entry_info_text_033 = $label_check.", vystavený na";
-	$entry_info_text_034 = "Kreditní/debetní karta a e-check (prostřednictvím PayPalu)";
-	$entry_info_text_035 = "Data degustace ještě nebyla určena. Prosím, navštivte náš web později.";
-	$entry_info_text_036 = "Lahve se vzorky přijímáme na poštovní adrese počínaje";
-	$entry_info_text_037 = "Vzorky zasílejte na následující adresu:";
-	$entry_info_text_038 = "Pečlivě zabalte své vzorky do pevné krabice. Vnitřek krabice vyložte plastovým pytlem na odpad. Oddělte a zabalte každou lahev odpovídajícím balicím materiálem. S množstvím materiálu to nepřehánějte!";
-	$entry_info_text_039 = "Na balík napište: <em>Křehké. Touto stranou vzůhru.</em> Pro balení používejte pouze bublinkovou fólii.";
-	$entry_info_text_040 = "<em>Každý</em> ze štítků na vašich lahvích zabalete do malého pytlíku před jeho upevněním na lahev. Tímto způsobem nám usnadníte určení, který vzorek se rozbil, pokud se něco stane při přepravě.";
-	$entry_info_text_041 = "Vynasnažíme se kontaktovat soutěžící, jejichž lahve se rozbily, kvůli zaslání nových lahví.";
-	$entry_info_text_042 = "Pokud se soutěž koná ve Spojených státech, mějte na paměti, že je <strong>zakázáno</strong> posílat vzorky pomocí United States Postal Service (USPS). <em>Pozn. překl.: Na zásilky zaslané prostřednictvím České pošty se žádný podobný zákaz nevztahuje.</em><br />Soukromé přepravní společnosti vám mohou odmítnout přepravu, pokud se dozví, že zásilka obsahuje sklo nebo alkoholické nápoje. Berte na vědomí, že vzorky zaslané mezinárodně mohou podléhat celnímu řízení. Zásilky mohou být otevřeny a vráceny odesilateli celní správou dle jejího uvážení. Je vaší povinností se řídit příslušnými zákony a nařízeními.";
-	$entry_info_text_043 = "Lahve se vzorky přijímáme v místech příjmu vzorků počínaje";
-	$entry_info_text_044 = "Zobrazit na mapě místo";
-	$entry_info_text_045 = "Klikněte/dotkněte se pro požadované informace o vzorku";
-	$entry_info_text_046 = "Pokud je na názvu stylu odkaz, má zvláštní požadavky na vzorek. Klikněte nebo se dotkněte názvu pro zobrazení požadavků podkategorie.";
-
-}
 
 // -------------------- Footer --------------------
 
@@ -1519,6 +1516,8 @@ $styles_entry_text_PRX4 = "Účastník musí uvést druhy použitých čerstvýc
 $output_text_032 = "Počet vstupů odráží pouze účastníky, kteří ve svém profilu účtu uvedli místo, kde došlo k výpadku. Skutečný počet záznamů může být vyšší nebo nižší.";
 $brewer_text_043 = "Nebo jste, nebo jste někdy byli zaměstnáni v pivovarnickém personálu v kterémkoli pivovaru? To zahrnuje pozice sládků, laboratorní techniky, posádky sklepů, plnění lahví / konzerváren atd. Současní a bývalí zaměstnanci pivovarnictví se nemohou účastnit soutěže Great American Beer Festival Pro-Am.";
 $label_entrant_reg = "Vstupní Registrace";
+$sidebar_text_026 = "jsou v systému k datu";
+$label_paid_entries = "Placené položky";
 
 // ***********************************************************************************
 // END TRANSLATIONS
