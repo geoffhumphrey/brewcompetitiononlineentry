@@ -227,11 +227,8 @@ else $rank = "";
 $fname = $purifier->purify($_POST['brewerFirstName']);
 $lname = $purifier->purify($_POST['brewerLastName']);
 
-$name_check_langs = array("en", "fr", "es", "pt", "it", "de", "nl");
-$last_name_exception_langs = array("nl", "es", "de");
-
 /**
- * Use PHP Name Parser class if using Latin-based languages in the array above
+ * Use PHP Name Parser class if using Latin-based languages in the array in /lib/process.lib.php
  * https://github.com/joshfraser/PHP-Name-Parser
  * Class requires a string with the entire name - concat from form post after purification.
  * Returns an array with the following keys: "salutation", "fname", "initials", "lname", "suffix"

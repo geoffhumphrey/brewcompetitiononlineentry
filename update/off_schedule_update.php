@@ -119,19 +119,6 @@ mysqli_real_escape_string($connection,$updateSQL);
 $result = mysqli_query($connection,$updateSQL);
 
 // Add new specialty IPA and historical styles to styles table if not present
-function check_new_style($style1, $style2, $style3) {
-
-	require(CONFIG.'config.php');
-
-	$query_new_style = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE brewStyleGroup='%s' AND brewStyleNum = '%s' AND  brewStyle='%s'", $prefix."styles", $style1, $style2, $style3);
-	$new_style = mysqli_query($connection,$query_new_style) or die (mysqli_error($connection));
-	$row_new_style = mysqli_fetch_assoc($new_style);
-
-	if ($row_new_style['count'] > 0) return TRUE;
-	else return FALSE;
-
-}
-
 if (!check_new_style("27","A1","Gose")) {
 
 	$updateSQL = sprintf("INSERT INTO `%s` (`brewStyleNum`, `brewStyle`, `brewStyleCategory`, `brewStyleOG`, `brewStyleOGMax`, `brewStyleFG`, `brewStyleFGMax`, `brewStyleABV`, `brewStyleABVMax`, `brewStyleIBU`, `brewStyleIBUMax`, `brewStyleSRM`, `brewStyleSRMMax`, `brewStyleType`, `brewStyleInfo`, `brewStyleLink`, `brewStyleGroup`, `brewStyleActive`, `brewStyleOwn`, `brewStyleVersion`, `brewStyleReqSpec`, `brewStyleStrength`, `brewStyleCarb`, `brewStyleSweet`, `brewStyleTags`, `brewStyleComEx`, `brewStyleEntry`) VALUES ('A1', 'Gose', 'Historical Beer', '1.036', '1.056', '1.006', '1.010', '4.2', '4.8', '5', '12', '3', '4', '1', 'A highly-carbonated, tart and fruity wheat ale with a restrained coriander and salt character and low bitterness. Very refreshing, with bright flavors and high attenuation.', 'http://bjcp.org/stylecenter.php', '27', 'Y', 'bcoe', 'BJCP2015', 0, 0, 0, 0, 'standard-strength, pale-color, top-fermented, centraleurope, historical-style, wheat-beer-family, sour, spice', 'Anderson Valley Gose, Bayerisch Bahnhof Leipziger Gose, Dollnitzer Ritterguts Gose', NULL);",$prefix."styles");
@@ -318,7 +305,6 @@ $output .= "<li>Judging Assignments table updated.</li>";
  * Update archive db tables to accommodate Pro Edition and BA Styles
  * -----------------------------------------------------------------------------------------------------
  */
-
 
 if (!check_update("brewerBreweryName", $prefix."brewer")) {
 	$updateSQL = sprintf("ALTER TABLE `%s`
@@ -571,6 +557,9 @@ require (CLASSES.'htmlpurifier/HTMLPurifier.standalone.php');
 $config_html_purifier = HTMLPurifier_Config::createDefault();
 $purifier = new HTMLPurifier($config_html_purifier);
 
+include (CLASSES.'capitalize_name/parser.php');
+$name_parser = new FullNameParser();
+
 // Standardize the proper names of entrants and locations
 $query_names = sprintf("SELECT * FROM %s",$prefix."brewer");
 $names = mysqli_query($connection,$query_names) or die (mysqli_error($connection));
@@ -581,8 +570,40 @@ if ($totalRows_names > 0) {
 
 	do {
 
-		$first_name = standardize_name($purifier->purify($row_names['brewerFirstName']));
-		$last_name = standardize_name($purifier->purify($row_names['brewerLastName']));
+		$fname = $purifier->purify($row_names['brewerFirstName']);
+		$lname = $purifier->purify($row_names['brewerLastName']);
+
+		/**
+		 * Use PHP Name Parser class if using Latin-based languages in the array in /lib/process.lib.php
+		 * https://github.com/joshfraser/PHP-Name-Parser
+		 * Class requires a string with the entire name - concat from form post after purification.
+		 * Returns an array with the following keys: "salutation", "fname", "initials", "lname", "suffix"
+		 * So, if the user inputs "Dr JOHN B" in the first name field and "MacKay III" the class will 
+		 * parse it out and return the individual parts with proper upper-lower case relationships
+		 * to read "Dr. John B. MacKay III"
+		 */
+
+		if ((isset($_SESSION['prefsLanguageFolder'])) && (in_array($_SESSION['prefsLanguageFolder'], $name_check_langs))) {
+
+		    $name_to_parse = $fname." ".$lname;
+		    $parsed_name = $name_parser->parse_name($name_to_parse);
+		    
+		    $first_name = "";
+		    if (!empty($parsed_name['salutation'])) $first_name .= $parsed_name['salutation']." ";
+		    $first_name .= $parsed_name['fname'];
+		    if (!empty($parsed_name['initials'])) $first_name .= " ".$parsed_name['initials'];
+		    
+		    $last_name = "";
+		    if ((isset($_SESSION['prefsLanguageFolder'])) && (in_array($_SESSION['prefsLanguageFolder'], $last_name_exception_langs))) $last_name .= standardize_name($parsed_name['lname']);
+		    else $last_name .= $parsed_name['lname']; 
+		    if (!empty($parsed_name['suffix'])) $last_name .= " ".$parsed_name['suffix'];
+		}
+
+		else {
+		    $first_name = $fname;
+		    $last_name = $lname;
+		}
+
 		$address = standardize_name($purifier->purify($row_names['brewerAddress']));
 		$city = standardize_name($purifier->purify($row_names['brewerCity']));
 		$state = $purifier->purify($row_names['brewerState']);
@@ -646,7 +667,30 @@ if ($totalRows_entry_names > 0) {
 		if (isset($row_entry_names['brewComments'])) $brewComments = $purifier->purify($row_entry_names['brewComments']);
 		else $brewComments = "";
 
-		if (isset($row_entry_names['brewCoBrewer'])) $brewCoBrewer = standardize_name($purifier->purify($row_entry_names['brewCoBrewer']));
+		if (isset($row_entry_names['brewCoBrewer'])) {
+
+			$brewCoBrewer = $purifier->purify($row_entry_names['brewCoBrewer']);
+			
+			if ((isset($_SESSION['prefsLanguageFolder'])) && (in_array($_SESSION['prefsLanguageFolder'], $name_check_langs))) {
+		    	
+		    	$parsed_name = $name_parser->parse_name($brewCoBrewer);
+
+		    	$first_name = "";
+			    if (!empty($parsed_name['salutation'])) $first_name .= $parsed_name['salutation']." ";
+			    $first_name .= $parsed_name['fname'];
+			    if (!empty($parsed_name['initials'])) $first_name .= " ".$parsed_name['initials'];
+			    
+			    $last_name = "";
+			    if ((isset($_SESSION['prefsLanguageFolder'])) && (in_array($_SESSION['prefsLanguageFolder'], $last_name_exception_langs))) $last_name .= standardize_name($parsed_name['lname']);
+			    else $last_name .= $parsed_name['lname']; 
+			    if (!empty($parsed_name['suffix'])) $last_name .= " ".$parsed_name['suffix']; 
+
+			    $brewCoBrewer = $first_name." ".$last_name;
+
+			}
+
+		}
+		
 		else $brewCoBrewer = "";
 
 		if (isset($row_entry_names['brewInfo'])) $brewInfo = $purifier->purify($row_entry_names['brewInfo']);
@@ -1383,6 +1427,21 @@ mysqli_real_escape_string($connection,$updateSQL);
 if (!$aabc_styles_present) $result = mysqli_query($connection,$updateSQL);
 
 $output .= "<li>Added Australian Amateur Brewing Championship (AABC) styles.</li>";
+
+/**
+ * ----------------------------------------------------------------------------------------------------
+ * Make sure all judging numbers are converted to lower case.
+ * Report from GitHub: https://github.com/geoffhumphrey/brewcompetitiononlineentry/issues/1145
+ * Makes sure all judging numbers that employ alpha characters can be matched up with 
+ * corresponding uploaded scoresheets.
+ * ----------------------------------------------------------------------------------------------------
+ */
+
+$updateSQL = sprintf("UPDATE %s SET brewJudgingNumber = LOWER(brewJudgingNumber)", $prefix."brewing");
+mysqli_real_escape_string($connection,$updateSQL);
+$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+
+$output .= "<li>Converted all alpha-numeric judging numbers to lower case.</li>";
 
 /**
  * ----------------------------------------------------------------------------------------------------

@@ -17,6 +17,9 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 	$config_html_purifier = HTMLPurifier_Config::createDefault();
 	$purifier = new HTMLPurifier($config_html_purifier);
 
+	include (CLASSES.'capitalize_name/parser.php');
+	$name_parser = new FullNameParser();
+
 	$query_user = sprintf("SELECT userLevel FROM $users_db_table WHERE user_name = '%s'", $_SESSION['loginUsername']);
 	$user = mysqli_query($connection,$query_user) or die (mysqli_error($connection));
 	$row_user = mysqli_fetch_assoc($user);
@@ -66,7 +69,29 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 		if (isset($_POST['brewComments'])) $brewComments .= $purifier->purify($_POST['brewComments']);
 
 		// Co Brewer
-		if (isset($_POST['brewCoBrewer'])) $brewCoBrewer .= standardize_name($purifier->purify($_POST['brewCoBrewer']));
+		if (isset($_POST['brewCoBrewer']))  {
+
+			$brewCoBrewer .= $purifier->purify($_POST['brewCoBrewer']);
+			
+			if ((isset($_SESSION['prefsLanguageFolder'])) && (in_array($_SESSION['prefsLanguageFolder'], $name_check_langs))) {
+		    	
+		    	$parsed_name = $name_parser->parse_name($brewCoBrewer);
+
+		    	$first_name = "";
+			    if (!empty($parsed_name['salutation'])) $first_name .= $parsed_name['salutation']." ";
+			    $first_name .= $parsed_name['fname'];
+			    if (!empty($parsed_name['initials'])) $first_name .= " ".$parsed_name['initials'];
+			    
+			    $last_name = "";
+			    if ((isset($_SESSION['prefsLanguageFolder'])) && (in_array($_SESSION['prefsLanguageFolder'], $last_name_exception_langs))) $last_name .= standardize_name($parsed_name['lname']);
+			    else $last_name .= $parsed_name['lname']; 
+			    if (!empty($parsed_name['suffix'])) $last_name .= " ".$parsed_name['suffix']; 
+
+			    $brewCoBrewer .= $first_name." ".$last_name;
+
+			}
+
+		}
 
 		// Possible Allergens
 		if (isset($_POST['brewPossAllergens'])) $brewPossAllergens .= $purifier->purify($_POST['brewPossAllergens']);
@@ -169,7 +194,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 		*/
 
 		// The following are only enabled when preferences dictate that the recipe fields be shown.
-		// DEPRECATE for version 2.2.0
+		// DEPRECATE for version 3.0.0
 		if ($_SESSION['prefsHideRecipe'] == "N") {
 
 			$brewExtract = "";
@@ -507,7 +532,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 
 			$insertSQL .= GetSQLValueString($brewBrewerFirstName,"text").", ";
 			$insertSQL .= GetSQLValueString($brewBrewerLastName,"text").", ";
-			$insertSQL .= GetSQLValueString(ucwords($brewCoBrewer),"text").", ";
+			$insertSQL .= GetSQLValueString($brewCoBrewer,"text").", ";
 
 			$insertSQL .= GetSQLValueString(strtolower($brewJudgingNumber),"text").", ";
 			$insertSQL .= "NOW( ), ";
@@ -713,6 +738,8 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 		$row_style_name = mysqli_fetch_assoc($style_name);
 		$check = $row_style_name['brewStyleOwn'];
 
+		$brewJudgingNumber = strtolower($_POST['brewJudgingNumber']);
+
 		$updateSQL = "UPDATE $brewing_db_table SET ";
 			if ($_SESSION['prefsHideRecipe'] == "N") {
 
@@ -782,9 +809,9 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 			$updateSQL .= "brewBrewerID=".GetSQLValueString($brewBrewerID,"text").", ";
 			$updateSQL .= "brewBrewerFirstName=". GetSQLValueString($brewBrewerFirstName,"text").", ";
 			$updateSQL .= "brewBrewerLastName=".GetSQLValueString($brewBrewerLastName,"text").", ";
-			$updateSQL .= "brewCoBrewer=".GetSQLValueString(ucwords($brewCoBrewer),"text").", ";
+			$updateSQL .= "brewCoBrewer=".GetSQLValueString($brewCoBrewer,"text").", ";
 			$updateSQL .= "brewUpdated="."NOW( ), ";
-			$updateSQL .= "brewJudgingNumber=".GetSQLValueString(filter_var($_POST['brewJudgingNumber'],FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION),"text").", ";
+			$updateSQL .= "brewJudgingNumber=".GetSQLValueString(filter_var($brewJudgingNumber,FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION),"text").", ";
 			$updateSQL .= "brewPaid=".GetSQLValueString($brewPaid,"text").", ";
 			$updateSQL .= "brewConfirmed=".GetSQLValueString(filter_var($_POST['brewConfirmed'],FILTER_SANITIZE_STRING),"text").", ";
 			$updateSQL .= "brewInfoOptional=".GetSQLValueString($brewInfoOptional,"text").", ";
