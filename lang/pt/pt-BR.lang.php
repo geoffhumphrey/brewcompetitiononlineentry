@@ -1436,13 +1436,101 @@ $best_brewer_text_014 = "clubes participantes";
 
 // Version 2.1.12
 $dropoff_qualifier_text_001 = "Por favor, preste atenção nas notas fornecidas para cada local de entrega, pois podem haver especificidades, tais como, diferentes prazos, horários e pessoas específicas para deixar as amostras. <strong class=\"text-danger\">Os participantes são responsáveis por ler as informações fornecidas pelos organizadores para cada local de entrega.</strong>";
-$brewer_text_036 = "Since you have chosen \"<em>Other</em>,\" please make sure the club you have entered is not on our list in some similar form.";
-$brewer_text_037 = "For example, you may have entered the acronnym of your club instead of the full name.";
-$brewer_text_038 = "Consistent club names across users is essential if for \"Best Club\" calculations if implemented for this competition.";
-$brewer_text_039 = "The club you entered previously does not match one on our list.";
-$brewer_text_040 = "Please choose from the list or choose <em>Other</em> and enter your club name.";
 
+/** 
+ ***********************************************
+ The following were translated from English to 
+ Brazilian Portuguese using Google Translate
+ ***********************************************
+ */
 
+$brewer_text_036 = "Como você escolheu <em> Outros</em>, verifique se o clube que você ingressou não está na nossa lista de forma semelhante.";
+$brewer_text_037 = "Por exemplo, você pode ter entrado a sigla do seu clube em vez do nome completo.";
+$brewer_text_038 = "Nomes de clubes consistentes entre os usuários são essenciais para os cálculos do \"Melhor Clube\", se implementados para esta competição.";
+$brewer_text_039 = "O clube que você entrou anteriormente não corresponde a um da nossa lista.";
+$brewer_text_040 = "Por favor, escolha da lista ou escolha <em> Outro </em> e digite o nome do seu clube.";
+
+// ----------------------------------------------------------------------------------
+// Version 2.1.13 Additions
+// ----------------------------------------------------------------------------------
+
+$entry_info_text_048 = "Para garantir um julgamento adequado, o participante deve fornecer informações adicionais sobre a bebida.";
+$entry_info_text_049 = "Para garantir um julgamento adequado, o participante deve fornecer o nível de força da bebida.";
+$entry_info_text_050 = "Para garantir um julgamento adequado, o participante deve fornecer o nível de carbonatação da bebida.";
+$entry_info_text_051 = "Para garantir um julgamento adequado, o participante deve fornecer o nível de doçura da bebida.";
+$entry_info_text_052 = "Ao entrar nesta categoria, o participante deve fornecer mais informações para que a entrada seja julgada com precisão. Quanto mais informação, melhor.";
+
+$output_text_028 = "As seguintes entradas têm possíveis alérgenos - como entrada pelos participantes.";
+$output_text_029 = "Nenhum participante forneceu informações sobre alérgenos para suas inscrições.";
+
+$label_this_style = "Esse Estilo";
+$label_notes = "Notas";
+$label_possible_allergens = "Possíveis Alérgenos";
+$label_please_choose = "Por favor Escolha";
+$label_mead_cider_info = "Mead/Cider Info";
+
+// ----------------------------------------------------------------------------------
+// Version 2.1.14 Additions
+// ----------------------------------------------------------------------------------
+
+// Labels
+$label_winners = "Vencedores";
+$label_unconfirmed_entries = "Entradas não Confirmadas";
+$label_recipe = "Receita";
+$label_view = "Visão";
+$label_number_bottles = "Número de Garrafas Necessárias por Entrada";
+$label_pro_am = "Pro-Am";
+
+// Pay screen
+$pay_text_034 = "O limite de entradas pagas foi atingido - pagamentos adicionais não estão sendo aceitos.";
+
+// Bottle Labels
+$bottle_labels_000 = "Os rótulos não podem ser gerados no momento.";
+$bottle_labels_001 = "Coloque a etiqueta SOMENTE com um elástico.";
+$bottle_labels_002 = "Use fita adesiva transparente para prender ao barril de cada garrafa.";
+$bottle_labels_003 = "Cubra a etiqueta completamente!";
+if (isset($_SESSION['jPrefsBottleNum'])) $bottle_labels_004 = "Observação: são fornecidas 4 etiquetas como cortesia. Esta competição requer ".$_SESSION['jPrefsBottleNum']." garrafas por inscrição. Descarte qualquer etiqueta extra.";
+else $bottle_labels_004 = "Observação: são fornecidas 4 etiquetas como cortesia. Descarte qualquer etiqueta extra.";
+$bottle_labels_005 = "Se algum item estiver faltando, feche esta janela e edite a entrada.";
+$bottle_labels_006 = "Espaço reservado para uso do pessoal da competição.";
+$bottle_labels_007 = "ESTE FORMULÁRIO DE RECEITA É APENAS PARA SEUS REGISTROS - NÃO inclua uma cópia dele na remessa de entrada.";
+
+// Add/Edit Entry
+$brew_text_040 = "Não há necessidade de especificar o glúten como alérgeno para qualquer estilo de cerveja; supõe-se que estará presente. As cervejas sem glúten devem ser inseridas na categoria Cerveja sem glúten (BA) ou na categoria Cerveja alternativa de grãos (BJCP). Apenas especifique o glúten como alérgeno nos estilos de hidromel ou sidra se uma fonte fermentável contiver glúten (por exemplo, malte de cevada, trigo ou centeio) ou se o fermento de cerveja foi usado.";
+
+// Pro-Am
+$brewer_text_041 = "Você já recebeu a oportunidade Pro-Am de competir na próxima competição Pro-Am do Great American Beer Festival?";
+$brewer_text_042 = "Se você já recebeu um Pro-Am ou já fez parte da equipe de cervejarias de qualquer cervejaria, indique-o aqui. Isso ajudará a equipe da competição e os representantes da cervejaria Pro-Am (se aplicável a esta competição) a escolher as entradas Pro-Am de cervejeiros que não possuem uma.";
+
+// ----------------------------------------------------------------------------------
+// Version 2.1.15 Additions
+// ----------------------------------------------------------------------------------
+
+$label_submitting = "Enviando";
+$label_additional_info = "Entradas com informações adicionais";
+$label_working = "Trabalhando";
+
+$output_text_030 = "Por favor espere.";
+
+$brewer_entries_text_021 = "Verifique as entradas para imprimir suas etiquetas de garrafa. Marque a caixa de seleção superior para marcar ou desmarcar todas as caixas na coluna.";
+$brewer_entries_text_022 = "Imprimir Todas as Etiquetas de Garrafas para Entradas Verificadas";
+$brewer_entries_text_023 = "Os rótulos dos frascos serão abertos em uma nova guia ou janela.";
+$brewer_entries_text_024 = "Imprimir Etiquetas de Garrafa";
+
+// ----------------------------------------------------------------------------------
+// Version 2.1.18 Additions
+// ----------------------------------------------------------------------------------
+
+$output_text_031 = "Pressione Esc para ocultar.";
+$styles_entry_text_21X = "O participante DEVE especificar uma força (sessão: 3,0-5,0%, padrão: 5,0-7,5%, duplo: 7,5-9,5%).";
+$styles_entry_text_PRX4 = "O participante deve especificar os tipos de frutas frescas usadas.";
+
+// ----------------------------------------------------------------------------------
+// Version 2.1.19 Additions
+// ----------------------------------------------------------------------------------
+$output_text_032 = "A contagem de entradas reflete apenas os participantes que indicaram um local de entrega em seu perfil de conta. O número real de entradas pode ser maior ou menor.";
+$brewer_text_043 = "Ou você está ou já trabalhou na equipe de cervejaria de qualquer cervejaria? Isso inclui posições de cervejeiro, bem como técnicos de laboratório, equipe de adega, equipe de engarrafamento / conservas, etc. Os funcionários atuais e antigos da equipe de cervejaria não são elegíveis para participar da competição Pro-Am do Great American Beer Festival.";
+$label_entrant_reg = "Registro de Participantes";
 
 // ************************************************ ***********************************
 // END TRANSLATIONS

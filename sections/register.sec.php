@@ -110,6 +110,16 @@ if (($registration_open == 2) && ($judge_window_open == 2) && (!$logged_in) || (
 	echo $page_info1;
 }
 
+elseif (($registration_open == 0) && ($judge_window_open == 0) && (!$logged_in) || (($logged_in) && ($_SESSION['userLevel'] == 2))) {
+
+	// Show registration closed message if
+	// 1) registration window is closed,
+	// 2) the judge/steward registration window is closed,
+	// 3) the user is not logged in OR the user is logged in and their user level is 2 (non-admin)
+	$page_info1 .= sprintf("<p class=\"lead\">%s</p>",$alert_text_033);
+	echo $page_info1;
+}
+
 else { // THIS ELSE ENDS at the end of the script
 
 	include (DB.'judging_locations.db.php');
@@ -162,7 +172,7 @@ if ($section == "admin") {
 
 if (($go != "default") && ($section != "admin")) $page_info1 .= sprintf("<p>%s</p>",$register_text_011);
 if ($view == "quick") $page_info1 .= sprintf("<p>%s</p>",$register_text_012);
-if ((($registration_open < 2) || ($judge_window_open < 2)) && ($go == "default") && ($section != "admin") && ((!$comp_entry_limit) || (!$comp_paid_entry_limit))) {
+/*if ((($registration_open < 2) || ($judge_window_open < 2)) && ($go == "default") && ($section != "admin") && ((!$comp_entry_limit) || (!$comp_paid_entry_limit))) {
 	$page_info1 .= sprintf("<p>%s</p>",$register_text_013);
 	$page_info1 .= "<ul>";
 	if (!NHC) {
@@ -174,7 +184,7 @@ if ((($registration_open < 2) || ($judge_window_open < 2)) && ($go == "default")
 		$page_info1 .= sprintf("<li>%s</li>",$register_text_017);
 	}
 	$page_info1 .= "</ul>";
-}
+}*/
 
 if (isset($_SERVER['HTTP_REFERER'])) $relocate = $_SERVER['HTTP_REFERER'];
 else $relocate = $base_url."index.php?section=list";
@@ -257,17 +267,21 @@ echo $header1_1;
 echo $page_info1;
 if ($go == "default") {  ?>
 <!-- DEFAULT screen to choose role - Will be deprecated in 2.1.9 -->
-<p><strong><?php echo $label_register_judge; ?></strong></p>
+<p class="lead"><?php echo $register_text_014; ?></p>
 <div class="row">
+	<?php if ($registration_open == 1) { ?>
     <div class="col col-sm-4">
-        <a class="btn btn-primary btn-block" href="<?php echo build_public_url("register","entrant","default","default",$sef,$base_url); ?>">Entrant</a>
+        <a class="btn btn-primary btn-block" href="<?php echo build_public_url("register","entrant","default","default",$sef,$base_url); ?>"><?php echo $label_entrant_reg; ?></a>
+    </div>
+	<?php } ?>
+	<?php if ($judge_window_open == 1) {?>
+    <div class="col col-sm-4">
+        <a class="btn btn-warning btn-block" href="<?php echo build_public_url("register","judge","default","default",$sef,$base_url); ?>"><?php echo $label_judge_reg; ?></a>
     </div>
     <div class="col col-sm-4">
-        <a class="btn btn-warning btn-block" href="<?php echo build_public_url("register","judge","default","default",$sef,$base_url); ?>">Judge</a>
+        <a class="btn btn-info btn-block" href="<?php echo build_public_url("register","steward","default","default",$sef,$base_url); ?>"><?php echo $label_steward_reg; ?></a>
     </div>
-    <div class="col col-sm-4">
-        <a class="btn btn-info btn-block" href="<?php echo build_public_url("register","steward","default","default",$sef,$base_url); ?>">Steward</a>
-    </div>
+    <?php } ?>
 </div>
 <input type="hidden" name="relocate" value="<?php echo relocate($relocate,"default",$msg,$id); ?>">
 </form>

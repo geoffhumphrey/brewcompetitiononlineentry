@@ -214,7 +214,7 @@ switch($section) {
 	break;
 
 	case "judge":
-		$header_output = "Judge Info";
+		$header_output = $label_judge_info;
 		if     ($msg == "1") $output = sprintf("<strong>%s</strong>",$header_text_005);
 		elseif ($msg == "2") $output = sprintf("<strong>%s</strong>",$header_text_006);
 		elseif ($msg == "3") $output = sprintf("<strong>%s</strong> %s",$header_text_007,$header_text_008);
@@ -222,7 +222,7 @@ switch($section) {
 	break;
 
 	case "list":
-		$header_output = "My Account";
+		$header_output = $label_my_account;
 		if     ($msg == "1") $output = sprintf("<strong>%s</strong>",$header_text_005);
 		elseif ($msg == "2") $output = sprintf("<strong>%s</strong>",$header_text_006);
 		elseif ($msg == "3") $output = sprintf("<strong>%s</strong>",$header_text_042);

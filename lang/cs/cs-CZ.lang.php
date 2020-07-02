@@ -1514,9 +1514,11 @@ $styles_entry_text_21X = "Účastník musí zadat sílu (relace: 3,0-5,0%, stand
 $styles_entry_text_PRX4 = "Účastník musí uvést druhy použitých čerstvých plodů.";
 
 // ----------------------------------------------------------------------------------
-// Version 2.1.19 Additions
+// Version 2.1.19 Additions (Via Google Translate English to Czech)
 // ----------------------------------------------------------------------------------
 $output_text_032 = "Počet vstupů odráží pouze účastníky, kteří ve svém profilu účtu uvedli místo, kde došlo k výpadku. Skutečný počet záznamů může být vyšší nebo nižší.";
+$brewer_text_043 = "Nebo jste, nebo jste někdy byli zaměstnáni v pivovarnickém personálu v kterémkoli pivovaru? To zahrnuje pozice sládků, laboratorní techniky, posádky sklepů, plnění lahví / konzerváren atd. Současní a bývalí zaměstnanci pivovarnictví se nemohou účastnit soutěže Great American Beer Festival Pro-Am.";
+$label_entrant_reg = "Vstupní Registrace";
 
 // ***********************************************************************************
 // END TRANSLATIONS

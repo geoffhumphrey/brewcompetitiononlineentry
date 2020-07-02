@@ -1517,6 +1517,7 @@ $styles_entry_text_PRX4 = "Entrant must specify the types of fresh fruit(s) used
 // ----------------------------------------------------------------------------------
 $output_text_032 = "Entry count only reflects entrants who indicated a drop-off location in their account profile. The actual number of entries may be higher or lower.";
 $brewer_text_043 = "Or, are you, or have you ever been, employed on the brewing staff at any brewery? This includes brewer positions as well as lab technicians, cellar crew, bottling/canning crew, etc. Current and former brewing staff employees are not eligible to participate in the Great American Beer Festival Pro-Am competition.";
+$label_entrant_reg = "Entrant Registration";
 
 /**
  * ----------------------------------------------------------------------------------
