@@ -150,6 +150,7 @@ $security_question = array($label_secret_01, $label_secret_05, $label_secret_06,
     <?php if (($section == "admin") && (($logged_in) && ($_SESSION['userLevel'] <= 1))) { ?>
     <!-- Admin Pages (Fluid Layout) -->
     <div class="container-fluid">
+        
         <?php if ($go == "default") { ?>
         <!-- Admin Dashboard - Has sidebar -->
         <div class="row">

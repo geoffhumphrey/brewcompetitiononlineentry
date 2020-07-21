@@ -14,18 +14,48 @@ $style_mead_cider_count_logged[] = 0;
 $style_cider_count_logged[] = 0;
 $style_other_count_logged[] = 0;
 
+include (DB.'styles.db.php');
+
+do {
+	$accepted_categories[] = $row_styles['brewStyleGroup'];
+} while ($row_styles = mysqli_fetch_assoc($styles));
+
+sort($accepted_categories);
+$total_cat = array_unique($accepted_categories);
+// echo "<br>";
+// print_r($total_cat);
+
 if ($_SESSION['prefsStyleSet'] == "BA") {
 
 	include (INCLUDES.'ba_constants.inc.php');
 
 	//print_r($ba_all_categories);
 
+	foreach ($style_sets as $style_set_data) {
+		if ($style_set_data['style_set_name'] === "BA") {
+			$style_set_cat = $style_set_data['style_set_categories'];
+			// print_r($style_set_cat);
+			
+			foreach ($style_set_cat as $key => $value) {
+				include (DB.'entries_by_style.db.php');
+				if ($row_style_count_logged['count'] > 0) $html .= "<tr class=\"success text-success\">";
+				else $html .= "<tr>";
+				$html .= "<td>".$value."</td>";
+				$html .= "<td>".$row_style_count_logged['count']."</td>";
+				$html .= "<td>".$row_style_count['count']."</td>";
+				$html .= "<td class=\"hidden-xs hidden-sm\">".$style_type."</td>";
+				$html .= "</tr>";
+			}
+			
+		}
+	}
+
+	/*
 	foreach ($ba_all_categories as $cat) {
 
 		include (DB.'entries_by_style.db.php');
 
-		if ($action == "print") $html .= "<tr>";
-		else $html .= "<tr>";
+		$html .= "<tr>";
 		$html .= "<td>".$ba_category_names[$cat]."</td>";
 		$html .= "<td>".$row_style_count_logged['count']."</td>";
 		$html .= "<td>".$row_style_count['count']."</td>";
@@ -33,57 +63,47 @@ if ($_SESSION['prefsStyleSet'] == "BA") {
 		$html .= "</tr>";
 
 	}
+	*/
 
 }
 
-if ($_SESSION['prefsStyleSet'] == "BJCP2008") {
-	$beer_end = 23;
-	$mead_array = array('24','25','26');
-	$cider_array = array('27','28');
-	$category_end = 28;
+else {
+	foreach ($style_sets as $style_set_data) {
+		if ($style_set_data['style_set_name'] === $_SESSION['prefsStyleSet']) {
+			$style_set_cat = $style_set_data['style_set_categories'];
+			// print_r($style_set_cat);
+			
+			foreach ($style_set_cat as $key => $value) {
+				include (DB.'entries_by_style.db.php');
+				if ($row_style_count_logged['count'] > 0) $html .= "<tr class=\"success text-success\">";
+				else $html .= "<tr>";
+				$html .= "<td>".$value."</td>";
+				$html .= "<td>".$row_style_count_logged['count']."</td>";
+				$html .= "<td>".$row_style_count['count']."</td>";
+				$html .= "<td class=\"hidden-xs hidden-sm\">".$style_type."</td>";
+				$html .= "</tr>";
+			}
+			
+		}
+	}
 }
 
-if ($_SESSION['prefsStyleSet'] == "BJCP2015") {
-	$beer_end = 34;
-	$mead_array = array('M1','M2','M3','M4');
-	$cider_array = array('C1','C2');
-	$category_end = 34;
-}
+foreach ($total_cat as $key) {
 
-if ($_SESSION['prefsStyleSet'] == "AABC") {
-	$beer_end = 18;
-	$mead_array = array('19');
-	$cider_array = array('20');
-	$category_end = 20;
-}
-
-include (DB.'styles.db.php');
-
-do {
-	$accepted_categories[] = $row_styles['brewStyleGroup'];
-} while ($row_styles = mysqli_fetch_assoc($styles));
-
-$total_cat = array_unique($accepted_categories);
-//print_r($total_cat);
-
-foreach ($total_cat as $cat) {
-
-	include (DB.'entries_by_style.db.php');
-
-	if (!empty($cat_name)) {
-
+	if ($key >= 35) {
+		include (DB.'entries_by_style.db.php');
 		if ($row_style_count_logged['count'] > 0) $html .= "<tr class=\"success text-success\">";
 		else $html .= "<tr>";
 		$html .= "<td>";
-		if ($_SESSION['prefsStyleSet'] == "BA") $html .= $cat_name;
-		else $html .= $cat_convert." - ".$cat_name;
+		$html .= $cat_name;
 		$html .= "</td>";
 		$html .= "<td>".$row_style_count_logged['count']."</td>";
 		$html .= "<td>".$row_style_count['count']."</td>";
 		$html .= "<td class=\"hidden-xs hidden-sm\">".$style_type."</td>";
 		$html .= "</tr>";
-
 	}
+
+	
 
 	// ------ DEBUG ------
 

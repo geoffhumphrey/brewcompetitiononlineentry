@@ -2,7 +2,7 @@
 /**
  * Module:      en-US.lang.php
  * Description: This module houses all display text in the English language.
- * Updated:     September 21, 2018
+ * Updated:     July 10, 2020
  */
 
 /*

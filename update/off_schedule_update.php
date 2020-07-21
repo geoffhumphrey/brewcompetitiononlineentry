@@ -837,7 +837,6 @@ $row_ba_present = mysqli_fetch_assoc($ba_present);
 
 if ($row_ba_present['count'] > 0) $ba_styles_present = TRUE;
 
-// Energy Enhanced Malt Beverage
 $styles_db_table = $prefix."styles";
 
 $updateSQL = "
@@ -1427,6 +1426,210 @@ mysqli_real_escape_string($connection,$updateSQL);
 if (!$aabc_styles_present) $result = mysqli_query($connection,$updateSQL);
 
 $output .= "<li>Added Australian Amateur Brewing Championship (AABC) styles.</li>";
+
+
+/**
+ * ----------------------------------------------------------------------------------------------------
+ * Update BA Styles for 2019 and 2020
+ * ----------------------------------------------------------------------------------------------------
+ */
+
+$updateSQL = "
+INSERT INTO `$styles_db_table` (`brewStyleNum`, `brewStyle`, `brewStyleCategory`, `brewStyleOG`, `brewStyleOGMax`, `brewStyleFG`, `brewStyleFGMax`, `brewStyleABV`, `brewStyleABVMax`, `brewStyleIBU`, `brewStyleIBUMax`, `brewStyleSRM`, `brewStyleSRMMax`, `brewStyleType`, `brewStyleInfo`, `brewStyleLink`, `brewStyleGroup`, `brewStyleActive`, `brewStyleOwn`, `brewStyleVersion`, `brewStyleReqSpec`, `brewStyleStrength`, `brewStyleCarb`, `brewStyleSweet`, `brewStyleTags`, `brewStyleComEx`, `brewStyleEntry`) VALUES
+(NULL, 'Experimental India Pale Ale', 'Hybrid/Mixed Lagers or Ales', '1.06', '1.1', '0.994', '1.02', '6.3', '10.6', '30', '100', '4', '40', '1', 'Beers in this category recognize the cutting edge of American IPA brewing. Experimental India Pale Ales are either 1) any of White, Red, Brown, Brut or many other IPA or Imperial IPA types or combinations thereof currently in production, and fruited or spiced versions of these, or 2) fruited or spiced versions of classic American, Juicy Hazy, and Imperial IPA categories. They range widely in color, hop and malt intensity and attributes, hop bitterness, balance, alcohol content, body and overall flavor experience. ', 'https://www.brewersassociation.org/edu/brewers-association-beer-style-guidelines/', '11', 'N', 'bcoe', 'BA', 1, 0, 0, 0, '', '', NULL),
+(NULL, 'Juicy or Hazy Strong Pale Ale', 'North American Orgin Ales', '1.05', '1.065', '1.008', '1.016', '5.6', '7', '40', '50', '4', '9', '1', 'Grist may include oats, wheat or other adjuncts to promote haziness. The term \"juicy\" is frequently used to describe taste and aroma attributes often present in these beers which result from late, often very large, additions of hops. A juicy character is not required, however. Other hopderived attributes such as citrus, pine, spice, floral or others may be present with or without the presence of juicy attributes.', 'https://www.brewersassociation.org/edu/brewers-association-beer-style-guidelines/', '03', 'N', 'bcoe', 'BA', 0, 0, 0, 0, '', '', NULL),
+(NULL, 'Contemporary Belgian-Style Gueuze Lambic', 'Belgian And French Origin Ales', '1.044', '1.056', '1', '1.01', '5', '8.9', '11', '23', '6', '40', '', 'Gueuze Lambics, whose origin is the Brussels area of Belgium, are often simply called Gueuze Lambic. Versions of this beer style made outside of the Brussels area are said to be \"BelgianStyle Gueuze Lambics.\" The Belgian-style versions are made to resemble many of the beers of true origin. While Traditional Gueuze Lambics are dry, Contemporary Gueuze Lambics may have a degree of sweetness contributed by sugars or other sweeteners. Traditionally, Gueuze is brewed with unmalted wheat, malted barley, and stale, aged hops. Whereas Contemporary Gueuze Lambics may incorporate specialty malts that influence the hue, flavor and aroma of the finished beer.', 'https://www.brewersassociation.org/edu/brewers-association-beer-style-guidelines/', '05', 'N', 'bcoe', 'BA', 0, 0, 0, 0, '', '', NULL),
+(NULL, 'Franconian-Style Rotbier', 'European Origin Lagers', '1.046', '1.056', '1.008', '1.01', '4.8', '5.6', '20', '28', '13', '23', '1', '', 'https://www.brewersassociation.org/edu/brewers-association-beer-style-guidelines/', '07', 'N', 'bcoe', 'BA', 0, 0, 0, 0, '', '', NULL),
+(NULL, 'American-Style India Pale Lager', 'North American Origin Lagers', '1.05', '1.065', '1.008', '1.016', '5.6', '7', '30', '70', '3', '6', '1', 'This style of beer should exhibit the fresh character of hops.', 'https://www.brewersassociation.org/edu/brewers-association-beer-style-guidelines/', '08', 'N', 'bcoe', 'BA', 0, 0, 0, 0, '', '', NULL),
+(NULL, 'Contemporary American-Style Lager', 'North American Origin Lagers', '1.04', '1.048', '1.006', '1.012', '4.1', '5.1', '5', '19', '2', '4', '1', 'Corn, rice, or other grain or sugar adjuncts are often used, but all-malt formulations are also made. Contemporary American Lagers typically exhibit increased hop aroma and flavor compared to traditional versions, are clean and crisp, and aggressively carbonated.', 'https://www.brewersassociation.org/edu/brewers-association-beer-style-guidelines/', '08', 'N', 'bcoe', 'BA', 0, 0, 0, 0, '', '', NULL),
+(NULL, 'Contemporary American-Style Light Lager', 'North American Origin Lagers', '1.024', '1.04', '0.992', '1.008', '3.5', '4.4', '4', '15', '1.5', '12', '', 'Corn, rice or other grain or sugar adjuncts may be used but all-malt formulations are also made. These beers are high in carbonation. Hop attributes, though subtle, are more evident than in traditional American-Style Light Lager. Calories should not exceed 125 per 12-ounce serving. Low carb beers should have a maximum carbohydrate level of 3.0 gm per 12 oz. (355 ml).', 'https://www.brewersassociation.org/edu/brewers-association-beer-style-guidelines/', '08', 'N', 'bcoe', 'BA', 0, 0, 0, 0, '', '', NULL);
+";
+mysqli_real_escape_string($connection,$updateSQL);
+
+if (!check_new_style("08","","Contemporary American-Style Lager","ignore_style_num")) {
+	
+	$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+
+	$query_ba_missing = sprintf("SELECT id,brewStyleNum FROM %s WHERE brewStyleNum IS NULL",$prefix."styles");
+	$ba_missing = mysqli_query($connection,$query_ba_missing) or die (mysqli_error($connection));
+	$row_ba_missing = mysqli_fetch_assoc($ba_missing);
+
+	do {
+		// Get last style BA number from DB
+		// BA style numbers are not official - only generated and kept in the DB for ID purposes in this installation
+		$query_ba_last_num = sprintf("SELECT brewStyleNum FROM %s WHERE brewStyleVersion='BA' ORDER BY brewStyleNum DESC LIMIT 1",$prefix."styles");
+		$ba_last_num = mysqli_query($connection,$query_ba_last_num) or die (mysqli_error($connection));
+		$row_ba_last_num = mysqli_fetch_assoc($ba_last_num);
+
+		$ba_num_add_one = $row_ba_last_num['brewStyleNum'] + 1;
+
+		$updateSQL = sprintf("UPDATE %s SET brewStyleNum='%s' WHERE id='%s'",$prefix."styles",$ba_num_add_one,$row_ba_missing['id']);
+		mysqli_real_escape_string($connection,$updateSQL);
+		$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+
+	} while ($row_ba_missing = mysqli_fetch_assoc($ba_missing));
+}
+
+$output .= "<li>Updated Brewers Association (BA) styles.</li>";
+
+/**
+ * ----------------------------------------------------------------------------------------------------
+ * Update all custom style brewStyleGroup columns to 35 or above (if not already)
+ * ----------------------------------------------------------------------------------------------------
+ */
+
+// First, search DB for custom styles with brewStyleGroup column values under 35
+
+$query_cust_st = sprintf("SELECT id,brewStyleGroup FROM %s WHERE brewStyleOwn='custom' AND brewStyleGroup < 35 ORDER BY brewStyleGroup ASC",$prefix."styles");
+$cust_st = mysqli_query($connection,$query_cust_st) or die (mysqli_error($connection));
+$row_cust_st = mysqli_fetch_assoc($cust_st);
+$totalRows_cust_st = mysqli_num_rows($cust_st);
+
+// Then, loop through the results to a) change the number in the styles table to the next available if over 35
+// and b) change any style numbers in the entries table to the new style number
+
+if ($totalRows_cust_st > 0) {
+
+	// Get the last custom style number if it's 35 or over
+	$query_st_num = sprintf("SELECT brewStyleGroup FROM %s WHERE brewStyleOwn='custom' AND brewStyleGroup >= 35 ORDER BY brewStyleGroup DESC LIMIT 1",$prefix."styles");
+	$st_num = mysqli_query($connection,$query_st_num) or die (mysqli_error($connection));
+	$row_st_num = mysqli_fetch_assoc($st_num);
+	$totalRows_st_num = mysqli_num_rows($st_num);
+
+	if ($totalRows_st_num > 0) $new_style_number = $row_st_num['brewStyleGroup'];
+	else $new_style_number = 35;
+
+	do {
+
+		$updateSQL = sprintf("UPDATE %s SET brewStyleGroup='%s' WHERE id='%s'",$prefix."styles",$new_style_number,$row_cust_st['id']);
+		mysqli_real_escape_string($connection,$updateSQL);
+		$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+
+		$new_style_number++;
+
+	} while ($row_cust_st = mysqli_fetch_assoc($cust_st));
+
+}
+	
+/*
+ * ----------------------------------------------------------------------------------------------------
+ * Update all custom style types ids to greater than 15 (if not already)
+ * This reserves 1-15 for system use.
+ * ----------------------------------------------------------------------------------------------------
+ */
+
+$old_style_types = array(
+    "Beer" => "1",
+    "Cider" => "2",
+    "Mead" => "3",
+    "Mead/Cider" => "4"
+);
+
+$new_style_types = array(
+    "Wine" => "5",
+    "Rice Wine" => "6",
+    "Spirits" => "7",
+    "Kombucha" => "8",
+    "Pulque" => "9"
+);
+
+$all_style_types = array_merge($old_style_types,$new_style_types);
+
+// First, gather current state of the style types table into an array to use later
+$query_current_st = sprintf("SELECT * FROM %s ORDER BY id ASC",$prefix."style_types");
+$current_st = mysqli_query($connection,$query_current_st) or die (mysqli_error($connection));
+$row_current_st = mysqli_fetch_assoc($current_st);
+
+// Blow away the current state of the table
+$updateSQL = sprintf("TRUNCATE %s",$prefix."style_types");
+mysqli_real_escape_string($connection,$updateSQL);
+$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+// echo $updateSQL."<br>";
+
+// Rebuild the table with the current base schema 
+$updateSQL = "
+        INSERT INTO `$style_types_db_table` (`id`, `styleTypeName`, `styleTypeOwn`, `styleTypeBOS`, `styleTypeBOSMethod`) VALUES
+        (1, 'Beer', 'bcoe', 'N', 1),
+        (2, 'Cider', 'bcoe', 'N', 1),
+        (3, 'Mead', 'bcoe', 'N', 1),
+        (4, 'Mead/Cider', 'bcoe', 'N', 1);
+        ";
+mysqli_real_escape_string($connection,$updateSQL);
+$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+// echo $updateSQL."<br>";
+
+// Add the new style types by looping through the array
+foreach ($new_style_types as $key => $value) {
+
+    $updateSQL = sprintf("INSERT INTO `%s` (`id`, `styleTypeName`, `styleTypeOwn`, `styleTypeBOS`, `styleTypeBOSMethod`) VALUES (%s, '%s', 'bcoe', 'N', 1);", $prefix."style_types",$value, $key);
+    mysqli_real_escape_string($connection,$updateSQL);
+    $result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+    // echo $updateSQL."<br>";
+
+}
+
+// Start mySQL auto increment at 16
+$updateSQL = sprintf("ALTER TABLE %s AUTO_INCREMENT = 16;", $prefix."style_types");
+mysqli_real_escape_string($connection,$updateSQL);
+$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+// echo $updateSQL."<br>";
+
+// Finally, add the remaining custom styles to the table.
+// If one matches a core style type, update the styles table 
+// with the new relational id.
+// If it does not match, add it to the table, query the table
+// for the new id and update the corresponding relational id 
+// in the styles table.
+
+do {
+
+    // Check against new style types array that was just added
+    // If the key exists, update the styles table with the new id
+    if (array_key_exists($row_current_st['styleTypeName'], $all_style_types)) {
+
+        // Only worry about any style types that were custom in the "old state"
+        if ($row_current_st['id'] > 4) {
+            $updateSQL = sprintf("UPDATE %s SET brewStyleType='%s' WHERE brewStyleType='%s';",$prefix."styles",$all_style_types[$row_current_st['styleTypeName']],$row_current_st['id']);
+            mysqli_real_escape_string($connection,$updateSQL);
+            $result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+            // echo $updateSQL."<br>";
+        }
+
+        // Apply current styleTypeBOS and styleTypeBOSMethod values for matching styles
+        $updateSQL = sprintf("UPDATE %s SET styleTypeBOS='%s',styleTypeBOSMethod='%s' WHERE styleTypeName='%s';",$prefix."style_types",$row_current_st['styleTypeBOS'],$row_current_st['styleTypeBOSMethod'],$row_current_st['styleTypeName']);
+        mysqli_real_escape_string($connection,$updateSQL);
+        $result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+        // echo $updateSQL."<br>";
+    }
+
+
+    // If not, add the style type to table
+    // Then, query the table for the new id
+    // Finally, update the styles table with the new relational id
+    else {
+        
+        $updateSQL = sprintf("INSERT INTO `%s` (`styleTypeName`, `styleTypeOwn`, `styleTypeBOS`, `styleTypeBOSMethod`) VALUES ('%s', 'custom', '%s', '%s');", 
+            $prefix."style_types",$row_current_st['styleTypeName'],$row_current_st['styleTypeBOS'],$row_current_st['styleTypeBOSMethod']);
+        mysqli_real_escape_string($connection,$updateSQL);
+        $result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+        // echo $row_current_st['styleTypeName']."<br>";
+        // echo $updateSQL."<br>";
+
+        $query_new_st = sprintf("SELECT id FROM %s ORDER BY id DESC LIMIT 1",$prefix."style_types");
+        $new_st = mysqli_query($connection,$query_new_st) or die (mysqli_error($connection));
+        $row_new_st = mysqli_fetch_assoc($new_st);
+
+        $updateSQL = sprintf("UPDATE %s SET brewStyleType='%s' WHERE brewStyleType='%s';",$prefix."styles",$row_new_st['id'],$row_current_st['id']);
+        mysqli_real_escape_string($connection,$updateSQL);
+        $result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+        // echo $updateSQL."<br>";
+
+    }
+
+} while($row_current_st = mysqli_fetch_assoc($current_st));
+	
+
+$output .= "<li>Add new style types: Wine, Rice Wine, Spirits, Kombucha, and Pulque.</li>";
 
 /**
  * ----------------------------------------------------------------------------------------------------

@@ -79,6 +79,7 @@ if ($setup_success) {
 	require_once (INCLUDES.'db_tables.inc.php');
 	if (($msg == "16") || ($force_update)) include (UPDATE.'off_schedule_update.php');
 	require_once (LIB.'help.lib.php');
+	require_once (INCLUDES.'styles.inc.php'); // Establishing session vars depends upon arrays here
 	require_once (DB.'common.db.php');
 	require_once (DB.'brewer.db.php');
 	require_once (DB.'entries.db.php');

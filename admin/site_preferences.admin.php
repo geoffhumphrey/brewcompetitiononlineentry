@@ -1,4 +1,11 @@
 <?php
+$style_set_dropdown = "";
+
+foreach ($style_sets as $style_set) {
+    $style_set_selected = "";
+    if ((isset($_SESSION['prefsStyleSet'])) && ($style_set['style_set_name'] == $_SESSION['prefsStyleSet'])) $style_set_selected = "SELECTED";
+    $style_set_dropdown .= sprintf("<option value=\"%s\" %s>%s (%s)</option>",$style_set['style_set_name'],$style_set_selected,$style_set['style_set_long_name'],$style_set['style_set_short_name']);
+}
 
 include (DB.'styles.db.php');
 $ba_exceptions = "";
@@ -779,10 +786,13 @@ $(document).ready(function(){
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
         <!-- Input Here -->
     	<select class="selectpicker" name="prefsStyleSet" id="prefsStyleSet" data-size="12" data-width="auto">
+        <?php echo $style_set_dropdown; ?>
+        <!--
         	<option value="BJCP2015" <?php if ($section == "step3") echo "SELECTED"; elseif ($row_limits['prefsStyleSet'] == "BJCP2015") echo "SELECTED"; ?>>BJCP 2015</option>
             <option value="BJCP2008" <?php if ($row_limits['prefsStyleSet'] == "BJCP2008") echo "SELECTED"; ?>>BJCP 2008</option>
             <option value="BA" <?php if ($row_limits['prefsStyleSet'] == "BA") echo "SELECTED"; ?>>Brewers Association</option>
             <option value="AABC" <?php if ($row_limits['prefsStyleSet'] == "AABC") echo "SELECTED"; ?>>Australian Amateur Brewing Championship (AABC)</option>
+        -->
     	</select>
         <div id="helpBlockBJCP2008" class="help-block">The BJCP 2008 style guidelines have been deprecated and will be completely removed in a future version. The 2008 guidelines are considered by the BJCP as &quot;obsolete.&quot;</div>
         <div id="helpBlockBAAPI" class="help-block">Please note that every effort is made to keep the BA style data current; however, the latest <a class="hide-loader" href="https://www.brewersassociation.org/resources/brewers-association-beer-style-guidelines/" target="_blank">BA style set</a> may <strong>not</strong> be available in this application.</div>

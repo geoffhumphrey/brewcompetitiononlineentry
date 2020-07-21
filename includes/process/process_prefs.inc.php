@@ -197,7 +197,49 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 
 			// Update style set of any custom styles to chosen style set
 			// Safeguards against a bug introduced in 2.1.13 scripting
-			$updateSQL = sprintf("UPDATE `%s` SET brewStyleVersion='%s' WHERE brewStyleOwn='custom'",$prefix."styles",$prefsStyleSet);
+			// Also update sub-style idenfication scheming
+
+			foreach ($style_sets as $key) {
+	            
+	            if ($key['style_set_name'] == $prefsStyleSet) {
+	            	
+	            	if ($prefsStyleSet == "BA") {
+	            		
+	            		$query_style_name = sprintf("SELECT id,brewStyleNum FROM %s WHERE brewStyleOwn='custom' ORDER BY id", $prefix."styles");
+						$style_name = mysqli_query($connection,$query_style_name) or die (mysqli_error($connection));
+						$row_style_name = mysqli_fetch_assoc($style_name);
+
+						$query_style_num = sprintf("SELECT brewStyleNum FROM %s WHERE brewStyleVersion='BA' ORDER BY brewStyleNum DESC LIMIT 1", $prefix."styles");
+						$style_num = mysqli_query($connection,$query_style_num) or die (mysqli_error($connection));
+						$row_style_num = mysqli_fetch_assoc($style_num);
+
+						$sub_style_id = $row_style_num['brewStyleNum'] + 1;
+
+						do {
+
+							$updateSQL = sprintf("UPDATE `%s` SET brewStyleNum='%s' WHERE id='%s'",$prefix."styles",str_pad($sub_style_id,3,"0", STR_PAD_LEFT),$row_style_name['id']);
+							mysqli_real_escape_string($connection,$updateSQL);
+							$result = mysqli_query($connection,$updateSQL);
+
+							$sub_style_id++;
+
+						} while ($row_style_name = mysqli_fetch_assoc($style_name));
+
+	            	}
+	            	
+	            	else {
+		            	if ($key['style_set_sub_style_method'] == 0) $sub_style_id = "A";
+		            	else $sub_style_id = "001";
+		            	$updateSQL = sprintf("UPDATE `%s` SET brewStyleVersion='%s',brewStyleNum='%s' WHERE brewStyleOwn='custom'",$prefix."styles",$prefsStyleSet,$sub_style_id);
+						mysqli_real_escape_string($connection,$updateSQL);
+						$result = mysqli_query($connection,$updateSQL);
+		            }
+
+	            } 
+
+	        }
+			
+			$updateSQL = sprintf("UPDATE `%s` SET brewStyleVersion='%s',brewStyleNum='%s' WHERE brewStyleOwn='custom'",$prefix."styles",$prefsStyleSet,$sub_style_id);
 			mysqli_select_db($connection,$database);
 			mysqli_real_escape_string($connection,$updateSQL);
 			$result = mysqli_query($connection,$updateSQL);
@@ -420,10 +462,49 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 
 			// Update style set of any custom styles to chosen style set
 			// Safeguards against a bug introduced in 2.1.13 scripting
-			$updateSQL = sprintf("UPDATE `%s` SET brewStyleVersion='%s' WHERE brewStyleOwn='custom'",$prefix."styles",$prefsStyleSet);
-			mysqli_select_db($connection,$database);
-			mysqli_real_escape_string($connection,$updateSQL);
-			$result = mysqli_query($connection,$updateSQL);
+			// Also update sub-style idenfication scheming
+
+			foreach ($style_sets as $key) {
+	            
+	            if ($key['style_set_name'] == $prefsStyleSet) {
+	            	
+	            	if ($prefsStyleSet == "BA") {
+	            		
+	            		$query_style_name = sprintf("SELECT id,brewStyleNum FROM %s WHERE brewStyleOwn='custom' ORDER BY id", $prefix."styles");
+						$style_name = mysqli_query($connection,$query_style_name) or die (mysqli_error($connection));
+						$row_style_name = mysqli_fetch_assoc($style_name);
+
+						$query_style_num = sprintf("SELECT brewStyleNum FROM %s WHERE brewStyleVersion='BA' ORDER BY brewStyleNum DESC LIMIT 1", $prefix."styles");
+						$style_num = mysqli_query($connection,$query_style_num) or die (mysqli_error($connection));
+						$row_style_num = mysqli_fetch_assoc($style_num);
+
+						$sub_style_id = $row_style_num['brewStyleNum'] + 1;
+
+						do {
+
+							$updateSQL = sprintf("UPDATE `%s` SET brewStyleNum='%s' WHERE id='%s'",$prefix."styles",str_pad($sub_style_id,3,"0", STR_PAD_LEFT),$row_style_name['id']);
+							mysqli_real_escape_string($connection,$updateSQL);
+							$result = mysqli_query($connection,$updateSQL);
+
+							$sub_style_id++;
+
+						} while ($row_style_name = mysqli_fetch_assoc($style_name));
+
+	            	}
+	            	
+	            	else {
+		            	if ($key['style_set_sub_style_method'] == 0) $sub_style_id = "A";
+		            	else $sub_style_id = "001";
+		            	$updateSQL = sprintf("UPDATE `%s` SET brewStyleVersion='%s',brewStyleNum='%s' WHERE brewStyleOwn='custom'",$prefix."styles",$prefsStyleSet,$sub_style_id);
+						mysqli_real_escape_string($connection,$updateSQL);
+						$result = mysqli_query($connection,$updateSQL);
+		            }
+
+	            } 
+
+	        }
+			
+			
 
 			if ($_POST['prefsPaypalIPN'] == 1) {
 

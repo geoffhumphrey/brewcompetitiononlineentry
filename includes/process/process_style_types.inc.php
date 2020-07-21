@@ -12,14 +12,25 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 
 	if ($action == "add") {
 
+		// Determine the greatest id value that is in the style_types table
+		$query_id_last_num = sprintf("SELECT id FROM %s ORDER BY id DESC LIMIT 1",$prefix."style_types");
+		$id_last_num = mysqli_query($connection,$query_id_last_num) or die (mysqli_error($connection));
+		$row_id_last_num = mysqli_fetch_assoc($id_last_num);
+
+		// ids 1-15 are reserved for system use
+		if ($row_id_last_num['id'] < 16) $id = 16;
+		else $id = $row_id_last_num['id'] + 1;
+
 		$insertSQL = sprintf("INSERT INTO $style_types_db_table (
+		id,
 		styleTypeName,
 		styleTypeOwn,
 		styleTypeBOS,
 		styleTypeBOSMethod
 		)
 		VALUES
-		(%s, %s, %s, %s)",
+		(%s, %s, %s, %s, %s)",
+						   GetSQLValueString($id, "int"),
 						   GetSQLValueString(capitalize($purifier->purify($_POST['styleTypeName'])), "text"),
 						   GetSQLValueString(sterilize($_POST['styleTypeOwn']), "text"),
 						   GetSQLValueString(sterilize($_POST['styleTypeBOS']), "text"),

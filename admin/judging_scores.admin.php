@@ -191,19 +191,8 @@ $totalRows_entry_count = total_paid_received($go,"default");
 	if ($row_scores['scoreMiniBOS'] == "1") $mini_bos = "<span class=\"fa fa-lg fa-check text-success\"></span>";
 	else $mini_bos = "&nbsp;";
 
-	$entry_category = "";
-
-	if ($_SESSION['prefsStyleSet'] == "BA") {
-        $entry_category = $table_score_data[13];
-	}
-
-	else {
-        if ($_SESSION['prefsStyleSet'] == "AABC") $style_display_number = ltrim($table_score_data[8],"0").".".ltrim($table_score_data[15],"0");
-        else $style_display_number = $table_score_data[12];
-
-        if ($filter == "default") $entry_category = $style_display_number." ".style_convert($table_score_data[8],1).": ".$table_score_data[13];
-        else $entry_category = $style_display_number.": ".$table_score_data[1];
-	}
+    $style_display_number = style_number_const($table_score_data[8],$table_score_data[15],$_SESSION['style_set_display_separator'],0);
+    $entry_category = $style_display_number." ".style_convert($table_score_data[8],1).": ".$table_score_data[13];
 
     // Check whether scoresheet file exists, and, if so, provide link.
     $scoresheet_file_name_entry = sprintf("%06s",$entry_number).".pdf";
@@ -388,9 +377,8 @@ $(document).ready(function() {
         //echo $score_style_data."<br>";
 		$score_style_data = explode("^",$score_style_data);
 
-		include (DB.'admin_judging_scores.db.php'); // moved to a separate document to not have MySQL queries within loops
-        if ($_SESSION['prefsStyleSet'] == "AABC") $style = ltrim($row_entries['brewCategorySort'],"0").".".ltrim($row_entries['brewSubCategory'],"0");
-		else $style = $row_entries['brewCategorySort'].$row_entries['brewSubCategory'];
+		include (DB.'admin_judging_scores.db.php');
+        $style = style_number_const($row_entries['brewCategorySort'],$row_entries['brewSubCategory'],$_SESSION['style_set_display_separator'],0);
 
 		do {
 

@@ -117,11 +117,11 @@ if (strtolower($data['receiver_email']) == strtolower($paypal_email_address)) {
 	$receiver_email_found = TRUE;
 }
 
-$paypal_ipn_status = "VERIFICATION FAILED";
+$paypal_ipn_status = "Payment Verification Failed";
 
 if ($verified) {
 
-	$paypal_ipn_status = "RECEIVER EMAIL MISMATCH";
+	$paypal_ipn_status = "Receiver Email Mismatch - Check PayPal Payment Email Address in Preferences";
 
 	if ($receiver_email_found) {
 
@@ -206,11 +206,11 @@ if ($verified) {
 }
 
 elseif ($enable_sandbox) {
-    if ($_POST['test_ipn'] != 1) $paypal_ipn_status = "RECEIVED FROM LIVE WHILE SANDBOXED";
+    if ($_POST['test_ipn'] != 1) $paypal_ipn_status = "Received from Live While Sandboxed";
 }
 
 elseif ($_POST['test_ipn'] == 1) {
-    $paypal_ipn_status = "RECEIVED FROM SANDBOX WHILE LIVE";
+    $paypal_ipn_status = "Received from Sandbox While Live";
 }
 
 if ($save_log_file) {

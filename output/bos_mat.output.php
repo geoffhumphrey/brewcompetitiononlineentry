@@ -58,26 +58,35 @@ foreach ($a as $type) {
 
 				if (($endRow == 0) && ($hloopRow1++ != 0)) $output .= "<tr>";
 				$output .= '<td>';
-				$output .= '<h3>';
+				$output .= '<div style="position:relative;width:100%;height:100%;">';
 				if ($_SESSION['prefsStyleSet'] == "BA") {
+					$output .= '<h3 style="padding:0; margin: 0;">';
 					$output .= $row_scores['brewStyle'];
-					$output .= '<br><em><small>'.$ba_category_names[$row_scores['brewCategory']].'</small></em>';
+					$output .= '</h3>';
+					$output .= '<h4>';
+					$output .= '<em>'.style_convert($row_scores['brewCategorySort'],1).'</em>';
+					$output .= '</h4>';
 				}
 				else {
+					$output .= '<h3 style="padding:0; margin: 0;">';
 					$output .= ltrim($row_scores['brewCategory'],"0").': '.style_convert($row_scores['brewCategorySort'],1);
-					$output .= '<br><em><small>'.$style.': '.$row_scores['brewStyle'].'</small></em>';
+					$output .= '</h3>';
+					$output .= '<h4>';
+					$output .= '<em>'.$style.': '.$row_scores['brewStyle'].'</em>';
+					$output .= '</h4>';
 				}
-				$output .= '</h3>';
-				$output .= '<p class="lead">'.check_table_name($row_scores['scoreTable'],$judging_tables_db_table).'</p>';
+				//$output .= '</h3>';
+				$output .= '<p class="lead"><strong>'.check_table_name($row_scores['scoreTable'],$judging_tables_db_table).'</strong></p>';
 
-				if ($filter == "entry") $output .= '<p>#'.sprintf("%06s",$row_scores['id']).'</p>';
-				else $output .= '<p>#'.sprintf("%06s",$row_scores['brewJudgingNumber']).'</p>';
-				if (!empty($row_scores['brewInfo'])) $output .= '<p><small><em>'.str_replace("^"," | ",$row_scores['brewInfo']).'</em></small></p>';
-				if (!empty($row_scores['brewInfoOptional'])) $output .= '<p><small><em>'.str_replace("^"," | ",$row_scores['brewInfoOptional']).'</em></small></p>';
-				if (!empty($row_scores['brewComments'])) $output .= '<p><small><em>'.$row_scores['brewComments'].'</em></small></p>';
-				if ($type == 2) $output .= '<p><small><em>'.$row_scores['brewMead1'].', '.$row_scores['brewMead2'].'</small></p>';
-				if ($type == 3) $output .= '<p><small><em>'.$row_scores['brewMead1'].', '.$row_scores['brewMead2'].', '.$row_scores['brewMead3'].'</small></p>';
-				if (pro_am_check($row_scores['brewBrewerID']) == 1) $output .= "<p><small><em>** NOT ELIGIBLE FOR PRO-AM **</em></small></p>";
+				if (!empty($row_scores['brewInfo'])) $output .= '<p><em>'.str_replace("^"," | ",$row_scores['brewInfo']).'</em></p>';
+				if (!empty($row_scores['brewInfoOptional'])) $output .= '<p><em>'.str_replace("^"," | ",$row_scores['brewInfoOptional']).'</em></p>';
+				if (!empty($row_scores['brewComments'])) $output .= '<p><em>'.$row_scores['brewComments'].'</em></p>';
+				if ($type == 2) $output .= '<p><em>'.$row_scores['brewMead1'].', '.$row_scores['brewMead2'].'</p>';
+				if ($type == 3) $output .= '<p><em>'.$row_scores['brewMead1'].', '.$row_scores['brewMead2'].', '.$row_scores['brewMead3'].'</p>';
+				if (pro_am_check($row_scores['brewBrewerID']) == 1) $output .= "<p><em>** NOT ELIGIBLE FOR PRO-AM **</em></p>";
+				if ($filter == "entry") $output .= '<p style="position:absolute;bottom:0;right:0;">#'.sprintf("%06s",$row_scores['id']).'</p>';
+				else $output .= '<p style="position:absolute;bottom:0;right:0;">#'.sprintf("%06s",$row_scores['brewJudgingNumber']).'</p>';
+				$output .= '</div>';
 				$output .= '</td>';
 
 				$endRow++;

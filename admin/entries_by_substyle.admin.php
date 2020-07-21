@@ -1,41 +1,17 @@
 <?php
 $html = "";
 $html_testing = "";
-
 $style_other_count[] = 0;
 $style_beer_count[] = 0;
 $style_mead_count[] = 0;
 $style_mead_cider_count[] = 0;
 $style_cider_count[] = 0;
-
 $style_beer_count_logged[] = 0;
 $style_mead_count_logged[] = 0;
 $style_mead_cider_count_logged[] = 0;
 $style_cider_count_logged[] = 0;
 $style_other_count_logged[] = 0;
-
 $substyle = "";
-
-if ($_SESSION['prefsStyleSet'] == "BJCP2008") {
-	$beer_end = 23;
-	$mead_array = array('24','25','26');
-	$cider_array = array('27','28');
-	$category_end = 28;
-}
-
-if ($_SESSION['prefsStyleSet'] == "BJCP2015") {
-	$beer_end = 34;
-	$mead_array = array('M1','M2','M3','M4');
-	$cider_array = array('C1','C2');
-	$category_end = 34;
-}
-
-if ($_SESSION['prefsStyleSet'] == "AABC") {
-	$beer_end = 18;
-	$mead_array = array('19');
-	$cider_array = array('20');
-	$category_end = 20;
-}
 
 include (DB.'styles.db.php');
 

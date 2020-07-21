@@ -2,7 +2,7 @@
 /**
  * Module:      cs-CZ.lang.php
  * Description: This module houses all display text in the Czech language.
- * Updated:     July 22, 2018
+ * Updated:     July 10, 2020
  */
 
 /*

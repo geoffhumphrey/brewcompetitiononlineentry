@@ -5,36 +5,26 @@ $count_mead = FALSE;
 $count_mead_cider = FALSE;
 $count_cider = FALSE;
 $other_count = FALSE;
-
-$cat_convert = $cat;
-$cat_name = style_convert($cat_convert,1);
+$cat = $key;
+$cat_convert = $key;
+$cat_name = style_convert($key,1);
+// echo $key."<br>";
 
 // Perform query in appropriate db table rows
-if ($_SESSION['prefsStyleSet'] == "BA") {
-	if (SINGLE) $query_style_count = sprintf("SELECT COUNT(*) AS 'count' FROM %s WHERE brewCategory='%s' AND brewPaid='1' AND brewReceived='1' AND brewConfirmed='1' AND comp_id='%s'", $prefix."brewing", $cat, $_SESSION['comp_id']);
-	else $query_style_count = sprintf("SELECT COUNT(*) AS 'count' FROM %s WHERE brewCategory='%s' AND brewPaid='1' AND brewReceived='1' AND brewConfirmed='1'", $prefix."brewing", $cat);
-}
-
-else {
-	if (SINGLE) $query_style_count = sprintf("SELECT COUNT(*) AS 'count' FROM %s WHERE brewCategorySort='%s' AND brewPaid='1' AND brewReceived='1' AND brewConfirmed='1' AND comp_id='%s'",$prefix."brewing",$cat, $_SESSION['comp_id']);
-	else $query_style_count = sprintf("SELECT COUNT(*) AS 'count' FROM %s WHERE brewCategorySort='%s' AND brewPaid='1' AND brewReceived='1' AND brewConfirmed='1'",$prefix."brewing",$cat);
-}
-
+if (SINGLE) $query_style_count = sprintf("SELECT COUNT(*) AS 'count' FROM %s WHERE brewCategorySort='%s' AND brewPaid='1' AND brewReceived='1' AND brewConfirmed='1' AND comp_id='%s'",$prefix."brewing",$cat, $_SESSION['comp_id']);
+else $query_style_count = sprintf("SELECT COUNT(*) AS 'count' FROM %s WHERE brewCategorySort='%s' AND brewPaid='1' AND brewReceived='1' AND brewConfirmed='1'",$prefix."brewing",$cat);
 $style_count = mysqli_query($connection,$query_style_count) or die (mysqli_error($connection));
 $row_style_count = mysqli_fetch_assoc($style_count);
 
-if ($_SESSION['prefsStyleSet'] == "BA") {
-	if (SINGLE) $query_style_count_logged = sprintf("SELECT COUNT(*) AS 'count' FROM %s WHERE brewCategory='%s' AND brewConfirmed='1' AND comp_id='%s'",$prefix."brewing",$cat, $_SESSION['comp_id']);
-	else $query_style_count_logged = sprintf("SELECT COUNT(*) AS 'count' FROM %s WHERE brewCategory='%s' AND brewConfirmed='1'",$prefix."brewing",$cat);
-}
-
-else {
-	if (SINGLE) $query_style_count_logged = sprintf("SELECT COUNT(*) AS 'count' FROM %s WHERE brewCategorySort='%s' AND brewConfirmed='1' AND comp_id='%s'",$prefix."brewing",$cat, $_SESSION['comp_id']);
-	else $query_style_count_logged = sprintf("SELECT COUNT(*) AS 'count' FROM %s WHERE brewCategorySort='%s' AND brewConfirmed='1'",$prefix."brewing",$cat);
-}
-
+if (SINGLE) $query_style_count_logged = sprintf("SELECT COUNT(*) AS 'count' FROM %s WHERE brewCategorySort='%s' AND brewConfirmed='1' AND comp_id='%s'",$prefix."brewing",$cat, $_SESSION['comp_id']);
+else $query_style_count_logged = sprintf("SELECT COUNT(*) AS 'count' FROM %s WHERE brewCategorySort='%s' AND brewConfirmed='1'",$prefix."brewing",$cat);
 $style_count_logged = mysqli_query($connection,$query_style_count_logged) or die (mysqli_error($connection));
 $row_style_count_logged = mysqli_fetch_assoc($style_count_logged);
+
+if (SINGLE) $query_style_type = sprintf("SELECT brewStyleType FROM %s WHERE brewStyleGroup='%s' AND comp_id='%s'",$styles_db_table,$cat, $_SESSION['comp_id']);
+else $query_style_type = sprintf("SELECT brewStyleType FROM %s WHERE brewStyleGroup='%s'",$styles_db_table,$cat);
+$style_type = mysqli_query($connection,$query_style_type) or die (mysqli_error($connection));
+$row_style_type = mysqli_fetch_assoc($style_type);
 
 if ($_SESSION['prefsStyleSet'] == "BA") {
 
@@ -78,15 +68,7 @@ else {
 	$style_count_logged = mysqli_query($connection,$query_style_count_logged) or die (mysqli_error($connection));
 	$row_style_count_logged = mysqli_fetch_assoc($style_count_logged);
 */
-	if ($cat > $category_end) {
-
-		if (SINGLE) $query_style_type = sprintf("SELECT brewStyleType FROM %s WHERE brewStyleGroup='%s' AND comp_id='%s'",$styles_db_table,$cat, $_SESSION['comp_id']);
-		else $query_style_type = sprintf("SELECT brewStyleType FROM %s WHERE brewStyleGroup='%s'",$styles_db_table,$cat);
-		$style_type = mysqli_query($connection,$query_style_type) or die (mysqli_error($connection));
-		$row_style_type = mysqli_fetch_assoc($style_type);
-
-	}
-
+	
 	if ($cat <= $beer_end) {
 		$count_beer = TRUE;
 		$count_mead = FALSE;

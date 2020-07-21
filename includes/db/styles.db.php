@@ -85,7 +85,10 @@ if (($view != "default") && ($section == "styles")) {
 	$explodies = explode("-",$view);
 	$query_styles .= sprintf(" AND brewStyleGroup='%s' AND brewStyleNum='%s'",$explodies[0],$explodies[1]);
 }
-if ((($section == "entry") || ($section == "brew") || ($action == "word") || ($action == "html")) || ((($section == "admin") && ($filter == "judging")) && ($bid != "default"))) $query_styles .= " AND brewStyleActive='Y' ORDER BY brewStyleGroup,brewStyleNum ASC";
+if ((($section == "entry") || ($section == "brew") || ($action == "word") || ($action == "html")) || ((($section == "admin") && ($filter == "judging")) && ($bid != "default"))) {
+	if ($_SESSION['prefsStyleSet'] == "BA") $query_styles .= " AND brewStyleActive='Y' ORDER BY brewStyleGroup,brewStyle ASC";
+	else $query_styles .= " AND brewStyleActive='Y' ORDER BY brewStyleGroup,brewStyleNum ASC";
+}
 elseif (($section == "admin") && ($go == "preferences")) $query_styles .= "  ORDER BY brewStyleOwn,brewStyleVersion,brewStyleGroup,brewStyleNum,brewStyle ASC";
 elseif (($section == "admin") && ($action == "edit") && ($go != "judging_tables")) $query_styles .= " AND id='$id'";
 elseif (($section == "admin") && ($go == "count_by_style")) $query_styles .= " AND brewStyleActive='Y'";

@@ -27,11 +27,12 @@ function check_update($column_name, $table_name) {
 	
 }
 
-function check_new_style($style1, $style2, $style3) {
+function check_new_style($style1, $style2, $style3, $mode="none") {
 
 	require(CONFIG.'config.php');
 
-	$query_new_style = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE brewStyleGroup='%s' AND brewStyleNum = '%s' AND  brewStyle='%s'", $prefix."styles", $style1, $style2, $style3);
+	if ($mode == "ignore_style_num") $query_new_style = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE brewStyleGroup='%s' AND  brewStyle='%s'", $prefix."styles", $style1, $style3);
+	else $query_new_style = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE brewStyleGroup='%s' AND brewStyleNum = '%s' AND  brewStyle='%s'", $prefix."styles", $style1, $style2, $style3);
 	$new_style = mysqli_query($connection,$query_new_style) or die (mysqli_error($connection));
 	$row_new_style = mysqli_fetch_assoc($new_style);
 

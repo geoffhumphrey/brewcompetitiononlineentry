@@ -2,7 +2,7 @@
 /**
  * Module:      pt-BR.lang.php
  * Description: This module houses all display text in the English language.
- * Updated:     January 31, 2018
+ * Updated:     July 10, 2020
  */
 
 /*
@@ -1522,7 +1522,7 @@ $styles_entry_text_21X = "O participante DEVE especificar uma força (sessão: 3
 $styles_entry_text_PRX4 = "O participante deve especificar os tipos de frutas frescas usadas.";
 
 // ----------------------------------------------------------------------------------
-// Version 2.1.19 Additions
+// Version 2.1.19 Additions (Via Google Translate English to Portuguese)
 // ----------------------------------------------------------------------------------
 $output_text_032 = "A contagem de entradas reflete apenas os participantes que indicaram um local de entrega em seu perfil de conta. O número real de entradas pode ser maior ou menor.";
 $brewer_text_043 = "Ou você está ou já trabalhou na equipe de cervejaria de qualquer cervejaria? Isso inclui posições de cervejeiro, bem como técnicos de laboratório, equipe de adega, equipe de engarrafamento / conservas, etc. Os funcionários atuais e antigos da equipe de cervejaria não são elegíveis para participar da competição Pro-Am do Great American Beer Festival.";

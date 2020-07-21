@@ -2539,4 +2539,10 @@ $tinymce_load = array("contest_info","default","step4","default");
 $datetime_load = array("contest_info","eval","testing","preferences","step4","step5","step6","default","judging");
 $datatables_load = array("admin","list","default","step4","eval");
 
+// Set vars for backwards compatibility
+$beer_end = $_SESSION['style_set_beer_end'];
+$mead_array = $_SESSION['style_set_mead'];
+$cider_array = $_SESSION['style_set_cider'];
+$category_end = $_SESSION['style_set_category_end'];
+
 ?>

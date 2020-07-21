@@ -186,17 +186,11 @@ include (DB.'admin_judging_scores_bos.db.php');
 
 	$bos_entry_info = bos_entry_info($row_bos['eid'], $row_bos['scoreTable'],$filter);
 	$bos_entry_info = explode("^",$bos_entry_info);
-    if ($_SESSION['prefsStyleSet'] == "AABC") $style = ltrim($bos_entry_info[1],"0").".".ltrim($bos_entry_info[3],"0");
-	else $style = $bos_entry_info[1].$bos_entry_info[3];
-
+    $style = style_number_const($bos_entry_info[1],$bos_entry_info[3],$_SESSION['style_set_display_separator'],0);
     $judging_number = sprintf("%06s",$bos_entry_info[6]);
 
-	if ($_SESSION['prefsStyleSet'] == "BA") $style_name = $bos_entry_info[0];
-
-    else  {
-		if ($filter == "default") $style_name = $style." ".style_convert($bos_entry_info[1],1).": ".$bos_entry_info[0];
-		else $style_name = $style.": ".$bos_entry_info[0];
-	}
+	if ($_SESSION['prefsStyleSet'] == "BA") style_convert($bos_entry_info[1],1).": ".$bos_entry_info[0];
+    else $style_name = $style." ".style_convert($bos_entry_info[1],1).": ".$bos_entry_info[0];
 
 	?>
 	<tr>
@@ -225,11 +219,7 @@ include (DB.'admin_judging_scores_bos.db.php');
 <?php } else echo "<p style='margin: 0 0 40px 0'>No entries are eligible.</p>";
 }
 
-?>
-<?php } ?>
-
-<?php
-//else echo "<p style='margin: 0 0 40px 0'>No Best of Show <a href='".$base_url."index.php?section=admin&amp;go=style_types' title='Enable Best of Show for one or more style types'>has been enabled</a> for any style type.</p>";
+} 
 } // end if ($action == "default")
 ?>
 
@@ -276,14 +266,9 @@ include (DB.'admin_judging_scores_bos.db.php');
 		$bos_entry_info = explode("^",$bos_entry_info);
 		$judging_number = sprintf("%06s",$bos_entry_info[6]);
 
-        if ($_SESSION['prefsStyleSet'] == "AABC") $style = ltrim($bos_entry_info[1],"0").".".ltrim($bos_entry_info[3],"0");
-        else $style = $bos_entry_info[1].$bos_entry_info[3];
-		if ($_SESSION['prefsStyleSet'] == "BA") $style_name = $bos_entry_info[0];
-
-        else {
-    		if ($filter == "default") $style_name = $style." ".style_convert($bos_entry_info[1],1).": ".$bos_entry_info[0];
-    		else $style_name = $style.": ".$bos_entry_info[0];
-    	}
+        $style = style_number_const($bos_entry_info[1],$bos_entry_info[3],$_SESSION['style_set_display_separator'],0);
+		if ($_SESSION['prefsStyleSet'] == "BA") $style_name = style_convert($bos_entry_info[1],1).": ".$bos_entry_info[0];
+        else $style_name = $style." ".style_convert($bos_entry_info[1],1).": ".$bos_entry_info[0];
 
 	?>
 	<tr>

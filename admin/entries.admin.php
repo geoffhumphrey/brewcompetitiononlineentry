@@ -58,11 +58,14 @@ do {
 	$brewer_info = explode("^",$brewer_info);
 
 	$brewer_pro_am = pro_am_check($row_log['brewBrewerID']);
-
 	$styleConvert = style_convert($row_log['brewCategorySort'], 1);
+	$entry_style_system = style_number_const($row_log['brewCategorySort'],$row_log['brewSubCategory'],$_SESSION['style_set_system_separator'],0);
+
+	/*
 	if ($_SESSION['prefsStyleSet'] == "BA") $entry_style = "";
 	elseif ($_SESSION['prefsStyleSet'] == "AABC") $entry_style = ltrim($row_log['brewCategorySort'],"0").".".ltrim($row_log['brewSubCategory'],"0");
 	else $entry_style = $row_log['brewCategorySort']."-".$row_log['brewSubCategory'];
+	*/
 
 	$entry_style_display = "";
 	$entry_brewer_display = "";
@@ -142,7 +145,7 @@ do {
 	}
 
 	if (($row_log['brewConfirmed'] == 0) || (empty($row_log['brewConfirmed']))) $entry_unconfirmed_row = "bg-danger";
-	elseif (($_SESSION['prefsStyleSet'] != "BA") && ((check_special_ingredients($entry_style,$row_styles['brewStyleVersion']))) && ($row_log['brewInfo'] == "")) $entry_unconfirmed_row = "bg-warning";
+	elseif (($_SESSION['prefsStyleSet'] != "BA") && ((check_special_ingredients($entry_style_system,$row_styles['brewStyleVersion']))) && ($row_log['brewInfo'] == "")) $entry_unconfirmed_row = "bg-warning";
 
 	if (isset($row_log['brewJudgingNumber'])) {
 		$entry_judging_num_hidden .= "<span class=\"hidden visible-print-inline\">".$judging_number."</span>";
@@ -165,17 +168,16 @@ do {
 */
 	// Entry Style
 	if ($_SESSION['prefsStyleSet'] == "BA") {
-		if ($row_log['brewCategory'] <= 14) $entry_style_display .= $ba_category_names[$row_log['brewCategory']].": ".$row_log['brewStyle'];
+		if ($row_log['brewCategory'] <= 14) $entry_style_display .= $styleConvert.": ".$row_log['brewStyle'];
 		else $entry_style_display .= "Custom: ".$row_log['brewStyle'];
 	}
 
 	else {
 		if ((!empty($row_log['brewCategorySort'])) && ($filter == "default") && ($bid == "default") && ($dbTable == "default"))
-		$entry_style_display .= "<span class=\"hidden\">".$row_log['brewCategorySort']."</span><a href=\"".$base_url."index.php?section=admin&amp;go=entries&amp;filter=".$row_log['brewCategorySort']."\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"See only the category ".$row_log['brewCategorySort']." entries\" >";
+		$entry_style_display .= "<span class=\"hidden\">".$row_log['brewCategorySort']."</span><a href=\"".$base_url."index.php?section=admin&amp;go=entries&amp;filter=".$row_log['brewCategorySort']."\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"See only the category ".ltrim($row_log['brewCategorySort'],"0")." entries\" >";
 		if ((!empty($row_log['brewCategorySort'])) && ($row_log['brewCategorySort'] != "00")) {
-			$entry_style_display .= ltrim($row_log['brewCategorySort'],"0");
-			if ($_SESSION['prefsStyleSet'] == "AABC") $entry_style_display .= ".";
-			$entry_style_display .= ltrim($row_log['brewSubCategory'],"0").": ".$row_log['brewStyle'];
+			$entry_style_display .= style_number_const($row_log['brewCategorySort'],$row_log['brewSubCategory'],$_SESSION['style_set_display_separator'],0);
+			$entry_style_display .= ": ".$row_log['brewStyle'];
 		} 
 		else $entry_style_display .= "<span class=\"text-danger\"><strong>Style NOT Specified</strong></span>";
 		if ((!empty($row_log['brewCategorySort'])) && ($filter == "default") && ($bid == "default") && ($dbTable == "default")) $entry_style_display .= "</a>";

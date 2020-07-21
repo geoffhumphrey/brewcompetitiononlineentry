@@ -12,7 +12,7 @@ include (LIB.'date_time.lib.php');
 include (INCLUDES.'version.inc.php');
 
 // ------------------ VERSION CHECK ------------------
-// Current version is 2.1.10.0, change version in system table if not
+// Change version in system table if does not match in DB
 // If there are NO database structure or data updates for the current version,
 // USE THIS FUNCTION ONLY IF THERE ARE *NOT* ANY DB TABLE OR DATA UPDATES
 // OTHERWISE, DEFINE/UPDATE THE VERSION VIA THE UPDATE PROCEDURE
@@ -32,6 +32,25 @@ function version_check($version,$current_version,$current_version_date_display) 
 }
 
 // ---------------------------------------------------
+
+function search_array($array, $key, $value) { 
+    // https://www.geeksforgeeks.org/how-to-search-by-keyvalue-in-a-multidimensional-array-in-php/?ref=rp
+    // RecursiveArrayIterator to traverse an unknown amount of sub arrays within the outer array. 
+    $arrIt = new RecursiveArrayIterator($array); 
+   
+    // RecursiveIteratorIterator used to iterate through recursive iterators 
+    $it = new RecursiveIteratorIterator($arrIt); 
+   
+    foreach ($it as $sub) { 
+        // Current active sub iterator 
+        $subArray = $it->getSubIterator(); 
+        if ($subArray[$key] === $value) { 
+            $result[] = iterator_to_array($subArray); 
+         } 
+    } 
+    return $result; 
+}
+
 
 function in_string($haystack,$needle) {
 	if (strpos($haystack,$needle) !== false) return TRUE;
@@ -1262,10 +1281,29 @@ function style_convert($number,$type,$base_url="") {
 
 		case "1":
 
-		if ($_SESSION['prefsStyleSet'] == "BA") {
-			$style_convert = $row_style['brewStyle']." (Custom Style)";
+		include (INCLUDES.'styles.inc.php');
+
+		// if numeric make two-digit by adding leading zero just in case
+		if (is_numeric($number)) $number = sprintf('%02d', $number); 
+
+		// If the number is less than 35 (custom style numbers start at 35) and is alphanumeric
+		// Search the array and return the style category name
+		$non_custom = FALSE;
+		if ((is_numeric($number)) && ($number < 35)) $non_custom = TRUE;
+		if (!preg_match("/^[[:digit:]]+$/",$number)) $non_custom = TRUE;
+
+		if ($non_custom) {
+			foreach ($style_sets as $style_set_data) {
+				if ($style_set_data['style_set_name'] === $_SESSION['prefsStyleSet']) {
+					$style_set_cat = $style_set_data['style_set_categories'];
+					$style_convert = $style_set_cat[$number];
+				}
+			}
 		}
 
+		else $style_convert = $row_style['brewStyle']." (Custom Style)";
+
+		/*
 		if ($_SESSION['prefsStyleSet'] == "BJCP2008") {
 		switch ($number) {
 			case "01": $style_convert = "Light Lager"; break;
@@ -1372,6 +1410,8 @@ function style_convert($number,$type,$base_url="") {
 			default: $style_convert = $row_style['brewStyle']." (Custom Style)"; break;
 			}
 		}
+
+		*/
 
 		break;
 
@@ -4023,6 +4063,22 @@ function pro_am_check($uid) {
 
 function is_html($string) {
 	return preg_match("/<[^<]+>/",$string) != 0;
+}
+
+function style_number_const($style_category_number,$style_sub,$style_set_display_separator,$method) {
+	switch ($method) {
+		case 0:
+			if ($_SESSION['prefsStyleSet'] != "BA") return ltrim($style_category_number,"0").$style_set_display_separator.ltrim($style_sub,"0");
+		break;
+
+		case 1:
+			return $style_category_number.$style_set_display_separator.$style_sub;
+		break;
+		
+		default:
+			return ltrim($style_category_number,"0").$style_set_display_separator.$style_sub;
+		break;
+	}
 }
 
 ?>
