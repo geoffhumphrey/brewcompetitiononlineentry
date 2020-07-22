@@ -779,7 +779,7 @@ else $relocate_referrer = $_SERVER['HTTP_REFERER'];
 		<label for="brewBoxNum" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label">Box/Location</label>
 		<div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
 			<!-- Input Here -->
-			<input type="text" class="form-control" placeholder="" name="brewBoxNum" value="<?php echo $row_log['brewBoxNum']; ?>">
+			<input type="text" class="form-control" placeholder="" name="brewBoxNum" value="<?php if ($action == "edit") echo $row_log['brewBoxNum']; ?>">
 		</div>
 	</div><!-- ./Form Group -->
 <?php } ?>

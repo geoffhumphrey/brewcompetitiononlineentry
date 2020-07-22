@@ -133,6 +133,27 @@ $(document).ready(function(){
 	$("#brewerClubsOther").hide("fast");
 	$("#brewerJudgeFields").hide("fast");
 	$("#brewerStewardFields").hide("fast");
+    $("#ahaProAmText").hide("fast");
+
+    <?php if (($action == "edit") && ($row_brewer['brewerCountry'] == "United States")) { ?>
+    $("#proAm").show("slow");
+    $("#ahaProAmText").show("slow");
+    <?php } else { ?>
+    $("#proAm").hide("fast");
+    <?php } ?>
+
+    $("#brewerCountry").change(function() {
+        if ($("#brewerCountry").val() == "United States") {
+            $("#proAm").show("slow");
+            $("#ahaProAmText").show("slow");
+        }
+        else {
+            $("#proAm").hide("fast");
+            $("#ahaProAmText").hide("fast");
+            $("#brewerProAm_0").prop("checked", true);
+            $("#brewerProAm_1").prop("checked", false);
+        }
+    });
 
 	<?php if (($action == "edit") && ($club_other)) { ?>
 	$("#brewerClubsOther").show("slow");
@@ -407,35 +428,36 @@ $(document).ready(function(){
        		<input class="form-control" name="brewerClubsOther" type="text" value="<?php if ($action == "edit") echo $row_brewer['brewerClubs']; ?>" placeholder="">
         </div>
     </div>
+<div id="proAm">
 <?php if ($_SESSION['prefsProEdition'] == 0) { ?>
-    <div class="form-group">
-        <label for="" class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label_pro_am; ?></label>
-        <div class="col-lg-9 col-md-9 col-sm-8 col-xs-12">
-            <p><?php echo $brewer_text_041; ?></p>
-            <p><?php echo $brewer_text_043; ?></p>
-            <div class="input-group">
-                <label class="radio-inline">
-                    <input type="radio" name="brewerProAm" value="1" id="brewerProAm_1" <?php if (($section != "step2") && ($row_brewer['brewerProAm'] == "1")) echo "CHECKED"; ?> /> <?php echo $label_yes; ?>
-                </label>
-                <label class="radio-inline">
-                    <input type="radio" name="brewerProAm" value="0" id="brewerProAm_0" <?php if (($section != "step2") && ($row_brewer['brewerProAm'] == "0") || (empty($row_brewer['brewerProAm']))) echo "CHECKED"; ?> /> <?php echo $label_no; ?>
-                </label>
+        <div class="form-group">
+            <label for="" class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label_pro_am; ?></label>
+            <div class="col-lg-9 col-md-9 col-sm-8 col-xs-12">
+                <p><?php echo $brewer_text_041; ?></p>
+                <p><?php echo $brewer_text_043; ?></p>
+                <div class="input-group">
+                    <label class="radio-inline">
+                        <input type="radio" name="brewerProAm" value="1" id="brewerProAm_1" <?php if (($section != "step2") && ($row_brewer['brewerProAm'] == "1")) echo "CHECKED"; ?> /> <?php echo $label_yes; ?>
+                    </label>
+                    <label class="radio-inline">
+                        <input type="radio" name="brewerProAm" value="0" id="brewerProAm_0" <?php if (($section != "step2") && ($row_brewer['brewerProAm'] == "0") || (empty($row_brewer['brewerProAm']))) echo "CHECKED"; ?> /> <?php echo $label_no; ?>
+                    </label>
+                </div>
+                <div class="help-block"><?php echo $brewer_text_042; ?></div>
             </div>
-            <div class="help-block"><?php echo $brewer_text_042; ?></div>
         </div>
-    </div>
 <?php } else { ?>
     <input type="hidden" name="brewerProAm" value="0">
 <?php } ?>
+</div>
     <div class="form-group"><!-- Form Group Text Input -->
         <label for="brewerAHA" class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label_aha_number; ?></label>
         <div class="col-lg-9 col-md-9 col-sm-8 col-xs-12">
         	<!-- Input Here -->
        		<input class="form-control" id="brewerAHA" name="brewerAHA" type="text" value="<?php if ($action == "edit") echo $row_brewer['brewerAHA']; ?>" placeholder="">
-            <span class="help-block"><?php echo $brewer_text_003; ?></span>
+            <span id="ahaProAmText" class="help-block"><?php echo $brewer_text_003; ?></span>
         </div>
     </div><!-- ./Form Group -->
-
     <!-- Staff preferences -->
     <div class="form-group"><!-- Form Group Radio INLINE -->
         <label for="brewerStaff" class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label_staff; ?></label>

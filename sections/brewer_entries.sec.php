@@ -228,9 +228,13 @@ do {
 	$entry_output .= "<td>";
 
 	if ($row_styles['brewStyleActive'] == "Y") {
+		/*
 		if ($_SESSION['prefsStyleSet'] == "BA") $entry_output .= $row_log['brewStyle'];
 		elseif ($_SESSION['prefsStyleSet'] == "AABC") $entry_output .= ltrim($row_log['brewCategorySort'],"0").".".ltrim($row_log['brewSubCategory'],"0").": ".$row_log['brewStyle'];
 		else $entry_output .= $row_log['brewCategorySort'].$row_log['brewSubCategory'].": ".$row_log['brewStyle'];
+		*/
+		$entry_output .= "<span class=\"hidden\">".$entry_style."</span>";
+		$entry_output .= style_number_const($row_log['brewCategorySort'],$row_log['brewSubCategory'],$_SESSION['style_set_display_separator'],0).": ".$row_log['brewStyle'];
 	}
 	else $entry_output .= sprintf("<strong class=\"text-danger\">%s</strong>",$brewer_entries_text_016);
 	if (empty($row_log['brewCategorySort'])) $entry_output .= sprintf("<strong class=\"text-danger\">%s</strong>",$brewer_entries_text_007);

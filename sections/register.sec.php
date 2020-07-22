@@ -48,19 +48,36 @@ httpxml.send(null);
 }
 
 $(document).ready(function(){
-
 	$("#brewerClubsOther").hide("fast");
+	$("#ahaProAmText").hide("fast");
+
+    <?php if (($action == "edit") && ($row_brewer['brewerCountry'] == "United States")) { ?>
+    $("#proAm").show("slow");
+    $("#ahaProAmText").show("slow");
+    <?php } else { ?>
+    $("#proAm").hide("fast");
+    <?php } ?>
+
+    $("#brewerCountry").change(function() {
+        if ($("#brewerCountry").val() == "United States") {
+            $("#proAm").show("slow");
+            $("#ahaProAmText").show("slow");
+        }
+        else {
+            $("#proAm").hide("fast");
+            $("#ahaProAmText").hide("fast");
+            $("#brewerProAm_0").prop("checked", true);
+            $("#brewerProAm_1").prop("checked", false);
+        }
+    });
 
 	$("#brewerClubs").change(function() {
-
 		if ($("#brewerClubs").val() == "Other") {
 			$("#brewerClubsOther").show("slow");
 		}
-
-		else  {
+		else {
 			$("#brewerClubsOther").hide("fast");
 		}
-
 	});
 
 	<?php if (($action == "edit") && ($row_brewer['brewerSteward'] == "Y")) { ?>
@@ -603,6 +620,7 @@ if ($go == "default") {  ?>
        		<input class="form-control" name="brewerClubsOther" type="text" value="<?php if ($action == "edit") echo $row_brewer['brewerClubs']; ?>" placeholder="">
         </div>
     </div>
+<div id="proAm">
     <?php if ($_SESSION['prefsProEdition'] == 0) { ?>
     <div class="form-group">
         <label for="" class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label_pro_am; ?></label>
@@ -623,6 +641,7 @@ if ($go == "default") {  ?>
     <?php } else { ?>
     <input type="hidden" name="brewerProAm" value="0">
     <?php } ?>
+</div>
 	<div class="form-group"><!-- Form Group Text Input -->
 		<label for="" class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label_aha_number; ?></label>
 		<div class="col-lg-9 col-md-9 col-sm-8 col-xs-12">
@@ -631,11 +650,9 @@ if ($go == "default") {  ?>
 				<!-- Input Here -->
 				<input class="form-control" name="brewerAHA" id="brewerAHA" type="number" placeholder="" value="<?php if (($msg > 0) && (isset($_COOKIE['brewerAHA']))) echo $_COOKIE['brewerAHA']; ?>">
 			</div>
-            <div class="help-block"><?php echo $register_text_033; ?></div>
+            <div id="ahaProAmText" class="help-block"><?php echo $register_text_033; ?></div>
 		</div>
 	</div><!-- ./Form Group -->
-
-
     <?php } // END if (($_SESSION['prefsProEdition'] == 0) || (($_SESSION['prefsProEdition'] == 1) && ($go != "entrant"))) ?>
     <?php } // END if ($view == "default") ?>
     <?php if (($_SESSION['prefsProEdition'] == 0) || (($_SESSION['prefsProEdition'] == 1) && (($go == "judge") || ($go == "steward")))) {
