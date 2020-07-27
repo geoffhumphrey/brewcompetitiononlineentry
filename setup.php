@@ -2,6 +2,7 @@
 ob_start();
 require_once ('paths.php');
 require_once (INCLUDES.'url_variables.inc.php');
+require_once (INCLUDES.'styles.inc.php');
 if (SINGLE) require_once(SSO.'sso.inc.php');
 require_once (LIB.'common.lib.php');
 require_once (LIB.'update.lib.php');

@@ -51,7 +51,7 @@ $style_sets = array(
  * 
  * Failure to include any REQUIRED variables will result in unexpected behavior
  * and errors. It is HIGHLY suggested you test these settings in a non-production
- * environment.
+ * environment prior to deployment.
  * ------------------------------------------------------------------------------
  */
 

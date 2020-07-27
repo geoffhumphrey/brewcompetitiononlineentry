@@ -247,13 +247,11 @@ $styles_hloopRow1 = 0; // first row flag
 
 		$page_info8 .= "<td width=\"33%\">";
 
+		$style_number = style_number_const($row_styles['brewStyleGroup'],$row_styles['brewStyleNum'],$_SESSION['style_set_display_separator'],0);
+
 		if (!empty($row_styles['brewStyleEntry'])) {
 
-			if ($_SESSION['prefsStyleSet'] == "BA") $page_info8 .= "<a href=\"#\" data-toggle=\"modal\" data-target=\"#custom-modal-".$row_styles['id']."\" title=\"".$entry_info_text_045."\">".$row_styles['brewStyle']."</a>";
-
-			elseif ($_SESSION['prefsStyleSet'] == "AABC") $page_info8 .= "<a href=\"#\" data-toggle=\"modal\" data-target=\"#custom-modal-".$row_styles['id']."\" title=\"".$entry_info_text_045."\">".ltrim($row_styles['brewStyleGroup'], "0").".".ltrim($row_styles['brewStyleNum'], "0")." ".$row_styles['brewStyle']."</a>";
-
-			else $page_info8 .= "<a href=\"#\" data-toggle=\"modal\" data-target=\"#custom-modal-".$row_styles['id']."\" title=\"".$entry_info_text_045."\">".ltrim($row_styles['brewStyleGroup'], "0").$row_styles['brewStyleNum']." ".$row_styles['brewStyle']."</a>";
+			$page_info8 .= "<a href=\"#\" data-toggle=\"modal\" data-target=\"#custom-modal-".$row_styles['id']."\" title=\"".$entry_info_text_045."\">".$style_number." ".$row_styles['brewStyle']."</a>";
 
 			$style_info_modal_body = "";
 
@@ -286,9 +284,7 @@ $styles_hloopRow1 = 0; // first row flag
 		}
 
 		else {
-			if ($_SESSION['prefsStyleSet'] == "BA") $page_info8 .= $row_styles['brewStyle'];
-			elseif ($_SESSION['prefsStyleSet'] == "AABC") $page_info8 .= ltrim($row_styles['brewStyleGroup'], "0").".".ltrim($row_styles['brewStyleNum'], "0")." ".$row_styles['brewStyle'];
-			else $page_info8 .= ltrim($row_styles['brewStyleGroup'], "0").$row_styles['brewStyleNum']." ".$row_styles['brewStyle'];
+			$page_info8 .= $style_number." ".$row_styles['brewStyle'];
 		}
 
 		if ($row_styles['brewStyleOwn'] == "custom") $page_info8 .= " (Custom Style)";

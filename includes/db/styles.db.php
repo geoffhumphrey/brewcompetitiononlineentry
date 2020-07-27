@@ -3,69 +3,27 @@
 if ((($section == "admin") && ($go == "preferences")) || ($section == "step3")) {
 
 	// Get all three sets of styles
-	$query_styles_all = sprintf("SELECT id,brewStyleGroup,brewStyleNum,brewStyle,brewStyleVersion,brewStyleOwn FROM %s ORDER BY brewStyleVersion,brewStyleGroup,brewStyleNum,brewStyle ASC ",$styles_db_table);
+	$query_styles_all = sprintf("SELECT id,brewStyleGroup,brewStyleNum,brewStyle,brewStyleVersion,brewStyleOwn FROM %s WHERE brewStyleOwn='custom' ORDER BY brewStyleVersion,brewStyleGroup,brewStyleNum,brewStyle ASC ",$styles_db_table);
 	$styles_all = mysqli_query($connection,$query_styles_all) or die (mysqli_error($connection));
 	$row_styles_all = mysqli_fetch_assoc($styles_all);
+	$totalRows_styles_all = mysqli_num_rows($styles_all);
+	
+	$custom_styles_arr = array();
+	
+	if ($totalRows_styles_all > 0) {
 
-	$ba_styles_arr[] = array();
-	$aabc_styles_arr[] = array();
-	$bjcp_2008_styles_arr[] = array();
-	$bjcp_2015_styles_arr[] = array();
-	$custom_styles_arr[] = array();
+		do {
 
-	do {
-
-		if ($row_styles_all['brewStyleOwn'] == "bcoe") {
-
-			if ($row_styles_all['brewStyleVersion'] == "BA") {
-				$ba_styles_arr[] = array(
-					"id" => $row_styles_all['id'],
-					"brewStyleGroup" => $row_styles_all['brewStyleGroup'],
-					"brewStyleNum" => $row_styles_all['brewStyleNum'],
-					"brewStyle" => $row_styles_all['brewStyle']
-				);
-			}
-
-			if ($row_styles_all['brewStyleVersion'] == "AABC") {
-				$aabc_styles_arr[] = array(
-					"id" => $row_styles_all['id'],
-					"brewStyleGroup" => $row_styles_all['brewStyleGroup'],
-					"brewStyleNum" => $row_styles_all['brewStyleNum'],
-					"brewStyle" => $row_styles_all['brewStyle']
-				);
-			}
-
-			if ($row_styles_all['brewStyleVersion'] == "BJCP2008") {
-				$bjcp_2008_styles_arr[] = array(
-					"id" => $row_styles_all['id'],
-					"brewStyleGroup" => $row_styles_all['brewStyleGroup'],
-					"brewStyleNum" => $row_styles_all['brewStyleNum'],
-					"brewStyle" => $row_styles_all['brewStyle']
-				);
-			}
-
-			if ($row_styles_all['brewStyleVersion'] == "BJCP2015") {
-				$bjcp_2015_styles_arr[] = array(
-					"id" => $row_styles_all['id'],
-					"brewStyleGroup" => $row_styles_all['brewStyleGroup'],
-					"brewStyleNum" => $row_styles_all['brewStyleNum'],
-					"brewStyle" => $row_styles_all['brewStyle']
-				);
-			}
-			
-		}
-		
-
-		if ($row_styles_all['brewStyleOwn'] == "custom") {
 			$custom_styles_arr[] = array(
 				"id" => $row_styles_all['id'],
 				"brewStyleGroup" => $row_styles_all['brewStyleGroup'],
 				"brewStyleNum" => $row_styles_all['brewStyleNum'],
 				"brewStyle" => $row_styles_all['brewStyle']
 			);
-		}
 
-	} while ($row_styles_all = mysqli_fetch_assoc($styles_all));
+		} while ($row_styles_all = mysqli_fetch_assoc($styles_all));
+		
+	}
 
 }
 

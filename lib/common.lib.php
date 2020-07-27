@@ -4074,6 +4074,10 @@ function style_number_const($style_category_number,$style_sub,$style_set_display
 		case 1:
 			return $style_category_number.$style_set_display_separator.$style_sub;
 		break;
+
+		case 2:
+			return "";
+		break;
 		
 		default:
 			return ltrim($style_category_number,"0").$style_set_display_separator.$style_sub;

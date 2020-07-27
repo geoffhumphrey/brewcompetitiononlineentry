@@ -109,7 +109,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 		if ((is_numeric($row_style_name['brewStyleGroup'])) && ($row_style_name['brewStyleGroup'] > $category_end)) $style_add_one = $row_style_name['brewStyleGroup'] + 1;
 		else $style_add_one = $category_end + 1;
 		
-		if ($_SESSION['style_set_sub_style_method'] == 1)) {
+		if ($_SESSION['style_set_sub_style_method'] == 1) {
 			if ($_SESSION['prefsStyleSet'] == "BA") $style_num_add_one = $row_style_name['brewStyleNum'] + 1;
 			else $style_num_add_one = 1;
 			$style_num_add_one = str_pad($style_num_add_one,3,"0", STR_PAD_LEFT);

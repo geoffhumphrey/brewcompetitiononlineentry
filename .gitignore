@@ -41,3 +41,4 @@ update/move_files.php
 vendor/*
 site/config-brewcomp-reset.php
 prepros-6.config
+.sftp-upload-on-change.json
