@@ -11,7 +11,7 @@ require_once ('paths.php');
 require_once (CONFIG.'bootstrap.php');
 require_once (DB.'mods.db.php');
 
-$account_pages = array("list","pay","brewer","user","brew","beerxml","pay","eval");
+$account_pages = array("list","pay","brewer","user","brew","beerxml","pay","evaluation");
 if ((!$logged_in) && (in_array($section,$account_pages))) {
     header(sprintf("Location: %s", $base_url."index.php?section=login&msg=99"));
     exit;
@@ -65,7 +65,7 @@ if (strpos($section, 'step') === FALSE)  {
 }
 
 // Bootstrap layout containers
-if ($section == "admin") {
+if (($section == "admin") || ($view == "admin")) {
     $container_main = "container-fluid";
     $nav_container = "navbar-inverse";
 }
@@ -146,11 +146,9 @@ $security_question = array($label_secret_01, $label_secret_05, $label_secret_06,
     </div>
     <!-- ./MODS TOP -->
     <?php } ?>
-
     <?php if (($section == "admin") && (($logged_in) && ($_SESSION['userLevel'] <= 1))) { ?>
     <!-- Admin Pages (Fluid Layout) -->
     <div class="container-fluid">
-        
         <?php if ($go == "default") { ?>
         <!-- Admin Dashboard - Has sidebar -->
         <div class="row">
@@ -187,9 +185,10 @@ $security_question = array($label_secret_01, $label_secret_05, $label_secret_06,
                 if ($action == "register") include (SECTIONS.'register.sec.php');
                 if ($go == "upload_scoresheets") include (ADMIN.'upload_scoresheets.admin.php');
                 if ($go == "payments") include (ADMIN.'payments.admin.php');
-                if ((EVALUATION) && ($go == "judging_scoresheets")) include (EVALS.'default.admin.php');
+                if ((EVALUATION) && ($go == "eval")) include (EVALS.'admin.eval.php');
 
                 if ($_SESSION['userLevel'] == "0") {
+
                     if ($go == "styles") include (ADMIN.'styles.admin.php');
                     if ($go == "archive") include (ADMIN.'archive.admin.php');
                     if ($go == "make_admin") include (ADMIN.'make_admin.admin.php');
@@ -202,26 +201,33 @@ $security_question = array($label_secret_01, $label_secret_05, $label_secret_06,
                     if ($go == "mods") include (ADMIN.'mods.admin.php');
                     if ($go == "upload") include (ADMIN.'upload.admin.php');
                     if ($go == "change_user_password") include (ADMIN.'change_user_password.admin.php');
+
                 }
 
             } ?>
     </div><!-- ./container-fluid -->
     <!-- ./Admin Pages -->
+    
+    <?php } elseif ((EVALUATION) && ($section == "evaluation") && ($logged_in)) { 
+
+        if (($view == "admin") && ($filter == "default")) $container_eval = "container-fluid";
+        else $container_eval = "container";
+    
+    ?>
+    
+    <div class="<?php echo $container_eval; ?>">
+        <div class="page-header">
+                <h1><?php echo $header_output; ?></h1>
+            </div>
+        <?php 
+            if ($go == "default") include (EVALS.'default.eval.php');
+            if ($go == "scoresheet") include (EVALS.'scoresheet.eval.php');
+        ?>
+    </div><!-- ./container-fluid -->
+    
     <?php } else { ?>
     <!-- Public Pages (Fixed Layout with Sidebar) -->
     <div id="main-content" class="container">
-        <?php if ((EVALUATION) && ($section == "eval"))  { ?>
-            <div class="page-header">
-                    <h1>Entry Evaluations</h1>
-                </div>
-            <?php
-                if ($logged_in) {
-                    if ($go == "default") include (EVALS.'list.sec.php');
-                    else include (EVALS.'eval.sec.php');
-                }
-                else echo "<p class=\"lead\">".$header_text_103."</p>";
-            ?>
-        <?php } else { ?>
         <div class="row">
             <div class="col col-lg-9 col-md-8 col-sm-12 col-xs-12">
             <div class="page-header">
@@ -265,8 +271,6 @@ $security_question = array($label_secret_01, $label_secret_05, $label_secret_06,
             </div><!-- ./sidebar -->
         </div><!-- ./row -->
         <!-- ./Public Pages -->
-        <?php } ?>
-
     </div><!-- ./container -->
     <!-- ./Public Pages -->
     <?php } ?>

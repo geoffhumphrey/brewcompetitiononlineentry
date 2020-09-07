@@ -203,7 +203,6 @@ function display_array_content($arrayname,$method) {
 	while(list($key, $value) = each($arrayname)) {
 		if (is_array($value)) {
 		$a .= display_array_content($value,'');
-
 		}
 	else $a .= "$value";
 	if ($method == "1") $a .= "";
@@ -211,6 +210,8 @@ function display_array_content($arrayname,$method) {
 	if ($method == "3") $a .= ",";
 	}
 	$b = rtrim($a, ",&nbsp;");
+	$b = rtrim($a, ", ");
+	$b = rtrim($a, ",");
 	return $b;
 }
 
@@ -2875,7 +2876,7 @@ function table_exists($table_name) {
 }
 
 
-function table_assignments($uid,$method,$time_zone,$date_format,$time_format,$method2) {
+function table_assignments($uid,$method,$time_zone,$date_format,$time_format,$method2,$label_table="Table") {
 
 	// Gather and output the judging or stewarding assignments for a user
 	require(CONFIG.'config.php');
@@ -2889,7 +2890,6 @@ function table_assignments($uid,$method,$time_zone,$date_format,$time_format,$me
 		$output = "";
 	}
 
-
 	$query_table_assignments = sprintf("SELECT assignTable FROM %s WHERE bid='%s' AND assignment='%s'",$prefix."judging_assignments",$uid,$method);
 	$table_assignments = mysqli_query($connection,$query_table_assignments) or die (mysqli_error($connection));
 	$row_table_assignments = mysqli_fetch_assoc($table_assignments);
@@ -2900,20 +2900,18 @@ function table_assignments($uid,$method,$time_zone,$date_format,$time_format,$me
 		do {
 			$table_info = explode("^",get_table_info(1,"basic",$row_table_assignments['assignTable'],"default","default"));
 			$location = explode("^",get_table_info($table_info[2],"location",$row_table_assignments['assignTable'],"default","default"));
-			//$output .= "\t<table class='dataTableCompact' style='margin-left: -5px'>\n";
 
 			if ($method2 == 0) {
 				$output .= "\t\t<tr>\n";
-				$output .= "\t\t\t<td class='dataList'>".$location[2]."</td>\n";
-				$output .= "\t\t\t<td class='dataList'>".getTimeZoneDateTime($time_zone, $location[0], $date_format,  $time_format, "long", "date-time")."</td>\n";
-				$output .= "\t\t\t<td class='dataList'>Table ".$table_info[0]." - ".$table_info[1]."</td>\n";
+				$output .= "\t\t\t<td>".$location[2]."</td>\n";
+				$output .= "\t\t\t<td>".getTimeZoneDateTime($time_zone, $location[0], $date_format,  $time_format, "long", "date-time")."</td>\n";
+				$output .= sprintf("\t\t\t<td>%s %s - %s</td>\n",$label_table,$table_info[0],$table_info[1]);
 				$output .= "\t\t</tr>\n";
 			}
 
 			elseif ($method2 == 1) {
 				if ($method == "J") $output .= "<a href='".$base_url."index.php?section=admin&amp;action=assign&amp;go=judging_tables&amp;filter=judges&id=".$table_info[3]."' data-toggle=\"tooltip\" title='Assign/Unassign Judges to Table ".$table_info[0]." - ".$table_info[1]."'>".$table_info[0]."</a>,&nbsp;";
 				if ($method == "S") $output .= "<a href='".$base_url."index.php?section=admin&amp;action=assign&amp;go=judging_tables&amp;filter=stewards&id=".$table_info[3]."' data-toggle=\"tooltip\" title='Assign/Unassign Stewards to Table ".$table_info[0]." - ".$table_info[1]."'>".$table_info[0]."</a>,&nbsp;";
-
 			}
 
 			elseif ($method2 == 2) {
@@ -2921,13 +2919,11 @@ function table_assignments($uid,$method,$time_zone,$date_format,$time_format,$me
 			}
 
 			else {
-				$output .= "\t\t\t<td class='dataList bdr1B'>".$location[2]."</td>\n";
-				$output .= "\t\t\t<td class='dataList bdr1B'>".getTimeZoneDateTime($time_zone, $location[0], $date_format,  $time_format, "long", "date-time")."</td>\n";
-				$output .= "\t\t\t<td class='dataList bdr1B'>Table ".$table_info[0]." - ".$table_info[1]."</td>\n";
+				$output .= "\t\t\t<td>".$location[2]."</td>\n";
+				$output .= "\t\t\t<td>".getTimeZoneDateTime($time_zone, $location[0], $date_format,  $time_format, "long", "date-time")."</td>\n";
+				$output .= sprintf("\t\t\t<td>%s %s - %s</td>\n",$label_table,$table_info[0],$table_info[1]);
 				$output .= "\t\t</tr>\n";
 			}
-
-			//$output .= "\t</table>\n";
 
 		} while ($row_table_assignments = mysqli_fetch_assoc($table_assignments));
 
@@ -4084,6 +4080,45 @@ function style_number_const($style_category_number,$style_sub,$style_set_display
 			return ltrim($style_category_number,"0").$style_set_display_separator.$style_sub;
 		break;
 	}
+}
+
+// Check if user is assigned to the flight that a entry is part of.
+function user_flight_assignment($uid,$table_id) {
+	require(CONFIG.'config.php');
+	mysqli_select_db($connection,$database);
+
+	$query_flight_assign = sprintf("SELECT assignFlight FROM %s WHERE bid=%s AND assignTable=%s",$prefix."judging_assignments",$uid,$table_id);
+	$flight_assign = mysqli_query($connection,$query_flight_assign) or die (mysqli_error($connection));
+	$row_flight_assign = mysqli_fetch_assoc($flight_assign);
+
+	return $row_flight_assign['assignFlight'];
+}
+
+function entry_flight_assignment($eid,$table_id) {
+	require(CONFIG.'config.php');
+	mysqli_select_db($connection,$database);
+	
+	$query_flight_assign = sprintf("SELECT flightNumber FROM %s WHERE flightEntryID=%s AND flightTable=%s",$prefix."judging_flights",$eid,$table_id);
+	$flight_assign = mysqli_query($connection,$query_flight_assign) or die (mysqli_error($connection));
+	$row_flight_assign = mysqli_fetch_assoc($flight_assign);
+	
+	return $row_flight_assign['flightNumber'];
+}
+
+function user_submitted_eval($uid,$eid) {
+
+	require(CONFIG.'config.php');
+	mysqli_select_db($connection,$database);
+
+	if ($uid == "admin") $query_eval_sub = sprintf("SELECT id,evalAromaScore,evalAppearanceScore,evalFlavorScore,evalMouthfeelScore,evalOverallScore,evalFinalScore,evalTable FROM %s WHERE eid='%s'", $prefix."evaluation",$eid);
+	else $query_eval_sub = sprintf("SELECT id,evalAromaScore,evalAppearanceScore,evalFlavorScore,evalMouthfeelScore,evalOverallScore,evalFinalScore,evalTable FROM %s WHERE evalJudgeInfo='%s' AND eid='%s'", $prefix."evaluation",$uid,$eid);
+	$eval_sub = mysqli_query($connection,$query_eval_sub) or die (mysqli_error($connection));
+	$row_eval_sub = mysqli_fetch_assoc($eval_sub);
+	$totalRows_eval_sub = mysqli_num_rows($eval_sub);
+
+	if ($totalRows_eval_sub > 0) return $row_eval_sub;
+	else return "";
+
 }
 
 ?>

@@ -5,6 +5,10 @@
  *
  */
 
+if (EVALUATION) {
+    include(EVALS.'admin_alert_empty_prefs.eval.php');
+    include(EVALS.'import_scores.eval.php');
+}
 ?>
 <p class="lead">Hello, <?php echo $_SESSION['brewerFirstName']; ?>. <span class="small">Click or tap the headings or icons below to view the options available in each category.</span></p>
 
@@ -696,12 +700,25 @@
                                     <strong>Scoresheets and Docs</strong>
                                 </div>
                                 <div class="col col-lg-7 col-md-8 col-sm-8 col-xs-8">
-                                    <ul class="list-inline">
+                                    <ul class="list-unstyled">
                                         <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=upload_scoresheets" data-toggle="tooltip" data-placement="top" title="Upload scoresheets for judged entries">Upload Multiple</a></li>
                                         <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=upload_scoresheets&amp;action=html" data-toggle="tooltip" data-placement="top" title="Upload scoresheets for judged entries">Upload Individually</a></li>
                                     </ul>
                                 </div>
                             </div><!-- ./row -->
+
+                            <?php if (EVALUATION) {?>
+                            <div class="row">
+                                <div class="col col-lg-5 col-md-4 col-sm-4 col-xs-4">
+                                    <strong>Entry Evaluations</strong>
+                                </div>
+                                <div class="col col-lg-7 col-md-8 col-sm-8 col-xs-8">
+                                    <ul class="list-inline">
+                                        <li><a href="<?php echo $base_url; ?>index.php?section=evaluation&amp;go=default&amp;filter=default&amp;view=admin" data-toggle="tooltip" data-placement="top" title="Manage, View and Edit Judges' evaluations of received entries">Manage</a></li>
+                                    </ul> 
+                                </div>
+                            </div><!-- ./row -->
+                            <?php } ?>
 
 
                             <div class="row">
@@ -711,6 +728,9 @@
                                 <div class="col col-lg-7 col-md-8 col-sm-8 col-xs-8">
                                     <ul class="list-unstyled">
                                         <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging_scores">Manage</a></li>
+                                    <?php if (EVALUATION) { ?>
+                                        <li><?php echo $import_scores_display; ?></li>
+                                    <?php } ?>
                                     </ul>
 									<div class="dropdown bcoem-admin-dashboard-select">
 										<button class="btn btn-default dropdown-toggle" type="button" id="scoresMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Add Scores to... <span class="caret"></span>

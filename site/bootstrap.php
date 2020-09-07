@@ -36,13 +36,68 @@ if ($setup_success) {
 
 	// ---------------------------- Check if Valid Section -----------------------------
 
-	$section_array = array("default","rules","entry","volunteers","contact","pay","list","admin","login","logout","check","brewer","user","setup","judge","beerxml","register","sponsors","past_winners","brew","step1","step2","step3","step4","step5","step6","step7","step8","update","confirm","delete","table_cards","participant_summary","loc","sorting","output_styles","map","driving","scores","entries","participants","emails","assignments","bos-mat","dropoff","summary","inventory","pullsheets","results","sorting","staff","styles","promo","table-cards","testing","notes","qr","shipping-label","particpant-entries","qr","eval");
-
-	// Redirect to 404 if section not the array
-	if (!in_array($section,$section_array)) {
-		header(sprintf("Location: %s",$base_url."404.php"));
-		exit;
-		}
+	$section_array = array(
+		"default",
+		"rules",
+		"entry",
+		"volunteers",
+		"contact",
+		"pay",
+		"list",
+		"admin",
+		"login",
+		"logout",
+		"check",
+		"brewer",
+		"user",
+		"setup",
+		"judge",
+		"beerxml",
+		"register",
+		"sponsors",
+		"past_winners",
+		"brew",
+		"step1",
+		"step2",
+		"step3",
+		"step4",
+		"step5",
+		"step6",
+		"step7",
+		"step8",
+		"update",
+		"confirm",
+		"delete",
+		"table_cards",
+		"participant_summary",
+		"loc",
+		"sorting",
+		"output_styles",
+		"map",
+		"driving",
+		"scores",
+		"entries",
+		"participants",
+		"emails",
+		"assignments",
+		"bos-mat",
+		"dropoff",
+		"summary",
+		"inventory",
+		"pullsheets",
+		"results",
+		"sorting",
+		"staff",
+		"styles",
+		"promo",
+		"table-cards",
+		"testing",
+		"notes",
+		"qr",
+		"shipping-label",
+		"particpant-entries",
+		"evaluation"
+	);
 
 	// ---------------------------- QR Redirect ----------------------------
 
@@ -74,7 +129,6 @@ if ($setup_success) {
 	// ---------------------------- Load Required Scripts ----------------------------
 
 	if (SINGLE) require_once(SSO.'sso.inc.php');
-
 	require_once (LIB.'common.lib.php');
 	require_once (INCLUDES.'db_tables.inc.php');
 	if (($msg == "16") || ($force_update)) include (UPDATE.'off_schedule_update.php');
@@ -148,8 +202,8 @@ if ($setup_success) {
 
 		if ($totalRows_prefs_check == 0) {
 
-			$sql = sprintf("INSERT INTO `%s` (`id`, `prefsTemp`, `prefsWeight1`, `prefsWeight2`, `prefsLiquid1`, `prefsLiquid2`, `prefsPaypal`, `prefsPaypalAccount`, `prefsCurrency`, `prefsCash`, `prefsCheck`, `prefsCheckPayee`, `prefsTransFee`, `prefsGoogle`, `prefsGoogleAccount`, `prefsSponsors`, `prefsSponsorLogos`, `prefsSponsorLogoSize`, `prefsCompLogoSize`, `prefsDisplayWinners`, `prefsWinnerDelay`, `prefsWinnerMethod`, `prefsDisplaySpecial`, `prefsBOSMead`, `prefsBOSCider`, `prefsEntryForm`, `prefsRecordLimit`, `prefsRecordPaging`, `prefsProEdition`, `prefsTheme`, `prefsDateFormat`, `prefsContact`, `prefsTimeZone`, `prefsEntryLimit`, `prefsTimeFormat`, `prefsUserEntryLimit`, `prefsUserSubCatLimit`, `prefsUSCLEx`, `prefsUSCLExLimit`, `prefsPayToPrint`, `prefsHideRecipe`, `prefsUseMods`, `prefsSEF`, `prefsSpecialCharLimit`, `prefsStyleSet`, `prefsAutoPurge`, `prefsEntryLimitPaid`, `prefsEmailRegConfirm`, `prefsLanguage`, `prefsSpecific`, `prefsDropOff`, `prefsShipping`,`prefsPaypalIPN`) VALUES
-	(1, 'Fahrenheit', 'ounces', 'pounds', 'ounces', 'gallons', 'Y', 'user.baseline@brewcompetition.com', '$', 'N', 'N', NULL, 'Y', 'N', NULL, 'Y', 'Y', '250', '300', 'N', 8, 0, NULL, 'N', 'N', 'B', 9999, 150, NULL, 'default', '1', 'Y', '-7.000', NULL, 0, NULL, NULL, NULL, NULL, 'N', 'Y', 'N', 'N', 150, 'BJCP2015', 0, NULL, NULL, 'English', 1, 1, 1, 0);",$preferences_db_table);
+			$sql = sprintf("INSERT INTO `%s` (`id`, `prefsTemp`, `prefsWeight1`, `prefsWeight2`, `prefsLiquid1`, `prefsLiquid2`, `prefsPaypal`, `prefsPaypalAccount`, `prefsCurrency`, `prefsCash`, `prefsCheck`, `prefsCheckPayee`, `prefsTransFee`, `prefsGoogle`, `prefsGoogleAccount`, `prefsSponsors`, `prefsSponsorLogos`, `prefsSponsorLogoSize`, `prefsCompLogoSize`, `prefsDisplayWinners`, `prefsWinnerDelay`, `prefsWinnerMethod`, `prefsDisplaySpecial`, `prefsBOSMead`, `prefsBOSCider`, `prefsEntryForm`, `prefsRecordLimit`, `prefsRecordPaging`, `prefsProEdition`, `prefsTheme`, `prefsDateFormat`, `prefsContact`, `prefsTimeZone`, `prefsEntryLimit`, `prefsTimeFormat`, `prefsUserEntryLimit`, `prefsUserSubCatLimit`, `prefsUSCLEx`, `prefsUSCLExLimit`, `prefsPayToPrint`, `prefsHideRecipe`, `prefsUseMods`, `prefsSEF`, `prefsSpecialCharLimit`, `prefsStyleSet`, `prefsAutoPurge`, `prefsEntryLimitPaid`, `prefsEmailRegConfirm`, `prefsLanguage`, `prefsSpecific`, `prefsDropOff`, `prefsShipping`,`prefsPaypalIPN`) 
+				VALUES (1, 'Fahrenheit', 'ounces', 'pounds', 'ounces', 'gallons', 'Y', 'user.baseline@brewcompetition.com', '$', 'N', 'N', NULL, 'Y', 'N', NULL, 'Y', 'Y', '250', '300', 'N', 8, 0, NULL, 'N', 'N', 'B', 9999, 150, NULL, 'default', '1', 'Y', '-7.000', NULL, 0, NULL, NULL, NULL, NULL, 'N', 'Y', 'N', 'N', 150, 'BJCP2015', 0, NULL, NULL, 'English', 1, 1, 1, 0);",$preferences_db_table);
 			mysqli_select_db($connection,$database);
 			mysqli_real_escape_string($connection,$sql);
 			$result = mysqli_query($connection,$sql) or die (mysqli_error($connection));

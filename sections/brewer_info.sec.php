@@ -157,16 +157,15 @@ $brewer_assignment .= brewer_assignment($_SESSION['user_id'],"1","blah",$dbTable
 $assignment_array = str_replace(", ",",",$brewer_assignment);
 $assignment_array = explode(",", $assignment_array);
 
-if ((in_array("Judge",$assignment_array)) && ($_SESSION['brewerJudge'] == "Y") && ($totalRows_judging3 > 1)) {
+if ((in_array($label_judge,$assignment_array)) && ($_SESSION['brewerJudge'] == "Y") && ($totalRows_judging3 > 1)) {
  	$assignment = "judge";
  	$judge_available_not_assigned = TRUE;
 }
 
-if ((in_array("Steward",$assignment_array)) && ($_SESSION['brewerSteward'] == "Y") && ($totalRows_judging3 > 1)) {
+if ((in_array($label_steward,$assignment_array)) && ($_SESSION['brewerSteward'] == "Y") && ($totalRows_judging3 > 1)) {
 	$assignment = "steward";
 	$steward_available_not_assigned = TRUE;
 }
-
 
 // Build header
 $header1_1 .= sprintf("<h2>%s</h2>",$label_account_info);
@@ -183,17 +182,20 @@ if (($totalRows_log > 0) && ($show_entries)) {
 	$primary_page_info .= "</small></p>";
 }
 
+if ((EVALUATION) && ($assignment == "judge")) include (EVALS.'my_account.eval.php');
+
 $user_edit_links .= "<div class=\"btn-group hidden-print\" role=\"group\" aria-label=\"EditAccountFunctions\">";
-$user_edit_links .= sprintf("<a class=\"btn btn-default\" href=\"".$edit_user_info_link."\"><span class=\"fa fa-user\"></span> %s</a>",$label_edit_account);
+$user_edit_links .= sprintf("<a class=\"btn btn-default\" href=\"%s\"><span class=\"fa fa-user\"></span> %s</a>",$edit_user_info_link,$label_edit_account);
 if (!NHC) $user_edit_links .= sprintf("<a class=\"btn btn-default\" href=\"".$edit_user_email_link."\"><span class=\"fa fa-envelope\"></span> %s</a>",$label_change_email);
-$user_edit_links .= sprintf("<a class=\"btn btn-default\" href=\"".$edit_user_password_link."\"><span class=\"fa fa-key\"></span> %s</a>",$label_change_password);
+$user_edit_links .= sprintf("<a class=\"btn btn-default\" href=\"%s\"><span class=\"fa fa-key\"></span> %s</a>",$edit_user_password_link,$label_change_password);
 $user_edit_links .= "</div><!-- ./button group --> ";
 $user_edit_links .= "<div class=\"btn-group hidden-print\" role=\"group\" aria-label=\"AddEntries\">";
 if (($show_entries) && ($add_entry_link_show)) {
-	$user_edit_links .= sprintf("<a class=\"btn btn-default\" href=\"".$add_entry_link."\"><span class=\"fa fa-plus-circle\"></span> %s</a>",$label_add_entry);
-	if ((!NHC) && ($_SESSION['prefsHideRecipe'] == "N")) $user_edit_links .= sprintf("<a class=\"btn btn-default\" href=\"".$add_entry_beerxml_link."\"><span class=\"fa fa-file-code-o\"></span> %s</a>",$label_add_beerXML);
+	$user_edit_links .= sprintf("<a class=\"btn btn-default\" href=\"%s\"><span class=\"fa fa-plus-circle\"></span> %s</a>",$add_entry_link,$label_add_entry);
+	if ((!NHC) && ($_SESSION['prefsHideRecipe'] == "N")) $user_edit_links .= sprintf("<a class=\"btn btn-default\" href=\"%s\"><span class=\"fa fa-file-code-o\"></span> %s</a>",$add_entry_beerxml_link,$label_add_beerXML);
 }
 $user_edit_links .= "</div><!-- ./button group -->";
+
 
 // Build User Info
 $name .= $_SESSION['brewerFirstName']." ".$_SESSION['brewerLastName'];

@@ -1335,7 +1335,7 @@ if (($section == "list") || ($section == "account") || ($go == "entries")) {
 if (SINGLE) $brewer_info_000 = "Dobrý den";
 else $brewer_info_000 = "Děkujeme za účast na";
 $brewer_info_001 = "Údaje vašeho účtu byly naposledy upraveny";
-$brewer_info_002 = "Věnujte chvíli <a href=\"#entries\">kontrole svých vzorků</a>";
+$brewer_info_002 = "Věnujte chvíli <a href=\"#entries\">kontrole svých vzorků</a>.";
 $brewer_info_003 = "uhradit poplatky za účast</a>";
 $brewer_info_004 = "za vzorek";
 $brewer_info_005 = "Členství v American Homebrewers Association (AHA) je povinné, pokud je některý z vašich vzorků vybrán pro Great American Beer Festival Pro-Am.";

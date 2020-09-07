@@ -376,6 +376,8 @@ if (($action == "add") || ($action == "edit")) {
 
 
 } // end if (($action == "add") || ($action == "edit"))
+
+if (EVALUATION) include(EVALS.'import_scores.eval.php');
 ?>
 <p class="lead"><?php echo $_SESSION['contestName'].$title;  ?></p>
 <?php if ($dbTable == "default") echo $sub_lead_text; ?>
@@ -615,7 +617,10 @@ $(document).ready(function() {
 						<div id="collapseStep6" class="panel-collapse collapse">
 							<div class="panel-body">
 								<ul class="list-unstyled">
-                                	<li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging_scores">All Scores</a></li>
+                                	<?php if (EVALUATION) { ?><li><a href="<?php echo $base_url; ?>index.php?section=evaluation&amp;go=default&amp;filter=default&amp;view=admin" data-toggle="tooltip" data-placement="top" title="Manage, View and Edit Judges' evaluations of received entries">Manage Entry Evaluations</a></li>
+                                    <li><?php echo $import_scores_display; ?></li>
+                                    <?php } ?>
+                                    <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging_scores">All Scores</a></li>
                                 </ul>
                                 <div class="btn-group" role="group" aria-label="modals">
                                     <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

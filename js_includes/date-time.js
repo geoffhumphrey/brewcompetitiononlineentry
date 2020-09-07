@@ -71,5 +71,13 @@ $(function () {
 	$("#dateThresholdEntries").datetimepicker({
         format: "YYYY-MM-DD"
     });
+
+    $('#jPrefsJudgingOpen').datetimepicker({
+		format: 'YYYY-MM-DD hh:mm A'
+	});
+
+	$('#jPrefsJudgingClosed').datetimepicker({
+		format: 'YYYY-MM-DD hh:mm A'
+	});
 	
 });

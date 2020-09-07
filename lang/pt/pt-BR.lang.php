@@ -1338,8 +1338,8 @@ $brewer_entries_text_020 = "A edição das inscrições não está disponível n
 if (SINGLE) $brewer_info_000 = "Olá";
 else $brewer_info_000 = "Obrigado por participar do";
 $brewer_info_001 = "Os detalhes da sua conta foram atualizados pela última vez";
-$brewer_info_002 = "Reserve um momento para <a href=\"#entries\"> revisar suas amostras </a>";
-$brewer_info_003 = "pague as taxas de inscrição </a>";
+$brewer_info_002 = "Reserve um momento para <a href=\"#entries\"> revisar suas amostras</a>.";
+$brewer_info_003 = "pague as taxas de inscrição</a>";
 $brewer_info_004 = "por amostra";
 $brewer_info_005 = "É necessária uma afiliação à American Homebrewers Association (AHA) se uma de suas inscrições for selecionada para um Grande Festival Americano de Cerveja Pro-Am.";
 $brewer_info_006 = "Imprima etiquetas de envio para anexar à sua caixa (s) de garrafas.";

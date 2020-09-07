@@ -77,6 +77,8 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 	// echo $referrer['host']."<br>".$_SERVER['SERVER_NAME']; exit;
 }
 
+if ($_SESSION['prefsSEF'] == "Y") $sef = "true";
+
 if (((isset($_SERVER['HTTP_REFERER'])) && ($referrer['host'] == $_SERVER['SERVER_NAME'])) && ((isset($_SESSION['prefs'.$prefix_session])) || ($setup_free_access))) {
 
 	require(LIB.'process.lib.php');
@@ -280,7 +282,7 @@ if (((isset($_SERVER['HTTP_REFERER'])) && ($referrer['host'] == $_SERVER['SERVER
 		if ($dbTable == $prefix."special_best_info") include (PROCESS.'process_special_best_info.inc.php');
 		if ($dbTable == $prefix."special_best_data") include (PROCESS.'process_special_best_data.inc.php');
 		if ($dbTable == $prefix."mods") include (PROCESS.'process_mods.inc.php');
-		if ($dbTable == $prefix."evaluation") include (EVALS.'process_evals.inc.php');
+		if ($dbTable == $prefix."evaluation") include (EVALS.'process.eval.php');
 
 	}
 

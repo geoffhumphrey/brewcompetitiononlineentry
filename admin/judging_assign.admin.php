@@ -123,25 +123,24 @@ do {
 		$judge_roles = mysqli_query($connection,$query_judge_roles) or die (mysqli_error($connection));
 		$row_judge_roles = mysqli_fetch_assoc($judge_roles);
 
-        if ($_SESSION['jPrefsQueued'] == "Y") {
-            // Activate for Roles
-    		if (!empty($row_judge_roles['assignRoles'])) {
-    			$roles_previously_defined = 1;
-    		}
+      if ($_SESSION['jPrefsQueued'] == "Y") {
+          // Activate for Roles
+      		if (!empty($row_judge_roles['assignRoles'])) {
+      			$roles_previously_defined = 1;
+      		}
 
-    		if (strpos($row_judge_roles['assignRoles'],"HJ") !== FALSE) {
-    			$checked_head_judge = "CHECKED";
-    		}
+      		if (strpos($row_judge_roles['assignRoles'],"HJ") !== FALSE) {
+      			$checked_head_judge = "CHECKED";
+      		}
 
-    		if (strpos($row_judge_roles['assignRoles'],"LJ") !== FALSE) {
-    			$checked_lead_judge = "CHECKED";
-    		}
+      		if (strpos($row_judge_roles['assignRoles'],"LJ") !== FALSE) {
+      			$checked_lead_judge = "CHECKED";
+      		}
 
-    		if (strpos($row_judge_roles['assignRoles'],"MBOS") !== FALSE) {
-    			$checked_minibos_judge = "CHECKED";
-    		}
-
-        }
+      		if (strpos($row_judge_roles['assignRoles'],"MBOS") !== FALSE) {
+      			$checked_minibos_judge = "CHECKED";
+      		}
+      }
 
 		if  (table_round($row_tables_edit['id'],$i)) {
 
@@ -150,7 +149,7 @@ do {
 			if (at_table($row_brewer['uid'],$row_tables_edit['id'])) {
                 $assigned_at_this_table = TRUE;
 				$assign_row_color = "bg-orange text-orange";
-				$assign_flag = "<span class=\"fa fa-lg fa-check\"></span> <strong>Assigned.</strong> Participant is assigned to this table.";
+				$assign_flag = "<span class=\"fa fa-lg fa-check\"></span> <strong>Assigned.</strong> Participant is assigned to this table/flight.";
 				$rank_number = filter_var($display_rank,FILTER_SANITIZE_NUMBER_FLOAT);
 				//$rank_number = preg_replace("/[^0-9,.]/", "", $display_rank);
 				if ($rank_number >= 2) {
@@ -293,6 +292,16 @@ $(document).ready(function(){
     <?php echo $output_jquery_toggle; ?>
 });
 </script>
+<?php } else { ?>
+<script type='text/javascript'>//<![CDATA[
+// Activate for Roles
+$(document).ready(function(){
+  $(".assign-flight").change(function() {
+      $(this).closest("section").find('.unassign-checkbox').prop('checked', true);
+  });
+});
+</script>
+
 <?php } ?>
 <div class="bcoem-admin-element hidden-print">
 	<div class="btn-group" role="group" aria-label="modals">

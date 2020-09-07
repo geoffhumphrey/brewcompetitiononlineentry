@@ -194,7 +194,7 @@ if (($logged_in) && ($admin_user) && ($go != "error_page")) { ?>
 					<li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=contacts">Manage Contacts</a></li>
                     <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=special_best">Manage Custom Categories</a></li>
                     <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=dropoff">Manage Drop-Off Locations</a></li>
-                    <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging">Manage Judging Locations</a></li>
+                    <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging">Manage Judging Sessions</a></li>
                     <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=sponsors">Manage Sponsors</a></li>
                     <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=styles">Manage Styles Accepted</a></li>
                     <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=style_types">Manage Style Types</a></li>
@@ -240,6 +240,7 @@ if (($logged_in) && ($admin_user) && ($go != "error_page")) { ?>
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">Scoring <span class="caret"></span></a>
                 <ul class="dropdown-menu navmenu-nav">
                 	<li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=upload_scoresheets">Upload Scoresheets</a></li>
+                	<?php if (EVALUATION) { ?><li><a href="<?php echo $base_url; ?>index.php?section=evaluation&amp;go=default&amp;filter=default&amp;view=admin">Manage Entry Evaluations</a></li><?php } ?>
                     <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging_scores">Manage Scores</a></li>
                     <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging_scores_bos">Manage BOS Entries and Places</a></li>
                 </ul>
@@ -400,8 +401,15 @@ $(document).ready(function(){
                     <li><a href="<?php echo $add_entry_link; ?>" tabindex="-1"><?php echo $label_add_entry; ?></a></li>
                     <?php if ((!NHC) && ($_SESSION['prefsHideRecipe'] == "N")) { ?><li tabindex="-1"><a href="<?php echo $add_entry_beerxml_link; ?>"><?php echo $label_add_beerXML; ?></a><?php } ?>
                     <?php } ?>
-                    <?php } ?>
-                    <?php if ((!$disable_pay) && ($show_entries)) { ?>
+                    <?php } if (EVALUATION) { 
+                    	$brewer_assignment = brewer_assignment($_SESSION['user_id'],"1","blah",$dbTable,$filter);
+						$assignment_array = str_replace(", ",",",$brewer_assignment);
+						$assignment_array = explode(",", $assignment_array);
+						if (((in_array($label_judge,$assignment_array)) && ($_SESSION['brewerJudge'] == "Y")) && (time() >= $row_judging_prefs['jPrefsJudgingOpen'])) { 
+                   	?>
+					<li><a href="<?php echo build_public_url("evaluation","default","default","default",$sef,$base_url); ?>" tabindex="-1"><?php echo $label_judging_dashboard; ?></a></li>
+                    <?php }
+                    } if ((!$disable_pay) && ($show_entries)) { ?>
                         <?php if (!$comp_paid_entry_limit) { ?>
                             <li><a href="<?php echo $link_pay; ?>"><?php echo $label_pay.$paid_icon; ?></a></li>
                         <?php } ?>

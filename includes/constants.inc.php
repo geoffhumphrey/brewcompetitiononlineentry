@@ -2404,6 +2404,40 @@ if (((strpos($section, "step") === FALSE) && ($section != "setup")) && ($section
 	$judge_open_sidebar = getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_contest_dates['contestJudgeOpen'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "short", "date-time"); ;
 	$judge_closed_sidebar = getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_contest_dates['contestJudgeDeadline'], $_SESSION['prefsDateFormat'],$_SESSION['prefsTimeFormat'], "short", "date-time");
 
+    if (EVALUATION) {
+
+        if (empty($row_judging_prefs['jPrefsScoresheet'])) $judging_scoresheet = "1"; 
+        else $judging_scoresheet = $_SESSION['jPrefsScoresheet'];
+
+        if ((empty($row_judging_prefs['jPrefsJudgingOpen'])) || (empty($row_judging_prefs['jPrefsJudgingClosed']))) {
+
+            $query_judging_dates = sprintf("SELECT judgingDate FROM %s",$judging_locations_db_table);
+            $judging_dates = mysqli_query($connection,$query_judging_dates) or die (mysqli_error($connection));
+            $row_judging_dates = mysqli_fetch_assoc($judging_dates);
+            $totalRows_judging_dates = mysqli_num_rows($judging_dates);
+
+            $date_arr = array();
+            do {
+                $date_arr[] = $row_judging_dates['judgingDate'];
+            } while($row_judging_dates = mysqli_fetch_assoc($judging_dates));
+
+            $suggested_open_date = min($date_arr); // Get the start time of the first judging location chronologically
+            $suggested_close_date = (max($date_arr) + 28800); // Add eight hours to the start time at the final judging location
+
+            if (empty($row_judging_prefs['jPrefsJudgingOpen'])) $judging_evals_open = getTimeZoneDateTime($_SESSION['prefsTimeZone'], $suggested_open_date, $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], $sidebar_date_format, "date-time");
+            else $judging_evals_open = getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_judging_prefs['jPrefsJudgingOpen'], $_SESSION['prefsDateFormat'], $_SESSION['prefsTimeFormat'], $sidebar_date_format, "date-time");
+            if (empty($row_judging_prefs['jPrefsJudgingClosed'])) $judging_evals_closed = getTimeZoneDateTime($_SESSION['prefsTimeZone'], $suggested_close_date, $_SESSION['prefsDateFormat'],$_SESSION['prefsTimeFormat'], $sidebar_date_format, "date-time");
+            else $judging_evals_closed = getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_judging_prefs['jPrefsJudgingClosed'], $_SESSION['prefsDateFormat'],$_SESSION['prefsTimeFormat'], $sidebar_date_format, "date-time");
+
+        }
+
+        else {
+            $judging_evals_open = getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_judging_prefs['jPrefsJudgingOpen'], $_SESSION['prefsDateFormat'], $_SESSION['prefsTimeFormat'], $sidebar_date_format, "date-time");
+            $judging_evals_closed = getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_judging_prefs['jPrefsJudgingClosed'], $_SESSION['prefsDateFormat'],$_SESSION['prefsTimeFormat'], $sidebar_date_format, "date-time");
+        }
+        
+    }
+
 	$currency = explode("^",currency_info($_SESSION['prefsCurrency'],1));
 	$currency_symbol = $currency[0];
 	$currency_code = $currency[1];
@@ -2536,8 +2570,8 @@ if (HOSTED) $_SESSION['prefsCAPTCHA'] = 1;
 
 // Load libraries only when needed - for performance
 $tinymce_load = array("contest_info","default","step4","default");
-$datetime_load = array("contest_info","eval","testing","preferences","step4","step5","step6","default","judging");
-$datatables_load = array("admin","list","default","step4","eval");
+$datetime_load = array("contest_info","eval","testing","preferences","step4","step5","step6","default","judging","judging_preferences");
+$datatables_load = array("admin","list","default","step4","evaluation");
 
 if (isset($_SESSION['prefsStyleSet'])) {
     // Set vars for backwards compatibility

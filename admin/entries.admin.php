@@ -50,6 +50,24 @@ else {
 }
 // Build table body and associated arrays
 
+
+if (EVALUATION) {
+
+	$evals = array();
+	// Check which evaluations exist
+	$query_eval_exists = sprintf("SELECT DISTINCT eid FROM %s",$prefix."evaluation");
+	$eval_exists = mysqli_query($connection,$query_eval_exists) or die (mysqli_error($connection));
+	$row_eval_exists = mysqli_fetch_assoc($eval_exists);
+	$totalRows_eval_exists = mysqli_num_rows($eval_exists);
+
+	if ($totalRows_eval_exists > 0) {
+		do {
+			$evals[] = $row_eval_exists['eid'];
+		} while ($row_eval_exists = mysqli_fetch_assoc($eval_exists));
+	}
+		 
+}
+
 do {
 
 	if ($dbTable == "default") $brewer_info_filter = "default";
@@ -86,45 +104,72 @@ do {
 	$entry_staff_notes_display = "";
 	$entry_allergens_display = "";
 
-	$entry_number = sprintf("%04s",$row_log['id']);
-	$judging_number = sprintf("%06s",$row_log['brewJudgingNumber']);
-
-	// Check whether scoresheet file exists, and, if so, provide link.
-	$scoresheet_file_name_entry = sprintf("%06s",$entry_number).".pdf";
-	$scoresheet_file_name_judging = strtolower($judging_number).".pdf"; // upon upload via the UI, filename is converted to lowercase
-
-	if ($dbTable == "default") {
-		$scoresheetfile_entry = USER_DOCS.$scoresheet_file_name_entry;
-		$scoresheetfile_judging = USER_DOCS.$scoresheet_file_name_judging;
-		$scoresheet_prefs = $_SESSION['prefsDisplaySpecial'];
-	}
-
-	else {
-		$scoresheetfile_entry = USER_DOCS.DIRECTORY_SEPARATOR.get_suffix($dbTable).DIRECTORY_SEPARATOR.$scoresheet_file_name_entry;
-		$scoresheetfile_judging = USER_DOCS.DIRECTORY_SEPARATOR.get_suffix($dbTable).DIRECTORY_SEPARATOR.$scoresheet_file_name_judging;
-		$scoresheet_prefs = $row_archive_prefs['archiveScoresheet'];
-	}
-
 	$scoresheet = FALSE;
 	$scoresheet_entry = FALSE;
 	$scoresheet_judging = FALSE;
 
-	if ((file_exists($scoresheetfile_entry)) && ($scoresheet_prefs == "E")) {
-		$scoresheet = TRUE;
-		$scoresheet_entry = TRUE;
+	$entry_number = sprintf("%04s",$row_log['id']);
+	$judging_number = sprintf("%06s",$row_log['brewJudgingNumber']);
+
+	// If using electronic scoresheets, build links
+	if (EVALUATION) {
+
+		if ($row_judging_prefs['jPrefsScoresheet'] == 1) $output_form = "full-scoresheet";
+		if ($row_judging_prefs['jPrefsScoresheet'] == 2) $output_form = "checklist-scoresheet";
+		if ($row_judging_prefs['jPrefsScoresheet'] == 3) $output_form = "structured-scoresheet";
+
+		if (in_array($row_log['id'], $evals)) {
+			$scoresheet = TRUE;
+			
+			$query_style = sprintf("SELECT id,brewStyleType FROM %s WHERE brewStyleVersion='%s'AND brewStyleGroup='%s' AND brewStyleNum='%s'",$prefix."styles",$_SESSION['prefsStyleSet'],$row_log['brewCategorySort'],$row_log['brewSubCategory']);
+			$style = mysqli_query($connection,$query_style) or die (mysqli_error($connection));
+			$row_style = mysqli_fetch_assoc($style);
+
+			if (($row_style['brewStyleType'] == 2) || ($row_style['brewStyleType'] == 3)) $output_form = "full-scoresheet";
+
+			$view_link = $base_url."output/print.output.php?section=evaluation&amp;go=".$output_form."&amp;view=all&amp;id=".$row_log['id']."&amp;tb=1";
+			$print_link = $base_url."output/print.output.php?section=evaluation&amp;go=".$output_form."&amp;view=all&amp;id=".$row_log['id'];
+		}
+	
 	}
 
-	elseif ((file_exists($scoresheetfile_judging)) && ($scoresheet_prefs == "J")) {
-		$scoresheet = TRUE;
-		$scoresheet_judging = TRUE;
-	}
+	else {
+		
+		// Check whether scoresheet file exists, and, if so, provide link.
+		$scoresheet_file_name_entry = sprintf("%06s",$entry_number).".pdf";
+		$scoresheet_file_name_judging = strtolower($judging_number).".pdf"; // upon upload via the UI, filename is converted to lowercase
 
-	$scoresheet_file_name_1 = "";
-	$scoresheet_file_name_2 = "";
-	if ($scoresheet_entry) $scoresheet_file_name_1 = $scoresheet_file_name_entry;
-	if ($scoresheet_judging) $scoresheet_file_name_2 = $scoresheet_file_name_judging;
+		if ($dbTable == "default") {
+			$scoresheetfile_entry = USER_DOCS.$scoresheet_file_name_entry;
+			$scoresheetfile_judging = USER_DOCS.$scoresheet_file_name_judging;
+			$scoresheet_prefs = $_SESSION['prefsDisplaySpecial'];
+		}
+
+		else {
+			$scoresheetfile_entry = USER_DOCS.DIRECTORY_SEPARATOR.get_suffix($dbTable).DIRECTORY_SEPARATOR.$scoresheet_file_name_entry;
+			$scoresheetfile_judging = USER_DOCS.DIRECTORY_SEPARATOR.get_suffix($dbTable).DIRECTORY_SEPARATOR.$scoresheet_file_name_judging;
+			$scoresheet_prefs = $row_archive_prefs['archiveScoresheet'];
+		}
+
+		if ((file_exists($scoresheetfile_entry)) && ($scoresheet_prefs == "E")) {
+			$scoresheet = TRUE;
+			$scoresheet_entry = TRUE;
+		}
+
+		elseif ((file_exists($scoresheetfile_judging)) && ($scoresheet_prefs == "J")) {
+			$scoresheet = TRUE;
+			$scoresheet_judging = TRUE;
+		}
+
+		$scoresheet_file_name_1 = "";
+		$scoresheet_file_name_2 = "";
+		if ($scoresheet_entry) $scoresheet_file_name_1 = $scoresheet_file_name_entry;
+		if ($scoresheet_judging) $scoresheet_file_name_2 = $scoresheet_file_name_judging;
+
+	} // end if (EVALUATION) else
 
 	if ((!empty($row_log['brewInfo'])) || (!empty($row_log['brewMead1'])) || (!empty($row_log['brewMead2'])) || (!empty($row_log['brewMead3']))) {
+		
 		$brewInfo = "";
 		//$brewInfo .= "Required Info: ";
 		if (!empty($row_log['brewInfo'])) $brewInfo .= str_replace("^", " | ", $row_log['brewInfo']);
@@ -133,6 +178,7 @@ do {
 		if (!empty($row_log['brewMead3'])) $brewInfo .= "&nbsp;&nbsp;".$row_log['brewMead3'];
 
 		$required_info .= "<p><strong>Req. Info:</strong> ".$brewInfo."</p>";
+	
 	}
 
 	if (!empty($row_log['brewInfoOptional'])) {
@@ -147,12 +193,23 @@ do {
 	if (($row_log['brewConfirmed'] == 0) || (empty($row_log['brewConfirmed']))) $entry_unconfirmed_row = "bg-danger";
 	elseif (($_SESSION['prefsStyleSet'] != "BA") && ((check_special_ingredients($entry_style_system,$row_styles['brewStyleVersion']))) && ($row_log['brewInfo'] == "")) $entry_unconfirmed_row = "bg-warning";
 
+	// Judging Number
+
 	if (isset($row_log['brewJudgingNumber'])) {
 		$entry_judging_num_hidden .= "<span class=\"hidden visible-print-inline\">".$judging_number."</span>";
 		$entry_judging_num .= $judging_number;
 	}
 
-	if (($action != "print") && ($dbTable == "default")) $entry_judging_num_display .= "<input class=\"form-control input-sm hidden-print\" id=\"brewJudgingNumber\" name=\"brewJudgingNumber".$row_log['id']."\" type=\"text\" pattern=\".{6,}\" title=\"Judging numbers must be six characters and cannot include the ^ character. The ^ character will be converted to a dash (-) upon submit. Use leading zeroes (e.g., 000123 or 01-001, etc.)\" size=\"8\" maxlength=\"6\" value=\"".$entry_judging_num."\" /> ".$entry_judging_num_hidden;
+	if (($action != "print") && ($dbTable == "default")) {
+		$entry_judging_num_display .= "<div class=\"form-group\" id=\"judging-number-ajax-".$row_log['id']."-brewJudgingNumber-form-group\">";
+		$entry_judging_num_display .= $entry_judging_num_hidden;
+		$entry_judging_num_display .= "<input class=\"form-control input-sm hidden-print\" id=\"judging-number-ajax-".$row_log['id']."\" name=\"brewJudgingNumber".$row_log['id']."\" type=\"text\" pattern=\".{6,}\" title=\"Judging numbers must be six characters and cannot include the ^ character. The ^ character will be converted to a dash (-) upon submit. Use leading zeroes (e.g., 000123 or 01-001, etc.). Alpha characters will be converted to lower case for consistency and system use.\" size=\"8\" maxlength=\"6\" value=\"".$entry_judging_num."\" onblur=\"save_column('".$base_url."','brewJudgingNumber','brewing','".$row_log['id']."','".$row_log['brewBrewerID']."','default','default','default','judging-number-ajax-".$row_log['id']."')\" /> ";
+		$entry_judging_num_display .= "</div>";
+		$entry_judging_num_display .= "<div>";
+		$entry_judging_num_display .= "<span id=\"judging-number-ajax-".$row_log['id']."-brewJudgingNumber-status\"></span>";
+		$entry_judging_num_display .= "<span id=\"judging-number-ajax-".$row_log['id']."-brewJudgingNumber-status-msg\"></span>";
+		$entry_judging_num_display .= "</div>";
+	}
 	else $entry_judging_num_display = $entry_judging_num;
 
 	/*
@@ -160,46 +217,59 @@ do {
 	$splitter[1] = substr($row_log['brewJudgingNumber'], 2);
 	$add_one = $splitter[1] + 1;
 	$entry_judging_num_display .= "<br>".$splitter[0].$add_one;
-
-
 	$splitter = explode("-",$row_log['brewJudgingNumber']);
-			$add_one = $splitter[1] + 1;
-			$entry_judging_num_display .= "<br>".sprintf("%02s",$splitter[0])."-".sprintf("%04s",$add_one);
-*/
+	$add_one = $splitter[1] + 1;
+	$entry_judging_num_display .= "<br>".sprintf("%02s",$splitter[0])."-".sprintf("%04s",$add_one);
+	*/
+
 	// Entry Style
 	if ($_SESSION['prefsStyleSet'] == "BA") {
+		
 		if ($row_log['brewCategory'] <= 14) $entry_style_display .= $styleConvert.": ".$row_log['brewStyle'];
 		else $entry_style_display .= "Custom: ".$row_log['brewStyle'];
+	
 	}
 
 	else {
+		
 		if ((!empty($row_log['brewCategorySort'])) && ($filter == "default") && ($bid == "default") && ($dbTable == "default"))
 		$entry_style_display .= "<span class=\"hidden\">".$row_log['brewCategorySort']."</span><a href=\"".$base_url."index.php?section=admin&amp;go=entries&amp;filter=".$row_log['brewCategorySort']."\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"See only the category ".ltrim($row_log['brewCategorySort'],"0")." entries\" >";
+		
 		if ((!empty($row_log['brewCategorySort'])) && ($row_log['brewCategorySort'] != "00")) {
 			$entry_style_display .= style_number_const($row_log['brewCategorySort'],$row_log['brewSubCategory'],$_SESSION['style_set_display_separator'],0);
 			$entry_style_display .= ": ".$row_log['brewStyle'];
 		} 
+
 		else $entry_style_display .= "<span class=\"text-danger\"><strong>Style NOT Specified</strong></span>";
 		if ((!empty($row_log['brewCategorySort'])) && ($filter == "default") && ($bid == "default") && ($dbTable == "default")) $entry_style_display .= "</a>";
+	
 	}
 
 	// Brewer Info
 	if (($brewer_info[0] != "") && ($brewer_info[1] != "") && ($pro_edition == 0)) {
+
 		if (($bid == "default") && ($dbTable == "default")) {
 			$entry_brewer_display .= "<a href=\"".$base_url."index.php?section=admin&amp;go=entries&amp;bid=".$row_log['brewBrewerID']."\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"See only ".$brewer_info[0]." ".$brewer_info[1]."&rsquo;s entries\">";
 			}
+
 		$entry_brewer_display .=  $brewer_info[1].", ".$brewer_info[0];
 		if (($bid == "default") && ($dbTable == "default")) $entry_brewer_display .= "</a>";
 		$entry_brewer_display .=  "<br>".$brewer_info[11].", ".$brewer_info[12];
-	 }
-	 elseif (($brewer_info[15] != "&nbsp;") && ($pro_edition == 1)) {
+
+	}
+
+	elseif (($brewer_info[15] != "&nbsp;") && ($pro_edition == 1)) {
+		
 		if (($bid == "default") && ($dbTable == "default")) {
 			$entry_brewer_display .= "<a href=\"".$base_url."index.php?section=admin&amp;go=entries&amp;bid=".$row_log['brewBrewerID']."\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"See only ".$brewer_info[15]."&rsquo;s entries\">";
-			}
+		}
+
 		$entry_brewer_display .=  $brewer_info[15];
 		if (($bid == "default") && ($dbTable == "default")) $entry_brewer_display .= "</a>";
 		$entry_brewer_display .=  "<br>".$brewer_info[11].", ".$brewer_info[12];
-	 }
+
+	}
+
 	else $entry_brewer_display .= "&nbsp;";
 
 	// Updated
@@ -273,6 +343,12 @@ do {
 		$entry_actions .= "<a class=\"hide-loader\" href=\"".$base_url."includes/process.inc.php?section=".$section."&amp;go=".$go."&amp;filter=".$filter."&amp;dbTable=".$brewing_db_table."&amp;action=delete&amp;id=".$row_log['id']."\" data-toggle=\"tooltip\" title=\"Delete &ldquo;".$row_log['brewName']."&rdquo;\" data-confirm=\"Are you sure you want to delete the entry called &ldquo;".$row_log['brewName']."?&rdquo; This cannot be undone.\"><span class=\"fa fa-lg fa-trash-o\"></a> ";
 		$entry_actions .= "<a id=\"modal_window_link\" class=\"hide-loader\" href=\"".$base_url."output/entry.output.php?id=".$row_log['id']."&amp;bid=".$brewer_info[7]."&amp;filter=admin\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Print the Entry Forms for &ldquo;".$row_log['brewName']."&rdquo;\"><span class=\"fa fa-lg fa-print hidden-xs hidden-sm\"></a> ";
 		$entry_actions .= "<a class=\"hide-loader\" href=\"mailto:".$brewer_info[6]."\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Email the entry&rsquo;s owner, ".$brewer_info[0]." ".$brewer_info[1].", at ".$brewer_info[6]."\"><span class=\"fa fa-lg fa-envelope\"></span></a> ";
+		if (EVALUATION) {
+			if ($scoresheet) {
+				$entry_actions .= "<a id=\"modal_window_link\" class=\"hide-loader\" href=\"".$print_link."\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Print the Scoresheets for &ldquo;".$row_log['brewName']."&rdquo;\"><i class=\"fa fa-lg fa-gavel\"></i></a> ";
+				$entry_actions .= "<a id=\"modal_window_link\" class=\"hide-loader\" href=\"".$view_link."\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"View the Scoresheets for &ldquo;".$row_log['brewName']."&rdquo;\"><span class=\"fa-stack\"><i class=\"fa fa-square fa-stack-2x\"></i><i class=\"fa fa-stack-1x fa-gavel fa-inverse\"></i></span></a> ";
+			}
+		}
 	}
 
 	$scoresheet_link_1 = "";
@@ -303,7 +379,6 @@ do {
 				$scoresheet_link_1 .= "&amp;randomfilename=".obfuscateURL($random_file_name_1)."&amp;download=true";
 			}
 			*/
-
 
 			$scoresheet_link_1 .= "scoresheetfilename=".urlencode(obfuscateURL($scoresheet_file_name_1,$encryption_key));
 			$scoresheet_link_1 .= "&amp;randomfilename=".urlencode(obfuscateURL($random_file_name_1,$encryption_key))."&amp;download=true";
@@ -382,6 +457,7 @@ do {
 
 		if (!empty($entry_unconfirmed_row)) $tbody_rows .= "</a>";
 		$tbody_rows .= " ";
+	
 	}
 
 	if (!empty($required_info)) $tbody_rows .= " <a class=\"hide-loader hidden-print\" role=\"button\" data-toggle=\"collapse\" data-target=\"#collapseEntryInfo".$row_log['id']."\" aria-expanded=\"false\" aria-controls=\"collapseEntryInfo".$row_log['id']."\"><span class=\"fa fa-lg fa-info-circle hidden-xs hidden-sm\"></span></a> ";
@@ -535,6 +611,13 @@ if ($action != "print") { ?>
 <?php } else { ?>
 <p class="lead"><?php echo $header; ?></p>
 <?php } ?>
+
+<script>
+$(document).ready(function () {
+    $('#brewing_helpBlock_enabled').hide();
+});
+</script>
+<script src="<?php echo $base_url;?>js_includes/admin_ajax.js"></script>
 <form name="form1" method="post" action="<?php echo $base_url; ?>includes/process.inc.php?action=update&amp;dbTable=<?php echo $brewing_db_table; ?>&amp;filter=<?php echo $filter; ?>">
 <?php if ($action != "print") { ?>
 <div class="bcoem-admin-element hidden-print row">
@@ -777,7 +860,7 @@ if ($action != "print") { ?>
 <thead>
     <tr>
         <th nowrap>Entry</th>
-        <th nowrap>Judging <?php if (($action != "print") &&  ($dbTable == "default")) { ?><a href="#" tabindex="0" role="button" data-toggle="popover" data-trigger="hover" data-placement="auto top" data-container="body" title="Judging Numbers" data-content="Judging numbers are random six-digit numbers that are automatically assigned by the system. You can override each judging number when scanning in barcodes, QR Codes, or by entering it in the field provided."><span class="hidden-xs hidden-sm hidden-md hidden-print fa fa-question-circle"></span></a><?php } ?></th>
+        <th nowrap>Judging <?php if (($action != "print") &&  ($dbTable == "default")) { ?><a href="#" tabindex="0" role="button" data-toggle="popover" data-trigger="hover" data-placement="auto top" data-container="body" title="Judging Numbers" data-content="Judging numbers are random six-digit numbers that are automatically assigned by the system. You can override each judging number when scanning in barcodes, QR Codes, or by entering it in the field provided. Judging numbers must be six characters and cannot include the ^ character. The ^ character will be converted to a dash (-) upon submit. Use leading zeroes (e.g., 000123 or 01-001, etc.). Alpha characters will be converted to lower case for consistency and system use."><span class="hidden-xs hidden-sm hidden-md hidden-print fa fa-question-circle"></span></a><?php } ?></th>
         <th class="hidden-xs hidden-sm hidden-md">Name</th>
         <th>Style</th>
         <th class="hidden-xs hidden-sm"><?php if ($pro_edition == 1) echo "Organization"; else echo "Brewer"; ?></th>
@@ -805,8 +888,9 @@ if ($action != "print") { ?>
 ?>
 <?php if ($dbTable == "default") { ?>
 <div class="bcoem-admin-element hidden-print">
-	<input type="submit" name="Submit" id="helpUpdateEntries" class="btn btn-primary" aria-describedby="helpBlock" value="Update Entries" />
-    <span id="helpBlock" class="help-block">Click "Update Entries" <em>before</em> paging through records.</span>
+	<input type="submit" name="Submit" id="brewing_submit" class="btn btn-primary" aria-describedby="helpBlock" value="Update Entries" disabled />
+	<span id="brewing_helpBlock_enabled" class="help-block">Click "Update Entries" <em>before</em> paging through records.</span>
+    <span id="brewing_helpBlock_disabled" class="help-block">The "Update Entries" button has been disabled since data is being saved successfully as it is being entered.</span>
 </div>
 <?php } ?>
 <input type="hidden" name="relocate" value="<?php echo relocate($base_url."index.php?section=admin&go=entries","default",$msg,$id); ?>">

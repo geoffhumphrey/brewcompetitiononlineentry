@@ -232,7 +232,10 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 			$row_delete_assign = mysqli_fetch_assoc($delete_assign);
 			$totalRows_delete_assign = mysqli_num_rows($delete_assign);
 
-			$c = "";
+			$a = array();
+			$b = array();
+			$z = array();
+			$c = array();
 
 			if ($totalRows_delete_assign > 0) {
 				do { $z[] = $row_delete_assign['id']; } while ($row_delete_assign = mysqli_fetch_assoc($delete_assign));

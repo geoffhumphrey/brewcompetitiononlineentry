@@ -6,6 +6,15 @@
 
 /** For anchor links to help with auto-scroll **/
 
+html {
+    scroll-behavior: smooth;
+}
+
+.anchor {
+    padding-top: 50px;
+    margin-top: -50px;
+}
+
 :target:before {
     content: "";
     display: block;

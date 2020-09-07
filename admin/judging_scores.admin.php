@@ -7,15 +7,44 @@ if ($pro_edition == 1) $edition = $label_pro." ".$label_edition;
 
 if ($_SESSION['prefsWinnerMethod'] == "0") { ?>
 <script>
+function select_place(base_url,column,action,id,rid1,rid2,rid3,rid4,element_id) {
+    
+        // Check if a place has been entered on all other select elements.
+        // If so, compare to the current selection.
+        // If the value of the current selection is not null or empty, and 
+        // the value has already been chosen, show the modal and clear the
+        // selection.
+        if (($('select option[value="' + $('#'+element_id).val() + '"]:selected').length > 1) && $('select option[value="' + $('#'+element_id).val() + '"]:selected') !== "") {
+            if ($('#'+element_id).val() !== "") {
+                $('#'+element_id).val('-1').change();
+                $('#noDupeModal').modal('show');
+            } 
+        }
+
+        else {
+            save_column(base_url,column,action,id,rid1,rid2,rid3,rid4,element_id);
+        }
+
+        // Still need to save if blank
+        if ($('#'+element_id).val() === "") {
+            save_column(base_url,column,action,id,rid1,rid2,rid3,rid4,element_id);
+        }
+        
+};
 $(document).ready(function () {
+
+    $('#judging_scores_helpBlock_enabled').hide();
+    /*
 	$('select').change(function () {
 		if (($('select option[value="' + $(this).val() + '"]:selected').length > 1) && $('select option[value="' + $(this).val() + '"]:selected') != "") {
 			$(this).val('-1').change();
 			$('#noDupeModal').modal('show');
 		}
 	});
+    */
 });
 </script>
+<script src="<?php echo $base_url;?>js_includes/admin_ajax.js"></script>
 <!-- Modal -->
 <div class="modal fade" id="noDupeModal" tabindex="-1" role="dialog" aria-labelledby="noDupeModalLabel" aria-hidden="true">
   <div class="modal-dialog">
@@ -77,18 +106,18 @@ $totalRows_entry_count = total_paid_received($go,"default");
 	<?php if (($action == "default") && ($totalRows_tables > 0)) { ?>
 	<!-- Position 2: Enter/Edit Dropdown Button Group -->
     <div class="btn-group" role="group">
-            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            <span class="fa fa-plus-circle"></span> Add or Update Scores For...
-            <span class="caret"></span>
-            </button>
-            <ul class="dropdown-menu">
-                <?php do {
-                        $table_count_total = table_count_total($row_tables_edit_2['id']);
-                    ?>
-                    <li class="small"><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging_scores&amp;action=<?php if ($table_count_total > 0) echo "edit&amp;id=".$row_tables_edit_2['id']; else echo "add&amp;id=".$row_tables_edit_2['id']; ?>"><?php echo "Table ".$row_tables_edit_2['tableNumber'].": ".$row_tables_edit_2['tableName']; ?></a></li>
-                    <?php  } while ($row_tables_edit_2 = mysqli_fetch_assoc($tables_edit_2)); ?>
-            </ul>
-		</div>
+        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <span class="fa fa-plus-circle"></span> Add or Update Scores For...
+        <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu">
+            <?php do {
+                    $table_count_total = table_count_total($row_tables_edit_2['id']);
+                ?>
+                <li class="small"><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging_scores&amp;action=<?php if ($table_count_total > 0) echo "edit&amp;id=".$row_tables_edit_2['id']; else echo "add&amp;id=".$row_tables_edit_2['id']; ?>"><?php echo "Table ".$row_tables_edit_2['tableNumber'].": ".$row_tables_edit_2['tableName']; ?></a></li>
+                <?php  } while ($row_tables_edit_2 = mysqli_fetch_assoc($tables_edit_2)); ?>
+        </ul>
+	</div>
 	<?php } ?>
     <?php if ($id == "default") { ?>
     <!-- Postion 4: Print Button Dropdown Group -->
@@ -109,12 +138,10 @@ $totalRows_entry_count = total_paid_received($go,"default");
     <?php } ?>
     <?php } ?>
 </div>
-<?php if ($dbTable == "default") { ?>
-
-<p>Scores have been entered for <?php echo $totalRows_scores; ?> of <?php echo $totalRows_entry_count; ?> entries marked as paid and received.</p>
-
+<?php if ($action == "default") { ?>
+<?php if (EVALUATION) include (EVALS.'import_scores.eval.php'); ?>
+<p id="score-entered-status-default">Scores have been entered for <?php echo $totalRows_scores; ?> of <?php echo $totalRows_entry_count; ?> entries marked as paid and received.</p>
 <?php } // end if ($dbTable == "default") ?>
-
 <?php if (($action == "default") && ($id == "default")) { ?>
 <?php if ($totalRows_scores > 0) { ?>
 <script type="text/javascript" language="javascript">
@@ -165,7 +192,7 @@ $totalRows_entry_count = total_paid_received($go,"default");
         <th><?php if ($pro_edition == 1) echo $label_organization; else echo $label_brewer; ?></th>
         <th>Entry Name</th>
         <?php } ?>
-    	<th>Score</th>
+    	<th><?php echo $label_assigned_score; ?></th>
         <th>Place</th>
         <th>Mini-BOS?</th>
         <?php if ($dbTable == "default") { ?>
@@ -327,7 +354,7 @@ $totalRows_entry_count = total_paid_received($go,"default");
 </tbody>
 </table>
 <?php } // end if ($totalRows_scores > 0)
-else echo "<p>No scores have been entered. If tables have been defined, use the &ldquo;Add or Update Scores for...&rdquo; menu above to add scores.</p>"; ?>
+else echo "<p id=\"no-scores-entered\">No scores have been entered. If tables have been defined, use the &ldquo;Add or Update Scores for...&rdquo; menu above to add scores.</p>"; ?>
 <?php } // end if (($action == "default") && ($id == "default")) ?>
 
 
@@ -359,12 +386,12 @@ $(document).ready(function() {
 <table class="table table-responsive table-striped table-bordered" id="sortable">
 <thead>
 	<tr>
-    	<th>Entry</th>
-        <th>Judging</th>
+    	<th width="10%">Entry</th>
+        <th width="10%">Judging</th>
         <th class="hidden-xs hidden-sm">Style</th>
-        <th>Mini-BOS?</th>
-    	<th>Score</th>
-        <th>Place</th>
+        <th width="15%">Mini-BOS?</th>
+    	<th width="20%">Score</th>
+        <th width="20%">Place</th>
     </tr>
 </thead>
 <tbody>
@@ -409,6 +436,8 @@ $(document).ready(function() {
 				if ($_SESSION['prefsStyleSet'] == "BA") $style_display = $score_style_data[2];
                 else $style_display = $style." ".style_convert($row_entries['brewCategorySort'],1).": ".$score_style_data[2];
 
+                $scoreType = style_type($score_style_data[3],"1","bcoe");
+
 	?>
 	<tr>
         <input type="hidden" name="score_id[]" value="<?php echo $score_id; ?>" />
@@ -418,18 +447,29 @@ $(document).ready(function() {
         <input type="hidden" name="eid<?php echo $score_id; ?>" value="<?php echo $eid; ?>" />
         <input type="hidden" name="bid<?php echo $score_id; ?>" value="<?php echo $bid; ?>" />
         <input type="hidden" name="scoreTable<?php echo $score_id; ?>" value="<?php echo $id; ?>" />
-        <input type="hidden" name="scoreType<?php echo $score_id; ?>" value="<?php echo style_type($score_style_data[3],"1","bcoe"); ?>" />
+        <input type="hidden" name="scoreType<?php echo $score_id; ?>" value="<?php echo $scoreType; ?>" />
         <td><?php echo $entry_number; ?></td>
         <td><?php echo $judging_number; ?></td>
         <td class="hidden-xs hidden-sm"><?php echo $style_display; ?></td>
-        <td><input type="checkbox" name="scoreMiniBOS<?php echo $score_id; ?>" value="1" <?php if (($action == "edit") && ($score_entry_data[5] == "1")) echo "CHECKED"; ?> /></td>
+        <td>
+            <div class="form-group" id="score-mini-bos-ajax-<?php echo $score_id; ?>-scoreMiniBOS-form-group">
+            <input type="checkbox" id="score-mini-bos-ajax-<?php echo $score_id; ?>" name="scoreMiniBOS<?php echo $score_id; ?>" value="1" onclick="$(this).attr('value', this.checked ? 1 : 0);save_column('<?php echo $base_url; ?>','scoreMiniBOS','judging_scores','<?php echo $eid; ?>','<?php echo $bid; ?>','<?php echo $id; ?>','<?php echo $scoreType; ?>','default','score-mini-bos-ajax-<?php echo $score_id; ?>')" <?php if (($action == "edit") && ($score_entry_data[5] == "1")) echo "CHECKED"; ?> />
+            <span id="score-mini-bos-ajax-<?php echo $score_id; ?>-scoreMiniBOS-status"></span>
+            <span id="score-mini-bos-ajax-<?php echo $score_id; ?>-scoreMiniBOS-status-msg"></span>
+            </div>
+        </td>
     	<td>
         	<span class="hidden"><?php if ($action == "edit") echo $score_entry_data[3]; ?></span>
-        	<input class="form-control" type="text" name="scoreEntry<?php echo $score_id; ?>" size="6" maxlength="6" value="<?php if ($action == "edit") echo $score_entry_data[3]; ?>" />
+            <div class="form-group" id="score-entry-ajax-<?php echo $score_id; ?>-scoreEntry-form-group">
+        	<input class="form-control" id="score-entry-ajax-<?php echo $score_id; ?>" type="number" pattern="\d{2}" maxlength="2" name="scoreEntry<?php echo $score_id; ?>" size="6" maxlength="6" value="<?php if ($action == "edit") echo $score_entry_data[3]; ?>" onblur="save_column('<?php echo $base_url; ?>','scoreEntry','judging_scores','<?php echo $eid; ?>','<?php echo $bid; ?>','<?php echo $id; ?>','<?php echo $scoreType; ?>','default','score-entry-ajax-<?php echo $score_id; ?>')" />
+            </div>
+            <span id="score-entry-ajax-<?php echo $score_id; ?>-scoreEntry-status"></span>
+            <span id="score-entry-ajax-<?php echo $score_id; ?>-scoreEntry-status-msg"></span>
         </td>
         <td>
         <span class="hidden"><?php if (($action == "edit") && ($score_entry_data[4] == "1")) echo $score_entry_data[4]; ?></span>
-            <select class="form-control nodupe" name="scorePlace<?php echo $score_id; ?>">
+            <div class="form-group" id="score-place-ajax-<?php echo $score_id; ?>-scorePlace-form-group">
+            <select class="form-control nodupe" id="score-place-ajax-<?php echo $score_id; ?>" name="scorePlace<?php echo $score_id; ?>" onchange="select_place('<?php echo $base_url; ?>','scorePlace','judging_scores','<?php echo $eid; ?>','<?php echo $bid; ?>','<?php echo $id; ?>','<?php echo $scoreType; ?>','default','score-place-ajax-<?php echo $score_id; ?>')">
               	<option value=""></option>
                   <option value="1" <?php if (($action == "edit") && ($score_entry_data[4] == "1")) echo "SELECTED"; ?>>1st</option>
                   <option value="2" <?php if (($action == "edit") && ($score_entry_data[4] == "2")) echo "SELECTED"; ?>>2nd</option>
@@ -439,6 +479,9 @@ $(document).ready(function() {
                   <option value="5" <?php if (($action == "edit") && ($score_entry_data[4] == "5")) echo "SELECTED"; ?>>Hon. Men.</option>
                   <?php } ?>
             </select>
+            </div>
+            <span id="score-place-ajax-<?php echo $score_id; ?>-scorePlace-status"></span>
+            <span id="score-place-ajax-<?php echo $score_id; ?>-scorePlace-status-msg"></span>
         </td>
 	</tr>
     <?php }
@@ -447,8 +490,9 @@ $(document).ready(function() {
 </tbody>
 </table>
 <div class="bcoem-admin-element hidden-print">
-	<input type="submit" name="Submit" id="helpUpdateEntries" class="btn btn-primary" aria-describedby="helpBlock" value="<?php if ($action == "edit") echo "Update Scores"; else echo "Add Scores"; ?>" />
-    <span id="helpBlock" class="help-block">Click "<?php if ($action == "edit") echo "Update Scores"; else echo "Add Scores"; ?>" <em>before</em> paging through records.</span>
+	<input type="submit" name="Submit" id="judging_scores_submit" class="btn btn-primary" aria-describedby="helpBlock" value="<?php if ($action == "edit") echo "Update Scores"; else echo "Add Scores"; ?>" disabled />
+    <span id="judging_scores_helpBlock_enabled" class="help-block">Click "<?php if ($action == "edit") echo "Update Scores"; else echo "Add Scores"; ?>" <em>before</em> paging through records.</span>
+    <span id="judging_scores_helpBlock_disabled" class="help-block">The "<?php if ($action == "edit") echo "Update Scores"; else echo "Add Scores"; ?>" button has been disabled since data is being saved successfully as it is being entered.</span>
 </div>
 <?php if (isset($_SERVER['HTTP_REFERER'])) { ?>
 <input type="hidden" name="relocate" value="<?php echo relocate($_SERVER['HTTP_REFERER'],"default",$msg,$id); ?>">

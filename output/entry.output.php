@@ -55,8 +55,6 @@ if ($brewer_info['brewerCountry'] = "United States") {
 
 $organizer = $row_brewer_organizer['brewerFirstName']." ".$row_brewer_organizer['brewerLastName'];
 
-
-
 if (in_array($_SESSION['prefsEntryForm'],$barcode_qrcode_array)) {
 
 	// Generate Barcode

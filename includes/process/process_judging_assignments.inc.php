@@ -13,6 +13,8 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 
 		if ($_SESSION['jPrefsQueued'] == "N") {
 
+		// print_r($_POST);
+
 		foreach ($_POST['random'] as $random) {
 
 			$roles = array();
@@ -37,36 +39,56 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 				$assignRoles = implode(", ",$roles);
 			}
 
-			if ((!isset($_POST['unassign'.$random])) && (($_POST['rolesPrevDefined'.$random] == 1) || ($_POST['rolesPrevDefined'.$random] == 0)) && (!empty($assignRoles))) $roles_only_update = TRUE;
-			elseif ((!isset($_POST['unassign'.$random])) && ($_POST['rolesPrevDefined'.$random] == 1) && (empty($assignRoles))) $roles_only_update = TRUE;
+			//if ((!isset($_POST['unassign'.$random])) && (($_POST['rolesPrevDefined'.$random] == 1) || ($_POST['rolesPrevDefined'.$random] == 0)) && (!empty($assignRoles))) $roles_only_update = TRUE;
+			//elseif ((!isset($_POST['unassign'.$random])) && ($_POST['rolesPrevDefined'.$random] == 1) && (empty($assignRoles))) $roles_only_update = TRUE;
 
 			if (isset($_POST['unassign'.$random])) $unassign = $_POST['unassign'.$random];
 			else $unassign = 0;
+
+			//echo $unassign."<br>";
 
 			// Check to see if participant is 1) not being "unassigned" and reassigned, and 2) being assigned.
 			if (($unassign == 0) && ((isset($_POST['assignFlight'.$random])) && ($_POST['assignFlight'.$random] > 0))) {
 
 				//Perform check to see if a record is in the DB. If not, insert a new record.
 				// If so, see will update
-				$query_flights = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE (bid='%s' AND assignTable='%s' AND assignRound='%s' AND assignFlight='%s' AND assignLocation='%s')", $prefix."judging_assignments", $_POST['bid'.$random], $_POST['assignTable'.$random], $_POST['assignRound'.$random], $_POST['assignFlight'.$random], $_POST['assignLocation'.$random]);
+				$query_flights = sprintf("SELECT id FROM %s WHERE (bid='%s' AND assignTable='%s' AND assignRound='%s' AND assignFlight='%s' AND assignLocation='%s')", $prefix."judging_assignments", $_POST['bid'.$random], $_POST['assignTable'.$random], $_POST['assignRound'.$random], $_POST['assignFlight'.$random], $_POST['assignLocation'.$random]);
 				$flights = mysqli_query($connection,$query_flights) or die (mysqli_error($connection));
 				$row_flights = mysqli_fetch_assoc($flights);
+				$totalRows_flights = mysqli_num_rows($flights);
 				//echo $query_flights."<br>";
+				//echo $totalRows_flights."<br>";
 
-				if ($row_flights['count'] == 0) {
-				$insertSQL = sprintf("INSERT INTO $judging_assignments_db_table (bid, assignment, assignTable, assignFlight, assignRound, assignLocation, assignRoles) VALUES (%s, %s, %s, %s, %s, %s, %s)",
+				if ($totalRows_flights == 0) {
+					$insertSQL = sprintf("INSERT INTO $judging_assignments_db_table (bid, assignment, assignTable, assignFlight, assignRound, assignLocation, assignRoles) VALUES (%s, %s, %s, %s, %s, %s, %s)",
+						GetSQLValueString(sterilize($_POST['bid'.$random]), "text"),
+						GetSQLValueString(sterilize($_POST['assignment'.$random]), "text"),
+						GetSQLValueString(sterilize($_POST['assignTable'.$random]), "text"),
+						GetSQLValueString(sterilize($_POST['assignFlight'.$random]), "text"),
+						GetSQLValueString(sterilize($_POST['assignRound'.$random]), "text"),
+						GetSQLValueString(sterilize($_POST['assignLocation'.$random]), "text"),
+						GetSQLValueString(sterilize($assignRoles), "text"));
+
+					mysqli_real_escape_string($connection,$insertSQL);
+					$result = mysqli_query($connection,$insertSQL) or die (mysqli_error($connection));
+					//echo $insertSQL."<br>";
+				}
+
+				else {
+					$updateSQL = sprintf("UPDATE $judging_assignments_db_table SET bid=%s, assignment=%s, assignTable=%s, assignFlight=%s, assignRound=%s, assignLocation=%s, assignRoles=%s WHERE id=%s",
 					GetSQLValueString(sterilize($_POST['bid'.$random]), "text"),
 					GetSQLValueString(sterilize($_POST['assignment'.$random]), "text"),
 					GetSQLValueString(sterilize($_POST['assignTable'.$random]), "text"),
 					GetSQLValueString(sterilize($_POST['assignFlight'.$random]), "text"),
 					GetSQLValueString(sterilize($_POST['assignRound'.$random]), "text"),
 					GetSQLValueString(sterilize($_POST['assignLocation'.$random]), "text"),
-					GetSQLValueString(sterilize($assignRoles), "text"));
+					GetSQLValueString(sterilize($assignRoles), "text"),
+					GetSQLValueString(sterilize($row_flights['id']), "text")
+					);
 
-				mysqli_real_escape_string($connection,$insertSQL);
-				$result = mysqli_query($connection,$insertSQL) or die (mysqli_error($connection));
-				//echo $insertSQL."<br>";
-
+				mysqli_real_escape_string($connection,$updateSQL);
+				$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+				//echo $updateSQL."<br><br>";
 				}
 			}
 
@@ -100,7 +122,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 
 				mysqli_real_escape_string($connection,$updateSQL);
 				$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
-				//echo $updateSQL."<br>";
+				echo $updateSQL."<br>";
 
 			}
 
@@ -119,7 +141,10 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 					}
 				}
 			} // end foreach
+
 	  } // end if ($_SESSION['jPrefsQueued'] == "N")
+
+	  //exit;
 
 	  if ($_SESSION['jPrefsQueued'] == "Y") {
 		 // print_r($_POST['random']);
