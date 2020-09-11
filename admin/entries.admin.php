@@ -52,20 +52,8 @@ else {
 
 
 if (EVALUATION) {
-
-	$evals = array();
 	// Check which evaluations exist
-	$query_eval_exists = sprintf("SELECT DISTINCT eid FROM %s",$prefix."evaluation");
-	$eval_exists = mysqli_query($connection,$query_eval_exists) or die (mysqli_error($connection));
-	$row_eval_exists = mysqli_fetch_assoc($eval_exists);
-	$totalRows_eval_exists = mysqli_num_rows($eval_exists);
-
-	if ($totalRows_eval_exists > 0) {
-		do {
-			$evals[] = $row_eval_exists['eid'];
-		} while ($row_eval_exists = mysqli_fetch_assoc($eval_exists));
-	}
-		 
+	$evals = eval_exits();	 
 }
 
 do {
@@ -194,7 +182,6 @@ do {
 	elseif (($_SESSION['prefsStyleSet'] != "BA") && ((check_special_ingredients($entry_style_system,$row_styles['brewStyleVersion']))) && ($row_log['brewInfo'] == "")) $entry_unconfirmed_row = "bg-warning";
 
 	// Judging Number
-
 	if (isset($row_log['brewJudgingNumber'])) {
 		$entry_judging_num_hidden .= "<span class=\"hidden visible-print-inline\">".$judging_number."</span>";
 		$entry_judging_num .= $judging_number;
@@ -212,19 +199,9 @@ do {
 	}
 	else $entry_judging_num_display = $entry_judging_num;
 
-	/*
-	$splitter[0] = substr($row_log['brewJudgingNumber'], 0, 2);
-	$splitter[1] = substr($row_log['brewJudgingNumber'], 2);
-	$add_one = $splitter[1] + 1;
-	$entry_judging_num_display .= "<br>".$splitter[0].$add_one;
-	$splitter = explode("-",$row_log['brewJudgingNumber']);
-	$add_one = $splitter[1] + 1;
-	$entry_judging_num_display .= "<br>".sprintf("%02s",$splitter[0])."-".sprintf("%04s",$add_one);
-	*/
-
 	// Entry Style
 	if ($_SESSION['prefsStyleSet'] == "BA") {
-		
+
 		if ($row_log['brewCategory'] <= 14) $entry_style_display .= $styleConvert.": ".$row_log['brewStyle'];
 		else $entry_style_display .= "Custom: ".$row_log['brewStyle'];
 	
@@ -278,14 +255,22 @@ do {
 
 	// Paid
 	if (($action != "print") && ($dbTable == "default")) {
+		
+		$entry_paid_display .= "<span class=\"hidden\">".$row_log['brewPaid']."</span>";
+		$entry_paid_display .= "<span class=\"visible-xs-inline visible-sm-inline\">Paid</span>";
+		$entry_paid_display .= "<div class=\"form-group\" id=\"paid-ajax-".$row_log['id']."-brewPaid-form-group\">";
 		$entry_paid_display .= "<div class=\"checkbox\"><label>";
-		$entry_paid_display .= "<input id=\"brewPaid\" name=\"brewPaid".$row_log['id']."\" type=\"checkbox\" value=\"1\"";
+		$entry_paid_display .= "<input name=\"brewPaid".$row_log['id']."\" type=\"checkbox\" value=\"1\" id=\"paid-ajax-".$row_log['id']."\" name=\"brewPaid".$row_log['id']."\" type=\"text\" size=\"5\" maxlength=\"10\" value=\"".$row_log['brewPaid']."\" onclick=\"$(this).attr('value', this.checked ? 1 : 0);save_column('".$base_url."','brewPaid','brewing','".$row_log['id']."','".$row_log['brewBrewerID']."','default','default','default','paid-ajax-".$row_log['id']."')\"";
 		if ($row_log['brewPaid'] == "1") $entry_paid_display .= " checked>";
 		else $entry_paid_display .= ">";
-		$entry_paid_display .= "<span class=\"visible-xs-inline visible-sm-inline\">Received</span>";
 		$entry_paid_display .= "</label></div>";
-		$entry_paid_display .= "<span class=\"hidden\">".$row_log['brewPaid']."</span>";
 		if ($brewer_info[9] == "Y") $entry_paid_display .= "&nbsp;<a tabindex=\"0\" role=\"button\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"This entry has been discounted to ".$currency_symbol.number_format($_SESSION['contestEntryFeePasswordNum'], 2).".\"><span class=\"fa fa-lg fa-star\"></span></a>";
+		$entry_paid_display .= "</div>";
+		$entry_paid_display .= "<div>";
+		$entry_paid_display .= "<span id=\"paid-ajax-".$row_log['id']."-brewPaid-status\"></span>";
+		$entry_paid_display .= "<span id=\"paid-ajax-".$row_log['id']."-brewPaid-status-msg\"></span>";
+		$entry_paid_display .= "</div>";
+
 	}
 
 	else {
@@ -295,12 +280,18 @@ do {
 
 	// Received
 	if (($action != "print") && ($dbTable == "default")) {
-		$entry_received_display .= "<div class=\"checkbox\"><label><input id=\"brewReceived\" name=\"brewReceived".$row_log['id']."\" type=\"checkbox\" value=\"1\"";
+		$entry_received_display .= "<span class=\"visible-xs-inline visible-sm-inline\">Received</span>";
+		$entry_received_display .= "<span class=\"hidden\">".$row_log['brewReceived']."</span>";
+		$entry_received_display .= "<div class=\"form-group\" id=\"received-ajax-".$row_log['id']."-brewReceived-form-group\">";
+		$entry_received_display .= "<div class=\"checkbox\"><label><input name=\"brewReceived".$row_log['id']."\" type=\"checkbox\" value=\"1\" id=\"received-ajax-".$row_log['id']."\" name=\"brewReceived".$row_log['id']."\" type=\"text\" size=\"5\" maxlength=\"10\" value=\"".$row_log['brewReceived']."\" onclick=\"$(this).attr('value', this.checked ? 1 : 0);save_column('".$base_url."','brewReceived','brewing','".$row_log['id']."','".$row_log['brewBrewerID']."','default','default','default','received-ajax-".$row_log['id']."')\"";
 		if ($row_log['brewReceived'] == "1") $entry_received_display .= " checked>";
 		else $entry_received_display .= ">";
-		$entry_received_display .= "<span class=\"visible-xs-inline visible-sm-inline\">Paid</span>";
 		$entry_received_display .= "</label></div>";
-		$entry_received_display .= "<span class=\"hidden\">".$row_log['brewReceived']."</span>";
+		$entry_received_display .= "</div>";
+		$entry_received_display .= "<div>";
+		$entry_received_display .= "<span id=\"received-ajax-".$row_log['id']."-brewReceived-status\"></span>";
+		$entry_received_display .= "<span id=\"received-ajax-".$row_log['id']."-brewReceived-status-msg\"></span>";
+		$entry_received_display .= "</div>";
 	}
 
 	else {
@@ -310,26 +301,41 @@ do {
 
 	// Box Number
 	if (($action != "print") && ($dbTable == "default")) {
-		$entry_box_num_display .= "<span class=\"visible-sm-inline visible-xs-inline\">Box: </span><input class=\"form-control input-sm hidden-print\" id=\"brewBoxNum\" name=\"brewBoxNum".$row_log['id']."\" type=\"text\" size=\"5\" maxlength=\"10\" value=\"".$row_log['brewBoxNum']."\" />";
+		$entry_box_num_display .= "<div class=\"form-group\" id=\"box-num-ajax-".$row_log['id']."-brewBoxNum-form-group\">";
 		$entry_box_num_display .= "<span class=\"hidden visible-print-inline\">".$row_log['brewBoxNum']."</span>";
+		$entry_box_num_display .= "<span class=\"visible-sm-inline visible-xs-inline\">Box: </span><input class=\"form-control input-sm hidden-print\" id=\"box-num-ajax-".$row_log['id']."\" name=\"brewBoxNum".$row_log['id']."\" type=\"text\" size=\"5\" maxlength=\"10\" value=\"".$row_log['brewBoxNum']."\" onblur=\"save_column('".$base_url."','brewBoxNum','brewing','".$row_log['id']."','".$row_log['brewBrewerID']."','default','default','default','box-num-ajax-".$row_log['id']."')\"/>";
+		$entry_box_num_display .= "</div>";
+		$entry_box_num_display .= "<div>";
+		$entry_box_num_display .= "<span id=\"box-num-ajax-".$row_log['id']."-brewBoxNum-status\"></span>";
+		$entry_box_num_display .= "<span id=\"box-num-ajax-".$row_log['id']."-brewBoxNum-status-msg\"></span>";
+		$entry_box_num_display .= "</div>";
 	}
 	else $entry_box_num_display = $row_log['brewBoxNum'];
 
 	// Notes to Staff
 	if (($action != "print") && ($dbTable == "default")) {
-		//$entry_staff_notes_display .= "<input class=\"form-control input-sm hidden-print\" id=\"brewStaffNotes\" name=\"brewStaffNotes".$row_log['id']."\" type=\"text\" size=\"20\" maxlength=\"255\" placeholder=\"\" value=\"".$row_log['brewStaffNotes']."\" />";
-
-		$entry_staff_notes_display .= "<span class=\"visible-sm-inline visible-xs-inline\">Staff Notes: </span><textarea class=\"form-control input-sm hidden-print\" id=\"brewStaffNotes\" name=\"brewStaffNotes".$row_log['id']."\" rows=\"2\" maxlength=\"255\" placeholder=\"\" />".$row_log['brewStaffNotes']."</textarea>";
-		$entry_staff_notes_display.= "<span class=\"hidden visible-print-inline\">".$row_log['brewStaffNotes']."</span>";
+		$entry_staff_notes_display .= "<span class=\"hidden visible-print-inline\">".$row_log['brewStaffNotes']."</span>";
+		$entry_staff_notes_display .= "<div class=\"form-group\" id=\"staff-notes-ajax-".$row_log['id']."-brewStaffNotes-form-group\">";
+		$entry_staff_notes_display .= "<span class=\"visible-sm-inline visible-xs-inline\">Staff Notes: </span><textarea class=\"form-control input-sm hidden-print\" id=\"staff-notes-ajax-".$row_log['id']."\" name=\"brewStaffNotes".$row_log['id']."\" rows=\"2\" maxlength=\"255\" placeholder=\"\" onblur=\"save_column('".$base_url."','brewStaffNotes','brewing','".$row_log['id']."','".$row_log['brewBrewerID']."','text-col','default','default','staff-notes-ajax-".$row_log['id']."')\"  />".$row_log['brewStaffNotes']."</textarea>";
+		$entry_staff_notes_display .= "</div>";
+		$entry_staff_notes_display .= "<div>";
+		$entry_staff_notes_display .= "<span id=\"staff-notes-ajax-".$row_log['id']."-brewStaffNotes-status\"></span>";
+		$entry_staff_notes_display .= "<span id=\"staff-notes-ajax-".$row_log['id']."-brewStaffNotes-status-msg\"></span>";
+		$entry_staff_notes_display .= "</div>";
+		
 	}
 	else $entry_staff_notes_display = $row_log['brewStaffNotes'];
 
 	// Notes to Admin
 	if (($action != "print") && ($dbTable == "default")) {
-		// $entry_admin_notes_display .= "<input class=\"form-control input-sm hidden-print\" id=\"brewAdminNotes\" name=\"brewAdminNotes".$row_log['id']."\" type=\"text\" size=\"10\" maxlength=\"255\" placeholder=\"\" value=\"".$row_log['brewAdminNotes']."\" />";
-
-		$entry_admin_notes_display .= "<span class=\"visible-sm-inline visible-xs-inline\">Admin Notes: </span><textarea class=\"form-control input-sm hidden-print\" id=\"brewAdminNotes\" name=\"brewAdminNotes".$row_log['id']."\" rows=\"2\" maxlength=\"255\" placeholder=\"\" />".$row_log['brewAdminNotes']."</textarea>";
 		$entry_admin_notes_display.= "<span class=\"hidden visible-print-inline\">".$row_log['brewAdminNotes']."</span>";
+		$entry_admin_notes_display .= "<div class=\"form-group\" id=\"admin-notes-ajax-".$row_log['id']."-brewAdminNotes-form-group\">";
+		$entry_admin_notes_display .= "<span class=\"visible-sm-inline visible-xs-inline\">Admin Notes: </span><textarea class=\"form-control input-sm hidden-print\" id=\"admin-notes-ajax-".$row_log['id']."\" name=\"brewAdminNotes".$row_log['id']."\" rows=\"2\" maxlength=\"255\" placeholder=\"\" onblur=\"save_column('".$base_url."','brewAdminNotes','brewing','".$row_log['id']."','".$row_log['brewBrewerID']."','text-col','default','default','admin-notes-ajax-".$row_log['id']."')\" />".$row_log['brewAdminNotes']."</textarea>";
+		$entry_admin_notes_display .= "</div>";
+		$entry_admin_notes_display .= "<div>";
+		$entry_admin_notes_display .= "<span id=\"admin-notes-ajax-".$row_log['id']."-brewAdminNotes-status\"></span>";
+		$entry_admin_notes_display .= "<span id=\"admin-notes-ajax-".$row_log['id']."-brewAdminNotes-status-msg\"></span>";
+		$entry_admin_notes_display .= "</div>";
 	}
 	else $entry_admin_notes_display = $row_log['brewAdminNotes'];
 
@@ -498,7 +504,7 @@ do {
 	$tbody_rows .= "\n\t<td class=\"hidden-xs hidden-sm hidden-md \">".$entry_admin_notes_display."</td>";
 	$tbody_rows .= "\n\t<td class=\"hidden-xs hidden-sm hidden-md \">".$entry_staff_notes_display."</td>";
 	$tbody_rows .= "\n\t<td class=\"hidden-xs hidden-sm\">".$entry_box_num_display."</td>";
-	if ($action != "print") $tbody_rows .= "<td class=\"hidden-xs hidden-sm\">".$entry_actions."</td>";
+	if ($action != "print") $tbody_rows .= "<td class=\"hidden-xs hidden-sm\" nowrap>".$entry_actions."</td>";
 	$tbody_rows .= "\n</tr>";
 
 	// Build all brewer email array
@@ -611,10 +617,9 @@ if ($action != "print") { ?>
 <?php } else { ?>
 <p class="lead"><?php echo $header; ?></p>
 <?php } ?>
-
 <script>
 $(document).ready(function () {
-    $('#brewing_helpBlock_enabled').hide();
+    disable_update_button('brewing');
 });
 </script>
 <script src="<?php echo $base_url;?>js_includes/admin_ajax.js"></script>
@@ -888,9 +893,9 @@ $(document).ready(function () {
 ?>
 <?php if ($dbTable == "default") { ?>
 <div class="bcoem-admin-element hidden-print">
-	<input type="submit" name="Submit" id="brewing_submit" class="btn btn-primary" aria-describedby="helpBlock" value="Update Entries" disabled />
-	<span id="brewing_helpBlock_enabled" class="help-block">Click "Update Entries" <em>before</em> paging through records.</span>
-    <span id="brewing_helpBlock_disabled" class="help-block">The "Update Entries" button has been disabled since data is being saved successfully as it is being entered.</span>
+	<input type="submit" name="Submit" id="brewing-submit" class="btn btn-primary" aria-describedby="helpBlock" value="Update Entries" disabled />
+	<span id="brewing-update-button-enabled" class="help-block">Click "Update Entries" <em>before</em> paging through records.</span>
+    <span id="brewing-update-button-disabled" class="help-block">The "Update Entries" button has been disabled since data is being saved successfully as it is being entered.</span>
 </div>
 <?php } ?>
 <input type="hidden" name="relocate" value="<?php echo relocate($base_url."index.php?section=admin&go=entries","default",$msg,$id); ?>">

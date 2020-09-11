@@ -132,8 +132,28 @@ if ($msg != "default") { ?>
 <?php } // end if ($section == "admin") ?>
 
 
-
 <?php if ($logged_in) { ?>
+
+  <?php if ($section == "admin") { ?>
+
+    <?php if (($go == "entries") || ($go == "judging_scores") || ($go == "judging_scores_bos")) { ?>
+    <style type="text/css">
+      .sticky-alert {
+        position: fixed;
+        width: 100%;
+        left: 0;
+        top: 70px;
+        z-index: 999;
+      }
+    </style>
+    <section id="alert-update-button-enabled" class="container-fluid sticky-alert">
+    <div class="alert alert-danger alert-dismissible hidden-print fade in" role="alert">
+      <span class="fa fa-lg fa-exclamation-circle"></span> <strong>Due to an error saving the previous data input, the Update button has been enabled.</strong> Any unsaved input will be saved if you select the Update button now. Otherwise, try again.
+    </div>
+    </section>
+    <?php } ?>
+
+  <?php } ?>
 
 	<?php if ($section == "brew") { ?>
 

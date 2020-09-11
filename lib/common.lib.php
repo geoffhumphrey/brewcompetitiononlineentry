@@ -1949,7 +1949,7 @@ function get_table_info($input,$method,$table_id,$dbTable,$param) {
 		// $d = $debug;
 
 	return $d;
-
+	
 	}
 
 	// Get total number of scored entries at table
@@ -4118,6 +4118,28 @@ function user_submitted_eval($uid,$eid) {
 
 	if ($totalRows_eval_sub > 0) return $row_eval_sub;
 	else return "";
+
+}
+
+function eval_exits() {
+
+	require(CONFIG.'config.php');
+	mysqli_select_db($connection,$database);
+
+	$evals = array();
+
+	$query_eval_exists = sprintf("SELECT DISTINCT eid FROM %s",$prefix."evaluation");
+	$eval_exists = mysqli_query($connection,$query_eval_exists) or die (mysqli_error($connection));
+	$row_eval_exists = mysqli_fetch_assoc($eval_exists);
+	$totalRows_eval_exists = mysqli_num_rows($eval_exists);
+
+	if ($totalRows_eval_exists > 0) {
+		do {
+			$evals[] = $row_eval_exists['eid'];
+		} while ($row_eval_exists = mysqli_fetch_assoc($eval_exists));
+	}
+
+	return $evals;
 
 }
 
