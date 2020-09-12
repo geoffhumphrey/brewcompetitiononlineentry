@@ -1,12 +1,16 @@
 <?php
 include (DB.'sponsors.db.php');
-
 $directory = (USER_IMAGES);
 $empty = is_dir_empty($directory);
-
+$sponsor_images = directory_contents_dropdown($directory,"none","2");
 ?>
+<script>
+$(document).ready(function () {
+    disable_update_button('sponsors');
+});
+</script>
+<script src="<?php echo $base_url;?>js_includes/admin_ajax.js"></script>
 <p class="lead"><?php echo $_SESSION['contestName']; if ($action == "add") echo ": Add a Sponsor"; elseif ($action == "edit") echo ": Edit a Sponsor"; else echo " Sponsors"; ?></p>
-
 <div class="bcoem-admin-element hidden-print">
 <?php if (($action == "add") || ($action == "edit")) { ?>
 	<div class="btn-group" role="group" aria-label="add-sponsor">
@@ -73,26 +77,61 @@ $empty = is_dir_empty($directory);
   <td><?php echo $row_sponsors['sponsorName']; ?></td>
   <td><?php echo $row_sponsors['sponsorLocation']; ?></td>
   <td><?php // echo $row_sponsors['sponsorLevel']; ?>
-    <select class="selectpicker" name="sponsorLevel<?php echo $row_sponsors['id']; ?>" id="sponsorLevel<?php echo $row_sponsors['id']; ?>" data-width="auto">
-        <option value="1" <?php if ($row_sponsors['sponsorLevel'] == "1") echo " SELECTED"; ?>>1</option>
-        <option value="2" <?php if ($row_sponsors['sponsorLevel'] == "2") echo " SELECTED"; ?>>2</option>
-        <option value="3" <?php if ($row_sponsors['sponsorLevel'] == "3") echo " SELECTED"; ?>>3</option>
-        <option value="4" <?php if ($row_sponsors['sponsorLevel'] == "4") echo " SELECTED"; ?>>4</option>
-        <option value="5" <?php if ($row_sponsors['sponsorLevel'] == "5") echo " SELECTED"; ?>>5</option>
-    </select>
+    <div class="form-group" id="sponsor-level-ajax-<?php echo $row_sponsors['id']; ?>-sponsorLevel-form-group">
+      <select class="selectpicker" name="sponsorLevel<?php echo $row_sponsors['id']; ?>" id="sponsor-level-ajax-<?php echo $row_sponsors['id']; ?>" data-width="auto" onchange="save_column('<?php echo $base_url; ?>','sponsorLevel','sponsors','<?php echo $row_sponsors['id']; ?>','default','default','default','default','sponsor-level-ajax-<?php echo $row_sponsors['id']; ?>')">
+          <option value="1" <?php if ($row_sponsors['sponsorLevel'] == "1") echo " SELECTED"; ?>>1</option>
+          <option value="2" <?php if ($row_sponsors['sponsorLevel'] == "2") echo " SELECTED"; ?>>2</option>
+          <option value="3" <?php if ($row_sponsors['sponsorLevel'] == "3") echo " SELECTED"; ?>>3</option>
+          <option value="4" <?php if ($row_sponsors['sponsorLevel'] == "4") echo " SELECTED"; ?>>4</option>
+          <option value="5" <?php if ($row_sponsors['sponsorLevel'] == "5") echo " SELECTED"; ?>>5</option>
+      </select>
+      <div>
+        <span id="sponsor-level-ajax-<?php echo $row_sponsors['id']; ?>-sponsorLevel-status"></span>
+        <span id="sponsor-level-ajax-<?php echo $row_sponsors['id']; ?>-sponsorLevel-status-msg"></span>
+      </div>
+    </div>
   </td>
   <td>  
     <?php if (!$empty) { ?>
-    <select class="selectpicker" name="sponsorImage<?php echo $row_sponsors['id']; ?>" id="sponsorImage<?php echo $row_sponsors['id']; ?>" data-live-search="true" data-size="10" data-width="auto">
-       <?php echo directory_contents_dropdown($directory,$row_sponsors['sponsorImage']); ?>
-    </select>
+    <div class="form-group" id="sponsor-image-ajax-<?php echo $row_sponsors['id']; ?>-sponsorImage-form-group">
+      <select class="selectpicker" name="sponsorImage<?php echo $row_sponsors['id']; ?>" id="sponsor-image-ajax-<?php echo $row_sponsors['id']; ?>" data-live-search="true" data-size="10" data-width="auto" onchange="save_column('<?php echo $base_url; ?>','sponsorImage','sponsors','<?php echo $row_sponsors['id']; ?>','default','default','default','default','sponsor-image-ajax-<?php echo $row_sponsors['id']; ?>')">
+       <?php 
+        $sponsor_images_options = "<option></option>";
+          foreach ($sponsor_images as $filename) {
+            $selected = "";
+            if ($filename == $row_sponsors['sponsorImage']) $selected = " selected";
+            $sponsor_images_options .= "<option value=\"".$filename."\"".$selected.">";
+            $sponsor_images_options .= $filename;
+            $sponsor_images_options .= "</option>";
+          }
+        echo $sponsor_images_options;
+       ?>
+      </select>
+      <div>
+        <span id="sponsor-image-ajax-<?php echo $row_sponsors['id']; ?>-sponsorImage-status"></span>
+        <span id="sponsor-image-ajax-<?php echo $row_sponsors['id']; ?>-sponsorImage-status-msg"></span>
+      </div>
+    </div>
     <?php } else echo "<p>No images exist in the user_images directory.</p>"; ?>
   </td>
   <td>
-    <textarea class="form-control" name="sponsorText<?php echo $row_sponsors['id']; ?>" rows="2" class="mceNoEditor"><?php if (!empty($row_sponsors['sponsorText'])) echo $row_sponsors['sponsorText']; ?></textarea>
-    <?php // echo $row_sponsors['sponsorText']; ?>
+    <div class="form-group" id="sponsor-text-ajax-<?php echo $row_sponsors['id']; ?>-sponsorText-form-group">
+    <textarea class="form-control" id="sponsor-text-ajax-<?php echo $row_sponsors['id']; ?>" name="sponsorText<?php echo $row_sponsors['id']; ?>" rows="2" class="mceNoEditor" onblur="save_column('<?php echo $base_url; ?>','sponsorText','sponsors','<?php echo $row_sponsors['id']; ?>','default','text-col','default','default','sponsor-text-ajax-<?php echo $row_sponsors['id']; ?>')"><?php if (!empty($row_sponsors['sponsorText'])) echo $row_sponsors['sponsorText']; ?></textarea>
+      <div>
+        <span id="sponsor-text-ajax-<?php echo $row_sponsors['id']; ?>-sponsorText-status"></span>
+        <span id="sponsor-text-ajax-<?php echo $row_sponsors['id']; ?>-sponsorText-status-msg"></span>
+      </div>
+    </div>
     </td>
-  <td><input id="mod_enable" type="checkbox" name="sponsorEnable<?php echo $row_sponsors['id']; ?>" value="1" <?php if ($row_sponsors['sponsorEnable'] == 1) echo 'CHECKED'; ?> /><input type="hidden" id="id" name="id[]" value="<?php echo $row_sponsors['id']; ?>" /></td>
+  <td>
+    <div class="form-group" id="sponsor-enable-ajax-<?php echo $row_sponsors['id']; ?>-sponsorEnable-form-group">
+    <input id="sponsor-enable-ajax-<?php echo $row_sponsors['id']; ?>" type="checkbox" name="sponsorEnable<?php echo $row_sponsors['id']; ?>" value="1" <?php if ($row_sponsors['sponsorEnable'] == 1) echo 'CHECKED'; ?> onclick="$(this).attr('value', this.checked ? 1 : 0);save_column('<?php echo $base_url; ?>','sponsorEnable','sponsors','<?php echo $row_sponsors['id']; ?>','default','default','default','default','sponsor-enable-ajax-<?php echo $row_sponsors['id']; ?>')" /><input type="hidden" id="id" name="id[]" value="<?php echo $row_sponsors['id']; ?>" />
+    <div>
+      <span id="sponsor-enable-ajax-<?php echo $row_sponsors['id']; ?>-sponsorEnable-status"></span>
+      <span id="sponsor-enable-ajax-<?php echo $row_sponsors['id']; ?>-sponsorEnable-status-msg"></span>
+    </div>
+    </div>
+  </td>
   <td nowrap="nowrap">
   <a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=<?php echo $go; ?>&amp;action=edit&amp;id=<?php echo $row_sponsors['id']; ?>" data-toggle="tooltip" data-placement="top" title="Edit <?php echo $row_sponsors['sponsorName']; ?>"><span class="fa fa-lg fa-pencil"></span></a>
   <a class="hide-loader" href="<?php echo $base_url; ?>includes/process.inc.php?section=admin&amp;go=<?php echo $go; ?>&amp;dbTable=<?php echo $sponsors_db_table; ?>&amp;action=delete&amp;id=<?php echo $row_sponsors['id']; ?>" data-toggle="tooltip" data-placement="top" title="Delete <?php echo $row_sponsors['sponsorName']; ?> as a sponsor" data-confirm="Are you sure you want to delete <?php echo $row_sponsors['sponsorName']; ?> as a sponsor? This cannot be undone."><span class="fa fa-lg fa-trash-o"></span></a>
@@ -103,8 +142,9 @@ $empty = is_dir_empty($directory);
  </tbody>
 </table>
 <div class="bcoem-admin-element hidden-print">
-	<input type="submit" name="Submit" id="updateCustomMods" class="btn btn-primary" aria-describedby="helpBlock" value="Update Sponsors" />
-    <span id="helpBlock" class="help-block">Click "Update Sponsors" <em>before</em> paging through records.</span>
+  <input type="submit" name="Submit" id="sponsors-submit" class="btn btn-primary" aria-describedby="helpBlock" value="Update Sponsors" disabled />
+    <span id="sponsors-update-button-enabled" class="help-block">Click Update Sponsors <em>before</em> paging through records.</span>
+    <span id="sponsors-update-button-disabled" class="help-block">The Update Sponsors button has been disabled since data is being saved successfully as it is being entered.</span>
 </div>
 <?php if (isset($_SERVER['HTTP_REFERER'])) { ?>
 <input type="hidden" name="relocate" value="<?php echo relocate($_SERVER['HTTP_REFERER'],"default",$msg,$id); ?>">
@@ -169,7 +209,17 @@ if ($action == "default") { ?>
     <!-- Input Here -->
     <?php if (!$empty) { ?>
     <select class="selectpicker" name="sponsorImage" id="sponsorImage" data-live-search="true" data-size="10" data-width="auto">
-       <?php echo directory_contents_dropdown($directory,$row_sponsors['sponsorImage']); ?>
+       <?php 
+        $sponsor_images_options = "<option></option>";
+          foreach ($sponsor_images as $filename) {
+            $selected = "";
+            if ($filename == $row_sponsors['sponsorImage']) $selected = " selected";
+            $sponsor_images_options .= "<option value=\"".$filename."\"".$selected.">";
+            $sponsor_images_options .= $filename;
+            $sponsor_images_options .= "</option>";
+          }
+        echo $sponsor_images_options;
+       ?>
     </select>
     <?php } else echo "<p>No images exist in the user_images directory.</p>"; ?>
     <span id="helpBlock" class="help-block">If the directory is empty or a file is not on the list, use the &ldquo;Upload Logo Images&rdquo; button below.</span>

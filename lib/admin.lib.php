@@ -1,27 +1,39 @@
 <?php
 
-function directory_contents_dropdown($directory,$file_name_selected) {
+function directory_contents_dropdown($directory,$file_name_selected,$method="1") {
 
 	$handle = opendir($directory);
-	$filelist[] = "";
+	$filelist = array();
 
 	while ($file = readdir($handle)) {
 
 	   if ((!is_dir($file)) && (!is_link($file))) {
-			$filelist[] .= $file;
+			$filelist[] = $file;
 	   }
 
 	}
 
 	sort($filelist, SORT_NATURAL | SORT_FLAG_CASE);
 
-	$return = "";
-	foreach ($filelist as $filename) {
-		$selected = "";
-		if ($file_name_selected == $filename) $selected = " selected";
-		$return .= "<option value=\"".$filename."\"".$selected.">";
-		$return .= $filename;
-		$return .= "</option>";
+	// Return dropdown options
+	// For one-time use
+	if ($method == "1") {
+		$return = "";
+		foreach ($filelist as $filename) {
+			$selected = "";
+			if ($file_name_selected == $filename) $selected = " selected";
+			$return .= "<option value=\"".$filename."\"".$selected.">";
+			$return .= $filename;
+			$return .= "</option>";
+		}
+	}
+
+	// Return an array of file names
+	if ($method == "2") {
+		$return = array();
+		foreach ($filelist as $filename) {
+			$return[] = $filename;
+		}
 	}
 
 	return $return;

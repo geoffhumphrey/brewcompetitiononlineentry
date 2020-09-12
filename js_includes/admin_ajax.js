@@ -61,14 +61,16 @@ function save_success(element_id,column,action,error) {
 // Save a single column (data point)
 function save_column(base_url,column,action,id,rid1,rid2,rid3,rid4,element_id) {
 
-    // base_url   = site URL - global php var
-    // action     = database table ("judging_scores", "brewing", etc.)
-    // id         = the primary identification item
-	// rid1       = first relational id (optional)
-	// rid2       = second relational id (optional)
-    // rid3       = third relational id (optional)
-    // rid4       = fourth relational id (optional)
-    // element_id = the html id of the element being acted upon
+    /**
+     * base_url   = site URL - global php var
+     * action     = database table ("judging_scores", "brewing", etc.)
+     * id         = the primary identification item
+	 * rid1       = first relational id (optional)
+	 * rid2       = second relational id (optional)
+     * rid3       = third relational id (optional)
+     * rid4       = fourth relational id (optional)
+     * element_id = the html id of the element being acted upon
+     */
 
     var value = $("#"+element_id).val();
 

@@ -46,6 +46,7 @@ if ((isset($_SESSION['session_set_'.$prefix_session])) && (isset($_SESSION['logi
 	$post = 0;
 	$error_type = 0;
 
+	
 	// brewing (entries) DB table
 	if ($action == "brewing") {
 		
@@ -96,6 +97,7 @@ if ((isset($_SESSION['session_set_'.$prefix_session])) && (isset($_SESSION['logi
 		else $error_type = 3; // SQL error
 
 	}
+	
 
 	if ($action == "sponsors") {
 
@@ -104,26 +106,28 @@ if ((isset($_SESSION['session_set_'.$prefix_session])) && (isset($_SESSION['logi
 		}
 
 		if ($go == "sponsorLevel") {
-			$input = filter_var($_POST['sponsorEnable'],FILTER_SANITIZE_NUMBER_FLOAT);
+			$input = filter_var($_POST['sponsorLevel'],FILTER_SANITIZE_NUMBER_FLOAT);
 		}
 
 		if ($go == "sponsorText") {
 			$input = filter_var($_POST['sponsorText'],FILTER_SANITIZE_STRING);
 		}
 
-		if ($go == "sponsorLogo") {
-			$input = filter_var($_POST['sponsorText'],FILTER_SANITIZE_STRING);
+		if ($go == "sponsorImage") {
+			$input = filter_var($_POST['sponsorImage'],FILTER_SANITIZE_STRING);
 		}
 
 		if (empty($input)) {
 			if ($rid2 == "text-col") $sql = sprintf("UPDATE `%s` SET %s='' WHERE id=%s", $prefix.$action, $go, $id);
-			else $sql = sprintf("UPDATE `%s` SET %s=NULL WHERE id=%s", $prefix."brewing", $go, $id);
+			else $sql = sprintf("UPDATE `%s` SET %s=NULL WHERE id=%s", $prefix.$action, $go, $id);
 		}
 
 		else {
 			if ($input == "0") $sql = sprintf("UPDATE `%s` SET %s=NULL WHERE id=%s", $prefix.$action, $go, $id);
-			else $sql = sprintf("UPDATE `%s` SET %s='%s' WHERE id=%s", $prefix."brewing", $go, $input, $id);
+			else $sql = sprintf("UPDATE `%s` SET %s='%s' WHERE id=%s", $prefix.$action, $go, $input, $id);
 		}
+
+		// echo $sql;
 
 		mysqli_real_escape_string($connection,$sql);
 		$result = mysqli_query($connection,$sql) or die (mysqli_error($connection));
