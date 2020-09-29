@@ -60,7 +60,7 @@ $(function () {
 		format: 'YYYY-MM-DD'
 	});
 	
-	$("#dateThresholdParticipants").datetimepicker({
+	$("#purge-part-participants-value").datetimepicker({
         format: "YYYY-MM-DD"
     });
 	
@@ -68,7 +68,7 @@ $(function () {
         format: "YYYY-MM-DD"
     });
 	
-	$("#dateThresholdEntries").datetimepicker({
+	$("#purge-entries-brewing-value").datetimepicker({
         format: "YYYY-MM-DD"
     });
 

@@ -28,7 +28,7 @@ if (ENABLE_MAILER) $mail_use_smtp = TRUE;
 else $mail_use_smtp = FALSE;
 
 // Set this field if you want to override the from address of 'noreply@[website]' address that gets added by default
-$mail_default_from = "";
+$mail_default_from = "noreply@brewcomp.com";
 
 // Enable verbose debug output
 // 0 = off (for production use)
@@ -38,23 +38,23 @@ $smtp_debug_level = 2;
 
 // Specify main (and backup, if necessary - ';' separated) SMTP servers.
 // Your host will have one more of these configured for you for an outgoing mail server.
-$smtp_host = "";
+$smtp_host = "brewcomp.com";
 
 // Enable / Disable SMTP authentication
 // To use this option, you'll likely need to have an email address established on your server to send outgoing messages from.
-$smtp_auth = FALSE;
+$smtp_auth = TRUE;
 
 // SMTP username
 // Generally the email address you are sending from.
-$smtp_username = "";
+$smtp_username = "noreply@brewcomp.com";
 
 // SMTP password
-$smtp_password = "";
+$smtp_password = "c1K0R#uzdwCb%PAcI9u!";
 
 // Enable TLS encryption, `tls` and `ssl` are accepted; leave blank if not used.
-$smtp_secure = "";
+$smtp_secure = "ssl";
 
 // TCP port to connect to - likely to be 25, 465 or 587.
-$smtp_port = 25;
+$smtp_port = 465;
 
 ?>

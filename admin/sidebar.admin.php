@@ -83,7 +83,7 @@ if ($logged_in) {
 
 	$page_info100 .= "<div class=\"bcoem-sidebar-panel\">";
 	$page_info100 .= "<strong class=\"text-info\">Confirmed Entries</strong>";
-	$page_info100 .= "<span class=\"pull-right\"><a href=\"".$base_url."index.php?section=admin&amp;go=entries\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"View all entries\">".$totalRows_log_confirmed."</a>";
+	$page_info100 .= "<span class=\"pull-right\"><a href=\"".$base_url."index.php?section=admin&amp;go=entries\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"View all entries\"><span id=\"admin-dashboard-entries-count\">".$totalRows_log_confirmed."</span></a>";
 	if (!empty($row_limits['prefsEntryLimit'])) {
 		$page_info100 .= " / ";
 		if ($_SESSION['userLevel'] == 0) $page_info100 .= "<a href=\"".$base_url."index.php?section=admin&amp;go=preferences\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Change the limit of total entries\">".$row_limits['prefsEntryLimit']."</a>";
@@ -95,12 +95,12 @@ if ($logged_in) {
 
 	$page_info100 .= "<div class=\"bcoem-sidebar-panel\">";
 	$page_info100 .= "<strong class=\"text-info\">Unconfirmed Entries</strong>";
-	$page_info100 .= "<span class=\"pull-right\">".$entries_unconfirmed."</span>";
+	$page_info100 .= "<span class=\"pull-right\" id=\"admin-dashboard-entries-unconfirmed-count\">".$entries_unconfirmed."</span>";
 	$page_info100 .= "</div>";
 
 	$page_info100 .= "<div class=\"bcoem-sidebar-panel\">";
 	$page_info100 .= "<strong class=\"text-info\">Paid Entries</strong>";
-	$page_info100 .= "<span class=\"pull-right\">".get_entry_count("paid");
+	$page_info100 .= "<span class=\"pull-right\"><span id=\"admin-dashboard-entries-paid-count\">".get_entry_count("paid")."</span>";
 	if (!empty($row_limits['prefsEntryLimitPaid'])) {
 		$page_info100 .= " / ";
 		if ($_SESSION['userLevel'] == 0) $page_info100 .= "<a href=\"".$base_url."index.php?section=admin&amp;go=preferences\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Change the limit of paid entries\">".$row_limits['prefsEntryLimitPaid']."</a>";
@@ -112,7 +112,7 @@ if ($logged_in) {
 
 	$page_info100 .= "<div class=\"bcoem-sidebar-panel\">";
 	$page_info100 .= "<strong class=\"text-info\">Paid/Rec'd Entries</strong>";
-	$page_info100 .= "<span class=\"pull-right\">".get_entry_count("paid-received")."</span>";
+	$page_info100 .= "<span class=\"pull-right\" id=\"admin-dashboard-entries-paid-received-count\">".get_entry_count("paid-received")."</span>";
 	$page_info100 .= "</div>";
 
 	$page_info100 .= "<div class=\"bcoem-sidebar-panel\">";
@@ -122,27 +122,27 @@ if ($logged_in) {
 
 	$page_info100 .= "<div class=\"bcoem-sidebar-panel\">";
 	$page_info100 .= "<strong class=\"text-info\">Total Fees</strong>";
-	$page_info100 .= "<span class=\"pull-right\">".$currency_symbol.number_format($total_fees,2)."</span>";
+	$page_info100 .= "<span class=\"pull-right\">".$currency_symbol."<span id=\"admin-dashboard-total-fees\">".number_format($total_fees,2)."</span></span>";
 	$page_info100 .= "</div>";
 
 	$page_info100 .= "<div class=\"bcoem-sidebar-panel\">";
 	$page_info100 .= "<strong class=\"text-info\">Total Fees Paid</strong>";
-	$page_info100 .= "<span class=\"pull-right\"><a href=\"".$base_url."index.php?section=admin&amp;go=entries&amp;view=paid\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"View all paid entries\">".$currency_symbol.number_format($total_fees_paid,2)."</a></span>";
+	$page_info100 .= "<span class=\"pull-right\"><a href=\"".$base_url."index.php?section=admin&amp;go=entries&amp;view=paid\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"View all paid entries\">".$currency_symbol."<span id=\"admin-dashboard-total-fees-paid\">".number_format($total_fees_paid,2)."</span></a></span>";
 	$page_info100 .= "</div>";
 
 	$page_info100 .= "<div class=\"bcoem-sidebar-panel\">";
 	$page_info100 .= "<strong class=\"text-info\">Participants</strong>";
-	$page_info100 .= "<span class=\"pull-right\"><a href=\"".$base_url."index.php?section=admin&amp;go=participants\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"View all participants\">".get_participant_count('default')."</a></span>";
+	$page_info100 .= "<span class=\"pull-right\"><a href=\"".$base_url."index.php?section=admin&amp;go=participants\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"View all participants\"><span id=\"admin-dashboard-participant-count\">".get_participant_count('default')."</span></a></span>";
 	$page_info100 .= "</div>";
 
 	$page_info100 .= "<div class=\"bcoem-sidebar-panel\">";
 	$page_info100 .= "<strong class=\"text-info\">Participants with Entries</strong>";
-	$page_info100 .= "<span class=\"pull-right\">".$row_with_entries['count']."</span>";
+	$page_info100 .= "<span class=\"pull-right\" id=\"admin-dashboard-participant-entries\">".$row_with_entries['count']."</span>";
 	$page_info100 .= "</div>";
 
 	$page_info100 .= "<div class=\"bcoem-sidebar-panel\">";
 	$page_info100 .= "<strong class=\"text-info\">Available Judges</strong>";
-	$page_info100 .= "<span class=\"pull-right\"><a href=\"".$base_url."index.php?section=admin&amp;go=participants&amp;filter=judges\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"View available judges\">".get_participant_count('judge')."</a>";
+	$page_info100 .= "<span class=\"pull-right\"><a href=\"".$base_url."index.php?section=admin&amp;go=participants&amp;filter=judges\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"View available judges\"><span id=\"admin-dashboard-avail-judges-count\">".get_participant_count('judge')."</span></a>";
 	if (!empty($row_judge_limits['jprefsCapJudges'])) {
 		$page_info100 .= " / ";
 		if ($_SESSION['userLevel'] == 0) $page_info100 .= "<a href=\"".$base_url."index.php?section=admin&amp;go=judging_preferences\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Change the limit of judges\">".$row_judge_limits['jprefsCapJudges']."</a>";
@@ -153,13 +153,13 @@ if ($logged_in) {
 
 	$page_info100 .= "<div class=\"bcoem-sidebar-panel\">";
 	$page_info100 .= "<strong class=\"text-info\">Assigned Judges</strong>";
-	$page_info100 .= "<span class=\"pull-right\"><a href=\"".$base_url."index.php?section=admin&amp;action=assign&amp;go=judging&amp;filter=judges\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"View assigned judges\">".get_participant_count('judge-assigned')."</a>";
+	$page_info100 .= "<span class=\"pull-right\"><a href=\"".$base_url."index.php?section=admin&amp;action=assign&amp;go=judging&amp;filter=judges\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"View assigned judges\"><span id=\"admin-dashboard-assigned-judges-count\">".get_participant_count('judge-assigned')."</span></a>";
 	$page_info100 .= "</span>";
 	$page_info100 .= "</div>";
 
 	$page_info100 .= "<div class=\"bcoem-sidebar-panel\">";
 	$page_info100 .= "<strong class=\"text-info\">Available Stewards</strong>";
-	$page_info100 .= "<span class=\"pull-right\"><a href=\"".$base_url."index.php?section=admin&amp;go=participants&amp;filter=stewards\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"View available stewards\">".get_participant_count('steward')."</a>";
+	$page_info100 .= "<span class=\"pull-right\"><a href=\"".$base_url."index.php?section=admin&amp;go=participants&amp;filter=stewards\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"View available stewards\"><span id=\"admin-dashboard-avail-stewards-count\">".get_participant_count('steward')."</span></a>";
 	if (!empty($row_judge_limits['jprefsCapStewards'])) {
 		$page_info100 .= " / ";
 		if ($_SESSION['userLevel'] == 0) $page_info100 .= "<a href=\"".$base_url."index.php?section=admin&amp;go=judging_preferences\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Change the limit of stewards\">".$row_judge_limits['jprefsCapStewards']."</a>";
@@ -170,19 +170,19 @@ if ($logged_in) {
 
 	$page_info100 .= "<div class=\"bcoem-sidebar-panel\">";
 	$page_info100 .= "<strong class=\"text-info\">Assigned Stewards</strong>";
-	$page_info100 .= "<span class=\"pull-right\"><a href=\"".$base_url."index.php?section=admin&amp;action=assign&amp;go=judging&amp;filter=stewards\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"View assigned stewards\">".get_participant_count('steward-assigned')."</a>";
+	$page_info100 .= "<span class=\"pull-right\"><a href=\"".$base_url."index.php?section=admin&amp;action=assign&amp;go=judging&amp;filter=stewards\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"View assigned stewards\"><span id=\"admin-dashboard-assigned-stewards-count\">".get_participant_count('steward-assigned')."</span></a>";
 	$page_info100 .= "</span>";
 	$page_info100 .= "</div>";
 
 	$page_info100 .= "<div class=\"bcoem-sidebar-panel\">";
 	$page_info100 .= "<strong class=\"text-info\">Available Staff</strong>";
-	$page_info100 .= "<span class=\"pull-right\"><a href=\"".$base_url."index.php?section=admin&amp;action=assign&amp;go=judging&amp;filter=staff&amp;view=yes\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"View available staff\">".get_participant_count('staff')."</a>";
+	$page_info100 .= "<span class=\"pull-right\"><a href=\"".$base_url."index.php?section=admin&amp;action=assign&amp;go=judging&amp;filter=staff&amp;view=yes\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"View available staff\"><span id=\"admin-dashboard-avail-staff-count\">".get_participant_count('staff')."</span></a>";
 	$page_info100 .= "</span>";
 	$page_info100 .= "</div>";
 
 	$page_info100 .= "<div class=\"bcoem-sidebar-panel\">";
 	$page_info100 .= "<strong class=\"text-info\">Assigned Staff</strong>";
-	$page_info100 .= "<span class=\"pull-right\"><a href=\"".$base_url."index.php?section=admin&amp;action=assign&amp;go=judging&amp;filter=staff\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"View assigned staff\">".get_participant_count('staff-assigned')."</a>";
+	$page_info100 .= "<span class=\"pull-right\"><a href=\"".$base_url."index.php?section=admin&amp;action=assign&amp;go=judging&amp;filter=staff\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"View assigned staff\"><span id=\"admin-dashboard-assigned-staff-count\">".get_participant_count('staff-assigned')."</span></a>";
 	$page_info100 .= "</span>";
 	$page_info100 .= "</div>";
 
