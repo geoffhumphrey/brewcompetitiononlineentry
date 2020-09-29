@@ -40,5 +40,7 @@ update/move_files.php
 update/move_files.php
 vendor/*
 site/config-brewcomp-reset.php
+site/config.mail.php
 prepros-6.config
 .sftp-upload-on-change.json
+site/config.mail.php
