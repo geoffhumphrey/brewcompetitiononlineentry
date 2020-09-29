@@ -6,12 +6,6 @@ Checked Single
 
 */
 
-function clean_up_text($text) {
-	$r = htmlspecialchars($text, ENT_QUOTES, 'UTF-8');
-	$r = preg_replace( "/\r|\n/", "", $r);
-	return $r;
-}
-
 $styles_entry_text = array(
     "07-C" => $styles_entry_text_07C,
     "09-A" => $styles_entry_text_09A,
@@ -339,7 +333,7 @@ $(document).ready(function() {
 				$("input[name='carbLambic']").prop("required", false);
 				$("input[name='BDGColor']").prop("required", false);
 				$("#specialInfo").show("fast");
-				$("#specialInfoText").html("<?php echo clean_up_text($entry_text); ?>");
+				$("#specialInfoText").html("<?php echo preg_replace( "/\r|\n/", "", $entry_text); ?>");
 				$("#specialInfoName").html("<a href='#' data-tooltip='true' title='Click for specifics for this style.' data-toggle='modal' data-target='#<?php echo $key; ?>'><?php echo $label_this_style; ?></a>");
 				<?php if (($_SESSION['prefsStyleSet'] == "BJCP2015") && (in_array($key,$optional_info_styles))) { ?>
 				$("#optional").show("fast");
@@ -481,7 +475,7 @@ $(document).ready(function() {
 			$("input[name='brewMead1']").prop("required", true);
 			$("input[name='brewMead2']").prop("required", true);
 			$("input[name='brewMead3']").prop("required", true);
-			$("#specialInfoText").html("<?php echo clean_up_text($entry_text); ?>");
+			$("#specialInfoText").html("<?php echo preg_replace( "/\r|\n/", "", $entry_text); ?>");
 			$("#specialInfoName").html("<a href='#' data-tooltip='true' title='Click for specifics for this style.' data-toggle='modal' data-target='#<?php echo $key; ?>'><?php echo $label_this_style; ?></a>");
 		}
 		<?php }
@@ -532,7 +526,7 @@ $(document).ready(function() {
 			<?php if (in_array($value, $styles_entry_text)) {
 			$entry_text = $styles_entry_text["$value"]; ?>
 			$("#specialInfo").show("fast");
-			$("#specialInfoText").html("<?php echo clean_up_text($entry_text); ?>");
+			$("#specialInfoText").html("<?php echo preg_replace( "/\r|\n/", "", $entry_text); ?>");
 			<?php } else { ?>
 			$("#specialInfo").hide("fast");
 			<?php } ?>
@@ -699,7 +693,7 @@ $(document).ready(function() {
 			$("#brewInfo").prop("required", true);
 			$("input[name='brewMead1']").prop("required", true);
 			$("input[name='brewMead2']").prop("required", true);
-			$("#specialInfoText").html("<?php echo clean_up_text($entry_text); ?>");
+			$("#specialInfoText").html("<?php echo preg_replace( "/\r|\n/", "", $entry_text); ?>");
 			$("#specialInfoName").html("<a href='#' data-tooltip='true' title='Click for specifics for this style.' data-toggle='modal' data-target='#<?php echo $key; ?>'><?php echo $label_this_style; ?></a>");
 		}
 		<?php }
@@ -754,7 +748,7 @@ $(document).ready(function() {
 			$("#brewInfo").prop("required", true);
 			$("input[name='brewMead1']").prop("required", true);
 			$("#specialInfo").show("fast");
-			$("#specialInfoText").html("<?php echo clean_up_text($entry_text); ?>");
+			$("#specialInfoText").html("<?php echo preg_replace( "/\r|\n/", "", $entry_text); ?>");
 			$("#specialInfoName").html("<a href='#' data-tooltip='true' title='Click for specifics for this style.' data-toggle='modal' data-target='#<?php echo $key; ?>'><?php echo $label_this_style; ?></a>");
 		}
 		<?php }
@@ -847,7 +841,7 @@ if ($action == "edit") {
 		$("input[name='carbLambic']").prop("required", false);
 		$("input[name='BDGColor']").prop("required", false);
 		$("#specialInfo").show("fast");
-		$("#specialInfoText").html("<?php echo clean_up_text($entry_text); ?>");
+		$("#specialInfoText").html("<?php echo preg_replace( "/\r|\n/", "", $entry_text); ?>");
 		$("#specialInfoName").html("<a href='#' data-tooltip='true' title='Click for specifics for this style.' data-toggle='modal' data-target='#<?php echo $view; ?>'><?php echo $label_this_style; ?></a>");
 		<?php if (($_SESSION['prefsStyleSet'] == "BJCP2015") && (in_array($view,$optional_info_styles))) { ?>
 		$("#optional").show("fast");
@@ -976,7 +970,7 @@ if ($action == "edit") {
 		$("input[name='sweetnessLambic']").prop("required", false);
 		$("input[name='carbLambic']").prop("required", false);
 		$("input[name='BDGColor']").prop("required", false);
-		$("#specialInfoText").html("<?php echo clean_up_text($entry_text); ?>");
+		$("#specialInfoText").html("<?php echo preg_replace( "/\r|\n/", "", $entry_text); ?>");
 		$("#specialInfoName").html("<a href='#' data-tooltip='true' title='Click for specifics for this style.' data-toggle='modal' data-target='#<?php echo $view; ?>'><?php echo $label_this_style; ?></a>");
 		<?php if (($_SESSION['prefsStyleSet'] == "BJCP2015") && (in_array($view,$optional_info_styles))) { ?>
 		$("#optional").show("fast");
@@ -1012,7 +1006,7 @@ if ($action == "edit") {
 		$("input[name='sweetnessLambic']").prop("required", false);
 		$("input[name='carbLambic']").prop("required", false);
 		$("input[name='BDGColor']").prop("required", false);
-		$("#specialInfoText").html("<?php echo clean_up_text($entry_text); ?>");
+		$("#specialInfoText").html("<?php echo preg_replace( "/\r|\n/", "", $entry_text); ?>");
 		$("#specialInfoName").html("<a href='#' data-tooltip='true' title='Click for specifics for this style.' data-toggle='modal' data-target='#<?php echo $view; ?>'><?php echo $label_this_style; ?></a>");
 		<?php if (($_SESSION['prefsStyleSet'] == "BJCP2015") && (in_array($view,$optional_info_styles))) { ?>
 		$("#optional").show("fast");
@@ -1048,7 +1042,7 @@ if ($action == "edit") {
 		$("input[name='carbLambic']").prop("required", false);
 		$("input[name='BDGColor']").prop("required", false);
 		$("#specialInfo").show("fast");
-		$("#specialInfoText").html("<?php echo clean_up_text($entry_text); ?>");
+		$("#specialInfoText").html("<?php echo preg_replace( "/\r|\n/", "", $entry_text); ?>");
 		$("#specialInfoName").html("<a href='#' data-tooltip='true' title='Click for specifics for this style.' data-toggle='modal' data-target='#<?php echo $view; ?>'><?php echo $label_this_style; ?></a>");
 		<?php if (($_SESSION['prefsStyleSet'] == "BJCP2015") && (in_array($view,$optional_info_styles))) { ?>
 		$("#optional").show("fast");
@@ -1070,7 +1064,7 @@ if ($action == "edit") {
 				$("#BDGColor").hide("fast");
 				$("#optional").hide("fast");
 				$("#specialInfo").show("fast");
-				$("#specialInfoText").html("<?php echo clean_up_text($styles_entry_text["$view"]); ?>");
+				$("#specialInfoText").html("<?php echo preg_replace( "/\r|\n/", "", $styles_entry_text["$view"]); ?>");
 				$("#specialInfoName").html("<a href='#' data-tooltip='true' title='Click for specifics for this style.' data-toggle='modal' data-target='#<?php echo $view; ?>'><?php echo $label_this_style; ?></a>");
 				<?php if (($_SESSION['prefsStyleSet'] == "BJCP2015") && (in_array($view,$optional_info_styles))) { ?>
 				$("#optional").show("fast");
@@ -1091,7 +1085,7 @@ if ($action == "edit") {
 				$("#BDGColor").show("fast");
 				$("#optional").hide("fast");
 				$("#specialInfo").show("fast");
-				$("#specialInfoText").html("<?php echo clean_up_text($styles_entry_text["$view"]); ?>");
+				$("#specialInfoText").html("<?php echo preg_replace( "/\r|\n/", "", $styles_entry_text["$view"]); ?>");
 				$("#specialInfoName").html("<a href='#' data-tooltip='true' title='Click for specifics for this style.' data-toggle='modal' data-target='#<?php echo $view; ?>'><?php echo $label_this_style; ?></a>");
 				<?php if (($_SESSION['prefsStyleSet'] == "BJCP2015") && (in_array($view,$optional_info_styles))) { ?>
 				$("#optional").show("fast");
@@ -1112,7 +1106,7 @@ if ($action == "edit") {
 				$("#BDGColor").hide("fast");
 				$("#optional").show("fast");
 				$("#specialInfo").show("fast");
-				$("#specialInfoText").html("<?php echo clean_up_text($styles_entry_text["$view"]); ?>");
+				$("#specialInfoText").html("<?php echo preg_replace( "/\r|\n/", "", $styles_entry_text["$view"]); ?>");
 				$("#specialInfoName").html("<a href='#' data-tooltip='true' title='Click for specifics for this style.' data-toggle='modal' data-target='#<?php echo $view; ?>'><?php echo $label_this_style; ?></a>");
 				<?php if (($_SESSION['prefsStyleSet'] == "BJCP2015") && (in_array($view,$optional_info_styles))) { ?>
 				$("#optional").show("fast");
@@ -1132,7 +1126,7 @@ if ($action == "edit") {
 				$("#carbLambic").hide("fast");
 				$("#BDGColor").hide("fast");
 				$("#specialInfo").hide("fast");
-				$("#specialInfoText").html("<?php echo clean_up_text($styles_entry_text["$view"]); ?>");
+				$("#specialInfoText").html("<?php echo preg_replace( "/\r|\n/", "", $styles_entry_text["$view"]); ?>");
 				$("#specialInfoName").html("<a href='#' data-tooltip='true' title='Click for specifics for this style.' data-toggle='modal' data-target='#<?php echo $view; ?>'><?php echo $label_this_style; ?></a>");
 				<?php if (($_SESSION['prefsStyleSet'] == "BJCP2015") && (in_array($view,$optional_info_styles))) { ?>
 				$("#optional").show("fast");
@@ -1152,7 +1146,7 @@ if ($action == "edit") {
 				$("#carbLambic").hide("fast");
 				$("#BDGColor").hide("fast");
 				$("#specialInfo").hide("fast");
-				$("#specialInfoText").html("<?php echo clean_up_text($styles_entry_text["$view"]); ?>");
+				$("#specialInfoText").html("<?php echo preg_replace( "/\r|\n/", "", $styles_entry_text["$view"]); ?>");
 				$("#specialInfoName").html("<a href='#' data-tooltip='true' title='Click for specifics for this style.' data-toggle='modal' data-target='#<?php echo $view; ?>'><?php echo $label_this_style; ?></a>");
 				<?php if (($_SESSION['prefsStyleSet'] == "BJCP2015") && (in_array($view,$optional_info_styles))) { ?>
 				$("#optional").show("fast");
@@ -1172,7 +1166,7 @@ if ($action == "edit") {
 				$("#carbLambic").hide("fast");
 				$("#BDGColor").hide("fast");
 				$("#specialInfo").hide("fast");
-				$("#specialInfoText").html("<?php echo clean_up_text($styles_entry_text["$view"]); ?>");
+				$("#specialInfoText").html("<?php echo preg_replace( "/\r|\n/", "", $styles_entry_text["$view"]); ?>");
 				$("#specialInfoName").html("<a href='#' data-tooltip='true' title='Click for specifics for this style.' data-toggle='modal' data-target='#<?php echo $view; ?>'><?php echo $label_this_style; ?></a>");
 				<?php if (($_SESSION['prefsStyleSet'] == "BJCP2015") && (in_array($view,$optional_info_styles))) { ?>
 				$("#optional").show("fast");
@@ -1192,7 +1186,7 @@ if ($action == "edit") {
 				$("#carbLambic").hide("fast");
 				$("#BDGColor").hide("fast");
 				$("#specialInfo").hide("fast");
-				$("#specialInfoText").html("<?php echo clean_up_text($styles_entry_text["$view"]); ?>");
+				$("#specialInfoText").html("<?php echo preg_replace( "/\r|\n/", "", $styles_entry_text["$view"]); ?>");
 				$("#specialInfoName").html("<a href='#' data-tooltip='true' title='Click for specifics for this style.' data-toggle='modal' data-target='#<?php echo $view; ?>'><?php echo $label_this_style; ?></a>");
 				<?php if (($_SESSION['prefsStyleSet'] == "BJCP2015") && (in_array($view,$optional_info_styles))) { ?>
 				$("#optional").show("fast");
@@ -1212,7 +1206,7 @@ if ($action == "edit") {
 				$("#carbLambic").hide("fast");
 				$("#BDGColor").hide("fast");
 				$("#specialInfo").hide("fast");
-				$("#specialInfoText").html("<?php echo clean_up_text($styles_entry_text["$view"]); ?>");
+				$("#specialInfoText").html("<?php echo preg_replace( "/\r|\n/", "", $styles_entry_text["$view"]); ?>");
 				$("#specialInfoName").html("<a href='#' data-tooltip='true' title='Click for specifics for this style.' data-toggle='modal' data-target='#<?php echo $view; ?>'><?php echo $label_this_style; ?></a>");
 				<?php if (($_SESSION['prefsStyleSet'] == "BJCP2015") && (in_array($view,$optional_info_styles))) { ?>
 				$("#optional").show("fast");
@@ -1232,7 +1226,7 @@ if ($action == "edit") {
 				$("#carbLambic").hide("fast");
 				$("#BDGColor").hide("fast");
 				$("#specialInfo").hide("fast");
-				$("#specialInfoText").html("<?php echo clean_up_text($special_beer_info["$view"]); ?>");
+				$("#specialInfoText").html("<?php echo preg_replace( "/\r|\n/", "", $special_beer_info["$view"]); ?>");
 				$("#specialInfoName").html("<a href='#' data-tooltip='true' title='Click for specifics for this style.' data-toggle='modal' data-target='#<?php echo $view; ?>'><?php echo $label_this_style; ?></a>");
 				<?php if (($_SESSION['prefsStyleSet'] == "BJCP2015") && (in_array($view,$optional_info_styles))) { ?>
 				$("#optional").show("fast");
@@ -1253,10 +1247,11 @@ if ($action == "edit") {
 				$("#BDGColor").hide("fast");
 				$("#special").show("fast");
 				$("#specialInfo").show("fast");
-				$("#specialInfoText").html("<?php echo clean_up_text($special_beer_info["$view"]); ?>");
+				$("#specialInfoText").html("<?php echo preg_replace( "/\r|\n/", "", $special_beer_info["$view"]); ?>");
 				$("#specialInfoName").html("<a href='#' data-tooltip='true' title='Click for specifics for this style.' data-toggle='modal' data-target='#<?php echo $view; ?>'><?php echo $label_this_style; ?></a>");
 				<?php if (($_SESSION['prefsStyleSet'] == "BJCP2015") && (in_array($view,$optional_info_styles))) { ?>
 				$("#optional").show("fast");
+				
 				<?php } ?>
 			});
 		<?php } elseif ($view == "25-B") { ?>
@@ -1272,10 +1267,11 @@ if ($action == "edit") {
 				$("#carbLambic").hide("fast");
 				$("#BDGColor").hide("fast");
 				$("#specialInfo").show("fast");
-				$("#specialInfoText").html("<?php echo clean_up_text($special_beer_info["$view"]); ?>");
+				$("#specialInfoText").html("<?php echo preg_replace( "/\r|\n/", "", $special_beer_info["$view"]); ?>");
 				$("#specialInfoName").html("<a href='#' data-tooltip='true' title='Click for specifics for this style.' data-toggle='modal' data-target='#<?php echo $view; ?>'><?php echo $label_this_style; ?></a>");
 				<?php if (($_SESSION['prefsStyleSet'] == "BJCP2015") && (in_array($view,$optional_info_styles))) { ?>
 				$("#optional").show("fast");
+				
 				<?php } ?>
 			});
 		<?php }	?>
