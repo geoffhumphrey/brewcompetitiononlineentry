@@ -10,8 +10,8 @@ if (EVALUATION) {
     include(EVALS.'import_scores.eval.php');
 }
 ?>
+<script src="<?php echo $base_url;?>js_includes/admin_ajax.js"></script>
 <p class="lead">Hello, <?php echo $_SESSION['brewerFirstName']; ?>. <span class="small">Click or tap the headings or icons below to view the options available in each category.</span></p>
-
 <?php if ((judging_date_return() == 0) && ($_SESSION['userLevel'] == 0))  { ?>
     <div class="row">
         <div class="col col-lg-6 col-md-12 col-sm-12 col-xs-12">
@@ -261,10 +261,99 @@ if (EVALUATION) {
                                     <strong>Regenerate</strong>
                                 </div>
                                 <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-8">
-                                    <ul class="list-inline">
-                                        <li><a class="hide-loader" data-confirm="Are you sure you want to regenerate judging numbers for all entries? This will over-write all judging numbers, including those that have been assigned via the barcode or QR Code scanning function. The process may take a while depending upon the number of entires in your database." href="<?php echo $base_url; ?>includes/process.inc.php?section=admin&amp;go=default&amp;action=generate_judging_numbers&amp;sort=default">Judging Numbers (Random)</a></li>
-                                        <li><a class="hide-loader" data-confirm="Are you sure you want to regenerate judging numbers for all entries? This will over-write all judging numbers, including those that have been assigned via the barcode or QR Code scanning function. The process may take a while depending upon the number of entires in your database. PLEASE NOTE that judging numbers will be in the following format: XX-123 (where XX is the category number or name)." href="<?php echo $base_url; ?>includes/process.inc.php?section=admin&amp;go=default&amp;action=generate_judging_numbers&amp;sort=legacy">Judging Numbers (With Style Number Prefix)</a></li>
-                                        <li><a class="hide-loader" data-confirm="Are you sure you want to regenerate judging numbers for all entries? This will over-write all judging numbers, including those that have been assigned via the barcode or QR Code scanning function. The process may take a while depending upon the number of entires in your database." href="<?php echo $base_url; ?>includes/process.inc.php?section=admin&amp;go=<?php echo $go; ?>&amp;action=generate_judging_numbers&amp;sort=identical">Judging Numbers (Same as Entry Numbers)</a></li>
+                                    <ul class="list-unstyled">
+                                        <li>
+                                            <!--
+                                            <a class="hide-loader" data-confirm="Are you sure you want to regenerate judging numbers for all entries? This will over-write all judging numbers, including those that have been assigned via the barcode or QR Code scanning function. The process may take a while depending upon the number of entires in your database." href="<?php echo $base_url; ?>includes/process.inc.php?section=admin&amp;go=default&amp;action=generate_judging_numbers&amp;sort=default">Judging Numbers (Random)</a>
+                                            -->
+                                            <a class="hide-loader"  href="#" data-toggle="modal" data-target="#jn-random-modal">Judging Numbers (Random)</a>
+                                            <div>
+                                                <span style="margin-bottom: 10px;" class="hidden" id="jn-random-status"></span>
+                                                <span style="margin-bottom: 10px;" class="hidden" id="jn-random-status-msg"></span>
+                                            </div>
+                                        </li>
+
+                                        <!-- Modal -->
+                                        <div class="modal fade" id="jn-random-modal" tabindex="-1" role="dialog" aria-labelledby="jn-random-modal-label">
+                                            <div class="modal-dialog" role="document">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                                        <h4 class="modal-title" id="jn-random-modal-label">Please Confirm</h4>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <p>Are you sure you want to regenerate judging numbers for all entries?</p>
+                                                        <p>This action will over-write all current judging numbers with randomly generated ones, <strong>including any that have been assigned via the barcode or QR Code scanning function</strong>.</p>
+                                                        <p>The process may take a while depending upon the number of entires in your database.</p>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-danger btn-default" data-dismiss="modal">Cancel</button>
+                                                        <button type="button" class="btn btn-success" data-dismiss="modal" onclick="regenerate_judging_numbers('<?php echo $base_url; ?>','default','admin-dashboard','jn-random');">Yes</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <li>
+                                            <!-- <a class="hide-loader" data-confirm="Are you sure you want to regenerate judging numbers for all entries? This will over-write all judging numbers, including those that have been assigned via the barcode or QR Code scanning function. The process may take a while depending upon the number of entires in your database. PLEASE NOTE that judging numbers will be in the following format: XX-123 (where XX is the category number or name)." href="<?php echo $base_url; ?>includes/process.inc.php?section=admin&amp;go=default&amp;action=generate_judging_numbers&amp;sort=legacy">Judging Numbers (With Style Number Prefix)</a> -->
+                                            <a class="hide-loader"  href="#" data-toggle="modal" data-target="#jn-style-modal">Judging Numbers (With Style Number Prefix)</a>
+                                            <div>
+                                                <span style="margin-bottom: 10px;" class="hidden" id="jn-style-status"></span>
+                                                <span style="margin-bottom: 10px;" class="hidden" id="jn-style-status-msg"></span>
+                                            </div>
+                                        </li>
+
+                                        <!-- Modal -->
+                                        <div class="modal fade" id="jn-style-modal" tabindex="-1" role="dialog" aria-labelledby="jn-style-modal-label">
+                                            <div class="modal-dialog" role="document">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                                        <h4 class="modal-title" id="jn-style-modal-label">Please Confirm</h4>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <p>Are you sure you want to regenerate judging numbers for all entries?</p>
+                                                        <p>This action will over-write all current judging numbers with those with style number prefixes, <strong>including any that have been assigned via the barcode or QR Code scanning function</strong>. Judging numbers will be in the following format: XX-123 (where XX is the 2-character category number or name).</p>
+                                                        <p>The process may take a while depending upon the number of entires in your database.</p>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-danger btn-default" data-dismiss="modal">Cancel</button>
+                                                        <button type="button" class="btn btn-success" data-dismiss="modal" onclick="regenerate_judging_numbers('<?php echo $base_url; ?>','legacy','admin-dashboard','jn-style');">Yes</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+
+                                        <li>
+                                            <!--<a class="hide-loader" data-confirm="Are you sure you want to regenerate judging numbers for all entries? This will over-write all judging numbers, including those that have been assigned via the barcode or QR Code scanning function. The process may take a while depending upon the number of entires in your database." href="<?php echo $base_url; ?>includes/process.inc.php?section=admin&amp;go=<?php echo $go; ?>&amp;action=generate_judging_numbers&amp;sort=identical">Judging Numbers (Same as Entry Numbers)</a>-->
+                                            <a class="hide-loader"  href="#" data-toggle="modal" data-target="#jn-entry-modal">Judging Numbers (Same as Entry Numbers)</a>
+                                            <div>
+                                                <span style="margin-bottom: 10px;" class="hidden" id="jn-entry-status"></span>
+                                                <span style="margin-bottom: 10px;" class="hidden" id="jn-entry-status-msg"></span>
+                                            </div>
+                                        </li>
+
+                                        <!-- Modal -->
+                                        <div class="modal fade" id="jn-entry-modal" tabindex="-1" role="dialog" aria-labelledby="jn-entry-modal-label">
+                                            <div class="modal-dialog" role="document">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                                        <h4 class="modal-title" id="jn-entry-modal-label">Please Confirm</h4>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <p>Are you sure you want to regenerate judging numbers for all entries?</p>
+                                                        <p>This action will over-write each entry's assigned judging number with one that matches its entry number, <strong>including any that have been assigned via the barcode or QR Code scanning function</strong>.</p>
+                                                        <p>The process may take a while depending upon the number of entires in your database.</p>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-danger btn-default" data-dismiss="modal">Cancel</button>
+                                                        <button type="button" class="btn btn-success" data-dismiss="modal" onclick="regenerate_judging_numbers('<?php echo $base_url; ?>','identical','admin-dashboard','jn-entry');">Yes</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </ul>
                                 </div>
                             </div><!-- ./row -->
@@ -684,7 +773,6 @@ if (EVALUATION) {
                         </div>
                     </div>
                 </div><!-- ./ Organizing Panel -->
-
                 <!-- Scoring Panel -->
                 <div class="panel panel-default">
                     <div class="panel-heading">
@@ -706,7 +794,6 @@ if (EVALUATION) {
                                     </ul>
                                 </div>
                             </div><!-- ./row -->
-
                             <?php if (EVALUATION) {?>
                             <div class="row">
                                 <div class="col col-lg-5 col-md-4 col-sm-4 col-xs-4">
@@ -719,8 +806,6 @@ if (EVALUATION) {
                                 </div>
                             </div><!-- ./row -->
                             <?php } ?>
-
-
                             <div class="row">
                                 <div class="col col-lg-5 col-md-4 col-sm-4 col-xs-4">
                                     <strong>Scores</strong>
@@ -780,10 +865,245 @@ if (EVALUATION) {
             </div><!-- ./ panel-group -->
         </div><!-- ./left column -->
 
+        <!-- Purge Modals -->
+        <div class="modal fade" id="cleanUp" tabindex="-1" role="dialog" aria-labelledby="cleanUpLabel">
+            <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="cleanUpLabel">Please Confirm</h4>
+                </div>
+                <div class="modal-body">
+                    <p>Are you sure? This will check the database for duplicate entries, duplicate scores for a single entry, users without associated personal data (no first name, no last name), etc.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-success" data-dismiss="modal" onclick="purge_data('<?php echo $base_url; ?>','cleanup','cleanup','admin-dashboard','clean-up');">Yes</button>
+                </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade" id="confirmAll" tabindex="-1" role="dialog" aria-labelledby="confirmAllLabel">
+            <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="confirmAllLabel">Please Confirm</h4>
+                </div>
+                <div class="modal-body">
+                    <p>Are you sure? This will mark ALL entries as confirmed even if the entry is incomplete. It could be a large pain to undo.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-success" data-dismiss="modal" onclick="purge_data('<?php echo $base_url; ?>','confirmed','confirmed','admin-dashboard','conf');">Yes</button>
+                </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade" id="purgeUnconfirmed" tabindex="-1" role="dialog" aria-labelledby="purgeUnconConfirm">
+            <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="purgeUnconConfirm">Please Confirm</h4>
+                </div>
+                <div class="modal-body">
+                    <p>Are you sure? This will delete ALL unconfirmed entries and/or entries without special ingredients/classic style info that require them from the database - even those that are less than 24 hours old. This action cannot be undone.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-success" data-dismiss="modal" onclick="purge_data('<?php echo $base_url; ?>','','unconfirmed','admin-dashboard','purge-un');">Yes</button>
+                </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade" id="purgeParticipants" tabindex="-1" role="dialog" aria-labelledby="previewBestLabel">
+            <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="previewBestLabel">Please Confirm</h4>
+                </div>
+                <div class="modal-body">
+                    <p>Are you sure you want to delete non-admin participants and associated data (including each user's entries, as well as their judge, steward, and staff assignments)? This cannot be undone.</p>
+                    <p>Optionally, choose a date threshold. User accounts and associated data will not be purged <strong>if they were <em>updated</em> on or after</strong> the date you choose.</p>
+                    <p>Leave the field blank to purge all non-admin participants.</p>
+                    <div class="input-group">
+                        <input class="form-control" id="purge-part-participants-value" name="dateThreshold" type="text" value="" placeholder="">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-success" data-dismiss="modal" onclick="purge_data('<?php echo $base_url; ?>','','participants','admin-dashboard','purge-part');">Yes</button>
+                </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade" id="purgePayments" tabindex="-1" role="dialog" aria-labelledby="purgePaymentsLabel">
+            <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="purgePaymentsLabel">Please Confirm</h4>
+                </div>
+                <div class="modal-body">
+                    <p>Are you sure you want to delete payments and associated data? This cannot be undone.</p>
+                    <p>Optionally, choose a date threshold. Payments and associated data will not be purged <strong>if they were <em>updated</em> on or after</strong> the date you choose.</p>
+                    <p>Leave the field blank to purge all payment data.</p>
+                    <div class="input-group">
+                        <input class="form-control" id="purge-pay-payments-value" name="dateThreshold" type="text" value="" placeholder="">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-success" data-dismiss="modal" onclick="purge_data('<?php echo $base_url; ?>','','payments','admin-dashboard','purge-pay');">Yes</button>
+                </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade" id="purgeEntries" tabindex="-1" role="dialog" aria-labelledby="purgeEntriesLabel">
+            <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="purgeEntriesLabel">Please Confirm</h4>
+                </div>
+                <div class="modal-body">
+                    <p>Are you sure you want to delete entries and associated data, including scores, BOS scores, and associated <?php if (EVALUATION) echo "entry evaluations recorded by judges"; else echo "scoresheets"; ?> (if present)? This cannot be undone.</p>
+                    <p>Optionally, choose a date threshold. Entries and associated data will not be purged <strong>if they were <em>updated</em> on or after</strong> the date you choose.</p>
+                    <p>Leave the field blank to purge all entries.</p>
+                    <div class="input-group">
+                        <input class="form-control" id="purge-ent-entries-value" name="dateThreshold" type="text" value="" placeholder="">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-success" data-dismiss="modal" onclick="purge_data('<?php echo $base_url; ?>','','entries','admin-dashboard','purge-ent');">Yes</button>
+                </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade" id="purgeScoresheets" tabindex="-1" role="dialog" aria-labelledby="purgeScoresheetsLabel">
+            <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="purgeScoresheetsLabel">Please Confirm</h4>
+                </div>
+                <div class="modal-body">
+                    <?php if (EVALUATION) { ?>
+                    <p>Are you sure you want to delete all recorded entry evaluations? This cannot be undone. </p>
+                    <p>Use the archive function if you wish to retain any evaluations recorded for past competition iterations.</p>
+                    <?php } else { ?>
+                    <p>Are you sure you want to delete all uploaded scoresheets in the root of the user_docs directory? This cannot be undone. </p>
+                    <p>Use the archive function if you wish to retain any uploaded scoresheets contained in the user_docs directory.</p>
+                    <?php } ?>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+                    <?php if (EVALUATION) { ?>
+                    <button type="button" class="btn btn-success" data-dismiss="modal" onclick="purge_data('<?php echo $base_url; ?>','','evaluation','admin-dashboard','purge-sheets');">Yes</button>
+                    <?php } else { ?>
+                    <button type="button" class="btn btn-success" data-dismiss="modal" onclick="purge_data('<?php echo $base_url; ?>','','scoresheets','admin-dashboard','purge-sheets');">Yes</button>
+                    <?php } ?>
+                </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade" id="purgeAvailabilty" tabindex="-1" role="dialog" aria-labelledby="purgeAvailabiltyLabel">
+            <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="purgeAvailabiltyLabel">Please Confirm</h4>
+                </div>
+                <div class="modal-body">
+                    <p>Are you sure you want to reset all entrant availability? This cannot be undone.
+                    <p>All current judge, steward, and staff assignments will be cleared, judge/steward availability will be set to &ldquo;No,&rdquo; location preferences will be set to to &ldquo;No,&rdquo; and entrant staff interest will be set to &ldquo;No&rdquo; for all entrants.
+                    <p>This is useful for sites that are carrying over user data to another competition instance, however, it is critical that all entrants be notified to update their judge, steward, and staff availability. </p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-success" data-dismiss="modal" onclick="purge_data('<?php echo $base_url; ?>','','availability','admin-dashboard','purge-avail');">Yes</button>
+                </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade" id="purgeCustom" tabindex="-1" role="dialog" aria-labelledby="purgeCustomLabel">
+            <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="purgeCustomLabel">Please Confirm</h4>
+                </div>
+                <div class="modal-body">
+                    <p>Are you sure you want to delete all custom categories and associated data? This cannot be undone.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-success" data-dismiss="modal" onclick="purge_data('<?php echo $base_url; ?>','','custom','admin-dashboard','purge-cust');">Yes</button>
+                </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade" id="purgeScores" tabindex="-1" role="dialog" aria-labelledby="purgeScoresLabel">
+            <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="purgeScoresLabel">Please Confirm</h4>
+                </div>
+                <div class="modal-body">
+                    <p>Are you sure you want to delete all scoring data from the database including best of show? This cannot be undone.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-success" data-dismiss="modal" onclick="purge_data('<?php echo $base_url; ?>','','scores','admin-dashboard','purge-score');">Yes</button>
+                </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade" id="purgeTables" tabindex="-1" role="dialog" aria-labelledby="purgeTablesLabel">
+            <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="purgeTablesLabel">Please Confirm</h4>
+                </div>
+                <div class="modal-body">
+                    <p>Are you sure you want to delete all judging tables and associated data including judging/stewarding table assignments and scores? This cannot be undone.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-success" data-dismiss="modal" onclick="purge_data('<?php echo $base_url; ?>','','tables','admin-dashboard','purge-table');">Yes</button>
+                </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade" id="purgeAll" tabindex="-1" role="dialog" aria-labelledby="purgeAllLabel">
+            <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="purgeAllLabel">Please Confirm</h4>
+                </div>
+                <div class="modal-body">
+                    <p>Are you sure you want to delete <strong>ALL</strong> entry, participant, judging table, score, and custom category data, <?php if (EVALUATION) echo "including all entry evaluations recorded by judges?"; else echo "including any scoresheets?"; ?></p>
+                    <p>This cannot be undone.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-success" data-dismiss="modal" onclick="purge_data('<?php echo $base_url; ?>','','purge-all','admin-dashboard','purge-total');">Yes</button>
+                </div>
+                </div>
+            </div>
+        </div>
+        <!-- END Purge Modals -->
+
+
+        <!-- BEGIN Right column accordions -->
 		<div class="col col-lg-6 col-md-12 col-sm-12 col-xs-12">
             <div class="panel-group" id="accordion2">
-
-
 			<!-- Reports Panel -->
 			<div class="panel panel-default">
 				<div class="panel-heading">
@@ -1140,7 +1460,6 @@ if (EVALUATION) {
 								</ul>
 							</div>
 						</div><!-- ./row -->
-
                         <?php if (empty($_SESSION['contestID'])) { ?>
                         <!-- Modal -->
                         <div class="modal fade" id="BJCPCompIDModal" tabindex="-1" role="dialog" aria-labelledby="BJCPCompIDModalLabel">
@@ -1160,9 +1479,7 @@ if (EVALUATION) {
                                 </div>
                             </div>
                         </div><!-- ./modal -->
-
                         <?php } ?>
-
                      	<?php if ($totalRows_tables > 0) { ?>
 						<div class="row">
 							<div class="col col-lg-4 col-md-4 col-sm-4 col-xs-4">
@@ -1193,7 +1510,6 @@ if (EVALUATION) {
 								</ul>
 							</div>
 						</div>
-
 						<?php } ?>
 						<div class="row">
 							<div class="col col-lg-4 col-md-4 col-sm-4 col-xs-4">
@@ -1238,7 +1554,6 @@ if (EVALUATION) {
 				</div>
 			</div>
 			<!-- ./ Reports Panel -->
-
             <!-- Data Exports Panel -->
             <div class="panel panel-default">
                 <div class="panel-heading">
@@ -1297,7 +1612,7 @@ if (EVALUATION) {
                                 <strong>Promo Materials</strong>
                             </div>
                             <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-8">
-                                <ul class="list-inline">
+                                <ul class="list-unstyled">
                                     <li><a class="hide-loader" href="<?php echo $base_url; ?>output/export.output.php?section=promo&amp;go=html&amp;action=html">HTML</a></li>
 									<li><a class="hide-loader" href="<?php echo $base_url; ?>output/export.output.php?section=promo&amp;go=word&amp;action=word">Word</a></li>
 									<li><a class="hide-loader" href="<?php echo $base_url; ?>output/export.output.php?section=promo&amp;go=word&amp;action=bbcode">Bulletin Board Code (BBC)</a></li>
@@ -1324,7 +1639,11 @@ if (EVALUATION) {
                             </div>
                             <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-8">
                                 <ul class="list-inline">
-                                    <li><a class="hide-loader" href="<?php echo $base_url; ?>includes/process.inc.php?action=cleanup" data-toggle="tooltip" data-placement="top" title="Check and clear the database of duplicate entries, etc." data-confirm="Are you sure? This will check the database for duplicate entries, duplicate scores for a single entry, users without associated personal data [no first name, no last name], etc.">Clean-Up Data</a></li>
+                                    <li><a class="hide-loader" href="#" data-toggle="modal" data-target="#cleanUp">Clean-Up Data</a></li>
+                                    <div>
+                                        <span style="margin-bottom: 10px;" class="hidden" id="clean-up-status"></span>
+                                        <span style="margin-bottom: 10px;" class="hidden" id="clean-up-status-msg"></span>
+                                    </div>
                                 </ul>
                             </div>
                         </div><!-- ./row -->
@@ -1333,9 +1652,17 @@ if (EVALUATION) {
                                 <strong>Entries</strong>
                             </div>
                             <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-8">
-                                <ul class="list-inline">
-                                    <li><a class="hide-loader" href="<?php echo $base_url; ?>includes/process.inc.php?action=confirmed&amp;dbTable=<?php echo $brewing_db_table; ?>" data-toggle="tooltip" data-placement="top" title="Mark ALL unconfirmed entries as confirmed even if entries are incomplete" data-confirm="Are you sure? This will mark ALL entries as confirmed even if the entry is incomplete. It could be a large pain to undo.">Confirm All Unconfirmed</a></li>
-                                    <li><a class="hide-loader" href="<?php echo $base_url; ?>includes/process.inc.php?action=purge&amp;go=unconfirmed" data-toggle="tooltip" data-placement="top" title="Delete all unconfirmed entries" data-confirm="Are you sure? This will delete ALL unconfirmed entries and/or entries without special ingredients/classic style info that require them from the database - even those that are less than 24 hours old. This cannot be undone.">Purge All Unconfirmed</a></li>
+                                <ul class="list-unstyled">
+                                    <li><a class="hide-loader" href="#" data-toggle="modal" data-target="#confirmAll">Confirm All Unconfirmed</a></li>
+                                    <div>
+                                        <span style="margin-bottom: 10px;" class="hidden" id="conf-status"></span>
+                                        <span style="margin-bottom: 10px;" class="hidden" id="conf-status-msg"></span>
+                                    </div>
+                                    <li><a class="hide-loader" href="#" data-toggle="modal" data-target="#purgeUnconfirmed">Purge All Unconfirmed</a></li>
+                                    <div>
+                                        <span style="margin-bottom: 10px;" class="hidden" id="purge-un-status"></span>
+                                        <span style="margin-bottom: 10px;" class="hidden" id="purge-un-status-msg"></span>
+                                    </div>
                                 </ul>
                             </div>
                         </div>
@@ -1344,99 +1671,63 @@ if (EVALUATION) {
                             <strong>Purge</strong>
                         </div>
                             <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-8">
-                                <ul class="list-inline">
+                                <ul class="list-unstyled">
                                     <li><a href="#" data-toggle="modal" data-target="#purgeEntries">Entries</a></li>
+                                    <div>
+                                        <span style="margin-bottom: 10px;" class="hidden" id="purge-ent-status"></span>
+                                        <span style="margin-bottom: 10px;" class="hidden" id="purge-ent-status-msg"></span>
+                                    </div>
                                     <?php if (check_setup($prefix."payments",$database)) { ?>
                                     <li><a class="hide-loader" href="#" data-toggle="modal" data-target="#purgePayments">Payments</a></li>
-                                    <?php } ?>
+                                    <div>
+                                        <span style="margin-bottom: 10px;" class="hidden" id="purge-pay-status"></span>
+                                        <span style="margin-bottom: 10px;" class="hidden" id="purge-pay-status-msg"></span>
+                                    </div>
+                                    <?php } ?> 
                                     <li><a class="hide-loader" href="#" data-toggle="modal" data-target="#purgeParticipants">Participants</a></li>
-                                    <li><a class="hide-loader" href="<?php echo $base_url; ?>includes/process.inc.php?action=purge&amp;go=tables" data-confirm="Are you sure you want to delete all judging tables and associated data including judging/stewarding table assignments and scores? This cannot be undone.">Judging Tables</a></li>
-                                    <li><a class="hide-loader" href="<?php echo $base_url; ?>includes/process.inc.php?action=purge&amp;go=scores" data-confirm="Are you sure you want to delete all scoring data from the database including best of show? This cannot be undone.">Scores</a></li>
-                                    <li><a class="hide-loader" href="<?php echo $base_url; ?>includes/process.inc.php?action=purge&amp;go=custom" data-confirm="Are you sure you want to delete all custom categories and associated data? This cannot be undone.">Custom Categories</a></li>
-                                    <li><a class="hide-loader" href="<?php echo $base_url; ?>includes/process.inc.php?action=purge&amp;go=availability" data-confirm="Are you sure you want to reset all entrant availability? All current judge, steward, and staff assignments will be cleared, judge/steward availability will be set to &ldquo;No,&rdquo; location preferences will be set to to &ldquo;No,&rdquo; and entrant staff interest will be set to &ldquo;No&rdquo; for all entrants. This is useful for sites that are carrying over user data to another competition instance, however, it is critical that all entrants be notified to update their judge, steward, and staff availability. This cannot be undone.">Entrant Availability</a></li>
-                                    <li><a class="hide-loader" href="<?php echo $base_url; ?>includes/process.inc.php?action=delete_scoresheets&filter=admin-dashboard" data-confirm="Are you sure you want to delete all uploaded scoresheets in the root of the user_docs directory? This cannot be undone. Use the archive function if you wish to retain any uploaded scoresheets contained in the root of the user_docs directory.">Uploaded Scoresheets</li>
-                                </ul>
-                                <ul class="list-inline">
-                                    <li><a class="hide-loader" href="<?php echo $base_url; ?>includes/process.inc.php?action=purge&amp;go=purge-all" data-confirm="Are you sure you want to delete entry, participant, judging table, score, and custom category data? This cannot be undone.">All of the Above</a> <span class="fa fa-hand-o-up small"></span></li>
+                                    <div>
+                                        <span style="margin-bottom: 10px;" class="hidden" id="purge-part-status"></span>
+                                        <span style="margin-bottom: 10px;" class="hidden" id="purge-part-status-msg"></span>
+                                    </div>
+
+
+                                    <li><a class="hide-loader" href="#" data-toggle="modal" data-target="#purgeTables">Judging Tables</a></li>
+                                    <div>
+                                        <span style="margin-bottom: 10px;" class="hidden" id="purge-table-status"></span>
+                                        <span style="margin-bottom: 10px;" class="hidden" id="purge-table-status-msg"></span>
+                                    </div>                            
+                                    <li><a class="hide-loader" href="#" data-toggle="modal" data-target="#purgeScores">Scores</a></li>
+                                    <div>
+                                        <span style="margin-bottom: 10px;" class="hidden" id="purge-score-status"></span>
+                                        <span style="margin-bottom: 10px;" class="hidden" id="purge-score-status-msg"></span>
+                                    </div>
+                                    <li><a class="hide-loader" href="#" data-toggle="modal" data-target="#purgeCustom">Custom Categories</a></li>
+                                    <div>
+                                        <span style="margin-bottom: 10px;" class="hidden" id="purge-cust-status"></span>
+                                        <span style="margin-bottom: 10px;" class="hidden" id="purge-cust-status-msg"></span>
+                                    </div>
+                                    <li><a class="hide-loader" href="#" data-toggle="modal" data-target="#purgeAvailabilty">Entrant Availability</a></li>
+                                    <div>
+                                        <span style="margin-bottom: 10px;" class="hidden" id="purge-avail-status"></span>
+                                        <span style="margin-bottom: 10px;" class="hidden" id="purge-avail-status-msg"></span>
+                                    </div>
+                                    <?php if (EVALUATION) { ?>
+                                    <li><a class="hide-loader" href="#" data-toggle="modal" data-target="#purgeScoresheets">Entry Evaluations</a></li>
+                                    <?php } else { ?>
+                                    <li><a class="hide-loader" href="#" data-toggle="modal" data-target="#purgeScoresheets">Uploaded Scoresheets</a></li>
+                                    <?php } ?>
+                                    <div>
+                                        <span style="margin-bottom: 10px;" class="hidden" id="purge-sheets-status"></span>
+                                        <span style="margin-bottom: 10px;" class="hidden" id="purge-sheets-status-msg"></span>
+                                    </div>
+                                    <li><a class="hide-loader" href="#" data-toggle="modal" data-target="#purgeAll">All Purge Functions</a> <span class="fa fa-hand-o-up small"></span></li>
+                                    <div>
+                                        <span class="hidden" id="purge-total-status"></span>
+                                        <span style="margin-bottom: 10px;" class="hidden" id="purge-total-status-msg"></span>
+                                    </div>
                                 </ul>
                             </div>
                         </div><!-- ./row -->
-
-
-                        <!-- Purge Modals -->
-                        <div class="modal fade" id="purgeParticipants" tabindex="-1" role="dialog" aria-labelledby="previewBestLabel">
-                        	<form class="form-horizontal" action="<?php echo $base_url; ?>includes/process.inc.php?action=purge&amp;go=participants" method="POST" name="form1" id="form1">
-							<div class="modal-dialog" role="document">
-							<div class="modal-content">
-								<div class="modal-header">
-									<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-									<h4 class="modal-title" id="previewBestLabel">Please Confirm</h4>
-								</div>
-								<div class="modal-body">
-									<p>Are you sure you want to delete non-admin participants and associated data (including each user's entries, as well as their judge, steward, and staff assignments)? This cannot be undone.</p>
-									<p>Optionally, choose a date threshold. User accounts and associated data will not be purged <strong>if they were <em>updated</em> on or after</strong> the date you choose.</p>
-									<p>Leave the field blank to purge all non-admin participants.</p>
-									<div class="input-group">
-										<input class="form-control" id="dateThresholdParticipants" name="dateThreshold" type="text" value="" placeholder="">
-									</div>
-								</div>
-								<div class="modal-footer">
-									<button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
-									<input type="submit" class="btn btn-success" value="Yes">
-								</div>
-								</div>
-							</div>
-							</form>
-						</div>
-
-                       <div class="modal fade" id="purgePayments" tabindex="-1" role="dialog" aria-labelledby="purgePaymentsLabel">
-                        	<form class="form-horizontal" action="<?php echo $base_url; ?>includes/process.inc.php?action=purge&amp;go=payments" method="POST" name="form1" id="form1">
-							<div class="modal-dialog" role="document">
-							<div class="modal-content">
-								<div class="modal-header">
-									<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-									<h4 class="modal-title" id="purgePaymentsLabel">Please Confirm</h4>
-								</div>
-								<div class="modal-body">
-									<p>Are you sure you want to delete payments and associated data? This cannot be undone.</p>
-									<p>Optionally, choose a date threshold. Payments and associated data will not be purged <strong>if they were <em>updated</em> on or after</strong> the date you choose.</p>
-									<p>Leave the field blank to purge all payment data.</p>
-									<div class="input-group">
-										<input class="form-control" id="dateThresholdPayments" name="dateThreshold" type="text" value="" placeholder="">
-									</div>
-								</div>
-								<div class="modal-footer">
-									<button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
-									<input type="submit" class="btn btn-success" value="Yes">
-								</div>
-								</div>
-							</div>
-							</form>
-						</div>
-                       <div class="modal fade" id="purgeEntries" tabindex="-1" role="dialog" aria-labelledby="purgeEntriesLabel">
-                        	<form class="form-horizontal" action="<?php echo $base_url; ?>includes/process.inc.php?action=purge&amp;go=entries" method="POST" name="form1" id="form1">
-							<div class="modal-dialog" role="document">
-							<div class="modal-content">
-								<div class="modal-header">
-									<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-									<h4 class="modal-title" id="purgeEntriesLabel">Please Confirm</h4>
-								</div>
-								<div class="modal-body">
-									<p>Are you sure you want to delete entries and associated data, including scores, BOS scores, and associated scoresheets (if present)? This cannot be undone.</p>
-									<p>Optionally, choose a date threshold. Entries and associated data will not be purged <strong>if they were <em>updated</em> on or after</strong> the date you choose.</p>
-									<p>Leave the field blank to purge all entries.</p>
-									<div class="input-group">
-										<input class="form-control" id="dateThresholdEntries" name="dateThreshold" type="text" value="" placeholder="">
-									</div>
-								</div>
-								<div class="modal-footer">
-									<button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
-									<input type="submit" class="btn btn-success" value="Yes">
-								</div>
-								</div>
-							</div>
-							</form>
-						</div>
                         <?php if ($_SESSION['userLevel'] == "0") { ?>
                         <div class="row">
                             <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-4">
@@ -1524,17 +1815,17 @@ if (EVALUATION) {
                                 </div>
                                 <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-8">
                                     <ul class="list-unstyled">
-                                    	<li><a href="#" role="button" data-toggle="modal" data-target="#dashboard-help-modal-comp-logo">Display the Competition Logo</a></li>
-                                       	<li><a href="#" role="button" data-toggle="modal" data-target="#dashboard-help-modal-sponsor-logo">Display Sponsors with Logos</a></li>
-                                 		<li><a href="#" role="button" data-toggle="modal" data-target="#dashboard-help-modal-check-in">Check In Received Entries</a></li>
-                                       	<li><a href="#" role="button" data-toggle="modal" data-target="#dashboard-help-modal-tables">Set Up Judging Tables</a></li>
-                                     	<li><a href="#" role="button" data-toggle="modal" data-target="#dashboard-help-modal-assign-tables">Assign Judges/Stewards to Tables</a></li>
-                                 		<li><a href="#" role="button" data-toggle="modal" data-target="#dashboard-help-modal-materials">Print Judging Day Materials</a></li>
-                                		<li><a href="#" role="button" data-toggle="modal" data-target="#dashboard-help-modal-bos-judges">Assign Best of Show Judges</a></li>
-										<li><a href="#" role="button" data-toggle="modal" data-target="#dashboard-help-modal-bos-results">Enter Scores and BOS Results</a></li>
-                                  		<li><a href="#" role="button" data-toggle="modal" data-target="#dashboard-help-modal-winning">Display Winning Entries</a></li>
-                                    	<li><a href="#" role="button" data-toggle="modal" data-target="#dashboard-help-modal-pro-am">Display Pro-Am Winner(s)</a></li>
-										<li><a class="hide-loader" href="https://github.com/geoffhumphrey/brewcompetitiononlineentry/issues" target="_blank">Report an Issue</a></li>
+                                    	<li><a href="#" role="button" data-toggle="modal" data-target="#dashboard-help-modal-comp-logo">Display the Competition Logo?</a></li>
+                                       	<li><a href="#" role="button" data-toggle="modal" data-target="#dashboard-help-modal-sponsor-logo">Display Sponsors with Logos?</a></li>
+                                 		<li><a href="#" role="button" data-toggle="modal" data-target="#dashboard-help-modal-check-in">Check In Received Entries?</a></li>
+                                       	<li><a href="#" role="button" data-toggle="modal" data-target="#dashboard-help-modal-tables">Set Up Judging Tables?</a></li>
+                                     	<li><a href="#" role="button" data-toggle="modal" data-target="#dashboard-help-modal-assign-tables">Assign Judges/Stewards to Tables?</a></li>
+                                 		<li><a href="#" role="button" data-toggle="modal" data-target="#dashboard-help-modal-materials">Print Judging Day Materials?</a></li>
+                                		<li><a href="#" role="button" data-toggle="modal" data-target="#dashboard-help-modal-bos-judges">Assign Best of Show Judges?</a></li>
+										<li><a href="#" role="button" data-toggle="modal" data-target="#dashboard-help-modal-bos-results">Enter Scores and BOS Results?</a></li>
+                                  		<li><a href="#" role="button" data-toggle="modal" data-target="#dashboard-help-modal-winning">Display Winning Entries?</a></li>
+                                    	<li><a href="#" role="button" data-toggle="modal" data-target="#dashboard-help-modal-pro-am">Display Pro-Am Winner(s)?</a></li>
+										<li><a class="hide-loader" href="https://github.com/geoffhumphrey/brewcompetitiononlineentry/issues" target="_blank">Report an Issue?</a></li>
                                         <!--
                                   		<li><a href="#" role="button" data-toggle="modal" data-target="#dashboard-help-modal-winner-rpt">Print a Winner Report</a></li>
                                 		<li><a href="#" role="button" data-toggle="modal" data-target="#dashboard-help-modal-bjcp-points">Report BJCP Judging Points</a></li>

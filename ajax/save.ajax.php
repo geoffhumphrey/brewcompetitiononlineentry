@@ -1,8 +1,8 @@
 <?php
 ob_start();
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
+ini_set('display_errors', 1); // Change to 0 for prod.
+ini_set('display_startup_errors', 1); // Change to 0 for prod.
+error_reporting(E_ALL); // Change to error_reporting(0) for prod.
 require('../paths.php');
 require(CONFIG.'bootstrap.php');
 
@@ -36,17 +36,16 @@ if (isset($_GET['rid4'])) {
   $rid4 = (get_magic_quotes_gpc()) ? $_GET['rid4'] : addslashes($_GET['rid4']);
 }
 
+$return_json = array();
+$status = 0;
+$process = FALSE;
+$sql = "";
+$input = "";
+$post = 0;
+$error_type = 0;
+
 if ((isset($_SESSION['session_set_'.$prefix_session])) && (isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) {
 
-	$return_json = array();
-	$status = 0;
-	$process = FALSE;
-	$sql = "";
-	$input = "";
-	$post = 0;
-	$error_type = 0;
-
-	
 	// brewing (entries) DB table
 	if ($action == "brewing") {
 		
@@ -96,7 +95,7 @@ if ((isset($_SESSION['session_set_'.$prefix_session])) && (isset($_SESSION['logi
 		if ($result) $status = 1;
 		else $error_type = 3; // SQL error
 
-	}
+	} // END if ($action == "brewing")
 	
 
 	if ($action == "sponsors") {
@@ -136,7 +135,7 @@ if ((isset($_SESSION['session_set_'.$prefix_session])) && (isset($_SESSION['logi
 		if ($result) $status = 1;
 		else $error_type = 3; // SQL error
 		
-	}
+	} // END if ($action == "sponsors")
 	
 	// judging_scores DB Table
 	if (($action == "judging_scores") || ($action == "judging_scores_bos")) {
@@ -243,26 +242,29 @@ if ((isset($_SESSION['session_set_'.$prefix_session])) && (isset($_SESSION['logi
 				$error_type = 3; // SQL error
 			}
 
-		} // end if (is_numeric($post))
+		} // END if (is_numeric($post))
 
 		else {
 			$error_type = 1;
 		}
 
-	}
+	} // END if ($action == "scores")
 
-	$return_json = array(
-		"status" => "$status",
-		"query" => "$sql",
-		"post" => "$post",
-		"input" => "$input",
-		"error_type" => "$error_type"
-	);
+} 
 
-	// Return the json
-	echo json_encode($return_json);
+else {
+	$status = 9; // Session expired, not enabled, etc.
+}  // END if session is set
 
-} else echo "<p>Not allowed.</p>"; // end if session is set
 
-	
+$return_json = array(
+	"status" => "$status",
+	"query" => "$sql",
+	"post" => "$post",
+	"input" => "$input",
+	"error_type" => "$error_type"
+);
+
+// Return the json
+echo json_encode($return_json);
 ?>
