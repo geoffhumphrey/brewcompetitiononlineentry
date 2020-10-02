@@ -33,12 +33,12 @@ $hostname = "localhost";
 $username = "";
 
 /**
- * INSERT YOUR PASSWORD BETWEEN THE DOUBLE-QUOTATION MARKS ("").
+ * INSERT YOUR PASSWORD BETWEEN THE SINGLE-QUOTATION MARKS ('').
  * For example, if your password is flintstone then the line should read 
- * $password = "flintsone".
+ * $password = 'flintsone'.
  */
 
-$password = "";
+$password = '';
 
 /**
  * The following line is the name of your MySQL database you set up already.
