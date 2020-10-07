@@ -175,7 +175,7 @@ $label_bos = "Best of Show";
 $label_brewer = "Sládek";
 $label_cobrewer = "Podsládek";
 $label_entry_name = "Název vzorku";
-$label_required_info = "Požadované údaje";
+$label_required_info = "Upřesnění";
 $label_character_limit = "znakový limit. Použijte klíčová slova a zkratky, pokud vám nestačí místo.<br>Použito znaků: ";
 $label_carbonation = "Nasycení";
 $label_sweetness = "Sladkost";
@@ -295,7 +295,7 @@ $label_stewarding = "Obsluha";
 $label_stewarding_avail = "Dostupnost obsluhy";
 $label_bjcp_id = "BJCP ID";
 $label_bjcp_mead = "Degustátor medoviny";
-$label_bjcp_rank = "Úroveň BJCB";
+$label_bjcp_rank = "Úroveň BJCP";
 $label_designations = "Zkušenosti";
 $label_judge_sensory = "Degustátor s degustačními zkouškami";
 $label_judge_pro = "Profesionální sládek";
@@ -516,7 +516,7 @@ $header_text_036 = "Byli jste odlášeni.";
 $header_text_037 = "Chcete se znovu přihlásit?";
 $header_text_038 = "Vaše ověřovací otázka se neshoduje s tou v naší databázi.";
 $header_text_039 = "Informace k ověření identity byly zaslány na emailovou adresu spojenou s vašim účtem.";
-$header_text_040 = "Vaše zpráva byla odeslána na";
+$header_text_040 = "Vaše zpráva byla odeslána uživateli";
 $header_text_041 = $header_text_023;
 $header_text_042 = "Vaše emailová adresa byla aktualizována.";
 $header_text_043 = "Vaše heslo bylo aktualizováno.";
@@ -587,6 +587,7 @@ $header_text_108 = "Tento vzorek nelze příjmout ani potvrdit, dokud nebyl vybr
 $header_text_109 = "Byli jste zaregistrováni jako obsluha.";
 $header_text_110 = "Všechny vzorky byly označeny jako neuhrazené.";
 $header_text_111 = "Všechny vzorky byly označeny jako nepřijaté.";
+
 
 // -------------------- Navigation --------------------
 
@@ -758,7 +759,7 @@ if ($section == "contact") {
 
 	$contact_text_000 = "Pro kontaktování osob zodpovědných za soutěž využijte odkazy níže:";
 	$contact_text_001 = "Pro kontaktování organizátora využijte formulář níže. Pole označená hvězdičkou jsou povinná.";
-	$contact_text_002 = "Kopie byla odeslána na emailovou adresu, které jse uvedli.";
+	$contact_text_002 = "Kopie byla odeslána na emailovou adresu, kterou jse uvedli.";
 	$contact_text_003 = "Chcete odeslat další zprávu?";
 
 }
@@ -778,12 +779,12 @@ if (($section == "default") || ($section == "results")) { // Changed for 2.1.14
 	$default_page_text_008 = "Zobrazit podrobnosti účtu.";
 	$default_page_text_009 = "Výherci Best of Show";
 	$default_page_text_010 = "Výherci";
-	$default_page_text_011 = "Své údaje zadáváte pouze jednou, následně se můžete na web vrátit a vložit další vzorky nebo upravit ty už existující.";
+	$default_page_text_011 = "Své osobní údaje do soutěže zadáváte pouze jednou. Následně se můžete na web vrátit a pokračovat ve vkládání vzorků nebo upravit ty už vložené.";
 	$default_page_text_012 = "Můžete taktéž zaplatit poplatky za vzorky online.";
 	$default_page_text_013 = "Organizátor soutěže";
 	$default_page_text_014 = "Organizátoři soutěže";
 	$default_page_text_015 = "Každé z osob můžete zaslat email prostřednictvím stránky ";
-	$default_page_text_016 = "je hrdý/jsou hrdi, že mají";
+	$default_page_text_016 = "děkuji subjektům níže. Tyto subjekty jsou";
 	$default_page_text_017 = "na";
 	$default_page_text_018 = "Stáhněte si výherce Best of Show ve formátu PDF.";
 	$default_page_text_019 = "Stáhněte si výherce Best of Show ve formátu HTML.";
@@ -794,17 +795,17 @@ if (($section == "default") || ($section == "results")) { // Changed for 2.1.14
 
 	$reg_open_text_000 = "Registrace degustátorů a obsluhy je";
 	$reg_open_text_001 = "otevřená";
-	$reg_open_text_002 = "Pokud jste se <em>ještě nezaregistrovali</em>, a chcete být dobrovolníkem,";
+	$reg_open_text_002 = "Pokud <em>nejste registrováni</em>, a chcete být dobrovolníkem,";
 	$reg_open_text_003 = "zaregistrujte se, prosím";
-	$reg_open_text_004 = "Pokud jste se <em>již zaregistrovali</em>, přihlaste se a zvolte <em>Upravit účet</em> přes Můj účet označený ikonou";
+	$reg_open_text_004 = "Jestliže <em>už jste registrováni</em>, přihlaste se a zvolte <em>Upravit účet</em> přes Můj účet označený ikonou";
 	$reg_open_text_005 = "v horní nabídce.";
-	$reg_open_text_006 = "Protože jste již zaregistrováni, můžete";
+	$reg_open_text_006 = "Protože už jste registrováni, můžete";
 	$reg_open_text_007 = "si prohlédnout údaje svého účtu";
-	$reg_open_text_008 = "abyste si ověřili, zda jste povolili svoji účast jako degustátor nebo obsluha.";
+	$reg_open_text_008 = ", kde si ověříte, zda máte povolenou účast jako degustátor nebo obsluha.";
 	$reg_open_text_009 = "Pokud se chcete účastnit jako degustátor nebo obsluha, prosím, vraťte se znovu pro svou registraci po";
 	$reg_open_text_010 = "Registrace vzorků je";
-	$reg_open_text_011 = "Pro přidání vzorků do systému";
-	$reg_open_text_012 = "projděte, prosím, registračním procesem";
+	$reg_open_text_011 = "Abyste mohli vložit vaše piva do soutěže";
+	$reg_open_text_012 = "zaregistrujte se, prosím";
 	$reg_open_text_013 = ", pokud již máte účet.";
 	$reg_open_text_014 = "použijte formulář přidání vzorků,";
 
@@ -848,9 +849,9 @@ $entry_info_text_015 = "Své vzorky můžete vkládat ode dneška do";
 $entry_info_text_016 = "Registrace vzorků je <strong class=\"text-danger\">uzavřena</strong>.";
 $entry_info_text_017 = "for unlimited entries.";
 $entry_info_text_018 = "pro členy AHA";
-$entry_info_text_019 = "Tato soutěž má omezení počtu na";
+$entry_info_text_019 = "V soutěži může být nejvýše";
 $entry_info_text_020 = "vzorků.";
-$entry_info_text_021 = "Každý soutěžící může vložit nejvíce";
+$entry_info_text_021 = "Každý soutěžící může vložit nejvýše";
 $entry_info_text_022 = strtolower($label_entry);
 $entry_info_text_023 = "vzorků";
 $entry_info_text_024 = "vzorek na podkategorii";
@@ -875,7 +876,7 @@ $entry_info_text_042 = "Pokud se soutěž koná ve Spojených státech, mějte n
 $entry_info_text_043 = "Lahve se vzorky přijímáme v místech příjmu vzorků počínaje";
 $entry_info_text_044 = "Zobrazit na mapě místo";
 $entry_info_text_045 = "Klikněte/dotkněte se pro požadované informace o vzorku";
-$entry_info_text_046 = "Pokud je na názvu stylu odkaz, má zvláštní požadavky na vzorek. Klikněte nebo se dotkněte názvu pro zobrazení požadavků podkategorie.";
+$entry_info_text_046 = "Pokud je název stylu s odkazem, má styl zvláštní požadavky na vzorek. Klikněte nebo se dotkněte názvu pro zobrazení požadavků podkategorie.";
 
 
 // -------------------- Footer --------------------
@@ -884,22 +885,22 @@ $entry_info_text_046 = "Pokud je na názvu stylu odkaz, má zvláštní požadav
 
 // -------------------- List (User Entry List) --------------------
 
-	$brewer_entries_text_000 = "U prohlížeče Firefox existuje známá chyba s tiskem.";
-	$brewer_entries_text_001 = "Máte nepotvrzené vzorky.";
-	$brewer_entries_text_002 = "U každého vzorku níže, označeného ikonou <span class=\"fa fa-lg fa-exclamation-circle text-danger\"></span>, klikněte na ikonu <span class=\"fa fa-lg fa-pencil text-primary\"></span> pro jeho prohlédnutí a potvrzení údajů. Nepotvrzené vzorky mohou být smazány ze systému bez předchozího upozornění.";
-	$brewer_entries_text_003 = "NEMŮŽETE zaplatit za vzorky dokud jste všechny nepotvrdili.";
-	$brewer_entries_text_004 = "Přihlásili jste vzorky, které vyžadují definici specifického stylu, zvláštních surovin, názvu klasického stylu, síly nebo barvy.";
-	$brewer_entries_text_005 = "U každého vzorku níže, označeného ikonou <span class=\"fa fa-lg fa-exclamation-circle text-danger\"></span>, klikněte na ikonu <span class=\"fa fa-lg fa-pencil text-primary\"></span> pro zadání požadovaných údajů. Vzorky bez uvedeného specifického stylu, zvláštních surovin, názvu klasického stylu, síly nebo barvy mohou být smazány ze systému bez předchozího upozornění.";
-	$brewer_entries_text_006 = "Stáhnout scoresheety degustátorů pro";
-	$brewer_entries_text_007 = "Styl NEZADÁN";
-	$brewer_entries_text_008 = "Entry Form and";
-	$brewer_entries_text_009 = "Štítky lahví";
-	$brewer_entries_text_010 = "Vytisknout formulář receptu";
-	$brewer_entries_text_011 = "Taktéž nebudete moci přidat další vzorek protože byl dosažen maximální počet vzorků soutěže. Klikněte na Zrušit v tomto poli a potom místo toho vzorek upravte, pokud jej chcete zachovat.";
-	$brewer_entries_text_012 = "Opravdu chcete smazat vzorek s názvem";
-	$brewer_entries_text_013 = "Následně budete moci přidat další vzorky do";
-	$brewer_entries_text_014 = "Zatím jste nevložili žádné vzorky.";
-	$brewer_entries_text_015 = "Momentálně nelze smazat tento vzorek.";
+$brewer_entries_text_000 = "U prohlížeče Firefox existuje známá chyba s tiskem.";
+$brewer_entries_text_001 = "Máte nepotvrzené vzorky.";
+$brewer_entries_text_002 = "U každého vzorku níže, označeného ikonou <span class=\"fa fa-lg fa-exclamation-circle text-danger\"></span>, klikněte na ikonu <span class=\"fa fa-lg fa-pencil text-primary\"></span> pro jeho prohlédnutí a potvrzení údajů. Nepotvrzené vzorky mohou být smazány ze systému bez předchozího upozornění.";
+$brewer_entries_text_003 = "NEMŮŽETE zaplatit za vzorky dokud jste všechny nepotvrdili.";
+$brewer_entries_text_004 = "Přihlásili jste vzorky, které vyžadují definici specifického stylu, zvláštních surovin, názvu klasického stylu, síly nebo barvy.";
+$brewer_entries_text_005 = "U každého vzorku níže, označeného ikonou <span class=\"fa fa-lg fa-exclamation-circle text-danger\"></span>, klikněte na ikonu <span class=\"fa fa-lg fa-pencil text-primary\"></span> pro zadání požadovaných údajů. Vzorky bez uvedeného specifického stylu, zvláštních surovin, názvu klasického stylu, síly nebo barvy mohou být smazány ze systému bez předchozího upozornění.";
+$brewer_entries_text_006 = "Stáhnout scoresheety degustátorů pro";
+$brewer_entries_text_007 = "Styl NEZADÁN";
+$brewer_entries_text_008 = "Entry Form and";
+$brewer_entries_text_009 = "Štítky lahví";
+$brewer_entries_text_010 = "Vytisknout formulář receptu";
+$brewer_entries_text_011 = "Taktéž nebudete moci přidat další vzorek protože byl dosažen maximální počet vzorků soutěže. Klikněte na Zrušit v tomto poli a potom místo toho vzorek upravte, pokud jej chcete zachovat.";
+$brewer_entries_text_012 = "Opravdu chcete smazat vzorek s názvem";
+$brewer_entries_text_013 = "Následně budete moci přidat další vzorky do";
+$brewer_entries_text_014 = "Zatím jste nevložili žádné vzorky.";
+$brewer_entries_text_015 = "Momentálně nelze smazat tento vzorek.";
 
 // -------------------- Login --------------------
 
@@ -943,34 +944,34 @@ $pay_text_029 = "Prosím, otevřete si seznam vzorků a potvrďte všechny vaše
 
 // -------------------- QR --------------------
 
-    // Ignore the next four lines
-	if (strpos($view, "^") !== FALSE) {
-		$qr_text_019 = sprintf("%04d",$checked_in_numbers[0]);
-		if (is_numeric($checked_in_numbers[1])) $qr_text_020 = sprintf("%06d",$checked_in_numbers[1]);
-		else $qr_text_020 = $checked_in_numbers[1];
-	}
+// Ignore the next four lines
+if (strpos($view, "^") !== FALSE) {
+	$qr_text_019 = sprintf("%04d",$checked_in_numbers[0]);
+	if (is_numeric($checked_in_numbers[1])) $qr_text_020 = sprintf("%06d",$checked_in_numbers[1]);
+	else $qr_text_020 = $checked_in_numbers[1];
+}
 
-	$qr_text_000 = $alert_text_080;
-	$qr_text_001 = $alert_text_081;
+$qr_text_000 = $alert_text_080;
+$qr_text_001 = $alert_text_081;
 
-    // Begin translations here
-	if (strpos($view, "^") !== FALSE) $qr_text_002 = sprintf("Vzorek číslo <span class=\"text-danger\">%s</span> je označen degustačním číslem <span class=\"text-danger\">%s</span>.",$qr_text_019,$qr_text_020); else $qr_text_002 = "";
-	$qr_text_003 = "Pokud je toto degustační číslo <em>chybné</em>, <strong>naskenujte kód znovu a znovu zadejte správné degustační číslo.";
-	if (strpos($view, "^") !== FALSE) $qr_text_004 = sprintf("Vzorek číslo %s byl přijat.",$qr_text_019); else $qr_text_004 = "";
-	if (strpos($view, "^") !== FALSE) $qr_text_005 = sprintf("Vzorek číslo %s nebyl v databázi nalezen. Lahve odložte stranou a upozorňete organizátora soutěže.",$qr_text_019); else $qr_text_005 = "";
-	if (strpos($view, "^") !== FALSE) $qr_text_006 = sprintf("Zadané degustační číslo - %s - je již přiřazeno vzorku %s.",$qr_text_020,$qr_text_019); else $qr_text_006 = "";
-	$qr_text_007 = "Příjem vzorků pomocí QR kódů";
-	$qr_text_008 = "Abyste mohli přijímat vzorky QR kódem, zadejte platné heslo. Heslo musíte zadat pouze jednou, nechte však po celou dobu spuštěnou skenovací aplikaci.";
-	$qr_text_009 = "Přiřadit degustační číslo nebo číslo krabice vzorku";
-	$qr_text_010 = "Zadejte degustační číslo POUZE V PŘÍPADĚ, že vaše soutěž používá u třídění vzorků štítky s degustačními čísly.";
-	$qr_text_011 = "Šestičíslí k uvozujícími nulami, např. 000021.";
-	$qr_text_012 = "Zkontrolujte pečlivě zadané údaje a upevněte štítek s odpovídajícím degustačním číslem na všechny lahve nebo případné etikety lahví.";
-	$qr_text_013 = "Degustační čísla musejí být šestiznaková a nesmí obsahovat znak ^.";
-	$qr_text_014 = "Čekám na naskenovaný QR kód.";
-	$qr_text_015 = "Spustit nebo se vrátit zpět do aplikace mobilního zařízení pro naskenování QR kódu.";
-	$qr_text_016 = "Potřebujete aplikaci pro skenování QR kódů? Hledejte na <a class=\"hide-loader\" href=\"https://play.google.com/store/search?q=qr%20code%20scanner&c=apps&hl=en\" target=\"_blank\">Google Play</a> (Android) nebo na <a class=\"hide-loader\" href=\"https://itunes.apple.com/store/\" target=\"_blank\">iTunes</a> (iOS).";
-	$qr_text_017 = "Pro využití této funkce je nutná aplikace pro skenování QR kódů.";
-	$qr_text_018 = "Spusťte aplikaci na svém mobilním zařízení, naskenujte QR kód na štítku lahve a zadejte heslo. Tím příjmete vzorek.";
+// Begin translations here
+if (strpos($view, "^") !== FALSE) $qr_text_002 = sprintf("Vzorek číslo <span class=\"text-danger\">%s</span> je označen degustačním číslem <span class=\"text-danger\">%s</span>.",$qr_text_019,$qr_text_020); else $qr_text_002 = "";
+$qr_text_003 = "Pokud je toto degustační číslo <em>chybné</em>, <strong>naskenujte kód znovu a znovu zadejte správné degustační číslo.";
+if (strpos($view, "^") !== FALSE) $qr_text_004 = sprintf("Vzorek číslo %s byl přijat.",$qr_text_019); else $qr_text_004 = "";
+if (strpos($view, "^") !== FALSE) $qr_text_005 = sprintf("Vzorek číslo %s nebyl v databázi nalezen. Lahve odložte stranou a upozorňete organizátora soutěže.",$qr_text_019); else $qr_text_005 = "";
+if (strpos($view, "^") !== FALSE) $qr_text_006 = sprintf("Zadané degustační číslo - %s - je již přiřazeno vzorku %s.",$qr_text_020,$qr_text_019); else $qr_text_006 = "";
+$qr_text_007 = "Příjem vzorků pomocí QR kódů";
+$qr_text_008 = "Abyste mohli přijímat vzorky QR kódem, zadejte platné heslo. Heslo musíte zadat pouze jednou, nechte však po celou dobu spuštěnou skenovací aplikaci.";
+$qr_text_009 = "Přiřadit degustační číslo nebo číslo krabice vzorku";
+$qr_text_010 = "Zadejte degustační číslo POUZE V PŘÍPADĚ, že vaše soutěž používá u třídění vzorků štítky s degustačními čísly.";
+$qr_text_011 = "Šestičíslí k uvozujícími nulami, např. 000021.";
+$qr_text_012 = "Zkontrolujte pečlivě zadané údaje a upevněte štítek s odpovídajícím degustačním číslem na všechny lahve nebo případné etikety lahví.";
+$qr_text_013 = "Degustační čísla musejí být šestiznaková a nesmí obsahovat znak ^.";
+$qr_text_014 = "Čekám na naskenovaný QR kód.";
+$qr_text_015 = "Spustit nebo se vrátit zpět do aplikace mobilního zařízení pro naskenování QR kódu.";
+$qr_text_016 = "Potřebujete aplikaci pro skenování QR kódů? Hledejte na <a class=\"hide-loader\" href=\"https://play.google.com/store/search?q=qr%20code%20scanner&c=apps&hl=en\" target=\"_blank\">Google Play</a> (Android) nebo na <a class=\"hide-loader\" href=\"https://itunes.apple.com/store/\" target=\"_blank\">iTunes</a> (iOS).";
+$qr_text_017 = "Pro využití této funkce je nutná aplikace pro skenování QR kódů.";
+$qr_text_018 = "Spusťte aplikaci na svém mobilním zařízení, naskenujte QR kód na štítku lahve a zadejte heslo. Tím příjmete vzorek.";
 
 
 // -------------------- Registration Open --------------------
@@ -1043,10 +1044,10 @@ $sidebar_text_018 = "před tím, než dosáhnete limitu";
 $sidebar_text_019 = "na účastníka";
 $sidebar_text_020 = "Dosáhli jste limitu";
 $sidebar_text_021 = "v této soutěži";
-$sidebar_text_022 = "Vzorky se příjmají v";
-$sidebar_text_023 = "místě zaslání vzorků";
+$sidebar_text_022 = "Pro předání vzorku využijte";
+$sidebar_text_023 = "místo zaslání vzorků";
 $sidebar_text_024 = "Data degustací nebyla ještě stanovena. Prosím, vraťte se později.";
-$sidebar_text_025 = "bylo vloženo do systému k datu";
+$sidebar_text_025 = "je zaregistrováno k datu";
 
 // -------------------- Sponsors --------------------
 // NONE
@@ -1112,6 +1113,8 @@ $user_text_003 = "Prosím, zaškrtněte toto pole, pokud chcete změnit svou ema
 
 // -------------------- Volunteers --------------------
 
+// -------------------- Volunteers --------------------
+
 if ($section == "volunteers") {
 
 	$volunteers_text_000 = "Pokud jste již zaregistrovaní,";
@@ -1121,7 +1124,7 @@ if ($section == "volunteers") {
 	$volunteers_text_004 = "Pokud ještě <em>nejste</em> zaregistrováni a chcete se zúčastnit jako degustátor nebo obsluha, prosím zaregistrujte se";
 	$volunteers_text_005 = "Jelikož jste již zaregistrováni,";
 	$volunteers_text_006 = "otevřete si podrobnosti svého účtu,";
-	$volunteers_text_007 = "abyste zjistili, zda jste se přihlásili jako dobrovolník pro degustace nebo obsluhování";
+	$volunteers_text_007 = "pro ověření, zda jste přihlášeni jako dobrovolník pro degustace nebo obsluha";
 	$volunteers_text_008 = "Pokud se chcete účastnit jako degustátor nebo obsluha, vraťte se prosím nejdříve";
 
 	// v2.1.9
@@ -1221,14 +1224,14 @@ $label_club_enter = "Zadejte název klubu";
 $label_secret_05 = "Jaké je jméno jméno vaší babičky z matčiny strany za svobodna?";
 $label_secret_06 = "Jak se jmenoval váš první partner?";
 $label_secret_07 = "Jaký je výrobce a model vašeho prvního auta?";
-$label_secret_08 = "Jaké je příjmení vašeho třídního ve třetí třídě?";
+$label_secret_08 = "Jak se jmenoval váš třídní ve třetí třídě?";
 $label_secret_09 = "V jakém městě nebo obci jste potkali svého partnera?";
 $label_secret_10 = "Jaké je křestní jméno vašeho nejlepšího kamaráda nebo kamarádky v šesté třídě?";
 $label_secret_11 = "Jaký je váš oblíbený interpret nebo skupina?";
 $label_secret_12 = "Jakou jste v dětství měli přezdívku?";
 $label_secret_13 = "Jak se jmenoval učitel, který vám poprvé dal pětku?";
 $label_secret_14 = "Jak se jmenoval váš nejlepší kamarád z dětství?";
-$label_secret_15 = "Ve kterém městě se setkal váš otec s vaší matkou?";
+$label_secret_15 = "Ve kterém městě se setkali vaši rodiče?";
 $label_secret_16 = "Jaké telefonní číslo jste měli v dětství, včetně předčíslí?";
 $label_secret_17 = "Jaké místo jste v dětství rádi navštěvovali?";
 $label_secret_18 = "Kde jste se poprvé líbali?";
@@ -1263,7 +1266,7 @@ $label_confirm_password = "Potvrzení hesla";
 $label_with_token = "S tokenem";
 $label_password_strength = "Síla hesla";
 $label_entry_shipping = "Zaslání vzorku";
-$label_jump_to = "Přeskočit na...";
+$label_jump_to = "Přejít na...";
 $label_top = "Nahoru";
 $label_bjcp_cider = "Degustátor cideru";
 
@@ -1335,7 +1338,7 @@ if (($section == "list") || ($section == "account") || ($go == "entries")) {
 if (SINGLE) $brewer_info_000 = "Dobrý den";
 else $brewer_info_000 = "Děkujeme za účast na";
 $brewer_info_001 = "Údaje vašeho účtu byly naposledy upraveny";
-$brewer_info_002 = "Věnujte chvíli <a href=\"#entries\">kontrole svých vzorků</a>.";
+$brewer_info_002 = "Věnujte chvíli <a href=\"#entries\">kontrole svých vzorků</a>";
 $brewer_info_003 = "uhradit poplatky za účast</a>";
 $brewer_info_004 = "za vzorek";
 $brewer_info_005 = "Členství v American Homebrewers Association (AHA) je povinné, pokud je některý z vašich vzorků vybrán pro Great American Beer Festival Pro-Am.";
@@ -1427,7 +1430,7 @@ $best_brewer_text_013 = "Nepoužito.";
 $best_brewer_text_014 = "zúčastněné kluby";
 
 // Version 2.1.12
-$dropoff_qualifier_text_001 = "Prosím, vezměte na vědomí poznámky uvedené u každého místa příjmu vzorků. Některá místa mohou mít dřívější uzavření příjmových oken, určité časové rámce, kdy se vzorky příjmají nebo určité osoby, které vzorky převezmou a podobně. <strong class=\"text-danger\">Všichni soutěžící jsou povinni si přečíst pokyny poskytnuté organizátory ke každému místu příjmu vzorků.</strong>";
+$dropoff_qualifier_text_001 = "Prosím, berte na vědomí poznámky uvedené u míst přijmu vzorků. Některá místa mohou mít dřívější uzavření příjmových oken, určité časové rámce, kdy se vzorky příjmají nebo určité osoby, které vzorky převezmou a podobně. <strong class=\"text-danger\">Všichni soutěžící jsou povinni si přečíst pokyny poskytnuté organizátory k místům příjmu vzorků.</strong>";
 
 $brewer_text_036 = "Jelikož jste vybrali \"<em>Jiný</em>,\" ujistěte se, že zadaný klub není na našem seznamu v nějaké jiné podobě.";
 $brewer_text_037 = "Například jste mohli hledat zkratku klubu místo jeho celého názvu.";
@@ -1463,7 +1466,7 @@ $label_winners = "Vítězové";
 $label_unconfirmed_entries = "Nepotvrzené vzorky";
 $label_recipe = "Recept";
 $label_view = "Zobrazit";
-$label_number_bottles = "Počet vyžadovaných lahví od každého vzorku";
+$label_number_bottles = "Požadovaný počet lahví každého vzorku";
 $label_pro_am = "Pro-Am";
 
 // Pay screen
@@ -1477,7 +1480,7 @@ $bottle_labels_003 = "Etiketu zcela zakryjte!";
 if (isset($_SESSION['jPrefsBottleNum'])) $bottle_labels_004 = "Upozornění: 4 štítky poskytujemem volně k dispozici. Tato soutěž vyžaduje ".$_SESSION['jPrefsBottleNum']." lahví od každého vzorku. Přebytečné štítky můžete vyhodit.";
 else $bottle_labels_004 = "Upozornění: 4 štítky poskytujeme volně k dispozici. Přebytečné štítky můžete vyhodit.";
 $bottle_labels_005 = "Pokud nějaký vzorek chybí, zavřete toto okno a upravte jej.";
-$bottle_labels_006 = "Prostor vyhrazený pro personál soutěže.";
+$bottle_labels_006 = "Prostor vyhrazený pro personál soutěže";
 $bottle_labels_007 = "TENTO FORMULÁŘ RECEPTU JE POUZE PRO VAŠE POZNÁMKY - prosím, NEPŘIKLÁDEJTE JEJ k vašim vzorkům.";
 
 // Add/Edit Entry
@@ -1507,17 +1510,73 @@ $brewer_entries_text_024 = "Vytisknout štítky lahví";
 // ----------------------------------------------------------------------------------
 
 $output_text_031 = "Stisknutím klávesy Esc skryjete.";
-$styles_entry_text_21X = "Účastník musí zadat sílu (relace: 3,0-5,0%, standard: 5,0-7,5%, dvojnásobek: 7,5-9,5%).";
-$styles_entry_text_PRX4 = "Účastník musí uvést druhy použitých čerstvých plodů.";
+$styles_entry_text_21X = "Účastník musí zadat sílu (session: 3,0-5,0%, standard: 5,0-7,5%, double: 7,5-9,5%).";
+$styles_entry_text_PRX4 = "Účastník musí uvést druh(y) použitého ovoce.";
 
 // ----------------------------------------------------------------------------------
-// Version 2.1.19 Additions (Via Google Translate English to Czech)
+// Version 2.1.19 Additions
 // ----------------------------------------------------------------------------------
-$output_text_032 = "Počet vstupů odráží pouze účastníky, kteří ve svém profilu účtu uvedli místo, kde došlo k výpadku. Skutečný počet záznamů může být vyšší nebo nižší.";
-$brewer_text_043 = "Nebo jste, nebo jste někdy byli zaměstnáni v pivovarnickém personálu v kterémkoli pivovaru? To zahrnuje pozice sládků, laboratorní techniky, posádky sklepů, plnění lahví / konzerváren atd. Současní a bývalí zaměstnanci pivovarnictví se nemohou účastnit soutěže Great American Beer Festival Pro-Am.";
-$label_entrant_reg = "Vstupní Registrace";
-$sidebar_text_026 = "jsou v systému k datu";
-$label_paid_entries = "Placené položky";
+$output_text_032 = "Počet vzorků ukazuje pouze ty účastníky, kteří si zvolili ve svém profilu místo příjmu vzorků. Skutečný počet může být vyšší nebo nižší.";
+$brewer_text_043 = "Nebo jste (či byli jste) zaměstnáni v pivovaru? Tím je myšlena nejen pozice sládka, ale i laboranta, sklepáka, obsluhy lahvárny a jiné. Současní nebo minulí zaměstnanci pivovaru nemají nárok k účasti na soutěži Great American Beer Festival Pro-Am.";
+$label_entrant_reg = "Registrace účastníků";
+$sidebar_text_026 = "je zaregistrováno k datu";
+$label_paid_entries = "Již uhrazených vzorků";
+
+// ----------------------------------------------------------------------------------
+// Version 2.1.20 Additions (Via Google Translate English to Czech)
+// ----------------------------------------------------------------------------------
+$brewer_info_013 = "Byl jste přidělen jako soudce.";
+$brewer_info_014 = "Vstupte do panelu rozhodčích pomocí tlačítka níže a zadejte hodnocení položek, které vám byly přiřazeny.";
+$label_judging_dashboard = "Soudě Dashboard";
+$label_table_assignments = "Přiřazení Tabulky";
+$label_table = "Stůl";
+$label_edit = "Upravit";
+$label_add = "Přidat";
+$label_disabled = "Invalidní";
+$label_judging_scoresheet = "Soudní Zápis";
+$label_checklist_version = "Verze Kontrolního Seznamu";
+$label_classic_version = "Klasická Verze";
+$label_structured_version = "Strukturovaná Verze";
+$label_submit_evaluation = "Odeslat Hodnocení";
+$label_edit_evaluation = "Upravit Hodnocení";
+$label_your_score = "Tvoje Skóre";
+$label_your_assigned_score = "Vaše Zadané Skóre Konsensu";
+$label_assigned_score = "Skóre Konsensu";
+$label_accepted_score = "Oficiální Přijaté Skóre";
+$label_recorded_scores = "Zadané Skóre Konsensu";
+$label_go = "Jít";
+$label_go_back = "Vraťte se";
+$label_na = "N/A";
+$label_evals_submitted = "Hodnocení Byla Předložena";
+$label_evaluations = "Vstupní Hodnocení";
+$label_submitted_by = "Předložené";
+$label_attention = "Pozor!";
+$evaluation_info_000 = "Níže jsou uvedeny položky pro jednotlivé tabulky a lety, které vám byly přiřazeny.";
+$evaluation_info_001 = "Tato soutěž využívá hodnocení ve frontě. Pokud je u vašeho stolu více než jeden pár rozhodčích, ohodnoťte další záznam v zavedené frontě.";
+$evaluation_info_002 = "Abyste zajistili přesnou a hladkou soutěž, měli byste vy a váš partner (y) rozhodčí POUZE u stolu posuzovat pouze ty, které ještě nebyly hodnoceny. Máte-li jakékoli dotazy, obraťte se na svého organizátora nebo koordinátora rozhodčích.";
+$evaluation_info_003 = "Čeká na konečné přijetí od správce webu.";
+$evaluation_info_004 = "Vaše konsenzuální skóre bylo zadáno.";
+$evaluation_info_005 = "Tato položka není součástí vašeho přiřazeného letu.";
+$evaluation_info_006 = "Podle potřeby upravte.";
+$evaluation_info_007 = "Vyberte si z následujících položek v této tabulce.";
+$evaluation_info_008 = "Chcete-li zaznamenat své hodnocení, vyberte odpovídající tlačítko Přidat pro záznam. K dispozici jsou pouze tabulky pro minulé a současné poroty.";
+$evaluation_info_009 = "Byl vám přidělen soudce, ale nebyl vám přidělen žádný stůl nebo let v systému. Obraťte se na organizátora nebo koordinátora rozhodčích.";
+$evaluation_info_010 = "Tato položka je součástí vašeho přiřazeného letu.";
+$evaluation_info_011 = "Přidejte hodnocení pro položku, která vám nebyla přiřazena.";
+$evaluation_info_012 = "Použijte pouze tehdy, když budete požádáni o vyhodnocení záznamu za běhu, který není součástí vaší přiřazené tabulky.";
+$evaluation_info_013 = "Záznam nebyl nalezen.";
+$evaluation_info_014 = "Ověřte šestimístné vstupní číslo a zkuste to znovu.";
+$evaluation_info_015 = "Ujistěte se, že číslo má 6 číslic.";
+$evaluation_info_016 = "Nebylo zaznamenáno žádné hodnocení.";
+$evaluation_info_017 = "Konsenzuální výsledky zadané soudci se neshodují.";
+$evaluation_info_018 = "Ověření je nutné pro následující položky:";
+$evaluation_info_019 = "U následujících položek je odesláno pouze jedno hodnocení:";
+$evaluation_info_020 = "Váš panel pro posuzování bude k dispozici na"; // Punctuation omitted intentionally
+$evaluation_info_021 = "přidat hodnocení pro položky, které jsou vám přiřazeny"; // Punctuation omitted intentionally
+$evaluation_info_022 = "Posuzování a hodnocení je uzavřeno.";
+$evaluation_info_023 = "Máte-li jakékoli dotazy, kontaktujte organizátora soutěže nebo koordinátora rozhodčích.";
+$evaluation_info_024 = "Byli jste přiřazeni k následujícím tabulkám. Seznamy přihlášek pro každou tabulku se zobrazí pouze pro minulé a aktuální zasedání rozhodčích.";
+$alert_text_086 = "Internet Explorer není podporován BCOE&M - funkce se nebudou správně vykreslovat a váš zážitek nebude optimální. Upgradujte prosím na novější prohlížeč.";
 
 // ***********************************************************************************
 // END TRANSLATIONS

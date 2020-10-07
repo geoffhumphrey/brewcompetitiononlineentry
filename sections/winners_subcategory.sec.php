@@ -132,7 +132,7 @@ if ($row_scored_entries['count'] > 0) {
 				$table_body1 .= "<td width=\"25%\">";
 				if ($_SESSION['prefsProEdition'] == 1) $table_body1 .= $row_scores['brewerBreweryName'];
 				else $table_body1 .= $row_scores['brewerFirstName']." ".$row_scores['brewerLastName'];
-				if (($_SESSION['prefsProEdition'] == 0) && ($row_scores['brewCoBrewer'] != "")) $table_body1 .= "<br>".$label_cobrewer.": ".$row_scores['brewCoBrewer'];
+				if (($_SESSION['prefsProEdition'] == 0) && (!empty($row_scores['brewCoBrewer'])) && ($row_scores['brewCoBrewer'] != " ")) $table_body1 .= "<br>".$label_cobrewer.": ".$row_scores['brewCoBrewer'];
 				$table_body1 .= "</td>";
 
 				$table_body1 .= "<td>";

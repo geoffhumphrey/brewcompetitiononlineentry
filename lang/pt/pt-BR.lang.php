@@ -1530,6 +1530,62 @@ $label_entrant_reg = "Registro de Participantes";
 $sidebar_text_026 = "estão no sistema a partir de";
 $label_paid_entries = "Entradas Pagas";
 
+// ----------------------------------------------------------------------------------
+// Version 2.1.20 Additions (Via Google Translate English to Portuguese)
+// ----------------------------------------------------------------------------------
+$brewer_info_013 = "Você foi designado como juiz.";
+$brewer_info_014 = "Acesse o painel de julgamento usando o botão abaixo para inserir avaliações das entradas atribuídas a você.";
+$label_judging_dashboard = "Painel de Julgamento";
+$label_table_assignments = "Tarefas de Mesa";
+$label_table = "Mesa";
+$label_edit = "Editar";
+$label_add = "Adicione";
+$label_disabled = "Inválido";
+$label_judging_scoresheet = "Folha de Pontuação de Julgamento";
+$label_checklist_version = "Versão da Lista de Verificação";
+$label_classic_version = "Versão Clássica";
+$label_structured_version = "Versão Estruturada";
+$label_submit_evaluation = "Enviar Avaliação";
+$label_edit_evaluation = "Editar Avaliação";
+$label_your_score = "Sua Pontuação";
+$label_your_assigned_score = "Sua Pontuação de Consenso Inserida";
+$label_assigned_score = "Pontuação de Consenso";
+$label_accepted_score = "Pontuação Oficial Aceita";
+$label_recorded_scores = "Pontuações de Consenso Inseridas";
+$label_go = "Ir";
+$label_go_back = "Volte";
+$label_na = "N/A";
+$label_evals_submitted = "Avaliações Enviadas";
+$label_evaluations = "Avaliações de Entrada";
+$label_submitted_by = "Enviado por";
+$label_attention = "Atenção!";
+$evaluation_info_000 = "O pool de entrada para cada uma das tabelas e voos que foram atribuídos a você é detalhado abaixo.";
+$evaluation_info_001 = "Esta competição está empregando julgamento em fila. Se houver mais de um par de juízes em sua mesa, avalie a próxima entrada na fila estabelecida.";
+$evaluation_info_002 = "Para garantir uma competição precisa e tranquila, você e seu (s) parceiro (s) de juízes SÓ devem julgar as inscrições em sua mesa que ainda não foram avaliadas. Consulte seu organizador ou coordenador de juízes se tiver alguma dúvida.";
+$evaluation_info_003 = "Aguardando aceitação final de um administrador do site.";
+$evaluation_info_004 = "Sua pontuação de consenso foi inserida.";
+$evaluation_info_005 = "Esta entrada não faz parte do seu voo atribuído.";
+$evaluation_info_006 = "Edite conforme necessário.";
+$evaluation_info_007 = "Escolha uma das seguintes entradas nesta tabela.";
+$evaluation_info_008 = "Para registrar sua avaliação, selecione o botão Adicionar correspondente de uma entrada. Apenas as tabelas das sessões de julgamento anteriores e atuais estão disponíveis.";
+$evaluation_info_009 = "Você foi designado como juiz, mas não foi designado para nenhuma mesa (s) ou vôo (s) no sistema. Por favor, verifique com o organizador ou coordenador do juiz.";
+$evaluation_info_010 = "Esta entrada faz parte do seu voo atribuído.";
+$evaluation_info_011 = "Adicione uma avaliação para uma entrada não atribuída a você.";
+$evaluation_info_012 = "Use apenas quando for solicitado a avaliar uma entrada que não faz parte da tabela atribuída.";
+$evaluation_info_013 = "A entrada não foi encontrada.";
+$evaluation_info_014 = "Verifique o número de entrada de seis caracteres e tente novamente.";
+$evaluation_info_015 = "Certifique-se de que o número tenha 6 dígitos.";
+$evaluation_info_016 = "Nenhuma avaliação registrada.";
+$evaluation_info_017 = "As pontuações de consenso inseridas pelos juízes não correspondem.";
+$evaluation_info_018 = "A verificação é necessária para as seguintes entradas:";
+$evaluation_info_019 = "As seguintes entradas têm apenas uma avaliação enviada:";
+$evaluation_info_020 = "Seu painel de julgamento estará disponível"; // Punctuation omitted intentionally
+$evaluation_info_021 = "para adicionar avaliações para entradas atribuídas a você"; // Punctuation omitted intentionally
+$evaluation_info_022 = "O envio de julgamento e avaliação está encerrado.";
+$evaluation_info_023 = "Se você tiver alguma dúvida, entre em contato com o organizador da competição ou coordenador de juízes.";
+$evaluation_info_024 = "Você foi atribuído às seguintes tabelas. As listas de inscrições para cada mesa serão exibidas apenas para as sessões de julgamento anteriores e atuais.";
+$alert_text_086 = "O Internet Explorer não é compatível com o BCOE&M - recursos e funções não serão renderizados corretamente e sua experiência não será a ideal. Por favor, atualize para um navegador mais recente.";
+
 // ************************************************ ***********************************
 // END TRANSLATIONS
 // ************************************************ ***********************************

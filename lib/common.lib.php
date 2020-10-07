@@ -2244,19 +2244,22 @@ function bjcp_rank($rank,$method) {
 			$return = "Level 1:"; break;
 			case "Recognized": $return = "Level 2:"; break;
 			case "Certified": $return = "Level 3:"; break;
-			case "National": $return = "Level 4:"; break;
-			case "Master": $return = "Level 5:"; break;
+			case "Certified Cicerone":
+			case "National":
+			$return = "Level 4:"; break;
+			case "Master Cicerone":
+			case "Master": 
+			$return = "Level 5:"; break;
 			case "Grand Master": $return = "Level 6:"; break;
 			case "Honorary Master": $return = "Level 5:"; break;
 			case "Honorary Grand Master": $return = "Level 6:"; break;
 			case "Experienced": $return = "Level 0:"; break;
 			case "Professional Brewer":
 			case "Beer Sommelier":
-			case "Certified Cicerone":
-			case "Master Cicerone":
 			case "Judge with Sensory Training":
 			$return = "Level 2:"; break;
 			case "Mead Judge": $return = "Level 3:"; break;
+			case "Cider Judge": $return = "Level 3:"; break;
 			default: $return = "Level 0:";
 		}
 	if (($rank != "None") && ($rank != "")) $return .= " ".$rank;

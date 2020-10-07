@@ -1560,9 +1560,9 @@ $evaluation_info_008 = "To record your evaluation, select an entry's correspondi
 $evaluation_info_009 = "You have been assigned as a judge, but have not been assigned to any table(s) or flight(s) in the system. Please check with the organizer or judge coordinator.";
 $evaluation_info_010 = "This entry is part of your assigned flight.";
 $evaluation_info_011 = "Add an evaluation for an entry not assigned to you.";
-$evaluation_info_012 = "Use only when you are asked to evaluate a entry on the fly that is not part of your assigned table.";
+$evaluation_info_012 = "Use only when you are asked to evaluate an entry on the fly that is not part of your assigned table.";
 $evaluation_info_013 = "Entry was not found.";
-$evaluation_info_014 = "Please verify the six-digit entry number and try again.";
+$evaluation_info_014 = "Please verify the six-character entry number and try again.";
 $evaluation_info_015 = "Be sure that the number is 6 digits in length.";
 $evaluation_info_016 = "No evaluation recorded.";
 $evaluation_info_017 = "Consensus scores entered by judges do not match.";
@@ -1573,6 +1573,8 @@ $evaluation_info_021 = "to add evaluations for entries assigned to you"; // Punc
 $evaluation_info_022 = "Judging and evaluation submission is closed.";
 $evaluation_info_023 = "If you have any questions, contact the competition organizer or judge coordinator.";
 $evaluation_info_024 = "You have been assigned to the following tables. Entry lists for each table will only show for past and current judging sessions.";
+$alert_text_086 = "Internet Explorer is not supported by BCOE&M - features and functions will not render properly and your experience will not be optimal. Please upgrade to a newer browser.";
+
 /**
  * ----------------------------------------------------------------------------------
  * END TRANSLATIONS

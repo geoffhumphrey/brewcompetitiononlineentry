@@ -1,10 +1,10 @@
 admin/error_log
+includes/error_log
 css/aha.css
 css/images/Thumbs.db
 *.db
 images/clip_image002.gif
 images/nhc_logo.png
-includes/error_log
 includes/test_scripts.inc.php
 update/current/DEPRECATED/alter_tables_DEPRECATED.php
 update/current/alter_tables_DEPRECATED.php
@@ -34,13 +34,12 @@ includes/brewerydb/ba_style_add.php
 js_includes/loading.js
 *.ser
 .github/*
-eval/*
 .config/*
-update/move_files.php
 update/move_files.php
 vendor/*
 site/config-brewcomp-reset.php
 site/config.mail.php
 prepros-6.config
 .sftp-upload-on-change.json
+lang/es/*
 site/config.mail.php

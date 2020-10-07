@@ -111,7 +111,18 @@ $security_question = array($label_secret_01, $label_secret_05, $label_secret_06,
     <meta property="og:url" content="<?php echo "http" . ((!empty($_SERVER['HTTPS'])) ? "s://" : "://") . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']; ?>" />
 </head>
 <body>
-
+<noscript>For all functions to execute propery, please enable JavaScript to continue using BCOE&M.</noscript>
+<script>
+try {
+    var ua = window.navigator.userAgent;
+    var msie = ua.indexOf("MSIE ");
+    if (msie > 0 || !!navigator.userAgent.match(/Trident.*rv\:11\./))  {
+        alert('<?php echo $alert_text_086; ?>');
+    }
+} catch (error) {
+    console.error('Error checking user agent.', error);
+}
+</script>
     <!-- LOADER -->
     <div id="loader-submit">
         <div class="center">

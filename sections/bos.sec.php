@@ -88,7 +88,7 @@ require(DB.'winners.db.php');
 					$table_body1 .= "<td width=\"25%\">";
 					if ($_SESSION['prefsProEdition'] == 1) $table_body1 .= $row_bos['brewerBreweryName'];
 					else $table_body1 .= $row_bos['brewerFirstName']." ".$row_bos['brewerLastName'];
-					if (($_SESSION['prefsProEdition'] == 0) && ($row_bos['brewCoBrewer'] != "")) $table_body1 .= sprintf("<br>%s: %s",$label_cobrewer,$row_bos['brewCoBrewer']);
+					if (($_SESSION['prefsProEdition'] == 0) && (!empty($row_bos['brewCoBrewer'])) && ($row_bos['brewCoBrewer'] != " ")) $table_body1 .= sprintf("<br>%s: %s",$label_cobrewer,$row_bos['brewCoBrewer']);
 					$table_body1 .= "</td>";
 
 					$table_body1 .= "<td width=\"25%\">";
