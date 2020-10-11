@@ -5,7 +5,7 @@ if ($_SESSION['prefsWinnerMethod'] != 0) {
 }
 
 // Display by Table
-if ($_SESSION['prefsWinnerMethod'] == 0) $query_scores = sprintf("SELECT a.scorePlace, a.scoreEntry, b.id, b.brewName, b.brewCategory, b.brewCategorySort, b.brewSubCategory, b.brewStyle, b.brewCoBrewer, b.brewInfo, c.brewerLastName, c.brewerFirstName, c.brewerBreweryName, c.brewerClubs FROM %s a, %s b, %s c WHERE scoreTable='%s' AND a.eid = b.id AND c.uid = b.brewBrewerID", $judging_scores_db_table, $brewing_db_table, $brewer_db_table,  $row_tables['id']);
+if ($_SESSION['prefsWinnerMethod'] == 0) $query_scores = sprintf("SELECT a.scorePlace, a.scoreEntry, b.id, b.brewName, b.brewCategory, b.brewCategorySort, b.brewSubCategory, b.brewStyle, b.brewCoBrewer, b.brewInfo, c.brewerLastName, c.brewerFirstName, c.brewerBreweryName, c.brewerClubs FROM %s a, %s b, %s c WHERE scoreTable='%s' AND a.eid = b.id AND c.uid = b.brewBrewerID", $judging_scores_db_table, $brewing_db_table, $brewer_db_table, $row_tables['id']);
 
 // Display by Category
 if ($_SESSION['prefsWinnerMethod'] == 1) {

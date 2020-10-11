@@ -17,11 +17,13 @@ ini_set('display_errors', '1');
 
 require('../paths.php');
 require(INCLUDES.'url_variables.inc.php');
+require(INCLUDES.'styles.inc.php');
 include (INCLUDES.'scrubber.inc.php');
-mysqli_select_db($connection,$database);
 require (DB.'common.db.php');
 include (LIB.'common.lib.php');
 include (LANG.'language.lang.php');
+
+mysqli_select_db($connection,$database);
 
 if (NHC) $base_url = "../";
 else $base_url = $base_url;
@@ -74,6 +76,8 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 	$referrer = parse_url($_SERVER['HTTP_REFERER']);
 	// echo $referrer['host']."<br>".$_SERVER['SERVER_NAME']; exit;
 }
+
+if ($_SESSION['prefsSEF'] == "Y") $sef = "true";
 
 if (((isset($_SERVER['HTTP_REFERER'])) && ($referrer['host'] == $_SERVER['SERVER_NAME'])) && ((isset($_SESSION['prefs'.$prefix_session])) || ($setup_free_access))) {
 
@@ -278,7 +282,7 @@ if (((isset($_SERVER['HTTP_REFERER'])) && ($referrer['host'] == $_SERVER['SERVER
 		if ($dbTable == $prefix."special_best_info") include (PROCESS.'process_special_best_info.inc.php');
 		if ($dbTable == $prefix."special_best_data") include (PROCESS.'process_special_best_data.inc.php');
 		if ($dbTable == $prefix."mods") include (PROCESS.'process_mods.inc.php');
-		if ($dbTable == $prefix."evaluation") include (EVALS.'process_evals.inc.php');
+		if ($dbTable == $prefix."evaluation") include (EVALS.'process.eval.php');
 
 	}
 

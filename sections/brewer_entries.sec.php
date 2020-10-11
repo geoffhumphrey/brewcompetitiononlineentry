@@ -101,6 +101,23 @@ if (($totalRows_log > 0) && ($action != "print")) {
 
 $entry_output = "";
 
+if (EVALUATION) {
+
+	$evals = array();
+	// Check which evaluations exist
+	$query_eval_exists = sprintf("SELECT DISTINCT eid FROM %s",$prefix."evaluation");
+	$eval_exists = mysqli_query($connection,$query_eval_exists) or die (mysqli_error($connection));
+	$row_eval_exists = mysqli_fetch_assoc($eval_exists);
+	$totalRows_eval_exists = mysqli_num_rows($eval_exists);
+
+	if ($totalRows_eval_exists > 0) {
+		do {
+			$evals[] = $row_eval_exists['eid'];
+		} while ($row_eval_exists = mysqli_fetch_assoc($eval_exists));
+	}
+		 
+}
+
 do {
 
 	include (DB.'styles.db.php');
@@ -150,55 +167,78 @@ do {
 
 	if (($show_scores) && ($show_scoresheets)) {
 
-		// Check whether scoresheet file exists, and, if so, provide link.
-		$scoresheet_file_name_entry = sprintf("%06s",$entry_number).".pdf";
-		$scoresheet_file_name_judging = strtolower($judging_number).".pdf";
-		$scoresheetfile_entry = USER_DOCS.$scoresheet_file_name_entry;
-		$scoresheetfile_judging = USER_DOCS.$scoresheet_file_name_judging;
+		if (EVALUATION) {
+			
+			if ($row_judging_prefs['jPrefsScoresheet'] == 1) $output_form = "full-scoresheet";
+			if ($row_judging_prefs['jPrefsScoresheet'] == 2) $output_form = "checklist-scoresheet";
+			if ($row_judging_prefs['jPrefsScoresheet'] == 3) $output_form = "structured-scoresheet";			
+			
+			if (in_array($row_log['id'], $evals)) {
 
-		if ((file_exists($scoresheetfile_entry)) && ($_SESSION['prefsDisplaySpecial'] == "E")) $scoresheet_file_name = $scoresheet_file_name_entry;
-		elseif ((file_exists($scoresheetfile_judging)) && ($_SESSION['prefsDisplaySpecial'] == "J")) $scoresheet_file_name = $scoresheet_file_name_judging;
-		else $scoresheet_file_name = "";
+				$query_style = sprintf("SELECT id,brewStyleType FROM %s WHERE brewStyleVersion='%s'AND brewStyleGroup='%s' AND brewStyleNum='%s'",$prefix."styles",$_SESSION['prefsStyleSet'],$row_log['brewCategorySort'],$row_log['brewSubCategory']);
+				$style = mysqli_query($connection,$query_style) or die (mysqli_error($connection));
+				$row_style = mysqli_fetch_assoc($style);
 
-		if (!empty($scoresheet_file_name)) {
+				if (($row_style['brewStyleType'] == 2) || ($row_style['brewStyleType'] == 3)) $output_form = "full-scoresheet";
 
-			$scoresheet = TRUE;
-
-			// The pseudo-random number and the corresponding name of the temporary file are defined each time
-			// this brewer_entries.sec.php script is accessed (or refreshed), but the temporary file is created
-			// only when the entrant clicks on the gavel icon to access the scoresheet.
-			$random_num_str = random_generator(8,2);
-			$random_file_name = $random_num_str.".pdf";
-			$scoresheet_random_file_relative = "user_temp/".$random_file_name;
-			$scoresheet_random_file = USER_TEMP.$random_file_name;
-			$scoresheet_random_file_html = $base_url.$scoresheet_random_file_relative;
-
-			if (($scoresheet) && (!empty($scoresheet_file_name))) {
-				$scoresheet_link = "";
-				$scoresheet_link .= "<a class=\"hide-loader\" href=\"".$base_url."output/scoresheets.output.php?";
-
-				// Obfuscate the *ACTUAL* file names.
-				// Prevents casual users from right clicking on scoresheet download link and changing
-				// the entry or judging number pdf name passed via the URL to force downloads of files
-				// they shouldn't have access to. Can I get a harumph?!
-				$scoresheet_link .= "scoresheetfilename=".urlencode(obfuscateURL($scoresheet_file_name,$encryption_key));
-				$scoresheet_link .= "&amp;randomfilename=".urlencode(obfuscateURL($random_file_name,$encryption_key))."&amp;download=true";
-				$scoresheet_link .= sprintf("\" data-toggle=\"tooltip\" title=\"%s '".$row_log['brewName']."'.\">",$brewer_entries_text_006);
-				$scoresheet_link .= "<span class=\"fa fa-lg fa-gavel\"></a>&nbsp;&nbsp;";
+				$scoresheet = TRUE;
+				$print_link = $base_url."output/print.output.php?section=evaluation&amp;go=".$output_form."&amp;view=all&amp;id=".$row_log['id'];
+				$scoresheet_link = "<a id=\"modal_window_link\" class=\"hide-loader\" href=\"".$print_link."\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"".$brewer_entries_text_006." &ldquo;".$row_log['brewName'].".&rdquo;\"><i class=\"fa fa-lg fa-gavel\"></i></a>&nbsp;&nbsp;";;
 			}
+		
 		}
 
-		// Clean up temporary scoresheets created for other brewers, when they are at least 1 minute old (just to avoid problems when two entrants try accessing their scoresheets at practically the same time, and clean up previously created scoresheets for the same brewer, regardless of how old they are.
-		$tempfiles = array_diff(scandir(USER_TEMP), array('..', '.'));
-		foreach ($tempfiles as $file) {
-			if ((filectime(USER_TEMP.$file) < time() - 1*60) || ((strpos($file, $scoresheet_file_name_judging) !== FALSE))) {
-				unlink(USER_TEMP.$file);
+		else {
+			// Check whether scoresheet file exists, and, if so, provide link.
+			$scoresheet_file_name_entry = sprintf("%06s",$entry_number).".pdf";
+			$scoresheet_file_name_judging = strtolower($judging_number).".pdf";
+			$scoresheetfile_entry = USER_DOCS.$scoresheet_file_name_entry;
+			$scoresheetfile_judging = USER_DOCS.$scoresheet_file_name_judging;
+
+			if ((file_exists($scoresheetfile_entry)) && ($_SESSION['prefsDisplaySpecial'] == "E")) $scoresheet_file_name = $scoresheet_file_name_entry;
+			elseif ((file_exists($scoresheetfile_judging)) && ($_SESSION['prefsDisplaySpecial'] == "J")) $scoresheet_file_name = $scoresheet_file_name_judging;
+			else $scoresheet_file_name = "";
+
+			if (!empty($scoresheet_file_name)) {
+
+				$scoresheet = TRUE;
+
+				// The pseudo-random number and the corresponding name of the temporary file are defined each time
+				// this brewer_entries.sec.php script is accessed (or refreshed), but the temporary file is created
+				// only when the entrant clicks on the gavel icon to access the scoresheet.
+				$random_num_str = random_generator(8,2);
+				$random_file_name = $random_num_str.".pdf";
+				$scoresheet_random_file_relative = "user_temp/".$random_file_name;
+				$scoresheet_random_file = USER_TEMP.$random_file_name;
+				$scoresheet_random_file_html = $base_url.$scoresheet_random_file_relative;
+
+				if (($scoresheet) && (!empty($scoresheet_file_name))) {
+					$scoresheet_link = "";
+					$scoresheet_link .= "<a class=\"hide-loader\" href=\"".$base_url."output/scoresheets.output.php?";
+
+					// Obfuscate the *ACTUAL* file names.
+					// Prevents casual users from right clicking on scoresheet download link and changing
+					// the entry or judging number pdf name passed via the URL to force downloads of files
+					// they shouldn't have access to. Can I get a harumph?!
+					$scoresheet_link .= "scoresheetfilename=".urlencode(obfuscateURL($scoresheet_file_name,$encryption_key));
+					$scoresheet_link .= "&amp;randomfilename=".urlencode(obfuscateURL($random_file_name,$encryption_key))."&amp;download=true";
+					$scoresheet_link .= sprintf("\" data-toggle=\"tooltip\" title=\"%s &ldquo;".$row_log['brewName']."&rdquo;.\">",$brewer_entries_text_006);
+					$scoresheet_link .= "<span class=\"fa fa-lg fa-gavel\"></a>&nbsp;&nbsp;";
+				}
 			}
 
-			if ((filectime(USER_TEMP.$file) < time() - 1*60) || ((strpos($file, $scoresheet_file_name_entry) !== FALSE))) {
-				unlink(USER_TEMP.$file);
+			// Clean up temporary scoresheets created for other brewers, when they are at least 1 minute old (just to avoid problems when two entrants try accessing their scoresheets at practically the same time, and clean up previously created scoresheets for the same brewer, regardless of how old they are.
+			$tempfiles = array_diff(scandir(USER_TEMP), array('..', '.'));
+			foreach ($tempfiles as $file) {
+				if ((filectime(USER_TEMP.$file) < time() - 1*60) || ((strpos($file, $scoresheet_file_name_judging) !== FALSE))) {
+					unlink(USER_TEMP.$file);
+				}
+
+				if ((filectime(USER_TEMP.$file) < time() - 1*60) || ((strpos($file, $scoresheet_file_name_entry) !== FALSE))) {
+					unlink(USER_TEMP.$file);
+				}
 			}
-		}
+		} // end else
 	}
 
 	if ($show_scores) {
@@ -220,7 +260,7 @@ do {
 	}
 
 	//$entry_output .= "&nbsp;".$required_info;
-	if ($row_log['brewCoBrewer'] != "") $entry_output .= sprintf("<br><em>%s: ".$row_log['brewCoBrewer']."</em>",$label_cobrewer);
+	if (!empty($row_log['brewCoBrewer'])) $entry_output .= sprintf("<br><em>%s: ".$row_log['brewCoBrewer']."</em>",$label_cobrewer);
 	$entry_output .= "</td>";
 
 
@@ -228,8 +268,13 @@ do {
 	$entry_output .= "<td>";
 
 	if ($row_styles['brewStyleActive'] == "Y") {
+		/*
 		if ($_SESSION['prefsStyleSet'] == "BA") $entry_output .= $row_log['brewStyle'];
+		elseif ($_SESSION['prefsStyleSet'] == "AABC") $entry_output .= ltrim($row_log['brewCategorySort'],"0").".".ltrim($row_log['brewSubCategory'],"0").": ".$row_log['brewStyle'];
 		else $entry_output .= $row_log['brewCategorySort'].$row_log['brewSubCategory'].": ".$row_log['brewStyle'];
+		*/
+		$entry_output .= "<span class=\"hidden\">".$entry_style."</span>";
+		$entry_output .= style_number_const($row_log['brewCategorySort'],$row_log['brewSubCategory'],$_SESSION['style_set_display_separator'],0).": ".$row_log['brewStyle'];
 	}
 	else $entry_output .= sprintf("<strong class=\"text-danger\">%s</strong>",$brewer_entries_text_016);
 	if (empty($row_log['brewCategorySort'])) $entry_output .= sprintf("<strong class=\"text-danger\">%s</strong>",$brewer_entries_text_007);
@@ -252,7 +297,7 @@ do {
 		$entry_output .= "</td>";
 
 		$entry_output .= "<td class=\"hidden-xs hidden-sm\">";
-		if ($row_log['brewUpdated'] != "") $entry_output .= "<span class=\"hidden\">".strtotime($row_log['brewUpdated'])."</span>".getTimeZoneDateTime($_SESSION['prefsTimeZone'], strtotime($row_log['brewUpdated']), $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "short", "date-time-no-gmt"); else $entry_output .= "&nbsp;";
+		if (!empty($row_log['brewUpdated'])) $entry_output .= "<span class=\"hidden\">".strtotime($row_log['brewUpdated'])."</span>".getTimeZoneDateTime($_SESSION['prefsTimeZone'], strtotime($row_log['brewUpdated']), $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "short", "date-time-no-gmt"); else $entry_output .= "&nbsp;";
 		$entry_output .= "</td>";
 
 

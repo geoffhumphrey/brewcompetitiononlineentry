@@ -2,7 +2,7 @@
 /**
  * Module:      en-US.lang.php
  * Description: This module houses all display text in the English language.
- * Updated:     September 21, 2018
+ * Updated:     July 10, 2020
  */
 
 /*
@@ -828,57 +828,54 @@ if (($section == "default") || ($section == "results")) { // Changed for 2.1.14
 
 // -------------------- Entry Info --------------------
 
-if ($section == "entry") {
+$entry_info_text_000 = "You will be able to create your account beginning";
+$entry_info_text_001 = "through";
+$entry_info_text_002 = "Judges and stewards may register beginning";
+$entry_info_text_003 = "per entry";
+$entry_info_text_004 = "You can create your account today through";
+$entry_info_text_005 = "Judges and stewards may register now through";
+$entry_info_text_006 = "Registrations for";
+$entry_info_text_007 = "judges and stewards only";
+$entry_info_text_008 = "accepted through";
+$entry_info_text_009 = "Registration is <strong class=\"text-danger\">closed</strong>.";
+$entry_info_text_010 = "Welcome";
+$entry_info_text_011 = "See your account details and list of entries.";
+$entry_info_text_012 = "View your account information here.";
+$entry_info_text_013 = "per entry after the";
+$entry_info_text_014 = "You will be able to add your entries to the system beginning";
+$entry_info_text_015 = "You can add your entries to the system today through";
+$entry_info_text_016 = "Entry registration is <strong class=\"text-danger\">closed</strong>.";
+$entry_info_text_017 = "for unlimited entries.";
+$entry_info_text_018 = "for AHA members.";
+$entry_info_text_019 = "There is a limit of";
+$entry_info_text_020 = "entries for this competition.";
+$entry_info_text_021 = "Each entrant is limited to";
+$entry_info_text_022 = strtolower($label_entry);
+$entry_info_text_023 = strtolower($label_entries);
+$entry_info_text_024 = "entry per subcategory";
+$entry_info_text_025 = "entries per subcategory";
+$entry_info_text_026 = "exceptions are detailed below";
+$entry_info_text_027 = strtolower($label_subcategory);
+$entry_info_text_028 = "subcategories";
+$entry_info_text_029 = "entry for the following";
+$entry_info_text_030 = "entries for for the following";
+$entry_info_text_031 = "After creating your account and adding your entries to the system, you must pay your entry fee(s). Accepted payment methods are:";
+$entry_info_text_032 = $label_cash;
+$entry_info_text_033 = $label_check.", made out to";
+$entry_info_text_034 = "Credit/debit card and e-check, via PayPal";
+$entry_info_text_035 = "Competition judging dates are yet to be determined. Please check back later.";
+$entry_info_text_036 = "Entry bottles accepted at our shipping location from";
+$entry_info_text_037 = "Ship entries to:";
+$entry_info_text_038 = "Carefully pack your entries in a sturdy box. Line the inside of your carton with a plastic trash bag. Partition and pack each bottle with adequate packaging material. Please do not over pack!";
+$entry_info_text_039 = "Write clearly: <em>Fragile. This Side Up.</em> on the package. Please only use bubble wrap as your packing material.";
+$entry_info_text_040 = "Enclose <em>each</em> of your bottle labels in a small zip-top bag before attaching to their respective bottles. This way it makes it possible for the organizer to identify specifically which entry has broken if there is damage during shipment.";
+$entry_info_text_041 = "Every reasonable effort will be made to contact entrants whose bottles have broken to make arrangements for sending replacement bottles.";
+$entry_info_text_042 = "If you live in the United States, please note that it is <strong>illegal</strong> to ship your entries via the United States Postal Service (USPS). Private shipping companies have the right to refuse your shipment if they are informed that the package contains glass and/or alcoholic beverages. Be aware that entries mailed internationally are often required by customs to have proper documentation. These entries might be opened and/or returned to the shipper by customs officials at their discretion. It is solely your responsibility to follow all applicable laws and regulations.";
+$entry_info_text_043 = "Entry bottles accepted at our drop-off locations from";
+$entry_info_text_044 = "Map to";
+$entry_info_text_045 = "Click/Tap for Required Entry Info";
+$entry_info_text_046 = "If a style's name is hyperlinked, it has specific entry requirements. Click or tap on the name to view the subcategory's requirements.";
 
-	$entry_info_text_000 = "You will be able to create your account beginning";
-	$entry_info_text_001 = "through";
-	$entry_info_text_002 = "Judges and stewards may register beginning";
-	$entry_info_text_003 = "per entry";
-	$entry_info_text_004 = "You can create your account today through";
-	$entry_info_text_005 = "Judges and stewards may register now through";
-	$entry_info_text_006 = "Registrations for";
-	$entry_info_text_007 = "judges and stewards only";
-	$entry_info_text_008 = "accepted through";
-	$entry_info_text_009 = "Registration is <strong class=\"text-danger\">closed</strong>.";
-	$entry_info_text_010 = "Welcome";
-	$entry_info_text_011 = "See your account details and list of entries.";
-	$entry_info_text_012 = "View your account information here.";
-	$entry_info_text_013 = "per entry after the";
-	$entry_info_text_014 = "You will be able to add your entries to the system beginning";
-	$entry_info_text_015 = "You can add your entries to the system today through";
-	$entry_info_text_016 = "Entry registration is <strong class=\"text-danger\">closed</strong>.";
-	$entry_info_text_017 = "for unlimited entries.";
-	$entry_info_text_018 = "for AHA members.";
-	$entry_info_text_019 = "There is a limit of";
-	$entry_info_text_020 = "entries for this competition.";
-	$entry_info_text_021 = "Each entrant is limited to";
-	$entry_info_text_022 = strtolower($label_entry);
-	$entry_info_text_023 = strtolower($label_entries);
-	$entry_info_text_024 = "entry per subcategory";
-	$entry_info_text_025 = "entries per subcategory";
-	$entry_info_text_026 = "exceptions are detailed below";
-	$entry_info_text_027 = strtolower($label_subcategory);
-	$entry_info_text_028 = "subcategories";
-	$entry_info_text_029 = "entry for the following";
-	$entry_info_text_030 = "entries for for the following";
-	$entry_info_text_031 = "After creating your account and adding your entries to the system, you must pay your entry fee(s). Accepted payment methods are:";
-	$entry_info_text_032 = $label_cash;
-	$entry_info_text_033 = $label_check.", made out to";
-	$entry_info_text_034 = "Credit/debit card and e-check, via PayPal";
-	$entry_info_text_035 = "Competition judging dates are yet to be determined. Please check back later.";
-	$entry_info_text_036 = "Entry bottles accepted at our shipping location from";
-	$entry_info_text_037 = "Ship entries to:";
-	$entry_info_text_038 = "Carefully pack your entries in a sturdy box. Line the inside of your carton with a plastic trash bag. Partition and pack each bottle with adequate packaging material. Please do not over pack!";
-	$entry_info_text_039 = "Write clearly: <em>Fragile. This Side Up.</em> on the package. Please only use bubble wrap as your packing material.";
-	$entry_info_text_040 = "Enclose <em>each</em> of your bottle labels in a small zip-top bag before attaching to their respective bottles. This way it makes it possible for the organizer to identify specifically which entry has broken if there is damage during shipment.";
-	$entry_info_text_041 = "Every reasonable effort will be made to contact entrants whose bottles have broken to make arrangements for sending replacement bottles.";
-	$entry_info_text_042 = "If you live in the United States, please note that it is <strong>illegal</strong> to ship your entries via the United States Postal Service (USPS). Private shipping companies have the right to refuse your shipment if they are informed that the package contains glass and/or alcoholic beverages. Be aware that entries mailed internationally are often required by customs to have proper documentation. These entries might be opened and/or returned to the shipper by customs officials at their discretion. It is solely your responsibility to follow all applicable laws and regulations.";
-	$entry_info_text_043 = "Entry bottles accepted at our drop-off locations from";
-	$entry_info_text_044 = "Map to";
-	$entry_info_text_045 = "Click/Tap for Required Entry Info";
-	$entry_info_text_046 = "If a style's name is hyperlinked, it has specific entry requirements. Click or tap on the name to view the subcategory's requirements.";
-
-}
 
 // -------------------- Footer --------------------
 
@@ -1337,7 +1334,7 @@ if (($section == "list") || ($section == "account") || ($go == "entries")) {
 if (SINGLE) $brewer_info_000 = "Hello";
 else $brewer_info_000 = "Thank you for participating in the";
 $brewer_info_001 = "Your account details were last updated";
-$brewer_info_002 = "Take a moment to <a href=\"#entries\">review your entries</a>";
+$brewer_info_002 = "Take a moment to <a href=\"#entries\">review your entries</a>.";
 $brewer_info_003 = "pay your entry fees</a>";
 $brewer_info_004 = "per entry";
 $brewer_info_005 = "An American Homebrewers Association (AHA) membership is required if one of your entries is selected for a Great American Beer Festival Pro-Am.";
@@ -1469,7 +1466,7 @@ $label_number_bottles = "Number of Bottles Required Per Entry";
 $label_pro_am = "Pro-Am";
 
 // Pay screen
-$pay_text_034 = "The limit of paid entires has been reached - further entry payments are not being accepted.";
+$pay_text_034 = "The limit of paid entries has been reached - further entry payments are not being accepted.";
 
 // Bottle Labels
 $bottle_labels_000 = "Labels cannot be generated at this time.";
@@ -1487,7 +1484,7 @@ $brew_text_040 = "There is no need to specify gluten as an allergen for any beer
 
 // Pro-Am
 $brewer_text_041 = "Have you already been awarded a Pro-Am opportunity to compete in the upcoming Great American Beer Festival Pro-Am Competition?";
-$brewer_text_042 = "If you have already been awarded a Pro-Am, please indicate so here. This will help competition staff and Pro-Am brewery representatives (if applicable for this competition) to choose Pro-Am entries from brewers that have not secured one.";
+$brewer_text_042 = "If you have already been awarded a Pro-Am, or have been on the brewing staff at any brewery, please indicate so here. This will help competition staff and Pro-Am brewery representatives (if applicable for this competition) to choose Pro-Am entries from brewers that have not secured one.";
 
 // ----------------------------------------------------------------------------------
 // Version 2.1.15 Additions
@@ -1516,6 +1513,67 @@ $styles_entry_text_PRX4 = "Entrant must specify the types of fresh fruit(s) used
 // Version 2.1.19 Additions
 // ----------------------------------------------------------------------------------
 $output_text_032 = "Entry count only reflects entrants who indicated a drop-off location in their account profile. The actual number of entries may be higher or lower.";
+$brewer_text_043 = "Or, are you, or have you ever been, employed on the brewing staff at any brewery? This includes brewer positions as well as lab technicians, cellar crew, bottling/canning crew, etc. Current and former brewing staff employees are not eligible to participate in the Great American Beer Festival Pro-Am competition.";
+$label_entrant_reg = "Entrant Registration";
+$sidebar_text_026 = "are in the system as of";
+$label_paid_entries = "Paid Entries";
+
+
+// ----------------------------------------------------------------------------------
+// Version 2.1.20 Additions
+// ----------------------------------------------------------------------------------
+$brewer_info_013 = "You have been assigned as a judge.";
+$brewer_info_014 = "Access the Judging Dashboard using the button below to enter evaluations of the entries assigned to you.";
+$label_judging_dashboard = "Judging Dashboard";
+$label_table_assignments = "Table Assignments";
+$label_table = "Table";
+$label_edit = "Edit";
+$label_add = "Add";
+$label_disabled = "Disabled";
+$label_judging_scoresheet = "Judging Scoresheet";
+$label_checklist_version = "Checklist Version";
+$label_classic_version = "Classic Version";
+$label_structured_version = "Structured Version";
+$label_submit_evaluation = "Submit Evaluation";
+$label_edit_evaluation = "Edit Evaluation";
+$label_your_score = "Your Score";
+$label_your_assigned_score = "Your Entered Consensus Score";
+$label_assigned_score = "Consensus Score";
+$label_accepted_score = "Official Accepted Score";
+$label_recorded_scores = "Entered Consensus Scores";
+$label_go = "Go";
+$label_go_back = "Go Back";
+$label_na = "N/A";
+$label_evals_submitted = "Evaluations Submitted";
+$label_evaluations = "Entry Evaluations";
+$label_submitted_by = "Submitted By";
+$label_attention = "Attention!";
+$evaluation_info_000 = "The entry pool for each of the tables and flights that have been assigned to you is detailed below.";
+$evaluation_info_001 = "This competition is employing queued judging. If there is more than one judge pair at your table, evaluate the the next entry in the established queue.";
+$evaluation_info_002 = "To ensure an accurate and smooth competition, you and your judge partner(s) should ONLY judge entries at your table that have not been evaluated yet. See your organizer or judge coordinator if you have any questions.";
+$evaluation_info_003 = "Awaiting final acceptance from a site administrator.";
+$evaluation_info_004 = "Your consensus score has been entered.";
+$evaluation_info_005 = "This entry <strong>is not</strong> part of your assigned flight.";
+$evaluation_info_006 = "Edit as needed.";
+$evaluation_info_007 = "Choose from the following entries at this table.";
+$evaluation_info_008 = "To record your evaluation, select an entry's corresponding Add button. Only tables for past and current judging sessions are available.";
+$evaluation_info_009 = "You have been assigned as a judge, but have not been assigned to any table(s) or flight(s) in the system. Please check with the organizer or judge coordinator.";
+$evaluation_info_010 = "This entry is part of your assigned flight.";
+$evaluation_info_011 = "Add an evaluation for an entry not assigned to you.";
+$evaluation_info_012 = "Use only when you are asked to evaluate an entry on the fly that is not part of your assigned table.";
+$evaluation_info_013 = "Entry was not found.";
+$evaluation_info_014 = "Please verify the six-character entry number and try again.";
+$evaluation_info_015 = "Be sure that the number is 6 digits in length.";
+$evaluation_info_016 = "No evaluation recorded.";
+$evaluation_info_017 = "Consensus scores entered by judges do not match.";
+$evaluation_info_018 = "Verification is needed for the following entries:";
+$evaluation_info_019 = "The following entries have only one evaluation submitted:";
+$evaluation_info_020 = "Your Judging Dashboard will be available"; // Punctuation omitted intentionally
+$evaluation_info_021 = "to add evaluations for entries assigned to you"; // Punctuation omitted intentionally
+$evaluation_info_022 = "Judging and evaluation submission is closed.";
+$evaluation_info_023 = "If you have any questions, contact the competition organizer or judge coordinator.";
+$evaluation_info_024 = "You have been assigned to the following tables. Entry lists for each table will only show for past and current judging sessions.";
+$alert_text_086 = "Internet Explorer is not supported by BCOE&M - features and functions will not render properly and your experience will not be optimal. Please upgrade to a newer browser.";
 
 /**
  * ----------------------------------------------------------------------------------

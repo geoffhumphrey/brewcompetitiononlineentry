@@ -35,6 +35,7 @@ define('USER_DOCS',ROOT.'user_docs'.DIRECTORY_SEPARATOR);
 define('USER_TEMP',ROOT.'user_temp'.DIRECTORY_SEPARATOR);
 define('LANG',ROOT.'lang'.DIRECTORY_SEPARATOR);
 define('DEBUGGING',ROOT.'includes'.DIRECTORY_SEPARATOR.'debug'.DIRECTORY_SEPARATOR);
+define('AJAX',ROOT.'ajax'.DIRECTORY_SEPARATOR);
 
 /**
  * --------------------------------------------------------
@@ -46,6 +47,7 @@ define('DEBUGGING',ROOT.'includes'.DIRECTORY_SEPARATOR.'debug'.DIRECTORY_SEPARAT
  * The following are for use by the developer
  * Default for all is FALSE
  */
+
 define('HOSTED', FALSE);
 define('NHC', FALSE);
 define('SINGLE', FALSE);
@@ -63,12 +65,15 @@ define('MAINT', FALSE);
 /**
  * Disable the following to utilize the Load Libraries
  * Locally option if your installation is having trouble
- * loading libraries via CDN.
+ * loading libraries via CDN or if you wish to host libraries
+ * in the root folder of your installation.
+ * If set to FALSE, the local libraries must be in place
+ * PRIOR to proceeding through the setup process.
  * See http://www.brewcompetition.com/local-load
  * Default is TRUE.
  */
 
-define('CDN', TRUE);
+define('CDN', FALSE);
 
 /**
  * Enable the following to put the site into "test mode"
@@ -77,14 +82,14 @@ define('CDN', TRUE);
  * Default is FALSE.
  */
 
-define('TESTING', TRUE);
+define('TESTING', FALSE);
 
 /**
  * Enable the following to display php errors on screen.
  * Default is FALSE.
  */
 
-define('DEBUG', TRUE);
+define('DEBUG', FALSE);
 
 /**
  * Enable the following to show a collapsable table of all
@@ -115,7 +120,7 @@ define('FORCE_UPDATE', FALSE);
  * Default is FALSE.
  */
 
-define('ENABLE_MARKDOWN', TRUE);
+define('ENABLE_MARKDOWN', FALSE);
 
 /**
  * Set the following to TRUE if you would like to use
@@ -127,7 +132,7 @@ define('ENABLE_MARKDOWN', TRUE);
  * Default is FALSE.
  */
 
-define('ENABLE_MAILER', TRUE);
+define('ENABLE_MAILER', FALSE);
 
 /**
  * --------------------------------------------------------
@@ -150,14 +155,14 @@ else ini_set('display_errors','Off');
  * called when constructing the $base_url variable in the
  * /sites/config.php file.
  * 
- * @fixes https://github.com/geoffhumphrey/brewcompetitiononlineentry/issues/1123
- * @refer https://stackoverflow.com/questions/1175096/how-to-find-out-if-youre-using-https-without-serverhttps
+ * @see https://github.com/geoffhumphrey/brewcompetitiononlineentry/issues/1123
+ * @see https://stackoverflow.com/questions/1175096/how-to-find-out-if-youre-using-https-without-serverhttps
  */
 
 function is_https() {
-    if (((!empty($_SERVER['HTTPS'])) && (strtolower($_SERVER['HTTPS']) !== "off")) || ((isset($_SERVER['SERVER_PORT'])) && ($_SERVER['SERVER_PORT'] === "443"))) return true;
+    if (((!empty($_SERVER['HTTPS'])) && (strtolower($_SERVER['HTTPS']) !== "off")) || ((isset($_SERVER['SERVER_PORT'])) && ($_SERVER['SERVER_PORT'] === "443"))) return TRUE;
     elseif (((!empty($_SERVER['HTTP_X_FORWARDED_PROTO'])) && (strtolower($_SERVER['HTTP_X_FORWARDED_PROTO']) == "https")) || ((!empty($_SERVER['HTTP_X_FORWARDED_SSL'])) && (strtolower($_SERVER['HTTP_X_FORWARDED_SSL']) == "on"))) return TRUE;
-    else return false;
+    else return FALSE;
 }
 
 require_once (CONFIG.'config.php');
@@ -172,7 +177,7 @@ if (HOSTED) {
 /** Using an MD5 of __FILE__ will ensure a different session
  * name for multiple installs on the same domain name.
  *
- * @fixes https://github.com/geoffhumphrey/brewcompetitiononlineentry/issues/781
+ * @see https://github.com/geoffhumphrey/brewcompetitiononlineentry/issues/781
  */
 
 if (empty($installation_id)) $prefix_session = md5(__FILE__);

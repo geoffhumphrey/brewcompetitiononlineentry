@@ -20,24 +20,7 @@ $replacement1 = array('Entry Instructions:','Commercial Examples:','must specify
 
 // --------------------------------------If BJCP Styles --------------------------------------
 
-if ($_SESSION['prefsStyleSet'] != "BA") {
-	$styleSet = str_replace("2"," 2",$_SESSION['prefsStyleSet']);
-
-	if ($_SESSION['prefsStyleSet'] == "BJCP2008") {
-		$beer_end = 23;
-		$mead_array = array('24','25','26');
-		$cider_array = array('27','28');
-		$category_end = 28;
-	}
-
-	if ($_SESSION['prefsStyleSet'] == "BJCP2015") {
-		$beer_end = 34;
-		$mead_array = array('M1','M2','M3','M4');
-		$cider_array = array('C1','C2');
-		$category_end = 34;
-	}
-}
-
+if ($_SESSION['prefsStyleSet'] != "BA") $styleSet = str_replace("2"," 2",$_SESSION['prefsStyleSet']);
 else $styleSet = $_SESSION['prefsStyleSet'];
 
 // Beer does not require mead/cider strength, carbonation or sweetness
@@ -151,7 +134,8 @@ if ($totalRows_spec_beer > 0) {
 			$special_beer_modal[] = $row_spec_beer['brewStyleGroup']."-".$row_spec_beer['brewStyleNum']."|".$row_spec_beer['brewStyle'];
 
 			if ($styleSet == "BA") $style_name = $styleSet." Style: ".$row_spec_beer['brewStyle'];
-			else $style_name = $styleSet." Style ".$row_spec_beer['brewStyleGroup'].$row_spec_beer['brewStyleNum'].": ".$row_spec_beer['brewStyle'];
+			elseif ($styleSet == "AABC") $style_name = $styleSet." Style ".ltrim($row_spec_beer['brewStyleGroup'],"0").".".ltrim($row_spec_beer['brewStyleNum'],"0").": ".$row_spec_beer['brewStyle'];
+			else $style_name = $styleSet." Style ".ltrim($row_spec_beer['brewStyleGroup'],"0").ltrim($row_spec_beer['brewStyleNum'],"0").": ".$row_spec_beer['brewStyle'];
 
 			$modals .= "
 					<!-- Modal -->

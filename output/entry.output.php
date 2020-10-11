@@ -1,6 +1,6 @@
 <?php
 require('../paths.php');
-session_name($prefix_session);
+//session_name($prefix_session);
 require(CONFIG.'bootstrap.php');
 require(LIB.'output.lib.php');
 include (CLASSES.'tiny_but_strong/tbs_class.php');
@@ -32,7 +32,7 @@ if ((!pay_to_print($_SESSION['prefsPayToPrint'],$brewing_info['brewPaid'])) && (
   	exit();
 }
 
-if ($_SESSION['prefsStyleSet'] == "BJCP2008") $category_end = 23; else $category_end = 34;
+$category_end = $_SESSION['style_set_category_end'];
 $brewing_id = sprintf("%04s",$brewing_info['id']);
 $brewer_info['brewerFirstName'] = strtr($brewer_info['brewerFirstName'],$html_remove);
 $brewing_info['brewName'] = strtr($brewing_info['brewName'],$html_remove);
@@ -54,8 +54,6 @@ if ($brewer_info['brewerCountry'] = "United States") {
 }
 
 $organizer = $row_brewer_organizer['brewerFirstName']." ".$row_brewer_organizer['brewerLastName'];
-
-
 
 if (in_array($_SESSION['prefsEntryForm'],$barcode_qrcode_array)) {
 

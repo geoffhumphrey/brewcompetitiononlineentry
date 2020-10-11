@@ -25,7 +25,7 @@
     <script type="text/javascript" src="<?php echo $base_url; ?>libraries/fancybox/lib/jquery.mousewheel-3.0.6.pack.js"></script>
     <script type="text/javascript" src="<?php echo $base_url; ?>libraries/fancybox/source/jquery.fancybox.pack.js"></script>
     
-    <?php if (($section == "admin") && (in_array($go,$datetime_load)) || ($section == "brew")) { ?>
+    <?php if ((($section == "admin") || (strpos($section, 'step') !== FALSE)) && (in_array($go,$datetime_load)) || ($section == "brew")) { ?>
     
     <!-- Load Bootstrap DateTime Picker / http://eonasdan.github.io/bootstrap-datetimepicker/ -->
     <link rel="stylesheet" type="text/css" href="<?php echo $base_url; ?>libraries/date-time-picker/css/bootstrap-datetimepicker.min.css" />
@@ -34,7 +34,7 @@
     <script src="<?php echo $base_url;?>js_includes/date-time.min.js"></script>
     <?php } ?>
     
-    <?php if (($section == "admin") && (in_array($go,$tinymce_load))) { ?>
+    <?php if ((($section == "admin") || (strpos($section, 'step') !== FALSE)) && (in_array($go,$tinymce_load))) { ?>
     <!-- Load TinyMCE / https://www.tinymce.com/ -->
     <script src="<?php echo $base_url; ?>libraries/tinymce/js/tinymce/tinymce.min.js"></script>
 	<script src="<?php echo $base_url;?>js_includes/tinymce-init.min.js"></script>    
@@ -46,7 +46,7 @@
     <link rel="stylesheet" href="<?php echo $base_url; ?>libraries/jasny-bootstrap/css/jasny-bootstrap.min.css">
     <script src="<?php echo $base_url; ?>libraries/jasny-bootstrap/js/jasny-bootstrap.min.js"></script>
     
-	<?php if (($section == "admin") && (($go == "upload") || ($go == "upload_scoresheets"))) { ?>
+	<?php if ((($section == "admin") || (strpos($section, 'step') !== FALSE)) && (($go == "upload") || ($go == "upload_scoresheets"))) { ?>
     <!-- Load DropZone / http://www.dropzonejs.com -->
     <link rel="stylesheet" type="text/css" href="<?php echo $base_url; ?>libraries/dropzone/dropzone.min.css" />
     <script src="<?php echo $base_url; ?>libraries/dropzone/dropzone.min.js"></script>
@@ -65,7 +65,7 @@
     <!-- Load Font Awesome / https://fortawesome.github.io/Font-Awesome -->
     <link rel="stylesheet" href="<?php echo $base_url; ?>libraries/font-awesome/css/font-awesome.min.css">
     
-	<?php if (($section == "register") || (($section == "login") && ($go == "password") && ($action == "reset-password")) || (($section == "user") && ($go == "account") && ($action == "password")) || (($section == "admin") && ($go == "change_user_password") && ($action == "edit")) || (($section == "admin") && ($action == "register"))) { ?>
+	<?php if (($section == "register") || ($section == "step1") || (($section == "login") && ($go == "password") && ($action == "reset-password")) || (($section == "user") && ($go == "account") && ($action == "password")) || (($section == "admin") && ($go == "change_user_password") && ($action == "edit")) || (($section == "admin") && ($action == "register"))) { ?>
 	<!-- Load jQuery Password Strength Meter for Twitter Bootstrap / https://github.com/ablanco/jquery.pwstrength.bootstrap -->
 	<script type="text/javascript" src="<?php echo $base_url; ?>libraries/zxcvbn/dist/zxcvbn.js"></script>
 	<script type="text/javascript" src="<?php echo $base_url; ?>libraries/pwstrength-bootstrap/dist/pwstrength-bootstrap.min.js"></script>

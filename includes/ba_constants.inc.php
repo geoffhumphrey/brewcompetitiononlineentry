@@ -6,12 +6,12 @@ $ba_category_names = array(
 	"4" => "German Origin Ales",
 	"5" => "Belgian And French Origin Ales",
 	"6" => "Other Origin Ales",
-	"7" => "European-Germanic Lagers",
+	"7" => "European Origin Lagers",
 	"8" => "North American Origin Lagers",
 	"9" => "Other Origin Lagers",
-	"10" => "International Styles",
+	"10" => "International Styles", // Deprecated
 	"11" => "Hybrid/Mixed Lagers or Ales",
-	"12" => "Mead, Cider, and Perry",
+	"12" => "Mead, Cider, and Perry", // Not officially part of the BA
 	"13" => "Other Origin", // Deprecated in 2018
 	"14" => "Malternative Beverages" // Deprecated in 2018
 );

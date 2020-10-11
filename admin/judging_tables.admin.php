@@ -59,8 +59,7 @@ if (($action == "default") && ($filter == "default")) {
 					$a[] = $row_styles['id'];
 					$z[] = 1;
                     $orphan_modal_body_2 .= "<li>";
-                    if ($_SESSION['prefsStyleSet'] == "BA") $orphan_modal_body_2 .= $row_styles['brewStyleCategory'].": ";
-                    else $orphan_modal_body_2 .= $row_styles['brewStyleGroup'].$row_styles['brewStyleNum']." ".style_convert($row_styles['brewStyleGroup'],"1").": ";
+                    $orphan_modal_body_2 .= style_number_const($row_styles['brewStyleGroup'],$row_styles['brewStyleNum'],$_SESSION['style_set_display_separator'],0);
                     $orphan_modal_body_2 .= $row_styles['brewStyle']." (".get_table_info($row_styles['brewStyleNum']."^".$row_styles['brewStyleGroup'],"count","default",$dbTable,"default")." entries)";
 					$orphan_modal_body_2 .= "</li>";
 				}
@@ -361,13 +360,12 @@ if (($action == "add") || ($action == "edit")) {
 		$table_styles_available .= "<td><input type=\"checkbox\" name=\"tableStyles[]\" value=\"".$row_styles['id']."\" ".$disabled_selected_styles."></td>";
 
         if ($_SESSION['prefsStyleSet'] == "BA") {
-            if (empty($row_styles['brewStyleCategory'])) $ba_category = "Custom";
-            else $ba_category = $row_styles['brewStyleCategory'];
+            $ba_category = style_convert($row_styles['brewStyleGroup'],1);
             $table_styles_available .= "<td>".$ba_category."</td><td>".$row_styles['brewStyle'].$style_no_entries.$style_assigned_location."</td>";
         }
 		else {
-            $table_styles_available .= "<td>".$row_styles['brewStyleGroup'].$row_styles['brewStyleNum']."</td>";
-            $table_styles_available .= "<td>".style_convert($row_styles['brewStyleGroup'],"1")."</td>";
+            $table_styles_available .= "<td>".style_number_const($row_styles['brewStyleGroup'],$row_styles['brewStyleNum'],$_SESSION['style_set_display_separator'],0)."</td>";
+            $table_styles_available .= "<td>".style_convert($row_styles['brewStyleGroup'],1)."</td>";
             $table_styles_available .= "<td>".$row_styles['brewStyle'].$style_no_entries.$style_assigned_location."</td>";
         }
 		$table_styles_available .= "<td>".$received_entry_count_style."</td>";
@@ -378,6 +376,8 @@ if (($action == "add") || ($action == "edit")) {
 
 
 } // end if (($action == "add") || ($action == "edit"))
+
+if (EVALUATION) include(EVALS.'import_scores.eval.php');
 ?>
 <p class="lead"><?php echo $_SESSION['contestName'].$title;  ?></p>
 <?php if ($dbTable == "default") echo $sub_lead_text; ?>
@@ -617,7 +617,10 @@ $(document).ready(function() {
 						<div id="collapseStep6" class="panel-collapse collapse">
 							<div class="panel-body">
 								<ul class="list-unstyled">
-                                	<li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging_scores">All Scores</a></li>
+                                	<?php if (EVALUATION) { ?><li><a href="<?php echo $base_url; ?>index.php?section=evaluation&amp;go=default&amp;filter=default&amp;view=admin" data-toggle="tooltip" data-placement="top" title="Manage, View and Edit Judges' evaluations of received entries">Manage Entry Evaluations</a></li>
+                                    <li><?php echo $import_scores_display; ?></li>
+                                    <?php } ?>
+                                    <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging_scores">All Scores</a></li>
                                 </ul>
                                 <div class="btn-group" role="group" aria-label="modals">
                                     <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

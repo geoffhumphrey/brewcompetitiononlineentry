@@ -6,7 +6,7 @@
  *
  */
 include (DB.'styles.db.php');
-if (strpos($styleSet,"BABDB") !== false) include (INCLUDES.'ba_constants.inc.php');
+if ($_SESSION['prefsStyleSet'] == "BA") include (INCLUDES.'ba_constants.inc.php');
 include (DB.'styles_special.db.php');
 
 // Define custom functions
@@ -229,10 +229,6 @@ else {
 	// If editing the entry, grab the value from the recordset
 	if ($action == "edit") $brewPaid = $row_log['brewPaid'];
 
-	// Style set where beer styles end
-	if ($_SESSION['prefsStyleSet'] == "BJCP2008") $beer_end = 23;
-	if ($_SESSION['prefsStyleSet'] == "BJCP2015") $beer_end = 34;
-
 	if (($action == "edit") && ($msg != "default")) {
 		$view = ltrim($msg,"1-");
 		$highlight_sweetness  = highlight_required($msg,0,$_SESSION['prefsStyleSet']);
@@ -314,6 +310,54 @@ else {
 		}
 
 	}
+
+
+// Construct styles drop-down
+$styles_dropdown = "";
+
+do {
+
+	$style_value = style_number_const($row_styles['brewStyleGroup'],$row_styles['brewStyleNum'],$_SESSION['style_set_system_separator'],999);
+	$style_value_edit = style_number_const($row_styles['brewStyleGroup'],$row_styles['brewStyleNum'],$_SESSION['style_set_system_separator'],1);
+
+	if (($_SESSION['userLevel'] <= 1) && ($bid != "default")) $subcat_limit = limit_subcategory($style_value,$user_subcat_limit,$user_subcat_limit_exception,$row_limits['prefsUSCLEx'],$bid);
+	else $subcat_limit = limit_subcategory($style_value,$user_subcat_limit,$user_subcat_limit_exception,$row_limits['prefsUSCLEx'],$_SESSION['user_id']);
+
+	// Build selected/disabled variable
+	$selected_disabled = "";
+	$selected = "";
+	if ($action == "edit") {
+		if ($row_styles['brewStyleGroup'].$row_styles['brewStyleNum'] == $row_log['brewCategorySort'].$row_log['brewSubCategory']) $selected_disabled = "SELECTED";
+		if ($row_styles['brewStyleGroup'].$row_styles['brewStyleNum'] != $row_log['brewCategorySort'].$row_log['brewSubCategory']) $selected_disabled = $subcat_limit;
+	}
+	if (($remaining_entries > 0) && (!$disable_fields)) $selected_disabled = $subcat_limit;
+	elseif ($disable_fields) $selected_disabled = "DISABLED";
+
+	if (($action == "edit") && ($view == $style_value_edit)) {
+		$selected = " SELECTED";
+		$selected_disabled = "";
+	}
+
+	// Build selection variable
+	$selection = style_number_const($row_styles['brewStyleGroup'],$row_styles['brewStyleNum'],$_SESSION['style_set_display_separator'],0)." ".$row_styles['brewStyle'];
+
+	if ($row_styles['brewStyleReqSpec'] == 1) $selection .= " &spades;";
+	if ($row_styles['brewStyleStrength'] == 1) $selection .= " &diams;";
+	if ($row_styles['brewStyleCarb'] == 1) $selection .= " &clubs;";
+	if ($row_styles['brewStyleSweet'] == 1) $selection .= " &hearts;";
+	if (($selected_disabled == "DISABLED") && ($bid == "default")) $selection .= " ".$brew_text_002;
+	if (($selected_disabled == "DISABLED") && ($bid != "default")) $selection .= " ".$brew_text_003;
+
+	if (!empty($row_styles['brewStyleGroup'])) {
+		$styles_dropdown .= "<option value=\"".$style_value."\"";
+		$styles_dropdown .= $selected_disabled;
+		$styles_dropdown .= $selected;
+		$styles_dropdown .= ">";
+		$styles_dropdown .= $selection;
+		$styles_dropdown .= "</option>\n";
+	}
+
+} while ($row_styles = mysqli_fetch_assoc($styles));
 
 ?>
 <script>
@@ -453,58 +497,7 @@ else $relocate_referrer = $_SERVER['HTTP_REFERER'];
         <select class="selectpicker" name="brewStyle" id="type" data-live-search="true" data-size="5" data-width="auto" data-show-tick="true" data-header="<?php echo $label_select_style; ?>" title="<?php echo $label_select_style; ?>" required>
 			<option value="0-A" <?php if (($action == "add") || (($action == "edit") && ($view == "00-A"))) echo "selected"; ?>><?php echo $header_text_107; ?></option>
             <option data-divider="true"></option>
-
-            <?php
-            // if (strpos($_SESSION['prefsStyleSet'],"BABDB") !== false) echo $styles_options;
-			//else {
-				// Build style drop-down
-				do {
-					// Option value variable
-					$style_value = ltrim($row_styles['brewStyleGroup'], "0")."-".$row_styles['brewStyleNum'];
-					$style_value_edit = $row_styles['brewStyleGroup']."-".$row_styles['brewStyleNum'];
-					$selected_disabled = "";
-					$selected = "";
-
-					if (($_SESSION['userLevel'] <= 1) && ($bid != "default"))  $subcat_limit = limit_subcategory($style_value,$user_subcat_limit,$user_subcat_limit_exception,$row_limits['prefsUSCLEx'],$bid);
-					else $subcat_limit = limit_subcategory($style_value,$user_subcat_limit,$user_subcat_limit_exception,$row_limits['prefsUSCLEx'],$_SESSION['user_id']);
-
-					// Build selected/disabled variable
-					if ($action == "edit") {
-						if ($row_styles['brewStyleGroup'].$row_styles['brewStyleNum'] == $row_log['brewCategorySort'].$row_log['brewSubCategory']) $selected_disabled = "SELECTED";
-						if ($row_styles['brewStyleGroup'].$row_styles['brewStyleNum'] != $row_log['brewCategorySort'].$row_log['brewSubCategory']) $selected_disabled = $subcat_limit;
-					}
-
-					if (($remaining_entries > 0) && (!$disable_fields)) $selected_disabled = $subcat_limit;
-					elseif ($disable_fields) $selected_disabled = "DISABLED";
-
-					if (($action == "edit") && ($view == $style_value_edit)) {
-						$selected = " SELECTED";
-						$selected_disabled = "";
-					}
-
-					// Build selection variable
-					if (preg_match("/^[[:digit:]]+$/",$row_styles['brewStyleGroup'])) {
-						if ($_SESSION['prefsStyleSet'] == "BA") $selection = $row_styles['brewStyle'];
-						else $selection = sprintf('%02d',$row_styles['brewStyleGroup']).$row_styles['brewStyleNum']." ".$row_styles['brewStyle'];
-					}
-					else {
-						if ($_SESSION['prefsStyleSet'] == "BA") $selection = $row_styles['brewStyle'];
-						$selection = $row_styles['brewStyleGroup'].$row_styles['brewStyleNum']." ".$row_styles['brewStyle'];
-					}
-					if ($row_styles['brewStyleReqSpec'] == 1) $selection .= " &spades;";
-					if ($row_styles['brewStyleStrength'] == 1) $selection .= " &diams;";
-					if ($row_styles['brewStyleCarb'] == 1) $selection .= " &clubs;";
-					if ($row_styles['brewStyleSweet'] == 1) $selection .= " &hearts;";
-					if (($selected_disabled == "DISABLED") && ($bid == "default")) $selection .= " ".$brew_text_002;
-					if (($selected_disabled == "DISABLED") && ($bid != "default")) $selection .= " ".$brew_text_003;
-
-				if (!empty($row_styles['brewStyleGroup'])) {
-				// Display
-				 ?>
-				<option value="<?php echo $style_value; ?>" <?php echo $selected_disabled.$selected; ?>><?php echo $selection; ?></option>
-				<?php }
-				} while ($row_styles = mysqli_fetch_assoc($styles));
-			//} ?>
+            <?php echo $styles_dropdown; ?>
         </select>
         <span id="helpBlock" class="help-block">&spades; = <?php echo $brew_text_004; ?><br />&diams; = <?php echo $brew_text_005; ?><br />&clubs; = <?php echo $brew_text_006; ?><br />&hearts; = <?php echo $brew_text_007; ?></p></span>
         </div>
@@ -786,7 +779,7 @@ else $relocate_referrer = $_SERVER['HTTP_REFERER'];
 		<label for="brewBoxNum" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label">Box/Location</label>
 		<div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
 			<!-- Input Here -->
-			<input type="text" class="form-control" placeholder="" name="brewBoxNum" value="<?php echo $row_log['brewBoxNum']; ?>">
+			<input type="text" class="form-control" placeholder="" name="brewBoxNum" value="<?php if ($action == "edit") echo $row_log['brewBoxNum']; ?>">
 		</div>
 	</div><!-- ./Form Group -->
 <?php } ?>

@@ -68,13 +68,22 @@ elseif ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] == "0") &
 		}
 		
 		// Do upload if all parameters met
-		if (($_FILES['file']['size'] <= $max_size) && (in_array($file_type, $file_mimes)) && (in_array($file_ext, $file_exts)))  {		
+		if (($_FILES['file']['size'] <= $max_size) && (in_array($file_type, $file_mimes)) && (in_array($file_ext, $file_exts)))  {
+
+			// Replace spaces in file with underscores
+			$renamed_file = str_replace(' ', '_', $_FILES['file']['name']);
+
+			// Trim out whitespace
+			$renamed_file = preg_replace('/\s+/', '', $renamed_file);
+
+			// Convert to lowercase
+			$renamed_file = strtolower($renamed_file);
 			
 			// Generate temp file
 			$temp_file = $_FILES['file']['tmp_name']; 
 			
 			// Define the target file and path, convert to lowercase
-			$target_file = $target_path.strtolower($_FILES['file']['name']);
+			$target_file = $target_path.$renamed_file;
 			
 			// Delete any file that has the same name as uploaded file in the target directory
 			if (file_exists($target_path.$_FILES['file']['name'])) unlink($target_path.$_FILES['file']['name']);

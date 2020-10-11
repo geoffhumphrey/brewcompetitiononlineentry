@@ -1,53 +1,98 @@
 <?php
+$style_set_dropdown = "";
+$all_exceptions = "";
+$all_exceptions_js = "";
+$all_hide_js = "";
+$custom_exceptions_USCLEx = "";
+$prefsUSCLEx = "";
+$js_edit_show_hide_style_set_div = "";
 
 include (DB.'styles.db.php');
-$ba_exceptions = "";
-$bjcp_2008_exceptions = "";
-$bjcp_2015_exceptions = "";
-$custom_exceptions = "";
-$prefsUSCLEx = "";
 
-foreach ($ba_styles_arr as $value) {
-    if ((is_array($value)) && ($value)) {
-        $ba_exceptions .= "<div class=\"checkbox\"><label><input name=\"prefsUSCLEx[]\" type=\"checkbox\" class=\"chkbox\" value=\"".$value['id']."\"> ".$value['brewStyle']."</label></div>";
-    }
-}
-
-foreach ($bjcp_2008_styles_arr as $value) {
-    if ((is_array($value)) && ($value)) {
-        $bjcp_2008_exceptions .= "<div class=\"checkbox\"><label><input name=\"prefsUSCLEx[]\" type=\"checkbox\" class=\"chkbox\" value=\"".$value['id']."\"> ";
-        $bjcp_2008_exceptions .= ltrim($value['brewStyleGroup'], "0").$value['brewStyleNum'].": ";
-        $bjcp_2008_exceptions .= $value['brewStyle']."</label></div>";
-    }
-}
-
-foreach ($bjcp_2015_styles_arr as $value) {
-    if ((is_array($value)) && ($value)) {
-        $bjcp_2015_exceptions .= "<div class=\"checkbox\"><label><input name=\"prefsUSCLEx[]\" type=\"checkbox\" class=\"chkbox\" value=\"".$value['id']."\"> ";
-        $bjcp_2015_exceptions .= ltrim($value['brewStyleGroup'], "0").$value['brewStyleNum'].": ";
-        $bjcp_2015_exceptions .= $value['brewStyle']."</label></div>";
-    }
-}
-
-if ($custom_styles_arr) {
+if (($custom_styles_arr) && (!empty($custom_styles_arr))) {
     foreach ($custom_styles_arr as $value) {
-        if ((is_array($value)) && ($value)) {
-            $custom_exceptions .= "<div class=\"checkbox\"><label><input name=\"prefsUSCLEx[]\" type=\"checkbox\" class=\"chkbox\" value=\"".$value['id']."\"> ";
-            $custom_exceptions .= "Custom Style: ";
-            $custom_exceptions .= $value['brewStyle']."</label></div>";
+        if ((is_array($value)) && ($value) && (!empty($value))) {
+            $custom_exceptions_USCLEx .= "<div class=\"checkbox\"><label><input name=\"prefsUSCLEx[]\" type=\"checkbox\" class=\"chkbox\" value=\"".$value['id']."\">";
+            $custom_exceptions_USCLEx .= "Custom Style: ";
+            $custom_exceptions_USCLEx .= $value['brewStyle']."</label></div>\n";
         }
     }
+}
+
+foreach ($style_sets as $style_set) {
+    
+    // Reset vars
+    $style_set_selected = "";
+    $all_exceptions_USCLEx = "";
+    $hide_other_js = "";
+    
+    // Build style set drop-down
+    if ((isset($_SESSION['prefsStyleSet'])) && ($style_set['style_set_name'] == $_SESSION['prefsStyleSet'])) $style_set_selected = "SELECTED";
+    $style_set_dropdown .= sprintf("<option value=\"%s\" %s>%s (%s)</option>",$style_set['style_set_name'],$style_set_selected,$style_set['style_set_long_name'],$style_set['style_set_short_name']);
+
+    // Generate exception list for each of the style sets in the 
+    // array and show/hide the list as each are selected via jQuery.
+    $query_styles_all = sprintf("SELECT id,brewStyleGroup,brewStyleNum,brewStyle,brewStyleVersion,brewStyleOwn FROM %s WHERE brewStyleVersion='%s' AND brewStyleOwn != 'custom' ORDER BY brewStyleVersion,brewStyleGroup,brewStyleNum,brewStyle ASC ",$prefix."styles",$style_set['style_set_name']);
+    $styles_all = mysqli_query($connection,$query_styles_all) or die (mysqli_error($connection));
+    $row_styles_all = mysqli_fetch_assoc($styles_all);
+
+    if ($style_set['style_set_name'] == "BA") $method = 2;
+    else $method = 0;
+
+    do {
+        
+        $all_exceptions_USCLEx .= "<div class=\"checkbox\"><label><input name=\"prefsUSCLEx[]\" type=\"checkbox\" class=\"chkbox\" value=\"".$row_styles_all['id']."\">";
+        $all_exceptions_USCLEx .= style_number_const($row_styles_all['brewStyleGroup'],$row_styles_all['brewStyleNum'],$style_set['style_set_display_separator'],$method);
+        if ($style_set['style_set_name'] == "BA") $all_exceptions_USCLEx .= $row_styles_all['brewStyle']."</label></div>\n";
+        else $all_exceptions_USCLEx .= " ".$row_styles_all['brewStyle']."</label></div>\n";
+        
+    } while($row_styles_all = mysqli_fetch_assoc($styles_all));
+
+    $all_exceptions .= "<div class=\"form-group\" id=\"".$style_set['id']."-".$style_set['style_set_name']."\">\n";
+    $all_exceptions .= "<label for=\"prefsUSCLEx\" class=\"col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label\">Exceptions to Entry Limit per ".$style_set['style_set_name']." Sub-Style</label>\n";
+    $all_exceptions .= "<div class=\"col-lg-9 col-md-9 col-sm-8 col-xs-12\">\n";
+    $all_exceptions .= "<div class=\"input-group\">\n";
+    $all_exceptions .= $all_exceptions_USCLEx;
+    $all_exceptions .= $custom_exceptions_USCLEx;
+    $all_exceptions .= "</div>";
+    $all_exceptions .= "</div>\n";
+    $all_exceptions .= "</div>\n\n";
+
+    // Generate js to hide other style set exception lists if not chosen in the drop-down
+    foreach ($style_sets as $hide_style_set) {
+        if ($hide_style_set['id'] != $style_set['id']) {
+            $hide_other_js .= "\t\t\t$(\"#".$hide_style_set['id']."-".$hide_style_set['style_set_name']."\").hide(\"fast\");\n";
+            $hide_other_js .= "\t\t\t$(\"#helpBlock".$hide_style_set['id']."-".$hide_style_set['style_set_name']."\").hide(\"fast\");\n";
+        }
+    }
+
+    // Generate jQuery for hide/show
+    // Unused as of now, but keeping just in case
+    // if ((isset($row_limits['prefsStyleSet'])) && ($row_limits['prefsStyleSet'] == $style_set['style_set_name'])) $js_edit_show_hide_style_set_div .= "$(\"#".$style_set['id']."-".$style_set['style_set_name']."\").show(\"fast\");";
+    // else $js_edit_show_hide_style_set_div .= "$(\"#".$style_set['id']."-".$style_set['style_set_name']."\").hide(\"fast\");";
+
+    $all_exceptions_js .= "\t\telse if ($(\"#prefsStyleSet\").val() == \"".$style_set['style_set_name']."\") {\n";
+    $all_exceptions_js .= "\t\t\t$(\"#subStyleExeptionsEdit\").hide(\"fast\");\n"; // Hide default upon entry
+    $all_exceptions_js .= $hide_other_js; // hide all others
+    $all_exceptions_js .= "\t\t\t$(\"#".$style_set['id']."-".$style_set['style_set_name']."\").show(\"fast\");\n"; // Show this 
+    $all_exceptions_js .= "\t\t\t$(\"#helpBlock".$style_set['id']."-".$style_set['style_set_name']."\").show(\"fast\");\n";
+    $all_exceptions_js .= "\t\t\t$(\"input[name='prefsUSCLEx[]']\").prop(\"checked\", false);\n";
+    $all_exceptions_js .= "\t\t\t$(\"#prefsHideSpecific\").show(\"fast\");\n";
+    $all_exceptions_js .= "\t\t}\n\n";
+
+    // Add to the list of divs to hide upon page load
+    $all_hide_js .= "\t$(\"#".$style_set['id']."-".$style_set['style_set_name']."\").hide();\n";
+    $all_hide_js .= "\t$(\"#helpBlock".$style_set['id']."-".$style_set['style_set_name']."\").hide();\n";
+
 }
 
 if (($section == "admin") && ($go == "preferences")) {
 
     $recaptcha_key = "";
-    if (isset($row_prefs['prefsGoogleAccount'])) {
-        $recaptcha_key = explode("|", $row_prefs['prefsGoogleAccount']);
-    }
-
+    if (isset($row_prefs['prefsGoogleAccount'])) $recaptcha_key = explode("|", $row_prefs['prefsGoogleAccount']);
     if ($_SESSION['prefsStyleSet'] == "BA") include (INCLUDES.'ba_constants.inc.php');
 
+    // Generate the default sub-style exception list (current settings)
     do {
 
         $checked = "";
@@ -61,10 +106,8 @@ if (($section == "admin") && ($go == "preferences")) {
     	}
 
     	if ($row_styles['id'] != "") {
-            $prefsUSCLEx .= "<div class=\"checkbox\"><label><input name=\"prefsUSCLEx[]\" type=\"checkbox\" value=\"".$row_styles['id']."\" ".$checked."> ";
-            if ((strpos($styleSet,"BA") === false) && ($row_styles['brewStyleOwn'] == "bcoe")) $prefsUSCLEx .= ltrim($row_styles['brewStyleGroup'], "0").$row_styles['brewStyleNum'].": ";
-            elseif ($row_styles['brewStyleOwn'] == "custom") $prefsUSCLEx .= "Custom Style: ";
-            $prefsUSCLEx .= $row_styles['brewStyle']."</label></div>";
+            $style_number = style_number_const($row_styles['brewStyleGroup'],$row_styles['brewStyleNum'],$_SESSION['style_set_display_separator'],0);
+            $prefsUSCLEx .= "<div class=\"checkbox\"><label><input name=\"prefsUSCLEx[]\" type=\"checkbox\" value=\"".$row_styles['id']."\" ".$checked.">".$style_number." ".$row_styles['brewStyle']."</label></div>\n";
         }
 
     } while ($row_styles = mysqli_fetch_assoc($styles));
@@ -81,31 +124,17 @@ if ($section == "admin") { ?>
 <?php } ?>
 <script type='text/javascript'>//<![CDATA[
 $(document).ready(function(){
-    <?php
-    $styleKey = "";
-    if ((isset($row_limits['prefsStyleSet'])) && ($row_limits['prefsStyleSet'] == "BA")) {
-
-    // Get API Key if set
-    // $styleKey = explode("|",$row_limits['prefsStyleSet']);
-
-    ?>
-    $("#helpBlockBAAPI").show("fast");
-    $("#prefsHideSpecific").hide("fast");
-    <?php } else { ?>
-    // show/hide divs on load if no value
-    $("#helpBlockBAAPI").hide("fast");
-    $("#prefsHideSpecific").show("fast");
-    <?php } ?>
-
+    
+    $("#prefsHideSpecific").show();
     $("#reCAPTCHA-keys").hide();
     $("#helpBlock-payPalIPN1").hide();
     $("#paypal-payment").hide();
     $("#checks-payment").hide();
-    $("#subStyleExeptionsBA").hide();
-    $("#subStyleExeptionsBJCP2008").hide();
-    $("#subStyleExeptionsBJCP2015").hide();
-    $("#helpBlockBJCP2008").hide();
 
+    <?php 
+    echo $all_hide_js; 
+    // echo $js_edit_show_hide_style_set_div;
+    ?>
 
     <?php if ((isset($row_limits['prefsStyleSet'])) && ($row_limits['prefsStyleSet'] == "BJCP2008")) { ?>
     $("#helpBlockBJCP2008").show("fast");
@@ -171,38 +200,11 @@ $(document).ready(function(){
 
     $("#prefsStyleSet").change(function() {
 
-        if ($("#prefsStyleSet").val() == "BA") {
-            $("#helpBlockBAAPI").show("fast");
-            $("#helpBlockBJCP2008").hide("fast");
-            $("#prefsHideSpecific").hide("fast");
-            $("#subStyleExeptionsEdit").hide("fast");
-            $("#subStyleExeptionsBA").show("fast");
-            $("#subStyleExeptionsBJCP2008").hide("fast");
-            $("#subStyleExeptionsBJCP2015").hide("fast");
+        if ($("#prefsStyleSet").val() == "") {
             $("input[name='prefsUSCLEx[]']").prop("checked", false);
         }
 
-        else if ($("#prefsStyleSet").val() == "BJCP2008") {
-            $("#helpBlockBAAPI").hide("fast");
-            $("#helpBlockBJCP2008").show("fast");
-            $("#prefsHideSpecific").show("fast");
-            $("#subStyleExeptionsEdit").hide("fast");
-            $("#subStyleExeptionsBA").hide("fast");
-            $("#subStyleExeptionsBJCP2008").show("fast");
-            $("#subStyleExeptionsBJCP2015").hide("fast");
-            $("input[name='prefsUSCLEx[]']").prop("checked", false);
-        }
-
-        else if ($("#prefsStyleSet").val() == "BJCP2015")  {
-            $("#helpBlockBAAPI").hide("fast");
-            $("#helpBlockBJCP2008").hide("fast");
-            $("#prefsHideSpecific").show("fast");
-            $("#subStyleExeptionsEdit").hide("fast");
-            $("#subStyleExeptionsBA").hide("fast");
-            $("#subStyleExeptionsBJCP2008").hide("fast");
-            $("#subStyleExeptionsBJCP2015").show("fast");
-            $("input[name='prefsUSCLEx[]']").prop("checked", false);
-        }
+        <?php echo $all_exceptions_js; ?>
 
     }); // end $("#prefsStyleSet").change(function()
 
@@ -383,7 +385,12 @@ $(document).ready(function(){
                 <a href="<?php echo $base_url; ?>includes/process.inc.php?section=admin&amp;&amp;go=default&amp;action=email&amp;filter=test-email&amp;id=<?php echo $_SESSION['brewerID']; ?>" role="button" class="btn btn-xs btn-primary">Send Test Email</a>
 			</div>
 		</div>
-		<p>If you are not sure that your server supports sending email via PHP scripts, click the &ldquo;Send Test Email&rdquo; button above to send an email to <?php echo $_SESSION['loginUsername']; ?>. Be sure to check your spam folder.</p>
+		<?php if (ENABLE_MAILER) {?>
+        <p>You have phpMailer enabled. Make sure it has been properly configured in the /site/config.mail.php file and then click the &ldquo;Send Test Email&rdquo; button above to send an email to <?php echo $_SESSION['loginUsername']; ?>. Be sure to check your spam folder.</p>
+        <?php } else { ?>
+
+        <p>If you are not sure that your server supports sending email via PHP scripts, click the &ldquo;Send Test Email&rdquo; button above to send an email to <?php echo $_SESSION['loginUsername']; ?>. Be sure to check your spam folder.</p>
+        <?php } ?>
 		</span>
     </div>
 </div><!-- ./Form Group -->
@@ -427,7 +434,11 @@ $(document).ready(function(){
                 <a href="<?php echo $base_url; ?>includes/process.inc.php?section=admin&amp;&amp;go=default&amp;action=email&amp;filter=test-email&amp;id=<?php echo $_SESSION['brewerID']; ?>" role="button" class="btn btn-xs btn-primary">Send Test Email</a>
 			</div>
 		</div>
+        <?php if (ENABLE_MAILER) {?>
+        <p>You have phpMailer enabled. Make sure it has been properly configured in the /site/config.mail.php file and then click the &ldquo;Send Test Email&rdquo; button above to send an email to <?php echo $_SESSION['loginUsername']; ?>. Be sure to check your spam folder.</p>
+        <?php } else { ?>
 		<p>If you are not sure that your server supports sending email via PHP scripts, click the &ldquo;Send Test Email&rdquo; button above to send an email to <?php echo $_SESSION['loginUsername']; ?>. Be sure to check your spam folder.</p>
+        <?php } ?>
 		</span>
     </div>
 </div><!-- ./Form Group -->
@@ -732,14 +743,13 @@ $(document).ready(function(){
 <div class="form-group"><!-- Form Group Radio INLINE -->
     <label for="prefsStyleSet" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Styleset</label>
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
-    <!-- Input Here -->
-	<select class="selectpicker" name="prefsStyleSet" id="prefsStyleSet" data-size="4">
-    	<option value="BJCP2015" <?php if ($section == "step3") echo "SELECTED"; elseif ($row_limits['prefsStyleSet'] == "BJCP2015") echo "SELECTED"; ?>>BJCP 2015</option>
-        <option value="BJCP2008" <?php if ($row_limits['prefsStyleSet'] == "BJCP2008") echo "SELECTED"; ?>>BJCP 2008</option>
-        <option value="BA" <?php if ($row_limits['prefsStyleSet'] == "BA") echo "SELECTED"; ?>>Brewers Association</option>
-	</select>
-    <div id="helpBlockBJCP2008" class="help-block">The BJCP 2008 style guidelines have been deprecated and will be completely removed in a future version. The 2008 guidelines are considered by the BJCP as &quot;obsolete.&quot;</div>
-    <div id="helpBlockBAAPI" class="help-block">Please note that every effort is made to keep the BA style data current; however, the latest <a class="hide-loader" href="https://www.brewersassociation.org/resources/brewers-association-beer-style-guidelines/" target="_blank">BA style set</a> may <strong>not</strong> be available.</div>
+        <!-- Input Here -->
+    	<select class="selectpicker" name="prefsStyleSet" id="prefsStyleSet" data-size="12" data-width="auto">
+        <?php echo $style_set_dropdown; ?>
+    	</select>
+        <div id="helpBlock0-BJCP2008" class="help-block">The BJCP 2008 style guidelines have been deprecated and will be completely removed in a future version. The 2008 guidelines are considered by the BJCP as &quot;obsolete.&quot;</div>
+        <div id="helpBlock2-BA" class="help-block">Please note that every effort is made to keep the BA style data current; however, the latest <a class="hide-loader" href="https://www.brewersassociation.org/resources/brewers-association-beer-style-guidelines/" target="_blank">BA style set</a> may <strong>not</strong> be available in this application.</div>
+        <div id="helpBlock3-AABC" class="help-block">Please note that every effort is made to keep the AABC style data current; however, the latest <a class="hide-loader" href="http://www.aabc.org.au/" target="_blank">AABC style set</a> may <strong>not</strong> be available for use in this application.</div>
     </div>
 </div><!-- ./Form Group -->
 <!--
@@ -1065,43 +1075,17 @@ $(document).ready(function(){
     	</span>
     	</div>
     </div><!-- ./Form Group -->
-    <div class="form-group" id="subStyleExeptionsEdit"><!-- Form Group Checkbox Stacked -->
+    <div class="form-group" id="subStyleExeptionsEdit">
     	<label for="prefsUSCLEx" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Exceptions to Entry Limit per Sub-Style</label>
     	<div class="col-lg-9 col-md-9 col-sm-8 col-xs-12">
     		<div class="input-group">
-    			<!-- Input Here -->
     			<?php echo $prefsUSCLEx; ?>
     		</div>
     	</div>
-    </div><!-- ./Form Group -->
-    <div class="form-group" id="subStyleExeptionsBA"><!-- Form Group Checkbox Stacked -->
-        <label for="prefsUSCLEx" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Exceptions to Entry Limit per Sub-Style</label>
-        <div class="col-lg-9 col-md-9 col-sm-8 col-xs-12">
-            <div class="input-group">
-                <!-- Input Here -->
-                <?php echo $ba_exceptions.$custom_exceptions;  ?>
-            </div>
-        </div>
-    </div><!-- ./Form Group -->
-    <div class="form-group" id="subStyleExeptionsBJCP2008"><!-- Form Group Checkbox Stacked -->
-        <label for="prefsUSCLEx" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Exceptions to Entry Limit per Sub-Style</label>
-        <div class="col-lg-9 col-md-9 col-sm-8 col-xs-12">
-            <div class="input-group">
-                <!-- Input Here -->
-                <?php echo $bjcp_2008_exceptions.$custom_exceptions; ?>
-            </div>
-        </div>
-    </div><!-- ./Form Group -->
-</div>
-<div class="form-group" id="subStyleExeptionsBJCP2015"><!-- Form Group Checkbox Stacked -->
-    <label for="prefsUSCLEx" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Exceptions to Entry Limit per Sub-Style</label>
-    <div class="col-lg-9 col-md-9 col-sm-8 col-xs-12">
-        <div class="input-group">
-            <!-- Input Here -->
-            <?php echo $bjcp_2015_exceptions.$custom_exceptions; ?>
-        </div>
     </div>
-</div><!-- ./Form Group -->
+    <?php echo $all_exceptions; ?>
+</div>
+<!-- ./Form Group -->
 <!-- Modal -->
 <div class="modal fade" id="exceptdSubstylesModal" tabindex="-1" role="dialog" aria-labelledby="exceptdSubstylesModalLabel">
     <div class="modal-dialog" role="document">

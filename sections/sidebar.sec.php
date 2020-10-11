@@ -141,7 +141,15 @@ if ($section != "admin") {
 		if (($_SESSION['prefsProEdition'] == 0) && ($entry_window_open == 1)) {
 			$page_info200 .= "<p>";
 			$page_info200 .= sprintf("<strong class=\"text-success\">%s %s</strong> %s %s, %s.", $total_entries, strtolower($label_entries), $sidebar_text_025, $current_time, $current_date_display);
+			if ($row_limits['prefsEntryLimit'] > 0) $page_info200 .= sprintf(" %s <strong>%s</strong> %s",$entry_info_text_019,$row_limits['prefsEntryLimit'],$entry_info_text_020);
 			$page_info200 .= "</p>";
+
+			$page_info200 .= "<p>";
+			$page_info200 .= sprintf("<strong class=\"text-success\">%s %s</strong> %s %s, %s.", $total_paid, strtolower($label_paid_entries), $sidebar_text_026, $current_time, $current_date_display);
+			if ($row_limits['prefsEntryLimitPaid'] > 0) $page_info200 .= sprintf(" %s <strong>%s</strong> <em>%s</em> %s",$entry_info_text_019,$row_limits['prefsEntryLimitPaid'],strtolower($label_paid),$entry_info_text_020);
+			$page_info200 .= "</p>";
+
+
 		}
 
 		if ((!$comp_entry_limit) && (!$comp_paid_entry_limit)) $page_info200 .= sprintf("%s %s %s %s.", $sidebar_text_009, $entry_open_sidebar, $sidebar_text_004, $entry_closed_sidebar);
@@ -315,7 +323,7 @@ if ($section != "admin") {
 	// --------------------------------------------------------------
 	// Display
 	// --------------------------------------------------------------
-	if ((($_SESSION['contestLogo'] != "") && (file_exists(USER_IMAGES.$_SESSION['contestLogo'])))) echo $competition_logo;
+	if ((isset($_SESSION['contestLogo'])) && (file_exists(USER_IMAGES.$_SESSION['contestLogo']))) echo $competition_logo;
 
 	echo $page_info;
 

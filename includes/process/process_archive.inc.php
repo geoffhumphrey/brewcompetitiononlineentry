@@ -11,8 +11,6 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 	$config_html_purifier = HTMLPurifier_Config::createDefault();
 	$purifier = new HTMLPurifier($config_html_purifier);
 
-
-
 	$dbTable = "default";
 
 	$suffix = strtr($_POST['archiveSuffix'], $space_remove);

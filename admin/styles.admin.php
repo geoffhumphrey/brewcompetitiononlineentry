@@ -40,13 +40,9 @@ if ((($action == "default") && ($filter == "default")) || ($section == "step7") 
 			$brewStyleSweet = "";
 
 			if ($row_styles['brewStyleReqSpec'] == 1) $brewStyleReqSpec = "<span class=\"fa fa-check-circle text-orange\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"".$entry_info_text_048."\"></span> ";
-
 			if ($row_styles['brewStyleStrength'] == 1) $brewStyleStrength = "<span class=\"fa fa-check-circle text-purple\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"".$entry_info_text_049."\"></span> ";
-
 			if ($row_styles['brewStyleCarb'] == 1) $brewStyleCarb = "<span class=\"fa fa-check-circle text-teal\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"".$entry_info_text_050."\"></span> ";
-
 			if ($row_styles['brewStyleSweet'] == 1) $brewStyleSweet = "<span class=\"fa fa-check-circle text-gold\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"".$entry_info_text_051."\"></span> ";
-
 
 			$table_body .= "<tr>";
 			$table_body .= "<input type=\"hidden\" name=\"id[]\" value=\"".$row_styles['id']."\" />";
@@ -56,6 +52,10 @@ if ((($action == "default") && ($filter == "default")) || ($section == "step7") 
 			if ($_SESSION['prefsStyleSet'] == "BA") {
 				if ($row_styles['brewStyleOwn'] == "custom") $table_body .= "<td>Custom Style</td>";
 				else $table_body .= "<td>".$ba_category_names[ltrim($row_styles['brewStyleGroup'],"0")]."</td>";
+			}
+			elseif ($_SESSION['prefsStyleSet'] == "AABC") {
+				if ($row_styles['brewStyleOwn'] == "custom") $table_body .= "<td>Custom Style</td>";
+				else $table_body .= "<td>".ltrim($row_styles['brewStyleGroup'], "0").".".ltrim($row_styles['brewStyleNum'], "0")."</td>";
 			}
 			else $table_body .= "<td>".$brewStyleOwn_prefix.$row_styles['brewStyleGroup'].$row_styles['brewStyleNum'].$brewStyleOwn_suffix."</td>";
 			$table_body .= "<td>".style_type($row_styles['brewStyleType'],"2",$style_own)."</td>";

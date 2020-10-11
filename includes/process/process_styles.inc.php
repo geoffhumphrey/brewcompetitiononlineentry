@@ -100,25 +100,20 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 	if ($action == "add") {
 
 		$order_by = "id";
+		$category_end = $_SESSION['style_set_category_end'];
 
-		if ($_SESSION['prefsStyleSet'] == "BJCP2008") $category_end = 28;
-		elseif ($_SESSION['prefsStyleSet'] == "BA") {
-			$category_end = 14;
-			$order_by = "brewStyleNum";
-		}
-		else $category_end = 34;
-
-		if ($_SESSION['prefsStyleSet'] == "BA") $query_style_name = sprintf("SELECT id,brewStyleGroup,brewStyleNum FROM %s WHERE (brewStyleVersion='%s' OR brewStyleOwn='custom') ORDER BY brewStyleNum DESC LIMIT 1", $styles_db_table, $_SESSION['prefsStyleSet'], $category_end);
-
-		else $query_style_name = sprintf("SELECT id,brewStyleGroup,brewStyleNum FROM %s WHERE (brewStyleVersion='%s' OR brewStyleOwn='custom') AND brewStyleGroup >= %s ORDER BY id DESC LIMIT 1", $styles_db_table, $_SESSION['prefsStyleSet'], $category_end);
-
+		$query_style_name = sprintf("SELECT id,brewStyleGroup,brewStyleNum FROM %s WHERE (brewStyleVersion='%s' OR brewStyleOwn='custom') AND brewStyleGroup >= %s ORDER BY brewStyleGroup DESC LIMIT 1", $styles_db_table, $_SESSION['prefsStyleSet'], $category_end);
 		$style_name = mysqli_query($connection,$query_style_name) or die (mysqli_error($connection));
 		$row_style_name = mysqli_fetch_assoc($style_name);
 
-		// Get the difference between the category end and the last number
-		// $style_difference = ($row_style_name['brewStyleGroup'] - $category_end);
-		$style_add_one = $row_style_name['brewStyleGroup'] + 1;
-		if ($_SESSION['prefsStyleSet'] == "BA") $style_num_add_one = $row_style_name['brewStyleNum'] + 1;
+		if ((is_numeric($row_style_name['brewStyleGroup'])) && ($row_style_name['brewStyleGroup'] > $category_end)) $style_add_one = $row_style_name['brewStyleGroup'] + 1;
+		else $style_add_one = $category_end + 1;
+		
+		if ($_SESSION['style_set_sub_style_method'] == 1) {
+			if ($_SESSION['prefsStyleSet'] == "BA") $style_num_add_one = $row_style_name['brewStyleNum'] + 1;
+			else $style_num_add_one = 1;
+			$style_num_add_one = str_pad($style_num_add_one,3,"0", STR_PAD_LEFT);
+		}
 		else $style_num_add_one = "A";
 
 		$insertSQL = sprintf("INSERT INTO $styles_db_table (

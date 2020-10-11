@@ -200,6 +200,8 @@ function generate_judging_numbers($brewing_db_table,$method) {
 	require(CONFIG.'config.php');
 	mysqli_select_db($connection,$database);
 
+	$status = array();
+
 	// Clear out all current judging numbers
 	$updateSQL = sprintf("UPDATE %s SET brewJudgingNumber=NULL", $brewing_db_table);
 	mysqli_real_escape_string($connection,$updateSQL);
@@ -232,6 +234,9 @@ function generate_judging_numbers($brewing_db_table,$method) {
 					mysqli_real_escape_string($connection,$updateSQL);
 					$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 
+					if ($result) $status[] = 0; 
+					else $status[] = 1;
+
 					$judging_number_looper = FALSE;
 				}
 				else {
@@ -239,30 +244,45 @@ function generate_judging_numbers($brewing_db_table,$method) {
 				}
 			}
 		} while ($row_judging_numbers = mysqli_fetch_assoc($judging_numbers));
+	
 	}
 
 	if ($method == "identical") {
 		do {
+			
 			$j_num = sprintf("%06s",$row_judging_numbers['id']);
+			
 			$updateSQL = sprintf("UPDATE %s SET brewJudgingNumber=%s WHERE id=%s",
 						$brewing_db_table,
 						GetSQLValueString($j_num, "text"),
 						GetSQLValueString($row_judging_numbers['id'], "text"));
 			mysqli_real_escape_string($connection,$updateSQL);
 			$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+			
+			if ($result) $status[] = 0;
+			else $status[] = 1;
+
 		} while ($row_judging_numbers = mysqli_fetch_assoc($judging_numbers));
 	}
 
 	if ($method == "legacy") {
 		do {
+			
 			$updateSQL = sprintf("UPDATE %s SET brewJudgingNumber=%s WHERE id=%s",
 						$brewing_db_table,
 						GetSQLValueString(generate_judging_num(2,$row_judging_numbers['brewCategory']), "text"),
 						GetSQLValueString($row_judging_numbers['id'], "text"));
 			mysqli_real_escape_string($connection,$updateSQL);
 			$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+
+			if ($result) $status[] = 0;
+			else $status[] = 1;
+
 		} while ($row_judging_numbers = mysqli_fetch_assoc($judging_numbers));
 	}
+
+	$status = array_sum($status);
+	return $status;
 }
 
 function check_sweetness($style,$styleSet) {
@@ -787,8 +807,8 @@ function standardize_name($string) {
 	if (in_array($_SESSION['prefsLanguageFolder'], $name_check_langs)) {
 
 		$word_splitters = array(" ", "-", "O'", "L'", "D'", "St.", "Mc", "Mac", ".", "\"");
-		$lowercase_exceptions = array("the", "van", "den", "ter", "von", "und", "des", "der", "de", "da", "of", "and", "l'", "d'", "de", "la", "vit", "dos", "das", "do");
-		$uppercase_exceptions = array("II", "III", "IV", "VI", "VII", "VIII", "IX", "IPA", "DIPA", "NE", "SHV");
+		$lowercase_exceptions = array("the", "van", "den", "ter", "von", "und", "des", "der", "de", "da", "of", "and", "l'", "d'", "la", "vit", "dos", "das", "do");
+		$uppercase_exceptions = array("II", "III", "IV", "VI", "VII", "VIII", "IX", "IPA", "DIPA", "NE", "SHV", "NEIPA", "RIS");
 
 		$string = strtolower($string);
 
@@ -849,5 +869,12 @@ function rdelete($src,$file_mimes){
 		$mime = mime_content_type($file->getPathname());
 		if (in_array($mime, $file_mimes)) unlink($file);
 	}
+
+	return true;
 }
+
+// Standardize name languages
+$name_check_langs = array("en", "fr", "es", "pt", "it", "de", "nl");
+$last_name_exception_langs = array("nl", "es", "de");
+
 ?>

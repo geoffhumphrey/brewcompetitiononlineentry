@@ -1,27 +1,39 @@
 <?php
 
-function directory_contents_dropdown($directory,$file_name_selected) {
+function directory_contents_dropdown($directory,$file_name_selected,$method="1") {
 
 	$handle = opendir($directory);
-	$filelist[] = "";
+	$filelist = array();
 
 	while ($file = readdir($handle)) {
 
 	   if ((!is_dir($file)) && (!is_link($file))) {
-			$filelist[] .= $file;
+			$filelist[] = $file;
 	   }
 
 	}
 
 	sort($filelist, SORT_NATURAL | SORT_FLAG_CASE);
 
-	$return = "";
-	foreach ($filelist as $filename) {
-		$selected = "";
-		if ($file_name_selected == $filename) $selected = " selected";
-		$return .= "<option value=\"".$filename."\"".$selected.">";
-		$return .= $filename;
-		$return .= "</option>";
+	// Return dropdown options
+	// For one-time use
+	if ($method == "1") {
+		$return = "";
+		foreach ($filelist as $filename) {
+			$selected = "";
+			if ($file_name_selected == $filename) $selected = " selected";
+			$return .= "<option value=\"".$filename."\"".$selected.">";
+			$return .= $filename;
+			$return .= "</option>";
+		}
+	}
+
+	// Return an array of file names
+	if ($method == "2") {
+		$return = array();
+		foreach ($filelist as $filename) {
+			$return[] = $filename;
+		}
 	}
 
 	return $return;
@@ -431,23 +443,37 @@ function score_custom_winning_choose($special_best_info_db_table,$special_best_d
 	return $r;
 }
 
-function participant_choose($brewer_db_table,$pro_edition) {
+function participant_choose($brewer_db_table,$pro_edition,$judge="0") {
 	require(CONFIG.'config.php');
 	mysqli_select_db($connection,$database);
 
 	//$query_brewers = "SELECT uid,brewerFirstName,brewerLastName FROM $brewer_db_table ORDER BY brewerLastName";
 	if ($pro_edition == 1) $query_brewers = "SELECT uid,brewerBreweryName FROM $brewer_db_table WHERE brewerBreweryName IS NOT NULL ORDER BY brewerBreweryName ASC";
-	else $query_brewers = "SELECT uid,brewerFirstName,brewerLastName FROM $brewer_db_table ORDER BY brewerLastName ASC";
+	else {
+		if ($judge == "1") $query_brewers = "SELECT uid,brewerFirstName,brewerLastName FROM $brewer_db_table WHERE brewerJudge='Y' ORDER BY brewerLastName ASC";
+		$query_brewers = "SELECT uid,brewerFirstName,brewerLastName FROM $brewer_db_table ORDER BY brewerLastName ASC";
+	}
 	$brewers = mysqli_query($connection,$query_brewers) or die (mysqli_error($connection));
 	$row_brewers = mysqli_fetch_assoc($brewers);
 
 	$output = "";
-	$output .= "<select class=\"selectpicker\" name=\"participants\" id=\"participants\" onchange=\"jumpMenu('self',this,0)\" data-size=\"15\" data-width=\"auto\" data-live-search=\"true\">";
-	$output .= "<option value=\"\" selected disabled data-icon=\"fa fa-plus-circle\">Add an Entry For...</option>";
+	$output .= "<select class=\"selectpicker\" name=\"participants\" id=\"participants\"";
+	if ($judge="0") $output .= " onchange=\"jumpMenu('self',this,0)\"";
+	if ($judge="1") $output .= " required";
+	$output .= " data-size=\"15\" data-width=\"auto\" data-live-search=\"true\">";
+	if ($judge="0") $output .= "<option value=\"\" selected disabled data-icon=\"fa fa-plus-circle\">Add an Entry For...</option>";
+	else $output .= "<option value=\"\"></option>";
 	do {
-		if ($pro_edition == 1) $output .= "<option value=\"index.php?section=brew&amp;go=entries&amp;bid=".$row_brewers['uid']."&amp;action=add\" data-content=\"<span class='small'>".$row_brewers['brewerBreweryName']."</span>\">".$row_brewers['brewerBreweryName']."</option>";
 
-		else $output .= "<option value=\"index.php?section=brew&amp;go=entries&amp;bid=".$row_brewers['uid']."&amp;action=add\" data-content=\"<span class='small'>".$row_brewers['brewerLastName'].", ".$row_brewers['brewerFirstName']."</span>\">".$row_brewers['brewerLastName'].", ".$row_brewers['brewerFirstName']."</option>";
+		if ($judge="1") {
+			$output .= "<option value=\"".$row_brewers['uid']."\">".$row_brewers['brewerLastName'].", ".$row_brewers['brewerFirstName']."</option>";
+		}
+
+		else {
+			if ($pro_edition == 1) $output .= "<option value=\"index.php?section=brew&amp;go=entries&amp;bid=".$row_brewers['uid']."&amp;action=add\" data-content=\"<span class='small'>".$row_brewers['brewerBreweryName']."</span>\">".$row_brewers['brewerBreweryName']."</option>";
+			else $output .= "<option value=\"index.php?section=brew&amp;go=entries&amp;bid=".$row_brewers['uid']."&amp;action=add\" data-content=\"<span class='small'>".$row_brewers['brewerLastName'].", ".$row_brewers['brewerFirstName']."</span>\">".$row_brewers['brewerLastName'].", ".$row_brewers['brewerFirstName']."</option>";
+		}
+
 	} while ($row_brewers = mysqli_fetch_assoc($brewers));
 	$output .= "</select>";
 
@@ -767,7 +793,8 @@ function table_score_data($eid,$score_table,$suffix) {
 	$row_tables['tableNumber']."^". //11
 	$style."^". //12
 	$style_name."^". //13
-	$row_brewer['brewerBreweryName']; //14
+	$row_brewer['brewerBreweryName']."^". //14
+	$row_entries['brewSubCategory']; //15
 
 	return $return;
 
@@ -1054,6 +1081,8 @@ $r = "";
 if (entry_conflict($bid,$table_styles)) $disabled = "disabled"; else $disabled = "";
 if ($filter == "stewards") $role = "S"; else $role = "J";
 
+$r .= "<section>";
+
 // Build the form elements
 $r .= '<input type="hidden" name="random[]" value="'.$random.'" />';
 $r .= '<input type="hidden" name="bid'.$random.'" value="'.$bid.'" />';
@@ -1079,8 +1108,8 @@ if ($unassign > 0) {
 	$r .= '<div class="form-inline">';
 	$r .= '<div class="checkbox">';
 	$r .= '<label for="unassign'.$random.'">';
-	$r .= '<input type="checkbox" id="unassign'.$random.'" name="unassign'.$random.'" value="'.$unassign.'"/>';
-	$r .= ' Unassign and...</label>';
+	$r .= '<input class="unassign-checkbox" type="checkbox" id="unassign'.$random.'" name="unassign'.$random.'" value="'.$unassign.'" '.$disabled.'>';
+	$r .= ' Unassign from their current assignment and...</label>';
 	$r .= '</div>';
 	$r .= '</div>';
 	}
@@ -1106,7 +1135,7 @@ if ($queued == "Y") { // For queued judging only
 
 if ($queued == "N") { // Non-queued judging
 	// Build the flights DropDown
-	$r .= '<select class="selectpicker" name="assignFlight'.$random.'" '.$disabled.'>';
+	$r .= '<select class="selectpicker assign-flight" name="assignFlight'.$random.'" '.$disabled.'>';
 	$r .= '<option value="0" />Do Not Assign</option>';
 		for($f=1; $f<$total_flights+1; $f++) {
 			if (flight_round($tid,$f,$round)) {
@@ -1120,6 +1149,9 @@ if ($queued == "N") { // Non-queued judging
 if ($queued == "Y") {
 		$r .= '<input type="hidden" name="assignFlight'.$random.'" value="1">';
 	}
+
+$r .= "</section>";
+
 return $r;
 }
 

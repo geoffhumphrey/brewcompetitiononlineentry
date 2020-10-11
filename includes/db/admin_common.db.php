@@ -79,16 +79,12 @@ if (table_exists($judging_tables_db_table)) {
 
 }
 
-
-
-if ($go == "judging_scores") {
-	$query_scores = "SELECT * FROM $judging_scores_db_table";
-	if (SINGLE) $query_scores .= sprintf(" WHERE comp_id='%s'",$_SESSION['comp_id']);
-	$query_scores .= " ORDER BY eid ASC";
-	$scores = mysqli_query($connection,$query_scores) or die (mysqli_error($connection));
-	$row_scores = mysqli_fetch_assoc($scores);
-	$totalRows_scores = mysqli_num_rows($scores);
-}
+$query_scores = "SELECT * FROM $judging_scores_db_table";
+if (SINGLE) $query_scores .= sprintf(" WHERE comp_id='%s'",$_SESSION['comp_id']);
+$query_scores .= " ORDER BY eid ASC";
+$scores = mysqli_query($connection,$query_scores) or die (mysqli_error($connection));
+$row_scores = mysqli_fetch_assoc($scores);
+$totalRows_scores = mysqli_num_rows($scores);
 
 if (($go == "judging_scores_bos") || ($go == "judging_tables") || ($go == "output") || ($go == "default")) {
 

@@ -85,6 +85,25 @@ if ((!isset($_SESSION['prefs'.$prefix_session])) || (empty($_SESSION['prefs'.$pr
 		$_SESSION['prefs'.$prefix_session] = "1";
 		$_SESSION['prefix'] = $prefix;
 
+		// Bring Style Set Information into session if preference is set
+		if (isset($_SESSION['prefsStyleSet'])) {
+			foreach ($style_sets as $style_set_data) {
+				if ($style_set_data['style_set_name'] === $_SESSION['prefsStyleSet']) {
+					$_SESSION['style_set_id'] = $style_set_data['id'];
+					$_SESSION['style_set_name'] = $style_set_data['style_set_name'];
+					$_SESSION['style_set_short_name'] = $style_set_data['style_set_short_name'];
+					$_SESSION['style_set_long_name'] = $style_set_data['style_set_long_name'];
+					$_SESSION['style_set_display_separator'] = $style_set_data['style_set_display_separator'];
+					$_SESSION['style_set_system_separator'] = $style_set_data['style_set_system_separator'];
+					$_SESSION['style_set_sub_style_method'] = $style_set_data['style_set_sub_style_method'];
+					$_SESSION['style_set_beer_end'] = $style_set_data['style_set_beer_end'];
+					$_SESSION['style_set_mead'] = $style_set_data['style_set_mead'];
+					$_SESSION['style_set_cider'] = $style_set_data['style_set_cider'];
+					$_SESSION['style_set_category_end'] = $style_set_data['style_set_category_end'];
+				}
+			}
+		}
+
 		/*
 		 * If using BA Styles, query DB (as of 2.1.13, BA styles are housed in the styles table)
 		 * As of April 2018, BreweryDB is not issuing any further API keys
@@ -277,12 +296,9 @@ if (isset($_SESSION['loginUsername'])) {
 // Set language preferences in session variables
 if ((!isset($_SESSION['prefsLang'.$prefix_session]))|| (empty($_SESSION['prefsLang'.$prefix_session]))) {
 
-	// Language - in current version only English is available. Future versions will feature translations.
-	if ($section != "update") $_SESSION['prefsLanguage'] = $row_prefs['prefsLanguage'];
-	elseif (!isset($row_prefs['prefsLanguage'])) {
-		$_SESSION['prefsLanguage'] = "en-US";
-	}
-	else $_SESSION['prefsLanguage'] = "en-US";
+	if (($section != "update") && (empty($row_prefs['prefsLanguage']))) $_SESSION['prefsLanguage'] = $row_prefs['prefsLanguage'];
+
+	if ((!isset($_SESSION['prefsLanguage'])) || (empty($row_prefs['prefsLanguage']))) $_SESSION['prefsLanguage'] = $row_prefs['prefsLanguage'];
 
 	// Check if variation used (demarked with a dash)
 	$_SESSION['prefsLang'.$prefix_session] = $prefix_session;

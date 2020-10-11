@@ -37,8 +37,8 @@ if (isset($_POST['brewerClubs'])) {
     include (DB.'entries.db.php');
     include (INCLUDES.'constants.inc.php');
     $brewerClubs = $purifier->purify($_POST['brewerClubs']);
-    $brewerClubsConcat = $brewerClubs."|".$brewerClubs;
-    if (!in_array($brewerClubsConcat,$club_array)) {
+    // $brewerClubsConcat = $brewerClubs."|".$brewerClubs;
+    if (!in_array($brewerClubs,$club_array)) {
         if ($_POST['brewerClubs'] == "Other") {
             if (!empty($_POST['brewerClubsOther'])) $brewerClubs = ucwords($purifier->purify($_POST['brewerClubsOther']));
             else $brewerClubs = "Other";
@@ -224,8 +224,43 @@ if (isset($brewerJudgeRank)) {
 }
 else $rank = "";
 
-$first_name = standardize_name($purifier->purify($_POST['brewerFirstName']));
-$last_name = standardize_name($purifier->purify($_POST['brewerLastName']));
+$fname = $purifier->purify($_POST['brewerFirstName']);
+$lname = $purifier->purify($_POST['brewerLastName']);
+
+/**
+ * Use PHP Name Parser class if using Latin-based languages in the array in /lib/process.lib.php
+ * https://github.com/joshfraser/PHP-Name-Parser
+ * Class requires a string with the entire name - concat from form post after purification.
+ * Returns an array with the following keys: "salutation", "fname", "initials", "lname", "suffix"
+ * So, if the user inputs "Dr JOHN B" in the first name field and "MacKay III" the class will 
+ * parse it out and return the individual parts with proper upper-lower case relationships
+ * to read "Dr. John B. MacKay III"
+ */
+
+if (in_array($_SESSION['prefsLanguageFolder'], $name_check_langs)) {
+    
+    include (CLASSES.'capitalize_name/parser.php');
+    $parser = new FullNameParser();
+
+    $name_to_parse = $fname." ".$lname;
+    $parsed_name = $parser->parse_name($name_to_parse);
+    
+    $first_name = "";
+    if (!empty($parsed_name['salutation'])) $first_name .= $parsed_name['salutation']." ";
+    $first_name .= $parsed_name['fname'];
+    if (!empty($parsed_name['initials'])) $first_name .= " ".$parsed_name['initials'];
+    
+    $last_name = "";
+    if (in_array($_SESSION['prefsLanguageFolder'], $last_name_exception_langs)) $last_name .= standardize_name($parsed_name['lname']);
+    else $last_name .= $parsed_name['lname']; 
+    if (!empty($parsed_name['suffix'])) $last_name .= " ".$parsed_name['suffix'];
+}
+
+else {
+    $first_name = $fname;
+    $last_name = $lname;
+}
+
 $address = standardize_name($purifier->purify($_POST['brewerAddress']));
 $city = standardize_name($purifier->purify($_POST['brewerCity']));
 $state = $purifier->purify($_POST['brewerState']);

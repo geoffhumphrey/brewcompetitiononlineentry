@@ -39,6 +39,12 @@ ini_set('log_errors','On');
 if (DEBUG)  ini_set('display_errors','On');
 else ini_set('display_errors','Off');
 
+function is_https() {
+    if (((!empty($_SERVER['HTTPS'])) && (strtolower($_SERVER['HTTPS']) !== "off")) || ((isset($_SERVER['SERVER_PORT'])) && ($_SERVER['SERVER_PORT'] === "443"))) return TRUE;
+    elseif (((!empty($_SERVER['HTTP_X_FORWARDED_PROTO'])) && (strtolower($_SERVER['HTTP_X_FORWARDED_PROTO']) == "https")) || ((!empty($_SERVER['HTTP_X_FORWARDED_SSL'])) && (strtolower($_SERVER['HTTP_X_FORWARDED_SSL']) == "on"))) return TRUE;
+    else return FALSE;
+}
+
 require_once (CONFIG.'config.php');
 
 $prefix_session = md5(__FILE__);
@@ -204,6 +210,7 @@ if (($go == "default") && ($id != "default") && (isset($_SESSION['qrPasswordOK']
 			if ((isset($_POST['brewJudgingNumber'])) && ($_POST['brewJudgingNumber'] != "")) {
 
 				$judgingNumber = sprintf("%06s",sterilize($_POST['brewJudgingNumber']));
+				$judgingNumber = strtolower($judgingNumber); // judging numbers are stored in all lower case
 
 				// Check to see if judging number has already been assigned
 				$query_judging_number = sprintf("SELECT id FROM %s WHERE brewJudgingNumber='%s' AND id <> %s ",$prefix."brewing",$judgingNumber,$id);

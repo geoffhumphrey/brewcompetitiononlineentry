@@ -93,7 +93,14 @@ if (($entry_window_open == 1) && ($show_entries)) {
 	if ($_SESSION['prefsProEdition'] == 0)  {
 		$page_info2 .= "<p>";
 		$page_info2 .= sprintf("<strong class=\"text-success\">%s %s</strong> %s %s, %s.", $total_entries, strtolower($label_entries), $sidebar_text_025, $current_time, $current_date_display);
+		if ($row_limits['prefsEntryLimit'] > 0) $page_info2 .= sprintf(" %s <strong>%s</strong> %s",$entry_info_text_019,$row_limits['prefsEntryLimit'],$entry_info_text_020);
 		$page_info2 .= "</p>";
+
+		$page_info2 .= "<p>";
+		$page_info2 .= sprintf("<strong class=\"text-success\">%s %s</strong> %s %s, %s.", $total_paid, strtolower($label_paid_entries), $sidebar_text_026, $current_time, $current_date_display);
+		if ($row_limits['prefsEntryLimitPaid'] > 0) $page_info2 .= sprintf(" %s <strong>%s</strong> <em>%s</em> %s",$entry_info_text_019,$row_limits['prefsEntryLimitPaid'],strtolower($label_paid),$entry_info_text_020);
+		$page_info2 .= "</p>";
+
 	}
 
 

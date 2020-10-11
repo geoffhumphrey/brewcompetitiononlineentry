@@ -44,6 +44,25 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 	mysqli_real_escape_string($connection,$updateSQL);
 	$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 
+	if (EVALUATION) {
+
+		$jPrefsJudgingOpen = strtotime(filter_var($_POST['jPrefsJudgingOpen'],FILTER_SANITIZE_STRING));
+		$jPrefsJudgingClosed = strtotime(filter_var($_POST['jPrefsJudgingClosed'],FILTER_SANITIZE_STRING));
+
+		$updateSQL = sprintf("UPDATE $judging_preferences_db_table SET
+			jPrefsScoresheet=%s,
+			jPrefsJudgingOpen=%s,
+			jPrefsJudgingClosed=%s
+			WHERE id=%s",
+						GetSQLValueString(sterilize($_POST['jPrefsScoresheet']), "text"),
+						GetSQLValueString(sterilize($jPrefsJudgingOpen), "text"),
+						GetSQLValueString(sterilize($jPrefsJudgingClosed), "int"),
+						GetSQLValueString($id, "int"));
+
+		mysqli_real_escape_string($connection,$updateSQL);
+		$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+	}
+
 	if ($section == "setup") {
 
 		session_unset();

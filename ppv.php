@@ -117,11 +117,11 @@ if (strtolower($data['receiver_email']) == strtolower($paypal_email_address)) {
 	$receiver_email_found = TRUE;
 }
 
-$paypal_ipn_status = "VERIFICATION FAILED";
+$paypal_ipn_status = "Payment Verification Failed";
 
 if ($verified) {
 
-	$paypal_ipn_status = "RECEIVER EMAIL MISMATCH";
+	$paypal_ipn_status = "Receiver Email Mismatch - Check PayPal Payment Email Address in Preferences";
 
 	if ($receiver_email_found) {
 
@@ -162,7 +162,7 @@ if ($verified) {
 
 		$message_top .= "<body>";
 		$message_top .= "<html>";
-		if (isset($row_logo['contestLogo'])) $message_body .= "<p align='center'><img src='".$base_url."/user_images/".$row_logo['contestLogo']."' height='150'></p>";
+		if ((isset($row_logo['contestLogo'])) && (file_exists(USER_IMAGES.$row_logo['contestLogo']))) $message_body .= "<p><img src='".$base_url."/user_images/".$row_logo['contestLogo']."' height='150'></p>";
 		$message_body .= "<p>".$row_user_info['brewerFirstName'].",</p>";
 		$message_body .= sprintf("<p>%s</p>",$paypal_response_text_000);
 		$message_body .= sprintf("<p><strong>%s</strong></p>",$paypal_response_text_001);
@@ -206,11 +206,11 @@ if ($verified) {
 }
 
 elseif ($enable_sandbox) {
-    if ($_POST['test_ipn'] != 1) $paypal_ipn_status = "RECEIVED FROM LIVE WHILE SANDBOXED";
+    if ($_POST['test_ipn'] != 1) $paypal_ipn_status = "Received from Live While Sandboxed";
 }
 
 elseif ($_POST['test_ipn'] == 1) {
-    $paypal_ipn_status = "RECEIVED FROM SANDBOX WHILE LIVE";
+    $paypal_ipn_status = "Received from Sandbox While Live";
 }
 
 if ($save_log_file) {

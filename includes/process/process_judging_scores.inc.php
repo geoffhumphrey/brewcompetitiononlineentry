@@ -23,15 +23,13 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 
 				if ($totalRows_delete_assign > 0) {
 
-					do { $delete_id[] = $row_delete_assign['id']; } while ($row_delete_assign = mysqli_fetch_assoc($delete_assign));
-
-					foreach($delete_id as $previous_id) {
-
-						$deleteSQL = sprintf("DELETE FROM %s WHERE id='%s'", $judging_scores_db_table, $previous_id);
+					do {
+						$deleteSQL = sprintf("DELETE FROM %s WHERE id='%s'", $judging_scores_db_table, $row_delete_assign['id']);
 						mysqli_real_escape_string($connection,$deleteSQL);
 						$result = mysqli_query($connection,$deleteSQL) or die (mysqli_error($connection));
-
-					}
+					} 
+					while ($row_delete_assign = mysqli_fetch_assoc($delete_assign));
+				
 				}
 
 

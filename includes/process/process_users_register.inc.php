@@ -274,13 +274,13 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 
 				// Build vars
 				$url = str_replace("www.","",$_SERVER['SERVER_NAME']);
-				$to_recipient = $first_name." ".$last_name;
+				$to_name = $first_name." ".$last_name;
 				$to_email = $username;
 				$subject = sprintf($_SESSION['contestName'].": %s",$register_text_037);
 
 				$message = "<html>" . "\r\n";
 				$message .= "<body>" . "\r\n";
-				if ((!empty($_SESSION['contestLogo'])) && (file_exists(USER_IMAGES.$_SESSION['contestLogo'])))) $message .= "<p><img src='".$base_url."user_images/".$_SESSION['contestLogo']."' height='150'></p>";
+				if ((!empty($_SESSION['contestLogo'])) && (file_exists(USER_IMAGES.$_SESSION['contestLogo']))) $message .= "<p><img src='".$base_url."user_images/".$_SESSION['contestLogo']."' height='150'></p>";
 				$message .= "<p>".$first_name.",</p>";
 				if ($filter == "admin") $message .= sprintf("<p>%s</p>",$register_text_038);
 				else $message .= sprintf("<p>%s</p>",$register_text_039);
@@ -319,7 +319,7 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 
 				$headers  = "MIME-Version: 1.0" . "\r\n";
 				$headers .= "Content-type: text/html; charset=utf-8" . "\r\n";
-				$headers .= sprintf("%s: ".$to_recipient. " <".$to_email.">, " . "\r\n",$label_to);
+				$headers .= sprintf("%s: ".$to_name. " <".$to_email.">, " . "\r\n",$label_to);
 
 				$url = str_replace("www.","",$_SERVER['SERVER_NAME']);
 				$from_email = (!isset($mail_default_from) || trim($mail_default_from) === '') ? "noreply@".$url : $mail_default_from;
@@ -332,15 +332,21 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 
 				$contestName = $_SESSION['contestName'];
 
-				$headers .= sprintf("%s: %s  <".$from_email. ">\r\n",$label_from,$contestName);
+				$to_email = mb_convert_encoding($to_email, "UTF-8");
+				$to_name = mb_convert_encoding($to_name, "UTF-8");
+				$from_email = mb_convert_encoding($from_email, "UTF-8");
+				$from_name = mb_convert_encoding($contestName, "UTF-8");
+				$subject = mb_convert_encoding($subject, "UTF-8");
+
+				$headers .= sprintf("%s: %s  <".$from_email. ">\r\n",$label_from,$from_name);
 				$emails = $to_email;
 
 				if ($mail_use_smtp) {
 					$mail = new PHPMailer(true);
 					$mail->CharSet = 'UTF-8';
 					$mail->Encoding = 'base64';
-					$mail->addAddress($emails, $to_recipient);
-					$mail->setFrom($from_email, $contestName);
+					$mail->addAddress($emails, $to_name);
+					$mail->setFrom($from_email, $from_name);
 					$mail->Subject = $subject;
 					$mail->Body = $message;
 					sendPHPMailerMessage($mail);

@@ -8,10 +8,10 @@ if (basename($_SERVER['SCRIPT_FILENAME'], '.php') == "process.inc") $_SESSION['q
 $_SESSION['queries_total'] = $_SESSION['queries_total'] + $queries_total_page;
 
 $output_query_count = "";
-$output_query_count .= "<div class=\"alert alert-warning\">";
-$output_query_count .= "<p>Number of database queries for this page load: <strong>".$queries_total_page."</strong></p>";
-$output_query_count .= "<p>Number of database queries in last /includes/process.inc.php call: <strong>".$_SESSION['queries_last']."</strong></p>";
-$output_query_count .= "<p>Number of database queries since ".getTimeZoneDateTime($_SESSION['prefsTimeZone'], $_SESSION['queries_started'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "short", "date-time")." (session start): <strong>".$_SESSION['queries_total']."</strong></p>";
+$output_query_count .= "<div class=\"alert alert-info small\" style=\"margin-top: 20px\">";
+$output_query_count .= "<p>DB queries for this page load: <strong>".$queries_total_page."</strong></p>";
+$output_query_count .= "<p>DB queries in last /includes/process.inc.php call: <strong>".$_SESSION['queries_last']."</strong></p>";
+$output_query_count .= "<p>DB queries since ".getTimeZoneDateTime($_SESSION['prefsTimeZone'], $_SESSION['queries_started'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "short", "date-time")." (session start): <strong>".$_SESSION['queries_total']."</strong></p>";
 $output_query_count .= "</div>";
 
 ?>

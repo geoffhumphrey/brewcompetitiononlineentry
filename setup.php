@@ -2,9 +2,7 @@
 ob_start();
 require_once ('paths.php');
 require_once (INCLUDES.'url_variables.inc.php');
-ini_set('session.cookie_httponly', 1);
-ini_set('session.use_only_cookies', 1);
-ini_set('session.cookie_secure', 1);
+require_once (INCLUDES.'styles.inc.php');
 if (SINGLE) require_once(SSO.'sso.inc.php');
 require_once (LIB.'common.lib.php');
 require_once (LIB.'update.lib.php');
@@ -112,50 +110,10 @@ $security_question = array($label_secret_01, $label_secret_05, $label_secret_06,
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>Setup BCOE&amp;M <?php echo $current_version; ?></title>
 
-		<!-- Load jQuery / http://jquery.com/ -->
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
-
-        <!-- Load Bootstrap / http://www.getbootsrap.com -->
-        <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-
-        <!-- Load DataTables / https://www.datatables.net -->
-        <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.10/css/dataTables.bootstrap.min.css" />
-        <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/plug-ins/1.10.10/integration/font-awesome/dataTables.fontAwesome.css" />
-        <script type="text/javascript" src="https://cdn.datatables.net/1.10.10/js/jquery.dataTables.min.js"></script>
-        <script type="text/javascript" src="https://cdn.datatables.net/1.10.10/js/dataTables.bootstrap.min.js"></script>
-
-        <!-- Load Fancybox / http://www.fancyapps.com -->
-        <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.5/jquery.fancybox.min.css" media="screen" />
-        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.3/jquery.easing.min.js"></script>
-        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery-mousewheel/3.1.13/jquery.mousewheel.min.js"></script>
-        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.5/jquery.fancybox.pack.js"></script>
-
-		<?php if ($section == "step4") { ?>
-        <!-- Load TinyMCE -->
-        <script src="https://cdn.tinymce.com/4/tinymce.min.js"></script>
-		<script src="<?php echo $base_url;?>js_includes/tinymce-init.min.js"></script>
-		<?php } ?>
-
-        <!-- Load Bootstrap DateTime Picker / http://eonasdan.github.io/bootstrap-datetimepicker/ -->
-		<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/css/bootstrap-datetimepicker.min.css" />
-		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.11.1/moment-with-locales.min.js"></script>
-		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/js/bootstrap-datetimepicker.min.js"></script>
-		<script src="<?php echo $base_url;?>js_includes/date-time.min.js"></script>
-
-        <!-- Load Bootstrap Form Validator / http://1000hz.github.io/bootstrap-validator -->
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/1000hz-bootstrap-validator/0.9.0/validator.min.js"></script>
-
-        <!-- Load Bootstrap-Select / http://silviomoreto.github.io/bootstrap-select -->
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.9.3/css/bootstrap-select.min.css">
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.9.3/js/bootstrap-select.min.js"></script>
-
-        <!-- Load jQuery Password Strength Meter for Twitter Bootstrap / https://github.com/ablanco/jquery.pwstrength.bootstrap -->
-		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/zxcvbn/4.4.2/zxcvbn.js"></script>
-		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pwstrength-bootstrap/2.1.0/pwstrength-bootstrap.min.js"></script>
-
-        <!-- Load Font Awesome / https://fortawesome.github.io/Font-Awesome -->
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+		<?php
+	    if (CDN) include (INCLUDES.'load_cdn_libraries.inc.php');
+	    else include (INCLUDES.'load_local_libraries.inc.php');
+	    ?>
 
         <!-- Load BCOE&M Custom CSS -->
         <link rel="stylesheet" type="text/css" href="<?php echo $base_url; ?>css/common.min.css">
@@ -221,6 +179,11 @@ $security_question = array($label_secret_01, $label_secret_05, $label_secret_06,
 					$query_system = sprintf("SELECT setup FROM %s", $prefix."system");
 					$system = mysqli_query($connection,$query_system) or die (mysqli_error($connection));
 					$row_system = mysqli_fetch_assoc($system);
+
+					if (ENABLE_MARKDOWN) {
+	                    include (CLASSES.'parsedown/Parsedown.php');
+	                    $Parsedown = new Parsedown();
+	                }
 
 					if (($row_system['setup'] == 0) && ($section != "step0")) {
 						if ($section == "step1") 	include (SETUP.'admin_user.setup.php');

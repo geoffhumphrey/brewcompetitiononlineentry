@@ -24,7 +24,7 @@
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery-mousewheel/3.1.13/jquery.mousewheel.min.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.5/jquery.fancybox.pack.js"></script>
 
-    <?php if (($section == "admin") && (in_array($go,$datetime_load)) || ($section == "brew")) { ?>
+    <?php if ((($section == "admin") || (strpos($section, 'step') !== FALSE)) && (in_array($go,$datetime_load)) || ($section == "brew")) { ?>
     <!-- Load Bootstrap DateTime Picker / http://eonasdan.github.io/bootstrap-datetimepicker/ -->
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/css/bootstrap-datetimepicker.min.css" />
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.11.1/moment-with-locales.min.js"></script>
@@ -32,7 +32,7 @@
     <script src="<?php echo $base_url;?>js_includes/date-time.min.js"></script>
     <?php } ?>
 
-	<?php if (($section == "admin") && (in_array($go,$tinymce_load))) { ?>
+	<?php if ((($section == "admin") || (strpos($section, 'step') !== FALSE)) && (in_array($go,$tinymce_load))) { ?>
     <!-- Load TinyMCE / https://www.tinymce.com/ -->
     <?php if (ENABLE_MARKDOWN) { ?>
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-markdown-editor/2.0.2/css/bootstrap-markdown-editor.css">
@@ -45,12 +45,12 @@
     <?php } ?>
 	<?php } ?>
 
-	<?php if ((($logged_in) && ($_SESSION['userLevel'] <= 1)) || (($logged_in) && ($section == "beerxml"))) { ?>
+	<?php if ((($logged_in) && ($_SESSION['userLevel'] <= 1) && (strpos($section, 'step') === FALSE)) || (($logged_in) && ($section == "beerxml"))) { ?>
     <!-- Load Jasny Off-Canvas Menu for Admin / http://www.jasny.net/bootstrap -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jasny-bootstrap/3.1.3/css/jasny-bootstrap.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jasny-bootstrap/3.1.3/js/jasny-bootstrap.min.js"></script>
 
-	<?php if (($section == "admin") && (($go == "upload") || ($go == "upload_scoresheets"))) { ?>
+	<?php if ((($section == "admin") || (strpos($section, 'step') !== FALSE)) && (($go == "upload") || ($go == "upload_scoresheets"))) { ?>
     <!-- Load DropZone / http://www.dropzonejs.com -->
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/4.2.0/min/dropzone.min.css" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/4.2.0/min/dropzone.min.js"></script>
@@ -69,7 +69,7 @@
     <!-- Load Font Awesome / https://fortawesome.github.io/Font-Awesome -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
 
-    <?php if (($section == "register") || (($section == "login") && ($go == "password") && ($action == "reset-password")) || (($section == "user") && ($go == "account") && ($action == "password")) || (($section == "admin") && ($go == "change_user_password") && ($action == "edit")) || (($section == "admin") && ($action == "register"))) { ?>
+    <?php if (($section == "register") || ($section == "step1") || (($section == "login") && ($go == "password") && ($action == "reset-password")) || (($section == "user") && ($go == "account") && ($action == "password")) || (($section == "admin") && ($go == "change_user_password") && ($action == "edit")) || (($section == "admin") && ($action == "register"))) { ?>
     <!-- Load jQuery Password Strength Meter for Twitter Bootstrap / https://github.com/ablanco/jquery.pwstrength.bootstrap -->
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/zxcvbn/4.4.2/zxcvbn.js"></script>
 	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pwstrength-bootstrap/2.1.0/pwstrength-bootstrap.min.js"></script>

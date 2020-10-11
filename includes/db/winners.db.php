@@ -31,4 +31,4 @@ if (table_exists($judging_scores_bos_db_table)) {
 	$bos_scores = mysqli_query($connection,$query_bos_scores) or die (mysqli_error($connection));
 	$row_bos_scores = mysqli_fetch_assoc($bos_scores);
 }
-?> 
+?>

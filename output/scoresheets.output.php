@@ -68,4 +68,6 @@ if (isset($_SESSION['loginUsername'])) {
 //	exit();
 } // end if logged in
 
+else echo "Not Allowed";
+
 ?>

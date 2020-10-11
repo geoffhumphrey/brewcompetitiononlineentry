@@ -7,8 +7,6 @@
 
 require ('../paths.php');
 require (CONFIG.'bootstrap.php');
-
-
 if (isset($_SESSION['loginUsername'])) {
 $role_replace1 = array("HJ","LJ","MBOS",", ");
 $role_replace2 = array("<span class=\"fa fa-gavel\"></span> Head Judge","<span class=\"fa fa-star\"></span> Lead Judge","<span class=\"fa fa-trophy\"></span> Mini-BOS Judge","&nbsp;&nbsp;&nbsp;");
@@ -67,6 +65,12 @@ $role_replace2 = array("<span class=\"fa fa-gavel\"></span> Head Judge","<span c
 
 		if ($section == "styles") 			include (OUTPUT.'styles.output.php');
 		if ($section == "shipping-label")	include (OUTPUT.'shipping_label.output.php');
+		if ($section == "full-scoresheet")	include (EVALS.'full_output.eval.php');
+		if ($section == "evaluation")	{
+			if ($go == "full-scoresheet")		include (EVALS.'full_output.eval.php');
+			if ($go == "checklist-scoresheet")	include (EVALS.'checklist_output.eval.php');
+			if ($go == "structured-scoresheet")	include (EVALS.'structured_output.eval.php');
+		}
 
 		if ($section == "admin") {
 			include (LIB.'admin.lib.php');

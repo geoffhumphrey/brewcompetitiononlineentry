@@ -155,7 +155,6 @@ if ($check == 1) {
 	//echo $_SESSION['loginUsername']."<br>";
 	//echo $location."<br>";
 	//echo "Yes."."<br>";
-	
 	//exit;
 	
 }

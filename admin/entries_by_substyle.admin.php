@@ -1,34 +1,17 @@
 <?php
 $html = "";
 $html_testing = "";
-
 $style_other_count[] = 0;
 $style_beer_count[] = 0;
 $style_mead_count[] = 0;
 $style_mead_cider_count[] = 0;
 $style_cider_count[] = 0;
-
 $style_beer_count_logged[] = 0;
 $style_mead_count_logged[] = 0;
 $style_mead_cider_count_logged[] = 0;
 $style_cider_count_logged[] = 0;
 $style_other_count_logged[] = 0;
-
 $substyle = "";
-
-if ($_SESSION['prefsStyleSet'] == "BJCP2008") {
-	$beer_end = 23;
-	$mead_array = array('24','25','26');
-	$cider_array = array('27','28');
-	$category_end = 28;
-}
-
-if ($_SESSION['prefsStyleSet'] == "BJCP2015") {
-	$beer_end = 34;
-	$mead_array = array('M1','M2','M3','M4');
-	$cider_array = array('C1','C2');
-	$category_end = 34;
-}
 
 include (DB.'styles.db.php');
 
@@ -37,6 +20,8 @@ $subcats = array();
 do {
 	$subcats[] = $row_styles['brewStyleGroup']."|".$row_styles['brewStyleNum']."|".$row_styles['brewStyle']."|".$row_styles['brewStyleCategory']."|".$row_styles['brewStyleActive'];
 } while ($row_styles = mysqli_fetch_assoc($styles));
+
+sort($subcats);
 
 foreach ($subcats as $subcat) {
 
@@ -74,7 +59,11 @@ foreach ($subcats as $subcat) {
 			else $substyle_cat = "Custom";
 
 			$html .= "<td>";
-			if ($_SESSION['prefsStyleSet'] != "BA") $html .= $substyle[0].$substyle[1]." - ";
+			$html .= "<span class=\"hidden\">".$substyle[0]."</span>";
+			if ($_SESSION['prefsStyleSet'] != "BA") {
+				if ($_SESSION['prefsStyleSet'] == "AABC") $html .= ltrim($substyle[0],"0").".".ltrim($substyle[1],"0")." ";
+				else $html .= $substyle[0].$substyle[1]." - ";
+			}
 			$html .= $substyle[2]."</td>";
 			$html .= "<td class=\"hidden-xs hidden-sm\">".$substyle_cat."</td>";
 			$html .= "<td>".$row_substyle_count_logged['count']."</td>";

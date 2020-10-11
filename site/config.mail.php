@@ -42,7 +42,7 @@ $smtp_host = "";
 
 // Enable / Disable SMTP authentication
 // To use this option, you'll likely need to have an email address established on your server to send outgoing messages from.
-$smtp_auth = FALSE;
+$smtp_auth = TRUE;
 
 // SMTP username
 // Generally the email address you are sending from.
@@ -52,9 +52,9 @@ $smtp_username = "";
 $smtp_password = "";
 
 // Enable TLS encryption, `tls` and `ssl` are accepted; leave blank if not used.
-$smtp_secure = "";
+$smtp_secure = "ssl";
 
 // TCP port to connect to - likely to be 25, 465 or 587.
-$smtp_port = 25;
+$smtp_port = 465;
 
 ?>

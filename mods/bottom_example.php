@@ -3,8 +3,8 @@ SOME THINGS TO NOTE:
 - DO NOT include <html> or <body> tags!!
 - All files MUST have a .php extension (e.g., name_of_file.php - some servers running PHP are not configured to include files with other exensions).
 - For the program to use any custom module, its information MUST be added into the database.
-  -- The Custom Modules option must be enabled via Website Preferences
-  -- The EXACT filename and other info (position, rank, description) must be entered into the database via the Add Custom Modules screen
+  - The Custom Modules option must be enabled via Website Preferences
+  - The EXACT filename and other info (position, rank, description) must be entered into the database via the Add Custom Modules screen
 - The corresponding file should be uploaded to the "mods" sub-folder via secure FTP.
 - Custom modules can only be placed above content (just below the main navigation) or below content (just above the footer).
 - You can have multiple custom modules. They will be displayed in the rank order you choose.
@@ -28,7 +28,7 @@ To use Bootstrap's native icon set, glyphicons, go to http://getbootstrap.com/co
     <a class="hide-loader" href="http://bjcp.org/stylecenter.php" target="_blank" role="button" class="btn btn-default">BJCP Styles</a>
     <a class="hide-loader" href="http://www.homebrewersassociation.org" target="_blank" role="button" class="btn btn-default">American Homebrewers Association</a>
     <div class="btn-group" role="group">
-        <button type="button" class="btn btn-default">More... </span></button>
+        <button type="button" class="btn btn-default">More...</button>
         <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
     		<span class="caret"></span>
     		<span class="sr-only">Toggle Dropdown</span>

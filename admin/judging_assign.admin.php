@@ -94,6 +94,9 @@ else {
 
 $output_datatables_head .= "</tr>";
 
+$available_count = 0;
+$total_count = 0;
+
 do {
 	$table_location = "Y-".$row_tables_edit['tableLocation'];
 	$judge_info = judge_info($row_brewer['uid']);
@@ -120,25 +123,24 @@ do {
 		$judge_roles = mysqli_query($connection,$query_judge_roles) or die (mysqli_error($connection));
 		$row_judge_roles = mysqli_fetch_assoc($judge_roles);
 
-        if ($_SESSION['jPrefsQueued'] == "Y") {
-            // Activate for Roles
-    		if (!empty($row_judge_roles['assignRoles'])) {
-    			$roles_previously_defined = 1;
-    		}
+      if ($_SESSION['jPrefsQueued'] == "Y") {
+          // Activate for Roles
+      		if (!empty($row_judge_roles['assignRoles'])) {
+      			$roles_previously_defined = 1;
+      		}
 
-    		if (strpos($row_judge_roles['assignRoles'],"HJ") !== FALSE) {
-    			$checked_head_judge = "CHECKED";
-    		}
+      		if (strpos($row_judge_roles['assignRoles'],"HJ") !== FALSE) {
+      			$checked_head_judge = "CHECKED";
+      		}
 
-    		if (strpos($row_judge_roles['assignRoles'],"LJ") !== FALSE) {
-    			$checked_lead_judge = "CHECKED";
-    		}
+      		if (strpos($row_judge_roles['assignRoles'],"LJ") !== FALSE) {
+      			$checked_lead_judge = "CHECKED";
+      		}
 
-    		if (strpos($row_judge_roles['assignRoles'],"MBOS") !== FALSE) {
-    			$checked_minibos_judge = "CHECKED";
-    		}
-
-        }
+      		if (strpos($row_judge_roles['assignRoles'],"MBOS") !== FALSE) {
+      			$checked_minibos_judge = "CHECKED";
+      		}
+      }
 
 		if  (table_round($row_tables_edit['id'],$i)) {
 
@@ -147,7 +149,7 @@ do {
 			if (at_table($row_brewer['uid'],$row_tables_edit['id'])) {
                 $assigned_at_this_table = TRUE;
 				$assign_row_color = "bg-orange text-orange";
-				$assign_flag = "<span class=\"fa fa-lg fa-check\"></span> <strong>Assigned.</strong> Participant is assigned to this table.";
+				$assign_flag = "<span class=\"fa fa-lg fa-check\"></span> <strong>Assigned.</strong> Participant is assigned to this table/flight.";
 				$rank_number = filter_var($display_rank,FILTER_SANITIZE_NUMBER_FLOAT);
 				//$rank_number = preg_replace("/[^0-9,.]/", "", $display_rank);
 				if ($rank_number >= 2) {
@@ -188,6 +190,7 @@ do {
 
 	if (in_array($table_location,$locations)) {
 
+    $total_count += 1;
 		$output_datatables_body .= "<tr class=\"".$assign_row_color."\">\n";
 
 		$output_datatables_body .= "<td nowrap>";
@@ -269,7 +272,10 @@ do {
 		}
 
 		// Build Available Modal
-		if ((!$at_table) && (!$unavailable)) $output_available_modal_body .= "<tr><td class=\"small\">".$judge_info[1].", ".$judge_info[0]."</td><td class=\"small\">".$modal_rank."</td></tr>";
+		if ((!$at_table) && (!$unavailable)) {
+      $output_available_modal_body .= "<tr><td class=\"small\">".$judge_info[1].", ".$judge_info[0]."</td><td class=\"small\">".$modal_rank."</td></tr>";
+      $available_count += 1;
+    } 
 
 		$output_datatables_body .= $flights_display;
 		$output_datatables_body .= "</tr>\n";
@@ -286,6 +292,16 @@ $(document).ready(function(){
     <?php echo $output_jquery_toggle; ?>
 });
 </script>
+<?php } else { ?>
+<script type='text/javascript'>//<![CDATA[
+// Activate for Roles
+$(document).ready(function(){
+  $(".assign-flight").change(function() {
+      $(this).closest("section").find('.unassign-checkbox').prop('checked', true);
+  });
+});
+</script>
+
 <?php } ?>
 <div class="bcoem-admin-element hidden-print">
 	<div class="btn-group" role="group" aria-label="modals">
@@ -319,21 +335,36 @@ $(document).ready(function(){
 	<li>No <?php echo rtrim($filter,"s"); ?> indicated that they are available for this table's location. To make <?php echo $filter; ?> available, you will need to edit their preferences via the <a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=participants">participants list</a>.</li>
 </ol>
 <?php } ?>
-<h4>Assign <span class="text-capitalize"><?php echo $filter; ?></span> to Table <?php echo $row_tables_edit['tableNumber']." &ndash; ".$row_tables_edit['tableName']; $entry_count = get_table_info(1,"count_total",$row_tables_edit['id'],$dbTable,"default"); echo " (".$entry_count." entries)"; ?> <small><?php echo table_location($row_tables_edit['id'],$_SESSION['prefsDateFormat'],$_SESSION['prefsTimeZone'],$_SESSION['prefsTimeFormat'],"default"); ?></small></h4>
-<?php if ((!empty($output_at_table_modal_body)) && ($filter == "judges"))  { ?>
-<p>Currently, there are <?php echo $ranked; ?> ranked judges and <?php echo $nonranked; ?> non-ranked judges at this table.</p>
-<?php } ?>
-<p><strong>Number of Flights:</strong> <?php echo $row_flights['flightNumber']; ?>
-<?php if ($_SESSION['jPrefsQueued'] == "N") { ?>
-<ul class="list-unstyled">
-	<?php for($c=1; $c<$row_flights['flightNumber']+1; $c++) {
-	$flight_entry_count = flight_entry_count($row_tables_edit['id'], $c);
-	?>
-	<li><?php echo "<strong>Flight ".$c.":</strong> ".$flight_entry_count." entries"; ?></li>
-    <?php } ?>
-</ul>
-<?php } ?>
-</p>
+<h4>Assign <span class="text-capitalize"><?php echo $filter; ?></span> to Table <?php echo $row_tables_edit['tableNumber']." &ndash; ".$row_tables_edit['tableName']; $entry_count = get_table_info(1,"count_total",$row_tables_edit['id'],$dbTable,"default"); echo " (".$entry_count." entries)"; ?><br><small><?php echo table_location($row_tables_edit['id'],$_SESSION['prefsDateFormat'],$_SESSION['prefsTimeZone'],$_SESSION['prefsTimeFormat'],"default"); ?></small></h4>
+
+<!-- Table stats snapshot -->
+<div class="well small">
+  <div class="row">
+    <div class="col-md-4">
+      <strong>Total <?php echo ucwords($filter); ?> Available for This Location and Round:</strong> <?php echo $total_count; ?><br>
+      <strong>Remaining <?php echo ucwords($filter); ?> Available for This Location and Round:</strong> <?php echo $available_count; ?>
+    </div>
+    <div class="col-md-4">
+      <?php if ((!empty($output_at_table_modal_body)) && ($filter == "judges"))  { ?>
+      <strong>Ranked Judges at this Table:</strong> <?php echo $ranked; ?><br>
+      <strong>Non-ranked Judges at this Table:</strong> <?php echo $nonranked; ?><br>
+      <?php } ?>
+    </div>
+    <div class="col-md-4">
+      <strong>Number of Flights:</strong> <?php echo $row_flights['flightNumber']; ?>
+      <?php if ($_SESSION['jPrefsQueued'] == "N") { ?>
+      <ul class="list-unstyled">
+        <?php for($c=1; $c<$row_flights['flightNumber']+1; $c++) {
+        $flight_entry_count = flight_entry_count($row_tables_edit['id'], $c);
+        ?>
+        <li><?php echo "<strong>Flight ".$c.":</strong> ".$flight_entry_count." entries"; ?></li>
+        <?php } ?>
+      </ul>
+      <?php } ?>
+    </div>
+  </div>
+</div>
+
 <?php if ($row_rounds['flightRound'] != "") { ?>
 <script type="text/javascript" language="javascript">
 	 $(document).ready(function() {
@@ -422,7 +453,7 @@ $(document).ready(function(){
                 <h4 class="modal-title" id="availModalLabel">Available <span class="text-capitalize"><?php echo $filter; ?></span> </h4>
             </div>
             <div class="modal-body">
-                <p>The following <?php echo $filter; ?> have not been assigned to a table at this location, in this round:</p>
+                <p>The following <?php echo $filter; ?> have not been assigned to a table at this location, in this round. There are <?php echo $available_count." ".$filter; ?> remaining of <?php echo $total_count; ?>.</p>
             	<table class="table table-responsive table-striped table-bordered table-condensed" id="sortable3">
                 <thead>
                     <th>Name</th>
