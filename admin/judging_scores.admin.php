@@ -194,6 +194,7 @@ $totalRows_entry_count = total_paid_received($go,"default");
     $entry_category = $style_display_number." ".style_convert($table_score_data[8],1).": ".$table_score_data[13];
 
     $scoresheet = FALSE;
+    $scoresheet_eval = FALSE;
     $scoresheet_entry = FALSE;
     $scoresheet_judging = FALSE;
     $entry_actions = "";
@@ -205,7 +206,7 @@ $totalRows_entry_count = total_paid_received($go,"default");
         if ($row_judging_prefs['jPrefsScoresheet'] == 3) $output_form = "structured-scoresheet";
 
         if (in_array($table_score_data[0], $evals)) {
-            $scoresheet = TRUE;
+            $scoresheet_eval = TRUE;
             $query_style = sprintf("SELECT id,brewStyleType FROM %s WHERE brewStyleVersion='%s'AND brewStyleGroup='%s' AND brewStyleNum='%s'",$prefix."styles",$_SESSION['prefsStyleSet'],$table_score_data[8],$table_score_data[15]);
             $style = mysqli_query($connection,$query_style) or die (mysqli_error($connection));
             $row_style = mysqli_fetch_assoc($style);
@@ -215,118 +216,117 @@ $totalRows_entry_count = total_paid_received($go,"default");
             $view_link = $base_url."output/print.output.php?section=evaluation&amp;go=".$output_form."&amp;view=all&amp;id=".$table_score_data[0]."&amp;tb=1";
             $print_link = $base_url."output/print.output.php?section=evaluation&amp;go=".$output_form."&amp;view=all&amp;id=".$table_score_data[0];
 
-            $entry_actions .= "<a id=\"modal_window_link\" class=\"hide-loader\" href=\"".$print_link."\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Print the Scoresheets for Entry ".$entry_number."\"><i class=\"fa fa-lg fa-gavel\"></i></a> ";
-            $entry_actions .= "<a id=\"modal_window_link\" class=\"hide-loader\" href=\"".$view_link."\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"View the Scoresheets for Entry ".$entry_number."\"><span class=\"fa-stack\"><i class=\"fa fa-square fa-stack-2x\"></i><i class=\"fa fa-stack-1x fa-gavel fa-inverse\"></i></span></a> ";
+            $entry_actions .= "<a id=\"modal_window_link\" class=\"hide-loader\" href=\"".$view_link."\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"View the Judge Evaluations in the system for entry ".$entry_number."\"><span class=\"fa-stack\"><i class=\"fa fa-square fa-stack-2x\"></i><i class=\"fa fa-stack-1x fa-file-text fa-inverse\"></i></span></a> ";
+            $entry_actions .= "<a id=\"modal_window_link\" class=\"hide-loader\" href=\"".$print_link."\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Print the Judge Evaluations in the system for entry ".$entry_number."\"><i class=\"fa fa-lg fa-file-text\"></i></a> ";
+            
         
         }
 
+    }
+    
+    // Check whether scoresheet file exists, and, if so, provide link.
+    $scoresheet_file_name_entry = sprintf("%06s",$entry_number).".pdf";
+    $scoresheet_file_name_judging = strtolower($judging_number).".pdf"; // upon upload via the UI, filename is converted to lowercase
+
+    if ($dbTable == "default") {
+        $scoresheetfile_entry = USER_DOCS.$scoresheet_file_name_entry;
+        $scoresheetfile_judging = USER_DOCS.$scoresheet_file_name_judging;
+        $scoresheet_prefs = $_SESSION['prefsDisplaySpecial'];
     }
 
     else {
-        
-        // Check whether scoresheet file exists, and, if so, provide link.
-        $scoresheet_file_name_entry = sprintf("%06s",$entry_number).".pdf";
-        $scoresheet_file_name_judging = strtolower($judging_number).".pdf"; // upon upload via the UI, filename is converted to lowercase
+        $scoresheetfile_entry = USER_DOCS.DIRECTORY_SEPARATOR.get_suffix($dbTable).DIRECTORY_SEPARATOR.$scoresheet_file_name_entry;
+        $scoresheetfile_judging = USER_DOCS.DIRECTORY_SEPARATOR.get_suffix($dbTable).DIRECTORY_SEPARATOR.$scoresheet_file_name_judging;
+        $scoresheet_prefs = $row_archive_prefs['archiveScoresheet'];
+    }
 
-        if ($dbTable == "default") {
-            $scoresheetfile_entry = USER_DOCS.$scoresheet_file_name_entry;
-            $scoresheetfile_judging = USER_DOCS.$scoresheet_file_name_judging;
-            $scoresheet_prefs = $_SESSION['prefsDisplaySpecial'];
+    if ((file_exists($scoresheetfile_entry)) && ($scoresheet_prefs == "E")) {
+        $scoresheet = TRUE;
+        $scoresheet_entry = TRUE;
+    }
+
+    elseif ((file_exists($scoresheetfile_judging)) && ($scoresheet_prefs == "J")) {
+        $scoresheet = TRUE;
+        $scoresheet_judging = TRUE;
+    }
+
+    $scoresheet_file_name_1 = "";
+    $scoresheet_file_name_2 = "";
+    $scoresheet_link_1 = "";
+    $scoresheet_link_2 = "";
+
+    if ($scoresheet_entry) $scoresheet_file_name_1 = $scoresheet_file_name_entry;
+    if ($scoresheet_judging) $scoresheet_file_name_2 = $scoresheet_file_name_judging;
+
+    if (($scoresheet) && ($action != "print")) {
+
+        if ((!empty($scoresheet_file_name_1)) && ($scoresheet_entry)) {
+
+            // The pseudo-random number and the corresponding name of the temporary file are defined each time
+            // this brewer_entries.sec.php script is accessed (or refreshed), but the temporary file is created
+            // only when the entrant clicks on the icon to access the scoresheet.
+            $random_num_str_1 = random_generator(8,2);
+            $random_file_name_1 = $random_num_str_1.".pdf";
+            $scoresheet_random_file_relative_1 = "user_temp/".$random_file_name_1;
+            $scoresheet_random_file_1 = USER_TEMP.$random_file_name_1;
+            $scoresheet_random_file_html_1 = $base_url.$scoresheet_random_file_relative_1;
+            $scoresheet_link_1 .= "<a class=\"hide-loader\" href=\"".$base_url."output/scoresheets.output.php?";
+
+            // Obfuscate the *ACTUAL* file names.
+            // Prevents casual users from right clicking on scoresheet download link and changing
+            // the entry or judging number pdf name passed via the URL to force downloads of files
+            // they shouldn't have access to. Can I get a harumph?!
+            $scoresheet_link_1 .= "scoresheetfilename=".urlencode(obfuscateURL($scoresheet_file_name_1,$encryption_key));
+            $scoresheet_link_1 .= "&amp;randomfilename=".urlencode(obfuscateURL($random_file_name_1,$encryption_key))."&amp;download=true";
+
+            if ($dbTable != "default") $scoresheet_link_1 .= "&amp;view=".get_suffix($dbTable);
+            $scoresheet_link_1 .= sprintf("\" data-toggle=\"tooltip\" title=\"%s '".$table_score_data[3]."'' (by Entry Number).\">",$brewer_entries_text_006);
+            $scoresheet_link_1 .= "<span class=\"fa fa-lg fa-file-pdf-o\"></a>&nbsp;&nbsp;";
         }
 
-        else {
-            $scoresheetfile_entry = USER_DOCS.DIRECTORY_SEPARATOR.get_suffix($dbTable).DIRECTORY_SEPARATOR.$scoresheet_file_name_entry;
-            $scoresheetfile_judging = USER_DOCS.DIRECTORY_SEPARATOR.get_suffix($dbTable).DIRECTORY_SEPARATOR.$scoresheet_file_name_judging;
-            $scoresheet_prefs = $row_archive_prefs['archiveScoresheet'];
+        if ((!empty($scoresheet_file_name_2)) && ($scoresheet_judging)) {
+
+            // The pseudo-random number and the corresponding name of the temporary file are defined each time
+            // this brewer_entries.sec.php script is accessed (or refreshed), but the temporary file is created
+            // only when the entrant clicks on the icon to access the scoresheet.
+            $random_num_str_2 = random_generator(8,2);
+            $random_file_name_2 = $random_num_str_2.".pdf";
+            $scoresheet_random_file_relative_2 = "user_temp/".$random_file_name_2;
+            $scoresheet_random_file_2 = USER_TEMP.$random_file_name_2;
+            $scoresheet_random_file_html_2 = $base_url.$scoresheet_random_file_relative_2;
+
+            $scoresheet_link_2 .= "<a class=\"hide-loader\" href=\"".$base_url."output/scoresheets.output.php?";
+
+            // Obfuscate the *ACTUAL* file names.
+            // Prevents casual users from right clicking on scoresheet download link and changing
+            // the entry or judging number pdf name passed via the URL to force downloads of files
+            // they shouldn't have access to. Can I get a harumph?!
+            $scoresheet_link_2 .= "scoresheetfilename=".urlencode(obfuscateURL($scoresheet_file_name_2,$encryption_key));
+            $scoresheet_link_2 .= "&amp;randomfilename=".urlencode(obfuscateURL($random_file_name_2,$encryption_key))."&amp;download=true";
+            if ($dbTable != "default") $scoresheet_link_2 .= "&amp;view=".get_suffix($dbTable);
+            $scoresheet_link_2 .= sprintf("\" data-toggle=\"tooltip\" title=\"%s '".$table_score_data[3]."' (by Judging Number).\">",$brewer_entries_text_006);
+            $scoresheet_link_2 .= "<span class=\"fa fa-lg fa-file-pdf-o\"></a>&nbsp;&nbsp;";
         }
 
-        if ((file_exists($scoresheetfile_entry)) && ($scoresheet_prefs == "E")) {
-            $scoresheet = TRUE;
-            $scoresheet_entry = TRUE;
-        }
+        // Clean up temporary scoresheets created for other brewers, when they are at least 1 minute old (just to avoid problems when two entrants try accessing their scoresheets at practically the same time, and clean up previously created scoresheets for the same brewer, regardless of how old they are.
+        $tempfiles = array_diff(scandir(USER_TEMP), array('..', '.'));
 
-        elseif ((file_exists($scoresheetfile_judging)) && ($scoresheet_prefs == "J")) {
-            $scoresheet = TRUE;
-            $scoresheet_judging = TRUE;
-        }
+        if (is_array($tempfiles)) {
+            foreach ($tempfiles as $file) {
+                if ((filectime(USER_TEMP.$file) < time() - 1*60) || ((strpos($file, $scoresheet_file_name_judging) !== FALSE))) {
+                    unlink(USER_TEMP.$file);
+                }
 
-        $scoresheet_file_name_1 = "";
-        $scoresheet_file_name_2 = "";
-        $scoresheet_link_1 = "";
-        $scoresheet_link_2 = "";
-
-        if ($scoresheet_entry) $scoresheet_file_name_1 = $scoresheet_file_name_entry;
-        if ($scoresheet_judging) $scoresheet_file_name_2 = $scoresheet_file_name_judging;
-
-        if (($scoresheet) && ($action != "print")) {
-
-            if ((!empty($scoresheet_file_name_1)) && ($scoresheet_entry)) {
-
-                // The pseudo-random number and the corresponding name of the temporary file are defined each time
-                // this brewer_entries.sec.php script is accessed (or refreshed), but the temporary file is created
-                // only when the entrant clicks on the gavel icon to access the scoresheet.
-                $random_num_str_1 = random_generator(8,2);
-                $random_file_name_1 = $random_num_str_1.".pdf";
-                $scoresheet_random_file_relative_1 = "user_temp/".$random_file_name_1;
-                $scoresheet_random_file_1 = USER_TEMP.$random_file_name_1;
-                $scoresheet_random_file_html_1 = $base_url.$scoresheet_random_file_relative_1;
-                $scoresheet_link_1 .= "<a class=\"hide-loader\" href=\"".$base_url."output/scoresheets.output.php?";
-
-                // Obfuscate the *ACTUAL* file names.
-                // Prevents casual users from right clicking on scoresheet download link and changing
-                // the entry or judging number pdf name passed via the URL to force downloads of files
-                // they shouldn't have access to. Can I get a harumph?!
-                $scoresheet_link_1 .= "scoresheetfilename=".urlencode(obfuscateURL($scoresheet_file_name_1,$encryption_key));
-                $scoresheet_link_1 .= "&amp;randomfilename=".urlencode(obfuscateURL($random_file_name_1,$encryption_key))."&amp;download=true";
-
-                if ($dbTable != "default") $scoresheet_link_1 .= "&amp;view=".get_suffix($dbTable);
-                $scoresheet_link_1 .= sprintf("\" data-toggle=\"tooltip\" title=\"%s '".$table_score_data[3]."'' (by Entry Number).\">",$brewer_entries_text_006);
-                $scoresheet_link_1 .= "<span class=\"fa fa-lg fa-gavel\"></a>&nbsp;&nbsp;";
-            }
-
-            if ((!empty($scoresheet_file_name_2)) && ($scoresheet_judging)) {
-
-                // The pseudo-random number and the corresponding name of the temporary file are defined each time
-                // this brewer_entries.sec.php script is accessed (or refreshed), but the temporary file is created
-                // only when the entrant clicks on the gavel icon to access the scoresheet.
-                $random_num_str_2 = random_generator(8,2);
-                $random_file_name_2 = $random_num_str_2.".pdf";
-                $scoresheet_random_file_relative_2 = "user_temp/".$random_file_name_2;
-                $scoresheet_random_file_2 = USER_TEMP.$random_file_name_2;
-                $scoresheet_random_file_html_2 = $base_url.$scoresheet_random_file_relative_2;
-
-                $scoresheet_link_2 .= "<a class=\"hide-loader\" href=\"".$base_url."output/scoresheets.output.php?";
-
-                // Obfuscate the *ACTUAL* file names.
-                // Prevents casual users from right clicking on scoresheet download link and changing
-                // the entry or judging number pdf name passed via the URL to force downloads of files
-                // they shouldn't have access to. Can I get a harumph?!
-                $scoresheet_link_2 .= "scoresheetfilename=".urlencode(obfuscateURL($scoresheet_file_name_2,$encryption_key));
-                $scoresheet_link_2 .= "&amp;randomfilename=".urlencode(obfuscateURL($random_file_name_2,$encryption_key))."&amp;download=true";
-                if ($dbTable != "default") $scoresheet_link_2 .= "&amp;view=".get_suffix($dbTable);
-                $scoresheet_link_2 .= sprintf("\" data-toggle=\"tooltip\" title=\"%s '".$table_score_data[3]."' (by Judging Number).\">",$brewer_entries_text_006);
-                $scoresheet_link_2 .= "<span class=\"fa fa-lg fa-gavel\"></a>&nbsp;&nbsp;";
-            }
-
-            // Clean up temporary scoresheets created for other brewers, when they are at least 1 minute old (just to avoid problems when two entrants try accessing their scoresheets at practically the same time, and clean up previously created scoresheets for the same brewer, regardless of how old they are.
-            $tempfiles = array_diff(scandir(USER_TEMP), array('..', '.'));
-
-            if (is_array($tempfiles)) {
-                foreach ($tempfiles as $file) {
-                    if ((filectime(USER_TEMP.$file) < time() - 1*60) || ((strpos($file, $scoresheet_file_name_judging) !== FALSE))) {
-                        unlink(USER_TEMP.$file);
-                    }
-
-                    if ((filectime(USER_TEMP.$file) < time() - 1*60) || ((strpos($file, $scoresheet_file_name_entry) !== FALSE))) {
-                        unlink(USER_TEMP.$file);
-                    }
+                if ((filectime(USER_TEMP.$file) < time() - 1*60) || ((strpos($file, $scoresheet_file_name_entry) !== FALSE))) {
+                    unlink(USER_TEMP.$file);
                 }
             }
-
-            if ((($dbTable == "default") && ($_SESSION['prefsDisplaySpecial'] == "E")) || ($dbTable != "default")) $entry_actions = $scoresheet_link_1;
-            if ((($dbTable == "default") && ($_SESSION['prefsDisplaySpecial'] == "J")) || ($dbTable != "default")) $entry_actions = $scoresheet_link_2;
         }
+
+        if ((($dbTable == "default") && ($_SESSION['prefsDisplaySpecial'] == "E")) || ($dbTable != "default")) $entry_actions .= $scoresheet_link_1;
+        if ((($dbTable == "default") && ($_SESSION['prefsDisplaySpecial'] == "J")) || ($dbTable != "default")) $entry_actions .= $scoresheet_link_2;
     }
+
 
 ?>
 	<tr>

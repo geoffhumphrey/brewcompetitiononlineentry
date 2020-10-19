@@ -183,62 +183,61 @@ do {
 
 				$scoresheet = TRUE;
 				$print_link = $base_url."output/print.output.php?section=evaluation&amp;go=".$output_form."&amp;view=all&amp;id=".$row_log['id'];
-				$scoresheet_link = "<a id=\"modal_window_link\" class=\"hide-loader\" href=\"".$print_link."\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"".$brewer_entries_text_006." &ldquo;".$row_log['brewName'].".&rdquo;\"><i class=\"fa fa-lg fa-gavel\"></i></a>&nbsp;&nbsp;";;
+				$scoresheet_link = "<a id=\"modal_window_link\" class=\"hide-loader\" href=\"".$print_link."\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"".$brewer_entries_text_006." &ldquo;".$row_log['brewName'].".&rdquo;\"><i class=\"fa fa-lg fa-file-text\"></i></a>&nbsp;&nbsp;";;
 			}
 		
 		}
+		
+		// Check whether scoresheet file exists, and, if so, provide link.
+		$scoresheet_file_name_entry = sprintf("%06s",$entry_number).".pdf";
+		$scoresheet_file_name_judging = strtolower($judging_number).".pdf";
+		$scoresheetfile_entry = USER_DOCS.$scoresheet_file_name_entry;
+		$scoresheetfile_judging = USER_DOCS.$scoresheet_file_name_judging;
 
-		else {
-			// Check whether scoresheet file exists, and, if so, provide link.
-			$scoresheet_file_name_entry = sprintf("%06s",$entry_number).".pdf";
-			$scoresheet_file_name_judging = strtolower($judging_number).".pdf";
-			$scoresheetfile_entry = USER_DOCS.$scoresheet_file_name_entry;
-			$scoresheetfile_judging = USER_DOCS.$scoresheet_file_name_judging;
+		if ((file_exists($scoresheetfile_entry)) && ($_SESSION['prefsDisplaySpecial'] == "E")) $scoresheet_file_name = $scoresheet_file_name_entry;
+		elseif ((file_exists($scoresheetfile_judging)) && ($_SESSION['prefsDisplaySpecial'] == "J")) $scoresheet_file_name = $scoresheet_file_name_judging;
+		else $scoresheet_file_name = "";
 
-			if ((file_exists($scoresheetfile_entry)) && ($_SESSION['prefsDisplaySpecial'] == "E")) $scoresheet_file_name = $scoresheet_file_name_entry;
-			elseif ((file_exists($scoresheetfile_judging)) && ($_SESSION['prefsDisplaySpecial'] == "J")) $scoresheet_file_name = $scoresheet_file_name_judging;
-			else $scoresheet_file_name = "";
+		if (!empty($scoresheet_file_name)) {
 
-			if (!empty($scoresheet_file_name)) {
+			$scoresheet = TRUE;
 
-				$scoresheet = TRUE;
+			// The pseudo-random number and the corresponding name of the temporary file are defined each time
+			// this brewer_entries.sec.php script is accessed (or refreshed), but the temporary file is created
+			// only when the entrant clicks on the icon to access the scoresheet.
+			$random_num_str = random_generator(8,2);
+			$random_file_name = $random_num_str.".pdf";
+			$scoresheet_random_file_relative = "user_temp/".$random_file_name;
+			$scoresheet_random_file = USER_TEMP.$random_file_name;
+			$scoresheet_random_file_html = $base_url.$scoresheet_random_file_relative;
 
-				// The pseudo-random number and the corresponding name of the temporary file are defined each time
-				// this brewer_entries.sec.php script is accessed (or refreshed), but the temporary file is created
-				// only when the entrant clicks on the gavel icon to access the scoresheet.
-				$random_num_str = random_generator(8,2);
-				$random_file_name = $random_num_str.".pdf";
-				$scoresheet_random_file_relative = "user_temp/".$random_file_name;
-				$scoresheet_random_file = USER_TEMP.$random_file_name;
-				$scoresheet_random_file_html = $base_url.$scoresheet_random_file_relative;
+			if (($scoresheet) && (!empty($scoresheet_file_name))) {
+				$scoresheet_link = "";
+				$scoresheet_link .= "<a class=\"hide-loader\" href=\"".$base_url."output/scoresheets.output.php?";
 
-				if (($scoresheet) && (!empty($scoresheet_file_name))) {
-					$scoresheet_link = "";
-					$scoresheet_link .= "<a class=\"hide-loader\" href=\"".$base_url."output/scoresheets.output.php?";
+				// Obfuscate the *ACTUAL* file names.
+				// Prevents casual users from right clicking on scoresheet download link and changing
+				// the entry or judging number pdf name passed via the URL to force downloads of files
+				// they shouldn't have access to. Can I get a harumph?!
+				$scoresheet_link .= "scoresheetfilename=".urlencode(obfuscateURL($scoresheet_file_name,$encryption_key));
+				$scoresheet_link .= "&amp;randomfilename=".urlencode(obfuscateURL($random_file_name,$encryption_key))."&amp;download=true";
+				$scoresheet_link .= sprintf("\" data-toggle=\"tooltip\" title=\"%s &ldquo;".$row_log['brewName']."&rdquo;.\">",$brewer_entries_text_006);
+				$scoresheet_link .= "<span class=\"fa fa-lg fa-file-pdf-o\"></a>&nbsp;&nbsp;";
+			}
+		}
 
-					// Obfuscate the *ACTUAL* file names.
-					// Prevents casual users from right clicking on scoresheet download link and changing
-					// the entry or judging number pdf name passed via the URL to force downloads of files
-					// they shouldn't have access to. Can I get a harumph?!
-					$scoresheet_link .= "scoresheetfilename=".urlencode(obfuscateURL($scoresheet_file_name,$encryption_key));
-					$scoresheet_link .= "&amp;randomfilename=".urlencode(obfuscateURL($random_file_name,$encryption_key))."&amp;download=true";
-					$scoresheet_link .= sprintf("\" data-toggle=\"tooltip\" title=\"%s &ldquo;".$row_log['brewName']."&rdquo;.\">",$brewer_entries_text_006);
-					$scoresheet_link .= "<span class=\"fa fa-lg fa-gavel\"></a>&nbsp;&nbsp;";
-				}
+		// Clean up temporary scoresheets created for other brewers, when they are at least 1 minute old (just to avoid problems when two entrants try accessing their scoresheets at practically the same time, and clean up previously created scoresheets for the same brewer, regardless of how old they are.
+		$tempfiles = array_diff(scandir(USER_TEMP), array('..', '.'));
+		foreach ($tempfiles as $file) {
+			if ((filectime(USER_TEMP.$file) < time() - 1*60) || ((strpos($file, $scoresheet_file_name_judging) !== FALSE))) {
+				unlink(USER_TEMP.$file);
 			}
 
-			// Clean up temporary scoresheets created for other brewers, when they are at least 1 minute old (just to avoid problems when two entrants try accessing their scoresheets at practically the same time, and clean up previously created scoresheets for the same brewer, regardless of how old they are.
-			$tempfiles = array_diff(scandir(USER_TEMP), array('..', '.'));
-			foreach ($tempfiles as $file) {
-				if ((filectime(USER_TEMP.$file) < time() - 1*60) || ((strpos($file, $scoresheet_file_name_judging) !== FALSE))) {
-					unlink(USER_TEMP.$file);
-				}
-
-				if ((filectime(USER_TEMP.$file) < time() - 1*60) || ((strpos($file, $scoresheet_file_name_entry) !== FALSE))) {
-					unlink(USER_TEMP.$file);
-				}
+			if ((filectime(USER_TEMP.$file) < time() - 1*60) || ((strpos($file, $scoresheet_file_name_entry) !== FALSE))) {
+				unlink(USER_TEMP.$file);
 			}
-		} // end else
+		}
+	
 	}
 
 	if ($show_scores) {

@@ -1647,6 +1647,35 @@ $result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection)
 $output .= "<li>Converted all alpha-numeric judging numbers to lower case.</li>";
 
 /**
+ * ---------------------------------------------------------------------------------------------------
+ * Provide options for judging session type and end date. Rename current unused column judgingTime.
+ * Helpful for comps that want to hold virtual or distributed judging sessions over a period of days.
+ * ---------------------------------------------------------------------------------------------------
+ */
+
+// ALTER TABLE `baseline_judging_locations` CHANGE `judgingTime` `judgingDateEnd` VARCHAR(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL; 
+// ALTER TABLE `baseline_judging_locations` ADD `judgingLocType` TINYINT(2) NULL DEFAULT NULL AFTER `id`; 
+// UPDATE `baseline_judging_locations` SET judgingLocType=0;
+
+$updateSQL = sprintf("ALTER TABLE `%s` CHANGE `judgingTime` `judgingDateEnd` VARCHAR(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL;", $prefix."judging_locations");
+mysqli_real_escape_string($connection,$updateSQL);
+$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+
+$updateSQL = sprintf("ALTER TABLE `%s` ADD `judgingLocType` TINYINT(2) NULL DEFAULT NULL AFTER `id`;", $prefix."judging_locations");
+mysqli_real_escape_string($connection,$updateSQL);
+$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+
+$updateSQL = sprintf("UPDATE `%s` SET judgingDateEnd=NULL;", $prefix."judging_locations");
+mysqli_real_escape_string($connection,$updateSQL);
+$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+
+$updateSQL = sprintf("UPDATE `%s` SET judgingLocType='0';", $prefix."judging_locations");
+mysqli_real_escape_string($connection,$updateSQL);
+$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+
+$output .= "<li>Add judging session type and end date columns.</li>";
+
+/**
  * ----------------------------------------------------------------------------------------------------
  * Change the version number and date
  * ALWAYS the final script

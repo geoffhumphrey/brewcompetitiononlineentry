@@ -1800,7 +1800,7 @@ function get_table_info($input,$method,$table_id,$dbTable,$param) {
 		$judging_location = mysqli_query($connection,$query_judging_location) or die (mysqli_error($connection));
 		$row_judging_location = mysqli_fetch_assoc($judging_location);
 
-		$return = $row_judging_location['judgingDate']."^".$row_judging_location['judgingTime']."^".$row_judging_location['judgingLocName'];
+		$return = $row_judging_location['judgingDate']."^".$row_judging_location['judgingDateEnd']."^".$row_judging_location['judgingLocName'];
 		return $return;
 	}
 
@@ -2129,7 +2129,7 @@ function table_location($table_id,$date_format,$time_zone,$time_format,$method) 
 
 	if ($method == "default") {
 
-		$query_location = sprintf("SELECT judgingLocName,judgingDate,judgingTime FROM %s WHERE id='%s'", $prefix."judging_locations", $row_table['tableLocation']);
+		$query_location = sprintf("SELECT * FROM %s WHERE id='%s'", $prefix."judging_locations", $row_table['tableLocation']);
 		$location = mysqli_query($connection,$query_location) or die (mysqli_error($connection));
 		$row_location = mysqli_fetch_assoc($location);
 		$totalRows_location = mysqli_num_rows($location);
@@ -2903,22 +2903,44 @@ function table_assignments($uid,$method,$time_zone,$date_format,$time_format,$me
 		$output = "";
 	}
 
-	$query_table_assignments = sprintf("SELECT assignTable FROM %s WHERE bid='%s' AND assignment='%s'",$prefix."judging_assignments",$uid,$method);
+	$query_table_assignments = sprintf("SELECT assignTable,assignRoles,assignFlight,assignRound FROM %s WHERE bid='%s' AND assignment='%s'",$prefix."judging_assignments",$uid,$method);
 	$table_assignments = mysqli_query($connection,$query_table_assignments) or die (mysqli_error($connection));
 	$row_table_assignments = mysqli_fetch_assoc($table_assignments);
 	$totalRows_table_assignments = mysqli_num_rows($table_assignments);
 
+	require(LANG.'language.lang.php');
+	
 	if ($totalRows_table_assignments > 0) {
 
 		do {
 			$table_info = explode("^",get_table_info(1,"basic",$row_table_assignments['assignTable'],"default","default"));
 			$location = explode("^",get_table_info($table_info[2],"location",$row_table_assignments['assignTable'],"default","default"));
 
+
+			if (!empty($row_table_assignments['assignRoles'])) {
+				$hj = "<span class=\"text-primary\"><i class=\"fa fa-gavel\"></i> ".$label_head_judge."</span>";
+				$lj = "<span class=\"text-purple\"><i class=\"fa fa-star\"></i> ".$label_lead_judge."</span>";
+				$mbos = "<span class=\"text-success\"><i class=\"fa fa-trophy\"></i> ".$label_mini_bos_judge."</span>";
+				$role_replace1 = array("HJ","LJ","MBOS",", ");
+				$role_replace2 = array($hj,$lj,$mbos,"&nbsp;&nbsp;&nbsp;");
+				$role = str_replace($role_replace1,$role_replace2,$row_table_assignments['assignRoles']);
+			}
+
 			if ($method2 == 0) {
 				$output .= "\t\t<tr>\n";
-				$output .= "\t\t\t<td>".$location[2]."</td>\n";
-				$output .= "\t\t\t<td>".getTimeZoneDateTime($time_zone, $location[0], $date_format,  $time_format, "long", "date-time")."</td>\n";
-				$output .= sprintf("\t\t\t<td>%s %s - %s</td>\n",$label_table,$table_info[0],$table_info[1]);
+				$output .= "\t\t\t<td>".$location[2];
+				$output .= "\t\t\t</td>";
+				$output .= "\t\t\t<td>";
+				$output .= getTimeZoneDateTime($time_zone, $location[0], $date_format,  $time_format, "short", "date-time");
+				if (!empty($location[1])) $output .= " - ".getTimeZoneDateTime($time_zone, $location[1], $date_format,  $time_format, "short", "date-time");
+				$output .= "</td>\n";
+				$output .= "\t\t\t<td>";
+				$output .= sprintf("%s %s - %s",$label_table,$table_info[0],$table_info[1]);
+				if ($_SESSION['jPrefsQueued'] == "N") {
+					$output .= "<br>".$label_round." ".$row_table_assignments['assignFlight'].", ".$label_flight." ".$row_table_assignments['assignFlight'];
+				}
+				if (!empty($row_table_assignments['assignRoles'])) $output .= "<br>".$role;
+				$output .= "</td>\n";
 				$output .= "\t\t</tr>\n";
 			}
 
@@ -3327,7 +3349,7 @@ function judging_location_info($id) {
 	require(CONFIG.'config.php');
 	mysqli_select_db($connection,$database);
 
-	$query_judging_loc3 = sprintf("SELECT judgingLocName,judgingDate,judgingLocation,judgingTime FROM %s WHERE id='%s'", $prefix."judging_locations", $id);
+	$query_judging_loc3 = sprintf("SELECT * FROM %s WHERE id='%s'", $prefix."judging_locations", $id);
 	$judging_loc3 = mysqli_query($connection,$query_judging_loc3) or die (mysqli_error($connection));
 	$row_judging_loc3 = mysqli_fetch_assoc($judging_loc3);
 	$totalRows_judging_loc3 = mysqli_num_rows($judging_loc3);
@@ -3337,7 +3359,7 @@ function judging_location_info($id) {
 	$row_judging_loc3['judgingLocName']."^". // 1
 	$row_judging_loc3['judgingDate']."^". // 2
 	$row_judging_loc3['judgingLocation']."^". // 3
-	$row_judging_loc3['judgingTime']; // 4
+	$row_judging_loc3['judgingDateEnd']; // 4
 
 	return $return;
 
@@ -4096,15 +4118,18 @@ function style_number_const($style_category_number,$style_sub,$style_set_display
 }
 
 // Check if user is assigned to the flight that a entry is part of.
-function user_flight_assignment($uid,$table_id) {
+function user_flight_assignment($uid,$table_id,$method=0) {
 	require(CONFIG.'config.php');
 	mysqli_select_db($connection,$database);
 
-	$query_flight_assign = sprintf("SELECT assignFlight FROM %s WHERE bid=%s AND assignTable=%s",$prefix."judging_assignments",$uid,$table_id);
+	$query_flight_assign = sprintf("SELECT * FROM %s WHERE bid=%s AND assignTable=%s",$prefix."judging_assignments",$uid,$table_id);
 	$flight_assign = mysqli_query($connection,$query_flight_assign) or die (mysqli_error($connection));
 	$row_flight_assign = mysqli_fetch_assoc($flight_assign);
 
-	return $row_flight_assign['assignFlight'];
+	if ($method == 0) return $row_flight_assign['assignFlight'];
+	if ($method == 1) return $row_flight_assign['assignRoles'];
+	if ($method == 2) return $row_flight_assign;
+
 }
 
 function entry_flight_assignment($eid,$table_id) {

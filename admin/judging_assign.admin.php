@@ -142,7 +142,7 @@ do {
       		}
       }
 
-		if  (table_round($row_tables_edit['id'],$i)) {
+		if (table_round($row_tables_edit['id'],$i)) {
 
 			$flights_display .= "<td>";
 

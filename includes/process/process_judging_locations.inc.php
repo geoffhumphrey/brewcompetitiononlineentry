@@ -12,11 +12,16 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 
 	$judgingDate = strtotime(sterilize($_POST['judgingDate']));
 	$judgingLocName = $purifier->purify($_POST['judgingLocName']);
+	$judgingLocation = $purifier->purify($_POST['judgingLocation']);
+	$judgingDateEnd = "";
+	if (!empty($_POST['judgingDateEnd'])) $judgingDateEnd = strtotime(sterilize($_POST['judgingDateEnd']));
 
 	if ($action == "add") {
-		$insertSQL = sprintf("INSERT INTO $judging_locations_db_table (judgingDate, judgingLocation, judgingLocName, judgingRounds) VALUES (%s, %s, %s, %s)",
+		$insertSQL = sprintf("INSERT INTO $judging_locations_db_table (judgingLocType, judgingDate, judgingDateEnd, judgingLocation, judgingLocName, judgingRounds) VALUES (%s, %s, %s, %s, %s, %s)",
+						   GetSQLValueString(sterilize($_POST['judgingLocType']), "text"),
 						   GetSQLValueString($judgingDate, "text"),
-						   GetSQLValueString($purifier->purify($_POST['judgingLocation']), "text"),
+						   GetSQLValueString($judgingDateEnd, "text"),
+						   GetSQLValueString($judgingLocation, "text"),
 						   GetSQLValueString($judgingLocName, "text"),
 						   GetSQLValueString(sterilize($_POST['judgingRounds']), "text")
 						   );
@@ -45,9 +50,11 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 	}
 
 	if ($action == "edit") {
-		$updateSQL = sprintf("UPDATE $judging_locations_db_table SET judgingDate=%s, judgingLocation=%s, judgingLocName=%s, judgingRounds=%s WHERE id=%s",
+		$updateSQL = sprintf("UPDATE $judging_locations_db_table SET judgingLocType=%s, judgingDate=%s, judgingDateEnd=%s, judgingLocation=%s, judgingLocName=%s, judgingRounds=%s WHERE id=%s",
+						   GetSQLValueString(sterilize($_POST['judgingLocType']), "text"),
 						   GetSQLValueString($judgingDate, "text"),
-						   GetSQLValueString($purifier->purify($_POST['judgingLocation']), "text"),
+						   GetSQLValueString($judgingDateEnd, "text"),
+						   GetSQLValueString($judgingLocation, "text"),
 						   GetSQLValueString($judgingLocName, "text"),
 						   GetSQLValueString(sterilize($_POST['judgingRounds']), "text"),
 						   GetSQLValueString($id, "int"));

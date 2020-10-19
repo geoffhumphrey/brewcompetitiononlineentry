@@ -826,23 +826,31 @@ function received_entries() {
 }
 
 
-function assigned_judges($tid,$dbTable,$judging_assignments_db_table){
+function assigned_judges($tid,$dbTable,$judging_assignments_db_table,$method=0){
 	include (CONFIG.'config.php');
 	//include (INCLUDES.'db_tables.inc.php');
 	mysqli_select_db($connection,$database);
 	$query_assignments = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE assignTable='%s' AND assignment='J'", $judging_assignments_db_table, $tid);
 	$assignments = mysqli_query($connection,$query_assignments) or die (mysqli_error($connection));
 	$row_assignments = mysqli_fetch_assoc($assignments);
-	if ($row_assignments['count'] == 0) {
-		$icon = "fa-plus-circle";
-		$title = "Add judges to this table.";
+
+	if ($method == 0) {
+		if ($row_assignments['count'] == 0) {
+			$icon = "fa-plus-circle";
+			$title = "Add judges to this table.";
+		}
+		else {
+			$icon = "fa-edit";
+			$title = "Edit judges assigned to this table.";
+		}
+		if ($dbTable == "default") $r = $row_assignments['count'].' <a href="'.$base_url.'index.php?section=admin&action=assign&go=judging_tables&filter=judges&id='.$tid.'" data-toggle="tooltip" data-placement="top" title="'.$title.'"><span class="fa fa-lg '.$icon.'"></span></a>';
+		else $r = $row_assignments['count'];
 	}
-	else {
-		$icon = "fa-edit";
-		$title = "Edit judges assigned to this table.";
+
+	if ($method == 1) {
+		$r = $row_assignments['count'];
 	}
-	if ($dbTable == "default") $r = $row_assignments['count'].' <a href="'.$base_url.'index.php?section=admin&action=assign&go=judging_tables&filter=judges&id='.$tid.'" data-toggle="tooltip" data-placement="top" title="'.$title.'"><span class="fa fa-lg '.$icon.'"></span></a>';
-	else $r = $row_assignments['count'];
+	
 	return $r;
 }
 

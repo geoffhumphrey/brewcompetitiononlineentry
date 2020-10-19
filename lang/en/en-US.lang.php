@@ -353,7 +353,7 @@ $label_register_judge_quick = "Register a Judge or Steward (Quick)";
 $label_all_participants = "All Participants";
 $label_open = "Open";
 $label_closed = "Closed";
-$label_judging_loc = "Judging Session Locations and Dates";
+$label_judging_loc = "Judging Sessions and Dates";
 $label_new = "New";
 $label_old = "Old";
 $label_sure = "Are You Sure?";
@@ -1548,6 +1548,12 @@ $label_evals_submitted = "Evaluations Submitted";
 $label_evaluations = "Entry Evaluations";
 $label_submitted_by = "Submitted By";
 $label_attention = "Attention!";
+
+$label_unassigned_eval = "Unassigned Evaluations";
+$label_head_judge = "Head Judge";
+$label_lead_judge = "Lead Judge";
+$label_mini_bos_judge = "Mini-BOS Judge";
+
 $evaluation_info_000 = "The entry pool for each of the tables and flights that have been assigned to you is detailed below.";
 $evaluation_info_001 = "This competition is employing queued judging. If there is more than one judge pair at your table, evaluate the the next entry in the established queue.";
 $evaluation_info_002 = "To ensure an accurate and smooth competition, you and your judge partner(s) should ONLY judge entries at your table that have not been evaluated yet. See your organizer or judge coordinator if you have any questions.";
@@ -1555,12 +1561,12 @@ $evaluation_info_003 = "Awaiting final acceptance from a site administrator.";
 $evaluation_info_004 = "Your consensus score has been entered.";
 $evaluation_info_005 = "This entry <strong>is not</strong> part of your assigned flight.";
 $evaluation_info_006 = "Edit as needed.";
-$evaluation_info_007 = "Choose from the following entries at this table.";
+$evaluation_info_007 = "Choose from the following entries.";
 $evaluation_info_008 = "To record your evaluation, select an entry's corresponding Add button. Only tables for past and current judging sessions are available.";
 $evaluation_info_009 = "You have been assigned as a judge, but have not been assigned to any table(s) or flight(s) in the system. Please check with the organizer or judge coordinator.";
 $evaluation_info_010 = "This entry is part of your assigned flight.";
 $evaluation_info_011 = "Add an evaluation for an entry not assigned to you.";
-$evaluation_info_012 = "Use only when you are asked to evaluate an entry on the fly that is not part of your assigned table.";
+$evaluation_info_012 = "Use only when you are asked to evaluate an entry that has not been assigned to you in the system.";
 $evaluation_info_013 = "Entry was not found.";
 $evaluation_info_014 = "Please verify the six-character entry number and try again.";
 $evaluation_info_015 = "Be sure that the number is 6 digits in length.";
@@ -1573,6 +1579,9 @@ $evaluation_info_021 = "to add evaluations for entries assigned to you"; // Punc
 $evaluation_info_022 = "Judging and evaluation submission is closed.";
 $evaluation_info_023 = "If you have any questions, contact the competition organizer or judge coordinator.";
 $evaluation_info_024 = "You have been assigned to the following tables. Entry lists for each table will only show for past and current judging sessions.";
+$evaluation_info_025 = "Judges assigned to this table, including you:";
+$evaluation_info_026 = "All consensus scores entered by judges match.";
+$evaluation_info_027 = "Entries that you have completed, or an admin has entered on your behalf, that were not assigned to you in the system.";
 $alert_text_086 = "Internet Explorer is not supported by BCOE&M - features and functions will not render properly and your experience will not be optimal. Please upgrade to a newer browser.";
 
 /**

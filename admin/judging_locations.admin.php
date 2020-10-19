@@ -8,46 +8,6 @@
  *
  */
 
-/* ---------------- Rebuild Info ---------------------
-
-Beginning with the 1.3.0 release, an effort was begun to separate the programming
-layer from the presentation layer for all scripts with this header.
-
-All Admin pages have certain variables in common that build the page:
-  $subtitle = the <h2> subtitle of the page
-  $primary_page_info = any information related to the page
-  $goto_nav = the "Back to Admin Dashboard" and other "Back to..." navigation
-  $secondary_nav = other navigation elements related to the subpage
-  $secondary_page_info = detailed information that comes after the nav elements
-
-  $form_submit_url = the processing url for the form
-  $form_submit_button = the form submit button element
-
-  DEFAULTS for all of the following are defined in constants.inc.php but can be overridden by defining on the page
-  $output_datatables_bPaginate = whether or not to paginate the DT output - default is true
-  $output_datatables_sPaginationType = type of pagination links output - default is full_numbers
-  $output_datatables_bLengthChange = whether or not the DT output will allow length changes - default is true
-  $output_datatables_iDisplayLength = limiting of the number of items the DT displays - default is round($_SESSION['prefsRecordPaging'])
-  $output_datatables_sDom = the order of DT elements - default is irftip
-  $output_datatables_bStateSave = true or false to save the state of the DT after refresh - default is false
-  $output_datatables_bProcessing = true or false to show a "processing" message -default is false
-  $output_datatables_aaSorting = the output in the DataTables JS for sort order - always customized for each display
-  $output_datatables_aoColumns = the output in the DataTables JS for columns - always customized for each display
-
-  $output_datatables_head = the output for DataTables placed in the <thead> tag
-  $output_datatables_body = the output for DataTables placed in the <tbody> tag
-  $output_datatables_edit_link = the link to edit the record
-  $output_datatables_delete_link = the link to delete the record
-  $output_datatables_print_link = the link to print the record or output to print
-  $output_datatables_view = the link to view the record's detail
-  $output_datatables_actions = compiles all of the "actions" links (edit, delete, print, view, etc.)
-
-  ADD/EDIT SCREENS VARIABLE
-  $output_add_edit = whether to run/display the add/edit functions
-
-
-*/
-
 include (DB.'judging_locations.db.php');
 
 // Set Vars
@@ -134,17 +94,19 @@ if ($filter == "bos") {
 // Judging Locations & Dates List
 if ($section != "step5") {
 	if (($action == "default") && ($totalRows_judging_locs > 0)) {
-		$output_datatables_aaSorting = "[1,'asc']";
-		$output_datatables_aoColumns = "null, null, null, null,	null, { \"asSorting\": [  ] }";
+		
+		$output_datatables_aaSorting = "[2,'asc']";
+		$output_datatables_aoColumns = "null, null, null, null, null, null, { \"asSorting\": [  ] }";
+		
 		$output_datatables_head .= "<tr>";
 		$output_datatables_head .= "<th>Name</th>";
-		$output_datatables_head .= "<th>Date</th>";
-		$output_datatables_head .= "<th>Start Time</th>";
-		$output_datatables_head .= "<th>Address</th>";
-		$output_datatables_head .= "<th># of Rounds</th>";
+		$output_datatables_head .= "<th class=\"hidden-xs hidden-sm\">Type</th>";
+		$output_datatables_head .= "<th>Start Date/Time</th>";
+		$output_datatables_head .= "<th>End Date/Time</th>";
+		$output_datatables_head .= "<th>Address or Entry Distribution Info</th>";
+		$output_datatables_head .= "<th class=\"hidden-xs hidden-sm\"># of Rounds</th>";
 		$output_datatables_head .= "<th>Actions</th>";
 		$output_datatables_head .= "</tr>";
-		$output_datatables_head .= "";
 
 		do {
 
@@ -154,12 +116,19 @@ if ($section != "step5") {
 
 			$output_datatables_actions = $output_datatables_edit_link." ".$output_datatables_delete_link;
 
+			$judgingLocType = "";
+			if ($row_judging_locs['judgingLocType'] == "0") $judgingLocType = "Traditional";
+			if ($row_judging_locs['judgingLocType'] == "1") $judgingLocType = "Distributed"; 
+
 			$output_datatables_body .= "<tr>";
 			$output_datatables_body .= "<td>".$row_judging_locs['judgingLocName']."</td>";
-			$output_datatables_body .= "<td><span class=\"hidden\">".$row_judging_locs['judgingDate']."</span>".getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_judging_locs['judgingDate'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "long", "date")."</td>";
-			$output_datatables_body .= "<td>".getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_judging_locs['judgingDate'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "long", "time-gmt")."</td>";
+			$output_datatables_body .= "<td class=\"hidden-xs hidden-sm\">".$judgingLocType."</td>";
+			$output_datatables_body .= "<td><span class=\"hidden\">".$row_judging_locs['judgingDate']."</span>".getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_judging_locs['judgingDate'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "short", "date-time")."</td>";
+			if (!empty($row_judging_locs['judgingDateEnd'])) $output_datatables_body .= "<td>".getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_judging_locs['judgingDateEnd'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "short", "date-time")."</td>";
+			else $output_datatables_body .= "<td>N/A</td>";
+			$output_datatables_body .= "</td>";
 			$output_datatables_body .= "<td>".$row_judging_locs['judgingLocation']."</td>";
-			$output_datatables_body .= "<td>".$row_judging_locs['judgingRounds']."</td>";
+			$output_datatables_body .= "<td class=\"hidden-xs hidden-sm\">".$row_judging_locs['judgingRounds']."</td>";
 			$output_datatables_body .= "<td>".$output_datatables_actions."</td>";
 			$output_datatables_body .= "</tr>";
 
@@ -386,8 +355,12 @@ if ((($action == "add") || ($action == "edit")) || ($section == "step5")) {
 	//$form_submit_button .= "'>";
 
 	$judging_date = "";
+	$judging_end_date = "";
 	$judging_time = "";
-	if ($action == "edit") $judging_date .= getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_judging['judgingDate'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "system", "date-time-system");
+	if ($action == "edit") {
+		$judging_date .= getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_judging['judgingDate'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "system", "date-time-system");
+		if (!empty($row_judging['judgingDateEnd'])) $judging_end_date .= getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_judging['judgingDateEnd'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "system", "date-time-system");
+	}
 
 } // end if ((($action == "add") || ($action == "edit")) || ($section == "step5"))
 
@@ -431,15 +404,21 @@ if ((($action == "add") || ($action == "edit")) || ($section == "step5")) {
 
 	<?php if (($action == "add") || ($action == "edit")) { ?>
 	<!-- Postion 1: View All Button -->
-	<div class="btn-group" role="group" aria-label="...">
+	<div class="btn-group bcoem-admin-element" role="group" aria-label="...">
         <a class="btn btn-default" href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging"><span class="fa fa-arrow-circle-left"></span> All Judging Sessions</a>
     </div><!-- ./button group -->
 	<?php } ?>
 	<?php if (($action == "default") || ($action == "edit")) { ?>
-	<div class="btn-group" role="group" aria-label="...">
+	<div class="btn-group bcoem-admin-element" role="group" aria-label="...">
         <a class="btn btn-default" href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging&amp;action=add"><span class="fa fa-plus-circle"></span> Add a Judging Session</a>
     </div><!-- ./button group -->
-    <p>BCOE&amp;M figures judge points according to the <a class="hide-loader" href="https://www.bjcp.org/rules.php" target="_blank">BJCP's definition of a session</a> as "...an uninterrupted time period when at least one panel of judges sits to judge one or more flights of entries. Typically, 'morning', 'afternoon' and 'evening' are considered sessions at most competitions." </p><p>Thus, to correctly calculate BJCP experience points for program participants, it is suggested that each session you set up here follow that guideline (e.g., <em>Session 1: XXX Location - Early Morning</em>, <em>Session 2: XXX Location - Late Morning</em>, <em>Session 3: XXX Location - Afternoon</em>, etc.). A judging session may consist of one or more flights and one or more rounds.</p>
+    <div class="bcoem-admin-element hidden-print" style="margin-top: 15px;">
+	    <p>BCOE&amp;M figures judge points according to the <a class="hide-loader" href="https://www.bjcp.org/rules.php" target="_blank">BJCP's definition of a session</a> as "...an uninterrupted time period when at least one panel of judges sits to judge one or more flights of entries." </p>
+	    <p>Thus, to correctly calculate BJCP experience points for program participants, it is suggested that each session you set up here follow that guideline (e.g., <em>Session 1: XXX Location - Early Morning</em>, <em>Session 2: XXX Location - Afternoon</em>, <em>Session 3: Distributed - Week of XXX</em>, etc.).</p>
+	    <p>A single judging session may consist of one or more flights and one or more rounds.</p>
+	    <h3>Distributed Judging</h3>
+	    <p>For distributed judging scenarios (e.g., when judge teams will not be in the same physical location, when judge teams are not judging concurrently, or when judge teams are not judging in a prescribed location, etc.), Administrators are required to define the start date/time and end date/time of the session. In this scenario, judging typically takes place over a period of days or weeks in a variety of locations. If a judging session is designated as <em>distributed</em>, it is required that Admins provide information on how judges will receive the entries they will be evaluating.</p>
+	</div>
 	<?php } ?>
 
 	<?php if ($filter != "default") { ?>
@@ -615,7 +594,6 @@ if ((($action == "add") || ($action == "edit")) || ($section == "step5")) {
 echo $output_assignment_modals;
 ?>
 <script type="text/javascript" language="javascript">
-//<![CDATA[
 	 $(document).ready(function() {
 		$('#sortable').dataTable( {
 			"bPaginate" : <?php echo $output_datatables_bPaginate; ?>,
@@ -629,13 +607,11 @@ echo $output_assignment_modals;
 			"aoColumns": [ <?php echo $output_datatables_aoColumns; ?> ]
 			} );
 		} );
-
 	$(window).load(function(){
 		$("#checkAll").change(function () {
 			$("input:checkbox").prop('checked', $(this).prop("checked"));
 		});
 	});
-//]]>
 </script>
 <table class="table table-responsive table-bordered <?php if ($filter != "bos") echo "table-striped"; ?>" id="sortable">
 <thead>
@@ -663,58 +639,130 @@ echo $output_none;
 
 // -------------------------------- Add/Edit Form ---------------------------------------------
 
-if (($output_add_edit) && ($msg != 9)) { ?>
-<?php if (!empty($form_submit_url)) echo $form_submit_url; ?>
+if (($output_add_edit) && ($msg != 9)) { 
+	if (!empty($form_submit_url)) echo $form_submit_url; 
+?>
+
+<script type="text/javascript">
+	$(document).ready(function() {
+
+		<?php if ((!empty($row_judging['judgingLocType'])) && ($row_judging['judgingLocType'] == "0")) { ?>
+		$('#judgingDateEndDiv').hide();
+		$('#helpBlockLocation2').hide();
+		<?php } elseif ((!empty($row_judging['judgingLocType'])) && ($row_judging['judgingLocType'] == "1")) { ?>
+		$('#judgingDateEndDiv').show();
+		$('#helpBlockLocation1').hide();
+		$('#helpBlockLocation2').show();
+		<?php } else { ?>
+		$('#judgingDateEndDiv').hide();
+		$('#helpBlockLocation2').hide();
+		<?php } ?>
+		
+		$('#judgingDate').datetimepicker({
+			format: 'YYYY-MM-DD hh:mm A'
+		});
+		
+		$('#judgingDateEnd').datetimepicker({
+			format: 'YYYY-MM-DD hh:mm A'
+		});
+
+		$("input[name$='judgingLocType']").click(function() {
+	        if ($(this).val() == "1") {
+	            $("#helpBlockLocation1").hide("fast");
+	            $("#judgingDateEndDiv").show("fast");
+	            $("#helpBlockLocation2").show("fast");
+	            $("#judgingLocationLabel").html("Entry Distribution to Judges");
+	            $("#judgingDateEnd").prop("required",true);
+	        }
+	        else {
+	            $("#judgingDateEndDiv").hide("fast");
+	            $("#helpBlockLocation2").hide("fast");
+	            $("#helpBlockLocation1").show("fast");
+	            $("#judgingLocationLabel").html("Session Address");
+	            $("#judgingDateEnd").prop("required",false);
+	            $("#judgingDateEnd").val("");
+	        }
+	    });
+
+	});
+</script>
 
 <div class="form-group"><!-- Form Group REQUIRED Text Input -->
-	<label for="judgingLocName" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Name</label>
+	<label for="judgingLocName" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Session Name</label>
 	<div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
 		<div class="input-group has-warning">
 			<!-- Input Here -->
 			<input class="form-control" id="judgingLocName" name="judgingLocName" type="text" size="10" maxlength="255" value="<?php if ($action == "edit") echo $row_judging['judgingLocName']; ?>" placeholder="" autofocus required>
 			<span class="input-group-addon" id="judgingTime2"><span class="fa fa-star"></span></span>
 		</div>
-		<span id="helpBlock" class="help-block">Provide the name of the judging location.</span>
+		<span class="help-block">Provide the name of the judging location.</span>
 	</div>
 </div><!-- ./Form Group -->
+
+<div class="form-group"><!-- Form Group Radio INLINE -->
+    <label for="judgingLocType" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Session Type</label>
+    <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
+        <div class="radio">
+            <!-- Input Here -->
+            <label>
+                <input type="radio" name="judgingLocType" value="0" id="judgingLocType_0"  <?php if (($section == "step3") || ($action == "add")) echo "CHECKED"; if (($section != "step3") && ($row_judging['judgingLocType'] == "0")) echo "CHECKED";  ?> /> Traditional <small>(typically a single day in a central location)</small>
+            </label>
+        </div>
+        <div class="radio">
+            <label>
+                <input type="radio" name="judgingLocType" value="1" id="judgingLocType_1" <?php if (($section != "step3") && ($row_judging['judgingLocType'] == "1")) echo "CHECKED"; ?>/> Distributed <small>(multi-day and/or multi-location)</small>
+            </label>
+        </div>
+        <span class="help-block">Indicate whether judge teams in this session will be evaluating entries at a single, designated location, typically collectively, or over a series of days in various locations. For example, choose <em>Distributed</em> if judges will be evaluating entries virtually - synchronously or asynchronously - or if locations will be ad-hoc, such as in a judge team member home.</span>
+    </div>
+</div><!-- ./Form Group -->
+
 <div class="form-group"><!-- Form Group REQUIRED Text Input -->
-	<label for="judgingDate" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Date</label>
+	<label for="judgingDate" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Session Start Date/Time</label>
 	<div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
 		<div class="input-group date has-warning">
 			<!-- Input Here -->
-			<input class="form-control" id="judgingDate" name="judgingDate" type="text" value="<?php if ($action == "edit") echo $judging_date; ?>" placeholder="<?php if (strpos($section, "step") === FALSE) echo $current_date; ?>" required>
+			<input class="form-control" id="judgingDate" name="judgingDate" type="text" value="<?php if ($action == "edit") echo $judging_date; ?>" placeholder="<?php if (strpos($section, "step") === FALSE) echo $current_date." ".$current_time; ?>" required>
 			<span class="input-group-addon"><span class="fa fa-star"></span></span>
 		</div>
-        <span class="help-block with-errors"></span>
+		<span class="help-block">Provide an start date and time for the session.</span>
 	</div>
 </div><!-- ./Form Group -->
-<script type="text/javascript">
-	$('#judgingDate').datetimepicker({
-		format: 'YYYY-MM-DD hh:mm A'
-	});
-</script>
+
+<div id="judgingDateEndDiv"  class="form-group"><!-- Form Group REQUIRED Text Input -->
+	<label for="judgingDateEnd" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Session End Date/Time</label>
+	<div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
+		<div class="input-group date has-warning">
+			<!-- Input Here -->
+			<input class="form-control" id="judgingDateEnd" name="judgingDateEnd" type="text" value="<?php if ($action == "edit") echo $judging_end_date; ?>" placeholder="<?php if (strpos($section, "step") === FALSE) echo $current_date." ".$current_time; ?>">
+			<span class="input-group-addon"><span class="fa fa-star"></span></span>
+		</div>
+		<span class="help-block">For a distributed session, it is required that you provide an end date and time that will serve as a deadline for judges to submit their evaluations.</span>
+	</div>
+</div><!-- ./Form Group -->
+
 <div class="form-group"><!-- Form Group REQUIRED Text Input -->
-	<label for="judgingLocation" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Address</label>
+	<label id="judgingLocationLabel" for="judgingLocation" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Session Address</label>
 	<div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
 		<div class="input-group has-warning">
 			<!-- Input Here -->
 			<input class="form-control" id="judgingLocation" name="judgingLocation" type="text" size="10" maxlength="255" value="<?php if ($action == "edit") echo $row_judging['judgingLocation']; ?>" placeholder="" required>
 			<span class="input-group-addon"><span class="fa fa-star"></span></span>
 		</div>
-        <span class="help-block with-errors"></span>
-        <span id="helpBlock" class="help-block">Provide the street address, city, and zip/postal code.</span>
+        <span id="helpBlockLocation1" class="help-block">Provide the street address, city, and zip/postal code where the session will take place.</span>
+        <span id="helpBlockLocation2" class="help-block">Inform judges how they will receive their entries to evaluate (e.g., a designated pick-up location with address, shipped directly, etc.). 255 character maximum.</span>
 	</div>
 </div><!-- ./Form Group -->
+
 <div class="form-group"><!-- Form Group REQUIRED Text Input -->
-	<label for="judgingRounds" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Rounds</label>
+	<label for="judgingRounds" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Session Rounds</label>
 	<div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
 		<div class="input-group has-warning">
 			<!-- Input Here -->
 			<input class="form-control" id="judgingRounds" name="judgingRounds" type="number" size="10" maxlength="255" value="<?php if ($action == "edit") echo $row_judging['judgingRounds']; ?>" placeholder="" required>
         	<span class="input-group-addon"><span class="fa fa-star"></span></span>
         </div>
-        <span class="help-block with-errors"></span>
-		<span id="helpBlock" class="help-block">Provide the number of judging rounds anticipated for this session (see the <a class="hide-loader" href="https://www.bjcp.org/rules.php" target="_blank">BJCP's definition of a session</a> in their rules).</span>
+        <span class="help-block">Provide the number of judging rounds anticipated for this session (see the <a class="hide-loader" href="https://www.bjcp.org/rules.php" target="_blank">BJCP's definition of a session</a> in their rules).</span>
 	</div>
 </div><!-- ./Form Group -->
 
@@ -722,7 +770,7 @@ if (($output_add_edit) && ($msg != 9)) { ?>
 <div class="bcoem-admin-element hidden-print">
 	<div class="form-group">
 		<div class="col-lg-offset-2 col-md-offset-3 col-sm-offset-4">
-			<input type="submit" name="Submit" id="helpUpdateJudgeAssign" class="btn btn-primary" aria-describedby="helpBlock" value="<?php echo $form_submit_button; ?>" />
+			<input type="submit" name="Submit" id="helpUpdateJudgeAssign" class="btn btn-primary" value="<?php echo $form_submit_button; ?>" />
 		</div>
 	</div>
 </div>

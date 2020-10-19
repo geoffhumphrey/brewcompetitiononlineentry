@@ -1525,58 +1525,64 @@ $label_paid_entries = "Již uhrazených vzorků";
 // ----------------------------------------------------------------------------------
 // Version 2.1.20 Additions (Via Google Translate English to Czech)
 // ----------------------------------------------------------------------------------
-$brewer_info_013 = "Byl jste přidělen jako soudce.";
-$brewer_info_014 = "Vstupte do panelu rozhodčích pomocí tlačítka níže a zadejte hodnocení položek, které vám byly přiřazeny.";
-$label_judging_dashboard = "Soudě Dashboard";
-$label_table_assignments = "Přiřazení Tabulky";
+// ----------------------------------------------------------------------------------
+// Version 2.1.20 Additions
+// ----------------------------------------------------------------------------------
+$brewer_info_013 = "Byli jste přiřazeni jako degustátor.";
+$brewer_info_014 = "K přehledu degustace, kde uvidíte vzorky k posouzení, se dostanete tlačítkem níže.";
+
+$label_judging_dashboard = "Přehled degustace";
+$label_table_assignments = "Přiřazení stolů";
 $label_table = "Stůl";
 $label_edit = "Upravit";
 $label_add = "Přidat";
-$label_disabled = "Invalidní";
-$label_judging_scoresheet = "Soudní Zápis";
-$label_checklist_version = "Verze Kontrolního Seznamu";
-$label_classic_version = "Klasická Verze";
-$label_structured_version = "Strukturovaná Verze";
-$label_submit_evaluation = "Odeslat Hodnocení";
-$label_edit_evaluation = "Upravit Hodnocení";
-$label_your_score = "Tvoje Skóre";
-$label_your_assigned_score = "Vaše Zadané Skóre Konsensu";
-$label_assigned_score = "Skóre Konsensu";
-$label_accepted_score = "Oficiální Přijaté Skóre";
-$label_recorded_scores = "Zadané Skóre Konsensu";
-$label_go = "Jít";
-$label_go_back = "Vraťte se";
+$label_disabled = "Vypnuto";
+$label_judging_scoresheet = "Degustační list";
+$label_checklist_version = "Zaškrtávací varianta";
+$label_classic_version = "Klasická varianta";
+$label_structured_version = "Strukturovaná varianta";
+$label_submit_evaluation = "Odeslat hodnocení";
+$label_edit_evaluation = "Upravit hodnocení";
+$label_your_score = "Vaše hodnocení";
+$label_your_assigned_score = "Vložení konsenzuální hodnocení";
+$label_assigned_score = "Konsenzuální hodnocení";
+$label_accepted_score = "Oficiálně uznané hodnocení";
+$label_recorded_scores = "Zadaná konsenzuální hodnocení";
+$label_go = "Přejít";
+$label_go_back = "Zpět";
 $label_na = "N/A";
-$label_evals_submitted = "Hodnocení Byla Předložena";
-$label_evaluations = "Vstupní Hodnocení";
-$label_submitted_by = "Předložené";
+$label_evals_submitted = "Hodnocení odeslána";
+$label_evaluations = "Hodnocení";
+$label_submitted_by = "Zadal(a)";
 $label_attention = "Pozor!";
-$evaluation_info_000 = "Níže jsou uvedeny položky pro jednotlivé tabulky a lety, které vám byly přiřazeny.";
-$evaluation_info_001 = "Tato soutěž využívá hodnocení ve frontě. Pokud je u vašeho stolu více než jeden pár rozhodčích, ohodnoťte další záznam v zavedené frontě.";
-$evaluation_info_002 = "Abyste zajistili přesnou a hladkou soutěž, měli byste vy a váš partner (y) rozhodčí POUZE u stolu posuzovat pouze ty, které ještě nebyly hodnoceny. Máte-li jakékoli dotazy, obraťte se na svého organizátora nebo koordinátora rozhodčích.";
-$evaluation_info_003 = "Čeká na konečné přijetí od správce webu.";
-$evaluation_info_004 = "Vaše konsenzuální skóre bylo zadáno.";
-$evaluation_info_005 = "Tato položka není součástí vašeho přiřazeného letu.";
-$evaluation_info_006 = "Podle potřeby upravte.";
-$evaluation_info_007 = "Vyberte si z následujících položek v této tabulce.";
-$evaluation_info_008 = "Chcete-li zaznamenat své hodnocení, vyberte odpovídající tlačítko Přidat pro záznam. K dispozici jsou pouze tabulky pro minulé a současné poroty.";
-$evaluation_info_009 = "Byl vám přidělen soudce, ale nebyl vám přidělen žádný stůl nebo let v systému. Obraťte se na organizátora nebo koordinátora rozhodčích.";
-$evaluation_info_010 = "Tato položka je součástí vašeho přiřazeného letu.";
-$evaluation_info_011 = "Přidejte hodnocení pro položku, která vám nebyla přiřazena.";
-$evaluation_info_012 = "Použijte pouze tehdy, když budete požádáni o vyhodnocení záznamu za běhu, který není součástí vaší přiřazené tabulky.";
-$evaluation_info_013 = "Záznam nebyl nalezen.";
-$evaluation_info_014 = "Ověřte šestimístné vstupní číslo a zkuste to znovu.";
-$evaluation_info_015 = "Ujistěte se, že číslo má 6 číslic.";
-$evaluation_info_016 = "Nebylo zaznamenáno žádné hodnocení.";
-$evaluation_info_017 = "Konsenzuální výsledky zadané soudci se neshodují.";
-$evaluation_info_018 = "Ověření je nutné pro následující položky:";
-$evaluation_info_019 = "U následujících položek je odesláno pouze jedno hodnocení:";
-$evaluation_info_020 = "Váš panel pro posuzování bude k dispozici na"; // Punctuation omitted intentionally
-$evaluation_info_021 = "přidat hodnocení pro položky, které jsou vám přiřazeny"; // Punctuation omitted intentionally
-$evaluation_info_022 = "Posuzování a hodnocení je uzavřeno.";
-$evaluation_info_023 = "Máte-li jakékoli dotazy, kontaktujte organizátora soutěže nebo koordinátora rozhodčích.";
-$evaluation_info_024 = "Byli jste přiřazeni k následujícím tabulkám. Seznamy přihlášek pro každou tabulku se zobrazí pouze pro minulé a aktuální zasedání rozhodčích.";
-$alert_text_086 = "Internet Explorer není podporován BCOE&M - funkce se nebudou správně vykreslovat a váš zážitek nebude optimální. Upgradujte prosím na novější prohlížeč.";
+
+$evaluation_info_000 = "Seznam vzorků ze stolů a sad, který vám byl přiřazen, je zobrazen níže.";
+$evaluation_info_001 = "Tato soutěž používá degustaci ve frontě. Pokud u vašeho stolu sedí více než jedna dvojice degutátorů, posuďte následující vzorek ve frontě.";
+$evaluation_info_002 = "Abychom zajistili přesné hodnocení vzorků a hladký průběh soutěže, vy i vaši kolegové smí posoudit pouze vzorky z vašeho stolu, které ještě nikdo jiný neochutnal. Dotažte se organizátora soutěže nebo koordinátora degustační komise, pokud máte nějaké otázky.";
+$evaluation_info_003 = "Očekáváme finální přijetí od správce webu.";
+$evaluation_info_004 = "Vaše konsenzuální hodnocení bylo přijato.";
+$evaluation_info_005 = "Tento vzorek <strong>není</strong> součástí vám přiřazené sady.";
+$evaluation_info_006 = "Upravte, je-li třeba.";
+$evaluation_info_007 = "U stolu si můžete vybrat z těchto vzorků.";
+$evaluation_info_008 = "Zvolte Přidat u příslušného vzorku pro zaznamenání hodnocení. K dispozici jsou pouze stoly aktuálního nebo minulých kol degustace.";
+$evaluation_info_009 = "Byli jste vybráni jako degustátor, nicméně nebyly vám přiřazeny žádné stoly nebo sady vzorků. Podrobnosti zjistíte u organizátora soutěže nebo koordinátora degustační komise.";
+$evaluation_info_010 = "Tento vzorek je součástí vám přiřazené sady.";
+$evaluation_info_011 = "Přidat hodnocení vzorku, který vám nebyl přiřazen.";
+$evaluation_info_012 = "Použijte pouze, když jste požádáni o ochutnání vzorku, který není součásti vám přiřazeného stolu.";
+$evaluation_info_013 = "Vzorek nebyl nalezen.";
+$evaluation_info_014 = "Prosím, zkontrolujte šestimístný kód vzorku a zkuste to znovu.";
+$evaluation_info_015 = "Ujistěte se, že má číslo 6 číslic.";
+$evaluation_info_016 = "Hodnocení nebylo zaznamenáno.";
+$evaluation_info_017 = "Konzenzuální hodnocení zadaná degustátory se neshodují.";
+$evaluation_info_018 = "U následujících vzorků je nutná kontrola:";
+$evaluation_info_019 = "Následující vzorky mají zadáno pouze jedno hodnocení:";
+$evaluation_info_020 = "Váš přehled degustace bude k dispozici"; // Punctuation omitted intentionally
+$evaluation_info_021 = "kdy budete moci ohodnotit vzorky, které jsme vám přiřadili"; // Punctuation omitted intentionally
+$evaluation_info_022 = "Degustace a vkládání hodnocení jsou uzavřeny.";
+$evaluation_info_023 = "Pokud máte nějaké dotazy, obraťte se se na organázotra soutěže nebo koordinátora degustační komise.";
+$evaluation_info_024 = "Byli jste přiřazeni k následujícím stolu. Seznam každého stolu zobrazuje pouze minulá a aktuální kola degustace.";
+
+$alert_text_086 = "Prohlížeč Internet Explorer není BCOE&M podporován - zobrazení a funkce nebudou fungovat správně. Prosím, pořiďte si novější prohlížeč.";
 
 // ***********************************************************************************
 // END TRANSLATIONS

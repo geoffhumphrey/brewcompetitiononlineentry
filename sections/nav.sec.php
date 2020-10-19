@@ -357,7 +357,6 @@ $(document).ready(function(){
                 <?php } ?>
                 <li<?php if ($section == "contact") echo $active_class; ?>><a class="hide-loader" href="<?php echo $link_contacts; ?>"><?php echo $label_contact; ?></a></li>
                 <?php if ((!$logged_in) && (($registration_open == 1) || ($judge_window_open == 1))) { ?>
-                <!--<li<?php if ($section == "register") echo $active_class; ?>><a href="<?php echo $link_register; ?>"><?php if (($registration_open != 1) && (!$ua) && (!isset($_SESSION['loginUsername'])) && ($judge_window_open == 1) && ($msg == "default")) echo $label_judge_steward_reg; else echo $label_register; ?></a></li> -->
                 <li class="dropdown">
                 	<a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false"><?php echo $label_register; ?> <span class="caret"></span></a>
                     <ul class="dropdown-menu">

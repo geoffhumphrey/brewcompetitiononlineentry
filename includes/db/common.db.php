@@ -380,7 +380,7 @@ $row_steward_count = mysqli_fetch_assoc($steward_count);
 
 if ($section == "default") {
 	$query_check = sprintf("SELECT judgingDate FROM %s",$prefix."judging_locations");
-	if (SINGLE) $query_judge_count .= sprintf(" WHERE comp_id='%s'",$_SESSION['comp_id']);
+	if (SINGLE) $query_check .= sprintf(" WHERE comp_id='%s'",$_SESSION['comp_id']);
 	$query_check .= " ORDER BY judgingDate DESC LIMIT 1";
 	$check = mysqli_query($connection,$query_check) or die (mysqli_error($connection));
 	$row_check = mysqli_fetch_assoc($check);

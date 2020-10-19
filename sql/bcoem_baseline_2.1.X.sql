@@ -631,11 +631,12 @@ CREATE TABLE IF NOT EXISTS `baseline_judging_flights` (
 
 DROP TABLE IF EXISTS `baseline_judging_locations`;
 CREATE TABLE IF NOT EXISTS `baseline_judging_locations` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int(11) NOT NULL,
+  `judgingLocType` tinyint(2) DEFAULT NULL,
   `judgingDate` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `judgingTime` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `judgingDateEnd` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `judgingLocName` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `judgingLocation` mediumtext COLLATE utf8mb4_unicode_ci,
+  `judgingLocation` text COLLATE utf8mb4_unicode_ci,
   `judgingRounds` int(11) DEFAULT '1' COMMENT 'number of rounds at location',
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -644,8 +645,8 @@ CREATE TABLE IF NOT EXISTS `baseline_judging_locations` (
 -- Dumping data for table `baseline_judging_locations`
 --
 
-INSERT INTO `baseline_judging_locations` (`id`, `judgingDate`, `judgingTime`, `judgingLocName`, `judgingLocation`, `judgingRounds`) VALUES
-(1, '1549094400', NULL, 'Baseline Judging Location', '1340 Pennsylvania St, Denver, CO 80203', 2);
+INSERT INTO `baseline_judging_locations` (`id`, `judgingLocType`, `judgingDate`, `judgingDateEnd`, `judgingLocName`, `judgingLocation`, `judgingRounds`) VALUES
+(1, '0', '1549094400', "NULL", 'Baseline Judging Location', '1340 Pennsylvania St, Denver, CO 80203', 2);
 
 -- --------------------------------------------------------
 

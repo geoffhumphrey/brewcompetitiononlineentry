@@ -304,16 +304,19 @@ if ($section != "admin") {
 
 			$page_info400 .= "<p>";
 			if ($row_judging['judgingLocName'] != "") $page_info400 .= $row_judging['judgingLocName'];
-			if ($logged_in) {
-				$location_link = $base_url."output/maps.output.php?section=driving&amp;id=".str_replace(' ', '+', $row_judging['judgingLocation']);
-				$location_tooltip = "Map to ".$row_judging['judgingLocName'];
+			if ($row_judging['judgingLocType'] == "0") {
+				if ($logged_in) {
+					$location_link = $base_url."output/maps.output.php?section=driving&amp;id=".str_replace(' ', '+', $row_judging['judgingLocation']);
+					$location_tooltip = "Map to ".$row_judging['judgingLocName'];
+				}
+				else {
+					$location_link = "#";
+					$location_tooltip = "Log in to view the ".$row_judging['judgingLocName']." location";
+				}
+				if ($row_judging['judgingLocation'] != "") $page_info400 .= " <a class=\"hide-loader\" href=\"".$location_link."\" target=\"".$location_target."\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"".$location_tooltip."\"> <span class=\"fa fa-lg fa-map-marker\"></span></a>";
 			}
-			else {
-				$location_link = "#";
-				$location_tooltip = "Log in to view the ".$row_judging['judgingLocName']." location";
-			}
-			if ($row_judging['judgingLocation'] != "") $page_info400 .= " <a class=\"hide-loader\" href=\"".$location_link."\" target=\"".$location_target."\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"".$location_tooltip."\"> <span class=\"fa fa-lg fa-map-marker\"></span></a>";
 			if ($row_judging['judgingDate'] != "") $page_info400 .=  "<br />".getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_judging['judgingDate'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "short", "date-time");
+			if ($row_judging['judgingDateEnd'] != "") $page_info400 .=  " ".$sidebar_text_004." ".getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_judging['judgingDateEnd'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "short", "date-time");
 			$page_info400 .= "</p>";
 		} while ($row_judging = mysqli_fetch_assoc($judging));
 	}

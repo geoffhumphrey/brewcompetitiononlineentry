@@ -95,6 +95,7 @@ if ($totalRows_log > 0) {
 		$entry_allergens_display = "";
 
 		$scoresheet = FALSE;
+		$scoresheet_eval = FALSE;
 		$scoresheet_entry = FALSE;
 		$scoresheet_judging = FALSE;
 
@@ -109,7 +110,7 @@ if ($totalRows_log > 0) {
 			if ($row_judging_prefs['jPrefsScoresheet'] == 3) $output_form = "structured-scoresheet";
 
 			if (in_array($row_log['id'], $evals)) {
-				$scoresheet = TRUE;
+				$scoresheet_eval = TRUE;
 				
 				$query_style = sprintf("SELECT id,brewStyleType FROM %s WHERE brewStyleVersion='%s'AND brewStyleGroup='%s' AND brewStyleNum='%s'",$prefix."styles",$_SESSION['prefsStyleSet'],$row_log['brewCategorySort'],$row_log['brewSubCategory']);
 				$style = mysqli_query($connection,$query_style) or die (mysqli_error($connection));
@@ -122,41 +123,37 @@ if ($totalRows_log > 0) {
 			}
 		
 		}
+			
+		// Check whether scoresheet file exists, and, if so, provide link.
+		$scoresheet_file_name_entry = sprintf("%06s",$entry_number).".pdf";
+		$scoresheet_file_name_judging = strtolower($judging_number).".pdf"; // upon upload via the UI, filename is converted to lowercase
+
+		if ($dbTable == "default") {
+			$scoresheetfile_entry = USER_DOCS.$scoresheet_file_name_entry;
+			$scoresheetfile_judging = USER_DOCS.$scoresheet_file_name_judging;
+			$scoresheet_prefs = $_SESSION['prefsDisplaySpecial'];
+		}
 
 		else {
-			
-			// Check whether scoresheet file exists, and, if so, provide link.
-			$scoresheet_file_name_entry = sprintf("%06s",$entry_number).".pdf";
-			$scoresheet_file_name_judging = strtolower($judging_number).".pdf"; // upon upload via the UI, filename is converted to lowercase
+			$scoresheetfile_entry = USER_DOCS.DIRECTORY_SEPARATOR.get_suffix($dbTable).DIRECTORY_SEPARATOR.$scoresheet_file_name_entry;
+			$scoresheetfile_judging = USER_DOCS.DIRECTORY_SEPARATOR.get_suffix($dbTable).DIRECTORY_SEPARATOR.$scoresheet_file_name_judging;
+			$scoresheet_prefs = $row_archive_prefs['archiveScoresheet'];
+		}
 
-			if ($dbTable == "default") {
-				$scoresheetfile_entry = USER_DOCS.$scoresheet_file_name_entry;
-				$scoresheetfile_judging = USER_DOCS.$scoresheet_file_name_judging;
-				$scoresheet_prefs = $_SESSION['prefsDisplaySpecial'];
-			}
+		if ((file_exists($scoresheetfile_entry)) && ($scoresheet_prefs == "E")) {
+			$scoresheet = TRUE;
+			$scoresheet_entry = TRUE;
+		}
 
-			else {
-				$scoresheetfile_entry = USER_DOCS.DIRECTORY_SEPARATOR.get_suffix($dbTable).DIRECTORY_SEPARATOR.$scoresheet_file_name_entry;
-				$scoresheetfile_judging = USER_DOCS.DIRECTORY_SEPARATOR.get_suffix($dbTable).DIRECTORY_SEPARATOR.$scoresheet_file_name_judging;
-				$scoresheet_prefs = $row_archive_prefs['archiveScoresheet'];
-			}
+		elseif ((file_exists($scoresheetfile_judging)) && ($scoresheet_prefs == "J")) {
+			$scoresheet = TRUE;
+			$scoresheet_judging = TRUE;
+		}
 
-			if ((file_exists($scoresheetfile_entry)) && ($scoresheet_prefs == "E")) {
-				$scoresheet = TRUE;
-				$scoresheet_entry = TRUE;
-			}
-
-			elseif ((file_exists($scoresheetfile_judging)) && ($scoresheet_prefs == "J")) {
-				$scoresheet = TRUE;
-				$scoresheet_judging = TRUE;
-			}
-
-			$scoresheet_file_name_1 = "";
-			$scoresheet_file_name_2 = "";
-			if ($scoresheet_entry) $scoresheet_file_name_1 = $scoresheet_file_name_entry;
-			if ($scoresheet_judging) $scoresheet_file_name_2 = $scoresheet_file_name_judging;
-
-		} // end if (EVALUATION) else
+		$scoresheet_file_name_1 = "";
+		$scoresheet_file_name_2 = "";
+		if ($scoresheet_entry) $scoresheet_file_name_1 = $scoresheet_file_name_entry;
+		if ($scoresheet_judging) $scoresheet_file_name_2 = $scoresheet_file_name_judging;
 
 		if ((!empty($row_log['brewInfo'])) || (!empty($row_log['brewMead1'])) || (!empty($row_log['brewMead2'])) || (!empty($row_log['brewMead3']))) {
 			
@@ -352,9 +349,9 @@ if ($totalRows_log > 0) {
 			$entry_actions .= "<a id=\"modal_window_link\" class=\"hide-loader\" href=\"".$base_url."output/entry.output.php?id=".$row_log['id']."&amp;bid=".$brewer_info[7]."&amp;filter=admin\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Print the Entry Forms for &ldquo;".$row_log['brewName']."&rdquo;\"><span class=\"fa fa-lg fa-print hidden-xs hidden-sm\"></a> ";
 			$entry_actions .= "<a class=\"hide-loader\" href=\"mailto:".$brewer_info[6]."\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Email the entry&rsquo;s owner, ".$brewer_info[0]." ".$brewer_info[1].", at ".$brewer_info[6]."\"><span class=\"fa fa-lg fa-envelope\"></span></a> ";
 			if (EVALUATION) {
-				if ($scoresheet) {
-					$entry_actions .= "<a id=\"modal_window_link\" class=\"hide-loader\" href=\"".$print_link."\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Print the Scoresheets for &ldquo;".$row_log['brewName']."&rdquo;\"><i class=\"fa fa-lg fa-gavel\"></i></a> ";
-					$entry_actions .= "<a id=\"modal_window_link\" class=\"hide-loader\" href=\"".$view_link."\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"View the Scoresheets for &ldquo;".$row_log['brewName']."&rdquo;\"><span class=\"fa-stack\"><i class=\"fa fa-square fa-stack-2x\"></i><i class=\"fa fa-stack-1x fa-gavel fa-inverse\"></i></span></a> ";
+				if ($scoresheet_eval) {
+					$entry_actions .= "<a id=\"modal_window_link\" class=\"hide-loader\" href=\"".$print_link."\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Print the Scoresheets for &ldquo;".$row_log['brewName']."&rdquo;\"><i class=\"fa fa-lg fa-file-text\"></i></a> ";
+					$entry_actions .= "<a id=\"modal_window_link\" class=\"hide-loader\" href=\"".$view_link."\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"View the Scoresheets for &ldquo;".$row_log['brewName']."&rdquo;\"><span class=\"fa-stack\"><i class=\"fa fa-square fa-stack-2x\"></i><i class=\"fa fa-stack-1x fa-file-text fa-inverse\"></i></span></a> ";
 				}
 			}
 		}
@@ -368,7 +365,7 @@ if ($totalRows_log > 0) {
 
 				// The pseudo-random number and the corresponding name of the temporary file are defined each time
 				// this brewer_entries.sec.php script is accessed (or refreshed), but the temporary file is created
-				// only when the entrant clicks on the gavel icon to access the scoresheet.
+				// only when the entrant clicks on the icon to access the scoresheet.
 				$random_num_str_1 = random_generator(8,2);
 				$random_file_name_1 = $random_num_str_1.".pdf";
 				$scoresheet_random_file_relative_1 = "user_temp/".$random_file_name_1;
@@ -393,14 +390,14 @@ if ($totalRows_log > 0) {
 
 				if ($dbTable != "default") $scoresheet_link_1 .= "&amp;view=".get_suffix($dbTable);
 				$scoresheet_link_1 .= sprintf("\" data-toggle=\"tooltip\" title=\"%s '".$row_log['brewName']."'' (by Entry Number).\">",$brewer_entries_text_006);
-				$scoresheet_link_1 .= "<span class=\"fa fa-lg fa-gavel\"></a>&nbsp;&nbsp;";
+				$scoresheet_link_1 .= "<span class=\"fa fa-lg fa-file-pdf-o\"></a>&nbsp;&nbsp;";
 			}
 
 			if ((!empty($scoresheet_file_name_2)) && ($scoresheet_judging)) {
 
 				// The pseudo-random number and the corresponding name of the temporary file are defined each time
 				// this brewer_entries.sec.php script is accessed (or refreshed), but the temporary file is created
-				// only when the entrant clicks on the gavel icon to access the scoresheet.
+				// only when the entrant clicks on the icon to access the scoresheet.
 
 				$random_num_str_2 = random_generator(8,2);
 				$random_file_name_2 = $random_num_str_2.".pdf";
@@ -418,7 +415,7 @@ if ($totalRows_log > 0) {
 				$scoresheet_link_2 .= "&amp;randomfilename=".urlencode(obfuscateURL($random_file_name_2,$encryption_key))."&amp;download=true";
 				if ($dbTable != "default") $scoresheet_link_2 .= "&amp;view=".get_suffix($dbTable);
 				$scoresheet_link_2 .= sprintf("\" data-toggle=\"tooltip\" title=\"%s '".$row_log['brewName']."' (by Judging Number).\">",$brewer_entries_text_006);
-				$scoresheet_link_2 .= "<span class=\"fa fa-lg fa-gavel\"></a>&nbsp;&nbsp;";
+				$scoresheet_link_2 .= "<span class=\"fa fa-lg fa-file-pdf-o\"></a>&nbsp;&nbsp;";
 			}
 
 			// Clean up temporary scoresheets created for other brewers, when they are at least 1 minute old (just to avoid problems when two entrants try accessing their scoresheets at practically the same time, and clean up previously created scoresheets for the same brewer, regardless of how old they are.

@@ -782,7 +782,6 @@ if (EVALUATION) {
                     </div>
                     <div id="collapseScoring" class="panel-collapse collapse">
                         <div class="panel-body">
-
                             <div class="row">
                                 <div class="col col-lg-5 col-md-4 col-sm-4 col-xs-4">
                                     <strong>Scoresheets and Docs</strong>

@@ -39,6 +39,19 @@
     <script src="<?php echo $base_url; ?>libraries/tinymce/js/tinymce/tinymce.min.js"></script>
 	<script src="<?php echo $base_url;?>js_includes/tinymce-init.min.js"></script>    
     <?php } ?>
+
+    <?php if ((($section == "admin") || (strpos($section, 'step') !== FALSE)) && (in_array($go,$tinymce_load))) { ?>
+    <!-- Load TinyMCE / https://www.tinymce.com/ -->
+    <?php if (ENABLE_MARKDOWN) { ?>
+    <link rel="stylesheet" href="<?php echo $base_url; ?>libraries/bootstrap-markdown-editor/css/bootstrap-markdown-editor.css">
+    <script src="<?php echo $base_url; ?>libraries/bootstrap-markdown-editor/js/bootstrap-markdown-editor.js"></script>
+    <script src="<?php echo $base_url; ?>libraries/ace/ace.js"></script>
+    <script src="<?php echo $base_url; ?>libraries/marked/marked.min.js"></script>
+    <?php } else { ?>
+    <script src="<?php echo $base_url; ?>libraries/tinymce/tinymce.min.js"></script>
+    <script src="<?php echo $base_url;?>js_includes/tinymce-init.min.js"></script>
+    <?php } ?>
+    <?php } ?>
     
     <?php if ((($logged_in) && ($_SESSION['userLevel'] <= 1)) || (($logged_in) && ($section == "beerxml"))) { ?>
     
