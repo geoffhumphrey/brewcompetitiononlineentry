@@ -106,7 +106,11 @@ $totalRows_entry_count = total_paid_received($go,"default");
     <?php } ?>
 </div>
 <?php if ($action == "default") { ?>
-<?php if (EVALUATION) include (EVALS.'import_scores.eval.php'); ?>
+<?php if (EVALUATION) {
+    echo "<div style=\"margin: 0 0 15px 0;\" class=\"btn-group hidden-print\" role=\"group\"><a class=\"btn btn-block btn-default\" href=\"".$base_url."index.php?section=evaluation&amp;go=default&amp;filter=default&amp;view=admin\"><span class=\"fa fa-chevron-circle-left\"></span> ".$label_admin.": ".$label_evaluations."</a></div>";
+    include (EVALS.'import_scores.eval.php');
+}
+?>
 <p id="score-entered-status-default">Scores have been entered for <?php echo $totalRows_scores; ?> of <?php echo $totalRows_entry_count; ?> entries marked as paid and received.</p>
 <?php } // end if ($dbTable == "default") ?>
 <?php if (($action == "default") && ($id == "default")) { ?>
@@ -171,7 +175,7 @@ $totalRows_entry_count = total_paid_received($go,"default");
 <?php
 
     if (EVALUATION) {
-        $evals = eval_exits();
+        $evals = eval_exits("default");
     }
 
 	do {

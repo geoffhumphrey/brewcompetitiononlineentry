@@ -85,7 +85,7 @@ if (!empty($row_contest_info['contestVolunteers'])) {
 // --------------------------------------------------------------
 // Display
 // --------------------------------------------------------------
-if (($action != "print") && ($msg != "default")) echo $msg_output;
+// if (($action != "print") && ($msg != "default")) echo $msg_output;
 
 echo $header_vol_1_1;
 echo $page_info_vol_1;

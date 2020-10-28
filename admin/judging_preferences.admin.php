@@ -164,14 +164,47 @@
         </div>
     </div>
 </div><!-- ./modal -->
-
-
-
+<div class="form-group">
+    <label for="jPrefsScoreDispMax" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Maximum Difference for Consensus Scores</label>
+    <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
+            <input class="form-control" id="jPrefsScoreDispMax" name="jPrefsScoreDispMax" type="number" min="1" value="<?php if (($section == "step8") || (!isset($_SESSION['jPrefsScoreDispMax']))) echo "7"; else echo $_SESSION['jPrefsScoreDispMax']; ?>" placeholder="" required>
+        <div id="helpBlock" class="help-block">
+            <p>Provide the maximum difference between judges' scores for any given entry.</p>
+            <div class="btn-group" role="group" aria-label="maxDiffModal">
+                <div class="btn-group" role="group">
+                    <button type="button" class="btn btn-xs btn-info" data-toggle="modal" data-target="#maxDiffModal">
+                       Maximum Difference for Consensus Scores Info
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Modal -->
+<div class="modal fade" id="maxDiffModal" tabindex="-1" role="dialog" aria-labelledby="maxDiffModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header bcoem-admin-modal">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="maxDiffModalLabel">Maximum Difference for Consensus Scores Info</h4>
+            </div>
+            <div class="modal-body">
+                <p>While judges are not required to have exactly the same score for the same entry they are evaluating, the difference between their individual scores should be within an acceptable range.</p>
+                <p>For example, suppose the specified maximum difference for consensus scores for a competition is eight (8). If one judge scores an entry at 42 and another scores the same entry at 29, the disparity is too great between their scores and, thus, a discussion should take place to bring the scores into within eight points of one another.</p>
+                <p>When scoring entries using BCOE&amp;M, judges will be alerted if their score is beyond the maximum difference.</p>
+                <p>If no number is provided in the <em>Maximum Difference for Consensus Scores</em> field, the system will default to seven (7), a commonly accepted range.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div><!-- ./modal -->
 <?php } ?>
 <div class="form-group">
     <label for="jPrefsBottleNum" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Number of Bottles Required per Entry</label>
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
-            <input class="form-control" id="jPrefsBottleNum" name="jPrefsBottleNum" type="text" value="<?php if (($section == "step8") || (!isset($_SESSION['jPrefsBottleNum']))) echo "2"; else echo $_SESSION['jPrefsBottleNum']; ?>" placeholder="" required>
+            <input class="form-control" id="jPrefsBottleNum" name="jPrefsBottleNum" type="number" min="1" value="<?php if (($section == "step8") || (!isset($_SESSION['jPrefsBottleNum']))) echo "2"; else echo $_SESSION['jPrefsBottleNum']; ?>" placeholder="" required>
         <span id="helpBlock" class="help-block"><p>Most competitions require at least two bottles.</span>
     </div>
 </div>
@@ -180,7 +213,7 @@
     <label for="jPrefsCapJudges" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Judge Limit</label>
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
         <!-- Input Here -->
-            <input class="form-control" id="jPrefsCapJudges" name="jPrefsCapJudges" type="text" value="<?php if (isset($_SESSION['jPrefsCapJudges'])) echo $_SESSION['jPrefsCapJudges']; ?>" placeholder="">
+            <input class="form-control" id="jPrefsCapJudges" name="jPrefsCapJudges" type="number" value="<?php if (isset($_SESSION['jPrefsCapJudges'])) echo $_SESSION['jPrefsCapJudges']; ?>" placeholder="">
 
         <span id="helpBlock" class="help-block"><p>Limit to the number of judges that may sign up. Leave blank for no limit.</span>
     </div>
@@ -190,7 +223,7 @@
     <label for="jPrefsCapStewards" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Steward Limit</label>
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
         <!-- Input Here -->
-            <input class="form-control" id="jPrefsCapStewards" name="jPrefsCapStewards" type="text" value="<?php if (isset($_SESSION['jPrefsCapStewards'])) echo $_SESSION['jPrefsCapStewards']; ?>" placeholder="">
+            <input class="form-control" id="jPrefsCapStewards" name="jPrefsCapStewards" type="number" value="<?php if (isset($_SESSION['jPrefsCapStewards'])) echo $_SESSION['jPrefsCapStewards']; ?>" placeholder="">
 
         <span id="helpBlock" class="help-block"><p>Limit to the number of stewards that may sign up. Leave blank for no limit.</span>
     </div>
@@ -201,7 +234,7 @@
 		<label for="jPrefsFlightEntries" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Maximum Entries per Flight</label>
 		<div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
 			<!-- Input Here -->
-				<input class="form-control" id="jPrefsFlightEntries" name="jPrefsFlightEntries" type="text" value="<?php if (isset($_SESSION['jPrefsFlightEntries'])) echo $_SESSION['jPrefsFlightEntries']; ?>" placeholder="" required>
+				<input class="form-control" id="jPrefsFlightEntries" name="jPrefsFlightEntries" type="number" value="<?php if (isset($_SESSION['jPrefsFlightEntries'])) echo $_SESSION['jPrefsFlightEntries']; ?>" placeholder="" required>
 		</div>
 	</div><!-- ./Form Group -->
 </div>
@@ -209,14 +242,14 @@
 	<label for="jPrefsRounds" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Maximum Rounds per Session</label>
 	<div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
 		<!-- Input Here -->
-			<input class="form-control" id="jPrefsRounds" name="jPrefsRounds" type="text" value="<?php if (isset($_SESSION['jPrefsRounds'])) echo $_SESSION['jPrefsRounds']; ?>" placeholder="" required>
+			<input class="form-control" id="jPrefsRounds" name="jPrefsRounds" type="number" value="<?php if (isset($_SESSION['jPrefsRounds'])) echo $_SESSION['jPrefsRounds']; ?>" placeholder="" required>
 	</div>
 </div><!-- ./Form Group -->
 <div class="form-group"><!-- Form Group NOT REQUIRED Text Input -->
 	<label for="jPrefsMaxBOS" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Maximum Places in BOS Round</label>
 	<div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
 		<!-- Input Here -->
-			<input class="form-control" id="jPrefsMaxBOS" name="jPrefsMaxBOS" type="text" value="<?php if (isset($_SESSION['jPrefsMaxBOS'])) echo $_SESSION['jPrefsMaxBOS']; ?>" placeholder="">
+			<input class="form-control" id="jPrefsMaxBOS" name="jPrefsMaxBOS" type="number" value="<?php if (isset($_SESSION['jPrefsMaxBOS'])) echo $_SESSION['jPrefsMaxBOS']; ?>" placeholder="">
 	</div>
 </div><!-- ./Form Group -->
 <div class="bcoem-admin-element hidden-print">

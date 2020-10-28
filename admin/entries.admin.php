@@ -53,7 +53,7 @@ else {
 
 if (EVALUATION) {
 	// Check which evaluations exist
-	$evals = eval_exits();	 
+	$evals = eval_exits("default");	 
 }
 
 if ($totalRows_log > 0) {

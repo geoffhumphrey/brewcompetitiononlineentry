@@ -20,7 +20,8 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 	if (isset($_POST['jPrefsBottleNum'])) $jPrefsBottleNum = $_POST['jPrefsBottleNum'];
 	else $jPrefsBottleNum = "2";
 
-	if ($_POST['jPrefsQueued'] == "N") $flight_ent = $_POST['jPrefsFlightEntries']; else $flight_ent = $_SESSION['jPrefsFlightEntries'];
+	if ($_POST['jPrefsQueued'] == "N") $flight_ent = $_POST['jPrefsFlightEntries']; 
+	else $flight_ent = $_SESSION['jPrefsFlightEntries'];
 
 	$updateSQL = sprintf("UPDATE $judging_preferences_db_table SET
 
@@ -52,11 +53,13 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 		$updateSQL = sprintf("UPDATE $judging_preferences_db_table SET
 			jPrefsScoresheet=%s,
 			jPrefsJudgingOpen=%s,
-			jPrefsJudgingClosed=%s
+			jPrefsJudgingClosed=%s,
+			jPrefsScoreDispMax=%s
 			WHERE id=%s",
 						GetSQLValueString(sterilize($_POST['jPrefsScoresheet']), "text"),
 						GetSQLValueString(sterilize($jPrefsJudgingOpen), "text"),
-						GetSQLValueString(sterilize($jPrefsJudgingClosed), "int"),
+						GetSQLValueString(sterilize($jPrefsJudgingClosed), "text"),
+						GetSQLValueString(sterilize($_POST['jPrefsScoreDispMax']), "int"),
 						GetSQLValueString($id, "int"));
 
 		mysqli_real_escape_string($connection,$updateSQL);

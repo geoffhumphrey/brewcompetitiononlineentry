@@ -1555,7 +1555,10 @@ $label_evals_submitted = "Hodnocení odeslána";
 $label_evaluations = "Hodnocení";
 $label_submitted_by = "Zadal(a)";
 $label_attention = "Pozor!";
-
+$label_unassigned_eval = "Unassigned Evaluations";
+$label_head_judge = "Hlavní degustátor";
+$label_lead_judge = "Vedoucí degustátor";
+$label_mini_bos_judge = "Mini-BOS degustátor";
 $evaluation_info_000 = "Seznam vzorků ze stolů a sad, který vám byl přiřazen, je zobrazen níže.";
 $evaluation_info_001 = "Tato soutěž používá degustaci ve frontě. Pokud u vašeho stolu sedí více než jedna dvojice degutátorů, posuďte následující vzorek ve frontě.";
 $evaluation_info_002 = "Abychom zajistili přesné hodnocení vzorků a hladký průběh soutěže, vy i vaši kolegové smí posoudit pouze vzorky z vašeho stolu, které ještě nikdo jiný neochutnal. Dotažte se organizátora soutěže nebo koordinátora degustační komise, pokud máte nějaké otázky.";
@@ -1581,7 +1584,9 @@ $evaluation_info_021 = "kdy budete moci ohodnotit vzorky, které jsme vám při�
 $evaluation_info_022 = "Degustace a vkládání hodnocení jsou uzavřeny.";
 $evaluation_info_023 = "Pokud máte nějaké dotazy, obraťte se se na organázotra soutěže nebo koordinátora degustační komise.";
 $evaluation_info_024 = "Byli jste přiřazeni k následujícím stolu. Seznam každého stolu zobrazuje pouze minulá a aktuální kola degustace.";
-
+$evaluation_info_025 = "Soudci přidělení k této tabulce, včetně vás:";
+$evaluation_info_026 = "Všechna shodná skóre zadaná rozhodčími se shodují.";
+$evaluation_info_027 = "Položky, které jste vyplnili nebo které administrátor zadal vaším jménem a které vám nebyly v systému přiřazeny.";
 $alert_text_086 = "Prohlížeč Internet Explorer není BCOE&M podporován - zobrazení a funkce nebudou fungovat správně. Prosím, pořiďte si novější prohlížeč.";
 
 // ***********************************************************************************

@@ -3536,7 +3536,7 @@ function obfuscateURL($data,$key) {
 	
 	else {
 	
-		if (function_exists(openssl_encrypt)) {
+		if (function_exists('openssl_encrypt')) {
 			// Generate an initialization vector
 			$iv = openssl_random_pseudo_bytes(openssl_cipher_iv_length('aes-256-cbc'));
 
@@ -3551,7 +3551,7 @@ function obfuscateURL($data,$key) {
 		}
 
 		// Use mcrypt if openssl not available; deprecated as of PHP 7.1
-		elseif (function_exists(mcrypt_encrypt)) {
+		elseif (function_exists('mcrypt_encrypt')) {
 			$salt = "rdwhahb"; // should be the same as the $salt var in the deobfuscateURL function
 			$encrypted = base64_encode(mcrypt_encrypt(MCRYPT_RIJNDAEL_256, md5($salt), str_replace($clean, $dirty, $data), MCRYPT_MODE_CBC, md5(md5($salt))));
 			return $encrypted;
@@ -4148,8 +4148,8 @@ function user_submitted_eval($uid,$eid) {
 	require(CONFIG.'config.php');
 	mysqli_select_db($connection,$database);
 
-	if ($uid == "admin") $query_eval_sub = sprintf("SELECT id,evalAromaScore,evalAppearanceScore,evalFlavorScore,evalMouthfeelScore,evalOverallScore,evalFinalScore,evalTable FROM %s WHERE eid='%s'", $prefix."evaluation",$eid);
-	else $query_eval_sub = sprintf("SELECT id,evalAromaScore,evalAppearanceScore,evalFlavorScore,evalMouthfeelScore,evalOverallScore,evalFinalScore,evalTable FROM %s WHERE evalJudgeInfo='%s' AND eid='%s'", $prefix."evaluation",$uid,$eid);
+	if ($uid == "admin") $query_eval_sub = sprintf("SELECT id, evalAromaScore, evalAppearanceScore, evalFlavorScore, evalMouthfeelScore, evalOverallScore, evalFinalScore, evalTable, evalMiniBOS FROM %s WHERE eid='%s'", $prefix."evaluation",$eid);
+	else $query_eval_sub = sprintf("SELECT id, evalAromaScore, evalAppearanceScore, evalFlavorScore, evalMouthfeelScore, evalOverallScore, evalFinalScore, evalTable, evalMiniBOS FROM %s WHERE evalJudgeInfo='%s' AND eid='%s'", $prefix."evaluation",$uid,$eid);
 	$eval_sub = mysqli_query($connection,$query_eval_sub) or die (mysqli_error($connection));
 	$row_eval_sub = mysqli_fetch_assoc($eval_sub);
 	$totalRows_eval_sub = mysqli_num_rows($eval_sub);
@@ -4159,22 +4159,42 @@ function user_submitted_eval($uid,$eid) {
 
 }
 
-function eval_exits() {
+function eval_exits($eid="default",$method="default") {
 
 	require(CONFIG.'config.php');
 	mysqli_select_db($connection,$database);
 
 	$evals = array();
 
-	$query_eval_exists = sprintf("SELECT DISTINCT eid FROM %s",$prefix."evaluation");
+	if ($eid == "default") $query_eval_exists = sprintf("SELECT DISTINCT eid FROM %s",$prefix."evaluation");
+	else $query_eval_exists = sprintf("SELECT * FROM %s WHERE eid='%s'",$prefix."evaluation",$eid); 
 	$eval_exists = mysqli_query($connection,$query_eval_exists) or die (mysqli_error($connection));
 	$row_eval_exists = mysqli_fetch_assoc($eval_exists);
 	$totalRows_eval_exists = mysqli_num_rows($eval_exists);
 
 	if ($totalRows_eval_exists > 0) {
+		
 		do {
-			$evals[] = $row_eval_exists['eid'];
+			if ($eid == "default") $evals[] = $row_eval_exists['eid'];
+			
+			else {
+				
+				if ($method == "judge_scores") {
+					$eval_score = $row_eval_exists['evalAromaScore'] + $row_eval_exists['evalAppearanceScore'] + $row_eval_exists['evalFlavorScore'] + $row_eval_exists['evalMouthfeelScore'] + $row_eval_exists['evalOverallScore'];
+					$evals[] = (string)$eval_score;
+				}
+				
+				elseif ($method == "consensus_scores") {
+					$consensus = $row_eval_exists['evalFinalScore'];
+					$evals[] = (string)$consensus;
+				}
+
+				else $evals[] = $row_eval_exists['eid'];
+			
+			}
+		
 		} while ($row_eval_exists = mysqli_fetch_assoc($eval_exists));
+	
 	}
 
 	return $evals;

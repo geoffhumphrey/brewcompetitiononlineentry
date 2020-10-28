@@ -1518,7 +1518,6 @@ $label_entrant_reg = "Entrant Registration";
 $sidebar_text_026 = "are in the system as of";
 $label_paid_entries = "Paid Entries";
 
-
 // ----------------------------------------------------------------------------------
 // Version 2.1.20 Additions
 // ----------------------------------------------------------------------------------
@@ -1548,12 +1547,10 @@ $label_evals_submitted = "Evaluations Submitted";
 $label_evaluations = "Entry Evaluations";
 $label_submitted_by = "Submitted By";
 $label_attention = "Attention!";
-
 $label_unassigned_eval = "Unassigned Evaluations";
 $label_head_judge = "Head Judge";
 $label_lead_judge = "Lead Judge";
 $label_mini_bos_judge = "Mini-BOS Judge";
-
 $evaluation_info_000 = "The entry pool for each of the tables and flights that have been assigned to you is detailed below.";
 $evaluation_info_001 = "This competition is employing queued judging. If there is more than one judge pair at your table, evaluate the the next entry in the established queue.";
 $evaluation_info_002 = "To ensure an accurate and smooth competition, you and your judge partner(s) should ONLY judge entries at your table that have not been evaluated yet. See your organizer or judge coordinator if you have any questions.";

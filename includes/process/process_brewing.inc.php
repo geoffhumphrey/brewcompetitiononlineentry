@@ -66,12 +66,12 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 		$brewReceived = 0;
 
 		// Comments
-		if ((isset($_POST['brewComments'])) && (!empty($_POST['brewComments']))) $brewComments .= $purifier->purify($_POST['brewComments']);
+		if ((isset($_POST['brewComments'])) && (!empty($_POST['brewComments']))) $brewComments = $purifier->purify($_POST['brewComments']);
 
 		// Co Brewer
 		if ((isset($_POST['brewCoBrewer'])) && (!empty($_POST['brewCoBrewer']))) {
 
-			$brewCoBrewer .= $purifier->purify($_POST['brewCoBrewer']);
+			$brewCoBrewer = $purifier->purify($_POST['brewCoBrewer']);
 			
 			if ((isset($_SESSION['prefsLanguageFolder'])) && (in_array($_SESSION['prefsLanguageFolder'], $name_check_langs))) {
 		    	
@@ -87,20 +87,20 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 			    else $last_name .= $parsed_name['lname']; 
 			    if (!empty($parsed_name['suffix'])) $last_name .= " ".$parsed_name['suffix']; 
 
-			    $brewCoBrewer .= $first_name." ".$last_name;
+			    $brewCoBrewer = $first_name." ".$last_name;
 
 			}
 
 		}
-
+		
 		// Possible Allergens
-		if ((isset($_POST['brewPossAllergens'])) && (!empty($_POST['brewPossAllergens']))) $brewPossAllergens .= $purifier->purify($_POST['brewPossAllergens']);
+		if ((isset($_POST['brewPossAllergens'])) && (!empty($_POST['brewPossAllergens']))) $brewPossAllergens = $purifier->purify($_POST['brewPossAllergens']);
 
 		// Admin and Staff Notes
-		if ((isset($_POST['brewAdminNotes'])) && (!empty($_POST['brewAdminNotes']))) $brewAdminNotes .= $purifier->purify($_POST['brewAdminNotes']);
-		if ((isset($_POST['brewStaffNotes'])) && (!empty($_POST['brewStaffNotes']))) $brewStaffNotes .= $purifier->purify($_POST['brewStaffNotes']);
+		if ((isset($_POST['brewAdminNotes'])) && (!empty($_POST['brewAdminNotes']))) $brewAdminNotes = $purifier->purify($_POST['brewAdminNotes']);
+		if ((isset($_POST['brewStaffNotes'])) && (!empty($_POST['brewStaffNotes']))) $brewStaffNotes = $purifier->purify($_POST['brewStaffNotes']);
 
-		if ((isset($_POST['brewBoxNum'])) && (!empty($_POST['brewBoxNum']))) $brewBoxNum .= $purifier->purify($_POST['brewBoxNum']);
+		if ((isset($_POST['brewBoxNum'])) && (!empty($_POST['brewBoxNum']))) $brewBoxNum = $purifier->purify($_POST['brewBoxNum']);
 		if (isset($_POST['brewReceived'])) $brewReceived = $_POST['brewReceived'];
 		if (isset($_POST['brewPaid'])) $brewPaid = $_POST['brewPaid'];
 
