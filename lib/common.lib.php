@@ -3237,7 +3237,9 @@ function limit_subcategory($style,$pref_num,$pref_exception_sub_num,$pref_except
 
 	$pref_exception_sub_array = explode(",",$pref_exception_sub_array);
 
-	if ($style_break[0] <= 9) $style_num = sprintf('%02d',$style_break[0]);
+	// Check if first character is "C", "M", or "P" for ciders, meads, and provisional styles 
+    if (preg_match("/^[C,M,P]$/", substr($style_break[0], 0, 1))) $style_num = $style_break[0];
+	elseif ($style_break[0] <= 9) $style_num = sprintf('%02d',$style_break[0]);
 	else $style_num = $style_break[0];
 
 	$query_style = sprintf("SELECT id FROM %s WHERE (brewStyleVersion='%s' OR brewStyleOwn='custom') AND brewStyleGroup='%s' AND brewStyleNum='%s'",$prefix."styles",$_SESSION['prefsStyleSet'],$style_num,$style_break[1]);
