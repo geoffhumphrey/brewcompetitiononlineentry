@@ -379,10 +379,10 @@ $(document).ready(function(){
               </ul>
           <ul class="nav navbar-nav navbar-right">
           	<?php if ($help_icon) { ?>
-            <li><a href="#" role="button" data-tooltip="true" data-toggle="modal" data-target="#helpModal"><span class="fa fa-question-circle"></span></a></li>
+            <li><a class="hide-loader hidden-xs hidden-sm hidden-md" href="#" role="button" data-tooltip="true" data-toggle="modal" data-target="#helpModal"><span class="fa fa-question-circle"></span></a></li>
             <?php } ?>
           	<?php if ($print_icon) { ?>
-          	<li><a class="hide-loader" href="javascript:window.print()" role="button"><span class="fa fa-print"></span></a></li>
+          	<li><a class="hide-loader hidden-xs hidden-sm hidden-md" href="javascript:window.print()" role="button"><span class="fa fa-print"></span></a></li>
             <?php } ?>
           	<?php if ($logged_in) { ?>
             <li class="dropdown">

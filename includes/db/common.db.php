@@ -260,10 +260,12 @@ if ((isset($_SESSION['loginUsername'])) && ((!isset($_SESSION['user_info'.$prefi
 
 	    $_SESSION['user_id'] = $row_user['id'];
 
-		$query_name = sprintf("SELECT * FROM %s WHERE uid='%s'", $prefix."brewer", $_SESSION['user_id']);
+		$query_name = sprintf("SELECT * FROM %s WHERE uid='%s'", $prefix."brewer", $row_user['id']);
 		$name = mysqli_query($connection,$query_name) or die (mysqli_error($connection));
 		$row_name = mysqli_fetch_assoc($name);
 		$name_columns = array_keys($row_name);
+
+		
 
 	    foreach ($row_name as $key => $value) {
 			if ($key != "id") $_SESSION[$key] = $value;

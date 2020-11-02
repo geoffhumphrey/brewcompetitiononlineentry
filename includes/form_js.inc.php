@@ -70,7 +70,7 @@ $styles_entry_text = array(
 if (($section == "admin") && ($go == "styles") && ($action != "default")) {
 
 	if ($styleSet != "BA") {
-		$specialty_ipa_subs = array("21-B1","21-B2","21-B3","21-B4","21-B5","21-B6");
+		$specialty_ipa_subs = array("21-B1","21-B2","21-B3","21-B4","21-B5","21-B6","21-B7");
 		$historical_subs = array("27-A1","27-A2","27-A3","27-A4","27-A5","27-A6","27-A7","27-A8","27-A9");
 	}
 
@@ -1220,6 +1220,26 @@ if ($action == "edit") {
 				<?php } ?>
 			});
 		<?php } elseif ($view == "21-B6") { ?>
+			$(document).ready(function() {
+				$("#special").hide("fast");
+				$("#carbonation").hide("fast");
+				$("#sweetness").hide("fast");
+				$("#strength").hide("fast");
+				$("#strengthIPA").show("fast");
+				$("#strengthSaison").hide("fast");
+				$("#darkLightColor").hide("fast");
+				$("#sweetnessLambic").hide("fast");
+				$("#carbLambic").hide("fast");
+				$("#BDGColor").hide("fast");
+				$("#specialInfo").hide("fast");
+				$("#specialInfoText").html("<?php echo clean_up_text($special_beer_info["$view"]); ?>");
+				$("#specialInfoName").html("<a href='#' data-tooltip='true' title='Click for specifics for this style.' data-toggle='modal' data-target='#<?php echo $view; ?>'><?php echo $label_this_style; ?></a>");
+				<?php if (($_SESSION['prefsStyleSet'] == "BJCP2015") && (in_array($view,$optional_info_styles))) { ?>
+				$("#optional").show("fast");
+				
+				<?php } ?>
+			});
+		<?php } elseif ($view == "21-B7") { ?>
 			$(document).ready(function() {
 				$("#special").hide("fast");
 				$("#carbonation").hide("fast");

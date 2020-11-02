@@ -1581,6 +1581,10 @@ $evaluation_info_026 = "All consensus scores entered by judges match.";
 $evaluation_info_027 = "Entries that you have completed, or an admin has entered on your behalf, that were not assigned to you in the system.";
 $alert_text_086 = "Internet Explorer is not supported by BCOE&M - features and functions will not render properly and your experience will not be optimal. Please upgrade to a newer browser.";
 
+$contact_text_004 = "The competition organizers have not specified any contacts.";
+$label_place_awarded = "Place Awarded";
+$label_honorable_mention = "Honorable Mention";
+
 /**
  * ----------------------------------------------------------------------------------
  * END TRANSLATIONS

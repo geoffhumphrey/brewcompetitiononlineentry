@@ -59,7 +59,7 @@ function generic_session_expired(element_id,remove,msg) {
     // If the remove var is greater than zero, elements hide after X seconds
     if (remove > 0) {
         $("#"+element_id+"-status").show().delay(remove).hide(100);
-        $("#"+element_id+"-status-msg").show().delay(remove).hide(100); 
+        $("#"+element_id+"-status-msg").show().delay(remove).hide(100);
     }
     
 }

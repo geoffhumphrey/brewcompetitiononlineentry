@@ -2406,7 +2406,11 @@ if (((strpos($section, "step") === FALSE) && ($section != "setup")) && ($section
 
     if (EVALUATION) {
 
-        if (empty($row_judging_prefs['jPrefsScoresheet'])) $judging_scoresheet = "1"; 
+        $suggested_open_date = time();
+        $suggested_close_date = time() + 604800;
+
+        if (empty($row_judging_prefs['jPrefsScoresheet'])) $judging_scoresheet = "1";
+        else if (!isset($_SESSION['jPrefsScoresheet'])) $judging_scoresheet = "1";
         else $judging_scoresheet = $_SESSION['jPrefsScoresheet'];
 
         if ((empty($row_judging_prefs['jPrefsJudgingOpen'])) || (empty($row_judging_prefs['jPrefsJudgingClosed']))) {

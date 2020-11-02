@@ -44,6 +44,37 @@ $input = "";
 $post = 0;
 $error_type = 0;
 
+
+if ((isset($_SESSION['session_set_'.$prefix_session])) && (isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 2)) {
+	if ($action == "evaluation") {
+
+		if ($go == "evalPlace") {
+
+			$input = filter_var($_POST['evalPlace'],FILTER_SANITIZE_STRING);
+
+		}
+
+		if (empty($input)) {
+			$sql = sprintf("UPDATE `%s` SET %s=NULL WHERE eid=%s", $prefix.$action, $go, $id);
+		}
+
+		else {
+			if ($input == "0") $sql = sprintf("UPDATE `%s` SET %s=NULL WHERE eid='%s'", $prefix.$action, $go, $id);
+			else $sql = sprintf("UPDATE `%s` SET %s='%s' WHERE eid='%s'", $prefix.$action, $go, $input, $id);
+		}
+
+		mysqli_real_escape_string($connection,$sql);
+		$result = mysqli_query($connection,$sql) or die (mysqli_error($connection));
+
+		// If successful, change $status from fail (0) to success (1)
+		if ($result) $status = 1;
+		else $error_type = 3; // SQL error
+
+	}
+
+		
+}
+
 if ((isset($_SESSION['session_set_'.$prefix_session])) && (isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) {
 
 	// brewing (entries) DB table
