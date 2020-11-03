@@ -1589,6 +1589,16 @@ $evaluation_info_026 = "Všechna shodná skóre zadaná rozhodčími se shodují
 $evaluation_info_027 = "Položky, které jste vyplnili nebo které administrátor zadal vaším jménem a které vám nebyly v systému přiřazeny.";
 $alert_text_086 = "Prohlížeč Internet Explorer není BCOE&M podporován - zobrazení a funkce nebudou fungovat správně. Prosím, pořiďte si novější prohlížeč.";
 
+$contact_text_004 = "Organizátoři soutěže neuvedli žádné kontakty.";
+$label_place_awarded = "Místo uděleno";
+$label_honorable_mention = "Čestné uznání";
+$label_places_awarded_table = "Místa oceněná u tohoto stolu";
+$label_places_awarded_duplicate = "Duplicitní místa oceněná v této tabulce";
+
+$evaluation_info_028 = "Porota skončila.";
+$evaluation_info_029 = "U následujících tabulek byla udělena duplicitní místa:";
+$evaluation_info_030 = "Správci budou muset zadat všechny zbývající položky umístění.";
+
 // ***********************************************************************************
 // END TRANSLATIONS
 // ***********************************************************************************

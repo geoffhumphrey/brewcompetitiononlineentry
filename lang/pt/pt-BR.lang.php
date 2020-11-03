@@ -1593,6 +1593,16 @@ $evaluation_info_026 = "Todas as pontuações de consenso inseridas pelos juíze
 $evaluation_info_027 = "Entradas que você completou, ou que um administrador inseriu em seu nome, que não foram atribuídas a você no sistema.";
 $alert_text_086 = "O Internet Explorer não é compatível com o BCOE&M - recursos e funções não serão renderizados corretamente e sua experiência não será a ideal. Por favor, atualize para um navegador mais recente.";
 
+$contact_text_004 = "Os organizadores da competição não especificaram nenhum contato.";
+$label_place_awarded = "Lugar concedido";
+$label_honorable_mention = "Menção honrosa";
+$label_places_awarded_table = "Lugares premiados nesta mesa";
+$label_places_awarded_duplicate = "Lugares duplicados concedidos nesta mesa";
+
+$evaluation_info_028 = "A sessão de julgamento terminou.";
+$evaluation_info_029 = "Lugares duplicados foram atribuídos nas seguintes tabelas:";
+$evaluation_info_030 = "Os administradores precisarão inserir as entradas de colocação que permanecerem.";
+
 // ************************************************ ***********************************
 // END TRANSLATIONS
 // ************************************************ ***********************************
