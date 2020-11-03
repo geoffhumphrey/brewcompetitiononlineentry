@@ -196,6 +196,7 @@ $anchor_name = str_replace(" ", "-", $label_admin_judging_loc);
 $header1_7 .= sprintf("<a class=\"anchor-offset\" name=\"%s\"></a><h2>%s</h2>",strtolower($anchor_name),$label_admin_judging_loc);
 if ($totalRows_judging == 0) $page_info7 .= sprintf("<p>%s</p>",$entry_info_text_035);
 else {
+	
 	do {
 		$page_info7 .= "<p>";
 
@@ -220,10 +221,12 @@ else {
 
 		if ($row_judging['judgingDate'] != "") $page_info7 .=  "<br />".getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_judging['judgingDate'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "long", "date-time");
 
-		if ($row_judging['judgingDateEnd'] != "") $page_info7 .=  " ".$sidebar_text_004." ".getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_judging['judgingDateEnd'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "short", "date-time");
+		if ($row_judging['judgingDateEnd'] != "") $page_info7 .=  " ".$sidebar_text_004." ".getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_judging['judgingDateEnd'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "long", "date-time");
 
 		$page_info7 .= "</p>";
+
 	} while ($row_judging = mysqli_fetch_assoc($judging));
+	
 	$page_info7 .= $anchor_top;
 }
 

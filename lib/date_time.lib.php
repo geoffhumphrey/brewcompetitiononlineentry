@@ -144,16 +144,19 @@ function greaterDate($start_date,$end_date) {
 function judging_date_return() {
 	require(CONFIG.'config.php');
 	mysqli_select_db($connection,$database);
-	$query_check = sprintf("SELECT judgingDate FROM %s", $prefix."judging_locations");
+
+	$r = 0;
+	$today = time();
+
+	$query_check = sprintf("SELECT judgingDate,judgingDateEnd FROM %s", $prefix."judging_locations");
 	$check = mysqli_query($connection,$query_check) or die (mysqli_error($connection));
 	$row_check = mysqli_fetch_assoc($check);
 
-	$today = strtotime("now");
 	do {
- 		if ($row_check['judgingDate'] >= $today) $newDate[] = 1;
- 		else $newDate[] = 0;
+ 		if ((empty($row_check['judgingDateEnd'])) && ($row_check['judgingDate'] >= $today)) $r += 1;
+ 		if ((!empty($row_check['judgingDateEnd'])) && ($row_check['judgingDateEnd'] >= $today)) $r += 1;
 	} while ($row_check = mysqli_fetch_assoc($check));
-	$r = array_sum($newDate);
+	
 	return $r;
 }
 

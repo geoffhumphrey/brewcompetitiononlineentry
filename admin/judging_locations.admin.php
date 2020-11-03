@@ -653,9 +653,11 @@ if (($output_add_edit) && ($msg != 9)) {
 		$('#judgingDateEndDiv').show();
 		$('#helpBlockLocation1').hide();
 		$('#helpBlockLocation2').show();
+		$("#judgingLocationLabel").html("Entry Distribution to Judges");
 		<?php } else { ?>
 		$('#judgingDateEndDiv').hide();
 		$('#helpBlockLocation2').hide();
+		$("#judgingLocationLabel").html("Session Address");
 		<?php } ?>
 		
 		$('#judgingDate').datetimepicker({

@@ -1567,7 +1567,7 @@ $evaluation_info_012 = "Use only when you are asked to evaluate an entry that ha
 $evaluation_info_013 = "Entry was not found.";
 $evaluation_info_014 = "Please verify the six-character entry number and try again.";
 $evaluation_info_015 = "Be sure that the number is 6 digits in length.";
-$evaluation_info_016 = "No evaluation recorded.";
+$evaluation_info_016 = "No evaluations have been submitted.";
 $evaluation_info_017 = "Consensus scores entered by judges do not match.";
 $evaluation_info_018 = "Verification is needed for the following entries:";
 $evaluation_info_019 = "The following entries have only one evaluation submitted:";
@@ -1584,6 +1584,12 @@ $alert_text_086 = "Internet Explorer is not supported by BCOE&M - features and f
 $contact_text_004 = "The competition organizers have not specified any contacts.";
 $label_place_awarded = "Place Awarded";
 $label_honorable_mention = "Honorable Mention";
+$label_places_awarded_table = "Places Awarded at this Table";
+$label_places_awarded_duplicate = "Duplicate Places Awarded at this Table";
+
+$evaluation_info_028 = "Judging session has ended.";
+$evaluation_info_029 = "Duplicate places have been awarded at the following tables:";
+$evaluation_info_030 = "Administrators will need to enter any placing entries that remain.";
 
 /**
  * ----------------------------------------------------------------------------------
