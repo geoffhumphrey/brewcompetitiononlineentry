@@ -87,6 +87,10 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 		// Rename current tables and recreate new ones based upon user input
 		$tables_array = array($brewing_db_table, $judging_assignments_db_table, $judging_flights_db_table, $judging_scores_db_table, $judging_scores_bos_db_table, $judging_tables_db_table, $staff_db_table);
 
+		if (EVALUATION) {
+			if (!isset($_POST['keepEvaluations'])) $tables_array[] = $prefix."evaluation";
+		}
+
 		if (!isset($_POST['keepParticipants'])) {
 			$tables_array[] = $users_db_table;
 			$tables_array[] = $brewer_db_table;
@@ -156,6 +160,17 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 
 		}
 
+		if (isset($_POST['keepEvaluations'])) {
+			$updateSQL = sprintf("CREATE TABLE %s LIKE %s", $prefix."evaluation_".$suffix, $prefix."evaluation");
+			mysqli_real_escape_string($connection,$updateSQL);
+			$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+
+			$updateSQL = sprintf("INSERT INTO %s SELECT * FROM %s", $prefix."evaluation_".$suffix, $prefix."evaluation");
+			mysqli_real_escape_string($connection,$updateSQL);
+			$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+
+		}
+
 		foreach ($tables_array as $table) {
 
 			$updateSQL = "RENAME TABLE ".$table." TO ".$table."_".$suffix.";";
@@ -178,7 +193,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 
 		if (!isset($_POST['keepStyleTypes'])) {
 
-			$insertSQL = "INSERT INTO $style_types_db_table (id, styleTypeName, styleTypeOwn, styleTypeBOS, styleTypeBOSMethod) VALUES (1, 'Beer', 'bcoe', 'Y', 1), (2, 'Cider', 'bcoe', 'Y', 3), (3, 'Mead', 'bcoe', 'Y', 3)";
+			$insertSQL = "INSERT INTO $style_types_db_table (id, styleTypeName, styleTypeOwn, styleTypeBOS, styleTypeBOSMethod) VALUES (1, 'Beer', 'bcoe', 'Y', 1), (2, 'Cider', 'bcoe', 'N', 1), (3, 'Mead', 'bcoe', 'N', 1), (4, 'Mead/Cider', 'N', 1), (5, 'Wine', 'N', 1), (6, 'Rice Wine', 'N', 1), (7, 'Spirits', 'N', 1), (8, 'Kombucha', 'N', 1), (9, 'Pulque', 'N', 1);";
 			mysqli_real_escape_string($connection,$insertSQL);
 			$result = mysqli_query($connection,$insertSQL) or die (mysqli_error($connection));
 

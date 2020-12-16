@@ -310,6 +310,12 @@ a.text-orange:focus, a.text-orange:hover {
     color: #FF9100;  /* A400 Shade */
 }
 
+.alert-orange {
+    border-color: #FFE0B2; /* 100 Shade */
+    background: #FFF3E0; /* 50 Shade */
+    color: #E65100; /* 900 Shade */
+}
+
 /* Indigo */
 .bg-indigo {
     background-color: #E8EAF6;  /* 50 Shade */

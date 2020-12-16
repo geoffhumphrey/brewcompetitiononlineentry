@@ -1657,8 +1657,12 @@ $output .= "<li>Converted all alpha-numeric judging numbers to lower case.</li>"
 // ALTER TABLE `baseline_judging_locations` ADD `judgingLocType` TINYINT(2) NULL DEFAULT NULL AFTER `id`; 
 // UPDATE `baseline_judging_locations` SET judgingLocType=0;
 
-if (!check_update("judgingTime", $prefix."judging_locations")) {
+if (check_update("judgingTime", $prefix."judging_locations")) {
 	$updateSQL = sprintf("ALTER TABLE `%s` CHANGE `judgingTime` `judgingDateEnd` VARCHAR(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL;", $prefix."judging_locations");
+	mysqli_real_escape_string($connection,$updateSQL);
+	$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+
+	$updateSQL = sprintf("UPDATE `%s` SET judgingDateEnd=NULL;", $prefix."judging_locations");
 	mysqli_real_escape_string($connection,$updateSQL);
 	$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 }
@@ -1669,12 +1673,6 @@ if (!check_update("judgingLocType", $prefix."judging_locations")) {
 	$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 
 	$updateSQL = sprintf("UPDATE `%s` SET judgingLocType='0';", $prefix."judging_locations");
-	mysqli_real_escape_string($connection,$updateSQL);
-	$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
-}
-
-if (!check_update("judgingDateEnd", $prefix."judging_locations")) {
-	$updateSQL = sprintf("UPDATE `%s` SET judgingDateEnd=NULL;", $prefix."judging_locations");
 	mysqli_real_escape_string($connection,$updateSQL);
 	$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 }

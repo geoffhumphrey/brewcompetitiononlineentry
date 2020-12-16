@@ -33,19 +33,19 @@ $table_header7 = $label_actions;
 <p><a href="<?php echo $base_url."index.php?section=admin&amp;go=archive&amp;action=add"; ?>" class="btn btn-primary">Archive Current Data</a></p>
 <?php } ?>
 <?php if ($action == "add") { ?>
-<div class="btn-group" role="group" aria-label="...">
+<div class="bcoem-admin-element btn-group" role="group" aria-label="...">
 	<a class="btn btn-default" href="<?php echo $base_url; ?>index.php?section=admin&amp;go=archive"><span class="fa fa-arrow-circle-left"></span> Archives</a>
 </div><!-- ./button group -->
 <form data-toggle="validator" role="form" id="formfield" class="form-horizontal" action="<?php echo $base_url; ?>includes/process.inc.php?action=archive" method="post" name="form1">
 <input type="hidden" name="action" value="add_form" />
 <p><?php echo $archive_text_010; ?></p>
 <!-- Form Group REQUIRED Text Input -->
-<div class="form-group">
+<div class="bcoem-admin-element form-group">
 	<label for="mod_name" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label_name; ?></label>
 	<div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
 		<div class="input-group has-warning">
 			<!-- Input Here -->
-			<input class="form-control" id="archiveSuffix" name="archiveSuffix" type="text" placeholder="2015 or Q12016" pattern="^[a-zA-Z0-9]+$" autofocus required>
+			<input class="form-control" id="archiveSuffix" name="archiveSuffix" type="text" placeholder="<?php echo date('Y'); ?> or Q2-<?php echo date('Y'); ?>, etc." pattern="^[a-zA-Z0-9]+$" autofocus required>
 			<span class="input-group-addon" id="mod_name-addon2"><span class="fa fa-star"></span></span>
 		</div>
 		<span class="help-block with-errors"></span>
@@ -53,16 +53,11 @@ $table_header7 = $label_actions;
 	</div>
 </div><!-- ./Form Group -->
 <p><?php echo $archive_text_014; ?></p>
-<div class="form-group"><!-- Form Group Checkbox STACKED -->
+<div class="bcoem-admin-element form-group"><!-- Form Group Checkbox STACKED -->
     <label for="retain" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label_data_retain; ?></label>
     <div class="col-lg-6 col-md-4 col-sm-8 col-xs-12">
         <div class="input-group">
             <!-- Input Here -->
-			<div class="checkbox">
-                <label>
-                    <input type="checkbox" name="none" id="retain_7" value="" > <?php echo $label_none; ?>
-                </label>
-            </div>
             <div class="checkbox">
                 <label>
                     <input type="checkbox" name="keepSpecialBest" id="retain_5" value="Y"> <?php echo $label_admin_custom_cat; ?>
@@ -93,6 +88,13 @@ $table_header7 = $label_actions;
                     <input type="checkbox" name="keepSponsors" id="retain_3" value="Y"> <?php echo $label_sponsors; ?>
                 </label>
             </div>
+            <?php if (EVALUATION) { ?>
+            <div class="checkbox">
+                <label>
+                    <input type="checkbox" name="keepEvaluations" id="retain_8" value="Y"> <?php echo $label_evaluations; ?>
+                </label>
+            </div>
+            <?php } ?>
             <div class="checkbox">
                 <label>
                     <input type="checkbox" name="keepScoresheets" id="retain_6" value="Y"> Uploaded Scoresheets <small>(files will be moved to a sub-folder of the user_docs directory)</small>

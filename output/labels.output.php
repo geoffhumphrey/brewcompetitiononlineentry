@@ -350,7 +350,7 @@ if (isset($_SESSION['loginUsername'])) {
 
 				for($i=0; $i<$sort; $i++) {
 
-					$entry_no = sprintf("%04s",$row_log['id']);
+					$entry_no = sprintf("%06s",$row_log['id']);
 
 					if ((!empty($entry_no)) && ($filter == "default")) {
 						if ($aabc) $text = sprintf("\n%s\n(%s)",$entry_no, ltrim($row_log['brewCategory'],"0").".".ltrim($row_log['brewSubCategory'],"0"));

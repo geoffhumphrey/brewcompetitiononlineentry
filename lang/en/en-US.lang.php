@@ -764,67 +764,64 @@ if ($section == "contact") {
 
 // -------------------- Default (Home) -------------------
 
-if (($section == "default") || ($section == "results")) { // Changed for 2.1.14
+$default_page_text_000 = "No drop-off locations have been specified.";
+$default_page_text_001 = "Add a drop-off location?";
+$default_page_text_002 = "No judging dates/locations have been specified.";
+$default_page_text_003 = "Add a judging location?";
+$default_page_text_004 = "Winning Entries";
+$default_page_text_005 = "Winners will be posted on or after";
+$default_page_text_006 = "Welcome";
+$default_page_text_007 = "See your account details and list of entries.";
+$default_page_text_008 = "View your account details here.";
+$default_page_text_009 = "Best of Show Winners";
+$default_page_text_010 = "Winning Entries";
+$default_page_text_011 = "You only need to register your information once and can return to this site to enter more brews or edit the brews you've entered.";
+$default_page_text_012 = "You can even pay your entry fees online if you wish.";
+$default_page_text_013 = "Competition Official";
+$default_page_text_014 = "Competition Officials";
+$default_page_text_015 = "You can send an email to any of the following individuals via ";
+$default_page_text_016 = "is proud to have the following";
+$default_page_text_017 = "for the";
+$default_page_text_018 = "Download the Best of Show winners in PDF format.";
+$default_page_text_019 = "Download the Best of Show winners in HTML format.";
+$default_page_text_020 = "Download the winning entries in PDF format.";
+$default_page_text_021 = "Download the winning entries in HTML format.";
+$default_page_text_022 = "Thank you for your interest in the";
+$default_page_text_023 = "organized by";
 
-	$default_page_text_000 = "No drop-off locations have been specified.";
-	$default_page_text_001 = "Add a drop-off location?";
-	$default_page_text_002 = "No judging dates/locations have been specified.";
-	$default_page_text_003 = "Add a judging location?";
-	$default_page_text_004 = "Winning Entries";
-	$default_page_text_005 = "Winners will be posted on or after";
-	$default_page_text_006 = "Welcome";
-	$default_page_text_007 = "See your account details and list of entries.";
-	$default_page_text_008 = "View your account details here.";
-	$default_page_text_009 = "Best of Show Winners";
-	$default_page_text_010 = "Winning Entries";
-	$default_page_text_011 = "You only need to register your information once and can return to this site to enter more brews or edit the brews you've entered.";
-	$default_page_text_012 = "You can even pay your entry fees online if you wish.";
-	$default_page_text_013 = "Competition Official";
-	$default_page_text_014 = "Competition Officials";
-	$default_page_text_015 = "You can send an email to any of the following individuals via ";
-	$default_page_text_016 = "is proud to have the following";
-	$default_page_text_017 = "for the";
-	$default_page_text_018 = "Download the Best of Show winners in PDF format.";
-	$default_page_text_019 = "Download the Best of Show winners in HTML format.";
-	$default_page_text_020 = "Download the winning entries in PDF format.";
-	$default_page_text_021 = "Download the winning entries in HTML format.";
-	$default_page_text_022 = "Thank you for your interest in the";
-	$default_page_text_023 = "organized by";
+$reg_open_text_000 = "Judge and Steward Registration is";
+$reg_open_text_001 = "Open";
+$reg_open_text_002 = "If you <em>have not</em> registered and are willing to be a volunteer,";
+$reg_open_text_003 = "please register";
+$reg_open_text_004 = "If you <em>have</em> registered, log in and then choose <em>Edit Account</em> from the My Account menu indicated by the";
+$reg_open_text_005 = "icon on the top menu.";
+$reg_open_text_006 = "Since you have already registered, you can";
+$reg_open_text_007 = "check your account info";
+$reg_open_text_008 = "to see whether you have indicated that you are willing to judge and/or steward.";
+$reg_open_text_009 = "If you are willing to judge or steward, please return to register on or after";
+$reg_open_text_010 = "Entry Registration is";
+$reg_open_text_011 = "To add your entries into the system";
+$reg_open_text_012 = "please proceed through the registration process";
+$reg_open_text_013 = "if you already have an account.";
+$reg_open_text_014 = "use the add an entry form";
 
-	$reg_open_text_000 = "Judge and Steward Registration is";
-	$reg_open_text_001 = "Open";
-	$reg_open_text_002 = "If you <em>have not</em> registered and are willing to be a volunteer,";
-	$reg_open_text_003 = "please register";
-	$reg_open_text_004 = "If you <em>have</em> registered, log in and then choose <em>Edit Account</em> from the My Account menu indicated by the";
-	$reg_open_text_005 = "icon on the top menu.";
-	$reg_open_text_006 = "Since you have already registered, you can";
-	$reg_open_text_007 = "check your account info";
-	$reg_open_text_008 = "to see whether you have indicated that you are willing to judge and/or steward.";
-	$reg_open_text_009 = "If you are willing to judge or steward, please return to register on or after";
-	$reg_open_text_010 = "Entry Registration is";
-	$reg_open_text_011 = "To add your entries into the system";
-	$reg_open_text_012 = "please proceed through the registration process";
-	$reg_open_text_013 = "if you already have an account.";
-	$reg_open_text_014 = "use the add an entry form";
+// v2.1.9
+$reg_open_text_015 = "Judge Registration is";
+$reg_open_text_016 = "Steward Registration is";
+$reg_closed_text_000 = "Thanks and Good Luck To All Who Entered the";
+$reg_closed_text_001 = "There are";
+$reg_closed_text_002 = "registered participants, judges, and stewards.";
+$reg_closed_text_003 = "registered entries and";
+$reg_closed_text_004 = "registered participants, judges, and stewards.";
+$reg_closed_text_005 = "As of";
+$reg_closed_text_006 = "received and processed entries (this number will update as entries are picked up from drop-off locations and organized for judging).";
+$reg_closed_text_007 = "Competition judging dates are yet to be determined. Please check back later.";
+$reg_closed_text_008 = "Map to";
+$judge_closed_000 = "Thanks to all who participated in the";
+$judge_closed_001 = "There were";
+$judge_closed_002 = "entries judged and";
+$judge_closed_003 = "registered participants, judges, and stewards.";
 
-	// v2.1.9
-	$reg_open_text_015 = "Judge Registration is";
-	$reg_open_text_016 = "Steward Registration is";
-	$reg_closed_text_000 = "Thanks and Good Luck To All Who Entered the";
-	$reg_closed_text_001 = "There are";
-	$reg_closed_text_002 = "registered participants, judges, and stewards.";
-	$reg_closed_text_003 = "registered entries and";
-	$reg_closed_text_004 = "registered participants, judges, and stewards.";
-	$reg_closed_text_005 = "As of";
-	$reg_closed_text_006 = "received and processed entries (this number will update as entries are picked up from drop-off locations and organized for judging).";
-	$reg_closed_text_007 = "Competition judging dates are yet to be determined. Please check back later.";
-	$reg_closed_text_008 = "Map to";
-	$judge_closed_000 = "Thanks to all who participated in the";
-	$judge_closed_001 = "There were";
-	$judge_closed_002 = "entries judged and";
-	$judge_closed_003 = "registered participants, judges, and stewards.";
-
-}
 
 // -------------------- Entry Info --------------------
 
@@ -1398,7 +1395,7 @@ $paypal_response_text_005 = "The status of your PayPal payment is:";
 $paypal_response_text_006 = "Paypal response was &quot;invalid.&quot;. Please try to make your payment again.";
 $paypal_response_text_007 = "Please contact the competition organizer if you have any questions.";
 $paypal_response_text_008 = "Invalid PayPal Payment";
-$paypal_response_text_009 = "PayPal Payment Details";
+$paypal_response_text_009 = "PayPal Payment";
 
 // -------------------- Output - Password reset email text --------------------
 $pwd_email_reset_text_000 = "A request was made to verify the account at the";
@@ -1551,6 +1548,7 @@ $label_unassigned_eval = "Unassigned Evaluations";
 $label_head_judge = "Head Judge";
 $label_lead_judge = "Lead Judge";
 $label_mini_bos_judge = "Mini-BOS Judge";
+
 $evaluation_info_000 = "The entry pool for each of the tables and flights that have been assigned to you is detailed below.";
 $evaluation_info_001 = "This competition is employing queued judging. If there is more than one judge pair at your table, evaluate the the next entry in the established queue.";
 $evaluation_info_002 = "To ensure an accurate and smooth competition, you and your judge partner(s) should ONLY judge entries at your table that have not been evaluated yet. See your organizer or judge coordinator if you have any questions.";
@@ -1579,9 +1577,11 @@ $evaluation_info_024 = "You have been assigned to the following tables. Entry li
 $evaluation_info_025 = "Judges assigned to this table, including you:";
 $evaluation_info_026 = "All consensus scores entered by judges match.";
 $evaluation_info_027 = "Entries that you have completed, or an admin has entered on your behalf, that were not assigned to you in the system.";
+
 $alert_text_086 = "Internet Explorer is not supported by BCOE&M - features and functions will not render properly and your experience will not be optimal. Please upgrade to a newer browser.";
 
 $contact_text_004 = "The competition organizers have not specified any contacts.";
+
 $label_place_awarded = "Place Awarded";
 $label_honorable_mention = "Honorable Mention";
 $label_places_awarded_table = "Places Awarded at this Table";
@@ -1590,6 +1590,187 @@ $label_places_awarded_duplicate = "Duplicate Places Awarded at this Table";
 $evaluation_info_028 = "Judging session has ended.";
 $evaluation_info_029 = "Duplicate places have been awarded at the following tables:";
 $evaluation_info_030 = "Administrators will need to enter any placing entries that remain.";
+
+$evaluation_info_031 = "evaluations have been added by judges";
+$evaluation_info_032 = "Multiple evaluations for a single entry were submitted by a judge.";
+$evaluation_info_033 = "While this is an unusual occurrance, a duplicate evaluation can be submitted due to connectivity issues, etc. A single recorded evaluation for each judge should be officially accepted - all others should be deleted to avoid any entrant confusion.";
+
+$evaluation_info_034 = "When evaluating specialty-type styles, use the this line to comment on characteristics unique to it, such as fruit, spice, fermentable, acidity, etc.";
+$evaluation_info_035 = "Provide comments on style, recipe, process, and drinking pleasure. Include helpful suggestions to the brewer.";
+
+
+// Scoresheets
+$label_submitted = "Submitted";
+$label_ordinal_position = "Ordinal Position in Flight";
+$label_alcoholic = "Alcoholic";
+$descr_alcoholic = "The aroma, flavor, and warming effect of ethanol and higher alcohols. Sometimes described as &quot;hot&quot;.";
+$descr_alcoholic_mead = "The effect of ethanol. Warming. Hot.";
+$label_metallic = "Metallic"; 
+$descr_metallic = "Tinny, coiny, copper, iron, or blood-like flavor.";
+$label_oxidized = "Oxidized";
+$descr_oxidized = "Any one or combination of stale, winy/vinous, cardboard, papery, or sherry-like aromas and flavors. Stale.";
+$descr_oxidized_cider = "Staleness, the aroma/flavor of sherry, raisins, or bruised fruit.";
+$label_phenolic = "Phenolic";
+$descr_phenolic = "Spicy (clove, pepper), smoky, plastic, plastic adhesive strip, and/or medicinal (chlorophenolic).";
+$label_vegetal = "Vegetal";
+$descr_vegetal = "Cooked, canned, or rotten vegetable aroma and flavor (cabbage, onion, celery, asparagus, etc.).";
+$label_astringent = "Astringent";
+$descr_astringent = "Puckering, lingering harshness and/or dryness in the finish/aftertaste; harsh graininess; huskiness.";
+$descr_astringent_cider = "A drying sensation in the mouth similar to chewing on a teabag. Must be in balance if present.";
+$label_acetaldehyde = "Acetaldehyde";
+$descr_acetaldehyde = "Green apple-like aroma and flavor.";
+$label_diacetyl = "Diacetyl";
+$descr_diacetyl = "Artificial butter, butterscotch, or toffee aroma and flavor. Sometimes perceived as a slickness on the tongue.";
+$descr_diacetyl_cider = "Butter or butterscotch aroma or flavor.";
+$label_dms = "DMS (Dimethyl Sulfide)";
+$descr_dms = "At low levels a sweet, cooked or canned corn-like aroma and flavor.";
+$label_estery = "Estery";
+$descr_estery = "Aroma and/or flavor of any ester (fruits, fruit flavorings, or roses).";
+$label_grassy = "Grassy";
+$descr_grassy = "Aroma/flavor of fresh-cut grass or green leaves.";
+$label_light_struck = "Light-Struck";
+$descr_light_struck = "Similar to the aroma of a skunk.";
+$label_musty = "Musty";
+$descr_musty = "Stale, musty, or moldy aromas/flavors.";
+$label_solvent = "Solvent";
+$descr_solvent = "Aromas and flavors of higher alcohols (fusel alcohols). Similar to acetone or lacquer thinner aromas.";
+$label_sour_acidic = "Sour/Acidic";
+$descr_sour_acidic = "Tartness in aroma and flavor. Can be sharp and clean (lactic acid), or vinegar-like (acetic acid).";
+$label_sulfur = "Sulfur";
+$descr_sulfur = "The aroma of rotten eggs or burning matches.";
+$label_sulfury = "Sulfury";
+$label_yeasty = "Yeasty ";
+$descr_yeasty = "A bready, sulfury or yeast-like aroma or flavor.";
+$label_acetified = "Acetified (Volatile Acidity, VA)";
+$descr_acetified = "Ethyl acetate (solvent, nail polish) or acetic acid (vinegar, harsh in back of throat).";
+$label_acidic = "Acidic";
+$descr_acidic = "Sour-tart flavor. Typically from one of several acids: malic, lactic, or citric. Must be in balance.";
+$descr_acidic_mead = "Clean, sour flavor/aroma from low pH. Typically from one of several acids: malic, lactic, gluconic, or citric.";
+$label_bitter = "Bitter";
+$descr_bitter = "A sharp taste that is unpleasant at higher levels.";
+$label_farmyard = "Farmyard";
+$descr_farmyard = "Manure-like (cow or pig) or barnyard (horse stall on a warm day).";
+$label_fruity = "Fruity";
+$descr_fruity = "The aroma and flavor of fresh fruits that may be appropriate in some styles and not others.";
+$descr_fruity_mead = "Flavor & aroma esters often derived from fruits in a melomel. Banana & pineapple are often off-flavors.";
+$label_mousy = "Mousy";
+$descr_mousy = "Taste evocative of the smell of a rodent’s den/cage.";
+$label_oaky = "Oaky";
+$descr_oaky = "A taste or aroma due to an extended length of time in a barrel or on wood chips. &quot;Barrel character.&quot;";
+$label_oily_ropy = "Oily/Ropy";
+$descr_oily_ropy = "A sheen in visual appearance, as an unpleasant viscous character proceeding to a ropy character.";
+$label_spicy_smoky = "Spicy/Smoky";
+$descr_spicy_smoky = "Spice, cloves, smoky, ham.";
+$label_sulfide = "Sulfide";
+$descr_sulfide = "Rotten eggs, from fermentation problems.";
+$label_sulfite = "Sulfite";
+$descr_sulfite = "Burning matches, from excessive/recent sulfiting.";
+$label_sweet = "Sweet";
+$descr_sweet = "Basic taste of sugar. Must be in balance if present.";
+$label_thin = "Thin";
+$descr_thin = "Watery. Lacking body or &quot;stuffing.&quot;";
+$label_acetic = "Acetic";
+$descr_acetic = "Vinegary, acetic acid, sharp.";
+$label_chemical = "Chemical";
+$descr_chemical = "Vitamin, nutrient or chemical taste.";
+$label_cloying = "Cloying";
+$descr_cloying = "Syrupy, overly sweet, unbalanced by acid/tannin";
+$label_floral = "Floral";
+$descr_floral = "The aroma of flower blossoms or perfume.";
+$label_moldy = "Moldy";
+$descr_moldy = "Stale, musty, moldy or corked aromas/flavors.";
+$label_tannic = "Tannic";
+$descr_tannic = "Drying, astringent puckering mouthfeel, similar to bitterness flavor. Taste of strong unsweetened tea or chewing on a grape skin.";
+$label_waxy = "Waxy";
+$descr_waxy = "Wax-like, tallow, fatty.";
+$label_medicinal = "Medicinal";
+$label_spicy = "Spicy";
+$label_vinegary = "Vinegary";
+$label_plastic = "Plastic";
+$label_smoky = "Smoky";
+
+$label_inappropriate = "Inappropriate";
+$label_possible_points = "Possible Points";
+$label_malt = "Malt";
+$label_ferm_char = "Fermentation Character";
+$label_body = "Body";
+$label_creaminess = "Creaminess";
+$label_astringency = "Astringency";
+$label_warmth = "Warmth";
+$label_appearance = "Appearance";
+$label_flavor = "Flavor";
+$label_mouthfeel = "Mouthfeel";
+$label_overall_impression = "Overall Impression";
+$label_balance = "Balance";
+$label_finish_aftertaste = "Finish/Aftertaste";
+$label_hoppy = "Hoppy";
+$label_malty = "Malty";
+$label_comments = "Comments";
+$label_flaws = "Flaws";
+$label_flawless = "Flawless";
+$label_significant_flaws = "Significant Flaws";
+$label_classic_example = "Classic Example";
+$label_not_style = "Not to Style";
+$label_tech_merit = "Technical Merit";
+$label_style_accuracy = "Stylistic Accuracy";
+$label_intangibles = "Intangibles";
+$label_wonderful = "Wonderful";
+$label_lifeless = "Lifeless";
+$label_feedback = "Feedback";
+$label_honey = "Honey";
+$label_alcohol = "Alcohol";
+$label_complexity = "Complexity";
+$label_viscous = "Viscous";
+$label_legs = "Legs"; // Used to describe liquid clinging to glass
+$label_clarity = "Clarity";
+$label_brilliant = "Brilliant";
+$label_hazy = "Hazy";
+$label_opaque = "Opaque";
+$label_fruit = "Fruit";
+$label_acidity = "Acidity";
+$label_tannin = "Tannin";
+
+// Appearance color of entries
+$label_white = "White";
+$label_straw = "Straw";
+$label_yellow = "Yellow";
+$label_gold = "Gold";
+$label_copper = "Copper";
+$label_quick = "Quick";
+$label_long_lasting = "Long Lasting";
+$label_ivory = "Ivory";
+$label_beige = "Beige";
+$label_tan = "Tan";
+$label_lacing = "Lacing";
+$label_particulate = "Particulate";
+$label_black = "Black";
+$label_large = "Large";
+$label_small = "Small";
+$label_size = "Size";
+$label_retention = "Retention";
+$label_head = "Head";
+$label_brettanomyces = "Brettanomyces";
+$label_cardboard = "Cardboard";
+$label_cloudy = "Cloudy";
+$label_sherry = "Sherry";
+$label_harsh = "Harsh";
+$label_full = "Full";
+
+$label_descriptor_defs = "Descriptor Definitions (Mark all that apply)";
+
+$label_outstanding = "Outstanding";
+$descr_outstanding = "World-class example of style.";
+$label_excellent = "Excellent";
+$descr_excellent = "Exempifies the style well, requires minor fine tuning.";
+$label_very_good = "Very Good";
+$descr_very_good = "Generally within style parameters, some minor flaws.";
+$label_good = "Good";
+$descr_good = "Misses the mark on style and/or minor flaws.";
+$label_fair = "Fair";
+$descr_fair = "Off flavors/aromas or major style deficiencies. Unpleasant.";
+$label_problematic = "Problematic";
+$descr_problematic = "Major off flavors and aromas dominate. Hard to drink.";
+
 
 /**
  * ----------------------------------------------------------------------------------

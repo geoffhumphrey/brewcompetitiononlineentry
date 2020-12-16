@@ -43,3 +43,5 @@ prepros-6.config
 .sftp-upload-on-change.json
 lang/es/*
 site/config.mail.php
+js_source/*
+js_unused/*

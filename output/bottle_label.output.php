@@ -106,7 +106,7 @@ if (isset($_SESSION['loginUsername'])) {
             $qrcode_url = $base_url."qr.php?id=".$row_log['id'];
             $qrcode_url = urlencode($qrcode_url);
 
-            $qr->qRCreate($qrcode_url,"65x65","UTF-8");
+            $qr->qRCreate($qrcode_url,"90x90","UTF-8");
             $qrcode_link = $qr->url;
 
             if (($bottle_label_endRow == 0) && ($bottle_label_hloopRow1++ != 0)) $page_info1 .= "<div class=\"row\">";
@@ -121,6 +121,17 @@ if (isset($_SESSION['loginUsername'])) {
             if ($_SESSION['prefsStyleSet'] == "BA") $page_info1 .= "<strong>Cat: ".$row_log['brewStyle']."<br>";
             elseif ($_SESSION['prefsStyleSet'] == "AABC")  $page_info1 .= "<strong>".$label_category.":</strong> ".ltrim($row_log['brewCategory'],"0").".".ltrim($row_log['brewSubCategory'],"0")." ".$row_log['brewStyle']."<br>";
             else $page_info1 .= "<strong>".$label_category.":</strong> ".$row_log['brewCategory'].$row_log['brewSubCategory']." ".$row_log['brewStyle']."<br>";
+            
+            if (($anon) && ((!empty($row_log['brewInfo'])) || (!empty($row_log['brewMead1'])) || (!empty($row_log['brewMead2'])) || (!empty($row_log['brewMead3'])))) {
+                $brewInfo = "";
+                if (!empty($row_log['brewInfo']))  $brewInfo .= str_replace("^", " | ", $row_log['brewInfo']);
+                if (!empty($row_log['brewMead1'])) $brewInfo .= "&nbsp;&nbsp;".$row_log['brewMead1'];
+                if (!empty($row_log['brewMead2'])) $brewInfo .= "&nbsp;&nbsp;".$row_log['brewMead2'];
+                if (!empty($row_log['brewMead3'])) $brewInfo .= "&nbsp;&nbsp;".$row_log['brewMead3'];
+                $brewInfo = str_replace("\n"," ",truncate($brewInfo,100,"...")); // Necessary for space considerations
+                $page_info1 .= "<strong>".$label_required_info.":</strong> ".$brewInfo;
+              }
+
             $page_info1 .= "</p>";
 
             if (!$anon) {
@@ -135,7 +146,7 @@ if (isset($_SESSION['loginUsername'])) {
 
             $page_info1 .= "<div align=\"center\" style=\"margin-top: 10px;\"><img src=\"".$barcode_link."\">&nbsp;&nbsp;<img src=\"".$qrcode_link."\"></div>";
 
-            $page_info1 .= "<div align=\"center\" class=\"box\">".$bottle_labels_006."</div>";
+            if (!$anon) $page_info1 .= "<div align=\"center\" class=\"box\">".$bottle_labels_006."</div>";
 
             $page_info1 .= "</div>";
             $page_info1 .= "</div>";

@@ -1,3 +1,8 @@
+<?php
+if (empty($row_judging_prefs['jPrefsScoresheet'])) $judging_scoresheet = 1;
+elseif (!isset($_SESSION['jPrefsScoresheet'])) $judging_scoresheet = 1;
+else $judging_scoresheet = $_SESSION['jPrefsScoresheet'];
+?>
 <form data-toggle="validator" role="form" class="form-horizontal" method="post" action="<?php echo $base_url; ?>includes/process.inc.php?section=<?php if ($section == "step8") echo "setup"; else echo $section; ?>&amp;action=edit&amp;dbTable=<?php echo $judging_preferences_db_table; ?>&amp;id=1" name="form1">
 <?php if ($section != "step8") { ?>
 <p class="lead"><?php echo $_SESSION['contestName'].": Set Competition Organization Preferences"; ?></p>
@@ -76,11 +81,9 @@
             <label class="radio-inline">
                 <input type="radio" name="jPrefsScoresheet" value="2" id="jPrefsScoresheet_1" rel="" <?php if ($judging_scoresheet == "2") echo "CHECKED"; ?>/> Checklist Scoresheet (Beer Only)
             </label>
-            <!--
             <label class="radio-inline">
                 <input type="radio" name="jPrefsScoresheet" value="3" id="jPrefsScoresheet_1" rel="" <?php if ($judging_scoresheet == "3") echo "CHECKED"; ?>/> Structured Scoresheet
             </label>
-            -->
         </div>
         <span id="helpBlock" class="help-block">
         <div class="btn-group" role="group" aria-label="queuedModal">
@@ -103,11 +106,9 @@
             </div>
             <div class="modal-body">
                 <p>Indicate which BJCP scoresheet judges will use for entry evaluation and scoring.</p>
-                <p>The <strong>Full Scoresheet</strong> is the original BJCP-sanctioned competition scoresheet. Long form evaluation responses for aroma, appearance, flavor, mouthfeel, and overall impression for <a href="https://bjcp.org/docs/SCP_BeerScoreSheet.pdf" target="_blank">Beer</a>, <a href="https://bjcp.org/docs/SCP_MeadScoreSheet.pdf" target="_blank">Mead</a>, <a href="https://bjcp.org/docs/SCP_CiderScoreSheet.pdf" target="_blank">Cider</a>, and all other style types.</p>
-                <p>The <strong>Checklist Scoresheet</strong> is "a quick checklist-based beer scoresheet covering perhaps 80% of the sensory information necessary for any beer." This is only for use in <a href="https://bjcp.org/docs/Beer_checklist.pdf" target="_blank">evaluating beer</a> entries; Mead, Cider, and other style types utilize the Full Scoresheet.</p>
-                <!--
+                <p>The <strong>Classic Scoresheet</strong> is the original BJCP-sanctioned competition scoresheet. Long form evaluation responses for aroma, appearance, flavor, mouthfeel, and overall impression for <a href="https://bjcp.org/docs/SCP_BeerScoreSheet.pdf" target="_blank">Beer</a>, <a href="https://bjcp.org/docs/SCP_MeadScoreSheet.pdf" target="_blank">Mead</a>, <a href="https://bjcp.org/docs/SCP_CiderScoreSheet.pdf" target="_blank">Cider</a>, and all other style types.</p>
+                <p>The <strong>Checklist Scoresheet</strong> is "a quick checklist-based beer scoresheet covering perhaps 80% of the sensory information necessary for any beer." This is only for use in <a href="https://bjcp.org/docs/Beer_checklist.pdf" target="_blank">evaluating beer entries</a>; Mead, Cider, and other style types utilize the Classic Scoresheet.</p>
                 <p>The <strong>Structured Scoresheet</strong> is a revised and updated version of the Checklist Scoresheet that features sliding scales (none to high) for aroma, appearance, flavor, and mouthfeel to "reduce the time [judges] spend writing out intensity levels." Considered experimental, these scoresheets were introduced at the National Homebrew Competition in 2018 and used again in 2019 to great success. While not officially adopted by the BJCP, their use has been increasing in local competitions. Available for Beer, Mead, and Cider. All other style types utilize the Full Scoresheet.</p>
-                -->
                 <p>More information can be downloaded on the <a class="hide-loader" href="https://bjcp.org/compcenter.php" target="_blank">BJCP's website</a>.</p>
             </div>
             <div class="modal-footer">
@@ -131,7 +132,7 @@
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
             <input class="form-control" id="jPrefsJudgingClosed" name="jPrefsJudgingClosed" type="text" size="20" value="<?php echo $judging_close_date; ?>" placeholder="<?php echo $current_date." ".$current_time; ?>" required>
         <div id="helpBlock" class="help-block">
-            <?php if ($suggested_close) echo "<p style=\"margin-bottom:5px;\">* The date and time above is suggested and is the system default. It is the last judging session's start time + 8 hours.</p>"; ?>
+            <?php if ($suggested_close) echo "<p style=\"margin-bottom:5px;\">* The date and time above is suggested and is the system default. It is the <u>last</u> judging session's start time + 8 hours.</p>"; ?>
             <div class="btn-group" role="group" aria-label="judgingWindowModal">
                 <div class="btn-group" role="group">
                     <button type="button" class="btn btn-xs btn-info" data-toggle="modal" data-target="#judgingWindowModal">

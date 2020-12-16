@@ -119,9 +119,9 @@ else {
 				if ($row_log_confirmed['brewPaid'] != "1") {
 					if ($_SESSION['prefsStyleSet'] == "BA") $style = $row_log_confirmed['brewStyle'];
 					else $style = "Style ".$row_log_confirmed['brewCategory'].$row_log_confirmed['brewSubCategory'];
-					$entry_no = sprintf("%04s",$row_log_confirmed['id']);
+					$entry_no = sprintf("%06s",$row_log_confirmed['id']);
 					$primary_page_info .= sprintf("<li>Entry #%s: %s (%s)</li>",$entry_no,$row_log_confirmed['brewName'],$style);
-					$entries .= sprintf("%04s",$row_log_confirmed['id']).", ";
+					$entries .= sprintf("%06s",$row_log_confirmed['id']).", ";
 					$return_entries .= $row_log_confirmed['id']."-";
 				}
 			} while ($row_log_confirmed = mysqli_fetch_assoc($log_confirmed));
@@ -166,8 +166,8 @@ else {
 			$page_info4 .= "<input type=\"hidden\" name=\"action\" value=\"add_form\" />\n";
 			$page_info4 .= "<input type=\"hidden\" name=\"cmd\" value=\"_xclick\">\n";
 			$page_info4 .= sprintf("<input type=\"hidden\" name=\"business\" value=\"%s\">\n",$_SESSION['prefsPaypalAccount']);
-			if ($_SESSION['prefsProEdition'] == 1) $page_info4 .= sprintf("<input type=\"hidden\" name=\"item_name\" value=\"%s - %s Payment\">\n",$_SESSION['brewerBreweryName'],ucwords($_SESSION['contestName']));
-			else $page_info4 .= sprintf("<input type=\"hidden\" name=\"item_name\" value=\"%s, %s - %s Payment\">\n",$_SESSION['brewerLastName'],$_SESSION['brewerFirstName'],ucwords($_SESSION['contestName']));
+			if ($_SESSION['prefsProEdition'] == 1) $page_info4 .= sprintf("<input type=\"hidden\" name=\"item_name\" value=\"%s - %s - %s\">\n",$_SESSION['brewerBreweryName'],remove_accents($_SESSION['contestName']),$paypal_response_text_009);
+			else $page_info4 .= sprintf("<input type=\"hidden\" name=\"item_name\" value=\"%s, %s - %s - %s\">\n",$_SESSION['brewerLastName'],$_SESSION['brewerFirstName'],remove_accents($_SESSION['contestName']),$paypal_response_text_009);
 			$page_info4 .= sprintf("<input type=\"hidden\" name=\"amount\" value=\"%s\">\n",$payment_amount);
 			$page_info4 .= sprintf("<input type=\"hidden\" name=\"currency_code\" value=\"%s\">\n",$currency_code);
 			$page_info4 .= "<input type=\"hidden\" name=\"button_subtype\" value=\"services\">\n";

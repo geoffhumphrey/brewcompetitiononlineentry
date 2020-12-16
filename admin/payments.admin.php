@@ -1,6 +1,9 @@
 <?php
 include (DB.'payments.db.php');
+
+
 if ($totalRows_payments > 0) {
+
 ?>
 <script type="text/javascript" language="javascript">
 	 $(document).ready(function() {
@@ -40,14 +43,23 @@ if ($totalRows_payments > 0) {
 	</tr>
 </thead>
  <tbody>
- <?php do { ?>
+ <?php do { 
+
+ 	$payment_entries = "";
+	$pay_ent = explode("-", $row_payments['payment_entries']);
+	foreach ($pay_ent as $value) {
+		$payment_entries .= sprintf("%06s",$value).", ";
+	}
+	$payment_entries = rtrim($payment_entries,", ");
+
+	?>
  <tr>
   <td><?php echo ucwords($row_payments['last_name']).", ".ucwords($row_payments['first_name']); ?></td>
   <td class="hidden-xs"><?php echo ucwords($row_payments['item_name']); ?></td>
   <td><?php echo $row_payments['payment_gross']." ".$row_payments['currency_code']; ?></td>
   <td><?php echo $row_payments['payment_status']; ?></td>
   <td><?php echo $row_payments['txn_id']; ?></td>
-  <td class="hidden-xs"><?php echo str_replace("-",", ",$row_payments['payment_entries']); ?></td>
+  <td class="hidden-xs"><?php echo $payment_entries; ?></td>
   <td><?php echo getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_payments['payment_time'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "short", "date-time-no-gmt"); ?></td>
   <td nowrap="nowrap">
   <a class="hide-loader" href="<?php echo $base_url; ?>includes/process.inc.php?section=admin&amp;go=<?php echo $go; ?>&amp;dbTable=<?php echo $payments_db_table; ?>&amp;action=delete&amp;id=<?php echo $row_payments['id']; ?>" data-toggle="tooltip" data-placement="top" title="Delete <?php echo $row_payments['item_name']; ?>" data-confirm="Are you sure you want to delete <?php echo $row_payments['item_name']; ?>? This cannot be undone."><span class="fa fa-lg fa-trash-o"></span></a>

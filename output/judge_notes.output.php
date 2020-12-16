@@ -87,7 +87,7 @@ if ($go == "allergens") { ?>
 </thead>
 <tbody>
 <?php do {
-	$entry_number = sprintf("%04s",$row_log_paid['id']);
+	$entry_number = sprintf("%06s",$row_log_paid['id']);
 	$judging_number = sprintf("%06s",$row_log_paid['brewJudgingNumber']);
 	$table_info = get_flight_info($row_log_paid['id']);
 	$table_info_all = "";

@@ -93,7 +93,7 @@ do {
             $bos_place = bos_place($row_log['id'],$prefix,$connection);
             ?>
 		<tr>
-			<td><?php echo sprintf("%04s",$row_log['id']); ?></td>
+			<td><?php echo sprintf("%06s",$row_log['id']); ?></td>
 			<td><?php echo readable_judging_number($row_log['brewCategory'],$row_log['brewJudgingNumber']); ?></td>
 			<td><?php echo $row_log['brewName']; ?></td>
 			<td><?php if ($_SESSION['prefsStyleSet'] != "BA") echo $row_log['brewCategorySort'].$row_log['brewSubCategory'].": "; echo $row_log['brewStyle'] ?></td>

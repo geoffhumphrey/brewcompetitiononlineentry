@@ -293,7 +293,7 @@ if (($admin_role) || (((judging_date_return() == 0) && ($registration_open == 2)
                         if (isset($row_sql['brewInfoOptional'])) $brewInfoOptional = strtr($row_sql['brewInfoOptional'],$html_remove);
                         else $brewInfoOptional = "";
 
-                        $entryNo = sprintf("%04s",$row_sql['id']);
+                        $entryNo = sprintf("%06s",$row_sql['id']);
 
                         if (isset($row_sql['brewJudgingNumber'])) $judgingNo = sprintf("%06s",$row_sql['brewJudgingNumber']);
                         else $judgingNo = "";

@@ -303,7 +303,7 @@ if ($section != "admin") {
 		do {
 
 			$page_info400 .= "<p>";
-			if ($row_judging['judgingLocName'] != "") $page_info400 .= $row_judging['judgingLocName'];
+			if ($row_judging['judgingLocName'] != "") $page_info400 .= "<strong>".$row_judging['judgingLocName']."</strong>";
 			if ($row_judging['judgingLocType'] == "0") {
 				if ($logged_in) {
 					$location_link = $base_url."output/maps.output.php?section=driving&amp;id=".str_replace(' ', '+', $row_judging['judgingLocation']);
@@ -317,7 +317,10 @@ if ($section != "admin") {
 			}
 			if ($row_judging['judgingDate'] != "") $page_info400 .=  "<br />".getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_judging['judgingDate'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "short", "date-time");
 			if ($row_judging['judgingDateEnd'] != "") $page_info400 .=  " ".$sidebar_text_004." ".getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_judging['judgingDateEnd'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "short", "date-time");
-			$page_info400 .= "</p>";
+			$page_info400 .= ".</p>";
+			if ($row_judging['judgingLocType'] == "1") {
+				if (!empty($row_judging['judgingLocation'])) $page_info400 .= "<p><small>".$row_judging['judgingLocation']."</small></p>";
+			}
 		} while ($row_judging = mysqli_fetch_assoc($judging));
 	}
 	$page_info400 .= "</div>";

@@ -10,7 +10,7 @@ $(document).ready(function () {
     disable_update_button('judging_scores_bos');
 });
 </script>
-<script src="<?php echo $base_url;?>js_includes/admin_ajax.js"></script>
+<script src="<?php echo $base_url;?>js_includes/admin_ajax.min.js"></script>
 <!-- Modal -->
 <div class="modal fade" id="noDupeModal" tabindex="-1" role="dialog" aria-labelledby="noDupeModalLabel" aria-hidden="true">
   <div class="modal-dialog">
@@ -247,7 +247,7 @@ $(document).ready(function(){
         <?php if (is_numeric($bos_entry_info[14])) { ?>
         <input type="hidden" name="id<?php echo $score_id; ?>" value="<?php echo $bos_entry_info[14]; ?>" />
         <?php } ?>
-        <td><?php echo sprintf("%04s",$row_enter_bos['eid']); ?></td>
+        <td><?php echo sprintf("%06s",$row_enter_bos['eid']); ?></td>
         <td><?php echo $judging_number ?></td>
         <td><?php echo $style_name; ?></td>
     	<td>

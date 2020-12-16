@@ -45,30 +45,36 @@ $all_loc_total = array();
 
 if (($action == "default") && ($filter == "default")) {
 
+    
+
 	// Orphans styles not assigned to tables yet
 
 	if ($totalRows_tables > 0) {
 
-		$a[] = array();
-		$y[] = array();
-		$z[] = 0;
+        if ($dbTable == "default") {
 
-		do {
-			if (get_table_info($row_styles['brewStyleNum']."^".$row_styles['brewStyleGroup'],"count","default","default","default")) {
-				if (!get_table_info($row_styles['id'],"styles","default","default","default")) {
-					$a[] = $row_styles['id'];
-					$z[] = 1;
-                    $orphan_modal_body_2 .= "<li>";
-                    $orphan_modal_body_2 .= style_number_const($row_styles['brewStyleGroup'],$row_styles['brewStyleNum'],$_SESSION['style_set_display_separator'],0);
-                    $orphan_modal_body_2 .= $row_styles['brewStyle']." (".get_table_info($row_styles['brewStyleNum']."^".$row_styles['brewStyleGroup'],"count","default",$dbTable,"default")." entries)";
-					$orphan_modal_body_2 .= "</li>";
-				}
-			}
-		} while ($row_styles = mysqli_fetch_assoc($styles));
+    		$a[] = array();
+    		$y[] = array();
+    		$z[] = 0;
 
-        $b = array_sum($z);
-        if ($b == 0) $orphan_modal_body_1 .= "<p>All styles with entries have been assigned to tables.</p>";
-        else $orphan_modal_body_1 .= "<p>The following styles with entries have not been assigned to tables:</p>";
+    		do {
+    			if (get_table_info($row_styles['brewStyleNum']."^".$row_styles['brewStyleGroup'],"count","default","default","default")) {
+    				if (!get_table_info($row_styles['id'],"styles","default","default","default")) {
+    					$a[] = $row_styles['id'];
+    					$z[] = 1;
+                        $orphan_modal_body_2 .= "<li>";
+                        $orphan_modal_body_2 .= style_number_const($row_styles['brewStyleGroup'],$row_styles['brewStyleNum'],$_SESSION['style_set_display_separator'],0);
+                        $orphan_modal_body_2 .= $row_styles['brewStyle']." (".get_table_info($row_styles['brewStyleNum']."^".$row_styles['brewStyleGroup'],"count","default",$dbTable,"default")." entries)";
+    					$orphan_modal_body_2 .= "</li>";
+    				}
+    			}
+    		} while ($row_styles = mysqli_fetch_assoc($styles));
+
+            $b = array_sum($z);
+            if ($b == 0) $orphan_modal_body_1 .= "<p>All styles with entries have been assigned to tables.</p>";
+            else $orphan_modal_body_1 .= "<p>The following styles with entries have not been assigned to tables:</p>";
+
+        }
 
     } // end if ($totalRows_tables > 0)
 
@@ -172,18 +178,21 @@ if (($action == "default") && ($filter == "default")) {
         $assigned_judges = assigned_judges($row_tables['id'],$dbTable,$judging_assignments_db_table);
         $assigned_stewards = assigned_stewards($row_tables['id'],$dbTable,$judging_assignments_db_table);
 
-        if (score_count($row_tables['id'],1,$dbTable)) $scoreAction = "edit";
-        else $scoreAction = "add";
+        if ($dbTable == "default") {
+            if (score_count($row_tables['id'],1,$dbTable)) $scoreAction = "edit";
+            else $scoreAction = "add";
+        }
 
         $manage_tables_default_tbody .= "<tr>";
         $manage_tables_default_tbody .= "<td class=\"hidden-xs hidden-sm\">".$row_tables['tableNumber']."</td>";
         $manage_tables_default_tbody .= "<td>".$row_tables['tableName']."</td>";
-        $manage_tables_default_tbody .= "<td>".$styles."</td>";
+        $manage_tables_default_tbody .= "<td>".rtrim($styles, ",&nbsp;")."</td>";
         $manage_tables_default_tbody .= "<td>".$received."</td>";
         $manage_tables_default_tbody .= "<td class=\"hidden-xs hidden-sm\">".$scored."</td>";
         $manage_tables_default_tbody .= "<td>".$assigned_judges."</td>";
         $manage_tables_default_tbody .= "<td>".$assigned_stewards."</td>";
         if (($totalRows_judging > 1) && ($dbTable == "default")) $manage_tables_default_tbody .= "<td class=\"hidden-xs hidden-sm\">".table_location($row_tables['id'],$_SESSION['prefsDateFormat'],$_SESSION['prefsTimeZone'],$_SESSION['prefsTimeFormat'],"default")."</td>";
+        
         if ($dbTable == "default") {
             $manage_tables_default_tbody .= "<td nowrap=\"nowrap\" class=\"hidden-print\">";
 
@@ -235,7 +244,7 @@ if (($action == "default") && ($filter == "default")) {
         $bos_modal_body .= $row_style_type['styleTypeName']." (".bos_method($row_style_type['styleTypeBOSMethod'])." from each table to BOS).";
         $bos_modal_body .= "</li>";
 
-    } while ($row_style_type = mysqli_fetch_assoc($style_type));
+    } while ($row_style_type = mysqli_fetch_assoc($style_type));   
 
 } // end if (($action == "default") && ($dbTable == "default"))
 
@@ -377,7 +386,7 @@ if (($action == "add") || ($action == "edit")) {
 
 } // end if (($action == "add") || ($action == "edit"))
 
-if (EVALUATION) include(EVALS.'import_scores.eval.php');
+if ((EVALUATION) && ($dbTable == "default")) include(EVALS.'import_scores.eval.php');
 ?>
 <p class="lead"><?php echo $_SESSION['contestName'].$title;  ?></p>
 <?php if ($dbTable == "default") echo $sub_lead_text; ?>
@@ -794,7 +803,7 @@ if ($totalRows_tables > 0) { ?>
 			null,
 			null,
 			<?php if (($totalRows_judging > 1) && ($dbTable == "default"))  { ?>null,<?php } ?>
-			{ "asSorting": [  ] }
+			<?php if ($dbTable == "default") { ?>{ "asSorting": [  ] }<?php } ?>
 			]
 		} );
 	} );

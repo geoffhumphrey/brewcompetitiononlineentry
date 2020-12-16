@@ -5,7 +5,11 @@
  */
 
 // if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) && (isset($_SESSION['userLevel'])))) echo "YES"; else echo "NO"; exit;
-
+/*
+foreach ($_POST as $key => $value) {
+	echo $key.": ".$value."<br>";
+}
+*/
 
 if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) && (isset($_SESSION['userLevel'])))) {
 
@@ -36,8 +40,28 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 				$pattern = array('\'', '"');
 				$insertGoTo = str_replace($pattern, "", $insertGoTo);
 				$redirect_go_to = sprintf("Location: %s", stripslashes($insertGoTo));
+				header($redirect_go_to);
+				exit;
 			}
 
+	}
+
+	$subcat_limit = FALSE;
+
+	if ((isset($_SESSION['prefsUserSubCatLimit'])) && (!empty($_SESSION['prefsUserSubCatLimit']))) {
+		if (($action == "add") || (($action == "edit") && ($_POST['brewStyle'] != $_POST['brewEditStyle']))) {
+			$subcat_limit = limit_subcategory(filter_var($_POST['brewStyle'],FILTER_SANITIZE_STRING),$_SESSION['prefsUserSubCatLimit'],$_SESSION['prefsUSCLExLimit'],$_SESSION['prefsUSCLEx'],filter_var($_POST['brewBrewerID'],FILTER_SANITIZE_STRING));
+		}
+		
+	}
+
+	if ($subcat_limit) {
+		$insertGoTo = $base_url."index.php?section=list&msg=9";
+		$pattern = array('\'', '"');
+		$insertGoTo = str_replace($pattern, "", $insertGoTo);
+		$redirect_go_to = sprintf("Location: %s", stripslashes($insertGoTo));
+		header($redirect_go_to);
+		exit;
 	}
 
 	if (($action == "add") || ($action == "edit")) {

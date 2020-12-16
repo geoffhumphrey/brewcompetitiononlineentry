@@ -22,7 +22,7 @@ require (CONFIG.'bootstrap.php');
 require (INCLUDES.'url_variables.inc.php');
 include (INCLUDES.'scrubber.inc.php');
 require (LANG.'language.lang.php');
-require(LIB.'email.lib.php');
+require (LIB.'email.lib.php');
 
 $query_prefs = sprintf("SELECT prefsPayPalAccount FROM %s WHERE id='1'", $prefix."preferences");
 $prefs = mysqli_query($connection,$query_prefs) or die (mysqli_error($connection));
@@ -135,6 +135,7 @@ if ($verified) {
 
 		$b = explode("-",$custom_parts[1]);
 		$queries = "";
+		$display_entry_no = array();
 
 		foreach ($b as $value) {
 
@@ -142,7 +143,12 @@ if ($verified) {
 			mysqli_real_escape_string($connection,$updateSQL);
 			$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 
+			$display_entry_no[] = sprintf("%06s",$b);
+
 		}
+
+		$display_entry_numbers = implode(", ", $display_entry_no);
+		$display_entry_numbers = rtrim($display_entry_numbers, ", ");
 
 		$to_email = 	$row_user_info['brewerEmail'];
 		$to_recipient = $row_user_info['brewerFirstName']." ".$row_user_info['brewerLastName'];
@@ -172,7 +178,7 @@ if ($verified) {
 		$message_body .= sprintf("<tr valign='top'><td nowrap><strong>%s:</strong></td><td>".$data['payment_status']."<td></tr>",$label_status);
 		$message_body .= sprintf("<tr valign='top'><td nowrap><strong>%s:</strong></td><td>".$data['payment_amount']." ".$data['payment_currency']."<td></tr>",$label_amount);
 		$message_body .= sprintf("<tr valign='top'><td nowrap><strong>%s:</strong></td><td>".$data['txn_id']."<td></tr>",$label_transaction_id);
-		$message_body .= sprintf("<tr valign='top'><td nowrap><strong>%s %s:</strong></td><td>".str_replace("-",", ",$custom_parts[1])."<td></tr>",$label_entry_numbers,$label_paid);
+		$message_body .= sprintf("<tr valign='top'><td nowrap><strong>%s %s:</strong></td><td>".$display_entry_numbers."<td></tr>",$label_entry_numbers,$label_paid);
 		$message_body .= "</table>";
 
 		$message_body .= sprintf("<p>%s</p>",$paypal_response_text_002);
@@ -181,7 +187,6 @@ if ($verified) {
 		$message_bottom .= "</html>";
 
 		$message_all = $message_top.$message_body.$message_bottom;
-
 
 		// Send the email message
 		$subject = $test_text." ".$data['item_name']." - ".ucwords($paypal_response_text_009);

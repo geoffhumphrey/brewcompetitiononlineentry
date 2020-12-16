@@ -9,8 +9,14 @@ Checked Single
 function clean_up_text($text) {
 	$r = htmlspecialchars($text, ENT_QUOTES, 'UTF-8');
 	$r = preg_replace( "/\r|\n/", "", $r);
+	$r = htmlspecialchars_decode($r);
 	return $r;
 }
+
+$replacement1 = array('Entry Instructions:','Commercial Examples:','must specify','may specify','MUST specify','MAY specify','must provide','must be specified','must declare','must either','must supply','may provide','MUST state');
+if ($go == "default") $replacement2 = array('<strong class="text-danger">Entry Instructions:</strong>','<strong class="text-info">Commercial Examples:</strong>','<strong><u>MUST</u></strong> specify','<strong><u>MAY</u></strong> specify','<strong><u>MUST</u></strong> specify','<strong><u>MAY</u></strong> specify','<strong><u>MUST</u></strong> provide','<strong><u>MUST</u></strong> declare','<strong><u>MUST</u></strong> either','<strong><u>MUST</u></strong> supply','<strong><u>MAY</u></strong> provide','<strong><u>MUST</u></strong> state');
+else $replacement2 = array('<strong class="text-danger">Entry Instructions:</strong>','<strong class="text-info">Commercial Examples:</strong>','<strong><u>MUST</u></strong> specify','<strong><u>MAY</u></strong> specify','<strong><u>MUST</u></strong> specify','<u>MAY</u> specify','<u>MUST</u> provide','<strong><u>MUST</u></strong> be specified','<strong><u>MUST</u></strong> declare','<strong><u>MUST</u></strong> either','<strong><u>MUST</u></strong> supply','<strong><u>MAY</u></strong> provide','<strong><u>MUST</u></strong> state');
+$replacement3 = array('Entry Instructions:','Commercial Examples:','<strong><u>MUST</u></strong> specify','<strong><u>MAY</u></strong> specify (using the <em>Optional Info</em> field below)','<strong><u>MUST</u></strong> specify','<strong><u>MAY</u></strong> specify (using the <em>Optional Info</em> field below)','<strong><u>MUST</u></strong> provide','<strong><u>MUST</u></strong> be specified','<strong><u>MUST</u></strong> declare','<strong><u>MUST</u></strong> either','<strong><u>MUST</u></strong> supply','<strong><u>MAY</u></strong> provide (using the <em>Optional Info</em> field below)','<strong><u>MUST</u></strong> state');
 
 $styles_entry_text = array(
     "07-C" => $styles_entry_text_07C,
@@ -290,6 +296,7 @@ $(document).ready(function() {
 		foreach ($special_beer_info as $key => $value) { 
 			if (array_key_exists($key, $styles_entry_text)) $entry_text = $styles_entry_text["$key"];
 			else $entry_text = $value;
+			$entry_text = str_replace($replacement1,$replacement3,$entry_text);
 			?>
 		else if (
 			$("#type").val() == "<?php echo ltrim($key,"0"); ?>"){ // Special Beer
@@ -423,6 +430,7 @@ $(document).ready(function() {
 		foreach ($carb_str_sweet_special_info as $key => $value) { 
 			if (array_key_exists($key, $styles_entry_text)) $entry_text = $styles_entry_text["$key"];
 			else $entry_text = $value;
+			$entry_text = str_replace($replacement1,$replacement3,$entry_text);
 		?>
 		else if (
 			$("#type").val() == "<?php echo ltrim($key,"0"); ?>"){
@@ -530,7 +538,9 @@ $(document).ready(function() {
 			$("#carbonation").show("fast");
 			$("#strength").show("fast");
 			<?php if (in_array($value, $styles_entry_text)) {
-			$entry_text = $styles_entry_text["$value"]; ?>
+			$entry_text = $styles_entry_text["$value"]; 
+			$entry_text = str_replace($replacement1,$replacement3,$entry_text);
+			?>
 			$("#specialInfo").show("fast");
 			$("#specialInfoText").html("<?php echo clean_up_text($entry_text); ?>");
 			<?php } else { ?>
@@ -652,6 +662,7 @@ $(document).ready(function() {
 		foreach ($spec_sweet_carb_only_info as $key => $value) { 
 			if (array_key_exists($key, $styles_entry_text)) $entry_text = $styles_entry_text["$key"];
 			else $entry_text = $value;
+			$entry_text = str_replace($replacement1,$replacement3,$entry_text);
 			?>
 		else if (
 			$("#type").val() == "<?php echo ltrim($key,"0"); ?>"){
@@ -709,6 +720,7 @@ $(document).ready(function() {
 		foreach ($spec_carb_only_info as $key => $value) { 
 			if (array_key_exists($key, $styles_entry_text)) $entry_text = $styles_entry_text["$key"];
 			else $entry_text = $value;
+			$entry_text = str_replace($replacement1,$replacement3,$entry_text);
 			?>
 		else if (
 			$("#type").val() == "<?php echo ltrim($key,"0"); ?>"){
@@ -821,6 +833,7 @@ if ($action == "edit") {
 	<?php if ((is_array($carb_str_sweet_special_info)) && (array_key_exists($view,$carb_str_sweet_special_info))) { 
 		if (in_array($view, $styles_entry_text)) $entry_text = $styles_entry_text["$view"];
 		else $entry_text = $carb_str_sweet_special_info["$view"];
+		$entry_text = str_replace($replacement1,$replacement3,$entry_text);
 		?>
 	// Show fields for styles that require special ingredients, carb, sweetness, strength, etc.
 	// Carb, sweetness, strength, and special info styles
@@ -951,6 +964,7 @@ if ($action == "edit") {
 	<?php if ((is_array($spec_sweet_carb_only_info)) && (array_key_exists($view,$spec_sweet_carb_only_info))) { 
 		if (in_array($view, $styles_entry_text)) $entry_text = $styles_entry_text["$view"];
 		else $entry_text = $spec_sweet_carb_only_info["$view"];
+		$entry_text = str_replace($replacement1,$replacement3,$entry_text);
 		?>
 	// Sweet and sweet only styles with special ingredients
 	$(document).ready(function() {
@@ -987,6 +1001,7 @@ if ($action == "edit") {
 	<?php if ((is_array($spec_carb_only_info)) && (array_key_exists($view,$spec_carb_only_info))) { 
 		if (in_array($view, $styles_entry_text)) $entry_text = $styles_entry_text["$view"];
 		else $entry_text = $spec_carb_only_info["$view"];
+		$entry_text = str_replace($replacement1,$replacement3,$entry_text);
 		?>
 	// Carb with special ingredients only styles
 	$(document).ready(function() {
@@ -1023,6 +1038,7 @@ if ($action == "edit") {
 	<?php if ((is_array($special_beer_info)) && (array_key_exists($view,$special_beer_info))) {
 		if (in_array($view, $styles_entry_text)) $entry_text = $styles_entry_text["$view"];
 		else $entry_text = $special_beer_info["$view"];
+		$entry_text = str_replace($replacement1,$replacement3,$entry_text);
 	 ?>
 	// Beer styles with special ingredients only
 	$(document).ready(function() {

@@ -10,7 +10,7 @@ if (EVALUATION) {
     include(EVALS.'import_scores.eval.php');
 }
 ?>
-<script src="<?php echo $base_url;?>js_includes/admin_ajax.js"></script>
+<script src="<?php echo $base_url;?>js_includes/admin_ajax.min.js"></script>
 <p class="lead">Hello, <?php echo $_SESSION['brewerFirstName']; ?>. <span class="small">Click or tap the headings or icons below to view the options available in each category.</span></p>
 <?php if ((judging_date_return() == 0) && ($_SESSION['userLevel'] == 0))  { ?>
     <div class="row">

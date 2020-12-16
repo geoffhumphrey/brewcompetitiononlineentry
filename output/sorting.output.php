@@ -87,7 +87,7 @@ if ($totalRows_entries > 0) {
 	if ($brewer_info[14] == "United States") $phone = format_phone_us($brewer_info[2]); else $phone = $brewer_info[2];
 	?>
     <tr>
-        <td><?php echo sprintf("%04s",$row_entries['id']); ?></td>
+        <td><?php echo sprintf("%06s",$row_entries['id']); ?></td>
         <?php if ($view == "default") { ?>
         <td><?php echo $row_entries['brewJudgingNumber'];  ?></td>
         <?php } ?>
@@ -143,7 +143,7 @@ if ($totalRows_entries > 0) {
 	?>
     <tr>
 		<?php if (strpos($styleSet,"BABDB") === false) { ?><td><span class="hidden"><?php echo $row_entries['brewCategorySort'].$row_entries['brewSubCategory']; ?></span><?php echo $row_entries['brewSubCategory']; ?></td><?php } ?>
-        <td><?php echo sprintf("%04s",$row_entries['id']); ?></td>
+        <td><?php echo sprintf("%06s",$row_entries['id']); ?></td>
         <td><?php echo readable_judging_number($row_entries['brewCategory'],$row_entries['brewJudgingNumber']);  ?></td>
         <td><p class="box_small">&nbsp;</p></td>
     </tr>

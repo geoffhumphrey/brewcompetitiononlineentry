@@ -114,7 +114,7 @@ else {
 		$query_bos .= " ORDER BY scoreTable ASC";
 		$bos = mysqli_query($connection,$query_bos) or die (mysqli_error($connection));
 		$row_bos = mysqli_fetch_assoc($bos);
-		$totalRows_bos = mysqli_num_rows($bos);
+		$totalRows_bos = mysqli_num_rows($bos); 
 
 	}
 

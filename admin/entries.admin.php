@@ -99,15 +99,15 @@ if ($totalRows_log > 0) {
 		$scoresheet_entry = FALSE;
 		$scoresheet_judging = FALSE;
 
-		$entry_number = sprintf("%04s",$row_log['id']);
+		$entry_number = sprintf("%06s",$row_log['id']);
 		$judging_number = sprintf("%06s",$row_log['brewJudgingNumber']);
 
 		// If using electronic scoresheets, build links
 		if (EVALUATION) {
 
-			if ($row_judging_prefs['jPrefsScoresheet'] == 1) $output_form = "full-scoresheet";
-			if ($row_judging_prefs['jPrefsScoresheet'] == 2) $output_form = "checklist-scoresheet";
-			if ($row_judging_prefs['jPrefsScoresheet'] == 3) $output_form = "structured-scoresheet";
+			// if ($row_judging_prefs['jPrefsScoresheet'] == 1) $output_form = "full-scoresheet";
+			// if ($row_judging_prefs['jPrefsScoresheet'] == 2) $output_form = "checklist-scoresheet";
+			// if ($row_judging_prefs['jPrefsScoresheet'] == 3) $output_form = "structured-scoresheet";
 
 			if (in_array($row_log['id'], $evals)) {
 				$scoresheet_eval = TRUE;
@@ -116,10 +116,10 @@ if ($totalRows_log > 0) {
 				$style = mysqli_query($connection,$query_style) or die (mysqli_error($connection));
 				$row_style = mysqli_fetch_assoc($style);
 
-				if (($row_style['brewStyleType'] == 2) || ($row_style['brewStyleType'] == 3)) $output_form = "full-scoresheet";
+				if ((($row_style['brewStyleType'] == 2) || ($row_style['brewStyleType'] == 3)) && ($row_judging_prefs['jPrefsScoresheet'] != 3)) $output_form = "full-scoresheet";
 
-				$view_link = $base_url."output/print.output.php?section=evaluation&amp;go=".$output_form."&amp;view=all&amp;id=".$row_log['id']."&amp;tb=1";
-				$print_link = $base_url."output/print.output.php?section=evaluation&amp;go=".$output_form."&amp;view=all&amp;id=".$row_log['id'];
+				$view_link = $base_url."output/print.output.php?section=evaluation&amp;go=default&amp;view=all&amp;id=".$row_log['id']."&amp;tb=1";
+				$print_link = $base_url."output/print.output.php?section=evaluation&amp;go=default&amp;view=all&amp;id=".$row_log['id'];
 			}
 		
 		}
@@ -445,7 +445,7 @@ if ($totalRows_log > 0) {
 		$tbody_rows .= "\n<tr class=\"".$entry_row_color."\">";
 		$tbody_rows .= "\n\t<td>";
 		$tbody_rows .= "<input type=\"hidden\" name=\"id[]\" value=\"".$row_log['id']."\" />";
-		$tbody_rows .= sprintf("%04s",$row_log['id']);
+		$tbody_rows .= sprintf("%06s",$row_log['id']);
 		$tbody_rows .= "</td>";
 		$tbody_rows .= "\n\t<td nowrap=\"nowrap\">".$entry_judging_num_display."</td>";
 		$tbody_rows .= "\n\t<td class=\"hidden-xs hidden-sm hidden-md\">";
@@ -622,7 +622,7 @@ $(document).ready(function () {
     disable_update_button('brewing');
 });
 </script>
-<script src="<?php echo $base_url;?>js_includes/admin_ajax.js"></script>
+<script src="<?php echo $base_url;?>js_includes/admin_ajax.min.js"></script>
 <form name="form1" method="post" action="<?php echo $base_url; ?>includes/process.inc.php?action=update&amp;dbTable=<?php echo $brewing_db_table; ?>&amp;filter=<?php echo $filter; ?>">
 <?php if ($action != "print") { ?>
 <div class="bcoem-admin-element hidden-print row">
@@ -658,7 +658,7 @@ $(document).ready(function () {
 			</ul>
 		</div><!-- ./button group -->
 		<div class="btn-group" role="group" aria-label="chooseParticipants">
-			<?php echo participant_choose($brewer_db_table,$pro_edition); ?>
+			<?php echo participant_choose($brewer_db_table,$pro_edition,0); ?>
 		</div><!-- ./button group -->
 		<div class="btn-group hidden-xs hidden-sm" role="group" aria-label="printCurrent">
 			<div class="btn-group" role="group">

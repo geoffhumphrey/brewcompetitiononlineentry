@@ -58,7 +58,7 @@ if ($_SESSION['prefsStyleSet'] == "BA") include (INCLUDES.'ba_constants.inc.php'
 
 	?>
     	<tr>
-        	<td><?php echo sprintf("%04s",$row_post_inventory['id']); ?></td>
+        	<td><?php echo sprintf("%06s",$row_post_inventory['id']); ?></td>
             <td><?php echo readable_judging_number($row_post_inventory['brewCategory'],$row_post_inventory['brewJudgingNumber']); ?></td>
             <td><?php echo $row_post_inventory['brewName']; ?></td>
             <td>

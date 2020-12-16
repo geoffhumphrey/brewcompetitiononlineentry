@@ -2409,10 +2409,6 @@ if (((strpos($section, "step") === FALSE) && ($section != "setup")) && ($section
         $suggested_open_date = time();
         $suggested_close_date = time() + 604800;
 
-        if (empty($row_judging_prefs['jPrefsScoresheet'])) $judging_scoresheet = "1";
-        else if (!isset($_SESSION['jPrefsScoresheet'])) $judging_scoresheet = "1";
-        else $judging_scoresheet = $_SESSION['jPrefsScoresheet'];
-
         if ((empty($row_judging_prefs['jPrefsJudgingOpen'])) || (empty($row_judging_prefs['jPrefsJudgingClosed']))) {
 
             $query_judging_dates = sprintf("SELECT judgingDate FROM %s",$judging_locations_db_table);
@@ -2475,7 +2471,7 @@ if (((strpos($section, "step") === FALSE) && ($section != "setup")) && ($section
 
 	$current_date = getTimeZoneDateTime($_SESSION['prefsTimeZone'], time(), $_SESSION['prefsDateFormat'], $_SESSION['prefsTimeFormat'], "system", "date");
 	$current_date_display = getTimeZoneDateTime($_SESSION['prefsTimeZone'], time(), $_SESSION['prefsDateFormat'], $_SESSION['prefsTimeFormat'], $sidebar_date_format, "date");
-	$current_time = getTimeZoneDateTime($_SESSION['prefsTimeZone'], time(), $_SESSION['prefsDateFormat'], $_SESSION['prefsTimeFormat'], "system", "time");
+	$current_time = getTimeZoneDateTime($_SESSION['prefsTimeZone'], time(), $_SESSION['prefsDateFormat'], $_SESSION['prefsTimeFormat'], "system", "time-gmt");
 
 }
 
@@ -2489,7 +2485,7 @@ else {
 
         $current_date = getTimeZoneDateTime($row_prefs_tz['prefsTimeZone'], time(), $row_prefs_tz['prefsDateFormat'], $row_prefs_tz['prefsTimeFormat'], "system", "date");
         $current_date_display = getTimeZoneDateTime($row_prefs_tz['prefsTimeZone'], time(), $row_prefs_tz['prefsDateFormat'], $row_prefs_tz['prefsTimeFormat'], $sidebar_date_format, "date");
-        $current_time = getTimeZoneDateTime($row_prefs_tz['prefsTimeZone'], time(), $row_prefs_tz['prefsDateFormat'], $row_prefs_tz['prefsTimeFormat'], "system", "time");
+        $current_time = getTimeZoneDateTime($row_prefs_tz['prefsTimeZone'], time(), $row_prefs_tz['prefsDateFormat'], $row_prefs_tz['prefsTimeFormat'], "system", "time-gmt");
 
     }
 
@@ -2574,7 +2570,7 @@ if (HOSTED) $_SESSION['prefsCAPTCHA'] = 1;
 
 // Load libraries only when needed - for performance
 $tinymce_load = array("contest_info","default","step4","default");
-$datetime_load = array("contest_info","eval","testing","preferences","step4","step5","step6","default","judging","judging_preferences");
+$datetime_load = array("contest_info","evaluation","testing","preferences","step4","step5","step6","default","judging","judging_preferences");
 $datatables_load = array("admin","list","default","step4","evaluation");
 
 if (isset($_SESSION['prefsStyleSet'])) {

@@ -54,7 +54,7 @@ do {
 
 		if (($sponsors_endRow == 0) && ($sponsors_hloopRow1++ != 0)) $page_info1 .= "<section class=\"row\">";
 
-		// Layout Column DIV
+		// Layout Column DIV 
 		$page_info1 .= "<section class=\"col-lg-3 col-md-6 col-sm-9 col-xs-12 bcoem-sponsor-container\">";
 
 		// Sponsor Name

@@ -201,7 +201,8 @@ elseif (($section == "admin") && ($go == "judging") && ($filter == "bos")  && ($
 elseif (($section == "admin") && ($go == "judging_tables") && ($filter == "judges") && ($dbTable == "default")) {
 	$query_brewer = "SELECT a.brewerFirstName, a.brewerLastName, a.uid, a.brewerJudgeRank, a.brewerJudgeID, b.uid FROM $brewer_db_table a, $staff_db_table b WHERE b.staff_judge='1' AND a.uid=b.uid";
 	//$query_brewer = "SELECT * FROM $staff_db_table WHERE staff_judge='1'";
-	if (SINGLE) $query_brewer .= sprintf(" AND comp_id='%s'", $_SESSION['comp_id']);
+	if (SINGLE) $query_brewer .= sprintf(" AND comp_id='%s'", $_SESSION['comp_id']); 
+	$query_brewer .= " ORDER BY a.brewerLastName ASC";
 	$brewer = mysqli_query($connection,$query_brewer) or die (mysqli_error($connection));
 	$row_brewer = mysqli_fetch_assoc($brewer);
 	$totalRows_brewer = mysqli_num_rows($brewer);

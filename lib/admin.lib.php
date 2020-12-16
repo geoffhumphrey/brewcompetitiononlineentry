@@ -165,13 +165,11 @@ function score_style_data($value) {
 	$styles = mysqli_query($connection,$query_styles) or die (mysqli_error($connection));
 	$row_styles = mysqli_fetch_assoc($styles);
 
-	if ($row_styles['brewStyleType'] == "") $styleType = 1; else $styleType = $row_styles['brewStyleType'];
-
 	$return =
 	$row_styles['brewStyleGroup']."^". //0
 	$row_styles['brewStyleNum']."^". //1
 	$row_styles['brewStyle']."^". //2
-	$styleType; //3
+	$row_styles['brewStyleType']; //3
 /*
 	}
 
@@ -443,29 +441,32 @@ function score_custom_winning_choose($special_best_info_db_table,$special_best_d
 	return $r;
 }
 
-function participant_choose($brewer_db_table,$pro_edition,$judge="0") {
+function participant_choose($brewer_db_table,$pro_edition,$judge) {
 	require(CONFIG.'config.php');
 	mysqli_select_db($connection,$database);
 
-	//$query_brewers = "SELECT uid,brewerFirstName,brewerLastName FROM $brewer_db_table ORDER BY brewerLastName";
 	if ($pro_edition == 1) $query_brewers = "SELECT uid,brewerBreweryName FROM $brewer_db_table WHERE brewerBreweryName IS NOT NULL ORDER BY brewerBreweryName ASC";
+	
 	else {
-		if ($judge == "1") $query_brewers = "SELECT uid,brewerFirstName,brewerLastName FROM $brewer_db_table WHERE brewerJudge='Y' ORDER BY brewerLastName ASC";
-		$query_brewers = "SELECT uid,brewerFirstName,brewerLastName FROM $brewer_db_table ORDER BY brewerLastName ASC";
+		if ($judge == 1) $query_brewers = "SELECT uid,brewerFirstName,brewerLastName FROM $brewer_db_table WHERE brewerJudge='Y' ORDER BY brewerLastName ASC";
+		else $query_brewers = "SELECT uid,brewerFirstName,brewerLastName FROM $brewer_db_table ORDER BY brewerLastName ASC";
 	}
+
 	$brewers = mysqli_query($connection,$query_brewers) or die (mysqli_error($connection));
 	$row_brewers = mysqli_fetch_assoc($brewers);
 
 	$output = "";
 	$output .= "<select class=\"selectpicker\" name=\"participants\" id=\"participants\"";
-	if ($judge="0") $output .= " onchange=\"jumpMenu('self',this,0)\"";
-	if ($judge="1") $output .= " required";
+	if ($judge == 0) $output .= " onchange=\"jumpMenu('self',this,0)\"";
+	if ($judge == 1) $output .= " required";
 	$output .= " data-size=\"15\" data-width=\"auto\" data-live-search=\"true\">";
-	if ($judge="0") $output .= "<option value=\"\" selected disabled data-icon=\"fa fa-plus-circle\">Add an Entry For...</option>";
+	
+	if ($judge == 0) $output .= "<option value=\"\" selected disabled data-icon=\"fa fa-plus-circle\">Add an Entry For...</option>";
 	else $output .= "<option value=\"\"></option>";
+	
 	do {
 
-		if ($judge="1") {
+		if ($judge == 1) {
 			$output .= "<option value=\"".$row_brewers['uid']."\">".$row_brewers['brewerLastName'].", ".$row_brewers['brewerFirstName']."</option>";
 		}
 
@@ -1141,7 +1142,131 @@ if ($queued == "Y") { // For queued judging only
 	}
 	else $r .= '<input type="hidden" name="assignTable'.$random.'" value="'.$tid.'" />';
 
+/*
 if ($queued == "N") { // Non-queued judging
+	// Build the flights DropDown
+	$r .= '<select class="selectpicker assign-flight" id="assignFlight'.$random.'" name="assignFlight'.$random.'" '.$disabled.' onchange="hj_enable(\''.$bid.'\',\'assignFlight'.$random.'\')">';
+	$r .= '<option value="0" />Do Not Assign</option>';
+		for($f=1; $f<$total_flights+1; $f++) {
+			if (flight_round($tid,$f,$round)) {
+				if (already_assigned($bid,$tid,$f,$round)) { $output = 'Assigned'; $selected = 'selected'; $style = ' style="color: #990000;"'; } else { $output = 'Assign'; $selected = ''; $style=''; }
+				$r .= '<option value="'.$f.'" '.$selected.$style.' />'.$output.' to Flight '.$f.'</option>';
+			}
+		} // end for loop
+	$r .= '</select>';
+}
+*/
+
+if ($queued == "N") { // Non-queued judging
+	// Build the flights DropDown
+	$r .= '<select class="selectpicker assign-flight" id="assignFlight'.$random.'" name="assignFlight'.$random.'" '.$disabled.' onchange="hj_enable(\''.$bid.'\',\'assignFlight'.$random.'\')">';
+	// $r .= '<select class="selectpicker assign-flight" name="assignFlight'.$random.'" '.$disabled.'>';
+	$r .= '<option value="0" />Do Not Assign</option>';
+		for($f=1; $f<$total_flights+1; $f++) {
+			if (flight_round($tid,$f,$round)) {
+				if (already_assigned($bid,$tid,$f,$round)) { $output = 'Assigned'; $selected = 'selected'; $style = ' style="color: #990000;"'; } else { $output = 'Assign'; $selected = ''; $style=''; }
+				$r .= '<option value="'.$f.'" '.$selected.$style.' />'.$output.' to Flight '.$f.'</option>';
+			}
+		} // end for loop
+	$r .= '</select>';
+}
+
+if ($queued == "Y") {
+		$r .= '<input type="hidden" name="assignFlight'.$random.'" value="1">';
+	}
+
+$r .= "</section>";
+
+return $r;
+}
+
+
+/* ***************************************
+ * This version of the asssign_to_table 
+ * function needs tweaking to utilize the 
+ * save_column() js ajax utility.
+ * ***************************************
+ */
+
+/*
+function assign_to_table($tid,$bid,$filter,$total_flights,$round,$location,$table_styles,$queued,$random,$base_url) {
+// Function almalgamates the above functions to output the correct form elements
+// $bid = id of row in the brewer's table
+// $tid = id of row in the judging_tables table
+// $filter = judges or stewards from encoded URL
+// $flight = flight number (query above)
+// $round = the round number from the for loop
+// $location = id of table's location from the judging_locations table
+
+// Define variables
+$unassign = unassign($bid,$location,$round,$tid);
+$unavailable = unavailable($bid,$location,$round,$tid);
+
+$r = "";
+if (entry_conflict($bid,$table_styles)) $disabled = "disabled"; else $disabled = "";
+if ($filter == "stewards") $role = "S"; else $role = "J";
+
+$r .= "<section>";
+
+// Build the form elements
+$r .= '<input type="hidden" name="random[]" value="'.$random.'" />';
+$r .= '<input type="hidden" name="bid'.$random.'" value="'.$bid.'" />';
+$r .= '<input type="hidden" name="assignRound'.$random.'" value="'.$round.'" />';
+$r .= '<input type="hidden" name="assignment'.$random.'" value="'.$role.'" />';
+$r .= '<input type="hidden" name="assignLocation'.$random.'" value="'.$location.'" />';
+$r .= '<input type="hidden" name="id'.$random.'" value="'.$unassign.'"/>';
+
+if ($queued == "Y") {
+	if (already_assigned($bid,$tid,"1",$round)) {
+		$selected = "checked";
+		$default = "";
+	}
+	else {
+		$selected = "";
+		$default = "checked";
+	}
+}
+
+if ($unassign > 0) {
+	// Check to see if the participant is already assigned to this round.
+	// If so (function returns a value greater than 0), display the following:
+	$r .= '<div class="form-inline">';
+	$r .= '<div class="checkbox">';
+	$r .= '<label for="unassign'.$random.'">';
+	$r .= '<input class="unassign-checkbox" type="checkbox" id="unassign'.$random.'" name="unassign'.$random.'" value="'.$unassign.'" '.$disabled.'>';
+	$r .= ' Unassign from their current assignment and...</label>';
+	$r .= '</div>';
+	$r .= '</div>';
+	}
+	else {
+		$r .= '<input type="hidden" name="unassign'.$random.'" value="'.$unassign.'"/>';
+	}
+
+if ($queued == "Y") { // For queued judging only
+	//if (already_assigned($bid,$tid,"1",$round)) { $selected = 'checked'; $default = ''; } else { $selected = ''; $default = 'checked'; }
+	$r .= '<div class="form-inline">';
+	$r .= '<div class="form-group">';
+	$r .= '<div class="input-group">';
+    $r .= '<label class="radio-inline">';
+    $r .= '<input type="radio" name="assignRound'.$random.'" value="'.$round.'" '.$selected.' '.$disabled.' /> Assign to this Table';
+    $r .= '</label>';
+    $r .= '<label class="radio-inline">';
+    $r .= '<input type="radio" name="assignRound'.$random.'" value="0" '.$default.' /> Do Not Assign to This Table';
+    $r .= '</label>';
+    $r .= '</div>';
+	$r .= '</div>';
+	}
+	else $r .= '<input type="hidden" name="assignTable'.$random.'" value="'.$tid.'" />';
+
+if ($queued == "N") { // Non-queued judging
+	// Build the flights DropDown
+
+	$hj_add = "head_judge_add('".$bid."','assign-flight-".$random."','".$tid."')";
+	$save_column = "save_column('".$base_url."','assignFlight','judging_assignments','".$bid."','".$tid."','".$role."','".$round."','".$random."','assign-flight-".$location."')";
+
+	$r .= sprintf("\n\n<select id=\"assign-flight-%s\" class=\"selectpicker assign-flight\" name=\"assignFlight\" %s onchange=\"%s;%s;\">",$random, $disabled, $hj_add, $save_column);
+
+	/*
 	// Build the flights DropDown
 	$r .= '<select class="selectpicker assign-flight" name="assignFlight'.$random.'" '.$disabled.'>';
 	$r .= '<option value="0" />Do Not Assign</option>';
@@ -1152,7 +1277,19 @@ if ($queued == "N") { // Non-queued judging
 			}
 		} // end for loop
 	$r .= '</select>';
-	}
+	*//*
+
+
+	$r .= '<option data-judge-id="'.$bid.'" value="0" />Do Not Assign</option>'."\n";
+		for($f=1; $f<$total_flights+1; $f++) {
+			if (flight_round($tid,$f,$round)) {
+				if (already_assigned($bid,$tid,$f,$round)) { $output = 'Assigned'; $selected = 'selected'; $style = ' style="color: #990000;"'; } else { $output = 'Assign'; $selected = ''; $style=''; }
+				$r .= '<option data-judge-id="'.$bid.'" value="'.$f.'" '.$selected.$style.' />'.$output.' to Flight '.$f.'</option>'."\n";
+			}
+		} // end for loop
+	$r .= '</select>'."\n"."\n";
+
+}
 
 if ($queued == "Y") {
 		$r .= '<input type="hidden" name="assignFlight'.$random.'" value="1">';
@@ -1162,6 +1299,7 @@ $r .= "</section>";
 
 return $r;
 }
+*/
 
 function get_judge_role($uid,$tid) {
 

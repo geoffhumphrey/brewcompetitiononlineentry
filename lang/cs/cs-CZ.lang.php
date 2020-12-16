@@ -766,67 +766,64 @@ if ($section == "contact") {
 
 // -------------------- Default (Home) -------------------
 
-if (($section == "default") || ($section == "results")) { // Changed for 2.1.14
 
-	$default_page_text_000 = "Nebyly zvolena žádná místa příjmu vzorků.";
-	$default_page_text_001 = "Přidat místo příjmu vzorků?";
-	$default_page_text_002 = "Nebyla zvolena žádná data/místa degustace.";
-	$default_page_text_003 = "Přidat místo degustace?";
-	$default_page_text_004 = "Výherci";
-	$default_page_text_005 = "Výherci budou uvedeni od";
-	$default_page_text_006 = "Vítejte";
-	$default_page_text_007 = "Prohlédněte si podrobnosti svého účtu a seznam vzorků.";
-	$default_page_text_008 = "Zobrazit podrobnosti účtu.";
-	$default_page_text_009 = "Výherci Best of Show";
-	$default_page_text_010 = "Výherci";
-	$default_page_text_011 = "Své osobní údaje do soutěže zadáváte pouze jednou. Následně se můžete na web vrátit a pokračovat ve vkládání vzorků nebo upravit ty už vložené.";
-	$default_page_text_012 = "Můžete taktéž zaplatit poplatky za vzorky online.";
-	$default_page_text_013 = "Organizátor soutěže";
-	$default_page_text_014 = "Organizátoři soutěže";
-	$default_page_text_015 = "Každé z osob můžete zaslat email prostřednictvím stránky ";
-	$default_page_text_016 = "děkuji subjektům níže. Tyto subjekty jsou";
-	$default_page_text_017 = "na";
-	$default_page_text_018 = "Stáhněte si výherce Best of Show ve formátu PDF.";
-	$default_page_text_019 = "Stáhněte si výherce Best of Show ve formátu HTML.";
-	$default_page_text_020 = "Stáhněte si vítězné vzorky ve formátu PDF.";
-	$default_page_text_021 = "Stáhněte si vítězné vzorky ve formátu HTML.";
-	$default_page_text_022 = "Děkujeme za váš zájem o soutěž";
-	$default_page_text_023 = ", která se koná v";
+$default_page_text_000 = "Nebyly zvolena žádná místa příjmu vzorků.";
+$default_page_text_001 = "Přidat místo příjmu vzorků?";
+$default_page_text_002 = "Nebyla zvolena žádná data/místa degustace.";
+$default_page_text_003 = "Přidat místo degustace?";
+$default_page_text_004 = "Výherci";
+$default_page_text_005 = "Výherci budou uvedeni od";
+$default_page_text_006 = "Vítejte";
+$default_page_text_007 = "Prohlédněte si podrobnosti svého účtu a seznam vzorků.";
+$default_page_text_008 = "Zobrazit podrobnosti účtu.";
+$default_page_text_009 = "Výherci Best of Show";
+$default_page_text_010 = "Výherci";
+$default_page_text_011 = "Své osobní údaje do soutěže zadáváte pouze jednou. Následně se můžete na web vrátit a pokračovat ve vkládání vzorků nebo upravit ty už vložené.";
+$default_page_text_012 = "Můžete taktéž zaplatit poplatky za vzorky online.";
+$default_page_text_013 = "Organizátor soutěže";
+$default_page_text_014 = "Organizátoři soutěže";
+$default_page_text_015 = "Každé z osob můžete zaslat email prostřednictvím stránky ";
+$default_page_text_016 = "děkuji subjektům níže. Tyto subjekty jsou";
+$default_page_text_017 = "na";
+$default_page_text_018 = "Stáhněte si výherce Best of Show ve formátu PDF.";
+$default_page_text_019 = "Stáhněte si výherce Best of Show ve formátu HTML.";
+$default_page_text_020 = "Stáhněte si vítězné vzorky ve formátu PDF.";
+$default_page_text_021 = "Stáhněte si vítězné vzorky ve formátu HTML.";
+$default_page_text_022 = "Děkujeme za váš zájem o soutěž";
+$default_page_text_023 = ", která se koná v";
 
-	$reg_open_text_000 = "Registrace degustátorů a obsluhy je";
-	$reg_open_text_001 = "otevřená";
-	$reg_open_text_002 = "Pokud <em>nejste registrováni</em>, a chcete být dobrovolníkem,";
-	$reg_open_text_003 = "zaregistrujte se, prosím";
-	$reg_open_text_004 = "Jestliže <em>už jste registrováni</em>, přihlaste se a zvolte <em>Upravit účet</em> přes Můj účet označený ikonou";
-	$reg_open_text_005 = "v horní nabídce.";
-	$reg_open_text_006 = "Protože už jste registrováni, můžete";
-	$reg_open_text_007 = "si prohlédnout údaje svého účtu";
-	$reg_open_text_008 = ", kde si ověříte, zda máte povolenou účast jako degustátor nebo obsluha.";
-	$reg_open_text_009 = "Pokud se chcete účastnit jako degustátor nebo obsluha, prosím, vraťte se znovu pro svou registraci po";
-	$reg_open_text_010 = "Registrace vzorků je";
-	$reg_open_text_011 = "Abyste mohli vložit vaše piva do soutěže";
-	$reg_open_text_012 = "zaregistrujte se, prosím";
-	$reg_open_text_013 = ", pokud již máte účet.";
-	$reg_open_text_014 = "použijte formulář přidání vzorků,";
+$reg_open_text_000 = "Registrace degustátorů a obsluhy je";
+$reg_open_text_001 = "otevřená";
+$reg_open_text_002 = "Pokud <em>nejste registrováni</em>, a chcete být dobrovolníkem,";
+$reg_open_text_003 = "zaregistrujte se, prosím";
+$reg_open_text_004 = "Jestliže <em>už jste registrováni</em>, přihlaste se a zvolte <em>Upravit účet</em> přes Můj účet označený ikonou";
+$reg_open_text_005 = "v horní nabídce.";
+$reg_open_text_006 = "Protože už jste registrováni, můžete";
+$reg_open_text_007 = "si prohlédnout údaje svého účtu";
+$reg_open_text_008 = ", kde si ověříte, zda máte povolenou účast jako degustátor nebo obsluha.";
+$reg_open_text_009 = "Pokud se chcete účastnit jako degustátor nebo obsluha, prosím, vraťte se znovu pro svou registraci po";
+$reg_open_text_010 = "Registrace vzorků je";
+$reg_open_text_011 = "Abyste mohli vložit vaše piva do soutěže";
+$reg_open_text_012 = "zaregistrujte se, prosím";
+$reg_open_text_013 = ", pokud již máte účet.";
+$reg_open_text_014 = "použijte formulář přidání vzorků,";
 
-	// v2.1.9
-	$reg_open_text_015 = "Registrace degustátorů je";
-	$reg_open_text_016 = "Registrace obsluhy je";
-	$reg_closed_text_000 = "Díky a hodně štěstí všem, kteří se zaregistrovali do soutěže";
-	$reg_closed_text_001 = "Momentálně máme";
-	$reg_closed_text_002 = "zaregistrovaných soutěžících, degustátorů a obsluhujících.";
-	$reg_closed_text_003 = "zaregistrovaných vzorků a";
-	$reg_closed_text_004 = "zaregistrovaných soutěžících, degustátorů a obsluhujících.";
-	$reg_closed_text_005 = "Ke dni celkem";
-	$reg_closed_text_006 = "přijatých a zpracovaných vzorků. Číslo se bude měnit podle toho, jak budeme přebírat vzorky na místě příjmu vzorků pro posouzení.";
-	$reg_closed_text_007 = "Data degustace nebyla zatím určena. Prosím, navštivte web později.";
-	$reg_closed_text_008 = "Map to";
-	$judge_closed_000 = "Díky všem, kteří se zúčastnili soutěže";
-	$judge_closed_001 = "Celkem bylo posouzeno";
-	$judge_closed_002 = "vzorků a účastnilo se";
-	$judge_closed_003 = "soutěžících, degustátorů a obsluhujících.";
-
-}
+// v2.1.9
+$reg_open_text_015 = "Registrace degustátorů je";
+$reg_open_text_016 = "Registrace obsluhy je";
+$reg_closed_text_000 = "Díky a hodně štěstí všem, kteří se zaregistrovali do soutěže";
+$reg_closed_text_001 = "Momentálně máme";
+$reg_closed_text_002 = "zaregistrovaných soutěžících, degustátorů a obsluhujících.";
+$reg_closed_text_003 = "zaregistrovaných vzorků a";
+$reg_closed_text_004 = "zaregistrovaných soutěžících, degustátorů a obsluhujících.";
+$reg_closed_text_005 = "Ke dni celkem";
+$reg_closed_text_006 = "přijatých a zpracovaných vzorků. Číslo se bude měnit podle toho, jak budeme přebírat vzorky na místě příjmu vzorků pro posouzení.";
+$reg_closed_text_007 = "Data degustace nebyla zatím určena. Prosím, navštivte web později.";
+$reg_closed_text_008 = "Map to";
+$judge_closed_000 = "Díky všem, kteří se zúčastnili soutěže";
+$judge_closed_001 = "Celkem bylo posouzeno";
+$judge_closed_002 = "vzorků a účastnilo se";
+$judge_closed_003 = "soutěžících, degustátorů a obsluhujících.";
 
 // -------------------- Entry Info --------------------
 

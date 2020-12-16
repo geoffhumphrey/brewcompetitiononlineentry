@@ -766,8 +766,6 @@ $contact_text_003 = "Deseja enviar outra mensagem?";
 
 // -------------------- Padrão (Home) -------------------
 
-if ($section == "default") {
-
 $default_page_text_000 = "Nenhum local de entrega foi especificado.";
 $default_page_text_001 = "Adicionar um local de entrega?";
 $default_page_text_002 = "Nenhuma data / local de julgamento foi especificado.";
@@ -824,10 +822,6 @@ $judge_closed_000 = "Obrigado a todos que participaram do";
 $judge_closed_001 = "Houve";
 $judge_closed_002 = "amostras julgadas e";
 $judge_closed_003 = "participantes registrados, juízes e administradores.";
-
-}
-
-
 
 // -------------------- Info de entrada --------------------
 

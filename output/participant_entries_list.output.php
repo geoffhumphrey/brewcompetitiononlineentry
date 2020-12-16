@@ -24,7 +24,7 @@ do {
 		
 		do {		
 		
-			$entry_numbers[] = sprintf("%04s",$row_log['id']);
+			$entry_numbers[] = sprintf("%06s",$row_log['id']);
 			$judging_numbers[] = sprintf("%06s",$row_log['brewJudgingNumber']);
 			
 		} while ($row_log = mysqli_fetch_assoc($log));

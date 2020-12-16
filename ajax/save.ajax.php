@@ -46,6 +46,120 @@ $error_type = 0;
 
 
 if ((isset($_SESSION['session_set_'.$prefix_session])) && (isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 2)) {
+	
+/* *****************************************
+ * The following is unfinished. Need more
+ * thought into the various scenarios
+ * associated with assigning judges and 
+ * stewards to tables/flights/rounds.
+ * *****************************************
+ */
+
+/*
+	if ($action == "judging_assignments") {
+
+		if ($go == "assignFlight") {
+
+			// https://test.brewcomp.com/ajax/save.ajax.php?action=judging_assignments&go=assignTable&id=212&rid1=1&rid2=J&rid3=1
+			// $id = judge's uid
+			// $rid1 = table id
+			// $rid2 = judge or steward
+			// $rid3 = round
+			// $rid4 = assigned location
+			// $_POST['assignFlight']
+
+			// Do query if judge is already assigned in their specified role
+			$query_already_assigned = sprintf("SELECT * FROM %s WHERE bid='%s' AND assignment='%s'", $prefix.$action, $id, $rid2);
+			$already_assigned = mysqli_query($connection,$query_already_assigned) or die (mysqli_error($connection));
+			$row_already_assigned = mysqli_fetch_assoc($already_assigned);
+			$totalRows_already_assigned = mysqli_num_rows($already_assigned);
+
+			// If no record of the user assigned to any table as either a judge or steward,
+			// simply add a record.
+			if ($totalRows_already_assigned == 0) {
+				if ($_POST['assignFlight'] > 0) $sql .= sprintf("INSERT INTO `%s` (bid, assignment, assignTable, assignFlight, assignRound, assignLocation) VALUES (%s, %s, %s, %s, %s, %s)", $prefix.$action, $id, $rid2, $rid1, $_POST['assignFlight'], $rid3, $rid4);
+			}
+
+			// Otherwise, loop through user's assignments for the role
+			
+			else {
+
+				do {
+
+					// If assigned to the same round, check to see if the user chose to assign to current table. 
+					// If the choice is to assign to current table, delete the previous record and add a new one with this assignment.
+					// If the choice is NOT assign to current table, clear any records that may be there
+
+					// Check if assigned to this round and table
+					if (($row_already_assigned['assignRound'] == $rid3) && ($row_already_assigned['assignTable'] == $rid1)) {
+
+						// Check to see if the user chose to assign. If so, update the record.
+						if ($_POST['assignFlight'] > 0) {
+
+							$sql .= sprintf("UPDATE `%s` SET assignFlight='%s' WHERE bid='%s' AND assignTable='%s' AND assignRound='%s'", $prefix.$action, $_POST['assignFlight'], $id, $rid1, $rid3);
+
+							echo $sql."<br>";
+
+						}
+
+						// If the choice is NOT assign to current table, clear any records that may be there
+						if ($_POST['assignFlight'] == 0) {
+							$sql = sprintf("DELETE FROM `%s` WHERE bid='%s' AND assignTable='%s' AND assignRound='%s' AND assignFlight='%s'", $prefix.$action, $rid2, $id, $rid1, $rid3, $_POST['assignFlight']);
+
+							echo $sql."<br>";
+						}
+					
+					}
+
+					// Check if assigned to this round at another table, but at same location
+					if (($row_already_assigned['assignRound'] == $rid3) && ($row_already_assigned['assignTable'] != $rid1) && ($row_already_assigned['assignLocation'] == $rid4)) {
+						
+						// if ($_POST['assignFlight'] > 0) $sql .= sprintf("INSERT INTO `%s` (bid, assignment, assignTable, assignFlight, assignRound) VALUES (%s, %s, %s, %s, %s)", $prefix.$action, $id, $rid2, $rid1, $_POST['assignFlight'], $rid3);
+					}
+
+				} while ($row_already_assigned = mysqli_fetch_assoc($already_assigned));
+
+			}
+
+		}
+
+		if ($go == "assignRoles") {
+			
+			$input = filter_var($rid1,FILTER_SANITIZE_STRING);
+			
+			if (empty($input)) {
+				$sql = sprintf("UPDATE `%s` SET %s=NULL WHERE assignTable='%s'", $prefix.$action, $go, $id);
+			}
+
+			else {
+
+				// Check if ID is assigned to the table, if so, change
+
+
+				// If not, flag
+
+
+				$sql = sprintf("UPDATE `%s` SET %s='HJ' WHERE bid='%s' AND assignTable='%s'", $prefix.$action, $go, $input, $id);
+			}
+
+			mysqli_real_escape_string($connection,$sql);
+			$result = mysqli_query($connection,$sql) or die (mysqli_error($connection));
+
+		} // end if ($go == "assignRoles")
+
+			
+
+		//mysqli_real_escape_string($connection,$sql);
+		//$result = mysqli_query($connection,$sql) or die (mysqli_error($connection));
+
+		// If successful, change $status from fail (0) to success (1)
+		//if ($result) $status = 1;
+		//else $error_type = 3; // SQL error
+
+	}
+
+*/
+
 	if ($action == "evaluation") {
 
 		if ($go == "evalPlace") {

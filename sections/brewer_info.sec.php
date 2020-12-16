@@ -243,9 +243,11 @@ else $pro_am = $label_no;
 					$judge_info .= "</td>\n";
 					$judge_info .= "<td>";
 					$judge_info .= $judging_location_info[1];
+					if ($judging_location_info[5] == "1") $judge_info .= "<br><em><small>".$judging_location_info[3]."</small></em>";
 					$judge_info .= "</td>\n";
 					$judge_info .= "<td>";
 					$judge_info .= getTimeZoneDateTime($_SESSION['prefsTimeZone'], $judging_location_info[2], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "short", "date-time");
+					if (!empty($judging_location_info[4])) $judge_info .= " - ".getTimeZoneDateTime($_SESSION['prefsTimeZone'], $judging_location_info[4], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "short", "date-time");
 					$judge_info .= "</td>\n";
 					$judge_info .= "</tr>";
 				}
@@ -447,15 +449,16 @@ if ($show_judge_steward_fields) {
 
 	if ($_SESSION['brewerJudge'] == "Y") {
 
-		$account_display .= "<div class=\"row bcoem-account-info hidden-print\">";
-		$account_display .= "<div class=\"".$display_left_cols."\"><strong>&nbsp;</strong></div>";
-		$account_display .= sprintf("<div class=\"".$display_right_cols."\">%s <a class=\"hide-loader\" href=\"".$base_url."output/labels.output.php?section=admin&amp;go=participants&amp;action=judging_labels&amp;id=".$_SESSION['brewerID']."&amp;psort=5160\" data-toggle=\"tooltip\" title=\"Avery 5160\">%s</a> %s <a class=\"hide-loader\" href=\"".$base_url."output/labels.output.php?section=admin&amp;go=participants&amp;action=judging_labels&amp;id=".$_SESSION['brewerID']."&amp;psort=3422\" data-toggle=\"tooltip\" title=\"Avery 3422\">A4</a></div>",$brewer_info_012, $label_letter, $brewer_info_011);
-		$account_display .= "</div>";
+		if (!EVALUATION) {
+			$account_display .= "<div class=\"row bcoem-account-info hidden-print\">";
+			$account_display .= "<div class=\"".$display_left_cols."\"><strong>&nbsp;</strong></div>";
+			$account_display .= sprintf("<div class=\"".$display_right_cols."\">%s <a class=\"hide-loader\" href=\"".$base_url."output/labels.output.php?section=admin&amp;go=participants&amp;action=judging_labels&amp;id=".$_SESSION['brewerID']."&amp;psort=5160\" data-toggle=\"tooltip\" title=\"Avery 5160\">%s</a> %s <a class=\"hide-loader\" href=\"".$base_url."output/labels.output.php?section=admin&amp;go=participants&amp;action=judging_labels&amp;id=".$_SESSION['brewerID']."&amp;psort=3422\" data-toggle=\"tooltip\" title=\"Avery 3422\">A4</a></div>",$brewer_info_012, $label_letter, $brewer_info_011);
+			$account_display .= "</div>";
+		}
 
 		$bjcp_rank = explode(",",$row_brewer['brewerJudgeRank']);
 		$display_rank = bjcp_rank($bjcp_rank[0],2);
 		if (!empty($bjcp_rank[1])) $display_rank .= designations($row_brewer['brewerJudgeRank'],$bjcp_rank[0]);
-
 
 		$account_display .= "<div class=\"row bcoem-account-info\">";
 		$account_display .= sprintf("<div class=\"".$display_left_cols."\"><strong>%s</strong></div>",$label_designations);

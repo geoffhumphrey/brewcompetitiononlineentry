@@ -9,7 +9,7 @@ $(document).ready(function () {
     disable_update_button('sponsors');
 });
 </script>
-<script src="<?php echo $base_url;?>js_includes/admin_ajax.js"></script>
+<script src="<?php echo $base_url;?>js_includes/admin_ajax.min.js"></script>
 <p class="lead"><?php echo $_SESSION['contestName']; if ($action == "add") echo ": Add a Sponsor"; elseif ($action == "edit") echo ": Edit a Sponsor"; else echo " Sponsors"; ?></p>
 <div class="bcoem-admin-element hidden-print">
 <?php if (($action == "add") || ($action == "edit")) { ?>

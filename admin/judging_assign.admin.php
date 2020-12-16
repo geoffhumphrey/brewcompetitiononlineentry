@@ -63,11 +63,15 @@ $output_available_modal_body = "";
 $output_at_table_modal_body = "";
 $ranked = 0;
 $nonranked = 0;
-$ranked_judge = array();
-$nonranked_judge = array();
+$head_judge_options_ranked = array();
+$head_judge_options_non = array();
+$assigned_at_table = array();
+$head_judge_choose = "";
+$head_judge_id = array();
 $unavailable = "";
 $at_table = "";
 $output_jquery_toggle = "";
+$head_judge_name = "";
 
 // Build DataTables Header
 $output_datatables_head .= "<tr>";
@@ -98,23 +102,30 @@ $available_count = 0;
 $total_count = 0;
 
 do {
-	$table_location = "Y-".$row_tables_edit['tableLocation'];
+
+  $table_location = "Y-".$row_tables_edit['tableLocation'];
 	$judge_info = judge_info($row_brewer['uid']);
 	$judge_info = explode("^",$judge_info);
 	$bjcp_rank = explode(",",$judge_info[5]);
-	$display_rank = "<strong>".bjcp_rank($bjcp_rank[0],1)."</strong>";
-
+  $rank_display = bjcp_rank($bjcp_rank[0],1);
+	$display_rank = "<strong>".$rank_display."</strong>";
+  $rank_number = preg_replace('/[^0-9]/','',$display_rank);
+  //$rank_number = filter_var($display_rank,FILTER_SANITIZE_NUMBER_FLOAT);
+        
 	$assign_row_color = "";
 	$flights_display = "";
 	$assign_flag = "";
-    $assigned_at_this_table = FALSE;
+  $assigned_at_this_table = FALSE;
 
-    $checked_head_judge = "";
-    $checked_lead_judge = "";
-    $checked_minibos_judge = "";
-    $roles_previously_defined = 0;
+  $checked_head_judge = "";
+  $checked_lead_judge = "";
+  $checked_minibos_judge = "";
+  $roles_previously_defined = 0;
 
-    $random = random_generator(6,2);
+  $judge_roles_display = "";
+  $head_judge_role_display = "";
+
+  $random = random_generator(6,2);
 
 	for($i=1; $i<$row_flights['flightRound']+1; $i++) {
 
@@ -122,6 +133,40 @@ do {
 		$query_judge_roles = sprintf("SELECT assignRoles FROM %s WHERE (bid='%s' AND assignTable='%s' AND assignRound='%s')", $prefix."judging_assignments", $row_brewer['uid'], $row_tables_edit['id'], $i);
 		$judge_roles = mysqli_query($connection,$query_judge_roles) or die (mysqli_error($connection));
 		$row_judge_roles = mysqli_fetch_assoc($judge_roles);
+
+      if ($_SESSION['jPrefsQueued'] == "N") {
+        if ($rank_number >= 2) {
+          $head_judge_options_ranked[] = array(
+            "uid" => $row_brewer['uid'],
+            "first_name" => $row_brewer['brewerFirstName'],
+            "last_name" => $row_brewer['brewerLastName'],
+            "rank" => $rank_display
+          );
+        }
+        if ($rank_number < 2) {
+          $head_judge_options_non[] = array(
+            "uid" => $row_brewer['uid'],
+            "first_name" => $row_brewer['brewerFirstName'],
+            "last_name" => $row_brewer['brewerLastName'],
+            "rank" => $rank_display
+          );
+        }
+      }
+
+      if ($_SESSION['jPrefsQueued'] == "N") {
+
+        $head_judge_role_display = "<div id=\"hj-display-".$row_brewer['uid']."\" class=\"text-primary hj-display hj-select-display\"><i class=\"fa fa-gavel\"></i> ".$label_head_judge."</div>";
+
+        if (!empty($row_judge_roles['assignRoles'])) {
+          if (strpos($row_judge_roles['assignRoles'],"HJ") !== FALSE) {
+            $head_judge_id[] = $row_brewer['uid'];
+            $head_judge_name = $row_brewer['brewerLastName'].", ".$row_brewer['brewerFirstName']." (".$rank_display.")";
+          }
+          if (strpos($row_judge_roles['assignRoles'],"MBOS") !== FALSE) {
+            $judge_roles_display .= "<div id=\"mbos-display-".$row_brewer['uid']."\" class=\"text-success\"><i class=\"fa fa-trophy\"></i> ".$label_mini_bos_judge."</div>";
+          }
+        }
+      }
 
       if ($_SESSION['jPrefsQueued'] == "Y") {
           // Activate for Roles
@@ -147,19 +192,14 @@ do {
 			$flights_display .= "<td>";
 
 			if (at_table($row_brewer['uid'],$row_tables_edit['id'])) {
-                $assigned_at_this_table = TRUE;
+        $assigned_at_this_table = TRUE;
+        $assigned_at_table[] = $row_brewer['uid'];
 				$assign_row_color = "bg-orange text-orange";
 				$assign_flag = "<span class=\"fa fa-lg fa-check\"></span> <strong>Assigned.</strong> Participant is assigned to this table/flight.";
-				$rank_number = filter_var($display_rank,FILTER_SANITIZE_NUMBER_FLOAT);
-				//$rank_number = preg_replace("/[^0-9,.]/", "", $display_rank);
-				if ($rank_number >= 2) {
-					$ranked_judge[] = 1;
-					$nonranked_judge[] = 0;
-				}
-				else {
-					$ranked_judge[] = 0;
-					$nonranked_judge[] = 1;
-				}
+				
+        //$rank_number = preg_replace("/[^0-9,.]/", "", $display_rank);
+				if ($rank_number >= 2) $ranked += 1;
+				if ($rank_number < 2) $nonranked += 1;
 			}
 
 			else {
@@ -173,7 +213,7 @@ do {
 
 			$unavailable = unavailable($row_brewer['uid'],$row_tables_edit['tableLocation'],$i,$row_tables_edit['id']);
 			$flights_display .= $assign_flag;
-			$flights_display .= assign_to_table($row_tables_edit['id'],$row_brewer['uid'],$filter,$total_flights,$i,$location,$row_tables_edit['tableStyles'],$queued,$random);
+			$flights_display .= assign_to_table($row_tables_edit['id'],$row_brewer['uid'],$filter,$total_flights,$i,$location,$row_tables_edit['tableStyles'],$queued,$random,$base_url);
 			$flights_display .= "</td>";
 
 		}
@@ -193,66 +233,78 @@ do {
     $total_count += 1;
 		$output_datatables_body .= "<tr class=\"".$assign_row_color."\">\n";
 
+    /*
+     * Build Name, Rank, BJCP ID, and Role columns
+     * for DataTables output.
+     */
+
+    // Name Column
 		$output_datatables_body .= "<td nowrap>";
 		$output_datatables_body .= "<a href=\"".$base_url."index.php?section=brewer&amp;go=admin&amp;action=edit&amp;filter=".$row_brewer['uid']."&amp;id=".$judge_info[11]."\" data-toggle=\"tooltip\" title=\"Edit ".$judge_info[0]." ".$judge_info[1]."&rsquo;s account info\">".$judge_info[1].", ".$judge_info[0]."</a>";
-        if ($filter == "judges") {
-            $output_datatables_body .= "<br><strong>Comps Judged:</strong> ";
-            if (empty($judge_info[9])) $output_datatables_body .= "0";
-            else $output_datatables_body .= $judge_info[9];
-        }
-        if (!empty($judge_info[10])) $output_datatables_body .= "<br><span class=\"text-danger\"><strong>Notes:</strong> ".$judge_info[10]."</strong>";
+    
+    if ($filter == "judges") {
+      $output_datatables_body .= "<br><strong>Comps Judged:</strong> ";
+      if (empty($judge_info[9])) $output_datatables_body .= "0";
+      else $output_datatables_body .= $judge_info[9];
+      if (!empty($head_judge_role_display)) $output_datatables_body .= $head_judge_role_display;
+      if (!empty($judge_roles_display)) $output_datatables_body .= $judge_roles_display;
+    }
+    
+    if (!empty($judge_info[10])) $output_datatables_body .= "<br><span class=\"text-danger\"><strong>Notes:</strong> ".$judge_info[10]."</strong>";
 		$output_datatables_body .= "</td>";
 
+    // Rank Column
+    $output_datatables_body .= "<td>".$display_rank."</td>";
+
+    // BJCP ID Column
+    $output_datatables_body .= "<td class=\"hidden-xs hidden-sm hidden-md\">";
+    if (($judge_info[6] != "") && ($judge_info[6] != "0")) $output_datatables_body .= strtoupper($judge_info[6]);
+    else $output_datatables_body .= "N/A";
+    $output_datatables_body .= "</td>";
+
+    // Roles Column (Queued Only)
 		if ($filter == "judges") {
 
-            if ($_SESSION['jPrefsQueued'] == "Y") {
-                // Activate for Roles
-                // Build jQuery function vars
-                if ($assigned_at_this_table) $output_jquery_toggle .= "$(\"#toggleRoles".$random."\").show();\n";
-                else $output_jquery_toggle .= "$(\"#toggleRoles".$random."\").hide();\n";
+      if ($_SESSION['jPrefsQueued'] == "Y") {
+        
+        // Activate for Roles
+        // Build jQuery function vars
+        if ($assigned_at_this_table) $output_jquery_toggle .= "$(\"#toggleRoles".$random."\").show();\n";
+        else $output_jquery_toggle .= "$(\"#toggleRoles".$random."\").hide();\n";
 
-                $output_jquery_toggle .= "
-                $(\"input[name$='assignRound".$random."']\").click(function() {
-                    if ($(this).val() == \"1\") {
-                        $(\"#toggleRoles".$random."\").show();
-                    }
-                    else {
-                        $(\"#toggleRoles".$random."\").hide();
-                        $(\"input[name='head_judge".$random."']\").prop(\"checked\", false);
-                        $(\"input[name='lead_judge".$random."']\").prop(\"checked\", false);
-                        $(\"input[name='minibos_judge".$random."']\").prop(\"checked\", false);
-                    }
-                });\n
-                ";
+        $output_jquery_toggle .= "
+        $(\"input[name$='assignRound".$random."']\").click(function() {
+            if ($(this).val() == \"1\") {
+                $(\"#toggleRoles".$random."\").show();
             }
-
-
-			$output_datatables_body .= "<td>".$display_rank."</td>";
-			$output_datatables_body .= "<td class=\"hidden-xs hidden-sm hidden-md\">";
-			if (($judge_info[6] != "") && ($judge_info[6] != "0")) $output_datatables_body .= strtoupper($judge_info[6]);
-			else $output_datatables_body .= "N/A";
-			$output_datatables_body .= "</td>";
-			// $output_datatables_body .= "<td>".$judge_info[9]."</td>";
-
-            if ($_SESSION['jPrefsQueued'] == "Y") {
-                // Activate for Roles
-    			$output_datatables_body .= "<td>";
-                $output_datatables_body .= "<div id=\"toggleRoles".$random."\">";
-    			$output_datatables_body .= "<input type=\"hidden\" name=\"rolesPrevDefined".$random."\" value=\"".$roles_previously_defined."\">";
-                $output_datatables_body .= "<div class=\"checkbox\">";
-    			$output_datatables_body .= "<label><input name=\"head_judge".$random."\" type=\"checkbox\" value=\"HJ\" ".$checked_head_judge." /> Head Judge</label>";
-                $output_datatables_body .= "</div><br>";
-                //$output_datatables_body .= "<div class=\"checkbox\">";
-    			//$output_datatables_body .= "<label><input name=\"lead_judge".$random."\" type=\"checkbox\" value=\"LJ\" ".$checked_lead_judge." /> Lead Judge</label>";
-                //$output_datatables_body .= "</div><br>";
-                $output_datatables_body .= "<div class=\"checkbox\">";
-    			$output_datatables_body .= "<label><input name=\"minibos_judge".$random."\" type=\"checkbox\" value=\"MBOS\" ".$checked_minibos_judge." /> Mini-BOS Judge</label>";
-                $output_datatables_body .= "</div>";
-                $output_datatables_body .= "</div>"; // toggleRoles
-    			$output_datatables_body .= "</td>";
+            else {
+                $(\"#toggleRoles".$random."\").hide();
+                $(\"input[name='head_judge".$random."']\").prop(\"checked\", false);
+                $(\"input[name='lead_judge".$random."']\").prop(\"checked\", false);
+                $(\"input[name='minibos_judge".$random."']\").prop(\"checked\", false);
             }
+        });\n
+        ";
 
-		}
+        // Activate for Roles
+        $output_datatables_body .= "<td>";
+        $output_datatables_body .= "<div id=\"toggleRoles".$random."\">";
+        $output_datatables_body .= "<input type=\"hidden\" name=\"rolesPrevDefined".$random."\" value=\"".$roles_previously_defined."\">";
+        $output_datatables_body .= "<div class=\"checkbox\">";
+        $output_datatables_body .= "<label><input name=\"head_judge".$random."\" type=\"checkbox\" value=\"HJ\" ".$checked_head_judge." /> Head Judge</label>";
+        $output_datatables_body .= "</div><br>";
+        //$output_datatables_body .= "<div class=\"checkbox\">";
+        //$output_datatables_body .= "<label><input name=\"lead_judge".$random."\" type=\"checkbox\" value=\"LJ\" ".$checked_lead_judge." /> Lead Judge</label>";
+        //$output_datatables_body .= "</div><br>";
+        $output_datatables_body .= "<div class=\"checkbox\">";
+        $output_datatables_body .= "<label><input name=\"minibos_judge".$random."\" type=\"checkbox\" value=\"MBOS\" ".$checked_minibos_judge." /> Mini-BOS Judge</label>";
+        $output_datatables_body .= "</div>";
+        $output_datatables_body .= "</div>"; // End toggleRoles <div>
+        $output_datatables_body .= "</td>";
+      
+      } // end if ($_SESSION['jPrefsQueued'] == "Y")
+
+		} // end if ($filter == "judges")
 
 		$modal_rank = $bjcp_rank[0];
 		if (empty($modal_rank)) $modal_rank = "Non-BJCP";
@@ -280,29 +332,24 @@ do {
 		$output_datatables_body .= $flights_display;
 		$output_datatables_body .= "</tr>\n";
 
-	}
+	} // end if (in_array($table_location,$locations))
+
 } while ($row_brewer = mysqli_fetch_assoc($brewer));
-if (is_array($ranked_judge)) $ranked = array_sum($ranked_judge); else $ranked = $ranked;
-if (is_array($nonranked_judge)) $nonranked = array_sum($nonranked_judge); else $nonranked = $nonranked;
-if ($_SESSION['jPrefsQueued'] == "Y") {
+
+$dashboard_link = build_public_url("evaluation","default","default","default",$sef,$base_url);
+$head_judge_explain = "<p>Choose the Head Judge for this table. <p>The Head Judge, <a class='hide-loader' href='http://www.bjcp.org/judgeprocman.php' target='_blank'>according to the BJCP</a>, is a <em>single judge</em> responsible for reviewing all scores and paperwork for accuracy.</p>";
+if (EVALUATION) $head_judge_explain .= "<p>The Head Judge at each table confirms consensus scores and enters the placing entries into the system via their <a href='".$dashboard_link."'>Judging Dashboard</a> after all evaluations at the table have been submitted by judges.</p>";
 ?>
-<script type='text/javascript'>//<![CDATA[
-// Activate for Roles
-$(document).ready(function(){
-    <?php echo $output_jquery_toggle; ?>
-});
-</script>
-<?php } else { ?>
-<script type='text/javascript'>//<![CDATA[
-// Activate for Roles
-$(document).ready(function(){
+<script>
+$(document).ready(function() {
+  <?php if ($_SESSION['jPrefsQueued'] == "Y") { echo $output_jquery_toggle; ?>
+  <?php } else { ?>
   $(".assign-flight").change(function() {
       $(this).closest("section").find('.unassign-checkbox').prop('checked', true);
   });
+  <?php } ?>
 });
 </script>
-
-<?php } ?>
 <div class="bcoem-admin-element hidden-print">
 	<div class="btn-group" role="group" aria-label="modals">
         <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -336,7 +383,6 @@ $(document).ready(function(){
 </ol>
 <?php } ?>
 <h4>Assign <span class="text-capitalize"><?php echo $filter; ?></span> to Table <?php echo $row_tables_edit['tableNumber']." &ndash; ".$row_tables_edit['tableName']; $entry_count = get_table_info(1,"count_total",$row_tables_edit['id'],$dbTable,"default"); echo " (".$entry_count." entries)"; ?><br><small><?php echo table_location($row_tables_edit['id'],$_SESSION['prefsDateFormat'],$_SESSION['prefsTimeZone'],$_SESSION['prefsTimeFormat'],"default"); ?></small></h4>
-
 <!-- Table stats snapshot -->
 <div class="well small">
   <div class="row">
@@ -364,7 +410,6 @@ $(document).ready(function(){
     </div>
   </div>
 </div>
-
 <?php if ($row_rounds['flightRound'] != "") { ?>
 <script type="text/javascript" language="javascript">
 	 $(document).ready(function() {
@@ -387,25 +432,25 @@ $(document).ready(function(){
 				null,
 				null,
 				null,
-                <?php if ($_SESSION['jPrefsQueued'] == "Y") { ?>
-                // Activate for Roles
-				{ "asSorting": [  ] }
-                <?php } ?>
-                <?php for($i=1; $i<$row_flights['flightRound']+1; $i++) {
+        <?php if ($_SESSION['jPrefsQueued'] == "Y") { ?>
+        // Activate for Roles
+				{ "asSorting": [  ] },
+        <?php } ?>
+        <?php for($i=1; $i<$row_flights['flightRound']+1; $i++) {
 			    if  (table_round($row_tables_edit['id'],$i)) {
-				?>, null<?php } } ?>
+				?>null,<?php } } ?>
 				]
 			} );
 			<?php } ?>
 			<?php if ($filter == "stewards") { ?>
 			"aoColumns": [
-				null<?php for($i=1; $i<$row_flights['flightRound']+1; $i++) {
+				null,<?php for($i=1; $i<$row_flights['flightRound']+1; $i++) {
 			    if  (table_round($row_tables_edit['id'],$i)) {
-				?>, null<?php } } ?>
+				?>null,<?php } } ?>
 				]
 			} );
 	 		<?php } ?>
-		} );
+		});
 </script>
 <script type="text/javascript" language="javascript">
 	 $(document).ready(function() {
@@ -420,12 +465,12 @@ $(document).ready(function(){
 				null,
 				null,
 				null,
-				<?php if ($_SESSION['jPrefsQueued'] == "N") { ?>,
+				<?php if ($_SESSION['jPrefsQueued'] == "N") { ?>
 				null
 				<?php } ?>
 				]
-			} );
-		} );
+			});
+		});
 	</script>
 <?php if (!empty($output_available_modal_body)) { ?>
 <script type="text/javascript" language="javascript">
@@ -527,6 +572,99 @@ $(document).ready(function(){
 </div><!-- ./modal -->
 <?php } ?>
 <form name="form1" method="post" action="<?php echo $base_url; ?>includes/process.inc.php?action=update&amp;dbTable=<?php echo $judging_assignments_db_table; ?>&amp;filter=<?php echo $filter; ?>&amp;limit=<?php echo $row_rounds['flightRound']; ?>&amp;view=<?php echo $_SESSION['jPrefsQueued']; ?>&amp;id=<?php echo $row_tables_edit['id']; ?>">
+<?php if ($_SESSION['jPrefsQueued'] == "N") { ?>
+<script type='text/javascript'>
+var hj_id = <?php if (!empty($head_judge_id)) echo max($head_judge_id); else echo "''"; ?>;
+
+function update_hj_display() {
+  var hj_id = $("#head-judge-select").val();
+  $(".hj-select-display").hide();
+  $("#hj-display-"+hj_id).show();
+}
+
+function show_hj_choose() {
+  var options = $("#hj-choose").length;
+  if (options > 0) {
+    $("#head-judge-choose").show();
+  }
+  else {
+    $("#head-judge-choose").hide();
+  }
+}
+
+function hj_enable(uid,element_id) {
+  var value = $("#"+element_id).val();
+  if (value == 0) {
+    $("#hj-choose-"+uid).hide();
+    $("#hj-display-"+uid).hide();
+    $("#hj-choose-"+uid).prop("selected",false);
+  }
+  
+  else {
+    $("#hj-choose-"+uid).show();
+  }
+
+}
+$(document).ready(function() {
+  $(".hj-display").hide();
+
+  <?php if (!empty($head_judge_id)) { ?>
+  $(".hj-display").hide();
+  $("#hj-display-"+hj_id).show();
+  <?php } ?>
+
+  <?php if (empty($assigned_at_table)) { ?>
+  $("#head-judge-choose").hide();
+  <?php } ?>
+});
+</script>
+<style>
+select.custom-hj-dropdown::-ms-expand {
+    display: none;
+}
+select.custom-hj-dropdown {
+    outline : none;
+    overflow : hidden;
+    text-indent : 0.01px;
+    text-overflow : '';
+    
+    background : url("https://img.icons8.com/material/24/000000/sort-down.png") no-repeat right #fff;
+
+    -webkit-appearance: none;
+       -moz-appearance: none;
+        -ms-appearance: none;
+         -o-appearance: none;
+            appearance: none;
+}
+</style>
+<div class="row form-group">
+  <label for="assignRoles" class="col-xs-12 col-sm-4 col-md-4 col-lg-2 control-label">
+  Head Judge for Table: <a href="#" role="button" data-html="true" data-toggle="popover" data-container="body" data-trigger="hover focus" data-placement="top" title="Designate the Head Judge" data-content="<?php echo $head_judge_explain; ?>"> <span class="fa fa-lg fa-question-circle"></span></a>
+  </label>
+  <div class="col-xs-12 col-sm-4 col-md-4 col-lg-6">
+    <select id="head-judge-select" name="head_judge_choose" class="form-control custom-hj-dropdown" onchange="update_hj_display()">
+      <option value="">None (Names will populate as you assign judges)</option>
+      <?php 
+      $head_judge_options_ranked = array_unique($head_judge_options_ranked, SORT_REGULAR);
+      $head_judge_options_non = array_unique($head_judge_options_non, SORT_REGULAR);
+      foreach ($head_judge_options_ranked as $key => $value) { 
+        $enable_disable = "";
+        $hj_class = "";
+        if ((!empty($head_judge_id)) && (in_array($value['uid'], $head_judge_id))) $enable_disable = "selected";
+        if (!in_array($value['uid'], $assigned_at_table)) $hj_class = "hj-display";
+      ?>
+      <option class="<?php echo $hj_class; ?>" id="hj-choose-<?php echo $value['uid']; ?>" value="<?php echo $value['uid']; ?>" <?php echo $enable_disable ?>><?php echo $value['last_name'].", ".$value['first_name']." (".$value['rank'].")"; ?></option>
+      <?php } ?>
+      <?php foreach ($head_judge_options_non as $key => $value) { 
+        $enable_disable = "";
+        if ((!empty($head_judge_id)) && (in_array($value['uid'], $head_judge_id))) $enable_disable = "selected";
+      ?>
+      <option class="hj-display" id="hj-choose-<?php echo $value['uid']; ?>" value="<?php echo $value['uid']; ?>" <?php echo $enable_disable ?>><?php echo $value['last_name'].", ".$value['first_name']." (".$value['rank'].")"; ?></option>
+      <?php } ?>
+    </select>
+  </div>
+</div>
+<?php } ?>
 <table class="table table-responsive table-bordered table" id="sortable">
 <thead>
  	<?php echo $output_datatables_head; ?>

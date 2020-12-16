@@ -13,14 +13,16 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 
 		if ($_SESSION['jPrefsQueued'] == "N") {
 
-		// print_r($_POST);
+		//print_r($_POST);
+		//exit;
 
 		foreach ($_POST['random'] as $random) {
-
+			
 			$roles = array();
 			$assignRoles = "";
 			$roles_only_update = FALSE;
 
+			/*
 			// Activate for Roles
 
 			if (!empty($_POST['head_judge'.$random])) {
@@ -39,8 +41,12 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 				$assignRoles = implode(", ",$roles);
 			}
 
-			//if ((!isset($_POST['unassign'.$random])) && (($_POST['rolesPrevDefined'.$random] == 1) || ($_POST['rolesPrevDefined'.$random] == 0)) && (!empty($assignRoles))) $roles_only_update = TRUE;
-			//elseif ((!isset($_POST['unassign'.$random])) && ($_POST['rolesPrevDefined'.$random] == 1) && (empty($assignRoles))) $roles_only_update = TRUE;
+			
+
+			if ((!isset($_POST['unassign'.$random])) && (($_POST['rolesPrevDefined'.$random] == 1) || ($_POST['rolesPrevDefined'.$random] == 0)) && (!empty($assignRoles))) $roles_only_update = TRUE;
+			elseif ((!isset($_POST['unassign'.$random])) && ($_POST['rolesPrevDefined'.$random] == 1) && (empty($assignRoles))) $roles_only_update = TRUE;
+
+			*/
 
 			if (isset($_POST['unassign'.$random])) $unassign = $_POST['unassign'.$random];
 			else $unassign = 0;
@@ -122,7 +128,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 
 				mysqli_real_escape_string($connection,$updateSQL);
 				$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
-				echo $updateSQL."<br>";
+				// echo $updateSQL."<br>";
 
 			}
 
@@ -142,6 +148,12 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 				}
 			} // end foreach
 
+			if ((isset($_POST['head_judge_choose'])) && (!empty($_POST['head_judge_choose']))) {
+				$updateSQL = sprintf("UPDATE `%s` SET assignRoles='HJ' WHERE bid='%s' and assignTable='%s'",$judging_assignments_db_table,sterilize($_POST['head_judge_choose']),sterilize($_POST['assignTable'.$random]));
+				mysqli_real_escape_string($connection,$updateSQL);
+				$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+			}
+
 	  } // end if ($_SESSION['jPrefsQueued'] == "N")
 
 	  //exit;
@@ -153,7 +165,6 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 				$roles = array();
 				$assignRoles = "";
 				$roles_only_update = FALSE;
-
 
 				// Activate for Roles
 				if (!empty($_POST['head_judge'.$random])) {

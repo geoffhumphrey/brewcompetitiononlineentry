@@ -91,6 +91,7 @@ $anchor_top = "<p><a href=\"#top-page\">".$label_top." <span class=\"fa fa-arrow
 
 // Registration Window
 if (!$logged_in) {
+	$anchor_links[] = $label_account_registration;
 	$header1_2 .= sprintf("<a name=\"reg_window\"></a><h2>%s</h2>",$label_account_registration);
 	if ($registration_open == 0) $page_info2 .= sprintf("<p>%s <strong class=\"text-success\">%s</strong> %s <strong class=\"text-success\">%s</strong>.</p><p>%s <strong class=\"text-success\">%s</strong> %s <strong class=\"text-success\">%s</strong>.</p>", $entry_info_text_000, $reg_open, $entry_info_text_001, $reg_closed, $entry_info_text_002, $judge_open, $entry_info_text_001, $judge_closed);
 	elseif ($registration_open == 1) $page_info2 .= sprintf("<p>%s <strong class=\"text-success\">%s</strong>.</p><p>%s <strong class=\"text-success\">%s</strong>.</p>", $entry_info_text_004, $reg_closed, $entry_info_text_005, $judge_closed);
@@ -128,6 +129,7 @@ if ($show_entries) {
 			$anchor_name = str_replace(" ", "-", $label_entry_limit);
 			$header1_5 .= sprintf("<a class=\"anchor-offset\" name=\"%s\"></a><h2>%s</h2>",strtolower($anchor_name),$label_entry_limit);
 			$page_info5 .= sprintf("<p>%s %s %s</p>",$entry_info_text_019,$row_limits['prefsEntryLimit'],$entry_info_text_020);
+			if (!empty($row_limits['prefsEntryLimitPaid'])) $page_info5 .= sprintf("<p>%s %s <strong>%s</strong> %s</p>",$entry_info_text_019,$row_limits['prefsEntryLimitPaid'],strtolower($label_paid),$entry_info_text_020);
 			$page_info5 .= $anchor_top;
 		}
 
@@ -222,6 +224,10 @@ else {
 		if ($row_judging['judgingDate'] != "") $page_info7 .=  "<br />".getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_judging['judgingDate'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "long", "date-time");
 
 		if ($row_judging['judgingDateEnd'] != "") $page_info7 .=  " ".$sidebar_text_004." ".getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_judging['judgingDateEnd'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "long", "date-time");
+
+		if ($row_judging['judgingLocType'] == "1") {
+			$page_info7 .= "<br><em><small>".$row_judging['judgingLocation']."</small></em>";
+		}
 
 		$page_info7 .= "</p>";
 
@@ -548,10 +554,9 @@ if (is_array($anchor_links)) {
 }
 
 // Display Registration Window
+echo $anchor_link_display;
 echo $header1_2;
 echo $page_info2;
-
-echo $anchor_link_display;
 
 // Display Entry Window
 echo $header1_3;
@@ -612,6 +617,4 @@ echo $header1_15;
 echo $page_info15;
 
 echo $style_info_modals;
-
 ?>
-<script src="<?php echo $base_url; ?>js_includes/scroll.js"></script>

@@ -84,7 +84,7 @@ function entries_by_dropoff_loc($id) {
 				do {
 					$build_rows .= "
 						<tr>
-							<td>".sprintf("%04s",$row_dropoff_count['id'])."</td>
+							<td>".sprintf("%06s",$row_dropoff_count['id'])."</td>
 							<td>".$row_dropoff_count['brewName']."</td>
 							<td>".$row_dropoff_count['brewBrewerLastName'].", ".$row_dropoff_count['brewBrewerFirstName']."</td>
 							<td><p class=\"box_small\"></p></td>

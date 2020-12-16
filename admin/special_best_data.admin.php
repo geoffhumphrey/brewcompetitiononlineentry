@@ -87,7 +87,7 @@
      <tr>
       <td><?php echo $special_best_info[1]; ?></td>
       <td><?php echo $row_sbd['sbd_place']; ?></td>
-      <td><?php echo sprintf("%04s",$row_sbd['eid']); ?></td>
+      <td><?php echo sprintf("%06s",$row_sbd['eid']); ?></td>
       <td><?php echo readable_judging_number($info[3],$info[6]); ?></td>
       <td><?php echo $info[0]; ?></td>
       <td><?php echo $brewer_info[0]." ".$brewer_info[1]; ?></td>

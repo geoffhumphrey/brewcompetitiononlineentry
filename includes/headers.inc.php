@@ -44,7 +44,8 @@ switch($section) {
 	break;
 
 	case "evaluation":
-		if     ($msg == "3") $output = sprintf("<strong>%s</strong>",$header_text_005);
+		if 	   ($msg == "2") $output = sprintf("<strong>%s</strong>",$header_text_006);
+		elseif ($msg == "3") $output = sprintf("<strong>%s</strong>",$header_text_005);
 		elseif ($msg == "4") $output = sprintf("<strong>%s</strong>",$header_text_006);
 		elseif ($msg == "5") $output = sprintf("<strong>%s</strong>",$header_text_044);
 

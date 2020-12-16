@@ -11,7 +11,7 @@ $(document).ready(function () {
     disable_update_button('judging_scores');
 });
 </script>
-<script src="<?php echo $base_url;?>js_includes/admin_ajax.js"></script>
+<script src="<?php echo $base_url;?>js_includes/admin_ajax.min.js"></script>
 <!-- Modal -->
 <div class="modal fade" id="noDupeModal" tabindex="-1" role="dialog" aria-labelledby="noDupeModalLabel" aria-hidden="true">
   <div class="modal-dialog">
@@ -107,8 +107,10 @@ $totalRows_entry_count = total_paid_received($go,"default");
 </div>
 <?php if ($action == "default") { ?>
 <?php if (EVALUATION) {
-    echo "<div style=\"margin: 0 0 15px 0;\" class=\"btn-group hidden-print\" role=\"group\"><a class=\"btn btn-block btn-default\" href=\"".$base_url."index.php?section=evaluation&amp;go=default&amp;filter=default&amp;view=admin\"><span class=\"fa fa-chevron-circle-left\"></span> ".$label_admin.": ".$label_evaluations."</a></div>";
-    include (EVALS.'import_scores.eval.php');
+    if ($dbTable == "default") {
+        echo "<div style=\"margin: 0 0 15px 0;\" class=\"btn-group hidden-print\" role=\"group\"><a class=\"btn btn-block btn-default\" href=\"".$base_url."index.php?section=evaluation&amp;go=default&amp;filter=default&amp;view=admin\"><span class=\"fa fa-chevron-circle-left\"></span> ".$label_admin.": ".$label_evaluations."</a></div>";
+        include (EVALS.'import_scores.eval.php');
+    }
 }
 ?>
 <p id="score-entered-status-default">Scores have been entered for <?php echo $totalRows_scores; ?> of <?php echo $totalRows_entry_count; ?> entries marked as paid and received.</p>
@@ -183,7 +185,7 @@ $totalRows_entry_count = total_paid_received($go,"default");
 	$table_score_data = table_score_data($row_scores['eid'],$row_scores['scoreTable'],$filter);
 	$table_score_data = explode("^",$table_score_data);
 
-	$entry_number = sprintf("%04s",$table_score_data[0]);
+	$entry_number = sprintf("%06s",$table_score_data[0]);
 	$judging_number = sprintf("%06s",$table_score_data[6]);
 
 	if ($row_scores['scorePlace'] == "5") $score_place = "HM";
@@ -205,9 +207,9 @@ $totalRows_entry_count = total_paid_received($go,"default");
 
     if (EVALUATION) {
 
-        if ($row_judging_prefs['jPrefsScoresheet'] == 1) $output_form = "full-scoresheet";
-        if ($row_judging_prefs['jPrefsScoresheet'] == 2) $output_form = "checklist-scoresheet";
-        if ($row_judging_prefs['jPrefsScoresheet'] == 3) $output_form = "structured-scoresheet";
+        // if ($row_judging_prefs['jPrefsScoresheet'] == 1) $output_form = "full-scoresheet";
+        // if ($row_judging_prefs['jPrefsScoresheet'] == 2) $output_form = "checklist-scoresheet";
+        // if ($row_judging_prefs['jPrefsScoresheet'] == 3) $output_form = "structured-scoresheet";
 
         if (in_array($table_score_data[0], $evals)) {
             $scoresheet_eval = TRUE;
@@ -215,10 +217,10 @@ $totalRows_entry_count = total_paid_received($go,"default");
             $style = mysqli_query($connection,$query_style) or die (mysqli_error($connection));
             $row_style = mysqli_fetch_assoc($style);
 
-            if (($row_style['brewStyleType'] == 2) || ($row_style['brewStyleType'] == 3)) $output_form = "full-scoresheet";
+           if ((($row_style['brewStyleType'] == 2) || ($row_style['brewStyleType'] == 3)) && ($row_judging_prefs['jPrefsScoresheet'] != 3)) $output_form = "full-scoresheet";
 
-            $view_link = $base_url."output/print.output.php?section=evaluation&amp;go=".$output_form."&amp;view=all&amp;id=".$table_score_data[0]."&amp;tb=1";
-            $print_link = $base_url."output/print.output.php?section=evaluation&amp;go=".$output_form."&amp;view=all&amp;id=".$table_score_data[0];
+            $view_link = $base_url."output/print.output.php?section=evaluation&amp;go=default&amp;view=all&amp;id=".$table_score_data[0]."&amp;tb=1";
+            $print_link = $base_url."output/print.output.php?section=evaluation&amp;go=default&amp;view=all&amp;id=".$table_score_data[0];
 
             $entry_actions .= "<a id=\"modal_window_link\" class=\"hide-loader\" href=\"".$view_link."\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"View the Judge Evaluations in the system for entry ".$entry_number."\"><span class=\"fa-stack\"><i class=\"fa fa-square fa-stack-2x\"></i><i class=\"fa fa-stack-1x fa-file-text fa-inverse\"></i></span></a> ";
             $entry_actions .= "<a id=\"modal_window_link\" class=\"hide-loader\" href=\"".$print_link."\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Print the Judge Evaluations in the system for entry ".$entry_number."\"><i class=\"fa fa-lg fa-file-text\"></i></a> ";
@@ -431,9 +433,7 @@ $(document).ready(function() {
 				// $bid is the brewBrewerID/uid
 				$bid = $row_entries['brewBrewerID'];
 
-				if ((NHC) && ($prefix == "final_")) $entry_number = sprintf("%06s",$row_entries['id']);
-				else $entry_number = sprintf("%04s",$row_entries['id']);
-
+				$entry_number = sprintf("%06s",$row_entries['id']);
 				$judging_number = sprintf("%06s",$row_entries['brewJudgingNumber']);
 
 				if ($_SESSION['prefsStyleSet'] == "BA") $style_display = $score_style_data[2];

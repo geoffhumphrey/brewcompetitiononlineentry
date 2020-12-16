@@ -241,10 +241,11 @@ try {
     <div id="main-content" class="container">
         <div class="row">
             <div class="col col-lg-9 col-md-8 col-sm-12 col-xs-12">
+            <?php if ($section != "competition") { ?>
             <div class="page-header">
                 <h1><?php echo $header_output; ?></h1>
             </div>
-            <?php
+            <?php }
 
                 if (ENABLE_MARKDOWN) {
                     include (CLASSES.'parsedown/Parsedown.php');
@@ -263,6 +264,7 @@ try {
                     if ($section == "register") include (SECTIONS.'register.sec.php');
                     if ($section == "login") include (SECTIONS.'login.sec.php');
                     if ($section == "past_winners") include (SECTIONS.'past_winners.sec.php');
+                    if ($section == "competition") include (SECTIONS.'custom_competition_info.sec.php');
 
                     if ($logged_in) {
                         if ($section == "brewer") include (SECTIONS.'brewer.sec.php');

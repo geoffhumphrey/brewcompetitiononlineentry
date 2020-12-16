@@ -326,18 +326,21 @@ do {
 	// Build selected/disabled variable
 	$selected_disabled = "";
 	$selected = "";
+	
 	if ($action == "edit") {
 		if ($row_styles['brewStyleGroup'].$row_styles['brewStyleNum'] == $row_log['brewCategorySort'].$row_log['brewSubCategory']) $selected_disabled = "SELECTED";
-		if ($row_styles['brewStyleGroup'].$row_styles['brewStyleNum'] != $row_log['brewCategorySort'].$row_log['brewSubCategory']) $selected_disabled = $subcat_limit;
+		if (($row_styles['brewStyleGroup'].$row_styles['brewStyleNum'] != $row_log['brewCategorySort'].$row_log['brewSubCategory']) && ($subcat_limit)) $selected_disabled = "DISABLED";
 	}
-	if (($remaining_entries > 0) && (!$disable_fields)) $selected_disabled = $subcat_limit;
+	
+	if (($remaining_entries > 0) && (!$disable_fields) && ($subcat_limit)) $selected_disabled = "DISABLED";
 	elseif ($disable_fields) $selected_disabled = "DISABLED";
 
+	
 	if (($action == "edit") && ($view == $style_value_edit)) {
 		$selected = " SELECTED";
 		$selected_disabled = "";
 	}
-
+	
 	// Build selection variable
 	$selection = style_number_const($row_styles['brewStyleGroup'],$row_styles['brewStyleNum'],$_SESSION['style_set_display_separator'],0)." ".$row_styles['brewStyle'];
 
@@ -430,6 +433,9 @@ else $relocate_referrer = $_SERVER['HTTP_REFERER'];
 <input type="hidden" name="brewBrewerID" value="<?php echo $_SESSION['user_id']; ?>">
 <input type="hidden" name="brewBrewerFirstName" value="<?php echo $_SESSION['brewerFirstName']; ?>">
 <input type="hidden" name="brewBrewerLastName" value="<?php echo $_SESSION['brewerLastName']; ?>">
+<?php } ?>
+<?php if ($action == "edit") { ?>
+<input type="hidden" name="brewEditStyle" value="<?php echo style_number_const($row_log['brewCategorySort'],$row_log['brewSubCategory'],$_SESSION['style_set_system_separator'],999); ?>">
 <?php } ?>
 <input type="hidden" name="brewJudgingNumber" value="<?php echo $row_log['brewJudgingNumber']; ?>">
 	<?php if ($_SESSION['prefsProEdition'] == 0) { ?>
