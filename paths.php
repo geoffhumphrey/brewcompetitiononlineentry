@@ -78,7 +78,7 @@ define('CDN', TRUE);
 /**
  * Enable the following to put the site into "test mode"
  * Useful for testing the PayPal IPN functions in their
- * sandbox enfvironment, etc.
+ * sandbox environment, etc.
  * Default is FALSE.
  */
 
@@ -110,7 +110,6 @@ define('DEBUG_SESSION_VARS', TRUE);
  */
 
 define('FORCE_UPDATE', FALSE);
-
 
 /**
  * Set the following to TRUE if receiving mod_security 

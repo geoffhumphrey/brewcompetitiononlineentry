@@ -660,12 +660,16 @@ if (EVALUATION) {
                                 </div>
                                 <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-8">
                                     <ul class="list-inline">
+                                        <li><strong><?php if ($_SESSION['tablePlanning'] == 1) echo "<span class=\"text-purple\">** Tables Planning Mode **</span>"; else echo "<span class=\"text-teal\">** Tables Competition Mode **</span>"; ?></strong></li>
+                                    </ul>
+                                    <ul class="list-inline">
                                         <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging_tables">Manage</a></li>
                                         <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging_tables&amp;action=add">Add</a></li>
                                         <?php if ($totalRows_tables > 1) { ?>
                                         <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging_tables&amp;action=assign">Assign Judges/Stewards</a></li>
                                         <?php } ?>
                                     </ul>
+                                    
                                 </div>
                             </div><!-- ./row -->
                             <?php if ($_SESSION['jPrefsQueued'] == "N") { ?>
@@ -1150,6 +1154,7 @@ if (EVALUATION) {
 						</div><!-- ./row -->
 						<?php if ($totalRows_tables > 0) { ?>
 						<div class="row">
+                            <?php if ($_SESSION['tablePlanning'] == 0) { ?>
                             <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-4">
                                 <strong><?php echo $label_additional_info; ?></strong>
                             </div>
@@ -1173,6 +1178,8 @@ if (EVALUATION) {
                                     </ul>
                                 </div>
                             </div>
+                            <?php } ?>
+                            <?php if ($_SESSION['tablePlanning'] == 0) { ?>
 							<div class="col col-lg-4 col-md-4 col-sm-4 col-xs-4">
 								<strong>Pullsheets</strong>
 							</div>
@@ -1237,6 +1244,7 @@ if (EVALUATION) {
 									</ul>
 								</div>
 							</div>
+                            <?php } ?>
 						</div><!-- ./row -->
 						<div class="row">
 							<div class="col col-lg-4 col-md-4 col-sm-4 col-xs-4">

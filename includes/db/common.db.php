@@ -317,6 +317,21 @@ if ((!isset($_SESSION['prefsLanguageFolder'.$prefix_session]))|| (empty($_SESSIO
 	else $_SESSION['prefsLanguageFolder'] = strtolower($_SESSION['prefsLanguage']);
 }
 
+// Check for Tables Planning Mode
+if ((!isset($_SESSION['tablePlanning'])) || (empty($_SESSION['tablePlanning']))) {
+
+	// Check judging_flights for any record with a 1 (planning mode);
+	// If found, set as 1, otherwise set as 0
+
+	$query_planning = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE flightPlanning='1'", $prefix."judging_flights");
+	$planning = mysqli_query($connection,$query_planning) or die (mysqli_error($connection));
+	$row_planning = mysqli_fetch_assoc($planning);
+
+	if ($row_planning['count'] > 0) $_SESSION['tablePlanning'] = 1;
+	else $_SESSION['tablePlanning'] = 0;
+
+}
+
 if ($section != "update") {
 	// Some limits and dates may need to be changed by admin and propagated instantly to all users
 	// These will be called on every page load instead of being stored in a session variable

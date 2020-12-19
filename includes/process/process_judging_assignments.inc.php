@@ -66,13 +66,14 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 				//echo $totalRows_flights."<br>";
 
 				if ($totalRows_flights == 0) {
-					$insertSQL = sprintf("INSERT INTO $judging_assignments_db_table (bid, assignment, assignTable, assignFlight, assignRound, assignLocation, assignRoles) VALUES (%s, %s, %s, %s, %s, %s, %s)",
+					$insertSQL = sprintf("INSERT INTO $judging_assignments_db_table (bid, assignment, assignTable, assignFlight, assignRound, assignLocation, assignPlanning, assignRoles) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)",
 						GetSQLValueString(sterilize($_POST['bid'.$random]), "text"),
 						GetSQLValueString(sterilize($_POST['assignment'.$random]), "text"),
 						GetSQLValueString(sterilize($_POST['assignTable'.$random]), "text"),
 						GetSQLValueString(sterilize($_POST['assignFlight'.$random]), "text"),
 						GetSQLValueString(sterilize($_POST['assignRound'.$random]), "text"),
 						GetSQLValueString(sterilize($_POST['assignLocation'.$random]), "text"),
+						GetSQLValueString(sterilize($_SESSION['tablePlanning']), "text"),
 						GetSQLValueString(sterilize($assignRoles), "text"));
 
 					mysqli_real_escape_string($connection,$insertSQL);
@@ -81,13 +82,14 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 				}
 
 				else {
-					$updateSQL = sprintf("UPDATE $judging_assignments_db_table SET bid=%s, assignment=%s, assignTable=%s, assignFlight=%s, assignRound=%s, assignLocation=%s, assignRoles=%s WHERE id=%s",
+					$updateSQL = sprintf("UPDATE $judging_assignments_db_table SET bid=%s, assignment=%s, assignTable=%s, assignFlight=%s, assignRound=%s, assignLocation=%s, assignPlanning=%s, assignRoles=%s WHERE id=%s",
 					GetSQLValueString(sterilize($_POST['bid'.$random]), "text"),
 					GetSQLValueString(sterilize($_POST['assignment'.$random]), "text"),
 					GetSQLValueString(sterilize($_POST['assignTable'.$random]), "text"),
 					GetSQLValueString(sterilize($_POST['assignFlight'.$random]), "text"),
 					GetSQLValueString(sterilize($_POST['assignRound'.$random]), "text"),
 					GetSQLValueString(sterilize($_POST['assignLocation'.$random]), "text"),
+					GetSQLValueString(sterilize($_SESSION['tablePlanning']), "text"),
 					GetSQLValueString(sterilize($assignRoles), "text"),
 					GetSQLValueString(sterilize($row_flights['id']), "text")
 					);
@@ -100,13 +102,14 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 
 			if (($unassign > 0) && ((isset($_POST['assignFlight'.$random])) && ($_POST['assignFlight'.$random] > 0))) {
 
-				$updateSQL = sprintf("UPDATE $judging_assignments_db_table SET bid=%s, assignment=%s, assignTable=%s, assignFlight=%s, assignRound=%s, assignLocation=%s, assignRoles=%s WHERE id=%s",
+				$updateSQL = sprintf("UPDATE $judging_assignments_db_table SET bid=%s, assignment=%s, assignTable=%s, assignFlight=%s, assignRound=%s, assignLocation=%s, assignPlanning=%s, assignRoles=%s WHERE id=%s",
 					GetSQLValueString(sterilize($_POST['bid'.$random]), "text"),
 					GetSQLValueString(sterilize($_POST['assignment'.$random]), "text"),
 					GetSQLValueString(sterilize($_POST['assignTable'.$random]), "text"),
 					GetSQLValueString(sterilize($_POST['assignFlight'.$random]), "text"),
 					GetSQLValueString(sterilize($_POST['assignRound'.$random]), "text"),
 					GetSQLValueString(sterilize($_POST['assignLocation'.$random]), "text"),
+					GetSQLValueString(sterilize($_SESSION['tablePlanning']), "text"),
 					GetSQLValueString(sterilize($assignRoles), "text"),
 					GetSQLValueString(sterilize($_POST['unassign'.$random]), "text")
 					);
@@ -197,13 +200,14 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 					//echo $query_flights."<br>";
 
 					if ($row_flights['count'] == 0) {
-						$insertSQL = sprintf("INSERT INTO $judging_assignments_db_table (bid, assignment, assignTable, assignFlight, assignRound, assignLocation, assignRoles) VALUES (%s, %s, %s, %s, %s, %s, %s)",
+						$insertSQL = sprintf("INSERT INTO $judging_assignments_db_table (bid, assignment, assignTable, assignFlight, assignRound, assignLocation, assignPlanning, assignRoles) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)",
 						GetSQLValueString(sterilize($_POST['bid'.$random]), "text"),
 						GetSQLValueString(sterilize($_POST['assignment'.$random]), "text"),
 						GetSQLValueString(sterilize($id), "text"),
 						GetSQLValueString("1", "text"),
 						GetSQLValueString(sterilize($_POST['assignRound'.$random]), "text"),
 						GetSQLValueString(sterilize($_POST['assignLocation'.$random]), "text"),
+						GetSQLValueString(sterilize($_SESSION['tablePlanning']), "text"),
 						GetSQLValueString(sterilize($assignRoles), "text"));
 
 						mysqli_real_escape_string($connection,$insertSQL);
@@ -229,13 +233,14 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 				}
 
 				if (((isset($_POST['unassign'.$random])) && ($_POST['unassign'.$random] > 0)) && ((isset($_POST['assignRound'.$random])) && ($_POST['assignRound'.$random] > 0))) {
-					$updateSQL = sprintf("UPDATE $judging_assignments_db_table SET bid=%s, assignment=%s, assignTable=%s, assignFlight=%s, assignRound=%s, assignLocation=%s, assignRoles=%s WHERE id=%s",
+					$updateSQL = sprintf("UPDATE $judging_assignments_db_table SET bid=%s, assignment=%s, assignTable=%s, assignFlight=%s, assignRound=%s, assignLocation=%s, assignPlanning=%s, assignRoles=%s WHERE id=%s",
 						GetSQLValueString(sterilize($_POST['bid'.$random]), "text"),
 						GetSQLValueString(sterilize($_POST['assignment'.$random]), "text"),
 						GetSQLValueString(sterilize($id), "text"),
 						GetSQLValueString("1", "text"),
 						GetSQLValueString(sterilize($_POST['assignRound'.$random]), "text"),
 						GetSQLValueString(sterilize($_POST['assignLocation'.$random]), "text"),
+						GetSQLValueString(sterilize($_SESSION['tablePlanning']), "text"),
 						GetSQLValueString(sterilize($assignRoles), "text"),
 						GetSQLValueString(sterilize($_POST['unassign'.$random]), "text"));
 					mysqli_real_escape_string($connection,$updateSQL);

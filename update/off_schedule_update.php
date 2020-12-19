@@ -1680,6 +1680,33 @@ if (!check_update("judgingLocType", $prefix."judging_locations")) {
 $output .= "<li>Add judging session type and end date columns.</li>";
 
 /**
+ * ---------------------------------------------------------------------------------------------------
+ * Provide new columns to enable the use of Tables Planning Mode.
+ * Helpful for admins who wish to plan tables and assignments prior to entry sorting.
+ * ---------------------------------------------------------------------------------------------------
+ */
+
+if (!check_update("assignPlanning", $prefix."judging_assignments")) {
+	$sql = sprintf("ALTER TABLE `%s` ADD `assignPlanning` TINYINT(1) NULL;",$prefix."judging_assignments");
+	mysqli_select_db($connection,$database);
+	mysqli_real_escape_string($connection,$sql);
+	$result = mysqli_query($connection,$sql);
+	if (!$result) $error_count += 1;
+}
+
+
+if (!check_update("flightPlanning", $prefix."judging_flights")) {
+	$sql = sprintf("ALTER TABLE `%s` ADD `flightPlanning` TINYINT(1) NULL;",$prefix."judging_flights");
+	mysqli_select_db($connection,$database);
+	mysqli_real_escape_string($connection,$sql);
+	$result = mysqli_query($connection,$sql);
+	if (!$result) $error_count += 1;
+}
+
+$output .= "<li>Added columns to facilitate Tables Planning Mode.</li>";
+
+
+/**
  * ----------------------------------------------------------------------------------------------------
  * Change the version number and date
  * ALWAYS the final script

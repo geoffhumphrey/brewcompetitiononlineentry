@@ -253,17 +253,16 @@ do {
     if (!empty($judge_info[10])) $output_datatables_body .= "<br><span class=\"text-danger\"><strong>Notes:</strong> ".$judge_info[10]."</strong>";
 		$output_datatables_body .= "</td>";
 
-    // Rank Column
-    $output_datatables_body .= "<td>".$display_rank."</td>";
-
-    // BJCP ID Column
-    $output_datatables_body .= "<td class=\"hidden-xs hidden-sm hidden-md\">";
-    if (($judge_info[6] != "") && ($judge_info[6] != "0")) $output_datatables_body .= strtoupper($judge_info[6]);
-    else $output_datatables_body .= "N/A";
-    $output_datatables_body .= "</td>";
-
-    // Roles Column (Queued Only)
 		if ($filter == "judges") {
+
+      // Rank Column
+      $output_datatables_body .= "<td>".$display_rank."</td>";
+
+      // BJCP ID Column
+      $output_datatables_body .= "<td class=\"hidden-xs hidden-sm hidden-md\">";
+      if (($judge_info[6] != "") && ($judge_info[6] != "0")) $output_datatables_body .= strtoupper($judge_info[6]);
+      else $output_datatables_body .= "N/A";
+      $output_datatables_body .= "</td>";
 
       if ($_SESSION['jPrefsQueued'] == "Y") {
         
@@ -618,6 +617,7 @@ $(document).ready(function() {
   <?php } ?>
 });
 </script>
+<?php if ($filter == "judges") { ?>
 <style>
 select.custom-hj-dropdown::-ms-expand {
     display: none;
@@ -664,6 +664,7 @@ select.custom-hj-dropdown {
     </select>
   </div>
 </div>
+<?php } ?>
 <?php } ?>
 <table class="table table-responsive table-bordered table" id="sortable">
 <thead>
