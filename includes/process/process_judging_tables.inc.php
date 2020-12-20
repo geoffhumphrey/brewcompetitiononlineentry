@@ -54,7 +54,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 				$row_styles = mysqli_fetch_assoc($styles);
 			}
 
-			if ($_SESSION['tablePlanning'] == 1) {
+			if ($_SESSION['jPrefsTablePlanning'] == 1) {
 
 				if ($_SESSION['prefsStyleSet'] == "BA") $query_entries = sprintf("SELECT id FROM %s WHERE brewSubCategory='%s'", $brewing_db_table, $value);
 				else $query_entries = sprintf("SELECT id FROM %s WHERE brewCategorySort='%s' AND brewSubCategory='%s'", $brewing_db_table, $row_styles['brewStyleGroup'],$row_styles['brewStyleNum']);
@@ -120,7 +120,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 			} while ($row_entries = mysqli_fetch_assoc($entries));
 
 			// Finally change the flightPlanning status for all records
-			if ($_SESSION['tablePlanning'] == 1) $sql = sprintf("UPDATE `%s` SET flightPlanning='1'", $prefix."judging_flights");
+			if ($_SESSION['jPrefsTablePlanning'] == 1) $sql = sprintf("UPDATE `%s` SET flightPlanning='1'", $prefix."judging_flights");
 			else $sql = sprintf("UPDATE `%s` SET flightPlanning='0'", $prefix."judging_flights");
 			mysqli_real_escape_string($connection,$sql);
 			$result = mysqli_query($connection,$sql) or die (mysqli_error($connection));
@@ -175,7 +175,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 					$row_styles = mysqli_fetch_assoc($styles);
 				}
 
-				if ($_SESSION['tablePlanning'] == 1) $query_entries = sprintf("SELECT id FROM %s WHERE brewCategorySort='%s' AND brewSubCategory='%s'", $brewing_db_table, $row_styles['brewStyleGroup'],$row_styles['brewStyleNum']);
+				if ($_SESSION['jPrefsTablePlanning'] == 1) $query_entries = sprintf("SELECT id FROM %s WHERE brewCategorySort='%s' AND brewSubCategory='%s'", $brewing_db_table, $row_styles['brewStyleGroup'],$row_styles['brewStyleNum']);
 				else $query_entries = sprintf("SELECT id FROM %s WHERE brewCategorySort='%s' AND brewSubCategory='%s' AND brewReceived='1'", $brewing_db_table, $row_styles['brewStyleGroup'],$row_styles['brewStyleNum']);
 				$entries = mysqli_query($connection,$query_entries) or die (mysqli_error($connection));
 				$row_entries = mysqli_fetch_assoc($entries);
@@ -229,7 +229,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 				} while ($row_entries = mysqli_fetch_assoc($entries));
 
 				// Finally change the flightPlanning status for all records
-				if ($_SESSION['tablePlanning'] == 1) $sql = sprintf("UPDATE `%s` SET flightPlanning='1'", $prefix."judging_flights");
+				if ($_SESSION['jPrefsTablePlanning'] == 1) $sql = sprintf("UPDATE `%s` SET flightPlanning='1'", $prefix."judging_flights");
 				else $sql = sprintf("UPDATE `%s` SET flightPlanning='0'", $prefix."judging_flights");
 				mysqli_real_escape_string($connection,$sql);
 				$result = mysqli_query($connection,$sql) or die (mysqli_error($connection));
@@ -334,7 +334,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 		} // end if (($totalRows_flight_count > 0) && ($table_styles == ""))
 
 		// Finally change the flightPlanning status for all records
-		if ($_SESSION['tablePlanning'] == 1) $sql = sprintf("UPDATE `%s` SET flightPlanning='1'", $prefix."judging_flights");
+		if ($_SESSION['jPrefsTablePlanning'] == 1) $sql = sprintf("UPDATE `%s` SET flightPlanning='1'", $prefix."judging_flights");
 		else $sql = sprintf("UPDATE `%s` SET flightPlanning='0'", $prefix."judging_flights");
 		mysqli_real_escape_string($connection,$sql);
 		$result = mysqli_query($connection,$sql) or die (mysqli_error($connection));

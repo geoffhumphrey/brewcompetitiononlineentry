@@ -41,6 +41,16 @@ if ($section == "enable-planning") {
 		$result = mysqli_query($connection,$sql);
 		if (!$result) $error_count += 1;
 	}
+
+	// Check if jPrefsTablePlanning row is in the judging_preferences table
+	// If not, add it
+	if (!check_update("jPrefsTablePlanning", $prefix."judging_preferences")) {
+		$sql = sprintf("ALTER TABLE `%s` ADD `jPrefsTablePlanning` TINYINT(1) NULL;",$prefix."judging_preferences");
+		mysqli_select_db($connection,$database);
+		mysqli_real_escape_string($connection,$sql);
+		$result = mysqli_query($connection,$sql);
+		if (!$result) $error_count += 1;
+	}
 	
 	$query_flight_entries = sprintf("SELECT COUNT(*) as 'count' FROM %s", $prefix."judging_flights");
 	$flight_entries = mysqli_query($connection,$query_flight_entries) or die (mysqli_error($connection));
@@ -156,8 +166,12 @@ if ($section == "enable-planning") {
 
 	} // end if ($row_flight_entries['count'] > 0)
 
-	// Set the tablePlanning session variable to true (1)
-	$_SESSION['tablePlanning'] = 1;
+	$sql = sprintf("UPDATE `%s` SET jPrefsTablePlanning='1'", $prefix."judging_preferences");
+	mysqli_real_escape_string($connection,$sql);
+	$result = mysqli_query($connection,$sql) or die (mysqli_error($connection));
+	if (!$result) $error_count += 1;
+
+	unset($_SESSION['prefs'.$prefix_session]);
 
 	// If error count is zero, change $status from fail (0) to success (1)
 	if ($error_count == 0) $status = 1;
@@ -320,8 +334,12 @@ if ($section == "enable-competition") {
 
 	}
 	
-	// Set the tablePlanning session variable to false (0)
-	$_SESSION['tablePlanning'] = 0;
+	$sql = sprintf("UPDATE `%s` SET jPrefsTablePlanning='0'", $prefix."judging_preferences");
+	mysqli_real_escape_string($connection,$sql);
+	$result = mysqli_query($connection,$sql) or die (mysqli_error($connection));
+	if (!$result) $error_count += 1;
+
+	unset($_SESSION['prefs'.$prefix_session]);
 
 	// If error count is zero, change $status from fail (0) to success (1)
 	if ($error_count == 0) $status = 1;

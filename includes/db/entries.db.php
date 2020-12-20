@@ -1,5 +1,9 @@
 <?php
 
+if (isset($_SESSION['user_id'])) {
+
+} // end if (isset($_SESSION['user_id']))
+
 $totalRows_entry_count = total_paid_received($go,0);
 
 if (NHC) {

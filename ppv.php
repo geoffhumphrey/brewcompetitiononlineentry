@@ -106,7 +106,7 @@ if ($send_confirmation_email) {
 	}
 }
 
-if ($_POST['test_ipn'] == 1) {
+if ((isset($_POST['test_ipn'])) && ($_POST['test_ipn'] == 1)) {
     $test_text = "Test: ";
 }
 
@@ -133,7 +133,8 @@ if ($verified) {
 
 		// If payment completed, update the brewing table rows for each paid entry
 
-		$b = explode("-",$custom_parts[1]);
+		if (strpos($custom_parts[1],"-")) $b = explode("-",$custom_parts[1]);
+		else $b = array($custom_parts[1]);
 		$queries = "";
 		$display_entry_no = array();
 

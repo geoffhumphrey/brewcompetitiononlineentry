@@ -73,7 +73,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 						GetSQLValueString(sterilize($_POST['assignFlight'.$random]), "text"),
 						GetSQLValueString(sterilize($_POST['assignRound'.$random]), "text"),
 						GetSQLValueString(sterilize($_POST['assignLocation'.$random]), "text"),
-						GetSQLValueString(sterilize($_SESSION['tablePlanning']), "text"),
+						GetSQLValueString(sterilize($_SESSION['jPrefsTablePlanning']), "text"),
 						GetSQLValueString(sterilize($assignRoles), "text"));
 
 					mysqli_real_escape_string($connection,$insertSQL);
@@ -89,7 +89,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 					GetSQLValueString(sterilize($_POST['assignFlight'.$random]), "text"),
 					GetSQLValueString(sterilize($_POST['assignRound'.$random]), "text"),
 					GetSQLValueString(sterilize($_POST['assignLocation'.$random]), "text"),
-					GetSQLValueString(sterilize($_SESSION['tablePlanning']), "text"),
+					GetSQLValueString(sterilize($_SESSION['jPrefsTablePlanning']), "text"),
 					GetSQLValueString(sterilize($assignRoles), "text"),
 					GetSQLValueString(sterilize($row_flights['id']), "text")
 					);
@@ -109,7 +109,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 					GetSQLValueString(sterilize($_POST['assignFlight'.$random]), "text"),
 					GetSQLValueString(sterilize($_POST['assignRound'.$random]), "text"),
 					GetSQLValueString(sterilize($_POST['assignLocation'.$random]), "text"),
-					GetSQLValueString(sterilize($_SESSION['tablePlanning']), "text"),
+					GetSQLValueString(sterilize($_SESSION['jPrefsTablePlanning']), "text"),
 					GetSQLValueString(sterilize($assignRoles), "text"),
 					GetSQLValueString(sterilize($_POST['unassign'.$random]), "text")
 					);
@@ -207,7 +207,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 						GetSQLValueString("1", "text"),
 						GetSQLValueString(sterilize($_POST['assignRound'.$random]), "text"),
 						GetSQLValueString(sterilize($_POST['assignLocation'.$random]), "text"),
-						GetSQLValueString(sterilize($_SESSION['tablePlanning']), "text"),
+						GetSQLValueString(sterilize($_SESSION['jPrefsTablePlanning']), "text"),
 						GetSQLValueString(sterilize($assignRoles), "text"));
 
 						mysqli_real_escape_string($connection,$insertSQL);
@@ -240,7 +240,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 						GetSQLValueString("1", "text"),
 						GetSQLValueString(sterilize($_POST['assignRound'.$random]), "text"),
 						GetSQLValueString(sterilize($_POST['assignLocation'.$random]), "text"),
-						GetSQLValueString(sterilize($_SESSION['tablePlanning']), "text"),
+						GetSQLValueString(sterilize($_SESSION['jPrefsTablePlanning']), "text"),
 						GetSQLValueString(sterilize($assignRoles), "text"),
 						GetSQLValueString(sterilize($_POST['unassign'.$random]), "text"));
 					mysqli_real_escape_string($connection,$updateSQL);

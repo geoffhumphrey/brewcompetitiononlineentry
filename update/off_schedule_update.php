@@ -1647,15 +1647,11 @@ $result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection)
 $output .= "<li>Converted all alpha-numeric judging numbers to lower case.</li>";
 
 /**
- * ---------------------------------------------------------------------------------------------------
+ * ----------------------------------------------- 2.2.0 ---------------------------------------------
  * Provide options for judging session type and end date. Rename current unused column judgingTime.
  * Helpful for comps that want to hold virtual or distributed judging sessions over a period of days.
  * ---------------------------------------------------------------------------------------------------
  */
-
-// ALTER TABLE `baseline_judging_locations` CHANGE `judgingTime` `judgingDateEnd` VARCHAR(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL; 
-// ALTER TABLE `baseline_judging_locations` ADD `judgingLocType` TINYINT(2) NULL DEFAULT NULL AFTER `id`; 
-// UPDATE `baseline_judging_locations` SET judgingLocType=0;
 
 if (check_update("judgingTime", $prefix."judging_locations")) {
 	$updateSQL = sprintf("ALTER TABLE `%s` CHANGE `judgingTime` `judgingDateEnd` VARCHAR(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL;", $prefix."judging_locations");
@@ -1691,7 +1687,6 @@ if (!check_update("assignPlanning", $prefix."judging_assignments")) {
 	mysqli_select_db($connection,$database);
 	mysqli_real_escape_string($connection,$sql);
 	$result = mysqli_query($connection,$sql);
-	if (!$result) $error_count += 1;
 }
 
 
@@ -1700,7 +1695,13 @@ if (!check_update("flightPlanning", $prefix."judging_flights")) {
 	mysqli_select_db($connection,$database);
 	mysqli_real_escape_string($connection,$sql);
 	$result = mysqli_query($connection,$sql);
-	if (!$result) $error_count += 1;
+}
+
+if (!check_update("jPrefsTablePlanning", $prefix."judging_preferences")) {
+	$sql = sprintf("ALTER TABLE `%s` ADD `jPrefsTablePlanning` TINYINT(1) NULL;",$prefix."judging_preferences");
+	mysqli_select_db($connection,$database);
+	mysqli_real_escape_string($connection,$sql);
+	$result = mysqli_query($connection,$sql);
 }
 
 $output .= "<li>Added columns to facilitate Tables Planning Mode.</li>";

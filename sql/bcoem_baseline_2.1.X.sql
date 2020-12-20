@@ -5,7 +5,7 @@
 --
 -- ------------------------------------------------------------------------------------
 --
--- UPDATED 2020-07-28 for Version 2.1.19.0
+-- UPDATED 2020-12-19 for Version 2.2.0.0
 --
 -- ------------------------------------------------------------------------------------
 --
@@ -604,6 +604,7 @@ CREATE TABLE IF NOT EXISTS `baseline_judging_assignments` (
   `assignRound` int(11) DEFAULT NULL,
   `assignLocation` int(11) DEFAULT NULL,
   `assignRoles` varchar(25) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `assignPlanning` tinyint(1) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
@@ -620,6 +621,7 @@ CREATE TABLE IF NOT EXISTS `baseline_judging_flights` (
   `flightNumber` int(11) DEFAULT NULL,
   `flightEntryID` mediumtext COLLATE utf8mb4_unicode_ci COMMENT 'array of ids of each entry from the brewing table',
   `flightRound` int(11) DEFAULT NULL,
+  `flightPlanning` tinyint(1) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
@@ -664,6 +666,7 @@ CREATE TABLE IF NOT EXISTS `baseline_judging_preferences` (
   `jPrefsCapJudges` int(3) DEFAULT NULL,
   `jPrefsCapStewards` int(3) DEFAULT NULL,
   `jPrefsBottleNum` int(3) DEFAULT NULL,
+  `jPrefsTablePlanning` tinyint(1) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
@@ -1556,7 +1559,7 @@ CREATE TABLE IF NOT EXISTS `baseline_system` (
 --
 
 INSERT INTO `baseline_system` (`id`, `version`, `version_date`, `data_check`, `setup`, `setup_last_step`) VALUES
-(1, '2.1.19.0', '2020-07-28', '2020-07-28 00:00:01', 1, 8);
+(1, '2.2.0.0', '2020-12-31', '2020-12-31 00:00:01', 1, 8);
 
 -- --------------------------------------------------------
 

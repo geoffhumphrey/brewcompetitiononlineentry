@@ -63,11 +63,10 @@ function is_session_started() {
 if (is_session_started() === FALSE) {
 	session_name($prefix_session);
     session_start();
+    ini_set('session.cookie_httponly', 1);
+	ini_set('session.use_only_cookies', 1);
+	ini_set('session.cookie_secure', 1);
 }
-
-ini_set('session.cookie_httponly', 1);
-ini_set('session.use_only_cookies', 1);
-ini_set('session.cookie_secure', 1);
 
 require_once (INCLUDES.'url_variables.inc.php');
 require_once (LIB.'common.lib.php');

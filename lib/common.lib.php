@@ -1941,7 +1941,7 @@ function get_table_info($input,$method,$table_id,$dbTable,$param) {
 			$styles = mysqli_query($connection,$query_styles) or die (mysqli_error($connection));
 			$row_styles = mysqli_fetch_assoc($styles);
 
-			if ($_SESSION['tablePlanning'] == 1) $query_style_count = sprintf("SELECT COUNT(*) as count FROM %s WHERE brewCategorySort='%s' AND brewSubCategory='%s'", $brewing_db_table, $row_styles['brewStyleGroup'], $row_styles['brewStyleNum']);
+			if ($_SESSION['jPrefsTablePlanning'] == 1) $query_style_count = sprintf("SELECT COUNT(*) as count FROM %s WHERE brewCategorySort='%s' AND brewSubCategory='%s'", $brewing_db_table, $row_styles['brewStyleGroup'], $row_styles['brewStyleNum']);
 			else $query_style_count = sprintf("SELECT COUNT(*) as count FROM %s WHERE brewCategorySort='%s' AND brewSubCategory='%s' AND brewReceived='1'", $brewing_db_table, $row_styles['brewStyleGroup'], $row_styles['brewStyleNum']);
 
 			$style_count = mysqli_query($connection,$query_style_count) or die (mysqli_error($connection));
@@ -1986,7 +1986,7 @@ function get_table_info($input,$method,$table_id,$dbTable,$param) {
 					$styles = mysqli_query($connection,$query_styles) or die (mysqli_error($connection));
 					$row_styles = mysqli_fetch_assoc($styles);
 
-					if ($_SESSION['tablePlanning'] == 1) $query_style_count = sprintf("SELECT COUNT(*) as count FROM %s WHERE brewCategorySort='%s' AND brewSubCategory='%s'", $brewing_db_table, $row_styles['brewStyleGroup'], $row_styles['brewStyleNum']);
+					if ($_SESSION['jPrefsTablePlanning'] == 1) $query_style_count = sprintf("SELECT COUNT(*) as count FROM %s WHERE brewCategorySort='%s' AND brewSubCategory='%s'", $brewing_db_table, $row_styles['brewStyleGroup'], $row_styles['brewStyleNum']);
 					else $query_style_count = sprintf("SELECT COUNT(*) as count FROM %s WHERE brewCategorySort='%s' AND brewSubCategory='%s' AND brewReceived='1'", $brewing_db_table, $row_styles['brewStyleGroup'], $row_styles['brewStyleNum']);
 					$style_count = mysqli_query($connection,$query_style_count) or die (mysqli_error($connection));
 					$row_style_count = mysqli_fetch_assoc($style_count);
@@ -2012,7 +2012,7 @@ function get_table_info($input,$method,$table_id,$dbTable,$param) {
 		//$row_styles['brewStyleNum']."^".$row_styles['brewStyleGroup']
 		$input = explode("^",$input);
 
-		if ((isset($_SESSION['tablePlanning'])) && ($_SESSION['tablePlanning'] == 1)) $query = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE brewCategorySort='%s' AND brewSubCategory='%s'", $prefix."brewing", $input[1], $input[0]);
+		if ((isset($_SESSION['jPrefsTablePlanning'])) && ($_SESSION['jPrefsTablePlanning'] == 1)) $query = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE brewCategorySort='%s' AND brewSubCategory='%s'", $prefix."brewing", $input[1], $input[0]);
 		else $query = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE brewCategorySort='%s' AND brewSubCategory='%s' AND brewReceived='1'", $prefix."brewing", $input[1], $input[0]);
 		$result = mysqli_query($connection,$query) or die (mysqli_error($connection));
 		$num_rows = mysqli_fetch_array($result);

@@ -1331,7 +1331,7 @@ if (($section == "list") || ($section == "account") || ($go == "entries")) {
 if (SINGLE) $brewer_info_000 = "Hello";
 else $brewer_info_000 = "Thank you for participating in the";
 $brewer_info_001 = "Your account details were last updated";
-$brewer_info_002 = "Take a moment to <a href=\"#entries\">review your entries</a>.";
+$brewer_info_002 = "Take a moment to <a href=\"#entries\">review your entries</a>";
 $brewer_info_003 = "pay your entry fees</a>";
 $brewer_info_004 = "per entry";
 $brewer_info_005 = "An American Homebrewers Association (AHA) membership is required if one of your entries is selected for a Great American Beer Festival Pro-Am.";

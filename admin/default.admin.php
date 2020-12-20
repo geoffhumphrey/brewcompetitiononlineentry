@@ -660,7 +660,7 @@ if (EVALUATION) {
                                 </div>
                                 <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-8">
                                     <ul class="list-inline">
-                                        <li><strong><?php if ($_SESSION['tablePlanning'] == 1) echo "<span class=\"text-purple\">** Tables Planning Mode **</span>"; else echo "<span class=\"text-teal\">** Tables Competition Mode **</span>"; ?></strong></li>
+                                        <li><strong><?php if ($_SESSION['jPrefsTablePlanning'] == 1) echo "<span class=\"text-purple\">** Tables Planning Mode **</span>"; else echo "<span class=\"text-teal\">** Tables Competition Mode **</span>"; ?></strong></li>
                                     </ul>
                                     <ul class="list-inline">
                                         <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging_tables">Manage</a></li>
@@ -1154,7 +1154,7 @@ if (EVALUATION) {
 						</div><!-- ./row -->
 						<?php if ($totalRows_tables > 0) { ?>
 						<div class="row">
-                            <?php if ($_SESSION['tablePlanning'] == 0) { ?>
+                            <?php if ($_SESSION['jPrefsTablePlanning'] == 0) { ?>
                             <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-4">
                                 <strong><?php echo $label_additional_info; ?></strong>
                             </div>
@@ -1179,7 +1179,7 @@ if (EVALUATION) {
                                 </div>
                             </div>
                             <?php } ?>
-                            <?php if ($_SESSION['tablePlanning'] == 0) { ?>
+                            <?php if ($_SESSION['jPrefsTablePlanning'] == 0) { ?>
 							<div class="col col-lg-4 col-md-4 col-sm-4 col-xs-4">
 								<strong>Pullsheets</strong>
 							</div>

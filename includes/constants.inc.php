@@ -2404,22 +2404,27 @@ if (((strpos($section, "step") === FALSE) && ($section != "setup")) && ($section
 	$judge_open_sidebar = getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_contest_dates['contestJudgeOpen'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "short", "date-time"); ;
 	$judge_closed_sidebar = getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_contest_dates['contestJudgeDeadline'], $_SESSION['prefsDateFormat'],$_SESSION['prefsTimeFormat'], "short", "date-time");
 
+
+
+    $query_judging_dates = sprintf("SELECT judgingDate FROM %s",$judging_locations_db_table);
+    $judging_dates = mysqli_query($connection,$query_judging_dates) or die (mysqli_error($connection));
+    $row_judging_dates = mysqli_fetch_assoc($judging_dates);
+    $totalRows_judging_dates = mysqli_num_rows($judging_dates);
+
+    $date_arr = array();
+    do {
+        $date_arr[] = $row_judging_dates['judgingDate'];
+    } while($row_judging_dates = mysqli_fetch_assoc($judging_dates));
+
+    $pay_close_date = min($date_arr);
+    $pay_window_open = open_or_closed(time(),$row_contest_dates['contestEntryOpen'],$pay_close_date);
+
     if (EVALUATION) {
 
         $suggested_open_date = time();
         $suggested_close_date = time() + 604800;
 
         if ((empty($row_judging_prefs['jPrefsJudgingOpen'])) || (empty($row_judging_prefs['jPrefsJudgingClosed']))) {
-
-            $query_judging_dates = sprintf("SELECT judgingDate FROM %s",$judging_locations_db_table);
-            $judging_dates = mysqli_query($connection,$query_judging_dates) or die (mysqli_error($connection));
-            $row_judging_dates = mysqli_fetch_assoc($judging_dates);
-            $totalRows_judging_dates = mysqli_num_rows($judging_dates);
-
-            $date_arr = array();
-            do {
-                $date_arr[] = $row_judging_dates['judgingDate'];
-            } while($row_judging_dates = mysqli_fetch_assoc($judging_dates));
 
             $suggested_open_date = min($date_arr); // Get the start time of the first judging location chronologically
             $suggested_close_date = (max($date_arr) + 28800); // Add eight hours to the start time at the final judging location
@@ -2519,7 +2524,7 @@ if (isset($_SESSION['loginUsername']))  {
 	   $total_to_pay = $total_entry_fees - $total_paid_entry_fees;
 
 		// Disable pay?
-		if (($registration_open == 2) && ($shipping_window_open == 2) && ($dropoff_window_open == 2) && ($entry_window_open == 2)) $disable_pay = TRUE;
+		if (($registration_open == 2) && ($shipping_window_open == 2) && ($dropoff_window_open == 2) && ($entry_window_open == 2) && ($pay_window_open == 2)) $disable_pay = TRUE;
 
 		// Show scores and scoresheets?
 		if ((judging_date_return() == 0) && ($entry_window_open == 2) && ($registration_open == 2) && ($judge_window_open == 2) && ($_SESSION['prefsDisplayWinners'] == "Y") && (judging_winner_display($_SESSION['prefsWinnerDelay']))) {

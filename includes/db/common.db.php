@@ -318,7 +318,7 @@ if ((!isset($_SESSION['prefsLanguageFolder'.$prefix_session]))|| (empty($_SESSIO
 }
 
 // Check for Tables Planning Mode
-if ((!isset($_SESSION['tablePlanning'])) || (empty($_SESSION['tablePlanning']))) {
+if ((!isset($_SESSION['jPrefsTablePlanning'])) || (empty($_SESSION['jPrefsTablePlanning']))) {
 
 	// Check judging_flights for any record with a 1 (planning mode);
 	// If found, set as 1, otherwise set as 0
@@ -327,8 +327,8 @@ if ((!isset($_SESSION['tablePlanning'])) || (empty($_SESSION['tablePlanning'])))
 	$planning = mysqli_query($connection,$query_planning) or die (mysqli_error($connection));
 	$row_planning = mysqli_fetch_assoc($planning);
 
-	if ($row_planning['count'] > 0) $_SESSION['tablePlanning'] = 1;
-	else $_SESSION['tablePlanning'] = 0;
+	if ($row_planning['count'] > 0) $_SESSION['jPrefsTablePlanning'] = 1;
+	else $_SESSION['jPrefsTablePlanning'] = 0;
 
 }
 

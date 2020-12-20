@@ -53,9 +53,9 @@ if ($action == "default") {
 }
 
 else {
-    if (isset($_SESSION['tablePlanning'])) {
-        if ($_SESSION['tablePlanning'] == 0) $sub_lead_text .= $sub_lead_text_comp_mode;
-        if ($_SESSION['tablePlanning'] == 1) {
+    if (isset($_SESSION['jPrefsTablePlanning'])) {
+        if ($_SESSION['jPrefsTablePlanning'] == 0) $sub_lead_text .= $sub_lead_text_comp_mode;
+        if ($_SESSION['jPrefsTablePlanning'] == 1) {
             $sub_lead_text .= $sub_lead_text_plan_mode;
             $mode_alert_color = "alert-purple";
         }
@@ -184,7 +184,7 @@ if (($action == "default") && ($filter == "default")) {
         $a = array(get_table_info("1","list",$row_tables['id'],$dbTable,"default"));
         $styles = display_array_content($a,1);
         $received = get_table_info("1","count_total",$row_tables['id'],$dbTable,"default");
-        if ($_SESSION['tablePlanning'] == 0) {
+        if ($_SESSION['jPrefsTablePlanning'] == 0) {
             $scored =  get_table_info("1","score_total",$row_tables['id'],$dbTable,"default");
             //get_table_info($input,$method,$id,$dbTable,$param)
             if (($received > $scored) && ($dbTable == "default")) $scored = $scored." <a class=\"hidden-print\" href=\"".$base_url."index.php?section=admin&amp;go=judging_scores&amp;action=edit&amp;id=".$row_tables['id']."\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Not all scores have been entered for this table. Click to add/edit scores.\"><span class=\"fa fa-lg fa-exclamation-circle text-danger\"></span></a>";
@@ -220,7 +220,7 @@ if (($action == "default") && ($filter == "default")) {
             $manage_tables_default_tbody .= "<span class=\"fa fa-lg fa-pencil\"></span>";
             $manage_tables_default_tbody .= "</a> ";
 
-            if ($_SESSION['tablePlanning'] == 0) {
+            if ($_SESSION['jPrefsTablePlanning'] == 0) {
                 // Build print pullsheet link
                 $manage_tables_default_tbody .= "<a id=\"modal_window_link\" class=\"hide-loader\" href=\"".$base_url."output/print.output.php?section=pullsheets&amp;go=judging_tables&amp;id=".$row_tables['id']."\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Print the pullsheet for Table ".$row_tables['tableNumber'].": ".$row_tables['tableName']."\">";
                 $manage_tables_default_tbody .= "<span class=\"fa fa-lg fa-print\"></span>";
@@ -230,7 +230,7 @@ if (($action == "default") && ($filter == "default")) {
 
             else $manage_tables_default_tbody .= "<span class=\"fa fa-lg fa-print text-muted\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Printing pullsheest is disabled in Tables Planning Mode\"></span> ";
 
-            if ($_SESSION['tablePlanning'] == 0) {
+            if ($_SESSION['jPrefsTablePlanning'] == 0) {
                 // Build print pullsheet link
                 $manage_tables_default_tbody .= "<a id=\"modal_window_link\" class=\"hide-loader\" href=\"".$base_url."output/print.output.php?section=pullsheets&amp;go=all_entry_info&amp;id=".$row_tables['id']."\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Print the Entries with Additional Info Report for Table ".$row_tables['tableNumber'].": ".$row_tables['tableName']."\">";
                 $manage_tables_default_tbody .= "<span class=\"fa fa-lg fa-plus-square\"></span>";
@@ -247,7 +247,7 @@ if (($action == "default") && ($filter == "default")) {
             }
 
 
-            if ($_SESSION['tablePlanning'] == 0) {
+            if ($_SESSION['jPrefsTablePlanning'] == 0) {
                 //Build add scores link
                 $manage_tables_default_tbody .= "<a href=\"".$base_url."index.php?section=admin&amp;go=judging_scores&amp;action=".$scoreAction."&amp;id=".$row_tables['id']."\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Add/edit scores for Table ".$row_tables['tableNumber'].": ".$row_tables['tableName']."\">";
                 $manage_tables_default_tbody .= "<span class=\"fa fa-lg fa-trophy\"></span>";
@@ -556,7 +556,7 @@ function enable_competition_mode() {
 
 $(document).ready(function(){
     
-    <?php if ($_SESSION['tablePlanning'] == 0) { ?>
+    <?php if ($_SESSION['jPrefsTablePlanning'] == 0) { ?>
 
     $("#tables-competition-mode").hide();
     $("#mode-alert").attr("class", "alert alert-teal");
@@ -564,7 +564,7 @@ $(document).ready(function(){
     
     <?php } ?>
 
-    <?php if ($_SESSION['tablePlanning'] == 1) { ?>
+    <?php if ($_SESSION['jPrefsTablePlanning'] == 1) { ?>
 
     $("#tables-planning-mode").hide();
     $("#mode-alert").attr("class", "alert alert-purple");
@@ -874,7 +874,7 @@ $(document).ready(function() {
 							</div>
 						</div>
 					</div><!-- ./accordion -->
-                    <?php if ($_SESSION['tablePlanning'] == 0) { ?>
+                    <?php if ($_SESSION['jPrefsTablePlanning'] == 0) { ?>
                     <div class="panel panel-default">
 						<div class="panel-heading">
 							<h4 class="panel-title">
@@ -933,7 +933,7 @@ $(document).ready(function() {
 				if ($sidebar_all_sessions) { ?>
                 <div class="bcoem-sidebar-panel">
                 	<strong class="text-info">All Sessions</strong>
-                    <span class="pull-right"><?php echo array_sum($all_loc_total); if ($_SESSION['tablePlanning'] == 0) { ?> of <a href="<?php echo $base_url; ?>/index.php?section=admin&amp;go=entries" data-toggle="tooltip" data-placement="top" title="View all entries."><?php echo $row_entry_count['count']; ?></a><?php } ?></span>
+                    <span class="pull-right"><?php echo array_sum($all_loc_total); if ($_SESSION['jPrefsTablePlanning'] == 0) { ?> of <a href="<?php echo $base_url; ?>/index.php?section=admin&amp;go=entries" data-toggle="tooltip" data-placement="top" title="View all entries."><?php echo $row_entry_count['count']; ?></a><?php } ?></span>
                 </div>
                 <?php } ?>
             <?php } ?>
@@ -1074,7 +1074,7 @@ if ($totalRows_tables > 0) { ?>
     	<th class="hidden-xs hidden-sm">No.</th>
         <th>Name</th>
         <th width="25%">Style(s)</th>
-        <th><?php if ($_SESSION['tablePlanning'] == 0) echo "<em>Rec'd</em> " ; ?>Entries</th>
+        <th><?php if ($_SESSION['jPrefsTablePlanning'] == 0) echo "<em>Rec'd</em> " ; ?>Entries</th>
         <th class="hidden-xs hidden-sm"><em>Scored</em> Entries</th>
         <th>Judges</th>
         <th>Stew<span class="hidden-xs">ards</span></th>
@@ -1216,7 +1216,7 @@ function update_table_total(element_id) {
 					<?php if ($_SESSION['prefsStyleSet'] != "BA") { ?><th width="1%">#</th><?php } ?>
                     <th>Category</th>
 					<th>Style</th>
-                    <th width="20%"><?php if ($_SESSION['tablePlanning'] == 0) echo "<em>Received</em> "; ?>Entries</th>
+                    <th width="20%"><?php if ($_SESSION['jPrefsTablePlanning'] == 0) echo "<em>Received</em> "; ?>Entries</th>
 				</tr>
 				</thead>
 				<tbody>

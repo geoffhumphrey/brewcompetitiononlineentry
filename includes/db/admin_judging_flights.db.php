@@ -5,7 +5,7 @@ if (($filter != "default") && ($filter != "rounds"))  {
 		if (SINGLE) $query_entries = sprintf("SELECT id,brewStyle,brewCategorySort,brewCategory,brewSubCategory,brewInfo,brewJudgingNumber FROM %s WHERE comp_id='%s' AND brewCategorySort='%s' AND brewSubcategory='%s'", $brewing_db_table, $_SESSION['comp_id'], $style_name[0],$style_name[1]);
 		else $query_entries = sprintf("SELECT id,brewStyle,brewCategorySort,brewCategory,brewSubCategory,brewInfo,brewJudgingNumber FROM %s WHERE brewCategorySort='%s' AND brewSubcategory='%s'", $brewing_db_table, $style_name[0],$style_name[1]);
 
-		if ($_SESSION['tablePlanning'] == 0) $query_entries .= " AND brewReceived='1'";
+		if ($_SESSION['jPrefsTablePlanning'] == 0) $query_entries .= " AND brewReceived='1'";
 		$query_entries .= " ORDER BY brewCategorySort,brewSubCategory";
 
 	$entries = mysqli_query($connection,$query_entries) or die (mysqli_error($connection));
