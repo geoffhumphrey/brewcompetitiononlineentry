@@ -163,8 +163,8 @@ if (($registration_open == 0) && ($entry_window_open == 0) && ($_SESSION['userLe
 	$add_entry_disable = TRUE;
 	$edit_entry_disable = TRUE;
 }
-// Registration and entry windows closed
-if (($registration_open == 2) && ($entry_window_open == 2) && ($_SESSION['userLevel'] == 2)) {
+// Entry window closed
+if (($entry_window_open == 2) && ($_SESSION['userLevel'] == 2)) {
 	$add_entry_disable = TRUE;
 	$edit_entry_disable = TRUE;
 }
