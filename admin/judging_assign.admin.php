@@ -239,7 +239,7 @@ do {
      */
 
     // Name Column
-		$output_datatables_body .= "<td nowrap>";
+		$output_datatables_body .= "<td>";
 		$output_datatables_body .= "<a href=\"".$base_url."index.php?section=brewer&amp;go=admin&amp;action=edit&amp;filter=".$row_brewer['uid']."&amp;id=".$judge_info[11]."\" data-toggle=\"tooltip\" title=\"Edit ".$judge_info[0]." ".$judge_info[1]."&rsquo;s account info\">".$judge_info[1].", ".$judge_info[0]."</a>";
     
     if ($filter == "judges") {

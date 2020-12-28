@@ -1707,6 +1707,16 @@ if (!check_update("jPrefsTablePlanning", $prefix."judging_preferences")) {
 $output .= "<li>Added columns to facilitate Tables Planning Mode.</li>";
 
 
+if (!check_update("prefsEmailCC", $prefix."preferences")) {
+	$updateSQL = sprintf("ALTER TABLE `%s` ADD `prefsEmailCC` TINYINT(1) NULL DEFAULT NULL AFTER `prefsEmailRegConfirm`;",$prefix."preferences");
+	mysqli_select_db($connection,$database);
+	mysqli_real_escape_string($connection,$updateSQL);
+	$result = mysqli_query($connection,$updateSQL);
+}
+
+$output .= "<li>Added column to enable or disable carbon copying contact messages.</li>";
+
+
 /**
  * ----------------------------------------------------------------------------------------------------
  * Change the version number and date

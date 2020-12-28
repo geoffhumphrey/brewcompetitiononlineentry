@@ -40,10 +40,13 @@
     <script src="//cdnjs.cloudflare.com/ajax/libs/marked/0.3.2/marked.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-markdown-editor/2.0.2/js/bootstrap-markdown-editor.js"></script>
     <?php } else { ?>
-	<script src="https://cdn.tinymce.com/4/tinymce.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/tinymce/4.9.11/tinymce.min.js"></script>
+    <!-- Future Release - TinyMCE 5 (needs testing and config options) -->
+    <!-- <script src="https://cdn.tiny.cloud/1/no-api-key/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script> -->
 	<script src="<?php echo $base_url;?>js_includes/tinymce-init.min.js"></script>
     <?php } ?>
 	<?php } ?>
+
 
 	<?php if ((($logged_in) && ($_SESSION['userLevel'] <= 1) && (strpos($section, 'step') === FALSE)) || (($logged_in) && ($section == "beerxml"))) { ?>
     <!-- Load Jasny Off-Canvas Menu for Admin / http://www.jasny.net/bootstrap -->

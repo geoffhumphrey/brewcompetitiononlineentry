@@ -160,7 +160,7 @@ if ($verified) {
 		$headers  = "MIME-Version: 1.0" . "\r\n";
 		$headers .= "Content-type: text/html; charset=utf-8" . "\r\n";
 		$headers .= "To: ".$to_recipient. " <".$to_email .">, " . "\r\n";
-		$headers .= "CC: ".$cc_recipient. " <".$cc_email.">, " . "\r\n";
+		$headers .= "Bcc: ".$cc_recipient. " <".$cc_email.">, " . "\r\n";
 		$headers .= "From: ".$row_logo['contestName']." Server <".$from_email.">\r\n";
 
 		$message_top = "";
@@ -244,7 +244,7 @@ if ($send_confirmation_email) {
 	$message_top_confirm .= "<html>";
 
 	if (!empty($to_email)) {
-		$message_body_confirm .= "<p>To: ".$to_recipient. "<br>" . "To Email: ".$to_email. "<br>" . "CC: ".$cc_recipient. "<br>" . "CC Email: ".$cc_email."</p>";
+		$message_body_confirm .= "<p>To: ".$to_recipient. "<br>" . "To Email: ".$to_email. "<br>" . "CC: ".$cc_recipient. "<br>" . "BCC Email: ".$cc_email."</p>";
 		$message_body_confirm .= $message_body;
 		$message_body_confirm .= "<br>-----------------------------------</p>";
 	}
