@@ -1548,6 +1548,8 @@ $label_unassigned_eval = "Unassigned Evaluations";
 $label_head_judge = "Head Judge";
 $label_lead_judge = "Lead Judge";
 $label_mini_bos_judge = "Mini-BOS Judge";
+$label_view_my_eval = "View My Evaluation";
+$label_view_other_judge_eval = "View Other Judge's Evaluation";
 
 $evaluation_info_000 = "The entry pool for each of the tables and flights that have been assigned to you is detailed below.";
 $evaluation_info_001 = "This competition is employing queued judging. If there is more than one judge pair at your table, evaluate the the next entry in the established queue.";

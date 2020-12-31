@@ -133,6 +133,8 @@ $judgeLikesDisplay = "";
 $judgeLikesModals = "";
 $judgeDislikesDisplay = "";
 $judgeDislikesModals = "";
+$table_assign_judge = "";
+$table_assign_steward = "";
 
 $show_judge_steward_fields = TRUE;
 
@@ -226,67 +228,66 @@ else $pro_am = $label_no;
 
 // Build Judge Info Display
 
-	$judge_info = "";
-	$a = explode(",",$_SESSION['brewerJudgeLocation']);
-	arsort($a);
-	foreach ($a as $value) {
-		if ($value != "0-0") {
-			$b = substr($value, 2);
+$judge_info = "";
+$a = explode(",",$_SESSION['brewerJudgeLocation']);
+arsort($a);
+foreach ($a as $value) {
+	if ($value != "0-0") {
+		$b = substr($value, 2);
 
-				$judging_location_info = judging_location_info($b);
-				$judging_location_info = explode("^",$judging_location_info);
+		$judging_location_info = judging_location_info($b);
+		$judging_location_info = explode("^",$judging_location_info);
 
-				if ($judging_location_info[0] > 0) {
-					$judge_info .= "<tr>\n";
-					$judge_info .= "<td>";
-					$judge_info .= yes_no(substr($value, 0, 1),$base_url);
-					$judge_info .= "</td>\n";
-					$judge_info .= "<td>";
-					$judge_info .= $judging_location_info[1];
-					if ($judging_location_info[5] == "1") $judge_info .= "<br><em><small>".$judging_location_info[3]."</small></em>";
-					$judge_info .= "</td>\n";
-					$judge_info .= "<td>";
-					$judge_info .= getTimeZoneDateTime($_SESSION['prefsTimeZone'], $judging_location_info[2], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "short", "date-time");
-					if (!empty($judging_location_info[4])) $judge_info .= " - ".getTimeZoneDateTime($_SESSION['prefsTimeZone'], $judging_location_info[4], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "short", "date-time");
-					$judge_info .= "</td>\n";
-					$judge_info .= "</tr>";
-				}
-			}
-		else $judge_info .= "";
+		if ($judging_location_info[0] > 0) {
+			$judge_info .= "<tr>\n";
+			$judge_info .= "<td>";
+			$judge_info .= yes_no(substr($value, 0, 1),$base_url);
+			$judge_info .= "</td>\n";
+			$judge_info .= "<td>";
+			$judge_info .= $judging_location_info[1];
+			if ($judging_location_info[5] == "1") $judge_info .= "<br><em><small>".$judging_location_info[3]."</small></em>";
+			$judge_info .= "</td>\n";
+			$judge_info .= "<td>";
+			$judge_info .= getTimeZoneDateTime($_SESSION['prefsTimeZone'], $judging_location_info[2], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "short", "date-time");
+			if (!empty($judging_location_info[4])) $judge_info .= " - ".getTimeZoneDateTime($_SESSION['prefsTimeZone'], $judging_location_info[4], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "short", "date-time");
+			$judge_info .= "</td>\n";
+			$judge_info .= "</tr>";
+		}
 	}
+}
 
 // Build Steward Info Display
 $steward_info = "";
-	$a = explode(",",$_SESSION['brewerStewardLocation']);
-		arsort($a);
-		foreach ($a as $value) {
-			if ($value != "0-0") {
-				$b = substr($value, 2);
+$a = explode(",",$_SESSION['brewerStewardLocation']);
+arsort($a);
+foreach ($a as $value) {
+	if ($value != "0-0") {
+		$b = substr($value, 2);
 
-				$judging_location_info = judging_location_info($b);
-				$judging_location_info = explode("^",$judging_location_info);
+		$judging_location_info = judging_location_info($b);
+		$judging_location_info = explode("^",$judging_location_info);
 
-					if ($judging_location_info[0] > 0) {
-						$steward_info .= "<tr>\n";
-						$steward_info .= "<td>";
-						$steward_info .= yes_no(substr($value, 0, 1),$base_url);
-						$steward_info .= "</td>\n";
-						$steward_info .= "<td>";
-						$steward_info .= $judging_location_info[1];
-						$steward_info .= "</td>\n";
-						$steward_info .= "<td>";
-						$steward_info .= getTimeZoneDateTime($_SESSION['prefsTimeZone'], $judging_location_info[2], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "short", "date-time");
-						$steward_info .= "</tr>";
-					}
-				}
-			else $steward_info .= "";
-			}
+		if ($judging_location_info[0] > 0) {
+			$steward_info .= "<tr>\n";
+			$steward_info .= "<td>";
+			$steward_info .= yes_no(substr($value, 0, 1),$base_url);
+			$steward_info .= "</td>\n";
+			$steward_info .= "<td>";
+			$steward_info .= $judging_location_info[1];
+			$steward_info .= "</td>\n";
+			$steward_info .= "<td>";
+			$steward_info .= getTimeZoneDateTime($_SESSION['prefsTimeZone'], $judging_location_info[2], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "short", "date-time");
+			$steward_info .= "</tr>";
+		}
+	}
+}
 
-if ($action == "print") $table_assign_judge = table_assignments($_SESSION['user_id'],"J",$_SESSION['prefsTimeZone'],$_SESSION['prefsDateFormat'],$_SESSION['prefsTimeFormat'],1);
-else $table_assign_judge = table_assignments($_SESSION['user_id'],"J",$_SESSION['prefsTimeZone'],$_SESSION['prefsDateFormat'],$_SESSION['prefsTimeFormat'],0);
-
-if ($action == "print") $table_assign_steward = table_assignments($_SESSION['user_id'],"S",$_SESSION['prefsTimeZone'],$_SESSION['prefsDateFormat'],$_SESSION['prefsTimeFormat'],1);
-else $table_assign_steward = table_assignments($_SESSION['user_id'],"S",$_SESSION['prefsTimeZone'],$_SESSION['prefsDateFormat'],$_SESSION['prefsTimeFormat'],0);
+if ($_SESSION['jPrefsTablePlanning'] == 0) {
+	if ($action == "print") $table_assign_judge = table_assignments($_SESSION['user_id'],"J",$_SESSION['prefsTimeZone'],$_SESSION['prefsDateFormat'],$_SESSION['prefsTimeFormat'],1);
+	else $table_assign_judge = table_assignments($_SESSION['user_id'],"J",$_SESSION['prefsTimeZone'],$_SESSION['prefsDateFormat'],$_SESSION['prefsTimeFormat'],0);
+	if ($action == "print") $table_assign_steward = table_assignments($_SESSION['user_id'],"S",$_SESSION['prefsTimeZone'],$_SESSION['prefsDateFormat'],$_SESSION['prefsTimeFormat'],1);
+	else $table_assign_steward = table_assignments($_SESSION['user_id'],"S",$_SESSION['prefsTimeZone'],$_SESSION['prefsDateFormat'],$_SESSION['prefsTimeFormat'],0);
+}
 
 	if ($_SESSION['brewerJudgeLikes'] != "") {
 		$judgeLikes = style_convert($_SESSION['brewerJudgeLikes'],4,$base_url);
@@ -485,13 +486,13 @@ if ($show_judge_steward_fields) {
 		$account_display .= "</div>";
 		$account_display .= "</div>";
 		$account_display .= "<div class=\"row bcoem-account-info\">";
-		$account_display .= sprintf("<div class=\"".$display_left_cols."\"><strong>Preferred</strong></div>",$label_judge_preferred);
+		$account_display .= sprintf("<div class=\"".$display_left_cols."\"><strong>%s</strong></div>",$label_judge_preferred);
 		$account_display .= "<div class=\"".$display_right_cols."\">";
 		$account_display .= $judgeLikesDisplay;
 		$account_display .= "</div>";
 		$account_display .= "</div>";
 		$account_display .= "<div class=\"row bcoem-account-info\">";
-		$account_display .= sprintf("<div class=\"".$display_left_cols."\"><strong>Non-Preferred</strong></div>",$label_judge_non_preferred);
+		$account_display .= sprintf("<div class=\"".$display_left_cols."\"><strong>%s</strong></div>",$label_judge_non_preferred);
 		$account_display .= "<div class=\"".$display_right_cols."\">";
 		$account_display .= $judgeDislikesDisplay;
 		$account_display .= "</div>";
@@ -502,28 +503,23 @@ if ($show_judge_steward_fields) {
 			$account_display .= sprintf("<div class=\"".$display_left_cols."\"><strong>%s</strong></div>",$label_avail);
 			$account_display .= "<div class=\"".$display_right_cols."\">";
 			if (($assignment == "judge") || (empty($assignment))) {
-
 				if (empty($table_assign_judge)) {
-
 						$account_display .= "<table id=\"sortable_judge\" class=\"table table-condensed table-striped table-bordered table-responsive\">";
 						$account_display .= "<thead>";
 						$account_display .= "<tr>";
-						$account_display .= sprintf("<th>%s/%s</th>",$label_yes,$label_no);
-						$account_display .= sprintf("<th>%s</th>",$label_location);
-						$account_display .= sprintf("<th>%s</th>",$label_date);
+						$account_display .= sprintf("<th width=\"34%%\">%s/%s</th>",$label_yes,$label_no);
+						$account_display .= sprintf("<th width=\"33%%\">%s</th>",$label_location);
+						$account_display .= sprintf("<th width=\"33%%\">%s</th>",$label_date);
 						$account_display .= "</tr>";
 						$account_display .= "</thead>";
 						$account_display .= "<tbody>";
 						$account_display .= $judge_info;
 						$account_display .= "</tbody>";
 						$account_display .= "</table>";
-
 				}
-
-				else $account_display .= "";
 			}
-			if ((!empty($table_assign_judge)) && (!empty($assignment))) $account_display .= sprintf("<p><strong class=\"text-success\">%s %s.</strong></p><p>%s</p>",$brewer_info_008,$assignment,$brewer_info_009);
-			elseif ((in_array("Steward",$assignment_array)) && (!empty($assignment))) $account_display .= sprintf("%s %s.",$assignment,$brewer_info_010);
+			if (!empty($table_assign_judge)) $account_display .= sprintf("<p><strong class=\"text-success\">%s %s.</strong></p><p>%s</p>",$brewer_info_008,$label_judge,$brewer_info_009);
+			elseif ((in_array("Steward",$assignment_array)) && (!empty($assignment))) $account_display .= sprintf("%s %s.",$label_steward,$brewer_info_010);
 			$account_display .= "</div>";
 			$account_display .= "</div>";
 
@@ -534,9 +530,9 @@ if ($show_judge_steward_fields) {
 					$account_display .= "<table id=\"judge_assignments\" class=\"table table-condensed table-striped table-bordered table-responsive\">";
 					$account_display .= "<thead>";
 					$account_display .= "<tr>";
-					$account_display .= sprintf("<th>%s</th>",$label_location);
-					$account_display .= sprintf("<th>%s</th>",$label_date);
-					$account_display .= sprintf("<th>%s</th>",$label_table);
+					$account_display .= sprintf("<th width=\"34%%\">%s</th>",$label_location);
+					$account_display .= sprintf("<th width=\"33%%\">%s</th>",$label_date);
+					$account_display .= sprintf("<th width=\"33%%\">%s</th>",$label_table);
 					$account_display .= "</tr>";
 					$account_display .= "</thead>";
 					$account_display .= "<tbody>";

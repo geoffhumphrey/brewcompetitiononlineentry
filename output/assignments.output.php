@@ -5,7 +5,7 @@ if ($filter == "stewards") $filter = "S"; else $filter = "J";
 include (DB.'output_assignments.db.php');
 $count = round((get_entry_count('received')/($_SESSION['jPrefsFlightEntries'])),0);
 $role_replace1 = array("HJ","LJ","MBOS",", ");
-$role_replace2 = array("<span class=\"text-primary\"><span class=\"fa fa-gavel\"></span> Head Judge</span><br>","<span class=\"text-warning\"><span class=\"fa fa-star\"></span> Lead Judge</span><br>","<span class=\"text-success\"><span class=\"fa fa-trophy\"></span> Mini-BOS Judge</span><br>","");
+$role_replace2 = array("<span class=\"text-primary\"><span class=\"fa fa-gavel\"></span> Table Head Judge</span><br>","<span class=\"text-warning\"><span class=\"fa fa-star\"></span> Lead Judge</span><br>","<span class=\"text-success\"><span class=\"fa fa-trophy\"></span> Mini-BOS Judge</span><br>","");
 
 ?>
 
@@ -32,7 +32,13 @@ include (LIB.'admin.lib.php');
 			<?php } ?>
 
 			<?php if ($view == "table") { ?>
-			"aaSorting": [[3,'asc'],[4,'asc'],[2,'asc'],[0,'asc']],
+				<?php if (($filter == "J") && ($_SESSION['jPrefsQueued'] == "N")) { ?>
+			"aaSorting": [[4,'asc'],[6,'asc'],[7,'asc'],[0,'asc']],
+				<?php } elseif (($filter == "J") && ($_SESSION['jPrefsQueued'] == "Y")) { ?>
+			"aaSorting": [[4,'asc'],[5,'asc'],[0,'asc']],	
+                <?php } else { ?>
+			"aaSorting": [[2,'asc'],[0,'asc']],
+				<?php } ?>
 			<?php } ?>
 
 			<?php if ($view == "location") { ?>
@@ -41,8 +47,10 @@ include (LIB.'admin.lib.php');
 			"bProcessing" : false,
 			"aoColumns": [
 				null,
-				<?php if (($filter == "J") && ($_SESSION['jPrefsQueued'] == "Y")) { ?>{ "asSorting": [  ] },<?php } ?>
-				<?php if ($filter == "J") { ?>{ "asSorting": [  ] },<?php } ?>
+				<?php if ($filter == "J") { ?>
+				{ "asSorting": [  ] },
+				{ "asSorting": [  ] },
+				<?php } ?>
 				null,
 				null,
 				null,
@@ -70,7 +78,7 @@ include (LIB.'admin.lib.php');
     <thead>
     <tr>
     	<th width="10%"><?php echo $label_name; ?></th>
-    	<?php if (($filter == "J") && ($_SESSION['jPrefsQueued'] == "Y")) { ?>
+    	<?php if ($filter == "J") { ?>
         <th width="10%">Role</th>
         <?php } ?>
         <?php if ($filter == "J") { ?><th width="10%">Rank</th><?php } ?>
@@ -101,7 +109,7 @@ include (LIB.'admin.lib.php');
 	?>
     <tr>
     	<td nowrap><?php echo "<strong>".$judge_info['1'].", ".$judge_info['0']."</strong>"; ?></td>
-    	<?php if (($filter == "J") && ($_SESSION['jPrefsQueued'] == "Y")) { ?>
+    	<?php if ($filter == "J") { ?>
         <td nowrap><?php if (!empty($role)) echo $role; ?></td>
 		<?php } ?>
         <?php if ($filter == "J") { ?>

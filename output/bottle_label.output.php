@@ -106,7 +106,7 @@ if (isset($_SESSION['loginUsername'])) {
             $qrcode_url = $base_url."qr.php?id=".$row_log['id'];
             $qrcode_url = urlencode($qrcode_url);
 
-            $qr->qRCreate($qrcode_url,"90x90","UTF-8");
+            $qr->qRCreate($qrcode_url,"85x85","UTF-8");
             $qrcode_link = $qr->url;
 
             if (($bottle_label_endRow == 0) && ($bottle_label_hloopRow1++ != 0)) $page_info1 .= "<div class=\"row\">";
@@ -124,12 +124,12 @@ if (isset($_SESSION['loginUsername'])) {
             
             if (($anon) && ((!empty($row_log['brewInfo'])) || (!empty($row_log['brewMead1'])) || (!empty($row_log['brewMead2'])) || (!empty($row_log['brewMead3'])))) {
                 $brewInfo = "";
+                $brewInfo .= truncate($row_log['brewInfo'],100,"..."); // Necessary for space considerations
                 if (!empty($row_log['brewInfo']))  $brewInfo .= str_replace("^", " | ", $row_log['brewInfo']);
                 if (!empty($row_log['brewMead1'])) $brewInfo .= "&nbsp;&nbsp;".$row_log['brewMead1'];
                 if (!empty($row_log['brewMead2'])) $brewInfo .= "&nbsp;&nbsp;".$row_log['brewMead2'];
                 if (!empty($row_log['brewMead3'])) $brewInfo .= "&nbsp;&nbsp;".$row_log['brewMead3'];
-                $brewInfo = str_replace("\n"," ",truncate($brewInfo,100,"...")); // Necessary for space considerations
-                $page_info1 .= "<strong>".$label_required_info.":</strong> ".$brewInfo;
+                $page_info1 .= "<strong>".$label_required_info.":</strong> <span class=\"break-long\">".$brewInfo."</span>";
               }
 
             $page_info1 .= "</p>";
@@ -137,15 +137,21 @@ if (isset($_SESSION['loginUsername'])) {
             if (!$anon) {
               $page_info1 .= "<small>";
               $page_info1 .= "<p>".$brewerFirstName." ".$brewerLastName."<br>";
-              $page_info1 .= $brewerAddress."<br>".$brewerCity.", ".$brewerState." ".$brewerZip." "."<br>";
+              // $page_info1 .= $brewerAddress."<br>".$brewerCity.", ".$brewerState." ".$brewerZip." "."<br>";
               $page_info1 .= $brewerEmail."<br>";
               $page_info1 .= $phone;
               $page_info1 .= "</p>";
               $page_info1 .= "</small>";
             }
 
-            $page_info1 .= "<div align=\"center\" style=\"margin-top: 10px;\"><img src=\"".$barcode_link."\">&nbsp;&nbsp;<img src=\"".$qrcode_link."\"></div>";
-
+            $page_info1 .= "<div align=\"center\">";
+            $page_info1 .= "<img src=\"".$barcode_link."\"> ";
+            if ($anon) {
+              $page_info1 .= "</div>";
+              $page_info1 .= "<div align=\"center\">";
+            }
+            $page_info1 .= "<img src=\"".$qrcode_link."\">";
+            $page_info1 .= "</div>";
             if (!$anon) $page_info1 .= "<div align=\"center\" class=\"box\">".$bottle_labels_006."</div>";
 
             $page_info1 .= "</div>";
@@ -215,7 +221,7 @@ else {
     <style>
 
     body {
-      font-size: 10px;
+      font-size: .95em;
     }
 
     .label-border {
@@ -229,10 +235,25 @@ else {
 
     .box {
       font-size: .85em;
-      height: 75px;
+      height: 65px;
       vertical-align: middle;
+      margin-top: 15px;
     }
 
+    .break-long {
+      overflow-wrap: break-word;
+      word-wrap: break-word;
+
+      -ms-word-break: break-all;
+      word-break: break-all;
+      word-break: break-word;
+
+      -ms-hyphens: auto;
+      -moz-hyphens: auto;
+      -webkit-hyphens: auto;
+      hyphens: auto;
+
+    }
     </style>
 </head>
 <body>
