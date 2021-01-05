@@ -281,7 +281,12 @@ do {
 
 		$output_datatables_body .= "<tr>";
 		if ($pro_edition == 1) $output_datatables_body .= "<td>".$row_brewer['brewerBreweryName']."</td>";
-		else $output_datatables_body .= "<td><a name='".$row_brewer['uid']."'></a>".$row_brewer['brewBrewerLastName'].", ".$row_brewer['brewBrewerFirstName']."</td>";
+		else {
+			$output_datatables_body .= "<td>";
+			$output_datatables_body .= "<a name='".$row_brewer['uid']."'></a>";
+			$output_datatables_body .= $row_brewer['brewBrewerLastName'].", ".$row_brewer['brewBrewerFirstName'];
+			$output_datatables_body .= "</td>";
+		}
 
 		$explodies = explode(",",$row_brewer['Entries']);
 
@@ -385,10 +390,12 @@ do {
 
 		$output_datatables_body .= "<tr>";
 
-		$output_datatables_body .= "<td><a name='".$row_brewer['uid']."'></a>".$row_brewer['brewerLastName'].", ".$row_brewer['brewerFirstName'];
+		$output_datatables_body .= "<td>";
+		$output_datatables_body .= "<a name='".$row_brewer['uid']."'></a>";
+		$output_datatables_body .= $row_brewer['brewerLastName'].", ".$row_brewer['brewerFirstName'];
 		if (($dbTable == "default") && ($user_info[1] == 0)) $output_datatables_body .= " <span class=\"fa fa-lg fa-lock text-danger\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"".$brewer_tooltip_display_name." is a Top-Level Admin User\"></span>";
 		elseif (($dbTable == "default") && ($user_info[1] == 1)) $output_datatables_body .= " <span class=\"fa fa-lg fa-lock text-warning\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"".$brewer_tooltip_display_name." is an Admin Level User\"></span>";
-		else $output_datatables_body .= "";
+		if ($action != "print") $output_datatables_body .= "<br><small>".$row_brewer['brewerCity'].", ".$row_brewer['brewerState']."</small>";
 		$output_datatables_body .= "</td>";
 
 		if ($action == "print") {
@@ -454,7 +461,21 @@ do {
 
 		}
 
-		$output_datatables_body .= "<td>".ucwords($brewer_assignment)."</td>";
+
+		$output_datatables_body .= "<td>";
+		
+		if (!empty($brewer_assignment)) {
+			
+			if ((strpos($brewer_assignment,"Judge") !== false) || (strpos($brewer_assignment,"Steward") !== false)) {
+				$output_datatables_body .= "<button type=\"button\" class=\"btn btn-link\" style=\"margin:0; padding:0;\" data-toggle=\"modal\" data-target=\"#assignment-modal-".$row_brewer['uid']."\">".ucwords($brewer_assignment)."</button>";
+			}
+			else {
+				$output_datatables_body .= ucwords($brewer_assignment);
+			}
+			
+		}
+
+		$output_datatables_body .= "</td>";
 
 		if ($filter != "default") {
 			if ($filter == "judges") {

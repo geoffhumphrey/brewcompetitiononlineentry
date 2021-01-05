@@ -184,7 +184,7 @@ if (($totalRows_log > 0) && ($show_entries)) {
 	$primary_page_info .= "</small></p>";
 }
 
-if ((EVALUATION) && ($assignment == "judge")) include (EVALS.'my_account.eval.php');
+if (EVALUATION) include (EVALS.'my_account.eval.php');
 
 $user_edit_links .= "<div class=\"btn-group hidden-print\" role=\"group\" aria-label=\"EditAccountFunctions\">";
 $user_edit_links .= sprintf("<a class=\"btn btn-default\" href=\"%s\"><span class=\"fa fa-user\"></span> %s</a>",$edit_user_info_link,$label_edit_account);

@@ -28,7 +28,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 	$user = mysqli_query($connection,$query_user) or die (mysqli_error($connection));
 	$row_user = mysqli_fetch_assoc($user);
 
-	if ($row_limits['prefsUserEntryLimit'] != "") {
+	if (($row_limits['prefsUserEntryLimit'] != "") && ($row_user['userLevel'] == 2)) {
 
 		// Check if user has reached the limit of entries in a particular sub-category. If so, redirect.
 		$query_brews = sprintf("SELECT COUNT(*) as 'count' FROM $brewing_db_table WHERE brewBrewerId = '%s'", $_SESSION['user_id']);
@@ -55,7 +55,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 		
 	}
 
-	if ($subcat_limit) {
+	if (($subcat_limit) && ($row_user['userLevel'] == 2)) {
 		$insertGoTo = $base_url."index.php?section=list&msg=9";
 		$pattern = array('\'', '"');
 		$insertGoTo = str_replace($pattern, "", $insertGoTo);

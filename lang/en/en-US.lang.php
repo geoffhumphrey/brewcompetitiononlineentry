@@ -1600,7 +1600,6 @@ $evaluation_info_033 = "While this is an unusual occurrance, a duplicate evaluat
 $evaluation_info_034 = "When evaluating specialty-type styles, use the this line to comment on characteristics unique to it, such as fruit, spice, fermentable, acidity, etc.";
 $evaluation_info_035 = "Provide comments on style, recipe, process, and drinking pleasure. Include helpful suggestions to the brewer.";
 
-
 // Scoresheets
 $label_submitted = "Submitted";
 $label_ordinal_position = "Ordinal Position in Flight";
@@ -1772,6 +1771,9 @@ $label_fair = "Fair";
 $descr_fair = "Off flavors/aromas or major style deficiencies. Unpleasant.";
 $label_problematic = "Problematic";
 $descr_problematic = "Major off flavors and aromas dominate. Hard to drink.";
+
+
+$evaluation_info_036 = "One or more judge scores is out of the acceptable score range. Acceptable range is ".$_SESSION['jPrefsScoreDispMax']. " points or less.";
 
 
 /**

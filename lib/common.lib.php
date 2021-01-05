@@ -2389,6 +2389,16 @@ function get_entry_count($method) {
 	return $r;
 }
 
+function get_evaluation_count($method) {
+	require(CONFIG.'config.php');
+	mysqli_select_db($connection,$database);
+	if ($method == "total") $sql = sprintf("SELECT COUNT(*) as 'count' FROM %s",$prefix."evaluation");
+	if ($method == "unique") $sql = sprintf("SELECT COUNT(DISTINCT `eid`) as 'count' FROM %s",$prefix."evaluation");	
+	$query = mysqli_query($connection,$sql) or die (mysqli_error($connection));
+	$row = mysqli_fetch_assoc($query);
+	return $row['count'];
+}
+
 function get_participant_count($type) {
 	require(CONFIG.'config.php');
 	mysqli_select_db($connection,$database);
@@ -2948,7 +2958,7 @@ function table_assignments($uid,$method,$time_zone,$date_format,$time_format,$me
 			}
 
 			elseif ($method2 == 1) {
-				if ($method == "J") $output .= "<a href='".$base_url."index.php?section=admin&amp;action=assign&amp;go=judging_tables&amp;filter=judges&id=".$table_info[3]."' data-toggle=\"tooltip\" title='Assign/Unassign Judges to Table ".$table_info[0]." - ".$table_info[1]."'>".$table_info[0]."</a>,&nbsp;";
+				if ($method == "J") $output .= "<a href='".$base_url."index.php?section=admin&amp;action=assign&amp;go=judging_tables&amp;filter=judges&id=".$table_info[3]."' data-toggle=\"tooltip\" title='Assign/Unassign Judges to Table ".$table_info[0]." - ".$table_info[1]."'>".$table_info[0]." - ".$table_info[1]."</a>,&nbsp;";
 				if ($method == "S") $output .= "<a href='".$base_url."index.php?section=admin&amp;action=assign&amp;go=judging_tables&amp;filter=stewards&id=".$table_info[3]."' data-toggle=\"tooltip\" title='Assign/Unassign Stewards to Table ".$table_info[0]." - ".$table_info[1]."'>".$table_info[0]."</a>,&nbsp;";
 			}
 

@@ -57,21 +57,22 @@ $table_body1 = "";
 if ($row_scored_entries['count'] > 0) {
 
 	do {
-	$entry_count = get_table_info(1,"count_total",$row_tables['id'],$dbTable,"default");
+		
+		$entry_count = get_table_info(1,"count_total",$row_tables['id'],$dbTable,"default");
 
-	if ($entry_count > 0) {
+		if ($entry_count > 0) {
 
-		if ($entry_count > 1) $entries = strtolower($label_entries); else $entries = strtolower($label_entry);
+			if ($entry_count > 1) $entries = strtolower($label_entries); else $entries = strtolower($label_entry);
 
-		$primary_page_info = "";
-		$header1_1 = "";
-		$page_info1 = "";
-		$header1_2 = "";
-		$page_info2 = "";
-		$table_head1 = "";
-		$table_body1 = "";
+			$primary_page_info = "";
+			$header1_1 = "";
+			$page_info1 = "";
+			$header1_2 = "";
+			$page_info2 = "";
+			$table_head1 = "";
+			$table_body1 = "";
 
-		$header1_2 .= sprintf("<div class=\"bcoem-winner-table\"><h3>%s %s: %s (%s %s)</h3><p>%s</p></div>",$label_table,$row_tables['tableNumber'],$row_tables['tableName'],$entry_count,$entries,$winners_text_000);
+			$header1_2 .= sprintf("<div class=\"bcoem-winner-table\"><h3>%s %s: %s (%s %s)</h3><p>%s</p></div>",$label_table,$row_tables['tableNumber'],$row_tables['tableName'],$entry_count,$entries,$winners_text_000);
 
 			if (score_count($row_tables['id'],"1",$dbTable))	{
 

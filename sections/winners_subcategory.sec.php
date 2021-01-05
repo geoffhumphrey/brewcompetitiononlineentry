@@ -51,6 +51,7 @@ if ($row_scored_entries['count'] > 0) {
 	else $category_end = 34;
 
 	$a = styles_active(2);
+	
 	foreach (array_unique($a) as $style) {
 
 		$style = explode("^",$style);

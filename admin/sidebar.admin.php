@@ -130,6 +130,15 @@ if ($logged_in) {
 	$page_info100 .= "<span class=\"pull-right\"><a href=\"".$base_url."index.php?section=admin&amp;go=entries&amp;view=paid\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"View all paid entries\">".$currency_symbol."<span id=\"admin-dashboard-total-fees-paid\">".number_format($total_fees_paid,2)."</span></a></span>";
 	$page_info100 .= "</div>";
 
+	if (EVALUATION) {
+
+		$page_info100 .= "<div class=\"bcoem-sidebar-panel\">";
+		$page_info100 .= "<strong class=\"text-info\">Evaluations</strong>";
+		$page_info100 .= "<span class=\"pull-right\"><a href=\"".$base_url."index.php?section=evaluation&amp;go=default&amp;filter=default&amp;view=admin\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Total evaluations\"><span id=\"admin-dashboard-evaluation-count\">".get_evaluation_count('total')."</span></a> / <a href=\"".$base_url."index.php?section=evaluation&amp;go=default&amp;filter=default&amp;view=admin\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Entries with evaluations\">".get_evaluation_count('unique')."</a></span>";
+		$page_info100 .= "</div>";
+
+	}
+
 	$page_info100 .= "<div class=\"bcoem-sidebar-panel\">";
 	$page_info100 .= "<strong class=\"text-info\">Participants</strong>";
 	$page_info100 .= "<span class=\"pull-right\"><a href=\"".$base_url."index.php?section=admin&amp;go=participants\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"View all participants\"><span id=\"admin-dashboard-participant-count\">".get_participant_count('default')."</span></a></span>";

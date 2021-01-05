@@ -333,7 +333,7 @@ a.text-indigo:focus, a.text-indigo:hover {
     color: #3D5AFE;  /* A400 Shade */
 }
 
-.alert-orange {
+.alert-indigo {
     border-color: #FFE0B2; /* 100 Shade */
     background: #FFF3E0; /* 50 Shade */
     color: #E65100; /* 900 Shade */

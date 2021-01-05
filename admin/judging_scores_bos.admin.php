@@ -259,7 +259,11 @@ $(document).ready(function(){
         </td>
         <td>
             <div class="form-group" id="score-place-bos-ajax-<?php echo $score_id; ?>-scorePlace-form-group">
+            <?php if ($_SESSION['prefsWinnerMethod'] == "0") { ?>
             <select class="form-control" id="score-place-bos-ajax-<?php echo $score_id; ?>" name="scorePlace<?php echo $score_id; ?>" onchange="select_place('<?php echo $base_url; ?>','scorePlace','judging_scores_bos','<?php echo $row_enter_bos['eid']; ?>','<?php echo $bos_entry_info[15]; ?>','1','<?php echo $filter; ?>','default','score-place-bos-ajax-<?php echo $score_id; ?>')">
+            <?php } else { ?>
+            <select class="form-control" id="score-place-bos-ajax-<?php echo $score_id; ?>" name="scorePlace<?php echo $score_id; ?>" onchange="save_column('<?php echo $base_url; ?>','scorePlace','judging_scores_bos','<?php echo $row_enter_bos['eid']; ?>','<?php echo $bos_entry_info[15]; ?>','1','<?php echo $filter; ?>','default','score-place-bos-ajax-<?php echo $score_id; ?>')">    
+            <?php } ?>
                 <option value=""></option>
                 <?php for($i=1; $i<$_SESSION['jPrefsMaxBOS']+1; $i++) { ?>
                 <option value="<?php echo $i; ?>" <?php if ($bos_entry_info[10] == $i) echo "selected"; ?>><?php echo text_number($i); ?></option>

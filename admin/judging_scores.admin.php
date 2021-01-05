@@ -1,3 +1,9 @@
+<script>
+$(document).ready(function () {
+    disable_update_button('judging_scores');
+});
+</script>
+<script src="<?php echo $base_url;?>js_includes/admin_ajax.min.js"></script>
 <?php
 if ($dbTable == "default") $pro_edition = $_SESSION['prefsProEdition'];
 else $pro_edition = $row_archive_prefs['archiveProEdition'];
@@ -6,12 +12,6 @@ if ($pro_edition == 0) $edition = $label_amateur." ".$label_edition;
 if ($pro_edition == 1) $edition = $label_pro." ".$label_edition;
 
 if ($_SESSION['prefsWinnerMethod'] == "0") { ?>
-<script>
-$(document).ready(function () {
-    disable_update_button('judging_scores');
-});
-</script>
-<script src="<?php echo $base_url;?>js_includes/admin_ajax.min.js"></script>
 <!-- Modal -->
 <div class="modal fade" id="noDupeModal" tabindex="-1" role="dialog" aria-labelledby="noDupeModalLabel" aria-hidden="true">
   <div class="modal-dialog">
@@ -472,7 +472,11 @@ $(document).ready(function() {
         <td>
         <span class="hidden"><?php if (($action == "edit") && ($score_entry_data[4] == "1")) echo $score_entry_data[4]; ?></span>
             <div class="form-group" id="score-place-ajax-<?php echo $score_id; ?>-scorePlace-form-group">
+            <?php if ($_SESSION['prefsWinnerMethod'] == "0") { ?>
             <select class="form-control nodupe" id="score-place-ajax-<?php echo $score_id; ?>" name="scorePlace<?php echo $score_id; ?>" onchange="select_place('<?php echo $base_url; ?>','scorePlace','judging_scores','<?php echo $eid; ?>','<?php echo $bid; ?>','<?php echo $id; ?>','<?php echo $scoreType; ?>','default','score-place-ajax-<?php echo $score_id; ?>')">
+            <?php } else { ?>
+            <select class="form-control" id="score-place-ajax-<?php echo $score_id; ?>" name="scorePlace<?php echo $score_id; ?>" onchange="save_column('<?php echo $base_url; ?>','scorePlace','judging_scores','<?php echo $eid; ?>','<?php echo $bid; ?>','<?php echo $id; ?>','<?php echo $scoreType; ?>','default','score-place-ajax-<?php echo $score_id; ?>')">    
+            <?php } ?>
               	<option value=""></option>
                   <option value="1" <?php if (($action == "edit") && ($score_entry_data[4] == "1")) echo "SELECTED"; ?>>1st</option>
                   <option value="2" <?php if (($action == "edit") && ($score_entry_data[4] == "2")) echo "SELECTED"; ?>>2nd</option>
@@ -481,6 +485,7 @@ $(document).ready(function() {
                   <option value="4" <?php if (($action == "edit") && ($score_entry_data[4] == "4")) echo "SELECTED"; ?>>4th</option>
                   <option value="5" <?php if (($action == "edit") && ($score_entry_data[4] == "5")) echo "SELECTED"; ?>>Hon. Men.</option>
                   <?php } ?>
+            }
             </select>
             </div>
             <span id="score-place-ajax-<?php echo $score_id; ?>-scorePlace-status"></span>

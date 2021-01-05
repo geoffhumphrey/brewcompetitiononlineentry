@@ -16,8 +16,6 @@ if ($_SESSION['prefsWinnerMethod'] == 1) {
 
 }
 
-
-
 // Display by Subcategory
 if ($_SESSION['prefsWinnerMethod'] == 2) {
 
@@ -28,7 +26,8 @@ if ($_SESSION['prefsWinnerMethod'] == 2) {
 }
 
 if ((($action == "print") && ($view == "winners")) || ($action == "default") || ($section == "default")) $query_scores .= " AND a.scorePlace IS NOT NULL";
-$query_scores .= " ORDER BY a.scorePlace ASC";
+if ($action == "awards-pres") $query_scores .= " ORDER BY a.scorePlace DESC";
+else $query_scores .= " ORDER BY a.scorePlace ASC";
 $scores = mysqli_query($connection,$query_scores) or die (mysqli_error($connection));
 $row_scores = mysqli_fetch_assoc($scores);
 $totalRows_scores = mysqli_num_rows($scores);
