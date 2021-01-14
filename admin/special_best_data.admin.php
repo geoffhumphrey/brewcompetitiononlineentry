@@ -26,6 +26,10 @@
         </ul>
     </div><!-- ./button group -->
 
+    <div class="btn-group" role="group" aria-label="add-custom-winning">
+        <a class="btn btn-default" href="<?php echo $base_url; ?>index.php?section=admin&amp;go=special_best&amp;action=add"><span class="fa fa-plus-circle"></span> Add a Custom Category</a>
+    </div><!-- ./button group -->
+
 	<div class="btn-group" role="group">
         <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
         <span class="fa fa-plus-circle"></span> Add/Edit Entries For...

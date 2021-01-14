@@ -1155,7 +1155,7 @@ if (($admin_role) || (((judging_date_return() == 0) && ($registration_open == 2)
 
         if ($admin_role) {
 
-          include (DB.'judging_locations.db.php');
+            include (DB.'judging_locations.db.php');
             include (DB.'styles.db.php');
             include (DB.'admin_common.db.php');
             include (DB.'output_staff_points.db.php');

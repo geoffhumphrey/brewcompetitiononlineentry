@@ -3116,9 +3116,9 @@ function judge_entries($uid,$method) {
 }
 
 function judging_winner_display($display_date) {
-			if (time() > $display_date) return TRUE;
-			else return FALSE;
-	}
+	if (time() > $display_date) return TRUE;
+	else return FALSE;
+}
 
 function format_phone_us($phone = '', $convert = true, $trim = true) {
 	// If we have not entered a phone number just return empty
@@ -4157,6 +4157,52 @@ function entry_flight_assignment($eid,$table_id) {
 	return $row_flight_assign['flightNumber'];
 }
 
+function flight_count_info($eid,$method=0) {
+
+	require(CONFIG.'config.php');
+	mysqli_select_db($connection,$database);
+
+	// Get the flight where entry is assigned
+
+	$query_flight_assign = sprintf("SELECT flightNumber,flightTable FROM %s WHERE flightEntryID=%s",$prefix."judging_flights",$eid);
+	$flight_assign = mysqli_query($connection,$query_flight_assign) or die (mysqli_error($connection));
+	$row_flight_assign = mysqli_fetch_assoc($flight_assign);
+
+	if ($method == 0) {
+
+		// Get count of entries in that flight
+		$query_flight_info = sprintf("SELECT id,flightEntryID FROM %s WHERE flightTable='%s' AND flightNumber=%s",$prefix."judging_flights",$row_flight_assign['flightTable'],$row_flight_assign['flightNumber']);
+		$flight_info = mysqli_query($connection,$query_flight_info) or die (mysqli_error($connection));
+		$row_flight_info = mysqli_fetch_assoc($flight_info);
+		$totalRows_flight_info = mysqli_num_rows($flight_info);
+
+		// Get eids of ALL entries in that flight
+
+		$flight_entry_ids = array();
+		$flight_evals = 0;
+
+		do {
+			$flight_entry_ids[] = $row_flight_info['flightEntryID'];
+		} while ($row_flight_info = mysqli_fetch_assoc($flight_info));
+
+		foreach ($flight_entry_ids as $eid) {
+			$query_flight_evals = sprintf("SELECT DISTINCT eid FROM %s WHERE evalTable='%s'",$prefix."evaluation",$row_flight_assign['flightTable']);
+			$flight_evals = mysqli_query($connection,$query_flight_evals) or die (mysqli_error($connection));
+			$totalRows_flight_evals = mysqli_num_rows($flight_evals);
+			$flight_evals =+ $totalRows_flight_evals;
+		}
+
+		$r = array(
+			"total_flight_entries" => $totalRows_flight_info,
+			"total_flight_evals" => $flight_evals
+		);
+
+		return $r;
+		
+	}
+
+}
+
 function user_submitted_eval($uid,$eid) {
 
 	require(CONFIG.'config.php');
@@ -4216,7 +4262,6 @@ function eval_exits($eid="default",$method="default") {
 }
 
 // See https://core.trac.wordpress.org/browser/tags/4.1/src/wp-includes/formatting.php
-
 function remove_accents($string) {
     if (!preg_match('/[\x80-\xff]/', $string)) return $string;
 
@@ -4399,6 +4444,47 @@ function remove_accents($string) {
     $string = strtr($string, $chars);
 
     return $string;
+}
+
+function truncate_string($string, $limit, $break=".", $pad="...") {
+
+	// return with no change if string is shorter than $limit
+	if (strlen($string) <= $limit) return $string;
+
+	// is $break present between $limit and the end of the string?
+	if (false !== ($breakpoint = strpos($string, $break, $limit))) {
+		if ($breakpoint < strlen($string) - 1) {
+			$string = substr($string, 0, $breakpoint) . $pad;
+		}
+	}
+
+	return $string;
+}
+
+function place_heirarchy($place) {
+	switch ($place) {
+		case "1": return "5";
+			break;
+
+		case "2": return "4";
+			break;
+
+		case "3": return "3";
+			break;
+
+		case "4": return "2";
+			break;
+
+		case "5": return "1";
+			break;
+	}
+}
+
+function normalizeClubs($string) {
+	$club = strtolower($string);
+	$club = preg_replace( "/[^a-z0-9]/i", "", $club );
+	$club = preg_replace( '/  +/', ' ', $club );
+	return $club;
 }
 
 ?>

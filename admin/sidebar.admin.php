@@ -117,7 +117,7 @@ if ($logged_in) {
 
 	$page_info100 .= "<div class=\"bcoem-sidebar-panel\">";
 	$page_info100 .= "<strong class=\"text-info\">Entry Counts</strong>";
-	$page_info100 .= "<span class=\"pull-right\"><a href=\"".$base_url."index.php?section=admin&amp;go=count_by_style\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"View the entry counts broken down by style\">By Style</a> / <a href=\"".$base_url."index.php?section=admin&amp;go=count_by_substyle\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"View the entry counts broken down by sub-style\">By Sub-Style</a></span>";
+	$page_info100 .= "<span class=\"pull-right\"><a href=\"".$base_url."index.php?section=admin&amp;go=count_by_style\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"View the entry counts broken down by style\"><small>Style</small></a> / <a href=\"".$base_url."index.php?section=admin&amp;go=count_by_substyle\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"View the entry counts broken down by sub-style\"><small>Sub-Style</small></a></span>";
 	$page_info100 .= "</div>";
 
 	$page_info100 .= "<div class=\"bcoem-sidebar-panel\">";

@@ -19,13 +19,6 @@ $bestbrewer_clubs = array();
 
 include(DB.'scores_bestbrewer.db.php');
 
-function normalizeClubs($string) {
-	$club = strtolower($string);
-	$club = preg_replace( "/[^a-z0-9]/i", "", $club );
-	$club = preg_replace( '/  +/', ' ', $club );
-	return $club;
-}
-
 // Loop through brewing table for preliminary round scores
 do {
 
@@ -161,8 +154,6 @@ if ($row_bb_prefs['prefsBestUseBOS'] == 1) {
 	} while ($bb_row_bos_scores = mysqli_fetch_assoc($bb_bos_scores));
 
 }
-
-
 
 if ($row_limits['prefsShowBestBrewer'] != 0) {
 
@@ -326,6 +317,7 @@ if (($_SESSION['prefsProEdition'] == 0) && ($row_limits['prefsShowBestClub'] != 
 }
 
 if ($row_limits['prefsShowBestBrewer'] != 0) {
+	
 	$bb_count = 0;
 	$bb_position = 0;
 	$bb_previouspoints = 0;

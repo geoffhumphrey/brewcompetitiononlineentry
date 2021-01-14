@@ -1412,8 +1412,8 @@ $best_brewer_text_002 = "Scores and tie-breakers have been applied in accordance
 $best_brewer_text_003 = "Scoring Methodology";
 $best_brewer_text_004 = "Each placing entry is given the following points:";
 $best_brewer_text_005 = "The following tie-breakers have been applied, in order of priority:";
-$best_brewer_text_006 = "The highest total number of first, second and third places.";
-$best_brewer_text_007 = "The highest total number of first, second, third, fourth, and honorable mention places.";
+$best_brewer_text_006 = "The highest total number of first, second, and third places.";
+$best_brewer_text_007 = "The highest total number of first, second, third, fourth (if applicable), and honorable mention places.";
 $best_brewer_text_008 = "The highest number of first places.";
 $best_brewer_text_009 = "The lowest number of entries.";
 $best_brewer_text_010 = "The highest minimum score.";
@@ -1558,7 +1558,7 @@ $evaluation_info_003 = "Awaiting final acceptance from a site administrator.";
 $evaluation_info_004 = "Your consensus score has been entered.";
 $evaluation_info_005 = "This entry <strong>is not</strong> part of your assigned flight.";
 $evaluation_info_006 = "Edit as needed.";
-$evaluation_info_007 = "Choose from the following entries.";
+$evaluation_info_007 = "To log an evaluation, choose from the following entries with a blue &quot;Add&quot; button.";
 $evaluation_info_008 = "To record your evaluation, select an entry's corresponding Add button. Only tables for past and current judging sessions are available.";
 $evaluation_info_009 = "You have been assigned as a judge, but have not been assigned to any table(s) or flight(s) in the system. Please check with the organizer or judge coordinator.";
 $evaluation_info_010 = "This entry is part of your assigned flight.";
@@ -1576,7 +1576,7 @@ $evaluation_info_021 = "to add evaluations for entries assigned to you"; // Punc
 $evaluation_info_022 = "Judging and evaluation submission is closed.";
 $evaluation_info_023 = "If you have any questions, contact the competition organizer or judge coordinator.";
 $evaluation_info_024 = "You have been assigned to the following tables. Entry lists for each table will only show for past and current judging sessions.";
-$evaluation_info_025 = "Judges assigned to this table, including you:";
+$evaluation_info_025 = "Judges assigned to this table:";
 $evaluation_info_026 = "All consensus scores entered by judges match.";
 $evaluation_info_027 = "Entries that you have completed, or an admin has entered on your behalf, that were not assigned to you in the system.";
 
@@ -1707,7 +1707,7 @@ $label_finish_aftertaste = "Finish/Aftertaste";
 $label_hoppy = "Hoppy";
 $label_malty = "Malty";
 $label_comments = "Comments";
-$label_flaws = "Flaws";
+$label_flaws = "Flaws for Style";
 $label_flawless = "Flawless";
 $label_significant_flaws = "Significant Flaws";
 $label_classic_example = "Classic Example";
@@ -1774,7 +1774,17 @@ $descr_problematic = "Major off flavors and aromas dominate. Hard to drink.";
 
 
 $evaluation_info_036 = "One or more judge scores is out of the acceptable score range. Acceptable range is ".$_SESSION['jPrefsScoreDispMax']. " points or less.";
+$evaluation_info_037 = "All flights at this table appear to be complete.";
+$evaluation_info_038 = "As Head Judge, it is your responsibilty to verify that each entry's consensus scores match, make sure all judge scores for each entry are within the appropriate range, and award places to the designated entries.";
 
+$evaluation_info_039 = "Entries at this table:";
+$evaluation_info_040 = "Scored entries at this table:";
+$evaluation_info_041 = "Scored entries in your flight:";
+$evaluation_info_042 = "Your scored entries:";
+$evaluation_info_043 = "Judges with evaluations at this table:";
+
+$label_thank_you = "Thank You";
+$label_congrats_winners = "Congratulations to All Medal Winners";
 
 /**
  * ----------------------------------------------------------------------------------

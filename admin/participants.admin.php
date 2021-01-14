@@ -484,10 +484,13 @@ do {
 
 				$output_datatables_body .= "<td class=\"".$output_hide_print."\">".$row_brewer['brewerJudgeID']."</td>";
 				$output_datatables_body .= "<td>".$display_rank;
+				$output_datatables_body .= "<small>";
 				if ($row_brewer['brewerJudgeMead'] == "Y") $output_datatables_body .= "<br />Certified Mead Judge";
+				if ($row_brewer['brewerJudgeCider'] == "Y") $output_datatables_body .= "<br />Certified Cider Judge";
 				if (!empty($bjcp_rank[1])) {
 					$output_datatables_body .= designations($row_brewer['brewerJudgeRank'],$bjcp_rank[0]);
 				}
+				$output_datatables_body .= "</small>";
 				$output_datatables_body .= "</td>";
 
 			}
