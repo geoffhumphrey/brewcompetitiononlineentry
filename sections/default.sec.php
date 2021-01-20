@@ -155,6 +155,8 @@ if ((judging_date_return() == 0) && ($registration_open == 2) && ($entry_window_
 
 		if (judging_winner_display($_SESSION['prefsWinnerDelay'])) {
 
+			echo "<div class=\"bcoem-admin-element hidden-print\"><a class=\"btn btn-primary btn-block btn-lg\" href=\"".$base_url."awards.php\" target=\"_blank\">".$label_launch_pres." <span class=\"fa fa-trophy\"></span></a></div>";
+
 			if (((NHC) && ($prefix == "final_")) || (!NHC)) {
 				echo $header1_10;
 				echo $page_info10;

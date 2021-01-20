@@ -109,7 +109,7 @@ $page_info1 = "";
 $header1_2 = "";
 $page_info2 = "";
 
-if (!empty($_SESSION['prefsGoogleAccount'])) {
+if ((!HOSTED) && (!empty($_SESSION['prefsGoogleAccount']))) {
     $recaptcha_key = explode("|", $_SESSION['prefsGoogleAccount']);
     $public_captcha_key = $recaptcha_key[0];
 }

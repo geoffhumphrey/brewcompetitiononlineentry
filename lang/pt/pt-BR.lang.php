@@ -574,9 +574,6 @@ $header_text_097 = "Sua instalação foi concluída com sucesso!";
 $header_text_098 = "Por RAZÕES DE SEGURANÇA você deve alterar imediatamente a variável &#36;setup_free_access no config.php para FALSE.";
 $header_text_099 = "Caso contrário, sua instalação e o seu servidor estarão vulneráveis brechas de segurança.";
 $header_text_100 = "Faça Login agora para acessar o Painel de Administração";
-
-
-
 $header_text_101 = "Sua instalação foi atualizada com sucesso!";
 $header_text_102 = "Os endereços de email não correspondem.";
 $header_text_103 = "Por favor, faça o login para acessar sua conta.";
@@ -692,8 +689,6 @@ $beerxml_text_012 = "amostra adicionada"; // letras minúsculas e falta de pontu
 
 
 // -------------------- Brew (Adicionar entrada) --------------------
-
-if ($section == "brew") {
 $brew_text_000 = "Clique para detalhes sobre o estilo"; // falta de pontuação intencional
 $brew_text_001 = "Os juízes não saberão o nome da sua amostra.";
 $brew_text_002 = "[desativado - limite de amostra do estilo atingido]"; // falta de pontuação intencional
@@ -722,11 +717,7 @@ $brew_text_024 = "Descanso de sacarificação, etc.";
 $brew_text_025 = "Fermentação secundária em dias.";
 $brew_text_026 = "Outra fermentação em dias.";
 
-}
-
 // -------------------- Cervejeiro (Conta) --------------------
-
-if (($section == "brewer") || ($section == "register") || ($section == "step2") || (($section == "admin") && ($go == "entrant")) || (($section == "admin") && ($go == "judge"))) {
 $brewer_text_000 = "Por favor digite apenas <em> um </em> nome da pessoa.";
 $brewer_text_001 = "Escolha uma. Esta questão será usada para verificar sua identidade caso você esqueça sua senha.";
 $brewer_text_003 = "Para ser considerado para uma oportunidade GABF Pro-Am você deve ser um membro da AHA.";
@@ -751,18 +742,11 @@ $brewer_text_019 = "Se você planeja servir como juiz em qualquer competição, 
 $brewer_text_020 = "Você está disposto a servir como membro da equipe nesta competição?";
 $brewer_text_021 = "Equipe da competição são pessoas que atuam em várias funções para ajudar na organização e execução da competição antes, durante e após o julgamento. Juízes e mordomos também podem servir como membros da equipe. Os membros da equipe podem ganhar pontos BJCP se a competição é sancionado. ";
 
-}
-
 // -------------------- Contato --------------------
-
-if ($section == "contact") {
-
 $contact_text_000 = "Use os links abaixo para contatar as pessoas envolvidas na coordenação desta competição:";
 $contact_text_001 = "Use o formulário abaixo para entrar em contato com um oficial da competição. Todos os campos com uma estrela são obrigatórios.";
 $contact_text_002 = "Além disso, uma cópia foi enviada para o endereço de e-mail que você forneceu.";
 $contact_text_003 = "Deseja enviar outra mensagem?";
-
-}
 
 // -------------------- Padrão (Home) -------------------
 
@@ -878,9 +862,6 @@ $entry_info_text_046 = "Se o nome de um estilo é um link, a amostra possui requ
 // -------------------- Info do juiz --------------------
 
 // -------------------- Lista (Lista de Entradas do Usuário) --------------------
-
-if (($section == "list") || ($section == "account") || ($go == "entries")) {
-
 $brewer_entries_text_000 = "Há um problema conhecido com a impressão do navegador Firefox.";
 $brewer_entries_text_001 = "Você tem amostras não confirmadas.";
 $brewer_entries_text_002 = "Para cada amostra abaixo com o ícone <span class=\"fa-lg fa-exclamation-circle text-danger\"></span>, clique no ícone <span class=\"fa fa-lg fa-pencil text-primary\"></span> para revisar e confirmar todos os dados das amostras. As amostras não confirmadas podem ser excluídas do sistema sem aviso prévio.";
@@ -898,14 +879,10 @@ $brewer_entries_text_013 = "Você poderá adicionar amostras a partir de";
 $brewer_entries_text_014 = "Você não adicionou nenhuma amostra ao sistema.";
 $brewer_entries_text_015 = "Você não pode deletar sua amostra neste momento.";
 
-}
-
 // -------------------- Entrar --------------------
 
 // -------------------- Vencedores anteriores --------------------
-if ($section == "past_winners") {
 $past_winners_text_000 = "Ver vencedores anteriores:";
-}
 
 // -------------------- Pagar por Entradas --------------------
 
@@ -944,15 +921,15 @@ $pay_text_029 = "Por favor, vá para a sua lista de amostras para confirmar todo
 
     // Ignore as próximas quatro linhas
 if (strpos ($view, "^")!== FALSE) {
-$qr_text_019 =sprintf ("% 04d", $checked_in_numbers [0]);
-if (is_numeric ($checked_in_numbers [1])) $qr_text_020 = sprintf ("% 06d", $checked_in_numbers [1]);
-else $qr_text_020 = $checked_in_numbers [1];
+	$qr_text_019 =sprintf ("% 04d", $checked_in_numbers [0]);
+	if (is_numeric ($checked_in_numbers [1])) $qr_text_020 = sprintf ("% 06d", $checked_in_numbers [1]);
+	else $qr_text_020 = $checked_in_numbers [1];
 }
 
 $qr_text_000 = $alert_text_080;
 $qr_text_001 = $alert_text_081;
 
-    // Comece traduções aqui
+// Comece traduções aqui
 if (strpos($view, "^") !== FALSE) $qr_text_002 = sprintf("Número de amostra <span class=\"text-danger\">%s</span> é verificado com <span class=\"text-danger\">%s</ span> como seu número de julgamento.",$qr_text_019,$qr_text_020); else $qr_text_002 = "";
 $qr_text_003 = "Se este número de avaliação não for <em> </em> correto, <strong> verifique novamente o código e digite novamente o número de avaliação correto.";
 if (strpos ($view, "^")!== FALSE) $qr_text_004 = sprintf ("Número da amostra %s está marcado", $qr_text_019); else $qr_text_004 = "";
@@ -977,9 +954,6 @@ $qr_text_018 = "Inicie o aplicativo em seu dispositivo móvel, digitalize um Có
 // -------------------- Inscrições encerradas --------------------
 
 // -------------------- Registo --------------------
-
-if (($section == "register") || ($section == "brewer") || ($action == "register") || ($go == "account") || ($section == "step2")) {
-
 $register_text_000 = "É o voluntário";
 $register_text_001 = "Você está";
 $register_text_002 = "O registro foi encerrado.";
@@ -1017,8 +991,6 @@ $register_text_033 = "Somente os membros da American Homebrewers Association sã
 $register_text_034 = "Para se registrar, você deve marcar a caixa, indicando que concorda com a declaração de renúncia.";
 $register_text_035 = "Favor preencher um CPF válido.";
 
-}
-
 // -------------------- Barra Lateral --------------------
 
 $sidebar_text_000 = "Inscrições para juízes ou assitentes";
@@ -1053,7 +1025,6 @@ $sidebar_text_025 = "foram adicionadas ao sistema a partir de";
 
 
 // -------------------- Estilos ---------------------
-
 $styles_entry_text_07C = "O participante deve especificar se a amostra é um Munich Kellerbier (pálido, baseado em Helles) ou um Franconian Kellerbier (âmbar, baseado em Marzen). O participante pode especificar outro tipo de Kellerbier baseado em outros estilos base, como Pils. , Bock, Schwarzbier, mas deve fornecer uma descrição de estilo para os juízes. ";
 $styles_entry_text_09A = "O participante deve especificar se a amostra é uma variante pálida ou escura.";
 $styles_entry_text_10C = "O participante deve especificar se a amostra é uma variante pálida ou escura.";
@@ -1103,16 +1074,12 @@ $styles_entry_text_C2F = "Os participantes DEVEM especificar todos os ingredient
 
 
 // -------------------- Usuário (Editar e-mail) --------------------
-
 $user_text_000 = "Um novo endereço de e-mail é obrigatório e deve estar em um formulário válido.";
 $user_text_001 = "Digite a senha antiga.";
 $user_text_002 = "Digite a nova senha.";
 $user_text_003 = "Por favor, marque esta caixa se você deseja mudar o seu endereço de e-mail.";
 
 // -------------------- Voluntários --------------------
-
-if ($section == "volunteers") {
-
 $volunteers_text_000 = "Se você se registrou,";
 $volunteers_text_001 = "e depois escolha <em> Editar conta </ ​​em> no menu Minha conta indicado pelo";
 $volunteers_text_002 = "ícone no menu superior";
@@ -1126,8 +1093,6 @@ $volunteers_text_008 = "Se você estiver disposto a julgar ou administrar, por f
 // v2.1.9
 $volunteers_text_009 = "Se você gostaria de se voluntariar para ser um membro da equipe de competição, registre ou atualize sua conta para indicar que você deseja fazer parte da equipe da competição.";
 $volunteers_text_010 = "";
-
-}
 
 $login_text_000 = "Você já está logado.";
 $login_text_001 = "Não há endereço de e-mail no sistema que corresponda ao que você digitou.";
@@ -1158,7 +1123,6 @@ $winners_text_004 = "Sua estrutura de premiação escolhida é premiar lugares p
 // ------------------------------------------------ ----------------------------------
 // Output
 // ------------------------------------------------ ----------------------------------
-
 $output_text_000 = "Obrigado por participar da nossa competição";
 $output_text_001 = "Um resumo de suas amostras, pontuações e lugares está abaixo.";
 $output_text_002 = "Resumo para";
@@ -1286,48 +1250,37 @@ $alert_text_084 = "Como dministrador, você pode adicionar uma amostra à conta 
 $alert_text_085 = "Você não conseguirá imprimir a papelada de qualquer amostra (etiquetas de garrafas, etc.) até que o pagamento seja confirmado e tenha sido marcado como & quot; pago & quot; abaixo.";
 
 // -------------------- Brew (Adicionar entrada) --------------------
-if ($section == "brew") {
 $brew_text_027 = "Este estilo da Associação de Cervejeiros requer uma declaração do fabricante de cerveja sobre a natureza especial do produto. Veja o <a href=\"https://www.brewersassociation.org/resources/brewers-association-beer-style- guidelines / \"target = \" _ blank \">Orientações de Estilo BA </a> para orientação específica.";
 $brew_text_028 = "*** NÃO REQUERIDO *** Adicione informações detalhadas nas diretrizes de estilo como uma característica que você PODE declarar.";
 $brew_text_029 = "Edição do administrador desativada. Seu perfil é considerado um perfil pessoal e não um perfil organizacional e, portanto, não está qualificado para adicionar amostras. Para adicionar uma amostra a uma organização, acesse a lista Gerenciar inscrições e escolha uma organização em;Adicionar uma amostra para...&quot; dropdown.";
-}
 
 // -------------------- Cervejeiro (Conta) --------------------
-if (($section == "brewer") || ($section == "register") || ($section == "step2") || (($section == "admin") && ($go == "entrant")) || (($section == "admin") && ($go == "judge"))) {
 $brewer_text_022 = "Você será capaz de identificar um co-cervejeiro ao adicionar suas amostras.";
 $brewer_text_023 = "Selecione <strong>None</strong> se você não é afiliado a um clube ou associação. Selecione <strong>Other</strong> se seu clube não estiver na lista - <strong> não deixe de usar a caixa de pesquisa </strong>.";
-    $brewer_text_024 = "Por favor, forneça seu primeiro nome.";
-    $brewer_text_025 = "Por favor, forneça seu sobrenome.";
-    $brewer_text_026 = "Por favor, forneça seu número de telefone.";
-    $brewer_text_027 = "Por favor, forneça seu endereço.";
-    $brewer_text_028 = "Por favor, forneça sua cidade.";
-    $brewer_text_029 = "Por favor, forneça seu estado ou província.";
-    $brewer_text_030 = "Por favor, forneça o seu CEP ou código postal.";
-    $brewer_text_031 = "Por favor, escolha o seu país.";
-    $brewer_text_032 = "Por favor, forneça o nome da sua organização.";
-    $brewer_text_033 = "Por favor, forneça uma pergunta de segurança.";
-    $brewer_text_034 = "Por favor, forneça uma resposta à sua pergunta de segurança.";
+$brewer_text_024 = "Por favor, forneça seu primeiro nome.";
+$brewer_text_025 = "Por favor, forneça seu sobrenome.";
+$brewer_text_026 = "Por favor, forneça seu número de telefone.";
+$brewer_text_027 = "Por favor, forneça seu endereço.";
+$brewer_text_028 = "Por favor, forneça sua cidade.";
+$brewer_text_029 = "Por favor, forneça seu estado ou província.";
+$brewer_text_030 = "Por favor, forneça o seu CEP ou código postal.";
+$brewer_text_031 = "Por favor, escolha o seu país.";
+$brewer_text_032 = "Por favor, forneça o nome da sua organização.";
+$brewer_text_033 = "Por favor, forneça uma pergunta de segurança.";
+$brewer_text_034 = "Por favor, forneça uma resposta à sua pergunta de segurança.";
 
 // v2.1.12
-    $brewer_text_035 = "Você passou no exame BJCP de Juiz de Cidra?";
-
-
-
-}
+$brewer_text_035 = "Você passou no exame BJCP de Juiz de Cidra?";
 
 // -------------------- Info de entrada --------------------
-if ($section == "entry") {
 $entry_info_text_047 = "Se o nome de um estilo contém um link, ele possui requisitos específicos para a amostra. Clique ou toque no nome para acessar os estilos da Associação de Cervejeiros conforme listado em seu site.";
-}
 
 // -------------------- Lista (Lista de Entradas do Usuário) --------------------
-if (($section == "list") || ($section == "account") || ($go == "entries")) {
 $brewer_entries_text_016 = "Estilo digitado NÃO aceito";
 $brewer_entries_text_017 = "As inscrições não serão exibidas como recebidas até que a equipe da competição as tenha marcado como tal no sistema. Normalmente, isso ocorre DEPOIS todas as amostras foram coletadas de todos os locais de entrega e classificadas.";
 $brewer_entries_text_018 = "Você não poderá imprimir a papelada desta amostra (etiquetas de garrafas, etc.) até que seja marcada como paga.";
 $brewer_entries_text_019 = "A impressão de documentos da amostra não está disponível no momento.";
 $brewer_entries_text_020 = "A edição das inscrições não está disponível no momento. Se você deseja editar sua inscrição, entre em contato com um oficial da competição.";
-}
 
 if (SINGLE) $brewer_info_000 = "Olá";
 else $brewer_info_000 = "Obrigado por participar do";
@@ -1351,7 +1304,6 @@ $pay_text_032 = "Nenhum pagamento é necessário. Obrigado!";
 $pay_text_033 = "Você tem amostras não pagas. Clique para pagar suas amostras.";
 
 // -------------------- Registo --------------------
-if (($section == "register") || ($section == "brewer") || ($action == "register") || ($go == "account") || ($section == "step2")) {
 $register_text_035 = "As informações que você fornece além do nome da sua organização são estritamente para fins de registro e manutenção.";
 $register_text_036 = "Uma condição para entrar na competição é fornecer essas informações, incluindo o endereço de e-mail e o número de telefone de uma pessoa de contato. O nome da sua organização pode ser exibido se uma das suas inscrições for publicada.";
 $register_text_037 = "Confirmação de inscrição";
@@ -1364,7 +1316,6 @@ $register_text_043 = "Por favor, não responda a este e-mail, pois ele é gerado
 $register_text_044 = "Por favor, forneça um nome de organização.";
 $register_text_045 = "Forneça um nome para a cervejaria, nome do brewpub, etc. Certifique-se de verificar as informações da competição para tipos de bebidas aceitos.";
 $register_text_046 = "Apenas para organizações dos EUA.";
-}
 
 // -------------------- Registro do usuário --------------------
 $user_text_004 = "Certifique-se de usar letras maiúsculas e minúsculas, números e caracteres especiais para uma senha mais forte.";
@@ -1596,6 +1547,202 @@ $label_places_awarded_duplicate = "Lugares duplicados concedidos nesta mesa";
 $evaluation_info_028 = "A sessão de julgamento terminou.";
 $evaluation_info_029 = "Lugares duplicados foram atribuídos nas seguintes tabelas:";
 $evaluation_info_030 = "Os administradores precisarão inserir as entradas de colocação que permanecerem.";
+
+$evaluation_info_031 = "evaluations have been added by judges";
+$evaluation_info_032 = "Multiple evaluations for a single entry were submitted by a judge.";
+$evaluation_info_033 = "While this is an unusual occurrance, a duplicate evaluation can be submitted due to connectivity issues, etc. A single recorded evaluation for each judge should be officially accepted - all others should be deleted to avoid any entrant confusion.";
+
+$evaluation_info_034 = "When evaluating specialty-type styles, use the this line to comment on characteristics unique to it, such as fruit, spice, fermentable, acidity, etc.";
+$evaluation_info_035 = "Provide comments on style, recipe, process, and drinking pleasure. Include helpful suggestions to the brewer.";
+
+// Scoresheets
+$label_submitted = "Submitted";
+$label_ordinal_position = "Ordinal Position in Flight";
+$label_alcoholic = "Alcoholic";
+$descr_alcoholic = "The aroma, flavor, and warming effect of ethanol and higher alcohols. Sometimes described as &quot;hot&quot;.";
+$descr_alcoholic_mead = "The effect of ethanol. Warming. Hot.";
+$label_metallic = "Metallic"; 
+$descr_metallic = "Tinny, coiny, copper, iron, or blood-like flavor.";
+$label_oxidized = "Oxidized";
+$descr_oxidized = "Any one or combination of stale, winy/vinous, cardboard, papery, or sherry-like aromas and flavors. Stale.";
+$descr_oxidized_cider = "Staleness, the aroma/flavor of sherry, raisins, or bruised fruit.";
+$label_phenolic = "Phenolic";
+$descr_phenolic = "Spicy (clove, pepper), smoky, plastic, plastic adhesive strip, and/or medicinal (chlorophenolic).";
+$label_vegetal = "Vegetal";
+$descr_vegetal = "Cooked, canned, or rotten vegetable aroma and flavor (cabbage, onion, celery, asparagus, etc.).";
+$label_astringent = "Astringent";
+$descr_astringent = "Puckering, lingering harshness and/or dryness in the finish/aftertaste; harsh graininess; huskiness.";
+$descr_astringent_cider = "A drying sensation in the mouth similar to chewing on a teabag. Must be in balance if present.";
+$label_acetaldehyde = "Acetaldehyde";
+$descr_acetaldehyde = "Green apple-like aroma and flavor.";
+$label_diacetyl = "Diacetyl";
+$descr_diacetyl = "Artificial butter, butterscotch, or toffee aroma and flavor. Sometimes perceived as a slickness on the tongue.";
+$descr_diacetyl_cider = "Butter or butterscotch aroma or flavor.";
+$label_dms = "DMS (Dimethyl Sulfide)";
+$descr_dms = "At low levels a sweet, cooked or canned corn-like aroma and flavor.";
+$label_estery = "Estery";
+$descr_estery = "Aroma and/or flavor of any ester (fruits, fruit flavorings, or roses).";
+$label_grassy = "Grassy";
+$descr_grassy = "Aroma/flavor of fresh-cut grass or green leaves.";
+$label_light_struck = "Light-Struck";
+$descr_light_struck = "Similar to the aroma of a skunk.";
+$label_musty = "Musty";
+$descr_musty = "Stale, musty, or moldy aromas/flavors.";
+$label_solvent = "Solvent";
+$descr_solvent = "Aromas and flavors of higher alcohols (fusel alcohols). Similar to acetone or lacquer thinner aromas.";
+$label_sour_acidic = "Sour/Acidic";
+$descr_sour_acidic = "Tartness in aroma and flavor. Can be sharp and clean (lactic acid), or vinegar-like (acetic acid).";
+$label_sulfur = "Sulfur";
+$descr_sulfur = "The aroma of rotten eggs or burning matches.";
+$label_sulfury = "Sulfury";
+$label_yeasty = "Yeasty ";
+$descr_yeasty = "A bready, sulfury or yeast-like aroma or flavor.";
+$label_acetified = "Acetified (Volatile Acidity, VA)";
+$descr_acetified = "Ethyl acetate (solvent, nail polish) or acetic acid (vinegar, harsh in back of throat).";
+$label_acidic = "Acidic";
+$descr_acidic = "Sour-tart flavor. Typically from one of several acids: malic, lactic, or citric. Must be in balance.";
+$descr_acidic_mead = "Clean, sour flavor/aroma from low pH. Typically from one of several acids: malic, lactic, gluconic, or citric.";
+$label_bitter = "Bitter";
+$descr_bitter = "A sharp taste that is unpleasant at higher levels.";
+$label_farmyard = "Farmyard";
+$descr_farmyard = "Manure-like (cow or pig) or barnyard (horse stall on a warm day).";
+$label_fruity = "Fruity";
+$descr_fruity = "The aroma and flavor of fresh fruits that may be appropriate in some styles and not others.";
+$descr_fruity_mead = "Flavor & aroma esters often derived from fruits in a melomel. Banana & pineapple are often off-flavors.";
+$label_mousy = "Mousy";
+$descr_mousy = "Taste evocative of the smell of a rodent’s den/cage.";
+$label_oaky = "Oaky";
+$descr_oaky = "A taste or aroma due to an extended length of time in a barrel or on wood chips. &quot;Barrel character.&quot;";
+$label_oily_ropy = "Oily/Ropy";
+$descr_oily_ropy = "A sheen in visual appearance, as an unpleasant viscous character proceeding to a ropy character.";
+$label_spicy_smoky = "Spicy/Smoky";
+$descr_spicy_smoky = "Spice, cloves, smoky, ham.";
+$label_sulfide = "Sulfide";
+$descr_sulfide = "Rotten eggs, from fermentation problems.";
+$label_sulfite = "Sulfite";
+$descr_sulfite = "Burning matches, from excessive/recent sulfiting.";
+$label_sweet = "Sweet";
+$descr_sweet = "Basic taste of sugar. Must be in balance if present.";
+$label_thin = "Thin";
+$descr_thin = "Watery. Lacking body or &quot;stuffing.&quot;";
+$label_acetic = "Acetic";
+$descr_acetic = "Vinegary, acetic acid, sharp.";
+$label_chemical = "Chemical";
+$descr_chemical = "Vitamin, nutrient or chemical taste.";
+$label_cloying = "Cloying";
+$descr_cloying = "Syrupy, overly sweet, unbalanced by acid/tannin";
+$label_floral = "Floral";
+$descr_floral = "The aroma of flower blossoms or perfume.";
+$label_moldy = "Moldy";
+$descr_moldy = "Stale, musty, moldy or corked aromas/flavors.";
+$label_tannic = "Tannic";
+$descr_tannic = "Drying, astringent puckering mouthfeel, similar to bitterness flavor. Taste of strong unsweetened tea or chewing on a grape skin.";
+$label_waxy = "Waxy";
+$descr_waxy = "Wax-like, tallow, fatty.";
+$label_medicinal = "Medicinal";
+$label_spicy = "Spicy";
+$label_vinegary = "Vinegary";
+$label_plastic = "Plastic";
+$label_smoky = "Smoky";
+
+$label_inappropriate = "Inappropriate";
+$label_possible_points = "Possible Points";
+$label_malt = "Malt";
+$label_ferm_char = "Fermentation Character";
+$label_body = "Body";
+$label_creaminess = "Creaminess";
+$label_astringency = "Astringency";
+$label_warmth = "Warmth";
+$label_appearance = "Appearance";
+$label_flavor = "Flavor";
+$label_mouthfeel = "Mouthfeel";
+$label_overall_impression = "Overall Impression";
+$label_balance = "Balance";
+$label_finish_aftertaste = "Finish/Aftertaste";
+$label_hoppy = "Hoppy";
+$label_malty = "Malty";
+$label_comments = "Comments";
+$label_flaws = "Flaws for Style";
+$label_flawless = "Flawless";
+$label_significant_flaws = "Significant Flaws";
+$label_classic_example = "Classic Example";
+$label_not_style = "Not to Style";
+$label_tech_merit = "Technical Merit";
+$label_style_accuracy = "Stylistic Accuracy";
+$label_intangibles = "Intangibles";
+$label_wonderful = "Wonderful";
+$label_lifeless = "Lifeless";
+$label_feedback = "Feedback";
+$label_honey = "Honey";
+$label_alcohol = "Alcohol";
+$label_complexity = "Complexity";
+$label_viscous = "Viscous";
+$label_legs = "Legs"; // Used to describe liquid clinging to glass
+$label_clarity = "Clarity";
+$label_brilliant = "Brilliant";
+$label_hazy = "Hazy";
+$label_opaque = "Opaque";
+$label_fruit = "Fruit";
+$label_acidity = "Acidity";
+$label_tannin = "Tannin";
+
+// Appearance color of entries
+$label_white = "White";
+$label_straw = "Straw";
+$label_yellow = "Yellow";
+$label_gold = "Gold";
+$label_copper = "Copper";
+$label_quick = "Quick";
+$label_long_lasting = "Long Lasting";
+$label_ivory = "Ivory";
+$label_beige = "Beige";
+$label_tan = "Tan";
+$label_lacing = "Lacing";
+$label_particulate = "Particulate";
+$label_black = "Black";
+$label_large = "Large";
+$label_small = "Small";
+$label_size = "Size";
+$label_retention = "Retention";
+$label_head = "Head";
+$label_brettanomyces = "Brettanomyces";
+$label_cardboard = "Cardboard";
+$label_cloudy = "Cloudy";
+$label_sherry = "Sherry";
+$label_harsh = "Harsh";
+$label_full = "Full";
+
+$label_descriptor_defs = "Descriptor Definitions (Mark all that apply)";
+
+$label_outstanding = "Outstanding";
+$descr_outstanding = "World-class example of style.";
+$label_excellent = "Excellent";
+$descr_excellent = "Exempifies the style well, requires minor fine tuning.";
+$label_very_good = "Very Good";
+$descr_very_good = "Generally within style parameters, some minor flaws.";
+$label_good = "Good";
+$descr_good = "Misses the mark on style and/or minor flaws.";
+$label_fair = "Fair";
+$descr_fair = "Off flavors/aromas or major style deficiencies. Unpleasant.";
+$label_problematic = "Problematic";
+$descr_problematic = "Major off flavors and aromas dominate. Hard to drink.";
+
+$evaluation_info_036 = "One or more judge scores is out of the acceptable score range. Acceptable range is ".$_SESSION['jPrefsScoreDispMax']. " points or less.";
+$evaluation_info_037 = "All flights at this table appear to be complete.";
+$evaluation_info_038 = "As Head Judge, it is your responsibilty to verify that each entry's consensus scores match, make sure all judge scores for each entry are within the appropriate range, and award places to the designated entries.";
+$evaluation_info_039 = "Entries at this table:";
+$evaluation_info_040 = "Scored entries at this table:";
+$evaluation_info_041 = "Scored entries in your flight:";
+$evaluation_info_042 = "Your scored entries:";
+$evaluation_info_043 = "Judges with evaluations at this table:";
+
+$label_thank_you = "Thank You";
+$label_congrats_winners = "Congratulations to All Medal Winners";
+$label_placing_entries = "Placing Entries";
+$label_by_the_numbers = "By the Numbers";
+$label_launch_pres = "Launch Awards Presentation";
+
+$brewer_entries_text_025 = "Print judges&rsquo; scoresheets";
 
 // ************************************************ ***********************************
 // END TRANSLATIONS

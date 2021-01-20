@@ -45,7 +45,7 @@ Declare all variables empty at the top of the script. Add on later...
 
 include (DB.'contacts.db.php');
 
-if (!empty($_SESSION['prefsGoogleAccount'])) {
+if ((!HOSTED) && (!empty($_SESSION['prefsGoogleAccount']))) {
     $recaptcha_key = explode("|", $_SESSION['prefsGoogleAccount']);
     $public_captcha_key = $recaptcha_key[0];
 }

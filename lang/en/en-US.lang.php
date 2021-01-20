@@ -1772,11 +1772,9 @@ $descr_fair = "Off flavors/aromas or major style deficiencies. Unpleasant.";
 $label_problematic = "Problematic";
 $descr_problematic = "Major off flavors and aromas dominate. Hard to drink.";
 
-
 $evaluation_info_036 = "One or more judge scores is out of the acceptable score range. Acceptable range is ".$_SESSION['jPrefsScoreDispMax']. " points or less.";
 $evaluation_info_037 = "All flights at this table appear to be complete.";
 $evaluation_info_038 = "As Head Judge, it is your responsibilty to verify that each entry's consensus scores match, make sure all judge scores for each entry are within the appropriate range, and award places to the designated entries.";
-
 $evaluation_info_039 = "Entries at this table:";
 $evaluation_info_040 = "Scored entries at this table:";
 $evaluation_info_041 = "Scored entries in your flight:";
@@ -1785,6 +1783,11 @@ $evaluation_info_043 = "Judges with evaluations at this table:";
 
 $label_thank_you = "Thank You";
 $label_congrats_winners = "Congratulations to All Medal Winners";
+$label_placing_entries = "Placing Entries";
+$label_by_the_numbers = "By the Numbers";
+$label_launch_pres = "Launch Awards Presentation";
+
+$brewer_entries_text_025 = "Print judges&rsquo; scoresheets";
 
 /**
  * ----------------------------------------------------------------------------------

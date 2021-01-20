@@ -2383,6 +2383,7 @@ function get_entry_count($method) {
 	if ($method == "paid-not-received") $query_paid .= " WHERE brewReceived='0' AND brewPaid='1'";
 	if ($method == "total-logged") $query_paid .= "";
 	if ($method == "unconfirmed") $query_paid .= " WHERE brewConfirmed <> '1'";
+	if ($method == "placing-entries") $query_paid = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE scorePlace IS NOT NULL",$prefix."judging_scores");
 	$paid = mysqli_query($connection,$query_paid) or die (mysqli_error($connection));
 	$row_paid = mysqli_fetch_assoc($paid);
 	$r = $row_paid['count'];
@@ -4164,17 +4165,18 @@ function flight_count_info($eid,$method=0) {
 
 	// Get the flight where entry is assigned
 
-	$query_flight_assign = sprintf("SELECT flightNumber,flightTable FROM %s WHERE flightEntryID=%s",$prefix."judging_flights",$eid);
+	$query_flight_assign = sprintf("SELECT flightNumber,flightTable FROM %s WHERE flightEntryID='%s'",$prefix."judging_flights",$eid);
 	$flight_assign = mysqli_query($connection,$query_flight_assign) or die (mysqli_error($connection));
 	$row_flight_assign = mysqli_fetch_assoc($flight_assign);
 
 	if ($method == 0) {
 
 		// Get count of entries in that flight
-		$query_flight_info = sprintf("SELECT id,flightEntryID FROM %s WHERE flightTable='%s' AND flightNumber=%s",$prefix."judging_flights",$row_flight_assign['flightTable'],$row_flight_assign['flightNumber']);
+		$query_flight_info = sprintf("SELECT id,flightEntryID FROM %s WHERE flightTable='%s' AND flightNumber='%s'",$prefix."judging_flights",$row_flight_assign['flightTable'],$row_flight_assign['flightNumber']);
 		$flight_info = mysqli_query($connection,$query_flight_info) or die (mysqli_error($connection));
 		$row_flight_info = mysqli_fetch_assoc($flight_info);
-		$totalRows_flight_info = mysqli_num_rows($flight_info);
+		// $totalRows_flight_info = mysqli_num_rows($flight_info);
+		$totalRows_flight_info = 0;
 
 		// Get eids of ALL entries in that flight
 
@@ -4190,6 +4192,7 @@ function flight_count_info($eid,$method=0) {
 			$flight_evals = mysqli_query($connection,$query_flight_evals) or die (mysqli_error($connection));
 			$totalRows_flight_evals = mysqli_num_rows($flight_evals);
 			$flight_evals =+ $totalRows_flight_evals;
+			$totalRows_flight_info += 1;
 		}
 
 		$r = array(

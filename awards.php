@@ -9,6 +9,7 @@
 
 require_once ('paths.php');
 require_once (CONFIG.'bootstrap.php');
+require_once (LIB.'admin.lib.php');
 include (DB.'winners.db.php');
 include (DB.'score_count.db.php');
 include (DB.'sponsors.db.php');
@@ -52,6 +53,48 @@ if (($display_to_admin) || ($display_to_public)) {
 		"1" => "HM"
 	);
 
+	// Judges and Stewards
+	$query_assignments = sprintf("SELECT DISTINCT c.uid, c.brewerLastName, c.brewerFirstName, c.brewerJudgeRank, c.brewerClubs, a.assignment, b.staff_judge, b.staff_steward, b.staff_judge_bos, b.staff_staff, b.staff_organizer FROM %s a RIGHT JOIN (%s b CROSS JOIN %s c ON b.uid=c.uid) ON c.uid=a.bid WHERE b.staff_judge='1' OR b.staff_steward='1' OR b.staff_judge_bos='1' OR b.staff_staff='1' OR b.staff_organizer='1' ORDER BY c.brewerLastName, c.brewerFirstName ASC;", $prefix."judging_assignments", $prefix."staff", $prefix."brewer");
+	$assignments = mysqli_query($connection,$query_assignments) or die (mysqli_error($connection));
+	$row_assignments = mysqli_fetch_assoc($assignments);
+	$totalRows_assignments = mysqli_num_rows($assignments);
+	$judge_list = "";
+	$judge_bos = "";
+	$steward_list = "";
+	$staff_list = "";
+	$staff_organizer = "";
+
+	if ($totalRows_assignments > 0) {
+		do {
+
+			if ($row_assignments['staff_judge'] == 1) {
+				$judge_list .= $row_assignments['brewerFirstName']." ".$row_assignments['brewerLastName'];
+				$judge_list .= ", ";
+			}
+
+			if ($row_assignments['staff_judge_bos'] == 1) {
+				$judge_bos .= $row_assignments['brewerFirstName']." ".$row_assignments['brewerLastName'];
+				$judge_bos .= ", ";
+			}
+
+			if ($row_assignments['staff_steward'] == 1) {
+				$steward_list .= $row_assignments['brewerFirstName']." ".$row_assignments['brewerLastName'];
+				$steward_list .= ", ";
+			}
+
+			if ($row_assignments['staff_staff'] == 1)  {
+				$staff_list .= $row_assignments['brewerFirstName']." ".$row_assignments['brewerLastName'];
+				$staff_list .= ", ";
+			}
+
+			if ($row_assignments['staff_organizer'] == 1)  {
+				$staff_organizer .= $row_assignments['brewerFirstName']." ".$row_assignments['brewerLastName'];
+				$staff_organizer .= ", ";
+			}
+
+		} while ($row_assignments = mysqli_fetch_assoc($assignments));
+	}
+
 	$slides = "";
 	$slides_bos = "";
 	$slides_best_brewer = "";
@@ -70,6 +113,26 @@ if (($display_to_admin) || ($display_to_public)) {
 
 					$entry_count = get_table_info(1,"count_total",$row_tables['id'],$dbTable,"default");
 					if ($entry_count > 1) $entries = strtolower($label_entries); else $entries = strtolower($label_entry);
+
+					$assigned_judge_names_display = "";
+
+					$assigned_judges = assigned_judges($row_tables['id'],"default",$prefix."judging_assignments",1);
+
+					if ($assigned_judges > 0) {
+
+						$query_assigned_judge_names = sprintf("SELECT a.brewerFirstName,a.brewerLastName, b.assignRoles FROM %s a, %s b WHERE b.assignTable='%s' AND a.uid = b.bid ORDER BY a.brewerLastName, a.brewerFirstName ASC",$prefix."brewer",$prefix."judging_assignments",$row_tables['id']);
+						$assigned_judge_names = mysqli_query($connection,$query_assigned_judge_names);
+						$row_assigned_judge_names = mysqli_fetch_assoc($assigned_judge_names);
+						
+						do {
+							$assigned_judge_names_display .= $row_assigned_judge_names['brewerFirstName']." ".$row_assigned_judge_names['brewerLastName'];
+							if ((isset($row_assigned_judge_names['assignRoles'])) && (strpos($row_assigned_judge_names['assignRoles'], "HJ") !== false)) $assigned_judge_names_display .= " <span style=\"font-size: .75em;\">(".$label_head_judge.")</span>";
+							$assigned_judge_names_display .= ", ";
+						} while ($row_assigned_judge_names = mysqli_fetch_assoc($assigned_judge_names));
+
+						$assigned_judge_names_display = rtrim($assigned_judge_names_display, ", ");
+					
+					}
 					
 					// Build Slide
 					$slides .= "<section>";
@@ -78,9 +141,10 @@ if (($display_to_admin) || ($display_to_public)) {
 					$slides .= sprintf("%s %s: %s",$label_table,$row_tables['tableNumber'],$row_tables['tableName']);
 					$slides .= "</h1>";
 
-					$slides .= "<p class=\"small entry-count\">";
+					$slides .= "<p class=\"entry-count\">";
 					$slides .= sprintf("%s %s",$entry_count,$entries);
 					$slides .= "</p>";
+					if (!empty($assigned_judge_names_display)) $slides .= sprintf("<p class=\"small entry-count\">%s: %s</p>",$label_judges,$assigned_judge_names_display);
 
 					// Perform check to see if any placing entries
 					// If so, loop through and display as normal
@@ -169,7 +233,7 @@ if (($display_to_admin) || ($display_to_public)) {
 
 						}
 
-						$slides .= "<p class=\"small entry-count\">";
+						$slides .= "<p class=\"entry-count\">";
 						$slides .= sprintf("%s %s",$row_entry_count['count'],$entries_display);
 						$slides .= "</p>";
 
@@ -262,7 +326,7 @@ if (($display_to_admin) || ($display_to_public)) {
 
 						}
 
-						$slides .= "<p class=\"small entry-count\">";
+						$slides .= "<p class=\"entry-count\">";
 						$slides .= sprintf("%s %s",$row_entry_count['count'],$entries_display);
 						$slides .= "</p>";
 
@@ -346,6 +410,7 @@ if (($display_to_admin) || ($display_to_public)) {
 			$slides_bos .= "<h3 class=\"entry-count\">";
 			$slides_bos .= $row_style_type_1['styleTypeName'];
 			$slides_bos .= "</h3>";
+			if (!empty($judge_bos)) $slides_bos .= sprintf("<p class=\"small entry-count\">%s: %s</p>",$label_judges,rtrim($judge_bos,", "));
 
 			do {
 
@@ -674,8 +739,8 @@ if (($display_to_admin) || ($display_to_public)) {
 			
 			$slides_bos .= "<h1 class=\"r-fit-text tight\">".$row_bb_prefs['prefsBestBrewerTitle']."</h1>";
 
-			$slides_bos .= "<p class=\"small entry-count\">";
-			$slides_bos .= sprintf(" %s %s <span style=\"font-size: .8em;\">[<a data-fancybox data-src=\"#scoring-method\" href=\"javascript:;\">%s</a>]</span>", get_participant_count('received-entrant'), ucwords($best_brewer_text_000), $best_brewer_text_003);
+			$slides_bos .= "<p class=\"entry-count\">";
+			$slides_bos .= sprintf(" %s %s <span class=\"small entry-count\">[<a data-fancybox data-src=\"#scoring-method\" href=\"javascript:;\">%s</a>]</span>", get_participant_count('received-entrant'), ucwords($best_brewer_text_000), $best_brewer_text_003);
 			$slides_bos .= "</p>";
 
 			$slides_bos .= "<table style=\"width: 100%; font-size: .55em;\">";
@@ -791,8 +856,8 @@ if (($display_to_admin) || ($display_to_public)) {
 			
 			$slides_bos .= "<h1 class=\"r-fit-text tight\">".$row_bb_prefs['prefsBestClubTitle']."</h1>";
 
-			$slides_bos .= "<p class=\"small entry-count\">";
-			$slides_bos .= sprintf(" %s %s <span style=\"font-size: .8em;\">[<a data-fancybox data-src=\"#scoring-method\" href=\"javascript:;\">%s</a>]</span>", get_participant_count('received-club'), ucwords($best_brewer_text_014), $best_brewer_text_003);
+			$slides_bos .= "<p class=\"entry-count\">";
+			$slides_bos .= sprintf(" %s %s <span class=\"small\">[<a data-fancybox data-src=\"#scoring-method\" href=\"javascript:;\">%s</a>]</span>", get_participant_count('received-club'), ucwords($best_brewer_text_014), $best_brewer_text_003);
 			$slides_bos .= "</p>";
 
 			$slides_bos .= "<table style=\"width: 100%; font-size: .55em;\">";
@@ -832,50 +897,6 @@ if (($display_to_admin) || ($display_to_public)) {
 		$slides_bos .= "</div>";
 
 	} // end if (($row_limits['prefsShowBestBrewer'] != 0) || ($row_limits['prefsShowBestClub'] != 0))
-
-// Judges and Stewards
-$query_assignments = sprintf("SELECT DISTINCT c.uid, c.brewerLastName, c.brewerFirstName, c.brewerJudgeRank, c.brewerClubs, a.assignment, b.staff_judge, b.staff_steward, b.staff_judge_bos, b.staff_staff, b.staff_organizer FROM %s a RIGHT JOIN (%s b CROSS JOIN %s c ON b.uid=c.uid) ON c.uid=a.bid WHERE b.staff_judge='1' OR b.staff_steward='1' OR b.staff_judge_bos='1' OR b.staff_staff='1' OR b.staff_organizer='1' ORDER BY c.brewerLastName, c.brewerFirstName ASC;", $prefix."judging_assignments", $prefix."staff", $prefix."brewer");
-$assignments = mysqli_query($connection,$query_assignments) or die (mysqli_error($connection));
-$row_assignments = mysqli_fetch_assoc($assignments);
-$totalRows_assignments = mysqli_num_rows($assignments);
-$judge_list = "";
-$judge_bos = "";
-$steward_list = "";
-$staff_list = "";
-$staff_organizer = "";
-
-if ($totalRows_assignments > 0) {
-	do {
-
-		if ($row_assignments['staff_judge'] == 1) {
-			$judge_list .= $row_assignments['brewerFirstName']." ".$row_assignments['brewerLastName'];
-			$judge_list .= ", ";
-		}
-
-		if ($row_assignments['staff_judge_bos'] == 1) {
-			$judge_bos .= $row_assignments['brewerFirstName']." ".$row_assignments['brewerLastName'];
-			$judge_bos .= ", ";
-		}
-
-		if ($row_assignments['staff_steward'] == 1) {
-			$steward_list .= $row_assignments['brewerFirstName']." ".$row_assignments['brewerLastName'];
-			$steward_list .= ", ";
-		}
-
-		if ($row_assignments['staff_staff'] == 1)  {
-			$staff_list .= $row_assignments['brewerFirstName']." ".$row_assignments['brewerLastName'];
-			$staff_list .= ", ";
-		}
-
-		if ($row_assignments['staff_organizer'] == 1)  {
-			$staff_organizer .= $row_assignments['brewerFirstName']." ".$row_assignments['brewerLastName'];
-			$staff_organizer .= ", ";
-		}
-
-	} while ($row_assignments = mysqli_fetch_assoc($assignments));
-}
-
-
 ?>
 <!doctype html>
 <html>
@@ -890,7 +911,7 @@ if ($totalRows_assignments > 0) {
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.1.0/theme/fonts/league-gothic/league-gothic.min.css">
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.1.0/theme/fonts/source-sans-pro/source-sans-pro.min.css">
 		<!-- Load Font Awesome / https://fortawesome.github.io/Font-Awesome -->
-    	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+    	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
     	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/lightslider/1.1.6/css/lightslider.min.css">
     	<!-- Load Fancybox / http://www.fancyapps.com -->
 	    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.css" />
@@ -936,24 +957,25 @@ if ($totalRows_assignments > 0) {
 		    .fancy .bold-text {
 		    	font-weight: bold;
 		    }
-
     	</style>
 	</head>
 	<body>
 		<div class="reveal">
 			<div class="slides">
+				
 				<!-- Title Slide -->
 				<section>
 					<h1 style="margin:0;padding:0" class="r-fit-text"><?php echo $_SESSION['contestName']; ?></h1>
 					<h2 style="margin:0;padding:0"><?php echo $label_awards; ?></h2>
-					<h3 style="margin:0;padding:0"><small><?php echo get_entry_count("paid-received")." ".$label_entries; ?></small></h3>
 					<?php if (!empty($_SESSION['contestLogo'])) { ?>
 						<div class="logo-image">
 							<img src="<?php echo $base_url."user_images/".$_SESSION['contestLogo']; ?>">
 						</div>
 					<?php } ?>
 				</section>
+				
 				<?php if ($_SESSION['prefsSponsorLogos'] == "Y") { ?>
+				<!-- Sponsor Carousel Slide -->	
 				<section>
 					<h1 style="margin:0;padding:0" class="r-fit-text"><?php echo $label_sponsors; ?></h1>
 					    <ul id="sponsor-slider">
@@ -968,7 +990,9 @@ if ($totalRows_assignments > 0) {
 					    </ul>
 				</section>
 				<?php } ?>
+				
 				<?php if (!empty($judge_list)) { ?>
+				<!-- Judge List Slide -->
 				<section>
 					<h1 style="margin:0;padding:0"><?php echo $label_judges; ?></h1>
 					<p><small><?php echo rtrim($judge_list, ", "); ?></small></p>
@@ -978,13 +1002,17 @@ if ($totalRows_assignments > 0) {
 					<?php } ?>
 				</section>
 				<?php } ?>
+				
 				<?php if (!empty($steward_list)) { ?>
+				<!-- Steward List Slide -->
 				<section>
 					<h1 style="margin:0;padding:0"><?php echo $label_stewards; ?></h1>
 					<p><small><?php echo rtrim($steward_list, ", "); ?></small></p>
 				</section>
 				<?php } ?>
+				
 				<?php if ((!empty($staff_list)) || (!empty($staff_organizer))) { ?>
+				<!-- Staff List Slide -->
 				<section>
 					<h1 style="margin:0;padding:0"><?php echo $label_staff; ?></h1>
 					<?php if (!empty($staff_list)) { ?>
@@ -996,8 +1024,50 @@ if ($totalRows_assignments > 0) {
 					<?php } ?>
 				</section>
 				<?php } ?>
+
+				<!-- Statistic Slide -->
+				<?php 
+				$entries_count = get_entry_count('paid-received');
+				$participant_count = get_participant_count('default');
+				$judges_count = get_participant_count('judge-assigned');
+				$steward_count = get_participant_count('steward-assigned');
+				$staff_count = get_participant_count('staff-assigned');
+				$placing_entry_count = get_entry_count('placing-entries');
+				?>
+				<section>
+					<h1 style="margin:0;padding:0"><?php echo $label_by_the_numbers; ?></h1>
+					<p>
+						<?php if ($entries_count > 0) { ?>
+						<span style="margin-right: 15px;" class="fragment" data-fragment-index="1"><i class="fa fa-beer"></i> <?php echo $entries_count." ".$label_entries; ?></span>
+						<?php } ?>
+						<?php if ($participant_count > 0) { ?>
+						<span class="fragment" data-fragment-index="1"><i class="fa fa-user"></i> <?php echo $participant_count." ".$label_participants; ?></span>
+						<?php } ?>
+					</p>
+					<p>
+						<?php if ($judges_count > 0) { ?>
+						<span style="margin-right: 15px;" class="fragment" data-fragment-index="2"><i class="fa fa-gavel"></i> <?php echo $judges_count." ".$label_judges; ?></span>
+						<?php } ?>
+						<?php if ($steward_count > 0) { ?>
+						<span style="margin-right: 15px;" class="fragment" data-fragment-index="2"><i class="fa fa-pencil"></i> <?php echo $steward_count." ".$label_stewards; ?></span>
+						<?php } ?>
+						<?php if ($staff_count > 0) { ?>
+						<span class="fragment" data-fragment-index="2"><i class="fa fa-user-circle"></i> <?php echo $staff_count." ".$label_staff; ?></span>
+						<?php } ?>
+					</p>
+					<?php if ($placing_entry_count > 0) { ?>
+					<p>
+						<span style="margin-right: 15px;" class="fragment" data-fragment-index="3"><i class="fa fa-trophy"></i> <?php echo $placing_entry_count." ".$label_placing_entries;  ?></span>
+					</p>
+					<?php } ?>
+					<?php if (!empty($_SESSION['contestLogo'])) { ?>
+						<div class="logo-image">
+							<img style="max-height: 225px;" src="<?php echo $base_url."user_images/".$_SESSION['contestLogo']; ?>">
+						</div>
+					<?php } ?>
+				</section>
+				
 				<!-- Table/Category/Sub-Cat Medal Slide Sections -->
-				<!-- Need to truncate club name for proper display -->
 				<?php 
 				if (!empty($slides)) echo $slides; 
 				if (!empty($slides_bos)) echo $slides_bos;

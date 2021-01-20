@@ -51,7 +51,7 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 
 		if (($_SESSION['prefsCAPTCHA'] == 1) && (isset($_POST['g-recaptcha-response'])) && (!empty($_POST['g-recaptcha-response']))) {
 
-			if (!empty($_SESSION['prefsGoogleAccount'])) {
+			if ((!HOSTED) && (!empty($_SESSION['prefsGoogleAccount']))) {
 				$recaptcha_key = explode("|", $_SESSION['prefsGoogleAccount']);
 				$private_captcha_key = $recaptcha_key[1];
 			}
