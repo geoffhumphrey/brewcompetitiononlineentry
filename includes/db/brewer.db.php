@@ -254,20 +254,19 @@ if (isset($_SESSION['user_id'])) {
 	}
 
 	if ($section != "step2") {
-		mysqli_select_db($connection,$database);
 		$query_brewerID = sprintf("SELECT id,brewerEmail FROM $brewer_db_table WHERE id = '%s'", $id);
 		$brewerID = mysqli_query($connection,$query_brewerID) or die (mysqli_error($connection));
 		$row_brewerID = mysqli_fetch_assoc($brewerID);
 		$totalRows_brewerID = mysqli_num_rows($brewerID);
 	}
 
-	if ($section == "step2")  {
-		mysqli_select_db($connection,$database);
-		$query_brewerID = sprintf("SELECT id,user_name FROM $users_db_table WHERE user_name = '%s'", $go);
-		$brewerID = mysqli_query($connection,$query_brewerID) or die (mysqli_error($connection));
-		$row_brewerID = mysqli_fetch_assoc($brewerID);
-		$totalRows_brewerID = mysqli_num_rows($brewerID);
-	}
+} // end if (isset($_SESSION['user_id'])
 
-} // end if (isset($_SESSION['user_id']))
+if ($section == "step2")  {
+	$query_brewerID = sprintf("SELECT id,user_name FROM $users_db_table WHERE user_name = '%s'", $go);
+	$brewerID = mysqli_query($connection,$query_brewerID) or die (mysqli_error($connection));
+	$row_brewerID = mysqli_fetch_assoc($brewerID);
+	$totalRows_brewerID = mysqli_num_rows($brewerID);
+}
+
 ?>

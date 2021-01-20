@@ -241,10 +241,10 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 			$updateSQL = sprintf("UPDATE $users_db_table SET user_name='%s' WHERE id='%s'",
 						   GetSQLValueString(filter_var($_POST['brewerEmail'],FILTER_SANITIZE_EMAIL), "text"),
 						   GetSQLValueString($_POST['uid'], "text"));
-			echo $updateSQL;
-			exit;
-			//mysqli_real_escape_string($connection,$updateSQL);
-			//$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+			//echo $updateSQL;
+			//exit;
+			mysqli_real_escape_string($connection,$updateSQL);
+			$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 		}
 
 		else {

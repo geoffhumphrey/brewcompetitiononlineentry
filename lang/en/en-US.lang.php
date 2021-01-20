@@ -1772,7 +1772,7 @@ $descr_fair = "Off flavors/aromas or major style deficiencies. Unpleasant.";
 $label_problematic = "Problematic";
 $descr_problematic = "Major off flavors and aromas dominate. Hard to drink.";
 
-$evaluation_info_036 = "One or more judge scores is out of the acceptable score range. Acceptable range is ".$_SESSION['jPrefsScoreDispMax']. " points or less.";
+if (isset($_SESSION['jPrefsScoreDispMax'])) $evaluation_info_036 = "One or more judge scores is out of the acceptable score range. Acceptable range is ".$_SESSION['jPrefsScoreDispMax']. " points or less.";
 $evaluation_info_037 = "All flights at this table appear to be complete.";
 $evaluation_info_038 = "As Head Judge, it is your responsibilty to verify that each entry's consensus scores match, make sure all judge scores for each entry are within the appropriate range, and award places to the designated entries.";
 $evaluation_info_039 = "Entries at this table:";

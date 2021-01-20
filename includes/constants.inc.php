@@ -2360,6 +2360,9 @@ asort($club_array);
 
 $sidebar_date_format = "short";
 
+$suggested_open_date = time();
+$suggested_close_date = time() + 604800;
+
 if (((strpos($section, "step") === FALSE) && ($section != "setup")) && ($section != "update")) {
 
 	$registration_open = open_or_closed(time(),$row_contest_dates['contestRegistrationOpen'],$row_contest_dates['contestRegistrationDeadline']);
@@ -2420,9 +2423,6 @@ if (((strpos($section, "step") === FALSE) && ($section != "setup")) && ($section
     $pay_window_open = open_or_closed(time(),$row_contest_dates['contestEntryOpen'],$pay_close_date);
 
     if (EVALUATION) {
-
-        $suggested_open_date = time();
-        $suggested_close_date = time() + 604800;
 
         if ((empty($row_judging_prefs['jPrefsJudgingOpen'])) || (empty($row_judging_prefs['jPrefsJudgingClosed']))) {
 

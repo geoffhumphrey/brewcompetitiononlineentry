@@ -47,6 +47,17 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 
 	if (EVALUATION) {
 
+		if (!check_update("jPrefsScoresheet", $prefix."judging_preferences")) {
+			$updateSQL = sprintf("ALTER TABLE `%s` 
+			ADD `jPrefsJudgingOpen` int(15) NULL DEFAULT NULL AFTER `jPrefsBottleNum`, 
+			ADD `jPrefsJudgingClosed` int(15) NULL DEFAULT NULL AFTER `jPrefsJudgingOpen`, 
+			ADD `jPrefsScoresheet` tinyint(2) NULL DEFAULT NULL AFTER `jPrefsJudgingClosed`, 
+			ADD `jPrefsScoreDispMax` tinyint(2) NULL DEFAULT NULL COMMENT 'Maximum disparity of entry scores between judges' AFTER `jPrefsScoresheet`;
+			", $prefix."judging_preferences");
+			mysqli_real_escape_string($connection,$updateSQL);
+			$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+		}
+
 		$jPrefsJudgingOpen = strtotime(filter_var($_POST['jPrefsJudgingOpen'],FILTER_SANITIZE_STRING));
 		$jPrefsJudgingClosed = strtotime(filter_var($_POST['jPrefsJudgingClosed'],FILTER_SANITIZE_STRING));
 
