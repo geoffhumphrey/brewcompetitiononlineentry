@@ -276,11 +276,30 @@ if (($logged_in) && ($admin_user) && ($go != "error_page")) { ?>
     #login-modal-enable {
         display: none;
     }
+    #admin-enable {
+        display: none;
+    }
+    #user-menu-enable {
+        display: none;
+    }
+    #print-enable {
+        display: none;
+    }
+    #help-enable {
+        display: none;
+    }
 </style>
 <script>
 $(document).ready(function(){
 	$("#login-modal-disable").hide();
     $("#login-modal-enable").show();
+    $("#admin-disable").hide();
+    $("#admin-enable").show();
+	$("#user-menu-disable").hide();
+    $("#logout-disable").hide();
+    $("#user-menu-enable").show();
+	$("#print-enable").show();
+	$("#help-enable").show();
 	$('#loginModal').on('shown.bs.modal', function() {
 		 $(this).find('#loginUsername').focus();
 	});
@@ -382,13 +401,13 @@ $(document).ready(function(){
               </ul>
           <ul class="nav navbar-nav navbar-right">
           	<?php if ($help_icon) { ?>
-            <li><a class="hide-loader hidden-xs hidden-sm hidden-md" href="#" role="button" data-tooltip="true" data-toggle="modal" data-target="#helpModal"><span class="fa fa-question-circle"></span></a></li>
+            <li id="help-enable"><a class="hide-loader hidden-xs hidden-sm hidden-md" href="#" role="button" data-tooltip="true" data-toggle="modal" data-target="#helpModal"><span class="fa fa-question-circle"></span></a></li>
             <?php } ?>
           	<?php if ($print_icon) { ?>
-          	<li><a class="hide-loader hidden-xs hidden-sm hidden-md" href="javascript:window.print()" role="button"><span class="fa fa-print"></span></a></li>
+          	<li id="print-enable"><a class="hide-loader hidden-xs hidden-sm hidden-md" href="javascript:window.print()" role="button"><span class="fa fa-print"></span></a></li>
             <?php } ?>
           	<?php if ($logged_in) { ?>
-            <li class="dropdown">
+            <li id="user-menu-enable" class="dropdown">
                 <a href="#" class="my-dropdown" data-toggle="dropdown"><span class="fa fa-user"></span> <span class="caret"></span></a>
                 <ul class="dropdown-menu">
                 	<li class="dropdown-header"><strong><?php if (($_SESSION['prefsProEdition'] == 1) && (!empty($_SESSION['brewerBreweryName']))) echo $_SESSION['brewerBreweryName']; else echo $_SESSION['loginUsername']; ?></strong></li>
@@ -420,8 +439,11 @@ $(document).ready(function(){
                     <li><a href="<?php echo $base_url; ?>includes/logout.inc.php"><?php echo $label_log_out; ?></a></li>
                 </ul>
             </li>
+            <li id="user-menu-disable"><a href="<?php echo $link_list; ?>" tabindex="-1"><?php echo $label_my_account; ?></a></li>
+            <li id="logout-disable"><a href="<?php echo $base_url; ?>includes/logout.inc.php"><?php echo $label_log_out; ?></a></li>  
             <?php if ($admin_user) { ?>
-            <li id="admin-arrow"><a href="<?php if ($go == "error_page") echo $base_url."index.php?section=admin"; else echo "#"; ?>" class="admin-offcanvas" data-toggle="offcanvas" data-target=".navmenu" data-canvas="body"><i class="fa fa-chevron-circle-left"></i> <?php echo $label_admin_short; ?></a></li>
+            <li id="admin-enable" id="admin-arrow"><a href="<?php if ($go == "error_page") echo $base_url."index.php?section=admin"; else echo "#"; ?>" class="admin-offcanvas" data-toggle="offcanvas" data-target=".navmenu" data-canvas="body"><i class="fa fa-chevron-circle-left"></i> <?php echo $label_admin_short; ?></a></li>
+            <li id="admin-disable"><a href="<?php echo $base_url."index.php?section=admin"; ?>"><?php echo $label_admin_short; ?></a></li>
             <?php } ?>
             <?php } else { ?>
             <li id="login-modal-enable" <?php if ($section == "login") echo $active_class; ?>><a href="#" role="button" data-toggle="modal" data-target="#loginModal"><?php echo $label_log_in; ?></a></li>

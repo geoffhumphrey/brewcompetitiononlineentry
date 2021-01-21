@@ -960,6 +960,7 @@ if (($display_to_admin) || ($display_to_public)) {
     	</style>
 	</head>
 	<body>
+		<noscript><?php echo $alert_text_087; ?></noscript>
 		<div class="reveal">
 			<div class="slides">
 				

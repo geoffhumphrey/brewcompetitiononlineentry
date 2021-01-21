@@ -111,7 +111,6 @@ $security_question = array($label_secret_01, $label_secret_05, $label_secret_06,
     <meta property="og:url" content="<?php echo "http" . ((!empty($_SERVER['HTTPS'])) ? "s://" : "://") . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']; ?>" />
 </head>
 <body>
-<noscript><?php echo $alert_text_087; ?></noscript>
 <script>
 try {
     var ua = window.navigator.userAgent;
