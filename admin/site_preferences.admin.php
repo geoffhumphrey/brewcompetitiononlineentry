@@ -404,6 +404,7 @@ $(document).ready(function(){
             </div>
             <div class="modal-body">
                 <p>Enable or disable your installation's contact form. This may be necessary if your site&rsquo;s server does not support PHP&rsquo;s <a class="hide-loader" href="http://php.net/manual/en/function.mail.php" target="_blank">mail()</a> function. Admins should test the form before disabling as the form is the more secure option. Admins should use the &ldquo;Send Test Email&rdquo; button to test the function.</p>
+                <p>If mail() is not an option, Admins have the option to enable phpMailer to send system-generated emails via SMTP. To enable phpMailer, change the MAILER definition in paths.php to TRUE and customize the variables in the /site/config.mail.php folder to your server environment.</p>
             </div>
             <div class="modal-footer">
             	<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
@@ -411,6 +412,24 @@ $(document).ready(function(){
         </div>
     </div>
 </div><!-- ./modal -->
+<div class="form-group"><!-- Form Group Radio INLINE -->
+    <label for="prefsEmailCC" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Contact Form CC</label>
+    <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
+        <div class="input-group">
+            <!-- Input Here -->
+            <label class="radio-inline">
+                <input type="radio" name="prefsEmailCC" value="0" id="prefsEmailCC_0" <?php if ((empty($row_prefs['prefsEmailCC'])) || ($row_prefs['prefsEmailCC'] == "0")) echo "CHECKED"; elseif ($section == "step3") echo "CHECKED"; ?>/> Enable
+            </label>
+            <label class="radio-inline">
+                <input type="radio" name="prefsEmailCC" value="1" id="prefsEmailCC_1"  <?php if ($row_prefs['prefsEmailCC'] == "1") echo "CHECKED"; elseif ($section == "step3") echo "CHECKED"; ?> /> Disable
+            </label>
+            
+        </div>
+        <span id="helpBlock" class="help-block">
+        <p>Enable or disable automatic carbon copying (CC) of emails sent by the system to the "sender" of the email. Since any email address can be entered in the From field of the Contact form, disabling CC will prevent malicious actors from using the competition contact form to spam emails unrelated to the competition.</p>
+        </span>
+    </div>
+</div><!-- ./Form Group -->
 <div class="form-group"><!-- Form Group Radio INLINE -->
     <label for="EmailRegConfirm" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Confirmation Emails</label>
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
@@ -452,16 +471,8 @@ $(document).ready(function(){
             </div>
             <div class="modal-body">
             	<p>Do you want a system-generated confirmation email sent to all users upon registering their account information?</p>
-            	<!--
-                <p>Do you want a system-generated confirmation email sent to:</p>
-                <ul>
-                	<li>All users upon registering and/or changing their account information?</li>
-                    <li>All users who register as a judge and/or steward with information specific to their role?</li>
-                    <li>All mid- and top-level admin users when a participant registers as a judge and/or steward?</li>
-                </li>
-                </ul>
-                -->
                 <p>Please note that these system-generated emails may not be possible if your site&rsquo;s server does not support PHP&rsquo;s <a class="hide-loader" href="http://php.net/manual/en/function.mail.php" target="_blank">mail()</a> function. Admins should use the &ldquo;Send Test Email&rdquo; button to test the function.</p>
+                <p>If mail() is not an option, Admins have the option to enable phpMailer to send system-generated emails via SMTP. To enable phpMailer, change the MAILER definition in paths.php to TRUE and customize the variables in the /site/config.mail.php folder to your server environment.</p>
             </div>
             <div class="modal-footer">
             	<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
@@ -1078,9 +1089,16 @@ $(document).ready(function(){
     <div class="form-group" id="subStyleExeptionsEdit">
     	<label for="prefsUSCLEx" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Exceptions to Entry Limit per Sub-Style</label>
     	<div class="col-lg-9 col-md-9 col-sm-8 col-xs-12">
-    		<div class="input-group">
-    			<?php echo $prefsUSCLEx; ?>
-    		</div>
+            <?php if (strpos($section, "step") === FALSE) { ?>
+                <div class="btn-group" role="group">
+                    <button class="btn btn-xs btn-default" data-toggle="collapse" href="#sub-style-list" aria-expanded="false" aria-controls="sub-style-list">Expand/Collapse List</button>
+                </div>
+                <?php } ?>
+            <div class="<?php if (strpos($section, "step") === FALSE) echo "collapse"; ?>" id="sub-style-list">
+        		<div class="input-group">
+        			<?php echo $prefsUSCLEx; ?>
+        		</div>
+            </div>
     	</div>
     </div>
     <?php echo $all_exceptions; ?>

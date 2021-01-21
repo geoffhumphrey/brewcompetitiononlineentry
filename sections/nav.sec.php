@@ -272,8 +272,15 @@ if (($logged_in) && ($admin_user) && ($go != "error_page")) { ?>
     </div>
 <!-- ./ Admin Push Menu -->
 <?php } ?>
+<style>
+    #login-modal-enable {
+        display: none;
+    }
+</style>
 <script>
 $(document).ready(function(){
+	$("#login-modal-disable").hide();
+    $("#login-modal-enable").show();
 	$('#loginModal').on('shown.bs.modal', function() {
 		 $(this).find('#loginUsername').focus();
 	});
@@ -331,11 +338,7 @@ $(document).ready(function(){
 		</div>
 	</div>
 </div>
-
 <?php } ?>
-
-
-
 	<!-- Fixed navbar -->
     <div class="navbar <?php echo $nav_container; ?> navbar-fixed-top">
       <div class="<?php echo $container_main; ?>">
@@ -421,7 +424,8 @@ $(document).ready(function(){
             <li id="admin-arrow"><a href="<?php if ($go == "error_page") echo $base_url."index.php?section=admin"; else echo "#"; ?>" class="admin-offcanvas" data-toggle="offcanvas" data-target=".navmenu" data-canvas="body"><i class="fa fa-chevron-circle-left"></i> <?php echo $label_admin_short; ?></a></li>
             <?php } ?>
             <?php } else { ?>
-            <li<?php if ($section == "login") echo $active_class; ?>><a href="#" role="button" data-toggle="modal" data-target="#loginModal"><?php echo $label_log_in; ?></a></li>
+            <li id="login-modal-enable" <?php if ($section == "login") echo $active_class; ?>><a href="#" role="button" data-toggle="modal" data-target="#loginModal"><?php echo $label_log_in; ?></a></li>
+            <li id="login-modal-disable"><a href="<?php echo $base_url; ?>index.php?section=login"><?php echo $label_log_in; ?></a></li>
             <?php } ?>
             </ul>
           </div>

@@ -292,6 +292,11 @@ if ($section != "admin") {
 
 	}
 
+	if (judging_winner_display($_SESSION['prefsWinnerDelay'])) {
+
+		$header1_400 .= "<div class=\"bcoem-admin-element hidden-print\"><a class=\"btn btn-primary btn-block btn-sm\" href=\"".$base_url."awards.php\" target=\"_blank\">".$label_launch_pres." <span class=\"fa fa-trophy\"></span></a></div>";
+	}
+
 	// Judging Location(s)
 	$header1_400 .= "<div class=\"panel panel-info\">";
 	$header1_400 .= "<div class=\"panel-heading\">";

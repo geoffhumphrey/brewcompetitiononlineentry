@@ -2904,6 +2904,7 @@ function table_exists($table_name) {
 
 
 function table_assignments($uid,$method,$time_zone,$date_format,$time_format,$method2,$label_table="Table") {
+	
 
 	// Gather and output the judging or stewarding assignments for a user
 	require(CONFIG.'config.php');
@@ -2917,12 +2918,16 @@ function table_assignments($uid,$method,$time_zone,$date_format,$time_format,$me
 		$output = "";
 	}
 
+
+
 	$query_table_assignments = sprintf("SELECT assignTable,assignRoles,assignFlight,assignRound FROM %s WHERE bid='%s' AND assignment='%s'",$prefix."judging_assignments",$uid,$method);
 	$table_assignments = mysqli_query($connection,$query_table_assignments) or die (mysqli_error($connection));
 	$row_table_assignments = mysqli_fetch_assoc($table_assignments);
 	$totalRows_table_assignments = mysqli_num_rows($table_assignments);
 
 	require(LANG.'language.lang.php');
+
+	/*
 	
 	if ($totalRows_table_assignments > 0) {
 
@@ -2981,6 +2986,7 @@ function table_assignments($uid,$method,$time_zone,$date_format,$time_format,$me
 	//if (($totalRows_table_assignments == 0) && ($method2 == "1")) $output_extend = "No assignment(s)";
 	if ($method2 == 2) $output = array_unique($output);
 	return $output;
+	*/
 }
 
 function available_at_location($location,$role,$round) {

@@ -1743,6 +1743,7 @@ $label_by_the_numbers = "By the Numbers";
 $label_launch_pres = "Launch Awards Presentation";
 
 $brewer_entries_text_025 = "Print judges&rsquo; scoresheets";
+$alert_text_087 = "For an optimal experience and so that all features and functions execute properly, please enable JavaScript to continue using this site. Otherwise, unexpected behavior will occur.";
 
 // ************************************************ ***********************************
 // END TRANSLATIONS

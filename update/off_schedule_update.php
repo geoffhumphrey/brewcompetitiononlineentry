@@ -1712,6 +1712,10 @@ if (!check_update("prefsEmailCC", $prefix."preferences")) {
 	mysqli_select_db($connection,$database);
 	mysqli_real_escape_string($connection,$updateSQL);
 	$result = mysqli_query($connection,$updateSQL);
+
+	$updateSQL = sprintf("UPDATE `%s` SET prefsEmailCC='0';", $prefix."preferences");
+	mysqli_real_escape_string($connection,$updateSQL);
+	$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 }
 
 $output .= "<li>Added column to enable or disable carbon copying contact messages.</li>";

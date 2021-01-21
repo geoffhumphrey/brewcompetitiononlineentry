@@ -75,6 +75,7 @@ $output_user_question_modals = "";
 $assignment_modal_body = "";
 $all_email_display = array();
 
+
 if ($dbTable == "default") $pro_edition = $_SESSION['prefsProEdition'];
 else $pro_edition = $row_archive_prefs['archiveProEdition'];
 
@@ -223,17 +224,26 @@ do {
 	$output_datatables_delete_link = "";
 	$output_datatables_print_link = "";
 	$output_datatables_other_link = "";
+	$output_datatables_other_link2 = "";
 	$output_datatables_view_link = "";
 	$output_datatables_email_link = "";
+	$output_datatables_change_pwd = "";
+	$output_datatables_user_question_link = "";
+	$output_datatables_phone_link = "";
 	$output_datatables_actions = "";
-
+	$table_assign_judge = "";
+	$table_assign_steward = "";
+	$judge_entries = "";
+	$brewer_assignment = "";
+	$user_info = "";
+	
 	$user_info = user_info($row_brewer['uid']);
 	$user_info = explode("^",$user_info);
 
 	if ($_SESSION['brewerCountry'] == "United States") $us_phone = TRUE; else $us_phone = FALSE;
 
+	$archive = "default";
 	if ($dbTable != "default") $archive = get_suffix($dbTable);
-	else $archive = "default";
 
 	unset($brewer_assignment);
 	$brewer_assignment = brewer_assignment($row_brewer['uid'],"1",$id,$dbTable,$filter,$archive);
@@ -247,16 +257,21 @@ do {
 
 	if (!$archive_display) {
 		$output_datatables_add_link = build_action_link("fa-beer",$base_url,"brew","entries","add",$row_brewer['uid'],"default","default","default",0,"Add an entry for ".$brewer_tooltip_display_name);
+
 		$output_datatables_edit_link = build_action_link("fa-pencil",$base_url,"brewer","admin","edit",$row_brewer['uid'],$row_brewer['id'],$dbTable,"default",0,"Edit ".$brewer_tooltip_display_name."&rsquo;s user account information");
+
 		if ($row_brewer['brewerEmail'] != $_SESSION['loginUsername']) $output_datatables_delete_link = build_action_link("fa-trash-o",$base_url,"admin","participants","delete",$row_brewer['uid'],$row_brewer['uid'],$brewer_db_table,"Are you sure you want to delete the participant account for ".$brewer_tooltip_display_name."? ALL entries for this participant WILL BE DELETED as well. This cannot be undone.",0,"Delete ".$brewer_tooltip_display_name."&rsquo;s account.");
 		else $output_datatables_delete_link = "<span class=\"fa fa-lg fa-trash-o text-muted\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Silly, you cannot delete yourself, ".$_SESSION['brewerFirstName']."!\"></span>";
+
 		if ($row_brewer['brewerEmail'] != $_SESSION['loginUsername']) $output_datatables_other_link = build_action_link("fa-lock",$base_url,"admin","make_admin","default","default",$row_brewer['uid'],"default","default",0,"Change ".$brewer_tooltip_display_name."&rsquo;s User Level");
 		else $output_datatables_other_link = "<span class=\"fa fa-lg fa-lock text-muted\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"You cannot change your own user level, ".$_SESSION['brewerFirstName'].".\"></span>";
+		
 		if (strpos($brewer_assignment,'Judge') !== false)  {
 			$output_datatables_view_link = "<a class=\"hide-loader\" href=\"".$base_url."output/labels.output.php?section=admin&amp;go=participants&amp;action=judging_labels&amp;id=".$row_brewer['id']."&amp;psort=5160\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Download Judge Scoresheet Labels for ".$brewer_tooltip_display_name." - Letter (Avery 5160)\"><span class=\"fa fa-lg fa-file\"></span></a> <a class=\"hide-loader\" href=\"".$base_url."output/labels.output.php?section=admin&amp;go=participants&amp;action=judging_labels&amp;id=".$row_brewer['id']."&amp;psort=3422\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Download Judge Scoresheet Labels for ".$brewer_tooltip_display_name." - A4 (Avery 3422)\"><span class=\"fa fa-lg fa-file-text\"></span></a>";
 		}
-		else $output_datatables_view_link = "";
+
 		$output_datatables_other_link2 = build_action_link("fa-user",$base_url,"user","default","username","admin",$row_brewer['uid'],"default","default",0,"Change ".$brewer_tooltip_display_name."&rsquo;s email address");
+		
 		$output_datatables_email_link .= "<a class=\"hide-loader\" href=\"mailto:".$row_brewer['brewerEmail']."\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Email ".$brewer_tooltip_display_name." at ".$row_brewer['brewerEmail']."\"><span class=\"fa fa-lg fa-envelope\"></span></a>";
 
 		if ($us_phone) {
@@ -306,9 +321,10 @@ do {
 
 		$table_assign_judge = table_assignments($user_info[0],"J",$_SESSION['prefsTimeZone'],$_SESSION['prefsDateFormat'],$_SESSION['prefsTimeFormat'],1);
 		$table_assign_judge = rtrim($table_assign_judge,",&nbsp;");
+		
 		$table_assign_steward = table_assignments($user_info[0],"S",$_SESSION['prefsTimeZone'],$_SESSION['prefsDateFormat'],$_SESSION['prefsTimeFormat'],1);
 		$table_assign_steward = rtrim($table_assign_steward,",&nbsp;");
-
+		
 		$judge_entries = judge_entries($row_brewer['uid'],1);
 
 		if ($filter == "judges") $locations = $row_brewer['brewerJudgeLocation'];
@@ -346,7 +362,6 @@ do {
 				$output_assignment_modals .= "</div><!-- ./modal -->\n";
 			}
 		}
-
 
 		if (!$archive_display) {
 			// Build secret user question modals

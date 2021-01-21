@@ -13,6 +13,9 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 	if (isset($_POST['prefsUSCLEx'])) $prefsUSCLEx = implode(",",$_POST['prefsUSCLEx']);
 	else  $prefsUSCLEx = "";
 
+	if (HOSTED) $prefsCAPTCHA = 1;
+	else $prefsCAPTCHA = $_POST['prefsCAPTCHA'];
+
 	$prefsStyleSet = "";
 	$style_alert = FALSE;
 
@@ -38,11 +41,10 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 		prefsCheckPayee,
 		prefsTransFee,
 		prefsSponsors,
-
 		prefsSponsorLogos,
 		prefsDisplayWinners,
-		prefsWinnerDelay,
 
+		prefsWinnerDelay,
 		prefsWinnerMethod,
 		prefsEntryForm,
 		prefsRecordLimit,
@@ -83,22 +85,25 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 		prefsShowBestClub,
 		prefsBestClubTitle,
 		prefsFirstPlacePts,
+
 		prefsSecondPlacePts,
 		prefsThirdPlacePts,
-
 		prefsFourthPlacePts,
 		prefsHMPts,
 		prefsTieBreakRule1,
+
 		prefsTieBreakRule2,
 		prefsTieBreakRule3,
-
 		prefsTieBreakRule4,
 		prefsTieBreakRule5,
 		prefsTieBreakRule6,
+
 		prefsCAPTCHA,
 		prefsGoogleAccount,
 		prefsBestUseBOS,
 		prefsLanguage,
+		prefsEmailCC,
+
 		id
 
 		) VALUES (
@@ -114,7 +119,8 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 		%s, %s, %s, %s, %s,
 		%s, %s, %s, %s, %s,
 		%s, %s, %s, %s, %s,
-		%s, %s, %s, %s, %s)",
+		%s, %s, %s, %s, %s,
+		%s)",
 
 			GetSQLValueString(sterilize($_POST['prefsTemp']), "text"),
 			GetSQLValueString(sterilize($_POST['prefsWeight1']), "text"),
@@ -186,10 +192,11 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 			GetSQLValueString(sterilize($_POST['prefsTieBreakRule4']), "text"),
 			GetSQLValueString(sterilize($_POST['prefsTieBreakRule5']), "text"),
 			GetSQLValueString(sterilize($_POST['prefsTieBreakRule6']), "text"),
-			GetSQLValueString(sterilize($_POST['prefsCAPTCHA']), "text"),
+			GetSQLValueString(sterilize($prefsCAPTCHA), "text"),
 			GetSQLValueString(sterilize($prefsGoogleAccount), "text"),
 			GetSQLValueString($_POST['prefsBestUseBOS'], "int"),
 			GetSQLValueString(sterilize($_POST['prefsLanguage']), "text"),
+			GetSQLValueString($_POST['prefsEmailCC'], "int"),
 			GetSQLValueString($id, "int"));
 
 			mysqli_real_escape_string($connection,$insertSQL);
@@ -376,7 +383,9 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 		prefsTieBreakRule6=%s,
 		prefsCAPTCHA=%s,
 		prefsGoogleAccount=%s,
-		prefsLanguage=%s
+		
+		prefsLanguage=%s,
+		prefsEmailCC=%s
 
 		WHERE id=%s",
 			GetSQLValueString(sterilize($_POST['prefsTemp']), "text"),
@@ -451,9 +460,11 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 			GetSQLValueString(sterilize($_POST['prefsTieBreakRule4']), "text"),
 			GetSQLValueString(sterilize($_POST['prefsTieBreakRule5']), "text"),
 			GetSQLValueString(sterilize($_POST['prefsTieBreakRule6']), "text"),
-			GetSQLValueString(sterilize($_POST['prefsCAPTCHA']), "text"),
+			GetSQLValueString(sterilize($prefsCAPTCHA), "text"),
 			GetSQLValueString(sterilize($prefsGoogleAccount), "text"),
+			
 			GetSQLValueString(sterilize($_POST['prefsLanguage']), "text"),
+			GetSQLValueString($_POST['prefsEmailCC'], "int"),
 			GetSQLValueString($id, "int"));
 
 			mysqli_real_escape_string($connection,$updateSQL);

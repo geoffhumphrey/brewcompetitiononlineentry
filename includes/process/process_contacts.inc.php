@@ -84,7 +84,7 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 			$headers .= "From: ".$comp_name." Server <".$from_competition_email.">" . "\r\n"; 
 			// needed to change due to more stringent rules and mail send incompatibility with Gmail.
 			$headers .= "Reply-To: ".$from_name." <".$from_email.">" . "\r\n";
-			$headers .= "Bcc: ".$from_name." <".$from_email.">" . "\r\n";
+			if ($_SESSION['prefsEmailCC'] == 0) $headers .= "Bcc: ".$from_name." <".$from_email.">" . "\r\n";
 
 			/*
 			// Debug
@@ -94,7 +94,7 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 			echo "To: ".$to_name." ".$to_email."<br>";
 			echo "From: ".$comp_name." ".$from_competition_email."<br>";
 			echo "Reply-To: ".$from_name." ".$from_email."<br>";
-			echo "Bcc: ".$from_name." ".$from_email."<br>";
+			if ($_SESSION['prefsEmailCC'] == 0) echo "Bcc: ".$from_name." ".$from_email."<br>";
 			echo $message;
 			exit;
 			*/
@@ -106,7 +106,7 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 				$mail->addAddress($to_email, $to_name);
 				$mail->setFrom($from_competition_email, $comp_name);
 				$mail->addReplyTo($from_email, $from_name);
-				$mail->addBCC($from_email, $from_name);
+				if ($_SESSION['prefsEmailCC'] == 0) $mail->addBCC($from_email, $from_name);
 				$mail->Subject = $subject;
 				$mail->Body = $message;
 				sendPHPMailerMessage($mail);
