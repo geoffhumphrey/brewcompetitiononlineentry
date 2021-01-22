@@ -2407,8 +2407,6 @@ if (((strpos($section, "step") === FALSE) && ($section != "setup")) && ($section
 	$judge_open_sidebar = getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_contest_dates['contestJudgeOpen'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "short", "date-time"); ;
 	$judge_closed_sidebar = getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_contest_dates['contestJudgeDeadline'], $_SESSION['prefsDateFormat'],$_SESSION['prefsTimeFormat'], "short", "date-time");
 
-
-
     $query_judging_dates = sprintf("SELECT judgingDate FROM %s",$judging_locations_db_table);
     $judging_dates = mysqli_query($connection,$query_judging_dates) or die (mysqli_error($connection));
     $row_judging_dates = mysqli_fetch_assoc($judging_dates);

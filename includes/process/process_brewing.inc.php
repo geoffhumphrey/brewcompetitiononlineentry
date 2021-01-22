@@ -49,7 +49,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 	$subcat_limit = FALSE;
 
 	if ((isset($_SESSION['prefsUserSubCatLimit'])) && (!empty($_SESSION['prefsUserSubCatLimit']))) {
-		if (($action == "add") || (($action == "edit") && ($_POST['brewStyle'] != $_POST['brewEditStyle']))) {
+		if (($action == "add") || (($action == "edit") && ($entry_window_open == 1) && ($_POST['brewStyle'] != $_POST['brewEditStyle']))) {
 			$subcat_limit = limit_subcategory(filter_var($_POST['brewStyle'],FILTER_SANITIZE_STRING),$_SESSION['prefsUserSubCatLimit'],$_SESSION['prefsUSCLExLimit'],$_SESSION['prefsUSCLEx'],filter_var($_POST['brewBrewerID'],FILTER_SANITIZE_STRING));
 		}
 		

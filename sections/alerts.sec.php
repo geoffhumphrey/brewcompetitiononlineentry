@@ -188,7 +188,7 @@ if ($msg != "default") { ?>
         <!-- Registration open, but entry window not -->
         <div class="alert alert-success alert-dismissible hidden-print fade in" role="alert">
           <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-          <span class="fa fa-lg fa-check-circle"></span> <strong><?php echo $alert_text_029; ?></strong> <?php echo $alert_text_032; ?>.
+          <span class="fa fa-lg fa-check-circle"></span> <strong><?php echo $alert_text_029; ?></strong> <?php echo $alert_text_032; ?>
         </div>
         <?php } ?>
 

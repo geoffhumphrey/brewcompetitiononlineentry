@@ -72,6 +72,7 @@ $add_entry_disable = FALSE;
 $edit_entry_disable = FALSE;
 $special_required = FALSE;
 $expanded_on_load = FALSE;
+$add_or_edit = TRUE;
 $selected_disabled = "";
 $darkLightPale = "";
 $darkLightAmber = "";
@@ -165,8 +166,11 @@ if (($registration_open == 0) && ($entry_window_open == 0) && ($_SESSION['userLe
 }
 // Entry window closed
 if (($entry_window_open == 2) && ($_SESSION['userLevel'] == 2)) {
+	// Disable adding of entries
 	$add_entry_disable = TRUE;
-	$edit_entry_disable = TRUE;
+
+	// Can edit until either drop off closes or judging dates pass
+	if ((judging_date_return() == 0) || (time() > $_SESSION['contestDropoffDeadline'])) $edit_entry_disable = TRUE;
 }
 
 if (($proEdition) && (!isset($_SESSION['brewerBreweryName'])) && ($_SESSION['userLevel'] == 2)) {
@@ -175,31 +179,39 @@ if (($proEdition) && (!isset($_SESSION['brewerBreweryName'])) && ($_SESSION['use
 	$adminUserAddDisable = TRUE;
 }
 
+$add_edit_message = "";
+
 // Disable display of add/edit form elements
 // Display messaging if adding and/or editing is disabled
 if (($add_entry_disable) && ($edit_entry_disable))  {
 
-	echo "<p class=\"lead\">".$alert_text_083."</p>";
-	if (($_SESSION['userLevel'] > 1) && ($remaining_entries <= 0)) echo sprintf("<p>%s</p>",$alert_text_031);
-	if (($adminUser) && ($adminUserAddDisable)) echo "<p>".$brew_text_029."</p>";
+	$add_or_edit = FALSE;
+
+	$add_edit_message .= "<p class=\"lead\">".$alert_text_083."</p>";
+	if (($_SESSION['userLevel'] > 1) && ($remaining_entries <= 0)) $add_edit_message .= sprintf("<p>%s</p>",$alert_text_031);
+	if (($adminUser) && ($adminUserAddDisable)) $add_edit_message .= "<p>".$brew_text_029."</p>";
 
 }
 
-elseif (($add_entry_disable) && (!$edit_entry_disable))  {
+if (($add_entry_disable) && (!$edit_entry_disable) && ($action == "add"))  {
+
+	$add_or_edit = FALSE;
 
 	if (($proEdition) && (!isset($_SESSION['brewerBreweryName']))) {
-		echo "<p class=\"lead\">".$alert_text_082."</p>";
-		if ($adminUser) echo "<p class=\"lead\"><small>".$alert_text_084."</small></p>";
+		$add_edit_message .= "<p class=\"lead\">".$alert_text_082."</p>";
+		if ($adminUser) $add_edit_message .= "<p class=\"lead\"><small>".$alert_text_084."</small></p>";
 	}
 
-	else echo "<p class=\"lead\">".$alert_text_029."</p>";
-	if (($_SESSION['userLevel'] > 1) && ($remaining_entries <= 0)) echo sprintf("<p>%s</p>",$alert_text_031);
-	if (($adminUser) && ($adminUserAddDisable)) echo "<p>".$brew_text_029."</p>";
+	else $add_edit_message .= "<p class=\"lead\">".$alert_text_029."</p>";
+	if (($_SESSION['userLevel'] > 1) && ($remaining_entries <= 0)) $add_edit_message .= sprintf("<p>%s</p>",$alert_text_031);
+	if (($adminUser) && ($adminUserAddDisable)) $add_edit_message .= "<p>".$brew_text_029."</p>";
 
 }
 
+echo $add_edit_message;
+
 // Run normally
-else {
+if ($add_or_edit) {
 
 	// Define vars
 	if ($action == "edit") $collapse_icon = "fa-plus-circle";
