@@ -1689,7 +1689,6 @@ if (!check_update("assignPlanning", $prefix."judging_assignments")) {
 	$result = mysqli_query($connection,$sql);
 }
 
-
 if (!check_update("flightPlanning", $prefix."judging_flights")) {
 	$sql = sprintf("ALTER TABLE `%s` ADD `flightPlanning` TINYINT(1) NULL;",$prefix."judging_flights");
 	mysqli_select_db($connection,$database);

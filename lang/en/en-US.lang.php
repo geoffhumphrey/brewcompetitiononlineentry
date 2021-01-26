@@ -1518,13 +1518,29 @@ $label_paid_entries = "Paid Entries";
 // ----------------------------------------------------------------------------------
 // Version 2.1.20 Additions
 // ----------------------------------------------------------------------------------
+
+$alert_text_087 = "For an optimal experience and so that all features and functions execute properly, please enable JavaScript to continue using this site. Otherwise, unexpected behavior will occur.";
+$alert_text_086 = "Internet Explorer is not supported by BCOE&M - features and functions will not render properly and your experience will not be optimal. Please upgrade to a newer browser.";
+
+$brewer_entries_text_025 = "Print judges&rsquo; scoresheets";
+
 $brewer_info_013 = "You have been assigned as a judge.";
 $brewer_info_014 = "Access the Judging Dashboard using the button below to enter evaluations of the entries assigned to you.";
+
+$contact_text_004 = "The competition organizers have not specified any contacts.";
+
+// Awards
+$label_thank_you = "Thank You";
+$label_congrats_winners = "Congratulations to All Medal Winners";
+$label_placing_entries = "Placing Entries";
+$label_by_the_numbers = "By the Numbers";
+$label_launch_pres = "Launch Awards Presentation";
+
 $label_judging_dashboard = "Judging Dashboard";
 $label_table_assignments = "Table Assignments";
-$label_table = "Table";
+$label_table = "Table"; 
 $label_edit = "Edit";
-$label_add = "Add";
+$label_add = "Add"; 
 $label_disabled = "Disabled";
 $label_judging_scoresheet = "Judging Scoresheet";
 $label_checklist_version = "Checklist Version";
@@ -1550,6 +1566,9 @@ $label_lead_judge = "Lead Judge";
 $label_mini_bos_judge = "Mini-BOS Judge";
 $label_view_my_eval = "View My Evaluation";
 $label_view_other_judge_eval = "View Other Judge's Evaluation";
+$label_honorable_mention = "Honorable Mention";
+$label_places_awarded_table = "Places Awarded at this Table";
+$label_places_awarded_duplicate = "Duplicate Places Awarded at this Table";
 
 $evaluation_info_000 = "The entry pool for each of the tables and flights that have been assigned to you is detailed below.";
 $evaluation_info_001 = "This competition is employing queued judging. If there is more than one judge pair at your table, evaluate the the next entry in the established queue.";
@@ -1579,28 +1598,24 @@ $evaluation_info_024 = "You have been assigned to the following tables. Entry li
 $evaluation_info_025 = "Judges assigned to this table:";
 $evaluation_info_026 = "All consensus scores entered by judges match.";
 $evaluation_info_027 = "Entries that you have completed, or an admin has entered on your behalf, that were not assigned to you in the system.";
-
-$alert_text_086 = "Internet Explorer is not supported by BCOE&M - features and functions will not render properly and your experience will not be optimal. Please upgrade to a newer browser.";
-
-$contact_text_004 = "The competition organizers have not specified any contacts.";
-
-$label_place_awarded = "Place Awarded";
-$label_honorable_mention = "Honorable Mention";
-$label_places_awarded_table = "Places Awarded at this Table";
-$label_places_awarded_duplicate = "Duplicate Places Awarded at this Table";
-
 $evaluation_info_028 = "Judging session has ended.";
 $evaluation_info_029 = "Duplicate places have been awarded at the following tables:";
 $evaluation_info_030 = "Administrators will need to enter any placing entries that remain.";
-
 $evaluation_info_031 = "evaluations have been added by judges";
 $evaluation_info_032 = "Multiple evaluations for a single entry were submitted by a judge.";
 $evaluation_info_033 = "While this is an unusual occurrance, a duplicate evaluation can be submitted due to connectivity issues, etc. A single recorded evaluation for each judge should be officially accepted - all others should be deleted to avoid any entrant confusion.";
-
 $evaluation_info_034 = "When evaluating specialty-type styles, use the this line to comment on characteristics unique to it, such as fruit, spice, fermentable, acidity, etc.";
 $evaluation_info_035 = "Provide comments on style, recipe, process, and drinking pleasure. Include helpful suggestions to the brewer.";
+if (isset($_SESSION['jPrefsScoreDispMax'])) $evaluation_info_036 = "One or more judge scores is out of the acceptable score range. Acceptable range is ".$_SESSION['jPrefsScoreDispMax']. " points or less.";
+$evaluation_info_037 = "All flights at this table appear to be complete.";
+$evaluation_info_038 = "As Head Judge, it is your responsibilty to verify that each entry's consensus scores match, make sure all judge scores for each entry are within the appropriate range, and award places to the designated entries.";
+$evaluation_info_039 = "Entries at this table:";
+$evaluation_info_040 = "Scored entries at this table:";
+$evaluation_info_041 = "Scored entries in your flight:";
+$evaluation_info_042 = "Your scored entries:";
+$evaluation_info_043 = "Judges with evaluations at this table:";
 
-// Scoresheets
+// Scoresheet Labels and Associated Descriptions
 $label_submitted = "Submitted";
 $label_ordinal_position = "Ordinal Position in Flight";
 $label_alcoholic = "Alcoholic";
@@ -1675,7 +1690,7 @@ $descr_acetic = "Vinegary, acetic acid, sharp.";
 $label_chemical = "Chemical";
 $descr_chemical = "Vitamin, nutrient or chemical taste.";
 $label_cloying = "Cloying";
-$descr_cloying = "Syrupy, overly sweet, unbalanced by acid/tannin";
+$descr_cloying = "Syrupy, overly sweet, unbalanced by acid/tannin.";
 $label_floral = "Floral";
 $descr_floral = "The aroma of flower blossoms or perfume.";
 $label_moldy = "Moldy";
@@ -1690,6 +1705,7 @@ $label_vinegary = "Vinegary";
 $label_plastic = "Plastic";
 $label_smoky = "Smoky";
 
+// Scoresheet Descriptors
 $label_inappropriate = "Inappropriate";
 $label_possible_points = "Possible Points";
 $label_malt = "Malt";
@@ -1731,7 +1747,7 @@ $label_fruit = "Fruit";
 $label_acidity = "Acidity";
 $label_tannin = "Tannin";
 
-// Appearance color of entries
+// Appearance and Color of Entries
 $label_white = "White";
 $label_straw = "Straw";
 $label_yellow = "Yellow";
@@ -1757,12 +1773,12 @@ $label_sherry = "Sherry";
 $label_harsh = "Harsh";
 $label_full = "Full";
 
+// Scoresheet Score Descriptions
 $label_descriptor_defs = "Descriptor Definitions (Mark all that apply)";
-
 $label_outstanding = "Outstanding";
 $descr_outstanding = "World-class example of style.";
 $label_excellent = "Excellent";
-$descr_excellent = "Exempifies the style well, requires minor fine tuning.";
+$descr_excellent = "Exemplifies the style well, requires minor fine tuning.";
 $label_very_good = "Very Good";
 $descr_very_good = "Generally within style parameters, some minor flaws.";
 $label_good = "Good";
@@ -1771,24 +1787,6 @@ $label_fair = "Fair";
 $descr_fair = "Off flavors/aromas or major style deficiencies. Unpleasant.";
 $label_problematic = "Problematic";
 $descr_problematic = "Major off flavors and aromas dominate. Hard to drink.";
-
-if (isset($_SESSION['jPrefsScoreDispMax'])) $evaluation_info_036 = "One or more judge scores is out of the acceptable score range. Acceptable range is ".$_SESSION['jPrefsScoreDispMax']. " points or less.";
-$evaluation_info_037 = "All flights at this table appear to be complete.";
-$evaluation_info_038 = "As Head Judge, it is your responsibilty to verify that each entry's consensus scores match, make sure all judge scores for each entry are within the appropriate range, and award places to the designated entries.";
-$evaluation_info_039 = "Entries at this table:";
-$evaluation_info_040 = "Scored entries at this table:";
-$evaluation_info_041 = "Scored entries in your flight:";
-$evaluation_info_042 = "Your scored entries:";
-$evaluation_info_043 = "Judges with evaluations at this table:";
-
-$label_thank_you = "Thank You";
-$label_congrats_winners = "Congratulations to All Medal Winners";
-$label_placing_entries = "Placing Entries";
-$label_by_the_numbers = "By the Numbers";
-$label_launch_pres = "Launch Awards Presentation";
-
-$brewer_entries_text_025 = "Print judges&rsquo; scoresheets";
-$alert_text_087 = "For an optimal experience and so that all features and functions execute properly, please enable JavaScript to continue using this site. Otherwise, unexpected behavior will occur.";
 
 /**
  * ----------------------------------------------------------------------------------

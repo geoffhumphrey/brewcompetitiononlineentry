@@ -5,7 +5,7 @@
 --
 -- ------------------------------------------------------------------------------------
 --
--- UPDATED 2020-12-19 for Version 2.2.0.0
+-- UPDATED 2021-01-26 for Version 2.2.0.0
 --
 -- ------------------------------------------------------------------------------------
 --
@@ -643,13 +643,6 @@ CREATE TABLE IF NOT EXISTS `baseline_judging_locations` (
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
---
--- Dumping data for table `baseline_judging_locations`
---
-
-INSERT INTO `baseline_judging_locations` (`id`, `judgingLocType`, `judgingDate`, `judgingDateEnd`, `judgingLocName`, `judgingLocation`, `judgingRounds`) VALUES
-(1, '0', '1549094400', "NULL", 'Baseline Judging Location', '1340 Pennsylvania St, Denver, CO 80203', 2);
-
 -- --------------------------------------------------------
 
 --
@@ -794,7 +787,7 @@ CREATE TABLE `baseline_preferences` (
   `prefsTheme` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `prefsDateFormat` char(1) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `prefsContact` char(1) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `prefsTimeZone` FLOAT DEFAULT NULL,
+  `prefsTimeZone` float DEFAULT NULL,
   `prefsEntryLimit` int(11) DEFAULT NULL,
   `prefsTimeFormat` tinyint(1) DEFAULT NULL,
   `prefsUserEntryLimit` varchar(4) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'Numeric limit of entries for each user',
@@ -810,9 +803,10 @@ CREATE TABLE `baseline_preferences` (
   `prefsAutoPurge` tinyint(1) DEFAULT NULL,
   `prefsEntryLimitPaid` int(4) DEFAULT NULL,
   `prefsEmailRegConfirm` tinyint(1) DEFAULT NULL,
+  `prefsEmailCC` tinyint(1) DEFAULT NULL,
   `prefsShipping` tinyint(1) DEFAULT NULL,
   `prefsDropOff` tinyint(1) DEFAULT NULL,
-  `prefsLanguage` varchar(25) CHARACTER SET utf8 DEFAULT NULL,
+  `prefsLanguage` varchar(25) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `prefsSpecific` tinyint(1) DEFAULT NULL,
   `prefsShowBestBrewer` int(1) DEFAULT NULL,
   `prefsBestBrewerTitle` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
@@ -829,7 +823,7 @@ CREATE TABLE `baseline_preferences` (
   `prefsTieBreakRule6` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `prefsShowBestClub` int(1) DEFAULT NULL,
   `prefsBestClubTitle` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `prefsBestUseBOS` tinyint(1) DEFAULT NULL,
+  `prefsBestUseBOS` tinyint(1) DEFAULT NULL, 
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
@@ -837,8 +831,9 @@ CREATE TABLE `baseline_preferences` (
 -- Dumping data for table `baseline_preferences`
 --
 
-INSERT INTO `baseline_preferences` (`id`, `prefsTemp`, `prefsWeight1`, `prefsWeight2`, `prefsLiquid1`, `prefsLiquid2`, `prefsPaypal`, `prefsPaypalAccount`, `prefsPaypalIPN`, `prefsCurrency`, `prefsCash`, `prefsCheck`, `prefsCheckPayee`, `prefsTransFee`, `prefsCAPTCHA`, `prefsGoogleAccount`, `prefsSponsors`, `prefsSponsorLogos`, `prefsSponsorLogoSize`, `prefsCompLogoSize`, `prefsDisplayWinners`, `prefsWinnerDelay`, `prefsWinnerMethod`, `prefsDisplaySpecial`, `prefsBOSMead`, `prefsBOSCider`, `prefsEntryForm`, `prefsRecordLimit`, `prefsRecordPaging`, `prefsProEdition`, `prefsTheme`, `prefsDateFormat`, `prefsContact`, `prefsTimeZone`, `prefsEntryLimit`, `prefsTimeFormat`, `prefsUserEntryLimit`, `prefsUserSubCatLimit`, `prefsUSCLEx`, `prefsUSCLExLimit`, `prefsPayToPrint`, `prefsHideRecipe`, `prefsUseMods`, `prefsSEF`, `prefsSpecialCharLimit`, `prefsStyleSet`, `prefsAutoPurge`, `prefsEntryLimitPaid`, `prefsEmailRegConfirm`, `prefsShipping`, `prefsDropOff`, `prefsLanguage`, `prefsSpecific`, `prefsShowBestBrewer`, `prefsBestBrewerTitle`, `prefsFirstPlacePts`, `prefsSecondPlacePts`, `prefsThirdPlacePts`, `prefsFourthPlacePts`, `prefsHMPts`, `prefsTieBreakRule1`, `prefsTieBreakRule2`, `prefsTieBreakRule3`, `prefsTieBreakRule4`, `prefsTieBreakRule5`, `prefsTieBreakRule6`, `prefsShowBestClub`, `prefsBestClubTitle`, `prefsBestUseBOS`) VALUES
-(1, 'Fahrenheit', 'ounces', 'pounds', 'ounces', 'gallons', 'N', NULL, 0, '$', 'N', 'N', NULL, 'N', 0, NULL, 'N', 'N', '250', '300', 'Y', '1577793599', 0, 'J', 'N', 'N', '2', 9999, 150, 0, 'bruxellensis', '1', 'N', '-7.000', NULL, 0, NULL, NULL, NULL, NULL, 'N', 'Y', 'N', 'N', 150, 'BJCP2015', 0, NULL, 0, 1, 1, 'en-US', 1, 0, NULL, 0, 0, 0, 0, 0, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 1);
+INSERT INTO `baseline_preferences` (`id`, `prefsTemp`, `prefsWeight1`, `prefsWeight2`, `prefsLiquid1`, `prefsLiquid2`, `prefsPaypal`, `prefsPaypalAccount`, `prefsPaypalIPN`, `prefsCurrency`, `prefsCash`, `prefsCheck`, `prefsCheckPayee`, `prefsTransFee`, `prefsCAPTCHA`, `prefsGoogleAccount`, `prefsSponsors`, `prefsSponsorLogos`, `prefsSponsorLogoSize`, `prefsCompLogoSize`, `prefsDisplayWinners`, `prefsWinnerDelay`, `prefsWinnerMethod`, `prefsDisplaySpecial`, `prefsBOSMead`, `prefsBOSCider`, `prefsEntryForm`, `prefsRecordLimit`, `prefsRecordPaging`, `prefsProEdition`, `prefsTheme`, `prefsDateFormat`, `prefsContact`, `prefsTimeZone`, `prefsEntryLimit`, `prefsTimeFormat`, `prefsUserEntryLimit`, `prefsUserSubCatLimit`, `prefsUSCLEx`, `prefsUSCLExLimit`, `prefsPayToPrint`, `prefsHideRecipe`, `prefsUseMods`, `prefsSEF`, `prefsSpecialCharLimit`, `prefsStyleSet`, `prefsAutoPurge`, `prefsEntryLimitPaid`, `prefsEmailRegConfirm`, `prefsEmailCC`, `prefsShipping`, `prefsDropOff`, `prefsLanguage`, `prefsSpecific`, `prefsShowBestBrewer`, `prefsBestBrewerTitle`, `prefsFirstPlacePts`, `prefsSecondPlacePts`, `prefsThirdPlacePts`, `prefsFourthPlacePts`, `prefsHMPts`, `prefsTieBreakRule1`, `prefsTieBreakRule2`, `prefsTieBreakRule3`, `prefsTieBreakRule4`, `prefsTieBreakRule5`, `prefsTieBreakRule6`, `prefsShowBestClub`, `prefsBestClubTitle`, `prefsBestUseBOS`) VALUES
+(1, 'Fahrenheit', 'ounces', 'pounds', 'ounces', 'gallons', 'N', NULL, 0, '$', 'N', 'N', NULL, 'Y', 0, '|', 'Y', 'Y', '250', '300', 'Y', '1616974200', 0, 'J', 'N', 'N', '1', 9999, 150, 0, 'bruxellensis', '1', 'Y', -7.001, NULL, 0, NULL, NULL, NULL, NULL, 'N', 'Y', 'N', 'N', 200, 'BJCP2015', 0, NULL, 0, 1, 1, 1, 'en-US', 1, 0, NULL, 0, 0, 0, 0, 0, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0);
+
 
 -- --------------------------------------------------------
 
@@ -1559,7 +1554,7 @@ CREATE TABLE IF NOT EXISTS `baseline_system` (
 --
 
 INSERT INTO `baseline_system` (`id`, `version`, `version_date`, `data_check`, `setup`, `setup_last_step`) VALUES
-(1, '2.2.0.0', '2020-12-31', '2020-12-31 00:00:01', 1, 8);
+(1, '2.2.0.0', '2021-01-31', '2021-01-31 00:00:01', 1, 8);
 
 -- --------------------------------------------------------
 
