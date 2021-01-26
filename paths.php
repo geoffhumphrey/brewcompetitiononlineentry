@@ -97,7 +97,7 @@ define('DEBUG', FALSE);
  * Default is FALSE.
  */
 
-define('DEBUG_SESSION_VARS', FALSE);
+define('DEBUG_SESSION_VARS', TRUE);
 
 /**
  * Enable the following when receiving mySQL "column does
@@ -119,7 +119,7 @@ define('FORCE_UPDATE', FALSE);
  * Default is FALSE.
  */
 
-define('ENABLE_MARKDOWN', FALSE);
+define('ENABLE_MARKDOWN', TRUE);
 
 /**
  * Set the following to TRUE if you would like to use
@@ -131,7 +131,7 @@ define('ENABLE_MARKDOWN', FALSE);
  * Default is FALSE.
  */
 
-define('ENABLE_MAILER', FALSE);
+define('ENABLE_MAILER', TRUE);
 
 /**
  * --------------------------------------------------------

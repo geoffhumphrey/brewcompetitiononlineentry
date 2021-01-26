@@ -136,7 +136,6 @@ if (strpos($section, "step") === FALSE) {
 
 // -------------------- Global Labels - mostly used for titles and navigation --------------------
 // All labels are capitalized and without punctuation
-
 $label_home = "Página de Inicio";
 $label_welcome = "Bienvenidos";
 $label_comps = "Directorio de Competencia";
@@ -654,7 +653,6 @@ $alert_text_077 = "No further steward registrations will be accepted.";
 $alert_text_078 = "Registering as a judge is still available.";
 $alert_text_080 = "Password incorrect.";
 $alert_text_081 = "Password accepted.";
-
 $alert_email_valid = "Email format is valid!";
 $alert_email_not_valid = "Email format is not valid!";
 $alert_email_in_use = "The email address you entered is already in use. Please choose another.";
@@ -671,7 +669,6 @@ $comps_text_002 = "There are no competitions with entry windows open now.";
 $comps_text_003 = "There are no competitions with entry windows closing in the next 7 days.";
 
 // -------------------- BeerXML --------------------
-
 $beerxml_text_000 = "Importing entries is not available.";
 $beerxml_text_001 = "has been uploaded and the brew has been added to your list of entries.";
 $beerxml_text_002 = "Sorry, that file type is not allowed to be uploaded.  Only .xml file extensions are allowed.";
@@ -691,140 +688,125 @@ $beerxml_text_012 = "entry added"; // lower-case and missing punctuation intenti
 
 
 // -------------------- Brew (Add Entry) --------------------
-
-if ($section == "brew") {
-	$brew_text_000 = "Click for specifics about style"; // missing punctuation intentional
-	$brew_text_001 = "Judges will not know the name of your entry.";
-	$brew_text_002 = "[disabled - style entry limit reached]"; // missing punctuation intentional
-	$brew_text_003 = "[disabled - style entry limit reached for user]"; // missing punctuation intentional
-	$brew_text_004 = "Specific type, special ingredients, classic style, strength (for beer styles), and/or color are required.";
-	$brew_text_005 = "Strength required (mead only)"; // missing punctuation intentional
-	$brew_text_006 = "Carbonation level required (mead and cider only)"; // missing punctuation intentional
-	$brew_text_007 = "Sweetness level required (mead and cider only)"; // missing punctuation intentional
-	$brew_text_008 = "This style requires that you provide specific information for entry.";
-	$brew_text_009 = "Requirements for"; // missing punctuation intentional
-	$brew_text_010 = "This style requires more information. Please enter in the provided area.";
-	$brew_text_011 = "The entry's name is required.";
-	$brew_text_012 = "***NOT REQUIRED*** Provide ONLY if you wish the judges to fully consider what you write here when evaluating and scoring your entry. Use to record specifics that you would like judges to consider when evaluating your entry that you have NOT SPECIFIED in other fields (e.g., mash technique, hop variety, honey variety, grape variety, pear variety, etc.).";
-	$brew_text_013 = "DO NOT use this field to specify special ingredients, classic style, strength (for beer entries), or color.";
-	$brew_text_014 = "Provide only if you wish the judges to fully consider what you specify when evaluating and scoring your entry.";
-	$brew_text_015 = "Type of extract (e.g., light, dark) or brand.";
-	$brew_text_016 = "Type of grain (e.g., pilsner, pale ale, etc.)";
-	$brew_text_017 = "Type of ingredient or name.";
-	$brew_text_018 = "Hop name.";
-	$brew_text_019 = "Numbers only (e.g., 12.2, 6.6, etc.).";
-	$brew_text_020 = "Name of strain (e.g., 1056 American Ale).";
-	$brew_text_021 = "Wyeast, White Labs, etc.";
-	$brew_text_022 = "1 smackpack, 2 vials, 2000 ml, etc.";
-	$brew_text_023 = "Primary fermentation in days.";
-	$brew_text_024 = "Saccharification rest, etc.";
-	$brew_text_025 = "Secondary fermentation in days.";
-	$brew_text_026 = "Other fermentation in days.";
-}
+$brew_text_000 = "Click for specifics about style"; // missing punctuation intentional
+$brew_text_001 = "Judges will not know the name of your entry.";
+$brew_text_002 = "[disabled - style entry limit reached]"; // missing punctuation intentional
+$brew_text_003 = "[disabled - style entry limit reached for user]"; // missing punctuation intentional
+$brew_text_004 = "Specific type, special ingredients, classic style, strength (for beer styles), and/or color are required.";
+$brew_text_005 = "Strength required (mead only)"; // missing punctuation intentional
+$brew_text_006 = "Carbonation level required (mead and cider only)"; // missing punctuation intentional
+$brew_text_007 = "Sweetness level required (mead and cider only)"; // missing punctuation intentional
+$brew_text_008 = "This style requires that you provide specific information for entry.";
+$brew_text_009 = "Requirements for"; // missing punctuation intentional
+$brew_text_010 = "This style requires more information. Please enter in the provided area.";
+$brew_text_011 = "The entry's name is required.";
+$brew_text_012 = "***NOT REQUIRED*** Provide ONLY if you wish the judges to fully consider what you write here when evaluating and scoring your entry. Use to record specifics that you would like judges to consider when evaluating your entry that you have NOT SPECIFIED in other fields (e.g., mash technique, hop variety, honey variety, grape variety, pear variety, etc.).";
+$brew_text_013 = "DO NOT use this field to specify special ingredients, classic style, strength (for beer entries), or color.";
+$brew_text_014 = "Provide only if you wish the judges to fully consider what you specify when evaluating and scoring your entry.";
+$brew_text_015 = "Type of extract (e.g., light, dark) or brand.";
+$brew_text_016 = "Type of grain (e.g., pilsner, pale ale, etc.)";
+$brew_text_017 = "Type of ingredient or name.";
+$brew_text_018 = "Hop name.";
+$brew_text_019 = "Numbers only (e.g., 12.2, 6.6, etc.).";
+$brew_text_020 = "Name of strain (e.g., 1056 American Ale).";
+$brew_text_021 = "Wyeast, White Labs, etc.";
+$brew_text_022 = "1 smackpack, 2 vials, 2000 ml, etc.";
+$brew_text_023 = "Primary fermentation in days.";
+$brew_text_024 = "Saccharification rest, etc.";
+$brew_text_025 = "Secondary fermentation in days.";
+$brew_text_026 = "Other fermentation in days.";
 
 // -------------------- Brewer (Account) --------------------
 
-if (($section == "brewer") || ($section == "register") || ($section == "step2") || (($section == "admin") && ($go == "entrant")) || (($section == "admin") && ($go == "judge")) || (($section == "admin") && ($go == "steward"))) {
-	$brewer_text_000 = "Please enter only <em>one</em> person's name.";
-	$brewer_text_001 = "Choose one. This question will be used to verify your identity should you forget your password.";
-	$brewer_text_003 = "To be considered for a GABF Pro-Am brewing opportunity you must be an AHA member.";
-	$brewer_text_004 = "Provide any information that you believe the competition organizer, judge coordinator, or competition staff should know (e.g., allergies, special dietary restrictions, shirt size, etc.).";
-	$brewer_text_005 = "Not Applicable / Shipping Entries";
-	$brewer_text_006 = "Are you willing and qualified to serve as a judge in this competition?";
-	$brewer_text_007 = "Have you passed the BJCP Mead Judge exam?";
-	$brewer_text_008 = "* The <em>Non-BJCP</em> rank is for those who haven't taken the BJCP Beer Judge Entrance Exam, and are <em>not</em> a professional brewer.";
-	$brewer_text_009 = "** The <em>Provisional</em> rank is for those have taken and passed the BJCP Beer Judge Entrance Exam, but have not yet taken the BJCP Beer Judging Exam.";
-	$brewer_text_010 = "Only the first two designations will appear on your printed scoresheet labels.";
-	$brewer_text_011 = "How many competitions have you previously served as a <strong>".strtolower($label_judge)."</strong>?";
-	$brewer_text_012 = "For preferences ONLY. Leaving a style unchecked indicates that you are available to judge it – there's no need to check all styles that your available to judge.";
-	$brewer_text_013 = "Click or tap the button above to expand the non-preferred styles to judge list.";
-	$brewer_text_014 = "There is no need to mark those styles for which you have entries; the system will not allow you to be assigned to any table where you have entries.";
-	$brewer_text_015 = "Are you willing to serve as a steward in this competition?";
-	$brewer_text_016 = "My participation in this judging is entirely voluntary. I know that participation in this judging involves consumption of alcoholic beverages and that this consumption may affect my perceptions and reactions.";
-	$brewer_text_017 = "Click or tap the button above to expand the preferred styles to judge list.";
-	$brewer_text_018 = "By checking this box, I am effectively signing a legal document wherein I accept responsibility for my conduct, behavior and actions and completely absolve the competition and its organizers, individually or collectively, of responsibility for my conduct, behavior and actions.";
+$brewer_text_000 = "Please enter only <em>one</em> person's name.";
+$brewer_text_001 = "Choose one. This question will be used to verify your identity should you forget your password.";
+$brewer_text_003 = "To be considered for a GABF Pro-Am brewing opportunity you must be an AHA member.";
+$brewer_text_004 = "Provide any information that you believe the competition organizer, judge coordinator, or competition staff should know (e.g., allergies, special dietary restrictions, shirt size, etc.).";
+$brewer_text_005 = "Not Applicable / Shipping Entries";
+$brewer_text_006 = "Are you willing and qualified to serve as a judge in this competition?";
+$brewer_text_007 = "Have you passed the BJCP Mead Judge exam?";
+$brewer_text_008 = "* The <em>Non-BJCP</em> rank is for those who haven't taken the BJCP Beer Judge Entrance Exam, and are <em>not</em> a professional brewer.";
+$brewer_text_009 = "** The <em>Provisional</em> rank is for those have taken and passed the BJCP Beer Judge Entrance Exam, but have not yet taken the BJCP Beer Judging Exam.";
+$brewer_text_010 = "Only the first two designations will appear on your printed scoresheet labels.";
+$brewer_text_011 = "How many competitions have you previously served as a <strong>".strtolower($label_judge)."</strong>?";
+$brewer_text_012 = "For preferences ONLY. Leaving a style unchecked indicates that you are available to judge it – there's no need to check all styles that your available to judge.";
+$brewer_text_013 = "Click or tap the button above to expand the non-preferred styles to judge list.";
+$brewer_text_014 = "There is no need to mark those styles for which you have entries; the system will not allow you to be assigned to any table where you have entries.";
+$brewer_text_015 = "Are you willing to serve as a steward in this competition?";
+$brewer_text_016 = "My participation in this judging is entirely voluntary. I know that participation in this judging involves consumption of alcoholic beverages and that this consumption may affect my perceptions and reactions.";
+$brewer_text_017 = "Click or tap the button above to expand the preferred styles to judge list.";
+$brewer_text_018 = "By checking this box, I am effectively signing a legal document wherein I accept responsibility for my conduct, behavior and actions and completely absolve the competition and its organizers, individually or collectively, of responsibility for my conduct, behavior and actions.";
 
 	// v2.1.9
 	$brewer_text_019 = "If you are planning to serve as a judge in any competition, click or tap the button above to enter your judge-related information.";
 	$brewer_text_020 = "Are you willing to serve as a staff member in this competition?";
 	$brewer_text_021 = "Competition staff are people that serve in various roles to assist in the organization and execution of the competition before, during, and after judging. Judges and stewards can also serve as staff members. Staff members can earn BJCP points if the competition is sanctioned.";
 
-}
-
 // -------------------- Contact --------------------
-
-if ($section == "contact") {
-
-	$contact_text_000 = "Use the links below to contact individuals involved with coordinating this competition:";
-	$contact_text_001 = "Use the form below to contact a competition official. All fields with a star are required.";
-	$contact_text_002 = "Additionally, a copy has been sent to the email address you provided.";
-	$contact_text_003 = "Would you like to send another message?";
-
-}
+$contact_text_000 = "Use the links below to contact individuals involved with coordinating this competition:";
+$contact_text_001 = "Use the form below to contact a competition official. All fields with a star are required.";
+$contact_text_002 = "Additionally, a copy has been sent to the email address you provided.";
+$contact_text_003 = "Would you like to send another message?";
 
 // -------------------- Default (Home) -------------------
 
-if (($section == "default") || ($section == "results")) { // Changed for 2.1.14
+$default_page_text_000 = "No drop-off locations have been specified.";
+$default_page_text_001 = "Add a drop-off location?";
+$default_page_text_002 = "No judging dates/locations have been specified.";
+$default_page_text_003 = "Add a judging location?";
+$default_page_text_004 = "Winning Entries";
+$default_page_text_005 = "Winners will be posted on or after";
+$default_page_text_006 = "Welcome";
+$default_page_text_007 = "See your account details and list of entries.";
+$default_page_text_008 = "View your account details here.";
+$default_page_text_009 = "Best of Show Winners";
+$default_page_text_010 = "Winning Entries";
+$default_page_text_011 = "You only need to register your information once and can return to this site to enter more brews or edit the brews you've entered.";
+$default_page_text_012 = "You can even pay your entry fees online if you wish.";
+$default_page_text_013 = "Competition Official";
+$default_page_text_014 = "Competition Officials";
+$default_page_text_015 = "You can send an email to any of the following individuals via ";
+$default_page_text_016 = "is proud to have the following";
+$default_page_text_017 = "for the";
+$default_page_text_018 = "Download the Best of Show winners in PDF format.";
+$default_page_text_019 = "Download the Best of Show winners in HTML format.";
+$default_page_text_020 = "Download the winning entries in PDF format.";
+$default_page_text_021 = "Download the winning entries in HTML format.";
+$default_page_text_022 = "Thank you for your interest in the";
+$default_page_text_023 = "organized by";
 
-	$default_page_text_000 = "No drop-off locations have been specified.";
-	$default_page_text_001 = "Add a drop-off location?";
-	$default_page_text_002 = "No judging dates/locations have been specified.";
-	$default_page_text_003 = "Add a judging location?";
-	$default_page_text_004 = "Winning Entries";
-	$default_page_text_005 = "Winners will be posted on or after";
-	$default_page_text_006 = "Welcome";
-	$default_page_text_007 = "See your account details and list of entries.";
-	$default_page_text_008 = "View your account details here.";
-	$default_page_text_009 = "Best of Show Winners";
-	$default_page_text_010 = "Winning Entries";
-	$default_page_text_011 = "You only need to register your information once and can return to this site to enter more brews or edit the brews you've entered.";
-	$default_page_text_012 = "You can even pay your entry fees online if you wish.";
-	$default_page_text_013 = "Competition Official";
-	$default_page_text_014 = "Competition Officials";
-	$default_page_text_015 = "You can send an email to any of the following individuals via ";
-	$default_page_text_016 = "is proud to have the following";
-	$default_page_text_017 = "for the";
-	$default_page_text_018 = "Download the Best of Show winners in PDF format.";
-	$default_page_text_019 = "Download the Best of Show winners in HTML format.";
-	$default_page_text_020 = "Download the winning entries in PDF format.";
-	$default_page_text_021 = "Download the winning entries in HTML format.";
-	$default_page_text_022 = "Thank you for your interest in the";
-	$default_page_text_023 = "organized by";
+$reg_open_text_000 = "Judge and Steward Registration is";
+$reg_open_text_001 = "Open";
+$reg_open_text_002 = "If you <em>have not</em> registered and are willing to be a volunteer,";
+$reg_open_text_003 = "please register";
+$reg_open_text_004 = "If you <em>have</em> registered, log in and then choose <em>Edit Account</em> from the My Account menu indicated by the";
+$reg_open_text_005 = "icon on the top menu.";
+$reg_open_text_006 = "Since you have already registered, you can";
+$reg_open_text_007 = "check your account info";
+$reg_open_text_008 = "to see whether you have indicated that you are willing to judge and/or steward.";
+$reg_open_text_009 = "If you are willing to judge or steward, please return to register on or after";
+$reg_open_text_010 = "Entry Registration is";
+$reg_open_text_011 = "To add your entries into the system";
+$reg_open_text_012 = "please proceed through the registration process";
+$reg_open_text_013 = "if you already have an account.";
+$reg_open_text_014 = "use the add an entry form";
 
-	$reg_open_text_000 = "Judge and Steward Registration is";
-	$reg_open_text_001 = "Open";
-	$reg_open_text_002 = "If you <em>have not</em> registered and are willing to be a volunteer,";
-	$reg_open_text_003 = "please register";
-	$reg_open_text_004 = "If you <em>have</em> registered, log in and then choose <em>Edit Account</em> from the My Account menu indicated by the";
-	$reg_open_text_005 = "icon on the top menu.";
-	$reg_open_text_006 = "Since you have already registered, you can";
-	$reg_open_text_007 = "check your account info";
-	$reg_open_text_008 = "to see whether you have indicated that you are willing to judge and/or steward.";
-	$reg_open_text_009 = "If you are willing to judge or steward, please return to register on or after";
-	$reg_open_text_010 = "Entry Registration is";
-	$reg_open_text_011 = "To add your entries into the system";
-	$reg_open_text_012 = "please proceed through the registration process";
-	$reg_open_text_013 = "if you already have an account.";
-	$reg_open_text_014 = "use the add an entry form";
-
-	// v2.1.9
-	$reg_open_text_015 = "Judge Registration is";
-	$reg_open_text_016 = "Steward Registration is";
-	$reg_closed_text_000 = "Thanks and Good Luck To All Who Entered the";
-	$reg_closed_text_001 = "There are";
-	$reg_closed_text_002 = "registered participants, judges, and stewards.";
-	$reg_closed_text_003 = "registered entries and";
-	$reg_closed_text_004 = "registered participants, judges, and stewards.";
-	$reg_closed_text_005 = "As of";
-	$reg_closed_text_006 = "received and processed entries (this number will update as entries are picked up from drop-off locations and organized for judging).";
-	$reg_closed_text_007 = "Competition judging dates are yet to be determined. Please check back later.";
-	$reg_closed_text_008 = "Map to";
-	$judge_closed_000 = "Thanks to all who participated in the";
-	$judge_closed_001 = "There were";
-	$judge_closed_002 = "entries judged and";
-	$judge_closed_003 = "registered participants, judges, and stewards.";
-
-}
+// v2.1.9
+$reg_open_text_015 = "Judge Registration is";
+$reg_open_text_016 = "Steward Registration is";
+$reg_closed_text_000 = "Thanks and Good Luck To All Who Entered the";
+$reg_closed_text_001 = "There are";
+$reg_closed_text_002 = "registered participants, judges, and stewards.";
+$reg_closed_text_003 = "registered entries and";
+$reg_closed_text_004 = "registered participants, judges, and stewards.";
+$reg_closed_text_005 = "As of";
+$reg_closed_text_006 = "received and processed entries (this number will update as entries are picked up from drop-off locations and organized for judging).";
+$reg_closed_text_007 = "Competition judging dates are yet to be determined. Please check back later.";
+$reg_closed_text_008 = "Map to";
+$judge_closed_000 = "Thanks to all who participated in the";
+$judge_closed_001 = "There were";
+$judge_closed_002 = "entries judged and";
+$judge_closed_003 = "registered participants, judges, and stewards.";
 
 // -------------------- Entry Info --------------------
 
@@ -876,7 +858,6 @@ $entry_info_text_044 = "Map to";
 $entry_info_text_045 = "Click/Tap for Required Entry Info";
 $entry_info_text_046 = "If a style's name is hyperlinked, it has specific entry requirements. Click or tap on the name to view the subcategory's requirements.";
 
-
 // -------------------- Footer --------------------
 
 // -------------------- Judge Info --------------------
@@ -903,9 +884,7 @@ $brewer_entries_text_015 = "You cannot delete your entry at this time.";
 // -------------------- Login --------------------
 
 // -------------------- Past Winners --------------------
-if ($section == "past_winners") {
-	$past_winners_text_000 = "View past winners:";
-}
+$past_winners_text_000 = "View past winners:";
 
 // -------------------- Pay for Entries --------------------
 
@@ -942,81 +921,75 @@ $pay_text_029 = "Please go to your entry list to confirm all your entry data. Un
 
 // -------------------- QR --------------------
 
-    // Ignore the next four lines
-	if (strpos($view, "^") !== FALSE) {
-		$qr_text_019 = sprintf("%04d",$checked_in_numbers[0]);
-		if (is_numeric($checked_in_numbers[1])) $qr_text_020 = sprintf("%06d",$checked_in_numbers[1]);
-		else $qr_text_020 = $checked_in_numbers[1];
-	}
+// Ignore the next four lines
+if (strpos($view, "^") !== FALSE) {
+	$qr_text_019 = sprintf("%04d",$checked_in_numbers[0]);
+	if (is_numeric($checked_in_numbers[1])) $qr_text_020 = sprintf("%06d",$checked_in_numbers[1]);
+	else $qr_text_020 = $checked_in_numbers[1];
+}
 
-	$qr_text_000 = $alert_text_080;
-	$qr_text_001 = $alert_text_081;
+$qr_text_000 = $alert_text_080;
+$qr_text_001 = $alert_text_081;
 
-    // Begin translations here
-	if (strpos($view, "^") !== FALSE) $qr_text_002 = sprintf("Entry number <span class=\"text-danger\">%s</span> is checked in with <span class=\"text-danger\">%s</span> as its judging number.",$qr_text_019,$qr_text_020); else $qr_text_002 = "";
-	$qr_text_003 = "If this judging number is <em>not</em> correct, <strong>re-scan the code and re-enter the correct judging number.";
-	if (strpos($view, "^") !== FALSE) $qr_text_004 = sprintf("Entry number %s is checked in.",$qr_text_019); else $qr_text_004 = "";
-	if (strpos($view, "^") !== FALSE) $qr_text_005 = sprintf("Entry number %s was not found in the database. Set the bottle(s) aside and alert the competition organizer.",$qr_text_019); else $qr_text_005 = "";
-	if (strpos($view, "^") !== FALSE) $qr_text_006 = sprintf("The judging number you entered - %s - is already assigned to entry number %s.",$qr_text_020,$qr_text_019); else $qr_text_006 = "";
-	$qr_text_007 = "QR Code Entry Check-In";
-	$qr_text_008 = "To check in entries via QR code, please provide the correct password. You will only need to provide the password once per session - be sure to keep the QR Code scanning app open.";
-	$qr_text_009 = "Assign a judging number and/or box number to entry";
-	$qr_text_010 = "ONLY inupt a judging number if your competition is using judging number labels at sorting.";
-	$qr_text_011 = "Six numbers with leading zeros - e.g., 000021.";
-	$qr_text_012 = "Be sure to double-check your input and affix the appropriate judging number labels to each bottle and bottle label (if applicable).";
-	$qr_text_013 = "Judging numbers must be six characters and cannot include the ^ character.";
-	$qr_text_014 = "Waiting for scanned QR code input.";
-	$qr_text_015 = "Launch or go back to your mobile device's scanning app to scan a QR code.";
-	$qr_text_016 = "Need a QR Code scanning app? Search <a class=\"hide-loader\" href=\"https://play.google.com/store/search?q=qr%20code%20scanner&c=apps&hl=en\" target=\"_blank\">Google Play</a> (Android) or <a class=\"hide-loader\" href=\"https://itunes.apple.com/store/\" target=\"_blank\">iTunes</a> (iOS).";
-	$qr_text_017 = "A QR Code scanning app is required to utilize this feature.";
-	$qr_text_018 = "Launch the app on your mobile device, scan a QR Code located on a bottle label, enter the required password, and check in the entry.";
-
+// Begin translations here
+if (strpos($view, "^") !== FALSE) $qr_text_002 = sprintf("Entry number <span class=\"text-danger\">%s</span> is checked in with <span class=\"text-danger\">%s</span> as its judging number.",$qr_text_019,$qr_text_020); else $qr_text_002 = "";
+$qr_text_003 = "If this judging number is <em>not</em> correct, <strong>re-scan the code and re-enter the correct judging number.";
+if (strpos($view, "^") !== FALSE) $qr_text_004 = sprintf("Entry number %s is checked in.",$qr_text_019); else $qr_text_004 = "";
+if (strpos($view, "^") !== FALSE) $qr_text_005 = sprintf("Entry number %s was not found in the database. Set the bottle(s) aside and alert the competition organizer.",$qr_text_019); else $qr_text_005 = "";
+if (strpos($view, "^") !== FALSE) $qr_text_006 = sprintf("The judging number you entered - %s - is already assigned to entry number %s.",$qr_text_020,$qr_text_019); else $qr_text_006 = "";
+$qr_text_007 = "QR Code Entry Check-In";
+$qr_text_008 = "To check in entries via QR code, please provide the correct password. You will only need to provide the password once per session - be sure to keep the QR Code scanning app open.";
+$qr_text_009 = "Assign a judging number and/or box number to entry";
+$qr_text_010 = "ONLY inupt a judging number if your competition is using judging number labels at sorting.";
+$qr_text_011 = "Six numbers with leading zeros - e.g., 000021.";
+$qr_text_012 = "Be sure to double-check your input and affix the appropriate judging number labels to each bottle and bottle label (if applicable).";
+$qr_text_013 = "Judging numbers must be six characters and cannot include the ^ character.";
+$qr_text_014 = "Waiting for scanned QR code input.";
+$qr_text_015 = "Launch or go back to your mobile device's scanning app to scan a QR code.";
+$qr_text_016 = "Need a QR Code scanning app? Search <a class=\"hide-loader\" href=\"https://play.google.com/store/search?q=qr%20code%20scanner&c=apps&hl=en\" target=\"_blank\">Google Play</a> (Android) or <a class=\"hide-loader\" href=\"https://itunes.apple.com/store/\" target=\"_blank\">iTunes</a> (iOS).";
+$qr_text_017 = "A QR Code scanning app is required to utilize this feature.";
+$qr_text_018 = "Launch the app on your mobile device, scan a QR Code located on a bottle label, enter the required password, and check in the entry.";
 
 // -------------------- Registration Open --------------------
 
 // -------------------- Registration Closed --------------------
 
 // -------------------- Register --------------------
-
-if (($section == "register") || ($section == "brewer") || ($action == "register") || ($go == "account") || ($section == "step2")) {
-
-	$register_text_000 = "Is the volunteer ";
-	$register_text_001 = "Are you ";
-	$register_text_002 = "Registration has closed.";
-	$register_text_003 = "Thank you for your interest.";
-	$register_text_004 = "The information you provide beyond your first name, last name, and club is strictly for record-keeping and contact purposes.";
-	$register_text_005 = "A condition of entry into the competition is providing this information. Your name and club may be displayed should one of your entries place, but no other information will be made public.";
-	$register_text_006 = "Reminder: You are only allowed to enter one region and once you have registered at a location, you will NOT be able to change it.";
-	$register_text_007 = "Quick";
-	$register_text_008 = "Register";
-	$register_text_009 = "a Judge";
-	$register_text_010 = "a Participant";
-	$register_text_011 = "To register, create your online account by filling out the fields below.";
-	$register_text_012 = "Quickly add a participant to the competition&rsquo;s judge/steward pool. A dummy address and phone number will be used and a default password of <em>bcoem</em> will be given to each participant added via this screen.";
-	$register_text_013 = "Entry into this competition is conducted completely online.";
-	$register_text_014 = "To add your entries and/or indicate that you are willing to judge or steward (judges and stewards can also add entries), you will need to create an account on our system.";
-	$register_text_015 = "Your email address will be your user name and will be used as a means of information dissemination by the competition staff. Please make sure it is correct.";
-	$register_text_016 = "Once you have registered, you can proceed through the entry process.";
-	$register_text_017 = "Each entry you add will automatically be assigned a number by the system.";
-	$register_text_018 = "Choose one. This question will be used to verify your identity should you forget your password.";
-	$register_text_019 = "Please provide an email address.";
-	$register_text_020 = "The email addresses you entered don't match.";
-	$register_text_021 = "Email addresses serve as user names.";
-	$register_text_022 = "Please provide a password.";
-	$register_text_023 = "Please provide an answer to your security question.";
-	$register_text_024 = "Make your security answer something only you will easily remember!";
-	$register_text_025 = "Please provide a first name.";
-	$register_text_026 = "Please provide a last name.";
-	$register_text_027 = "a Steward";
-	$register_text_028 = "Please provide a street address.";
-	$register_text_029 = "Please provide a city.";
-	$register_text_030 = "Please provide a state or province.";
-	$register_text_031 = "Please provide a zip or postal code.";
-	$register_text_032 = "Please provide a primary telephone number.";
-	$register_text_033 = "Only American Homebrewers Association members are eligible for a Great American Beer Festival Pro-Am opportunity.";
-	$register_text_034 = "To register, you must check the box, indicating that you agree to the waiver statement.";
-
-}
+$register_text_000 = "Is the volunteer ";
+$register_text_001 = "Are you ";
+$register_text_002 = "Registration has closed.";
+$register_text_003 = "Thank you for your interest.";
+$register_text_004 = "The information you provide beyond your first name, last name, and club is strictly for record-keeping and contact purposes.";
+$register_text_005 = "A condition of entry into the competition is providing this information. Your name and club may be displayed should one of your entries place, but no other information will be made public.";
+$register_text_006 = "Reminder: You are only allowed to enter one region and once you have registered at a location, you will NOT be able to change it.";
+$register_text_007 = "Quick";
+$register_text_008 = "Register";
+$register_text_009 = "a Judge";
+$register_text_010 = "a Participant";
+$register_text_011 = "To register, create your online account by filling out the fields below.";
+$register_text_012 = "Quickly add a participant to the competition&rsquo;s judge/steward pool. A dummy address and phone number will be used and a default password of <em>bcoem</em> will be given to each participant added via this screen.";
+$register_text_013 = "Entry into this competition is conducted completely online.";
+$register_text_014 = "To add your entries and/or indicate that you are willing to judge or steward (judges and stewards can also add entries), you will need to create an account on our system.";
+$register_text_015 = "Your email address will be your user name and will be used as a means of information dissemination by the competition staff. Please make sure it is correct.";
+$register_text_016 = "Once you have registered, you can proceed through the entry process.";
+$register_text_017 = "Each entry you add will automatically be assigned a number by the system.";
+$register_text_018 = "Choose one. This question will be used to verify your identity should you forget your password.";
+$register_text_019 = "Please provide an email address.";
+$register_text_020 = "The email addresses you entered don't match.";
+$register_text_021 = "Email addresses serve as user names.";
+$register_text_022 = "Please provide a password.";
+$register_text_023 = "Please provide an answer to your security question.";
+$register_text_024 = "Make your security answer something only you will easily remember!";
+$register_text_025 = "Please provide a first name.";
+$register_text_026 = "Please provide a last name.";
+$register_text_027 = "a Steward";
+$register_text_028 = "Please provide a street address.";
+$register_text_029 = "Please provide a city.";
+$register_text_030 = "Please provide a state or province.";
+$register_text_031 = "Please provide a zip or postal code.";
+$register_text_032 = "Please provide a primary telephone number.";
+$register_text_033 = "Only American Homebrewers Association members are eligible for a Great American Beer Festival Pro-Am opportunity.";
+$register_text_034 = "To register, you must check the box, indicating that you agree to the waiver statement.";
 
 // -------------------- Sidebar --------------------
 
@@ -1100,7 +1073,6 @@ $styles_entry_text_C2D = "Entrants MUST specify starting gravity, final gravity 
 $styles_entry_text_C2E = "Entrants MUST specify carbonation level (3 levels). Entrants MUST specify sweetness (5 categories). Entrants MUST specify all botanicals added. If hops are used, entrant must specify variety/varieties used.";
 $styles_entry_text_C2F = "Entrants MUST specify all ingredients. Entrants MUST specify carbonation level (3 levels). Entrants MUST specify sweetness (5 categories).";
 
-
 // -------------------- User (Edit Email) --------------------
 
 $user_text_000 = "A new email address is required and must be in valid form.";
@@ -1109,24 +1081,19 @@ $user_text_002 = "Enter the new password.";
 $user_text_003 = "Please check this box if you wish to proceed with changing your email address.";
 
 // -------------------- Volunteers --------------------
+$volunteers_text_000 = "If you have registered,";
+$volunteers_text_001 = "and then choose <em>Edit Account</em> from the My Account menu indicated by the";
+$volunteers_text_002 = "icon on the top menu";
+$volunteers_text_003 = "and";
+$volunteers_text_004 = "If you have <em>not</em> registered and are willing to be a judge or steward, please register";
+$volunteers_text_005 = "Since you have already registered,";
+$volunteers_text_006 = "access your account";
+$volunteers_text_007 = "to see if you have volunteered to be a judge or steward";
+$volunteers_text_008 = "If you are willing to judge or steward, please return to register on or after";
 
-if ($section == "volunteers") {
-
-	$volunteers_text_000 = "If you have registered,";
-	$volunteers_text_001 = "and then choose <em>Edit Account</em> from the My Account menu indicated by the";
-	$volunteers_text_002 = "icon on the top menu";
-	$volunteers_text_003 = "and";
-	$volunteers_text_004 = "If you have <em>not</em> registered and are willing to be a judge or steward, please register";
-	$volunteers_text_005 = "Since you have already registered,";
-	$volunteers_text_006 = "access your account";
-	$volunteers_text_007 = "to see if you have volunteered to be a judge or steward";
-	$volunteers_text_008 = "If you are willing to judge or steward, please return to register on or after";
-
-	// v2.1.9
-	$volunteers_text_009 = "If you would like to volunteer to be a competition staff member, please register or update your account to indicate that you wish to be a part of the competition staff.";
-	$volunteers_text_010 = "";
-
-}
+// v2.1.9
+$volunteers_text_009 = "If you would like to volunteer to be a competition staff member, please register or update your account to indicate that you wish to be a part of the competition staff.";
+$volunteers_text_010 = "";
 
 $login_text_000 = "You are already logged in.";
 $login_text_001 = "There is no email address in the system that matches the one you entered.";
@@ -1279,62 +1246,54 @@ $alert_text_084 = "As an Administrator, you can add an entry to an organization'
 $alert_text_085 = "You will not be able to print any entry's paperwork (bottle labels, etc.) until payment for it has been confirmed and it has been marked as &quot;paid&quot; below.";
 
 // -------------------- Brew (Add Entry) --------------------
-if ($section == "brew") {
-	$brew_text_027 = "This Brewers Association style requires a statement from the brewer regarding the special nature of the product. See the <a href=\"https://www.brewersassociation.org/resources/brewers-association-beer-style-guidelines/\" target=\"_blank\">BA Style Guidelines</a> for specific guidance.";
-	$brew_text_028 = "***NOT REQUIRED*** Add information here that is detailed in the style guidelines as a characteristic that you MAY declare.";
-	$brew_text_029 = "Admin editing disabled. Your profile is considered a personal profile and not a organizational profile, and thus, not eligible to add entries. To add an entry for an organization, access the Manage Entries list and choose an organization from the &quot;Add an Entry For...&quot; dropdown.";
+$brew_text_027 = "This Brewers Association style requires a statement from the brewer regarding the special nature of the product. See the <a href=\"https://www.brewersassociation.org/resources/brewers-association-beer-style-guidelines/\" target=\"_blank\">BA Style Guidelines</a> for specific guidance.";
+$brew_text_028 = "***NOT REQUIRED*** Add information here that is detailed in the style guidelines as a characteristic that you MAY declare.";
+$brew_text_029 = "Admin editing disabled. Your profile is considered a personal profile and not a organizational profile, and thus, not eligible to add entries. To add an entry for an organization, access the Manage Entries list and choose an organization from the &quot;Add an Entry For...&quot; dropdown.";
 
-    // v2.1.13
-    $brew_text_030 = "milk / lactose";
-    $brew_text_031 = "eggs";
-    $brew_text_032 = "fish";
-    $brew_text_033 = "crustacean shellfish";
-    $brew_text_034 = "tree nuts";
-    $brew_text_035 = "peanuts";
-    $brew_text_036 = "wheat";
-    $brew_text_037 = "soybeans";
-    $brew_text_038 = "Does this entry have possible food allergens? Common food allergens include milk (including lactose), eggs, fish, crustaceans, tree nuts, peanuts, wheat, soybeans, etc.";
-    $brew_text_039 = "Please specify any and all possible allergen(s)";
-}
+// v2.1.13
+$brew_text_030 = "milk / lactose";
+$brew_text_031 = "eggs";
+$brew_text_032 = "fish";
+$brew_text_033 = "crustacean shellfish";
+$brew_text_034 = "tree nuts";
+$brew_text_035 = "peanuts";
+$brew_text_036 = "wheat";
+$brew_text_037 = "soybeans";
+$brew_text_038 = "Does this entry have possible food allergens? Common food allergens include milk (including lactose), eggs, fish, crustaceans, tree nuts, peanuts, wheat, soybeans, etc.";
+$brew_text_039 = "Please specify any and all possible allergen(s)";
 
 // -------------------- Brewer (Account) --------------------
-if (($section == "brewer") || ($section == "register") || ($section == "step2") || (($section == "admin") && ($go == "entrant")) || (($section == "admin") && ($go == "judge")) || (($section == "admin") && ($go == "steward"))) {
-	$brewer_text_022 = "You will be able to identify a co-brewer when adding your entries.";
-	$brewer_text_023 = "Select &quot;None&quot; if you are not affiliated with a club. Select &quot;Other&quot; if your club is not on the list - <strong>be sure to use the search box</strong>.";
-    $brewer_text_024 = "Please provide your first name.";
-    $brewer_text_025 = "Please provide your last name.";
-    $brewer_text_026 = "Please provide your phone number.";
-    $brewer_text_027 = "Please provide your address.";
-    $brewer_text_028 = "Please provide your city.";
-    $brewer_text_029 = "Please provide your state or province.";
-    $brewer_text_030 = "Pleaee provide your zip or postal code.";
-    $brewer_text_031 = "Please choose your country.";
-    $brewer_text_032 = "Please provide your organization name.";
-    $brewer_text_033 = "Please choose a security question.";
-    $brewer_text_034 = "Please provide a response to your security question.";
+$brewer_text_022 = "You will be able to identify a co-brewer when adding your entries.";
+$brewer_text_023 = "Select &quot;None&quot; if you are not affiliated with a club. Select &quot;Other&quot; if your club is not on the list - <strong>be sure to use the search box</strong>.";
+$brewer_text_024 = "Please provide your first name.";
+$brewer_text_025 = "Please provide your last name.";
+$brewer_text_026 = "Please provide your phone number.";
+$brewer_text_027 = "Please provide your address.";
+$brewer_text_028 = "Please provide your city.";
+$brewer_text_029 = "Please provide your state or province.";
+$brewer_text_030 = "Pleaee provide your zip or postal code.";
+$brewer_text_031 = "Please choose your country.";
+$brewer_text_032 = "Please provide your organization name.";
+$brewer_text_033 = "Please choose a security question.";
+$brewer_text_034 = "Please provide a response to your security question.";
 
-    // v2.1.12
-    $brewer_text_035 = "Have you passed the BJCP Cider Judge exam?";
-}
+// v2.1.12
+$brewer_text_035 = "Have you passed the BJCP Cider Judge exam?";
 
 // -------------------- Entry Info --------------------
-if ($section == "entry") {
-	$entry_info_text_047 = "If a style's name is hyperlinked, it has specific entry requirements. Click or tap on the name to access the Brewers Association styles as listed on their website.";
-}
+$entry_info_text_047 = "If a style's name is hyperlinked, it has specific entry requirements. Click or tap on the name to access the Brewers Association styles as listed on their website.";
 
 // -------------------- List (User Entry List) --------------------
-if (($section == "list") || ($section == "account") || ($go == "entries")) {
-	$brewer_entries_text_016 = "Style Entered NOT Accepted";
-	$brewer_entries_text_017 = "Entries will not be displayed as received until the competition staff has marked them as such in the system. Typically, this occurs AFTER all entries have been collected from all drop-off and shipping locations and sorted.";
-	$brewer_entries_text_018 = "You will not be able to print this entry's paperwork (bottle labels, etc.) until it has been marked as paid.";
-	$brewer_entries_text_019 = "Printing of entry paperwork is not available at this time.";
-	$brewer_entries_text_020 = "Editing of entries is not available at this time. If you wish to edit your entry, contact a competition official.";
-}
+$brewer_entries_text_016 = "Style Entered NOT Accepted";
+$brewer_entries_text_017 = "Entries will not be displayed as received until the competition staff has marked them as such in the system. Typically, this occurs AFTER all entries have been collected from all drop-off and shipping locations and sorted.";
+$brewer_entries_text_018 = "You will not be able to print this entry's paperwork (bottle labels, etc.) until it has been marked as paid.";
+$brewer_entries_text_019 = "Printing of entry paperwork is not available at this time.";
+$brewer_entries_text_020 = "Editing of entries is not available at this time. If you wish to edit your entry, contact a competition official.";
 
 if (SINGLE) $brewer_info_000 = "Hello";
 else $brewer_info_000 = "Thank you for participating in the";
 $brewer_info_001 = "Your account details were last updated";
-$brewer_info_002 = "Take a moment to <a href=\"#entries\">review your entries</a>.";
+$brewer_info_002 = "Take a moment to <a href=\"#entries\">review your entries</a>";
 $brewer_info_003 = "pay your entry fees</a>";
 $brewer_info_004 = "per entry";
 $brewer_info_005 = "An American Homebrewers Association (AHA) membership is required if one of your entries is selected for a Great American Beer Festival Pro-Am.";
@@ -1353,20 +1312,19 @@ $pay_text_032 = "No payment is necessary. Thank you!";
 $pay_text_033 = "You have unpaid entries. Click or tap to pay for your entries.";
 
 // -------------------- Register --------------------
-if (($section == "register") || ($section == "brewer") || ($action == "register") || ($go == "account") || ($section == "step2")) {
-	$register_text_035 = "The information you provide beyond your organization's name is strictly for record-keeping and contact purposes.";
-	$register_text_036 = "A condition of entry into the competition is providing this information, including a contact person's email address and phone number. Your organization's name may be displayed should one of your entries place, but no other information will be made public.";
-	$register_text_037 = "Registration Confirmation";
-	$register_text_038 = "An administrator has registerd you for an account. The following is confirmation of the information input:";
-	$register_text_039 = "Thank you for registering an account. The following is confirmation of the information you provided:";
-	$register_text_040 = "If any of the above information is incorrect,";
-	$register_text_041 = "log in to your account";
-	$register_text_042 = "and make the necessary changes. Best of luck in the competition!";
-	$register_text_043 = "Please do not reply to this email as it is automatically generated. The originating account is not active or monitored.";
-	$register_text_044 = "Please provide an organization name.";
-	$register_text_045 = "Provide a brewery name, brewpub name, etc. Be sure to check the competition information for types of beverages accepted.";
-	$register_text_046 = "For U.S. organizations only.";
-}
+$register_text_035 = "The information you provide beyond your organization's name is strictly for record-keeping and contact purposes.";
+$register_text_036 = "A condition of entry into the competition is providing this information, including a contact person's email address and phone number. Your organization's name may be displayed should one of your entries place, but no other information will be made public.";
+$register_text_037 = "Registration Confirmation";
+$register_text_038 = "An administrator has registerd you for an account. The following is confirmation of the information input:";
+$register_text_039 = "Thank you for registering an account. The following is confirmation of the information you provided:";
+$register_text_040 = "If any of the above information is incorrect,";
+$register_text_041 = "log in to your account";
+$register_text_042 = "and make the necessary changes. Best of luck in the competition!";
+$register_text_043 = "Please do not reply to this email as it is automatically generated. The originating account is not active or monitored.";
+$register_text_044 = "Please provide an organization name.";
+$register_text_045 = "Provide a brewery name, brewpub name, etc. Be sure to check the competition information for types of beverages accepted.";
+$register_text_046 = "For U.S. organizations only.";
+
 
 // -------------------- User Registration --------------------
 $user_text_004 = "Be sure to use upper and lower case letters, numbers, and special characters for a stronger password.";
@@ -1517,6 +1475,278 @@ $brewer_text_043 = "Or, are you, or have you ever been, employed on the brewing 
 $label_entrant_reg = "Entrant Registration";
 $sidebar_text_026 = "are in the system as of";
 $label_paid_entries = "Paid Entries";
+
+// ----------------------------------------------------------------------------------
+// Version 2.1.20 Additions
+// ----------------------------------------------------------------------------------
+$brewer_info_013 = "You have been assigned as a judge.";
+$brewer_info_014 = "Access the Judging Dashboard using the button below to enter evaluations of the entries assigned to you.";
+$label_judging_dashboard = "Judging Dashboard";
+$label_table_assignments = "Table Assignments";
+$label_table = "Table";
+$label_edit = "Edit";
+$label_add = "Add";
+$label_disabled = "Disabled";
+$label_judging_scoresheet = "Judging Scoresheet";
+$label_checklist_version = "Checklist Version";
+$label_classic_version = "Classic Version";
+$label_structured_version = "Structured Version";
+$label_submit_evaluation = "Submit Evaluation";
+$label_edit_evaluation = "Edit Evaluation";
+$label_your_score = "Your Score";
+$label_your_assigned_score = "Your Entered Consensus Score";
+$label_assigned_score = "Consensus Score";
+$label_accepted_score = "Official Accepted Score";
+$label_recorded_scores = "Entered Consensus Scores";
+$label_go = "Go";
+$label_go_back = "Go Back";
+$label_na = "N/A";
+$label_evals_submitted = "Evaluations Submitted";
+$label_evaluations = "Entry Evaluations";
+$label_submitted_by = "Submitted By";
+$label_attention = "Attention!";
+$label_unassigned_eval = "Unassigned Evaluations";
+$label_head_judge = "Head Judge";
+$label_lead_judge = "Lead Judge";
+$label_mini_bos_judge = "Mini-BOS Judge";
+$evaluation_info_000 = "The entry pool for each of the tables and flights that have been assigned to you is detailed below.";
+$evaluation_info_001 = "This competition is employing queued judging. If there is more than one judge pair at your table, evaluate the the next entry in the established queue.";
+$evaluation_info_002 = "To ensure an accurate and smooth competition, you and your judge partner(s) should ONLY judge entries at your table that have not been evaluated yet. See your organizer or judge coordinator if you have any questions.";
+$evaluation_info_003 = "Awaiting final acceptance from a site administrator.";
+$evaluation_info_004 = "Your consensus score has been entered.";
+$evaluation_info_005 = "This entry <strong>is not</strong> part of your assigned flight.";
+$evaluation_info_006 = "Edit as needed.";
+$evaluation_info_007 = "Choose from the following entries.";
+$evaluation_info_008 = "To record your evaluation, select an entry's corresponding Add button. Only tables for past and current judging sessions are available.";
+$evaluation_info_009 = "You have been assigned as a judge, but have not been assigned to any table(s) or flight(s) in the system. Please check with the organizer or judge coordinator.";
+$evaluation_info_010 = "This entry is part of your assigned flight.";
+$evaluation_info_011 = "Add an evaluation for an entry not assigned to you.";
+$evaluation_info_012 = "Use only when you are asked to evaluate an entry that has not been assigned to you in the system.";
+$evaluation_info_013 = "Entry was not found.";
+$evaluation_info_014 = "Please verify the six-character entry number and try again.";
+$evaluation_info_015 = "Be sure that the number is 6 digits in length.";
+$evaluation_info_016 = "No evaluation recorded.";
+$evaluation_info_017 = "Consensus scores entered by judges do not match.";
+$evaluation_info_018 = "Verification is needed for the following entries:";
+$evaluation_info_019 = "The following entries have only one evaluation submitted:";
+$evaluation_info_020 = "Your Judging Dashboard will be available"; // Punctuation omitted intentionally
+$evaluation_info_021 = "to add evaluations for entries assigned to you"; // Punctuation omitted intentionally
+$evaluation_info_022 = "Judging and evaluation submission is closed.";
+$evaluation_info_023 = "If you have any questions, contact the competition organizer or judge coordinator.";
+$evaluation_info_024 = "You have been assigned to the following tables. Entry lists for each table will only show for past and current judging sessions.";
+$evaluation_info_025 = "Judges assigned to this table:";
+$evaluation_info_026 = "All consensus scores entered by judges match.";
+$evaluation_info_027 = "Entries that you have completed, or an admin has entered on your behalf, that were not assigned to you in the system.";
+$alert_text_086 = "Internet Explorer is not supported by BCOE&M - features and functions will not render properly and your experience will not be optimal. Please upgrade to a newer browser.";
+
+$alert_text_086 = "Internet Explorer is not supported by BCOE&M - features and functions will not render properly and your experience will not be optimal. Please upgrade to a newer browser.";
+
+$contact_text_004 = "The competition organizers have not specified any contacts.";
+
+$label_place_awarded = "Place Awarded";
+$label_honorable_mention = "Honorable Mention";
+$label_places_awarded_table = "Places Awarded at this Table";
+$label_places_awarded_duplicate = "Duplicate Places Awarded at this Table";
+
+$evaluation_info_028 = "Judging session has ended.";
+$evaluation_info_029 = "Duplicate places have been awarded at the following tables:";
+$evaluation_info_030 = "Administrators will need to enter any placing entries that remain.";
+
+$evaluation_info_031 = "evaluations have been added by judges";
+$evaluation_info_032 = "Multiple evaluations for a single entry were submitted by a judge.";
+$evaluation_info_033 = "While this is an unusual occurrance, a duplicate evaluation can be submitted due to connectivity issues, etc. A single recorded evaluation for each judge should be officially accepted - all others should be deleted to avoid any entrant confusion.";
+
+$evaluation_info_034 = "When evaluating specialty-type styles, use the this line to comment on characteristics unique to it, such as fruit, spice, fermentable, acidity, etc.";
+$evaluation_info_035 = "Provide comments on style, recipe, process, and drinking pleasure. Include helpful suggestions to the brewer.";
+
+// Scoresheets
+$label_submitted = "Submitted";
+$label_ordinal_position = "Ordinal Position in Flight";
+$label_alcoholic = "Alcoholic";
+$descr_alcoholic = "The aroma, flavor, and warming effect of ethanol and higher alcohols. Sometimes described as &quot;hot&quot;.";
+$descr_alcoholic_mead = "The effect of ethanol. Warming. Hot.";
+$label_metallic = "Metallic"; 
+$descr_metallic = "Tinny, coiny, copper, iron, or blood-like flavor.";
+$label_oxidized = "Oxidized";
+$descr_oxidized = "Any one or combination of stale, winy/vinous, cardboard, papery, or sherry-like aromas and flavors. Stale.";
+$descr_oxidized_cider = "Staleness, the aroma/flavor of sherry, raisins, or bruised fruit.";
+$label_phenolic = "Phenolic";
+$descr_phenolic = "Spicy (clove, pepper), smoky, plastic, plastic adhesive strip, and/or medicinal (chlorophenolic).";
+$label_vegetal = "Vegetal";
+$descr_vegetal = "Cooked, canned, or rotten vegetable aroma and flavor (cabbage, onion, celery, asparagus, etc.).";
+$label_astringent = "Astringent";
+$descr_astringent = "Puckering, lingering harshness and/or dryness in the finish/aftertaste; harsh graininess; huskiness.";
+$descr_astringent_cider = "A drying sensation in the mouth similar to chewing on a teabag. Must be in balance if present.";
+$label_acetaldehyde = "Acetaldehyde";
+$descr_acetaldehyde = "Green apple-like aroma and flavor.";
+$label_diacetyl = "Diacetyl";
+$descr_diacetyl = "Artificial butter, butterscotch, or toffee aroma and flavor. Sometimes perceived as a slickness on the tongue.";
+$descr_diacetyl_cider = "Butter or butterscotch aroma or flavor.";
+$label_dms = "DMS (Dimethyl Sulfide)";
+$descr_dms = "At low levels a sweet, cooked or canned corn-like aroma and flavor.";
+$label_estery = "Estery";
+$descr_estery = "Aroma and/or flavor of any ester (fruits, fruit flavorings, or roses).";
+$label_grassy = "Grassy";
+$descr_grassy = "Aroma/flavor of fresh-cut grass or green leaves.";
+$label_light_struck = "Light-Struck";
+$descr_light_struck = "Similar to the aroma of a skunk.";
+$label_musty = "Musty";
+$descr_musty = "Stale, musty, or moldy aromas/flavors.";
+$label_solvent = "Solvent";
+$descr_solvent = "Aromas and flavors of higher alcohols (fusel alcohols). Similar to acetone or lacquer thinner aromas.";
+$label_sour_acidic = "Sour/Acidic";
+$descr_sour_acidic = "Tartness in aroma and flavor. Can be sharp and clean (lactic acid), or vinegar-like (acetic acid).";
+$label_sulfur = "Sulfur";
+$descr_sulfur = "The aroma of rotten eggs or burning matches.";
+$label_sulfury = "Sulfury";
+$label_yeasty = "Yeasty ";
+$descr_yeasty = "A bready, sulfury or yeast-like aroma or flavor.";
+$label_acetified = "Acetified (Volatile Acidity, VA)";
+$descr_acetified = "Ethyl acetate (solvent, nail polish) or acetic acid (vinegar, harsh in back of throat).";
+$label_acidic = "Acidic";
+$descr_acidic = "Sour-tart flavor. Typically from one of several acids: malic, lactic, or citric. Must be in balance.";
+$descr_acidic_mead = "Clean, sour flavor/aroma from low pH. Typically from one of several acids: malic, lactic, gluconic, or citric.";
+$label_bitter = "Bitter";
+$descr_bitter = "A sharp taste that is unpleasant at higher levels.";
+$label_farmyard = "Farmyard";
+$descr_farmyard = "Manure-like (cow or pig) or barnyard (horse stall on a warm day).";
+$label_fruity = "Fruity";
+$descr_fruity = "The aroma and flavor of fresh fruits that may be appropriate in some styles and not others.";
+$descr_fruity_mead = "Flavor & aroma esters often derived from fruits in a melomel. Banana & pineapple are often off-flavors.";
+$label_mousy = "Mousy";
+$descr_mousy = "Taste evocative of the smell of a rodent’s den/cage.";
+$label_oaky = "Oaky";
+$descr_oaky = "A taste or aroma due to an extended length of time in a barrel or on wood chips. &quot;Barrel character.&quot;";
+$label_oily_ropy = "Oily/Ropy";
+$descr_oily_ropy = "A sheen in visual appearance, as an unpleasant viscous character proceeding to a ropy character.";
+$label_spicy_smoky = "Spicy/Smoky";
+$descr_spicy_smoky = "Spice, cloves, smoky, ham.";
+$label_sulfide = "Sulfide";
+$descr_sulfide = "Rotten eggs, from fermentation problems.";
+$label_sulfite = "Sulfite";
+$descr_sulfite = "Burning matches, from excessive/recent sulfiting.";
+$label_sweet = "Sweet";
+$descr_sweet = "Basic taste of sugar. Must be in balance if present.";
+$label_thin = "Thin";
+$descr_thin = "Watery. Lacking body or &quot;stuffing.&quot;";
+$label_acetic = "Acetic";
+$descr_acetic = "Vinegary, acetic acid, sharp.";
+$label_chemical = "Chemical";
+$descr_chemical = "Vitamin, nutrient or chemical taste.";
+$label_cloying = "Cloying";
+$descr_cloying = "Syrupy, overly sweet, unbalanced by acid/tannin";
+$label_floral = "Floral";
+$descr_floral = "The aroma of flower blossoms or perfume.";
+$label_moldy = "Moldy";
+$descr_moldy = "Stale, musty, moldy or corked aromas/flavors.";
+$label_tannic = "Tannic";
+$descr_tannic = "Drying, astringent puckering mouthfeel, similar to bitterness flavor. Taste of strong unsweetened tea or chewing on a grape skin.";
+$label_waxy = "Waxy";
+$descr_waxy = "Wax-like, tallow, fatty.";
+$label_medicinal = "Medicinal";
+$label_spicy = "Spicy";
+$label_vinegary = "Vinegary";
+$label_plastic = "Plastic";
+$label_smoky = "Smoky";
+
+$label_inappropriate = "Inappropriate";
+$label_possible_points = "Possible Points";
+$label_malt = "Malt";
+$label_ferm_char = "Fermentation Character";
+$label_body = "Body";
+$label_creaminess = "Creaminess";
+$label_astringency = "Astringency";
+$label_warmth = "Warmth";
+$label_appearance = "Appearance";
+$label_flavor = "Flavor";
+$label_mouthfeel = "Mouthfeel";
+$label_overall_impression = "Overall Impression";
+$label_balance = "Balance";
+$label_finish_aftertaste = "Finish/Aftertaste";
+$label_hoppy = "Hoppy";
+$label_malty = "Malty";
+$label_comments = "Comments";
+$label_flaws = "Flaws for Style";
+$label_flawless = "Flawless";
+$label_significant_flaws = "Significant Flaws";
+$label_classic_example = "Classic Example";
+$label_not_style = "Not to Style";
+$label_tech_merit = "Technical Merit";
+$label_style_accuracy = "Stylistic Accuracy";
+$label_intangibles = "Intangibles";
+$label_wonderful = "Wonderful";
+$label_lifeless = "Lifeless";
+$label_feedback = "Feedback";
+$label_honey = "Honey";
+$label_alcohol = "Alcohol";
+$label_complexity = "Complexity";
+$label_viscous = "Viscous";
+$label_legs = "Legs"; // Used to describe liquid clinging to glass
+$label_clarity = "Clarity";
+$label_brilliant = "Brilliant";
+$label_hazy = "Hazy";
+$label_opaque = "Opaque";
+$label_fruit = "Fruit";
+$label_acidity = "Acidity";
+$label_tannin = "Tannin";
+
+// Appearance color of entries
+$label_white = "White";
+$label_straw = "Straw";
+$label_yellow = "Yellow";
+$label_gold = "Gold";
+$label_copper = "Copper";
+$label_quick = "Quick";
+$label_long_lasting = "Long Lasting";
+$label_ivory = "Ivory";
+$label_beige = "Beige";
+$label_tan = "Tan";
+$label_lacing = "Lacing";
+$label_particulate = "Particulate";
+$label_black = "Black";
+$label_large = "Large";
+$label_small = "Small";
+$label_size = "Size";
+$label_retention = "Retention";
+$label_head = "Head";
+$label_brettanomyces = "Brettanomyces";
+$label_cardboard = "Cardboard";
+$label_cloudy = "Cloudy";
+$label_sherry = "Sherry";
+$label_harsh = "Harsh";
+$label_full = "Full";
+
+$label_descriptor_defs = "Descriptor Definitions (Mark all that apply)";
+
+$label_outstanding = "Outstanding";
+$descr_outstanding = "World-class example of style.";
+$label_excellent = "Excellent";
+$descr_excellent = "Exempifies the style well, requires minor fine tuning.";
+$label_very_good = "Very Good";
+$descr_very_good = "Generally within style parameters, some minor flaws.";
+$label_good = "Good";
+$descr_good = "Misses the mark on style and/or minor flaws.";
+$label_fair = "Fair";
+$descr_fair = "Off flavors/aromas or major style deficiencies. Unpleasant.";
+$label_problematic = "Problematic";
+$descr_problematic = "Major off flavors and aromas dominate. Hard to drink.";
+
+$evaluation_info_036 = "One or more judge scores is out of the acceptable score range. Acceptable range is ".$_SESSION['jPrefsScoreDispMax']. " points or less.";
+$evaluation_info_037 = "All flights at this table appear to be complete.";
+$evaluation_info_038 = "As Head Judge, it is your responsibilty to verify that each entry's consensus scores match, make sure all judge scores for each entry are within the appropriate range, and award places to the designated entries.";
+$evaluation_info_039 = "Entries at this table:";
+$evaluation_info_040 = "Scored entries at this table:";
+$evaluation_info_041 = "Scored entries in your flight:";
+$evaluation_info_042 = "Your scored entries:";
+$evaluation_info_043 = "Judges with evaluations at this table:";
+
+$label_thank_you = "Thank You";
+$label_congrats_winners = "Congratulations to All Medal Winners";
+$label_placing_entries = "Placing Entries";
+$label_by_the_numbers = "By the Numbers";
+$label_launch_pres = "Launch Awards Presentation";
+
+$brewer_entries_text_025 = "Print judges&rsquo; scoresheets";
 
 /**
  * ----------------------------------------------------------------------------------

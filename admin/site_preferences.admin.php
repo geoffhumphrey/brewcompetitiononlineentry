@@ -763,44 +763,6 @@ $(document).ready(function(){
         <div id="helpBlock3-AABC" class="help-block">Please note that every effort is made to keep the AABC style data current; however, the latest <a class="hide-loader" href="http://www.aabc.org.au/" target="_blank">AABC style set</a> may <strong>not</strong> be available for use in this application.</div>
     </div>
 </div><!-- ./Form Group -->
-<!--
-<div id="styleSetAPIKey">
-<div class="form-group">
-    <label for="prefsStyleSetAPIKey" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Brewery DB API Key</label>
-    <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
-
-        <input class="form-control" id="prefsStyleSetAPIKey" name="prefsStyleSetAPIKey" type="text" value="<?php if ((isset($styleKey[1])) && ($styleKey[1] != "000000")) echo $styleKey[1]; ?>" placeholder="">
-		<span id="helpBlock" class="help-block">
-		<div class="btn-group" role="group" aria-label="prefsStyleSetAPIKeyModal">
-            <button type="button" class="btn btn-xs btn-info" data-toggle="modal" data-target="#prefsStyleSetAPIKeyModal">
-               Brewery DB API Key Info
-            </button>
-		</div>
-        <div class="help-block">Brewers Association style data is also housed and maintained by the <a class="hide-loader" href="http://www.brewerydb.com/" target="_blank">Brewery DB</a>. If you have an API key, provide it here to utilize the BreweryDB's BA Style data. Otherwise, leave blank.</div>
-		</span>
-    </div>
-</div>
-<div class="modal fade" id="prefsStyleSetAPIKeyModal" tabindex="-1" role="dialog" aria-labelledby="prefsStyleSetAPIKeyModalLabel">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header bcoem-admin-modal">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="prefsStyleSetAPIKeyModalLabel">Brewery DB API Key Info</h4>
-            </div>
-            <div class="modal-body">
-                <p>The Brewers Association styles are available via the <a class="hide-loader" href="https://www.brewerydb.com" target="_blank">Brewery DB</a>'s API. To utilize these styles in BCOE&amp;M, you will need an API key issued by Brewery DB.</p>
-                <p>To obtain an API key from the Brewery DB project website, you will need to <a class="hide-loader" href="https://www.brewerydb.com/auth/signup" target="_blank">create an account on the Brewery DB website</a> and register your installation as an app.</p>
-                <p>After creating your account, click the &quot;Register New App&quot; button, provide a name for the app (something like &quot;BCOE&amp;M <?php echo $row_prefs['contestName']; ?>&quot;), web address, and platform (choose &quot;Web Application&quot;). Once you have your API key, enter it here in the designated field.</p>
-                <p><strong>Please note:</strong> The Brewers Association styles will not populate without a valid API key issued by the Brewery DB.</p>
-            </div>
-            <div class="modal-footer">
-            	<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-            </div>
-        </div>
-    </div>
-</div>
-</div>
--->
 <div class="form-group"><!-- Form Group NOT REQUIRED Select -->
 	<label for="prefsEntryForm" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Printed Entry Form and/or Bottle Labels</label>
 	<div class="col-lg-6 col-md-3 col-sm-8 col-xs-12">
