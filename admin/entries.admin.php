@@ -13,10 +13,14 @@ $tbody_rows = "";
 $copy_paste_all_emails = array();
 $copy_paste_paid_emails = array();
 $copy_paste_unpaid_emails = array();
+$style_set = $_SESSION['prefsStyleSet'];
+$pro_edition = $_SESSION['prefsProEdition'];
 
-// If Archive, use archive preference
-if ($dbTable == "default") $pro_edition = $_SESSION['prefsProEdition'];
-else $pro_edition = $row_archive_prefs['archiveProEdition'];
+if ($dbTable != "default") {
+	$archive_suffix = get_suffix($dbTable);
+	$style_set = $row_archive_prefs['archiveStyleSet'];
+	$pro_edition = $row_archive_prefs['archiveProEdition'];
+} 
 
 if ($pro_edition == 0) $edition = $label_amateur." ".$label_edition;
 if ($pro_edition == 1) $edition = $label_pro." ".$label_edition;
@@ -25,7 +29,7 @@ if ($dbTable != "default") $header1_1 .= "<p>".$edition."</p>";
 
 if ($view == "paid") $header1_1 = "Paid ";
 if ($view == "unpaid") $header1_1 = "Unpaid ";
-if ($dbTable != "default") $header1_2 = " (Archive ".get_suffix($dbTable).")";
+if ($dbTable != "default") $header1_2 = " (Archive ".$archive_suffix.")";
 
 $header = $_SESSION['contestName'].": ";
 if ($view == "paid") $header .= "Paid";
@@ -53,7 +57,9 @@ else {
 
 if (EVALUATION) {
 	// Check which evaluations exist
-	$evals = eval_exits("default");	 
+	if ($dbTable == "default") $evals = eval_exits("default","default",$prefix."evaluation");
+	else $evals = eval_exits("default","default",$prefix."evaluation_".$archive_suffix);
+	// print_r($evals);
 }
 
 if ($totalRows_log > 0) {
@@ -61,7 +67,7 @@ if ($totalRows_log > 0) {
 	do {
 
 		if ($dbTable == "default") $brewer_info_filter = "default";
-		else $brewer_info_filter = get_suffix($dbTable);
+		else $brewer_info_filter = $archive_suffix;
 		$brewer_info = brewer_info($row_log['brewBrewerID'],$brewer_info_filter);
 		$brewer_info = explode("^",$brewer_info);
 
@@ -110,16 +116,19 @@ if ($totalRows_log > 0) {
 			// if ($row_judging_prefs['jPrefsScoresheet'] == 3) $output_form = "structured-scoresheet";
 
 			if (in_array($row_log['id'], $evals)) {
+			
 				$scoresheet_eval = TRUE;
 				
-				$query_style = sprintf("SELECT id,brewStyleType FROM %s WHERE brewStyleVersion='%s'AND brewStyleGroup='%s' AND brewStyleNum='%s'",$prefix."styles",$_SESSION['prefsStyleSet'],$row_log['brewCategorySort'],$row_log['brewSubCategory']);
+				$query_style = sprintf("SELECT id,brewStyleType FROM %s WHERE brewStyleVersion='%s'AND brewStyleGroup='%s' AND brewStyleNum='%s'",$prefix."styles",$style_set,$row_log['brewCategorySort'],$row_log['brewSubCategory']);
 				$style = mysqli_query($connection,$query_style) or die (mysqli_error($connection));
 				$row_style = mysqli_fetch_assoc($style);
 
 				if ((($row_style['brewStyleType'] == 2) || ($row_style['brewStyleType'] == 3)) && ($row_judging_prefs['jPrefsScoresheet'] != 3)) $output_form = "full-scoresheet";
 
 				$view_link = $base_url."output/print.output.php?section=evaluation&amp;go=default&amp;view=all&amp;id=".$row_log['id']."&amp;tb=1";
+				if ($dbTable != "default") $view_link .= "&amp;dbTable=".$prefix."evaluation_".$archive_suffix;
 				$print_link = $base_url."output/print.output.php?section=evaluation&amp;go=default&amp;view=all&amp;id=".$row_log['id'];
+				if ($dbTable != "default") $print_link .= "&amp;dbTable=".$prefix."evaluation_".$archive_suffix;
 			}
 		
 		}
@@ -135,8 +144,8 @@ if ($totalRows_log > 0) {
 		}
 
 		else {
-			$scoresheetfile_entry = USER_DOCS.DIRECTORY_SEPARATOR.get_suffix($dbTable).DIRECTORY_SEPARATOR.$scoresheet_file_name_entry;
-			$scoresheetfile_judging = USER_DOCS.DIRECTORY_SEPARATOR.get_suffix($dbTable).DIRECTORY_SEPARATOR.$scoresheet_file_name_judging;
+			$scoresheetfile_entry = USER_DOCS.DIRECTORY_SEPARATOR.$archive_suffix.DIRECTORY_SEPARATOR.$scoresheet_file_name_entry;
+			$scoresheetfile_judging = USER_DOCS.DIRECTORY_SEPARATOR.$archive_suffix.DIRECTORY_SEPARATOR.$scoresheet_file_name_judging;
 			$scoresheet_prefs = $row_archive_prefs['archiveScoresheet'];
 		}
 
@@ -178,7 +187,7 @@ if ($totalRows_log > 0) {
 		}
 
 		if (($row_log['brewConfirmed'] == 0) || (empty($row_log['brewConfirmed']))) $entry_unconfirmed_row = "bg-danger";
-		elseif (($_SESSION['prefsStyleSet'] != "BA") && ((check_special_ingredients($entry_style_system,$row_styles['brewStyleVersion']))) && ($row_log['brewInfo'] == "")) $entry_unconfirmed_row = "bg-warning";
+		elseif (($style_set != "BA") && ((check_special_ingredients($entry_style_system,$row_styles['brewStyleVersion']))) && ($row_log['brewInfo'] == "")) $entry_unconfirmed_row = "bg-warning";
 
 		// Judging Number
 		if (isset($row_log['brewJudgingNumber'])) {
@@ -199,7 +208,7 @@ if ($totalRows_log > 0) {
 		else $entry_judging_num_display = $entry_judging_num;
 
 		// Entry Style
-		if ($_SESSION['prefsStyleSet'] == "BA") {
+		if ($style_set == "BA") {
 
 			if ($row_log['brewCategory'] <= 14) $entry_style_display .= $styleConvert.": ".$row_log['brewStyle'];
 			else $entry_style_display .= "Custom: ".$row_log['brewStyle'];
@@ -348,11 +357,12 @@ if ($totalRows_log > 0) {
 			$entry_actions .= "<a class=\"hide-loader\" href=\"".$base_url."includes/process.inc.php?section=".$section."&amp;go=".$go."&amp;filter=".$filter."&amp;dbTable=".$brewing_db_table."&amp;action=delete&amp;id=".$row_log['id']."\" data-toggle=\"tooltip\" title=\"Delete &ldquo;".$row_log['brewName']."&rdquo;\" data-confirm=\"Are you sure you want to delete the entry called &ldquo;".$row_log['brewName']."?&rdquo; This cannot be undone.\"><span class=\"fa fa-lg fa-trash-o\"></a> ";
 			$entry_actions .= "<a id=\"modal_window_link\" class=\"hide-loader\" href=\"".$base_url."output/entry.output.php?id=".$row_log['id']."&amp;bid=".$brewer_info[7]."&amp;filter=admin\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Print the Entry Forms for &ldquo;".$row_log['brewName']."&rdquo;\"><span class=\"fa fa-lg fa-print hidden-xs hidden-sm\"></a> ";
 			$entry_actions .= "<a class=\"hide-loader\" href=\"mailto:".$brewer_info[6]."\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Email the entry&rsquo;s owner, ".$brewer_info[0]." ".$brewer_info[1].", at ".$brewer_info[6]."\"><span class=\"fa fa-lg fa-envelope\"></span></a> ";
-			if (EVALUATION) {
-				if ($scoresheet_eval) {
-					$entry_actions .= "<a id=\"modal_window_link\" class=\"hide-loader\" href=\"".$print_link."\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Print the Scoresheets for &ldquo;".$row_log['brewName']."&rdquo;\"><i class=\"fa fa-lg fa-file-text\"></i></a> ";
-					$entry_actions .= "<a id=\"modal_window_link\" class=\"hide-loader\" href=\"".$view_link."\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"View the Scoresheets for &ldquo;".$row_log['brewName']."&rdquo;\"><span class=\"fa-stack\"><i class=\"fa fa-square fa-stack-2x\"></i><i class=\"fa fa-stack-1x fa-file-text fa-inverse\"></i></span></a> ";
-				}
+		}
+
+		if (EVALUATION) {
+			if ($scoresheet_eval) {
+				$entry_actions .= "<a id=\"modal_window_link\" class=\"hide-loader\" href=\"".$print_link."\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Print the Scoresheets for &ldquo;".$row_log['brewName']."&rdquo;\"><i class=\"fa fa-lg fa-file-text\"></i></a> ";
+				$entry_actions .= "<a id=\"modal_window_link\" class=\"hide-loader\" href=\"".$view_link."\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"View the Scoresheets for &ldquo;".$row_log['brewName']."&rdquo;\"><span class=\"fa-stack\"><i class=\"fa fa-square fa-stack-2x\"></i><i class=\"fa fa-stack-1x fa-file-text fa-inverse\"></i></span></a> ";
 			}
 		}
 
@@ -388,7 +398,7 @@ if ($totalRows_log > 0) {
 				$scoresheet_link_1 .= "scoresheetfilename=".urlencode(obfuscateURL($scoresheet_file_name_1,$encryption_key));
 				$scoresheet_link_1 .= "&amp;randomfilename=".urlencode(obfuscateURL($random_file_name_1,$encryption_key))."&amp;download=true";
 
-				if ($dbTable != "default") $scoresheet_link_1 .= "&amp;view=".get_suffix($dbTable);
+				if ($dbTable != "default") $scoresheet_link_1 .= "&amp;view=".$archive_suffix;
 				$scoresheet_link_1 .= sprintf("\" data-toggle=\"tooltip\" title=\"%s '".$row_log['brewName']."'' (by Entry Number).\">",$brewer_entries_text_006);
 				$scoresheet_link_1 .= "<span class=\"fa fa-lg fa-file-pdf-o\"></a>&nbsp;&nbsp;";
 			}
@@ -413,7 +423,7 @@ if ($totalRows_log > 0) {
 				// they shouldn't have access to. Can I get a harumph?!
 				$scoresheet_link_2 .= "scoresheetfilename=".urlencode(obfuscateURL($scoresheet_file_name_2,$encryption_key));
 				$scoresheet_link_2 .= "&amp;randomfilename=".urlencode(obfuscateURL($random_file_name_2,$encryption_key))."&amp;download=true";
-				if ($dbTable != "default") $scoresheet_link_2 .= "&amp;view=".get_suffix($dbTable);
+				if ($dbTable != "default") $scoresheet_link_2 .= "&amp;view=".$archive_suffix;
 				$scoresheet_link_2 .= sprintf("\" data-toggle=\"tooltip\" title=\"%s '".$row_log['brewName']."' (by Judging Number).\">",$brewer_entries_text_006);
 				$scoresheet_link_2 .= "<span class=\"fa fa-lg fa-file-pdf-o\"></a>&nbsp;&nbsp;";
 			}
@@ -436,6 +446,8 @@ if ($totalRows_log > 0) {
 			if ((($dbTable == "default") && ($_SESSION['prefsDisplaySpecial'] == "E")) || ($dbTable != "default")) $entry_actions .= $scoresheet_link_1;
 			if ((($dbTable == "default") && ($_SESSION['prefsDisplaySpecial'] == "J")) || ($dbTable != "default")) $entry_actions .= $scoresheet_link_2;
 		}
+
+
 
 		if ((empty($entry_allergen_row)) && (!empty($entry_unconfirmed_row))) $entry_row_color = $entry_unconfirmed_row;
 		elseif ((!empty($entry_allergen_row)) && (empty($entry_unconfirmed_row))) $entry_row_color = $entry_allergen_row;
@@ -515,7 +527,7 @@ if ($totalRows_log > 0) {
 if ($totalRows_log_paid > 0) {
 	do {
 		if ($dbTable == "default") $brewer_info_filter = "default";
-		else $brewer_info_filter = get_suffix($dbTable);
+		else $brewer_info_filter = $archive_suffix;
 		$brewer_info = brewer_info($row_log_paid['brewBrewerID'],$brewer_info_filter);
 		$brewer_info = explode("^",$brewer_info);
 		if (!empty($brewer_info[6])) $copy_paste_paid_emails[] = $brewer_info[6];

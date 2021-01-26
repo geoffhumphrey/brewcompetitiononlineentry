@@ -113,8 +113,10 @@ $totalRows_entry_count = total_paid_received($go,"default");
     }
 }
 ?>
+<?php if ($dbTable == "default") { ?>
 <p id="score-entered-status-default">Scores have been entered for <?php echo $totalRows_scores; ?> of <?php echo $totalRows_entry_count; ?> entries marked as paid and received.</p>
-<?php } // end if ($dbTable == "default") ?>
+<?php } // end if ($dbTable == "default")
+} // end if ($action == "default") ?>
 <?php if (($action == "default") && ($id == "default")) { ?>
 <?php if ($totalRows_scores > 0) { ?>
 <script type="text/javascript" language="javascript">
@@ -177,7 +179,7 @@ $totalRows_entry_count = total_paid_received($go,"default");
 <?php
 
     if (EVALUATION) {
-        $evals = eval_exits("default");
+        $evals = eval_exits("default","default",$dbTable);
     }
 
 	do {

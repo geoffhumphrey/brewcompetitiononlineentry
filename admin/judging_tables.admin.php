@@ -638,6 +638,7 @@ $(document).ready(function(){
 
 <?php } ?>
 <p class="lead"><?php echo $_SESSION['contestName'].$title;  ?></p>
+<?php if ($dbTable == "default") { ?>
 <div id="mode-alert" class="alert <?php echo $mode_alert_color; ?>"><?php echo $sub_lead_text; ?></div>
 <?php if ($action == "default") { ?>
 <!-- Planning Mode Button -->
@@ -647,6 +648,7 @@ $(document).ready(function(){
 <div id="tables-competition-mode" class="bcoem-admin-element hidden-print">
     <button id="tables-competition-button" class="btn btn-success"><span class="fa fa-exchange"></span> Switch to Tables Competition Mode</button> <a href="#" data-toggle="popover" title="Tables Competition Mode" data-content="<p>When the Tables Competition Mode function is enabled by an admin, it indicates to the system that the planning stage is over (i.e., sorting is finished and all applicable entries have been marked as paid and received).</p><p>Table configurations and assignments can still be changed as necessary while in Competition Mode.</p>" data-trigger="hover click" data-placement="right" data-html="true" data-container="body"><i class="fa fa-lg fa-question-circle"></i></a> <span id="competition-mode-status"><i id="competition-mode-status-icon" class=""></i> <span id="competition-mode-status-text" class="small"></span></span>
 </div>
+<?php } ?>
 <?php if ((EVALUATION) && ($dbTable == "default")) include (EVALS.'import_scores.eval.php'); ?>
 <?php } ?>
 <div class="bcoem-admin-element hidden-print">

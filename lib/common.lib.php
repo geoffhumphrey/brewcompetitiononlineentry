@@ -4228,15 +4228,15 @@ function user_submitted_eval($uid,$eid) {
 
 }
 
-function eval_exits($eid="default",$method="default") {
+function eval_exits($eid="default",$method="default",$dbTable) {
 
 	require(CONFIG.'config.php');
 	mysqli_select_db($connection,$database);
 
 	$evals = array();
 
-	if ($eid == "default") $query_eval_exists = sprintf("SELECT DISTINCT eid FROM %s",$prefix."evaluation");
-	else $query_eval_exists = sprintf("SELECT * FROM %s WHERE eid='%s'",$prefix."evaluation",$eid); 
+	if ($eid == "default") $query_eval_exists = sprintf("SELECT DISTINCT eid FROM %s",$dbTable);
+	else $query_eval_exists = sprintf("SELECT * FROM %s WHERE eid='%s'",$dbTable,$eid); 
 	$eval_exists = mysqli_query($connection,$query_eval_exists) or die (mysqli_error($connection));
 	$row_eval_exists = mysqli_fetch_assoc($eval_exists);
 	$totalRows_eval_exists = mysqli_num_rows($eval_exists);

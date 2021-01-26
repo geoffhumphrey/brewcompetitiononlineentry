@@ -88,13 +88,6 @@ $table_header7 = $label_actions;
                     <input type="checkbox" name="keepSponsors" id="retain_3" value="Y"> <?php echo $label_sponsors; ?>
                 </label>
             </div>
-            <?php if (EVALUATION) { ?>
-            <div class="checkbox">
-                <label>
-                    <input type="checkbox" name="keepEvaluations" id="retain_8" value="Y"> <?php echo $label_evaluations; ?>
-                </label>
-            </div>
-            <?php } ?>
             <div class="checkbox">
                 <label>
                     <input type="checkbox" name="keepScoresheets" id="retain_6" value="Y"> Uploaded Scoresheets <small>(files will be moved to a sub-folder of the user_docs directory)</small>
@@ -224,7 +217,7 @@ $table_header7 = $label_actions;
     <?php }
 	} else echo $row_archive['archiveSuffix']. " - Not Archived";
 	?>
-    <td><a class="hide-loader" href="<?php echo $base_url; ?>includes/process.inc.php?section=<?php echo $section; ?>&amp;go=<?php echo $go; ?>&amp;filter=<?php echo $row_archive['archiveSuffix']; ?>&amp;dbTable=<?php echo $archive_db_table; ?>&amp;action=delete&amp;id=<?php echo $row_archive['id']; ?>" data-toggle="tooltip" data-placement="top" title=" <?php echo $label_delete." ".$row_archive['archiveSuffix']; ?>" data-confirm="<?php echo $archive_text_015." ".$row_archive['archiveSuffix']; ?>"><span class="fa fa-lg fa-trash-o"></span></a></td>
+    <td><a class="hide-loader" href="<?php echo $base_url; ?>includes/process.inc.php?section=<?php echo $section; ?>&amp;go=<?php echo $go; ?>&amp;filter=<?php echo $row_archive['archiveSuffix']; ?>&amp;dbTable=<?php echo $archive_db_table; ?>&amp;action=delete&amp;id=<?php echo $row_archive['id']; ?>" data-toggle="tooltip" data-placement="top" title=" <?php echo $label_delete." ".$row_archive['archiveSuffix']; ?>" data-confirm="<?php echo $archive_text_015." ".$row_archive['archiveSuffix'].". ".$archive_text_016; ?>"><span class="fa fa-lg fa-trash-o"></span></a></td>
   </tr>
   <?php } while ($row_archive = mysqli_fetch_assoc($archive)); ?>
 </tbody>

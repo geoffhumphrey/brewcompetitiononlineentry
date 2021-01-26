@@ -89,6 +89,7 @@ $archive_text_012 = "Check the information you would like to retain for use in f
 $archive_text_013 = "Are you sure you want to archive current data?";
 $archive_text_014 = "Then, choose what data you would like to retain.";
 $archive_text_015 = "This will delete the archive called";
+$archive_text_016 = "All associated records will be removed as well.";
 
 // -------------------- Barcode Check-In --------------------
 

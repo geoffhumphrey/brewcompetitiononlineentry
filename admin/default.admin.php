@@ -1743,6 +1743,7 @@ if (($row_limits['prefsShowBestBrewer'] != 0) || ($row_limits['prefsShowBestClub
                             <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-8">
                                 <ul class="list-inline">
                                     <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=archive">Manage</a></li>
+                                    <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=archive&amp;action=add">Archive Current Data</a></li>
                                 </ul>
                             </div>
                         </div><!-- ./row -->

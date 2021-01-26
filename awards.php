@@ -464,13 +464,22 @@ if (($display_to_admin) || ($display_to_public)) {
 					$slides_bos .= $row_sbi['sbi_name'];
 					$slides_bos .= "</h1>";
 
+					$place_heirarchy_count = 0;
+
 					do {
 
-						$place_heirarchy = place_heirarchy($row_sbd['sbd_place']);
-
+						$place_heirarchy_count += 1;
 						$display_place = "";
-						if ($row_sbi['sbi_display_places'] == "1") $display_place = display_place($row_sbd['sbd_place'],1);
 
+						if (($row_sbi['sbi_display_places'] == "1") && (!empty($row_sbd['sbd_place']))) {
+							$place_heirarchy = place_heirarchy($row_sbd['sbd_place']);
+							$display_place = display_place($row_sbd['sbd_place'],1);
+						}
+						
+						else {
+							$place_heirarchy = place_heirarchy($place_heirarchy_count);
+						}
+						
 						$brewer_info = explode("^",brewer_info($row_sbd['bid']));
 						$entry_info = explode("^",entry_info($row_sbd['eid']));
 						$style = $entry_info['5'].$entry_info['2'];
@@ -968,7 +977,7 @@ if (($display_to_admin) || ($display_to_public)) {
 				<section>
 					<h1 style="margin:0;padding:0" class="r-fit-text"><?php echo $_SESSION['contestName']; ?></h1>
 					<h2 style="margin:0;padding:0"><?php echo $label_awards; ?></h2>
-					<?php if (!empty($_SESSION['contestLogo'])) { ?>
+					<?php if ((!empty($_SESSION['contestLogo'])) && (file_exists(USER_IMAGES.$_SESSION['contestLogo']))) { ?>
 						<div class="logo-image">
 							<img src="<?php echo $base_url."user_images/".$_SESSION['contestLogo']; ?>">
 						</div>
@@ -982,7 +991,7 @@ if (($display_to_admin) || ($display_to_public)) {
 					    <ul id="sponsor-slider">
 					   	<?php do { 
 					   	if ($row_sponsors['sponsorEnable'] == "1") {
-					   	if (($row_sponsors['sponsorImage'] != "") && (file_exists(USER_IMAGES.$row_sponsors['sponsorImage']))) { ?>
+					   	if ((!empty($row_sponsors['sponsorImage'])) && (file_exists(USER_IMAGES.$row_sponsors['sponsorImage']))) { ?>
 					   		<li data-thumb="<?php echo $base_url."user_images/".$row_sponsors['sponsorImage']; ?>"><img src="<?php echo $base_url."user_images/".$row_sponsors['sponsorImage']; ?>" height="200" alt="<?php echo $row_sponsors['sponsorName']; ?>"></li>
 					   	<?php 
 					   			} 
@@ -1061,7 +1070,7 @@ if (($display_to_admin) || ($display_to_public)) {
 						<span style="margin-right: 15px;" class="fragment" data-fragment-index="3"><i class="fa fa-trophy"></i> <?php echo $placing_entry_count." ".$label_placing_entries;  ?></span>
 					</p>
 					<?php } ?>
-					<?php if (!empty($_SESSION['contestLogo'])) { ?>
+					<?php if ((!empty($_SESSION['contestLogo'])) && (file_exists(USER_IMAGES.$_SESSION['contestLogo']))) { ?>
 						<div class="logo-image">
 							<img style="max-height: 225px;" src="<?php echo $base_url."user_images/".$_SESSION['contestLogo']; ?>">
 						</div>
@@ -1077,7 +1086,7 @@ if (($display_to_admin) || ($display_to_public)) {
 				<section>
 					<h2 style="margin:0;padding:0" class="r-fit-text"><?php echo $label_thank_you; ?></h2>
 					<h3 style="margin:0;padding:0"><?php echo $label_congrats_winners; ?></h3>
-					<?php if (!empty($_SESSION['contestLogo'])) { ?>
+					<?php if ((!empty($_SESSION['contestLogo'])) && (file_exists(USER_IMAGES.$_SESSION['contestLogo']))) { ?>
 						<div class="logo-image">
 							<img src="<?php echo $base_url."user_images/".$_SESSION['contestLogo']; ?>">
 						</div>

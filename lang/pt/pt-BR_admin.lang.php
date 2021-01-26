@@ -89,6 +89,7 @@ $archive_text_012 = "Verifique as informações que você deseja reter para uso 
 $archive_text_013 = "Tem certeza de que deseja arquivar dados atuais?";
 $archive_text_014 = "Em seguida, escolha quais dados você gostaria de reter.";
 $archive_text_015 = "Isso excluirá o arquivo chamado";
+$archive_text_016 = "Todos os registros associados serão excluídos.";
 
 // -------------------- Barcode Check-In --------------------
 

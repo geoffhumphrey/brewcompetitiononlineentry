@@ -89,6 +89,7 @@ $archive_text_012 = "Zkontrolujte, které informace chcete zachovat pro další 
 $archive_text_013 = "Jste si jisti, že chcete archivovat aktuální údaje?";
 $archive_text_014 = "Zvolte, která data chcete zachovat.";
 $archive_text_015 = "Toto smaže archiv nazvaný";
+$archive_text_016 = "Všechny související záznamy budou smazány.";
 
 // -------------------- Barcode Check-In --------------------
 

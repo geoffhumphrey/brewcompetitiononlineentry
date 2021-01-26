@@ -296,6 +296,43 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 
 		} // end if ($go == "judging_tables")
 
+		elseif ($go == "archive") {
+
+			include (LIB.'update.lib.php');
+
+			$delete_suffix = "_".$filter; 
+
+			$drop_tables_array = array(
+				$prefix."brewer".$delete_suffix,
+				$prefix."brewing".$delete_suffix,
+				$prefix."evaluation".$delete_suffix,
+				$prefix."judging_assignments".$delete_suffix,
+				$prefix."judging_flights".$delete_suffix,
+				$prefix."judging_scores".$delete_suffix,
+				$prefix."judging_scores_bos".$delete_suffix,
+				$prefix."judging_tables".$delete_suffix,
+				$prefix."special_best_data".$delete_suffix,
+				$prefix."special_best_info".$delete_suffix,
+				$prefix."staff".$delete_suffix,
+				$prefix."style_types".$delete_suffix,
+				$prefix."users".$delete_suffix
+			);
+			
+			foreach ($drop_tables_array as $table) {
+				if (check_setup($table,$database)) {
+					$updateSQL = "DROP TABLE ".$table.";";
+					mysqli_real_escape_string($connection,$updateSQL);
+					$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+					//echo $updateSQL."<br>";
+				}
+			}
+
+			$deleteSQL = sprintf("DELETE FROM $dbTable WHERE id='%s'", $id);
+			mysqli_real_escape_string($connection,$deleteSQL);
+			$result = mysqli_query($connection,$deleteSQL) or die (mysqli_error($connection));
+
+		}
+
 		elseif ($go == "default") {
 
 			$deleteSQL = sprintf("DELETE FROM $dbTable WHERE id='%s'", $id);

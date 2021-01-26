@@ -1,9 +1,13 @@
 <?php
 if ($dbTable == "default") $pro_edition = $_SESSION['prefsProEdition'];
-else $pro_edition = $row_archive_prefs['archiveProEdition'];
+else {
+    $pro_edition = $row_archive_prefs['archiveProEdition'];
+    $suffix = get_suffix($dbTable);
+}
 
 if ($pro_edition == 0) $edition = $label_amateur." ".$label_edition;
 if ($pro_edition == 1) $edition = $label_pro." ".$label_edition;
+
 ?>
 <script>
 $(document).ready(function () {
@@ -30,7 +34,7 @@ $(document).ready(function () {
 </div>
 <p class="lead"><?php echo $_SESSION['contestName'];
 if ($action == "enter") echo ": Add or Update BOS Places for ".$row_style_type['styleTypeName']; else echo ": Best of Show (BOS) Entries and Places";
-if ($dbTable != "default") echo " (Archive ".get_suffix($dbTable).")";
+if ($dbTable != "default") echo " (Archive ".$suffix.")";
 ?></p>
 <?php if ($dbTable != "default") { ?>
 <p><?php echo $edition; ?></p>
@@ -43,8 +47,8 @@ if ($dbTable != "default") echo " (Archive ".get_suffix($dbTable).")";
     </div><!-- ./button group -->
     <?php } ?>
     <?php if ($dbTable == "default") { ?>
-
-		<?php if ($action == "enter") { ?>
+		
+        <?php if ($action == "enter") { ?>
         <!-- Postion 1: View All Button -->
         <div class="btn-group" role="group" aria-label="...">
             <a class="btn btn-default" href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging_scores_bos"><span class="fa fa-arrow-circle-left"></span> All BOS Entries and Places</a>
@@ -102,9 +106,8 @@ if ($dbTable != "default") echo " (Archive ".get_suffix($dbTable).")";
 <?php
 if (($action == "default") && ($totalRows_style_type > 0)) {
     do { $a[] = $row_style_types['id']; } while ($row_style_types = mysqli_fetch_assoc($style_types));
-    sort($a);
     foreach ($a as $type) {
-    	$style_type_info = style_type_info($type);
+    	$style_type_info = style_type_info($type,$suffix);
     	$style_type_info = explode("^",$style_type_info);
         if ($style_type_info[0] == "Y") {
             include (DB.'admin_judging_scores_bos.db.php');
@@ -205,7 +208,11 @@ $(document).ready(function(){
     	"sDom": 'rt',
     	"bStateSave" : false,
     	"bLengthChange" : false,
+        <?php if ($dbTable == "default") { ?>
     	"aaSorting": [[2,'asc']],
+        <?php } else { ?>
+        "aaSorting": [[8,'asc']],
+        <?php } ?>
     	"bProcessing" : false,
     	"aoColumns": [
     		null,

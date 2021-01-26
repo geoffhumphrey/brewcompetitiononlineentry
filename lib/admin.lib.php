@@ -114,7 +114,7 @@ function bos_entry_info($eid,$table_id,$filter) {
 	$bos_place_1 = mysqli_query($connection,$query_bos_place_1) or die (mysqli_error($connection));
 	$row_bos_place_1 = mysqli_fetch_assoc($bos_place_1);
 
-	$query_brewer = sprintf("SELECT brewerLastName,brewerFirstName,brewerBreweryName FROM %s WHERE id='%s'", $brewer_db_table, $row_entries_1['brewBrewerID']);
+	$query_brewer = sprintf("SELECT brewerLastName,brewerFirstName,brewerBreweryName FROM %s WHERE uid='%s'", $brewer_db_table, $row_entries_1['brewBrewerID']);
 	$brewer = mysqli_query($connection,$query_brewer) or die (mysqli_error($connection));
 	$row_brewer = mysqli_fetch_assoc($brewer);
 
@@ -141,11 +141,14 @@ function bos_entry_info($eid,$table_id,$filter) {
 	return $return;
 }
 
-function style_type_info($type) {
+function style_type_info($type,$suffix="default") {
 	require(CONFIG.'config.php');
 	mysqli_select_db($connection,$database);
 
-	$query_style_type = sprintf("SELECT * FROM %s WHERE id='%s'",$prefix."style_types",$type);
+	if ($suffix == "default") $dbTable = $prefix."style_types";
+	else $dbTable = $prefix."style_types_".$suffix;
+
+	$query_style_type = sprintf("SELECT * FROM %s WHERE id='%s'",$dbTable,$type);
 	$style_type = mysqli_query($connection,$query_style_type) or die (mysqli_error($connection));
 	$row_style_type = mysqli_fetch_assoc($style_type);
 
@@ -775,7 +778,7 @@ function table_score_data($eid,$score_table,$suffix) {
 	$row_tables = mysqli_fetch_assoc($tables);
 	$totalRows_tables = mysqli_num_rows($tables);
 
-	$query_brewer = sprintf("SELECT brewerLastName,brewerFirstName,brewerBreweryName FROM %s WHERE id='%s'", $prefix."brewer".$suffix, $row_entries['brewBrewerID']);
+	$query_brewer = sprintf("SELECT brewerLastName,brewerFirstName,brewerBreweryName FROM %s WHERE uid='%s'", $prefix."brewer".$suffix, $row_entries['brewBrewerID']);
 	$brewer = mysqli_query($connection,$query_brewer) or die (mysqli_error($connection));
 	$row_brewer = mysqli_fetch_assoc($brewer);
 

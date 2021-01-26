@@ -22,7 +22,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 	$row_suffix_check = mysqli_fetch_assoc($suffix_check);
 
 	if ($row_suffix_check['count'] > 0) {
-			$redirect_go_to = sprintf("Location: %s", $base_url."index.php?section=admin&go=archive&msg=6");
+		$redirect_go_to = sprintf("Location: %s", $base_url."index.php?section=admin&go=archive&msg=6");
 	}
 
 	else {
@@ -87,9 +87,13 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 		// Rename current tables and recreate new ones based upon user input
 		$tables_array = array($brewing_db_table, $judging_assignments_db_table, $judging_flights_db_table, $judging_scores_db_table, $judging_scores_bos_db_table, $judging_tables_db_table, $staff_db_table);
 
+		if (EVALUATION) $tables_array[] = $prefix."evaluation";
+
+		/*
 		if (EVALUATION) {
 			if (!isset($_POST['keepEvaluations'])) $tables_array[] = $prefix."evaluation";
 		}
+		*/
 
 		if (!isset($_POST['keepParticipants'])) {
 			$tables_array[] = $users_db_table;
@@ -107,6 +111,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 		if (!isset($_POST['keepDropoff'])) $truncate_tables_array[] = $drop_off_db_table;
 		if (!isset($_POST['keepSponsors'])) $truncate_tables_array[] = $sponsors_db_table;
 		if (!isset($_POST['keepLocations'])) $truncate_tables_array[] = $judging_locations_db_table;
+		if (EVALUATION) $truncate_tables_array[] = $prefix."evaluation";
 
 		$keep_participants = FALSE;
 
@@ -160,6 +165,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 
 		}
 
+		/*
 		if (isset($_POST['keepEvaluations'])) {
 			$updateSQL = sprintf("CREATE TABLE %s LIKE %s", $prefix."evaluation_".$suffix, $prefix."evaluation");
 			mysqli_real_escape_string($connection,$updateSQL);
@@ -170,6 +176,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 			$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 
 		}
+		*/
 
 		foreach ($tables_array as $table) {
 
@@ -193,7 +200,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 
 		if (!isset($_POST['keepStyleTypes'])) {
 
-			$insertSQL = "INSERT INTO $style_types_db_table (id, styleTypeName, styleTypeOwn, styleTypeBOS, styleTypeBOSMethod) VALUES (1, 'Beer', 'bcoe', 'Y', 1), (2, 'Cider', 'bcoe', 'N', 1), (3, 'Mead', 'bcoe', 'N', 1), (4, 'Mead/Cider', 'N', 1), (5, 'Wine', 'N', 1), (6, 'Rice Wine', 'N', 1), (7, 'Spirits', 'N', 1), (8, 'Kombucha', 'N', 1), (9, 'Pulque', 'N', 1);";
+			$insertSQL = "INSERT INTO $style_types_db_table (id, styleTypeName, styleTypeOwn, styleTypeBOS, styleTypeBOSMethod) VALUES (1, 'Beer', 'bcoe', 'Y', 1), (2, 'Cider', 'bcoe', 'N', 1), (3, 'Mead', 'bcoe', 'N', 1), (4, 'Mead/Cider', 'bcoe', 'N', 1), (5, 'Wine', 'N', 'bcoe', 1), (6, 'Rice Wine', 'bcoe', 'N', 1), (7, 'Spirits', 'bcoe', 'N', 1), (8, 'Kombucha', 'bcoe', 'N', 1), (9, 'Pulque', 'bcoe', 'N', 1);";
 			mysqli_real_escape_string($connection,$insertSQL);
 			$result = mysqli_query($connection,$insertSQL) or die (mysqli_error($connection));
 
@@ -213,7 +220,6 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 		}
 
 		// Insert a new record into the "archive" table containing the newly created archives names (allows access to archived tables)
-
 		$styleSet = $_SESSION['prefsStyleSet'];
 
 		$insertSQL = sprintf("INSERT INTO %s (archiveSuffix,archiveProEdition,archiveStyleSet) VALUES ('%s','%s','%s');",$archive_db_table,$suffix,$_SESSION['prefsProEdition'],$styleSet);
