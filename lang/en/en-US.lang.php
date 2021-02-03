@@ -485,7 +485,7 @@ $header_text_005 = "Info added successfully.";
 $header_text_006 = "Info edited successfully.";
 $header_text_007 = "There was an error.";
 $header_text_008 = "Please try again.";
-$header_text_009 = "You must be an administrator to access the admin functions.";
+$header_text_009 = "You must be an administrator to access any admin functions.";
 $header_text_010 = "Change";
 $header_text_011 = $label_email;
 $header_text_012 = $label_password;
@@ -531,7 +531,7 @@ $header_text_051 = "Set Up: Create Admin User";
 $header_text_052 = "Set Up: Add Admin User Info";
 $header_text_053 = "Set Up: Set Website Preferences";
 $header_text_054 = "Set Up: Add Competition Info";
-$header_text_055 = "Set Up: Add Judging Session Locations";
+$header_text_055 = "Set Up: Add Judging Sessions";
 $header_text_056 = "Set Up: Add Drop-Off Locations";
 $header_text_057 = "Set Up: Designate Accepted Styles";
 $header_text_058 = "Set Up: Set Judging Preferences";
@@ -1516,11 +1516,12 @@ $sidebar_text_026 = "are in the system as of";
 $label_paid_entries = "Paid Entries";
 
 // ----------------------------------------------------------------------------------
-// Version 2.1.20 Additions
+// Version 2.2.0 Additions
 // ----------------------------------------------------------------------------------
 
-$alert_text_087 = "For an optimal experience and so that all features and functions execute properly, please enable JavaScript to continue using this site. Otherwise, unexpected behavior will occur.";
 $alert_text_086 = "Internet Explorer is not supported by BCOE&M - features and functions will not render properly and your experience will not be optimal. Please upgrade to a newer browser.";
+$alert_text_087 = "For an optimal experience and so that all features and functions execute properly, please enable JavaScript to continue using this site. Otherwise, unexpected behavior will occur.";
+$alert_text_088 = "The Awards Presentation will be available publicly after results are published.";
 
 $brewer_entries_text_025 = "Print judges&rsquo; scoresheets";
 
@@ -1566,6 +1567,8 @@ $label_lead_judge = "Lead Judge";
 $label_mini_bos_judge = "Mini-BOS Judge";
 $label_view_my_eval = "View My Evaluation";
 $label_view_other_judge_eval = "View Other Judge's Evaluation";
+
+$label_place_awarded = "Place Awarded";
 $label_honorable_mention = "Honorable Mention";
 $label_places_awarded_table = "Places Awarded at this Table";
 $label_places_awarded_duplicate = "Duplicate Places Awarded at this Table";
@@ -1772,9 +1775,10 @@ $label_cloudy = "Cloudy";
 $label_sherry = "Sherry";
 $label_harsh = "Harsh";
 $label_full = "Full";
+$label_suggested = "Suggested";
 
 // Scoresheet Score Descriptions
-$label_descriptor_defs = "Descriptor Definitions (Mark all that apply)";
+$label_descriptor_defs = "Descriptor Definitions";
 $label_outstanding = "Outstanding";
 $descr_outstanding = "World-class example of style.";
 $label_excellent = "Excellent";

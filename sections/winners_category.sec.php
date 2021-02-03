@@ -45,13 +45,10 @@ Declare all variables empty at the top of the script. Add on later...
 
  * ---------------- END Rebuild Info --------------------- */
 
-
-
 if ($row_scored_entries['count'] > 0) {
 
-	$a = styles_active(0);
+	$a = styles_active(0,$go);
 
-	// print_r($a);
 	foreach (array_unique($a) as $style) {
 
 		if (!empty($style)) {
@@ -86,8 +83,9 @@ if ($row_scored_entries['count'] > 0) {
 
 				}
 				else {
-					$header1_1 .= sprintf("<h3>%s %s: %s (%s %s)</h3>",$label_category,ltrim($style,"0"),style_convert($style,"1"),$row_entry_count['count'],$entries);
+					$header1_1 .= sprintf("<h3>%s %s: %s (%s %s)</h3>",$label_category,ltrim($style,"0"),style_convert($style,"1",$base_url,$go),$row_entry_count['count'],$entries);
 				}
+				// $header1_1 .=  $go;
 				// Build table headers
 				$table_head1 .= "<tr>";
 				$table_head1 .= sprintf("<th nowrap>%s</th>",$label_place);

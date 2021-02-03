@@ -158,6 +158,7 @@ require(DB.'winners.db.php');
 if ($totalRows_sbi > 0) {
 	do {
 		include (DB.'output_results_download_sbd.db.php');
+			
 			if ($totalRows_sbd > 0) {
 
 				$display_bos_style_type = TRUE;
@@ -183,9 +184,9 @@ if ($totalRows_sbi > 0) {
 
 				// Build table body
 				do {
-					$brewer_info = explode("^",brewer_info($row_sbd['bid']));
-					$entry_info = explode("^",entry_info($row_sbd['eid']));
-					$style = $entry_info['5'].$entry_info['2'];
+					//$brewer_info = explode("^",brewer_info($row_sbd['bid']));
+					//$entry_info = explode("^",entry_info($row_sbd['eid']));
+					//$style = $entry_info['5'].$entry_info['2'];
 
 					$table_body2 .= "<tr>";
 
@@ -196,22 +197,24 @@ if ($totalRows_sbi > 0) {
 					}
 
 					$table_body2 .= "<td width=\"25%\">";
-					if ($_SESSION['prefsProEdition'] == 0) $table_body2 .= $brewer_info['0']." ".$brewer_info['1'];
-					else $table_body2 .= $brewer_info[15];
-					if (($_SESSION['prefsProEdition'] == 0) && (!empty($entry_info['4']))) $table_body2 .=  "<br />".$label_cobrewer.": ".$entry_info['4'];
+					if ($_SESSION['prefsProEdition'] == 0) $table_body2 .= $row_sbd['brewerFirstName']." ".$row_sbd['brewerLastName'];
+					else $table_body2 .= $row_sbd['brewerBreweryName'];
+					if (($_SESSION['prefsProEdition'] == 0) && (!empty($row_sbd['brewCoBrewer']))) $table_body2 .=  "<br />".$label_cobrewer.": ".$row_sbd['brewCoBrewer'];
 					$table_body2 .= "</td>";
 
 					$table_body2 .= "<td width=\"25%\">";
-					$table_body2 .= $entry_info['0'];
+					$table_body2 .= $row_sbd['brewName'];
 					$table_body2 .= "</td>";
 
 					$table_body2 .= "<td>";
-					$table_body2 .= $style.": ".$entry_info['3'];
+					if ($_SESSION['prefsStyleSet'] == "BA") $table_body2 .= $row_sbd['brewStyle'];
+					elseif ($_SESSION['prefsStyleSet'] == "AABC") $table_body2 .= ltrim($row_sbd['brewCategory'],"0").".".ltrim($row_sbd['brewSubCategory'],"0").": ".$row_sbd['brewStyle'];
+					else $table_body2 .= $row_sbd['brewCategory'].$row_sbd['brewSubCategory'].": ".$row_sbd['brewStyle'];
 					$table_body2 .= "</td>";
 
 					if ($_SESSION['prefsProEdition'] == 0) {
 						$table_body2 .= "<td width=\"25%\">";
-						$table_body2 .= $brewer_info['8'];
+						$table_body2 .= $row_sbd['brewerClubs'];
 						$table_body2 .= "</td>";
 					}
 

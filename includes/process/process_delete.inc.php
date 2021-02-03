@@ -298,8 +298,6 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 
 		elseif ($go == "archive") {
 
-			include (LIB.'update.lib.php');
-
 			$delete_suffix = "_".$filter; 
 
 			$drop_tables_array = array(

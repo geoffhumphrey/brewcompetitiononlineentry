@@ -97,7 +97,8 @@ if ($setup_success) {
 		"shipping-label",
 		"particpant-entries",
 		"evaluation",
-		"competition"
+		"competition",
+		"past-winners"
 	);
 
 	// ---------------------------- QR Redirect ----------------------------

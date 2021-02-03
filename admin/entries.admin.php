@@ -3,6 +3,7 @@
 
 include (DB.'styles.db.php');
 if ($_SESSION['prefsStyleSet'] == "BA") include (INCLUDES.'ba_constants.inc.php');
+$eval_db_table = FALSE;
 
 $header1_1 = "";
 $header1_2 = "";
@@ -57,9 +58,15 @@ else {
 
 if (EVALUATION) {
 	// Check which evaluations exist
-	if ($dbTable == "default") $evals = eval_exits("default","default",$prefix."evaluation");
-	else $evals = eval_exits("default","default",$prefix."evaluation_".$archive_suffix);
-	// print_r($evals);
+	if ($dbTable == "default") {
+		$eval_db_table = TRUE;
+		$evals = eval_exits("default","default",$prefix."evaluation");
+	}
+	elseif (check_setup($prefix."evaluation_".$archive_suffix,$database)) {
+		$eval_db_table = TRUE;
+		$evals = eval_exits("default","default",$prefix."evaluation_".$archive_suffix);
+	}
+	
 }
 
 if ($totalRows_log > 0) {
@@ -106,10 +113,12 @@ if ($totalRows_log > 0) {
 		$scoresheet_judging = FALSE;
 
 		$entry_number = sprintf("%06s",$row_log['id']);
-		$judging_number = sprintf("%06s",$row_log['brewJudgingNumber']);
+
+		$judging_number = "";
+		if (isset($row_log['brewJudgingNumber'])) $judging_number = sprintf("%06s",$row_log['brewJudgingNumber']);
 
 		// If using electronic scoresheets, build links
-		if (EVALUATION) {
+		if ((EVALUATION) && ($eval_db_table)) {
 
 			// if ($row_judging_prefs['jPrefsScoresheet'] == 1) $output_form = "full-scoresheet";
 			// if ($row_judging_prefs['jPrefsScoresheet'] == 2) $output_form = "checklist-scoresheet";
@@ -332,7 +341,9 @@ if ($totalRows_log > 0) {
 			$entry_staff_notes_display .= "</div>";
 			
 		}
-		else $entry_staff_notes_display = $row_log['brewStaffNotes'];
+		else {
+			if (isset($row_log['brewStaffNotes'])) $entry_staff_notes_display = $row_log['brewStaffNotes'];
+		}
 
 		// Notes to Admin
 		if (($action != "print") && ($dbTable == "default")) {
@@ -345,7 +356,9 @@ if ($totalRows_log > 0) {
 			$entry_admin_notes_display .= "<span id=\"admin-notes-ajax-".$row_log['id']."-brewAdminNotes-status-msg\"></span>";
 			$entry_admin_notes_display .= "</div>";
 		}
-		else $entry_admin_notes_display = $row_log['brewAdminNotes'];
+		else {
+			if (isset($row_log['brewAdminNotes'])) $entry_admin_notes_display = $row_log['brewAdminNotes'];
+		}
 
 		if (($action != "print") && ($dbTable == "default")) {
 			$entry_actions .= "<a href=\"".$base_url."index.php?section=brew&amp;go=".$go."&amp;action=edit&amp;bid=".$brewer_info[7]."&amp;id=".$row_log['id'];
@@ -359,7 +372,7 @@ if ($totalRows_log > 0) {
 			$entry_actions .= "<a class=\"hide-loader\" href=\"mailto:".$brewer_info[6]."\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Email the entry&rsquo;s owner, ".$brewer_info[0]." ".$brewer_info[1].", at ".$brewer_info[6]."\"><span class=\"fa fa-lg fa-envelope\"></span></a> ";
 		}
 
-		if (EVALUATION) {
+		if ((EVALUATION) && ($eval_db_table)) {
 			if ($scoresheet_eval) {
 				$entry_actions .= "<a id=\"modal_window_link\" class=\"hide-loader\" href=\"".$print_link."\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Print the Scoresheets for &ldquo;".$row_log['brewName']."&rdquo;\"><i class=\"fa fa-lg fa-file-text\"></i></a> ";
 				$entry_actions .= "<a id=\"modal_window_link\" class=\"hide-loader\" href=\"".$view_link."\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"View the Scoresheets for &ldquo;".$row_log['brewName']."&rdquo;\"><span class=\"fa-stack\"><i class=\"fa fa-square fa-stack-2x\"></i><i class=\"fa fa-stack-1x fa-file-text fa-inverse\"></i></span></a> ";
@@ -637,14 +650,14 @@ $(document).ready(function () {
 <script src="<?php echo $base_url;?>js_includes/admin_ajax.min.js"></script>
 <form name="form1" method="post" action="<?php echo $base_url; ?>includes/process.inc.php?action=update&amp;dbTable=<?php echo $brewing_db_table; ?>&amp;filter=<?php echo $filter; ?>">
 <?php if ($action != "print") { ?>
+<?php if ($dbTable != "default") { ?>
+<div class="btn-group" role="group" aria-label="...">
+	<a class="btn btn-default" href="<?php echo $base_url; ?>index.php?section=admin&amp;go=archive"><span class="fa fa-arrow-circle-left"></span> Archives</a>
+</div><!-- ./button group -->
+<?php } ?>
+<?php if ($dbTable == "default") { ?>
 <div class="bcoem-admin-element hidden-print row">
 	<div class="col-md-12">
-		<?php if ($dbTable != "default") { ?>
-		<div class="btn-group" role="group" aria-label="...">
-			<a class="btn btn-default" href="<?php echo $base_url; ?>index.php?section=admin&amp;go=archive"><span class="fa fa-arrow-circle-left"></span> Archives</a>
-		</div><!-- ./button group -->
-		<?php } ?>
-		<?php if ($dbTable == "default") { ?>
 		<?php if (($filter != "default") || ($bid != "default") || ($view != "default")) { ?>
 		<div class="btn-group" role="group" aria-label="allEntriesNav">
 			<a class="btn btn-default" href="<?php echo $base_url; ?>index.php?section=admin&amp;go=entries"><span class="fa fa-arrow-circle-left"></span> <?php if ($filter != "default") echo "All Styles"; if ($bid != "default") echo "All Entries"; if ($view != "default") echo "All Entries"; ?></a>
@@ -866,7 +879,7 @@ $(document).ready(function () {
     </div><!-- ./modal -->
 	</div>
 </div>
-    <?php }// end if ($dbTable == "default") ?>
+<?php } // end if ($dbTable == "default") ?>
 
 <?php } // end if ($action != "print") ?>
 

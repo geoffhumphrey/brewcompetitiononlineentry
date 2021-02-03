@@ -1,8 +1,15 @@
 <?php
 include (DB.'sponsors.db.php');
-$directory = (USER_IMAGES);
-$empty = is_dir_empty($directory);
-$sponsor_images = directory_contents_dropdown($directory,"none","2");
+
+if ($dbTable == "default") {
+  $directory = (USER_IMAGES);
+  $empty = is_dir_empty($directory);
+  $sponsor_images = directory_contents_dropdown($directory,"none","2");
+}
+
+else {
+  $archive_suffix = get_suffix($dbTable);
+}
 ?>
 <script>
 $(document).ready(function () {
@@ -10,19 +17,25 @@ $(document).ready(function () {
 });
 </script>
 <script src="<?php echo $base_url;?>js_includes/admin_ajax.min.js"></script>
-<p class="lead"><?php echo $_SESSION['contestName']; if ($action == "add") echo ": Add a Sponsor"; elseif ($action == "edit") echo ": Edit a Sponsor"; else echo " Sponsors"; ?></p>
+<p class="lead"><?php echo $_SESSION['contestName']; if ($action == "add") echo ": Add a Sponsor"; elseif ($action == "edit") echo ": Edit a Sponsor"; else echo " Sponsors"; if ($dbTable != "default") echo " (Archive ".$archive_suffix.")"; ?></p>
 <div class="bcoem-admin-element hidden-print">
 <?php if (($action == "add") || ($action == "edit")) { ?>
 	<div class="btn-group" role="group" aria-label="add-sponsor">
         <a class="btn btn-default" href="<?php echo $base_url; ?>index.php?section=admin&amp;go=sponsors"><span class="fa fa-eye"></span> View All Sponsors</a>
     </div><!-- ./button group -->
 <?php } else { ?>
+  <?php if ($dbTable == "default") { ?>
 	<div class="btn-group" role="group" aria-label="add-sponsor">
         <a class="btn btn-default" href="<?php echo $base_url; ?>index.php?section=admin&amp;go=sponsors&amp;action=add"><span class="fa fa-plus-circle"></span> Add a Sponsor</a>
     </div><!-- ./button group -->
     <div class="btn-group" role="group" aria-label="upload-sponsor">
 		<a class="btn btn-primary" href="<?php echo $base_url; ?>index.php?section=admin&amp;go=upload"><span class="fa fa-upload"></span> Upload Sponsor Logo Images</a>
 	</div>
+  <?php } else { ?>
+    <div class="btn-group" role="group" aria-label="...">
+      <a class="btn btn-default" href="<?php echo $base_url; ?>index.php?section=admin&amp;go=archive"><span class="fa fa-arrow-circle-left"></span> Archives</a>
+    </div><!-- ./button group -->
+  <?php } ?>
 <?php } ?>
 </div>
 
@@ -51,10 +64,14 @@ $(document).ready(function () {
 				null,
 				null,
 				null,
+        <?php if ($dbTable == "default") { ?>
 				{ "asSorting": [  ] },
+      <?php } ?>
 				{ "asSorting": [  ] },
+        <?php if ($dbTable == "default") { ?>
 				{ "asSorting": [  ] },
 				{ "asSorting": [  ] }
+        <?php } ?>
 				]
 			} );
 		} );
@@ -65,18 +82,30 @@ $(document).ready(function () {
   <th>Sponsor Name</th>
   <th>Sponsor Location</th>
   <th>Level</th>
+  <?php if ($dbTable == "default") { ?>
   <th>Logo?</th>
+  <?php } ?>
   <th>Description/Text</th>
+  <?php if ($dbTable == "default") { ?>
   <th>Display</th>
   <th>Actions</th>
+  <?php } ?>
  </tr>
  </thead>
  <tbody>
  <?php do { ?>
  <tr>
-  <td><?php echo $row_sponsors['sponsorName']; ?></td>
+  <td>
+    <?php if ($dbTable != "default") {
+    if ($row_sponsors['sponsorURL'] !="") echo "<a class=\"hide-loader\" href=\"".$row_sponsors['sponsorURL']."\" target=\"_blank\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Visit the ".$row_sponsors['sponsorName']." website\">".$row_sponsors['sponsorName']."</a>"; else echo $row_sponsors['sponsorName'];
+    }
+  else echo $row_sponsors['sponsorName']; 
+  ?>
+    
+  </td>
   <td><?php echo $row_sponsors['sponsorLocation']; ?></td>
-  <td><?php // echo $row_sponsors['sponsorLevel']; ?>
+  <td><?php if (isset($row_sponsors['sponsorLevel'])) { ?>
+    <?php if ($dbTable == "default") { ?>
     <div class="form-group" id="sponsor-level-ajax-<?php echo $row_sponsors['id']; ?>-sponsorLevel-form-group">
       <select class="selectpicker" name="sponsorLevel<?php echo $row_sponsors['id']; ?>" id="sponsor-level-ajax-<?php echo $row_sponsors['id']; ?>" data-width="auto" onchange="save_column('<?php echo $base_url; ?>','sponsorLevel','sponsors','<?php echo $row_sponsors['id']; ?>','default','default','default','default','sponsor-level-ajax-<?php echo $row_sponsors['id']; ?>')">
           <option value="1" <?php if ($row_sponsors['sponsorLevel'] == "1") echo " SELECTED"; ?>>1</option>
@@ -90,7 +119,10 @@ $(document).ready(function () {
         <span id="sponsor-level-ajax-<?php echo $row_sponsors['id']; ?>-sponsorLevel-status-msg"></span>
       </div>
     </div>
+  <?php } else echo $row_sponsors['sponsorLevel']; ?>
+  <?php } ?>
   </td>
+  <?php if ($dbTable == "default") { ?>
   <td>  
     <?php if (!$empty) { ?>
     <div class="form-group" id="sponsor-image-ajax-<?php echo $row_sponsors['id']; ?>-sponsorImage-form-group">
@@ -114,7 +146,9 @@ $(document).ready(function () {
     </div>
     <?php } else echo "<p>No images exist in the user_images directory.</p>"; ?>
   </td>
+<?php } ?>
   <td>
+    <?php if ($dbTable == "default") { ?>
     <div class="form-group" id="sponsor-text-ajax-<?php echo $row_sponsors['id']; ?>-sponsorText-form-group">
     <textarea class="form-control" id="sponsor-text-ajax-<?php echo $row_sponsors['id']; ?>" name="sponsorText<?php echo $row_sponsors['id']; ?>" rows="2" class="mceNoEditor" onblur="save_column('<?php echo $base_url; ?>','sponsorText','sponsors','<?php echo $row_sponsors['id']; ?>','default','text-col','default','default','sponsor-text-ajax-<?php echo $row_sponsors['id']; ?>')"><?php if (!empty($row_sponsors['sponsorText'])) echo $row_sponsors['sponsorText']; ?></textarea>
       <div>
@@ -122,7 +156,9 @@ $(document).ready(function () {
         <span id="sponsor-text-ajax-<?php echo $row_sponsors['id']; ?>-sponsorText-status-msg"></span>
       </div>
     </div>
+    <?php } else echo $row_sponsors['sponsorText']; ?>
     </td>
+  <?php if ($dbTable == "default") { ?>
   <td>
     <div class="form-group" id="sponsor-enable-ajax-<?php echo $row_sponsors['id']; ?>-sponsorEnable-form-group">
     <input id="sponsor-enable-ajax-<?php echo $row_sponsors['id']; ?>" type="checkbox" name="sponsorEnable<?php echo $row_sponsors['id']; ?>" value="1" <?php if ($row_sponsors['sponsorEnable'] == 1) echo 'CHECKED'; ?> onclick="$(this).attr('value', this.checked ? 1 : 0);save_column('<?php echo $base_url; ?>','sponsorEnable','sponsors','<?php echo $row_sponsors['id']; ?>','default','default','default','default','sponsor-enable-ajax-<?php echo $row_sponsors['id']; ?>')" /><input type="hidden" id="id" name="id[]" value="<?php echo $row_sponsors['id']; ?>" />
@@ -137,16 +173,18 @@ $(document).ready(function () {
   <a class="hide-loader" href="<?php echo $base_url; ?>includes/process.inc.php?section=admin&amp;go=<?php echo $go; ?>&amp;dbTable=<?php echo $sponsors_db_table; ?>&amp;action=delete&amp;id=<?php echo $row_sponsors['id']; ?>" data-toggle="tooltip" data-placement="top" title="Delete <?php echo $row_sponsors['sponsorName']; ?> as a sponsor" data-confirm="Are you sure you want to delete <?php echo $row_sponsors['sponsorName']; ?> as a sponsor? This cannot be undone."><span class="fa fa-lg fa-trash-o"></span></a>
   <?php if ($row_sponsors['sponsorURL'] !="") echo "<a class=\"hide-loader\" href=\"".$row_sponsors['sponsorURL']."\" target=\"_blank\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Visit the ".$row_sponsors['sponsorName']." website\"><span class=\"fa fa-lg fa-link\"></span></a> "; ?>
   </td>
+  <?php } ?>
  </tr>
 <?php } while($row_sponsors = mysqli_fetch_assoc($sponsors)) ?>
  </tbody>
 </table>
+<?php if ($dbTable == "default") { ?>
 <div class="bcoem-admin-element hidden-print">
   <input type="submit" name="Submit" id="sponsors-submit" class="btn btn-primary" aria-describedby="helpBlock" value="Update Sponsors" disabled />
     <span id="sponsors-update-button-enabled" class="help-block">Click Update Sponsors <em>before</em> paging through records.</span>
     <span id="sponsors-update-button-disabled" class="help-block">The Update Sponsors button has been disabled since data is being saved successfully as it is being entered.</span>
 </div>
-<?php if (isset($_SERVER['HTTP_REFERER'])) { ?>
+<?php } if (isset($_SERVER['HTTP_REFERER'])) { ?>
 <input type="hidden" name="relocate" value="<?php echo relocate($_SERVER['HTTP_REFERER'],"default",$msg,$id); ?>">
 <?php } else { ?>
 <input type="hidden" name="relocate" value="<?php echo relocate($base_url."index.php?section=admin&go=sponsors","default",$msg,$id); ?>">

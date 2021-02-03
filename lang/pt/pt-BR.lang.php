@@ -1477,11 +1477,13 @@ $sidebar_text_026 = "estão no sistema a partir de";
 $label_paid_entries = "Entradas Pagas";
 
 // ----------------------------------------------------------------------------------
-// Version 2.1.20 Additions (Via Google Translate English to Portuguese)
+// Version 2.2.0 Additions 
+// - Via Google Translate English to Portuguese - and for that, I'm sorry. :)
 // ----------------------------------------------------------------------------------
 
 $alert_text_086 = "O Internet Explorer não é compatível com o BCOE&M - recursos e funções não serão renderizados corretamente e sua experiência não será a ideal. Por favor, atualize para um navegador mais recente.";
 $alert_text_087 = "Para uma experiência ideal e para que todos os recursos e funções sejam executados corretamente, habilite o JavaScript para continuar usando este site. Caso contrário, ocorrerá um comportamento inesperado.";
+$alert_text_088 = "A apresentação dos prêmios estará disponível publicamente após a publicação dos resultados.";
 
 $brewer_entries_text_025 = "Imprimir folhas de pontuação dos juízes";
 
@@ -1733,9 +1735,10 @@ $label_cloudy = "Nublado";
 $label_sherry = "Xerez";
 $label_harsh = "Áspero";
 $label_full = "Cheio";
+$label_suggested = "Sugerido";
 
 // Scoresheet Score Descriptions
-$label_descriptor_defs = "Definições do descritor (marque todas as que se aplicam)";
+$label_descriptor_defs = "Definições do descritor";
 $label_outstanding = "Excepcional";
 $descr_outstanding = "Exemplo de estilo de classe mundial.";
 $label_excellent = "Excelente";

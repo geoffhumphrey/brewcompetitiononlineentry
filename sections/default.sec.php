@@ -39,6 +39,7 @@ Declare all variables empty at the top of the script. Add on later...
 
  * ---------------- END Rebuild Info --------------------- */
 
+
 include (DB.'dropoff.db.php');
 include (DB.'sponsors.db.php');
 include (DB.'contacts.db.php');
@@ -62,7 +63,7 @@ if ((judging_date_return() == 0) && ($registration_open == 2) && ($entry_window_
 	include (SECTIONS.'judge_closed.sec.php');
 	include (DB.'winners.db.php');
 
-	$style_types_active = styles_active(1);
+	$style_types_active = styles_active(1,"default");
 	$bos_data_available = FALSE;
 
 	if ($row_bos_scores['count'] > 0) $bos_data_available = TRUE;
@@ -72,7 +73,7 @@ if ((judging_date_return() == 0) && ($registration_open == 2) && ($entry_window_
 		if ($section == "past_winners") $header1_10 .= ": ".$trimmed;
 
 		if ($bos_data_available) {
-			$header1_10 .= sprintf(" <a class=\"hide-loader\" href=\"%soutput/export.output.php?section=results&amp;go=judging_scores_bos&amp;action=download&amp;filter=default&amp;view=pdf\" data-toggle=\"tooltip\" title=\"%s\"><span class=\"fa fa-file-pdf-o hidden-print\"></span></a> <a class=\"hide-loader\" href=\"%soutput/export.output.php?section=results&amp;go=judging_scores_bos&amp;action=download&amp;filter=default&amp;view=html\" data-toggle=\"tooltip\" title=\"%s\"><span class=\"fa fa-file-code-o hidden-print\"></span></a>",$base_url,$default_page_text_018,$base_url,$default_page_text_019);
+			if ($filter == "default") $header1_10 .= sprintf(" <a class=\"hide-loader\" href=\"%soutput/export.output.php?section=results&amp;go=judging_scores_bos&amp;action=download&amp;filter=default&amp;view=pdf\" data-toggle=\"tooltip\" title=\"%s\"><span class=\"fa fa-file-pdf-o hidden-print\"></span></a> <a class=\"hide-loader\" href=\"%soutput/export.output.php?section=results&amp;go=judging_scores_bos&amp;action=download&amp;filter=default&amp;view=html\" data-toggle=\"tooltip\" title=\"%s\"><span class=\"fa fa-file-code-o hidden-print\"></span></a>",$base_url,$default_page_text_018,$base_url,$default_page_text_019);
 		}
 
 		$header1_10 .= "</h2>";
@@ -82,12 +83,13 @@ if ((judging_date_return() == 0) && ($registration_open == 2) && ($entry_window_
 
 	$header1_20 .= "<h2>".$default_page_text_010;
 	if ($section == "past_winners") $header1_20 .= ": ".$trimmed;
-	$header1_20 .= sprintf(" <a class=\"hide-loader\" href=\"%soutput/export.output.php?section=results&amp;go=judging_scores&amp;action=default&amp;filter=none&amp;view=pdf\" data-toggle=\"tooltip\" title=\"%s\"><span class=\"fa fa-file-pdf-o hidden-print\"></span></a> <a class=\"hide-loader\" href=\"%soutput/export.output.php?section=results&amp;go=judging_scores&amp;action=default&amp;filter=none&amp;view=html\" data-toggle=\"tooltip\" title=\"%s\"><span class=\"fa fa-file-code-o hidden-print\"></span></a>",$base_url,$default_page_text_020,$base_url,$default_page_text_021);
+	if ($filter == "default") $header1_20 .= sprintf(" <a class=\"hide-loader\" href=\"%soutput/export.output.php?section=results&amp;go=judging_scores&amp;action=default&amp;filter=none&amp;view=pdf\" data-toggle=\"tooltip\" title=\"%s\"><span class=\"fa fa-file-pdf-o hidden-print\"></span></a> <a class=\"hide-loader\" href=\"%soutput/export.output.php?section=results&amp;go=judging_scores&amp;action=default&amp;filter=none&amp;view=html\" data-toggle=\"tooltip\" title=\"%s\"><span class=\"fa fa-file-code-o hidden-print\"></span></a>",$base_url,$default_page_text_020,$base_url,$default_page_text_021);
 	$header1_20 .= "</h2>";
 
 	$page_info .= sprintf("<h2>%s</h2><p>%s %s.</p>",$default_page_text_004,$default_page_text_005,getTimeZoneDateTime($_SESSION['prefsTimeZone'], $_SESSION['prefsWinnerDelay'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "long", "date-time"));
 
 } // end if ((judging_date_return() == 0) && ($registration_open == "2"))
+
 
 else {
 
@@ -145,11 +147,34 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= "1") && ($
 echo $primary_page_info;
 //echo $totalRowsSponsors;
 
-if ((judging_date_return() == 0) && ($registration_open == 2) && ($entry_window_open == 2)) {
+if ($_SESSION['prefsProEdition'] == 1) $label_brewer = $label_organization; else $label_brewer = $label_brewer;
+
+// Queries for current data
+if ($filter == "default") {
+	$winner_method = $_SESSION['prefsWinnerMethod'];
+	$style_set = $_SESSION['prefsStyleSet'];
+}
+
+// Or, for archived data
+else {
+
+	// Query the archive table for preferences
+	$query_archive_prefs = sprintf("SELECT * FROM %s WHERE archiveSuffix='%s'",$prefix."archive", $filter);
+	$archive_prefs = mysqli_query($connection,$query_archive_prefs) or die (mysqli_error($connection));
+	$row_archive_prefs = mysqli_fetch_assoc($archive_prefs);
+	$totalRows_archive_prefs = mysqli_num_rows($archive_prefs);
+
+	$winner_method = $row_archive_prefs['archiveWinnerMethod'];
+	$style_set = $row_archive_prefs['archiveStyleSet'];
+	$judging_scores_db_table = $prefix."judging_scores_".$filter;
+	$brewing_db_table = $prefix."brewing_".$filter;
+	$brewer_db_table = $prefix."brewer_".$filter;
+
+}
+
+if ((judging_date_return() == 0) && ($registration_open == 2) && ($entry_window_open == 2) && ($section !="past-winners")) {
 
 	if ($_SESSION['prefsDisplayWinners'] == "Y") {
-
-		if ($_SESSION['prefsProEdition'] == 1) $label_brewer = $label_organization; else $label_brewer = $label_brewer;
 
 		include (DB.'score_count.db.php');
 
@@ -164,8 +189,8 @@ if ((judging_date_return() == 0) && ($registration_open == 2) && ($entry_window_
 			if (($row_scored_entries['count'] > 0) && (($row_limits['prefsShowBestBrewer'] != 0) || ($row_limits['prefsShowBestClub'] != 0))) include (SECTIONS.'bestbrewer.sec.php');
 
 			echo $header1_20;
-			if ($_SESSION['prefsWinnerMethod'] == "1") include (SECTIONS.'winners_category.sec.php');
-			elseif ($_SESSION['prefsWinnerMethod'] == "2") include (SECTIONS.'winners_subcategory.sec.php');
+			if ($winner_method == "1") include (SECTIONS.'winners_category.sec.php');
+			elseif ($winner_method == "2") include (SECTIONS.'winners_subcategory.sec.php');
 			else include (SECTIONS.'winners.sec.php');
 		}
 
@@ -177,21 +202,45 @@ if ((judging_date_return() == 0) && ($registration_open == 2) && ($entry_window_
 
 // If registration or entry window still open and the judging dates have not passed
 else {
-	echo $page_info;
 
+	if ($section != "past-winners") {
+		
+		echo $page_info;
 
-	if ((($registration_open == 2) && ($entry_window_open == 2)) || ($comp_entry_limit) || ($comp_paid_entry_limit)) include (SECTIONS.'reg_closed.sec.php');
-	else include('reg_open.sec.php');
+		if ((($registration_open == 2) && ($entry_window_open == 2)) || ($comp_entry_limit) || ($comp_paid_entry_limit)) include (SECTIONS.'reg_closed.sec.php');
+		else include('reg_open.sec.php');
 
-	// Display Competition Official(s)
-	echo $header1_10;
-	echo $page_info10;
+		// Display Competition Official(s)
+		echo $header1_10;
+		echo $page_info10;
 
-	if (($_SESSION['prefsSponsors'] == "Y") && ($totalRows_sponsors > 0)) {
-		echo $header1_30;
-		echo $page_info30;
-		include (SECTIONS.'sponsors.sec.php');
+		if (($_SESSION['prefsSponsors'] == "Y") && ($totalRows_sponsors > 0)) {
+			echo $header1_30;
+			echo $page_info30;
+			include (SECTIONS.'sponsors.sec.php');
+		}
+
 	}
 }
+
+if ($section == "past-winners") {
+
+	include (DB.'score_count.db.php');
+
+	echo $header1_10;
+	echo $page_info10;
+	include (SECTIONS.'bos.sec.php');
+
+	echo $header1_20;
+	if ($winner_method == "1") include (SECTIONS.'winners_category.sec.php');
+	elseif ($winner_method == "2") include (SECTIONS.'winners_subcategory.sec.php');
+	else include (SECTIONS.'winners.sec.php');
+
+}
+
+/*
+
+
+*/
 
 ?>

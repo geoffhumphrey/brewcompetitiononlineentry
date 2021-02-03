@@ -19,10 +19,16 @@ if (strpos($section, "step") === FALSE) {
 	if ($_SESSION['jPrefsQueued'] == "N") $assign_to = "Flights"; else $assign_to = "Tables";
 }
 
+if ($section == "past-winners") $filter = $go;
+
 switch($section) {
 
 	case "default":
+	case "past-winners":
 		$header_output = $_SESSION['contestName'];
+
+		if (($filter != "default") && ($section == "past-winners")) $header_output .= ": ".$label_past_winners." &ndash; ".$filter;
+
 		if ($msg == "success") {
 			$output = "<strong>".$header_text_000."</strong>";
 			$output_extend = sprintf("<div class=\"alert alert-info hidden-print\"><span class=\"fa fa-lg fa-info-circle\"></span> %s</p>",$header_text_001);
@@ -40,6 +46,7 @@ switch($section) {
 		elseif ($msg == "4") $output = sprintf("<strong>%s</strong>",$header_text_009);
 		elseif ($msg == "5") $output = sprintf("<strong>%s</strong> <a href=\#\"  role=\"button\" data-toggle=\"modal\" data-target=\"#loginModal\">%s</a>",$header_text_036,$header_text_037);
 		elseif ($msg == "6") { $output = sprintf("<strong>%s</strong> %s",$header_text_034,$header_text_116); $output_extend = ""; }
+		elseif ($msg == "7") $output = sprintf("<strong>%s</strong>",$alert_text_088);
 		elseif ($msg == "9") $output = sprintf("<strong>%s</strong>",$header_text_066);
 	break;
 

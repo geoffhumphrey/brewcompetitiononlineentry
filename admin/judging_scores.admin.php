@@ -199,7 +199,7 @@ $totalRows_entry_count = total_paid_received($go,"default");
 	else $mini_bos = "&nbsp;";
 
     $style_display_number = style_number_const($table_score_data[8],$table_score_data[15],$_SESSION['style_set_display_separator'],0);
-    $entry_category = $style_display_number." ".style_convert($table_score_data[8],1).": ".$table_score_data[13];
+    $entry_category = $style_display_number." ".style_convert($table_score_data[8],1,$base_url,$filter).": ".$table_score_data[13];
 
     $scoresheet = FALSE;
     $scoresheet_eval = FALSE;
@@ -348,7 +348,7 @@ $totalRows_entry_count = total_paid_received($go,"default");
         <td><?php if ($pro_edition == 1) echo $table_score_data[14]; else echo $table_score_data[5].", ".$table_score_data[4]; ?></td>
         <td><?php echo $table_score_data[3]; ?></td>
         <?php } ?>
-        <td><?php echo $row_scores['scoreEntry']; ?></td>
+        <td><?php echo number_format($row_scores['scoreEntry'],0); ?></td>
         <td><?php echo $score_place; ?></td>
         <td><?php echo $mini_bos; ?></td>
 		<?php if ($dbTable == "default") { ?>
@@ -439,7 +439,7 @@ $(document).ready(function() {
 				$judging_number = sprintf("%06s",$row_entries['brewJudgingNumber']);
 
 				if ($_SESSION['prefsStyleSet'] == "BA") $style_display = $score_style_data[2];
-                else $style_display = $style." ".style_convert($row_entries['brewCategorySort'],1).": ".$score_style_data[2];
+                else $style_display = $style." ".style_convert($row_entries['brewCategorySort'],1,$base_url,$filter).": ".$score_style_data[2];
 
                 $scoreType = style_type($score_style_data[3],"1","bcoe");
 

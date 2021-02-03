@@ -1,4 +1,11 @@
 <?php
+if ($filter != "default") {
+	$special_best_info_db_table = $prefix."special_best_info_".$filter;
+	$judging_tables_db_table = $prefix."judging_tables_".$filter;
+	$style_types_db_table = $prefix."style_types_".$filter;
+	$judging_scores_db_table = $prefix."judging_scores_".$filter;
+	$judging_scores_bos_db_table = $prefix."judging_scores_bos_".$filter;
+}
 if ((isset($style)) && (is_numeric($style))) $style_pad = sprintf("%02d", $style);
 else $style_pad = $style;
 if ($_SESSION['prefsStyleSet'] == "BA") $query_entry_count = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE brewCategory='%s' AND brewReceived='1'", $brewing_db_table,  $style);

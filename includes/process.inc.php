@@ -21,6 +21,7 @@ require(INCLUDES.'styles.inc.php');
 include (INCLUDES.'scrubber.inc.php');
 require (DB.'common.db.php');
 include (LIB.'common.lib.php');
+include (LIB.'update.lib.php');
 include (LANG.'language.lang.php');
 
 mysqli_select_db($connection,$database);
@@ -40,8 +41,6 @@ if (DEBUG) include(DEBUGGING.'query_count_begin.debug.php');
 // Check if setup is running, if so, check whether prefs have been established
 // If so, get time zone setup by admin
 if (($section == "setup") && ($dbTable != $prefix."preferences")) {
-
-	include (LIB.'update.lib.php');
 
 	if (check_setup($prefix."preferences",$database)) {
 

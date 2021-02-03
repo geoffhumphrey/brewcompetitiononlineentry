@@ -1544,7 +1544,6 @@ $row_current_st = mysqli_fetch_assoc($current_st);
 $updateSQL = sprintf("TRUNCATE %s",$prefix."style_types");
 mysqli_real_escape_string($connection,$updateSQL);
 $result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
-// echo $updateSQL."<br>";
 
 // Rebuild the table with the current base schema 
 $updateSQL = "
@@ -1556,7 +1555,6 @@ $updateSQL = "
         ";
 mysqli_real_escape_string($connection,$updateSQL);
 $result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
-// echo $updateSQL."<br>";
 
 // Add the new style types by looping through the array
 foreach ($new_style_types as $key => $value) {
@@ -1564,7 +1562,6 @@ foreach ($new_style_types as $key => $value) {
     $updateSQL = sprintf("INSERT INTO `%s` (`id`, `styleTypeName`, `styleTypeOwn`, `styleTypeBOS`, `styleTypeBOSMethod`) VALUES (%s, '%s', 'bcoe', 'N', 1);", $prefix."style_types",$value, $key);
     mysqli_real_escape_string($connection,$updateSQL);
     $result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
-    // echo $updateSQL."<br>";
 
 }
 
@@ -1572,7 +1569,6 @@ foreach ($new_style_types as $key => $value) {
 $updateSQL = sprintf("ALTER TABLE %s AUTO_INCREMENT = 16;", $prefix."style_types");
 mysqli_real_escape_string($connection,$updateSQL);
 $result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
-// echo $updateSQL."<br>";
 
 // Finally, add the remaining custom styles to the table.
 // If one matches a core style type, update the styles table 
@@ -1592,14 +1588,12 @@ do {
             $updateSQL = sprintf("UPDATE %s SET brewStyleType='%s' WHERE brewStyleType='%s';",$prefix."styles",$all_style_types[$row_current_st['styleTypeName']],$row_current_st['id']);
             mysqli_real_escape_string($connection,$updateSQL);
             $result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
-            // echo $updateSQL."<br>";
         }
 
         // Apply current styleTypeBOS and styleTypeBOSMethod values for matching styles
         $updateSQL = sprintf("UPDATE %s SET styleTypeBOS='%s',styleTypeBOSMethod='%s' WHERE styleTypeName='%s';",$prefix."style_types",$row_current_st['styleTypeBOS'],$row_current_st['styleTypeBOSMethod'],$row_current_st['styleTypeName']);
         mysqli_real_escape_string($connection,$updateSQL);
         $result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
-        // echo $updateSQL."<br>";
     }
 
 
@@ -1612,8 +1606,6 @@ do {
             $prefix."style_types",$row_current_st['styleTypeName'],$row_current_st['styleTypeBOS'],$row_current_st['styleTypeBOSMethod']);
         mysqli_real_escape_string($connection,$updateSQL);
         $result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
-        // echo $row_current_st['styleTypeName']."<br>";
-        // echo $updateSQL."<br>";
 
         $query_new_st = sprintf("SELECT id FROM %s ORDER BY id DESC LIMIT 1",$prefix."style_types");
         $new_st = mysqli_query($connection,$query_new_st) or die (mysqli_error($connection));
@@ -1622,7 +1614,6 @@ do {
         $updateSQL = sprintf("UPDATE %s SET brewStyleType='%s' WHERE brewStyleType='%s';",$prefix."styles",$row_new_st['id'],$row_current_st['id']);
         mysqli_real_escape_string($connection,$updateSQL);
         $result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
-        // echo $updateSQL."<br>";
 
     }
 
@@ -1719,6 +1710,116 @@ if (!check_update("prefsEmailCC", $prefix."preferences")) {
 
 $output .= "<li>Added column to enable or disable carbon copying contact messages.</li>";
 
+/**
+ * ---------------------------------------------------------------------------------------------------
+ * Add the winner display method for Archives
+ * Add display winners on past winners list toggle preference for Archives
+ * -- Both allow for display of past winners from archived db tables
+ * ---------------------------------------------------------------------------------------------------
+ */
+
+if (!check_update("archiveWinnerMethod", $prefix."archive")) {
+	$updateSQL = sprintf("ALTER TABLE `%s` ADD `archiveWinnerMethod` tinyint(1) NULL DEFAULT NULL COMMENT 'Method comp uses to choose winners: 0=by table; 1=by category; 2=by sub-category';",$prefix."archive");
+	mysqli_select_db($connection,$database);
+	mysqli_real_escape_string($connection,$updateSQL);
+	$result = mysqli_query($connection,$updateSQL);
+
+	$updateSQL = sprintf("UPDATE `%s` SET archiveWinnerMethod='0';", $prefix."archive");
+	mysqli_real_escape_string($connection,$updateSQL);
+	$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+}
+
+if (!check_update("archiveDisplayWinners", $prefix."archive")) {
+	$updateSQL = sprintf("ALTER TABLE `%s` ADD `archiveDisplayWinners` char(1) NULL DEFAULT NULL;",$prefix."archive");
+	mysqli_select_db($connection,$database);
+	mysqli_real_escape_string($connection,$updateSQL);
+	$result = mysqli_query($connection,$updateSQL);
+
+	$updateSQL = sprintf("UPDATE `%s` SET archiveDisplayWinners='N';", $prefix."archive");
+	mysqli_real_escape_string($connection,$updateSQL);
+	$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+}
+
+
+// Get all of the archive suffix records
+// Check if all necessary DB tables are present for each suffix,
+// If not, add them.
+
+$query_archive = sprintf("SELECT archiveSuffix FROM %s",$prefix."archive");
+$archive = mysqli_query($connection,$query_archive);
+$row_archive = mysqli_fetch_assoc($archive);
+$totalRows_archive = mysqli_num_rows($archive);
+
+//echo $query_archive;
+
+$tables_array = array($brewing_db_table, $judging_assignments_db_table, $judging_flights_db_table, $judging_scores_db_table, $judging_scores_bos_db_table, $judging_tables_db_table, $staff_db_table,$brewer_db_table,$special_best_data_db_table,$special_best_info_db_table,$style_types_db_table,$users_db_table);
+
+// if (EVALUATION) $tables_array[] = $prefix."evaluation";
+
+if ($totalRows_archive > 0) {
+
+	do {
+
+		foreach ($tables_array as $table) {
+
+			$table_archive = $table."_".$row_archive['archiveSuffix'];
+
+			if (!check_setup($table_archive,$database)) {
+
+				$updateSQL = "CREATE TABLE ".$table_archive." LIKE ".$table.";";
+				mysqli_real_escape_string($connection,$updateSQL);
+				$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+
+				$updateSQL = "TRUNCATE TABLE ".$table_archive.";";
+				mysqli_real_escape_string($connection,$updateSQL);
+				$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+
+			}
+
+			if ($table_archive == $brewer_db_table."_".$row_archive['archiveSuffix']) {
+
+				if (!check_update("brewerJudgeMead",$brewer_db_table."_".$row_archive['archiveSuffix'])) {
+					$updateSQL = sprintf("ALTER TABLE `%s` ADD `brewerJudgeMead` char(1) NULL DEFAULT NULL;",$brewer_db_table."_".$row_archive['archiveSuffix']);
+					mysqli_select_db($connection,$database);
+					mysqli_real_escape_string($connection,$updateSQL);
+					$result = mysqli_query($connection,$updateSQL);
+				}
+
+				if (!check_update("brewerBreweryName",$brewer_db_table."_".$row_archive['archiveSuffix'])) {
+					$updateSQL = sprintf("ALTER TABLE `%s` ADD `brewerBreweryName` varchar(255) NULL DEFAULT NULL;",$brewer_db_table."_".$row_archive['archiveSuffix']);
+					mysqli_select_db($connection,$database);
+					mysqli_real_escape_string($connection,$updateSQL);
+					$result = mysqli_query($connection,$updateSQL);
+				}
+
+				if (!check_update("brewJudgingNumber",$brewing_db_table."_".$row_archive['archiveSuffix'])) {
+					$updateSQL = sprintf("ALTER TABLE `%s` ADD `brewJudgingNumber` char(1) NULL DEFAULT NULL;",$brewer_db_table."_".$row_archive['archiveSuffix']);
+					mysqli_select_db($connection,$database);
+					mysqli_real_escape_string($connection,$updateSQL);
+					$result = mysqli_query($connection,$updateSQL);
+				}
+
+				if (!check_update("brewStaffNotes",$brewing_db_table."_".$row_archive['archiveSuffix'])) {
+					$updateSQL = sprintf("ALTER TABLE `%s` ADD `brewStaffNotes` char(1) NULL DEFAULT NULL;",$brewer_db_table."_".$row_archive['archiveSuffix']);
+					mysqli_select_db($connection,$database);
+					mysqli_real_escape_string($connection,$updateSQL);
+					$result = mysqli_query($connection,$updateSQL);
+				}
+
+				if (!check_update("brewAdminNotes",$brewing_db_table."_".$row_archive['archiveSuffix'])) {
+					$updateSQL = sprintf("ALTER TABLE `%s` ADD `brewAdminNotes` char(1) NULL DEFAULT NULL;",$brewer_db_table."_".$row_archive['archiveSuffix']);
+					mysqli_select_db($connection,$database);
+					mysqli_real_escape_string($connection,$updateSQL);
+					$result = mysqli_query($connection,$updateSQL);
+				}
+
+			}
+
+		}
+
+	} while ($row_archive = mysqli_fetch_assoc($archive));
+
+}
 
 /**
  * ----------------------------------------------------------------------------------------------------

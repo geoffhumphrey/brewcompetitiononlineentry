@@ -161,7 +161,7 @@ if ($show_entries) {
 				$page_info16 .= "<div class=\"row\">";
 				$page_info16 .= "<div class=\"col col-lg-6 col-md-8 col-sm-10 col-xs-12\">";
 
-				$page_info16 .= style_convert($row_limits['prefsUSCLEx'],"7");
+				$page_info16 .= style_convert($row_limits['prefsUSCLEx'],"7",$base_url,$filter);
 
 				$page_info16 .= "</div>";
 				$page_info16 .= "</div>";

@@ -4,7 +4,7 @@ function check_setup($tablename, $database) {
 	require(CONFIG.'config.php');
 	mysqli_select_db($connection,$database);
 	
-	$query_log = sprintf("SELECT COUNT(*) AS count FROM information_schema.tables WHERE table_schema = '%s' AND table_name = '%s'",$database, $tablename);
+	$query_log = sprintf("SELECT COUNT(*) AS count FROM information_schema.tables WHERE table_schema = '%s' AND table_name = '%s'", $database, $tablename);
 	$log = mysqli_query($connection,$query_log) or die (mysqli_error($connection));
 	$row_log = mysqli_fetch_assoc($log);
 

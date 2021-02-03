@@ -1,7 +1,7 @@
 <?php
 /**
- * Module:      index.php
- * Description: This module is the delivery vehicle for all modules.
+ * Module:      awards.php
+ * Description: This module is the delivery vehicle for the awards presentation.
  *
  */
 
@@ -23,6 +23,8 @@ $bb_count_clubs = "";
 $bb_previouspoints = "";
 $bb_previouspoints_clubs = "";
 
+$winner_method = $_SESSION['prefsWinnerMethod'];
+
 $display_to_public = FALSE;
 if ((judging_date_return() == 0) && ($entry_window_open == 2) && ($registration_open == 2) && ($judge_window_open == 2) && ($_SESSION['prefsDisplayWinners'] == "Y") && (judging_winner_display($_SESSION['prefsWinnerDelay']))) $display_to_public = TRUE;
 
@@ -30,7 +32,7 @@ $display_to_admin = FALSE;
 if (($logged_in) && ($_SESSION['userLevel'] <= 1)) $display_to_admin = TRUE;
 
 if ((!$display_to_public) && (!$display_to_admin)) {
-	header(sprintf("Location: %s", $base_url."index.php?msg=4"));
+	header(sprintf("Location: %s", $base_url."index.php?msg=7"));
     exit;
 }
 
@@ -198,8 +200,8 @@ if (($display_to_admin) || ($display_to_public)) {
 
 		// Build slides by Category
 		if ($_SESSION['prefsWinnerMethod'] == "1") {
-
-			$a = styles_active(0);
+			
+			$a = styles_active(0,"default");
 
 			foreach (array_unique($a) as $style) {
 
@@ -226,6 +228,8 @@ if (($display_to_admin) || ($display_to_public)) {
 						} // end if ($_SESSION['prefsStyleSet'] == "BA")
 
 						else {
+
+							//style_convert($number,$type,$base_url="",$archive="")
 
 							$slides .= "<h1 class=\"r-fit-text tight\">";
 							$slides .= sprintf("%s %s: %s",$label_category,ltrim($style,"0"),style_convert($style,"1"));
@@ -290,7 +294,7 @@ if (($display_to_admin) || ($display_to_public)) {
 			if ($_SESSION['prefsStyleSet'] == "BJCP2008") $category_end = 28;
 			else $category_end = 34;
 
-			$a = styles_active(2);
+			$a = styles_active(2,"default");
 
 			foreach (array_unique($a) as $style) {
 
@@ -480,29 +484,25 @@ if (($display_to_admin) || ($display_to_public)) {
 							$place_heirarchy = place_heirarchy($place_heirarchy_count);
 						}
 						
-						$brewer_info = explode("^",brewer_info($row_sbd['bid']));
-						$entry_info = explode("^",entry_info($row_sbd['eid']));
-						$style = $entry_info['5'].$entry_info['2'];
-
 						// Category/Style Display
-						if ($_SESSION['prefsStyleSet'] == "AABC") $style = ltrim($entry_info['5'],"0").".".ltrim($entry_info['2'],"0");
-							else $style = $entry_info['5'].$entry_info['2'];
-						if ($_SESSION['prefsStyleSet'] == "BA") $style_display = $entry_info['3'];
-						else $style_display = $style.": ".$entry_info['3'];
+						if ($_SESSION['prefsStyleSet'] == "AABC") $style = ltrim($row_sbd['brewerCategory'],"0").".".ltrim($row_sbd['brewSubCategory'],"0");
+							else $style = $row_sbd['brewCategory'].$row_sbd['brewSubCategory'];
+						if ($_SESSION['prefsStyleSet'] == "BA") $style_display = $row_sbd['brewStyle'];
+						else $style_display = $row_sbd['brewCategory'].$row_sbd['brewSubCategory'].": ".$row_sbd['brewStyle'];
 
 							// Name Display
-						if ($_SESSION['prefsProEdition'] == 1) $brewer_name = $brewer_info['15'];
-						else $brewer_name = $brewer_info['0']." ".$brewer_info['1'];
+						if ($_SESSION['prefsProEdition'] == 1) $brewer_name = $row_sbd['brewerBreweryName'];
+						else $brewer_name = $row_sbd['brewerFirstName']." ".$row_sbd['brewerLastName'];
 
 						$brewer_club = "";
-						if ((!empty($brewer_info['8'])) && ($brewer_info['8'] != "Other")) $brewer_club = $brewer_info['8'];
+						if ((!empty($row_sbd['brewerClubs'])) && ($row_sbd['brewerClubs'] != "Other")) $brewer_club = $row_sbd['brewerClubs'];
 
 						// Build Slide Content
 						$slides_bos .= "<div id=\"medal-grid\">";
 						$slides_bos .= "<div class=\"fragment justify-right col-right\" data-fragment-index=\"".$place_heirarchy."\" id=\"pos-".$place_heirarchy."\"><i class=\"fa fa-trophy icon pos-".$place_heirarchy."-medal-color\"></i>".$display_place."</div>";
 						$slides_bos .= "<div class=\"fragment justify-left\" data-fragment-index=\"".$place_heirarchy."\" id=\"pos-".$place_heirarchy."-name\">".$brewer_name."</div>";
 						if ($_SESSION['prefsProEdition'] == 0) $slides_bos .= "<div class=\"fragment justify-left small\" data-fragment-index=\"".$place_heirarchy."\" id=\"pos-".$place_heirarchy."-club\">".truncate_string($brewer_club,25," ")."</div>";
-						$slides_bos .= "<div class=\"fragment justify-left small entry-name bottom-row\" data-fragment-index=\"".$place_heirarchy."\" id=\"pos-".$place_heirarchy."-style\">".truncate_string($entry_info['0'],65," ")." (".$style_display.")</div>";
+						$slides_bos .= "<div class=\"fragment justify-left small entry-name bottom-row\" data-fragment-index=\"".$place_heirarchy."\" id=\"pos-".$place_heirarchy."-style\">".truncate_string($row_sbd['brewName'],65," ")." (".$style_display.")</div>";
 						$slides_bos .= "</div>";
 					
 					} while ($row_sbd = mysqli_fetch_assoc($sbd));

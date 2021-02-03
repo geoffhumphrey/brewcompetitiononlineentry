@@ -374,9 +374,16 @@ if ((($section == "admin") && ($go == "preferences")) || ($section == "step3")) 
 if ($dbTable != "default") {
 	$suffix = strrchr($dbTable,"_");
 	$suffix = ltrim($suffix, "_");
-	$query_archive_prefs = sprintf("SELECT archiveStyleSet,archiveProEdition,archiveScoresheet FROM %s WHERE archiveSuffix='%s'", $prefix."archive", $suffix);
+	$query_archive_prefs = sprintf("SELECT * FROM %s WHERE archiveSuffix='%s'", $prefix."archive", $suffix);
 	$archive_prefs = mysqli_query($connection,$query_archive_prefs) or die (mysqli_error($connection));
 	$row_archive_prefs = mysqli_fetch_assoc($archive_prefs);
+}
+
+if ($section != "admin") {
+	$query_archive = sprintf("SELECT * FROM %s ORDER BY archiveSuffix ASC", $prefix."archive");
+	$archive = mysqli_query($connection,$query_archive) or die (mysqli_error($connection));
+	$row_archive = mysqli_fetch_assoc($archive);
+	$totalRows_archive = mysqli_num_rows($archive);
 }
 
 // Do not rely on session data to populate Competition Organization Preferences (Judging Preferences) for editing in Admin or in Setup

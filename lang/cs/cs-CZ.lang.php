@@ -1490,12 +1490,13 @@ $sidebar_text_026 = "je zaregistrováno k datu";
 $label_paid_entries = "Již uhrazených vzorků";
 
 // ----------------------------------------------------------------------------------
-// Version 2.1.20 Additions
+// Version 2.2.0 Additions
 // Via Google Translate English to Czech - and for that, I'm sorry. :)
 // ----------------------------------------------------------------------------------
 
 $alert_text_086 = "Prohlížeč Internet Explorer není BCOE&M podporován - zobrazení a funkce nebudou fungovat správně. Prosím, pořiďte si novější prohlížeč.";
 $alert_text_087 = "Pro optimální zážitek a správné fungování všech funkcí a funkcí povolte prosím JavaScript, abyste mohli nadále používat tento web. Jinak dojde k neočekávanému chování.";
+$alert_text_088 = "Prezentace cen bude veřejně k dispozici po zveřejnění výsledků.";
 
 $brewer_entries_text_025 = "Vytiskněte si výsledkové listy rozhodčích";
 
@@ -1748,7 +1749,8 @@ $label_cloudy = "Zataženo";
 $label_sherry = "Sherry";
 $label_harsh = "Drsný";
 $label_full = "Úplný";
-$label_descriptor_defs = "Definice deskriptoru (označte všechny platné možnosti)";
+$label_descriptor_defs = "Definice deskriptoru";
+$label_suggested = "Navrhnout";
 
 // Scoresheet Score Descriptions
 $label_outstanding = "Vynikající";

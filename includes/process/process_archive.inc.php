@@ -5,7 +5,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 
 	require(INCLUDES.'scrubber.inc.php');
 	require(INCLUDES.'db_tables.inc.php');
-
+	
 	// Instantiate HTMLPurifier
 	require (CLASSES.'htmlpurifier/HTMLPurifier.standalone.php');
 	$config_html_purifier = HTMLPurifier_Config::createDefault();
@@ -13,20 +13,25 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 
 	$dbTable = "default";
 
+	$suffix = $purifier->purify($suffix);
 	$suffix = strtr($_POST['archiveSuffix'], $space_remove);
 	$suffix = preg_replace("/[^a-zA-Z0-9]+/", "", $suffix);
 	$suffix = sterilize($suffix);
 
-	$query_suffix_check = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE archiveSuffix = '%s';", $archive_db_table, $suffix);
-	$suffix_check = mysqli_query($connection,$query_suffix_check) or die (mysqli_error($connection));
-	$row_suffix_check = mysqli_fetch_assoc($suffix_check);
+	// Rename current tables and recreate new ones based upon user input
+	$tables_array = array($brewing_db_table, $judging_assignments_db_table, $judging_flights_db_table, $judging_scores_db_table, $judging_scores_bos_db_table, $judging_tables_db_table, $staff_db_table);
 
-	if ($row_suffix_check['count'] > 0) {
-		$redirect_go_to = sprintf("Location: %s", $base_url."index.php?section=admin&go=archive&msg=6");
-	}
+	if (EVALUATION) $tables_array[] = $prefix."evaluation";
 
-	else {
+	if ($go == "add") {
+		$query_suffix_check = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE archiveSuffix = '%s';", $archive_db_table, $suffix);
+		$suffix_check = mysqli_query($connection,$query_suffix_check) or die (mysqli_error($connection));
+		$row_suffix_check = mysqli_fetch_assoc($suffix_check);
 
+		if ($row_suffix_check['count'] > 0) {
+			$redirect_go_to = sprintf("Location: %s", $base_url."index.php?section=admin&go=archive&msg=6");
+		}
+			
 		//Check if any documents are in the user_docs folder
 
 		if ((isset($_POST['keepScoresheets'])) && (!is_dir_empty(USER_DOCS))) {
@@ -83,11 +88,6 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 			$brewerBreweryName = $row_name['brewerBreweryName'];
 
 		} // end if (!isset($_POST['keepParticipants']))
-
-		// Rename current tables and recreate new ones based upon user input
-		$tables_array = array($brewing_db_table, $judging_assignments_db_table, $judging_flights_db_table, $judging_scores_db_table, $judging_scores_bos_db_table, $judging_tables_db_table, $staff_db_table);
-
-		if (EVALUATION) $tables_array[] = $prefix."evaluation";
 
 		/*
 		if (EVALUATION) {
@@ -222,7 +222,25 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 		// Insert a new record into the "archive" table containing the newly created archives names (allows access to archived tables)
 		$styleSet = $_SESSION['prefsStyleSet'];
 
-		$insertSQL = sprintf("INSERT INTO %s (archiveSuffix,archiveProEdition,archiveStyleSet) VALUES ('%s','%s','%s');",$archive_db_table,$suffix,$_SESSION['prefsProEdition'],$styleSet);
+		$insertSQL = sprintf("
+			INSERT INTO %s (
+			archiveSuffix,
+			archiveProEdition,
+			archiveStyleSet,
+			archiveScoresheet,
+			archiveWinnerMethod,
+			archiveDisplayWinners
+		) VALUES (
+		'%s','%s','%s','%s','%s','%s'
+		);",
+		$archive_db_table,
+		$suffix,
+		$_SESSION['prefsProEdition'],
+		$styleSet,
+		$_SESSION['prefsDisplaySpecial'],
+		$_SESSION['prefsWinnerMethod'],
+		$_SESSION['prefsDisplayWinners']
+		);
 		mysqli_real_escape_string($connection,$insertSQL);
 		$result = mysqli_query($connection,$insertSQL) or die (mysqli_error($connection));
 
@@ -400,7 +418,62 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 			}
 		}
 
-	} // end else
+	} // end if ($go == "add")
+
+
+	if ($go == "edit") {
+
+		$tables_array[] = $brewer_db_table;
+		$tables_array[] = $special_best_data_db_table;
+		$tables_array[] = $special_best_info_db_table;
+		$tables_array[] = $style_types_db_table;
+		$tables_array[] = $users_db_table;
+		
+		// If the user changed the archive suffix name
+		// Need to loop through each possible archive
+		// DB table and change its name
+		if ($filter != $suffix) {
+
+			foreach ($tables_array as $table) {
+
+				$table_old = $table."_".$filter;
+				$table_new = $table."_".$suffix;
+
+				if (check_setup($table_old,$database)){
+					$updateSQL = sprintf("RENAME TABLE %s TO %s;", $table_old, $table_new);
+					//echo $updateSQL."<br>";
+					mysqli_real_escape_string($connection,$updateSQL);
+					$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+				}
+
+			}
+
+			$updateSQL = sprintf("UPDATE `%s` SET archiveSuffix='%s' WHERE id='%s'",$prefix."archive",$suffix,$id);
+			mysqli_real_escape_string($connection,$updateSQL);
+			$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+
+		} // end if ($filter != $suffix)
+
+		$updateSQL = sprintf("UPDATE `%s` SET 
+				archiveProEdition='%s',
+				archiveStyleSet='%s',
+				archiveScoresheet='%s',
+				archiveWinnerMethod='%s',
+				archiveDisplayWinners='%s'
+				WHERE id='%s'",
+				$prefix."archive",
+				$_POST['archiveProEdition'],
+				$_POST['archiveStyleSet'],
+				$_POST['archiveScoresheet'],
+				$_POST['archiveWinnerMethod'],
+				$_POST['archiveDisplayWinners'],
+				$id);
+		mysqli_real_escape_string($connection,$updateSQL);
+		$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+
+		$redirect_go_to = sprintf("Location: %s", $base_url."index.php?section=admin&go=archive&msg=2");
+
+	} // end if ($go == "edit")
 
 } // end if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] == 0))
 else echo "Not allowed."

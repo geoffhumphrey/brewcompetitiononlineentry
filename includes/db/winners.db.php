@@ -1,4 +1,13 @@
 <?php
+
+if ($filter != "default") {
+	$special_best_info_db_table = $prefix."special_best_info_".$filter;
+	$judging_tables_db_table = $prefix."judging_tables_".$filter;
+	$style_types_db_table = $prefix."style_types_".$filter;
+	$judging_scores_db_table = $prefix."judging_scores_".$filter;
+	$judging_scores_bos_db_table = $prefix."judging_scores_bos_".$filter;
+}
+
 if (table_exists($special_best_info_db_table)) { 
 	$query_sbi = "SELECT * FROM $special_best_info_db_table";
 	if ($action == "edit") $query_sbi .= " WHERE id='$id'"; else $query_sbi .= " ORDER BY sbi_rank ASC";
@@ -11,7 +20,7 @@ if (table_exists($judging_tables_db_table)) {
 	$query_tables = "SELECT * FROM $judging_tables_db_table ORDER BY tableNumber ASC";
 	$tables = mysqli_query($connection,$query_tables) or die (mysqli_error($connection));
 	$row_tables = mysqli_fetch_assoc($tables);
-	$totalRows_tables = mysqli_num_rows($tables);
+	$totalRows_tables = mysqli_num_rows($tables); 
 }
 
 if (table_exists($style_types_db_table)) {

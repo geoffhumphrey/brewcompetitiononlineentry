@@ -91,6 +91,29 @@ $archive_text_014 = "Em seguida, escolha quais dados você gostaria de reter.";
 $archive_text_015 = "Isso excluirá o arquivo chamado";
 $archive_text_016 = "Todos os registros associados serão excluídos.";
 
+/*
+ * --------------------- v 2.2.0 -----------------------
+ */
+$archive_text_017 = "Edite as informações do arquivo com cuidado. Alterar qualquer um dos itens a seguir pode resultar em um comportamento inesperado ao tentar acessar os dados arquivados.";
+$archive_text_018 = "Os arquivos serão movidos para uma subpasta com o mesmo nome do seu arquivo no diretório user_docs.";
+$archive_text_019 = "Lista (s) de vencedores arquivados disponíveis para exibição pública.";
+$archive_text_020 = "Geralmente, isso só deve ser alterado se a lista de vencedores deste arquivo for exibida incorretamente.";
+$archive_text_021 = "Folhas de pontuação em PDF foram salvas para este arquivo. Esta é a convenção de nomenclatura de cada arquivo usado pelo sistema ao acessá-los.";
+$archive_text_022 = "Desativado. Não existem dados de resultados para este arquivo.";
+
+$label_uploaded_scoresheets = "Folhas de Pontuação Carregadas (Arquivos PDF)";
+$label_admin_comp_type = "Tipo de Competição";
+$label_admin_styleset = "Conjunto de Estilos";
+$label_admin_winner_display = "Exibição do Vencedor";
+$label_admin_enable = "Permitir";
+$label_admin_disable = "Desabilitar";
+$label_admin_winner_dist = "Método de Distribuição do Lugar do Vencedor";
+$label_admin_archive = "Arquivo";
+$label_admin_scoresheet_names = "Nomes de Arquivos de Upload de Planilhas";
+$label_six_char_judging = "Número de Julgamento de 6 Caracteres";
+$label_six_digit_entry = "Número de Entrada de 6 Dígitos";
+$label_not_archived = "Não Arquivado";
+
 // -------------------- Barcode Check-In --------------------
 
 

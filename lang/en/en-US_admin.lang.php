@@ -91,6 +91,29 @@ $archive_text_014 = "Then, choose what data you would like to retain.";
 $archive_text_015 = "This will delete the archive called";
 $archive_text_016 = "All associated records will be removed as well.";
 
+/*
+ * --------------------- v 2.2.0 -----------------------
+ */
+$archive_text_017 = "Edit your archive information with caution. Changing any of the following may result in unexpected behavior when attempting to access archived data.";
+$archive_text_018 = "The files will be moved to a sub-folder with the same name of your archive in the user_docs directory.";
+$archive_text_019 = "Archived winner list(s) available for public viewing.";
+$archive_text_020 = "Generally, this should only be changed if this archive's winner list is displaying incorrectly.";
+$archive_text_021 = "PDF scoresheets have been saved for this archive. This is the naming convention of each file used by the system when accessing them.";
+$archive_text_022 = "Disabled. No results data exists for this archive.";
+
+$label_uploaded_scoresheets = "Uploaded Scoresheets (PDF Files)";
+$label_admin_comp_type = "Competition Type";
+$label_admin_styleset = "Style Set";
+$label_admin_winner_display = "Winner Display";
+$label_admin_enable = "Enable";
+$label_admin_disable = "Disable";
+$label_admin_winner_dist = "Winner Place Distribution Method";
+$label_admin_archive = "Archive";
+$label_admin_scoresheet_names = "Scoresheet Upload File Names";
+$label_six_char_judging = "6-Character Judging Number";
+$label_six_digit_entry = "6-Digit Entry Number";
+$label_not_archived = "Not Archived";
+
 // -------------------- Barcode Check-In --------------------
 
 

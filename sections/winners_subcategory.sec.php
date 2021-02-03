@@ -50,7 +50,8 @@ if ($row_scored_entries['count'] > 0) {
 	if ($_SESSION['prefsStyleSet'] == "BJCP2008") $category_end = 28;
 	else $category_end = 34;
 
-	$a = styles_active(2);
+	$a = styles_active(2,$go);
+	//print_r($a);
 	
 	foreach (array_unique($a) as $style) {
 
@@ -111,7 +112,7 @@ if ($row_scored_entries['count'] > 0) {
 
 					if ($_SESSION['prefsStyleSet'] == "AABC") $style = ltrim($row_scores['brewCategory'],"0").".".ltrim($row_scores['brewSubCategory'],"0");
        				else $style = $row_scores['brewCategory'].$row_scores['brewSubCategory'];
-					if ($row_scores['brewCategorySort'] > $category_end) $style_long = style_convert($row_scores['brewCategorySort'],1);
+					if ($row_scores['brewCategorySort'] > $category_end) $style_long = style_convert($row_scores['brewCategorySort'],1,$base_url,$go);
 					else $style_long = $row_scores['brewStyle'];
 
 				}

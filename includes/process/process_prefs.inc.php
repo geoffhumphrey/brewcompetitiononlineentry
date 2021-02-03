@@ -253,8 +253,6 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 
 			if ($_POST['prefsPaypalIPN'] == 1) {
 
-				include (LIB.'update.lib.php');
-
 				// Only install the payments db table if enabled and if not there already
 				if (!check_setup($prefix."payments", $database)) {
 
@@ -515,11 +513,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 
 	        }
 			
-			
-
 			if ($_POST['prefsPaypalIPN'] == 1) {
-
-				include (LIB.'update.lib.php');
 
 				// Only install the payments db table if enabled and if not there already
 				if (!check_setup($prefix."payments", $database)) {

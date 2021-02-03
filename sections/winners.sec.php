@@ -33,61 +33,92 @@ All Public pages have certain variables in common that build the page:
 
 Declare all variables empty at the top of the script. Add on later...
 	$primary_page_info = "";
-	$header1_1 = "";
-	$page_info1 = "";
-	$header1_2 = "";
-	$page_info2 = "";
+	$winners_table_header = "";
+	$winners_table_page_info_1 = "";
+	$winners_table_head_2 = "";
+	$winners_table_page_info_2 = "";
 
-	$table_head1 = "";
-	$table_body1 = "";
-
+	$winners_table_head_1 = "";
+	$winners_table_body_1 = "";
+ 
 	etc., etc., etc.
 
  * ---------------- END Rebuild Info --------------------- */
-
+/*
 $primary_page_info = "";
-$header1_1 = "";
-$page_info1 = "";
-$header1_2 = "";
-$page_info2 = "";
+$winners_table_header = "";
+$winners_table_page_info_1 = "";
+$winners_table_head_2 = "";
+$winners_table_page_info_2 = "";
 
-$table_head1 = "";
-$table_body1 = "";
+$winners_table_head_1 = "";
+$winners_table_body_1 = "";
+*/
+
+if ($section == "past-winners"){
+	$suffix = $go;
+	$judging_tables_db_table = $prefix."judging_tables_".$go;
+	$judging_scores_db_table = $prefix."judging_scores_".$go;
+	$brewing_db_table = $prefix."brewing_".$go;
+}
+
+else {
+	$suffix = "default";
+	$judging_tables_db_table = $prefix."judging_tables";
+	$judging_scores_db_table = $prefix."judging_scores";
+	$brewing_db_table = $prefix."brewing";
+}
 
 if ($row_scored_entries['count'] > 0) {
 
 	do {
 		
-		$entry_count = get_table_info(1,"count_total",$row_tables['id'],$dbTable,"default");
+		$a = explode(",", $row_tables['tableStyles']);
 
+		$entry_count = 0;
+
+		foreach ($a as $value) {
+
+			$query_styles = sprintf("SELECT brewStyleGroup,brewStyleNum FROM %s WHERE id='%s'", $prefix."styles", $value);
+			$styles = mysqli_query($connection,$query_styles) or die (mysqli_error($connection));
+			$row_styles = mysqli_fetch_assoc($styles);
+
+			$query_style_count = sprintf("SELECT COUNT(*) as count FROM %s WHERE brewCategorySort='%s' AND brewSubCategory='%s' AND brewReceived='1'", $brewing_db_table, $row_styles['brewStyleGroup'], $row_styles['brewStyleNum']);
+			$style_count = mysqli_query($connection,$query_style_count) or die (mysqli_error($connection));
+			$row_style_count = mysqli_fetch_assoc($style_count);
+
+			$entry_count += $row_style_count['count'];
+
+		}
+
+		$primary_page_info = "";
+		$winners_table_header = "";
+		$winners_table_page_info_1 = "";
+		$winners_table_head_2 = "";
+		$winners_table_page_info_2 = "";
+		$winners_table_head_1 = "";
+		$winners_table_body_1 = "";
+		
 		if ($entry_count > 0) {
 
 			if ($entry_count > 1) $entries = strtolower($label_entries); else $entries = strtolower($label_entry);
 
-			$primary_page_info = "";
-			$header1_1 = "";
-			$page_info1 = "";
-			$header1_2 = "";
-			$page_info2 = "";
-			$table_head1 = "";
-			$table_body1 = "";
+			$winners_table_head_2 .= sprintf("<div class=\"bcoem-winner-table\"><h3>%s %s: %s (%s %s)</h3><p>%s</p></div>",$label_table,$row_tables['tableNumber'],$row_tables['tableName'],$entry_count,$entries,$winners_text_000);
 
-			$header1_2 .= sprintf("<div class=\"bcoem-winner-table\"><h3>%s %s: %s (%s %s)</h3><p>%s</p></div>",$label_table,$row_tables['tableNumber'],$row_tables['tableName'],$entry_count,$entries,$winners_text_000);
-
-			if (score_count($row_tables['id'],"1",$dbTable))	{
+			if (score_count($row_tables['id'],"1",$suffix))	{
 
 				// Build page headers
-				$header1_1 .= sprintf("<h3>%s %s: %s (%s %s)</h3>",$label_table,$row_tables['tableNumber'],$row_tables['tableName'],$entry_count,$entries);
+				$winners_table_header .= sprintf("<h3>%s %s: %s (%s %s)</h3>",$label_table,$row_tables['tableNumber'],$row_tables['tableName'],$entry_count,$entries);
 
 				// Build table headers
-				$table_head1 .= "<tr>";
-				$table_head1 .= sprintf("<th nowrap>%s</th>",$label_place);
-				$table_head1 .= sprintf("<th>%s</th>",$label_brewer);
-				$table_head1 .= sprintf("<th><span class=\"hidden-xs hidden-sm hidden-md\">%s </span>%s</th>",$label_entry,$label_name);
-				$table_head1 .= sprintf("<th>%s</th>",$label_style);
-				if ($_SESSION['prefsProEdition'] == 0) $table_head1 .= sprintf("<th>%s</th>",$label_club);
-				if ($filter == "scores") $table_head1 .= sprintf("<th nowrap>Score</th>",$label_score);
-				$table_head1 .= "</tr>";
+				$winners_table_head_1 .= "<tr>";
+				$winners_table_head_1 .= sprintf("<th nowrap>%s</th>",$label_place);
+				$winners_table_head_1 .= sprintf("<th>%s</th>",$label_brewer);
+				$winners_table_head_1 .= sprintf("<th><span class=\"hidden-xs hidden-sm hidden-md\">%s </span>%s</th>",$label_entry,$label_name);
+				$winners_table_head_1 .= sprintf("<th>%s</th>",$label_style);
+				if ($_SESSION['prefsProEdition'] == 0) $winners_table_head_1 .= sprintf("<th>%s</th>",$label_club);
+				if ($filter == "scores") $winners_table_head_1 .= sprintf("<th nowrap>Score</th>",$label_score);
+				$winners_table_head_1 .= "</tr>";
 
 				// Build table body
 				include (DB.'scores.db.php');
@@ -96,52 +127,52 @@ if ($row_scored_entries['count'] > 0) {
 					if ($_SESSION['prefsStyleSet'] == "AABC") $style = ltrim($row_scores['brewCategory'],"0").".".ltrim($row_scores['brewSubCategory'],"0");
        				else $style = $row_scores['brewCategory'].$row_scores['brewSubCategory'];
 
-					$table_body1 .= "<tr>";
+					$winners_table_body_1 .= "<tr>";
 
 					if ($action == "print") {
-						$table_body1 .= "<td width=\"1%\" nowrap>";
-						$table_body1 .= display_place($row_scores['scorePlace'],1);
-						$table_body1 .= "</td>";
+						$winners_table_body_1 .= "<td width=\"1%\" nowrap>";
+						$winners_table_body_1 .= display_place($row_scores['scorePlace'],1);
+						$winners_table_body_1 .= "</td>";
 					}
 
 					else {
-						$table_body1 .= "<td width=\"1%\" nowrap>";
-						$table_body1 .= display_place($row_scores['scorePlace'],2);
-						$table_body1 .= "</td>";
+						$winners_table_body_1 .= "<td width=\"1%\" nowrap>";
+						$winners_table_body_1 .= display_place($row_scores['scorePlace'],2);
+						$winners_table_body_1 .= "</td>";
 					}
 
-					$table_body1 .= "<td>";
-					if ($_SESSION['prefsProEdition'] == 1) $table_body1 .= $row_scores['brewerBreweryName'];
-					else $table_body1 .= $row_scores['brewerFirstName']." ".$row_scores['brewerLastName'];
-					if (($_SESSION['prefsProEdition'] == 0) && (!empty($row_scores['brewCoBrewer'])) && ($row_scores['brewCoBrewer'] != " ")) $table_body1 .= "<br>".$label_cobrewer.": ".$row_scores['brewCoBrewer'];
-					$table_body1 .= "</td>";
+					$winners_table_body_1 .= "<td>";
+					if ($_SESSION['prefsProEdition'] == 1) $winners_table_body_1 .= $row_scores['brewerBreweryName'];
+					else $winners_table_body_1 .= $row_scores['brewerFirstName']." ".$row_scores['brewerLastName'];
+					if (($_SESSION['prefsProEdition'] == 0) && (!empty($row_scores['brewCoBrewer'])) && ($row_scores['brewCoBrewer'] != " ")) $winners_table_body_1 .= "<br>".$label_cobrewer.": ".$row_scores['brewCoBrewer'];
+					$winners_table_body_1 .= "</td>";
 
-					$table_body1 .= "<td width=\"25%\">";
-					$table_body1 .= $row_scores['brewName'];
-					$table_body1 .= "</td>";
+					$winners_table_body_1 .= "<td width=\"25%\">";
+					$winners_table_body_1 .= $row_scores['brewName'];
+					$winners_table_body_1 .= "</td>";
 
-					$table_body1 .= "<td width=\"25%\">";
-					if ($_SESSION['prefsStyleSet'] == "BA") $table_body1 .= $row_scores['brewStyle'];
-					else $table_body1 .= $style.": ".$row_scores['brewStyle'];
+					$winners_table_body_1 .= "<td width=\"25%\">";
+					if ($_SESSION['prefsStyleSet'] == "BA") $winners_table_body_1 .= $row_scores['brewStyle'];
+					else $winners_table_body_1 .= $style.": ".$row_scores['brewStyle'];
 					if ((!empty($row_scores['brewInfo'])) && ($section != "results")) {
-						$table_body1 .= " <a href=\"#".$row_scores['id']."\"  tabindex=\"0\" role=\"button\" data-toggle=\"popover\" data-trigger=\"hover\" data-placement=\"auto top\" data-container=\"body\" title=\"".$label_info."\" data-content=\"".str_replace("^", " ", $row_scores['brewInfo'])."\"><span class=\"hidden-xs hidden-sm hidden-md hidden-print fa fa-info-circle\"></span></a></td>";
+						$winners_table_body_1 .= " <a href=\"#".$row_scores['id']."\"  tabindex=\"0\" role=\"button\" data-toggle=\"popover\" data-trigger=\"hover\" data-placement=\"auto top\" data-container=\"body\" title=\"".$label_info."\" data-content=\"".str_replace("^", " ", $row_scores['brewInfo'])."\"><span class=\"hidden-xs hidden-sm hidden-md hidden-print fa fa-info-circle\"></span></a></td>";
 					}
-					$table_body1 .= "</td>";
+					$winners_table_body_1 .= "</td>";
 
 					if ($_SESSION['prefsProEdition'] == 0) {
-						$table_body1 .= "<td width=\"25%\">";
-						$table_body1 .= $row_scores['brewerClubs'];
-						$table_body1 .= "</td>";
+						$winners_table_body_1 .= "<td width=\"25%\">";
+						$winners_table_body_1 .= $row_scores['brewerClubs'];
+						$winners_table_body_1 .= "</td>";
 					}
 
 					if ($filter == "scores") {
-						$table_body1 .= "<td width=\"1%\" nowrap>";
-						if (!empty($row_scores['scoreEntry'])) $table_body1 .= $row_scores['scoreEntry'];
-						else $table_body1 .= "&nbsp;";
-						$table_body1 .= "</td>";
+						$winners_table_body_1 .= "<td width=\"1%\" nowrap>";
+						if (!empty($row_scores['scoreEntry'])) $winners_table_body_1 .= $row_scores['scoreEntry'];
+						else $winners_table_body_1 .= "&nbsp;";
+						$winners_table_body_1 .= "</td>";
 					}
 
-					$table_body1 .= "</tr>";
+					$winners_table_body_1 .= "</tr>";
 
 				 } while ($row_scores = mysqli_fetch_assoc($scores));
 
@@ -177,18 +208,18 @@ if ($row_scored_entries['count'] > 0) {
 		} );
 	</script>
 	<div class="bcoem-winner-table">
-		<?php echo $header1_1; ?>
+		<?php echo $winners_table_header; ?>
 		<table class="table table-responsive table-striped table-bordered" id="sortable<?php echo $random1; ?>">
 		<thead>
-			<?php echo $table_head1; ?>
+			<?php echo $winners_table_head_1; ?>
 		</thead>
 		<tbody>
-			<?php echo $table_body1; ?>
+			<?php echo $winners_table_body_1; ?>
 		</tbody>
 		</table>
 	</div>
 	<?php
-			} else echo $header1_2;
+			} else echo $winners_table_head_2;
 		} // end if ($entry_count > 0);
 	} while ($row_tables = mysqli_fetch_assoc($tables));
 }

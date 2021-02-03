@@ -91,6 +91,29 @@ $archive_text_014 = "Zvolte, která data chcete zachovat.";
 $archive_text_015 = "Toto smaže archiv nazvaný";
 $archive_text_016 = "Všechny související záznamy budou smazány.";
 
+/*
+ * --------------------- v 2.2.0 -----------------------
+ */
+$archive_text_017 = "Upravujte informace v archivu opatrně. Změna kteréhokoli z následujících může mít za následek neočekávané chování při pokusu o přístup k archivovaným datům.";
+$archive_text_018 = "Soubory budou přesunuty do podsložky se stejným názvem archivu v adresáři user_docs.";
+$archive_text_019 = "Archivované seznamy vítězů dostupné pro veřejné prohlížení.";
+$archive_text_020 = "Obecně by to mělo být změněno, pouze pokud se seznam vítězů tohoto archivu zobrazuje nesprávně.";
+$archive_text_021 = "Pro tento archiv byly uloženy výsledkové listy PDF. Toto je konvence pojmenování každého souboru používaného systémem při přístupu k nim.";
+$archive_text_022 = "Zakázáno. Pro tento archiv neexistují žádná data výsledků.";
+
+$label_uploaded_scoresheets = "Nahrané Cýsledkové Listy (Soubory PDF)";
+$label_admin_comp_type = "Typ Soutěže";
+$label_admin_styleset = "Sada Stylů";
+$label_admin_winner_display = "Zobrazení Vítězů";
+$label_admin_enable = "Umožnit";
+$label_admin_disable = "Zakázat";
+$label_admin_winner_dist = "Metoda Distribuce Vítěze";
+$label_admin_archive = "Archiv";
+$label_admin_scoresheet_names = "Výsledkový List Nahrát Názvy Souborů";
+$label_six_char_judging = "6-znakové Rozhodčí číslo";
+$label_six_digit_entry = "6-místné číslo vstupu";
+$label_not_archived = "Není Archivováno";
+
 // -------------------- Barcode Check-In --------------------
 
 
