@@ -2354,7 +2354,8 @@ $club_array = array(
     "Western Sydney Brewers [Australia]",
     "Westgate Brewers [Australia]",
     "Worthogs [Australia]",
-    "Browns Point Homebrew Club"
+    "Browns Point Homebrew Club",
+    "MontreAlers"
 );
 asort($club_array);
 

@@ -1821,6 +1821,14 @@ if ($totalRows_archive > 0) {
 
 }
 
+/* --- Future Release ---
+// Finally, after all updates have been implemented, 
+// make sure the character set is utf8mb4 and coallation 
+// is utf8mb4_unicode_ci. 
+
+require_once(UPDATE.'char_set_update.php');
+*/
+
 /**
  * ----------------------------------------------------------------------------------------------------
  * Change the version number and date
