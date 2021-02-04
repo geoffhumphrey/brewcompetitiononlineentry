@@ -401,7 +401,6 @@ else {
 	$status = 9; // Session expired, not enabled, etc.
 }  // END if session is set
 
-
 $return_json = array(
 	"status" => "$status",
 	"query" => "$sql",

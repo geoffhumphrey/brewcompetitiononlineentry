@@ -1508,9 +1508,10 @@ $contact_text_004 = "Organizátoři soutěže neuvedli žádné kontakty.";
 // Awards
 $label_thank_you = "Děkuji";
 $label_congrats_winners = "Gratulujeme všem vítězům medailí";
-$label_placing_entries = "Vkládání záznamů";v
+$label_placing_entries = "Vkládání záznamů";
 $label_by_the_numbers = "Statistika";
 $label_launch_pres = "Zahájení předávání cen";
+$label_entrants = "Účastníci";
 
 $label_judging_dashboard = "Přehled degustace";
 $label_table_assignments = "Přiřazení stolů";

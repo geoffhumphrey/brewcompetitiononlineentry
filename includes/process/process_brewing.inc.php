@@ -980,16 +980,28 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 
 		foreach($_POST['id'] as $id) {
 
+			$brewBoxNum = "";
 			$brewAdminNotes = "";
 			$brewStaffNotes = "";
 			$brewPaid = 0;
 			$brewReceived = 0;
-			$brewBoxNum = "";
 			$brewJudgingNumber = str_replace("^","-",$_POST['brewJudgingNumber'.$id]);
 
-			if (isset($_POST['brewBoxNum'.$id])) $brewBoxNum = $purifier->purify($_POST['brewBoxNum'.$id]);
-			if (isset($_POST['brewAdminNotes'.$id])) $brewAdminNotes .= $purifier->purify($_POST['brewAdminNotes'.$id]);
-			if (isset($_POST['brewStaffNotes'.$id])) $brewStaffNotes .= $purifier->purify($_POST['brewStaffNotes'.$id]);
+			if (isset($_POST['brewBoxNum'.$id])) {
+				$brewBoxNum = filter_var($_POST['brewBoxNum'.$id],FILTER_SANITIZE_STRING);
+				$brewBoxNum = $purifier->purify($brewBoxNum);
+			}
+
+			if (isset($_POST['brewAdminNotes'.$id])) {
+				$brewAdminNotes = filter_var($_POST['brewAdminNotes'.$id],FILTER_SANITIZE_STRING);
+				$brewAdminNotes = $purifier->purify($brewAdminNotes);
+			} 
+			
+			if (isset($_POST['brewStaffNotes'.$id])) {
+				$brewStaffNotes = filter_var($_POST['brewStaffNotes'.$id],FILTER_SANITIZE_STRING);
+				$brewStaffNotes = $purifier->purify($brewStaffNotes);
+			}
+
 			if ((isset($_POST['brewPaid'.$id])) && ($_POST['brewPaid'.$id] == 1)) $brewPaid = 1;
 			if ((isset($_POST['brewReceived'.$id])) && ($_POST['brewReceived'.$id] == 1)) $brewReceived = 1;
 

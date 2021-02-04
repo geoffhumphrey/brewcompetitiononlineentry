@@ -1536,6 +1536,7 @@ $label_congrats_winners = "Congratulations to All Medal Winners";
 $label_placing_entries = "Placing Entries";
 $label_by_the_numbers = "By the Numbers";
 $label_launch_pres = "Launch Awards Presentation";
+$label_entrants = "Entrants";
 
 $label_judging_dashboard = "Judging Dashboard";
 $label_table_assignments = "Table Assignments";

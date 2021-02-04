@@ -1494,10 +1494,11 @@ $contact_text_004 = "Os organizadores da competição não especificaram nenhum 
 
 // Awards
 $label_thank_you = "Obrigado";
-$label_congrats_winners = "Parabéns a todos os vencedores de medalhas";
+$label_congrats_winners = "Parabéns a Todos os Vencedores de Medalhas";
 $label_placing_entries = "Colocando Entradas";
 $label_by_the_numbers = "Estatisticas";
-$label_launch_pres = "Apresentação de prêmios de lançamento";
+$label_launch_pres = "Apresentação de Prêmios de Lançamento";
+$label_entrants = "Competidores";
 
 $label_judging_dashboard = "Painel de Julgamento";
 $label_table_assignments = "Tarefas de Mesa";

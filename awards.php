@@ -1038,7 +1038,7 @@ if (($display_to_admin) || ($display_to_public)) {
 				<!-- Statistic Slide -->
 				<?php 
 				$entries_count = get_entry_count('paid-received');
-				$participant_count = get_participant_count('default');
+				$entrant_count = get_participant_count('received-entrant');
 				$judges_count = get_participant_count('judge-assigned');
 				$steward_count = get_participant_count('steward-assigned');
 				$staff_count = get_participant_count('staff-assigned');
@@ -1050,8 +1050,8 @@ if (($display_to_admin) || ($display_to_public)) {
 						<?php if ($entries_count > 0) { ?>
 						<span style="margin-right: 15px;" class="fragment" data-fragment-index="1"><i class="fa fa-beer"></i> <?php echo $entries_count." ".$label_entries; ?></span>
 						<?php } ?>
-						<?php if ($participant_count > 0) { ?>
-						<span class="fragment" data-fragment-index="1"><i class="fa fa-user"></i> <?php echo $participant_count." ".$label_participants; ?></span>
+						<?php if ($entrant_count > 0) { ?>
+						<span class="fragment" data-fragment-index="1"><i class="fa fa-user"></i> <?php echo $entrant_count." ".$label_entrants; ?></span>
 						<?php } ?>
 					</p>
 					<p>

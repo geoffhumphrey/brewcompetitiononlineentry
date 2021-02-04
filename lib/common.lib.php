@@ -2459,6 +2459,10 @@ function get_participant_count($type,$filter="") {
 	$participant_count = mysqli_query($connection,$query_participant_count) or die (mysqli_error($connection));
 	$row_participant_count = mysqli_fetch_assoc($participant_count);
 
+	// Get sum total of participants. The following only aggregates, does not distinguish those that are both entrants AND have indicated
+	// they would like to be a judge, steward, or staff
+	// SELECT sum(count) AS total_count FROM ((SELECT COUNT(DISTINCT uid) as count FROM $brewer_db_table WHERE brewerJudge='Y' OR brewerSteward='Y' OR brewerStaff='Y') UNION ALL (SELECT COUNT(DISTINCT brewBrewerID) as count FROM $brewing_db_table))t;
+
 	return $row_participant_count['count'];
 }
 
