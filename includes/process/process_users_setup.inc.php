@@ -14,6 +14,7 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 	$username = strtolower($_POST['user_name']);
 	$username = filter_var($username,FILTER_SANITIZE_EMAIL);
 	$userQuestionAnswer = $purifier->purify($_POST['userQuestionAnswer']);
+	$userQuestionAnswer = filter_var($userQuestionAnswer,FILTER_SANITIZE_STRING,FILTER_FLAG_STRIP_HIGH|FILTER_FLAG_STRIP_LOW);
 
 	if (strstr($username,'@'))  {
 		$password = md5($_POST['password']);

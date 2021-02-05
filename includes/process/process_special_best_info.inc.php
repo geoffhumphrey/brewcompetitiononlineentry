@@ -11,11 +11,23 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 	$config_html_purifier = HTMLPurifier_Config::createDefault();
 	$purifier = new HTMLPurifier($config_html_purifier);
 
+	if (isset($_POST['sbi_name']) {
+		$sbi_name = $purifier->purify($_POST['sbi_name']);
+		$sbi_name = filter_var($sbi_name,FILTER_SANITIZE_STRING,FILTER_FLAG_ENCODE_HIGH|FILTER_FLAG_ENCODE_LOW);
+	}
+	else $sbi_name = "";
+
+	if (isset($_POST['sbi_description'])) {
+		$sbi_description = $purifier->purify($_POST['sbi_description']);
+		$sbi_description = filter_var($sbi_description,FILTER_SANITIZE_STRING,FILTER_FLAG_ENCODE_HIGH|FILTER_FLAG_ENCODE_LOW);
+	}
+	else $sbi_description = "";
+
 	if ($action == "add") {
 
 			$insertSQL = sprintf("INSERT INTO $special_best_info_db_table (sbi_name, sbi_description, sbi_places, sbi_rank, sbi_display_places) VALUES (%s, %s, %s, %s, %s)",
-							   GetSQLValueString($purifier->purify($_POST['sbi_name']), "text"),
-							   GetSQLValueString($purifier->purify(strip_newline($_POST['sbi_description'])), "text"),
+							   GetSQLValueString($sbi_name), "text"),
+							   GetSQLValueString(strip_newline($sbi_description)), "text"),
 							   GetSQLValueString(sterilize($_POST['sbi_places']), "int"),
 							   GetSQLValueString(sterilize($_POST['sbi_rank']), "int"),
 							   GetSQLValueString(sterilize($_POST['sbi_display_places']), "int")
@@ -33,8 +45,8 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 		if ($action == "edit") {
 
 			$updateSQL = sprintf("UPDATE $special_best_info_db_table SET sbi_name=%s, sbi_description=%s, sbi_places=%s, sbi_rank=%s, sbi_display_places=%s WHERE id=%s",
-							   GetSQLValueString($purifier->purify($_POST['sbi_name']), "text"),
-							   GetSQLValueString($purifier->purify(strip_newline($_POST['sbi_description'])), "text"),
+							   GetSQLValueString($sbi_name), "text"),
+							   GetSQLValueString(strip_newline($sbi_description)), "text"),
 							   GetSQLValueString(sterilize($_POST['sbi_places']), "int"),
 							   GetSQLValueString(sterilize($_POST['sbi_rank']), "int"),
 							   GetSQLValueString(sterilize($_POST['sbi_display_places']), "int"),

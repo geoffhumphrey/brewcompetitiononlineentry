@@ -10,6 +10,12 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 	$config_html_purifier = HTMLPurifier_Config::createDefault();
 	$purifier = new HTMLPurifier($config_html_purifier);
 
+	if (isset($_POST['styleTypeName'])) {
+		$styleTypeName = $purifier->purify($_POST['styleTypeName']);
+		$styleTypeName = capitalize($styleTypeName);
+		$styleTypeName = filter_var($styleTypeName,FILTER_SANITIZE_STRING,FILTER_FLAG_ENCODE_HIGH|FILTER_FLAG_ENCODE_LOW);
+	}
+		
 	if ($action == "add") {
 
 		// Determine the greatest id value that is in the style_types table
@@ -31,7 +37,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 		VALUES
 		(%s, %s, %s, %s, %s)",
 						   GetSQLValueString($id, "int"),
-						   GetSQLValueString(capitalize($purifier->purify($_POST['styleTypeName'])), "text"),
+						   GetSQLValueString($styleTypeName, "text"),
 						   GetSQLValueString(sterilize($_POST['styleTypeOwn']), "text"),
 						   GetSQLValueString(sterilize($_POST['styleTypeBOS']), "text"),
 						   GetSQLValueString(sterilize($_POST['styleTypeBOSMethod']), "text"));
@@ -104,7 +110,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 			styleTypeBOS=%s,
 			styleTypeBOSMethod=%s
 			WHERE id=%s",
-							   GetSQLValueString(capitalize($purifier->purify($_POST['styleTypeName'])), "text"),
+							   GetSQLValueString($styleTypeName, "text"),
 							   GetSQLValueString(sterilize($_POST['styleTypeOwn']), "text"),
 							   GetSQLValueString(sterilize($_POST['styleTypeBOS']), "text"),
 							   GetSQLValueString(sterilize($_POST['styleTypeBOSMethod']), "text"),

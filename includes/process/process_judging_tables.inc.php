@@ -15,7 +15,13 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 	$config_html_purifier = HTMLPurifier_Config::createDefault();
 	$purifier = new HTMLPurifier($config_html_purifier);
 
-	if ($_POST['tableStyles'] != "") $table_styles = implode(",",$_POST['tableStyles']); else $table_styles = $_POST['tableStyles'];
+	if ($_POST['tableStyles'] != "") $table_styles = implode(",",$_POST['tableStyles']); 
+	else $table_styles = $_POST['tableStyles'];
+	if (isset($_POST['tableName'])) {
+		$tableName = $purifier->purify($_POST['tableName']);
+		$tableName = filter_var($tableName,FILTER_SANITIZE_STRING,FILTER_FLAG_ENCODE_HIGH|FILTER_FLAG_ENCODE_LOW);
+	}
+	else $tableName = "";
 
 	if ($action == "add") {
 
@@ -25,7 +31,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 		tableNumber,
 		tableLocation
 		) VALUES (%s, %s, %s, %s)",
-						   GetSQLValueString($purifier->purify($_POST['tableName']), "text"),
+						   GetSQLValueString($tableName), "text"),
 						   GetSQLValueString(sterilize($table_styles), "text"),
 						   GetSQLValueString(sterilize($_POST['tableNumber']), "text"),
 						   GetSQLValueString(sterilize($_POST['tableLocation']), "text")
@@ -246,7 +252,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 		tableLocation=%s
 		WHERE id=%s",
 
-							GetSQLValueString($purifier->purify($_POST['tableName']), "text"),
+							GetSQLValueString($tableName), "text"),
 							GetSQLValueString(sterilize($table_styles), "text"),
 							GetSQLValueString(sterilize($_POST['tableNumber']), "text"),
 							GetSQLValueString(sterilize($_POST['tableLocation']), "text"),

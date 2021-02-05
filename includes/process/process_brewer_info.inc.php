@@ -15,6 +15,7 @@ $purifier = new HTMLPurifier($config_html_purifier);
 if (isset($_POST['brewerJudgeID'])) {
     $brewerJudgeID = $purifier->purify($_POST['brewerJudgeID']);
     $brewerJudgeID = strtoupper($brewerJudgeID);
+    $brewerJudgeID = filter_var($brewerJudgeID,FILTER_SANITIZE_STRING,FILTER_FLAG_ENCODE_HIGH|FILTER_FLAG_ENCODE_LOW);
 }
 else $brewerJudgeID = "";
 
@@ -61,12 +62,16 @@ else $brewerJudgeWaiver = "";
 if (isset($_POST['brewerDropOff'])) $brewerDropOff = sterilize($_POST['brewerDropOff']);
 else $brewerDropOff = "0";
 
-if (isset($_POST['brewerBreweryName'])) $brewerBreweryName = standardize_name($purifier->purify($_POST['brewerBreweryName']));
+if (isset($_POST['brewerBreweryName'])) {
+    $brewerBreweryName = standardize_name($purifier->purify($_POST['brewerBreweryName']));
+    $brewerBreweryName = filter_var($brewerBreweryName,FILTER_SANITIZE_STRING,FILTER_FLAG_ENCODE_HIGH|FILTER_FLAG_ENCODE_LOW);
+}
 else $brewerBreweryName = "";
 
 if (isset($_POST['brewerBreweryTTB'])) {
     $brewerBreweryTTB = $purifier->purify($_POST['brewerBreweryTTB']);
     $brewerBreweryTTB = strtoupper($brewerBreweryTTB);
+    $brewerBreweryTTB = filter_var($brewerBreweryTTB,FILTER_SANITIZE_STRING,FILTER_FLAG_ENCODE_HIGH|FILTER_FLAG_ENCODE_LOW);
 }
 else $brewerBreweryTTB = "";
 
@@ -87,7 +92,10 @@ else $brewerStaff = "";
 if (isset($_POST['brewerJudgeExp'])) $brewerJudgeExp = $_POST['brewerJudgeExp'];
 else $brewerJudgeExp = "";
 
-if (isset($_POST['brewerJudgeNotes'])) $brewerJudgeNotes = $purifier->purify($_POST['brewerJudgeNotes']);
+if (isset($_POST['brewerJudgeNotes'])) {
+    $brewerJudgeNotes = $purifier->purify($_POST['brewerJudgeNotes']);
+    $brewerJudgeNotes = filter_var($brewerJudgeNotes,FILTER_SANITIZE_STRING,FILTER_FLAG_ENCODE_HIGH|FILTER_FLAG_ENCODE_LOW);
+}
 else $brewerJudgeNotes = "";
 
 /*
@@ -259,12 +267,16 @@ if (in_array($_SESSION['prefsLanguageFolder'], $name_check_langs)) {
 else {
     $first_name = $fname;
     $last_name = $lname;
+    $first_name = filter_var($first_name,FILTER_SANITIZE_STRING,FILTER_FLAG_ENCODE_HIGH|FILTER_FLAG_ENCODE_LOW);
+    $last_name = filter_var($last_name,FILTER_SANITIZE_STRING,FILTER_FLAG_ENCODE_HIGH|FILTER_FLAG_ENCODE_LOW);
 }
 
 $address = standardize_name($purifier->purify($_POST['brewerAddress']));
+$address = filter_var($address,FILTER_SANITIZE_STRING,FILTER_FLAG_ENCODE_HIGH|FILTER_FLAG_ENCODE_LOW);
 $city = standardize_name($purifier->purify($_POST['brewerCity']));
+$city = filter_var($city,FILTER_SANITIZE_STRING,FILTER_FLAG_ENCODE_HIGH|FILTER_FLAG_ENCODE_LOW);
 $state = $purifier->purify($_POST['brewerState']);
 if (strlen($state) > 2) $state = standardize_name($state);
 else $state = strtoupper($state);
-
+$state = filter_var($state,FILTER_SANITIZE_STRING,FILTER_FLAG_ENCODE_HIGH|FILTER_FLAG_ENCODE_LOW);
 ?>
