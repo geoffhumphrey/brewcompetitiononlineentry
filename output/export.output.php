@@ -200,16 +200,16 @@ if (($admin_role) || (((judging_date_return() == 0) && ($registration_open == 2)
 
                         do {
 
+                            $brewer_info = "";
+                            $brewerFirstName = "";
+                            $brewerLastName = "";
+                            $brewer_club = "";
+
                             include (DB.'output_entries_export_extend.db.php');
 
                             if (isset($row_sql['brewBrewerID'])) $brewer_info = explode("^", brewer_info($row_sql['brewBrewerID']));
-                            else $brewer_info = "";
-
                             if (isset($row_sql['brewBrewerFirstName'])) $brewerFirstName = strtr($row_sql['brewBrewerFirstName'],$html_remove);
-                            else $brewerFirstName = "";
-
                             if (isset($row_sql['brewBrewerLastName'])) $brewerLastName = strtr($row_sql['brewBrewerLastName'],$html_remove);
-                            else $brewerLastName = "";
 
                             if ($_SESSION['prefsProEdition'] == 1) {
                                 if (!empty($brewer_info)) $fields0 = array($brewerFirstName,$brewerLastName,$brewer_info[15],$brewer_info[17],$brewer_info[6],$brewer_info[10],$brewer_info[11],$brewer_info[12],$brewer_info[13],$brewer_info[14]);
@@ -217,8 +217,7 @@ if (($admin_role) || (((judging_date_return() == 0) && ($registration_open == 2)
                             }
 
                             else {
-                                $brewer_club = "";
-                                if ($brewer_info[8] != "&nbsp;") $brewer_club = $brewer_info[8];
+                                if ((isset($brewer_info[8])) && ($brewer_info[8] != "&nbsp;")) $brewer_club = $brewer_info[8];
                                 if (!empty($brewer_info)) $fields0 = array($brewerFirstName,$brewerLastName,$brewer_info[6],$brewer_info[10],$brewer_info[11],$brewer_info[12],$brewer_info[13],$brewer_info[14],$brewer_club);
                                 else $fields0 = array($brewerFirstName,$brewerLastName,"","","","","","","");
                             }
@@ -271,45 +270,34 @@ if (($admin_role) || (((judging_date_return() == 0) && ($registration_open == 2)
                 if ($totalRows_sql > 0) {
 
                     do {
+                        
+                        $brewerFirstName = "";
+                        $brewerLastName = "";
+                        $brewName = "";
+                        $brewInfo = "";
+                        $brewSpecifics = "";
+                        $brewInfoOptional = "";
+                        $entryNo = sprintf("%06s",$row_sql['id']);
+                        $judgingNo = "";
+                        $brewer_info = "";
+                        $brewer_club = "";
 
+                        if (isset($row_sql['brewBrewerID'])) $brewer_info = explode("^", brewer_info($row_sql['brewBrewerID']));
                         if (isset($row_sql['brewBrewerFirstName'])) $brewerFirstName = strtr($row_sql['brewBrewerFirstName'],$html_remove);
-                        else $brewerFirstName = "";
-
                         if (isset($row_sql['brewBrewerLastName'])) $brewerLastName = strtr($row_sql['brewBrewerLastName'],$html_remove);
-                        else $brewerLastName = "";
-
                         if (isset($row_sql['brewBrewerLastName'])) $brewName = strtr($row_sql['brewName'],$html_remove);
-                        else $brewName = "";
 
                         if (isset($row_sql['brewInfo'])) {
                             $brewInfo = str_replace("^"," | ",$row_sql['brewInfo']);
                             $brewInfo = strtr($brewInfo,$html_remove);
                         }
-                        else $brewInfo = "";
 
                         if (isset($row_sql['brewComments'])) $brewSpecifics = strtr($row_sql['brewComments'],$html_remove);
-                        else $brewSpecifics = "";
-
                         if (isset($row_sql['brewInfoOptional'])) $brewInfoOptional = strtr($row_sql['brewInfoOptional'],$html_remove);
-                        else $brewInfoOptional = "";
-
-                        $entryNo = sprintf("%06s",$row_sql['id']);
-
                         if (isset($row_sql['brewJudgingNumber'])) $judgingNo = sprintf("%06s",$row_sql['brewJudgingNumber']);
-                        else $judgingNo = "";
-
                         if (isset($row_sql['brewBrewerID'])) $brewer_info = explode("^", brewer_info($row_sql['brewBrewerID']));
-                        else $brewer_info = "";
+                        if ((isset($brewer_info[8])) && ($brewer_info[8] != "&nbsp;")) $brewer_club = $brewer_info[8];
 
-                        $brewer_club = "";
-                        if ($brewer_info[8] != "&nbsp;") $brewer_club = $brewer_info[8];
-
-                        // Winner Downloads
-                        /*
-                        if (($action == "default") && ($filter == "winners") && ($_SESSION['prefsWinnerMethod'] == 0)) {
-                            include (DB.'output_entries_export_winner.db.php');
-                        } // end if (($action == "default") && ($filter == "winners"))
-                        */
                         if (($action == "default") && ($filter == "winners") && ($_SESSION['prefsWinnerMethod'] >= 0)) {
                             include (DB.'output_entries_export_winner.db.php');
                         }
