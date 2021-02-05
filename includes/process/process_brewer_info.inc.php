@@ -11,29 +11,37 @@ require (CLASSES.'htmlpurifier/HTMLPurifier.standalone.php');
 $config_html_purifier = HTMLPurifier_Config::createDefault();
 $purifier = new HTMLPurifier($config_html_purifier);
 
+$brewerJudgeNotes = "";
+$brewerJudgeID = "";
+$brewerJudgeMead = "";
+$brewerJudgeCider = "";
+$brewerJudgeRank = "";
+$brewerAHA = "";
+$brewerProAm = "";
+$brewerClubs = "";
+$brewerPhone1 = "";
+$brewerPhone2 = "";
+$brewerJudgeWaiver = "";
+$brewerDropOff = "0";
+$brewerBreweryName = "";
+$brewerBreweryTTB = "";
+$brewerJudge = "N";
+$brewerSteward = "N";
+$brewerStaff = "";
+$brewerJudgeExp = "";
+
 // Gather, convert, and/or sanitize info from the form
 if (isset($_POST['brewerJudgeID'])) {
     $brewerJudgeID = $purifier->purify($_POST['brewerJudgeID']);
     $brewerJudgeID = strtoupper($brewerJudgeID);
     $brewerJudgeID = filter_var($brewerJudgeID,FILTER_SANITIZE_STRING,FILTER_FLAG_ENCODE_HIGH|FILTER_FLAG_ENCODE_LOW);
 }
-else $brewerJudgeID = "";
 
 if (isset($_POST['brewerJudgeMead'])) $brewerJudgeMead = $_POST['brewerJudgeMead'];
-else $brewerJudgeMead = "";
-
 if (isset($_POST['brewerJudgeCider'])) $brewerJudgeCider = $_POST['brewerJudgeCider'];
-else $brewerJudgeCider = "";
-
 if (isset($_POST['brewerJudgeRank'])) $brewerJudgeRank = $_POST['brewerJudgeRank'];
-else $brewerJudgeRank = "";
-
 if (isset($_POST['brewerAHA'])) $brewerAHA = sterilize($_POST['brewerAHA']);
-else $brewerAHA = "";
-
 if (isset($_POST['brewerProAm'])) $brewerProAm = $_POST['brewerProAm'];
-else $brewerProAm = "";
-
 if (isset($_POST['brewerClubs'])) {
     include (DB.'entries.db.php');
     include (INCLUDES.'constants.inc.php');
@@ -48,55 +56,36 @@ if (isset($_POST['brewerClubs'])) {
     }
     else $brewerClubs = $brewerClubs;
 }
-else $brewerClubs = "";
 
 if (isset($_POST['brewerPhone1'])) $brewerPhone1 = sterilize($_POST['brewerPhone1']);
-else $brewerPhone1 = "";
-
 if (isset($_POST['brewerPhone2'])) $brewerPhone2 = sterilize($_POST['brewerPhone2']);
-else $brewerPhone2 = "";
-
 if (isset($_POST['brewerJudgeWaiver'])) $brewerJudgeWaiver = $_POST['brewerJudgeWaiver'];
-else $brewerJudgeWaiver = "";
-
 if (isset($_POST['brewerDropOff'])) $brewerDropOff = sterilize($_POST['brewerDropOff']);
-else $brewerDropOff = "0";
 
 if (isset($_POST['brewerBreweryName'])) {
     $brewerBreweryName = standardize_name($purifier->purify($_POST['brewerBreweryName']));
     $brewerBreweryName = filter_var($brewerBreweryName,FILTER_SANITIZE_STRING,FILTER_FLAG_ENCODE_HIGH|FILTER_FLAG_ENCODE_LOW);
 }
-else $brewerBreweryName = "";
 
 if (isset($_POST['brewerBreweryTTB'])) {
     $brewerBreweryTTB = $purifier->purify($_POST['brewerBreweryTTB']);
     $brewerBreweryTTB = strtoupper($brewerBreweryTTB);
     $brewerBreweryTTB = filter_var($brewerBreweryTTB,FILTER_SANITIZE_STRING,FILTER_FLAG_ENCODE_HIGH|FILTER_FLAG_ENCODE_LOW);
 }
-else $brewerBreweryTTB = "";
 
 if (isset($_POST['brewerJudge'])) $brewerJudge = $_POST['brewerJudge'];
-else $brewerJudge = "N";
-
 if (isset($_POST['brewerSteward'])) $brewerSteward = $_POST['brewerSteward'];
-else $brewerSteward = "N";
-
 if (($_SESSION['prefsProEdition'] == 1) && ($go == "entrant")) {
     $brewerJudge = "N";
     $brewerSteward = "N";
 }
 
 if (isset($_POST['brewerStaff'])) $brewerStaff = $_POST['brewerStaff'];
-else $brewerStaff = "";
-
 if (isset($_POST['brewerJudgeExp'])) $brewerJudgeExp = $_POST['brewerJudgeExp'];
-else $brewerJudgeExp = "";
-
 if (isset($_POST['brewerJudgeNotes'])) {
     $brewerJudgeNotes = $purifier->purify($_POST['brewerJudgeNotes']);
     $brewerJudgeNotes = filter_var($brewerJudgeNotes,FILTER_SANITIZE_STRING,FILTER_FLAG_ENCODE_HIGH|FILTER_FLAG_ENCODE_LOW);
 }
-else $brewerJudgeNotes = "";
 
 /*
  * Address GitHub Issue #1113 - https://github.com/geoffhumphrey/brewcompetitiononlineentry/issues/1113
@@ -117,9 +106,9 @@ if ($brewerJudge == "Y") {
             
             if ($loc[0] == "N") {
                 
-                if ($go == "admin") $id = $filter;
-                else $id = $id;
-                $updateSQL = sprintf("DELETE FROM %s WHERE bid='%s' AND assignment='J' AND assignLocation='%s'",$prefix."judging_assignments",$id,$loc[1]);
+                if ($go == "admin") $user_id = $filter;
+                else $user_id = $id;
+                $updateSQL = sprintf("DELETE FROM %s WHERE bid='%s' AND assignment='J' AND assignLocation='%s'",$prefix."judging_assignments",$user_id,$loc[1]);
                 //echo $updateSQL."<br>";
                 mysqli_real_escape_string($connection,$updateSQL);
                 $result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
@@ -136,10 +125,10 @@ if ($brewerJudge == "Y") {
 
         if ($loc[0] == "N") {
             
-            if ($go == "admin") $id = $filter;
-            else $id = $id;
+            if ($go == "admin") $user_id = $filter;
+            else $user_id = $id;
             
-            $updateSQL = sprintf("DELETE FROM %s WHERE bid='%s' AND assignment='J' AND assignLocation='%s'",$prefix."judging_assignments",$id,$loc[1]);
+            $updateSQL = sprintf("DELETE FROM %s WHERE bid='%s' AND assignment='J' AND assignLocation='%s'",$prefix."judging_assignments",$user_id,$loc[1]);
             mysqli_real_escape_string($connection,$updateSQL);
             $result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 
@@ -151,10 +140,10 @@ if ($brewerJudge == "Y") {
 
 if ($brewerJudge == "N") {
 
-    if ($go == "admin") $id = $filter;
-    else $id = $id;
+    if ($go == "admin") $user_id = $filter;
+    else $user_id = $id;
 
-    $updateSQL = sprintf("DELETE FROM %s WHERE bid='%s' AND assignment='J'",$prefix."judging_assignments",$id);
+    $updateSQL = sprintf("DELETE FROM %s WHERE bid='%s' AND assignment='J'",$prefix."judging_assignments",$user_id);
     mysqli_real_escape_string($connection,$updateSQL);
     $result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
     $location_pref1 = "";
@@ -168,9 +157,9 @@ if ($brewerSteward == "Y") {
         foreach ($_POST['brewerStewardLocation'] as $value) {
             $loc = explode("-",$value);
             if ($loc[0] == "N") {
-                if ($go == "admin") $id = $filter;
-                else $id = $id;
-                $updateSQL = sprintf("DELETE FROM %s WHERE bid='%s' AND assignment='S' AND assignLocation='%s'",$prefix."judging_assignments",$id,$loc[1]);
+                if ($go == "admin") $user_id = $filter;
+                else $user_id = $id;
+                $updateSQL = sprintf("DELETE FROM %s WHERE bid='%s' AND assignment='S' AND assignLocation='%s'",$prefix."judging_assignments",$user_id,$loc[1]);
                 mysqli_real_escape_string($connection,$updateSQL);
                 $result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
             }
@@ -185,9 +174,9 @@ if ($brewerSteward == "Y") {
         $loc = explode("-",$_POST['brewerStewardLocation']);
 
         if ($loc[0] == "N") {
-            if ($go == "admin") $id = $filter;
-            else $id = $id;
-            $updateSQL = sprintf("DELETE FROM %s WHERE bid='%s' AND assignment='S' AND assignLocation='%s'",$prefix."judging_assignments",$id,$loc[1]);
+            if ($go == "admin") $user_id = $filter;
+            else $user_id = $id;
+            $updateSQL = sprintf("DELETE FROM %s WHERE bid='%s' AND assignment='S' AND assignLocation='%s'",$prefix."judging_assignments",$user_id,$loc[1]);
             mysqli_real_escape_string($connection,$updateSQL);
             $result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
         }
@@ -200,10 +189,10 @@ if ($brewerSteward == "Y") {
 
 if ($brewerSteward == "N") { 
 
-    if ($go == "admin") $id = $filter;
-    else $id = $id;
+    if ($go == "admin") $user_id = $filter;
+    else $user_id = $id;
 
-    $updateSQL = sprintf("DELETE FROM %s WHERE bid='%s' AND assignment='S'",$prefix."judging_assignments",$id);
+    $updateSQL = sprintf("DELETE FROM %s WHERE bid='%s' AND assignment='S'",$prefix."judging_assignments",$user_id);
     mysqli_real_escape_string($connection,$updateSQL);
     $result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 

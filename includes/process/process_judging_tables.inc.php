@@ -31,7 +31,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 		tableNumber,
 		tableLocation
 		) VALUES (%s, %s, %s, %s)",
-						   GetSQLValueString($tableName), "text"),
+						   GetSQLValueString($tableName, "text"),
 						   GetSQLValueString(sterilize($table_styles), "text"),
 						   GetSQLValueString(sterilize($_POST['tableNumber']), "text"),
 						   GetSQLValueString(sterilize($_POST['tableLocation']), "text")
@@ -252,7 +252,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 		tableLocation=%s
 		WHERE id=%s",
 
-							GetSQLValueString($tableName), "text"),
+							GetSQLValueString($tableName, "text"),
 							GetSQLValueString(sterilize($table_styles), "text"),
 							GetSQLValueString(sterilize($_POST['tableNumber']), "text"),
 							GetSQLValueString(sterilize($_POST['tableLocation']), "text"),

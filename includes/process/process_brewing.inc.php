@@ -91,7 +91,10 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 		$brewReceived = 0;
 
 		// Comments
-		if ((isset($_POST['brewComments'])) && (!empty($_POST['brewComments']))) $brewComments = $purifier->purify($_POST['brewComments']);
+		if ((isset($_POST['brewComments'])) && (!empty($_POST['brewComments']))) {
+			$brewComments = $purifier->purify($_POST['brewComments']);
+			$brewComments = filter_var($brewComments,FILTER_SANITIZE_STRING,FILTER_FLAG_ENCODE_HIGH|FILTER_FLAG_ENCODE_LOW);
+		}
 
 		// Co Brewer
 		if ((isset($_POST['brewCoBrewer'])) && (!empty($_POST['brewCoBrewer']))) {
@@ -116,6 +119,8 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 
 			}
 
+			$brewCoBrewer = filter_var($brewCoBrewer,FILTER_SANITIZE_STRING,FILTER_FLAG_ENCODE_HIGH|FILTER_FLAG_ENCODE_LOW);
+
 		}
 		
 		// Possible Allergens
@@ -129,14 +134,17 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 			$brewAdminNotes = $purifier->purify($_POST['brewAdminNotes']);
 			$brewAdminNotes = filter_var($brewAdminNotes,FILTER_SANITIZE_STRING,FILTER_FLAG_ENCODE_HIGH|FILTER_FLAG_ENCODE_LOW);
 		}
+
 		if ((isset($_POST['brewStaffNotes'])) && (!empty($_POST['brewStaffNotes']))) {
 			$brewStaffNotes = $purifier->purify($_POST['brewStaffNotes']);
 			$brewStaffNotes = filter_var($brewStaffNotes,FILTER_SANITIZE_STRING,FILTER_FLAG_ENCODE_HIGH|FILTER_FLAG_ENCODE_LOW);
 		}
+
 		if ((isset($_POST['brewBoxNum'])) && (!empty($_POST['brewBoxNum']))) {
 			$brewBoxNum = $purifier->purify($_POST['brewBoxNum']);
 			$brewBoxNum = filter_var($brewBoxNum,FILTER_SANITIZE_STRING,FILTER_FLAG_ENCODE_HIGH|FILTER_FLAG_ENCODE_LOW);
 		}
+		
 		if (isset($_POST['brewReceived'])) $brewReceived = $_POST['brewReceived'];
 		if (isset($_POST['brewPaid'])) $brewPaid = $_POST['brewPaid'];
 
