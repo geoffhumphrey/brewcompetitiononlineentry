@@ -16,8 +16,19 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 	$brewStyleInfo = "";
 	$brewStyleLink = "";
 	$brewStyleStrength = "";
-	if (isset($_POST['brewStyleEntry'])) $brewStyleEntry = $purifier->purify($_POST['brewStyleEntry']);
-	if (isset($_POST['brewStyleInfo'])) $brewStyleInfo = $purifier->purify($_POST['brewStyleInfo']);
+	
+	if (isset($_POST['brewStyleEntry'])) {
+		$brewStyleEntry = trim($_POST['brewStyleEntry']);
+		$brewStyleEntry = $purifier->purify($brewStyleEntry);
+		$brewStyleEntry = filter_var($brewStyleEntry,FILTER_SANITIZE_STRING,FILTER_FLAG_ENCODE_HIGH | FILTER_FLAG_ENCODE_LOW);
+	}
+	
+	if (isset($_POST['brewStyleInfo'])) {
+		$brewStyleInfo = trim($_POST['brewStyleInfo']);
+		$brewStyleInfo = $purifier->purify($brewStyleInfo);
+		$brewStyleInfo = filter_var($brewStyleInfo,FILTER_SANITIZE_SPECIAL_CHARS,FILTER_FLAG_ENCODE_HIGH | FILTER_FLAG_ENCODE_LOW);
+	}
+	
 	if (isset($_POST['brewStyleLink'])) $brewStyleLink = sterilize($_POST['brewStyleLink']);
 	if ((isset($_POST['brewStyleType'])) && ($_POST['brewStyleType'] == 2)) $brewStyleStrength = 0; else $brewStyleStrength = sterilize($_POST['brewStyleStrength']);
 
