@@ -175,7 +175,7 @@ if (($display_to_admin) || ($display_to_public)) {
 							$slides .= "<div class=\"fragment justify-right col-right\" data-fragment-index=\"".$place_heirarchy."\" id=\"pos-".$place_heirarchy."\"><i class=\"fa fa-trophy icon pos-".$place_heirarchy."-medal-color\"></i>".$display_place."</div>";
 							$slides .= "<div class=\"fragment justify-left\" data-fragment-index=\"".$place_heirarchy."\" id=\"pos-".$place_heirarchy."-name\">";
 							$slides .= $brewer_name;
-							if (!empty($row_scores['brewCoBrewer'])) $slides .= "<span style=\"padding-top: .9em;\" class=\"small\">&nbsp;&amp;&nbsp;<em>".truncate_string($row_scores['brewCoBrewer'],25," ")."</em></span>";
+							if (!empty($row_scores['brewCoBrewer'])) $slides .= "<span style=\"padding-top: .9em;\" class=\"small\">&nbsp;&amp;&nbsp;<em>".truncate_string($row_scores['brewCoBrewer'],20," ")."</em></span>";
 							$slides .= "</div>";
 							if ($_SESSION['prefsProEdition'] == 0) $slides .= "<div class=\"fragment justify-left small\" data-fragment-index=\"".$place_heirarchy."\" id=\"pos-".$place_heirarchy."-club\">".truncate_string($brewer_club,25," ")."</div>";
 							$slides .= "<div class=\"fragment justify-left small entry-name bottom-row\" data-fragment-index=\"".$place_heirarchy."\" id=\"pos-".$place_heirarchy."-style\">".truncate_string($row_scores['brewName'],65," ")." (".$style_display.")</div>";
@@ -264,7 +264,11 @@ if (($display_to_admin) || ($display_to_public)) {
 								// Build Slide Content
 								$slides .= "<div id=\"medal-grid\">";
 								$slides .= "<div class=\"fragment justify-right col-right\" data-fragment-index=\"".$place_heirarchy."\" id=\"pos-".$place_heirarchy."\"><i class=\"fa fa-trophy icon pos-".$place_heirarchy."-medal-color\"></i>".$display_place."</div>";
-								$slides .= "<div class=\"fragment justify-left\" data-fragment-index=\"".$place_heirarchy."\" id=\"pos-".$place_heirarchy."-name\">".$brewer_name."</div>";
+								$slides .= "<div class=\"fragment justify-left\" data-fragment-index=\"".$place_heirarchy."\" id=\"pos-".$place_heirarchy."-name\">";
+								$slides .= $brewer_name;
+								if (!empty($row_scores['brewCoBrewer'])) $slides .= "<span style=\"padding-top: .9em;\" class=\"small\">&nbsp;&amp;&nbsp;<em>".truncate_string($row_scores['brewCoBrewer'],20," ")."</em></span>";
+								$slides .= "</div>";
+								
 								if ($_SESSION['prefsProEdition'] == 0) $slides .= "<div class=\"fragment justify-left small\" data-fragment-index=\"".$place_heirarchy."\" id=\"pos-".$place_heirarchy."-club\">".truncate_string($brewer_club,25," ")."</div>";
 								$slides .= "<div class=\"fragment justify-left small entry-name bottom-row\" data-fragment-index=\"".$place_heirarchy."\" id=\"pos-".$place_heirarchy."-style\">".truncate_string($row_scores['brewName'],65," ")." (".$style_display.")</div>";
 								$slides .= "</div>";
@@ -357,7 +361,11 @@ if (($display_to_admin) || ($display_to_public)) {
 								// Build Slide Content
 								$slides .= "<div id=\"medal-grid\">";
 								$slides .= "<div class=\"fragment justify-right col-right\" data-fragment-index=\"".$place_heirarchy."\" id=\"pos-".$place_heirarchy."\"><i class=\"fa fa-trophy icon pos-".$place_heirarchy."-medal-color\"></i>".$display_place."</div>";
-								$slides .= "<div class=\"fragment justify-left\" data-fragment-index=\"".$place_heirarchy."\" id=\"pos-".$place_heirarchy."-name\">".$brewer_name."</div>";
+								$slides .= "<div class=\"fragment justify-left\" data-fragment-index=\"".$place_heirarchy."\" id=\"pos-".$place_heirarchy."-name\">";
+								$slides .= $brewer_name;
+								if (!empty($row_scores['brewCoBrewer'])) $slides .= "<span style=\"padding-top: .9em;\" class=\"small\">&nbsp;&amp;&nbsp;<em>".truncate_string($row_scores['brewCoBrewer'],20," ")."</em></span>";
+								$slides .= "</div>";
+
 								if ($_SESSION['prefsProEdition'] == 0) $slides .= "<div class=\"fragment justify-left small\" data-fragment-index=\"".$place_heirarchy."\" id=\"pos-".$place_heirarchy."-club\">".truncate_string($brewer_club,25," ")."</div>";
 								$slides .= "<div class=\"fragment justify-left small entry-name bottom-row\" data-fragment-index=\"".$place_heirarchy."\" id=\"pos-".$place_heirarchy."-style\">".truncate_string($row_scores['brewName'],65," ")." (".$style_display.")</div>";
 								$slides .= "</div>";
@@ -437,7 +445,11 @@ if (($display_to_admin) || ($display_to_public)) {
 				// Build Slide Content
 				$slides_bos .= "<div id=\"medal-grid\">";
 				$slides_bos .= "<div class=\"fragment justify-right col-right\" data-fragment-index=\"".$place_heirarchy."\" id=\"pos-".$place_heirarchy."\"><i class=\"fa fa-trophy icon pos-".$place_heirarchy."-medal-color\"></i>".$display_place."</div>";
-				$slides_bos .= "<div class=\"fragment justify-left\" data-fragment-index=\"".$place_heirarchy."\" id=\"pos-".$place_heirarchy."-name\">".$brewer_name."</div>";
+				$slides_bos .= "<div class=\"fragment justify-left\" data-fragment-index=\"".$place_heirarchy."\" id=\"pos-".$place_heirarchy."-name\">";
+				$slides_bos .= $brewer_name;
+				if (!empty($row_bos['brewCoBrewer'])) $slides_bos .= "<span style=\"padding-top: .9em;\" class=\"small\">&nbsp;&amp;&nbsp;<em>".truncate_string($row_bos['brewCoBrewer'],20," ")."</em></span>";
+				$slides_bos .= "</div>";
+
 				if ($_SESSION['prefsProEdition'] == 0) $slides_bos .= "<div class=\"fragment justify-left small\" data-fragment-index=\"".$place_heirarchy."\" id=\"pos-".$place_heirarchy."-club\">".truncate_string($brewer_club,25," ")."</div>";
 				$slides_bos .= "<div class=\"fragment justify-left small entry-name bottom-row\" data-fragment-index=\"".$place_heirarchy."\" id=\"pos-".$place_heirarchy."-style\">".truncate_string($row_bos['brewName'],65," ")." (".$style_display.")</div>";
 				$slides_bos .= "</div>";

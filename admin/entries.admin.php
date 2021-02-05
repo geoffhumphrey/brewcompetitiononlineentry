@@ -277,7 +277,7 @@ if ($totalRows_log > 0) {
 			$entry_paid_display .= "<span class=\"visible-xs-inline visible-sm-inline\">Paid</span>";
 			$entry_paid_display .= "<div class=\"form-group\" id=\"paid-ajax-".$row_log['id']."-brewPaid-form-group\">";
 			$entry_paid_display .= "<div class=\"checkbox\"><label>";
-			$entry_paid_display .= "<input name=\"brewPaid".$row_log['id']."\" type=\"checkbox\" value=\"1\" id=\"paid-ajax-".$row_log['id']."\" name=\"brewPaid".$row_log['id']."\" type=\"text\" size=\"5\" maxlength=\"10\" value=\"".$row_log['brewPaid']."\" onclick=\"$(this).attr('value', this.checked ? 1 : 0);save_column('".$base_url."','brewPaid','brewing','".$row_log['id']."','".$row_log['brewBrewerID']."','default','default','default','paid-ajax-".$row_log['id']."')\"";
+			$entry_paid_display .= "<input name=\"brewPaid".$row_log['id']."\" type=\"checkbox\" value=\"1\" id=\"paid-ajax-".$row_log['id']."\" name=\"brewPaid".$row_log['id']."\" type=\"text\" size=\"5\" maxlength=\"10\" value=\"".$row_log['brewPaid']."\" onclick=\"$(this).attr('value', this.checked ? 1 : 0);save_column('".$base_url."','brewPaid','brewing','".$row_log['id']."','".$row_log['brewBrewerID']."','default','default','default','paid-ajax-".$row_log['id']."','value')\"";
 			if ($row_log['brewPaid'] == "1") $entry_paid_display .= " checked>";
 			else $entry_paid_display .= ">";
 			$entry_paid_display .= "</label></div>";
@@ -300,7 +300,7 @@ if ($totalRows_log > 0) {
 			$entry_received_display .= "<span class=\"visible-xs-inline visible-sm-inline\">Received</span>";
 			$entry_received_display .= "<span class=\"hidden\">".$row_log['brewReceived']."</span>";
 			$entry_received_display .= "<div class=\"form-group\" id=\"received-ajax-".$row_log['id']."-brewReceived-form-group\">";
-			$entry_received_display .= "<div class=\"checkbox\"><label><input name=\"brewReceived".$row_log['id']."\" type=\"checkbox\" value=\"1\" id=\"received-ajax-".$row_log['id']."\" name=\"brewReceived".$row_log['id']."\" type=\"text\" size=\"5\" maxlength=\"10\" value=\"".$row_log['brewReceived']."\" onclick=\"$(this).attr('value', this.checked ? 1 : 0);save_column('".$base_url."','brewReceived','brewing','".$row_log['id']."','".$row_log['brewBrewerID']."','default','default','default','received-ajax-".$row_log['id']."')\"";
+			$entry_received_display .= "<div class=\"checkbox\"><label><input name=\"brewReceived".$row_log['id']."\" type=\"checkbox\" value=\"1\" id=\"received-ajax-".$row_log['id']."\" name=\"brewReceived".$row_log['id']."\" type=\"text\" size=\"5\" maxlength=\"10\" value=\"".$row_log['brewReceived']."\" onclick=\"$(this).attr('value', this.checked ? 1 : 0);save_column('".$base_url."','brewReceived','brewing','".$row_log['id']."','".$row_log['brewBrewerID']."','default','default','default','received-ajax-".$row_log['id']."','value')\"";
 			if ($row_log['brewReceived'] == "1") $entry_received_display .= " checked>";
 			else $entry_received_display .= ">";
 			$entry_received_display .= "</label></div>";
@@ -320,7 +320,7 @@ if ($totalRows_log > 0) {
 		if (($action != "print") && ($dbTable == "default")) {
 			$entry_box_num_display .= "<div class=\"form-group\" id=\"box-num-ajax-".$row_log['id']."-brewBoxNum-form-group\">";
 			$entry_box_num_display .= "<span class=\"hidden visible-print-inline\">".$row_log['brewBoxNum']."</span>";
-			$entry_box_num_display .= "<span class=\"visible-sm-inline visible-xs-inline\">Box: </span><input class=\"form-control input-sm hidden-print\" id=\"box-num-ajax-".$row_log['id']."\" name=\"brewBoxNum".$row_log['id']."\" type=\"text\" size=\"5\" maxlength=\"10\" value=\"".$row_log['brewBoxNum']."\" onblur=\"save_column('".$base_url."','brewBoxNum','brewing','".$row_log['id']."','".$row_log['brewBrewerID']."','default','default','default','box-num-ajax-".$row_log['id']."')\"/>";
+			$entry_box_num_display .= "<span class=\"visible-sm-inline visible-xs-inline\">Box: </span><input class=\"form-control input-sm hidden-print\" id=\"box-num-ajax-".$row_log['id']."\" name=\"brewBoxNum".$row_log['id']."\" type=\"text\" size=\"5\" maxlength=\"10\" value=\"".$row_log['brewBoxNum']."\" onblur=\"save_column('".$base_url."','brewBoxNum','brewing','".$row_log['id']."','".$row_log['brewBrewerID']."','default','default','default','box-num-ajax-".$row_log['id']."','html')\"/>";
 			$entry_box_num_display .= "</div>";
 			$entry_box_num_display .= "<div>";
 			$entry_box_num_display .= "<span id=\"box-num-ajax-".$row_log['id']."-brewBoxNum-status\"></span>";
@@ -333,7 +333,7 @@ if ($totalRows_log > 0) {
 		if (($action != "print") && ($dbTable == "default")) {
 			$entry_staff_notes_display .= "<span class=\"hidden visible-print-inline\">".$row_log['brewStaffNotes']."</span>";
 			$entry_staff_notes_display .= "<div class=\"form-group\" id=\"staff-notes-ajax-".$row_log['id']."-brewStaffNotes-form-group\">";
-			$entry_staff_notes_display .= "<span class=\"visible-sm-inline visible-xs-inline\">Staff Notes: </span><textarea class=\"form-control input-sm hidden-print\" id=\"staff-notes-ajax-".$row_log['id']."\" name=\"brewStaffNotes".$row_log['id']."\" rows=\"2\" maxlength=\"255\" placeholder=\"\" onblur=\"save_column('".$base_url."','brewStaffNotes','brewing','".$row_log['id']."','".$row_log['brewBrewerID']."','text-col','default','default','staff-notes-ajax-".$row_log['id']."')\"  />".$row_log['brewStaffNotes']."</textarea>";
+			$entry_staff_notes_display .= "<span class=\"visible-sm-inline visible-xs-inline\">Staff Notes: </span><textarea class=\"form-control input-sm hidden-print\" id=\"staff-notes-ajax-".$row_log['id']."\" name=\"brewStaffNotes".$row_log['id']."\" rows=\"2\" maxlength=\"255\" placeholder=\"\" onblur=\"save_column('".$base_url."','brewStaffNotes','brewing','".$row_log['id']."','".$row_log['brewBrewerID']."','text-col','default','default','staff-notes-ajax-".$row_log['id']."','html')\"  />".$row_log['brewStaffNotes']."</textarea>";
 			$entry_staff_notes_display .= "</div>";
 			$entry_staff_notes_display .= "<div>";
 			$entry_staff_notes_display .= "<span id=\"staff-notes-ajax-".$row_log['id']."-brewStaffNotes-status\"></span>";
@@ -349,7 +349,7 @@ if ($totalRows_log > 0) {
 		if (($action != "print") && ($dbTable == "default")) {
 			$entry_admin_notes_display.= "<span class=\"hidden visible-print-inline\">".$row_log['brewAdminNotes']."</span>";
 			$entry_admin_notes_display .= "<div class=\"form-group\" id=\"admin-notes-ajax-".$row_log['id']."-brewAdminNotes-form-group\">";
-			$entry_admin_notes_display .= "<span class=\"visible-sm-inline visible-xs-inline\">Admin Notes: </span><textarea class=\"form-control input-sm hidden-print\" id=\"admin-notes-ajax-".$row_log['id']."\" name=\"brewAdminNotes".$row_log['id']."\" rows=\"2\" maxlength=\"255\" placeholder=\"\" onblur=\"save_column('".$base_url."','brewAdminNotes','brewing','".$row_log['id']."','".$row_log['brewBrewerID']."','text-col','default','default','admin-notes-ajax-".$row_log['id']."')\" />".$row_log['brewAdminNotes']."</textarea>";
+			$entry_admin_notes_display .= "<span class=\"visible-sm-inline visible-xs-inline\">Admin Notes: </span><textarea class=\"form-control input-sm hidden-print\" id=\"admin-notes-ajax-".$row_log['id']."\" name=\"brewAdminNotes".$row_log['id']."\" rows=\"2\" maxlength=\"255\" placeholder=\"\" onblur=\"save_column('".$base_url."','brewAdminNotes','brewing','".$row_log['id']."','".$row_log['brewBrewerID']."','text-col','default','default','admin-notes-ajax-".$row_log['id']."','html')\" />".$row_log['brewAdminNotes']."</textarea>";
 			$entry_admin_notes_display .= "</div>";
 			$entry_admin_notes_display .= "<div>";
 			$entry_admin_notes_display .= "<span id=\"admin-notes-ajax-".$row_log['id']."-brewAdminNotes-status\"></span>";

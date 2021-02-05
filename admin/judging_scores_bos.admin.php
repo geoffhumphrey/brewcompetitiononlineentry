@@ -1,5 +1,8 @@
 <?php
-if ($dbTable == "default") $pro_edition = $_SESSION['prefsProEdition'];
+if ($dbTable == "default") {
+    $pro_edition = $_SESSION['prefsProEdition'];
+    $suffix = "default";
+}
 else {
     $pro_edition = $row_archive_prefs['archiveProEdition'];
     $suffix = get_suffix($dbTable);
@@ -259,7 +262,7 @@ $(document).ready(function(){
         <td><?php echo $style_name; ?></td>
     	<td>
             <div class="form-group" id="score-entry-bos-ajax-<?php echo $score_id; ?>-scoreEntry-form-group">
-            <input class="form-control" id="score-entry-bos-ajax-<?php echo $score_id; ?>" type="number" pattern="\d{2}" maxlength="2" name="scoreEntry<?php echo $score_id; ?>" size="6" maxlength="6" value="<?php echo $bos_entry_info[11]; ?>" onblur="save_column('<?php echo $base_url; ?>','scoreEntry','judging_scores_bos','<?php echo $row_enter_bos['eid']; ?>','<?php echo $bos_entry_info[15]; ?>','1','<?php echo $filter; ?>','default','score-entry-bos-ajax-<?php echo $score_id; ?>')"  />
+            <input class="form-control" id="score-entry-bos-ajax-<?php echo $score_id; ?>" type="number" pattern="\d{2}" maxlength="2" name="scoreEntry<?php echo $score_id; ?>" size="6" maxlength="6" value="<?php echo $bos_entry_info[11]; ?>" onblur="save_column('<?php echo $base_url; ?>','scoreEntry','judging_scores_bos','<?php echo $row_enter_bos['eid']; ?>','<?php echo $bos_entry_info[15]; ?>','1','<?php echo $filter; ?>','default','score-entry-bos-ajax-<?php echo $score_id; ?>','value')"  />
             </div>
             <span id="score-entry-bos-ajax-<?php echo $score_id; ?>-scoreEntry-status"></span>
             <span id="score-entry-bos-ajax-<?php echo $score_id; ?>-scoreEntry-status-msg"></span>
@@ -269,7 +272,7 @@ $(document).ready(function(){
             <?php if ($_SESSION['prefsWinnerMethod'] == "0") { ?>
             <select class="form-control" id="score-place-bos-ajax-<?php echo $score_id; ?>" name="scorePlace<?php echo $score_id; ?>" onchange="select_place('<?php echo $base_url; ?>','scorePlace','judging_scores_bos','<?php echo $row_enter_bos['eid']; ?>','<?php echo $bos_entry_info[15]; ?>','1','<?php echo $filter; ?>','default','score-place-bos-ajax-<?php echo $score_id; ?>')">
             <?php } else { ?>
-            <select class="form-control" id="score-place-bos-ajax-<?php echo $score_id; ?>" name="scorePlace<?php echo $score_id; ?>" onchange="save_column('<?php echo $base_url; ?>','scorePlace','judging_scores_bos','<?php echo $row_enter_bos['eid']; ?>','<?php echo $bos_entry_info[15]; ?>','1','<?php echo $filter; ?>','default','score-place-bos-ajax-<?php echo $score_id; ?>')">    
+            <select class="form-control" id="score-place-bos-ajax-<?php echo $score_id; ?>" name="scorePlace<?php echo $score_id; ?>" onchange="save_column('<?php echo $base_url; ?>','scorePlace','judging_scores_bos','<?php echo $row_enter_bos['eid']; ?>','<?php echo $bos_entry_info[15]; ?>','1','<?php echo $filter; ?>','default','score-place-bos-ajax-<?php echo $score_id; ?>','value')">    
             <?php } ?>
                 <option value=""></option>
                 <?php for($i=1; $i<$_SESSION['jPrefsMaxBOS']+1; $i++) { ?>
