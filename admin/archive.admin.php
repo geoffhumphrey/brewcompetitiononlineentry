@@ -169,7 +169,7 @@ foreach ($style_sets as $style_set) {
                 <input type="radio" name="archiveDisplayWinners" value="Y" id="archiveDisplayWinners_0"  <?php if ($row_archive['archiveDisplayWinners'] == "Y") echo "CHECKED"; if (!$results_data) echo " DISABLED"; ?> /> <?php echo $label_admin_enable; ?>
             </label>
             <label class="radio-inline">
-                <input type="radio" name="archiveDisplayWinners" value="N" id="archiveDisplayWinners_1" <?php if (($section != "step3") && ($row_archive['archiveDisplayWinners'] == "N")) echo "CHECKED"; if (!$results_data) echo " DISABLED"; ?>/> <?php echo $label_admin_disable; ?>
+                <input type="radio" name="archiveDisplayWinners" value="N" id="archiveDisplayWinners_1" <?php if (($section != "step3") && (($row_archive['archiveDisplayWinners'] == "N") || (empty($row_archive['archiveDisplayWinners'])))) echo "CHECKED"; if (!$results_data) echo " DISABLED"; ?>/> <?php echo $label_admin_disable; ?>
             </label>
         </div>
         <span id="helpBlock" class="help-block"><?php if ($results_data) echo $archive_text_019; else echo $archive_text_022; ?></span>

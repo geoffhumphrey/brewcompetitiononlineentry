@@ -1760,7 +1760,6 @@ if (!check_update("archiveDisplayWinners", $prefix."archive")) {
 	$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 }
 
-
 // Get all of the archive suffix records
 // Check if all necessary DB tables are present for each suffix,
 // If not, add them.

@@ -5,7 +5,7 @@
 --
 -- ------------------------------------------------------------------------------------
 --
--- UPDATED 2021-01-26 for Version 2.2.0.0
+-- UPDATED 2021-02-09 for Version 2.2.0.0
 --
 -- ------------------------------------------------------------------------------------
 --
@@ -58,12 +58,13 @@ SET time_zone = "+00:00";
 
 DROP TABLE IF EXISTS `baseline_archive`;
 CREATE TABLE IF NOT EXISTS `baseline_archive` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int(11) NOT NULL,
   `archiveProEdition` tinyint(1) DEFAULT NULL,
   `archiveStyleSet` varchar(25) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `archiveScoresheet` char(1) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `archiveSuffix` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  `archiveWinnerMethod` tinyint(1) DEFAULT NULL COMMENT 'Method comp uses to choose winners: 0=by table; 1=by category; 2=by sub-category',
+  `archiveDisplayWinners` char(1) COLLATE utf8mb4_unicode_ci DEFAULT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -1554,7 +1555,7 @@ CREATE TABLE IF NOT EXISTS `baseline_system` (
 --
 
 INSERT INTO `baseline_system` (`id`, `version`, `version_date`, `data_check`, `setup`, `setup_last_step`) VALUES
-(1, '2.2.0.0', '2021-01-31', '2021-01-31 00:00:01', 1, 8);
+(1, '2.2.0.0', '2021-02-01', '2021-02-01 00:00:01', 1, 8);
 
 -- --------------------------------------------------------
 
