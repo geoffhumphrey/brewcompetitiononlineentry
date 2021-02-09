@@ -10,28 +10,41 @@ if (EVALUATION) {
     include(EVALS.'import_scores.eval.php');
 }
 
+$show_post_judging = FALSE;
+if (judging_date_return() == 0) $show_post_judging = TRUE;
+
 $show_best = FALSE;
 if (($row_limits['prefsShowBestBrewer'] != 0) || ($row_limits['prefsShowBestClub'] != 0)) {
-    if (judging_date_return() == 0) $show_best = TRUE;
-    elseif ((EVALUATION) && ((judging_date_return() == 0) || ($judge_window_open > 0))) $show_best = TRUE;
+    if ($show_post_judging) $show_best = TRUE;
+    elseif ((EVALUATION) && (($show_post_judging) || ($judge_window_open > 0))) $show_best = TRUE;
 }
 
 ?>
 <script src="<?php echo $base_url;?>js_includes/admin_ajax.min.js"></script>
 <p class="lead">Hello, <?php echo $_SESSION['brewerFirstName']; ?>. <span class="small">Click or tap the headings or icons below to view the options available in each category.</span></p>
-<?php if ((judging_date_return() == 0) && ($_SESSION['userLevel'] == 0))  { ?>
-    <div class="row bcoem-admin-element">
-        <div class="col col-lg-6 col-md-12 col-sm-12 col-xs-12" style="padding-bottom: 5px;">
-            <a class="btn btn-primary btn-block hide-loader" href="<?php echo $base_url; ?>includes/process.inc.php?action=publish" data-toggle="popover" data-trigger="hover" data-placement="auto top" data-container="body" data-title="Publish Results" data-content="Immediately publish all results in the database to the home page." data-confirm="Are you sure you wish to publish the results now?">Publish Results Now <span class="fa fa-bullhorn"></span></a>
-        </div>
-        <div class="col col-lg-6 col-md-12 col-sm-12 col-xs-12">
-            <a class="btn btn-primary btn-block" href="<?php echo $base_url; ?>awards.php" target="_blank" data-toggle="popover" data-trigger="hover" data-placement="auto top" data-container="body" data-title="Awards Presentation" data-html="true" data-content="<p>PowerPoint-style presentation of placing entries and Best of Show winner(s). Intended to be projected or screen-shared during your awards ceremony.</p><p><strong>Only Admin-level users can access the presentation before results are published.</strong></p>"><?php echo $label_launch_pres; ?> <span class="fa fa-trophy"></span></a>
-        </div>
-    </div>
-<?php } ?>
 <div class="row bcoem-admin-element">
-    <?php if ($show_best) { ?><div class="col col-lg-6 col-md-12 col-sm-12 col-xs-12" style="padding-bottom: 5px;">
-        <button type="button" class="btn btn-info btn-block" data-toggle="modal" data-target="#previewBest">Preview Best Brewer/Best Club Results <span class="fa fa-trophy"></span></button>
+    <?php if ($hosted_setup) { ?>
+    <div class="col col-lg-3 col-md-12 col-sm-12 col-xs-12" style="padding-bottom: 5px;">
+        <a class="btn btn-info btn-block hide-loader" href="http://brewcompetition.com/customize-comp-info" target="_blank" data-toggle="popover" data-trigger="hover" data-placement="auto top" data-container="body" data-title="Reset Competition Information" data-content="Detailed instructions on how to customize your hosted BCOE&amp;M installation including defining registration dates, judging sessions, drop-off window and locations, shipping window and locations, sponsors, styles accepted, etc.">Customize Competition Info <span class="fa fa-info-circle"></span></a>
+    </div>
+    <?php } else { ?>
+    <div class="col col-lg-3 col-md-12 col-sm-12 col-xs-12" style="padding-bottom: 5px;">
+        <a class="btn btn-info btn-block hide-loader" href="http://brewcompetition.com/reset-comp" target="_blank" data-toggle="popover" data-trigger="hover" data-placement="auto top" data-container="body" data-title="Reset Competition Information" data-content="Detailed instructions on how to reset the site information in preparation for an upcoming competition iteration.">Reset Competition Info <span class="fa fa-info-circle"></span></a>
+    </div>
+    <?php } ?>
+    <?php if (($show_post_judging) && ($_SESSION['userLevel'] == 0)) { ?>
+    <div class="col col-lg-3 col-md-12 col-sm-12 col-xs-12" style="padding-bottom: 5px;">
+        <a class="btn btn-primary btn-block hide-loader" href="<?php echo $base_url; ?>includes/process.inc.php?action=publish" data-toggle="popover" data-trigger="hover" data-placement="auto top" data-container="body" data-title="Publish Results" data-content="Immediately publish all results in the database to the home page." data-confirm="Are you sure you wish to publish the results now?">Publish Results Now <span class="fa fa-bullhorn"></span></a>
+    </div>
+    <?php } ?>
+    <?php if (($show_post_judging) && ($_SESSION['userLevel'] == 0)) { ?>
+    <div class="col col-lg-3 col-md-12 col-sm-12 col-xs-12" style="padding-bottom: 5px;">
+        <a class="btn btn-primary btn-block" href="<?php echo $base_url; ?>awards.php" target="_blank" data-toggle="popover" data-trigger="hover" data-placement="auto top" data-container="body" data-title="Awards Presentation" data-html="true" data-content="<p>PowerPoint-style presentation of placing entries and Best of Show winner(s). Intended to be projected or screen-shared during your awards ceremony.</p><p><strong>Only Admin-level users can access the presentation before results are published.</strong></p>"><?php echo $label_launch_pres; ?> <span class="fa fa-award"></span></a>
+    </div>
+    <?php } ?>
+    <?php if ($show_best) { ?>
+    <div class="col col-lg-3 col-md-12 col-sm-12 col-xs-12" style="padding-bottom: 5px;">
+        <button type="button" class="btn btn-info btn-block" data-toggle="modal" data-target="#previewBest">Best Brewer/Best Club Results <span class="fa fa-trophy"></span></button>
     </div>
     <div class="modal fade" id="previewBest" tabindex="-1" role="dialog" aria-labelledby="previewBestLabel">
         <div class="modal-dialog modal-lg" role="document">
@@ -46,16 +59,12 @@ if (($row_limits['prefsShowBestBrewer'] != 0) || ($row_limits['prefsShowBestClub
         </div>
     </div>
     <?php } ?>
-    <div class="col col-lg-6 col-md-12 col-sm-12 col-xs-12">
-        <a class="btn btn-info btn-block hide-loader" href="http://brewcompetition.com/reset-comp" target="_blank" data-toggle="popover" data-trigger="hover" data-placement="auto top" data-container="body" data-title="Reset Competition Information" data-content="Detailed instructions on how to reset the site information in preparation for an upcoming competition iteration.">Reset Competition Information&nbsp;&nbsp;<span class="fa fa-info-circle"></span></a>
-    </div>
 </div>
 <div class="bcoem-admin-dashboard-accordion">
     <div class="row">
         <div class="col col-lg-6 col-md-12 col-sm-12 col-xs-12">
             <div class="panel-group" id="accordion">
-				<?php if ($_SESSION['userLevel'] == "0") { ?>
-                    
+				<?php if ($_SESSION['userLevel'] == "0") { ?>  
                 <!-- Preparing Panel -->
                 <div class="panel panel-default">
                     <div class="panel-heading">
@@ -76,7 +85,6 @@ if (($row_limits['prefsShowBestBrewer'] != 0) || ($row_limits['prefsShowBestClub
 									</ul>
                                 </div>
                             </div><!-- ./row -->
-
                             <div class="row">
                                 <div class="col col-lg-5 col-md-4 col-sm-4 col-xs-4">
                                     <strong>Contacts</strong>
@@ -88,7 +96,6 @@ if (($row_limits['prefsShowBestBrewer'] != 0) || ($row_limits['prefsShowBestClub
                                     </ul>
                                 </div>
                             </div><!-- ./row -->
-
                             <div class="row">
                                 <div class="col col-lg-5 col-md-4 col-sm-4 col-xs-4">
                                     <strong>Custom Categories</strong>
@@ -100,7 +107,6 @@ if (($row_limits['prefsShowBestBrewer'] != 0) || ($row_limits['prefsShowBestClub
                                     </ul>
                                 </div>
                             </div><!-- ./row -->
-
                             <div class="row">
                                 <div class="col col-lg-5 col-md-4 col-sm-4 col-xs-4">
                                     <strong>Drop-Off Locations</strong>
@@ -112,7 +118,6 @@ if (($row_limits['prefsShowBestBrewer'] != 0) || ($row_limits['prefsShowBestClub
                                     </ul>
                                 </div>
                             </div><!-- ./row -->
-
                             <div class="row">
                                 <div class="col col-lg-5 col-md-4 col-sm-4 col-xs-4">
                                     <strong>Judging Sessions</strong>
@@ -124,7 +129,6 @@ if (($row_limits['prefsShowBestBrewer'] != 0) || ($row_limits['prefsShowBestClub
                                     </ul>
                                 </div>
                             </div><!-- ./row -->
-
                             <?php if ($_SESSION['userLevel'] == "0") { ?>
                             <div class="row">
                                 <div class="col col-lg-5 col-md-4 col-sm-4 col-xs-4">
@@ -138,7 +142,6 @@ if (($row_limits['prefsShowBestBrewer'] != 0) || ($row_limits['prefsShowBestClub
                                     </ul>
                                 </div>
                             </div><!-- ./row -->
-
                             <div class="row">
                                 <div class="col col-lg-5 col-md-4 col-sm-4 col-xs-4">
                                     <strong>Styles Accepted</strong>
@@ -150,7 +153,6 @@ if (($row_limits['prefsShowBestBrewer'] != 0) || ($row_limits['prefsShowBestClub
                                     </ul>
                                 </div>
                             </div><!-- ./row -->
-
                             <div class="row">
                                 <div class="col col-lg-5 col-md-4 col-sm-4 col-xs-4">
                                     <strong>Style Types</strong>
@@ -162,15 +164,11 @@ if (($row_limits['prefsShowBestBrewer'] != 0) || ($row_limits['prefsShowBestClub
                                     </ul>
                                 </div>
                             </div><!-- ./row -->
-
                             <?php } // end if ($_SESSION['userLevel'] == "0") ?>
-
                         </div>
                     </div>
                 </div><!-- ./ Preparing Panel -->
-
 				<?php } ?>
-
                 <!-- Entry and Data Gathering Panel -->
                 <div class="panel panel-default">
                     <div class="panel-heading">
@@ -180,7 +178,6 @@ if (($row_limits['prefsShowBestBrewer'] != 0) || ($row_limits['prefsShowBestClub
                     </div>
                     <div id="collapseEntry" class="panel-collapse collapse">
                         <div class="panel-body">
-
                             <div class="row">
                                 <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-4">
                                     <strong>Entries</strong>
@@ -191,9 +188,7 @@ if (($row_limits['prefsShowBestBrewer'] != 0) || ($row_limits['prefsShowBestClub
                                     </ul>
                                 </div>
                             </div><!-- ./row -->
-
                             <?php if ($_SESSION['prefsPaypalIPN'] == 1) { ?>
-
                             <div class="row">
                                 <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-4">
                                     <strong>Payments</strong>
@@ -204,9 +199,7 @@ if (($row_limits['prefsShowBestBrewer'] != 0) || ($row_limits['prefsShowBestClub
                                     </ul>
                                 </div>
                             </div><!-- ./row -->
-
                             <?php } ?>
-
                             <div class="row">
                                 <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-4">
                                     <strong>Participants</strong>
@@ -224,7 +217,6 @@ if (($row_limits['prefsShowBestBrewer'] != 0) || ($row_limits['prefsShowBestClub
                                     </ul>
                                 </div>
                             </div><!-- ./row -->
-
                             <div class="row">
                                 <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-4">
                                     <strong>Register</strong>
@@ -243,7 +235,6 @@ if (($row_limits['prefsShowBestBrewer'] != 0) || ($row_limits['prefsShowBestClub
                                     </ul>
                                 </div>
                             </div><!-- ./row -->
-
                         </div>
                     </div>
                 </div><!-- ./ Entry and Data Gathering Panel -->
@@ -263,16 +254,12 @@ if (($row_limits['prefsShowBestBrewer'] != 0) || ($row_limits['prefsShowBestClub
                                 <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-8">
                                     <ul class="list-unstyled">
                                         <li>
-                                            <!--
-                                            <a class="hide-loader" data-confirm="Are you sure you want to regenerate judging numbers for all entries? This will over-write all judging numbers, including those that have been assigned via the barcode or QR Code scanning function. The process may take a while depending upon the number of entires in your database." href="<?php echo $base_url; ?>includes/process.inc.php?section=admin&amp;go=default&amp;action=generate_judging_numbers&amp;sort=default">Judging Numbers (Random)</a>
-                                            -->
                                             <a class="hide-loader"  href="#" data-toggle="modal" data-target="#jn-random-modal">Judging Numbers (Random)</a>
                                             <div>
                                                 <span style="margin-bottom: 10px;" class="hidden" id="jn-random-status"></span>
                                                 <span style="margin-bottom: 10px;" class="hidden" id="jn-random-status-msg"></span>
                                             </div>
                                         </li>
-
                                         <!-- Modal -->
                                         <div class="modal fade" id="jn-random-modal" tabindex="-1" role="dialog" aria-labelledby="jn-random-modal-label">
                                             <div class="modal-dialog" role="document">
@@ -295,7 +282,6 @@ if (($row_limits['prefsShowBestBrewer'] != 0) || ($row_limits['prefsShowBestClub
                                         </div>
 
                                         <li>
-                                            <!-- <a class="hide-loader" data-confirm="Are you sure you want to regenerate judging numbers for all entries? This will over-write all judging numbers, including those that have been assigned via the barcode or QR Code scanning function. The process may take a while depending upon the number of entires in your database. PLEASE NOTE that judging numbers will be in the following format: XX-123 (where XX is the category number or name)." href="<?php echo $base_url; ?>includes/process.inc.php?section=admin&amp;go=default&amp;action=generate_judging_numbers&amp;sort=legacy">Judging Numbers (With Style Number Prefix)</a> -->
                                             <a class="hide-loader"  href="#" data-toggle="modal" data-target="#jn-style-modal">Judging Numbers (With Style Number Prefix)</a>
                                             <div>
                                                 <span style="margin-bottom: 10px;" class="hidden" id="jn-style-status"></span>
@@ -323,17 +309,13 @@ if (($row_limits['prefsShowBestBrewer'] != 0) || ($row_limits['prefsShowBestClub
                                                 </div>
                                             </div>
                                         </div>
-
-
                                         <li>
-                                            <!--<a class="hide-loader" data-confirm="Are you sure you want to regenerate judging numbers for all entries? This will over-write all judging numbers, including those that have been assigned via the barcode or QR Code scanning function. The process may take a while depending upon the number of entires in your database." href="<?php echo $base_url; ?>includes/process.inc.php?section=admin&amp;go=<?php echo $go; ?>&amp;action=generate_judging_numbers&amp;sort=identical">Judging Numbers (Same as Entry Numbers)</a>-->
                                             <a class="hide-loader"  href="#" data-toggle="modal" data-target="#jn-entry-modal">Judging Numbers (Same as Entry Numbers)</a>
                                             <div>
                                                 <span style="margin-bottom: 10px;" class="hidden" id="jn-entry-status"></span>
                                                 <span style="margin-bottom: 10px;" class="hidden" id="jn-entry-status-msg"></span>
                                             </div>
                                         </li>
-
                                         <!-- Modal -->
                                         <div class="modal fade" id="jn-entry-modal" tabindex="-1" role="dialog" aria-labelledby="jn-entry-modal-label">
                                             <div class="modal-dialog" role="document">
@@ -491,7 +473,6 @@ if (($row_limits['prefsShowBestBrewer'] != 0) || ($row_limits['prefsShowBestClub
 												</ul>
 											</div>
 										</li>
-
 									</ul>
                                     <ul class="list-unstyled">
 										<li>With Required Info - All Styles (Judging Numbers)
@@ -572,7 +553,6 @@ if (($row_limits['prefsShowBestBrewer'] != 0) || ($row_limits['prefsShowBestClub
                                     </ul>
                                 </div>
                             </div><!-- ./row -->
-
                             <div class="row">
                                 <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-4">
                                     <a class="hide-loader" href="http://www.onlinelabels.com/Products/OL5275WR.htm" target="_blank" data-toggle="tooltip" data-placement="right" title="Online Lables OL5275WR">0.75 in/19 mm Round</a>
@@ -631,8 +611,6 @@ if (($row_limits['prefsShowBestBrewer'] != 0) || ($row_limits['prefsShowBestClub
                     </div>
                 </div>
                 <!-- ./ Sorting Panel -->
-
-
                 <!-- Organizing Panel -->
                 <div class="panel panel-default">
                     <div class="panel-heading">
@@ -669,7 +647,6 @@ if (($row_limits['prefsShowBestBrewer'] != 0) || ($row_limits['prefsShowBestClub
                                         <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging_tables&amp;action=assign">Assign Judges/Stewards</a></li>
                                         <?php } ?>
                                     </ul>
-                                    
                                 </div>
                             </div><!-- ./row -->
                             <?php if ($_SESSION['jPrefsQueued'] == "N") { ?>
@@ -697,83 +674,6 @@ if (($row_limits['prefsShowBestBrewer'] != 0) || ($row_limits['prefsShowBestClub
                                 </div>
                             </div><!-- ./row -->
 							<?php } ?>
-                            <!-- Staff, Judge, Steward Emails -->
-                            <!--
-                            <div class="row">
-                                <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-4">
-                                    <strong>Emails</strong>
-                                </div>
-                                <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-8">
-                                    <ul class="list-inline">
-                                        <li><a data-tooltip="true" title="Send a custom email message to judges" href="#" data-toggle="modal" data-target="#CustomMessage">Custom Message to Judges and/or Stewards</a><li>
-                                        <?php if ($totalRows_tables > 1) { ?>
-                                        <li><a class="hide-loader" data-confirm="Are you sure you want to send an email to each judge and steward assigned to a table? The email will detail their table assignment(s) and associated judging date(s), location(s), and time(s)." href="<?php echo $base_url; ?>includes/process.inc.php?section=admin&amp;go=default&amp;action=email&amp;filter=table-assignments">Judge and Steward Table Assignments</a></li>
-                                        <?php } ?>
-                                    </ul>
-                                </div>
-                            </div>
-                            -->
-                            <!-- Send Message Modal -->
-                            <!--
-                            <div class="modal fade" id="CustomMessage" tabindex="-1" role="dialog" aria-labelledby="CustomMessageLabel">
-                                <div class="modal-dialog modal-lg" role="document">
-                                    <form data-toggle="validator" role="form" method="post" action="<?php echo $base_url; ?>includes/process.inc.php?section=admin&amp;go=default&amp;action=email&amp;filter=custom-message" name="form2">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                                            <h4 class="modal-title" id="CustomMessageLabel">Compose a Custom Message</h4>
-                                        </div>
-                                        <div class="modal-body">
-                                            <div class="form-group">
-                                                <label for="emailSubject">Subject</label>
-                                                <div class="input-group has-warning">
-                                                    <input class="form-control" id="emailSubject" name="emailSubject" type="text" maxlength="255" value="" placeholder="Add an email subject line" data-error="The email subject line is required." autofocus required>
-                                                    <span class="input-group-addon" id="emailSubject-addon2"><span class="fa fa-star"></span></span>
-                                                </div>
-                                            <div class="help-block with-errors"></div>
-                                            </div>
-                                            <div class="form-group">
-                                                <label for="emailMessage">Message</label>
-                                                <textarea style="height: 200px;" class="form-control" id="emailMessage" name="emailMessage" data-error="Please provide a message body" rows="15" required>
-                                                    <p>[Compose your message here...]</p>
-                                                    <p>Cheers,</p>
-                                                    <p><?php echo $_SESSION['brewerFirstName']." ".$_SESSION['brewerLastName']; ?><br><a href="mailto:<?php echo $_SESSION['brewerEmail']; ?>"><?php echo $_SESSION['brewerEmail']; ?></a><br>[Your title]<br><?php echo $_SESSION['contestName']; ?></p>
-                                                </textarea>
-                                                <div class="help-block">Each email will be customized with the name and the role of the user as a greeting.</div>
-                                                <div class="help-block with-errors"></div>
-                                            </div>
-                                            <div class="form-group">
-                                                <label for="messageAudience">Audience</label>
-                                                <div class="input-group">
-                                                    <label class="radio-inline">
-                                                        <input type="radio" name="messageAudience" value="0" id="messageAudience_0" checked /> Judges
-                                                    </label>
-                                                    <label class="radio-inline">
-                                                        <input type="radio" name="messageAudience" value="1" id="messageAudience_1" /> Stewards
-                                                    </label>
-                                                    <label class="radio-inline">
-                                                        <input type="radio" name="messageAudience" value="2" id="messageAudience_2" /> Judges and Stewards
-                                                    </label>
-                                                    <label class="radio-inline">
-                                                        <input type="radio" name="messageAudience" value="3" id="messageAudience_3" /> Staff
-                                                    </label>
-                                                    <label class="radio-inline">
-                                                        <input type="radio" name="messageAudience" value="4" id="messageAudience_4" /> Judges, Stewards, and Staff
-                                                    </label>
-                                                </div>
-                                            </div>
-                                            <input type="hidden" name="relocate" value="<?php echo $base_url."index.php?section=admin"; ?>">
-                                        </div>
-                                        <div class="modal-footer">
-                                            <input name="submit" type="submit" class="btn btn-primary" value="Send Message">
-                                            <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-                                        </div>
-                                        </form>
-                                    </div>
-                                </div>
-
-                            </div>
-                            -->
                         </div>
                     </div>
                 </div><!-- ./ Organizing Panel -->
@@ -781,7 +681,7 @@ if (($row_limits['prefsShowBestBrewer'] != 0) || ($row_limits['prefsShowBestClub
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         <h4 class="panel-title">
-                            <a data-toggle="collapse" data-parent="#accordion" href="#collapseScoring">Scoring<span class="fa fa-trophy pull-right"></span></a>
+                            <a data-toggle="collapse" data-parent="#accordion" href="#collapseScoring">Scoring<span class="fa fa-clipboard pull-right"></span></a>
                         </h4>
                     </div>
                     <div id="collapseScoring" class="panel-collapse collapse">
@@ -863,11 +763,8 @@ if (($row_limits['prefsShowBestBrewer'] != 0) || ($row_limits['prefsShowBestClub
                         </div>
                     </div>
                 </div><!-- ./ Scoring Panel -->
-
-
             </div><!-- ./ panel-group -->
         </div><!-- ./left column -->
-
         <!-- Purge Modals -->
         <div class="modal fade" id="cleanUp" tabindex="-1" role="dialog" aria-labelledby="cleanUpLabel">
             <div class="modal-dialog" role="document">
@@ -1102,8 +999,6 @@ if (($row_limits['prefsShowBestBrewer'] != 0) || ($row_limits['prefsShowBestClub
             </div>
         </div>
         <!-- END Purge Modals -->
-
-
         <!-- BEGIN Right column accordions -->
 		<div class="col col-lg-6 col-md-12 col-sm-12 col-xs-12">
             <div class="panel-group" id="accordion2">
@@ -1327,7 +1222,6 @@ if (($row_limits['prefsShowBestBrewer'] != 0) || ($row_limits['prefsShowBestClub
 							<div class="col col-lg-8 col-md-8 col-sm-8 col-xs-8">
 								<ul class="list-inline">
 									<li><a class="hide-loader" href="<?php echo $base_url; ?>output/labels.output.php?section=admin&amp;go=participants&amp;action=judging_nametags&amp;psort=5395" data-toggle="tooltip" data-placement="top" title="Avery 5395">Letter</a></li>
-									<!-- <li><a href="#" target="_blank" data-toggle="tooltip" data-placement="top" title="Avery XXXX">A4</a></li> -->
 								</ul>
 							</div>
 						</div><!-- ./row -->
@@ -1348,10 +1242,8 @@ if (($row_limits['prefsShowBestBrewer'] != 0) || ($row_limits['prefsShowBestClub
 									<?php do {
 										if ($row_style_type['styleTypeBOS'] == "Y") {
 										?>
-
 										<li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=pullsheets&amp;go=judging_scores_bos&amp;view=entry&amp;id=<?php echo $row_style_type['id']; ?>"  data-toggle="tooltip" data-placement="top" title="Print the <?php echo $row_style_type['styleTypeName']; ?> BOS Pullsheet Using Entry Numbers"><?php echo $row_style_type['styleTypeName']; ?> - Entry Numbers</a></li>
                                         <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=pullsheets&amp;go=judging_scores_bos&amp;id=<?php echo $row_style_type['id']; ?>"  data-toggle="tooltip" data-placement="top" title="Print the <?php echo $row_style_type['styleTypeName']; ?> BOS Pullsheet Using Entry Numbers"><?php echo $row_style_type['styleTypeName']; ?> - Judging Numbers</a></li>
-
 										<?php }
 										} while ($row_style_type = mysqli_fetch_assoc($style_type));
 									?>
@@ -1365,7 +1257,6 @@ if (($row_limits['prefsShowBestBrewer'] != 0) || ($row_limits['prefsShowBestClub
 								<ul class="list-unstyled">
 									<li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=bos-mat&amp;filter=entry" data-toggle="tooltip" data-placement="top" title="Print all BOS Cup Mats with entry numbers only">All Style Types - Entry Numbers</a></li>
                                     <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=bos-mat" data-toggle="tooltip" data-placement="top" title="Print all BOS Cup Mats with judging numbers only">All Style Types - Judging Numbers</a></li>
-
                                     <?php do {
                                         if ($row_style_types['styleTypeBOS'] == "Y") { ?>
                                         <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=bos-mat&amp;filter=entry&amp;view=<?php echo $row_style_types['id']; ?>" data-toggle="tooltip" data-placement="top" title="Print BOS Cup Mats with entry numbers only for <?php echo $row_style_types['styleTypeName'];?>"><?php echo $row_style_types['styleTypeName'];?> - Entry Numbers</a></li>
@@ -1402,10 +1293,6 @@ if (($row_limits['prefsShowBestBrewer'] != 0) || ($row_limits['prefsShowBestClub
                             <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-8">
                                 <ul class="list-inline">
                                     <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=results&amp;go=best&amp;action=print&amp;tb=bos&amp;view=default" title="Best Brewer and/or Club Results Report">Print</a></li>
-                                    <!--
-                                    <li><a href="<?php echo $base_url; ?>output/export.output.php?section=results&amp;go=best&amp;action=download&amp;filter=default&amp;view=pdf">PDF</a></li>
-                                    <li><a href="<?php echo $base_url; ?>output/export.output.php?section=results&amp;go=best&amp;action=download&amp;filter=default&amp;view=html">HTML</a></li>
-                                    -->
                                 </ul>
                             </div>
                         </div><!-- ./row -->
@@ -1442,12 +1329,6 @@ if (($row_limits['prefsShowBestBrewer'] != 0) || ($row_limits['prefsShowBestClub
                                     <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=results&amp;go=all&amp;action=print&amp;filter=none&amp;view=default" data-toggle="tooltip" data-placement="top" title="Print all entry results without scores listed">All without Scores</a></li>
                                     <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=results&amp;go=all&amp;action=print&amp;filter=none&amp;view=winners" data-toggle="tooltip" data-placement="top" title="Print winners only results without scores listed">Winners Only without Scores</a></li>
                                 </ul>
-                            <!--
-                                <ul class="list-inline">
-                                    <li><a href="<?php echo $base_url; ?>output/export.output.php?section=results&amp;go=judging_scores&amp;action=default&amp;filter=none&amp;view=pdf" data-toggle="tooltip" data-placement="top" title="Download a PDF report of results - winners only without scores">PDF</a></li>
-                                    <li><a href="<?php echo $base_url; ?>output/export.output.php?section=results&amp;go=judging_scores&amp;action=default&amp;filter=none&amp;view=html" data-toggle="tooltip" data-placement="top" title="Download a HTML report of results to copy/paste into another website - winners only without scores">HTML</a></li>
-                                </ul>
-                            -->
                             </div>
                         </div><!-- ./row -->
                         <?php } ?>
@@ -1507,13 +1388,6 @@ if (($row_limits['prefsShowBestBrewer'] != 0) || ($row_limits['prefsShowBestClub
 							<div class="col col-lg-8 col-md-8 col-sm-8 col-xs-8">
 								<ul class="list-inline">
                                     <li><a class="hide-loader" href="<?php echo $base_url; ?>output/labels.output.php?section=admin&amp;go=judging_scores&amp;action=awards&amp;filter=round&amp;psort=5293" data-toggle="tooltip" data-placement="top" title="1 2/3 inch Round Avery 5293">Letter</a></li>
-                                    <!--
-									<li><a href="<?php echo $base_url; ?>output/labels.output.php?section=admin&amp;go=judging_scores&amp;action=awards&amp;filter=round&amp;psort=OL5375" data-toggle="tooltip" data-placement="top" title="2 inch (50.8 mm) Round Online Labels OL5375">Letter</a> (<a class="hide-loader" href="https://www.onlinelabels.com/OL5375.htm" target="_blank">OL5375</a>)</li>
-                                    <li><a class="hide-loader" href="<?php echo $base_url; ?>output/labels.output.php?section=admin&amp;go=judging_scores&amp;action=awards&amp;filter=round&amp;psort=OL3012" data-toggle="tooltip" data-placement="top" title="1.25 inch (31.75 mm) Round Online Labels OL3012">Letter</a> (<a class="hide-loader" href="https://www.onlinelabels.com/OL3012.htm" target="_blank">OL3012</a>)</li>
-                                </ul>
-                                <ul class="list-inline">
-									<li><a href="<?php echo $base_url; ?>output/labels.output.php?section=admin&amp;go=judging_scores&amp;action=awards&amp;filter=round&amp;psort=EU30095" data-toggle="tooltip" data-placement="top" title="45 mm Round Online Labels EU30095">A4</a> (<a class="hide-loader" href="https://uk.onlinelabels.com/EU30095.htm" target="_blank">EU30095</a>)</li>
-                                -->
 								</ul>
 							</div>
 						</div>
@@ -1799,6 +1673,18 @@ if (($row_limits['prefsShowBestBrewer'] != 0) || ($row_limits['prefsShowBestClub
                     </div>
                     <div id="collapseHelp" class="panel-collapse collapse">
                         <div class="panel-body">
+                            <?php if ($hosted_setup) { ?>
+                            <div class="row">
+                                <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                                    <strong>Customize</strong>
+                                </div>
+                                <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-8">
+                                    <ul class="list-unstyled">
+                                        <li><a href="http://brewcompetition.com/customize-comp-info" target="_blank">Competition Information</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <?php } ?>
                             <div class="row">
                                 <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-4">
                                     <strong>Post Setup</strong>

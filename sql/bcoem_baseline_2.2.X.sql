@@ -58,13 +58,14 @@ SET time_zone = "+00:00";
 
 DROP TABLE IF EXISTS `baseline_archive`;
 CREATE TABLE IF NOT EXISTS `baseline_archive` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `archiveProEdition` tinyint(1) DEFAULT NULL,
   `archiveStyleSet` varchar(25) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `archiveScoresheet` char(1) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `archiveSuffix` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `archiveWinnerMethod` tinyint(1) DEFAULT NULL COMMENT 'Method comp uses to choose winners: 0=by table; 1=by category; 2=by sub-category',
-  `archiveDisplayWinners` char(1) COLLATE utf8mb4_unicode_ci DEFAULT NULL
+  `archiveDisplayWinners` char(1) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------

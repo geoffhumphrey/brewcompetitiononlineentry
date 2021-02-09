@@ -296,7 +296,7 @@ if ($section != "admin") {
 
 	if (judging_winner_display($_SESSION['prefsWinnerDelay'])) {
 
-		if ((get_archive_count($prefix."judging_scores") > 0) || (get_archive_count($prefix."judging_scores_bos") > 0)) $header1_600 .= "<div class=\"bcoem-admin-element hidden-print\"><a class=\"btn btn-primary btn-block btn-sm\" href=\"".$base_url."awards.php\" target=\"_blank\">".$label_launch_pres." <span class=\"fa fa-trophy\"></span></a></div>";
+		if ((get_archive_count($prefix."judging_scores") > 0) || (get_archive_count($prefix."judging_scores_bos") > 0)) $header1_600 .= "<div class=\"bcoem-admin-element hidden-print\"><a class=\"btn btn-primary btn-block btn-sm\" href=\"".$base_url."awards.php\" target=\"_blank\">".$label_launch_pres." <span class=\"fa fa-award\"></span></a></div>";
 	}
 
 	// Judging Location(s)

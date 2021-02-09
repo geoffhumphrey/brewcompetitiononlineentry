@@ -64,6 +64,10 @@ if (check_setup($prefix."system",$database)) {
 		$setup_relocate .= "&msg=1";
 	}
 
+	// Flag for hosted installations
+	$hosted_setup = FALSE;
+	if ((HOSTED) && ($row_system['setup_last_step'] == 9)) $hosted_setup = TRUE;
+
 
 	if ($row_system['version'] == $current_version) {
 		// If the current version is the same as what is in the DB, trigger a force update
