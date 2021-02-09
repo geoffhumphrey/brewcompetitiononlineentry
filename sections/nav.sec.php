@@ -260,6 +260,13 @@ if (($logged_in) && ($admin_user) && ($go != "error_page")) { ?>
             </li>
 			<?php if ($_SESSION['userLevel'] == "0") { ?>
             <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Data Management <span class="caret"></span></a>
+                <ul class="dropdown-menu navmenu-nav">
+                    <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=archive">Manage Archives</a></li>
+                    <?php if (!HOSTED) { ?><li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=archive&amp;action=add">Archive Current Data</a></li><?php } ?>
+                </ul>
+            </li>
+            <li class="dropdown">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">Preferences <span class="caret"></span></a>
                 <ul class="dropdown-menu navmenu-nav">
                     <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=preferences">Website</a></li>

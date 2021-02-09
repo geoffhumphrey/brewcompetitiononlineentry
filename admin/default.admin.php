@@ -1617,7 +1617,9 @@ if (($row_limits['prefsShowBestBrewer'] != 0) || ($row_limits['prefsShowBestClub
                             <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-8">
                                 <ul class="list-inline">
                                     <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=archive">Manage</a></li>
+                                    <?php if (!HOSTED) { ?>
                                     <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=archive&amp;action=add">Archive Current Data</a></li>
+                                    <?php } ?>
                                 </ul>
                             </div>
                         </div><!-- ./row -->
@@ -1625,7 +1627,6 @@ if (($row_limits['prefsShowBestBrewer'] != 0) || ($row_limits['prefsShowBestClub
                     </div>
                 </div>
             </div><!-- ./ Database Maintenance Panel -->
-
             <!-- Preferences Panel -->
             <div class="panel panel-default">
                 <div class="panel-heading">

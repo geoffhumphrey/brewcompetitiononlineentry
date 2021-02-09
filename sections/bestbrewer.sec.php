@@ -157,6 +157,8 @@ if ($row_bb_prefs['prefsBestUseBOS'] == 1) {
 
 if ($row_limits['prefsShowBestBrewer'] != 0) {
 
+	$bb_sorter = array();
+
 	foreach (array_keys($bestbrewer) as $key) {
 		$points = best_brewer_points($key,$bestbrewer[$key]['Places'],$bestbrewer[$key]['Scores'],$bb_points_prefs,$bb_tiebreaker_prefs);
 		$bestbrewer[$key]['Points'] = $points;
@@ -190,6 +192,8 @@ if ($row_limits['prefsShowBestBrewer'] != 0) {
 }
 
 if (($_SESSION['prefsProEdition'] == 0) && ($row_limits['prefsShowBestClub'] != 0)) {
+
+	$bb_sorter_clubs = array();
 
 	// Compile the Best Club points
 	foreach (array_keys($bestbrewer_clubs) as $key) {

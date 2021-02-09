@@ -8,10 +8,11 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 	require(INCLUDES.'db_tables.inc.php');
 
 	$dbTable = "default";
-
 	$gh_user_name = "geoff@zkdigital.com";
 
 	$tables_array = array($special_best_info_db_table, $special_best_data_db_table, $brewing_db_table, $judging_assignments_db_table, $judging_flights_db_table, $judging_scores_db_table, $judging_scores_bos_db_table, $judging_tables_db_table, $staff_db_table);
+
+	if (EVALUATION) $tables_array[] = $prefix."evaluation";
 
 	foreach ($tables_array as $table) {
 
