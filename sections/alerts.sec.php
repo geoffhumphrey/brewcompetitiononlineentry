@@ -4,7 +4,7 @@ $alert_text_004 = sprintf("<strong>%s</strong> %s",$alert_text_002,$alert_text_0
 $alert_text_007 = sprintf("<strong>%s</strong> <a href=\"".$base_url."index.php?section=admin&amp;action=add&amp;go=dropoff\" class=\"alert-link\">%s</a>",$alert_text_005,$alert_text_006);
 $alert_text_010 = sprintf("<strong>%s</strong> <a href=\"".$base_url."index.php?section=admin&amp;action=add&amp;go=judging\" class=\"alert-link\">%s</a>",$alert_text_008,$alert_text_009);
 $alert_text_013 = sprintf("<strong>%s</strong> <a href=\"".$base_url."index.php?section=admin&amp;action=add&amp;go=contacts\" class=\"alert-link\">%s</a>",$alert_text_011,$alert_text_012);
-$alert_text_018 = sprintf("<strong>%s</strong> <a class=\"alert-link hide-loader\" href=\"".$base_url."includes/process.inc.php?action=convert_bjcp\" data-confirm=\"%s\">%s</a> %s",$alert_text_014,$alert_text_015,$alert_text_016,$alert_text_017);
+$alert_text_018 = sprintf("<strong>%s</strong> <a class=\"alert-link hide-loader\" href=\"".$base_url."includes/process.inc.php?action=convert_bjcp\" data-confirm=\"%s\">%s</a> %s",$alert_text_014,$alert_text_016,$alert_text_015,$alert_text_017);
 $alert_text_022 = sprintf("<strong>%s</strong> %s",$alert_text_020,$alert_text_021);
 $alert_text_026 = sprintf("<strong>%s</strong> <a class=\"alert-link\" href=\"",$alert_text_023);
 if ($section == "step6") $alert_text_026 .= "setup.php?section=step6";
@@ -115,7 +115,7 @@ if ($msg != "default") { ?>
 <?php } // end if (($logged_in) && ($_SESSION['userLevel'] <= 1) && ($section == "admin") && ($go == "default")) ?>
 
 <?php if (($logged_in) && ($section == "admin")) { ?>
-	<?php if (($entries_unconfirmed > 0) && ($go == "entries")) { ?>
+	<?php if (($entries_unconfirmed > 0) && ($go == "entries") && ($dbTable == "default")) { ?>
    		<!-- Unconfirmed entries -->
     	<div class="alert alert-danger alert-dismissible hidden-print fade in" role="alert">
         	<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>

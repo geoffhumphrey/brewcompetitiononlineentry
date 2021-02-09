@@ -1522,6 +1522,7 @@ $label_paid_entries = "Paid Entries";
 $alert_text_086 = "Internet Explorer is not supported by BCOE&M - features and functions will not render properly and your experience will not be optimal. Please upgrade to a newer browser.";
 $alert_text_087 = "For an optimal experience and so that all features and functions execute properly, please enable JavaScript to continue using this site. Otherwise, unexpected behavior will occur.";
 $alert_text_088 = "The Awards Presentation will be available publicly after results are published.";
+$alert_text_089 = "Archived data is not available.";
 
 $brewer_entries_text_025 = "Print judges&rsquo; scoresheets";
 

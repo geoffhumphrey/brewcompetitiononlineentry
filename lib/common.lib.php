@@ -3123,7 +3123,8 @@ function judge_steward_availability($input,$method,$prefix) {
 			$location = mysqli_query($connection,$query_location) or die (mysqli_error($connection));
 			$row_location = mysqli_fetch_assoc($location);
 				if (!empty($row_location['judgingLocName'])) {
-					$return .= $row_location['judgingLocName']." ";
+					if ($method == "2") $return .= html_entity_decode($row_location['judgingLocName'])." ";
+					else $return .= $row_location['judgingLocName']." ";
 					if ($method == "1") $return .= "<br>";
 					elseif ($method == "2") $return .= " | ";
 					else $return .= " ";

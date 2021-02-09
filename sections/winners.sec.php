@@ -55,11 +55,13 @@ $winners_table_head_1 = "";
 $winners_table_body_1 = "";
 */
 
-if ($section == "past-winners"){
+if ($section == "past-winners") {
+	
 	$suffix = $go;
 	$judging_tables_db_table = $prefix."judging_tables_".$go;
 	$judging_scores_db_table = $prefix."judging_scores_".$go;
 	$brewing_db_table = $prefix."brewing_".$go;
+	$brewer_db_table = $prefix."brewer_".$go;
 }
 
 else {
@@ -67,6 +69,7 @@ else {
 	$judging_tables_db_table = $prefix."judging_tables";
 	$judging_scores_db_table = $prefix."judging_scores";
 	$brewing_db_table = $prefix."brewing";
+	$brewer_db_table = $prefix."brewer";
 }
 
 if ($row_scored_entries['count'] > 0) {
@@ -117,7 +120,7 @@ if ($row_scored_entries['count'] > 0) {
 				$winners_table_head_1 .= sprintf("<th><span class=\"hidden-xs hidden-sm hidden-md\">%s </span>%s</th>",$label_entry,$label_name);
 				$winners_table_head_1 .= sprintf("<th>%s</th>",$label_style);
 				if ($_SESSION['prefsProEdition'] == 0) $winners_table_head_1 .= sprintf("<th>%s</th>",$label_club);
-				if ($filter == "scores") $winners_table_head_1 .= sprintf("<th nowrap>Score</th>",$label_score);
+				if ($tb == "scores") $winners_table_head_1 .= sprintf("<th nowrap>Score</th>",$label_score);
 				$winners_table_head_1 .= "</tr>";
 
 				// Build table body
@@ -165,7 +168,7 @@ if ($row_scored_entries['count'] > 0) {
 						$winners_table_body_1 .= "</td>";
 					}
 
-					if ($filter == "scores") {
+					if ($tb == "scores") {
 						$winners_table_body_1 .= "<td width=\"1%\" nowrap>";
 						if (!empty($row_scores['scoreEntry'])) $winners_table_body_1 .= $row_scores['scoreEntry'];
 						else $winners_table_body_1 .= "&nbsp;";
@@ -200,7 +203,7 @@ if ($row_scored_entries['count'] > 0) {
 				{ "asSorting": [  ] },
 				{ "asSorting": [  ] },
 				<?php if ($_SESSION['prefsProEdition'] == 0) { ?>{ "asSorting": [  ] },<?php } ?>
-				{ "asSorting": [  ] }<?php if ($filter == "scores") { ?>,
+				{ "asSorting": [  ] }<?php if ($tb == "scores") { ?>,
 				{ "asSorting": [  ] }
 				<?php } ?>
 				]

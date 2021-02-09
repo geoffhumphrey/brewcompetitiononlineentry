@@ -100,6 +100,7 @@ $archive_text_019 = "Archivované seznamy vítězů dostupné pro veřejné proh
 $archive_text_020 = "Obecně by to mělo být změněno, pouze pokud se seznam vítězů tohoto archivu zobrazuje nesprávně.";
 $archive_text_021 = "Pro tento archiv byly uloženy výsledkové listy PDF. Toto je konvence pojmenování každého souboru používaného systémem při přístupu k nim.";
 $archive_text_022 = "Zakázáno. Pro tento archiv neexistují žádná data výsledků.";
+$archive_text_023 = "Sada stylů není zadána. Archivovaná položka, hodnocení a data pole se nemusí zobrazit správně.";
 
 $label_uploaded_scoresheets = "Nahrané Cýsledkové Listy (Soubory PDF)";
 $label_admin_comp_type = "Typ Soutěže";

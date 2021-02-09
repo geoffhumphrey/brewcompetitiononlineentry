@@ -8,32 +8,32 @@ if ($bid != "") {
 }
 
 // Note: the order of the columns is set to the specifications set by HCCP for import
-if ($filter != "winners") {
+if (($filter != "winners") || ($tb != "winners")) {
 
 	if ($filter == "all") 	$query_sql = "SELECT * FROM $brewing_db_table";
 	else $query_sql = "SELECT DISTINCT id, brewBrewerFirstName, brewBrewerLastName, brewCategory, brewSubCategory, brewName, brewInfo, brewInfoOptional, brewComments, brewMead2, brewMead1, brewMead3, brewBrewerID, brewJudgingNumber, brewStyle FROM $brewing_db_table";
 
 	if (SINGLE) {
 
-		if (($filter == "paid") && ($bid == "default") && ($view == "default"))  $query_sql .= sprintf(" WHERE brewPaid = '1' AND brewReceived = '1' AND comp_id='%s'",$_SESSION['comp_id']);
-		if (($filter == "paid") && ($bid == "default") && ($view == "all"))  $query_sql .= sprintf(" WHERE brewPaid = '1' AND comp_id='%s'",$_SESSION['comp_id']);
-		if (($filter == "paid") && ($bid == "default") && ($view == "not_received"))  $query_sql .= sprintf(" WHERE brewPaid = '1' AND (brewReceived <> 1 OR brewReceived IS NULL) AND comp_id='%s'",$_SESSION['comp_id']);
-		if (($filter == "paid") && ($bid != "default"))  $query_sql .= sprintf(" WHERE brewPaid = '1' AND brewReceived = '1' AND brewJudgingLocation='%s' AND comp_id='%s'", $bid, $_SESSION['comp_id']);
-		if (($filter == "nopay") && ($bid == "default") && ($view == "default")) $query_sql .= sprintf(" WHERE (brewPaid <> 1 OR brewPaid IS NULL) AND brewReceived = '1' AND comp_id='%s'",$_SESSION['comp_id']);
-		if (($filter == "nopay") && ($bid == "default") && ($view == "all")) $query_sql .= sprintf(" WHERE (brewPaid <> 1 OR brewPaid IS NULL) AND comp_id='%s'",$_SESSION['comp_id']);
-		if (($filter == "required") && ($bid == "default") && ($view == "default")) $query_sql .= sprintf(" WHERE (brewInfo IS NOT NULL) OR (brewComments IS NOT NULL) OR (brewInfoOptional IS NOT NULL) AND comp_id='%s'",$_SESSION['comp_id']);
+		if ((($filter == "paid") || ($tb == "paid")) && ($bid == "default") && ($view == "default"))  $query_sql .= sprintf(" WHERE brewPaid = '1' AND brewReceived = '1' AND comp_id='%s'",$_SESSION['comp_id']);
+		if ((($filter == "paid") || ($tb == "paid")) && ($bid == "default") && ($view == "all"))  $query_sql .= sprintf(" WHERE brewPaid = '1' AND comp_id='%s'",$_SESSION['comp_id']);
+		if ((($filter == "paid") || ($tb == "paid")) && ($bid == "default") && ($view == "not_received"))  $query_sql .= sprintf(" WHERE brewPaid = '1' AND (brewReceived <> 1 OR brewReceived IS NULL) AND comp_id='%s'",$_SESSION['comp_id']);
+		if ((($filter == "paid") || ($tb == "paid")) && ($bid != "default"))  $query_sql .= sprintf(" WHERE brewPaid = '1' AND brewReceived = '1' AND brewJudgingLocation='%s' AND comp_id='%s'", $bid, $_SESSION['comp_id']);
+		if ((($filter == "nopay") || ($tb == "nopay")) && ($bid == "default") && ($view == "default")) $query_sql .= sprintf(" WHERE (brewPaid <> 1 OR brewPaid IS NULL) AND brewReceived = '1' AND comp_id='%s'",$_SESSION['comp_id']);
+		if ((($filter == "nopay") || ($tb == "nopay")) && ($bid == "default") && ($view == "all")) $query_sql .= sprintf(" WHERE (brewPaid <> 1 OR brewPaid IS NULL) AND comp_id='%s'",$_SESSION['comp_id']);
+		if ((($filter == "required") || ($tb == "required")) && ($bid == "default") && ($view == "default")) $query_sql .= sprintf(" WHERE (brewInfo IS NOT NULL) OR (brewComments IS NOT NULL) OR (brewInfoOptional IS NOT NULL) AND comp_id='%s'",$_SESSION['comp_id']);
 
 	}
 
 	else {
 
-		if (($filter == "paid") && ($bid == "default") && ($view == "default"))  $query_sql .= " WHERE brewPaid = '1' AND brewReceived = '1'";
-		if (($filter == "paid") && ($bid == "default") && ($view == "all"))  $query_sql .= " WHERE brewPaid = '1'";
-		if (($filter == "paid") && ($bid == "default") && ($view == "not_received"))  $query_sql .= " WHERE brewPaid = '1' AND (brewReceived <> 1 OR brewReceived IS NULL)";
-		if (($filter == "paid") && ($bid != "default"))  $query_sql .= sprintf(" WHERE brewPaid = '1' AND brewReceived = '1' AND brewJudgingLocation = '%s'",$bid);
-		if (($filter == "nopay") && ($bid == "default") && ($view == "default")) $query_sql .= " WHERE (brewPaid <> 1 OR brewPaid IS NULL) AND brewReceived = '1'";
-		if (($filter == "nopay") && ($bid == "default") && ($view == "all")) $query_sql .= " WHERE (brewPaid <> 1 OR brewPaid IS NULL)";
-		if (($filter == "required") && ($bid == "default") && ($view == "default")) $query_sql .= " WHERE (brewInfo IS NOT NULL) OR (brewComments IS NOT NULL) OR (brewInfoOptional IS NOT NULL) ORDER BY id ASC";
+		if ((($filter == "paid") || ($tb == "paid")) && ($bid == "default") && ($view == "default"))  $query_sql .= " WHERE brewPaid = '1' AND brewReceived = '1'";
+		if ((($filter == "paid") || ($tb == "paid")) && ($bid == "default") && ($view == "all"))  $query_sql .= " WHERE brewPaid = '1'";
+		if ((($filter == "paid") || ($tb == "paid")) && ($bid == "default") && ($view == "not_received"))  $query_sql .= " WHERE brewPaid = '1' AND (brewReceived <> 1 OR brewReceived IS NULL)";
+		if ((($filter == "paid") || ($tb == "paid")) && ($bid != "default"))  $query_sql .= sprintf(" WHERE brewPaid = '1' AND brewReceived = '1' AND brewJudgingLocation = '%s'",$bid);
+		if ((($filter == "nopay") || ($tb == "nopay")) && ($bid == "default") && ($view == "default")) $query_sql .= " WHERE (brewPaid <> 1 OR brewPaid IS NULL) AND brewReceived = '1'";
+		if ((($filter == "nopay") || ($tb == "nopay")) && ($bid == "default") && ($view == "all")) $query_sql .= " WHERE (brewPaid <> 1 OR brewPaid IS NULL)";
+		if ((($filter == "required") || ($tb == "required")) && ($bid == "default") && ($view == "default")) $query_sql .= " WHERE (brewInfo IS NOT NULL) OR (brewComments IS NOT NULL) OR (brewInfoOptional IS NOT NULL) ORDER BY id ASC";
 	}
 
 }
@@ -41,7 +41,7 @@ if ($filter != "winners") {
 if (($go == "csv") && ($action == "email")) $query_sql .= " ORDER BY brewBrewerLastName,brewBrewerFirstName,id ASC";
 if (($go == "csv") && ($action == "all") && ($filter == "all")) $query_sql .= " ORDER BY id ASC";
 
-if ($filter == "winners") {
+if (($filter == "winners") || ($tb == "winners")) {
 
 	$query_sql = "SELECT id,tableNumber,tableName FROM $judging_tables_db_table";
 	if (SINGLE) $query_sql .= sprintf(" AND comp_id='%s'",$_SESSION['comp_id']);

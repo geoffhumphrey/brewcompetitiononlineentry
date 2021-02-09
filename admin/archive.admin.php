@@ -73,7 +73,7 @@ foreach ($style_sets as $style_set) {
 	<div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
 		<div class="input-group has-warning">
 			<!-- Input Here -->
-			<input class="form-control" id="archiveSuffix" name="archiveSuffix" type="text" placeholder="<?php echo date('Y'); ?> or Q2-<?php echo date('Y'); ?>, etc." pattern="^[a-zA-Z0-9]+$" autofocus required value="<?php if ($action == "edit") echo $row_archive['archiveSuffix']; ?>">
+			<input class="form-control" id="archiveSuffix" name="archiveSuffix" type="text" placeholder="<?php echo date('Y'); ?> or Q2<?php echo date('Y'); ?>, etc." pattern="^[a-zA-Z0-9]+$" autofocus required value="<?php if ($action == "edit") echo $row_archive['archiveSuffix']; ?>">
 			<span class="input-group-addon" id="mod_name-addon2"><span class="fa fa-star"></span></span>
 		</div>
 		<span class="help-block with-errors"></span>
@@ -151,8 +151,12 @@ foreach ($style_sets as $style_set) {
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
         <!-- Input Here -->
         <select class="selectpicker" name="archiveStyleSet" id="archiveStyleSet" data-size="12" data-width="auto">
-        <?php echo $style_set_dropdown; ?>
+            <option value="">None Specified</option>
+            <?php echo $style_set_dropdown; ?>
         </select>
+    <?php if (!isset($row_archive['archiveStyleSet'])) { ?>
+    <span id="helpBlock" class="help-block"><?php echo $archive_text_023; ?></span>
+    <?php } ?>
     </div>
 </div><!-- ./Form Group -->
 
@@ -182,7 +186,7 @@ foreach ($style_sets as $style_set) {
                 <input type="radio" name="archiveWinnerMethod" value="<?php echo $key; ?>" id="archiveWinnerMethod_<?php echo $key; ?>" <?php if ($row_archive['archiveWinnerMethod'] == $key) echo "CHECKED"; if (!$results_data) echo " DISABLED"; ?>> <?php echo $value; ?>
             </label>
             <?php } ?>
-            <span id="helpBlock" class="help-block"><?php if (!$results_data) echo $archive_text_022; else { echo $archive_text_020; ?> <a href=""><?php echo $label_view; ?> <i class="fa fa-external-link"></i></a>.<?php } ?></span>
+            <span id="helpBlock" class="help-block"><?php if (!$results_data) echo $archive_text_022; else { echo $archive_text_020; ?> <a href="<?php echo build_public_url("past-winners",$row_archive['archiveSuffix'],"default","default",$sef,$base_url); ?>" target="_blank"><?php echo $label_view; ?> <i class="fa fa-external-link"></i></a>.<?php } ?></span>
         </div>
     </div>
 </div><!-- ./Form Group -->
@@ -210,9 +214,9 @@ foreach ($style_sets as $style_set) {
 	<div class="form-group">
 		<div class="col-lg-offset-2 col-md-offset-3 col-sm-offset-4">
             <?php if ($action == "edit") { ?>
-            <input type="submit" name="submit" class="btn btn-primary" value="<?php echo $label_edit." ".$label_admin_archive; ?>" />
+            <input type="submit" name="Submit" class="btn btn-primary" value="<?php echo $label_edit." ".$label_admin_archive; ?>" />
             <?php } else { ?>
-			<button type="button" name="submit" id="submitBtn" data-toggle="modal" data-target="#confirm-submit" class="btn btn-primary" /><?php echo $label_add." ".$label_admin_archive; ?></button>
+            <input type="button" name="Submit" id="submitBtn" data-toggle="modal" data-target="#confirm-submit" class="btn btn-primary" value="<?php echo $label_add." ".$label_admin_archive; ?>" />
             <?php } ?>
 		</div>
 	</div>
@@ -309,8 +313,8 @@ foreach ($style_sets as $style_set) {
 	$db = $prefix."brewing_".$row_archive['archiveSuffix'];
 	$count = get_archive_count($db);
 	if ($count > 0) { ?>
-    	<a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=entries&amp;dbTable=<?php echo $db; ?>"><?php echo $row_archive['archiveSuffix']; ?></a> (<?php echo $count; ?>)
-    <?php }  else echo $row_archive['archiveSuffix']. " - ".$label_not_archived; ?>
+    	<a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=entries&amp;dbTable=<?php echo $db; ?>"><?php echo $row_archive['archiveSuffix']; ?></a> (<?php echo $count; ?>)<?php if (!isset($row_archive['archiveStyleSet'])) echo "*<br><em><small>".$archive_text_023."</small></em>"; ?>
+    <?php } else echo $row_archive['archiveSuffix']. " - ".$label_not_archived; ?>
     </td>
     <td>
     <?php

@@ -10,13 +10,38 @@ require (CONFIG.'bootstrap.php');
 if (isset($_SESSION['loginUsername'])) {
 $role_replace1 = array("HJ","LJ","MBOS",", ");
 $role_replace2 = array("<span class=\"fa fa-gavel\"></span> Head Judge","<span class=\"fa fa-star\"></span> Lead Judge","<span class=\"fa fa-trophy\"></span> Mini-BOS Judge","&nbsp;&nbsp;&nbsp;");
+
+// Queries for current data
+if ($filter == "default") {
+	$winner_method = $_SESSION['prefsWinnerMethod'];
+	$style_set = $_SESSION['prefsStyleSet'];
+}
+
+// Or, for archived data
+else {
+
+	// Query the archive table for preferences
+	$query_archive_prefs = sprintf("SELECT * FROM %s WHERE archiveSuffix='%s'",$prefix."archive", $filter);
+	$archive_prefs = mysqli_query($connection,$query_archive_prefs) or die (mysqli_error($connection));
+	$row_archive_prefs = mysqli_fetch_assoc($archive_prefs);
+	$totalRows_archive_prefs = mysqli_num_rows($archive_prefs);
+
+	$winner_method = $row_archive_prefs['archiveWinnerMethod'];
+	$style_set = $row_archive_prefs['archiveStyleSet'];
+	$judging_scores_db_table = $prefix."judging_scores_".$filter;
+	$brewing_db_table = $prefix."brewing_".$filter;
+	$brewer_db_table = $prefix."brewer_".$filter;
+
+}
+
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- <meta name="viewport" content="width=device-width, initial-scale=1"> -->
     <title><?php echo $_SESSION['contestName']; ?> - Brew Competition Online Entry &amp; Management</title>
 
     <!-- Load Bootstrap and jQuery -->

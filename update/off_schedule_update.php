@@ -427,6 +427,7 @@ if ((!check_update("archiveBrewerTableName", $prefix."archive")) && (!check_upda
 	$result = mysqli_query($connection,$updateSQL);
 }
 
+
 if (HOSTED) {
 	$updateSQL = sprintf("TRUNCATE TABLE `%s`;",$prefix."archive");
 	mysqli_select_db($connection,$database);
@@ -446,25 +447,29 @@ else {
 
 		do {
 
-			if (!check_update("brewerBreweryName", $prefix."brewer_".$row_archive['archiveSuffix'])) {
+			if ((check_setup($prefix."brewer_".$row_archive['archiveSuffix'],$database)) && (!check_update("brewerBreweryName", $prefix."brewer_".$row_archive['archiveSuffix']))) {
 				$updateSQL = sprintf("ALTER TABLE `%s` ADD `brewerBreweryName` VARCHAR(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL, ADD `brewerBreweryTTB` VARCHAR(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL;", $prefix."brewer_".$row_archive['archiveSuffix']);
 				mysqli_select_db($connection,$database);
 				mysqli_real_escape_string($connection,$updateSQL);
 				$result = mysqli_query($connection,$updateSQL);
 			}
 
-			if (check_update("brewWinnerSubCat", $prefix."brewing_".$row_archive['archiveSuffix'])) {
-				$updateSQL = sprintf("ALTER TABLE `%s` CHANGE `brewWinnerSubCat` `brewInfoOptional` TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL;",$prefix."brewing_".$row_archive['archiveSuffix']);
-				mysqli_select_db($connection,$database);
-				mysqli_real_escape_string($connection,$updateSQL);
-				$result = mysqli_query($connection,$updateSQL);
-			}
+			if (check_setup($prefix."brewing_".$row_archive['archiveSuffix'],$database)) {
 
-			if ((!check_update("brewWinnerSubCat", $prefix."brewing_".$row_archive['archiveSuffix'])) && (!check_update("brewInfoOptional", $prefix."brewing_".$row_archive['archiveSuffix']))) {
-				$updateSQL = sprintf("ALTER TABLE `%s` ADD `brewInfoOptional` TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL;",$prefix."brewing_".$row_archive['archiveSuffix']);
-				mysqli_select_db($connection,$database);
-				mysqli_real_escape_string($connection,$updateSQL);
-				$result = mysqli_query($connection,$updateSQL);
+				if (check_update("brewWinnerSubCat", $prefix."brewing_".$row_archive['archiveSuffix'])) {
+					$updateSQL = sprintf("ALTER TABLE `%s` CHANGE `brewWinnerSubCat` `brewInfoOptional` TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL;",$prefix."brewing_".$row_archive['archiveSuffix']);
+					mysqli_select_db($connection,$database);
+					mysqli_real_escape_string($connection,$updateSQL);
+					$result = mysqli_query($connection,$updateSQL);
+				}
+
+				if ((!check_update("brewWinnerSubCat", $prefix."brewing_".$row_archive['archiveSuffix'])) && (!check_update("brewInfoOptional", $prefix."brewing_".$row_archive['archiveSuffix']))) {
+					$updateSQL = sprintf("ALTER TABLE `%s` ADD `brewInfoOptional` TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL;",$prefix."brewing_".$row_archive['archiveSuffix']);
+					mysqli_select_db($connection,$database);
+					mysqli_real_escape_string($connection,$updateSQL);
+					$result = mysqli_query($connection,$updateSQL);
+				}
+
 			}
 
 		} while ($row_archive = mysqli_fetch_assoc($archive));
@@ -1749,7 +1754,7 @@ if (!check_update("archiveDisplayWinners", $prefix."archive")) {
 	mysqli_select_db($connection,$database);
 	mysqli_real_escape_string($connection,$updateSQL);
 	$result = mysqli_query($connection,$updateSQL);
-
+	
 	$updateSQL = sprintf("UPDATE `%s` SET archiveDisplayWinners='N';", $prefix."archive");
 	mysqli_real_escape_string($connection,$updateSQL);
 	$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
@@ -1767,7 +1772,20 @@ $totalRows_archive = mysqli_num_rows($archive);
 
 //echo $query_archive;
 
-$tables_array = array($brewing_db_table, $judging_assignments_db_table, $judging_flights_db_table, $judging_scores_db_table, $judging_scores_bos_db_table, $judging_tables_db_table, $staff_db_table,$brewer_db_table,$special_best_data_db_table,$special_best_info_db_table,$style_types_db_table,$users_db_table);
+$tables_array = array(
+	$prefix."brewing", 
+	$prefix."judging_assignments", 
+	$prefix."judging_flights", 
+	$prefix."judging_scores", 
+	$prefix."judging_scores_bos", 
+	$prefix."judging_tables", 
+	$prefix."staff",
+	$prefix."brewer",
+	$prefix."special_best_data",
+	$prefix."special_best_info",
+	$prefix."style_types",
+	$prefix."users"
+);
 
 // if (EVALUATION) $tables_array[] = $prefix."evaluation";
 
@@ -1807,22 +1825,15 @@ if ($totalRows_archive > 0) {
 					$result = mysqli_query($connection,$updateSQL);
 				}
 
-				if (!check_update("brewJudgingNumber",$brewing_db_table."_".$row_archive['archiveSuffix'])) {
-					$updateSQL = sprintf("ALTER TABLE `%s` ADD `brewJudgingNumber` char(1) NULL DEFAULT NULL;",$brewer_db_table."_".$row_archive['archiveSuffix']);
+				if (!check_update("brewerProAm",$brewer_db_table."_".$row_archive['archiveSuffix'])) {
+					$updateSQL = sprintf("ALTER TABLE `%s` ADD `brewerProAm` tinyint(1) NULL DEFAULT NULL;",$brewer_db_table."_".$row_archive['archiveSuffix']);
 					mysqli_select_db($connection,$database);
 					mysqli_real_escape_string($connection,$updateSQL);
 					$result = mysqli_query($connection,$updateSQL);
 				}
 
-				if (!check_update("brewStaffNotes",$brewing_db_table."_".$row_archive['archiveSuffix'])) {
-					$updateSQL = sprintf("ALTER TABLE `%s` ADD `brewStaffNotes` char(1) NULL DEFAULT NULL;",$brewer_db_table."_".$row_archive['archiveSuffix']);
-					mysqli_select_db($connection,$database);
-					mysqli_real_escape_string($connection,$updateSQL);
-					$result = mysqli_query($connection,$updateSQL);
-				}
-
-				if (!check_update("brewAdminNotes",$brewing_db_table."_".$row_archive['archiveSuffix'])) {
-					$updateSQL = sprintf("ALTER TABLE `%s` ADD `brewAdminNotes` char(1) NULL DEFAULT NULL;",$brewer_db_table."_".$row_archive['archiveSuffix']);
+				if (!check_update("brewerDiscount",$brewer_db_table."_".$row_archive['archiveSuffix'])) {
+					$updateSQL = sprintf("ALTER TABLE `%s` ADD `brewerDiscount` char(1) NULL DEFAULT NULL;",$brewer_db_table."_".$row_archive['archiveSuffix']);
 					mysqli_select_db($connection,$database);
 					mysqli_real_escape_string($connection,$updateSQL);
 					$result = mysqli_query($connection,$updateSQL);
@@ -1830,6 +1841,53 @@ if ($totalRows_archive > 0) {
 
 			}
 
+			if ($table_archive == $brewing_db_table."_".$row_archive['archiveSuffix']) {
+
+				if (!check_update("brewJudgingNumber",$brewing_db_table."_".$row_archive['archiveSuffix'])) {
+					$updateSQL = sprintf("ALTER TABLE `%s` ADD `brewJudgingNumber` char(1) NULL DEFAULT NULL;",$brewing_db_table."_".$row_archive['archiveSuffix']);
+					mysqli_select_db($connection,$database);
+					mysqli_real_escape_string($connection,$updateSQL);
+					$result = mysqli_query($connection,$updateSQL);
+				}
+
+				if (!check_update("brewStaffNotes",$brewing_db_table."_".$row_archive['archiveSuffix'])) {
+					$updateSQL = sprintf("ALTER TABLE `%s` ADD `brewStaffNotes` char(1) NULL DEFAULT NULL;",$brewing_db_table."_".$row_archive['archiveSuffix']);
+					mysqli_select_db($connection,$database);
+					mysqli_real_escape_string($connection,$updateSQL);
+					$result = mysqli_query($connection,$updateSQL);
+				}
+
+				if (!check_update("brewAdminNotes",$brewing_db_table."_".$row_archive['archiveSuffix'])) {
+					$updateSQL = sprintf("ALTER TABLE `%s` ADD `brewAdminNotes` char(1) NULL DEFAULT NULL;",$brewing_db_table."_".$row_archive['archiveSuffix']);
+					mysqli_select_db($connection,$database);
+					mysqli_real_escape_string($connection,$updateSQL);
+					$result = mysqli_query($connection,$updateSQL);
+				}
+
+				if (!check_update("brewPossAllergens",$brewing_db_table."_".$row_archive['archiveSuffix'])) {
+					$updateSQL = sprintf("ALTER TABLE `%s` ADD `brewPossAllergens` char(1) NULL DEFAULT NULL;",$brewing_db_table."_".$row_archive['archiveSuffix']);
+					mysqli_select_db($connection,$database);
+					mysqli_real_escape_string($connection,$updateSQL);
+					$result = mysqli_query($connection,$updateSQL);
+				}
+
+				if (!check_update("brewJudgingNumber",$brewing_db_table."_".$row_archive['archiveSuffix'])) {
+					$updateSQL = sprintf("ALTER TABLE `%s` ADD `brewJudging` int(6) NULL DEFAULT NULL;",$brewing_db_table."_".$row_archive['archiveSuffix']);
+					mysqli_select_db($connection,$database);
+					mysqli_real_escape_string($connection,$updateSQL);
+					$result = mysqli_query($connection,$updateSQL);
+				}
+
+			}
+
+		}
+
+		if (check_setup($prefix."judging_scores_".$row_archive['archiveSuffix'],$database)) {
+			if (get_archive_count($prefix."judging_scores_".$row_archive['archiveSuffix']) > 0) {
+        		$updateSQL = sprintf("UPDATE `%s` SET archiveDisplayWinners='Y' WHERE archiveSuffix='%s';", $prefix."archive",$row_archive['archiveSuffix']);
+				mysqli_real_escape_string($connection,$updateSQL);
+				$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+        	}
 		}
 
 	} while ($row_archive = mysqli_fetch_assoc($archive));

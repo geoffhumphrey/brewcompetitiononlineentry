@@ -34,19 +34,19 @@ if ((!pay_to_print($_SESSION['prefsPayToPrint'],$brewing_info['brewPaid'])) && (
 
 $category_end = $_SESSION['style_set_category_end'];
 $brewing_id = sprintf("%06s",$brewing_info['id']);
-$brewer_info['brewerFirstName'] = strtr($brewer_info['brewerFirstName'],$html_remove);
-$brewing_info['brewName'] = strtr($brewing_info['brewName'],$html_remove);
+$brewer_info['brewerFirstName'] = html_entity_decode($brewer_info['brewerFirstName']);
+$brewing_info['brewName'] = html_entity_decode($brewing_info['brewName']);
 $style_entry = $brewing_info['brewCategory']."-".$brewing_info['brewSubCategory'];
 
 $brewing_info['brewInfo'] = str_replace("^"," | ",$brewing_info['brewInfo']);
-$brewing_info['brewInfo'] = strtr($brewing_info['brewInfo'],$html_remove);
-$brewer_info['brewerFirstName'] = strtr($brewer_info['brewerFirstName'],$html_remove);
-$brewer_info['brewerLastName'] = strtr($brewer_info['brewerLastName'],$html_remove);
-$brewer_info['brewerAddress'] = strtr($brewer_info['brewerAddress'],$html_remove);
-$brewer_info['brewerCity'] = strtr($brewer_info['brewerCity'],$html_remove);
-$brewer_info['brewerState'] = strtr($brewer_info['brewerState'],$html_remove);
-$brewer_info['brewerClubs'] = strtr($brewer_info['brewerClubs'],$html_remove);
-$brewer_info['brewerEmail'] = strtr($brewer_info['brewerEmail'],$html_remove);
+$brewing_info['brewInfo'] = html_entity_decode($brewing_info['brewInfo']);
+$brewer_info['brewerFirstName'] = html_entity_decode($brewer_info['brewerFirstName']);
+$brewer_info['brewerLastName'] = html_entity_decode($brewer_info['brewerLastName']);
+$brewer_info['brewerAddress'] = html_entity_decode($brewer_info['brewerAddress']);
+$brewer_info['brewerCity'] = html_entity_decode($brewer_info['brewerCity']);
+$brewer_info['brewerState'] = html_entity_decode($brewer_info['brewerState']);
+$brewer_info['brewerClubs'] = html_entity_decode($brewer_info['brewerClubs']);
+$brewer_info['brewerEmail'] = html_entity_decode($brewer_info['brewerEmail']);
 
 if ($brewer_info['brewerCountry'] = "United States") {
 	$brewer_info['brewerPhone1'] = format_phone_us($brewer_info['brewerPhone1']);
@@ -189,7 +189,7 @@ if (!in_array($_SESSION['prefsEntryForm'],$no_entry_form_array)) {
 	$brewing_info['grains']=array();
 	for ($i=1; $i <= 20; $i++) {
 	  if ($brewing_info['brewGrain'.$i] != "") {
-		$brewing_info['grains'][$i]['name']=strtr($brewing_info['brewGrain'.$i],$html_remove);;
+		$brewing_info['grains'][$i]['name']=html_entity_decode($brewing_info['brewGrain'.$i]);;
 
 		// Metric/US conversion
 		if ($_SESSION['prefsWeight2'] == "kilograms") {
@@ -211,7 +211,7 @@ if (!in_array($_SESSION['prefsEntryForm'],$no_entry_form_array)) {
 	$brewing_info['extracts']=array();
 	for ($i=1; $i <= 10; $i++) {
 	  if (isset($brewing_info['brewExtract'.$i])) {
-		$brewing_info['extracts'][$i]['name']=strtr($brewing_info['brewExtract'.$i],$html_remove);;
+		$brewing_info['extracts'][$i]['name']=html_entity_decode($brewing_info['brewExtract'.$i]);;
 
 		// Metric/US conversion
 		if ($_SESSION['prefsWeight2'] == "kilograms") {
@@ -233,7 +233,7 @@ if (!in_array($_SESSION['prefsEntryForm'],$no_entry_form_array)) {
 	$brewing_info['adjuncts']=array();
 	for ($i=1; $i <= 20; $i++) {
 	  if (isset($brewing_info['brewAddition'.$i])) {
-		$brewing_info['adjuncts'][$i]['name']=strtr($brewing_info['brewAddition'.$i],$html_remove);;
+		$brewing_info['adjuncts'][$i]['name']=html_entity_decode($brewing_info['brewAddition'.$i]);;
 
 		// Metric/US conversion
 		if ($_SESSION['prefsWeight2'] == "kilograms") {
@@ -274,7 +274,7 @@ if (!in_array($_SESSION['prefsEntryForm'],$no_entry_form_array)) {
 	$brewing_info['hops']=array();
 	for ($i=1; $i <= 20; $i++) {
 	  if (isset($brewing_info['brewHops'.$i])) {
-		$brewing_info['hops'][$i]['name'] = strtr($brewing_info['brewHops'.$i],$html_remove);
+		$brewing_info['hops'][$i]['name'] = html_entity_decode($brewing_info['brewHops'.$i]);
 		$brewing_info['hops'][$i]['alphaAcid'] = $brewing_info['brewHops'.$i.'IBU'];
 		$brewing_info['hops'][$i]['minutes'] = $brewing_info['brewHops'.$i.'Time'];
 		$brewing_info['hops'][$i]['use'] = $brewing_info['brewHops'.$i.'Use'];
@@ -300,7 +300,7 @@ if (!in_array($_SESSION['prefsEntryForm'],$no_entry_form_array)) {
 	$brewing_info['mashSteps']=array();
 	for ($i=1; $i <= 10; $i++) {
 	  if (isset($brewing_info['brewMashStep'.$i.'Temp'])) {
-		$brewing_info['mashSteps'][$i]['name']=strtr($brewing_info['brewMashStep'.$i.'Name'],$html_remove);
+		$brewing_info['mashSteps'][$i]['name']=html_entity_decode($brewing_info['brewMashStep'.$i.'Name']);
 		$brewing_info['mashSteps'][$i]['minutes']=$brewing_info['brewMashStep'.$i.'Time'];
 		$totalMash+=$brewing_info['mashSteps'][$i]['minutes'];
 		// Metric/US conversion

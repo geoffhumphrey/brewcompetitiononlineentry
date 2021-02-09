@@ -1388,7 +1388,7 @@ if (($row_limits['prefsShowBestBrewer'] != 0) || ($row_limits['prefsShowBestClub
 							</div>
 							<div class="col col-lg-8 col-md-8 col-sm-8 col-xs-8">
 								<ul class="list-inline">
-									<li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=results&amp;go=judging_scores_bos&amp;action=print&amp;filter=bos&amp;view=default" title="BOS Round(s) Results Report">Print</a></li>
+									<li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=results&amp;go=judging_scores_bos&amp;action=print&amp;tb=bos&amp;view=default" title="BOS Round(s) Results Report">Print</a></li>
 									<li><a class="hide-loader" href="<?php echo $base_url; ?>output/export.output.php?section=results&amp;go=judging_scores_bos&amp;action=download&amp;filter=default&amp;view=pdf">PDF</a></li>
                                     <li><a class="hide-loader" href="<?php echo $base_url; ?>output/export.output.php?section=results&amp;go=judging_scores_bos&amp;action=download&amp;filter=default&amp;view=html">HTML</a></li>
 								</ul>
@@ -1401,7 +1401,7 @@ if (($row_limits['prefsShowBestBrewer'] != 0) || ($row_limits['prefsShowBestClub
                             </div>
                             <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-8">
                                 <ul class="list-inline">
-                                    <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=results&amp;go=best&amp;action=print&amp;filter=bos&amp;view=default" title="Best Brewer and/or Club Results Report">Print</a></li>
+                                    <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=results&amp;go=best&amp;action=print&amp;tb=bos&amp;view=default" title="Best Brewer and/or Club Results Report">Print</a></li>
                                     <!--
                                     <li><a href="<?php echo $base_url; ?>output/export.output.php?section=results&amp;go=best&amp;action=download&amp;filter=default&amp;view=pdf">PDF</a></li>
                                     <li><a href="<?php echo $base_url; ?>output/export.output.php?section=results&amp;go=best&amp;action=download&amp;filter=default&amp;view=html">HTML</a></li>
@@ -1416,16 +1416,16 @@ if (($row_limits['prefsShowBestBrewer'] != 0) || ($row_limits['prefsShowBestClub
                             </div>
                             <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-8">
                                 <ul class="list-inline">
-                                    <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=results&amp;go=judging_scores&amp;action=print&amp;filter=scores&amp;view=default" data-toggle="tooltip" data-placement="top" title="Print all entry results with scores listed">All with Scores</a></li>
-                                    <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=results&amp;go=judging_scores&amp;action=print&amp;filter=scores&amp;view=winners" data-toggle="tooltip" data-placement="top" title="Print winners only results with scores listed">Winners Only with Scores</a></li>
+                                    <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=results&amp;go=judging_scores&amp;action=print&amp;tb=scores&amp;view=default" data-toggle="tooltip" data-placement="top" title="Print all entry results with scores listed">All with Scores</a></li>
+                                    <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=results&amp;go=judging_scores&amp;action=print&amp;tb=scores&amp;view=winners" data-toggle="tooltip" data-placement="top" title="Print winners only results with scores listed">Winners Only with Scores</a></li>
                                 </ul>
                                 <ul class="list-inline">
-                                    <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=results&amp;go=judging_scores&amp;action=print&amp;filter=none&amp;view=default" data-toggle="tooltip" data-placement="top" title="Print all entry results without scores listed">All without Scores</a></li>
-                                    <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=results&amp;go=judging_scores&amp;action=print&amp;filter=none&amp;view=winners" data-toggle="tooltip" data-placement="top" title="Print winners only results without scores listed">Winners Only without Scores</a></li>
+                                    <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=results&amp;go=judging_scores&amp;action=print&amp;tb=none&amp;view=default" data-toggle="tooltip" data-placement="top" title="Print all entry results without scores listed">All without Scores</a></li>
+                                    <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=results&amp;go=judging_scores&amp;action=print&amp;tb=none&amp;view=winners" data-toggle="tooltip" data-placement="top" title="Print winners only results without scores listed">Winners Only without Scores</a></li>
                                 </ul>
                                 <ul class="list-inline">
-                                    <li><a class="hide-loader" href="<?php echo $base_url; ?>output/export.output.php?section=results&amp;go=judging_scores&amp;action=default&amp;filter=none&amp;view=pdf" data-toggle="tooltip" data-placement="top" title="Download a PDF report of results - winners only without scores">PDF</a></li>
-                                    <li><a class="hide-loader" href="<?php echo $base_url; ?>output/export.output.php?section=results&amp;go=judging_scores&amp;action=default&amp;filter=none&amp;view=html" data-toggle="tooltip" data-placement="top" title="Download a HTML report of results to copy/paste into another website - winners only without scores">HTML</a></li>
+                                    <li><a class="hide-loader" href="<?php echo $base_url; ?>output/export.output.php?section=results&amp;go=judging_scores&amp;action=default&amp;tb=none&amp;view=pdf" data-toggle="tooltip" data-placement="top" title="Download a PDF report of results - winners only without scores">PDF</a></li>
+                                    <li><a class="hide-loader" href="<?php echo $base_url; ?>output/export.output.php?section=results&amp;go=judging_scores&amp;action=default&amp;tb=none&amp;view=html" data-toggle="tooltip" data-placement="top" title="Download a HTML report of results to copy/paste into another website - winners only without scores">HTML</a></li>
                                 </ul>
                             </div>
                         </div><!-- ./row -->
@@ -1592,7 +1592,7 @@ if (($row_limits['prefsShowBestBrewer'] != 0) || ($row_limits['prefsShowBestClub
                             <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-8">
                                 <ul class="list-unstyled">
                                     <li><a class="hide-loader" href="<?php echo $base_url; ?>output/export.output.php?section=participants&amp;go=csv">All Participants</a></li>
-                                    <li><a class="hide-loader" href="<?php echo $base_url; ?>output/export.output.php?section=entries&amp;go=csv&amp;filter=winners">Winners</a></li>
+                                    <li><a class="hide-loader" href="<?php echo $base_url; ?>output/export.output.php?section=entries&amp;go=csv&amp;tb=winners">Winners</a></li>
                                 </ul>
                             </div>
                         </div><!-- ./row -->
@@ -1602,15 +1602,15 @@ if (($row_limits['prefsShowBestBrewer'] != 0) || ($row_limits['prefsShowBestClub
                             </div>
                             <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-8">
                                 <ul class="list-unstyled">
-									<li><a class="hide-loader" href="<?php echo $base_url; ?>output/export.output.php?section=entries&amp;go=csv&amp;action=all&amp;filter=all">All Entries: All Data</a></li>
+									<li><a class="hide-loader" href="<?php echo $base_url; ?>output/export.output.php?section=entries&amp;go=csv&amp;action=all&amp;tb=all">All Entries: All Data</a></li>
 									<li><a class="hide-loader" href="<?php echo $base_url; ?>output/export.output.php?section=entries&amp;go=csv">All Entries: Limited Data</a></li>
-                                    <li><a class="hide-loader" href="<?php echo $base_url; ?>output/export.output.php?section=entries&amp;go=csv&amp;filter=brewer_contact_info">All Entries: Limited Data with Brewer Contact Info</a></li>
-									<li><a class="hide-loader" href="<?php echo $base_url; ?>output/export.output.php?section=entries&amp;go=csv&amp;filter=paid&amp;view=all">Paid Entries</a></li>
-									<li><a class="hide-loader" href="<?php echo $base_url; ?>output/export.output.php?section=entries&amp;go=csv&amp;filter=paid">Paid &amp; Received Entries</a></li>
-									<li><a class="hide-loader" href="<?php echo $base_url; ?>output/export.output.php?section=entries&amp;go=csv&amp;filter=paid&amp;view=not_received">Paid Entries Not Received</a></li>
-                                    <li><a class="hide-loader" href="<?php echo $base_url; ?>output/export.output.php?section=entries&amp;go=csv&amp;filter=nopay&amp;view=all">Non-Paid Entries</a></li>
-									<li><a class="hide-loader" href="<?php echo $base_url; ?>output/export.output.php?section=entries&amp;go=csv&amp;filter=nopay">Non-Paid &amp; Received Entries</a></li>
-									<li><a class="hide-loader" href="<?php echo $base_url; ?>output/export.output.php?section=entries&amp;go=csv&amp;action=required&amp;filter=required">Entries with Required &amp; Optional Info</a></li>
+                                    <li><a class="hide-loader" href="<?php echo $base_url; ?>output/export.output.php?section=entries&amp;go=csv&amp;tb=brewer_contact_info">All Entries: Limited Data with Brewer Contact Info</a></li>
+									<li><a class="hide-loader" href="<?php echo $base_url; ?>output/export.output.php?section=entries&amp;go=csv&amp;tb=paid&amp;view=all">Paid Entries</a></li>
+									<li><a class="hide-loader" href="<?php echo $base_url; ?>output/export.output.php?section=entries&amp;go=csv&amp;tb=paid">Paid &amp; Received Entries</a></li>
+									<li><a class="hide-loader" href="<?php echo $base_url; ?>output/export.output.php?section=entries&amp;go=csv&amp;tb=paid&amp;view=not_received">Paid Entries Not Received</a></li>
+                                    <li><a class="hide-loader" href="<?php echo $base_url; ?>output/export.output.php?section=entries&amp;go=csv&amp;tb=nopay&amp;view=all">Non-Paid Entries</a></li>
+									<li><a class="hide-loader" href="<?php echo $base_url; ?>output/export.output.php?section=entries&amp;go=csv&amp;tb=nopay">Non-Paid &amp; Received Entries</a></li>
+									<li><a class="hide-loader" href="<?php echo $base_url; ?>output/export.output.php?section=entries&amp;go=csv&amp;action=required&amp;tb=required">Entries with Required &amp; Optional Info</a></li>
                                 </ul>
                             </div>
                         </div><!-- ./row -->

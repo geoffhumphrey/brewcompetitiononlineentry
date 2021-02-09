@@ -93,7 +93,7 @@ if ($row_scored_entries['count'] > 0) {
 				$table_head1 .= sprintf("<th><span class=\"hidden-xs hidden-sm hidden-md\">%s </span>%s</th>",$label_entry,$label_name);
 				$table_head1 .= sprintf("<th>%s</th>",$label_style);
 				if ($_SESSION['prefsProEdition'] == 0) $table_head1 .= sprintf("<th width=\"24%%\">%s</th>",$label_club);
-				if ($filter == "scores") $table_head1 .= sprintf("<th width=\"1%%\" nowrap>Score</th>",$label_score);
+				if ($tb == "scores") $table_head1 .= sprintf("<th width=\"1%%\" nowrap>Score</th>",$label_score);
 				$table_head1 .= "</tr>";
 
 				// Build table body
@@ -142,7 +142,7 @@ if ($row_scored_entries['count'] > 0) {
 						$table_body1 .= "</td>";
 					}
 
-					if ($filter == "scores") {
+					if ($tb == "scores") {
 						$table_body1 .= "<td width=\"1%\" nowrap>";
 						if (!empty($row_scores['scoreEntry'])) $table_body1 .= $row_scores['scoreEntry'];
 						else $table_body1 .= "&nbsp;";
@@ -176,7 +176,7 @@ if ($row_scored_entries['count'] > 0) {
 				{ "asSorting": [  ] },
 				{ "asSorting": [  ] },
 				<?php if ($_SESSION['prefsProEdition'] == 0) { ?>{ "asSorting": [  ] },<?php } ?>
-				{ "asSorting": [  ] }<?php if ($filter == "scores") { ?>,
+				{ "asSorting": [  ] }<?php if ($tb == "scores") { ?>,
 				{ "asSorting": [  ] }
 				<?php } ?>
 				]

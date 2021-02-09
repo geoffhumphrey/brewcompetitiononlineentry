@@ -57,7 +57,6 @@ $header1_30 = "";
 $message1 = sprintf("<div class=\"alert alert-warning\"><span class=\"fa fa-lg fa-exclamation-triangle\"> %s <a href='index.php?section=admin&amp;action=add&amp;go=dropoff'>%s</a></div>",$default_page_text_000,$default_page_text_001);
 $message2 = sprintf("<div class=\"alert alert-warning\"><span class=\"fa fa-lg fa-exclamation-triangle\"> %s <a href='index.php?section=admin&amp;action=add&amp;go=judging'>%s</a></div>",$default_page_text_002,$default_page_text_003);
 
-
 if ((judging_date_return() == 0) && ($registration_open == 2) && ($entry_window_open == 2)) {
 
 	include (SECTIONS.'judge_closed.sec.php');
@@ -93,42 +92,46 @@ if ((judging_date_return() == 0) && ($registration_open == 2) && ($entry_window_
 
 else {
 
-	if ($logged_in) $primary_page_info .= sprintf("<p class=\"lead\">%s %s! <small><a href=\"%s\" data-toggle=\"tooltip\" title=\"%s\">%s</a></small></p>",$default_page_text_006,$_SESSION['brewerFirstName'],build_public_url("list","default","default","default",$sef,$base_url),$default_page_text_007,$default_page_text_008);
-	$primary_page_info .= "<p class='lead'>";
-	$primary_page_info .= sprintf("%s %s %s ",$default_page_text_022, $_SESSION['contestName'], $default_page_text_023);
-	if ($_SESSION['contestHostWebsite'] != "") $primary_page_info .= sprintf("<a class='hide-loader' href='%s' target='_blank'>%s</a>",$_SESSION['contestHostWebsite'],$_SESSION['contestHost']);
-	else $primary_page_info .= $_SESSION['contestHost'];
-	if (!empty($_SESSION['contestHostLocation'])) $primary_page_info .= sprintf(", %s",$_SESSION['contestHostLocation']);
-	$primary_page_info .= ".</p>";
+	if ($section != "past-winners") {
+		if ($logged_in) $primary_page_info .= sprintf("<p class=\"lead\">%s %s! <small><a href=\"%s\" data-toggle=\"tooltip\" title=\"%s\">%s</a></small></p>",$default_page_text_006,$_SESSION['brewerFirstName'],build_public_url("list","default","default","default",$sef,$base_url),$default_page_text_007,$default_page_text_008);
+		$primary_page_info .= "<p class='lead'>";
+		$primary_page_info .= sprintf("%s %s %s ",$default_page_text_022, $_SESSION['contestName'], $default_page_text_023);
+		if ($_SESSION['contestHostWebsite'] != "") $primary_page_info .= sprintf("<a class='hide-loader' href='%s' target='_blank'>%s</a>",$_SESSION['contestHostWebsite'],$_SESSION['contestHost']);
+		else $primary_page_info .= $_SESSION['contestHost'];
+		if (!empty($_SESSION['contestHostLocation'])) $primary_page_info .= sprintf(", %s",$_SESSION['contestHostLocation']);
+		$primary_page_info .= ".</p>";
 
-	if (!isset($_SESSION['loginUsername'])) {
-		$page_info .= "<p class='lead'><small>".$default_page_text_011;
-		if ($_SESSION['prefsPaypal'] == "Y") $page_info .= " ".$default_page_text_012;
-		$page_info .= "</small></p>";
+		if (!isset($_SESSION['loginUsername'])) {
+			$page_info .= "<p class='lead'><small>".$default_page_text_011;
+			if ($_SESSION['prefsPaypal'] == "Y") $page_info .= " ".$default_page_text_012;
+			$page_info .= "</small></p>";
+		}
+
+		$contact_count = get_contact_count();
+		// Competition Officials
+		if ($contact_count > 0) {
+			if ($contact_count == 1) $header1_10 .= "<a name='officials'></a><h2>".$default_page_text_013."</h2>";
+			else $header1_10 .= "<a name='officials'></a><h2>".$default_page_text_014."</h2>";
+			if ($action != "print") $page_info10 .= sprintf("<p>%s <a href='%s'>%s</a>.</p>",$default_page_text_015,build_public_url("contact","default","default","default",$sef,$base_url),$label_contact);
+			$page_info10 .= "<ul>";
+			do {
+				$page_info10 .= "<li>";
+				$page_info10 .= $row_contact['contactFirstName']." ".$row_contact['contactLastName']." &mdash; ".$row_contact['contactPosition'];
+				if ($action == "print") $page_info10 .= " (".$row_contact['contactEmail'].")";
+				$page_info10 .= "</li>";
+			} while ($row_contact = mysqli_fetch_assoc($contact));
+			$page_info10 .= "</ul>";
+		}
+
+		if (($_SESSION['prefsSponsors'] == "Y") && ($totalRows_sponsors > 0)) {
+			$header1_30 = "<h1>".$label_sponsors."</h1>";
+			 $page_info30 .= sprintf("<p>%s %s ",$_SESSION['contestHost'],$default_page_text_016);
+			if ($_SESSION['prefsSponsorLogos'] == "Y") $page_info30 .= sprintf("<a href='%s'>%s</a>",build_public_url("sponsors","default","default","default",$sef,$base_url),strtolower($label_sponsors)); else $page_info20 .= "sponsors";
+	        $page_info30 .= sprintf(" %s %s.",$default_page_text_017,$_SESSION['contestName']);
+		}
 	}
 
-	$contact_count = get_contact_count();
-	// Competition Officials
-	if ($contact_count > 0) {
-		if ($contact_count == 1) $header1_10 .= "<a name='officials'></a><h2>".$default_page_text_013."</h2>";
-		else $header1_10 .= "<a name='officials'></a><h2>".$default_page_text_014."</h2>";
-		if ($action != "print") $page_info10 .= sprintf("<p>%s <a href='%s'>%s</a>.</p>",$default_page_text_015,build_public_url("contact","default","default","default",$sef,$base_url),$label_contact);
-		$page_info10 .= "<ul>";
-		do {
-			$page_info10 .= "<li>";
-			$page_info10 .= $row_contact['contactFirstName']." ".$row_contact['contactLastName']." &mdash; ".$row_contact['contactPosition'];
-			if ($action == "print") $page_info10 .= " (".$row_contact['contactEmail'].")";
-			$page_info10 .= "</li>";
-		} while ($row_contact = mysqli_fetch_assoc($contact));
-		$page_info10 .= "</ul>";
-	}
-
-	if (($_SESSION['prefsSponsors'] == "Y") && ($totalRows_sponsors > 0)) {
-		$header1_30 = "<h1>".$label_sponsors."</h1>";
-		 $page_info30 .= sprintf("<p>%s %s ",$_SESSION['contestHost'],$default_page_text_016);
-		if ($_SESSION['prefsSponsorLogos'] == "Y") $page_info30 .= sprintf("<a href='%s'>%s</a>",build_public_url("sponsors","default","default","default",$sef,$base_url),strtolower($label_sponsors)); else $page_info20 .= "sponsors";
-        $page_info30 .= sprintf(" %s %s.",$default_page_text_017,$_SESSION['contestName']);
-	}
+		
 }
 
 
@@ -225,16 +228,19 @@ else {
 
 if ($section == "past-winners") {
 
-	include (DB.'score_count.db.php');
+	if ($archive_winner_display) {
+		
+		include (DB.'score_count.db.php');
 
-	echo $header1_10;
-	echo $page_info10;
-	include (SECTIONS.'bos.sec.php');
+		echo $header1_10;
+		echo $page_info10;
+		include (SECTIONS.'bos.sec.php');
 
-	echo $header1_20;
-	if ($winner_method == "1") include (SECTIONS.'winners_category.sec.php');
-	elseif ($winner_method == "2") include (SECTIONS.'winners_subcategory.sec.php');
-	else include (SECTIONS.'winners.sec.php');
+		echo $header1_20;
+		if ($winner_method == "1") include (SECTIONS.'winners_category.sec.php');
+		elseif ($winner_method == "2") include (SECTIONS.'winners_subcategory.sec.php');
+		else include (SECTIONS.'winners.sec.php');
+	}
 
 }
 

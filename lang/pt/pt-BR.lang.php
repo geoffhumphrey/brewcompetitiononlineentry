@@ -1484,6 +1484,7 @@ $label_paid_entries = "Entradas Pagas";
 $alert_text_086 = "O Internet Explorer não é compatível com o BCOE&M - recursos e funções não serão renderizados corretamente e sua experiência não será a ideal. Por favor, atualize para um navegador mais recente.";
 $alert_text_087 = "Para uma experiência ideal e para que todos os recursos e funções sejam executados corretamente, habilite o JavaScript para continuar usando este site. Caso contrário, ocorrerá um comportamento inesperado.";
 $alert_text_088 = "A apresentação dos prêmios estará disponível publicamente após a publicação dos resultados.";
+$alert_text_089 = "Os dados arquivados não estão disponíveis.";
 
 $brewer_entries_text_025 = "Imprimir folhas de pontuação dos juízes";
 

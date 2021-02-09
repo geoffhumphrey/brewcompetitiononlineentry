@@ -23,8 +23,8 @@ do {
 		display_place($row_bos['scorePlace'],1),
 		"Best of Show",
 		style_type($row_bos['scoreType'],"3","default"),
-		strtr($row_entries['brewBrewerFirstName'],$html_remove)." ".strtr($row_entries['brewBrewerLastName'],$html_remove),
-		strtr(trim($row_entries['brewName']),$html_remove),
+		html_entity_decode($row_entries['brewBrewerFirstName'])." ".html_entity_decode($row_entries['brewBrewerLastName']),
+		html_entity_decode(trim($row_entries['brewName'])),
 		$row_entries['brewStyle']
 		);
 		$text = iconv('UTF-8', 'windows-1252', $text);
@@ -194,8 +194,8 @@ else { // Output by Table.
 				$text = sprintf("\n%s\n%s\n%s\n'%s'\n%s",
 					$display_place,
 					$table_name,
-					strtr($brewer_name,$html_remove),
-					strtr($entry_name,$html_remove),
+					html_entity_decode($brewer_name),
+					html_entity_decode($entry_name),
 					$style_name
 				);
 
@@ -206,8 +206,8 @@ else { // Output by Table.
 				$text = sprintf("\n%s\n%s\n%s\n'%s'\n%s",
 					$display_place,
 					$table_name,
-					strtr($brewer_name,$html_remove),
-					strtr($entry_name,$html_remove),
+					html_entity_decode($brewer_name),
+					html_entity_decode($entry_name),
 					$style_name
 				);
 

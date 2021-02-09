@@ -22,9 +22,48 @@ if ($_SESSION['prefsWinnerMethod'] == 0) {
 
 			if ($row_brewer['brewerCountry'] == "United States") $phone = format_phone_us($row_brewer['brewerPhone1']); else $phone = $row_brewer['brewerPhone1'];
 
-			if ($_SESSION['prefsProEdition'] == 1) $a[] = array($row_sql['tableNumber'],$row_sql['tableName'],$row_entries['brewCategory'],$row_entries['brewSubCategory'],iconv("UTF-8", "ISO-8859-1//TRANSLIT",$row_entries['brewStyle']),$row_scores['scorePlace'],strtr($row_brewer['brewerLastName'],$html_remove),strtr($row_brewer['brewerFirstName'],$html_remove),$row_brewer['brewerBreweryName'],$row_brewer['brewerBreweryTTB'],$row_brewer['brewerEmail'],$row_brewer['brewerAddress'],$row_brewer['brewerCity'],$row_brewer['brewerState'],$row_brewer['brewerZip'],$row_brewer['brewerCountry'],$phone,strtr($row_entries['brewName'],$html_remove),$row_brewer['brewerClubs'],$row_entries['brewCoBrewer']);
+			if ($_SESSION['prefsProEdition'] == 1) $a[] = array(
+				$row_sql['tableNumber'],
+				html_entity_decode($row_sql['tableName']),
+				$row_entries['brewCategory'],
+				$row_entries['brewSubCategory'],
+				iconv("UTF-8", "ISO-8859-1//TRANSLIT",$row_entries['brewStyle']),
+				$row_scores['scorePlace'],
+				html_entity_decode($row_brewer['brewerLastName']),
+				html_entity_decode($row_brewer['brewerFirstName']),
+				html_entity_decode($row_brewer['brewerBreweryName']),
+				$row_brewer['brewerBreweryTTB'],
+				$row_brewer['brewerEmail'],
+				html_entity_decode($row_brewer['brewerAddress']),
+				html_entity_decode($row_brewer['brewerCity']),
+				html_entity_decode($row_brewer['brewerState']),
+				html_entity_decode($row_brewer['brewerZip']),
+				html_entity_decode($row_brewer['brewerCountry']),
+				$phone,
+				html_entity_decode($row_entries['brewName']),
+				$row_brewer['brewerClubs'],
+				html_entity_decode($row_entries['brewCoBrewer'])
+			);
 
-			else $a[] = array($row_sql['tableNumber'],$row_sql['tableName'],$row_entries['brewCategory'],$row_entries['brewSubCategory'],iconv("UTF-8", "ISO-8859-1//TRANSLIT",$row_entries['brewStyle']),$row_scores['scorePlace'],strtr($row_brewer['brewerLastName'],$html_remove),strtr($row_brewer['brewerFirstName'],$html_remove),$row_brewer['brewerEmail'],$row_brewer['brewerAddress'],$row_brewer['brewerCity'],$row_brewer['brewerState'],$row_brewer['brewerZip'],$row_brewer['brewerCountry'],$phone,strtr($row_entries['brewName'],$html_remove),$row_brewer['brewerClubs'],$row_entries['brewCoBrewer']);
+			else $a[] = array(
+				$row_sql['tableNumber'],
+				html_entity_decode($row_sql['tableName']),
+				$row_entries['brewCategory'],
+				$row_entries['brewSubCategory'],
+				iconv("UTF-8", "ISO-8859-1//TRANSLIT",$row_entries['brewStyle']),
+				$row_scores['scorePlace'],
+				html_entity_decode($row_brewer['brewerLastName']),
+				html_entity_decode($row_brewer['brewerFirstName']),
+				$row_brewer['brewerEmail'],
+				html_entity_decode($row_brewer['brewerAddress']),
+				html_entity_decode($row_brewer['brewerCity']),
+				html_entity_decode($row_brewer['brewerState']),
+				html_entity_decode($row_brewer['brewerZip']),
+				html_entity_decode($row_brewer['brewerCountry']),
+				$phone,html_entity_decode($row_entries['brewName']),
+				html_entity_decode($row_brewer['brewerClubs']),
+				html_entity_decode($row_entries['brewCoBrewer'])
+			);
 
 		} while ($row_scores = mysqli_fetch_assoc($scores));
 	}
@@ -65,9 +104,49 @@ if ($_SESSION['prefsWinnerMethod'] == 1) {
 
 				if ($row_scores['brewerCountry'] == "United States") $phone = format_phone_us($row_scores['brewerPhone1']); else $phone = $row_scores['brewerPhone1'];
 
-				if ($_SESSION['prefsProEdition'] == 1) $a[] = array($row_table_name['tableNumber'],strtr($row_table_name['tableName'],$html_remove),$row_scores['brewCategory'],$row_scores['brewSubCategory'],iconv("UTF-8", "ISO-8859-1//TRANSLIT",$row_scores['brewStyle']),$row_scores['scorePlace'],strtr($row_scores['brewerLastName'],$html_remove),strtr($row_scores['brewerFirstName'],$html_remove),$row_scores['brewerBreweryName'],$row_scores['brewerBreweryTTB'],$row_scores['brewerEmail'],$row_scores['brewerAddress'],$row_scores['brewerCity'],$row_scores['brewerState'],$row_scores['brewerZip'],$row_scores['brewerCountry'],$phone,strtr($row_scores['brewName'],$html_remove),$row_scores['brewerClubs'],$row_scores['brewCoBrewer']);
+				if ($_SESSION['prefsProEdition'] == 1) $a[] = array(
+					$row_table_name['tableNumber'],
+					html_entity_decode($row_table_name['tableName']),
+					$row_scores['brewCategory'],
+					$row_scores['brewSubCategory'],
+					iconv("UTF-8", "ISO-8859-1//TRANSLIT",$row_scores['brewStyle']),
+					$row_scores['scorePlace'],
+					html_entity_decode($row_scores['brewerLastName']),
+					html_entity_decode($row_scores['brewerFirstName']),
+					html_entity_decode($row_scores['brewerBreweryName']),
+					html_entity_decode($row_scores['brewerBreweryTTB']),
+					html_entity_decode($row_scores['brewerEmail']),
+					html_entity_decode($row_scores['brewerAddress']),
+					html_entity_decode($row_scores['brewerCity']),
+					html_entity_decode($row_scores['brewerState']),
+					html_entity_decode($row_scores['brewerZip']),
+					html_entity_decode($row_scores['brewerCountry']),
+					$phone,
+					html_entity_decode($row_scores['brewName']),
+					html_entity_decode($row_scores['brewerClubs']),
+					html_entity_decode($row_scores['brewCoBrewer'])
+				);
 
-				else $a[] = array($row_table_name['tableNumber'],strtr($row_table_name['tableName'],$html_remove),$row_scores['brewCategory'],$row_scores['brewSubCategory'],iconv("UTF-8", "ISO-8859-1//TRANSLIT",$row_scores['brewStyle']),$row_scores['scorePlace'],strtr($row_scores['brewerLastName'],$html_remove),strtr($row_scores['brewerFirstName'],$html_remove),$row_scores['brewerEmail'],$row_scores['brewerAddress'],$row_scores['brewerCity'],$row_scores['brewerState'],$row_scores['brewerZip'],$row_scores['brewerCountry'],$phone,strtr($row_scores['brewName'],$html_remove),$row_scores['brewerClubs'],$row_scores['brewCoBrewer']);
+				else $a[] = array(
+					$row_table_name['tableNumber'],
+					html_entity_decode($row_table_name['tableName']),
+					$row_scores['brewCategory'],
+					$row_scores['brewSubCategory'],
+					iconv("UTF-8", "ISO-8859-1//TRANSLIT",$row_scores['brewStyle']),
+					$row_scores['scorePlace'],
+					html_entity_decode($row_scores['brewerLastName']),
+					html_entity_decode($row_scores['brewerFirstName']),
+					html_entity_decode($row_scores['brewerEmail']),
+					html_entity_decode($row_scores['brewerAddress']),
+					html_entity_decode($row_scores['brewerCity']),
+					html_entity_decode($row_scores['brewerState']),
+					html_entity_decode($row_scores['brewerZip']),
+					html_entity_decode($row_scores['brewerCountry']),
+					$phone,
+					html_entity_decode($row_scores['brewName']),
+					html_entity_decode($row_scores['brewerClubs']),
+					html_entity_decode($row_scores['brewCoBrewer'])
+				);
 
 			} while ($row_scores = mysqli_fetch_assoc($scores));
 		}
@@ -115,11 +194,52 @@ if ($_SESSION['prefsWinnerMethod'] == 2) {
 
 				if (!empty($row_scores['scorePlace'])) {
 
-					if ($row_scores['brewerCountry'] == "United States") $phone = format_phone_us($row_scores['brewerPhone1']); else $phone = $row_scores['brewerPhone1'];
+					if ($row_scores['brewerCountry'] == "United States") $phone = format_phone_us($row_scores['brewerPhone1']); 
+					else $phone = $row_scores['brewerPhone1'];
 
-					if ($_SESSION['prefsProEdition'] == 1)  $a[] = array($row_table_name['tableNumber'],strtr($row_table_name['tableName'],$html_remove),$row_scores['brewCategory'],$row_scores['brewSubCategory'],iconv("UTF-8", "ISO-8859-1//TRANSLIT",$row_scores['brewStyle']),$row_scores['scorePlace'],strtr($row_scores['brewerLastName'],$html_remove),strtr($row_scores['brewerFirstName'],$html_remove),$row_scores['brewerBreweryName'],$row_scores['brewerBreweryTTB'],$row_scores['brewerEmail'],$row_scores['brewerAddress'],$row_scores['brewerCity'],$row_scores['brewerState'],$row_scores['brewerZip'],$row_scores['brewerCountry'],$row_scores['brewerPhone1'],strtr($row_scores['brewName'],$html_remove),$row_scores['brewerClubs'],$row_scores['brewCoBrewer']);
+					if ($_SESSION['prefsProEdition'] == 1)  $a[] = array(
+						$row_table_name['tableNumber'],
+						html_entity_decode($row_table_name['tableName']),
+						$row_scores['brewCategory'],
+						$row_scores['brewSubCategory'],
+						iconv("UTF-8", "ISO-8859-1//TRANSLIT",$row_scores['brewStyle']),
+						$row_scores['scorePlace'],
+						html_entity_decode($row_scores['brewerLastName']),
+						html_entity_decode($row_scores['brewerFirstName']),
+						html_entity_decode($row_scores['brewerBreweryName']),
+						html_entity_decode($row_scores['brewerBreweryTTB']),
+						html_entity_decode($row_scores['brewerEmail']),
+						html_entity_decode($row_scores['brewerAddress']),
+						html_entity_decode($row_scores['brewerCity']),
+						html_entity_decode($row_scores['brewerState']),
+						html_entity_decode($row_scores['brewerZip']),
+						html_entity_decode($row_scores['brewerCountry']),
+						$phone,
+						html_entity_decode($row_scores['brewName']),
+						html_entity_decode($row_scores['brewerClubs']),
+						html_entity_decode($row_scores['brewCoBrewer'])
+					);
 
-					else $a[] = array($row_table_name['tableNumber'],strtr($row_table_name['tableName'],$html_remove),$row_scores['brewCategory'],$row_scores['brewSubCategory'],iconv("UTF-8", "ISO-8859-1//TRANSLIT",$row_scores['brewStyle']),$row_scores['scorePlace'],strtr($row_scores['brewerLastName'],$html_remove),strtr($row_scores['brewerFirstName'],$html_remove),$row_scores['brewerEmail'],$row_scores['brewerAddress'],$row_scores['brewerCity'],$row_scores['brewerState'],$row_scores['brewerZip'],$row_scores['brewerCountry'],$row_scores['brewerPhone1'],strtr($row_scores['brewName'],$html_remove),$row_scores['brewerClubs'],$row_scores['brewCoBrewer']);
+					else $a[] = array(
+						$row_table_name['tableNumber'],
+						html_entity_decode($row_table_name['tableName']),
+						$row_scores['brewCategory'],
+						$row_scores['brewSubCategory'],
+						iconv("UTF-8", "ISO-8859-1//TRANSLIT",$row_scores['brewStyle']),
+						$row_scores['scorePlace'],
+						html_entity_decode($row_scores['brewerLastName']),
+						html_entity_decode($row_scores['brewerFirstName']),
+						html_entity_decode($row_scores['brewerEmail']),
+						html_entity_decode($row_scores['brewerAddress']),
+						html_entity_decode($row_scores['brewerCity']),
+						html_entity_decode($row_scores['brewerState']),
+						html_entity_decode($row_scores['brewerZip']),
+						html_entity_decode($row_scores['brewerCountry']),
+						$phone,
+						html_entity_decode($row_scores['brewName']),
+						html_entity_decode($row_scores['brewerClubs']),
+						html_entity_decode($row_scores['brewCoBrewer'])
+					);
 				}
 
 			} while ($row_scores = mysqli_fetch_assoc($scores));

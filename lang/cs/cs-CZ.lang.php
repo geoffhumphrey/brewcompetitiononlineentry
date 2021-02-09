@@ -1497,6 +1497,7 @@ $label_paid_entries = "Již uhrazených vzorků";
 $alert_text_086 = "Prohlížeč Internet Explorer není BCOE&M podporován - zobrazení a funkce nebudou fungovat správně. Prosím, pořiďte si novější prohlížeč.";
 $alert_text_087 = "Pro optimální zážitek a správné fungování všech funkcí a funkcí povolte prosím JavaScript, abyste mohli nadále používat tento web. Jinak dojde k neočekávanému chování.";
 $alert_text_088 = "Prezentace cen bude veřejně k dispozici po zveřejnění výsledků.";
+$alert_text_089 = "Archivovaná data nejsou k dispozici.";
 
 $brewer_entries_text_025 = "Vytiskněte si výsledkové listy rozhodčích";
 

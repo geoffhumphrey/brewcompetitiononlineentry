@@ -106,6 +106,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 		}
 
 		if (!isset($_POST['keepStyleTypes'])) $tables_array[] = $style_types_db_table;
+		if (!isset($_POST['keepSponsors'])) $tables_array[] = $sponsors_db_table;
 
 		$truncate_tables_array = array();
 		if (!isset($_POST['keepDropoff'])) $truncate_tables_array[] = $drop_off_db_table;
@@ -200,7 +201,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 
 		if (!isset($_POST['keepStyleTypes'])) {
 
-			$insertSQL = "INSERT INTO $style_types_db_table (id, styleTypeName, styleTypeOwn, styleTypeBOS, styleTypeBOSMethod) VALUES (1, 'Beer', 'bcoe', 'Y', 1), (2, 'Cider', 'bcoe', 'N', 1), (3, 'Mead', 'bcoe', 'N', 1), (4, 'Mead/Cider', 'bcoe', 'N', 1), (5, 'Wine', 'N', 'bcoe', 1), (6, 'Rice Wine', 'bcoe', 'N', 1), (7, 'Spirits', 'bcoe', 'N', 1), (8, 'Kombucha', 'bcoe', 'N', 1), (9, 'Pulque', 'bcoe', 'N', 1);";
+			$insertSQL = "INSERT INTO $style_types_db_table (id, styleTypeName, styleTypeOwn, styleTypeBOS, styleTypeBOSMethod) VALUES (1, 'Beer', 'bcoe', 'Y', 1), (2, 'Cider', 'bcoe', 'N', 1), (3, 'Mead', 'bcoe', 'N', 1), (4, 'Mead/Cider', 'bcoe', 'N', 1), (5, 'Wine', 'N', 'bcoe', 1), (6, 'Rice Wine', 'N', 'bcoe', 1), (7, 'Spirits', 'bcoe', 'N', 1), (8, 'Kombucha', 'bcoe', 'N', 1), (9, 'Pulque', 'bcoe', 'N', 1);";
 			mysqli_real_escape_string($connection,$insertSQL);
 			$result = mysqli_query($connection,$insertSQL) or die (mysqli_error($connection));
 

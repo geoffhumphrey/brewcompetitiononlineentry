@@ -82,6 +82,30 @@ else {
 
 $security_question = array($label_secret_01, $label_secret_05, $label_secret_06, $label_secret_07, $label_secret_08, $label_secret_09, $label_secret_10, $label_secret_11, $label_secret_12, $label_secret_13, $label_secret_14, $label_secret_15, $label_secret_16, $label_secret_17, $label_secret_18, $label_secret_19, $label_secret_20, $label_secret_21, $label_secret_22, $label_secret_23, $label_secret_25, $label_secret_26, $label_secret_27);
 
+if ($section == "past-winners") {
+
+    $query_disp_archive_winners = sprintf("SELECT * FROM %s WHERE archiveSuffix='%s'",$prefix."archive",$go);
+    $disp_archive_winners = mysqli_query($connection,$query_disp_archive_winners);
+    $row_disp_archive_winners = mysqli_fetch_assoc($disp_archive_winners);
+    $totalRows_disp_archive_winners = mysqli_num_rows($disp_archive_winners);
+    $archive_winner_display = FALSE;
+    
+    if (($totalRows_disp_archive_winners > 0) && ($row_disp_archive_winners['archiveDisplayWinners'] == "Y") && ($row_disp_archive_winners['archiveStyleSet'] != "")) {
+
+        $query_disp_archive_winners = sprintf("SELECT * FROM %s WHERE archiveSuffix='%s'",$prefix."archive",$go);
+        $disp_archive_winners = mysqli_query($connection,$query_disp_archive_winners);
+        $row_disp_archive_winners = mysqli_fetch_assoc($disp_archive_winners);
+
+        if ((check_setup($prefix."brewer_".$go,$database)) && (check_setup($prefix."brewing_".$go,$database)) && (check_setup($prefix."judging_scores_".$go,$database))) {
+
+            $archive_count = get_archive_count($prefix."judging_scores_".$go);
+            if ($archive_count > 0) $archive_winner_display = TRUE;
+        }
+
+    }
+
+    if (!$archive_winner_display) header(sprintf("Location: %s", $base_url."index.php?msg=8"));
+}
 
 
 // ---------------------------------------------------------------------------------

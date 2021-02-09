@@ -100,6 +100,7 @@ $archive_text_019 = "Lista (s) de vencedores arquivados disponíveis para exibi�
 $archive_text_020 = "Geralmente, isso só deve ser alterado se a lista de vencedores deste arquivo for exibida incorretamente.";
 $archive_text_021 = "Folhas de pontuação em PDF foram salvas para este arquivo. Esta é a convenção de nomenclatura de cada arquivo usado pelo sistema ao acessá-los.";
 $archive_text_022 = "Desativado. Não existem dados de resultados para este arquivo.";
+$archive_text_023 = "Um conjunto de estilos não é especificado. Dados de entrada, pontuação e caixa arquivados podem não ser exibidos corretamente.";
 
 $label_uploaded_scoresheets = "Folhas de Pontuação Carregadas (Arquivos PDF)";
 $label_admin_comp_type = "Tipo de Competição";

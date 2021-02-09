@@ -83,7 +83,7 @@ $archive_text_006 = "Option 2";
 $archive_text_007 = "Are you sure you want to clear the current competition&rsquo;s data? This CANNOT be undone.";
 $archive_text_008 = "Clear Entry, Judging, and Scoring Data Only";
 $archive_text_009 = "This option clears all entry, judging, and scoring data, including all uploaded scoresheets, but retains the participant data. Useful if you want don't want to have participants create new account profiles.";
-$archive_text_010 = "To archive data currently stored in the database, provide a name of the archive.";
+$archive_text_010 = "To archive data currently stored in the database, provide a name of the archive. It is suggested that choose a name that is unique to this data set. For example, if you hold your competition annually, the name could be the year it was held. If you host successive competitions on a single installation, the name of the competition and the year could serve as the name.";
 $archive_text_011 = "Alpha numeric characters only - all others will be omitted.";
 $archive_text_012 = "Check the information you would like to retain for use in future competition instances.";
 $archive_text_013 = "Are you sure you want to archive current data?";
@@ -100,6 +100,7 @@ $archive_text_019 = "Archived winner list(s) available for public viewing.";
 $archive_text_020 = "Generally, this should only be changed if this archive's winner list is displaying incorrectly.";
 $archive_text_021 = "PDF scoresheets have been saved for this archive. This is the naming convention of each file used by the system when accessing them.";
 $archive_text_022 = "Disabled. No results data exists for this archive.";
+$archive_text_023 = "A style set is not specified. Archived entry, scoring, and box data may not display correctly.";
 
 $label_uploaded_scoresheets = "Uploaded Scoresheets (PDF Files)";
 $label_admin_comp_type = "Competition Type";

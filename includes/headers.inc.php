@@ -19,7 +19,9 @@ if (strpos($section, "step") === FALSE) {
 	if ($_SESSION['jPrefsQueued'] == "N") $assign_to = "Flights"; else $assign_to = "Tables";
 }
 
-if ($section == "past-winners") $filter = $go;
+if ($section == "past-winners") {
+	$filter = $go;
+}
 
 switch($section) {
 
@@ -47,6 +49,7 @@ switch($section) {
 		elseif ($msg == "5") $output = sprintf("<strong>%s</strong> <a href=\#\"  role=\"button\" data-toggle=\"modal\" data-target=\"#loginModal\">%s</a>",$header_text_036,$header_text_037);
 		elseif ($msg == "6") { $output = sprintf("<strong>%s</strong> %s",$header_text_034,$header_text_116); $output_extend = ""; }
 		elseif ($msg == "7") $output = sprintf("<strong>%s</strong>",$alert_text_088);
+		elseif ($msg == "8") $output = sprintf("<strong>%s</strong>",$alert_text_089);
 		elseif ($msg == "9") $output = sprintf("<strong>%s</strong>",$header_text_066);
 	break;
 

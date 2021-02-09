@@ -119,7 +119,8 @@ else {
 
 		if (SINGLE) {
 
-			$query_log = sprintf("SELECT * FROM %s", $brewing_db_table);
+			// $query_log = sprintf("SELECT * FROM %s", $brewing_db_table);
+			$query_log = sprintf("SELECT a.id, a.brewBrewerID, a.brewBoxNum, a.brewName, a.brewStyle, a.brewCategory, a.brewCategorySort, a.brewSubCategory, a.brewInfo, a.brewPossAllergens, a.brewPaid, a.brewReceived, a.brewAdminNotes, a.brewStaffNotes, a.brewJudgingNumber, a.brewUpdated, a.brewConfirmed, b.brewerFirstName, b.uid, b.brewerBreweryName, b.brewerBreweryTTB, b.brewerLastName, b.brewerCity, b.brewerState, b.brewerCountry, b.brewerPhone1, b.brewerClubs, b.brewerProAm, b.brewerDiscount, b.brewerEmail FROM %s a, %s b WHERE a.brewBrewerID = b.uid AND comp_id='%s' ORDER BY a.id ASC", $brewing_db_table, $brewer_db_table, $_SESSION['comp_id']);
 			$query_log_paid = sprintf("SELECT * FROM %s WHERE brewPaid='1' AND comp_id='%s'", $brewing_db_table, $_SESSION['comp_id']);
 			$query_log_confirmed = sprintf("SELECT * FROM %s WHERE brewConfirmed='1' AND comp_id='%s'", $brewing_db_table, $_SESSION['comp_id']);
 
@@ -132,7 +133,9 @@ else {
 
 		else {
 
-			$query_log = sprintf("SELECT * FROM %s", $brewing_db_table);
+			// $query_log = sprintf("SELECT * FROM %s", $brewing_db_table);
+
+			$query_log = sprintf("SELECT a.id, a.brewBrewerID, a.brewBoxNum, a.brewName, a.brewStyle, a.brewCategory, a.brewCategorySort, a.brewSubCategory, a.brewInfo, a.brewPossAllergens, a.brewPaid, a.brewReceived, a.brewAdminNotes, a.brewStaffNotes, a.brewJudgingNumber, a.brewUpdated, a.brewConfirmed, b.brewerFirstName, b.uid, b.brewerBreweryName, b.brewerBreweryTTB, b.brewerLastName, b.brewerCity, b.brewerState, b.brewerCountry, b.brewerPhone1, b.brewerClubs, b.brewerProAm, b.brewerDiscount, b.brewerEmail FROM %s a, %s b WHERE a.brewBrewerID = b.uid ORDER BY a.id ASC", $brewing_db_table, $brewer_db_table);
 			$query_log_paid = sprintf("SELECT * FROM %s WHERE brewPaid='1'", $brewing_db_table);
 			$query_log_confirmed = sprintf("SELECT * FROM %s WHERE brewConfirmed='1'", $brewing_db_table);
 
@@ -148,7 +151,8 @@ else {
 
 		if (SINGLE) {
 
-			$query_log = sprintf("SELECT * FROM %s WHERE brewPaid='1'", $brewing_db_table);
+			$query_log = sprintf("SELECT a.id, a.brewBrewerID, a.brewBoxNum, a.brewName, a.brewStyle, a.brewCategory, a.brewCategorySort, a.brewSubCategory, a.brewInfo, a.brewPossAllergens, a.brewPaid, a.brewReceived, a.brewAdminNotes, a.brewStaffNotes, a.brewJudgingNumber, a.brewUpdated, a.brewConfirmed, b.brewerFirstName, b.uid, b.brewerBreweryName, b.brewerBreweryTTB, b.brewerLastName, b.brewerCity, b.brewerState, b.brewerCountry, b.brewerPhone1, b.brewerClubs, b.brewerProAm, b.brewerDiscount, b.brewerEmail FROM %s a, %s b WHERE a.brewBrewerID = b.uid AND a.brewPaid='1' ORDER BY a.id ASC", $brewing_db_table, $brewer_db_table);
+			//$query_log = sprintf("SELECT * FROM %s WHERE brewPaid='1'", $brewing_db_table);
 			$query_log_paid = sprintf("SELECT * FROM %s WHERE brewPaid='1'", $brewing_db_table);
 			$query_log_confirmed = sprintf("SELECT * FROM $brewing_db_table WHERE brewPaid='1' AND brewConfirmed='1'", $brewing_db_table);
 
@@ -160,7 +164,8 @@ else {
 
 		else {
 
-			$query_log = sprintf("SELECT * FROM %s WHERE brewPaid='1'", $brewing_db_table);
+			//$query_log = sprintf("SELECT * FROM %s WHERE brewPaid='1'", $brewing_db_table);
+			$query_log = sprintf("SELECT a.id, a.brewBrewerID, a.brewBoxNum, a.brewName, a.brewStyle, a.brewCategory, a.brewCategorySort, a.brewSubCategory, a.brewInfo, a.brewPossAllergens, a.brewPaid, a.brewReceived, a.brewAdminNotes, a.brewStaffNotes, a.brewJudgingNumber, a.brewUpdated, a.brewConfirmed, b.brewerFirstName, b.uid, b.brewerBreweryName, b.brewerBreweryTTB, b.brewerLastName, b.brewerCity, b.brewerState, b.brewerCountry, b.brewerPhone1, b.brewerClubs, b.brewerProAm, b.brewerDiscount, b.brewerEmail FROM %s a, %s b WHERE a.brewBrewerID = b.uid AND a.brewPaid='1' ORDER BY a.id ASC", $brewing_db_table, $brewer_db_table);
 			$query_log_paid = sprintf("SELECT * FROM %s WHERE brewPaid='1'", $brewing_db_table);
 			$query_log_confirmed = sprintf("SELECT * FROM $brewing_db_table WHERE brewPaid='1' AND brewConfirmed='1'", $brewing_db_table);
 
@@ -176,8 +181,9 @@ else {
 
 		if (SINGLE) {
 
-			$query_log = sprintf("SELECT * FROM %s WHERE (brewPaid='' OR brewPaid='0' OR brewPaid IS NULL) AND comp_id='%s'", $brewing_db_table, $_SESSION['comp_id']);
-			$query_log_paid = sprintf("SELECT * FROM %s WHERE (brewPaid='' OR brewPaid='0' OR brewPaid IS NULL) AND comp_id='%s'", $brewing_db_table, $_SESSION['comp_id']);
+			// $query_log = sprintf("SELECT * FROM %s WHERE (brewPaid='' OR brewPaid='0' OR brewPaid IS NULL) AND comp_id='%s'", $brewing_db_table, $_SESSION['comp_id']);
+			$query_log = sprintf("SELECT a.id, a.brewBrewerID, a.brewBoxNum, a.brewName, a.brewStyle, a.brewCategory, a.brewCategorySort, a.brewSubCategory, a.brewInfo, a.brewPossAllergens, a.brewPaid, a.brewReceived, a.brewAdminNotes, a.brewStaffNotes, a.brewJudgingNumber, a.brewUpdated, a.brewConfirmed, b.brewerFirstName, b.uid, b.brewerBreweryName, b.brewerBreweryTTB, b.brewerLastName, b.brewerCity, b.brewerState, b.brewerCountry, b.brewerPhone1, b.brewerClubs, b.brewerProAm, b.brewerDiscount, b.brewerEmail FROM %s a, %s b WHERE a.brewBrewerID = b.uid AND (a.brewPaid='' OR a.brewPaid='0' OR a.brewPaid IS NULL) AND comp_id='%s' ORDER BY a.id ASC", $brewing_db_table, $brewer_db_table);
+			$query_log_paid = sprintf("SELECT * FROM %s WHERE (brewPaid='' OR brewPaid='0' OR brewPaid IS NULL) AND comp_id='%s'", $brewing_db_table, $_SESSION['comp_id'], $_SESSION['comp_id']);
 			$query_log_confirmed = sprintf("SELECT * FROM %s WHERE (brewPaid='' OR brewPaid='0' OR brewPaid IS NULL) AND brewConfirmed='1' AND comp_id='%s'", $brewing_db_table, $_SESSION['comp_id']);
 
 			$query_total_count = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE comp_id='%s'", $brewing_db_table, $_SESSION['comp_id']);
@@ -188,7 +194,9 @@ else {
 
 		else {
 
-			$query_log = sprintf("SELECT * FROM %s WHERE brewPaid='' OR brewPaid='0' OR brewPaid IS NULL", $brewing_db_table);
+			//$query_log = sprintf("SELECT * FROM %s WHERE brewPaid='' OR brewPaid='0' OR brewPaid IS NULL", $brewing_db_table);
+			$query_log = sprintf("SELECT a.id, a.brewBrewerID, a.brewBoxNum, a.brewName, a.brewStyle, a.brewCategory, a.brewCategorySort, a.brewSubCategory, a.brewInfo, a.brewPossAllergens, a.brewPaid, a.brewReceived, a.brewAdminNotes, a.brewStaffNotes, a.brewJudgingNumber, a.brewUpdated, a.brewConfirmed, b.brewerFirstName, b.uid, b.brewerBreweryName, b.brewerBreweryTTB, b.brewerLastName, b.brewerCity, b.brewerState, b.brewerCountry, b.brewerPhone1, b.brewerClubs, b.brewerProAm, b.brewerDiscount, b.brewerEmail FROM %s a, %s b WHERE a.brewBrewerID = b.uid AND (a.brewPaid='' OR a.brewPaid='0' OR a.brewPaid IS NULL) ORDER BY a.id ASC", $brewing_db_table, $brewer_db_table);
+
 			$query_log_paid = sprintf("SELECT * FROM %s WHERE brewPaid='' OR brewPaid='0' OR brewPaid IS NULL", $brewing_db_table);
 			$query_log_confirmed = sprintf("SELECT * FROM %s WHERE brewPaid='' OR brewPaid='0' OR brewPaid IS NULL AND brewConfirmed='1'", $brewing_db_table);
 
@@ -204,7 +212,9 @@ else {
 
 		if (SINGLE) {
 
-			$query_log = sprintf("SELECT * FROM %s WHERE brewCategorySort='%s' AND comp_id='%s'",$brewing_db_table, $filter, $_SESSION['comp_id']);
+			// $query_log = sprintf("SELECT * FROM %s WHERE brewCategorySort='%s' AND comp_id='%s'",$brewing_db_table, $filter, $_SESSION['comp_id']);
+
+			$query_log = sprintf("SELECT a.id, a.brewBrewerID, a.brewBoxNum, a.brewName, a.brewStyle, a.brewCategory, a.brewCategorySort, a.brewSubCategory, a.brewInfo, a.brewPossAllergens, a.brewPaid, a.brewReceived, a.brewAdminNotes, a.brewStaffNotes, a.brewJudgingNumber, a.brewUpdated, a.brewConfirmed, b.brewerFirstName, b.uid, b.brewerBreweryName, b.brewerBreweryTTB, b.brewerLastName, b.brewerCity, b.brewerState, b.brewerCountry, b.brewerPhone1, b.brewerClubs, b.brewerProAm, b.brewerDiscount, b.brewerEmail FROM %s a, %s b WHERE a.brewBrewerID = b.uid AND a.brewCategorySort='%s' AND comp_id='%s' ORDER BY a.id ASC", $brewing_db_table, $brewer_db_table, $filter, $_SESSION['comp_id']);
 			$query_log_paid = sprintf("SELECT * FROM %s WHERE brewCategorySort='%s' AND brewPaid='1' AND brewConfirmed='1' AND comp_id='%s'",$brewing_db_table, $filter, $_SESSION['comp_id']);
 			$query_log_confirmed = sprintf("SELECT * FROM %s WHERE brewCategorySort='%s' AND brewConfirmed='1' AND comp_id='%s'",$brewing_db_table, $filter, $_SESSION['comp_id']);
 
@@ -215,8 +225,8 @@ else {
 		}
 
 		else {
-
-			$query_log = sprintf("SELECT * FROM %s WHERE brewCategorySort='%s'",$brewing_db_table, $filter);
+			//$query_log = sprintf("SELECT * FROM %s WHERE brewCategorySort='%s'",$brewing_db_table, $filter);
+			$query_log = sprintf("SELECT a.id, a.brewBrewerID, a.brewBoxNum, a.brewName, a.brewStyle, a.brewCategory, a.brewCategorySort, a.brewSubCategory, a.brewInfo, a.brewPossAllergens, a.brewPaid, a.brewReceived, a.brewAdminNotes, a.brewStaffNotes, a.brewJudgingNumber, a.brewUpdated, a.brewConfirmed, b.brewerFirstName, b.uid, b.brewerBreweryName, b.brewerBreweryTTB, b.brewerLastName, b.brewerCity, b.brewerState, b.brewerCountry, b.brewerPhone1, b.brewerClubs, b.brewerProAm, b.brewerDiscount, b.brewerEmail FROM %s a, %s b WHERE a.brewBrewerID = b.uid AND a.brewCategorySort='%s' ORDER BY a.id ASC", $brewing_db_table, $brewer_db_table, $filter);
 			$query_log_paid = sprintf("SELECT * FROM %s WHERE brewCategorySort='%s' AND brewPaid='1' AND brewConfirmed='1'",$brewing_db_table,$filter);
 			$query_log_confirmed = sprintf("SELECT * FROM %s WHERE brewCategorySort='%s' AND brewConfirmed='1'",$brewing_db_table,$filter);
 
@@ -232,7 +242,8 @@ else {
 
 		if (SINGLE) {
 
-			$query_log = sprintf("SELECT * FROM %s AND comp_id='%s'",$brewing_db_table, $_SESSION['comp_id']);
+			// $query_log = sprintf("SELECT * FROM %s AND comp_id='%s'",$brewing_db_table, $_SESSION['comp_id']);
+			$query_log = sprintf("SELECT a.id, a.brewBrewerID, a.brewBoxNum, a.brewName, a.brewStyle, a.brewCategory, a.brewCategorySort, a.brewSubCategory, a.brewInfo, a.brewPossAllergens, a.brewPaid, a.brewReceived, a.brewAdminNotes, a.brewStaffNotes, a.brewJudgingNumber, a.brewUpdated, a.brewConfirmed, b.brewerFirstName, b.uid, b.brewerBreweryName, b.brewerBreweryTTB, b.brewerLastName, b.brewerCity, b.brewerState, b.brewerCountry, b.brewerPhone1, b.brewerClubs, b.brewerProAm, b.brewerDiscount, b.brewerEmail FROM %s a, %s b WHERE (a.brewBrewerID = b.uid OR a.brewBrewerID = b.id) AND comp_id='%s' ORDER BY a.id ASC", $brewing_db_table, $brewer_db_table, $_SESSION['comp_id']);
 			$query_log_paid = sprintf("SELECT * FROM %s WHERE brewPaid='1' AND comp_id='%s'",$brewing_db_table, $_SESSION['comp_id']);
 			$query_log_confirmed = sprintf("SELECT * FROM %s WHERE brewConfirmed='1' AND comp_id='%s'",$brewing_db_table, $_SESSION['comp_id']);
 
@@ -244,7 +255,8 @@ else {
 
 		else {
 
-			$query_log = sprintf("SELECT * FROM %s",$brewing_db_table);
+			// $query_log = sprintf("SELECT * FROM %s",$brewing_db_table);
+			$query_log = sprintf("SELECT a.id, a.brewBrewerID, a.brewBoxNum, a.brewName, a.brewStyle, a.brewCategory, a.brewCategorySort, a.brewSubCategory, a.brewInfo, a.brewPossAllergens, a.brewPaid, a.brewReceived, a.brewAdminNotes, a.brewStaffNotes, a.brewJudgingNumber, a.brewUpdated, a.brewConfirmed, b.brewerFirstName, b.uid, b.brewerBreweryName, b.brewerBreweryTTB, b.brewerLastName, b.brewerCity, b.brewerState, b.brewerCountry, b.brewerPhone1, b.brewerClubs, b.brewerProAm, b.brewerDiscount, b.brewerEmail FROM %s a, %s b WHERE (a.brewBrewerID = b.uid OR a.brewBrewerID = b.id) ORDER BY a.id ASC", $dbTable, $prefix."brewer_".get_suffix($dbTable));
 			$query_log_paid = sprintf("SELECT * FROM %s WHERE brewPaid='1'",$brewing_db_table);
 			$query_log_confirmed = sprintf("SELECT * FROM %s WHERE brewConfirmed='1'",$brewing_db_table);
 
@@ -260,7 +272,8 @@ else {
 
 		if (SINGLE) {
 
-			$query_log = sprintf("SELECT * FROM %s WHERE brewCategorySort='%s' AND comp_id='%s'",$brewing_db_table, $filter, $_SESSION['comp_id']);
+			// $query_log = sprintf("SELECT * FROM %s WHERE brewCategorySort='%s' AND comp_id='%s'",$brewing_db_table, $filter, $_SESSION['comp_id']);
+			$query_log = sprintf("SELECT a.id, a.brewBrewerID, a.brewBoxNum, a.brewName, a.brewStyle, a.brewCategory, a.brewCategorySort, a.brewSubCategory, a.brewInfo, a.brewPossAllergens, a.brewPaid, a.brewReceived, a.brewAdminNotes, a.brewStaffNotes, a.brewJudgingNumber, a.brewUpdated, a.brewConfirmed, b.brewerFirstName, b.uid, b.brewerBreweryName, b.brewerBreweryTTB, b.brewerLastName, b.brewerCity, b.brewerState, b.brewerCountry, b.brewerPhone1, b.brewerClubs, b.brewerProAm, b.brewerDiscount, b.brewerEmail FROM %s a, %s b WHERE (a.brewBrewerID = b.uid OR a.brewBrewerID = b.id) AND a.brewCategorySort='%s' AND comp_id='%s' ORDER BY a.id ASC", $dbTable, $prefix."brewer".get_suffix($dbTable), $filter, $_SESSION['comp_id']);
 			$query_log_paid = sprintf("SELECT * FROM %s WHERE brewCategorySort='%s' AND brewPaid='1' AND comp_id='%s'",$brewing_db_table, $filter, $_SESSION['comp_id']);
 			$query_log_confirmed = sprintf("SELECT * FROM %s WHERE brewCategorySort='%s' AND brewConfirmed='1' AND comp_id='%s'",$brewing_db_table, $filter, $_SESSION['comp_id']);
 
@@ -272,7 +285,8 @@ else {
 
 		else {
 
-			$query_log = sprintf("SELECT * FROM %s WHERE brewCategorySort='%s'",$brewing_db_table, $filter);
+			// $query_log = sprintf("SELECT * FROM %s WHERE brewCategorySort='%s'",$brewing_db_table, $filter);
+			$query_log = sprintf("SELECT a.id, a.brewBrewerID, a.brewBoxNum, a.brewName, a.brewStyle, a.brewCategory, a.brewCategorySort, a.brewSubCategory, a.brewInfo, a.brewPossAllergens, a.brewPaid, a.brewReceived, a.brewAdminNotes, a.brewStaffNotes, a.brewJudgingNumber, a.brewUpdated, a.brewConfirmed, b.brewerFirstName, b.uid, b.brewerBreweryName, b.brewerBreweryTTB, b.brewerLastName, b.brewerCity, b.brewerState, b.brewerCountry, b.brewerPhone1, b.brewerClubs, b.brewerProAm, b.brewerDiscount, b.brewerEmail FROM %s a, %s b WHERE (a.brewBrewerID = b.uid OR a.brewBrewerID = b.id) AND a.brewCategorySort='%s' ORDER BY a.id ASC", $brewing_db_table, $brewer_db_table, $filter);
 			$query_log_paid = sprintf("SELECT * FROM %s WHERE brewCategorySort='%s' AND brewPaid='1'",$brewing_db_table,$filter);
 			$query_log_confirmed = sprintf("SELECT * FROM %s WHERE brewCategorySort='%s' AND brewConfirmed='1'",$brewing_db_table,$filter);
 
@@ -289,7 +303,8 @@ else {
 
 		if (SINGLE) {
 
-			$query_log = sprintf("SELECT * FROM %s WHERE brewBrewerID='%s' AND comp_id='%s'", $brewing_db_table, $bid, $_SESSION['comp_id']);
+			// $query_log = sprintf("SELECT * FROM %s WHERE brewBrewerID='%s' AND comp_id='%s'", $brewing_db_table, $bid, $_SESSION['comp_id']);
+			$query_log = sprintf("SELECT a.id, a.brewBrewerID, a.brewBoxNum, a.brewName, a.brewStyle, a.brewCategory, a.brewCategorySort, a.brewSubCategory, a.brewInfo, a.brewPossAllergens, a.brewPaid, a.brewReceived, a.brewAdminNotes, a.brewStaffNotes, a.brewJudgingNumber, a.brewUpdated, a.brewConfirmed, b.brewerFirstName, b.uid, b.brewerBreweryName, b.brewerBreweryTTB, b.brewerLastName, b.brewerCity, b.brewerState, b.brewerCountry, b.brewerPhone1, b.brewerClubs, b.brewerProAm, b.brewerDiscount, b.brewerEmail FROM %s a, %s b WHERE a.brewBrewerID = b.uid AND b.uid='%s' AND comp_id='%s' ORDER BY a.id ASC", $brewing_db_table, $brewer_db_table, $bid, $_SESSION['comp_id']);
 			$query_log_paid = sprintf("SELECT * FROM %s WHERE brewBrewerID='%s' AND brewPaid='1' AND comp_id='%s'", $brewing_db_table, $bid, $_SESSION['comp_id']);
 			$query_log_confirmed = sprintf("SELECT * FROM %s WHERE brewBrewerID='%s' AND brewConfirmed='1' AND comp_id='%s'", $brewing_db_table, $bid, $_SESSION['comp_id']);
 
@@ -301,7 +316,10 @@ else {
 
 		else {
 
-			$query_log = sprintf("SELECT * FROM %s WHERE brewBrewerID='%s'", $brewing_db_table, $bid);
+			// $query_log = sprintf("SELECT * FROM %s WHERE brewBrewerID='%s'", $brewing_db_table, $bid);
+			
+			$query_log = sprintf("SELECT a.id, a.brewBrewerID, a.brewBoxNum, a.brewName, a.brewStyle, a.brewCategory, a.brewCategorySort, a.brewSubCategory, a.brewInfo, a.brewPossAllergens, a.brewPaid, a.brewReceived, a.brewAdminNotes, a.brewStaffNotes, a.brewJudgingNumber, a.brewUpdated, a.brewConfirmed, b.brewerFirstName, b.uid, b.brewerBreweryName, b.brewerBreweryTTB, b.brewerLastName, b.brewerCity, b.brewerState, b.brewerCountry, b.brewerPhone1, b.brewerClubs, b.brewerProAm, b.brewerDiscount, b.brewerEmail FROM %s a, %s b WHERE a.brewBrewerID = b.uid AND b.uid='%s' ORDER BY a.id ASC", $brewing_db_table, $brewer_db_table, $bid);
+
 			$query_log_paid = sprintf("SELECT * FROM %s WHERE brewBrewerID='%s' AND brewPaid='1'", $brewing_db_table, $bid);
 			$query_log_confirmed = sprintf("SELECT * FROM %s WHERE brewBrewerID='%s' AND brewConfirmed='1'", $brewing_db_table, $bid);
 

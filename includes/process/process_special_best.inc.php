@@ -10,14 +10,25 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 	$config_html_purifier = HTMLPurifier_Config::createDefault();
 	$purifier = new HTMLPurifier($config_html_purifier);
 
+	if (isset($_POST['sbi_name']) {
+		$sbi_name = $purifier->purify($_POST['sbi_name']);
+		$sbi_name = filter_var($sbi_name,FILTER_SANITIZE_STRING,FILTER_FLAG_ENCODE_HIGH|FILTER_FLAG_ENCODE_LOW);
+	}
+	else $sbi_name = "";
+
+	if (isset($_POST['sbi_description'])) {
+		$sbi_description = $purifier->purify($_POST['sbi_description']);
+		$sbi_description = filter_var($sbi_description,FILTER_SANITIZE_STRING,FILTER_FLAG_ENCODE_HIGH|FILTER_FLAG_ENCODE_LOW);
+	}
+	else $sbi_description = "";
+
 	if ($action == "add") {
 		$insertSQL = sprintf("INSERT INTO $special_best_info_db_table (sbi_name, sbi_description, sbi_places, sbi_rank) VALUES (%s, %s, %s, %s)",
-						   GetSQLValueString($purifier->purify($_POST['sbi_name']), "text"),
-						   GetSQLValueString($purifier->purify($_POST['sbi_description']), "text"),
+						   GetSQLValueString($sbi_name), "text"),
+						   GetSQLValueString($sbi_description), "text"),
 						   GetSQLValueString(sterilize($_POST['sbi_places']), "int"),
 						   GetSQLValueString(sterilize($_POST['sbi_rank']), "int")
 						   );
-
 
 		mysqli_real_escape_string($connection,$insertSQL);
 		$result = mysqli_query($connection,$insertSQL) or die (mysqli_error($connection));
@@ -29,12 +40,11 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 
 	if ($action == "edit") {
 		$updateSQL = sprintf("UPDATE $special_best_info_db_table SET sbi_name=%s, sbi_description=%s, sbi_places=%s, sbi_rank=%s WHERE id=%s",
-						   GetSQLValueString($purifier->purify($_POST['sbi_name']), "text"),
-						   GetSQLValueString($purifier->purify($_POST['sbi_description']), "text"),
+						   GetSQLValueString($sbi_name), "text"),
+						   GetSQLValueString($sbi_description), "text"),
 						   GetSQLValueString(sterilize($_POST['sbi_places']), "int"),
 						   GetSQLValueString(sterilize($_POST['sbi_rank']), "int"),
 						   GetSQLValueString($id, "int"));
-
 
 		mysqli_real_escape_string($connection,$updateSQL);
 		$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));

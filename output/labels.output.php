@@ -221,7 +221,7 @@ if (isset($_SESSION['loginUsername'])) {
 							}
 
 							$special = str_replace("\n"," ",truncate($special,$character_limit_adjust));
-							$special = strtr($special,$html_remove);
+							$special = html_entity_decode($special);
 							$special = str_replace("^", "", $special);
 							$special = trim($special);
 							$entry_str_sweet_carb .= $beer_carbonation.$beer_sweeteness.$beer_strength;
@@ -234,7 +234,7 @@ if (isset($_SESSION['loginUsername'])) {
 							$special_optional = strip_tags($row_log['brewInfoOptional']);
 							$special_optional = iconv('UTF-8', 'windows-1252', html_entity_decode($special_optional));
 							$optional = str_replace("\n"," ",truncate($special_optional,$character_limit_adjust,""));
-							$optional = strtr($optional,$html_remove);
+							$optional = html_entity_decode($optional);
 							$optional = sprintf("\n%s",$optional);
 
 						}

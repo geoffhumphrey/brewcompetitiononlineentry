@@ -17,6 +17,29 @@ require(CONFIG.'bootstrap.php');
 require(LIB.'output.lib.php');
 require(INCLUDES.'scrubber.inc.php');
 
+// Queries for current data
+if ($filter == "default") {
+    $winner_method = $_SESSION['prefsWinnerMethod'];
+    $style_set = $_SESSION['prefsStyleSet'];
+}
+
+// Or, for archived data
+else {
+
+    // Query the archive table for preferences
+    $query_archive_prefs = sprintf("SELECT * FROM %s WHERE archiveSuffix='%s'",$prefix."archive", $filter);
+    $archive_prefs = mysqli_query($connection,$query_archive_prefs) or die (mysqli_error($connection));
+    $row_archive_prefs = mysqli_fetch_assoc($archive_prefs);
+    $totalRows_archive_prefs = mysqli_num_rows($archive_prefs);
+
+    $winner_method = $row_archive_prefs['archiveWinnerMethod'];
+    $style_set = $row_archive_prefs['archiveStyleSet'];
+    $judging_scores_db_table = $prefix."judging_scores_".$filter;
+    $brewing_db_table = $prefix."brewing_".$filter;
+    $brewer_db_table = $prefix."brewer_".$filter;
+
+}
+
 $admin_role = FALSE;
 if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) $admin_role = TRUE;
 
@@ -127,6 +150,8 @@ if (($admin_role) || (((judging_date_return() == 0) && ($registration_open == 2)
         if ($admin_role) {
 
             $type = "entries";
+            if ($tb != "default") $filter_filename = $tb;
+            else $filter_filename = $filter;
 
             if ($go == "csv") { $separator = ","; $extension = ".csv"; }
             if ($go == "tab") { $separator = chr(9); $extension = ".tab"; }
@@ -134,7 +159,7 @@ if (($admin_role) || (((judging_date_return() == 0) && ($registration_open == 2)
             if ($section == "loc") $loc = "_".str_replace(' ', '_', $row_judging['judgingLocName']);
             else $loc = "";
             $date = date("m-d-Y");
-            $filename = ltrim(filename($contest)."_Entries".filename($filter).filename($action).filename($view).filename($date).$loc.$extension,"_");
+            $filename = ltrim(filename($contest)."_Entries".filename($filter_filename).filename($action).filename($view).filename($date).$loc.$extension,"_");
 
             include (DB.'output_entries_export.db.php');
 
@@ -143,7 +168,7 @@ if (($admin_role) || (((judging_date_return() == 0) && ($registration_open == 2)
                 return is_object($properties) ? $properties->name : null;
             }
 
-            if (($go == "csv") && ($action == "all") && ($filter == "all")) {
+            if (($go == "csv") && ($action == "all") && ($tb == "all")) {
 
                 $headers = array();
                 $headers[] = $label_first_name;
@@ -208,8 +233,8 @@ if (($admin_role) || (((judging_date_return() == 0) && ($registration_open == 2)
                             include (DB.'output_entries_export_extend.db.php');
 
                             if (isset($row_sql['brewBrewerID'])) $brewer_info = explode("^", brewer_info($row_sql['brewBrewerID']));
-                            if (isset($row_sql['brewBrewerFirstName'])) $brewerFirstName = strtr($row_sql['brewBrewerFirstName'],$html_remove);
-                            if (isset($row_sql['brewBrewerLastName'])) $brewerLastName = strtr($row_sql['brewBrewerLastName'],$html_remove);
+                            if (isset($row_sql['brewBrewerFirstName'])) $brewerFirstName = html_entity_decode($row_sql['brewBrewerFirstName']);
+                            if (isset($row_sql['brewBrewerLastName'])) $brewerLastName = html_entity_decode($row_sql['brewBrewerLastName']);
 
                             if ($_SESSION['prefsProEdition'] == 1) {
                                 if (!empty($brewer_info)) $fields0 = array($brewerFirstName,$brewerLastName,$brewer_info[15],$brewer_info[17],$brewer_info[6],$brewer_info[10],$brewer_info[11],$brewer_info[12],$brewer_info[13],$brewer_info[14]);
@@ -244,7 +269,6 @@ if (($admin_role) || (((judging_date_return() == 0) && ($registration_open == 2)
 
                     if ($_SESSION['prefsProEdition'] == 1) $a[] = array($label_first_name,$label_last_name,$label_organization,$label_ttb,$label_entry_number,$label_category,$label_style,$label_name,$label_entry_number,$label_judging_number,$label_name,$label_required_info,$label_sweetness,$label_carbonation,$label_strength);
 
-
                     else $a[] = array($label_first_name,$label_last_name,$label_entry_number,$label_category,$label_style,$label_name,$label_entry_number,$label_judging_number,$label_name,$label_required_info,$label_sweetness,$label_carbonation,$label_strength);
                 }
 
@@ -255,7 +279,7 @@ if (($admin_role) || (((judging_date_return() == 0) && ($registration_open == 2)
                     else $a[] = array($label_first_name,$label_last_name,$label_email,$label_address,$label_city,$label_state_province,$label_zip,$label_country,$label_club,$label_entry_number,$label_judging_number,$label_category,$label_subcategory,$label_style,$label_entry_name,$label_required_info,$label_brewer_specifics,$label_sweetness,$label_carbonation,$label_strength,$label_table,$label_location,$label_flight,$label_round,$label_score,$label_place,$label_bos);
                 }
 
-                if (($go == "csv") && ($action == "default") && ($filter == "winners")) {
+                if (($go == "csv") && ($action == "default") && ($filter == "default") && ($tb == "winners")) {
 
                     if ($_SESSION['prefsProEdition'] == 1) $a[] = array($label_table,$label_name,$label_category,$label_style,$label_name,$label_place,$label_last_name,$label_first_name,$label_organization,$label_ttb,$label_email,$label_address,$label_city,$label_state_province,$label_zip,$label_country,$label_phone,$label_entry_name,$label_club,$label_cobrewer);
 
@@ -263,8 +287,20 @@ if (($admin_role) || (((judging_date_return() == 0) && ($registration_open == 2)
                 }
 
                 // Required and optional info only headers
-                if (($go == "csv") && ($action == "required") && ($filter == "required")) {
-                    $a[] = array($label_entry_number,$label_judging_number,$label_category,$label_subcategory,$label_style,$label_required_info,$label_optional_info,$label_brewer_specifics,$label_sweetness,$label_carbonation,$label_strength);
+                if (($go == "csv") && ($action == "required") && ($tb == "required")) {
+                    $a[] = array(
+                        $label_entry_number,
+                        $label_judging_number,
+                        $label_category,
+                        $label_subcategory,
+                        $label_style,
+                        $label_required_info,
+                        $label_optional_info,
+                        $label_brewer_specifics,
+                        $label_sweetness,
+                        $label_carbonation,
+                        $label_strength
+                    );
                 }
 
                 if ($totalRows_sql > 0) {
@@ -283,54 +319,138 @@ if (($admin_role) || (((judging_date_return() == 0) && ($registration_open == 2)
                         $brewer_club = "";
 
                         if (isset($row_sql['brewBrewerID'])) $brewer_info = explode("^", brewer_info($row_sql['brewBrewerID']));
-                        if (isset($row_sql['brewBrewerFirstName'])) $brewerFirstName = strtr($row_sql['brewBrewerFirstName'],$html_remove);
-                        if (isset($row_sql['brewBrewerLastName'])) $brewerLastName = strtr($row_sql['brewBrewerLastName'],$html_remove);
-                        if (isset($row_sql['brewBrewerLastName'])) $brewName = strtr($row_sql['brewName'],$html_remove);
+                        if (isset($row_sql['brewBrewerFirstName'])) $brewerFirstName = html_entity_decode($row_sql['brewBrewerFirstName']);
+                        if (isset($row_sql['brewBrewerLastName'])) $brewerLastName = html_entity_decode($row_sql['brewBrewerLastName']);
+                        if (isset($row_sql['brewBrewerLastName'])) $brewName = html_entity_decode($row_sql['brewName']);
 
                         if (isset($row_sql['brewInfo'])) {
                             $brewInfo = str_replace("^"," | ",$row_sql['brewInfo']);
-                            $brewInfo = strtr($brewInfo,$html_remove);
+                            $brewInfo = html_entity_decode($brewInfo);
                         }
 
-                        if (isset($row_sql['brewComments'])) $brewSpecifics = strtr($row_sql['brewComments'],$html_remove);
-                        if (isset($row_sql['brewInfoOptional'])) $brewInfoOptional = strtr($row_sql['brewInfoOptional'],$html_remove);
+                        if (isset($row_sql['brewComments'])) $brewSpecifics = html_entity_decode($row_sql['brewComments']);
+                        if (isset($row_sql['brewInfoOptional'])) $brewInfoOptional = html_entity_decode($row_sql['brewInfoOptional']);
                         if (isset($row_sql['brewJudgingNumber'])) $judgingNo = sprintf("%06s",$row_sql['brewJudgingNumber']);
                         if (isset($row_sql['brewBrewerID'])) $brewer_info = explode("^", brewer_info($row_sql['brewBrewerID']));
-                        if ((isset($brewer_info[8])) && ($brewer_info[8] != "&nbsp;")) $brewer_club = $brewer_info[8];
+                        if ((isset($brewer_info[8])) && ($brewer_info[8] != "&nbsp;")) $brewer_club = html_entity_decode($brewer_info[8]);
 
-                        if (($action == "default") && ($filter == "winners") && ($_SESSION['prefsWinnerMethod'] >= 0)) {
+                        if (($action == "default") && ($filter == "default") && ($tb == "winners") && ($winner_method >= 0)) {
                             include (DB.'output_entries_export_winner.db.php');
                         }
 
                         // No participant email addresses
-                        if (($action == "hccp") && ($filter != "winners")) {
+                        if (($action == "hccp") && (($filter != "winners") && ($tb != "winners"))) {
 
-                            if ($_SESSION['prefsProEdition'] == 1) $a[] = array($brewerFirstName,$brewerLastName,$brewer_info[15],$brewer_info[17],$row_sql['brewCategory'],$row_sql['brewSubCategory'],$row_sql['brewStyle'],$entryNo,$brewName,$brewInfo,$row_sql['brewMead2'],$row_sql['brewMead1'],$row_sql['brewMead3']);
-                            else $a[] = array($brewerFirstName,$brewerLastName,$row_sql['brewCategory'],$row_sql['brewSubCategory'],$row_sql['brewStyle'],$entryNo,$brewName,$brewInfo,$row_sql['brewMead2'],$row_sql['brewMead1'],$row_sql['brewMead3']);
+                            if ($_SESSION['prefsProEdition'] == 1) $a[] = array(
+                                $brewerFirstName,
+                                $brewerLastName,
+                                html_entity_decode($brewer_info[15]),
+                                html_entity_decode($brewer_info[17]),
+                                $row_sql['brewCategory'],
+                                $row_sql['brewSubCategory'],
+                                iconv("UTF-8", "ISO-8859-1//TRANSLIT",$row_sql['brewStyle']),
+                                $entryNo,
+                                $brewName,
+                                $brewInfo,
+                                $row_sql['brewMead2'],
+                                $row_sql['brewMead1'],
+                                $row_sql['brewMead3']
+                            );
+                            
+                            else $a[] = array(
+                                $brewerFirstName,
+                                $brewerLastName,
+                                $row_sql['brewCategory'],
+                                $row_sql['brewSubCategory'],
+                                iconv("UTF-8", "ISO-8859-1//TRANSLIT",$row_sql['brewStyle']),
+                                $entryNo,
+                                $brewName,
+                                $brewInfo,
+                                $row_sql['brewMead2'],
+                                $row_sql['brewMead1'],
+                                $row_sql['brewMead3']
+                            );
 
                         }
 
                         // With email addresses of participants.
-                        if ((($action == "default") || ($action == "email")) && ($go == "csv") && ($filter != "winners")) {
+                        if ((($action == "default") || ($action == "email")) && ($go == "csv") && (($filter != "winners") && ($tb != "winners"))) {
 
                             include (DB.'output_entries_export_extend.db.php');
 
                             if (!empty($brewer_info)) {
 
-                                if ($_SESSION['prefsProEdition'] == 1) $a[] = array($brewerFirstName,$brewerLastName,$brewer_info[15],$brewer_info[17],$brewer_info[6],$brewer_info[10],$brewer_info[11],$brewer_info[12],$brewer_info[13],$brewer_info[14],$entryNo,$judgingNo,$row_sql['brewCategory'],$row_sql['brewSubCategory'],$row_sql['brewStyle'],$brewName,$brewInfo,$brewSpecifics,$row_sql['brewMead1'],$row_sql['brewMead2'],$row_sql['brewMead3'],$table_name,$location[2],$row_flight['flightNumber'],$row_flight['flightRound'],sprintf("%02s",$row_scores['scoreEntry']),$row_scores['scorePlace'],$bos_place);
+                                if ($_SESSION['prefsProEdition'] == 1) $a[] = array(
+                                    $brewerFirstName,
+                                    $brewerLastName,
+                                    html_entity_decode($brewer_info[15]),
+                                    html_entity_decode($brewer_info[17]),
+                                    $brewer_info[6],
+                                    html_entity_decode($brewer_info[10]),
+                                    html_entity_decode($brewer_info[11]),
+                                    html_entity_decode($brewer_info[12]),
+                                    html_entity_decode($brewer_info[13]),
+                                    html_entity_decode($brewer_info[14]),
+                                    $entryNo,
+                                    $judgingNo,
+                                    $row_sql['brewCategory'],
+                                    $row_sql['brewSubCategory'],
+                                    iconv("UTF-8", "ISO-8859-1//TRANSLIT",$row_sql['brewStyle']),
+                                    $brewName,
+                                    $brewInfo,
+                                    $brewSpecifics,
+                                    $row_sql['brewMead1'],
+                                    $row_sql['brewMead2'],
+                                    $row_sql['brewMead3'],
+                                    html_entity_decode($table_name),
+                                    html_entity_decode($location[2]),
+                                    $row_flight['flightNumber'],
+                                    $row_flight['flightRound'],
+                                    sprintf("%02s",$row_scores['scoreEntry']),
+                                    $row_scores['scorePlace'],
+                                    $bos_place
+                                );
 
-                                else $a[] = array($brewerFirstName,$brewerLastName,$brewer_info[6],$brewer_info[10],$brewer_info[11],$brewer_info[12],$brewer_info[13],$brewer_info[14],$brewer_club,$entryNo,$judgingNo,$row_sql['brewCategory'],$row_sql['brewSubCategory'],$row_sql['brewStyle'],$brewName,$brewInfo,$brewSpecifics,$row_sql['brewMead1'],$row_sql['brewMead2'],$row_sql['brewMead3'],$table_name,$location[2],$row_flight['flightNumber'],$row_flight['flightRound'],sprintf("%02s",$row_scores['scoreEntry']),$row_scores['scorePlace'],$bos_place);
+                                else $a[] = array(
+                                    $brewerFirstName,
+                                    $brewerLastName,
+                                    $brewer_info[6],
+                                    html_entity_decode($brewer_info[10]),
+                                    html_entity_decode($brewer_info[11]),
+                                    html_entity_decode($brewer_info[12]),
+                                    html_entity_decode($brewer_info[13]),
+                                    html_entity_decode($brewer_info[14]),
+                                    $brewer_club,
+                                    $entryNo,
+                                    $judgingNo,
+                                    $row_sql['brewCategory'],
+                                    $row_sql['brewSubCategory'],
+                                    iconv("UTF-8", "ISO-8859-1//TRANSLIT",$row_sql['brewStyle']),
+                                    $brewName,
+                                    $brewInfo,
+                                    $brewSpecifics,
+                                    $row_sql['brewMead1'],
+                                    $row_sql['brewMead2'],
+                                    $row_sql['brewMead3'],
+                                    html_entity_decode($table_name),
+                                    html_entity_decode($location[2]),
+                                    $row_flight['flightNumber'],
+                                    $row_flight['flightRound'],
+                                    sprintf("%02s",$row_scores['scoreEntry']),
+                                    $row_scores['scorePlace'],
+                                    $bos_place
+                                );
                             }
 
                         }
 
-                        if (($go == "csv") && ($action == "required") && ($filter == "required")) {
+                        if (($go == "csv") && ($action == "required") && ($tb == "required")) {
 
                             $a[] = array($entryNo,
                                          $judgingNo,
                                          $row_sql['brewCategory'],
                                          $row_sql['brewSubCategory'],
-                                         $row_sql['brewStyle'],
+                                         iconv("UTF-8", "ISO-8859-1//TRANSLIT",$row_sql['brewStyle']),
                                          $brewInfo,
                                          $brewInfoOptional,
                                          $brewSpecifics,
@@ -425,11 +545,11 @@ if (($admin_role) || (((judging_date_return() == 0) && ($registration_open == 2)
                 $brewerAddress = "";
                 $brewerCity = "";
                 $phone = "";
-                $brewerFirstName = strtr($row_sql['brewerFirstName'],$html_remove);
-                $brewerLastName = strtr($row_sql['brewerLastName'],$html_remove);
+                $brewerFirstName = html_entity_decode($row_sql['brewerFirstName']);
+                $brewerLastName = html_entity_decode($row_sql['brewerLastName']);
                 if ($filter == "default") {
-                    $brewerAddress = strtr($row_sql['brewerAddress'],$html_remove);
-                    $brewerCity = strtr($row_sql['brewerCity'],$html_remove);
+                    $brewerAddress = html_entity_decode($row_sql['brewerAddress']);
+                    $brewerCity = html_entity_decode($row_sql['brewerCity']);
                     if ($row_sql['brewerCountry'] == "United States") $phone = format_phone_us($row_sql['brewerPhone1']); else $phone = $row_sql['brewerPhone1'];
                 }
 
@@ -457,16 +577,54 @@ if (($admin_role) || (((judging_date_return() == 0) && ($registration_open == 2)
                 }
 
                 elseif (($filter == "stewards") || ($filter == "avail_stewards")) {
-                    $a [] = array($brewerFirstName,$brewerLastName,$row_sql['brewerEmail'],$steward_avail,judge_entries($row_sql['uid'],0));
+                    $a [] = array(
+                        $brewerFirstName,
+                        $brewerLastName,
+                        $row_sql['brewerEmail'],
+                        $steward_avail,
+                        judge_entries($row_sql['uid'],0)
+                    );
                 }
 
                 elseif ($filter == "staff") {
-                    $a [] = array($brewerFirstName,$brewerLastName,$row_sql['brewerEmail'],judge_entries($row_sql['uid'],0));
+                    $a [] = array(
+                        $brewerFirstName,
+                        $brewerLastName,
+                        $row_sql['brewerEmail'],
+                        judge_entries($row_sql['uid'],0)
+                    );
                 }
 
                 else {
-                    if ($_SESSION['prefsProEdition'] == 1) $a [] = array($brewerFirstName,$brewerLastName,$row_sql['brewerBreweryName'],$row_sql['brewerBreweryTTB'],$row_sql['brewerEmail'],$brewerAddress,$brewerCity,$row_sql['brewerState'],$row_sql['brewerZip'],$row_sql['brewerCountry'],$phone,$row_sql['brewerClubs'],judge_entries($row_sql['uid'],0));
-                    else $a [] = array($brewerFirstName,$brewerLastName,$row_sql['brewerEmail'],$brewerAddress,$brewerCity,$row_sql['brewerState'],$row_sql['brewerZip'],$row_sql['brewerCountry'],$phone,$row_sql['brewerClubs'],judge_entries($row_sql['uid'],0));
+                    if ($_SESSION['prefsProEdition'] == 1) $a [] = array(
+                        $brewerFirstName,
+                        $brewerLastName,
+                        html_entity_decode($row_sql['brewerBreweryName']),
+                        html_entity_decode($row_sql['brewerBreweryTTB']),
+                        $row_sql['brewerEmail'],
+                        $brewerAddress,
+                        $brewerCity,
+                        html_entity_decode($row_sql['brewerState']),
+                        html_entity_decode($row_sql['brewerZip']),
+                        html_entity_decode($row_sql['brewerCountry']),
+                        $phone,
+                        html_entity_decode($row_sql['brewerClubs']),
+                        judge_entries($row_sql['uid'],0)
+                    );
+                    
+                    else $a [] = array(
+                        $brewerFirstName,
+                        $brewerLastName,
+                        $row_sql['brewerEmail'],
+                        $brewerAddress,
+                        $brewerCity,
+                        html_entity_decode($row_sql['brewerState']),
+                        html_entity_decode($row_sql['brewerZip']),
+                        html_entity_decode($row_sql['brewerCountry']),
+                        $phone,
+                        html_entity_decode($row_sql['brewerClubs']),
+                        judge_entries($row_sql['uid'],0)
+                    );
                 }
 
             } while ($row_sql = mysqli_fetch_assoc($sql));
@@ -513,10 +671,14 @@ if (($admin_role) || (((judging_date_return() == 0) && ($registration_open == 2)
             //echo $query_sql;
 
             do {
-                $brewerFirstName = strtr($row_sql['brewerFirstName'],$html_remove);
-                $brewerLastName = strtr($row_sql['brewerLastName'],$html_remove);
-                $brewerAddress = strtr($row_sql['brewerAddress'],$html_remove);
-                $brewerCity = strtr($row_sql['brewerCity'],$html_remove);
+                $brewerFirstName = html_entity_decode($row_sql['brewerFirstName']);
+                $brewerLastName = html_entity_decode($row_sql['brewerLastName']);
+                $brewerAddress = html_entity_decode($row_sql['brewerAddress']);
+                $brewerCity = html_entity_decode($row_sql['brewerCity']);
+                $brewerState = html_entity_decode($row_sql['brewerState']);
+                $brewerZip = html_entity_decode($row_sql['brewerZip']);
+                $brewerCountry = html_entity_decode($row_sql['brewerCountry']);
+                $brewerClubs = html_entity_decode($row_sql['brewerClubs']);
                 $brewerJudgeMead = "";
                 $brewerJudgeCider = "";
                 if ((!empty($row_sql['brewerJudgeMead'])) && ($row_sql['brewerJudgeMead'] == "Y")) $brewerJudgeMead = $label_bjcp_mead;
@@ -536,20 +698,40 @@ if (($admin_role) || (((judging_date_return() == 0) && ($registration_open == 2)
 
                 $assignment = implode(", ", $assign);
 
-                if ($row_sql['brewerCountry'] == "United States") $phone = format_phone_us($row_sql['brewerPhone1']); else $phone = $row_sql['brewerPhone1'];
+                if ($row_sql['brewerCountry'] == "United States") $phone = format_phone_us($row_sql['brewerPhone1']); 
+                else $phone = $row_sql['brewerPhone1'];
 
-                if ($_SESSION['prefsProEdition'] == 1) $a[] = array($brewerFirstName,$brewerLastName,$row_sql['brewerBreweryName'],$row_sql['brewerBreweryTTB'],$brewerAddress,$brewerCity,$row_sql['brewerState'],$row_sql['brewerZip'],$row_sql['brewerCountry'],$phone,$row_sql['brewerEmail'],$row_sql['brewerClubs'],judge_entries($row_sql['uid'],0),$assignment,$row_sql['brewerJudgeID'],str_replace(",",", ",$row_sql['brewerJudgeRank']),style_convert($row_sql['brewerJudgeLikes'],'6'),style_convert($row_sql['brewerJudgeDislikes'],'6'));
+                if ($_SESSION['prefsProEdition'] == 1) $a[] = array(
+                    $brewerFirstName,
+                    $brewerLastName,
+                    html_entity_decode($row_sql['brewerBreweryName']),
+                    html_entity_decode($row_sql['brewerBreweryTTB']),
+                    $brewerAddress,
+                    $brewerCity,
+                    $brewerState,
+                    $brewerZip,
+                    $brewerCountry,
+                    $phone,
+                    $row_sql['brewerEmail'],
+                    $brewerClubs,
+                    judge_entries($row_sql['uid'],0),
+                    $assignment,$row_sql['brewerJudgeID'],
+                    str_replace(",",", ",$row_sql['brewerJudgeRank']),
+                    style_convert($row_sql['brewerJudgeLikes'],'6'),
+                    style_convert($row_sql['brewerJudgeDislikes'],'6')
+                );
 
                 else $a[] = array(
                     $brewerFirstName,
                     $brewerLastName,
                     $brewerAddress,
                     $brewerCity,
-                    $row_sql['brewerState'],
-                    $row_sql['brewerZip'],
-                    $row_sql['brewerCountry'],
-                    $phone,$row_sql['brewerEmail'],
-                    $row_sql['brewerClubs'],
+                    $brewerState,
+                    $brewerZip,
+                    $brewerCountry,
+                    $phone,
+                    $row_sql['brewerEmail'],
+                    $brewerClubs,
                     judge_entries($row_sql['uid'],0),
                     $assignment,
                     $row_sql['brewerJudgeID'],
@@ -791,7 +973,7 @@ if (($admin_role) || (((judging_date_return() == 0) && ($registration_open == 2)
 
             if ($go == "judging_scores") {
                 $html = '';
-
+                
                 if ($view == "pdf") {
                     $pdf->SetFont('Arial','B',16);
                     $pdf->Write(5,'Results - '.$_SESSION['contestName']);
@@ -802,7 +984,7 @@ if (($admin_role) || (((judging_date_return() == 0) && ($registration_open == 2)
 
                 $filename = str_replace(" ","_",$_SESSION['contestName']).'_Results.'.$view;
 
-                if ($_SESSION['prefsWinnerMethod'] == 0) {
+                if ($winner_method == 0) {
 
                     do {
                         $entry_count = get_table_info(1,"count_total",$row_tables['id'],$dbTable,"default");
@@ -829,17 +1011,18 @@ if (($admin_role) || (((judging_date_return() == 0) && ($registration_open == 2)
                                 $style = $row_scores['brewCategory'].$row_scores['brewSubCategory'];
                                 $html .= '<tr>';
                                 $html .= '<td width="'.$td_width_place.'">'.display_place($row_scores['scorePlace'],1).'</td>';
-                                if ($_SESSION['prefsProEdition'] == 1) $html .= '<td width="'.$td_width_name.'">'.strtr($row_scores['brewerBreweryName'],$html_remove).'</td>';
-                                else $html .= '<td width="'.$td_width_name.'">'.$row_scores['brewerFirstName'].' '.$row_scores['brewerLastName'].'</td>';
+                                if ($_SESSION['prefsProEdition'] == 1) $html .= '<td width="'.$td_width_name.'">'.html_entity_decode($row_scores['brewerBreweryName']).'</td>';
+                                else $html .= '<td width="'.$td_width_name.'">'.html_entity_decode($row_scores['brewerFirstName']).' '.html_entity_decode($row_scores['brewerLastName']).'</td>';
                                 $html .= '<td width="'.$td_width_entry.'">';
-                                if ($row_scores['brewName'] != '') $html .= strtr($row_scores['brewName'],$html_remove); else $html .= '&nbsp;';
+                                if ($row_scores['brewName'] != '') $html .= html_entity_decode(truncate_string($row_scores['brewName'],30," ")); else $html .= '&nbsp;';
                                 $html .= '</td>';
                                 $html .= '<td width="'.$td_width_style.'">';
-                                if ($row_scores['brewStyle'] != '') $html .= $row_scores['brewStyle']; else $html .= "&nbsp;";
+                                if ($row_scores['brewStyle'] != '') $html .= truncate_string($row_scores['brewStyle'],30," "); else $html .= "&nbsp;";
                                 $html .= '</td>';
                                 if ($_SESSION['prefsProEdition'] == 0) {
                                     $html .= '<td width="175">';
-                                    if ($row_scores['brewerClubs'] != "") $html .= strtr($row_scores['brewerClubs'],$html_remove);
+                                    if ($row_scores['brewerClubs'] != "") $html .= html_entity_decode(truncate_string($row_scores['brewerClubs'],17," "));
+                                    else $html .= "&nbsp;";
                                     $html .= '</td>';
                                 }
                                 $html .= '</tr>';
@@ -848,9 +1031,9 @@ if (($admin_role) || (((judging_date_return() == 0) && ($registration_open == 2)
                         }
                     } while ($row_tables = mysqli_fetch_assoc($tables));
 
-                } // end if ($_SESSION['prefsWinnerMethod'] == 0)
+                } // end if ($winner_method == 0)
 
-                if ($_SESSION['prefsWinnerMethod'] == 1) {
+                if ($winner_method == 1) {
 
                     $a = styles_active(0);
 
@@ -896,17 +1079,19 @@ if (($admin_role) || (((judging_date_return() == 0) && ($registration_open == 2)
                                     $style = $row_scores['brewCategory'].$row_scores['brewSubCategory'];
                                     $html .= '<tr>';
                                     $html .= '<td width="'.$td_width_place.'">'.display_place($row_scores['scorePlace'],1).'</td>';
-                                    if ($_SESSION['prefsProEdition'] == 1) $html .= '<td width="'.$td_width_name.'">'.strtr($row_scores['brewerBreweryName'],$html_remove).'</td>';
-                                    else $html .= '<td width="'.$td_width_name.'">'.$row_scores['brewerFirstName'].' '.$row_scores['brewerLastName'].'</td>';
+                                    if ($_SESSION['prefsProEdition'] == 1) $html .= '<td width="'.$td_width_name.'">'.html_entity_decode($row_scores['brewerBreweryName']).'</td>';
+                                    else $html .= '<td width="'.$td_width_name.'">'.html_entity_decode($row_scores['brewerFirstName']).' '.html_entity_decode($row_scores['brewerLastName']).'</td>';
                                     $html .= '<td width="'.$td_width_entry.'">';
-                                    if ($row_scores['brewName'] != '') $html .= strtr($row_scores['brewName'],$html_remove); else $html .= '&nbsp;';
+                                    if ($row_scores['brewName'] != '') $html .= html_entity_decode(truncate_string($row_scores['brewName'],30," ")); 
+                                    else $html .= '&nbsp;';
                                     $html .= '</td>';
                                     $html .= '<td width="'.$td_width_style.'">';
-                                    if ($row_scores['brewStyle'] != '') $html .= $row_scores['brewStyle']; else $html .= "&nbsp;";
+                                    if ($row_scores['brewStyle'] != '') $html .= truncate_string($row_scores['brewStyle'],30," "); else $html .= "&nbsp;";
                                     $html .= '</td>';
                                     if ($_SESSION['prefsProEdition'] == 0) {
                                         $html .= '<td width="175">';
-                                        if ($row_scores['brewerClubs'] != "") $html .= strtr($row_scores['brewerClubs'],$html_remove);
+                                        if ($row_scores['brewerClubs'] != "") $html .= html_entity_decode(truncate_string($row_scores['brewerClubs'],17," "));
+                                        else $html .= "&nbsp;";
                                         $html .= '</td>';
                                     }
                                     $html .= '</tr>';
@@ -920,9 +1105,9 @@ if (($admin_role) || (((judging_date_return() == 0) && ($registration_open == 2)
 
                     } // end foreach
 
-                } // end if if ($_SESSION['prefsWinnerMethod'] == 1)
+                } // end if if ($winner_method == 1)
 
-                if ($_SESSION['prefsWinnerMethod'] == 2) {
+                if ($winner_method == 2) {
                     $styles = styles_active(2);
 
                     foreach (array_unique($styles) as $style) {
@@ -963,17 +1148,19 @@ if (($admin_role) || (((judging_date_return() == 0) && ($registration_open == 2)
                                 $style = $row_scores['brewCategory'].$row_scores['brewSubCategory'];
                                 $html .= '<tr>';
                                 $html .= '<td width="'.$td_width_place.'">'.display_place($row_scores['scorePlace'],1).'</td>';
-                                if ($_SESSION['prefsProEdition'] == 1) $html .= '<td width="'.$td_width_name.'">'.strtr($row_scores['brewerBreweryName'],$html_remove).'</td>';
-                                else $html .= '<td width="'.$td_width_name.'">'.$row_scores['brewerFirstName'].' '.$row_scores['brewerLastName'].'</td>';
+                                if ($_SESSION['prefsProEdition'] == 1) $html .= '<td width="'.$td_width_name.'">'.html_entity_decode($row_scores['brewerBreweryName']).'</td>';
+                                else $html .= '<td width="'.$td_width_name.'">'.html_entity_decode($row_scores['brewerFirstName']).' '.html_entity_decode($row_scores['brewerLastName']).'</td>';
                                 $html .= '<td width="'.$td_width_entry.'">';
-                                if ($row_scores['brewName'] != '') $html .= strtr($row_scores['brewName'],$html_remove); else $html .= '&nbsp;';
+                                if ($row_scores['brewName'] != '') $html .= html_entity_decode(truncate_string($row_scores['brewName'],30," ")); else $html .= '&nbsp;';
                                 $html .= '</td>';
                                 $html .= '<td width="'.$td_width_style.'">';
-                                if ($row_scores['brewStyle'] != '') $html .= $row_scores['brewStyle']; else $html .= "&nbsp;";
+                                if ($row_scores['brewStyle'] != '') $html .= truncate_string($row_scores['brewStyle'],30," "); 
+                                else $html .= "&nbsp;";
                                 $html .= '</td>';
                                 if ($_SESSION['prefsProEdition'] == 0) {
                                     $html .= '<td width="175">';
-                                    if ($row_scores['brewerClubs'] != "") $html .= strtr($row_scores['brewerClubs'],$html_remove);
+                                    if ($row_scores['brewerClubs'] != "") $html .= html_entity_decode(truncate_string($row_scores['brewerClubs'],17," "));
+                                    else $html .= "&nbsp;";
                                     $html .= '</td>';
                                 }
                                 $html .= '</tr>';
@@ -1006,7 +1193,7 @@ if (($admin_role) || (((judging_date_return() == 0) && ($registration_open == 2)
 
                 do { $a[] = $row_style_types['id']; } while ($row_style_types = mysqli_fetch_assoc($style_types));
 
-                if ($view == "html") $html .= '<h1>BOS - '.$_SESSION['contestName'].'</h1>';
+                if ($view == "html") $html .= '<h1>BOS - '.html_entity_decode($_SESSION['contestName']).'</h1>';
 
                 sort($a);
 
@@ -1016,8 +1203,8 @@ if (($admin_role) || (((judging_date_return() == 0) && ($registration_open == 2)
 
                     if ($totalRows_bos > 0) {
 
-                        if ($view == "pdf") $html .= '<br><br><strong>'.$row_style_type['styleTypeName'].'</strong><br>';
-                        else $html .= '<h2>'.$row_style_type['styleTypeName'].'</h2>';
+                        if ($view == "pdf") $html .= '<br><br><strong>'.$row_style_type_1['styleTypeName'].'</strong><br>';
+                        else $html .= '<h2>'.$row_style_type_1['styleTypeName'].'</h2>';
                         $html .= '<table border="1" cellpadding="5" cellspacing="0">';
                         $html .= '<tr>';
                         $html .= '<td width="'.$td_width_place.'" align="center"  bgcolor="#cccccc" nowrap="nowrap"><strong>'.$label_place.'</strong></td>';
@@ -1032,17 +1219,27 @@ if (($admin_role) || (((judging_date_return() == 0) && ($registration_open == 2)
                             $style = $row_bos['brewCategory'].$row_bos['brewSubCategory'];
 
                             $html .= '<tr>';
+                            
+                            // Place
                             $html .= '<td width="'.$td_width_place.'" nowrap="nowrap">'.display_place($row_bos['scorePlace'],1).'</td>';
-                            if ($_SESSION['prefsProEdition'] == 1) $html .= '<td width="'.$td_width_name.'">'.strtr($row_bos['brewerBreweryName'],$html_remove).'</td>';
-                            else $html .= '<td width="'.$td_width_name.'">'.$row_bos['brewerFirstName'].' '.$row_bos['brewerLastName'].'</td>';
-                            if (($_SESSION['prefsProEdition'] == 0) && ($row_bos['brewCoBrewer'] != "")) $html .=', '.$row_bos['brewCoBrewer'];
-                            $html .= '</td>';
-                            $html .= '<td width="'.$td_width_entry.'">'.strtr($row_bos['brewName'],$html_remove).'</td>';
-                            $html .= '<td width="'.$td_width_style.'">'.$row_bos['brewStyle'].'</td>';
+                            
+                            // Brewer
+                            if ($_SESSION['prefsProEdition'] == 1) {
+                                $html .= '<td width="'.$td_width_name.'">'.html_entity_decode($row_bos['brewerBreweryName']);
+                                $html .= '</td>';
+                            }
+                            else {
+                                $html .= '<td width="'.$td_width_name.'">'.html_entity_decode($row_bos['brewerFirstName']).' '.html_entity_decode($row_bos['brewerLastName']);
+                                if (($_SESSION['prefsProEdition'] == 0) && ($row_bos['brewCoBrewer'] != "")) $html .=', '.html_entity_decode(truncate_string($row_bos['brewCoBrewer'],20," "));
+                                $html .= '</td>';
+                            }
+
+                            $html .= '<td width="'.$td_width_entry.'">'.html_entity_decode($row_bos['brewName']).'</td>';
+                            $html .= '<td width="'.$td_width_style.'">'.truncate_string($row_bos['brewStyle'],30," ").'</td>';
 
                             if ($_SESSION['prefsProEdition'] == 0) {
                                 $html .= '<td width="175">';
-                                if ($row_bos['brewerClubs'] != "") $html .= strtr($row_bos['brewerClubs'],$html_remove);
+                                if ($row_bos['brewerClubs'] != "") $html .= html_entity_decode(truncate_string($row_bos['brewerClubs'],17," "));
                                 else $html .= "&nbsp;";
                                 $html .= '</td>';
                             }
@@ -1065,9 +1262,9 @@ if (($admin_role) || (((judging_date_return() == 0) && ($registration_open == 2)
                         include (DB.'output_results_download_sbd.db.php');
 
                         if ($totalRows_sbd > 0) {
-                        if ($view == "pdf") $html .= '<br><br><strong>'.strtr($row_sbi['sbi_name'],$html_remove).'</strong>';
-                        else $html .= '<h2>'.strtr($row_sbi['sbi_name'],$html_remove).'</h2>';
-                        $html .= '<br>'.strtr($row_sbi['sbi_description'],$html_remove).'<br>';
+                        if ($view == "pdf") $html .= '<br><br><strong>'.html_entity_decode($row_sbi['sbi_name']).'</strong>';
+                        else $html .= '<h2>'.html_entity_decode($row_sbi['sbi_name']).'</h2>';
+                        $html .= '<br>'.html_entity_decode($row_sbi['sbi_description']).'<br>';
                         $html .= '<table border="1" cellpadding="5" cellspacing="0">';
                         $html .= '<tr>';
                         if ($row_sbi['sbi_display_places'] == "1") $html .= '<td width="'.$td_width_place.'" align="center"  bgcolor="#cccccc" nowrap="nowrap"><strong>'.$label_place.'</strong></td>';
@@ -1083,13 +1280,13 @@ if (($admin_role) || (((judging_date_return() == 0) && ($registration_open == 2)
                             $style = $entry_info['5'].$entry_info['2'];
                             $html .= '<tr>';
                             if ($row_sbi['sbi_display_places'] == "1") { $html .= '<td width="'.$td_width_place.'" nowrap="nowrap">'.display_place($row_sbd['sbd_place'],4).'</td>'; }
-                            $html .= '<td width="'.$td_width_name.'">'.$brewer_info['0']." ".$brewer_info['1'];
-                                if ($row_entries['brewCoBrewer'] != "") $html .= "<br />Co-Brewer: ".$entry_info['4'];
+                            $html .= '<td width="'.$td_width_name.'">'.html_entity_decode($brewer_info['0'])." ".html_entity_decode($brewer_info['1']);
+                                if ($row_entries['brewCoBrewer'] != "") $html .= "<br />Co-Brewer: ".html_entity_decode($entry_info['4']);
                             $html .= '</td>';
-                            $html .= '<td width="'.$td_width_entry.'">'.strtr($entry_info['0'],$html_remove).'</td>';
+                            $html .= '<td width="'.$td_width_entry.'">'.html_entity_decode($entry_info['0']).'</td>';
                             $html .= '<td width="'.$td_width_style.'">'.$entry_info['3'].'</td>';
                             $html .= '<td width="175">';
-                            if (($_SESSION['prefsProEdition'] == 0) && ($brewer_info['8'] != "")) $html .=strtr($brewer_info['8'],$html_remove);
+                            if (($_SESSION['prefsProEdition'] == 0) && ($brewer_info['8'] != "")) $html .=html_entity_decode($brewer_info['8']);
                             else $html .= "&nbsp;";
                             $html .= '</td>';
                             $html .= '</tr>';
@@ -1112,10 +1309,9 @@ if (($admin_role) || (((judging_date_return() == 0) && ($registration_open == 2)
             } // end if ($go == "judging_scores_bos")
 
             if ($view == "pdf") {
-                $html = iconv('UTF-8', 'windows-1252', $html);
+                $html = iconv('UTF-8', 'utf-8//TRANSLIT', $html);
                 $pdf->WriteHTML($html);
                 $pdf->Output($filename,'D');
-                //echo $html;
             }
 
             if ($view == "html") {
@@ -1290,7 +1486,7 @@ if (($admin_role) || (((judging_date_return() == 0) && ($registration_open == 2)
                 $pdf=new PDF();
                 $pdf->AddPage();
                 $pdf->SetFont('Arial','B',16);
-                $pdf->Write(5,strtr($_SESSION['contestName'],$html_remove).' BJCP Points Report');
+                $pdf->Write(5,html_entity_decode($_SESSION['contestName']).' BJCP Points Report');
                 $pdf->SetFont('Arial','',10);
 
                 $html = '<br><br><strong>BJCP Competition ID</strong>: '.$_SESSION['contestID'].'<br>';
@@ -1308,7 +1504,7 @@ if (($admin_role) || (((judging_date_return() == 0) && ($registration_open == 2)
                     $html .= '<td width="'.$td_width_name.'" align="center" bgcolor="#cccccc">Points</td>';
                     $html .= '</tr>';
                         $html .= '<tr>';
-                        $html .= '<td width="300">'.$row_org['brewerLastName'].", ".$row_org['brewerFirstName'].'</td>';
+                        $html .= '<td width="300">'.html_entity_decode($row_org['brewerLastName']).", ".html_entity_decode($row_org['brewerFirstName']).'</td>';
                         $html .= '<td width="'.$td_width_name.'">';
                             if ($row_org['brewerJudgeID'] != "") $html .=  strtoupper(strtr($row_org['brewerJudgeID'],$bjcp_num_replace)); else $html .= '&nbsp;';
                         $html .= '</td>';
@@ -1420,7 +1616,7 @@ if (($admin_role) || (((judging_date_return() == 0) && ($registration_open == 2)
                         $steward_info = explode("^",brewer_info($uid));
                         $steward_points = steward_points($uid);
                         if ($steward_points > 0) {
-                            $steward_name = $steward_info['1'].", ".$steward_info['0'];
+                            $steward_name = html_entity_decode($steward_info['1']).", ".html_entity_decode($steward_info['0']);
                             $html .= '<tr>';
                             $html .= '<td width="300">'.$steward_name.'</td>';
                             $html .= '<td width="'.$td_width_name.'">';
@@ -1445,7 +1641,7 @@ if (($admin_role) || (((judging_date_return() == 0) && ($registration_open == 2)
                     foreach (array_unique($st) as $uid) {
                         if (array_sum($st_running_total) < $staff_max_points) {
                             $staff_info = explode("^",brewer_info($uid));
-                            $staff_name = $staff_info['1'].", ".$staff_info['0'];
+                            $staff_name = html_entity_decode($staff_info['1']).", ".html_entity_decode($staff_info['0']);
                             $html .= '<tr>';
                             $html .= '<td width="300">'.$staff_name.'</td>';
                             $html .= '<td width="'.$td_width_name.'">';
@@ -1517,7 +1713,7 @@ if (($admin_role) || (((judging_date_return() == 0) && ($registration_open == 2)
                     $output .= "<OrgReport>\n";
                     $output .= "\t<CompData>\n";
                     $output .= "\t\t<CompID>".$_SESSION['contestID']."</CompID>\n";
-                    $output .= "\t\t<CompName>".$_SESSION['contestName']."</CompName>\n";
+                    $output .= "\t\t<CompName>".html_entity_decode($_SESSION['contestName'])."</CompName>\n";
                     $output .= "\t\t<CompDate>".getTimeZoneDateTime($_SESSION['prefsTimeZone'], max($dates), $_SESSION['prefsDateFormat'], $_SESSION['prefsTimeFormat'], "system", "date-no-gmt")."</CompDate>\n";
                     $output .= "\t\t<CompEntries>".$total_entries."</CompEntries>\n";
                     $output .= "\t\t<CompDays>".$total_days."</CompDays>\n";
@@ -1578,7 +1774,7 @@ if (($admin_role) || (((judging_date_return() == 0) && ($registration_open == 2)
                             if (($bos_judge) && (!in_array($uid,$bos_judge_no_assignment))) $assignment = "Judge + BOS";
                             else $assignment = "Judge";
                             if (($judge_info['0'] != "") && ($judge_info['1'] != "") && (validate_bjcp_id($judge_info['4']))) {
-                                $judge_name = $judge_info['0']." ".$judge_info['1'];
+                                $judge_name = html_entity_decode($judge_info['0'])." ".html_entity_decode($judge_info['1']);
                                 $output .= "\t\t<JudgeData>\n";
                                 $output .= "\t\t\t<JudgeName>".$judge_name."</JudgeName>\n";
                                 $output .= "\t\t\t<JudgeID>".strtoupper(strtr($judge_info['4'],$bjcp_num_replace))."</JudgeID>\n";
@@ -1596,7 +1792,7 @@ if (($admin_role) || (((judging_date_return() == 0) && ($registration_open == 2)
                         $judge_info = explode("^",brewer_info($uid));
                         if (($judge_info['0'] != "") && ($judge_info['1'] != "") && (validate_bjcp_id($judge_info['4']))) {
                             if (!empty($uid)) {
-                                $judge_name = $judge_info['0']." ".$judge_info['1'];
+                                $judge_name = html_entity_decode($judge_info['0'])." ".html_entity_decode($judge_info['1']);
                                 $output .= "\t\t<JudgeData>\n";
                                 $output .= "\t\t\t<JudgeName>".$judge_name."</JudgeName>\n";
                                 $output .= "\t\t\t<JudgeID>".strtoupper(strtr($judge_info['4'],$bjcp_num_replace))."</JudgeID>\n";
@@ -1613,7 +1809,7 @@ if (($admin_role) || (((judging_date_return() == 0) && ($registration_open == 2)
                     $steward_info = explode("^",brewer_info($uid));
                     $steward_points = steward_points($uid);
                     if ($steward_points > 0) {
-                        $steward_name = $steward_info['0']." ".$steward_info['1'];
+                        $steward_name = html_entity_decode($steward_info['0'])." ".html_entity_decode($steward_info['1']);
                         if (($steward_info['0'] != "") && ($steward_info['1'] != "") && (validate_bjcp_id($steward_info['4']))) {
                             $output .= "\t\t<JudgeData>\n";
                             $output .= "\t\t\t<JudgeName>".$steward_name."</JudgeName>\n";
@@ -1631,7 +1827,7 @@ if (($admin_role) || (((judging_date_return() == 0) && ($registration_open == 2)
                     if (array_sum($st_running_total) < $staff_max_points) {
                         $staff_info = explode("^",brewer_info($uid));
                             if (($staff_info['0'] != "") && ($staff_info['1'] != "") && (validate_bjcp_id($staff_info['4']))) {
-                                $staff_name = $staff_info['0']." ".$staff_info['1'];
+                                $staff_name = html_entity_decode($staff_info['0'])." ".html_entity_decode($staff_info['1']);
                                 $st_running_total[] .= $staff_points;
                                 $output .= "\t\t<JudgeData>\n";
                                 $output .= "\t\t\t<JudgeName>".$staff_name."</JudgeName>\n";
@@ -1649,8 +1845,8 @@ if (($admin_role) || (((judging_date_return() == 0) && ($registration_open == 2)
                     $organizer_info = explode("^",brewer_info($uid));
                         if (($organizer_info['0'] != "") && ($organizer_info['1'] != "") && (validate_bjcp_id($organizer_info['4']))) {
                             $output .= "\t\t<JudgeData>\n";
-                            $output .= "\t\t\t<JudgeName>".$organizer_info['0']." ".$organizer_info['1']."</JudgeName>\n";
-                            $output .= "\t\t\t<JudgeID>".$organizer_info['4']."</JudgeID>\n";
+                            $output .= "\t\t\t<JudgeName>".html_entity_decode($organizer_info['0'])." ".html_entity_decode($organizer_info['1'])."</JudgeName>\n";
+                            $output .= "\t\t\t<JudgeID>".strtoupper(strtr($organizer_info['4'],$bjcp_num_replace))."</JudgeID>\n";
                             $output .= "\t\t\t<JudgeRole>Organizer</JudgeRole>\n";
                             $output .= "\t\t\t<JudgePts>0.0</JudgePts>\n";
                             $output .= "\t\t\t<NonJudgePts>".$organ_max_points."</NonJudgePts>\n";
@@ -1712,7 +1908,7 @@ if (($admin_role) || (((judging_date_return() == 0) && ($registration_open == 2)
                             if ($bos_judge) $assignment = "Judge + BOS";
                             else $assignment = "Judge";
                             if (($judge_info['0'] != "") && ($judge_info['1'] != "") && (!validate_bjcp_id($judge_info['4']))) {
-                                $judge_name = $judge_info['0']." ".$judge_info['1'];
+                                $judge_name = html_entity_decode($judge_info['0'])." ".html_entity_decode($judge_info['1']);
                                 $output .= "\t\t<JudgeData>\n";
                                 $output .= "\t\t\t<JudgeName>".$judge_name."</JudgeName>\n";
                                 $output .= "\t\t\t<JudgeRole>".$assignment."</JudgeRole>\n";
@@ -1729,7 +1925,7 @@ if (($admin_role) || (((judging_date_return() == 0) && ($registration_open == 2)
                         $judge_info = explode("^",brewer_info($uid));
                         if (($judge_info['0'] != "") && ($judge_info['1'] != "") && (!validate_bjcp_id($judge_info['4']))) {
                             if (!empty($uid)) {
-                                $judge_name = $judge_info['0']." ".$judge_info['1'];
+                                $judge_name = html_entity_decode($judge_info['0'])." ".html_entity_decode($judge_info['1']);
                                 $output .= "\t\t<JudgeData>\n";
                                 $output .= "\t\t\t<JudgeName>".$judge_name."</JudgeName>\n";
                                 $output .= "\t\t\t<JudgeID>".strtoupper(strtr($judge_info['4'],$bjcp_num_replace))."</JudgeID>\n";
@@ -1747,7 +1943,7 @@ if (($admin_role) || (((judging_date_return() == 0) && ($registration_open == 2)
                     if ($steward_points > 0) {
                         $steward_info = explode("^",brewer_info($uid));
                             if (($steward_info['0'] != "") && ($steward_info['1'] != "") && (!validate_bjcp_id($steward_info['4']))) {
-                                    $steward_name = $steward_info['0']." ".$steward_info['1'];
+                                    $steward_name = html_entity_decode($steward_info['0'])." ".html_entity_decode($steward_info['1']);
                                     $output .= "\t\t<JudgeData>\n";
                                     $output .= "\t\t\t<JudgeName>".$steward_name."</JudgeName>\n";
                                     $output .= "\t\t\t<JudgeRole>Steward</JudgeRole>\n";
@@ -1764,7 +1960,7 @@ if (($admin_role) || (((judging_date_return() == 0) && ($registration_open == 2)
                         $staff_info = explode("^",brewer_info($uid));
                             if (($staff_info['0'] != "") && ($staff_info['1'] != "") && (!validate_bjcp_id($staff_info['4']))) {
                                 $st_running_total[] = $staff_points;
-                                $staff_name = $staff_info['0']." ".$staff_info['1'];
+                                $staff_name = html_entity_decode($staff_info['0'])." ".html_entity_decode($staff_info['1']);
                                 $output .= "\t\t<JudgeData>\n";
                                 $output .= "\t\t\t<JudgeName>".$staff_name."</JudgeName>\n";
                                 $output .= "\t\t\t<JudgeRole>Staff</JudgeRole>\n";
@@ -1781,7 +1977,7 @@ if (($admin_role) || (((judging_date_return() == 0) && ($registration_open == 2)
                     $organizer_info = explode("^",brewer_info($uid));
                         if (($organizer_info['0'] != "") && ($organizer_info['1'] != "") && (!validate_bjcp_id($organizer_info['4']))) {
                             $output .= "\t\t<JudgeData>\n";
-                            $output .= "\t\t\t<JudgeName>".$organizer_info['0']." ".$organizer_info['1']."</JudgeName>\n";
+                            $output .= "\t\t\t<JudgeName>".html_entity_decode($organizer_info['0'])." ".html_entity_decode($organizer_info['1'])."</JudgeName>\n";
                             $output .= "\t\t\t<JudgeRole>Organizer</JudgeRole>\n";
                             $output .= "\t\t\t<JudgePts>0.0</JudgePts>\n";
                             $output .= "\t\t\t<NonJudgePts>".$organ_max_points."</NonJudgePts>\n";
@@ -1808,12 +2004,12 @@ if (($admin_role) || (((judging_date_return() == 0) && ($registration_open == 2)
                         include (DB.'output_results_download_bos.db.php');
 
                         if ($totalRows_bos > 0) {
-                            if ($_SESSION['prefsProEdition'] == 1) $output .= "\t\t".$label_bos.": ".$row_bos['brewerBreweryName']."\n";
-                            else $output .= "\t\t".$label_bos.": ".$row_bos['brewerFirstName']." ".$row_bos['brewerLastName']."\n";
-                            $output .= "\t\t".$label_style.": ".$row_bos['brewStyle']."\n";
-                            $output .= "\t\t".$label_city.": ".$row_bos['brewerCity']."\n";
-                            $output .= "\t\t".$label_state_province.": ".$row_bos['brewerState']."\n";
-                            $output .= "\t\t".$label_country.": ".$row_bos['brewerCountry']."\n";
+                            if ($_SESSION['prefsProEdition'] == 1) $output .= "\t\t".$label_bos.": ".html_entity_decode($row_bos['brewerBreweryName'])."\n";
+                            else $output .= "\t\t".$label_bos.": ".html_entity_decode($row_bos['brewerFirstName'])." ".html_entity_decode($row_bos['brewerLastName'])."\n";
+                            $output .= "\t\t".$label_style.": ".html_entity_decode($row_bos['brewStyle'])."\n";
+                            $output .= "\t\t".$label_city.": ".html_entity_decode($row_bos['brewerCity'])."\n";
+                            $output .= "\t\t".$label_state_province.": ".html_entity_decode($row_bos['brewerState'])."\n";
+                            $output .= "\t\t".$label_country.": ".html_entity_decode($row_bos['brewerCountry'])."\n";
                         }
                     }
 
