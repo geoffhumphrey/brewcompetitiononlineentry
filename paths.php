@@ -51,7 +51,7 @@ define('AJAX',ROOT.'ajax'.DIRECTORY_SEPARATOR);
 define('HOSTED', FALSE);
 define('NHC', FALSE);
 define('SINGLE', FALSE);
-define('EVALUATION', TRUE);
+define('EVALUATION', FALSE);
 
 /**
  * Enable to following to put your installation into
@@ -97,7 +97,7 @@ define('DEBUG', FALSE);
  * Default is FALSE.
  */
 
-define('DEBUG_SESSION_VARS', TRUE);
+define('DEBUG_SESSION_VARS', FALSE);
 
 /**
  * Enable the following when receiving mySQL "column does
@@ -119,7 +119,7 @@ define('FORCE_UPDATE', FALSE);
  * Default is FALSE.
  */
 
-define('ENABLE_MARKDOWN', TRUE);
+define('ENABLE_MARKDOWN', FALSE);
 
 /**
  * Set the following to TRUE if you would like to use
@@ -131,7 +131,7 @@ define('ENABLE_MARKDOWN', TRUE);
  * Default is FALSE.
  */
 
-define('ENABLE_MAILER', TRUE);
+define('ENABLE_MAILER', FALSE);
 
 /**
  * --------------------------------------------------------
