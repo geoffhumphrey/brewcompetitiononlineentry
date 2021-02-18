@@ -12,13 +12,13 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 
 	if (isset($_POST['sbi_name']) {
 		$sbi_name = $purifier->purify($_POST['sbi_name']);
-		$sbi_name = filter_var($sbi_name,FILTER_SANITIZE_STRING,FILTER_FLAG_ENCODE_HIGH|FILTER_FLAG_ENCODE_LOW);
+		$sbi_name = filter_var($sbi_name,FILTER_SANITIZE_STRING);
 	}
 	else $sbi_name = "";
 
 	if (isset($_POST['sbi_description'])) {
 		$sbi_description = $purifier->purify($_POST['sbi_description']);
-		$sbi_description = filter_var($sbi_description,FILTER_SANITIZE_STRING,FILTER_FLAG_ENCODE_HIGH|FILTER_FLAG_ENCODE_LOW);
+		$sbi_description = filter_var($sbi_description,FILTER_SANITIZE_STRING);
 	}
 	else $sbi_description = "";
 

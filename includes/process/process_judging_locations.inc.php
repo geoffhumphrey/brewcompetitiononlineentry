@@ -12,9 +12,9 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 
 	$judgingDate = strtotime(sterilize($_POST['judgingDate']));
 	$judgingLocName = $purifier->purify($_POST['judgingLocName']);
-	$judgingLocName = filter_var($judgingLocName,FILTER_SANITIZE_STRING,FILTER_FLAG_ENCODE_HIGH|FILTER_FLAG_ENCODE_LOW);
+	$judgingLocName = filter_var($judgingLocName,FILTER_SANITIZE_STRING);
 	$judgingLocation = $purifier->purify($_POST['judgingLocation']);
-	$judgingLocation = filter_var($judgingLocation,FILTER_SANITIZE_STRING,FILTER_FLAG_ENCODE_HIGH|FILTER_FLAG_ENCODE_LOW);
+	$judgingLocation = filter_var($judgingLocation,FILTER_SANITIZE_STRING);
 	
 	$judgingDateEnd = "";
 	if (!empty($_POST['judgingDateEnd'])) $judgingDateEnd = strtotime(sterilize($_POST['judgingDateEnd']));

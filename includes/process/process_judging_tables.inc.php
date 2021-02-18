@@ -19,7 +19,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 	else $table_styles = $_POST['tableStyles'];
 	if (isset($_POST['tableName'])) {
 		$tableName = $purifier->purify($_POST['tableName']);
-		$tableName = filter_var($tableName,FILTER_SANITIZE_STRING,FILTER_FLAG_ENCODE_HIGH|FILTER_FLAG_ENCODE_LOW);
+		$tableName = filter_var($tableName,FILTER_SANITIZE_STRING);
 	}
 	else $tableName = "";
 

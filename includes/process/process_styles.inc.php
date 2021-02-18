@@ -20,7 +20,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 	if (isset($_POST['brewStyleEntry'])) {
 		$brewStyleEntry = trim($_POST['brewStyleEntry']);
 		$brewStyleEntry = $purifier->purify($brewStyleEntry);
-		$brewStyleEntry = filter_var($brewStyleEntry,FILTER_SANITIZE_STRING,FILTER_FLAG_ENCODE_HIGH|FILTER_FLAG_ENCODE_LOW);
+		$brewStyleEntry = filter_var($brewStyleEntry,FILTER_SANITIZE_STRING);
 	}
 	
 	if (isset($_POST['brewStyleInfo'])) {

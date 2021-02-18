@@ -607,22 +607,22 @@ if ($totalRows_names > 0) {
 		else {
 		    $first_name = $fname;
 		    $last_name = $lname;
-		    $first_name = filter_var($first_name,FILTER_SANITIZE_STRING,FILTER_FLAG_ENCODE_HIGH|FILTER_FLAG_ENCODE_LOW);
-		    $last_name = filter_var($last_name,FILTER_SANITIZE_STRING,FILTER_FLAG_ENCODE_HIGH|FILTER_FLAG_ENCODE_LOW);
+		    $first_name = filter_var($first_name,FILTER_SANITIZE_STRING);
+		    $last_name = filter_var($last_name,FILTER_SANITIZE_STRING);
 		}
 
 		$address = standardize_name($purifier->purify($row_names['brewerAddress']));
-		$address = filter_var($address,FILTER_SANITIZE_STRING,FILTER_FLAG_ENCODE_HIGH|FILTER_FLAG_ENCODE_LOW);
+		$address = filter_var($address,FILTER_SANITIZE_STRING);
 		$city = standardize_name($purifier->purify($row_names['brewerCity']));
-		$city = filter_var($city,FILTER_SANITIZE_STRING,FILTER_FLAG_ENCODE_HIGH|FILTER_FLAG_ENCODE_LOW);
+		$city = filter_var($city,FILTER_SANITIZE_STRING);
 		$state = $purifier->purify($row_names['brewerState']);
 		if (strlen($state) > 2) $state = standardize_name($state);
 		else $state = strtoupper($state);
-		$state = filter_var($state,FILTER_SANITIZE_STRING,FILTER_FLAG_ENCODE_HIGH|FILTER_FLAG_ENCODE_LOW);
+		$state = filter_var($state,FILTER_SANITIZE_STRING);
 		
 		if (!empty($row_names['brewerJudgeID'])) {
 			$brewerJudgeID = sterilize($row_names['brewerJudgeID']);
-			$brewerJudgeID = filter_var($brewerJudgeID,FILTER_SANITIZE_STRING,FILTER_FLAG_ENCODE_HIGH|FILTER_FLAG_ENCODE_LOW);
+			$brewerJudgeID = filter_var($brewerJudgeID,FILTER_SANITIZE_STRING);
 			$brewerJudgeID = strtoupper($brewerJudgeID);
 		}
 		else $brewerJudgeID = "";
@@ -634,7 +634,7 @@ if ($totalRows_names > 0) {
 
 		if (!empty($row_names['brewerJudgeNotes'])) {
 			$brewerJudgeNotes = $purifier->purify($row_names['brewerJudgeNotes']);
-			$brewerJudgeNotes = filter_var($brewerJudgeNotes,FILTER_SANITIZE_STRING,FILTER_FLAG_ENCODE_HIGH|FILTER_FLAG_ENCODE_LOW);
+			$brewerJudgeNotes = filter_var($brewerJudgeNotes,FILTER_SANITIZE_STRING);
 		}
 		else $brewerJudgeNotes = "";
 
@@ -703,7 +703,7 @@ if ($totalRows_entry_names > 0) {
 
 			}
 
-			$brewCoBrewer = filter_var($brewCoBrewer,FILTER_SANITIZE_STRING,FILTER_FLAG_ENCODE_HIGH|FILTER_FLAG_ENCODE_LOW);
+			$brewCoBrewer = filter_var($brewCoBrewer,FILTER_SANITIZE_STRING);
 
 		}
 		
@@ -711,12 +711,12 @@ if ($totalRows_entry_names > 0) {
 
 		if (isset($row_entry_names['brewInfo'])) {
 			$brewInfo = $purifier->purify($row_entry_names['brewInfo']);
-			$brewInfo = filter_var($brewInfo,FILTER_SANITIZE_STRING,FILTER_FLAG_ENCODE_HIGH|FILTER_FLAG_ENCODE_LOW);
+			$brewInfo = filter_var($brewInfo,FILTER_SANITIZE_STRING);
 		}
 		else $brewInfo = "";
 
 		$brewName = standardize_name($purifier->purify($row_entry_names['brewName']));
-		$brewName = filter_var($brewName,FILTER_SANITIZE_STRING,FILTER_FLAG_ENCODE_HIGH|FILTER_FLAG_ENCODE_LOW);
+		$brewName = filter_var($brewName,FILTER_SANITIZE_STRING);
 
 		$updateSQL = sprintf("UPDATE %s SET
 				brewJudgingNumber=%s,
