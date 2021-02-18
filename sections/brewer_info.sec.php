@@ -518,12 +518,13 @@ if ($show_judge_steward_fields) {
 						$account_display .= "</table>";
 				}
 			}
+
 			if (!empty($table_assign_judge)) $account_display .= sprintf("<p><strong class=\"text-success\">%s %s.</strong></p><p>%s</p>",$brewer_info_008,$label_judge,$brewer_info_009);
 			elseif ((in_array("Steward",$assignment_array)) && (!empty($assignment))) $account_display .= sprintf("%s %s.",$label_steward,$brewer_info_010);
 			$account_display .= "</div>";
 			$account_display .= "</div>";
 
-			if ((!$judge_available_not_assigned) && (!empty($table_assign_judge))) {
+			if (!empty($table_assign_judge)) {
 				$account_display .= "<div class=\"row bcoem-account-info\">";
 				$account_display .= sprintf("<div class=\"".$display_left_cols."\"><strong>%s</strong></div>",$label_assignment);
 				$account_display .= "<div class=\"".$display_right_cols."\">";
