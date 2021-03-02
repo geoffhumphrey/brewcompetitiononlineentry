@@ -170,7 +170,10 @@ if ($row_scored_entries['count'] > 0) {
 
 					if ($tb == "scores") {
 						$winners_table_body_1 .= "<td width=\"1%\" nowrap>";
-						if (!empty($row_scores['scoreEntry'])) $winners_table_body_1 .= $row_scores['scoreEntry'];
+						if (!empty($row_scores['scoreEntry'])) {
+							if (strpos($row_scores['scoreEntry'], '.') !== false) $winners_table_body_1 .= rtrim(number_format($row_scores['scoreEntry'],2),"0"); 
+							else $winners_table_body_1 .= $row_scores['scoreEntry'];
+						}
 						else $winners_table_body_1 .= "&nbsp;";
 						$winners_table_body_1 .= "</td>";
 					}

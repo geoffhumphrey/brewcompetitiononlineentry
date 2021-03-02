@@ -348,7 +348,7 @@ $totalRows_entry_count = total_paid_received($go,"default");
         <td><?php if ($pro_edition == 1) echo $table_score_data[14]; else echo $table_score_data[5].", ".$table_score_data[4]; ?></td>
         <td><?php echo $table_score_data[3]; ?></td>
         <?php } ?>
-        <td><?php echo number_format($row_scores['scoreEntry'],0); ?></td>
+        <td><?php if (strpos($row_scores['scoreEntry'], '.') !== false) echo rtrim(number_format($row_scores['scoreEntry'],2),"0"); else echo $row_scores['scoreEntry']; ?></td>
         <td><?php echo $score_place; ?></td>
         <td><?php echo $mini_bos; ?></td>
 		<?php if ($dbTable == "default") { ?>

@@ -25,11 +25,11 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) {
 
         echo "<h1>".$_SESSION['contestName']."</h1>";
         echo sprintf("<p class=\"lead\">%s <strong>%s</strong> %s <strong>%s</strong> %s</p>",$judge_closed_001,get_entry_count('received'),$judge_closed_002,get_participant_count('default'),$judge_closed_003);
+        
         echo "<h2>".$label_bos."</h2>";
         include (SECTIONS.'bos.sec.php');
-
         if (($_SESSION['prefsShowBestBrewer'] != 0) || ($_SESSION['prefsShowBestClub'] != 0)) include (SECTIONS.'bestbrewer.sec.php');
-
+        
         echo "<h2>".$label_winners."</h2>";
         if ($row_prefs['prefsWinnerMethod'] == "1") include (SECTIONS.'winners_category.sec.php');
         elseif ($row_prefs['prefsWinnerMethod'] == "2") include (SECTIONS.'winners_subcategory.sec.php');

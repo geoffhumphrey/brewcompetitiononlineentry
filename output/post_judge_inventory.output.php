@@ -75,7 +75,10 @@ if ($_SESSION['prefsStyleSet'] == "BA") include (INCLUDES.'ba_constants.inc.php'
 
             </td>
             <?php if ($go == "scores") { ?>
-            <td><?php if (isset($row_post_inventory_entry['scoreEntry'])) echo $row_post_inventory_entry['scoreEntry']; ?></td>
+            <td><?php 
+            if (isset($row_post_inventory_entry['scoreEntry'])) {
+                if (strpos($row_scores['scoreEntry'], '.') !== false) echo rtrim(number_format($row_post_inventory_entry['scoreEntry'],2),"0"); else echo $row_post_inventory_entry['scoreEntry'];
+            } ?></td>
             <?php } ?>
         </tr>
     <?php

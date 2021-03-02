@@ -15,8 +15,6 @@ if ($row_bb_prefs['prefsBestUseBOS'] == 1) {
     $bb_totalRows_bos_scores = mysqli_num_rows($bb_bos_scores);
 }
 
-
-
 $bb_points_prefs = array($row_bb_prefs['prefsFirstPlacePts'],$row_bb_prefs['prefsSecondPlacePts'],$row_bb_prefs['prefsThirdPlacePts'],$row_bb_prefs['prefsFourthPlacePts'],$row_bb_prefs['prefsHMPts']);
 
 $bb_tiebreaker_prefs = array($row_bb_prefs['prefsTieBreakRule1'],$row_bb_prefs['prefsTieBreakRule2'],$row_bb_prefs['prefsTieBreakRule3'],$row_bb_prefs['prefsTieBreakRule4'],$row_bb_prefs['prefsTieBreakRule5'],$row_bb_prefs['prefsTieBreakRule6']);

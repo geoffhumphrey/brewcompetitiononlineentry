@@ -929,7 +929,12 @@ if (($admin_role) || (((judging_date_return() == 0) && ($registration_open == 2)
 
 	if ($section == "results") {
 
-        if (($_SESSION['prefsDisplayWinners'] == "Y") && (judging_winner_display($_SESSION['prefsWinnerDelay']))) {
+        $results_download = FALSE;
+        
+        if (($_SESSION['prefsDisplayWinners'] == "Y") && (judging_winner_display($_SESSION['prefsWinnerDelay']))) $results_download = TRUE; 
+        if ($_SESSION['userLevel'] < 2) $results_download = TRUE;
+
+        if ($results_download) {
 
             if ($_SESSION['prefsProEdition'] == 1) {
                 $td_width_place = 100;
@@ -1328,7 +1333,7 @@ if (($admin_role) || (((judging_date_return() == 0) && ($registration_open == 2)
 
         } // end if results display enabled
 
-        else echo "Not allowed";
+        else echo "Not allowed. Results have not been published yet.";
         exit(); 		
 
 	} // END if ($section == "results")
@@ -2044,8 +2049,8 @@ if (($admin_role) || (((judging_date_return() == 0) && ($registration_open == 2)
 
 	} // END if ($section == "staff")
 
-} // end if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1))
+} // end if (($admin_role) || (((judging_date_return() == 0) && ($registration_open == 2) && ($entry_window_open == 2))))
 
-else echo "Not Allowed"; 
+else echo "Not allowed."; 
 exit();
 ?>

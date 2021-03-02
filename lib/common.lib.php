@@ -454,7 +454,6 @@ function currency_info($input,$method) {
 	if ($method == 1) {
 
 		switch ($input) {
-
 			case "$": $currency_code = "$^USD"; break;
 			case "R$": $currency_code = "R$^BRL"; break;
 			case "pound": $currency_code = "&pound;^GBP"; break;
@@ -482,33 +481,6 @@ function currency_info($input,$method) {
 			case "tlira": $currency_code = "&#8356;^TRY"; break;
 			case "R": $currency_code = "R^ZAR"; break;
 			case "rupee": $currency_code = "&#8360;^INR"; break;
-
-			/*
-			case "&pound;": $currency_code = $input."^GBP"; break;
-			case "&euro;": $currency_code = $input."^EUR"; break;
-			case "&yen;": $currency_code = $input."^JPY"; break;
-			case "C$": $currency_code = "$^CAD"; break;
-			case "kr": $currency_code = $input."^DKK"; break;
-			case "R$": $currency_code = "R$^BRL"; break;
-			case "A$": $currency_code = "$^AUD"; break;
-			case "N$": $currency_code = "$^NZD"; break;
-			case "H$": $currency_code = "$^HKD"; break;
-			case "S$": $currency_code = "$^SGD"; break;
-			case "skr": $currency_code = "kr^SEK"; break;
-			case "pol": $currency_code = "z&#322;^PLN"; break;
-			case "nkr": $currency_code = "kr^NOK"; break;
-			case "Ft": $currency_code = $input."^HUF"; break;
-			case "czkoruna": $currency_code = "K&#269;^CZK"; break;
-			case "shekel": $currency_code = "&#8362;^ILS"; break;
-			case "M$": $currency_code = "$^MXM"; break;
-			case "RM": $currency_code = $input."^MYR"; break;
-			case "T$": $currency_code = "$^TWD"; break;
-			case "baht": $currency_code = "&#3647;^THB"; break;
-			case "tlira": $currency_code = "&#8356;^TRY"; break;
-			case "p.": $currency_code = $input."^RUB"; break;
-			case "phpeso": $currency_code = "&#8369;^PHP"; break;
-			default: $currency_code = $input."^USD";
-			*/
 		}
 
 	}
@@ -3559,10 +3531,27 @@ function check_hosted_gh() {
 	$hasher = new PasswordHash(8, false);
 	$hash = $hasher->HashPassword($gh_password);
 
-	if (($totalRows_gh_user == 1) && ($row_gh_user['userLevel'] > 0)) {
-		$updateSQL = sprintf("UPDATE %s SET userLevel='0' WHERE id='%s';",$prefix."users",$row_gh_user['id']);
-		mysqli_real_escape_string($connection,$updateSQL);
-		$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+	if ($totalRows_gh_user == 1) {
+
+		$query_gh_brewer = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE uid='%s'",$prefix."brewer",$row_gh_user['id']);
+		$gh_brewer = mysqli_query($connection,$query_gh_brewer) or die (mysqli_error($connection));
+		$row_gh_brewer = mysqli_fetch_assoc($gh_brewer);
+
+		if ($row_gh_brewer['count'] == 0) {
+
+			$sql = sprintf("INSERT INTO `%s` (`id`, `uid`, `brewerFirstName`, `brewerLastName`, `brewerAddress`, `brewerCity`, `brewerState`, `brewerZip`, `brewerCountry`, `brewerPhone1`, `brewerPhone2`, `brewerClubs`, `brewerEmail`, `brewerStaff`, `brewerSteward`, `brewerJudge`, `brewerJudgeID`, `brewerJudgeRank`, `brewerAHA`) VALUES (NULL, '%s', 'Geoff', 'Humphrey', '1234 Main Street', 'Castle Rock', 'CO', '80104', 'United States', '303-555-5555', '303-555-5555', 'Rock Hoppers Brew Club', '%s', 'N', 'N', 'N', 'D0986', 'Certified', '000000');",$prefix."brewer",$row_gh_user['id'],$gh_user_name);
+			mysqli_select_db($connection,$database);
+			mysqli_real_escape_string($connection,$sql);
+			$result = mysqli_query($connection,$sql) or die (mysqli_error($connection));
+
+		}
+
+		if ($row_gh_user['userLevel'] > 0) {
+			$updateSQL = sprintf("UPDATE %s SET userLevel='0' WHERE id='%s';",$prefix."users",$row_gh_user['id']);
+			mysqli_real_escape_string($connection,$updateSQL);
+			$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+		}
+	
 	}
 
 	if ($totalRows_gh_user == 0) {
@@ -3576,7 +3565,7 @@ function check_hosted_gh() {
 		$gh_user = mysqli_query($connection,$query_gh_user) or die (mysqli_error($connection));
 		$row_gh_user = mysqli_fetch_assoc($gh_user);
 
-		$sql = sprintf("INSERT INTO `%s` (`id`, `uid`, `brewerFirstName`, `brewerLastName`, `brewerAddress`, `brewerCity`, `brewerState`, `brewerZip`, `brewerCountry`, `brewerPhone1`, `brewerPhone2`, `brewerClubs`, `brewerEmail`, `brewerStaff`, `brewerSteward`, `brewerJudge`, `brewerJudgeID`, `brewerJudgeRank`, `brewerAHA`) VALUES (NULL, '%s', 'Geoff', 'Humphrey', '1234 Main Street', 'Anytown', 'CO', '80000', 'United States', '303-555-5555', '303-555-5555', 'Rock Hoppers', '%s', 'N', 'N', 'N', 'A0000', 'Certified', '000000');",$prefix."brewer",$row_gh_user['id'],$gh_user_name);
+		$sql = sprintf("INSERT INTO `%s` (`id`, `uid`, `brewerFirstName`, `brewerLastName`, `brewerAddress`, `brewerCity`, `brewerState`, `brewerZip`, `brewerCountry`, `brewerPhone1`, `brewerPhone2`, `brewerClubs`, `brewerEmail`, `brewerStaff`, `brewerSteward`, `brewerJudge`, `brewerJudgeID`, `brewerJudgeRank`, `brewerAHA`) VALUES (NULL, '%s', 'Geoff', 'Humphrey', '1234 Main Street', 'Castle Rock', 'CO', '80104', 'United States', '303-555-5555', '303-555-5555', 'Rock Hoppers Brew Club', '%s', 'N', 'N', 'N', 'D0986', 'Certified', '000000');",$prefix."brewer",$row_gh_user['id'],$gh_user_name);
 		mysqli_select_db($connection,$database);
 		mysqli_real_escape_string($connection,$sql);
 		$result = mysqli_query($connection,$sql) or die (mysqli_error($connection));
@@ -3660,6 +3649,7 @@ function deobfuscateURL($data,$key) {
 	}
 	
 	else {
+		
 		if (function_exists(openssl_encrypt)) {
 			// To decrypt, split the encrypted data from our IV - our unique separator used was "::"
 			// Get the data "dirty" again and remove base64 encoding

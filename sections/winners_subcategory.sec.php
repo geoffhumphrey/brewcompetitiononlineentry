@@ -156,7 +156,10 @@ if ($row_scored_entries['count'] > 0) {
 
 				if ($tb == "scores") {
 					$table_body1 .= "<td width=\"1%\" nowrap>";
-					if (!empty($row_scores['scoreEntry'])) $table_body1 .= $row_scores['scoreEntry'];
+					if (!empty($row_scores['scoreEntry'])) {
+						if (strpos($row_scores['scoreEntry'], '.') !== false) $table_body1 .= rtrim(number_format($row_scores['scoreEntry'],2),"0"); 
+						else $table_body1 .= $row_scores['scoreEntry'];
+					}
 					else $table_body1 .= "&nbsp;";
 					$table_body1 .= "</td>";
 				}

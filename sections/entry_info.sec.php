@@ -496,7 +496,7 @@ if ($show_entries) {
 		$header1_15 .= sprintf("<a class=\"anchor-offset\" name=\"%s\"></a><h2>%s</h2>",strtolower($anchor_name),$label_circuit);
 
 		if ((ENABLE_MARKDOWN) && (!is_html($row_contest_info['contestCircuit']))) {
-			$page_info13 .= Parsedown::instance()
+			$page_info15 .= Parsedown::instance()
 					   ->setBreaksEnabled(true) # enables automatic line breaks
 					   ->setMarkupEscaped(true) # escapes markup (HTML)
 					   ->text($row_contest_info['contestCircuit']);
