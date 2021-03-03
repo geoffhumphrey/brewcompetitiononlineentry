@@ -18,7 +18,10 @@ $style_set = $_SESSION['prefsStyleSet'];
 $pro_edition = $_SESSION['prefsProEdition'];
 $hidden_md = "";
 $hidden_sm = "";
-if ($action != "print") $hidden_md = "hidden-xs hidden-sm hidden-md";
+if ($action != "print") {
+	$hidden_md = "hidden-xs hidden-sm hidden-md ";
+	$hidden_sm = "hidden-xs hidden-sm ";
+}
 
 if ($dbTable != "default") {
 	$archive_suffix = get_suffix($dbTable);
@@ -763,7 +766,7 @@ $(document).ready(function () {
 	if (!empty($all_email_display))	{ ?>
 	<div class="col-md-12">
 	<!-- All Participant Email Addresses Modal -->
-	   <div class="btn-group hidden-xs hidden-sm" role="group" aria-label="...">
+	   <div class="btn-group hidden-xs hidden-sm" role="group" aria-label="All Participants with Entries Email Addresses">
 			<button type="button" class="btn btn-info" data-toggle="modal" data-target="#allEmailModal">
 				  All Participants with Entries Email Addresses
 				</button>
