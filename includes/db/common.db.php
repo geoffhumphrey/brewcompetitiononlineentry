@@ -3,6 +3,8 @@
 $today = time();
 $url = parse_url($_SERVER['PHP_SELF']);
 
+require_once (INCLUDES.'styles.inc.php');
+
 mysqli_select_db($connection,$database);
 
 $query_version1 = sprintf("SELECT * FROM %s WHERE id='1'", $prefix."system");
