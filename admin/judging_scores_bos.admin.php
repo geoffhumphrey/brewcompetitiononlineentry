@@ -188,7 +188,7 @@ $(document).ready(function() {
         <td><?php echo $bos_entry_info[12]; ?></td>
         <?php } ?>
         <td><?php echo $bos_entry_info[11]; ?></td>
-        <td><?php echo $bos_entry_info[10] ?></td>
+        <td><?php if ($bos_entry_info[10] == "5") echo "HM"; else echo $bos_entry_info[10]; ?></td>
     </tr>
     <?php } while ($row_bos = mysqli_fetch_assoc($bos)); ?>
 </tbody>
@@ -278,7 +278,7 @@ $(document).ready(function(){
                 <?php for($i=1; $i<$_SESSION['jPrefsMaxBOS']+1; $i++) { ?>
                 <option value="<?php echo $i; ?>" <?php if ($bos_entry_info[10] == $i) echo "selected"; ?>><?php echo text_number($i); ?></option>
                 <?php } ?>
-                <option value="HM" <?php if ($bos_entry_info[10] == "HM") echo "selected"; ?>><?php echo "Hon. Men."; ?></option>
+                <option value="5" <?php if ($bos_entry_info[10] == "5") echo "selected"; ?>><?php echo "Hon. Men."; ?></option>
             </select>
             </div>
             <span id="score-place-bos-ajax-<?php echo $score_id; ?>-scorePlace-status"></span>
