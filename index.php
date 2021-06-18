@@ -147,11 +147,6 @@ try {
 } catch (error) {
     console.error('Error checking user agent.', error);
 }
-
-$(document).ready(function(){
-    $("#no-js-alert").hide();
-});
-
 </script>
     <!-- LOADER -->
     <div id="loader-submit">
@@ -350,5 +345,25 @@ $(document).ready(function(){
     </footer><!-- ./footer -->
     <!-- ./ Footer -->
     <?php session_write_close(); ?>
+
+<script>
+$(document).ready(function(){
+    
+    $("#no-js-alert").hide();
+
+    $("a").attr("target", function() {
+        if(this.host == location.host) {
+            return "_self";
+        }
+        else {
+            return "_blank";
+            
+        }
+    });
+
+    $("a[target='_blank'])").addClass("hide-loader");
+
+});
+</script>
 </body>
 </html>

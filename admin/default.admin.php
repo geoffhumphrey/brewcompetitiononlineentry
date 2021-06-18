@@ -1688,7 +1688,28 @@ if (($row_limits['prefsShowBestBrewer'] != 0) || ($row_limits['prefsShowBestClub
                             <?php } ?>
                             <div class="row">
                                 <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-4">
-                                    <strong>Post Setup</strong>
+                                    <strong>Guides</strong>
+                                </div>
+                                <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-8">
+                                    <ul class="list-unstyled">
+                                        <?php if (HOSTED) { ?>
+                                        <li><a href="https://brewcompetition.com/customize-competition-info" target="_blank">Customize Competition Information Guide</a></li>
+                                        <?php } ?>
+                                        <li><a href="https://brewcompetition.com/comp-org" target="_blank">Competition Organizer's Guide</a></li>
+                                        <li><a href="https://brewcompetition.com/reset-comp" target="_blank">Reset Competition Information Guide</a></li>
+                                        <li><a href="https://brewcompetition.com/paypal-ipn" target="_blank">Implement PayPal Instant Payment Notifications Guide</a></li>
+                                        <li><a href="https://brewcompetition.com/upload-scoresheets" target="_blank">Upload Scanned Judges’ Scoresheets Guide</a></li>
+                                        <li><a href="https://brewcompetition.com/barcode-check-in" target="_blank">Barcode or QR Code Entry Check-In Guide</a></li>
+                                        <?php if (EVALUATION) { ?>
+                                        <li><a href="https://brewcompetition.com/setup-electronic-scoresheets" target="_blank">Setup BCOE&M Electronic Scoresheets Guide</a></li>
+                                        <li><a href="https://brewcompetition.com/judging-with-electronic-scoresheets" target="_blank">Judging with BCOE&M Electronic Scoresheets Guide</a></li>
+                                        <li><a href="https://brewcompetition.com/virtual-judging" target="_blank">Virtual Judging Guide</a></li>
+                                        <li><a href="https://brewcompetition.com/virtual-judging/tips" target="_blank">Virtual Judging - Tips for Judges</a></li>
+                                        <?php } ?>
+                                    </ul>
+                                </div>
+                                <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                                    <strong>Customize Installation</strong>
                                 </div>
                                 <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-8">
                                     <ul class="list-unstyled">

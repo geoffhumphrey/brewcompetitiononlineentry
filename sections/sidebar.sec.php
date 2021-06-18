@@ -277,7 +277,7 @@ if ($section != "admin") {
 		}
 
 		// Shipping Date and Location
-		if ($_SESSION['prefsShipping'] == 1) {
+		if (($_SESSION['prefsShipping'] == 1) && (!empty($row_contest_dates['contestShippingOpen']))) {
 			$header1_500 .= "<div class=\"panel ".$shipping_panel_display."\">";
 			$header1_500 .= "<div class=\"panel-heading\">";
 			$header1_500 .= sprintf("<h4 class=\"panel-title\">%s",$label_entry_shipping);
