@@ -148,9 +148,13 @@ else {
 
 		if ($_SESSION['prefsPaypal'] == "Y")  {
 
-			$fee = number_format((($total_to_pay * .03) + .30), 2, '.', '') + .01; // Hack to resolve payments being off by a penny
-			if ($_SESSION['prefsTransFee'] == "Y") $payment_amount = $total_to_pay + $fee;
-			else $payment_amount = number_format($total_to_pay, 2);
+			// As of August 1, 2021, PayPal fees were split. What is reflected here is the HIGHEST amount PayPal charges per transaction
+			// which is 3.49% + $0.49 US. This should be sufficient to cover costs for most international currencies as well.
+			
+			if ($_SESSION['prefsTransFee'] == "Y") {
+				$fee = number_format((($total_to_pay * .035) + .50), 2, '.', '');
+				$payment_amount = $total_to_pay + $fee;
+			}
 
 			// Online
 			$header1_3 .= sprintf("<h2>%s</h2>",$label_pay_online);
@@ -159,7 +163,7 @@ else {
 			// PayPal
 			$header2_4 .= "<h3>PayPal <span class=\"fa fa-lg fa-cc-paypal\"></span> <span class=\"fa fa-lg fa-cc-visa\"></span> <span class=\"fa fa-lg fa-cc-mastercard\"></span> <span class=\"fa fa-lg fa-cc-discover\"></span> <span class=\"fa fa-lg fa-cc-amex\"></span></h3>";
 			$page_info4 .= sprintf("<p>%s",$pay_text_018);
-			if ($_SESSION['prefsTransFee'] == "Y") $page_info4 .= sprintf(" %s %s %s",$pay_text_019,$currency_symbol.$fee,$pay_text_020);
+			if ($_SESSION['prefsTransFee'] == "Y") $page_info4 .= sprintf("<strong> %s %s %s</strong>",$pay_text_019,$currency_symbol.$fee,$pay_text_020);
 			$page_info4 .= "</p>";
 
 			$page_info4 .= "<form role=\"form\" id=\"formfield\" name=\"PayPal\" action=\"".$paypal_env."\" method=\"post\">\n";

@@ -1727,6 +1727,21 @@ if (($admin_role) || (((judging_date_return() == 0) && ($registration_open == 2)
                     $output .= "\t</CompData>\n";
                     $output .= "\t<BJCPpoints>\n";
 
+                    // Organizer with a properly formatted BJCP ID in the system
+                    foreach (array_unique($o) as $uid) {
+                    $organizer_info = explode("^",brewer_info($uid));
+                        if (($organizer_info['0'] != "") && ($organizer_info['1'] != "") && (validate_bjcp_id($organizer_info['4']))) {
+                            $organ_bjcp_id = strtoupper(strtr($organizer_info['4'],$bjcp_num_replace));
+                            $output .= "\t\t<JudgeData>\n";
+                            $output .= "\t\t\t<JudgeName>".html_entity_decode($organizer_info['0'])." ".html_entity_decode($organizer_info['1'])."</JudgeName>\n";
+                            $output .= "\t\t\t<JudgeID>".$organ_bjcp_id."</JudgeID>\n";
+                            $output .= "\t\t\t<JudgeRole>Organizer</JudgeRole>\n";
+                            $output .= "\t\t\t<JudgePts>0.0</JudgePts>\n";
+                            $output .= "\t\t\t<NonJudgePts>".$organ_max_points."</NonJudgePts>\n";
+                            $output .= "\t\t</JudgeData>\n";
+                        }
+                    }
+
 
                     // Judges with a properly formatted BJCP IDs in the system
                     foreach (array_unique($j) as $uid) {
@@ -1773,8 +1788,9 @@ if (($admin_role) || (((judging_date_return() == 0) && ($registration_open == 2)
                         else $points = $points;
 
                         $judge_points = number_format($points,1);
+                        $judge_bjcp_id = strtoupper(strtr($judge_info['4'],$bjcp_num_replace));
 
-                        if ($judge_points > 0) {
+                        if (($judge_points > 0) && ($judge_bjcp_id != $organ_bjcp_id)) {
                             $bos_judge = bos_points($uid);
                             if (($bos_judge) && (!in_array($uid,$bos_judge_no_assignment))) $assignment = "Judge + BOS";
                             else $assignment = "Judge";
@@ -1782,7 +1798,7 @@ if (($admin_role) || (((judging_date_return() == 0) && ($registration_open == 2)
                                 $judge_name = html_entity_decode($judge_info['0'])." ".html_entity_decode($judge_info['1']);
                                 $output .= "\t\t<JudgeData>\n";
                                 $output .= "\t\t\t<JudgeName>".$judge_name."</JudgeName>\n";
-                                $output .= "\t\t\t<JudgeID>".strtoupper(strtr($judge_info['4'],$bjcp_num_replace))."</JudgeID>\n";
+                                $output .= "\t\t\t<JudgeID>".$judge_bjcp_id."</JudgeID>\n";
                                 $output .= "\t\t\t<JudgeRole>".$assignment."</JudgeRole>\n";
                                 if ($bos_judge) $output .= "\t\t\t<JudgePts>".number_format(($judge_points+$bos_judge_points),1)."</JudgePts>\n";
                                 else $output .= "\t\t\t<JudgePts>".$judge_points."</JudgePts>\n";
@@ -1796,11 +1812,12 @@ if (($admin_role) || (((judging_date_return() == 0) && ($registration_open == 2)
                     foreach (array_unique($bos_judge_no_assignment) as $uid) {
                         $judge_info = explode("^",brewer_info($uid));
                         if (($judge_info['0'] != "") && ($judge_info['1'] != "") && (validate_bjcp_id($judge_info['4']))) {
-                            if (!empty($uid)) {
+                            $judge_bjcp_id = strtoupper(strtr($judge_info['4'],$bjcp_num_replace));
+                            if (!empty($uid) && ($judge_bjcp_id != $organ_bjcp_id)) {
                                 $judge_name = html_entity_decode($judge_info['0'])." ".html_entity_decode($judge_info['1']);
                                 $output .= "\t\t<JudgeData>\n";
                                 $output .= "\t\t\t<JudgeName>".$judge_name."</JudgeName>\n";
-                                $output .= "\t\t\t<JudgeID>".strtoupper(strtr($judge_info['4'],$bjcp_num_replace))."</JudgeID>\n";
+                                $output .= "\t\t\t<JudgeID>".$judge_bjcp_id."</JudgeID>\n";
                                 $output .= "\t\t\t<JudgeRole>BOS Judge</JudgeRole>\n";
                                 $output .= "\t\t\t<JudgePts>1.0</JudgePts>\n";
                                 $output .= "\t\t\t<NonJudgePts>0.0</NonJudgePts>\n";
@@ -1814,15 +1831,18 @@ if (($admin_role) || (((judging_date_return() == 0) && ($registration_open == 2)
                     $steward_info = explode("^",brewer_info($uid));
                     $steward_points = steward_points($uid);
                     if ($steward_points > 0) {
+                        $steward_bjcp_id = strtoupper(strtr($steward_info['4'],$bjcp_num_replace));
                         $steward_name = html_entity_decode($steward_info['0'])." ".html_entity_decode($steward_info['1']);
                         if (($steward_info['0'] != "") && ($steward_info['1'] != "") && (validate_bjcp_id($steward_info['4']))) {
-                            $output .= "\t\t<JudgeData>\n";
-                            $output .= "\t\t\t<JudgeName>".$steward_name."</JudgeName>\n";
-                            $output .= "\t\t\t<JudgeID>".strtoupper(strtr($steward_info['4'],$bjcp_num_replace))."</JudgeID>\n";
-                            $output .= "\t\t\t<JudgeRole>Steward</JudgeRole>\n";
-                            $output .= "\t\t\t<JudgePts>0.0</JudgePts>\n";
-                            $output .= "\t\t\t<NonJudgePts>".$steward_points."</NonJudgePts>\n";
-                            $output .= "\t\t</JudgeData>\n";
+                                if ($steward_bjcp_id != $organ_bjcp_id) {
+                                    $output .= "\t\t<JudgeData>\n";
+                                    $output .= "\t\t\t<JudgeName>".$steward_name."</JudgeName>\n";
+                                    $output .= "\t\t\t<JudgeID>".$steward_bjcp_id."</JudgeID>\n";
+                                    $output .= "\t\t\t<JudgeRole>Steward</JudgeRole>\n";
+                                    $output .= "\t\t\t<JudgePts>0.0</JudgePts>\n";
+                                    $output .= "\t\t\t<NonJudgePts>".$steward_points."</NonJudgePts>\n";
+                                    $output .= "\t\t</JudgeData>\n";
+                                }
                             }
                         }
                     }
@@ -1832,37 +1852,26 @@ if (($admin_role) || (((judging_date_return() == 0) && ($registration_open == 2)
                     if (array_sum($st_running_total) < $staff_max_points) {
                         $staff_info = explode("^",brewer_info($uid));
                             if (($staff_info['0'] != "") && ($staff_info['1'] != "") && (validate_bjcp_id($staff_info['4']))) {
-                                $staff_name = html_entity_decode($staff_info['0'])." ".html_entity_decode($staff_info['1']);
-                                $st_running_total[] .= $staff_points;
-                                $output .= "\t\t<JudgeData>\n";
-                                $output .= "\t\t\t<JudgeName>".$staff_name."</JudgeName>\n";
-                                $output .= "\t\t\t<JudgeID>".strtoupper(strtr($staff_info['4'],$bjcp_num_replace))."</JudgeID>\n";
-                                $output .= "\t\t\t<JudgeRole>Staff</JudgeRole>\n";
-                                $output .= "\t\t\t<JudgePts>0.0</JudgePts>\n";
-                                $output .= "\t\t\t<NonJudgePts>".$staff_points."</NonJudgePts>\n";
-                                $output .= "\t\t</JudgeData>\n";
+                                $staff_bjcp_id = strtoupper(strtr($staff_info['4'],$bjcp_num_replace));
+                                if ($staff_bjcp_id != $organ_bjcp_id) {
+                                    $staff_name = html_entity_decode($staff_info['0'])." ".html_entity_decode($staff_info['1']);
+                                    $st_running_total[] .= $staff_points;
+                                    $output .= "\t\t<JudgeData>\n";
+                                    $output .= "\t\t\t<JudgeName>".$staff_name."</JudgeName>\n";
+                                    $output .= "\t\t\t<JudgeID>".$staff_bjcp_id."</JudgeID>\n";
+                                    $output .= "\t\t\t<JudgeRole>Staff</JudgeRole>\n";
+                                    $output .= "\t\t\t<JudgePts>0.0</JudgePts>\n";
+                                    $output .= "\t\t\t<NonJudgePts>".$staff_points."</NonJudgePts>\n";
+                                    $output .= "\t\t</JudgeData>\n";
+                                }
                             }
-                        }
-                    }
-
-                    // Organizer with a properly formatted BJCP ID in the system
-                    foreach (array_unique($o) as $uid) {
-                    $organizer_info = explode("^",brewer_info($uid));
-                        if (($organizer_info['0'] != "") && ($organizer_info['1'] != "") && (validate_bjcp_id($organizer_info['4']))) {
-                            $output .= "\t\t<JudgeData>\n";
-                            $output .= "\t\t\t<JudgeName>".html_entity_decode($organizer_info['0'])." ".html_entity_decode($organizer_info['1'])."</JudgeName>\n";
-                            $output .= "\t\t\t<JudgeID>".strtoupper(strtr($organizer_info['4'],$bjcp_num_replace))."</JudgeID>\n";
-                            $output .= "\t\t\t<JudgeRole>Organizer</JudgeRole>\n";
-                            $output .= "\t\t\t<JudgePts>0.0</JudgePts>\n";
-                            $output .= "\t\t\t<NonJudgePts>".$organ_max_points."</NonJudgePts>\n";
-                            $output .= "\t\t</JudgeData>\n";
                         }
                     }
 
                     $output .= "\t</BJCPpoints>\n";
                     $output .= "\t<NonBJCP>\n";
 
-                    // Judges without a properly formatted BJCP IDs in the system
+                    // Judges WITHOUT a properly formatted BJCP IDs in the system
                     foreach (array_unique($j) as $uid) {
 
                         $judge_info = explode("^",brewer_info($uid));
