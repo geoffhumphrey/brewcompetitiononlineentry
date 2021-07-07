@@ -14,13 +14,10 @@ For assistance with Bootstrap elements, reference the Bootstrap website:
 - Components: http://getbootstrap.com/components/
 - JavaScript: http://getbootstrap.com/javascript/
 
-BCOE&M uses Font Awesome icons throughout the core code. To use Font Awesome icons, reference the following:
-- Font Awesome icon list:     https://fortawesome.github.io/Font-Awesome/icons/
-- Font Awesome icon examples: https://fortawesome.github.io/Font-Awesome/examples/
-
-To use Bootstrap's native icon set, glyphicons, go to http://getbootstrap.com/components/#glyphicons for a list and how to integrate
+BCOE&M uses Font Awesome v4.7 icons throughout the core code. To use Font Awesome icons, reference the following:
+- Font Awesome icon list:     https://fontawesome.com/v4.7/icons
+- Font Awesome icon examples: https://fontawesome.com/v4.7/examples/
 -->
-
 <div class="jumbotron">
   <h1>Welcome to Our Competition Website!</h1>
   <h2>Important Information Here (with a Bit Less Shouting)</h2>
