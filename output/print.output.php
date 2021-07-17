@@ -7,6 +7,8 @@
 
 require ('../paths.php');
 require (CONFIG.'bootstrap.php');
+//require(LIB.'output.lib.php');
+
 if (isset($_SESSION['loginUsername'])) {
 $role_replace1 = array("HJ","LJ","MBOS",", ");
 $role_replace2 = array("<span class=\"fa fa-gavel\"></span> Head Judge","<span class=\"fa fa-star\"></span> Lead Judge","<span class=\"fa fa-trophy\"></span> Mini-BOS Judge","&nbsp;&nbsp;&nbsp;");
@@ -59,8 +61,8 @@ else {
     <!-- Load DataTables -->
     <!-- Homepage URL: https://www.datatables.net -->
     <link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.10/css/dataTables.bootstrap.min.css" />
-	<link rel="stylesheet" type="text/css" href="//cdn.datatables.net/plug-ins/1.10.10/integration/font-awesome/dataTables.fontAwesome.css" />
-	<script type="text/javascript" src="//cdn.datatables.net/1.10.8/js/jquery.dataTables.js"></script>
+		<link rel="stylesheet" type="text/css" href="//cdn.datatables.net/plug-ins/1.10.10/integration/font-awesome/dataTables.fontAwesome.css" />
+		<script type="text/javascript" src="//cdn.datatables.net/1.10.8/js/jquery.dataTables.js"></script>
     <script type="text/javascript" src="//cdn.datatables.net/1.10.10/js/dataTables.bootstrap.min.js"></script>
 
     <!-- Load Font Awesome -->

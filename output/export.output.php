@@ -10,6 +10,7 @@
  *   -- http://www.bjcp.org/it/docs/BJCP%20Database%20XML%20Interface%20Spec%202.1.pdf
  * 09.18.2018 - judge_points() function was returning incorrect calculations. Could not figure out why. All calcs were moved inline below.
  * 09.01.2020 - fixed unauthorized access issues reported to GitHub https://github.com/geoffhumphrey/brewcompetitiononlineentry/issues/1163
+ * 07.18.2021 - fixed judge_points() and steward_points() calculations to better handle multiple day and multiple session day calculations
  */
 
 require('../paths.php');
@@ -1409,6 +1410,7 @@ if (($admin_role) || (((judging_date_return() == 0) && ($registration_open == 2)
             $st = array();
             $o = array();
             $dates = array();
+            $organ_bjcp_id = strtoupper(strtr($row_org['brewerJudgeID'],$bjcp_num_replace));
             do { $j[] = $row_judges['uid']; } while ($row_judges = mysqli_fetch_assoc($judges));
             do { $s[] = $row_stewards['uid']; } while ($row_stewards = mysqli_fetch_assoc($stewards));
             do { $st[] = $row_staff['uid']; } while ($row_staff = mysqli_fetch_assoc($staff));
@@ -1511,7 +1513,8 @@ if (($admin_role) || (((judging_date_return() == 0) && ($registration_open == 2)
                         $html .= '<tr>';
                         $html .= '<td width="300">'.html_entity_decode($row_org['brewerLastName']).", ".html_entity_decode($row_org['brewerFirstName']).'</td>';
                         $html .= '<td width="'.$td_width_name.'">';
-                            if ($row_org['brewerJudgeID'] != "") $html .=  strtoupper(strtr($row_org['brewerJudgeID'],$bjcp_num_replace)); else $html .= '&nbsp;';
+                        if ($row_org['brewerJudgeID'] != "") $html .=  $organ_bjcp_id; 
+                        else $html .= '&nbsp;';
                         $html .= '</td>';
                         $html .= '<td width="'.$td_width_name.'">'.$organ_max_points.'</td>';
                         $html .= '</tr>';
@@ -1528,83 +1531,63 @@ if (($admin_role) || (((judging_date_return() == 0) && ($registration_open == 2)
                         $html .= '</tr>';
 
                         sort($j);
+                        
                         foreach (array_unique($j) as $uid) {
 
                             $judge_info = explode("^",brewer_info($uid));
 
                             unset($b);
-                            // $judge_points = judge_points($uid,$judge_info['5'],$judge_max_points);
-
-                            foreach (array_unique($a) as $location) {
-
-                                $query_assignments = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE bid='%s' AND assignLocation='%s' AND assignment='J'", $prefix."judging_assignments", $uid, $location);
-                                $assignments = mysqli_query($connection,$query_assignments) or die (mysqli_error($connection));
-                                $row_assignments = mysqli_fetch_assoc($assignments);
-
-                                // 0.5 points per session
-                                $number = $row_assignments['count'] * 0.5;
-                                if ($number > 0.5) $b[] = 0.5;
-                                else $b[] = $number;
-
-                            }
-
-                            $points = array_sum($b);
-
-                            // Minimum of 0.5 points per session
-                            // "Judges earn points at a rate of 0.5 Judge Points per session."
-                            $max_comp_points = ($sessions * 0.5);
-
-                            // Cannot exceed more than 1.5 points per *day*
-                            // "Judges earn a maximum of 1.5 Judge Points per day."
-                            if ($points > ($days * 1.5)) $points = ($days * 1.5);
-                            else $points = $points;
-
-                            // Cannot exceed the maximum amount of points possible for the entire competition
-                            if ($points > $max_comp_points) $points = $max_comp_points;
-                            else $points = $points;
-
-                            // Cannot exceed the maximum allowable points for judges for the competition
-                            if ($points > $judge_max_points) $points = $judge_max_points;
-                            else $points = $points;
-
-                            // If points are below the 1.0 minimum, award minimum
-                            if ($points < 1) $points = 1;
-                            else $points = $points;
-
-                            $judge_points = number_format($points,1);
-
+                            $judge_points = judge_points($uid,$judge_max_points);
                             $bos_judge = bos_points($uid);
+                            $judge_bjcp_id = strtoupper(strtr($judge_info['4'],$bjcp_num_replace));
 
                             if ($judge_points > 0) {
-                                $judge_name = $judge_info['0']." ".$judge_info['1'];
+                                $judge_name = $judge_info['1'].", ".$judge_info['0'];
                                 $html .= '<tr>';
                                 $html .= '<td width="300">'.$judge_name;
-                                if ($bos_judge) $html .= " (BOS Judge)";
+                                if ($bos_judge) $html .= " (BOS)";
                                 $html .= '</td>';
                                 $html .= '<td width="'.$td_width_name.'">';
-                                    if (validate_bjcp_id($judge_info['4'])) $html .= strtoupper(strtr($judge_info['4'],$bjcp_num_replace)); else $html .= '&nbsp;';
+                                if (validate_bjcp_id($judge_info['4'])) $html .= $judge_bjcp_id; 
+                                else $html .= '&nbsp;';
                                 $html .= '</td>';
-                                if ($bos_judge) $html .= '<td width="'.$td_width_name.'">'.($judge_points+$bos_judge_points).'</td>';
-                                else $html .= '<td width="'.$td_width_name.'">'.$judge_points.'</td>';
+                                
+                                if ($judge_bjcp_id == $organ_bjcp_id) $html .= '<td width="'.$td_width_name.'">0.0 ('.$label_organizer.')</td>';
+                                
+                                else {
+                                    if ($bos_judge) $html .= '<td width="'.$td_width_name.'">'.($judge_points+$bos_judge_points).'</td>';
+                                    else $html .= '<td width="'.$td_width_name.'">'.$judge_points.'</td>'; 
+                                }
+                                
                                 $html .= '</tr>';
                                 }
                             }
 
                         foreach (array_unique($bos_judge_no_assignment) as $uid) {
-                            $judge_info = explode("^",brewer_info($uid));
-                            if (!empty($uid)) {
-                                $judge_name = $judge_info['1'].", ".$judge_info['0'];
-                                $html .= '<tr>';
-                                $html .= '<td width="300">'.$judge_name;
-                                $html .= " (BOS Judge)";
-                                $html .= '</td>';
-                                $html .= '<td width="'.$td_width_name.'">';
-                                    if (validate_bjcp_id($judge_info['4'])) $html .= strtoupper(strtr($judge_info['4'],$bjcp_num_replace)); else $html .= '&nbsp;';
-                                $html .= '</td>';
-                                $html .= '<td width="'.$td_width_name.'">1.0</td>';
-                                $html .= '</tr>';
+
+                            if (($total_entries >= 30) && (($beer_styles >= 5) || ($mead_cider >= 3))) {
+                                
+                                $judge_info = explode("^",brewer_info($uid));
+                                $judge_bjcp_id = strtoupper(strtr($judge_info['4'],$bjcp_num_replace));
+                                
+                                if (!empty($uid)) {
+                                    $judge_name = $judge_info['1'].", ".$judge_info['0'];
+                                    $html .= '<tr>';
+                                    $html .= '<td width="300">'.$judge_name;
+                                    $html .= " (BOS Judge)";
+                                    $html .= '</td>';
+                                    $html .= '<td width="'.$td_width_name.'">';
+                                        if (validate_bjcp_id($judge_info['4'])) $html .= $judge_bjcp_id; else $html .= '&nbsp;';
+                                    $html .= '</td>';
+                                    if ($judge_bjcp_id == $organ_bjcp_id)  $html .= '<td width="'.$td_width_name.'">0.0 ('.$label_organizer.')</td>';
+                                    else $html .= '<td width="'.$td_width_name.'">0.5</td>';
+                                    $html .= '</tr>';
+                                }
+                            
                             }
+                                
                         }
+
                         $html .= '</table>';
                     }
 
@@ -1742,54 +1725,11 @@ if (($admin_role) || (((judging_date_return() == 0) && ($registration_open == 2)
                         }
                     }
 
-
                     // Judges with a properly formatted BJCP IDs in the system
                     foreach (array_unique($j) as $uid) {
-
                         $judge_info = explode("^",brewer_info($uid));
-                        // $judge_points = judge_points($uid,$judge_max_points,$days,$sessions);
-
-                        unset($b);
-
-                        foreach (array_unique($a) as $location) {
-
-                            $query_assignments = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE bid='%s' AND assignLocation='%s' AND assignment='J'", $prefix."judging_assignments", $uid, $location);
-                            $assignments = mysqli_query($connection,$query_assignments) or die (mysqli_error($connection));
-                            $row_assignments = mysqli_fetch_assoc($assignments);
-
-                            // 0.5 points per session
-                            $number = $row_assignments['count'] * 0.5;
-                            if ($number > 0.5) $b[] = 0.5;
-                            else $b[] = $number;
-
-                        }
-
-                        $points = array_sum($b);
-
-                        // Minimum of 0.5 points per session
-                        // "Judges earn points at a rate of 0.5 Judge Points per session."
-                        $max_comp_points = ($sessions * 0.5);
-
-                        // Cannot exceed more than 1.5 points per *day*
-                        // "Judges earn a maximum of 1.5 Judge Points per day."
-                        if ($points > ($days * 1.5)) $points = ($days * 1.5);
-                        else $points = $points;
-
-                        // Cannot exceed the maximum amount of points possible for the entire competition
-                        if ($points > $max_comp_points) $points = $max_comp_points;
-                        else $points = $points;
-
-                        // Cannot exceed the maximum allowable points for judges for the competition
-                        if ($points > $judge_max_points) $points = $judge_max_points;
-                        else $points = $points;
-
-                        // If points are below the 1.0 minimum, award minimum
-                        if ($points < 1) $points = 1;
-                        else $points = $points;
-
-                        $judge_points = number_format($points,1);
+                        $judge_points = judge_points($uid,$judge_max_points);
                         $judge_bjcp_id = strtoupper(strtr($judge_info['4'],$bjcp_num_replace));
-
                         if (($judge_points > 0) && ($judge_bjcp_id != $organ_bjcp_id)) {
                             $bos_judge = bos_points($uid);
                             if (($bos_judge) && (!in_array($uid,$bos_judge_no_assignment))) $assignment = "Judge + BOS";
@@ -1810,30 +1750,32 @@ if (($admin_role) || (((judging_date_return() == 0) && ($registration_open == 2)
 
                     // Loner BOS Judges (no assignment to any table)
                     foreach (array_unique($bos_judge_no_assignment) as $uid) {
-                        $judge_info = explode("^",brewer_info($uid));
-                        if (($judge_info['0'] != "") && ($judge_info['1'] != "") && (validate_bjcp_id($judge_info['4']))) {
-                            $judge_bjcp_id = strtoupper(strtr($judge_info['4'],$bjcp_num_replace));
-                            if (!empty($uid) && ($judge_bjcp_id != $organ_bjcp_id)) {
-                                $judge_name = html_entity_decode($judge_info['0'])." ".html_entity_decode($judge_info['1']);
-                                $output .= "\t\t<JudgeData>\n";
-                                $output .= "\t\t\t<JudgeName>".$judge_name."</JudgeName>\n";
-                                $output .= "\t\t\t<JudgeID>".$judge_bjcp_id."</JudgeID>\n";
-                                $output .= "\t\t\t<JudgeRole>BOS Judge</JudgeRole>\n";
-                                $output .= "\t\t\t<JudgePts>1.0</JudgePts>\n";
-                                $output .= "\t\t\t<NonJudgePts>0.0</NonJudgePts>\n";
-                                $output .= "\t\t</JudgeData>\n";
+                        if (($total_entries >= 30) && (($beer_styles >= 5) || ($mead_cider >= 3))) {
+                            $judge_info = explode("^",brewer_info($uid));
+                            if (($judge_info['0'] != "") && ($judge_info['1'] != "") && (validate_bjcp_id($judge_info['4']))) {
+                                $judge_bjcp_id = strtoupper(strtr($judge_info['4'],$bjcp_num_replace));
+                                if (!empty($uid) && ($judge_bjcp_id != $organ_bjcp_id)) {
+                                    $judge_name = html_entity_decode($judge_info['0'])." ".html_entity_decode($judge_info['1']);
+                                    $output .= "\t\t<JudgeData>\n";
+                                    $output .= "\t\t\t<JudgeName>".$judge_name."</JudgeName>\n";
+                                    $output .= "\t\t\t<JudgeID>".$judge_bjcp_id."</JudgeID>\n";
+                                    $output .= "\t\t\t<JudgeRole>BOS Judge</JudgeRole>\n";
+                                    $output .= "\t\t\t<JudgePts>0.5</JudgePts>\n";
+                                    $output .= "\t\t\t<NonJudgePts>0.0</NonJudgePts>\n";
+                                    $output .= "\t\t</JudgeData>\n";
+                                }
                             }
                         }
                     }
 
                     // Stewards with a properly formatted BJCP IDs in the system
                     foreach (array_unique($s) as $uid) {
-                    $steward_info = explode("^",brewer_info($uid));
-                    $steward_points = steward_points($uid);
-                    if ($steward_points > 0) {
-                        $steward_bjcp_id = strtoupper(strtr($steward_info['4'],$bjcp_num_replace));
-                        $steward_name = html_entity_decode($steward_info['0'])." ".html_entity_decode($steward_info['1']);
-                        if (($steward_info['0'] != "") && ($steward_info['1'] != "") && (validate_bjcp_id($steward_info['4']))) {
+                        $steward_points = steward_points($uid);
+                        if ($steward_points > 0) {
+                            $steward_info = explode("^",brewer_info($uid));
+                            $steward_bjcp_id = strtoupper(strtr($steward_info['4'],$bjcp_num_replace));
+                            $steward_name = html_entity_decode($steward_info['0'])." ".html_entity_decode($steward_info['1']);
+                            if (($steward_info['0'] != "") && ($steward_info['1'] != "") && (validate_bjcp_id($steward_info['4']))) {
                                 if ($steward_bjcp_id != $organ_bjcp_id) {
                                     $output .= "\t\t<JudgeData>\n";
                                     $output .= "\t\t\t<JudgeName>".$steward_name."</JudgeName>\n";
@@ -1849,10 +1791,10 @@ if (($admin_role) || (((judging_date_return() == 0) && ($registration_open == 2)
 
                     //Staff Members with a properly formatted BJCP IDs in the system
                     foreach (array_unique($st) as $uid) {
-                    if (array_sum($st_running_total) < $staff_max_points) {
+                        if (array_sum($st_running_total) < $staff_max_points) {
                         $staff_info = explode("^",brewer_info($uid));
                             if (($staff_info['0'] != "") && ($staff_info['1'] != "") && (validate_bjcp_id($staff_info['4']))) {
-                                $staff_bjcp_id = strtoupper(strtr($staff_info['4'],$bjcp_num_replace));
+                            $staff_bjcp_id = strtoupper(strtr($staff_info['4'],$bjcp_num_replace));
                                 if ($staff_bjcp_id != $organ_bjcp_id) {
                                     $staff_name = html_entity_decode($staff_info['0'])." ".html_entity_decode($staff_info['1']);
                                     $st_running_total[] .= $staff_points;

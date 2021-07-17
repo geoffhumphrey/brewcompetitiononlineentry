@@ -3,7 +3,7 @@
 /**
  * Module:      staff_points.php
  * Description: This module calculates the BJCP points for staff, judges, and stewards
- *	            using the guidelines provided by the BJCP at http://www.bjcp.org/rules.php.
+ *	            using the guidelines provided by the BJCP at https://dev.bjcp.org/about/reference/experience-point-award-schedule/.
  * Revision History:
  * - fixed point output errors for judges and BOS judges
  * - programming now accounts for multiple roles (e.g., judge/staff, steward/staff, bos judge/staff, etc.)
@@ -11,10 +11,32 @@
  *   -- http://www.bjcp.org/it/docs/BJCP%20Database%20XML%20Interface%20Spec%202.1.pdf
  */
 
+
+/*
+
+To figure out judge points, need to assess:
+ - Which sessions the judge was assigned to
+ - Which day those sessions were on
+ - For each day:
+   - Determine how many sessions the judge was assigned to and award 0.5 points for each
+   - Make sure that number is a minimum of 1.0 and a maximum of 1.5
+ - Sum up the daily points
+ - Compare that sum to the maximum judge points based upon the table; if more use the max, if less, use the sum
+
+To figure out steward points, need to assess:
+ - Which sessions the steward was assigned to
+ - Which day those sessions were on
+ - For each day:
+   - Determine how many sessions the steward was assigned to and award 0.5 points for each
+ - Sum up the daily points
+ - Compare that sum to the 1.0 maximum possible steward points for the entire competition; if more use maximum, if less use sum
+
+*/
+
 require (DB.'judging_locations.db.php');
 require (DB.'styles.db.php');
 require (DB.'admin_common.db.php');
-require (LIB.'output.lib.php');
+//require (LIB.'output.lib.php');
 require (DB.'output_staff_points.db.php');
 // Get total amount of paid and received entries
 $total_entries = total_paid_received("judging_scores","default");
@@ -39,12 +61,15 @@ $mead_cider = $mead_styles+$cider_styles;
 if (($total_entries >= 30) && (($beer_styles >= 5) || ($mead_cider >= 3))) $bos_judge_points = 0.5;
 else $bos_judge_points = 0.0;
 
+/*
 do { 
 	$a[] = $row_judging['id']; 
 } while ($row_judging = mysqli_fetch_assoc($judging));
-
+*/
 $days = number_format(total_days(),1);
 $sessions = number_format(total_sessions(),1);
+
+
 
 if ($view == "default") {
 	$output_organizer = "";
@@ -66,59 +91,23 @@ if ($view == "default") {
 	}
 
 	if ($totalRows_judges > 0) {
+        
         $j = array();
 
 		do { 
 			$j[] = $row_judges['uid']; 
 		} while ($row_judges = mysqli_fetch_assoc($judges));
 
-        foreach (array_unique($j) as $uid) {
+		$j = array_unique($j);
 
-            unset($b);
+        foreach ($j as $uid) {
 
-            $judge_info = explode("^",brewer_info($uid));
+        	$judge_info = explode("^",brewer_info($uid));
             $judge_bjcp_id = strtoupper(strtr($judge_info['4'],$bjcp_num_replace));
-			// $judge_points = judge_points($uid,$judge_info['5'],$judge_max_points);
-
-            foreach (array_unique($a) as $location) {
-
-                $query_assignments = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE bid='%s' AND assignLocation='%s' AND assignment='J'", $prefix."judging_assignments", $uid, $location);
-                $assignments = mysqli_query($connection,$query_assignments) or die (mysqli_error($connection));
-                $row_assignments = mysqli_fetch_assoc($assignments);
-
-                // 0.5 points per session
-                $number = $row_assignments['count'] * 0.5;
-                if ($number > 0.5) $b[] = 0.5;
-                else $b[] = $number;
-
-            }
-
-            $points = array_sum($b);
-
-            // Minimum of 0.5 points per session
-            // "Judges earn points at a rate of 0.5 Judge Points per session."
-            $max_comp_points = ($sessions * 0.5);
-
-            // Cannot exceed more than 1.5 points per *day*
-            // "Judges earn a maximum of 1.5 Judge Points per day."
-            if ($points > ($days * 1.5)) $points = ($days * 1.5);
-            else $points = $points;
-
-            // Cannot exceed the maximum amount of points possible for the entire competition
-            if ($points > $max_comp_points) $points = $max_comp_points;
-            else $points = $points;
-
-            // Cannot exceed the maximum allowable points for judges for the competition
-            if ($points > $judge_max_points) $points = $judge_max_points;
-            else $points = $points;
-
-            // If points are below the 1.0 minimum, award minimum
-            if ($points < 1) $points = 1;
-            else $points = $points;
-
-            $judge_points = number_format($points,1);
+			$judge_points = judge_points($uid,$judge_max_points);
 
 			if ($judge_points > 0) {
+				
 				if (!empty($judge_info['1'])) {
 					
 					$judge_name = ucwords(strtolower($judge_info['1'])).", ".ucwords(strtolower($judge_info['0']));
@@ -143,14 +132,25 @@ if ($view == "default") {
 					$output_judges .= "</tr>";
 
 				}
-			}
-		}
 
-		foreach (array_unique($bos_judge_no_assignment) as $uid) {
+			}
+
+		} // end foreach (array_unique($j) as $uid)
+
+	} // endif ($totalRows_judges > 0)
+
+	foreach (array_unique($bos_judge_no_assignment) as $uid) {
+
+		if (($total_entries >= 30) && (($beer_styles >= 5) || ($mead_cider >= 3))) {
+			
+			// Best of Show judges criteria
+			// "BOS Judges are eligible to receive 0.5 Best-of-Show (BOS) Judge Points if they judge in any BOS panel in a competition."
+			// "BOS Judge Points may only be awarded if a competition has at least 30 entries in at least five beer and/or three mead/cider categories."
+
 			$judge_info = explode("^",brewer_info($uid));
 			$judge_bjcp_id = strtoupper(strtr($judge_info['4'],$bjcp_num_replace));
 			
-			if ((!empty($uid)) && (!empty($judge_info['1']))) {
+			if ((!empty($uid)) && (!in_array($uid,$j)) && (!empty($judge_info['1']))) {
 				
 				$judge_name = ucwords(strtolower($judge_info['1'])).", ".ucwords(strtolower($judge_info['0']));
 
@@ -161,7 +161,7 @@ if ($view == "default") {
 				$output_judges .= "</td>";
 				$output_judges .= "<td>";
 				if ($judge_bjcp_id == $organ_bjcp_id) $output_judges .= "0.0 (".$label_organizer.")"; 
-				else $output_judges .= "1.0";
+				else $output_judges .= "0.5";
 				$output_judges .= "</td>";
 				$output_judges .= "<td>";
 				$output_judges .= "<span class=\"fa fa-lg fa-check\"></span>";
@@ -169,15 +169,23 @@ if ($view == "default") {
 				$output_judges .= "</tr>";
 
 			}
-		}
+
+		}	
+	
 	}
 
 	if ($totalRows_stewards > 0) {
+        
         $s = array();
-		do { $s[] = $row_stewards['uid']; } while ($row_stewards = mysqli_fetch_assoc($stewards));
+        
+		do { 
+			$s[] = $row_stewards['uid']; 
+		} while ($row_stewards = mysqli_fetch_assoc($stewards));
 
 		foreach (array_unique($s) as $uid) {
+			
 			$steward_points = steward_points($uid);
+			
 			if ($steward_points > 0) {
 				$steward_info = explode("^",brewer_info($uid));
 				$steward_bjcp_id = strtoupper(strtr($steward_info['4'],$bjcp_num_replace));
@@ -190,7 +198,7 @@ if ($view == "default") {
 					else $output_staff .= "&nbsp;";
 					$output_stewards .= "</td>";
 					if ($steward_bjcp_id == $organ_bjcp_id) $output_judges .= "<td>0.0 (".$label_organizer.")</td>";
-					else $output_stewards .= "<td>".steward_points($uid)."</td>";
+					else $output_stewards .= "<td>".$steward_points."</td>";
 					$output_stewards .= "</tr>";
 				}
 			}
@@ -202,7 +210,9 @@ if ($view == "default") {
 	if ($totalRows_staff > 0) {
         
         $st = array();
-		do { $st[] = $row_staff['uid']; } while ($row_staff = mysqli_fetch_assoc($staff));
+		do { 
+			$st[] = $row_staff['uid']; 
+		} while ($row_staff = mysqli_fetch_assoc($staff));
 		
 		$st_running_total[] = "";
 		

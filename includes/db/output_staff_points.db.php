@@ -17,7 +17,7 @@ if (($staff_points * $row_assignments['count']) > $staff_max_points) $staff_poin
 else $staff_points = $staff_points;
 
 // Organizer
-$query_organizer = sprintf("SELECT uid FROM %s WHERE staff_organizer='1'",$staff_db_table);
+$query_organizer = sprintf("SELECT * FROM %s WHERE staff_organizer='1'",$staff_db_table);
 $organizer = mysqli_query($connection,$query_organizer) or die (mysqli_error($connection));
 $row_organizer = mysqli_fetch_assoc($organizer);
 $totalRows_organizer = mysqli_num_rows($organizer);
@@ -45,7 +45,7 @@ $bos_judges_no_assignment = mysqli_query($connection,$query_bos_judges_no_assign
 $row_bos_judges_no_assignment = mysqli_fetch_assoc($bos_judges_no_assignment);
 $totalRows_bos_judges_no_assignment = mysqli_num_rows($bos_judges_no_assignment);
 
-$bos_judge_no_assignment[] = "";
+$bos_judge_no_assignment = array();
 
 if ($totalRows_bos_judges > 0) {
 
