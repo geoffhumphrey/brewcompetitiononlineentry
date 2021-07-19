@@ -1760,7 +1760,7 @@ if (($admin_role) || (((judging_date_return() == 0) && ($registration_open == 2)
                                     $output .= "\t\t\t<JudgeName>".$judge_name."</JudgeName>\n";
                                     $output .= "\t\t\t<JudgeID>".$judge_bjcp_id."</JudgeID>\n";
                                     $output .= "\t\t\t<JudgeRole>BOS Judge</JudgeRole>\n";
-                                    $output .= "\t\t\t<JudgePts>0.5</JudgePts>\n";
+                                    $output .= "\t\t\t<JudgePts>1.0</JudgePts>\n";
                                     $output .= "\t\t\t<NonJudgePts>0.0</NonJudgePts>\n";
                                     $output .= "\t\t</JudgeData>\n";
                                 }

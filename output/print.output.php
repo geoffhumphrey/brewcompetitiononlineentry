@@ -7,7 +7,6 @@
 
 require ('../paths.php');
 require (CONFIG.'bootstrap.php');
-//require(LIB.'output.lib.php');
 
 if (isset($_SESSION['loginUsername'])) {
 $role_replace1 = array("HJ","LJ","MBOS",", ");

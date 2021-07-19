@@ -268,7 +268,7 @@ if ($go == "mini_bos") {
 
 			$table_flight_tbody .= "<tr>";
 			$table_flight_tbody .= "<td>";
-			$table_flight_tbody .= "<p class=\"box\">&nbsp;</p>";
+			$table_flight_tbody .= "<p>&nbsp;</p>";
 			$table_flight_tbody .= "</td>";
 
 			$table_flight_tbody .= "<td>";
@@ -299,11 +299,11 @@ if ($go == "mini_bos") {
 			$table_flight_tbody .= "</td>";
 
 			$table_flight_tbody .= "<td>";
-			$table_flight_tbody .= "<p class=\"box\">&nbsp;</p>";
+			$table_flight_tbody .= "<p>&nbsp;</p>";
 			$table_flight_tbody .= "</td>";
 
 			$table_flight_tbody .= "<td>";
-			$table_flight_tbody .= "<p class=\"box\">&nbsp;</p>";
+			$table_flight_tbody .= "<p>&nbsp;</p>";
 			$table_flight_tbody .= "</td>";
 
 			$table_flight_tbody .= "</tr>";
@@ -404,7 +404,7 @@ if ($go == "judging_scores_bos") {
 						$table_flight_tbody .= "<tr>";
 
 						$table_flight_tbody .= "<td>";
-						$table_flight_tbody .= "<p class=\"box\">&nbsp;</p>";
+						$table_flight_tbody .= "<p>&nbsp;</p>";
 						$table_flight_tbody .= "</td>";
 						$table_flight_tbody .= "<td>";
 
@@ -439,10 +439,10 @@ if ($go == "judging_scores_bos") {
 						$table_flight_tbody .= $row_entries_1['brewBoxNum'];
 						$table_flight_tbody .= "</td>";
 						$table_flight_tbody .= "<td>";
-						$table_flight_tbody .= "<p class=\"box\">&nbsp;</p>";
+						$table_flight_tbody .= "<p>&nbsp;</p>";
 						$table_flight_tbody .= "</td>";
 						$table_flight_tbody .= "<td>";
-						$table_flight_tbody .= "<p class=\"box\">&nbsp;</p>";
+						$table_flight_tbody .= "<p>&nbsp;</p>";
 						$table_flight_tbody .= "</td>";
 						$table_flight_tbody .= "</tr>";
 
@@ -570,7 +570,7 @@ elseif (($go != "judging_scores_bos") && ($go != "mini_bos") && ($go != "all_ent
 
 									$table_flight_tbody .= "<tr>";
 									$table_flight_tbody .= "<td>";
-									$table_flight_tbody .= "<p class=\"box\">&nbsp;</p>";
+									$table_flight_tbody .= "<p>&nbsp;</p>";
 									$table_flight_tbody .= "</td>";
 									$table_flight_tbody .= "<td>";
 									if ($view == "entry")  $table_flight_tbody .= sprintf("%06s",$row_entries['id']);
@@ -608,10 +608,10 @@ elseif (($go != "judging_scores_bos") && ($go != "mini_bos") && ($go != "all_ent
 										$table_flight_tbody .= "</td>";
 									}
 									$table_flight_tbody .= "<td>";
-									$table_flight_tbody .= "<p class=\"box\">&nbsp;</p>";
+									$table_flight_tbody .= "<p>&nbsp;</p>";
 									$table_flight_tbody .= "</td>";
 									$table_flight_tbody .= "<td>";
-									$table_flight_tbody .= "<p class=\"box\">&nbsp;</p>";
+									$table_flight_tbody .= "<p>&nbsp;</p>";
 									$table_flight_tbody .= "</td>";
 									$table_flight_tbody .= "</tr>";
 
@@ -730,7 +730,7 @@ elseif (($go != "judging_scores_bos") && ($go != "mini_bos") && ($go != "all_ent
 
 								$table_flight_tbody .= "<tr>";
 								$table_flight_tbody .= "<td>";
-								$table_flight_tbody .= "<p class=\"box\">&nbsp;</p>";
+								$table_flight_tbody .= "<p>&nbsp;</p>";
 								$table_flight_tbody .= "</td>";
 								$table_flight_tbody .= "<td>";
 								if ($view == "entry")  $table_flight_tbody .= sprintf("%06s",$row_entries['id']);
@@ -770,10 +770,10 @@ elseif (($go != "judging_scores_bos") && ($go != "mini_bos") && ($go != "all_ent
 									$table_flight_tbody .= "</td>";
 								}
 								$table_flight_tbody .= "<td>";
-								$table_flight_tbody .= "<p class=\"box\">&nbsp;</p>";
+								$table_flight_tbody .= "<p>&nbsp;</p>";
 								$table_flight_tbody .= "</td>";
 								$table_flight_tbody .= "<td>";
-								$table_flight_tbody .= "<p class=\"box\">&nbsp;</p>";
+								$table_flight_tbody .= "<p>&nbsp;</p>";
 								$table_flight_tbody .= "</td>";
 								$table_flight_tbody .= "</tr>";
 
@@ -915,7 +915,7 @@ elseif (($go != "judging_scores_bos") && ($go != "mini_bos") && ($go != "all_ent
 
 									$table_flight_tbody .= "<tr>";
 									$table_flight_tbody .= "<td>";
-									$table_flight_tbody .= "<p class=\"box\">&nbsp;</p>";
+									$table_flight_tbody .= "<p>&nbsp;</p>";
 									$table_flight_tbody .= "</td>";
 									$table_flight_tbody .= "<td>";
 									if ($view == "entry")  $table_flight_tbody .= sprintf("%06s",$row_entries['id']);
@@ -954,10 +954,10 @@ elseif (($go != "judging_scores_bos") && ($go != "mini_bos") && ($go != "all_ent
 											$table_flight_tbody .= "</td>";
 										}
 										$table_flight_tbody .= "<td>";
-										$table_flight_tbody .= "<p class=\"box\">&nbsp;</p>";
+										$table_flight_tbody .= "<p>&nbsp;</p>";
 										$table_flight_tbody .= "</td>";
 										$table_flight_tbody .= "<td>";
-										$table_flight_tbody .= "<p class=\"box\">&nbsp;</p>";
+										$table_flight_tbody .= "<p>&nbsp;</p>";
 										$table_flight_tbody .= "</td>";
 										$table_flight_tbody .= "</tr>";
 
@@ -1089,7 +1089,7 @@ elseif (($go != "judging_scores_bos") && ($go != "mini_bos") && ($go != "all_ent
 
 									$table_flight_tbody .= "<tr>";
 									$table_flight_tbody .= "<td>";
-									$table_flight_tbody .= "<p class=\"box\">&nbsp;</p>";
+									$table_flight_tbody .= "<p>&nbsp;</p>";
 									$table_flight_tbody .= "</td>";
 									$table_flight_tbody .= "<td>";
 									if ($view == "entry")  $table_flight_tbody .= sprintf("%06s",$row_entries['id']);
@@ -1128,10 +1128,10 @@ elseif (($go != "judging_scores_bos") && ($go != "mini_bos") && ($go != "all_ent
 										$table_flight_tbody .= "</td>";
 									}
 									$table_flight_tbody .= "<td>";
-									$table_flight_tbody .= "<p class=\"box\">&nbsp;</p>";
+									$table_flight_tbody .= "<p>&nbsp;</p>";
 									$table_flight_tbody .= "</td>";
 									$table_flight_tbody .= "<td>";
-									$table_flight_tbody .= "<p class=\"box\">&nbsp;</p>";
+									$table_flight_tbody .= "<p>&nbsp;</p>";
 									$table_flight_tbody .= "</td>";
 									$table_flight_tbody .= "</tr>";
 
@@ -1296,7 +1296,7 @@ elseif (($go != "judging_scores_bos") && ($go != "mini_bos") && ($go != "all_ent
 
 							$table_flight_tbody .= "<tr>";
 							$table_flight_tbody .= "<td>";
-							$table_flight_tbody .= "<p class=\"box\">&nbsp;</p>";
+							$table_flight_tbody .= "<p>&nbsp;</p>";
 							$table_flight_tbody .= "</td>";
 							$table_flight_tbody .= "<td>";
 							if ($view == "entry")  $table_flight_tbody .= sprintf("%06s",$row_entries['id']);
@@ -1337,10 +1337,10 @@ elseif (($go != "judging_scores_bos") && ($go != "mini_bos") && ($go != "all_ent
 								$table_flight_tbody .= "</td>";
 							}
 							$table_flight_tbody .= "<td>";
-							$table_flight_tbody .= "<p class=\"box\">&nbsp;</p>";
+							$table_flight_tbody .= "<p>&nbsp;</p>";
 							$table_flight_tbody .= "</td>";
 							$table_flight_tbody .= "<td>";
-							$table_flight_tbody .= "<p class=\"box\">&nbsp;</p>";
+							$table_flight_tbody .= "<p>&nbsp;</p>";
 							$table_flight_tbody .= "</td>";
 							$table_flight_tbody .= "</tr>";
 

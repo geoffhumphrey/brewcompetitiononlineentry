@@ -36,7 +36,7 @@ To figure out steward points, need to assess:
 require (DB.'judging_locations.db.php');
 require (DB.'styles.db.php');
 require (DB.'admin_common.db.php');
-//require (LIB.'output.lib.php');
+require (LIB.'output.lib.php');
 require (DB.'output_staff_points.db.php');
 // Get total amount of paid and received entries
 $total_entries = total_paid_received("judging_scores","default");
@@ -161,7 +161,7 @@ if ($view == "default") {
 				$output_judges .= "</td>";
 				$output_judges .= "<td>";
 				if ($judge_bjcp_id == $organ_bjcp_id) $output_judges .= "0.0 (".$label_organizer.")"; 
-				else $output_judges .= "0.5";
+				else $output_judges .= "1.0";
 				$output_judges .= "</td>";
 				$output_judges .= "<td>";
 				$output_judges .= "<span class=\"fa fa-lg fa-check\"></span>";
