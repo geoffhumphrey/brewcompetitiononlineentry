@@ -1136,7 +1136,7 @@ if ($queued == "Y") { // For queued judging only
 	$r .= '<div class="form-group">';
 	$r .= '<div class="input-group">';
     $r .= '<label class="radio-inline">';
-    $r .= '<input type="radio" name="assignRound'.$random.'" value="'.$round.'" '.$selected.' '.$disabled.' /> Assign to this Table';
+    $r .= '<input type="radio" name="assignRound'.$random.'" value="'.$round.'" '.$selected.' '.$disabled.' /> Assign to this Table/Round';
     $r .= '</label>';
     $r .= '<label class="radio-inline">';
     $r .= '<input type="radio" name="assignRound'.$random.'" value="0" '.$default.' /> Do Not Assign to This Table';

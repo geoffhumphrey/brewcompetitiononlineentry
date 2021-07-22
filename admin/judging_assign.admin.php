@@ -89,11 +89,8 @@ if ($filter == "judges") {
     }
 }
 
-if ($queued == "Y") $output_datatables_head .= "<th>Round ".$row_flights['flightRound']."</th>";
-else {
-	for($i=1; $i<$row_flights['flightRound']+1; $i++) {
-			$output_datatables_head .= "<th>Round ".$i."</th>";
-	}
+for($i=1; $i<$row_flights['flightRound']+1; $i++) {
+	$output_datatables_head .= "<th>Round ".$i."</th>";
 }
 
 $output_datatables_head .= "</tr>";
