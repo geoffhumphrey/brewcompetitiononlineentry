@@ -2,7 +2,7 @@
 
 //@single
 if ($bid != "") {
-	$query_judging = sprintf("SELECT judgingLocName FROM %s WHERE id='%s'",$judging_locations_db_table, $bid);
+	$query_judging = sprintf("SELECT judgingLocName FROM %s WHERE id='%s'",$prefix."judging_locations", $bid);
 	$judging = mysqli_query($connection,$query_judging) or die (mysqli_error($connection));
 	$row_judging = mysqli_fetch_assoc($judging);
 }

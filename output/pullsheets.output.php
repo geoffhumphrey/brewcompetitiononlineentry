@@ -474,6 +474,7 @@ if ($go == "judging_scores_bos") {
 elseif (($go != "judging_scores_bos") && ($go != "mini_bos") && ($go != "all_entry_info")) {
 
 	// If using queued judging (no flights)
+	
 	if ($queued) {
 
 		if ($tables_all) {
@@ -797,6 +798,8 @@ elseif (($go != "judging_scores_bos") && ($go != "mini_bos") && ($go != "all_ent
 		} // end if (!$tables_all)
 
 	} // end if ($queued)
+
+
 
 	// If NOT using queued judging (with flights)
 	if (!$queued) {

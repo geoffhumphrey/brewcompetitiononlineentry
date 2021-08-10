@@ -313,7 +313,7 @@ $(document).ready(function(){
 	</div>
 </div><!-- ./Form Group -->
 <div class="form-group"><!-- Form Group Radio STACKED -->
-	<label for="prefsDisplaySpecial" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Scoresheet Upload File Names</label>
+	<label for="prefsDisplaySpecial" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Scoresheet Unique Identifier</label>
 	<div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
 		<div class="input-group">
 			<!-- Input Here -->
@@ -325,10 +325,10 @@ $(document).ready(function(){
 			</label>
 		</div>
 		<div id="helpBlock" class="help-block">
-			<p>The way scoresheet PDF files will be named for use by the system when uploaded. <span class="text-primary"><strong>Using the random, system-generated judging numbers ensures unique file names for live and archived entry data.</strong></span></p>
+			<p>How entries are identified to judges when evaluating. If uploading scoresheet PDF files, the PDFs for each entry should be named according to the exact 6-character number for use by the system. <span class="text-primary"><strong>Using the random, system-generated judging numbers ensures unique file names for live and archived entry data.</strong></span></p>
 			<div class="btn-group" role="group" aria-label="ScoresheetsModal">
 				<button type="button" class="btn btn-xs btn-info" data-toggle="modal" data-target="#scoresheetModal">
-				   Scoresheet Upload File Name Info/Examples
+				   Scoresheet Unique Identifier Info/Examples
 				</button>
 			</div>
 		</div>

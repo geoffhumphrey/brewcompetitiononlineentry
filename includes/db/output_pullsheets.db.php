@@ -1,5 +1,5 @@
 <?php
-$query_tables = "SELECT * FROM $judging_tables_db_table";
+$query_tables = sprintf("SELECT * FROM %s",$prefix."judging_tables");
 if ($go == "judging_locations") $query_tables .= sprintf(" WHERE tableLocation = '%s'", $location);
 if ($id != "default") $query_tables .= sprintf(" WHERE id='%s'",$id);
 else $query_tables .= " ORDER BY tableNumber";

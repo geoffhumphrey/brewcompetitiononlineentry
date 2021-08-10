@@ -1,7 +1,7 @@
 <?php
 
 if ($bid != "") {
-	$query_judging = sprintf("SELECT judgingLocName FROM %s WHERE id='%s'",$judging_locations_db_table, $bid);
+	$query_judging = sprintf("SELECT judgingLocName FROM %s WHERE id='%s'",$prefix."judging_locations", $bid);
 	if (SINGLE) $query_judging .= sprintf(" AND comp_id='%s'", $_SESSION['comp_id']);
 	$judging = mysqli_query($connection,$query_judging) or die (mysqli_error($connection));
 	$row_judging = mysqli_fetch_assoc($judging);
@@ -10,8 +10,8 @@ if ($bid != "") {
 // Note: the order of the columns is set to the specifications set by HCCP for import
 if (($filter != "winners") || ($tb != "winners")) {
 
-	if ($filter == "all") 	$query_sql = "SELECT * FROM $brewing_db_table";
-	else $query_sql = "SELECT DISTINCT id, brewBrewerFirstName, brewBrewerLastName, brewCategory, brewSubCategory, brewName, brewInfo, brewInfoOptional, brewComments, brewMead2, brewMead1, brewMead3, brewBrewerID, brewJudgingNumber, brewStyle FROM $brewing_db_table";
+	if ($tb == "all") $query_sql = sprintf($query_sql = "SELECT * FROM %s", $prefix."brewing");
+	else $query_sql = sprintf("SELECT DISTINCT id, brewBrewerFirstName, brewBrewerLastName, brewCategory, brewSubCategory, brewName, brewInfo, brewInfoOptional, brewComments, brewMead2, brewMead1, brewMead3, brewBrewerID, brewJudgingNumber, brewStyle FROM %s", $prefix."brewing");
 
 	if (SINGLE) {
 

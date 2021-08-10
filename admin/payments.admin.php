@@ -1,7 +1,6 @@
 <?php
 include (DB.'payments.db.php');
 
-
 if ($totalRows_payments > 0) {
 
 ?>
