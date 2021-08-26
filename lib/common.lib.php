@@ -1275,12 +1275,17 @@ function style_convert($number,$type,$base_url="",$archive="") {
 		// If the number is 35 or greater and is not alphanumeric
 		// Search the array and return the style category name
 		$custom = FALSE;
-		if ((is_numeric($number)) && ($number >= 35) && ($row_style['brewStyleOwn'] != "bcoe")) $custom = TRUE;
+		
+		if ($style_set == "BJCP2008") $start_custom = 29;
+		else $start_custom = 35;
+
+		if ((is_numeric($number)) && ($number >= $start_custom) && ($row_style['brewStyleOwn'] != "bcoe")) $custom = TRUE;
 
 		// if numeric make two-digit by adding leading zero just in case
 		if (is_numeric($number)) $number = sprintf('%02d', $number); 
 
 		if ($custom) $style_convert = $row_style['brewStyle']." (Custom Style)";
+		
 		else {
 			foreach ($style_sets as $style_set_data) {
 				if ($style_set_data['style_set_name'] === $style_set) {

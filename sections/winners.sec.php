@@ -134,6 +134,9 @@ if ($row_scored_entries['count'] > 0) {
 					if ($_SESSION['prefsStyleSet'] == "AABC") $style = ltrim($row_scores['brewCategory'],"0").".".ltrim($row_scores['brewSubCategory'],"0");
        				else $style = $row_scores['brewCategory'].$row_scores['brewSubCategory'];
 
+       				$entry_name = html_entity_decode($row_scores['brewName'],ENT_QUOTES|ENT_XML1,"UTF-8");
+   					$entry_name = htmlentities($entry_name,ENT_QUOTES|ENT_SUBSTITUTE|ENT_HTML5,"UTF-8");
+
 					$winners_table_body_1 .= "<tr>";
 
 					if ($action == "print") {
@@ -155,7 +158,7 @@ if ($row_scored_entries['count'] > 0) {
 					$winners_table_body_1 .= "</td>";
 
 					$winners_table_body_1 .= "<td width=\"25%\">";
-					$winners_table_body_1 .= $row_scores['brewName'];
+					$winners_table_body_1 .= $entry_name;
 					$winners_table_body_1 .= "</td>";
 
 					$winners_table_body_1 .= "<td width=\"25%\">";

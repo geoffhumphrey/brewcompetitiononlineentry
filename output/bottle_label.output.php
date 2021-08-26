@@ -109,6 +109,9 @@ if (isset($_SESSION['loginUsername'])) {
             $qr->qRCreate($qrcode_url,"85x85","UTF-8");
             $qrcode_link = $qr->url;
 
+            $entry_name = html_entity_decode($row_log['brewName'],ENT_QUOTES|ENT_XML1,"UTF-8");
+            $entry_name = htmlentities($entry_name,ENT_QUOTES|ENT_SUBSTITUTE|ENT_HTML5,"UTF-8");
+
             if (($bottle_label_endRow == 0) && ($bottle_label_hloopRow1++ != 0)) $page_info1 .= "<div class=\"row\">";
 
             // Layout Column div
@@ -117,7 +120,7 @@ if (isset($_SESSION['loginUsername'])) {
             $page_info1 .= "<p class=\"text-center\"><strong>".$_SESSION['contestName']."</strong></p>";
 
             $page_info1 .= "<p><strong>".$label_entry_number.":</strong> ".$barcode."</br>";
-            if (!$anon) $page_info1 .= "<strong>".$label_entry_name.":</strong> ".truncate($row_log['brewName'],30,"&hellip;")."<br>";
+            if (!$anon) $page_info1 .= "<strong>".$label_entry_name.":</strong> ".truncate($entry_name,30,"&hellip;")."<br>";
             if ($_SESSION['prefsStyleSet'] == "BA") $page_info1 .= "<strong>Cat: ".$row_log['brewStyle']."<br>";
             elseif ($_SESSION['prefsStyleSet'] == "AABC")  $page_info1 .= "<strong>".$label_category.":</strong> ".ltrim($row_log['brewCategory'],"0").".".ltrim($row_log['brewSubCategory'],"0")." ".$row_log['brewStyle']."<br>";
             else $page_info1 .= "<strong>".$label_category.":</strong> ".$row_log['brewCategory'].$row_log['brewSubCategory']." ".$row_log['brewStyle']."<br>";

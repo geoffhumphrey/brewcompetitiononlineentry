@@ -79,13 +79,16 @@ function entries_by_dropoff_loc($id) {
 			$row_dropoff_count = mysqli_fetch_assoc($dropoff_count);
 			$totalRows_dropoff_count = mysqli_num_rows($dropoff_count);
 
+			$entry_name = html_entity_decode($row_dropoff_count['brewName'],ENT_QUOTES|ENT_XML1,"UTF-8");
+			$entry_name = htmlentities($entry_name,ENT_QUOTES|ENT_SUBSTITUTE|ENT_HTML5,"UTF-8");
+
 			if ($totalRows_dropoff_count > 0) {
 
 				do {
 					$build_rows .= "
 						<tr>
 							<td>".sprintf("%06s",$row_dropoff_count['id'])."</td>
-							<td>".$row_dropoff_count['brewName']."</td>
+							<td>".$entry_name."</td>
 							<td>".$row_dropoff_count['brewBrewerLastName'].", ".$row_dropoff_count['brewBrewerFirstName']."</td>
 							<td><p class=\"box_small\"></p></td>
 						</tr>

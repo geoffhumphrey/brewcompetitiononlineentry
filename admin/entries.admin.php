@@ -107,6 +107,8 @@ if ($totalRows_log > 0) {
 		$scoresheet_judging = FALSE;
 
 		$entry_number = sprintf("%06s",$row_log['id']);
+		$entry_name = html_entity_decode($row_log['brewName'],ENT_QUOTES|ENT_XML1,"UTF-8");
+		$entry_name = htmlentities($entry_name,ENT_QUOTES|ENT_SUBSTITUTE|ENT_HTML5,"UTF-8");
 
 		$judging_number = "";
 		if (isset($row_log['brewJudgingNumber'])) $judging_number = sprintf("%06s",$row_log['brewJudgingNumber']);
@@ -382,18 +384,18 @@ if ($totalRows_log > 0) {
 			$entry_actions .= "<a href=\"".$base_url."index.php?section=brew&amp;go=".$go."&amp;action=edit&amp;bid=".$row_log['uid']."&amp;id=".$row_log['id'];
 			if ($row_log['brewConfirmed'] == 0) $entry_actions .= "&amp;msg=1-".$row_log['brewCategorySort']."-".$row_log['brewSubCategory'];
 			else $entry_actions .= "&amp;view=".$row_log['brewCategorySort']."-".$row_log['brewSubCategory'];
-			$entry_actions .= "\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Edit &ldquo;".$row_log['brewName']."&rdquo;\">";
+			$entry_actions .= "\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Edit &ldquo;".$entry_name."&rdquo;\">";
 			$entry_actions .= "<span class=\"fa fa-lg fa-pencil\"></span>";
 			$entry_actions .= "</a> ";
-			$entry_actions .= "<a class=\"hide-loader\" href=\"".$base_url."includes/process.inc.php?section=".$section."&amp;go=".$go."&amp;filter=".$filter."&amp;dbTable=".$brewing_db_table."&amp;action=delete&amp;id=".$row_log['id']."\" data-toggle=\"tooltip\" title=\"Delete &ldquo;".$row_log['brewName']."&rdquo;\" data-confirm=\"Are you sure you want to delete the entry called &ldquo;".$row_log['brewName']."?&rdquo; This cannot be undone.\"><span class=\"fa fa-lg fa-trash-o\"></a> ";
-			$entry_actions .= "<a id=\"modal_window_link\" class=\"hide-loader\" href=\"".$base_url."output/entry.output.php?id=".$row_log['id']."&amp;bid=".$row_log['uid']."&amp;filter=admin\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Print the Entry Forms for &ldquo;".$row_log['brewName']."&rdquo;\"><span class=\"fa fa-lg fa-print <?php echo $hidden_sm; ?>\"></a> ";
+			$entry_actions .= "<a class=\"hide-loader\" href=\"".$base_url."includes/process.inc.php?section=".$section."&amp;go=".$go."&amp;filter=".$filter."&amp;dbTable=".$brewing_db_table."&amp;action=delete&amp;id=".$row_log['id']."\" data-toggle=\"tooltip\" title=\"Delete &ldquo;".$entry_name."&rdquo;\" data-confirm=\"Are you sure you want to delete the entry called &ldquo;".$entry_name."?&rdquo; This cannot be undone.\"><span class=\"fa fa-lg fa-trash-o\"></a> ";
+			$entry_actions .= "<a id=\"modal_window_link\" class=\"hide-loader\" href=\"".$base_url."output/entry.output.php?id=".$row_log['id']."&amp;bid=".$row_log['uid']."&amp;filter=admin\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Print the Entry Forms for &ldquo;".$entry_name."&rdquo;\"><span class=\"fa fa-lg fa-print <?php echo $hidden_sm; ?>\"></a> ";
 			$entry_actions .= "<a class=\"hide-loader\" href=\"mailto:".$row_log['brewerEmail']."\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Email the entry&rsquo;s owner, ".$row_log['brewerFirstName']." ".$row_log['brewerLastName'].", at ".$row_log['brewerEmail']."\"><span class=\"fa fa-lg fa-envelope\"></span></a> ";
 		}
 
 		if (($_SESSION['prefsEval'] == 1) && ($eval_db_table)) {
 			if ($scoresheet_eval) {
-				$entry_actions .= "<a id=\"modal_window_link\" class=\"hide-loader\" href=\"".$print_link."\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Print the Scoresheets for &ldquo;".$row_log['brewName']."&rdquo;\"><i class=\"fa fa-lg fa-file-text\"></i></a> ";
-				$entry_actions .= "<a id=\"modal_window_link\" class=\"hide-loader\" href=\"".$view_link."\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"View the Scoresheets for &ldquo;".$row_log['brewName']."&rdquo;\"><span class=\"fa-stack\"><i class=\"fa fa-square fa-stack-2x\"></i><i class=\"fa fa-stack-1x fa-file-text fa-inverse\"></i></span></a> ";
+				$entry_actions .= "<a id=\"modal_window_link\" class=\"hide-loader\" href=\"".$print_link."\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Print the Scoresheets for &ldquo;".$entry_name."&rdquo;\"><i class=\"fa fa-lg fa-file-text\"></i></a> ";
+				$entry_actions .= "<a id=\"modal_window_link\" class=\"hide-loader\" href=\"".$view_link."\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"View the Scoresheets for &ldquo;".$entry_name."&rdquo;\"><span class=\"fa-stack\"><i class=\"fa fa-square fa-stack-2x\"></i><i class=\"fa fa-stack-1x fa-file-text fa-inverse\"></i></span></a> ";
 			}
 		}
 
@@ -430,7 +432,7 @@ if ($totalRows_log > 0) {
 				$scoresheet_link_1 .= "&amp;randomfilename=".urlencode(obfuscateURL($random_file_name_1,$encryption_key))."&amp;download=true";
 
 				if ($dbTable != "default") $scoresheet_link_1 .= "&amp;view=".$archive_suffix;
-				$scoresheet_link_1 .= sprintf("\" data-toggle=\"tooltip\" title=\"%s '".$row_log['brewName']."'' (by Entry Number).\">",$brewer_entries_text_006);
+				$scoresheet_link_1 .= sprintf("\" data-toggle=\"tooltip\" title=\"%s '".$entry_name."'' (by Entry Number).\">",$brewer_entries_text_006);
 				$scoresheet_link_1 .= "<span class=\"fa fa-lg fa-file-pdf-o\"></a>&nbsp;&nbsp;";
 			}
 
@@ -455,7 +457,7 @@ if ($totalRows_log > 0) {
 				$scoresheet_link_2 .= "scoresheetfilename=".urlencode(obfuscateURL($scoresheet_file_name_2,$encryption_key));
 				$scoresheet_link_2 .= "&amp;randomfilename=".urlencode(obfuscateURL($random_file_name_2,$encryption_key))."&amp;download=true";
 				if ($dbTable != "default") $scoresheet_link_2 .= "&amp;view=".$archive_suffix;
-				$scoresheet_link_2 .= sprintf("\" data-toggle=\"tooltip\" title=\"%s '".$row_log['brewName']."' (by Judging Number).\">",$brewer_entries_text_006);
+				$scoresheet_link_2 .= sprintf("\" data-toggle=\"tooltip\" title=\"%s '".$entry_name."' (by Judging Number).\">",$brewer_entries_text_006);
 				$scoresheet_link_2 .= "<span class=\"fa fa-lg fa-file-pdf-o\"></a>&nbsp;&nbsp;";
 			}
 
@@ -492,7 +494,7 @@ if ($totalRows_log > 0) {
 		$tbody_rows .= "</td>";
 		$tbody_rows .= "\n\t<td nowrap=\"nowrap\">".$entry_judging_num_display."</td>";
 		$tbody_rows .= "\n\t<td class=\"<?php echo $hidden_md; ?>\">";
-		$tbody_rows .= $row_log['brewName'];
+		$tbody_rows .= $entry_name;
 		$tbody_rows .= "</td>";
 		$tbody_rows .= "\n\t<td>";
 

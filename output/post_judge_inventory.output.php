@@ -60,7 +60,13 @@ if ($_SESSION['prefsStyleSet'] == "BA") include (INCLUDES.'ba_constants.inc.php'
     	<tr>
         	<td><?php echo sprintf("%06s",$row_post_inventory['id']); ?></td>
             <td><?php echo readable_judging_number($row_post_inventory['brewCategory'],$row_post_inventory['brewJudgingNumber']); ?></td>
-            <td><?php echo $row_post_inventory['brewName']; ?></td>
+            <td>
+                <?php 
+                $entry_name = html_entity_decode($row_post_inventory['brewName'],ENT_QUOTES|ENT_XML1,"UTF-8");
+                $entry_name = htmlentities($entry_name,ENT_QUOTES|ENT_SUBSTITUTE|ENT_HTML5,"UTF-8");
+                echo $entry_name; 
+                ?>
+            </td>
             <td>
                 <?php if ($_SESSION['prefsStyleSet'] == "BA") echo $ba_category_names[$row_post_inventory['brewCategory']].": ".$row_post_inventory['brewStyle'];
                 else echo $row_post_inventory['brewCategorySort'].$row_post_inventory['brewSubCategory'].": ".$row_post_inventory['brewStyle']; ?>

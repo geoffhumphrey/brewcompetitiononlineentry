@@ -157,6 +157,9 @@ if (($display_to_admin) || ($display_to_public)) {
 							$place_heirarchy = place_heirarchy($row_scores['scorePlace']);
 							$display_place = display_place($row_scores['scorePlace'],1);
 
+							$entry_name = html_entity_decode($row_scores['brewName'], ENT_QUOTES | ENT_XML1, 'UTF-8');
+							$entry_name = htmlentities($entry_name,ENT_QUOTES|ENT_SUBSTITUTE|ENT_HTML5,"UTF-8");
+
 							// Category/Style Display
 							if ($_SESSION['prefsStyleSet'] == "AABC") $style = ltrim($row_scores['brewCategory'],"0").".".ltrim($row_scores['brewSubCategory'],"0");
 	       					else $style = $row_scores['brewCategory'].$row_scores['brewSubCategory'];
@@ -178,7 +181,7 @@ if (($display_to_admin) || ($display_to_public)) {
 							if (!empty($row_scores['brewCoBrewer'])) $slides .= "<span style=\"padding-top: .9em;\" class=\"small\">&nbsp;&amp;&nbsp;<em>".truncate_string($row_scores['brewCoBrewer'],20," ")."</em></span>";
 							$slides .= "</div>";
 							if ($_SESSION['prefsProEdition'] == 0) $slides .= "<div class=\"fragment justify-left small\" data-fragment-index=\"".$place_heirarchy."\" id=\"pos-".$place_heirarchy."-club\">".truncate_string($brewer_club,25," ")."</div>";
-							$slides .= "<div class=\"fragment justify-left small entry-name bottom-row\" data-fragment-index=\"".$place_heirarchy."\" id=\"pos-".$place_heirarchy."-style\">".truncate_string($row_scores['brewName'],65," ")." (".$style_display.")</div>";
+							$slides .= "<div class=\"fragment justify-left small entry-name bottom-row\" data-fragment-index=\"".$place_heirarchy."\" id=\"pos-".$place_heirarchy."-style\">".truncate_string($entry_name,65," ")." (".$style_display.")</div>";
 							$slides .= "</div>";
 
 						} while ($row_scores = mysqli_fetch_assoc($scores));
@@ -248,6 +251,9 @@ if (($display_to_admin) || ($display_to_public)) {
 								$place_heirarchy = place_heirarchy($row_scores['scorePlace']);
 								$display_place = display_place($row_scores['scorePlace'],1);
 
+								$entry_name = html_entity_decode($row_scores['brewName'], ENT_QUOTES | ENT_XML1, 'UTF-8');
+								$entry_name = htmlentities($entry_name,ENT_QUOTES|ENT_SUBSTITUTE|ENT_HTML5,"UTF-8");
+
 								// Category/Style Display
 								if ($_SESSION['prefsStyleSet'] == "AABC") $style = ltrim($row_scores['brewCategory'],"0").".".ltrim($row_scores['brewSubCategory'],"0");
 		       					else $style = $row_scores['brewCategory'].$row_scores['brewSubCategory'];
@@ -270,7 +276,7 @@ if (($display_to_admin) || ($display_to_public)) {
 								$slides .= "</div>";
 								
 								if ($_SESSION['prefsProEdition'] == 0) $slides .= "<div class=\"fragment justify-left small\" data-fragment-index=\"".$place_heirarchy."\" id=\"pos-".$place_heirarchy."-club\">".truncate_string($brewer_club,25," ")."</div>";
-								$slides .= "<div class=\"fragment justify-left small entry-name bottom-row\" data-fragment-index=\"".$place_heirarchy."\" id=\"pos-".$place_heirarchy."-style\">".truncate_string($row_scores['brewName'],65," ")." (".$style_display.")</div>";
+								$slides .= "<div class=\"fragment justify-left small entry-name bottom-row\" data-fragment-index=\"".$place_heirarchy."\" id=\"pos-".$place_heirarchy."-style\">".truncate_string($entry_name,65," ")." (".$style_display.")</div>";
 								$slides .= "</div>";
 
 							} while ($row_scores = mysqli_fetch_assoc($scores));
@@ -345,6 +351,9 @@ if (($display_to_admin) || ($display_to_public)) {
 								$place_heirarchy = place_heirarchy($row_scores['scorePlace']);
 								$display_place = display_place($row_scores['scorePlace'],1);
 
+								$entry_name = html_entity_decode($row_scores['brewName'], ENT_QUOTES | ENT_XML1, 'UTF-8');
+								$entry_name = htmlentities($entry_name,ENT_QUOTES|ENT_SUBSTITUTE|ENT_HTML5,"UTF-8");
+
 								// Category/Style Display
 								if ($_SESSION['prefsStyleSet'] == "AABC") $style = ltrim($row_scores['brewCategory'],"0").".".ltrim($row_scores['brewSubCategory'],"0");
 		       					else $style = $row_scores['brewCategory'].$row_scores['brewSubCategory'];
@@ -367,7 +376,7 @@ if (($display_to_admin) || ($display_to_public)) {
 								$slides .= "</div>";
 
 								if ($_SESSION['prefsProEdition'] == 0) $slides .= "<div class=\"fragment justify-left small\" data-fragment-index=\"".$place_heirarchy."\" id=\"pos-".$place_heirarchy."-club\">".truncate_string($brewer_club,25," ")."</div>";
-								$slides .= "<div class=\"fragment justify-left small entry-name bottom-row\" data-fragment-index=\"".$place_heirarchy."\" id=\"pos-".$place_heirarchy."-style\">".truncate_string($row_scores['brewName'],65," ")." (".$style_display.")</div>";
+								$slides .= "<div class=\"fragment justify-left small entry-name bottom-row\" data-fragment-index=\"".$place_heirarchy."\" id=\"pos-".$place_heirarchy."-style\">".truncate_string($entry_name,65," ")." (".$style_display.")</div>";
 								$slides .= "</div>";
 
 							} while ($row_scores = mysqli_fetch_assoc($scores));
@@ -429,6 +438,9 @@ if (($display_to_admin) || ($display_to_public)) {
 				$place_heirarchy = place_heirarchy($row_bos['scorePlace']);
 				$display_place = display_place($row_bos['scorePlace'],1);
 
+				$entry_name = html_entity_decode($row_bos['brewName'], ENT_QUOTES | ENT_XML1, 'UTF-8');
+				$entry_name = htmlentities($entry_name,ENT_QUOTES|ENT_SUBSTITUTE|ENT_HTML5,"UTF-8");
+
 				// Category/Style Display
 				if ($_SESSION['prefsStyleSet'] == "AABC") $style = ltrim($row_bos['brewCategory'],"0").".".ltrim($row_bos['brewSubCategory'],"0");
 					else $style = $row_bos['brewCategory'].$row_bos['brewSubCategory'];
@@ -451,8 +463,8 @@ if (($display_to_admin) || ($display_to_public)) {
 				$slides_bos .= "</div>";
 
 				if ($_SESSION['prefsProEdition'] == 0) $slides_bos .= "<div class=\"fragment justify-left small\" data-fragment-index=\"".$place_heirarchy."\" id=\"pos-".$place_heirarchy."-club\">".truncate_string($brewer_club,25," ")."</div>";
-				$slides_bos .= "<div class=\"fragment justify-left small entry-name bottom-row\" data-fragment-index=\"".$place_heirarchy."\" id=\"pos-".$place_heirarchy."-style\">".truncate_string($row_bos['brewName'],65," ")." (".$style_display.")</div>";
-				$slides_bos .= "</div>";
+				$slides_bos .= "<div class=\"fragment justify-left small entry-name bottom-row\" data-fragment-index=\"".$place_heirarchy."\" id=\"pos-".$place_heirarchy."-style\">".truncate_string($entry_name,65," ")." (".$style_display.")</div>";
+				$slides_bos .= "</div>"; 
 			
 			} while ($row_bos = mysqli_fetch_assoc($bos));
 
@@ -495,6 +507,9 @@ if (($display_to_admin) || ($display_to_public)) {
 						else {
 							$place_heirarchy = place_heirarchy($place_heirarchy_count);
 						}
+
+						$entry_name = html_entity_decode($row_sbd['brewName'],ENT_QUOTES|ENT_XML1,"UTF-8");
+						$entry_name = htmlentities($entry_name,ENT_QUOTES|ENT_SUBSTITUTE|ENT_HTML5,"UTF-8");
 						
 						// Category/Style Display
 						if ($_SESSION['prefsStyleSet'] == "AABC") $style = ltrim($row_sbd['brewerCategory'],"0").".".ltrim($row_sbd['brewSubCategory'],"0");
@@ -514,7 +529,7 @@ if (($display_to_admin) || ($display_to_public)) {
 						$slides_bos .= "<div class=\"fragment justify-right col-right\" data-fragment-index=\"".$place_heirarchy."\" id=\"pos-".$place_heirarchy."\"><i class=\"fa fa-trophy icon pos-".$place_heirarchy."-medal-color\"></i>".$display_place."</div>";
 						$slides_bos .= "<div class=\"fragment justify-left\" data-fragment-index=\"".$place_heirarchy."\" id=\"pos-".$place_heirarchy."-name\">".$brewer_name."</div>";
 						if ($_SESSION['prefsProEdition'] == 0) $slides_bos .= "<div class=\"fragment justify-left small\" data-fragment-index=\"".$place_heirarchy."\" id=\"pos-".$place_heirarchy."-club\">".truncate_string($brewer_club,25," ")."</div>";
-						$slides_bos .= "<div class=\"fragment justify-left small entry-name bottom-row\" data-fragment-index=\"".$place_heirarchy."\" id=\"pos-".$place_heirarchy."-style\">".truncate_string($row_sbd['brewName'],65," ")." (".$style_display.")</div>";
+						$slides_bos .= "<div class=\"fragment justify-left small entry-name bottom-row\" data-fragment-index=\"".$place_heirarchy."\" id=\"pos-".$place_heirarchy."-style\">".truncate_string($entry_name,65," ")." (".$style_display.")</div>";
 						$slides_bos .= "</div>";
 					
 					} while ($row_sbd = mysqli_fetch_assoc($sbd));

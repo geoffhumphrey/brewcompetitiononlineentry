@@ -95,7 +95,13 @@ do {
 		<tr>
 			<td><?php echo sprintf("%06s",$row_log['id']); ?></td>
 			<td><?php echo readable_judging_number($row_log['brewCategory'],$row_log['brewJudgingNumber']); ?></td>
-			<td><?php echo $row_log['brewName']; ?></td>
+			<td>
+			<?php 
+			$entry_name = html_entity_decode($row_log['brewName'],ENT_QUOTES|ENT_XML1,"UTF-8");
+            $entry_name = htmlentities($entry_name,ENT_QUOTES|ENT_SUBSTITUTE|ENT_HTML5,"UTF-8");
+			echo $entry_name;
+			?>	
+			</td>
 			<td><?php if ($_SESSION['prefsStyleSet'] != "BA") echo $row_log['brewCategorySort'].$row_log['brewSubCategory'].": "; echo $row_log['brewStyle'] ?></td>
 			<td><?php echo score_check($row_log['id'],$judging_scores_db_table,1); ?></td>
 			<td><?php if (minibos_check($row_log['id'],$judging_scores_db_table)) echo "<span class =\"fa fa-lg fa-check\"></span>"; ?></td>

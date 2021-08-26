@@ -158,6 +158,8 @@ do {
 	$judging_number = sprintf("%06s",$row_log['brewJudgingNumber']);
 
 	$entry_style = $row_log['brewCategorySort']."-".$row_log['brewSubCategory'];
+	$entry_name = html_entity_decode($row_log['brewName'],ENT_QUOTES|ENT_XML1,"UTF-8");
+    $entry_name = htmlentities($entry_name,ENT_QUOTES|ENT_SUBSTITUTE|ENT_HTML5,"UTF-8");
 
 	// Build Entry Table Body
 
@@ -192,7 +194,7 @@ do {
 
 				$scoresheet = TRUE;
 				$print_link = $base_url."output/print.output.php?section=evaluation&amp;go=default&amp;view=all&amp;id=".$row_log['id'];
-				$scoresheet_link_eval = "<a id=\"modal_window_link\" class=\"hide-loader\" href=\"".$print_link."\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"".$brewer_entries_text_025." &ndash; &ldquo;".$row_log['brewName'].".&rdquo;\"><i class=\"fa fa-lg fa-file-text\"></i></a>&nbsp;&nbsp;";
+				$scoresheet_link_eval = "<a id=\"modal_window_link\" class=\"hide-loader\" href=\"".$print_link."\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"".$brewer_entries_text_025." &ndash; &ldquo;".$entry_name.".&rdquo;\"><i class=\"fa fa-lg fa-file-text\"></i></a>&nbsp;&nbsp;";
 			}
 		
 		}
@@ -230,7 +232,7 @@ do {
 				// they shouldn't have access to. Can I get a harumph?!
 				$scoresheet_link .= "scoresheetfilename=".urlencode(obfuscateURL($scoresheet_file_name,$encryption_key));
 				$scoresheet_link .= "&amp;randomfilename=".urlencode(obfuscateURL($random_file_name,$encryption_key))."&amp;download=true";
-				$scoresheet_link .= sprintf("\" data-toggle=\"tooltip\" title=\"%s &ldquo;".$row_log['brewName']."&rdquo;.\">",$brewer_entries_text_006);
+				$scoresheet_link .= sprintf("\" data-toggle=\"tooltip\" title=\"%s &ldquo;".$entry_name."&rdquo;.\">",$brewer_entries_text_006);
 				$scoresheet_link .= "<span class=\"fa fa-lg fa-file-pdf-o\"></a>&nbsp;&nbsp;";
 			}
 		}
@@ -257,7 +259,7 @@ do {
 
 	// Brew Name
 	$entry_output .= "<td>";
-	$entry_output .= $row_log['brewName'];
+	$entry_output .= $entry_name;
 
 	if (!empty($required_info)) $entry_output .= " <a class=\"hide-loader\" role=\"button\" data-toggle=\"collapse\" data-target=\"#collapseEntryInfo".$row_log['id']."\" aria-expanded=\"false\" aria-controls=\"collapseEntryInfo".$row_log['id']."\"><span class=\"fa fa-lg fa-info-circle\"></span></a> ";
 
@@ -358,7 +360,7 @@ do {
 		$edit_link .= "<a href=\"".$base_url."index.php?section=brew&amp;action=edit&amp;id=".$row_log['id'];
 		if ($row_log['brewConfirmed'] == 0) $edit_link .= "&amp;msg=1-".$brewCategory."-".$row_log['brewSubCategory'];
 		$edit_link .= "&amp;view=".$brewCategory."-".$row_log['brewSubCategory'];
-		$edit_link .= "\" data-toggle=\"tooltip\" title=\"Edit ".$row_log['brewName']."\">";
+		$edit_link .= "\" data-toggle=\"tooltip\" title=\"Edit ".$entry_name."\">";
 		$edit_link .= "<span class=\"fa fa-lg fa-pencil\"></a>&nbsp;&nbsp;";
 
 	}
@@ -371,7 +373,7 @@ do {
 	$alt_title .= "Print ";
 	if ((!NHC) && (($_SESSION['prefsEntryForm'] == "B") || ($_SESSION['prefsEntryForm'] == "M") || ($_SESSION['prefsEntryForm'] == "U") || ($_SESSION['prefsEntryForm'] == "N"))) $alt_title .= sprintf("%s ",$brewer_entries_text_008);
 	$alt_title .= sprintf("%s ",$brewer_entries_text_009);
-	$alt_title .= "for ".$row_log['brewName'];
+	$alt_title .= "for ".$entry_name;
 
 	if (!$multiple_bottle_ids) {
 
@@ -395,12 +397,12 @@ do {
 	}
 
 	// Print Recipe
-	$print_recipe_link = sprintf("<a id=\"modal_window_link\" class=\"hide-loader\" href=\"".$base_url."output/entry.output.php?go=recipe&amp;id=".$row_log['id']."&amp;bid=".$_SESSION['brewerID']."\" title=\"%s ".$row_log['brewName']."\"><span class=\"fa fa-lg fa-book\"><span></a>&nbsp;&nbsp;",$brewer_entries_text_010);
+	$print_recipe_link = sprintf("<a id=\"modal_window_link\" class=\"hide-loader\" href=\"".$base_url."output/entry.output.php?go=recipe&amp;id=".$row_log['id']."&amp;bid=".$_SESSION['brewerID']."\" title=\"%s ".$entry_name."\"><span class=\"fa fa-lg fa-book\"><span></a>&nbsp;&nbsp;",$brewer_entries_text_010);
 
 	if ($comp_entry_limit) $warning_append = sprintf("\n%s",$brewer_entries_text_011); else $warning_append = "";
 
-	$delete_alt_title = sprintf("%s %s",$label_delete, $row_log['brewName']);
-	$delete_warning = sprintf("%s %s - %s.",$label_delete,$row_log['brewName'],strtolower($label_undone));
+	$delete_alt_title = sprintf("%s %s",$label_delete, $entry_name);
+	$delete_warning = sprintf("%s %s - %s.",$label_delete, $entry_name, strtolower($label_undone));
 	$delete_link = sprintf("<a class=\"hide-loader\" data-toggle=\"tooltip\" title=\"%s\" href=\"%s\" data-confirm=\"%s.\"><span class=\"fa fa-lg fa-trash-o\"></a>",$delete_alt_title,$base_url."includes/process.inc.php?section=".$section."&amp;go=".$go."&amp;dbTable=".$brewing_db_table."&amp;action=delete&amp;id=".$row_log['id'],$delete_warning);
 	$entry_output .= "<td nowrap class=\"hidden-print\">";
 

@@ -79,6 +79,9 @@ require(DB.'winners.db.php');
 
 				do {
 
+					$entry_name = html_entity_decode($row_bos['brewName'],ENT_QUOTES|ENT_XML1,"UTF-8");
+            		$entry_name = htmlentities($entry_name,ENT_QUOTES|ENT_SUBSTITUTE|ENT_HTML5,"UTF-8");
+
 					$table_body1 .= "<tr>";
 
 					$table_body1 .= "<td width=\"1%\" nowrap>";
@@ -92,7 +95,7 @@ require(DB.'winners.db.php');
 					$table_body1 .= "</td>";
 
 					$table_body1 .= "<td width=\"25%\">";
-					$table_body1 .= $row_bos['brewName'];
+					$table_body1 .= $entry_name;
 					$table_body1 .= "</td>";
 
 					$table_body1 .= "<td>";
@@ -188,6 +191,9 @@ if ($totalRows_sbi > 0) {
 					//$entry_info = explode("^",entry_info($row_sbd['eid']));
 					//$style = $entry_info['5'].$entry_info['2'];
 
+					$entry_name = html_entity_decode($row_sbd['brewName'],ENT_QUOTES|ENT_XML1,"UTF-8");
+            		$entry_name = htmlentities($entry_name,ENT_QUOTES|ENT_SUBSTITUTE|ENT_HTML5,"UTF-8");
+
 					$table_body2 .= "<tr>";
 
 					if ($row_sbi['sbi_display_places'] == "1") {
@@ -203,7 +209,7 @@ if ($totalRows_sbi > 0) {
 					$table_body2 .= "</td>";
 
 					$table_body2 .= "<td width=\"25%\">";
-					$table_body2 .= $row_sbd['brewName'];
+					$table_body2 .= $entry_name;
 					$table_body2 .= "</td>";
 
 					$table_body2 .= "<td>";

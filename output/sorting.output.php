@@ -92,7 +92,13 @@ if ($totalRows_entries > 0) {
         <td><?php echo $row_entries['brewJudgingNumber'];  ?></td>
         <?php } ?>
         <td><?php echo $row_entries['brewBrewerLastName'].", ".$row_entries['brewBrewerFirstName']; if (isset($row_entries['brewCoBrewer'])) echo "<br>".$row_entries['brewCoBrewer']; ?></td>
-        <td><?php echo $row_entries['brewName']; ?></td>
+        <td>
+        	<?php
+        	$entry_name = html_entity_decode($row_entries['brewName'],ENT_QUOTES|ENT_XML1,"UTF-8");
+            $entry_name = htmlentities($entry_name,ENT_QUOTES|ENT_SUBSTITUTE|ENT_HTML5,"UTF-8");
+        	echo $entry_name; 
+        	?>
+        </td>
         <td><span class="hidden"><?php echo $row_entries['brewCategorySort'].$row_entries['brewSubCategory']; ?></span><?php echo $row_entries['brewStyle']; ?></td>
         <td><?php echo $row_entries['brewSubCategory']; ?></td>
         <td><small><?php echo $brewer_info[6]; ?><br><?php echo $phone; ?></small></td>
