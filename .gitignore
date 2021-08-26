@@ -14,7 +14,6 @@ sections/nhc_pay.sec.php
 sections/nav_admin.php
 libraries/*
 sso/*
-eval/*
 config_for_test.php
 php_info.php
 .DS_Store
