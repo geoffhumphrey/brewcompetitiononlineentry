@@ -3,7 +3,7 @@
  * Module:        config.php
  * Description:   This module houses configuration variables for DB connection, etc.
  *
- * Last Modified: January 14, 2020
+ * Last Modified: August 26, 2021
  */
 
 /**
@@ -13,7 +13,7 @@
  */
 
 /**
- * Generally, "localhost" will work for most environments. 
+ * Generally, 'localhost' will work for most environments. 
  * However, some environments may require another hostname.
  * *** This has been confirmed for GO DADDY shared hosting users.         
  * *** This article details how to change "localhost" to suit your Go Daddy 
@@ -21,16 +21,17 @@
  * *** https://www.godaddy.com/help/viewing-your-database-details-with-shared-hosting-accounts-39
  */
 
-$hostname = "localhost";
+$hostname = 'localhost';
 
 /**
  * Enter the username for your database (generally the same as your login code 
  * for your web hosting company).
- * INSERT YOUR USERNAME BETWEEN THE DOUBLE-QUOTATION MARKS ("").
- * For example, if your username is fred then the line should read $username = "fred".
+ * INSERT YOUR USERNAME BETWEEN THE SINGLE-QUOTATION MARKS ('').
+ * For example, if your username is fred then the line should read 
+ * $username = 'fred'.
  */
 
-$username = "";
+$username = '';
 
 /**
  * INSERT YOUR PASSWORD BETWEEN THE SINGLE-QUOTATION MARKS ('').
@@ -46,7 +47,7 @@ $password = '';
  * http://brewcompetition.com/install-instructions for setup instructions.
  */
 
-$database = "";
+$database = '';
 
 /**
  * If the database port is different from the default then overwrite as the 
@@ -95,12 +96,12 @@ $brewing = $connection;
  * that you use an underscore (_), after a short descriptor that identifies which
  * install is using which tables.
  * Example:
- * $prefix = "bcoem1_";
+ * $prefix = 'bcoem1_';
  * OR
- * $prefix = "comp1_";
+ * $prefix = 'comp1_';
  */
 
-$prefix = "";
+$prefix = '';
 
 /*
  * ******************************************************************************
@@ -114,7 +115,7 @@ $prefix = "";
  * change the variable to something completely unique for each installation.
  */
 
-$installation_id = "";
+$installation_id = '';
 
 /*
  * ******************************************************************************
@@ -138,7 +139,7 @@ $session_expire_after = 30;
  * TRUE back to a FALSE!
  */
 
-$setup_free_access =  FALSE;
+$setup_free_access = FALSE;
 
 /*
  * ******************************************************************************
@@ -161,7 +162,7 @@ $setup_free_access =  FALSE;
  * .htaccess file.
  */
 
-$sub_directory = "";
+$sub_directory = '';
 
 /*
  * ******************************************************************************
@@ -172,12 +173,12 @@ $sub_directory = "";
  * IF you are installing on a server where you do not have a domain name set up,
  * you'll need to replace the last $base_url variable below with something
  * formatted like this:
- * $base_url .= "yourhostingdomain/~accountname/subdirectoryname/";
+ * $base_url .= 'yourhostingdomain/~accountname/subdirectoryname/';
  *
  * Example:
- * $base_url .= "147.21.160.5/~brewcompetition/bcoem/";
+ * $base_url .= '147.21.160.5/~brewcompetition/bcoem/';
  * OR:
- * $base_url .= "www.bluehost.com/~brewcompeition/bcoem/";
+ * $base_url .= 'www.bluehost.com/~brewcompeition/bcoem/';
  * 
  * To override the SSL (HTTPS) check if SSL isn't implemented on your
  * server AND you're experiencing log in or session issues, or if pages are not 
@@ -186,9 +187,9 @@ $sub_directory = "";
  * @fixes https://github.com/geoffhumphrey/brewcompetitiononlineentry/issues/1123 
  */
 
-$base_url = "http://";
-if (is_https()) $base_url = "https://";
-$base_url .= $_SERVER['SERVER_NAME'].$sub_directory."/";
+$base_url = 'http://';
+if (is_https()) $base_url = 'https://';
+$base_url .= $_SERVER['SERVER_NAME'].$sub_directory.'/';
 
 /*
  * ******************************************************************************
