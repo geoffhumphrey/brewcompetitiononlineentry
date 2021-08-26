@@ -88,6 +88,7 @@ if ($section == "past-winners") {
     $disp_archive_winners = mysqli_query($connection,$query_disp_archive_winners);
     $row_disp_archive_winners = mysqli_fetch_assoc($disp_archive_winners);
     $totalRows_disp_archive_winners = mysqli_num_rows($disp_archive_winners);
+    
     $archive_winner_display = FALSE;
     
     if (($totalRows_disp_archive_winners > 0) && ($row_disp_archive_winners['archiveDisplayWinners'] == "Y") && ($row_disp_archive_winners['archiveStyleSet'] != "")) {
@@ -226,7 +227,7 @@ try {
                 if ($action == "register") include (SECTIONS.'register.sec.php');
                 if ($go == "upload_scoresheets") include (ADMIN.'upload_scoresheets.admin.php');
                 if ($go == "payments") include (ADMIN.'payments.admin.php');
-                if ((EVALUATION) && ($go == "eval")) include (EVALS.'admin.eval.php');
+                if (($_SESSION['prefsEval'] == 1) && ($go == "eval")) include (EVALS.'admin.eval.php');
 
                 if ($_SESSION['userLevel'] == "0") {
 
@@ -249,7 +250,7 @@ try {
     </div><!-- ./container-fluid -->
     <!-- ./Admin Pages -->
     
-    <?php } elseif ((EVALUATION) && ($section == "evaluation") && ($logged_in)) { 
+    <?php } elseif (($_SESSION['prefsEval'] == 1) && ($section == "evaluation") && ($logged_in)) { 
 
         if (($view == "admin") && ($filter == "default")) $container_eval = "container-fluid";
         else $container_eval = "container";
@@ -293,7 +294,7 @@ try {
                     if ($section == "sponsors") include (SECTIONS.'sponsors.sec.php');
                     if ($section == "register") include (SECTIONS.'register.sec.php');
                     if ($section == "login") include (SECTIONS.'login.sec.php');
-                    if ($section == "past_winners") include (SECTIONS.'past_winners.sec.php');
+                    // if ($section == "past_winners") include (SECTIONS.'past_winners.sec.php');
                     if ($section == "competition") include (SECTIONS.'custom_competition_info.sec.php');
 
                     if ($logged_in) {

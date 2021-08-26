@@ -649,7 +649,7 @@ $(document).ready(function(){
     <button id="tables-competition-button" class="btn btn-success"><span class="fa fa-exchange"></span> Switch to Tables Competition Mode</button> <a href="#" data-toggle="popover" title="Tables Competition Mode" data-content="<p>When the Tables Competition Mode function is enabled by an admin, it indicates to the system that the planning stage is over (i.e., sorting is finished and all applicable entries have been marked as paid and received).</p><p>Table configurations and assignments can still be changed as necessary while in Competition Mode.</p>" data-trigger="hover click" data-placement="right" data-html="true" data-container="body"><i class="fa fa-lg fa-question-circle"></i></a> <span id="competition-mode-status"><i id="competition-mode-status-icon" class=""></i> <span id="competition-mode-status-text" class="small"></span></span>
 </div>
 <?php } ?>
-<?php if ((EVALUATION) && ($dbTable == "default")) include (EVALS.'import_scores.eval.php'); ?>
+<?php if (($_SESSION['prefsEval'] == 1) && ($dbTable == "default")) include (EVALS.'import_scores.eval.php'); ?>
 <?php } ?>
 <div class="bcoem-admin-element hidden-print">
 	<?php if  ($dbTable != "default") { ?>
@@ -886,7 +886,7 @@ $(document).ready(function() {
 						<div id="collapseStep6" class="panel-collapse collapse">
 							<div class="panel-body">
 								<ul class="list-unstyled">
-                                	<?php if (EVALUATION) { ?><li><a href="<?php echo $base_url; ?>index.php?section=evaluation&amp;go=default&amp;filter=default&amp;view=admin" data-toggle="tooltip" data-placement="top" title="Manage, View and Edit Judges' evaluations of received entries">Manage Entry Evaluations</a></li>
+                                	<?php if ($_SESSION['prefsEval'] == 1) { ?><li><a href="<?php echo $base_url; ?>index.php?section=evaluation&amp;go=default&amp;filter=default&amp;view=admin" data-toggle="tooltip" data-placement="top" title="Manage, View and Edit Judges' evaluations of received entries">Manage Entry Evaluations</a></li>
                                     <li><?php echo $import_scores_display; ?></li>
                                     <?php } ?>
                                     <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging_scores">All Scores</a></li>

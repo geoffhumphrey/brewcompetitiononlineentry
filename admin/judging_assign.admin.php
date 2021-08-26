@@ -334,7 +334,7 @@ do {
 
 $dashboard_link = build_public_url("evaluation","default","default","default",$sef,$base_url);
 $head_judge_explain = "<p>Choose the Head Judge for this table. <p>The Head Judge, <a class='hide-loader' href='http://www.bjcp.org/judgeprocman.php' target='_blank'>according to the BJCP</a>, is a <em>single judge</em> responsible for reviewing all scores and paperwork for accuracy.</p>";
-if (EVALUATION) $head_judge_explain .= "<p>The Head Judge at each table confirms consensus scores and enters the placing entries into the system via their <a href='".$dashboard_link."'>Judging Dashboard</a> after all evaluations at the table have been submitted by judges.</p>";
+if ($_SESSION['prefsEval'] == 1) $head_judge_explain .= "<p>The Head Judge at each table confirms consensus scores and enters the placing entries into the system via their <a href='".$dashboard_link."'>Judging Dashboard</a> after all evaluations at the table have been submitted by judges.</p>";
 ?>
 <script>
 $(document).ready(function() {

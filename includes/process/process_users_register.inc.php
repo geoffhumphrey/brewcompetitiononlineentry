@@ -12,12 +12,18 @@ $captcha_success = FALSE;
 if (isset($_SERVER['HTTP_REFERER'])) {
 
 	require(PROCESS.'process_brewer_info.inc.php');
+	require(CLASSES.'phpass/PasswordHash.php');
 
 	$username = strtolower($_POST['user_name']);
 	$username = filter_var($username,FILTER_SANITIZE_EMAIL);
 
 	$userQuestionAnswer = $purifier->purify($_POST['userQuestionAnswer']);
 	$userQuestionAnswer = filter_var($userQuestionAnswer,FILTER_SANITIZE_STRING,FILTER_FLAG_STRIP_HIGH|FILTER_FLAG_STRIP_LOW);
+	
+	/*
+	$hasher_question = new PasswordHash(8, false);
+	$hash_question = $hasher_question->HashPassword($userQuestionAnswer);
+	*/
 
 	$username2 = strtolower($_POST['user_name2']);
 	$username2 = filter_var($username2,FILTER_SANITIZE_EMAIL);
@@ -103,7 +109,6 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 
 			// Add the user's creds to the "users" table
 			$password = md5($_POST['password']);
-			require(CLASSES.'phpass/PasswordHash.php');
 			$hasher = new PasswordHash(8, false);
 			$hash = $hasher->HashPassword($password);
 
@@ -122,7 +127,7 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 
 			mysqli_real_escape_string($connection,$insertSQL);
 			$result = mysqli_query($connection,$insertSQL) or die (mysqli_error($connection));
-			echo $insertSQL."<br>";
+			//echo $insertSQL."<br>";
 
 			// Get the id from the "users" table to insert as the uid in the "brewer" table
 			$query_user= "SELECT * FROM $users_db_table WHERE user_name = '$username'";

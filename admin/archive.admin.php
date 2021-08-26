@@ -1,5 +1,6 @@
 <?php
-require(DB.'archive.db.php');
+require (DB.'archive.db.php');
+require (DB.'styles.db.php');
 
 $table_header1 = $label_users;
 $table_header2 = $label_participants;
@@ -17,8 +18,6 @@ if ($action == "edit") {
     $row_results_recorded = mysqli_fetch_assoc($results_recorded);
     if ($row_results_recorded['count'] > 0) $results_data = TRUE;
 }
-
-include (DB.'styles.db.php');
 
 foreach ($style_sets as $style_set) {
     
@@ -117,11 +116,6 @@ foreach ($style_sets as $style_set) {
             <div class="checkbox">
                 <label>
                     <input type="checkbox" name="keepSponsors" id="retain_3" value="Y"> <?php echo $label_sponsors; ?>
-                </label>
-            </div>
-            <div class="checkbox">
-                <label>
-                    <input type="checkbox" name="keepScoresheets" id="retain_6" value="Y"> <?php echo $label_uploaded_scoresheets; ?><br><em><small><?php echo $archive_text_018; ?></small></em>
                 </label>
             </div>
         </div>

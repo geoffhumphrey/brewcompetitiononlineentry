@@ -1,8 +1,8 @@
 <?php
 if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] == 0))) {
 
-	session_name($prefix_session);
-	session_start();
+	//session_name($prefix_session);
+	//session_start();
 
 	require(INCLUDES.'scrubber.inc.php');
 	require(INCLUDES.'db_tables.inc.php');
@@ -12,7 +12,9 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 
 	$tables_array = array($special_best_info_db_table, $special_best_data_db_table, $brewing_db_table, $judging_assignments_db_table, $judging_flights_db_table, $judging_scores_db_table, $judging_scores_bos_db_table, $judging_tables_db_table, $staff_db_table);
 
-	if (EVALUATION) $tables_array[] = $prefix."evaluation";
+	if (check_setup($prefix."evaluation",$database)) {
+		$tables_array[] = $prefix."evaluation";
+	}
 
 	foreach ($tables_array as $table) {
 

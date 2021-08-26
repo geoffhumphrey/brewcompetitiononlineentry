@@ -638,6 +638,13 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 		if (isset($_POST['userQuestionAnswer'])) {
 			$userQuestionAnswer = $purifier->purify($_POST['userQuestionAnswer']);
 			$userQuestionAnswer = filter_var($userQuestionAnswer,FILTER_SANITIZE_STRING);
+
+			/*
+			require(CLASSES.'phpass/PasswordHash.php');
+			$hasher_question = new PasswordHash(8, false);
+			$hash_question = $hasher_question->HashPassword($userQuestionAnswer);
+			*/
+
 			$updateSQL = sprintf("UPDATE $users_db_table SET userQuestionAnswer=%s WHERE id=%s",GetSQLValueString($userQuestionAnswer,"text"),GetSQLValueString($_SESSION['user_id'],"int"));
 			mysqli_real_escape_string($connection,$updateSQL);
 			$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));

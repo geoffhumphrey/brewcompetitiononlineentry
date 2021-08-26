@@ -312,6 +312,56 @@ $(document).ready(function(){
 		<span id="helpBlock" class="help-block">How the competition will award places for winning entries.</span>
 	</div>
 </div><!-- ./Form Group -->
+<div class="form-group"><!-- Form Group Radio INLINE -->
+    <label for="prefsEval" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Electronic Scoresheets</label>
+    <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
+        <div class="input-group">
+            <!-- Input Here -->
+            <label class="radio-inline">
+                <input type="radio" name="prefsEval" value="1" id="prefsEval_1"  <?php if ($row_prefs['prefsEval'] == "1") echo "CHECKED"; elseif ($section == "step3") echo "CHECKED"; ?> /> Enable
+            </label>
+            <label class="radio-inline">
+                <input type="radio" name="prefsEval" value="0" id="prefsEval_0" <?php if ($row_prefs['prefsEval'] == "0") echo "CHECKED"; ?>/> Disable
+            </label>
+        </div>
+        <span id="helpBlock" class="help-block">
+        <div class="btn-group" role="group" aria-label="prefsEvalModal">
+            <div class="btn-group" role="group">
+                <button type="button" class="btn btn-xs btn-info" data-toggle="modal" data-target="#prefsEvalModal">
+                   Electronic Scoresheets Info
+                </button>
+            </div>
+        </div>
+        </span>
+    </div>
+</div><!-- ./Form Group -->
+<!-- Modal -->
+<div class="modal fade" id="prefsEvalModal" tabindex="-1" role="dialog" aria-labelledby="prefsEvalModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header bcoem-admin-modal">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="prefsEvalModalLabel">Contact Form Info</h4>
+            </div>
+            <div class="modal-body">
+                <p>Enable or disable the Electronic Scoresheets function. If enabled, Admins have the option to accept judges' entry evaluations via fully electronic, web-based scoresheets built to emulate BJCP official and quasi-official paper-based forms.</p>
+                <p>If enabling Electronic Scoresheets and associated functions, Admins should also make sure to set up their installation to take full advantage of them by following the steps outlined in the <a href="https://brewcompetition.com/setup-electronic-scoresheets" target="_blank">Setup BCOE&amp;M Electronic Scoresheets</a> help article. Admins or competition officials should also direct all judges who will be using Electronic Scoresheets to review the <a href="https://brewcompetition.com/judging-with-electronic-scoresheets" target="_blank">Judging with BCOE&amp;M Electronic Scoresheets</a> primer.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div><!-- ./modal -->
+
+
+
+
+
+
+
+
+
 <div class="form-group"><!-- Form Group Radio STACKED -->
 	<label for="prefsDisplaySpecial" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Scoresheet Unique Identifier</label>
 	<div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">

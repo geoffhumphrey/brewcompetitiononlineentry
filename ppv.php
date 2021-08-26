@@ -138,13 +138,13 @@ if ($verified) {
 		$queries = "";
 		$display_entry_no = array();
 
-		foreach ($b as $value) {
+		foreach ($b as $key=>$value) {
 
 			$updateSQL = sprintf("UPDATE %s SET brewPaid='1', brewUpdated=NOW( ) WHERE id='%s'",$prefix."brewing",$value);
 			mysqli_real_escape_string($connection,$updateSQL);
 			$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 
-			$display_entry_no[] = sprintf("%06s",$b);
+			$display_entry_no[$key] = sprintf("%.06s",$b[$key]);
 
 		}
 

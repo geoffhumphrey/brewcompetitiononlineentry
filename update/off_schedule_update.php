@@ -1786,7 +1786,7 @@ $tables_array = array(
 	$prefix."users"
 );
 
-// if (EVALUATION) $tables_array[] = $prefix."evaluation";
+// if ($_SESSION['prefsEval'] == 1) $tables_array[] = $prefix."evaluation";
 
 if ($totalRows_archive > 0) {
 
@@ -1892,6 +1892,30 @@ if ($totalRows_archive > 0) {
 	} while ($row_archive = mysqli_fetch_assoc($archive));
 
 }
+
+$output .= "<li>Added column to enable or disable carbon copying contact messages.</li>";
+
+/**
+ * ----------------------------------------------- 2.3.0 ---------------------------------------------
+ * Electronic scoresheets added to core.
+ * Add a boolean preference to enable or disable them.
+ * ---------------------------------------------------------------------------------------------------
+ */
+
+if (!check_update("prefsEval", $prefix."preferences")) {
+	$updateSQL = sprintf("ALTER TABLE `%s` ADD `prefsEval` TINYINT(1) NULL DEFAULT NULL;",$prefix."preferences");
+	mysqli_select_db($connection,$database);
+	mysqli_real_escape_string($connection,$updateSQL);
+	$result = mysqli_query($connection,$updateSQL);
+
+	$updateSQL = sprintf("UPDATE `%s` SET prefsEval='0';", $prefix."preferences");
+	mysqli_real_escape_string($connection,$updateSQL);
+	$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+
+	$_SESSION['prefsEval'] = 0;
+}
+
+$output .= "<li>Added column to enable or disable Electronic Scoresheets functionality.</li>";
 
 /* --- Future Release ---
 // Finally, after all updates have been implemented, 

@@ -1251,7 +1251,7 @@ function style_convert($number,$type,$base_url="",$archive="") {
 	$styles_db_table = $prefix."styles";
 
 	mysqli_select_db($connection,$database);
-	$query_style = sprintf("SELECT brewStyleNum,brewStyleGroup,brewStyle,brewStyleVersion,brewStyleReqSpec FROM %s WHERE brewStyleGroup='%s' AND (brewStyleVersion='%s' OR brewStyleOwn='custom')",$styles_db_table,$number,$_SESSION['prefsStyleSet']);
+	$query_style = sprintf("SELECT brewStyleNum,brewStyleGroup,brewStyle,brewStyleVersion,brewStyleReqSpec,brewStyleOwn FROM %s WHERE brewStyleGroup='%s' AND (brewStyleVersion='%s' OR brewStyleOwn='custom')",$styles_db_table,$number,$_SESSION['prefsStyleSet']);
 	$style = mysqli_query($connection,$query_style) or die (mysqli_error($connection));
 	$row_style = mysqli_fetch_assoc($style);
 
@@ -1272,16 +1272,16 @@ function style_convert($number,$type,$base_url="",$archive="") {
 
 		include (INCLUDES.'styles.inc.php');
 
+		// If the number is 35 or greater and is not alphanumeric
+		// Search the array and return the style category name
+		$custom = FALSE;
+		if ((is_numeric($number)) && ($number >= 35) && ($row_style['brewStyleOwn'] != "bcoe")) $custom = TRUE;
+
 		// if numeric make two-digit by adding leading zero just in case
 		if (is_numeric($number)) $number = sprintf('%02d', $number); 
 
-		// If the number is less than 35 (custom style numbers start at 35) and is alphanumeric
-		// Search the array and return the style category name
-		$non_custom = FALSE;
-		if ((is_numeric($number)) && ($number < 35)) $non_custom = TRUE;
-		if (!preg_match("/^[[:digit:]]+$/",$number)) $non_custom = TRUE;
-
-		if ($non_custom) {
+		if ($custom) $style_convert = $row_style['brewStyle']." (Custom Style)";
+		else {
 			foreach ($style_sets as $style_set_data) {
 				if ($style_set_data['style_set_name'] === $style_set) {
 					$style_set_cat = $style_set_data['style_set_categories'];
@@ -1290,121 +1290,10 @@ function style_convert($number,$type,$base_url="",$archive="") {
 			}
 		}
 
-		else $style_convert = $row_style['brewStyle']." (Custom Style)";
-
-		/*
-		if ($_SESSION['prefsStyleSet'] == "BJCP2008") {
-		switch ($number) {
-			case "01": $style_convert = "Light Lager"; break;
-			case "02": $style_convert = "Pilsner"; break;
-			case "03": $style_convert = "European Amber Lager"; break;
-			case "04": $style_convert = "Dark Lager"; break;
-			case "05": $style_convert = "Bock"; break;
-			case "06": $style_convert = "Light Hybrid Beer"; break;
-			case "07": $style_convert = "Amber Hybrid Beer"; break;
-			case "08": $style_convert = "English Pale Ale"; break;
-			case "09": $style_convert = "Scottish and Irish Ale"; break;
-			case "10": $style_convert = "American Ale"; break;
-			case "11": $style_convert = "English Brown Ale"; break;
-			case "12": $style_convert = "Porter"; break;
-			case "13": $style_convert = "Stout"; break;
-			case "14": $style_convert = "India Pale Ale (IPA)"; break;
-			case "15": $style_convert = "German Wheat and Rye Beer"; break;
-			case "16": $style_convert = "Belgian and French Ale"; break;
-			case "17": $style_convert = "Sour Ale"; break;
-			case "18": $style_convert = "Belgian Strong Ale"; break;
-			case "19": $style_convert = "Strong Ale"; break;
-			case "20": $style_convert = "Fruit Beer"; break;
-			case "21": $style_convert = "Spice/Herb/Vegetable Beer"; break;
-			case "22": $style_convert = "Smoke-Flavored and Wood-Aged Beer"; break;
-			case "23": $style_convert = "Specialty Beer"; break;
-			case "24": $style_convert = "Traditional Mead"; break;
-			case "25": $style_convert = "Melomel (Fruit Mead)"; break;
-			case "26": $style_convert = "Other Mead"; break;
-			case "27": $style_convert = "Standard Cider and Perry"; break;
-			case "28": $style_convert = "Specialty Cider and Perry"; break;
-			default: $style_convert = $row_style['brewStyle']." (Custom Style)"; break;
-			}
-		}
-
-		if ($_SESSION['prefsStyleSet'] == "BJCP2015") {
-		switch ($number) {
-			case "01": $style_convert = "Standard American Beer"; break;
-			case "02": $style_convert = "International Lager"; break;
-			case "03": $style_convert = "Czech Lager"; break;
-			case "04": $style_convert = "Pale Malty European Lager"; break;
-			case "05": $style_convert = "Pale Bitter European Beer"; break;
-			case "06": $style_convert = "Amber Malty European Lager"; break;
-			case "07": $style_convert = "Amber Bitter European Beer"; break;
-			case "08": $style_convert = "Dark European Lager"; break;
-			case "09": $style_convert = "Strong European Beer"; break;
-			case "10": $style_convert = "German Wheat Beer"; break;
-			case "11": $style_convert = "British Bitter"; break;
-			case "12": $style_convert = "Pale Commonwealth Beer"; break;
-			case "13": $style_convert = "Brown British Beer"; break;
-			case "14": $style_convert = "Scottish Ale"; break;
-			case "15": $style_convert = "Irish Beer"; break;
-			case "16": $style_convert = "Dark British Beer"; break;
-			case "17": $style_convert = "Strong British Ale"; break;
-			case "18": $style_convert = "Pale American Ale"; break;
-			case "19": $style_convert = "Amber and Brown American Beer"; break;
-			case "20": $style_convert = "American Porter and Stout"; break;
-			case "21": $style_convert = "IPA"; break;
-			case "22": $style_convert = "Strong American Ale"; break;
-			case "23": $style_convert = "European Sour Ale"; break;
-			case "24": $style_convert = "Belgian Ale"; break;
-			case "25": $style_convert = "Strong Belgian Ale"; break;
-			case "26": $style_convert = "Trappist Ale"; break;
-			case "27": $style_convert = "Historical Beer"; break;
-			case "28": $style_convert = "American Wild Ale"; break;
-			case "29": $style_convert = "Fruit Beer"; break;
-			case "30": $style_convert = "Spiced Beer"; break;
-			case "31": $style_convert = "Alternative Fermentables Beer"; break;
-			case "32": $style_convert = "Smoked Beer"; break;
-			case "33": $style_convert = "Wood Beer"; break;
-			case "34": $style_convert = "Specialty Beer"; break;
-			case "M1": $style_convert = "Traditional Mead"; break;
-			case "M2": $style_convert = "Fruit Mead"; break;
-			case "M3": $style_convert = "Spiced Mead"; break;
-			case "M4": $style_convert = "Specialty Mead"; break;
-			case "C1": $style_convert = "Standard Cider and Perry"; break;
-			case "C2": $style_convert = "Specialty Cider and Perry"; break;
-			case "PR": $style_convert = "Provisional Styles"; break;
-			default: $style_convert = $row_style['brewStyle']." (Custom Style)"; break;
-			}
-		}
-
-		if ($_SESSION['prefsStyleSet'] == "AABC") {
-		switch ($number) {
-			case "01": $style_convert = "Low Alcohol"; break;
-			case "02": $style_convert = "Pale Lager"; break;
-			case "03": $style_convert = "Amber and Dark Lager"; break;
-			case "04": $style_convert = "Pale Ale"; break;
-			case "05": $style_convert = "American Pale Ale"; break;
-			case "06": $style_convert = "Bitter Ale"; break;
-			case "07": $style_convert = "Brown Ale"; break;
-			case "08": $style_convert = "Porter"; break;
-			case "09": $style_convert = "Stout"; break;
-			case "10": $style_convert = "Strong Stout"; break;
-			case "11": $style_convert = "India Pale Ale"; break;
-			case "12": $style_convert = "Specialty IPA"; break;
-			case "13": $style_convert = "Wheat and Ryle Ale"; break;
-			case "14": $style_convert = "Sour Ale"; break;
-			case "15": $style_convert = "Belgian Ale"; break;
-			case "16": $style_convert = "Strong Ales and Lagers"; break;
-			case "17": $style_convert = "Fruit/Spice/Herb/Vegetable Beer"; break;
-			case "18": $style_convert = "Specialty Beer"; break;
-			case "19": $style_convert = "Mead"; break;
-			case "20": $style_convert = "Cider"; break;
-			default: $style_convert = $row_style['brewStyle']." (Custom Style)"; break;
-			}
-		}
-
-		*/
-
 		break;
 
 		case "2":
+		
 		if ($style_set == "BJCP2008") {
 			switch ($number) {
 				case "01": $style_convert = "1A,1B,1C,1D,1E"; break;
@@ -3450,7 +3339,12 @@ function styles_active($method,$archive="") {
 
 	if ($method == 0) { // Active Styles
 
-		$query_styles = sprintf("SELECT brewStyleGroup FROM %s WHERE (brewStyleVersion='%s' OR brewStyleOwn='custom') AND brewStyleActive='Y' ORDER BY brewStyleGroup ASC",$prefix."styles",$style_set);
+		// $query_styles = sprintf("SELECT brewStyleGroup FROM %s WHERE (brewStyleVersion='%s' OR brewStyleOwn='custom') AND brewStyleActive='Y' ORDER BY brewStyleGroup ASC",$prefix."styles",$style_set);
+
+		$query_styles = sprintf("SELECT brewStyleGroup FROM %s WHERE (brewStyleVersion='%s' OR brewStyleOwn='custom')",$prefix."styles",$style_set);
+		if (empty($archive)) $query_styles .= " AND brewStyleActive='Y'";
+		$query_styles .= " ORDER BY brewStyleGroup ASC";
+
 		$styles = mysqli_query($connection,$query_styles) or die (mysqli_error($connection));
 		$row_styles = mysqli_fetch_assoc($styles);
 		$totalRows_styles = mysqli_num_rows($styles);
@@ -3471,12 +3365,17 @@ function styles_active($method,$archive="") {
 	}
 
 	if ($method == 2) {
+		
+		$query_styles = sprintf("SELECT brewStyleGroup,brewStyleNum,brewStyle FROM %s WHERE (brewStyleVersion='%s' OR brewStyleOwn='custom')",$prefix."styles",$style_set);
+		if (empty($archive)) $query_styles .= " AND brewStyleActive='Y'";
+		$query_styles .= " ORDER BY brewStyleGroup,brewStyleNum ASC";
 
-		$query_styles = sprintf("SELECT brewStyleGroup,brewStyleNum,brewStyle FROM %s WHERE (brewStyleVersion='%s' OR brewStyleOwn='custom') AND brewStyleActive='Y' ORDER BY brewStyleGroup,brewStyleNum ASC",$prefix."styles",$style_set);
 		$styles = mysqli_query($connection,$query_styles) or die (mysqli_error($connection));
 		$row_styles = mysqli_fetch_assoc($styles);
 		$totalRows_styles = mysqli_num_rows($styles);
-		do { $a[] = $row_styles['brewStyleGroup']."^".$row_styles['brewStyleNum']."^".$row_styles['brewStyle']; } while ($row_styles = mysqli_fetch_assoc($styles));
+		do { 
+			$a[] = $row_styles['brewStyleGroup']."^".$row_styles['brewStyleNum']."^".$row_styles['brewStyle']; 
+		} while ($row_styles = mysqli_fetch_assoc($styles));
 
 		return $a;
 
@@ -3650,7 +3549,7 @@ function deobfuscateURL($data,$key) {
 	
 	else {
 		
-		if (function_exists(openssl_encrypt)) {
+		if (function_exists('openssl_encrypt')) {
 			// To decrypt, split the encrypted data from our IV - our unique separator used was "::"
 			// Get the data "dirty" again and remove base64 encoding
 			list($encrypted_data, $iv) = explode('::', base64_decode(str_replace($clean, $dirty, $data)), 2);
@@ -3658,7 +3557,7 @@ function deobfuscateURL($data,$key) {
 			return openssl_decrypt($encrypted_data, 'aes-256-cbc', $encryption_key, 0, $iv);
 		}
 
-		elseif (function_exists(mcrypt_decrypt)) {
+		elseif (function_exists('mcrypt_decrypt')) {
 			$salt = "rdwhahb"; // should be the same as the $salt var in the encryptString function
 			$decode = rtrim(mcrypt_decrypt(MCRYPT_RIJNDAEL_256, md5($salt), base64_decode(str_replace($clean, $dirty, $data)), MCRYPT_MODE_CBC, md5(md5($salt))), "\0");
 			return $decode;

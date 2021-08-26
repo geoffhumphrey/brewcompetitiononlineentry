@@ -11,10 +11,18 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 	$config_html_purifier = HTMLPurifier_Config::createDefault();
 	$purifier = new HTMLPurifier($config_html_purifier);
 
+	require(CLASSES.'phpass/PasswordHash.php');
+
 	$username = strtolower($_POST['user_name']);
 	$username = filter_var($username,FILTER_SANITIZE_EMAIL);
+	
 	$userQuestionAnswer = $purifier->purify($_POST['userQuestionAnswer']);
 	$userQuestionAnswer = filter_var($userQuestionAnswer,FILTER_SANITIZE_STRING,FILTER_FLAG_STRIP_HIGH|FILTER_FLAG_STRIP_LOW);
+
+	/*
+	$hasher_question = new PasswordHash(8, false);
+	$hash_question = $hasher_question->HashPassword($userQuestionAnswer);
+	*/
 
 	if (strstr($username,'@'))  {
 		$password = md5($_POST['password']);

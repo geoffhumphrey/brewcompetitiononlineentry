@@ -184,7 +184,7 @@ if (($totalRows_log > 0) && ($show_entries)) {
 	$primary_page_info .= "</small></p>";
 }
 
-if (EVALUATION) include (EVALS.'my_account.eval.php');
+if ($_SESSION['prefsEval'] == 1) include (EVALS.'my_account.eval.php');
 
 $user_edit_links .= "<div class=\"btn-group hidden-print\" role=\"group\" aria-label=\"EditAccountFunctions\">";
 $user_edit_links .= sprintf("<a class=\"btn btn-default\" href=\"%s\"><span class=\"fa fa-user\"></span> %s</a>",$edit_user_info_link,$label_edit_account);
@@ -450,7 +450,7 @@ if ($show_judge_steward_fields) {
 
 	if ($_SESSION['brewerJudge'] == "Y") {
 
-		if (!EVALUATION) {
+		if ($_SESSION['prefsEval'] == 0) {
 			$account_display .= "<div class=\"row bcoem-account-info hidden-print\">";
 			$account_display .= "<div class=\"".$display_left_cols."\"><strong>&nbsp;</strong></div>";
 			$account_display .= sprintf("<div class=\"".$display_right_cols."\">%s <a class=\"hide-loader\" href=\"".$base_url."output/labels.output.php?section=admin&amp;go=participants&amp;action=judging_labels&amp;id=".$_SESSION['brewerID']."&amp;psort=5160\" data-toggle=\"tooltip\" title=\"Avery 5160\">%s</a> %s <a class=\"hide-loader\" href=\"".$base_url."output/labels.output.php?section=admin&amp;go=participants&amp;action=judging_labels&amp;id=".$_SESSION['brewerID']."&amp;psort=3422\" data-toggle=\"tooltip\" title=\"Avery 3422\">A4</a></div>",$brewer_info_012, $label_letter, $brewer_info_011);

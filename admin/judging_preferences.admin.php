@@ -53,7 +53,7 @@ else $judging_scoresheet = $_SESSION['jPrefsScoresheet'];
         </div>
     </div>
 </div><!-- ./modal -->
-<?php if (EVALUATION) { 
+<?php if ($_SESSION['prefsEval'] == 1) { 
 
     $suggested_open = FALSE;
     $suggested_close = FALSE;

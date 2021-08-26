@@ -56,7 +56,6 @@ $winners_table_body_1 = "";
 */
 
 if ($section == "past-winners") {
-	
 	$suffix = $go;
 	$judging_tables_db_table = $prefix."judging_tables_".$go;
 	$judging_scores_db_table = $prefix."judging_scores_".$go;
@@ -77,6 +76,7 @@ if ($row_scored_entries['count'] > 0) {
 	do {
 		
 		$a = explode(",", $row_tables['tableStyles']);
+		$missing_style = FALSE;
 
 		$entry_count = 0;
 
@@ -85,6 +85,8 @@ if ($row_scored_entries['count'] > 0) {
 			$query_styles = sprintf("SELECT brewStyleGroup,brewStyleNum FROM %s WHERE id='%s'", $prefix."styles", $value);
 			$styles = mysqli_query($connection,$query_styles) or die (mysqli_error($connection));
 			$row_styles = mysqli_fetch_assoc($styles);
+			$totalRows_styles = mysqli_num_rows($styles);
+			if ($totalRows_styles == 0) $missing_style = TRUE;
 
 			$query_style_count = sprintf("SELECT COUNT(*) as count FROM %s WHERE brewCategorySort='%s' AND brewSubCategory='%s' AND brewReceived='1'", $brewing_db_table, $row_styles['brewStyleGroup'], $row_styles['brewStyleNum']);
 			$style_count = mysqli_query($connection,$query_style_count) or die (mysqli_error($connection));
@@ -112,6 +114,8 @@ if ($row_scored_entries['count'] > 0) {
 
 				// Build page headers
 				$winners_table_header .= sprintf("<h3>%s %s: %s (%s %s)</h3>",$label_table,$row_tables['tableNumber'],$row_tables['tableName'],$entry_count,$entries);
+
+				if ($missing_style) $winners_table_header .= sprintf("<p>%s</p>",$winners_text_006);
 
 				// Build table headers
 				$winners_table_head_1 .= "<tr>";
@@ -186,7 +190,6 @@ if ($row_scored_entries['count'] > 0) {
 
 	$random1 = "";
 	$random1 .= random_generator(12,1);
-
 
 	// --------------------------------------------------------------
 	// Display

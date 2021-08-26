@@ -1,10 +1,11 @@
 <?php
 if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] == 0))) {
-	session_name($prefix_session);
-	session_start();
+	
+	//session_name($prefix_session);
+	//session_start();
 
-	require(INCLUDES.'scrubber.inc.php');
-	require(INCLUDES.'db_tables.inc.php');
+	require (INCLUDES.'scrubber.inc.php');
+	require (INCLUDES.'db_tables.inc.php');
 	
 	// Instantiate HTMLPurifier
 	require (CLASSES.'htmlpurifier/HTMLPurifier.standalone.php');
@@ -13,17 +14,20 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 
 	$dbTable = "default";
 
-	$suffix = $purifier->purify($suffix);
-	$suffix = strtr($_POST['archiveSuffix'], $space_remove);
+	$suffix = $purifier->purify($_POST['archiveSuffix']);
+	$suffix = strtr($suffix, $space_remove);
 	$suffix = preg_replace("/[^a-zA-Z0-9]+/", "", $suffix);
 	$suffix = sterilize($suffix);
 
 	// Rename current tables and recreate new ones based upon user input
 	$tables_array = array($brewing_db_table, $judging_assignments_db_table, $judging_flights_db_table, $judging_scores_db_table, $judging_scores_bos_db_table, $judging_tables_db_table, $staff_db_table);
 
-	if (EVALUATION) $tables_array[] = $prefix."evaluation";
+	if (check_setup($prefix."evaluation",$database)) {
+		$tables_array[] = $prefix."evaluation";
+	}
 
 	if ($go == "add") {
+		
 		$query_suffix_check = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE archiveSuffix = '%s';", $archive_db_table, $suffix);
 		$suffix_check = mysqli_query($connection,$query_suffix_check) or die (mysqli_error($connection));
 		$row_suffix_check = mysqli_fetch_assoc($suffix_check);
@@ -32,22 +36,23 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 			$redirect_go_to = sprintf("Location: %s", $base_url."index.php?section=admin&go=archive&msg=6");
 		}
 			
-		//Check if any documents are in the user_docs folder
-
-		if ((isset($_POST['keepScoresheets'])) && (!is_dir_empty(USER_DOCS))) {
+		// Check if any documents are in the user_docs folder
+		// If so, create a directory with the suffix name
+		// Move the files to that folder
+		// Erase all files with certain mime types in the user_docs directory
+		if (!is_dir_empty(USER_DOCS)) {
 
 			// Define directories and run the move function
 			$src = USER_DOCS;
 			$dest = USER_DOCS.$suffix;
 			rmove($src, $dest);
-
-		}
-
-		if (!isset($_POST['keepScoresheets'])) {
-			// Erase all files in the user_docs directory
+			
+			// Run the delete function
 			rdelete(USER_DOCS,"");
+
 		}
 
+		// Clear out all participants (except for current user and admins)
 		if (!isset($_POST['keepParticipants'])) {
 
 			// Gather current User's information from the current "users" AND current "brewer" tables and store in variables
@@ -89,12 +94,6 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 
 		} // end if (!isset($_POST['keepParticipants']))
 
-		/*
-		if (EVALUATION) {
-			if (!isset($_POST['keepEvaluations'])) $tables_array[] = $prefix."evaluation";
-		}
-		*/
-
 		if (!isset($_POST['keepParticipants'])) {
 			$tables_array[] = $users_db_table;
 			$tables_array[] = $brewer_db_table;
@@ -112,7 +111,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 		if (!isset($_POST['keepDropoff'])) $truncate_tables_array[] = $drop_off_db_table;
 		if (!isset($_POST['keepSponsors'])) $truncate_tables_array[] = $sponsors_db_table;
 		if (!isset($_POST['keepLocations'])) $truncate_tables_array[] = $judging_locations_db_table;
-		if (EVALUATION) $truncate_tables_array[] = $prefix."evaluation";
+		if (!isset($_POST['keepEvaluations'])) $truncate_tables_array[] = $prefix."evaluation";
 
 		$keep_participants = FALSE;
 
@@ -152,7 +151,6 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 			$updateSQL = "CREATE TABLE ".$special_best_data_db_table." LIKE ".$special_best_data_db_table."_".$suffix.";";
 			mysqli_real_escape_string($connection,$updateSQL);
 			$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
-
 		}
 
 		if (isset($_POST['keepStyleTypes'])) {
@@ -163,9 +161,8 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 			$updateSQL = "INSERT INTO ".$style_types_db_table."_".$suffix." SELECT * FROM ".$style_types_db_table.";";
 			mysqli_real_escape_string($connection,$updateSQL);
 			$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
-
 		}
-
+		
 		/*
 		if (isset($_POST['keepEvaluations'])) {
 			$updateSQL = sprintf("CREATE TABLE %s LIKE %s", $prefix."evaluation_".$suffix, $prefix."evaluation");
@@ -175,42 +172,38 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 			$updateSQL = sprintf("INSERT INTO %s SELECT * FROM %s", $prefix."evaluation_".$suffix, $prefix."evaluation");
 			mysqli_real_escape_string($connection,$updateSQL);
 			$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
-
 		}
 		*/
 
 		foreach ($tables_array as $table) {
 
-			$updateSQL = "RENAME TABLE ".$table." TO ".$table."_".$suffix.";";
+			$updateSQL = sprintf("RENAME TABLE %s TO %s", $table, $table."_".$suffix);
 			mysqli_real_escape_string($connection,$updateSQL);
 			$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 
-			$updateSQL = "CREATE TABLE ".$table." LIKE ".$table."_".$suffix.";";
+			$updateSQL = sprintf("CREATE TABLE %s LIKE %s", $table, $table."_".$suffix);
 			mysqli_real_escape_string($connection,$updateSQL);
 			$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 
 		}
 
 		foreach ($truncate_tables_array as $table) {
-
-			$updateSQL = "TRUNCATE ".$table.";";
+			$updateSQL = sprintf("TRUNCATE %s", $table);
 			mysqli_real_escape_string($connection,$updateSQL);
 			$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
-
 		}
 
 		if (!isset($_POST['keepStyleTypes'])) {
-
-			$insertSQL = "INSERT INTO $style_types_db_table (id, styleTypeName, styleTypeOwn, styleTypeBOS, styleTypeBOSMethod) VALUES (1, 'Beer', 'bcoe', 'Y', 1), (2, 'Cider', 'bcoe', 'N', 1), (3, 'Mead', 'bcoe', 'N', 1), (4, 'Mead/Cider', 'bcoe', 'N', 1), (5, 'Wine', 'N', 'bcoe', 1), (6, 'Rice Wine', 'N', 'bcoe', 1), (7, 'Spirits', 'bcoe', 'N', 1), (8, 'Kombucha', 'bcoe', 'N', 1), (9, 'Pulque', 'bcoe', 'N', 1);";
+			$insertSQL = sprintf("INSERT INTO %s (id, styleTypeName, styleTypeOwn, styleTypeBOS, styleTypeBOSMethod) VALUES (1, 'Beer', 'bcoe', 'Y', 1), (2, 'Cider', 'bcoe', 'N', 1), (3, 'Mead', 'bcoe', 'N', 1), (4, 'Mead/Cider', 'bcoe', 'N', 1), (5, 'Wine', 'N', 'bcoe', 1), (6, 'Rice Wine', 'N', 'bcoe', 1), (7, 'Spirits', 'bcoe', 'N', 1), (8, 'Kombucha', 'bcoe', 'N', 1), (9, 'Pulque', 'bcoe', 'N', 1);", $style_types_db_table);
 			mysqli_real_escape_string($connection,$insertSQL);
 			$result = mysqli_query($connection,$insertSQL) or die (mysqli_error($connection));
-
 		}
 
 		if (!isset($_POST['keepParticipants']))  {
 
 			// Insert current user's info into new "users" and "brewer" table
-			$insertSQL = "INSERT INTO $users_db_table (id, user_name, password,	userLevel, userQuestion, userQuestionAnswer, userCreated) VALUES ('1', '$user_name', '$password', '0', '$userQuestion', '$userQuestionAnswer', NOW());";
+			$insertSQL = sprintf("INSERT INTO %s (id, user_name, password,	userLevel, userQuestion, userQuestionAnswer, userCreated) 
+				VALUES ('1', '%s', '%s', '0', '%s', '%s', NOW());", $users_db_table, $user_name, $password, $userQuestion, $userQuestionAnswer);
 			mysqli_real_escape_string($connection,$insertSQL);
 			$result = mysqli_query($connection,$insertSQL) or die (mysqli_error($connection));
 

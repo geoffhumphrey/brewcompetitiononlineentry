@@ -227,8 +227,8 @@ if ($setup_success) {
 	}
 
 	$alert_flag_contest_info = FALSE;
+	
 	// Check if contest_info DB table is empty or does not have a row with id of 1. If so, add row with id of 1 with dummy content. Set alert flag.
-
 	if (!isset($_SESSION['compInfoSet'])) {
 
 		$query_contest_info_check = sprintf("SELECT id FROM %s ORDER BY id ASC LIMIT 1",$contest_info_db_table);
@@ -264,29 +264,6 @@ if ($setup_success) {
 		$_SESSION['compInfoSet'] = "1";
 	}
 
-	/*
-	echo $_SESSION['characterSet']."<br>";
-	echo $_SESSION['compInfoSet']."<br>";
-	echo $_SESSION['preferencesSet'];
-	exit;
-	*/
-
-	/*
-	The following was reported to cause a "redirect loop failure" - commenting out in lieu of another solution
-	See https://github.com/geoffhumphrey/brewcompetitiononlineentry/issues/674
-	Is not necessary as there is now a judging number check upon adding and editing entries
-	Therefore, deprecated. Code will be removed in a future release after review.
-
-	// Check to see if all judging numbers have been generated. If not, generate.
-	if ((!check_judging_numbers()) && (!NHC)) header("Location: includes/process.inc.php?action=generate_judging_numbers&go=hidden");
-
-	// Check if judging flights are up-to-date
-	if (!check_judging_flights()) $check_judging_flights = TRUE;
-	else $check_judging_flights = FALSE;
-	$check_judging_flights = FALSE;
-
-	*/
-
 	// ---------------------------- Time Related Globals ----------------------------
 
 	// Set timezone globals
@@ -298,13 +275,6 @@ if ($setup_success) {
 	$bool = date("I");
 	if ($bool == 1) $timezone_offset = number_format(($_SESSION['prefsTimeZone'] + 1.000),0);
 	else $timezone_offset = number_format($_SESSION['prefsTimeZone'],0);
-
-	/*
-	// Check for Firefox (printing issues persist with Firefox)
-	// Deprecated as of v2.0.0
-	if(strpos($_SERVER['HTTP_USER_AGENT'], 'Firefox') !== FALSE) $fx = TRUE;
-	else $fx = FALSE;
-	*/
 
 	//  ---------------------------- Load Theme ----------------------------
 

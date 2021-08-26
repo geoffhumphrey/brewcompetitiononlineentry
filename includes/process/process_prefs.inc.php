@@ -103,7 +103,8 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 		prefsBestUseBOS,
 		prefsLanguage,
 		prefsEmailCC,
-
+		
+		prefsEval,
 		id
 
 		) VALUES (
@@ -120,7 +121,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 		%s, %s, %s, %s, %s,
 		%s, %s, %s, %s, %s,
 		%s, %s, %s, %s, %s,
-		%s)",
+		%s, %s)",
 
 			GetSQLValueString(sterilize($_POST['prefsTemp']), "text"),
 			GetSQLValueString(sterilize($_POST['prefsWeight1']), "text"),
@@ -197,6 +198,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 			GetSQLValueString($_POST['prefsBestUseBOS'], "int"),
 			GetSQLValueString(sterilize($_POST['prefsLanguage']), "text"),
 			GetSQLValueString($_POST['prefsEmailCC'], "int"),
+			GetSQLValueString($_POST['prefsEval'], "int"),
 			GetSQLValueString($id, "int"));
 
 			mysqli_real_escape_string($connection,$insertSQL);
@@ -383,7 +385,8 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 		prefsGoogleAccount=%s,
 		
 		prefsLanguage=%s,
-		prefsEmailCC=%s
+		prefsEmailCC=%s,
+		prefsEval=%s
 
 		WHERE id=%s",
 			GetSQLValueString(sterilize($_POST['prefsTemp']), "text"),
@@ -463,6 +466,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 			
 			GetSQLValueString(sterilize($_POST['prefsLanguage']), "text"),
 			GetSQLValueString($_POST['prefsEmailCC'], "int"),
+			GetSQLValueString($_POST['prefsEval'], "int"),
 			GetSQLValueString($id, "int"));
 
 			mysqli_real_escape_string($connection,$updateSQL);

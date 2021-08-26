@@ -62,7 +62,7 @@ else {
 // Build table body and associated arrays
 
 
-if (EVALUATION) {
+if ($_SESSION['prefsEval'] == 1) {
 	// Check which evaluations exist
 	if ($dbTable == "default") {
 		$eval_db_table = TRUE;
@@ -112,7 +112,7 @@ if ($totalRows_log > 0) {
 		if (isset($row_log['brewJudgingNumber'])) $judging_number = sprintf("%06s",$row_log['brewJudgingNumber']);
 
 		// If using electronic scoresheets, build links
-		if ((EVALUATION) && ($eval_db_table)) {
+		if (($_SESSION['prefsEval'] == 1) && ($eval_db_table)) {
 
 			// if ($row_judging_prefs['jPrefsScoresheet'] == 1) $output_form = "full-scoresheet";
 			// if ($row_judging_prefs['jPrefsScoresheet'] == 2) $output_form = "checklist-scoresheet";
@@ -390,7 +390,7 @@ if ($totalRows_log > 0) {
 			$entry_actions .= "<a class=\"hide-loader\" href=\"mailto:".$row_log['brewerEmail']."\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Email the entry&rsquo;s owner, ".$row_log['brewerFirstName']." ".$row_log['brewerLastName'].", at ".$row_log['brewerEmail']."\"><span class=\"fa fa-lg fa-envelope\"></span></a> ";
 		}
 
-		if ((EVALUATION) && ($eval_db_table)) {
+		if (($_SESSION['prefsEval'] == 1) && ($eval_db_table)) {
 			if ($scoresheet_eval) {
 				$entry_actions .= "<a id=\"modal_window_link\" class=\"hide-loader\" href=\"".$print_link."\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Print the Scoresheets for &ldquo;".$row_log['brewName']."&rdquo;\"><i class=\"fa fa-lg fa-file-text\"></i></a> ";
 				$entry_actions .= "<a id=\"modal_window_link\" class=\"hide-loader\" href=\"".$view_link."\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"View the Scoresheets for &ldquo;".$row_log['brewName']."&rdquo;\"><span class=\"fa-stack\"><i class=\"fa fa-square fa-stack-2x\"></i><i class=\"fa fa-stack-1x fa-file-text fa-inverse\"></i></span></a> ";

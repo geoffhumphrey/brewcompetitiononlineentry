@@ -92,7 +92,7 @@ if (check_setup($prefix."system",$database)) {
 
 	}
 
-	if ((EVALUATION) && (!check_setup($prefix."evaluation",$database)))  {
+	if (((isset($_SESSION['prefsEval'])) && ($_SESSION['prefsEval'] == 1)) && (!check_setup($prefix."evaluation",$database)))  {
 		require_once (EVALS.'install_eval_db.eval.php');
 	}
 

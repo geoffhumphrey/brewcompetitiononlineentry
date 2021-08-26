@@ -833,15 +833,16 @@ function standardize_name($string) {
 	return $string;
 }
 
-function rmove($src, $dest){
+function rmove($src, $dest) {
 
     // If source is not a directory stop processing
-    if(!is_dir($src)) return false;
+    if (!is_dir($src)) return false;
 
     // If the destination directory does not exist create it
-    if(!is_dir($dest)) {
-        if(!mkdir($dest)) {
-            // If the destination directory could not be created stop processing
+    // If the destination directory could not be created stop processing
+    if (!is_dir($dest)) {
+    	// mkdir($dest);
+        if (!mkdir($dest)) {
             return false;
         }
     }
@@ -849,13 +850,16 @@ function rmove($src, $dest){
     // Open the source directory to read in files
     $i = new DirectoryIterator($src);
     foreach($i as $f) {
-        if($f->isFile()) {
-            rename($f->getRealPath(), "$dest/" . $f->getFilename());
+        if ($f->isFile()) {
+            rename($f->getRealPath(), "$dest/".$f->getFilename());
         }
     }
+
+    return true;
+
 }
 
-function rdelete($src,$file_mimes){
+function rdelete($src,$file_mimes) {
 
 	if (empty($file_mimes)) $file_mimes = array('image/jpeg','image/jpg','image/gif','image/png','application/pdf','image/bmp','image/tiff','image/svg+xml');
 	else $file_mimes = array('application/pdf');

@@ -109,7 +109,7 @@ if (($totalRows_log > 0) && ($action != "print")) {
 
 $entry_output = "";
 
-if (EVALUATION) {
+if ($_SESSION['prefsEval'] == 1) {
 
 	$evals = array();
 	// Check which evaluations exist
@@ -170,12 +170,14 @@ do {
 	$entry_output .= "<td class=\"hidden-xs\">";
 	$entry_output .= $entry_number;
 	$entry_output .= "</td>";
-
+	
 	$scoresheet = FALSE;
+	$scoresheet_link = "";
+	$scoresheet_link_eval = "";
 
 	if (($show_scores) && ($show_scoresheets)) {
 
-		if (EVALUATION) {
+		if ($_SESSION['prefsEval'] == 1) {
 			
 			// if ($row_judging_prefs['jPrefsScoresheet'] == 1) $output_form = "full-scoresheet";
 			// if ($row_judging_prefs['jPrefsScoresheet'] == 2) $output_form = "checklist-scoresheet";
@@ -190,7 +192,7 @@ do {
 
 				$scoresheet = TRUE;
 				$print_link = $base_url."output/print.output.php?section=evaluation&amp;go=default&amp;view=all&amp;id=".$row_log['id'];
-				$scoresheet_link = "<a id=\"modal_window_link\" class=\"hide-loader\" href=\"".$print_link."\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"".$brewer_entries_text_025." &ndash; &ldquo;".$row_log['brewName'].".&rdquo;\"><i class=\"fa fa-lg fa-file-text\"></i></a>&nbsp;&nbsp;";
+				$scoresheet_link_eval = "<a id=\"modal_window_link\" class=\"hide-loader\" href=\"".$print_link."\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"".$brewer_entries_text_025." &ndash; &ldquo;".$row_log['brewName'].".&rdquo;\"><i class=\"fa fa-lg fa-file-text\"></i></a>&nbsp;&nbsp;";
 			}
 		
 		}
@@ -403,7 +405,8 @@ do {
 	$entry_output .= "<td nowrap class=\"hidden-print\">";
 
 	if ($scoresheet) {
-		$entry_output .= $scoresheet_link;
+		if (!empty($scoresheet_link_eval)) $entry_output .= $scoresheet_link_eval;
+		if (!empty($scoresheet_link)) $entry_output .= $scoresheet_link;
 	}
 
 	if (!$show_scores) {

@@ -130,7 +130,7 @@ if ($logged_in) {
 	$page_info100 .= "<span class=\"pull-right\"><a href=\"".$base_url."index.php?section=admin&amp;go=entries&amp;view=paid\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"View all paid entries\">".$currency_symbol."<span id=\"admin-dashboard-total-fees-paid\">".number_format($total_fees_paid,2)."</span></a></span>";
 	$page_info100 .= "</div>";
 
-	if (EVALUATION) {
+	if ($_SESSION['prefsEval'] == 1) {
 
 		$page_info100 .= "<div class=\"bcoem-sidebar-panel\">";
 		$page_info100 .= "<strong class=\"text-info\">Evaluations</strong>";

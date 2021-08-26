@@ -4,6 +4,9 @@
  * Description: This module houses the footer displayed on all pages. 
  * 
  */
+
+if ($_SESSION['prefsEval'] == 1) $current_version_display .= " (e)";
+
 $footer = "";
 
 if(!empty($_SESSION['contestName'])) $footer .= $_SESSION['contestName']." &ndash; ";

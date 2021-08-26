@@ -37,7 +37,7 @@ if (isset($_SESSION['loginUsername'])) {
 
 		// Get the directory name from URL if present
 		if ($view == "default") $scoresheetfile = USER_DOCS.$scoresheet_file_name;
-		else $scoresheetfile = USER_DOCS.DIRECTORY_SEPARATOR.$view.DIRECTORY_SEPARATOR.$scoresheet_file_name;
+		else $scoresheetfile = USER_DOCS.$view.DIRECTORY_SEPARATOR.$scoresheet_file_name;
 
 		// Decrypt the filename
 		$get_random_file_name = urldecode($_GET['randomfilename']);
@@ -47,8 +47,10 @@ if (isset($_SESSION['loginUsername'])) {
 
 		if (copy($scoresheetfile, $scoresheet_random_file)) {
 
-			header('Content-Type: application/pdf');
-			header("Content-Transfer-Encoding: Binary");
+			header("Cache-Control: public");
+     		header("Content-Description: File Transfer");
+     		header("Content-Type: application/pdf");
+     		header("Content-Transfer-Encoding: binary");
 			header("Content-Disposition: attachment; filename=".$scoresheet_file_name);
 			ob_clean();
 			flush();

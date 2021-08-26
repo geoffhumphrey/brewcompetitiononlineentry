@@ -1,6 +1,11 @@
 <?php
 
-if ($filter != "default") {
+if ($filter == "default") {
+	$winner_style_set = $_SESSION['prefsStyleSet'];
+}
+
+else {
+	$winner_style_set = $row_disp_archive_winners['archiveStyleSet'];
 	$special_best_info_db_table = $prefix."special_best_info_".$filter;
 	$judging_tables_db_table = $prefix."judging_tables_".$filter;
 	$style_types_db_table = $prefix."style_types_".$filter;

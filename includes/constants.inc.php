@@ -1,9 +1,4 @@
 <?php
-/*
-Checked Single
-2016-06-06
-*/
-
 /** -------------------------- Languages Available ----------------------------------------------
  * Array of languages available for translation
  * Associative array of available translation languages.
@@ -52,7 +47,7 @@ $tie_break_rules = array(
 );
 
 // -------------------------- Clubs List ------------------------------------------------------
-// Updated July 1, 2020
+// Updated August 26, 2021
 
 
 $club_array = array(
@@ -2356,7 +2351,9 @@ $club_array = array(
     "Worthogs [Australia]",
     "Browns Point Homebrew Club",
     "MontreAlers",
-    "Keepers of Craft"
+    "Keepers of Craft",
+    "STLBrewhogs",
+    "Brewly Homebrew Club"
 );
 asort($club_array);
 
@@ -2422,7 +2419,7 @@ if (((strpos($section, "step") === FALSE) && ($section != "setup")) && ($section
     $pay_close_date = min($date_arr);
     $pay_window_open = open_or_closed(time(),$row_contest_dates['contestEntryOpen'],$pay_close_date);
 
-    if (EVALUATION) {
+    if ($_SESSION['prefsEval'] == 1) {
 
         if ((empty($row_judging_prefs['jPrefsJudgingOpen'])) || (empty($row_judging_prefs['jPrefsJudgingClosed']))) {
 

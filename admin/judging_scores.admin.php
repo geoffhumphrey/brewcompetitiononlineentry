@@ -106,7 +106,7 @@ $totalRows_entry_count = total_paid_received($go,"default");
     <?php } ?>
 </div>
 <?php if ($action == "default") { ?>
-<?php if (EVALUATION) {
+<?php if ($_SESSION['prefsEval'] == 1) {
     if ($dbTable == "default") {
         echo "<div style=\"margin: 0 0 15px 0;\" class=\"btn-group hidden-print\" role=\"group\"><a class=\"btn btn-block btn-default\" href=\"".$base_url."index.php?section=evaluation&amp;go=default&amp;filter=default&amp;view=admin\"><span class=\"fa fa-chevron-circle-left\"></span> ".$label_admin.": ".$label_evaluations."</a></div>";
         include (EVALS.'import_scores.eval.php');
@@ -178,7 +178,7 @@ $totalRows_entry_count = total_paid_received($go,"default");
 <tbody>
 <?php
 
-    if (EVALUATION) {
+    if ($_SESSION['prefsEval'] == 1) {
         $evals = eval_exits("default","default",$dbTable);
     }
 
@@ -207,7 +207,7 @@ $totalRows_entry_count = total_paid_received($go,"default");
     $scoresheet_judging = FALSE;
     $entry_actions = "";
 
-    if (EVALUATION) {
+    if ($_SESSION['prefsEval'] == 1) {
 
         // if ($row_judging_prefs['jPrefsScoresheet'] == 1) $output_form = "full-scoresheet";
         // if ($row_judging_prefs['jPrefsScoresheet'] == 2) $output_form = "checklist-scoresheet";

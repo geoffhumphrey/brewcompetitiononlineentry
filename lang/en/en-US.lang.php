@@ -1524,7 +1524,7 @@ $alert_text_087 = "For an optimal experience and so that all features and functi
 $alert_text_088 = "The Awards Presentation will be available publicly after results are published.";
 $alert_text_089 = "Archived data is not available.";
 
-$brewer_entries_text_025 = "Print judges&rsquo; scoresheets";
+$brewer_entries_text_025 = "View or Print judges&rsquo; scoresheets";
 
 $brewer_info_013 = "You have been assigned as a judge.";
 $brewer_info_014 = "Access the Judging Dashboard using the button below to enter evaluations of the entries assigned to you.";
@@ -1793,6 +1793,12 @@ $label_fair = "Fair";
 $descr_fair = "Off flavors/aromas or major style deficiencies. Unpleasant.";
 $label_problematic = "Problematic";
 $descr_problematic = "Major off flavors and aromas dominate. Hard to drink.";
+
+// ----------------------------------------------------------------------------------
+// Version 2.3.0 Additions
+// ----------------------------------------------------------------------------------
+
+$winners_text_006 = "Please note: results from this table may be incomplete due to insufficient entry or style information.";
 
 /**
  * ----------------------------------------------------------------------------------

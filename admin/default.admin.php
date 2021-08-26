@@ -5,7 +5,7 @@
  *
  */
 
-if (EVALUATION) {
+if ($_SESSION['prefsEval'] == 1) {
     include(EVALS.'admin_alert_empty_prefs.eval.php');
     include(EVALS.'import_scores.eval.php');
 }
@@ -16,7 +16,7 @@ if (judging_date_return() == 0) $show_post_judging = TRUE;
 $show_best = FALSE;
 if (($row_limits['prefsShowBestBrewer'] != 0) || ($row_limits['prefsShowBestClub'] != 0)) {
     if ($show_post_judging) $show_best = TRUE;
-    elseif ((EVALUATION) && (($show_post_judging) || ($judge_window_open > 0))) $show_best = TRUE;
+    elseif (($_SESSION['prefsEval'] == 1) && (($show_post_judging) || ($judge_window_open > 0))) $show_best = TRUE;
 }
 
 ?>
@@ -697,7 +697,7 @@ if (($row_limits['prefsShowBestBrewer'] != 0) || ($row_limits['prefsShowBestClub
                                     </ul>
                                 </div>
                             </div><!-- ./row -->
-                            <?php if (EVALUATION) {?>
+                            <?php if ($_SESSION['prefsEval'] == 1) {?>
                             <div class="row">
                                 <div class="col col-lg-5 col-md-4 col-sm-4 col-xs-4">
                                     <strong>Entry Evaluations</strong>
@@ -716,7 +716,7 @@ if (($row_limits['prefsShowBestBrewer'] != 0) || ($row_limits['prefsShowBestClub
                                 <div class="col col-lg-7 col-md-8 col-sm-8 col-xs-8">
                                     <ul class="list-unstyled">
                                         <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging_scores">Manage</a></li>
-                                    <?php if (EVALUATION) { ?>
+                                    <?php if ($_SESSION['prefsEval'] == 1) { ?>
                                         <li><?php echo $import_scores_display; ?></li>
                                     <?php } ?>
                                     </ul>
@@ -869,7 +869,7 @@ if (($row_limits['prefsShowBestBrewer'] != 0) || ($row_limits['prefsShowBestClub
                     <h4 class="modal-title" id="purgeEntriesLabel">Please Confirm</h4>
                 </div>
                 <div class="modal-body">
-                    <p>Are you sure you want to delete entries and associated data, including scores, BOS scores, and associated <?php if (EVALUATION) echo "entry evaluations recorded by judges"; else echo "scoresheets"; ?> (if present)? This cannot be undone.</p>
+                    <p>Are you sure you want to delete entries and associated data, including scores, BOS scores, and associated <?php if ($_SESSION['prefsEval'] == 1) echo "entry evaluations recorded by judges"; else echo "scoresheets"; ?> (if present)? This cannot be undone.</p>
                     <p>Optionally, choose a date threshold. Entries and associated data will not be purged <strong>if they were <em>updated</em> on or after</strong> the date you choose.</p>
                     <p>Leave the field blank to purge all entries.</p>
                     <div class="input-group">
@@ -891,7 +891,7 @@ if (($row_limits['prefsShowBestBrewer'] != 0) || ($row_limits['prefsShowBestClub
                     <h4 class="modal-title" id="purgeScoresheetsLabel">Please Confirm</h4>
                 </div>
                 <div class="modal-body">
-                    <?php if (EVALUATION) { ?>
+                    <?php if ($_SESSION['prefsEval'] == 1) { ?>
                     <p>Are you sure you want to delete all recorded entry evaluations? This cannot be undone. </p>
                     <p>Use the archive function if you wish to retain any evaluations recorded for past competition iterations.</p>
                     <?php } else { ?>
@@ -901,7 +901,7 @@ if (($row_limits['prefsShowBestBrewer'] != 0) || ($row_limits['prefsShowBestClub
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
-                    <?php if (EVALUATION) { ?>
+                    <?php if ($_SESSION['prefsEval'] == 1) { ?>
                     <button type="button" class="btn btn-success" data-dismiss="modal" onclick="purge_data('<?php echo $base_url; ?>','','evaluation','admin-dashboard','purge-sheets');">Yes</button>
                     <?php } else { ?>
                     <button type="button" class="btn btn-success" data-dismiss="modal" onclick="purge_data('<?php echo $base_url; ?>','','scoresheets','admin-dashboard','purge-sheets');">Yes</button>
@@ -988,7 +988,7 @@ if (($row_limits['prefsShowBestBrewer'] != 0) || ($row_limits['prefsShowBestClub
                     <h4 class="modal-title" id="purgeAllLabel">Please Confirm</h4>
                 </div>
                 <div class="modal-body">
-                    <p>Are you sure you want to delete <strong>ALL</strong> entry, participant, judging table, score, and custom category data, <?php if (EVALUATION) echo "including all entry evaluations recorded by judges?"; else echo "including any scoresheets?"; ?></p>
+                    <p>Are you sure you want to delete <strong>ALL</strong> entry, participant, judging table, score, and custom category data, <?php if ($_SESSION['prefsEval'] == 1) echo "including all entry evaluations recorded by judges?"; else echo "including any scoresheets?"; ?></p>
                     <p>This cannot be undone.</p>
                 </div>
                 <div class="modal-footer">
@@ -1592,7 +1592,7 @@ if (($row_limits['prefsShowBestBrewer'] != 0) || ($row_limits['prefsShowBestClub
                                         <span style="margin-bottom: 10px;" class="hidden" id="purge-avail-status"></span>
                                         <span style="margin-bottom: 10px;" class="hidden" id="purge-avail-status-msg"></span>
                                     </div>
-                                    <?php if (EVALUATION) { ?>
+                                    <?php if ($_SESSION['prefsEval'] == 1) { ?>
                                     <li><a class="hide-loader" href="#" data-toggle="modal" data-target="#purgeScoresheets">Entry Evaluations</a></li>
                                     <?php } else { ?>
                                     <li><a class="hide-loader" href="#" data-toggle="modal" data-target="#purgeScoresheets">Uploaded Scoresheets</a></li>
@@ -1700,7 +1700,7 @@ if (($row_limits['prefsShowBestBrewer'] != 0) || ($row_limits['prefsShowBestClub
                                         <li><a href="https://brewcompetition.com/paypal-ipn" target="_blank">Implement PayPal Instant Payment Notifications Guide</a></li>
                                         <li><a href="https://brewcompetition.com/upload-scoresheets" target="_blank">Upload Scanned Judges’ Scoresheets Guide</a></li>
                                         <li><a href="https://brewcompetition.com/barcode-check-in" target="_blank">Barcode or QR Code Entry Check-In Guide</a></li>
-                                        <?php if (EVALUATION) { ?>
+                                        <?php if ($_SESSION['prefsEval'] == 1) { ?>
                                         <li><a href="https://brewcompetition.com/setup-electronic-scoresheets" target="_blank">Setup BCOE&M Electronic Scoresheets Guide</a></li>
                                         <li><a href="https://brewcompetition.com/judging-with-electronic-scoresheets" target="_blank">Judging with BCOE&M Electronic Scoresheets Guide</a></li>
                                         <li><a href="https://brewcompetition.com/virtual-judging" target="_blank">Virtual Judging Guide</a></li>

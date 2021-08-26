@@ -45,7 +45,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 	mysqli_real_escape_string($connection,$updateSQL);
 	$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 
-	if (EVALUATION) {
+	if ($_SESSION['prefsEval'] == 1) {
 
 		if (!check_update("jPrefsScoresheet", $prefix."judging_preferences")) {
 			$updateSQL = sprintf("ALTER TABLE `%s` 
