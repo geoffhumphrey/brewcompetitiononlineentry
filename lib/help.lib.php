@@ -81,7 +81,7 @@ function bcoem_dashboard_help($content) {
 		case "preferences":
 		$bcoem_dashboard_help_title .= "Preferences Help";
 		$bcoem_dashboard_help_body .= "<p><a href=\"".$base_url."index.php?section=admin&amp;go=preferences\">Website Preferences</a> are those that affect the behavior of your BCOE&amp;M installation, such as the overall site theme, styleset to use, entry limit, per-participant entry limit, units of measurement, currency and localization, etc.</p>";
-		$bcoem_dashboard_help_body .= "<p><a href=\"".$base_url."index.php?section=admin&amp;go=judging_preferences\">Competition Organization Preferences</a> are those affect how BCOE&amp;M behaves with regard to tables, flights, and best of show functions.</p>";
+		$bcoem_dashboard_help_body .= "<p><a href=\"".$base_url."index.php?section=admin&amp;go=judging_preferences\">Judging/Competition Organization Preferences</a> are those affect how BCOE&amp;M behaves with regard to tables, flights, and best of show functions.</p>";
 		break;
 
 		case "reports":
@@ -437,7 +437,7 @@ function bcoem_help($section,$go,$action,$filter) {
 		}
 
 		if ($go == "judging_preferences") {
-			$bcoem_help_title .= "Competition Organization Preferences Help";
+			$bcoem_help_title .= "Judging/Competition Organization Preferences Help";
 			$bcoem_help_body .= "<p>Here, site admins can define how their competition judging will be setup and organized, including flights, rounds, and Best of Show places. More information about particular preferences can be accessed by clicking the &ldquo;Info&rdquo; buttons below the line items.</p>";
 			$content = TRUE;
 		}

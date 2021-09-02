@@ -149,221 +149,303 @@ try {
     console.error('Error checking user agent.', error);
 }
 </script>
-    <!-- LOADER -->
-    <div id="loader-submit">
-        <div class="center">
-            <span class="fa fa-cog fa-spin fa-5x fa-fw"></span>
-            <p><strong><?php echo $label_working; ?>.<br><?php echo $output_text_030." ".$output_text_031; ?></strong></p>
-        </div>
+<!-- LOADER -->
+<div id="loader-submit">
+    <div class="center">
+        <span class="fa fa-cog fa-spin fa-5x fa-fw"></span>
+        <p><strong><?php echo $label_working; ?>.<br><?php echo $output_text_030." ".$output_text_031; ?></strong></p>
     </div>
-    <!-- ./LOADER -->
+</div>
+<!-- ./LOADER -->
 
-    <!-- MAIN NAV -->
-    <div class="<?php echo $container_main; ?> hidden-print">
-        <?php include (SECTIONS.'nav.sec.php'); ?>
-    </div><!-- container -->
-    <!-- ./MAIN NAV -->
+<!-- MAIN NAV -->
+<div class="<?php echo $container_main; ?> hidden-print">
+    <?php include (SECTIONS.'nav.sec.php'); ?>
+</div><!-- container -->
+<!-- ./MAIN NAV -->
 
-    <!-- ALERTS -->
-    <div class="<?php echo $container_main; ?> bcoem-warning-container">
-        <?php include (SECTIONS.'alerts.sec.php'); ?>
-        <?php if ($go == "default") { ?>
-        <div id="no-js-alert" class="alert alert-danger lead">
-            <i class="fa fa-lg fa-exclamation-circle"></i> <strong><?php echo $alert_text_087; ?></strong>
-        </div>
-        <?php } ?>
-    </div><!-- ./container -->
-    <!-- ./ALERTS -->
-
-    <!-- DEBUG -->
-    <div class="<?php echo $container_main; ?> hidden-print">
-    <?php if (DEBUG_SESSION_VARS) include (DEBUGGING.'session_vars.debug.php'); ?>
+<!-- ALERTS -->
+<div class="<?php echo $container_main; ?> bcoem-warning-container">
+    <?php include (SECTIONS.'alerts.sec.php'); ?>
+    <?php if ($go == "default") { ?>
+    <div id="no-js-alert" class="alert alert-danger lead">
+        <i class="fa fa-lg fa-exclamation-circle"></i> <strong><?php echo $alert_text_087; ?></strong>
     </div>
-    <!-- ./DEBUG -->
-
-    <?php if ($_SESSION['prefsUseMods'] == "Y") { ?>
-    <!-- MODS TOP -->
-    <div class="<?php echo $container_main; ?> hidden-print">
-    <?php include (INCLUDES.'mods_top.inc.php'); ?>
-    </div>
-    <!-- ./MODS TOP -->
     <?php } ?>
-    <?php if (($section == "admin") && (($logged_in) && ($_SESSION['userLevel'] <= 1))) { ?>
-    <!-- Admin Pages (Fluid Layout) -->
-    <div class="container-fluid">
-        <?php if ($go == "default") { ?>
-        <!-- Admin Dashboard - Has sidebar -->
-        <div class="row">
-            <div class="col col-lg-9 col-md-8 col-sm-12 col-xs-12">
-            <div class="page-header">
-                <h1><?php echo $header_output; ?></h1>
-            </div>
-            <?php include (ADMIN.'default.admin.php'); ?>
-            </div><!-- ./left column -->
-            <div class="sidebar col col-lg-3 col-md-4 col-sm-12 col-xs-12">
-                <?php include (ADMIN.'sidebar.admin.php'); ?>
-            </div><!-- ./sidebar -->
-        </div><!-- ./row -->
-        <?php } else { ?>
-        <!-- Admin Page - full width of viewport -->
-            <div class="page-header">
-                <h1><?php echo $header_output; ?></h1>
-            </div>
-            <?php
+</div><!-- ./container -->
+<!-- ./ALERTS -->
 
-                if ($go == "judging") include (ADMIN.'judging_locations.admin.php');
-                if ($go == "judging_preferences") include (ADMIN.'judging_preferences.admin.php');
-                if ($go == "judging_tables") include (ADMIN.'judging_tables.admin.php');
-                if ($go == "judging_flights") include (ADMIN.'judging_flights.admin.php');
-                if ($go == "judging_scores") include (ADMIN.'judging_scores.admin.php');
-                if ($go == "judging_scores_bos") include (ADMIN.'judging_scores_bos.admin.php');
-                if ($go == "participants") include (ADMIN.'participants.admin.php');
-                if ($go == "entries") include (ADMIN.'entries.admin.php');
-                if ($go == "contacts") include (ADMIN.'contacts.admin.php');
-                if ($go == "dropoff") include (ADMIN.'dropoff.admin.php');
-                if ($go == "checkin") include (ADMIN.'barcode_check-in.admin.php');
-                if ($go == "count_by_style") include (ADMIN.'entries_by_style.admin.php');
-                if ($go == "count_by_substyle") include (ADMIN.'entries_by_substyle.admin.php');
-                if ($action == "register") include (SECTIONS.'register.sec.php');
-                if ($go == "upload_scoresheets") include (ADMIN.'upload_scoresheets.admin.php');
-                if ($go == "payments") include (ADMIN.'payments.admin.php');
-                if (($_SESSION['prefsEval'] == 1) && ($go == "eval")) include (EVALS.'admin.eval.php');
+<!-- DEBUG -->
+<div class="<?php echo $container_main; ?> hidden-print">
+<?php if (DEBUG_SESSION_VARS) include (DEBUGGING.'session_vars.debug.php'); ?>
+</div>
+<!-- ./DEBUG -->
 
-                if ($_SESSION['userLevel'] == "0") {
-
-                    if ($go == "styles") include (ADMIN.'styles.admin.php');
-                    if ($go == "archive") include (ADMIN.'archive.admin.php');
-                    if ($go == "make_admin") include (ADMIN.'make_admin.admin.php');
-                    if ($go == "contest_info") include (ADMIN.'competition_info.admin.php');
-                    if ($go == "preferences") include (ADMIN.'site_preferences.admin.php');
-                    if ($go == "sponsors") include (ADMIN.'sponsors.admin.php');
-                    if ($go == "style_types") include (ADMIN.'style_types.admin.php');
-                    if ($go == "special_best") include (ADMIN.'special_best.admin.php');
-                    if ($go == "special_best_data") include (ADMIN.'special_best_data.admin.php');
-                    if ($go == "mods") include (ADMIN.'mods.admin.php');
-                    if ($go == "upload") include (ADMIN.'upload.admin.php');
-                    if ($go == "change_user_password") include (ADMIN.'change_user_password.admin.php');
-
-                }
-
-            } ?>
-    </div><!-- ./container-fluid -->
-    <!-- ./Admin Pages -->
-    
-    <?php } elseif (($_SESSION['prefsEval'] == 1) && ($section == "evaluation") && ($logged_in)) { 
-
-        if (($view == "admin") && ($filter == "default")) $container_eval = "container-fluid";
-        else $container_eval = "container";
-    
-    ?>
-    
-    <div class="<?php echo $container_eval; ?>">
+<?php if ($_SESSION['prefsUseMods'] == "Y") { ?>
+<!-- MODS TOP -->
+<div class="<?php echo $container_main; ?> hidden-print">
+<?php include (INCLUDES.'mods_top.inc.php'); ?>
+</div>
+<!-- ./MODS TOP -->
+<?php } ?>
+<?php if (($section == "admin") && (($logged_in) && ($_SESSION['userLevel'] <= 1))) { ?>
+<!-- Admin Pages (Fluid Layout) -->
+<div class="container-fluid">
+    <?php if ($go == "default") { ?>
+    <!-- Admin Dashboard - Has sidebar -->
+    <div class="row">
+        <div class="col col-lg-9 col-md-8 col-sm-12 col-xs-12">
         <div class="page-header">
-                <h1><?php echo $header_output; ?></h1>
-            </div>
-        <?php 
-            if ($go == "default") include (EVALS.'default.eval.php');
-            if ($go == "scoresheet") include (EVALS.'scoresheet.eval.php');
-        ?>
-    </div><!-- ./container-fluid -->
-    
-    <?php } else { ?>
-    <!-- Public Pages (Fixed Layout with Sidebar) -->
-    <div id="main-content" class="container">
-        <div class="row">
-            <div class="col col-lg-9 col-md-8 col-sm-12 col-xs-12">
-            <?php if ($section != "competition") { ?>
-            <div class="page-header">
-                <h1><?php echo $header_output; ?></h1>
-            </div>
-            <?php }
-
-                if (ENABLE_MARKDOWN) {
-                    include (CLASSES.'parsedown/Parsedown.php');
-                    $Parsedown = new Parsedown();
-                }
-
-                if (SINGLE) include (SSO.'sections/default.sec.php');
-
-                else {
-
-                    if (($section == "default") || ($section == "past-winners")) include (SECTIONS.'default.sec.php');
-                    if ($section == "entry") include (SECTIONS.'entry_info.sec.php');
-                    if ($section == "contact") include (SECTIONS.'contact.sec.php');
-                    if ($section == "volunteers") include (SECTIONS.'volunteers.sec.php');
-                    if ($section == "sponsors") include (SECTIONS.'sponsors.sec.php');
-                    if ($section == "register") include (SECTIONS.'register.sec.php');
-                    if ($section == "login") include (SECTIONS.'login.sec.php');
-                    // if ($section == "past_winners") include (SECTIONS.'past_winners.sec.php');
-                    if ($section == "competition") include (SECTIONS.'custom_competition_info.sec.php');
-
-                    if ($logged_in) {
-                        if ($section == "brewer") include (SECTIONS.'brewer.sec.php');
-                        if ($section == "list") include (SECTIONS.'list.sec.php');
-                        if ($section == "brew") include (SECTIONS.'brew.sec.php');
-                        if ($section == "pay") include (SECTIONS.'pay.sec.php');
-                        if ($section == "user") include (SECTIONS.'user.sec.php');
-                        if ($section == "beerxml") include (SECTIONS.'beerxml.sec.php');
-                    }
-
-                }
-
-            ?>
-            </div><!-- ./left column -->
-            <div class="sidebar col col-lg-3 col-md-4 col-sm-12 col-xs-12">
-                <?php include (SECTIONS.'sidebar.sec.php'); ?>
-            </div><!-- ./sidebar -->
-        </div><!-- ./row -->
-        <!-- ./Public Pages -->
-    </div><!-- ./container -->
-    <!-- ./Public Pages -->
-    <?php } ?>
-
-    <?php if (DEBUG) { ?>
-    <div class="<?php echo $container_main; ?> hidden-print">
-    <?php
-    include(DEBUGGING.'query_count_end.debug.php');
-    echo $output_query_count;
-    ?>
-    </div>
-    <?php } ?>
-
-    <?php if ($_SESSION['prefsUseMods'] == "Y") { ?>
-    <!-- Mods Bottom -->
-    <div class="<?php echo $container_main; ?> hidden-print">
-    <?php include (INCLUDES.'mods_bottom.inc.php'); ?>
-    </div>
-    <!-- ./Mods Bottom -->
-    <?php } ?>
-
-    <!-- Footer -->
-    <footer class="footer hidden-xs hidden-sm hidden-md">
-        <div class="navbar <?php echo $nav_container; ?> navbar-fixed-bottom">
-            <div class="<?php echo $container_main; ?> text-center">
-                <p class="navbar-text col-md-12 col-sm-12 col-xs-12 text-muted small bcoem-footer"><?php include (SECTIONS.'footer.sec.php'); ?></p>
-            </div>
+            <h1><?php echo $header_output; ?></h1>
         </div>
-    </footer><!-- ./footer -->
-    <!-- ./ Footer -->
-    <?php session_write_close(); ?>
+        <?php include (ADMIN.'default.admin.php'); ?>
+        </div><!-- ./left column -->
+        <div class="sidebar col col-lg-3 col-md-4 col-sm-12 col-xs-12">
+            <?php include (ADMIN.'sidebar.admin.php'); ?>
+        </div><!-- ./sidebar -->
+    </div><!-- ./row -->
+    <?php } else { ?>
+    <!-- Admin Page - full width of viewport -->
+        <div class="page-header">
+            <h1><?php echo $header_output; ?></h1>
+        </div>
+        <?php
 
+            if ($go == "judging") include (ADMIN.'judging_locations.admin.php');
+            if ($go == "judging_preferences") include (ADMIN.'judging_preferences.admin.php');
+            if ($go == "judging_tables") include (ADMIN.'judging_tables.admin.php');
+            if ($go == "judging_flights") include (ADMIN.'judging_flights.admin.php');
+            if ($go == "judging_scores") include (ADMIN.'judging_scores.admin.php');
+            if ($go == "judging_scores_bos") include (ADMIN.'judging_scores_bos.admin.php');
+            if ($go == "participants") include (ADMIN.'participants.admin.php');
+            if ($go == "entries") include (ADMIN.'entries.admin.php');
+            if ($go == "contacts") include (ADMIN.'contacts.admin.php');
+            if ($go == "dropoff") include (ADMIN.'dropoff.admin.php');
+            if ($go == "checkin") include (ADMIN.'barcode_check-in.admin.php');
+            if ($go == "count_by_style") include (ADMIN.'entries_by_style.admin.php');
+            if ($go == "count_by_substyle") include (ADMIN.'entries_by_substyle.admin.php');
+            if ($action == "register") include (SECTIONS.'register.sec.php');
+            if ($go == "upload_scoresheets") include (ADMIN.'upload_scoresheets.admin.php');
+            if ($go == "payments") include (ADMIN.'payments.admin.php');
+            if (($_SESSION['prefsEval'] == 1) && ($go == "eval")) include (EVALS.'admin.eval.php');
+
+            if ($_SESSION['userLevel'] == "0") {
+
+                if ($go == "styles") include (ADMIN.'styles.admin.php');
+                if ($go == "archive") include (ADMIN.'archive.admin.php');
+                if ($go == "make_admin") include (ADMIN.'make_admin.admin.php');
+                if ($go == "contest_info") include (ADMIN.'competition_info.admin.php');
+                if ($go == "preferences") include (ADMIN.'site_preferences.admin.php');
+                if ($go == "sponsors") include (ADMIN.'sponsors.admin.php');
+                if ($go == "style_types") include (ADMIN.'style_types.admin.php');
+                if ($go == "special_best") include (ADMIN.'special_best.admin.php');
+                if ($go == "special_best_data") include (ADMIN.'special_best_data.admin.php');
+                if ($go == "mods") include (ADMIN.'mods.admin.php');
+                if ($go == "upload") include (ADMIN.'upload.admin.php');
+                if ($go == "change_user_password") include (ADMIN.'change_user_password.admin.php');
+
+            }
+
+        } ?>
+</div><!-- ./container-fluid -->
+<!-- ./Admin Pages -->
+
+<?php } elseif (($_SESSION['prefsEval'] == 1) && ($section == "evaluation") && ($logged_in)) { 
+
+    if (($view == "admin") && ($filter == "default")) $container_eval = "container-fluid";
+    else $container_eval = "container";
+
+?>
+
+<div class="<?php echo $container_eval; ?>">
+    <div class="page-header">
+            <h1><?php echo $header_output; ?></h1>
+        </div>
+    <?php 
+        if ($go == "default") include (EVALS.'default.eval.php');
+        if ($go == "scoresheet") include (EVALS.'scoresheet.eval.php');
+    ?>
+</div><!-- ./container-fluid -->
+
+<?php } else { ?>
+<!-- Public Pages (Fixed Layout with Sidebar) -->
+<div id="main-content" class="container">
+    <div class="row">
+        <div class="col col-lg-9 col-md-8 col-sm-12 col-xs-12">
+        <?php if ($section != "competition") { ?>
+        <div class="page-header">
+            <h1><?php echo $header_output; ?></h1>
+        </div>
+        <?php }
+
+            if (ENABLE_MARKDOWN) {
+                include (CLASSES.'parsedown/Parsedown.php');
+                $Parsedown = new Parsedown();
+            }
+
+            if (SINGLE) include (SSO.'sections/default.sec.php');
+
+            else {
+
+                if (($section == "default") || ($section == "past-winners")) include (SECTIONS.'default.sec.php');
+                if ($section == "entry") include (SECTIONS.'entry_info.sec.php');
+                if ($section == "contact") include (SECTIONS.'contact.sec.php');
+                if ($section == "volunteers") include (SECTIONS.'volunteers.sec.php');
+                if ($section == "sponsors") include (SECTIONS.'sponsors.sec.php');
+                if ($section == "register") include (SECTIONS.'register.sec.php');
+                if ($section == "login") include (SECTIONS.'login.sec.php');
+                // if ($section == "past_winners") include (SECTIONS.'past_winners.sec.php');
+                if ($section == "competition") include (SECTIONS.'custom_competition_info.sec.php');
+
+                if ($logged_in) {
+                    if ($section == "brewer") include (SECTIONS.'brewer.sec.php');
+                    if ($section == "list") include (SECTIONS.'list.sec.php');
+                    if ($section == "brew") include (SECTIONS.'brew.sec.php');
+                    if ($section == "pay") include (SECTIONS.'pay.sec.php');
+                    if ($section == "user") include (SECTIONS.'user.sec.php');
+                    if ($section == "beerxml") include (SECTIONS.'beerxml.sec.php');
+                }
+
+            }
+
+        ?>
+        </div><!-- ./left column -->
+        <div class="sidebar col col-lg-3 col-md-4 col-sm-12 col-xs-12">
+            <?php include (SECTIONS.'sidebar.sec.php'); ?>
+        </div><!-- ./sidebar -->
+    </div><!-- ./row -->
+    <!-- ./Public Pages -->
+</div><!-- ./container -->
+<!-- ./Public Pages -->
+<?php } ?>
+
+<?php if (DEBUG) { ?>
+<div class="<?php echo $container_main; ?> hidden-print">
+<?php
+include(DEBUGGING.'query_count_end.debug.php');
+echo $output_query_count;
+?>
+</div>
+<?php } ?>
+
+<?php if ($_SESSION['prefsUseMods'] == "Y") { ?>
+<!-- Mods Bottom -->
+<div class="<?php echo $container_main; ?> hidden-print">
+<?php include (INCLUDES.'mods_bottom.inc.php'); ?>
+</div>
+<!-- ./Mods Bottom -->
+<?php } ?>
+
+<!-- Footer -->
+<footer class="footer hidden-xs hidden-sm hidden-md">
+    <div class="navbar <?php echo $nav_container; ?> navbar-fixed-bottom">
+        <div class="<?php echo $container_main; ?> text-center">
+            <p class="navbar-text col-md-12 col-sm-12 col-xs-12 text-muted small bcoem-footer"><?php include (SECTIONS.'footer.sec.php'); ?></p>
+        </div>
+    </div>
+</footer><!-- ./footer -->
+<!-- ./ Footer -->
+<?php 
+session_write_close(); 
+if ($logged_in) {
+$session_end = getTimeZoneDateTime($_SESSION['prefsTimeZone'],(time() + ($session_expire_after * 60)),"999",$_SESSION['prefsTimeFormat'],"short","date-no-gmt");
+?>
+<div class="modal fade" id="session-expire-warning" tabindex="-1" role="dialog" aria-labelledby="session-expire-warning-label">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="session-expire-warning-label"><?php echo $label_session_expire; ?></h4>
+      </div>
+      <div class="modal-body">
+        <p><?php echo $alert_text_090; ?></p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal"><?php echo $label_stay_here; ?></button>
+        <button type="button" class="btn btn-success" data-dismiss="modal" onclick="window.location.reload()"><?php echo $label_refresh; ?></button>
+        <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="window.location.replace('<?php echo $base_url; ?>includes/logout.inc.php')"><?php echo $label_log_out; ?></button>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal fade" id="session-expire-warning-30" tabindex="-1" role="dialog" aria-labelledby="session-expire-warning-30-label">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="session-expire-warning-30-label"><?php echo $label_session_expire; ?></h4>
+      </div>
+      <div class="modal-body">
+        <p><?php echo $alert_text_091; ?></p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-success" data-dismiss="modal" onclick="window.location.reload()"><?php echo $label_refresh; ?></button>
+        <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="window.location.replace('<?php echo $base_url; ?>includes/logout.inc.php')"><?php echo $label_log_out; ?></button>
+      </div>
+    </div>
+  </div>
+</div>
+<script type="text/javascript" src="https://cdn.rawgit.com/hilios/jQuery.countdown/2.2.0/dist/jquery.countdown.min.js"></script>
+<script>
+$("#session-expire-warning").modal('hide');
+$("#session-expire-warning-30").modal('hide');
+var session_end = "<?php echo $session_end; ?>";
+$("#session-end").countdown(session_end, function(event) {
+    var end_time = (event.strftime('%M:%S'));
+    $(this).html(end_time);
+    if (end_time == "02:00") {
+        $("#session-expire-warning").modal('show');
+    }
+    if (end_time == "00:30") {
+        $("#session-expire-warning").modal('hide');
+        $("#session-expire-warning-30").modal('show');
+    }
+    if (end_time == "00:01") {
+        $("#session-expire-warning-30").modal('hide');
+        var session_end_redirect = "<?php echo $base_url; ?>includes/logout.inc.php";
+        window.location.replace(session_end_redirect);
+    }
+});
+</script>
+<?php if ($section == "evaluation") { ?>
+<?php if ($go == "default") { ?>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment-timezone/0.5.32/moment-timezone-with-data.min.js"></script>
+<script>
+var judging_end = moment.tz("<?php echo $judging_end; ?>","<?php echo get_timezone($_SESSION['prefsTimeZone']); ?>");
+$("#judging-ends").countdown(judging_end.toDate(), function(event) {
+    $(this).text(event.strftime('%-w weeks %-d days %-H:%M:%S'));
+});
+</script>
+<?php } ?>
+<?php if ($go == "scoresheet") { ?>
+<script>
+$("#session-end-eval").countdown(session_end, function(event) {
+    var end_time = (event.strftime('%M:%S'));
+    $(this).html(end_time);
+    if (end_time == "15:00") {
+        $("#session-end-eval-p").attr("class", "text-warning");
+    }
+    if (end_time == "10:00") {
+        $("#session-end-eval-p").attr("class", "text-danger");
+    }
+});
+</script>
+<?php } ?>
+<?php } // end if ($section == "evaluation") ?>
+<?php } // end if ($logged_in) ?>
 <script>
 $(document).ready(function(){
-    
     $("#no-js-alert").hide();
-
     $("a").attr("target", function() {
         if(this.host == location.host) {
             return "_self";
         }
         else {
             return "_blank";
-            
         }
     });
-
     $("a[target='_blank'])").addClass("hide-loader");
-
 });
 </script>
 </body>

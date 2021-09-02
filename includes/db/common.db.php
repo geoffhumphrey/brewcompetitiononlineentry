@@ -386,7 +386,7 @@ if ($section != "admin") {
 	$totalRows_archive = mysqli_num_rows($archive);
 }
 
-// Do not rely on session data to populate Competition Organization Preferences (Judging Preferences) for editing in Admin or in Setup
+// Do not rely on session data to populate Judging/Competition Organization Preferences for editing in Admin or in Setup
 if (SINGLE) $query_judging_prefs = sprintf("SELECT * FROM %s WHERE id='%s'", $prefix."judging_preferences",$_SESSION['comp_id']);
 else $query_judging_prefs = sprintf("SELECT * FROM %s WHERE id='1'", $prefix."judging_preferences");
 $judging_prefs = mysqli_query($connection,$query_judging_prefs) or die (mysqli_error($connection));

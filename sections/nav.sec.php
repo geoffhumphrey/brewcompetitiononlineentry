@@ -270,7 +270,7 @@ if (($logged_in) && ($admin_user) && ($go != "error_page")) { ?>
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">Preferences <span class="caret"></span></a>
                 <ul class="dropdown-menu navmenu-nav">
                     <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=preferences">Website</a></li>
-                    <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging_preferences">Competition Organization</a></li>
+                    <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging_preferences">Judging/Competition Organization</a></li>
                 </ul>
             </li>
 			<?php } ?>
@@ -444,6 +444,7 @@ $(document).ready(function(){
                     <?php } ?>
                     <li role="separator" class="divider"></li>
                     <li><a href="<?php echo $base_url; ?>includes/logout.inc.php"><?php echo $label_log_out; ?></a></li>
+                    <li class="dropdown-header"><small><?php echo $label_auto_log_out; ?> <span id="session-end"></span></small></li>
                 </ul>
             </li>
             <li id="user-menu-disable"><a href="<?php echo $link_list; ?>" tabindex="-1"><?php echo $label_my_account; ?></a></li>

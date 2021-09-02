@@ -170,9 +170,9 @@ if (!empty($judge_scores)) {;
   $scored_previously = TRUE;
   $consensus_scores = eval_exits($row_entry_info['id'],"consensus_scores",$dbTable);
   if (count(array_unique($consensus_scores)) === 1) $consensus_match = TRUE;
-  $other_judge_scores .= "Judge score(s): ".rtrim(display_array_content($judge_scores,2),", ");
-  $other_judge_consensus_scores .= "Judge consensus score(s): ".rtrim(display_array_content($consensus_scores,2),", ");
-  if (isset($row_eval['evalFinalScore'])) $my_consensus_score .= "Your consensus score: <span id=\"my-consensus-score\">".$row_eval['evalFinalScore']."</span>";
+  $other_judge_scores .= sprintf("%s: ".rtrim(display_array_content($judge_scores,2),", "),$label_judge_score);
+  $other_judge_consensus_scores .= sprintf("%s: ".rtrim(display_array_content($consensus_scores,2),", "),$label_judge_consensus_scores);
+  if (isset($row_eval['evalFinalScore'])) $my_consensus_score .= sprintf("%s: <span id=\"my-consensus-score\">".$row_eval['evalFinalScore']."</span>",$label_your_consensus_score);
 }
 
 if (($action == "edit") && (!$consensus_match)) $consensus_scores = array_diff($consensus_scores,array($row_eval['evalFinalScore'])); 
@@ -264,7 +264,7 @@ if ($entry_found) {
   if (!empty($row_entry_info['brewInfo'])) {
     $entry_info_html .= "<div class=\"row bcoem-admin-element\">";
     $entry_info_html .= "<div class=\"col col-lg-3 col-md-4 col-sm-4 col-xs-12\"><strong>".$label_required_info."</strong></div>";
-    $entry_info_html .= "<div class=\"col col-lg-9 col-md-8 col-sm-8 col-xs-12\">" . str_replace("^", " - ", $row_entry_info['brewInfo']) . "</div>";
+    $entry_info_html .= "<div class=\"col col-lg-9 col-md-8 col-sm-8 col-xs-12\">".str_replace("^", " - ", $row_entry_info['brewInfo'])."</div>";
     $entry_info_html .= "</div>";
   }
 
@@ -346,7 +346,7 @@ if ($entry_found) {
       $judge_info_html .= "</div>";
     }
     
-  $judge_info_html .= "</div>";
+    $judge_info_html .= "</div>";
   
   }
   
@@ -355,28 +355,33 @@ if ($entry_found) {
   
   // Sticky score
   $sticky_score_tally = "<div id=\"sticky-score\" class=\"pull-right\">";
-  $sticky_score_tally .= "<h3><span id=\"scoring-guide-badge\" class=\"label label-default sticky-glow\">".$label_score.": <span id=\"judge-score\">".$eval_score."</span> <span id=\"scoring-guide\"></span></span></h3>";
+  
+  $sticky_score_tally .= "<section style=\"width: 100%\"><h3><span id=\"scoring-guide-badge\" class=\"label label-default sticky-glow\">".$label_score.": <span id=\"judge-score\">".$eval_score."</span> <span id=\"scoring-guide\"></span></span></h3></section>";
+  
+  $sticky_score_tally .= "<section style=\"margin-top: -5px; position: absolute; width: 100%; background-color: rgba(220,220,220,0.80);\" id=\"scoring-guide-status\" class=\"well sticky-glow\">";
+  
+  $sticky_score_tally .= "<p><span id=\"elapsed-time-p\"><i class=\"fa fa-clock\"></i> <strong>".$label_elapsed_time.": <span id=\"elapsed-time\"></span></strong></span><br><small id=\"session-end-eval-p\">".$label_auto_log_out." <span id=\"session-end-eval\"></span></small></p>";
+  
   if ($scored_previously) {
-    $sticky_score_tally .= "<section style=\"margin-top: -5px; position:absolute;\" id=\"scoring-guide-status\" class=\"alert well sticky-glow\">";
-    $sticky_score_tally .= "<p>";
-    $sticky_score_tally .= "<i id=\"scoring-guide-status-icon\" class=\"fa fa-chevron-circle-right\"></i> <span id=\"scoring-guide-status-msg\"><strong>Score Range Status</strong></span>";
+    $sticky_score_tally .= "<p style=\"padding-top: 10px;\">";
+    $sticky_score_tally .= "<i id=\"scoring-guide-status-icon\" class=\"fa fa-chevron-circle-right\"></i> <span id=\"scoring-guide-status-msg\"><strong>".$label_score_range_status."</strong></span>";
     if (!empty($other_judge_scores)) $sticky_score_tally .= "<br><small>".$other_judge_scores."</small>";
-    //if (!empty($other_judge_consensus_scores)) $sticky_score_tally .= "<br><small>".$other_judge_consensus_scores."</small>";
-    //if (!empty($my_consensus_score)) $sticky_score_tally .= "<br><small>".$my_consensus_score."</small>";
+    // if (!empty($other_judge_consensus_scores)) $sticky_score_tally .= "<br><small>".$other_judge_consensus_scores."</small>";
+    // if (!empty($my_consensus_score)) $sticky_score_tally .= "<br><small>".$my_consensus_score."</small>";
     $sticky_score_tally .= "</p>";
     $sticky_score_tally .= "<p style=\"padding-top: 10px;\">";
     $sticky_score_tally .= "<i id=\"consensus-status-icon\" class=\"fa fa-chevron-circle-right\"></i> <span id=\"consensus-status-msg\"><strong>Consensus Status</strong></span>";
     if (!empty($my_consensus_score)) $sticky_score_tally .= "<br><small>".$my_consensus_score."</small>";
     if (!empty($other_judge_consensus_scores)) $sticky_score_tally .= "<br><small>".$other_judge_consensus_scores."</small>";
     $sticky_score_tally .= "</p>";
-    $sticky_score_tally .= "</section>";
   }
 
+  $sticky_score_tally .= "</section>";
   $sticky_score_tally .= "</div>";
+
 }
 
 else {
-  
   $header_elements .= sprintf("<p class=\"alert alert-danger\"><strong><i class=\"fa fa-exclamation-triangle\"></i> %s</strong> %s</p>",$evaluation_info_013,$evaluation_info_014); 
   $entry_info_html .= "<form class=\"hide-loader-form-submit form-horizontal\" name=\"form1\" data-toggle=\"validator\" role=\"form\" action=\"".$base_url."index.php?section=evaluation&amp;go=scoresheet&amp;action=add\" method=\"post\">";
   $entry_info_html .= "<div class=\"form-group\">";
@@ -393,15 +398,12 @@ else {
   $entry_info_html .= "</div>";
   if (isset($_POST['participants'])) $entry_info_html .= "<input type=\"hidden\" name=\"participants\" value=\"".$_POST['participants']."\">";
   $entry_info_html .= "</form>";
-  
   $scoresheet_version = "";
-
 }
 
 // Sub-nav Buttons
 if ($eval_source == 0) $eval_nav_buttons .= "<div style=\"margin: 0 5px 15px 0;\" class=\"btn-group hidden-print\" role=\"group\"><a class=\"btn btn-block btn-default\" href=\"".$base_url."index.php?section=evaluation&amp;go=default&amp;filter=default&amp;view=admin\"><span class=\"fa fa-chevron-circle-left\"></span> ".$label_admin.": ".$label_evaluations."</a></div>";
 $eval_nav_buttons .= "<div style=\"margin-bottom: 15px;\" class=\"btn-group hidden-print\" role=\"group\"><a class=\"btn btn-block btn-default\" href=\"".build_public_url("evaluation","default","default","default",$sef,$base_url)."\"><span class=\"fa fa-chevron-circle-left\"></span> ".$label_judging_dashboard."</a></div>";
-
 if ($eval_prevent_edit) $header_elements .= sprintf("<p>%s</p>",$header_text_104);
 ?>
 <style>
@@ -414,9 +416,35 @@ if ($eval_prevent_edit) $header_elements .= sprintf("<p>%s</p>",$header_text_104
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/11.0.2/bootstrap-slider.min.js"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/11.0.2/css/bootstrap-slider.min.css" />
 <script>
+var elapsedTimeStart = Date.now();
+setInterval(function() {
+  var elapsedTime = ((Date.now() - elapsedTimeStart) / 1000);
+  var elapsedTimeDisp = formatTimeDisplay(elapsedTime,1);
+  // Add hour display after 60 minutes 
+  // (if session timeout is set to greater than 60)
+  if (elapsedTime > 3600) {
+    var elapsedTimeDisp = formatTimeDisplay(elapsedTime,0);
+  }
+  $("#elapsed-time").html(elapsedTimeDisp);
+  if ((elapsedTime > 600) && (elapsedTime < 900)) {
+    $("#elapsed-time-p").attr("class", "text-warning");
+  }
+  if (elapsedTime >= 900) {
+    $("#elapsed-time-p").attr("class", "text-danger");
+  }
+}, 1);
+
 var judgeScores = <?php echo json_encode($judge_scores); ?>;
 var consensusScores = <?php echo json_encode($consensus_scores); ?>;
 var score_range = <?php echo $score_range; ?>;
+
+var consensus_caution = "<?php echo $label_consensus_caution; ?>";
+var consensus_caution_text = "<?php echo $evaluation_info_044; ?>";
+var consensus_caution_output = "<span class=\"text-danger\"><strong>" + consensus_caution + "</strong><br><small><strong>" +consensus_caution_text + "</strong></small></span>";
+
+var consensus_match = "<?php echo $label_consensus_match; ?>";
+var consensus_match_text = "<?php echo $evaluation_info_045; ?>";
+var consensus_match_output = "<span class=\"text-success\"><strong>" + consensus_match + "</strong><br><small><strong>" +consensus_match_text + "</strong></small></span>";
 
 function checkConsensus(data) {
 
@@ -427,33 +455,43 @@ function checkConsensus(data) {
     if ((entered_consensus_score > 0) && (entered_consensus_score !== item)) disparity += 1;
   });
 
-  // If the entered value is does not match one or more the
-  // recorded scores, trigger a warning modal.
-  if ((disparity > 0) || (entered_consensus_score === "")) {
-    $('#score-disparity-modal').modal('show');
-    $("#consensus-status-icon").attr("class", "fa fa-times-circle text-danger");
-    $("#consensus-status-msg").html("<span class=\"text-danger\"><strong>Consensus Caution</strong><br><small><strong>Your consensus score does not match those entered by other judges.</strong></small></span>");
+  /**
+   * If the entered value is does not match one or more the
+   * recorded scores, trigger a warning modal.
+   */
+  if (disparity > 0) {
+      $('#score-floor-modal').modal('hide');
+      $('#score-ceiling-modal').modal('hide');
+      $('#score-disparity-modal').modal('show');
+      $("#consensus-status-icon").attr("class", "fa fa-times-circle text-danger");
+      $("#consensus-status-msg").html(consensus_caution_output);
+  }
+
+  /**
+   * Trigger warning modal if score is less than 13, a commonly
+   * accepted "courtesty score" floor for BJCP competitions.
+   * See the Scoring Ranges section in the "7 Steps to Great Beer Judging" 
+   * document from the BJCP (https://www.bjcp.org/cep/GreatBeerJudging.pdf)
+   */
+  else if ((entered_consensus_score !== "") && (entered_consensus_score < 13)) {
+      $('#score-disparity-modal').modal('hide');
+      $('#score-ceiling-modal').modal('hide');
+      $('#score-floor-modal').modal('show');
+  }
+
+  else if ((entered_consensus_score !== "") && (entered_consensus_score > 50)) {
+      $('#score-disparity-modal').modal('hide');
+      $('#score-floor-modal').modal('hide');
+      $('#score-ceiling-modal').modal('show');
   }
 
   else { 
-    // Not really necessary, but close out any models just in case
-    $('#score-disparity-modal').modal('hide');
-    $('#score-floor-modal').modal('hide');
-    $('#score-ceiling-modal').modal('hide');
-    $("#consensus-status-icon").attr("class", "fa fa-check-circle text-success");
-    $("#consensus-status-msg").html("<span class=\"text-success\"><strong>Consensus Match</strong><br><small><strong>Consensus score entered matches those entered by previous judges.</strong></small></span>");
-  }
-
-  // Trigger warning modal if score is less than 13, a commonly
-  // accepted "courtesty score" floor for BJCP competitions.
-  // See the Scoring Ranges section in the "7 Steps to Great Beer Judging" 
-  // document from the BJCP (https://www.bjcp.org/cep/GreatBeerJudging.pdf)
-  if ((entered_consensus_score < 13) && (entered_consensus_score !== "")) {
-    $('#score-floor-modal').modal('show');
-  }
-
-  if (entered_consensus_score > 50) {
-    $('#score-ceiling-modal').modal('show');
+      // Not really necessary, but close out any models just in case
+      $('#score-disparity-modal').modal('hide');
+      $('#score-floor-modal').modal('hide');
+      $('#score-ceiling-modal').modal('hide');
+      $("#consensus-status-icon").attr("class", "fa fa-check-circle text-success");
+      $("#consensus-status-msg").html(consensus_match_output);
   }
 
 };
@@ -468,32 +506,32 @@ function displayCalc(score) {
   $("#scoring-guide-bottom-outstanding").attr("class", "row");
 
   if ((score > 0) && (score <= 13)) {
-    $("#scoring-guide").html("(Problematic)");
+    $("#scoring-guide").html("(<?php echo $label_problematic; ?>)");
     $("#scoring-guide-badge").attr("class", "label label-danger sticky-glow");
     $("#scoring-guide-bottom-prob").attr("class", "row scoring-guide-bottom-text bg-danger text-danger");
   }
   else if ((score > 13) && (score <= 20)) {
-    $("#scoring-guide").html("(Fair)");
+    $("#scoring-guide").html("(<?php echo $label_fair; ?>)");
     $("#scoring-guide-badge").attr("class", "label label-warning sticky-glow");
     $("#scoring-guide-bottom-fair").attr("class", "row scoring-guide-bottom-text bg-warning text-warning");
   }
   else if ((score > 20) && (score <= 29)) {
-    $("#scoring-guide").html("(Good)");
+    $("#scoring-guide").html("(<?php echo $label_good; ?>)");
     $("#scoring-guide-badge").attr("class", "label label-info sticky-glow");
     $("#scoring-guide-bottom-good").attr("class", "row scoring-guide-bottom-text bg-info text-info");
   }
   else if ((score > 29) && (score <= 37)) {
-    $("#scoring-guide").html("(Very Good)");
+    $("#scoring-guide").html("(<?php echo $label_very_good; ?>)");
     $("#scoring-guide-badge").attr("class", "label label-primary sticky-glow");
     $("#scoring-guide-bottom-v-good").attr("class", "row scoring-guide-bottom-text bg-primary");
   }
   else if ((score > 37) && (score <= 44)) {
-    $("#scoring-guide").html("(Excellent)");
+    $("#scoring-guide").html("(<?php echo $label_excellent; ?>)");
     $("#scoring-guide-badge").attr("class", "label label-success sticky-glow");
     $("#scoring-guide-bottom-excellent").attr("class", "row scoring-guide-bottom-text bg-success text-success");
   }
   else if ((score > 44) && (score <= 50)) {
-    $("#scoring-guide").html("(Outstanding)");
+    $("#scoring-guide").html("(<?php echo $label_outstanding; ?>)");
     $("#scoring-guide-badge").attr("class", "label label-success sticky-glow");
     $("#scoring-guide-bottom-outstanding").attr("class", "row scoring-guide-bottom-text bg-success text-success");
   }
@@ -520,6 +558,12 @@ function calculateSum(method) {
 function checkScoreRange(score,data,score_range,method) {
 
   var disparity = 0;
+  var score_range_caution = "<?php echo $label_score_range_caution; ?>";
+  var score_range_caution_text = "<?php echo $evaluation_info_046; ?>";
+  var score_range_caution_output = "<span class=\"text-danger\"><strong>" + score_range_caution + "</strong><br><small><strong>" + score_range_caution_text + " " + score_range + ".</strong></small></span>";
+  var score_range_ok = "<?php echo $label_score_range_ok; ?>";
+  var score_range_ok_text = "<?php echo $evaluation_info_047; ?>";
+  var score_range_ok_output = "<span class=\"text-success\"><strong>" + score_range_ok + "</strong><br><small><strong>" + score_range_ok_text + "</strong></small></span>";
 
   data.forEach(function (item, index) {
     if (Math.abs(item - score) > score_range) disparity += 1;
@@ -527,11 +571,9 @@ function checkScoreRange(score,data,score_range,method) {
 
   if (disparity > 0) {
     
-    // $("#scoring-guide-status").attr("class", "alert alert-warning sticky-glow");
-
     if (method == 0) {
       $("#scoring-guide-status-icon").attr("class", "fa fa-times-circle text-danger");
-      $("#scoring-guide-status-msg").html("<span class=\"text-danger\"><strong>Judges' Score Range Caution</strong><br><small><strong>Score difference is greater than " + score_range + " points.</strong></small></span>");
+      $("#scoring-guide-status-msg").html(score_range_caution_output);
     }
 
     if (method == 1) {
@@ -541,9 +583,8 @@ function checkScoreRange(score,data,score_range,method) {
   }
 
   else {
-    // $("#scoring-guide-status").attr("class", "alert alert-success sticky-glow");
     $("#scoring-guide-status-icon").attr("class", "fa fa-check-circle text-success");
-    $("#scoring-guide-status-msg").html("<span class=\"text-success\"><strong>Judges' Score Range OK</strong><br><small><strong>Score difference is " + score_range + " points or less.</strong></small></span>");
+    $("#scoring-guide-status-msg").html(score_range_ok_output);
   };
 
 };
@@ -633,8 +674,9 @@ $(document).ready(function() {
   position: sticky;
   top: 70px;
   z-index: 999;
-  min-width: 300px;
+  min-width: 250px;
   /* font-family: initial !important; */
+  font-size: .9em;
 }
 
 .sticky-glow {
@@ -657,11 +699,8 @@ $(document).ready(function() {
 }
 
 </style>
-
 <?php 
-
 if ((isset($row_eval['evalPosition'])) && (!empty($row_eval['evalPosition']))) $evalPosition = explode(",", $row_eval['evalPosition']);
-
 echo $header_elements; 
 if (!empty($scoresheet_version)) echo "<h2>".$scoresheet_version."</h2>";
 echo $eval_nav_buttons;
@@ -669,7 +708,6 @@ echo $entry_info_html;
 if ($entry_found) {
   echo $sticky_score_tally;
 ?>
-
 <form class="hide-loader-form-submit" id="form1" name="form1" role="form" data-toggle="validator" action="<?php echo $base_url; ?>includes/process.inc.php?section=<?php echo $process_type; ?>&action=<?php echo $action; ?>&view=<?php echo $view; ?>&dbTable=<?php echo $prefix."evaluation"; if ($action == "edit") echo "&id=".$id; ?>" method="post">
 <!-- Provide information about the judge -->
 <input type="hidden" name="evalJudgeInfo" value="<?php if ($action == "add") echo $judge_id; else echo $row_eval['evalJudgeInfo']; ?>">
@@ -691,28 +729,28 @@ if ($entry_found) {
     <input type="number" class="form-control form-control-inline" name="evalPosition_0" min="1" id="evalPosition_0" maxlength="3" size="15" placeholder="<?php echo $label_suggested.": ".($flight_count_info['total_flight_evals']+1); ?>" value="<?php if ($action == "edit") { if (is_numeric($evalPosition[0])) echo $evalPosition[0]; else echo ($flight_count_info['total_flight_evals']+1); } ?>">
     Of 
     <input type="number" class="form-control form-control-inline" name="evalPosition_1" min="1" id="evalPosition_1" maxlength="3" size="15" placeholder="<?php echo $label_suggested.": ".$flight_count_info['total_flight_entries']; ?>" value="<?php if ($action == "edit") { if (is_numeric($evalPosition[1])) echo $evalPosition[1]; } ?>">
-    <div id="ordinal-help-position" class="help-block small text-danger">Please provide <strong>the entry's ordinal position</strong> in the flight.</div>
-    <div id="ordinal-help-total" class="help-block small text-danger">Please provide <strong>the total number of entries</strong> in the flight.</div>
+    <div id="ordinal-help-position" class="help-block small text-danger"><?php echo $evaluation_info_050; ?></div>
+    <div id="ordinal-help-total" class="help-block small text-danger"><?php echo $evaluation_info_051; ?></div>
   </div>
 </div>
 <div class="form-group">
-  <label for="evalBottle">Bottle Inspection</label>
+  <label for="evalBottle"><?php echo $label_bottle_inspection; ?></label>
   <div class="checkbox">
     <label>
-      <input type="checkbox" name="evalBottle" id="evalBottle" value="1" <?php if (($action == "edit") && ($row_eval['evalBottle'] == 1)) echo "checked"; ?>> Appropriate size, cap, fill level, label removal, etc.
+      <input type="checkbox" name="evalBottle" id="evalBottle" value="1" <?php if (($action == "edit") && ($row_eval['evalBottle'] == 1)) echo "checked"; ?>> <?php echo $evaluation_info_052; ?>
   </label>
   </div>
 </div>
 <div class="form-group">
-  <label for="evalBottleNotes">Bottle Inspection Comments</label>
+  <label for="evalBottleNotes"><?php echo $label_bottle_inspection_comments; ?></label>
   <input type="text" class="form-control" name="evalBottleNotes" id="evalBottleNotes" maxlength="255" placeholder="" value="<?php if ($action == "edit") echo $row_eval['evalBottleNotes']; ?>">
 </div>
 <?php include (EVALS.$scoresheet_form); ?>
 <h3 class="section-heading"><?php echo $label_score; ?></h3>
 <div class="form-group">
-  <label for="evalFinalScore">Consensus Score</label>
-  <input type="number" min="5" max="50" name="evalFinalScore" id="evalFinalScore" class="form-control" placeholder="" data-error="Please provide the consensus score - minimum of 5, maximum of 50." value="<?php if ($action == "edit") echo $row_eval['evalFinalScore']; ?>" onblur="checkConsensus(consensusScores)" required>
-  <div class="help-block small">The consensus score is the final score agreed upon by all judges evaluating the entry. If the consensus score is unknown at this time, enter your own score. If the consensus score entered here differs from those entered by other judges, you will be notified.</div>
+  <label for="evalFinalScore"><?php echo $label_assigned_score; ?></label>
+  <input type="number" min="5" max="50" name="evalFinalScore" id="evalFinalScore" class="form-control" placeholder="" data-error="<?php echo $evaluation_info_068; ?>" value="<?php if ($action == "edit") echo $row_eval['evalFinalScore']; ?>" onblur="checkConsensus(consensusScores)" required>
+  <div class="help-block small"><?php echo $evaluation_info_053; ?></div>
   <div class="help-block small with-errors"></div>
 </div>
 <!-- Scoring Guide -->
@@ -790,10 +828,10 @@ if ($entry_found) {
     </div>
 </div><!-- ./ scoring guide -->
 <div class="form-group">
-  <label for="evalMiniBOS">Mini BOS</label>
+  <label for="evalMiniBOS"><?php echo $label_mini_bos; ?></label>
   <div class="checkbox">
     <label>
-      <input type="checkbox" name="evalMiniBOS" id="evalMiniBOS" value="1" <?php if (($action == "edit") && ($row_eval['evalMiniBOS'] == 1)) echo "checked"; ?>> This entry advanced to a mini-BOS round.
+      <input type="checkbox" name="evalMiniBOS" id="evalMiniBOS" value="1" <?php if (($action == "edit") && ($row_eval['evalMiniBOS'] == 1)) echo "checked"; ?>> <?php echo $evaluation_info_054; ?>
   </label>
   </div>
 </div>
@@ -805,13 +843,13 @@ if ($entry_found) {
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title" id="score-disparity-modal-label">Consensus Scores Do Not Match</h4>
+        <h4 class="modal-title" id="score-disparity-modal-label"><?php echo $label_consensus_no_match; ?></h4>
       </div>
       <div class="modal-body">
-        <p>The consensus score you entered does not match those entered by previous judges for this entry. Please consult with other judges evaluating this entry and revise your consensus score as necessary.</p>
+        <p><?php echo $evaluation_info_055; ?></p>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-success" data-dismiss="modal">OK</button>
+        <button type="button" class="btn btn-success" data-dismiss="modal"><?php echo $label_ok; ?></button>
       </div>
     </div>
   </div>
@@ -821,17 +859,18 @@ if ($entry_found) {
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title" id="score-disparity-modal-submit-label">Consensus Scores Do Not Match</h4>
+        <h4 class="modal-title" id="score-disparity-modal-submit-label"><?php echo $label_consensus_no_match; ?></h4>
+      </div></h4>
       </div>
       <div class="modal-body">
-        <p>The consensus score you entered does not match those entered by previous judges for this entry. Please consult with other judges evaluating this entry and revise your consensus score as necessary.</p>
+        <p><?php echo $evaluation_info_055; ?></p>
       </div>
       <div class="modal-footer">
         <!--
         <button id="score-disparity-submit" type="button" class="btn btn-primary" data-dismiss="modal">Submit Anyway</button>
         <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
         -->
-        <button type="button" class="btn btn-success" data-dismiss="modal">OK</button>
+        <button type="button" class="btn btn-success" data-dismiss="modal"><?php echo $label_ok; ?></button>
       </div>
     </div>
   </div>
@@ -841,18 +880,14 @@ if ($entry_found) {
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title" id="score-floor-modal-label">Score Entered is Below the Courtesy Score Threshold</h4>
+        <h4 class="modal-title" id="score-floor-modal-label"><?php echo $label_score_below_courtesy; ?></h4>
       </div>
       <div class="modal-body">
-        <p>The score you entered falls below 13, <a href="https://www.bjcp.org/cep/GreatBeerJudging.pdf" target="_blank">a commonly known courtesy threshold for BJCP judges</a>. Please consult with other judges and revise your score as necessary.</p>
-        <p>Scores should be no less than 5 and no greater than 50.</p>
+        <p><?php echo $evaluation_info_056; ?></p>
+        <p><?php echo $evaluation_info_057; ?></p>
       </div>
       <div class="modal-footer">
-        <!--
-        <button id="floor-button-submit" type="button" class="btn btn-primary" data-dismiss="modal">Submit Anyway</button>
-        <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
-        -->
-        <button type="button" class="btn btn-success" data-dismiss="modal">OK</button>
+        <button type="button" class="btn btn-success" data-dismiss="modal"><?php echo $label_ok; ?></button>
       </div>
     </div>
   </div>
@@ -862,30 +897,32 @@ if ($entry_found) {
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title" id="score-ceiling-modal-label">Score Entered is Greater Than 50</h4>
+        <h4 class="modal-title" id="score-ceiling-modal-label"><?php echo $label_score_greater_50; ?></h4>
       </div>
       <div class="modal-body">
-        <p>The score you entered is greater than 50, the maximum score for any entry. Please review and revise your consensus score.</p>
+        <p><?php echo $evaluation_info_058; ?></p>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-success" data-dismiss="modal">OK</button>
+        <button type="button" class="btn btn-success" data-dismiss="modal"><?php echo $label_ok; ?></button>
       </div>
     </div>
   </div>
 </div>
+
 <div class="modal fade" id="score-disparity-judges-modal" tabindex="-1" role="dialog" aria-labelledby="score-disparity-judges-modal-label">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title" id="score-disparity-judges-modal-label">Score is Out of Score Range</h4>
+        <h4 class="modal-title" id="score-disparity-judges-modal-label"><?php echo $label_score_out_range; ?></h4>
       </div>
       <div class="modal-body">
-        <p>The score you provided for this entry is outside of the scoring difference of <?php echo $score_range; ?> between judges.</p>
+        <p><?php echo $evaluation_info_059; ?></p>
+        <p><?php echo "<strong>".$label_score_range.":</strong> ".$score_range; ?></p>
       </div>
       <div class="modal-footer">
-        <button id="disparity-button-submit" type="button" class="btn btn-primary" data-dismiss="modal">Submit Anyway</button>
-        <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+        <button id="disparity-button-submit" type="button" class="btn btn-primary" data-dismiss="modal"><?php echo $label_submit; ?></button>
+        <button type="button" class="btn btn-danger" data-dismiss="modal"><?php echo $label_cancel; ?></button>
       </div>
     </div>
   </div>

@@ -11,6 +11,8 @@
  *
  * TO DO:
  *    - Add check to see if all scores have been imported. If so, don't show or disable the import button.
+ *    - Dynamically check at interval to see if entry currently evaluating has score entered by another judge.
+ *    - Add elapsed time display.
  *    - Check translation items
  *
  *    -----------------------------------------------------------------------------------------
@@ -806,17 +808,15 @@ if ($totalRows_table_assignments > 0) {
 		$count_none = count($eval_no_evaluations);
 		$count_unique = get_evaluation_count('unique');
 
-		if ($judging_open) $total_evals_alert .= "<p><i style=\"padding-right: 5px;\" class=\"fa fa-lg fa-clock-o\"></i> <span id=\"judging-ends\"></span> to judging close.</p>";
-
 		if (($admin) && ($totalRows_eval_sub > 0)) {
 
-			$total_evals_alert .= sprintf("<i style=\"padding-right: 5px;\" class=\"fa fa-lg fa-comments-o\"></i><strong>%s</strong> %s %s %s, %s.", $totalRows_eval_sub, $evaluation_info_031, strtolower($reg_closed_text_005), $current_time, $current_date_display);
+			$total_evals_alert .= sprintf("<i style=\"padding-right: 5px;\" class=\"fa fa-comments-o\"></i><strong>%s</strong> %s %s %s, %s.", $totalRows_eval_sub, $evaluation_info_031, strtolower($reg_closed_text_005), $current_time, $current_date_display);
 			
 			if (($judging_open && (time() > $two_days)) && ($count_none > 0)) {
-				if ($count_none == 1) $total_evals_alert .= " <button type=\"button\" class=\"btn btn-default btn-xs\" data-toggle=\"collapse\" data-target=\"#no-eval\">".$count_none." Entry Without an Evaluation <i class=\"fa fa-chevron-down small\"></i></button>";
-				else $total_evals_alert .= " <button type=\"button\" class=\"btn btn-default btn-xs\" data-toggle=\"collapse\" data-target=\"#no-eval\">".$count_none." Entries Without an Evaluation <i class=\"fa fa-chevron-down small\"></i></button>";
+				if ($count_none == 1) $total_evals_alert .= sprintf(" <button type=\"button\" class=\"btn btn-default btn-xs\" data-toggle=\"collapse\" data-target=\"#no-eval\">%s %s <i class=\"fa fa-chevron-down small\"></i></button>",$count_none,$label_entry_without_eval);
+				else $total_evals_alert .= sprintf(" <button type=\"button\" class=\"btn btn-default btn-xs\" data-toggle=\"collapse\" data-target=\"#no-eval\">%s %s <i class=\"fa fa-chevron-down small\"></i></button>",$count_none,$label_entries_without_eval);
 				$total_evals_alert .= "<section style=\"margin-top: 15px;\" class=\"collapse small\" id=\"no-eval\">";
-				$total_evals_alert .= "<p>These entries do not have at least one evaluation:</p>";
+				$total_evals_alert .= sprintf("<p>%s:</p>",$evaluation_info_049);
 				$total_evals_alert .= "<ul class=\"list-inline\">";
 				asort($eval_no_evaluations);
 				foreach ($eval_no_evaluations as $value) {
@@ -827,18 +827,17 @@ if ($totalRows_table_assignments > 0) {
 			}
 
 			else {
-				if ($count_unique == 1) $total_evals_alert .= " <strong>".$count_unique."</strong> entry with at least one evaluation.";
-				else $total_evals_alert .= " <strong>".$count_unique."</strong> entries with at least one evaluation.";
-				if ($count_none == 1) $total_evals_alert .= " <strong>".$count_none."</strong> entry without an evaluation.";
-				else $total_evals_alert .= " <strong>".$count_none."</strong> entries without an evaluation.";
+				$total_evals_alert .= sprintf("<br><i style=\"padding-right: 5px;\" class=\"fa fa-check-circle\"></i><strong>%s</strong>: %s",$label_entries_with_eval,$count_unique);
+				$total_evals_alert .= sprintf("<br><i style=\"padding-right: 5px;\" class=\"fa fa-times-circle\"></i><strong>%s</strong>: %s",$label_entries_without_eval,$count_none);
 			}
 		}
+
+		if ($judging_open) $total_evals_alert .= sprintf("<p><i style=\"padding-right: 5px;\" class=\"fa fa-clock-o\"></i><strong>%s:</strong> <span id=\"judging-ends\"></span></p>", $label_judging_close);
 
 		$total_evals_alert .= "</div>";
 
 ?>
 <script type="text/javascript" language="javascript">
-
 	function update_place_display(number,element_id,table_id) {
 		var value = $("#"+element_id).val();
 		if ((value == 0) || (value == "")) {
@@ -854,7 +853,6 @@ if ($totalRows_table_assignments > 0) {
 			$("#place-display-num-"+number).html(disp_val);
 		}
 	}
-
 	$(document).ready(function() {
 		$('#judge_assignments').dataTable( {
 			"bPaginate" : false,
@@ -876,7 +874,6 @@ if ($totalRows_table_assignments > 0) {
 	        });
 	    });
 	});
-	
 </script>
 <script src="<?php echo $base_url;?>js_includes/admin_ajax.min.js"></script>
 <?php
@@ -910,23 +907,14 @@ if (($admin) || ((!empty($table_assign_judge)) && (!$admin))) {
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title" id="noDupeModalLabel">Place Previously Selected</h4>
+        <h4 class="modal-title" id="noDupeModalLabel"><?php echo $label_place_previously_selected; ?></h4>
       </div>
       <div class="modal-body">
-      The place you specified has already been input for the table. Please choose another place or no place (None).
+      <?php echo $evaluation_info_048; ?>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-danger" data-dismiss="modal"><?php echo $label_close; ?></button>
       </div>
     </div>
   </div>
 </div>
-<script type="text/javascript" src="https://cdn.rawgit.com/hilios/jQuery.countdown/2.2.0/dist/jquery.countdown.min.js"></script>
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment-timezone/0.5.32/moment-timezone-with-data.min.js"></script>
-<script type="text/javascript">
-	var judging_end = moment.tz("<?php echo $judging_end; ?>","<?php echo get_timezone($_SESSION['prefsTimeZone']); ?>");
-	$("#judging-ends").countdown(judging_end.toDate(), function(event) {
-    	$(this).text(event.strftime('%-w weeks %-d days %-H:%M:%S'));
-  	});
-</script>

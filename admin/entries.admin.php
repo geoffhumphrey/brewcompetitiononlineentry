@@ -62,17 +62,18 @@ else {
 // Build table body and associated arrays
 
 
-if ($_SESSION['prefsEval'] == 1) {
-	// Check which evaluations exist
-	if ($dbTable == "default") {
+if ($dbTable == "default") {
+	if ($_SESSION['prefsEval'] == 1) {
 		$eval_db_table = TRUE;
 		$evals = eval_exits("default","default",$prefix."evaluation");
 	}
-	elseif (check_setup($prefix."evaluation_".$archive_suffix,$database)) {
+}
+
+else {
+	if (check_setup($prefix."evaluation_".$archive_suffix,$database)) {
 		$eval_db_table = TRUE;
 		$evals = eval_exits("default","default",$prefix."evaluation_".$archive_suffix);
 	}
-	
 }
 
 if ($totalRows_log > 0) {
@@ -114,14 +115,10 @@ if ($totalRows_log > 0) {
 		if (isset($row_log['brewJudgingNumber'])) $judging_number = sprintf("%06s",$row_log['brewJudgingNumber']);
 
 		// If using electronic scoresheets, build links
-		if (($_SESSION['prefsEval'] == 1) && ($eval_db_table)) {
-
-			// if ($row_judging_prefs['jPrefsScoresheet'] == 1) $output_form = "full-scoresheet";
-			// if ($row_judging_prefs['jPrefsScoresheet'] == 2) $output_form = "checklist-scoresheet";
-			// if ($row_judging_prefs['jPrefsScoresheet'] == 3) $output_form = "structured-scoresheet";
+		if ($eval_db_table) {
 
 			if (in_array($row_log['id'], $evals)) {
-			
+
 				$scoresheet_eval = TRUE;
 				
 				$query_style = sprintf("SELECT id,brewStyleType FROM %s WHERE brewStyleVersion='%s'AND brewStyleGroup='%s' AND brewStyleNum='%s'",$prefix."styles",$style_set,$row_log['brewCategorySort'],$row_log['brewSubCategory']);
@@ -134,6 +131,7 @@ if ($totalRows_log > 0) {
 				if ($dbTable != "default") $view_link .= "&amp;dbTable=".$prefix."evaluation_".$archive_suffix;
 				$print_link = $base_url."output/print.output.php?section=evaluation&amp;go=default&amp;view=all&amp;id=".$row_log['id'];
 				if ($dbTable != "default") $print_link .= "&amp;dbTable=".$prefix."evaluation_".$archive_suffix;
+
 			}
 		
 		}
@@ -392,7 +390,7 @@ if ($totalRows_log > 0) {
 			$entry_actions .= "<a class=\"hide-loader\" href=\"mailto:".$row_log['brewerEmail']."\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Email the entry&rsquo;s owner, ".$row_log['brewerFirstName']." ".$row_log['brewerLastName'].", at ".$row_log['brewerEmail']."\"><span class=\"fa fa-lg fa-envelope\"></span></a> ";
 		}
 
-		if (($_SESSION['prefsEval'] == 1) && ($eval_db_table)) {
+		if ($eval_db_table) {
 			if ($scoresheet_eval) {
 				$entry_actions .= "<a id=\"modal_window_link\" class=\"hide-loader\" href=\"".$print_link."\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Print the Scoresheets for &ldquo;".$entry_name."&rdquo;\"><i class=\"fa fa-lg fa-file-text\"></i></a> ";
 				$entry_actions .= "<a id=\"modal_window_link\" class=\"hide-loader\" href=\"".$view_link."\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"View the Scoresheets for &ldquo;".$entry_name."&rdquo;\"><span class=\"fa-stack\"><i class=\"fa fa-square fa-stack-2x\"></i><i class=\"fa fa-stack-1x fa-file-text fa-inverse\"></i></span></a> ";
@@ -479,8 +477,6 @@ if ($totalRows_log > 0) {
 			if ((($dbTable == "default") && ($_SESSION['prefsDisplaySpecial'] == "E")) || ($dbTable != "default")) $entry_actions .= $scoresheet_link_1;
 			if ((($dbTable == "default") && ($_SESSION['prefsDisplaySpecial'] == "J")) || ($dbTable != "default")) $entry_actions .= $scoresheet_link_2;
 		}
-
-
 
 		if ((empty($entry_allergen_row)) && (!empty($entry_unconfirmed_row))) $entry_row_color = $entry_unconfirmed_row;
 		elseif ((!empty($entry_allergen_row)) && (empty($entry_unconfirmed_row))) $entry_row_color = $entry_allergen_row;

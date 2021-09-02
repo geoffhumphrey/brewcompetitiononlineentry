@@ -959,7 +959,7 @@ if ($manage_tables_default) { ?>
                 <div class="modal-content">
                     <div class="modal-header bcoem-admin-modal">
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                        <h4 class="modal-title" id="compOrgModalLabel">Competition Organization Info</h4>
+                        <h4 class="modal-title" id="compOrgModalLabel">Judging/Competition Organization Info</h4>
                     </div>
                     <div class="modal-body">
                         <p><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging_preferences">Competition organization preferences</a> are set to:</p>

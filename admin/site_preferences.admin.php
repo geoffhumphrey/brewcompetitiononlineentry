@@ -118,7 +118,7 @@ if ($section == "admin") { ?>
 <p class="lead"><?php echo $_SESSION['contestName'].": Set Website Preferences"; ?></p>
 <div class="bcoem-admin-element hidden-print">
 	<div class="btn-group" role="group" aria-label="...">
-		<a class="btn btn-default" href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging_preferences"><span class="fa fa-cog"></span> Competition Organization Preferences</a>
+		<a class="btn btn-default" href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging_preferences"><span class="fa fa-cog"></span> Judging/Competition Organization Preferences</a>
 	</div><!-- ./button group -->
 </div>
 <?php } ?>

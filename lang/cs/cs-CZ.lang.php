@@ -2,93 +2,97 @@
 /**
  * Module:      cs-CZ.lang.php
  * Description: This module houses all display text in the Czech language.
- * Updated:     July 10, 2020
+ * Updated:     September 1, 2021
+ *  
+ * To translate this file, first make a copy of it and rename it with the 
+ * language name in the title.
+ * 
+ * ==============================
+ * 
+ * Use ISO 169-2 Standards for and WWW3C Language Tag Standards for naming 
+ * of language files. Use the ALPHA-2 letter code whenever possible.
+ * 
+ * ISO 169-2:
+ * @see https://www.loc.gov/standards/iso639-2/php/code_list.php
+ * 
+ * WWW3 Language Tags:
+ * @see https://www.w3.org/International/articles/language-tags/
+ * 
+ * WWW3 Choosing a Language Tag:
+ * @see https://www.w3.org/International/questions/qa-choosing-language-tags
+ * 
+ * To determine a subtag, go to the IANA Language Subtag Registry:
+ * @see http://www.iana.org/assignments/language-subtag-registry
+ * 
+ * According to the WWW3:
+ * 
+ * "Always bear in mind that the golden rule is to keep your language tag 
+ * as short as possible. Only add further subtags to your language tag if 
+ * they are needed to distinguish the language from something else in the 
+ * context where your content is used..."
+ * 
+ * "Unless you specifically need to highlight that you are talking about 
+ * Italian as spoken in Italy you should use it 'for Italian, and not 
+ * it-IT. The same goes for any other possible combination."
+ * 
+ * "You should only use a region subtag if it contributes information 
+ * needed in a particular context to distinguish this language tag from 
+ * another one; otherwise leave it out."
+ * 
+ * ================ FORMAT =================
+ * 
+ * Always indicate the primary languge subtag first, then a dash (-) 
+ * and then the region subtag. The region subtag is in all capital letters 
+ * or a three digit number.
+ * 
+ * Examples:
+ * en-US
+ * English spoken in the United States
+ * en is the PRIMARY language subtag
+ * US is the REGION subtag (note the capitalization)
+ * 
+ * es-ES
+ * Spanish spoken in Spain
+ * 
+ * es-419
+ * Spanish spoken in Latin America
+ * 
+ * ========================================
+ * 
+ * Items that need translation into other languages are housed here in 
+ * PHP variables - each start with a dollar sign ($). The words, phrases,
+ * etc. (called strings) that need to be translated are housed between 
+ * double-quotes ("). Please, ONLY alter the text between the double quotes!
+ * 
+ * For example, a translated PHP variable would look like this (encoding is utf8mb4; therefore, 
+ * accented and other special characters are acceptable):
+ * 
+ * English (US) before translation:
+ * $label_volunteer_info = "Volunteer Info";
+ * 
+ * Spanish translated:
+ * $label_volunteer_info = "Información de Voluntarios";
+ * 
+ * Portuguese translated:
+ * $label_volunteer_info = "Informações Voluntário";
+ * 
+ * ========================================
+ * 
+ * Please note: the strings that need to be translated MAY contain HTML 
+ * code. Please leave this code intact! For example:
+ * 
+ * English (US):
+ * $beerxml_text_008 = "Browse for your BeerXML compliant file on your hard drive and click <em>Upload</em>.";
+ * 
+ * Spanish:
+ * $beerxml_text_008 = "Buscar su archivo compatible BeerXML en su disco duro y haga clic en <em>Cargar</em>.";
+ * 
+ * Note that the <em>...</em> tags were not altered. Just the word "Upload" 
+ * to "Cargar" between those tags.
+ * 
+ * ==============================
+ * 
  */
-
-/*
-
---------------------------------------------------------------------------------------------------
-
-To translate this file, first make a copy of it and rename it with the language name in the title.
-
-==============================
-
-Use ISO 169-2 Standards for and WWW3C Language Tag Standards for naming of language files. Use the
-ALPHA-2 letter code whenever possible.
-
-ISO 169-2:
-https://www.loc.gov/standards/iso639-2/php/code_list.php
-
-WWW3 Language Tags:
-https://www.w3.org/International/articles/language-tags/
-
-WWW3 Choosing a Language Tag:
-https://www.w3.org/International/questions/qa-choosing-language-tags
-
-To determine a subtag, go to the IANA Language Subtag Registry:
-http://www.iana.org/assignments/language-subtag-registry
-
-According to the WWW3:
-
-"Always bear in mind that the golden rule is to keep your language tag as short as possible. Only
-add further subtags to your language tag *if they are needed to distinguish the language from
-something else in the context where your content is used..."
-
-"Unless you specifically need to highlight that you are talking about Italian as spoken in Italy
-you should use it 'for Italian, and not it-IT. The same goes for any other possible combination."
-
-"You should only use a region subtag if it contributes information needed in a particular context
-to distinguish this language tag from another one; otherwise leave it out."
-
-================ FORMAT =================
-
-Always indicate the primary languge subtag first, then a dash (-) and then the region subtag. The
-region subtag is in all capital letters or a three digit number.
-
-Examples:
-en-US
-English spoken in the United States
-en is the PRIMARY language subtag
-US is the REGION subtag (note the capitalization)
-
-es-ES
-Spanish spoken in Spain
-
-es-419
-Spanish spoken in Latin America
-
-========================================
-
-Items that need translation into other languages are housed here in PHP variables - each start with
-a dollar sign ($). The words, phrases, etc. (called strings) that need to be translated are housed
-between double-quotes ("). Please, ONLY alter the text between the double quotes!
-
-For example, a translated PHP variable would look like this (encoding is utf8mb4; therefore, accented and other special characters are acceptable):
-
-English (US) before translation:
-$label_volunteer_info = "Volunteer Info";
-
-Spanish translated:
-$label_volunteer_info = "Información de Voluntarios";
-
-Portuguese translated:
-$label_volunteer_info = "Informações Voluntário";
-
-========================================
-
-Please note: the strings that need to be translated MAY contain HTML code. Please leave this code intact! For example:
-
-English (US):
-$beerxml_text_008 = "Browse for your BeerXML compliant file on your hard drive and click <em>Upload</em>.";
-
-Spanish:
-$beerxml_text_008 = "Buscar su archivo compatible BeerXML en su disco duro y haga clic en <em>Cargar</em>.";
-
-Note that the <em>...</em> tags were not altered. Just the word "Upload" to "Cargar" between those tags.
-
-==============================
-
-*/
 
 include (INCLUDES.'url_variables.inc.php');
 
@@ -121,9 +125,11 @@ else $row_limits['prefsEntryLimitPaid'] = "";
 
 $php_version = phpversion();
 
-// ***********************************************************************************
-// BEGIN TRANSLATIONS BELOW!
-// ***********************************************************************************
+/**
+ * ------------------------------------------------------------------------
+ * BEGIN TRANSLATIONS BELOW
+ * ------------------------------------------------------------------------
+ */
 
 $j_s_text = "";
 if (strpos($section, "step") === FALSE) {
@@ -133,9 +139,6 @@ if (strpos($section, "step") === FALSE) {
 		else $j_s_text = "Obsluha nebo degustátor"; // missing punctuation intentional
 	}
 }
-
-// -------------------- Global Labels - mostly used for titles and navigation --------------------
-// All labels are capitalized and without punctuation
 
 $label_home = "Domů";
 $label_welcome = "Vítejte";
@@ -458,24 +461,18 @@ $label_admin_upload_img = "Nahrát obrázky";
 $label_admin_upload_doc = "Nahrát scoresheety a další dokumenty";
 $label_admin_password = "Změnit uživatelské heslo";
 $label_admin_edit_account = "Upravit uživatelský účet";
-
-// Sidebar Labels
 $label_account_summary = "Přehled mého účtu";
 $label_confirmed_entries = "Potvrzených vzorků";
 $label_unpaid_confirmed_entries = "Neuhrazených potvrzených vzorků";
 $label_total_entry_fees = "Celkové poplatky";
 $label_entry_fees_to_pay = "Poplatky k úhradě";
 $label_entry_drop_off = "Entry Drop-Off";
-
-// v2.1.9
 $label_maintenance = "Údržba";
 $label_judge_info = "Informace o degustátorovi";
 $label_cellar = "Můj sklep";
 $label_verify = "Ověřit";
 $label_entry_number = "Číslo vzorku";
 
-// -------------------- Headers --------------------
-// Missing punctuation intentional for all
 $header_text_000 = "Instalace byla úspěšná.";
 $header_text_001 = "Jste nyní přihlášeni, vše je připraveno pro další nastavení webu vaší soutěže.";
 $header_text_002 = "Bohužel, oprávnění k vašemu config.php se nepodařilo změnit.";
@@ -582,18 +579,10 @@ $header_text_105 = "Pro příjmutí a potvrzení vašeho vzorku je třeba více 
 $header_text_106 = "Prohlédněte si ČERVENĚ zvýrazněné oblasti níže.";
 $header_text_107 = "Prosím, zvolte styl.";
 $header_text_108 = "Tento vzorek nelze příjmout ani potvrdit, dokud nebyl vybrán styl. Nepotvrzené vzorky mohou být ze systému smazány bez předchozího upozornění.";
-
-// v2.1.9
 $header_text_109 = "Byli jste zaregistrováni jako obsluha.";
 $header_text_110 = "Všechny vzorky byly označeny jako neuhrazené.";
 $header_text_111 = "Všechny vzorky byly označeny jako nepřijaté.";
 
-
-// -------------------- Navigation --------------------
-
-
-
-// -------------------- Alerts --------------------
 $alert_text_000 = "Oprávnění nejvyššího správce a správce přidělujte uživatelům s opatrností.";
 $alert_text_001 = "Vyčištění dat dokončeno.";
 $alert_text_002 = "Proměnná &#36;setup_free_access v config.php je momentálně nastavena na TRUE.";
@@ -661,17 +650,10 @@ $alert_email_not_valid = "Formát email je neplatný!";
 $alert_email_in_use = "Zadaná emailová adresa se již používá, prosím zvolte jinou.";
 $alert_email_not_in_use = "Gratulujeme! Zadaná emailová adresa je volná.";
 
-// ----------------------------------------------------------------------------------
-// Public Pages
-// ----------------------------------------------------------------------------------
-
-// v2.1.9
 $comps_text_000 = "Prosím, zvolte v seznamu níže, kterou soutěž chcete otevřít.";
 $comps_text_001 = "Aktuální soutěž:";
 $comps_text_002 = "Momentálně nejsou k dispozici žádné soutěže s otevřeným přihlašováním.";
 $comps_text_003 = "Momentálně nejsou k dispozici žádné soutěže s přihlašováním, které se uzavírá během následujících 7 dnů.";
-
-// -------------------- BeerXML --------------------
 
 $beerxml_text_000 = "Import vzorků není dostupný.";
 $beerxml_text_001 = "byl nahrán a pivo přidáno do vašeho seznamu vzorků.";
@@ -686,12 +668,6 @@ $beerxml_text_009 = "Zvolte soubor BeerXML";
 $beerxml_text_010 = "Soubor nevybrán...";
 $beerxml_text_011 = "vzorků přidáno"; // lower-case and missing punctuation intentional
 $beerxml_text_012 = "vzorek přidán"; // lower-case and missing punctuation intentional
-
-// -------------------- Best of Show --------------------
-// None
-
-
-// -------------------- Brew (Add Entry) --------------------
 
 $brew_text_000 = "Klikněte sem pro zobrazení podrobností stylu"; // missing punctuation intentional
 $brew_text_001 = "Degustátoři nebudou znát název vašeho vzorku.";
@@ -721,7 +697,6 @@ $brew_text_024 = "Cukrotvorná teplota, atd.";
 $brew_text_025 = "Délka dokvašování ve dnech.";
 $brew_text_026 = "Délka dalšího kvašení ve dnech.";
 
-// -------------------- Brewer (Account) --------------------
 $brewer_text_000 = "Prosím, zadejte jméno pouze <em>jedné</em> osoby.";
 $brewer_text_001 = "Zvolte jednu z otázek. Tato otázka bude použita pro ověření vaší identity když zapomente heslo.";
 $brewer_text_003 = "Abyste mohli být vybráni na GABF Pro-Am brewing opportunity, musíte být členem AHA.";
@@ -740,20 +715,14 @@ $brewer_text_015 = "Jste ochotni se soutěže účastnit jako obsluha?";
 $brewer_text_016 = "Moje účast v této degustaci je zcela dobrovolná. Jsem si vědom(a) toho, že degustace zahrnuje konzumaci alkoholických nápojů a může ovlivnit moje vnímání a reakce.";
 $brewer_text_017 = "Klikněte nebo se dotkněte tlačítka výše pro rozbalení oblíbených pivních stylů.";
 $brewer_text_018 = "Zaškrtnutím tohoto políčka fakticky podepisuji právní dokument, kterým přijímám odpovědnost za svoje činy a chování a zbavuji organizátory, jednotlivě nebo společně, odpovědnosti za tyto činy a chování.";
-
-// v2.1.9
 $brewer_text_019 = "Pokud se chcete účastnit soutěže jako degustátor, klikněte nebo se dotkněte tlačítka výše pro zadání informací souvisejících s touto rolí.";
 $brewer_text_020 = "Jste ochotni se soutěže účastnit jako personál?";
 $brewer_text_021 = "Personál soutěže jsou osoby, které plní rozličné role v organizaci a uskutečnění soutěže před, během a po skončení degustace. Degustátoři a obsluha mohou taktéž být členy personálu. Pokud je soutěž uznaná BJCP, získají tito, po skončení soutěže, body do svého profilu.";
 
-// -------------------- Contact --------------------
 $contact_text_000 = "Pro kontaktování osob zodpovědných za soutěž využijte odkazy níže:";
 $contact_text_001 = "Pro kontaktování organizátora využijte formulář níže. Pole označená hvězdičkou jsou povinná.";
 $contact_text_002 = "Kopie byla odeslána na emailovou adresu, kterou jse uvedli.";
 $contact_text_003 = "Chcete odeslat další zprávu?";
-
-// -------------------- Default (Home) -------------------
-
 
 $default_page_text_000 = "Nebyly zvolena žádná místa příjmu vzorků.";
 $default_page_text_001 = "Přidat místo příjmu vzorků?";
@@ -795,10 +764,9 @@ $reg_open_text_011 = "Abyste mohli vložit vaše piva do soutěže";
 $reg_open_text_012 = "zaregistrujte se, prosím";
 $reg_open_text_013 = ", pokud již máte účet.";
 $reg_open_text_014 = "použijte formulář přidání vzorků,";
-
-// v2.1.9
 $reg_open_text_015 = "Registrace degustátorů je";
 $reg_open_text_016 = "Registrace obsluhy je";
+
 $reg_closed_text_000 = "Díky a hodně štěstí všem, kteří se zaregistrovali do soutěže";
 $reg_closed_text_001 = "Momentálně máme";
 $reg_closed_text_002 = "zaregistrovaných soutěžících, degustátorů a obsluhujících.";
@@ -808,12 +776,11 @@ $reg_closed_text_005 = "Ke dni celkem";
 $reg_closed_text_006 = "přijatých a zpracovaných vzorků. Číslo se bude měnit podle toho, jak budeme přebírat vzorky na místě příjmu vzorků pro posouzení.";
 $reg_closed_text_007 = "Data degustace nebyla zatím určena. Prosím, navštivte web později.";
 $reg_closed_text_008 = "Map to";
+
 $judge_closed_000 = "Díky všem, kteří se zúčastnili soutěže";
 $judge_closed_001 = "Celkem bylo posouzeno";
 $judge_closed_002 = "vzorků a účastnilo se";
 $judge_closed_003 = "soutěžících, degustátorů a obsluhujících.";
-
-// -------------------- Entry Info --------------------
 
 $entry_info_text_000 = "Účet si budete moci vytvořit počínaje";
 $entry_info_text_001 = "do";
@@ -863,13 +830,6 @@ $entry_info_text_044 = "Zobrazit na mapě místo";
 $entry_info_text_045 = "Klikněte/dotkněte se pro požadované informace o vzorku";
 $entry_info_text_046 = "Pokud je název stylu s odkazem, má styl zvláštní požadavky na vzorek. Klikněte nebo se dotkněte názvu pro zobrazení požadavků podkategorie.";
 
-
-// -------------------- Footer --------------------
-
-// -------------------- Judge Info --------------------
-
-// -------------------- List (User Entry List) --------------------
-
 $brewer_entries_text_000 = "U prohlížeče Firefox existuje známá chyba s tiskem.";
 $brewer_entries_text_001 = "Máte nepotvrzené vzorky.";
 $brewer_entries_text_002 = "U každého vzorku níže, označeného ikonou <span class=\"fa fa-lg fa-exclamation-circle text-danger\"></span>, klikněte na ikonu <span class=\"fa fa-lg fa-pencil text-primary\"></span> pro jeho prohlédnutí a potvrzení údajů. Nepotvrzené vzorky mohou být smazány ze systému bez předchozího upozornění.";
@@ -887,12 +847,7 @@ $brewer_entries_text_013 = "Následně budete moci přidat další vzorky do";
 $brewer_entries_text_014 = "Zatím jste nevložili žádné vzorky.";
 $brewer_entries_text_015 = "Momentálně nelze smazat tento vzorek.";
 
-// -------------------- Login --------------------
-
-// -------------------- Past Winners --------------------
 $past_winners_text_000 = "Zobrazit dřívější výherce:";
-
-// -------------------- Pay for Entries --------------------
 
 $pay_text_000 = "Jelikož již uplynul čas pro registraci, vkládání vzorků, zasílání a přejímku, platby nejsou již přijímány.";
 $pay_text_001 = "Kontaktujte zástupce soutěže, máte-li nějaké dotazy.";
@@ -925,8 +880,6 @@ $pay_text_027 = "Klikněte na <em>Můj účet</em> výše pro zobrazení seznamu
 $pay_text_028 = "Máte nepotvrzené vzorky, které <em>nejsou</em> zahrnuty do celkového součtu poplatků níže.";
 $pay_text_029 = "Prosím, otevřete si seznam vzorků a potvrďte všechny vaše vzorky. Nepotvrzené vzorky mohou být smazány ze systému bez předchozího varování.";
 
-// -------------------- QR --------------------
-
 // Ignore the next four lines
 if (strpos($view, "^") !== FALSE) {
 	$qr_text_019 = sprintf("%04d",$checked_in_numbers[0]);
@@ -956,12 +909,6 @@ $qr_text_016 = "Potřebujete aplikaci pro skenování QR kódů? Hledejte na <a 
 $qr_text_017 = "Pro využití této funkce je nutná aplikace pro skenování QR kódů.";
 $qr_text_018 = "Spusťte aplikaci na svém mobilním zařízení, naskenujte QR kód na štítku lahve a zadejte heslo. Tím příjmete vzorek.";
 
-
-// -------------------- Registration Open --------------------
-
-// -------------------- Registration Closed --------------------
-
-// -------------------- Register --------------------
 $register_text_000 = "Je dobrovolník ";
 $register_text_001 = "Jste ";
 $register_text_002 = "Registrace je uzavřena.";
@@ -998,8 +945,6 @@ $register_text_032 = "Prosím, zadejte hlavní telefonní číslo.";
 $register_text_033 = "Pouze členové American Homebrewers Association mají nárok na příležitost Great American Beer Festival Pro-Am.";
 $register_text_034 = "Abyste se mohli zaregistrovat, musíte potvrdit zaškrtnutím pole, že souhlasíte s prohlášením níže.";
 
-// -------------------- Sidebar --------------------
-
 $sidebar_text_000 = "Registrace degustátorů a obsluhy přijímáme od";
 $sidebar_text_001 = "Registrace obsluhy přijímáme od";
 $sidebar_text_002 = "Registrace degustátorů";
@@ -1026,12 +971,6 @@ $sidebar_text_022 = "Pro předání vzorku využijte";
 $sidebar_text_023 = "místo zaslání vzorků";
 $sidebar_text_024 = "Data degustací nebyla ještě stanovena. Prosím, vraťte se později.";
 $sidebar_text_025 = "je zaregistrováno k datu";
-
-// -------------------- Sponsors --------------------
-// NONE
-
-
-// -------------------- Styles ---------------------
 
 $styles_entry_text_07C = "Účastník musí uvést, zda je vzorek Munich Kellerbier (světlý, založený na Helles) nebo Franconian Kellerbier (polotmavý, založený na Märzenu). Účastník může taktéž uvést jiný druh Kellerbieru založený na jiném základním stylu, jakým může být například Pils, Bock nebo Schwarzbier, musí však uvést popis tohoto stylu pro degustátory.";
 $styles_entry_text_09A = "Účastník musí uvést, zda je vzorek světlou nebo tmavou variantou.";
@@ -1081,17 +1020,10 @@ $styles_entry_text_C2D = "Entrants MUST specify starting gravity, final gravity 
 $styles_entry_text_C2E = "Entrants MUST specify carbonation level (3 levels). Entrants MUST specify sweetness (5 categories). Entrants MUST specify all botanicals added. If hops are used, entrant must specify variety/varieties used.";
 $styles_entry_text_C2F = "Entrants MUST specify all ingredients. Entrants MUST specify carbonation level (3 levels). Entrants MUST specify sweetness (5 categories).";
 
-
-// -------------------- User (Edit Email) --------------------
-
 $user_text_000 = "Je vyžadována nová emailová adresa v platném tvaru.";
 $user_text_001 = "Zadejte původní heslo.";
 $user_text_002 = "Zadejte nové heslo.";
 $user_text_003 = "Prosím, zaškrtněte toto pole, pokud chcete změnit svou emailovou adresu.";
-
-// -------------------- Volunteers --------------------
-
-// -------------------- Volunteers --------------------
 
 $volunteers_text_000 = "Pokud jste již zaregistrovaní,";
 $volunteers_text_001 = "a potovm zvolte <em>Upravit účet</em> z nabídky můj účet uvozené ikonou";
@@ -1102,8 +1034,6 @@ $volunteers_text_005 = "Jelikož jste již zaregistrováni,";
 $volunteers_text_006 = "otevřete si podrobnosti svého účtu,";
 $volunteers_text_007 = "pro ověření, zda jste přihlášeni jako dobrovolník pro degustace nebo obsluha";
 $volunteers_text_008 = "Pokud se chcete účastnit jako degustátor nebo obsluha, vraťte se prosím nejdříve";
-
-// v2.1.9
 $volunteers_text_009 = "Pokud chcete být dobrovolníkem, součástí personálu soutěže, prosím zaregistrujte se nebo ve svém účtu zvolte, že chcete být součástí personálu.";
 $volunteers_text_010 = "";
 
@@ -1125,17 +1055,11 @@ $login_text_014 = "klikněte sem pro znovuzaslání na";
 $login_text_015 = "Pokud si nevybavíte odpověď na bezpečnostní otázku, kontaktujte zástupce soutěže nebo správce webu.";
 $login_text_016 = "Zaslat na";
 
-// -------------------- Winners --------------------
-
 $winners_text_000 = "U tohoto stolu nebyli zadáni žádní výherci. Zkuste to později, prosím.";
 $winners_text_001 = "Vítězové nebyli ještě zveřejněni. Zkuste to později, prosím.";
 $winners_text_002 = "Zvolená struktura udílení cen je udílení podle stolů. Zvolte místa udílení stolu jako celku níže.";
 $winners_text_003 = "Zvolená struktura udílení cen je udílení podle kategorie. Zvolte místa udílení pro každou kategorii jako celku (u tohoto stolu může být více než jedna).";
 $winners_text_004 = "Zvolená struktura udílení cen je podle podkategorie. Zvolte místa udílení pro každou z podkategorií níže (u tohoto stolu může být více než jedna).";
-
-// ----------------------------------------------------------------------------------
-// Output
-// ----------------------------------------------------------------------------------
 
 $output_text_000 = "Děkujeme za účast v soutěži";
 $output_text_001 = "Souhrn vašich vzorků, hodnocení a míst je níže.";
@@ -1166,19 +1090,9 @@ $output_text_025 = "Celkem dostupných bodů pro personál";
 $output_text_026 = "Styly této kategorie nejsou v této soutěži přijímány.";
 $output_text_027 = "odkaz na Beer Judge Certification Program Style Guidelines";
 
-// ----------------------------------------------------------------------------------
-// Maintenance
-// ----------------------------------------------------------------------------------
-
-// v2.1.9
 $maintenance_text_000 = "Správce webu stránku dočasně odpojil pro provedení údržby.";
 $maintenance_text_001 = "Zkuste to později, prosím.";
 
-// ----------------------------------------------------------------------------------
-// Version 2.1.10-2.1.12 Additions
-// ----------------------------------------------------------------------------------
-
-// -------------------- Labels --------------------
 $label_entry_numbers = "Čísla vzorků"; // For PayPal IPN Email
 $label_status = "Stav"; // For PayPal IPN Email
 $label_transaction_id = "ID transakce"; // For PayPal IPN Email
@@ -1244,25 +1158,21 @@ $label_jump_to = "Přejít na...";
 $label_top = "Nahoru";
 $label_bjcp_cider = "Degustátor cideru";
 
-// -------------------- Headers --------------------
 $header_text_112 = "Nemáte dostatečná oprávnění pro provedení této akce.";
 $header_text_113 = "Můžete upravovat údaje pouze svého účtu.";
 $header_text_114 = "Jako správce můžete upravit údaje uživatelských účtů přes nabídku Admin &quot; Účastníci a vzorky &quot; Správa účastníků.";
 $header_text_115 = "Výsledky byly zveřejněny.";
 $header_text_116 = "Pokud v rozumném čase nedostanete email, kontaktujte představitele soutěže nebo správce webu aby vám obnovil heslo.";
 
-// -------------------- Alerts --------------------
 $alert_text_082 = "Jelikož jste se zaregistrovali jako degustátor nebo obsluha, nemáte dovoleno vkládat do vašeho účtu vzorky. Toto mohou činit pouze představitelé organizací.";
 $alert_text_083 = "Přidávání nebo úprava vzorků nejsou k dispozici.";
 $alert_text_084 = "Jako správce můžete přidat vzorky k účtu organizace pomocí položky &quot;Přidat vzorek pro...&quot; z rozbalovacího menu na stránce správy Vzorky a účastníci &gt; Správa vzorků.";
 $alert_text_085 = "Nebudete si moci vytisknout žádné dokumenty vzorku (např. štítky na lahve) dokud nebude platba potvrzena a vzorek níže označen jako &quot;uhrazený&quot;.";
 
-// -------------------- Brew (Add Entry) --------------------
 $brew_text_027 = "Tento styl Brewers Association vyžaduje prohlášení od sládka ohledně zvláštního charakteru produktu. Prohlédněte si <a href=\"https://www.brewersassociation.org/resources/brewers-association-beer-style-guidelines/\" target=\"_blank\">BA Style Guidelines</a> pro podrobné informace.";
 $brew_text_028 = "***NENÍ POVINNÉ*** Vložte sem informace, které jsou uvedeny v guidelines jako ty, které MŮŽETE uvést.";
 $brew_text_029 = "Úprava správce vypnuta. Váš profil je považován za osobní a ne profil organizace a tudíž nemá nárok na přidání vzorků. Pro přidání vzorků za organizaci, otevřete si seznam Správa vzorků a zvolte organizaci v nabídce &quot;Přidat vzorek pro...&quot;";
 
-// v2.1.13
 $brew_text_030 = "mléko / laktóza";
 $brew_text_031 = "vejce";
 $brew_text_032 = "ryby";
@@ -1273,7 +1183,6 @@ $brew_text_036 = "pšenice";
 $brew_text_037 = "sójové boby";
 $brew_text_038 = "Obsahuje tento vzorek alergeny? Běžnými alergeny může být mléko (včetně laktózy), vejce, ryby, korýři, skořápkové plody, podzemnice olejná (arašídy), pšenice, sójové boby a podobně.";
 
-// -------------------- Brewer (Account) --------------------
 $brewer_text_022 = "Podsládka budete moci uvést při vkládání vzorků.";
 $brewer_text_023 = "Zvolte &quot;Žádný&quot;, pokud nejste členy žádného klubu. Zvolte &quot;Jiný&quot; pokud není váš klub na seznamu - <strong>použijte funkci hledání</strong>.";
 $brewer_text_024 = "Prosím, zadejte křestní jméno.";
@@ -1287,21 +1196,15 @@ $brewer_text_031 = "Prosím, zvolte zemi.";
 $brewer_text_032 = "Prosím, zadejte název své organizace.";
 $brewer_text_033 = "Prosím, zvolte bezpečnostní otázku.";
 $brewer_text_034 = "Prosím, zadejte odpověď na bezpečnostní otázku.";
-
-// v2.1.12
 $brewer_text_035 = "Složili jste zkoušku BJCP Cider Judge?";
 
-// -------------------- Entry Info --------------------
 $entry_info_text_047 = "Pokud je u názvu stylu odkaz, má tento zvláštní požadavky na vzorek. Klikněte nebo se dotkněte názvu pro otevření stylů Brewers Association tak, jak jsou uvedeny na jejich webu.";
 
-
-// -------------------- List (User Entry List) --------------------
 $brewer_entries_text_016 = "Zadaný styl NENÍ přijatelný";
 $brewer_entries_text_017 = "Vzorky nebudou zobrazeny jako přijaté, dokud je personál soutěže takto neoznačí. Obvykle se tak stane PO TOM, co jsou přijaty veškeré vzorky ze všech míst příjmu a zaslání vzorků.";
 $brewer_entries_text_018 = "Dokumenty ke vzorku (např. štítky na lahve) nebude možné vytisknout dokud nebudou vzorky označeny jako uhrazené.";
 $brewer_entries_text_019 = "Tisk dokumentů vzorku není momentálně k dispozici.";
 $brewer_entries_text_020 = "Úprava vzorků není momentálně k dispozici. Pokud chcete vzorek upravit, kontaktujte představitele soutěže.";
-
 
 if (SINGLE) $brewer_info_000 = "Dobrý den";
 else $brewer_info_000 = "Děkujeme za účast na";
@@ -1318,13 +1221,11 @@ $brewer_info_010 = "Byli jste přiřazeni jako";
 $brewer_info_011 = "nebo";
 $brewer_info_012 = "Vytisknout štítky scoresheetů ";
 
-// -------------------- Pay --------------------
 $pay_text_030 = "Kliknutím na tlačítko &quot;Rozumím&quot; níže budete přesměrováni na PayPal pro provedení platby. Jakmile platbu <strong>dokončíte</strong>, PayPal vás přesměruje zpět na tuto stránku a odešle email s potvrzením transakce. <strong>Pokud bude vaše platba úspěšná, stav úhrady se zaktualizuje automaticky. Prosím, mějte na paměti, že to může chvilku trvat.</strong> Platební stránku obnovujte nebo si otevřete seznam svých vzorků.";
 $pay_text_031 = "Budete přesměrováni jinam";
 $pay_text_032 = "Platba není nutná. Děkujeme!";
 $pay_text_033 = "Máte jeden nebo několik neuhrazených vzorků. Klikněte nebo se dotkněte pro uhrazení.";
 
-// -------------------- Register --------------------
 $register_text_035 = "Informace, které poskytnete nad rámec názvu organizace jsou striktně pro náš záznam a případnou potřebu vás kontaktovat.";
 $register_text_036 = "Podmínkou vložení vzorku do soutěže je poskytnutí těchto informací včetně emailu kontaktní osoby a telefonního čísla. Název organizace může být uveden u vašeho vzorku, žádné další údaje však nezveřejníme.";
 $register_text_037 = "Potvrzení registace";
@@ -1338,11 +1239,9 @@ $register_text_044 = "Prosím, zadejte název organizace.";
 $register_text_045 = "Zadejte název pivovaru, pivovarské pivnice, atd. Ujistěte se, že rozumíte pravidlům soutěže týkající se druhů přijímaných nápojů.";
 $register_text_046 = "Pouze pro americké organizace.";
 
-// -------------------- User Registration --------------------
 $user_text_004 = "Ujistěte se, že používáte malá a velká písmena, číslice a zvláštní znaky pro vytvoření silnějšího hesla.";
 $user_text_005 = "Vaše aktuální emailová adresa je";
 
-// -------------------- Login --------------------
 $login_text_017 = "Zašlete mi odpověď na moji bezpečnostní otázku";
 $login_text_018 = "Je vyžadováno vaše uživatelské jméno (emailová adresa).";
 $login_text_019 = "Je vyžadováno heslo.";
@@ -1355,10 +1254,8 @@ $login_text_025 = "Zapomněli jste heslo?";
 $login_text_026 = "Zadejte emailovou adresu a nové heslo níže.";
 $login_text_027 = "Vaše heslo bylo úspěšně obnoveno. Nyní se můžete přihlásit s novým heslem.";
 
-// -------------------- Winners --------------------
 $winners_text_005 = "Vítězové Best of Show nebyli ještě zveřejněni. Zkuste to později, prosím.";
 
-// -------------------- Output - PayPal Response --------------------
 $paypal_response_text_000 = "Platba byla úspěšně dokončena. Podrobnosti transakce jsou uvedeny níže.";
 $paypal_response_text_001 = "Prosím, berte na vědomí, že dostanete ještě oficiální email od PayPalu na adresu uvedenou níže.";
 $paypal_response_text_002 = "Hodně štěstí v soutěži!";
@@ -1370,7 +1267,6 @@ $paypal_response_text_007 = "Prosím, kontaktujte organizátora soutěže, máte
 $paypal_response_text_008 = "Neplatná platba přes PayPal";
 $paypal_response_text_009 = "Podrobnosti platby přes PayPal";
 
-// -------------------- Output - Password reset email text --------------------
 $pwd_email_reset_text_000 = "Na webu";
 $pwd_email_reset_text_001 = "byl vytvořen požadavek na ověření identity prostřednictvím emailu. Pokud jste tento požadavek nevytvořili vy, kontaktujte organizátora soutěže.";
 $pwd_email_reset_text_002 = "Odpověď na ověření identity rozlišuje malá a velká písmena";
@@ -1378,7 +1274,6 @@ $pwd_email_reset_text_003 = "Na webu";
 $pwd_email_reset_text_004 = "byl vytvořen požadavek pro obnovení vašeho hesla. Pokud jste tento požadavek nevytvořili vy, nemějte obavy. Vaše heslo nemůže být obnoveno bez použití odkazu níže.";
 $pwd_email_reset_text_005 = "Pro obnovu vašeho hesla klikněte na odkaz níže nebo jej zkopírujte do svého prohlížeče.";
 
-// -------------------- Best Brewer --------------------
 $best_brewer_text_000 = "zúčastnění sládkové";
 $best_brewer_text_001 = "HM";
 $best_brewer_text_002 = "Hodnocení a rozstřely byly použity v souladu <a href=\"#\" data-toggle=\"modal\" data-target=\"#scoreMethod\">metodikou hodnocení</a>. Zobrazená čísla jsou zaokrouhlena na setinu. Přejeďte myší nebo klepněte na ikonu otazníku (<span class=\"fa fa-question-circle\"></span>) pro zobrazení přesné hodnoty.";
@@ -1395,7 +1290,6 @@ $best_brewer_text_012 = "Nejvyšší průměrné hodnocení.";
 $best_brewer_text_013 = "Nepoužito.";
 $best_brewer_text_014 = "zúčastněné kluby";
 
-// Version 2.1.12
 $dropoff_qualifier_text_001 = "Prosím, berte na vědomí poznámky uvedené u míst přijmu vzorků. Některá místa mohou mít dřívější uzavření příjmových oken, určité časové rámce, kdy se vzorky příjmají nebo určité osoby, které vzorky převezmou a podobně. <strong class=\"text-danger\">Všichni soutěžící jsou povinni si přečíst pokyny poskytnuté organizátory k místům příjmu vzorků.</strong>";
 
 $brewer_text_036 = "Jelikož jste vybrali \"<em>Jiný</em>,\" ujistěte se, že zadaný klub není na našem seznamu v nějaké jiné podobě.";
@@ -1404,10 +1298,11 @@ $brewer_text_038 = "Konzistentní název klubu je důležitý pro výpočet ocen
 $brewer_text_039 = "Klub, který jste zadali, se neshoduje s klubem v seznamu.";
 $brewer_text_040 = "Prosím, zvolte název klubu ze seznamu nebo zvolte <em>Jiný</em> a zadejte název klubu.";
 
-// ----------------------------------------------------------------------------------
-// Version 2.1.13 Additions
-// ----------------------------------------------------------------------------------
-
+/**
+ * ------------------------------------------------------------------------
+ * Version 2.1.13 Additions
+ * ------------------------------------------------------------------------
+ */
 $entry_info_text_048 = "Soutěžicí musí zadat dodatečné informace o nápoji pro zajištění správného posouzení.";
 $entry_info_text_049 = "Soutěžicí musí zadat sílu nápoje pro zajištění správného posouzení.";
 $entry_info_text_050 = "Soutěžicí musí zadat nasycení nápoje pro zajištění správného posouzení.";
@@ -1423,11 +1318,12 @@ $label_possible_allergens = "Možné alergeny";
 $label_please_choose = "Prosím zvolte";
 $label_mead_cider_info = "Informace o medovině/cideru";
 
-// ----------------------------------------------------------------------------------
-// Version 2.1.14 Additions
-// ----------------------------------------------------------------------------------
+/**
+ * ------------------------------------------------------------------------
+ * Version 2.1.14 Additions
+ * ------------------------------------------------------------------------
+ */
 
-// Labels
 $label_winners = "Vítězové";
 $label_unconfirmed_entries = "Nepotvrzené vzorky";
 $label_recipe = "Recept";
@@ -1435,10 +1331,8 @@ $label_view = "Zobrazit";
 $label_number_bottles = "Požadovaný počet lahví každého vzorku";
 $label_pro_am = "Pro-Am";
 
-// Pay screen
 $pay_text_034 = "Maximální počet uhrazených vzorků byl dosažen - další platby již nejsou přijímány.";
 
-// Bottle Labels
 $bottle_labels_000 = "Štítky momentálně nelze vygenerovat";
 $bottle_labels_001 = "Štítek připevněte k lahvi POUZE za pomocí gumičky.";
 $bottle_labels_002 = "Use clear packing tape to attach to the barrel of each bottle.";
@@ -1449,16 +1343,16 @@ $bottle_labels_005 = "Pokud nějaký vzorek chybí, zavřete toto okno a upravte
 $bottle_labels_006 = "Prostor vyhrazený pro personál soutěže";
 $bottle_labels_007 = "TENTO FORMULÁŘ RECEPTU JE POUZE PRO VAŠE POZNÁMKY - prosím, NEPŘIKLÁDEJTE JEJ k vašim vzorkům.";
 
-// Add/Edit Entry
 $brew_text_040 = "Lepek není třeba uvádět jako alergen; předpokládá se jeho přítomnost ve všech pivních stylech. Bezlepková piva by měla být přihlašována do kategorie Gluten-Free Beer (BA) nebo Alternative Grain Beer (BJCP). Lepek jako alergen uvádějte v medovině nebo cideru, pokud použitá cukernatá surovina obsahuje lepek (např. ječný, pšeničný nebo žitný slad) nebo pokud bylo použito pivovarských kvasnic.";
 
-// Pro-Am
 $brewer_text_041 = "Dostali jste již možnost Pro-Am, abyste mohli soutěži na nadcházející soutěži Great American Beer Festival Pro-Am?";
 $brewer_text_042 = "Jestliže jste již obdrželi Pro-Am, uveďte to zde. Pomůžete personálu soutěže a představitelům pivovaru Pro-Am  (pokud je v této soutěži použito) vybrat vzorky Pro-Am od sládků, kteří ještě Pro-Am nemají.";
 
-// ----------------------------------------------------------------------------------
-// Version 2.1.15 Additions
-// ----------------------------------------------------------------------------------
+/**
+ * ------------------------------------------------------------------------
+ * Version 2.1.15 Additions
+ * ------------------------------------------------------------------------
+ */
 
 $label_submitting = "Odesílám";
 $label_additional_info = "Vzorky s doplňujícími informacemi";
@@ -1471,17 +1365,21 @@ $brewer_entries_text_022 = "Vytisknout štítky lahví všech zaškrtnutých vzo
 $brewer_entries_text_023 = "Štítky lahví se otevřou na nové záložce nebo v novém okně.";
 $brewer_entries_text_024 = "Vytisknout štítky lahví";
 
-// ----------------------------------------------------------------------------------
-// Version 2.1.18 Additions
-// ----------------------------------------------------------------------------------
+/**
+ * ------------------------------------------------------------------------
+ * Version 2.1.18 Additions
+ * ------------------------------------------------------------------------
+ */
 
 $output_text_031 = "Stisknutím klávesy Esc skryjete.";
 $styles_entry_text_21X = "Účastník musí zadat sílu (session: 3,0-5,0%, standard: 5,0-7,5%, double: 7,5-9,5%).";
 $styles_entry_text_PRX4 = "Účastník musí uvést druh(y) použitého ovoce.";
 
-// ----------------------------------------------------------------------------------
-// Version 2.1.19 Additions
-// ----------------------------------------------------------------------------------
+/**
+ * ------------------------------------------------------------------------
+ * Version 2.1.19 Additions
+ * ------------------------------------------------------------------------
+ */
 
 $output_text_032 = "Počet vzorků ukazuje pouze ty účastníky, kteří si zvolili ve svém profilu místo příjmu vzorků. Skutečný počet může být vyšší nebo nižší.";
 $brewer_text_043 = "Nebo jste (či byli jste) zaměstnáni v pivovaru? Tím je myšlena nejen pozice sládka, ale i laboranta, sklepáka, obsluhy lahvárny a jiné. Současní nebo minulí zaměstnanci pivovaru nemají nárok k účasti na soutěži Great American Beer Festival Pro-Am.";
@@ -1489,10 +1387,12 @@ $label_entrant_reg = "Registrace účastníků";
 $sidebar_text_026 = "je zaregistrováno k datu";
 $label_paid_entries = "Již uhrazených vzorků";
 
-// ----------------------------------------------------------------------------------
-// Version 2.2.0 Additions
-// Via Google Translate English to Czech - and for that, I'm sorry. :)
-// ----------------------------------------------------------------------------------
+/**
+ * ------------------------------------------------------------------------
+ * Version 2.2.0 Additions
+ * Via Google Translate English to Czech - and for that, I'm sorry. :)
+ * ------------------------------------------------------------------------
+ */
 
 $alert_text_086 = "Prohlížeč Internet Explorer není BCOE&M podporován - zobrazení a funkce nebudou fungovat správně. Prosím, pořiďte si novější prohlížeč.";
 $alert_text_087 = "Pro optimální zážitek a správné fungování všech funkcí a funkcí povolte prosím JavaScript, abyste mohli nadále používat tento web. Jinak dojde k neočekávanému chování.";
@@ -1686,15 +1586,15 @@ $label_smoky = "Zakouřený";
 
 // Scoresheet Descriptors
 $label_inappropriate = "Nemístný";
-$label_possible_points = "Možné Body";
+$label_possible_points = "Možné body";
 $label_malt = "Slad";
-$label_ferm_char = "Fermentační Charakter";
+$label_ferm_char = "Fermentační charakter";
 $label_body = "Tělo";
 $label_creaminess = "Krémovost";
 $label_astringency = "Svíravost";
 $label_warmth = "Teplo";
 $label_appearance = "Vzhled";
-$label_flavor = "Flavor";
+$label_flavor = "Příchuť";
 $label_mouthfeel = "Pocit v ústech";
 $label_overall_impression = "Celkový dojem";
 $label_balance = "Zůstatek";
@@ -1745,16 +1645,27 @@ $label_small = "Malý";
 $label_size = "Velikost";
 $label_retention = "Zadržení";
 $label_head = "Hlava";
+$label_head_size = "Velikost hlavy";
+$label_head_retention = "Zadržení hlavy";
+$label_head_color = "Barva hlavy";
 $label_brettanomyces = "Brettanomyces";
 $label_cardboard = "Lepenka";
 $label_cloudy = "Zataženo";
 $label_sherry = "Sherry";
 $label_harsh = "Drsný";
+$label_harshness = "Drsnost";
 $label_full = "Úplný";
-$label_descriptor_defs = "Definice deskriptoru";
 $label_suggested = "Navrhnout";
+$label_lactic = "Mléčný";
+$label_smoke = "Kouř";
+$label_spice = "Koření";
+$label_vinous = "Vinný";
+$label_wood = "Dřevo";
+$label_cream = "Krém";
+$label_flat = "Plochý";
 
 // Scoresheet Score Descriptions
+$label_descriptor_defs = "Definice deskriptoru";
 $label_outstanding = "Vynikající";
 $descr_outstanding = "Světový příklad stylu.";
 $label_excellent = "Vynikající";
@@ -1768,15 +1679,114 @@ $descr_fair = "Chuť / vůně nebo hlavní nedostatky stylu. Nepříjemný.";
 $label_problematic = "Problematický";
 $descr_problematic = "Dominují hlavní příchutě a vůně. Těžko pít.";
 
+/**
+ * ------------------------------------------------------------------------
+ * Version 2.3.0 Additions
+ * Via Google Translate English to Czech - and for that, I'm sorry. Again. :)
+ * ------------------------------------------------------------------------
+ */
 
-// ***********************************************************************************
-// END TRANSLATIONS
-// ***********************************************************************************
+$winners_text_006 = "Poznámka: výsledky z této tabulky mohou být neúplné z důvodu nedostatečných informací o zadání nebo stylu.";
 
-// ----------------------------------------------------------------------------------
-// Various conditionals
-// No translations below this line
-// ----------------------------------------------------------------------------------
+$label_elapsed_time = "Uplynulý čas";
+$label_judge_score = "Skóre soudce";
+$label_judge_consensus_scores = "Posoudit konsensuální skóre";
+$label_your_consensus_score = "Vaše konsensuální skóre";
+$label_score_range_status = "Stav rozsahu skóre";
+$label_consensus_caution = "Konsensuální opatrnost";
+$label_consensus_match = "Konsensuální shoda";
+$label_score_range_caution = "Pozor na rozsah rozhodčích";
+$label_score_range_ok = "Rozsah skóre rozhodčích OK";
+$label_auto_log_out = "Automatické odhlášení v";
+$label_place_previously_selected = "Místo dříve vybrané";
+$label_entry_without_eval = "Vstup bez hodnocení";
+$label_entries_with_eval = "Záznamy s hodnocením";
+$label_entries_without_eval = "Entries Without an Evaluation";
+$label_judging_close = "Soudce uzavírá";
+$label_session_expire = "Platnost relace brzy vyprší";
+$label_refresh = "Obnovte tuto stránku";
+$label_stay_here = "Zůstaň tu";
+$label_bottle_inspection = "Kontrola lahví";
+$label_bottle_inspection_comments = "Komentáře ke kontrole lahví";
+$label_consensus_no_match = "Konsensuální skóre se neshodují";
+$label_score_below_courtesy = "Zadané skóre je pod prahovou hodnotou skóre zdvořilosti";
+$label_score_greater_50 = "Zadané skóre je větší než 50";
+$label_score_out_range = "Skóre je mimo rozsah skóre";
+$label_score_range = "Rozsah skóre";
+$label_ok = "Dobře";
+$label_esters = "Estery";
+$label_phenols = "Fenoly";
+$label_descriptors = "Deskriptory";
+$label_grainy = "Zrnitý";
+$label_caramel = "Karamel";
+$label_bready = "Chléb";
+$label_rich = "Bohatý";
+$label_dark_fruit = "Tmavé ovoce";
+$label_toasty = "Toasty";
+$label_roasty = "Pečené";
+$label_burnt = "Spálený";
+$label_citrusy = "Citrusové";
+$label_earthy = "Zemitý";
+$label_herbal = "Bylinný";
+$label_piney = "Borovice";
+$label_woody = "Dřevnatý";
+$label_apple_pear = "Jablko/Hruška";
+$label_banana = "Banán";
+$label_berry = "Bobule";
+$label_citrus = "Citrus";
+$label_dried_fruit = "Sušené ovoce";
+$label_grape = "Hroznový";
+$label_stone_fruit = "Kamenné ovoce";
+$label_even = "Dokonce";
+$label_gushed = "Tryskal";
+$label_hot = "Horký";
+$label_slick = "Úhledný";
+$label_finish = "Dokončit";
+$label_biting = "Ostrý";
+$label_drinkability = "Pitelnost";
+$label_bouquet = "Kytice";
+
+$evaluation_info_044 = "Vaše konsensuální skóre neodpovídá skóre zadaným jinými rozhodčími.";
+$evaluation_info_045 = "Zadané konsensuální skóre odpovídá zápasům zadaným předchozími rozhodčími.";
+$evaluation_info_046 = "Rozdíl ve skóre je větší než";
+$evaluation_info_047 = "Rozdíl ve skóre je v přijatelném rozsahu.";
+$evaluation_info_048 = "Místo, které jste zadali, již bylo pro tabulku zadáno. Vyberte prosím jiné místo nebo žádné (Žádné).";
+$evaluation_info_049 = "Tyto položky nemají v databázi alespoň jedno hodnocení";
+$evaluation_info_050 = "Uveďte, prosím, pořadovou polohu záznamu v letu.";
+$evaluation_info_051 = "Uveďte prosím celkový počet vstupů do letu.";
+$evaluation_info_052 = "Vhodná velikost, víčko, úroveň naplnění, odstranění štítku atd.";
+$evaluation_info_053 = "Konsensuální skóre je konečné skóre dohodnuté všemi rozhodčími hodnotícími zápis. Pokud není konsensuální skóre v tuto chvíli známé, zadejte své vlastní skóre. Pokud se zde uvedené konsensuální skóre liší od skóre zadaného jinými rozhodčími, budete upozorněni.";
+$evaluation_info_054 = "Tento příspěvek postoupil do kola mini-BOS.";
+$evaluation_info_055 = "Konsensuální skóre, které jste zadali, neodpovídá skóre zadanému předchozími rozhodčími pro tento záznam. Poraďte se prosím s dalšími rozhodčími hodnotícími tento příspěvek a podle potřeby upravte své konsensuální skóre.";
+$evaluation_info_056 = "Skóre, které jste zadali, klesá pod 13, <a href=\"https://www.bjcp.org/cep/GreatBeerJudging.pdf\" target=\"_blank\">což je běžně známá laskavost pro soudce BJCP</a>. Poraďte se s ostatními rozhodčími a podle potřeby upravte své skóre.";
+$evaluation_info_057 = "Skóre by nemělo být menší než 5 a ne větší než 50.";
+$evaluation_info_058 = "Skóre, které jste zadali, je větší než 50, maximální skóre pro jakýkoli záznam. Zkontrolujte a zrevidujte své konsensuální skóre.";
+$evaluation_info_059 = "Skóre, které jste zadali pro tento záznam, je mimo rozsah rozdílu skóre mezi rozhodčími.";
+$evaluation_info_060 = "maximálně znaků";
+$evaluation_info_061 = "Uveďte prosím krátké komentáře.";
+$evaluation_info_062 = "Vyberte si prosím deskriptor.";
+$evaluation_info_063 = "Dokončil bych tento vzorek.";
+$evaluation_info_064 = "Vypil bych půllitr tohoto piva.";
+$evaluation_info_065 = "Za toto pivo bych zaplatil peníze.";
+$evaluation_info_066 = "Doporučil bych toto pivo.";
+$evaluation_info_067 = "Uveďte prosím hodnocení.";
+$evaluation_info_068 = "Uveďte konsensuální skóre - minimálně 5, maximálně 50.";
+
+$alert_text_090 = "Vaše relace vyprší za dvě minuty. Můžete zůstat na aktuální stránce, abyste mohli dokončit práci, než vyprší čas, obnovte tuto stránku a pokračujte v aktuální relaci (data formuláře se mohou ztratit) nebo se odhlaste.";
+$alert_text_091 = "Vaše relace vyprší za 30 sekund. Chcete -li pokračovat v aktuální relaci, můžete se obnovit nebo se odhlásit.";
+
+/**
+ * ----------------------------------------------------------------------------------
+ * END TRANSLATIONS
+ * ----------------------------------------------------------------------------------
+ */
+
+/**
+ * ----------------------------------------------------------------------------------
+ * Various conditionals
+ * No translations below this line
+ * ----------------------------------------------------------------------------------
+ */
 
 if (strpos($section, "step") === FALSE) $alert_text_032 = $alert_text_032; else $alert_text_032 = "";
 if (strpos($section, "step") === FALSE) $alert_text_033 = $alert_text_033; else $alert_text_033 = "";
@@ -1793,10 +1803,11 @@ if (strpos($section, "step") === FALSE) $label_character_limit = $label_characte
 if (strpos($section, "step") === FALSE) $header_text_031 = $header_text_031; else $header_text_031 = "";
 if (strpos($section, "step") === FALSE) $beerxml_text_007 = $beerxml_text_007; else $beerxml_text_007 = "";
 
-
-// ----------------------------------------------------------------------------------
-// Admin Pages - Admin pages will be included in a future release
-// ----------------------------------------------------------------------------------
+/**
+ * ----------------------------------------------------------------------------------
+ * Admin Pages - Admin pages will be included in a future release
+ * ----------------------------------------------------------------------------------
+ */
 // if ($section == "admin") include (LANG.'en_admin.lang.php');
 
 ?>

@@ -11,6 +11,27 @@ else $pro_edition = $row_archive_prefs['archiveProEdition'];
 if ($pro_edition == 0) $edition = $label_amateur." ".$label_edition;
 if ($pro_edition == 1) $edition = $label_pro." ".$label_edition;
 
+if ($dbTable == "default") {
+    if ($_SESSION['prefsEval'] == 1) {
+        $eval_db_table = TRUE;
+        $evals = eval_exits("default","default",$dbTable);
+    }
+    $style_set = $_SESSION['prefsStyleSet'];
+}
+
+else {
+    
+    $archive_suffix = get_suffix($dbTable);
+    $style_set = $row_archive_prefs['archiveStyleSet'];
+    $pro_edition = $row_archive_prefs['archiveProEdition'];
+
+    if (check_setup($prefix."evaluation_".$archive_suffix,$database)) {
+        $eval_db_table = TRUE;
+        $evals = eval_exits("default","default",$prefix."evaluation_".$archive_suffix);
+    }
+
+} 
+
 if ($_SESSION['prefsWinnerMethod'] == "0") { ?>
 <!-- Modal -->
 <div class="modal fade" id="noDupeModal" tabindex="-1" role="dialog" aria-labelledby="noDupeModalLabel" aria-hidden="true">
@@ -148,9 +169,8 @@ $totalRows_entry_count = total_paid_received($go,"default");
 				null,
 				<?php } ?>
 				null,
-				{ "asSorting": [  ] }<?php if ($dbTable == "default") { ?>,
+				{ "asSorting": [  ] },
 				{ "asSorting": [  ] }
-				<?php } ?>
 				]
 			} );
 		} );
@@ -170,17 +190,11 @@ $totalRows_entry_count = total_paid_received($go,"default");
     	<th><?php echo $label_assigned_score; ?></th>
         <th>Place</th>
         <th>Mini-BOS?</th>
-        <?php if ($dbTable == "default") { ?>
         <th>Actions</th>
-        <?php } ?>
     </tr>
 </thead>
 <tbody>
 <?php
-
-    if ($_SESSION['prefsEval'] == 1) {
-        $evals = eval_exits("default","default",$dbTable);
-    }
 
 	do {
 
@@ -207,27 +221,23 @@ $totalRows_entry_count = total_paid_received($go,"default");
     $scoresheet_judging = FALSE;
     $entry_actions = "";
 
-    if ($_SESSION['prefsEval'] == 1) {
+    if ($eval_db_table) {
 
-        // if ($row_judging_prefs['jPrefsScoresheet'] == 1) $output_form = "full-scoresheet";
-        // if ($row_judging_prefs['jPrefsScoresheet'] == 2) $output_form = "checklist-scoresheet";
-        // if ($row_judging_prefs['jPrefsScoresheet'] == 3) $output_form = "structured-scoresheet";
+        if (in_array($row_scores['eid'], $evals)) {
 
-        if (in_array($table_score_data[0], $evals)) {
-            $scoresheet_eval = TRUE;
-            $query_style = sprintf("SELECT id,brewStyleType FROM %s WHERE brewStyleVersion='%s'AND brewStyleGroup='%s' AND brewStyleNum='%s'",$prefix."styles",$_SESSION['prefsStyleSet'],$table_score_data[8],$table_score_data[15]);
+            $query_style = sprintf("SELECT id,brewStyleType FROM %s WHERE brewStyleVersion='%s'AND brewStyleGroup='%s' AND brewStyleNum='%s'",$prefix."styles",$style_set,$row_log['brewCategorySort'],$row_log['brewSubCategory']);
             $style = mysqli_query($connection,$query_style) or die (mysqli_error($connection));
             $row_style = mysqli_fetch_assoc($style);
 
-           if ((($row_style['brewStyleType'] == 2) || ($row_style['brewStyleType'] == 3)) && ($row_judging_prefs['jPrefsScoresheet'] != 3)) $output_form = "full-scoresheet";
+            if ((($row_style['brewStyleType'] == 2) || ($row_style['brewStyleType'] == 3)) && ($row_judging_prefs['jPrefsScoresheet'] != 3)) $output_form = "full-scoresheet";
 
-            $view_link = $base_url."output/print.output.php?section=evaluation&amp;go=default&amp;view=all&amp;id=".$table_score_data[0]."&amp;tb=1";
-            $print_link = $base_url."output/print.output.php?section=evaluation&amp;go=default&amp;view=all&amp;id=".$table_score_data[0];
+            $view_link = $base_url."output/print.output.php?section=evaluation&amp;go=default&amp;view=all&amp;id=".$row_scores['eid']."&amp;tb=1";
+            if ($dbTable != "default") $view_link .= "&amp;dbTable=".$prefix."evaluation_".$archive_suffix;
+            $print_link = $base_url."output/print.output.php?section=evaluation&amp;go=default&amp;view=all&amp;id=".$row_scores['eid'];
+            if ($dbTable != "default") $print_link .= "&amp;dbTable=".$prefix."evaluation_".$archive_suffix;
 
             $entry_actions .= "<a id=\"modal_window_link\" class=\"hide-loader\" href=\"".$view_link."\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"View the Judge Evaluations in the system for entry ".$entry_number."\"><span class=\"fa-stack\"><i class=\"fa fa-square fa-stack-2x\"></i><i class=\"fa fa-stack-1x fa-file-text fa-inverse\"></i></span></a> ";
             $entry_actions .= "<a id=\"modal_window_link\" class=\"hide-loader\" href=\"".$print_link."\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Print the Judge Evaluations in the system for entry ".$entry_number."\"><i class=\"fa fa-lg fa-file-text\"></i></a> ";
-            
-        
         }
 
     }
@@ -351,9 +361,13 @@ $totalRows_entry_count = total_paid_received($go,"default");
         <td><?php if (strpos($row_scores['scoreEntry'], '.') !== false) echo rtrim(number_format($row_scores['scoreEntry'],2),"0"); else echo $row_scores['scoreEntry']; ?></td>
         <td><?php echo $score_place; ?></td>
         <td><?php echo $mini_bos; ?></td>
-		<?php if ($dbTable == "default") { ?>
-        <td><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=<?php echo $go; ?>&amp;action=edit&amp;id=<?php echo $table_score_data[9]; ?>" data-toggle="tooltip" data-placement="top" title="Edit the <?php echo $table_score_data[10]; ?> scores"><span class="fa fa-lg fa-pencil"></span></a>&nbsp;<a class="hide-loader" href="<?php echo $base_url; ?>includes/process.inc.php?action=delete&amp;go=<?php echo $go; ?>&amp;id=<?php echo $row_scores['id']; ?>" data-toggle="tooltip" data-placement="top" title="Delete this score for entry #<?php echo $row_scores['eid']; ?>" data-confirm="Are you sure? This will delete the score and/or place for this entry."><span class="fa fa-lg fa-trash-o"></span></a><?php echo "&nbsp;".$entry_actions; ?></td>
-        <?php } ?>
+		<td>
+            <?php if ($dbTable == "default") { ?>
+            <a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=<?php echo $go; ?>&amp;action=edit&amp;id=<?php echo $table_score_data[9]; ?>" data-toggle="tooltip" data-placement="top" title="Edit the <?php echo $table_score_data[10]; ?> scores"><span class="fa fa-lg fa-pencil"></span></a>&nbsp;<a class="hide-loader" href="<?php echo $base_url; ?>includes/process.inc.php?action=delete&amp;go=<?php echo $go; ?>&amp;id=<?php echo $row_scores['id']; ?>" data-toggle="tooltip" data-placement="top" title="Delete this score for entry #<?php echo $row_scores['eid']; ?>" data-confirm="Are you sure? This will delete the score and/or place for this entry."><span class="fa fa-lg fa-trash-o"></span></a>
+            <?php echo "&nbsp;";
+            }
+            echo $entry_actions; ?>
+        </td>
     </tr>
     <?php
 		//}

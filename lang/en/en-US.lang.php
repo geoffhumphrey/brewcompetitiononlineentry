@@ -2,93 +2,101 @@
 /**
  * Module:      en-US.lang.php
  * Description: This module houses all display text in the English language.
- * Updated:     July 10, 2020
+ * Updated:     September 1, 2021
+ *  
+ * To translate this file, first make a copy of it and rename it with the 
+ * language name in the title.
+ * 
+ * ==============================
+ * 
+ * Use ISO 169-2 Standards for and WWW3C Language Tag Standards for naming 
+ * of language files. Use the ALPHA-2 letter code whenever possible.
+ * 
+ * ISO 169-2:
+ * @see https://www.loc.gov/standards/iso639-2/php/code_list.php
+ * 
+ * WWW3 Language Tags:
+ * @see https://www.w3.org/International/articles/language-tags/
+ * 
+ * WWW3 Choosing a Language Tag:
+ * @see https://www.w3.org/International/questions/qa-choosing-language-tags
+ * 
+ * To determine a subtag, go to the IANA Language Subtag Registry:
+ * @see http://www.iana.org/assignments/language-subtag-registry
+ * 
+ * According to the WWW3:
+ * 
+ * "Always bear in mind that the golden rule is to keep your language tag 
+ * as short as possible. Only add further subtags to your language tag if 
+ * they are needed to distinguish the language from something else in the 
+ * context where your content is used..."
+ * 
+ * "Unless you specifically need to highlight that you are talking about 
+ * Italian as spoken in Italy you should use it 'for Italian, and not 
+ * it-IT. The same goes for any other possible combination."
+ * 
+ * "You should only use a region subtag if it contributes information 
+ * needed in a particular context to distinguish this language tag from 
+ * another one; otherwise leave it out."
+ * 
+ * ================ FORMAT =================
+ * 
+ * Always indicate the primary languge subtag first, then a dash (-) 
+ * and then the region subtag. The region subtag is in all capital letters 
+ * or a three digit number.
+ * 
+ * Examples:
+ * en-US
+ * English spoken in the United States
+ * en is the PRIMARY language subtag
+ * US is the REGION subtag (note the capitalization)
+ * 
+ * es-ES
+ * Spanish spoken in Spain
+ * 
+ * es-419
+ * Spanish spoken in Latin America
+ * 
+ * ========================================
+ * 
+ * Items that need translation into other languages are housed here in 
+ * PHP variables - each start with a dollar sign ($). The words, phrases,
+ * etc. (called strings) that need to be translated are housed between 
+ * double-quotes ("). Please, ONLY alter the text between the double quotes!
+ * 
+ * For example, a translated PHP variable would look like this (encoding is utf8mb4; therefore, 
+ * accented and other special characters are acceptable):
+ * 
+ * English (US) before translation:
+ * $label_volunteer_info = "Volunteer Info";
+ * 
+ * Spanish translated:
+ * $label_volunteer_info = "Información de Voluntarios";
+ * 
+ * Portuguese translated:
+ * $label_volunteer_info = "Informações Voluntário";
+ * 
+ * ========================================
+ * 
+ * Please note: the strings that need to be translated MAY contain HTML 
+ * code. Please leave this code intact! For example:
+ * 
+ * English (US):
+ * $beerxml_text_008 = "Browse for your BeerXML compliant file on your hard drive and click <em>Upload</em>.";
+ * 
+ * Spanish:
+ * $beerxml_text_008 = "Buscar su archivo compatible BeerXML en su disco duro y haga clic en <em>Cargar</em>.";
+ * 
+ * Note that the <em>...</em> tags were not altered. Just the word "Upload" 
+ * to "Cargar" between those tags.
+ * 
+ * ==============================
+ * 
  */
 
-/*
-
---------------------------------------------------------------------------------------------------
-
-To translate this file, first make a copy of it and rename it with the language name in the title.
-
-==============================
-
-Use ISO 169-2 Standards for and WWW3C Language Tag Standards for naming of language files. Use the
-ALPHA-2 letter code whenever possible.
-
-ISO 169-2:
-https://www.loc.gov/standards/iso639-2/php/code_list.php
-
-WWW3 Language Tags:
-https://www.w3.org/International/articles/language-tags/
-
-WWW3 Choosing a Language Tag:
-https://www.w3.org/International/questions/qa-choosing-language-tags
-
-To determine a subtag, go to the IANA Language Subtag Registry:
-http://www.iana.org/assignments/language-subtag-registry
-
-According to the WWW3:
-
-"Always bear in mind that the golden rule is to keep your language tag as short as possible. Only
-add further subtags to your language tag *if they are needed to distinguish the language from
-something else in the context where your content is used..."
-
-"Unless you specifically need to highlight that you are talking about Italian as spoken in Italy
-you should use it 'for Italian, and not it-IT. The same goes for any other possible combination."
-
-"You should only use a region subtag if it contributes information needed in a particular context
-to distinguish this language tag from another one; otherwise leave it out."
-
-================ FORMAT =================
-
-Always indicate the primary languge subtag first, then a dash (-) and then the region subtag. The
-region subtag is in all capital letters or a three digit number.
-
-Examples:
-en-US
-English spoken in the United States
-en is the PRIMARY language subtag
-US is the REGION subtag (note the capitalization)
-
-es-ES
-Spanish spoken in Spain
-
-es-419
-Spanish spoken in Latin America
-
-========================================
-
-Items that need translation into other languages are housed here in PHP variables - each start with
-a dollar sign ($). The words, phrases, etc. (called strings) that need to be translated are housed
-between double-quotes ("). Please, ONLY alter the text between the double quotes!
-
-For example, a translated PHP variable would look like this (encoding is utf8mb4; therefore, accented and other special characters are acceptable):
-
-English (US) before translation:
-$label_volunteer_info = "Volunteer Info";
-
-Spanish translated:
-$label_volunteer_info = "Información de Voluntarios";
-
-Portuguese translated:
-$label_volunteer_info = "Informações Voluntário";
-
-========================================
-
-Please note: the strings that need to be translated MAY contain HTML code. Please leave this code intact! For example:
-
-English (US):
-$beerxml_text_008 = "Browse for your BeerXML compliant file on your hard drive and click <em>Upload</em>.";
-
-Spanish:
-$beerxml_text_008 = "Buscar su archivo compatible BeerXML en su disco duro y haga clic en <em>Cargar</em>.";
-
-Note that the <em>...</em> tags were not altered. Just the word "Upload" to "Cargar" between those tags.
-
-==============================
-
-*/
+/**
+ * Set up PHP variables. No translations in this section.
+ */
 
 include (INCLUDES.'url_variables.inc.php');
 
@@ -121,9 +129,11 @@ else $row_limits['prefsEntryLimitPaid'] = "";
 
 $php_version = phpversion();
 
-// ***********************************************************************************
-// BEGIN TRANSLATIONS BELOW!
-// ***********************************************************************************
+/**
+ * ------------------------------------------------------------------------
+ * BEGIN TRANSLATIONS BELOW!
+ * ------------------------------------------------------------------------
+ */
 
 $j_s_text = "";
 if (strpos($section, "step") === FALSE) {
@@ -134,9 +144,13 @@ if (strpos($section, "step") === FALSE) {
 	}
 }
 
-// -------------------- Global Labels - mostly used for titles and navigation --------------------
-// All labels are capitalized and without punctuation
-
+/**
+ * ------------------------------------------------------------------------
+ * Global Labels
+ * Mostly used for titles and navigation.
+ * All labels are capitalized and without punctuation.
+ * ------------------------------------------------------------------------
+ */
 $label_home = "Home";
 $label_welcome = "Welcome";
 $label_comps = "Competition Directory";
@@ -433,7 +447,7 @@ $label_admin_participants = $label_participants;
 $label_admin_entries = $label_entries;
 $label_admin_comp_info = "Competition Info";
 $label_admin_web_prefs = "Website Preferences";
-$label_admin_judge_prefs = "Competition Organization Preferences";
+$label_admin_judge_prefs = "Judging/Competition Organization Preferences";
 $label_admin_archives = "Archives";
 $label_admin_style = $label_style;
 $label_admin_styles = "Styles";
@@ -466,16 +480,18 @@ $label_unpaid_confirmed_entries = "Unpaid Confirmed Entries";
 $label_total_entry_fees = "Total Entry Fees";
 $label_entry_fees_to_pay = "Entry Fees to Pay";
 $label_entry_drop_off = "Entry Drop-Off";
-
-// v2.1.9
 $label_maintenance = "Maintenance";
 $label_judge_info = "Judge Information";
 $label_cellar = "My Cellar";
 $label_verify = "Verify";
 $label_entry_number = "Entry Number";
 
-// -------------------- Headers --------------------
-// Missing punctuation intentional for all
+/**
+ * ------------------------------------------------------------------------
+ * Headers
+ * Missing punctuation intentional for all.
+ * ------------------------------------------------------------------------
+ */
 $header_text_000 = "Setup was successful.";
 $header_text_001 = "You are now logged in and ready to further customize your competition's site.";
 $header_text_002 = "However, your config.php permissions file could not be changed.";
@@ -582,17 +598,15 @@ $header_text_105 = "More information is required for your entry to be accepted a
 $header_text_106 = "See the area(s) highlighted in RED below.";
 $header_text_107 = "Please choose a style.";
 $header_text_108 = "This entry cannot be accepted or confirmed until a style has been chosen. Unconfirmed entries may be deleted from the system without warning.";
-
-// v2.1.9
 $header_text_109 = "You have registered as a steward.";
 $header_text_110 = "All entries have been un-marked as paid.";
 $header_text_111 = "All entries have been un-marked as received.";
 
-// -------------------- Navigation --------------------
-
-
-
-// -------------------- Alerts --------------------
+/**
+ * ------------------------------------------------------------------------
+ * Alerts
+ * ------------------------------------------------------------------------
+ */
 $alert_text_000 = "Grant users top-level admin and admin access with caution.";
 $alert_text_001 = "Data clean-up completed.";
 $alert_text_002 = "The &#36;setup_free_access variable in config.php is currently set to TRUE.";
@@ -660,9 +674,11 @@ $alert_email_not_valid = "Email format is not valid!";
 $alert_email_in_use = "The email address you entered is already in use. Please choose another.";
 $alert_email_not_in_use = "Congratulations! The email address you entered is not in use.";
 
-// ----------------------------------------------------------------------------------
-// Public Pages
-// ----------------------------------------------------------------------------------
+/**
+ * ------------------------------------------------------------------------
+ * Public Pages
+ * ------------------------------------------------------------------------
+ */
 
 // v2.1.9
 $comps_text_000 = "Choose the competition you wish to access from the list below.";
@@ -670,7 +686,11 @@ $comps_text_001 = "Current competition:";
 $comps_text_002 = "There are no competitions with entry windows open now.";
 $comps_text_003 = "There are no competitions with entry windows closing in the next 7 days.";
 
-// -------------------- BeerXML --------------------
+/**
+ * ------------------------------------------------------------------------
+ * BeerXML
+ * ------------------------------------------------------------------------
+ */
 
 $beerxml_text_000 = "Importing entries is not available.";
 $beerxml_text_001 = "has been uploaded and the brew has been added to your list of entries.";
@@ -686,11 +706,11 @@ $beerxml_text_010 = "No file chosen...";
 $beerxml_text_011 = "entries added"; // lower-case and missing punctuation intentional
 $beerxml_text_012 = "entry added"; // lower-case and missing punctuation intentional
 
-// -------------------- Best of Show --------------------
-// None
-
-
-// -------------------- Brew (Add Entry) --------------------
+/**
+ * ------------------------------------------------------------------------
+ * Add Entry
+ * ------------------------------------------------------------------------
+ */
 
 if ($section == "brew") {
 	$brew_text_000 = "Click for specifics about style"; // missing punctuation intentional
@@ -722,48 +742,52 @@ if ($section == "brew") {
 	$brew_text_026 = "Other fermentation in days.";
 }
 
-// -------------------- Brewer (Account) --------------------
+/**
+ * ------------------------------------------------------------------------
+ * My Account
+ * ------------------------------------------------------------------------
+ */
 
-if (($section == "brewer") || ($section == "register") || ($section == "step2") || (($section == "admin") && ($go == "entrant")) || (($section == "admin") && ($go == "judge")) || (($section == "admin") && ($go == "steward"))) {
-	$brewer_text_000 = "Please enter only <em>one</em> person's name.";
-	$brewer_text_001 = "Choose one. This question will be used to verify your identity should you forget your password.";
-	$brewer_text_003 = "To be considered for a GABF Pro-Am brewing opportunity you must be an AHA member.";
-	$brewer_text_004 = "Provide any information that you believe the competition organizer, judge coordinator, or competition staff should know (e.g., allergies, special dietary restrictions, shirt size, etc.).";
-	$brewer_text_005 = "Not Applicable / Shipping Entries";
-	$brewer_text_006 = "Are you willing and qualified to serve as a judge in this competition?";
-	$brewer_text_007 = "Have you passed the BJCP Mead Judge exam?";
-	$brewer_text_008 = "* The <em>Non-BJCP</em> rank is for those who haven't taken the BJCP Beer Judge Entrance Exam, and are <em>not</em> a professional brewer.";
-	$brewer_text_009 = "** The <em>Provisional</em> rank is for those have taken and passed the BJCP Beer Judge Entrance Exam, but have not yet taken the BJCP Beer Judging Exam.";
-	$brewer_text_010 = "Only the first two designations will appear on your printed scoresheet labels.";
-	$brewer_text_011 = "How many competitions have you previously served as a <strong>".strtolower($label_judge)."</strong>?";
-	$brewer_text_012 = "For preferences ONLY. Leaving a style unchecked indicates that you are available to judge it – there's no need to check all styles that your available to judge.";
-	$brewer_text_013 = "Click or tap the button above to expand the non-preferred styles to judge list.";
-	$brewer_text_014 = "There is no need to mark those styles for which you have entries; the system will not allow you to be assigned to any table where you have entries.";
-	$brewer_text_015 = "Are you willing to serve as a steward in this competition?";
-	$brewer_text_016 = "My participation in this judging is entirely voluntary. I know that participation in this judging involves consumption of alcoholic beverages and that this consumption may affect my perceptions and reactions.";
-	$brewer_text_017 = "Click or tap the button above to expand the preferred styles to judge list.";
-	$brewer_text_018 = "By checking this box, I am effectively signing a legal document wherein I accept responsibility for my conduct, behavior and actions and completely absolve the competition and its organizers, individually or collectively, of responsibility for my conduct, behavior and actions.";
 
-	// v2.1.9
-	$brewer_text_019 = "If you are planning to serve as a judge in any competition, click or tap the button above to enter your judge-related information.";
-	$brewer_text_020 = "Are you willing to serve as a staff member in this competition?";
-	$brewer_text_021 = "Competition staff are people that serve in various roles to assist in the organization and execution of the competition before, during, and after judging. Judges and stewards can also serve as staff members. Staff members can earn BJCP points if the competition is sanctioned.";
+$brewer_text_000 = "Please enter only <em>one</em> person's name.";
+$brewer_text_001 = "Choose one. This question will be used to verify your identity should you forget your password.";
+$brewer_text_003 = "To be considered for a GABF Pro-Am brewing opportunity you must be an AHA member.";
+$brewer_text_004 = "Provide any information that you believe the competition organizer, judge coordinator, or competition staff should know (e.g., allergies, special dietary restrictions, shirt size, etc.).";
+$brewer_text_005 = "Not Applicable / Shipping Entries";
+$brewer_text_006 = "Are you willing and qualified to serve as a judge in this competition?";
+$brewer_text_007 = "Have you passed the BJCP Mead Judge exam?";
+$brewer_text_008 = "* The <em>Non-BJCP</em> rank is for those who haven't taken the BJCP Beer Judge Entrance Exam, and are <em>not</em> a professional brewer.";
+$brewer_text_009 = "** The <em>Provisional</em> rank is for those have taken and passed the BJCP Beer Judge Entrance Exam, but have not yet taken the BJCP Beer Judging Exam.";
+$brewer_text_010 = "Only the first two designations will appear on your printed scoresheet labels.";
+$brewer_text_011 = "How many competitions have you previously served as a <strong>".strtolower($label_judge)."</strong>?";
+$brewer_text_012 = "For preferences ONLY. Leaving a style unchecked indicates that you are available to judge it – there's no need to check all styles that your available to judge.";
+$brewer_text_013 = "Click or tap the button above to expand the non-preferred styles to judge list.";
+$brewer_text_014 = "There is no need to mark those styles for which you have entries; the system will not allow you to be assigned to any table where you have entries.";
+$brewer_text_015 = "Are you willing to serve as a steward in this competition?";
+$brewer_text_016 = "My participation in this judging is entirely voluntary. I know that participation in this judging involves consumption of alcoholic beverages and that this consumption may affect my perceptions and reactions.";
+$brewer_text_017 = "Click or tap the button above to expand the preferred styles to judge list.";
+$brewer_text_018 = "By checking this box, I am effectively signing a legal document wherein I accept responsibility for my conduct, behavior and actions and completely absolve the competition and its organizers, individually or collectively, of responsibility for my conduct, behavior and actions.";
 
-}
+// v2.1.9
+$brewer_text_019 = "If you are planning to serve as a judge in any competition, click or tap the button above to enter your judge-related information.";
+$brewer_text_020 = "Are you willing to serve as a staff member in this competition?";
+$brewer_text_021 = "Competition staff are people that serve in various roles to assist in the organization and execution of the competition before, during, and after judging. Judges and stewards can also serve as staff members. Staff members can earn BJCP points if the competition is sanctioned.";
 
-// -------------------- Contact --------------------
+/**
+ * ------------------------------------------------------------------------
+ * Contact
+ * ------------------------------------------------------------------------
+ */
+$contact_text_000 = "Use the links below to contact individuals involved with coordinating this competition:";
+$contact_text_001 = "Use the form below to contact a competition official. All fields with a star are required.";
+$contact_text_002 = "Additionally, a copy has been sent to the email address you provided.";
+$contact_text_003 = "Would you like to send another message?";
 
-if ($section == "contact") {
-
-	$contact_text_000 = "Use the links below to contact individuals involved with coordinating this competition:";
-	$contact_text_001 = "Use the form below to contact a competition official. All fields with a star are required.";
-	$contact_text_002 = "Additionally, a copy has been sent to the email address you provided.";
-	$contact_text_003 = "Would you like to send another message?";
-
-}
-
-// -------------------- Default (Home) -------------------
-
+/**
+ * ------------------------------------------------------------------------
+ * Home Pages
+ * ------------------------------------------------------------------------
+ */
 $default_page_text_000 = "No drop-off locations have been specified.";
 $default_page_text_001 = "Add a drop-off location?";
 $default_page_text_002 = "No judging dates/locations have been specified.";
@@ -822,9 +846,11 @@ $judge_closed_001 = "There were";
 $judge_closed_002 = "entries judged and";
 $judge_closed_003 = "registered participants, judges, and stewards.";
 
-
-// -------------------- Entry Info --------------------
-
+/**
+ * ------------------------------------------------------------------------
+ * Entry Info
+ * ------------------------------------------------------------------------
+ */
 $entry_info_text_000 = "You will be able to create your account beginning";
 $entry_info_text_001 = "through";
 $entry_info_text_002 = "Judges and stewards may register beginning";
@@ -873,13 +899,11 @@ $entry_info_text_044 = "Map to";
 $entry_info_text_045 = "Click/Tap for Required Entry Info";
 $entry_info_text_046 = "If a style's name is hyperlinked, it has specific entry requirements. Click or tap on the name to view the subcategory's requirements.";
 
-
-// -------------------- Footer --------------------
-
-// -------------------- Judge Info --------------------
-
-// -------------------- List (User Entry List) --------------------
-
+/**
+ * ------------------------------------------------------------------------
+ * My Account Entry List
+ * ------------------------------------------------------------------------
+ */
 $brewer_entries_text_000 = "There is a known issue with printing from the Firefox browser.";
 $brewer_entries_text_001 = "You have unconfirmed entries.";
 $brewer_entries_text_002 = "For each entry below with a <span class=\"fa fa-lg fa-exclamation-circle text-danger\"></span> icon, click the <span class=\"fa fa-lg fa-pencil text-primary\"></span> icon to review and confirm all your entry data. Unconfirmed entries may be deleted from the system without warning.";
@@ -897,15 +921,18 @@ $brewer_entries_text_013 = "You will be able to add entries on or after";
 $brewer_entries_text_014 = "You have not added any entries to the system.";
 $brewer_entries_text_015 = "You cannot delete your entry at this time.";
 
-// -------------------- Login --------------------
+/**
+ * ------------------------------------------------------------------------
+ * Past Winners
+ * ------------------------------------------------------------------------
+ */
+$past_winners_text_000 = "View past winners:";
 
-// -------------------- Past Winners --------------------
-if ($section == "past_winners") {
-	$past_winners_text_000 = "View past winners:";
-}
-
-// -------------------- Pay for Entries --------------------
-
+/**
+ * ------------------------------------------------------------------------
+ * Pay for Entries
+ * ------------------------------------------------------------------------
+ */
 $pay_text_000 = "Since the account registration, entry registration, shipping, and drop-off deadlines have all passed, payments are no longer being accepted.";
 $pay_text_001 = "Contact a competition official if you have any questions.";
 $pay_text_002 = "the following are your options for paying your entry fees.";
@@ -937,86 +964,87 @@ $pay_text_027 = "Click <em>My Account</em> above to review your unconfirmed entr
 $pay_text_028 = "You have unconfirmed entries that are <em>not</em> reflected in your fee totals below.";
 $pay_text_029 = "Please go to your entry list to confirm all your entry data. Unconfirmed entries may be deleted from the system without warning.";
 
-// -------------------- QR --------------------
+/**
+ * ------------------------------------------------------------------------
+ * QR Code Check-in
+ * ------------------------------------------------------------------------
+ */
 
-    // Ignore the next four lines
-	if (strpos($view, "^") !== FALSE) {
-		$qr_text_019 = sprintf("%04d",$checked_in_numbers[0]);
-		if (is_numeric($checked_in_numbers[1])) $qr_text_020 = sprintf("%06d",$checked_in_numbers[1]);
-		else $qr_text_020 = $checked_in_numbers[1];
-	}
-
-	$qr_text_000 = $alert_text_080;
-	$qr_text_001 = $alert_text_081;
-
-    // Begin translations here
-	if (strpos($view, "^") !== FALSE) $qr_text_002 = sprintf("Entry number <span class=\"text-danger\">%s</span> is checked in with <span class=\"text-danger\">%s</span> as its judging number.",$qr_text_019,$qr_text_020); else $qr_text_002 = "";
-	$qr_text_003 = "If this judging number is <em>not</em> correct, <strong>re-scan the code and re-enter the correct judging number.";
-	if (strpos($view, "^") !== FALSE) $qr_text_004 = sprintf("Entry number %s is checked in.",$qr_text_019); else $qr_text_004 = "";
-	if (strpos($view, "^") !== FALSE) $qr_text_005 = sprintf("Entry number %s was not found in the database. Set the bottle(s) aside and alert the competition organizer.",$qr_text_019); else $qr_text_005 = "";
-	if (strpos($view, "^") !== FALSE) $qr_text_006 = sprintf("The judging number you entered - %s - is already assigned to entry number %s.",$qr_text_020,$qr_text_019); else $qr_text_006 = "";
-	$qr_text_007 = "QR Code Entry Check-In";
-	$qr_text_008 = "To check in entries via QR code, please provide the correct password. You will only need to provide the password once per session - be sure to keep the QR Code scanning app open.";
-	$qr_text_009 = "Assign a judging number and/or box number to entry";
-	$qr_text_010 = "ONLY inupt a judging number if your competition is using judging number labels at sorting.";
-	$qr_text_011 = "Six numbers with leading zeros - e.g., 000021.";
-	$qr_text_012 = "Be sure to double-check your input and affix the appropriate judging number labels to each bottle and bottle label (if applicable).";
-	$qr_text_013 = "Judging numbers must be six characters and cannot include the ^ character.";
-	$qr_text_014 = "Waiting for scanned QR code input.";
-	$qr_text_015 = "Launch or go back to your mobile device's scanning app to scan a QR code.";
-	$qr_text_016 = "Need a QR Code scanning app? Search <a class=\"hide-loader\" href=\"https://play.google.com/store/search?q=qr%20code%20scanner&c=apps&hl=en\" target=\"_blank\">Google Play</a> (Android) or <a class=\"hide-loader\" href=\"https://itunes.apple.com/store/\" target=\"_blank\">iTunes</a> (iOS).";
-	$qr_text_017 = "A QR Code scanning app is required to utilize this feature.";
-	$qr_text_018 = "Launch the app on your mobile device, scan a QR Code located on a bottle label, enter the required password, and check in the entry.";
-
-
-// -------------------- Registration Open --------------------
-
-// -------------------- Registration Closed --------------------
-
-// -------------------- Register --------------------
-
-if (($section == "register") || ($section == "brewer") || ($action == "register") || ($go == "account") || ($section == "step2")) {
-
-	$register_text_000 = "Is the volunteer ";
-	$register_text_001 = "Are you ";
-	$register_text_002 = "Registration has closed.";
-	$register_text_003 = "Thank you for your interest.";
-	$register_text_004 = "The information you provide beyond your first name, last name, and club is strictly for record-keeping and contact purposes.";
-	$register_text_005 = "A condition of entry into the competition is providing this information. Your name and club may be displayed should one of your entries place, but no other information will be made public.";
-	$register_text_006 = "Reminder: You are only allowed to enter one region and once you have registered at a location, you will NOT be able to change it.";
-	$register_text_007 = "Quick";
-	$register_text_008 = "Register";
-	$register_text_009 = "a Judge";
-	$register_text_010 = "a Participant";
-	$register_text_011 = "To register, create your online account by filling out the fields below.";
-	$register_text_012 = "Quickly add a participant to the competition&rsquo;s judge/steward pool. A dummy address and phone number will be used and a default password of <em>bcoem</em> will be given to each participant added via this screen.";
-	$register_text_013 = "Entry into this competition is conducted completely online.";
-	$register_text_014 = "To add your entries and/or indicate that you are willing to judge or steward (judges and stewards can also add entries), you will need to create an account on our system.";
-	$register_text_015 = "Your email address will be your user name and will be used as a means of information dissemination by the competition staff. Please make sure it is correct.";
-	$register_text_016 = "Once you have registered, you can proceed through the entry process.";
-	$register_text_017 = "Each entry you add will automatically be assigned a number by the system.";
-	$register_text_018 = "Choose one. This question will be used to verify your identity should you forget your password.";
-	$register_text_019 = "Please provide an email address.";
-	$register_text_020 = "The email addresses you entered don't match.";
-	$register_text_021 = "Email addresses serve as user names.";
-	$register_text_022 = "Please provide a password.";
-	$register_text_023 = "Please provide an answer to your security question.";
-	$register_text_024 = "Make your security answer something only you will easily remember!";
-	$register_text_025 = "Please provide a first name.";
-	$register_text_026 = "Please provide a last name.";
-	$register_text_027 = "a Steward";
-	$register_text_028 = "Please provide a street address.";
-	$register_text_029 = "Please provide a city.";
-	$register_text_030 = "Please provide a state or province.";
-	$register_text_031 = "Please provide a zip or postal code.";
-	$register_text_032 = "Please provide a primary telephone number.";
-	$register_text_033 = "Only American Homebrewers Association members are eligible for a Great American Beer Festival Pro-Am opportunity.";
-	$register_text_034 = "To register, you must check the box, indicating that you agree to the waiver statement.";
-
+// Ignore the next four lines
+if (strpos($view, "^") !== FALSE) {
+	$qr_text_019 = sprintf("%04d",$checked_in_numbers[0]);
+	if (is_numeric($checked_in_numbers[1])) $qr_text_020 = sprintf("%06d",$checked_in_numbers[1]);
+	else $qr_text_020 = $checked_in_numbers[1];
 }
 
-// -------------------- Sidebar --------------------
+$qr_text_000 = $alert_text_080;
+$qr_text_001 = $alert_text_081;
 
+// Begin translations here
+if (strpos($view, "^") !== FALSE) $qr_text_002 = sprintf("Entry number <span class=\"text-danger\">%s</span> is checked in with <span class=\"text-danger\">%s</span> as its judging number.",$qr_text_019,$qr_text_020); else $qr_text_002 = "";
+$qr_text_003 = "If this judging number is <em>not</em> correct, <strong>re-scan the code and re-enter the correct judging number.";
+if (strpos($view, "^") !== FALSE) $qr_text_004 = sprintf("Entry number %s is checked in.",$qr_text_019); else $qr_text_004 = "";
+if (strpos($view, "^") !== FALSE) $qr_text_005 = sprintf("Entry number %s was not found in the database. Set the bottle(s) aside and alert the competition organizer.",$qr_text_019); else $qr_text_005 = "";
+if (strpos($view, "^") !== FALSE) $qr_text_006 = sprintf("The judging number you entered - %s - is already assigned to entry number %s.",$qr_text_020,$qr_text_019); else $qr_text_006 = "";
+$qr_text_007 = "QR Code Entry Check-In";
+$qr_text_008 = "To check in entries via QR code, please provide the correct password. You will only need to provide the password once per session - be sure to keep the QR Code scanning app open.";
+$qr_text_009 = "Assign a judging number and/or box number to entry";
+$qr_text_010 = "ONLY inupt a judging number if your competition is using judging number labels at sorting.";
+$qr_text_011 = "Six numbers with leading zeros - e.g., 000021.";
+$qr_text_012 = "Be sure to double-check your input and affix the appropriate judging number labels to each bottle and bottle label (if applicable).";
+$qr_text_013 = "Judging numbers must be six characters and cannot include the ^ character.";
+$qr_text_014 = "Waiting for scanned QR code input.";
+$qr_text_015 = "Launch or go back to your mobile device's scanning app to scan a QR code.";
+$qr_text_016 = "Need a QR Code scanning app? Search <a class=\"hide-loader\" href=\"https://play.google.com/store/search?q=qr%20code%20scanner&c=apps&hl=en\" target=\"_blank\">Google Play</a> (Android) or <a class=\"hide-loader\" href=\"https://itunes.apple.com/store/\" target=\"_blank\">iTunes</a> (iOS).";
+$qr_text_017 = "A QR Code scanning app is required to utilize this feature.";
+$qr_text_018 = "Launch the app on your mobile device, scan a QR Code located on a bottle label, enter the required password, and check in the entry.";
+
+/**
+ * ------------------------------------------------------------------------
+ * Registration
+ * ------------------------------------------------------------------------
+ */
+$register_text_000 = "Is the volunteer ";
+$register_text_001 = "Are you ";
+$register_text_002 = "Registration has closed.";
+$register_text_003 = "Thank you for your interest.";
+$register_text_004 = "The information you provide beyond your first name, last name, and club is strictly for record-keeping and contact purposes.";
+$register_text_005 = "A condition of entry into the competition is providing this information. Your name and club may be displayed should one of your entries place, but no other information will be made public.";
+$register_text_006 = "Reminder: You are only allowed to enter one region and once you have registered at a location, you will NOT be able to change it.";
+$register_text_007 = "Quick";
+$register_text_008 = "Register";
+$register_text_009 = "a Judge";
+$register_text_010 = "a Participant";
+$register_text_011 = "To register, create your online account by filling out the fields below.";
+$register_text_012 = "Quickly add a participant to the competition&rsquo;s judge/steward pool. A dummy address and phone number will be used and a default password of <em>bcoem</em> will be given to each participant added via this screen.";
+$register_text_013 = "Entry into this competition is conducted completely online.";
+$register_text_014 = "To add your entries and/or indicate that you are willing to judge or steward (judges and stewards can also add entries), you will need to create an account on our system.";
+$register_text_015 = "Your email address will be your user name and will be used as a means of information dissemination by the competition staff. Please make sure it is correct.";
+$register_text_016 = "Once you have registered, you can proceed through the entry process.";
+$register_text_017 = "Each entry you add will automatically be assigned a number by the system.";
+$register_text_018 = "Choose one. This question will be used to verify your identity should you forget your password.";
+$register_text_019 = "Please provide an email address.";
+$register_text_020 = "The email addresses you entered don't match.";
+$register_text_021 = "Email addresses serve as user names.";
+$register_text_022 = "Please provide a password.";
+$register_text_023 = "Please provide an answer to your security question.";
+$register_text_024 = "Make your security answer something only you will easily remember!";
+$register_text_025 = "Please provide a first name.";
+$register_text_026 = "Please provide a last name.";
+$register_text_027 = "a Steward";
+$register_text_028 = "Please provide a street address.";
+$register_text_029 = "Please provide a city.";
+$register_text_030 = "Please provide a state or province.";
+$register_text_031 = "Please provide a zip or postal code.";
+$register_text_032 = "Please provide a primary telephone number.";
+$register_text_033 = "Only American Homebrewers Association members are eligible for a Great American Beer Festival Pro-Am opportunity.";
+$register_text_034 = "To register, you must check the box, indicating that you agree to the waiver statement.";
+
+/**
+ * ------------------------------------------------------------------------
+ * Sidebar
+ * ------------------------------------------------------------------------
+ */
 $sidebar_text_000 = "Registrations for judges or stewards accepted";
 $sidebar_text_001 = "Registrations for stewards accepted";
 $sidebar_text_002 = "Registrations for judges";
@@ -1044,12 +1072,11 @@ $sidebar_text_023 = "the shipping location";
 $sidebar_text_024 = "Competition judging dates are yet to be determined. Please check back later.";
 $sidebar_text_025 = "have been added to the system as of";
 
-// -------------------- Sponsors --------------------
-// NONE
-
-
-// -------------------- Styles ---------------------
-
+/**
+ * ------------------------------------------------------------------------
+ * Styles
+ * ------------------------------------------------------------------------
+ */
 $styles_entry_text_07C = "The entrant must specify whether the entry is a Munich Kellerbier (pale, based on Helles) or a Franconian Kellerbier (amber, based on Marzen). The entrant may specify another type of Kellerbier based on other base styles such as Pils, Bock, Schwarzbier, but should supply a style description for judges.";
 $styles_entry_text_09A = "The entrant must specify whether the entry is a pale or a dark variant.";
 $styles_entry_text_10C = "The entrant must specify whether the entry is a pale or a dark variant.";
@@ -1098,33 +1125,41 @@ $styles_entry_text_C2E = "Entrants MUST specify carbonation level (3 levels). En
 $styles_entry_text_C2F = "Entrants MUST specify all ingredients. Entrants MUST specify carbonation level (3 levels). Entrants MUST specify sweetness (5 categories).";
 
 
-// -------------------- User (Edit Email) --------------------
-
+/**
+ * ------------------------------------------------------------------------
+ * User Edit Email
+ * ------------------------------------------------------------------------
+ */
 $user_text_000 = "A new email address is required and must be in valid form.";
 $user_text_001 = "Enter the old password.";
 $user_text_002 = "Enter the new password.";
 $user_text_003 = "Please check this box if you wish to proceed with changing your email address.";
 
-// -------------------- Volunteers --------------------
+/**
+ * ------------------------------------------------------------------------
+ * Volunteers
+ * ------------------------------------------------------------------------
+ */
 
-if ($section == "volunteers") {
+$volunteers_text_000 = "If you have registered,";
+$volunteers_text_001 = "and then choose <em>Edit Account</em> from the My Account menu indicated by the";
+$volunteers_text_002 = "icon on the top menu";
+$volunteers_text_003 = "and";
+$volunteers_text_004 = "If you have <em>not</em> registered and are willing to be a judge or steward, please register";
+$volunteers_text_005 = "Since you have already registered,";
+$volunteers_text_006 = "access your account";
+$volunteers_text_007 = "to see if you have volunteered to be a judge or steward";
+$volunteers_text_008 = "If you are willing to judge or steward, please return to register on or after";
 
-	$volunteers_text_000 = "If you have registered,";
-	$volunteers_text_001 = "and then choose <em>Edit Account</em> from the My Account menu indicated by the";
-	$volunteers_text_002 = "icon on the top menu";
-	$volunteers_text_003 = "and";
-	$volunteers_text_004 = "If you have <em>not</em> registered and are willing to be a judge or steward, please register";
-	$volunteers_text_005 = "Since you have already registered,";
-	$volunteers_text_006 = "access your account";
-	$volunteers_text_007 = "to see if you have volunteered to be a judge or steward";
-	$volunteers_text_008 = "If you are willing to judge or steward, please return to register on or after";
+// v2.1.9
+$volunteers_text_009 = "If you would like to volunteer to be a competition staff member, please register or update your account to indicate that you wish to be a part of the competition staff.";
+$volunteers_text_010 = "";
 
-	// v2.1.9
-	$volunteers_text_009 = "If you would like to volunteer to be a competition staff member, please register or update your account to indicate that you wish to be a part of the competition staff.";
-	$volunteers_text_010 = "";
-
-}
-
+/**
+ * ------------------------------------------------------------------------
+ * Login
+ * ------------------------------------------------------------------------
+ */
 $login_text_000 = "You are already logged in.";
 $login_text_001 = "There is no email address in the system that matches the one you entered.";
 $login_text_002 = "Try again?";
@@ -1143,18 +1178,22 @@ $login_text_014 = "click here to resend it to";
 $login_text_015 = "If you can't remember the answer to your security question, contact a competition official or site administrator.";
 $login_text_016 = "Get it emailed to";
 
-// -------------------- Winners --------------------
-
+/**
+ * ------------------------------------------------------------------------
+ * Winners
+ * ------------------------------------------------------------------------
+ */
 $winners_text_000 = "No winners have been entered for this table. Please check back later.";
 $winners_text_001 = "Winning entries have not been posted yet. Please check back later.";
 $winners_text_002 = "Your chosen award structure is to award places by table. Select the award places for the table as a whole below.";
 $winners_text_003 = "Your chosen award structure is to award places by category. Select the award places for each overall category below (there may be more than one at this table).";
 $winners_text_004 = "Your chosen award structure is to award places by subcategory. Select the award places for each subcategory below (there may be more than one at this table).";
 
-// ----------------------------------------------------------------------------------
-// Output
-// ----------------------------------------------------------------------------------
-
+/**
+ * ------------------------------------------------------------------------
+ * Output
+ * ------------------------------------------------------------------------
+ */
 $output_text_000 = "Thank you for participating our competition";
 $output_text_001 = "A summary of your entries, scores, and places is below.";
 $output_text_002 = "Summary for";
@@ -1184,19 +1223,20 @@ $output_text_025 = "Total Staff Points Available";
 $output_text_026 = "Styles in this category are not accepted in this competition.";
 $output_text_027 = "link to Beer Judge Certification Program Style Guidelines";
 
-// ----------------------------------------------------------------------------------
-// Maintenance
-// ----------------------------------------------------------------------------------
-
-// v2.1.9
+/**
+ * ------------------------------------------------------------------------
+ * Maintenance
+ * ------------------------------------------------------------------------
+ */
 $maintenance_text_000 = "The site administrator has taken the site offline to undergo maintenance.";
 $maintenance_text_001 = "Please check back later.";
 
-// ----------------------------------------------------------------------------------
-// Version 2.1.10-2.1.12 Additions
-// ----------------------------------------------------------------------------------
+/**
+ * ------------------------------------------------------------------------
+ * Version 2.1.10-2.1.13 Additions
+ * ------------------------------------------------------------------------
+ */
 
-// -------------------- Labels --------------------
 $label_entry_numbers = "Entry Number(s)"; // For PayPal IPN Email
 $label_status = "Status"; // For PayPal IPN Email
 $label_transaction_id = "Transaction ID"; // For PayPal IPN Email
@@ -1262,71 +1302,53 @@ $label_jump_to = "Jump to...";
 $label_top = "Top";
 $label_bjcp_cider = "Cider Judge";
 
-// -------------------- Headers --------------------
 $header_text_112 = "You do not have sufficient access privileges to perform this action.";
 $header_text_113 = "You can only edit your own account information.";
 $header_text_114 = "As an admin, you can change a user's account information via Admin > Entries and Particpants > Manage Participants.";
 $header_text_115 = "Results have been published.";
 $header_text_116 = "If you do not receive the email within a reasonable amount of time, contact a competition official or site administrator to reset your password for you.";
 
-// -------------------- Alerts --------------------
 $alert_text_082 = "Since you signed up as a judge or steward, you are not allowed to add entries to your account. Only representatives of an organization are able to add entries to their accounts.";
 $alert_text_083 = "Adding and edting of entries is not available.";
 $alert_text_084 = "As an Administrator, you can add an entry to an organization's account by using the &quot;Add Entry For...&quot; dropdown menu on the Admin &gt; Entries and Participants &gt; Manage Entries page.";
 $alert_text_085 = "You will not be able to print any entry's paperwork (bottle labels, etc.) until payment for it has been confirmed and it has been marked as &quot;paid&quot; below.";
 
-// -------------------- Brew (Add Entry) --------------------
-if ($section == "brew") {
-	$brew_text_027 = "This Brewers Association style requires a statement from the brewer regarding the special nature of the product. See the <a href=\"https://www.brewersassociation.org/resources/brewers-association-beer-style-guidelines/\" target=\"_blank\">BA Style Guidelines</a> for specific guidance.";
-	$brew_text_028 = "***NOT REQUIRED*** Add information here that is detailed in the style guidelines as a characteristic that you MAY declare.";
-	$brew_text_029 = "Admin editing disabled. Your profile is considered a personal profile and not a organizational profile, and thus, not eligible to add entries. To add an entry for an organization, access the Manage Entries list and choose an organization from the &quot;Add an Entry For...&quot; dropdown.";
+$brew_text_027 = "This Brewers Association style requires a statement from the brewer regarding the special nature of the product. See the <a href=\"https://www.brewersassociation.org/resources/brewers-association-beer-style-guidelines/\" target=\"_blank\">BA Style Guidelines</a> for specific guidance.";
+$brew_text_028 = "***NOT REQUIRED*** Add information here that is detailed in the style guidelines as a characteristic that you MAY declare.";
+$brew_text_029 = "Admin editing disabled. Your profile is considered a personal profile and not a organizational profile, and thus, not eligible to add entries. To add an entry for an organization, access the Manage Entries list and choose an organization from the &quot;Add an Entry For...&quot; dropdown.";
+$brew_text_030 = "milk / lactose";
+$brew_text_031 = "eggs";
+$brew_text_032 = "fish";
+$brew_text_033 = "crustacean shellfish";
+$brew_text_034 = "tree nuts";
+$brew_text_035 = "peanuts";
+$brew_text_036 = "wheat";
+$brew_text_037 = "soybeans";
+$brew_text_038 = "Does this entry have possible food allergens? Common food allergens include milk (including lactose), eggs, fish, crustaceans, tree nuts, peanuts, wheat, soybeans, etc.";
+$brew_text_039 = "Please specify any and all possible allergen(s)";
 
-    // v2.1.13
-    $brew_text_030 = "milk / lactose";
-    $brew_text_031 = "eggs";
-    $brew_text_032 = "fish";
-    $brew_text_033 = "crustacean shellfish";
-    $brew_text_034 = "tree nuts";
-    $brew_text_035 = "peanuts";
-    $brew_text_036 = "wheat";
-    $brew_text_037 = "soybeans";
-    $brew_text_038 = "Does this entry have possible food allergens? Common food allergens include milk (including lactose), eggs, fish, crustaceans, tree nuts, peanuts, wheat, soybeans, etc.";
-    $brew_text_039 = "Please specify any and all possible allergen(s)";
-}
+$brewer_text_022 = "You will be able to identify a co-brewer when adding your entries.";
+$brewer_text_023 = "Select &quot;None&quot; if you are not affiliated with a club. Select &quot;Other&quot; if your club is not on the list - <strong>be sure to use the search box</strong>.";
+$brewer_text_024 = "Please provide your first name.";
+$brewer_text_025 = "Please provide your last name.";
+$brewer_text_026 = "Please provide your phone number.";
+$brewer_text_027 = "Please provide your address.";
+$brewer_text_028 = "Please provide your city.";
+$brewer_text_029 = "Please provide your state or province.";
+$brewer_text_030 = "Pleaee provide your zip or postal code.";
+$brewer_text_031 = "Please choose your country.";
+$brewer_text_032 = "Please provide your organization name.";
+$brewer_text_033 = "Please choose a security question.";
+$brewer_text_034 = "Please provide a response to your security question.";
+$brewer_text_035 = "Have you passed the BJCP Cider Judge exam?";
 
-// -------------------- Brewer (Account) --------------------
-if (($section == "brewer") || ($section == "register") || ($section == "step2") || (($section == "admin") && ($go == "entrant")) || (($section == "admin") && ($go == "judge")) || (($section == "admin") && ($go == "steward"))) {
-	$brewer_text_022 = "You will be able to identify a co-brewer when adding your entries.";
-	$brewer_text_023 = "Select &quot;None&quot; if you are not affiliated with a club. Select &quot;Other&quot; if your club is not on the list - <strong>be sure to use the search box</strong>.";
-    $brewer_text_024 = "Please provide your first name.";
-    $brewer_text_025 = "Please provide your last name.";
-    $brewer_text_026 = "Please provide your phone number.";
-    $brewer_text_027 = "Please provide your address.";
-    $brewer_text_028 = "Please provide your city.";
-    $brewer_text_029 = "Please provide your state or province.";
-    $brewer_text_030 = "Pleaee provide your zip or postal code.";
-    $brewer_text_031 = "Please choose your country.";
-    $brewer_text_032 = "Please provide your organization name.";
-    $brewer_text_033 = "Please choose a security question.";
-    $brewer_text_034 = "Please provide a response to your security question.";
+$entry_info_text_047 = "If a style's name is hyperlinked, it has specific entry requirements. Click or tap on the name to access the Brewers Association styles as listed on their website.";
 
-    // v2.1.12
-    $brewer_text_035 = "Have you passed the BJCP Cider Judge exam?";
-}
-
-// -------------------- Entry Info --------------------
-if ($section == "entry") {
-	$entry_info_text_047 = "If a style's name is hyperlinked, it has specific entry requirements. Click or tap on the name to access the Brewers Association styles as listed on their website.";
-}
-
-// -------------------- List (User Entry List) --------------------
-if (($section == "list") || ($section == "account") || ($go == "entries")) {
-	$brewer_entries_text_016 = "Style Entered NOT Accepted";
-	$brewer_entries_text_017 = "Entries will not be displayed as received until the competition staff has marked them as such in the system. Typically, this occurs AFTER all entries have been collected from all drop-off and shipping locations and sorted.";
-	$brewer_entries_text_018 = "You will not be able to print this entry's paperwork (bottle labels, etc.) until it has been marked as paid.";
-	$brewer_entries_text_019 = "Printing of entry paperwork is not available at this time.";
-	$brewer_entries_text_020 = "Editing of entries is not available at this time. If you wish to edit your entry, contact a competition official.";
-}
+$brewer_entries_text_016 = "Style Entered NOT Accepted";
+$brewer_entries_text_017 = "Entries will not be displayed as received until the competition staff has marked them as such in the system. Typically, this occurs AFTER all entries have been collected from all drop-off and shipping locations and sorted.";
+$brewer_entries_text_018 = "You will not be able to print this entry's paperwork (bottle labels, etc.) until it has been marked as paid.";
+$brewer_entries_text_019 = "Printing of entry paperwork is not available at this time.";
+$brewer_entries_text_020 = "Editing of entries is not available at this time. If you wish to edit your entry, contact a competition official.";
 
 if (SINGLE) $brewer_info_000 = "Hello";
 else $brewer_info_000 = "Thank you for participating in the";
@@ -1343,33 +1365,26 @@ $brewer_info_010 = "You have already been assigned as a";
 $brewer_info_011 = "or";
 $brewer_info_012 = "Print your judging scoresheet labels ";
 
-// -------------------- Pay --------------------
 $pay_text_030 = "By clicking the &quot;I Understand&quot; button below, you will be directed to PayPal to make your payment. Once you have <strong>completed</strong> your payment, PayPal will redirect you back to this site and will email you a receipt for the transaction. <strong>If your payment was successful, your paid status will be updated automatically. Please note that you may need wait a few minutes for the payment status to be updated.</strong> Be sure to refresh the pay page or access your entries list.";
 $pay_text_031 = "About to Leave this Site";
 $pay_text_032 = "No payment is necessary. Thank you!";
 $pay_text_033 = "You have unpaid entries. Click or tap to pay for your entries.";
 
-// -------------------- Register --------------------
-if (($section == "register") || ($section == "brewer") || ($action == "register") || ($go == "account") || ($section == "step2")) {
-	$register_text_035 = "The information you provide beyond your organization's name is strictly for record-keeping and contact purposes.";
-	$register_text_036 = "A condition of entry into the competition is providing this information, including a contact person's email address and phone number. Your organization's name may be displayed should one of your entries place, but no other information will be made public.";
-	$register_text_037 = "Registration Confirmation";
-	$register_text_038 = "An administrator has registerd you for an account. The following is confirmation of the information input:";
-	$register_text_039 = "Thank you for registering an account. The following is confirmation of the information you provided:";
-	$register_text_040 = "If any of the above information is incorrect,";
-	$register_text_041 = "log in to your account";
-	$register_text_042 = "and make the necessary changes. Best of luck in the competition!";
-	$register_text_043 = "Please do not reply to this email as it is automatically generated. The originating account is not active or monitored.";
-	$register_text_044 = "Please provide an organization name.";
-	$register_text_045 = "Provide a brewery name, brewpub name, etc. Be sure to check the competition information for types of beverages accepted.";
-	$register_text_046 = "For U.S. organizations only.";
-}
-
-// -------------------- User Registration --------------------
+$register_text_035 = "The information you provide beyond your organization's name is strictly for record-keeping and contact purposes.";
+$register_text_036 = "A condition of entry into the competition is providing this information, including a contact person's email address and phone number. Your organization's name may be displayed should one of your entries place, but no other information will be made public.";
+$register_text_037 = "Registration Confirmation";
+$register_text_038 = "An administrator has registerd you for an account. The following is confirmation of the information input:";
+$register_text_039 = "Thank you for registering an account. The following is confirmation of the information you provided:";
+$register_text_040 = "If any of the above information is incorrect,";
+$register_text_041 = "log in to your account";
+$register_text_042 = "and make the necessary changes. Best of luck in the competition!";
+$register_text_043 = "Please do not reply to this email as it is automatically generated. The originating account is not active or monitored.";
+$register_text_044 = "Please provide an organization name.";
+$register_text_045 = "Provide a brewery name, brewpub name, etc. Be sure to check the competition information for types of beverages accepted.";
+$register_text_046 = "For U.S. organizations only.";
 $user_text_004 = "Be sure to use upper and lower case letters, numbers, and special characters for a stronger password.";
 $user_text_005 = "Your current email address is";
 
-// -------------------- Login --------------------
 $login_text_017 = "Email Me My Security Question Answer";
 $login_text_018 = "Your user name (email address) is required.";
 $login_text_019 = "Your password is required.";
@@ -1382,10 +1397,8 @@ $login_text_025 = "Forgot your password?";
 $login_text_026 = "Enter your account email address and new password below.";
 $login_text_027 = "Your password has been reset successfully. You may now log in with the new password.";
 
-// -------------------- Winners --------------------
 $winners_text_005 = "Best of Show winner(s) have not been posted yet. Please check back later.";
 
-// -------------------- Output - PayPal Response --------------------
 $paypal_response_text_000 = "Your payment has been completed. The transaction details are provided here for your convience.";
 $paypal_response_text_001 = "Please note that you will receive an official commuication from PayPal at the email address listed below.";
 $paypal_response_text_002 = "Best of luck in the competition!";
@@ -1397,7 +1410,6 @@ $paypal_response_text_007 = "Please contact the competition organizer if you hav
 $paypal_response_text_008 = "Invalid PayPal Payment";
 $paypal_response_text_009 = "PayPal Payment";
 
-// -------------------- Output - Password reset email text --------------------
 $pwd_email_reset_text_000 = "A request was made to verify the account at the";
 $pwd_email_reset_text_001 = "website using the ID Verfication email function. If you did not initiate this, please contact the competition's organizer.";
 $pwd_email_reset_text_002 = "The ID verification answer is case sensitive";
@@ -1405,7 +1417,6 @@ $pwd_email_reset_text_003 = "A request was made to change your password at the";
 $pwd_email_reset_text_004 = "website. If you did not initiate this, don't worry. Your password cannot be reset without the link below.";
 $pwd_email_reset_text_005 = "To reset your password, click the link below or copy/paste it into your browser.";
 
-// -------------------- Best Brewer --------------------
 $best_brewer_text_000 = "participating brewers";
 $best_brewer_text_001 = "HM";
 $best_brewer_text_002 = "Scores and tie-breakers have been applied in accordance with the <a href=\"#\" data-toggle=\"modal\" data-target=\"#scoreMethod\">scoring methodology</a>. Numbers reflected are rounded to the hundredth place. Hover over or tap the question mark icon (<span class=\"fa fa-question-circle\"></span>) for the actual calculated value.";
@@ -1422,7 +1433,6 @@ $best_brewer_text_012 = "The highest average score.";
 $best_brewer_text_013 = "Unused.";
 $best_brewer_text_014 = "participating clubs";
 
-// Version 2.1.12
 $dropoff_qualifier_text_001 = "Please pay attention to the notes provided for each drop-off location. There could be earlier deadlines for some drop-off locations listed, particular hours when entries are accepted, certain individuals to leave your entries with, etc. <strong class=\"text-danger\">All entrants are responsible for reading the information provided by the organizers for each drop-off location.</strong>";
 
 $brewer_text_036 = "Since you have chosen \"<em>Other</em>,\" please make sure the club you have entered is not on our list in some similar form.";
@@ -1431,9 +1441,11 @@ $brewer_text_038 = "Consistent club names across users is essential if for \"Bes
 $brewer_text_039 = "The club you entered previously does not match one on our list.";
 $brewer_text_040 = "Please choose from the list or choose <em>Other</em> and enter your club name.";
 
-// ----------------------------------------------------------------------------------
-// Version 2.1.13 Additions
-// ----------------------------------------------------------------------------------
+/**
+ * ------------------------------------------------------------------------
+ * Version 2.1.13 Additions
+ * ------------------------------------------------------------------------
+ */
 
 $entry_info_text_048 = "To ensure proper judging, the entrant must provide additional information about the beverage.";
 $entry_info_text_049 = "To ensure proper judging, the entrant must provide the strength level of the beverage.";
@@ -1450,11 +1462,12 @@ $label_possible_allergens = "Possible Allergens";
 $label_please_choose = "Please Choose";
 $label_mead_cider_info = "Mead/Cider Info";
 
-// ----------------------------------------------------------------------------------
-// Version 2.1.14 Additions
-// ----------------------------------------------------------------------------------
+/**
+ * ------------------------------------------------------------------------
+ * Version 2.1.14 Additions
+ * ------------------------------------------------------------------------
+ */
 
-// Labels
 $label_winners = "Winners";
 $label_unconfirmed_entries = "Unconfirmed Entries";
 $label_recipe = "Recipe";
@@ -1462,10 +1475,8 @@ $label_view = "View";
 $label_number_bottles = "Number of Bottles Required Per Entry";
 $label_pro_am = "Pro-Am";
 
-// Pay screen
 $pay_text_034 = "The limit of paid entries has been reached - further entry payments are not being accepted.";
 
-// Bottle Labels
 $bottle_labels_000 = "Labels cannot be generated at this time.";
 $bottle_labels_001 = "Attach label ONLY with a rubber band.";
 $bottle_labels_002 = "Use clear packing tape to attach to the barrel of each bottle.";
@@ -1476,16 +1487,17 @@ $bottle_labels_005 = "If any items are missing, close this window and edit the e
 $bottle_labels_006 = "Space reserved for competition staff use.";
 $bottle_labels_007 = "THIS RECIPE FORM IS FOR YOUR RECORDS ONLY - please DO NOT include a copy of it with your entry shipment.";
 
-// Add/Edit Entry
+
 $brew_text_040 = "There is no need to specify gluten as an allergen for any beer style; it is assumed that it will be present. Gluten-free beers should be entered into the Gluten-Free Beer category (BA) or the Alternative Grain Beer category (BJCP). Only specify gluten as an allergen in mead or cider styles if a source fermentable contains gluten (e.g., barley, wheat, or rye malt) or if a brewer's yeast was used.";
 
-// Pro-Am
 $brewer_text_041 = "Have you already been awarded a Pro-Am opportunity to compete in the upcoming Great American Beer Festival Pro-Am Competition?";
 $brewer_text_042 = "If you have already been awarded a Pro-Am, or have been on the brewing staff at any brewery, please indicate so here. This will help competition staff and Pro-Am brewery representatives (if applicable for this competition) to choose Pro-Am entries from brewers that have not secured one.";
 
-// ----------------------------------------------------------------------------------
-// Version 2.1.15 Additions
-// ----------------------------------------------------------------------------------
+/**
+ * ------------------------------------------------------------------------
+ * Version 2.1.15 Additions
+ * ------------------------------------------------------------------------
+ */
 
 $label_submitting = "Submitting";
 $label_additional_info = "Entries with Additional Info";
@@ -1498,26 +1510,33 @@ $brewer_entries_text_022 = "Print All Bottle Labels for Checked Entries";
 $brewer_entries_text_023 = "The bottle labels will open in a new tab or window.";
 $brewer_entries_text_024 = "Print Bottle Labels";
 
-// ----------------------------------------------------------------------------------
-// Version 2.1.18 Additions
-// ----------------------------------------------------------------------------------
+/**
+ * ------------------------------------------------------------------------
+ * Version 2.1.18 Additions
+ * ------------------------------------------------------------------------
+ */
 
 $output_text_031 = "Press Esc to hide.";
 $styles_entry_text_21X = "Entrant MUST specify a strength (session: 3.0-5.0%, standard: 5.0-7.5%, double: 7.5-9.5%).";
 $styles_entry_text_PRX4 = "Entrant must specify the types of fresh fruit(s) used.";
 
-// ----------------------------------------------------------------------------------
-// Version 2.1.19 Additions
-// ----------------------------------------------------------------------------------
+/**
+ * ------------------------------------------------------------------------
+ * Version 2.1.19 Additions
+ * ------------------------------------------------------------------------
+ */
+
 $output_text_032 = "Entry count only reflects entrants who indicated a drop-off location in their account profile. The actual number of entries may be higher or lower.";
 $brewer_text_043 = "Or, are you, or have you ever been, employed on the brewing staff at any brewery? This includes brewer positions as well as lab technicians, cellar crew, bottling/canning crew, etc. Current and former brewing staff employees are not eligible to participate in the Great American Beer Festival Pro-Am competition.";
 $label_entrant_reg = "Entrant Registration";
 $sidebar_text_026 = "are in the system as of";
 $label_paid_entries = "Paid Entries";
 
-// ----------------------------------------------------------------------------------
-// Version 2.2.0 Additions
-// ----------------------------------------------------------------------------------
+/**
+ * ------------------------------------------------------------------------
+ * Version 2.2.0 Additions
+ * ------------------------------------------------------------------------
+ */
 
 $alert_text_086 = "Internet Explorer is not supported by BCOE&M - features and functions will not render properly and your experience will not be optimal. Please upgrade to a newer browser.";
 $alert_text_087 = "For an optimal experience and so that all features and functions execute properly, please enable JavaScript to continue using this site. Otherwise, unexpected behavior will occur.";
@@ -1531,14 +1550,12 @@ $brewer_info_014 = "Access the Judging Dashboard using the button below to enter
 
 $contact_text_004 = "The competition organizers have not specified any contacts.";
 
-// Awards
 $label_thank_you = "Thank You";
 $label_congrats_winners = "Congratulations to All Medal Winners";
 $label_placing_entries = "Placing Entries";
 $label_by_the_numbers = "By the Numbers";
 $label_launch_pres = "Launch Awards Presentation";
 $label_entrants = "Entrants";
-
 $label_judging_dashboard = "Judging Dashboard";
 $label_table_assignments = "Table Assignments";
 $label_table = "Table"; 
@@ -1569,7 +1586,6 @@ $label_lead_judge = "Lead Judge";
 $label_mini_bos_judge = "Mini-BOS Judge";
 $label_view_my_eval = "View My Evaluation";
 $label_view_other_judge_eval = "View Other Judge's Evaluation";
-
 $label_place_awarded = "Place Awarded";
 $label_honorable_mention = "Honorable Mention";
 $label_places_awarded_table = "Places Awarded at this Table";
@@ -1620,7 +1636,6 @@ $evaluation_info_041 = "Scored entries in your flight:";
 $evaluation_info_042 = "Your scored entries:";
 $evaluation_info_043 = "Judges with evaluations at this table:";
 
-// Scoresheet Labels and Associated Descriptions
 $label_submitted = "Submitted";
 $label_ordinal_position = "Ordinal Position in Flight";
 $label_alcoholic = "Alcoholic";
@@ -1710,7 +1725,6 @@ $label_vinegary = "Vinegary";
 $label_plastic = "Plastic";
 $label_smoky = "Smoky";
 
-// Scoresheet Descriptors
 $label_inappropriate = "Inappropriate";
 $label_possible_points = "Possible Points";
 $label_malt = "Malt";
@@ -1752,7 +1766,6 @@ $label_fruit = "Fruit";
 $label_acidity = "Acidity";
 $label_tannin = "Tannin";
 
-// Appearance and Color of Entries
 $label_white = "White";
 $label_straw = "Straw";
 $label_yellow = "Yellow";
@@ -1771,15 +1784,25 @@ $label_small = "Small";
 $label_size = "Size";
 $label_retention = "Retention";
 $label_head = "Head";
+$label_head_size = "Head Size";
+$label_head_retention = "Head Retention";
+$label_head_color = "Head Color";
 $label_brettanomyces = "Brettanomyces";
 $label_cardboard = "Cardboard";
 $label_cloudy = "Cloudy";
 $label_sherry = "Sherry";
 $label_harsh = "Harsh";
+$label_harshness = "Harshness";
 $label_full = "Full";
 $label_suggested = "Suggested";
+$label_lactic = "Lactic";
+$label_smoke = "Smoke";
+$label_spice = "Spice";
+$label_vinous = "Vinous";
+$label_wood = "Wood";
+$label_cream = "Cream";
+$label_flat = "Flat";
 
-// Scoresheet Score Descriptions
 $label_descriptor_defs = "Descriptor Definitions";
 $label_outstanding = "Outstanding";
 $descr_outstanding = "World-class example of style.";
@@ -1794,11 +1817,101 @@ $descr_fair = "Off flavors/aromas or major style deficiencies. Unpleasant.";
 $label_problematic = "Problematic";
 $descr_problematic = "Major off flavors and aromas dominate. Hard to drink.";
 
-// ----------------------------------------------------------------------------------
-// Version 2.3.0 Additions
-// ----------------------------------------------------------------------------------
+/**
+ * ------------------------------------------------------------------------
+ * Version 2.3.0 Additions
+ * ------------------------------------------------------------------------
+ */
 
 $winners_text_006 = "Please note: results from this table may be incomplete due to insufficient entry or style information.";
+
+$label_elapsed_time = "Elapsed Time";
+$label_judge_score = "Judge Score(s)";
+$label_judge_consensus_scores = "Judge consensus score(s)";
+$label_your_consensus_score = "Your consensus score";
+$label_score_range_status = "Score Range Status";
+$label_consensus_caution = "Consensus Caution";
+$label_consensus_match = "Consensus Match";
+$label_score_range_caution = "Judges' Score Range Caution";
+$label_score_range_ok = "Judges' Score Range OK";
+$label_auto_log_out = "Auto Log Out in";
+$label_place_previously_selected = "Place Previously Selected";
+$label_entry_without_eval = "Entry Without an Evaluation";
+$label_entries_with_eval = "Entries With an Evaluation";
+$label_entries_without_eval = "Entries Without an Evaluation";
+$label_judging_close = "Judging Close";
+$label_session_expire = "Session About To Expire";
+$label_refresh = "Refresh This Page";
+$label_stay_here = "Stay Here";
+$label_bottle_inspection = "Bottle Inspection";
+$label_bottle_inspection_comments = "Bottle Inspection Comments";
+$label_consensus_no_match = "Consensus Scores Do Not Match";
+$label_score_below_courtesy = "Score Entered is Below the Courtesy Score Threshold";
+$label_score_greater_50 = "Score Entered is Greater Than 50";
+$label_score_out_range = "Score is Out of Score Range";
+$label_score_range = "Score Range";
+$label_ok = "OK";
+$label_esters = "Esters";
+$label_phenols = "Phenols";
+$label_descriptors = "Descriptors";
+$label_grainy = "Grainy";
+$label_caramel = "Caramel";
+$label_bready = "Bready";
+$label_rich = "Rich";
+$label_dark_fruit = "Dark Fruit";
+$label_toasty = "Toasty";
+$label_roasty = "Roasty";
+$label_burnt = "Burnt";
+$label_citrusy = "Citrusy";
+$label_earthy = "Earthy";
+$label_herbal = "Herbal";
+$label_piney = "Piney";
+$label_woody = "Woody";
+$label_apple_pear = "Apple/Pear";
+$label_banana = "Banana";
+$label_berry = "Berry";
+$label_citrus = "Citrus";
+$label_dried_fruit = "Dried Fruit";
+$label_grape = "Grape";
+$label_stone_fruit = "Stone Fruit";
+$label_even = "Even";
+$label_gushed = "Gushed";
+$label_hot = "Hot";
+$label_slick = "Slick";
+$label_finish = "Finish";
+$label_biting = "Biting";
+$label_drinkability = "Drinkability";
+$label_bouquet = "Bouquet";
+$label_smoke = "Smoke";
+
+$evaluation_info_044 = "Your consensus score does not match those entered by other judges.";
+$evaluation_info_045 = "Consensus score entered matches those entered by previous judges.";
+$evaluation_info_046 = "Score difference is greater than";
+$evaluation_info_047 = "Score difference is within acceptable range.";
+$evaluation_info_048 = "The place you specified has already been input for the table. Please choose another place or no place (None).";
+$evaluation_info_049 = "These entries do not have at least one evaluation";
+$evaluation_info_050 = "Please provide the entry's ordinal position in the flight.";
+$evaluation_info_051 = "Please provide the total number of entries in the flight.";
+$evaluation_info_052 = "Appropriate size, cap, fill level, label removal, etc.";
+$evaluation_info_053 = "The consensus score is the final score agreed upon by all judges evaluating the entry. If the consensus score is unknown at this time, enter your own score. If the consensus score entered here differs from those entered by other judges, you will be notified.";
+$evaluation_info_054 = "This entry advanced to a mini-BOS round.";
+$evaluation_info_055 = "The consensus score you entered does not match those entered by previous judges for this entry. Please consult with other judges evaluating this entry and revise your consensus score as necessary.";
+$evaluation_info_056 = "The score you entered falls below 13, <a href=\"https://www.bjcp.org/cep/GreatBeerJudging.pdf\" target=\"_blank\">a commonly known courtesy threshold for BJCP judges</a>. Please consult with other judges and revise your score as necessary.";
+$evaluation_info_057 = "Scores should be no less than 5 and no greater than 50.";
+$evaluation_info_058 = "The score you entered is greater than 50, the maximum score for any entry. Please review and revise your consensus score.";
+$evaluation_info_059 = "The score you provided for this entry is outside of the scoring difference range between judges.";
+$evaluation_info_060 = "characters maximum";
+$evaluation_info_061 = "Please provide some brief comments.";
+$evaluation_info_062 = "Please choose a descriptor.";
+$evaluation_info_063 = "I would finish this sample.";
+$evaluation_info_064 = "I would drink a pint of this beer.";
+$evaluation_info_065 = "I would pay money for this beer.";
+$evaluation_info_066 = "I would recommend this beer.";
+$evaluation_info_067 = "Please provide a rating.";
+$evaluation_info_068 = "Please provide the consensus score - minimum of 5, maximum of 50.";
+
+$alert_text_090 = "Your session will expire in two minutes. You can stay on the current page to finish your work before time expires, refresh this page to continue your current session (form data may be lost), or log out.";
+$alert_text_091 = "Your session will expire in 30 seconds. You can refresh to continue your current session or log out.";
 
 /**
  * ----------------------------------------------------------------------------------
@@ -1828,10 +1941,11 @@ if (strpos($section, "step") === FALSE) $label_character_limit = $label_characte
 if (strpos($section, "step") === FALSE) $header_text_031 = $header_text_031; else $header_text_031 = "";
 if (strpos($section, "step") === FALSE) $beerxml_text_007 = $beerxml_text_007; else $beerxml_text_007 = "";
 
-
-// ----------------------------------------------------------------------------------
-// Admin Pages - Admin pages will be included in a future release
-// ----------------------------------------------------------------------------------
+/**
+ * ----------------------------------------------------------------------------------
+ * Admin Pages - Admin pages will be included in a future release
+ * ----------------------------------------------------------------------------------
+ */
 // if ($section == "admin") include (LANG.'en_admin.lang.php');
 
 ?>

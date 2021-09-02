@@ -32,7 +32,7 @@
 -- Once you have installed the DB tables, browse to your site and log in.
 -- Update the default information to suit your own needs. Be sure to update:
 --   -  Site Preferences
---   -  Competition Organization Preferences
+--   -  Judging/Competition Organization Preferences
 --   -  Competition Info
 --   -  Style Types
 --   -  Accepted Style Categories
@@ -825,7 +825,8 @@ CREATE TABLE `baseline_preferences` (
   `prefsTieBreakRule6` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `prefsShowBestClub` int(1) DEFAULT NULL,
   `prefsBestClubTitle` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `prefsBestUseBOS` tinyint(1) DEFAULT NULL, 
+  `prefsBestUseBOS` tinyint(1) DEFAULT NULL,
+  `prefsEval` tinyint(1) DEFAULT NULL, 
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 

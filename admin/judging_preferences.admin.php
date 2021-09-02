@@ -5,7 +5,7 @@ else $judging_scoresheet = $_SESSION['jPrefsScoresheet'];
 ?>
 <form data-toggle="validator" role="form" class="form-horizontal" method="post" action="<?php echo $base_url; ?>includes/process.inc.php?section=<?php if ($section == "step8") echo "setup"; else echo $section; ?>&amp;action=edit&amp;dbTable=<?php echo $judging_preferences_db_table; ?>&amp;id=1" name="form1">
 <?php if ($section != "step8") { ?>
-<p class="lead"><?php echo $_SESSION['contestName'].": Set Competition Organization Preferences"; ?></p>
+<p class="lead"><?php echo $_SESSION['contestName'].": Set Judging/Competition Organization Preferences"; ?></p>
 <div class="bcoem-admin-element hidden-print">
 	<div class="btn-group" role="group" aria-label="...">
 		<a class="btn btn-default" href="<?php echo $base_url; ?>index.php?section=admin&amp;go=preferences"><span class="fa fa-cog"></span> Website Preferences</a>
@@ -256,7 +256,7 @@ else $judging_scoresheet = $_SESSION['jPrefsScoresheet'];
 <div class="bcoem-admin-element hidden-print">
 	<div class="form-group">
 		<div class="col-lg-offset-2 col-md-offset-3 col-sm-offset-4">
-			<input type="submit" name="Submit" id="setJudgingPrefs" class="btn btn-primary" aria-describedby="helpBlock" value="Set Competition Organization Preferences" />
+			<input type="submit" name="Submit" id="setJudgingPrefs" class="btn btn-primary" aria-describedby="helpBlock" value="Set Judging/Competition Organization Preferences" />
 		</div>
 	</div>
 </div>

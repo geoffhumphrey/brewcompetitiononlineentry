@@ -1908,7 +1908,8 @@ if (!check_update("prefsEval", $prefix."preferences")) {
 	mysqli_real_escape_string($connection,$updateSQL);
 	$result = mysqli_query($connection,$updateSQL);
 
-	$updateSQL = sprintf("UPDATE `%s` SET prefsEval='0';", $prefix."preferences");
+	if (EVALUATION) $updateSQL = sprintf("UPDATE `%s` SET prefsEval='1';", $prefix."preferences");
+	else $updateSQL = sprintf("UPDATE `%s` SET prefsEval='0';", $prefix."preferences");
 	mysqli_real_escape_string($connection,$updateSQL);
 	$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 
