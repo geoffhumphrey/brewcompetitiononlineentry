@@ -345,11 +345,6 @@ echo $output_query_count;
     </div>
 </footer><!-- ./footer -->
 <!-- ./ Footer -->
-<?php 
-session_write_close(); 
-if ($logged_in) {
-$session_end = getTimeZoneDateTime($_SESSION['prefsTimeZone'],(time() + ($session_expire_after * 60)),"999",$_SESSION['prefsTimeFormat'],"short","date-no-gmt");
-?>
 <div class="modal fade" id="session-expire-warning" tabindex="-1" role="dialog" aria-labelledby="session-expire-warning-label">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
@@ -385,26 +380,47 @@ $session_end = getTimeZoneDateTime($_SESSION['prefsTimeZone'],(time() + ($sessio
     </div>
   </div>
 </div>
+
+<?php 
+session_write_close(); 
+if ($logged_in) {
+$session_end_seconds = time() + ($session_expire_after * 60);
+$session_end = getTimeZoneDateTime($_SESSION['prefsTimeZone'],$session_end_seconds,"999",$_SESSION['prefsTimeFormat'],"short","date-no-gmt");
+?>
+
+
 <script type="text/javascript" src="https://cdn.rawgit.com/hilios/jQuery.countdown/2.2.0/dist/jquery.countdown.min.js"></script>
 <script>
-$("#session-expire-warning").modal('hide');
-$("#session-expire-warning-30").modal('hide');
+
 var session_end = "<?php echo $session_end; ?>";
+var session_end_seconds = "<?php echo $session_end_seconds; ?>";
+var visual_updates = true;
+
+document.addEventListener('visibilitychange', function(){
+  visual_updates = !document.hidden;
+});
+
 $("#session-end").countdown(session_end, function(event) {
+
     var end_time = (event.strftime('%M:%S'));
     $(this).html(end_time);
-    if (end_time == "02:00") {
-        $("#session-expire-warning").modal('show');
+
+    if (visual_updates) {
+        if (end_time == "02:00") {
+            $("#session-expire-warning").modal('show');
+        }
+        if (end_time == "00:30") {
+            $("#session-expire-warning").modal('hide');
+            $("#session-expire-warning-30").modal('show');
+        }
     }
-    if (end_time == "00:30") {
-        $("#session-expire-warning").modal('hide');
-        $("#session-expire-warning-30").modal('show');
-    }
+
     if (end_time == "00:01") {
         $("#session-expire-warning-30").modal('hide');
         var session_end_redirect = "<?php echo $base_url; ?>includes/logout.inc.php";
         window.location.replace(session_end_redirect);
-    }
+    } 
+        
 });
 </script>
 <?php if ($section == "evaluation") { ?>
@@ -421,14 +437,18 @@ $("#judging-ends").countdown(judging_end.toDate(), function(event) {
 <?php if ($go == "scoresheet") { ?>
 <script>
 $("#session-end-eval").countdown(session_end, function(event) {
+
     var end_time = (event.strftime('%M:%S'));
     $(this).html(end_time);
+    
     if (end_time == "15:00") {
         $("#session-end-eval-p").attr("class", "text-warning");
     }
+    
     if (end_time == "10:00") {
         $("#session-end-eval-p").attr("class", "text-danger");
     }
+
 });
 </script>
 <?php } ?>
