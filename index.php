@@ -380,18 +380,14 @@ echo $output_query_count;
     </div>
   </div>
 </div>
-
 <?php 
 session_write_close(); 
 if ($logged_in) {
 $session_end_seconds = time() + ($session_expire_after * 60);
 $session_end = getTimeZoneDateTime($_SESSION['prefsTimeZone'],$session_end_seconds,"999",$_SESSION['prefsTimeFormat'],"short","date-no-gmt");
 ?>
-
-
 <script type="text/javascript" src="https://cdn.rawgit.com/hilios/jQuery.countdown/2.2.0/dist/jquery.countdown.min.js"></script>
 <script>
-
 var session_end = "<?php echo $session_end; ?>";
 var session_end_seconds = "<?php echo $session_end_seconds; ?>";
 var visual_updates = true;
@@ -444,7 +440,7 @@ $("#session-end-eval").countdown(session_end, function(event) {
     if (end_time == "15:00") {
         $("#session-end-eval-p").attr("class", "text-warning");
     }
-    
+
     if (end_time == "10:00") {
         $("#session-end-eval-p").attr("class", "text-danger");
     }

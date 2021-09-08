@@ -41,7 +41,7 @@
         <p class="descriptor"><?php if (strlen($row_eval['evalOverallComments']) > 800) echo truncate($row_eval['evalOverallComments'],800,"..."); else echo $row_eval['evalOverallComments']; ?></p>
         </div>
         <!-- Total -->
-        <p><strong>Judge Total<span class="pull-right"><?php echo $score; ?> / 50</span></strong></p>
+        <p><strong><?php echo $label_total; ?><span class="pull-right"><?php echo $score; ?> / 50</span></strong></p>
     </div>
 </div><!-- /row (main body content row) -->
 <div>&nbsp;</div>
@@ -51,68 +51,68 @@
     	<div class="box footer-descriptor">
         	<div class="row <?php if ($score >= 45) echo "strong-text"; ?>">
             	<div class="col col-lg-2 col-md-2 col-sm-2 col-xs-2 no-wrap">
-                Outstanding
+                <?php echo $label_outstanding; ?>
                 </div>
                 <div class="col col-lg-2 col-md-2 col-sm-2 col-xs-2 no-wrap">
                 (45-50)
                 </div>
                 <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-8">
-                World-class example of style.
+                <?php echo $descr_outstanding; ?>
                 </div>
             </div>
             <div class="row <?php if (($score >= 38) && ($score <= 44)) echo "strong-text"; ?>">
             	<div class="col col-lg-2 col-md-2 col-sm-2 col-xs-2 no-wrap">
-                Excellent
+                <?php echo $label_excellent; ?>
                 </div>
                 <div class="col col-lg-2 col-md-2 col-sm-2 col-xs-2 no-wrap">
                 (38-44)
                 </div>
                 <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-8">
-                Exempifies the style well, requires minor fine tuning.
+                <?php echo $descr_excellent; ?>
                 </div>
             </div>
             <div class="row <?php if (($score >= 30) && ($score <= 37)) echo "strong-text"; ?>">
             	<div class="col col-lg-2 col-md-2 col-sm-2 col-xs-2 no-wrap">
-                V. Good
+                <?php echo $label_very_good; ?>
                 </div>
                 <div class="col col-lg-2 col-md-2 col-sm-2 col-xs-2 no-wrap">
                 (30-37)
                 </div>
                 <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-8">
-                Generally within style parameters, some minor flaws.
+                <?php echo $descr_very_good; ?>
                 </div>
             </div>
             <div class="row <?php if (($score >= 21) && ($score <= 29)) echo "strong-text"; ?>">
             	<div class="col col-lg-2 col-md-2 col-sm-2 col-xs-2 no-wrap">
-                Good
+                <?php echo $label_good; ?>
                 </div>
                 <div class="col col-lg-2 col-md-2 col-sm-2 col-xs-2 no-wrap">
                 (21-29)
                 </div>
                 <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-8">
-                Misses the mark on style and/or minor flaws.
+                <?php echo $descr_good; ?>
                 </div>
             </div>
             <div class="row <?php if (($score >= 14) && ($score <= 20)) echo "strong-text"; ?>">
-            	<div class="col col-lg-2 col-md-2 col-sm-2 col-xs-2 no-wrap no-wrap">
-                Fair
+            	<div class="col col-lg-2 col-md-2 col-sm-2 col-xs-2 no-wrap">
+                <?php echo $label_fair; ?>
                 </div>
-                <div class="col col-lg-2 col-md-2 col-sm-2 col-xs-2 no-wrap no-wrap">
+                <div class="col col-lg-2 col-md-2 col-sm-2 col-xs-2 no-wrap">
                 (14-20)
                 </div>
                 <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-8">
-                Off flavors/aromas or major style deficiencies. Unpleasant.
+                <?php echo $descr_fair; ?>
                 </div>
             </div>
             <div class="row <?php if (($score >= 0) && ($score <= 13)) echo "bg-primary"; ?>">
             	<div class="col col-lg-2 col-md-2 col-sm-2 col-xs-2 no-wrap">
-                Problematic
+                <?php echo $label_problematic; ?>
                 </div>
                 <div class="col col-lg-2 col-md-2 col-sm-2 col-xs-2 no-wrap">
                 (00-13)
                 </div>
                 <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-8">
-                Major off flavors and aromas dominate. Hard to drink.
+                <?php echo $descr_problematic; ?>
                 </div>
             </div>
         </div><!-- ./box -->
@@ -120,10 +120,10 @@
 
     <div class="col col-lg-6 col-md-6 col-sm-6 col-xs-6">
         <div class="box footer-descriptor">
-        	<p class="text-center"><strong>Stylistic Accuracy</strong></p>
+        	<p class="text-center"><strong><?php echo $label_style_accuracy; ?></strong></p>
             <div class="row">
             	<div class="col col-lg-4 col-md-4 col-sm-4 col-xs-4">
-                <span class="pull-right"><strong>Classic Example</strong></span>
+                <span class="pull-right"><strong><?php echo $label_classic_example; ?></strong></span>
                 </div>
                 <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-4 text-center">
                 <span class="fa <?php if ($row_eval['evalStyleAccuracy'] == 5) echo "fa-check-square-o"; else echo "fa-square-o"; ?>"></span>&nbsp;&nbsp;&nbsp;
@@ -133,13 +133,13 @@
                 <span class="fa <?php if ($row_eval['evalStyleAccuracy'] == 1) echo "fa-check-square-o"; else echo "fa-square-o"; ?>"></span>
                 </div>
                 <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-4">
-                <span class="pull-left"><strong>Not to Style</strong></span>
+                <span class="pull-left"><strong><?php echo $label_not_style; ?></strong></span>
                 </div>
             </div>
-            <p class="text-center"><strong>Technical Merit</strong></p>
+            <p class="text-center"><strong><?php echo $label_tech_merit; ?></strong></p>
             <div class="row">
             	<div class="col col-lg-4 col-md-4 col-sm-4 col-xs-4">
-                <span class="pull-right"><strong>Flawless</strong></span>
+                <span class="pull-right"><strong><?php echo $label_flawless; ?></strong></span>
                 </div>
                 <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-4 text-center">
                 <span class="fa <?php if ($row_eval['evalTechMerit'] == 5) echo "fa-check-square-o"; else echo "fa-square-o"; ?>"></span>&nbsp;&nbsp;&nbsp;
@@ -149,13 +149,13 @@
                 <span class="fa <?php if ($row_eval['evalTechMerit'] == 1) echo "fa-check-square-o"; else echo "fa-square-o"; ?>"></span>
                 </div>
                 <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-4">
-                <span class="pull-left"><strong>Significant Flaws</strong></span>
+                <span class="pull-left"><strong><?php echo $label_significant_flaws; ?></strong></span>
                 </div>
             </div>
-            <p class="text-center"><strong>Intangibles</strong></p>
+            <p class="text-center"><strong><?php echo $label_intangibles; ?></strong></p>
             <div class="row">
             	<div class="col col-lg-4 col-md-4 col-sm-4 col-xs-4">
-                <span class="pull-right"><strong>Wonderful</strong></span>
+                <span class="pull-right"><strong><?php echo $label_wonderful; ?></strong></span>
                 </div>
                 <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-4 text-center">
                 <span class="fa <?php if ($row_eval['evalIntangibles'] == 5) echo "fa-check-square-o"; else echo "fa-square-o"; ?>"></span>&nbsp;&nbsp;&nbsp;
@@ -165,7 +165,7 @@
                 <span class="fa <?php if ($row_eval['evalIntangibles'] == 1) echo "fa-check-square-o"; else echo "fa-square-o"; ?>"></span>
                 </div>
                 <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-4">
-                <span class="pull-left"><strong>Lifeless</strong></span>
+                <span class="pull-left"><strong><?php echo $label_lifeless; ?></strong></span>
                 </div>
             </div>
         </div><!-- ./box -->
@@ -173,8 +173,8 @@
 
 </div>
 <div>&nbsp;</div>
-<p><small><em>Based upon the BJCP <?php echo $scoresheet_type; ?> Scoresheet Copyright &copy;2017 Beer Judge Certification Program rev. 170612</em></small></p>
+<p><small><em><?php echo sprintf("%s %s. &copy;%s Beer Judge Certification Program.",$evaluation_info_070,$scoresheet_type,date('Y')); ?></em></small></p>
 <?php if (!empty($row_eval['evalFinalScore'])) { ?>
-<p><small><em>** At least two judges from the flight in which your submission was entered reached consensus on your final assigned score. It is not necessarily an average of the individual scores.</em></small></p>
+<p><small><em>** <?php echo $evaluation_info_069; ?></em></small></p>
 <?php } ?>
 <div style="page-break-after: always;"></div>

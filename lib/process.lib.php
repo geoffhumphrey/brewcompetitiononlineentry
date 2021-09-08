@@ -343,7 +343,6 @@ function check_mead_strength($style,$styleSet) {
 
 }
 
-
 // Map BJCP2008 Styles to BJCP2015 Styles
 function bjcp_convert() {
 
@@ -356,6 +355,8 @@ function bjcp_convert() {
 
 	// Loop through entries and convert to 2015 styles
 	do {
+
+		$updateSQL = "";
 
 		$style = $row_brews['brewCategorySort'].$row_brews['brewSubCategory'];
 
@@ -783,13 +784,15 @@ function bjcp_convert() {
 
 		}
 
+		if (!empty($updateSQL)) {
+			mysqli_select_db($connection,$database);
+			$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+		}
+
+		// Update all custom styles
+		$updateSQL = sprintf("UPDATE %s SET brewStyleVersion = 'BJCP2015' WHERE brewStyleOwn='custom' OR brewStyleOwn IS NULL",$prefix."brewing");
 		mysqli_select_db($connection,$database);
 		$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
-
-		/* --- DEBUG ---
-		echo "<p>".$updateSQL."<br>";
-		echo $row_brews['brewName']." (".$row_brews['brewCategorySort'].$row_brews['brewSubCategory'].": ".$row_brews['brewStyle'].")</p>";
-		*/
 
 	} while ($row_brews = mysqli_fetch_assoc($brews));
 

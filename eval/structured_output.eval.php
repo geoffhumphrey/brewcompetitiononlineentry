@@ -752,8 +752,8 @@ $flaws_table .= "</table>";
 </div><!-- ./ scoring guide -->
 
 <!-- Footer -->
-<p style="padding-top: 30px;"><small><em>Based upon the BJCP <?php echo $scoresheet_type; ?> Scoresheet - Structured Version Copyright &copy;2019 Beer Judge Certification Program rev. 1.2.1</em></small></p>
+<p style="padding-top: 30px;"><small><em><?php echo sprintf("%s %s. &copy;%s Beer Judge Certification Program.",$evaluation_info_070,$scoresheet_type,date('Y')); ?></em></small></p>
 <?php if (!empty($row_eval['evalFinalScore'])) { ?>
-<p><small><em>** At least two judges from the flight in which your submission was entered reached consensus on your final assigned score. It is not necessarily an average of the individual scores.</em></small></p>
+<p><small><em>** <?php echo $evaluation_info_069; ?></em></small></p>
 <?php } ?>
 <div style="page-break-after: always;"></div>

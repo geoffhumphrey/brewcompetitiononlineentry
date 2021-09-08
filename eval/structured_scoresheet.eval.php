@@ -33,7 +33,7 @@ if ($action == "edit") {
 <input type="hidden" name="evalFormType" value="3">
 
 <!-- Aroma -->
-<h3 class="section-heading"><?php echo $label_aroma; ?></h3>
+<h3 class="section-heading"><?php if ($cider || $mead) echo $label_bouquet."/"; echo $label_aroma; ?></h3>
 <!-- Aroma Score -->
 <div class="form-group">
 	<div class="row">

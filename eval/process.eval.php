@@ -44,7 +44,7 @@ if (isset($_POST['evalMouthfeelScore'])) $evalMouthfeelScore = filter_var($_POST
 $evalOverallScore = filter_var($_POST['evalOverallScore'],FILTER_SANITIZE_NUMBER_INT);
 if (isset($_POST['evalStyleAccuracy'])) $evalStyleAccuracy = filter_var($_POST['evalStyleAccuracy'],FILTER_SANITIZE_NUMBER_INT);
 if (isset($_POST['evalTechMerit'])) $evalTechMerit = filter_var($_POST['evalTechMerit'],FILTER_SANITIZE_NUMBER_INT);
-if (isset($_POST['evalDrinkability'])) $evalDrinkability = filter_var($_POST['evalDrinkability'],FILTER_SANITIZE_NUMBER_INT);
+if (isset($_POST['evalDrinkability'])) $evalDrinkability = filter_var($_POST['evalDrinkability'],FILTER_SANITIZE_STRING);
 $evalTable = filter_var($_POST['evalTable'],FILTER_SANITIZE_NUMBER_INT);
 $evalFinalScore = filter_var($_POST['evalFinalScore'],FILTER_SANITIZE_NUMBER_INT);
 

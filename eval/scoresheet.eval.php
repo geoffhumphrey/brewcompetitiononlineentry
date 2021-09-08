@@ -726,10 +726,10 @@ if ($entry_found) {
 <div class="form-group">
   <label for="evalPosition_0"><?php echo $label_ordinal_position; ?></label>
   <div>
-    <input type="number" class="form-control form-control-inline" name="evalPosition_0" min="1" id="evalPosition_0" maxlength="3" size="15" placeholder="<?php echo $label_suggested.": ".($flight_count_info['total_flight_evals']+1); ?>" value="<?php if ($action == "edit") { if (is_numeric($evalPosition[0])) echo $evalPosition[0]; else echo ($flight_count_info['total_flight_evals']+1); } ?>">
-    Of 
-    <input type="number" class="form-control form-control-inline" name="evalPosition_1" min="1" id="evalPosition_1" maxlength="3" size="15" placeholder="<?php echo $label_suggested.": ".$flight_count_info['total_flight_entries']; ?>" value="<?php if ($action == "edit") { if (is_numeric($evalPosition[1])) echo $evalPosition[1]; } ?>">
+    <input type="number" class="form-control form-control-inline" name="evalPosition_0" min="1" id="evalPosition_0" maxlength="3" size="30" placeholder="<?php echo $label_suggested.": ".($flight_count_info['total_flight_evals']+1); ?>" value="<?php if ($action == "edit") { if (is_numeric($evalPosition[0])) echo $evalPosition[0]; else echo ($flight_count_info['total_flight_evals']+1); } ?>">
     <div id="ordinal-help-position" class="help-block small text-danger"><?php echo $evaluation_info_050; ?></div>
+    <section><?php echo $label_of; ?></section>
+    <input type="number" class="form-control form-control-inline" name="evalPosition_1" min="1" id="evalPosition_1" maxlength="3" size="30" placeholder="<?php echo $label_suggested.": ".$flight_count_info['total_flight_entries']; ?>" value="<?php if ($action == "edit") { if (is_numeric($evalPosition[1])) echo $evalPosition[1]; } ?>">
     <div id="ordinal-help-total" class="help-block small text-danger"><?php echo $evaluation_info_051; ?></div>
   </div>
 </div>

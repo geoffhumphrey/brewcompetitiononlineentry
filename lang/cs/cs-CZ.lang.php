@@ -1603,6 +1603,7 @@ $label_hoppy = "Hoppy";
 $label_malty = "Sladový";
 $label_comments = "Komentáře";
 $label_flaws = "Vady Stylu";
+$label_flaw = "Chyba";
 $label_flawless = "Bezchybný";
 $label_significant_flaws = "Významné Nedostatky";
 $label_classic_example = "Klasický Příklad";
@@ -1745,6 +1746,8 @@ $label_finish = "Dokončit";
 $label_biting = "Ostrý";
 $label_drinkability = "Pitelnost";
 $label_bouquet = "Kytice";
+$label_of = "Ze";
+$label_fault = "Chyba";
 
 $evaluation_info_044 = "Vaše konsensuální skóre neodpovídá skóre zadaným jinými rozhodčími.";
 $evaluation_info_045 = "Zadané konsensuální skóre odpovídá zápasům zadaným předchozími rozhodčími.";
@@ -1771,6 +1774,8 @@ $evaluation_info_065 = "Za toto pivo bych zaplatil peníze.";
 $evaluation_info_066 = "Doporučil bych toto pivo.";
 $evaluation_info_067 = "Uveďte prosím hodnocení.";
 $evaluation_info_068 = "Uveďte konsensuální skóre - minimálně 5, maximálně 50.";
+$evaluation_info_069 = "Nejméně dva rozhodčí z letu, do kterého bylo vaše podání zapsáno, dosáhli konsensu o vašem konečném přiděleném skóre. Není to nutně průměr jednotlivých skóre.";
+$evaluation_info_070 = "Na základě výsledkové listiny BJCP pro";
 
 $alert_text_090 = "Vaše relace vyprší za dvě minuty. Můžete zůstat na aktuální stránce, abyste mohli dokončit práci, než vyprší čas, obnovte tuto stránku a pokračujte v aktuální relaci (data formuláře se mohou ztratit) nebo se odhlaste.";
 $alert_text_091 = "Vaše relace vyprší za 30 sekund. Chcete -li pokračovat v aktuální relaci, můžete se obnovit nebo se odhlásit.";

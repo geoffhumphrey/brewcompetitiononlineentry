@@ -1605,6 +1605,7 @@ $label_hoppy = "Hoppy";
 $label_malty = "Maltado";
 $label_comments = "Comentários";
 $label_flaws = "Falhas de Estilo";
+$label_flaw = "Falha";
 $label_flawless = "Sem Falhas";
 $label_significant_flaws = "Falhas Significativas";
 $label_classic_example = "Exemplo Clássico";
@@ -1746,6 +1747,8 @@ $label_finish = "Terminar";
 $label_biting = "Mordendo";
 $label_drinkability = "Bebibilidade";
 $label_bouquet = "Ramalhete";
+$label_of = "Do";
+$label_fault = "Culpa";
 
 $evaluation_info_044 = "Sua pontuação de consenso não corresponde às inseridas por outros juízes.";
 $evaluation_info_045 = "A pontuação de consenso inserida corresponde àquela inserida por juízes anteriores.";
@@ -1772,6 +1775,8 @@ $evaluation_info_065 = "Eu pagaria por esta cerveja.";
 $evaluation_info_066 = "Eu recomendaria esta cerveja.";
 $evaluation_info_067 = "Forneça uma classificação.";
 $evaluation_info_068 = "Forneça a pontuação de consenso - mínimo de 5, máximo de 50.";
+$evaluation_info_069 = "Pelo menos dois juízes do voo em que sua inscrição foi inscrita chegaram a um consenso sobre a pontuação final atribuída. Não é necessariamente uma média das pontuações individuais.";
+$evaluation_info_070 = "Com base na planilha de pontuação BJCP para";
 
 $alert_text_090 = "Sua sessão irá expirar em dois minutos. Você pode permanecer na página atual para terminar seu trabalho antes que o tempo expire, atualizar esta página para continuar sua sessão atual (os dados do formulário podem ser perdidos) ou fazer logout.";
 $alert_text_091 = "Sua sessão irá expirar em 30 segundos. Você pode atualizar para continuar sua sessão atual ou fazer logout.";
