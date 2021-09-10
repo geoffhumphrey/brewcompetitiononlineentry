@@ -1,5 +1,4 @@
 <?php 
-// Establish vars
 $eid = "";
 $uid = "";
 $style = "";
@@ -19,6 +18,7 @@ $cider = FALSE;
 $mead = FALSE;
 $scored_previously = FALSE;
 $consensus_match = FALSE;
+$auto_logout_extension = FALSE;
 $evals = array();
 $judge_scores = array();
 $consensus_scores = array();
@@ -28,8 +28,13 @@ $other_judge_previous_consensus = array();
 $my_consensus_score = "";
 $evalPosition = "";
 
+/**
+ * Default judge range is 7 points, a commonly accepted
+ * range. 
+ */
+
 if (isset($_SESSION['jPrefsScoreDispMax'])) $score_range = $_SESSION['jPrefsScoreDispMax'];
-else $score_range = 7; // 7 is a commonly accepted disparity range between judges
+else $score_range = 7;
 
 $bjcp2015_exceptions = array(
   "27A1" => "//bjcp.org/style/2015/27/27A/historical-beer-gose/",
@@ -56,8 +61,11 @@ $bjcp2015_exceptions = array(
   "PRX5" => "//dev.bjcp.org/beer-styles/x5-new-zealand-pilsner/"
 );
 
-// When admins edit a scoresheet, the $bid var will be in the URL
-// $bid will be judge's user id
+/**
+ * When admins edit a scoresheet, the $bid var will be in the URL.
+ * $bid is judge's user id.
+ */
+
 if ($bid == "default") {
   $judge_id = $_SESSION['user_id'];
   $eval_source = 1; // From user judging dashboard
@@ -97,12 +105,16 @@ if ($judging_scoresheet == 3) {
   $scoresheet_version = $label_structured_version;
 }
 
-// When adding an evaluation
+/** 
+ * When a user is adding a new evaluation.
+ * If there's an entry_number $_POST var, indicates
+ * that the scoresheet is being added by a non-admin
+ * on-the-fly.
+ */
 if ($action == "add") {
 
   $submit_button_text = $label_submit_evaluation;
 
-  // On-the-fly (non-admin)
   if (isset($_POST['entry_number'])) {
     
     if ($_SESSION['prefsDisplaySpecial'] == "E") {
@@ -125,7 +137,12 @@ if ($action == "add") {
   $query_style = sprintf("SELECT * FROM %s WHERE brewStyleGroup = '%s' AND brewStyleNum = '%s' AND brewStyleVersion='%s'", $prefix."styles", $row_entry_info['brewCategorySort'], $row_entry_info['brewSubCategory'], $_SESSION['prefsStyleSet']);
 }
 
-// When editing an evaluation
+/**
+ * When a user is editing an evaluation.
+ * Checks are in place to determine whether the 
+ * current user is associated with the original
+ * eval add.
+ */
 if ($action == "edit") {
 
   $submit_button_text = $label_edit_evaluation;
@@ -166,7 +183,7 @@ $judge_scores = eval_exits($row_entry_info['id'],"judge_scores",$dbTable);
 if ($action == "add") $flight_count_info = flight_count_info($id,0);
 if ($action == "edit") $flight_count_info = flight_count_info($eid,0);
 
-if (!empty($judge_scores)) {;
+if (!empty($judge_scores)) {
   $scored_previously = TRUE;
   $consensus_scores = eval_exits($row_entry_info['id'],"consensus_scores",$dbTable);
   if (count(array_unique($consensus_scores)) === 1) $consensus_match = TRUE;
@@ -188,8 +205,10 @@ if (isset($_POST['entry_number'])) {
 
 }
 
-// Descriptors used by multiple functions.
-// Depends upon query of style db table.
+/**
+ * Included Descriptors are used by multiple functions.
+ * Depends upon query of style db table.
+ */
 include (EVALS.'descriptors.eval.php');
 
 if ($totalRows_entry_info > 0) $entry_found = TRUE;
@@ -207,7 +226,6 @@ if ($entry_found) {
     $process_type = "process-eval-full";
     $mead_cider = TRUE;
     $scoresheet_version = $label_classic_version;
-
   }
 
   if ($action == "add") {
@@ -225,6 +243,11 @@ if ($entry_found) {
 
   // Standardize style number display
   $style_num = style_number_const($row_style['brewStyleGroup'],$row_style['brewStyleNum'],$_SESSION['style_set_display_separator'],0);
+
+  // Build auto logout extended display
+  if ($auto_logout_extension) {
+    $entry_info_html .= sprintf("<div class=\"alert alert-info\"><strong><i class=\"fa fa-info-circle\"></i> %s:</strong> %s</div>",$label_please_note,$evaluation_info_072);
+  }
 
   // Build entry info display
   $entry_info_html .= "<div class=\"alert alert-teal\">";
@@ -360,7 +383,8 @@ if ($entry_found) {
   
   $sticky_score_tally .= "<section style=\"margin-top: -5px; position: absolute; width: 100%; background-color: rgba(220,220,220,0.80);\" id=\"scoring-guide-status\" class=\"well sticky-glow\">";
   
-  $sticky_score_tally .= "<p><span id=\"elapsed-time-p\"><i class=\"fa fa-clock\"></i> <strong>".$label_elapsed_time.": <span id=\"elapsed-time\"></span></strong></span><br><small id=\"session-end-eval-p\">".$label_auto_log_out." <span id=\"session-end-eval\"></span></small></p>";
+  $sticky_score_tally .= "<p><span id=\"elapsed-time-p\"><i class=\"fa fa-clock\"></i> <strong>".$label_elapsed_time.": <span id=\"elapsed-time\"></span></strong></span><br><small id=\"session-end-eval-p\">".$label_auto_log_out." <span id=\"session-end-eval\"></span></small>";
+  $sticky_score_tally .= "</p>";
   
   if ($scored_previously) {
     $sticky_score_tally .= "<p style=\"padding-top: 10px;\">";
@@ -416,23 +440,6 @@ if ($eval_prevent_edit) $header_elements .= sprintf("<p>%s</p>",$header_text_104
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/11.0.2/bootstrap-slider.min.js"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/11.0.2/css/bootstrap-slider.min.css" />
 <script>
-var elapsedTimeStart = Date.now();
-setInterval(function() {
-  var elapsedTime = ((Date.now() - elapsedTimeStart) / 1000);
-  var elapsedTimeDisp = formatTimeDisplay(elapsedTime,1);
-  // Add hour display after 60 minutes 
-  // (if session timeout is set to greater than 60)
-  if (elapsedTime > 3600) {
-    var elapsedTimeDisp = formatTimeDisplay(elapsedTime,0);
-  }
-  $("#elapsed-time").html(elapsedTimeDisp);
-  if ((elapsedTime > 600) && (elapsedTime < 900)) {
-    $("#elapsed-time-p").attr("class", "text-warning");
-  }
-  if (elapsedTime >= 900) {
-    $("#elapsed-time-p").attr("class", "text-danger");
-  }
-}, 1);
 
 var judgeScores = <?php echo json_encode($judge_scores); ?>;
 var consensusScores = <?php echo json_encode($consensus_scores); ?>;
@@ -699,8 +706,12 @@ $(document).ready(function() {
 }
 
 </style>
-<?php 
-if ((isset($row_eval['evalPosition'])) && (!empty($row_eval['evalPosition']))) $evalPosition = explode(",", $row_eval['evalPosition']);
+<?php
+$evalPos = FALSE; 
+if ((isset($row_eval['evalPosition'])) && (!empty($row_eval['evalPosition']))) {
+  $evalPosition = explode(",", $row_eval['evalPosition']);
+  $evalPos = TRUE;
+} 
 echo $header_elements; 
 if (!empty($scoresheet_version)) echo "<h2>".$scoresheet_version."</h2>";
 echo $eval_nav_buttons;
@@ -726,10 +737,10 @@ if ($entry_found) {
 <div class="form-group">
   <label for="evalPosition_0"><?php echo $label_ordinal_position; ?></label>
   <div>
-    <input type="number" class="form-control form-control-inline" name="evalPosition_0" min="1" id="evalPosition_0" maxlength="3" size="30" placeholder="<?php echo $label_suggested.": ".($flight_count_info['total_flight_evals']+1); ?>" value="<?php if ($action == "edit") { if (is_numeric($evalPosition[0])) echo $evalPosition[0]; else echo ($flight_count_info['total_flight_evals']+1); } ?>">
+    <input type="number" class="form-control form-control-inline" name="evalPosition_0" min="1" id="evalPosition_0" maxlength="3" size="30" placeholder="<?php echo $label_suggested.": ".($flight_count_info['total_flight_evals']+1); ?>" value="<?php if (($action == "edit") && ($evalPos)) { if (is_numeric($evalPosition[0])) echo $evalPosition[0]; else echo ($flight_count_info['total_flight_evals']+1); } ?>">
     <div id="ordinal-help-position" class="help-block small text-danger"><?php echo $evaluation_info_050; ?></div>
     <section><?php echo $label_of; ?></section>
-    <input type="number" class="form-control form-control-inline" name="evalPosition_1" min="1" id="evalPosition_1" maxlength="3" size="30" placeholder="<?php echo $label_suggested.": ".$flight_count_info['total_flight_entries']; ?>" value="<?php if ($action == "edit") { if (is_numeric($evalPosition[1])) echo $evalPosition[1]; } ?>">
+    <input type="number" class="form-control form-control-inline" name="evalPosition_1" min="1" id="evalPosition_1" maxlength="3" size="30" placeholder="<?php echo $label_suggested.": ".$flight_count_info['total_flight_entries']; ?>" value="<?php if (($action == "edit") && ($evalPos)) { if (is_numeric($evalPosition[1])) echo $evalPosition[1]; } ?>">
     <div id="ordinal-help-total" class="help-block small text-danger"><?php echo $evaluation_info_051; ?></div>
   </div>
 </div>

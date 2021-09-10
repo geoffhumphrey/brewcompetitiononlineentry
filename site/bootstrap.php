@@ -142,6 +142,23 @@ if ($setup_success) {
 	if ($_SESSION['prefsSEF'] == "Y") $sef = "true";
 	else $sef = "false";
 
+	if (($_SESSION['prefsEval'] == 1) && ($section == "evaluation") && ($go == "scoresheet")) {
+
+		/**
+		 * For usability when accessing an electronic scoresheet, 
+		 * make sure session timeout is at least 30 minutes to 
+		 * give slowpoke judges sufficient time for evaluations 
+		 * (typically should be no more than 15 minutes per entry).
+		 */
+
+		if ($session_expire_after < 30) {
+		  $session_expire_after = 30;
+		  $auto_logout_extension = TRUE;
+		}
+		else $session_expire_after = $session_expire_after;
+
+	}
+
 	// ---------------------------- Data Integrity Checks ----------------------------
 
 	// Perform data integrity check on users, brewer, and brewing tables at 24 hour intervals. Set alert flag.

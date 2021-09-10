@@ -69,7 +69,7 @@ define('MAINT', FALSE);
  * in the root folder of your installation.
  * If set to FALSE, the local libraries must be in place
  * PRIOR to proceeding through the setup process.
- * See http://www.brewcompetition.com/local-load
+ * @see http://www.brewcompetition.com/local-load
  * Default is TRUE.
  */
 
@@ -134,9 +134,7 @@ define('ENABLE_MARKDOWN', FALSE);
 define('ENABLE_MAILER', FALSE);
 
 /**
- * --------------------------------------------------------
  * Error Reporting
- * --------------------------------------------------------
  */
 
 ini_set('error_reporting', E_ALL ^ E_DEPRECATED);
@@ -144,16 +142,10 @@ ini_set('log_errors','On');
 if (DEBUG) ini_set('display_errors','On');
 else ini_set('display_errors','Off');
 
-/**
- * --------------------------------------------------------
- * Load Configuration
- * --------------------------------------------------------
- */
-
-/** Function to check for HTTPS protocol (SSL) will be
+/** 
+ * Function to check for HTTPS protocol (SSL) will be
  * called when constructing the $base_url variable in the
  * /sites/config.php file.
- * 
  * @see https://github.com/geoffhumphrey/brewcompetitiononlineentry/issues/1123
  * @see https://stackoverflow.com/questions/1175096/how-to-find-out-if-youre-using-https-without-serverhttps
  */
@@ -164,16 +156,13 @@ function is_https() {
     else return FALSE;
 }
 
-require_once (CONFIG.'config.php');
-if (ENABLE_MAILER) require_once (CONFIG.'config.mail.php');
-require_once (INCLUDES.'current_version.inc.php');
-
 if (HOSTED) {
     $installation_id = $prefix;
     $session_expire_after = 30;
 }
 
-/** Using an MD5 of __FILE__ will ensure a different session
+/** 
+ * Using an MD5 of __FILE__ will ensure a different session
  * name for multiple installs on the same domain name.
  *
  * @see https://github.com/geoffhumphrey/brewcompetitiononlineentry/issues/781
@@ -182,32 +171,31 @@ if (HOSTED) {
 if (empty($installation_id)) $prefix_session = md5(__FILE__);
 else $prefix_session = md5($installation_id);
 
-// **PREVENTING SESSION HIJACKING**
-// Prevents javascript XSS attacks aimed to steal the session ID
-ini_set('session.cookie_httponly', 1);
+if (session_status() == PHP_SESSION_ACTIVE) {
+    // **PREVENTING SESSION HIJACKING**
+    // Prevents javascript XSS attacks aimed to steal the session ID
+    ini_set('session.cookie_httponly', 1);
 
-// **PREVENTING SESSION FIXATION**
-// Session ID cannot be passed through URLs
-ini_set('session.use_only_cookies', 1);
+    // **PREVENTING SESSION FIXATION**
+    // Session ID cannot be passed through URLs
+    ini_set('session.use_only_cookies', 1);
 
-// Uses a secure connection (HTTPS) if possible
-ini_set('session.cookie_secure', 1);
-
-function is_session_started() {
-    if (php_sapi_name() !== 'cli' ) {
-        if (version_compare(phpversion(), '5.4.0', '>=')) {
-            return session_status() === PHP_SESSION_ACTIVE ? TRUE : FALSE;
-        } else {
-            return session_id() === '' ? FALSE : TRUE;
-        }
-    }
-    return FALSE;
+    // Uses a secure connection (HTTPS) if possible
+    ini_set('session.cookie_secure', 1);
 }
 
-if (is_session_started() === FALSE) {
-	session_name($prefix_session);
+if (session_status() == PHP_SESSION_NONE) {
+    session_name($prefix_session);
     session_start();
 }
+
+/**
+ * Load DB connection and configuration files
+ */
+
+require_once (CONFIG.'config.php');
+if (ENABLE_MAILER) require_once (CONFIG.'config.mail.php');
+require_once (INCLUDES.'current_version.inc.php');
 
 if (isset($_SESSION['last_action'])) {
     $seconds_inactive = time() - $_SESSION['last_action'];
@@ -221,17 +209,17 @@ if (isset($_SESSION['last_action'])) {
 $_SESSION['last_action'] = time();
 
 /**
- * --------------------------------------------------------
  * RECAPTCHA Keys
  * One set is for hosted installations on brewcomp.com or
  * brewcompetition.com - the other is for outside use.
  * Per Google guidelines, all keys validate the domain from
  * which it was generated:
- * https://developers.google.com/recaptcha/docs/domain_validation
+ * @see https://developers.google.com/recaptcha/docs/domain_validation
  * You may need to change the second set with your own API keys if
  * reCAPTCHA is not functioning on your self-hosted installation.
- * Get started at: https://developers.google.com/recaptcha/
- * --------------------------------------------------------
+ * @see https://developers.google.com/recaptcha/
+ * These are the fallback default. Custom keys must be defined in site 
+ * preferences.
  */
 
 if (HOSTED) {

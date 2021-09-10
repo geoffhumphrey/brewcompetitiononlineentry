@@ -1,7 +1,4 @@
 <?php
-
-//session_destroy();
-//include ('paths.php');
 define('ROOT',dirname( __FILE__ ).DIRECTORY_SEPARATOR);
 define('ADMIN',ROOT.'admin'.DIRECTORY_SEPARATOR);
 define('SSO',ROOT.'sso'.DIRECTORY_SEPARATOR);
@@ -60,12 +57,22 @@ function is_session_started() {
     return FALSE;
 }
 
-if (is_session_started() === FALSE) {
-	session_name($prefix_session);
-    session_start();
+if (session_status() == PHP_SESSION_ACTIVE) {
+    // **PREVENTING SESSION HIJACKING**
+    // Prevents javascript XSS attacks aimed to steal the session ID
     ini_set('session.cookie_httponly', 1);
-	ini_set('session.use_only_cookies', 1);
-	ini_set('session.cookie_secure', 1);
+
+    // **PREVENTING SESSION FIXATION**
+    // Session ID cannot be passed through URLs
+    ini_set('session.use_only_cookies', 1);
+
+    // Uses a secure connection (HTTPS) if possible
+    ini_set('session.cookie_secure', 1);
+}
+
+if (session_status() == PHP_SESSION_NONE) {
+    session_name($prefix_session);
+    session_start();
 }
 
 require_once (INCLUDES.'url_variables.inc.php');

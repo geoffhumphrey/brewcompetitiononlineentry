@@ -12,7 +12,7 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 
 	// --------------------------- SETUP: Adding the Admin Participant ----------------- //
 
-	if (($action == "add") && ($section == "setup")) 	include (PROCESS.'process_users_setup.inc.php');
+	if (($action == "add") && ($section == "setup")) include (PROCESS.'process_users_setup.inc.php');
 
 	// --------------------------- Adding a user (Admin only) -------------------------- //
 

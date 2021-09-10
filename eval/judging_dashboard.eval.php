@@ -181,17 +181,17 @@ if (($add_disabled) && ($judging_open)) {
 
 			$actions .= "<p style=\"margin-top: 3px;\">Choose a scoresheet (demo mode only - Admins choose the official scoresheet for the competition):</p>";
 			$actions .= "<div class=\"row\" style=\"margin-top: 3px;\">";
-			$actions .= "<div class=\"col col-xs-4\">";
+			$actions .= "<div style=\"padding-top:3px;\" class=\"col col-md-4 col-sm-12\">";
 			$actions .= "<a class=\"btn btn-block btn-xs btn-danger\" href=\"".$add_link_full."\">Classic</a>";
 			$actions .= "</div>";
 			if ($row_style['brewStyleType'] == 1) {
-				$actions .= "<div class=\"col col-xs-4\">";
+				$actions .= "<div style=\"padding-top:3px;\" class=\"col col-md-4 col-sm-12\">";
 				$actions .= "<a class=\"btn btn-block btn-xs btn-danger\" href=\"".$add_link_checklist."\">Checklist</a>";
 				$actions .= "</div>";
 			}
 
 			if ($row_style['brewStyleType'] <= 3) {
-				$actions .= "<div class=\"col col-xs-4\">";
+				$actions .= "<div style=\"padding-top:3px;\" class=\"col col-md-4 col-sm-12\">";
 				$actions .= "<a class=\"btn btn-block btn-xs btn-danger\" href=\"".$add_link_structured."\">Structured</a>";
 				$actions .= "</div>";
 			}
@@ -277,16 +277,16 @@ else {
 				$actions .= "<div class=\"collapse\" id=\"add-choose-".$row_entries['id']."\">";
 				$actions .= "<p style=\"margin-top: 3px;\"><small>Choose a scoresheet (demo mode only - Admins choose the official scoresheet for the competition):</small></p>";
 				$actions .= "<div class=\"row\" style=\"margin-top: 3px;\">";
-				$actions .= "<div class=\"col col-xs-4\">";
+				$actions .= "<div style=\"padding-top:3px;\" class=\"col col-md-4 col-sm-12\">";
 				$actions .= "<a class=\"btn btn-block btn-xs btn-info\" href=\"".$add_link_full."\">Classic</a>";
 				$actions .= "</div>";
 				if ($row_style['brewStyleType'] == 1) {
-					$actions .= "<div class=\"col col-xs-4\">";
+					$actions .= "<div style=\"padding-top:3px;\" class=\"col col-md-4 col-sm-12\">";
 					$actions .= "<a class=\"btn btn-block btn-xs btn-info\" href=\"".$add_link_checklist."\">Checklist</a>";
 					$actions .= "</div>";
 				}
 				if ($row_style['brewStyleType'] <= 3) {
-					$actions .= "<div class=\"col col-xs-4\">";
+					$actions .= "<div style=\"padding-top:3px;\" class=\"col col-md-4 col-sm-12\">";
 					$actions .= "<a class=\"btn btn-block btn-xs btn-info\" href=\"".$add_link_structured."\">Structured</a>";
 					$actions .= "</div>";
 				}
@@ -296,7 +296,6 @@ else {
 			}
 
 			else $actions .= "<a style=\"margin-bottom:5px;\" class=\"btn btn-block btn-sm btn-primary\" href=\"".$add_link."\">".$label_add."</a>";
-
 
 		}
 

@@ -646,9 +646,10 @@ if (($output_add_edit) && ($msg != 9)) {
 <script type="text/javascript">
 	$(document).ready(function() {
 
-		<?php if ((!empty($row_judging['judgingLocType'])) && ($row_judging['judgingLocType'] == "0")) { ?>
+		<?php if (((!empty($row_judging['judgingLocType'])) && ($row_judging['judgingLocType'] == "0")) || ($section == "step5")) { ?>
 		$('#judgingDateEndDiv').hide();
 		$('#helpBlockLocation2').hide();
+		$("#judgingLocationLabel").html("Session Address");
 		<?php } elseif ((!empty($row_judging['judgingLocType'])) && ($row_judging['judgingLocType'] == "1")) { ?>
 		$('#judgingDateEndDiv').show();
 		$('#helpBlockLocation1').hide();

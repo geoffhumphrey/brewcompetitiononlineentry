@@ -1885,6 +1885,12 @@ $label_drinkability = "Drinkability";
 $label_bouquet = "Bouquet";
 $label_of = "Of";
 $label_fault = "Fault";
+$label_weeks = "Weeks";
+$label_days = "Days";
+$label_scoresheet = "Scoresheet";
+$label_beer_scoresheet = "Beer Scoresheet";
+$label_cider_scoresheet = "Cider Scoresheet";
+$label_mead_scoresheet = "Mead Scoresheet";
 
 $evaluation_info_044 = "Your consensus score does not match those entered by other judges.";
 $evaluation_info_045 = "Consensus score entered matches those entered by previous judges.";
@@ -1913,8 +1919,10 @@ $evaluation_info_067 = "Please provide a rating.";
 $evaluation_info_068 = "Please provide the consensus score - minimum of 5, maximum of 50.";
 $evaluation_info_069 = "At least two judges from the flight in which your submission was entered reached consensus on your final assigned score. It is not necessarily an average of the individual scores.";
 $evaluation_info_070 = "Based upon the BJCP scoresheet for";
+$evaluation_info_071 = "15 minutes have elapsed since you began your evaluation. While you should have plenty of time left before being automatically logged out, this is a courtesy warning to make sure to complete your evaluation in a timely manner to keep the pace of judging moving at an acceptable rate.";
+$evaluation_info_072 = "By default, Auto Log Out is extended to 30 minutes for entry evaluations.";
 
-$alert_text_090 = "Your session will expire in two minutes. You can stay on the current page to finish your work before time expires, refresh this page to continue your current session (form data may be lost), or log out.";
+$alert_text_090 = "Your session will expire in two minutes. You can stay on the current page to finish your work before time expires, refresh this page to continue your current session (unsaved form data may be lost), or log out.";
 $alert_text_091 = "Your session will expire in 30 seconds. You can refresh to continue your current session or log out.";
 
 /**

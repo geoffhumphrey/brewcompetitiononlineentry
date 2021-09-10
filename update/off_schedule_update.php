@@ -1893,7 +1893,7 @@ if ($totalRows_archive > 0) {
 
 }
 
-$output .= "<li>Added column to enable or disable carbon copying contact messages.</li>";
+$output .= "<li>Cleaned up archive tables as necessary.</li>";
 
 /**
  * ----------------------------------------------- 2.3.0 ---------------------------------------------

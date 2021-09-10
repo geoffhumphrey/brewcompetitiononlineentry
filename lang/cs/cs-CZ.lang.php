@@ -1748,6 +1748,12 @@ $label_drinkability = "Pitelnost";
 $label_bouquet = "Kytice";
 $label_of = "Ze";
 $label_fault = "Chyba";
+$label_weeks = "Týdny";
+$label_days = "Dny";
+$label_scoresheet = "Výsledková listina";
+$label_beer_scoresheet = "Záznam o Pivu";
+$label_cider_scoresheet = "Záznam o Jablečný Mošt";
+$label_mead_scoresheet = "Záznam o Medovina";
 
 $evaluation_info_044 = "Vaše konsensuální skóre neodpovídá skóre zadaným jinými rozhodčími.";
 $evaluation_info_045 = "Zadané konsensuální skóre odpovídá zápasům zadaným předchozími rozhodčími.";
@@ -1776,6 +1782,8 @@ $evaluation_info_067 = "Uveďte prosím hodnocení.";
 $evaluation_info_068 = "Uveďte konsensuální skóre - minimálně 5, maximálně 50.";
 $evaluation_info_069 = "Nejméně dva rozhodčí z letu, do kterého bylo vaše podání zapsáno, dosáhli konsensu o vašem konečném přiděleném skóre. Není to nutně průměr jednotlivých skóre.";
 $evaluation_info_070 = "Na základě výsledkové listiny BJCP pro";
+$evaluation_info_071 = "Od vašeho hodnocení uplynulo 15 minut. I když byste měli mít dost času, než se automaticky odhlásíte, toto je zdvořilostní varování, abyste se ujistili, že dokončíte své hodnocení včas, abyste udrželi tempo posuzování v přijatelné míře.";
+$evaluation_info_072 = "Ve výchozím nastavení je automatické odhlášení prodlouženo na 30 minut pro hodnocení vstupů.";
 
 $alert_text_090 = "Vaše relace vyprší za dvě minuty. Můžete zůstat na aktuální stránce, abyste mohli dokončit práci, než vyprší čas, obnovte tuto stránku a pokračujte v aktuální relaci (data formuláře se mohou ztratit) nebo se odhlaste.";
 $alert_text_091 = "Vaše relace vyprší za 30 sekund. Chcete -li pokračovat v aktuální relaci, můžete se obnovit nebo se odhlásit.";

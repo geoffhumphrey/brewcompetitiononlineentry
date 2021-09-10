@@ -48,7 +48,7 @@
     <?php } ?>
 	<?php } ?>
 
-	<?php if ((($logged_in) && ($_SESSION['userLevel'] <= 1) && (strpos($section, 'step') === FALSE)) || (($logged_in) && ($section == "beerxml"))) { ?>
+	<?php if ((($logged_in) && ((isset($_SESSION['userLevel'])) && ($_SESSION['userLevel'] <= 1)) && (strpos($section, 'step') === FALSE)) || (($logged_in) && ($section == "beerxml"))) { ?>
     <!-- Load Jasny Off-Canvas Menu for Admin / http://www.jasny.net/bootstrap -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jasny-bootstrap/3.1.3/css/jasny-bootstrap.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jasny-bootstrap/3.1.3/js/jasny-bootstrap.min.js"></script>

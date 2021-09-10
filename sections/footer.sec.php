@@ -5,7 +5,7 @@
  * 
  */
 
-if ($_SESSION['prefsEval'] == 1) $current_version_display .= " (e)";
+if ((isset($_SESSION['prefsEval'])) && ($_SESSION['prefsEval'] == 1)) $current_version_display .= " (e)";
 
 $footer = "";
 

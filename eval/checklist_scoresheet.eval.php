@@ -436,10 +436,10 @@ $cl_mf_desc_finish = array($label_cloying,$label_sweet,$label_med,$label_dry,$la
     	<?php 
         $id_value = 1; 
         foreach($checklist_factors as $value) { 
-        $cl_value = $label_phenols.": ".$value;
+        $cl_value = $label_bitterness.": ".$value;
         ?>
         <label class="radio-inline">
-            <input type="radio" name="evalFlavorPhenols" id="evalFlavorPhenols<?php echo $id_value++; ?>" value="<?php echo $cl_value; ?>" data-error="<?php echo $evaluation_info_062; ?>" required <?php if ($action == "edit") { if (strpos($row_eval['evalFlavorChecklist'],$cl_value) !== false) echo "checked"; } ?>> <?php echo $value; ?>
+            <input type="radio" name="evalFlavorBitterness" id="evalFlavorBitterness<?php echo $id_value++; ?>" value="<?php echo $cl_value; ?>" data-error="<?php echo $evaluation_info_062; ?>" required <?php if ($action == "edit") { if (strpos($row_eval['evalFlavorChecklist'],$cl_value) !== false) echo "checked"; } ?>> <?php echo $value; ?>
         </label>
         <?php } ?>
         <div class="help-block small with-errors"></div>

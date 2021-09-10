@@ -249,14 +249,11 @@ try {
         } ?>
 </div><!-- ./container-fluid -->
 <!-- ./Admin Pages -->
-
 <?php } elseif (($_SESSION['prefsEval'] == 1) && ($section == "evaluation") && ($logged_in)) { 
-
     if (($view == "admin") && ($filter == "default")) $container_eval = "container-fluid";
     else $container_eval = "container";
-
 ?>
-
+<!-- Electronic Scoresheets Container -->
 <div class="<?php echo $container_eval; ?>">
     <div class="page-header">
             <h1><?php echo $header_output; ?></h1>
@@ -266,7 +263,6 @@ try {
         if ($go == "scoresheet") include (EVALS.'scoresheet.eval.php');
     ?>
 </div><!-- ./container-fluid -->
-
 <?php } else { ?>
 <!-- Public Pages (Fixed Layout with Sidebar) -->
 <div id="main-content" class="container">
@@ -335,7 +331,6 @@ echo $output_query_count;
 </div>
 <!-- ./Mods Bottom -->
 <?php } ?>
-
 <!-- Footer -->
 <footer class="footer hidden-xs hidden-sm hidden-md">
     <div class="navbar <?php echo $nav_container; ?> navbar-fixed-bottom">
@@ -345,6 +340,13 @@ echo $output_query_count;
     </div>
 </footer><!-- ./footer -->
 <!-- ./ Footer -->
+<?php 
+session_write_close(); 
+if ($logged_in) {
+$session_end_seconds = time() + ($session_expire_after * 60);
+$session_end = getTimeZoneDateTime($_SESSION['prefsTimeZone'],$session_end_seconds,"999",$_SESSION['prefsTimeFormat'],"short","date-no-gmt");
+?>
+<!-- Session Expiring Modal: 2 Minute Warning -->
 <div class="modal fade" id="session-expire-warning" tabindex="-1" role="dialog" aria-labelledby="session-expire-warning-label">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
@@ -363,6 +365,7 @@ echo $output_query_count;
     </div>
   </div>
 </div>
+<!-- Session Expiring Modal: 30 Second Warning -->
 <div class="modal fade" id="session-expire-warning-30" tabindex="-1" role="dialog" aria-labelledby="session-expire-warning-30-label">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
@@ -380,89 +383,17 @@ echo $output_query_count;
     </div>
   </div>
 </div>
-<?php 
-session_write_close(); 
-if ($logged_in) {
-$session_end_seconds = time() + ($session_expire_after * 60);
-$session_end = getTimeZoneDateTime($_SESSION['prefsTimeZone'],$session_end_seconds,"999",$_SESSION['prefsTimeFormat'],"short","date-no-gmt");
-?>
-<script type="text/javascript" src="https://cdn.rawgit.com/hilios/jQuery.countdown/2.2.0/dist/jquery.countdown.min.js"></script>
+<!-- Session Timer Displays and Auto Logout -->
 <script>
 var session_end = "<?php echo $session_end; ?>";
+var session_end_min = <?php echo $session_expire_after; ?>;
 var session_end_seconds = "<?php echo $session_end_seconds; ?>";
-var visual_updates = true;
-
-document.addEventListener('visibilitychange', function(){
-  visual_updates = !document.hidden;
-});
-
-$("#session-end").countdown(session_end, function(event) {
-
-    var end_time = (event.strftime('%M:%S'));
-    $(this).html(end_time);
-
-    if (visual_updates) {
-        if (end_time == "02:00") {
-            $("#session-expire-warning").modal('show');
-        }
-        if (end_time == "00:30") {
-            $("#session-expire-warning").modal('hide');
-            $("#session-expire-warning-30").modal('show');
-        }
-    }
-
-    if (end_time == "00:01") {
-        $("#session-expire-warning-30").modal('hide');
-        var session_end_redirect = "<?php echo $base_url; ?>includes/logout.inc.php";
-        window.location.replace(session_end_redirect);
-    } 
-        
-});
+var session_end_redirect = "<?php echo $base_url; ?>includes/logout.inc.php";
 </script>
-<?php if ($section == "evaluation") { ?>
-<?php if ($go == "default") { ?>
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment-timezone/0.5.32/moment-timezone-with-data.min.js"></script>
-<script>
-var judging_end = moment.tz("<?php echo $judging_end; ?>","<?php echo get_timezone($_SESSION['prefsTimeZone']); ?>");
-$("#judging-ends").countdown(judging_end.toDate(), function(event) {
-    $(this).text(event.strftime('%-w weeks %-d days %-H:%M:%S'));
-});
-</script>
-<?php } ?>
-<?php if ($go == "scoresheet") { ?>
-<script>
-$("#session-end-eval").countdown(session_end, function(event) {
-
-    var end_time = (event.strftime('%M:%S'));
-    $(this).html(end_time);
-    
-    if (end_time == "15:00") {
-        $("#session-end-eval-p").attr("class", "text-warning");
-    }
-
-    if (end_time == "10:00") {
-        $("#session-end-eval-p").attr("class", "text-danger");
-    }
-
-});
-</script>
-<?php } ?>
-<?php } // end if ($section == "evaluation") ?>
+<script type="text/javascript" src="https://cdn.rawgit.com/hilios/jQuery.countdown/2.2.0/dist/jquery.countdown.min.js"></script>
+<script type="text/javascript" src="<?php echo $base_url; ?>js_includes/autologout.min.js"></script>
+<?php if (($_SESSION['prefsEval'] == 1) && ($section == "evaluation")) include (EVALS.'warnings.eval.php'); ?>
 <?php } // end if ($logged_in) ?>
-<script>
-$(document).ready(function(){
-    $("#no-js-alert").hide();
-    $("a").attr("target", function() {
-        if(this.host == location.host) {
-            return "_self";
-        }
-        else {
-            return "_blank";
-        }
-    });
-    $("a[target='_blank'])").addClass("hide-loader");
-});
-</script>
+<script type="text/javascript" src="<?php echo $base_url; ?>js_includes/loader_target.min.js"></script>
 </body>
 </html>

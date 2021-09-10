@@ -300,8 +300,6 @@ if ($totalRows_table_assignments > 0) {
 				else $table_assignment_entries .= sprintf("<a name=\"table".$tbl_id."\"></a><h3 style=\"margin-top: 30px;\">%s %s - %s<br><small>%s %s <span class=\"text-warning\">%s</span> - %s</small></h3>",$label_table,$tbl_num_disp,$tbl_name_disp,$table_start_time,$entry_info_text_001,$table_end_time,strtolower($evaluation_info_028));
 			}
 
-			
-			
 			$table_assignment_pre = "";
 			$table_assignment_data = "";
 			$table_assignment_post = "";

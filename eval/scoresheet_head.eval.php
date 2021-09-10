@@ -9,16 +9,19 @@ include (EVALS.'descriptors.eval.php');
 if ($row_style['brewStyleType'] == 2) {
   $cider = TRUE;
   $scoresheet_type = "Cider";
+  $label_scoresheet = $label_cider_scoresheet;
 }
 
 elseif ($row_style['brewStyleType'] == 3) {
   $mead = TRUE;
   $scoresheet_type = "Mead";
+  $label_scoresheet = $label_mead_scoresheet;
 }
 
 else {
   $beer = TRUE;
   $scoresheet_type = "Beer";
+  $label_scoresheet = $label_beer_scoresheet;
 }
 
 if ($_SESSION['prefsDisplaySpecial'] == "E") $entry_id = $row_entry_info['id'];
@@ -50,7 +53,7 @@ if (($head_ordinal) || ($head_miniBOS)) $head_rt_col = "col-xs-6";
         <p><img style="max-width: 60px; min-width: 40px;" src="<?php echo $base_url."images/bjcp_logo.jpg"; ?>"></p>
     </div>
     <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-8">
-        <h2 class="text-center" style="margin:0; padding:0;"><?php if (!empty($scoresheet_type)) echo $scoresheet_type." "; ?>Scoresheet</h2>
+        <h2 class="text-center" style="margin:0; padding:0;"><?php echo $label_scoresheet; ?></h2>
         <div class="row">
             <div class="col col-xs-5 text-center">
                 <h5>
@@ -85,34 +88,34 @@ if (($head_ordinal) || ($head_miniBOS)) $head_rt_col = "col-xs-6";
     <div class="col col-lg-6 col-md-6 col-sm-6 col-xs-6">
         <!-- judge name, ID, email -->
         <div class="row">
-            <div class="col col-lg-2 col-md-3 col-sm-4 col-xs-3">
-            <strong>Judge<span class="hidden-sm hidden-xs"> Name</span>:</strong>
+            <div class="col col-lg-2 col-md-3 col-sm-4 col-xs-4">
+            <strong><?php echo $label_judge; ?>:</strong>
             </div>
-            <div class="col col-lg-10 col-md-9 col-sm-8 col-xs-9">
+            <div class="col col-lg-10 col-md-9 col-sm-8 col-xs-8">
             <?php echo $row_judge['brewerFirstName']." ".$row_judge['brewerLastName']; ?>
             </div>
         </div><!-- /row for judge name -->
         <div class="row">
-            <div class="col col-lg-2 col-md-3 col-sm-4 col-xs-3">
-            <strong>BJCP ID:</strong>
+            <div class="col col-lg-2 col-md-3 col-sm-4 col-xs-4">
+            <strong><?php echo $label_bjcp_id; ?>:</strong>
             </div>
-            <div class="col col-lg-10 col-md-9 col-sm-8 col-xs-9">
+            <div class="col col-lg-10 col-md-9 col-sm-8 col-xs-8">
             <?php echo $row_judge['brewerJudgeID']; ?>
             </div>
         </div><!-- /row for judge ID -->
         <div class="row">
-            <div class="col col-lg-2 col-md-3 col-sm-4 col-xs-3">
-            <strong>BJCP Rank:</strong>
+            <div class="col col-lg-2 col-md-3 col-sm-4 col-xs-4">
+            <strong><?php echo $label_bjcp_rank; ?>:</strong>
             </div>
-            <div class="col col-lg-10 col-md-9 col-sm-8 col-xs-9">
+            <div class="col col-lg-10 col-md-9 col-sm-8 col-xs-8">
             <?php echo str_replace(",", ", ", $row_judge['brewerJudgeRank']); ?>
             </div>
         </div><!-- /row for judge rank -->
         <div class="row">
-            <div class="col col-lg-2 col-md-3 col-sm-4 col-xs-3">
-            <strong>Email:</strong>
+            <div class="col col-lg-2 col-md-3 col-sm-4 col-xs-4">
+            <strong><?php echo $label_email; ?>:</strong>
             </div>
-            <div class="col col-lg-10 col-md-9 col-sm-8 col-xs-9">
+            <div class="col col-lg-10 col-md-9 col-sm-8 col-xs-8">
             <?php echo $row_judge['brewerEmail']; ?>
             </div>
         </div><!-- /row for judge email -->
@@ -120,7 +123,7 @@ if (($head_ordinal) || ($head_miniBOS)) $head_rt_col = "col-xs-6";
     <div class="col col-lg-6 col-md-6 col-sm-6 col-xs-6">
         <div class="row">
             <div class="col col-lg-2 col-md-3 col-sm-4 col-xs-3">
-            <strong>Category:</strong>
+            <strong><?php echo $label_category; ?>:</strong>
             </div>
             <div class="col col-lg-10 col-md-9 col-sm-8 col-xs-9">
             <?php echo $row_style['brewStyle']." (".style_number_const($row_style['brewStyleGroup'],$row_style['brewStyleNum'],$_SESSION['style_set_display_separator'],0).")"; ?>
@@ -129,7 +132,7 @@ if (($head_ordinal) || ($head_miniBOS)) $head_rt_col = "col-xs-6";
         <?php if (!empty($evalSpecialIngredients)) { ?>
          <div class="row">
             <div class="col col-lg-2 col-md-3 col-sm-4 col-xs-3">
-            <strong>Special Ing<span class="hidden-sm hidden-xs">redients</span>:</strong>
+            <strong><?php echo $label_required_info; ?></span>:</strong>
             </div>
             <div class="col col-lg-10 col-md-9 col-sm-8 col-xs-9">
             <?php echo $evalSpecialIngredients; ?>
@@ -138,7 +141,7 @@ if (($head_ordinal) || ($head_miniBOS)) $head_rt_col = "col-xs-6";
         <?php } ?>
         <div class="row">
             <div class="col col-lg-2 col-md-3 col-sm-4 col-xs-3">
-            <strong>Bottle<span class="hidden-sm hidden-xs"> Inspection</span>:</strong>
+            <strong><?php echo $label_bottle_inspection; ?></span>:</strong>
             </div>
             <div class="col col-lg-10 col-md-9 col-sm-8 col-xs-9">
             <span class="fa fa-fw <?php if ($row_eval['evalBottle'] == 1) echo "fa-check-square-o"; else echo "fa-square-o"; ?>"></span> Appropriate size, cap, fill level, label removal, etc.
@@ -148,7 +151,7 @@ if (($head_ordinal) || ($head_miniBOS)) $head_rt_col = "col-xs-6";
         <?php if (!empty($evalOtherNotes)) { ?>
         <div class="row">
             <div class="col col-lg-2 col-md-3 col-sm-4 col-xs-4">
-            <strong>Notes:</strong>
+            <strong><?php echo $label_notes; ?>:</strong>
             </div>
             <div class="col col-lg-10 col-md-9 col-sm-8 col-xs-8">
             <?php echo $evalOtherNotes; ?>
