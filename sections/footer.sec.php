@@ -26,7 +26,7 @@ elseif ((isset($_SESSION['prefsProEdition'])) && ($_SESSION['prefsProEdition'] =
 
 else $footer .= $current_version_display;
 
-$footer .= " <span class=\"fa fa-copyright\"></span>2009-".date('Y');
+$footer .= " <span class=\"far fa-copyright fa-xs\"></span>2009-".date('Y');
 
 if (((TESTING) || (DEBUG)) && (isset($starttime))) {
 	$mtime = microtime(); 

@@ -19,9 +19,9 @@ require('../paths.php');
 require(INCLUDES.'url_variables.inc.php');
 require(INCLUDES.'styles.inc.php');
 include (INCLUDES.'scrubber.inc.php');
-require (DB.'common.db.php');
 include (LIB.'common.lib.php');
 include (LIB.'update.lib.php');
+require (DB.'common.db.php');
 include (LANG.'language.lang.php');
 
 mysqli_select_db($connection,$database);

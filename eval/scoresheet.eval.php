@@ -192,7 +192,7 @@ if (!empty($judge_scores)) {
   if (isset($row_eval['evalFinalScore'])) $my_consensus_score .= sprintf("%s: <span id=\"my-consensus-score\">".$row_eval['evalFinalScore']."</span>",$label_your_consensus_score);
 }
 
-if (($action == "edit") && (!$consensus_match)) $consensus_scores = array_diff($consensus_scores,array($row_eval['evalFinalScore'])); 
+if (($action == "edit") && (!$consensus_match)) $consensus_scores = array_diff($consensus_scores,array($row_eval['evalFinalScore']));
 
 if (isset($_POST['entry_number'])) {
   
@@ -394,7 +394,7 @@ if ($entry_found) {
     // if (!empty($my_consensus_score)) $sticky_score_tally .= "<br><small>".$my_consensus_score."</small>";
     $sticky_score_tally .= "</p>";
     $sticky_score_tally .= "<p style=\"padding-top: 10px;\">";
-    $sticky_score_tally .= "<i id=\"consensus-status-icon\" class=\"fa fa-chevron-circle-right\"></i> <span id=\"consensus-status-msg\"><strong>Consensus Status</strong></span>";
+    $sticky_score_tally .= sprintf("<i id=\"consensus-status-icon\" class=\"fa fa-chevron-circle-right\"></i> <span id=\"consensus-status-msg\"><strong>%s</strong></span>",$label_consensus_status);
     if (!empty($my_consensus_score)) $sticky_score_tally .= "<br><small>".$my_consensus_score."</small>";
     if (!empty($other_judge_consensus_scores)) $sticky_score_tally .= "<br><small>".$other_judge_consensus_scores."</small>";
     $sticky_score_tally .= "</p>";
@@ -430,251 +430,48 @@ if ($eval_source == 0) $eval_nav_buttons .= "<div style=\"margin: 0 5px 15px 0;\
 $eval_nav_buttons .= "<div style=\"margin-bottom: 15px;\" class=\"btn-group hidden-print\" role=\"group\"><a class=\"btn btn-block btn-default\" href=\"".build_public_url("evaluation","default","default","default",$sef,$base_url)."\"><span class=\"fa fa-chevron-circle-left\"></span> ".$label_judging_dashboard."</a></div>";
 if ($eval_prevent_edit) $header_elements .= sprintf("<p>%s</p>",$header_text_104);
 ?>
-<style>
-  .scoring-guide-bottom-text {
-    font-weight: bold;
-  }
-</style>
 <!-- Load Bootstrap Slider -->
 <!-- https://github.com/seiyria/bootstrap-slider -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/11.0.2/bootstrap-slider.min.js"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/11.0.2/css/bootstrap-slider.min.css" />
 <script>
-
 var judgeScores = <?php echo json_encode($judge_scores); ?>;
 var consensusScores = <?php echo json_encode($consensus_scores); ?>;
 var score_range = <?php echo $score_range; ?>;
-
 var consensus_caution = "<?php echo $label_consensus_caution; ?>";
 var consensus_caution_text = "<?php echo $evaluation_info_044; ?>";
 var consensus_caution_output = "<span class=\"text-danger\"><strong>" + consensus_caution + "</strong><br><small><strong>" +consensus_caution_text + "</strong></small></span>";
-
 var consensus_match = "<?php echo $label_consensus_match; ?>";
 var consensus_match_text = "<?php echo $evaluation_info_045; ?>";
 var consensus_match_output = "<span class=\"text-success\"><strong>" + consensus_match + "</strong><br><small><strong>" +consensus_match_text + "</strong></small></span>";
-
-function checkConsensus(data) {
-
-  var entered_consensus_score = $("#evalFinalScore").val();
-  var disparity = 0;
-
-  data.forEach(function (item, index) {
-    if ((entered_consensus_score > 0) && (entered_consensus_score !== item)) disparity += 1;
-  });
-
-  /**
-   * If the entered value is does not match one or more the
-   * recorded scores, trigger a warning modal.
-   */
-  if (disparity > 0) {
-      $('#score-floor-modal').modal('hide');
-      $('#score-ceiling-modal').modal('hide');
-      $('#score-disparity-modal').modal('show');
-      $("#consensus-status-icon").attr("class", "fa fa-times-circle text-danger");
-      $("#consensus-status-msg").html(consensus_caution_output);
-  }
-
-  /**
-   * Trigger warning modal if score is less than 13, a commonly
-   * accepted "courtesty score" floor for BJCP competitions.
-   * See the Scoring Ranges section in the "7 Steps to Great Beer Judging" 
-   * document from the BJCP (https://www.bjcp.org/cep/GreatBeerJudging.pdf)
-   */
-  else if ((entered_consensus_score !== "") && (entered_consensus_score < 13)) {
-      $('#score-disparity-modal').modal('hide');
-      $('#score-ceiling-modal').modal('hide');
-      $('#score-floor-modal').modal('show');
-  }
-
-  else if ((entered_consensus_score !== "") && (entered_consensus_score > 50)) {
-      $('#score-disparity-modal').modal('hide');
-      $('#score-floor-modal').modal('hide');
-      $('#score-ceiling-modal').modal('show');
-  }
-
-  else { 
-      // Not really necessary, but close out any models just in case
-      $('#score-disparity-modal').modal('hide');
-      $('#score-floor-modal').modal('hide');
-      $('#score-ceiling-modal').modal('hide');
-      $("#consensus-status-icon").attr("class", "fa fa-check-circle text-success");
-      $("#consensus-status-msg").html(consensus_match_output);
-  }
-
-};
-
-function displayCalc(score) {
-
-  $("#scoring-guide-bottom-prob").attr("class", "row");
-  $("#scoring-guide-bottom-fair").attr("class", "row");
-  $("#scoring-guide-bottom-good").attr("class", "row");
-  $("#scoring-guide-bottom-v-good").attr("class", "row");
-  $("#scoring-guide-bottom-excellent").attr("class", "row");
-  $("#scoring-guide-bottom-outstanding").attr("class", "row");
-
-  if ((score > 0) && (score <= 13)) {
-    $("#scoring-guide").html("(<?php echo $label_problematic; ?>)");
-    $("#scoring-guide-badge").attr("class", "label label-danger sticky-glow");
-    $("#scoring-guide-bottom-prob").attr("class", "row scoring-guide-bottom-text bg-danger text-danger");
-  }
-  else if ((score > 13) && (score <= 20)) {
-    $("#scoring-guide").html("(<?php echo $label_fair; ?>)");
-    $("#scoring-guide-badge").attr("class", "label label-warning sticky-glow");
-    $("#scoring-guide-bottom-fair").attr("class", "row scoring-guide-bottom-text bg-warning text-warning");
-  }
-  else if ((score > 20) && (score <= 29)) {
-    $("#scoring-guide").html("(<?php echo $label_good; ?>)");
-    $("#scoring-guide-badge").attr("class", "label label-info sticky-glow");
-    $("#scoring-guide-bottom-good").attr("class", "row scoring-guide-bottom-text bg-info text-info");
-  }
-  else if ((score > 29) && (score <= 37)) {
-    $("#scoring-guide").html("(<?php echo $label_very_good; ?>)");
-    $("#scoring-guide-badge").attr("class", "label label-primary sticky-glow");
-    $("#scoring-guide-bottom-v-good").attr("class", "row scoring-guide-bottom-text bg-primary");
-  }
-  else if ((score > 37) && (score <= 44)) {
-    $("#scoring-guide").html("(<?php echo $label_excellent; ?>)");
-    $("#scoring-guide-badge").attr("class", "label label-success sticky-glow");
-    $("#scoring-guide-bottom-excellent").attr("class", "row scoring-guide-bottom-text bg-success text-success");
-  }
-  else if ((score > 44) && (score <= 50)) {
-    $("#scoring-guide").html("(<?php echo $label_outstanding; ?>)");
-    $("#scoring-guide-badge").attr("class", "label label-success sticky-glow");
-    $("#scoring-guide-bottom-outstanding").attr("class", "row scoring-guide-bottom-text bg-success text-success");
-  }
-
-};
-
-function calculateSum(method) {
-  var score = 0;
-  $(".score-choose").each(function() {
-    if(!isNaN(this.value) && this.value.length!=0) {
-      score += parseFloat(this.value);
-    }
-  });
-  
-  if (method == 0) {
-    $("#judge-score").html(score.toFixed(0));
-    $("#evalFinalScore").attr("placeholder", score.toFixed(0));
-    displayCalc(score);
-    checkScoreRange(score,judgeScores,score_range,method);
-  }
-
-};
-
-function checkScoreRange(score,data,score_range,method) {
-
-  var disparity = 0;
-  var score_range_caution = "<?php echo $label_score_range_caution; ?>";
-  var score_range_caution_text = "<?php echo $evaluation_info_046; ?>";
-  var score_range_caution_output = "<span class=\"text-danger\"><strong>" + score_range_caution + "</strong><br><small><strong>" + score_range_caution_text + " " + score_range + ".</strong></small></span>";
-  var score_range_ok = "<?php echo $label_score_range_ok; ?>";
-  var score_range_ok_text = "<?php echo $evaluation_info_047; ?>";
-  var score_range_ok_output = "<span class=\"text-success\"><strong>" + score_range_ok + "</strong><br><small><strong>" + score_range_ok_text + "</strong></small></span>";
-
-  data.forEach(function (item, index) {
-    if (Math.abs(item - score) > score_range) disparity += 1;
-  });
-
-  if (disparity > 0) {
-    
-    if (method == 0) {
-      $("#scoring-guide-status-icon").attr("class", "fa fa-times-circle text-danger");
-      $("#scoring-guide-status-msg").html(score_range_caution_output);
-    }
-
-    if (method == 1) {
-      $('#score-disparity-judges-modal').modal('show');
-    }
-      
-  }
-
-  else {
-    $("#scoring-guide-status-icon").attr("class", "fa fa-check-circle text-success");
-    $("#scoring-guide-status-msg").html(score_range_ok_output);
-  };
-
-};
-
-function ordinalHelp(totalNum,positionNum) {
-  
-  if ((totalNum == "") && (positionNum == "")) {
-      $("#ordinal-help-total").hide("fast");
-      $("#ordinal-help-position").hide("fast");
-      $("#evalPosition_0").prop("required",false);
-      $("#evalPosition_1").prop("required",false);
-    }
-    
-    else if ((totalNum == "") && (positionNum != "")) {
-      $("#ordinal-help-total").show("fast");
-      $("#ordinal-help-position").hide("fast");
-      $("#evalPosition_0").prop("required",true);
-      $("#evalPosition_1").prop("required",true);
-    }
-
-    else if ((totalNum != "") && (positionNum == "")) {
-      $("#ordinal-help-total").hide("fast");
-      $("#ordinal-help-position").show("fast");
-      $("#evalPosition_0").prop("required",true);
-      $("#evalPosition_1").prop("required",true);     
-    }
-
-    else if ((totalNum != "") && (positionNum != "")) {
-      $("#ordinal-help-total").hide("fast");
-      $("#ordinal-help-position").hide("fast");
-      $("#evalPosition_0").prop("required",true);
-      $("#evalPosition_1").prop("required",true);     
-    }
-
-    else {
-      $("#evalPosition_0").prop("required",true);
-      $("#evalPosition_1").prop("required",true);
-    }
-};
-
+var score_problematic = "<?php echo $label_problematic; ?>";
+var score_fair = "<?php echo $label_fair; ?>";
+var score_good = "<?php echo $label_good; ?>";
+var score_very_good = "<?php echo $label_very_good; ?>";
+var score_excellent = "<?php echo $label_excellent; ?>";
+var score_outstanding = "<?php echo $label_outstanding; ?>";
+var score_range_caution = "<?php echo $label_score_range_caution; ?>";
+var score_range_caution_text = "<?php echo $evaluation_info_046; ?>";
+var score_range_caution_output = "<span class=\"text-danger\"><strong>" + score_range_caution + "</strong><br><small><strong>" + score_range_caution_text + " " + score_range + ".</strong></small></span>";
+var score_range_ok = "<?php echo $label_score_range_ok; ?>";
+var score_range_ok_text = "<?php echo $evaluation_info_047; ?>";
+var score_range_ok_output = "<span class=\"text-success\"><strong>" + score_range_ok + "</strong><br><small><strong>" + score_range_ok_text + "</strong></small></span>";
+</script>
+<script src="<?php echo $base_url;?>js_includes/eval_checks.min.js"></script>
+<?php if ($action == "edit") { ?>
+<script>
 $(document).ready(function() {
-
-  $(".score-choose").change(function() {
-      calculateSum(0);
-  });
-
-  $("#ordinal-help-position").hide();
-  $("#ordinal-help-total").hide();
-
-  $("#evalPosition_0").on("keyup", function(e) {
-    var value = $(this).val();
-    var positionNum = $.trim(value);
-    var totalNum = $("#evalPosition_1").val();
-    ordinalHelp(totalNum,positionNum);
-  });
-
-  $("#evalPosition_1").on("keyup", function(e) {
-    var value = $(this).val();
-    var totalNum = $.trim(value);
-    var positionNum = $("#evalPosition_0").val();
-    ordinalHelp(totalNum,positionNum);
-  });
-
-  $("#evalFinalScore").on("keyup", function(e) {
-      if (e.which !== 32) {
-          var value = $(this).val();
-          var noWhitespaceValue = value.replace(/\s+/g, '');
-          var noWhitespaceCount = noWhitespaceValue.length;
-          if (noWhitespaceCount % 2 === 0) {
-              checkConsensus(consensusScores);
-          }
-      }
-  });
-
-  <?php if ($action == "edit") { ?>
     displayCalc(<?php echo $eval_score; ?>);
     checkScoreRange(<?php echo $eval_score; ?>,judgeScores,score_range,0);
     checkConsensus(consensusScores);
-  <?php }?>
 });
 </script>
-
+<?php }?>
 <style type="text/css">
+
+.scoring-guide-bottom-text {
+    font-weight: bold;
+  }
 
 #sticky-score {
   position: -webkit-sticky;

@@ -446,3 +446,19 @@ table.dataTable thead th.sorting:after {
     height: 300px;
     color: #fff;
 }
+
+#login-modal-enable {
+    display: none;
+}
+#admin-enable {
+    display: none;
+}
+#user-menu-enable {
+    display: none;
+}
+#print-enable {
+    display: none;
+}
+#help-enable {
+    display: none;
+}

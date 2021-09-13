@@ -1755,6 +1755,7 @@ $label_scoresheet = "Súmula";
 $label_beer_scoresheet = "Folha de Pontuação da Cerveja";
 $label_cider_scoresheet = "Folha de Pontuação da Cidra";
 $label_mead_scoresheet = "Folha de Pontuação da Hidromel";
+$label_consensus_status = "Status de Consenso";
 
 $evaluation_info_044 = "Sua pontuação de consenso não corresponde às inseridas por outros juízes.";
 $evaluation_info_045 = "A pontuação de consenso inserida corresponde àquela inserida por juízes anteriores.";
@@ -1788,6 +1789,9 @@ $evaluation_info_072 = "Por padrão, o Logout automático é estendido para 30 m
 
 $alert_text_090 = "Sua sessão irá expirar em dois minutos. Você pode permanecer na página atual para terminar seu trabalho antes que o tempo expire, atualizar esta página para continuar sua sessão atual (os dados do formulário podem ser perdidos) ou fazer logout.";
 $alert_text_091 = "Sua sessão irá expirar em 30 segundos. Você pode atualizar para continuar sua sessão atual ou fazer logout.";
+$alert_text_092 = "Deve ser definida pelo menos uma sessão de julgamento para adicionar uma mesa.";
+
+$brewer_entries_text_026 = "As planilhas de pontuação dos juízes para esta inscrição estão em vários formatos. Cada formato contém uma ou mais avaliações válidas desta entrada.";
 
 /**
  * ----------------------------------------------------------------------------------

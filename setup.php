@@ -93,8 +93,10 @@ if ($setup_free_access == FALSE) {
 }
 
 else {
-	if ($section != "step0") require(DB.'common.db.php');
-	require(INCLUDES.'version.inc.php');
+	if ($section != "step0") {
+		require (DB.'common.db.php');
+	}
+	require (INCLUDES.'version.inc.php');
 	if ((!table_exists($prefix."system")) && ($section == "step0"))	include (SETUP.'install_db.setup.php');
 	$setup_body .= $output;
 }

@@ -2577,9 +2577,9 @@ $datatables_load = array("admin","list","default","step4","evaluation");
 
 if (isset($_SESSION['prefsStyleSet'])) {
     // Set vars for backwards compatibility
-    $beer_end = $_SESSION['style_set_beer_end'];
-    $mead_array = $_SESSION['style_set_mead'];
-    $cider_array = $_SESSION['style_set_cider'];
-    $category_end = $_SESSION['style_set_category_end'];
+    if (isset($_SESSION['style_set_beer_end'])) $beer_end = $_SESSION['style_set_beer_end'];
+    if (isset($_SESSION['style_set_mead'])) $mead_array = $_SESSION['style_set_mead'];
+    if (isset($_SESSION['style_set_cider'])) $cider_array = $_SESSION['style_set_cider'];
+    if (isset($_SESSION['style_set_category_end'])) $category_end = $_SESSION['style_set_category_end'];
 }
 ?>

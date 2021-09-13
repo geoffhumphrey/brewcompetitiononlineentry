@@ -807,7 +807,7 @@ function standardize_name($string) {
 	// Major latin-character languages that will apply the standardization
 	$name_check_langs = array("en", "fr", "es", "pt", "it", "de");
 
-	if (in_array($_SESSION['prefsLanguageFolder'], $name_check_langs)) {
+	if ((isset($_SESSION['prefsLanguageFolder'])) && (in_array($_SESSION['prefsLanguageFolder'], $name_check_langs))) {
 
 		$word_splitters = array(" ", "-", "O'", "L'", "D'", "St.", "Mc", "Mac", ".", "\"");
 		$lowercase_exceptions = array("the", "van", "den", "ter", "von", "und", "des", "der", "de", "da", "of", "and", "l'", "d'", "la", "vit", "dos", "das", "do");

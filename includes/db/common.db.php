@@ -318,7 +318,8 @@ if ((!isset($_SESSION['prefsLanguageFolder'.$prefix_session]))|| (empty($_SESSIO
 }
 
 // Check for Tables Planning Mode
-if ((!isset($_SESSION['jPrefsTablePlanning'])) || (empty($_SESSION['jPrefsTablePlanning']))) {
+
+if ((check_update("flightPlanning", $prefix."judging_flights")) && ((!isset($_SESSION['jPrefsTablePlanning'])) || (empty($_SESSION['jPrefsTablePlanning'])))) {
 
 	// Check judging_flights for any record with a 1 (planning mode);
 	// If found, set as 1, otherwise set as 0

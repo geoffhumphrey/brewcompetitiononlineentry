@@ -1913,7 +1913,8 @@ if (!check_update("prefsEval", $prefix."preferences")) {
 	mysqli_real_escape_string($connection,$updateSQL);
 	$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 
-	$_SESSION['prefsEval'] = 0;
+	if (EVALUATION) $_SESSION['prefsEval'] = 1;
+	else $_SESSION['prefsEval'] = 0;
 }
 
 $output .= "<li>Added column to enable or disable Electronic Scoresheets functionality.</li>";

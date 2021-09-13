@@ -4,54 +4,49 @@ include (LIB.'update.lib.php');
 $update_required = FALSE;
 $setup_success = TRUE;
 $force_update = FALSE;
+$no_updates_needed = FALSE;
 if (FORCE_UPDATE) $force_update = TRUE;
-
-// The following line will need to change with future conversions
-if ((!check_setup($prefix."mods",$database)) && (!check_setup($prefix."preferences",$database))) {
-/*  */
-	$setup_success = FALSE;
-	$setup_relocate = "Location: ".$base_url."setup.php?section=step0";
-
-}
-
-// For older versions (pre-1.3.0.0)
-if ((!check_setup($prefix."mods",$database)) && (check_setup($prefix."preferences",$database))) {
-
-	$setup_success = FALSE;
-	$setup_relocate = "Location: ".$base_url."update.php";
-
-}
-
-elseif ((MAINT) && ($section != "maintenance")) {
-
-	$setup_success = FALSE;
-	$setup_relocate = "Location: ".$base_url."maintenance.php";
-
-}
+$hosted_setup = FALSE;
 
 if (check_setup($prefix."system",$database)) {
-
 	mysqli_select_db($connection,$database);
 	$query_system = sprintf("SELECT * FROM %s WHERE id='1'",$prefix."system");
 	$system = mysqli_query($connection,$query_system) or die (mysqli_error($connection));
 	$row_system = mysqli_fetch_assoc($system);
+}
 
-	// For current version, check if "prefsShipping" column is in the prefs table since it was added in the 2.1.6.0 release
+if ((HOSTED) && ($row_system['setup_last_step'] == 9)) $hosted_setup = TRUE;
+
+if ((!isset($_SESSION['currentVersion'])) || ((isset($_SESSION['currentVersion'])) && ($_SESSION['currentVersion'] == 0))) {
+	
+	// The following line will need to change with future conversions
+	if ((!check_setup($prefix."mods",$database)) && (!check_setup($prefix."preferences",$database))) {
+		$setup_success = FALSE;
+		$setup_relocate = "Location: ".$base_url."setup.php?section=step0";
+	}
+
+	// For older versions (pre-1.3.0.0)
+	if ((!check_setup($prefix."mods",$database)) && (check_setup($prefix."preferences",$database))) {
+		$setup_success = FALSE;
+		$setup_relocate = "Location: ".$base_url."update.php";
+	}
+
+	elseif ((MAINT) && ($section != "maintenance")) {
+		$setup_success = FALSE;
+		$setup_relocate = "Location: ".$base_url."maintenance.php";
+	}
+
+	// Check if "prefsShipping" column is in the prefs table since it was added in the 2.1.6.0 release
 	// If not, run the update
-
 	if (!check_update("prefsShipping", $prefix."preferences")) {
-
 		$update_required = TRUE;
 		$setup_success = FALSE;
 		$setup_relocate = "Location: ".$base_url."update.php";
-
 	}
 
 	// Check if setup was completed successfully
 	if ($row_system['setup'] == 0) {
-
 		$setup_success = FALSE;
-
 		$setup_relocate = "Location: ".$base_url."setup.php?section=step".($row_system['setup_last_step']+1);
 
 		if ($row_system['setup_last_step'] == 1) {
@@ -63,11 +58,6 @@ if (check_setup($prefix."system",$database)) {
 
 		$setup_relocate .= "&msg=1";
 	}
-
-	// Flag for hosted installations
-	$hosted_setup = FALSE;
-	if ((HOSTED) && ($row_system['setup_last_step'] == 9)) $hosted_setup = TRUE;
-
 
 	if ($row_system['version'] == $current_version) {
 		// If the current version is the same as what is in the DB, trigger a force update
@@ -92,17 +82,15 @@ if (check_setup($prefix."system",$database)) {
 
 	}
 
-	if (((isset($_SESSION['prefsEval'])) && ($_SESSION['prefsEval'] == 1)) && (!check_setup($prefix."evaluation",$database)))  {
-		require_once (EVALS.'install_eval_db.eval.php');
+	if (!$setup_success) {
+		header ($setup_relocate);
+		exit;
 	}
 
-}
+	else {
+		$no_updates_needed = TRUE;
+	}
 
-if (!$setup_success) {
-
-	header ($setup_relocate);
-	exit;
-
-}
+} // end if (!isset($_SESSION['currentVersion']))
 
 ?>

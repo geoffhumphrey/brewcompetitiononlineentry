@@ -154,7 +154,7 @@ if ((isset($_SESSION['session_set_'.$prefix_session])) && (isset($_SESSION['logi
 					$not_imported_count ++;
 				}
 				
-				if ($totalRows_evals > 1) {
+				if ($totalRows_evals > 0) {
 
 					// Loop through and compare each final score. 
 					do {

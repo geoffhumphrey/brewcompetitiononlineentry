@@ -174,6 +174,8 @@ do {
 	$entry_output .= "</td>";
 	
 	$scoresheet = FALSE;
+	$scoresheet_es = FALSE;
+	$scoresheet_pdf = FALSE;
 	$scoresheet_link = "";
 	$scoresheet_link_eval = "";
 
@@ -193,6 +195,7 @@ do {
 				// if (($row_style['brewStyleType'] == 2) || ($row_style['brewStyleType'] == 3)) $output_form = "full-scoresheet";
 
 				$scoresheet = TRUE;
+				$scoresheet_es = TRUE;
 				$print_link = $base_url."output/print.output.php?section=evaluation&amp;go=default&amp;view=all&amp;id=".$row_log['id'];
 				$scoresheet_link_eval = "<a id=\"modal_window_link\" class=\"hide-loader\" href=\"".$print_link."\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"".$brewer_entries_text_025." &ndash; &ldquo;".$entry_name.".&rdquo;\"><i class=\"fa fa-lg fa-file-text\"></i></a>&nbsp;&nbsp;";
 			}
@@ -212,7 +215,7 @@ do {
 		if (!empty($scoresheet_file_name)) {
 
 			$scoresheet = TRUE;
-
+			$scoresheet_pdf = TRUE;
 			// The pseudo-random number and the corresponding name of the temporary file are defined each time
 			// this brewer_entries.sec.php script is accessed (or refreshed), but the temporary file is created
 			// only when the entrant clicks on the icon to access the scoresheet.
@@ -272,7 +275,6 @@ do {
 	//$entry_output .= "&nbsp;".$required_info;
 	if (!empty($row_log['brewCoBrewer'])) $entry_output .= sprintf("<br><em>%s: ".$row_log['brewCoBrewer']."</em>",$label_cobrewer);
 	$entry_output .= "</td>";
-
 
 	// Style
 	$entry_output .= "<td>";
@@ -436,6 +438,8 @@ do {
 		}
 
 	}
+
+	if (($scoresheet_es) && ($scoresheet_pdf)) $entry_output .= sprintf("<span class=\"fa fa-question-circle text-muted\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"%s\" href=\"#\"></span>",$brewer_entries_text_026);
 
 	$entry_output .= "</td>";
 	$entry_output .= "</tr>";

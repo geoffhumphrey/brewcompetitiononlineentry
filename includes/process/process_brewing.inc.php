@@ -594,7 +594,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 			if ($_POST['brewStyle'] == "0-A") $insertSQL .= GetSQLValueString("0","text").", ";
 			else $insertSQL .= GetSQLValueString(filter_var($_POST['brewConfirmed'],FILTER_SANITIZE_STRING),"text").", ";
 			$insertSQL .= GetSQLValueString($brewPaid,"text").", ";
-			$insertSQL .= GetSQLValueString("0","text").", ";
+			$insertSQL .= GetSQLValueString($brewReceived,"text").", ";
 			$insertSQL .= GetSQLValueString($brewInfoOptional,"text").", ";
 			$insertSQL .= GetSQLValueString($brewBoxNum,"text").", ";
 			$insertSQL .= GetSQLValueString($brewAdminNotes,"text").", ";

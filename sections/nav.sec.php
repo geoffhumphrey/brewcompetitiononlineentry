@@ -279,23 +279,6 @@ if (($logged_in) && ($admin_user) && ($go != "error_page")) { ?>
     </div>
 <!-- ./ Admin Push Menu -->
 <?php } ?>
-<style>
-    #login-modal-enable {
-        display: none;
-    }
-    #admin-enable {
-        display: none;
-    }
-    #user-menu-enable {
-        display: none;
-    }
-    #print-enable {
-        display: none;
-    }
-    #help-enable {
-        display: none;
-    }
-</style>
 <script>
 $(document).ready(function(){
 	$("#login-modal-disable").hide();

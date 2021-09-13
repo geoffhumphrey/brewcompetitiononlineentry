@@ -6,11 +6,6 @@
 require_once ('paths.php');
 require_once (INCLUDES.'url_variables.inc.php');
 $section = "update";
-ini_set('session.cookie_httponly', 1);
-ini_set('session.use_only_cookies', 1);
-
-// Uses a secure connection (HTTPS) if possible
-ini_set('session.cookie_secure', 1);
 
 if (SINGLE) require_once(SSO.'sso.inc.php');
 require_once (LIB.'common.lib.php');
@@ -253,7 +248,6 @@ if (file_exists($filename)) {
 					session_unset();
 					session_destroy();
 					session_write_close();
-					session_regenerate_id(true);
 
 					$update_alerts .= "<div class=\"alert alert-success\"><span class=\"fa fa-lg fa-check-circle\"></span> <strong>Update to ".$current_version_display." Complete!</strong></div>";
 

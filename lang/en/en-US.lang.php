@@ -1891,6 +1891,7 @@ $label_scoresheet = "Scoresheet";
 $label_beer_scoresheet = "Beer Scoresheet";
 $label_cider_scoresheet = "Cider Scoresheet";
 $label_mead_scoresheet = "Mead Scoresheet";
+$label_consensus_status = "Consensus Status";
 
 $evaluation_info_044 = "Your consensus score does not match those entered by other judges.";
 $evaluation_info_045 = "Consensus score entered matches those entered by previous judges.";
@@ -1924,6 +1925,9 @@ $evaluation_info_072 = "By default, Auto Log Out is extended to 30 minutes for e
 
 $alert_text_090 = "Your session will expire in two minutes. You can stay on the current page to finish your work before time expires, refresh this page to continue your current session (unsaved form data may be lost), or log out.";
 $alert_text_091 = "Your session will expire in 30 seconds. You can refresh to continue your current session or log out.";
+$alert_text_092 = "At least one judging session must be defined to add a table.";
+
+$brewer_entries_text_026 = "Judges scoresheets for this entry are in multiple formats. Each format contains one or more valid evaluations of this entry.";
 
 /**
  * ----------------------------------------------------------------------------------

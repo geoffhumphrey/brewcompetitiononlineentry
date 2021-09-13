@@ -119,36 +119,28 @@ if ($section == "past-winners") {
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title><?php echo $_SESSION['contestName']; ?> - Brew Competition Online Entry &amp; Management</title>
-    <?php
+<?php
     if (CDN) include (INCLUDES.'load_cdn_libraries.inc.php');
     else include (INCLUDES.'load_local_libraries.inc.php');
-    ?>
+?>
     <!-- Load BCOE&M Custom CSS - Contains Bootstrap overrides and custom classes common to all BCOE&M themes -->
     <link rel="stylesheet" type="text/css" href="<?php echo $base_url."css/common.min.css"; ?>" />
     <link rel="stylesheet" type="text/css" href="<?php echo $theme; ?>" />
+    
     <!-- Load BCOE&M Custom JS -->
     <script src="<?php echo $base_url; ?>js_includes/bcoem_custom.min.js"></script>
+    
     <!-- Open Graph Implementation -->
-    <?php if (!empty($_SESSION['contestName'])) { ?>
+<?php if (!empty($_SESSION['contestName'])) { ?>
     <meta property="og:title" content="<?php echo $_SESSION['contestName']?>" />
-    <?php } ?>
-    <?php if (!empty($_SESSION['contestLogo'])) { ?>
+<?php } ?>
+<?php if (!empty($_SESSION['contestLogo'])) { ?>
     <meta property="og:image" content="<?php echo $base_url."user_images/".$_SESSION['contestLogo']?>" />
-    <?php } ?>
+<?php } ?>
     <meta property="og:url" content="<?php echo "http" . ((!empty($_SERVER['HTTPS'])) ? "s://" : "://") . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']; ?>" />
 </head>
 <body>
-<script>
-try {
-    var ua = window.navigator.userAgent;
-    var msie = ua.indexOf("MSIE ");
-    if (msie > 0 || !!navigator.userAgent.match(/Trident.*rv\:11\./))  {
-        alert('<?php echo $alert_text_086; ?>');
-    }
-} catch (error) {
-    console.error('Error checking user agent.', error);
-}
-</script>
+
 <!-- LOADER -->
 <div id="loader-submit">
     <div class="center">
@@ -167,11 +159,6 @@ try {
 <!-- ALERTS -->
 <div class="<?php echo $container_main; ?> bcoem-warning-container">
     <?php include (SECTIONS.'alerts.sec.php'); ?>
-    <?php if ($go == "default") { ?>
-    <div id="no-js-alert" class="alert alert-danger lead">
-        <i class="fa fa-lg fa-exclamation-circle"></i> <strong><?php echo $alert_text_087; ?></strong>
-    </div>
-    <?php } ?>
 </div><!-- ./container -->
 <!-- ./ALERTS -->
 
@@ -386,11 +373,11 @@ $session_end = getTimeZoneDateTime($_SESSION['prefsTimeZone'],$session_end_secon
 <!-- Session Timer Displays and Auto Logout -->
 <script>
 var session_end = "<?php echo $session_end; ?>";
-var session_end_min = <?php echo $session_expire_after; ?>;
+var session_end_min = "<?php echo $session_expire_after; ?>";
 var session_end_seconds = "<?php echo $session_end_seconds; ?>";
 var session_end_redirect = "<?php echo $base_url; ?>includes/logout.inc.php";
 </script>
-<script type="text/javascript" src="https://cdn.rawgit.com/hilios/jQuery.countdown/2.2.0/dist/jquery.countdown.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery.countdown/2.2.0/jquery.countdown.min.js"></script>
 <script type="text/javascript" src="<?php echo $base_url; ?>js_includes/autologout.min.js"></script>
 <?php if (($_SESSION['prefsEval'] == 1) && ($section == "evaluation")) include (EVALS.'warnings.eval.php'); ?>
 <?php } // end if ($logged_in) ?>

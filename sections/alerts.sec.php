@@ -29,8 +29,9 @@ $alert_text_075 = sprintf("<strong>%s</strong> %s",$alert_text_072,$alert_text_0
 if (!$steward_limit) $alert_text_075 .= $alert_text_074;
 $alert_text_079 = sprintf("<strong>%s</strong> %s ",$alert_text_076,$alert_text_077);
 if (!$judge_limit) $alert_text_079 .= $alert_text_078;
+?>
 
-if ($msg != "default") { ?>
+<?php if ($msg != "default") { ?>
     <!-- User action alerts -->
     <div class="alert alert-danger alert-dismissible hidden-print fade in" role="alert">
       <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
@@ -210,111 +211,113 @@ if ($msg != "default") { ?>
 
 	<?php } // end if ($section == "brew") ?>
 <?php } // end if ($logged_in) ?>
+
 <?php if (!$logged_in) { ?>
-     <?php if (($registration_open == 0) && (!$ua) && ($section == "default") && ($msg == "default")) { ?>
-        <!-- Account registration not open yet -->
-        <div class="alert alert-success alert-dismissible hidden-print fade in" role="alert">
-          <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-          <span class="fa fa-lg fa-check-circle"></span> <?php echo $alert_text_035; ?>
-        </div>
-    <?php } ?>
+    
+  <?php if (($registration_open == 0) && (!$ua) && ($section == "default") && ($msg == "default")) { ?>
+    <!-- Account registration not open yet -->
+    <div class="alert alert-success alert-dismissible hidden-print fade in" role="alert">
+      <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+      <span class="fa fa-lg fa-check-circle"></span> <?php echo $alert_text_035; ?>
+    </div>
+  <?php } ?>
 
-    <?php if (($entry_window_open == 0) && (!$ua) && ($section == "default") && ($msg == "default")) { ?>
-        <!-- Entry registration not open yet -->
-        <div class="alert alert-success alert-dismissible hidden-print fade in" role="alert">
-          <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-          <span class="fa fa-lg fa-check-circle"></span> <?php echo $alert_text_038; ?>
-        </div>
-    <?php } ?>
+  <?php if (($entry_window_open == 0) && (!$ua) && ($section == "default") && ($msg == "default")) { ?>
+    <!-- Entry registration not open yet -->
+    <div class="alert alert-success alert-dismissible hidden-print fade in" role="alert">
+      <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+      <span class="fa fa-lg fa-check-circle"></span> <?php echo $alert_text_038; ?>
+    </div>
+  <?php } ?>
 
-    <?php if (($registration_open == 0) && (!$ua) && ($section != "admin") && ($judge_window_open == "0") && ($msg == "default")) { ?>
-        <!-- Judge/steward registration not open yet -->
-        <div class="alert alert-info alert-dismissible hidden-print fade in" role="alert">
-          <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-          <span class="fa fa-lg fa-info-circle"></span> <?php echo $alert_text_041; ?>
-        </div>
-    <?php } ?>
+  <?php if (($registration_open == 0) && (!$ua) && ($section != "admin") && ($judge_window_open == "0") && ($msg == "default")) { ?>
+    <!-- Judge/steward registration not open yet -->
+    <div class="alert alert-info alert-dismissible hidden-print fade in" role="alert">
+      <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+      <span class="fa fa-lg fa-info-circle"></span> <?php echo $alert_text_041; ?>
+    </div>
+  <?php } ?>
 
-    <?php if (($registration_open == 1) && ($entry_window_open == 1) && (!$ua) && ($section == "default") && ($comp_entry_limit) && ($msg == "default")) { ?>
-        <!-- Account and entry registration open -->
-        <div class="alert alert-success alert-dismissible hidden-print fade in" role="alert">
-          <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-          <span class="fa fa-lg fa-check-circle"></span> <?php echo $alert_text_045; ?>
-        </div>
-    <?php } ?>
+  <?php if (($registration_open == 1) && ($entry_window_open == 1) && (!$ua) && ($section == "default") && ($comp_entry_limit) && ($msg == "default")) { ?>
+    <!-- Account and entry registration open -->
+    <div class="alert alert-success alert-dismissible hidden-print fade in" role="alert">
+      <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+      <span class="fa fa-lg fa-check-circle"></span> <?php echo $alert_text_045; ?>
+    </div>
+  <?php } ?>
 
-    <?php if (($registration_open == 1) && ($entry_window_open == 1) && (!$ua) && ($section == "default") && ($comp_entry_limit_near_warning) && ($msg == "default")) { ?>
-        <!-- Entry limit nearly reached -->
-        <div class="alert alert-warning alert-dismissible hidden-print fade in" role="alert">
-          <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-          <span class="fa fa-lg fa-info-circle"></span> <?php echo $alert_text_048; ?>
-        </div>
-    <?php } ?>
+  <?php if (($registration_open == 1) && ($entry_window_open == 1) && (!$ua) && ($section == "default") && ($comp_entry_limit_near_warning) && ($msg == "default")) { ?>
+    <!-- Entry limit nearly reached -->
+    <div class="alert alert-warning alert-dismissible hidden-print fade in" role="alert">
+      <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+      <span class="fa fa-lg fa-info-circle"></span> <?php echo $alert_text_048; ?>
+    </div>
+  <?php } ?>
 
-    <?php
-	// $entry_window_open variable will be at 2, meaning closed - only show if account registration is open
+  <?php
 	if (($registration_open == 1) && (!$ua) && ($section == "default") && ($comp_entry_limit) && ($msg == "default")) { ?>
-        <!-- Entry limit reached -->
-        <div class="alert alert-danger alert-dismissible hidden-print fade in" role="alert">
-          <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-          <span class="fa fa-lg fa-exclamation-circle"></span> <?php echo $alert_text_051; ?>
-        </div>
-    <?php } ?>
+    <!-- Entry limit reached -->
+    <div class="alert alert-danger alert-dismissible hidden-print fade in" role="alert">
+      <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+      <span class="fa fa-lg fa-exclamation-circle"></span> <?php echo $alert_text_051; ?>
+    </div>
+  <?php } ?>
 
-    <?php if (($registration_open == 1) && (!$ua) && ($section == "default") && ($comp_paid_entry_limit) && ($msg == "default")) { ?>
-        <!-- Entry limit reached -->
-        <div class="alert alert-danger alert-dismissible hidden-print fade in" role="alert">
-          <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-          <span class="fa fa-lg fa-exclamation-circle"></span> <?php echo $alert_text_054; ?>
-        </div>
-    <?php } ?>
+  <?php if (($registration_open == 1) && (!$ua) && ($section == "default") && ($comp_paid_entry_limit) && ($msg == "default")) { ?>
+    <!-- Entry limit reached -->
+    <div class="alert alert-danger alert-dismissible hidden-print fade in" role="alert">
+      <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+      <span class="fa fa-lg fa-exclamation-circle"></span> <?php echo $alert_text_054; ?>
+    </div>
+  <?php } ?>
 
-    <?php if (($registration_open == 2) && (!$ua) && ($section == "default") && (judging_date_return() > 0) && ($msg == "default")) { ?>
-        <!-- Account registration closed -->
-        <div class="alert alert-danger alert-dismissible hidden-print fade in" role="alert">
-          <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-          <span class="fa fa-lg fa-exclamation-circle"></span> <?php echo $alert_text_058; ?>
-        </div>
-    <?php } 	?>
+  <?php if (($registration_open == 2) && (!$ua) && ($section == "default") && (judging_date_return() > 0) && ($msg == "default")) { ?>
+    <!-- Account registration closed -->
+    <div class="alert alert-danger alert-dismissible hidden-print fade in" role="alert">
+      <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+      <span class="fa fa-lg fa-exclamation-circle"></span> <?php echo $alert_text_058; ?>
+    </div>
+  <?php } 	?>
 
-    <?php if (($entry_window_open == 2) && (!$ua) && ($section == "default") && (judging_date_return() > 0) && ($msg == "default")) { ?>
-        <!-- Entry registration closed -->
-        <div class="alert alert-danger alert-dismissible hidden-print fade in" role="alert">
-          <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-          <span class="fa fa-lg fa-exclamation-circle"></span> <?php echo $alert_text_061; ?>
-        </div>
-    <?php } 	?>
+  <?php if (($entry_window_open == 2) && (!$ua) && ($section == "default") && (judging_date_return() > 0) && ($msg == "default")) { ?>
+    <!-- Entry registration closed -->
+    <div class="alert alert-danger alert-dismissible hidden-print fade in" role="alert">
+      <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+      <span class="fa fa-lg fa-exclamation-circle"></span> <?php echo $alert_text_061; ?>
+    </div>
+  <?php } 	?>
 
-     <?php if (($dropoff_window_open == 2) && (!$ua) && ($section == "default") && (judging_date_return() > 0) && ($msg == "default")) { ?>
-        <!-- Drop-off window closed -->
-        <div class="alert alert-danger alert-dismissible hidden-print fade in" role="alert">
-          <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-          <span class="fa fa-lg fa-exclamation-circle"></span> <?php echo $alert_text_064; ?>
-        </div>
-    <?php } 	?>
+  <?php if (($dropoff_window_open == 2) && (!$ua) && ($section == "default") && (judging_date_return() > 0) && ($msg == "default")) { ?>
+    <!-- Drop-off window closed -->
+    <div class="alert alert-danger alert-dismissible hidden-print fade in" role="alert">
+      <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+      <span class="fa fa-lg fa-exclamation-circle"></span> <?php echo $alert_text_064; ?>
+    </div>
+  <?php } 	?>
 
-    <?php if (($shipping_window_open == 2) && (!$ua) && ($section == "default") && (judging_date_return() > 0) && ($msg == "default")) { ?>
-        <!-- Drop-off window closed -->
-        <div class="alert alert-danger alert-dismissible hidden-print fade in" role="alert">
-          <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-          <span class="fa fa-lg fa-exclamation-circle"></span> <?php echo $alert_text_067; ?>
-        </div>
-    <?php } 	?>
+  <?php if (($shipping_window_open == 2) && (!$ua) && ($section == "default") && (judging_date_return() > 0) && ($msg == "default")) { ?>
+    <!-- Drop-off window closed -->
+    <div class="alert alert-danger alert-dismissible hidden-print fade in" role="alert">
+      <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+      <span class="fa fa-lg fa-exclamation-circle"></span> <?php echo $alert_text_067; ?>
+    </div>
+  <?php } 	?>
 
-    <?php if ((($registration_open == 0) || ($registration_open == 2)) && (!$ua) && ($section == "default") && ($judge_window_open == 1) && ($msg == "default")) { ?>
+  <?php if ((($registration_open == 0) || ($registration_open == 2)) && (!$ua) && ($section == "default") && ($judge_window_open == 1) && ($msg == "default")) { ?>
     <!-- Account and entry registration closed, but Judge/steward registration open -->
     <div class="alert alert-info alert-dismissible hidden-print fade in" role="alert">
       <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
       <span class="fa fa-lg fa-info-circle"></span> <?php echo $alert_text_071; ?>
     </div>
-    <?php } ?>
-		<?php if (($judge_limit) && ($section == "register")) { ?>
-            <!-- Limit of judges reached -->
-            <div class="alert alert-danger alert-dismissible hidden-print fade in" role="alert">
-              <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-              <span class="fa fa-lg fa-exclamation-circle"></span> <?php echo $alert_text_075; ?>
-            </div>
-        <?php } ?>
+  <?php } ?>
+	
+  <?php if (($judge_limit) && ($section == "register")) { ?>
+    <!-- Limit of judges reached -->
+    <div class="alert alert-danger alert-dismissible hidden-print fade in" role="alert">
+      <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+      <span class="fa fa-lg fa-exclamation-circle"></span> <?php echo $alert_text_075; ?>
+    </div>
+  <?php } ?>
         <?php if (($steward_limit) && ($section == "register")) { ?>
             <!-- Limit of stewards reached -->
             <div class="alert alert-danger alert-dismissible hidden-print fade in" role="alert">
@@ -323,3 +326,9 @@ if ($msg != "default") { ?>
             </div>
         <?php } ?>
 <?php } // end if (!$logged_in) ?>
+
+<?php if ($go == "default") { ?>
+    <div id="no-js-alert" class="alert alert-danger lead">
+        <i class="fa fa-lg fa-exclamation-circle"></i> <strong><?php echo $alert_text_087; ?></strong>
+    </div>
+<?php } ?>

@@ -12,10 +12,10 @@ TODO - convert the following for translation:
 */
 
 // Default to English language if prefs not defined
-$prefsLanguage = "en-US";
-$prefsLanguageFolder = "en";
-if (isset($_SESSION['prefsLanguage'])) $prefsLanguage = $_SESSION['prefsLanguage'];
-if (isset($_SESSION['prefsLanguageFolder'])) $prefsLanguageFolder = $_SESSION['prefsLanguageFolder'];
+if ((isset($_SESSION['prefsLanguage'])) && (!empty($_SESSION['prefsLanguage']))) $prefsLanguage = $_SESSION['prefsLanguage'];
+else $prefsLanguage = "en-US";
+if ((isset($_SESSION['prefsLanguageFolder'])) && (!empty($_SESSION['prefsLanguageFolder']))) $prefsLanguageFolder = $_SESSION['prefsLanguageFolder'];
+else $prefsLanguageFolder = $prefsLanguageFolder = "en";;
 
 // Load public pages language file
 include (LANG.$prefsLanguageFolder.DIRECTORY_SEPARATOR.$prefsLanguage.'.lang.php');

@@ -6,16 +6,17 @@ Checked Single
 use PHPMailer\PHPMailer\PHPMailer;
 ob_start();
 include('../paths.php');
-require(CONFIG.'config.php');
-require(INCLUDES.'url_variables.inc.php');
-require(INCLUDES.'db_tables.inc.php');
-require(LANG.'language.lang.php');
-require(LIB.'common.lib.php'); 
-require(DB.'common.db.php');
-require(CLASSES.'phpass/PasswordHash.php');
+require (CONFIG.'config.php');
+require (INCLUDES.'url_variables.inc.php');
+require (INCLUDES.'db_tables.inc.php');
+require (LANG.'language.lang.php');
+require (LIB.'common.lib.php');
+require (LIB.'update.lib.php'); 
+require (DB.'common.db.php');
+require (CLASSES.'phpass/PasswordHash.php');
 $hasher = new PasswordHash(8, false);
 mysqli_select_db($connection,$database);
-require(LIB.'email.lib.php');
+require (LIB.'email.lib.php');
 
 if (($action == "email") && ($id != "default")) {
 		

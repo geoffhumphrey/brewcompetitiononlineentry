@@ -142,20 +142,30 @@ if ($setup_success) {
 	if ($_SESSION['prefsSEF'] == "Y") $sef = "true";
 	else $sef = "false";
 
-	if (($_SESSION['prefsEval'] == 1) && ($section == "evaluation") && ($go == "scoresheet")) {
+	if ($no_updates_needed) $_SESSION['currentVersion'] = 1;
+	else $_SESSION['currentVersion'] = 0;
 
-		/**
-		 * For usability when accessing an electronic scoresheet, 
-		 * make sure session timeout is at least 30 minutes to 
-		 * give slowpoke judges sufficient time for evaluations 
-		 * (typically should be no more than 15 minutes per entry).
-		 */
+	if ((isset($_SESSION['prefsEval'])) && ($_SESSION['prefsEval'] == 1)) {
+		
+		if (!check_setup($prefix."evaluation",$database)) require_once (EVALS.'install_eval_db.eval.php');
+		
+		if (($section == "evaluation") && ($go == "scoresheet")) {
+			
+			/**
+			 * For usability when accessing an electronic scoresheet, 
+			 * make sure session timeout is at least 30 minutes to 
+			 * give slowpoke judges sufficient time for evaluations 
+			 * (typically should be no more than 15 minutes per entry).
+			 */
 
-		if ($session_expire_after < 30) {
-		  $session_expire_after = 30;
-		  $auto_logout_extension = TRUE;
+			if ($session_expire_after < 30) {
+				$session_expire_after = 30;
+				$auto_logout_extension = TRUE;
+			}
+			
+			else $session_expire_after = $session_expire_after;
+
 		}
-		else $session_expire_after = $session_expire_after;
 
 	}
 
