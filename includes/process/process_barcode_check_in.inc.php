@@ -45,7 +45,7 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 					elseif (($entry_number >= 10) && ($entry_number <= 99)) $eid = ltrim($entry_number,"00");
 					elseif (($entry_number >= 100) && ($entry_number <= 999)) $eid = ltrim($entry_number,"0");
 					else $eid = $entry_number;
-					$entries_updated[] = number_pad($entry_number,4);
+					$entries_updated[] = number_pad($entry_number,6);
 				}
 
 				if ((isset($_POST['brewPaid'.$id])) && ($_POST['brewPaid'.$id] == 1)) $brewPaid = 1; else $brewPaid = $row_enum['brewPaid'];

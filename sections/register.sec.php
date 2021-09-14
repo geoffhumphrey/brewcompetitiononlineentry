@@ -591,12 +591,13 @@ if ($go == "default") {  ?>
 		<label for="" class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label_drop_off; ?></label>
 		<div class="col-lg-9 col-md-9 col-sm-8 col-xs-12 has-warning">
 			<!-- Input Here -->
-			<select class="selectpicker" name="brewerDropOff" id="brewerDropOff" data-size="10" data-width="fit">
+			<select class="selectpicker" name="brewerDropOff" id="brewerDropOff" data-live-search="true" data-size="10" data-width="fit" data-show-tick="true" data-header="<?php echo $label_select_dropoff; ?>" title="<?php echo $label_select_dropoff; ?>" required>
+				<?php if (!empty($dropoff_select)) { ?>
+	                <?php echo $dropoff_select; ?>
+	                <option disabled>----------------------------------------</option>
+	            <?php } ?>
 				<option value="0"><?php echo $brewer_text_005; ?></option>
-				<option disabled="disabled">-------------</option>
-				<?php echo $dropoff_select; ?>
 			</select>
-
 		</div>
 	</div><!-- ./Form Group -->
     <?php } // END if (($_SESSION['prefsProEdition'] == 0) || (($_SESSION['prefsProEdition'] == 1) && ($go == "entrant"))) ?>
@@ -913,12 +914,12 @@ if ($go == "default") {  ?>
 	<div class="form-group">
 		<div class="col-lg-offset-2 col-md-offset-3 col-sm-offset-4">
 			<!-- Input Here -->
-			<button name="submit" type="submit" class="btn btn-primary" >Register</button>
+			<button name="submit" type="submit" class="btn btn-primary">Register</button>
 		</div>
 	</div><!-- Form Group -->
 </form>
 <script type="text/javascript">
-  	$( function () {
+  	$(function () {
   		twitter.screenNameKeyUp();
   		$('#user_screen_name').focus();
 	});

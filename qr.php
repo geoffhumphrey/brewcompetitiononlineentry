@@ -92,25 +92,17 @@ $prefs = mysqli_query($connection,$query_prefs) or die (mysqli_error($connection
 $row_prefs = mysqli_fetch_assoc($prefs);
 $totalRows_prefs = mysqli_num_rows($prefs);
 
-// Set language preferences in session variables
-if (empty($_SESSION['prefsLang'.$prefix_session])) {
+$_SESSION['prefsLanguage'] = $row_prefs['prefsLanguage'];
 
-	// Language - in current version only English is available. Future versions will feature translations.
-	$_SESSION['prefsLanguage'] = "en-US";
-
-	// Check if variation used (demarked with a dash)
-	if (strpos($_SESSION['prefsLanguage'], '-') !== FALSE) {
-		$lang_folder = explode("-",$_SESSION['prefsLanguage']);
-		$_SESSION['prefsLanguageFolder'] = strtolower($lang_folder[0]);
-	}
-
-	else $_SESSION['prefsLanguageFolder'] = strtolower($_SESSION['prefsLanguage']);
-
-	$_SESSION['prefsLang'.$prefix_session] = "1";
-
+// Check if variation used (demarked with a dash)
+if (strpos($row_prefs['prefsLanguage'], '-') !== FALSE) {
+	$lang_folder = explode("-",$_SESSION['prefsLanguage']);
+	$_SESSION['prefsLanguageFolder'] = strtolower($lang_folder[0]);
 }
 
-require_once (LANG.'language.lang.php');
+else $_SESSION['prefsLanguageFolder'] = strtolower($_SESSION['prefsLanguage']);
+
+require (LANG.'language.lang.php');
 
 $logged_in = FALSE;
 if (!isset($_SESSION['qrPasswordOK'])) $logged_in = TRUE;
@@ -414,9 +406,9 @@ $_SESSION['last_action'] = time();
     </div>
     <?php if (!isset($_SESSION['qrPasswordOK'])) { ?>
 	<div align="center" class="text-primary"><span class="fa fa-qrcode fa-5x"></span></div>
-	<p class="lead"><small><?php echo sprintf("<strong class=\"text-danger\">%s</strong> %s",$qr_text_017,$qr_text_018); ?></small></p>
-	<p class="lead"><small><?php echo sprintf("%s",$qr_text_016); ?></small></p>
-	<p class="lead container-signin-heading"><small><?php echo $qr_text_008; ?></small></p>
+	<p class="lead"><small><strong class=text-danger><?php echo $qr_text_017; ?></strong></small></p>
+	<p><?php echo $qr_text_018; ?></p>
+	<p style="margin-bottom: 15px;" class="container-signin-heading"><?php echo $qr_text_008; ?></p>
     <!-- Password Form if Not Signed In -->
 	<form data-toggle="validator" name="form1" action="<?php echo $base_url; ?>qr.php?action=password-check<?php if ($id != "default") echo "&amp;id=".$id; ?>" method="post">
         <div class="form-group">
@@ -426,14 +418,15 @@ $_SESSION['last_action'] = time();
         </div>
         <button class="btn btn-lg btn-primary btn-block" type="submit"><?php echo $label_log_in; ?></button>
    	</form>
-    <?php } ?>
+    <p style="margin-top: 15px;" class="well"><small><?php echo $qr_text_016; ?></small></p>
+	<?php } ?>
     <?php if (isset($_SESSION['qrPasswordOK'])) { ?>
 	<?php if (($id == "default") && ($action == "default")) { ?>
     <p class="lead text-primary"><span class="fa fa-spinner fa-spin"></span> <strong><?php echo $qr_text_014; ?></strong></p>
     <p class="lead text-danger"><small><span class="fa fa-exclamation-triangle"></span> <?php echo $qr_text_015; ?></small></p>
-    <p><?php echo $qr_text_016; ?></p>
+    <p style="margin-top: 15px;" class="well"><small><?php echo $qr_text_016; ?></small></p>
     <?php } if (($id != "default") && ($action == "default") && ($go != "success")) { ?>
-    <p class="lead text-primary"><strong><?php echo $qr_text_009; ?> <span class="text-success"><?php echo sprintf("%04d",$id); ?></span></strong>.</p>
+    <p class="lead text-primary"><strong><?php echo $qr_text_009; ?> <span class="badge"><?php echo sprintf("%06d",$id); ?></span></strong></p>
     <p class="lead text-danger"><small><strong><?php echo $qr_text_010; ?></strong></small></p>
     <form name="form1" data-toggle="validator" action="<?php echo $base_url; ?>qr.php?action=update<?php if ($id != "default") echo "&amp;id=".$id; ?>" method="post">
     	<div class="form-group">

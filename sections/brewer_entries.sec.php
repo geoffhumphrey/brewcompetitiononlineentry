@@ -72,7 +72,7 @@ $multiple_bottle_ids = FALSE;
 if (($_SESSION['prefsEntryForm'] == "5") || ($_SESSION['prefsEntryForm'] == "6")) $multiple_bottle_ids = TRUE;
 
 // Build Headers
-if ($total_to_pay > 0) $pay_button .= sprintf("<a class=\"btn btn-success pull-right\" href=\"%s\"><i class=\"fa fa-lg fa-money\"></i> %s</a>",$link_pay, $label_pay);
+if (($total_to_pay > 0) && (!$disable_pay)) $pay_button .= sprintf("<a class=\"btn btn-success pull-right\" href=\"%s\"><i class=\"fa fa-lg fa-money\"></i> %s</a>",$link_pay, $label_pay);
 $header1_1 .= "<div class=\"row\">";
 $header1_1 .= "<div class=\"col col-xs-6 col-sm-9\">";
 $header1_1 .= sprintf("<a class=\"anchor-offset\" name=\"entries\"></a><h2>%s</h2>",$label_entries);
@@ -547,7 +547,7 @@ if (($totalRows_log > 0) && ($entry_window_open >= 1)) {
     <?php if (!$show_scores) { ?>
   	<th width="5%" class="hidden-xs hidden-md"><?php echo $label_confirmed; ?></th>
   	<th width="5%" class="hidden-xs"><?php echo $label_paid; ?></th>
-    <th width="5%" class="hidden-xs" nowrap><?php echo $label_received; ?> <a tabindex="0" role="button" title="<?php echo $label_received." ".$label_entries." ".$label_info; ?>" data-placement="auto top" data-toggle="popover" data-trigger="hover focus" data-content="<?php echo $brewer_entries_text_017; ?>" data-container="body"><span class="fa fa-question-circle"></span></a></th>
+    <th width="5%" class="hidden-xs" nowrap><?php echo $label_received; ?><a tabindex="0" role="button" title="<?php echo $label_received." ".$label_entries." ".$label_info; ?>" data-placement="auto top" data-toggle="popover" data-trigger="hover focus" data-content="<?php echo $brewer_entries_text_017; ?>" data-container="body"><span style="padding-left:5px;" class="fa fa-question-circle"></span></a></th>
     <th width="10%" class="hidden-xs hidden-sm"><?php echo $label_updated; ?></th>
     <?php } ?>
   	<?php if ($show_scores) { ?>
@@ -556,11 +556,9 @@ if (($totalRows_log > 0) && ($entry_window_open >= 1)) {
   	<th width="5%"><?php echo $label_winner; ?></th>
   	<?php } ?>
   	<?php if ((!$show_scores) && ($multiple_bottle_ids)) { ?>
-    <th width="5%" class="hidden-print" nowrap>
-    <input type="checkbox" id="select_all"> <a style="cursor: pointer;" data-toggle="popover" data-container="body" data-trigger="hover focus" data-placement="auto" title="<?php echo $brewer_entries_text_024; ?>" data-content="<?php echo $brewer_entries_text_021; ?>"><span class="fa fa-question-circle"></span></a>
-    </th>
+    <th width="7%" class="hidden-print" nowrap><input type="checkbox" id="select_all"><a style="cursor: pointer;" data-toggle="popover" data-container="body" data-trigger="hover focus" data-placement="auto" title="<?php echo $brewer_entries_text_024; ?>" data-content="<?php echo $brewer_entries_text_021; ?>"><span style="padding-left:5px;" class="fa fa-question-circle"></span></a></th>
 	<?php } ?>
-    <th width="10%" class="hidden-print"><?php echo $label_actions; ?></th>
+    <th class="hidden-print"><?php echo $label_actions; ?></th>
  </tr>
 </thead>
 <tbody>

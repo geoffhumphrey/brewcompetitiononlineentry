@@ -2498,6 +2498,7 @@ $admin_user = FALSE;
 $disable_pay = FALSE;
 $show_scores = FALSE;
 $show_scoresheets = FALSE;
+$show_presentation = FALSE;
 
 // User constants
 if (isset($_SESSION['loginUsername']))  {
@@ -2523,14 +2524,16 @@ if (isset($_SESSION['loginUsername']))  {
 		// Disable pay?
 		if (($registration_open == 2) && ($shipping_window_open == 2) && ($dropoff_window_open == 2) && ($entry_window_open == 2) && ($pay_window_open == 2)) $disable_pay = TRUE;
 
-		// Show scores and scoresheets?
-		if ((judging_date_return() == 0) && ($entry_window_open == 2) && ($registration_open == 2) && ($judge_window_open == 2) && ($_SESSION['prefsDisplayWinners'] == "Y") && (judging_winner_display($_SESSION['prefsWinnerDelay']))) {
-            $show_scores = TRUE;
-            $show_scoresheets = TRUE;
-        }
-
 	}
 
+}
+
+if ((judging_date_return() == 0) && ($entry_window_open == 2) && ($registration_open == 2) && ($judge_window_open == 2) && ($_SESSION['prefsDisplayWinners'] == "Y") && (judging_winner_display($_SESSION['prefsWinnerDelay']))) {
+    $show_presentation = TRUE;
+    if ($logged_in) {
+        $show_scores = TRUE;
+        $show_scoresheets = TRUE;
+    }
 }
 
 // DataTables Default Values

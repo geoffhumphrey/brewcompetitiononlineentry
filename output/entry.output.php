@@ -58,10 +58,7 @@ $organizer = $row_brewer_organizer['brewerFirstName']." ".$row_brewer_organizer[
 if (in_array($_SESSION['prefsEntryForm'],$barcode_qrcode_array)) {
 
 	// Generate Barcode
-	$barcode = $brewing_id;
-	if ((NHC) && ($prefix == "final_")) $barcode = sprintf("%06s",$barcode);
-
-	$barcode_link = "http://www.brewcompetition.com/includes/barcode/html/image.php?filetype=PNG&dpi=300&scale=1&rotation=0&font_family=Arial.ttf&font_size=10&text=".$barcode."&thickness=50&code=BCGcode39";
+	$barcode_link = "http://www.brewcompetition.com/includes/barcode/html/image.php?filetype=PNG&dpi=300&scale=1&rotation=0&font_family=Arial.ttf&font_size=10&text=".$brewing_id."&thickness=50&code=BCGcode39";
 
 	// Generate QR Code
 	require_once (CLASSES.'qr_code/qrClass.php');
@@ -72,8 +69,6 @@ if (in_array($_SESSION['prefsEntryForm'],$barcode_qrcode_array)) {
 
 	$qr->qRCreate($qrcode_url,"90x90","UTF-8");
 	$qrcode_link = $qr->url;
-
-	//$qrcode_link = "http://qrickit.com/api/qr?d=".$qrcode_url."&qrsize=90&t=p&e=m&addtext=".$brewing_id;
 
 }
 

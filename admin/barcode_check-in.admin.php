@@ -6,6 +6,7 @@
  */
 
 $fields = 15;
+$maxlength = 6;
 $entry_list = "";
 $flag_jnum = "";
 $flag_enum = "";
@@ -13,27 +14,7 @@ $jnum_info = "";
 
 $barcode_text_000 = "Check-In Entries with a Barcode Reader/Scanner";
 $barcode_text_001 = "The following entries have been checked in";
-$barcode_text_002 = "The following judging number(s) have already been assigned to entries. Please use another judging number for each.";
-$barcode_text_003 = "";
-$barcode_text_004 = "";
-$barcode_text_005 = "";
-$barcode_text_006 = "";
-$barcode_text_007 = "";
-$barcode_text_008 = "";
-$barcode_text_009 = "";
-$barcode_text_010 = "";
-$barcode_text_011 = "";
-$barcode_text_012 = "";
-$barcode_text_013 = "";
-$barcode_text_014 = "";
-$barcode_text_015 = "";
-$barcode_text_016 = "";
-$barcode_text_017 = "";
-$barcode_text_018 = "";
-$barcode_text_019 = "";
-$barcode_text_020 = "";
-
-if ($_SESSION['prefsEntryForm'] == "5") $maxlength = 6; else $maxlength = 4;
+$barcode_text_002 = "<strong>The following judging number(s) have already been assigned to entries.</strong> Please use another judging number for each.";
 
 // Update upon submitting the form
 if ($action == "add") {
@@ -51,14 +32,11 @@ function moveOnCheck(field,nextFieldID){
 }
 document.form1.first.focus();
 var p = false;
-</script>
-<script type="text/javascript">
+
 $(function() {
-
     $("form").bind("keypress", function(e) {
-            if (e.keyCode == 13) return false;
-      });
-
+        if (e.keyCode == 13) return false;
+    });
 });
 </script>
 <p class="lead"><?php echo $_SESSION['contestName'].": ".$barcode_text_000; ?></p>
@@ -68,7 +46,7 @@ $entry_list = rtrim($entry_list,", ");
 $entry_list = ltrim($entry_list, ", ");
 ?>
 <div class="alert alert-info">
-<span class="fa fa-info-circle"></span> <?php echo sprintf("%s: %s", $barcode_text_001, $entry_list); ?>
+<span class="fa fa-info-circle"></span> <?php echo sprintf("<strong>%s</strong>: %s", $barcode_text_001, $entry_list); ?>
 </div>
 <?php }
 if (!empty($flag_jnum)) {
@@ -77,11 +55,11 @@ if (!empty($flag_jnum)) {
 		if (!empty($num)) {
 		$num = explode("*",$num);
 		if ((NHC) && ($prefix == "final_")) $jnum_info .= "<li>".$num[0]."  - attempted to assign to entry ".number_pad($num[1],6)."</li>";
-		else $jnum_info .= "<li>".$num[0]." - attempted to assign to entry ".number_pad($num[1],4)."</li>";
+		else $jnum_info .= "<li>".$num[0]." - attempted to assign to entry ".number_pad($num[1],6)."</li>";
 		}
 	}
 ?>
-<div class="alert alert-warning">
+<div class="alert alert-danger">
 	<span class="fa fa-exclamation-circle"></span> <?php echo $barcode_text_002; ?>
 	<ul class="small">
 	<?php echo $jnum_info; ?>
@@ -99,7 +77,7 @@ foreach ($flag_enum as $num) {
 	}
 }
 ?>
-<div class="well">
+<div class="alert alert-grey">
     <p><span class="fa fa-info-circle"></span> These entries already have 6 digit judging numbers assigned to them - the current 6 digit judging number has been kept for each of the following:</p>
     <ul class="small"><?php echo $enum_info; ?></ul>
     <p>If any of the above are incorrect, you can update its judging number via the <a href="<?php $base_url; ?>index.php?section=admin&amp;go=entries">Administration: Entries</a> list.</p>
@@ -129,7 +107,7 @@ foreach ($flag_enum as $num) {
                       <li>Use the TAB key to move between fields, to skip a field, or if the cursor does not move after data is input.</li>
                       <li>Use the space bar to place a checkmark in the &quot;Paid&quot; box.</li>
                     </ul>
-                <p>This function is intended to be used with a barcode reader/scanner in conjunction with the Judging Number Barcode Labels and the Judging Number Round Labels <a class="hide-loader" href="http://www.brewcompetition.com/bottle-labels" target="_blank">available for download at brewcompetition.com</a>. </p>
+                <p>This function is intended to be used with a barcode reader/scanner in conjunction with the Judging Number Barcode Labels and the Judging Number Round Labels <a class="hide-loader" href="http://www.brewcompetition.com/barcode-labels" target="_blank">available for download at brewcompetition.com</a>. </p>
                 <p>Also available are <a class="hide-loader" href="http://www.brewcompetition.com/barcode-check-in" target="_blank">suggested usage instructions</a>.</p>
             </div>
             <div class="modal-footer">

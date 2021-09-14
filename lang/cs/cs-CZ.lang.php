@@ -882,7 +882,7 @@ $pay_text_029 = "Prosím, otevřete si seznam vzorků a potvrďte všechny vaše
 
 // Ignore the next four lines
 if (strpos($view, "^") !== FALSE) {
-	$qr_text_019 = sprintf("%04d",$checked_in_numbers[0]);
+	$qr_text_019 = sprintf("%06d",$checked_in_numbers[0]);
 	if (is_numeric($checked_in_numbers[1])) $qr_text_020 = sprintf("%06d",$checked_in_numbers[1]);
 	else $qr_text_020 = $checked_in_numbers[1];
 }
@@ -1791,6 +1791,12 @@ $alert_text_091 = "Vaše relace vyprší za 30 sekund. Chcete -li pokračovat v 
 $alert_text_092 = "Pro přidání tabulky musí být definována alespoň jedna relace posuzování.";
 
 $brewer_entries_text_026 = "Tabulky rozhodčích pro tento záznam jsou ve více formátech. Každý formát obsahuje jedno nebo více platných hodnocení této položky.";
+
+// Update QR text
+$qr_text_008 = "Chcete -li zadávat záznamy pomocí QR kódu, zadejte správné heslo. Heslo budete muset zadat pouze jednou za relaci - nezapomeňte mít prohlížeč nebo aplikaci pro skenování QR kódu otevřenou.";
+$qr_text_015 = "Naskenujte další QR kód. U novějších operačních systémů přejděte do aplikace fotoaparátu svého mobilního zařízení. U starších operačních systémů spusťte/vraťte se do skenovací aplikace.";
+$qr_text_017 = "Skenování QR kódu je k dispozici nativně na většině moderních mobilních operačních systémů. Jednoduše namiřte fotoaparát na QR kód na štítku lahve a postupujte podle pokynů. U starších mobilních operačních systémů je k využití této funkce nutná aplikace pro skenování QR kódu.";
+$qr_text_018 = "Naskenujte QR kód umístěný na štítku lahve, zadejte požadované heslo a zkontrolujte záznam.";
 
 /**
  * ----------------------------------------------------------------------------------

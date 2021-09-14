@@ -204,11 +204,13 @@ if ($section != "admin") {
 				$page_info100 .= sprintf("<span class=\"pull-right\">%s%s</span>",$currency_symbol,number_format($total_entry_fees,2));
 				$page_info100 .= "</div>";
 
-				$page_info100 .= "<div class=\"bcoem-sidebar-panel\">";
-				$page_info100 .= sprintf("<strong class=\"text-danger\">%s</strong>",$label_entry_fees_to_pay);
-				if ($section != "pay") $page_info100 .= sprintf("<span class=\"pull-right\"><a data-toggle=\"tooltip\" data-placement=\"top\" title=\"%s\" href=\"%s\">%s%s</a></span>",$sidebar_text_013,build_public_url("pay","default","default","default",$sef,$base_url),$currency_symbol,number_format($total_to_pay,2));
-				else $page_info100 .= sprintf("<span class=\"pull-right\">%s%s</span>",$currency_symbol,number_format($total_to_pay,2));
-				$page_info100 .= "</div>";
+				if (!$disable_pay) {
+					$page_info100 .= "<div class=\"bcoem-sidebar-panel\">";
+					$page_info100 .= sprintf("<strong class=\"text-danger\">%s</strong>",$label_entry_fees_to_pay);
+					if ($section != "pay") $page_info100 .= sprintf("<span class=\"pull-right\"><a data-toggle=\"tooltip\" data-placement=\"top\" title=\"%s\" href=\"%s\">%s%s</a></span>",$sidebar_text_013,build_public_url("pay","default","default","default",$sef,$base_url),$currency_symbol,number_format($total_to_pay,2));
+					else $page_info100 .= sprintf("<span class=\"pull-right\">%s%s</span>",$currency_symbol,number_format($total_to_pay,2));
+					$page_info100 .= "</div>";
+				}
 				if (($totalRows_log - $totalRows_log_confirmed) > 0) {
 					$page_info100 .= "<div class=\"bcoem-sidebar-panel\">";
 					$page_info100 .= sprintf("<small><em class=\"text-muted\">* %s</em></small>",$sidebar_text_014);
@@ -217,7 +219,7 @@ if ($section != "admin") {
 
 			}
 
-			if (!empty($row_limits['prefsUserEntryLimit']) && (!$comp_entry_limit) && (!$comp_paid_entry_limit)) {
+			if (!empty($row_limits['prefsUserEntryLimit']) && (!$comp_entry_limit) && (!$comp_paid_entry_limit) && (!$disable_pay)) {
 
 				$page_info100 .= "<div class=\"bcoem-sidebar-panel\">";
 				if ($remaining_entries > 0) {
@@ -294,8 +296,7 @@ if ($section != "admin") {
 
 	}
 
-	if (judging_winner_display($_SESSION['prefsWinnerDelay'])) {
-
+	if ($show_presentation) {
 		if ((get_archive_count($prefix."judging_scores") > 0) || (get_archive_count($prefix."judging_scores_bos") > 0)) $header1_600 .= "<div class=\"bcoem-admin-element hidden-print\"><a class=\"btn btn-primary btn-block btn-sm\" href=\"".$base_url."awards.php\" target=\"_blank\">".$label_launch_pres." <span class=\"fa fa-award\"></span></a></div>";
 	}
 

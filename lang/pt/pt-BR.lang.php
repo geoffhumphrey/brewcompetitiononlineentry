@@ -884,8 +884,8 @@ $pay_text_028 = "Você tem amostras não confirmadas que <em>não</em> estão re
 $pay_text_029 = "Por favor, vá para a sua lista de amostras para confirmar todos os dados da sua amostra. As amostras não confirmadas podem ser excluídas do sistema sem aviso.";
 
 if (strpos ($view, "^")!== FALSE) {
-	$qr_text_019 =sprintf ("% 04d", $checked_in_numbers [0]);
-	if (is_numeric ($checked_in_numbers [1])) $qr_text_020 = sprintf ("% 06d", $checked_in_numbers [1]);
+	$qr_text_019 =sprintf ("%06d", $checked_in_numbers [0]);
+	if (is_numeric ($checked_in_numbers [1])) $qr_text_020 = sprintf ("%06d", $checked_in_numbers [1]);
 	else $qr_text_020 = $checked_in_numbers [1];
 }
 
@@ -1792,6 +1792,12 @@ $alert_text_091 = "Sua sessão irá expirar em 30 segundos. Você pode atualizar
 $alert_text_092 = "Deve ser definida pelo menos uma sessão de julgamento para adicionar uma mesa.";
 
 $brewer_entries_text_026 = "As planilhas de pontuação dos juízes para esta inscrição estão em vários formatos. Cada formato contém uma ou mais avaliações válidas desta entrada.";
+
+// Update QR text
+$qr_text_008 = "Para fazer o check-in das entradas por meio do código QR, forneça a senha correta. Você só precisará fornecer a senha uma vez por sessão - certifique-se de manter o navegador ou o aplicativo de leitura de código QR aberto.";
+$qr_text_015 = "Digitalize o próximo código QR. Para sistemas operacionais mais recentes, acesse o aplicativo da câmera do seu dispositivo móvel. Para sistemas operacionais mais antigos, inicie / volte para o aplicativo de digitalização.";
+$qr_text_017 = "A leitura de código QR está disponível nativamente na maioria dos sistemas operacionais móveis modernos. Basta apontar sua câmera para o código QR no rótulo de uma garrafa e seguir as instruções. Para sistemas operacionais móveis mais antigos, um aplicativo de leitura de código QR é necessário para utilizar este recurso.";
+$qr_text_018 = "Digitalize um código QR localizado no rótulo de um frasco, digite a senha necessária e verifique a entrada.";
 
 /**
  * ----------------------------------------------------------------------------------

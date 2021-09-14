@@ -972,7 +972,7 @@ $pay_text_029 = "Please go to your entry list to confirm all your entry data. Un
 
 // Ignore the next four lines
 if (strpos($view, "^") !== FALSE) {
-	$qr_text_019 = sprintf("%04d",$checked_in_numbers[0]);
+	$qr_text_019 = sprintf("%06d",$checked_in_numbers[0]);
 	if (is_numeric($checked_in_numbers[1])) $qr_text_020 = sprintf("%06d",$checked_in_numbers[1]);
 	else $qr_text_020 = $checked_in_numbers[1];
 }
@@ -1928,6 +1928,13 @@ $alert_text_091 = "Your session will expire in 30 seconds. You can refresh to co
 $alert_text_092 = "At least one judging session must be defined to add a table.";
 
 $brewer_entries_text_026 = "Judges scoresheets for this entry are in multiple formats. Each format contains one or more valid evaluations of this entry.";
+
+// Update QR text
+$qr_text_008 = "To check in entries via QR code, please provide the correct password. You will only need to provide the password once per session - be sure to keep the browser or QR Code scanning app open.";
+$qr_text_015 = "Scan the next QR Code. For newer operating systems, access your mobile device's camera app. For older operating systems, launch/go back to your the scanning app.";
+$qr_text_017 = "QR Code scanning is available natively on most modern mobile operating systems. Simply point your camera to the QR Code on a bottle label and follow the prompts. For older mobile operating systems, a QR Code scanning app is required to utilize this feature.";
+$qr_text_018 = "Scan a QR Code located on a bottle label, enter the required password, and check in the entry.";
+
 
 /**
  * ----------------------------------------------------------------------------------

@@ -378,21 +378,26 @@ $(document).ready(function(){
         	<div class="help-block with-errors"></div>
 		</div>
     </div><!-- ./Form Group -->
-
- 	<?php if (($_SESSION['prefsProEdition'] == 0) || (($_SESSION['prefsProEdition'] == 1) && ($entrant_type_brewery))) { ?>
+ 	<?php if (($_SESSION['prefsProEdition'] == 0) || (($_SESSION['prefsProEdition'] == 1) && ($entrant_type_brewery))) { 
+    $dropoff_select = "";
+    if ($section != "step2") {
+        do {
+            if (($action == "edit") && ($row_brewer['brewerDropOff'] == $row_dropoff['id'])) $selected = "SELECTED";
+            else $selected = "";
+            $dropoff_select .= sprintf("<option value=\"%s\" %s>%s</option>",$row_dropoff['id'],$selected,$row_dropoff['dropLocationName']);
+         } while ($row_dropoff = mysqli_fetch_assoc($dropoff));
+    }
+    ?>
     <div class="form-group"><!-- Form Group NOT REQUIRED Select -->
         <label for="brewerDropOff" class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label_drop_off; ?></label>
         <div class="col-lg-9 col-md-9 col-sm-8 col-xs-12">
         <!-- Input Here -->
-        <select class="selectpicker" name="brewerDropOff" id="brewerDropOff" data-live-search="true" data-size="10" data-width="fit" data-show-tick="true" data-header="<?php echo $label_select_dropoff; ?>" title="<?php echo $label_select_dropoff; ?>">
-        <?php if ($section != "step2") {
-        do { ?>
-            <option value="<?php echo $row_dropoff['id']; ?>" <?php if (($action == "edit") && ($row_brewer['brewerDropOff'] == $row_dropoff['id'])) echo "SELECTED"; ?>><?php echo $row_dropoff['dropLocationName']; ?></option>
-        <?php } while ($row_dropoff = mysqli_fetch_assoc($dropoff));
-            }
-        ?>
-            <option disabled="disabled">-------------</option>
-    		<option value="0" <?php if (($section == "step2") || (($action == "edit") && ($row_brewer['brewerDropOff'] == "0"))) echo "SELECTED"; ?>><?php echo $brewer_text_005; ?></option>
+        <select class="selectpicker" name="brewerDropOff" id="brewerDropOff" data-live-search="true" data-size="10" data-width="fit" data-show-tick="true" data-header="<?php echo $label_select_dropoff; ?>" title="<?php echo $label_select_dropoff; ?>" required>
+            <?php if (!empty($dropoff_select)) { ?>
+                <?php echo $dropoff_select; ?>
+                <option disabled>----------------------------------------</option>
+            <?php } ?>
+            <option value="0" <?php if (($section == "step2") || (($action == "edit") && ($row_brewer['brewerDropOff'] == "0"))) echo "SELECTED"; ?>><?php echo $brewer_text_005; ?></option>
         </select>
         </div>
     </div><!-- ./Form Group -->

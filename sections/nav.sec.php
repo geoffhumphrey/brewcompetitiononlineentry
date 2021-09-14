@@ -416,7 +416,7 @@ $(document).ready(function(){
                     	$brewer_assignment = brewer_assignment($_SESSION['user_id'],"1","blah",$dbTable,$filter);
 						$assignment_array = str_replace(", ",",",$brewer_assignment);
 						$assignment_array = explode(",", $assignment_array);
-						if (((in_array($label_judge,$assignment_array)) && ($_SESSION['brewerJudge'] == "Y")) && (time() >= $row_judging_prefs['jPrefsJudgingOpen'])) { 
+						if (((in_array($label_judge,$assignment_array)) && ($_SESSION['brewerJudge'] == "Y")) && (judging_winner_display($row_judging_prefs['jPrefsJudgingOpen']))) { 
                    	?>
 					<li><a href="<?php echo build_public_url("evaluation","default","default","default",$sef,$base_url); ?>" tabindex="-1"><?php echo $label_judging_dashboard; ?></a></li>
                     <?php }
