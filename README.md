@@ -37,7 +37,7 @@ There is also a growing number of instructive resources available on the [compan
 - [Load Libraries Locally](https://brewcompetition.com/local-load) - disable CDN loading of external libraries such as jQuery, Bootstrap, DataTables, etc.
 - [Setup BCOE&M Electronic Scoresheets](https://brewcompetition.com/setup-electronic-scoresheets) - primer for Admins to effectively set up and use Electronic Scoresheets
 - [Judging with BCOE&M Scoresheets](https://brewcompetition.com/judging-with-electronic-scoresheets) - primer for judges on how to evaluate entries using Electronic Scoresheets
-- [Virtual Juding](https://brewcompetition.com/virtual-judging) - information and suggestions for judges particpating in virtual judging sessions.
+- [Virtual Judging](https://brewcompetition.com/virtual-judging) - information and suggestions for judges particpating in virtual judging sessions.
 - [Virtual Judging Tips for Judges](https://brewcompetition.com/virtual-judging/tips) - tips and tricks for evaluating homebrew entries virtually.
 - [Upload Scanned Judges' Scoresheets](https://brewcompetition.com/upload-scoresheets) - procedure for scanning and uploading scoresheets to make available to entrants via BCOE&M
 - [Reset Competition Information](https://brewcompetition.com/reset-comp) - get your site ready for your next competition iteration
