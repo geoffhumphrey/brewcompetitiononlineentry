@@ -1437,6 +1437,7 @@ $club_array = array(
     "Miami Beach Home Brew",
     "Miami County Brewing Club",
     "Michiana Extract &amp; Grain Association (MEGA)",
+    "Michigan Mead Coalition:,
     "Michigan Occasional Brewers (MOB)",
     "Mid Columbia Zymurgy Association",
     "Mid Michigan Ale and Lager Team (MMALT)",
