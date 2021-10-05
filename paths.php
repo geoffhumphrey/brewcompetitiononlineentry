@@ -157,7 +157,7 @@ function is_https() {
 }
 
 if (HOSTED) {
-    $installation_id = $prefix;
+    $installation_id = md5(__FILE__);
     $session_expire_after = 30;
 }
 
