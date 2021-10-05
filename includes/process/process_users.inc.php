@@ -169,7 +169,7 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 						$totalRows_login = mysqli_num_rows($login);
 						// echo $query_login;
 
-						if (is_session_started() === FALSE) {
+						if (session_status() == PHP_SESSION_NONE) {
 							session_name($prefix_session);
 							session_start();
 						}

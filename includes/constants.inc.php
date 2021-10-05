@@ -49,7 +49,6 @@ $tie_break_rules = array(
 // -------------------------- Clubs List ------------------------------------------------------
 // Updated August 26, 2021
 
-
 $club_array = array(
     "1.090",
     "#sovai",
@@ -2406,18 +2405,21 @@ if (((strpos($section, "step") === FALSE) && ($section != "setup")) && ($section
 	$judge_open_sidebar = getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_contest_dates['contestJudgeOpen'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "short", "date-time"); ;
 	$judge_closed_sidebar = getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_contest_dates['contestJudgeDeadline'], $_SESSION['prefsDateFormat'],$_SESSION['prefsTimeFormat'], "short", "date-time");
 
-    $query_judging_dates = sprintf("SELECT judgingDate FROM %s",$judging_locations_db_table);
-    $judging_dates = mysqli_query($connection,$query_judging_dates) or die (mysqli_error($connection));
-    $row_judging_dates = mysqli_fetch_assoc($judging_dates);
-    $totalRows_judging_dates = mysqli_num_rows($judging_dates);
+    if (check_setup($prefix."judging_locations",$database)) {
+        $query_judging_dates = sprintf("SELECT judgingDate FROM %s",$judging_locations_db_table);
+        $judging_dates = mysqli_query($connection,$query_judging_dates) or die (mysqli_error($connection));
+        $row_judging_dates = mysqli_fetch_assoc($judging_dates);
+        $totalRows_judging_dates = mysqli_num_rows($judging_dates);
 
-    $date_arr = array();
-    do {
-        $date_arr[] = $row_judging_dates['judgingDate'];
-    } while($row_judging_dates = mysqli_fetch_assoc($judging_dates));
+        $date_arr = array();
+        do {
+            $date_arr[] = $row_judging_dates['judgingDate'];
+        } while($row_judging_dates = mysqli_fetch_assoc($judging_dates));
 
-    $pay_close_date = min($date_arr);
-    $pay_window_open = open_or_closed(time(),$row_contest_dates['contestEntryOpen'],$pay_close_date);
+        $pay_close_date = min($date_arr);
+        $pay_window_open = open_or_closed(time(),$row_contest_dates['contestEntryOpen'],$pay_close_date);
+
+    }
 
     if ($_SESSION['prefsEval'] == 1) {
 
@@ -2528,11 +2530,13 @@ if (isset($_SESSION['loginUsername']))  {
 
 }
 
-if ((judging_date_return() == 0) && ($entry_window_open == 2) && ($registration_open == 2) && ($judge_window_open == 2) && ($_SESSION['prefsDisplayWinners'] == "Y") && (judging_winner_display($_SESSION['prefsWinnerDelay']))) {
-    $show_presentation = TRUE;
-    if ($logged_in) {
-        $show_scores = TRUE;
-        $show_scoresheets = TRUE;
+if ((strpos($section, "step") === FALSE) && ($section != "setup")) {
+    if ((judging_date_return() == 0) && ($entry_window_open == 2) && ($registration_open == 2) && ($judge_window_open == 2) && ($_SESSION['prefsDisplayWinners'] == "Y") && (judging_winner_display($_SESSION['prefsWinnerDelay']))) {
+        $show_presentation = TRUE;
+        if ($logged_in) {
+            $show_scores = TRUE;
+            $show_scoresheets = TRUE;
+        }
     }
 }
 

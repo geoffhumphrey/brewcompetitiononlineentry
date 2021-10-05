@@ -8,7 +8,7 @@
 ?>
 <p class="lead"><?php echo $_SESSION['contestName']; if ($action == "add") echo ": Add a Custom Category"; elseif ($action == "edit") echo ": Edit a Custom Category"; else echo " Custom Categories"; ?></p>
 <?php if ($action == "default") { ?>
-    <p>Custom categories are useful if your competition features unique &ldquo;best of show&rdquo; categories, such as Pro-Am opportunites, Stewards&rsquo; Choice, Best Name, etc.</p>
+    <p>Custom categories are useful if your competition features unique &ldquo;best of show&rdquo; categories, such as Pro-Am opportunities, Stewards&rsquo; Choice, Best Name, etc.</p>
 <?php } ?>
 <div class="bcoem-admin-element hidden-print">
 

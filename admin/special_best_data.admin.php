@@ -45,7 +45,7 @@
 </div>
 
 <?php if (($action == "default") || ($action == "list")) { ?>
-<p>Custom categories are useful if your competition features unique &ldquo;best of show&rdquo; categories, such as Pro-Am opportunites, Stewards&rsquo; Choice, Best Name, etc.</p>
+<p>Custom categories are useful if your competition features unique &ldquo;best of show&rdquo; categories, such as Pro-Am opportunities, Stewards&rsquo; Choice, Best Name, etc.</p>
 	<?php if ($totalRows_sbd > 0) { ?>
     <script type="text/javascript" language="javascript">
          $(document).ready(function() {

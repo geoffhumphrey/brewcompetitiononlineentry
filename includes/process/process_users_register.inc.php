@@ -95,7 +95,7 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 	if (strstr($username,'@'))  {
 
 		// Sanity check from AJAX widget
-		$query_userCheck = "SELECT user_name FROM $users_db_table WHERE user_name = '$username'";
+		$query_userCheck = sprintf("SELECT user_name FROM %s WHERE user_name = '%s'",$prefix."users",$username);
 		$userCheck = mysqli_query($connection,$query_userCheck) or die (mysqli_error($connection));
 		$row_userCheck = mysqli_fetch_assoc($userCheck);
 		$totalRows_userCheck = mysqli_num_rows($userCheck);

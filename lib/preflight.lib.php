@@ -7,12 +7,14 @@ $force_update = FALSE;
 $no_updates_needed = FALSE;
 if (FORCE_UPDATE) $force_update = TRUE;
 $hosted_setup = FALSE;
+$check_setup = FALSE;
 
 if (check_setup($prefix."system",$database)) {
 	mysqli_select_db($connection,$database);
 	$query_system = sprintf("SELECT * FROM %s WHERE id='1'",$prefix."system");
 	$system = mysqli_query($connection,$query_system) or die (mysqli_error($connection));
 	$row_system = mysqli_fetch_assoc($system);
+	$check_setup = TRUE;
 }
 
 if ((HOSTED) && ($row_system['setup_last_step'] == 9)) $hosted_setup = TRUE;
@@ -36,48 +38,53 @@ if ((!isset($_SESSION['currentVersion'])) || ((isset($_SESSION['currentVersion']
 		$setup_relocate = "Location: ".$base_url."maintenance.php";
 	}
 
-	// Check if "prefsShipping" column is in the prefs table since it was added in the 2.1.6.0 release
-	// If not, run the update
-	if (!check_update("prefsShipping", $prefix."preferences")) {
-		$update_required = TRUE;
-		$setup_success = FALSE;
-		$setup_relocate = "Location: ".$base_url."update.php";
-	}
+	if ($check_setup) {
 
-	// Check if setup was completed successfully
-	if ($row_system['setup'] == 0) {
-		$setup_success = FALSE;
-		$setup_relocate = "Location: ".$base_url."setup.php?section=step".($row_system['setup_last_step']+1);
-
-		if ($row_system['setup_last_step'] == 1) {
-			$query_user = sprintf("SELECT user_name FROM %s WHERE id='1'",$prefix."users");
-			$user = mysqli_query($connection,$query_user) or die (mysqli_error($connection));
-			$row_user = mysqli_fetch_assoc($user);
-			$setup_relocate .= "&go=".$row_user['user_name'];
-		}
-
-		$setup_relocate .= "&msg=1";
-	}
-
-	if ($row_system['version'] == $current_version) {
-		// If the current version is the same as what is in the DB, trigger a force update
-		// if system version date in DB is prior to the current version date
-		// covers updates made in between pre-releases and full version
-		if ((strtotime($row_system['version_date'])) < ($current_version_date)) $force_update = TRUE;
-	}
-
-	if ($row_system['version'] != $current_version) {
-
-		// Run update scripts if required
-		if ($update_required) {
+		// Check if "prefsShipping" column is in the prefs table since it was added in the 2.1.6.0 release
+		// If not, run the update
+		if (!check_update("prefsShipping", $prefix."preferences")) {
+			$update_required = TRUE;
 			$setup_success = FALSE;
 			$setup_relocate = "Location: ".$base_url."update.php";
 		}
 
-		else {
-			$force_update = TRUE;
+		// Check if setup was completed successfully
+		if ($row_system['setup'] == 0) {
+			$setup_success = FALSE;
+			$setup_relocate = "Location: ".$base_url."setup.php?section=step".($row_system['setup_last_step']+1);
+
+			if ($row_system['setup_last_step'] == 1) {
+				$query_user = sprintf("SELECT user_name FROM %s WHERE id='1'",$prefix."users");
+				$user = mysqli_query($connection,$query_user) or die (mysqli_error($connection));
+				$row_user = mysqli_fetch_assoc($user);
+				$setup_relocate .= "&go=".$row_user['user_name'];
+			}
+
+			$setup_relocate .= "&msg=1";
+		}
+
+		if ($row_system['version'] == $current_version) {
+			// If the current version is the same as what is in the DB, trigger a force update
+			// if system version date in DB is prior to the current version date
+			// covers updates made in between pre-releases and full version
+			if ((strtotime($row_system['version_date'])) < ($current_version_date)) $force_update = TRUE;
 			$setup_success = TRUE;
-			$setup_relocate = "Location: ".$base_url;
+		}
+
+		if ($row_system['version'] != $current_version) {
+
+			// Run update scripts if required
+			if ($update_required) {
+				$setup_success = FALSE;
+				$setup_relocate = "Location: ".$base_url."update.php";
+			}
+
+			else {
+				$force_update = TRUE;
+				$setup_success = TRUE;
+				$setup_relocate = "Location: ".$base_url;
+			}
+
 		}
 
 	}
@@ -92,5 +99,4 @@ if ((!isset($_SESSION['currentVersion'])) || ((isset($_SESSION['currentVersion']
 	}
 
 } // end if (!isset($_SESSION['currentVersion']))
-
 ?>
