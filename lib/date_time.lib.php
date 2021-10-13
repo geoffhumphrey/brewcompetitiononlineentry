@@ -149,14 +149,18 @@ function judging_date_return() {
 	$r = 0;
 	$today = time();
 
-	$query_check = sprintf("SELECT judgingDate,judgingDateEnd FROM %s", $prefix."judging_locations");
-	$check = mysqli_query($connection,$query_check) or die (mysqli_error($connection));
-	$row_check = mysqli_fetch_assoc($check);
+	if (check_update("judgingDateEnd", $prefix."judging_locations")) {
 
-	do {
- 		if ((empty($row_check['judgingDateEnd'])) && ($row_check['judgingDate'] >= $today)) $r += 1;
- 		if ((!empty($row_check['judgingDateEnd'])) && ($row_check['judgingDateEnd'] >= $today)) $r += 1;
-	} while ($row_check = mysqli_fetch_assoc($check));
+		$query_check = sprintf("SELECT judgingDate,judgingDateEnd FROM %s", $prefix."judging_locations");
+		$check = mysqli_query($connection,$query_check) or die (mysqli_error($connection));
+		$row_check = mysqli_fetch_assoc($check);
+
+		do {
+	 		if ((empty($row_check['judgingDateEnd'])) && ($row_check['judgingDate'] >= $today)) $r += 1;
+	 		if ((!empty($row_check['judgingDateEnd'])) && ($row_check['judgingDateEnd'] >= $today)) $r += 1;
+		} while ($row_check = mysqli_fetch_assoc($check));
+
+	}
 	
 	return $r;
 }

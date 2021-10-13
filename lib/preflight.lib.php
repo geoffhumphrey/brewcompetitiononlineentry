@@ -15,6 +15,7 @@ if (check_setup($prefix."system",$database)) {
 	$system = mysqli_query($connection,$query_system) or die (mysqli_error($connection));
 	$row_system = mysqli_fetch_assoc($system);
 	$check_setup = TRUE;
+	if ($row_system['version'] != $current_version) unset($_SESSION['session_set_'.$prefix_session]);
 }
 
 if ((HOSTED) && ($row_system['setup_last_step'] == 9)) $hosted_setup = TRUE;

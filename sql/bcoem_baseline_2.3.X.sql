@@ -5,11 +5,11 @@
 --
 -- ------------------------------------------------------------------------------------
 --
--- UPDATED 2021-02-09 for Version 2.2.0.0
+-- UPDATED 2021-10-15 for Version 2.3.2.0
 --
 -- ------------------------------------------------------------------------------------
 --
--- Sets up a basic install and baseline data for version 2.1.X.
+-- Sets up a basic install and baseline data for version 2.3.X.
 -- Import this DB structure and dummy data via phpMyAdmin or shell access.
 -- Adds a top-level admin user:
 --   - Username: user.baseline@brewcompetition.com
@@ -1557,7 +1557,7 @@ CREATE TABLE IF NOT EXISTS `baseline_system` (
 --
 
 INSERT INTO `baseline_system` (`id`, `version`, `version_date`, `data_check`, `setup`, `setup_last_step`) VALUES
-(1, '2.2.0.0', '2021-02-01', '2021-02-01 00:00:01', 1, 8);
+(1, '2.3.2.0', '2021-10-15', '2021-10-15 00:00:01', 1, 8);
 
 -- --------------------------------------------------------
 

@@ -31,12 +31,6 @@ $score = ($row_eval['evalAromaScore'] + $row_eval['evalAppearanceScore'] + $row_
 $evalSpecialIngredients = str_replace("^", " ", $row_eval['evalSpecialIngredients']);
 $evalOtherNotes = $row_eval['evalOtherNotes'];
 
-/*
-$notes_max_length = 65;
-if ((!empty($row_eval['evalSpecialIngredients'])) && (strlen($row_eval['evalSpecialIngredients']) > $notes_max_length)) $evalSpecialIngredients = truncate($row_eval['evalSpecialIngredients'],$notes_max_length,"...");
-if ((!empty($row_eval['evalOtherNotes'])) && (strlen($row_eval['evalOtherNotes']) > $notes_max_length)) $evalOtherNotes = truncate($row_eval['evalOtherNotes'],$notes_max_length,"...");
-*/
-
 $head_ordinal = FALSE;
 $head_miniBOS = FALSE;
 $head_rt_col = "col-xs-12";

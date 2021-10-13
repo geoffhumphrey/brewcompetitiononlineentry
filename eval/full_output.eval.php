@@ -16,29 +16,29 @@
         <!-- Aroma -->
         <div class="bcoem-scoresheet-element">
         <p><strong><?php echo $label_aroma; ?><span class="pull-right"><?php echo $row_eval['evalAromaScore']; ?> / <?php echo $aroma_points; ?></span></strong></p>
-        <p class="descriptor"><?php if (strlen($row_eval['evalAromaComments']) > 475) echo truncate($row_eval['evalAromaComments'],475,"..."); else echo $row_eval['evalAromaComments']; ?></p>
+        <p class="descriptor"><?php echo $row_eval['evalAromaComments']; ?></p>
         </div>
         <!-- Appearance -->
         <div class="bcoem-scoresheet-element">
         <p><strong><?php echo $label_appearance; ?><span class="pull-right"><?php echo $row_eval['evalAppearanceScore']; ?> / <?php echo $appearance_points; ?></span></strong></p>
-        <p class="descriptor"><?php if (strlen($row_eval['evalAppearanceComments']) > 475) echo truncate($row_eval['evalAppearanceComments'],475,"..."); else echo $row_eval['evalAppearanceComments']; ?></p>
+        <p class="descriptor"><?php echo $row_eval['evalAppearanceComments']; ?></p>
         </div>
         <!-- Flavor -->
         <div class="bcoem-scoresheet-element">
         <p><strong><?php echo $label_flavor; ?><span class="pull-right"><?php echo $row_eval['evalFlavorScore']; ?> / <?php echo $flavor_points; ?></span></strong></p>
-        <p class="descriptor"><?php if (strlen($row_eval['evalFlavorComments']) > 475) echo truncate($row_eval['evalFlavorComments'],475,"..."); else echo $row_eval['evalFlavorComments']; ?></p>
+        <p class="descriptor"><?php echo $row_eval['evalFlavorComments']; ?></p>
         </div>
         <!-- Mouthfeel -->
         <?php if ($beer) { ?>
         <div class="bcoem-scoresheet-element">
         <p><strong><?php echo $label_mouthfeel; ?><span class="pull-right"><?php echo $row_eval['evalMouthfeelScore']; ?> / <?php echo $mouthfeel_points; ?></span></strong></p>
-        <p class="descriptor"><?php if (strlen($row_eval['evalMouthfeelComments']) > 475) echo truncate($row_eval['evalMouthfeelComments'],475,"..."); else echo $row_eval['evalMouthfeelComments']; ?></p>  
+        <p class="descriptor"><?php echo $row_eval['evalMouthfeelComments']; ?></p>  
         </div>
         <?php } ?>
         <!-- Overall Impression -->
         <div class="bcoem-scoresheet-element">
         <p><strong><?php echo $label_overall_impression; ?><span class="pull-right"><?php echo $row_eval['evalOverallScore']; ?> / <?php echo $overall_points; ?></span></strong></p>
-        <p class="descriptor"><?php if (strlen($row_eval['evalOverallComments']) > 800) echo truncate($row_eval['evalOverallComments'],800,"..."); else echo $row_eval['evalOverallComments']; ?></p>
+        <p class="descriptor"><?php echo $row_eval['evalOverallComments']; ?></p>
         </div>
         <!-- Total -->
         <p><strong><?php echo $label_total; ?><span class="pull-right"><?php echo $score; ?> / 50</span></strong></p>
