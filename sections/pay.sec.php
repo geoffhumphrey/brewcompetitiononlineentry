@@ -157,6 +157,8 @@ else {
 			if ($_SESSION['prefsTransFee'] == "Y") {
 				$fee = number_format((($total_to_pay * .035) + .50), 2, '.', '');
 				$payment_amount = $total_to_pay + $fee;
+			} else {
+				$payment_amount = $total_to_pay;
 			}
 
 			// Online
