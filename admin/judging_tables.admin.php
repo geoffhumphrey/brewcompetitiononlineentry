@@ -379,7 +379,7 @@ if (($action == "add") || ($action == "edit")) {
             $selected_styles = "";
             $table_row_class = "bg-success text-success";
 
-            $style_display = style_number_const($row_styles['brewStyleGroup'],$row_styles['brewStyleNum'],$_SESSION['style_set_display_separator'],0);
+            $style_display = style_number_const($row_styles['brewStyleGroup'],$row_styles['brewStyleNum'],$_SESSION['style_set_display_separator'],"");
             $style_sort = style_number_const($row_styles['brewStyleGroup'],$row_styles['brewStyleNum'],$_SESSION['style_set_display_separator'],1);
 
             if ($received_entry_count_style == 0) {
@@ -407,7 +407,7 @@ if (($action == "add") || ($action == "edit")) {
             $disabled_selected_styles = $selected_styles." ".$disabled_styles;
 
             $table_styles_available .= "<tr class=\"".$table_row_class."\">\n";
-            $table_styles_available .= "<td><input id=\"".$style_display."\" type=\"checkbox\" name=\"tableStyles[]\" onClick=\"update_table_total('".$style_display."');\" value=\"".$row_styles['id']."\" ".$disabled_selected_styles."></td>\n";
+            $table_styles_available .= "<td><input id=\"".$row_styles['id']."\" type=\"checkbox\" name=\"tableStyles[]\" onClick=\"update_table_total('".$row_styles['id']."');\" value=\"".$row_styles['id']."\" ".$disabled_selected_styles."></td>\n";
 
             if ($_SESSION['prefsStyleSet'] == "BA") {
                 $ba_category = style_convert($row_styles['brewStyleGroup'],1);
@@ -418,7 +418,7 @@ if (($action == "add") || ($action == "edit")) {
                 $table_styles_available .= "<td>".style_convert($row_styles['brewStyleGroup'],1)."</td>\n";
                 $table_styles_available .= "<td>".$row_styles['brewStyle'].$style_no_entries.$style_assigned_location."</td>\n";
             }
-            $table_styles_available .= "<td><span id=\"".$style_display."-total\">".$received_entry_count_style."</span></td>\n";
+            $table_styles_available .= "<td><span id=\"".$row_styles['id']."-total\">".$received_entry_count_style."</span></td>\n";
             $table_styles_available .= "</tr>\n\n";
 
             if ($selected_styles == "CHECKED") $table_total += $received_entry_count_style;
