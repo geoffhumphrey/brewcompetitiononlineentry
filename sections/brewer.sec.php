@@ -50,8 +50,6 @@ else {
 if ((!empty($table_assign_judge)) || (!empty($table_assign_steward))) $table_assignment = TRUE;
 if ((empty($table_assign_judge)) && (empty($table_assign_steward))) $table_assignment = FALSE;
 
-
-
 if ($_SESSION['prefsProEdition'] == 1) {
 
 	// If registered as a brewery, will not be a judge
@@ -123,6 +121,22 @@ if ($section != "step2") {
     }
 }
 
+$country_select = "";
+foreach ($countries as $country) {
+    $country_select .= "<option value=\"".$country."\" ";
+    if ((isset($row_brewer['brewerCountry'])) && ($row_brewer['brewerCountry'] == $country)) $country_select .= "SELECTED";
+    $country_select .= ">";
+    $country_select .= $country."</option>\n";
+}
+
+$state_select = "";
+foreach ($us_state_abbrevs_names as $key => $value) {
+    $state_select .= "<option value=\"".$key."\" ";
+    if ((isset($row_brewer['brewerState'])) && ($row_brewer['brewerState'] == $key)) $state_select .= "SELECTED";
+    $state_select .= ">";
+    $state_select .= $value." [".$key."]</option>\n";
+}
+
 if ($go != "admin") echo $info_msg;
 ?>
 
@@ -130,26 +144,30 @@ if ($go != "admin") echo $info_msg;
 $(document).ready(function(){
 
 	// hide divs on load if no value
-	$("#brewerClubsOther").hide("fast");
-	$("#brewerJudgeFields").hide("fast");
-	$("#brewerStewardFields").hide("fast");
-    $("#ahaProAmText").hide("fast");
+	$("#brewerClubsOther").hide();
+    $("#ahaProAmText").hide();
+    $("#us-state").hide();
+    $("#proAm").hide();
 
     <?php if (($action == "edit") && ($row_brewer['brewerCountry'] == "United States")) { ?>
     $("#proAm").show("slow");
     $("#ahaProAmText").show("slow");
-    <?php } else { ?>
-    $("#proAm").hide("fast");
+    $("#us-state").show();
+    $("#non-us-state").hide();
     <?php } ?>
 
     $("#brewerCountry").change(function() {
         if ($("#brewerCountry").val() == "United States") {
             $("#proAm").show("slow");
             $("#ahaProAmText").show("slow");
+            $("#us-state").show();
+            $("#non-us-state").hide();
         }
         else {
             $("#proAm").hide("fast");
             $("#ahaProAmText").hide("fast");
+            $("#us-state").hide();
+            $("#non-us-state").show();
             $("#brewerProAm_0").prop("checked", true);
             $("#brewerProAm_1").prop("checked", false);
         }
@@ -315,6 +333,20 @@ $(document).ready(function(){
         </div>
     </div><!-- ./Form Group -->
 
+    <div class="form-group"><!-- Form Group REQUIRED Select -->
+        <label for="brewerCountry" class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label"><?php if ($_SESSION['prefsProEdition'] == 1) echo $label_organization." "; echo $label_country; ?></label>
+        <div class="col-lg-9 col-md-6 col-sm-8 col-xs-12">
+            <div class="input-group has-warning">
+                <!-- Input Here -->
+                <select class="selectpicker" name="brewerCountry" id="brewerCountry" data-live-search="true" data-size="10" data-width="auto" data-show-tick="true" data-header="<?php echo $label_select_country; ?>" title="<?php echo $label_select_country; ?>" data-error="<?php echo $brewer_text_031; ?>" required>
+                <option></option>
+                <?php echo $country_select; ?>
+                </select>
+            </div>
+            <div class="help-block with-errors"></div>
+        </div>
+    </div><!-- ./Form Group -->
+
 	<div class="form-group"><!-- Form Group REQUIRED Text Input -->
         <label for="brewerAddress" class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label"><?php if ($_SESSION['prefsProEdition'] == 1) echo $label_organization." "; echo $label_street_address; ?></label>
         <div class="col-lg-9 col-md-9 col-sm-8 col-xs-12">
@@ -343,11 +375,37 @@ $(document).ready(function(){
 	<div class="form-group"><!-- Form Group REQUIRED Text Input -->
         <label for="brewerState" class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label"><?php if ($_SESSION['prefsProEdition'] == 1) echo $label_organization." "; echo $label_state_province; ?></label>
         <div class="col-lg-9 col-md-9 col-sm-8 col-xs-12">
+            <!--
             <div class="input-group has-warning">
-                <!-- Input Here -->
                 <input class="form-control" id="brewerState" name="brewerState" type="text" value="<?php if ($action == "edit") echo $row_brewer['brewerState']; ?>" placeholder="" data-error="<?php echo $brewer_text_029; ?>" required>
                 <span class="input-group-addon" id="brewerState-addon2"><span class="fa fa-star"></span></span>
             </div>
+            -->
+
+
+            <div id="non-us-state" class="input-group has-warning">
+                <span class="input-group-addon" id="state-addon1"><span class="fa fa-home"></span></span>
+                <!-- Input Here -->
+                <input class="form-control" name="brewerState" id="brewerState" type="text" placeholder="" value="<?php if ($action == "edit") echo $row_brewer['brewerState']; ?>" data-error="<?php echo $register_text_029; ?>" required>
+                <span class="input-group-addon" id="state-addon2"><span class="fa fa-star"></span>
+            </div>
+            <div id="us-state" class="has-warning">
+                <select class="selectpicker" name="brewerState" id="brewerState" data-live-search="true" data-size="10" data-width="fit" title="<?php echo $label_select_state; ?>" data-error="<?php echo $register_text_030; ?>" required>
+                    <option></option>
+                    <?php echo $state_select; ?>
+                </select>
+            </div>
+
+
+
+
+
+
+
+
+
+
+
             <div class="help-block with-errors"></div>
         </div>
     </div><!-- ./Form Group -->
@@ -364,20 +422,6 @@ $(document).ready(function(){
         </div>
     </div><!-- ./Form Group -->
 
-	<div class="form-group"><!-- Form Group REQUIRED Select -->
-        <label for="brewerCountry" class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label"><?php if ($_SESSION['prefsProEdition'] == 1) echo $label_organization." "; echo $label_country; ?></label>
-        <div class="col-lg-9 col-md-6 col-sm-8 col-xs-12">
-        	<div class="input-group has-warning">
-				<!-- Input Here -->
-				<select class="selectpicker" name="brewerCountry" id="brewerCountry" data-live-search="true" data-size="10" data-width="auto" data-show-tick="true" data-header="<?php echo $label_select_country; ?>" title="<?php echo $label_select_country; ?>" data-error="<?php echo $brewer_text_031; ?>" required>
-				<?php foreach ($countries as $country) {  ?>
-				<option value="<?php echo $country; ?>" <?php if (($action == "edit") && ($row_brewer['brewerCountry'] == $country)) echo "selected"; ?>><?php echo $country; ?></option>
-				<?php } ?>
-				</select>
-        	</div>
-        	<div class="help-block with-errors"></div>
-		</div>
-    </div><!-- ./Form Group -->
  	<?php if (($_SESSION['prefsProEdition'] == 0) || (($_SESSION['prefsProEdition'] == 1) && ($entrant_type_brewery))) { 
     $dropoff_select = "";
     if ($section != "step2") {

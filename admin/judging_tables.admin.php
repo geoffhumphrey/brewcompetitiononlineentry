@@ -191,10 +191,15 @@ if (($action == "default") && ($filter == "default")) {
             else $scored = $scored;
         }
 
-        else $scored = "N/A <small>(Planning Mode)</em></small>";
+        else $scored = "<i class=\"text-danger fa fas fa-lg fa-ban\"></i> <small><em>Planning Mode</em></small>";
 
         $assigned_judges = assigned_judges($row_tables['id'],$dbTable,$judging_assignments_db_table);
+        //if (strpos($assigned_judges, "fa-plus-circle") === FALSE) 
+            $assigned_judges .= "<button class=\"btn-link\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Delete all judge assignments for this table.\" onclick=\"purge_data('".$base_url."','purge','judge-assignments','table-admin','delete-judges-".$row_tables['id']."');\"><i class=\"text-danger fas fa-lg fa-minus-circle\"></i></button><div><span class=\"hidden\" id=\"delete-judges-".$row_tables['id']."-status\"></span><span class=\"hidden\" id=\"delete-judges-".$row_tables['id']."-status-msg\"></span></div>";
+        
         $assigned_stewards = assigned_stewards($row_tables['id'],$dbTable,$judging_assignments_db_table);
+        //if (strpos($assigned_stewards, "fa-plus-circle") === FALSE) 
+            $assigned_stewards .= "<button class=\"btn-link\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Delete all steward assignments for this table.\" onclick=\"purge_data('".$base_url."','purge','steward-assignments','table-admin','delete-stewards-".$row_tables['id']."');\"><i class=\"text-danger fas fa-lg fa-minus-circle\"></i></button><div><span class=\"hidden\" id=\"delete-stewards-".$row_tables['id']."-status\"></span><span class=\"hidden\" id=\"delete-stewards-".$row_tables['id']."-status-msg\"></span></div>";
 
         if ($dbTable == "default") {
             if (score_count($row_tables['id'],1,$dbTable)) $scoreAction = "edit";
@@ -640,6 +645,43 @@ $(document).ready(function(){
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
+
+
+<!-- Delete assignments modals -->
+<div class="modal fade" id="delete-all-judges" tabindex="-1" role="dialog" aria-labelledby="delete-all-judgesLabel">
+    <div class="modal-dialog" role="document">
+    <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title" id="delete-all-judgesLabel">Please Confirm</h4>
+        </div>
+        <div class="modal-body">
+            <p>Are you sure you want to delete ALL judge assignments? This cannot be undone.</p>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+            <button type="button" class="btn btn-success" data-dismiss="modal" onclick="purge_data('<?php echo $base_url; ?>','','tables','admin-dashboard','purge-table');">Yes</button>
+        </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="delete-all-stewards" tabindex="-1" role="dialog" aria-labelledby="delete-all-stewardsLabel">
+    <div class="modal-dialog" role="document">
+    <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title" id="delete-all-stewardsLabel">Please Confirm</h4>
+        </div>
+        <div class="modal-body">
+            <p>Are you sure you want to delete ALL steward assignments? This cannot be undone.</p>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+            <button type="button" class="btn btn-success" data-dismiss="modal" onclick="purge_data('<?php echo $base_url; ?>','','tables','admin-dashboard','purge-table');">Yes</button>
+        </div>
+        </div>
+    </div>
+</div>
 
 <?php } ?>
 <p class="lead"><?php echo $_SESSION['contestName'].$title;  ?></p>
@@ -1393,4 +1435,5 @@ if (($action == "assign") && ($filter == "default")) { ?>
     </ul>
 </div>
 <?php } ?>
+<script src="<?php echo $base_url;?>js_includes/admin_ajax.min.js"></script>
 <?php if (($action == "assign") && ($filter != "default") && ($id != "default")) include ('judging_assign.admin.php'); ?>

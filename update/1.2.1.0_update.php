@@ -159,7 +159,7 @@ $output .= "<li>All archive table schemas updated successfully.</li>";
 //   Table to house system data.
 // -----------------------------------------------------------
 
-$updateSQL = "CREATE TABLE IF NOT EXISTS `".$prefix."system` (
+$updateSQL = "CREATE TABLE IF NOT EXISTS `".$prefix."bcoem_sys` (
 	`id` int(11) NOT NULL AUTO_INCREMENT,
 	`version` varchar(12) DEFAULT NULL,
 	`version_date` date DEFAULT NULL,
@@ -171,7 +171,7 @@ mysqli_real_escape_string($connection,$updateSQL);
 $result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 //$output .= $updateSQL."<br>";
 
-$updateSQL = "INSERT INTO `".$prefix."system` (`id`, `version`, `version_date`, `data_check`,`setup`) VALUES (1, '1.2.1.1', '2012-09-01', NOW( ),'1');";
+$updateSQL = "INSERT INTO `".$prefix."bcoem_sys` (`id`, `version`, `version_date`, `data_check`,`setup`) VALUES (1, '1.2.1.1', '2012-09-01', NOW( ),'1');";
 mysqli_real_escape_string($connection,$updateSQL);
 $result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 //$output .= $updateSQL."<br>";

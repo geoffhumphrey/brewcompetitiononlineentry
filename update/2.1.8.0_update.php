@@ -50,7 +50,7 @@ $output .= "<li>Preferences data updated.</li>";
 // Data Update: Update Version in System Table
 // -----------------------------------------------------------
 
-$updateSQL = sprintf("UPDATE %s SET version='%s', version_date='%s' WHERE id='1'",$prefix."system","2.1.8.0","2016-09-10");
+$updateSQL = sprintf("UPDATE %s SET version='%s', version_date='%s' WHERE id='1'",$prefix."bcoem_sys","2.1.8.0","2016-09-10");
 mysqli_select_db($connection,$database);
 mysqli_real_escape_string($connection,$updateSQL);
 $result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));

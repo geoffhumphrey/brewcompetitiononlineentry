@@ -103,7 +103,7 @@ if (((isset($_SERVER['HTTP_REFERER'])) && ($referrer['host'] == $_SERVER['SERVER
 	$staff_db_table = $prefix."staff";
 	$styles_db_table = $prefix."styles";
 	$style_types_db_table = $prefix."style_types";
-	$system_db_table = $prefix."system";
+	$system_db_table = $prefix."bcoem_sys";
 	$themes_db_table = $prefix."themes";
 	$users_db_table = $prefix."users";
 

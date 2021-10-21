@@ -85,14 +85,14 @@ if (!check_update("brewStyleComEx", $prefix."styles")) {
  * -----------------------------------------------------------------------------------------------------
  */
 
-if (!check_update("setup_last_step", $prefix."system")) {
+if (!check_update("setup_last_step", $prefix."bcoem_sys")) {
 	// Add setup_last_step column to system table
-	$updateSQL = sprintf("ALTER TABLE `%s` ADD `setup_last_step` INT(3) NULL DEFAULT NULL;",$prefix."system");
+	$updateSQL = sprintf("ALTER TABLE `%s` ADD `setup_last_step` INT(3) NULL DEFAULT NULL;",$prefix."bcoem_sys");
 	mysqli_select_db($connection,$database);
 	mysqli_real_escape_string($connection,$updateSQL);
 	$result = mysqli_query($connection,$updateSQL);
 
-	$updateSQL = sprintf("UPDATE `%s` SET `setup_last_step` = '8';",$prefix."system");
+	$updateSQL = sprintf("UPDATE `%s` SET `setup_last_step` = '8';",$prefix."bcoem_sys");
 	mysqli_select_db($connection,$database);
 	mysqli_real_escape_string($connection,$updateSQL);
 	$result = mysqli_query($connection,$updateSQL);
@@ -1933,7 +1933,7 @@ require_once(UPDATE.'char_set_update.php');
  * ----------------------------------------------------------------------------------------------------
  */
 
-$updateSQL = sprintf("UPDATE %s SET version='%s', version_date='%s', data_check=%s WHERE id=1", $prefix."system", $current_version, $current_version_date_display, "NOW()");
+$updateSQL = sprintf("UPDATE %s SET version='%s', version_date='%s', data_check=%s WHERE id=1", $prefix."bcoem_sys", $current_version, $current_version_date_display, "NOW()");
 mysqli_real_escape_string($connection,$updateSQL);
 $result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 

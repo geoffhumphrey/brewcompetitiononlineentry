@@ -14,8 +14,8 @@ $log = mysqli_query($connection,$query_log) or die (mysqli_error($connection));
 $row_log = mysqli_fetch_assoc($log);
 $totalRows_log = mysqli_num_rows($log);
 
-// if "system" db table is present, get installed version from it
-if (check_setup($prefix."system",$database)) { 
+// if "bcoem_sys" db table is present, get installed version from it
+if (check_setup($prefix."bcoem_sys",$database)) { 
 	$query_version = sprintf("SELECT version,version_date FROM %s",$system_db_table);
 	$version = mysqli_query($connection,$query_version) or die (mysqli_error($connection));
 	$row_version = mysqli_fetch_assoc($version);	

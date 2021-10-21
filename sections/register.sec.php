@@ -5,7 +5,7 @@ function checkAvailability() {
 		data:'user_name='+$("#user_name").val(),
 		type: "POST",
 		success:function(data) {
-			$("#status").html(data);
+			$("#username-status").html(data);
 		},
 		error:function (){}
 	});
@@ -48,24 +48,30 @@ httpxml.send(null);
 }
 
 $(document).ready(function(){
-	$("#brewerClubsOther").hide("fast");
-	$("#ahaProAmText").hide("fast");
+	$("#brewerClubsOther").hide();
+	$("#ahaProAmText").hide();
+	$("#us-state").hide();
+	$("#proAm").hide();
 
     <?php if (($action == "edit") && ($row_brewer['brewerCountry'] == "United States")) { ?>
-    $("#proAm").show("slow");
-    $("#ahaProAmText").show("slow");
-    <?php } else { ?>
-    $("#proAm").hide("fast");
+    $("#proAm").show();
+    $("#ahaProAmText").show();
+    $("#us-state").show();
+    $("#non-us-state").hide();
     <?php } ?>
 
     $("#brewerCountry").change(function() {
         if ($("#brewerCountry").val() == "United States") {
             $("#proAm").show("slow");
             $("#ahaProAmText").show("slow");
+            $("#us-state").show();
+            $("#non-us-state").hide();
         }
         else {
             $("#proAm").hide("fast");
             $("#ahaProAmText").hide("fast");
+            $("#us-state").hide();
+            $("#non-us-state").show();
             $("#brewerProAm_0").prop("checked", true);
             $("#brewerProAm_1").prop("checked", false);
         }
@@ -146,12 +152,21 @@ else { // THIS ELSE ENDS at the end of the script
 	if (NHC) $totalRows_log = $totalRows_entry_count;
 	else $totalRows_log = $totalRows_log;
 	if ($go != "default") {
+		
 		$country_select = "";
 		foreach ($countries as $country) {
 			$country_select .= "<option value=\"".$country."\" ";
 			if (($msg > 0) && (isset($_COOKIE['brewerCountry'])) && ($_COOKIE['brewerCountry'] == $country)) $country_select .= "SELECTED";
 			$country_select .= ">";
 			$country_select .= $country."</option>\n";
+     	}
+
+     	$state_select = "";
+		foreach ($us_state_abbrevs_names as $key => $value) {
+			$state_select .= "<option value=\"".$key."\" ";
+			if (($msg > 0) && (isset($_COOKIE['brewerState'])) && ($_COOKIE['brewerState'] == $key)) $state_select .= "SELECTED";
+			$state_select .= ">";
+			$state_select .= $key." (".$value.")</option>\n";
      	}
 
 	$random_country = array_rand($countries);
@@ -358,7 +373,7 @@ if ($go == "default") {  ?>
 	<?php } // END if ($section == "admin") ?>
 	<?php if (($_SESSION['prefsProEdition'] == 1) && ($go == "entrant")) { ?>
     <div class="form-group"><!-- Form Group REQUIRED Text Input -->
-        <label for="brewerBreweryName" class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label_organization." ".$label_name; ?></label>
+        <label for="brewerBreweryName" class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label_name; if (($_SESSION['prefsProEdition'] == 1) && ($go == "entrant")) echo " (".$label_organization.")"; ?></label>
         <div class="col-lg-9 col-md-9 col-sm-8 col-xs-12">
             <div class="input-group has-warning">
                 <span class="input-group-addon" id="brewerBreweryName-addon1"><span class="fa fa-beer"></span></span>
@@ -392,7 +407,7 @@ if ($go == "default") {  ?>
             <div class="help-block"><?php echo $register_text_021; ?></div>
 			<div class="help-block with-errors"></div>
             <div id="msg_email"></div>
-			
+			<div id="username-status"></div>
 		</div>
 	</div><!-- ./Form Group -->
     <?php if ($view == "default") { // Show if not using quick add judge/steward feature ?>
@@ -506,9 +521,20 @@ if ($go == "default") {  ?>
 		</div>
 	</div><!-- ./Form Group -->
     <?php if ($view == "default") { ?>
+    <div class="form-group"><!-- Form Group REQUIRED Select -->
+		<label for="" class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label_country; if (($_SESSION['prefsProEdition'] == 1) && ($go == "entrant")) echo " (".$label_organization.")"; ?></label>
+		<div class="col-lg-9 col-md-9 col-sm-8 col-xs-12 has-warning">
+		<!-- Input Here -->
+		<select class="selectpicker" name="brewerCountry" id="brewerCountry" data-live-search="true" data-size="10" data-width="auto" data-show-tick="true" data-header="<?php echo $label_select_country; ?>" title="<?php echo $label_select_country; ?>" data-error="<?php echo $brewer_text_031; ?>" required>
+			<option></option>
+    		<?php echo $country_select; ?>
+    	</select>
+		</div>
+		<div class="help-block with-errors"></div>
+	</div><!-- ./Form Group -->
     <!-- General Entry Fields: Address, Phone, Dropoff Locations, Club, AHA -->
 	<div class="form-group"><!-- Form Group REQUIRED Text Input -->
-		<label for="" class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label"><?php if (($_SESSION['prefsProEdition'] == 1) && ($go == "entrant")) echo $label_organization." "; echo $label_street_address; ?></label>
+		<label for="" class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label_street_address; if (($_SESSION['prefsProEdition'] == 1) && ($go == "entrant")) echo " (".$label_organization.")"; ?></label>
 		<div class="col-lg-9 col-md-9 col-sm-8 col-xs-12">
 			<div class="input-group has-warning">
 				<span class="input-group-addon" id="street-addon1"><span class="fa fa-home"></span></span>
@@ -520,7 +546,7 @@ if ($go == "default") {  ?>
 		</div>
     </div><!-- ./Form Group -->
 	<div class="form-group"><!-- Form Group REQUIRED Text Input -->
-		<label for="" class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label"><?php if (($_SESSION['prefsProEdition'] == 1) && ($go == "entrant")) echo $label_organization." "; echo $label_city; ?></label>
+		<label for="" class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label_city; if (($_SESSION['prefsProEdition'] == 1) && ($go == "entrant")) echo " (".$label_organization.")"; ?></label>
 		<div class="col-lg-9 col-md-9 col-sm-8 col-xs-12">
 			<div class="input-group has-warning">
 				<span class="input-group-addon" id="city-addon1"><span class="fa fa-home"></span></span>
@@ -532,19 +558,26 @@ if ($go == "default") {  ?>
 		</div>
 	</div><!-- ./Form Group -->
 	<div class="form-group"><!-- Form Group REQUIRED Text Input -->
-		<label for="" class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label"><?php if (($_SESSION['prefsProEdition'] == 1) && ($go == "entrant")) echo $label_organization." "; echo $label_state_province; ?></label>
+		<label for="" class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label_state_province; if (($_SESSION['prefsProEdition'] == 1) && ($go == "entrant")) echo " (".$label_organization.")"; ?></label>
 		<div class="col-lg-9 col-md-9 col-sm-8 col-xs-12">
-			<div class="input-group has-warning">
+			<div id="non-us-state" class="input-group has-warning">
 				<span class="input-group-addon" id="state-addon1"><span class="fa fa-home"></span></span>
 				<!-- Input Here -->
 				<input class="form-control" name="brewerState" id="brewerState" type="text" placeholder="" value="<?php if (($msg > 0) && (isset($_COOKIE['brewerState']))) echo $_COOKIE['brewerState']; ?>" data-error="<?php echo $register_text_030; ?>" required>
 				<span class="input-group-addon" id="state-addon2"><span class="fa fa-star"></span>
 			</div>
+			<div id="us-state" class="has-warning">
+				<select class="selectpicker" name="brewerState" id="brewerState" data-live-search="true" data-size="10" data-width="fit" title="<?php echo $label_select_state; ?>" data-error="<?php echo $register_text_030; ?>" required>
+					<option></option>
+	    			<?php echo $state_select; ?>
+	    		</select>
+	    	</div>
             <div class="help-block with-errors"></div>
 		</div>
 	</div><!-- ./Form Group -->
+	
 	<div class="form-group"><!-- Form Group REQUIRED Text Input -->
-		<label for="" class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label"><?php if (($_SESSION['prefsProEdition'] == 1) && ($go == "entrant")) echo $label_organization." "; echo $label_zip; ?></label>
+		<label for="" class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label_zip; if (($_SESSION['prefsProEdition'] == 1) && ($go == "entrant")) echo " (".$label_organization.")"; ?></label>
 		<div class="col-lg-9 col-md-9 col-sm-8 col-xs-12">
 			<div class="input-group has-warning">
 				<span class="input-group-addon" id="zip-addon1"><span class="fa fa-home"></span></span>
@@ -553,15 +586,6 @@ if ($go == "default") {  ?>
 				<span class="input-group-addon" id="zip-addon2"><span class="fa fa-star"></span>
 			</div>
             <div class="help-block with-errors"></div>
-		</div>
-	</div><!-- ./Form Group -->
-	<div class="form-group"><!-- Form Group REQUIRED Select -->
-		<label for="" class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label"><?php if (($_SESSION['prefsProEdition'] == 1) && ($go == "entrant")) echo $label_organization." "; echo $label_country; ?></label>
-		<div class="col-lg-9 col-md-9 col-sm-8 col-xs-12 has-warning">
-		<!-- Input Here -->
-		<select class="selectpicker" name="brewerCountry" id="brewerCountry" data-live-search="true" data-size="10" data-width="fit">
-    		<?php echo $country_select; ?>
-    	</select>
 		</div>
 	</div><!-- ./Form Group -->
     <div class="form-group"><!-- Form Group REQUIRED Text Input -->
@@ -800,7 +824,7 @@ if ($go == "default") {  ?>
             <p><?php echo $row_judging3['judgingLocName']." ("; echo getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_judging3['judgingDate'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "short", "date-time").")"; ?></p>
             <div class="input-group input-group-sm">
                 <!-- Input Here -->
-                <select class="selectpicker" name="brewerJudgeLocation[]" id="brewerJudgeLocation" data-width="auto">
+                <select class="selectpicker" name="brewerJudgeLocation[]" id="brewerJudgeLocation" data-width="auto" <?php if (time() > $row_judging3['judgingDate']) echo "disabled"; ?>>
                 	<option value="<?php echo "N-".$row_judging3['id']; ?>" <?php echo $location_no; ?>><?php echo $label_no; ?></option>
                     <option value="<?php echo "Y-".$row_judging3['id']; ?>" <?php echo $location_yes; ?>><?php echo $label_yes; ?></option>
                 </select>

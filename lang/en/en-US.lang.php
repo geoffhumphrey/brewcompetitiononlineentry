@@ -1936,6 +1936,9 @@ $qr_text_017 = "QR Code scanning is available natively on most modern mobile ope
 $qr_text_018 = "Scan a QR Code located on a bottle label, enter the required password, and check in the entry.";
 
 
+// 2.3.1
+$label_select_state = "Select or Search for Your State";
+
 /**
  * ----------------------------------------------------------------------------------
  * END TRANSLATIONS

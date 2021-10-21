@@ -1,9 +1,9 @@
 <?php
 mysqli_select_db($connection,$database);
 // Check to see if initial setup has taken place
-if (table_exists($prefix."system")) {
+if (table_exists($prefix."bcoem_sys")) {
 	
-	$query_system = sprintf("SELECT setup FROM %s", $prefix."system");
+	$query_system = sprintf("SELECT setup FROM %s", $prefix."bcoem_sys");
 	$system = mysqli_query($connection,$query_system) or die (mysqli_error($connection));
 	$row_system = mysqli_fetch_assoc($system);
 	if ($row_system['setup'] == 1) header (sprintf("Location: %s",$base_url."index.php"));

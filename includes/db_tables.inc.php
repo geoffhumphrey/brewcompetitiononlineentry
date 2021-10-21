@@ -39,7 +39,7 @@ if ($dbTable == "default") {
 	$staff_db_table = $prefix."staff";
 	$styles_db_table = $prefix."styles";
 	$style_types_db_table = $prefix."style_types";
-	$system_db_table = $prefix."system";
+	$system_db_table = $prefix."bcoem_sys";
 	$users_db_table = $prefix."users";
 	}
 else {
@@ -67,7 +67,7 @@ else {
 	$staff_db_table = $prefix."staff";
 	$styles_db_table = $prefix."styles";
 	$style_types_db_table = $prefix."style_types".$suffix;
-	$system_db_table = $prefix."system";
+	$system_db_table = $prefix."bcoem_sys";
 	$users_db_table = $prefix."users".$suffix;
 }
 

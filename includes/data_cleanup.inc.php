@@ -345,6 +345,32 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] == 0)) {
 
 		} // END if (($go == "tables") || ($go == "purge-all"))
 
+		if ($go == "judge-assignments") {
+
+			if ($view != "default") {
+				$view = explode("-",$view);
+				$updateSQL = sprintf("DELETE FROM %s WHERE assignTable='%s' AND assignment='J'",$judging_assignments_db_table,$view[2]);
+			}
+			else $updateSQL = sprintf("DELETE FROM %s WHERE assignment='J'",$judging_assignments_db_table);
+			$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+			if ($result) $status = 1;
+			$redirect_go_to = sprintf("Location: %s", $base_url."index.php?section=admin&msg=26");
+
+		} // END if ($go == "judging-assignments")
+
+		if ($go == "steward-assignments") {
+
+			if ($view != "default") {
+				$view = explode("-",$view);
+				$updateSQL = sprintf("DELETE FROM %s WHERE assignTable='%s' AND assignment='S'",$judging_assignments_db_table,$view[2]);
+			}
+			else $updateSQL = sprintf("DELETE FROM %s WHERE assignment='S'",$judging_assignments_db_table);
+			$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+			if ($result) $status = 1;
+			$redirect_go_to = sprintf("Location: %s", $base_url."index.php?section=admin&msg=26");
+
+		} // END if ($go == "judging-assignments")
+
 		if (($go == "custom") || ($go == "purge-all")) {
 
 			$purge_array = array($special_best_info_db_table,$special_best_data_db_table);

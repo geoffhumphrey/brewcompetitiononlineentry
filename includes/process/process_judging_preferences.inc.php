@@ -84,7 +84,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 		session_write_close();
 		session_regenerate_id(true);
 
-		$updateSQL = sprintf("UPDATE %s SET setup='1', setup_last_step='8' WHERE id='1'",$prefix."system");
+		$updateSQL = sprintf("UPDATE %s SET setup='1', setup_last_step='8' WHERE id='1'",$prefix."bcoem_sys");
 		mysqli_real_escape_string($connection,$updateSQL);
 		$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 

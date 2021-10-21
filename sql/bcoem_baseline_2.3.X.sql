@@ -1541,8 +1541,8 @@ INSERT INTO `baseline_style_types` (`id`, `styleTypeName`, `styleTypeOwn`, `styl
 -- Table structure for table `baseline_system`
 --
 
-DROP TABLE IF EXISTS `baseline_system`;
-CREATE TABLE IF NOT EXISTS `baseline_system` (
+DROP TABLE IF EXISTS `baseline_bcoem_sys`;
+CREATE TABLE IF NOT EXISTS `baseline_bcoem_sys` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `version` varchar(12) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `version_date` date DEFAULT NULL,
@@ -1553,10 +1553,10 @@ CREATE TABLE IF NOT EXISTS `baseline_system` (
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
--- Dumping data for table `baseline_system`
+-- Dumping data for table `baseline_bcoem_sys`
 --
 
-INSERT INTO `baseline_system` (`id`, `version`, `version_date`, `data_check`, `setup`, `setup_last_step`) VALUES
+INSERT INTO `baseline_bcoem_sys` (`id`, `version`, `version_date`, `data_check`, `setup`, `setup_last_step`) VALUES
 (1, '2.3.2.0', '2021-10-15', '2021-10-15 00:00:01', 1, 8);
 
 -- --------------------------------------------------------
@@ -1612,5 +1612,5 @@ ALTER TABLE `baseline_sponsors` MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 ALTER TABLE `baseline_staff` MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 ALTER TABLE `baseline_styles` MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 ALTER TABLE `baseline_style_types` MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-ALTER TABLE `baseline_system` MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+ALTER TABLE `baseline_bcoem_sys` MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 ALTER TABLE `baseline_users` MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;

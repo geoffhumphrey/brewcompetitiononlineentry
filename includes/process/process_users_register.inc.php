@@ -165,14 +165,17 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 			  brewerStaff,
 			  brewerBreweryName,
 			  brewerBreweryTTB,
-			  brewerProAm
+			  brewerProAm,
+			  
+			  brewerAHA
 
 			) VALUES (
 			%s, %s, %s, %s, %s,
 			%s, %s, %s, %s, %s,
 			%s, %s, %s, %s, %s,
 			%s, %s, %s, %s, %s,
-			%s, %s, %s, %s, %s
+			%s, %s, %s, %s, %s,
+			%s
 			)",
 						   GetSQLValueString($row_user['id'], "int"),
 						   GetSQLValueString($first_name, "text"),
@@ -198,7 +201,8 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 						   GetSQLValueString($brewerStaff, "text"),
 						   GetSQLValueString($brewerBreweryName, "text"),
 						   GetSQLValueString($brewerBreweryTTB, "text"),
-						   GetSQLValueString($brewerProAm, "text")
+						   GetSQLValueString($brewerProAm, "text"),
+						   GetSQLValueString($brewerAHA, "text")
 						   );
 
 			mysqli_real_escape_string($connection,$insertSQL);

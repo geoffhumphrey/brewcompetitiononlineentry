@@ -22,20 +22,32 @@ if ($action == "add") {
 }
 ?>
 <script type="text/javascript">
+
 function moveOnMax(field,nextFieldID){
   if(field.value.length >= field.maxLength){
     document.getElementById(nextFieldID).focus();
   }
 }
+
 function moveOnCheck(field,nextFieldID){
     document.getElementById(nextFieldID).focus();
 }
-document.form1.first.focus();
+
 var p = false;
 
+/**
+ * Disable return key.
+ * Most scanners are programmed to submit
+ * after a barcode reaches its end. JS here
+ * attempts to prevent that.
+ */
 $(function() {
     $("form").bind("keypress", function(e) {
         if (e.keyCode == 13) return false;
+        if (e.keyCode == 10) return false;
+        if (e.which == '10' || e.which == '13') {
+            e.preventDefault();
+        }
     });
 });
 </script>

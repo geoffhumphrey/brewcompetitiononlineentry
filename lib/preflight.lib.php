@@ -5,13 +5,24 @@ $update_required = FALSE;
 $setup_success = TRUE;
 $force_update = FALSE;
 $no_updates_needed = FALSE;
-if (FORCE_UPDATE) $force_update = TRUE;
 $hosted_setup = FALSE;
 $check_setup = FALSE;
 
+/**
+ * To be compatible with MySQL 8, the "system" DB
+ * table name needs to be changed. SYSTEM is a reserved
+ * word in MySQL 8 and beyond.
+ */
+
 if (check_setup($prefix."system",$database)) {
+	$query_sys = sprintf("RENAME TABLE %s TO %s",$prefix."system",$prefix."bcoem_sys");
+	$sys = mysqli_query($connection,$query_sys) or die (mysqli_error($connection));
+	$row_sys = mysqli_fetch_assoc($sys);
+}
+
+if (check_setup($prefix."bcoem_sys",$database)) {
 	mysqli_select_db($connection,$database);
-	$query_system = sprintf("SELECT * FROM %s WHERE id='1'",$prefix."system");
+	$query_system = sprintf("SELECT * FROM %s WHERE id='1'",$prefix."bcoem_sys");
 	$system = mysqli_query($connection,$query_system) or die (mysqli_error($connection));
 	$row_system = mysqli_fetch_assoc($system);
 	$check_setup = TRUE;
@@ -89,6 +100,8 @@ if ((!isset($_SESSION['currentVersion'])) || ((isset($_SESSION['currentVersion']
 		}
 
 	}
+
+	if (FORCE_UPDATE) $force_update = TRUE;
 
 	if (!$setup_success) {
 		header ($setup_relocate);

@@ -1,8 +1,8 @@
 <?php
 ob_start();
-ini_set('display_errors', 1); // Change to 0 for prod.
-ini_set('display_startup_errors', 1); // Change to 0 for prod.
-error_reporting(E_ALL); // Change to error_reporting(0) for prod.
+ini_set('display_errors', 0); // Change to 0 for prod.
+ini_set('display_startup_errors', 0); // Change to 0 for prod.
+error_reporting(0); // Change to error_reporting(0) for prod.
 require('../paths.php');
 require(CONFIG.'bootstrap.php');
 
@@ -39,26 +39,34 @@ else {
 	$status = 9; // Session expired, not enabled, etc.
 }  // END if session is set
 
-$return_json = array(
-	"status" => "$status",
-	"query" => "$sql",
-	"date" => "$display_date",
-	"dom_ct_participants" => "$dom_ct_participants",
-	"dom_ct_participants_entries" => "$dom_ct_participants_entries",
-	"dom_ct_judges_avail" => "$dom_ct_judges_avail",
-	"dom_ct_judges_assigned" => "$dom_ct_judges_assigned",
-	"dom_ct_stewards_avail" => "$dom_ct_stewards_avail",
-	"dom_ct_stewards_assigned" => "$dom_ct_stewards_assigned",
-	"dom_ct_staff_avail" => "$dom_ct_staff_avail",
-	"dom_ct_staff_assigned" => "$dom_ct_staff_assigned",
-	"dom_ct_entries" => "$dom_ct_entries",
-	"dom_ct_entries_unconfirmed" => "$dom_ct_entries_unconfirmed",
-	"dom_ct_entries_paid" => "$dom_ct_entries_paid",
-	"dom_ct_entries_paid_received" => "$dom_ct_entries_paid_received",
-	"dom_total_fees" => "$dom_total_fees",
-	"dom_total_fees_paid" => "$dom_total_fees_paid"
-);
+if (($go == "judge-assignments") || ($go == "judge-assignments")) {
+	$return_json = array(
+		"status" => "$status",
+		"query" => "$sql"
+	);
+}
 
+else {
+	$return_json = array(
+		"status" => "$status",
+		"query" => "$sql",
+		"date" => "$display_date",
+		"dom_ct_participants" => "$dom_ct_participants",
+		"dom_ct_participants_entries" => "$dom_ct_participants_entries",
+		"dom_ct_judges_avail" => "$dom_ct_judges_avail",
+		"dom_ct_judges_assigned" => "$dom_ct_judges_assigned",
+		"dom_ct_stewards_avail" => "$dom_ct_stewards_avail",
+		"dom_ct_stewards_assigned" => "$dom_ct_stewards_assigned",
+		"dom_ct_staff_avail" => "$dom_ct_staff_avail",
+		"dom_ct_staff_assigned" => "$dom_ct_staff_assigned",
+		"dom_ct_entries" => "$dom_ct_entries",
+		"dom_ct_entries_unconfirmed" => "$dom_ct_entries_unconfirmed",
+		"dom_ct_entries_paid" => "$dom_ct_entries_paid",
+		"dom_ct_entries_paid_received" => "$dom_ct_entries_paid_received",
+		"dom_total_fees" => "$dom_total_fees",
+		"dom_total_fees_paid" => "$dom_total_fees_paid"
+	);
+}
 // Return the json
 echo json_encode($return_json);
 mysqli_close($connection);

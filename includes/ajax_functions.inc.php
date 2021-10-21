@@ -1112,8 +1112,7 @@ if ($action == "email") {
 	$email = $_GET['email'];
 	if (is_email($email)) echo sprintf("<span class=\"text-success\"><span class=\"fa fa-check-circle\"></span> %s</span>",$alert_email_valid);
 	else echo sprintf("<span class=\"text-danger\"><span class=\"fa fa-exclamation-triangle\"></span> %s</span>",$alert_email_not_valid);
-	
-	
+
 }
 
 

@@ -1082,7 +1082,6 @@ if (!defined('ISEMAIL_VALID')) {
 	return ($diagnose) ? $final_status : ($final_status < ISEMAIL_THRESHOLD);
 }
 $email = $_GET['email'];
-if (is_email($email)) echo sprintf("<span class=\"text-success\"><span class=\"glyphicon glyphicon-ok\"></span> %</span>",$alert_email_valid);
-else echo sprintf("<span class=\"text-danger\"><span class=\"glyphicon glyphicon-exclamation-sign\"></span> %s</span>",$alert_email_not_valid);
-
-?> 
+if (is_email($email)) echo sprintf("<span class=\"text-success\"><i class=\"fa fas fa-check-circle\"></i> %</span>",$alert_email_valid);
+else echo sprintf("<span class=\"text-danger\"><i class=\"fa fas fa-exclamation-triangle\"></i> %s</span>",$alert_email_not_valid);
+?>

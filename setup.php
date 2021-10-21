@@ -97,7 +97,7 @@ else {
 		require (DB.'common.db.php');
 	}
 	require (INCLUDES.'version.inc.php');
-	if ((!table_exists($prefix."system")) && ($section == "step0"))	include (SETUP.'install_db.setup.php');
+	if ((!table_exists($prefix."bcoem_sys")) && ($section == "step0"))	include (SETUP.'install_db.setup.php');
 	$setup_body .= $output;
 }
 
@@ -176,9 +176,9 @@ $security_question = array($label_secret_01, $label_secret_05, $label_secret_06,
 
             if ($setup_free_access == TRUE) {
 
-				if (table_exists($prefix."system")) {
+				if (table_exists($prefix."bcoem_sys")) {
 
-					$query_system = sprintf("SELECT setup FROM %s", $prefix."system");
+					$query_system = sprintf("SELECT setup FROM %s", $prefix."bcoem_sys");
 					$system = mysqli_query($connection,$query_system) or die (mysqli_error($connection));
 					$row_system = mysqli_fetch_assoc($system);
 
@@ -198,7 +198,7 @@ $security_question = array($label_secret_01, $label_secret_05, $label_secret_06,
 						if ($section == "step8") 	include (SETUP.'judging_preferences.setup.php');
 					}
 
-				} // end if (table_exists($prefix."system"))
+				} // end if (table_exists($prefix."bcoem_sys"))
 
 			}
 
