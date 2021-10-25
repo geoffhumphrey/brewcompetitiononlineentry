@@ -129,12 +129,43 @@ foreach ($countries as $country) {
     $country_select .= $country."</option>\n";
 }
 
-$state_select = "";
+$us_state_select = "";
 foreach ($us_state_abbrevs_names as $key => $value) {
-    $state_select .= "<option value=\"".$key."\" ";
-    if ((isset($row_brewer['brewerState'])) && ($row_brewer['brewerState'] == $key)) $state_select .= "SELECTED";
-    $state_select .= ">";
-    $state_select .= $value." [".$key."]</option>\n";
+    $us_state_select .= "<option value=\"".$key."\" ";
+    if (isset($row_brewer['brewerState'])) { 
+        $us_state = strtolower($value);
+        $us_state_abb = strtolower($key);
+        $us_state_user = strtolower($row_brewer['brewerState']);
+        if (($row_brewer['brewerState'] == $key) || ($us_state == $us_state_user) || ($us_state_abb == $us_state_user)) $us_state_select .= "SELECTED";
+    }
+    $us_state_select .= ">";
+    $us_state_select .= $value." [".$key."]</option>\n";
+}
+
+$ca_state_select = "";
+foreach ($ca_state_abbrevs_names as $key => $value) {
+    $ca_state_select .= "<option value=\"".$key."\" ";
+    if (isset($row_brewer['brewerState'])) { 
+        $ca_state = strtolower($value);
+        $ca_state_abb = strtolower($key);
+        $ca_state_user = strtolower($row_brewer['brewerState']);
+        if (($row_brewer['brewerState'] == $key) || ($ca_state == $ca_state_user) || ($ca_state_abb == $ca_state_user)) $ca_state_select .= "SELECTED";
+    }
+    $ca_state_select .= ">";
+    $ca_state_select .= $value." [".$key."]</option>\n";
+}
+
+$aus_state_select = "";
+foreach ($aus_state_abbrevs_names as $key => $value) {
+    $aus_state_select .= "<option value=\"".$key."\" ";
+    if (isset($row_brewer['brewerState'])) { 
+        $aus_state = strtolower($value);
+        $aus_state_abb = strtolower($key);
+        $aus_state_user = strtolower($row_brewer['brewerState']);
+        if (($row_brewer['brewerState'] == $key) || ($aus_state == $aus_state_user) || ($aus_state_abb == $aus_state_user)) $aus_state_select .= "SELECTED";
+    }
+    $aus_state_select .= ">";
+    $aus_state_select .= $value." [".$key."]</option>\n";
 }
 
 if ($go != "admin") echo $info_msg;
@@ -147,21 +178,68 @@ $(document).ready(function(){
 	$("#brewerClubsOther").hide();
     $("#ahaProAmText").hide();
     $("#us-state").hide();
+    $("#aus-state").hide();
+    $("#ca-state").hide();
     $("#proAm").hide();
+    $("#judge-waiver").hide();
+    $("#bjcp-id").hide();
 
     <?php if (($action == "edit") && ($row_brewer['brewerCountry'] == "United States")) { ?>
-    $("#proAm").show("slow");
-    $("#ahaProAmText").show("slow");
+    $("#proAm").show();
+    $("#ahaProAmText").show();
     $("#us-state").show();
+    $("#aus-state").hide();
+    $("#ca-state").hide();
+    $("#non-us-state").hide();
+    <?php } ?>
+
+    <?php if (($action == "edit") && ($row_brewer['brewerCountry'] == "Australia")) { ?>
+    $("#proAm").hide();
+    $("#ahaProAmText").hide();
+    $("#aus-state").show();
+    $("#us-state").hide();
+    $("#ca-state").hide();
+    $("#non-us-state").hide();
+    <?php } ?>
+
+    <?php if (($action == "edit") && ($row_brewer['brewerCountry'] == "Canada")) { ?>
+    $("#proAm").hide();
+    $("#ahaProAmText").hide();
+    $("#aus-state").hide();
+    $("#us-state").hide();
+    $("#ca-state").show();
     $("#non-us-state").hide();
     <?php } ?>
 
     $("#brewerCountry").change(function() {
+        $("#brewerStateNon").val('');
+        $("#brewerStateUS").find('option').attr("selected",false);
+        $("#brewerStateAUS").find('option').attr("selected",false);
+        $("#brewerStateCA").find('option').attr("selected",false);
+
         if ($("#brewerCountry").val() == "United States") {
             $("#proAm").show("slow");
             $("#ahaProAmText").show("slow");
-            $("#us-state").show();
             $("#non-us-state").hide();
+            $("#us-state").show();
+            $("#aus-state").hide();
+            $("#ca-state").hide();
+        }
+        else if ($("#brewerCountry").val() == "Australia") {
+            $("#proAm").hide("fast");
+            $("#ahaProAmText").hide("fast");
+            $("#non-us-state").hide();
+            $("#aus-state").show();
+            $("#us-state").hide();
+            $("#ca-state").hide();
+        }
+        else if ($("#brewerCountry").val() == "Canada") {
+            $("#proAm").hide("fast");
+            $("#ahaProAmText").hide("fast");
+            $("#non-us-state").hide();
+            $("#aus-state").hide();
+            $("#us-state").hide();
+            $("#ca-state").show();
         }
         else {
             $("#proAm").hide("fast");
@@ -179,60 +257,76 @@ $(document).ready(function(){
 	<?php } ?>
 
 	$("#brewerClubs").change(function() {
-
 		if ($("#brewerClubs").val() == "Other") {
 			$("#brewerClubsOther").show("slow");
             $("#clubOther").show("slow");
 		}
-
 		else  {
 			$("#brewerClubsOther").hide("fast");
             $("#clubOther").hide("fast");
 		}
-
 	});
 
 	$("#brewerJudge").change(function() {
-
 		if ($("#brewerJudge").val() == "Y") {
 			$("#brewerJudgeFields").show("slow");
+            $("#judge-waiver").show("slow");
 		}
-
 	});
 
 	<?php if (($action == "edit") && ($row_brewer['brewerJudge'] == "Y")) { ?>
 	$("#brewerJudgeFields").show("slow");
+    $("#judge-waiver").show("slow");
+    $("#bjcp-id").show("slow");
 	<?php } ?>
 
-	$('input[type="radio"]').click(function() {
+    <?php if (($action == "edit") && ($row_brewer['brewerJudge'] == "N")) { ?>
+    $("#brewerJudgeFields").hide();
+    $("#judge-waiver").hide();
+    $("#bjcp-id").hide();
+    <?php } ?>
 
+	$('input[type="radio"]').click(function() {
 		if($(this).attr('id') == 'brewerJudge_0') {
 			$("#brewerJudgeFields").show("slow");
+            $("#judge-waiver").show("slow");
+            $("#bjcp-id").show("slow");
 		}
-
 		if($(this).attr('id') == 'brewerJudge_1') {
-            $("#brewerJudgeFields").hide("fast");
+            $("#brewerJudgeFields").hide("slow");
+            if ($('#brewerSteward_1').prop('checked')) {
+                $("#judge-waiver").hide("slow");
+                $("#bjcp-id").hide("slow");
+            }
        	}
-
    	});
-
 
 	<?php if (($action == "edit") && ($row_brewer['brewerSteward'] == "Y")) { ?>
 	$("#brewerStewardFields").show("slow");
+    $("#judge-waiver").show("slow");
+    $("#bjcp-id").show("slow");
 	<?php } ?>
 
-	$('input[type="radio"]').click(function() {
+    <?php if (($action == "edit") && ($row_brewer['brewerSteward'] == "N")) { ?>
+    $("#brewerStewardFields").hide();
+    $("#judge-waiver").hide();
+    $("#bjcp-id").hide();
+    <?php } ?>
 
+	$('input[type="radio"]').click(function() {
 		if($(this).attr('id') == 'brewerSteward_0') {
 			$("#brewerStewardFields").show("slow");
+            $("#judge-waiver").show("slow");
+            $("#bjcp-id").show("slow");
 		}
-
 		if($(this).attr('id') == 'brewerSteward_1') {
-            $("#brewerStewardFields").hide("fast");
+            $("#brewerStewardFields").hide("slow");
+            if ($('#brewerJudge_1').prop('checked')) {
+                $("#judge-waiver").hide("slow");
+                $("#bjcp-id").hide("slow");
+            }
        	}
-
    	});
-
 });
 </script>
 
@@ -381,31 +475,27 @@ $(document).ready(function(){
                 <span class="input-group-addon" id="brewerState-addon2"><span class="fa fa-star"></span></span>
             </div>
             -->
-
-
             <div id="non-us-state" class="input-group has-warning">
                 <span class="input-group-addon" id="state-addon1"><span class="fa fa-home"></span></span>
                 <!-- Input Here -->
-                <input class="form-control" name="brewerState" id="brewerState" type="text" placeholder="" value="<?php if ($action == "edit") echo $row_brewer['brewerState']; ?>" data-error="<?php echo $register_text_029; ?>" required>
+                <input class="form-control" name="brewerStateNon" id="brewerStateNon" type="text" placeholder="" value="<?php if ($action == "edit") echo $row_brewer['brewerState']; ?>" data-error="<?php echo $register_text_029; ?>" required>
                 <span class="input-group-addon" id="state-addon2"><span class="fa fa-star"></span>
             </div>
             <div id="us-state" class="has-warning">
-                <select class="selectpicker" name="brewerState" id="brewerState" data-live-search="true" data-size="10" data-width="fit" title="<?php echo $label_select_state; ?>" data-error="<?php echo $register_text_030; ?>" required>
-                    <option></option>
-                    <?php echo $state_select; ?>
+                <select class="selectpicker" name="brewerStateUS" id="brewerStateUS" data-live-search="true" data-size="10" data-width="fit" title="<?php echo $label_select_state; ?>" data-error="<?php echo $register_text_030; ?>" required>
+                    <?php echo $us_state_select; ?>
                 </select>
             </div>
-
-
-
-
-
-
-
-
-
-
-
+            <div id="aus-state" class="has-warning">
+                <select class="selectpicker" name="brewerStateAUS" id="brewerStateAUS" data-live-search="true" data-size="10" data-width="fit" title="<?php echo $label_select_state; ?>" data-error="<?php echo $register_text_030; ?>" required>
+                    <?php echo $aus_state_select; ?>
+                </select>
+            </div>
+            <div id="ca-state" class="has-warning">
+                <select class="selectpicker" name="brewerStateCA" id="brewerStateCA" data-live-search="true" data-size="10" data-width="fit" title="<?php echo $label_select_state; ?>" data-error="<?php echo $register_text_030; ?>" required>
+                    <?php echo $ca_state_select; ?>
+                </select>
+            </div>
             <div class="help-block with-errors"></div>
         </div>
     </div><!-- ./Form Group -->
@@ -575,7 +665,7 @@ $(document).ready(function(){
                 <span class="help-block"><?php echo $brewer_text_006; ?></span>
             </div>
         </div><!-- ./Form Group -->
-        <div class="form-group"><!-- Form Group Text Input -->
+        <div id="bjcp-id" class="form-group"><!-- Form Group Text Input -->
             <label for="brewerJudgeID" class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label_bjcp_id; ?></label>
             <div class="col-lg-9 col-md-9 col-sm-8 col-xs-12">
                 <!-- Input Here -->
@@ -607,14 +697,15 @@ $(document).ready(function(){
                 foreach ($c as $value) { 
                     if ($value == $d) $location_yes = "SELECTED";
                 }
-
+            if (time() < $row_judging3['judgingDate']) { 
             ?>
             <p class="bcoem-form-info"><?php echo $row_judging3['judgingLocName']." ("; echo getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_judging3['judgingDate'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "short", "date-time").")"; ?></p>
             <select class="selectpicker" name="brewerJudgeLocation[]" id="brewerJudgeLocation" data-width="auto">
                 <option value="<?php echo "N-".$row_judging3['id']; ?>" <?php echo $location_no; ?>><?php echo $label_no; ?></option>
                 <option value="<?php echo "Y-".$row_judging3['id']; ?>" <?php echo $location_yes; ?>><?php echo $label_yes; ?></option>
             </select>
-            <?php }  while ($row_judging3 = mysqli_fetch_assoc($judging3)); ?>
+            <?php } 
+            }  while ($row_judging3 = mysqli_fetch_assoc($judging3)); ?>
             </div>
         </div><!-- ./Form Group -->
         <?php } ?>
@@ -870,7 +961,7 @@ $(document).ready(function(){
                     $a = explode(",", $row_brewer['brewerStewardLocation']); 
                     $b = "N-".$row_stewarding['id']; 
                     foreach ($a as $value) { 
-                        if ($value == $b) echo "SELECTED";
+                        if ($value == $b) $location_steward_no = "SELECTED";
                     }
 
                     $c = explode(",", $row_brewer['brewerStewardLocation']); 
@@ -878,21 +969,22 @@ $(document).ready(function(){
                     foreach ($c as $value) { 
                         if ($value == $d) $location_steward_yes = "SELECTED";
                     }
-
+                if (time() < $row_stewarding['judgingDate']) {
                 ?>
 				<p class="bcoem-form-info"><?php echo $row_stewarding['judgingLocName']." ("; echo getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_stewarding['judgingDate'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "short", "date-time").")"; ?></p>
 				<select class="selectpicker" name="brewerStewardLocation[]" id="brewerStewardLocation" data-width="auto">
 					<option value="<?php echo "N-".$row_stewarding['id']; ?>" <?php echo $location_steward_no; ?>><?php echo $label_no; ?></option>
                     <option value="<?php echo "Y-".$row_stewarding['id']; ?>" <?php echo $location_steward_yes; ?>><?php echo $label_yes; ?></option>
 				</select>
-				<?php }  while ($row_stewarding = mysqli_fetch_assoc($stewarding));  ?>
+				<?php }
+                }  while ($row_stewarding = mysqli_fetch_assoc($stewarding));  ?>
 				</div>
 			</div><!-- ./Form Group -->
         </div>
         <?php } ?>
         <?php } ?>
         <?php if (($go != "entrant") &&  (($row_brewer['brewerJudge'] == "Y") || ($row_brewer['brewerSteward'] == "Y"))) { ?>
-    <div class="form-group"><!-- Form Group REQUIRED Radio Group -->
+    <div id="judge-waiver" class="form-group"><!-- Form Group REQUIRED Radio Group -->
 		<label for="brewerJudgeWaiver" class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label_waiver; ?></label>
 		<div class="col-lg-9 col-md-9 col-sm-8 col-xs-12">
 			<div class="checkbox">

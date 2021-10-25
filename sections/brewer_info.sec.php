@@ -507,9 +507,9 @@ if ($show_judge_steward_fields) {
 						$account_display .= "<table id=\"sortable_judge\" class=\"table table-condensed table-striped table-bordered table-responsive\">";
 						$account_display .= "<thead>";
 						$account_display .= "<tr>";
-						$account_display .= sprintf("<th width=\"34%%\">%s/%s</th>",$label_yes,$label_no);
-						$account_display .= sprintf("<th width=\"33%%\">%s</th>",$label_location);
-						$account_display .= sprintf("<th width=\"33%%\">%s</th>",$label_date);
+						$account_display .= sprintf("<th width=\"14%%\">%s/%s</th>",$label_yes,$label_no);
+						$account_display .= sprintf("<th width=\"43%%\">%s</th>",$label_location);
+						$account_display .= sprintf("<th width=\"43%%\">%s</th>",$label_date);
 						$account_display .= "</tr>";
 						$account_display .= "</thead>";
 						$account_display .= "<tbody>";
@@ -569,9 +569,9 @@ if ($show_judge_steward_fields) {
 						$account_display .= "<table id=\"sortable_steward\" class=\"table table-condensed table-striped table-bordered table-responsive\">";
 						$account_display .= "<thead>";
 						$account_display .= "<tr>";
-						$account_display .= sprintf("<th>%s/%s</th>",$label_yes,$label_no);;
-						$account_display .= sprintf("<th>%s</th>",$label_location);
-						$account_display .= sprintf("<th>%s</th>",$label_date);
+						$account_display .= sprintf("<th width=\"14%%\">%s/%s</th>",$label_yes,$label_no);;
+						$account_display .= sprintf("<th width=\"43%%\">%s</th>",$label_location);
+						$account_display .= sprintf("<th width=\"43%%\">%s</th>",$label_date);
 						$account_display .= "</tr>";
 						$account_display .= "</thead>";
 						$account_display .= "<tbody>";
@@ -595,9 +595,9 @@ if ($show_judge_steward_fields) {
 					$account_display .= "<table id=\"steward_assignments\" class=\"table table-striped table-bordered table-responsive\">";
 					$account_display .= "<thead>";
 					$account_display .= "<tr>";
-					$account_display .= sprintf("<th>%s</th>",$label_location);
-					$account_display .= sprintf("<th>%s</th>",$label_date);
-					$account_display .= sprintf("<th>%s</th>",$label_table);
+					$account_display .= sprintf("<th width=\"34%%\">%s</th>",$label_location);
+					$account_display .= sprintf("<th width=\"33%%\">%s</th>",$label_date);
+					$account_display .= sprintf("<th width=\"33%%\">%s</th>",$label_table);
 					$account_display .= "</tr>";
 					$account_display .= "</thead>";
 					$account_display .= "<tbody>";

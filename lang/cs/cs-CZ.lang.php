@@ -1799,6 +1799,14 @@ $qr_text_017 = "Skenování QR kódu je k dispozici nativně na většině moder
 $qr_text_018 = "Naskenujte QR kód umístěný na štítku lahve, zadejte požadované heslo a zkontrolujte záznam.";
 
 /**
+ * ------------------------------------------------------------------------
+ * Version 2.3.2 Additions
+ * ------------------------------------------------------------------------
+ */
+
+$label_select_state = "Vyberte nebo vyhledejte svůj stát";
+
+/**
  * ----------------------------------------------------------------------------------
  * END TRANSLATIONS
  * ----------------------------------------------------------------------------------

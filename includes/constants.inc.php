@@ -87,6 +87,33 @@ $us_state_abbrevs_names = array(
     'WY' => 'Wyoming'
 );
 
+$ca_state_abbrevs_names = array(
+    'BC' => 'British Columbia', 
+    'ON' => 'Ontario', 
+    'NL' => 'Newfoundland and Labrador', 
+    'NS' => 'Nova Scotia', 
+    'PE' => 'Prince Edward Island', 
+    'NB' => 'New Brunswick', 
+    'QC' => 'Quebec', 
+    'MB' => 'Manitoba', 
+    'SK' => 'Saskatchewan', 
+    'AB' => 'Alberta', 
+    'NT' => 'Northwest Territories', 
+    'NU' => 'Nunavut',
+    'YT' => 'Yukon Territory'
+);
+
+$aus_state_abbrevs_names = array(
+    'NSW' => 'New South Wales',
+    'QLD' => 'Queensland',
+    'SA' => 'South Australia',
+    'TAS' => 'Tasmania',
+    'VIC' => 'Victoria',
+    'WA' => 'Western Australia',
+    'ACT' => 'Australian Capital Territory',
+    'NT' => 'Northern Territory'
+);
+
 // -------------------------- Tie break rules ---------------------------------------------------
 // List of existing rules for the tie break for ordering the best brewers.
 // The order of the rules will be chosen during setup

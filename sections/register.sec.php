@@ -48,6 +48,7 @@ httpxml.send(null);
 }
 
 $(document).ready(function(){
+	$("#address-fields").hide();
 	$("#brewerClubsOther").hide();
 	$("#ahaProAmText").hide();
 	$("#us-state").hide();
@@ -57,20 +58,64 @@ $(document).ready(function(){
     $("#proAm").show();
     $("#ahaProAmText").show();
     $("#us-state").show();
+    $("#aus-state").hide();
+    $("#ca-state").hide();
     $("#non-us-state").hide();
+    $("#address-fields").show();
+    <?php } ?>
+
+    <?php if (($action == "edit") && ($row_brewer['brewerCountry'] == "Australia")) { ?>
+    $("#proAm").hide();
+    $("#ahaProAmText").hide();
+    $("#aus-state").show();
+    $("#us-state").hide();
+    $("#ca-state").hide();
+    $("#non-us-state").hide();
+    $("#address-fields").show();
+    <?php } ?>
+
+    <?php if (($action == "edit") && ($row_brewer['brewerCountry'] == "Canada")) { ?>
+    $("#proAm").hide();
+    $("#ahaProAmText").hide();
+    $("#aus-state").hide();
+    $("#us-state").hide();
+    $("#ca-state").show();
+    $("#non-us-state").hide();
+    $("#address-fields").show();
     <?php } ?>
 
     $("#brewerCountry").change(function() {
+    	$("#address-fields").show("slow");
         if ($("#brewerCountry").val() == "United States") {
             $("#proAm").show("slow");
             $("#ahaProAmText").show("slow");
-            $("#us-state").show();
             $("#non-us-state").hide();
+            $("#us-state").show();
+            $("#aus-state").hide();
+            $("#ca-state").hide();
+        }
+        else if ($("#brewerCountry").val() == "Australia") {
+            $("#proAm").hide("fast");
+            $("#ahaProAmText").hide("fast");
+            $("#non-us-state").hide();
+            $("#aus-state").show();
+            $("#us-state").hide();
+            $("#ca-state").hide();
+        }
+        else if ($("#brewerCountry").val() == "Canada") {
+            $("#proAm").hide("fast");
+            $("#ahaProAmText").hide("fast");
+            $("#non-us-state").hide();
+            $("#aus-state").hide();
+            $("#us-state").hide();
+            $("#ca-state").show();
         }
         else {
             $("#proAm").hide("fast");
             $("#ahaProAmText").hide("fast");
             $("#us-state").hide();
+            $("#aus-state").hide();
+            $("#ca-state").hide();
             $("#non-us-state").show();
             $("#brewerProAm_0").prop("checked", true);
             $("#brewerProAm_1").prop("checked", false);
@@ -161,12 +206,28 @@ else { // THIS ELSE ENDS at the end of the script
 			$country_select .= $country."</option>\n";
      	}
 
-     	$state_select = "";
+     	$us_state_select = "";
 		foreach ($us_state_abbrevs_names as $key => $value) {
-			$state_select .= "<option value=\"".$key."\" ";
-			if (($msg > 0) && (isset($_COOKIE['brewerState'])) && ($_COOKIE['brewerState'] == $key)) $state_select .= "SELECTED";
-			$state_select .= ">";
-			$state_select .= $key." (".$value.")</option>\n";
+			$us_state_select .= "<option value=\"".$key."\" ";
+			if (($msg > 0) && (isset($_COOKIE['brewerState'])) && ($_COOKIE['brewerState'] == $key)) $us_state_select .= "SELECTED";
+			$us_state_select .= ">";
+			$us_state_select .= $value." [".$key."]</option>\n";
+     	}
+
+     	$ca_state_select = "";
+		foreach ($ca_state_abbrevs_names as $key => $value) {
+			$ca_state_select .= "<option value=\"".$key."\" ";
+			if (($msg > 0) && (isset($_COOKIE['brewerState'])) && ($_COOKIE['brewerState'] == $key)) $ca_state_select .= "SELECTED";
+			$ca_state_select .= ">";
+			$ca_state_select .= $value." [".$key."]</option>\n";
+     	}
+
+     	$aus_state_select = "";
+		foreach ($aus_state_abbrevs_names as $key => $value) {
+			$aus_state_select .= "<option value=\"".$key."\" ";
+			if (($msg > 0) && (isset($_COOKIE['brewerState'])) && ($_COOKIE['brewerState'] == $key)) $aus_state_select .= "SELECTED";
+			$aus_state_select .= ">";
+			$aus_state_select .= $value." [".$key."]</option>\n";
      	}
 
 	$random_country = array_rand($countries);
@@ -526,12 +587,14 @@ if ($go == "default") {  ?>
 		<div class="col-lg-9 col-md-9 col-sm-8 col-xs-12 has-warning">
 		<!-- Input Here -->
 		<select class="selectpicker" name="brewerCountry" id="brewerCountry" data-live-search="true" data-size="10" data-width="auto" data-show-tick="true" data-header="<?php echo $label_select_country; ?>" title="<?php echo $label_select_country; ?>" data-error="<?php echo $brewer_text_031; ?>" required>
-			<option></option>
     		<?php echo $country_select; ?>
     	</select>
 		</div>
 		<div class="help-block with-errors"></div>
 	</div><!-- ./Form Group -->
+
+
+	<section id="address-fields">
     <!-- General Entry Fields: Address, Phone, Dropoff Locations, Club, AHA -->
 	<div class="form-group"><!-- Form Group REQUIRED Text Input -->
 		<label for="" class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label_street_address; if (($_SESSION['prefsProEdition'] == 1) && ($go == "entrant")) echo " (".$label_organization.")"; ?></label>
@@ -568,8 +631,17 @@ if ($go == "default") {  ?>
 			</div>
 			<div id="us-state" class="has-warning">
 				<select class="selectpicker" name="brewerState" id="brewerState" data-live-search="true" data-size="10" data-width="fit" title="<?php echo $label_select_state; ?>" data-error="<?php echo $register_text_030; ?>" required>
-					<option></option>
-	    			<?php echo $state_select; ?>
+	    			<?php echo $us_state_select; ?>
+	    		</select>
+	    	</div>
+	    	<div id="aus-state" class="has-warning">
+				<select class="selectpicker" name="brewerState" id="brewerState" data-live-search="true" data-size="10" data-width="fit" title="<?php echo $label_select_state; ?>" data-error="<?php echo $register_text_030; ?>" required>
+	    			<?php echo $aus_state_select; ?>
+	    		</select>
+	    	</div>
+	    	<div id="ca-state" class="has-warning">
+				<select class="selectpicker" name="brewerState" id="brewerState" data-live-search="true" data-size="10" data-width="fit" title="<?php echo $label_select_state; ?>" data-error="<?php echo $register_text_030; ?>" required>
+	    			<?php echo $ca_state_select; ?>
 	    		</select>
 	    	</div>
             <div class="help-block with-errors"></div>
@@ -583,11 +655,12 @@ if ($go == "default") {  ?>
 				<span class="input-group-addon" id="zip-addon1"><span class="fa fa-home"></span></span>
 				<!-- Input Here -->
 				<input class="form-control" name="brewerZip" id="brewerZip" type="text" placeholder="" value="<?php if (($msg > 0) && (isset($_COOKIE['brewerZip']))) echo $_COOKIE['brewerZip']; ?>" data-error="<?php echo $register_text_031; ?>" required>
-				<span class="input-group-addon" id="zip-addon2"><span class="fa fa-star"></span>
+				<span class="input-group-addon" id="zip-addon2"><span class="fa fa-star"></span></span>
 			</div>
             <div class="help-block with-errors"></div>
 		</div>
 	</div><!-- ./Form Group -->
+	</section>
     <div class="form-group"><!-- Form Group REQUIRED Text Input -->
 		<label for="" class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label"><?php if (($_SESSION['prefsProEdition'] == 1) && ($go == "entrant")) echo $label_contact." "; echo $label_phone_primary; ?></label>
 		<div class="col-lg-9 col-md-9 col-sm-8 col-xs-12">
@@ -812,25 +885,24 @@ if ($go == "default") {  ?>
         <label for="" class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label_judging_avail; ?></label>
         <div class="col-lg-9 col-md-9 col-sm-8 col-xs-12">
         <?php do { 
-
         	$location_yes = "";
             $location_no = "";
-
             if (in_array("Y-".$row_judging3['id'],$judging_locations)) $location_yes = "SELECTED";
             if (in_array("N-".$row_judging3['id'],$judging_locations)) $location_no = "SELECTED"; 
-
+         	if (time() < $row_judging3['judgingDate']) { 
         ?>
             <div class="well well-sm">
             <p><?php echo $row_judging3['judgingLocName']." ("; echo getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_judging3['judgingDate'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "short", "date-time").")"; ?></p>
-            <div class="input-group input-group-sm">
-                <!-- Input Here -->
-                <select class="selectpicker" name="brewerJudgeLocation[]" id="brewerJudgeLocation" data-width="auto" <?php if (time() > $row_judging3['judgingDate']) echo "disabled"; ?>>
-                	<option value="<?php echo "N-".$row_judging3['id']; ?>" <?php echo $location_no; ?>><?php echo $label_no; ?></option>
-                    <option value="<?php echo "Y-".$row_judging3['id']; ?>" <?php echo $location_yes; ?>><?php echo $label_yes; ?></option>
-                </select>
+	            <div class="input-group input-group-sm">
+	                <!-- Input Here -->
+	                <select class="selectpicker" name="brewerJudgeLocation[]" id="brewerJudgeLocation" data-width="auto">
+	                	<option value="<?php echo "N-".$row_judging3['id']; ?>" <?php echo $location_no; ?>><?php echo $label_no; ?></option>
+	                    <option value="<?php echo "Y-".$row_judging3['id']; ?>" <?php echo $location_yes; ?>><?php echo $label_yes; ?></option>
+	                </select>
+	            </div>
             </div>
-            </div>
-        <?php }  while ($row_judging3 = mysqli_fetch_assoc($judging3)); ?>
+        	<?php }   
+        } while ($row_judging3 = mysqli_fetch_assoc($judging3)); ?>
         </div>
     </div><!-- ./Form Group -->
     <?php } // END if if ($totalRows_judging > 1)
@@ -886,7 +958,7 @@ if ($go == "default") {  ?>
 
             if (in_array("Y-".$row_stewarding['id'],$stewarding_locations)) $location_steward_yes = "SELECTED";
             if (in_array("N-".$row_stewarding['id'],$stewarding_locations)) $location_steward_no = "SELECTED";
-
+            if (time() < $row_stewarding['judgingDate']) {
         ?>
             <div class="well well-sm">
             <p><?php echo $row_stewarding['judgingLocName']." ("; echo getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_stewarding['judgingDate'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "short", "date-time").")"; ?></p>
@@ -898,7 +970,8 @@ if ($go == "default") {  ?>
                 </select>
             </div>
             </div>
-        <?php }  while ($row_stewarding = mysqli_fetch_assoc($stewarding));  ?>
+        <?php } 
+    	}  while ($row_stewarding = mysqli_fetch_assoc($stewarding));  ?>
         </div>
     </div><!-- ./Form Group -->
 	<?php } // END if ($totalRows_judging > 1)

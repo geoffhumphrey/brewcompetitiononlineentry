@@ -1800,6 +1800,14 @@ $qr_text_017 = "A leitura de código QR está disponível nativamente na maioria
 $qr_text_018 = "Digitalize um código QR localizado no rótulo de um frasco, digite a senha necessária e verifique a entrada.";
 
 /**
+ * ------------------------------------------------------------------------
+ * Version 2.3.2 Additions
+ * ------------------------------------------------------------------------
+ */
+
+$label_select_state = "Selecione ou pesquise o seu estado";
+
+/**
  * ----------------------------------------------------------------------------------
  * END TRANSLATIONS
  * ----------------------------------------------------------------------------------
