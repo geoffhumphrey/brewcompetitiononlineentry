@@ -15,7 +15,7 @@ $post = 0;
 $error_type = 0;
 $error_count = 0;
 
-/*
+/**
  * Convert all records in the judging_assignments 
  * and judging_flights tables to 1 (planning).
  */
@@ -179,17 +179,24 @@ if ($section == "enable-planning") {
 
 } // end if ($section == "enable-planning")
 
-/*
+/**
  * Check all records in the judging_flights DB 
  * table to verify if each relational record
  * has been marked as received in the brewing 
  * DB table. If so, retain in judging_flights. 
  * If not, delete.
+ * 
  * Also convert all records in the
  * judging_assignments table to 0 (production).
+ * Finally, check for entry conflicts for any
+ * assigned judge. Unassign if they have an entry
+ * at the table they were assigned to in planning
+ * mode.
  */
 
 if ($section == "enable-competition") {
+
+	require(LIB."admin.lib.php");
 
 	$received_entries_arr = array();
 	$flight_entries_arr = array();
@@ -305,6 +312,25 @@ if ($section == "enable-competition") {
 				mysqli_real_escape_string($connection,$sql);
 				$result = mysqli_query($connection,$sql) or die (mysqli_error($connection));
 				// echo $sql."<br>";
+
+				// Check if assigned judges or stewards have any
+				// entries at this table.
+
+				// Query judging assignments for this table.
+				$query_table_assignments = sprintf("SELECT id,bid FROM %s WHERE assignTable='%s'",$prefix."judging_assignments",$row_table['id']);
+				$table_assignments = mysqli_query($connection,$query_table_assignments) or die (mysqli_error($connection));
+				$row_table_assignments = mysqli_fetch_assoc($table_assignments);
+
+				do {
+
+					$entry_conflict = entry_conflict($row_table_assignments['bid'],$new_table_styles);
+					if ($entry_conflict) {
+						$sql = sprintf("DELETE FROM %s WHERE id='%s'",$prefix."judging_assignments",$row_table_assignments['id']);
+						mysqli_real_escape_string($connection,$sql);
+						$result = mysqli_query($connection,$sql) or die (mysqli_error($connection));
+					}
+
+				} while($row_table_assignments = mysqli_fetch_assoc($table_assignments));
 
 			}
 			

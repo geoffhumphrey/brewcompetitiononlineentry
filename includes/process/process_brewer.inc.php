@@ -387,7 +387,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 				%s, %s, %s, %s, %s,
 				%s, %s, %s, %s, %s,
 				%s, %s, %s, %s, %s,
-				%s, %s, %s, %s, %s
+				%s, %s, %s, %s, %s,
 				%s, %s)",
 							   GetSQLValueString($_POST['uid'], "int"),
 							   GetSQLValueString($first_name, "text"),
