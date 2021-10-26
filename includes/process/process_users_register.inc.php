@@ -7,6 +7,7 @@
 
 use PHPMailer\PHPMailer\PHPMailer;
 require(LIB.'email.lib.php');
+require (CLASSES.'sesemail/sesEmailClass.php');
 $captcha_success = FALSE;
 
 if (isset($_SERVER['HTTP_REFERER'])) {
@@ -19,7 +20,7 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 
 	$userQuestionAnswer = $purifier->purify($_POST['userQuestionAnswer']);
 	$userQuestionAnswer = filter_var($userQuestionAnswer,FILTER_SANITIZE_STRING,FILTER_FLAG_STRIP_HIGH|FILTER_FLAG_STRIP_LOW);
-	
+
 	/*
 	$hasher_question = new PasswordHash(8, false);
 	$hash_question = $hasher_question->HashPassword($userQuestionAnswer);
@@ -166,7 +167,7 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 			  brewerBreweryName,
 			  brewerBreweryTTB,
 			  brewerProAm,
-			  
+
 			  brewerAHA
 
 			) VALUES (
@@ -360,7 +361,19 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 					$mail->Subject = $subject;
 					$mail->Body = $message;
 					sendPHPMailerMessage($mail);
-				} else {
+				} elseif($mail_use_ses) {
+					$mail = new SESEmail();
+					$mail->charset = 'UTF-8';
+					$mail->recipients = array($to_email);
+					$mail->sender = 'no-reply@libme.org';
+					$mail->replyto = 'no-reply@libme.org';
+					$mail->subject = $subject;
+					$mail->htmlBody = $message;
+					$mail->region = $ses_region;
+					$mail->key = $ses_key;
+					$mail->secret = $ses_secret;
+					$mail->sendEmail();
+				}else {
 					mail($emails, $subject, $message, $headers);
 				}
 

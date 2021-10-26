@@ -13,10 +13,10 @@
  */
 
 /**
- * Generally, 'localhost' will work for most environments. 
+ * Generally, 'localhost' will work for most environments.
  * However, some environments may require another hostname.
- * *** This has been confirmed for GO DADDY shared hosting users.         
- * *** This article details how to change "localhost" to suit your Go Daddy 
+ * *** This has been confirmed for GO DADDY shared hosting users.
+ * *** This article details how to change "localhost" to suit your Go Daddy
  *     enviornment.
  * *** https://www.godaddy.com/help/viewing-your-database-details-with-shared-hosting-accounts-39
  */
@@ -24,22 +24,22 @@
 $hostname = 'localhost';
 
 /**
- * Enter the username for your database (generally the same as your login code 
+ * Enter the username for your database (generally the same as your login code
  * for your web hosting company).
  * INSERT YOUR USERNAME BETWEEN THE SINGLE-QUOTATION MARKS ('').
- * For example, if your username is fred then the line should read 
+ * For example, if your username is fred then the line should read
  * $username = 'fred'.
  */
 
-$username = '';
+$username = 'root';
 
 /**
  * INSERT YOUR PASSWORD BETWEEN THE SINGLE-QUOTATION MARKS ('').
- * For example, if your password is flintstone then the line should read 
+ * For example, if your password is flintstone then the line should read
  * $password = 'flintsone'.
  */
 
-$password = '';
+$password = 'root';
 
 /**
  * The following line is the name of your MySQL database you set up already.
@@ -47,10 +47,10 @@ $password = '';
  * http://brewcompetition.com/install-instructions for setup instructions.
  */
 
-$database = '';
+$database = 'bcoem';
 
 /**
- * If the database port is different from the default then overwrite as the 
+ * If the database port is different from the default then overwrite as the
  * port integer
  * Example: $database_port = 3308;
  */
@@ -101,7 +101,7 @@ $brewing = $connection;
  * $prefix = 'comp1_';
  */
 
-$prefix = '';
+$prefix = 't3st';
 
 /*
  * ******************************************************************************
@@ -115,7 +115,7 @@ $prefix = '';
  * change the variable to something completely unique for each installation.
  */
 
-$installation_id = '';
+$installation_id = 't3st';
 
 /*
  * ******************************************************************************
@@ -179,12 +179,12 @@ $sub_directory = '';
  * $base_url .= '147.21.160.5/~brewcompetition/bcoem/';
  * OR:
  * $base_url .= 'www.bluehost.com/~brewcompeition/bcoem/';
- * 
+ *
  * To override the SSL (HTTPS) check if SSL isn't implemented on your
- * server AND you're experiencing log in or session issues, or if pages are not 
+ * server AND you're experiencing log in or session issues, or if pages are not
  * rendering correctly, comment out the second line in the block below (the if
  * statement).
- * @fixes https://github.com/geoffhumphrey/brewcompetitiononlineentry/issues/1123 
+ * @fixes https://github.com/geoffhumphrey/brewcompetitiononlineentry/issues/1123
  */
 
 $base_url = 'http://';
