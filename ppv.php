@@ -207,8 +207,8 @@ if ($verified) {
 			$mail = new SESEmail();
 			$mail->charset = 'UTF-8';
 			$mail->recipients = array($to_email);
-			$mail->sender = 'no-reply@libme.org';
-			$mail->replyto = 'no-reply@libme.org';
+			$mail->sender = $from_email;
+			$mail->replyto = $from_email;
 			$mail->subject = $subject;
 			$mail->htmlBody = $message_all;
 			$mail->region = $ses_region;
@@ -289,8 +289,8 @@ if ($send_confirmation_email) {
 		$mail = new SESEmail();
 		$mail->charset = 'UTF-8';
 		$mail->recipients = array($paypal_email_address);
-		$mail->sender = 'no-reply@libme.org';
-		$mail->replyto = 'no-reply@libme.org';
+		$mail->sender = $from_email;
+		$mail->replyto = $from_email;
 		$mail->subject = $subject_confirm;
 		$mail->htmlBody = $message_all_confirm;
 		$mail->region = $ses_region;

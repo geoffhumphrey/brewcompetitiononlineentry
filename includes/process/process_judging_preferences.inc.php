@@ -124,8 +124,8 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 				$mail = new SESEmail();
 				$mail->charset = 'UTF-8';
 				$mail->recipients = array($to_email);
-				$mail->sender = 'no-reply@libme.org';
-				$mail->replyto = 'no-reply@libme.org';
+				$mail->sender = $from_email;
+				$mail->replyto = $from_email;
 				$mail->subject = $subject;
 				$mail->htmlBody = $message;
 				$mail->region = $ses_region;

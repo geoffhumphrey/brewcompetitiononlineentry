@@ -71,6 +71,7 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 			$message .= "<p>". $message_post. "</p>";
 			$message .= "<p><strong>Sender's Contact Info</strong><br>Name: " . $from_name . "<br>Email: ". $from_email . "<br><em><small>** Use if you try to reply and the email address contains &quot;noreply&quot; in it. Common with web-based mail services such as Gmail.</small></em></p>";
 			if ((DEBUG || TESTING) && ($mail_use_smtp)) $message .= "<p><small>Sent using phpMailer.</small></p>";
+			if ((DEBUG || TESTING) && ($mail_use_ses)) $message .= "<p><small>Sent using Amazon SES.</small></p>";
 			$message .= "</body>" . "\r\n";
 			$message .= "</html>";
 
@@ -115,8 +116,8 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 				$mail = new SESEmail();
 				$mail->charset = 'UTF-8';
 				$mail->recipients = array($to_email);
-				$mail->sender = 'no-reply@libme.org';
-				$mail->replyto = 'no-reply@libme.org';
+				$mail->sender = $from_email;
+				$mail->replyto = $from_email;
 				$mail->bcc = array($from_email);
 				$mail->subject = $subject;
 				$mail->htmlBody = $message;

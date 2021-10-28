@@ -20,17 +20,17 @@ if (($custom_styles_arr) && (!empty($custom_styles_arr))) {
 }
 
 foreach ($style_sets as $style_set) {
-    
+
     // Reset vars
     $style_set_selected = "";
     $all_exceptions_USCLEx = "";
     $hide_other_js = "";
-    
+
     // Build style set drop-down
     if ((isset($_SESSION['prefsStyleSet'])) && ($style_set['style_set_name'] == $_SESSION['prefsStyleSet'])) $style_set_selected = "SELECTED";
     $style_set_dropdown .= sprintf("<option value=\"%s\" %s>%s (%s)</option>",$style_set['style_set_name'],$style_set_selected,$style_set['style_set_long_name'],$style_set['style_set_short_name']);
 
-    // Generate exception list for each of the style sets in the 
+    // Generate exception list for each of the style sets in the
     // array and show/hide the list as each are selected via jQuery.
     $query_styles_all = sprintf("SELECT id,brewStyleGroup,brewStyleNum,brewStyle,brewStyleVersion,brewStyleOwn FROM %s WHERE brewStyleVersion='%s' AND brewStyleOwn != 'custom' ORDER BY brewStyleVersion,brewStyleGroup,brewStyleNum,brewStyle ASC ",$prefix."styles",$style_set['style_set_name']);
     $styles_all = mysqli_query($connection,$query_styles_all) or die (mysqli_error($connection));
@@ -40,12 +40,12 @@ foreach ($style_sets as $style_set) {
     else $method = 0;
 
     do {
-        
+
         $all_exceptions_USCLEx .= "<div class=\"checkbox\"><label><input name=\"prefsUSCLEx[]\" type=\"checkbox\" class=\"chkbox\" value=\"".$row_styles_all['id']."\">";
         $all_exceptions_USCLEx .= style_number_const($row_styles_all['brewStyleGroup'],$row_styles_all['brewStyleNum'],$style_set['style_set_display_separator'],$method);
         if ($style_set['style_set_name'] == "BA") $all_exceptions_USCLEx .= $row_styles_all['brewStyle']."</label></div>\n";
         else $all_exceptions_USCLEx .= " ".$row_styles_all['brewStyle']."</label></div>\n";
-        
+
     } while($row_styles_all = mysqli_fetch_assoc($styles_all));
 
     $all_exceptions .= "<div class=\"form-group\" id=\"".$style_set['id']."-".$style_set['style_set_name']."\">\n";
@@ -74,7 +74,7 @@ foreach ($style_sets as $style_set) {
     $all_exceptions_js .= "\t\telse if ($(\"#prefsStyleSet\").val() == \"".$style_set['style_set_name']."\") {\n";
     $all_exceptions_js .= "\t\t\t$(\"#subStyleExeptionsEdit\").hide(\"fast\");\n"; // Hide default upon entry
     $all_exceptions_js .= $hide_other_js; // hide all others
-    $all_exceptions_js .= "\t\t\t$(\"#".$style_set['id']."-".$style_set['style_set_name']."\").show(\"fast\");\n"; // Show this 
+    $all_exceptions_js .= "\t\t\t$(\"#".$style_set['id']."-".$style_set['style_set_name']."\").show(\"fast\");\n"; // Show this
     $all_exceptions_js .= "\t\t\t$(\"#helpBlock".$style_set['id']."-".$style_set['style_set_name']."\").show(\"fast\");\n";
     $all_exceptions_js .= "\t\t\t$(\"input[name='prefsUSCLEx[]']\").prop(\"checked\", false);\n";
     $all_exceptions_js .= "\t\t\t$(\"#prefsHideSpecific\").show(\"fast\");\n";
@@ -124,15 +124,15 @@ if ($section == "admin") { ?>
 <?php } ?>
 <script type='text/javascript'>//<![CDATA[
 $(document).ready(function(){
-    
+
     $("#prefsHideSpecific").show();
     $("#reCAPTCHA-keys").hide();
     $("#helpBlock-payPalIPN1").hide();
     $("#paypal-payment").hide();
     $("#checks-payment").hide();
 
-    <?php 
-    echo $all_hide_js; 
+    <?php
+    echo $all_hide_js;
     // echo $js_edit_show_hide_style_set_div;
     ?>
 
@@ -436,9 +436,10 @@ $(document).ready(function(){
 			</div>
 		</div>
 		<?php if (ENABLE_MAILER) {?>
-        <p>You have phpMailer enabled. Make sure it has been properly configured in the /site/config.mail.php file and then click the &ldquo;Send Test Email&rdquo; button above to send an email to <?php echo $_SESSION['loginUsername']; ?>. Be sure to check your spam folder.</p>
-        <?php } else { ?>
-
+		<p>You have phpMailer enabled. Make sure it has been properly configured in the /site/config.mail.php file and then click the &ldquo;Send Test Email&rdquo; button above to send an email to <?php echo $_SESSION['loginUsername']; ?>. Be sure to check your spam folder.</p>
+        <?php } elseif (ENABLE_SES) { ?>
+		<p>You have email via Amazon SES enabled. Make sure it has been properly configured in the /site/config.ses.php file and then click the &ldquo;Send Test Email&rdquo; button above to send an email to <?php echo $_SESSION['loginUsername']; ?>. Be sure to check your spam folder.</p>
+		<?php }else { ?>
         <p>If you are not sure that your server supports sending email via PHP scripts, click the &ldquo;Send Test Email&rdquo; button above to send an email to <?php echo $_SESSION['loginUsername']; ?>. Be sure to check your spam folder.</p>
         <?php } ?>
 		</span>
@@ -473,7 +474,7 @@ $(document).ready(function(){
             <label class="radio-inline">
                 <input type="radio" name="prefsEmailCC" value="1" id="prefsEmailCC_1"  <?php if ($row_prefs['prefsEmailCC'] == "1") echo "CHECKED"; elseif ($section == "step3") echo "CHECKED"; ?> /> Disable
             </label>
-            
+
         </div>
         <span id="helpBlock" class="help-block">
         <p>Enable or disable automatic carbon copying (CC) of emails sent by the system to the "sender" of the email. Since any email address can be entered in the From field of the Contact form, disabling CC will prevent malicious actors from using the competition contact form to spam emails unrelated to the competition.</p>
