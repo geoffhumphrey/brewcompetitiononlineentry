@@ -97,6 +97,30 @@ $output_datatables_head .= "</tr>";
 
 $available_count = 0;
 $total_count = 0;
+$table_styles = explode(",",$row_tables_edit['tableStyles']);
+$co_brewers_table = array();
+
+foreach ($table_styles as $table_style) {
+
+  $query_style = sprintf("SELECT brewStyleGroup,brewStyleNum FROM %s WHERE id='%s'", $prefix."styles", $table_style);
+  $style = mysqli_query($connection,$query_style) or die (mysqli_error($connection));
+  $row_style = mysqli_fetch_assoc($style);
+
+  $query_co_brewers = sprintf("SELECT brewCoBrewer FROM %s WHERE brewCoBrewer IS NOT NULL AND brewCategorySort='%s' AND brewSubCategory='%s'",$prefix."brewing",$row_style['brewStyleGroup'],$row_style['brewStyleNum']);
+  if ($_SESSION['jPrefsTablePlanning'] == 0) $query_co_brewers .= " AND brewReceived='1'";
+  $co_brewers = mysqli_query($connection,$query_co_brewers) or die (mysqli_error($connection));
+  $row_co_brewers = mysqli_fetch_assoc($co_brewers);
+  $totalRows_co_brewers = mysqli_num_rows($co_brewers);
+  
+  if ($totalRows_co_brewers > 0) {
+    do {
+      $co_brewers_table[] = $row_co_brewers['brewCoBrewer'];
+    } while ($row_co_brewers = mysqli_fetch_assoc($co_brewers));
+  }
+
+}
+
+// print_r($co_brewers_table);
 
 do {
 
@@ -108,6 +132,17 @@ do {
 	$display_rank = "<strong>".$rank_display."</strong>";
   $rank_number = preg_replace('/[^0-9]/','',$display_rank);
   //$rank_number = filter_var($display_rank,FILTER_SANITIZE_NUMBER_FLOAT);
+  
+  $co_brewer_flag = FALSE;
+  $cb_ct = 0;
+  $cb_list = array();
+  foreach ($co_brewers_table as $cb) {
+     if (strpos($cb, $judge_info[1]) !== false) $cb_ct +=1;
+     $cb_list[] = $cb;
+  }
+  if ($cb_ct > 0) $co_brewer_flag = TRUE;
+  $cb_list = array_unique($cb_list);
+  $cb_list = implode(", ",$cb_list);
         
 	$assign_row_color = "";
 	$flights_display = "";
@@ -246,6 +281,8 @@ do {
       if (!empty($head_judge_role_display)) $output_datatables_body .= $head_judge_role_display;
       if (!empty($judge_roles_display)) $output_datatables_body .= $judge_roles_display;
     }
+
+    if (($co_brewer_flag) && ($assign_row_color != "bg-info text-info")) $output_datatables_body .= "<br><span class=\"text-danger\"><i class=\"fa fas fa-exclamation-triangle\"></i> <strong>Possible Co-Brewer conflict (last name match).</strong> <small>Verify with full co-brewer names listed above.</small></span>"; 
     
     if (!empty($judge_info[10])) $output_datatables_body .= "<br><span class=\"text-danger\"><strong>Notes:</strong> ".$judge_info[10]."</strong>";
 		$output_datatables_body .= "</td>";
@@ -403,6 +440,11 @@ $(document).ready(function() {
         <?php } ?>
       </ul>
       <?php } ?>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12">
+      <?php if (!empty($cb_list)) { ?><strong>Co-Brewer Names Associated with Entries at this Table:</strong> <?php echo rtrim($cb_list,", "); } ?>
     </div>
   </div>
 </div>
