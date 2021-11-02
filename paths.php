@@ -140,6 +140,8 @@ define('ENABLE_MAILER', FALSE);
  * or the email addresses used to send.
  * Requires configuration in the /site/config.ses.php file
  * Default is FALSE.
+ *
+ * If ENABLE_MAILER and ENABLE_SES are true ENABLE_MAILER will be used.
  */
 
 define('ENABLE_SES', TRUE);
@@ -205,8 +207,11 @@ if (session_status() == PHP_SESSION_NONE) {
  */
 
 require_once (CONFIG.'config.php');
-if (ENABLE_MAILER) require_once (CONFIG.'config.mail.php');
-if (ENABLE_SES) require_once (CONFIG.'config.ses.php');
+if (ENABLE_MAILER) {
+	require_once (CONFIG.'config.mail.php');
+} elseif (ENABLE_SES) {
+	require_once (CONFIG.'config.ses.php');
+}
 require_once (INCLUDES.'current_version.inc.php');
 
 if (isset($_SESSION['last_action'])) {
