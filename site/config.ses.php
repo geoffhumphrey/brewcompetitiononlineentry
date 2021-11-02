@@ -1,6 +1,10 @@
 <?php
-if (ENABLE_SES && !ENABLE_MAILER) $mail_use_ses = TRUE;
-else $mail_use_ses = FALSE;
+if (ENABLE_SES && !ENABLE_MAILER){
+	$mail_use_ses = TRUE;
+	$mail_use_smtp = FALSE;
+}else{
+	$mail_use_ses = FALSE;
+}
 
 //Set this to the Amazon AWS region to use for sending.
 $ses_region = "";

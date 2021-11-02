@@ -4,14 +4,14 @@
  * ******************************************************************************
  * Setup the email settings for the application
  * ******************************************************************************
- * In most cases the default mail() will be OK but if you would rather use the PHPMailer class 
+ * In most cases the default mail() will be OK but if you would rather use the PHPMailer class
  * set the mail_use_smtp variable below to true and fill out the rest of the SMTP fields as required.
  * @see https://github.com/PHPMailer/PHPMailer for examples
- * 
+ *
  * See your web host's SMTP mail configuration examples for your specific environment.
  * The following is an example of a PHPMailer configuration for use with BCOE&M and on a fictional server
  * using SMTP and SSL:
- * 
+ *
  * $mail_use_smtp = TRUE;
  * $mail_default_from = "comps@example.com";
  * $smtp_debug_level = 2;
@@ -24,8 +24,12 @@
  */
 
 // Do not change the following. Enable this module in /paths.php.
-if (ENABLE_MAILER) $mail_use_smtp = TRUE;
-else $mail_use_smtp = FALSE;
+if (ENABLE_MAILER) {
+	$mail_use_smtp = TRUE;
+	$mail_use_ses = FALSE;
+}else {
+	$mail_use_smtp = FALSE;
+}
 
 // Set this field if you want to override the from address of 'noreply@[website]' address that gets added by default
 $mail_default_from = "";
