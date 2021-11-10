@@ -24,7 +24,6 @@ site/config.reset.php
 *.sublime-workspace
 sftp-config.json
 lang/en/en.lang.php
-lang/en/en.lang.php
 js_includes/autosave.js
 node_modules
 ssh-agent.exe.stackdump
@@ -34,7 +33,6 @@ js_includes/loading.js
 *.ser
 .github/*
 .config/*
-update/move_files.php
 vendor/*
 site/config-brewcomp-reset.php
 site/config.mail.php
@@ -44,3 +42,5 @@ prepros-6.config
 lang/es/*
 js_source/*
 js_unused/*
+update/char_set_update.php
+update/move_files.php

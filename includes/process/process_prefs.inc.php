@@ -552,6 +552,14 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 
 			if ($style_alert) $updateGoTo .= $_POST['relocate']."&msg=37";
 
+			if ($section == "setup") {
+				$sql = sprintf("UPDATE `%s` SET setup_last_step = '3' WHERE id='1';", $system_db_table);
+				mysqli_select_db($connection,$database);
+				mysqli_real_escape_string($connection,$sql);
+				$result = mysqli_query($connection,$sql) or die (mysqli_error($connection));
+				$updateGoTo = $base_url."setup.php?section=step4";
+			}
+
 			$pattern = array('\'', '"');
 			$updateGoTo = str_replace($pattern, "", $updateGoTo);
 			$redirect_go_to = sprintf("Location: %s", stripslashes($updateGoTo));

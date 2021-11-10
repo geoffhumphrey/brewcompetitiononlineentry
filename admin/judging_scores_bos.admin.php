@@ -168,17 +168,15 @@ $(document).ready(function() {
     	$bos_entry_info = explode("^",$bos_entry_info);
         $style = style_number_const($bos_entry_info[1],$bos_entry_info[3],$_SESSION['style_set_display_separator'],0);
         $judging_number = sprintf("%06s",$bos_entry_info[6]);
-    	if ($_SESSION['prefsStyleSet'] == "BA") style_convert($bos_entry_info[1],1,$base_url,$filter).": ".$bos_entry_info[0];
-        else $style_name = $style." ".style_convert($bos_entry_info[1],1,$base_url,$filter).": ".$bos_entry_info[0];
+        if (!empty($style)) $style_name = $style.": ".style_convert($bos_entry_info[1],1,$base_url,$filter).": ".$bos_entry_info[0];
+        else $style_name = $bos_entry_info[0];
 	?>
 	<tr>
     	<td nowrap><?php echo sprintf("%04s",$row_bos['eid']); ?></td>
         <td><?php echo $judging_number; ?></td>
         <td><?php echo $bos_entry_info[9]; ?></td>
         <td class="hidden-xs hidden-sm"><?php echo $bos_entry_info[8]; ?></td>
-        <td>
-		<?php echo $style_name; ?>
-        </td>
+        <td><?php echo $style_name; ?></td>
         <?php if ($dbTable == "default") { ?>
         <td class="hidden-xs hidden-sm"><?php echo $row_bos['scoreEntry']; ?></td>
         <td class="hidden-xs hidden-sm"><?php echo $row_bos['scorePlace']; ?></td>
@@ -244,8 +242,9 @@ $(document).ready(function(){
 		$bos_entry_info = explode("^",$bos_entry_info);
 		$judging_number = sprintf("%06s",$bos_entry_info[6]);
         $style = style_number_const($bos_entry_info[1],$bos_entry_info[3],$_SESSION['style_set_display_separator'],0);
-		if ($_SESSION['prefsStyleSet'] == "BA") $style_name = style_convert($bos_entry_info[1],1,$base_url,$filter).": ".$bos_entry_info[0];
-        else $style_name = $style." ".style_convert($bos_entry_info[1],1,$base_url,$filter).": ".$bos_entry_info[0];
+        $judging_number = sprintf("%06s",$bos_entry_info[6]);
+        if (!empty($style)) $style_name = $style.": ".style_convert($bos_entry_info[1],1,$base_url,$filter).": ".$bos_entry_info[0];
+        else $style_name = $bos_entry_info[0];
 	?>
 	<tr>
 		<?php $score_id = $bos_entry_info[13]; ?>

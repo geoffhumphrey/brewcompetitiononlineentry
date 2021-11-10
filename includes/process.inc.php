@@ -40,18 +40,24 @@ if (DEBUG) include(DEBUGGING.'query_count_begin.debug.php');
 
 // Check if setup is running, if so, check whether prefs have been established
 // If so, get time zone setup by admin
-if (($section == "setup") && ($dbTable != $prefix."preferences")) {
+if ($section == "setup") {
 
 	if (check_setup($prefix."preferences",$database)) {
 
-		$query_prefs_tz = sprintf("SELECT prefsTimeZone FROM %s WHERE id='1'", $prefix."preferences");
-		$prefs_tz = mysqli_query($connection,$query_prefs_tz) or die (mysqli_error($connection));
-		$row_prefs_tz = mysqli_fetch_assoc($prefs_tz);
-		$totalRows_prefs_tz = mysqli_num_rows($prefs_tz);
-
-		if ($totalRows_prefs_tz > 0) {
-			$timezone_raw = $row_prefs_tz['prefsTimeZone'];
+		if ($dbTable == $prefix."preferences") {
+			$action = "edit";
 		}
+
+		else {
+			$query_prefs_tz = sprintf("SELECT prefsTimeZone FROM %s WHERE id='1'", $prefix."preferences");
+			$prefs_tz = mysqli_query($connection,$query_prefs_tz) or die (mysqli_error($connection));
+			$row_prefs_tz = mysqli_fetch_assoc($prefs_tz);
+			$totalRows_prefs_tz = mysqli_num_rows($prefs_tz);
+
+			if ($totalRows_prefs_tz > 0) {
+				$timezone_raw = $row_prefs_tz['prefsTimeZone'];
+			}
+		}	
 
 	}
 
