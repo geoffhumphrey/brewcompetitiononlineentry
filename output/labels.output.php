@@ -60,7 +60,7 @@ if (isset($_SESSION['loginUsername'])) {
 
 	if ($_SESSION['userLevel'] <= 1) {
 
-		/*
+		/**
 		 * -------------------------------------------------------------------
 		 * Reworked for 2.1.13
 		 * Updated for 2.1.15 to remove special characters

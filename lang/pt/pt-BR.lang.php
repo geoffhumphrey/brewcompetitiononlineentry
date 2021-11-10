@@ -1806,6 +1806,7 @@ $qr_text_018 = "Digitalize um código QR localizado no rótulo de um frasco, dig
  */
 
 $label_select_state = "Selecione ou pesquise o seu estado";
+$label_select_below = "Selecione abaixo";
 
 /**
  * ----------------------------------------------------------------------------------

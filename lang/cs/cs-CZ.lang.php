@@ -1805,6 +1805,7 @@ $qr_text_018 = "Naskenujte QR kód umístěný na štítku lahve, zadejte požad
  */
 
 $label_select_state = "Vyberte nebo vyhledejte svůj stát";
+$label_select_below = "Vyberte níže";
 
 /**
  * ----------------------------------------------------------------------------------

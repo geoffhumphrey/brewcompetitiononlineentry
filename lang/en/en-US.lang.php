@@ -1943,6 +1943,7 @@ $qr_text_018 = "Scan a QR Code located on a bottle label, enter the required pas
  */
 
 $label_select_state = "Select or Search for Your State";
+$label_select_below = "Select Below";
 
 /**
  * ----------------------------------------------------------------------------------

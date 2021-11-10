@@ -8,7 +8,13 @@ if ($go == "entries") {
 	if ($action == "bottle-entry") {
 
 		$query_log = sprintf("SELECT * FROM %s", $prefix."brewing");
-		if ($filter != "default") $query_log .= sprintf(" WHERE brewCategorySort='%s'",$filter);
+		if ($filter == "default") {
+			if ($tb == "received") $query_log .= sprintf(" WHERE brewReceived='1'");
+		}
+		else {
+			$query_log .= sprintf(" WHERE brewCategorySort='%s'",$filter);
+			if ($tb == "received") $query_log .= sprintf(" AND brewReceived='1'");
+		}
 		$query_log .= " ORDER BY brewCategorySort,brewSubCategory,id ASC";
 
 	}
@@ -16,7 +22,13 @@ if ($go == "entries") {
 	if ($action == "bottle-judging") {
 
 		$query_log = sprintf("SELECT * FROM %s",$prefix."brewing");
-		if ($filter != "default") $query_log .= sprintf(" WHERE brewCategorySort='%s'",$filter);
+		if ($filter == "default") {
+			if ($tb == "received") $query_log .= sprintf(" WHERE brewReceived='1'");
+		}
+		else {
+			$query_log .= sprintf(" WHERE brewCategorySort='%s'",$filter);
+			if ($tb == "received") $query_log .= sprintf(" AND brewReceived='1'");
+		}
 		$query_log .= " ORDER BY brewCategorySort,brewSubCategory,brewJudgingNumber ASC";
 
 	}

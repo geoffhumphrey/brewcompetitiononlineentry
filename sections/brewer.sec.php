@@ -681,30 +681,38 @@ $(document).ready(function(){
             <label for="brewerJudgeLocation" class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label_judging_avail; ?></label>
             <div class="col-lg-9 col-md-9 col-sm-8 col-xs-12">
             <!-- Input Here -->
+            
             <?php do { 
 
                 $location_yes = "";
                 $location_no = "";
+                $judge_avail_info = "";
+                $judge_avail_option = "";
 
                 $a = explode(",", $row_brewer['brewerJudgeLocation']); 
                 $b = "N-".$row_judging3['id']; 
                 foreach ($a as $value) { 
-                    if ($value == $b) $location_no = "SELECTED"; 
+                    if ($value == $b) $location_no = " SELECTED"; 
                 }
 
                 $c = explode(",", $row_brewer['brewerJudgeLocation']); 
                 $d = "Y-".$row_judging3['id']; 
                 foreach ($c as $value) { 
-                    if ($value == $d) $location_yes = "SELECTED";
+                    if ($value == $d) $location_yes = " SELECTED";
                 }
-            if (time() < $row_judging3['judgingDate']) { 
-            ?>
-            <p class="bcoem-form-info"><?php echo $row_judging3['judgingLocName']." ("; echo getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_judging3['judgingDate'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "short", "date-time").")"; ?></p>
-            <select class="selectpicker" name="brewerJudgeLocation[]" id="brewerJudgeLocation" data-width="auto">
-                <option value="<?php echo "N-".$row_judging3['id']; ?>" <?php echo $location_no; ?>><?php echo $label_no; ?></option>
-                <option value="<?php echo "Y-".$row_judging3['id']; ?>" <?php echo $location_yes; ?>><?php echo $label_yes; ?></option>
-            </select>
-            <?php } 
+
+                $judge_avail_info .= sprintf("<p class=\"bcoem-form-info\">%s (%s)</p>",$row_judging3['judgingLocName'],getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_judging3['judgingDate'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "short", "date-time"));
+
+                $judge_avail_option .= "<select class=\"selectpicker\" name=\"brewerJudgeLocation[]\" id=\"brewerJudgeLocation\" data-width=\"auto\">";
+                $judge_avail_option .= sprintf("<option value=\"N-%s\"%s>%s</option>",$row_judging3['id'],$location_no,$label_no);
+                $judge_avail_option .= sprintf("<option value=\"Y-%s\"%s>%s</option>",$row_judging3['id'],$location_yes,$label_yes);
+                $judge_avail_option .= "</select>";
+                
+                if (time() < $row_judging3['judgingDate']) {
+                    echo $judge_avail_info;
+                    echo $judge_avail_option;
+                }
+
             }  while ($row_judging3 = mysqli_fetch_assoc($judging3)); ?>
             </div>
         </div><!-- ./Form Group -->
@@ -953,31 +961,41 @@ $(document).ready(function(){
 				<label for="brewerStewardLocation" class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label_stewarding_avail; ?></label>
 				<div class="col-lg-9 col-md-9 col-sm-8 col-xs-12">
 				<!-- Input Here -->
-				<?php do {
+				
+                <?php do {
 
                     $location_steward_no = "";
                     $location_steward_yes = "";
+                    $steward_avail_info = "";
+                    $steward_avail_option = "";
 
                     $a = explode(",", $row_brewer['brewerStewardLocation']); 
                     $b = "N-".$row_stewarding['id']; 
                     foreach ($a as $value) { 
-                        if ($value == $b) $location_steward_no = "SELECTED";
+                        if ($value == $b) $location_steward_no = " SELECTED";
                     }
 
                     $c = explode(",", $row_brewer['brewerStewardLocation']); 
                     $d = "Y-".$row_stewarding['id']; 
                     foreach ($c as $value) { 
-                        if ($value == $d) $location_steward_yes = "SELECTED";
+                        if ($value == $d) $location_steward_yes = " SELECTED";
                     }
-                if (time() < $row_stewarding['judgingDate']) {
+                    
+                    $steward_avail_info .= sprintf("<p class=\"bcoem-form-info\">%s (%s)</p>",$row_stewarding['judgingLocName'],getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_stewarding['judgingDate'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "short", "date-time"));
+                    
+                    $steward_avail_option .= "<select class=\"selectpicker\" name=\"brewerStewardLocation[]\" id=\"brewerStewardLocation\" data-width=\"auto\">";
+                    $steward_avail_option .= sprintf("<option value=\"N-%s\"%s>%s</option>",$row_stewarding['id'],$location_steward_no,$label_no);
+                    $steward_avail_option .= sprintf("<option value=\"Y-%s\"%s>%s</option>",$row_stewarding['id'],$location_steward_yes,$label_yes);
+                    $steward_avail_option .= "</select>";
+                    
+                    if (time() < $row_stewarding['judgingDate']) {
+                        echo $steward_avail_info;
+                        echo $steward_avail_option;
+                    }
+                
+                }  while ($row_stewarding = mysqli_fetch_assoc($stewarding));  
+
                 ?>
-				<p class="bcoem-form-info"><?php echo $row_stewarding['judgingLocName']." ("; echo getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_stewarding['judgingDate'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "short", "date-time").")"; ?></p>
-				<select class="selectpicker" name="brewerStewardLocation[]" id="brewerStewardLocation" data-width="auto">
-					<option value="<?php echo "N-".$row_stewarding['id']; ?>" <?php echo $location_steward_no; ?>><?php echo $label_no; ?></option>
-                    <option value="<?php echo "Y-".$row_stewarding['id']; ?>" <?php echo $location_steward_yes; ?>><?php echo $label_yes; ?></option>
-				</select>
-				<?php }
-                }  while ($row_stewarding = mysqli_fetch_assoc($stewarding));  ?>
 				</div>
 			</div><!-- ./Form Group -->
         </div>

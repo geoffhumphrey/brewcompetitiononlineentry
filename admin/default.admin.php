@@ -19,6 +19,9 @@ if (($row_limits['prefsShowBestBrewer'] != 0) || ($row_limits['prefsShowBestClub
     elseif (($_SESSION['prefsEval'] == 1) && (($show_post_judging) || ($judge_window_open > 0))) $show_best = TRUE;
 }
 
+$judge_assign_links = array();
+$steward_assign_links = array();
+
 ?>
 <script src="<?php echo $base_url;?>js_includes/admin_ajax.min.js"></script>
 <p class="lead">Hello, <?php echo $_SESSION['brewerFirstName']; ?>. <span class="small">Click or tap the headings or icons below to view the options available in each category.</span></p>
@@ -75,10 +78,10 @@ if (($row_limits['prefsShowBestBrewer'] != 0) || ($row_limits['prefsShowBestClub
                     <div id="collapsePrep" class="panel-collapse collapse">
                         <div class="panel-body">
                             <div class="row">
-                                <div class="col col-lg-5 col-md-4 col-sm-4 col-xs-4">
+                                <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
                                     <strong>Competition Info</strong>
                                 </div>
-                                <div class="col col-lg-7 col-md-8 col-sm-8 col-xs-8">
+                                <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
                                     <ul class="list-inline">
                                         <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=contest_info&amp;action=edit">Edit</a></li>
 										<li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=upload&amp;action=html" data-toggle="tooltip" data-placement="top" title="Upload your logo before editing your Competition Information">Upload Logo</a></li>
@@ -86,10 +89,10 @@ if (($row_limits['prefsShowBestBrewer'] != 0) || ($row_limits['prefsShowBestClub
                                 </div>
                             </div><!-- ./row -->
                             <div class="row">
-                                <div class="col col-lg-5 col-md-4 col-sm-4 col-xs-4">
+                               <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
                                     <strong>Contacts</strong>
                                 </div>
-                                <div class="col col-lg-7 col-md-8 col-sm-8 col-xs-8">
+                                <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
                                     <ul class="list-inline">
                                         <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=contacts">Manage</a></li>
                                         <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=contacts&amp;action=add">Add</a></li>
@@ -97,10 +100,10 @@ if (($row_limits['prefsShowBestBrewer'] != 0) || ($row_limits['prefsShowBestClub
                                 </div>
                             </div><!-- ./row -->
                             <div class="row">
-                                <div class="col col-lg-5 col-md-4 col-sm-4 col-xs-4">
+                               <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
                                     <strong>Custom Categories</strong>
                                 </div>
-                                <div class="col col-lg-7 col-md-8 col-sm-8 col-xs-8">
+                                <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
                                     <ul class="list-inline">
                                         <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=special_best">Manage</a></li>
                                         <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=special_best&amp;action=add">Add</a></li>
@@ -108,10 +111,10 @@ if (($row_limits['prefsShowBestBrewer'] != 0) || ($row_limits['prefsShowBestClub
                                 </div>
                             </div><!-- ./row -->
                             <div class="row">
-                                <div class="col col-lg-5 col-md-4 col-sm-4 col-xs-4">
+                               <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
                                     <strong>Drop-Off Locations</strong>
                                 </div>
-                                <div class="col col-lg-7 col-md-8 col-sm-8 col-xs-8">
+                                <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
                                     <ul class="list-inline">
                                         <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=dropoff">Manage</a></li>
                                         <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=dropoff&amp;action=add">Add</a></li>
@@ -119,10 +122,10 @@ if (($row_limits['prefsShowBestBrewer'] != 0) || ($row_limits['prefsShowBestClub
                                 </div>
                             </div><!-- ./row -->
                             <div class="row">
-                                <div class="col col-lg-5 col-md-4 col-sm-4 col-xs-4">
+                               <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
                                     <strong>Judging Sessions</strong>
                                 </div>
-                                <div class="col col-lg-7 col-md-8 col-sm-8 col-xs-8">
+                                <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
                                     <ul class="list-inline">
                                         <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging">Manage</a></li>
                                         <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging&amp;action=add">Add</a></li>
@@ -131,10 +134,10 @@ if (($row_limits['prefsShowBestBrewer'] != 0) || ($row_limits['prefsShowBestClub
                             </div><!-- ./row -->
                             <?php if ($_SESSION['userLevel'] == "0") { ?>
                             <div class="row">
-                                <div class="col col-lg-5 col-md-4 col-sm-4 col-xs-4">
+                               <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
                                     <strong>Sponsors</strong>
                                 </div>
-                                <div class="col col-lg-7 col-md-8 col-sm-8 col-xs-8">
+                                <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
                                     <ul class="list-inline">
                                         <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=sponsors">Manage</a></li>
                                         <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=sponsors&amp;action=add">Add</a></li>
@@ -143,10 +146,10 @@ if (($row_limits['prefsShowBestBrewer'] != 0) || ($row_limits['prefsShowBestClub
                                 </div>
                             </div><!-- ./row -->
                             <div class="row">
-                                <div class="col col-lg-5 col-md-4 col-sm-4 col-xs-4">
+                               <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
                                     <strong>Styles Accepted</strong>
                                 </div>
-                                <div class="col col-lg-7 col-md-8 col-sm-8 col-xs-8">
+                                <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
                                     <ul class="list-inline">
                                         <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=styles">Manage</a></li>
                                         <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=styles&amp;action=add">Add</a></li>
@@ -154,10 +157,10 @@ if (($row_limits['prefsShowBestBrewer'] != 0) || ($row_limits['prefsShowBestClub
                                 </div>
                             </div><!-- ./row -->
                             <div class="row">
-                                <div class="col col-lg-5 col-md-4 col-sm-4 col-xs-4">
+                               <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
                                     <strong>Style Types</strong>
                                 </div>
-                                <div class="col col-lg-7 col-md-8 col-sm-8 col-xs-8">
+                                <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
                                     <ul class="list-inline">
                                         <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=style_types">Manage</a></li>
                                         <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=style_types&amp;action=add">Add</a></li>
@@ -179,10 +182,10 @@ if (($row_limits['prefsShowBestBrewer'] != 0) || ($row_limits['prefsShowBestClub
                     <div id="collapseEntry" class="panel-collapse collapse">
                         <div class="panel-body">
                             <div class="row">
-                                <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                                <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
                                     <strong>Entries</strong>
                                 </div>
-                                <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-8">
+                                <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
                                     <ul class="list-inline">
                                         <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=entries">Manage</a></li>
                                     </ul>
@@ -190,10 +193,10 @@ if (($row_limits['prefsShowBestBrewer'] != 0) || ($row_limits['prefsShowBestClub
                             </div><!-- ./row -->
                             <?php if ($_SESSION['prefsPaypalIPN'] == 1) { ?>
                             <div class="row">
-                                <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                                <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
                                     <strong>Payments</strong>
                                 </div>
-                                <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-8">
+                                <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
                                     <ul class="list-inline">
                                         <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=payments">Manage</a></li>
                                     </ul>
@@ -201,10 +204,10 @@ if (($row_limits['prefsShowBestBrewer'] != 0) || ($row_limits['prefsShowBestClub
                             </div><!-- ./row -->
                             <?php } ?>
                             <div class="row">
-                                <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                                <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
                                     <strong>Participants</strong>
                                 </div>
-                                <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-8">
+                                <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
                                     <ul class="list-inline">
                                         <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=participants">Manage</a></li>
                                     </ul>
@@ -218,10 +221,10 @@ if (($row_limits['prefsShowBestBrewer'] != 0) || ($row_limits['prefsShowBestClub
                                 </div>
                             </div><!-- ./row -->
                             <div class="row">
-                                <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                                <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
                                     <strong>Register</strong>
                                 </div>
-                                <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-8">
+                                <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
                                     <ul class="list-inline">
                                         <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=entrant&amp;action=register">A Participant</a></li>
                                     </ul>
@@ -248,10 +251,10 @@ if (($row_limits['prefsShowBestBrewer'] != 0) || ($row_limits['prefsShowBestClub
                     <div id="collapseSorting" class="panel-collapse collapse">
                         <div class="panel-body">
                             <div class="row">
-                                <div class="col col-lg-4 col-md-8 col-sm-4 col-xs-4">
+                                <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
                                     <strong>Regenerate</strong>
                                 </div>
-                                <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-8">
+                                <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
                                     <ul class="list-unstyled">
                                         <li>
                                             <a class="hide-loader"  href="#" data-toggle="modal" data-target="#jn-random-modal">Judging Numbers (Random)</a>
@@ -341,10 +344,10 @@ if (($row_limits['prefsShowBestBrewer'] != 0) || ($row_limits['prefsShowBestClub
                             </div><!-- ./row -->
                             <?php if (in_array($_SESSION['prefsEntryForm'],$barcode_qrcode_array)) { ?>
                             <div class="row">
-                                <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                                <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
                                     <strong>Using Barcodes/QR Codes?</strong>
                                 </div>
-                                <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-8">
+                                <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
                                     <ul class="list-inline">
                                         <li><a class="hide-loader" href="http://brewcompetition.com/barcode-labels" target="_blank">Download Barcode and Round Judging Number Labels <span class="fa fa-external-link"></span></a></li>
                                     </ul>
@@ -352,10 +355,10 @@ if (($row_limits['prefsShowBestBrewer'] != 0) || ($row_limits['prefsShowBestClub
                             </div><!-- ./row -->
                             <?php } ?>
 							<div class="row">
-                                <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                                <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
                                     <strong>Entry Check-In</strong>
                                 </div>
-                                <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-8">
+                                <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
                                     <ul class="list-inline">
                                         <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=entries">Manually</a></li>
                                         <?php if (in_array($_SESSION['prefsEntryForm'],$barcode_qrcode_array)) { ?>
@@ -366,10 +369,10 @@ if (($row_limits['prefsShowBestBrewer'] != 0) || ($row_limits['prefsShowBestClub
                                 </div>
                             </div><!-- ./row -->
                             <div class="row">
-                                <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                                <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
                                     <strong>Sorting Sheets</strong>
                                 </div>
-                                <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-8">
+                                <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
                                     <ul class="list-inline">
                                         <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=sorting&amp;go=default&amp;filter=default&amp;view=entry">Entry Numbers</a></li>
                                         <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=sorting&amp;go=default&amp;filter=default">Judging Numbers</a></li>
@@ -383,10 +386,10 @@ if (($row_limits['prefsShowBestBrewer'] != 0) || ($row_limits['prefsShowBestClub
                                 </div>
                             </div><!-- ./row -->
                             <div class="row">
-                                <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-4">
-                                    <a class="hide-loader" href="http://www.avery.com/avery/en_us/Products/Labels/Addressing-Labels/Easy-Peel-White-Address-Labels_05160.htm" target="_blank" data-toggle="tooltip" data-placement="right" title="Avery 5160">Letter</a>
+                                <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
+                                    <a class="hide-loader" href="http://www.avery.com/avery/en_us/Products/Labels/Addressing-Labels/Easy-Peel-White-Address-Labels_05160.htm" target="_blank" data-toggle="tooltip" data-placement="right" title="Avery 5160"><strong>Letter</strong></a>
                                 </div>
-                                <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-8">
+                                <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
                                     <ul class="list-inline">
                                         <li><a class="hide-loader" data-toggle="tooltip" title="6 entry numbers per label" href="<?php echo $base_url; ?>output/labels.output.php?section=admin&amp;go=entries&amp;action=bottle-entry&amp;filter=default&amp;psort=5160">Entry Numbers</a></li>
                                         <li><a class="hide-loader" data-toggle="tooltip" title="6 judging numbers per label" href="<?php echo $base_url; ?>output/labels.output.php?section=admin&amp;go=entries&amp;action=bottle-judging&amp;filter=default&amp;psort=5160">Judging Numbers</a></li>
@@ -442,10 +445,10 @@ if (($row_limits['prefsShowBestBrewer'] != 0) || ($row_limits['prefsShowBestClub
                                 </div>
                              </div><!-- ./row -->
                              <div class="row">
-                                <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-4">
-                                    <a class="hide-loader" href="http://www.avery.se/avery/en_se/Products/Labels/Multipurpose/White-Multipurpose-Labels-Permanent/General-Usage-Labels-White_3422.htm" target="_blank" data-toggle="tooltip" data-placement="right" title="Avery 3422">A4</a>
+                                <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
+                                    <a class="hide-loader" href="http://www.avery.se/avery/en_se/Products/Labels/Multipurpose/White-Multipurpose-Labels-Permanent/General-Usage-Labels-White_3422.htm" target="_blank" data-toggle="tooltip" data-placement="right" title="Avery 3422"><strong>A4</strong></a>
                                 </div>
-                                <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-8">
+                                <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
                                     <ul class="list-inline">
                                         <li><a class="hide-loader" data-toggle="tooltip" title="6 entry numbers per label" href="<?php echo $base_url; ?>output/labels.output.php?section=admin&amp;go=entries&amp;action=bottle-entry&amp;filter=default&amp;psort=3422">Entry Numbers</a></li>
                                         <li><a class="hide-loader" data-toggle="tooltip" title="6 judging numbers per label" href="<?php echo $base_url; ?>output/labels.output.php?section=admin&amp;go=entries&amp;action=bottle-judging&amp;filter=default&amp;psort=3422">Judging Numbers</a></li>
@@ -501,10 +504,10 @@ if (($row_limits['prefsShowBestBrewer'] != 0) || ($row_limits['prefsShowBestClub
                                 </div>
                              </div><!-- ./row -->
                              <div class="row">
-                                <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-4">
-                                    <a class="hide-loader" href="http://www.onlinelabels.com/Products/OL32.htm" target="_blank" data-toggle="tooltip" data-placement="right" title="Online Lables OL32">0.50 in/13 mm Round</a>
+                                <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
+                                    <a class="hide-loader" href="http://www.onlinelabels.com/Products/OL32.htm" target="_blank" data-toggle="tooltip" data-placement="right" title="Online Lables OL32"><strong>0.50 in/13 mm Round</strong></a>
                                 </div>
-                                <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-8">
+                                <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
                                     <ul class="list-unstyled">
 										<li>Entry Numbers
 											<div class="dropdown bcoem-admin-dashboard-select">
@@ -554,10 +557,10 @@ if (($row_limits['prefsShowBestBrewer'] != 0) || ($row_limits['prefsShowBestClub
                                 </div>
                             </div><!-- ./row -->
                             <div class="row">
-                                <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-4">
-                                    <a class="hide-loader" href="http://www.onlinelabels.com/Products/OL5275WR.htm" target="_blank" data-toggle="tooltip" data-placement="right" title="Online Lables OL5275WR">0.75 in/19 mm Round</a>
+                                <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
+                                    <a class="hide-loader" href="http://www.onlinelabels.com/Products/OL5275WR.htm" target="_blank" data-toggle="tooltip" data-placement="right" title="Online Lables OL5275WR"><strong>0.75 in/19 mm Round</strong></a>
                                 </div>
-                                <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-8">
+                                <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
                                     <ul class="list-unstyled">
                                         <li>Entry Numbers
 											<div class="dropdown bcoem-admin-dashboard-select">
@@ -621,10 +624,10 @@ if (($row_limits['prefsShowBestBrewer'] != 0) || ($row_limits['prefsShowBestClub
                     <div id="collapseOrg" class="panel-collapse collapse">
                         <div class="panel-body">
                             <div class="row">
-                                <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                                <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
                                     <strong>Assign</strong>
                                 </div>
-                                <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-8">
+                                <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
                                     <ul class="list-inline">
                                         <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;action=assign&amp;go=judging&amp;filter=judges">Judges</a></li>
                                         <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;action=assign&amp;go=judging&amp;filter=stewards">Stewards</a></li>
@@ -633,10 +636,10 @@ if (($row_limits['prefsShowBestBrewer'] != 0) || ($row_limits['prefsShowBestClub
                                 </div>
                             </div><!-- ./row -->
                             <div class="row">
-                                <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                                <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
                                     <strong>Tables</strong>
                                 </div>
-                                <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-8">
+                                <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
                                     <ul class="list-inline">
                                         <li><strong><?php if ($_SESSION['jPrefsTablePlanning'] == 1) echo "<span class=\"text-purple\">** Tables Planning Mode **</span>"; else echo "<span class=\"text-teal\">** Tables Competition Mode **</span>"; ?></strong></li>
                                     </ul>
@@ -651,10 +654,10 @@ if (($row_limits['prefsShowBestBrewer'] != 0) || ($row_limits['prefsShowBestClub
                             </div><!-- ./row -->
                             <?php if ($_SESSION['jPrefsQueued'] == "N") { ?>
                             <div class="row">
-                                <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                                <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
                                     <strong>Flights</strong>
                                 </div>
-                                <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-8">
+                                <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
                                     <ul class="list-inline">
                                         <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging_flights">Manage</a></li>
                                         <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging_flights">Add</a></li>
@@ -664,10 +667,10 @@ if (($row_limits['prefsShowBestBrewer'] != 0) || ($row_limits['prefsShowBestClub
                             <?php } ?>
                             <?php if ($totalRows_tables > 1) { ?>
 							<div class="row">
-                                <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                                <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
                                     <strong>BOS Judges</strong>
                                 </div>
-                                <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-8">
+                                <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
                                     <ul class="list-inline">
                                         <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;action=assign&amp;go=judging&amp;filter=bos">Add</a></li>
                                     </ul>
@@ -687,10 +690,10 @@ if (($row_limits['prefsShowBestBrewer'] != 0) || ($row_limits['prefsShowBestClub
                     <div id="collapseScoring" class="panel-collapse collapse">
                         <div class="panel-body">
                             <div class="row">
-                                <div class="col col-lg-5 col-md-4 col-sm-4 col-xs-4">
+                               <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
                                     <strong>Scoresheets and Docs</strong>
                                 </div>
-                                <div class="col col-lg-7 col-md-8 col-sm-8 col-xs-8">
+                                <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
                                     <ul class="list-unstyled">
                                         <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=upload_scoresheets" data-toggle="tooltip" data-placement="top" title="Upload scoresheets for judged entries">Upload Multiple</a></li>
                                         <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=upload_scoresheets&amp;action=html" data-toggle="tooltip" data-placement="top" title="Upload scoresheets for judged entries">Upload Individually</a></li>
@@ -699,10 +702,10 @@ if (($row_limits['prefsShowBestBrewer'] != 0) || ($row_limits['prefsShowBestClub
                             </div><!-- ./row -->
                             <?php if ($_SESSION['prefsEval'] == 1) {?>
                             <div class="row">
-                                <div class="col col-lg-5 col-md-4 col-sm-4 col-xs-4">
+                               <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
                                     <strong>Entry Evaluations</strong>
                                 </div>
-                                <div class="col col-lg-7 col-md-8 col-sm-8 col-xs-8">
+                                <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
                                     <ul class="list-inline">
                                         <li><a href="<?php echo $base_url; ?>index.php?section=evaluation&amp;go=default&amp;filter=default&amp;view=admin" data-toggle="tooltip" data-placement="top" title="Manage, View and Edit Judges' evaluations of received entries">Manage</a></li>
                                     </ul> 
@@ -710,10 +713,10 @@ if (($row_limits['prefsShowBestBrewer'] != 0) || ($row_limits['prefsShowBestClub
                             </div><!-- ./row -->
                             <?php } ?>
                             <div class="row">
-                                <div class="col col-lg-5 col-md-4 col-sm-4 col-xs-4">
+                               <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
                                     <strong>Scores</strong>
                                 </div>
-                                <div class="col col-lg-7 col-md-8 col-sm-8 col-xs-8">
+                                <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
                                     <ul class="list-unstyled">
                                         <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging_scores">Manage</a></li>
                                     <?php if ($_SESSION['prefsEval'] == 1) { ?>
@@ -730,10 +733,10 @@ if (($row_limits['prefsShowBestBrewer'] != 0) || ($row_limits['prefsShowBestClub
                                 </div>
                             </div><!-- ./row -->
                             <div class="row">
-                                <div class="col col-lg-5 col-md-4 col-sm-4 col-xs-4">
+                               <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
                                     <strong>BOS Entries and Places</strong>
                                 </div>
-                                <div class="col col-lg-7 col-md-8 col-sm-8 col-xs-8">
+                                <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
                                     <ul class="list-unstyled">
                                         <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging_scores_bos">Manage</a></li>
                                     </ul>
@@ -741,10 +744,10 @@ if (($row_limits['prefsShowBestBrewer'] != 0) || ($row_limits['prefsShowBestClub
                             </div><!-- ./row -->
                             <?php if ($_SESSION['userLevel'] == "0") { ?>
                             <div class="row">
-                                <div class="col col-lg-5 col-md-4 col-sm-4 col-xs-4">
+                               <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
                                     <strong>Custom Categories</strong>
                                 </div>
-                                <div class="col col-lg-7 col-md-8 col-sm-8 col-xs-8">
+                                <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
                                     <ul class="list-unstyled">
                                         <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=special_best_data">Manage</a></li>
                                     </ul>
@@ -1017,30 +1020,30 @@ if (($row_limits['prefsShowBestBrewer'] != 0) || ($row_limits['prefsShowBestClub
 							</div>
 						</div><!-- ./row -->
                         <div class="row">
-							<div class="col col-lg-4 col-md-4 col-sm-4 col-xs-4">
+							<div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
 								<strong>Notes</strong>
 							</div>
-							<div class="col col-lg-8 col-md-8 col-sm-8 col-xs-8">
+							<div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
 								<ul class="list-inline">
 									<li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=notes&amp;go=org_notes" data-toggle="tooltip" data-placement="top" title="A List of Notes Individual Judges Have Provided to the Organizer - Includes Reports of Allergies">Notes to Organizer</a></li>
                                 </ul>
 							</div>
 						</div><!-- ./row -->
                         <div class="row">
-                            <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                            <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
                                 <strong>Allergens</strong>
                             </div>
-                            <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-8">
+                            <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
                                 <ul class="list-inline">
                                     <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=notes&amp;go=allergens" data-toggle="tooltip" data-placement="top" title="A List of Entries with Allergen Information">Possible Allergens in Entries</a></li>
                                 </ul>
                             </div>
                         </div><!-- ./row -->
 						<div class="row">
-							<div class="col col-lg-4 col-md-4 col-sm-4 col-xs-4">
+							<div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
 								<strong>Drop-Off</strong>
 							</div>
-							<div class="col col-lg-8 col-md-8 col-sm-8 col-xs-8">
+							<div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
 								<ul class="list-inline">
 									<li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=dropoff" data-toggle="tooltip" data-placement="top" title="Print Entry Totals for Each Drop-Off Location">Entry Totals</a></li>
 									<li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=dropoff&amp;go=check" data-toggle="tooltip" data-placement="top" title="Print Entries By Drop-Off Location">List of Entries</a></li>
@@ -1050,10 +1053,10 @@ if (($row_limits['prefsShowBestBrewer'] != 0) || ($row_limits['prefsShowBestClub
 						<?php if ($totalRows_tables > 0) { ?>
 						<div class="row">
                             <?php if ($_SESSION['jPrefsTablePlanning'] == 0) { ?>
-                            <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                            <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
                                 <strong><?php echo $label_additional_info; ?></strong>
                             </div>
-                            <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-8">
+                            <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
                                 <ul class="list-unstyled">
                                     <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=pullsheets&amp;go=all_entry_info&amp;view=entry&amp;id=default" data-toggle="tooltip" data-placement="top" title="Print Entries with Addtional Info by Table">Entry Numbers (By Table)</a></li>
                                     <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=pullsheets&amp;go=all_entry_info&amp;id=default" data-toggle="tooltip" data-placement="top" title="Print Entries with Addtional Info by Table">Judging Numbers (By Table)</a></li>
@@ -1075,10 +1078,10 @@ if (($row_limits['prefsShowBestBrewer'] != 0) || ($row_limits['prefsShowBestClub
                             </div>
                             <?php } ?>
                             <?php if ($_SESSION['jPrefsTablePlanning'] == 0) { ?>
-							<div class="col col-lg-4 col-md-4 col-sm-4 col-xs-4">
+							<div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
 								<strong>Pullsheets</strong>
 							</div>
-							<div class="col col-lg-8 col-md-8 col-sm-8 col-xs-8">
+							<div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
 								<ul class="list-unstyled">
 									<li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=pullsheets&amp;go=judging_tables&amp;view=entry&amp;id=default" data-toggle="tooltip" data-placement="top" title="Print All Table Pullsheets with Entry Numbers">Entry Numbers</a></li>
                                     <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=pullsheets&amp;go=mini_bos&amp;view=entry" data-toggle="tooltip" data-placement="top" title="Print a Mini-BOS Table Pullsheet with Judging Numbers">Entry Numbers (Mini-BOS - All)</a></li>
@@ -1094,6 +1097,7 @@ if (($row_limits['prefsShowBestBrewer'] != 0) || ($row_limits['prefsShowBestClub
 									</button>
 									<ul class="dropdown-menu" aria-labelledby="pullsheetMenu3">
 										<?php echo table_choose("pullsheets","judging_tables",$action,$filter,"entry","output/print.output.php","thickbox"); ?>
+                                        <li role="separator" class="divider"></li>
                                         <?php echo table_choose("pullsheets","judging_tables",$action,"mini_bos","entry","output/print.output.php","thickbox"); ?>
 									</ul>
 								</div>
@@ -1102,6 +1106,7 @@ if (($row_limits['prefsShowBestBrewer'] != 0) || ($row_limits['prefsShowBestClub
 									</button>
 									<ul class="dropdown-menu" aria-labelledby="pullsheetnMenu4">
 										<?php echo table_choose("pullsheets","judging_tables",$action,$filter,$view,"output/print.output.php","thickbox"); ?>
+                                        <li role="separator" class="divider"></li>
                                         <?php echo table_choose("pullsheets","judging_tables",$action,"mini_bos",$view,"output/print.output.php","thickbox"); ?>
 									</ul>
 								</div>
@@ -1117,8 +1122,11 @@ if (($row_limits['prefsShowBestBrewer'] != 0) || ($row_limits['prefsShowBestClub
 										<li class="small"><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=pullsheets&amp;go=judging_locations&amp;view=entry&amp;location=<?php echo $row_judging['id']?>&amp;round=<?php echo $round; ?>" data-toggle="tooltip" data-placement="top" title="Print Pullsheet for Location <?php echo $row_judging['judgingLocName'] . " - " . $location_date. ", Round " . $round; ?>"><?php echo $row_judging['judgingLocName'] . " - " . $location_date. ", Round " . $round; ?></a>
                                         <li class="small"><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=pullsheets&amp;go=judging_locations&amp;view=entry&amp;filter=mini_bos&amp;location=<?php echo $row_judging['id']?>&amp;round=<?php echo $round; ?>" data-toggle="tooltip" data-placement="top" title="Print Pullsheet for Location <?php echo $row_judging['judgingLocName'] . " - " . $location_date. ", Round " . $round; ?>"><?php echo $row_judging['judgingLocName'] . " - " . $location_date. ", Round " . $round . " (Mini-BOS)"; ?></a>
 										<?php }
-										}
-										while ($row_judging = mysqli_fetch_assoc($judging));
+                                        
+                                            $judge_assign_links[$row_judging['judgingLocName']] = $base_url."output/print.output.php?section=assignments&amp;go=judging_assignments&amp;filter=judges&amp;location=".$row_judging['id'];
+                                            $steward_assign_links[$row_judging['judgingLocName']] = $base_url."output/print.output.php?section=assignments&amp;go=judging_assignments&amp;filter=stewards&amp;location=".$row_judging['id'];
+										
+                                        } while ($row_judging = mysqli_fetch_assoc($judging));
 										?>
 									</ul>
 								</div>
@@ -1142,10 +1150,10 @@ if (($row_limits['prefsShowBestBrewer'] != 0) || ($row_limits['prefsShowBestClub
                             <?php } ?>
 						</div><!-- ./row -->
 						<div class="row">
-							<div class="col col-lg-4 col-md-4 col-sm-4 col-xs-4">
+							<div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
 								<strong>Table Cards</strong>
 							</div>
-							<div class="col col-lg-8 col-md-8 col-sm-8 col-xs-8">
+							<div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
 								<ul class="list-unstyled">
 									<li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=table-cards&amp;go=judging_tables&amp;id=default" data-toggle="tooltip" data-placement="top" title="Print Table Cards">All Tables</a></li>
 								</ul>
@@ -1177,10 +1185,10 @@ if (($row_limits['prefsShowBestBrewer'] != 0) || ($row_limits['prefsShowBestClub
 						</div><!-- ./row -->
                         <?php } ?>
 						<div class="row">
-							<div class="col col-lg-4 col-md-4 col-sm-4 col-xs-4">
+							<div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
 								<strong>Sign In Sheets</strong>
 							</div>
-							<div class="col col-lg-8 col-md-8 col-sm-8 col-xs-8">
+							<div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
 								<ul class="list-inline">
 									<li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=assignments&amp;go=judging_assignments&amp;filter=judges&amp;view=sign-in" data-toggle="tooltip" data-placement="top" title="Print a Judge Sign-in Sheet">Judges</a></li>
 									<li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=assignments&amp;go=judging_assignments&amp;filter=stewards&amp;view=sign-in" data-toggle="tooltip" data-placement="top" title="Print a Steward Sign-in Sheet">Stewards</a></li>
@@ -1189,37 +1197,117 @@ if (($row_limits['prefsShowBestBrewer'] != 0) || ($row_limits['prefsShowBestClub
 						</div><!-- ./row -->
                         <?php if ($totalRows_tables > 0) { ?>
 						<div class="row">
-							<div class="col col-lg-4 col-md-4 col-sm-4 col-xs-4">
+							<div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
 								<strong>Assignments</strong>
 							</div>
-							<div class="col col-lg-8 col-md-8 col-sm-8 col-xs-8">
+							<div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
 								<ul class="list-unstyled">
-									<li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=assignments&amp;go=judging_assignments&amp;filter=judges&amp;view=name" data-toggle="tooltip" data-placement="top" title="Print Judge Assignments by Name">Judges By Last Name</a></li>
-									<li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=assignments&amp;go=judging_assignments&amp;filter=judges&amp;view=table" data-toggle="tooltip" data-placement="top" title="Print Judge Assignments by Table">Judges By Table</a></li>
-									<li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=assignments&amp;go=judging_assignments&amp;filter=judges&amp;view=location" data-toggle="tooltip" data-placement="top" title="Print Judge Assignments by Location">Judges By Location</a></li>
-									<li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=assignments&amp;go=judging_assignments&amp;filter=stewards&amp;view=name" data-toggle="tooltip" data-placement="top" title="Print Steward Assignments by Name">Stewards Last Name</a></li>
-									<li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=assignments&amp;go=judging_assignments&amp;filter=stewards&amp;view=table" data-toggle="tooltip" data-placement="top" title="Print Steward Assignments by Table">Stewards By Table</a></li>
-									<li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=assignments&amp;go=judging_assignments&amp;filter=stewards&amp;view=location" data-toggle="tooltip" data-placement="top" title="Print Steward Assignments by Location">Stewards By Location</a></li>
+									<li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=assignments&amp;go=judging_assignments&amp;filter=judges&amp;view=name" data-toggle="tooltip" data-placement="top" title="Print Judge Assignments by Name">All Judges By Last Name</a></li>
+									<li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=assignments&amp;go=judging_assignments&amp;filter=judges&amp;view=table" data-toggle="tooltip" data-placement="top" title="Print Judge Assignments by Table">All Judges By Table</a></li>
+									<li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=assignments&amp;go=judging_assignments&amp;filter=judges&amp;view=location" data-toggle="tooltip" data-placement="top" title="Print Judge Assignments by Location">All Judges By Location</a></li>
+									<li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=assignments&amp;go=judging_assignments&amp;filter=stewards&amp;view=name" data-toggle="tooltip" data-placement="top" title="Print Steward Assignments by Name">All Stewards Last Name</a></li>
+									<li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=assignments&amp;go=judging_assignments&amp;filter=stewards&amp;view=table" data-toggle="tooltip" data-placement="top" title="Print Steward Assignments by Table">All Stewards By Table</a></li>
+									<li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=assignments&amp;go=judging_assignments&amp;filter=stewards&amp;view=location" data-toggle="tooltip" data-placement="top" title="Print Steward Assignments by Location">All Stewards By Location</a></li>
 								</ul>
+                                <div class="dropdown bcoem-admin-dashboard-select">
+                                    <button class="btn btn-default dropdown-toggle" type="button" id="judgeAssignMenuLoc" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Judges For Location... <span class="caret"></span>
+                                    </button>
+                                    <ul class="dropdown-menu" aria-labelledby="judgeAssignMenuLoc">
+                                        <?php foreach($judge_assign_links as $key => $value) { ?>
+                                            <li class="small"><a id="modal_window_link" class="hide-loader" href="<?php echo $value."&amp;view=name"; ?>" data-toggle="tooltip" data-placement="top" title="Print Judge Assignments for <?php echo $key; ?>"><?php echo $key; ?> By Name</a></li>
+                                        <?php } ?>
+                                        <li role="separator" class="divider"></li>
+                                        <?php foreach($judge_assign_links as $key => $value) { ?>
+                                            <li class="small"><a id="modal_window_link" class="hide-loader" href="<?php echo $value."&amp;view=table"; ?>" data-toggle="tooltip" data-placement="top" title="Print Judge Assignments for <?php echo $key; ?>"><?php echo $key; ?> By Table</a></li>
+                                        <?php } ?>
+                                    </ul>
+                                </div>
+                                <div class="dropdown bcoem-admin-dashboard-select">
+                                    <button class="btn btn-default dropdown-toggle" type="button" id="stewardAssignMenuLoc" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Stewards For Location... <span class="caret"></span>
+                                    </button>
+                                    <ul class="dropdown-menu" aria-labelledby="stewardAssignMenuLoc">
+                                        <?php foreach($steward_assign_links as $key => $value) { ?>
+                                            <li class="small"><a id="modal_window_link" class="hide-loader" href="<?php echo $value."&amp;view=name"; ?>" data-toggle="tooltip" data-placement="top" title="Print Steward Assignments for <?php echo $key; ?>"><?php echo $key; ?> By Name</a></li>
+                                        <?php } ?>
+                                        <li role="separator" class="divider"></li>
+                                        <?php foreach($steward_assign_links as $key => $value) { ?>
+                                            <li class="small"><a id="modal_window_link" class="hide-loader" href="<?php echo $value."&amp;view=table"; ?>" data-toggle="tooltip" data-placement="top" title="Print Steward Assignments for <?php echo $key; ?>"><?php echo $key; ?> By Table</a></li>
+                                        <?php } ?>
+                                    </ul>
+                                </div>
 							</div>
+                                
 						</div><!-- ./row -->
                         <?php } ?>
 						<div class="row">
-							<div class="col col-lg-4 col-md-4 col-sm-4 col-xs-4">
-								<strong>Scoresheet Labels</strong>
+							<div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
+								<strong>Judge Scoresheet Labels</strong>
 							</div>
-							<div class="col col-lg-8 col-md-8 col-sm-8 col-xs-8">
+							<div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
 								<ul class="list-inline">
 									<li><a class="hide-loader" href="<?php echo $base_url; ?>output/labels.output.php?section=admin&amp;go=participants&amp;action=judging_labels&amp;psort=5160" data-toggle="tooltip" data-placement="top" title="Avery 5160">Letter</a></li>
 									<li><a class="hide-loader" href="<?php echo $base_url; ?>output/labels.output.php?section=admin&amp;go=participants&amp;action=judging_labels&amp;psort=3422" data-toggle="tooltip" data-placement="top" title="Avery 3422">A4</a></li>
 								</ul>
 							</div>
 						</div><!-- ./row -->
+                        <div class="row">
+                            <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
+                                <strong>Entry Required Info Scoresheet Labels</strong>
+                            </div>
+                            <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
+                                <ul class="list-unstyled">
+                                    <li>Letter (Entry Numbers)
+                                        <div class="dropdown bcoem-admin-dashboard-select">
+                                            <button class="btn btn-default dropdown-toggle" type="button" id="reqLablesMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Number of Labels per Entry <span class="caret"></span>
+                                            </button>
+                                            <ul class="dropdown-menu" aria-labelledby="reqLablesMenu1">
+                                                <?php for($i=1; $i<=6; $i++) { ?>
+                                                <li class="small"><a class="hide-loader" href="<?php echo $base_url; ?>output/labels.output.php?section=admin&amp;go=entries&amp;action=bottle-entry&amp;filter=default&amp;view=special&amp;psort=5160&amp;sort=<?php echo $i; ?>&amp;tb=received"><?php echo $i; ?></a></li>
+                                                <?php } ?>
+                                            </ul>
+                                        </div>
+                                    </li>
+                                    <li>Letter (Judging Numbers)
+                                        <div class="dropdown bcoem-admin-dashboard-select">
+                                            <button class="btn btn-default dropdown-toggle" type="button" id="reqLablesMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Number of Labels per Entry <span class="caret"></span>
+                                            </button>
+                                            <ul class="dropdown-menu" aria-labelledby="reqLablesMenu2">
+                                                <?php for($i=1; $i<=6; $i++) { ?>
+                                                <li class="small"><a class="hide-loader" href="<?php echo $base_url; ?>output/labels.output.php?section=admin&amp;go=entries&amp;action=bottle-judging&amp;filter=default&amp;view=special&amp;&amp;psort=5160&amp;sort=<?php echo $i; ?>&amp;tb=received"><?php echo $i; ?></a></li>
+                                                <?php } ?>
+                                            </ul>
+                                        </div>
+                                    </li>
+                                    <li>A4 (Entry Numbers)
+                                        <div class="dropdown bcoem-admin-dashboard-select">
+                                            <button class="btn btn-default dropdown-toggle" type="button" id="reqLablesMenu3reqLablesMenu4" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Number of Labels per Entry <span class="caret"></span>
+                                            </button>
+                                            <ul class="dropdown-menu" aria-labelledby="reqLablesMenu3reqLablesMenu4">
+                                                <?php for($i=1; $i<=6; $i++) { ?>
+                                                <li class="small"><a class="hide-loader" href="<?php echo $base_url; ?>output/labels.output.php?section=admin&amp;go=entries&amp;action=bottle-entry&amp;filter=default&amp;view=special&amp;psort=3422&amp;sort=<?php echo $i; ?>&amp;tb=received"><?php echo $i; ?></a></li>
+                                                <?php } ?>
+                                            </ul>
+                                        </div>
+                                    </li>
+                                    <li>A4 (Judging Numbers)
+                                        <div class="dropdown bcoem-admin-dashboard-select">
+                                            <button class="btn btn-default dropdown-toggle" type="button" id="reqLablesMenu4" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Number of Labels per Entry <span class="caret"></span>
+                                            </button>
+                                            <ul class="dropdown-menu" aria-labelledby="reqLablesMenu4">
+                                                <?php for($i=1; $i<=6; $i++) { ?>
+                                                <li class="small"><a class="hide-loader" href="<?php echo $base_url; ?>output/labels.output.php?section=admin&amp;go=entries&amp;action=bottle-judging&amp;filter=default&amp;view=special&amp;&amp;psort=3422&amp;sort=<?php echo $i; ?>&amp;tb=received"><?php echo $i; ?></a></li>
+                                                <?php } ?>
+                                            </ul>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div><!-- ./row -->
 						<div class="row">
-							<div class="col col-lg-4 col-md-4 col-sm-4 col-xs-4">
+							<div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
 								<strong>Name Tags</strong>
 							</div>
-							<div class="col col-lg-8 col-md-8 col-sm-8 col-xs-8">
+							<div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
 								<ul class="list-inline">
 									<li><a class="hide-loader" href="<?php echo $base_url; ?>output/labels.output.php?section=admin&amp;go=participants&amp;action=judging_nametags&amp;psort=5395" data-toggle="tooltip" data-placement="top" title="Avery 5395">Letter</a></li>
 								</ul>
@@ -1232,10 +1320,10 @@ if (($row_limits['prefsShowBestBrewer'] != 0) || ($row_limits['prefsShowBestClub
 							</div>
 						</div><!-- ./row -->
 						<div class="row">
-							<div class="col col-lg-4 col-md-4 col-sm-4 col-xs-4">
+							<div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
 								<strong>BOS Pullsheets</strong>
 							</div>
-							<div class="col col-lg-8 col-md-8 col-sm-8 col-xs-8">
+							<div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
 								<ul class="list-unstyled">
                                     <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=pullsheets&amp;go=judging_scores_bos&amp;view=entry" data-toggle="tooltip" data-placement="top" title="Print All BOS Pullsheets Using Entry Numbers">All Style Types - Entry Numbers</a></li>
                                     <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=pullsheets&amp;go=judging_scores_bos" data-toggle="tooltip" data-placement="top" title="Print All BOS Pullsheets Using Judging Numbers">All Style Types - Judging Numbers</a></li>
@@ -1250,10 +1338,10 @@ if (($row_limits['prefsShowBestBrewer'] != 0) || ($row_limits['prefsShowBestClub
 							</div>
 						</div><!-- ./row -->
 						<div class="row">
-							<div class="col col-lg-4 col-md-4 col-sm-4 col-xs-4">
+							<div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
 								<strong>BOS Cup Mats</strong>
 							</div>
-							<div class="col col-lg-8 col-md-8 col-sm-8 col-xs-8">
+							<div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
 								<ul class="list-unstyled">
 									<li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=bos-mat&amp;filter=entry" data-toggle="tooltip" data-placement="top" title="Print all BOS Cup Mats with entry numbers only">All Style Types - Entry Numbers</a></li>
                                     <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=bos-mat" data-toggle="tooltip" data-placement="top" title="Print all BOS Cup Mats with judging numbers only">All Style Types - Judging Numbers</a></li>
@@ -1274,10 +1362,10 @@ if (($row_limits['prefsShowBestBrewer'] != 0) || ($row_limits['prefsShowBestClub
 						</div><!-- ./row -->
 						<?php if ($totalRows_tables > 0) { ?>
                         <div class="row">
-							<div class="col col-lg-4 col-md-4 col-sm-4 col-xs-4">
+							<div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
 								<strong>BOS Results</strong>
 							</div>
-							<div class="col col-lg-8 col-md-8 col-sm-8 col-xs-8">
+							<div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
 								<ul class="list-inline">
 									<li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=results&amp;go=judging_scores_bos&amp;action=print&amp;tb=bos&amp;view=default" title="BOS Round(s) Results Report">Print</a></li>
 									<li><a class="hide-loader" href="<?php echo $base_url; ?>output/export.output.php?section=results&amp;go=judging_scores_bos&amp;action=download&amp;filter=default&amp;view=pdf">PDF</a></li>
@@ -1287,10 +1375,10 @@ if (($row_limits['prefsShowBestBrewer'] != 0) || ($row_limits['prefsShowBestClub
 						</div><!-- ./row -->
                         <?php if (($_SESSION['prefsShowBestBrewer'] != 0) || ($_SESSION['prefsShowBestClub'] != 0)) { ?>
                         <div class="row">
-                            <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                            <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
                                 <strong>Best Brewer and/or Club</strong>
                             </div>
-                            <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-8">
+                            <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
                                 <ul class="list-inline">
                                     <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=results&amp;go=best&amp;action=print&amp;tb=bos&amp;view=default" title="Best Brewer and/or Club Results Report">Print</a></li>
                                 </ul>
@@ -1298,10 +1386,10 @@ if (($row_limits['prefsShowBestBrewer'] != 0) || ($row_limits['prefsShowBestClub
                         </div><!-- ./row -->
                         <?php } ?>
                         <div class="row">
-                            <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                            <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
                                 <strong>Table Results (<?php echo $results_method[$_SESSION['prefsWinnerMethod']]; ?>)</strong>
                             </div>
-                            <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-8">
+                            <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
                                 <ul class="list-inline">
                                     <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=results&amp;go=judging_scores&amp;action=print&amp;tb=scores&amp;view=default" data-toggle="tooltip" data-placement="top" title="Print all entry results with scores listed">All with Scores</a></li>
                                     <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=results&amp;go=judging_scores&amp;action=print&amp;tb=scores&amp;view=winners" data-toggle="tooltip" data-placement="top" title="Print winners only results with scores listed">Winners Only with Scores</a></li>
@@ -1317,10 +1405,10 @@ if (($row_limits['prefsShowBestBrewer'] != 0) || ($row_limits['prefsShowBestClub
                             </div>
                         </div><!-- ./row -->
                         <div class="row">
-                            <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                            <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
                                 <strong>All Results (<?php echo $results_method[$_SESSION['prefsWinnerMethod']]; ?> - Single Report)</strong>
                             </div>
-                            <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-8">
+                            <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
                                 <ul class="list-inline">
                                     <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=results&amp;go=all&amp;action=print&amp;tb=scores&amp;view=default" data-toggle="tooltip" data-placement="top" title="Print all entry results with scores listed">All with Scores</a></li>
                                     <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=results&amp;go=all&amp;action=print&amp;tb=scores&amp;view=winners" data-toggle="tooltip" data-placement="top" title="Print winners only results with scores listed">Winners Only with Scores</a></li>
@@ -1333,10 +1421,10 @@ if (($row_limits['prefsShowBestBrewer'] != 0) || ($row_limits['prefsShowBestClub
                         </div><!-- ./row -->
                         <?php } ?>
                         <div class="row">
-							<div class="col col-lg-4 col-md-4 col-sm-4 col-xs-4">
+							<div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
 								<strong>BJCP Points</strong>
 							</div>
-							<div class="col col-lg-8 col-md-8 col-sm-8 col-xs-8">
+							<div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
 								<ul class="list-inline">
 									<li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=staff&amp;go=judging_assignments&amp;action=download&amp;filter=default&amp;view=default" data-toggle="tooltip" data-placement="top" title="Print the BJCP Points report for judges, stewards, and staff">Print</a></li>
 									<li><a class="hide-loader" href="<?php echo $base_url; ?>output/export.output.php?section=staff&amp;go=judging_assignments&amp;action=download&amp;filter=default&amp;view=pdf" data-toggle="tooltip" data-placement="top" title="Download a PDF of the BJCP points report for judges, stewards, and staff">PDF</a></li>
@@ -1370,10 +1458,10 @@ if (($row_limits['prefsShowBestBrewer'] != 0) || ($row_limits['prefsShowBestClub
                         <?php } ?>
                      	<?php if ($totalRows_tables > 0) { ?>
 						<div class="row">
-							<div class="col col-lg-4 col-md-4 col-sm-4 col-xs-4">
+							<div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
 								<strong>Award Labels</strong>
 							</div>
-							<div class="col col-lg-8 col-md-8 col-sm-8 col-xs-8">
+							<div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
 								<ul class="list-inline">
 									<li><a class="hide-loader" href="<?php echo $base_url; ?>output/labels.output.php?section=admin&amp;go=judging_scores&amp;action=awards&amp;filter=default&amp;psort=5160" data-toggle="tooltip" data-placement="top" title="Avery 5160">Letter</a></li>
 									<li><a class="hide-loader" href="<?php echo $base_url; ?>output/labels.output.php?section=admin&amp;go=judging_scores&amp;action=awards&amp;filter=default&amp;psort=3422" data-toggle="tooltip" data-placement="top" title="Avery 3422">A4</a></li>
@@ -1382,10 +1470,10 @@ if (($row_limits['prefsShowBestBrewer'] != 0) || ($row_limits['prefsShowBestClub
 						</div><!-- ./row -->
 
                         <div class="row">
-							<div class="col col-lg-4 col-md-4 col-sm-4 col-xs-4">
+							<div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
 								<strong>Medal Labels (Round)</strong>
 							</div>
-							<div class="col col-lg-8 col-md-8 col-sm-8 col-xs-8">
+							<div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
 								<ul class="list-inline">
                                     <li><a class="hide-loader" href="<?php echo $base_url; ?>output/labels.output.php?section=admin&amp;go=judging_scores&amp;action=awards&amp;filter=round&amp;psort=5293" data-toggle="tooltip" data-placement="top" title="1 2/3 inch Round Avery 5293">Letter</a></li>
 								</ul>
@@ -1393,10 +1481,10 @@ if (($row_limits['prefsShowBestBrewer'] != 0) || ($row_limits['prefsShowBestClub
 						</div>
 						<?php } ?>
 						<div class="row">
-							<div class="col col-lg-4 col-md-4 col-sm-4 col-xs-4">
+							<div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
 								<strong>Address Labels</strong>
 							</div>
-							<div class="col col-lg-8 col-md-8 col-sm-8 col-xs-8">
+							<div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
 								<ul class="list-inline">
 									<li>All Participants</li>
 									<li><a class="hide-loader" href="<?php echo $base_url; ?>output/labels.output.php?section=admin&amp;go=participants&amp;action=address_labels&amp;filter=default&amp;psort=5160" data-toggle="tooltip" data-placement="top" title="Avery 5160">Letter</a></li>
@@ -1410,10 +1498,10 @@ if (($row_limits['prefsShowBestBrewer'] != 0) || ($row_limits['prefsShowBestClub
 							</div>
 						</div><!-- ./row -->
 						<div class="row">
-							<div class="col col-lg-4 col-md-4 col-sm-4 col-xs-4">
+							<div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
 								<strong>Summaries</strong>
 							</div>
-							<div class="col col-lg-8 col-md-8 col-sm-8 col-xs-8">
+							<div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
 								<ul class="list-inline">
 									<li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=summary" data-toggle="tooltip" data-placement="top" title="Print participant summaries - each on a separate sheet of paper. Useful as a cover sheet for mailing entry scoresheets to participants.">All Participants with Entries</a></li>
                                     <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=particpant-entries" data-toggle="tooltip" data-placement="top" title="Print a list of all particpants with entries and associated judging numbers as assigned in the system. Useful for distributing scoresheets that are physically sorted by entry or judging numbers.">All Entries by Particpant</a></li>
@@ -1421,10 +1509,10 @@ if (($row_limits['prefsShowBestBrewer'] != 0) || ($row_limits['prefsShowBestClub
 							</div>
 						</div><!-- ./row -->
 						<div class="row">
-							<div class="col col-lg-4 col-md-4 col-sm-4 col-xs-4">
+							<div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
 								<strong>Inventory</strong>
 							</div>
-							<div class="col col-lg-8 col-md-8 col-sm-8 col-xs-8">
+							<div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
 								<ul class="list-inline">
 									<li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=inventory&amp;go=scores" data-toggle="tooltip" data-placement="top" title="Print an inventory of entry bottles remaining after judging - with scores">With Scores</a></li>
 									<li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=inventory" data-toggle="tooltip" data-placement="top" title="Print an inventory of entry bottles remaining after judging - without scores">Without Scores</a></li>
@@ -1445,10 +1533,10 @@ if (($row_limits['prefsShowBestBrewer'] != 0) || ($row_limits['prefsShowBestClub
                 <div id="collapseExports" class="panel-collapse collapse">
                     <div class="panel-body">
                         <div class="row">
-                            <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                            <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
                                 <strong>Email Addresses and Associated Contact Data (CSV)</strong>
                             </div>
-                            <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-8">
+                            <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
                                 <ul class="list-unstyled">
                                     <li><a class="hide-loader" href="<?php echo $base_url; ?>output/export.output.php?section=emails">All Participants</a></li>
 									<li><a class="hide-loader" href="<?php echo $base_url; ?>output/export.output.php?section=emails&amp;go=csv&amp;filter=avail_judges&amp;action=email">Available Judges</a></li>
@@ -1460,10 +1548,10 @@ if (($row_limits['prefsShowBestBrewer'] != 0) || ($row_limits['prefsShowBestClub
                             </div>
                         </div><!-- ./row -->
                         <div class="row">
-                            <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                            <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
                                 <strong>Participant Data (CSV)</strong>
                             </div>
-                            <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-8">
+                            <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
                                 <ul class="list-unstyled">
                                     <li><a class="hide-loader" href="<?php echo $base_url; ?>output/export.output.php?section=participants&amp;go=csv">All Participants</a></li>
                                     <li><a class="hide-loader" href="<?php echo $base_url; ?>output/export.output.php?section=entries&amp;go=csv&amp;tb=winners">Winners</a></li>
@@ -1471,10 +1559,10 @@ if (($row_limits['prefsShowBestBrewer'] != 0) || ($row_limits['prefsShowBestClub
                             </div>
                         </div><!-- ./row -->
                         <div class="row">
-                            <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                            <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
                                 <strong>Entries and Associated Data (CSV)</strong>
                             </div>
-                            <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-8">
+                            <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
                                 <ul class="list-unstyled">
 									<li><a class="hide-loader" href="<?php echo $base_url; ?>output/export.output.php?section=entries&amp;go=csv&amp;action=all&amp;tb=all">All Entries: All Data</a></li>
 									<li><a class="hide-loader" href="<?php echo $base_url; ?>output/export.output.php?section=entries&amp;go=csv">All Entries: Limited Data</a></li>
@@ -1489,10 +1577,10 @@ if (($row_limits['prefsShowBestBrewer'] != 0) || ($row_limits['prefsShowBestClub
                             </div>
                         </div><!-- ./row -->
                         <div class="row">
-                            <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                            <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
                                 <strong>Promo Materials</strong>
                             </div>
-                            <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-8">
+                            <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
                                 <ul class="list-unstyled">
                                     <li><a class="hide-loader" href="<?php echo $base_url; ?>output/export.output.php?section=promo&amp;go=html&amp;action=html">HTML</a></li>
 									<li><a class="hide-loader" href="<?php echo $base_url; ?>output/export.output.php?section=promo&amp;go=word&amp;action=word">Word</a></li>
@@ -1515,10 +1603,10 @@ if (($row_limits['prefsShowBestBrewer'] != 0) || ($row_limits['prefsShowBestClub
                 <div id="collapseMaint" class="panel-collapse collapse">
                     <div class="panel-body">
                         <div class="row">
-                            <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                            <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
                                 <strong>Integrity</strong>
                             </div>
-                            <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-8">
+                            <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
                                 <ul class="list-inline">
                                     <li><a class="hide-loader" href="#" data-toggle="modal" data-target="#cleanUp">Clean-Up Data</a></li>
                                     <div>
@@ -1529,10 +1617,10 @@ if (($row_limits['prefsShowBestBrewer'] != 0) || ($row_limits['prefsShowBestClub
                             </div>
                         </div><!-- ./row -->
                         <div class="row">
-                            <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                            <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
                                 <strong>Entries</strong>
                             </div>
-                            <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-8">
+                            <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
                                 <ul class="list-unstyled">
                                     <li><a class="hide-loader" href="#" data-toggle="modal" data-target="#confirmAll">Confirm All Unconfirmed</a></li>
                                     <div>
@@ -1548,10 +1636,10 @@ if (($row_limits['prefsShowBestBrewer'] != 0) || ($row_limits['prefsShowBestClub
                             </div>
                         </div>
                         <div class="row">
-                        <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                        <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
                             <strong>Purge</strong>
                         </div>
-                            <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-8">
+                            <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
                                 <ul class="list-unstyled">
                                     <li><a href="#" data-toggle="modal" data-target="#purgeEntries">Entries</a></li>
                                     <div>
@@ -1611,10 +1699,10 @@ if (($row_limits['prefsShowBestBrewer'] != 0) || ($row_limits['prefsShowBestClub
                         </div><!-- ./row -->
                         <?php if ($_SESSION['userLevel'] == "0") { ?>
                         <div class="row">
-                            <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                            <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
                                 <strong>Archives</strong>
                             </div>
-                            <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-8">
+                            <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
                                 <ul class="list-inline">
                                     <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=archive">Manage</a></li>
                                     <?php if (!HOSTED) { ?>
@@ -1637,10 +1725,10 @@ if (($row_limits['prefsShowBestBrewer'] != 0) || ($row_limits['prefsShowBestClub
                 <div id="collapsePrefs" class="panel-collapse collapse">
                     <div class="panel-body">
                         <div class="row">
-                        <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                        <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
                             <strong>Preferences</strong>
                         </div>
-                        <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-8">
+                        <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
                             <ul class="list-inline">
                                 <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=preferences">Website</a></li>
                                 <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging_preferences">Competition Organization</a></li>
@@ -1649,10 +1737,10 @@ if (($row_limits['prefsShowBestBrewer'] != 0) || ($row_limits['prefsShowBestClub
                         </div><!-- ./row -->
 						<?php if (($_SESSION['prefsUseMods'] == "Y") && (!HOSTED)) { ?>
 						 <div class="row">
-                            <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                            <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
                                 <strong>Custom Modules</strong>
                             </div>
-                            <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-8">
+                            <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
                                 <ul class="list-inline">
                                     <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=mods">Manage</a></li>
 									<li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=mods&amp;action=add">Add</a></li>
@@ -1676,10 +1764,10 @@ if (($row_limits['prefsShowBestBrewer'] != 0) || ($row_limits['prefsShowBestClub
                         <div class="panel-body">
                             <?php if ($hosted_setup) { ?>
                             <div class="row">
-                                <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                                <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
                                     <strong>Customize</strong>
                                 </div>
-                                <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-8">
+                                <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
                                     <ul class="list-unstyled">
                                         <li><a href="http://brewcompetition.com/customize-comp-info" target="_blank">Competition Information</a></li>
                                     </ul>
@@ -1687,10 +1775,10 @@ if (($row_limits['prefsShowBestBrewer'] != 0) || ($row_limits['prefsShowBestClub
                             </div>
                             <?php } ?>
                             <div class="row">
-                                <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                                <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
                                     <strong>Guides</strong>
                                 </div>
-                                <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-8">
+                                <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
                                     <ul class="list-unstyled">
                                         <?php if (HOSTED) { ?>
                                         <li><a href="https://brewcompetition.com/customize-competition-info" target="_blank">Customize Competition Information Guide</a></li>
@@ -1708,10 +1796,10 @@ if (($row_limits['prefsShowBestBrewer'] != 0) || ($row_limits['prefsShowBestClub
                                         <?php } ?>
                                     </ul>
                                 </div>
-                                <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                                <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
                                     <strong>Customize Installation</strong>
                                 </div>
-                                <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-8">
+                                <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
                                     <ul class="list-unstyled">
                                         <li><a href="#" role="button" data-toggle="modal" data-target="#dashboard-help-modal-comp-prep">Competition Preparation</a></li>
                                         <li><a href="#" role="button" data-toggle="modal" data-target="#dashboard-help-modal-entries-participants">Entries and Participants</a></li>
@@ -1726,10 +1814,10 @@ if (($row_limits['prefsShowBestBrewer'] != 0) || ($row_limits['prefsShowBestClub
                                 </div>
                             </div><!-- ./row -->
                             <div class="row">
-                                <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                                <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
                                     <strong>How Do I...</strong>
                                 </div>
-                                <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-8">
+                                <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
                                     <ul class="list-unstyled">
                                     	<li><a href="#" role="button" data-toggle="modal" data-target="#dashboard-help-modal-comp-logo">Display the Competition Logo?</a></li>
                                        	<li><a href="#" role="button" data-toggle="modal" data-target="#dashboard-help-modal-sponsor-logo">Display Sponsors with Logos?</a></li>

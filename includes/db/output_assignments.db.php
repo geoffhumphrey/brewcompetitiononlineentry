@@ -1,6 +1,7 @@
 <?php
 $query_assignments = sprintf("SELECT * FROM %s WHERE assignment='%s'", $prefix."judging_assignments", $filter);
 if ($id != "default") $query_assignments .= sprintf(" AND assignTable='%s'",$id);
+if ($location != "default") $query_assignments .= sprintf(" AND assignLocation='%s'",$location);
 if (SINGLE) $query_assignments .= sprintf(" AND comp_id='%s'",$_SESSION['comp_id']);
 $assignments = mysqli_query($connection,$query_assignments) or die (mysqli_error($connection));
 $row_assignments = mysqli_fetch_assoc($assignments);
