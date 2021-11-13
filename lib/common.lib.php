@@ -23,7 +23,8 @@ function version_check($version,$current_version,$current_version_date_display) 
 
 	if ($version != $current_version) {
 
-		$updateSQL = sprintf("UPDATE %s SET version='%s', version_date='%s' WHERE id=%s", $prefix."bcoem_sys", $current_version, $current_version_date_display, "1");
+		if (check_setup($prefix."system",$database)) $updateSQL = sprintf("UPDATE %s SET version='%s', version_date='%s' WHERE id=%s", $prefix."system", $current_version, $current_version_date_display, "1");
+		else $updateSQL = sprintf("UPDATE %s SET version='%s', version_date='%s' WHERE id=%s", $prefix."bcoem_sys", $current_version, $current_version_date_display, "1");
 		mysqli_real_escape_string($connection,$updateSQL);
 		$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 

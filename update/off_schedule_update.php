@@ -2,6 +2,23 @@
 
 if (!isset($output)) $output = "";
 
+
+/**
+ * ----------------------------------------------- 2.3.2 ---------------------------------------------
+ * SYSTEM is a reserved word in MySQL 8.
+ * Check to see if 'system' DB table is present.
+ * If so, change its name to 'bcoem_system'.
+ * This is at the top due to cascading changes below.
+ * ---------------------------------------------------------------------------------------------------
+ */
+
+if (check_setup($prefix."system",$database)) {
+	$query_sys = sprintf("RENAME TABLE %s TO %s",$prefix."system",$prefix."bcoem_sys");
+	$sys = mysqli_query($connection,$query_sys) or die (mysqli_error($connection));
+	$row_sys = mysqli_fetch_assoc($sys);
+}
+
+
 /**
  * ----------------------------------------------- 2.1.5 -----------------------------------------------
  * Make sure all items are present from last "official" update
@@ -1918,6 +1935,10 @@ if (!check_update("prefsEval", $prefix."preferences")) {
 }
 
 $output .= "<li>Added column to enable or disable Electronic Scoresheets functionality.</li>";
+
+
+
+
 
 /** --- Future Release ---
  * Finally, after all updates have been implemented, 

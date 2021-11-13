@@ -15,13 +15,19 @@ $check_setup = FALSE;
  */
 
 if (check_setup($prefix."system",$database)) {
-	$query_sys = sprintf("RENAME TABLE %s TO %s",$prefix."system",$prefix."bcoem_sys");
-	$sys = mysqli_query($connection,$query_sys) or die (mysqli_error($connection));
-	$row_sys = mysqli_fetch_assoc($sys);
+
+	$system_name_change = FALSE;
+	$query_system = sprintf("SELECT * FROM %s WHERE id='1'",$prefix."system");
+	$system = mysqli_query($connection,$query_system) or die (mysqli_error($connection));
+	$row_system = mysqli_fetch_assoc($system);
+	$check_setup = TRUE;
+	if ($row_system['version'] != $current_version) unset($_SESSION['session_set_'.$prefix_session]);
+
 }
 
 if (check_setup($prefix."bcoem_sys",$database)) {
-	mysqli_select_db($connection,$database);
+
+	$system_name_change = TRUE;
 	$query_system = sprintf("SELECT * FROM %s WHERE id='1'",$prefix."bcoem_sys");
 	$system = mysqli_query($connection,$query_system) or die (mysqli_error($connection));
 	$row_system = mysqli_fetch_assoc($system);
@@ -92,9 +98,11 @@ if ((!isset($_SESSION['currentVersion'])) || ((isset($_SESSION['currentVersion']
 			}
 
 			else {
+				
 				$force_update = TRUE;
 				$setup_success = TRUE;
 				$setup_relocate = "Location: ".$base_url;
+
 			}
 
 		}
@@ -110,6 +118,11 @@ if ((!isset($_SESSION['currentVersion'])) || ((isset($_SESSION['currentVersion']
 
 	else {
 		$no_updates_needed = TRUE;
+		if (!$system_name_change) {
+			$query_sys = sprintf("RENAME TABLE %s TO %s",$prefix."system",$prefix."bcoem_sys");
+			$sys = mysqli_query($connection,$query_sys) or die (mysqli_error($connection));
+			$row_sys = mysqli_fetch_assoc($sys);
+		}
 	}
 
 } // end if (!isset($_SESSION['currentVersion']))

@@ -247,31 +247,31 @@ $(document).ready(function(){
         else $style_name = $bos_entry_info[0];
 	?>
 	<tr>
-		<?php $score_id = $bos_entry_info[13]; ?>
-        <input type="hidden" name="score_id[]" value="<?php echo $score_id; ?>" />
-        <input type="hidden" name="scorePrevious<?php echo $score_id; ?>" value="<?php if (is_numeric($bos_entry_info[14])) echo "Y"; else echo $bos_entry_info[14]; ?>" />
-        <input type="hidden" name="eid<?php echo $score_id; ?>" value="<?php echo $score_id; ?>" />
-        <input type="hidden" name="bid<?php echo $score_id; ?>" value="<?php echo $bos_entry_info[15]; ?>" />
-        <input type="hidden" name="scoreType<?php echo $score_id; ?>" value="<?php echo $filter; ?>" />
+		<?php $eid = $row_enter_bos['eid']; ?>
+        <input type="hidden" name="score_id[]" value="<?php echo $eid; ?>" />
+        <input type="hidden" name="scorePrevious<?php echo $eid; ?>" value="<?php if (is_numeric($bos_entry_info[14])) echo "Y"; else echo $bos_entry_info[14]; ?>" />
+        <input type="hidden" name="eid<?php echo $eid; ?>" value="<?php echo $eid; ?>" />
+        <input type="hidden" name="bid<?php echo $eid; ?>" value="<?php echo $bos_entry_info[15]; ?>" />
+        <input type="hidden" name="scoreType<?php echo $eid; ?>" value="<?php echo $filter; ?>" />
         <?php if (is_numeric($bos_entry_info[14])) { ?>
-        <input type="hidden" name="id<?php echo $score_id; ?>" value="<?php echo $bos_entry_info[14]; ?>" />
+        <input type="hidden" name="id<?php echo $eid; ?>" value="<?php echo $bos_entry_info[14]; ?>" />
         <?php } ?>
         <td><?php echo sprintf("%06s",$row_enter_bos['eid']); ?></td>
         <td><?php echo $judging_number ?></td>
         <td><?php echo $style_name; ?></td>
     	<td>
-            <div class="form-group" id="score-entry-bos-ajax-<?php echo $score_id; ?>-scoreEntry-form-group">
-            <input class="form-control" id="score-entry-bos-ajax-<?php echo $score_id; ?>" type="number" pattern="\d{2}" maxlength="2" name="scoreEntry<?php echo $score_id; ?>" size="6" maxlength="6" value="<?php echo $bos_entry_info[11]; ?>" onblur="save_column('<?php echo $base_url; ?>','scoreEntry','judging_scores_bos','<?php echo $row_enter_bos['eid']; ?>','<?php echo $bos_entry_info[15]; ?>','1','<?php echo $filter; ?>','default','score-entry-bos-ajax-<?php echo $score_id; ?>','value')"  />
+            <div class="form-group" id="score-entry-bos-ajax-<?php echo $eid; ?>-scoreEntry-form-group">
+            <input class="form-control" id="score-entry-bos-ajax-<?php echo $eid; ?>" type="number" pattern="\d{2}" maxlength="2" name="scoreEntry<?php echo $eid; ?>" size="6" maxlength="6" value="<?php echo $bos_entry_info[11]; ?>" onblur="save_column('<?php echo $base_url; ?>','scoreEntry','judging_scores_bos','<?php echo $row_enter_bos['eid']; ?>','<?php echo $bos_entry_info[15]; ?>','1','<?php echo $filter; ?>','default','score-entry-bos-ajax-<?php echo $eid; ?>','value')"  />
             </div>
-            <span id="score-entry-bos-ajax-<?php echo $score_id; ?>-scoreEntry-status"></span>
-            <span id="score-entry-bos-ajax-<?php echo $score_id; ?>-scoreEntry-status-msg"></span>
+            <span id="score-entry-bos-ajax-<?php echo $eid; ?>-scoreEntry-status"></span>
+            <span id="score-entry-bos-ajax-<?php echo $eid; ?>-scoreEntry-status-msg"></span>
         </td>
         <td>
-            <div class="form-group" id="score-place-bos-ajax-<?php echo $score_id; ?>-scorePlace-form-group">
+            <div class="form-group" id="score-place-bos-ajax-<?php echo $eid; ?>-scorePlace-form-group">
             <?php if ($_SESSION['prefsWinnerMethod'] == "0") { ?>
-            <select class="form-control" id="score-place-bos-ajax-<?php echo $score_id; ?>" name="scorePlace<?php echo $score_id; ?>" onchange="select_place('<?php echo $base_url; ?>','scorePlace','judging_scores_bos','<?php echo $row_enter_bos['eid']; ?>','<?php echo $bos_entry_info[15]; ?>','1','<?php echo $filter; ?>','default','score-place-bos-ajax-<?php echo $score_id; ?>')">
+            <select class="form-control" id="score-place-bos-ajax-<?php echo $eid; ?>" name="scorePlace<?php echo $eid; ?>" onchange="select_place('<?php echo $base_url; ?>','scorePlace','judging_scores_bos','<?php echo $row_enter_bos['eid']; ?>','<?php echo $bos_entry_info[15]; ?>','1','<?php echo $filter; ?>','default','score-place-bos-ajax-<?php echo $eid; ?>')">
             <?php } else { ?>
-            <select class="form-control" id="score-place-bos-ajax-<?php echo $score_id; ?>" name="scorePlace<?php echo $score_id; ?>" onchange="save_column('<?php echo $base_url; ?>','scorePlace','judging_scores_bos','<?php echo $row_enter_bos['eid']; ?>','<?php echo $bos_entry_info[15]; ?>','1','<?php echo $filter; ?>','default','score-place-bos-ajax-<?php echo $score_id; ?>','value')">    
+            <select class="form-control" id="score-place-bos-ajax-<?php echo $eid; ?>" name="scorePlace<?php echo $eid; ?>" onchange="save_column('<?php echo $base_url; ?>','scorePlace','judging_scores_bos','<?php echo $row_enter_bos['eid']; ?>','<?php echo $bos_entry_info[15]; ?>','1','<?php echo $filter; ?>','default','score-place-bos-ajax-<?php echo $eid; ?>','value')">    
             <?php } ?>
                 <option value=""></option>
                 <?php for($i=1; $i<$_SESSION['jPrefsMaxBOS']+1; $i++) { ?>
@@ -280,8 +280,8 @@ $(document).ready(function(){
                 <option value="5" <?php if ($bos_entry_info[10] == "5") echo "selected"; ?>><?php echo "Hon. Men."; ?></option>
             </select>
             </div>
-            <span id="score-place-bos-ajax-<?php echo $score_id; ?>-scorePlace-status"></span>
-            <span id="score-place-bos-ajax-<?php echo $score_id; ?>-scorePlace-status-msg"></span>
+            <span id="score-place-bos-ajax-<?php echo $eid; ?>-scorePlace-status"></span>
+            <span id="score-place-bos-ajax-<?php echo $eid; ?>-scorePlace-status-msg"></span>
         </td>
 	</tr>
 <?php } while ($row_enter_bos = mysqli_fetch_assoc($enter_bos)); ?>

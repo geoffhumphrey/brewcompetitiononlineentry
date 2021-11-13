@@ -1,6 +1,6 @@
 <?php
 // -----------------------------------------------------------
-// Version 2.1.19
+// Version 2.3.2
 // -----------------------------------------------------------
 
 require_once ('paths.php');
@@ -21,16 +21,16 @@ if (HOSTED) check_hosted_gh();
 
 // Get current version from DB
 if (table_exists($prefix."bcoem_sys")) {
-
 	$query_system = sprintf("SELECT version FROM %s", $prefix."bcoem_sys");
-	$system = mysqli_query($connection,$query_system) or die (mysqli_error($connection));
-	$row_system = mysqli_fetch_assoc($system);
-    $version = $row_system['version'];
-
+	$system_db_table = $prefix."bcoem_sys";
 }
-
-// Define vars
-$section = "update";
+else {
+	$query_system = sprintf("SELECT version FROM %s", $prefix."system");
+	$system_db_table = $prefix."system";
+}
+$system = mysqli_query($connection,$query_system) or die (mysqli_error($connection));
+$row_system = mysqli_fetch_assoc($system);
+$version = $row_system['version'];
 
 // Set timezone globals for the site
 $timezone_raw = "0";
@@ -68,7 +68,7 @@ $output = "";
 if (file_exists($filename)) {
 
 	// check to see if the "bcoem_sys" db table is present, if not, use the legacy hard-coded version
-	if (!check_setup($prefix."bcoem_sys",$database)) require(INCLUDES.'version.inc.php');
+	if (!check_setup($system_db_table,$database)) require (INCLUDES.'version.inc.php');
 
 	if (($action == "default") && ($version != $current_version)) $update_alerts .= "<div class=\"alert alert-info\"><span class=\"fa fa-lg fa-info-circle\"></span> <strong>The BCOE&amp;M ".$current_version_display." Database Update Script must be run to update the database.</strong></div>";
 

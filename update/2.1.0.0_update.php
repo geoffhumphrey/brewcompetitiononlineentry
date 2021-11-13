@@ -614,7 +614,7 @@ $output .= "<li>Styles data updated.</li>";
 // Data Update: Update Version in System Table
 // -----------------------------------------------------------
 
-$updateSQL = sprintf("UPDATE %s SET version='%s', version_date='%s' WHERE id='1'",$prefix."bcoem_sys",$current_version,"2016-05-24");
+$updateSQL = sprintf("UPDATE %s SET version='%s', version_date='%s' WHERE id='1'",$system_db_table,$current_version,"2016-05-24");
 mysqli_select_db($connection,$database);
 mysqli_real_escape_string($connection,$updateSQL);
 $result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
