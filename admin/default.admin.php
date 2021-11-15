@@ -1111,7 +1111,7 @@ $steward_assign_links = array();
 									</ul>
 								</div>
 								<div class="dropdown bcoem-admin-dashboard-select">
-									<button class="btn btn-default dropdown-toggle" type="button" id="pullsheetMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Entry Numbers for Location... <span class="caret"></span>
+									<button class="btn btn-default dropdown-toggle" type="button" id="pullsheetMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Entry Numbers for Session... <span class="caret"></span>
 									</button>
 									<ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
 										<?php
@@ -1119,8 +1119,8 @@ $steward_assign_links = array();
 											for ($round=1; $round <= $row_judging['judgingRounds']; $round++) {
 										 $location_date = getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_judging['judgingDate'], $_SESSION['prefsDateFormat'], $_SESSION['prefsTimeFormat'], "short", "date-time-no-gmt");
 										 ?>
-										<li class="small"><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=pullsheets&amp;go=judging_locations&amp;view=entry&amp;location=<?php echo $row_judging['id']?>&amp;round=<?php echo $round; ?>" data-toggle="tooltip" data-placement="top" title="Print Pullsheet for Location <?php echo $row_judging['judgingLocName'] . " - " . $location_date. ", Round " . $round; ?>"><?php echo $row_judging['judgingLocName'] . " - " . $location_date. ", Round " . $round; ?></a>
-                                        <li class="small"><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=pullsheets&amp;go=judging_locations&amp;view=entry&amp;filter=mini_bos&amp;location=<?php echo $row_judging['id']?>&amp;round=<?php echo $round; ?>" data-toggle="tooltip" data-placement="top" title="Print Pullsheet for Location <?php echo $row_judging['judgingLocName'] . " - " . $location_date. ", Round " . $round; ?>"><?php echo $row_judging['judgingLocName'] . " - " . $location_date. ", Round " . $round . " (Mini-BOS)"; ?></a>
+										<li class="small"><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=pullsheets&amp;go=judging_locations&amp;view=entry&amp;location=<?php echo $row_judging['id']?>&amp;round=<?php echo $round; ?>" data-toggle="tooltip" data-placement="top" title="Print Pullsheet for Session <?php echo $row_judging['judgingLocName'] . " - " . $location_date. ", Round " . $round; ?>"><?php echo $row_judging['judgingLocName'] . " - " . $location_date. ", Round " . $round; ?></a>
+                                        <li class="small"><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=pullsheets&amp;go=judging_locations&amp;view=entry&amp;filter=mini_bos&amp;location=<?php echo $row_judging['id']?>&amp;round=<?php echo $round; ?>" data-toggle="tooltip" data-placement="top" title="Print Pullsheet for Session <?php echo $row_judging['judgingLocName'] . " - " . $location_date. ", Round " . $round; ?>"><?php echo $row_judging['judgingLocName'] . " - " . $location_date. ", Round " . $round . " (Mini-BOS)"; ?></a>
 										<?php }
                                         
                                             $judge_assign_links[$row_judging['judgingLocName']] = $base_url."output/print.output.php?section=assignments&amp;go=judging_assignments&amp;filter=judges&amp;location=".$row_judging['id'];
@@ -1131,17 +1131,36 @@ $steward_assign_links = array();
 									</ul>
 								</div>
 								<div class="dropdown bcoem-admin-dashboard-select">
-									<button class="btn btn-default dropdown-toggle" type="button" id="pullsheetMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Judging Numbers for Location...<span class="caret"></span>
+									<button class="btn btn-default dropdown-toggle" type="button" id="pullsheetMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Judging Numbers for Session...<span class="caret"></span>
 									</button>
 									<ul class="dropdown-menu" aria-labelledby="pullsheetMenu2">
 										<?php
+
+                                        $judge_inventory_loc_entry = "";
+                                        $judge_inventory_loc_judging = "";
+
 										do {
 											for ($round=1; $round <= $row_judging1['judgingRounds']; $round++) {
 												$location_date = getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_judging1['judgingDate'], $_SESSION['prefsDateFormat'], $_SESSION['prefsTimeFormat'], "short", "date-time-no-gmt");
 										 ?>
-										<li class="small"><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=pullsheets&amp;go=judging_locations&amp;view=default&amp;location=<?php echo $row_judging1['id']?>&amp;round=<?php echo $round; ?>" data-toggle="tooltip" data-placement="top" title="Print Pullsheet for Location <?php echo $row_judging1['judgingLocName'] . " - " . $location_date. ", Round " . $round; ?>"><?php echo $row_judging1['judgingLocName'] . " - " . $location_date. ", Round " . $round; ?></a></li>
-                                        <li class="small"><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=pullsheets&amp;go=judging_locations&amp;view=default&amp;filter=mini_bos&amp;location=<?php echo $row_judging1['id']?>&amp;round=<?php echo $round; ?>" data-toggle="tooltip" data-placement="top" title="Print Pullsheet for Location <?php echo $row_judging1['judgingLocName'] . " - " . $location_date. ", Round " . $round; ?>"><?php echo $row_judging1['judgingLocName'] . " - " . $location_date. ", Round " . $round . " (Mini-BOS)"; ?></a>
+										<li class="small"><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=pullsheets&amp;go=judging_locations&amp;view=default&amp;location=<?php echo $row_judging1['id']?>&amp;round=<?php echo $round; ?>" data-toggle="tooltip" data-placement="top" title="Print Pullsheet for Session <?php echo $row_judging1['judgingLocName'] . " - " . $location_date. ", Round " . $round; ?>"><?php echo $row_judging1['judgingLocName'] . " - " . $location_date. ", Round " . $round; ?></a></li>
+                                        <li class="small"><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=pullsheets&amp;go=judging_locations&amp;view=default&amp;filter=mini_bos&amp;location=<?php echo $row_judging1['id']?>&amp;round=<?php echo $round; ?>" data-toggle="tooltip" data-placement="top" title="Print Pullsheet for Session <?php echo $row_judging1['judgingLocName'] . " - " . $location_date. ", Round " . $round; ?>"><?php echo $row_judging1['judgingLocName'] . " - " . $location_date. ", Round " . $round . " (Mini-BOS)"; ?></a>
 										<?php }
+
+                                            $judge_inventory_link_entry = $base_url."output/print.output.php?section=pullsheets&amp;go=all_entry_info&amp;view=judge_inventory&amp;filter=J&amp;sort=entry&amp;location=".$row_judging1['id'];
+                                            $judge_inventory_loc_entry .= "<li class=\"small\">";
+                                            $judge_inventory_loc_entry .= sprintf("<a id=\"modal_window_link\" class=\"hide-loader\" href=\"%s\">",$judge_inventory_link_entry);
+                                            $judge_inventory_loc_entry .= $row_judging1['judgingLocName'];
+                                            $judge_inventory_loc_entry .= "</a>";
+                                            $judge_inventory_loc_entry .= "</li>";
+
+                                            $judge_inventory_link_judging = $base_url."output/print.output.php?section=pullsheets&amp;go=all_entry_info&amp;view=judge_inventory&amp;filter=J&amp;location=".$row_judging1['id'];
+                                            $judge_inventory_loc_judging .= "<li class=\"small\">";
+                                            $judge_inventory_loc_judging .= sprintf("<a id=\"modal_window_link\" class=\"hide-loader\" href=\"%s\">",$judge_inventory_link_judging);
+                                            $judge_inventory_loc_judging .= $row_judging1['judgingLocName'];
+                                            $judge_inventory_loc_judging .= "</a>";
+                                            $judge_inventory_loc_judging .= "</li>";
+
 										} while ($row_judging1 = mysqli_fetch_assoc($judging1));
 										?>
 									</ul>
@@ -1149,6 +1168,30 @@ $steward_assign_links = array();
 							</div>
                             <?php } ?>
 						</div><!-- ./row -->
+                        <div class="row">
+                            <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
+                                <strong>Judge Inventories</strong> <a class="hide-loader" tabindex="0" type="button" role="button" data-toggle="popover" data-trigger="hover" data-placement="auto top" data-container="body" data-content="Judge Inventories are generally used judging sessions using the distributed methodology. Prints a list of all entries assigned to each judge for evaluation."><i class="fa fa-question-circle"></i></a>
+                            </div>
+                            <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
+                                <div class="dropdown bcoem-admin-dashboard-select">
+                                <button class="btn btn-default dropdown-toggle" type="button" id="judging-inv-ent" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Entry Numbers for Session...<span class="caret"></span>
+                                    </button>
+                                <ul class="dropdown-menu" aria-labelledby="judging-inv-ent">
+                                    <?php if (!empty($judge_inventory_loc_entry)) echo $judge_inventory_loc_entry; ?>
+                                </ul>
+                                </div>
+                                <div class="dropdown bcoem-admin-dashboard-select">
+                                <button class="btn btn-default dropdown-toggle" type="button" id="judging-inv-jnum" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Judging Numbers for Session...<span class="caret"></span>
+                                    </button>
+                                <ul class="dropdown-menu" aria-labelledby="judging-inv-jnum">
+                                    <?php if (!empty($judge_inventory_loc_judging)) echo $judge_inventory_loc_judging; ?>
+                                </ul>
+                                </div>
+                            </div>
+
+
+
+                        </div>
 						<div class="row">
 							<div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
 								<strong>Table Cards</strong>
@@ -1165,7 +1208,7 @@ $steward_assign_links = array();
 									</ul>
 								</div>
 								<div class="dropdown bcoem-admin-dashboard-select">
-									<button class="btn btn-default dropdown-toggle" type="button" id="cardsMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">For Location... <span class="caret"></span>
+									<button class="btn btn-default dropdown-toggle" type="button" id="cardsMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">for Session... <span class="caret"></span>
 									</button>
 									<ul class="dropdown-menu" aria-labelledby="cardsMenu2">
 										<?php
@@ -1210,7 +1253,7 @@ $steward_assign_links = array();
 									<li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=assignments&amp;go=judging_assignments&amp;filter=stewards&amp;view=location" data-toggle="tooltip" data-placement="top" title="Print Steward Assignments by Location">All Stewards By Location</a></li>
 								</ul>
                                 <div class="dropdown bcoem-admin-dashboard-select">
-                                    <button class="btn btn-default dropdown-toggle" type="button" id="judgeAssignMenuLoc" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Judges For Location... <span class="caret"></span>
+                                    <button class="btn btn-default dropdown-toggle" type="button" id="judgeAssignMenuLoc" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Judges for Session... <span class="caret"></span>
                                     </button>
                                     <ul class="dropdown-menu" aria-labelledby="judgeAssignMenuLoc">
                                         <?php foreach($judge_assign_links as $key => $value) { ?>
@@ -1223,7 +1266,7 @@ $steward_assign_links = array();
                                     </ul>
                                 </div>
                                 <div class="dropdown bcoem-admin-dashboard-select">
-                                    <button class="btn btn-default dropdown-toggle" type="button" id="stewardAssignMenuLoc" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Stewards For Location... <span class="caret"></span>
+                                    <button class="btn btn-default dropdown-toggle" type="button" id="stewardAssignMenuLoc" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Stewards for Session... <span class="caret"></span>
                                     </button>
                                     <ul class="dropdown-menu" aria-labelledby="stewardAssignMenuLoc">
                                         <?php foreach($steward_assign_links as $key => $value) { ?>

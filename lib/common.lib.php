@@ -1666,7 +1666,11 @@ function get_table_info($input,$method,$table_id,$dbTable,$param) {
 
 	// Only return basic info (table number, name, location, id)
 	if ($method == "basic") {
-		$return = $row_table['tableNumber']."^".$row_table['tableName']."^".$row_table['tableLocation']."^".$row_table['id'];
+		$return = $row_table['tableNumber'];
+		$return .= "^".$row_table['tableName'];
+		$return .= "^".$row_table['tableLocation'];
+		$return .= "^".$row_table['id'];
+		$return .= "^".$row_table['tableStyles'];
 		return $return;
 	}
 

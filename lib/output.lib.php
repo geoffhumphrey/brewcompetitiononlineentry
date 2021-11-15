@@ -1,5 +1,7 @@
 <?php
 
+include (LIB.'admin.lib.php');
+
 function dropoff_loc($id) {
 	include (CONFIG.'config.php');
 	mysqli_select_db($connection,$database);
@@ -563,6 +565,7 @@ function check_flight_round($flight_round,$round) {
 
 }
 
+/*
 function style_type_info($id) {
 	require(CONFIG.'config.php');
     mysqli_select_db($connection,$database);
@@ -578,6 +581,7 @@ function style_type_info($id) {
 
 	return $return;
 }
+*/
 
 function results_count($style) {
 	require(CONFIG.'config.php');
