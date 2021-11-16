@@ -133,63 +133,64 @@ include (LIB.'admin.lib.php');
 <?php } // end if ($view != "sign-in")
 else {
 
-// Build list
-$list_tbody = "";
-if ($totalRows_brewer > 0) {
-	do {
+	$list_tbody = "";
 
-		/*
-		
-
-		// Get array of location assignments for each assignee
-		$assignee_sessions[$row_brewer['uid']] = array();
-		$query_sessions .= sprintf("SELECT assignLocation from %s WHERE bid='%s'",$prefix."judging_assignments",$row_brewer['uid']);
-		$sessions = mysqli_query($connection,$query_sessions) or die (mysqli_error($connection));
-		$row_sessions = mysqli_fetch_assoc($sessions);
-		$totalRows_sessions = mysqli_num_rows($sessions);
-
-		if ($totalRows_sessions > 0) {
-			$assignee_sessions[$row_brewer['uid']] = $row_sessions['assignLocation'];
-		}
-		*/
-
-		$list_tbody .= "<tr>";
-		$list_tbody .= "<td nowrap=\"nowrap\">".$row_brewer['brewerLastName'].", ".$row_brewer['brewerFirstName']."</td>";
-		if ($filter == "J") $list_tbody .= "<td>".strtoupper(strtr($row_brewer['brewerJudgeID'],$bjcp_num_replace))."</td>";
-		$list_tbody .= "<td>";
-		if ($row_brewer['brewerJudgeWaiver'] == "Y") $list_tbody .= $label_yes; 
-		else $list_tbody .= $label_no;
-		$list_tbody .= "</td>";
-		$list_tbody .= "<td>&nbsp;</td>";
-		$list_tbody .= "</tr>";
-	} while ($row_brewer = mysqli_fetch_assoc($brewer));
-}
 	foreach ($judging_sessions as $key => $value) {
-		if ($totalRows_brewer > 0) { 
+
+		$query_brewer = sprintf("SELECT a.id,a.brewerFirstName,a.brewerLastName,a.brewerJudgeID,a.brewerJudgeWaiver,b.uid,b.staff_judge,b.staff_steward,b.staff_staff,b.staff_organizer,c.assignLocation FROM %s a, %s b, %s c WHERE a.uid = b.uid AND a.uid = c.bid",$prefix."brewer",$prefix."staff",$prefix."judging_assignments");
+		if (SINGLE) $query_brewer .= sprintf(" AND comp_id='%s'",$_SESSION['comp_id']);
+		if ($filter == "S") $query_brewer .= " AND b.staff_steward='1'";
+		else $query_brewer .= " AND b.staff_judge='1'"; 
+		$query_brewer .= " ORDER BY a.brewerLastName ASC";
+		$brewer = mysqli_query($connection,$query_brewer) or die (mysqli_error($connection));
+		$row_brewer = mysqli_fetch_assoc($brewer);
+		$totalRows_brewer = mysqli_num_rows($brewer);
+
+		$list_tbody = "";
+
+
+		if ($totalRows_brewer > 0) {
+
+		do {
+
+			if ($row_brewer['assignLocation'] == $value['loc-id']) {
+				$list_tbody .= "<tr class=\"show-me-hide-me\">";
+				$list_tbody .= "<td nowrap=\"nowrap\">".$row_brewer['brewerLastName'].", ".$row_brewer['brewerFirstName']."</td>";
+				if ($filter == "J") $list_tbody .= "<td>".strtoupper(strtr($row_brewer['brewerJudgeID'],$bjcp_num_replace))."</td>";
+				$list_tbody .= "<td>";
+				if ($row_brewer['brewerJudgeWaiver'] == "Y") $list_tbody .= $label_yes; 
+				else $list_tbody .= $label_no;
+				$list_tbody .= "</td>";
+				$list_tbody .= "<td>&nbsp;</td>";
+				$list_tbody .= "</tr>";
+			}
+
+		} while($row_brewer = mysqli_fetch_assoc($brewer));
 ?>
 <script type="text/javascript" language="javascript">
-	 $(document).ready(function() {
-		$('#sortable<?php echo $key; ?>').dataTable( {
-			"bPaginate" : false,
-			"sDom": 'rt',
-			"bStateSave" : false,
-			"bLengthChange" : false,
-			"aaSorting": [[0,'asc']],
-			"bProcessing" : false,
-			"aoColumns": [
-				{ "asSorting": [  ] },
-				<?php if ($filter == "J") { ?>
-				{ "asSorting": [  ] },
-				<?php } ?>
-				{ "asSorting": [  ] },
-				{ "asSorting": [  ] }
-				]
-			} );
-		} );
-	</script>
+$(document).ready(function() {
+	$('#sortable<?php echo $key; ?>').dataTable({
+		"bPaginate" : false,
+		"sDom": 'rt',
+		"bStateSave" : false,
+		"bLengthChange" : false,
+		"aaSorting": [[0,'asc']],
+		"bProcessing" : false,
+		"aoColumns": [
+			{ "asSorting": [  ] },
+			<?php if ($filter == "J") { ?>
+			{ "asSorting": [  ] },
+			<?php } ?>
+			{ "asSorting": [  ] },
+			{ "asSorting": [  ] }
+			]
+		});
+	});
+</script>
 <?php } // end if ($totalRows_brewer > 0) ?>
+<?php if (!empty($list_tbody)) { ?>
     <div class="page-header">
-        <h1><?php echo $_SESSION['contestName']; if ($filter == "S") echo sprintf(" %s ",$label_steward); else echo sprintf(" %s ",$label_judge); echo $label_sign_in; ?><br><small><em><?php echo $value; ?></em></small></h1>
+        <h1><?php echo $_SESSION['contestName']; if ($filter == "S") echo sprintf(" %s ",$label_steward); else echo sprintf(" %s ",$label_judge); echo $label_sign_in; ?><br><small><em><?php echo $value['loc-name']; ?></em></small></h1>
     </div>
     <p><?php echo $output_text_008; ?></p>
     <p><?php echo $output_text_009; ?></p>
@@ -210,13 +211,13 @@ if ($totalRows_brewer > 0) {
     </table>
     <div style="page-break-after:always;"></div>
     <?php } // end foreach ?>
+<?php } ?>	
     <div class="page-header">
         <h1><?php echo $_SESSION['contestName']; if ($filter == "S") echo sprintf(" %s ",$label_steward); else echo sprintf(" %s ",$label_judge); echo $label_sign_in; ?></h1>
     </div>
      <?php if ($filter == "J") { ?>
     <p><?php echo $output_text_010; ?></p>
     <?php } ?>
-	
     <script type="text/javascript" language="javascript">
 	 $(document).ready(function() {
 		$('#sortable999').dataTable( {
