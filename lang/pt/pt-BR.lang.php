@@ -1802,11 +1802,14 @@ $qr_text_018 = "Digitalize um código QR localizado no rótulo de um frasco, dig
 /**
  * ------------------------------------------------------------------------
  * Version 2.3.2 Additions
+ * Via Google Translate English to Portuguese - and for that, I'm sorry. 
+ * Again. :)
  * ------------------------------------------------------------------------
  */
 
 $label_select_state = "Selecione ou pesquise o seu estado";
 $label_select_below = "Selecione abaixo";
+$output_text_033 = "Ao enviar seu relatório ao BJCP, é possível que nem todos os integrantes da lista de funcionários recebam pontos. É sugerido que você aloque pontos para aqueles com IDs BJCP primeiro.";
 
 /**
  * ----------------------------------------------------------------------------------

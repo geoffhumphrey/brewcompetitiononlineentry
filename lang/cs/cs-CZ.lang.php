@@ -1801,11 +1801,13 @@ $qr_text_018 = "Naskenujte QR kód umístěný na štítku lahve, zadejte požad
 /**
  * ------------------------------------------------------------------------
  * Version 2.3.2 Additions
+ * Via Google Translate English to Czech - and for that, I'm sorry. Again. :)
  * ------------------------------------------------------------------------
  */
 
 $label_select_state = "Vyberte nebo vyhledejte svůj stát";
 $label_select_below = "Vyberte níže";
+$output_text_033 = "Při odesílání vaší zprávy BJCP je možné, že ne všichni zaměstnanci na seznamu obdrží body. Doporučuje se, abyste nejprve přidělili body těm s BJCP ID.";
 
 /**
  * ----------------------------------------------------------------------------------

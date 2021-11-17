@@ -1944,6 +1944,7 @@ $qr_text_018 = "Scan a QR Code located on a bottle label, enter the required pas
 
 $label_select_state = "Select or Search for Your State";
 $label_select_below = "Select Below";
+$output_text_033 = "When submitting your report to the BJCP, it is possible that not all on the staff list will receive points. It is suggested that you allocate points to those with BJCP IDs first.";
 
 /**
  * ----------------------------------------------------------------------------------

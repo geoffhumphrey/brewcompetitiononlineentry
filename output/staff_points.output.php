@@ -69,8 +69,6 @@ do {
 $days = number_format(total_days(),1);
 $sessions = number_format(total_sessions(),1);
 
-
-
 if ($view == "default") {
 	$output_organizer = "";
 	$output_judges = "";
@@ -214,35 +212,33 @@ if ($view == "default") {
 			$st[] = $row_staff['uid']; 
 		} while ($row_staff = mysqli_fetch_assoc($staff));
 		
-		$st_running_total[] = "";
+		$st_running_total = 0;
 		
 		foreach (array_unique($st) as $uid) {
-
-			if (array_sum($st_running_total) < $staff_max_points) {
 				
-				$staff_info = explode("^",brewer_info($uid));
-				$staff_bjcp_id = strtoupper(strtr($staff_info['4'],$bjcp_num_replace));
-				$st_running_total[] = $staff_points;
+			$staff_info = explode("^",brewer_info($uid));
+			$staff_bjcp_id = strtoupper(strtr($staff_info['4'],$bjcp_num_replace));
+			$st_running_total += $staff_points;
 
-				if ((!empty($staff_info['1'])) && ($staff_bjcp_id != $organ_bjcp_id)) {
-					$staff_name = ucwords(strtolower($staff_info['1'])).", ".ucwords(strtolower($staff_info['0']));
+			if ((!empty($staff_info['1'])) && ($staff_bjcp_id != $organ_bjcp_id)) {
+				$staff_name = ucwords(strtolower($staff_info['1'])).", ".ucwords(strtolower($staff_info['0']));
 
-					$output_staff .= "<tr>";
-					$output_staff .= "<td>".$staff_name."</td>";
-					$output_staff .= "<td>";
-					if (validate_bjcp_id($staff_info['4'])) $output_staff .= $staff_bjcp_id;
+				$output_staff .= "<tr>";
+				$output_staff .= "<td>".$staff_name."</td>";
+				$output_staff .= "<td>";
+				if (validate_bjcp_id($staff_info['4'])) $output_staff .= $staff_bjcp_id;
 
-					$output_staff .= "</td>";
-					$output_staff .= "<td>";
-					if ($staff_bjcp_id == $organ_bjcp_id) $output_staff .= "0.0 (".$label_organizer.")";
-					else {
-						if ((array_sum($st_running_total) <= $staff_max_points) && ($staff_points < $organ_max_points)) $output_staff .= $staff_points;
-						else $output_staff .= $organ_max_points;
-					}
-					$output_staff .= "</td>";
-					$output_staff .= "</tr>";
+				$output_staff .= "</td>";
+				$output_staff .= "<td>";
+				if ($staff_bjcp_id == $organ_bjcp_id) $output_staff .= "0.0 (".$label_organizer.")";
+				else {
+					if ((array_sum($st_running_total) <= $staff_max_points) && ($staff_points < $organ_max_points)) $output_staff .= $staff_points;
+					else $output_staff .= $organ_max_points;
 				}
+				$output_staff .= "</td>";
+				$output_staff .= "</tr>";
 			}
+
 		}
 	} // end if ($totalRows_staff > 0)
 
@@ -359,6 +355,7 @@ if ($view == "default") {
     <?php if (!empty($output_staff)) { ?>
     <h2><?php echo $label_staff; ?></h2>
     <p><?php echo sprintf("%s: %s",$output_text_025,$staff_max_points); ?></p>
+    <?php if ($st_running_total > $staff_max_points) echo sprintf("<p><em>%s</em></p>",$output_text_033); ?>
     <script type="text/javascript" language="javascript">
 	 $(document).ready(function() {
 		$('#sortable99').dataTable( {

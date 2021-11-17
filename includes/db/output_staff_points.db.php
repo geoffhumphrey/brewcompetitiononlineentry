@@ -8,13 +8,10 @@ $judge_max_points = number_format(total_points($total_entries,"Judge"), 1);
 $query_assignments = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE staff_staff='1'", $prefix."staff");
 $assignments = mysqli_query($connection,$query_assignments) or die (mysqli_error($connection));
 $row_assignments = mysqli_fetch_assoc($assignments);
-if ($row_assignments['count'] >= 2)
-$staff_points = number_format(round(($staff_max_points/$row_assignments['count']) / 0.5) * 0.5, 1);
-elseif ($row_assignments['count'] == 1) $staff_points = number_format($staff_max_points,1);
-else $staff_points = 0;
 
-if (($staff_points * $row_assignments['count']) > $staff_max_points) $staff_points = number_format(floor($staff_points),1);
-else $staff_points = $staff_points;
+$staff_points = 0;
+if ($row_assignments['count'] == 1) $staff_points = number_format($staff_max_points,1);
+if ($row_assignments['count'] >= 2) $staff_points = number_format(round(($staff_max_points/$row_assignments['count']) / 0.5) * 0.5, 1);
 
 // Organizer
 $query_organizer = sprintf("SELECT * FROM %s WHERE staff_organizer='1'",$prefix."staff");
