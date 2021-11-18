@@ -291,10 +291,10 @@ if ($entry_found) {
     $entry_info_html .= "</div>";
   }
 
-  if (!empty($row_entry_info['brewInfoOptional  '])) {
+  if (!empty($row_entry_info['brewInfoOptional'])) {
     $entry_info_html .= "<div class=\"row bcoem-admin-element\">";
     $entry_info_html .= "<div class=\"col col-lg-3 col-md-4 col-sm-4 col-xs-12\"><strong>".$label_optional_info."</strong></div>";
-    $entry_info_html .= "<div class=\"col col-lg-9 col-md-8 col-sm-8 col-xs-12\">".$row_entry_info['brewInfoOptional  ']."</div>";
+    $entry_info_html .= "<div class=\"col col-lg-9 col-md-8 col-sm-8 col-xs-12\">".$row_entry_info['brewInfoOptional']."</div>";
     $entry_info_html .= "</div>";
   }
 
