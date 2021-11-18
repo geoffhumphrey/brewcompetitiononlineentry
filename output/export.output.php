@@ -2020,6 +2020,8 @@ if (($admin_role) || (((judging_date_return() == 0) && ($registration_open == 2)
                                     if ($st_running_total <= $staff_max_points) $output .= "\t\t\t<NonJudgePts>".number_format(($staff_points+$steward_points),1)."</NonJudgePts>\n";
                                     else $output .= "\t\t\t<NonJudgePts>0.0</NonJudgePts>\n";
                                 }
+
+                                $output .= "\t\t</JudgeData>\n";
                             }
                         }
                     }
