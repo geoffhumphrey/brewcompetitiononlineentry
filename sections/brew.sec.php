@@ -374,68 +374,7 @@ do {
 
 } while ($row_styles = mysqli_fetch_assoc($styles));
 
-?>
-<script>
-
-	$(document).ready(function() {
-
-		$("#brewInfo").keyup(function()	{
-			var cs = $(this).val().length;
-			$('#countInfo').text(cs);
-		});
-
-		$("#brewInfo").keydown(function() {
-			var cs = $(this).val().length;
-			$('#countInfo').text(cs);
-		});
-
-		$("#brewInfoOptional").keyup(function()	{
-			var cs = $(this).val().length;
-			$('#countInfoOptional').text(cs);
-		});
-
-		$("#brewInfoOptional").keydown(function() {
-			var cs = $(this).val().length;
-			$('#countInfoOptional').text(cs);
-		});
-
-		$("#brewComments").keyup(function()	{
-			var cs = $(this).val().length;
-			$('#countComments').text(cs);
-		});
-
-		$("#brewComments").keydown(function() {
-			var cs = $(this).val().length;
-			$('#countComments').text(cs);
-		});
-
-		//$("#possible-allergens-freeform").hide();
-		$("#possible-allergens").hide();
-
-		$("input[name$='possible-allergens']").click(function() {
-	        if ($(this).val() == "1") {
-	            $("#possible-allergens").show("fast");
-	            $("input[name='brewPossAllergens']").prop("required", true);
-	        }
-	        else {
-	            $("#possible-allergens").hide("fast");
-	            $("input[name='brewPossAllergens']").prop("required", false);
-	            $("input[name='brewPossAllergens']").val("");
-	        }
-	    });
-
-	    <?php if (($action == "edit") && (!empty($row_log['brewPossAllergens']))) { ?>
-	    	$("#possible-allergens").show("fast");
-	    	<?php if (!in_array($row_log['brewPossAllergens'], $possible_allergens)) { ?>
-	    	$("#possible-allergens-freeform").show("fast");
-	    	<?php } ?>
-		<?php } ?>
-
-	});
-
-</script>
-<?php
-echo $modals;
+echo $add_edit_entry_modals;
 if (!isset($_SERVER['HTTP_REFERER'])) $relocate_referrer = "list";
 else $relocate_referrer = $_SERVER['HTTP_REFERER'];
 // echo $brewPaid; echo $row_limits['prefsUserSubCatLimit'];
@@ -526,15 +465,21 @@ else $relocate_referrer = $_SERVER['HTTP_REFERER'];
             <option data-divider="true"></option>
             <?php echo $styles_dropdown; ?>
         </select>
-        <span id="helpBlock" class="help-block">&spades; = <?php echo $brew_text_004; ?><br />&diams; = <?php echo $brew_text_005; ?><br />&clubs; = <?php echo $brew_text_006; ?><br />&hearts; = <?php echo $brew_text_007; ?></p></span>
+        <span id="helpBlock" class="help-block">
+        	<div id="req-special" style="margin:0; padding:0">&spades; = <?php echo $brew_text_004; ?></div>
+        	<div id="req-strength" style="margin:0; padding:0">&diams; = <?php echo $brew_text_005; ?></div>
+        	<div id="req-carbonation" style="margin:0; padding:0">&clubs; = <?php echo $brew_text_006; ?></div>
+        	<div id="req-sweetness" style="margin:0; padding:0">&hearts; = <?php echo $brew_text_007; ?></div>
+        </span>
         </div>
     </div><!-- ./Form Group -->
     <!-- Entry Requirements -->
 	<div id="specialInfo" class="form-group">
     	<label for="brewInfo" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label"><?php echo $brew_text_009; ?> <span id="specialInfoName">Style Name</span></label>
         <div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
-        <p><strong class="text-primary"><?php echo $brew_text_008; ?></strong>
-        	<div id="specialInfoText" class="form-control-static">Entry info goes here.</div>
+        <p class="form-control-static"><strong class="text-teal"><?php echo $brew_text_008; ?></strong><br> 
+        <p class="form-control-static alert alert-teal" id="specialInfoText">Entry info goes here.</p>
+        </p>
         </div>
     </div>
     <!-- Enter Special Ingredients -->
@@ -1407,8 +1352,7 @@ if ($action == "edit") {
 <input type="hidden" name="relocate" value="<?php echo relocate($base_url."index.php?section=list","default",$msg,$id); ?>">
 <?php } ?>
 </form>
-<?php
-// Load Show/Hide
+<?php 
 include (INCLUDES.'form_js.inc.php');
 }  // end adding and editing allowed (line 52 or so)
 ?>

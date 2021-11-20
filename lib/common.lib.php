@@ -4454,4 +4454,11 @@ function normalizeClubs($string) {
 	return $club;
 }
 
+function clean_up_text($text) {
+	$r = htmlspecialchars($text, ENT_QUOTES, 'UTF-8');
+	$r = preg_replace( "/\r|\n/", "", $r);
+	$r = htmlspecialchars_decode($r);
+	return $r;
+}
+
 ?>

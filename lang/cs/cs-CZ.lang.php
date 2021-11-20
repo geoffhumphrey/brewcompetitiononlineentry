@@ -1808,6 +1808,7 @@ $qr_text_018 = "Naskenujte QR kód umístěný na štítku lahve, zadejte požad
 $label_select_state = "Vyberte nebo vyhledejte svůj stát";
 $label_select_below = "Vyberte níže";
 $output_text_033 = "Při odesílání vaší zprávy BJCP je možné, že ne všichni zaměstnanci na seznamu obdrží body. Doporučuje se, abyste nejprve přidělili body těm s BJCP ID.";
+$styles_entry_text_PRX3 = "Účastník musí uvést odrůdu použitých hroznů nebo hroznového moštu.";
 
 /**
  * ----------------------------------------------------------------------------------

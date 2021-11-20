@@ -717,10 +717,10 @@ if ($section == "brew") {
 	$brew_text_001 = "Judges will not know the name of your entry.";
 	$brew_text_002 = "[disabled - style entry limit reached]"; // missing punctuation intentional
 	$brew_text_003 = "[disabled - style entry limit reached for user]"; // missing punctuation intentional
-	$brew_text_004 = "Specific type, special ingredients, classic style, strength (for beer styles), and/or color are required.";
-	$brew_text_005 = "Strength required (mead only)"; // missing punctuation intentional
-	$brew_text_006 = "Carbonation level required (mead and cider only)"; // missing punctuation intentional
-	$brew_text_007 = "Sweetness level required (mead and cider only)"; // missing punctuation intentional
+	$brew_text_004 = "Specific type, special ingredients, classic style, strength (for beer styles), and/or color are required";
+	$brew_text_005 = "Strength required"; // missing punctuation intentional
+	$brew_text_006 = "Carbonation level required"; // missing punctuation intentional
+	$brew_text_007 = "Sweetness level required"; // missing punctuation intentional
 	$brew_text_008 = "This style requires that you provide specific information for entry.";
 	$brew_text_009 = "Requirements for"; // missing punctuation intentional
 	$brew_text_010 = "This style requires more information. Please enter in the provided area.";
@@ -1945,6 +1945,8 @@ $qr_text_018 = "Scan a QR Code located on a bottle label, enter the required pas
 $label_select_state = "Select or Search for Your State";
 $label_select_below = "Select Below";
 $output_text_033 = "When submitting your report to the BJCP, it is possible that not all on the staff list will receive points. It is suggested that you allocate points to those with BJCP IDs first.";
+
+$styles_entry_text_PRX3 = "Entrant must specify the varietal of grapes or grape must used.";
 
 /**
  * ----------------------------------------------------------------------------------

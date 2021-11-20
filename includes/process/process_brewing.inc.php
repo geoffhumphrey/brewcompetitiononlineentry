@@ -13,8 +13,8 @@ foreach ($_POST as $key => $value) {
 
 if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) && (isset($_SESSION['userLevel'])))) {
 
-	if ($_SESSION['prefsStyleSet'] == "BA") $optional_info_styles = array();
-	else $optional_info_styles = array("21-B","28-A","30-B","33-A","33-B","34-B","M2-C","M2-D","M2-E","M3-A","M3-B","M4-B","M4-C","07-C","M1-A","M1-B","M1-C","M2-A","M2-B","M4-A","C1-B","C1-C");
+	include (DB.'entries.db.php');
+    include (INCLUDES.'constants.inc.php');
 
 	// Instantiate HTMLPurifier
 	require (CLASSES.'htmlpurifier/HTMLPurifier.standalone.php');
@@ -167,28 +167,30 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 		// Mark as paid if free entry fee
 		if ($_SESSION['contestEntryFee'] == 0) $brewPaid = "1";
 
+		/*
 		// Concat all special ingredient styles
 		$all_special_ing_styles = array();
 		if (is_array($special_beer)) $all_special_ing_styles = array_merge($all_special_ing_styles,$special_beer);
 		if (is_array($carb_str_sweet_special)) $all_special_ing_styles = array_merge($all_special_ing_styles,$carb_str_sweet_special);
 		if (is_array($spec_sweet_carb_only)) $all_special_ing_styles = array_merge($all_special_ing_styles,$spec_sweet_carb_only);
 		if (is_array($spec_carb_only)) $all_special_ing_styles = array_merge($all_special_ing_styles,$spec_carb_only);
-
 		// print_r($all_special_ing_styles);
 		// echo $index."<br>";
+		*/
 
 		// -------------------------------- Required info --------------------------------
 		// Checked against requirements later
-		if ((!empty($_POST['brewInfo'])) && (in_array($index, $all_special_ing_styles))) {
+		if (!empty($_POST['brewInfo'])) {
 			$brewInfo = $purifier->purify($_POST['brewInfo']);
 			$brewInfo = filter_var($brewInfo,FILTER_SANITIZE_STRING);
 		}
 
 		// Specialized/Optional info
-		if ((!empty($_POST['brewInfoOptional'])) && (in_array($index, $optional_info_styles))) {
+		if (!empty($_POST['brewInfoOptional'])) {
 			$brewInfoOptional = $purifier->purify($_POST['brewInfoOptional']);
 			$brewInfoOptional = filter_var($brewInfoOptional,FILTER_SANITIZE_STRING);			
 		}
+
 		// For BJCP 2015, process addtional info
 		if ($_SESSION['prefsStyleSet'] == "BJCP2015") {
 
@@ -232,14 +234,11 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 
 		/*
 		// DEBUG
-		print_r($all_carb_ids);
-		print_r($all_sweet_ids);
-		print_r($all_strength_ids);
 		echo "ID: ".$styleID."<br>";
 		echo "Carb: ".$brewMead1."<br>";
 		echo "Sweet: ".$brewMead2."<br>";
 		echo "Strength: ".$brewMead3;
-		exit;
+		exit();
 		*/
 
 		// The following are only enabled when preferences dictate that the recipe fields be shown.
@@ -877,7 +876,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 			$updateSQL .= "brewPossAllergens=".GetSQLValueString($brewPossAllergens,"text");
 			$updateSQL .= " WHERE id ='".$id."'";
 
-		// echo $updateSQL; exit;
+		// echo $updateSQL; exit();
 		mysqli_real_escape_string($connection,$updateSQL);
 		$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 
@@ -1002,7 +1001,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 		if (isset($updateSQL2)) echo "Carb: ".$updateSQL2."<br>";
 		if (isset($updateSQL3)) echo "Sweetness: ".$updateSQL3."<br>";
 		if (isset($updateSQL4)) echo "Strength: ".$updateSQL4."<br>";
-		exit;
+		exit();
 		*/
 
 	} // end if ($action == "edit")

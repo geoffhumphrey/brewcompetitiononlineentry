@@ -1810,6 +1810,7 @@ $qr_text_018 = "Digitalize um código QR localizado no rótulo de um frasco, dig
 $label_select_state = "Selecione ou pesquise o seu estado";
 $label_select_below = "Selecione abaixo";
 $output_text_033 = "Ao enviar seu relatório ao BJCP, é possível que nem todos os integrantes da lista de funcionários recebam pontos. É sugerido que você aloque pontos para aqueles com IDs BJCP primeiro.";
+$styles_entry_text_PRX3 = "O participante deve especificar o varietal de uva ou mosto de uva utilizado.";
 
 /**
  * ----------------------------------------------------------------------------------
