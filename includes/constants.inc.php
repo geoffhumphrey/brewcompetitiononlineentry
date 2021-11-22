@@ -2678,4 +2678,7 @@ if (isset($_SESSION['prefsStyleSet'])) {
     if (isset($_SESSION['style_set_cider'])) $cider_array = $_SESSION['style_set_cider'];
     if (isset($_SESSION['style_set_category_end'])) $category_end = $_SESSION['style_set_category_end'];
 }
+
+$specialty_ipa_subs = array("21-B1","21-B2","21-B3","21-B4","21-B5","21-B6","21-B7");
+$historical_subs = array("27-A1","27-A2","27-A3","27-A4","27-A5","27-A6","27-A7","27-A8","27-A9");
 ?>

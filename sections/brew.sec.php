@@ -98,6 +98,7 @@ $highlight_special = "";
 $highlight_carb = "";
 $highlight_strength = "";
 
+/*
 $all_special_ing_styles = array();
 if (is_array($special_beer)) $all_special_ing_styles  = array_merge($all_special_ing_styles,$special_beer);
 if (is_array($carb_str_sweet_special)) $all_special_ing_styles = array_merge($all_special_ing_styles,$carb_str_sweet_special);
@@ -110,6 +111,8 @@ if (is_array($special_beer_info)) $all_special_ing_styles_info = array_merge($al
 if (is_array($carb_str_sweet_special_info)) $all_special_ing_styles_info = array_merge($all_special_ing_styles_info,$carb_str_sweet_special_info);
 if (is_array($spec_sweet_carb_only_info)) $all_special_ing_styles_info = array_merge($all_special_ing_styles_info,$spec_sweet_carb_only_info);
 array_unique($all_special_ing_styles_info);
+
+*/
 
 $proEdition = FALSE;
 if ($_SESSION['prefsProEdition'] == 1) $proEdition = TRUE;

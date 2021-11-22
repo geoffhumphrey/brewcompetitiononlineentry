@@ -1936,9 +1936,16 @@ if (!check_update("prefsEval", $prefix."preferences")) {
 
 $output .= "<li>Added column to enable or disable Electronic Scoresheets functionality.</li>";
 
+/**
+ * ----------------------------------------------- 2.3.2 ---------------------------------------------
+ * Require more info for Italian Grape Ale.
+ * ---------------------------------------------------------------------------------------------------
+ */
+$updateSQL = sprintf("UPDATE `%s` SET brewStyleReqSpec='1' WHERE brewStyleGroup='PR' AND brewStyleNum='X3';", $prefix."archive",$row_archive['archiveSuffix']);
+mysqli_real_escape_string($connection,$updateSQL);
+$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 
-
-
+$output .= "<li>Added more information requirement for Italian Grape Ale (PRX3).</li>";
 
 /** --- Future Release ---
  * Finally, after all updates have been implemented, 

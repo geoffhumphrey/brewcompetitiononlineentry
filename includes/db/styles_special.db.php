@@ -288,5 +288,4 @@ do {
 	
 } while($row_required_optional = mysqli_fetch_assoc($required_optional));
 
-
 ?>

@@ -1,10 +1,16 @@
-<?php
-if (($section == "admin") && ($go == "styles") && ($action != "default")) {
-	if ($styleSet != "BA") {
-		$specialty_ipa_subs = array("21-B1","21-B2","21-B3","21-B4","21-B5","21-B6","21-B7");
-		$historical_subs = array("27-A1","27-A2","27-A3","27-A4","27-A5","27-A6","27-A7","27-A8","27-A9");
+<?php if (($section == "admin") && ($go == "styles") && ($action != "default")) { ?>
+<script>
+	var specialty_ipa_subs = <?php echo json_encode($specialty_ipa_subs); ?>;
+	var historical_subs = <?php echo json_encode($historical_subs); ?>;
+	var edit_style = "<?php echo $action; ?>";
+	if (edit_style == "edit") {
+		var req_special = "<?php echo $row_styles['brewStyleReqSpec']; ?>";
+		var style_type = "<?php echo $row_styles['brewStyleType']; ?>";
+	} else { 
+		var req_special = "0";
+		var style_type = "1";
 	}
-?>
+</script>
 <script src="<?php echo $base_url; ?>js_includes/add_edit_style.min.js"></script>
 <?php } ?>
 <?php if ($section == "brew") { ?>
