@@ -10,7 +10,44 @@ require_once (DB.'setup.db.php');
 require_once (INCLUDES.'db_tables.inc.php');
 require_once (LIB.'help.lib.php');
 
-if ($section == "step4") unset($_SESSION['prefs'.$prefix_session]);
+$prefs_set = FALSE;
+$jprefs_set = FALSE;
+
+if (($section == "step4") || ($section == "step5") || ($section == "step6") || ($section == "step7")) {
+	
+	unset($_SESSION['prefs'.$prefix_session]);
+	$query_prefs = sprintf("SELECT * FROM %s WHERE id='1'", $prefix."preferences");
+	$prefs = mysqli_query($connection,$query_prefs) or die (mysqli_error($connection));
+	$row_prefs = mysqli_fetch_assoc($prefs);
+	$totalRows_prefs = mysqli_num_rows($prefs);
+
+	if ($totalRows_prefs == 1) {
+		$prefs_set = TRUE;
+		foreach ($row_prefs as $key => $value) {
+			if ($key != "id") $_SESSION[$key] = $value;
+		}
+	}
+
+	$query_judging_prefs = sprintf("SELECT * FROM %s WHERE id='1'", $prefix."judging_preferences");
+	$judging_prefs = mysqli_query($connection,$query_judging_prefs) or die (mysqli_error($connection));
+	$row_judging_prefs = mysqli_fetch_assoc($judging_prefs);
+	$totalRows_judging_prefs = mysqli_num_rows($judging_prefs);
+
+	if ($totalRows_judging_prefs == 1) {
+		$jprefs_set = TRUE;
+		foreach ($row_judging_prefs as $key => $value) {
+			if ($key != "id") $_SESSION[$key] = $value;
+		}
+	}
+
+	// If preferences aren't set, redirect to preferences set up screen
+	if (!$prefs_set) {
+		unset($_SESSION['prefs'.$prefix_session]);
+		header(sprintf("Location: %s", $base_url."setup.php?section=step3&msg=999"));
+		exit();
+	}
+
+}
 
 // Set language preferences in session variables
 if (empty($_SESSION['prefsLang'.$prefix_session])) {
@@ -83,6 +120,8 @@ $setup_alerts = "";
 $setup_body = "";
 
 if ($msg == 1) $setup_alerts .= "<div class=\"alert alert-danger\"><span class=\"fa fa-lg fa-exclamation-circle\"></span> <strong>Setup Has Not Been Completed.</strong> Continue setting up your BCOE&amp;M installation.</div>";
+
+if ($msg == 999) $setup_alerts .= "<div class=\"alert alert-danger\"><span class=\"fa fa-lg fa-exclamation-circle\"></span> <strong>Preferences Were Not Saved.</strong> There was an error is saving your preferences. Please check below and re-enter your installation preferences as necessary.</div>";
 
 if ($setup_free_access == FALSE) {
 
@@ -188,14 +227,14 @@ $security_question = array($label_secret_01, $label_secret_05, $label_secret_06,
 	                }
 
 					if (($row_system['setup'] == 0) && ($section != "step0")) {
-						if ($section == "step1") 	include (SETUP.'admin_user.setup.php');
-						if ($section == "step2") 	include (SETUP.'admin_user_info.setup.php');
-						if ($section == "step3") 	include (SETUP.'site_preferences.setup.php');
-						if ($section == "step4") 	include (SETUP.'competition_info.setup.php');
-						if ($section == "step5") 	include (SETUP.'judging_locations.setup.php');
-						if ($section == "step6") 	include (SETUP.'drop-off.setup.php');
-						if ($section == "step7") 	include (SETUP.'accepted_styles.setup.php');
-						if ($section == "step8") 	include (SETUP.'judging_preferences.setup.php');
+						if ($section == "step1") include (SETUP.'admin_user.setup.php');
+						if ($section == "step2") include (SETUP.'admin_user_info.setup.php');
+						if ($section == "step3") include (SETUP.'site_preferences.setup.php');
+						if ($section == "step4") include (SETUP.'competition_info.setup.php');
+						if ($section == "step5") include (SETUP.'judging_locations.setup.php');
+						if ($section == "step6") include (SETUP.'drop-off.setup.php');
+						if ($section == "step7") include (SETUP.'accepted_styles.setup.php');
+						if ($section == "step8") include (SETUP.'judging_preferences.setup.php');
 					}
 
 				} // end if (table_exists($prefix."bcoem_sys"))

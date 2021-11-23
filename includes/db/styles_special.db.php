@@ -80,7 +80,6 @@ if (($_SESSION['prefsLanguage'] == "en-US") && ($_SESSION['prefsStyleSet'] == "B
 	);
 }
 
-
 elseif (($_SESSION['prefsLanguage'] != "en-US") && ($_SESSION['prefsStyleSet'] == "BJCP2015")) {
 	$styles_entry_text = array(
 	    "7-C" => $styles_entry_text_07C,
@@ -178,12 +177,6 @@ do {
 	if ($_SESSION['prefsStyleSet'] == "BA") {
 		if (!empty($row_required_optional['brewStyleInfo'])) $styles_entry_text[$style_id] = str_replace($replacement1,$replacement2,$row_required_optional['brewStyleInfo']);
 	}
-
-	/*
-	else if ($_SESSION['prefsStyleSet'] == "AABC") {
-		if (!empty($row_required_optional['brewStyleEntry'])) $styles_entry_text[$style_id] = str_replace($replacement1,$replacement2,$row_required_optional['brewStyleEntry']);
-	}
-	*/
 	
 	else {
 		if (!empty($row_required_optional['brewStyleEntry'])) {
@@ -191,7 +184,6 @@ do {
 			else $styles_entry_text[$style_id] = $row_required_optional['brewStyleEntry'];
 		}
 	}
-	
 
 	// Build Modals
 	if ($section == "brew") {
@@ -209,6 +201,7 @@ do {
 				if ($_SESSION['prefsLanguage'] == "en-US") $info .= str_replace($replacement1,$replacement2,"<p>".$label_entry_instructions.": ".$styles_entry_text[$style_id]."</p>");
 				else $info .= "<p>".$label_entry_instructions.": ".$styles_entry_text[$style_id]."</p>";
 			}
+			
 			else {
 				if (!empty($row_required_optional['brewStyleEntry'])) {
 					if ($_SESSION['prefsLanguage'] == "en-US") $info .= str_replace($replacement1,$replacement2,"<p>".$label_entry_instructions.": ".$row_required_optional['brewStyleEntry']."</p>");

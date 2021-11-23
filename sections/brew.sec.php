@@ -445,7 +445,7 @@ else $relocate_referrer = $_SERVER['HTTP_REFERER'];
 	}
 	
     ?>
-	<div class="form-group"><!-- Form Group REQUIRED Text Input -->
+	<div id="entry-name" class="form-group"><!-- Form Group REQUIRED Text Input -->
         <label for="brewName" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label"><?php echo $label_entry_name; ?></label>
         <div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
             <div class="input-group has-warning">
@@ -599,7 +599,7 @@ else $relocate_referrer = $_SERVER['HTTP_REFERER'];
     </div>
     <!-- Select Strength -->
     <div id="strength">
-    	<div class="form-group"><!-- Form Group Radio INLINE -->
+    	<div id="fg-strength" class="form-group"><!-- Form Group Radio INLINE -->
             <label for="brewMead3" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label <?php if ($highlight_strength) echo "text-danger"; ?>"><?php echo $label_strength; ?></label>
             <div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
                 <div class="input-group">
@@ -620,7 +620,7 @@ else $relocate_referrer = $_SERVER['HTTP_REFERER'];
     </div>
 	<!-- Select Carbonation -->
     <div id="carbonation">
-        <div id="selectCarbonation" class="form-group"><!-- Form Group Radio INLINE -->
+        <div id="fg-carbonation" class="form-group"><!-- Form Group Radio INLINE -->
             <label for="brewMead1" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label"><?php echo $label_carbonation; ?></label>
             <div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
                 <div class="input-group">
@@ -641,7 +641,8 @@ else $relocate_referrer = $_SERVER['HTTP_REFERER'];
      </div>
      <!-- Select Sweetness -->
      <div id="sweetness">
-    	<div class="form-group <?php if (($highlight_carb) || ($highlight_sweetness)) echo "has-error"; ?>"><!-- Form Group Radio INLINE -->
+    	<div id="fg-sweetness" class="form-group <?php if (($highlight_carb) || ($highlight_sweetness)) echo "has-error"; ?>">
+    		<!-- Form Group Radio INLINE -->
             <label for="brewMead2" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label"><?php echo $label_sweetness; ?></label>
             <div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
                 <div class="input-group">

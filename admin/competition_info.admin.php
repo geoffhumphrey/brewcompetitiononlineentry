@@ -1,9 +1,14 @@
 <?php 
 if ($section == "step4") {
 
-    $currency = explode("^",currency_info($row_prefs['prefsCurrency'],1));
-    $currency_symbol = $currency[0];
-    $currency_code = $currency[1];
+    if (isset($row_prefs['prefsCurrency'])) {
+        $currency = explode("^",currency_info($row_prefs['prefsCurrency'],1));
+        $currency_symbol = $currency[0];
+        $currency_code = $currency[1];
+    } else {
+        $currency_symbol = "$";
+        $currency_code = "USD";
+    }
 
     $query_brewer = sprintf("SELECT brewerFirstName,brewerLastName,brewerEmail FROM %s ORDER BY id ASC LIMIT 1",$prefix."brewer");
     $brewer = mysqli_query($connection,$query_brewer) or die (mysqli_error($connection));

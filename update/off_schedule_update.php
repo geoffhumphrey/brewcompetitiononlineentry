@@ -1941,7 +1941,8 @@ $output .= "<li>Added column to enable or disable Electronic Scoresheets functio
  * Require more info for Italian Grape Ale.
  * ---------------------------------------------------------------------------------------------------
  */
-$updateSQL = sprintf("UPDATE `%s` SET brewStyleReqSpec='1' WHERE brewStyleGroup='PR' AND brewStyleNum='X3';", $prefix."archive",$row_archive['archiveSuffix']);
+
+$updateSQL = sprintf("UPDATE `%s` SET brewStyleReqSpec='1' WHERE brewStyleGroup='PR' AND brewStyleNum='X3';", $prefix."styles");
 mysqli_real_escape_string($connection,$updateSQL);
 $result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 

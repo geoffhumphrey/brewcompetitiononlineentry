@@ -7,6 +7,16 @@
 
 if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) || ($section == "setup"))) {
 
+	// Sanity check for prefs
+	if ($section == "setup") {
+		$query_prefs = sprintf("SELECT * FROM %s WHERE id='1'", $prefix."preferences");
+		$prefs = mysqli_query($connection,$query_prefs) or die (mysqli_error($connection));
+		$row_prefs = mysqli_fetch_assoc($prefs);
+		$totalRows_prefs = mysqli_num_rows($prefs);
+
+		if ($totalRows_prefs < 1) $action = "add";
+	}
+
 	$prefsGoogleAccount = "";
 	if ((isset($_POST['prefsGoogleAccount0'])) && (isset($_POST['prefsGoogleAccount1']))) $prefsGoogleAccount = $_POST['prefsGoogleAccount0']."|".$_POST['prefsGoogleAccount1'];
 

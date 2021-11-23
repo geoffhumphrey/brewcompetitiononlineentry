@@ -452,6 +452,8 @@ function GetSQLValueString($theValue, $theType, $theDefinedValue = "", $theNotDe
 
 function currency_info($input,$method) {
 
+	$currency_code = "";
+
 	if ($method == 1) {
 
 		switch ($input) {
