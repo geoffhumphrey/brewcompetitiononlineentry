@@ -7,6 +7,7 @@ $force_update = FALSE;
 $no_updates_needed = FALSE;
 $hosted_setup = FALSE;
 $check_setup = FALSE;
+$system_name_change = FALSE;
 
 /**
  * To be compatible with MySQL 8, the "system" DB
@@ -15,27 +16,21 @@ $check_setup = FALSE;
  */
 
 if (check_setup($prefix."system",$database)) {
-
-	$system_name_change = FALSE;
 	$query_system = sprintf("SELECT * FROM %s WHERE id='1'",$prefix."system");
 	$system = mysqli_query($connection,$query_system) or die (mysqli_error($connection));
 	$row_system = mysqli_fetch_assoc($system);
-	$check_setup = TRUE;
 	if ($row_system['version'] != $current_version) unset($_SESSION['session_set_'.$prefix_session]);
-
+	if ((HOSTED) && ($row_system['setup_last_step'] == 9)) $hosted_setup = TRUE;
 }
 
 if (check_setup($prefix."bcoem_sys",$database)) {
-
 	$system_name_change = TRUE;
 	$query_system = sprintf("SELECT * FROM %s WHERE id='1'",$prefix."bcoem_sys");
 	$system = mysqli_query($connection,$query_system) or die (mysqli_error($connection));
 	$row_system = mysqli_fetch_assoc($system);
-	$check_setup = TRUE;
 	if ($row_system['version'] != $current_version) unset($_SESSION['session_set_'.$prefix_session]);
+	if ((HOSTED) && ($row_system['setup_last_step'] == 9)) $hosted_setup = TRUE;
 }
-
-if ((HOSTED) && ($row_system['setup_last_step'] == 9)) $hosted_setup = TRUE;
 
 if ((!isset($_SESSION['currentVersion'])) || ((isset($_SESSION['currentVersion'])) && ($_SESSION['currentVersion'] == 0))) {
 	
@@ -81,10 +76,13 @@ if ((!isset($_SESSION['currentVersion'])) || ((isset($_SESSION['currentVersion']
 			$setup_relocate .= "&msg=1";
 		}
 
+		/**
+		 * If the current version is the same as what is in the DB, trigger a force update
+		 * if system version date in DB is prior to the current version date.
+		 * Covers updates made in between pre-releases and full version.
+		 */
+
 		if ($row_system['version'] == $current_version) {
-			// If the current version is the same as what is in the DB, trigger a force update
-			// if system version date in DB is prior to the current version date
-			// covers updates made in between pre-releases and full version
 			if ((strtotime($row_system['version_date'])) < ($current_version_date)) $force_update = TRUE;
 			$setup_success = TRUE;
 		}
@@ -98,11 +96,9 @@ if ((!isset($_SESSION['currentVersion'])) || ((isset($_SESSION['currentVersion']
 			}
 
 			else {
-				
 				$force_update = TRUE;
 				$setup_success = TRUE;
 				$setup_relocate = "Location: ".$base_url;
-
 			}
 
 		}
@@ -113,7 +109,7 @@ if ((!isset($_SESSION['currentVersion'])) || ((isset($_SESSION['currentVersion']
 
 	if (!$setup_success) {
 		header ($setup_relocate);
-		exit;
+		exit();
 	}
 
 	else {

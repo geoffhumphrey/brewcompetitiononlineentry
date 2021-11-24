@@ -104,7 +104,11 @@ else {
 	if (($row_brewer['brewerDiscount'] == "Y") && (isset($_SESSION['contestEntryFeePasswordNum']))) {
 		$primary_page_info .= sprintf("<p class=\"lead\"><small><span class=\"fa fa-lg fa-star-o text-primary\"></span> %s <strong class=\"text-success\">%s</strong> %s.</small></p>",$pay_text_007,$currency_symbol.number_format($_SESSION['contestEntryFeePasswordNum'], 2),$pay_text_004);
 	}
-	$primary_page_info .= sprintf("<p class=\"lead\"><small><span class=\"fa fa-lg fa-exclamation-triangle text-danger\"></span> %s <strong class=\"text-success\">%s</strong>. %s <strong class=\"text-danger\">%s</strong>.</small></p>",$pay_text_008,$currency_symbol.number_format($total_entry_fees,2),$pay_text_009,$currency_symbol.number_format($total_to_pay,2));
+	$primary_page_info .= "<p class=\"lead\">";
+	$primary_page_info .= sprintf("<small><span class=\"fa fa-lg fa-exclamation-triangle text-danger\"></span> %s <strong class=\"text-success\">%s</strong>.",$pay_text_008,$currency_symbol.number_format($total_entry_fees,2));
+	$primary_page_info .= sprintf(" %s <strong class=\"text-danger\">%s</strong>",$pay_text_009,$currency_symbol.number_format($total_to_pay,2));
+	if ($_SESSION['prefsTransFee'] == "Y") $primary_page_info .= "<strong><span class=\"text-primary\">*</span></strong>";
+	$primary_page_info .= ".</small></p>";
 
 	if (($total_not_paid == 0) || ($total_to_pay == 0)) $primary_page_info .= sprintf("<p class=\"lead\"><small><span class=\"fa fa-lg fa-check-circle text-success\"></span> %s</p></small></p>",$pay_text_010);
 
@@ -151,8 +155,12 @@ else {
 
 		if ($_SESSION['prefsPaypal'] == "Y")  {
 
-			// As of August 1, 2021, PayPal fees were split. What is reflected here is the HIGHEST amount PayPal charges per transaction
-			// which is 3.49% + $0.49 US. This should be sufficient to cover costs for most international currencies as well.
+			/**
+			 * As of August 1, 2021, PayPal fees were split. What is reflected here is the 
+			 * HIGHEST amount PayPal charges per transaction which is 3.49% + $0.49 US. The 
+			 * calculations below should be sufficient to cover costs for most international 
+			 * currencies as well.
+			 */
 			
 			if ($_SESSION['prefsTransFee'] == "Y") {
 				$fee = number_format((($total_to_pay * .035) + .50), 2, '.', '');
@@ -167,9 +175,7 @@ else {
 
 			// PayPal
 			$header2_4 .= "<h3>PayPal <span class=\"fa fa-lg fa-cc-paypal\"></span> <span class=\"fa fa-lg fa-cc-visa\"></span> <span class=\"fa fa-lg fa-cc-mastercard\"></span> <span class=\"fa fa-lg fa-cc-discover\"></span> <span class=\"fa fa-lg fa-cc-amex\"></span></h3>";
-			$page_info4 .= sprintf("<p>%s",$pay_text_018);
-			if ($_SESSION['prefsTransFee'] == "Y") $page_info4 .= sprintf("<strong> %s %s %s</strong>",$pay_text_019,$currency_symbol.$fee,$pay_text_020);
-			$page_info4 .= "</p>";
+			$page_info4 .= sprintf("<p>%s</p>",$pay_text_018);
 
 			$page_info4 .= "<form role=\"form\" id=\"formfield\" name=\"PayPal\" action=\"".$paypal_env."\" method=\"post\">\n";
 			$page_info4 .= "<input type=\"hidden\" name=\"action\" value=\"add_form\" />\n";
@@ -188,11 +194,18 @@ else {
 			$page_info4 .= sprintf("<input type=\"hidden\" name=\"return\" value=\"%s\">\n",rtrim($return, '-'));
 			$page_info4 .= sprintf("<input type=\"hidden\" name=\"cancel_return\" value=\"%s\">\n",$base_url."index.php?section=pay&msg=11");
 			if ((isset($_SESSION['prefsPaypalIPN'])) && ($_SESSION['prefsPaypalIPN'] == 1) && (TESTING)) $page_info4 .= "<input type=\"hidden\" name=\"test_ipn\" value=\"1\">\n";
+			$page_info4 .= "<div class=\"row\" style=\"margin-bottom:20px;\">";
+			$page_info4 .= "<div class=\"col-sm-12 col-md-3 col-lg-2\">";
 			$page_info4 .= "<input type=\"hidden\" name=\"bn\" value=\"PP-BuyNowBF:btn_paynowCC_LG.gif:NonHosted\">\n";
 			$page_info4 .= "<button type=\"button\" name=\"btn\" id=\"submitBtn\" data-toggle=\"modal\" data-target=\"#confirm-submit\" class=\"btn btn-primary\" /><span class=\"fa fa-paypal\"></span> ".$label_pay_with_paypal."</button>\n";
+			$page_info4 .= "</div>";
+			$page_info4 .= "<div class=\"col-sm-12 col-md-9 col-lg-10\">";
+			if ($_SESSION['prefsTransFee'] == "Y") $page_info4 .= sprintf("<p><strong class=\"text-primary\">*%s %s %s</strong></p>",$pay_text_019,$currency_symbol.$fee,$pay_text_020);
+			$page_info4 .= "</div>";
+			$page_info4 .= "</div>";
 			$page_info4 .= "</form>\n";
 
-			/*
+			/* 
 			// If IPN is NOT enabled show this:
 			$page_info4 .= "<form role=\"form\" id=\"formfield\" name=\"PayPal\" action=\"https://www.paypal.com/cgi-bin/webscr\" method=\"post\">";
 			//$page_info4 .= "<form role=\"form\" id=\"formfield\" name=\"PayPal\" action=\"".$base_url."includes/process.inc.php?action=paypal\" method=\"post\">\n";
@@ -281,18 +294,20 @@ else {
 		$page_info7 .= "</form>";
 	}
 
-	if (($total_entry_fees > 0) && ($total_entry_fees == $total_paid_entry_fees)) $page_info6 .= sprintf("<span class=\"fa fa-lg fa-check-circle text-success\"></span> %s</p>",$pay_text_024);
-	if (($total_entry_fees == 0) && ($_SESSION['contestEntryFee'] > 0)) $page_info6 .= sprintf("<p>%s</p>",$pay_text_025);
-	else $page_info6 .= sprintf("<span class=\"fa fa-lg fa-check-circle text-success\"></span> %s</p>",$pay_text_032);
+	if (($total_entry_fees > 0) && ($total_entry_fees == $total_paid_entry_fees)) 
+		$page_info6 .= sprintf("<p class=\"text-success\"><span class=\"fa fa-lg fa-check-circle\"></span> <strong>%s</strong></p>",$pay_text_024);
+	if (($total_entry_fees == 0) && ($_SESSION['contestEntryFee'] > 0)) 
+		$page_info6 .= sprintf("<p>%s</p>",$pay_text_025);
+	else 
+		$page_info6 .= sprintf("<p class=\"text-success\"><span class=\"fa fa-lg fa-check-circle\"></span> <strong>%s</strong></p>",$pay_text_032);
 
 	if (($_SESSION['prefsPayToPrint'] == "Y") && ($unconfirmed > 0)) $warning1 .= sprintf("<div class=\"alert alert-danger\"><span class=\"fa fa-lg fa-exclamation-circle\"></span> <strong>%s</strong> %s</div>",$pay_text_026,$pay_text_027);
 
-
-	// --------------------------------------------------------------
-	// Display
-	// --------------------------------------------------------------
-
-
+	/**
+	 * --------------------------------------------------------------
+	 * Display
+	 * --------------------------------------------------------------
+	 */
 
 	if ($total_entry_fees > 0) {
 
@@ -318,5 +333,5 @@ else {
 
 	else echo $page_info6;
 
-} // end pay not disabled
+} // end if payment options are not disabled
 ?>
