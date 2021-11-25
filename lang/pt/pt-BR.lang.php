@@ -1813,6 +1813,14 @@ $output_text_033 = "Ao enviar seu relatório ao BJCP, é possível que nem todos
 $styles_entry_text_PRX3 = "O participante deve especificar o varietal de uva ou mosto de uva utilizado.";
 
 /**
+ * ------------------------------------------------------------------------
+ * Version 2.3.3 Additions
+ * ------------------------------------------------------------------------
+ */
+
+$winners_text_007 = "Não há entradas vencedoras nesta tabela.";
+
+/**
  * ----------------------------------------------------------------------------------
  * END TRANSLATIONS
  * ----------------------------------------------------------------------------------

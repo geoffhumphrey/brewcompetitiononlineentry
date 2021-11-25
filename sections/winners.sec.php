@@ -117,79 +117,80 @@ if ($row_scored_entries['count'] > 0) {
 
 				if ($missing_style) $winners_table_header .= sprintf("<p>%s</p>",$winners_text_006);
 
-				// Build table headers
-				$winners_table_head_1 .= "<tr>";
-				$winners_table_head_1 .= sprintf("<th nowrap>%s</th>",$label_place);
-				$winners_table_head_1 .= sprintf("<th>%s</th>",$label_brewer);
-				$winners_table_head_1 .= sprintf("<th><span class=\"hidden-xs hidden-sm hidden-md\">%s </span>%s</th>",$label_entry,$label_name);
-				$winners_table_head_1 .= sprintf("<th>%s</th>",$label_style);
-				if ($_SESSION['prefsProEdition'] == 0) $winners_table_head_1 .= sprintf("<th>%s</th>",$label_club);
-				if ($tb == "scores") $winners_table_head_1 .= sprintf("<th nowrap>Score</th>",$label_score);
-				$winners_table_head_1 .= "</tr>";
-
 				// Build table body
 				include (DB.'scores.db.php');
 
-				do {
-					if ($_SESSION['prefsStyleSet'] == "AABC") $style = ltrim($row_scores['brewCategory'],"0").".".ltrim($row_scores['brewSubCategory'],"0");
-       				else $style = $row_scores['brewCategory'].$row_scores['brewSubCategory'];
+				if ($totalRows_scores > 0) {
 
-       				$entry_name = html_entity_decode($row_scores['brewName'],ENT_QUOTES|ENT_XML1,"UTF-8");
-   					$entry_name = htmlentities($entry_name,ENT_QUOTES|ENT_SUBSTITUTE|ENT_HTML5,"UTF-8");
+					// Build table headers
+					$winners_table_head_1 .= "<tr>";
+					$winners_table_head_1 .= sprintf("<th nowrap>%s</th>",$label_place);
+					$winners_table_head_1 .= sprintf("<th>%s</th>",$label_brewer);
+					$winners_table_head_1 .= sprintf("<th><span class=\"hidden-xs hidden-sm hidden-md\">%s </span>%s</th>",$label_entry,$label_name);
+					$winners_table_head_1 .= sprintf("<th>%s</th>",$label_style);
+					if ($_SESSION['prefsProEdition'] == 0) $winners_table_head_1 .= sprintf("<th>%s</th>",$label_club);
+					if ($tb == "scores") $winners_table_head_1 .= sprintf("<th nowrap>Score</th>",$label_score);
+					$winners_table_head_1 .= "</tr>";
 
-					$winners_table_body_1 .= "<tr>";
+					do {
+						if ($_SESSION['prefsStyleSet'] == "AABC") $style = ltrim($row_scores['brewCategory'],"0").".".ltrim($row_scores['brewSubCategory'],"0");
+	       				else $style = $row_scores['brewCategory'].$row_scores['brewSubCategory'];
 
-					if ($action == "print") {
-						$winners_table_body_1 .= "<td width=\"1%\" nowrap>";
-						$winners_table_body_1 .= display_place($row_scores['scorePlace'],1);
-						$winners_table_body_1 .= "</td>";
-					}
+	       				$entry_name = html_entity_decode($row_scores['brewName'],ENT_QUOTES|ENT_XML1,"UTF-8");
+	   					$entry_name = htmlentities($entry_name,ENT_QUOTES|ENT_SUBSTITUTE|ENT_HTML5,"UTF-8");
 
-					else {
-						$winners_table_body_1 .= "<td width=\"1%\" nowrap>";
-						$winners_table_body_1 .= display_place($row_scores['scorePlace'],2);
-						$winners_table_body_1 .= "</td>";
-					}
+						$winners_table_body_1 .= "<tr>";
 
-					$winners_table_body_1 .= "<td>";
-					if ($_SESSION['prefsProEdition'] == 1) $winners_table_body_1 .= $row_scores['brewerBreweryName'];
-					else $winners_table_body_1 .= $row_scores['brewerFirstName']." ".$row_scores['brewerLastName'];
-					if (($_SESSION['prefsProEdition'] == 0) && (!empty($row_scores['brewCoBrewer'])) && ($row_scores['brewCoBrewer'] != " ")) $winners_table_body_1 .= "<br>".$label_cobrewer.": ".$row_scores['brewCoBrewer'];
-					$winners_table_body_1 .= "</td>";
-
-					$winners_table_body_1 .= "<td width=\"25%\">";
-					$winners_table_body_1 .= $entry_name;
-					$winners_table_body_1 .= "</td>";
-
-					$winners_table_body_1 .= "<td width=\"25%\">";
-					if ($_SESSION['prefsStyleSet'] == "BA") $winners_table_body_1 .= $row_scores['brewStyle'];
-					else $winners_table_body_1 .= $style.": ".$row_scores['brewStyle'];
-					if ((!empty($row_scores['brewInfo'])) && ($section != "results")) {
-						$winners_table_body_1 .= " <a href=\"#".$row_scores['id']."\"  tabindex=\"0\" role=\"button\" data-toggle=\"popover\" data-trigger=\"hover\" data-placement=\"auto top\" data-container=\"body\" title=\"".$label_info."\" data-content=\"".str_replace("^", " ", $row_scores['brewInfo'])."\"><span class=\"hidden-xs hidden-sm hidden-md hidden-print fa fa-info-circle\"></span></a></td>";
-					}
-					$winners_table_body_1 .= "</td>";
-
-					if ($_SESSION['prefsProEdition'] == 0) {
-						$winners_table_body_1 .= "<td width=\"25%\">";
-						$winners_table_body_1 .= $row_scores['brewerClubs'];
-						$winners_table_body_1 .= "</td>";
-					}
-
-					if ($tb == "scores") {
-						$winners_table_body_1 .= "<td width=\"1%\" nowrap>";
-						if (!empty($row_scores['scoreEntry'])) {
-							if (strpos($row_scores['scoreEntry'], '.') !== false) $winners_table_body_1 .= rtrim(number_format($row_scores['scoreEntry'],2),"0"); 
-							else $winners_table_body_1 .= $row_scores['scoreEntry'];
+						if ($action == "print") {
+							$winners_table_body_1 .= "<td width=\"1%\" nowrap>";
+							$winners_table_body_1 .= display_place($row_scores['scorePlace'],1);
+							$winners_table_body_1 .= "</td>";
 						}
-						else $winners_table_body_1 .= "&nbsp;";
+
+						else {
+							$winners_table_body_1 .= "<td width=\"1%\" nowrap>";
+							$winners_table_body_1 .= display_place($row_scores['scorePlace'],2);
+							$winners_table_body_1 .= "</td>";
+						}
+
+						$winners_table_body_1 .= "<td>";
+						if ($_SESSION['prefsProEdition'] == 1) $winners_table_body_1 .= $row_scores['brewerBreweryName'];
+						else $winners_table_body_1 .= $row_scores['brewerFirstName']." ".$row_scores['brewerLastName'];
+						if (($_SESSION['prefsProEdition'] == 0) && (!empty($row_scores['brewCoBrewer'])) && ($row_scores['brewCoBrewer'] != " ")) $winners_table_body_1 .= "<br>".$label_cobrewer.": ".$row_scores['brewCoBrewer'];
 						$winners_table_body_1 .= "</td>";
-					}
 
-					$winners_table_body_1 .= "</tr>";
+						$winners_table_body_1 .= "<td width=\"25%\">";
+						$winners_table_body_1 .= $entry_name;
+						$winners_table_body_1 .= "</td>";
 
-				 } while ($row_scores = mysqli_fetch_assoc($scores));
+						$winners_table_body_1 .= "<td width=\"25%\">";
+						if ($_SESSION['prefsStyleSet'] == "BA") $winners_table_body_1 .= $row_scores['brewStyle'];
+						else $winners_table_body_1 .= $style.": ".$row_scores['brewStyle'];
+						if ((!empty($row_scores['brewInfo'])) && ($section != "results")) {
+							$winners_table_body_1 .= " <a href=\"#".$row_scores['id']."\"  tabindex=\"0\" role=\"button\" data-toggle=\"popover\" data-trigger=\"hover\" data-placement=\"auto top\" data-container=\"body\" title=\"".$label_info."\" data-content=\"".str_replace("^", " ", $row_scores['brewInfo'])."\"><span class=\"hidden-xs hidden-sm hidden-md hidden-print fa fa-info-circle\"></span></a></td>";
+						}
+						$winners_table_body_1 .= "</td>";
 
+						if ($_SESSION['prefsProEdition'] == 0) {
+							$winners_table_body_1 .= "<td width=\"25%\">";
+							$winners_table_body_1 .= $row_scores['brewerClubs'];
+							$winners_table_body_1 .= "</td>";
+						}
 
+						if ($tb == "scores") {
+							$winners_table_body_1 .= "<td width=\"1%\" nowrap>";
+							if (!empty($row_scores['scoreEntry'])) {
+								if (strpos($row_scores['scoreEntry'], '.') !== false) $winners_table_body_1 .= rtrim(number_format($row_scores['scoreEntry'],2),"0"); 
+								else $winners_table_body_1 .= $row_scores['scoreEntry'];
+							}
+							else $winners_table_body_1 .= "&nbsp;";
+							$winners_table_body_1 .= "</td>";
+						}
+
+						$winners_table_body_1 .= "</tr>";
+
+					} while ($row_scores = mysqli_fetch_assoc($scores));
+				}
 
 	$random1 = "";
 	$random1 .= random_generator(12,1);
@@ -221,6 +222,7 @@ if ($row_scored_entries['count'] > 0) {
 	</script>
 	<div class="bcoem-winner-table">
 		<?php echo $winners_table_header; ?>
+		<?php if (!empty($winners_table_body_1)) { ?>
 		<table class="table table-responsive table-striped table-bordered" id="sortable<?php echo $random1; ?>">
 		<thead>
 			<?php echo $winners_table_head_1; ?>
@@ -229,6 +231,7 @@ if ($row_scored_entries['count'] > 0) {
 			<?php echo $winners_table_body_1; ?>
 		</tbody>
 		</table>
+		<?php } else echo sprintf("<p>%s</p>",$winners_text_007); ?>
 	</div>
 	<?php
 			} else echo $winners_table_head_2;

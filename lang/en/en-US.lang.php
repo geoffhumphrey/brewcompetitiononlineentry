@@ -1949,6 +1949,14 @@ $output_text_033 = "When submitting your report to the BJCP, it is possible that
 $styles_entry_text_PRX3 = "Entrant must specify the varietal of grapes or grape must used.";
 
 /**
+ * ------------------------------------------------------------------------
+ * Version 2.3.3 Additions
+ * ------------------------------------------------------------------------
+ */
+
+$winners_text_007 = "There are no winning entries at this table.";
+
+/**
  * ----------------------------------------------------------------------------------
  * END TRANSLATIONS
  * ----------------------------------------------------------------------------------

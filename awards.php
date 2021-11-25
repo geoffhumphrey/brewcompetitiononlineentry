@@ -191,7 +191,7 @@ if (($display_to_admin) || ($display_to_public)) {
 
 					// If not, display "no winning entries" message
 					else {
-						$slides .= "<p>".$winners_text_000."</p>";
+						$slides .= "<p>".$winners_text_007."</p>";
 					}
 							
 					$slides .= "</section>\n";
@@ -286,7 +286,7 @@ if (($display_to_admin) || ($display_to_public)) {
 
 						// If not, display "no winning entries" message
 						else {
-							$slides .= "<p>".$winners_text_000."</p>";
+							$slides .= "<p>".$winners_text_007."</p>";
 						}
 
 						$slides .= "</section>\n";
@@ -386,7 +386,7 @@ if (($display_to_admin) || ($display_to_public)) {
 
 						// If not, display "no winning entries" message
 						else {
-							$slides .= "<p>".$winners_text_000."</p>";
+							$slides .= "<p>".$winners_text_007."</p>";
 						}
 
 						$slides .= "</section>\n";
@@ -402,7 +402,7 @@ if (($display_to_admin) || ($display_to_public)) {
 	} // end if ($row_scored_entries['count'] > 0)
 
 	/**
-	 * Best of Show *
+	 * Best of Show
 	 * Need to display combined Mead/Cider
 	 */
 
