@@ -139,19 +139,18 @@ do {
 		$brewInfo = "";
 		//$brewInfo .= "Required Info: ";
 		if (!empty($row_log['brewInfo'])) $brewInfo .= str_replace("^", " | ", $row_log['brewInfo']);
-		if (!empty($row_log['brewMead1'])) $brewInfo .= "&nbsp;&nbsp;".$row_log['brewMead1'];
-		if (!empty($row_log['brewMead2'])) $brewInfo .= "&nbsp;&nbsp;".$row_log['brewMead2'];
-		if (!empty($row_log['brewMead3'])) $brewInfo .= "&nbsp;&nbsp;".$row_log['brewMead3'];
-		//$required_info .= " <a tabindex=\"0\" role=\"button\" data-toggle=\"popover\" data-placement=\"right\" data-trigger=\"hover focus\" title=\"Required Info\" data-content=\"".$brewInfo."\"><span class=\"fa fa-lg fa-comment\"></span></a>";
+		if (!empty($row_log['brewMead1'])) $brewInfo .= "<br>".$row_log['brewMead1'];
+		if (!empty($row_log['brewMead2'])) $brewInfo .= "<br>".$row_log['brewMead2'];
+		if (!empty($row_log['brewMead3'])) $brewInfo .= "<br>".$row_log['brewMead3'];
 		$required_info .= "<p><strong>".$label_required_info.":</strong> ".$brewInfo."</p>";
 	}
 
 	if (!empty($row_log['brewInfoOptional'])) {
+		$required_info .= "<p><strong>".$label_optional_info.":</strong> ".$row_log['brewInfoOptional']."</p>";
+	}
 
-		//$required_info .= " <a tabindex=\"0\" role=\"button\" data-toggle=\"popover\" data-placement=\"right\" data-trigger=\"hover focus\" title=\"Optional Info\" data-content=\"".$row_log['brewInfoOptional']."\"><span class=\"fa fa-lg fa-comment-o\"></span></a>";
-
-		$required_info .= "<p><strong>".$label_optional_info."</strong> ".$row_log['brewInfoOptional']."</p>";
-
+	if (!empty($row_log['brewPossAllergens'])) {
+		$required_info .= "<p><strong>".$label_possible_allergens.":</strong> ".$row_log['brewPossAllergens']."</p>";
 	}
 
 	$entry_number = sprintf("%06s",$row_log['id']);
@@ -267,7 +266,7 @@ do {
 	if (!empty($required_info)) $entry_output .= " <a class=\"hide-loader\" role=\"button\" data-toggle=\"collapse\" data-target=\"#collapseEntryInfo".$row_log['id']."\" aria-expanded=\"false\" aria-controls=\"collapseEntryInfo".$row_log['id']."\"><span class=\"fa fa-lg fa-info-circle\"></span></a> ";
 
 	if (!empty($required_info)) {
-		$entry_output .= "<div style=\"margin-top: 8px;\" class=\"collapse small well\" id=\"collapseEntryInfo".$row_log['id']."\">";
+		$entry_output .= "<div style=\"margin-top: 8px;\" class=\"collapse small alert alert-info\" id=\"collapseEntryInfo".$row_log['id']."\">";
     	$entry_output .= $required_info;
     	$entry_output .= "</div>";
 	}

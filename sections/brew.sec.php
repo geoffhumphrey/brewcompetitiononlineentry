@@ -682,10 +682,10 @@ else $relocate_referrer = $_SERVER['HTTP_REFERER'];
 	        <div class="input-group">
 	            <!-- Input Here -->
 	            <label class="radio-inline">
-	                <input type="radio" name="possible-allergens" value="1" id="prefsCheck_0"  <?php if (($action == "edit") && (!empty($row_log['brewPossAllergens']))) echo "CHECKED"; ?> />Yes
+	                <input type="radio" name="possible-allergens" value="1" id="possAllergens_0"  <?php if (($action == "edit") && (!empty($row_log['brewPossAllergens']))) echo "CHECKED"; ?> />Yes
 	            </label>
 	            <label class="radio-inline">
-	                <input type="radio" name="possible-allergens" value="0" id="prefsCheck_1" <?php if (($action == "edit") && (empty($row_log['brewPossAllergens']))) echo "CHECKED"; if ($action == "add") echo "CHECKED"; ?> />No
+	                <input type="radio" name="possible-allergens" value="0" id="possAllergens_1" <?php if (($action == "edit") && (empty($row_log['brewPossAllergens']))) echo "CHECKED"; if ($action == "add") echo "CHECKED"; ?> />No
 	    		</label>
 	        </div>
 	        <span id="helpBlockAllergens" class="help-block"><?php echo sprintf("<strong>%s</strong> %s",$brew_text_038,$brew_text_040);  ?></span>

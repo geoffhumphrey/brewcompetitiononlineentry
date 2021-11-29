@@ -2396,7 +2396,7 @@ function entry_info($id) {
 }
 
 function get_suffix($dbTable) {
-	$suffix = strrchr($dbTable,"_");
+	$suffix = strrchr($dbTable, "_");
 	$suffix = ltrim($suffix, "_");
 	return $suffix;
 }
