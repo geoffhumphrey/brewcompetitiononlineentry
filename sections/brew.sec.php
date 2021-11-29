@@ -252,12 +252,6 @@ if ($add_or_edit) {
 		$highlight_strength   = highlight_required($msg,3,$_SESSION['prefsStyleSet']);
 	}
 
-	elseif ($action == "edit") {
-		$view = $view;
-		if (in_array($view,$all_special_ing_styles)) $special_required = TRUE;
-		else $special_required = FALSE;
-	}
-
 	if ($action == "edit") {
 
 		if (strlen(strstr($view,"21-B")) > 0) {

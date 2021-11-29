@@ -13,7 +13,7 @@ Checked Single
 
 // echo get_suffix($dbTable);
 
-if (isset($dbTable)) $dbTable = $dbTable;
+if ((isset($dbTable)) && ($dbTable != "default")) $dbTable = $dbTable;
 else $dbTable = "default";
 
 if ($dbTable == "default") {

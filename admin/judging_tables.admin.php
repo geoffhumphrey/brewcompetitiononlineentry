@@ -26,7 +26,7 @@ if ($totalRows_judging > 1) $sidebar_all_sessions = TRUE;
 
 $manage_tables_default = FALSE;
 $judging_session = FALSE;
-if ($totalRows_judging > 0) $judging_session = TRUE;
+if (($totalRows_judging > 0) || ($dbTable != "default")) $judging_session = TRUE;
 
 // Establish Vars
 $output_at_table_modals = "";
@@ -194,12 +194,10 @@ if (($action == "default") && ($filter == "default")) {
         else $scored = "<i class=\"text-danger fa fas fa-lg fa-ban\"></i> <small><em>Planning Mode</em></small>";
 
         $assigned_judges = assigned_judges($row_tables['id'],$dbTable,$judging_assignments_db_table);
-        //if (strpos($assigned_judges, "fa-plus-circle") === FALSE) 
-            $assigned_judges .= "<button class=\"btn-link\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Delete all judge assignments for this table.\" onclick=\"purge_data('".$base_url."','purge','judge-assignments','table-admin','delete-judges-".$row_tables['id']."');\"><i class=\"text-danger fas fa-lg fa-minus-circle\"></i></button><div><span class=\"hidden\" id=\"delete-judges-".$row_tables['id']."-status\"></span><span class=\"hidden\" id=\"delete-judges-".$row_tables['id']."-status-msg\"></span></div>";
+            if ($dbTable == "default") $assigned_judges .= "<button class=\"btn-link\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Delete all judge assignments for this table.\" onclick=\"purge_data('".$base_url."','purge','judge-assignments','table-admin','delete-judges-".$row_tables['id']."');\"><i class=\"text-danger fas fa-lg fa-minus-circle\"></i></button><div><span class=\"hidden\" id=\"delete-judges-".$row_tables['id']."-status\"></span><span class=\"hidden\" id=\"delete-judges-".$row_tables['id']."-status-msg\"></span></div>";
         
         $assigned_stewards = assigned_stewards($row_tables['id'],$dbTable,$judging_assignments_db_table);
-        //if (strpos($assigned_stewards, "fa-plus-circle") === FALSE) 
-            $assigned_stewards .= "<button class=\"btn-link\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Delete all steward assignments for this table.\" onclick=\"purge_data('".$base_url."','purge','steward-assignments','table-admin','delete-stewards-".$row_tables['id']."');\"><i class=\"text-danger fas fa-lg fa-minus-circle\"></i></button><div><span class=\"hidden\" id=\"delete-stewards-".$row_tables['id']."-status\"></span><span class=\"hidden\" id=\"delete-stewards-".$row_tables['id']."-status-msg\"></span></div>";
+            if ($dbTable == "default") $assigned_stewards .= "<button class=\"btn-link\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Delete all steward assignments for this table.\" onclick=\"purge_data('".$base_url."','purge','steward-assignments','table-admin','delete-stewards-".$row_tables['id']."');\"><i class=\"text-danger fas fa-lg fa-minus-circle\"></i></button><div><span class=\"hidden\" id=\"delete-stewards-".$row_tables['id']."-status\"></span><span class=\"hidden\" id=\"delete-stewards-".$row_tables['id']."-status-msg\"></span></div>";
 
         if ($dbTable == "default") {
             if (score_count($row_tables['id'],1,$dbTable)) $scoreAction = "edit";
