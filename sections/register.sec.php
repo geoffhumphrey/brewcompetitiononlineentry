@@ -626,21 +626,21 @@ if ($go == "default") {  ?>
 			<div id="non-us-state" class="input-group has-warning">
 				<span class="input-group-addon" id="state-addon1"><span class="fa fa-home"></span></span>
 				<!-- Input Here -->
-				<input class="form-control" name="brewerState" id="brewerState" type="text" placeholder="" value="<?php if (($msg > 0) && (isset($_COOKIE['brewerState']))) echo $_COOKIE['brewerState']; ?>" data-error="<?php echo $register_text_030; ?>" required>
+				<input class="form-control" name="brewerStateNon" id="brewerStateNon" type="text" placeholder="" value="<?php if (($msg > 0) && (isset($_COOKIE['brewerState']))) echo $_COOKIE['brewerState']; ?>" data-error="<?php echo $register_text_030; ?>" required>
 				<span class="input-group-addon" id="state-addon2"><span class="fa fa-star"></span>
 			</div>
 			<div id="us-state" class="has-warning">
-				<select class="selectpicker" name="brewerState" id="brewerState" data-live-search="true" data-size="10" data-width="fit" title="<?php echo $label_select_state; ?>" data-error="<?php echo $register_text_030; ?>" required>
+				<select class="selectpicker" name="brewerStateUS" id="brewerStateUS" data-live-search="true" data-size="10" data-width="fit" title="<?php echo $label_select_state; ?>" data-error="<?php echo $register_text_030; ?>" required>
 	    			<?php echo $us_state_select; ?>
 	    		</select>
 	    	</div>
 	    	<div id="aus-state" class="has-warning">
-				<select class="selectpicker" name="brewerState" id="brewerState" data-live-search="true" data-size="10" data-width="fit" title="<?php echo $label_select_state; ?>" data-error="<?php echo $register_text_030; ?>" required>
+				<select class="selectpicker" name="brewerStateAUS" id="brewerStateAUS" data-live-search="true" data-size="10" data-width="fit" title="<?php echo $label_select_state; ?>" data-error="<?php echo $register_text_030; ?>" required>
 	    			<?php echo $aus_state_select; ?>
 	    		</select>
 	    	</div>
 	    	<div id="ca-state" class="has-warning">
-				<select class="selectpicker" name="brewerState" id="brewerState" data-live-search="true" data-size="10" data-width="fit" title="<?php echo $label_select_state; ?>" data-error="<?php echo $register_text_030; ?>" required>
+				<select class="selectpicker" name="brewerStateCA" id="brewerStateCA" data-live-search="true" data-size="10" data-width="fit" title="<?php echo $label_select_state; ?>" data-error="<?php echo $register_text_030; ?>" required>
 	    			<?php echo $ca_state_select; ?>
 	    		</select>
 	    	</div>

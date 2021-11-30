@@ -34,6 +34,7 @@ $countries = array("United States","Australia","Canada","Ireland","United Kingdo
 $us_state_abbrevs_names = array(
     'AL' => 'Alabama',
     'AK' => 'Alaska',
+    'AS' => 'American Samoa',
     'AZ' => 'Arizona',
     'AR' => 'Arkansas',
     'CA' => 'California',
@@ -42,7 +43,9 @@ $us_state_abbrevs_names = array(
     'DE' => 'Delaware',
     'DC' => 'District of Columbia',
     'FL' => 'Florida',
+    'FM' => 'Federated States of Micronesia',
     'GA' => 'Georgia',
+    'GU' => 'Guam',
     'HI' => 'Hawaii',
     'ID' => 'Idaho',
     'IL' => 'Illinois',
@@ -54,8 +57,10 @@ $us_state_abbrevs_names = array(
     'ME' => 'Maine',
     'MD' => 'Maryland',
     'MA' => 'Massachusetts',
+    'MH' => 'Marshall Islands',
     'MI' => 'Michigan',
     'MN' => 'Minnesota',
+    'MP' => 'Northern Mariana Islands',
     'MS' => 'Mississippi',
     'MO' => 'Missouri',
     'MT' => 'Montana',
@@ -72,6 +77,7 @@ $us_state_abbrevs_names = array(
     'OR' => 'Oregon',
     'PA' => 'Pennsylvania',
     'PR' => 'Puerto Rico',
+    'PW' => 'Palau',
     'RI' => 'Rhode Island',
     'SC' => 'South Carolina',
     'SD' => 'South Dakota',
@@ -88,30 +94,30 @@ $us_state_abbrevs_names = array(
 );
 
 $ca_state_abbrevs_names = array(
-    'BC' => 'British Columbia', 
-    'ON' => 'Ontario', 
-    'NL' => 'Newfoundland and Labrador', 
-    'NS' => 'Nova Scotia', 
-    'PE' => 'Prince Edward Island', 
-    'NB' => 'New Brunswick', 
-    'QC' => 'Quebec', 
-    'MB' => 'Manitoba', 
-    'SK' => 'Saskatchewan', 
     'AB' => 'Alberta', 
+    'BC' => 'British Columbia', 
+    'MB' => 'Manitoba', 
+    'NB' => 'New Brunswick', 
+    'NL' => 'Newfoundland and Labrador', 
     'NT' => 'Northwest Territories', 
+    'NS' => 'Nova Scotia', 
     'NU' => 'Nunavut',
+    'ON' => 'Ontario', 
+    'PE' => 'Prince Edward Island', 
+    'QC' => 'Quebec', 
+    'SK' => 'Saskatchewan', 
     'YT' => 'Yukon Territory'
 );
 
 $aus_state_abbrevs_names = array(
+    'ACT' => 'Australian Capital Territory',
     'NSW' => 'New South Wales',
+    'NT' => 'Northern Territory',
     'QLD' => 'Queensland',
     'SA' => 'South Australia',
     'TAS' => 'Tasmania',
     'VIC' => 'Victoria',
-    'WA' => 'Western Australia',
-    'ACT' => 'Australian Capital Territory',
-    'NT' => 'Northern Territory'
+    'WA' => 'Western Australia'
 );
 
 // -------------------------- Tie break rules ---------------------------------------------------
@@ -2661,7 +2667,7 @@ $encryption_key = "8sQHfMk8rinRtA/Frhm+AWrSgOmkcbu+FxIUGy9Fq5I=";
 
 if ((isset($_SESSION['prefsStyleSet'])) && ($_SESSION['prefsStyleSet'] == "BA")) $optional_info_styles = array();
 elseif ((isset($_SESSION['prefsStyleSet'])) && ($_SESSION['prefsStyleSet'] == "AABC")) $optional_info_styles = array("12-01","14-08","17-03","18-04","18-05","19-05","19-07","16-01","19-01","19-02","19-03","19-04","19-06","20-02","20-03");
-else $optional_info_styles = array("21-B","28-A","30-B","33-A","33-B","34-B","M2-C","M2-D","M2-E","M3-A","M3-B","M4-B","M4-C","7-C","M1-A","M1-B","M1-C","M2-A","M2-B","M4-A","C1-B","C1-C");
+else $optional_info_styles = array("21-B","28-A","30-B","33-A","33-B","34-B","M2-C","M2-D","M2-E","M3-A","M3-B","M4-B","M4-C","7-C","M1-A","M1-B","M1-C","M2-A","M2-B","M4-A","C1-A","C1-B","C1-C");
 $results_method = array("0" => "By Table", "1" => "By Style", "2" => "By Sub-Style");
 
 if (HOSTED) $_SESSION['prefsCAPTCHA'] = 1;

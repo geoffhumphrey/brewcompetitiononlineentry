@@ -1809,13 +1809,9 @@ $label_select_state = "Vyberte nebo vyhledejte svůj stát";
 $label_select_below = "Vyberte níže";
 $output_text_033 = "Při odesílání vaší zprávy BJCP je možné, že ne všichni zaměstnanci na seznamu obdrží body. Doporučuje se, abyste nejprve přidělili body těm s BJCP ID.";
 $styles_entry_text_PRX3 = "Účastník musí uvést odrůdu použitých hroznů nebo hroznového moštu.";
-
-/**
- * ------------------------------------------------------------------------
- * Version 2.3.3 Additions
- * ------------------------------------------------------------------------
- */
-
+$styles_entry_text_C1A = "Účastníci MUSÍ uvést úroveň sycení (3 úrovně). Účastníci MUSÍ uvést sladkost (5 kategorií). Pokud je OG výrazně vyšší než typické rozmezí, účastník by měl vysvětlit, např. konkrétní odrůda jablek dává šťávu s vysokou gramáží.";
+$styles_entry_text_C1B = "Účastníci MUSÍ uvést úroveň sycení (3 úrovně). Účastníci MUSÍ uvést sladkost (suchá až středně sladká, 4 úrovně). Účastníci MOHOU uvést odrůdu jablek u jednodruhových moštů; pokud je uvedena, očekává se odrůdový charakter.";
+$styles_entry_text_C1C = "Účastníci MUSÍ uvést úroveň sycení (3 úrovně). Účastníci MUSÍ uvést sladkost (pouze střední až sladká, 3 úrovně). Účastníci MŮŽOU uvést odrůdu jablek pro jednoodrůdový cider; pokud je uvedena, očekává se odrůdový charakter.";
 $winners_text_007 = "U této tabulky nejsou žádné výherní položky.";
 
 /**

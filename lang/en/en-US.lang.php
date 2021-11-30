@@ -1947,13 +1947,9 @@ $label_select_below = "Select Below";
 $output_text_033 = "When submitting your report to the BJCP, it is possible that not all on the staff list will receive points. It is suggested that you allocate points to those with BJCP IDs first.";
 
 $styles_entry_text_PRX3 = "Entrant must specify the varietal of grapes or grape must used.";
-
-/**
- * ------------------------------------------------------------------------
- * Version 2.3.3 Additions
- * ------------------------------------------------------------------------
- */
-
+$styles_entry_text_C1A = "Entrants MUST specify carbonation level (3 levels). Entrants MUST specify sweetness (5 categories). If OG is substantially above typical range, entrant should explain, e.g., particular variety of apple giving high-gravity juice.";
+$styles_entry_text_C1B = "Entrants MUST specify carbonation level (3 levels). Entrants MUST specify sweetness (dry through medium-sweet, 4 levels). Entrants MAY specify variety of apple for a single varietal cider; if specified, varietal character will be expected.";
+$styles_entry_text_C1C = "Entrants MUST specify carbonation level (3 levels). Entrants MUST specify sweetness (medium to sweet only, 3 levels). Entrants MAY specify variety of apple for a single varietal cider; if specified, varietal character will be expected.";
 $winners_text_007 = "There are no winning entries at this table.";
 
 /**

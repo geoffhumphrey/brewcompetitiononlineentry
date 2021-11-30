@@ -1811,13 +1811,9 @@ $label_select_state = "Selecione ou pesquise o seu estado";
 $label_select_below = "Selecione abaixo";
 $output_text_033 = "Ao enviar seu relatório ao BJCP, é possível que nem todos os integrantes da lista de funcionários recebam pontos. É sugerido que você aloque pontos para aqueles com IDs BJCP primeiro.";
 $styles_entry_text_PRX3 = "O participante deve especificar o varietal de uva ou mosto de uva utilizado.";
-
-/**
- * ------------------------------------------------------------------------
- * Version 2.3.3 Additions
- * ------------------------------------------------------------------------
- */
-
+$styles_entry_text_C1A = "Os participantes DEVEM especificar o nível de carbonatação (3 níveis). Os participantes DEVEM especificar a doçura (5 categorias). Se o OG estiver substancialmente acima da faixa típica, o entrante deve explicar, por exemplo, a variedade particular de maçã que dá suco de alta gravidade.";
+$styles_entry_text_C1B = "Os participantes DEVEM indicar o nível de carbonatação (3 níveis). Os participantes DEVEM indicar a doçura (seca a média doçura, 4 níveis). Os participantes DEVEM indicar a variedade de maçã para cidra varietal única; se indicado, é esperado o caráter varietal.";
+$styles_entry_text_C1C = "Os participantes DEVEM especificar o nível de carbonatação (3 níveis). Os participantes DEVEM especificar o nível de doçura (somente de média a doce, 3 níveis). Os participantes PODEM especificar a variedade de maçã para uma única cidra varietal; se especificado, será esperado um caráter varietal.";
 $winners_text_007 = "Não há entradas vencedoras nesta tabela.";
 
 /**
