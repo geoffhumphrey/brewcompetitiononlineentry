@@ -1,6 +1,5 @@
 <?php
 require('../paths.php');
-//session_name($prefix_session);
 require(CONFIG.'bootstrap.php');
 require(LIB.'output.lib.php');
 
@@ -120,21 +119,33 @@ if (isset($_SESSION['loginUsername'])) {
             $page_info1 .= "<p class=\"text-center\"><strong>".$_SESSION['contestName']."</strong></p>";
 
             $page_info1 .= "<p><strong>".$label_entry_number.":</strong> ".$barcode."</br>";
-            if (!$anon) $page_info1 .= "<strong>".$label_entry_name.":</strong> ".truncate($entry_name,30,"&hellip;")."<br>";
+            if (!$anon) $page_info1 .= "<strong>".$label_entry_name.":</strong> ".truncate($entry_name,45,"&hellip;")."<br>";
             if ($_SESSION['prefsStyleSet'] == "BA") $page_info1 .= "<strong>Cat: ".$row_log['brewStyle']."<br>";
             elseif ($_SESSION['prefsStyleSet'] == "AABC")  $page_info1 .= "<strong>".$label_category.":</strong> ".ltrim($row_log['brewCategory'],"0").".".ltrim($row_log['brewSubCategory'],"0")." ".$row_log['brewStyle']."<br>";
             else $page_info1 .= "<strong>".$label_category.":</strong> ".$row_log['brewCategory'].$row_log['brewSubCategory']." ".$row_log['brewStyle']."<br>";
             
-            if (($anon) && ((!empty($row_log['brewInfo'])) || (!empty($row_log['brewMead1'])) || (!empty($row_log['brewMead2'])) || (!empty($row_log['brewMead3'])))) {
-                $brewInfo = "";
-                $brewInfo .= truncate($row_log['brewInfo'],100,"..."); // Necessary for space considerations
-                if (!empty($row_log['brewInfo']))  $brewInfo .= str_replace("^", " | ", $row_log['brewInfo']);
-                if (!empty($row_log['brewMead1'])) $brewInfo .= "&nbsp;&nbsp;".$row_log['brewMead1'];
-                if (!empty($row_log['brewMead2'])) $brewInfo .= "&nbsp;&nbsp;".$row_log['brewMead2'];
-                if (!empty($row_log['brewMead3'])) $brewInfo .= "&nbsp;&nbsp;".$row_log['brewMead3'];
-                $page_info1 .= "<strong>".$label_required_info.":</strong> <span class=\"break-long\">".$brewInfo."</span>";
+
+            if ($anon) {
+              
+              $brewInfo = "";
+              
+              if (!empty($row_log['brewInfo'])) {
+                $brewInfo = $row_log['brewInfo'];
+                if (strpos($row_log['brewInfo'],"^") !== FALSE) $brewInfo = str_replace("^", "&nbsp;&nbsp;", $brewInfo);
+                $brewInfo = truncate($brewInfo,70,"&hellip;");
               }
 
+              if ((!empty($row_log['brewMead1'])) || (!empty($row_log['brewMead2'])) || (!empty($row_log['brewMead3']))) {
+                $brewInfo .= "<br>";
+                if (!empty($row_log['brewMead1'])) $brewInfo .= $row_log['brewMead1']."&nbsp;&nbsp;";
+                if (!empty($row_log['brewMead2'])) $brewInfo .= $row_log['brewMead2']."&nbsp;&nbsp;";
+                if (!empty($row_log['brewMead3'])) $brewInfo .= $row_log['brewMead3'];
+              }
+              
+              if (!empty($brewInfo)) $page_info1 .= "<strong>".$label_required_info.":</strong> <span class=\"break-long\">".$brewInfo."</span>";
+            
+            }
+              
             $page_info1 .= "</p>";
 
             if (!$anon) {

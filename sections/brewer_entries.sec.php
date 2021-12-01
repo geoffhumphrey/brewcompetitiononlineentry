@@ -263,7 +263,7 @@ do {
 	$entry_output .= "<td>";
 	$entry_output .= $entry_name;
 
-	if (!empty($required_info)) $entry_output .= " <a class=\"hide-loader\" role=\"button\" data-toggle=\"collapse\" data-target=\"#collapseEntryInfo".$row_log['id']."\" aria-expanded=\"false\" aria-controls=\"collapseEntryInfo".$row_log['id']."\"><span class=\"fa fa-lg fa-info-circle\"></span></a> ";
+	if (!empty($required_info)) $entry_output .= " <a class=\"hide-loader\" role=\"button\" data-toggle=\"collapse\" data-target=\"#collapseEntryInfo".$row_log['id']."\" aria-expanded=\"false\" aria-controls=\"collapseEntryInfo".$row_log['id']."\"><span class=\"fa fa-info-circle\"></span></a> ";
 
 	if (!empty($required_info)) {
 		$entry_output .= "<div style=\"margin-top: 8px;\" class=\"collapse small alert alert-info\" id=\"collapseEntryInfo".$row_log['id']."\">";
@@ -442,7 +442,7 @@ do {
 
 	}
 
-	if (($scoresheet_es) && ($scoresheet_pdf)) $entry_output .= sprintf("<span class=\"fa fa-question-circle text-muted\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"%s\" href=\"#\"></span>",$brewer_entries_text_026);
+	if (($scoresheet_es) && ($scoresheet_pdf)) $entry_output .= sprintf("<span class=\"fa fa-question-circle text-muted hide-loader\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"%s\" href=\"#\"></span>",$brewer_entries_text_026);
 
 	$entry_output .= "</td>";
 	$entry_output .= "</tr>";
@@ -550,7 +550,7 @@ if (($totalRows_log > 0) && ($entry_window_open >= 1)) {
     <?php if (!$show_scores) { ?>
   	<th width="5%" class="hidden-xs hidden-md"><?php echo $label_confirmed; ?></th>
   	<th width="5%" class="hidden-xs"><?php echo $label_paid; ?></th>
-    <th width="5%" class="hidden-xs" nowrap><?php echo $label_received; ?><a tabindex="0" role="button" title="<?php echo $label_received." ".$label_entries." ".$label_info; ?>" data-placement="auto top" data-toggle="popover" data-trigger="hover focus" data-content="<?php echo $brewer_entries_text_017; ?>" data-container="body"><span style="padding-left:5px;" class="fa fa-question-circle"></span></a></th>
+    <th width="5%" class="hidden-xs" nowrap><?php echo $label_received; ?><a class="hide-loader" tabindex="0" role="button" title="<?php echo $label_received." ".$label_entries." ".$label_info; ?>" data-placement="auto top" data-toggle="popover" data-trigger="hover focus" data-content="<?php echo $brewer_entries_text_017; ?>" data-container="body"><span style="padding-left:5px;" class="fa fa-question-circle"></span></a></th>
     <th width="10%" class="hidden-xs hidden-sm"><?php echo $label_updated; ?></th>
     <?php } ?>
   	<?php if ($show_scores) { ?>
@@ -559,7 +559,7 @@ if (($totalRows_log > 0) && ($entry_window_open >= 1)) {
   	<th width="5%"><?php echo $label_winner; ?></th>
   	<?php } ?>
   	<?php if ((!$show_scores) && ($multiple_bottle_ids)) { ?>
-    <th width="7%" class="hidden-print" nowrap><input type="checkbox" id="select_all"><a style="cursor: pointer;" data-toggle="popover" data-container="body" data-trigger="hover focus" data-placement="auto" title="<?php echo $brewer_entries_text_024; ?>" data-content="<?php echo $brewer_entries_text_021; ?>"><span style="padding-left:5px;" class="fa fa-question-circle"></span></a></th>
+    <th width="7%" class="hidden-print" nowrap><input type="checkbox" id="select_all"><a class="hide-loader" style="cursor: pointer;" data-toggle="popover" data-container="body" data-trigger="hover focus" data-placement="auto" title="<?php echo $brewer_entries_text_024; ?>" data-content="<?php echo $brewer_entries_text_021; ?>"><span style="padding-left:5px;" class="fa fa-question-circle hide-loader"></span></a></th>
 	<?php } ?>
     <th class="hidden-print"><?php echo $label_actions; ?></th>
  </tr>

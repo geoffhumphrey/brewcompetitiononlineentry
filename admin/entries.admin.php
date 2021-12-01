@@ -44,7 +44,8 @@ elseif ($view == "unpaid") $header .=  "Unpaid";
 else $header .=  "All";
 $header .= " Entries ".$header1_2;
 
-if (($filter == "default") && ($bid == "default") && ($view == "default")) $entries_unconfirmed = ($totalRows_entry_count - $totalRows_log_confirmed); else $entries_unconfirmed = ($totalRows_log - $totalRows_log_confirmed);
+if (($filter == "default") && ($bid == "default") && ($view == "default")) $entries_unconfirmed = ($totalRows_entry_count - $totalRows_log_confirmed); 
+else $entries_unconfirmed = ($totalRows_log - $totalRows_log_confirmed);
 if ($filter != "default") $sidebar_extension .= " in this Category";
 if ($bid != "default") $sidebar_extension .= " for this Participant";
 
@@ -513,7 +514,7 @@ if ($totalRows_log > 0) {
 
 		if (!empty($required_info)) $tbody_rows .= "<div class=\"visible-xs visible-sm hidden-print\" style=\"margin: 5px 0 5px 0\"><button class=\"btn btn-primary btn-block btn-xs\" type=\"button\" data-toggle=\"collapse\" data-target=\"#collapseEntryInfo".$row_log['id']."\" aria-expanded=\"false\" aria-controls=\"collapseEntryInfo".$row_log['id']."\">Entry Info <span class=\"fa fa-lg fa-info-circle\"></span></button></div>";
 		
-		$tbody_rows .= "<div class=\"collapse small well\" id=\"collapseEntryInfo".$row_log['id']."\">";
+		$tbody_rows .= "<div class=\"collapse small alert alert-info\" id=\"collapseEntryInfo".$row_log['id']."\">";
 	    $tbody_rows .= $required_info;
 	    $tbody_rows .= "</div>";
 
@@ -694,9 +695,11 @@ $(document).ready(function () {
 				<?php } ?>
 			</ul>
 		</div><!-- ./button group -->
+		<?php } ?>
 		<div class="btn-group" role="group" aria-label="chooseParticipants">
 			<?php echo participant_choose($brewer_db_table,$pro_edition,0); ?>
 		</div><!-- ./button group -->
+		<?php if ($totalRows_log > 0) { ?>
 		<div class="btn-group <?php echo $hidden_sm; ?>" role="group" aria-label="printCurrent">
 			<div class="btn-group" role="group">
 				<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
