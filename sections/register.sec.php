@@ -188,6 +188,16 @@ elseif (($registration_open == 0) && ($judge_window_open == 0) && (!$logged_in) 
 	echo $page_info1;
 }
 
+elseif (($registration_open == 0) && ($judge_window_open == 1) && ($go == "entrant") && (!$logged_in) || (($logged_in) && ($_SESSION['userLevel'] == 2))) {
+
+	// Show registration closed message if
+	// 1) registration window is closed,
+	// 2) the judge/steward registration window is OPEN,
+	// 3) the user is not logged in OR the user is logged in and their user level is 2 (non-admin)
+	$page_info1 .= sprintf("<p class=\"lead\">%s</p>",$alert_text_033);
+	echo $page_info1;
+}
+
 else { // THIS ELSE ENDS at the end of the script
 
 	include (DB.'judging_locations.db.php');
