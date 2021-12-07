@@ -330,7 +330,7 @@ echo $output_query_count;
 <?php 
 session_write_close(); 
 if ($logged_in) {
-$session_end_seconds = time() + ($session_expire_after * 60);
+$session_end_seconds = (time() + ($session_expire_after * 60));
 $session_end = getTimeZoneDateTime($_SESSION['prefsTimeZone'],$session_end_seconds,"999",$_SESSION['prefsTimeFormat'],"short","date-no-gmt");
 ?>
 <!-- Session Expiring Modal: 2 Minute Warning -->

@@ -143,7 +143,7 @@ if (!function_exists('fputcsv')) {
     }
 }
 
-if (($admin_role) || (((judging_date_return() == 0) && ($registration_open == 2) && ($entry_window_open == 2)))) {
+if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($entry_window_open == 2)))) {
 
 /* -------------- ENTRY Exports -------------- */
 
@@ -2098,7 +2098,7 @@ if (($admin_role) || (((judging_date_return() == 0) && ($registration_open == 2)
 
 	} // END if ($section == "staff")
 
-} // end if (($admin_role) || (((judging_date_return() == 0) && ($registration_open == 2) && ($entry_window_open == 2))))
+} // end if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($entry_window_open == 2))))
 
 else echo "Not allowed."; 
 exit();

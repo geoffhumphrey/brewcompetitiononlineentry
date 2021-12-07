@@ -10,13 +10,10 @@ if ($_SESSION['prefsEval'] == 1) {
     include(EVALS.'import_scores.eval.php');
 }
 
-$show_post_judging = FALSE;
-if (judging_date_return() == 0) $show_post_judging = TRUE;
-
 $show_best = FALSE;
 if (($row_limits['prefsShowBestBrewer'] != 0) || ($row_limits['prefsShowBestClub'] != 0)) {
-    if ($show_post_judging) $show_best = TRUE;
-    elseif (($_SESSION['prefsEval'] == 1) && (($show_post_judging) || ($judge_window_open > 0))) $show_best = TRUE;
+    if ($judging_started) $show_best = TRUE;
+    elseif (($_SESSION['prefsEval'] == 1) && (($judging_started) || ($judge_window_open > 0))) $show_best = TRUE;
 }
 
 $judge_assign_links = array();
@@ -35,12 +32,12 @@ $steward_assign_links = array();
         <a class="btn btn-info btn-block hide-loader" href="http://brewcompetition.com/reset-comp" target="_blank" data-toggle="popover" data-trigger="hover" data-placement="auto top" data-container="body" data-title="Reset Competition Information" data-content="Detailed instructions on how to reset the site information in preparation for an upcoming competition iteration.">Reset Competition Info <span class="fa fa-info-circle"></span></a>
     </div>
     <?php } ?>
-    <?php if (($show_post_judging) && ($_SESSION['userLevel'] == 0)) { ?>
+    <?php if (($judging_started) && ($_SESSION['userLevel'] == 0)) { ?>
     <div class="col col-lg-3 col-md-12 col-sm-12 col-xs-12" style="padding-bottom: 5px;">
         <a class="btn btn-primary btn-block hide-loader" href="<?php echo $base_url; ?>includes/process.inc.php?action=publish" data-toggle="popover" data-trigger="hover" data-placement="auto top" data-container="body" data-title="Publish Results" data-content="Immediately publish all results in the database to the home page." data-confirm="Are you sure you wish to publish the results now?">Publish Results Now <span class="fa fa-bullhorn"></span></a>
     </div>
     <?php } ?>
-    <?php if (($show_post_judging) && ($_SESSION['userLevel'] == 0)) { ?>
+    <?php if (($judging_started) && ($_SESSION['userLevel'] == 0)) { ?>
     <div class="col col-lg-3 col-md-12 col-sm-12 col-xs-12" style="padding-bottom: 5px;">
         <a class="btn btn-primary btn-block" href="<?php echo $base_url; ?>awards.php" target="_blank" data-toggle="popover" data-trigger="hover" data-placement="auto top" data-container="body" data-title="Awards Presentation" data-html="true" data-content="<p>PowerPoint-style presentation of placing entries and Best of Show winner(s). Intended to be projected or screen-shared during your awards ceremony.</p><p><strong>Only Admin-level users can access the presentation before results are published.</strong></p>"><?php echo $label_launch_pres; ?> <span class="fa fa-award"></span></a>
     </div>

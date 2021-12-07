@@ -271,7 +271,7 @@ if (!$judge_limit) $alert_text_079 .= $alert_text_078;
     </div>
   <?php } ?>
 
-  <?php if (($registration_open == 2) && (!$ua) && ($section == "default") && (judging_date_return() > 0) && ($msg == "default")) { ?>
+  <?php if (($registration_open == 2) && (!$ua) && ($section == "default") && ($judging_past > 0) && ($msg == "default")) { ?>
     <!-- Account registration closed -->
     <div class="alert alert-danger alert-dismissible hidden-print fade in" role="alert">
       <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
@@ -279,7 +279,7 @@ if (!$judge_limit) $alert_text_079 .= $alert_text_078;
     </div>
   <?php } 	?>
 
-  <?php if (($entry_window_open == 2) && (!$ua) && ($section == "default") && (judging_date_return() > 0) && ($msg == "default")) { ?>
+  <?php if (($entry_window_open == 2) && (!$ua) && ($section == "default") && ($judging_past > 0) && ($msg == "default")) { ?>
     <!-- Entry registration closed -->
     <div class="alert alert-danger alert-dismissible hidden-print fade in" role="alert">
       <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
@@ -287,7 +287,7 @@ if (!$judge_limit) $alert_text_079 .= $alert_text_078;
     </div>
   <?php } 	?>
 
-  <?php if (($dropoff_window_open == 2) && (!$ua) && ($section == "default") && (judging_date_return() > 0) && ($msg == "default")) { ?>
+  <?php if (($dropoff_window_open == 2) && (!$ua) && ($section == "default") && ($judging_past > 0) && ($msg == "default")) { ?>
     <!-- Drop-off window closed -->
     <div class="alert alert-danger alert-dismissible hidden-print fade in" role="alert">
       <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
@@ -295,7 +295,7 @@ if (!$judge_limit) $alert_text_079 .= $alert_text_078;
     </div>
   <?php } 	?>
 
-  <?php if (($shipping_window_open == 2) && (!$ua) && ($section == "default") && (judging_date_return() > 0) && ($msg == "default")) { ?>
+  <?php if (($shipping_window_open == 2) && (!$ua) && ($section == "default") && ($judging_past > 0) && ($msg == "default")) { ?>
     <!-- Drop-off window closed -->
     <div class="alert alert-danger alert-dismissible hidden-print fade in" role="alert">
       <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>

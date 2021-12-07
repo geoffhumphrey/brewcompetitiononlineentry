@@ -100,7 +100,7 @@ if (($totalRows_log > 0) && ($action != "print")) {
 		$warnings .= sprintf("<div class=\"alert alert-warning\"><span class=\"fa fa-lg fa-exclamation-triangle\"></span> <strong>%s</strong> %s</div>",$brewer_entries_text_004,$brewer_entries_text_005);
 	}
 
-	if (($_SESSION['prefsPayToPrint'] == "Y") && (judging_date_return() > 0) && (!$disable_pay) && (!$comp_paid_entry_limit)) {
+	if (($_SESSION['prefsPayToPrint'] == "Y") && ($judging_past > 0) && (!$disable_pay) && (!$comp_paid_entry_limit)) {
 		$warnings .= sprintf("<div class=\"alert alert-warning\"><span class=\"fa fa-lg fa-exclamation-triangle\"></span> <strong>%s!</strong> %s</div>",$label_please_note, $alert_text_085);
 	}
 }
@@ -355,12 +355,11 @@ do {
 	}
 
 	// Build Actions Links
-
 	// Edit
 	if (($row_log['brewCategory'] < 10) && (preg_match("/^[[:digit:]]+$/",$row_log['brewCategory']))) $brewCategory = "0".$row_log['brewCategory'];
 	else $brewCategory = $row_log['brewCategory'];
 
-	if (($entry_window_open == 1) || (($entry_window_open != 1) && (time() < $row_contest_dates['contestEntryDeadline']))) {
+	if (($entry_window_open == 1) || (($entry_window_open != 1) && (time() < $row_contest_dates['contestDropoffDeadline']))) {
 
 		$edit_link .= "<a href=\"".$base_url."index.php?section=brew&amp;action=edit&amp;id=".$row_log['id'];
 		if ($row_log['brewConfirmed'] == 0) $edit_link .= "&amp;msg=1-".$brewCategory."-".$row_log['brewSubCategory'];
@@ -371,7 +370,6 @@ do {
 	}
 
 	else $edit_link .= "<span data-toggle=\"tooltip\" title=\"".$brewer_entries_text_020."\" data-placement=\"auto top\" data-container=\"body\" class=\"fa fa-lg fa-pencil text-muted\"></span>&nbsp;&nbsp;";
-
 
 	// Print Forms
 	$alt_title = "";
@@ -408,7 +406,15 @@ do {
 
 	$delete_alt_title = sprintf("%s %s",$label_delete, $entry_name);
 	$delete_warning = sprintf("%s %s - %s.",$label_delete, $entry_name, strtolower($label_undone));
-	$delete_link = sprintf("<a class=\"hide-loader\" data-toggle=\"tooltip\" title=\"%s\" href=\"%s\" data-confirm=\"%s.\"><span class=\"fa fa-lg fa-trash-o\"></a>",$delete_alt_title,$base_url."includes/process.inc.php?section=".$section."&amp;go=".$go."&amp;dbTable=".$brewing_db_table."&amp;action=delete&amp;id=".$row_log['id'],$delete_warning);
+	
+	if (($entry_window_open == 1) || (($entry_window_open != 1) && (time() < $row_contest_dates['contestDropoffDeadline']))) {
+		$delete_link = sprintf("<a class=\"hide-loader\" data-toggle=\"tooltip\" title=\"%s\" href=\"%s\" data-confirm=\"%s.\"><span class=\"fa fa-lg fa-trash-o\"></a>",$delete_alt_title,$base_url."includes/process.inc.php?section=".$section."&amp;go=".$go."&amp;dbTable=".$brewing_db_table."&amp;action=delete&amp;id=".$row_log['id'],$delete_warning);
+	}
+
+	else {
+		$delete_link = sprintf("<span class=\"fa fa-lg fa-trash-o text-muted\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"%s\" href=\"#\"></span>",$brewer_entries_text_015);
+	}
+
 	$entry_output .= "<td nowrap class=\"hidden-print\">";
 
 	if ($scoresheet) {
@@ -416,29 +422,32 @@ do {
 		if (!empty($scoresheet_link)) $entry_output .= $scoresheet_link;
 	}
 
-	if (!$show_scores) {
-		$entry_output .= $edit_link;
-		$entry_output .= $print_forms_link;
+	// If no judging date specified or if a judging start date/time has not past
+	// Suspend edit and delete as it may affect judging
+
+	if ($judging_started) {
+		$entry_output .= "<span data-toggle=\"tooltip\" title=\"".$brewer_entries_text_020."\" data-placement=\"auto top\" data-container=\"body\" class=\"fa fa-lg fa-pencil text-muted\"></span>&nbsp;&nbsp;";
+		$entry_output .= sprintf("<span class=\"fa fa-lg fa-trash-o text-muted\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"%s\" href=\"#\"></span>",$brewer_entries_text_015);
 	}
 
 	// If a judging date has not passed yet
-	if (judging_date_return() > 0) {
-		if ($row_log['brewPaid'] != 1) $entry_output .= $delete_link;
-		else $entry_output .= sprintf("<span class=\"fa fa-lg fa-trash-o text-muted\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"%s\" href=\"#\"></span>",$brewer_entries_text_015);
-	}
+	else {
 
-	// If no judging date specified or if a single judging date has passed
-	if (judging_date_return() == 0) {
-
-		// Display the edit link for NHC final round after judging has taken place
-		// Necessary to gather recipe data for first place winners in the final round
-		if ((($registration_open == 2) && ($entry_window_open == 1)) && ((NHC) && ($prefix == "final_"))) $entry_output .= $edit_link;
-
-		// Display delete link only when entry window is open
-		if ($entry_window_open == 1) {
-			if ($row_log['brewPaid'] != 1) $entry_output .= $delete_link;
-			else $entry_output .= sprintf("<span class=\"fa fa-lg fa-trash-o text-muted\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"%s\" href=\"#\"></span>",$brewer_entries_text_015);
+		if (!$show_scores) {
+			$entry_output .= $edit_link;
+			$entry_output .= $print_forms_link;
 		}
+
+		// If the entry window is open, display delete
+		if ($entry_window_open == 1) {
+			if ($row_log['brewPaid'] == 1) {
+				if ($_SESSION['contestEntryFee'] > 0) $entry_output .= sprintf("<span class=\"fa fa-lg fa-trash-o text-muted\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"%s\" href=\"#\"></span>",$brewer_entries_text_015);
+				else $entry_output .= $delete_link;
+			}
+			else $entry_output .= $delete_link;
+		} 
+
+		else $entry_output .= $delete_link;
 
 	}
 
@@ -452,7 +461,6 @@ do {
 // --------------------------------------------------------------
 // Display
 // --------------------------------------------------------------
-
 echo $header1_1;
 
 // Display Warnings and Entry Message

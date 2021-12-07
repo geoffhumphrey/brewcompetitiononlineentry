@@ -63,7 +63,7 @@ if (NHC) {
 	}
 }
 
-$judging_date = judging_date_return();
+$judging_date = $judging_past;
 $total_not_paid = total_not_paid_brewer($_SESSION['user_id']);
 
 // Call the brewer's info information

@@ -507,7 +507,7 @@ if ($show_entries) {
 }
 
 // Show rules if winner display is active (moved from default page)
-if ((judging_date_return() == 0) && ($registration_open == 2) && ($entry_window_open == 2)) {
+if (($judging_past == 0) && ($registration_open == 2) && ($entry_window_open == 2)) {
 	$anchor_links[] = $label_rules;
 	$anchor_name = str_replace(" ", "-", $label_rules);
 	$header1_17 .= sprintf("<a class=\"anchor-offset\" name=\"%s\"></a><h2>%s</h2>",strtolower($anchor_name),$label_rules);

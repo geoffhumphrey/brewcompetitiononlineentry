@@ -27,7 +27,7 @@ $winner_method = $_SESSION['prefsWinnerMethod'];
 $style_set = $_SESSION['prefsStyleSet'];
 
 $display_to_public = FALSE;
-if ((judging_date_return() == 0) && ($entry_window_open == 2) && ($registration_open == 2) && ($judge_window_open == 2) && ($_SESSION['prefsDisplayWinners'] == "Y") && (judging_winner_display($_SESSION['prefsWinnerDelay']))) $display_to_public = TRUE;
+if (($judging_past == 0) && ($entry_window_open == 2) && ($registration_open == 2) && ($judge_window_open == 2) && ($_SESSION['prefsDisplayWinners'] == "Y") && (judging_winner_display($_SESSION['prefsWinnerDelay']))) $display_to_public = TRUE;
 
 $display_to_admin = FALSE;
 if (($logged_in) && ($_SESSION['userLevel'] <= 1)) $display_to_admin = TRUE;

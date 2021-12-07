@@ -173,7 +173,7 @@ if (($entry_window_open == 2) && ($_SESSION['userLevel'] == 2)) {
 	$add_entry_disable = TRUE;
 
 	// Can edit until either drop off closes or judging dates pass
-	if ((judging_date_return() == 0) || (time() > $_SESSION['contestDropoffDeadline'])) $edit_entry_disable = TRUE;
+	if (($judging_started) || (time() > $_SESSION['contestDropoffDeadline'])) $edit_entry_disable = TRUE;
 }
 
 if (($proEdition) && (!isset($_SESSION['brewerBreweryName'])) && ($_SESSION['userLevel'] == 2)) {

@@ -102,7 +102,7 @@ else $link_logout = build_public_url("logout","default","default","default",$sef
 $qr_enable = FALSE;
 $link_qr = "";
 if (!empty($row_contest_dates['contestCheckInPassword'])) {
-	if (($entry_window_open == 2) && ($dropoff_window_open == 2) && ($shipping_window_open == 2) && (judging_date_return() > 0) && (in_array($_SESSION['prefsEntryForm'],$barcode_qrcode_array))) $qr_enable = TRUE;
+	if (($entry_window_open == 2) && ($dropoff_window_open == 2) && ($shipping_window_open == 2) && ($judging_past > 0) && (in_array($_SESSION['prefsEntryForm'],$barcode_qrcode_array))) $qr_enable = TRUE;
 	$link_qr .= build_public_url("qr","default","default","default",$sef,$base_url);
 }
 

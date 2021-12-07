@@ -57,7 +57,7 @@ $header1_30 = "";
 $message1 = sprintf("<div class=\"alert alert-warning\"><span class=\"fa fa-lg fa-exclamation-triangle\"> %s <a href='index.php?section=admin&amp;action=add&amp;go=dropoff'>%s</a></div>",$default_page_text_000,$default_page_text_001);
 $message2 = sprintf("<div class=\"alert alert-warning\"><span class=\"fa fa-lg fa-exclamation-triangle\"> %s <a href='index.php?section=admin&amp;action=add&amp;go=judging'>%s</a></div>",$default_page_text_002,$default_page_text_003);
 
-if ((judging_date_return() == 0) && ($registration_open == 2) && ($entry_window_open == 2)) {
+if (($judging_past == 0) && ($registration_open == 2) && ($entry_window_open == 2)) {
 
 	include (SECTIONS.'judge_closed.sec.php');
 	include (DB.'winners.db.php');
@@ -87,7 +87,7 @@ if ((judging_date_return() == 0) && ($registration_open == 2) && ($entry_window_
 
 	$page_info .= sprintf("<h2>%s</h2><p>%s %s.</p>",$default_page_text_004,$default_page_text_005,getTimeZoneDateTime($_SESSION['prefsTimeZone'], $_SESSION['prefsWinnerDelay'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "long", "date-time"));
 
-} // end if ((judging_date_return() == 0) && ($registration_open == "2"))
+} // end if (($judging_past == 0) && ($registration_open == "2"))
 
 
 else {
@@ -175,7 +175,7 @@ else {
 
 }
 
-if ((judging_date_return() == 0) && ($registration_open == 2) && ($entry_window_open == 2) && ($section !="past-winners")) {
+if (($judging_past == 0) && ($registration_open == 2) && ($entry_window_open == 2) && ($section !="past-winners")) {
 
 	if ($_SESSION['prefsDisplayWinners'] == "Y") {
 
