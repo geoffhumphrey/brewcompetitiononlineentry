@@ -581,7 +581,33 @@ if ($action != "print") { ?>
         }
     ?>
 	<script type="text/javascript" language="javascript">
-	 $(document).ready(function() {
+
+	/**
+	 * https://datatables.net/examples/plug-ins/dom_sort.html
+	 * Create an array with the values of all the input boxes in a column, parsed as numbers
+	 */
+
+	$.fn.dataTable.ext.order['dom-text-numeric'] = function (settings, col) {
+	    return this.api().column(col, {order:'index'}).nodes().map(function (td, i) {
+	        return $('input', td).val() * 1;
+	    });
+	}
+
+	/* Create an array with the values of all the input boxes in a column */
+	$.fn.dataTable.ext.order['dom-text'] = function (settings, col) {
+	    return this.api().column(col, {order:'index'}).nodes().map( function ( td, i ) {
+	        return $('input', td).val();
+	    });
+	}
+
+	/* Create an array with the values of all the checkboxes in a column */
+	$.fn.dataTable.ext.order['dom-checkbox'] = function (settings, col)	{
+	    return this.api().column(col, {order:'index'}).nodes().map( function (td, i) {
+	        return $('input', td).prop('checked') ? '1' : '0';
+	    });
+	}
+
+	$(document).ready(function() {
 		$('#sortable').dataTable( {
 			<?php if (($totalRows_entry_count <= $_SESSION['prefsRecordLimit']) || ((($section == "admin") && ($go == "entries") && ($filter == "default")  && ($dbTable != "default")))) { ?>
 			"bPaginate" : true,
@@ -600,17 +626,17 @@ if ($action != "print") { ?>
 			"bProcessing" : true,
 			"aoColumns": [
 				null,
-				null,
+				{ "orderDataType": "dom-text-numeric" },
 				null,
 				null,
 				null,
 				<?php if ($pro_edition == 0) { ?>null,<?php } ?>
 				null,
+				{ "orderDataType": "dom-checkbox" },
+				{ "orderDataType": "dom-checkbox" },
 				null,
 				null,
-				null,
-				null,
-				null,
+				{ "orderDataType": "dom-text", type: 'string' },
 				{ "asSorting": [  ] }
 				]
 			} );

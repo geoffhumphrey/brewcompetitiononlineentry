@@ -3,7 +3,7 @@ $(document).ready(function () {
     disable_update_button('judging_scores');
 });
 </script>
-<script src="<?php echo $base_url;?>js_includes/admin_ajax.min.js"></script>
+<script src="<?php echo $base_url;?>js_source/admin_ajax.js"></script>
 <?php
 if ($dbTable == "default") $pro_edition = $_SESSION['prefsProEdition'];
 else $pro_edition = $row_archive_prefs['archiveProEdition'];
@@ -69,7 +69,7 @@ $totalRows_entry_count = total_paid_received($go,"default");
         <a class="btn btn-default" href="<?php echo $base_url; ?>index.php?section=admin&amp;go=archive"><span class="fa fa-arrow-circle-left"></span> Archives</a>
     </div><!-- ./button group -->
     <?php } ?>
-    <?php if  ($dbTable == "default") { ?>
+    <?php if ($dbTable == "default") { ?>
     <?php if ($action != "default") { ?>
     <!-- Postion 1: View All Button -->
     <div class="btn-group" role="group" aria-label="...">
@@ -344,8 +344,6 @@ $totalRows_entry_count = total_paid_received($go,"default");
         if ((($dbTable == "default") && ($_SESSION['prefsDisplaySpecial'] == "E")) || ($dbTable != "default")) $entry_actions .= $scoresheet_link_1;
         if ((($dbTable == "default") && ($_SESSION['prefsDisplaySpecial'] == "J")) || ($dbTable != "default")) $entry_actions .= $scoresheet_link_2;
     }
-
-
 ?>
 	<tr>
     	<td><?php echo $entry_number; ?></td>
@@ -385,6 +383,25 @@ if (NHC) echo "<div class='alert alert-danger'><span class=\"fa fa-exclamation-c
 <?php if ($id != "default") { ?>
 <form name="scores" method="post" action="<?php echo $base_url; ?>includes/process.inc.php?action=<?php echo $action; ?>&amp;dbTable=<?php echo $judging_scores_db_table; ?>&amp;id=<?php echo $id; ?>">
 <script type="text/javascript" language="javascript">
+
+/**
+ * https://datatables.net/examples/plug-ins/dom_sort.html
+ * Create an array with the values of all the input boxes in a column, parsed as numbers
+ */
+
+$.fn.dataTable.ext.order['dom-text-numeric'] = function (settings, col) {
+    return this.api().column(col, {order:'index'}).nodes().map(function (td, i) {
+        return $('input', td).val() * 1;
+    });
+}
+
+/* Create an array with the values of all the select options in a column */
+$.fn.dataTable.ext.order['dom-select'] = function (settings, col) {
+    return this.api().column(col, {order:'index'}).nodes().map(function (td, i) {
+        return $('select', td).val();
+    });
+}
+
 $(document).ready(function() {
 	$('#sortable').dataTable( {
 		"bPaginate" : false,
@@ -398,8 +415,8 @@ $(document).ready(function() {
 			null,
 			null,
 			{ "asSorting": [  ] },
-			null,
-			null
+			{ "orderDataType": "dom-text-numeric" },
+			{ "orderDataType": "dom-select" }
 		]
 	} );
 } );
@@ -472,7 +489,7 @@ $(document).ready(function() {
             </div>
         </td>
     	<td>
-        	<span class="hidden"><?php if ($action == "edit") echo $score_entry_data[3]; ?></span>
+            <span id="score-entry-ajax-<?php echo $eid; ?>-scoreEntry-sortable-value" style="visibility: hidden;"><?php if ($action == "edit") echo $score_entry_data[3]; ?></span>
             <div class="form-group" id="score-entry-ajax-<?php echo $eid; ?>-scoreEntry-form-group">
         	<input class="form-control" id="score-entry-ajax-<?php echo $eid; ?>" type="number" pattern="\d{2}" maxlength="2" name="scoreEntry<?php echo $eid; ?>" size="6" maxlength="6" value="<?php if ($action == "edit") echo $score_entry_data[3]; ?>" onblur="save_column('<?php echo $base_url; ?>','scoreEntry','judging_scores','<?php echo $eid; ?>','<?php echo $bid; ?>','<?php echo $id; ?>','<?php echo $scoreType; ?>','default','score-entry-ajax-<?php echo $eid; ?>','value')" />
             </div>
