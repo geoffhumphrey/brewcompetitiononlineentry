@@ -6,6 +6,7 @@
 
 use PHPMailer\PHPMailer\PHPMailer;
 require(LIB.'email.lib.php');
+require (CLASSES.'sesemail/sesEmailClass.php');
 
 if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1))  || ($section == "setup"))) {
 
@@ -20,7 +21,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 	if (isset($_POST['jPrefsBottleNum'])) $jPrefsBottleNum = $_POST['jPrefsBottleNum'];
 	else $jPrefsBottleNum = "2";
 
-	if ($_POST['jPrefsQueued'] == "N") $flight_ent = $_POST['jPrefsFlightEntries']; 
+	if ($_POST['jPrefsQueued'] == "N") $flight_ent = $_POST['jPrefsFlightEntries'];
 	else $flight_ent = $_SESSION['jPrefsFlightEntries'];
 
 	$updateSQL = sprintf("UPDATE $judging_preferences_db_table SET
@@ -48,10 +49,10 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 	if ($_SESSION['prefsEval'] == 1) {
 
 		if (!check_update("jPrefsScoresheet", $prefix."judging_preferences")) {
-			$updateSQL = sprintf("ALTER TABLE `%s` 
-			ADD `jPrefsJudgingOpen` int(15) NULL DEFAULT NULL AFTER `jPrefsBottleNum`, 
-			ADD `jPrefsJudgingClosed` int(15) NULL DEFAULT NULL AFTER `jPrefsJudgingOpen`, 
-			ADD `jPrefsScoresheet` tinyint(2) NULL DEFAULT NULL AFTER `jPrefsJudgingClosed`, 
+			$updateSQL = sprintf("ALTER TABLE `%s`
+			ADD `jPrefsJudgingOpen` int(15) NULL DEFAULT NULL AFTER `jPrefsBottleNum`,
+			ADD `jPrefsJudgingClosed` int(15) NULL DEFAULT NULL AFTER `jPrefsJudgingOpen`,
+			ADD `jPrefsScoresheet` tinyint(2) NULL DEFAULT NULL AFTER `jPrefsJudgingClosed`,
 			ADD `jPrefsScoreDispMax` tinyint(2) NULL DEFAULT NULL COMMENT 'Maximum disparity of entry scores between judges' AFTER `jPrefsScoresheet`;
 			", $prefix."judging_preferences");
 			mysqli_real_escape_string($connection,$updateSQL);
@@ -119,6 +120,18 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 				$mail->Body = $message;
 
 				sendPHPMailerMessage($mail);
+			} elseif($mail_use_ses) {
+				$mail = new SESEmail();
+				$mail->charset = 'UTF-8';
+				$mail->recipients = array($to_email);
+				$mail->sender = $from_email;
+				$mail->replyto = $from_email;
+				$mail->subject = $subject;
+				$mail->htmlBody = $message;
+				$mail->region = $ses_region;
+				$mail->key = $ses_key;
+				$mail->secret = $ses_secret;
+				$mail->sendEmail();
 			} else {
 				mail($to_email, $subject, $message, $headers);
 			}

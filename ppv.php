@@ -23,6 +23,7 @@ require (INCLUDES.'url_variables.inc.php');
 include (INCLUDES.'scrubber.inc.php');
 require (LANG.'language.lang.php');
 require (LIB.'email.lib.php');
+require (CLASSES.'sesemail/sesEmailClass.php');
 
 $query_prefs = sprintf("SELECT prefsPayPalAccount FROM %s WHERE id='1'", $prefix."preferences");
 $prefs = mysqli_query($connection,$query_prefs) or die (mysqli_error($connection));
@@ -202,6 +203,18 @@ if ($verified) {
 			$mail->Subject = $subject;
 			$mail->Body = $message_all;
 			sendPHPMailerMessage($mail);
+		} elseif($mail_use_ses) {
+			$mail = new SESEmail();
+			$mail->charset = 'UTF-8';
+			$mail->recipients = array($to_email);
+			$mail->sender = $from_email;
+			$mail->replyto = $from_email;
+			$mail->subject = $subject;
+			$mail->htmlBody = $message_all;
+			$mail->region = $ses_region;
+			$mail->key = $ses_key;
+			$mail->secret = $ses_secret;
+			$mail->sendEmail();
 		} else {
 			mail($to_email, $subject, $message_all, $headers);
 		}
@@ -272,6 +285,18 @@ if ($send_confirmation_email) {
 		$mail->Subject = $subject_confirm;
 		$mail->Body = $message_all_confirm;
 		sendPHPMailerMessage($mail);
+	} elseif($mail_use_ses) {
+		$mail = new SESEmail();
+		$mail->charset = 'UTF-8';
+		$mail->recipients = array($paypal_email_address);
+		$mail->sender = $from_email;
+		$mail->replyto = $from_email;
+		$mail->subject = $subject_confirm;
+		$mail->htmlBody = $message_all_confirm;
+		$mail->region = $ses_region;
+		$mail->key = $ses_key;
+		$mail->secret = $ses_secret;
+		$mail->sendEmail();
 	} else {
 		mail($confirm_to_email_address, $subject_confirm, $message_all_confirm, $headers_confirm);
 	}

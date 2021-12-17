@@ -379,6 +379,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 				  brewerStaff,
 				  brewerBreweryName,
 				  brewerBreweryTTB,
+
 				  brewerJudgeCider,
 				  brewerProAm
 
@@ -415,7 +416,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 							   GetSQLValueString($brewerBreweryName, "text"),
 							   GetSQLValueString($brewerBreweryTTB, "text"),
 							   GetSQLValueString($brewerJudgeCider, "text"),
-							   GetSQLValueString($_POST['brewerProAm'], "int")
+							   GetSQLValueString($_POST['brewerProAm'], "int"),
 							   );
 			}
 			//echo $insertSQL;

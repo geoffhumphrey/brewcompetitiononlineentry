@@ -112,8 +112,8 @@ define('DEBUG_SESSION_VARS', FALSE);
 define('FORCE_UPDATE', FALSE);
 
 /**
- * Set the following to TRUE if receiving mod_security 
- * "Not Acceptable!" errors. This may not alleviate the 
+ * Set the following to TRUE if receiving mod_security
+ * "Not Acceptable!" errors. This may not alleviate the
  * problem, but it's a good first step in diagnosing
  * why some mod_security errors are occurring.
  * Default is FALSE.
@@ -134,6 +134,19 @@ define('ENABLE_MARKDOWN', FALSE);
 define('ENABLE_MAILER', FALSE);
 
 /**
+ * Set the following to TRUE if you would like to use
+ * Amazon SES to send emails from your BCOE&M installation.
+ * You'll need to have verified the domain of the installation
+ * or the email addresses used to send.
+ * Requires configuration in the /site/config.ses.php file
+ * Default is FALSE.
+ *
+ * If ENABLE_MAILER and ENABLE_SES are true ENABLE_MAILER will be used.
+ */
+
+define('ENABLE_SES', TRUE);
+
+/**
  * Error Reporting
  */
 
@@ -142,7 +155,7 @@ ini_set('log_errors','On');
 if (DEBUG) ini_set('display_errors','On');
 else ini_set('display_errors','Off');
 
-/** 
+/**
  * Function to check for HTTPS protocol (SSL) will be
  * called when constructing the $base_url variable in the
  * /sites/config.php file.
@@ -161,7 +174,7 @@ if (HOSTED) {
     $session_expire_after = 30;
 }
 
-/** 
+/**
  * Using an MD5 of __FILE__ will ensure a different session
  * name for multiple installs on the same domain name.
  *
@@ -194,7 +207,11 @@ if (session_status() == PHP_SESSION_NONE) {
  */
 
 require_once (CONFIG.'config.php');
-if (ENABLE_MAILER) require_once (CONFIG.'config.mail.php');
+if (ENABLE_MAILER) {
+	require_once (CONFIG.'config.mail.php');
+} elseif (ENABLE_SES) {
+	require_once (CONFIG.'config.ses.php');
+}
 require_once (INCLUDES.'current_version.inc.php');
 
 if (isset($_SESSION['last_action'])) {
@@ -218,7 +235,7 @@ $_SESSION['last_action'] = time();
  * You may need to change the second set with your own API keys if
  * reCAPTCHA is not functioning on your self-hosted installation.
  * @see https://developers.google.com/recaptcha/
- * These are the fallback default. Custom keys must be defined in site 
+ * These are the fallback default. Custom keys must be defined in site
  * preferences.
  */
 

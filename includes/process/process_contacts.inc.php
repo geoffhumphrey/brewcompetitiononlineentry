@@ -7,6 +7,7 @@
 
 use PHPMailer\PHPMailer\PHPMailer;
 require(LIB.'email.lib.php');
+require (CLASSES.'sesemail/sesEmailClass.php');
 
 $captcha_success = FALSE;
 
@@ -70,6 +71,7 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 			$message .= "<p>". $message_post. "</p>";
 			$message .= "<p><strong>Sender's Contact Info</strong><br>Name: " . $from_name . "<br>Email: ". $from_email . "<br><em><small>** Use if you try to reply and the email address contains &quot;noreply&quot; in it. Common with web-based mail services such as Gmail.</small></em></p>";
 			if ((DEBUG || TESTING) && ($mail_use_smtp)) $message .= "<p><small>Sent using phpMailer.</small></p>";
+			if ((DEBUG || TESTING) && ($mail_use_ses)) $message .= "<p><small>Sent using Amazon SES.</small></p>";
 			$message .= "</body>" . "\r\n";
 			$message .= "</html>";
 
@@ -81,7 +83,7 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 			$headers  = "MIME-Version: 1.0" . "\r\n";
 			$headers .= "Content-type: text/html; charset=utf-8" . "\r\n";
 			$headers .= "To: ".$to_name." <".$to_email.">" . "\r\n";
-			$headers .= "From: ".$comp_name." Server <".$from_competition_email.">" . "\r\n"; 
+			$headers .= "From: ".$comp_name." Server <".$from_competition_email.">" . "\r\n";
 			// needed to change due to more stringent rules and mail send incompatibility with Gmail.
 			$headers .= "Reply-To: ".$from_name." <".$from_email.">" . "\r\n";
 			if ($_SESSION['prefsEmailCC'] == 0) $headers .= "Bcc: ".$from_name." <".$from_email.">" . "\r\n";
@@ -99,7 +101,7 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 			exit;
 			*/
 
-			if ($mail_use_smtp) {				
+			if ($mail_use_smtp) {
 				$mail = new PHPMailer(true);
 				$mail->CharSet = 'UTF-8';
 				$mail->Encoding = 'base64';
@@ -110,6 +112,19 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 				$mail->Subject = $subject;
 				$mail->Body = $message;
 				sendPHPMailerMessage($mail);
+			} elseif($mail_use_ses) {
+				$mail = new SESEmail();
+				$mail->charset = 'UTF-8';
+				$mail->recipients = array($to_email);
+				$mail->sender = $from_email;
+				$mail->replyto = $from_email;
+				$mail->bcc = array($from_email);
+				$mail->subject = $subject;
+				$mail->htmlBody = $message;
+				$mail->region = $ses_region;
+				$mail->key = $ses_key;
+				$mail->secret = $ses_secret;
+				$mail->sendEmail();
 			} else {
 				mail($to_email, $subject, $message, $headers);
 			}

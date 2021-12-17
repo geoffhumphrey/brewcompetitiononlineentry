@@ -2,6 +2,7 @@
 
 use PHPMailer\PHPMailer\PHPMailer;
 require(LIB.'email.lib.php');
+require (CLASSES.'sesemail/sesEmailClass.php');
 
 if (isset($_SERVER['HTTP_REFERER'])) {
 
@@ -11,7 +12,7 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 	$from_name = mb_convert_encoding($from_name, "UTF-8");
 	$from_email = (!isset($mail_default_from) || trim($mail_default_from) === '') ? "noreply@".$url : $mail_default_from;
 	$from_email = mb_convert_encoding($from_email, "UTF-8");
-	
+
 	$headers = "";
 	$message = "";
 
@@ -61,6 +62,18 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 			$mail->Subject = $subject;
 			$mail->Body = $message;
 			sendPHPMailerMessage($mail);
+		} elseif($mail_use_ses) {
+			$mail = new SESEmail();
+			$mail->charset = 'UTF-8';
+			$mail->recipients = array($to_email);
+			$mail->sender = $from_email;
+			$mail->replyto = $from_email;
+			$mail->subject = $subject;
+			$mail->htmlBody = $message;
+			$mail->region = $ses_region;
+			$mail->key = $ses_key;
+			$mail->secret = $ses_secret;
+			$mail->sendEmail();
 		} else {
 			mail($to_email, $subject, $message, $headers);
 		}
@@ -145,6 +158,18 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 					$mail->Subject = $subject;
 					$mail->Body = $message;
 					sendPHPMailerMessage($mail);
+				} elseif($mail_use_ses) {
+					$mail = new SESEmail();
+					$mail->charset = 'UTF-8';
+					$mail->recipients = array($to_email);
+					$mail->sender = $from_email;
+					$mail->replyto = $from_email;
+					$mail->subject = $subject;
+					$mail->htmlBody = $message;
+					$mail->region = $ses_region;
+					$mail->key = $ses_key;
+					$mail->secret = $ses_secret;
+					$mail->sendEmail();
 				} else {
 					mail($to_email, $subject, $message, $headers);
 				}
