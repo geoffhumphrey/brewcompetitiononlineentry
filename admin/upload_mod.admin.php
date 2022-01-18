@@ -6,7 +6,7 @@ $imageSrc = $base_url."images/";
 
 $fileCornfirm = "default";
 if (isset($_GET['fileConfirm'])) {
-  $fileConfirm = (get_magic_quotes_gpc()) ? $_GET['fileConfirm'] : addslashes($_GET['fileConfirm']);
+  $fileConfirm = addslashes($_GET['fileConfirm']);
 }
 
 //Mmaximum file size.
