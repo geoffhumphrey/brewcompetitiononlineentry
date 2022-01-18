@@ -25,7 +25,10 @@ $totalRows_mods = mysqli_num_rows($mods);
 //echo "<p>".$query_mods."</p>";
 
 if ($go != "mods") {
-	do { $mods_display[] = $row_mods['id']; } while ($row_mods = mysqli_fetch_assoc($mods));
+	$mods_display = array();
+	while ($row_mods = mysqli_fetch_assoc($mods)) {
+		$mods_display[] = $row_mods['id'];
+	}
 }
 
 //print_r($mods_display);
