@@ -16,7 +16,7 @@ require(LIB.'common.lib.php');
 
 $section = "default";
 if (isset($_GET['section'])) {
-  $section = (get_magic_quotes_gpc()) ? $_GET['section'] : addslashes($_GET['section']);
+  $section = addslashes($_GET['section']);
 }
 
 header('Expires: Sat, 26 Jul 1997 05:00:00 GMT'); 
