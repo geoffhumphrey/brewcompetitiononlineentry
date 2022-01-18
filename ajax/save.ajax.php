@@ -18,22 +18,22 @@ require(CONFIG.'bootstrap.php');
 // For use in ajax URLS
 $rid1 = "default";
 if (isset($_GET['rid1'])) {
-  $rid1 = (get_magic_quotes_gpc()) ? $_GET['rid1'] : addslashes($_GET['rid1']);
+  $rid1 = addslashes($_GET['rid1']);
 }
 
 $rid2 = "default";
 if (isset($_GET['rid2'])) {
-  $rid2 = (get_magic_quotes_gpc()) ? $_GET['rid2'] : addslashes($_GET['rid2']);
+  $rid2 = addslashes($_GET['rid2']);
 }
 
 $rid3 = "default";
 if (isset($_GET['rid3'])) {
-  $rid3 = (get_magic_quotes_gpc()) ? $_GET['rid3'] : addslashes($_GET['rid3']);
+  $rid3 = addslashes($_GET['rid3']);
 }
 
 $rid4 = "default";
 if (isset($_GET['rid4'])) {
-  $rid4 = (get_magic_quotes_gpc()) ? $_GET['rid4'] : addslashes($_GET['rid4']);
+  $rid4 = addslashes($_GET['rid4']);
 }
 
 $return_json = array();
