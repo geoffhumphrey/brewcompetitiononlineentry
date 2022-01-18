@@ -170,166 +170,18 @@ foreach ($aus_state_abbrevs_names as $key => $value) {
 
 if ($go != "admin") echo $info_msg;
 ?>
-
-<script type='text/javascript'>//<![CDATA[
-$(document).ready(function(){
-
-	// hide divs on load if no value
-	$("#brewerClubsOther").hide();
-    $("#ahaProAmText").hide();
-    $("#us-state").hide();
-    $("#aus-state").hide();
-    $("#ca-state").hide();
-    $("#proAm").hide();
-    $("#judge-waiver").hide();
-    $("#bjcp-id").hide();
-
-    <?php if (($action == "edit") && ($row_brewer['brewerCountry'] == "United States")) { ?>
-    $("#proAm").show();
-    $("#ahaProAmText").show();
-    $("#us-state").show();
-    $("#aus-state").hide();
-    $("#ca-state").hide();
-    $("#non-us-state").hide();
-    <?php } ?>
-
-    <?php if (($action == "edit") && ($row_brewer['brewerCountry'] == "Australia")) { ?>
-    $("#proAm").hide();
-    $("#ahaProAmText").hide();
-    $("#aus-state").show();
-    $("#us-state").hide();
-    $("#ca-state").hide();
-    $("#non-us-state").hide();
-    <?php } ?>
-
-    <?php if (($action == "edit") && ($row_brewer['brewerCountry'] == "Canada")) { ?>
-    $("#proAm").hide();
-    $("#ahaProAmText").hide();
-    $("#aus-state").hide();
-    $("#us-state").hide();
-    $("#ca-state").show();
-    $("#non-us-state").hide();
-    <?php } ?>
-
-    $("#brewerCountry").change(function() {
-        $("#brewerStateNon").val('');
-        $("#brewerStateUS").find('option').attr("selected",false);
-        $("#brewerStateAUS").find('option').attr("selected",false);
-        $("#brewerStateCA").find('option').attr("selected",false);
-
-        if ($("#brewerCountry").val() == "United States") {
-            $("#proAm").show("slow");
-            $("#ahaProAmText").show("slow");
-            $("#non-us-state").hide();
-            $("#us-state").show();
-            $("#aus-state").hide();
-            $("#ca-state").hide();
-        }
-        else if ($("#brewerCountry").val() == "Australia") {
-            $("#proAm").hide("fast");
-            $("#ahaProAmText").hide("fast");
-            $("#non-us-state").hide();
-            $("#aus-state").show();
-            $("#us-state").hide();
-            $("#ca-state").hide();
-        }
-        else if ($("#brewerCountry").val() == "Canada") {
-            $("#proAm").hide("fast");
-            $("#ahaProAmText").hide("fast");
-            $("#non-us-state").hide();
-            $("#aus-state").hide();
-            $("#us-state").hide();
-            $("#ca-state").show();
-        }
-        else {
-            $("#proAm").hide("fast");
-            $("#ahaProAmText").hide("fast");
-            $("#us-state").hide();
-            $("#non-us-state").show();
-            $("#brewerProAm_0").prop("checked", true);
-            $("#brewerProAm_1").prop("checked", false);
-        }
-    });
-
-	<?php if (($action == "edit") && ($club_other)) { ?>
-	$("#brewerClubsOther").show("slow");
-    $("#clubOther").show("slow");
-	<?php } ?>
-
-	$("#brewerClubs").change(function() {
-		if ($("#brewerClubs").val() == "Other") {
-			$("#brewerClubsOther").show("slow");
-            $("#clubOther").show("slow");
-		}
-		else  {
-			$("#brewerClubsOther").hide("fast");
-            $("#clubOther").hide("fast");
-		}
-	});
-
-	$("#brewerJudge").change(function() {
-		if ($("#brewerJudge").val() == "Y") {
-			$("#brewerJudgeFields").show("slow");
-            $("#judge-waiver").show("slow");
-		}
-	});
-
-	<?php if (($action == "edit") && ($row_brewer['brewerJudge'] == "Y")) { ?>
-	$("#brewerJudgeFields").show("slow");
-    $("#judge-waiver").show("slow");
-    $("#bjcp-id").show("slow");
-	<?php } ?>
-
-    <?php if (($action == "edit") && ($row_brewer['brewerJudge'] == "N")) { ?>
-    $("#brewerJudgeFields").hide();
-    $("#judge-waiver").hide();
-    $("#bjcp-id").hide();
-    <?php } ?>
-
-	$('input[type="radio"]').click(function() {
-		if($(this).attr('id') == 'brewerJudge_0') {
-			$("#brewerJudgeFields").show("slow");
-            $("#judge-waiver").show("slow");
-            $("#bjcp-id").show("slow");
-		}
-		if($(this).attr('id') == 'brewerJudge_1') {
-            $("#brewerJudgeFields").hide("slow");
-            if ($('#brewerSteward_1').prop('checked')) {
-                $("#judge-waiver").hide("slow");
-                $("#bjcp-id").hide("slow");
-            }
-       	}
-   	});
-
-	<?php if (($action == "edit") && ($row_brewer['brewerSteward'] == "Y")) { ?>
-	$("#brewerStewardFields").show("slow");
-    $("#judge-waiver").show("slow");
-    $("#bjcp-id").show("slow");
-	<?php } ?>
-
-    <?php if (($action == "edit") && ($row_brewer['brewerSteward'] == "N")) { ?>
-    $("#brewerStewardFields").hide();
-    $("#judge-waiver").hide();
-    $("#bjcp-id").hide();
-    <?php } ?>
-
-	$('input[type="radio"]').click(function() {
-		if($(this).attr('id') == 'brewerSteward_0') {
-			$("#brewerStewardFields").show("slow");
-            $("#judge-waiver").show("slow");
-            $("#bjcp-id").show("slow");
-		}
-		if($(this).attr('id') == 'brewerSteward_1') {
-            $("#brewerStewardFields").hide("slow");
-            if ($('#brewerJudge_1').prop('checked')) {
-                $("#judge-waiver").hide("slow");
-                $("#bjcp-id").hide("slow");
-            }
-       	}
-   	});
-});
+<script type='text/javascript'>
+var action = "<?php echo $action; ?>";
+var club_other = "<?php if ($club_other) echo "true"; else echo "false"; ?>";
+var brewer_judge = "N";
+var brewer_steward = "N";
+if (action == "edit") {
+    var brewer_country = "<?php echo $row_brewer['brewerCountry']; ?>";
+    var brewer_judge = "<?php echo $row_brewer['brewerJudge']; ?>";
+    var brewer_steward = "<?php echo $row_brewer['brewerSteward']; ?>";
+}
 </script>
-
+<script src="<?php echo $base_url; ?>js_includes/add_edit_user.min.js"></script>
 <form class="form-horizontal" data-toggle="validator" action="<?php echo $form_action; ?>" method="POST" name="form1" id="form1">
 <?php if (($_SESSION['prefsProEdition'] == 1) && (!$show_judge_steward_fields)) { ?>
     <div class="form-group"><!-- Form Group REQUIRED Text Input -->

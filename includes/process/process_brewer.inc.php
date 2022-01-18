@@ -218,6 +218,10 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 
 		}
 
+		$updateSQL = sprintf("UPDATE %s SET brewerJudgeWaiver='Y' WHERE brewerJudge='Y' OR brewerSteward='Y';",$prefix."brewer");
+		mysqli_real_escape_string($connection,$updateSQL);
+		$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+
 		$pattern = array('\'', '"');
 		if ($filter == "clear") $massUpdateGoTo = $base_url."index.php?section=admin&go=participants&msg=9";
 		else $massUpdateGoTo = $base_url."index.php?section=admin&action=assign&go=judging&filter=".$filter."&msg=9";
@@ -654,6 +658,10 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 						   	"NOW( )",
 							GetSQLValueString($_POST['uid'], "text")
 							);
+		mysqli_real_escape_string($connection,$updateSQL);
+		$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+
+		$updateSQL = sprintf("UPDATE %s SET brewerJudgeWaiver='Y' WHERE brewerJudge='Y' OR brewerSteward='Y';",$prefix."brewer");
 		mysqli_real_escape_string($connection,$updateSQL);
 		$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 

@@ -535,16 +535,18 @@ function number_of_flights($table_id) {
 	return $r;
 }
 
-function check_flight_number($entry_id,$flight) {
+function check_flight_number($entry_id,$flight,$method) {
 	require(CONFIG.'config.php');
-    mysqli_select_db($connection,$database);
+  mysqli_select_db($connection,$database);
+
+  $r = "";
 
 	$query_flights = sprintf("SELECT flightNumber,flightRound FROM %s WHERE flightEntryID='%s'", $prefix."judging_flights", $entry_id);
-    $flights = mysqli_query($connection,$query_flights) or die (mysqli_error($connection));
-    $row_flights = mysqli_fetch_assoc($flights);
+  $flights = mysqli_query($connection,$query_flights) or die (mysqli_error($connection));
+  $row_flights = mysqli_fetch_assoc($flights);
 
-	if ($row_flights['flightNumber'] == $flight) $r = $row_flights['flightRound'];
-	else $r = "";
+	if (($method == 0) && ($row_flights['flightNumber'] == $flight)) $r = $row_flights['flightRound'];
+	if ($method == 1) $r = $row_flights['flightNumber'];
 	return $r;
 
 }

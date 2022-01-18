@@ -122,7 +122,11 @@ if ($section == "admin") { ?>
 	</div><!-- ./button group -->
 </div>
 <?php } ?>
-<script type='text/javascript'>//<![CDATA[
+<script type='text/javascript'>
+
+var entries_present = <?php echo $totalRows_log; ?>;
+var current_style_set = "<?php echo $_SESSION['prefsStyleSet']; ?>";
+
 $(document).ready(function(){
     
     $("#prefsHideSpecific").show();
@@ -135,10 +139,6 @@ $(document).ready(function(){
     echo $all_hide_js; 
     // echo $js_edit_show_hide_style_set_div;
     ?>
-
-    <?php if ((isset($row_limits['prefsStyleSet'])) && ($row_limits['prefsStyleSet'] == "BJCP2008")) { ?>
-    $("#helpBlockBJCP2008").show("fast");
-    <?php } ?>
 
     <?php if (($row_prefs['prefsCAPTCHA'] == "1") || ($section == "step3")) { ?>
      $("#reCAPTCHA-keys").show("fast");
@@ -200,11 +200,18 @@ $(document).ready(function(){
 
     $("#prefsStyleSet").change(function() {
 
+        if (entries_present > 0) {
+           if ((current_style_set == "BJCP2015") && ($("#prefsStyleSet").val() == "BJCP2021")) $('#style-set-change-bjcp-2021').modal('show');
+           else {
+                if (current_style_set != $("#prefsStyleSet").val()) $('#style-set-change').modal('show');
+           } 
+        }
+
         if ($("#prefsStyleSet").val() == "") {
             $("input[name='prefsUSCLEx[]']").prop("checked", false);
         }
 
-        <?php echo $all_exceptions_js; ?>
+<?php echo $all_exceptions_js; ?>
 
     }); // end $("#prefsStyleSet").change(function()
 
@@ -256,6 +263,44 @@ $(document).ready(function(){
 
 }); // end $(document).ready(function(){
 </script>
+
+<div class="modal fade" id="style-set-change" tabindex="-1" role="dialog" aria-labelledby="style-set-change-label">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="style-set-change-label">Caution! Entries Present</h4>
+      </div>
+      <div class="modal-body">
+        <p>There are currently entries logged into the database from participants using <?php echo $_SESSION['style_set_short_name']; ?> styles.</p>
+        <p><strong class="text-primary">Changing the style set here may result in incorrect style classifications or "unrecognized style" messages for participant entries, necessitating editing of individual entries to align the entered style with a style defined in the your chosen style set.</strong></p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-dismiss="modal">I Understand</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="style-set-change-bjcp-2021" tabindex="-1" role="dialog" aria-labelledby="style-set-change-bjcp-2021-label">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="style-set-change-bjcp-2021-label">Caution! Entries Present</h4>
+      </div>
+      <div class="modal-body">
+        <p>There are currently entries logged into the database from participants using BJCP 2015 styles.</p>
+        <p>Entries currently in the database will be converted from BJCP 2015 to BJCP 2021. <strong class="text-primary">This cannot be undone.</strong></p>
+        <p>Additionally, preferred and non-preferred styles will be updated to BJCP 2021 for all judges. All defined table styles will be updated as well.</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-dismiss="modal">I Understand</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <form data-toggle="validator" role="form" class="form-horizontal" method="post" action="<?php echo $base_url; ?>includes/process.inc.php?section=<?php if ($section == "step3") echo "setup"; else echo $section; ?>&amp;action=<?php if ($section == "step3") echo "add"; else echo "edit"; ?>&amp;dbTable=<?php echo $preferences_db_table; ?>&amp;id=1" name="form1">
 <input type="hidden" name="prefsRecordLimit" value="9999" />
 <h3>General</h3>
@@ -436,10 +481,10 @@ $(document).ready(function(){
 			</div>
 		</div>
 		<?php if (ENABLE_MAILER) {?>
-        <p>You have phpMailer enabled. Make sure it has been properly configured in the /site/config.mail.php file and then click the &ldquo;Send Test Email&rdquo; button above to send an email to <?php echo $_SESSION['loginUsername']; ?>. Be sure to check your spam folder.</p>
+        <p>You have phpMailer enabled. Make sure it has been properly configured in the /site/config.mail.php file and then select the &ldquo;Send Test Email&rdquo; button above to send an email to <?php echo $_SESSION['loginUsername']; ?>. Be sure to check your spam folder.</p>
         <?php } else { ?>
 
-        <p>If you are not sure that your server supports sending email via PHP scripts, click the &ldquo;Send Test Email&rdquo; button above to send an email to <?php echo $_SESSION['loginUsername']; ?>. Be sure to check your spam folder.</p>
+        <p>If you are not sure that your server supports sending email via PHP scripts, select the &ldquo;Send Test Email&rdquo; button above to send an email to <?php echo $_SESSION['loginUsername']; ?>. Be sure to check your spam folder.</p>
         <?php } ?>
 		</span>
     </div>
@@ -504,9 +549,9 @@ $(document).ready(function(){
 			</div>
 		</div>
         <?php if (ENABLE_MAILER) {?>
-        <p>You have phpMailer enabled. Make sure it has been properly configured in the /site/config.mail.php file and then click the &ldquo;Send Test Email&rdquo; button above to send an email to <?php echo $_SESSION['loginUsername']; ?>. Be sure to check your spam folder.</p>
+        <p>You have phpMailer enabled. Make sure it has been properly configured in the /site/config.mail.php file and then select the &ldquo;Send Test Email&rdquo; button above to send an email to <?php echo $_SESSION['loginUsername']; ?>. Be sure to check your spam folder.</p>
         <?php } else { ?>
-		<p>If you are not sure that your server supports sending email via PHP scripts, click the &ldquo;Send Test Email&rdquo; button above to send an email to <?php echo $_SESSION['loginUsername']; ?>. Be sure to check your spam folder.</p>
+		<p>If you are not sure that your server supports sending email via PHP scripts, select the &ldquo;Send Test Email&rdquo; button above to send an email to <?php echo $_SESSION['loginUsername']; ?>. Be sure to check your spam folder.</p>
         <?php } ?>
 		</span>
     </div>
@@ -808,7 +853,6 @@ $(document).ready(function(){
     	<select class="selectpicker" name="prefsStyleSet" id="prefsStyleSet" data-size="12" data-width="auto">
         <?php echo $style_set_dropdown; ?>
     	</select>
-        <div id="helpBlock0-BJCP2008" class="help-block">The BJCP 2008 style guidelines have been deprecated and will be completely removed in a future version. The 2008 guidelines are considered by the BJCP as &quot;obsolete.&quot;</div>
         <div id="helpBlock2-BA" class="help-block">Please note that every effort is made to keep the BA style data current; however, the latest <a class="hide-loader" href="https://www.brewersassociation.org/resources/brewers-association-beer-style-guidelines/" target="_blank">BA style set</a> may <strong>not</strong> be available in this application.</div>
         <div id="helpBlock3-AABC" class="help-block">Please note that every effort is made to keep the AABC style data current; however, the latest <a class="hide-loader" href="http://www.aabc.org.au/" target="_blank">AABC style set</a> may <strong>not</strong> be available for use in this application.</div>
     </div>
@@ -1034,7 +1078,7 @@ $(document).ready(function(){
                 <ol>
                 	<li>Whether or not the competition is accepting payments via PayPal.
                     	<ol type="a">
-                        	<li>Automatic &ldquo;mark as paid&rdquo; functionality is <em>entirely</em> dependent upon the user to click the &ldquo;return to...&rdquo; link on PayPal&rsquo;s payment confirmation screen.</li>
+                        	<li>Automatic &ldquo;mark as paid&rdquo; functionality is <em>entirely</em> dependent upon the user to select the &ldquo;return to...&rdquo; link on PayPal&rsquo;s payment confirmation screen.</li>
                         	<li>As payments come in via PayPal, an Admin of the site should have access to the email address associated with the PayPal account to monitor and confirm payments.</li>
                         </ol>
                     <li>Whether or not the competition organization facilitates multiple pickups from drop-off sites <em>before</em> the drop-off deadline date (so that Admins can mark entries as paid before sorting day).</li>
@@ -1443,7 +1487,7 @@ $(document).ready(function(){
             </div>
             <div class="modal-body">
                 <p>Indicate if the entry must be marked as paid to be able to print associated paperwork.</p>
-                <p>The default of &ldquo;Disable&rdquo; is appropriate for most installations; otherwise issues may arise that the BCOE&amp;M programming cannot control (e.g., if the user doesn't click the &ldquo;return to...&rdquo; link in PayPal).</p>
+                <p>The default of &ldquo;Disable&rdquo; is appropriate for most installations; otherwise issues may arise that the BCOE&amp;M programming cannot control (e.g., if the user doesn't select the &ldquo;return to...&rdquo; link in PayPal).</p>
             </div>
             <div class="modal-footer">
             	<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>

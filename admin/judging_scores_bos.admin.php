@@ -289,7 +289,7 @@ $(document).ready(function(){
 </table>
 <div class="bcoem-admin-element hidden-print">
 	<input type="submit" name="Submit" id="judging_scores_bos-submit" class="btn btn-primary" value="<?php if ($action == "enter") echo "Update BOS Places"; else echo "Add BOS Places"; ?>" />
-    <span id="judging_scores_bos-update-button-enabled" class="help-block">Click "<?php if ($action == "edit") echo "Update BOS Places"; else echo "Add BOS Places"; ?>" <em>before</em> paging through records.</span>
+    <span id="judging_scores_bos-update-button-enabled" class="help-block">Select "<?php if ($action == "edit") echo "Update BOS Places"; else echo "Add BOS Places"; ?>" <em>before</em> paging through records.</span>
     <span id="judging_scores_bos-update-button-disabled" class="help-block">The "<?php if ($action == "edit") echo "Update BOS Places"; else echo "Add BOS Places"; ?>" button has been disabled since data is being saved successfully as it is being entered.</span>
 </div>
 <?php if (isset($_SERVER['HTTP_REFERER'])) { ?>

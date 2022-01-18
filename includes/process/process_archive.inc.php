@@ -1,11 +1,11 @@
 <?php
 if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] == 0))) {
-	
-	//session_name($prefix_session);
-	//session_start();
 
 	require (INCLUDES.'scrubber.inc.php');
 	require (INCLUDES.'db_tables.inc.php');
+	
+	$eval_db_exist = FALSE;
+	if (check_setup($prefix."evaluation",$database)) $eval_db_exist = TRUE;
 	
 	// Instantiate HTMLPurifier
 	require (CLASSES.'htmlpurifier/HTMLPurifier.standalone.php');
@@ -22,9 +22,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 	// Rename current tables and recreate new ones based upon user input
 	$tables_array = array($brewing_db_table, $judging_assignments_db_table, $judging_flights_db_table, $judging_scores_db_table, $judging_scores_bos_db_table, $judging_tables_db_table, $staff_db_table);
 
-	if (check_setup($prefix."evaluation",$database)) {
-		$tables_array[] = $prefix."evaluation";
-	}
+	if ($eval_db_exist) $tables_array[] = $prefix."evaluation";
 
 	if ($go == "add") {
 		
@@ -35,11 +33,14 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 		if ($row_suffix_check['count'] > 0) {
 			$redirect_go_to = sprintf("Location: %s", $base_url."index.php?section=admin&go=archive&msg=6");
 		}
-			
-		// Check if any documents are in the user_docs folder
-		// If so, create a directory with the suffix name
-		// Move the files to that folder
-		// Erase all files with certain mime types in the user_docs directory
+		
+		/**
+		 * Check if any documents are in the user_docs folder
+		 * If so, create a directory with the suffix name.
+		 * Move the files to that folder. 
+		 * Erase all files with certain mime types in the user_docs directory.
+		 */
+		
 		if (!is_dir_empty(USER_DOCS)) {
 
 			// Define directories and run the move function
@@ -111,7 +112,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 		if (!isset($_POST['keepDropoff'])) $truncate_tables_array[] = $drop_off_db_table;
 		if (!isset($_POST['keepSponsors'])) $truncate_tables_array[] = $sponsors_db_table;
 		if (!isset($_POST['keepLocations'])) $truncate_tables_array[] = $judging_locations_db_table;
-		if (!isset($_POST['keepEvaluations'])) $truncate_tables_array[] = $prefix."evaluation";
+		if (($eval_db_exist) && (!isset($_POST['keepEvaluations']))) $truncate_tables_array[] = $prefix."evaluation";
 
 		$keep_participants = FALSE;
 
@@ -164,7 +165,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 		}
 		
 		/*
-		if (isset($_POST['keepEvaluations'])) {
+		if (($eval_db_exist) && (isset($_POST['keepEvaluations']))) {
 			$updateSQL = sprintf("CREATE TABLE %s LIKE %s", $prefix."evaluation_".$suffix, $prefix."evaluation");
 			mysqli_real_escape_string($connection,$updateSQL);
 			$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));

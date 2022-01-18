@@ -483,6 +483,27 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 			$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 			//echo $updateSQL; exit;
 
+			/**
+			 * If the style set has changed from BJCP 2015 to BJCP 2021, map
+			 * 2015 styles to updated 2021 styles in brewing DB.
+			 * Update scripting changed BJCP2008 preference to BJCP2015 and
+			 * performed a conversion from 2008 to 2015 on all entries in the DB.
+			 */
+			
+			if ($prefsStyleSet == "BJCP2021") {
+				
+				if ($_SESSION['prefsStyleSet'] == "BJCP2015") {
+					
+					include (INCLUDES.'convert/bjcp_2021_convert_map_ids.inc.php');
+					include (INCLUDES.'convert/bjcp_2021_convert_judge_likes.inc.php');
+					include (INCLUDES.'convert/bjcp_2021_convert_table_styles.php');
+					include (INCLUDES.'convert/bjcp_2021_convert_active_styles.inc.php');
+					include (INCLUDES.'convert/bjcp_2021_convert_entry_styles.inc.php');
+					
+				}
+
+			}
+
 			// Update style set of any custom styles to chosen style set
 			// Safeguards against a bug introduced in 2.1.13 scripting
 			// Also update sub-style idenfication scheming

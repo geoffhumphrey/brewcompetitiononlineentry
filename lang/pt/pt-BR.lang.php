@@ -82,7 +82,7 @@
  * code. Please leave this code intact! For example:
  * 
  * English (US):
- * $beerxml_text_008 = "Browse for your BeerXML compliant file on your hard drive and click <em>Upload</em>.";
+ * $beerxml_text_008 = "Browse for your BeerXML compliant file on your hard drive and select <em>Upload</em>.";
  * 
  * Spanish:
  * $beerxml_text_008 = "Buscar su archivo compatible BeerXML en su disco duro y haga clic en <em>Cargar</em>.";
@@ -1801,7 +1801,7 @@ $qr_text_018 = "Digitalize um código QR localizado no rótulo de um frasco, dig
 
 /**
  * ------------------------------------------------------------------------
- * Version 2.3.2 Additions
+ * Version 2.4.0 Additions
  * Via Google Translate English to Portuguese - and for that, I'm sorry. 
  * Again. :)
  * ------------------------------------------------------------------------
@@ -1815,6 +1815,43 @@ $styles_entry_text_C1A = "Os participantes DEVEM especificar o nível de carbona
 $styles_entry_text_C1B = "Os participantes DEVEM indicar o nível de carbonatação (3 níveis). Os participantes DEVEM indicar a doçura (seca a média doçura, 4 níveis). Os participantes DEVEM indicar a variedade de maçã para cidra varietal única; se indicado, é esperado o caráter varietal.";
 $styles_entry_text_C1C = "Os participantes DEVEM especificar o nível de carbonatação (3 níveis). Os participantes DEVEM especificar o nível de doçura (somente de média a doce, 3 níveis). Os participantes PODEM especificar a variedade de maçã para uma única cidra varietal; se especificado, será esperado um caráter varietal.";
 $winners_text_007 = "Não há entradas vencedoras nesta tabela.";
+
+/**
+ * ------------------------------------------------------------------------
+ * Version 2.4.0 Additions
+ * Via DeepL Translator English to Portuguese - and for that, I'm sorry. 
+ * Again. :)
+ * ------------------------------------------------------------------------
+ */
+
+$label_entries_to_judge = "Entradas para Julgar";
+
+if ($_SESSION['prefsStyleSet'] == "BJCP2021") {
+    $styles_entry_text_21B = "O participante DEVE especificar uma força (sessão, padrão, duplo); se nenhuma força for especificada, o padrão será assumido. O participante DEVE especificar o tipo específico de Especialidade IPA da lista de Tipos Definidos Atualmente identificados nas Diretrizes de Estilo, ou conforme emendado pelos Estilos Provisórios no site do BJCP; OU o participante DEVE descrever o tipo de Especialidade IPA e suas principais características em forma de comentários para que os juízes saibam o que esperar. Os participantes PODEM especificar as variedades específicas de lúpulo utilizadas, se os participantes acharem que os juízes podem não reconhecer as características varietais dos lúpulos mais recentes. Os participantes PODEM especificar uma combinação de tipos IPA definidos (por exemplo, IPA Centeio Negro) sem fornecer descrições adicionais.";
+    $styles_entry_text_24C = "O participante DEVE especificar a Bière de Garde loira, âmbar ou marrom.";
+    $styles_entry_text_25B = "O participante DEVE especificar a força (tabela, padrão, super) e a cor (pálido, escuro). O participante PODE identificar os grãos de caráter utilizados.";
+    $styles_entry_text_27A = "Categoria para outras cervejas históricas que NÃO tenham sido definidas pelo BJCP. O participante DEVE fornecer uma descrição para os juízes do estilo histórico que NÃO é um dos exemplos de estilo histórico definido atualmente fornecidos pelo BJCP. Exemplos atualmente definidos: Kellerbier, Kentucky Common, Lichtenhainer, London Brown Ale, Piwo Grodziskie, Pre-Prohibition Lager, Pre-Prohibition Porter, Roggenbier, Sahti. Se uma cerveja é entrada apenas com um nome de estilo e sem descrição, é muito improvável que os juízes entendam como julgá-la.";
+    $styles_entry_text_28A = "O participante DEVE especificar ou um Estilo Base, ou fornecer uma descrição dos ingredientes, especificações, ou caráter desejado. O participante PODE especificar as linhagens de Brett utilizadas.";
+    $styles_entry_text_28B = "O participante DEVE especificar uma descrição da cerveja, identificando a levedura ou as bactérias usadas e um Estilo Base, ou os ingredientes, especificações, ou o caráter alvo da cerveja.";
+    $styles_entry_text_28C = "O participante DEVE especificar qualquer ingrediente de tipo especial (por exemplo, fruta, especiarias, ervas ou madeira) utilizado. O participante DEVE especificar ou uma descrição da cerveja, identificando a levedura ou as bactérias usadas e um Estilo Base, ou os ingredientes, especificações, ou o caráter alvo da cerveja. Uma descrição geral da natureza especial da cerveja pode cobrir todos os itens necessários.";
+    $styles_entry_text_29A = "O participante DEVE especificar o(s) tipo(s) de fruta(s) utilizado(s). O participante DEVE especificar uma descrição da cerveja, identificando um Estilo Base ou os ingredientes, especificações ou o caráter alvo da cerveja. Uma descrição geral da natureza especial da cerveja pode cobrir todos os itens necessários.  Cervejas de fruta baseadas no estilo clássico devem ser inseridas neste estilo, exceto a Lambic.";
+    $styles_entry_text_29B = "O participante deve especificar o tipo de fruta e o tipo de SHV utilizado; os ingredientes individuais de SHV não precisam ser especificados se for utilizada uma mistura bem conhecida de especiarias (por exemplo, especiarias de torta de maçã). O participante deve especificar uma descrição da cerveja, seja um Estilo Base ou os ingredientes, especificações ou o caráter alvo da cerveja. Uma descrição geral da natureza especial da cerveja pode cobrir todos os itens necessários.";
+    $styles_entry_text_29C = "O entrante DEVE especificar o tipo de fruta utilizada. O participante DEVE especificar o tipo de ingrediente adicional (conforme a introdução) ou processo especial empregado. O participante DEVE especificar uma descrição da cerveja, identificando um Estilo Base ou os ingredientes, especificações ou caráter alvo da cerveja. Uma descrição geral da natureza especial da cerveja pode cobrir todos os itens necessários.";
+    $styles_entry_text_29D = "O entrante DEVE especificar o tipo de uva utilizada. O participante PODE fornecer informações adicionais sobre o estilo de base ou ingredientes característicos.";
+    $styles_entry_text_30A = "O participante DEVE especificar o tipo de especiarias, ervas ou vegetais utilizados, mas os ingredientes individuais não precisam ser especificados se for utilizada uma mistura de especiarias bem conhecida (por exemplo, especiarias para torta de maçã, caril em pó, chili em pó). O participante DEVE especificar uma descrição da cerveja, identificando um Estilo Base ou os ingredientes, especificações ou o caráter alvo da cerveja. Uma descrição geral da natureza especial da cerveja pode cobrir todos os itens necessários.";
+    $styles_entry_text_30B = "O participante DEVE especificar o tipo de especiarias, ervas ou vegetais utilizados; os ingredientes individuais não precisam ser especificados se for utilizada uma mistura bem conhecida de especiarias (por exemplo, tempero para torta de abóbora). O participante DEVE especificar uma descrição da cerveja, identificando um Estilo Base ou os ingredientes, especificações ou o caráter alvo da cerveja. Uma descrição geral da natureza especial da cerveja pode cobrir todos os itens necessários.";
+    $styles_entry_text_30C = "O participante DEVE especificar o tipo de especiarias, açúcares, frutas ou fermentáveis adicionais utilizados; os ingredientes individuais não precisam ser especificados se for utilizada uma mistura bem conhecida de especiarias (por exemplo, especiarias mulling). O participante DEVE especificar uma descrição da cerveja, identificando um Estilo Base ou os ingredientes, especificações ou o caráter alvo da cerveja. Uma descrição geral da natureza especial da cerveja pode cobrir todos os itens necessários.";
+    $styles_entry_text_30D = "O participante DEVE especificar o tipo de SHV utilizado, mas os ingredientes individuais não precisam ser especificados se for utilizada uma mistura de especiarias bem conhecida (por exemplo, especiarias para torta de maçã, caril em pó, pimenta em pó). O participante DEVE especificar o tipo de ingrediente adicional (de acordo com a introdução) ou o processo especial empregado. O participante DEVE especificar uma descrição da cerveja, identificando um Estilo Base ou os ingredientes, especificações ou o caráter alvo da cerveja. Uma descrição geral da natureza especial da cerveja pode cobrir todos os itens necessários.";
+    $styles_entry_text_31A = "O participante deve especificar o tipo de grão alternativo utilizado. O participante deve especificar uma descrição da cerveja, identificando o Estilo Base ou os ingredientes, especificações ou o caráter alvo da cerveja. Uma descrição geral da natureza especial da cerveja pode cobrir todos os itens necessários.";
+    $styles_entry_text_31B = "O entrante DEVE especificar o tipo de açúcar utilizado. O participante DEVE especificar uma descrição da cerveja, identificando um Estilo Base ou os ingredientes, especificações ou o caráter alvo da cerveja. Uma descrição geral da natureza especial da cerveja pode cobrir todos os itens necessários.";
+    $styles_entry_text_32A = "O participante DEVE especificar um Estilo Base. O participante DEVE especificar o tipo de madeira ou fumaça se um caractere varietal de fumaça for perceptível.";
+    $styles_entry_text_32B = "O entrante DEVE especificar o tipo de madeira ou fumaça se um caráter de fumaça varietal for perceptível. O entrante DEVE especificar os ingredientes ou processos adicionais que fazem desta uma cerveja defumada especial. O participante DEVE especificar uma descrição da cerveja, identificando um estilo base ou os ingredientes, especificações, ou o caráter alvo da cerveja. Uma descrição geral da natureza especial da cerveja pode cobrir todos os itens necessários.";
+    $styles_entry_text_33A = "O entrante DEVE especificar o tipo de madeira utilizada e o nível de torrada ou char (se usado). Se for usada uma madeira varietal incomum, o participante DEVE fornecer uma breve descrição dos aspectos sensoriais que a madeira acrescenta à cerveja. O entrante DEVE especificar uma descrição da cerveja, identificando o Estilo Base ou os ingredientes, especificações ou o caráter alvo da cerveja. Uma descrição geral da natureza especial da cerveja pode cobrir todos os itens necessários.";
+    $styles_entry_text_33B = "O participante DEVE especificar o caráter alcoólico adicional, com informações sobre o barril se relevante para o perfil de sabor acabado. Se uma madeira ou ingrediente incomum tiver sido utilizado, o participante DEVE fornecer uma breve descrição dos aspectos sensoriais que os ingredientes acrescentam à cerveja. O entrante DEVE especificar uma descrição da cerveja, identificando o Estilo Base ou os ingredientes, especificações ou o caráter alvo da cerveja. Uma descrição geral da natureza especial da cerveja pode cobrir todos os itens necessários.";
+    $styles_entry_text_34A = "O participante DEVE especificar o nome da cerveja comercial, especificações (estatísticas vitais) para a cerveja e uma breve descrição sensorial ou uma lista de ingredientes usados na fabricação da cerveja. Sem esta informação, os juízes que não estiverem familiarizados com a cerveja não terão base para comparação.";
+    $styles_entry_text_34B = "O participante DEVE especificar o Estilo ou Estilos Base utilizados, e quaisquer ingredientes especiais, processos ou variações envolvidas. O participante PODE fornecer uma descrição adicional do perfil sensorial da cerveja ou as estatísticas vitais da cerveja resultante.";
+    $styles_entry_text_PRX3 = "O entrante DEVE especificar o tipo de uva utilizada. O participante PODE fornecer informações adicionais sobre o estilo de base ou ingredientes característicos.";
+}
 
 /**
  * ----------------------------------------------------------------------------------

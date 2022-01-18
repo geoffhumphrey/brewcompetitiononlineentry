@@ -135,7 +135,7 @@ function mod_info($info,$method) {
     </table>
 <div class="bcoem-admin-element hidden-print">
 	<input type="submit" name="Submit" id="updateCustomMods" class="btn btn-primary" aria-describedby="helpBlock" value="Update Custom Modules" />
-    <span id="helpBlock" class="help-block">Click "Update Custom Modules" <em>before</em> paging through records.</span>
+    <span id="helpBlock" class="help-block">Select "Update Custom Modules" <em>before</em> paging through records.</span>
 </div>
 <?php if (isset($_SERVER['HTTP_REFERER'])) { ?>
 <input type="hidden" name="relocate" value="<?php echo relocate($_SERVER['HTTP_REFERER'],"default",$msg,$id); ?>">

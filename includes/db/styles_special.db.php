@@ -21,7 +21,7 @@ $replacement3 = array('Entry Instructions:','Commercial Examples:','<strong><u>M
 $replacement4 = array('must specify','may specify','MUST specify','MAY specify','must provide','must be specified','must declare','must either','must supply','may provide','MUST state');
 $replacement5 = array('<strong><u>MUST</u></strong> specify','<strong><u>MAY</u></strong> specify (using the <em>Optional Info</em> field below)','<strong><u>MUST</u></strong> specify','<strong><u>MAY</u></strong> specify (using the <em>Optional Info</em> field below)','<strong><u>MUST</u></strong> provide','<strong><u>MUST</u></strong> be specified','<strong><u>MUST</u></strong> declare','<strong><u>MUST</u></strong> either','<strong><u>MUST</u></strong> supply','<strong><u>MAY</u></strong> provide (using the <em>Optional Info</em> field below)','<strong><u>MUST</u></strong> state');
 
-if (($_SESSION['prefsLanguage'] == "en-US") && ($_SESSION['prefsStyleSet'] == "BJCP2015")) {
+if (($_SESSION['prefsLanguage'] == "en-US") && (($_SESSION['prefsStyleSet'] == "BJCP2015") || ($_SESSION['prefsStyleSet'] == "BJCP2021"))) {
 	$styles_entry_text = array(
 	    "7-C" => str_replace($replacement4,$replacement5,$styles_entry_text_07C),
 	    "9-A" => str_replace($replacement4,$replacement5,$styles_entry_text_09A),
@@ -80,10 +80,12 @@ if (($_SESSION['prefsLanguage'] == "en-US") && ($_SESSION['prefsStyleSet'] == "B
 	    "21-B7" => str_replace($replacement4,$replacement5,$styles_entry_text_21X),
 	    "PR-X3" => str_replace($replacement4,$replacement5,$styles_entry_text_PRX3),
 	    "PR-X4" => str_replace($replacement4,$replacement5,$styles_entry_text_PRX4),
+	    "LS-X3" => str_replace($replacement4,$replacement5,$styles_entry_text_PRX3),
+	    "LS-X4" => str_replace($replacement4,$replacement5,$styles_entry_text_PRX4),
 	);
 }
 
-elseif (($_SESSION['prefsLanguage'] != "en-US") && ($_SESSION['prefsStyleSet'] == "BJCP2015")) {
+elseif (($_SESSION['prefsLanguage'] != "en-US") && (($_SESSION['prefsStyleSet'] == "BJCP2015") || ($_SESSION['prefsStyleSet'] == "BJCP2021"))) {
 	$styles_entry_text = array(
 	    "7-C" => $styles_entry_text_07C,
 	    "9-A" => $styles_entry_text_09A,
@@ -139,6 +141,8 @@ elseif (($_SESSION['prefsLanguage'] != "en-US") && ($_SESSION['prefsStyleSet'] =
 	    "21-B7" => $styles_entry_text_21X,
 	    "PR-X3" => $styles_entry_text_PRX3,
 	    "PR-X4" => $styles_entry_text_PRX4,
+	    "LS-X3" => $styles_entry_text_PRX3,
+	    "LS-X4" => $styles_entry_text_PRX4,
 	);
 }
 
@@ -243,7 +247,7 @@ do {
 
 			if ($styleSet == "BA") $style_name = $styleSet." Style: ".$row_required_optional['brewStyle'];
 			elseif ($styleSet == "AABC") $style_name = $styleSet." Style ".ltrim($row_required_optional['brewStyleGroup'],"0").".".ltrim($row_required_optional['brewStyleNum'],"0").": ".$row_required_optional['brewStyle'];
-			else $style_name = $styleSet." Style ".ltrim($row_required_optional['brewStyleGroup'],"0").ltrim($row_required_optional['brewStyleNum'],"0").": ".$row_required_optional['brewStyle'];
+			else $style_name = $_SESSION['style_set_short_name']." Style ".ltrim($row_required_optional['brewStyleGroup'],"0").ltrim($row_required_optional['brewStyleNum'],"0").": ".$row_required_optional['brewStyle'];
 
 			$info .= "<table class=\"table table-bordered table-striped\">";
 			$info .= "<tr>";

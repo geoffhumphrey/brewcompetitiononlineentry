@@ -241,8 +241,7 @@ $header1_8 .= "";
 if ($_SESSION['prefsStyleSet'] == "BA") $page_info8 .= sprintf("<p>%s</p>",$entry_info_text_047);
 else $page_info8 .= sprintf("<p>%s</p>",$entry_info_text_046);
 
-if ($_SESSION['prefsStyleSet'] == "BA") $style_set = "Brewers Association";
-else $style_set = str_replace("2"," 2",$row_styles['brewStyleVersion']);
+$style_set = $_SESSION['style_set_short_name'];
 
 $anchor_links[] = $label_judging_styles;
 $anchor_name = str_replace(" ", "-", $label_judging_styles);

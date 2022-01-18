@@ -264,15 +264,33 @@ $address = standardize_name($purifier->purify($_POST['brewerAddress']));
 $address = filter_var($address,FILTER_SANITIZE_STRING);
 $city = standardize_name($purifier->purify($_POST['brewerCity']));
 $city = filter_var($city,FILTER_SANITIZE_STRING);
+$state = "";
 
-if ((isset($_POST['brewerStateNon'])) && ($_POST['brewerStateNon'] != "")) {
-    $state = $purifier->purify($_POST['brewerStateNon']);
-    if (strlen($state) > 2) $state = standardize_name($state);
-    else $state = strtoupper($state);
+if (isset($_POST['brewerCountry'])) {
+
+    if ($_POST['brewerCountry'] == "United States") {
+        if ((isset($_POST['brewerStateUS'])) && ($_POST['brewerStateUS'] != "")) $state = $_POST['brewerStateUS'];
+    }
+
+    if ($_POST['brewerCountry'] == "Canada") {
+        if ((isset($_POST['brewerStateCA'])) && ($_POST['brewerStateCA'] != "")) $state = $_POST['brewerStateCA'];
+    }
+
+    if ($_POST['brewerCountry'] == "Australia") {
+        if ((isset($_POST['brewerStateAUS'])) && ($_POST['brewerStateAUS'] != "")) $state = $_POST['brewerStateAUS'];
+    }
+
+    else {
+
+        if ((isset($_POST['brewerStateNon'])) && ($_POST['brewerStateNon'] != "")) {
+            $state = $purifier->purify($_POST['brewerStateNon']);
+            if (strlen($state) > 2) $state = standardize_name($state);
+            else $state = strtoupper($state);
+        }
+
+    }
+
 }
 
-if ((isset($_POST['brewerStateUS'])) && ($_POST['brewerStateUS'] != "")) $state = $_POST['brewerStateUS'];
-if ((isset($_POST['brewerStateAUS'])) && ($_POST['brewerStateAUS'] != "")) $state = $_POST['brewerStateAUS'];
-if ((isset($_POST['brewerStateCA'])) && ($_POST['brewerStateCA'] != "")) $state = $_POST['brewerStateCA'];
-$state = filter_var($state,FILTER_SANITIZE_STRING);
+if (!empty($state)) $state = filter_var($state,FILTER_SANITIZE_STRING);
 ?>

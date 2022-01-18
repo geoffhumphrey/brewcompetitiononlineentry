@@ -56,8 +56,7 @@ function admin_relocate($user_level,$go,$referrer) {
 if ((($action == "add") && ($remaining_entries <= 0) && ($_SESSION['userLevel'] == 2)) || (($action == "add") && ($entry_window_open == "2") && ($_SESSION['userLevel'] == 2))) $disable_fields = TRUE; else $disable_fields = FALSE;
 
 // Specific code for Style select
-if ($_SESSION['prefsStyleSet'] == "BA") $style_set = "Brewers Association";
-else $style_set = str_ireplace("2"," 2",$_SESSION['prefsStyleSet']);
+$style_set = $_SESSION['style_set_short_name'];
 
 if (empty($row_limits['prefsUserSubCatLimit'])) $user_subcat_limit = "99999";
 else $user_subcat_limit = $row_limits['prefsUserSubCatLimit'];
@@ -98,22 +97,6 @@ $highlight_special = "";
 $highlight_carb = "";
 $highlight_strength = "";
 
-/*
-$all_special_ing_styles = array();
-if (is_array($special_beer)) $all_special_ing_styles  = array_merge($all_special_ing_styles,$special_beer);
-if (is_array($carb_str_sweet_special)) $all_special_ing_styles = array_merge($all_special_ing_styles,$carb_str_sweet_special);
-if (is_array($spec_sweet_carb_only)) $all_special_ing_styles = array_merge($all_special_ing_styles,$spec_sweet_carb_only);
-if (is_array($spec_carb_only)) $all_special_ing_styles = array_merge($all_special_ing_styles,$spec_carb_only);
-array_unique($all_special_ing_styles);
-
-$all_special_ing_styles_info = array();
-if (is_array($special_beer_info)) $all_special_ing_styles_info = array_merge($all_special_ing_styles_info,$special_beer_info);
-if (is_array($carb_str_sweet_special_info)) $all_special_ing_styles_info = array_merge($all_special_ing_styles_info,$carb_str_sweet_special_info);
-if (is_array($spec_sweet_carb_only_info)) $all_special_ing_styles_info = array_merge($all_special_ing_styles_info,$spec_sweet_carb_only_info);
-array_unique($all_special_ing_styles_info);
-
-*/
-
 $proEdition = FALSE;
 if ($_SESSION['prefsProEdition'] == 1) $proEdition = TRUE;
 
@@ -123,7 +106,6 @@ if ($_SESSION['userLevel'] <= 1) $adminUser = TRUE;
 $adminUserAddDisable = FALSE;
 
 if (($_SESSION['userLevel'] == 2) && ($action == "edit")) {
-
 
 	// Fix fatal error when using [] operator on strings
 	$user_entries = [];
@@ -258,7 +240,8 @@ if ($add_or_edit) {
 			
 			$exploder = explode("^",$row_log['brewInfo']);
 
-			/** If the catch-all specialty IPA category, explode to 
+			/** 
+			 * If the catch-all specialty IPA category, explode to 
 			 * gather the strength and the required info
 			 */
 			
@@ -267,7 +250,8 @@ if ($add_or_edit) {
 				$brewInfo = $exploder[0];
 			}
 
-			/** For the speciality IPA substyles that are pre-defined
+			/** 
+			 * For the speciality IPA substyles that are pre-defined
 			 * by the BJCP, only grab the strength (info not required)
 			 *
 			 * @fixes https://github.com/geoffhumphrey/brewcompetitiononlineentry/issues/1108
@@ -320,7 +304,6 @@ if ($add_or_edit) {
 
 	}
 
-
 // Construct styles drop-down
 $styles_dropdown = "";
 
@@ -344,7 +327,6 @@ do {
 	if (($remaining_entries > 0) && (!$disable_fields) && ($subcat_limit)) $selected_disabled = "DISABLED";
 	elseif ($disable_fields) $selected_disabled = "DISABLED";
 
-	
 	if (($action == "edit") && ($view == $style_value_edit)) {
 		$selected = " SELECTED";
 		$selected_disabled = "";

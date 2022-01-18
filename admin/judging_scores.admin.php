@@ -525,7 +525,7 @@ $(document).ready(function() {
 </table>
 <div class="bcoem-admin-element hidden-print">
 	<input type="submit" name="Submit" id="judging_scores-submit" class="btn btn-primary" aria-describedby="helpBlock" value="<?php if ($action == "edit") echo "Update Scores"; else echo "Add Scores"; ?>" disabled />
-    <span id="judging_scores-update-button-enabled" class="help-block">Click "<?php if ($action == "edit") echo "Update Scores"; else echo "Add Scores"; ?>" <em>before</em> paging through records.</span>
+    <span id="judging_scores-update-button-enabled" class="help-block">Select "<?php if ($action == "edit") echo "Update Scores"; else echo "Add Scores"; ?>" <em>before</em> paging through records.</span>
     <span id="judging_scores-update-button-disabled" class="help-block">The "<?php if ($action == "edit") echo "Update Scores"; else echo "Add Scores"; ?>" button has been disabled since data is being saved successfully as it is being entered.</span>
 </div>
 <?php if (isset($_SERVER['HTTP_REFERER'])) { ?>

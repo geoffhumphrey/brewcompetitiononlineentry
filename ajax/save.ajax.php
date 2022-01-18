@@ -1,40 +1,29 @@
 <?php
 ob_start();
-ini_set('display_errors', 1); // Change to 0 for prod.
-ini_set('display_startup_errors', 1); // Change to 0 for prod.
-error_reporting(E_ALL); // Change to error_reporting(0) for prod.
+ini_set('display_errors', 0); // Change to 0 for prod.
+ini_set('display_startup_errors', 0); // Change to 0 for prod.
+error_reporting(0); // Change to error_reporting(0) for prod.
 require('../paths.php');
 require(CONFIG.'bootstrap.php');
 
 /**
  * The action variable cooresponds to a table in the DB.
  *
- * The id varable will be used as an identifier - either as the 
+ * @param $id varable will be used as an identifier - either as the 
  * record id in the table or a relational component (bid, eid).
  * 
- * $ridX variables are for other relational vars
+ * @param $ridX variables are for other relational vars.
  */
 
-// For use in ajax URLS
 $rid1 = "default";
-if (isset($_GET['rid1'])) {
-  $rid1 = (get_magic_quotes_gpc()) ? $_GET['rid1'] : addslashes($_GET['rid1']);
-}
-
 $rid2 = "default";
-if (isset($_GET['rid2'])) {
-  $rid2 = (get_magic_quotes_gpc()) ? $_GET['rid2'] : addslashes($_GET['rid2']);
-}
-
 $rid3 = "default";
-if (isset($_GET['rid3'])) {
-  $rid3 = (get_magic_quotes_gpc()) ? $_GET['rid3'] : addslashes($_GET['rid3']);
-}
-
 $rid4 = "default";
-if (isset($_GET['rid4'])) {
-  $rid4 = (get_magic_quotes_gpc()) ? $_GET['rid4'] : addslashes($_GET['rid4']);
-}
+
+if (isset($_GET['rid1'])) $rid1 = sterilize($_GET['rid1']);
+if (isset($_GET['rid2'])) $rid2 = sterilize($_GET['rid2']);
+if (isset($_GET['rid3'])) $rid3 = sterilize($_GET['rid3']);
+if (isset($_GET['rid4'])) $rid4 = sterilize($_GET['rid4']);
 
 $return_json = array();
 $status = 0;
@@ -43,6 +32,7 @@ $sql = "";
 $input = "";
 $post = 0;
 $error_type = 0;
+
 $session_active = FALSE;
 if ((isset($_SESSION['session_set_'.$prefix_session])) && (isset($_SESSION['loginUsername']))) $session_active = TRUE;
 
@@ -51,9 +41,7 @@ if (($session_active) && ($_SESSION['userLevel'] <= 2)) {
 	if ($action == "evaluation") {
 
 		if ($go == "evalPlace") {
-
 			$input = filter_var($_POST['evalPlace'],FILTER_SANITIZE_STRING);
-
 		}
 
 		if (empty($input)) {
@@ -128,7 +116,6 @@ if (($session_active) && ($_SESSION['userLevel'] <= 1)) {
 		else $error_type = 3; // SQL error
 
 	} // END if ($action == "brewing")
-	
 
 	if ($action == "sponsors") {
 
@@ -157,8 +144,6 @@ if (($session_active) && ($_SESSION['userLevel'] <= 1)) {
 			if ($input == "0") $sql = sprintf("UPDATE `%s` SET %s=NULL WHERE id=%s", $prefix.$action, $go, $id);
 			else $sql = sprintf("UPDATE `%s` SET %s='%s' WHERE id=%s", $prefix.$action, $go, $input, $id);
 		}
-
-		// echo $sql;
 
 		mysqli_real_escape_string($connection,$sql);
 		$result = mysqli_query($connection,$sql) or die (mysqli_error($connection));
@@ -287,7 +272,6 @@ if (($session_active) && ($_SESSION['userLevel'] <= 1)) {
 
 if (!$session_active) $status = 9; // Session expired, not enabled, etc.
 
-
 $return_json = array(
 	"status" => "$status",
 	"query" => "$sql",
@@ -299,13 +283,11 @@ $return_json = array(
 // Return the json
 echo json_encode($return_json);
 
-
-/* *****************************************
+/**  
  * The following is unfinished. Need more
  * thought into the various scenarios
  * associated with assigning judges and 
  * stewards to tables/flights/rounds.
- * *****************************************
  */
 
 /*
@@ -387,12 +369,9 @@ if ($action == "judging_assignments") {
 		else {
 
 			// Check if ID is assigned to the table, if so, change
-
-
 			// If not, flag
-
-
 			$sql = sprintf("UPDATE `%s` SET %s='HJ' WHERE bid='%s' AND assignTable='%s'", $prefix.$action, $go, $input, $id);
+
 		}
 
 		mysqli_real_escape_string($connection,$sql);
@@ -412,7 +391,5 @@ if ($action == "judging_assignments") {
 }
 
 */
-
-
 
 ?>

@@ -41,16 +41,7 @@ if (!$judge_limit) $alert_text_079 .= $alert_text_078;
 <?php } ?>
 
 <?php if (($logged_in) && ($_SESSION['userLevel'] <= 1) && ($section == "admin")) {
-
-	if (($totalRows_log  > 0) && ($_SESSION['prefsStyleSet'] == "BJCP2008") && ($_SESSION['userLevel'] == 0) && ($go == "default")) {
-
-		include (DB.'admin_judging_tables.db.php');
-		$bjcp_2008 = TRUE;
-
-	} // end if (($totalRows_log  > 0) && ($_SESSION['prefsStyleSet'] == "BJCP2008") && ($_SESSION['userLevel'] == 0))
-
-	else $bjcp_2008 = FALSE;
-
+  $bjcp_2008 = FALSE;
 ?>
 	<!-- Admin Alerts -->
 	<?php if ($go == "make_admin") { ?>

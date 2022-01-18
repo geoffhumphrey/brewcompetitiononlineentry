@@ -9,27 +9,36 @@ $hosted_setup = FALSE;
 $check_setup = FALSE;
 $system_name_change = FALSE;
 
-/**
- * To be compatible with MySQL 8, the "system" DB
- * table name needs to be changed. SYSTEM is a reserved
- * word in MySQL 8 and beyond.
- */
-
 if (check_setup($prefix."system",$database)) {
+	
 	$query_system = sprintf("SELECT * FROM %s WHERE id='1'",$prefix."system");
 	$system = mysqli_query($connection,$query_system) or die (mysqli_error($connection));
 	$row_system = mysqli_fetch_assoc($system);
-	if ($row_system['version'] != $current_version) unset($_SESSION['session_set_'.$prefix_session]);
+	
+	if ($row_system['version'] != $current_version) {
+		unset($_SESSION['session_set_'.$prefix_session]);
+		unset($_SESSION['currentVersion']);
+	}
+	
 	if ((HOSTED) && ($row_system['setup_last_step'] == 9)) $hosted_setup = TRUE;
+
 }
 
 if (check_setup($prefix."bcoem_sys",$database)) {
+	
 	$system_name_change = TRUE;
 	$query_system = sprintf("SELECT * FROM %s WHERE id='1'",$prefix."bcoem_sys");
 	$system = mysqli_query($connection,$query_system) or die (mysqli_error($connection));
 	$row_system = mysqli_fetch_assoc($system);
-	if ($row_system['version'] != $current_version) unset($_SESSION['session_set_'.$prefix_session]);
+	
+	if ($row_system['version'] != $current_version) {
+		unset($_SESSION['session_set_'.$prefix_session]);
+		unset($_SESSION['currentVersion']);
+	}
+
 	if ((HOSTED) && ($row_system['setup_last_step'] == 9)) $hosted_setup = TRUE;
+	$check_setup = TRUE;
+
 }
 
 if ((!isset($_SESSION['currentVersion'])) || ((isset($_SESSION['currentVersion'])) && ($_SESSION['currentVersion'] == 0))) {
@@ -52,6 +61,8 @@ if ((!isset($_SESSION['currentVersion'])) || ((isset($_SESSION['currentVersion']
 	}
 
 	if ($check_setup) {
+
+		// echo "Setup checked.<br>";
 
 		// Check if "prefsShipping" column is in the prefs table since it was added in the 2.1.6.0 release
 		// If not, run the update
@@ -85,9 +96,12 @@ if ((!isset($_SESSION['currentVersion'])) || ((isset($_SESSION['currentVersion']
 		if ($row_system['version'] == $current_version) {
 			if ((strtotime($row_system['version_date'])) < ($current_version_date)) $force_update = TRUE;
 			$setup_success = TRUE;
+			// echo "Versions match.<br>";
 		}
 
 		if ($row_system['version'] != $current_version) {
+
+			// echo "Versions don't match.<br>";
 
 			// Run update scripts if required
 			if ($update_required) {
@@ -122,4 +136,14 @@ if ((!isset($_SESSION['currentVersion'])) || ((isset($_SESSION['currentVersion']
 	}
 
 } // end if (!isset($_SESSION['currentVersion']))
+
+/*
+echo $row_system['version'];
+echo "<br>";
+echo $current_version;
+echo "<br>";
+if ($check_setup) echo "CS Yes."; else echo "CS No.";
+echo "<br>";
+if ($force_update) echo "FU Yes."; else echo "FU No."; exit ();
+*/
 ?>

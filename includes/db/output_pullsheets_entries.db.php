@@ -20,8 +20,16 @@ else {
 
 	if ($view == "default") $order = "brewJudgingNumber";
 	else $order = "id";
+	
+	$received = TRUE;
+	if ($view == "judge_inventory") {
+		if ($_SESSION['jPrefsTablePlanning'] == 1) $received = FALSE;
+	}
 
-	$query_entries = sprintf("SELECT id, brewStyle, brewCategory, brewCategorySort, brewSubCategory, brewInfo, brewMead1, brewMead2, brewMead3, brewJudgingNumber, brewBoxNum, brewComments, brewInfoOptional, brewPossAllergens, brewStaffNotes FROM %s WHERE brewCategorySort='%s' AND brewSubCategory='%s' AND brewReceived='1' ORDER BY %s ASC", $prefix."brewing", $row_styles['brewStyleGroup'], $row_styles['brewStyleNum'], $order);
+	$query_entries = sprintf("SELECT id, brewStyle, brewCategory, brewCategorySort, brewSubCategory, brewInfo, brewMead1, brewMead2, brewMead3, brewJudgingNumber, brewBoxNum, brewComments, brewInfoOptional, brewPossAllergens, brewStaffNotes FROM %s WHERE brewCategorySort='%s' AND brewSubCategory='%s'", $prefix."brewing", $row_styles['brewStyleGroup'], $row_styles['brewStyleNum']);
+	
+	if ($received) $query_entries .= " AND brewReceived='1'";
+	$query_entries .= sprintf(" ORDER BY %s ASC",$order);
 
 }
 

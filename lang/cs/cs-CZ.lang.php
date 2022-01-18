@@ -82,7 +82,7 @@
  * code. Please leave this code intact! For example:
  * 
  * English (US):
- * $beerxml_text_008 = "Browse for your BeerXML compliant file on your hard drive and click <em>Upload</em>.";
+ * $beerxml_text_008 = "Browse for your BeerXML compliant file on your hard drive and select <em>Upload</em>.";
  * 
  * Spanish:
  * $beerxml_text_008 = "Buscar su archivo compatible BeerXML en su disco duro y haga clic en <em>Cargar</em>.";
@@ -1810,6 +1810,43 @@ $styles_entry_text_C1A = "Účastníci MUSÍ uvést úroveň nasycení (3 úrovn
 $styles_entry_text_C1B = "Účastníci MUSÍ uvést úroveň nasycení (3 úrovně). Účastníci MUSÍ uvést sladkost (suchý až středně sladký, 4 úrovně). Účastníci MOHOU uvést odrůdu jablek u jednodruhových moštů; pokud je uvedena, očekává se odrůdový charakter.";
 $styles_entry_text_C1C = "Účastníci MUSÍ uvést úroveň sycení (3 úrovně). Účastníci MUSÍ uvést sladkost (pouze středně sladký až sladký, 3 úrovně). Účastníci MOHOU uvést odrůdu jablek pro jednoodrůdový cider; pokud je uvedena, očekává se odrůdový charakter.";
 $winners_text_007 = "U tohoto stolu nejsou žádné vítězné vzorky.";
+
+/**
+ * ------------------------------------------------------------------------
+ * Version 2.4.0 Additions
+ * Via DeepL Translator English to Czech - and for that, I'm sorry. 
+ * Again. :)
+ * ------------------------------------------------------------------------
+ */
+
+$label_entries_to_judge = "Přihlášky k posouzení";
+
+if ($_SESSION['prefsStyleSet'] == "BJCP2021") {
+    $styles_entry_text_21B = "Účastník MUSÍ zadat sílu (relační, standardní, dvojitá); pokud sílu nezadá, předpokládá se, že je standardní. Účastník MUSÍ uvést konkrétní typ Specialty IPA ze seznamu aktuálně definovaných typů uvedených v pokynech pro styly nebo ve znění prozatímních stylů na internetových stránkách BJCP; NEBO MUSÍ popsat typ Specialty IPA a jeho klíčové vlastnosti formou komentáře, aby porotci věděli, co mají očekávat. Účastníci MŮŽOU uvést konkrétní použité odrůdy chmele, pokud se domnívají, že porotci nemusí rozpoznat odrůdové vlastnosti novějších chmelů. Účastníci MOHOU uvést kombinaci definovaných typů IPA (např. Black Rye IPA) bez uvedení dalších popisů.";
+    $styles_entry_text_24C = "Účastník MUSÍ uvést světlé, jantarové nebo hnědé Bière de Garde.";
+    $styles_entry_text_25B = "Účastník MUSÍ uvést sílu (stolní, standardní, super) a barvu (světlá, tmavá). Účastník MŮŽE uvést použitá znaková zrna.";
+    $styles_entry_text_27A = "Souhrnná kategorie pro ostatní historická piva, která NEBYLY definována BJCP. Účastník MUSÍ poskytnout porotcům popis historického stylu, který NENÍ jedním z aktuálně definovaných příkladů historických stylů poskytovaných BJCP. V současné době definované příklady: Kellerbier, Kentucky Common, Lichtenhainer, London Brown Ale, Piwo Grodziskie, Pre-Prohibition Lager, Pre-Prohibition Porter, Roggenbier, Sahti. Pokud je pivo přihlášeno pouze s názvem stylu a bez popisu, je velmi nepravděpodobné, že by porotci pochopili, jak jej hodnotit.";
+    $styles_entry_text_28A = "O participante DEVE especificar ou um Estilo Base, ou fornecer uma descrição dos ingredientes, especificações, ou caráter desejado. O participante PODE especificar as linhagens de Brett utilizadas.";
+    $styles_entry_text_28B = "Účastník MUSÍ uvést popis piva, identifikaci použitých kvasinek nebo bakterií a buď základní styl, nebo složky, specifikace nebo cílový charakter piva.";
+    $styles_entry_text_28C = "Účastník MUSÍ uvést všechny použité složky speciálního typu (např. ovoce, koření, byliny nebo dřevo). Účastník MUSÍ uvést buď popis piva, identifikaci použitých kvasinek nebo bakterií a buď základní styl, nebo složky, specifikace nebo cílový charakter piva. Obecný popis zvláštního charakteru piva může zahrnovat všechny požadované položky.";
+    $styles_entry_text_29A = "Účastník MUSÍ uvést druh (druhy) použitého ovoce. Účastník MUSÍ uvést popis piva s uvedením buď základního stylu, nebo složek, specifikací nebo cílového charakteru piva. Obecný popis zvláštního charakteru piva může zahrnovat všechny požadované položky.  Ovocná piva založená na klasickém stylu by měla být přihlášena v tomto stylu, s výjimkou Lambicu.";
+    $styles_entry_text_29B = "Účastník musí uvést druh ovoce a typ použitého SHV; jednotlivé složky SHV není třeba uvádět, pokud je použita známá směs koření (např. koření na jablečný koláč). Účastník musí uvést popis piva, a to buď základní styl, nebo přísady, specifikace nebo cílový charakter piva. Obecný popis zvláštního charakteru piva může zahrnovat všechny požadované položky.";
+    $styles_entry_text_29C = "Účastník MUSÍ uvést druh použitého ovoce. Účastník MUSÍ uvést druh další přísady (podle úvodu) nebo použitý zvláštní postup. Účastník MUSÍ uvést popis piva s uvedením buď základního stylu, nebo přísad, specifikací nebo cílového charakteru piva. Obecný popis zvláštního charakteru piva může zahrnovat všechny požadované položky.";
+    $styles_entry_text_29D = "Účastník MUSÍ uvést druh použitých hroznů. Účastník MŮŽE uvést další informace o základním stylu nebo charakteristických složkách.";
+    $styles_entry_text_30A = "Účastník MUSÍ uvést druh použitého koření, bylinek nebo zeleniny, ale jednotlivé ingredience nemusí být uvedeny, pokud je použita známá směs koření (např. koření na jablečný koláč, kari, chilli). Účastník MUSÍ uvést popis piva s uvedením buď základního stylu, nebo přísad, specifikací nebo cílového charakteru piva. Obecný popis zvláštního charakteru piva může zahrnovat všechny požadované položky.";
+    $styles_entry_text_30B = "Účastník MUSÍ uvést druh použitého koření, bylinek nebo zeleniny; jednotlivé ingredience není třeba uvádět, pokud je použita známá směs koření (např. koření na dýňový koláč). Účastník MUSÍ uvést popis piva s uvedením buď základního stylu, nebo přísad, specifikací nebo cílového charakteru piva. Obecný popis zvláštního charakteru piva může zahrnovat všechny požadované položky.";
+    $styles_entry_text_30C = "Účastník MUSÍ uvést druh použitého koření, cukrů, ovoce nebo dalších fermentovatelných látek; jednotlivé složky není třeba uvádět, pokud je použita známá směs koření (např. koření na mulling). Účastník MUSÍ uvést popis piva s uvedením buď základního stylu, nebo přísad, specifikací nebo cílového charakteru piva. Obecný popis zvláštního charakteru piva může zahrnovat všechny požadované položky.";
+    $styles_entry_text_30D = "Účastník MUSÍ uvést typ použitých SHV, ale jednotlivé ingredience není třeba uvádět, pokud je použita známá směs koření (např. koření na jablečný koláč, kari, chilli). Účastník MUSÍ uvést typ další přísady (podle úvodu) nebo použitý zvláštní postup. Účastník MUSÍ uvést popis piva s uvedením buď základního stylu, nebo přísad, specifikací nebo cílového charakteru piva. Obecný popis zvláštního charakteru piva může zahrnovat všechny požadované položky.";
+    $styles_entry_text_31A = "Účastník musí uvést typ použitého alternativního obilí. Účastník musí uvést popis piva s uvedením buď základního stylu, nebo složek, specifikací nebo cílového charakteru piva. Obecný popis zvláštního charakteru piva může zahrnovat všechny požadované položky.";
+    $styles_entry_text_31B = "Účastník MUSÍ uvést typ použitého cukru. Účastník MUSÍ uvést popis piva s uvedením buď základního stylu, nebo složek, specifikací nebo cílového charakteru piva. Obecný popis zvláštního charakteru piva může zahrnovat všechny požadované položky.";
+    $styles_entry_text_32A = "Účastník MUSÍ zadat základní styl. Účastník MUSÍ uvést druh dřeva nebo kouře, pokud je patrný odrůdový charakter kouře.";
+    $styles_entry_text_32B = "Účastník MUSÍ uvést druh dřeva nebo kouře, pokud je patrný odrůdový charakter kouře. Účastník MUSÍ uvést další přísady nebo postupy, díky nimž se jedná o speciální uzené pivo. Účastník MUSÍ uvést popis piva s uvedením buď základního stylu, nebo přísad, specifikací nebo cílového charakteru piva. Obecný popis speciálního charakteru piva může zahrnovat všechny požadované položky.";
+    $styles_entry_text_33A = "Účastník MUSÍ uvést druh použitého dřeva a stupeň opečení nebo zuhelnatění (pokud je použito). Pokud je použito neobvyklé odrůdové dřevo, účastník MUSÍ uvést stručný popis senzorických aspektů, které dřevo pivu dodává. Účastník MUSÍ uvést popis piva s uvedením buď základního stylu, nebo složek, specifikací nebo cílového charakteru piva. Obecný popis speciálního charakteru piva může zahrnovat všechny požadované položky.";
+    $styles_entry_text_33B = "Účastník MUSÍ uvést dodatečný charakter alkoholu a informace o sudu, pokud je to relevantní pro konečný chuťový profil. Pokud bylo použito neobvyklé dřevo nebo přísada, účastník MUSÍ uvést stručný popis senzorických aspektů, které tyto přísady pivu dodávají. Účastník MUSÍ uvést popis piva s uvedením buď základního stylu, nebo složek, specifikací nebo cílového charakteru piva. Obecný popis speciálního charakteru piva může zahrnovat všechny požadované položky.";
+    $styles_entry_text_34A = "Účastník MUSÍ uvést název komerčního piva, specifikace (základní statistiky) piva a buď stručný senzorický popis, nebo seznam ingrediencí použitých při výrobě piva. Bez těchto informací nebudou mít porotci, kteří pivo neznají, žádný podklad pro srovnání.";
+    $styles_entry_text_34B = "Účastník MUSÍ uvést použitý základní styl nebo styly a jakékoli speciální přísady, postupy nebo varianty. Účastník MŮŽE uvést další popis senzorického profilu piva nebo životních statistik výsledného piva.";
+    $styles_entry_text_PRX3 = "Účastník MUSÍ uvést druh použitých hroznů. Účastník MŮŽE uvést další informace o základním stylu nebo charakteristických složkách.";
+}
 
 /**
  * ----------------------------------------------------------------------------------

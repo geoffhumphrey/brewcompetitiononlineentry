@@ -19,9 +19,77 @@ if (($row_limits['prefsShowBestBrewer'] != 0) || ($row_limits['prefsShowBestClub
 $judge_assign_links = array();
 $steward_assign_links = array();
 
+// Judge Inventory
+$ji_loc_entry = "";
+$ji_loc_judging = "";
+
+// Pullsheet
+$ps_loc_entry = "";
+$ps_loc_entry_mbos = "";
+$ps_loc_judging = "";
+$ps_loc_judging_mbos = "";
+
+$cards_loc_rnd = "";
+
+do {
+
+    $judge_assign_links[$row_judging['judgingLocName']] = $base_url."output/print.output.php?section=assignments&amp;go=judging_assignments&amp;filter=judges&amp;location=".$row_judging['id'];
+    $steward_assign_links[$row_judging['judgingLocName']] = $base_url."output/print.output.php?section=assignments&amp;go=judging_assignments&amp;filter=stewards&amp;location=".$row_judging['id'];                                     
+    for ($round=1; $round <= $row_judging['judgingRounds']; $round++) {
+        
+        $location_date = getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_judging['judgingDate'], $_SESSION['prefsDateFormat'], $_SESSION['prefsTimeFormat'], "short", "date-time-no-gmt");
+        $location_name = sprintf("%s - %s, Round %s", $row_judging['judgingLocName'], $location_date, $round);
+
+        $ps_loc_j_link = $base_url."output/print.output.php?section=pullsheets&amp;go=judging_locations&amp;view=default&amp;location=".$row_judging['id']."&amp;round=".$round;
+
+        $ps_loc_j_mbos_link = $base_url."output/print.output.php?section=pullsheets&amp;go=judging_locations&amp;view=default&amp;filter=mini_bos&amp;location=".$row_judging['id']."&amp;round=".$round;
+
+        $ps_loc_e_link = $base_url."output/print.output.php?section=pullsheets&amp;go=judging_locations&amp;view=entry&amp;location=".$row_judging['id']."&amp;round=".$round;
+
+        $ps_loc_e_mbos_link = $base_url."output/print.output.php?section=pullsheets&amp;go=judging_locations&amp;view=entry&amp;filter=mini_bos&amp;location=".$row_judging['id']."&amp;round=".$round;
+        
+        $ps_loc_judging .= sprintf("<li class=\"small\"><a id=\"modal_window_link\" class=\"hide-loader\" href=\"%s\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Print Pullsheet for Session %s (Judging Numbers)\">%s</a></li>", $ps_loc_j_link, $location_name, $location_name);
+
+        $ps_loc_judging_mbos .= sprintf("<li class=\"small\"><a id=\"modal_window_link\" class=\"hide-loader\" href=\"%s\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Print Pullsheet for Session %s (Mini-BOS Judging Numbers)\">%s (Mini-BOS)</a></li>", $ps_loc_j_mbos_link, $location_name, $location_name);
+
+        $ps_loc_entry .= sprintf("<li class=\"small\"><a id=\"modal_window_link\" class=\"hide-loader\" href=\"%s\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Print Pullsheet for Session %s (Entry Numbers)\">%s</a></li>", $ps_loc_e_link, $location_name, $location_name);
+
+        $ps_loc_entry_mbos .= sprintf("<li class=\"small\"><a id=\"modal_window_link\" class=\"hide-loader\" href=\"%s\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Print Pullsheet for Session %s (Mini-BOS Entry Numbers)\">%s (Mini-BOS)</a></li>", $ps_loc_e_mbos_link, $location_name, $location_name);
+
+        $cards_loc_rnd_link = $base_url."output/print.output.php?section=table-cards&amp;go=judging_locations&amp;location=".$row_judging['id']."&amp;round=".$round;
+
+        $cards_loc_rnd .= sprintf("<li class=\"small\"><a id=\"modal_window_link\" class=\"hide-loader\" href=\"%s\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Print Table Cards for %s\">%s</a></li>", $cards_loc_rnd_link, $location_name, $location_name);
+
+        /*
+
+        <li class="small"><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=table-cards&amp;go=judging_locations&amp;location=<?php echo $row_judging2['id']?>&amp;round=<?php echo $round; ?>" data-toggle="tooltip" data-placement="top" title="Print Table Cards for <?php echo $row_judging2['judgingLocName']. " - " . $location_date . ", Round " . $round; ?>"><?php echo $row_judging2['judgingLocName']. " - " . $location_date . ", Round " . $round; ?></a></li>
+
+
+        $ps_loc_judging .= "<li class=\"small\"><a id=\"modal_window_link\" class=\"hide-loader\" href=\"".$base_url."output/print.output.php?section=pullsheets&amp;go=judging_locations&amp;view=default&amp;location=".$row_judging['id']."&amp;round=".$round."\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Print Pullsheet for Session ".$row_judging['judgingLocName'] . " - " . $location_date. ", Round " . $round."\">".$row_judging['judgingLocName'] . " - " . $location_date. ", Round " . $round."</a></li>";
+
+        $ps_loc_judging_mbos .= "<li class=\"small\"><a id=\"modal_window_link\" class=\"hide-loader\" href=\"".$base_url."output/print.output.php?section=pullsheets&amp;go=judging_locations&amp;view=default&amp;filter=mini_bos&amp;location=".$row_judging['id']."&amp;round=".$round."\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Print Pullsheet for Session ".$row_judging['judgingLocName'] . " - " . $location_date. ", Round " . $round."\">".$row_judging['judgingLocName'] . " - " . $location_date. ", Round " . $round . " (Mini-BOS)</a></li>";
+        */
+    }
+
+    $ji_link_entry = $base_url."output/print.output.php?section=pullsheets&amp;go=all_entry_info&amp;view=judge_inventory&amp;filter=J&amp;sort=entry&amp;location=".$row_judging['id'];
+    $ji_loc_entry .= "<li class=\"small\">";
+    $ji_loc_entry .= sprintf("<a id=\"modal_window_link\" class=\"hide-loader\" href=\"%s\">",$ji_link_entry);
+    $ji_loc_entry .= $row_judging['judgingLocName'];
+    $ji_loc_entry .= "</a>";
+    $ji_loc_entry .= "</li>";
+
+    $ji_loc_judging_link = $base_url."output/print.output.php?section=pullsheets&amp;go=all_entry_info&amp;view=judge_inventory&amp;filter=J&amp;location=".$row_judging['id'];
+    $ji_loc_judging .= "<li class=\"small\">";
+    $ji_loc_judging .= sprintf("<a id=\"modal_window_link\" class=\"hide-loader\" href=\"%s\">",$ji_loc_judging_link);
+    $ji_loc_judging .= $row_judging['judgingLocName'];
+    $ji_loc_judging .= "</a>";
+    $ji_loc_judging .= "</li>";
+
+} while ($row_judging = mysqli_fetch_assoc($judging));
+
 ?>
 <script src="<?php echo $base_url;?>js_includes/admin_ajax.min.js"></script>
-<p class="lead">Hello, <?php echo $_SESSION['brewerFirstName']; ?>. <span class="small">Click or tap the headings or icons below to view the options available in each category.</span></p>
+<p class="lead">Hello, <?php echo $_SESSION['brewerFirstName']; ?>. <span class="small">Select the headings or icons below to view the options available in each category.</span></p>
 <div class="row bcoem-admin-element">
     <?php if ($hosted_setup) { ?>
     <div class="col col-lg-3 col-md-12 col-sm-12 col-xs-12" style="padding-bottom: 5px;">
@@ -1111,20 +1179,13 @@ $steward_assign_links = array();
 									<button class="btn btn-default dropdown-toggle" type="button" id="pullsheetMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Entry Numbers for Session... <span class="caret"></span>
 									</button>
 									<ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-										<?php
-										do {
-											for ($round=1; $round <= $row_judging['judgingRounds']; $round++) {
-										 $location_date = getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_judging['judgingDate'], $_SESSION['prefsDateFormat'], $_SESSION['prefsTimeFormat'], "short", "date-time-no-gmt");
-										 ?>
-										<li class="small"><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=pullsheets&amp;go=judging_locations&amp;view=entry&amp;location=<?php echo $row_judging['id']?>&amp;round=<?php echo $round; ?>" data-toggle="tooltip" data-placement="top" title="Print Pullsheet for Session <?php echo $row_judging['judgingLocName'] . " - " . $location_date. ", Round " . $round; ?>"><?php echo $row_judging['judgingLocName'] . " - " . $location_date. ", Round " . $round; ?></a>
-                                        <li class="small"><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=pullsheets&amp;go=judging_locations&amp;view=entry&amp;filter=mini_bos&amp;location=<?php echo $row_judging['id']?>&amp;round=<?php echo $round; ?>" data-toggle="tooltip" data-placement="top" title="Print Pullsheet for Session <?php echo $row_judging['judgingLocName'] . " - " . $location_date. ", Round " . $round; ?>"><?php echo $row_judging['judgingLocName'] . " - " . $location_date. ", Round " . $round . " (Mini-BOS)"; ?></a>
-										<?php }
-                                        
-                                            $judge_assign_links[$row_judging['judgingLocName']] = $base_url."output/print.output.php?section=assignments&amp;go=judging_assignments&amp;filter=judges&amp;location=".$row_judging['id'];
-                                            $steward_assign_links[$row_judging['judgingLocName']] = $base_url."output/print.output.php?section=assignments&amp;go=judging_assignments&amp;filter=stewards&amp;location=".$row_judging['id'];
-										
-                                        } while ($row_judging = mysqli_fetch_assoc($judging));
-										?>
+										<?php 
+                                        if (!empty($ps_loc_entry)) echo $ps_loc_entry; 
+                                        if (!empty($ps_loc_entry_mbos)) {
+                                            echo "<li role=\"separator\" class=\"divider\"></li>";
+                                            echo $ps_loc_entry_mbos;
+                                        }
+                                        ?>
 									</ul>
 								</div>
 								<div class="dropdown bcoem-admin-dashboard-select">
@@ -1132,34 +1193,12 @@ $steward_assign_links = array();
 									</button>
 									<ul class="dropdown-menu" aria-labelledby="pullsheetMenu2">
 										<?php
-
-                                        $judge_inventory_loc_entry = "";
-                                        $judge_inventory_loc_judging = "";
-
-										do {
-											for ($round=1; $round <= $row_judging1['judgingRounds']; $round++) {
-												$location_date = getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_judging1['judgingDate'], $_SESSION['prefsDateFormat'], $_SESSION['prefsTimeFormat'], "short", "date-time-no-gmt");
-										 ?>
-										<li class="small"><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=pullsheets&amp;go=judging_locations&amp;view=default&amp;location=<?php echo $row_judging1['id']?>&amp;round=<?php echo $round; ?>" data-toggle="tooltip" data-placement="top" title="Print Pullsheet for Session <?php echo $row_judging1['judgingLocName'] . " - " . $location_date. ", Round " . $round; ?>"><?php echo $row_judging1['judgingLocName'] . " - " . $location_date. ", Round " . $round; ?></a></li>
-                                        <li class="small"><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=pullsheets&amp;go=judging_locations&amp;view=default&amp;filter=mini_bos&amp;location=<?php echo $row_judging1['id']?>&amp;round=<?php echo $round; ?>" data-toggle="tooltip" data-placement="top" title="Print Pullsheet for Session <?php echo $row_judging1['judgingLocName'] . " - " . $location_date. ", Round " . $round; ?>"><?php echo $row_judging1['judgingLocName'] . " - " . $location_date. ", Round " . $round . " (Mini-BOS)"; ?></a>
-										<?php }
-
-                                            $judge_inventory_link_entry = $base_url."output/print.output.php?section=pullsheets&amp;go=all_entry_info&amp;view=judge_inventory&amp;filter=J&amp;sort=entry&amp;location=".$row_judging1['id'];
-                                            $judge_inventory_loc_entry .= "<li class=\"small\">";
-                                            $judge_inventory_loc_entry .= sprintf("<a id=\"modal_window_link\" class=\"hide-loader\" href=\"%s\">",$judge_inventory_link_entry);
-                                            $judge_inventory_loc_entry .= $row_judging1['judgingLocName'];
-                                            $judge_inventory_loc_entry .= "</a>";
-                                            $judge_inventory_loc_entry .= "</li>";
-
-                                            $judge_inventory_link_judging = $base_url."output/print.output.php?section=pullsheets&amp;go=all_entry_info&amp;view=judge_inventory&amp;filter=J&amp;location=".$row_judging1['id'];
-                                            $judge_inventory_loc_judging .= "<li class=\"small\">";
-                                            $judge_inventory_loc_judging .= sprintf("<a id=\"modal_window_link\" class=\"hide-loader\" href=\"%s\">",$judge_inventory_link_judging);
-                                            $judge_inventory_loc_judging .= $row_judging1['judgingLocName'];
-                                            $judge_inventory_loc_judging .= "</a>";
-                                            $judge_inventory_loc_judging .= "</li>";
-
-										} while ($row_judging1 = mysqli_fetch_assoc($judging1));
-										?>
+                                        if (!empty($ps_loc_judging)) echo $ps_loc_judging;
+                                        if (!empty($ps_loc_judging_mbos)) {
+                                            echo "<li role=\"separator\" class=\"divider\"></li>";
+                                            echo $ps_loc_judging_mbos;
+                                        }
+                                        ?>
 									</ul>
 								</div>
 							</div>
@@ -1174,20 +1213,17 @@ $steward_assign_links = array();
                                 <button class="btn btn-default dropdown-toggle" type="button" id="judging-inv-ent" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Entry Numbers for Session...<span class="caret"></span>
                                     </button>
                                 <ul class="dropdown-menu" aria-labelledby="judging-inv-ent">
-                                    <?php if (!empty($judge_inventory_loc_entry)) echo $judge_inventory_loc_entry; ?>
+                                    <?php if (!empty($ji_loc_entry)) echo $ji_loc_entry; ?>
                                 </ul>
                                 </div>
                                 <div class="dropdown bcoem-admin-dashboard-select">
                                 <button class="btn btn-default dropdown-toggle" type="button" id="judging-inv-jnum" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Judging Numbers for Session...<span class="caret"></span>
                                     </button>
                                 <ul class="dropdown-menu" aria-labelledby="judging-inv-jnum">
-                                    <?php if (!empty($judge_inventory_loc_judging)) echo $judge_inventory_loc_judging; ?>
+                                    <?php if (!empty($ji_loc_judging)) echo $ji_loc_judging; ?>
                                 </ul>
                                 </div>
                             </div>
-
-
-
                         </div>
 						<div class="row">
 							<div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
@@ -1208,17 +1244,7 @@ $steward_assign_links = array();
 									<button class="btn btn-default dropdown-toggle" type="button" id="cardsMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">for Session... <span class="caret"></span>
 									</button>
 									<ul class="dropdown-menu" aria-labelledby="cardsMenu2">
-										<?php
-										do {
-											for ($round=1; $round <= $row_judging2['judgingRounds']; $round++) {
-												$location_date = getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_judging2['judgingDate'], $_SESSION['prefsDateFormat'], $_SESSION['prefsTimeFormat'], "short", "date-time-no-gmt");
-										?>
-											<li class="small"><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=table-cards&amp;go=judging_locations&amp;location=<?php echo $row_judging2['id']?>&amp;round=<?php echo $round; ?>" data-toggle="tooltip" data-placement="top" title="Print Table Cards for <?php echo $row_judging2['judgingLocName']. " - " . $location_date . ", Round " . $round; ?>"><?php echo $row_judging2['judgingLocName']. " - " . $location_date . ", Round " . $round; ?></a></li>
-										<?php
-											}
-										} while ($row_judging2 = mysqli_fetch_assoc($judging2));
-										?>
-
+										<?php if (!empty($cards_loc_rnd)) echo $cards_loc_rnd; ?>
 									</ul>
 								</div>
 							</div>

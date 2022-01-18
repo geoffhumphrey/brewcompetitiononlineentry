@@ -13,7 +13,7 @@ function bcoem_dashboard_help($content) {
 		case "comp-prep":
 		$bcoem_dashboard_help_title .= "Competition Preparation Help";
 		$bcoem_dashboard_help_body .= "<p>The Competition Preparation category houses links to areas of your site that are intended to be completed before account or entry registration opens. Much of this information was completed during the set up process.</p>";
-		$bcoem_dashboard_help_body .= "<p>Expand the category by clicking the heading or icon. Once expanded, you are presented with several choices. You can:</p>";
+		$bcoem_dashboard_help_body .= "<p>Expand the category by selecting the heading or icon. Once expanded, you are presented with several choices. You can:</p>";
 		$bcoem_dashboard_help_body .= "<ol>";
   		$bcoem_dashboard_help_body .= "<li><a href=\"".$base_url."index.php?section=admin&amp;go=contacts\">Manage</a> or <a href=\"".$base_url."index.php?section=admin&amp;go=contacts&amp;action=add\">add</a> competition contacts.";
   		$bcoem_dashboard_help_body .= "<li><a href=\"".$base_url."index.php?section=admin&amp;go=special_best\">Manage</a> or <a href=\"".$base_url."index.php?section=admin&amp;go=special_best&amp;action=add\">add</a> custom categories.";
@@ -30,7 +30,7 @@ function bcoem_dashboard_help($content) {
 		case "entries-participants":
 		$bcoem_dashboard_help_title .= "Entries and Participants Help";
 		$bcoem_dashboard_help_body .= "<p>Once registration has opened for your competition, you can keep track of ongoing participant and entry data by using the functions under the Entries and Participants heading.";
-		$bcoem_dashboard_help_body .= "<p>Expand the category by clicking the heading or icon. Once expanded, you are presented with several choices. You can:</p>";
+		$bcoem_dashboard_help_body .= "<p>Expand the category by selecting the heading or icon. Once expanded, you are presented with several choices. You can:</p>";
 		$bcoem_dashboard_help_body .= "<ol>";
   		$bcoem_dashboard_help_body .= "<li><a href=\"".$base_url."index.php?section=admin&amp;go=entries\">Manage</a> entries.";
   		$bcoem_dashboard_help_body .= "<li><a href=\"".$base_url."index.php?section=admin&amp;go=participants\">Manage</a> participants.";
@@ -162,7 +162,7 @@ function bcoem_dashboard_help($content) {
 		$bcoem_dashboard_help_body .= "<p>After setting up tables, you can then assign judges and stewards to each of them in one of two ways:</p>";
 		$bcoem_dashboard_help_body .= "<ol>";
 		$bcoem_dashboard_help_body .= "<li>By accessing the <a href=\"".$base_url."index.php?section=admin&amp;go=judging_tables&amp;action=assign\">Assign Judges or Stewards to Tables</a> screen an choosing a table from one of the drop-down lists.</li>";
-		$bcoem_dashboard_help_body .= "<li>By clicking the icon next to the number in the &ldquo;Judges&rdquo; or &ldquo;Stewards&rdquo; column from the tables list on the <a href=\"".$base_url."index.php?section=admin&amp;go=judging_tables\">Administration: Tables</a> screen. The icon will either be <span class=\"fa fa-plus-circle\"></span> (no assignments at table) or <span class=\"fa fa-pencil-square-o\"></span> (assignments at table).</li>";
+		$bcoem_dashboard_help_body .= "<li>By selecting the icon next to the number in the &ldquo;Judges&rdquo; or &ldquo;Stewards&rdquo; column from the tables list on the <a href=\"".$base_url."index.php?section=admin&amp;go=judging_tables\">Administration: Tables</a> screen. The icon will either be <span class=\"fa fa-plus-circle\"></span> (no assignments at table) or <span class=\"fa fa-pencil-square-o\"></span> (assignments at table).</li>";
 		$bcoem_dashboard_help_body .= "</ol>";
 		$bcoem_dashboard_help_body .= "<p>BCOE&amp;M has built in logic that will not allow you to assign a judge or steward to a table who has been:</p>";
 		$bcoem_dashboard_help_body .= "<ul>";
@@ -250,16 +250,16 @@ function bcoem_help($section,$go,$action,$filter) {
 		$bcoem_help_body .= "<p>This is a comprehensive snapshot of your account information.</p>";
 		$bcoem_help_body .= "<p>Here, you can view your personal information including name, address, phone number(s), clubs, AHA member number, BJCP ID, BJCP judge rank, judging preferences, and stewarding preferences.</p>";
 		$bcoem_help_body .= "<ul>";
-		$bcoem_help_body .= "<li>Click the &ldquo;Edit Account&rdquo; button to update your personal information.</li>";
-		$bcoem_help_body .= "<li>Click the &ldquo;Change Email&rdquo; button to update your email address. <strong>Note:</strong> your email address is also your user name.</li>";
-		$bcoem_help_body .= "<li>Click the &ldquo;Change Password&rdquo; button to update your account password.</li>";
+		$bcoem_help_body .= "<li>Select the &ldquo;Edit Account&rdquo; button to update your personal information.</li>";
+		$bcoem_help_body .= "<li>Select the &ldquo;Change Email&rdquo; button to update your email address. <strong>Note:</strong> your email address is also your user name.</li>";
+		$bcoem_help_body .= "<li>Select the &ldquo;Change Password&rdquo; button to update your account password.</li>";
 		$bcoem_help_body .= "</ul>";
 
 			$bcoem_help_body .= "<p>At the bottom of the page is your list of entries.</p>";
 			$bcoem_help_body .= "<ul>";
-			$bcoem_help_body .= "<li>Click the printer icon <span class=\"fa fa-print\"></span> to print the necessary documentation for each entry (bottle labels, etc.).</li>";
-			$bcoem_help_body .= "<li>Click the pencil icon <span class=\"fa fa-pencil\"></span> to edit the entry.</li>";
-			$bcoem_help_body .= "<li>Click the trash can icon <span class=\"fa fa-trash-o\"></span> to delete the entry.</li>";
+			$bcoem_help_body .= "<li>Select the printer icon <span class=\"fa fa-print\"></span> to print the necessary documentation for each entry (bottle labels, etc.).</li>";
+			$bcoem_help_body .= "<li>Select the pencil icon <span class=\"fa fa-pencil\"></span> to edit the entry.</li>";
+			$bcoem_help_body .= "<li>Select the trash can icon <span class=\"fa fa-trash-o\"></span> to delete the entry.</li>";
 			$bcoem_help_body .= "</ul>";
 
 		$content = TRUE;
@@ -280,7 +280,7 @@ function bcoem_help($section,$go,$action,$filter) {
 		$bcoem_help_body .= "<ul>";
 		if ($_SESSION['prefsCash'] == "Y") $bcoem_help_body .= "<li><strong>Cash.</strong> Put cash in an envelope and attach to one of your bottles. Please, for the sanity of the organizing staff, do not pay with coins.</li>";
 		if ($_SESSION['prefsCheck'] == "Y") $bcoem_help_body .= "<li><strong>Check.</strong> Make your check out to ".$_SESSION['prefsCheckPayee']." for the full amount of your entry fees, place in an envelope, and attach to one of your bottles. It would be extremely helpful for competition staff if you would list your entry numbers in the memo section.</li>";
-		if ($_SESSION['prefsPaypal'] == "Y") $bcoem_help_body .= "<li><strong>Credit/Debit Card via PayPal.</strong> To pay your entry fees with a credit or debit card, click the &ldquo;Pay with PayPal&rdquo; button. A PayPal account is not necessary. After you have paid, be sure to click the &ldquo;Return to...&rdquo; link on the PayPal confirmation screen. This will ensure that your entries are marked as paid for this competition.</li>";
+		if ($_SESSION['prefsPaypal'] == "Y") $bcoem_help_body .= "<li><strong>Credit/Debit Card via PayPal.</strong> To pay your entry fees with a credit or debit card, select the &ldquo;Pay with PayPal&rdquo; button. A PayPal account is not necessary. After you have paid, be sure to click the &ldquo;Return to...&rdquo; link on the PayPal confirmation screen. This will ensure that your entries are marked as paid for this competition.</li>";
 		$bcoem_help_body .= "</ul>";
 		$content = TRUE;
 	}
@@ -317,37 +317,37 @@ function bcoem_help($section,$go,$action,$filter) {
 
 		if ($go == "special_best") {
 			$bcoem_help_title .= "Custom Categories Help";
-			$bcoem_help_body .= "<p>View and define a winning category unique to your competition. (e.g., Steward's Choice, Best Name, etc.). This is especially useful to define and display Pro-Am winners.</p><p>Click the &ldquo;Add a Custom Style&rdquo; button to define a new category.<p>";
+			$bcoem_help_body .= "<p>View and define a winning category unique to your competition. (e.g., Steward's Choice, Best Name, etc.). This is especially useful to define and display Pro-Am winners.</p><p>Select the &ldquo;Add a Custom Style&rdquo; button to define a new category.<p>";
 			$content = TRUE;
 		}
 
 		if ($go == "dropoff") {
 			$bcoem_help_title .= "Drop-Off Locations Help";
-			$bcoem_help_body .= "<p>Define one or more entry drop-off locations for participants to hand-deliver their entries. Drop-off locations are displayed on the Info with a link* to a map and driving directions.</p><p>A drop-off location may or may not be the same as the Shipping Location, which is defined in Competition Info. There is only one shipping location defined for the competition, whereas there can be multiple drop-off locations.</p><p>Click the &ldquo;Add a Drop-Off Location&rdquo; button to enter a drop-off location.<p><p class=\"small\">* The mapping features will only work if an address is input.</p>";
+			$bcoem_help_body .= "<p>Define one or more entry drop-off locations for participants to hand-deliver their entries. Drop-off locations are displayed on the Info with a link* to a map and driving directions.</p><p>A drop-off location may or may not be the same as the Shipping Location, which is defined in Competition Info. There is only one shipping location defined for the competition, whereas there can be multiple drop-off locations.</p><p>Select the &ldquo;Add a Drop-Off Location&rdquo; button to enter a drop-off location.<p><p class=\"small\">* The mapping features will only work if an address is input.</p>";
 			$content = TRUE;
 		}
 
 		if (($go == "judging") && ($action == "default")) {
 			$bcoem_help_title .= "Judging Locations Help";
-			$bcoem_help_body .= "<p>Define one or more entry judging locations and associated dates and times. Each judging location is displayed on the public pages sidebar with a link* to a map and driving directions.</p><p>Click the &ldquo;Add a Judging Location&rdquo; button to enter a new judging location and its associated date/time.<p><p class=\"small\">* The mapping features will only work if an address is input.</p>";
+			$bcoem_help_body .= "<p>Define one or more entry judging locations and associated dates and times. Each judging location is displayed on the public pages sidebar with a link* to a map and driving directions.</p><p>Select the &ldquo;Add a Judging Location&rdquo; button to enter a new judging location and its associated date/time.<p><p class=\"small\">* The mapping features will only work if an address is input.</p>";
 			$content = TRUE;
 		}
 
 		if ($go == "sponsors") {
 			$bcoem_help_title .= "Sponsors Help";
-			$bcoem_help_body .= "<p>View, add or edit competition sponsors for display on the public Home page and Sponsors page.</p><p>For each sponsor, enter their name, location, level (1 through 5, 1 being the highest level), website address, logo image name* from the drop-down and an optional short description.<p><p class=\"small\">*Logo images must be uploaded first to show up on the logo image drop-down list. Click the &ldquo;Upload Sponsor Logo Images&rdquo; button.</p>";
+			$bcoem_help_body .= "<p>View, add or edit competition sponsors for display on the public Home page and Sponsors page.</p><p>For each sponsor, enter their name, location, level (1 through 5, 1 being the highest level), website address, logo image name* from the drop-down and an optional short description.<p><p class=\"small\">*Logo images must be uploaded first to show up on the logo image drop-down list. Select the &ldquo;Upload Sponsor Logo Images&rdquo; button.</p>";
 			$content = TRUE;
 		}
 
 		if ($go == "styles") {
 			$bcoem_help_title .= "Styles Help";
-			$bcoem_help_body .= "<p>Define the accepted sub-styles for your competition based upon the 2008 or 2015 BJCP Style Guidelines. Check or uncheck the sub-styles your competition will accept.</p><p>Custom Styles will be at the top of the list. To define a custom style or custom style type, click the &ldquo;Add...&rdquo; drop-down menu.</p>";
+			$bcoem_help_body .= "<p>Define the accepted sub-styles for your competition based upon the 2008 or 2015 BJCP Style Guidelines. Check or uncheck the sub-styles your competition will accept.</p><p>Custom Styles will be at the top of the list. To define a custom style or custom style type, select the &ldquo;Add...&rdquo; drop-down menu.</p>";
 			$content = TRUE;
 		}
 
 		if ($go == "style_types") {
 			$bcoem_help_title .= "Styles Types Help";
-			$bcoem_help_body .= "<p>Here, you can designate the style types for use in the competition.</p><p>BCOE&M ships with three pre-defined style types: Beer, Cider, and Mead. Using the Style Types function, Administrators can add a custom style type, define whether a best of show round will be conducted for each style type (including pre-defined ones), and designate which placed entries from each table will be sent to the best of show round (1st place only, 1st and 2nd place, or 1st, 2nd, and 3rd places).</p><p>You can also add a custom style type (e.g., wine, soda, saki, etc.) and its associated best of show methodology by clicking the &ldquo;Add...&rdquo; drop-down menu.</p>";
+			$bcoem_help_body .= "<p>Here, you can designate the style types for use in the competition.</p><p>BCOE&M ships with three pre-defined style types: Beer, Cider, and Mead. Using the Style Types function, Administrators can add a custom style type, define whether a best of show round will be conducted for each style type (including pre-defined ones), and designate which placed entries from each table will be sent to the best of show round (1st place only, 1st and 2nd place, or 1st, 2nd, and 3rd places).</p><p>You can also add a custom style type (e.g., wine, soda, saki, etc.) and its associated best of show methodology by selecting the &ldquo;Add...&rdquo; drop-down menu.</p>";
 			$content = TRUE;
 		}
 
@@ -355,18 +355,18 @@ function bcoem_help($section,$go,$action,$filter) {
 			$bcoem_help_title .= "Entries Help";
 			$bcoem_help_body .= "<p>From here, Administrators can view, add, edit, or delete any entry.</p>";
 			$bcoem_help_body .= "<ul>";
-			$bcoem_help_body .= "<li>View entries entered into a single category by clicking on the category name.</li>";
-			$bcoem_help_body .= "<li>View entries for a particular user by clicking on their name in the Brewer column.</li>";
-			$bcoem_help_body .= "<li>Sort entries by entry nubmer, judging number, name of entry, category, or brewer by clicking on the corresponding column headers. The default view is by ascending category.</li>";
-			$bcoem_help_body .= "<li>View all paid or unpaid entries by clicking the &ldquo;View...&rdquo; drop-down menu.</li>";
+			$bcoem_help_body .= "<li>View entries entered into a single category by selecting on the category name.</li>";
+			$bcoem_help_body .= "<li>View entries for a particular user by selecting on their name in the Brewer column.</li>";
+			$bcoem_help_body .= "<li>Sort entries by entry nubmer, judging number, name of entry, category, or brewer by selecting on the corresponding column headers. The default view is by ascending category.</li>";
+			$bcoem_help_body .= "<li>View all paid or unpaid entries by selecting the &ldquo;View...&rdquo; drop-down menu.</li>";
 			$bcoem_help_body .= "<li>Add an entry for any participant by selecting their name in the the &ldquo;Add an Entry For...&rdquo; drop-down menu.</li>";
 			$bcoem_help_body .= "<li>Print the list of entries sorted in various ways using the &ldquo;Print Current View...&rdquo; drop-down menu.</li>";
 			$bcoem_help_body .= "<li>Perform global entry-related actions by selecting a function in the &ldquo;Admin Actions...&rdquo; drop-down menu.</li>";
 			$bcoem_help_body .= "<li>Designate entries as paid and/or received by checking the corresponding box for each entry.</li>";
-			$bcoem_help_body .= "<li>Edit the entry by clicking the pencil icon <span class=\"fa fa-pencil\"></span>.</li>";
-			$bcoem_help_body .= "<li>Delete the entry by clicking the trash can icon <span class=\"fa fa-trash-o\"></span>.</li>";
-			$bcoem_help_body .= "<li>Print entry forms for any entry by clicking the printer icon <span class=\"fa fa-print\"></span>.</li>";
-			$bcoem_help_body .= "<li>Email the participant who added the entry by clicking the envelope icon <span class=\"fa fa-envelope\"></span>.</li>";
+			$bcoem_help_body .= "<li>Edit the entry by selecting the pencil icon <span class=\"fa fa-pencil\"></span>.</li>";
+			$bcoem_help_body .= "<li>Delete the entry by selecting the trash can icon <span class=\"fa fa-trash-o\"></span>.</li>";
+			$bcoem_help_body .= "<li>Print entry forms for any entry by selecting the printer icon <span class=\"fa fa-print\"></span>.</li>";
+			$bcoem_help_body .= "<li>Email the participant who added the entry by selecting the envelope icon <span class=\"fa fa-envelope\"></span>.</li>";
 			$bcoem_help_body .= "</ul>";
 			$content = TRUE;
 		}
@@ -386,13 +386,13 @@ function bcoem_help($section,$go,$action,$filter) {
 			$bcoem_help_body .= "</ul>";
 			$bcoem_help_body .= "<p>Admins can:</p>";
 			$bcoem_help_body .= "<ul>";
-			$bcoem_help_body .= "<li>Add and entry to the participant&rsquo;s account by clicking the beer stein icon <span class=\"fa fa-beer\"></span>.</li>";
-			$bcoem_help_body .= "<li>Delete the particiapnt&rsquo;s account by clicking the trash can icon <span class=\"fa fa-trash-o\"></span>.</li>";
-			$bcoem_help_body .= "<li>Change the participant&rsquo;s user level by clicking the lock icon <span class=\"fa fa-lock\"></span>.</li>";
-			$bcoem_help_body .= "<li>Email the participant by clicking the envelope icon <span class=\"fa fa-envelope\"></span>.</li>";
+			$bcoem_help_body .= "<li>Add and entry to the participant&rsquo;s account by selecting the beer stein icon <span class=\"fa fa-beer\"></span>.</li>";
+			$bcoem_help_body .= "<li>Delete the particiapnt&rsquo;s account by selecting the trash can icon <span class=\"fa fa-trash-o\"></span>.</li>";
+			$bcoem_help_body .= "<li>Change the participant&rsquo;s user level by selecting the lock icon <span class=\"fa fa-lock\"></span>.</li>";
+			$bcoem_help_body .= "<li>Email the participant by selecting the envelope icon <span class=\"fa fa-envelope\"></span>.</li>";
 			$bcoem_help_body .= "<li>See the participant&rsquo;s phone number by hovering over the telephone icon <span class=\"fa fa-phone\"></span>.</li>";
-			$bcoem_help_body .= "<li>Change the participant&rsquo;s email address by clicking the user icon <span class=\"fa fa-user\"></span>.</li>";
-			$bcoem_help_body .= "<li>Download the participant&rsquo;s judge scoresheet labels by clicking the one of the page icons <span class=\"fa fa-file\"></span> (Avery 5160 - Letter) or <span class=\"fa fa-file-text\"></span> (Avery 3422 - A4).</li>";
+			$bcoem_help_body .= "<li>Change the participant&rsquo;s email address by selecting the user icon <span class=\"fa fa-user\"></span>.</li>";
+			$bcoem_help_body .= "<li>Download the participant&rsquo;s judge scoresheet labels by selecting the one of the page icons <span class=\"fa fa-file\"></span> (Avery 5160 - Letter) or <span class=\"fa fa-file-text\"></span> (Avery 3422 - A4).</li>";
 			$bcoem_help_body .= "</ul>";
 			$content = TRUE;
 		}
@@ -424,7 +424,7 @@ function bcoem_help($section,$go,$action,$filter) {
 			$bcoem_help_title .= "Assign Judges or Stewards to Tables Help";
 			$bcoem_help_body .= "<p>Choose judges or stewards to assign to this table.</p>";
 			$bcoem_help_body .= "<ul>";
-			$bcoem_help_body .= "<li>If using queued judging, click the &quot;Assign to this Table&quot; radio button for each participant you wish to assign to the table.</li>";
+			$bcoem_help_body .= "<li>If using queued judging, select the &quot;Assign to this Table&quot; radio button for each participant you wish to assign to the table.</li>";
 			$bcoem_help_body .= "<li>If using traditional or non-queued judging, choose the flight to assign the participant to from the drop-down menu.</li>";
 			$bcoem_help_body .= "</ul>";
 			$content = TRUE;
@@ -432,13 +432,13 @@ function bcoem_help($section,$go,$action,$filter) {
 
 		if ($go == "preferences") {
 			$bcoem_help_title .= "Website Preferences Help";
-			$bcoem_help_body .= "<p>Here, site admins can customize the display and function of the competition site from pre-defined variables. More information about particular preferences can be accessed by clicking the &ldquo;Info&rdquo; buttons below the line items.</p>";
+			$bcoem_help_body .= "<p>Here, site admins can customize the display and function of the competition site from pre-defined variables. More information about particular preferences can be accessed by selecting the &ldquo;Info&rdquo; buttons below the line items.</p>";
 			$content = TRUE;
 		}
 
 		if ($go == "judging_preferences") {
 			$bcoem_help_title .= "Judging/Competition Organization Preferences Help";
-			$bcoem_help_body .= "<p>Here, site admins can define how their competition judging will be setup and organized, including flights, rounds, and Best of Show places. More information about particular preferences can be accessed by clicking the &ldquo;Info&rdquo; buttons below the line items.</p>";
+			$bcoem_help_body .= "<p>Here, site admins can define how their competition judging will be setup and organized, including flights, rounds, and Best of Show places. More information about particular preferences can be accessed by selecting the &ldquo;Info&rdquo; buttons below the line items.</p>";
 			$content = TRUE;
 		}
 

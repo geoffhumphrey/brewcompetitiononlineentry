@@ -209,14 +209,35 @@ if (((isset($_SERVER['HTTP_REFERER'])) && ($referrer['host'] == $_SERVER['SERVER
 
 	elseif ($action == "convert_bjcp") {
 
-		bjcp_convert();
+		if ($_SESSION['prefsStyleSet'] == "BJCP2008") {
+
+			include (LIB.'convert.lib.php');
+			include (INCLUDES.'convert/bjcp_2015_convert_map_ids.inc.php');
+			include (INCLUDES.'convert/bjcp_2015_convert_judge_likes.inc.php');
+			include (INCLUDES.'convert/bjcp_2015_convert_table_styles.php');
+			include (INCLUDES.'convert/bjcp_2015_convert_active_styles.inc.php');
+			include (INCLUDES.'convert/bjcp_2015_convert_entry_styles.inc.php');
+
+			$updateSQL = sprintf("UPDATE %s SET prefsStyleSet='%s' WHERE id='%s'",$prefix."preferences","BJCP2015","1");
+			mysqli_real_escape_string($connection,$updateSQL);
+			$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+
+		}
+
+		if ($_SESSION['prefsStyleSet'] == "BJCP2015") {
+
+			include (LIB.'convert.lib.php');
+			include (INCLUDES.'convert/convert_bjcp_2021.inc.php');
+
+			$updateSQL = sprintf("UPDATE %s SET prefsStyleSet='%s' WHERE id='%s'",$prefix."preferences","BJCP2021","1");
+			mysqli_real_escape_string($connection,$updateSQL);
+			$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+
+		}
+		
 		session_name($prefix_session);
 		session_start();
 		unset($_SESSION['prefs'.$prefix_session]);
-
-		$updateSQL = sprintf("UPDATE %s SET prefsStyleSet='%s' WHERE id='%s'",$prefix."preferences","BJCP2015","1");
-		mysqli_real_escape_string($connection,$updateSQL);
-		$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 
 		$redirect_go_to = sprintf("Location: %s", $base_url."index.php?section=admin&go=entries&msg=25");
 

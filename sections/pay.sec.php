@@ -258,9 +258,9 @@ else {
 			if ($_SESSION['prefsGoogle'] == "Y") {
 				// Google Wallet
 				$header2_5 .= "<h2>Google Wallet</h2>";
-				$page_info5 .= "<p>Click the &quot;Buy Now&quot; button below to pay online using Google Wallet.";
+				$page_info5 .= "<p>Select the &quot;Buy Now&quot; button below to pay online using Google Wallet.";
 				if ($_SESSION['prefsTransFee'] == "Y") $page_info5 .= sprintf(" Please note that a transaction fee of %s will be added into your total.</p>",$currency_symbol.$fee);
-				$page_info5 .= "<div class='error'>To make sure your Google Wallet payment is marked &quot;paid&quot; on <em>this site</em>, please click the &quot;Return to...&quot; link on Google Wallet's confirmation screen after you have sent your payment.</div>";
+				$page_info5 .= "<div class='error'>To make sure your Google Wallet payment is marked &quot;paid&quot; on <em>this site</em>, please select the &quot;Return to...&quot; link on Google Wallet's confirmation screen after you have sent your payment.</div>";
 				$page_info5 .= sprintf("<form action='https://checkout.google.com/api/checkout/v2/checkoutForm/Merchant/%s' id='BB_BuyButtonForm' method='post' name='BB_BuyButtonForm' target='_top'>",$_SESSION['prefsGoogleAccount']);
 				$page_info5 .= sprintf("<input name='item_name_1' type='hidden' value='%s, %s - %s Payment'>",$_SESSION['brewerLastName'],$_SESSION['brewerFirstName'],$_SESSION['contestName']);
 				$page_info5 .= sprintf("<input name='checkout-flow-support.merchant-checkout-flow-support.continue-shopping-url' type='hidden' value='%s' />",rtrim($return, '-'));

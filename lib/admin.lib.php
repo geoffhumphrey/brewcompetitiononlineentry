@@ -306,12 +306,17 @@ function style_choose($section,$go,$action,$filter,$view,$script_name,$method) {
 	require(CONFIG.'config.php');
 	mysqli_select_db($connection,$database);
 
-	if ($_SESSION['prefsStyleSet'] == "BJCP2008") $end = 28;
-	if ($_SESSION['prefsStyleSet'] == "BJCP2015") $end = 34;
+	$end = $_SESSION['style_set_category_end'];
 
-	if ($method == "thickbox") { $suffix = ''; $class = 'class="hide-loader menuItem" id="modal_window_link"'; }
+	if ($method == "thickbox") { 
+		$suffix = '';
+		$class = 'class="hide-loader menuItem" id="modal_window_link"'; 
+	}
 
-	if ($method == "none") { $suffix = '';  $class = 'class="menuItem"'; }
+	if ($method == "none") { 
+		$suffix = '';
+		$class = 'class="menuItem"'; 
+	}
 
 	$random = random_generator(7,2);
 
@@ -363,8 +368,7 @@ function flight_count($table_id,$method) {
 function orphan_styles() {
 	require(CONFIG.'config.php');
 
-	if ($_SESSION['prefsStyleSet'] == "BJCP2008") $end = 28;
-	if ($_SESSION['prefsStyleSet'] == "BJCP2015") $end = 34;
+	$end = $_SESSION['style_set_category_end'];
 
 	$query_styles = sprintf("SELECT id,brewStyle,brewStyleType FROM %s WHERE brewStyleGroup >= %s", $prefix."styles",$end);
 	$styles = mysqli_query($connection,$query_styles) or die (mysqli_error($connection));

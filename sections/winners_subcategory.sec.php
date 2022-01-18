@@ -47,8 +47,7 @@ Declare all variables empty at the top of the script. Add on later...
 
 if ($row_scored_entries['count'] > 0) {
 
-	if ($_SESSION['prefsStyleSet'] == "BJCP2008") $category_end = 28;
-	else $category_end = 34;
+	$category_end = $_SESSION['style_set_category_end'];
 
 	$a = styles_active(2,$go);
 	//print_r($a);

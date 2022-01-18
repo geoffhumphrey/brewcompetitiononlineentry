@@ -187,7 +187,7 @@ if (($action == "default") && ($filter == "default")) {
         if ($_SESSION['jPrefsTablePlanning'] == 0) {
             $scored =  get_table_info("1","score_total",$row_tables['id'],$dbTable,"default");
             //get_table_info($input,$method,$id,$dbTable,$param)
-            if (($received > $scored) && ($dbTable == "default")) $scored = $scored." <a class=\"hidden-print\" href=\"".$base_url."index.php?section=admin&amp;go=judging_scores&amp;action=edit&amp;id=".$row_tables['id']."\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Not all scores have been entered for this table. Click to add/edit scores.\"><span class=\"fa fa-lg fa-exclamation-circle text-danger\"></span></a>";
+            if (($received > $scored) && ($dbTable == "default")) $scored = $scored." <a class=\"hidden-print\" href=\"".$base_url."index.php?section=admin&amp;go=judging_scores&amp;action=edit&amp;id=".$row_tables['id']."\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Not all scores have been entered for this table. Select to add/edit scores.\"><span class=\"fa fa-lg fa-exclamation-circle text-danger\"></span></a>";
             else $scored = $scored;
         }
 
@@ -205,13 +205,13 @@ if (($action == "default") && ($filter == "default")) {
         }
 
         $manage_tables_default_tbody .= "<tr>";
-        $manage_tables_default_tbody .= "<td class=\"hidden-xs hidden-sm\">".$row_tables['tableNumber']."</td>";
+        $manage_tables_default_tbody .= "<td>".$row_tables['tableNumber']."</td>";
         $manage_tables_default_tbody .= "<td>".$row_tables['tableName']."</td>";
-        $manage_tables_default_tbody .= "<td class=\"hidden-xs hidden-sm\">".rtrim($styles, ",&nbsp;")."</td>";
+        $manage_tables_default_tbody .= "<td>".rtrim($styles, ",&nbsp;")."</td>";
         $manage_tables_default_tbody .= "<td>".$received."</td>";
         $manage_tables_default_tbody .= "<td class=\"hidden-xs hidden-sm\">".$scored."</td>";
-        $manage_tables_default_tbody .= "<td>".$assigned_judges."</td>";
-        $manage_tables_default_tbody .= "<td>".$assigned_stewards."</td>";
+        $manage_tables_default_tbody .= "<td class=\"hidden-xs hidden-sm\">".$assigned_judges."</td>";
+        $manage_tables_default_tbody .= "<td class=\"hidden-xs hidden-sm\">".$assigned_stewards."</td>";
         if (($totalRows_judging > 1) && ($dbTable == "default")) $manage_tables_default_tbody .= "<td class=\"hidden-xs hidden-sm\">".table_location($row_tables['id'],$_SESSION['prefsDateFormat'],$_SESSION['prefsTimeZone'],$_SESSION['prefsTimeFormat'],"default")."</td>";
         
         if ($dbTable == "default") {
@@ -684,7 +684,7 @@ $(document).ready(function(){
 <?php } ?>
 <p class="lead"><?php echo $_SESSION['contestName'].$title;  ?></p>
 <?php if ($dbTable == "default") { ?>
-<div id="mode-alert" class="alert <?php echo $mode_alert_color; ?>"><?php echo $sub_lead_text; ?></div>
+<div id="mode-alert" class="hidden-print alert <?php echo $mode_alert_color; ?>"><?php echo $sub_lead_text; ?></div>
 <?php if ($action == "default") { ?>
 <!-- Planning Mode Button -->
 <div id="tables-planning-mode" class="bcoem-admin-element hidden-print">
@@ -1122,13 +1122,13 @@ if ($totalRows_tables > 0) { ?>
 <table class="table table-responsive table-bordered table-striped" id="judgingTables">
 	<thead>
     <tr>
-    	<th class="hidden-xs hidden-sm">#</th>
+    	<th>#</th>
         <th>Name</th>
-        <th class="hidden-xs hidden-sm">Style(s)</th>
-        <th><?php if ($_SESSION['jPrefsTablePlanning'] == 0) echo "<span class=\"hidden-sm hidden-xs\"><em>Rec'd</em> </span>" ; ?>E<span class="hidden-xs hidden-sm">ntries</span></th>
+        <th>Style(s)</th>
+        <th><?php if ($_SESSION['jPrefsTablePlanning'] == 0) echo "<span class=\"hidden-sm hidden-xs\"><em>Rec'd</em> </span>" ; ?>Entries</th>
         <th class="hidden-xs hidden-sm"><em>Scored</em> Entries</th>
-        <th>J<span class="hidden-xs hidden-sm">udge Assignments</span></th>
-        <th>S<span class="hidden-xs hidden-sm">teward Assignments</span></th>
+        <th class="hidden-xs hidden-sm">Judge Assignments</th>
+        <th class="hidden-xs hidden-sm">Steward Assignments</th>
         <?php if (($totalRows_judging > 1) && ($dbTable == "default"))  { ?>
         <th class="hidden-xs hidden-sm">Location</th>
         <?php } ?>

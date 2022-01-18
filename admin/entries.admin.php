@@ -958,7 +958,7 @@ $(document).ready(function () {
 <?php if ($dbTable == "default") { ?>
 <div class="bcoem-admin-element hidden-print">
 	<input type="submit" name="Submit" id="brewing-submit" class="btn btn-primary" aria-describedby="helpBlock" value="Update Entries" disabled />
-	<span id="brewing-update-button-enabled" class="help-block">Click "Update Entries" <em>before</em> paging through records.</span>
+	<span id="brewing-update-button-enabled" class="help-block">Select "Update Entries" <em>before</em> paging through records.</span>
     <span id="brewing-update-button-disabled" class="help-block">The "Update Entries" button has been disabled since data is being saved successfully as it is being entered.</span>
 </div>
 <?php } ?>

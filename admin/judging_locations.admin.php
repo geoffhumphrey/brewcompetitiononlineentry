@@ -167,7 +167,7 @@ if ($section != "step5") {
 		elseif ($action == "edit") $form_submit_button .= "Edit Judging Session";
 		else $form_submit_button .= "Submit";
 
-		$form_submit_button_help .= "Click ";
+		$form_submit_button_help .= "Select ";
 		if ($action == "update") $form_submit_button_help .= "Assign to ".$row_judging['judgingLocName'];
 		elseif ($action == "assign") $form_submit_button_help .= "Assign as ".brewer_assignment($filter,"3",$id,"default",$filter);
 		else $form_submit_button_help .= "Submit";

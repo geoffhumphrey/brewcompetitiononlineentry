@@ -19,9 +19,6 @@ To implement:
 use PHPMailer\PHPMailer\PHPMailer;
 require ('paths.php');
 require (CONFIG.'bootstrap.php');
-require (INCLUDES.'url_variables.inc.php');
-include (INCLUDES.'scrubber.inc.php');
-require (LANG.'language.lang.php');
 require (LIB.'email.lib.php');
 
 $query_prefs = sprintf("SELECT prefsPayPalAccount FROM %s WHERE id='1'", $prefix."preferences");

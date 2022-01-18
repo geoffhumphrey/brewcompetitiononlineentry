@@ -60,7 +60,7 @@ Please note: the strings that need to be translated MAY contain HTML code. Pleas
 intact! For example:
 
 English (US):
-$beerxml_text_008 = "Browse for your BeerXML compliant file on your hard drive and click <em>Upload</em>.";
+$beerxml_text_008 = "Browse for your BeerXML compliant file on your hard drive and select <em>Upload</em>.";
 
 Spanish:
 $beerxml_text_008 = "Buscar su archivo compatible BeerXML en su disco duro y haga clic en <em>Cargar</em>.";

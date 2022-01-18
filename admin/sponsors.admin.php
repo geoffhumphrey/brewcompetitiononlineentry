@@ -181,7 +181,7 @@ $(document).ready(function () {
 <?php if ($dbTable == "default") { ?>
 <div class="bcoem-admin-element hidden-print">
   <input type="submit" name="Submit" id="sponsors-submit" class="btn btn-primary" aria-describedby="helpBlock" value="Update Sponsors" disabled />
-    <span id="sponsors-update-button-enabled" class="help-block">Click Update Sponsors <em>before</em> paging through records.</span>
+    <span id="sponsors-update-button-enabled" class="help-block">Select Update Sponsors <em>before</em> paging through records.</span>
     <span id="sponsors-update-button-disabled" class="help-block">The Update Sponsors button has been disabled since data is being saved successfully as it is being entered.</span>
 </div>
 <?php } if (isset($_SERVER['HTTP_REFERER'])) { ?>

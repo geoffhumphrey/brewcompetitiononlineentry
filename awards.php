@@ -302,8 +302,7 @@ if (($display_to_admin) || ($display_to_public)) {
 		// Build slides by Sub-Category
 		if ($_SESSION['prefsWinnerMethod'] == "2") {
 
-			if ($_SESSION['prefsStyleSet'] == "BJCP2008") $category_end = 28;
-			else $category_end = 34;
+			$category_end = $_SESSION['style_set_category_end'];
 
 			$a = styles_active(2,"default");
 

@@ -146,7 +146,7 @@ function checkUncheckAll(theElement) {
  </table>
  <div class="bcoem-admin-element hidden-print">
 	<input type="submit" name="Submit" id="helpUpdateStyles" class="btn btn-primary" aria-describedby="helpBlock" value="<?php if (($filter == "judging") && ($bid != "default")) echo "Update ".$row_judging['judgingLocName']; else echo "Update Accepted Styles"; ?>" />
-    <span id="helpBlock" class="help-block">Click "<?php if (($filter == "judging") && ($bid != "default")) echo "Update ".$row_judging['judgingLocName']; else echo "Update Accepted Styles"; ?> <em>before</em> paging through records.</span>
+    <span id="helpBlock" class="help-block">Select "<?php if (($filter == "judging") && ($bid != "default")) echo "Update ".$row_judging['judgingLocName']; else echo "Update Accepted Styles"; ?> <em>before</em> paging through records.</span>
 </div>
 <?php if (isset($_SERVER['HTTP_REFERER'])) { ?>
 <input type="hidden" name="relocate" value="<?php echo relocate($_SERVER['HTTP_REFERER'],"default",$msg,$id); ?>">

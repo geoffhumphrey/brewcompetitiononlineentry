@@ -88,7 +88,7 @@ Load Libraries Locally (No CDNs):
 http://brewcompetition.com/local-load
 
 Starting with version 2.0.0, online documentation/help is available within the
-application. Click the question mark icon on the top navigation bar when available.
+application. Select the question mark icon on the top navigation bar when available.
 In-app help will be augmented and expanded in future releases.
 
 Other info can be found on the GitHub repository page.

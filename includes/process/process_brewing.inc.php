@@ -192,7 +192,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 		}
 
 		// For BJCP 2015, process addtional info
-		if ($_SESSION['prefsStyleSet'] == "BJCP2015") {
+		if (($_SESSION['prefsStyleSet'] == "BJCP2015") || ($_SESSION['prefsStyleSet'] == "BJCP2021")) {
 
 			// IPA strength for 21B styles
 			if (strlen(strstr($index,"21-B")) > 0) {

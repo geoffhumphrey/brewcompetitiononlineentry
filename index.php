@@ -10,7 +10,6 @@
 require_once ('paths.php');
 require_once (CONFIG.'bootstrap.php');
 require_once (DB.'mods.db.php');
-
 $account_pages = array("list","pay","brewer","user","brew","beerxml","pay","evaluation");
 if ((!$logged_in) && (in_array($section,$account_pages))) {
     header(sprintf("Location: %s", $base_url."index.php?section=login&msg=99"));
@@ -107,7 +106,6 @@ if ($section == "past-winners") {
 
     if (!$archive_winner_display) header(sprintf("Location: %s", $base_url."index.php?msg=8"));
 }
-
 
 // ---------------------------------------------------------------------------------
 ?>

@@ -423,30 +423,32 @@ if ($v == "milliliters") { // fluid ounces to milliliters
 }
 
 function GetSQLValueString($theValue, $theType, $theDefinedValue = "", $theNotDefinedValue = "")  {
-	$theValue = (!get_magic_quotes_gpc()) ? addslashes($theValue) : $theValue;
+	
+	$theValue = sterilize($theValue);
 
 	require (INCLUDES.'scrubber.inc.php');
 
 	switch ($theType) {
-	case "text":
-	  $theValue = ($theValue != "") ? "'" . $theValue . "'" : "NULL";
-	  break;
-	case "long":
-	case "int":
-	  $theValue = ($theValue != "") ? intval($theValue) : "NULL";
-	  break;
-	case "double":
-	  $theValue = ($theValue != "") ? "'" . doubleval($theValue) . "'" : "NULL";
-	  break;
-	case "date":
-	  $theValue = ($theValue != "") ? "'" . $theValue . "'" : "NULL";
-	  break;
-	case "defined":
-	  $theValue = ($theValue != "") ? $theDefinedValue : $theNotDefinedValue;
-	  break;
-	case "scrubbed":
-	  $theValue = ($theValue != "") ? "'" . strtr($theValue, $html_string) . "'" : "NULL";
+		case "text":
+		  $theValue = ($theValue != "") ? "'" . $theValue . "'" : "NULL";
+		  break;
+		case "long":
+		case "int":
+		  $theValue = ($theValue != "") ? intval($theValue) : "NULL";
+		  break;
+		case "double":
+		  $theValue = ($theValue != "") ? "'" . doubleval($theValue) . "'" : "NULL";
+		  break;
+		case "date":
+		  $theValue = ($theValue != "") ? "'" . $theValue . "'" : "NULL";
+		  break;
+		case "defined":
+		  $theValue = ($theValue != "") ? $theDefinedValue : $theNotDefinedValue;
+		  break;
+		case "scrubbed":
+		  $theValue = ($theValue != "") ? "'" . strtr($theValue, $html_string) . "'" : "NULL";
 	}
+	
 	return $theValue;
 }
 
@@ -1252,13 +1254,12 @@ function style_convert($number,$type,$base_url="",$archive="") {
 	require(CONFIG.'config.php');
 	require(LANG.'language.lang.php');
 	$styles_db_table = $prefix."styles";
+	$style_set = $_SESSION['prefsStyleSet'];
 
 	mysqli_select_db($connection,$database);
-	$query_style = sprintf("SELECT brewStyleNum,brewStyleGroup,brewStyle,brewStyleVersion,brewStyleReqSpec,brewStyleOwn FROM %s WHERE brewStyleGroup='%s' AND (brewStyleVersion='%s' OR brewStyleOwn='custom')",$styles_db_table,$number,$_SESSION['prefsStyleSet']);
+	$query_style = sprintf("SELECT brewStyleNum,brewStyleGroup,brewStyle,brewStyleVersion,brewStyleReqSpec,brewStyleOwn FROM %s WHERE brewStyleGroup='%s' AND (brewStyleVersion='%s' OR brewStyleOwn='custom')",$styles_db_table,$number,$style_set);
 	$style = mysqli_query($connection,$query_style) or die (mysqli_error($connection));
 	$row_style = mysqli_fetch_assoc($style);
-
-	$style_set = $_SESSION['prefsStyleSet'];
 
 	if ((!empty($archive)) && ($archive != "default")) {
 		$query_archive_db = sprintf("SELECT archiveStyleSet FROM %s WHERE archiveSuffix='%s'",$prefix."archive",$archive);
@@ -1275,12 +1276,8 @@ function style_convert($number,$type,$base_url="",$archive="") {
 
 		include (INCLUDES.'styles.inc.php');
 
-		// If the number is 35 or greater and is not alphanumeric
-		// Search the array and return the style category name
 		$custom = FALSE;
-		
-		if ($style_set == "BJCP2008") $start_custom = 29;
-		else $start_custom = 35;
+		$start_custom = ($_SESSION['style_set_category_end'] + 1);
 
 		if ((is_numeric($number)) && ($number >= $start_custom) && ($row_style['brewStyleOwn'] != "bcoe")) $custom = TRUE;
 
@@ -1301,40 +1298,6 @@ function style_convert($number,$type,$base_url="",$archive="") {
 		break;
 
 		case "2":
-		
-		if ($style_set == "BJCP2008") {
-			switch ($number) {
-				case "01": $style_convert = "1A,1B,1C,1D,1E"; break;
-				case "02": $style_convert = "2A,2B,2C"; break;
-				case "03": $style_convert = "3A,3B"; break;
-				case "04": $style_convert = "4A,4B,4C"; break;
-				case "05": $style_convert = "5A,5B,5C,5D"; break;
-				case "06": $style_convert = "6A,6B,6C,6D"; break;
-				case "07": $style_convert = "7A,7B,7C"; break;
-				case "08": $style_convert = "8A,8B,8C"; break;
-				case "09": $style_convert = "9A,9B,9C,9D,9E"; break;
-				case "10": $style_convert = "10A,10B,10C"; break;
-				case "11": $style_convert = "11A,11B,11C"; break;
-				case "12": $style_convert = "12A,12B,12C"; break;
-				case "13": $style_convert = "13A,13B,13C,13D,13E,13F"; break;
-				case "14": $style_convert = "14A,14B,14C,"; break;
-				case "15": $style_convert = "15A,15B,15C,15D,"; break;
-				case "16": $style_convert = "16A,16B,16C,16D,16E,"; break;
-				case "17": $style_convert = "17A,17B,17C,17D,17E,17F"; break;
-				case "18": $style_convert = "18A,18B,18C,18D,18E,"; break;
-				case "19": $style_convert = "19A,19B,19C,"; break;
-				case "20": $style_convert = "20"; break;
-				case "21": $style_convert = "21A,21B"; break;
-				case "22": $style_convert = "22A,22B,22C"; break;
-				case "23": $style_convert = "23"; break;
-				case "24": $style_convert = "24A,24B,24C"; break;
-				case "25": $style_convert = "25A,25B,25C"; break;
-				case "26": $style_convert = "25A,25B,26C"; break;
-				case "27": $style_convert = "27A,27B,27C,27D,27E"; break;
-				case "28": $style_convert = "28A,28B,28C,28D"; break;
-				default: $style_convert = "Custom Style"; break;
-			}
-		}
 
 		if ($style_set == "BJCP2015") {
 			switch ($number) {
@@ -1383,37 +1346,59 @@ function style_convert($number,$type,$base_url="",$archive="") {
 			}
 		}
 
+		if ($style_set == "BJCP2021") {
+			switch ($number) {
+				case "01": $style_convert = "1A,1B,1C,1D"; break;
+				case "02": $style_convert = "2A,2B,2C"; break;
+				case "03": $style_convert = "3A,3B,3C,3D"; break;
+				case "04": $style_convert = "4A,4B,4C"; break;
+				case "05": $style_convert = "5A,5B,5C,5D"; break;
+				case "06": $style_convert = "6A,6B,6C"; break;
+				case "07": $style_convert = "7A,7B"; break;
+				case "08": $style_convert = "8A,8B"; break;
+				case "09": $style_convert = "9A,9B,9C"; break;
+				case "10": $style_convert = "10A,10B,10C"; break;
+				case "11": $style_convert = "11A,11B,11C"; break;
+				case "12": $style_convert = "12A,12B,12C"; break;
+				case "13": $style_convert = "13A,13B,13C"; break;
+				case "14": $style_convert = "14A,14B"; break;
+				case "15": $style_convert = "15A,15B,15C"; break;
+				case "16": $style_convert = "16A,16B,16C,16D"; break;
+				case "17": $style_convert = "17A,17B,17C,17D"; break;
+				case "18": $style_convert = "18A,18B"; break;
+				case "19": $style_convert = "19A,19B,19C,"; break;
+				case "20": $style_convert = "20A,20B,20C"; break;
+				case "21": $style_convert = "21A,21B,21B1,21B2,21B3,21B4,21B5,21B6,21B7,21B8,21B9"; break;
+				case "22": $style_convert = "22A,22B"; break;
+				case "23": $style_convert = "23A,23B,23C,23D,23E,23F,23G"; break;
+				case "24": $style_convert = "24A,24B,24C"; break;
+				case "25": $style_convert = "25A,25B,25C"; break;
+				case "26": $style_convert = "25A,25B,26C,26D"; break;
+				case "27": $style_convert = "27A,27A1,27A2,27A3,27A4,27A5,27A6,27A7"; break;
+				case "28": $style_convert = "28A,28B,28C"; break;
+				case "29": $style_convert = "29A,29B,29C,29D"; break;
+				case "30": $style_convert = "30A,30B,30C,30D"; break;
+				case "31": $style_convert = "31A,31B"; break;
+				case "32": $style_convert = "32A,32B"; break;
+				case "33": $style_convert = "33A,33B"; break;
+				case "34": $style_convert = "34A,34B,34C"; break;
+				case "35": $style_convert = "35A,35B,35C"; break;
+				case "36": $style_convert = "36A,36B,36C,36D,36E,36F"; break;
+				case "37": $style_convert = "37A,37B"; break;
+				case "38": $style_convert = "38A,38B,38C"; break;
+				case "39": $style_convert = "39A,39B,39C,39D,39E"; break;
+				case "40": $style_convert = "40A,40B,40C,40D,40E,40F"; break;
+				case "LS": $style_convert = "X1,X2,X3,X4,X5"; break;
+				default: $style_convert = "Custom Style"; break;
+			}
+		}
+
 		break;
 
 		case "3":
 		$n = preg_replace('/[^0-9]+/', '', $number);
 
-		if ($style_set == "BJCP2008") {
-			if ($n >= 29) $style_convert = TRUE;
-			else {
-				switch ($number) {
-					case "06D": $style_convert = TRUE; break;
-					case "16E": $style_convert = TRUE; break;
-					case "17F": $style_convert = TRUE; break;
-					case "20A": $style_convert = TRUE; break;
-					case "21A": $style_convert = TRUE; break;
-					case "21B": $style_convert = TRUE; break;
-					case "22B": $style_convert = TRUE; break;
-					case "22C": $style_convert = TRUE; break;
-					case "23A": $style_convert = TRUE; break;
-					case "25C": $style_convert = TRUE; break;
-					case "26A": $style_convert = TRUE; break;
-					case "26C": $style_convert = TRUE; break;
-					case "27E": $style_convert = TRUE; break;
-					case "28B": $style_convert = TRUE; break;
-					case "28C": $style_convert = TRUE; break;
-					case "28D": $style_convert = TRUE; break;
-					default: $style_convert = FALSE; break;
-				}
-			}
-		}
-
-		if ($style_set == "BJCP2015") {
+		if (($style_set == "BJCP2015") || ($style_set == "BJCP2021")) {
 			if ($n >= 29) $style_convert = TRUE;
 			else {
 				switch ($number) {
@@ -1426,9 +1411,11 @@ function style_convert($number,$type,$base_url="",$archive="") {
 					case "29A": $style_convert = TRUE; break;
 					case "29B": $style_convert = TRUE; break;
 					case "29C": $style_convert = TRUE; break;
+					case "29D": $style_convert = TRUE; break;
 					case "30A": $style_convert = TRUE; break;
 					case "30B": $style_convert = TRUE; break;
 					case "30C": $style_convert = TRUE; break;
+					case "30D": $style_convert = TRUE; break;
 					case "31A": $style_convert = TRUE; break;
 					case "31B": $style_convert = TRUE; break;
 					case "32B": $style_convert = TRUE; break;
@@ -1547,14 +1534,11 @@ function style_convert($number,$type,$base_url="",$archive="") {
 		} // end foreach
 
 		$style_convert = rtrim(implode(", ",$style_convert_1),", ")."|".implode("^",$style_modal);
-
-
 		break;
 
 		case "5":
 		$n = preg_replace('/[^0-9]+/', '', $number);
-		if (($style_set == "BJCP2008") && ($n >= 24)) $style_convert = TRUE;
-		if (($style_set == "BJCP2015") && ($n >= 35)) $style_convert = TRUE;
+		if ((($style_set == "BJCP2015") || (($style_set == "BJCP2021"))) && ($n >= 35)) $style_convert = TRUE;
 		break;
 
 		case "6":
@@ -1605,10 +1589,8 @@ function style_convert($number,$type,$base_url="",$archive="") {
 		else $style_name = $row_styles['brewStyle'];
 
 		$style_convert = $row_styles['brewStyleGroup'].",".$row_styles['brewStyleNum'].",".$style_name;
-
 		break;
 
-		//
 		case "9":
 		$number = explode("^",$number);
 		$query_style = sprintf("SELECT brewStyleNum,brewStyleGroup,brewStyle,brewStyleVersion,brewStyleReqSpec,brewStyleStrength,brewStyleCarb,brewStyleSweet FROM %s WHERE brewStyleGroup='%s' AND brewStyleNum='%s' AND (brewStyleVersion='%s' OR brewStyleOwn='custom')",$styles_db_table,$number[0],$number[1],$number[2]);
@@ -3917,32 +3899,6 @@ function verify_token($token,$time) {
 
 	return $return;
 
-}
-
-// Moved from logincheck.inc.php
-// Clean the data collected in the <form>
-
-function sterilize ($sterilize = NULL) {
-
-	if ($sterilize == NULL) {
-		return NULL;
-	}
-
-	$sterilize = trim($sterilize);
-
-	if (is_numeric($sterilize)) {
-		if (is_float($sterilize)) $sterilize = filter_var($sterilize,FILTER_SANITIZE_NUMBER_FLOAT,FILTER_FLAG_ALLOW_FRACTION);
-		if (is_int($sterilize)) $sterilize = filter_var($sterilize,FILTER_SANITIZE_NUMBER_INT);
-	}
-
-	else $sterilize = filter_var($sterilize,FILTER_SANITIZE_STRING);
-
-	$sterilize = strip_tags($sterilize);
-	$sterilize = stripcslashes($sterilize);
-	$sterilize = stripslashes($sterilize);
-	$sterilize = addslashes($sterilize);
-
-	return $sterilize;
 }
 
 function tiebreak_rule($rule) {

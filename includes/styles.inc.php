@@ -146,6 +146,7 @@ $style_sets = array(
  * ------------------------------------------------------------------------------
  */
 
+	/*
 	array(
 		"id" => 0,
 		"style_set_name" => "BJCP2008",
@@ -188,6 +189,65 @@ $style_sets = array(
 		"style_set_mead" => array("24","25","26"),
 		"style_set_cider" => array("27","28"),
 		"style_set_category_end" => "28"
+	),
+
+	*/
+
+	array(
+		"id" => 4,
+		"style_set_name" => "BJCP2021",
+		"style_set_long_name" => "Beer Judge Certification Program 2021",
+		"style_set_short_name" => "BJCP 2021",
+		"style_set_display_separator" => "",
+		"style_set_system_separator" => "-",
+		"style_set_sub_style_method" => "0",
+		"style_set_categories" => array(
+			"01" => "Standard American Beer",
+			"02" => "International Lager",
+			"03" => "Czech Lager",
+			"04" => "Pale Malty European Lager",
+			"05" => "Pale Bitter European Beer",
+			"06" => "Amber Malty European Lager",
+			"07" => "Amber Bitter European Beer",
+			"08" => "Dark European Lager",
+			"09" => "Strong European Beer",
+			"10" => "German Wheat Beer",
+			"11" => "British Bitter",
+			"12" => "Pale Commonwealth Beer",
+			"13" => "Brown British Beer",
+			"14" => "Scottish Ale",
+			"15" => "Irish Beer",
+			"16" => "Dark British Beer",
+			"17" => "Strong British Ale",
+			"18" => "Pale American Ale",
+			"19" => "Amber and Brown American Beer",
+			"20" => "American Porter and Stout",
+			"21" => "IPA",
+			"22" => "Strong American Ale",
+			"23" => "European Sour Ale",
+			"24" => "Belgian Ale",
+			"25" => "Strong Belgian Ale",
+			"26" => "Monastic Ale",
+			"27" => "Historical Beer",
+			"28" => "American Wild Ale",
+			"29" => "Fruit Beer",
+			"30" => "Spiced Beer",
+			"31" => "Alternative Fermentables Beer",
+			"32" => "Smoked Beer",
+			"33" => "Wood Beer",
+			"34" => "Specialty Beer",
+			"M1" => "Traditional Mead",
+			"M2" => "Fruit Mead",
+			"M3" => "Spiced Mead",
+			"M4" => "Specialty Mead",
+			"C1" => "Standard Cider and Perry",
+			"C2" => "Specialty Cider and Perry",
+			"LS" => "Local Styles"
+		),
+		"style_set_beer_end" => "34",
+		"style_set_mead" => array("M1","M2","M3","M4"),
+		"style_set_cider" => array("C1","C2"),
+		"style_set_category_end" => "34"
 	),
 
 	array(
@@ -298,7 +358,7 @@ $style_sets = array(
 			"10" => "Strong Stout",
 			"11" => "India Pale Ale",
 			"12" => "Specialty IPA",
-			"13" => "Wheat and Ryle Ale",
+			"13" => "Wheat and Rye Ale",
 			"14" => "Sour Ale",
 			"15" => "Belgian Ale",
 			"16" => "Strong Ales and Lagers",
