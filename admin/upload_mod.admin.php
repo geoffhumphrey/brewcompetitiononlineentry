@@ -4,7 +4,7 @@ require(CONFIG.'bootstrap.php');
 
 $imageSrc = $base_url."images/";
 
-$fileCornfirm = "default";
+$fileConfirm = "default";
 if (isset($_GET['fileConfirm'])) {
   $fileConfirm = addslashes($_GET['fileConfirm']);
 }
