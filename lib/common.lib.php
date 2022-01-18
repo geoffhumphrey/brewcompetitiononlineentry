@@ -423,7 +423,7 @@ if ($v == "milliliters") { // fluid ounces to milliliters
 }
 
 function GetSQLValueString($theValue, $theType, $theDefinedValue = "", $theNotDefinedValue = "")  {
-	$theValue = (!get_magic_quotes_gpc()) ? addslashes($theValue) : $theValue;
+	$theValue = addslashes($theValue);
 
 	require (INCLUDES.'scrubber.inc.php');
 
