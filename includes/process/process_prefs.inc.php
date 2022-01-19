@@ -493,12 +493,9 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 			if ($prefsStyleSet == "BJCP2021") {
 				
 				if ($_SESSION['prefsStyleSet'] == "BJCP2015") {
-					
-					include (INCLUDES.'convert/bjcp_2021_convert_map_ids.inc.php');
-					include (INCLUDES.'convert/bjcp_2021_convert_judge_likes.inc.php');
-					include (INCLUDES.'convert/bjcp_2021_convert_table_styles.php');
-					include (INCLUDES.'convert/bjcp_2021_convert_active_styles.inc.php');
-					include (INCLUDES.'convert/bjcp_2021_convert_entry_styles.inc.php');
+
+					include (LIB.'convert.lib.php');
+					include (INCLUDES.'convert/convert_bjcp_2021.inc.php');
 					
 				}
 

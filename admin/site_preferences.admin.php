@@ -291,8 +291,9 @@ $(document).ready(function(){
       </div>
       <div class="modal-body">
         <p>There are currently entries logged into the database from participants using BJCP 2015 styles.</p>
-        <p>Entries currently in the database will be converted from BJCP 2015 to BJCP 2021. <strong class="text-primary">This cannot be undone.</strong></p>
+        <p>Entries currently in the database will be converted from BJCP 2015 to BJCP 2021.</p>
         <p>Additionally, preferred and non-preferred styles will be updated to BJCP 2021 for all judges. All defined table styles will be updated as well.</p>
+        <p><strong class="text-primary">This cannot be undone.</strong></p>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-danger" data-dismiss="modal">I Understand</button>

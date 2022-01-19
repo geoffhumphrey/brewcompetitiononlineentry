@@ -1,10 +1,4 @@
 <?php
-
-/*
-Checked Single
-2016-06-06
-*/
-
 /*
  * Module:      process.inc.php
  * Description: This module does all the heavy lifting for any DB updates; new entries,
@@ -15,9 +9,9 @@ ob_start();
 error_reporting(E_ALL ^ E_NOTICE);
 ini_set('display_errors', '1');
 
-require('../paths.php');
-require(INCLUDES.'url_variables.inc.php');
-require(INCLUDES.'styles.inc.php');
+require ('../paths.php');
+require (INCLUDES.'url_variables.inc.php');
+require (INCLUDES.'styles.inc.php');
 include (INCLUDES.'scrubber.inc.php');
 include (LIB.'common.lib.php');
 include (LIB.'update.lib.php');
@@ -36,7 +30,7 @@ $timezone_raw = "0";
 $redirect_go_to = "";
 
 // Track queries if debugging
-if (DEBUG) include(DEBUGGING.'query_count_begin.debug.php');
+if (DEBUG) include (DEBUGGING.'query_count_begin.debug.php');
 
 // Check if setup is running, if so, check whether prefs have been established
 // If so, get time zone setup by admin
@@ -192,7 +186,7 @@ if (((isset($_SERVER['HTTP_REFERER'])) && ($referrer['host'] == $_SERVER['SERVER
 
 	elseif ($action == "check_discount") {
 
-		$query_contest_info1 = sprintf("SELECT contestEntryFeePassword FROM %s WHERE id=1",$prefix."contest_info");
+		$query_contest_info1 = sprintf("SELECT contestEntryFeePassword FROM %s WHERE id='1'",$prefix."contest_info");
 		if (SINGLE) $query_contest_info1 .= sprintf(" WHERE comp_id='%s'",$_SESSION['comp_id']);
 		$contest_info1 = mysqli_query($connection,$query_contest_info1) or die (mysqli_error($connection));
 		$row_contest_info1 = mysqli_fetch_assoc($contest_info1);
@@ -212,11 +206,7 @@ if (((isset($_SERVER['HTTP_REFERER'])) && ($referrer['host'] == $_SERVER['SERVER
 		if ($_SESSION['prefsStyleSet'] == "BJCP2008") {
 
 			include (LIB.'convert.lib.php');
-			include (INCLUDES.'convert/bjcp_2015_convert_map_ids.inc.php');
-			include (INCLUDES.'convert/bjcp_2015_convert_judge_likes.inc.php');
-			include (INCLUDES.'convert/bjcp_2015_convert_table_styles.php');
-			include (INCLUDES.'convert/bjcp_2015_convert_active_styles.inc.php');
-			include (INCLUDES.'convert/bjcp_2015_convert_entry_styles.inc.php');
+			include (INCLUDES.'convert/convert_bjcp_2015.inc.php');
 
 			$updateSQL = sprintf("UPDATE %s SET prefsStyleSet='%s' WHERE id='%s'",$prefix."preferences","BJCP2015","1");
 			mysqli_real_escape_string($connection,$updateSQL);
