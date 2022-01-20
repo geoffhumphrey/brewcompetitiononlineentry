@@ -53,7 +53,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 
 		}
 
-		// Clear out all participants (except for current user and admins)
+		// Clear out all participants (except for current user)
 		if (!isset($_POST['keepParticipants'])) {
 
 			// Gather current User's information from the current "users" AND current "brewer" tables and store in variables

@@ -51,7 +51,6 @@ if (!$judge_limit) $alert_text_079 .= $alert_text_078;
         </div>
 	<?php } ?>
 
-
 	<?php if ($purge == "cleanup") { ?>
     	<!-- Data cleanup complete -->
     	<div class="alert alert-danger alert-dismissible hidden-print fade in" role="alert">

@@ -36,30 +36,49 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 	// If not retaining participant data, keep current admins
 	if ($filter == "default") {
 
-		$query_admin = sprintf("SELECT id, userLevel, user_name FROM %s WHERE userLevel = '2'", $prefix."users");
+		$query_admin = sprintf("SELECT id FROM %s WHERE userLevel < '2'", $prefix."users");
 		$admin = mysqli_query($connection,$query_admin) or die (mysqli_error($connection));
 		$row_admin = mysqli_fetch_assoc($admin);
 		$totalRows_admin = mysqli_num_rows($admin);
 
+		$admin_ids = array();
+
 		if ($totalRows_admin > 0) {
 
 			do {
-
-				// Delete the user's record
-				$updateSQL = sprintf("DELETE FROM %s WHERE uid='%s'", $prefix."brewer", $row_admin['id']);
-				mysqli_real_escape_string($connection,$updateSQL);
-				$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
-
-				// Delete the associated brewer record
-				$updateSQL = sprintf("DELETE FROM %s WHERE id='%s'", $prefix."users", $row_admin['id']);
-				mysqli_real_escape_string($connection,$updateSQL);
-				$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
-
+				$admin_ids[] = $row_admin['id'];
 			} while($row_admin = mysqli_fetch_assoc($admin));
 
-		} // if ($totalRows_admin > 0)
+		}
 
-	}
+		$query_non_admin = sprintf("SELECT id FROM %s WHERE userLevel='2'", $prefix."users");
+		$non_admin = mysqli_query($connection,$query_non_admin) or die (mysqli_error($connection));
+		$row_non_admin = mysqli_fetch_assoc($non_admin);
+		$totalRows_non_admin = mysqli_num_rows($non_admin);
+
+		if ($totalRows_non_admin > 0) {
+
+			do {
+
+				if (!in_array($row_non_admin['id'],$admin_ids)) {
+
+					// Delete the user's record
+					$updateSQL = sprintf("DELETE FROM %s WHERE id='%s'", $prefix."users", $row_non_admin['id']);
+					mysqli_real_escape_string($connection,$updateSQL);
+					$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+
+					// Delete the associated brewer's record
+					$updateSQL = sprintf("DELETE FROM %s WHERE uid='%s'", $prefix."brewer", $row_non_admin['id']);
+					mysqli_real_escape_string($connection,$updateSQL);
+					$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+
+				} // end if (!in_array($row_non_admin['id'],$admin_ids))
+
+			} while ($row_non_admin = mysqli_fetch_assoc($non_admin));
+
+		} // end if ($totalRows_non_admin > 0)
+
+	} // end if ($filter == "default")
 
 	// Check for GH
 	$query_check_gh = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE user_name='%s'", $prefix."users", $gh_user_name);

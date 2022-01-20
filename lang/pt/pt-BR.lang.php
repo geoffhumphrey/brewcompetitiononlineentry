@@ -1825,6 +1825,14 @@ $winners_text_007 = "Não há entradas vencedoras nesta tabela.";
  */
 
 $label_entries_to_judge = "Entradas para Julgar";
+$evaluation_info_073 = "Se você tiver alterado ou adicionado qualquer item ou comentário nesta folha de pontuação, seus dados poderão ser perdidos se você navegar para longe desta página.";
+$evaluation_info_074 = "Se você TENHA feito alterações, feche este diálogo, role até o final da folha de pontuação e selecione Submeter Avaliação.";
+$evaluation_info_075 = "Se você NÃO tiver feito nenhuma mudança, selecione o botão azul do Painel de Julgamento abaixo.";
+$evaluation_info_076 = "Comente sobre malte, lúpulo, ésteres e outros aromáticos.";
+$evaluation_info_077 = "Comente sobre cor, clareza e cabeça (retenção, cor e textura).";
+$evaluation_info_078 = "Comente sobre malte, lúpulo, características de fermentação, equilíbrio, acabamento/sabor, e outras características de sabor.";
+$evaluation_info_079 = "Comentário sobre o corpo, carbonação, calor, cremosidade, adstringência e outras sensações palatinas.";
+$evaluation_info_080 = "Comente sobre o prazer geral de beber associado à entrada, dê sugestões para melhorias.";
 
 if ($_SESSION['prefsStyleSet'] == "BJCP2021") {
     $styles_entry_text_21B = "O participante DEVE especificar uma força (sessão, padrão, duplo); se nenhuma força for especificada, o padrão será assumido. O participante DEVE especificar o tipo específico de Especialidade IPA da lista de Tipos Definidos Atualmente identificados nas Diretrizes de Estilo, ou conforme emendado pelos Estilos Provisórios no site do BJCP; OU o participante DEVE descrever o tipo de Especialidade IPA e suas principais características em forma de comentários para que os juízes saibam o que esperar. Os participantes PODEM especificar as variedades específicas de lúpulo utilizadas, se os participantes acharem que os juízes podem não reconhecer as características varietais dos lúpulos mais recentes. Os participantes PODEM especificar uma combinação de tipos IPA definidos (por exemplo, IPA Centeio Negro) sem fornecer descrições adicionais.";

@@ -10,7 +10,7 @@ else {
 
 if ($pro_edition == 0) $edition = $label_amateur." ".$label_edition;
 if ($pro_edition == 1) $edition = $label_pro." ".$label_edition;
-
+if ($dbTable == "default") $style_display_method = 0; else $style_display_method = 3;
 ?>
 <script>
 $(document).ready(function () {
@@ -163,13 +163,14 @@ $(document).ready(function() {
     </tr>
 </thead>
 <tbody>
-	<?php do {
+	<?php
+    do {
     	$bos_entry_info = bos_entry_info($row_bos['eid'], $row_bos['scoreTable'],$filter);
     	$bos_entry_info = explode("^",$bos_entry_info);
-        $style = style_number_const($bos_entry_info[1],$bos_entry_info[3],$_SESSION['style_set_display_separator'],0);
+        $style = style_number_const($bos_entry_info[1],$bos_entry_info[3],$_SESSION['style_set_display_separator'],$style_display_method);
         $judging_number = sprintf("%06s",$bos_entry_info[6]);
-        if (!empty($style)) $style_name = $style.": ".style_convert($bos_entry_info[1],1,$base_url,$filter).": ".$bos_entry_info[0];
-        else $style_name = $bos_entry_info[0];
+        if (empty($style)) $style_name = $bos_entry_info[0];
+        else $style_name = $style.": ".$bos_entry_info[0];
 	?>
 	<tr>
     	<td nowrap><?php echo sprintf("%04s",$row_bos['eid']); ?></td>
@@ -241,10 +242,10 @@ $(document).ready(function(){
 		$bos_entry_info = bos_entry_info($row_enter_bos['eid'], "default","default");
 		$bos_entry_info = explode("^",$bos_entry_info);
 		$judging_number = sprintf("%06s",$bos_entry_info[6]);
-        $style = style_number_const($bos_entry_info[1],$bos_entry_info[3],$_SESSION['style_set_display_separator'],0);
+        $style = style_number_const($bos_entry_info[1],$bos_entry_info[3],$_SESSION['style_set_display_separator'],$style_display_method);
         $judging_number = sprintf("%06s",$bos_entry_info[6]);
-        if (!empty($style)) $style_name = $style.": ".style_convert($bos_entry_info[1],1,$base_url,$filter).": ".$bos_entry_info[0];
-        else $style_name = $bos_entry_info[0];
+        if (!empty($style)) $style_name = $bos_entry_info[0];
+        else $style_name = $style.": ".$bos_entry_info[0];
 	?>
 	<tr>
 		<?php $eid = $row_enter_bos['eid']; ?>

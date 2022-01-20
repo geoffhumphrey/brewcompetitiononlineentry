@@ -11,6 +11,10 @@ else $pro_edition = $row_archive_prefs['archiveProEdition'];
 if ($pro_edition == 0) $edition = $label_amateur." ".$label_edition;
 if ($pro_edition == 1) $edition = $label_pro." ".$label_edition;
 
+if ($dbTable == "default") $style_display_method = 0; else $style_display_method = 2;
+
+$eval_db_table = FALSE;
+
 if ($dbTable == "default") {
     if ($_SESSION['prefsEval'] == 1) {
         $eval_db_table = TRUE;
@@ -212,8 +216,14 @@ $totalRows_entry_count = total_paid_received($go,"default");
 	if ($row_scores['scoreMiniBOS'] == "1") $mini_bos = "<span class=\"fa fa-lg fa-check text-success\"></span>";
 	else $mini_bos = "&nbsp;";
 
-    $style_display_number = style_number_const($table_score_data[8],$table_score_data[15],$_SESSION['style_set_display_separator'],0);
-    $entry_category = $style_display_number." ".style_convert($table_score_data[8],1,$base_url,$filter).": ".$table_score_data[13];
+    
+    $style_display_number = style_number_const($table_score_data[8],$table_score_data[15],$_SESSION['style_set_display_separator'],$style_display_method);
+    /*
+    if ($dbTable == "default") $entry_category = $style_display_number.": ".style_convert($table_score_data[8],1,$base_url,$filter).": ".$table_score_data[13];
+    else 
+    */
+    if (empty($style_display_number)) $entry_category = $table_score_data[13];
+    else $entry_category = $style_display_number.": ".$table_score_data[13];
 
     $scoresheet = FALSE;
     $scoresheet_eval = FALSE;
@@ -356,7 +366,7 @@ $totalRows_entry_count = total_paid_received($go,"default");
         <td><?php if ($pro_edition == 1) echo $table_score_data[14]; else echo $table_score_data[5].", ".$table_score_data[4]; ?></td>
         <td><?php echo $table_score_data[3]; ?></td>
         <?php } ?>
-        <td><?php if (strpos($row_scores['scoreEntry'], '.') !== false) echo rtrim(number_format($row_scores['scoreEntry'],2),"0"); else echo $row_scores['scoreEntry']; ?></td>
+        <td><?php if (fmod($row_scores['scoreEntry'], 1) !== 0.00) echo number_format($row_scores['scoreEntry'],2); else echo $row_scores['scoreEntry']; ?></td>
         <td><?php echo $score_place; ?></td>
         <td><?php echo $mini_bos; ?></td>
 		<td>
@@ -443,7 +453,7 @@ $(document).ready(function() {
 		$score_style_data = explode("^",$score_style_data);
 
 		include (DB.'admin_judging_scores.db.php');
-        $style = style_number_const($row_entries['brewCategorySort'],$row_entries['brewSubCategory'],$_SESSION['style_set_display_separator'],0);
+        $style = style_number_const($row_entries['brewCategorySort'],$row_entries['brewSubCategory'],$_SESSION['style_set_display_separator'],$style_display_method);
 
 		do {
 
@@ -463,8 +473,8 @@ $(document).ready(function() {
 				$entry_number = sprintf("%06s",$row_entries['id']);
 				$judging_number = sprintf("%06s",$row_entries['brewJudgingNumber']);
 
-				if ($_SESSION['prefsStyleSet'] == "BA") $style_display = $score_style_data[2];
-                else $style_display = $style." ".style_convert($row_entries['brewCategorySort'],1,$base_url,$filter).": ".$score_style_data[2];
+				if (empty($style)) $style_display = $score_style_data[2];
+                else $style_display = $style.": ".$score_style_data[2];
 
                 $scoreType = style_type($score_style_data[3],"1","bcoe");
 

@@ -1724,8 +1724,6 @@ do {
                                         <span style="margin-bottom: 10px;" class="hidden" id="purge-part-status"></span>
                                         <span style="margin-bottom: 10px;" class="hidden" id="purge-part-status-msg"></span>
                                     </div>
-
-
                                     <li><a class="hide-loader" href="#" data-toggle="modal" data-target="#purgeTables">Judging Tables</a></li>
                                     <div>
                                         <span style="margin-bottom: 10px;" class="hidden" id="purge-table-status"></span>

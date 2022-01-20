@@ -1960,8 +1960,16 @@ $winners_text_007 = "There are no winning entries at this table.";
  */
 
 $label_entries_to_judge = "Entries to Judge";
+$evaluation_info_073 = "If you've changed or added any item or comment in this scoresheet, your data may be lost if you navigate away from this page.";
+$evaluation_info_074 = "If you HAVE made changes, close this dialog, scroll to the bottom of the scoresheet, and select Submit Evaluation.";
+$evaluation_info_075 = "If you HAVE NOT made any changes, select the blue Judging Dashboard button below.";
+$evaluation_info_076 = "Comment on malt, hops, esters, and other aromatics.";
+$evaluation_info_077 = "Comment on color, clarity, and head (retention, color, and texture).";
+$evaluation_info_078 = "Comment on malt, hops, fermentation characteristics, balance, finish/aftertaste, and other flavor characteristics.";
+$evaluation_info_079 = "Comment on body, carbonation, warmth, creaminess, astringency, and other palate sensations.";
+$evaluation_info_080 = "Comment on overall drinking pleasure associated with entry, give suggestions for improvement.";
 
-if ($_SESSION['prefsStyleSet'] == "BJCP2021") {
+if ((isset($_SESSION['prefsStyleSet'])) && ($_SESSION['prefsStyleSet'] == "BJCP2021")) {
     $styles_entry_text_21B = "Entrant MUST specify a strength (session, standard, double); if no strength is specified, standard will be assumed. Entrant MUST specify specific type of Specialty IPA from the list of Currently Defined Types identified in the Style Guidelines, or as amended by Provisional Styles on the BJCP website; OR the entrant MUST describe the type of Specialty IPA and its key characteristics in comment form so judges will know what to expect. Entrants MAY specify specific hop varieties used, if entrants feel that judges may not recognize the varietal characteristics of newer hops. Entrants MAY specify a combination of defined IPA types (e.g., Black Rye IPA) without providing additional descriptions.";
     $styles_entry_text_24C = "Entrant MUST specify blond, amber, or brown Bière de Garde.";
     $styles_entry_text_25B = "The entrant MUST specify the strength (table, standard, super) and the color (pale, dark). The entrant MAY identify character grains used.";

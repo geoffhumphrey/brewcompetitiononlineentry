@@ -1820,6 +1820,15 @@ $winners_text_007 = "U tohoto stolu nejsou žádné vítězné vzorky.";
  */
 
 $label_entries_to_judge = "Přihlášky k posouzení";
+$evaluation_info_073 = "Pokud jste v tomto výsledkovém listu změnili nebo přidali nějakou položku nebo komentář, mohou být vaše údaje ztraceny, pokud přejdete z této stránky pryč.";
+$evaluation_info_074 = "Pokud jste provedli změny, zavřete toto dialogové okno, přejděte na konec výsledkové listiny a vyberte možnost Odeslat hodnocení.";
+$evaluation_info_075 = "Pokud jste neprovedli žádné změny, vyberte níže uvedené modré tlačítko Judging Dashboard.";
+$evaluation_info_076 = "Komentář ke sladu, chmelu, esterům a dalším aromatickým látkám.";
+$evaluation_info_077 = "Komentář k barvě, průzračnosti a pěně (retenci, barvě a struktuře).";
+$evaluation_info_078 = "Komentář ke sladu, chmelu, kvasným vlastnostem, vyváženosti, dochuti a dalším chuťovým vlastnostem.";
+$evaluation_info_079 = "Komentujte tělo, sycení, teplotu, krémovitost, trpkost a další chuťové vjemy.";
+$evaluation_info_080 = "Okomentujte celkový požitek z pití spojený se vstupem, uveďte návrhy na zlepšení.";
+
 
 if ($_SESSION['prefsStyleSet'] == "BJCP2021") {
     $styles_entry_text_21B = "Účastník MUSÍ zadat sílu (relační, standardní, dvojitá); pokud sílu nezadá, předpokládá se, že je standardní. Účastník MUSÍ uvést konkrétní typ Specialty IPA ze seznamu aktuálně definovaných typů uvedených v pokynech pro styly nebo ve znění prozatímních stylů na internetových stránkách BJCP; NEBO MUSÍ popsat typ Specialty IPA a jeho klíčové vlastnosti formou komentáře, aby porotci věděli, co mají očekávat. Účastníci MŮŽOU uvést konkrétní použité odrůdy chmele, pokud se domnívají, že porotci nemusí rozpoznat odrůdové vlastnosti novějších chmelů. Účastníci MOHOU uvést kombinaci definovaných typů IPA (např. Black Rye IPA) bez uvedení dalších popisů.";

@@ -30,7 +30,7 @@ if ((isset($_SESSION['session_set_'.$prefix_session])) && (isset($_SESSION['logi
 	include(INCLUDES.'data_cleanup.inc.php');
 
 	if (!empty($date_threshold)) {
-		$display_date = getTimeZoneDateTime($_SESSION['prefsTimeZone'], strtotime($date_threshold), $_SESSION['prefsDateFormat'],$_SESSION['prefsTimeFormat'], "short", "date");
+		$display_date = getTimeZoneDateTime($_SESSION['prefsTimeZone'], $date_threshold, $_SESSION['prefsDateFormat'],$_SESSION['prefsTimeFormat'], "short", "date");
 	}
 	
 } 

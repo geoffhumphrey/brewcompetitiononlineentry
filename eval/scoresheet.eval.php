@@ -36,6 +36,12 @@ $evalPosition = "";
 if (isset($_SESSION['jPrefsScoreDispMax'])) $score_range = $_SESSION['jPrefsScoreDispMax'];
 else $score_range = 7;
 
+/**
+ * BJCP 2015 and BJCP 2021 exceptions.
+ * BJCP 2021 will be integrated when the BJCP website is updated
+ * with the 2021 guidelines. See coding below.
+ */
+
 $bjcp2015_exceptions = array(
   "27A1" => "//bjcp.org/style/2015/27/27A/historical-beer-gose/",
   "27A2" => "//bjcp.org/style/2015/27/27A/historical-beer-piwo-grodziskie/",
@@ -59,6 +65,14 @@ $bjcp2015_exceptions = array(
   "PRX3" => "//dev.bjcp.org/beer-styles/x3-italian-grape-ale/",
   "PRX4" => "//dev.bjcp.org/beer-styles/x4-catharina-sour/",
   "PRX5" => "//dev.bjcp.org/beer-styles/x5-new-zealand-pilsner/"
+);
+
+$bjcp2021_execptions = array(
+  "LSX1" => "//bjcp.org/beer-styles/x1-dorada-pampeana/",
+  "LSX2" => "//bjcp.org/beer-styles/x2-ipa-argenta/",
+  "LSX3" => "//bjcp.org/beer-styles/x3-italian-grape-ale/",
+  "LSX4" => "//bjcp.org/beer-styles/x4-catharina-sour/",
+  "LSX5" => "//bjcp.org/beer-styles/x5-new-zealand-pilsner/"
 );
 
 /**
@@ -257,7 +271,7 @@ if ($entry_found) {
   $entry_info_html .= "</div>";
 
   $entry_info_html .= "<div class=\"row bcoem-admin-element\">";
-  $entry_info_html .= "<div class=\"col col-lg-3 col-md-4 col-sm-4 col-xs-12\"><strong>".$label_style."</strong></div>";
+  $entry_info_html .= "<div class=\"col col-lg-3 col-md-4 col-sm-4 col-xs-12\"><strong>".$_SESSION['style_set_short_name']." ".$label_style."</strong></div>";
   $entry_info_html .= "<div class=\"col col-lg-9 col-md-8 col-sm-8 col-xs-12\">";
 
   if (!empty($row_style['brewStyleLink'])) {
@@ -266,19 +280,40 @@ if ($entry_found) {
 
       $style_concat = ltrim($row_style['brewStyleGroup'],"0").strtoupper($row_style['brewStyleNum']);
       if (array_key_exists($style_concat, $bjcp2015_exceptions)) $bjcp2015_link = $bjcp2015_exceptions[$style_concat];
-      else $bjcp2015_link = "//bjcp.org/style/2015/".ltrim($row_style['brewStyleGroup'],"0")."/".$style_concat."/";
+      else $bjcp2015_link = "https://bjcp.org/style/2015/".ltrim($row_style['brewStyleGroup'],"0")."/".$style_concat."/";
       $entry_info_html .= "<a href=\"".$bjcp2015_link."\" target=\"_blank\">";
+      $entry_info_html .= $style_num." ".$row_style['brewStyle'];
+      $entry_info_html .= " <i class=\"small fa fa-external-link\"></i></a>";
     
     }
     
-    else $entry_info_html .= "<a href=\"".$row_style['brewStyleLink']."\" target=\"_blank\">";
-    $entry_info_html .= $style_num." ".$row_style['brewStyle'];
-    $entry_info_html .= " <i class=\"small fa fa-external-link\"></i></a>";
+    else {
+
+      $entry_info_html .= "<a href=\"".$row_style['brewStyleLink']."\" target=\"_blank\">";
+      $entry_info_html .= $style_num." ".$row_style['brewStyle'];
+      $entry_info_html .= " <i class=\"small fa fa-external-link\"></i></a>";
+
+    }    
   
   }
 
+  /*
+  
+  elseif ($_SESSION['prefsStyleSet'] == "BJCP2021") {
+
+    $style_concat = ltrim($row_style['brewStyleGroup'],"0").strtoupper($row_style['brewStyleNum']);
+    if (array_key_exists($style_concat, $bjcp2021_exceptions)) $bjcp2021_link = $bjcp2021_exceptions[$style_concat];
+    else $bjcp2021_link = "//bjcp.org/style/2021/".ltrim($row_style['brewStyleGroup'],"0")."/".$style_concat."/";
+    $entry_info_html .= "<a href=\"".$bjcp2021_link."\" target=\"_blank\">";
+
+  }
+
+  */
+
   else {
     $entry_info_html .= $style_num." ".$row_style['brewStyle'];
+    if (($_SESSION['prefsStyleSet'] == "BJCP2021") && (is_numeric($row_style['brewStyleGroup']))) $entry_info_html .= "<a style=\"margin-left:10px;\" href=\"https://www.bjcp.org/download/2021_Guidelines_Beer.pdf\" target=\"_blank\"><i class=\"small fa fa-external-link\"></i></a>";
+    else $entry_info_html .= "<a style=\"margin-left:10px;\" href=\"https://www.bjcp.org/bjcp-style-guidelines\" target=\"_blank\"><i class=\"small fa fa-external-link\"></i></a>";
   }
 
   $entry_info_html .= "</div>";
@@ -434,9 +469,28 @@ else {
 
 // Sub-nav Buttons
 if ($eval_source == 0) $eval_nav_buttons .= "<div style=\"margin: 0 5px 15px 0;\" class=\"btn-group hidden-print\" role=\"group\"><a class=\"btn btn-block btn-default\" href=\"".$base_url."index.php?section=evaluation&amp;go=default&amp;filter=default&amp;view=admin\"><span class=\"fa fa-chevron-circle-left\"></span> ".$label_admin.": ".$label_evaluations."</a></div>";
-$eval_nav_buttons .= "<div style=\"margin-bottom: 15px;\" class=\"btn-group hidden-print\" role=\"group\"><a class=\"btn btn-block btn-default\" href=\"".build_public_url("evaluation","default","default","default",$sef,$base_url)."\"><span class=\"fa fa-chevron-circle-left\"></span> ".$label_judging_dashboard."</a></div>";
+$eval_nav_buttons .= "<div style=\"margin-bottom: 15px;\" class=\"btn-group hidden-print\" role=\"group\"><button class=\"btn btn-block btn-default\"  data-toggle=\"modal\" data-target=\"#unsaved-modal\"><span class=\"fa fa-chevron-circle-left\"></span> ".$label_judging_dashboard."</button></div>";
+//$eval_nav_buttons .= "<div style=\"margin-bottom: 15px;\" class=\"btn-group hidden-print\" role=\"group\"><a class=\"btn btn-block btn-default\" href=\"".build_public_url("evaluation","default","default","default",$sef,$base_url)."\"><span class=\"fa fa-chevron-circle-left\"></span> ".$label_judging_dashboard."</a></div>";
 if ($eval_prevent_edit) $header_elements .= sprintf("<p>%s</p>",$header_text_104);
 ?>
+<!-- Unsaved Data Modal -->
+<div id="unsaved-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="unsaved-modal-label">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="unsaved-modal-label">Caution: Possible Data Loss</h4>
+      </div>
+      <div class="modal-body">
+        <?php echo sprintf("<p>%s</p><p>%s</p><p>%s</p>",$evaluation_info_073,$evaluation_info_074,$evaluation_info_075); ?>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-dismiss="modal"><?php echo $label_close; ?></button>
+        <a class="btn btn-primary" href="<?php echo build_public_url("evaluation","default","default","default",$sef,$base_url); ?>"><?php echo $label_judging_dashboard; ?></a>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
 <!-- Load Bootstrap Slider -->
 <!-- https://github.com/seiyria/bootstrap-slider -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/11.0.2/bootstrap-slider.min.js"></script>

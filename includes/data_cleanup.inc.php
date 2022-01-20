@@ -42,8 +42,7 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] == 0)) {
 			// Purge all data from brewing table
 			if (!empty($date_threshold)) {
 
-				$query_purge_entries = sprintf("SELECT id,brewJudgingNumber FROM %s WHERE brewUpdated < '%s' OR brewUpdated IS NULL",$brewing_db_table,$date_threshold);
-				if (SINGLE) $query_purge_entries .= sprintf(" AND comp_id='%s'",$_SESSION['comp_id']);
+				$query_purge_entries = sprintf("SELECT id,brewJudgingNumber FROM %s WHERE brewUpdated < '%s' OR brewUpdated IS NULL", $prefix."brewing", $date_threshold);
 				$purge_entries = mysqli_query($connection,$query_purge_entries) or die (mysqli_error($connection));
 				$row_purge_entries = mysqli_fetch_assoc($purge_entries);
 				$totalRows_purge_entries = mysqli_num_rows($purge_entries);
@@ -58,7 +57,7 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] == 0)) {
 
 					do {
 
-						$updateSQL = sprintf("DELETE FROM %s WHERE id='%s'",$brewing_db_table,$row_purge_entries['id']);
+						$updateSQL = sprintf("DELETE FROM %s WHERE id='%s'", $prefix."brewing", $row_purge_entries['id']);
 						mysqli_real_escape_string($connection,$updateSQL);
 						$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 						if ($result) $count_results += 1;
@@ -106,6 +105,7 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] == 0)) {
 					$dom_total_fees_paid = number_format($total_fees_paid,2);
 
 				}
+			
 			}
 
 			// Purge all entries
@@ -156,155 +156,138 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] == 0)) {
 
 				}
 
+			if (!empty($date_threshold)) $date_threshold = strtotime($date_threshold);
+
 		} // END if (($go == "entries") || ($go == "purge-all"))
 
 		// Purge participant and associated data
 		if (($go == "participants") || ($go == "purge-all")) {
 
 			// Purge all data from brewer and users tables (except admins)
+			$query_admin = sprintf("SELECT id FROM %s WHERE userLevel < '2'", $prefix."users");
+			$admin = mysqli_query($connection,$query_admin) or die (mysqli_error($connection));
+			$row_admin = mysqli_fetch_assoc($admin);
+			$totalRows_admin = mysqli_num_rows($admin);
 
-			if (!SINGLE) {
+			$admin_ids = array();
 
-				$query_admin = sprintf("SELECT id,user_name FROM %s WHERE userLevel = '2'", $users_db_table);
+			if ($totalRows_admin > 0) {
 
-				if (!empty($date_threshold)) {
-					$query_admin .= sprintf(" AND userCreated < '%s' OR userCreated IS NULL", $date_threshold);
-				}
+				do {
+					$admin_ids[] = $row_admin['id'];
+				} while($row_admin = mysqli_fetch_assoc($admin));
 
-				$admin = mysqli_query($connection,$query_admin) or die (mysqli_error($connection));
-				$row_admin = mysqli_fetch_assoc($admin);
-				$totalRows_admin = mysqli_num_rows($admin);
+			}
 
-				if ($totalRows_admin == 0) {
-					$status = 2; // No entries found
-				}
+			$query_non_admin = sprintf("SELECT id FROM %s WHERE userLevel='2'", $prefix."users");
+			if (!empty($date_threshold)) $query_non_admin .= sprintf(" AND userCreated < '%s' OR userCreated IS NULL", $date_threshold);
+			$non_admin = mysqli_query($connection,$query_non_admin) or die (mysqli_error($connection));
+			$row_non_admin = mysqli_fetch_assoc($non_admin);
+			$totalRows_non_admin = mysqli_num_rows($non_admin);
 
-				else {
+			if ($totalRows_non_admin == 0) {
+				$status = 2; // No entries found
+			}
 
-					$dom_ct_participants += $totalRows_admin;
+			if ($totalRows_non_admin > 0) {
 
-					do {
+				$dom_ct_participants += $totalRows_non_admin;
+
+				do {
+
+					if (!in_array($row_non_admin['id'],$admin_ids)) {
 
 						// Delete the user's record
-						$updateSQL = sprintf("DELETE FROM %s WHERE uid='%s'", $brewer_db_table, $row_admin['id']);
+						$updateSQL = sprintf("DELETE FROM %s WHERE id='%s'", $prefix."users", $row_non_admin['id']);
 						mysqli_real_escape_string($connection,$updateSQL);
 						$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 						if ($result) $count_results += 1;
 
-						// Delete the associated brewer record
-						$updateSQL = sprintf("DELETE FROM %s WHERE id='%s'", $users_db_table, $row_admin['id']);
+						// Delete the associated brewer's record
+						$updateSQL = sprintf("DELETE FROM %s WHERE uid='%s'", $prefix."brewer", $row_non_admin['id']);
 						mysqli_real_escape_string($connection,$updateSQL);
 						$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 						if ($result) $count_results += 1;
 
 						// Delete all the user's entries
-						$updateSQL = sprintf("DELETE FROM %s WHERE brewBrewerID='%s'", $brewing_db_table, $row_admin['id']);
+						$updateSQL = sprintf("DELETE FROM %s WHERE brewBrewerID='%s'", $prefix."brewing", $row_non_admin['id']);
 						mysqli_real_escape_string($connection,$updateSQL);
 						$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 						if ($result) $count_results += 1;
 
-						// Purge all data from judging_assignments table
-						$updateSQL = sprintf("DELETE FROM %s WHERE bid='%s'",$judging_assignments_db_table, $row_admin['id']);
+						// Purge all user's data from judging_assignments table
+						$updateSQL = sprintf("DELETE FROM %s WHERE bid='%s'",$prefix."judging_assignments", $row_non_admin['id']);
 						mysqli_real_escape_string($connection,$updateSQL);
 						$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 						if ($result) $count_results += 1;
 
-						// Purge all data from staff table
-						$updateSQL = sprintf("DELETE FROM %s WHERE uid='%s'",$staff_db_table, $row_admin['id']);
+						// Purge all user's data from staff table
+						$updateSQL = sprintf("DELETE FROM %s WHERE uid='%s'",$prefix."staff", $row_non_admin['id']);
 						mysqli_real_escape_string($connection,$updateSQL);
 						$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 						if ($result) $count_results += 1;
-
-					} while ($row_admin = mysqli_fetch_assoc($admin));
-
-				}
-
-				if ($count_results > 0) {
-					
-					$status = 1;
-
-					if ($go != "purge-all") {
-						$dom_ct_judges_avail = get_participant_count("judge");
-						$dom_ct_judges_assigned = get_participant_count("judge-assigned");
-						$dom_ct_stewards_avail = get_participant_count("steward");
-						$dom_ct_stewards_assigned = get_participant_count("steward-assigned");
-						$dom_ct_staff_avail = get_participant_count("staff");
-						$dom_ct_staff_assigned = get_participant_count("staff-assigned");
-						$dom_ct_participants_entries = get_participant_count("received-entrant");
-						$dom_ct_entries = get_entry_count("total-logged");
-						$dom_ct_entries_unconfirmed = get_entry_count("unconfirmed");
-						$dom_ct_entries_paid = get_entry_count("paid");
-						$dom_ct_entries_paid_received = get_entry_count("paid-received");
-						$total_fees = total_fees($_SESSION['contestEntryFee'], $_SESSION['contestEntryFee2'], $_SESSION['contestEntryFeeDiscount'], $_SESSION['contestEntryFeeDiscountNum'], $_SESSION['contestEntryCap'], $_SESSION['contestEntryFeePasswordNum'], $bid, $filter, $_SESSION['comp_id']);
-						$total_fees_paid = total_fees_paid($_SESSION['contestEntryFee'], $_SESSION['contestEntryFee2'], $_SESSION['contestEntryFeeDiscount'], $_SESSION['contestEntryFeeDiscountNum'], $_SESSION['contestEntryCap'], $_SESSION['contestEntryFeePasswordNum'], $bid, $filter, $_SESSION['comp_id']);					
-						$dom_total_fees = number_format($total_fees,2);
-						$dom_total_fees_paid = number_format($total_fees_paid,2);
-					}
-					
-				}
-
-			}
-
-			if (!SINGLE) {
-
-				// Clean up any strays
-				$query_strays2 = sprintf("SELECT id FROM %s", $users_db_table);
-
-				if (!empty($date_threshold)) {
-					$query_strays2 .= sprintf(" WHERE userCreated < '%s' OR userCreated IS NULL", $date_threshold);
-				}
-
-				$strays2 = mysqli_query($connection,$query_strays2) or die (mysqli_error($connection));
-				$row_strays2 = mysqli_fetch_assoc($strays2);
-				$totalRows_strays2 = mysqli_num_rows($strays2);
-
-				if ($totalRows_strays2 > 0) {
-
-					// Users table
-					do {
-						$query_stray2 = sprintf("SELECT COUNT(*) AS 'count' FROM %s WHERE uid='%s'", $brewer_db_table, $row_strays2['id']);
-						$stray2 = mysqli_query($connection,$query_stray2) or die (mysqli_error($connection));
-						$row_stray2 = mysqli_fetch_assoc($stray2);
-
-						if ($row_stray2['count'] == 0) {
-							$updateSQL = sprintf("DELETE FROM %s WHERE id='%s'", $users_db_table, $row_strays2['id']);
-							mysqli_real_escape_string($connection,$updateSQL);
-							$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
-							if ($result) $count_results += 1;
-						}
-
-
-					} while ($row_strays2 = mysqli_fetch_assoc($strays2));
-
-					// Brewer table
-					$query_strays = sprintf("SELECT id,uid FROM %s", $brewer_db_table);
-					$strays = mysqli_query($connection,$query_strays) or die (mysqli_error($connection));
-					$row_strays = mysqli_fetch_assoc($strays);
-					$totalRows_strays = mysqli_num_rows($strays);
-
-					if ($totalRows_strays > 0) {
-
-						do {
-							$query_stray = sprintf("SELECT COUNT(*) AS 'count' FROM %s WHERE id='%s'", $users_db_table, $row_strays['id']);
-							$stray = mysqli_query($connection,$query_stray) or die (mysqli_error($connection));
-							$row_stray = mysqli_fetch_assoc($stray);
-
-							if ($row_stray['count'] == 0) {
-								$updateSQL = sprintf("DELETE FROM %s WHERE id='%s'", $brewer_db_table, $row_strays['id']);
-								mysqli_real_escape_string($connection,$updateSQL);
-								$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
-								if ($result) $count_results += 1;
-							}
-
-						} while ($row_strays = mysqli_fetch_assoc($strays));
 
 					}
 
-				}
+				} while($row_non_admin = mysqli_fetch_assoc($non_admin));
 
+				// Search for any strays in the users table that is NOT in the brewer's table
+				$query_stray_brewers = sprintf("SELECT id,uid FROM %s",$prefix."brewer");
+				$stray_brewers = mysqli_query($connection,$query_stray_brewers) or die (mysqli_error($connection));
+				$row_stray_brewers = mysqli_fetch_assoc($stray_brewers);
+				$totalRows_stray_brewers = mysqli_num_rows($stray_brewers);
+
+				do {
+
+					$query_stray_users = sprintf("SELECT id FROM %s WHERE id='%s'", $prefix."users", $row_stray_brewers['uid']);
+					$stray_users = mysqli_query($connection,$query_stray_users) or die (mysqli_error($connection));
+					$row_stray_users = mysqli_fetch_assoc($stray_users);
+					$totalRows_stray_users = mysqli_num_rows($stray_users);
+
+					if ($totalRows_stray_users == 0) {
+
+						$updateSQL = sprintf("DELETE FROM %s WHERE id='%s'", $prefix."users", $row_stray_users['id']);
+						mysqli_real_escape_string($connection,$updateSQL);
+						$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+						if ($result) $count_results += 1;
+
+						$updateSQL = sprintf("DELETE FROM %s WHERE id='%s'", $prefix."brewer", $row_stray_brewers['id']);
+						mysqli_real_escape_string($connection,$updateSQL);
+						$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+						if ($result) $count_results += 1;
+
+					}
+
+				} while ($row_stray_brewers = mysqli_fetch_assoc($stray_brewers));
+
+			} // end if ($totalRows_non_admin > 0)
+
+			if ($count_results > 0) {
+					
+				$status = 1;
+
+				if ($go != "purge-all") {
+					$dom_ct_judges_avail = get_participant_count("judge");
+					$dom_ct_judges_assigned = get_participant_count("judge-assigned");
+					$dom_ct_stewards_avail = get_participant_count("steward");
+					$dom_ct_stewards_assigned = get_participant_count("steward-assigned");
+					$dom_ct_staff_avail = get_participant_count("staff");
+					$dom_ct_staff_assigned = get_participant_count("staff-assigned");
+					$dom_ct_participants_entries = get_participant_count("received-entrant");
+					$dom_ct_entries = get_entry_count("total-logged");
+					$dom_ct_entries_unconfirmed = get_entry_count("unconfirmed");
+					$dom_ct_entries_paid = get_entry_count("paid");
+					$dom_ct_entries_paid_received = get_entry_count("paid-received");
+					$total_fees = total_fees($_SESSION['contestEntryFee'], $_SESSION['contestEntryFee2'], $_SESSION['contestEntryFeeDiscount'], $_SESSION['contestEntryFeeDiscountNum'], $_SESSION['contestEntryCap'], $_SESSION['contestEntryFeePasswordNum'], $bid, $filter, $_SESSION['comp_id']);
+					$total_fees_paid = total_fees_paid($_SESSION['contestEntryFee'], $_SESSION['contestEntryFee2'], $_SESSION['contestEntryFeeDiscount'], $_SESSION['contestEntryFeeDiscountNum'], $_SESSION['contestEntryCap'], $_SESSION['contestEntryFeePasswordNum'], $bid, $filter, $_SESSION['comp_id']);					
+					$dom_total_fees = number_format($total_fees,2);
+					$dom_total_fees_paid = number_format($total_fees_paid,2);
+				}
+				
 			}
 
-			if ($count_results > 0) $status = 1;
+			if (!empty($date_threshold)) $date_threshold = strtotime($date_threshold);
+
 			$redirect_go_to = sprintf("Location: %s", $base_url."index.php?section=admin&msg=26");
 
 		} // END if (($go == "participants") || ($go == "purge-all"))

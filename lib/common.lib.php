@@ -423,8 +423,8 @@ if ($v == "milliliters") { // fluid ounces to milliliters
 }
 
 function GetSQLValueString($theValue, $theType, $theDefinedValue = "", $theNotDefinedValue = "")  {
-	
-	$theValue = sterilize($theValue);
+
+	$theValue = addslashes($theValue);
 
 	require (INCLUDES.'scrubber.inc.php');
 
@@ -4043,9 +4043,10 @@ function style_number_const($style_category_number,$style_sub,$style_set_display
 		break;
 
 		case 2:
-			return "";
+			return ltrim($style_category_number,"0").$style_set_display_separator.ltrim($style_sub,"0");
 		break;
 		
+		case 3:
 		default:
 			return ltrim($style_category_number,"0").$style_set_display_separator.$style_sub;
 		break;
