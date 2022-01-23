@@ -1241,7 +1241,7 @@ do {
 									</ul>
 								</div>
 								<div class="dropdown bcoem-admin-dashboard-select">
-									<button class="btn btn-default dropdown-toggle" type="button" id="cardsMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">for Session... <span class="caret"></span>
+									<button class="btn btn-default dropdown-toggle" type="button" id="cardsMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">For Session... <span class="caret"></span>
 									</button>
 									<ul class="dropdown-menu" aria-labelledby="cardsMenu2">
 										<?php if (!empty($cards_loc_rnd)) echo $cards_loc_rnd; ?>

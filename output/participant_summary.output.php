@@ -8,8 +8,7 @@ if (NHC) $base_url = "../";
 include (LIB.'output.lib.php');
 
 // Best of Show check
-
-function bos_place($entry_id,$prefix,$connection) {
+function bos_place_output($entry_id,$prefix,$connection) {
     $query_bos = sprintf("SELECT a.scorePlace FROM %s a, %s b, %s c WHERE a.eid = %s AND c.uid = b.brewBrewerID", $prefix."judging_scores_bos", $prefix."brewing", $prefix."brewer", $entry_id);
     $bos = mysqli_query($connection,$query_bos) or die (mysqli_error($connection));
     $row_bos = mysqli_fetch_assoc($bos);
@@ -90,7 +89,7 @@ do {
     </thead>
     <tbody>
 		<?php do {
-            $bos_place = bos_place($row_log['id'],$prefix,$connection);
+            $bos_place = bos_place_output($row_log['id'],$prefix,$connection);
             ?>
 		<tr>
 			<td><?php echo sprintf("%06s",$row_log['id']); ?></td>

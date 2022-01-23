@@ -46,6 +46,7 @@ $admin_role = FALSE;
 if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) $admin_role = TRUE;
 
 $header = "";
+$table_width = "";
 
 // Establish standard widths
 // Total of 760 px for Portrait
@@ -55,6 +56,8 @@ $td_width_name = 150;
 $td_width_entry = 200;
 $td_width_style = 200;
 $td_width_club = 175;
+if ($view == "pdf") $table_width = 760;
+if ($view == "html") $table_width = "100%";
 
 $BOM = "\xEF\xBB\xBF"; // UTF-8 byte order mark (BOM)
 
@@ -934,7 +937,7 @@ if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($en
         $results_download = FALSE;
         
         if (($_SESSION['prefsDisplayWinners'] == "Y") && (judging_winner_display($_SESSION['prefsWinnerDelay']))) $results_download = TRUE; 
-        if ($_SESSION['userLevel'] < 2) $results_download = TRUE;
+        if ((isset($_SESSION['userLevel'])) && ($_SESSION['userLevel'] < 2)) $results_download = TRUE;
 
         if ($results_download) {
 
@@ -963,7 +966,7 @@ if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($en
                 require(CLASSES.'fpdf/html_table.php');
                 $pdf=new PDF();
                 $pdf->AddPage('L');
-
+                
             }
 
             if ($view == "html") {
@@ -1003,7 +1006,7 @@ if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($en
 
                         if ($view == "pdf") $html .= '<br><br><strong>'.$label_table.' '.$row_tables['tableNumber'].': '.$row_tables['tableName'].' ('.$entry_count.' '.$entries.')</strong><br>';
                         else $html .= '<h2>'.$label_table.' '.$row_tables['tableNumber'].': '.$row_tables['tableName'].' ('.$entry_count.' '.$entries.')</h2>';
-                        $html .= '<table border="1" cellpadding="5" cellspacing="0">';
+                        $html .= '<table border="1" cellpadding="5" cellspacing="0" width="'.$table_width.'">';
                         $html .= '<tr>';
                         $html .= '<td width="'.$td_width_place.'" align="center"  bgcolor="#cccccc" nowrap="nowrap"><strong>'.$label_place.'</strong></td>';
                         $html .= '<td width="'.$td_width_name.'" align="center" bgcolor="#cccccc"><strong>'.$label_brewer.'</strong></td>';
@@ -1071,7 +1074,7 @@ if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($en
                                     else $html .= '<h2>Style '.$style_trimmed.': '.style_convert($style,"1").' ('.$row_entry_count['count'].' '.$entries.')</h2>';
                                 }
 
-                                $html .= '<table border="1" cellpadding="5" cellspacing="0">';
+                                $html .= '<table border="1" cellpadding="5" cellspacing="0" width="'.$table_width.'">';
                                 $html .= '<tr>';
                                 $html .= '<td width="'.$td_width_place.'" align="center"  bgcolor="#cccccc" nowrap="nowrap"><strong>'.$label_place.'</strong></td>';
                                 $html .= '<td width="'.$td_width_name.'" align="center" bgcolor="#cccccc"><strong>'.$label_brewer.'</strong></td>';
@@ -1140,7 +1143,7 @@ if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($en
 
 
 
-                            $html .= '<table border="1" cellpadding="5" cellspacing="0">';
+                            $html .= '<table border="1" cellpadding="5" cellspacing="0" width="'.$table_width.'">';
                             $html .= '<tr>';
                             $html .= '<td width="'.$td_width_place.'" align="center"  bgcolor="#cccccc" nowrap="nowrap"><strong>'.$label_place.'</strong></td>';
                             $html .= '<td width="'.$td_width_name.'" align="center" bgcolor="#cccccc"><strong>'.$label_brewer.'</strong></td>';
@@ -1212,7 +1215,7 @@ if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($en
 
                         if ($view == "pdf") $html .= '<br><br><strong>'.$row_style_type_1['styleTypeName'].'</strong><br>';
                         else $html .= '<h2>'.$row_style_type_1['styleTypeName'].'</h2>';
-                        $html .= '<table border="1" cellpadding="5" cellspacing="0">';
+                        $html .= '<table border="1" cellpadding="5" cellspacing="0" width="'.$table_width.'">';
                         $html .= '<tr>';
                         $html .= '<td width="'.$td_width_place.'" align="center"  bgcolor="#cccccc" nowrap="nowrap"><strong>'.$label_place.'</strong></td>';
                         $html .= '<td width="'.$td_width_name.'" align="center" bgcolor="#cccccc"><strong>'.$label_brewer.'</strong></td>';
@@ -1271,8 +1274,13 @@ if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($en
                         if ($totalRows_sbd > 0) {
                         if ($view == "pdf") $html .= '<br><br><strong>'.html_entity_decode($row_sbi['sbi_name']).'</strong>';
                         else $html .= '<h2>'.html_entity_decode($row_sbi['sbi_name']).'</h2>';
-                        $html .= '<br>'.html_entity_decode($row_sbi['sbi_description']).'<br>';
-                        $html .= '<table border="1" cellpadding="5" cellspacing="0">';
+                        if (!empty($row_sbi['sbi_description'])) {
+                            $html .= '<br>'.html_entity_decode($row_sbi['sbi_description']).'<br>';
+                        }
+                        else {
+                            if ($view == "pdf") $html .= "<br>";
+                        }
+                        $html .= '<table border="1" cellpadding="5" cellspacing="0" width="'.$table_width.'">';
                         $html .= '<tr>';
                         if ($row_sbi['sbi_display_places'] == "1") $html .= '<td width="'.$td_width_place.'" align="center"  bgcolor="#cccccc" nowrap="nowrap"><strong>'.$label_place.'</strong></td>';
                         $html .= '<td width="'.$td_width_name.'" align="center" bgcolor="#cccccc"><strong>'.$label_brewer.'</strong></td>';
@@ -1288,7 +1296,7 @@ if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($en
                             $html .= '<tr>';
                             if ($row_sbi['sbi_display_places'] == "1") { $html .= '<td width="'.$td_width_place.'" nowrap="nowrap">'.display_place($row_sbd['sbd_place'],4).'</td>'; }
                             $html .= '<td width="'.$td_width_name.'">'.html_entity_decode($brewer_info['0'])." ".html_entity_decode($brewer_info['1']);
-                                if ($row_entries['brewCoBrewer'] != "") $html .= "<br />Co-Brewer: ".html_entity_decode($entry_info['4']);
+                                if (($row_sbd['brewCoBrewer'] != "") && ($view == "html")) $html .= "<br />Co-Brewer: ".html_entity_decode($entry_info['4']);
                             $html .= '</td>';
                             $html .= '<td width="'.$td_width_entry.'">'.html_entity_decode($entry_info['0']).'</td>';
                             $html .= '<td width="'.$td_width_style.'">'.$entry_info['3'].'</td>';
@@ -1505,7 +1513,7 @@ if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($en
 
                     if ($totalRows_organizer > 0) {
                     $html .= '<br><br><strong>Organizer</strong><br>';
-                    $html .= '<table border="1">';
+                    $html .= '<table border="1" width="'.$table_width.'">';
                     $html .= '<tr>';
                     $html .= '<td width="300" align="center" bgcolor="#cccccc"><strong>'.$label_name.'</strong></td>';
                     $html .= '<td width="'.$td_width_name.'" align="center" bgcolor="#cccccc"><strong>'.$label_bjcp_id.'</strong></td>';
@@ -1524,7 +1532,7 @@ if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($en
 
                     if ($totalRows_judges > 0) {
                         $html .= '<br><br><strong>Judges</strong><br>';
-                        $html .= '<table border="1">';
+                        $html .= '<table border="1" width="'.$table_width.'">';
                         $html .= '<tr>';
                         $html .= '<td width="300" align="center" bgcolor="#cccccc"><strong>'.$label_name.'</strong></td>';
                         $html .= '<td width="'.$td_width_name.'" align="center" bgcolor="#cccccc"><strong>'.$label_bjcp_id.'</strong></td>';
@@ -1593,7 +1601,7 @@ if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($en
                     if ($totalRows_stewards > 0) {
                     
                         $html .= '<br><br><strong>'.$label_stewards.'</strong><br>';
-                        $html .= '<table border="1">';
+                        $html .= '<table border="1" width="'.$table_width.'">';
                         $html .= '<tr>';
                         $html .= '<td width="300" align="center" bgcolor="#cccccc"><strong>'.$label_name.'</strong></td>';
                         $html .= '<td width="'.$td_width_name.'" align="center" bgcolor="#cccccc"><strong>'.$label_bjcp_id.'</strong></td>';
@@ -1621,7 +1629,7 @@ if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($en
                     if ($totalRows_staff > 0) {
                         
                         $html .= '<br><br><strong>'.$label_staff.'*</strong><br>';
-                        $html .= '<table border="1">';
+                        $html .= '<table border="1" width="'.$table_width.'">';
                         $html .= '<tr>';
                         $html .= '<td width="300" align="center" bgcolor="#cccccc"><strong>'.$label_name.'</strong></td>';
                         $html .= '<td width="'.$td_width_name.'" align="center" bgcolor="#cccccc"><strong>'.$label_bjcp_id.'</strong></td>';

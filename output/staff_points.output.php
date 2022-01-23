@@ -232,7 +232,7 @@ if ($view == "default") {
 				$output_staff .= "<td>";
 				if ($staff_bjcp_id == $organ_bjcp_id) $output_staff .= "0.0 (".$label_organizer.")";
 				else {
-					if ((array_sum($st_running_total) <= $staff_max_points) && ($staff_points < $organ_max_points)) $output_staff .= $staff_points;
+					if (($st_running_total <= $staff_max_points) && ($staff_points < $organ_max_points)) $output_staff .= $staff_points;
 					else $output_staff .= $organ_max_points;
 				}
 				$output_staff .= "</td>";
