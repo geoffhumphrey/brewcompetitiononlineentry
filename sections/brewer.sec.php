@@ -168,6 +168,41 @@ foreach ($aus_state_abbrevs_names as $key => $value) {
     $aus_state_select .= $value." [".$key."]</option>\n";
 }
 
+$judge_location_avail = "";
+
+do { 
+
+    $location_yes = "";
+    $location_no = "";
+    $judge_avail_info = "";
+    $judge_avail_option = "";
+
+    $a = explode(",", $row_brewer['brewerJudgeLocation']); 
+    $b = "N-".$row_judging3['id']; 
+    foreach ($a as $value) { 
+        if ($value == $b) $location_no = " SELECTED"; 
+    }
+
+    $c = explode(",", $row_brewer['brewerJudgeLocation']); 
+    $d = "Y-".$row_judging3['id']; 
+    foreach ($c as $value) { 
+        if ($value == $d) $location_yes = " SELECTED";
+    }
+
+    $judge_avail_info .= sprintf("<p class=\"bcoem-form-info\">%s (%s)</p>",$row_judging3['judgingLocName'],getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_judging3['judgingDate'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "short", "date-time"));
+
+    $judge_avail_option .= "<select class=\"selectpicker\" name=\"brewerJudgeLocation[]\" id=\"brewerJudgeLocation\" data-width=\"auto\">";
+    $judge_avail_option .= sprintf("<option value=\"N-%s\"%s>%s</option>",$row_judging3['id'],$location_no,$label_no);
+    $judge_avail_option .= sprintf("<option value=\"Y-%s\"%s>%s</option>",$row_judging3['id'],$location_yes,$label_yes);
+    $judge_avail_option .= "</select>";
+    
+    if ((time() < $row_judging3['judgingDate'])  || (($go == "admin") && ($filter != "default"))) {
+        $judge_location_avail .= $judge_avail_info;
+        $judge_location_avail .= $judge_avail_option;
+    }
+
+}  while ($row_judging3 = mysqli_fetch_assoc($judging3)); 
+
 if ($go != "admin") echo $info_msg;
 ?>
 <script type='text/javascript'>
@@ -529,43 +564,13 @@ if (action == "edit") {
 		<input name="brewerJudgeLocation" type="hidden" value="<?php echo "Y-".$row_judging3['id']; ?>" />
         <?php } ?>
         <?php if (($totalRows_judging > 1) || (($go == "admin") && ($filter != "default"))) { ?>
-        <div class="form-group"><!-- Form Group NOT REQUIRED Select -->
+        <div class="form-group"><!-- Form Group NOT REQUIRED Select -->            
+            <?php  if (!empty($judge_location_avail)) { ?>
             <label for="brewerJudgeLocation" class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label_judging_avail; ?></label>
             <div class="col-lg-9 col-md-9 col-sm-8 col-xs-12">
             <!-- Input Here -->
-            
-            <?php do { 
-
-                $location_yes = "";
-                $location_no = "";
-                $judge_avail_info = "";
-                $judge_avail_option = "";
-
-                $a = explode(",", $row_brewer['brewerJudgeLocation']); 
-                $b = "N-".$row_judging3['id']; 
-                foreach ($a as $value) { 
-                    if ($value == $b) $location_no = " SELECTED"; 
-                }
-
-                $c = explode(",", $row_brewer['brewerJudgeLocation']); 
-                $d = "Y-".$row_judging3['id']; 
-                foreach ($c as $value) { 
-                    if ($value == $d) $location_yes = " SELECTED";
-                }
-
-                $judge_avail_info .= sprintf("<p class=\"bcoem-form-info\">%s (%s)</p>",$row_judging3['judgingLocName'],getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_judging3['judgingDate'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "short", "date-time"));
-
-                $judge_avail_option .= "<select class=\"selectpicker\" name=\"brewerJudgeLocation[]\" id=\"brewerJudgeLocation\" data-width=\"auto\">";
-                $judge_avail_option .= sprintf("<option value=\"N-%s\"%s>%s</option>",$row_judging3['id'],$location_no,$label_no);
-                $judge_avail_option .= sprintf("<option value=\"Y-%s\"%s>%s</option>",$row_judging3['id'],$location_yes,$label_yes);
-                $judge_avail_option .= "</select>";
-                
-                if (time() < $row_judging3['judgingDate']) {
-                    echo $judge_avail_info;
-                    echo $judge_avail_option;
-                }
-
-            }  while ($row_judging3 = mysqli_fetch_assoc($judging3)); ?>
+            <?php echo $judge_location_avail; ?>
+            <?php } ?>
             </div>
         </div><!-- ./Form Group -->
         <?php } ?>

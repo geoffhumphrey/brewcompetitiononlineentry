@@ -2469,7 +2469,7 @@ if (((strpos($section, "step") === FALSE) && ($section != "setup")) && ($section
     $judging_past = judging_date_return();
     $judging_started = FALSE;
 
-    if (check_setup($prefix."judging_locations",$database)) {
+    if ((check_setup($prefix."judging_locations",$database)) && (check_update("judgingDateEnd", $prefix."judging_locations"))) {
 
         $query_judging_dates = sprintf("SELECT judgingDate,judgingDateEnd FROM %s",$judging_locations_db_table);
         $judging_dates = mysqli_query($connection,$query_judging_dates) or die (mysqli_error($connection));

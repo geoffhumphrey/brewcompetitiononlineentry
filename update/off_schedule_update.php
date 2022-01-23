@@ -2154,29 +2154,6 @@ if ($row_current_prefs['prefsStyleSet'] == "BJCP2008") {
 
 }
 
-/**
- * Remove BJCP 2008.
- * Once BJCP 2021 is added and BJCP 2008 is removed,
- * do some clean-up of auto-increment ids in the DB.
- */
-
-/*
-$updateSQL = sprintf("DELETE FROM `%s` WHERE brewStyleVersion='BJCP2008'",$styles_db_table);
-mysqli_real_escape_string($connection,$updateSQL);
-$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
-
-$updateSQL = sprintf("ALTER TABLE `%s` DROP `id`;",$styles_db_table);
-mysqli_real_escape_string($connection,$updateSQL);
-$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
-
-$updateSQL = sprintf("ALTER TABLE `%s` ADD `id` INT(11) AUTO_INCREMENT FIRST, ADD PRIMARY KEY (`id`);",$styles_db_table);
-mysqli_real_escape_string($connection,$updateSQL);
-$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
-
-// $output .= "<li>Removed BJCP 2008 Styles from the styles table.</li>";
-
-*/
-
 // Move brewStyleGroup to second position
 $updateSQL = sprintf("ALTER TABLE `%s` MODIFY COLUMN `brewStyleGroup` VARCHAR(3) AFTER `id`;",$styles_db_table);
 mysqli_real_escape_string($connection,$updateSQL);

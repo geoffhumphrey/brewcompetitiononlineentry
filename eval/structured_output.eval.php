@@ -91,10 +91,10 @@ $flaws_table .= "</table>";
 <h5 class="header-h5 header-bdr-bottom"><?php echo $label_aroma; ?><span class="pull-right"><span class="judge-score"><?php echo $row_eval['evalAromaScore']; ?></span>/<?php echo $aroma_possible; ?></span></h5>
 <?php foreach ($aroma_ticks as $key => $value) { ?>
 <div class="row tick-row no-break">
-    <div class="col col-lg-2 col-md-2 col-sm-2 col-xs-12">
+    <div class="col col-lg-2 col-md-2 col-sm-2 col-xs-2">
         <strong><?php echo $key; ?></strong>
     </div>
-    <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12">
+    <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-5">
     <table class="tick-table-sm">
         <tr>
             <td width="9%"><small><?php echo $label_none; ?></small></td>
@@ -116,11 +116,11 @@ $flaws_table .= "</table>";
         </tr>
     </table>
     </div>
-    <div class="col col-lg-1 col-md-1 col-sm-1 col-xs-12">
+    <div class="col col-lg-1 col-md-1 col-sm-1 col-xs-2">
         <small><?php echo $label_inappropriate; ?></small> <i class="<?php if ((isset($aroma_data[$value.'Inappr'])) && ($aroma_data[$value.'Inappr'] == "1")) echo "fa fa-check-square-o"; else echo "fa fa-square-o"; ?>"></i>
     </div>  
-    <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12">
-        <?php if (isset($aroma_data[$value.'Comments'])) echo $aroma_data[$value.'Comments']; ?>
+    <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-3">
+        <?php if (isset($aroma_data[$value.'Comments'])) echo htmlentities($aroma_data[$value.'Comments']); ?>
     </div>
 </div><!-- ./row -->
 <?php } ?>
@@ -129,7 +129,7 @@ $flaws_table .= "</table>";
         <strong><?php echo $label_other; ?></strong>
     </div>
     <div class="col col-lg-10 col-md-10 col-sm-10 col-xs-10">
-        <?php if (isset($aroma_data['evalAromaOther'])) echo $aroma_data['evalAromaOther']; ?>
+        <?php if (isset($aroma_data['evalAromaOther'])) echo htmlentities($aroma_data['evalAromaOther']); ?>
     </div>
 </div><!-- ./row -->
 
@@ -139,10 +139,10 @@ $flaws_table .= "</table>";
 <?php if ($beer) { ?>
 <!-- Appearance: Color (Beer) -->
 <div class="row tick-row no-break">
-    <div class="col col-lg-2 col-md-2 col-sm-2 col-xs-12">
+    <div class="col col-lg-2 col-md-2 col-sm-2 col-xs-2">
         <strong><?php echo $label_color; ?></strong>
     </div>
-    <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12">
+    <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-5">
     <table class="tick-table-sm">
         <tr>
             <td width="9%"><?php echo $label_yellow; ?></td>
@@ -164,20 +164,20 @@ $flaws_table .= "</table>";
         </tr>
     </table>
     </div>
-    <div class="col col-lg-1 col-md-1 col-sm-1 col-xs-12">
+    <div class="col col-lg-1 col-md-1 col-sm-1 col-xs-2">
         <small><?php echo $label_inappropriate; ?></small> <i class="<?php if ((isset($appearance_data['evalAppearanceColorInappr'])) && ($appearance_data['evalAppearanceColorInappr'] == "1")) echo "fa fa-check-square-o"; else echo "fa fa-square-o"; ?>"></i>
     </div>  
-    <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12">
-        <?php if (isset($appearance_data['evalAppearanceColorOther'])) echo $appearance_data['evalAppearanceColorOther']; ?>
+    <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-3">
+        <?php if (isset($appearance_data['evalAppearanceColorOther'])) echo htmlentities($appearance_data['evalAppearanceColorOther']); ?>
     </div>
 </div><!-- ./row -->
 <?php } // end if ($beer); ?>
 <!-- Appearace: Clarity (All Style Types) -->
 <div class="row tick-row no-break">
-    <div class="col col-lg-2 col-md-2 col-sm-2 col-xs-12">
+    <div class="col col-lg-2 col-md-2 col-sm-2 col-xs-2">
         <strong><?php echo $label_clarity; ?></strong>
     </div>
-    <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12">
+    <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-5">
     <table class="tick-table-sm">
         <tr>
             <td width="9%"><?php echo $label_opaque; ?></td>
@@ -199,20 +199,20 @@ $flaws_table .= "</table>";
         </tr>
     </table>
     </div>
-    <div class="col col-lg-1 col-md-1 col-sm-1 col-xs-12">
+    <div class="col col-lg-1 col-md-1 col-sm-1 col-xs-2">
         <small><?php echo $label_inappropriate; ?></small> <i class="<?php if ((isset($appearance_data['evalAppearanceClarityInappr'])) && ($appearance_data['evalAppearanceClarityInappr'] == "1")) echo "fa fa-check-square-o"; else echo "fa fa-square-o"; ?>"></i>
     </div>  
-    <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12">
-        <?php if (isset($appearance_data['evalAppearanceClarityComments'])) echo $appearance_data['evalAppearanceClarityComments']; ?>
+    <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-3">
+        <?php if (isset($appearance_data['evalAppearanceClarityComments'])) echo htmlentities($appearance_data['evalAppearanceClarityComments']); ?>
     </div>
 </div><!-- ./row -->
 <?php if ($beer) { ?>
 <!-- Appearance: Beer Head Size -->
 <div class="row tick-row no-break">
-    <div class="col col-lg-2 col-md-2 col-sm-2 col-xs-12">
+    <div class="col col-lg-2 col-md-2 col-sm-2 col-xs-2">
         <strong><?php echo $label_head.": ".$label_size; ?></strong>
     </div>
-    <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12">
+    <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-5">
     <table class="tick-table-sm">
         <tr>
             <td width="9%"><?php echo $label_none; ?></td>
@@ -234,19 +234,19 @@ $flaws_table .= "</table>";
         </tr>
     </table>
     </div>
-    <div class="col col-lg-1 col-md-1 col-sm-1 col-xs-12">
+    <div class="col col-lg-1 col-md-1 col-sm-1 col-xs-2">
         <small><?php echo $label_inappropriate; ?></small> <i class="<?php if ((isset($appearance_data['evalAppearanceHeadSizeInappr'])) && ($appearance_data['evalAppearanceHeadSizeInappr'] == "1")) echo "fa fa-check-square-o"; else echo "fa fa-square-o"; ?>"></i>
     </div>  
-    <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12">
-        <?php if (isset($appearance_data['evalAppearanceHeadSizeComments'])) echo $appearance_data['evalAppearanceHeadSizeComments']; ?>
+    <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-3">
+        <?php if (isset($appearance_data['evalAppearanceHeadSizeComments'])) echo htmlentities($appearance_data['evalAppearanceHeadSizeComments']); ?>
     </div>
 </div><!-- ./row -->
 <!-- Appearance: Beer Head Retention -->
 <div class="row tick-row no-break">
-    <div class="col col-lg-2 col-md-2 col-sm-2 col-xs-12">
+    <div class="col col-lg-2 col-md-2 col-sm-2 col-xs-2">
         <strong><?php echo $label_head.": ".$label_retention; ?></strong>
     </div>
-    <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12">
+    <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-5">
     <table class="tick-table-sm">
         <tr>
             <td width="9%"><?php echo $label_quick; ?></td>
@@ -266,16 +266,16 @@ $flaws_table .= "</table>";
         </tr>
     </table>
     </div>
-    <div class="col col-lg-1 col-md-1 col-sm-1 col-xs-12">
+    <div class="col col-lg-1 col-md-1 col-sm-1 col-xs-2">
         <small><?php echo $label_inappropriate; ?></small> <i class="<?php if ((isset($appearance_data['evalAppearanceHeadRetenInappr'])) && ($appearance_data['evalAppearanceHeadRetenInappr'] == "1")) echo "fa fa-check-square-o"; else echo "fa fa-square-o"; ?>"></i>
     </div>
 </div><!-- ./row -->
 <!-- Appearance: Beer Head Color -->
 <div class="row tick-row no-break">
-    <div class="col col-lg-2 col-md-2 col-sm-2 col-xs-12">
+    <div class="col col-lg-2 col-md-2 col-sm-2 col-xs-2">
         <strong><?php echo $label_head.": ".$label_color; ?></strong>
     </div>
-    <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12">
+    <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-5">
     <table class="tick-table-sm">
         <tr>
             <td width="9%"><?php echo $label_white; ?></td>
@@ -297,7 +297,7 @@ $flaws_table .= "</table>";
         </tr>
     </table>
     </div>
-    <div class="col col-lg-1 col-md-1 col-sm-1 col-xs-12">
+    <div class="col col-lg-1 col-md-1 col-sm-1 col-xs-2">
         <small><?php echo $label_inappropriate; ?></small> <i class="<?php if ((isset($appearance_data['evalAppearanceHeadColorInappr'])) && ($appearance_data['evalAppearanceHeadColorInappr'] == "1")) echo "fa fa-check-square-o"; else echo "fa fa-square-o"; ?>"></i>
     </div>
 </div><!-- ./row -->
@@ -306,10 +306,10 @@ $flaws_table .= "</table>";
 <?php if (($cider) || ($mead)) { ?>
 <!-- Appearance: Legs (Mead and Cider) -->
 <div class="row tick-row no-break">
-    <div class="col col-lg-2 col-md-2 col-sm-2 col-xs-12">
+    <div class="col col-lg-2 col-md-2 col-sm-2 col-xs-2">
         <strong><?php echo $label_legs; ?></strong>
     </div>
-    <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12">
+    <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-5">
     <table class="tick-table-sm">
         <tr>
             <td width="9%"><small><?php echo $label_none; ?></small></td>
@@ -331,16 +331,16 @@ $flaws_table .= "</table>";
         </tr>
     </table>
     </div>
-    <div class="col col-lg-1 col-md-1 col-sm-1 col-xs-12">
+    <div class="col col-lg-1 col-md-1 col-sm-1 col-xs-2">
         <small><?php echo $label_inappropriate; ?></small> <i class="<?php if ((isset($appearance_data['evalAppearanceLegsInappr'])) && ($appearance_data['evalAppearanceLegsInappr'] == "1")) echo "fa fa-check-square-o"; else echo "fa fa-square-o"; ?>"></i>
     </div>
 </div><!-- ./row -->
 <!-- Appearance: Carbonation (Mead and Cider) -->
 <div class="row tick-row no-break">
-    <div class="col col-lg-2 col-md-2 col-sm-2 col-xs-12">
+    <div class="col col-lg-2 col-md-2 col-sm-2 col-xs-2">
         <strong><?php echo $label_carbonation; ?></strong>
     </div>
-    <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12">
+    <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-5">
     <table class="tick-table-sm">
         <tr>
             <td width="9%"><small><?php echo $label_none; ?></small></td>
@@ -362,7 +362,7 @@ $flaws_table .= "</table>";
         </tr>
     </table>
     </div>
-    <div class="col col-lg-1 col-md-1 col-sm-1 col-xs-12">
+    <div class="col col-lg-1 col-md-1 col-sm-1 col-xs-2">
         <small><?php echo $label_inappropriate; ?></small> <i class="<?php if ((isset($appearance_data['evalAppearanceCarbInappr'])) && ($appearance_data['evalAppearanceCarbInappr'] == "1")) echo "fa fa-check-square-o"; else echo "fa fa-square-o"; ?>"></i>
     </div>
 </div><!-- ./row -->
@@ -373,7 +373,7 @@ $flaws_table .= "</table>";
         <strong><?php echo $label_other; ?></strong>
     </div>
     <div class="col col-lg-10 col-md-10 col-sm-10 col-xs-10">
-        <?php if (isset($appearance_data['evalAppearanceOther'])) echo $appearance_data['evalAppearanceOther']; ?>
+        <?php if (isset($appearance_data['evalAppearanceOther'])) echo htmlentities($appearance_data['evalAppearanceOther']); ?>
     </div>
 </div><!-- ./row -->
 
@@ -381,10 +381,10 @@ $flaws_table .= "</table>";
 <h5 class="header-h5 header-bdr-bottom"><?php echo $label_flavor; ?><span class="pull-right"><span class="judge-score"><?php echo $row_eval['evalFlavorScore']; ?></span>/<?php echo $flavor_possible; ?></span></h5>
 <?php foreach ($flavor_ticks as $key => $value) { ?>
 <div class="row tick-row no-break">
-    <div class="col col-lg-2 col-md-2 col-sm-2 col-xs-12">
+    <div class="col col-lg-2 col-md-2 col-sm-2 col-xs-2">
         <strong><?php echo $key; ?></strong>
     </div>
-    <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12">
+    <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-5">
     <table class="tick-table-sm">
         <tr>
             <td width="9%"><small><?php echo $label_none; ?></small></td>
@@ -406,11 +406,11 @@ $flaws_table .= "</table>";
         </tr>
     </table>
     </div>
-    <div class="col col-lg-1 col-md-1 col-sm-1 col-xs-12">
+    <div class="col col-lg-1 col-md-1 col-sm-1 col-xs-2">
         <small><?php echo $label_inappropriate; ?></small> <i class="<?php if ((isset($flavor_data[$value.'Inappr'])) && ($flavor_data[$value.'Inappr'] == "1")) echo "fa fa-check-square-o"; else echo "fa fa-square-o"; ?>"></i>
     </div>  
-    <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12">
-        <?php if (isset($flavor_data[$value.'Comments'])) echo $flavor_data[$value.'Comments']; ?>
+    <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-3">
+        <?php if (isset($flavor_data[$value.'Comments'])) echo htmlentities($flavor_data[$value.'Comments']); ?>
     </div>
 </div><!-- ./row -->
 <?php } ?>
@@ -418,10 +418,10 @@ $flaws_table .= "</table>";
 <?php if ($beer) { ?>
 <!-- Flavor: Balance (Beer) -->
 <div class="row tick-row no-break">
-    <div class="col col-lg-2 col-md-2 col-sm-2 col-xs-12">
+    <div class="col col-lg-2 col-md-2 col-sm-2 col-xs-2">
         <strong><?php echo $label_balance; ?></strong>
     </div>
-    <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12">
+    <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-5">
     <table class="tick-table-sm">
         <tr>
             <td width="9%"><?php echo $label_hoppy; ?></td>
@@ -443,19 +443,19 @@ $flaws_table .= "</table>";
         </tr>
     </table>
     </div>
-    <div class="col col-lg-1 col-md-1 col-sm-1 col-xs-12">
+    <div class="col col-lg-1 col-md-1 col-sm-1 col-xs-2">
         <small><?php echo $label_inappropriate; ?></small> <i class="<?php if ((isset($flavor_data['evalFlavorBalanceInappr'])) && ($flavor_data['evalFlavorBalanceInappr'] == "1")) echo "fa fa-check-square-o"; else echo "fa fa-square-o"; ?>"></i>
     </div>  
-    <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12">
-        <?php if (isset($flavor_data['evalFlavorBalanceComments'])) echo $flavor_data['evalFlavorBalanceComments']; ?>
+    <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-3">
+        <?php if (isset($flavor_data['evalFlavorBalanceComments'])) echo htmlentities($flavor_data['evalFlavorBalanceComments']); ?>
     </div>
 </div><!-- ./row -->
 <!-- Flavor: Aftertaste (Beer) -->
 <div class="row tick-row no-break">
-    <div class="col col-lg-2 col-md-2 col-sm-2 col-xs-12">
+    <div class="col col-lg-2 col-md-2 col-sm-2 col-xs-2">
         <strong><?php echo $label_finish_aftertaste; ?></strong>
     </div>
-    <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12">
+    <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-5">
     <table class="tick-table-sm">
         <tr>
             <td width="9%"><?php echo $label_dry; ?></td>
@@ -477,11 +477,11 @@ $flaws_table .= "</table>";
         </tr>
     </table>
     </div>
-    <div class="col col-lg-1 col-md-1 col-sm-1 col-xs-12">
+    <div class="col col-lg-1 col-md-1 col-sm-1 col-xs-2">
         <small><?php echo $label_inappropriate; ?></small> <i class="<?php if ((isset($flavor_data['evalFlavorFinishInappr'])) && ($flavor_data['evalFlavorFinishInappr'] == "1")) echo "fa fa-check-square-o"; else echo "fa fa-square-o"; ?>"></i>
     </div>  
-    <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12">
-        <?php if (isset($flavor_data['evalFlavorFinishComments'])) echo $flavor_data['evalFlavorFinishComments']; ?>
+    <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-3">
+        <?php if (isset($flavor_data['evalFlavorFinishComments'])) echo htmlentities($flavor_data['evalFlavorFinishComments']); ?>
     </div>
 </div><!-- ./row -->
 <?php } // end if ($beer) ?>
@@ -489,10 +489,10 @@ $flaws_table .= "</table>";
 <?php if (($mead) || ($cider)) { ?>
 <!-- Flavor: Body (Mead and Cider) -->
 <div class="row tick-row no-break">
-    <div class="col col-lg-2 col-md-2 col-sm-2 col-xs-12">
+    <div class="col col-lg-2 col-md-2 col-sm-2 col-xs-2">
         <strong><?php echo $label_body; ?></strong>
     </div>
-    <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12">
+    <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-5">
     <table class="tick-table-sm">
         <tr>
             <td width="9%"><?php echo $label_thin; ?></td>
@@ -514,20 +514,20 @@ $flaws_table .= "</table>";
         </tr>
     </table>
     </div>
-    <div class="col col-lg-1 col-md-1 col-sm-1 col-xs-12">
+    <div class="col col-lg-1 col-md-1 col-sm-1 col-xs-2">
         <small><?php echo $label_inappropriate; ?></small> <i class="<?php if ((isset($flavor_data['evalFlavorBodyInappr'])) && ($flavor_data['evalFlavorBodyInappr'] == "1")) echo "fa fa-check-square-o"; else echo "fa fa-square-o"; ?>"></i>
     </div>  
-    <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12">
-        <?php if (isset($flavor_data['evalFlavorBodyComments'])) echo $flavor_data['evalFlavorBodyComments']; ?>
+    <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-3">
+        <?php if (isset($flavor_data['evalFlavorBodyComments'])) echo htmlentities($flavor_data['evalFlavorBodyComments']); ?>
     </div>
 </div><!-- ./row -->
 
 <!-- Flavor: Aftertaste (Mead and Cider) -->
 <div class="row tick-row no-break">
-    <div class="col col-lg-2 col-md-2 col-sm-2 col-xs-12">
+    <div class="col col-lg-2 col-md-2 col-sm-2 col-xs-2">
         <strong><?php echo $label_finish_aftertaste; ?></strong>
     </div>
-    <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12">
+    <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-5">
     <table class="tick-table-sm">
         <tr>
             <td width="9%"><?php echo $label_quick; ?></td>
@@ -547,30 +547,30 @@ $flaws_table .= "</table>";
         </tr>
     </table>
     </div>
-    <div class="col col-lg-1 col-md-1 col-sm-1 col-xs-12">
+    <div class="col col-lg-1 col-md-1 col-sm-1 col-xs-2">
         <small><?php echo $label_inappropriate; ?></small> <i class="<?php if ((isset($flavor_data['evalFlavorFinishInappr'])) && ($flavor_data['evalFlavorFinishInappr'] == "1")) echo "fa fa-check-square-o"; else echo "fa fa-square-o"; ?>"></i>
     </div>  
-    <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12">
-        <?php if (isset($flavor_data['evalFlavorFinishComments'])) echo $flavor_data['evalFlavorFinishComments']; ?>
+    <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-3">
+        <?php if (isset($flavor_data['evalFlavorFinishComments'])) echo htmlentities($flavor_data['evalFlavorFinishComments']); ?>
     </div>
 </div><!-- ./row -->
 <!-- Flavor: Balance (Mead and Cider) -->
 <div class="row tick-row no-break other-row">
-    <div class="col col-lg-2 col-md-2 col-sm-2 col-xs-12">
+    <div class="col col-lg-2 col-md-2 col-sm-2 col-xs-2">
         <strong><?php echo $label_balance; ?></strong>
     </div>
-    <div class="col col-lg-10 col-md-10 col-sm-10 col-xs-12">
+    <div class="col col-lg-10 col-md-10 col-sm-10 col-xs-10">
         <?php if (isset($flavor_data['evalFlavorBalance'])) echo $flavor_data['evalFlavorBalance']; ?>
     </div>
 </div><!-- ./row -->
 <?php } // end if (($mead) || ($cider)) ?>
 <!-- Flavor: Other (All) -->
 <div class="row tick-row no-break other-row">
-    <div class="col col-lg-2 col-md-2 col-sm-2 col-xs-12">
+    <div class="col col-lg-2 col-md-2 col-sm-2 col-xs-2">
         <strong><?php echo $label_other; ?></strong>
     </div>
-    <div class="col col-lg-10 col-md-10 col-sm-10 col-xs-12">
-        <?php if (isset($flavor_data['evalFlavorOther'])) echo $flavor_data['evalFlavorOther']; ?>
+    <div class="col col-lg-10 col-md-10 col-sm-10 col-xs-10">
+        <?php if (isset($flavor_data['evalFlavorOther'])) echo htmlentities($flavor_data['evalFlavorOther']); ?>
     </div>
 </div><!-- ./row -->
 <!-- Mouthfeel (Beer only) -->
@@ -578,10 +578,10 @@ $flaws_table .= "</table>";
 <h5 class="header-h5 header-bdr-bottom"><?php echo $label_mouthfeel ?><span class="pull-right"><span class="judge-score"><?php echo $row_eval['evalMouthfeelScore']; ?></span>/<?php echo $mouthfeel_possible; ?></span></h5>
 <?php foreach ($mouthfeel_ticks as $key => $value) { ?>
 <div class="row tick-row no-break">
-    <div class="col col-lg-2 col-md-2 col-sm-2 col-xs-12">
+    <div class="col col-lg-2 col-md-2 col-sm-2 col-xs-2">
         <strong><?php echo $key; ?></strong>
     </div>
-    <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12">
+    <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-5">
     <table class="tick-table-sm no-break">
         <tr>
             <td width="9%"><?php if (strpos($key, $label_body) !== false) echo $label_thin; else echo "<small>".$label_none."</small>"; ?></td>
@@ -603,70 +603,70 @@ $flaws_table .= "</table>";
         </tr>
     </table>
     </div>
-    <div class="col col-lg-1 col-md-1 col-sm-1 col-xs-12">
+    <div class="col col-lg-1 col-md-1 col-sm-1 col-xs-2">
         <small><?php echo $label_inappropriate; ?></small> <i class="<?php if ((isset($mouthfeel_data[$value.'Inappr'])) && ($mouthfeel_data[$value.'Inappr'] == "1")) echo "fa fa-check-square-o"; else echo "fa fa-square-o"; ?>"></i>
     </div>  
-    <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12">
-        <?php if (isset($mouthfeel_data[$value.'Comments'])) echo $mouthfeel_data[$value.'Comments']; ?>
+    <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-3">
+        <?php if (isset($mouthfeel_data[$value.'Comments'])) echo htmlentities($mouthfeel_data[$value.'Comments']); ?>
     </div>
 </div><!-- ./row -->
 <?php } ?>
 <div class="row tick-row no-break other-row">
-    <div class="col col-lg-2 col-md-2 col-sm-2 col-xs-12">
+    <div class="col col-lg-2 col-md-2 col-sm-2 col-xs-2">
         <strong><?php echo $label_other; ?></strong>
     </div>
-    <div class="col col-lg-10 col-md-10 col-sm-10 col-xs-12">
-        <?php if (isset($mouthfeel_data['evalMouthfeelOther'])) echo $mouthfeel_data['evalMouthfeelOther']; ?>
+    <div class="col col-lg-10 col-md-10 col-sm-10 col-xs-10">
+        <?php if (isset($mouthfeel_data['evalMouthfeelOther'])) echo htmlentities($mouthfeel_data['evalMouthfeelOther']); ?>
     </div>
 </div><!-- ./row -->
 <?php } // end if ($beer) ?>
 <!-- Overall Impression -->
 <h5 class="header-h5 header-bdr-bottom"><?php echo $label_overall_impression; ?><span class="pull-right"><span class="judge-score"><?php echo $row_eval['evalOverallScore']; ?></span>/<?php echo $overall_possible; ?></span></h5>
-<p><?php echo $row_eval['evalOverallComments']; ?></p>
+<p><?php echo htmlentities($row_eval['evalOverallComments']); ?></p>
 <div class="row section-row no-break">
-    <div class="col col-lg-2 col-md-2 col-sm-2 col-xs-12">
+    <div class="col col-lg-2 col-md-2 col-sm-2 col-xs-2">
     <strong><?php echo $label_style_accuracy; ?></strong>
     </div>
-    <div class="col col-lg-10 col-md-10 col-sm-10 col-xs-12">
-    <table class="tick-table">
+    <div class="col col-lg-7 col-md-8 col-sm-9 col-xs-9">
+    <table class="tick-table" width="700">
     	<tr>
-    		<td nowrap="nowrap" width="20%" style="text-align: right; border-right: 1px solid #000; padding-right: 5px;"><?php echo $label_not_style; ?></td>
+    		<td nowrap="nowrap" width="30%" style="text-align: right; border-right: 1px solid #000; padding-right: 5px;"><?php echo $label_not_style; ?></td>
     		<?php for ($i=1; $i <= 10; $i++) { ?>
-    		<td width="5%" style="text-align: right; border-bottom: 1px solid #000;"><?php if ($row_eval['evalStyleAccuracy'] == $i) echo "<i class=\"fa fa-lg fa-caret-down\"></i>"; else echo "&nbsp;"; ?></td>
+    		<td style="text-align: right; border-bottom: 1px solid #000;"><?php if ($row_eval['evalStyleAccuracy'] == $i) echo "<i class=\"fa fa-lg fa-caret-down\"></i>"; else echo "&nbsp;"; ?></td>
     		<?php } ?>
-    		<td nowrap="nowrap" style="border-left: 1px solid #000; padding-left: 5px;"><?php echo $label_classic_example; ?></td>
+    		<td nowrap="nowrap" width="30%"  style="border-left: 1px solid #000; padding-left: 5px;"><?php echo $label_classic_example; ?></td>
     	</tr>
     </table>
     </div>
 </div>
 <div class="row tick-row no-break">
-    <div class="col col-lg-2 col-md-2 col-sm-2 col-xs-12">
+    <div class="col col-lg-2 col-md-2 col-sm-2 col-xs-2">
     <strong><?php echo $label_tech_merit; ?></strong>
     </div>
-    <div class="col col-lg-10 col-md-10 col-sm-10 col-xs-12">
-    <table class="tick-table">
+    <div class="col col-lg-7 col-md-8 col-sm-9 col-xs-9">
+    <table class="tick-table" width="700">
     	<tr>
-    		<td nowrap="nowrap" width="20%" style="text-align: right; border-right: 1px solid #000; padding-right: 5px;"><?php echo $label_significant_flaws; ?></td>
+    		<td nowrap="nowrap" width="30%" style="text-align: right; border-right: 1px solid #000; padding-right: 5px;"><?php echo $label_significant_flaws; ?></td>
     		<?php for ($i=1; $i <= 10; $i++) { ?>
-    		<td width="5%" style="border-bottom: 1px solid #000; text-align: center;"><?php if ($row_eval['evalTechMerit'] == $i) echo "<i class=\"fa fa-lg fa-caret-down\"></i>"; else echo "&nbsp;"; ?></td>
+    		<td style="border-bottom: 1px solid #000; text-align: center;"><?php if ($row_eval['evalTechMerit'] == $i) echo "<i class=\"fa fa-lg fa-caret-down\"></i>"; else echo "&nbsp;"; ?></td>
     		<?php } ?>
-    		<td nowrap="nowrap" style="border-left: 1px solid #000; padding-left: 5px;"><?php echo $label_flawless; ?></td>
+    		<td nowrap="nowrap" width="30%" style="border-left: 1px solid #000; padding-left: 5px;"><?php echo $label_flawless; ?></td>
     	</tr>
     </table>
     </div>
 </div>
 <div class="row tick-row no-break">
-    <div class="col col-lg-2 col-md-2 col-sm-2 col-xs-12">
+    <div class="col col-lg-2 col-md-2 col-sm-2 col-xs-2">
     <strong><?php echo $label_intangibles; ?></strong>
     </div>
-    <div class="col col-lg-10 col-md-10 col-sm-10 col-xs-12">
-    <table class="tick-table">
+    <div class="col col-lg-7 col-md-8 col-sm-9 col-xs-9">
+    <table class="tick-table" width="700">
     	<tr>
-    		<td nowrap="nowrap" width="20%" style="text-align: right; border-right: 1px solid #000; padding-right: 5px;"><?php echo $label_lifeless; ?></td>
+    		<td nowrap="nowrap" width="30%" style="text-align: right; border-right: 1px solid #000; padding-right: 5px;"><?php echo $label_lifeless; ?></td>
     		<?php for ($i=1; $i <= 10; $i++) { ?>
-    		<td width="5%" style="border-bottom: 1px solid #000; text-align: center;"><?php if ($row_eval['evalIntangibles'] == $i) echo "<i class=\"fa fa-lg fa-caret-down\"></i>"; else echo "&nbsp;"; ?></td>
+    		<td style="border-bottom: 1px solid #000; text-align: center;"><?php if ($row_eval['evalIntangibles'] == $i) echo "<i class=\"fa fa-lg fa-caret-down\"></i>"; else echo "&nbsp;"; ?></td>
     		<?php } ?>
-    		<td nowrap="nowrap" style="border-left: 1px solid #000; padding-left: 5px;"><?php echo $label_wonderful; ?></td>
+    		<td nowrap="nowrap" width="30%"  style="border-left: 1px solid #000; padding-left: 5px;"><?php echo $label_wonderful; ?></td>
     	</tr>
     </table>
     </div>
@@ -681,70 +681,70 @@ $flaws_table .= "</table>";
 <div class="row footer-descriptor no-break" style="padding: 20px 0;">
 	<div class="col col-lg-6 col-md-6 col-sm-6 col-xs-6">
     	<div class="row <?php if ($score >= 45) echo "strong-text box-plain"; ?>">
-            <div class="col col-lg-2 col-md-2 col-sm-2 col-xs-12 no-wrap">
+            <div class="col col-lg-2 col-md-2 col-sm-2 col-xs-2 no-wrap">
             <?php echo $label_outstanding; ?>
             </div>
-            <div class="col col-lg-2 col-md-2 col-sm-2 col-xs-12 no-wrap">
+            <div class="col col-lg-2 col-md-2 col-sm-2 col-xs-2 no-wrap">
             (45-50)
             </div>
-            <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12">
+            <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-10">
             <?php echo $descr_outstanding; ?>
             </div>
         </div>
         <div class="row <?php if (($score >= 38) && ($score <= 44)) echo "strong-text box-plain"; ?>">
-            <div class="col col-lg-2 col-md-2 col-sm-2 col-xs-12">
+            <div class="col col-lg-2 col-md-2 col-sm-2 col-xs-2">
             <?php echo $label_excellent; ?>
             </div>
-            <div class="col col-lg-2 col-md-2 col-sm-2 col-xs-12 no-wrap">
+            <div class="col col-lg-2 col-md-2 col-sm-2 col-xs-2 no-wrap">
             (38-44)
             </div>
-            <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12">
+            <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-10">
             <?php echo $descr_excellent; ?>
             </div>
         </div>
         <div class="row <?php if (($score >= 30) && ($score <= 37)) echo "strong-text box-plain"; ?>">
-            <div class="col col-lg-2 col-md-2 col-sm-2 col-xs-12 no-wrap">
+            <div class="col col-lg-2 col-md-2 col-sm-2 col-xs-2 no-wrap">
             <?php echo $label_very_good; ?>
             </div>
-            <div class="col col-lg-2 col-md-2 col-sm-2 col-xs-12 no-wrap">
+            <div class="col col-lg-2 col-md-2 col-sm-2 col-xs-2 no-wrap">
             (30-37)
             </div>
-            <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12">
+            <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-10">
             <?php echo $descr_very_good; ?>
             </div>
         </div>
     </div>
     <div class="col col-lg-6 col-md-6 col-sm-6 col-xs-6">
     	<div class="row <?php if (($score >= 21) && ($score <= 29)) echo "strong-text box-plain"; ?>">
-            <div class="col col-lg-2 col-md-2 col-sm-2 col-xs-12 no-wrap">
+            <div class="col col-lg-2 col-md-2 col-sm-2 col-xs-2 no-wrap">
             <?php echo $label_good; ?>
             </div>
-            <div class="col col-lg-2 col-md-2 col-sm-2 col-xs-12 no-wrap">
+            <div class="col col-lg-2 col-md-2 col-sm-2 col-xs-2 no-wrap">
             (21-29)
             </div>
-            <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12">
+            <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-10">
             <?php echo $descr_good; ?>
             </div>
         </div>
         <div class="row <?php if (($score >= 14) && ($score <= 20)) echo "strong-text box-plain"; ?>">
-            <div class="col col-lg-2 col-md-2 col-sm-2 col-xs-12 no-wrap">
+            <div class="col col-lg-2 col-md-2 col-sm-2 col-xs-2 no-wrap">
             <?php echo $label_fair; ?>
             </div>
-            <div class="col col-lg-2 col-md-2 col-sm-2 col-xs-12 no-wrap">
+            <div class="col col-lg-2 col-md-2 col-sm-2 col-xs-2 no-wrap">
             (14-20)
             </div>
-            <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12">
+            <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-10">
             <?php echo $descr_fair; ?>
             </div>
         </div>
         <div class="row <?php if (($score >= 0) && ($score <= 13)) echo "strong-text box-plain"; ?>">
-            <div class="col col-lg-2 col-md-2 col-sm-2 col-xs-12 no-wrap">
+            <div class="col col-lg-2 col-md-2 col-sm-2 col-xs-2 no-wrap">
             <?php echo $label_problematic; ?>
             </div>
-            <div class="col col-lg-2 col-md-2 col-sm-2 col-xs-12 no-wrap">
+            <div class="col col-lg-2 col-md-2 col-sm-2 col-xs-2 no-wrap">
             (00-13)
             </div>
-            <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12">
+            <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-10">
             <?php echo $descr_problematic; ?>
             </div>
         </div>

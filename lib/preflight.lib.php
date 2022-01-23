@@ -21,6 +21,7 @@ if (check_setup($prefix."system",$database)) {
 	}
 	
 	if ((HOSTED) && ($row_system['setup_last_step'] == 9)) $hosted_setup = TRUE;
+	$check_setup = TRUE;
 
 }
 
@@ -41,6 +42,8 @@ if (check_setup($prefix."bcoem_sys",$database)) {
 
 }
 
+
+
 if ((!isset($_SESSION['currentVersion'])) || ((isset($_SESSION['currentVersion'])) && ($_SESSION['currentVersion'] == 0))) {
 	
 	// The following line will need to change with future conversions
@@ -55,24 +58,29 @@ if ((!isset($_SESSION['currentVersion'])) || ((isset($_SESSION['currentVersion']
 		$setup_relocate = "Location: ".$base_url."update.php";
 	}
 
-	elseif ((MAINT) && ($section != "maintenance")) {
+	elseif (MAINT) {
 		$setup_success = FALSE;
 		$setup_relocate = "Location: ".$base_url."maintenance.php";
 	}
 
 	if ($check_setup) {
 
-		// echo "Setup checked.<br>";
+		/**
+		 * Check if "prefsShipping" column is in the prefs table 
+		 * since it was added in the 2.1.6.0 release. 
+		 * If not, run the update.
+		 */
 
-		// Check if "prefsShipping" column is in the prefs table since it was added in the 2.1.6.0 release
-		// If not, run the update
 		if (!check_update("prefsShipping", $prefix."preferences")) {
 			$update_required = TRUE;
 			$setup_success = FALSE;
 			$setup_relocate = "Location: ".$base_url."update.php";
 		}
 
-		// Check if setup was completed successfully
+		/**
+		 * Check if setup was completed successfully
+		 */
+		
 		if ($row_system['setup'] == 0) {
 			$setup_success = FALSE;
 			$setup_relocate = "Location: ".$base_url."setup.php?section=step".($row_system['setup_last_step']+1);
@@ -88,20 +96,20 @@ if ((!isset($_SESSION['currentVersion'])) || ((isset($_SESSION['currentVersion']
 		}
 
 		/**
-		 * If the current version is the same as what is in the DB, trigger a force update
-		 * if system version date in DB is prior to the current version date.
-		 * Covers updates made in between pre-releases and full version.
+		 * If the current version is the same as what is in 
+		 * the DB, trigger a force update.
+		 * if system version date in DB is prior to the 
+		 * current version date.
+		 * Covers updates made in between pre-releases 
+		 * and full version.
 		 */
 
 		if ($row_system['version'] == $current_version) {
 			if ((strtotime($row_system['version_date'])) < ($current_version_date)) $force_update = TRUE;
 			$setup_success = TRUE;
-			// echo "Versions match.<br>";
 		}
 
 		if ($row_system['version'] != $current_version) {
-
-			// echo "Versions don't match.<br>";
 
 			// Run update scripts if required
 			if ($update_required) {
@@ -127,23 +135,28 @@ if ((!isset($_SESSION['currentVersion'])) || ((isset($_SESSION['currentVersion']
 	}
 
 	else {
-		$no_updates_needed = TRUE;
+		if (!$force_update) $no_updates_needed = TRUE;
 		if (!$system_name_change) {
 			$query_sys = sprintf("RENAME TABLE %s TO %s",$prefix."system",$prefix."bcoem_sys");
 			$sys = mysqli_query($connection,$query_sys) or die (mysqli_error($connection));
-			$row_sys = mysqli_fetch_assoc($sys);
 		}
 	}
 
 } // end if (!isset($_SESSION['currentVersion']))
 
 /*
+if ($system_name_change) echo "System DB table name has been changed to bcoem_sys.<br>";
+else echo "System DB table name has NOT been changed to bcoem_sys.<br>";
+if ($check_setup) echo "Setup checked.<br>";
+else echo "Setup NOT checked.<br>";
+if ($row_system['version'] == $current_version) echo "Versions match.<br>";
+else echo "Versions DO NOT match.<br>";
+if ($force_update) echo "Update will run.<br>";
+else echo "Update will NOT run.<br>";
 echo $row_system['version'];
 echo "<br>";
 echo $current_version;
 echo "<br>";
-if ($check_setup) echo "CS Yes."; else echo "CS No.";
-echo "<br>";
-if ($force_update) echo "FU Yes."; else echo "FU No."; exit ();
+exit();
 */
 ?>

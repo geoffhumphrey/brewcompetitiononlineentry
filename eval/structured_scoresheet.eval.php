@@ -74,7 +74,7 @@ if ($action == "edit") {
             </div>
 		</div>
 		<div class="col-md-4 col-sm-12 col-xs-12">
-			<input class="form-control" type="text" id="<?php echo $value; ?>Comments" name="<?php echo $value; ?>Comments" placeholder="<?php echo $label_comments; ?>" value="<?php if ($action == "edit") { if (isset($aroma_data[$value.'Comments'])) echo $aroma_data[$value.'Comments']; } ?>"> 
+			<input class="form-control" type="text" id="<?php echo $value; ?>Comments" name="<?php echo $value; ?>Comments" placeholder="<?php echo $label_comments; ?>" value="<?php if ($action == "edit") { if (isset($aroma_data[$value.'Comments'])) echo htmlentities($aroma_data[$value.'Comments']); } ?>"> 
 		</div>
 	</div>
 	<div class="help-block small with-errors"></div>
@@ -87,7 +87,7 @@ if ($action == "edit") {
 			<label for="evalAromaOther"><?php echo $label_other; ?></label>
 		</div>
 		<div class="col-md-9 col-sm-12 col-xs-12">
-			<input class="form-control" type="text" id="evalAromaOther" name="evalAromaOther" placeholder="" value="<?php if ($action == "edit") { if (isset($aroma_data['evalAromaOther'])) echo $aroma_data['evalAromaOther']; } ?>">
+			<input class="form-control" type="text" id="evalAromaOther" name="evalAromaOther" placeholder="" value="<?php if ($action == "edit") { if (isset($aroma_data['evalAromaOther'])) echo htmlentities($aroma_data['evalAromaOther']); } ?>">
 			<div class="help-block small"><?php echo $evaluation_info_034; ?></div>
 		</div>	
 	</div>
@@ -135,7 +135,7 @@ if ($action == "edit") {
             </div>
 		</div>
 		<div class="col-md-4 col-sm-12 col-xs-12">
-			<input class="form-control" type="text" id="evalAppearanceColorOther" name="evalAppearanceColorOther" placeholder="<?php echo $label_other; ?>" value="<?php if ($action == "edit") { if (isset($appearance_data['evalAppearanceColorOther'])) echo $appearance_data['evalAppearanceColorOther']; } ?>"> 
+			<input class="form-control" type="text" id="evalAppearanceColorOther" name="evalAppearanceColorOther" placeholder="<?php echo $label_other; ?>" value="<?php if ($action == "edit") { if (isset($appearance_data['evalAppearanceColorOther'])) echo htmlentities($appearance_data['evalAppearanceColorOther']); } ?>"> 
 		</div>
 	</div>
 	<div class="help-block small with-errors"></div>
@@ -161,7 +161,7 @@ if ($action == "edit") {
             </div>
 		</div>
 		<div class="col-md-4 col-sm-12 col-xs-12">
-			<input class="form-control" type="text" id="evalAppearanceColorOther" name="evalAppearanceColorOther" placeholder="<?php echo $label_other; ?>"value="<?php if ($action == "edit") { if (isset($appearance_data['evalAppearanceColorOther'])) echo $appearance_data['evalAppearanceColorOther']; } ?>"> 
+			<input class="form-control" type="text" id="evalAppearanceColorOther" name="evalAppearanceColorOther" placeholder="<?php echo $label_other; ?>"value="<?php if ($action == "edit") { if (isset($appearance_data['evalAppearanceColorOther'])) echo htmlentities($appearance_data['evalAppearanceColorOther']); } ?>"> 
 		</div>
 	</div>
 	<div class="help-block small with-errors"></div>
@@ -187,7 +187,7 @@ if ($action == "edit") {
             </div>
 		</div>
 		<div class="col-md-4 col-sm-12 col-xs-12">
-			<input class="form-control" type="text" id="evalAppearanceColorOther" name="evalAppearanceColorOther" placeholder="<?php echo $label_other; ?>" value="<?php if ($action == "edit") { if (isset($appearance_data['evalAppearanceColorOther'])) echo $appearance_data['evalAppearanceColorOther']; } ?>"> 
+			<input class="form-control" type="text" id="evalAppearanceColorOther" name="evalAppearanceColorOther" placeholder="<?php echo $label_other; ?>" value="<?php if ($action == "edit") { if (isset($appearance_data['evalAppearanceColorOther'])) echo htmlentities($appearance_data['evalAppearanceColorOther']); } ?>"> 
 		</div>
 	</div>
 	<div class="help-block small with-errors"></div>
@@ -222,7 +222,7 @@ if ($action == "edit") {
 			<label for="evalAppearanceOther"><?php echo $label_other; ?></label>
 		</div>
 		<div class="col-md-9 col-sm-9 col-xs-12">
-			<input class="form-control" type="text" id="evalAppearanceOther" name="evalAppearanceOther" placeholder="<?php echo $label_legs." ".$label_lacing." ".$label_particulate; ?>" value="<?php if ($action == "edit") { if (isset($appearance_data['evalAppearanceOther'])) echo $appearance_data['evalAppearanceOther']; } ?>">
+			<input class="form-control" type="text" id="evalAppearanceOther" name="evalAppearanceOther" placeholder="<?php echo $label_legs." ".$label_lacing." ".$label_particulate; ?>" value="<?php if ($action == "edit") { if (isset($appearance_data['evalAppearanceOther'])) echo htmlentities($appearance_data['evalAppearanceOther']); } ?>">
 		</div>	
 	</div>
 </div>
@@ -390,7 +390,7 @@ if ($action == "edit") {
             </div>
 		</div>
 		<div class="col-md-4 col-sm-12 col-xs-12">
-			<input class="form-control" type="text" id="<?php echo $value; ?>Comments" name="<?php echo $value; ?>Comments" placeholder="<?php echo $label_comments; ?>" value="<?php if ($action == "edit") { if (isset($flavor_data[$value.'Comments'])) echo $flavor_data[$value.'Comments']; } ?>"> 
+			<input class="form-control" type="text" id="<?php echo $value; ?>Comments" name="<?php echo $value; ?>Comments" placeholder="<?php echo $label_comments; ?>" value="<?php if ($action == "edit") { if (isset($flavor_data[$value.'Comments'])) echo htmlentities($flavor_data[$value.'Comments']); } ?>"> 
 		</div>
 	</div>
 	<div class="help-block small with-errors"></div>
@@ -416,7 +416,7 @@ if ($action == "edit") {
             </div>
 		</div>
 		<div class="col-md-4 col-sm-12 col-xs-12">
-			<input class="form-control" type="text" id="evalFlavorBalanceComments" name="evalFlavorBalanceComments" placeholder="<?php echo $label_comments; ?>"  value="<?php if ($action == "edit") { if (isset($flavor_data['evalFlavorBalanceComments'])) echo $flavor_data['evalFlavorBalanceComments']; } ?>"> 
+			<input class="form-control" type="text" id="evalFlavorBalanceComments" name="evalFlavorBalanceComments" placeholder="<?php echo $label_comments; ?>"  value="<?php if ($action == "edit") { if (isset($flavor_data['evalFlavorBalanceComments'])) echo htmlentities($flavor_data['evalFlavorBalanceComments']); } ?>"> 
 		</div>
 	</div>
 	<div class="help-block small with-errors"></div>
@@ -440,7 +440,7 @@ if ($action == "edit") {
             </div>
 		</div>
 		<div class="col-md-4 col-sm-12 col-xs-12">
-			<input class="form-control" type="text" id="evalFlavorFinishComments" name="evalFlavorFinishComments" placeholder="<?php echo $label_comments; ?>" value="<?php if ($action == "edit") { if (isset($flavor_data['evalFlavorFinishComments'])) echo $flavor_data['evalFlavorFinishComments']; } ?>"> 
+			<input class="form-control" type="text" id="evalFlavorFinishComments" name="evalFlavorFinishComments" placeholder="<?php echo $label_comments; ?>" value="<?php if ($action == "edit") { if (isset($flavor_data['evalFlavorFinishComments'])) echo htmlentities($flavor_data['evalFlavorFinishComments']); } ?>"> 
 		</div>
 	</div>
 	<div class="help-block small with-errors"></div>
@@ -467,7 +467,7 @@ if ($action == "edit") {
             </div>
 		</div>
 		<div class="col-md-4 col-sm-12 col-xs-12">
-			<input class="form-control" type="text" id="evalFlavorBodyComments" name="evalFlavorBodyComments" placeholder="<?php echo $label_comments; ?>" value="<?php if ($action == "edit") { if (isset($flavor_data['evalFlavorBodyComments'])) echo $flavor_data['evalFlavorBodyComments']; } ?>"> 
+			<input class="form-control" type="text" id="evalFlavorBodyComments" name="evalFlavorBodyComments" placeholder="<?php echo $label_comments; ?>" value="<?php if ($action == "edit") { if (isset($flavor_data['evalFlavorBodyComments'])) echo htmlentities($flavor_data['evalFlavorBodyComments']); } ?>"> 
 		</div>
 	</div>
 	<div class="help-block small with-errors"></div>
@@ -491,7 +491,7 @@ if ($action == "edit") {
             </div>
 		</div>
 		<div class="col-md-4 col-sm-12 col-xs-12">
-			<input class="form-control" type="text" id="evalFlavorFinishComments" name="evalFlavorFinishComments" placeholder="<?php echo $label_comments; ?>" value="<?php if ($action == "edit") { if (isset($flavor_data['evalFlavorFinishComments'])) echo $flavor_data['evalFlavorFinishComments']; } ?>"> 
+			<input class="form-control" type="text" id="evalFlavorFinishComments" name="evalFlavorFinishComments" placeholder="<?php echo $label_comments; ?>" value="<?php if ($action == "edit") { if (isset($flavor_data['evalFlavorFinishComments'])) echo htmlentities($flavor_data['evalFlavorFinishComments']); } ?>"> 
 		</div>
 	</div>
 	<div class="help-block small with-errors"></div>
@@ -515,7 +515,7 @@ if ($action == "edit") {
 			<label for="evalFlavorOther"><?php echo $label_other; ?></label>
 		</div>
 		<div class="col-md-9 col-sm-9 col-xs-12">
-			<input class="form-control" type="text" id="evalFlavorOther" name="evalFlavorOther" placeholder="" value="<?php if ($action == "edit") { if (isset($flavor_data['evalFlavorOther'])) echo $flavor_data['evalFlavorOther']; } ?>">
+			<input class="form-control" type="text" id="evalFlavorOther" name="evalFlavorOther" placeholder="" value="<?php if ($action == "edit") { if (isset($flavor_data['evalFlavorOther'])) echo htmlentities($flavor_data['evalFlavorOther']); } ?>">
 			<div class="help-block small"><?php echo $evaluation_info_034; ?></div>
 		</div>	
 	</div>
@@ -562,7 +562,7 @@ if ($action == "edit") {
             </div>
 		</div>
 		<div class="col-md-4 col-sm-12 col-xs-12">
-			<input class="form-control" type="text" id="<?php echo $value; ?>Comments" name="<?php echo $value; ?>Comments" placeholder="<?php echo $label_comments; ?>" value="<?php if ($action == "edit") { if (isset($mouthfeel_data[$value.'Comments'])) echo $mouthfeel_data[$value.'Comments']; } ?>"> 
+			<input class="form-control" type="text" id="<?php echo $value; ?>Comments" name="<?php echo $value; ?>Comments" placeholder="<?php echo $label_comments; ?>" value="<?php if ($action == "edit") { if (isset($mouthfeel_data[$value.'Comments'])) echo htmlentities($mouthfeel_data[$value.'Comments']); } ?>"> 
 		</div>
 	</div>
 	<div class="help-block small with-errors"></div>
@@ -574,7 +574,7 @@ if ($action == "edit") {
 			<label for="evalMouthfeelOther"><?php echo $label_other; ?></label>
 		</div>
 		<div class="col-md-9 col-sm-12 col-xs-12">
-			<input class="form-control" type="text" id="evalMouthfeelOther" name="evalMouthfeelOther" placeholder="" value="<?php if ($action == "edit") { if (isset($mouthfeel_data['evalMouthfeelOther'])) echo $mouthfeel_data['evalMouthfeelOther']; } ?>">
+			<input class="form-control" type="text" id="evalMouthfeelOther" name="evalMouthfeelOther" placeholder="" value="<?php if ($action == "edit") { if (isset($mouthfeel_data['evalMouthfeelOther'])) echo htmlentities($mouthfeel_data['evalMouthfeelOther']); } ?>">
 			<div class="help-block small"><?php echo $evaluation_info_034; ?></div>
 		</div>	
 	</div>
@@ -646,7 +646,7 @@ if ($action == "edit") {
 <!-- Overall Feedback -->
 <div class="form-group">
     <label for="evalOverallComments"><?php echo $label_feedback; ?></label>
-    <textarea class="form-control" name="evalOverallComments" rows="6" placeholder="" maxlength="800" data-error="<?php echo $evaluation_info_061; ?>" required><?php if ($action == "edit") echo $row_eval['evalOverallComments']; ?></textarea>
+    <textarea class="form-control" name="evalOverallComments" rows="6" placeholder="" maxlength="800" data-error="<?php echo $evaluation_info_061; ?>" required><?php if ($action == "edit") echo htmlentities($row_eval['evalOverallComments']); ?></textarea>
     <div class="help-block small"><?php echo $evaluation_info_035; ?></div>
     <div class="help-block small with-errors"></div>
 </div>

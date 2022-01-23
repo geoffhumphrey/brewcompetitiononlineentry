@@ -25,7 +25,7 @@ else $beer = TRUE;
 <div class="form-group">
     <label for="evalAromaComments"><?php echo $label_comments; ?></label>
     <p><small><?php echo $evaluation_info_076; ?></small></p>
-    <textarea class="form-control" name="evalAromaComments" rows="6" placeholder="450 <?php echo $evaluation_info_060; ?>" data-error="<?php echo $evaluation_info_061; ?>" maxlength="450" required><?php if ($action == "edit") echo $row_eval['evalAromaComments']; ?></textarea>
+    <textarea class="form-control" name="evalAromaComments" rows="6" placeholder="450 <?php echo $evaluation_info_060; ?>" data-error="<?php echo $evaluation_info_061; ?>" maxlength="450" required><?php if ($action == "edit") echo htmlentities($row_eval['evalAromaComments']); ?></textarea>
     <div class="help-block small with-errors"></div>
 </div>
 <!-- Appearance -->
@@ -48,7 +48,7 @@ else $beer = TRUE;
 <div class="form-group">
     <label for="evalAppearanceComments"><?php echo $label_comments; ?></label>
     <p><small><?php echo $evaluation_info_077; ?></small></p>
-    <textarea class="form-control" name="evalAppearanceComments" rows="6" placeholder="450 <?php echo $evaluation_info_060; ?>" data-error="<?php echo $evaluation_info_061; ?>" maxlength="450" required><?php if ($action == "edit") echo $row_eval['evalAppearanceComments']; ?></textarea>
+    <textarea class="form-control" name="evalAppearanceComments" rows="6" placeholder="450 <?php echo $evaluation_info_060; ?>" data-error="<?php echo $evaluation_info_061; ?>" maxlength="450" required><?php if ($action == "edit") echo htmlentities($row_eval['evalAppearanceComments']); ?></textarea>
     <div class="help-block small with-errors"></div>
 </div>
 <!-- Flavor -->
@@ -71,7 +71,7 @@ else $beer = TRUE;
 <div class="form-group">
     <label for="evalFlavorComments"><?php echo $label_comments; ?></label>
     <p><small><?php echo $evaluation_info_078; ?></small></p>
-    <textarea class="form-control" name="evalFlavorComments" rows="6" placeholder="450 <?php echo $evaluation_info_060; ?>" data-error="<?php echo $evaluation_info_061; ?>" maxlength="450" required><?php if ($action == "edit") echo $row_eval['evalFlavorComments']; ?></textarea>
+    <textarea class="form-control" name="evalFlavorComments" rows="6" placeholder="450 <?php echo $evaluation_info_060; ?>" data-error="<?php echo $evaluation_info_061; ?>" maxlength="450" required><?php if ($action == "edit") echo htmlentities($row_eval['evalFlavorComments']); ?></textarea>
     <div class="help-block small with-errors"></div>
 </div>
 <?php if ($beer) { ?>
@@ -95,7 +95,7 @@ else $beer = TRUE;
 <div class="form-group">
     <label for="evalMouthfeelComments"><?php echo $label_comments; ?></label>
     <p><small><?php echo $evaluation_info_079; ?></small></p>
-    <textarea class="form-control" name="evalMouthfeelComments" rows="6" placeholder="450 <?php echo $evaluation_info_060; ?>" data-error="<?php echo $evaluation_info_061; ?>" maxlength="450" required><?php if ($action == "edit") echo $row_eval['evalMouthfeelComments']; ?></textarea>
+    <textarea class="form-control" name="evalMouthfeelComments" rows="6" placeholder="450 <?php echo $evaluation_info_060; ?>" data-error="<?php echo $evaluation_info_061; ?>" maxlength="450" required><?php if ($action == "edit") echo htmlentities($row_eval['evalMouthfeelComments']); ?></textarea>
     <div class="help-block small with-errors"></div>
 </div>
 <?php } ?>
@@ -119,7 +119,7 @@ else $beer = TRUE;
 <div class="form-group">
     <label for="evalOverallComments"><?php echo $label_comments; ?></label>
     <p><small><?php echo $evaluation_info_080; ?></small></p>
-    <textarea class="form-control" name="evalOverallComments" rows="6" placeholder="800 <?php echo $evaluation_info_060; ?>" data-error="<?php echo $evaluation_info_061; ?>" maxlength="800" required><?php if ($action == "edit") echo $row_eval['evalOverallComments']; ?></textarea>
+    <textarea class="form-control" name="evalOverallComments" rows="6" placeholder="800 <?php echo $evaluation_info_060; ?>" data-error="<?php echo $evaluation_info_061; ?>" maxlength="800" required><?php if ($action == "edit") echo htmlentities($row_eval['evalOverallComments']); ?></textarea>
     <div class="help-block small with-errors"></div>
 </div>
 <!-- Style Accuracy -->

@@ -4,17 +4,9 @@
  * Description: This page displays if the site is in maintenance mode.
  *
  */
-$section = "maintenance";
 require_once ('paths.php');
-require_once (CONFIG.'bootstrap.php');
-require_once (INCLUDES.'url_variables.inc.php');
-require_once (LIB.'update.lib.php'); 
-require_once (LIB.'common.lib.php');
-require_once (DB.'common.db.php');
-require_once (INCLUDES.'constants.inc.php');
 require_once (LANG.'language.lang.php');
 ?>
-
 
 <!DOCTYPE html>
 <html lang="en">
@@ -22,7 +14,7 @@ require_once (LANG.'language.lang.php');
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title><?php echo $_SESSION['contestName']; ?> Organized By <?php echo $_SESSION['contestHost']." &gt; Maintenance"; ?></title>
+    <title><?php echo $maintenance_text_001; ?></title>
 
     <!-- Load jQuery / http://jquery.com/ -->
 	<script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
@@ -37,14 +29,13 @@ require_once (LANG.'language.lang.php');
     <![endif]-->
 
     <!-- Load Font Awesome / https://fortawesome.github.io/Font-Awesome -->
-    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css" integrity="sha512-HK5fgLBL+xu6dm/Ii3z4xhlSUyZgTT9tuc/hSrtw6uzJOvgRr2a9jyxxT1ely+B+xFAmJKVSTbpM/CuL7qxO8w==" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/v4-shims.min.css" integrity="sha512-NfhLGuxy6G12XHj7/bvm0RC3jmR25RdpImn8P19aIMmN5pndO0fvIg78ihN2WIJtVRs+AYVrnYF4AipVikGPLg==" crossorigin="anonymous" />
 
     <!-- Load BCOE&M Custom Theme CSS - Contains Bootstrap overrides and custom classes -->
-    <link rel="stylesheet" type="text/css" href="<?php echo $base_url; ?>css/common.min.css">
-    <link rel="stylesheet" type="text/css" href="<?php echo $theme; ?>" />
-
-	<!-- Load BCOE&M Custom JS -->
-    <script src="<?php echo $base_url; ?>js_includes/bcoem_custom.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="css/common.min.css">
+    <link rel="stylesheet" type="text/css" href="css/bruxellensis.min.css" />
+    
   </head>
 <body>
 	<!-- MAIN NAV -->
@@ -53,19 +44,8 @@ require_once (LANG.'language.lang.php');
         <div class="navbar navbar-default navbar-fixed-top">
             <div class="container">
                 <div class="navbar-header">
-                    <p class="navbar-text"><?php echo $_SESSION['contestName']; ?></p>
+                    <p class="navbar-text">Site Offline</p>
                 </div>
-            <div class="collapse navbar-collapse" id="bcoem-navbar-collapse">
-                <ul class="nav navbar-nav navbar-right">
-                    <p class="navbar-text">
-                    <?php if (isset($_SESSION['loginUsername'])) { ?>
-                    <?php echo $label_logged_in." <span class=\"fa fa-caret-right\"></span> <span class=\"small\"><em>".$_SESSION['loginUsername']."</em></span>"; ?>
-                    <?php } else { ?>
-                    Site Offline</a></li>
-                    <?php } ?>
-                    </p>
-                </ul>
-            </div>
             </div><!--/.nav-collapse -->
         </div>
     </div><!-- container -->

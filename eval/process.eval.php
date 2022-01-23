@@ -107,11 +107,26 @@ if ($section == "process-eval-structured") {
 
 	foreach ($_POST as $key => $value) {
 
-		if (is_numeric($value)) $value = filter_var($value,FILTER_SANITIZE_NUMBER_INT);
-		else $value = filter_var($value,FILTER_SANITIZE_STRING);
-		
-		if ((!empty($value)) && (is_array($value))) $value = implode(", ",$value);
-		// echo $key." => ".$value."<br>";
+		if (!empty($value)) {
+			
+			if (is_numeric($value)) $value = filter_var($value,FILTER_SANITIZE_NUMBER_INT);	
+			
+			if (is_array($value)) {
+
+				$new_value = array();
+				
+				foreach ($value as $v) {
+					if (is_numeric($v)) $v = filter_var($value,FILTER_SANITIZE_NUMBER_INT);
+					else  $v = $purifier->purify($v);
+					$new_value[] = $v;
+				}
+				
+				$value = implode(", ",$new_value);
+				
+			}
+		} 
+
+		//echo $key." => ".$value."<br>";
 
 		// Build Aroma Insert
 		if ((strpos($key, "evalAroma") !== FALSE) && (!in_array($key, $exceptions))) {
@@ -201,50 +216,50 @@ if ($section == "process-eval-structured") {
 		) 
 		
 		VALUES (
-		'%s', '%s', '%s', '%s', '%s',
-		'%s', '%s', '%s', '%s', '%s',
-		'%s', '%s', '%s', '%s', '%s',
-		'%s', '%s', '%s', '%s', '%s',
-		'%s', '%s', '%s', '%s', '%s',
-		'%s', '%s', '%s', '%s', '%s'
+		%s, %s, %s, %s, %s,
+		%s, %s, %s, %s, %s,
+		%s, %s, %s, %s, %s,
+		%s, %s, %s, %s, %s,
+		%s, %s, %s, %s, %s,
+		%s, %s, %s, %s, %s
 		)",
 							$prefix."evaluation",
 							
-							$evalJudgeInfo, 
-							$evalScoresheet, 
-							$evalStyle, 
-							$evalSpecialIngredients, 
-							$evalOtherNotes, 
+							GetSQLValueString($evalJudgeInfo, "text"), 
+							GetSQLValueString($evalScoresheet, "text"), 
+							GetSQLValueString($evalStyle, "text"), 
+							GetSQLValueString($evalSpecialIngredients, "text"), 
+							GetSQLValueString($evalOtherNotes, "text"), 
 							
-							$evalAromaScore, 
-							$evalAromaChecklist, 
-							$evalAppearanceScore, 
-							$evalAppearanceChecklist, 
-							$evalFlavorScore, 
+							GetSQLValueString($evalAromaScore, "text"), 
+							GetSQLValueString($evalAromaChecklist, "text"), 
+							GetSQLValueString($evalAppearanceScore, "text"), 
+							GetSQLValueString($evalAppearanceChecklist, "text"), 
+							GetSQLValueString($evalFlavorScore, "text"), 
 
-							$evalFlavorChecklist, 
-							$evalMouthfeelScore, 
-							$evalMouthfeelChecklist, 
-							$evalOverallScore, 
-							$evalOverallComments, 
+							GetSQLValueString($evalFlavorChecklist, "text"), 
+							GetSQLValueString($evalMouthfeelScore, "text"), 
+							GetSQLValueString($evalMouthfeelChecklist, "text"), 
+							GetSQLValueString($evalOverallScore, "text"), 
+							GetSQLValueString($evalOverallComments, "text"), 
 
-							$evalStyleAccuracy, 
-							$evalTechMerit, 
-							$evalIntangibles, 
-							filter_var($evalFlaws,FILTER_SANITIZE_STRING), 
-							time(), 
+							GetSQLValueString($evalStyleAccuracy, "text"), 
+							GetSQLValueString($evalTechMerit, "text"), 
+							GetSQLValueString($evalIntangibles, "text"), 
+							GetSQLValueString($evalFlaws, "text"), 
+							GetSQLValueString(time(), "text"), 
 
-							time(), 
-							$token, 
-							$eid, 
-							$uid, 
-							$evalTable, 
+							GetSQLValueString(time(), "text"), 
+							GetSQLValueString($token, "text"), 
+							GetSQLValueString($eid, "text"), 
+							GetSQLValueString($uid, "text"), 
+							GetSQLValueString($evalTable, "text"), 
 
-							$evalFinalScore, 
-							$evalMiniBOS,
-							$evalBottle,
-							$evalBottleNotes,
-							$evalPosition
+							GetSQLValueString($evalFinalScore, "text"), 
+							GetSQLValueString($evalMiniBOS, "text"),
+							GetSQLValueString($evalBottle, "text"),
+							GetSQLValueString($evalBottleNotes, "text"),
+							GetSQLValueString($evalPosition, "text")
 		);
 		
 		//echo $insertSQL;
@@ -264,76 +279,76 @@ if ($section == "process-eval-structured") {
 		
 		$updateSQL = sprintf("UPDATE %s SET 
 		
-		evalJudgeInfo='%s', 
-		evalScoresheet='%s', 
-		evalStyle='%s', 
-		evalSpecialIngredients='%s', 
-		evalOtherNotes='%s',
+		evalJudgeInfo=%s, 
+		evalScoresheet=%s, 
+		evalStyle=%s, 
+		evalSpecialIngredients=%s, 
+		evalOtherNotes=%s,
 
-		evalAromaScore='%s', 
-		evalAromaChecklist='%s', 
-		evalAppearanceScore='%s', 
-		evalAppearanceChecklist='%s',
-		evalFlavorScore='%s', 
+		evalAromaScore=%s, 
+		evalAromaChecklist=%s, 
+		evalAppearanceScore=%s, 
+		evalAppearanceChecklist=%s,
+		evalFlavorScore=%s, 
 
-		evalFlavorChecklist='%s', 
-		evalMouthfeelScore='%s',
-		evalMouthfeelChecklist='%s', 
-		evalOverallScore='%s',
-		evalOverallComments='%s',
+		evalFlavorChecklist=%s, 
+		evalMouthfeelScore=%s,
+		evalMouthfeelChecklist=%s, 
+		evalOverallScore=%s,
+		evalOverallComments=%s,
 		
-		evalStyleAccuracy='%s',
-		evalTechMerit='%s', 
-		evalIntangibles='%s',
-		evalFlaws='%s',
-		evalUpdatedDate='%s',
+		evalStyleAccuracy=%s,
+		evalTechMerit=%s, 
+		evalIntangibles=%s,
+		evalFlaws=%s,
+		evalUpdatedDate=%s,
 
-		eid='%s',
-		uid='%s',
-		evalTable='%s',
-		evalFinalScore='%s',
-		evalMiniBOS='%s',
+		eid=%s,
+		uid=%s,
+		evalTable=%s,
+		evalFinalScore=%s,
+		evalMiniBOS=%s,
 
-		evalBottle='%s',
-		evalBottleNotes='%s',
-		evalPosition='%s'		
-		WHERE id='%s'
+		evalBottle=%s,
+		evalBottleNotes=%s,
+		evalPosition=%s		
+		WHERE id=%s
 		",
 							$prefix."evaluation",
-							$evalJudgeInfo, 
-							$evalScoresheet,  
-							$evalStyle, 
-							$evalSpecialIngredients, 
-							$evalOtherNotes, 
+							GetSQLValueString($evalJudgeInfo, "text"), 
+							GetSQLValueString($evalScoresheet, "text"),  
+							GetSQLValueString($evalStyle, "text"), 
+							GetSQLValueString($evalSpecialIngredients, "text"), 
+							GetSQLValueString($evalOtherNotes, "text"), 
 
-							$evalAromaScore, 
-							$evalAromaChecklist, 							
-							$evalAppearanceScore, 
-							$evalAppearanceChecklist, 							
-							$evalFlavorScore, 
+							GetSQLValueString($evalAromaScore, "text"), 
+							GetSQLValueString($evalAromaChecklist, "text"), 							
+							GetSQLValueString($evalAppearanceScore, "text"), 
+							GetSQLValueString($evalAppearanceChecklist, "text"), 							
+							GetSQLValueString($evalFlavorScore, "text"), 
 
-							$evalFlavorChecklist, 
-							$evalMouthfeelScore, 							
-							$evalMouthfeelChecklist, 
-							$evalOverallScore, 
-							$evalOverallComments, 
+							GetSQLValueString($evalFlavorChecklist, "text"), 
+							GetSQLValueString($evalMouthfeelScore, "text"), 							
+							GetSQLValueString($evalMouthfeelChecklist, "text"), 
+							GetSQLValueString($evalOverallScore, "text"), 
+							GetSQLValueString($evalOverallComments, "text"), 
 
-							$evalStyleAccuracy, 
-							$evalTechMerit, 
-							$evalIntangibles,
-							filter_var($evalFlaws,FILTER_SANITIZE_STRING), 							
-							time(),
+							GetSQLValueString($evalStyleAccuracy, "text"), 
+							GetSQLValueString($evalTechMerit, "text"), 
+							GetSQLValueString($evalIntangibles, "text"),
+							GetSQLValueString($evalFlaws, "text"), 							
+							GetSQLValueString(time(), "text"),
 
-							$eid,
-							$uid,
-							$evalTable, 
-							$evalFinalScore, 							
-							$evalMiniBOS,
+							GetSQLValueString($eid, "text"),
+							GetSQLValueString($uid, "text"),
+							GetSQLValueString($evalTable, "text"), 
+							GetSQLValueString($evalFinalScore, "text"), 							
+							GetSQLValueString($evalMiniBOS, "text"),
 							
-							$evalBottle,
-							$evalBottleNotes,
-							$evalPosition,
-							$id
+							GetSQLValueString($evalBottle, "text"),
+							GetSQLValueString($evalBottleNotes, "text"),
+							GetSQLValueString($evalPosition, "text"),
+							GetSQLValueString($id, "int")
 		);
 		
 		//echo $updateSQL;
@@ -400,50 +415,50 @@ if ($section == "process-eval-full") {
 		) 
 		
 		VALUES (
-		'%s', '%s', '%s', '%s', '%s',
-		'%s', '%s', '%s', '%s', '%s',
-		'%s', '%s', '%s', '%s', '%s',
-		'%s', '%s', '%s', '%s', '%s',
-		'%s', '%s', '%s', '%s', '%s',
-		'%s', '%s', '%s', '%s', '%s'
+		%s, %s, %s, %s, %s,
+		%s, %s, %s, %s, %s,
+		%s, %s, %s, %s, %s,
+		%s, %s, %s, %s, %s,
+		%s, %s, %s, %s, %s,
+		%s, %s, %s, %s, %s
 		)",
 							$prefix."evaluation",
 							
-							$evalJudgeInfo, 
-							$evalScoresheet,
-							$evalStyle,
-							$evalSpecialIngredients, 
-							$evalOtherNotes, 
+							GetSQLValueString($evalJudgeInfo, "text"), 
+							GetSQLValueString($evalScoresheet, "text"),
+							GetSQLValueString($evalStyle, "text"),
+							GetSQLValueString($evalSpecialIngredients, "text"), 
+							GetSQLValueString($evalOtherNotes, "text"), 
 							
-							$evalAromaScore,
-							$evalAromaComments, 
-							$evalAppearanceScore,
-							$evalAppearanceComments,
-							$evalFlavorScore,
+							GetSQLValueString($evalAromaScore, "text"),
+							GetSQLValueString($evalAromaComments, "text"), 
+							GetSQLValueString($evalAppearanceScore, "text"),
+							GetSQLValueString($evalAppearanceComments, "text"),
+							GetSQLValueString($evalFlavorScore, "text"),
 							
-							$evalFlavorComments, 
-							$evalMouthfeelScore,
-							$evalMouthfeelComments, 
-							$evalOverallScore, 
-							$evalOverallComments,
+							GetSQLValueString($evalFlavorComments, "text"), 
+							GetSQLValueString($evalMouthfeelScore, "text"),
+							GetSQLValueString($evalMouthfeelComments, "text"), 
+							GetSQLValueString($evalOverallScore, "text"), 
+							GetSQLValueString($evalOverallComments, "text"),
 							
-							$evalStyleAccuracy, 
-							$evalTechMerit, 
-							$evalIntangibles, 
-							$evalDescriptors,
-							time(), 
+							GetSQLValueString($evalStyleAccuracy, "text"), 
+							GetSQLValueString($evalTechMerit, "text"), 
+							GetSQLValueString($evalIntangibles, "text"), 
+							GetSQLValueString($evalDescriptors, "text"),
+							GetSQLValueString(time(), "text"), 
 							
-							time(),
-							$token,
-							$eid,
-							$uid,
-							$evalTable, 
+							GetSQLValueString(time(), "text"),
+							GetSQLValueString($token, "text"),
+							GetSQLValueString($eid, "text"),
+							GetSQLValueString($uid, "text"),
+							GetSQLValueString($evalTable, "text"), 
 							
-							$evalFinalScore,
-							$evalMiniBOS,
-							$evalBottle,
-							$evalBottleNotes,
-							$evalPosition
+							GetSQLValueString($evalFinalScore, "text"),
+							GetSQLValueString($evalMiniBOS, "text"),
+							GetSQLValueString($evalBottle, "text"),
+							GetSQLValueString($evalBottleNotes, "text"),
+							GetSQLValueString($evalPosition, "text")
 		);
 		
 		//echo $insertSQL;
@@ -463,76 +478,76 @@ if ($section == "process-eval-full") {
 		
 		$updateSQL = sprintf("UPDATE %s SET 
 		
-		evalJudgeInfo='%s', 
-		evalScoresheet='%s', 
-		evalStyle='%s', 
+		evalJudgeInfo=%s, 
+		evalScoresheet=%s, 
+		evalStyle=%s, 
 		
-		evalSpecialIngredients='%s', 
-		evalOtherNotes='%s', 
-		evalAromaScore='%s',
-		evalAromaComments='%s', 
-		evalAppearanceScore='%s',
+		evalSpecialIngredients=%s, 
+		evalOtherNotes=%s, 
+		evalAromaScore=%s,
+		evalAromaComments=%s, 
+		evalAppearanceScore=%s,
 		
-		evalAppearanceComments='%s',
-		evalFlavorScore='%s',
-		evalFlavorComments='%s', 
-		evalMouthfeelScore='%s',
-		evalMouthfeelComments='%s',
+		evalAppearanceComments=%s,
+		evalFlavorScore=%s,
+		evalFlavorComments=%s, 
+		evalMouthfeelScore=%s,
+		evalMouthfeelComments=%s,
 		
-		evalOverallScore='%s',
-		evalOverallComments='%s',
-		evalStyleAccuracy='%s',
-		evalTechMerit='%s', 
-		evalIntangibles='%s',
+		evalOverallScore=%s,
+		evalOverallComments=%s,
+		evalStyleAccuracy=%s,
+		evalTechMerit=%s, 
+		evalIntangibles=%s,
 		
-		evalDescriptors='%s',
-		evalUpdatedDate='%s',
-		eid='%s',
-		uid='%s',
-		evalTable='%s',
+		evalDescriptors=%s,
+		evalUpdatedDate=%s,
+		eid=%s,
+		uid=%s,
+		evalTable=%s,
 		
-		evalFinalScore='%s',
-		evalMiniBOS='%s',
-		evalBottle='%s',
-		evalBottleNotes='%s',
-		evalPosition='%s'
-		WHERE id='%s'
+		evalFinalScore=%s,
+		evalMiniBOS=%s,
+		evalBottle=%s,
+		evalBottleNotes=%s,
+		evalPosition=%s
+		WHERE id=%s
 		",
 							$prefix."evaluation",
-							$evalJudgeInfo, 
-							$evalScoresheet, 
-							$evalStyle,
+							GetSQLValueString($evalJudgeInfo, "text"), 
+							GetSQLValueString($evalScoresheet, "text"), 
+							GetSQLValueString($evalStyle, "text"),
 							
-							$evalSpecialIngredients, 
-							$evalOtherNotes, 
-							$evalAromaScore,									
-							$evalAromaComments, 
-							$evalAppearanceScore, 
+							GetSQLValueString($evalSpecialIngredients, "text"), 
+							GetSQLValueString($evalOtherNotes, "text"), 
+							GetSQLValueString($evalAromaScore, "text"),									
+							GetSQLValueString($evalAromaComments, "text"), 
+							GetSQLValueString($evalAppearanceScore, "text"), 
 							
-							$evalAppearanceComments,
-							$evalFlavorScore,
-							$evalFlavorComments, 
-							$evalMouthfeelScore,
-							$evalMouthfeelComments,  
+							GetSQLValueString($evalAppearanceComments, "text"),
+							GetSQLValueString($evalFlavorScore, "text"),
+							GetSQLValueString($evalFlavorComments, "text"), 
+							GetSQLValueString($evalMouthfeelScore, "text"),
+							GetSQLValueString($evalMouthfeelComments, "text"),  
 							
-							$evalOverallScore, 
-							$evalOverallComments,
-							$evalStyleAccuracy, 
-							$evalTechMerit, 
-							$evalIntangibles, 
+							GetSQLValueString($evalOverallScore, "text"), 
+							GetSQLValueString($evalOverallComments, "text"),
+							GetSQLValueString($evalStyleAccuracy, "text"), 
+							GetSQLValueString($evalTechMerit, "text"), 
+							GetSQLValueString($evalIntangibles, "text"), 
 							
-							$evalDescriptors,
-							time(),
-							$eid,
-							$uid,
-							$evalTable, 
+							GetSQLValueString($evalDescriptors, "text"),
+							GetSQLValueString(time(), "text"),
+							GetSQLValueString($eid, "text"),
+							GetSQLValueString($uid, "text"),
+							GetSQLValueString($evalTable, "text"), 
 							
-							$evalFinalScore,
-							$evalMiniBOS,
-							$evalBottle,
-							$evalBottleNotes,
-							$evalPosition,
-							$id
+							GetSQLValueString($evalFinalScore, "text"),
+							GetSQLValueString($evalMiniBOS, "text"),
+							GetSQLValueString($evalBottle, "text"),
+							GetSQLValueString($evalBottleNotes, "text"),
+							GetSQLValueString($evalPosition, "text"),
+							GetSQLValueString($id, "int")
 		);
 		
 		//echo $updateSQL;
@@ -673,62 +688,62 @@ if ($section == "process-eval-checklist") {
 		) 
 		
 		VALUES (
-		'%s', '%s', '%s', '%s', '%s',
-		'%s', '%s', '%s', '%s', '%s',
-		'%s', '%s', '%s', '%s', '%s',
-		'%s', '%s', '%s', '%s', '%s',
-		'%s', '%s', '%s', '%s', '%s',
-		'%s', '%s', '%s', '%s', '%s',
-		'%s', '%s', '%s', '%s', '%s',
-		'%s', '%s', '%s', '%s'
+		%s, %s, %s, %s, %s,
+		%s, %s, %s, %s, %s,
+		%s, %s, %s, %s, %s,
+		%s, %s, %s, %s, %s,
+		%s, %s, %s, %s, %s,
+		%s, %s, %s, %s, %s,
+		%s, %s, %s, %s, %s,
+		%s, %s, %s, %s
 		)",
 							$prefix."evaluation",
-							$evalJudgeInfo, 
-							$evalScoresheet, 
-							$evalStyle, 
+							GetSQLValueString($evalJudgeInfo, "text"), 
+							GetSQLValueString($evalScoresheet, "text"), 
+							GetSQLValueString($evalStyle, "text"), 
 							
-							$evalSpecialIngredients, 
-							$evalOtherNotes, 
-							$evalAromaScore, 
-							filter_var($evalAromaChecklist,FILTER_SANITIZE_STRING), 
-							filter_var($evalAromaChecklistDesc,FILTER_SANITIZE_STRING), 
+							GetSQLValueString($evalSpecialIngredients, "text"), 
+							GetSQLValueString($evalOtherNotes, "text"), 
+							GetSQLValueString($evalAromaScore, "text"), 
+							GetSQLValueString($evalAromaChecklist, "text"), 
+							GetSQLValueString($evalAromaChecklistDesc, "text"), 
 							
-							$evalAromaComments, 
-							$evalAppearanceScore, 
-							filter_var($evalAppearanceChecklist,FILTER_SANITIZE_STRING), 
-							filter_var($evalAppearanceChecklistDesc,FILTER_SANITIZE_STRING), 
-							$evalAppearanceComments, 
+							GetSQLValueString($evalAromaComments, "text"), 
+							GetSQLValueString($evalAppearanceScore, "text"), 
+							GetSQLValueString($evalAppearanceChecklist, "text"), 
+							GetSQLValueString($evalAppearanceChecklistDesc, "text"), 
+							GetSQLValueString($evalAppearanceComments, "text"), 
 							
-							$evalFlavorScore, 
-							filter_var($evalFlavorChecklist,FILTER_SANITIZE_STRING), 
-							filter_var($evalFlavorChecklistDesc,FILTER_SANITIZE_STRING), 
-							$evalFlavorComments, 
-							$evalMouthfeelScore, 
+							GetSQLValueString($evalFlavorScore, "text"), 
+							GetSQLValueString($evalFlavorChecklist, "text"), 
+							GetSQLValueString($evalFlavorChecklistDesc, "text"), 
+							GetSQLValueString($evalFlavorComments, "text"), 
+							GetSQLValueString($evalMouthfeelScore, "text"), 
 							
-							filter_var($evalMouthfeelChecklist,FILTER_SANITIZE_STRING), 
-							filter_var($evalMouthfeelChecklistDesc,FILTER_SANITIZE_STRING), 
-							$evalMouthfeelComments, 
-							$evalOverallScore, 
-							$evalOverallComments, 
+							GetSQLValueString($evalMouthfeelChecklist, "text"), 
+							GetSQLValueString($evalMouthfeelChecklistDesc, "text"), 
+							GetSQLValueString($evalMouthfeelComments, "text"), 
+							GetSQLValueString($evalOverallScore, "text"), 
+							GetSQLValueString($evalOverallComments, "text"), 
 							
-							$evalStyleAccuracy, 
-							$evalTechMerit, 
-							$evalIntangibles,
-							$evalDrinkability,
-							filter_var($evalFlaws,FILTER_SANITIZE_STRING),
+							GetSQLValueString($evalStyleAccuracy, "text"), 
+							GetSQLValueString($evalTechMerit, "text"), 
+							GetSQLValueString($evalIntangibles, "text"),
+							GetSQLValueString($evalDrinkability, "text"),
+							GetSQLValueString($evalFlaws, "text"),
 							 
-							time(), 
-							time(),
-							$token,
-							$eid,
-							$uid,
+							GetSQLValueString(time(), "text"), 
+							GetSQLValueString(time(), "text"),
+							GetSQLValueString($token, "text"),
+							GetSQLValueString($eid, "text"),
+							GetSQLValueString($uid, "text"),
 							
-							$evalTable, 
-							$evalFinalScore,
-							$evalMiniBOS,
-							$evalBottle,
-							$evalBottleNotes,
-							$evalPosition
+							GetSQLValueString($evalTable, "text"), 
+							GetSQLValueString($evalFinalScore, "text"),
+							GetSQLValueString($evalMiniBOS, "text"),
+							GetSQLValueString($evalBottle, "text"),
+							GetSQLValueString($evalBottleNotes, "text"),
+							GetSQLValueString($evalPosition, "text")
 		);
 		
 		//echo $insertSQL;
@@ -749,98 +764,98 @@ if ($section == "process-eval-checklist") {
 		
 		$updateSQL = sprintf("UPDATE %s SET 
 		
-		evalJudgeInfo='%s', 
-		evalScoresheet='%s', 
-		evalStyle='%s', 
+		evalJudgeInfo=%s, 
+		evalScoresheet=%s, 
+		evalStyle=%s, 
 		
-		evalSpecialIngredients='%s', 
-		evalOtherNotes='%s', 
-		evalAromaScore='%s', 
-		evalAromaChecklist='%s', 
-		evalAromaChecklistDesc='%s', 
+		evalSpecialIngredients=%s, 
+		evalOtherNotes=%s, 
+		evalAromaScore=%s, 
+		evalAromaChecklist=%s, 
+		evalAromaChecklistDesc=%s, 
 		
-		evalAromaComments='%s', 
-		evalAppearanceScore='%s', 
-		evalAppearanceChecklist='%s', 
-		evalAppearanceChecklistDesc='%s', 
-		evalAppearanceComments='%s',
+		evalAromaComments=%s, 
+		evalAppearanceScore=%s, 
+		evalAppearanceChecklist=%s, 
+		evalAppearanceChecklistDesc=%s, 
+		evalAppearanceComments=%s,
 		
-		evalFlavorScore='%s', 
-		evalFlavorChecklist='%s', 
-		evalFlavorChecklistDesc='%s', 
-		evalFlavorComments='%s', 
-		evalMouthfeelScore='%s',
+		evalFlavorScore=%s, 
+		evalFlavorChecklist=%s, 
+		evalFlavorChecklistDesc=%s, 
+		evalFlavorComments=%s, 
+		evalMouthfeelScore=%s,
 		
-		evalMouthfeelChecklist='%s', 
-		evalMouthfeelChecklistDesc='%s', 
-		evalMouthfeelComments='%s',
-		evalOverallScore='%s',
-		evalOverallComments='%s',
+		evalMouthfeelChecklist=%s, 
+		evalMouthfeelChecklistDesc=%s, 
+		evalMouthfeelComments=%s,
+		evalOverallScore=%s,
+		evalOverallComments=%s,
 		
-		evalStyleAccuracy='%s',
-		evalTechMerit='%s', 
-		evalIntangibles='%s',
-		evalDrinkability='%s',
-		evalFlaws='%s',
+		evalStyleAccuracy=%s,
+		evalTechMerit=%s, 
+		evalIntangibles=%s,
+		evalDrinkability=%s,
+		evalFlaws=%s,
 		
-		evalUpdatedDate='%s',
-		eid='%s',
-		uid='%s',
-		evalTable='%s',
-		evalFinalScore='%s',
+		evalUpdatedDate=%s,
+		eid=%s,
+		uid=%s,
+		evalTable=%s,
+		evalFinalScore=%s,
 		
-		evalMiniBOS='%s',
-		evalBottle='%s',
-		evalBottleNotes='%s',
-		evalPosition='%s'		
-		WHERE id='%s'
+		evalMiniBOS=%s,
+		evalBottle=%s,
+		evalBottleNotes=%s,
+		evalPosition=%s		
+		WHERE id=%s
 		",
 							$prefix."evaluation",
-							$evalJudgeInfo, 
-							$evalScoresheet,  
-							$evalStyle, 
+							GetSQLValueString($evalJudgeInfo, "text"), 
+							GetSQLValueString($evalScoresheet, "text"),  
+							GetSQLValueString($evalStyle, "text"), 
 							
-							$evalSpecialIngredients, 
-							$evalOtherNotes, 
-							$evalAromaScore, 
-							filter_var($evalAromaChecklist,FILTER_SANITIZE_STRING), 
-							filter_var($evalAromaChecklistDesc,FILTER_SANITIZE_STRING), 
+							GetSQLValueString($evalSpecialIngredients, "text"), 
+							GetSQLValueString($evalOtherNotes, "text"), 
+							GetSQLValueString($evalAromaScore, "text"), 
+							GetSQLValueString($evalAromaChecklist, "text"), 
+							GetSQLValueString($evalAromaChecklistDesc, "text"), 
 							
-							$evalAromaComments, 
-							filter_var($evalAppearanceScore, 
-							filter_var($evalAppearanceChecklist,FILTER_SANITIZE_STRING), 
-							$evalAppearanceChecklistDesc,FILTER_SANITIZE_STRING), 
-							$evalAppearanceComments, 
+							GetSQLValueString($evalAromaComments, "text"), 
+							GetSQLValueString($evalAppearanceScore, "text"), 
+							GetSQLValueString($evalAppearanceChecklist, "text"), 
+							GetSQLValueString($evalAppearanceChecklistDesc, "text"), 
+							GetSQLValueString($evalAppearanceComments, "text"), 
 							
-							$evalFlavorScore, 
-							filter_var($evalFlavorChecklist,FILTER_SANITIZE_STRING), 
-							filter_var($evalFlavorChecklistDesc,FILTER_SANITIZE_STRING), 
-							$evalFlavorComments, 
-							$evalMouthfeelScore, 
+							GetSQLValueString($evalFlavorScore, "text"), 
+							GetSQLValueString($evalFlavorChecklist, "text"), 
+							GetSQLValueString($evalFlavorChecklistDesc, "text"), 
+							GetSQLValueString($evalFlavorComments, "text"), 
+							GetSQLValueString($evalMouthfeelScore, "text"), 
 							
-							filter_var($evalMouthfeelChecklist,FILTER_SANITIZE_STRING), 
-							filter_var($evalMouthfeelChecklistDesc,FILTER_SANITIZE_STRING), 
-							$evalMouthfeelComments, 
-							$evalOverallScore, 
-							$evalOverallComments, 
+							GetSQLValueString($evalMouthfeelChecklist, "text"), 
+							GetSQLValueString($evalMouthfeelChecklistDesc, "text"), 
+							GetSQLValueString($evalMouthfeelComments, "text"), 
+							GetSQLValueString($evalOverallScore, "text"), 
+							GetSQLValueString($evalOverallComments, "text"), 
 							
-							$evalStyleAccuracy, 
-							$evalTechMerit, 
-							$evalIntangibles,
-							$evalDrinkability,
-							filter_var($evalFlaws,FILTER_SANITIZE_STRING),
+							GetSQLValueString($evalStyleAccuracy, "text"), 
+							GetSQLValueString($evalTechMerit, "text"), 
+							GetSQLValueString($evalIntangibles, "text"),
+							GetSQLValueString($evalDrinkability, "text"),
+							GetSQLValueString($evalFlaws, "text"),
 							
-							time(),
-							$eid,
-							$uid,
-							$evalTable, 
-							$evalFinalScore,
+							GetSQLValueString(time(), "text"),
+							GetSQLValueString($eid, "text"),
+							GetSQLValueString($uid, "text"),
+							GetSQLValueString($evalTable, "text"), 
+							GetSQLValueString($evalFinalScore, "text"),
 							
-							$evalMiniBOS,
-							$evalBottle,
-							$evalBottleNotes,
-							$evalPosition,
-							$id
+							GetSQLValueString($evalMiniBOS, "text"),
+							GetSQLValueString($evalBottle, "text"),
+							GetSQLValueString($evalBottleNotes, "text"),
+							GetSQLValueString($evalPosition, "text"),
+							GetSQLValueString($id, "int")
 		);
 		
 		//echo $updateSQL;
