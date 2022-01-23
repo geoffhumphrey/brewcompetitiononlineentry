@@ -29,7 +29,7 @@ do {
 // Map ids from 2008 to 2015
 foreach ($styles_2008 as $key => $id_2008) {
 	// Convert the 2008 style to 2015
-	$mapped_style_to_2015 = bjcp_map_2008_2015($key,1);
+	$mapped_style_to_2015 = bjcp_map_2008_2015($key,1,$prefix,1);
 	$mapped_style_ids[$id_2008] = $mapped_style_to_2015;
 }
 
@@ -53,7 +53,7 @@ echo "<br><br>";
  * Implode and update db column
  */
 
-$query_judge_likes = sprintf("SELECT id, brewerJudgeLikes, brewerJudgeDislikes WHERE (brewerJudgeLikes IS NOT NULL OR brewerJudgeDislikes IS NOT NULL) ORDER BY id ASC", $prefix."styles");
+$query_judge_likes = sprintf("SELECT id, brewerJudgeLikes, brewerJudgeDislikes FROM %s WHERE (brewerJudgeLikes IS NOT NULL OR brewerJudgeDislikes IS NOT NULL) ORDER BY id ASC", $prefix."brewer");
 $judge_likes = mysqli_query($connection,$query_judge_likes) or die (mysqli_error($connection));
 $row_judge_likes = mysqli_fetch_assoc($judge_likes);
 $totalRows_judge_likes = mysqli_num_rows($judge_likes);
