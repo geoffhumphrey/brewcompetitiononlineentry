@@ -11,12 +11,23 @@ Helpful Articles:
 
 The Brew Competition Online Entry and Management (BCOE&M) system is an online application to assist homebrew competition organizers - of the beer/mead/cider variety - to collect, store, and manage their competition entry, organization, and scoring data.
 
-The biggest challenges of organizing a homebrewing competition is knowing who has entered what and how many, organizing judging efficiently, and reporting the results of the competition in a timely manner. BCOE&M provides a single online interface to collect entry and participant data, organize judging tables and assignments, input scoring data, and report the results.
+The biggest challenges of organizing a homebrewing competition is knowing who has entered what and how many, organizing judging efficiently, and reporting the results of the competition in a timely manner. BCOE&M provides a single online interface to collect entry and participant data, organize judging tables and assignments, input scoring data, and report the results. Features include, but certainly aren't limited to:
+- Collecting entry information from participants.
+- Four major style guidelines collections to use: BJCP 2021, BJCP 2015, Brewers Association (BA), Australian Amateur Brewing Championship (AABC)
+- Defining categories and styles customized to your competition's needs.
+- Facilitating online entry fee payments (via PayPal).
+- Organizing and assigning participants as judges, stewards, and staff.
+- Defining tables/flights and assigning judges and stewards to them.
+- Mobile entry check-in using QR and/or barcodes.
+- Electronic scoresheets for use in virtual and/or in-person judging.
+- 60+ reports for use before, during, and after judging.
+- 20+ data export options.
+- Custom modules for information/functionality unique to your competition.
 
 The best part: **BCOE&M is free and open-source**. Hundreds of competitions around the world have utilized BCOE&M since its [first release](https://brewcompetition.com/change-log) back in 2009.
 
 ## Download
-Version 2.3.X is available for [download here](https://github.com/geoffhumphrey/brewcompetitiononlineentry/releases). The [latest committed code](https://github.com/geoffhumphrey/brewcompetitiononlineentry/archive/master.zip) is also available for testers and contributors.
+Version 2.4.X is available for [download here](https://github.com/geoffhumphrey/brewcompetitiononlineentry/releases). The [latest committed code](https://github.com/geoffhumphrey/brewcompetitiononlineentry/archive/master.zip) is also available for testers and contributors.
 
 ## Install or Upgrade
 Step by step [installation](https://www.brewcompetition.com/install-instructions) and [upgrade](https://www.brewcompetition.com/upgrade-instructions) instructions are available.
