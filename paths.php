@@ -117,7 +117,7 @@ define('FORCE_UPDATE', FALSE);
  * Default is FALSE.
  */
 
-define('ENABLE_MARKDOWN', TRUE);
+define('ENABLE_MARKDOWN', FALSE);
 
 /**
  * Set the following to TRUE if you would like to use
@@ -129,7 +129,7 @@ define('ENABLE_MARKDOWN', TRUE);
  * Default is FALSE.
  */
 
-define('ENABLE_MAILER', TRUE);
+define('ENABLE_MAILER', FALSE);
 
 /**
  * Error Reporting
