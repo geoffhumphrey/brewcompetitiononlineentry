@@ -1,12 +1,10 @@
 <?php
+
 /**
  * Module:      paths.php
  * Description: This module sets global file folder paths. Also houses
  *              specific, site-wide variables.
- *
- */
-
-/**
+ * 
  * The following are file path definitions for various
  * script and document storage folders used/accessed by the
  * application.
@@ -119,7 +117,7 @@ define('FORCE_UPDATE', FALSE);
  * Default is FALSE.
  */
 
-define('ENABLE_MARKDOWN', FALSE);
+define('ENABLE_MARKDOWN', TRUE);
 
 /**
  * Set the following to TRUE if you would like to use
@@ -131,7 +129,7 @@ define('ENABLE_MARKDOWN', FALSE);
  * Default is FALSE.
  */
 
-define('ENABLE_MAILER', FALSE);
+define('ENABLE_MAILER', TRUE);
 
 /**
  * Error Reporting
@@ -154,6 +152,29 @@ function is_https() {
     if (((!empty($_SERVER['HTTPS'])) && (strtolower($_SERVER['HTTPS']) !== "off")) || ((isset($_SERVER['SERVER_PORT'])) && ($_SERVER['SERVER_PORT'] === "443"))) return TRUE;
     elseif (((!empty($_SERVER['HTTP_X_FORWARDED_PROTO'])) && (strtolower($_SERVER['HTTP_X_FORWARDED_PROTO']) == "https")) || ((!empty($_SERVER['HTTP_X_FORWARDED_SSL'])) && (strtolower($_SERVER['HTTP_X_FORWARDED_SSL']) == "on"))) return TRUE;
     else return FALSE;
+}
+
+/**
+ * General sanitization function.
+ * Needs to be top-level due to use in 
+ * url_variables.inc.php file.
+ */
+
+function sterilize($sterilize = NULL) {
+    if ($sterilize == NULL) {
+        return NULL;
+    }
+    $sterilize = trim($sterilize);
+    if (is_numeric($sterilize)) {
+        if (is_float($sterilize)) $sterilize = filter_var($sterilize,FILTER_SANITIZE_NUMBER_FLOAT,FILTER_FLAG_ALLOW_FRACTION);
+        if (is_int($sterilize)) $sterilize = filter_var($sterilize,FILTER_SANITIZE_NUMBER_INT);
+    }
+    else $sterilize = filter_var($sterilize,FILTER_SANITIZE_STRING);
+    $sterilize = strip_tags($sterilize);
+    $sterilize = stripcslashes($sterilize);
+    $sterilize = stripslashes($sterilize);
+    $sterilize = addslashes($sterilize);
+    return $sterilize;
 }
 
 if (HOSTED) {
