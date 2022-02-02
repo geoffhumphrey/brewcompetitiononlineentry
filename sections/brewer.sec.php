@@ -570,8 +570,8 @@ if (action == "edit") {
             <div class="col-lg-9 col-md-9 col-sm-8 col-xs-12">
             <!-- Input Here -->
             <?php echo $judge_location_avail; ?>
+	    </div>
             <?php } ?>
-            </div>
         </div><!-- ./Form Group -->
         <?php } ?>
         <div class="form-group"><!-- Form Group Radio INLINE -->
