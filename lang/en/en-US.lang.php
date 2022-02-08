@@ -753,7 +753,7 @@ $brewer_text_000 = "Please enter only <em>one</em> person's name.";
 $brewer_text_001 = "Choose one. This question will be used to verify your identity should you forget your password.";
 $brewer_text_003 = "To be considered for a GABF Pro-Am brewing opportunity you must be an AHA member.";
 $brewer_text_004 = "Provide any information that you believe the competition organizer, judge coordinator, or competition staff should know (e.g., allergies, special dietary restrictions, shirt size, etc.).";
-$brewer_text_005 = "Not Applicable / Shipping Entries";
+$brewer_text_005 = "Not Applicable or Shipping Entries";
 $brewer_text_006 = "Are you willing and qualified to serve as a judge in this competition?";
 $brewer_text_007 = "Have you passed the BJCP Mead Judge exam?";
 $brewer_text_008 = "* The <em>Non-BJCP</em> rank is for those who haven't taken the BJCP Beer Judge Entrance Exam, and are <em>not</em> a professional brewer.";
@@ -1015,7 +1015,7 @@ $register_text_007 = "Quick";
 $register_text_008 = "Register";
 $register_text_009 = "a Judge";
 $register_text_010 = "a Participant";
-$register_text_011 = "To register, create your online account by filling out the fields below.";
+$register_text_011 = "To register, create your account by filling out the fields below.";
 $register_text_012 = "Quickly add a participant to the competition&rsquo;s judge/steward pool. A dummy address and phone number will be used and a default password of <em>bcoem</em> will be given to each participant added via this screen.";
 $register_text_013 = "Entry into this competition is conducted completely online.";
 $register_text_014 = "To add your entries and/or indicate that you are willing to judge or steward (judges and stewards can also add entries), you will need to create an account on our system.";
@@ -1307,7 +1307,7 @@ $header_text_112 = "You do not have sufficient access privileges to perform this
 $header_text_113 = "You can only edit your own account information.";
 $header_text_114 = "As an admin, you can change a user's account information via Admin > Entries and Particpants > Manage Participants.";
 $header_text_115 = "Results have been published.";
-$header_text_116 = "If you do not receive the email within a reasonable amount of time, contact a competition official or site administrator to reset your password for you.";
+$header_text_116 = "If you do not receive the email within a reasonable amount of time, check your email account's SPAM folder. If it is not there, contact a competition official or site administrator to reset your password for you.";
 
 $alert_text_082 = "Since you signed up as a judge or steward, you are not allowed to add entries to your account. Only representatives of an organization are able to add entries to their accounts.";
 $alert_text_083 = "Adding and edting of entries is not available.";
@@ -1999,8 +1999,9 @@ if ((isset($_SESSION['prefsStyleSet'])) && ($_SESSION['prefsStyleSet'] == "BJCP2
 $register_text_047 = "Your security question and/or answer has changed.";
 $register_text_048 = "If you did not initiate this change, your account may be compromised. You should immediately log into your account and change your password in addition to updating your security question and answer.";
 $register_text_049 = "If you aren't able to log into your account, you should immediately contact a site administrator to update your password and other vital account information.";
-$register_text_050 = "Your security question's answer is encrypted and must be entered if you elect to change your security question and/or answer.";
+$register_text_050 = "Your security question's answer is encrypted and cannot be read by site administrators. It must be entered if you elect to change your security question and/or answer.";
 $register_text_051 = "Account Information Updated";
+$register_text_052 = "A \"Yes\" or \"No\" response is required for each location below.";
 
 $brewer_text_044 = "Do you wish to change your security question and/or answer?";
 

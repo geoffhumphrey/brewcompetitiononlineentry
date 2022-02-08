@@ -20,7 +20,9 @@ if ($action == "username") {
 		$query_user_name = "SELECT user_name FROM ".$users_db_table." WHERE user_name='".$user_name."'";
 		$sql_check = mysqli_query($connection,$query_user_name) or die (mysqli_error($connection));
 		if (mysqli_num_rows($sql_check)) echo sprintf("<span class=\"text-danger\"><span class=\"fa fa-exclamation-triangle\"></span> %s</span>",$alert_email_in_use);
-		else echo sprintf("<span class=\"text-success\"><span class=\"fa fa-check-circle\"></span> %s</span>",$alert_email_not_in_use);
+		else {
+			if (!empty($user_name)) echo sprintf("<span class=\"text-success\"><span class=\"fa fa-check-circle\"></span> %s</span>",$alert_email_not_in_use);
+		}
 	}
 	
 } // end if ($action == "username")
@@ -1110,7 +1112,7 @@ if ($action == "email") {
 		return ($diagnose) ? $final_status : ($final_status < ISEMAIL_THRESHOLD);
 	}
 	$email = $_GET['email'];
-	if (is_email($email)) echo sprintf("<span class=\"text-success\"><span class=\"fa fa-check-circle\"></span> %s</span>",$alert_email_valid);
+	if ((is_email($email)) && (!empty($email))) echo sprintf("<span class=\"text-success\"><span class=\"fa fa-check-circle\"></span> %s</span>",$alert_email_valid);
 	else echo sprintf("<span class=\"text-danger\"><span class=\"fa fa-exclamation-triangle\"></span> %s</span>",$alert_email_not_valid);
 
 }

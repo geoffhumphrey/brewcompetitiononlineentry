@@ -31,7 +31,7 @@ $hostname = 'localhost';
  */
 
 
-$username = 'brewcomp_bcoeh2';
+$username = '';
 
 
 /**
@@ -40,7 +40,7 @@ $username = 'brewcomp_bcoeh2';
  * $password = 'flintsone'.
  */
 
-$password = '5T82!#aXhAZu';
+$password = '';
 
 /**
  * The following line is the name of your MySQL database you set up already.
@@ -48,7 +48,7 @@ $password = '5T82!#aXhAZu';
  * http://brewcompetition.com/install-instructions for setup instructions.
  */
 
-$database = 'brewcomp_bcoetest';
+$database = '';
 
 
 /**
@@ -103,7 +103,7 @@ $brewing = $connection;
  * $prefix = 'comp1_';
  */
 
-$prefix = 'tbh_';
+$prefix = '';
 
 /*
  * ******************************************************************************
@@ -127,7 +127,7 @@ $installation_id = '';
  * expires due to inactivity. Default is 30 minutes.
  */
 
-$session_expire_after = 90;
+$session_expire_after = 30;
 
 /*
  * ******************************************************************************

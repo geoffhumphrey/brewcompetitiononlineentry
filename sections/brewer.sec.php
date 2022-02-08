@@ -198,13 +198,13 @@ if ((isset($row_judging3)) && (!empty($row_judging3))) {
         }
 
         $e = explode(",", $row_brewer['brewerStewardLocation']); 
-        $f = "N-".$row_stewarding['id']; 
+        $f = "N-".$row_judging3['id']; 
         foreach ($e as $value) { 
             if ($value == $f) $location_steward_no = " SELECTED";
         }
 
         $g = explode(",", $row_brewer['brewerStewardLocation']); 
-        $h = "Y-".$row_stewarding['id']; 
+        $h = "Y-".$row_judging3['id']; 
         foreach ($g as $value) { 
             if ($value == $h) $location_steward_yes = " SELECTED";
         }

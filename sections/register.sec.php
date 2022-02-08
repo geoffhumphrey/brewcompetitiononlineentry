@@ -1,155 +1,9 @@
 <script type="text/javascript">
-function checkAvailability() {
-	jQuery.ajax({
-		url: "<?php echo $base_url; ?>includes/ajax_functions.inc.php?action=username",
-		data:'user_name='+$("#user_name").val(),
-		type: "POST",
-		success:function(data) {
-			$("#username-status").html(data);
-		},
-		error:function (){}
-	});
-}
-
-function AjaxFunction(email) {
-	var httpxml;
-		try 	{
-		// Firefox, Opera 8.0+, Safari
-		httpxml=new XMLHttpRequest();
-		}
-	catch (e) {
-		// Internet Explorer
-		try	{
-			httpxml=new ActiveXObject("Msxml2.XMLHTTP");
-		}
-	catch (e) {
-		try {
-		httpxml=new ActiveXObject("Microsoft.XMLHTTP");
-		}
-		catch (e) {
-		//alert("Your browser does not support AJAX!");
-		return false;
-		}
-	}
-}
-
-function stateck() {
-	if(httpxml.readyState==4) {
-		document.getElementById("msg_email").innerHTML=httpxml.responseText;
-	}
-}
-
-var url="<?php echo $base_url; ?>includes/ajax_functions.inc.php?action=email";
-url=url+"&email="+email;
-url=url+"&sid="+Math.random();
-httpxml.onreadystatechange=stateck;
-httpxml.open("GET",url,true);
-httpxml.send(null);
-}
-
-$(document).ready(function(){
-	$("#address-fields").hide();
-	$("#brewerClubsOther").hide();
-	$("#ahaProAmText").hide();
-	$("#us-state").hide();
-	$("#proAm").hide();
-
-    <?php if (($action == "edit") && ($row_brewer['brewerCountry'] == "United States")) { ?>
-    $("#proAm").show();
-    $("#ahaProAmText").show();
-    $("#us-state").show();
-    $("#aus-state").hide();
-    $("#ca-state").hide();
-    $("#non-us-state").hide();
-    $("#address-fields").show();
-    <?php } ?>
-
-    <?php if (($action == "edit") && ($row_brewer['brewerCountry'] == "Australia")) { ?>
-    $("#proAm").hide();
-    $("#ahaProAmText").hide();
-    $("#aus-state").show();
-    $("#us-state").hide();
-    $("#ca-state").hide();
-    $("#non-us-state").hide();
-    $("#address-fields").show();
-    <?php } ?>
-
-    <?php if (($action == "edit") && ($row_brewer['brewerCountry'] == "Canada")) { ?>
-    $("#proAm").hide();
-    $("#ahaProAmText").hide();
-    $("#aus-state").hide();
-    $("#us-state").hide();
-    $("#ca-state").show();
-    $("#non-us-state").hide();
-    $("#address-fields").show();
-    <?php } ?>
-
-    $("#brewerCountry").change(function() {
-    	$("#address-fields").show("slow");
-        if ($("#brewerCountry").val() == "United States") {
-            $("#proAm").show("slow");
-            $("#ahaProAmText").show("slow");
-            $("#non-us-state").hide();
-            $("#us-state").show();
-            $("#aus-state").hide();
-            $("#ca-state").hide();
-        }
-        else if ($("#brewerCountry").val() == "Australia") {
-            $("#proAm").hide("fast");
-            $("#ahaProAmText").hide("fast");
-            $("#non-us-state").hide();
-            $("#aus-state").show();
-            $("#us-state").hide();
-            $("#ca-state").hide();
-        }
-        else if ($("#brewerCountry").val() == "Canada") {
-            $("#proAm").hide("fast");
-            $("#ahaProAmText").hide("fast");
-            $("#non-us-state").hide();
-            $("#aus-state").hide();
-            $("#us-state").hide();
-            $("#ca-state").show();
-        }
-        else {
-            $("#proAm").hide("fast");
-            $("#ahaProAmText").hide("fast");
-            $("#us-state").hide();
-            $("#aus-state").hide();
-            $("#ca-state").hide();
-            $("#non-us-state").show();
-            $("#brewerProAm_0").prop("checked", true);
-            $("#brewerProAm_1").prop("checked", false);
-        }
-    });
-
-	$("#brewerClubs").change(function() {
-		if ($("#brewerClubs").val() == "Other") {
-			$("#brewerClubsOther").show("slow");
-		}
-		else {
-			$("#brewerClubsOther").hide("fast");
-		}
-	});
-
-	<?php if (($action == "edit") && ($row_brewer['brewerSteward'] == "Y")) { ?>
-	$("#brewerStewardFields").show("slow");
-	<?php } else { ?>
-	$("#brewerStewardFields").hide("fast");
-	<?php } ?>
-
-	$('input[type="radio"]').click(function() {
-       if($(this).attr('id') == 'brewerSteward_0') {
-            $("#brewerStewardFields").show("slow");
-       }
-
-       else {
-         	$("#brewerStewardFields").hide("fast");
-       }
-   	});
-
-});
-//-->
+var username_url = "<?php echo $base_url; ?>includes/ajax_functions.inc.php?action=username";
+var email_url="<?php echo $base_url; ?>includes/ajax_functions.inc.php?action=email";
+var action = "<?php echo $action; ?>";
 </script>
+<script src="<?php echo $base_url; ?>js_includes/registration_checks.min.js"></script>
 <?php
 $warning0 = "";
 $warning1 = "";
@@ -357,6 +211,49 @@ foreach ($security_questions_display as $key => $value) {
 
 }
 
+$steward_location_avail = "";
+$judge_location_avail = "";
+
+if ((isset($row_judging3)) && (!empty($row_judging3))) {
+    do { 
+
+        $location_yes = "";
+        $location_no = "";
+        $judge_avail_info = "";
+        $judge_avail_option = "";
+
+        $location_steward_no = "";
+        $location_steward_yes = "";
+        $steward_avail_info = "";
+        $steward_avail_option = "";
+
+        $judge_avail_info .= sprintf("<p class=\"bcoem-form-info\">%s (%s)</p>",$row_judging3['judgingLocName'],getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_judging3['judgingDate'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "short", "date-time"));
+
+        $judge_avail_option .= "<select class=\"selectpicker\" name=\"brewerJudgeLocation[]\" id=\"brewerJudgeLocation_".$row_judging3['id']."\" data-width=\"auto\">";
+        $judge_avail_option .= sprintf("<option value=\"N-%s\"%s>%s</option>",$row_judging3['id'],$location_no,$label_no);
+        $judge_avail_option .= sprintf("<option value=\"Y-%s\"%s>%s</option>",$row_judging3['id'],$location_yes,$label_yes);
+        $judge_avail_option .= "</select>";
+        
+        if (time() < $row_judging3['judgingDate']) {
+            $judge_location_avail .= $judge_avail_info;
+            $judge_location_avail .= $judge_avail_option;
+        }
+
+        $steward_avail_info .= sprintf("<p class=\"bcoem-form-info\">%s (%s)</p>",$row_judging3['judgingLocName'],getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_judging3['judgingDate'], $_SESSION['prefsDateFormat'], $_SESSION['prefsTimeFormat'], "short", "date-time"));
+
+        $steward_avail_option .= "<select class=\"selectpicker\" name=\"brewerStewardLocation[]\" id=\"brewerStewardLocation_".$row_judging3['id']."\" data-width=\"auto\">";
+        $steward_avail_option .= sprintf("<option value=\"N-%s\"%s>%s</option>",$row_judging3['id'],$location_steward_no,$label_no);
+        $steward_avail_option .= sprintf("<option value=\"Y-%s\"%s>%s</option>",$row_judging3['id'],$location_steward_yes,$label_yes);
+        $steward_avail_option .= "</select>";
+
+        if (time() < $row_judging3['judgingDate']) {
+            $steward_location_avail .= $steward_avail_info;
+            $steward_location_avail .= $steward_avail_option;
+        }
+
+    }  while ($row_judging3 = mysqli_fetch_assoc($judging3)); 
+}
+
 // --------------------------------------------------------------
 // Display
 // --------------------------------------------------------------
@@ -390,7 +287,7 @@ if ($go == "default") {  ?>
 </form>
 <?php } else { // THIS ELSE ENDS at the end of the script ?>
 <!-- Begin the Form -->
-	<form data-toggle="validator" role="form" class="form-horizontal" action="<?php echo $base_url; ?>includes/process.inc.php?action=add&amp;dbTable=<?php echo $users_db_table; ?>&amp;section=register&amp;go=<?php echo $go; if ($section == "admin") echo "&amp;filter=admin"; echo "&amp;view=".$view; ?>" method="POST" name="form1" id="form1">
+	<form data-toggle="validator" role="form" class="form-horizontal" action="<?php echo $base_url; ?>includes/process.inc.php?action=add&amp;dbTable=<?php echo $users_db_table; ?>&amp;section=register&amp;go=<?php echo $go; if ($section == "admin") echo "&amp;filter=admin"; echo "&amp;view=".$view; ?>" method="POST" name="register_form" id="register_form">
 	<!-- Hidden Form Elements -->
 	<!-- User Level is Always 2 -->
 	<input type="hidden" name="userLevel" value="2" />
@@ -896,40 +793,16 @@ if ($go == "default") {  ?>
 	if ($action == "edit") $judging_locations = explode(",",$row_brewer['brewerJudgeLocation']);
 	elseif ((isset($_COOKIE['brewerJudgeLocation'])) && ($section != "admin")) $judging_locations = explode(",",$_COOKIE['brewerJudgeLocation']);
 	else $judging_locations = array("","");
-	?>
+	if (!empty($judge_location_avail)) { ?>
     <div class="form-group"><!-- Form Group REQUIRED Radio Group -->
         <label for="" class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label text-warning"><i class="fa fa-sm fa-asterisk"></i> <?php echo $label_judging_avail; ?></label>
-        <div class="col-lg-9 col-md-9 col-sm-8 col-xs-12">  
-        <?php do {
-
-        	$judge_location_yes = "";
-            $judge_location_no = "";
-            $judge_avail_info = "";
-            $judge_avail_option = "";
-
-            if ((time() < $row_judging3['judgingDate']) || ($section == "admin")) {
-
-            	if (in_array("Y-".$row_judging3['id'],$judging_locations)) $judge_location_yes = " SELECTED";
-            	if (in_array("N-".$row_judging3['id'],$judging_locations)) $judge_location_no = " SELECTED";
-
-	            $judge_avail_info .= sprintf("<p class=\"bcoem-form-info\">%s (%s)</p>",$row_judging3['judgingLocName'],getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_judging3['judgingDate'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "short", "date-time"));
-	           
-	           	$judge_avail_option .= sprintf("<select class=\"selectpicker\" name=\"brewerJudgeLocation[]\" id=\"brewerJudgeLocation\" data-width=\"auto\" data-header=\"* %s\" title=\"* %s\" required>",$label_select_below,$label_select_below);
-	            $judge_avail_option .= sprintf("<option value=\"Y-%s\"%s>%s</option>",$row_judging3['id'],$judge_location_yes,$label_yes);
-	            $judge_avail_option .= sprintf("<option value=\"N-%s\"%s>%s</option>",$row_judging3['id'],$judge_location_no,$label_no);
-	            $judge_avail_option .= "</select>";
-
-            }
-
-            echo $judge_avail_info;
-            echo $judge_avail_option;
-
-		} while ($row_judging3 = mysqli_fetch_assoc($judging3)); 
-
-		?>
+        <div class="col-lg-9 col-md-9 col-sm-8 col-xs-12">
+        	<p class="bcoem-form-info text-warning"><?php echo $register_text_052; ?></p>
+        <?php echo $judge_location_avail;	?>
         </div>
     </div><!-- ./Form Group -->
-    <?php } // END if if ($totalRows_judging > 1) 
+	<?php } 
+	} // END if if ($totalRows_judging > 1) 
     else { ?><input name="brewerJudgeLocation" type="hidden" value="<?php echo "Y-".$row_judging3['id']; ?>" /><?php } ?>
     <?php } // END if (!$judge_hidden) ?>
     <?php if (!$steward_hidden) {
@@ -972,38 +845,15 @@ if ($go == "default") {  ?>
 	elseif ((isset($_COOKIE['brewerStewardLocation'])) && ($section != "admin")) $stewarding_locations = explode(",",$_COOKIE['brewerStewardLocation']);
 	else $stewarding_locations = array("","");
 	?>
+	<?php if (!empty($steward_location_avail)) { ?>
     <div class="form-group"><!-- Form Group REQUIRED Radio Group -->
         <label for="" class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label text-warning"><i class="fa fa-sm fa-asterisk"></i> <?php echo $label_stewarding_avail; ?></label>
         <div class="col-lg-9 col-md-9 col-sm-8 col-xs-12">
-        <p class="bcoem-form-info text-danger">A "Yes" or "No" response is required for each location below.</p>
-        <?php do { 
-
-        	$steward_location_yes = "";
-            $steward_location_no = "";
-            $steward_avail_info = "";
-            $steward_avail_option = "";
-
-            if ((time() < $row_stewarding['judgingDate']) || ($section == "admin")) {
-
-            	if (in_array("Y-".$row_stewarding['id'],$stewarding_locations)) $steward_location_yes = "SELECTED";
-            	if (in_array("N-".$row_stewarding['id'],$stewarding_locations)) $steward_location_no = "SELECTED";
-
-	            $steward_avail_info .= sprintf("<p class=\"bcoem-form-info\">%s (%s)</p>",$row_stewarding['judgingLocName'],getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_stewarding['judgingDate'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "short", "date-time"));
-	           
-	           	$steward_avail_option .= sprintf("<select class=\"selectpicker\" name=\"brewerStewardLocation[]\" id=\"brewerStewardLocation\" data-width=\"auto\" data-header=\"%s\" title=\"%s\" required>",$label_select_below,$label_select_below);
-	            $steward_avail_option .= sprintf("<option value=\"Y-%s\"%s>%s</option>",$row_stewarding['id'],$steward_location_yes,$label_yes);
-	            $steward_avail_option .= sprintf("<option value=\"N-%s\"%s>%s</option>",$row_stewarding['id'],$steward_location_no,$label_no);
-	            $steward_avail_option .= "</select>";
-
-            }
-
-            echo $steward_avail_info;
-            echo $steward_avail_option;
-
-		} while ($row_stewarding = mysqli_fetch_assoc($stewarding));  
-		?>
+        <p class="bcoem-form-info text-warning"><?php echo $register_text_052; ?></p>
+        <?php echo $steward_location_avail; ?>
         </div>
     </div><!-- ./Form Group -->
+	<?php } ?>
 	<?php } // END if ($totalRows_judging > 1)
 	else { ?>
    	<input name="brewerStewardLocation" type="hidden" value="<?php echo "Y-".$row_judging3['id']; ?>" />
@@ -1047,7 +897,6 @@ if ($go == "default") {  ?>
 </form>
 <script type="text/javascript">
   	$(function () {
-  		twitter.screenNameKeyUp();
   		$('#user_screen_name').focus();
 	});
 </script>

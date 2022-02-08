@@ -1,61 +1,8 @@
 <script type="text/javascript">
-function checkAvailability()
-{
-	jQuery.ajax({
-		url: "<?php echo $base_url; ?>includes/ajax_functions.inc.php?action=username",
-		data:'user_name='+$("#user_name").val(),
-		type: "POST",
-		success:function(data){
-			$("#status").html(data);
-		},
-		error:function (){}
-	});
-}
-
-function AjaxFunction(email)
-{
-	var httpxml;
-		try
-		{
-		// Firefox, Opera 8.0+, Safari
-		httpxml=new XMLHttpRequest();
-		}
-	catch (e)
-		{
-		// Internet Explorer
-		try
-		{
-		httpxml=new ActiveXObject("Msxml2.XMLHTTP");
-		}
-	catch (e)
-		{
-		try
-		{
-		httpxml=new ActiveXObject("Microsoft.XMLHTTP");
-		}
-		catch (e)
-		{
-		//alert("Your browser does not support AJAX!");
-	return false;
-	}
-	}
-}
-function stateck()
-{
-if(httpxml.readyState==4)
-{
-document.getElementById("msg_email").innerHTML=httpxml.responseText;
-}
-}
-var url="<?php echo $base_url; ?>includes/ajax_functions.inc.php?action=email";
-url=url+"&email="+email;
-url=url+"&sid="+Math.random();
-httpxml.onreadystatechange=stateck;
-httpxml.open("GET",url,true);
-httpxml.send(null);
-}
-//-->
+var username_url = "<?php echo $base_url; ?>includes/ajax_functions.inc.php?action=username";
+var email_url="<?php echo $base_url; ?>includes/ajax_functions.inc.php?action=email";
 </script>
+<script src="<?php echo $base_url; ?>js_includes/registration_checks.min.js"></script>
 <script type="text/javascript">
         $(document).ready(function () {
             "use strict";
@@ -104,7 +51,7 @@ if (($action != "print") && ($msg != "default")) echo $msg_output; ?>
 				<span class="input-group-addon" id="email-addon2"><span class="fa fa-star"></span>
 			</div>
 			<div id="msg_email" class="help-block"></div>
-			<div id="status"></div>
+			<div id="username-status"></div>
 		</div>
 	</div><!-- ./Form Group -->
 
