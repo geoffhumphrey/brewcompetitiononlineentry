@@ -40,12 +40,14 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 				$hasher = new PasswordHash(8, false);
 				$password = md5($_POST['password']);
 				$hash = $hasher->HashPassword($password);
+				$hasher_question = new PasswordHash(8, false);
+				$hash_question = $hasher_question->HashPassword(sterilize($_POST['userQuestionAnswer']));
 				$insertSQL = sprintf("INSERT INTO $users_db_table (user_name, userLevel, password, userQuestion, userQuestionAnswer, userCreated) VALUES (%s, %s, %s, %s, %s, %s)",
 								   GetSQLValueString($username, "text"),
 								   GetSQLValueString($_POST['userLevel'], "text"),
 								   GetSQLValueString($hash, "text"),
 								   GetSQLValueString(sterilize($_POST['userQuestion']), "text"),
-								   GetSQLValueString(sterilize($_POST['userQuestionAnswer']), "text"),
+								   GetSQLValueString($hash_question, "text"),
 								   "NOW( )"
 								   );
 

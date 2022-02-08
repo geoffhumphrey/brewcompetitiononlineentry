@@ -27,14 +27,15 @@ else {
 	$row_archive_prefs = mysqli_fetch_assoc($archive_prefs);
 	$totalRows_archive_prefs = mysqli_num_rows($archive_prefs);
 
-	$winner_method = $row_archive_prefs['archiveWinnerMethod'];
-	$style_set = $row_archive_prefs['archiveStyleSet'];
-	$judging_scores_db_table = $prefix."judging_scores_".$filter;
-	$brewing_db_table = $prefix."brewing_".$filter;
-	$brewer_db_table = $prefix."brewer_".$filter;
+	if ($totalRows_archive_prefs > 0) {
+		$winner_method = $row_archive_prefs['archiveWinnerMethod'];
+		$style_set = $row_archive_prefs['archiveStyleSet'];
+		$judging_scores_db_table = $prefix."judging_scores_".$filter;
+		$brewing_db_table = $prefix."brewing_".$filter;
+		$brewer_db_table = $prefix."brewer_".$filter;
+	}
 
 }
-
 
 ?>
 <!DOCTYPE html>
@@ -71,28 +72,26 @@ else {
   	</head>
 	<body>
     <div class="container-fluid">
-
-    	<?php
+    <?php
 
 		if ($_SESSION['userLevel'] <= 1) {
 			if ($section == "assignments") 			include (OUTPUT.'assignments.output.php');
-			if ($section == "bos-mat") 				include (OUTPUT.'bos_mat.output.php');
-			if ($section == "dropoff") 				include (OUTPUT.'dropoff.output.php');
-			if ($section == "summary") 				include (OUTPUT.'participant_summary.output.php');
+			if ($section == "bos-mat") 					include (OUTPUT.'bos_mat.output.php');
+			if ($section == "dropoff") 					include (OUTPUT.'dropoff.output.php');
+			if ($section == "summary") 					include (OUTPUT.'participant_summary.output.php');
 			if ($section == "particpant-entries") 	include (OUTPUT.'participant_entries_list.output.php');
-			if ($section == "inventory") 			include (OUTPUT.'post_judge_inventory.output.php');
+			if ($section == "inventory") 				include (OUTPUT.'post_judge_inventory.output.php');
 			if ($section == "pullsheets") 			include (OUTPUT.'pullsheets.output.php');
-			if ($section == "results") 				include (OUTPUT.'results.output.php');
-			if ($section == "sorting") 				include (OUTPUT.'sorting.output.php');
-			if ($section == "staff") 				include (OUTPUT.'staff_points.output.php');
+			if ($section == "results") 					include (OUTPUT.'results.output.php');
+			if ($section == "sorting") 					include (OUTPUT.'sorting.output.php');
+			if ($section == "staff") 						include (OUTPUT.'staff_points.output.php');
 			if ($section == "table-cards") 			include (OUTPUT.'table_cards.output.php');
-			if ($section == "notes") 				include (OUTPUT.'judge_notes.output.php');
+			if ($section == "notes") 						include (OUTPUT.'judge_notes.output.php');
 		}
 
-		if ($section == "styles") 			include (OUTPUT.'styles.output.php');
-		if ($section == "shipping-label")	include (OUTPUT.'shipping_label.output.php');
-		// if ($section == "full-scoresheet")	include (EVALS.'full_output.eval.php');
-		if ($section == "evaluation")		include (EVALS.'scoresheet_output.eval.php');
+		if ($section == "styles") 						include (OUTPUT.'styles.output.php');
+		if ($section == "shipping-label")			include (OUTPUT.'shipping_label.output.php');
+		if ($section == "evaluation")					include (EVALS.'scoresheet_output.eval.php');
 
 		if ($section == "admin") {
 			include (LIB.'admin.lib.php');
@@ -101,16 +100,15 @@ else {
 			include (DB.'stewarding.db.php');
 			include (DB.'dropoff.db.php');
 			include (DB.'contacts.db.php');
-			if ($go == "entries") 		include (ADMIN.'entries.admin.php');
-			if ($go == "participants") 	include (ADMIN.'participants.admin.php');
+			if ($go == "entries") 							include (ADMIN.'entries.admin.php');
+			if ($go == "participants") 					include (ADMIN.'participants.admin.php');
 		}
 
 		?>
-
     </div><!-- ./container -->
 </body>
 </html>
-<?php if ($tb == "default") { ?>
+<?php if (($tb == "default") || ($tb == "scores") || ($tb == "none") || ($tb == "bos")) { ?>
 <script type="text/javascript">
 function selfPrint(){
     self.focus();

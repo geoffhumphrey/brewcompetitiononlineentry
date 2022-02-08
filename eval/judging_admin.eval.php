@@ -22,7 +22,8 @@ foreach ($eval_scores as $key => $value) {
 		$judge_name = $eval_judge[0]." ".$eval_judge[1];
 		$score = $value['judge_score'];
 		$eval_all_judges[] = $value['judge_id'];
-		$latest_submitted[] = $value['date_updated'];
+		$latest_submitted[$value['eid']] = $value['date_added'];
+		$latest_updated[$value['eid']] = $value['date_updated'];
 		$table_judges[] = array(
 			"tj_first_name" => $eval_judge[0],
 			"tj_last_name" => $eval_judge[1],
@@ -139,6 +140,18 @@ if ($count_evals == 1) {
 }
 
 if ($count_evals > 0) {
+
+	$date_submitted[] = array(
+		"table_id" => $tbl_id,
+		"table_name" => $tbl_num_disp." - ".$tbl_name_disp,
+		"id" => $row_entries['id'],
+		"date_submitted" => $latest_submitted[$row_entries['id']],
+		"date_updated" => $latest_updated[$row_entries['id']],
+		"brewJudgingNumber" => $number,
+		"brewCategorySort" => $row_entries['brewCategorySort'],
+		"brewSubCategory" => $row_entries['brewSubCategory'],
+		"brewStyle" => $row_entries['brewStyle']
+	);
 
 	if (!empty($score_entry_data[3])) {
 		$notes .= "<div style=\"margin-bottom:5px;\" class=\"text-success\"><strong>";

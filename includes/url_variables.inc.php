@@ -51,9 +51,9 @@ if (isset($_GET['limit'])) $limit = sterilize($_GET['limit']);
 if (isset($_GET['purge'])) $purge = sterilize($_GET['purge']);
 if (isset($_GET['round'])) $round = sterilize($_GET['round']);
 if (isset($_GET['location'])) $location = sterilize($_GET['location']);
-if (isset($_GET['sort'])) $psort = sterilize($_GET['sort']);
-if (isset($_GET['pg'])) $psort = sterilize($_GET['pg']);
-if (isset($_GET['dir'])) $psort = sterilize($_GET['dir']);
-if (isset($_GET['inserted'])) $psort = sterilize($_GET['inserted']);
+if (isset($_GET['sort'])) $sort = sterilize($_GET['sort']);
+if (isset($_GET['pg'])) $pg = sterilize($_GET['pg']);
+if (isset($_GET['dir'])) $dir = sterilize($_GET['dir']);
+if (isset($_GET['inserted'])) $inserted = sterilize($_GET['inserted']);
 if (isset($_GET['redirect-url'])) $redirect_url = sterilize($_GET['redirect-url']);
 ?>

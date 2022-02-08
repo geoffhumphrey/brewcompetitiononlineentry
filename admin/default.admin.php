@@ -31,61 +31,123 @@ $ps_loc_judging_mbos = "";
 
 $cards_loc_rnd = "";
 
-do {
+if ($totalRows_judging > 0) {
+    do {
 
-    $judge_assign_links[$row_judging['judgingLocName']] = $base_url."output/print.output.php?section=assignments&amp;go=judging_assignments&amp;filter=judges&amp;location=".$row_judging['id'];
-    $steward_assign_links[$row_judging['judgingLocName']] = $base_url."output/print.output.php?section=assignments&amp;go=judging_assignments&amp;filter=stewards&amp;location=".$row_judging['id'];                                     
-    for ($round=1; $round <= $row_judging['judgingRounds']; $round++) {
-        
-        $location_date = getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_judging['judgingDate'], $_SESSION['prefsDateFormat'], $_SESSION['prefsTimeFormat'], "short", "date-time-no-gmt");
-        $location_name = sprintf("%s - %s, Round %s", $row_judging['judgingLocName'], $location_date, $round);
+        $judge_assign_links[$row_judging['judgingLocName']] = $base_url."output/print.output.php?section=assignments&amp;go=judging_assignments&amp;filter=judges&amp;location=".$row_judging['id'];
+        $steward_assign_links[$row_judging['judgingLocName']] = $base_url."output/print.output.php?section=assignments&amp;go=judging_assignments&amp;filter=stewards&amp;location=".$row_judging['id'];                                     
+        for ($round=1; $round <= $row_judging['judgingRounds']; $round++) {
+            
+            $location_date = getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_judging['judgingDate'], $_SESSION['prefsDateFormat'], $_SESSION['prefsTimeFormat'], "short", "date-time-no-gmt");
+            $location_name = sprintf("%s - %s, Round %s", $row_judging['judgingLocName'], $location_date, $round);
 
-        $ps_loc_j_link = $base_url."output/print.output.php?section=pullsheets&amp;go=judging_locations&amp;view=default&amp;location=".$row_judging['id']."&amp;round=".$round;
+            $ps_loc_j_link = $base_url."output/print.output.php?section=pullsheets&amp;go=judging_locations&amp;view=default&amp;location=".$row_judging['id']."&amp;round=".$round;
 
-        $ps_loc_j_mbos_link = $base_url."output/print.output.php?section=pullsheets&amp;go=judging_locations&amp;view=default&amp;filter=mini_bos&amp;location=".$row_judging['id']."&amp;round=".$round;
+            $ps_loc_j_mbos_link = $base_url."output/print.output.php?section=pullsheets&amp;go=judging_locations&amp;view=default&amp;filter=mini_bos&amp;location=".$row_judging['id']."&amp;round=".$round;
 
-        $ps_loc_e_link = $base_url."output/print.output.php?section=pullsheets&amp;go=judging_locations&amp;view=entry&amp;location=".$row_judging['id']."&amp;round=".$round;
+            $ps_loc_e_link = $base_url."output/print.output.php?section=pullsheets&amp;go=judging_locations&amp;view=entry&amp;location=".$row_judging['id']."&amp;round=".$round;
 
-        $ps_loc_e_mbos_link = $base_url."output/print.output.php?section=pullsheets&amp;go=judging_locations&amp;view=entry&amp;filter=mini_bos&amp;location=".$row_judging['id']."&amp;round=".$round;
-        
-        $ps_loc_judging .= sprintf("<li class=\"small\"><a id=\"modal_window_link\" class=\"hide-loader\" href=\"%s\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Print Pullsheet for Session %s (Judging Numbers)\">%s</a></li>", $ps_loc_j_link, $location_name, $location_name);
+            $ps_loc_e_mbos_link = $base_url."output/print.output.php?section=pullsheets&amp;go=judging_locations&amp;view=entry&amp;filter=mini_bos&amp;location=".$row_judging['id']."&amp;round=".$round;
+            
+            $ps_loc_judging .= sprintf("<li class=\"small\"><a id=\"modal_window_link\" class=\"hide-loader\" href=\"%s\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Print Pullsheet for Session %s (Judging Numbers)\">%s</a></li>", $ps_loc_j_link, $location_name, $location_name);
 
-        $ps_loc_judging_mbos .= sprintf("<li class=\"small\"><a id=\"modal_window_link\" class=\"hide-loader\" href=\"%s\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Print Pullsheet for Session %s (Mini-BOS Judging Numbers)\">%s (Mini-BOS)</a></li>", $ps_loc_j_mbos_link, $location_name, $location_name);
+            $ps_loc_judging_mbos .= sprintf("<li class=\"small\"><a id=\"modal_window_link\" class=\"hide-loader\" href=\"%s\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Print Pullsheet for Session %s (Mini-BOS Judging Numbers)\">%s (Mini-BOS)</a></li>", $ps_loc_j_mbos_link, $location_name, $location_name);
 
-        $ps_loc_entry .= sprintf("<li class=\"small\"><a id=\"modal_window_link\" class=\"hide-loader\" href=\"%s\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Print Pullsheet for Session %s (Entry Numbers)\">%s</a></li>", $ps_loc_e_link, $location_name, $location_name);
+            $ps_loc_entry .= sprintf("<li class=\"small\"><a id=\"modal_window_link\" class=\"hide-loader\" href=\"%s\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Print Pullsheet for Session %s (Entry Numbers)\">%s</a></li>", $ps_loc_e_link, $location_name, $location_name);
 
-        $ps_loc_entry_mbos .= sprintf("<li class=\"small\"><a id=\"modal_window_link\" class=\"hide-loader\" href=\"%s\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Print Pullsheet for Session %s (Mini-BOS Entry Numbers)\">%s (Mini-BOS)</a></li>", $ps_loc_e_mbos_link, $location_name, $location_name);
+            $ps_loc_entry_mbos .= sprintf("<li class=\"small\"><a id=\"modal_window_link\" class=\"hide-loader\" href=\"%s\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Print Pullsheet for Session %s (Mini-BOS Entry Numbers)\">%s (Mini-BOS)</a></li>", $ps_loc_e_mbos_link, $location_name, $location_name);
 
-        $cards_loc_rnd_link = $base_url."output/print.output.php?section=table-cards&amp;go=judging_locations&amp;location=".$row_judging['id']."&amp;round=".$round;
+            $cards_loc_rnd_link = $base_url."output/print.output.php?section=table-cards&amp;go=judging_locations&amp;location=".$row_judging['id']."&amp;round=".$round;
 
-        $cards_loc_rnd .= sprintf("<li class=\"small\"><a id=\"modal_window_link\" class=\"hide-loader\" href=\"%s\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Print Table Cards for %s\">%s</a></li>", $cards_loc_rnd_link, $location_name, $location_name);
+            $cards_loc_rnd .= sprintf("<li class=\"small\"><a id=\"modal_window_link\" class=\"hide-loader\" href=\"%s\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Print Table Cards for %s\">%s</a></li>", $cards_loc_rnd_link, $location_name, $location_name);
 
-        /*
+            /*
 
-        <li class="small"><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=table-cards&amp;go=judging_locations&amp;location=<?php echo $row_judging2['id']?>&amp;round=<?php echo $round; ?>" data-toggle="tooltip" data-placement="top" title="Print Table Cards for <?php echo $row_judging2['judgingLocName']. " - " . $location_date . ", Round " . $round; ?>"><?php echo $row_judging2['judgingLocName']. " - " . $location_date . ", Round " . $round; ?></a></li>
+            <li class="small"><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=table-cards&amp;go=judging_locations&amp;location=<?php echo $row_judging2['id']?>&amp;round=<?php echo $round; ?>" data-toggle="tooltip" data-placement="top" title="Print Table Cards for <?php echo $row_judging2['judgingLocName']. " - " . $location_date . ", Round " . $round; ?>"><?php echo $row_judging2['judgingLocName']. " - " . $location_date . ", Round " . $round; ?></a></li>
+
+            $ps_loc_judging .= "<li class=\"small\"><a id=\"modal_window_link\" class=\"hide-loader\" href=\"".$base_url."output/print.output.php?section=pullsheets&amp;go=judging_locations&amp;view=default&amp;location=".$row_judging['id']."&amp;round=".$round."\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Print Pullsheet for Session ".$row_judging['judgingLocName'] . " - " . $location_date. ", Round " . $round."\">".$row_judging['judgingLocName'] . " - " . $location_date. ", Round " . $round."</a></li>";
+
+            $ps_loc_judging_mbos .= "<li class=\"small\"><a id=\"modal_window_link\" class=\"hide-loader\" href=\"".$base_url."output/print.output.php?section=pullsheets&amp;go=judging_locations&amp;view=default&amp;filter=mini_bos&amp;location=".$row_judging['id']."&amp;round=".$round."\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Print Pullsheet for Session ".$row_judging['judgingLocName'] . " - " . $location_date. ", Round " . $round."\">".$row_judging['judgingLocName'] . " - " . $location_date. ", Round " . $round . " (Mini-BOS)</a></li>";
+            */
+        }
+
+        $ji_link_entry = $base_url."output/print.output.php?section=pullsheets&amp;go=all_entry_info&amp;view=judge_inventory&amp;filter=J&amp;sort=entry&amp;location=".$row_judging['id'];
+        $ji_loc_entry .= "<li class=\"small\">";
+        $ji_loc_entry .= sprintf("<a id=\"modal_window_link\" class=\"hide-loader\" href=\"%s\">",$ji_link_entry);
+        $ji_loc_entry .= $row_judging['judgingLocName'];
+        $ji_loc_entry .= "</a>";
+        $ji_loc_entry .= "</li>";
+
+        $ji_loc_judging_link = $base_url."output/print.output.php?section=pullsheets&amp;go=all_entry_info&amp;view=judge_inventory&amp;filter=J&amp;location=".$row_judging['id'];
+        $ji_loc_judging .= "<li class=\"small\">";
+        $ji_loc_judging .= sprintf("<a id=\"modal_window_link\" class=\"hide-loader\" href=\"%s\">",$ji_loc_judging_link);
+        $ji_loc_judging .= $row_judging['judgingLocName'];
+        $ji_loc_judging .= "</a>";
+        $ji_loc_judging .= "</li>";
+
+    } while ($row_judging = mysqli_fetch_assoc($judging));
+}
+
+// BOS Pullsheets and Cup Mats for Individual Style Types
+if ($totalRows_tables > 0) {
+    
+    $bos_pull_st_entry = "";
+    $bos_pull_st_judging = "";
+    $bos_pull_pro_am_st_entry = "";
+    $bos_pull_pro_am_st_judging = "";
+    $bos_cup_mat_st_entry = "";
+    $bos_cup_mat_st_judging = "";
+
+    do {
+
+        if ($row_style_type['styleTypeBOS'] == "Y") {
+
+            $bos_pull_entry_link = $base_url."output/print.output.php?section=pullsheets&amp;go=judging_scores_bos&amp;view=entry&amp;id=".$row_style_type['id'];
+            $bos_pull_judging_link = $base_url."output/print.output.php?section=pullsheets&amp;go=judging_scores_bos&amp;id=".$row_style_type['id']; 
+
+            $bos_pull_st_entry .= "<li>";
+            $bos_pull_st_entry .= sprintf("<a id=\"modal_window_link\" class=\"hide-loader\" href=\"%s\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Print the %s BOS Pullsheet Using Entry Numbers\">%s</a>",$bos_pull_entry_link,$row_style_type['styleTypeName'],$row_style_type['styleTypeName']);
+            $bos_pull_st_entry .= "</li>";
+
+            $bos_pull_st_judging .= "<li>";
+            $bos_pull_st_judging .= sprintf("<a id=\"modal_window_link\" class=\"hide-loader\" href=\"%s\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Print the %s BOS Pullsheet Using Judging Numbers\">%s</a>",$bos_pull_judging_link,$row_style_type['styleTypeName'],$row_style_type['styleTypeName']);
+            $bos_pull_st_judging .= "</li>";
 
 
-        $ps_loc_judging .= "<li class=\"small\"><a id=\"modal_window_link\" class=\"hide-loader\" href=\"".$base_url."output/print.output.php?section=pullsheets&amp;go=judging_locations&amp;view=default&amp;location=".$row_judging['id']."&amp;round=".$round."\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Print Pullsheet for Session ".$row_judging['judgingLocName'] . " - " . $location_date. ", Round " . $round."\">".$row_judging['judgingLocName'] . " - " . $location_date. ", Round " . $round."</a></li>";
+            for ($i=1; $i <= 3; $i++) {
 
-        $ps_loc_judging_mbos .= "<li class=\"small\"><a id=\"modal_window_link\" class=\"hide-loader\" href=\"".$base_url."output/print.output.php?section=pullsheets&amp;go=judging_locations&amp;view=default&amp;filter=mini_bos&amp;location=".$row_judging['id']."&amp;round=".$round."\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Print Pullsheet for Session ".$row_judging['judgingLocName'] . " - " . $location_date. ", Round " . $round."\">".$row_judging['judgingLocName'] . " - " . $location_date. ", Round " . $round . " (Mini-BOS)</a></li>";
-        */
-    }
+                if ($i == 1) $pro_am_bos_method = "1st Place Only";
+                if ($i == 2) $pro_am_bos_method = "1st and 2nd Places";
+                if ($i == 3) $pro_am_bos_method = "1st, 2nd, and 3rd Places";
 
-    $ji_link_entry = $base_url."output/print.output.php?section=pullsheets&amp;go=all_entry_info&amp;view=judge_inventory&amp;filter=J&amp;sort=entry&amp;location=".$row_judging['id'];
-    $ji_loc_entry .= "<li class=\"small\">";
-    $ji_loc_entry .= sprintf("<a id=\"modal_window_link\" class=\"hide-loader\" href=\"%s\">",$ji_link_entry);
-    $ji_loc_entry .= $row_judging['judgingLocName'];
-    $ji_loc_entry .= "</a>";
-    $ji_loc_entry .= "</li>";
+                $bos_pull_pro_am_entry_link = $base_url."output/print.output.php?section=pullsheets&amp;go=judging_scores_bos&amp;action=pro-am&amp;filter=".$i."&amp;view=entry&amp;id=".$row_style_type['id'];
+                $bos_pull_pro_am_judging_link = $base_url."output/print.output.php?section=pullsheets&amp;go=judging_scores_bos&amp;action=pro-am&amp;filter=".$i."&amp;id=".$row_style_type['id']; 
 
-    $ji_loc_judging_link = $base_url."output/print.output.php?section=pullsheets&amp;go=all_entry_info&amp;view=judge_inventory&amp;filter=J&amp;location=".$row_judging['id'];
-    $ji_loc_judging .= "<li class=\"small\">";
-    $ji_loc_judging .= sprintf("<a id=\"modal_window_link\" class=\"hide-loader\" href=\"%s\">",$ji_loc_judging_link);
-    $ji_loc_judging .= $row_judging['judgingLocName'];
-    $ji_loc_judging .= "</a>";
-    $ji_loc_judging .= "</li>";
+                $bos_pull_pro_am_st_entry .= "<li>";
+                $bos_pull_pro_am_st_entry .= sprintf("<a id=\"modal_window_link\" class=\"hide-loader\" href=\"%s\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Print the %s BOS Pullsheet Using Entry Numbers\">%s - %s</a>",$bos_pull_pro_am_entry_link,$row_style_type['styleTypeName'],$row_style_type['styleTypeName'],$pro_am_bos_method);
+                $bos_pull_pro_am_st_entry .= "</li>";
 
-} while ($row_judging = mysqli_fetch_assoc($judging));
+                $bos_pull_pro_am_st_judging .= "<li>";
+                $bos_pull_pro_am_st_judging .= sprintf("<a id=\"modal_window_link\" class=\"hide-loader\" href=\"%s\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Print the %s BOS Pullsheet Using Judging Numbers\">%s - %s</a>",$bos_pull_pro_am_judging_link,$row_style_type['styleTypeName'],$row_style_type['styleTypeName'],$pro_am_bos_method);
+                $bos_pull_pro_am_st_judging .= "</li>";
+            
+            }
+
+            $bos_mat_entry = $base_url."output/print.output.php?section=bos-mat&amp;filter=entry&amp;view=".$row_style_type['id'];
+            $bos_mat_judging = $base_url."output/print.output.php?section=bos-mat&amp;view=".$row_style_type['id'];
+
+            $bos_cup_mat_st_entry .= "<li>";
+            $bos_cup_mat_st_entry .= sprintf("<a id=\"modal_window_link\" class=\"hide-loader\" href=\"%s\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Print the %s BOS Cup Mat Using Entry Numbers\">%s</a>",$bos_mat_entry,$row_style_type['styleTypeName'],$row_style_type['styleTypeName']);
+            $bos_cup_mat_st_entry .= "</li>";
+
+            $bos_cup_mat_st_judging .= "<li>";
+            $bos_cup_mat_st_judging .= sprintf("<a id=\"modal_window_link\" class=\"hide-loader\" href=\"%s\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Print the %s BOS Cup Mat Using Judging Numbers\">%s</a>",$bos_mat_judging,$row_style_type['styleTypeName'],$row_style_type['styleTypeName']);
+            $bos_cup_mat_st_judging .= "</li>";
+
+        }
+
+    } while ($row_style_type = mysqli_fetch_assoc($style_type));
+}
 
 ?>
 <script src="<?php echo $base_url;?>js_includes/admin_ajax.min.js"></script>
@@ -1379,7 +1441,12 @@ do {
 								</ul>
 							</div>
 						</div><!-- ./row -->
-                        <?php if ($totalRows_tables > 0) { ?>
+                        <?php 
+                        if ($totalRows_tables > 0) { 
+
+                            
+
+                        ?>
 						<div class="row">
 							<div class="col col-lg-12 col-md-12 col-sm-12 col-xs-12">
 								<h5>During Judging<hr></h5>
@@ -1393,33 +1460,69 @@ do {
 								<ul class="list-unstyled">
                                     <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=pullsheets&amp;go=judging_scores_bos&amp;view=entry" data-toggle="tooltip" data-placement="top" title="Print All BOS Pullsheets Using Entry Numbers">All Style Types - Entry Numbers</a></li>
                                     <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=pullsheets&amp;go=judging_scores_bos" data-toggle="tooltip" data-placement="top" title="Print All BOS Pullsheets Using Judging Numbers">All Style Types - Judging Numbers</a></li>
-									<?php do {
-										if ($row_style_type['styleTypeBOS'] == "Y") {
-										?>
-										<li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=pullsheets&amp;go=judging_scores_bos&amp;view=entry&amp;id=<?php echo $row_style_type['id']; ?>"  data-toggle="tooltip" data-placement="top" title="Print the <?php echo $row_style_type['styleTypeName']; ?> BOS Pullsheet Using Entry Numbers"><?php echo $row_style_type['styleTypeName']; ?> - Entry Numbers</a></li>
-                                        <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=pullsheets&amp;go=judging_scores_bos&amp;id=<?php echo $row_style_type['id']; ?>"  data-toggle="tooltip" data-placement="top" title="Print the <?php echo $row_style_type['styleTypeName']; ?> BOS Pullsheet Using Entry Numbers"><?php echo $row_style_type['styleTypeName']; ?> - Judging Numbers</a></li>
-										<?php }
-										} while ($row_style_type = mysqli_fetch_assoc($style_type));
-									?>
+                                </ul>
+                                <div class="dropdown bcoem-admin-dashboard-select">
+                                    <button class="btn btn-default dropdown-toggle" type="button" id="bos-pullsheet-menu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Entry Numbers for Style Type... <span class="caret"></span>
+                                    </button>
+                                    <ul class="dropdown-menu" aria-labelledby="bos-pullsheet-menu">
+                                        <?php echo $bos_pull_st_entry; ?>
+                                    </ul>
+                                </div>
+                                <div class="dropdown bcoem-admin-dashboard-select">
+                                    <button class="btn btn-default dropdown-toggle" type="button" id="bos-pullsheet-menu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Judging Numbers for Style Type... <span class="caret"></span>
+                                    </button>
+                                    <ul class="dropdown-menu" aria-labelledby="bos-pullsheet-menu">
+                                        <?php echo $bos_pull_st_judging; ?>
+                                    </ul>
+                                </div>
 							</div>
 						</div><!-- ./row -->
-						<div class="row">
-							<div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
-								<strong>BOS Cup Mats</strong>
-							</div>
-							<div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
-								<ul class="list-unstyled">
-									<li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=bos-mat&amp;filter=entry" data-toggle="tooltip" data-placement="top" title="Print all BOS Cup Mats with entry numbers only">All Style Types - Entry Numbers</a></li>
+                        <div class="row">
+                            <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
+                                <strong>Pro-Am/Scale-up Pullsheets</strong>
+                            </div>
+                            <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
+                                <div class="dropdown bcoem-admin-dashboard-select">
+                                    <button class="btn btn-default dropdown-toggle" type="button" id="bos-pullsheet-menu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Entry Numbers for Style Type... <span class="caret"></span>
+                                    </button>
+                                    <ul class="dropdown-menu" aria-labelledby="bos-pullsheet-menu">
+                                        <?php echo $bos_pull_pro_am_st_entry; ?>
+                                    </ul>
+                                </div>
+                                <div class="dropdown bcoem-admin-dashboard-select">
+                                    <button class="btn btn-default dropdown-toggle" type="button" id="bos-pullsheet-menu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Judging Numbers for Style Type... <span class="caret"></span>
+                                    </button>
+                                    <ul class="dropdown-menu" aria-labelledby="bos-pullsheet-menu">
+                                        <?php echo $bos_pull_pro_am_st_judging; ?>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
+                                <strong>BOS Cup Mats</strong>
+                            </div>
+                            <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
+                                <ul class="list-unstyled">
+                                    <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=bos-mat&amp;filter=entry" data-toggle="tooltip" data-placement="top" title="Print all BOS Cup Mats with entry numbers only">All Style Types - Entry Numbers</a></li>
                                     <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=bos-mat" data-toggle="tooltip" data-placement="top" title="Print all BOS Cup Mats with judging numbers only">All Style Types - Judging Numbers</a></li>
-                                    <?php do {
-                                        if ($row_style_types['styleTypeBOS'] == "Y") { ?>
-                                        <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=bos-mat&amp;filter=entry&amp;view=<?php echo $row_style_types['id']; ?>" data-toggle="tooltip" data-placement="top" title="Print BOS Cup Mats with entry numbers only for <?php echo $row_style_types['styleTypeName'];?>"><?php echo $row_style_types['styleTypeName'];?> - Entry Numbers</a></li>
-                                        <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=bos-mat&amp;view=<?php echo $row_style_types['id']; ?>" data-toggle="tooltip" data-placement="top" title="Print BOS Cup Mats with judging numbers only for <?php echo $row_style_types['styleTypeName'];?>"><?php echo $row_style_types['styleTypeName'];?> - Judging Numbers</a></li>
-                                    <?php }
-                                } while ($row_style_types = mysqli_fetch_assoc($style_types)); ?>
-								</ul>
-							</div>
-						</div><!-- ./row -->
+                                </ul>
+                                <div class="dropdown bcoem-admin-dashboard-select">
+                                    <button class="btn btn-default dropdown-toggle" type="button" id="bos-pullsheet-menu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Entry Numbers for Style Type... <span class="caret"></span>
+                                    </button>
+                                    <ul class="dropdown-menu" aria-labelledby="bos-pullsheet-menu">
+                                        <?php echo $bos_cup_mat_st_entry; ?>
+                                    </ul>
+                                </div>
+                                <div class="dropdown bcoem-admin-dashboard-select">
+                                    <button class="btn btn-default dropdown-toggle" type="button" id="bos-pullsheet-menu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Judging Numbers for Style Type... <span class="caret"></span>
+                                    </button>
+                                    <ul class="dropdown-menu" aria-labelledby="bos-pullsheet-menu">
+                                        <?php echo $bos_cup_mat_st_judging; ?>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div><!-- ./row -->
                         <?php } ?>
 						<div class="row">
 							<div class="col col-lg-12 col-md-12 col-sm-12 col-xs-12">
@@ -1461,8 +1564,8 @@ do {
                                     <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=results&amp;go=judging_scores&amp;action=print&amp;tb=scores&amp;view=winners" data-toggle="tooltip" data-placement="top" title="Print winners only results with scores listed">Winners Only with Scores</a></li>
                                 </ul>
                                 <ul class="list-inline">
-                                    <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=results&amp;go=judging_scores&amp;action=print&amp;tb=none&amp;view=default" data-toggle="tooltip" data-placement="top" title="Print all entry results without scores listed">All without Scores</a></li>
-                                    <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=results&amp;go=judging_scores&amp;action=print&amp;tb=none&amp;view=winners" data-toggle="tooltip" data-placement="top" title="Print winners only results without scores listed">Winners Only without Scores</a></li>
+                                    <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=results&amp;go=judging_scores&amp;action=print&amp;view=default" data-toggle="tooltip" data-placement="top" title="Print all entry results without scores listed">All without Scores</a></li>
+                                    <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=results&amp;go=judging_scores&amp;action=print&amp;view=winners" data-toggle="tooltip" data-placement="top" title="Print winners only results without scores listed">Winners Only without Scores</a></li>
                                 </ul>
                                 <ul class="list-inline">
                                     <li><a class="hide-loader" href="<?php echo $base_url; ?>output/export.output.php?section=results&amp;go=judging_scores&amp;action=default&amp;tb=none&amp;view=pdf" data-toggle="tooltip" data-placement="top" title="Download a PDF report of results - winners only without scores">PDF</a></li>

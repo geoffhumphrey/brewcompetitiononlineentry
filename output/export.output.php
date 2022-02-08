@@ -1360,7 +1360,7 @@ if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($en
             include (DB.'output_staff_points.db.php');
 
             // Get total amount of paid and received entries
-            $total_entries = total_paid_received("judging_scores","default");
+            $total_entries = total_paid_received("judging_scores",0);
             //$total_entries = 750;
 
             $st_running_total = array();

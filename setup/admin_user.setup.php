@@ -100,7 +100,7 @@ if (($action != "print") && ($msg != "default")) echo $msg_output; ?>
 			<div class="input-group has-warning">
 				<span class="input-group-addon" id="email-addon1"><span class="fa fa-envelope"></span></span>
 				<!-- Input Here -->
-				<input class="form-control" name="user_name" id="user_name" type="email" placeholder="Your email address is your user name" onBlur="checkAvailability()" onkeyup="twitter.updateUrl(this.value)" onchange="AjaxFunction(this.value);" value="<?php if ($msg > 0) echo $_COOKIE['user_name']; ?>" required>
+				<input class="form-control" name="user_name" id="user_name" type="email" placeholder="Your email address is your user name" onBlur="checkAvailability()" onkeyup="twitter.updateUrl(this.value)" onchange="AjaxFunction(this.value);" value="<?php if ((isset($_COOKIE['user_name'])) && ($msg > 0)) echo $_COOKIE['user_name']; ?>" required>
 				<span class="input-group-addon" id="email-addon2"><span class="fa fa-star"></span>
 			</div>
 			<div id="msg_email" class="help-block"></div>
@@ -114,7 +114,7 @@ if (($action != "print") && ($msg != "default")) echo $msg_output; ?>
 			<div class="input-group has-warning">
 				<span class="input-group-addon" id="password-addon1"><span class="fa fa-key"></span></span>
 				<!-- Input Here -->
-				<input class="form-control" name="password" id="password" type="password" placeholder="Password" value="<?php if ($msg > 0) echo $_COOKIE['password']; ?>" required>
+				<input class="form-control" name="password" id="password" type="password" placeholder="Password" value="<?php if ((isset($_COOKIE['password'])) && ($msg > 0)) echo $_COOKIE['password']; ?>" required>
 				<span class="input-group-addon" id="password-addon2"><span class="fa fa-star"></span>
 			</div>
 		</div>
@@ -143,7 +143,7 @@ if (($action != "print") && ($msg != "default")) echo $msg_output; ?>
 			<div class="input-group has-warning">
 				<span class="input-group-addon" id="security-question-answer-addon1"><span class="fa fa-bullhorn"></span></span>
 				<!-- Input Here -->
-				<input class="form-control" name="userQuestionAnswer" id="userQuestionAnswer" type="text" placeholder="" value="<?php if ($msg > 0) echo $_COOKIE['userQuestionAnswer']; ?>" required>
+				<input class="form-control" name="userQuestionAnswer" id="userQuestionAnswer" type="text" placeholder="" value="<?php if ((isset($_COOKIE['userQuestionAnswer'])) && ($msg > 0)) echo $_COOKIE['userQuestionAnswer']; ?>" required>
 				<span class="input-group-addon" id="security-question-answer-addon2"><span class="fa fa-star"></span>
 			</div>
 		</div>

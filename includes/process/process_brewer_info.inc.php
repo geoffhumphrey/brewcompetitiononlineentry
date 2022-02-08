@@ -10,7 +10,7 @@
 require (CLASSES.'htmlpurifier/HTMLPurifier.standalone.php');
 $config_html_purifier = HTMLPurifier_Config::createDefault();
 $purifier = new HTMLPurifier($config_html_purifier);
-
+$user_id = "";
 $brewerJudgeNotes = "";
 $brewerJudgeID = "";
 $brewerJudgeMead = "";
@@ -29,6 +29,9 @@ $brewerJudge = "N";
 $brewerSteward = "N";
 $brewerStaff = "";
 $brewerJudgeExp = "";
+
+if ($go == "admin") $user_id = $filter;
+elseif ($id != "default") $user_id = $id;
 
 // Gather, convert, and/or sanitize info from the form
 if (isset($_POST['brewerJudgeID'])) {
@@ -105,13 +108,12 @@ if ($brewerJudge == "Y") {
             $loc = explode("-",$value);
             
             if ($loc[0] == "N") {
-                
-                if ($go == "admin") $user_id = $filter;
-                else $user_id = $id;
-                $updateSQL = sprintf("DELETE FROM %s WHERE bid='%s' AND assignment='J' AND assignLocation='%s'",$prefix."judging_assignments",$user_id,$loc[1]);
-                //echo $updateSQL."<br>";
-                mysqli_real_escape_string($connection,$updateSQL);
-                $result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+
+                if (!empty($user_id)) {
+                    $updateSQL = sprintf("DELETE FROM %s WHERE bid='%s' AND assignment='J' AND assignLocation='%s'",$prefix."judging_assignments",$user_id,$loc[1]);
+                    mysqli_real_escape_string($connection,$updateSQL);
+                    $result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+                }
 
             }
         }
@@ -125,12 +127,11 @@ if ($brewerJudge == "Y") {
 
         if ($loc[0] == "N") {
             
-            if ($go == "admin") $user_id = $filter;
-            else $user_id = $id;
-            
-            $updateSQL = sprintf("DELETE FROM %s WHERE bid='%s' AND assignment='J' AND assignLocation='%s'",$prefix."judging_assignments",$user_id,$loc[1]);
-            mysqli_real_escape_string($connection,$updateSQL);
-            $result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+            if (!empty($user_id)) {
+                $updateSQL = sprintf("DELETE FROM %s WHERE bid='%s' AND assignment='J' AND assignLocation='%s'",$prefix."judging_assignments",$user_id,$loc[1]);
+                mysqli_real_escape_string($connection,$updateSQL);
+                $result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+            }
 
         }
 
@@ -139,13 +140,13 @@ if ($brewerJudge == "Y") {
 }
 
 if ($brewerJudge == "N") {
-
-    if ($go == "admin") $user_id = $filter;
-    else $user_id = $id;
-
-    $updateSQL = sprintf("DELETE FROM %s WHERE bid='%s' AND assignment='J'",$prefix."judging_assignments",$user_id);
-    mysqli_real_escape_string($connection,$updateSQL);
-    $result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+    
+    if (!empty($user_id)) {
+        $updateSQL = sprintf("DELETE FROM %s WHERE bid='%s' AND assignment='J'",$prefix."judging_assignments",$user_id);
+        echo $updateSQL;
+        mysqli_real_escape_string($connection,$updateSQL);
+        $result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+    }
     $location_pref1 = "";
 
 }
@@ -157,11 +158,11 @@ if ($brewerSteward == "Y") {
         foreach ($_POST['brewerStewardLocation'] as $value) {
             $loc = explode("-",$value);
             if ($loc[0] == "N") {
-                if ($go == "admin") $user_id = $filter;
-                else $user_id = $id;
-                $updateSQL = sprintf("DELETE FROM %s WHERE bid='%s' AND assignment='S' AND assignLocation='%s'",$prefix."judging_assignments",$user_id,$loc[1]);
-                mysqli_real_escape_string($connection,$updateSQL);
-                $result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+                if (!empty($user_id)) {
+                    $updateSQL = sprintf("DELETE FROM %s WHERE bid='%s' AND assignment='S' AND assignLocation='%s'",$prefix."judging_assignments",$user_id,$loc[1]);
+                    mysqli_real_escape_string($connection,$updateSQL);
+                    $result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+                }
             }
         }
 
@@ -174,11 +175,11 @@ if ($brewerSteward == "Y") {
         $loc = explode("-",$_POST['brewerStewardLocation']);
 
         if ($loc[0] == "N") {
-            if ($go == "admin") $user_id = $filter;
-            else $user_id = $id;
-            $updateSQL = sprintf("DELETE FROM %s WHERE bid='%s' AND assignment='S' AND assignLocation='%s'",$prefix."judging_assignments",$user_id,$loc[1]);
-            mysqli_real_escape_string($connection,$updateSQL);
-            $result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+            if (!empty($user_id)) {
+                $updateSQL = sprintf("DELETE FROM %s WHERE bid='%s' AND assignment='S' AND assignLocation='%s'",$prefix."judging_assignments",$user_id,$loc[1]);
+                mysqli_real_escape_string($connection,$updateSQL);
+                $result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+            }
         }
 
         $location_pref2 = sterilize($_POST['brewerStewardLocation']);
@@ -189,12 +190,11 @@ if ($brewerSteward == "Y") {
 
 if ($brewerSteward == "N") { 
 
-    if ($go == "admin") $user_id = $filter;
-    else $user_id = $id;
-
-    $updateSQL = sprintf("DELETE FROM %s WHERE bid='%s' AND assignment='S'",$prefix."judging_assignments",$user_id);
-    mysqli_real_escape_string($connection,$updateSQL);
-    $result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+    if (!empty($user_id)) {
+        $updateSQL = sprintf("DELETE FROM %s WHERE bid='%s' AND assignment='S'",$prefix."judging_assignments",$user_id);
+        mysqli_real_escape_string($connection,$updateSQL);
+        $result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+    }
 
     $location_pref2 = "";
 

@@ -129,8 +129,10 @@ function bos_entry_info($eid,$table_id,$filter) {
 	$return .= $row_tables_1['id']."^";  					// 7
 	$return .= $row_tables_1['tableName']."^";   			// 8
 	$return .= $row_tables_1['tableNumber']."^";  			// 9
-	$return .= $row_bos_place_1['scorePlace']."^";  		// 10
-	$return .= $row_bos_place_1['scoreEntry']."^";  		// 11
+	if (isset($row_bos_place_1['scorePlace'])) $return .= $row_bos_place_1['scorePlace']."^";  		// 10
+	else $return .= " ^";
+	if (isset($row_bos_place_1['scoreEntry'])) $return .= $row_bos_place_1['scoreEntry']."^";  		// 11
+	else $return .= " ^";
 	$return .= $row_entries_1['brewName']."^";  			// 12
 	$return .= $row_entries_1['id']."^";   					// 13
 	if (isset($row_bos_place_1['id'])) $return .= $row_bos_place_1['id']."^";   				// 14
@@ -225,15 +227,17 @@ function score_entry_data($value) {
 	$scores = mysqli_query($connection,$query_scores) or die (mysqli_error($connection));
 	$row_scores = mysqli_fetch_assoc($scores);
 
-	$return =
-	$row_scores['id']."^". //0
-	$row_scores['eid']."^". //1
-	$row_scores['bid']."^". //2
-	$row_scores['scoreEntry']."^". //3
-	$row_scores['scorePlace']."^". //4
-	$row_scores['scoreMiniBOS']; //5
+	$return = "";
 
-	return $return;
+	if (!empty($row_scores)) {
+		$return =
+		$row_scores['id']."^". //0
+		$row_scores['eid']."^". //1
+		$row_scores['bid']."^". //2
+		$row_scores['scoreEntry']."^". //3
+		$row_scores['scorePlace']."^". //4
+		$row_scores['scoreMiniBOS']; //5
+	}
 
 }
 
@@ -976,9 +980,11 @@ function at_table($bid,$tid) {
 	$assignments = mysqli_query($connection,$query_assignments) or die (mysqli_error($connection));
 	$row_assignments = mysqli_fetch_assoc($assignments);
 	$a = array();
-	do {
-		$a[] .= $row_assignments['assignTable'];
-	} while ($row_assignments = mysqli_fetch_assoc($assignments));
+	if (!empty($row_assignments)) {
+		do {
+			$a[] .= $row_assignments['assignTable'];
+		} while ($row_assignments = mysqli_fetch_assoc($assignments));
+	}
 	if (in_array($tid,$a)) return TRUE;
 	else return FALSE;
 	//return implode(",",$a);
@@ -1067,16 +1073,13 @@ function entry_conflict($bid,$table_styles) {
 }
 
 function unassign($bid,$location,$round,$tid) {
-	//if (unavailable($bid,$location,$round,$tid)) {
-		require(CONFIG.'config.php');
-		mysqli_select_db($connection,$database);
-		$query_assignments = sprintf("SELECT id FROM %s WHERE bid='%s' AND assignRound='%s' AND assignLocation='%s'", $prefix."judging_assignments", $bid, $round, $location);
-		$assignments = mysqli_query($connection,$query_assignments) or die (mysqli_error($connection));
-		$row_assignments = mysqli_fetch_assoc($assignments);
-		$r = $row_assignments['id'];
-	//}
-	if ($r > 0) $r = $r;
-	else $r = "0";
+	require(CONFIG.'config.php');
+	mysqli_select_db($connection,$database);
+	$query_assignments = sprintf("SELECT id FROM %s WHERE bid='%s' AND assignRound='%s' AND assignLocation='%s'", $prefix."judging_assignments", $bid, $round, $location);
+	$assignments = mysqli_query($connection,$query_assignments) or die (mysqli_error($connection));
+	$row_assignments = mysqli_fetch_assoc($assignments);
+	if (!empty($row_assignments)) $r = $row_assignments['id'];
+	else $r = 0;
 	//$r = $query_assignments;
 	return $r;
 }
@@ -1329,25 +1332,30 @@ function judge_alert($round,$bid,$tid,$location,$likes,$dislikes,$table_styles,$
 function judge_info($uid) {
 	require(CONFIG.'config.php');
 	mysqli_select_db($connection,$database);
+
+	$r = "";
+
 	$query_brewer_info = sprintf("SELECT id,brewerFirstName,brewerLastName,brewerJudgeLikes,brewerJudgeDislikes,brewerJudgeMead,brewerJudgeCider,brewerJudgeRank,brewerJudgeID,brewerStewardLocation,brewerJudgeLocation,brewerJudgeExp,brewerJudgeNotes FROM %s WHERE uid='%s'", $prefix."brewer", $uid);
 	$brewer_info = mysqli_query($connection,$query_brewer_info) or die (mysqli_error($connection));
 	$row_brewer_info = mysqli_fetch_assoc($brewer_info);
 
 
-	$r =
-	$row_brewer_info['brewerFirstName']
-	."^".$row_brewer_info['brewerLastName']
-	."^".$row_brewer_info['brewerJudgeLikes']
-	."^".$row_brewer_info['brewerJudgeDislikes']
-	."^".$row_brewer_info['brewerJudgeMead']
-	."^".$row_brewer_info['brewerJudgeRank']
-	."^".$row_brewer_info['brewerJudgeID']
-	."^".$row_brewer_info['brewerStewardLocation']
-	."^".$row_brewer_info['brewerJudgeLocation']
-	."^".$row_brewer_info['brewerJudgeExp']
-	."^".$row_brewer_info['brewerJudgeNotes']
-	."^".$row_brewer_info['id']
-	."^".$row_brewer_info['brewerJudgeCider'];
+	if (!empty($row_brewer_info)) {
+		$r =
+		$row_brewer_info['brewerFirstName']
+		."^".$row_brewer_info['brewerLastName']
+		."^".$row_brewer_info['brewerJudgeLikes']
+		."^".$row_brewer_info['brewerJudgeDislikes']
+		."^".$row_brewer_info['brewerJudgeMead']
+		."^".$row_brewer_info['brewerJudgeRank']
+		."^".$row_brewer_info['brewerJudgeID']
+		."^".$row_brewer_info['brewerStewardLocation']
+		."^".$row_brewer_info['brewerJudgeLocation']
+		."^".$row_brewer_info['brewerJudgeExp']
+		."^".$row_brewer_info['brewerJudgeNotes']
+		."^".$row_brewer_info['id']
+		."^".$row_brewer_info['brewerJudgeCider'];
+	}
 
 
 	if ($_SESSION['jPrefsQueued'] == "N") {
@@ -1355,7 +1363,7 @@ function judge_info($uid) {
 		$judge_info = mysqli_query($connection,$query_judge_info) or die (mysqli_error($connection));
 		$row_judge_info = mysqli_fetch_assoc($judge_info);
 
-		$r .= "^".$row_judge_info['assignFlight']."^".$row_judge_info['assignRound'];
+		if (!empty($row_judge_info)) $r .= "^".$row_judge_info['assignFlight']."^".$row_judge_info['assignRound'];
 	}
 
 	return $r;
@@ -1406,9 +1414,12 @@ function not_assigned($method) {
 				if ($row_assignments['count'] == 0) {
 					$info = judge_info($bid);
 					$assignment_info = explode("^",$info);
-					$judge_rank = $assignment_info[5];
-					$judge_rank_explode = explode(",",$assignment_info[5]);
-					$judge_rank_display = $judge_rank_explode[0];
+					$judge_rank = "";
+					if (isset($assignment_info[5])) {
+						$judge_rank = $assignment_info[5];
+						$judge_rank_explode = explode(",",$assignment_info[5]);
+						$judge_rank_display = $judge_rank_explode[0];
+					}
 					if (empty($judge_rank)) $judge_rank_display = "Non-BJCP";
 					if (!empty($assignment_info[1])) $assignment .= "<tr><td class=\"small\">".$assignment_info[1].", ".$assignment_info[0]."</td><td class=\"small\">".$judge_rank_display."</td></tr>";
 				}
@@ -1424,9 +1435,11 @@ function not_assigned($method) {
 				if ($row_assignments['count'] == 0) {
 					$info = judge_info($bid);
 					$assignment_info = explode("^",$info);
-					$judge_rank = $assignment_info[5];
-					$judge_rank_explode = explode(",",$assignment_info[5]);
-					$judge_rank_display = $judge_rank_explode[0];
+					if (isset($assignment_info[5])) {
+						$judge_rank = $assignment_info[5];
+						$judge_rank_explode = explode(",",$assignment_info[5]);
+						$judge_rank_display = $judge_rank_explode[0];
+					}
 					if (empty($judge_rank)) $judge_rank_display = "Non-BJCP";
 					if (!empty($assignment_info[1])) $assignment .= "<tr><td class=\"small\">".$assignment_info[1].", ".$assignment_info[0]."</td><td class=\"small\">".$judge_rank_display."</td></tr>";
 				}

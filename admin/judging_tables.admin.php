@@ -179,99 +179,103 @@ if (($action == "default") && ($filter == "default")) {
 
     } while ($row_judging = mysqli_fetch_assoc($judging));
 
-    do {
+    if ($totalRows_tables > 0) {
 
-        $a = array(get_table_info("1","list",$row_tables['id'],$dbTable,"default"));
-        $styles = display_array_content($a,1);
-        $received = get_table_info("1","count_total",$row_tables['id'],$dbTable,"default");
-        if ($_SESSION['jPrefsTablePlanning'] == 0) {
-            $scored =  get_table_info("1","score_total",$row_tables['id'],$dbTable,"default");
-            //get_table_info($input,$method,$id,$dbTable,$param)
-            if (($received > $scored) && ($dbTable == "default")) $scored = $scored." <a class=\"hidden-print\" href=\"".$base_url."index.php?section=admin&amp;go=judging_scores&amp;action=edit&amp;id=".$row_tables['id']."\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Not all scores have been entered for this table. Select to add/edit scores.\"><span class=\"fa fa-lg fa-exclamation-circle text-danger\"></span></a>";
-            else $scored = $scored;
-        }
+        do {
 
-        else $scored = "<i class=\"text-danger fa fas fa-lg fa-ban\"></i> <small><em>Planning Mode</em></small>";
-
-        $assigned_judges = assigned_judges($row_tables['id'],$dbTable,$judging_assignments_db_table);
-            if ($dbTable == "default") $assigned_judges .= "<button class=\"btn-link\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Delete all judge assignments for this table.\" onclick=\"purge_data('".$base_url."','purge','judge-assignments','table-admin','delete-judges-".$row_tables['id']."');\"><i class=\"text-danger fas fa-lg fa-minus-circle\"></i></button><div><span class=\"hidden\" id=\"delete-judges-".$row_tables['id']."-status\"></span><span class=\"hidden\" id=\"delete-judges-".$row_tables['id']."-status-msg\"></span></div>";
-        
-        $assigned_stewards = assigned_stewards($row_tables['id'],$dbTable,$judging_assignments_db_table);
-            if ($dbTable == "default") $assigned_stewards .= "<button class=\"btn-link\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Delete all steward assignments for this table.\" onclick=\"purge_data('".$base_url."','purge','steward-assignments','table-admin','delete-stewards-".$row_tables['id']."');\"><i class=\"text-danger fas fa-lg fa-minus-circle\"></i></button><div><span class=\"hidden\" id=\"delete-stewards-".$row_tables['id']."-status\"></span><span class=\"hidden\" id=\"delete-stewards-".$row_tables['id']."-status-msg\"></span></div>";
-
-        if ($dbTable == "default") {
-            if (score_count($row_tables['id'],1,$dbTable)) $scoreAction = "edit";
-            else $scoreAction = "add";
-        }
-
-        $manage_tables_default_tbody .= "<tr>";
-        $manage_tables_default_tbody .= "<td>".$row_tables['tableNumber']."</td>";
-        $manage_tables_default_tbody .= "<td>".$row_tables['tableName']."</td>";
-        $manage_tables_default_tbody .= "<td>".rtrim($styles, ",&nbsp;")."</td>";
-        $manage_tables_default_tbody .= "<td>".$received."</td>";
-        $manage_tables_default_tbody .= "<td class=\"hidden-xs hidden-sm\">".$scored."</td>";
-        $manage_tables_default_tbody .= "<td class=\"hidden-xs hidden-sm\">".$assigned_judges."</td>";
-        $manage_tables_default_tbody .= "<td class=\"hidden-xs hidden-sm\">".$assigned_stewards."</td>";
-        if (($totalRows_judging > 1) && ($dbTable == "default")) $manage_tables_default_tbody .= "<td class=\"hidden-xs hidden-sm\">".table_location($row_tables['id'],$_SESSION['prefsDateFormat'],$_SESSION['prefsTimeZone'],$_SESSION['prefsTimeFormat'],"default")."</td>";
-        
-        if ($dbTable == "default") {
-            $manage_tables_default_tbody .= "<td nowrap class=\"hidden-print\">";
-
-            // Build edit link
-            $manage_tables_default_tbody .= "<a href=\"".$base_url."index.php?section=admin&amp;go=".$go;
-            $manage_tables_default_tbody .= "&amp;action=edit&amp;id=".$row_tables['id']."\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Edit Table ".$row_tables['tableNumber'].": ".$row_tables['tableName']."\">";
-            $manage_tables_default_tbody .= "<span class=\"fa fa-lg fa-pencil\"></span>";
-            $manage_tables_default_tbody .= "</a> ";
-
+            $a = array(get_table_info("1","list",$row_tables['id'],$dbTable,"default"));
+            $styles = display_array_content($a,1);
+            $received = get_table_info("1","count_total",$row_tables['id'],$dbTable,"default");
             if ($_SESSION['jPrefsTablePlanning'] == 0) {
-                // Build print pullsheet link
-                $manage_tables_default_tbody .= "<a id=\"modal_window_link\" class=\"hide-loader\" href=\"".$base_url."output/print.output.php?section=pullsheets&amp;go=judging_tables&amp;id=".$row_tables['id']."\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Print the pullsheet for Table ".$row_tables['tableNumber'].": ".$row_tables['tableName']."\">";
-                $manage_tables_default_tbody .= "<span class=\"fa fa-lg fa-print\"></span>";
-                $manage_tables_default_tbody .= "</a> ";
-
+                $scored =  get_table_info("1","score_total",$row_tables['id'],$dbTable,"default");
+                //get_table_info($input,$method,$id,$dbTable,$param)
+                if (($received > $scored) && ($dbTable == "default")) $scored = $scored." <a class=\"hidden-print\" href=\"".$base_url."index.php?section=admin&amp;go=judging_scores&amp;action=edit&amp;id=".$row_tables['id']."\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Not all scores have been entered for this table. Select to add/edit scores.\"><span class=\"fa fa-lg fa-exclamation-circle text-danger\"></span></a>";
+                else $scored = $scored;
             }
 
-            else $manage_tables_default_tbody .= "<span class=\"fa fa-lg fa-print text-muted\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Printing pullsheest is disabled in Tables Planning Mode\"></span> ";
+            else $scored = "<i class=\"text-danger fa fas fa-lg fa-ban\"></i> <small><em>Planning Mode</em></small>";
 
-            if ($_SESSION['jPrefsTablePlanning'] == 0) {
-                // Build print pullsheet link
-                $manage_tables_default_tbody .= "<a id=\"modal_window_link\" class=\"hide-loader\" href=\"".$base_url."output/print.output.php?section=pullsheets&amp;go=all_entry_info&amp;id=".$row_tables['id']."\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Print the Entries with Additional Info Report for Table ".$row_tables['tableNumber'].": ".$row_tables['tableName']."\">";
-                $manage_tables_default_tbody .= "<span class=\"fa fa-lg fa-plus-square\"></span>";
-                $manage_tables_default_tbody .= "</a> ";
+            $assigned_judges = assigned_judges($row_tables['id'],$dbTable,$judging_assignments_db_table);
+                if ($dbTable == "default") $assigned_judges .= "<button class=\"btn-link\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Delete all judge assignments for this table.\" onclick=\"purge_data('".$base_url."','purge','judge-assignments','table-admin','delete-judges-".$row_tables['id']."');\"><i class=\"text-danger fas fa-lg fa-minus-circle\"></i></button><div><span class=\"hidden\" id=\"delete-judges-".$row_tables['id']."-status\"></span><span class=\"hidden\" id=\"delete-judges-".$row_tables['id']."-status-msg\"></span></div>";
+            
+            $assigned_stewards = assigned_stewards($row_tables['id'],$dbTable,$judging_assignments_db_table);
+                if ($dbTable == "default") $assigned_stewards .= "<button class=\"btn-link\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Delete all steward assignments for this table.\" onclick=\"purge_data('".$base_url."','purge','steward-assignments','table-admin','delete-stewards-".$row_tables['id']."');\"><i class=\"text-danger fas fa-lg fa-minus-circle\"></i></button><div><span class=\"hidden\" id=\"delete-stewards-".$row_tables['id']."-status\"></span><span class=\"hidden\" id=\"delete-stewards-".$row_tables['id']."-status-msg\"></span></div>";
+
+            if ($dbTable == "default") {
+                if (score_count($row_tables['id'],1,$dbTable)) $scoreAction = "edit";
+                else $scoreAction = "add";
             }
 
-            else $manage_tables_default_tbody .= "<span class=\"fa fa-lg fa-plus-square text-muted\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Printing the Entries with Additional Info report is disabled in Tables Planning Mode\"></span> ";
+            $manage_tables_default_tbody .= "<tr>";
+            $manage_tables_default_tbody .= "<td>".$row_tables['tableNumber']."</td>";
+            $manage_tables_default_tbody .= "<td>".$row_tables['tableName']."</td>";
+            $manage_tables_default_tbody .= "<td>".rtrim($styles, ",&nbsp;")."</td>";
+            $manage_tables_default_tbody .= "<td>".$received."</td>";
+            $manage_tables_default_tbody .= "<td class=\"hidden-xs hidden-sm\">".$scored."</td>";
+            $manage_tables_default_tbody .= "<td class=\"hidden-xs hidden-sm\">".$assigned_judges."</td>";
+            $manage_tables_default_tbody .= "<td class=\"hidden-xs hidden-sm\">".$assigned_stewards."</td>";
+            if (($totalRows_judging > 1) && ($dbTable == "default")) $manage_tables_default_tbody .= "<td class=\"hidden-xs hidden-sm\">".table_location($row_tables['id'],$_SESSION['prefsDateFormat'],$_SESSION['prefsTimeZone'],$_SESSION['prefsTimeFormat'],"default")."</td>";
+            
+            if ($dbTable == "default") {
+                $manage_tables_default_tbody .= "<td nowrap class=\"hidden-print\">";
 
-            // Build flight link
-            if (($_SESSION['jPrefsQueued'] == "N") && (flight_count($row_tables['id'],1))) {
-                $manage_tables_default_tbody .= "<a href=\"".$base_url."index.php?section=admin&amp;go=judging_flights&amp;filter=define&amp;action=edit&amp;id=".$row_tables['id']."\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Add/edit flights for Table ".$row_tables['tableNumber'].": ".$row_tables['tableName']."\">";
-                $manage_tables_default_tbody .= "<span class=\"fa fa-lg fa-send\"></span>";
+                // Build edit link
+                $manage_tables_default_tbody .= "<a href=\"".$base_url."index.php?section=admin&amp;go=".$go;
+                $manage_tables_default_tbody .= "&amp;action=edit&amp;id=".$row_tables['id']."\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Edit Table ".$row_tables['tableNumber'].": ".$row_tables['tableName']."\">";
+                $manage_tables_default_tbody .= "<span class=\"fa fa-lg fa-pencil\"></span>";
                 $manage_tables_default_tbody .= "</a> ";
+
+                if ($_SESSION['jPrefsTablePlanning'] == 0) {
+                    // Build print pullsheet link
+                    $manage_tables_default_tbody .= "<a id=\"modal_window_link\" class=\"hide-loader\" href=\"".$base_url."output/print.output.php?section=pullsheets&amp;go=judging_tables&amp;id=".$row_tables['id']."\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Print the pullsheet for Table ".$row_tables['tableNumber'].": ".$row_tables['tableName']."\">";
+                    $manage_tables_default_tbody .= "<span class=\"fa fa-lg fa-print\"></span>";
+                    $manage_tables_default_tbody .= "</a> ";
+
+                }
+
+                else $manage_tables_default_tbody .= "<span class=\"fa fa-lg fa-print text-muted\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Printing pullsheest is disabled in Tables Planning Mode\"></span> ";
+
+                if ($_SESSION['jPrefsTablePlanning'] == 0) {
+                    // Build print pullsheet link
+                    $manage_tables_default_tbody .= "<a id=\"modal_window_link\" class=\"hide-loader\" href=\"".$base_url."output/print.output.php?section=pullsheets&amp;go=all_entry_info&amp;id=".$row_tables['id']."\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Print the Entries with Additional Info Report for Table ".$row_tables['tableNumber'].": ".$row_tables['tableName']."\">";
+                    $manage_tables_default_tbody .= "<span class=\"fa fa-lg fa-plus-square\"></span>";
+                    $manage_tables_default_tbody .= "</a> ";
+                }
+
+                else $manage_tables_default_tbody .= "<span class=\"fa fa-lg fa-plus-square text-muted\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Printing the Entries with Additional Info report is disabled in Tables Planning Mode\"></span> ";
+
+                // Build flight link
+                if (($_SESSION['jPrefsQueued'] == "N") && (flight_count($row_tables['id'],1))) {
+                    $manage_tables_default_tbody .= "<a href=\"".$base_url."index.php?section=admin&amp;go=judging_flights&amp;filter=define&amp;action=edit&amp;id=".$row_tables['id']."\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Add/edit flights for Table ".$row_tables['tableNumber'].": ".$row_tables['tableName']."\">";
+                    $manage_tables_default_tbody .= "<span class=\"fa fa-lg fa-send\"></span>";
+                    $manage_tables_default_tbody .= "</a> ";
+                }
+
+
+                if ($_SESSION['jPrefsTablePlanning'] == 0) {
+                    //Build add scores link
+                    $manage_tables_default_tbody .= "<a href=\"".$base_url."index.php?section=admin&amp;go=judging_scores&amp;action=".$scoreAction."&amp;id=".$row_tables['id']."\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Add/edit scores for Table ".$row_tables['tableNumber'].": ".$row_tables['tableName']."\">";
+                    $manage_tables_default_tbody .= "<span class=\"fa fa-lg fa-trophy\"></span>";
+                    $manage_tables_default_tbody .= "</a> ";
+                }
+
+                else $manage_tables_default_tbody .= "<span class=\"fa fa-lg fa-trophy text-muted\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Add/edit scores disabled in Tables Planning Mode\"></span> ";
+
+                // Build delete link
+                $manage_tables_default_tbody .= "<a class=\"hide-loader\" href=\"".$base_url;
+                $manage_tables_default_tbody .= "includes/process.inc.php?section=".$section."&amp;go=".$go."&amp;filter=".$filter."&amp;dbTable=".$judging_tables_db_table."&amp;action=delete&amp;id=".$row_tables['id']."\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Delete Table ".$row_tables['tableNumber'].": ".$row_tables['tableName']."\" data-confirm=\"Are you sure you want to delete Table ".$row_tables['tableNumber'].": ".$row_tables['tableName']."? ALL associated FLIGHTS and SCORES will be deleted as well. This cannot be undone.\">";
+                $manage_tables_default_tbody .= "<span class=\"fa fa-lg fa-trash-o\"></span>";
+                $manage_tables_default_tbody .= "</a> ";
+                $manage_tables_default_tbody .= "</td>";
             }
 
+            $manage_tables_default_tbody .= "";
+            $manage_tables_default_tbody .= "";
+            $manage_tables_default_tbody .= "</tr>";
 
-            if ($_SESSION['jPrefsTablePlanning'] == 0) {
-                //Build add scores link
-                $manage_tables_default_tbody .= "<a href=\"".$base_url."index.php?section=admin&amp;go=judging_scores&amp;action=".$scoreAction."&amp;id=".$row_tables['id']."\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Add/edit scores for Table ".$row_tables['tableNumber'].": ".$row_tables['tableName']."\">";
-                $manage_tables_default_tbody .= "<span class=\"fa fa-lg fa-trophy\"></span>";
-                $manage_tables_default_tbody .= "</a> ";
-            }
+        } while ($row_tables = mysqli_fetch_assoc($tables));
 
-            else $manage_tables_default_tbody .= "<span class=\"fa fa-lg fa-trophy text-muted\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Add/edit scores disabled in Tables Planning Mode\"></span> ";
-
-            // Build delete link
-            $manage_tables_default_tbody .= "<a class=\"hide-loader\" href=\"".$base_url;
-            $manage_tables_default_tbody .= "includes/process.inc.php?section=".$section."&amp;go=".$go."&amp;filter=".$filter."&amp;dbTable=".$judging_tables_db_table."&amp;action=delete&amp;id=".$row_tables['id']."\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Delete Table ".$row_tables['tableNumber'].": ".$row_tables['tableName']."\" data-confirm=\"Are you sure you want to delete Table ".$row_tables['tableNumber'].": ".$row_tables['tableName']."? ALL associated FLIGHTS and SCORES will be deleted as well. This cannot be undone.\">";
-            $manage_tables_default_tbody .= "<span class=\"fa fa-lg fa-trash-o\"></span>";
-            $manage_tables_default_tbody .= "</a> ";
-            $manage_tables_default_tbody .= "</td>";
-        }
-
-        $manage_tables_default_tbody .= "";
-        $manage_tables_default_tbody .= "";
-        $manage_tables_default_tbody .= "</tr>";
-
-    } while ($row_tables = mysqli_fetch_assoc($tables));
+    }
 
     do {
 

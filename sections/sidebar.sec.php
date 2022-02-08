@@ -340,21 +340,25 @@ if ($section != "admin") {
 		$archive_sidebar_count = 0;
 		$archive_sidebar_content = "";
 
-		do {
+		if ($totalRows_archive > 0) {
 
-			if (($row_archive['archiveDisplayWinners'] == "Y") && ($row_archive['archiveStyleSet'] != "")) {
-				$table_archive = $prefix."judging_scores_".$row_archive['archiveSuffix'];
-				if (table_exists($table_archive)) {
-			   		if (get_archive_count($table_archive) > 0) {
-			   			$archive_link = build_public_url("past-winners",$row_archive['archiveSuffix'],"default","default",$sef,$base_url);
-			   			$archive_sidebar_count += 1;
-						if ($go == $row_archive['archiveSuffix']) $archive_sidebar_content .= "<li><i class=\"fa fa-trophy text-gold\"></i> <strong>".$row_archive['archiveSuffix']."</strong></li>";
-						else $archive_sidebar_content .= "<li><i class=\"fa fa-trophy text-silver\"></i> <a href=\"".$archive_link."\">".$row_archive['archiveSuffix']."</a></li>";
+			do {
+
+				if (($row_archive['archiveDisplayWinners'] == "Y") && ($row_archive['archiveStyleSet'] != "")) {
+					$table_archive = $prefix."judging_scores_".$row_archive['archiveSuffix'];
+					if (table_exists($table_archive)) {
+				   		if (get_archive_count($table_archive) > 0) {
+				   			$archive_link = build_public_url("past-winners",$row_archive['archiveSuffix'],"default","default",$sef,$base_url);
+				   			$archive_sidebar_count += 1;
+							if ($go == $row_archive['archiveSuffix']) $archive_sidebar_content .= "<li><i class=\"fa fa-trophy text-gold\"></i> <strong>".$row_archive['archiveSuffix']."</strong></li>";
+							else $archive_sidebar_content .= "<li><i class=\"fa fa-trophy text-silver\"></i> <a href=\"".$archive_link."\">".$row_archive['archiveSuffix']."</a></li>";
+						}
 					}
-				}
-			}	
+				}	
 
-		} while($row_archive = mysqli_fetch_assoc($archive));
+			} while($row_archive = mysqli_fetch_assoc($archive));
+
+		}
 
 		if ($archive_sidebar_count > 0) $archive_sidebar = TRUE;
 
@@ -372,8 +376,6 @@ if ($section != "admin") {
 		}
 		
 	}
-
-	
 
 	// --------------------------------------------------------------
 	// Display

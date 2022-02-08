@@ -250,30 +250,34 @@ if ((!isset($_SESSION['prefs'.$prefix_session])) || (empty($_SESSION['prefs'.$pr
 if ((isset($_SESSION['loginUsername'])) && ((!isset($_SESSION['user_info'.$prefix_session])) || (empty($_SESSION['user_info'.$prefix_session]))))  {
 
 	if (strpos($section, "step") === FALSE) {
-		$query_user = sprintf("SELECT * FROM %s WHERE user_name = '%s'", $prefix."users", $_SESSION['loginUsername']);
-		$user = mysqli_query($connection,$query_user) or die (mysqli_error($connection));
-		$row_user = mysqli_fetch_assoc($user);
-		$totalRows_user = mysqli_num_rows($user);
 
-	    foreach ($row_user as $key => $value) {
-			if ($key != "id") $_SESSION[$key] = $value;
+		if ($section != "setup") {
+
+			$query_user = sprintf("SELECT * FROM %s WHERE user_name = '%s'", $prefix."users", $_SESSION['loginUsername']);
+			$user = mysqli_query($connection,$query_user) or die (mysqli_error($connection));
+			$row_user = mysqli_fetch_assoc($user);
+			$totalRows_user = mysqli_num_rows($user);
+
+		    foreach ($row_user as $key => $value) {
+				if ($key != "id") $_SESSION[$key] = $value;
+			}
+
+		    $_SESSION['user_id'] = $row_user['id'];
+
+			$query_name = sprintf("SELECT * FROM %s WHERE uid='%s'", $prefix."brewer", $row_user['id']);
+			$name = mysqli_query($connection,$query_name) or die (mysqli_error($connection));
+			$row_name = mysqli_fetch_assoc($name);
+			$name_columns = array_keys($row_name);
+
+		    foreach ($row_name as $key => $value) {
+				if ($key != "id") $_SESSION[$key] = $value;
+			}
+
+		    $_SESSION['brewerID'] = $row_name['id'];
+			$_SESSION['user_info'.$prefix_session] = $prefix_session;
+
 		}
-
-	    $_SESSION['user_id'] = $row_user['id'];
-
-		$query_name = sprintf("SELECT * FROM %s WHERE uid='%s'", $prefix."brewer", $row_user['id']);
-		$name = mysqli_query($connection,$query_name) or die (mysqli_error($connection));
-		$row_name = mysqli_fetch_assoc($name);
-		$name_columns = array_keys($row_name);
-
-		
-
-	    foreach ($row_name as $key => $value) {
-			if ($key != "id") $_SESSION[$key] = $value;
-		}
-
-	    $_SESSION['brewerID'] = $row_name['id'];
-		$_SESSION['user_info'.$prefix_session] = $prefix_session;
+			
 	}
 
 }

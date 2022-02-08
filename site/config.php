@@ -2,7 +2,6 @@
 /**
  * Module:        config.php
  * Description:   This module houses configuration variables for DB connection, etc.
- *
  * Last Modified: August 26, 2021
  */
 
@@ -31,7 +30,9 @@ $hostname = 'localhost';
  * $username = 'fred'.
  */
 
-$username = '';
+
+$username = 'brewcomp_bcoeh2';
+
 
 /**
  * INSERT YOUR PASSWORD BETWEEN THE SINGLE-QUOTATION MARKS ('').
@@ -39,7 +40,7 @@ $username = '';
  * $password = 'flintsone'.
  */
 
-$password = '';
+$password = '5T82!#aXhAZu';
 
 /**
  * The following line is the name of your MySQL database you set up already.
@@ -47,7 +48,8 @@ $password = '';
  * http://brewcompetition.com/install-instructions for setup instructions.
  */
 
-$database = '';
+$database = 'brewcomp_bcoetest';
+
 
 /**
  * If the database port is different from the default then overwrite as the 
@@ -101,7 +103,7 @@ $brewing = $connection;
  * $prefix = 'comp1_';
  */
 
-$prefix = '';
+$prefix = 'tbh_';
 
 /*
  * ******************************************************************************
@@ -125,7 +127,7 @@ $installation_id = '';
  * expires due to inactivity. Default is 30 minutes.
  */
 
-$session_expire_after = 30;
+$session_expire_after = 90;
 
 /*
  * ******************************************************************************
@@ -184,7 +186,7 @@ $sub_directory = '';
  * server AND you're experiencing log in or session issues, or if pages are not 
  * rendering correctly, comment out the second line in the block below (the if
  * statement).
- * @fixes https://github.com/geoffhumphrey/brewcompetitiononlineentry/issues/1123 
+ * @fixes https://github.com/geoffhumphrey/brewcompetitiononlineentry/issues/1123
  */
 
 $base_url = 'http://';

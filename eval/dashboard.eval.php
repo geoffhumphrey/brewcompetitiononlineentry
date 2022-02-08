@@ -72,6 +72,10 @@ $table_assignments_user = array();
 $on_the_fly_display = "";
 $on_the_fly_display_tbody = "";
 $roles = "";
+$latest_submitted = array();
+$date_submitted = array();
+$latest_updated = array();
+$date_updated = array();
 
 // Get last judging session end date/time (if any)
 $query_session_end = sprintf("SELECT judgingDateEnd FROM %s",$prefix."judging_locations");
@@ -876,6 +880,36 @@ if ($totalRows_table_assignments > 0) {
 <script src="<?php echo $base_url;?>js_includes/admin_ajax.min.js"></script>
 <?php
 } // end if ($totalRows_table_assignments > 0)
+
+if ($admin) {
+	$columns = array_column($date_submitted, "date_submitted");
+	array_multisort($columns, SORT_DESC, $date_submitted);
+	$date_submitted = array_unique($date_submitted, SORT_REGULAR);
+	$show_submitted = 0;
+	$latest_submitted_accordion = "";
+
+	foreach ($date_submitted as $key => $value) {
+		$show_submitted += 1;
+		if ($show_submitted <=20) {
+			$submitted_date = getTimeZoneDateTime($_SESSION['prefsTimeZone'], $value['date_submitted'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "short", "date-time");
+			$latest_submitted_accordion .= sprintf("<li><a href=\"#%s\">%s</a> - %s%s: %s (%s)</li>",$value['brewJudgingNumber'],$value['brewJudgingNumber'],$value['brewCategorySort'],$value['brewSubCategory'],$value['brewStyle'],$submitted_date);
+		}
+	}
+
+	$columns = array_column($date_submitted, "date_updated");
+	array_multisort($columns, SORT_DESC, $date_submitted);
+	$date_submitted = array_unique($date_submitted, SORT_REGULAR);
+	$show_updated = 0;
+	$latest_updated_accordion = "";
+	foreach ($date_submitted as $key => $value) {
+		$show_updated += 1;
+		if ($show_updated <=20) {
+			$updated_date = getTimeZoneDateTime($_SESSION['prefsTimeZone'], $value['date_updated'], $_SESSION['prefsDateFormat'], $_SESSION['prefsTimeFormat'], "short", "date-time");
+			$latest_updated_accordion .= sprintf("<li><a href=\"#%s\">%s</a> - %s%s: %s (%s)</li>",$value['brewJudgingNumber'],$value['brewJudgingNumber'],$value['brewCategorySort'],$value['brewSubCategory'],$value['brewStyle'],$updated_date);
+		}
+	}
+}
+
 if (!$admin) {
 	echo $header;
 	if (($judging_open) && (empty($table_assign_judge))) echo sprintf("<p>%s</p>",$evaluation_info_009);
@@ -889,6 +923,38 @@ if (!empty($judge_score_disparity)) echo $jscore_disparity;
 if (!empty($assign_score_mismatch)) echo $assign_score_mismatch;
 if (!empty($dup_judge_evals_alert)) echo $dup_judge_evals_alert;
 if (!empty($single_evaluation)) echo $single_eval;
+
+if ((!empty($latest_submitted_accordion)) || (!empty($latest_updated_accordion))) {
+	echo "<div class=\"bcoem-admin-element\">";
+
+	if (!empty($latest_submitted_accordion)) {
+		echo "<a style=\"margin:0 10px 15px 0;\" class=\"btn btn-default\" role=\"button\" data-toggle=\"collapse\" href=\"#latest-submitted\" aria-expanded=\"false\" aria-controls=\"latest-submitted\"><i style=\"padding-right: 5px;\" class=\"fa fa-clock-o\"></i>20 Latest Submitted</a>";
+	}
+
+	if (!empty($latest_updated_accordion)) {
+		echo "<a style=\"margin:0 10px 15px 0;\" class=\"btn btn-default\" role=\"button\" data-toggle=\"collapse\" href=\"#latest-updated\" aria-expanded=\"false\" aria-controls=\"latest-updated\"><i style=\"padding-right: 5px;\" class=\"fa fa-clock-o\"></i>20 Latest Updated</a>";
+	}
+
+}
+
+if (!empty($latest_submitted_accordion)) {
+	echo "<div id=\"latest-submitted\" class=\"collapse alert alert-teal\">";
+	echo "<p><i style=\"padding-right: 5px;\" class=\"fa fa-clock-o\"></i>The <strong>20 most recently submitted</strong> evaluations:</p>";
+	echo "<ul>";
+	echo $latest_submitted_accordion;
+	echo "</ul>";
+	echo "</div>";
+}
+
+if (!empty($latest_updated_accordion)) {
+	echo "<div id=\"latest-updated\" class=\"collapse alert alert-teal\">";
+	echo "<p><i style=\"padding-right: 5px;\" class=\"fa fa-clock-o\"></i>The <strong>20 most recently updated</strong> evaluations:</p>";
+	echo "<ul>";
+	echo $latest_updated_accordion;
+	echo "</ul>";
+	echo "</div>";
+}
+
 if (!$admin) echo $assignment_display;
 if (!empty($on_the_fly_display)) echo $on_the_fly_display;
 if (($admin) || ((!empty($table_assign_judge)) && (!$admin))) {

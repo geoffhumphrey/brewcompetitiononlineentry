@@ -5,7 +5,12 @@
  *              "brewer" table.
  */
 
+use PHPMailer\PHPMailer\PHPMailer;
+require(LIB.'email.lib.php');
+
 if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) && (isset($_SESSION['userLevel']))) || ($section == "setup"))) {
+
+	
 
 	require(PROCESS.'process_brewer_info.inc.php');
 
@@ -28,9 +33,9 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 
 	// Empty the user_info session variable
 	// Will trigger the session to reset the variables in common.db.php upon reload after redirect
-	session_name($prefix_session);
-	session_start();
 	unset($_SESSION['user_info'.$prefix_session]);
+
+	$userQuestion_change = FALSE;
 
 	if ($action == "update") {
 
@@ -631,27 +636,38 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 		mysqli_real_escape_string($connection,$updateSQL);
 		$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 		//echo $updateSQL."<br>";
-		//exit;
+		//exit();
 
-		if (isset($_POST['userQuestion'])) {
+		if ((isset($_POST['userQuestion'])) && ($_POST['changeSecurity'] == "Y")) {
 			$updateSQL = sprintf("UPDATE $users_db_table SET userQuestion=%s WHERE id=%s",GetSQLValueString($purifier->purify($_POST['userQuestion']),"text"),GetSQLValueString($_SESSION['user_id'],"int"));
 			mysqli_real_escape_string($connection,$updateSQL);
 			$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+			//echo $updateSQL."<br>";
 		}
 
-		if (isset($_POST['userQuestionAnswer'])) {
+		if ((isset($_POST['userQuestionAnswer'])) && ($_POST['changeSecurity'] == "Y")) {
 			$userQuestionAnswer = $purifier->purify($_POST['userQuestionAnswer']);
 			$userQuestionAnswer = filter_var($userQuestionAnswer,FILTER_SANITIZE_STRING);
 
-			/*
+			/**
+			 * Hash the user's security question response.
+			 * Addresses Issue #1208 on GitHub
+			 * @see https://github.com/geoffhumphrey/brewcompetitiononlineentry/issues/1208
+			 */
 			require(CLASSES.'phpass/PasswordHash.php');
 			$hasher_question = new PasswordHash(8, false);
 			$hash_question = $hasher_question->HashPassword($userQuestionAnswer);
-			*/
 
-			$updateSQL = sprintf("UPDATE $users_db_table SET userQuestionAnswer=%s WHERE id=%s",GetSQLValueString($userQuestionAnswer,"text"),GetSQLValueString($_SESSION['user_id'],"int"));
+			if ($_POST['userQuestionAnswer'] != $hash_question) {
+				// Store unhashed response for email confirmation
+				$userQuestion_change = TRUE;
+				$userQuestionAnswer_email = $userQuestionAnswer;
+			}
+
+			$updateSQL = sprintf("UPDATE $users_db_table SET userQuestionAnswer=%s WHERE id=%s",GetSQLValueString($hash_question,"text"),GetSQLValueString($_SESSION['user_id'],"int"));
 			mysqli_real_escape_string($connection,$updateSQL);
 			$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+			//echo $updateSQL."<br>";
 		}
 
 		$updateSQL = sprintf("UPDATE $users_db_table SET userCreated=%s WHERE id=%s",
@@ -673,14 +689,82 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 
 		$pattern = array('\'', '"');
 		$updateGoTo = str_replace($pattern, "", $updateGoTo);
-
 		$redirect_go_to = sprintf("Location: %s", stripslashes($updateGoTo));
+
+		if ($userQuestion_change) {
+
+			// Build vars
+			$url = str_replace("www.","",$_SERVER['SERVER_NAME']);
+			$to_name = $first_name." ".$last_name;
+			$to_email = filter_var($_POST['brewerEmail'],FILTER_SANITIZE_EMAIL);
+			$subject = sprintf($_SESSION['contestName'].": %s",$register_text_051);
+
+			$message = "<html>" . "\r\n";
+			$message .= "<body>" . "\r\n";
+
+			if ((!empty($_SESSION['contestLogo'])) && (file_exists(USER_IMAGES.$_SESSION['contestLogo']))) $message .= "<p><img src='".$base_url."user_images/".$_SESSION['contestLogo']."' height='150'></p>";
+
+			$message .= sprintf("<p>%s</p>",$register_text_047);
+
+			$message .= "<table cellpadding='5' border='0'>";
+			$message .= sprintf("<tr><td valign='top'><strong>%s:</strong></td><td valign='top'>%s</td></tr>",$label_security_question,sterilize($_POST['userQuestion']));
+			$message .= sprintf("<tr><td valign='top'><strong>%s:</strong></td><td valign='top'>%s</td></tr>",$label_security_answer,$userQuestionAnswer_email);
+			$message .= "</table>";
+			$message .= sprintf("<p>%s <a href='".$base_url."index.php?section=login'>%s</a>.</p>",$register_text_040,$register_text_041);
+
+			$message .= sprintf("<p><strong>%s</strong></p>",$register_text_048);
+			$message .= sprintf("<p>%s</p>",$register_text_049);
+			$message .= sprintf("<p><small><em>%s</em></small></p>",$register_text_043);
+			if ((DEBUG || TESTING) && ($mail_use_smtp)) $message .= "<p><small>Sent using phpMailer.</small></p>";
+
+			$message .= "</body>" . "\r\n";
+			$message .= "</html>";
+
+			$url = str_replace("www.","",$_SERVER['SERVER_NAME']);
+			$from_email = (!isset($mail_default_from) || trim($mail_default_from) === '') ? "noreply@".$url : $mail_default_from;
+
+			if (strpos($url, 'brewcomp.com') !== false) {
+				$from_email = "noreply@brewcomp.com";
+			} elseif (strpos($url, 'brewcompetition.com') !== false) {
+				$from_email = "noreply@brewcompetition.com";
+			}
+
+			$contestName = $_SESSION['contestName'];
+
+			$to_email = mb_convert_encoding($to_email, "UTF-8");
+			$to_name = mb_convert_encoding($to_name, "UTF-8");
+			$from_email = mb_convert_encoding($from_email, "UTF-8");
+			$from_name = mb_convert_encoding($contestName, "UTF-8");
+			$subject = mb_convert_encoding($subject, "UTF-8");
+
+			$headers  = "MIME-Version: 1.0" . "\r\n";
+			$headers .= "Content-type: text/html; charset=utf-8" . "\r\n";
+			$headers .= sprintf("%s: ".$to_name. " <".$to_email.">, " . "\r\n",$label_to);
+			$headers .= sprintf("%s: %s  <".$from_email. ">\r\n",$label_from,$from_name);
+			$emails = $to_email;
+
+			//echo "<pre>".htmlspecialchars($headers)."</pre>";
+			//echo $message;
+			//exit();
+
+			if ($mail_use_smtp) {
+				$mail = new PHPMailer(true);
+				$mail->CharSet = 'UTF-8';
+				$mail->Encoding = 'base64';
+				$mail->addAddress($emails, $to_name);
+				$mail->setFrom($from_email, $from_name);
+				$mail->Subject = $subject;
+				$mail->Body = $message;
+				sendPHPMailerMessage($mail);
+			} else {
+				mail($emails, $subject, $message, $headers);
+			}
+
+		}
 
 	}
 
 } else {
-
 	$redirect_go_to = sprintf("Location: %s", $base_url."index.php?msg=98");
-
 }
 ?>

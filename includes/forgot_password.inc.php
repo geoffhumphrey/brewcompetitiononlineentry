@@ -105,8 +105,12 @@ if ($action == "forgot") {
 		exit; 
 	}
 
+	$stored_hash = $row_forgot['userQuestionAnswer'];
+	$check = 0;
+	$check = $hasher->CheckPassword(sterilize($_POST['userQuestionAnswer']), $stored_hash);
+
 	//if answer is correct
-	if (strtolower(sterilize($_POST['userQuestionAnswer'])) == strtolower(sterilize($row_forgot['userQuestionAnswer']))) { 
+	if ($check == 1) { 
 		
 		$query_brewer = sprintf("SELECT brewerLastName,brewerFirstName FROM %s WHERE uid = '%s'", $brewer_db_table, $row_forgot['id']);
 		$brewer = mysqli_query($connection,$query_brewer) or die (mysqli_error($connection));

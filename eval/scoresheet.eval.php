@@ -127,12 +127,13 @@ if ($judging_scoresheet == 3) {
  */
 if ($action == "add") {
 
+  $id = ltrim(sterilize($_POST['entry_number']),"0");
+
   $submit_button_text = $label_submit_evaluation;
 
   if (isset($_POST['entry_number'])) {
     
     if ($_SESSION['prefsDisplaySpecial'] == "E") {
-      $id = ltrim(sterilize($_POST['entry_number']),"0");
       $query_entry_info = sprintf("SELECT * FROM %s WHERE id='%s'",$prefix."brewing",$id);
     }
     

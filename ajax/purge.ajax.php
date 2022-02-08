@@ -25,6 +25,8 @@ $dom_ct_entries_paid_received = 0;
 $dom_total_fees = 0;
 $dom_total_fees_paid = 0;
 
+
+
 if ((isset($_SESSION['session_set_'.$prefix_session])) && (isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] == 0)) {
 
 	include(INCLUDES.'data_cleanup.inc.php');
@@ -39,10 +41,9 @@ else {
 	$status = 9; // Session expired, not enabled, etc.
 }  // END if session is set
 
-if (($go == "judge-assignments") || ($go == "judge-assignments")) {
+if (($go == "judge-assignments") || ($go == "steward-assignments")) {
 	$return_json = array(
-		"status" => "$status",
-		"query" => "$sql"
+		"status" => "$status"
 	);
 }
 

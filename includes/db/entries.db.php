@@ -1,6 +1,6 @@
 <?php
 
-$totalRows_entry_count = total_paid_received($go,0);
+$totalRows_entry_count = total_paid_received("",0);
 
 if (NHC) {
 	// Place NHC SQL calls below

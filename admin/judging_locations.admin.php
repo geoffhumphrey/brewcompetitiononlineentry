@@ -153,9 +153,9 @@ if ($section != "step5") {
 
 			do {
 				$form_organizer_select .= "<option value=\"".$row_brewers['uid']."\"";
-				if (($row_brewers['uid'] == $row_organizer['uid'])) $form_organizer_select .= " SELECTED";
+				if (($totalRows_organizer > 0) && (($row_brewers['uid'] == $row_organizer['uid']))) $form_organizer_select .= " SELECTED";
 				$form_organizer_select .= ">".$row_brewers['brewerLastName'].", ".$row_brewers['brewerFirstName'];
-				if (($row_brewers['uid'] == $row_organizer['uid'])) $form_organizer_select .= " (Selected Competition Organizer)";
+				if (($totalRows_organizer > 0) && (($row_brewers['uid'] == $row_organizer['uid']))) $form_organizer_select .= " (Selected Competition Organizer)";
 				$form_organizer_select .= "</option>";
 			} while ($row_brewers = mysqli_fetch_assoc($brewers));
 
@@ -289,7 +289,7 @@ if ($section != "step5") {
 				$output_datatables_body .= "<td>";
 				$output_datatables_body .= "<input type=\"hidden\" name=\"uid[]\" value=\"".$row_brewer['uid']."\" />";
 				$output_datatables_body .= "<div class=\"checkbox\"><label><input name=\"".$staff_row_field.$row_brewer['uid']."\" type=\"checkbox\" value=\"1\" ".$checked;
-				if (($filter == "staff") && ($row_organizer['uid'] == $row_brewer['uid'])) $output_datatables_body .= " DISABLED";
+				if ((isset($totalRows_organizer)) && ($totalRows_organizer > 0) && (($filter == "staff") && ($row_organizer['uid'] == $row_brewer['uid']))) $output_datatables_body .= " DISABLED";
 				if (($filter == "stewards") && (strpos($brewer_assignment,'Judge') !== false)) $output_datatables_body .= " DISABLED";
 				if (($filter == "judges") && (strpos($brewer_assignment,'Steward') !== false)) $output_datatables_body .= " DISABLED";
 				$output_datatables_body .= " /></label></div>";
@@ -708,12 +708,12 @@ if (($output_add_edit) && ($msg != 9)) {
         <div class="radio">
             <!-- Input Here -->
             <label>
-                <input type="radio" name="judgingLocType" value="0" id="judgingLocType_0"  <?php if (($section == "step5") || ($action == "add")) echo "CHECKED"; if (($section != "step5") && ($row_judging['judgingLocType'] == "0")) echo "CHECKED";  ?> /> Traditional <small>(typically a single day in a central location)</small>
+                <input type="radio" name="judgingLocType" value="0" id="judgingLocType_0"  <?php if (($section == "step5") || ($action == "add")) echo "CHECKED"; if ((isset($row_judging['judgingLocType'])) && ($section != "step5") && ($row_judging['judgingLocType'] == "0")) echo "CHECKED";  ?> /> Traditional <small>(typically a single day in a central location)</small>
             </label>
         </div>
         <div class="radio">
             <label>
-                <input type="radio" name="judgingLocType" value="1" id="judgingLocType_1" <?php if (($section != "step5") && ($row_judging['judgingLocType'] == "1")) echo "CHECKED"; ?>/> Distributed <small>(multi-day and/or multi-location)</small>
+                <input type="radio" name="judgingLocType" value="1" id="judgingLocType_1" <?php if ((isset($row_judging['judgingLocType'])) && ($section != "step5") && ($row_judging['judgingLocType'] == "1")) echo "CHECKED"; ?>/> Distributed <small>(multi-day and/or multi-location)</small>
             </label>
         </div>
         <span class="help-block">Indicate whether judge teams in this session will be evaluating entries at a single, designated location, typically collectively, or over a series of days in various locations. For example, choose <em>Distributed</em> if judges will be evaluating entries virtually - synchronously or asynchronously - or if locations will be ad-hoc, such as in a judge team member home.</span>

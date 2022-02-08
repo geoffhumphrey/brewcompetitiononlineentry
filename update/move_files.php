@@ -15,6 +15,7 @@ function rmove($src, $dest){
 
     // If the destination directory does not exist create it
     if(!is_dir($dest)) {
+        //mkdir($dest);
         if(!mkdir($dest)) {
             // If the destination directory could not be created stop processing
             return false;

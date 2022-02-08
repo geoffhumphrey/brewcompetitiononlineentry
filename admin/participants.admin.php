@@ -282,7 +282,9 @@ do {
 			$output_datatables_phone_link = "<a class=\"hide-loader\" href=\"#\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"".$brewer_tooltip_display_name."&rsquo;s phone number: ".$row_brewer['brewerPhone1']."\"><span class=\"fa fa-lg fa-phone\"></span></a>";
 		}
 
+		/*
 		$output_datatables_user_question_link = "<a href=\"#\" data-tooltip=\"true\" data-toggle=\"modal\" data-target=\"#user-question-modal-".$row_brewer['uid']."\" data-placement=\"top\" title=\"Select to see ".$brewer_tooltip_display_name."&rsquo;s secret question and answer\"><span class=\"fa fa-lg fa-question-circle\"></span></a>";
+		*/
 
 		$output_datatables_change_pwd = build_action_link("fa-key",$base_url,"admin","change_user_password","edit","default",$row_brewer['uid'],"default","default",0,"Change ".$brewer_tooltip_display_name."&rsquo;s password");
 
@@ -295,7 +297,7 @@ do {
 		}
 
 
-		$output_datatables_actions = $output_datatables_add_link." ".$output_datatables_edit_link." ".$output_datatables_delete_link." ".$output_datatables_other_link." ".$output_datatables_email_link." ".$output_datatables_phone_link." ".$output_datatables_other_link2." ".$output_datatables_user_question_link." ".$output_datatables_change_pwd." ".$output_datatables_view_link;
+		$output_datatables_actions = $output_datatables_add_link." ".$output_datatables_edit_link." ".$output_datatables_delete_link." ".$output_datatables_other_link." ".$output_datatables_email_link." ".$output_datatables_phone_link." ".$output_datatables_other_link2." ".$output_datatables_change_pwd." ".$output_datatables_view_link;
 
 	}
 
@@ -314,12 +316,13 @@ do {
 		$explodies = explode(",",$row_brewer['Entries']);
 
 		foreach ($explodies as $entry_number) {
-			$entries[] = "<a href=\"".$base_url."index.php?section=admin&amp;go=entries&amp;bid=".$row_brewer['uid']."\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"View ".$brewer_tooltip_display_name."&rsquo;s entries.\">".$entry_number."</a>";
+			$entry_number = sprintf("%06s",$entry_number);
+			$entries[] = $entry_number;
 		}
 
 		$brewer_entries = implode(",",$entries);
 
-		$output_datatables_body .= "<td>".str_replace(",",", ",$brewer_entries)."</td>";
+		$output_datatables_body .= "<td><a href=\"".$base_url."index.php?section=admin&amp;go=entries&amp;bid=".$row_brewer['uid']."\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"List ".$brewer_tooltip_display_name."&rsquo;s entries.\"><i class=\"fa fa-list\"></i></a> ".str_replace(",",", ",$brewer_entries)."</td>";
 		if ($action != "print") $output_datatables_body .= "<td>".$output_datatables_actions."</td>";
 		$output_datatables_body .= "</tr>";
 
@@ -328,10 +331,10 @@ do {
 	else {
 
 		$table_assign_judge = table_assignments($user_info[0],"J",$_SESSION['prefsTimeZone'],$_SESSION['prefsDateFormat'],$_SESSION['prefsTimeFormat'],1);
-		$table_assign_judge = rtrim($table_assign_judge,",&nbsp;");
+		$table_assign_judge = str_replace(",&nbsp;","<br>",$table_assign_judge);
 		
 		$table_assign_steward = table_assignments($user_info[0],"S",$_SESSION['prefsTimeZone'],$_SESSION['prefsDateFormat'],$_SESSION['prefsTimeFormat'],1);
-		$table_assign_steward = rtrim($table_assign_steward,",&nbsp;");
+		$table_assign_steward = str_replace(",&nbsp;","<br>",$table_assign_steward);
 		
 		$judge_entries = judge_entries($row_brewer['uid'],1);
 
@@ -369,46 +372,6 @@ do {
 				$output_assignment_modals .= "\t</div><!-- ./modal-dialog -->\n";
 				$output_assignment_modals .= "</div><!-- ./modal -->\n";
 			}
-		}
-
-		if (!$archive_display) {
-			// Build secret user question modals
-			unset($user_question_modal_body);
-
-			$user_question_modal_body = "";
-
-			$query_question = sprintf("SELECT userQuestion,userQuestionAnswer FROM %s WHERE id = '%s'", $users_db_table, $row_brewer['uid']);
-			$question = mysqli_query($connection,$query_question) or die (mysqli_error($connection));
-			$row_question = mysqli_fetch_assoc($question);
-
-			$user_question_modal_body .= "<p>";
-			$user_question_modal_body .= "<strong>Question:</strong><br>";
-			if (isset($row_question['userQuestion'])) $user_question_modal_body .= "<em>".$row_question['userQuestion']."</em>";
-			else $user_question_modal_body .= "<em>No question is present.</em>";
-			$user_question_modal_body .= "</p>";
-
-			$user_question_modal_body .= "<p>";
-			$user_question_modal_body .= "<strong>Answer:</strong><br>";
-			if (isset($row_question['userQuestionAnswer'])) $user_question_modal_body .= "<em>".$row_question['userQuestionAnswer']."</em>";
-			else $user_question_modal_body .= "<em>No answer is present.</em>";
-			$user_question_modal_body .= "</p>";
-
-			$output_user_question_modals .= "<div class=\"modal fade\" id=\"user-question-modal-".$row_brewer['uid']."\" tabindex=\"-1\" role=\"dialog\" aria-labelledby=\"user-question-modal-label-".$row_brewer['uid']."\">\n";
-			$output_user_question_modals .= "\t<div class=\"modal-dialog modal-lg\" role=\"document\">\n";
-			$output_user_question_modals .= "\t\t<div class=\"modal-content\">\n";
-			$output_user_question_modals .= "\t\t\t<div class=\"modal-header bcoem-admin-modal\">\n";
-			$output_user_question_modals .= "\t\t\t\t<button type=\"button\" class=\"close\" data-dismiss=\"modal\" aria-label=\"Close\"><span aria-hidden=\"true\">&times;</span></button>\n";
-			$output_user_question_modals .= "\t\t\t\t<h4 class=\"modal-title\" id=\"user-question-modal-label-".$row_brewer['uid']."\">Secret Question and Answer for ".$brewer_tooltip_display_name."</h4>\n";
-			$output_user_question_modals .= "\t\t\t</div><!-- ./modal-header -->\n";
-			$output_user_question_modals .= "\t\t\t<div class=\"modal-body\">\n";
-			$output_user_question_modals .= "\t\t\t\t".$user_question_modal_body."\n";
-			$output_user_question_modals .= "\t\t\t</div><!-- ./modal-body -->\n";
-			$output_user_question_modals .= "\t\t\t<div class=\"modal-footer\">\n";
-			$output_user_question_modals .= "\t\t\t\t<button type=\"button\" class=\"btn btn-danger\" data-dismiss=\"modal\">Close</button>\n";
-			$output_user_question_modals .= "\t\t\t</div><!-- ./modal-footer -->\n";
-			$output_user_question_modals .= "\t\t</div><!-- ./modal-content -->\n";
-			$output_user_question_modals .= "\t</div><!-- ./modal-dialog -->\n";
-			$output_user_question_modals .= "</div><!-- ./modal -->\n";
 		}
 
 		$output_datatables_body .= "<tr>";

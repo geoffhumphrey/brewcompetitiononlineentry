@@ -365,15 +365,18 @@ $account_display .= "</div>";
 
 if (($_SESSION['prefsProEdition'] == 1) && (!$show_judge_steward_fields)) $account_display .= "<hr>";
 
+/*
 $account_display .= "<div class=\"row bcoem-account-info\">";
 $account_display .= sprintf("<div class=\"".$display_left_cols."\"><strong>%s</strong></div>",$label_security_question);
 $account_display .= "<div class=\"".$display_right_cols."\">".$_SESSION['userQuestion']."</div>";
 $account_display .= "</div>";
 
+
 $account_display .= "<div class=\"row bcoem-account-info\">";
 $account_display .= sprintf("<div class=\"".$display_left_cols."\"><strong>%s</strong></div>",$label_security_answer);
 $account_display .= "<div class=\"".$display_right_cols."\">".$_SESSION['userQuestionAnswer']."</div>";
 $account_display .= "</div>";
+*/
 
 if ($show_judge_steward_fields) {
 	$account_display .= "<div class=\"row bcoem-account-info\">";

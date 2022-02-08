@@ -54,7 +54,9 @@ setInterval(function() {
 }, 1);
 // session_end var defined in index.php
 $("#session-end-eval").countdown(session_end, function(event) {
-    var end_time = (event.strftime('%M:%S'));
+    if (session_end_min > 1440) var end_time = (event.strftime('%D:%H:%M:%S'));
+    else if (session_end_min > 60) var end_time = (event.strftime('%H:%M:%S'));
+    else var end_time = (event.strftime('%M:%S'));
     $(this).html(end_time); 
     if (end_time == "15:00") {
         $("#session-end-eval-p").attr("class", "text-warning");

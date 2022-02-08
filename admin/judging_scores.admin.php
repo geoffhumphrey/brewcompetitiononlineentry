@@ -60,14 +60,14 @@ if (($action == "edit") && ($id != "default")) echo ": Edit Scores for Table ".$
 elseif (($action == "add") && ($id != "default")) echo ": Add Scores for Table ".$row_tables_edit['tableNumber']." - ".$row_tables_edit['tableName'];
 else echo " Scores";
 if ($dbTable != "default") echo ": All Scores (Archive ".get_suffix($dbTable).")";
-$totalRows_entry_count = total_paid_received($go,"default");
+$totalRows_entry_count = total_paid_received($go,0);
 ?></p>
 <?php if ($dbTable != "default") { ?>
 <p><?php echo $edition; ?></p>
 <?php } ?>
 
 <div class="bcoem-admin-element hidden-print">
-	<?php if  ($dbTable != "default") { ?>
+    <?php if  ($dbTable != "default") { ?>
     <!-- Postion 1: View All Button -->
     <div class="btn-group" role="group" aria-label="...">
         <a class="btn btn-default" href="<?php echo $base_url; ?>index.php?section=admin&amp;go=archive"><span class="fa fa-arrow-circle-left"></span> Archives</a>
@@ -95,8 +95,8 @@ $totalRows_entry_count = total_paid_received($go,"default");
     </div><!-- ./button group -->
     <?php } ?>
 
-	<?php if (($action == "default") && ($totalRows_tables > 0)) { ?>
-	<!-- Position 2: Enter/Edit Dropdown Button Group -->
+    <?php if (($action == "default") && ($totalRows_tables > 0)) { ?>
+    <!-- Position 2: Enter/Edit Dropdown Button Group -->
     <div class="btn-group" role="group">
         <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
         <span class="fa fa-plus-circle"></span> Add or Update Scores For...
@@ -109,8 +109,8 @@ $totalRows_entry_count = total_paid_received($go,"default");
                 <li class="small"><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging_scores&amp;action=<?php if ($table_count_total > 0) echo "edit&amp;id=".$row_tables_edit_2['id']; else echo "add&amp;id=".$row_tables_edit_2['id']; ?>"><?php echo "Table ".$row_tables_edit_2['tableNumber'].": ".$row_tables_edit_2['tableName']; ?></a></li>
                 <?php  } while ($row_tables_edit_2 = mysqli_fetch_assoc($tables_edit_2)); ?>
         </ul>
-	</div>
-	<?php } ?>
+    </div>
+    <?php } ?>
     <?php if ($id == "default") { ?>
     <!-- Postion 4: Print Button Dropdown Group -->
     <div class="btn-group hidden-xs hidden-sm" role="group">
@@ -119,12 +119,12 @@ $totalRows_entry_count = total_paid_received($go,"default");
         <span class="caret"></span>
         </button>
         <ul class="dropdown-menu">
-        	<?php do {
-			if ($row_style_type['styleTypeBOS'] == "Y") { ?>
-				<li class="small"><a id="modal_window_link" class="hide-loader menuItem" href="<?php echo $base_url; ?>output/print.output.php?section=pullsheets&amp;go=judging_scores_bos&amp;id=<?php echo $row_style_type['id']; ?>"  title="Print the <?php echo $row_style_type['styleTypeName']; ?> BOS Pullsheet">BOS Pullsheet for <?php echo $row_style_type['styleTypeName']; ?></a></li>
-		<?php }
-			} while ($row_style_type = mysqli_fetch_assoc($style_type));
-			?>
+            <?php do {
+            if ($row_style_type['styleTypeBOS'] == "Y") { ?>
+                <li class="small"><a id="modal_window_link" class="hide-loader menuItem" href="<?php echo $base_url; ?>output/print.output.php?section=pullsheets&amp;go=judging_scores_bos&amp;id=<?php echo $row_style_type['id']; ?>"  title="Print the <?php echo $row_style_type['styleTypeName']; ?> BOS Pullsheet">BOS Pullsheet for <?php echo $row_style_type['styleTypeName']; ?></a></li>
+        <?php }
+            } while ($row_style_type = mysqli_fetch_assoc($style_type));
+            ?>
         </ul>
     </div>
     <?php } ?>
@@ -145,45 +145,45 @@ $totalRows_entry_count = total_paid_received($go,"default");
 <?php if (($action == "default") && ($id == "default")) { ?>
 <?php if ($totalRows_scores > 0) { ?>
 <script type="text/javascript" language="javascript">
-	 $(document).ready(function() {
-		$('#sortable').dataTable( {
-			"bPaginate" : true,
-			"sPaginationType" : "full_numbers",
-			"bLengthChange" : true,
-			"iDisplayLength" :  <?php echo round($_SESSION['prefsRecordPaging']); ?>,
-			"sDom": 'frtp',
-			"bStateSave" : false,
-			<?php if ($filter == "category") { ?>
-			"aaSorting": [[4,'asc'],[6,'asc'],[5,'desc']],
-			<?php } elseif ($dbTable != "default") { ?>
-			"aaSorting": [[2,'asc'],[8,'asc']],
-			<?php } else { ?>
-			"aaSorting": [[2,'asc'],[6,'asc'],[5,'desc']],
-			<?php } ?>
-			"bProcessing" : true,
-			"aoColumns": [
-				null,
-				null,
-				null,
-				null,
-				null,
-				null,
-				<?php if ($dbTable != "default") { ?>
-				null,
-				null,
-				<?php } ?>
-				null,
-				{ "asSorting": [  ] },
-				{ "asSorting": [  ] }
-				]
-			} );
-		} );
-	</script>
+     $(document).ready(function() {
+        $('#sortable').dataTable( {
+            "bPaginate" : true,
+            "sPaginationType" : "full_numbers",
+            "bLengthChange" : true,
+            "iDisplayLength" :  <?php echo round($_SESSION['prefsRecordPaging']); ?>,
+            "sDom": 'frtp',
+            "bStateSave" : false,
+            <?php if ($filter == "category") { ?>
+            "aaSorting": [[4,'asc'],[6,'asc'],[5,'desc']],
+            <?php } elseif ($dbTable != "default") { ?>
+            "aaSorting": [[2,'asc'],[8,'asc']],
+            <?php } else { ?>
+            "aaSorting": [[2,'asc'],[6,'asc'],[5,'desc']],
+            <?php } ?>
+            "bProcessing" : true,
+            "aoColumns": [
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                <?php if ($dbTable != "default") { ?>
+                null,
+                null,
+                <?php } ?>
+                null,
+                { "asSorting": [  ] },
+                { "asSorting": [  ] }
+                ]
+            } );
+        } );
+    </script>
 <table class="table table-responsive table-bordered table-striped" id="sortable">
 <thead>
-	<tr>
-    	<th nowrap>Entry</th>
-    	<th nowrap>Judging</th>
+    <tr>
+        <th nowrap>Entry</th>
+        <th nowrap>Judging</th>
         <th nowrap>Table</th>
         <th class="hidden-xs hidden-sm">Table Name</th>
         <th class="hidden-xs hidden-sm">Style</th>
@@ -191,7 +191,7 @@ $totalRows_entry_count = total_paid_received($go,"default");
         <th><?php if ($pro_edition == 1) echo $label_organization; else echo $label_brewer; ?></th>
         <th>Entry Name</th>
         <?php } ?>
-    	<th><?php echo $label_assigned_score; ?></th>
+        <th><?php echo $label_assigned_score; ?></th>
         <th>Place</th>
         <th>Mini-BOS?</th>
         <th>Actions</th>
@@ -200,21 +200,21 @@ $totalRows_entry_count = total_paid_received($go,"default");
 <tbody>
 <?php
 
-	do {
+    do {
 
-	$table_score_data = table_score_data($row_scores['eid'],$row_scores['scoreTable'],$filter);
-	$table_score_data = explode("^",$table_score_data);
+    $table_score_data = table_score_data($row_scores['eid'],$row_scores['scoreTable'],$filter);
+    $table_score_data = explode("^",$table_score_data);
 
-	$entry_number = sprintf("%06s",$table_score_data[0]);
-	$judging_number = sprintf("%06s",$table_score_data[6]);
+    $entry_number = sprintf("%06s",$table_score_data[0]);
+    $judging_number = sprintf("%06s",$table_score_data[6]);
 
-	if ($row_scores['scorePlace'] == "5") $score_place = "HM";
-	elseif ($row_scores['scorePlace'] == "6") $score_place =  "Admin Adv.";
-	elseif ($row_scores['scorePlace'] == "") $score_place = "<span style=\"display:none\">N/A</span>";
-	else $score_place =  $row_scores['scorePlace'];
+    if ($row_scores['scorePlace'] == "5") $score_place = "HM";
+    elseif ($row_scores['scorePlace'] == "6") $score_place =  "Admin Adv.";
+    elseif ($row_scores['scorePlace'] == "") $score_place = "<span style=\"display:none\">N/A</span>";
+    else $score_place =  $row_scores['scorePlace'];
 
-	if ($row_scores['scoreMiniBOS'] == "1") $mini_bos = "<span class=\"fa fa-lg fa-check text-success\"></span>";
-	else $mini_bos = "&nbsp;";
+    if ($row_scores['scoreMiniBOS'] == "1") $mini_bos = "<span class=\"fa fa-lg fa-check text-success\"></span>";
+    else $mini_bos = "&nbsp;";
 
     
     $style_display_number = style_number_const($table_score_data[8],$table_score_data[15],$_SESSION['style_set_display_separator'],$style_display_method);
@@ -355,8 +355,8 @@ $totalRows_entry_count = total_paid_received($go,"default");
         if ((($dbTable == "default") && ($_SESSION['prefsDisplaySpecial'] == "J")) || ($dbTable != "default")) $entry_actions .= $scoresheet_link_2;
     }
 ?>
-	<tr>
-    	<td><?php echo $entry_number; ?></td>
+    <tr>
+        <td><?php echo $entry_number; ?></td>
         <td><?php echo $judging_number;  ?></td>
         <td><?php echo $table_score_data[11]; ?></td>
         <td class="hidden-xs hidden-sm"><?php echo $table_score_data[10]; ?></td>
@@ -369,7 +369,7 @@ $totalRows_entry_count = total_paid_received($go,"default");
         <td><?php if (fmod($row_scores['scoreEntry'], 1) !== 0.00) echo number_format($row_scores['scoreEntry'],2); else echo $row_scores['scoreEntry']; ?></td>
         <td><?php echo $score_place; ?></td>
         <td><?php echo $mini_bos; ?></td>
-		<td>
+        <td>
             <?php if ($dbTable == "default") { ?>
             <a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=<?php echo $go; ?>&amp;action=edit&amp;id=<?php echo $table_score_data[9]; ?>" data-toggle="tooltip" data-placement="top" title="Edit the <?php echo $table_score_data[10]; ?> scores"><span class="fa fa-lg fa-pencil"></span></a>&nbsp;<a class="hide-loader" href="<?php echo $base_url; ?>includes/process.inc.php?action=delete&amp;go=<?php echo $go; ?>&amp;id=<?php echo $row_scores['id']; ?>" data-toggle="tooltip" data-placement="top" title="Delete this score for entry #<?php echo $row_scores['eid']; ?>" data-confirm="Are you sure? This will delete the score and/or place for this entry."><span class="fa fa-lg fa-trash-o"></span></a>
             <?php echo "&nbsp;";
@@ -378,8 +378,8 @@ $totalRows_entry_count = total_paid_received($go,"default");
         </td>
     </tr>
     <?php
-		//}
-	} while ($row_scores = mysqli_fetch_assoc($scores)); ?>
+        //}
+    } while ($row_scores = mysqli_fetch_assoc($scores)); ?>
 </tbody>
 </table>
 <?php } // end if ($totalRows_scores > 0)
@@ -413,77 +413,77 @@ $.fn.dataTable.ext.order['dom-select'] = function (settings, col) {
 }
 
 $(document).ready(function() {
-	$('#sortable').dataTable( {
-		"bPaginate" : false,
-		"sDom": 'rt',
-		"bStateSave" : false,
-		"bLengthChange" : false,
-		"aaSorting": [[2,'asc'],[1,'asc']],
-		"bProcessing" : false,
-		"aoColumns": [
-			null,
-			null,
-			null,
-			{ "asSorting": [  ] },
-			{ "orderDataType": "dom-text-numeric" },
-			{ "orderDataType": "dom-select" }
-		]
-	} );
+    $('#sortable').dataTable( {
+        "bPaginate" : false,
+        "sDom": 'rt',
+        "bStateSave" : false,
+        "bLengthChange" : false,
+        "aaSorting": [[2,'asc'],[1,'asc']],
+        "bProcessing" : false,
+        "aoColumns": [
+            null,
+            null,
+            null,
+            { "asSorting": [  ] },
+            { "orderDataType": "dom-text-numeric" },
+            { "orderDataType": "dom-select" }
+        ]
+    } );
 } );
 </script>
 <table class="table table-responsive table-striped table-bordered" id="sortable">
 <thead>
-	<tr>
-    	<th width="10%">Entry</th>
+    <tr>
+        <th width="10%">Entry</th>
         <th width="10%">Judging</th>
         <th class="hidden-xs hidden-sm">Style</th>
         <th width="15%">Mini-BOS?</th>
-    	<th width="20%">Score</th>
+        <th width="20%">Score</th>
         <th width="20%">Place</th>
     </tr>
 </thead>
 <tbody>
 <?php
-	$a = explode(",", $row_tables_edit['tableStyles']);
+    $a = explode(",", $row_tables_edit['tableStyles']);
 
-	foreach (array_unique($a) as $value) {
+    foreach (array_unique($a) as $value) {
 
-		$score_style_data = score_style_data($value);
+        $score_style_data = score_style_data($value);
         //echo $score_style_data."<br>";
-		$score_style_data = explode("^",$score_style_data);
+        $score_style_data = explode("^",$score_style_data);
 
-		include (DB.'admin_judging_scores.db.php');
+        include (DB.'admin_judging_scores.db.php');
         $style = style_number_const($row_entries['brewCategorySort'],$row_entries['brewSubCategory'],$_SESSION['style_set_display_separator'],$style_display_method);
 
-		do {
+        do {
 
-			if ($totalRows_entries > 0) {
+            if ($totalRows_entries > 0) {
 
-				if ($action == "edit") {
-					$score_entry_data = score_entry_data($row_entries['id']);
-					$score_entry_data = explode("^",$score_entry_data);
-				}
+                if ($action == "edit") {
+                    $score_entry_data = score_entry_data($row_entries['id']);
+                    $score_entry_data = explode("^",$score_entry_data);
+                }
 
-				if (!empty($score_entry_data[3])) $score_previous = "Y";
-				elseif (!empty($score_entry_data[4])) $score_previous = "Y";
-				else $score_previous = "N";
+                if (!empty($score_entry_data[3])) $score_previous = "Y";
+                elseif (!empty($score_entry_data[4])) $score_previous = "Y";
+                else $score_previous = "N";
 
                 $eid = $row_entries['id'];
                 $bid = $row_entries['brewBrewerID'];
-				$entry_number = sprintf("%06s",$row_entries['id']);
-				$judging_number = sprintf("%06s",$row_entries['brewJudgingNumber']);
+                $entry_number = sprintf("%06s",$row_entries['id']);
+                $judging_number = sprintf("%06s",$row_entries['brewJudgingNumber']);
 
-				if (empty($style)) $style_display = $score_style_data[2];
+                if (empty($style)) $style_display = $score_style_data[2];
                 else $style_display = $style.": ".$score_style_data[2];
 
                 $scoreType = style_type($score_style_data[3],"1","bcoe");
 
-	?>
-	<tr>
+    ?>
+    <tr>
         <input type="hidden" name="score_id[]" value="<?php echo $eid; ?>" />
         <?php if ($action == "edit") { ?>
         <input type="hidden" name="scorePrevious<?php echo $eid; ?>" value="<?php echo $score_previous; ?>" />
-    	<?php } ?>
+        <?php } ?>
         <input type="hidden" name="eid<?php echo $eid; ?>" value="<?php echo $eid; ?>" />
         <input type="hidden" name="bid<?php echo $eid; ?>" value="<?php echo $bid; ?>" />
         <input type="hidden" name="scoreTable<?php echo $eid; ?>" value="<?php echo $id; ?>" />
@@ -493,48 +493,48 @@ $(document).ready(function() {
         <td class="hidden-xs hidden-sm"><?php echo $style_display; ?></td>
         <td>
             <div class="form-group" id="score-mini-bos-ajax-<?php echo $eid; ?>-scoreMiniBOS-form-group">
-            <input type="checkbox" id="score-mini-bos-ajax-<?php echo $eid; ?>" name="scoreMiniBOS<?php echo $eid; ?>" value="1" onclick="$(this).attr('value', this.checked ? 1 : 0);save_column('<?php echo $base_url; ?>','scoreMiniBOS','judging_scores','<?php echo $eid; ?>','<?php echo $bid; ?>','<?php echo $id; ?>','<?php echo $scoreType; ?>','default','score-mini-bos-ajax-<?php echo $eid; ?>','value')" <?php if (($action == "edit") && ($score_entry_data[5] == "1")) echo "CHECKED"; ?> />
+            <input type="checkbox" id="score-mini-bos-ajax-<?php echo $eid; ?>" name="scoreMiniBOS<?php echo $eid; ?>" value="1" onclick="$(this).attr('value', this.checked ? 1 : 0);save_column('<?php echo $base_url; ?>','scoreMiniBOS','judging_scores','<?php echo $eid; ?>','<?php echo $bid; ?>','<?php echo $id; ?>','<?php echo $scoreType; ?>','default','score-mini-bos-ajax-<?php echo $eid; ?>','value')" <?php if ((isset($score_entry_data[5])) && (($action == "edit") && ($score_entry_data[5] == "1"))) echo "CHECKED"; ?> />
             <span id="score-mini-bos-ajax-<?php echo $eid; ?>-scoreMiniBOS-status"></span>
             <span id="score-mini-bos-ajax-<?php echo $eid; ?>-scoreMiniBOS-status-msg"></span>
             </div>
         </td>
-    	<td>
-            <span id="score-entry-ajax-<?php echo $eid; ?>-scoreEntry-sortable-value" style="visibility: hidden;"><?php if ($action == "edit") echo $score_entry_data[3]; ?></span>
+        <td>
+            <span id="score-entry-ajax-<?php echo $eid; ?>-scoreEntry-sortable-value" style="visibility: hidden;"><?php if ((isset($score_entry_data[3])) && ($action == "edit")) echo $score_entry_data[3]; ?></span>
             <div class="form-group" id="score-entry-ajax-<?php echo $eid; ?>-scoreEntry-form-group">
-        	<input class="form-control" id="score-entry-ajax-<?php echo $eid; ?>" type="number" pattern="\d{2}" maxlength="2" name="scoreEntry<?php echo $eid; ?>" size="6" maxlength="6" value="<?php if ($action == "edit") echo $score_entry_data[3]; ?>" onblur="save_column('<?php echo $base_url; ?>','scoreEntry','judging_scores','<?php echo $eid; ?>','<?php echo $bid; ?>','<?php echo $id; ?>','<?php echo $scoreType; ?>','default','score-entry-ajax-<?php echo $eid; ?>','value')" />
+            <input class="form-control" id="score-entry-ajax-<?php echo $eid; ?>" type="number" pattern="\d{2}" maxlength="2" name="scoreEntry<?php echo $eid; ?>" size="6" maxlength="6" value="<?php if ($action == "edit") echo $score_entry_data[3]; ?>" onblur="save_column('<?php echo $base_url; ?>','scoreEntry','judging_scores','<?php echo $eid; ?>','<?php echo $bid; ?>','<?php echo $id; ?>','<?php echo $scoreType; ?>','default','score-entry-ajax-<?php echo $eid; ?>','value')" />
             </div>
             <span id="score-entry-ajax-<?php echo $eid; ?>-scoreEntry-status"></span>
             <span id="score-entry-ajax-<?php echo $eid; ?>-scoreEntry-status-msg"></span>
         </td>
         <td>
-        <span class="hidden"><?php if (($action == "edit") && ($score_entry_data[4] == "1")) echo $score_entry_data[4]; ?></span>
+        <span class="hidden"><?php if ((isset($score_entry_data[4])) && (($action == "edit") && ($score_entry_data[4] == "1"))) echo $score_entry_data[4]; ?></span>
             <div class="form-group" id="score-place-ajax-<?php echo $eid; ?>-scorePlace-form-group">
             <?php if ($_SESSION['prefsWinnerMethod'] == "0") { ?>
             <select class="form-control nodupe" id="score-place-ajax-<?php echo $eid; ?>" name="scorePlace<?php echo $eid; ?>" onchange="select_place('<?php echo $base_url; ?>','scorePlace','judging_scores','<?php echo $eid; ?>','<?php echo $bid; ?>','<?php echo $id; ?>','<?php echo $scoreType; ?>','default','score-place-ajax-<?php echo $eid; ?>')">
             <?php } else { ?>
             <select class="form-control" id="score-place-ajax-<?php echo $eid; ?>" name="scorePlace<?php echo $eid; ?>" onchange="save_column('<?php echo $base_url; ?>','scorePlace','judging_scores','<?php echo $eid; ?>','<?php echo $bid; ?>','<?php echo $id; ?>','<?php echo $scoreType; ?>','default','score-place-ajax-<?php echo $eid; ?>','value')">    
             <?php } ?>
-              	<option value=""></option>
-                  <option value="1" <?php if (($action == "edit") && ($score_entry_data[4] == "1")) echo "SELECTED"; ?>>1st</option>
-                  <option value="2" <?php if (($action == "edit") && ($score_entry_data[4] == "2")) echo "SELECTED"; ?>>2nd</option>
-                  <option value="3" <?php if (($action == "edit") && ($score_entry_data[4] == "3")) echo "SELECTED"; ?>>3rd</option>
+                <option value=""></option>
+                  <option value="1" <?php if ((isset($score_entry_data[4])) && (($action == "edit") && ($score_entry_data[4] == "1"))) echo "SELECTED"; ?>>1st</option>
+                  <option value="2" <?php if ((isset($score_entry_data[4])) && (($action == "edit") && ($score_entry_data[4] == "2"))) echo "SELECTED"; ?>>2nd</option>
+                  <option value="3" <?php if ((isset($score_entry_data[4])) && (($action == "edit") && ($score_entry_data[4] == "3"))) echo "SELECTED"; ?>>3rd</option>
                   <?php if (!NHC) { ?>
-                  <option value="4" <?php if (($action == "edit") && ($score_entry_data[4] == "4")) echo "SELECTED"; ?>>4th</option>
-                  <option value="5" <?php if (($action == "edit") && ($score_entry_data[4] == "5")) echo "SELECTED"; ?>>Hon. Men.</option>
+                  <option value="4" <?php if ((isset($score_entry_data[4])) && (($action == "edit") && ($score_entry_data[4] == "4"))) echo "SELECTED"; ?>>4th</option>
+                  <option value="5" <?php if ((isset($score_entry_data[4])) && (($action == "edit") && ($score_entry_data[4] == "5"))) echo "SELECTED"; ?>>Hon. Men.</option>
                   <?php } ?>
             </select>
             </div>
             <span id="score-place-ajax-<?php echo $eid; ?>-scorePlace-status"></span>
             <span id="score-place-ajax-<?php echo $eid; ?>-scorePlace-status-msg"></span>
         </td>
-	</tr>
+    </tr>
     <?php }
-		} while ($row_entries = mysqli_fetch_assoc($entries));
-	} // end foreach ?>
+        } while ($row_entries = mysqli_fetch_assoc($entries));
+    } // end foreach ?>
 </tbody>
 </table>
 <div class="bcoem-admin-element hidden-print">
-	<input type="submit" name="Submit" id="judging_scores-submit" class="btn btn-primary" aria-describedby="helpBlock" value="<?php if ($action == "edit") echo "Update Scores"; else echo "Add Scores"; ?>" disabled />
+    <input type="submit" name="Submit" id="judging_scores-submit" class="btn btn-primary" aria-describedby="helpBlock" value="<?php if ($action == "edit") echo "Update Scores"; else echo "Add Scores"; ?>" disabled />
     <span id="judging_scores-update-button-enabled" class="help-block">Select "<?php if ($action == "edit") echo "Update Scores"; else echo "Add Scores"; ?>" <em>before</em> paging through records.</span>
     <span id="judging_scores-update-button-disabled" class="help-block">The "<?php if ($action == "edit") echo "Update Scores"; else echo "Add Scores"; ?>" button has been disabled since data is being saved successfully as it is being entered.</span>
 </div>

@@ -68,6 +68,7 @@ if ($filter == "staff") {
 	if (SINGLE) $query_organizer .= sprintf(" AND comp_id='%s'",$_SESSION['comp_id']);
 	$organizer = mysqli_query($connection,$query_organizer) or die (mysqli_error($connection));
 	$row_organizer = mysqli_fetch_assoc($organizer);
+	$totalRows_organizer = mysqli_num_rows($organizer);
 	
 	// @single
 	$query_brewers = "SELECT * FROM $brewer_db_table ORDER BY brewerLastName";

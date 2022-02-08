@@ -10,9 +10,11 @@ $date_threshold = "";
 
 if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] == 0)) {
 
-	if ((isset($_POST['dateThreshold'])) && (!empty($_POST['dateThreshold']))) $date_threshold = sterilize($_POST['dateThreshold']); 
-	if ((!isset($_POST['dateThreshold']) && ($view != "default"))) $date_threshold = sterilize($view);
-
+	if (is_numeric($view)) {
+		if ((isset($_POST['dateThreshold'])) && (!empty($_POST['dateThreshold']))) $date_threshold = sterilize($_POST['dateThreshold']); 
+		if ((!isset($_POST['dateThreshold']) && ($view != "default"))) $date_threshold = sterilize($view);
+	}
+		
 	$sql = "action=".$action."&go=".$go;
 	if (!empty($date_threshold)) $sql .= "&view=".$view;
 

@@ -562,7 +562,7 @@ $row_delay = mysqli_fetch_assoc($delay);
 
 // Check if the length is less than 10 (Unix timestamp is 10)
 // If so, convert to timestamp
-if ((strlen($row_delay['prefsWinnerDelay'])) < 10) {
+if ((!empty($row_delay)) && ((strlen($row_delay['prefsWinnerDelay'])) < 10)) {
 
 	$query_check = sprintf("SELECT judgingDate FROM %s ORDER BY judgingDate DESC LIMIT 1", $prefix."judging_locations");
 	$check = mysqli_query($connection,$query_check) or die (mysqli_error($connection));
@@ -2141,7 +2141,7 @@ if (!$bjcp_2021_styles_present) {
  * change preferences to 2015.
  */
 
-if ($row_current_prefs['prefsStyleSet'] == "BJCP2008") {
+if ((!empty($row_current_prefs)) && ($row_current_prefs['prefsStyleSet'] == "BJCP2008")) {
 	
 	include (LIB.'convert.lib.php');
 	include (INCLUDES.'convert/convert_bjcp_2015.inc.php');
@@ -2186,6 +2186,33 @@ $result = mysqli_query($connection,$updateSQL);
 
 $output .= "<li>Corrected British Golden Ale name.</li>";
 
+
+/**
+ * Version 2.4.1
+ * Encrypt all security question responses for all users.
+ */
+
+$query_security_resp = sprintf("SELECT id, userQuestionAnswer FROM `%s`",$prefix."users");
+$security_resp = mysqli_query($connection,$query_security_resp);
+$row_security_resp = mysqli_fetch_assoc($security_resp);
+$totalRows_security_resp = mysqli_num_rows($security_resp);
+
+if ($totalRows_security_resp > 0) {
+
+	require(CLASSES.'phpass/PasswordHash.php');
+
+	do {
+		
+		$hasher_question = new PasswordHash(8, false);
+		$hash_question = $hasher_question->HashPassword($row_security_resp['userQuestionAnswer']);
+
+		$updateSQL = sprintf("UPDATE `%s` SET userQuestionAnswer='%s' WHERE id='%s'", $prefix."users", $hash_question, $row_security_resp['id']);
+		mysqli_select_db($connection,$database);
+		mysqli_real_escape_string($connection,$updateSQL);
+		$result = mysqli_query($connection,$updateSQL);
+
+	} while($row_security_resp = mysqli_fetch_assoc($security_resp));
+}
 
 /** 
  * --- Future Release ---

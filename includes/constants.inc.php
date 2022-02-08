@@ -2457,145 +2457,157 @@ $suggested_close_date = time() + 604800;
 
 if (((strpos($section, "step") === FALSE) && ($section != "setup")) && ($section != "update")) {
 
-    $reg_closed_date = $row_contest_dates['contestRegistrationDeadline'];
-    $entry_closed_date = $row_contest_dates['contestEntryDeadline'];
+    if ((isset($row_contest_dates)) && (!empty($row_contest_dates))) {
 
-	$registration_open = open_or_closed(time(), $row_contest_dates['contestRegistrationOpen'], $row_contest_dates['contestRegistrationDeadline']);
-	$entry_window_open = open_or_closed(time(), $row_contest_dates['contestEntryOpen'], $row_contest_dates['contestEntryDeadline']);
-	$judge_window_open = open_or_closed(time(), $row_contest_dates['contestJudgeOpen'], $row_contest_dates['contestJudgeDeadline']);
-	$dropoff_window_open = open_or_closed(time(), $row_contest_dates['contestDropoffOpen'], $row_contest_dates['contestDropoffDeadline']);
-	$shipping_window_open = open_or_closed(time(), $row_contest_dates['contestShippingOpen'], $row_contest_dates['contestShippingDeadline']);
-    
-    $judging_past = judging_date_return();
-    $judging_started = FALSE;
+        $reg_closed_date = $row_contest_dates['contestRegistrationDeadline'];
+        $entry_closed_date = $row_contest_dates['contestEntryDeadline'];
 
-    if ((check_setup($prefix."judging_locations",$database)) && (check_update("judgingDateEnd", $prefix."judging_locations"))) {
+        $registration_open = open_or_closed(time(), $row_contest_dates['contestRegistrationOpen'], $row_contest_dates['contestRegistrationDeadline']);
+        $entry_window_open = open_or_closed(time(), $row_contest_dates['contestEntryOpen'], $row_contest_dates['contestEntryDeadline']);
+        $judge_window_open = open_or_closed(time(), $row_contest_dates['contestJudgeOpen'], $row_contest_dates['contestJudgeDeadline']);
+        $dropoff_window_open = open_or_closed(time(), $row_contest_dates['contestDropoffOpen'], $row_contest_dates['contestDropoffDeadline']);
+        $shipping_window_open = open_or_closed(time(), $row_contest_dates['contestShippingOpen'], $row_contest_dates['contestShippingDeadline']);
+        
+        $judging_past = judging_date_return();
+        $judging_started = FALSE;
 
-        $query_judging_dates = sprintf("SELECT judgingDate,judgingDateEnd FROM %s",$judging_locations_db_table);
-        $judging_dates = mysqli_query($connection,$query_judging_dates) or die (mysqli_error($connection));
-        $row_judging_dates = mysqli_fetch_assoc($judging_dates);
-        $totalRows_judging_dates = mysqli_num_rows($judging_dates);
+        if ((check_setup($prefix."judging_locations",$database)) && (check_update("judgingDateEnd", $prefix."judging_locations"))) {
 
-        $date_arr = array();
-        $first_judging_date = "";
-        $last_judging_date = "";
+            $query_judging_dates = sprintf("SELECT judgingDate,judgingDateEnd FROM %s",$judging_locations_db_table);
+            $judging_dates = mysqli_query($connection,$query_judging_dates) or die (mysqli_error($connection));
+            $row_judging_dates = mysqli_fetch_assoc($judging_dates);
+            $totalRows_judging_dates = mysqli_num_rows($judging_dates);
 
-        if ($totalRows_judging_dates > 0) {
-            do {
-                if (!empty($row_judging_dates['judgingDate'])) $date_arr[] = $row_judging_dates['judgingDate'];
-                if (!empty($row_judging_dates['judgingDateEnd'])) $date_arr[] = $row_judging_dates['judgingDateEnd'];
-            } while($row_judging_dates = mysqli_fetch_assoc($judging_dates));
-        }
+            $date_arr = array();
+            $first_judging_date = "";
+            $last_judging_date = "";
 
-        if (!empty($date_arr)) {
-            $first_judging_date = min($date_arr);
-            $last_judging_date = max($date_arr);
-            if (time() > $first_judging_date) {
-                $judging_started = TRUE;
-                $reg_closed_date = $first_judging_date;
-                $entry_closed_date = $first_judging_date;
+            if ($totalRows_judging_dates > 0) {
+                do {
+                    if (!empty($row_judging_dates['judgingDate'])) $date_arr[] = $row_judging_dates['judgingDate'];
+                    if (!empty($row_judging_dates['judgingDateEnd'])) $date_arr[] = $row_judging_dates['judgingDateEnd'];
+                } while($row_judging_dates = mysqli_fetch_assoc($judging_dates));
             }
+
+            if (!empty($date_arr)) {
+                $first_judging_date = min($date_arr);
+                $last_judging_date = max($date_arr);
+                if (time() > $first_judging_date) {
+                    $judging_started = TRUE;
+                    $reg_closed_date = $first_judging_date;
+                    $entry_closed_date = $first_judging_date;
+                }
+            }
+            
+            $pay_window_open = open_or_closed(time(),$row_contest_dates['contestEntryOpen'],$last_judging_date);
+
         }
         
-        $pay_window_open = open_or_closed(time(),$row_contest_dates['contestEntryOpen'],$last_judging_date);
-
-    }
-    
-    /**
-     * If any judging session has started, close the entry
-     * and account registration windows.
-     * This ensures that any entries that are being judged 
-     * aren't modified or deleted by non-admin users.
-     */
-    
-    if ($judging_started) {
-        $entry_window_open = 2;
-        $registration_open = 2;
-    }
-
-    if (strpos($_SESSION['prefsLanguage'],"en-") !== false) $sidebar_date_format = "long";
-
-	$reg_open = getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_contest_dates['contestRegistrationOpen'], $_SESSION['prefsDateFormat'], $_SESSION['prefsTimeFormat'], $sidebar_date_format, "date-time");
-	$reg_closed = getTimeZoneDateTime($_SESSION['prefsTimeZone'], $reg_closed_date, $_SESSION['prefsDateFormat'], $_SESSION['prefsTimeFormat'], $sidebar_date_format, "date-time");
-	$reg_open_sidebar = getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_contest_dates['contestRegistrationOpen'], $_SESSION['prefsDateFormat'], $_SESSION['prefsTimeFormat'], "short", "date-time");
-	$reg_closed_sidebar = getTimeZoneDateTime($_SESSION['prefsTimeZone'], $reg_closed_date, $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "short", "date-time");
-
-	$entry_open = getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_contest_dates['contestEntryOpen'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], $sidebar_date_format, "date-time"); ;
-	$entry_closed = getTimeZoneDateTime($_SESSION['prefsTimeZone'], $entry_closed_date, $_SESSION['prefsDateFormat'],$_SESSION['prefsTimeFormat'], $sidebar_date_format, "date-time");
-	$entry_open_sidebar = getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_contest_dates['contestEntryOpen'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "short", "date-time"); ;
-	$entry_closed_sidebar = getTimeZoneDateTime($_SESSION['prefsTimeZone'], $entry_closed_date, $_SESSION['prefsDateFormat'],$_SESSION['prefsTimeFormat'], "short", "date-time"); 
-
-	$dropoff_open = getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_contest_dates['contestDropoffOpen'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], $sidebar_date_format, "date-time"); ;
-	$dropoff_closed = getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_contest_dates['contestDropoffDeadline'], $_SESSION['prefsDateFormat'],$_SESSION['prefsTimeFormat'], $sidebar_date_format, "date-time");
-	$dropoff_open_sidebar = getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_contest_dates['contestDropoffOpen'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "short", "date-time"); ;
-	$dropoff_closed_sidebar = getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_contest_dates['contestDropoffDeadline'], $_SESSION['prefsDateFormat'],$_SESSION['prefsTimeFormat'], "short", "date-time");
-
-	$shipping_open = getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_contest_dates['contestShippingOpen'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], $sidebar_date_format, "date-time"); ;
-	$shipping_closed = getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_contest_dates['contestShippingDeadline'], $_SESSION['prefsDateFormat'],$_SESSION['prefsTimeFormat'], $sidebar_date_format, "date-time");
-	$shipping_open_sidebar = getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_contest_dates['contestShippingOpen'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "short", "date-time"); ;
-	$shipping_closed_sidebar = getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_contest_dates['contestShippingDeadline'], $_SESSION['prefsDateFormat'],$_SESSION['prefsTimeFormat'], "short", "date-time");
-
-	$judge_open = getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_contest_dates['contestJudgeOpen'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], $sidebar_date_format, "date-time"); ;
-	$judge_closed = getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_contest_dates['contestJudgeDeadline'], $_SESSION['prefsDateFormat'],$_SESSION['prefsTimeFormat'], $sidebar_date_format, "date-time");
-
-	$judge_open_sidebar = getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_contest_dates['contestJudgeOpen'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "short", "date-time"); ;
-	$judge_closed_sidebar = getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_contest_dates['contestJudgeDeadline'], $_SESSION['prefsDateFormat'],$_SESSION['prefsTimeFormat'], "short", "date-time");
-
-    if ($_SESSION['prefsEval'] == 1) {
-
-        if ((empty($row_judging_prefs['jPrefsJudgingOpen'])) || (empty($row_judging_prefs['jPrefsJudgingClosed']))) {
-
-            $suggested_open_date = min($date_arr); // Get the start time of the first judging location chronologically
-            $suggested_close_date = (max($date_arr) + 28800); // Add eight hours to the start time at the final judging location
-
-            if (empty($row_judging_prefs['jPrefsJudgingOpen'])) $judging_evals_open = getTimeZoneDateTime($_SESSION['prefsTimeZone'], $suggested_open_date, $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], $sidebar_date_format, "date-time");
-            else $judging_evals_open = getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_judging_prefs['jPrefsJudgingOpen'], $_SESSION['prefsDateFormat'], $_SESSION['prefsTimeFormat'], $sidebar_date_format, "date-time");
-            if (empty($row_judging_prefs['jPrefsJudgingClosed'])) $judging_evals_closed = getTimeZoneDateTime($_SESSION['prefsTimeZone'], $suggested_close_date, $_SESSION['prefsDateFormat'],$_SESSION['prefsTimeFormat'], $sidebar_date_format, "date-time");
-            else $judging_evals_closed = getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_judging_prefs['jPrefsJudgingClosed'], $_SESSION['prefsDateFormat'],$_SESSION['prefsTimeFormat'], $sidebar_date_format, "date-time");
-
-        }
-
-        else {
-            $judging_evals_open = getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_judging_prefs['jPrefsJudgingOpen'], $_SESSION['prefsDateFormat'], $_SESSION['prefsTimeFormat'], $sidebar_date_format, "date-time");
-            $judging_evals_closed = getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_judging_prefs['jPrefsJudgingClosed'], $_SESSION['prefsDateFormat'],$_SESSION['prefsTimeFormat'], $sidebar_date_format, "date-time");
-        }
+        /**
+         * If any judging session has started, close the entry
+         * and account registration windows.
+         * This ensures that any entries that are being judged 
+         * aren't modified or deleted by non-admin users.
+         */
         
-    }
+        if ($judging_started) {
+            $entry_window_open = 2;
+            $registration_open = 2;
+        }
 
-	$currency = explode("^",currency_info($_SESSION['prefsCurrency'],1));
-	$currency_symbol = $currency[0];
-	$currency_code = $currency[1];
+        if (strpos($_SESSION['prefsLanguage'],"en-") !== false) $sidebar_date_format = "long";
 
-    $totalRows_entry_count = total_paid_received("default","default");
-    $total_entries = $totalRows_entry_count;
-    $total_paid = get_entry_count("paid");
-    $comp_paid_entry_limit = FALSE;
-    $comp_entry_limit = FALSE;
+        $reg_open = getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_contest_dates['contestRegistrationOpen'], $_SESSION['prefsDateFormat'], $_SESSION['prefsTimeFormat'], $sidebar_date_format, "date-time");
+        $reg_closed = getTimeZoneDateTime($_SESSION['prefsTimeZone'], $reg_closed_date, $_SESSION['prefsDateFormat'], $_SESSION['prefsTimeFormat'], $sidebar_date_format, "date-time");
+        $reg_open_sidebar = getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_contest_dates['contestRegistrationOpen'], $_SESSION['prefsDateFormat'], $_SESSION['prefsTimeFormat'], "short", "date-time");
+        $reg_closed_sidebar = getTimeZoneDateTime($_SESSION['prefsTimeZone'], $reg_closed_date, $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "short", "date-time");
 
-    if (isset($totalRows_entry_count)) {
-        if ((!empty($row_limits['prefsEntryLimit'])) && ($totalRows_entry_count >= $row_limits['prefsEntryLimit'])) $comp_entry_limit = TRUE;
-        if ((!empty($row_limits['prefsEntryLimitPaid'])) && ($total_paid >= $row_limits['prefsEntryLimitPaid'])) $comp_paid_entry_limit = TRUE;
-    }
+        $entry_open = getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_contest_dates['contestEntryOpen'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], $sidebar_date_format, "date-time"); ;
+        $entry_closed = getTimeZoneDateTime($_SESSION['prefsTimeZone'], $entry_closed_date, $_SESSION['prefsDateFormat'],$_SESSION['prefsTimeFormat'], $sidebar_date_format, "date-time");
+        $entry_open_sidebar = getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_contest_dates['contestEntryOpen'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "short", "date-time"); ;
+        $entry_closed_sidebar = getTimeZoneDateTime($_SESSION['prefsTimeZone'], $entry_closed_date, $_SESSION['prefsDateFormat'],$_SESSION['prefsTimeFormat'], "short", "date-time"); 
 
-	if (!empty($row_limits['prefsEntryLimit'])) $comp_entry_limit_near = ($row_limits['prefsEntryLimit']*.9); else $comp_entry_limit_near = "";
-	if ((!empty($row_limits['prefsEntryLimit'])) && (($total_entries > $comp_entry_limit_near) && ($total_entries < $row_limits['prefsEntryLimit']))) $comp_entry_limit_near_warning = TRUE; else $comp_entry_limit_near_warning = FALSE;
+        $dropoff_open = getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_contest_dates['contestDropoffOpen'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], $sidebar_date_format, "date-time"); ;
+        $dropoff_closed = getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_contest_dates['contestDropoffDeadline'], $_SESSION['prefsDateFormat'],$_SESSION['prefsTimeFormat'], $sidebar_date_format, "date-time");
+        $dropoff_open_sidebar = getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_contest_dates['contestDropoffOpen'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "short", "date-time"); ;
+        $dropoff_closed_sidebar = getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_contest_dates['contestDropoffDeadline'], $_SESSION['prefsDateFormat'],$_SESSION['prefsTimeFormat'], "short", "date-time");
 
-	$remaining_entries = 0;
-	if ((($section == "brew") || ($section == "beerxml")|| ($section == "list") || ($section == "pay")) && (!empty($row_limits['prefsUserEntryLimit']))) $remaining_entries = ($row_limits['prefsUserEntryLimit'] - $totalRows_log);
-	else $remaining_entries = 1;
+        $shipping_open = getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_contest_dates['contestShippingOpen'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], $sidebar_date_format, "date-time"); ;
+        $shipping_closed = getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_contest_dates['contestShippingDeadline'], $_SESSION['prefsDateFormat'],$_SESSION['prefsTimeFormat'], $sidebar_date_format, "date-time");
+        $shipping_open_sidebar = getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_contest_dates['contestShippingOpen'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "short", "date-time"); ;
+        $shipping_closed_sidebar = getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_contest_dates['contestShippingDeadline'], $_SESSION['prefsDateFormat'],$_SESSION['prefsTimeFormat'], "short", "date-time");
 
-    if (open_limit($row_judge_count['count'],$row_judging_prefs['jPrefsCapJudges'],$judge_window_open)) $judge_limit = TRUE;
-    else $judge_limit = FALSE;
+        $judge_open = getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_contest_dates['contestJudgeOpen'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], $sidebar_date_format, "date-time"); ;
+        $judge_closed = getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_contest_dates['contestJudgeDeadline'], $_SESSION['prefsDateFormat'],$_SESSION['prefsTimeFormat'], $sidebar_date_format, "date-time");
 
-    if (open_limit($row_steward_count['count'],$row_judging_prefs['jPrefsCapStewards'],$judge_window_open)) $steward_limit = TRUE;
-    else $steward_limit = FALSE;
+        $judge_open_sidebar = getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_contest_dates['contestJudgeOpen'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "short", "date-time"); ;
+        $judge_closed_sidebar = getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_contest_dates['contestJudgeDeadline'], $_SESSION['prefsDateFormat'],$_SESSION['prefsTimeFormat'], "short", "date-time");
+    
+        if ($_SESSION['prefsEval'] == 1) {
 
-	if (($judge_limit) && ($steward_limit)) $judge_window_open = 2;
-	if (($comp_entry_limit) || ($comp_paid_entry_limit)) $entry_window_open = 2;
+            if ((empty($row_judging_prefs['jPrefsJudgingOpen'])) || (empty($row_judging_prefs['jPrefsJudgingClosed']))) {
+                
+                
+                if (!empty($date_arr)) {
+                    $suggested_open_date = min($date_arr); // Get the start time of the first judging location chronologically
+                    $suggested_close_date = (max($date_arr) + 28800); // Add eight hours to the start time at the final judging location
+                }
+                
+                else {
+                    $suggested_close_date = (time()  + 28800);
+                    $suggested_open_date = time();
+                }
 
-	$current_date = getTimeZoneDateTime($_SESSION['prefsTimeZone'], time(), $_SESSION['prefsDateFormat'], $_SESSION['prefsTimeFormat'], "system", "date");
-	$current_date_display = getTimeZoneDateTime($_SESSION['prefsTimeZone'], time(), $_SESSION['prefsDateFormat'], $_SESSION['prefsTimeFormat'], $sidebar_date_format, "date");
-	$current_time = getTimeZoneDateTime($_SESSION['prefsTimeZone'], time(), $_SESSION['prefsDateFormat'], $_SESSION['prefsTimeFormat'], "system", "time-gmt");
+                if (empty($row_judging_prefs['jPrefsJudgingOpen'])) $judging_evals_open = getTimeZoneDateTime($_SESSION['prefsTimeZone'], $suggested_open_date, $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], $sidebar_date_format, "date-time");
+                else $judging_evals_open = getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_judging_prefs['jPrefsJudgingOpen'], $_SESSION['prefsDateFormat'], $_SESSION['prefsTimeFormat'], $sidebar_date_format, "date-time");
+                if (empty($row_judging_prefs['jPrefsJudgingClosed'])) $judging_evals_closed = getTimeZoneDateTime($_SESSION['prefsTimeZone'], $suggested_close_date, $_SESSION['prefsDateFormat'],$_SESSION['prefsTimeFormat'], $sidebar_date_format, "date-time");
+                else $judging_evals_closed = getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_judging_prefs['jPrefsJudgingClosed'], $_SESSION['prefsDateFormat'],$_SESSION['prefsTimeFormat'], $sidebar_date_format, "date-time");
+
+            }
+
+            else {
+                $judging_evals_open = getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_judging_prefs['jPrefsJudgingOpen'], $_SESSION['prefsDateFormat'], $_SESSION['prefsTimeFormat'], $sidebar_date_format, "date-time");
+                $judging_evals_closed = getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_judging_prefs['jPrefsJudgingClosed'], $_SESSION['prefsDateFormat'],$_SESSION['prefsTimeFormat'], $sidebar_date_format, "date-time");
+            }
+            
+        }
+
+        $currency = explode("^",currency_info($_SESSION['prefsCurrency'],1));
+        $currency_symbol = $currency[0];
+        $currency_code = $currency[1];
+
+        $totalRows_entry_count = total_paid_received("",0);
+        $total_entries = $totalRows_entry_count;
+        $total_paid = get_entry_count("paid");
+        $comp_paid_entry_limit = FALSE;
+        $comp_entry_limit = FALSE;
+
+        if (isset($totalRows_entry_count)) {
+            if ((!empty($row_limits['prefsEntryLimit'])) && ($totalRows_entry_count >= $row_limits['prefsEntryLimit'])) $comp_entry_limit = TRUE;
+            if ((!empty($row_limits['prefsEntryLimitPaid'])) && ($total_paid >= $row_limits['prefsEntryLimitPaid'])) $comp_paid_entry_limit = TRUE;
+        }
+
+        if (!empty($row_limits['prefsEntryLimit'])) $comp_entry_limit_near = ($row_limits['prefsEntryLimit']*.9); else $comp_entry_limit_near = "";
+        if ((!empty($row_limits['prefsEntryLimit'])) && (($total_entries > $comp_entry_limit_near) && ($total_entries < $row_limits['prefsEntryLimit']))) $comp_entry_limit_near_warning = TRUE; else $comp_entry_limit_near_warning = FALSE;
+
+        $remaining_entries = 0;
+        if ((($section == "brew") || ($section == "beerxml")|| ($section == "list") || ($section == "pay")) && (!empty($row_limits['prefsUserEntryLimit']))) $remaining_entries = ($row_limits['prefsUserEntryLimit'] - $totalRows_log);
+        else $remaining_entries = 1;
+
+        if (open_limit($row_judge_count['count'],$row_judging_prefs['jPrefsCapJudges'],$judge_window_open)) $judge_limit = TRUE;
+        else $judge_limit = FALSE;
+
+        if (open_limit($row_steward_count['count'],$row_judging_prefs['jPrefsCapStewards'],$judge_window_open)) $steward_limit = TRUE;
+        else $steward_limit = FALSE;
+
+        if (($judge_limit) && ($steward_limit)) $judge_window_open = 2;
+        if (($comp_entry_limit) || ($comp_paid_entry_limit)) $entry_window_open = 2;
+
+        $current_date = getTimeZoneDateTime($_SESSION['prefsTimeZone'], time(), $_SESSION['prefsDateFormat'], $_SESSION['prefsTimeFormat'], "system", "date");
+        $current_date_display = getTimeZoneDateTime($_SESSION['prefsTimeZone'], time(), $_SESSION['prefsDateFormat'], $_SESSION['prefsTimeFormat'], $sidebar_date_format, "date");
+        $current_time = getTimeZoneDateTime($_SESSION['prefsTimeZone'], time(), $_SESSION['prefsDateFormat'], $_SESSION['prefsTimeFormat'], "system", "time-gmt");
+
+    } // end if ((isset($row_contest_dates)) && (!empty($row_contest_dates)))
 
 }
 

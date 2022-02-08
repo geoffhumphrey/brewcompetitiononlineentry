@@ -442,9 +442,15 @@ if ($go == "default") {  ?>
         <input type="hidden" name="brewerPhone1" value="1234567890">
     <?php } // END if ($view == "quick")?>
 	<?php } // END if ($section == "admin") ?>
+	<div class="form-group">
+		<label class="col-lg-3 col-md-3 col-sm-4 col-xs-12"></label>
+		<div class="col-lg-9 col-md-9 col-sm-8 col-xs-12">
+			<p class="bcoem-form-info text-warning"><i class="fa fa-asterisk"></i> <strong>= <?php echo $label_required_info; ?></strong></p>
+		</div>
+	</div>
 	<?php if (($_SESSION['prefsProEdition'] == 1) && ($go == "entrant")) { ?>
     <div class="form-group"><!-- Form Group REQUIRED Text Input -->
-        <label for="brewerBreweryName" class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label_name; if (($_SESSION['prefsProEdition'] == 1) && ($go == "entrant")) echo " (".$label_organization.")"; ?></label>
+        <label for="brewerBreweryName" class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label text-warning"><i class="fa fa-sm fa-asterisk"></i> <?php echo $label_name; if (($_SESSION['prefsProEdition'] == 1) && ($go == "entrant")) echo " (".$label_organization.")"; ?></label>
         <div class="col-lg-9 col-md-9 col-sm-8 col-xs-12">
             <div class="input-group has-warning">
                 <span class="input-group-addon" id="brewerBreweryName-addon1"><span class="fa fa-beer"></span></span>
@@ -457,17 +463,17 @@ if ($go == "default") {  ?>
         </div>
     </div><!-- ./Form Group -->
 	<div class="form-group"><!-- Form Group Text Input -->
-        <label for="brewerBreweryTTB" class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label_ttb; ?></label>
+        <label for="brewerBreweryTTB" class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label text-warning"><i class="fa fa-sm fa-asterisk"></i> <?php echo $label_ttb; ?></label>
         <div class="col-lg-9 col-md-9 col-sm-8 col-xs-12">
         	<!-- Input Here -->
-       		<input class="form-control" id="brewerBreweryTTB" name="brewerBreweryTTB" type="text" value="<?php if (($msg > 0) && (isset($_COOKIE['brewerBreweryTTB']))) echo $_COOKIE['brewerBreweryTTB']; ?>" placeholder="">
+       		<input class="form-control has-warning" id="brewerBreweryTTB" name="brewerBreweryTTB" type="text" value="<?php if (($msg > 0) && (isset($_COOKIE['brewerBreweryTTB']))) echo $_COOKIE['brewerBreweryTTB']; ?>" placeholder="">
             <div class="help-block"><?php echo $register_text_046; ?></div>
         </div>
     </div><!-- ./Form Group -->
 	<?php } // END if (($_SESSION['prefsProEdition'] == 1) && ($go == "entrant")) ?>
 	<!-- Email -->
     <div class="form-group"><!-- Form Group REQUIRED Text Input -->
-		<label for="" class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label"><?php if (($_SESSION['prefsProEdition'] == 1) && ($go == "entrant")) echo $label_contact." "; echo $label_email; ?></label>
+		<label for="" class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label text-warning"><i class="fa fa-sm fa-asterisk"></i> <?php if (($_SESSION['prefsProEdition'] == 1) && ($go == "entrant")) echo $label_contact." "; echo $label_email; ?></label>
 		<div class="col-lg-9 col-md-9 col-sm-8 col-xs-12">
 			<div class="input-group has-warning">
 				<span class="input-group-addon" id="email-addon1"><span class="fa fa-envelope"></span></span>
@@ -483,7 +489,7 @@ if ($go == "default") {  ?>
 	</div><!-- ./Form Group -->
     <?php if ($view == "default") { // Show if not using quick add judge/steward feature ?>
     <div class="form-group"><!-- Form Group REQUIRED Text Input -->
-		<label for="" class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label_re_enter; if (($_SESSION['prefsProEdition'] == 1) && ($go == "entrant")) echo " ".$label_contact." "; echo " ".$label_email; ?></label>
+		<label for="" class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label text-warning"><i class="fa fa-sm fa-asterisk"></i> <?php echo $label_re_enter; if (($_SESSION['prefsProEdition'] == 1) && ($go == "entrant")) echo " ".$label_contact." "; echo " ".$label_email; ?></label>
 		<div class="col-lg-9 col-md-9 col-sm-8 col-xs-12">
 			<div class="input-group has-warning">
 				<span class="input-group-addon" id="re-enter-email-addon1"><span class="fa fa-envelope"></span></span>
@@ -522,7 +528,7 @@ if ($go == "default") {  ?>
 	</script>
 	<!-- Password -->
 	<div class="form-group"><!-- Form Group REQUIRED Text Input -->
-		<label for="" class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label_password; ?></label>
+		<label for="" class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label text-warning"><i class="fa fa-sm fa-asterisk"></i> <?php echo $label_password; ?></label>
 		<div class="col-lg-9 col-md-9 col-sm-8 col-xs-12">
 			<div class="input-group has-warning">
 				<span class="input-group-addon" id="password-addon1"><span class="fa fa-key"></span></span>
@@ -543,16 +549,16 @@ if ($go == "default") {  ?>
 	<?php } // END if ($view == "default") ?>
     <?php if ($section != "admin") { // Show only when NOT being added by an administrator ?>
 	<div class="form-group"><!-- Form Group REQUIRED Radio Group -->
-		<label for="" class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label_security_question; ?></label>
+		<label for="" class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label text-warning"><i class="fa fa-sm fa-asterisk"></i> <?php echo $label_security_question; ?></label>
 		<div class="col-lg-9 col-md-9 col-sm-8 col-xs-12">
-			<div class="input-group">
+			<div class="input-group has-warning">
                 <?php echo $security; ?>
 			</div>
             <div class="help-block"><?php echo $register_text_018; ?></div>
 		</div>
 	</div><!-- ./Form Group -->
 	<div class="form-group"><!-- Form Group REQUIRED Text Input -->
-		<label for="" class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label_security_answer; ?></label>
+		<label for="" class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label text-warning"><i class="fa fa-sm fa-asterisk"></i> <?php echo $label_security_answer; ?></label>
 		<div class="col-lg-9 col-md-9 col-sm-8 col-xs-12">
 			<div class="input-group has-warning">
 				<span class="input-group-addon" id="security-question-answer-addon1"><span class="fa fa-bullhorn"></span></span>
@@ -567,7 +573,7 @@ if ($go == "default") {  ?>
 	<?php } // end if ($section != "admin") ?>
   	<!-- Name -->
     <div class="form-group"><!-- Form Group REQUIRED Text Input -->
-		<label for="" class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label"><?php if (($_SESSION['prefsProEdition'] == 1) && ($go == "entrant")) echo $label_contact." "; echo $label_first_name; ?></label>
+		<label for="" class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label text-warning"><i class="fa fa-sm fa-asterisk"></i> <?php if (($_SESSION['prefsProEdition'] == 1) && ($go == "entrant")) echo $label_contact." "; echo $label_first_name; ?></label>
 		<div class="col-lg-9 col-md-9 col-sm-8 col-xs-12">
 			<div class="input-group has-warning">
 				<span class="input-group-addon" id="first-name-addon1"><span class="fa fa-user"></span></span>
@@ -579,7 +585,7 @@ if ($go == "default") {  ?>
 		</div>
 	</div><!-- ./Form Group -->
 	<div class="form-group"><!-- Form Group REQUIRED Text Input -->
-		<label for="" class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label"><?php if (($_SESSION['prefsProEdition'] == 1) && ($go == "entrant")) echo $label_contact." "; echo $label_last_name; ?></label>
+		<label for="" class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label text-warning"><i class="fa fa-sm fa-asterisk"></i> <?php if (($_SESSION['prefsProEdition'] == 1) && ($go == "entrant")) echo $label_contact." "; echo $label_last_name; ?></label>
 		<div class="col-lg-9 col-md-9 col-sm-8 col-xs-12">
 			<div class="input-group has-warning">
 				<span class="input-group-addon" id="last-name-addon1"><span class="fa fa-user"></span></span>
@@ -593,8 +599,8 @@ if ($go == "default") {  ?>
 	</div><!-- ./Form Group -->
     <?php if ($view == "default") { ?>
     <div class="form-group"><!-- Form Group REQUIRED Select -->
-		<label for="" class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label_country; if (($_SESSION['prefsProEdition'] == 1) && ($go == "entrant")) echo " (".$label_organization.")"; ?></label>
-		<div class="col-lg-9 col-md-9 col-sm-8 col-xs-12 has-warning">
+		<label for="" class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label text-warning"><i class="fa fa-sm fa-asterisk"></i> <?php echo $label_country; if (($_SESSION['prefsProEdition'] == 1) && ($go == "entrant")) echo " (".$label_organization.")"; ?></label>
+		<div class="col-lg-9 col-md-9 col-sm-8 col-xs-12">
 		<!-- Input Here -->
 		<select class="selectpicker" name="brewerCountry" id="brewerCountry" data-live-search="true" data-size="10" data-width="auto" data-show-tick="true" data-header="<?php echo $label_select_country; ?>" title="<?php echo $label_select_country; ?>" data-error="<?php echo $brewer_text_031; ?>" required>
     		<?php echo $country_select; ?>
@@ -607,7 +613,7 @@ if ($go == "default") {  ?>
 	<section id="address-fields">
     <!-- General Entry Fields: Address, Phone, Dropoff Locations, Club, AHA -->
 	<div class="form-group"><!-- Form Group REQUIRED Text Input -->
-		<label for="" class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label_street_address; if (($_SESSION['prefsProEdition'] == 1) && ($go == "entrant")) echo " (".$label_organization.")"; ?></label>
+		<label for="" class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label text-warning"><i class="fa fa-sm fa-asterisk"></i> <?php echo $label_street_address; if (($_SESSION['prefsProEdition'] == 1) && ($go == "entrant")) echo " (".$label_organization.")"; ?></label>
 		<div class="col-lg-9 col-md-9 col-sm-8 col-xs-12">
 			<div class="input-group has-warning">
 				<span class="input-group-addon" id="street-addon1"><span class="fa fa-home"></span></span>
@@ -619,7 +625,7 @@ if ($go == "default") {  ?>
 		</div>
     </div><!-- ./Form Group -->
 	<div class="form-group"><!-- Form Group REQUIRED Text Input -->
-		<label for="" class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label_city; if (($_SESSION['prefsProEdition'] == 1) && ($go == "entrant")) echo " (".$label_organization.")"; ?></label>
+		<label for="" class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label text-warning"><i class="fa fa-sm fa-asterisk"></i> <?php echo $label_city; if (($_SESSION['prefsProEdition'] == 1) && ($go == "entrant")) echo " (".$label_organization.")"; ?></label>
 		<div class="col-lg-9 col-md-9 col-sm-8 col-xs-12">
 			<div class="input-group has-warning">
 				<span class="input-group-addon" id="city-addon1"><span class="fa fa-home"></span></span>
@@ -631,7 +637,7 @@ if ($go == "default") {  ?>
 		</div>
 	</div><!-- ./Form Group -->
 	<div class="form-group"><!-- Form Group REQUIRED Text Input -->
-		<label for="" class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label_state_province; if (($_SESSION['prefsProEdition'] == 1) && ($go == "entrant")) echo " (".$label_organization.")"; ?></label>
+		<label for="" class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label text-warning"><i class="fa fa-sm fa-asterisk"></i> <?php echo $label_state_province; if (($_SESSION['prefsProEdition'] == 1) && ($go == "entrant")) echo " (".$label_organization.")"; ?></label>
 		<div class="col-lg-9 col-md-9 col-sm-8 col-xs-12">
 			<div id="non-us-state" class="input-group has-warning">
 				<span class="input-group-addon" id="state-addon1"><span class="fa fa-home"></span></span>
@@ -639,7 +645,7 @@ if ($go == "default") {  ?>
 				<input class="form-control" name="brewerStateNon" id="brewerStateNon" type="text" placeholder="" value="<?php if (($msg > 0) && (isset($_COOKIE['brewerState']))) echo $_COOKIE['brewerState']; ?>" data-error="<?php echo $register_text_030; ?>" required>
 				<span class="input-group-addon" id="state-addon2"><span class="fa fa-star"></span>
 			</div>
-			<div id="us-state" class="has-warning">
+			<div id="us-state" class="input-group has-warning">
 				<select class="selectpicker" name="brewerStateUS" id="brewerStateUS" data-live-search="true" data-size="10" data-width="fit" title="<?php echo $label_select_state; ?>" data-error="<?php echo $register_text_030; ?>" required>
 	    			<?php echo $us_state_select; ?>
 	    		</select>
@@ -659,7 +665,7 @@ if ($go == "default") {  ?>
 	</div><!-- ./Form Group -->
 	
 	<div class="form-group"><!-- Form Group REQUIRED Text Input -->
-		<label for="" class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label_zip; if (($_SESSION['prefsProEdition'] == 1) && ($go == "entrant")) echo " (".$label_organization.")"; ?></label>
+		<label for="" class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label text-warning"><i class="fa fa-sm fa-asterisk"></i> <?php echo $label_zip; if (($_SESSION['prefsProEdition'] == 1) && ($go == "entrant")) echo " (".$label_organization.")"; ?></label>
 		<div class="col-lg-9 col-md-9 col-sm-8 col-xs-12">
 			<div class="input-group has-warning">
 				<span class="input-group-addon" id="zip-addon1"><span class="fa fa-home"></span></span>
@@ -672,7 +678,7 @@ if ($go == "default") {  ?>
 	</div><!-- ./Form Group -->
 	</section>
     <div class="form-group"><!-- Form Group REQUIRED Text Input -->
-		<label for="" class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label"><?php if (($_SESSION['prefsProEdition'] == 1) && ($go == "entrant")) echo $label_contact." "; echo $label_phone_primary; ?></label>
+		<label for="" class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label text-warning"><i class="fa fa-sm fa-asterisk"></i> <?php if (($_SESSION['prefsProEdition'] == 1) && ($go == "entrant")) echo $label_contact." "; echo $label_phone_primary; ?></label>
 		<div class="col-lg-9 col-md-9 col-sm-8 col-xs-12">
 			<div class="input-group has-warning">
 				<span class="input-group-addon" id="phone1-addon1"><span class="fa fa-phone"></span></span>
@@ -695,8 +701,8 @@ if ($go == "default") {  ?>
 	</div><!-- ./Form Group -->
     <?php if (($_SESSION['prefsProEdition'] == 0) || (($_SESSION['prefsProEdition'] == 1) && ($go == "entrant"))) { ?>
 	<div class="form-group"><!-- Form Group REQUIRED Select -->
-		<label for="" class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label_drop_off; ?></label>
-		<div class="col-lg-9 col-md-9 col-sm-8 col-xs-12 has-warning">
+		<label for="" class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label text-warning"><i class="fa fa-sm fa-asterisk"></i> <?php echo $label_drop_off; ?></label>
+		<div class="col-lg-9 col-md-9 col-sm-8 col-xs-12">
 			<!-- Input Here -->
 			<select class="selectpicker" name="brewerDropOff" id="brewerDropOff" data-live-search="true" data-size="10" data-width="fit" data-show-tick="true" data-header="<?php echo $label_select_dropoff; ?>" title="<?php echo $label_select_dropoff; ?>" required>
 				<?php if (!empty($dropoff_select)) { ?>
@@ -801,10 +807,10 @@ if ($go == "default") {  ?>
     ?>
     <!-- Show Judge Fields if Registering as a Judge -->
     <div class="form-group"><!-- Form Group REQUIRED Radio Group -->
-        <label for="" class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label_judging; ?></label>
+        <label for="" class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label text-warning"><i class="fa fa-sm fa-asterisk"></i> <?php echo $label_judging; ?></label>
         <div class="col-lg-9 col-md-9 col-sm-8 col-xs-12">
             <p><?php echo $brewer_text_006; ?></p>
-            <div class="input-group">
+            <div class="input-group has-warning">
                 <!-- Input Here -->
                 <label class="radio-inline">
                     <input type="radio" name="brewerJudge" value="Y" id="brewerJudge_0"  <?php if ($judge_checked_yes) echo "CHECKED"; ?> rel="judge_no" /> <?php echo $label_yes; ?>
@@ -892,7 +898,7 @@ if ($go == "default") {  ?>
 	else $judging_locations = array("","");
 	?>
     <div class="form-group"><!-- Form Group REQUIRED Radio Group -->
-        <label for="" class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label_judging_avail; ?></label>
+        <label for="" class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label text-warning"><i class="fa fa-sm fa-asterisk"></i> <?php echo $label_judging_avail; ?></label>
         <div class="col-lg-9 col-md-9 col-sm-8 col-xs-12">  
         <?php do {
 
@@ -901,14 +907,14 @@ if ($go == "default") {  ?>
             $judge_avail_info = "";
             $judge_avail_option = "";
 
-            if (time() < $row_judging3['judgingDate']) {
+            if ((time() < $row_judging3['judgingDate']) || ($section == "admin")) {
 
             	if (in_array("Y-".$row_judging3['id'],$judging_locations)) $judge_location_yes = " SELECTED";
             	if (in_array("N-".$row_judging3['id'],$judging_locations)) $judge_location_no = " SELECTED";
 
 	            $judge_avail_info .= sprintf("<p class=\"bcoem-form-info\">%s (%s)</p>",$row_judging3['judgingLocName'],getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_judging3['judgingDate'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "short", "date-time"));
 	           
-	           	$judge_avail_option .= sprintf("<select class=\"selectpicker\" name=\"brewerJudgeLocation[]\" id=\"brewerJudgeLocation\" data-width=\"auto\" data-header=\"%s\" title=\"%s\" required>",$label_select_below,$label_select_below);
+	           	$judge_avail_option .= sprintf("<select class=\"selectpicker\" name=\"brewerJudgeLocation[]\" id=\"brewerJudgeLocation\" data-width=\"auto\" data-header=\"* %s\" title=\"* %s\" required>",$label_select_below,$label_select_below);
 	            $judge_avail_option .= sprintf("<option value=\"Y-%s\"%s>%s</option>",$row_judging3['id'],$judge_location_yes,$label_yes);
 	            $judge_avail_option .= sprintf("<option value=\"N-%s\"%s>%s</option>",$row_judging3['id'],$judge_location_no,$label_no);
 	            $judge_avail_option .= "</select>";
@@ -940,10 +946,10 @@ if ($go == "default") {  ?>
     ?>
     <!-- Show Steward Fields if Registering as a Judge -->
     <div class="form-group"><!-- Form Group REQUIRED Radio Group -->
-        <label for="" class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label_stewarding; ?></label>
+        <label for="" class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label text-warning"><i class="fa fa-sm fa-asterisk"></i> <?php echo $label_stewarding; ?></label>
         <div class="col-lg-9 col-md-9 col-sm-8 col-xs-12">
             <p><?php echo $brewer_text_015; ?></p>
-            <div class="input-group">
+            <div class="input-group has-warning">
                 <!-- Input Here -->
                 <label class="radio-inline">
                     <input type="radio" name="brewerSteward" value="Y" id="brewerSteward_0" <?php if ($steward_checked_yes) echo "CHECKED"; ?> rel="steward_no" /><?php echo $label_yes; ?>
@@ -967,8 +973,9 @@ if ($go == "default") {  ?>
 	else $stewarding_locations = array("","");
 	?>
     <div class="form-group"><!-- Form Group REQUIRED Radio Group -->
-        <label for="" class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label_stewarding_avail; ?></label>
+        <label for="" class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label text-warning"><i class="fa fa-sm fa-asterisk"></i> <?php echo $label_stewarding_avail; ?></label>
         <div class="col-lg-9 col-md-9 col-sm-8 col-xs-12">
+        <p class="bcoem-form-info text-danger">A "Yes" or "No" response is required for each location below.</p>
         <?php do { 
 
         	$steward_location_yes = "";
@@ -976,7 +983,7 @@ if ($go == "default") {  ?>
             $steward_avail_info = "";
             $steward_avail_option = "";
 
-            if (time() < $row_stewarding['judgingDate']) {
+            if ((time() < $row_stewarding['judgingDate']) || ($section == "admin")) {
 
             	if (in_array("Y-".$row_stewarding['id'],$stewarding_locations)) $steward_location_yes = "SELECTED";
             	if (in_array("N-".$row_stewarding['id'],$stewarding_locations)) $steward_location_no = "SELECTED";
@@ -1005,7 +1012,7 @@ if ($go == "default") {  ?>
     <?php if (((!$judge_hidden) || (!$steward_hidden)) && ($section != "admin")) { ?>
     <!-- Show Waiver -->
     <div class="form-group"><!-- Form Group REQUIRED Radio Group -->
-        <label for="brewerJudgeWaiver" class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label_waiver; ?></label>
+        <label for="brewerJudgeWaiver" class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label text-warning"><i class="fa fa-sm fa-asterisk"></i> <?php echo $label_waiver; ?></label>
         <div class="col-lg-9 col-md-9 col-sm-8 col-xs-12">
             <div class="checkbox">
                 <!-- Input Here -->
@@ -1021,9 +1028,9 @@ if ($go == "default") {  ?>
     <?php if ($_SESSION['prefsCAPTCHA'] == "1") { ?>
     <!-- CAPTCHA -->
 	<div class="form-group">
-		<label for="recaptcha" class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label">CAPTCHA</label>
+		<label for="recaptcha" class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label text-warning"><i class="fa fa-sm fa-asterisk"></i> CAPTCHA</label>
 		<div class="col-lg-9 col-md-9 col-sm-8 col-xs-12">
-			<div class="input-group">
+			<div class="input-group has-warning">
 				<!-- Input Here -->
                 <div class="g-recaptcha" data-sitekey="<?php echo $public_captcha_key; ?>"></div>
 			</div>

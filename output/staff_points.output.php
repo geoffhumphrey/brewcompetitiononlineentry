@@ -39,7 +39,7 @@ require (DB.'admin_common.db.php');
 require (LIB.'output.lib.php');
 require (DB.'output_staff_points.db.php');
 // Get total amount of paid and received entries
-$total_entries = total_paid_received("judging_scores","default");
+$total_entries = total_paid_received("judging_scores",0);
 //$total_entries = 750;
 
 // Figure out whether BOS Judge Points are awarded or not

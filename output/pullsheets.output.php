@@ -16,17 +16,32 @@ if ((($go == "judging_tables") || ($go == "judging_locations") || ($go == "all_e
 $table_flight_thead = "";
 $pullsheet_output = "";
 
-if ($go != "all_entry_info") {
+if ($go == "judging_scores_bos") {
 	$table_flight_thead .= "<tr>";
 	$table_flight_thead .= "<th width=\"5%\" nowrap>".$label_pull_order."</th>";
 	$table_flight_thead .= "<th width=\"5%\">#</th>";
-	$table_flight_thead .= "<th width=\"35%\">".$label_style."</th>";
-	$table_flight_thead .= "<th width=\"35%\">".$label_info."</th>";
+	$table_flight_thead .= "<th width=\"5%\">".$label_table." ".$label_place."</th>";
+	$table_flight_thead .= "<th width=\"20%\">".$label_style."</th>";
+	$table_flight_thead .= "<th>".$label_info."</th>";
 	$table_flight_thead .= "<th width=\"5%\" nowrap>".$label_box."</th>";
-	if (($go != "judging_scores_bos") && ($go != "mini_bos") && ($filter != "mini_bos")) $table_flight_thead .= "<th width=\"5%\" nowrap>".$label_mini_bos."</th>";
 	$table_flight_thead .= "<th width=\"5%\" nowrap>".$label_score."</th>";
-	$table_flight_thead .= "<th width=\"5%\" nowrap>".$label_place."</th>";
+	$table_flight_thead .= "<th width=\"5%\" nowrap>".$label_bos."<br>".$label_place."</th>";
 	$table_flight_thead .= "</tr>";
+}
+
+else {
+	if ($go != "all_entry_info") {
+		$table_flight_thead .= "<tr>";
+		$table_flight_thead .= "<th width=\"5%\" nowrap>".$label_pull_order."</th>";
+		$table_flight_thead .= "<th width=\"5%\">#</th>";
+		$table_flight_thead .= "<th width=\"35%\">".$label_style."</th>";
+		$table_flight_thead .= "<th width=\"35%\">".$label_info."</th>";
+		$table_flight_thead .= "<th width=\"5%\" nowrap>".$label_box."</th>";
+		if (($go != "judging_scores_bos") && ($go != "mini_bos") && ($filter != "mini_bos")) $table_flight_thead .= "<th width=\"5%\" nowrap>".$label_mini_bos."</th>";
+		$table_flight_thead .= "<th width=\"5%\" nowrap>".$label_score."</th>";
+		$table_flight_thead .= "<th width=\"5%\" nowrap>".$label_place."</th>";
+		$table_flight_thead .= "</tr>";
+	}
 }
 
 if ($go == "all_entry_info") {
@@ -573,9 +588,10 @@ if ($go == "judging_scores_bos") {
 				$table_flight_datatables .= "\"sDom\": 'rt',";
 				$table_flight_datatables .= "\"bStateSave\" : false,";
 				$table_flight_datatables .= "\"bLengthChange\" : false,";
-				$table_flight_datatables .= "\"aaSorting\": [[2,'asc'],[1,'asc']],";
+				$table_flight_datatables .= "\"aaSorting\": [[3,'asc'],[2,'asc'],[1,'asc']],";
 				$table_flight_datatables .= "\"bProcessing\" : false,";
 				$table_flight_datatables .= "\"aoColumns\": [";
+				$table_flight_datatables .= "{ \"asSorting\": [  ] },";
 				$table_flight_datatables .= "{ \"asSorting\": [  ] },";
 				$table_flight_datatables .= "{ \"asSorting\": [  ] },";
 				$table_flight_datatables .= "{ \"asSorting\": [  ] },";
@@ -597,12 +613,12 @@ if ($go == "judging_scores_bos") {
 
 				do {
 
-					include (DB.'output_pullsheets_bos_entries.db.php');
+					// include (DB.'output_pullsheets_bos_entries.db.php');
 
-					$style = style_number_const($row_entries_1['brewCategorySort'],$row_entries_1['brewSubCategory'],$_SESSION['style_set_display_separator'],0);
-					$style_special = $row_entries_1['brewCategorySort']."^".$row_entries_1['brewSubCategory']."^".$_SESSION['prefsStyleSet'];
+					$style = style_number_const($row_bos['brewCategorySort'],$row_bos['brewSubCategory'],$_SESSION['style_set_display_separator'],1);
+					$style_special = $row_bos['brewCategorySort']."^".$row_bos['brewSubCategory']."^".$_SESSION['prefsStyleSet'];
 
-					if (!empty($row_entries_1['brewCategorySort'])) {
+					if (!empty($row_bos['brewCategorySort'])) {
 
 						$table_flight_tbody .= "<tr>";
 
@@ -611,35 +627,44 @@ if ($go == "judging_scores_bos") {
 						$table_flight_tbody .= "</td>";
 						$table_flight_tbody .= "<td>";
 
-						if ($view == "entry")  $table_flight_tbody .= sprintf("%06s",$row_entries_1['id']);
-						else $table_flight_tbody .= sprintf("%06s",$row_entries_1['brewJudgingNumber']);
+						if ($view == "entry")  $table_flight_tbody .= sprintf("%06s",$row_bos['id']);
+						else $table_flight_tbody .= sprintf("%06s",$row_bos['brewJudgingNumber']);
 						$table_flight_tbody .= "</td>";
 
 						$table_flight_tbody .= "<td>";
-						if ($_SESSION['prefsStyleSet'] == "BA") $table_flight_tbody .= $row_entries_1['brewStyle'];
-						else $table_flight_tbody .= $style." ".$row_entries_1['brewStyle']."<em><br>".style_convert($row_entries_1['brewCategorySort'],1)."</em>";
+						$table_flight_tbody .= $row_bos['scorePlace'];
+						$table_flight_tbody .= "</td>";
+
+						$table_flight_tbody .= "<td>";
+						if ($_SESSION['prefsStyleSet'] == "BA") $table_flight_tbody .= $row_bos['brewStyle'];
+						else $table_flight_tbody .= $style." ".$row_bos['brewStyle']."<em><br>".style_convert($row_bos['brewCategorySort'],1)."</em>";
 						$table_flight_tbody .= "</td>";
 
 						$table_flight_tbody .= "<td>";
 						$special = style_convert($style_special,"9");
 						$special = explode("^",$special);
 
-						if (($row_entries_1['brewInfo'] != "") && ($special[4] == "1")) $table_flight_tbody .= "<p><strong>".$label_required_info.": </strong>".str_replace("^"," | ",$row_entries_1['brewInfo'])."</p>";
-						if ($row_entries_1['brewInfoOptional'] != "") $table_flight_tbody .= "<p><strong>".$label_optional_info.": </strong>".$row_entries_1['brewInfoOptional']."</p>";
-						if ($row_entries_1['brewComments'] != "") $table_flight_tbody .= "<p><strong>".$label_brewer_specifics.": </strong>".$row_entries_1['brewComments']."</p>";
-						$table_flight_tbody .= "<p>";
-						if (!empty($row_entries_1['brewMead1'])) $table_flight_tbody .= "<strong>".$label_carbonation.":</strong> ".$row_entries_1['brewMead1']."<br>";
-						if (!empty($row_entries_1['brewMead2'])) $table_flight_tbody .= "<strong>".$label_sweetness.":</strong> ".$row_entries_1['brewMead2']."<br>";
-						if (!empty($row_entries_1['brewMead3'])) $table_flight_tbody .= "<strong>".$label_strength.":</strong> ".$row_entries_1['brewMead3'];
-						$table_flight_tbody .= "</p>";
+						if (($row_bos['brewInfo'] != "") && ($special[4] == "1")) $table_flight_tbody .= "<p><strong>".$label_required_info.": </strong>".str_replace("^"," | ",$row_bos['brewInfo'])."</p>";
+						if ($row_bos['brewInfoOptional'] != "") $table_flight_tbody .= "<p><strong>".$label_optional_info.": </strong>".$row_bos['brewInfoOptional']."</p>";
+						if ($row_bos['brewComments'] != "") $table_flight_tbody .= "<p><strong>".$label_brewer_specifics.": </strong>".$row_bos['brewComments']."</p>";
 
+						if ((!empty($row_bos['brewMead1'])) || (!empty($row_bos['brewMead2'])) || (!empty($row_bos['brewMead3']))) {
+							$table_flight_tbody .= "<p>";
+							if (!empty($row_bos['brewMead1'])) $table_flight_tbody .= "<strong>".$label_carbonation.":</strong> ".$row_bos['brewMead1']."<br>";
+							if (!empty($row_bos['brewMead2'])) $table_flight_tbody .= "<strong>".$label_sweetness.":</strong> ".$row_bos['brewMead2']."<br>";
+							if (!empty($row_bos['brewMead3'])) $table_flight_tbody .= "<strong>".$label_strength.":</strong> ".$row_bos['brewMead3'];
+							$table_flight_tbody .= "</p>";
+						}
+							
 						if (!empty($row_entries['brewPossAllergens'])) $table_flight_tbody .= "<p><strong>".$label_possible_allergens.":</strong> ".$row_entries['brewPossAllergens']."</p>";
 
 						if (!empty($row_entries['brewStaffNotes'])) $table_flight_tbody .= "<p><strong>".$label_notes.":</strong> ".$row_entries['brewStaffNotes']."</p>";
 
+						if ($row_bos['brewerProAm'] == 1) $table_flight_tbody .= "<p><strong>** NOT ELIGIBLE FOR PRO-AM **</p>"; 
+
 						$table_flight_tbody .= "</td>";
 						$table_flight_tbody .= "<td>";
-						$table_flight_tbody .= $row_entries_1['brewBoxNum'];
+						$table_flight_tbody .= $row_bos['brewBoxNum'];
 						$table_flight_tbody .= "</td>";
 						$table_flight_tbody .= "<td>";
 						$table_flight_tbody .= "<p>&nbsp;</p>";
@@ -1106,86 +1131,91 @@ elseif (($go != "judging_scores_bos") && ($go != "mini_bos") && ($go != "all_ent
 						foreach (array_unique($a) as $value) {
 
 							include (DB.'output_pullsheets_entries.db.php');
-							$style = style_number_const($row_entries['brewCategorySort'],$row_entries['brewSubCategory'],$_SESSION['style_set_display_separator'],0);
-							$style_special = $row_entries['brewCategorySort']."^".$row_entries['brewSubCategory']."^".$_SESSION['prefsStyleSet'];
 
-							do {
+							$table_flight_tbody = "";
 
-								$table_flight_tbody = "";
+							if (!empty($row_entries)) {
 
-								$flight_round = check_flight_number($row_entries['id'],$i,0);
+								$style = style_number_const($row_entries['brewCategorySort'],$row_entries['brewSubCategory'],$_SESSION['style_set_display_separator'],0);
+								$style_special = $row_entries['brewCategorySort']."^".$row_entries['brewSubCategory']."^".$_SESSION['prefsStyleSet'];
 
-								if (check_flight_round($flight_round,$round)) {
+								do {
 
-									$table_flight_tbody .= "<tr>";
-									$table_flight_tbody .= "<td>";
-									$table_flight_tbody .= "<p>&nbsp;</p>";
-									$table_flight_tbody .= "</td>";
-									$table_flight_tbody .= "<td>";
-									if ($view == "entry")  $table_flight_tbody .= sprintf("%06s",$row_entries['id']);
-									else $table_flight_tbody .= sprintf("%06s",$row_entries['brewJudgingNumber']);
-									$table_flight_tbody .= "</td>";
-									$table_flight_tbody .= "<td>";
-									if ($_SESSION['prefsStyleSet'] == "BA") $table_flight_tbody .= $row_entries['brewStyle'];
-									else $table_flight_tbody .= $style." ".$row_entries['brewStyle']."<em><br>".style_convert($row_entries['brewCategorySort'],1)."</em>";
-									$table_flight_tbody .= "</td>";
-									$table_flight_tbody .= "<td>";
+									$flight_round = check_flight_number($row_entries['id'],$i,0);
 
-									$special = style_convert($style_special,"9");
-									$special = explode("^",$special);
+									if (check_flight_round($flight_round,$round)) {
 
-										if (($row_entries['brewInfo'] != "") && ($special[4] == "1")) $table_flight_tbody .= "<p><strong>".$label_required_info.": </strong> ".str_replace("^"," | ",$row_entries['brewInfo'])."</p>";
-										if ($row_entries['brewInfoOptional'] != "") $table_flight_tbody .= "<p><strong>".$label_optional_info.": </strong> ".$row_entries['brewInfoOptional']."</p>";
-										if ($row_entries['brewComments'] != "") $table_flight_tbody .= "<p><strong>".$label_brewer_specifics.": </strong> ".$row_entries['brewComments']."</p>";
-
-										$table_flight_tbody .= "<p>";
-										if (!empty($row_entries['brewMead1'])) $table_flight_tbody .= "<strong>".$label_carbonation.": </strong> ".$row_entries['brewMead1']."<br>";
-										if (!empty($row_entries['brewMead2'])) $table_flight_tbody .= "<strong>".$label_sweetness.":</strong> ".$row_entries['brewMead2']."<br>";
-										if (!empty($row_entries['brewMead3'])) $table_flight_tbody .= "<strong>".$label_strength.":</strong> ".$row_entries['brewMead3'];
-										$table_flight_tbody .= "</p>";
-
-										if (!empty($row_entries['brewPossAllergens'])) $table_flight_tbody .= "<p><strong>".$label_possible_allergens.":</strong> ".$row_entries['brewPossAllergens']."</p>";
-
-										if (!empty($row_entries['brewStaffNotes'])) $table_flight_tbody .= "<p><strong>".$label_notes.":</strong> ".$row_entries['brewStaffNotes']."</p>";
-
+										$table_flight_tbody .= "<tr>";
+										$table_flight_tbody .= "<td>";
+										$table_flight_tbody .= "<p>&nbsp;</p>";
 										$table_flight_tbody .= "</td>";
 										$table_flight_tbody .= "<td>";
-										$table_flight_tbody .= $row_entries['brewBoxNum'];;
+										if ($view == "entry")  $table_flight_tbody .= sprintf("%06s",$row_entries['id']);
+										else $table_flight_tbody .= sprintf("%06s",$row_entries['brewJudgingNumber']);
 										$table_flight_tbody .= "</td>";
-										if ($filter != "mini_bos") {
-											$table_flight_tbody .= "<td>";
-											$table_flight_tbody .= "<p class=\"box_small\">";
+										$table_flight_tbody .= "<td>";
+										if ($_SESSION['prefsStyleSet'] == "BA") $table_flight_tbody .= $row_entries['brewStyle'];
+										else $table_flight_tbody .= $style." ".$row_entries['brewStyle']."<em><br>".style_convert($row_entries['brewCategorySort'],1)."</em>";
+										$table_flight_tbody .= "</td>";
+										$table_flight_tbody .= "<td>";
+
+										$special = style_convert($style_special,"9");
+										$special = explode("^",$special);
+
+											if (($row_entries['brewInfo'] != "") && ($special[4] == "1")) $table_flight_tbody .= "<p><strong>".$label_required_info.": </strong> ".str_replace("^"," | ",$row_entries['brewInfo'])."</p>";
+											if ($row_entries['brewInfoOptional'] != "") $table_flight_tbody .= "<p><strong>".$label_optional_info.": </strong> ".$row_entries['brewInfoOptional']."</p>";
+											if ($row_entries['brewComments'] != "") $table_flight_tbody .= "<p><strong>".$label_brewer_specifics.": </strong> ".$row_entries['brewComments']."</p>";
+
+											$table_flight_tbody .= "<p>";
+											if (!empty($row_entries['brewMead1'])) $table_flight_tbody .= "<strong>".$label_carbonation.": </strong> ".$row_entries['brewMead1']."<br>";
+											if (!empty($row_entries['brewMead2'])) $table_flight_tbody .= "<strong>".$label_sweetness.":</strong> ".$row_entries['brewMead2']."<br>";
+											if (!empty($row_entries['brewMead3'])) $table_flight_tbody .= "<strong>".$label_strength.":</strong> ".$row_entries['brewMead3'];
+											$table_flight_tbody .= "</p>";
+
+											if (!empty($row_entries['brewPossAllergens'])) $table_flight_tbody .= "<p><strong>".$label_possible_allergens.":</strong> ".$row_entries['brewPossAllergens']."</p>";
+
+											if (!empty($row_entries['brewStaffNotes'])) $table_flight_tbody .= "<p><strong>".$label_notes.":</strong> ".$row_entries['brewStaffNotes']."</p>";
+
 											$table_flight_tbody .= "</td>";
+											$table_flight_tbody .= "<td>";
+											$table_flight_tbody .= $row_entries['brewBoxNum'];;
+											$table_flight_tbody .= "</td>";
+											if ($filter != "mini_bos") {
+												$table_flight_tbody .= "<td>";
+												$table_flight_tbody .= "<p class=\"box_small\">";
+												$table_flight_tbody .= "</td>";
+											}
+											$table_flight_tbody .= "<td>";
+											$table_flight_tbody .= "<p>&nbsp;</p>";
+											$table_flight_tbody .= "</td>";
+											$table_flight_tbody .= "<td>";
+											$table_flight_tbody .= "<p>&nbsp;</p>";
+											$table_flight_tbody .= "</td>";
+											$table_flight_tbody .= "</tr>";
+
 										}
-										$table_flight_tbody .= "<td>";
-										$table_flight_tbody .= "<p>&nbsp;</p>";
-										$table_flight_tbody .= "</td>";
-										$table_flight_tbody .= "<td>";
-										$table_flight_tbody .= "<p>&nbsp;</p>";
-										$table_flight_tbody .= "</td>";
-										$table_flight_tbody .= "</tr>";
 
-									}
-
-								$table_flight .= $table_flight_tbody;
+									$table_flight .= $table_flight_tbody;
 
 								} while ($row_entries = mysqli_fetch_assoc($entries));
 
-							} // end foreach
+							}
 
-						} // end for($i=1; $i<$flights+1; $i++)
+						} // end foreach
 
-						$table_flight .= "</tbody>";
-						$table_flight .= "</table>";
+					} // end for($i=1; $i<$flights+1; $i++)
 
-						if (empty($table_flight_tbody)){
-							if ($filter == "mini_bos") $pullsheet_output .= "No Mini-BOS entries available.";
-							else $pullsheet_output .= "No entries available.";
-						}
-						else $pullsheet_output .= $table_flight;
-							//if (($flights > 0) && ($filter != "mini_bos")) $pullsheet_output .= "<div style=\"page-break-after:always;\"></div>";
-							//if (($flights == 0) || ($filter == "mini_bos")) $pullsheet_output .= "<div style=\"page-break-after:always;\"></div>";
-						$pullsheet_output .= "<div style=\"page-break-after:always;\"></div>";
+					$table_flight .= "</tbody>";
+					$table_flight .= "</table>";
+
+					if (empty($table_flight_tbody)){
+						if ($filter == "mini_bos") $pullsheet_output .= "No Mini-BOS entries available.";
+						else $pullsheet_output .= "No entries available.";
+					}
+					else $pullsheet_output .= $table_flight;
+					//if (($flights > 0) && ($filter != "mini_bos")) $pullsheet_output .= "<div style=\"page-break-after:always;\"></div>";
+					//if (($flights == 0) || ($filter == "mini_bos")) $pullsheet_output .= "<div style=\"page-break-after:always;\"></div>";
+					$pullsheet_output .= "<div style=\"page-break-after:always;\"></div>";
 
 				} while ($row_tables = mysqli_fetch_assoc($tables));
 
@@ -1486,75 +1516,83 @@ elseif (($go != "judging_scores_bos") && ($go != "mini_bos") && ($go != "all_ent
 
 				$a = explode(",", $row_tables['tableStyles']);
 				//print_r($a);
+				
 				foreach (array_unique($a) as $value) {
 
 					include (DB.'output_pullsheets_entries.db.php');
-					$style = style_number_const($row_entries['brewCategorySort'],$row_entries['brewSubCategory'],$_SESSION['style_set_display_separator'],0);
-					$style_special = $row_entries['brewCategorySort']."^".$row_entries['brewSubCategory']."^".$_SESSION['prefsStyleSet'];
 
-					do {
+					$table_flight_tbody = "";
 
-						$table_flight_tbody = "";
+					if (!empty($row_entries)) {
 
-						$flight_round = check_flight_number($row_entries['id'],$i,0);
+						$style = style_number_const($row_entries['brewCategorySort'],$row_entries['brewSubCategory'],$_SESSION['style_set_display_separator'],0);
+						$style_special = $row_entries['brewCategorySort']."^".$row_entries['brewSubCategory']."^".$_SESSION['prefsStyleSet'];
 
-						if (check_flight_round($flight_round,$round)) {
+						do {
 
-							$table_flight_tbody .= "<tr>";
-							$table_flight_tbody .= "<td>";
-							$table_flight_tbody .= "<p>&nbsp;</p>";
-							$table_flight_tbody .= "</td>";
-							$table_flight_tbody .= "<td>";
-							if ($view == "entry")  $table_flight_tbody .= sprintf("%06s",$row_entries['id']);
-							else $table_flight_tbody .= sprintf("%06s",$row_entries['brewJudgingNumber']);
-							$table_flight_tbody .= "</td>";
-							$table_flight_tbody .= "<td>";
-							if ($_SESSION['prefsStyleSet'] == "BA") $table_flight_tbody .= $row_entries['brewStyle'];
-							else $table_flight_tbody .= $style." ".$row_entries['brewStyle']."<em><br>".style_convert($row_entries['brewCategorySort'],1)."</em>";
-							$table_flight_tbody .= "</td>";
-							$table_flight_tbody .= "<td>";
+							$table_flight_tbody = "";
 
-							$special = style_convert($style_special,"9");
-							$special = explode("^",$special);
+							$flight_round = check_flight_number($row_entries['id'],$i,0);
 
-								if (($row_entries['brewInfo'] != "") && ($special[4] == "1")) $table_flight_tbody .= "<p><strong>".$label_required_info.": </strong> ".str_replace("^"," | ",$row_entries['brewInfo'])."</p>";
-								if ($row_entries['brewInfoOptional'] != "") $table_flight_tbody .= "<p><strong>".$label_optional_info.": </strong>".$row_entries['brewInfoOptional']."</p>";
-								if ($row_entries['brewComments'] != "") $table_flight_tbody .= "<p><strong>".$label_brewer_specifics.": </strong> ".$row_entries['brewComments']."</p>";
+							if (check_flight_round($flight_round,$round)) {
 
-								$table_flight_tbody .= "<p>";
-								if (!empty($row_entries['brewMead1'])) $table_flight_tbody .= "<strong>".$label_carbonation.": </strong> ".$row_entries['brewMead1']."<br>";
-								if (!empty($row_entries['brewMead2'])) $table_flight_tbody .= "<strong>".$label_sweetness.":</strong> ".$row_entries['brewMead2']."<br>";
-								if (!empty($row_entries['brewMead3'])) $table_flight_tbody .= "<strong>".$label_strength.":</strong> ".$row_entries['brewMead3'];
-								$table_flight_tbody .= "</p>";
-
-								if (!empty($row_entries['brewPossAllergens'])) $table_flight_tbody .= "<p><strong>".$label_possible_allergens.":</strong> ".$row_entries['brewPossAllergens']."</p>";
-
-								if (!empty($row_entries['brewStaffNotes'])) $table_flight_tbody .= "<p><strong>".$label_notes.":</strong> ".$row_entries['brewStaffNotes']."</p>";
-
-							$table_flight_tbody .= "</td>";
-							$table_flight_tbody .= "<td>";
-							$table_flight_tbody .= $row_entries['brewBoxNum'];;
-							$table_flight_tbody .= "</td>";
-							if ($filter != "mini_bos") {
+								$table_flight_tbody .= "<tr>";
 								$table_flight_tbody .= "<td>";
-								$table_flight_tbody .= "<p class=\"box_small\">";
-								if (($filter == "mini_bos") && ($row_entries['scoreMiniBOS'] == 1)) $table_flight_tbody .= "<span class=\"fa fa-check\"></span>";
-								else $table_flight_tbody .= "&nbsp;";
+								$table_flight_tbody .= "<p>&nbsp;</p>";
 								$table_flight_tbody .= "</td>";
+								$table_flight_tbody .= "<td>";
+								if ($view == "entry")  $table_flight_tbody .= sprintf("%06s",$row_entries['id']);
+								else $table_flight_tbody .= sprintf("%06s",$row_entries['brewJudgingNumber']);
+								$table_flight_tbody .= "</td>";
+								$table_flight_tbody .= "<td>";
+								if ($_SESSION['prefsStyleSet'] == "BA") $table_flight_tbody .= $row_entries['brewStyle'];
+								else $table_flight_tbody .= $style." ".$row_entries['brewStyle']."<em><br>".style_convert($row_entries['brewCategorySort'],1)."</em>";
+								$table_flight_tbody .= "</td>";
+								$table_flight_tbody .= "<td>";
+
+								$special = style_convert($style_special,"9");
+								$special = explode("^",$special);
+
+									if (($row_entries['brewInfo'] != "") && ($special[4] == "1")) $table_flight_tbody .= "<p><strong>".$label_required_info.": </strong> ".str_replace("^"," | ",$row_entries['brewInfo'])."</p>";
+									if ($row_entries['brewInfoOptional'] != "") $table_flight_tbody .= "<p><strong>".$label_optional_info.": </strong>".$row_entries['brewInfoOptional']."</p>";
+									if ($row_entries['brewComments'] != "") $table_flight_tbody .= "<p><strong>".$label_brewer_specifics.": </strong> ".$row_entries['brewComments']."</p>";
+
+									$table_flight_tbody .= "<p>";
+									if (!empty($row_entries['brewMead1'])) $table_flight_tbody .= "<strong>".$label_carbonation.": </strong> ".$row_entries['brewMead1']."<br>";
+									if (!empty($row_entries['brewMead2'])) $table_flight_tbody .= "<strong>".$label_sweetness.":</strong> ".$row_entries['brewMead2']."<br>";
+									if (!empty($row_entries['brewMead3'])) $table_flight_tbody .= "<strong>".$label_strength.":</strong> ".$row_entries['brewMead3'];
+									$table_flight_tbody .= "</p>";
+
+									if (!empty($row_entries['brewPossAllergens'])) $table_flight_tbody .= "<p><strong>".$label_possible_allergens.":</strong> ".$row_entries['brewPossAllergens']."</p>";
+
+									if (!empty($row_entries['brewStaffNotes'])) $table_flight_tbody .= "<p><strong>".$label_notes.":</strong> ".$row_entries['brewStaffNotes']."</p>";
+
+								$table_flight_tbody .= "</td>";
+								$table_flight_tbody .= "<td>";
+								$table_flight_tbody .= $row_entries['brewBoxNum'];;
+								$table_flight_tbody .= "</td>";
+								if ($filter != "mini_bos") {
+									$table_flight_tbody .= "<td>";
+									$table_flight_tbody .= "<p class=\"box_small\">";
+									if (($filter == "mini_bos") && ($row_entries['scoreMiniBOS'] == 1)) $table_flight_tbody .= "<span class=\"fa fa-check\"></span>";
+									else $table_flight_tbody .= "&nbsp;";
+									$table_flight_tbody .= "</td>";
+								}
+								$table_flight_tbody .= "<td>";
+								$table_flight_tbody .= "<p>&nbsp;</p>";
+								$table_flight_tbody .= "</td>";
+								$table_flight_tbody .= "<td>";
+								$table_flight_tbody .= "<p>&nbsp;</p>";
+								$table_flight_tbody .= "</td>";
+								$table_flight_tbody .= "</tr>";
+
 							}
-							$table_flight_tbody .= "<td>";
-							$table_flight_tbody .= "<p>&nbsp;</p>";
-							$table_flight_tbody .= "</td>";
-							$table_flight_tbody .= "<td>";
-							$table_flight_tbody .= "<p>&nbsp;</p>";
-							$table_flight_tbody .= "</td>";
-							$table_flight_tbody .= "</tr>";
 
-						}
+							$table_flight .= $table_flight_tbody;
 
-						$table_flight .= $table_flight_tbody;
+						} while ($row_entries = mysqli_fetch_assoc($entries));
 
-					} while ($row_entries = mysqli_fetch_assoc($entries));
+					} // if (!empty($row_entries))
 
 				} // end foreach
 

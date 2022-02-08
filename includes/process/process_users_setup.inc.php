@@ -19,10 +19,8 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 	$userQuestionAnswer = $purifier->purify($_POST['userQuestionAnswer']);
 	$userQuestionAnswer = filter_var($userQuestionAnswer,FILTER_SANITIZE_STRING,FILTER_FLAG_STRIP_HIGH|FILTER_FLAG_STRIP_LOW);
 
-	/*
 	$hasher_question = new PasswordHash(8, false);
 	$hash_question = $hasher_question->HashPassword($userQuestionAnswer);
-	*/
 
 	if (strstr($username,'@'))  {
 		$password = md5($_POST['password']);
@@ -33,7 +31,7 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 						   GetSQLValueString($_POST['userLevel'], "text"),
 						   GetSQLValueString($hash, "text"),
 						   GetSQLValueString($purifier->purify($_POST['userQuestion']), "text"),
-						   GetSQLValueString($userQuestionAnswer, "text"),
+						   GetSQLValueString($hash_question, "text"),
 						   "NOW( )"
 						   );
 
