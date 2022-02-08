@@ -80,14 +80,14 @@ define('CDN', TRUE);
  * Default is FALSE.
  */
 
-define('TESTING', TRUE);
+define('TESTING', FALSE);
 
 /**
  * Enable the following to display php errors on screen.
  * Default is FALSE.
  */
 
-define('DEBUG', TRUE);
+define('DEBUG', FALSE);
 
 /**
  * Enable the following to show a collapsable table of all
@@ -117,7 +117,7 @@ define('FORCE_UPDATE', FALSE);
  * Default is FALSE.
  */
 
-define('ENABLE_MARKDOWN', TRUE);
+define('ENABLE_MARKDOWN', FALSE);
 
 /**
  * Set the following to TRUE if you would like to use
@@ -129,7 +129,7 @@ define('ENABLE_MARKDOWN', TRUE);
  * Default is FALSE.
  */
 
-define('ENABLE_MAILER', TRUE);
+define('ENABLE_MAILER', FALSE);
 
 /**
  * Error Reporting
