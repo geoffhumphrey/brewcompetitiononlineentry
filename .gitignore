@@ -17,3 +17,4 @@ js_includes/autosave.js
 *.db
 update/char_set_update.php
 update/move_files.php
+site/config.php

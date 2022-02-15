@@ -3216,13 +3216,18 @@ function highlight_required($msg,$method,$style_version) {
 
 	if ($method == "0") { // mead cider sweetness
 
-		$query_check = sprintf("SELECT brewStyleSweet FROM %s WHERE (brewStyleVersion='%s' OR brewStyleOwn='custom') AND brewStyleGroup='%s' AND brewStyleNum='%s'", $prefix."styles",$style_version,$explodies[1],$explodies[2]);
-		$check = mysqli_query($connection,$query_check) or die (mysqli_error($connection));
-		$row_check = mysqli_fetch_assoc($check);
-		$totalRows_check = mysqli_num_rows($check);
+		$return = TRUE;
 
-		if ($row_check['brewStyleSweet'] == 1) return TRUE;
-		else return FALSE;
+		if (!empty($explodies)) {
+
+			$query_check = sprintf("SELECT brewStyleSweet FROM %s WHERE (brewStyleVersion='%s' OR brewStyleOwn='custom') AND brewStyleGroup='%s' AND brewStyleNum='%s'", $prefix."styles",$style_version,$explodies[1],$explodies[2]);
+			$check = mysqli_query($connection,$query_check) or die (mysqli_error($connection));
+			$row_check = mysqli_fetch_assoc($check);
+			$totalRows_check = mysqli_num_rows($check);
+
+			if ($row_check['brewStyleSweet'] == 1) $return = TRUE;
+
+		}
 
 	}
 
