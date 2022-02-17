@@ -1862,6 +1862,23 @@ if ($_SESSION['prefsStyleSet'] == "BJCP2021") {
 }
 
 /**
+ * ------------------------------------------------------------------------
+ * Version 2.4.1 Additions
+ * Via DeepL Translator English to Portuguese - and for that, I'm sorry. 
+ * Again. :)
+ * ------------------------------------------------------------------------
+ */
+
+$register_text_047 = "Sua pergunta e/ou resposta de segurança mudou.";
+$register_text_048 = "Se você não iniciou esta mudança, sua conta pode estar comprometida. Você deve entrar imediatamente em sua conta e alterar sua senha, além de atualizar sua pergunta e resposta de segurança.";
+$register_text_049 = "Se você não conseguir entrar em sua conta, você deve entrar imediatamente em contato com um administrador do site para atualizar sua senha e outras informações vitais da conta.";
+$register_text_050 = "A resposta de sua pergunta de segurança é criptografada e não pode ser lida pelos administradores do site. Ela deve ser inserida se você optar por mudar sua pergunta e/ou resposta de segurança.";
+$register_text_051 = "Informações de Conta Atualizadas";
+$register_text_052 = "Uma resposta de Sim ou Não é necessária para cada local abaixo.";
+$brewer_text_044 = "Você deseja mudar sua pergunta e/ou resposta de segurança?";
+$label_change_security = "Mudar pergunta/resposta de segurança?";
+
+/**
  * ----------------------------------------------------------------------------------
  * END TRANSLATIONS
  * ----------------------------------------------------------------------------------

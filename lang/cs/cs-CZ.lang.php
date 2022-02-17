@@ -1858,6 +1858,23 @@ if ($_SESSION['prefsStyleSet'] == "BJCP2021") {
 }
 
 /**
+ * ------------------------------------------------------------------------
+ * Version 2.4.1 Additions
+ * Via DeepL Translator English to Portuguese - and for that, I'm sorry. 
+ * Again. :)
+ * ------------------------------------------------------------------------
+ */
+
+$register_text_047 = "Vaše bezpečnostní otázka a/nebo odpověď se změnila.";
+$register_text_048 = "Pokud jste tuto změnu neiniciovali, může být váš účet ohrožen. Kromě aktualizace bezpečnostní otázky a odpovědi byste se měli okamžitě přihlásit ke svému účtu a změnit heslo.";
+$register_text_049 = "Pokud se nemůžete přihlásit ke svému účtu, měli byste neprodleně kontaktovat správce webu a aktualizovat heslo a další důležité informace o účtu.";
+$register_text_050 = "Odpověď na bezpečnostní otázku je zašifrovaná a správci webu ji nemohou přečíst. Pokud se rozhodnete změnit svou bezpečnostní otázku a/nebo odpověď, musíte ji zadat.";
+$register_text_051 = "Informace o účtu Aktualizováno";
+$register_text_052 = "U každého níže uvedeného místa je třeba uvést odpověď Ano nebo Ne.";
+$brewer_text_044 = "Chcete změnit bezpečnostní otázku a/nebo odpověď?";
+$label_change_security = "Změna bezpečnostní otázky/odpovědi?";
+
+/**
  * ----------------------------------------------------------------------------------
  * END TRANSLATIONS
  * ----------------------------------------------------------------------------------

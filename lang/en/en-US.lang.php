@@ -1996,15 +1996,19 @@ if ((isset($_SESSION['prefsStyleSet'])) && ($_SESSION['prefsStyleSet'] == "BJCP2
     $styles_entry_text_PRX3 = "The entrant MUST specify the type of grape used. The entrant MAY provide additional information about the base style or characteristic ingredients.";
 }
 
+/**
+ * ------------------------------------------------------------------------
+ * Version 2.4.1 Additions
+ * ------------------------------------------------------------------------
+ */
+
 $register_text_047 = "Your security question and/or answer has changed.";
 $register_text_048 = "If you did not initiate this change, your account may be compromised. You should immediately log into your account and change your password in addition to updating your security question and answer.";
 $register_text_049 = "If you aren't able to log into your account, you should immediately contact a site administrator to update your password and other vital account information.";
 $register_text_050 = "Your security question's answer is encrypted and cannot be read by site administrators. It must be entered if you elect to change your security question and/or answer.";
 $register_text_051 = "Account Information Updated";
 $register_text_052 = "A \"Yes\" or \"No\" response is required for each location below.";
-
 $brewer_text_044 = "Do you wish to change your security question and/or answer?";
-
 $label_change_security = "Change Security Question/Answer?";
 
 /**

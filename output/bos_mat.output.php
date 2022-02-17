@@ -19,10 +19,6 @@ function check_table_name($id,$judging_tables_db_table) {
 	return "From Table ".$row_tables['tableNumber'].": ".$row_tables['tableName'];
 }
 
-$special_beer = array("6D","16E","17F","20A","21A","21B","22B","22C","23A");
-$special_mead = array("24A","24B","24C","25A","25B","25C","26A","26B","26C");
-$special_cider = array("27B","27C","27E","28A","28B","28C","28D");
-
 $a = array();
 
 if ($view == "default") {
@@ -39,18 +35,16 @@ foreach ($a as $type) {
 	$style_type_info = style_type_info($type);
 	$style_type_info = explode("^",$style_type_info);
 
-	// print_r($style_type_info); exit;
-
 	if ($style_type_info[0] == "Y") {
 
 		include (DB.'output_bos_mat.db.php');
-		//$output .= $query_scores;
 
 		$endRow = 0;
-		$columns = 3;  // number of columns
-		$hloopRow1 = 0; // first row flag
+		$columns = 3;
+		$hloopRow1 = 0;
 
 		$output .= '<table class="BOS-mat">';
+
 		do {
 			
 			if (!empty($row_scores['brewJudgingNumber'])) {
@@ -117,28 +111,16 @@ foreach ($a as $type) {
 
 	} // end if ($style_type_info[0] == "Y")
 
-	$output .= '<div style="page-break-after:always;"></div>';
+	if (!empty($output)) $output .= '<div style="page-break-after:always;"></div>';
+
 } // end foreach
-?>
-<?php if ((isset($_SESSION['contestLogo'])) && (file_exists(USER_IMAGES.$_SESSION['contestLogo']))) { ?>
-<style>
-<!--
-.BOS-mat td:before {
-	background-image: url(<?php echo $base_url."user_images/".$_SESSION['contestLogo']; ?>);
-	background-repeat: no-repeat;
-	background-position: center;
-	opacity: 0.25;
-    filter: alpha(opacity=25); /* For IE8 and earlier */
-}
--->
-</style>
-<?php } 
+
 if (empty($output)) {
-	echo '<h1>';
-	echo 'No BOS entries are present';
-	if ($view != "default") echo ' for this style';
-	echo '.';
-	echo '</h1>';
+	$output .= '<h1>';
+	$output .= 'No BOS entries are present';
+	if ($view != "default") $output .= ' for this style type';
+	$output .= '.';
+	$output .= '</h1>';
 }
-else echo $output;
+echo $output;
 ?>
