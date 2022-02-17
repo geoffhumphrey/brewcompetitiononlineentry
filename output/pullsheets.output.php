@@ -656,9 +656,9 @@ if ($go == "judging_scores_bos") {
 							$table_flight_tbody .= "</p>";
 						}
 							
-						if (!empty($row_entries['brewPossAllergens'])) $table_flight_tbody .= "<p><strong>".$label_possible_allergens.":</strong> ".$row_entries['brewPossAllergens']."</p>";
+						if (!empty($row_bos['brewPossAllergens'])) $table_flight_tbody .= "<p><strong>".$label_possible_allergens.":</strong> ".$row_bos['brewPossAllergens']."</p>";
 
-						if (!empty($row_entries['brewStaffNotes'])) $table_flight_tbody .= "<p><strong>".$label_notes.":</strong> ".$row_entries['brewStaffNotes']."</p>";
+						if (!empty($row_bos['brewStaffNotes'])) $table_flight_tbody .= "<p><strong>".$label_notes.":</strong> ".$row_bos['brewStaffNotes']."</p>";
 
 						if ($row_bos['brewerProAm'] == 1) $table_flight_tbody .= "<p><strong>** NOT ELIGIBLE FOR PRO-AM **</p>"; 
 
