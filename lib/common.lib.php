@@ -2820,27 +2820,21 @@ function table_exists($table_name) {
 
 function table_assignments($uid,$method,$time_zone,$date_format,$time_format,$method2,$label_table="Table") {
 	
-
 	// Gather and output the judging or stewarding assignments for a user
 	require(CONFIG.'config.php');
 	mysqli_select_db($connection,$database);
 
-	if ($method2 == 2) {
-		$output = array();
-	}
-
-	else {
-		$output = "";
-	}
+	if ($method2 == 2) $output = array();
+	else $output = "";
 
 	$query_table_assignments = sprintf("SELECT assignTable,assignRoles,assignFlight,assignRound FROM %s WHERE bid='%s' AND assignment='%s'",$prefix."judging_assignments",$uid,$method);
 	$table_assignments = mysqli_query($connection,$query_table_assignments) or die (mysqli_error($connection));
 	$row_table_assignments = mysqli_fetch_assoc($table_assignments);
 	$totalRows_table_assignments = mysqli_num_rows($table_assignments);
 
-	require(LANG.'language.lang.php');
-
 	if ($totalRows_table_assignments > 0) {
+
+		require(LANG.'language.lang.php');
 
 		do {
 			$table_info = explode("^",get_table_info(1,"basic",$row_table_assignments['assignTable'],"default","default"));
@@ -2914,19 +2908,18 @@ function available_at_location($location,$role,$round) {
 	$row_available = mysqli_fetch_assoc($available);
 	$totalRows_available = mysqli_num_rows($available);
 
-	$return = "";
+	$return = 0;
 
-	do {
-		if ($role == "judges") $available_location = explode(",",$row_available['brewerJudgeLocation']);
-		if ($role == "stewards") $available_location =  explode(",",$row_available['brewerStewardLocation']);
-		if (in_array("Y-".$location,$available_location)) $count[] = 1; else $count[] = 0;
+	if ($totalRows_available > 0) {
 
-		//$return .= $row_available['brewerJudgeLocation']."<br>";
+		do {
+			if ($role == "judges") $available_location = explode(",",$row_available['brewerJudgeLocation']);
+			if ($role == "stewards") $available_location =  explode(",",$row_available['brewerStewardLocation']);
+			if (in_array("Y-".$location,$available_location)) $return += 1;
+		} while ($row_available = mysqli_fetch_assoc($available));
 
-	} while ($row_available = mysqli_fetch_assoc($available));
+	}
 
-	$return = array_sum($count);
-	//$return = print_r;
 	return $return;
 }
 
@@ -2967,16 +2960,16 @@ function judge_steward_availability($input,$method,$prefix) {
 
 	require(LANG.'language.lang.php');
 
+	$return = "";
+
 	if (($input == "Y-") || ($input == "")) {
 		if ($method == "1") $return = strtolower(ucfirst($label_no_availability));
-		else $return = "";
 	}
 	else {
 
 		$a = explode(",",$input);
 		//$a = explode(",",$row_sql['brewerJudgeLocation']);
 
-		$return = "";
 		foreach ($a as $value) {
 			$b = explode("-",$value);
 
@@ -3091,6 +3084,7 @@ function format_phone_us($phone = '', $convert = true, $trim = true) {
 			// Return original phone if not 7, 10 or 11 digits long
 			return $OriginalPhone;
 	}
+
 }
 
 function check_judging_flights() {
@@ -3130,7 +3124,6 @@ function get_archive_count($table) {
 function number_pad($number,$n) {
 	return str_pad((int) $number,$n,"0",STR_PAD_LEFT);
 }
-
 
 function open_or_closed($now,$date1,$date2) {
 
@@ -3213,10 +3206,9 @@ function highlight_required($msg,$method,$style_version) {
 	require(CONFIG.'config.php');
 	mysqli_select_db($connection,$database);
 	$explodies = explode("-",$msg);
+	$return = FALSE;
 
 	if ($method == "0") { // mead cider sweetness
-
-		$return = TRUE;
 
 		if (!empty($explodies)) {
 
@@ -3225,7 +3217,7 @@ function highlight_required($msg,$method,$style_version) {
 			$row_check = mysqli_fetch_assoc($check);
 			$totalRows_check = mysqli_num_rows($check);
 
-			if ($row_check['brewStyleSweet'] == 1) $return = TRUE;
+			if ((!empty($row_check)) && ($row_check['brewStyleSweet'] == 1)) $return = TRUE;
 
 		}
 
@@ -3233,36 +3225,44 @@ function highlight_required($msg,$method,$style_version) {
 
 	if ($method == "1") { // special ingredients REQUIRED beer/mead/cider
 
-		$query_check = sprintf("SELECT brewStyleReqSpec FROM %s WHERE (brewStyleVersion='%s' OR brewStyleOwn='custom') AND brewStyleGroup='%s' AND brewStyleNum='%s'", $prefix."styles",$style_version,$explodies[1],$explodies[2]);
-		$check = mysqli_query($connection,$query_check) or die (mysqli_error($connection));
-		$row_check = mysqli_fetch_assoc($check);
+		if (!empty($explodies)) {
 
-		if ($row_check['brewStyleReqSpec'] == 1) return TRUE;
-		else return FALSE;
+			$query_check = sprintf("SELECT brewStyleReqSpec FROM %s WHERE (brewStyleVersion='%s' OR brewStyleOwn='custom') AND brewStyleGroup='%s' AND brewStyleNum='%s'", $prefix."styles",$style_version,$explodies[1],$explodies[2]);
+			$check = mysqli_query($connection,$query_check) or die (mysqli_error($connection));
+			$row_check = mysqli_fetch_assoc($check);
 
+			if ((!empty($row_check)) && ($row_check['brewStyleReqSpec'] == 1)) $return = TRUE;
+
+		}
 	}
 
 	if ($method == "2") { // mead cider carb
 
-		$query_check = sprintf("SELECT brewStyleCarb FROM %s WHERE (brewStyleVersion='%s' OR brewStyleOwn='custom') AND brewStyleGroup='%s' AND brewStyleNum='%s'", $prefix."styles",$style_version,$explodies[1],$explodies[2]);
-		$check = mysqli_query($connection,$query_check) or die (mysqli_error($connection));
-		$row_check = mysqli_fetch_assoc($check);
+		if (!empty($explodies)) {
 
-		if ($row_check['brewStyleCarb'] == 1) return TRUE;
-		else return FALSE;
+			$query_check = sprintf("SELECT brewStyleCarb FROM %s WHERE (brewStyleVersion='%s' OR brewStyleOwn='custom') AND brewStyleGroup='%s' AND brewStyleNum='%s'", $prefix."styles",$style_version,$explodies[1],$explodies[2]);
+			$check = mysqli_query($connection,$query_check) or die (mysqli_error($connection));
+			$row_check = mysqli_fetch_assoc($check);
+
+			if ((!empty($row_check)) && ($row_check['brewStyleCarb'] == 1)) $return = TRUE;
+		}
 
 	}
 
 	if ($method == "3") { // mead strength
 
-		$query_check = sprintf("SELECT brewStyleStrength FROM %s WHERE (brewStyleVersion='%s' OR brewStyleOwn='custom') AND brewStyleGroup='%s' AND brewStyleNum='%s'", $prefix."styles",$style_version,$explodies[1],$explodies[2]);
-		$check = mysqli_query($connection,$query_check) or die (mysqli_error($connection));
-		$row_check = mysqli_fetch_assoc($check);
+		if (!empty($explodies)) {
 
-		if ($row_check['brewStyleStrength'] == 1) return TRUE;
-		else return FALSE;
+			$query_check = sprintf("SELECT brewStyleStrength FROM %s WHERE (brewStyleVersion='%s' OR brewStyleOwn='custom') AND brewStyleGroup='%s' AND brewStyleNum='%s'", $prefix."styles",$style_version,$explodies[1],$explodies[2]);
+			$check = mysqli_query($connection,$query_check) or die (mysqli_error($connection));
+			$row_check = mysqli_fetch_assoc($check);
+
+			if ((!empty($row_check)) && ($row_check['brewStyleStrength'] == 1)) $return = TRUE;
+		}
 
 	}
+
+	return $return;
 
 }
 
@@ -3271,12 +3271,14 @@ function user_check($user_name) {
 	require(CONFIG.'config.php');
 	mysqli_select_db($connection,$database);
 
+	$return = "";
+
 	$query_userCheck = sprintf("SELECT * FROM %s WHERE user_name = '%s'",$prefix."users",$user_name);
 	$userCheck = mysqli_query($connection,$query_userCheck) or die (mysqli_error($connection));
 	$row_userCheck = mysqli_fetch_assoc($userCheck);
 	$totalRows_userCheck = mysqli_num_rows($userCheck);
-	//$return = $query_userCheck;
-	$return = $totalRows_userCheck."^".$row_userCheck['userQuestion']."^".$row_userCheck['id'];
+
+	if (!empty($row_userCheck)) $return = $totalRows_userCheck."^".$row_userCheck['userQuestion']."^".$row_userCheck['id'];
 
 	return $return;
 

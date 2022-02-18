@@ -459,6 +459,8 @@ $(document).ready(function() {
 
             if ($totalRows_entries > 0) {
 
+                $saving_random_num = random_generator(8,2);
+
                 if ($action == "edit") {
                     $score_entry_data = score_entry_data($row_entries['id']);
                     $score_entry_data = explode("^",$score_entry_data);
@@ -492,27 +494,27 @@ $(document).ready(function() {
         <td><?php echo $judging_number; ?></td>
         <td class="hidden-xs hidden-sm"><?php echo $style_display; ?></td>
         <td>
-            <div class="form-group" id="score-mini-bos-ajax-<?php echo $eid; ?>-scoreMiniBOS-form-group">
-            <input type="checkbox" id="score-mini-bos-ajax-<?php echo $eid; ?>" name="scoreMiniBOS<?php echo $eid; ?>" value="1" onclick="$(this).attr('value', this.checked ? 1 : 0);save_column('<?php echo $base_url; ?>','scoreMiniBOS','judging_scores','<?php echo $eid; ?>','<?php echo $bid; ?>','<?php echo $id; ?>','<?php echo $scoreType; ?>','default','score-mini-bos-ajax-<?php echo $eid; ?>','value')" <?php if ((isset($score_entry_data[5])) && (($action == "edit") && ($score_entry_data[5] == "1"))) echo "CHECKED"; ?> />
-            <span id="score-mini-bos-ajax-<?php echo $eid; ?>-scoreMiniBOS-status"></span>
-            <span id="score-mini-bos-ajax-<?php echo $eid; ?>-scoreMiniBOS-status-msg"></span>
+            <div class="form-group" id="score-mini-bos-ajax-<?php echo $saving_random_num; ?>-scoreMiniBOS-form-group">
+            <input type="checkbox" id="score-mini-bos-ajax-<?php echo $saving_random_num; ?>" name="scoreMiniBOS<?php echo $eid; ?>" value="1" onclick="$(this).attr('value', this.checked ? 1 : 0);save_column('<?php echo $base_url; ?>','scoreMiniBOS','judging_scores','<?php echo $eid; ?>','<?php echo $bid; ?>','<?php echo $id; ?>','<?php echo $scoreType; ?>','default','score-mini-bos-ajax-<?php echo $saving_random_num; ?>','value')" <?php if ((isset($score_entry_data[5])) && (($action == "edit") && ($score_entry_data[5] == "1"))) echo "CHECKED"; ?> />
+            <span id="score-mini-bos-ajax-<?php echo $saving_random_num; ?>-scoreMiniBOS-status"></span>
+            <span id="score-mini-bos-ajax-<?php echo $saving_random_num; ?>-scoreMiniBOS-status-msg"></span>
             </div>
         </td>
         <td>
-            <span id="score-entry-ajax-<?php echo $eid; ?>-scoreEntry-sortable-value" style="visibility: hidden;"><?php if ((isset($score_entry_data[3])) && ($action == "edit")) echo $score_entry_data[3]; ?></span>
-            <div class="form-group" id="score-entry-ajax-<?php echo $eid; ?>-scoreEntry-form-group">
-            <input class="form-control" id="score-entry-ajax-<?php echo $eid; ?>" type="number" pattern="\d{2}" maxlength="2" name="scoreEntry<?php echo $eid; ?>" size="6" maxlength="6" value="<?php if ($action == "edit") echo $score_entry_data[3]; ?>" onblur="save_column('<?php echo $base_url; ?>','scoreEntry','judging_scores','<?php echo $eid; ?>','<?php echo $bid; ?>','<?php echo $id; ?>','<?php echo $scoreType; ?>','default','score-entry-ajax-<?php echo $eid; ?>','value')" />
+            <span id="score-entry-ajax-<?php echo $saving_random_num; ?>-scoreEntry-sortable-value" style="visibility: hidden;"><?php if ((isset($score_entry_data[3])) && ($action == "edit")) echo $score_entry_data[3]; ?></span>
+            <div class="form-group" id="score-entry-ajax-<?php echo $saving_random_num; ?>-scoreEntry-form-group">
+            <input class="form-control" id="score-entry-ajax-<?php echo $saving_random_num; ?>" type="number" pattern="\d{2}" maxlength="2" name="scoreEntry<?php echo $eid; ?>" size="6" maxlength="6" value="<?php if ($action == "edit") echo $score_entry_data[3]; ?>" onblur="save_column('<?php echo $base_url; ?>','scoreEntry','judging_scores','<?php echo $eid; ?>','<?php echo $bid; ?>','<?php echo $id; ?>','<?php echo $scoreType; ?>','default','score-entry-ajax-<?php echo $saving_random_num; ?>','value')" />
             </div>
-            <span id="score-entry-ajax-<?php echo $eid; ?>-scoreEntry-status"></span>
-            <span id="score-entry-ajax-<?php echo $eid; ?>-scoreEntry-status-msg"></span>
+            <span id="score-entry-ajax-<?php echo $saving_random_num; ?>-scoreEntry-status"></span>
+            <span id="score-entry-ajax-<?php echo $saving_random_num; ?>-scoreEntry-status-msg"></span>
         </td>
         <td>
         <span class="hidden"><?php if ((isset($score_entry_data[4])) && (($action == "edit") && ($score_entry_data[4] == "1"))) echo $score_entry_data[4]; ?></span>
-            <div class="form-group" id="score-place-ajax-<?php echo $eid; ?>-scorePlace-form-group">
+            <div class="form-group" id="score-place-ajax-<?php echo $saving_random_num; ?>-scorePlace-form-group">
             <?php if ($_SESSION['prefsWinnerMethod'] == "0") { ?>
-            <select class="form-control nodupe" id="score-place-ajax-<?php echo $eid; ?>" name="scorePlace<?php echo $eid; ?>" onchange="select_place('<?php echo $base_url; ?>','scorePlace','judging_scores','<?php echo $eid; ?>','<?php echo $bid; ?>','<?php echo $id; ?>','<?php echo $scoreType; ?>','default','score-place-ajax-<?php echo $eid; ?>')">
+            <select class="form-control nodupe" id="score-place-ajax-<?php echo $saving_random_num; ?>" name="scorePlace<?php echo $eid; ?>" onchange="select_place('<?php echo $base_url; ?>','scorePlace','judging_scores','<?php echo $eid; ?>','<?php echo $bid; ?>','<?php echo $id; ?>','<?php echo $scoreType; ?>','default','score-place-ajax-<?php echo $saving_random_num; ?>')">
             <?php } else { ?>
-            <select class="form-control" id="score-place-ajax-<?php echo $eid; ?>" name="scorePlace<?php echo $eid; ?>" onchange="save_column('<?php echo $base_url; ?>','scorePlace','judging_scores','<?php echo $eid; ?>','<?php echo $bid; ?>','<?php echo $id; ?>','<?php echo $scoreType; ?>','default','score-place-ajax-<?php echo $eid; ?>','value')">    
+            <select class="form-control" id="score-place-ajax-<?php echo $saving_random_num; ?>" name="scorePlace<?php echo $eid; ?>" onchange="save_column('<?php echo $base_url; ?>','scorePlace','judging_scores','<?php echo $eid; ?>','<?php echo $bid; ?>','<?php echo $id; ?>','<?php echo $scoreType; ?>','default','score-place-ajax-<?php echo $saving_random_num; ?>','value')">    
             <?php } ?>
                 <option value=""></option>
                   <option value="1" <?php if ((isset($score_entry_data[4])) && (($action == "edit") && ($score_entry_data[4] == "1"))) echo "SELECTED"; ?>>1st</option>
@@ -524,8 +526,8 @@ $(document).ready(function() {
                   <?php } ?>
             </select>
             </div>
-            <span id="score-place-ajax-<?php echo $eid; ?>-scorePlace-status"></span>
-            <span id="score-place-ajax-<?php echo $eid; ?>-scorePlace-status-msg"></span>
+            <span id="score-place-ajax-<?php echo $saving_random_num; ?>-scorePlace-status"></span>
+            <span id="score-place-ajax-<?php echo $saving_random_num; ?>-scorePlace-status-msg"></span>
         </td>
     </tr>
     <?php }

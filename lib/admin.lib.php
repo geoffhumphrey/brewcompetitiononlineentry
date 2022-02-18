@@ -239,6 +239,8 @@ function score_entry_data($value) {
 		$row_scores['scoreMiniBOS']; //5
 	}
 
+	return $return;
+
 }
 
 

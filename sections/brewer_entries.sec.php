@@ -127,6 +127,7 @@ if ($_SESSION['prefsEval'] == 1) {
 }
 
 if ($totalRows_log > 0) {
+	
 	do {
 
 		include (DB.'styles.db.php');
@@ -360,7 +361,7 @@ if ($totalRows_log > 0) {
 		if (($row_log['brewCategory'] < 10) && (preg_match("/^[[:digit:]]+$/",$row_log['brewCategory']))) $brewCategory = "0".$row_log['brewCategory'];
 		else $brewCategory = $row_log['brewCategory'];
 
-		if (($entry_window_open == 1) || (($entry_window_open != 1) && (time() < $row_contest_dates['contestDropoffDeadline']))) {
+		if ((($entry_window_open == 1) && ($row_log['brewReceived'] == 0)) || (($entry_window_open != 1) && ($row_log['brewReceived'] == 0) && (time() < $row_contest_dates['contestDropoffDeadline']))) {
 
 			$edit_link .= "<a href=\"".$base_url."index.php?section=brew&amp;action=edit&amp;id=".$row_log['id'];
 			if ($row_log['brewConfirmed'] == 0) $edit_link .= "&amp;msg=1-".$brewCategory."-".$row_log['brewSubCategory'];
@@ -408,7 +409,7 @@ if ($totalRows_log > 0) {
 		$delete_alt_title = sprintf("%s %s",$label_delete, $entry_name);
 		$delete_warning = sprintf("%s %s - %s.",$label_delete, $entry_name, strtolower($label_undone));
 		
-		if (($entry_window_open == 1) || (($entry_window_open != 1) && (time() < $row_contest_dates['contestDropoffDeadline']))) {
+		if ((($entry_window_open == 1) && ($row_log['brewReceived'] == 0)) || (($entry_window_open != 1) && ($row_log['brewReceived'] == 0) && (time() < $row_contest_dates['contestDropoffDeadline']))) {
 			$delete_link = sprintf("<a class=\"hide-loader\" data-toggle=\"tooltip\" title=\"%s\" href=\"%s\" data-confirm=\"%s.\"><span class=\"fa fa-lg fa-trash-o\"></a>",$delete_alt_title,$base_url."includes/process.inc.php?section=".$section."&amp;go=".$go."&amp;dbTable=".$brewing_db_table."&amp;action=delete&amp;id=".$row_log['id'],$delete_warning);
 		}
 
