@@ -2562,7 +2562,7 @@ function check_special_ingredients($style,$style_version) {
 	$brews = mysqli_query($connection,$query_brews) or die (mysqli_error($connection));
 	$row_brews = mysqli_fetch_assoc($brews);
 
-	if ($row_brews['brewStyleReqSpec'] == 1) return TRUE;
+	if ((!empty($row_brews)) && ($row_brews['brewStyleReqSpec'] == 1)) return TRUE;
 	else return FALSE;
 }
 

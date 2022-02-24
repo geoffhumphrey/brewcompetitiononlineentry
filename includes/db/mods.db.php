@@ -22,15 +22,13 @@ $mods = mysqli_query($connection,$query_mods) or die (mysqli_error($connection))
 $row_mods = mysqli_fetch_assoc($mods);
 $totalRows_mods = mysqli_num_rows($mods);
 
-//echo "<p>".$query_mods."</p>";
-
 $mods_display = array();
 
 if ($go != "mods") {
-	if ($totalRows_mods > 0) do { $mods_display[] = $row_mods['id']; } while ($row_mods = mysqli_fetch_assoc($mods));
+	if ($totalRows_mods > 0) do { 
+		$mods_display[] = $row_mods['id']; 
+	} while ($row_mods = mysqli_fetch_assoc($mods));
 }
-
-//print_r($mods_display);
 
 function mod_display($id,$section,$go,$user_level,$page_location) {
 	
@@ -55,17 +53,21 @@ function mod_display($id,$section,$go,$user_level,$page_location) {
 		case "admin": 		$display_section = 9; break;
 		default: $display_section = 0; break;
 	}
-	
-	if (($section != "admin") && (($display_section == $row_mod_display['mod_extend_function']) || ($row_mod_display['mod_extend_function'] == 0))) {
-		if (($row_mod_display['mod_display_rank'] == $page_location) && ($row_mod_display['mod_permission'] >= $user_level)) $output .= (MODS.$row_mod_display['mod_filename']);
-	}
-	
-	if ($section == "admin") {
-		if (($row_mod_display['mod_type'] == 0) || ($row_mod_display['mod_type'] == 3)) {
-			if (($row_mod_display['mod_display_rank'] == $page_location) && ($row_mod_display['mod_permission'] >= $user_level)) {
-				if (($go == $row_mod_display['mod_extend_function_admin']) || ($row_mod_display['mod_extend_function'] == 0)) $output .= (MODS.$row_mod_display['mod_filename']);
+
+	if (!empty($row_mod_display)) {
+
+		if (($section != "admin") && (($display_section == $row_mod_display['mod_extend_function']) || ($row_mod_display['mod_extend_function'] == 0))) {
+			if (($row_mod_display['mod_display_rank'] == $page_location) && ($row_mod_display['mod_permission'] >= $user_level)) $output .= (MODS.$row_mod_display['mod_filename']);
+		}
+		
+		if ($section == "admin") {
+			if (($row_mod_display['mod_type'] == 0) || ($row_mod_display['mod_type'] == 3)) {
+				if (($row_mod_display['mod_display_rank'] == $page_location) && ($row_mod_display['mod_permission'] >= $user_level)) {
+					if (($go == $row_mod_display['mod_extend_function_admin']) || ($row_mod_display['mod_extend_function'] == 0)) $output .= (MODS.$row_mod_display['mod_filename']);
+				}
 			}
 		}
+
 	}
 	
 	return $output;

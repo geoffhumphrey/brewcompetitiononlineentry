@@ -173,7 +173,7 @@ $(document).ready(function() {
         else $style_name = $style.": ".$bos_entry_info[0];
 	?>
 	<tr>
-    	<td nowrap><?php echo sprintf("%04s",$row_bos['eid']); ?></td>
+    	<td nowrap><?php echo sprintf("%06s",$row_bos['eid']); ?></td>
         <td><?php echo $judging_number; ?></td>
         <td><?php echo $bos_entry_info[9]; ?></td>
         <td class="hidden-xs hidden-sm"><?php echo $bos_entry_info[8]; ?></td>

@@ -2446,7 +2446,8 @@ $club_array = array(
     "MontreAlers",
     "Keepers of Craft",
     "STLBrewhogs",
-    "Brewly Homebrew Club"
+    "Brewly Homebrew Club",
+    "Butler County Brewing Society (BCBS)"
 );
 asort($club_array);
 
