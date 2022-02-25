@@ -2189,8 +2189,8 @@ $output .= "<li>Corrected British Golden Ale name.</li>";
 
 /**
  * ----------------------------------------------- 2.4.1 ---------------------------------------------
- * Encrypt security question responses for all users.
- * @see 
+ * Hash security question responses for all users.
+ * @see https://github.com/geoffhumphrey/brewcompetitiononlineentry/issues/1208
  * ---------------------------------------------------------------------------------------------------
  */
 
@@ -2208,10 +2208,10 @@ if ($totalRows_security_resp > 0) {
 	do {
 
 		/**
-		 * Fail safe to prevent double encryption of question
+		 * Fail safe to prevent double hashing of question
 		 * response strings.
 		 * Check if string length is less than 60 characters.
-		 * If so, the response string has NOT been encrypted.
+		 * If so, the response string has NOT been hashed.
 		 */
 
 		if (strlen($row_security_resp['userQuestionAnswer']) < 60) {
