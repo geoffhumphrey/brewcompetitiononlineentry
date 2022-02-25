@@ -2188,8 +2188,10 @@ $output .= "<li>Corrected British Golden Ale name.</li>";
 
 
 /**
- * Version 2.4.1
- * Encrypt all security question responses for all users.
+ * ----------------------------------------------- 2.4.1 ---------------------------------------------
+ * Encrypt security question responses for all users.
+ * @see 
+ * ---------------------------------------------------------------------------------------------------
  */
 
 $query_security_resp = sprintf("SELECT id, userQuestionAnswer FROM `%s`",$prefix."users");
@@ -2197,29 +2199,46 @@ $security_resp = mysqli_query($connection,$query_security_resp);
 $row_security_resp = mysqli_fetch_assoc($security_resp);
 $totalRows_security_resp = mysqli_num_rows($security_resp);
 
+$total_encrypted = 0;
+
 if ($totalRows_security_resp > 0) {
 
 	require(CLASSES.'phpass/PasswordHash.php');
 
 	do {
-		
-		$hasher_question = new PasswordHash(8, false);
-		$hash_question = $hasher_question->HashPassword($row_security_resp['userQuestionAnswer']);
 
-		$updateSQL = sprintf("UPDATE `%s` SET userQuestionAnswer='%s' WHERE id='%s'", $prefix."users", $hash_question, $row_security_resp['id']);
-		mysqli_select_db($connection,$database);
-		mysqli_real_escape_string($connection,$updateSQL);
-		$result = mysqli_query($connection,$updateSQL);
+		/**
+		 * Fail safe to prevent double encryption of question
+		 * response strings.
+		 * Check if string length is less than 60 characters.
+		 * If so, the response string has NOT been encrypted.
+		 */
+
+		if (strlen($row_security_resp['userQuestionAnswer']) < 60) {
+
+			$hasher_question = new PasswordHash(8, false);
+			$hash_question = $hasher_question->HashPassword($row_security_resp['userQuestionAnswer']);
+
+			$updateSQL = sprintf("UPDATE `%s` SET userQuestionAnswer='%s' WHERE id='%s'", $prefix."users", $hash_question, $row_security_resp['id']);
+			mysqli_select_db($connection,$database);
+			mysqli_real_escape_string($connection,$updateSQL);
+			$result = mysqli_query($connection,$updateSQL);
+			if ($result) $total_encrypted += 1;
+
+		}
 
 	} while($row_security_resp = mysqli_fetch_assoc($security_resp));
+
 }
+
+if ($total_encrypted > 0) $output .= "<li>Encrypted ".$total_encrypted." plain-text security question responses.</li>";
 
 /** 
  * --- Future Release ---
  * Finally, after all updates have been implemented, 
  * make sure the character set is utf8mb4 and coallation 
  * is utf8mb4_unicode_ci. 
-require_once(UPDATE.'char_set_update.php');
+ * require_once(UPDATE.'char_set_update.php');
  */
 
 /**
