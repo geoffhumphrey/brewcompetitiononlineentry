@@ -523,7 +523,7 @@ if ($show_judge_steward_fields) {
 			}
 
 			if (!empty($table_assign_judge)) $account_display .= sprintf("<p><strong class=\"text-success\">%s %s.</strong></p><p>%s</p>",$brewer_info_008,$label_judge,$brewer_info_009);
-			elseif ((in_array("Steward",$assignment_array)) && (!empty($assignment))) $account_display .= sprintf("%s %s.",$label_steward,$brewer_info_010);
+			elseif ((in_array("Steward",$assignment_array)) && (!empty($assignment))) $account_display .= sprintf("%s %s.",$brewer_info_010,$label_steward);
 			$account_display .= "</div>";
 			$account_display .= "</div>";
 

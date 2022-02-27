@@ -1,17 +1,27 @@
 <?php
 
 /**
- * Module:      export.output.php
+ * Module: export.output.php
  * Revision History:
  * - fixed point output errors for judges and BOS judges
- * - programming now accounts for multiple roles (e.g., judge/staff, steward/staff, bos judge/staff, etc.)
+ * - programming now accounts for multiple roles (e.g., judge/staff, steward/staff, 
+ *   bos judge/staff, etc.)
  * - XML output is fully compliant with the BJCP Database Interface Specifications
- *   -- http://www.bjcp.org/it/docs/BJCP%20Database%20XML%20Interface%20Spec%202.1.pdf
- * 09.18.2018 - judge_points() function was returning incorrect calculations. Could not figure out why. All calcs were moved inline below.
- * 09.01.2020 - fixed unauthorized access issues reported to GitHub https://github.com/geoffhumphrey/brewcompetitiononlineentry/issues/1163
- * 07.18.2021 - fixed judge_points() and steward_points() calculations to better handle multiple day and multiple session day calculations
- * 11.15.2021 - BJCP is now rejecting reports with "duplicate entries" - most likely resulting from participants serving as both staff and
- *              either a judge or steward. Fixed to combine points into a single entry per person (Staff + Judge, Staff + Steward, etc.).
+ *   http://www.bjcp.org/it/docs/BJCP%20Database%20XML%20Interface%20Spec%202.1.pdf
+ * 
+ * 09.18.2018 - judge_points() function was returning incorrect calculations. 
+ *              Could not figure out why. All calcs were moved inline below.
+ * 09.01.2020 - fixed unauthorized access issues reported to GitHub 
+ *              https://github.com/geoffhumphrey/brewcompetitiononlineentry/issues/1163
+ * 07.18.2021 - fixed judge_points() and steward_points() calculations to 
+ *              better handle multiple day and multiple session day calculations
+ * 11.15.2021 - BJCP is now rejecting reports with "duplicate entries" - most 
+ *              likely resulting from participants serving as both staff and
+ *              either a judge or steward. Fixed to combine points into a single 
+ *              entry per person (Staff + Judge, Staff + Steward, etc.).
+ * 02.24.2022 - Due to incompatabilities with PHP 8, the HTML2PDF and htmlTable 
+ *              FPDF extension classes have been removed in favor of FPDF EasyTables -
+ *              https://github.com/fpdf-easytable/fpdf-easytable
  */
 
 require('../paths.php');
@@ -62,6 +72,7 @@ if ($view == "html") $table_width = "100%";
 $BOM = "\xEF\xBB\xBF"; // UTF-8 byte order mark (BOM)
 
 if (!function_exists('fputcsv')) {
+    
     function fputcsv(&$handle, $fields = array(), $delimiter = ',', $enclosure = '"') {
 
         // Sanity Check
@@ -148,7 +159,9 @@ if (!function_exists('fputcsv')) {
 
 if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($entry_window_open == 2)))) {
 
-/* -------------- ENTRY Exports -------------- */
+    /**
+     *  -------------- ENTRY Exports -------------- 
+     */
 
 	if ($section == "entries") {
 
@@ -493,7 +506,9 @@ if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($en
 
 	} // END if ($section == "entries")
 
-/* -------------- EMAIL Exports -------------- */
+    /** 
+     * -------------- EMAIL Exports -------------- 
+     */
 
 	if ($section == "emails") {
 
@@ -655,7 +670,9 @@ if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($en
 
 	} // END if ($section == "emails")
 
-/* -------------- PARTICIPANTS Exports -------------- */
+    /** 
+     * -------------- PARTICIPANT Exports -------------- 
+     */
 
 	if ($section == "participants") {
 
@@ -773,7 +790,9 @@ if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($en
 
 	}
 
-/* -------------- PROMO Exports -------------- */
+    /**
+     * -------------- PROMO Exports -------------- 
+     */
 
 	if ($section == "promo") {
 
@@ -930,7 +949,9 @@ if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($en
 
 	} // END if ($section == "promo")
 
-/* -------------- RESULTS Exports -------------- */
+    /**
+     * -------------- RESULTS Exports -------------- 
+     */
 
 	if ($section == "results") {
 
@@ -962,14 +983,441 @@ if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($en
 
             if ($_SESSION['prefsProEdition'] == 1) $label_brewer = $label_organization; else $label_brewer = $label_brewer;
 
+            /**
+             * -------------- PDF OUTPUT -------------- 
+             */
+
             if ($view == "pdf") {
-                require(CLASSES.'fpdf/html_table.php');
-                $pdf=new PDF();
-                $pdf->AddPage('L');
+               
+                include(CLASSES.'fpdf/fpdf.php');
+                include(CLASSES.'fpdf/exfpdf.php');
+                include(CLASSES.'fpdf/easyTable.php');
                 
-            }
+                $pdf=new exFPDF();
+                $pdf->AddPage();
+                $pdf->SetFont('arial','',10);
+
+                if ($go == "judging_scores") {
+
+                    /**
+                     * Winners by table/medal category
+                     */
+
+                    if ($winner_method == 0) {
+
+                        do {
+                            
+                            $entry_count = get_table_info(1,"count_total",$row_tables['id'],$dbTable,"default");
+                            if ($entry_count > 1) $entries = strtolower($label_entries);
+                            else $entries = strtolower($label_entry);
+
+                            if ($entry_count > 0) {
+
+                                include (DB.'scores.db.php');
+
+                                $title = sprintf("%s %s: %s (%s %s)",$label_table,$row_tables['tableNumber'],$row_tables['tableName'],$entry_count,$entries);
+                                $title_table = new easyTable($pdf,1);
+                                $title_table->easyCell($title, 'font-size:22; font-style:B; font-color:#000000;');
+                                $title_table->printRow();
+                                $title_table->endTable();
+
+                                if ($totalRows_scores > 0) {
+
+                                    if ($_SESSION['prefsProEdition'] == 0) $table = new easyTable($pdf, '{15, 45, 45, 40, 45}','align:L;border:1; border-color:#000000;');
+                                    else $table = new easyTable($pdf, '{20, 55, 55, 50}','align:L;border:1; border-color:#000000;');
+                                    $table->rowStyle('align:C;valign:M;bgcolor:#000000; font-color:#ffffff; font-style:B;');
+                                    $table->easyCell($label_place);
+                                    $table->easyCell($label_brewer);
+                                    $table->easyCell($label_entry);
+                                    $table->easyCell($label_style);
+                                    if ($_SESSION['prefsProEdition'] == 0) $table->easyCell($label_club);
+                                    $table->printRow(); 
+
+                                    if (!empty($row_scores)) {
+                                        
+                                        do {
+
+                                            $string = display_place($row_scores['scorePlace'],1);
+                                            $string = (iconv("UTF-8", "ASCII//TRANSLIT//IGNORE", transliterator_transliterate('Any-Latin; Latin-ASCII', $string)));
+                                            $table->easyCell($string);
+                                            
+                                            if ($_SESSION['prefsProEdition'] == 1) $string = html_entity_decode($row_scores['brewerBreweryName']);
+                                            else $string = html_entity_decode($row_scores['brewerFirstName']).' '.html_entity_decode($row_scores['brewerLastName']);
+                                            $string = (iconv("UTF-8", "ASCII//TRANSLIT//IGNORE", transliterator_transliterate('Any-Latin; Latin-ASCII', $string)));
+                                            $table->easyCell($string);
+                                            
+                                            $string = html_entity_decode($row_scores['brewName']);
+                                            $string = (iconv("UTF-8", "ASCII//TRANSLIT//IGNORE", transliterator_transliterate('Any-Latin; Latin-ASCII', $string)));
+                                            $table->easyCell($string);
+                                            
+                                            $string = (iconv("UTF-8", "ASCII//TRANSLIT//IGNORE", transliterator_transliterate('Any-Latin; Latin-ASCII', $row_scores['brewStyle'])));
+                                            $table->easyCell($string);
+                                            if ($_SESSION['prefsProEdition'] == 0) {
+                                                $string = html_entity_decode($row_scores['brewerClubs']);
+                                                $string = (iconv("UTF-8", "ASCII//TRANSLIT//IGNORE", transliterator_transliterate('Any-Latin; Latin-ASCII', $string)));
+                                                $table->easyCell($string);
+                                            }
+                                            $table->printRow();
+
+                                        } while ($row_scores = mysqli_fetch_assoc($scores));
+                                    
+                                    } // end if (!empty($row_scores))
+
+                                    $table->endTable();
+
+                                } // end if ($totalRows_scores > 0)
+
+                                else {
+                                    $no_places_table = new easyTable($pdf,1);
+                                    $no_places_table->easyCell($winners_text_007);
+                                    $no_places_table->printRow();
+                                    $no_places_table->endTable();
+                                }
+                            
+                            } // end if ($entry_count > 0)
+
+                        } while ($row_tables = mysqli_fetch_assoc($tables));
+
+                    } // end if ($winner_method == 0)
+
+                    /**
+                     * Winners by style category
+                     */
+
+                    if ($winner_method == 1) {
+
+                        $a = styles_active(0);
+
+                        foreach (array_unique($a) as $style) {
+
+                            if ($style > 0) {
+
+                                include (DB.'winners_category.db.php');
+                                if ($row_entry_count['count'] > 1) $entries = strtolower($label_entries); 
+                                else $entries = strtolower($label_entry);
+                                
+                                if ($row_score_count['count'] > 0) {
+
+                                    include (DB.'scores.db.php');
+
+                                    if (!empty($row_scores)) {
+
+                                        if ($_SESSION['prefsStyleSet'] == "BA") {
+                                            include (INCLUDES.'ba_constants.inc.php');
+                                            $title = sprintf("%s (%s %s)",$ba_category_names[$style],$row_entry_count['count'],$entries);
+                                        }
+
+                                        else $title = sprintf("%s: %s (%s %s)",$style_trimmed,style_convert($style,"1"),$row_entry_count['count'],$entries);
+                                        $title_table = new easyTable($pdf,1);
+                                        $title_table->easyCell($title, 'font-size:18; font-style:B; font-color:#000000;');
+                                        $title_table->printRow();
+                                        $title_table->endTable();
+
+                                        if ($totalRows_scores > 0) {
+
+                                            if ($_SESSION['prefsProEdition'] == 0) $table = new easyTable($pdf, '{15, 45, 45, 40, 45}','align:L;border:1; border-color:#000000;');
+                                            else $table = new easyTable($pdf, '{20, 55, 55, 50}','align:L;border:1; border-color:#000000;');
+                                            $table->rowStyle('align:C;valign:M;bgcolor:#000000; font-color:#ffffff; font-style:B;');
+                                            $table->easyCell($label_place);
+                                            $table->easyCell($label_brewer);
+                                            $table->easyCell($label_entry);
+                                            $table->easyCell($label_style);
+                                            if ($_SESSION['prefsProEdition'] == 0) $table->easyCell($label_club);
+                                            $table->printRow();
+
+                                            do {
+
+                                                $string = display_place($row_scores['scorePlace'],1);
+                                                $string = (iconv("UTF-8", "ASCII//TRANSLIT//IGNORE", transliterator_transliterate('Any-Latin; Latin-ASCII', $string)));
+                                                $table->easyCell($string);
+                                                
+                                                if ($_SESSION['prefsProEdition'] == 1) $string = html_entity_decode($row_scores['brewerBreweryName']);
+                                                else $string = html_entity_decode($row_scores['brewerFirstName']).' '.html_entity_decode($row_scores['brewerLastName']); 
+                                                $string = (iconv("UTF-8", "ASCII//TRANSLIT//IGNORE", transliterator_transliterate('Any-Latin; Latin-ASCII', $string)));
+                                                $table->easyCell($string);
+                                                
+                                                $string = html_entity_decode($row_scores['brewName']);
+                                                $string = (iconv("UTF-8", "ASCII//TRANSLIT//IGNORE", transliterator_transliterate('Any-Latin; Latin-ASCII', $string)));
+                                                $table->easyCell($string);
+                                                
+                                                $string = truncate_string($row_scores['brewStyle'],30," ");
+                                                $string = (iconv("UTF-8", "ASCII//TRANSLIT//IGNORE", transliterator_transliterate('Any-Latin; Latin-ASCII', $string)));
+                                                $table->easyCell($string);
+                                                
+                                                if ($_SESSION['prefsProEdition'] == 0) {
+                                                    $string = html_entity_decode($row_scores['brewerClubs']);
+                                                    $string = (iconv("UTF-8", "ASCII//TRANSLIT//IGNORE", transliterator_transliterate('Any-Latin; Latin-ASCII', $string)));
+                                                    $table->easyCell($string);
+                                                }
+
+                                                $table->printRow();
+
+                                            } while ($row_scores = mysqli_fetch_assoc($scores));
+
+                                        } // end if ($totalRows_scores > 0)
+
+                                        else {
+                                            $no_places_table = new easyTable($pdf,1);
+                                            $no_places_table->easyCell($winners_text_001);
+                                            $no_places_table->printRow();
+                                            $no_places_table->endTable();
+                                        }                                          
+
+                                    } // end if (!empty($row_scores))
+
+                                } // end if ($row_score_count['count'] > 0)
+
+                            } // end if ($style > 0)
+
+                        } // end foreach
+
+                    } // end if ($winner_method == 1)
+
+                    /**
+                     * Winners by style sub-category
+                     */
+
+                    if ($winner_method == 2) {
+
+                        $styles = styles_active(2);
+
+                        foreach (array_unique($styles) as $style) {
+
+                            $style = explode("^",$style);
+                            include (DB.'winners_subcategory.db.php');
+
+                            if (($row_entry_count['count'] > 0) && ($row_score_count['count'] > 0)) {
+
+                                if ($row_entry_count['count'] > 1) $entries = strtolower($label_entries);
+                                else $entries = strtolower($label_entry);
+
+                                include (DB.'scores.db.php');
+
+                                if (!empty($row_scores)) {
+
+                                    if ($_SESSION['prefsStyleSet'] == "BA") $title = sprintf("%s (%s %s)",$style[2],$row_entry_count['count'],$entries);
+                                    else $title = sprintf("%s%s: %s (%s %s)",ltrim($style[0],"0"),$style[1],$style[2],$row_entry_count['count'],$entries);
+
+                                    $title_table = new easyTable($pdf,1);
+                                    $title_table->easyCell($title, 'font-size:18; font-style:B; font-color:#000000;');
+                                    $title_table->printRow();
+                                    $title_table->endTable();
+
+                                    if ($totalRows_scores > 0) {
+
+                                        if ($_SESSION['prefsProEdition'] == 0) $table = new easyTable($pdf, '{15, 45, 45, 40, 45}','align:L;border:1; border-color:#000000;');
+                                        else $table = new easyTable($pdf, '{20, 55, 55, 50}','align:L;border:1; border-color:#000000;');
+                                        $table->rowStyle('align:C;valign:M;bgcolor:#000000; font-color:#ffffff; font-style:B;');
+                                        $table->easyCell($label_place);
+                                        $table->easyCell($label_brewer);
+                                        $table->easyCell($label_entry);
+                                        $table->easyCell($label_style);
+                                        if ($_SESSION['prefsProEdition'] == 0) $table->easyCell($label_club);
+                                        $table->printRow();
+
+                                        do {
+
+                                            $style = $row_scores['brewCategory'].$row_scores['brewSubCategory'];
+
+                                            $string = display_place($row_scores['scorePlace'],1);
+                                            $string = (iconv("UTF-8", "ASCII//TRANSLIT//IGNORE", transliterator_transliterate('Any-Latin; Latin-ASCII', $string)));
+                                            $table->easyCell($string);
+                                            
+                                            if ($_SESSION['prefsProEdition'] == 1) $string = html_entity_decode($row_scores['brewerBreweryName']);
+                                            else $string = html_entity_decode($row_scores['brewerFirstName']).' '.html_entity_decode($row_scores['brewerLastName']); 
+                                            $string = (iconv("UTF-8", "ASCII//TRANSLIT//IGNORE", transliterator_transliterate('Any-Latin; Latin-ASCII', $string)));
+                                            $table->easyCell($string);
+                                            
+                                            $string = html_entity_decode($row_scores['brewName']);
+                                            $string = (iconv("UTF-8", "ASCII//TRANSLIT//IGNORE", transliterator_transliterate('Any-Latin; Latin-ASCII', $string)));
+                                            $table->easyCell($string);
+                                            
+                                            $string = truncate_string($row_scores['brewStyle'],30," ");
+                                            $string = (iconv("UTF-8", "ASCII//TRANSLIT//IGNORE", transliterator_transliterate('Any-Latin; Latin-ASCII', $string)));
+                                            $table->easyCell($string);
+                                            
+                                            if ($_SESSION['prefsProEdition'] == 0) {
+                                                $string = html_entity_decode($row_scores['brewerClubs']);
+                                                $string = (iconv("UTF-8", "ASCII//TRANSLIT//IGNORE", transliterator_transliterate('Any-Latin; Latin-ASCII', $string)));
+                                                $table->easyCell($string);
+                                            }
+
+                                            $table->printRow();
+
+                                        } while ($row_scores = mysqli_fetch_assoc($scores));
+
+                                    } // end if ($totalRows_scores > 0)
+
+                                    else {
+                                        $no_places_table = new easyTable($pdf,1);
+                                        $no_places_table->easyCell($winners_text_001);
+                                        $no_places_table->printRow();
+                                        $no_places_table->endTable();
+                                    }
+
+                                } // end if (!empty($row_scores))
+
+                            } // end if (($row_entry_count['count'] > 0) && ($row_score_count['count'] > 0))
+
+                        } // end foreach
+
+                    } // end if ($winner_method == 2)
+
+                } // end if ($go == "judging_scores")
+
+                if ($go == "judging_scores_bos") {
+
+                    if ($_SESSION['prefsProEdition'] == 1) $label_brewer = $label_organization; 
+                    else $label_brewer = $label_brewer;
+                    $filename = str_replace(" ","_",$_SESSION['contestName']).'_BOS_Results.'.$view;
+
+                    $a = array();
+                    do { 
+                        $a[] = $row_style_types['id']; 
+                    } while ($row_style_types = mysqli_fetch_assoc($style_types));
+                    sort($a);
+
+                    $string = sprintf("%s - %s",$label_bos,html_entity_decode($_SESSION['contestName']));
+                    $string = (iconv("UTF-8", "ASCII//TRANSLIT//IGNORE", transliterator_transliterate('Any-Latin; Latin-ASCII', $string)));                  
+                    $title_table = new easyTable($pdf,1);
+                    $title_table->easyCell($string, 'font-size:22; font-style:B; font-color:#000000;');
+                    $title_table->printRow();
+                    $title_table->endTable();
+
+                    foreach (array_unique($a) as $type) {
+
+                        include (DB.'output_results_download_bos.db.php');
+
+                        if ($totalRows_bos > 0) {
+
+                            $title_table = new easyTable($pdf,1);
+                            $title_table->easyCell($row_style_type_1['styleTypeName'], 'font-size:16; font-style:B; font-color:#000000;');
+                            $title_table->printRow();
+                            $title_table->endTable();
+
+                            if ($_SESSION['prefsProEdition'] == 0) $table = new easyTable($pdf, '{15, 45, 45, 40, 45}','align:L;border:1; border-color:#000000;');
+                            else $table = new easyTable($pdf, '{20, 55, 55, 50}','align:L;border:1; border-color:#000000;');
+                            $table->rowStyle('align:C;valign:M;bgcolor:#000000; font-color:#ffffff; font-style:B;');
+                            $table->easyCell($label_place);
+                            $table->easyCell($label_brewer);
+                            $table->easyCell($label_entry);
+                            $table->easyCell($label_style);
+                            if ($_SESSION['prefsProEdition'] == 0) $table->easyCell($label_club);
+                            $table->printRow();
+
+                            do {
+
+                                $style = $row_bos['brewCategory'].$row_bos['brewSubCategory'];
+
+                                $string = display_place($row_bos['scorePlace'],1);
+                                $string = (iconv("UTF-8", "ASCII//TRANSLIT//IGNORE", transliterator_transliterate('Any-Latin; Latin-ASCII', $string)));
+                                $table->easyCell($string);
+                                
+                                if ($_SESSION['prefsProEdition'] == 1) $string = html_entity_decode($row_bos['brewerBreweryName']);
+                                else $string = html_entity_decode($row_bos['brewerFirstName']).' '.html_entity_decode($row_bos['brewerLastName']);
+                                $string = (iconv("UTF-8", "ASCII//TRANSLIT//IGNORE", transliterator_transliterate('Any-Latin; Latin-ASCII', $string)));
+                                $table->easyCell($string);
+                                
+                                $string = html_entity_decode($row_bos['brewName']);
+                                $string = (iconv("UTF-8", "ASCII//TRANSLIT//IGNORE", transliterator_transliterate('Any-Latin; Latin-ASCII', $string)));
+                                $table->easyCell($string);
+                                
+                                $string = (iconv("UTF-8", "ASCII//TRANSLIT//IGNORE", transliterator_transliterate('Any-Latin; Latin-ASCII', $row_bos['brewStyle'])));
+                                $table->easyCell($string);
+                                if ($_SESSION['prefsProEdition'] == 0) {
+                                    $string = html_entity_decode($row_bos['brewerClubs']);
+                                    $string = (iconv("UTF-8", "ASCII//TRANSLIT//IGNORE", transliterator_transliterate('Any-Latin; Latin-ASCII', $string)));
+                                    $table->easyCell($string);
+                                }
+                                $table->printRow();
+
+                            } while ($row_bos = mysqli_fetch_assoc($bos));
+
+                            $table->endTable();
+
+                        } // end if ($totalRows_bos > 0)
+
+                    } // end foreach
+
+                    if ($totalRows_sbi > 0) {
+
+                        do {
+
+                            include (DB.'output_results_download_sbd.db.php');
+
+                            if ($totalRows_sbd > 0) {
+                                
+                                $title_table = new easyTable($pdf,1);
+                                $title_table->easyCell(html_entity_decode($row_sbi['sbi_name']), 'font-size:16; font-style:B; font-color:#000000;');
+                                $title_table->printRow();
+                                if (!empty($row_sbi['sbi_description'])) {
+                                    $string = html_entity_decode($row_sbi['sbi_description']);
+                                    $string = (iconv("UTF-8", "ASCII//TRANSLIT//IGNORE", transliterator_transliterate('Any-Latin; Latin-ASCII', $string)));
+                                    $title_table->easyCell($string);
+                                }
+                                $title_table->endTable();
+
+                                if ($_SESSION['prefsProEdition'] == 0) $table = new easyTable($pdf, '{15, 45, 45, 40, 45}','align:L;border:1; border-color:#000000;');
+                                else $table = new easyTable($pdf, '{20, 55, 55, 50}','align:L;border:1; border-color:#000000;');
+                                $table->rowStyle('align:C;valign:M;bgcolor:#000000; font-color:#ffffff; font-style:B;');
+                                $table->easyCell($label_place);
+                                $table->easyCell($label_brewer);
+                                $table->easyCell($label_entry);
+                                $table->easyCell($label_style);
+                                if ($_SESSION['prefsProEdition'] == 0) $table->easyCell($label_club);
+                                $table->printRow();
+
+                                do {
+
+                                    $brewer_info = explode("^",brewer_info($row_sbd['bid']));
+                                    $entry_info = explode("^",entry_info($row_sbd['eid']));
+                                    $style = $entry_info['5'].$entry_info['2'];
+
+                                    $string = "";
+                                    if ($row_sbi['sbi_display_places'] == "1") $string = display_place($row_sbd['sbd_place'],4);
+                                    $string = (iconv("UTF-8", "ASCII//TRANSLIT//IGNORE", transliterator_transliterate('Any-Latin; Latin-ASCII', $string)));
+                                    $table->easyCell($string);
+                                    
+                                    if ($_SESSION['prefsProEdition'] == 1) $string = html_entity_decode($brewer_info['15']);
+                                    else $string = html_entity_decode($brewer_info['0'])." ".html_entity_decode($brewer_info['1']);
+                                    $string = (iconv("UTF-8", "ASCII//TRANSLIT//IGNORE", transliterator_transliterate('Any-Latin; Latin-ASCII', $string)));
+                                    $table->easyCell($string);
+                                    
+                                    $string = html_entity_decode($entry_info['0']);
+                                    $string = (iconv("UTF-8", "ASCII//TRANSLIT//IGNORE", transliterator_transliterate('Any-Latin; Latin-ASCII', $string)));
+                                    $table->easyCell($string);
+                                    
+                                    $string = (iconv("UTF-8", "ASCII//TRANSLIT//IGNORE", transliterator_transliterate('Any-Latin; Latin-ASCII', $entry_info['3'])));
+                                    $table->easyCell($string);
+                                    if ($_SESSION['prefsProEdition'] == 0) {
+                                        $string = html_entity_decode($brewer_info['8']);
+                                        $string = (iconv("UTF-8", "ASCII//TRANSLIT//IGNORE", transliterator_transliterate('Any-Latin; Latin-ASCII', $string)));
+                                        $table->easyCell($string);
+                                    }
+                                    $table->printRow();
+
+                                } while ($row_sbd = mysqli_fetch_assoc($sbd));
+
+                                $table->endTable();
+                            
+                            } // end if ($totalRows_sbd > 0)
+
+                        } while ($row_sbi = mysqli_fetch_assoc($sbi));
+
+                    } // end  if ($totalRows_sbi > 0)
+
+                } // end if ($go == "judging_scores_bos")
+
+                $pdf->Output($filename,'D');
+
+            } // end if ($view == "pdf")
+
+            /**
+             * -------------- HTML OUTPUT -------------- 
+             */
 
             if ($view == "html") {
+                
                 $header .= '<!DOCTYPE html>';
                 $header .= '<head>';
                 $header .= '<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />';
@@ -979,100 +1427,170 @@ if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($en
                 $header .= '</style>';
                 $header .= '</head>';
                 $header .= '<body>';
-            }
 
-            if ($go == "judging_scores") {
-                $html = '';
-                
-                if ($view == "pdf") {
-                    $pdf->SetFont('Arial','B',16);
-                    $pdf->Write(5,'Results - '.$_SESSION['contestName']);
-                    $pdf->SetFont('Arial','',8);
-                }
+                if ($go == "judging_scores") {
+                    
+                    $html = '';                
+                    $html .= '<h1>Winners - '.$_SESSION['contestName'].'</h1>';
+                    $filename = str_replace(" ","_",$_SESSION['contestName']).'_Results.'.$view;
 
-                if ($view == "html") $html .= '<h1>Winners - '.$_SESSION['contestName'].'</h1>';
+                    /**
+                     * Winners by table/medal group
+                     */
 
-                $filename = str_replace(" ","_",$_SESSION['contestName']).'_Results.'.$view;
-
-                if ($winner_method == 0) {
-
-                    do {
-                        $entry_count = get_table_info(1,"count_total",$row_tables['id'],$dbTable,"default");
-
-                        if ($entry_count > 1) $entries = strtolower($label_entries);
-                        else $entries = strtolower($label_entry);
-
-                        if ($entry_count > 0) {
-
-                        if ($view == "pdf") $html .= '<br><br><strong>'.$label_table.' '.$row_tables['tableNumber'].': '.$row_tables['tableName'].' ('.$entry_count.' '.$entries.')</strong><br>';
-                        else $html .= '<h2>'.$label_table.' '.$row_tables['tableNumber'].': '.$row_tables['tableName'].' ('.$entry_count.' '.$entries.')</h2>';
-                        $html .= '<table border="1" cellpadding="5" cellspacing="0" width="'.$table_width.'">';
-                        $html .= '<tr>';
-                        $html .= '<td width="'.$td_width_place.'" align="center"  bgcolor="#cccccc" nowrap="nowrap"><strong>'.$label_place.'</strong></td>';
-                        $html .= '<td width="'.$td_width_name.'" align="center" bgcolor="#cccccc"><strong>'.$label_brewer.'</strong></td>';
-                        $html .= '<td width="'.$td_width_entry.'" align="center" bgcolor="#cccccc"><strong>'.$label_entry.' '.$label_name.'</strong></td>';
-                        $html .= '<td width="'.$td_width_entry.'" align="center" bgcolor="#cccccc"><strong>'.$label_style.'</strong></td>';
-                        if ($_SESSION['prefsProEdition'] == 0) $html .= '<td width="175" align="center" bgcolor="#cccccc"><strong>'.$label_club.'</strong></td>';
-                        $html .= '</tr>';
-
-                        include (DB.'scores.db.php');
+                    if ($winner_method == 0) {
 
                         do {
-                                $style = $row_scores['brewCategory'].$row_scores['brewSubCategory'];
+                            
+                            $entry_count = get_table_info(1,"count_total",$row_tables['id'],$dbTable,"default");
+
+                            if ($entry_count > 1) $entries = strtolower($label_entries);
+                            else $entries = strtolower($label_entry);
+
+                            if ($entry_count > 0) {
+
+                                include (DB.'scores.db.php');
+
+                                $html .= '<h2>'.$label_table.' '.$row_tables['tableNumber'].': '.$row_tables['tableName'].' ('.$entry_count.' '.$entries.')</h2>';
+                                $html .= '<table border="1" cellpadding="5" cellspacing="0" width="'.$table_width.'">';
                                 $html .= '<tr>';
-                                $html .= '<td width="'.$td_width_place.'">'.display_place($row_scores['scorePlace'],1).'</td>';
-                                if ($_SESSION['prefsProEdition'] == 1) $html .= '<td width="'.$td_width_name.'">'.html_entity_decode($row_scores['brewerBreweryName']).'</td>';
-                                else $html .= '<td width="'.$td_width_name.'">'.html_entity_decode($row_scores['brewerFirstName']).' '.html_entity_decode($row_scores['brewerLastName']).'</td>';
-                                $html .= '<td width="'.$td_width_entry.'">';
-                                if ($row_scores['brewName'] != '') $html .= html_entity_decode(truncate_string($row_scores['brewName'],30," ")); else $html .= '&nbsp;';
-                                $html .= '</td>';
-                                $html .= '<td width="'.$td_width_style.'">';
-                                if ($row_scores['brewStyle'] != '') $html .= truncate_string($row_scores['brewStyle'],30," "); else $html .= "&nbsp;";
-                                $html .= '</td>';
-                                if ($_SESSION['prefsProEdition'] == 0) {
-                                    $html .= '<td width="175">';
-                                    if ($row_scores['brewerClubs'] != "") $html .= html_entity_decode(truncate_string($row_scores['brewerClubs'],17," "));
-                                    else $html .= "&nbsp;";
-                                    $html .= '</td>';
-                                }
+                                $html .= '<td width="'.$td_width_place.'" align="center"  bgcolor="#cccccc" nowrap="nowrap"><strong>'.$label_place.'</strong></td>';
+                                $html .= '<td width="'.$td_width_name.'" align="center" bgcolor="#cccccc"><strong>'.$label_brewer.'</strong></td>';
+                                $html .= '<td width="'.$td_width_entry.'" align="center" bgcolor="#cccccc"><strong>'.$label_entry.' '.$label_name.'</strong></td>';
+                                $html .= '<td width="'.$td_width_entry.'" align="center" bgcolor="#cccccc"><strong>'.$label_style.'</strong></td>';
+                                if ($_SESSION['prefsProEdition'] == 0) $html .= '<td width="175" align="center" bgcolor="#cccccc"><strong>'.$label_club.'</strong></td>';
                                 $html .= '</tr>';
-                            } while ($row_scores = mysqli_fetch_assoc($scores));
-                        $html .= '</table>';
-                        }
-                    } while ($row_tables = mysqli_fetch_assoc($tables));
 
-                } // end if ($winner_method == 0)
+                                do {
+                                    
+                                    $style = $row_scores['brewCategory'].$row_scores['brewSubCategory'];
+                                    $html .= '<tr>';
+                                    
+                                    $html .= '<td width="'.$td_width_place.'">'.display_place($row_scores['scorePlace'],1).'</td>';
+                                    if ($_SESSION['prefsProEdition'] == 1) $html .= '<td width="'.$td_width_name.'">'.html_entity_decode($row_scores['brewerBreweryName']).'</td>';
+                                    else $html .= '<td width="'.$td_width_name.'">'.html_entity_decode($row_scores['brewerFirstName']).' '.html_entity_decode($row_scores['brewerLastName']).'</td>';
+                                    
+                                    $html .= '<td width="'.$td_width_entry.'">';
+                                    if ($row_scores['brewName'] != '') $html .= html_entity_decode($row_scores['brewName']); 
+                                    else $html .= '&nbsp;';
+                                    $html .= '</td>';
+                                    
+                                    $html .= '<td width="'.$td_width_style.'">';
+                                    if ($row_scores['brewStyle'] != '') $html .= html_entity_decode($row_scores['brewStyle']); else $html .= "&nbsp;";
+                                    $html .= '</td>';
+                                    
+                                    if ($_SESSION['prefsProEdition'] == 0) {
+                                        $html .= '<td width="175">';
+                                        if ($row_scores['brewerClubs'] != "") $html .= html_entity_decode($row_scores['brewerClubs']);
+                                        else $html .= "&nbsp;";
+                                        $html .= '</td>';
+                                    }
 
-                if ($winner_method == 1) {
+                                    $html .= '</tr>';
 
-                    $a = styles_active(0);
+                                } while ($row_scores = mysqli_fetch_assoc($scores));
 
-                    foreach (array_unique($a) as $style) {
+                                $html .= '</table>';
 
-                        if ($style > 0) {
+                            } // end if ($entry_count > 0)
 
-                            include (DB.'winners_category.db.php');
+                        } while ($row_tables = mysqli_fetch_assoc($tables));
 
-                            //echo $style."<br>";
-                            //echo $row_entry_count['count']."<br>";
-                            //echo $row_score_count['count']."<br><br>";
+                    } // end if ($winner_method == 0)
 
-                            // Display all winners
-                            if ($row_entry_count['count'] > 1) $entries = strtolower($label_entries); else $entries = strtolower($label_entry);
-                            if ($row_score_count['count'] > 0)   {
+                    /**
+                     * Winners by style category
+                     */
 
-                                $style_trimmed = ltrim($style,"0");
+                    if ($winner_method == 1) {
 
-                                if ($_SESSION['prefsStyleSet'] == "BA") {
-                                    include (INCLUDES.'ba_constants.inc.php');
-                                    if ($view == "pdf") $html .= '<br><br><strong>'.$ba_category_names[$style].' ('.$row_entry_count['count'].' '.$entries.')</strong><br>';
-                                    else $html .= '<h2>'.$ba_category_names[$style].' ('.$row_entry_count['count'].' '.$entries.')</h2>';
-                                }
+                        $a = styles_active(0);
 
-                                else {
-                                    if ($view == "pdf") $html .= '<br><br><strong>Style '.ltrim($style,"0").': '.style_convert($style,"1").' ('.$row_entry_count['count'].' '.$entries.')</strong><br>';
+                        foreach (array_unique($a) as $style) {
+
+                            if ($style > 0) {
+
+                                include (DB.'winners_category.db.php');
+
+                                // Display all winners
+                                if ($row_entry_count['count'] > 1) $entries = strtolower($label_entries); 
+                                else $entries = strtolower($label_entry);
+                                
+                                if ($row_score_count['count'] > 0) {
+
+                                    $style_trimmed = ltrim($style,"0");
+
+                                    if ($_SESSION['prefsStyleSet'] == "BA") {
+                                        include (INCLUDES.'ba_constants.inc.php');
+                                        $html .= '<h2>'.$ba_category_names[$style].' ('.$row_entry_count['count'].' '.$entries.')</h2>';
+                                    }
+
                                     else $html .= '<h2>Style '.$style_trimmed.': '.style_convert($style,"1").' ('.$row_entry_count['count'].' '.$entries.')</h2>';
-                                }
+
+                                    $html .= '<table border="1" cellpadding="5" cellspacing="0" width="'.$table_width.'">';
+                                    $html .= '<tr>';
+                                    $html .= '<td width="'.$td_width_place.'" align="center"  bgcolor="#cccccc" nowrap="nowrap"><strong>'.$label_place.'</strong></td>';
+                                    $html .= '<td width="'.$td_width_name.'" align="center" bgcolor="#cccccc"><strong>'.$label_brewer.'</strong></td>';
+                                    $html .= '<td width="'.$td_width_entry.'" align="center" bgcolor="#cccccc"><strong>'.$label_entry.' '.$label_name.'</strong></td>';
+                                    $html .= '<td width="'.$td_width_style.'" align="center" bgcolor="#cccccc"><strong>'.$label_style.'</strong></td>';
+                                    if ($_SESSION['prefsProEdition'] == 0) $html .= '<td width="175" align="center" bgcolor="#cccccc"><strong>'.$label_club.'</strong></td>';
+                                    $html .= '</tr>';
+
+                                    include (DB.'scores.db.php');
+
+                                    do {
+                                        $style = $row_scores['brewCategory'].$row_scores['brewSubCategory'];
+                                        $html .= '<tr>';
+                                        $html .= '<td width="'.$td_width_place.'">'.display_place($row_scores['scorePlace'],1).'</td>';
+                                        if ($_SESSION['prefsProEdition'] == 1) $html .= '<td width="'.$td_width_name.'">'.html_entity_decode($row_scores['brewerBreweryName']).'</td>';
+                                        else $html .= '<td width="'.$td_width_name.'">'.html_entity_decode($row_scores['brewerFirstName']).' '.html_entity_decode($row_scores['brewerLastName']).'</td>';
+                                        $html .= '<td width="'.$td_width_entry.'">';
+                                        if ($row_scores['brewName'] != '') $html .= html_entity_decode($row_scores['brewName']); 
+                                        else $html .= '&nbsp;';
+                                        $html .= '</td>';
+                                        $html .= '<td width="'.$td_width_style.'">';
+                                        if ($row_scores['brewStyle'] != '') $html .= html_entity_decode($row_scores['brewStyle']); else $html .= "&nbsp;";
+                                        $html .= '</td>';
+                                        if ($_SESSION['prefsProEdition'] == 0) {
+                                            $html .= '<td width="175">';
+                                            if ($row_scores['brewerClubs'] != "") $html .= html_entity_decode($row_scores['brewerClubs']);
+                                            else $html .= "&nbsp;";
+                                            $html .= '</td>';
+                                        }
+                                        $html .= '</tr>';
+                                    } while ($row_scores = mysqli_fetch_assoc($scores));
+
+                                    $html .= '</table>';
+
+                                } // end if ($row_score_count['count'] > 0)
+
+                            } // end if ($style > 0)
+
+                        } // end foreach
+
+                    } // end if ($winner_method == 1)
+
+                    /**
+                     * Winners by style sub-category
+                     */
+
+                    if ($winner_method == 2) {
+
+                        $styles = styles_active(2);
+
+                        foreach (array_unique($styles) as $style) {
+
+                            $style = explode("^",$style);
+                            include (DB.'winners_subcategory.db.php');
+
+                            if (($row_entry_count['count'] > 0) && ($row_score_count['count'] > 0)) {
+
+                                if ($row_entry_count['count'] > 1) $entries = strtolower($label_entries);
+                                else $entries = strtolower($label_entry);
+
+
+                                if ($_SESSION['prefsStyleSet'] == "BA") $html .= '<h2>'.$style[2].' ('.$row_entry_count['count'].' '.$entries.')</h2>';
+                                else $html .= '<h2>Style '.ltrim($style[0],"0").$style[1].': '.$style[2].' ('.$row_entry_count['count'].' '.$entries.')</h2>';
 
                                 $html .= '<table border="1" cellpadding="5" cellspacing="0" width="'.$table_width.'">';
                                 $html .= '<tr>';
@@ -1083,66 +1601,79 @@ if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($en
                                 if ($_SESSION['prefsProEdition'] == 0) $html .= '<td width="175" align="center" bgcolor="#cccccc"><strong>'.$label_club.'</strong></td>';
                                 $html .= '</tr>';
 
-                            include (DB.'scores.db.php');
+                                include (DB.'scores.db.php');
 
                                 do {
+                                    
                                     $style = $row_scores['brewCategory'].$row_scores['brewSubCategory'];
                                     $html .= '<tr>';
+                                    
                                     $html .= '<td width="'.$td_width_place.'">'.display_place($row_scores['scorePlace'],1).'</td>';
                                     if ($_SESSION['prefsProEdition'] == 1) $html .= '<td width="'.$td_width_name.'">'.html_entity_decode($row_scores['brewerBreweryName']).'</td>';
                                     else $html .= '<td width="'.$td_width_name.'">'.html_entity_decode($row_scores['brewerFirstName']).' '.html_entity_decode($row_scores['brewerLastName']).'</td>';
+
                                     $html .= '<td width="'.$td_width_entry.'">';
-                                    if ($row_scores['brewName'] != '') $html .= html_entity_decode(truncate_string($row_scores['brewName'],30," ")); 
-                                    else $html .= '&nbsp;';
+                                    if ($row_scores['brewName'] != '') $html .= html_entity_decode($row_scores['brewName']); else $html .= '&nbsp;';
                                     $html .= '</td>';
+
                                     $html .= '<td width="'.$td_width_style.'">';
-                                    if ($row_scores['brewStyle'] != '') $html .= truncate_string($row_scores['brewStyle'],30," "); else $html .= "&nbsp;";
+                                    if ($row_scores['brewStyle'] != '') $html .= html_entity_decode($row_scores['brewStyle']); 
+                                    else $html .= "&nbsp;";
                                     $html .= '</td>';
+
                                     if ($_SESSION['prefsProEdition'] == 0) {
                                         $html .= '<td width="175">';
-                                        if ($row_scores['brewerClubs'] != "") $html .= html_entity_decode(truncate_string($row_scores['brewerClubs'],17," "));
+                                        if ($row_scores['brewerClubs'] != "") $html .= html_entity_decode($row_scores['brewerClubs']);
                                         else $html .= "&nbsp;";
                                         $html .= '</td>';
                                     }
+                                    
                                     $html .= '</tr>';
+
                                 } while ($row_scores = mysqli_fetch_assoc($scores));
 
-                            $html .= '</table>';
+                                $html .= '</table>';
 
-                            } // if (($results_count[0] > 0) && ($results_count[1] > 0))
+                            } // end if (($row_entry_count['count'] > 0) && ($row_score_count['count'] > 0))
 
-                        }
+                        } // end foreach
 
-                    } // end foreach
+                    } // end if ($winner_method == 2)
 
-                } // end if if ($winner_method == 1)
+                } // end if ($go == "judging_scores")
+            
+                if ($go == "judging_scores_bos") {
 
-                if ($winner_method == 2) {
-                    $styles = styles_active(2);
+                    if ($_SESSION['prefsProEdition'] == 1) $label_brewer = $label_organization; else $label_brewer = $label_brewer;
 
-                    foreach (array_unique($styles) as $style) {
+                    $html = '';
 
-                        $style = explode("^",$style);
-                        include (DB.'winners_subcategory.db.php');
+                    /*
+                    if ($view == "pdf") {
+                        $pdf->SetFont('Arial','B',16);
+                        $pdf->Write(5,'Best of Show Results - '.$_SESSION['contestName']);
+                        $pdf->SetFont('Arial','',7);
+                    }
+                    */
+                    $filename = str_replace(" ","_",$_SESSION['contestName']).'_BOS_Results.'.$view;
 
-                        if (($row_entry_count['count'] > 0) && ($row_score_count['count'] > 0)) {
+                    $a = array();
 
-                            if ($row_entry_count['count'] > 1) $entries = strtolower($label_entries);
-                            else $entries = strtolower($label_entry);
+                    do { $a[] = $row_style_types['id']; } while ($row_style_types = mysqli_fetch_assoc($style_types));
 
+                    if ($view == "html") $html .= '<h1>BOS - '.html_entity_decode($_SESSION['contestName']).'</h1>';
 
-                            if ($_SESSION['prefsStyleSet'] == "BA") {
-                                if ($view == "pdf") $html .= '<br><br><strong>'.$style[2].' ('.$row_entry_count['count'].' '.$entries.')</strong><br>';
-                                else $html .= '<h2>'.$style[2].' ('.$row_entry_count['count'].' '.$entries.')</h2>';
-                            }
+                    sort($a);
 
-                            else {
-                                if ($view == "pdf") $html .= '<br><br><strong>Style '.ltrim($style[0],"0").$style[1].': '.$style[2].' ('.$row_entry_count['count'].' '.$entries.')</strong><br>';
-                                else $html .= '<h2>Style '.ltrim($style[0],"0").$style[1].': '.$style[2].' ('.$row_entry_count['count'].' '.$entries.')</h2>';
-                            }
+                    foreach (array_unique($a) as $type) {
 
+                        include (DB.'output_results_download_bos.db.php');
 
+                        if ($totalRows_bos > 0) {
 
+                            //if ($view == "pdf") $html .= '<br><br><strong>'.$row_style_type_1['styleTypeName'].'</strong><br>';
+                            //else
+                            $html .= '<h2>'.$row_style_type_1['styleTypeName'].'</h2>';
                             $html .= '<table border="1" cellpadding="5" cellspacing="0" width="'.$table_width.'">';
                             $html .= '<tr>';
                             $html .= '<td width="'.$td_width_place.'" align="center"  bgcolor="#cccccc" nowrap="nowrap"><strong>'.$label_place.'</strong></td>';
@@ -1152,184 +1683,106 @@ if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($en
                             if ($_SESSION['prefsProEdition'] == 0) $html .= '<td width="175" align="center" bgcolor="#cccccc"><strong>'.$label_club.'</strong></td>';
                             $html .= '</tr>';
 
-                            include (DB.'scores.db.php');
-
                             do {
-                                $style = $row_scores['brewCategory'].$row_scores['brewSubCategory'];
+
+                                $style = $row_bos['brewCategory'].$row_bos['brewSubCategory'];
+
                                 $html .= '<tr>';
-                                $html .= '<td width="'.$td_width_place.'">'.display_place($row_scores['scorePlace'],1).'</td>';
-                                if ($_SESSION['prefsProEdition'] == 1) $html .= '<td width="'.$td_width_name.'">'.html_entity_decode($row_scores['brewerBreweryName']).'</td>';
-                                else $html .= '<td width="'.$td_width_name.'">'.html_entity_decode($row_scores['brewerFirstName']).' '.html_entity_decode($row_scores['brewerLastName']).'</td>';
-                                $html .= '<td width="'.$td_width_entry.'">';
-                                if ($row_scores['brewName'] != '') $html .= html_entity_decode(truncate_string($row_scores['brewName'],30," ")); else $html .= '&nbsp;';
-                                $html .= '</td>';
-                                $html .= '<td width="'.$td_width_style.'">';
-                                if ($row_scores['brewStyle'] != '') $html .= truncate_string($row_scores['brewStyle'],30," "); 
-                                else $html .= "&nbsp;";
-                                $html .= '</td>';
+                                
+                                // Place
+                                $html .= '<td width="'.$td_width_place.'" nowrap="nowrap">'.display_place($row_bos['scorePlace'],1).'</td>';
+                                
+                                // Brewer
+                                if ($_SESSION['prefsProEdition'] == 1) {
+                                    $html .= '<td width="'.$td_width_name.'">'.html_entity_decode($row_bos['brewerBreweryName']);
+                                    $html .= '</td>';
+                                }
+                                else {
+                                    $html .= '<td width="'.$td_width_name.'">'.html_entity_decode($row_bos['brewerFirstName']).' '.html_entity_decode($row_bos['brewerLastName']);
+                                    if (($_SESSION['prefsProEdition'] == 0) && ($row_bos['brewCoBrewer'] != "")) $html .=', '.html_entity_decode(truncate_string($row_bos['brewCoBrewer'],20," "));
+                                    $html .= '</td>';
+                                }
+
+                                $html .= '<td width="'.$td_width_entry.'">'.html_entity_decode($row_bos['brewName']).'</td>';
+                                $html .= '<td width="'.$td_width_style.'">'.html_entity_decode($row_bos['brewStyle']).'</td>';
+
                                 if ($_SESSION['prefsProEdition'] == 0) {
                                     $html .= '<td width="175">';
-                                    if ($row_scores['brewerClubs'] != "") $html .= html_entity_decode(truncate_string($row_scores['brewerClubs'],17," "));
+                                    if ($row_bos['brewerClubs'] != "") $html .= html_entity_decode($row_bos['brewerClubs']);
                                     else $html .= "&nbsp;";
                                     $html .= '</td>';
                                 }
+
                                 $html .= '</tr>';
-                            } while ($row_scores = mysqli_fetch_assoc($scores));
+
+
+                            } while ($row_bos = mysqli_fetch_assoc($bos));
 
                             $html .= '</table>';
 
-                        }
+                        } // end if ($totalRows_bos > 0)
 
-                    }
+                    } // end foreach (array_unique($a) as $type)
 
-                }
-
-            }
-
-            if ($go == "judging_scores_bos") {
-
-                if ($_SESSION['prefsProEdition'] == 1) $label_brewer = $label_organization; else $label_brewer = $label_brewer;
-
-                $html = '';
-
-                if ($view == "pdf") {
-                    $pdf->SetFont('Arial','B',16);
-                    $pdf->Write(5,'Best of Show Results - '.$_SESSION['contestName']);
-                    $pdf->SetFont('Arial','',7);
-                }
-                $filename = str_replace(" ","_",$_SESSION['contestName']).'_BOS_Results.'.$view;
-
-                $a = array();
-
-                do { $a[] = $row_style_types['id']; } while ($row_style_types = mysqli_fetch_assoc($style_types));
-
-                if ($view == "html") $html .= '<h1>BOS - '.html_entity_decode($_SESSION['contestName']).'</h1>';
-
-                sort($a);
-
-                foreach (array_unique($a) as $type) {
-
-                    include (DB.'output_results_download_bos.db.php');
-
-                    if ($totalRows_bos > 0) {
-
-                        if ($view == "pdf") $html .= '<br><br><strong>'.$row_style_type_1['styleTypeName'].'</strong><br>';
-                        else $html .= '<h2>'.$row_style_type_1['styleTypeName'].'</h2>';
-                        $html .= '<table border="1" cellpadding="5" cellspacing="0" width="'.$table_width.'">';
-                        $html .= '<tr>';
-                        $html .= '<td width="'.$td_width_place.'" align="center"  bgcolor="#cccccc" nowrap="nowrap"><strong>'.$label_place.'</strong></td>';
-                        $html .= '<td width="'.$td_width_name.'" align="center" bgcolor="#cccccc"><strong>'.$label_brewer.'</strong></td>';
-                        $html .= '<td width="'.$td_width_entry.'" align="center" bgcolor="#cccccc"><strong>'.$label_entry.' '.$label_name.'</strong></td>';
-                        $html .= '<td width="'.$td_width_style.'" align="center" bgcolor="#cccccc"><strong>'.$label_style.'</strong></td>';
-                        if ($_SESSION['prefsProEdition'] == 0) $html .= '<td width="175" align="center" bgcolor="#cccccc"><strong>'.$label_club.'</strong></td>';
-                        $html .= '</tr>';
+                    if ($totalRows_sbi > 0) {
 
                         do {
 
-                            $style = $row_bos['brewCategory'].$row_bos['brewSubCategory'];
+                            include (DB.'output_results_download_sbd.db.php');
 
-                            $html .= '<tr>';
-                            
-                            // Place
-                            $html .= '<td width="'.$td_width_place.'" nowrap="nowrap">'.display_place($row_bos['scorePlace'],1).'</td>';
-                            
-                            // Brewer
-                            if ($_SESSION['prefsProEdition'] == 1) {
-                                $html .= '<td width="'.$td_width_name.'">'.html_entity_decode($row_bos['brewerBreweryName']);
-                                $html .= '</td>';
+                            if ($totalRows_sbd > 0) {
+                            //if ($view == "pdf") $html .= '<br><br><strong>'.html_entity_decode($row_sbi['sbi_name']).'</strong>';
+                            //else 
+                            $html .= '<h2>'.html_entity_decode($row_sbi['sbi_name']).'</h2>';
+                            if (!empty($row_sbi['sbi_description'])) {
+                                $html .= '<br>'.html_entity_decode($row_sbi['sbi_description']).'<br>';
                             }
                             else {
-                                $html .= '<td width="'.$td_width_name.'">'.html_entity_decode($row_bos['brewerFirstName']).' '.html_entity_decode($row_bos['brewerLastName']);
-                                if (($_SESSION['prefsProEdition'] == 0) && ($row_bos['brewCoBrewer'] != "")) $html .=', '.html_entity_decode(truncate_string($row_bos['brewCoBrewer'],20," "));
-                                $html .= '</td>';
+                                // if ($view == "pdf") $html .= "<br>";
                             }
+                            $html .= '<table border="1" cellpadding="5" cellspacing="0" width="'.$table_width.'">';
+                            $html .= '<tr>';
+                            if ($row_sbi['sbi_display_places'] == "1") $html .= '<td width="'.$td_width_place.'" align="center"  bgcolor="#cccccc" nowrap="nowrap"><strong>'.$label_place.'</strong></td>';
+                            $html .= '<td width="'.$td_width_name.'" align="center" bgcolor="#cccccc"><strong>'.$label_brewer.'</strong></td>';
+                            $html .= '<td width="'.$td_width_entry.'" align="center" bgcolor="#cccccc"><strong>'.$label_entry.' '.$label_name.'</strong></td>';
+                            $html .= '<td width="'.$td_width_style.'" align="center" bgcolor="#cccccc"><strong>'.$label_style.'</strong></td>';
+                            if ($_SESSION['prefsProEdition'] == 0) $html .= '<td width="175" align="center" bgcolor="#cccccc"><strong>'.$label_club.'</strong></td>';
+                            $html .= '</tr>';
 
-                            $html .= '<td width="'.$td_width_entry.'">'.html_entity_decode($row_bos['brewName']).'</td>';
-                            $html .= '<td width="'.$td_width_style.'">'.truncate_string($row_bos['brewStyle'],30," ").'</td>';
-
-                            if ($_SESSION['prefsProEdition'] == 0) {
+                            do {
+                                $brewer_info = explode("^",brewer_info($row_sbd['bid']));
+                                $entry_info = explode("^",entry_info($row_sbd['eid']));
+                                $style = $entry_info['5'].$entry_info['2'];
+                                $html .= '<tr>';
+                                if ($row_sbi['sbi_display_places'] == "1") { $html .= '<td width="'.$td_width_place.'" nowrap="nowrap">'.display_place($row_sbd['sbd_place'],4).'</td>'; }
+                                $html .= '<td width="'.$td_width_name.'">'.html_entity_decode($brewer_info['0'])." ".html_entity_decode($brewer_info['1']);
+                                    if (($row_sbd['brewCoBrewer'] != "") && ($view == "html")) $html .= "<br />Co-Brewer: ".html_entity_decode($entry_info['4']);
+                                $html .= '</td>';
+                                $html .= '<td width="'.$td_width_entry.'">'.html_entity_decode($entry_info['0']).'</td>';
+                                $html .= '<td width="'.$td_width_style.'">'.$entry_info['3'].'</td>';
                                 $html .= '<td width="175">';
-                                if ($row_bos['brewerClubs'] != "") $html .= html_entity_decode(truncate_string($row_bos['brewerClubs'],17," "));
+                                if (($_SESSION['prefsProEdition'] == 0) && ($brewer_info['8'] != "")) $html .=html_entity_decode($brewer_info['8']);
                                 else $html .= "&nbsp;";
                                 $html .= '</td>';
-                            }
-
-                            $html .= '</tr>';
-
-
-                        } while ($row_bos = mysqli_fetch_assoc($bos));
-
-                        $html .= '</table>';
-
-                    } // end if ($totalRows_bos > 0)
-
-                } // end foreach (array_unique($a) as $type)
-
-                if ($totalRows_sbi > 0) {
-
-                    do {
-
-                        include (DB.'output_results_download_sbd.db.php');
-
-                        if ($totalRows_sbd > 0) {
-                        if ($view == "pdf") $html .= '<br><br><strong>'.html_entity_decode($row_sbi['sbi_name']).'</strong>';
-                        else $html .= '<h2>'.html_entity_decode($row_sbi['sbi_name']).'</h2>';
-                        if (!empty($row_sbi['sbi_description'])) {
-                            $html .= '<br>'.html_entity_decode($row_sbi['sbi_description']).'<br>';
-                        }
-                        else {
-                            if ($view == "pdf") $html .= "<br>";
-                        }
-                        $html .= '<table border="1" cellpadding="5" cellspacing="0" width="'.$table_width.'">';
-                        $html .= '<tr>';
-                        if ($row_sbi['sbi_display_places'] == "1") $html .= '<td width="'.$td_width_place.'" align="center"  bgcolor="#cccccc" nowrap="nowrap"><strong>'.$label_place.'</strong></td>';
-                        $html .= '<td width="'.$td_width_name.'" align="center" bgcolor="#cccccc"><strong>'.$label_brewer.'</strong></td>';
-                        $html .= '<td width="'.$td_width_entry.'" align="center" bgcolor="#cccccc"><strong>'.$label_entry.' '.$label_name.'</strong></td>';
-                        $html .= '<td width="'.$td_width_style.'" align="center" bgcolor="#cccccc"><strong>'.$label_style.'</strong></td>';
-                        if ($_SESSION['prefsProEdition'] == 0) $html .= '<td width="175" align="center" bgcolor="#cccccc"><strong>'.$label_club.'</strong></td>';
-                        $html .= '</tr>';
-
-                        do {
-                            $brewer_info = explode("^",brewer_info($row_sbd['bid']));
-                            $entry_info = explode("^",entry_info($row_sbd['eid']));
-                            $style = $entry_info['5'].$entry_info['2'];
-                            $html .= '<tr>';
-                            if ($row_sbi['sbi_display_places'] == "1") { $html .= '<td width="'.$td_width_place.'" nowrap="nowrap">'.display_place($row_sbd['sbd_place'],4).'</td>'; }
-                            $html .= '<td width="'.$td_width_name.'">'.html_entity_decode($brewer_info['0'])." ".html_entity_decode($brewer_info['1']);
-                                if (($row_sbd['brewCoBrewer'] != "") && ($view == "html")) $html .= "<br />Co-Brewer: ".html_entity_decode($entry_info['4']);
-                            $html .= '</td>';
-                            $html .= '<td width="'.$td_width_entry.'">'.html_entity_decode($entry_info['0']).'</td>';
-                            $html .= '<td width="'.$td_width_style.'">'.$entry_info['3'].'</td>';
-                            $html .= '<td width="175">';
-                            if (($_SESSION['prefsProEdition'] == 0) && ($brewer_info['8'] != "")) $html .=html_entity_decode($brewer_info['8']);
-                            else $html .= "&nbsp;";
-                            $html .= '</td>';
-                            $html .= '</tr>';
-                            if ($row_sbd['sbd_comments'] != "") {
-                                $html .= '<tr>';
-                                if ($row_sbi['sbi_display_places'] == "1") $html .= '<td width="760" colspan="5"><em>'.$row_sbd['sbd_comments'].'</em></td>';
-                                else $html .= '<td width="725" colspan="4"><em>'.$row_sbd['sbd_comments'].'</em></td>';
                                 $html .= '</tr>';
+                                if ($row_sbd['sbd_comments'] != "") {
+                                    $html .= '<tr>';
+                                    if ($row_sbi['sbi_display_places'] == "1") $html .= '<td width="760" colspan="5"><em>'.$row_sbd['sbd_comments'].'</em></td>';
+                                    else $html .= '<td width="725" colspan="4"><em>'.$row_sbd['sbd_comments'].'</em></td>';
+                                    $html .= '</tr>';
+                                }
+                            } while ($row_sbd = mysqli_fetch_assoc($sbd));
+
+                            $html .= '</table>';
+
                             }
-                        } while ($row_sbd = mysqli_fetch_assoc($sbd));
 
-                        $html .= '</table>';
+                        } while ($row_sbi = mysqli_fetch_assoc($sbi));
 
-                        }
+                    } // end if ($totalRows_sbi > 0)
 
-                    } while ($row_sbi = mysqli_fetch_assoc($sbi));
+                } // end if ($go == "judging_scores_bos")
 
-                } // end if ($totalRows_sbi > 0)
-
-            } // end if ($go == "judging_scores_bos")
-
-            if ($view == "pdf") {
-                $html = iconv('UTF-8', 'utf-8//TRANSLIT', $html);
-                $pdf->WriteHTML($html);
-                $pdf->Output($filename,'D');
-            }
-
-            if ($view == "html") {
                 $footer = '</body>';
                 $footer .= '</html>';
                 header("Content-Type: application/force-download");
@@ -1338,8 +1791,8 @@ if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($en
                 header("Expires: 0");
                 echo $header.$html.$footer;
                 exit();
-            }
 
+            } // end  if ($view == "html")
 
         } // end if results display enabled
 
@@ -1498,168 +1951,300 @@ if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($en
             if ($view == "pdf") {
 
                 $filename = str_replace(" ","_",$_SESSION['contestName']).'_BJCP_Points_Report.'.$view;
-                require(CLASSES.'fpdf/html_table.php');
-                $pdf=new PDF();
+                include(CLASSES.'fpdf/fpdf.php');
+                include(CLASSES.'fpdf/exfpdf.php');
+                include(CLASSES.'fpdf/easyTable.php');
+
+                $pdf=new exFPDF();
                 $pdf->AddPage();
-                $pdf->SetFont('Arial','B',16);
-                $pdf->Write(5,html_entity_decode($_SESSION['contestName']).' '.$output_text_024);
-                $pdf->SetFont('Arial','',10);
+                $pdf->SetFont('arial','',10);
 
-                $html = '<br><br><strong>'.$label_comp_id.'</strong>: '.$_SESSION['contestID'].'<br>';
-                $html .= '<br><strong>'.$label_entries.'</strong>: '.$total_entries.'<br>';
-                $html .= '<br><strong>'.$label_days.'</strong>: '.total_days().'<br>';
-                $html .= '<br><strong>'.$label_sessions.'</strong>: '.total_sessions().'<br>';
-                $html .= '<br><strong>'.$label_flights.'</strong>: '.total_flights().' ('.$output_text_023.')<br>';
+                $title = sprintf("%s %s",html_entity_decode($_SESSION['contestName']),$output_text_024);
+                $title = (iconv("UTF-8", "ASCII//TRANSLIT//IGNORE", transliterator_transliterate('Any-Latin; Latin-ASCII', $title)));
+                
+                $title_table = new easyTable($pdf,1);
+                $title_table->easyCell($title, 'font-size:22; font-style:B; font-color:#000000;');
+                $title_table->printRow();
+                
+                $string = sprintf("%s: %s",$label_comp_id,$_SESSION['contestID']);
+                $string = (iconv("UTF-8", "ASCII//TRANSLIT//IGNORE", transliterator_transliterate('Any-Latin; Latin-ASCII', $string)));
+                $title_table->easyCell($string);
+                $title_table->printRow();
 
-                    if ($totalRows_organizer > 0) {
-                    $html .= '<br><br><strong>Organizer</strong><br>';
-                    $html .= '<table border="1" width="'.$table_width.'">';
-                    $html .= '<tr>';
-                    $html .= '<td width="300" align="center" bgcolor="#cccccc"><strong>'.$label_name.'</strong></td>';
-                    $html .= '<td width="'.$td_width_name.'" align="center" bgcolor="#cccccc"><strong>'.$label_bjcp_id.'</strong></td>';
-                    $html .= '<td width="'.$td_width_name.'" align="center" bgcolor="#cccccc"><strong>'.$label_points.'</strong></td>';
-                    $html .= '</tr>';
-                        $html .= '<tr>';
-                        $html .= '<td width="300">'.html_entity_decode($row_org['brewerLastName']).", ".html_entity_decode($row_org['brewerFirstName']).'</td>';
-                        $html .= '<td width="'.$td_width_name.'">';
-                        if ($row_org['brewerJudgeID'] != "") $html .=  $organ_bjcp_id; 
-                        else $html .= '&nbsp;';
-                        $html .= '</td>';
-                        $html .= '<td width="'.$td_width_name.'">'.$organ_max_points.'</td>';
-                        $html .= '</tr>';
-                    $html .= '</table>';
-                    }
+                $string = sprintf("%s: %s",$label_entries,$total_entries);
+                $string = (iconv("UTF-8", "ASCII//TRANSLIT//IGNORE", transliterator_transliterate('Any-Latin; Latin-ASCII', $string)));
+                $title_table->easyCell($string);
+                $title_table->printRow();
 
-                    if ($totalRows_judges > 0) {
-                        $html .= '<br><br><strong>Judges</strong><br>';
-                        $html .= '<table border="1" width="'.$table_width.'">';
-                        $html .= '<tr>';
-                        $html .= '<td width="300" align="center" bgcolor="#cccccc"><strong>'.$label_name.'</strong></td>';
-                        $html .= '<td width="'.$td_width_name.'" align="center" bgcolor="#cccccc"><strong>'.$label_bjcp_id.'</strong></td>';
-                        $html .= '<td width="'.$td_width_name.'" align="center" bgcolor="#cccccc"><strong>'.$label_points.'</strong></td>';
-                        $html .= '</tr>';
+                $string = sprintf("%s: %s",$label_days,total_days());
+                $string = (iconv("UTF-8", "ASCII//TRANSLIT//IGNORE", transliterator_transliterate('Any-Latin; Latin-ASCII', $string)));
+                $title_table->easyCell($string);
+                $title_table->printRow();
 
-                        sort($j);
-                        
-                        foreach (array_unique($j) as $uid) {
+                $string = sprintf("%s: %s",$label_sessions,total_sessions());
+                $string = (iconv("UTF-8", "ASCII//TRANSLIT//IGNORE", transliterator_transliterate('Any-Latin; Latin-ASCII', $string)));
+                $title_table->easyCell($string);
+                $title_table->printRow();
+
+                $string = sprintf("%s: %s (%s)",$label_flights,total_flights(),$output_text_023);
+                $string = (iconv("UTF-8", "ASCII//TRANSLIT//IGNORE", transliterator_transliterate('Any-Latin; Latin-ASCII', $string)));
+                $title_table->easyCell($string);
+                $title_table->printRow();
+                $title_table->endTable();
+
+                if ($totalRows_organizer > 0) {
+
+                    $organizer_title = $label_organizer;
+                    $organizer_title = (iconv("UTF-8", "ASCII//TRANSLIT//IGNORE", transliterator_transliterate('Any-Latin; Latin-ASCII', $organizer_title)));
+                    
+                    $organizer_title_table = new easyTable($pdf,1);
+                    $organizer_title_table->easyCell($organizer_title, 'font-size:16; font-style:B; font-color:#000000;');
+                    $organizer_title_table->printRow();
+                    $organizer_title_table->endTable();
+
+                    $organizer_table = new easyTable($pdf, '{85, 55, 50}','align:L;border:1; border-color:#000000;');
+                    $organizer_table->rowStyle('align:C;valign:M;bgcolor:#000000; font-color:#ffffff; font-style:B;');
+                    $organizer_table->easyCell($label_name);
+                    $organizer_table->easyCell($label_bjcp_id);
+                    $organizer_table->easyCell($label_points);
+                    $organizer_table->printRow();
+
+                    $string = html_entity_decode($row_org['brewerLastName']).", ".html_entity_decode($row_org['brewerFirstName']);
+                    $string = (iconv("UTF-8", "ASCII//TRANSLIT//IGNORE", transliterator_transliterate('Any-Latin; Latin-ASCII', $string)));
+                    $organizer_table->easyCell($string);
+
+                    $string = "";
+                    if ($row_org['brewerJudgeID'] != "") $string .= $organ_bjcp_id; 
+                    $string = (iconv("UTF-8", "ASCII//TRANSLIT//IGNORE", transliterator_transliterate('Any-Latin; Latin-ASCII', $string)));
+                    $organizer_table->easyCell($string);
+
+                    $string = (iconv("UTF-8", "ASCII//TRANSLIT//IGNORE", transliterator_transliterate('Any-Latin; Latin-ASCII', $organ_max_points)));
+                    $organizer_table->easyCell($string);
+
+                    $organizer_table->printRow();
+                    $organizer_table->endTable();
+
+                }
+
+                if ($totalRows_judges > 0) {
+
+                    // asort($j);
+
+                    $judges_title = $label_judges;
+                    $judges_title = (iconv("UTF-8", "ASCII//TRANSLIT//IGNORE", transliterator_transliterate('Any-Latin; Latin-ASCII', $judges_title)));
+                    
+                    $judges_title_table = new easyTable($pdf,1);
+                    $judges_title_table->easyCell($judges_title, 'font-size:16; font-style:B; font-color:#000000;');
+                    $judges_title_table->printRow();
+                    $judges_title_table->endTable();
+
+                    $judges_table = new easyTable($pdf, '{85, 55, 50}','align:L;border:1; border-color:#000000;');
+                    $judges_table->rowStyle('align:C;valign:M;bgcolor:#000000; font-color:#ffffff; font-style:B;');
+                    $judges_table->easyCell($label_name);
+                    $judges_table->easyCell($label_bjcp_id);
+                    $judges_table->easyCell($label_points);
+                    $judges_table->printRow();
+
+                    foreach (array_unique($j) as $uid) {
+
+                        $judge_info = explode("^",brewer_info($uid));
+
+                        unset($b);
+                        $judge_points = judge_points($uid,$judge_max_points);
+                        $bos_judge = bos_points($uid);
+                        $judge_bjcp_id = "";
+                        if (validate_bjcp_id($judge_info['4'])) $judge_bjcp_id = strtoupper(strtr($judge_info['4'],$bjcp_num_replace));
+
+                        if ($judge_points > 0) {
+
+                            $string = html_entity_decode($judge_info['1']).", ".html_entity_decode($judge_info['0']);
+                            $string = (iconv("UTF-8", "ASCII//TRANSLIT//IGNORE", transliterator_transliterate('Any-Latin; Latin-ASCII', $string)));
+                            $judges_table->easyCell($string);
+
+                            $string = "";
+                            if (!empty($judge_bjcp_id)) $string = (iconv("UTF-8", "ASCII//TRANSLIT//IGNORE", transliterator_transliterate('Any-Latin; Latin-ASCII', $judge_bjcp_id)));
+                            $judges_table->easyCell($string);
+
+                            if ($judge_bjcp_id == $organ_bjcp_id) $string = sprintf("0.0 (%s)",$label_organizer);
+                            else {
+                                if ($bos_judge) $string = $judge_points + $bos_judge_points;
+                                else $string = $judge_points;
+                            }
+                            $string = (iconv("UTF-8", "ASCII//TRANSLIT//IGNORE", transliterator_transliterate('Any-Latin; Latin-ASCII', $string)));
+                            $judges_table->easyCell($string);
+
+                            $judges_table->printRow();
+
+                        } // end if ($judge_points > 0)
+
+                    } // end foreach
+
+                    foreach (array_unique($bos_judge_no_assignment) as $uid) {
+
+                        if (($total_entries >= 30) && (($beer_styles >= 5) || ($mead_cider >= 3))) {
 
                             $judge_info = explode("^",brewer_info($uid));
+                            $judge_bjcp_id = "";
+                            if (validate_bjcp_id($judge_info['4'])) $judge_bjcp_id = strtoupper(strtr($judge_info['4'],$bjcp_num_replace));
 
-                            unset($b);
-                            $judge_points = judge_points($uid,$judge_max_points);
-                            $bos_judge = bos_points($uid);
-                            $judge_bjcp_id = strtoupper(strtr($judge_info['4'],$bjcp_num_replace));
+                            if (!empty($uid)) {
 
-                            if ($judge_points > 0) {
-                                $judge_name = $judge_info['1'].", ".$judge_info['0'];
-                                $html .= '<tr>';
-                                $html .= '<td width="300">'.$judge_name;
-                                $html .= '</td>';
-                                $html .= '<td width="'.$td_width_name.'">';
-                                if (validate_bjcp_id($judge_info['4'])) $html .= $judge_bjcp_id; 
-                                else $html .= '&nbsp;';
-                                $html .= '</td>';
-                                
-                                if ($judge_bjcp_id == $organ_bjcp_id) $html .= '<td width="'.$td_width_name.'">0.0 ('.$label_organizer.')</td>';
-                                
+                                $string = html_entity_decode($judge_info['1']).", ".html_entity_decode($judge_info['0']);
+                                $string = (iconv("UTF-8", "ASCII//TRANSLIT//IGNORE", transliterator_transliterate('Any-Latin; Latin-ASCII', $string)));
+                                $judges_table->easyCell($string);
+
+                                $string = "";
+                                if (!empty($judge_bjcp_id)) $string = (iconv("UTF-8", "ASCII//TRANSLIT//IGNORE", transliterator_transliterate('Any-Latin; Latin-ASCII', $judge_bjcp_id)));
+                                $judges_table->easyCell($string);
+
+                                if ($judge_bjcp_id == $organ_bjcp_id) $string = sprintf("0.0 (%s)",$label_organizer);
                                 else {
-                                    if ($bos_judge) $html .= '<td width="'.$td_width_name.'">'.($judge_points+$bos_judge_points).' (BOS)</td>';
-                                    else $html .= '<td width="'.$td_width_name.'">'.$judge_points.'</td>'; 
+                                    if ($bos_judge) $string = $judge_points + $bos_judge_points;
+                                    else $string = $judge_points;
                                 }
-                                
-                                $html .= '</tr>';
-                                }
-                            }
+                                $string = (iconv("UTF-8", "ASCII//TRANSLIT//IGNORE", transliterator_transliterate('Any-Latin; Latin-ASCII', $string)));
+                                $judges_table->easyCell($string);
 
-                        foreach (array_unique($bos_judge_no_assignment) as $uid) {
+                                $judges_table->printRow();
 
-                            if (($total_entries >= 30) && (($beer_styles >= 5) || ($mead_cider >= 3))) {
-                                
-                                $judge_info = explode("^",brewer_info($uid));
-                                $judge_bjcp_id = strtoupper(strtr($judge_info['4'],$bjcp_num_replace));
-                                
-                                if (!empty($uid)) {
-                                    $judge_name = $judge_info['1'].", ".$judge_info['0'];
-                                    $html .= '<tr>';
-                                    $html .= '<td width="300">'.$judge_name;
-                                    $html .= '</td>';
-                                    $html .= '<td width="'.$td_width_name.'">';
-                                        if (validate_bjcp_id($judge_info['4'])) $html .= $judge_bjcp_id; else $html .= '&nbsp;';
-                                    $html .= '</td>';
-                                    if ($judge_bjcp_id == $organ_bjcp_id)  $html .= '<td width="'.$td_width_name.'">0.0 ('.$label_organizer.')</td>';
-                                    else $html .= '<td width="'.$td_width_name.'">1.0 (BOS only)</td>';
-                                    $html .= '</tr>';
-                                }
-                            
-                            }
-                                
-                        }
+                            } // end if (!empty($uid))
 
-                        $html .= '</table>';
-                    }
+                        } // end if (($total_entries >= 30) && (($beer_styles >= 5) || ($mead_cider >= 3)))
 
-                    if ($totalRows_stewards > 0) {
-                    
-                        $html .= '<br><br><strong>'.$label_stewards.'</strong><br>';
-                        $html .= '<table border="1" width="'.$table_width.'">';
-                        $html .= '<tr>';
-                        $html .= '<td width="300" align="center" bgcolor="#cccccc"><strong>'.$label_name.'</strong></td>';
-                        $html .= '<td width="'.$td_width_name.'" align="center" bgcolor="#cccccc"><strong>'.$label_bjcp_id.'</strong></td>';
-                        $html .= '<td width="'.$td_width_name.'" align="center" bgcolor="#cccccc"><strong>'.$label_points.'</strong></td>';
-                        $html .= '</tr>';
+                    } // end foreach
 
-                        foreach (array_unique($s) as $uid) {
-                            $steward_info = explode("^",brewer_info($uid));
-                            $steward_points = steward_points($uid);
-                            if ($steward_points > 0) {
-                                $steward_name = html_entity_decode($steward_info['1']).", ".html_entity_decode($steward_info['0']);
-                                $html .= '<tr>';
-                                $html .= '<td width="300">'.$steward_name.'</td>';
-                                $html .= '<td width="'.$td_width_name.'">';
-                                    if (validate_bjcp_id($steward_info['4'])) $html .= strtoupper(strtr($steward_info['4'],$bjcp_num_replace)); else $html .= '&nbsp;';
-                                $html .= '</td>';
-                                $html .= '<td width="'.$td_width_name.'">'.steward_points($uid).'</td>';
-                                $html .= '</tr>';
-                                }
-                            }
-                        $html .= '</table>';
-
-                    }
-
-                    if ($totalRows_staff > 0) {
+                    $judges_table->endTable();
                         
-                        $html .= '<br><br><strong>'.$label_staff.'*</strong><br>';
-                        $html .= '<table border="1" width="'.$table_width.'">';
-                        $html .= '<tr>';
-                        $html .= '<td width="300" align="center" bgcolor="#cccccc"><strong>'.$label_name.'</strong></td>';
-                        $html .= '<td width="'.$td_width_name.'" align="center" bgcolor="#cccccc"><strong>'.$label_bjcp_id.'</strong></td>';
-                        $html .= '<td width="'.$td_width_name.'" align="center" bgcolor="#cccccc"><strong>'.$label_points.'</strong></td>';
-                        $html .= '</tr>';
+                } // end if ($totalRows_judges > 0)
 
-                        foreach (array_unique($st) as $uid) {
-                            if (array_sum($st_running_total) < $staff_max_points) {
-                                $staff_info = explode("^",brewer_info($uid));
-                                $staff_name = html_entity_decode($staff_info['1']).", ".html_entity_decode($staff_info['0']);
-                                $html .= '<tr>';
-                                $html .= '<td width="300">'.$staff_name.'</td>';
-                                $html .= '<td width="'.$td_width_name.'">';
-                                    if (validate_bjcp_id($staff_info['4'])) $html .= strtoupper(strtr($staff_info['4'],$bjcp_num_replace)); else $html .= '&nbsp;';
-                                $html .= '</td>';
-                                $html .= '<td width="'.$td_width_name.'">';
-                                if ((array_sum($st_running_total) <= $staff_max_points) && ($staff_points < $organ_max_points)) $html .= $staff_points;
-                                else $html .= $organ_max_points;
-                                $html .= '</td>';
-                                $html .= '</tr>';
-                            }
-                            }
-                        $html .= '</table>';
-                        $html .= '<br>* '.$output_text_033.'</em>';
+                if ($totalRows_stewards > 0) {
+
+                    $stewards_assigned_tables = 0;
+                    
+                    $stewards_title = $label_stewards;
+                    $stewards_title = (iconv("UTF-8", "ASCII//TRANSLIT//IGNORE", transliterator_transliterate('Any-Latin; Latin-ASCII', $stewards_title)));
+                    
+                    $stewards_title_table = new easyTable($pdf,1);
+                    $stewards_title_table->easyCell($stewards_title, 'font-size:16; font-style:B; font-color:#000000;');
+                    $stewards_title_table->printRow();
+                    $stewards_title_table->endTable();
+
+                    $stewards_table = new easyTable($pdf, '{85, 55, 50}','align:L;border:1; border-color:#000000;');
+                    $stewards_table->rowStyle('align:C;valign:M;bgcolor:#000000; font-color:#ffffff; font-style:B;');
+                    $stewards_table->easyCell($label_name);
+                    $stewards_table->easyCell($label_bjcp_id);
+                    $stewards_table->easyCell($label_points);
+                    $stewards_table->printRow();
+                        
+                    foreach (array_unique($s) as $uid) {
+                        
+                        $steward_info = explode("^",brewer_info($uid));
+                        $steward_points = steward_points($uid);
+                        $steward_bjcp_id = "";
+                        if (validate_bjcp_id($steward_info['4'])) $steward_bjcp_id = strtoupper(strtr($steward_info['4'],$bjcp_num_replace));
+
+                        if ($steward_points > 0) {
+
+                            $stewards_assigned_tables += 1;
+
+                            $string = html_entity_decode($steward_info['1']).", ".html_entity_decode($steward_info['0']);
+                            $string = (iconv("UTF-8", "ASCII//TRANSLIT//IGNORE", transliterator_transliterate('Any-Latin; Latin-ASCII', $string)));
+                            $stewards_table->easyCell($string);
+
+                            $string = "";
+                            if (!empty($steward_bjcp_id)) $string = (iconv("UTF-8", "ASCII//TRANSLIT//IGNORE", transliterator_transliterate('Any-Latin; Latin-ASCII', $steward_bjcp_id)));
+                            $stewards_table->easyCell($string);
+
+                            $string = (iconv("UTF-8", "ASCII//TRANSLIT//IGNORE", transliterator_transliterate('Any-Latin; Latin-ASCII', $steward_points)));
+                            $stewards_table->easyCell($string);
+
+                            $stewards_table->printRow();
+
+                        } // end if ($steward_points > 0)
+
+                    } // end foreach
+
+                    if ($stewards_assigned_tables == 0) {
+                        $string = (iconv("UTF-8", "ASCII//TRANSLIT//IGNORE", transliterator_transliterate('Any-Latin; Latin-ASCII', $output_text_011)));
+                        $stewards_table->easyCell($string,'colspan:3');
+                        $stewards_table->printRow();
                     }
 
-                    $html = iconv('UTF-8', 'windows-1252', $html);
-                    $pdf->WriteHTML($html);
-                    $pdf->Output($filename,'D');
-            }
+                    $stewards_table->endTable();
+
+                }
+
+                
+
+                if ($totalRows_staff > 0) {
+
+                    $staff_title = $label_staff;
+                    $staff_title = (iconv("UTF-8", "ASCII//TRANSLIT//IGNORE", transliterator_transliterate('Any-Latin; Latin-ASCII', $staff_title)));
+                    
+                    $staff_title_table = new easyTable($pdf,1);
+                    $staff_title_table->easyCell($staff_title, 'font-size:16; font-style:B; font-color:#000000;');
+                    $staff_title_table->printRow();
+
+                    $string = "* ".$output_text_033;
+                    $string = (iconv("UTF-8", "ASCII//TRANSLIT//IGNORE", transliterator_transliterate('Any-Latin; Latin-ASCII', $string)));
+                    $staff_title_table->easyCell($string, 'font-size:10; font-style:I; font-color:#000000;');
+                    $staff_title_table->printRow();
+                    
+                    $staff_title_table->endTable();
+
+                    $staff_table = new easyTable($pdf, '{85, 55, 50}','align:L;border:1; border-color:#000000;');
+                    $staff_table->rowStyle('align:C;valign:M;bgcolor:#000000; font-color:#ffffff; font-style:B;');
+                    $staff_table->easyCell($label_name);
+                    $staff_table->easyCell($label_bjcp_id);
+                    $staff_table->easyCell($label_points);
+                    $staff_table->printRow();
+
+                    
+                    foreach (array_unique($st) as $uid) {
+                        
+                        if (array_sum($st_running_total) < $staff_max_points) {
+                            
+                            
+                            $staff_info = explode("^",brewer_info($uid));
+                            $staff_bjcp_id = "";
+                            if (validate_bjcp_id($staff_info['4'])) $staff_bjcp_id = strtoupper(strtr($staff_info['4'],$bjcp_num_replace));
+
+                           
+                            if ((array_sum($st_running_total) <= $staff_max_points) && ($staff_points < $organ_max_points)) $staff_points = $staff_points;
+                            else $staff_points = $organ_max_points;
+
+
+
+                            $string = html_entity_decode($staff_info['1']).", ".html_entity_decode($staff_info['0']);
+                            $string = (iconv("UTF-8", "ASCII//TRANSLIT//IGNORE", transliterator_transliterate('Any-Latin; Latin-ASCII', $string)));
+                            $staff_table->easyCell($string);
+
+
+
+                            $string = "";
+                            if (!empty($staff_bjcp_id)) $string = (iconv("UTF-8", "ASCII//TRANSLIT//IGNORE", transliterator_transliterate('Any-Latin; Latin-ASCII', $staff_bjcp_id)));
+                            $staff_table->easyCell($string);
+
+
+
+                            $string = (iconv("UTF-8", "ASCII//TRANSLIT//IGNORE", transliterator_transliterate('Any-Latin; Latin-ASCII', $staff_points)));
+                            $staff_table->easyCell($string);
+
+                            $staff_table->printRow();
+                            
+                            
+                        } // end if (array_sum($st_running_total) < $staff_max_points)
+
+                    } // end foreach
+                    
+                    $staff_table->endTable();
+                
+                } // end if ($totalRows_staff > 0)
+
+                //$pdf->Output();
+                $pdf->Output($filename,'D');
+            
+            } // end if ($view == "pdf")
 
             /** 
              * ------------------------------------------------------------------------------------------------------

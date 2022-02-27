@@ -25,19 +25,19 @@ $row_org = mysqli_fetch_assoc($org);
 $totalRows_org = mysqli_num_rows($org);
 
 // Judges
-$query_judges = sprintf("SELECT uid FROM %s WHERE staff_judge='1'",$prefix."staff");
+$query_judges = sprintf("SELECT a.uid, b.uid, b.brewerLastName, b.brewerFirstName, b.brewerJudgeID FROM %s a, %s b WHERE a.staff_judge='1' AND a.uid = b.uid ORDER BY b.brewerLastName ASC",$prefix."staff",$prefix."brewer");
 $judges = mysqli_query($connection,$query_judges) or die (mysqli_error($connection));;
 $row_judges = mysqli_fetch_assoc($judges);
 $totalRows_judges = mysqli_num_rows($judges);
 
 // Best of Show Judges (those that are assigned in another role)
-$query_bos_judges = sprintf("SELECT uid FROM %s WHERE staff_judge_bos='1' AND (staff_judge='1' OR staff_steward='1' OR staff_staff='1')",$prefix."staff");
+$query_bos_judges = sprintf("SELECT a.uid, b.uid, b.brewerLastName, b.brewerFirstName, b.brewerJudgeID FROM %s a, %s b WHERE a.staff_judge_bos='1' AND a.uid = b.uid AND (a.staff_judge='1' OR a.staff_steward='1' OR a.staff_staff='1') ORDER BY b.brewerLastName ASC",$prefix."staff",$prefix."brewer");
 $bos_judges = mysqli_query($connection,$query_bos_judges) or die (mysqli_error($connection));
 $row_bos_judges = mysqli_fetch_assoc($bos_judges);
 $totalRows_bos_judges = mysqli_num_rows($bos_judges);
 
 // Best of Show Judges (those that aren't assigned in another role)
-$query_bos_judges_no_assignment = sprintf("SELECT uid FROM %s WHERE staff_judge_bos='1' AND staff_judge='0' AND staff_steward='0' AND staff_staff='0'",$prefix."staff");
+$query_bos_judges_no_assignment = sprintf("SELECT a.uid, b.uid, b.brewerLastName, b.brewerFirstName, b.brewerJudgeID FROM %s a, %s b WHERE a.staff_judge_bos='1' AND a.uid = b.uid AND a.staff_judge='0' AND a.staff_steward='0' AND a.staff_staff='0' ORDER BY b.brewerLastName ASC",$prefix."staff",$prefix."brewer");
 $bos_judges_no_assignment = mysqli_query($connection,$query_bos_judges_no_assignment) or die (mysqli_error($connection));
 $row_bos_judges_no_assignment = mysqli_fetch_assoc($bos_judges_no_assignment);
 $totalRows_bos_judges_no_assignment = mysqli_num_rows($bos_judges_no_assignment);
@@ -70,13 +70,13 @@ if ($totalRows_bos_judges_no_assignment > 0) {
 
 
 // Stewards
-$query_stewards = sprintf("SELECT uid FROM %s WHERE staff_steward='1'",$prefix."staff");
+$query_stewards = sprintf("SELECT a.uid, b.uid, b.brewerLastName, b.brewerFirstName, b.brewerJudgeID FROM %s a, %s b WHERE a.staff_steward='1' AND a.uid = b.uid ORDER BY b.brewerLastName ASC",$prefix."staff",$prefix."brewer");
 $stewards = mysqli_query($connection,$query_stewards) or die (mysqli_error($connection));
 $row_stewards = mysqli_fetch_assoc($stewards);
 $totalRows_stewards = mysqli_num_rows($stewards);
 
 // Staff
-$query_staff = sprintf("SELECT uid FROM %s WHERE staff_staff='1'",$prefix."staff");
+$query_staff = sprintf("SELECT a.uid, b.uid, b.brewerLastName, b.brewerFirstName, b.brewerJudgeID FROM %s a, %s b WHERE a.staff_staff='1' AND a.uid = b.uid ORDER BY b.brewerLastName ASC",$prefix."staff",$prefix."brewer");
 $staff = mysqli_query($connection,$query_staff) or die (mysqli_error($connection));
 $row_staff = mysqli_fetch_assoc($staff);
 $totalRows_staff = mysqli_num_rows($staff);

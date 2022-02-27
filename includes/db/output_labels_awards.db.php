@@ -27,7 +27,7 @@ do {
 		html_entity_decode(trim($row_entries['brewName'])),
 		$row_entries['brewStyle']
 		);
-		$text = iconv('UTF-8', 'windows-1252', $text);
+		$text = (iconv("UTF-8", "ASCII//TRANSLIT//IGNORE", transliterator_transliterate('Any-Latin; Latin-ASCII', $text)));
 		$pdf->Add_Label($text);
 	}
 
@@ -93,7 +93,7 @@ if ($_SESSION['prefsWinnerMethod'] == "1") { // Output by Category
 
 			}
 
-			$text = iconv('UTF-8', 'windows-1252', $text);
+			$text = (iconv("UTF-8", "ASCII//TRANSLIT//IGNORE", transliterator_transliterate('Any-Latin; Latin-ASCII', $text)));
 			$pdf->Add_Label($text);
 
 			} while ($row_scores = mysqli_fetch_assoc($scores));
@@ -159,7 +159,7 @@ elseif ($_SESSION['prefsWinnerMethod'] == "2") { // Output by sub-category
 
 				}
 
-				$text = iconv('UTF-8', 'windows-1252', $text);
+				$text = (iconv("UTF-8", "ASCII//TRANSLIT//IGNORE", transliterator_transliterate('Any-Latin; Latin-ASCII', $text)));
 				$pdf->Add_Label($text);
 
 			} while ($row_scores = mysqli_fetch_assoc($scores));
@@ -215,7 +215,7 @@ else { // Output by Table.
 
 			
 
-			$text = iconv('UTF-8', 'windows-1252', $text);
+			$text = (iconv("UTF-8", "ASCII//TRANSLIT//IGNORE", transliterator_transliterate('Any-Latin; Latin-ASCII', $text)));
 			if ($display_place != "N/A") $pdf->Add_Label($text);
 
 		} while ($row_scores = mysqli_fetch_assoc($scores));
