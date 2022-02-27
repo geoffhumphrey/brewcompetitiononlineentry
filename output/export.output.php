@@ -7,12 +7,12 @@
  * - programming now accounts for multiple roles (e.g., judge/staff, steward/staff, 
  *   bos judge/staff, etc.)
  * - XML output is fully compliant with the BJCP Database Interface Specifications
- *   http://www.bjcp.org/it/docs/BJCP%20Database%20XML%20Interface%20Spec%202.1.pdf
+ *   @see http://www.bjcp.org/it/docs/BJCP%20Database%20XML%20Interface%20Spec%202.1.pdf
  * 
  * 09.18.2018 - judge_points() function was returning incorrect calculations. 
  *              Could not figure out why. All calcs were moved inline below.
  * 09.01.2020 - fixed unauthorized access issues reported to GitHub 
- *              https://github.com/geoffhumphrey/brewcompetitiononlineentry/issues/1163
+ *              @see https://github.com/geoffhumphrey/brewcompetitiononlineentry/issues/1163
  * 07.18.2021 - fixed judge_points() and steward_points() calculations to 
  *              better handle multiple day and multiple session day calculations
  * 11.15.2021 - BJCP is now rejecting reports with "duplicate entries" - most 
@@ -21,7 +21,7 @@
  *              entry per person (Staff + Judge, Staff + Steward, etc.).
  * 02.24.2022 - Due to incompatabilities with PHP 8, the HTML2PDF and htmlTable 
  *              FPDF extension classes have been removed in favor of FPDF EasyTables -
- *              https://github.com/fpdf-easytable/fpdf-easytable
+ *              @see https://github.com/fpdf-easytable/fpdf-easytable
  */
 
 require('../paths.php');
@@ -999,6 +999,15 @@ if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($en
 
                 if ($go == "judging_scores") {
 
+                    $filename = str_replace(" ","_",$_SESSION['contestName']).'_Winners.'.$view;
+
+                    $string = sprintf("%s - %s",$label_winners,html_entity_decode($_SESSION['contestName']));
+                    $string = (iconv("UTF-8", "ASCII//TRANSLIT//IGNORE", transliterator_transliterate('Any-Latin; Latin-ASCII', $string)));                  
+                    $title_table = new easyTable($pdf,1);
+                    $title_table->easyCell($string, 'font-size:22; font-style:B; font-color:#000000;');
+                    $title_table->printRow();
+                    $title_table->endTable();
+
                     /**
                      * Winners by table/medal category
                      */
@@ -1017,7 +1026,7 @@ if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($en
 
                                 $title = sprintf("%s %s: %s (%s %s)",$label_table,$row_tables['tableNumber'],$row_tables['tableName'],$entry_count,$entries);
                                 $title_table = new easyTable($pdf,1);
-                                $title_table->easyCell($title, 'font-size:22; font-style:B; font-color:#000000;');
+                                $title_table->easyCell($title, 'font-size:16; font-style:B; font-color:#000000;');
                                 $title_table->printRow();
                                 $title_table->endTable();
 
@@ -1031,7 +1040,7 @@ if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($en
                                     $table->easyCell($label_entry);
                                     $table->easyCell($label_style);
                                     if ($_SESSION['prefsProEdition'] == 0) $table->easyCell($label_club);
-                                    $table->printRow(); 
+                                    $table->printRow(true);
 
                                     if (!empty($row_scores)) {
                                         
@@ -1109,7 +1118,7 @@ if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($en
 
                                         else $title = sprintf("%s: %s (%s %s)",$style_trimmed,style_convert($style,"1"),$row_entry_count['count'],$entries);
                                         $title_table = new easyTable($pdf,1);
-                                        $title_table->easyCell($title, 'font-size:18; font-style:B; font-color:#000000;');
+                                        $title_table->easyCell($title, 'font-size:16; font-style:B; font-color:#000000;');
                                         $title_table->printRow();
                                         $title_table->endTable();
 
@@ -1123,7 +1132,7 @@ if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($en
                                             $table->easyCell($label_entry);
                                             $table->easyCell($label_style);
                                             if ($_SESSION['prefsProEdition'] == 0) $table->easyCell($label_club);
-                                            $table->printRow();
+                                            $table->printRow(true);
 
                                             do {
 
@@ -1199,7 +1208,7 @@ if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($en
                                     else $title = sprintf("%s%s: %s (%s %s)",ltrim($style[0],"0"),$style[1],$style[2],$row_entry_count['count'],$entries);
 
                                     $title_table = new easyTable($pdf,1);
-                                    $title_table->easyCell($title, 'font-size:18; font-style:B; font-color:#000000;');
+                                    $title_table->easyCell($title, 'font-size:16; font-style:B; font-color:#000000;');
                                     $title_table->printRow();
                                     $title_table->endTable();
 
@@ -1213,7 +1222,7 @@ if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($en
                                         $table->easyCell($label_entry);
                                         $table->easyCell($label_style);
                                         if ($_SESSION['prefsProEdition'] == 0) $table->easyCell($label_club);
-                                        $table->printRow();
+                                        $table->printRow(true);
 
                                         do {
 
@@ -1303,7 +1312,7 @@ if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($en
                             $table->easyCell($label_entry);
                             $table->easyCell($label_style);
                             if ($_SESSION['prefsProEdition'] == 0) $table->easyCell($label_club);
-                            $table->printRow();
+                            $table->printRow(true);
 
                             do {
 
@@ -1365,7 +1374,7 @@ if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($en
                                 $table->easyCell($label_entry);
                                 $table->easyCell($label_style);
                                 if ($_SESSION['prefsProEdition'] == 0) $table->easyCell($label_club);
-                                $table->printRow();
+                                $table->printRow(true);
 
                                 do {
 
@@ -1879,8 +1888,9 @@ if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($en
             do { $o[] = $row_organizer['uid']; } while ($row_organizer = mysqli_fetch_assoc($organizer));
             do { $a[] = $row_judging['id']; $dates[] = $row_judging['judgingDate']; } while ($row_judging = mysqli_fetch_assoc($judging));
 
-            /*
-            // DEBUG
+            /**
+             * DEBUG
+             * 
             $days = number_format(total_days(),1);
             $sessions = number_format(total_sessions(),1);
 
@@ -1955,7 +1965,7 @@ if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($en
                 include(CLASSES.'fpdf/exfpdf.php');
                 include(CLASSES.'fpdf/easyTable.php');
 
-                $pdf=new exFPDF();
+                $pdf = new exFPDF();
                 $pdf->AddPage();
                 $pdf->SetFont('arial','',10);
 
@@ -2027,8 +2037,6 @@ if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($en
                 }
 
                 if ($totalRows_judges > 0) {
-
-                    // asort($j);
 
                     $judges_title = $label_judges;
                     $judges_title = (iconv("UTF-8", "ASCII//TRANSLIT//IGNORE", transliterator_transliterate('Any-Latin; Latin-ASCII', $judges_title)));
@@ -2172,9 +2180,7 @@ if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($en
 
                     $stewards_table->endTable();
 
-                }
-
-                
+                }        
 
                 if ($totalRows_staff > 0) {
 
@@ -2199,39 +2205,29 @@ if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($en
                     $staff_table->easyCell($label_points);
                     $staff_table->printRow();
 
-                    
                     foreach (array_unique($st) as $uid) {
                         
                         if (array_sum($st_running_total) < $staff_max_points) {
                             
-                            
                             $staff_info = explode("^",brewer_info($uid));
                             $staff_bjcp_id = "";
                             if (validate_bjcp_id($staff_info['4'])) $staff_bjcp_id = strtoupper(strtr($staff_info['4'],$bjcp_num_replace));
-
                            
                             if ((array_sum($st_running_total) <= $staff_max_points) && ($staff_points < $organ_max_points)) $staff_points = $staff_points;
                             else $staff_points = $organ_max_points;
-
-
 
                             $string = html_entity_decode($staff_info['1']).", ".html_entity_decode($staff_info['0']);
                             $string = (iconv("UTF-8", "ASCII//TRANSLIT//IGNORE", transliterator_transliterate('Any-Latin; Latin-ASCII', $string)));
                             $staff_table->easyCell($string);
 
-
-
                             $string = "";
                             if (!empty($staff_bjcp_id)) $string = (iconv("UTF-8", "ASCII//TRANSLIT//IGNORE", transliterator_transliterate('Any-Latin; Latin-ASCII', $staff_bjcp_id)));
                             $staff_table->easyCell($string);
-
-
 
                             $string = (iconv("UTF-8", "ASCII//TRANSLIT//IGNORE", transliterator_transliterate('Any-Latin; Latin-ASCII', $staff_points)));
                             $staff_table->easyCell($string);
 
                             $staff_table->printRow();
-                            
                             
                         } // end if (array_sum($st_running_total) < $staff_max_points)
 
