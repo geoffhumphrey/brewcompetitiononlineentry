@@ -264,7 +264,21 @@ class PDF_Label extends FPDF {
             'width'=>45,
             'height'=>45,
             'font-size'=>9
-        )
+        ),
+        // Labels for custom quick sort
+        '5167' 		=> array(
+			'paper-size'=>'letter',		
+			'metric'=>'mm',	
+            'marginLeft'=>5.4, 		
+			'marginTop'=>7.3, 		
+			'NX'=>4, 	
+			'NY'=>20, 	
+			'SpaceX'=>7.14, 		
+			'SpaceY'=>0, 	
+			'width'=>44.45, 		
+			'height'=>12.7,		
+			'font-size'=>9),
+
 
     );
 
@@ -357,5 +371,22 @@ class PDF_Label extends FPDF {
         // Disable the page scaling option in the printing dialog
         $this->_put('/ViewerPreferences <</PrintScaling /None>>');
     }
+
+    // New function for custom quick sort.
+    function SetDash($black=null, $white=null)
+    {
+        if($black!==null)
+            $s=sprintf('[%.3F %.3F] 0 d',$black*$this->k,$white*$this->k);
+        else
+            $s='[] 0 d';
+        $this->_out($s);
+ 
+    }
+    function GetTopMargin()
+    {
+        // Set top margin
+        return $this->tMargin ;
+    }
+
 
 }

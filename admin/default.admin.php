@@ -520,6 +520,7 @@ if ($totalRows_tables > 0) {
                                     <ul class="list-inline">
                                         <li><a class="hide-loader" data-toggle="tooltip" title="6 entry numbers per label" href="<?php echo $base_url; ?>output/labels.output.php?section=admin&amp;go=entries&amp;action=bottle-entry&amp;filter=default&amp;psort=5160">Entry Numbers</a></li>
                                         <li><a class="hide-loader" data-toggle="tooltip" title="6 judging numbers per label" href="<?php echo $base_url; ?>output/labels.output.php?section=admin&amp;go=entries&amp;action=bottle-judging&amp;filter=default&amp;psort=5160">Judging Numbers</a></li>
+                                        <li><a class="hide-loader" data-toggle="tooltip" title="Quicksort labels" href="<?php echo $base_url; ?>output/labels.output.php?section=admin&amp;go=entries&amp;action=bottle-judging&amp;filter=default&amp;view=quicksort&amp;psort=5160">Quicksort</a></li>
                                     </ul>
 									<ul class="list-unstyled">
 										<li>With Required Info - All Styles (Entry Numbers)

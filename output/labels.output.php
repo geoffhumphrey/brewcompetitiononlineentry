@@ -70,6 +70,68 @@ if (isset($_SESSION['loginUsername'])) {
 		 * - Made formatting of both types consistent
 		 * -------------------------------------------------------------------
 		 */
+		
+		 // -----------------------------------------------
+		// Custom Quicksort PDF
+		// -----------------------------------------------
+		if (($go == "entries") && ($action == "bottle-judging") && ($view == "quicksort")) {
+			$filename = str_replace(" ", "_", $_SESSION['contestName']) . "_QuickSort_Labels_Judging_Numbers";
+			$filename .= ".pdf";
+			$pdf = new PDF_Label('5167');
+
+			$pdf->AddPage();
+			$pdf->SetFont('Arial', '', 9);
+			$lastStyle = '';
+			do {
+				if ($lastStyle != '') {
+					if ($lastStyle == $row_log['brewCategory']) {
+						$pdf->SetLineWidth(0.1);
+						$pdf->SetDash(1, 1);
+						//$pdf->Line(0, $pdf->GetY() + $pdf->GetTopMargin(), 200, $pdf->GetY() + $pdf->GetTopMargin());
+						$pdf->Line(0, $pdf->GetY() + 5, 200, $pdf->GetY() + 5);
+					} else {
+						$pdf->SetLineWidth(1);
+						$pdf->Line(0, $pdf->GetY() + 5, 200, $pdf->GetY() + 5);
+					}
+				}
+				$lastStyle = $row_log['brewCategory'];
+
+				$bottles = ['1st', '2nd', 'BOS'];
+
+				$entry_no = readable_judging_number($row_log['brewCategory'], $row_log['brewJudgingNumber']);
+				$style = $row_log['brewCategory'] . $row_log['brewSubCategory'];
+				$style_name = truncate($row_log['brewStyle'], 22);
+				$pdf->SetFont('Arial', '', 9);
+				foreach ($bottles as $b) {
+					$text = sprintf("\n              %s  %s\n                     %s", $style, $entry_no, $b);
+					$text = iconv('UTF-8', 'windows-1252', $text);
+					$pdf->Add_Label($text);
+				}
+				reset($bottles);
+
+				// Print Entrant info
+				$pdf->SetFont('Arial', '', 9);
+				// Print Entrant info
+				$text = sprintf("\n%s %s\n%s %s", $style, $style_name, $row_log['brewBrewerFirstName'], $row_log['brewBrewerLastName']);
+				$text = iconv('UTF-8', 'windows-1252', $text);
+				$pdf->Add_Label($text);
+
+				$pdf->SetFont('Arial', '', 9);
+				foreach ($bottles as $b) {
+					$text = sprintf("\n              %s  %s\n                     %s", $style, $entry_no, $b);
+					$text = iconv('UTF-8', 'windows-1252', $text);
+					$pdf->Add_Label($text);
+				}
+
+				$pdf->SetFont('Arial', '', 16);
+				$text = sprintf("\n%04s | %s", $row_log['id'], $entry_no);
+				$text = iconv('UTF-8', 'windows-1252', $text);
+				$pdf->Add_Label($text);
+			} while ($row_log = mysqli_fetch_assoc($log));
+			ob_end_clean();
+			
+			$pdf->Output($filename, 'D');
+		}
 
 		if (($go == "entries") && (($action == "bottle-judging") || ($action == "bottle-entry"))) {
 			
