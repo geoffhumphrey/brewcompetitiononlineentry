@@ -2817,6 +2817,21 @@ function table_exists($table_name) {
 	else return FALSE;
 }
 
+function judge_assignment($uid, $loc_id)
+{
+	// Get judge table assignments by locations
+	require(CONFIG.'config.php');
+	mysqli_select_db($connection,$database);
+
+	$query_judge_assignment = sprintf("SELECT assignTable,assignRoles,assignFlight,assignRound,tableName,tableNumber FROM %s a JOIN %s t on t.id = a.assignTable WHERE a.bid='%s' AND a.assignLocation='%s'",$prefix."judging_assignments",$prefix."judging_tables", $uid, $loc_id);
+	$judge_assignment = mysqli_query($connection,$query_judge_assignment) or die (mysqli_error($connection));
+	$row_judge_assignment = mysqli_fetch_assoc($judge_assignment);
+	//$totalRows_table_assignments = mysqli_num_rows($table_assignments);
+
+	return $row_judge_assignment;
+}
+
+
 
 function table_assignments($uid,$method,$time_zone,$date_format,$time_format,$method2,$label_table="Table") {
 	

@@ -1476,4 +1476,22 @@ function not_assigned($method) {
 	return $return;
 
 }
+
+function virtual_locations()
+{
+	require(CONFIG.'config.php');
+	mysqli_select_db($connection,$database);
+	$query_virtual_locations = sprintf("SELECT id FROM %s WHERE judgingLocType = 1", $prefix."judging_locations");
+	$virtual_locations = mysqli_query($connection,$query_virtual_locations) or die (mysqli_error($connection));
+	$row_virtual_locations = mysqli_fetch_assoc($virtual_locations);
+
+	$return = array();
+	do {
+		$return[] = array(
+			'id' => $row_virtual_locations['id'],
+			'check' => 'Y-' . $row_virtual_locations['id']
+		);
+	} while ($row_virtual_locations = mysqli_fetch_assoc($virtual_locations));
+	return $return;
+}
 ?>
