@@ -382,11 +382,6 @@ class PDF_Label extends FPDF {
         $this->_out($s);
  
     }
-    function GetTopMargin()
-    {
-        // Set top margin
-        return $this->tMargin ;
-    }
-
+ 
 
 }
