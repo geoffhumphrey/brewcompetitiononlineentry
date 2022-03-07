@@ -2,6 +2,7 @@
 /**
  * Module:        config.php
  * Description:   This module houses configuration variables for DB connection, etc.
+ *
  * Last Modified: August 26, 2021
  */
 
@@ -20,7 +21,7 @@
  * *** https://www.godaddy.com/help/viewing-your-database-details-with-shared-hosting-accounts-39
  */
 
-$hostname = 'localhost';
+$hostname = 'mysql.highplainsdrafters.org';
 
 /**
  * Enter the username for your database (generally the same as your login code 
@@ -30,9 +31,7 @@ $hostname = 'localhost';
  * $username = 'fred'.
  */
 
-
-$username = '';
-
+$username = 'hpd_bcoe'; 
 
 /**
  * INSERT YOUR PASSWORD BETWEEN THE SINGLE-QUOTATION MARKS ('').
@@ -40,16 +39,15 @@ $username = '';
  * $password = 'flintsone'.
  */
 
-$password = '';
-
+$password = 'xAi7rkFUfrzT2VNqk85z';
+ 
 /**
  * The following line is the name of your MySQL database you set up already.
- * If you haven't set up the database yet, please refer to
+ * If you haven't set up the database yet, please refer to 
  * http://brewcompetition.com/install-instructions for setup instructions.
  */
 
-$database = '';
-
+$database = 'hpd_bcoe';
 
 /**
  * If the database port is different from the default then overwrite as the 
@@ -186,7 +184,7 @@ $sub_directory = '';
  * server AND you're experiencing log in or session issues, or if pages are not 
  * rendering correctly, comment out the second line in the block below (the if
  * statement).
- * @fixes https://github.com/geoffhumphrey/brewcompetitiononlineentry/issues/1123
+ * @fixes https://github.com/geoffhumphrey/brewcompetitiononlineentry/issues/1123 
  */
 
 $base_url = 'http://';

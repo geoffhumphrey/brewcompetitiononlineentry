@@ -87,7 +87,7 @@ define('TESTING', FALSE);
  * Default is FALSE.
  */
 
-define('DEBUG', FALSE);
+define('DEBUG', DEBUG);
 
 /**
  * Enable the following to show a collapsable table of all

@@ -9,9 +9,9 @@ $hosted_setup = FALSE;
 $check_setup = FALSE;
 $system_name_change = FALSE;
 
-if (check_setup($prefix."system",$database)) {
+if (check_setup($prefix."`system`",$database)) {
 	
-	$query_system = sprintf("SELECT * FROM %s WHERE id='1'",$prefix."system");
+	$query_system = sprintf("SELECT * FROM %s WHERE id='1'",$prefix."`system`");
 	$system = mysqli_query($connection,$query_system) or die (mysqli_error($connection));
 	$row_system = mysqli_fetch_assoc($system);
 	
@@ -137,7 +137,7 @@ if ((!isset($_SESSION['currentVersion'])) || ((isset($_SESSION['currentVersion']
 	else {
 		if (!$force_update) $no_updates_needed = TRUE;
 		if (!$system_name_change) {
-			$query_sys = sprintf("RENAME TABLE %s TO %s",$prefix."system",$prefix."bcoem_sys");
+			$query_sys = sprintf("RENAME TABLE %s TO %s",$prefix."`system`",$prefix."bcoem_sys");
 			$sys = mysqli_query($connection,$query_sys) or die (mysqli_error($connection));
 		}
 	}

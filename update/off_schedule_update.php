@@ -12,8 +12,8 @@ if (!isset($output)) $output = "";
  * ---------------------------------------------------------------------------------------------------
  */
 
-if (check_setup($prefix."system",$database)) {
-	$query_sys = sprintf("RENAME TABLE %s TO %s",$prefix."system",$prefix."bcoem_sys");
+if (check_setup($prefix."`system`",$database)) {
+	$query_sys = sprintf("RENAME TABLE %s TO %s",$prefix."`system`",$prefix."bcoem_sys");
 	$sys = mysqli_query($connection,$query_sys) or die (mysqli_error($connection));
 	$row_sys = mysqli_fetch_assoc($sys);
 }
