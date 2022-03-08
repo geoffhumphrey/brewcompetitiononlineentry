@@ -809,7 +809,7 @@ $(document).ready(function () {
 						<h4 class="modal-title" id="allEmailModalLabel">All Participants with Entries Email Addresses</h4>
 					</div>
 					<div class="modal-body">
-						<p>Copy and paste the list below into your favorite email program to contact all particpants with entries.</p>
+						<p>Copy and paste the list below into your favorite email program to contact all participants with entries.</p>
 						<textarea class="form-control" rows="8"><?php echo ltrim($all_email_display," ")
 						?></textarea>
 					</div>
@@ -837,7 +837,7 @@ $(document).ready(function () {
 						<h4 class="modal-title" id="paidEmailModalLabel">All Participants with Paid Entries Email Addresses</h4>
 					</div>
 					<div class="modal-body">
-						<p>Copy and paste the list below into your favorite email program to contact particpants with <strong>PAID</strong> entries.</p>
+						<p>Copy and paste the list below into your favorite email program to contact participants with <strong>PAID</strong> entries.</p>
 						<textarea class="form-control" rows="8"><?php echo ltrim($paid_email_display); ?></textarea>
 					</div>
 					<div class="modal-footer">
@@ -863,7 +863,7 @@ $(document).ready(function () {
 						<h4 class="modal-title" id="unpaidEmailModalLabel">All Participants with Unpaid Entries Email Addresses</h4>
 					</div>
 					<div class="modal-body">
-						<p>Copy and paste the list below into your favorite email program to contact particpants with <strong>UNPAID</strong> entries.</p>
+						<p>Copy and paste the list below into your favorite email program to contact participants with <strong>UNPAID</strong> entries.</p>
 						<textarea class="form-control" rows="8"><?php echo ltrim($unpaid_email_display); ?></textarea>
 					</div>
 					<div class="modal-footer">
