@@ -347,19 +347,18 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 				$subject = mb_convert_encoding($subject, "UTF-8");
 
 				$headers .= sprintf("%s: %s  <".$from_email. ">\r\n",$label_from,$from_name);
-				$emails = $to_email;
 
 				if ($mail_use_smtp) {
 					$mail = new PHPMailer(true);
 					$mail->CharSet = 'UTF-8';
 					$mail->Encoding = 'base64';
-					$mail->addAddress($emails, $to_name);
+					$mail->addAddress($to_email, $to_name);
 					$mail->setFrom($from_email, $from_name);
 					$mail->Subject = $subject;
 					$mail->Body = $message;
 					sendPHPMailerMessage($mail);
 				} else {
-					mail($emails, $subject, $message, $headers);
+					mail($to_name. " <".$to_email.">", $subject, $message, $headers);
 				}
 
 				/*
