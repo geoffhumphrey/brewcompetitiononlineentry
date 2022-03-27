@@ -50,7 +50,6 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 
 		$headers  = "MIME-Version: 1.0" . "\r\n";
 		$headers .= "Content-type: text/html; charset=utf-8" . "\r\n";
-		$headers .= "To: ".$to_name. " <".$to_email.">, " . "\r\n";
 		$headers .= "From: ".$from_name." <".$from_email.">" . "\r\n";
 
 		if ($mail_use_smtp) {
@@ -63,7 +62,7 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 			$mail->Body = $message;
 			sendPHPMailerMessage($mail);
 		} else {
-			mail($to_email, $subject, $message, $headers);
+			mail($to_name. " <".$to_email.">", $subject, $message, $headers);
 		}
 
 		$redirect = $base_url."index.php?section=admin&go=preferences&msg=32";
@@ -136,7 +135,6 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 
 				$headers  = "MIME-Version: 1.0" . "\r\n";
 				$headers .= "Content-type: text/html; charset=utf-8" . "\r\n";
-				$headers .= "To: ".$to_name. " <".$to_email.">, " . "\r\n";
 				$headers .= "From: ".$from_name." <".$from_email.">" . "\r\n";
 
 				if ($mail_use_smtp) {
@@ -149,7 +147,7 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 					$mail->Body = $message;
 					sendPHPMailerMessage($mail);
 				} else {
-					mail($to_email, $subject, $message, $headers);
+					mail($to_name. " <".$to_email.">", $subject, $message, $headers);
 				}
 
 			}

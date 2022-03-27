@@ -362,7 +362,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 						$mail->Body = $message;
 						sendPHPMailerMessage($mail);
 					} else {
-						mail($emails, $subject, $message, $headers);
+						mail($to_name. " <".$to_email.">", $subject, $message, $headers);
 					}
 
 					/*

@@ -88,8 +88,7 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 
 			$headers  = "MIME-Version: 1.0" . "\r\n";
 			$headers .= "Content-type: text/html; charset=utf-8" . "\r\n";
-			$headers .= "To: ".$to_name." <".$to_email.">" . "\r\n";
-			$headers .= "From: ".$comp_name." Server <".$from_competition_email.">" . "\r\n"; 
+			$headers .= "From: ".$comp_name." Server <".$from_competition_email.">" . "\r\n";
 			// needed to change due to more stringent rules and mail send incompatibility with Gmail.
 			$headers .= "Reply-To: ".$from_name." <".$from_email.">" . "\r\n";
 			if ($_SESSION['prefsEmailCC'] == 0) $headers .= "Bcc: ".$from_name." <".$from_email.">" . "\r\n";
@@ -119,7 +118,7 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 				$mail->Body = $message;
 				sendPHPMailerMessage($mail);
 			} else {
-				mail($to_email, $subject, $message, $headers);
+				mail($to_name." <".$to_email.">", $subject, $message, $headers);
 			}
 
 			$redirect = $base_url."index.php?section=contact&action=email&id=".$row_contact['id']."&msg=1";

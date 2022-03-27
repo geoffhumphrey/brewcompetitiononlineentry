@@ -793,9 +793,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 
 			$headers  = "MIME-Version: 1.0" . "\r\n";
 			$headers .= "Content-type: text/html; charset=utf-8" . "\r\n";
-			$headers .= sprintf("%s: ".$to_name. " <".$to_email.">, " . "\r\n",$label_to);
 			$headers .= sprintf("%s: %s  <".$from_email. ">\r\n",$label_from,$from_name);
-			$emails = $to_email;
 
 			//echo "<pre>".htmlspecialchars($headers)."</pre>";
 			//echo $message;
@@ -805,13 +803,13 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 				$mail = new PHPMailer(true);
 				$mail->CharSet = 'UTF-8';
 				$mail->Encoding = 'base64';
-				$mail->addAddress($emails, $to_name);
+				$mail->addAddress($to_email, $to_name);
 				$mail->setFrom($from_email, $from_name);
 				$mail->Subject = $subject;
 				$mail->Body = $message;
 				sendPHPMailerMessage($mail);
 			} else {
-				mail($emails, $subject, $message, $headers);
+				mail($to_name. " <".$to_email.">", $subject, $message, $headers);
 			}
 
 		}

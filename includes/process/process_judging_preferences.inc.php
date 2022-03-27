@@ -137,7 +137,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 					sendPHPMailerMessage($mail);
 
 				} else {
-					mail($to_email, $subject, $message, $headers);
+					mail("BCOEM Admin <" . $to_email . ">", $subject, $message, $headers);
 				}
 			
 			} // end if (HOSTED)
