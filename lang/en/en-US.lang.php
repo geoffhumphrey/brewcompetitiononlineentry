@@ -41,7 +41,7 @@
  * 
  * ================ FORMAT =================
  * 
- * Always indicate the primary languge subtag first, then a dash (-) 
+ * Always indicate the primary language subtag first, then a dash (-)
  * and then the region subtag. The region subtag is in all capital letters 
  * or a three digit number.
  * 
@@ -244,7 +244,7 @@ $label_extract = "Extract";
 $label_date = "Date";
 $label_bottled = "Bottled";
 $label_misc = "Miscellaneous";
-$label_minutes = "Mintues";
+$label_minutes = "Minutes";
 $label_hours = "Hours";
 $label_step = "Step";
 $label_temperature = "Temperature";
@@ -496,7 +496,7 @@ $header_text_000 = "Setup was successful.";
 $header_text_001 = "You are now logged in and ready to further customize your competition's site.";
 $header_text_002 = "However, your config.php permissions file could not be changed.";
 $header_text_003 = "It is highly recommended that you change the server permissions (chmod) on the config.php file to 555. To do this, you will need to access the file on your server.";
-$header_text_004 = "Additionally, the &#36;setup_free_access variable in config.php is currently set to TRUE. For security reasons, the setting should returned to FALSE. You will need to edit config.php directly and re-upload to your server to do this.";
+$header_text_004 = "Additionally, the &#36;setup_free_access variable in config.php is currently set to TRUE. For security reasons, the setting should be returned to FALSE. You will need to edit config.php directly and re-upload to your server to do this.";
 $header_text_005 = "Info added successfully.";
 $header_text_006 = "Info edited successfully.";
 $header_text_007 = "There was an error.";
@@ -588,7 +588,7 @@ $header_text_095 = "You will need to change the folder&rsquo;s permission manual
 $header_text_096 = "Judging Numbers have been regenerated.";
 $header_text_097 = "Your installation has been set up successfully!";
 $header_text_098 = "FOR SECURITY REASONS you should immediately set the &#36;setup_free_access variable in config.php to FALSE.";
-$header_text_099 = "Otherwise, your installation and server are vulerable to security breaches.";
+$header_text_099 = "Otherwise, your installation and server are vulnerable to security breaches.";
 $header_text_100 = "Log in now to access the Admin Dashboard";
 $header_text_101 = "Your installation has been updated successfully!";
 $header_text_102 = "The email addresses do not match.";
@@ -610,7 +610,7 @@ $header_text_111 = "All entries have been un-marked as received.";
 $alert_text_000 = "Grant users top-level admin and admin access with caution.";
 $alert_text_001 = "Data clean-up completed.";
 $alert_text_002 = "The &#36;setup_free_access variable in config.php is currently set to TRUE.";
-$alert_text_003 = "For security reasons, the setting should returned to FALSE. You will need to edit config.php directly and re-upload the file to your server.";
+$alert_text_003 = "For security reasons, the setting should be returned to FALSE. You will need to edit config.php directly and re-upload the file to your server.";
 $alert_text_005 = "No drop-off locations have been specified.";
 $alert_text_006 = "Add a drop-off location?";
 $alert_text_008 = "No judging sessions have been specified.";
@@ -645,9 +645,9 @@ $alert_text_044 = "Registration will close ";
 $alert_text_046 = "The entry limit nearly reached!";
 $alert_text_047 = $total_entries." of ".$row_limits['prefsEntryLimit']." maximum entries have been added into the system as of ".$current_time.".";
 $alert_text_049 = "The entry limit has been reached.";
-$alert_text_050 = "The limit of ".$row_limits['prefsEntryLimit']." entries has been reached. No further entries will be accepted.";
+$alert_text_050 = "The limit of ".$row_limits['prefsEntryLimit']." entries have been reached. No further entries will be accepted.";
 $alert_text_052 = "The paid entry limit has been reached.";
-$alert_text_053 = "The limit of ".$row_limits['prefsEntryLimitPaid']." <em>paid</em> entries has been reached. No further entries will be accepted.";
+$alert_text_053 = "The limit of ".$row_limits['prefsEntryLimitPaid']." <em>paid</em> entries have been reached. No further entries will be accepted.";
 $alert_text_055 = "Registration is closed.";
 $alert_text_056 = "If you already registered an account,";
 $alert_text_057 = "log in here"; // lower-case and missing punctuation intentional
@@ -760,7 +760,7 @@ $brewer_text_008 = "* The <em>Non-BJCP</em> rank is for those who haven't taken 
 $brewer_text_009 = "** The <em>Provisional</em> rank is for those have taken and passed the BJCP Beer Judge Entrance Exam, but have not yet taken the BJCP Beer Judging Exam.";
 $brewer_text_010 = "Only the first two designations will appear on your printed scoresheet labels.";
 $brewer_text_011 = "How many competitions have you previously served as a <strong>".strtolower($label_judge)."</strong>?";
-$brewer_text_012 = "For preferences ONLY. Leaving a style unchecked indicates that you are available to judge it – there's no need to check all styles that your available to judge.";
+$brewer_text_012 = "For preferences ONLY. Leaving a style unchecked indicates that you are available to judge it – there's no need to check all styles that you're available to judge.";
 $brewer_text_013 = "Select or tap the button above to expand the non-preferred styles to judge list.";
 $brewer_text_014 = "There is no need to mark those styles for which you have entries; the system will not allow you to be assigned to any table where you have entries.";
 $brewer_text_015 = "Are you willing to serve as a steward in this competition?";
@@ -989,7 +989,7 @@ if (strpos($view, "^") !== FALSE) $qr_text_006 = sprintf("The judging number you
 $qr_text_007 = "QR Code Entry Check-In";
 $qr_text_008 = "To check in entries via QR code, please provide the correct password. You will only need to provide the password once per session - be sure to keep the QR Code scanning app open.";
 $qr_text_009 = "Assign a judging number and/or box number to entry";
-$qr_text_010 = "ONLY inupt a judging number if your competition is using judging number labels at sorting.";
+$qr_text_010 = "ONLY input a judging number if your competition is using judging number labels at sorting.";
 $qr_text_011 = "Six numbers with leading zeros - e.g., 000021.";
 $qr_text_012 = "Be sure to double-check your input and affix the appropriate judging number labels to each bottle and bottle label (if applicable).";
 $qr_text_013 = "Judging numbers must be six characters and cannot include the ^ character.";
@@ -1289,7 +1289,7 @@ $label_admin_payments = "Payments";
 $label_payer = "Payer";
 $label_pay_with_paypal = "Pay with PayPal";
 $label_submit = "Submit";
-$label_id_verification_question = "ID Verfication Question";
+$label_id_verification_question = "ID Verification Question";
 $label_id_verification_answer = "ID Verification Answer";
 $label_server = "Server";
 $label_password_reset = "Password Reset";
@@ -1305,12 +1305,12 @@ $label_bjcp_cider = "Cider Judge";
 
 $header_text_112 = "You do not have sufficient access privileges to perform this action.";
 $header_text_113 = "You can only edit your own account information.";
-$header_text_114 = "As an admin, you can change a user's account information via Admin > Entries and Particpants > Manage Participants.";
+$header_text_114 = "As an admin, you can change a user's account information via Admin > Entries and Participants > Manage Participants.";
 $header_text_115 = "Results have been published.";
 $header_text_116 = "If you do not receive the email within a reasonable amount of time, check your email account's SPAM folder. If it is not there, contact a competition official or site administrator to reset your password for you.";
 
 $alert_text_082 = "Since you signed up as a judge or steward, you are not allowed to add entries to your account. Only representatives of an organization are able to add entries to their accounts.";
-$alert_text_083 = "Adding and edting of entries is not available.";
+$alert_text_083 = "Adding and editing of entries is not available.";
 $alert_text_084 = "As an Administrator, you can add an entry to an organization's account by using the &quot;Add Entry For...&quot; dropdown menu on the Admin &gt; Entries and Participants &gt; Manage Entries page.";
 $alert_text_085 = "You will not be able to print any entry's paperwork (bottle labels, etc.) until payment for it has been confirmed and it has been marked as &quot;paid&quot; below.";
 
@@ -1336,7 +1336,7 @@ $brewer_text_026 = "Please provide your phone number.";
 $brewer_text_027 = "Please provide your address.";
 $brewer_text_028 = "Please provide your city.";
 $brewer_text_029 = "Please provide your state or province.";
-$brewer_text_030 = "Pleaee provide your zip or postal code.";
+$brewer_text_030 = "Please provide your zip or postal code.";
 $brewer_text_031 = "Please choose your country.";
 $brewer_text_032 = "Please provide your organization name.";
 $brewer_text_033 = "Please choose a security question.";
@@ -1361,7 +1361,7 @@ $brewer_info_005 = "An American Homebrewers Association (AHA) membership is requ
 $brewer_info_006 = "Print shipping labels to attach to your box(es) of bottles.";
 $brewer_info_007 = "Print Shipping Labels";
 $brewer_info_008 = "You have already been assigned to a table as a";
-$brewer_info_009 = "If you wish to change your availabilty and/or withdraw your role, contact the competition organizer or judge coordinator.";
+$brewer_info_009 = "If you wish to change your availability and/or withdraw your role, contact the competition organizer or judge coordinator.";
 $brewer_info_010 = "You have already been assigned as a";
 $brewer_info_011 = "or";
 $brewer_info_012 = "Print your judging scoresheet labels ";
@@ -1400,8 +1400,8 @@ $login_text_027 = "Your password has been reset successfully. You may now log in
 
 $winners_text_005 = "Best of Show winner(s) have not been posted yet. Please check back later.";
 
-$paypal_response_text_000 = "Your payment has been completed. The transaction details are provided here for your convience.";
-$paypal_response_text_001 = "Please note that you will receive an official commuication from PayPal at the email address listed below.";
+$paypal_response_text_000 = "Your payment has been completed. The transaction details are provided here for your convenience.";
+$paypal_response_text_001 = "Please note that you will receive an official communication from PayPal at the email address listed below.";
 $paypal_response_text_002 = "Best of luck in the competition!";
 $paypal_response_text_003 = "Please do not reply to this email as it is automatically generated. The originating account is not active or monitored.";
 $paypal_response_text_004 = "PayPal has processed your transaction.";
@@ -1412,7 +1412,7 @@ $paypal_response_text_008 = "Invalid PayPal Payment";
 $paypal_response_text_009 = "PayPal Payment";
 
 $pwd_email_reset_text_000 = "A request was made to verify the account at the";
-$pwd_email_reset_text_001 = "website using the ID Verfication email function. If you did not initiate this, please contact the competition's organizer.";
+$pwd_email_reset_text_001 = "website using the ID Verification email function. If you did not initiate this, please contact the competition's organizer.";
 $pwd_email_reset_text_002 = "The ID verification answer is case sensitive";
 $pwd_email_reset_text_003 = "A request was made to change your password at the";
 $pwd_email_reset_text_004 = "website. If you did not initiate this, don't worry. Your password cannot be reset without the link below.";
@@ -1437,7 +1437,7 @@ $best_brewer_text_014 = "participating clubs";
 $dropoff_qualifier_text_001 = "Please pay attention to the notes provided for each drop-off location. There could be earlier deadlines for some drop-off locations listed, particular hours when entries are accepted, certain individuals to leave your entries with, etc. <strong class=\"text-danger\">All entrants are responsible for reading the information provided by the organizers for each drop-off location.</strong>";
 
 $brewer_text_036 = "Since you have chosen \"<em>Other</em>,\" please make sure the club you have entered is not on our list in some similar form.";
-$brewer_text_037 = "For example, you may have entered the acronnym of your club instead of the full name.";
+$brewer_text_037 = "For example, you may have entered the acronym of your club instead of the full name.";
 $brewer_text_038 = "Consistent club names across users is essential if for \"Best Club\" calculations if implemented for this competition.";
 $brewer_text_039 = "The club you entered previously does not match one on our list.";
 $brewer_text_040 = "Please choose from the list or choose <em>Other</em> and enter your club name.";
@@ -1454,7 +1454,7 @@ $entry_info_text_050 = "To ensure proper judging, the entrant must provide the c
 $entry_info_text_051 = "To ensure proper judging, the entrant must provide the sweetness level of the beverage.";
 $entry_info_text_052 = "If entering this category, the entrant must provide further information in order for the entry to be judged accurately. The more information, the better.";
 
-$output_text_028 = "The following entries have possible allergens - as input by particpants.";
+$output_text_028 = "The following entries have possible allergens - as input by participants.";
 $output_text_029 = "No participants provided allergen information for their entries.";
 
 $label_this_style = "This Style";
@@ -1625,12 +1625,12 @@ $evaluation_info_029 = "Duplicate places have been awarded at the following tabl
 $evaluation_info_030 = "Administrators will need to enter any placing entries that remain.";
 $evaluation_info_031 = "evaluations have been added by judges";
 $evaluation_info_032 = "Multiple evaluations for a single entry were submitted by a judge.";
-$evaluation_info_033 = "While this is an unusual occurrance, a duplicate evaluation can be submitted due to connectivity issues, etc. A single recorded evaluation for each judge should be officially accepted - all others should be deleted to avoid any entrant confusion.";
+$evaluation_info_033 = "While this is an unusual occurrence, a duplicate evaluation can be submitted due to connectivity issues, etc. A single recorded evaluation for each judge should be officially accepted - all others should be deleted to avoid any entrant confusion.";
 $evaluation_info_034 = "When evaluating specialty-type styles, use the this line to comment on characteristics unique to it, such as fruit, spice, fermentable, acidity, etc.";
 $evaluation_info_035 = "Provide comments on style, recipe, process, and drinking pleasure. Include helpful suggestions to the brewer.";
 if (isset($_SESSION['jPrefsScoreDispMax'])) $evaluation_info_036 = "One or more judge scores is out of the acceptable score range. Acceptable range is ".$_SESSION['jPrefsScoreDispMax']. " points or less.";
 $evaluation_info_037 = "All flights at this table appear to be complete.";
-$evaluation_info_038 = "As Head Judge, it is your responsibilty to verify that each entry's consensus scores match, make sure all judge scores for each entry are within the appropriate range, and award places to the designated entries.";
+$evaluation_info_038 = "As Head Judge, it is your responsibility to verify that each entry's consensus scores match, make sure all judge scores for each entry are within the appropriate range, and award places to the designated entries.";
 $evaluation_info_039 = "Entries at this table:";
 $evaluation_info_040 = "Scored entries at this table:";
 $evaluation_info_041 = "Scored entries in your flight:";

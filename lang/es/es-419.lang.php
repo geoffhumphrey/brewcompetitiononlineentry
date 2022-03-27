@@ -42,7 +42,7 @@ to distinguish this language tag from another one; otherwise leave it out."
 
 ================ FORMAT =================
 
-Always indicate the primary languge subtag first, then a dash (-) and then the region subtag. The
+Always indicate the primary language subtag first, then a dash (-) and then the region subtag. The
 region subtag is in all capital letters or a three digit number.
 
 Examples:
@@ -479,7 +479,7 @@ $header_text_000 = "Setup was successful.";
 $header_text_001 = "You are now logged in and ready to further customize your competition's site.";
 $header_text_002 = "However, your config.php permissions file could not be changed.";
 $header_text_003 = "It is highly recommended that you change the server permissions (chmod) on the config.php file to 555. To do this, you will need to access the file on your server.";
-$header_text_004 = "Additionally, the &#36;setup_free_access variable in config.php is currently set to TRUE. For security reasons, the setting should returned to FALSE. You will need to edit config.php directly and re-upload to your server to do this.";
+$header_text_004 = "Additionally, the &#36;setup_free_access variable in config.php is currently set to TRUE. For security reasons, the setting should be returned to FALSE. You will need to edit config.php directly and re-upload to your server to do this.";
 $header_text_005 = "Info added successfully.";
 $header_text_006 = "Info edited successfully.";
 $header_text_007 = "There was an error.";
@@ -571,7 +571,7 @@ $header_text_095 = "You will need to change the folder&rsquo;s permission manual
 $header_text_096 = "Judging Numbers have been regenerated.";
 $header_text_097 = "Your installation has been set up successfully!";
 $header_text_098 = "FOR SECURITY REASONS you should immediately set the &#36;setup_free_access variable in config.php to FALSE.";
-$header_text_099 = "Otherwise, your installation and server are vulerable to security breaches.";
+$header_text_099 = "Otherwise, your installation and server are vulnerable to security breaches.";
 $header_text_100 = "Log in now to access the Admin Dashboard";
 $header_text_101 = "Your installation has been updated successfully!";
 $header_text_102 = "The email addresses do not match.";
@@ -729,7 +729,7 @@ $brewer_text_008 = "* The <em>Non-BJCP</em> rank is for those who haven't taken 
 $brewer_text_009 = "** The <em>Provisional</em> rank is for those have taken and passed the BJCP Beer Judge Entrance Exam, but have not yet taken the BJCP Beer Judging Exam.";
 $brewer_text_010 = "Only the first two designations will appear on your printed scoresheet labels.";
 $brewer_text_011 = "How many competitions have you previously served as a <strong>".strtolower($label_judge)."</strong>?";
-$brewer_text_012 = "For preferences ONLY. Leaving a style unchecked indicates that you are available to judge it – there's no need to check all styles that your available to judge.";
+$brewer_text_012 = "For preferences ONLY. Leaving a style unchecked indicates that you are available to judge it – there's no need to check all styles that you're available to judge.";
 $brewer_text_013 = "Click or tap the button above to expand the non-preferred styles to judge list.";
 $brewer_text_014 = "There is no need to mark those styles for which you have entries; the system will not allow you to be assigned to any table where you have entries.";
 $brewer_text_015 = "Are you willing to serve as a steward in this competition?";
@@ -940,7 +940,7 @@ if (strpos($view, "^") !== FALSE) $qr_text_006 = sprintf("The judging number you
 $qr_text_007 = "QR Code Entry Check-In";
 $qr_text_008 = "To check in entries via QR code, please provide the correct password. You will only need to provide the password once per session - be sure to keep the QR Code scanning app open.";
 $qr_text_009 = "Assign a judging number and/or box number to entry";
-$qr_text_010 = "ONLY inupt a judging number if your competition is using judging number labels at sorting.";
+$qr_text_010 = "ONLY input a judging number if your competition is using judging number labels at sorting.";
 $qr_text_011 = "Six numbers with leading zeros - e.g., 000021.";
 $qr_text_012 = "Be sure to double-check your input and affix the appropriate judging number labels to each bottle and bottle label (if applicable).";
 $qr_text_013 = "Judging numbers must be six characters and cannot include the ^ character.";
@@ -1218,7 +1218,7 @@ $label_admin_payments = "Payments";
 $label_payer = "Payer";
 $label_pay_with_paypal = "Pay with PayPal";
 $label_submit = "Submit";
-$label_id_verification_question = "ID Verfication Question";
+$label_id_verification_question = "ID Verification Question";
 $label_id_verification_answer = "ID Verification Answer";
 $label_server = "Server";
 $label_password_reset = "Password Reset";
@@ -1235,13 +1235,13 @@ $label_bjcp_cider = "Cider Judge";
 // -------------------- Headers --------------------
 $header_text_112 = "You do not have sufficient access privileges to perform this action.";
 $header_text_113 = "You can only edit your own account information.";
-$header_text_114 = "As an admin, you can change a user's account information via Admin > Entries and Particpants > Manage Participants.";
+$header_text_114 = "As an admin, you can change a user's account information via Admin > Entries and Participants > Manage Participants.";
 $header_text_115 = "Results have been published.";
 $header_text_116 = "If you do not receive the email within a reasonable amount of time, contact a competition official or site administrator to reset your password for you.";
 
 // -------------------- Alerts --------------------
 $alert_text_082 = "Since you signed up as a judge or steward, you are not allowed to add entries to your account. Only representatives of an organization are able to add entries to their accounts.";
-$alert_text_083 = "Adding and edting of entries is not available.";
+$alert_text_083 = "Adding and editing of entries is not available.";
 $alert_text_084 = "As an Administrator, you can add an entry to an organization's account by using the &quot;Add Entry For...&quot; dropdown menu on the Admin &gt; Entries and Participants &gt; Manage Entries page.";
 $alert_text_085 = "You will not be able to print any entry's paperwork (bottle labels, etc.) until payment for it has been confirmed and it has been marked as &quot;paid&quot; below.";
 
@@ -1347,8 +1347,8 @@ $login_text_027 = "Your password has been reset successfully. You may now log in
 $winners_text_005 = "Best of Show winner(s) have not been posted yet. Please check back later.";
 
 // -------------------- Output - PayPal Response --------------------
-$paypal_response_text_000 = "Your payment has been completed. The transaction details are provided here for your convience.";
-$paypal_response_text_001 = "Please note that you will receive an official commuication from PayPal at the email address listed below.";
+$paypal_response_text_000 = "Your payment has been completed. The transaction details are provided here for your convenience.";
+$paypal_response_text_001 = "Please note that you will receive an official communication from PayPal at the email address listed below.";
 $paypal_response_text_002 = "Best of luck in the competition!";
 $paypal_response_text_003 = "Please do not reply to this email as it is automatically generated. The originating account is not active or monitored.";
 $paypal_response_text_004 = "PayPal has processed your transaction.";
@@ -1360,7 +1360,7 @@ $paypal_response_text_009 = "PayPal Payment Details";
 
 // -------------------- Output - Password reset email text --------------------
 $pwd_email_reset_text_000 = "A request was made to verify the account at the";
-$pwd_email_reset_text_001 = "website using the ID Verfication email function. If you did not initiate this, please contact the competition's organizer.";
+$pwd_email_reset_text_001 = "website using the ID Verification email function. If you did not initiate this, please contact the competition's organizer.";
 $pwd_email_reset_text_002 = "The ID verification answer is case sensitive";
 $pwd_email_reset_text_003 = "A request was made to change your password at the";
 $pwd_email_reset_text_004 = "website. If you did not initiate this, don't worry. Your password cannot be reset without the link below.";
@@ -1402,7 +1402,7 @@ $entry_info_text_050 = "To ensure proper judging, the entrant must provide the c
 $entry_info_text_051 = "To ensure proper judging, the entrant must provide the sweetness level of the beverage.";
 $entry_info_text_052 = "If entering this category, the entrant must provide further information in order for the entry to be judged accurately. The more information, the better.";
 
-$output_text_028 = "The following entries have possible allergens - as input by particpants.";
+$output_text_028 = "The following entries have possible allergens - as input by participants.";
 $output_text_029 = "No participants provided allergen information for their entries.";
 
 $label_this_style = "This Style";

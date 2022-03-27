@@ -1680,7 +1680,7 @@ if ($totalRows_tables > 0) {
 							<div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
 								<ul class="list-inline">
 									<li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=summary" data-toggle="tooltip" data-placement="top" title="Print participant summaries - each on a separate sheet of paper. Useful as a cover sheet for mailing entry scoresheets to participants.">All Participants with Entries</a></li>
-                                    <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=particpant-entries" data-toggle="tooltip" data-placement="top" title="Print a list of all particpants with entries and associated judging numbers as assigned in the system. Useful for distributing scoresheets that are physically sorted by entry or judging numbers.">All Entries by Particpant</a></li>
+                                    <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=particpant-entries" data-toggle="tooltip" data-placement="top" title="Print a list of all participants with entries and associated judging numbers as assigned in the system. Useful for distributing scoresheets that are physically sorted by entry or judging numbers.">All Entries by Particpant</a></li>
 								</ul>
 							</div>
 						</div><!-- ./row -->

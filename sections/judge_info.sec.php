@@ -56,7 +56,7 @@
 	<tr>
       <td width="10%" class="dataLabel">Preferred:</td>
       <td class="data" colspan="3">
-      Check all styles that you <em>prefer</em> to judge.<p><span class="required"><strong>For preferences ONLY.</strong> Leaving a style unchecked indicates that you are OK to judge it &ndash; there's no need to check all that your available to judge.</span></p>
+      Check all styles that you <em>prefer</em> to judge.<p><span class="required"><strong>For preferences ONLY.</strong> Leaving a style unchecked indicates that you are OK to judge it &ndash; there's no need to check all that you're available to judge.</span></p>
       	<table class="dataTableCompact">
         		<?php $endRow = 0; $columns = 3; $hloopRow1 = 0;
 				do {

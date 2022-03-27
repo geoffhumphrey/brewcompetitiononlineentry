@@ -41,7 +41,7 @@
  * 
  * ================ FORMAT =================
  * 
- * Always indicate the primary languge subtag first, then a dash (-) 
+ * Always indicate the primary language subtag first, then a dash (-)
  * and then the region subtag. The region subtag is in all capital letters 
  * or a three digit number.
  * 
@@ -1272,7 +1272,7 @@ $paypal_response_text_008 = "Pagamento PayPal inválido";
 $paypal_response_text_009 = "Detalhes do pagamento via PayPal";
 
 $pwd_email_reset_text_000 = "Foi feita uma solicitação para verificar a conta no";
-$pwd_email_reset_text_001 = "website usando a função de e-mail Verfication ID. Se você não iniciou isto, entre em contato com o organizador da competição.";
+$pwd_email_reset_text_001 = "website usando a função de e-mail Verification ID. Se você não iniciou isto, entre em contato com o organizador da competição.";
 $pwd_email_reset_text_002 = "A resposta de verificação de ID faz distinção entre maiúsculas e minúsculas";
 $pwd_email_reset_text_003 = "Foi feita uma solicitação para alterar sua senha no";
 $pwd_email_reset_text_004 = "website. Se você não iniciou isto, não se preocupe. Sua senha não pode ser redefinida sem o link abaixo.";
