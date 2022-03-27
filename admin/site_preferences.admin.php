@@ -937,10 +937,7 @@ $(document).ready(function(){
         <div class="input-group">
             <!-- Input Here -->
             <label class="radio-inline">
-                <input type="radio" name="prefsHideRecipe" value="Y" id="prefsHideRecipe_0"  <?php if ($row_prefs['prefsHideRecipe'] == "Y") echo "CHECKED"; elseif ($section == "step3") echo "CHECKED"; ?> /> Yes
-            </label>
-            <label class="radio-inline">
-                <input type="radio" name="prefsHideRecipe" value="N" id="prefsHideRecipe_1" <?php if ($row_prefs['prefsHideRecipe'] == "N") echo "CHECKED"; ?>/> No
+                <input type="radio" name="prefsHideRecipe" value="Y" id="prefsHideRecipe_0" checked> Yes
             </label>
         </div>
         <span id="helpBlock" class="help-block">
@@ -963,7 +960,7 @@ $(document).ready(function(){
                 <h4 class="modal-title" id="hideRecipeModalLabel">Hide Entry Recipe Section Info</h4>
             </div>
             <div class="modal-body">
-                <p>Indicate if the recipe section (optional information such as malt, yeast, etc.) on the Add Entry or Edit Entry screens will be displayed. If the recipe section is hidden, the BeerXML Import function will not be available. The recipe entry function is deprecated and will be completely removed in a future release.</p>
+                <p>As of version 2.4.1, the entry recipe section has been removed from the add/edit entry functions. This preference will be removed altogether in a future release; until then, it will be "Yes."</p>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>

@@ -5,6 +5,12 @@
  *
  */
 
+$server_environ = "<p><strong>Reporting an issue?</strong> Here's your server environment information:</p>";
+$server_environ .= "<ul>";
+$server_environ .= "<li>PHP Version &ndash; ".$php_version."</li>";
+$server_environ .= "<li>MySQL Version &ndash; ".$connection -> server_info."</li>";
+$server_environ .= "</ul>";
+
 if ($_SESSION['prefsEval'] == 1) {
     include(EVALS.'admin_alert_empty_prefs.eval.php');
     include(EVALS.'import_scores.eval.php');
@@ -147,6 +153,7 @@ if ($totalRows_tables > 0) {
         }
 
     } while ($row_style_type = mysqli_fetch_assoc($style_type));
+
 }
 
 ?>
@@ -2002,19 +2009,21 @@ if ($totalRows_tables > 0) {
                                 		<li><a href="#" role="button" data-toggle="modal" data-target="#dashboard-help-modal-bjcp-points">Report BJCP Judging Points</a></li>
                                         -->
                                     </ul>
+                                    <div class="alert alert-info">
+                                        <?php echo $server_environ; ?>
+                                    </div>
                                 </div>
                             </div><!-- ./row -->
                         </div>
                     </div>
                 </div>
-
                 <!-- ./ Help Panel -->
             </div><!--./ panel-group" -->
         </div><!-- ./ right column -->
     </div>
 </div><!-- end bcoem-admin-dashboard-accordion -->
 <!-- Dashboard Help Modals -->
-<?php  foreach ($bcoem_dashboard_help_array as $content)  {
+<?php foreach ($bcoem_dashboard_help_array as $content)  {
 	echo bcoem_dashboard_help($content);
 }
 ?>

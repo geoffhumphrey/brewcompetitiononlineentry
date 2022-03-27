@@ -7,31 +7,32 @@
  *
  */
 
-// ---------------------------- Base URL ----------------------------
+// ---------------------------- Base URL -----------------------------------------------
 
 if (NHC) $base_url = "";
 else $base_url = $base_url;
 
-// ---------------------------- Globals ----------------------------
+// ---------------------------- Globals ------------------------------------------------
 
 $php_version = phpversion();
 $nhc_landing_url = "https://www.brewingcompetition.com";
 
-// ---------------------------- Preflight Checks ----------------------------
-
+// ---------------------------- Preflight Checks ---------------------------------------
 require_once (LIB.'preflight.lib.php');
 
-// ---------------------------- Run Scripts ----------------------------
+// ---------------------------- Run Scripts --------------------------------------------
 
 // If all setup or update has taken place, run normally
 if ($setup_success) {
 
-	// ---------------------------- Define URL Variables ----------------------------
+	$errors = FALSE;
+	$error_output = array();
+	if (!isset($_SESSION['error_output'])) $_SESSION['error_output'] = "";
 
+	// ---------------------------- Define URL Variables -------------------------------
 	require_once (INCLUDES.'url_variables.inc.php');
 
 	// ---------------------------- Check if Valid Section -----------------------------
-
 	$section_array = array(
 		"default",
 		"rules",
@@ -48,7 +49,6 @@ if ($setup_success) {
 		"user",
 		"setup",
 		"judge",
-		"beerxml",
 		"register",
 		"sponsors",
 		"past_winners",
@@ -97,7 +97,7 @@ if ($setup_success) {
 		"past-winners"
 	);
 
-	// ---------------------------- QR Redirect ----------------------------
+	// ---------------------------- QR Redirect --------------------------------------
 
 	// Redirect to QR Code Check-In page if necessary
 	if ($section == "qr") {
@@ -105,7 +105,7 @@ if ($setup_success) {
 		exit;
 	}
 
-	// ---------------------------- IE Browser Check ----------------------------
+	// ---------------------------- IE Browser Check ---------------------------------
 
 	// Check for IE and redirect if not using a version beyond 9
 
@@ -126,6 +126,7 @@ if ($setup_success) {
 
 	// ---------------------------- Load Required Scripts ----------------------------
 
+	
 	if (SINGLE) require_once(SSO.'sso.inc.php');
 	require_once (LIB.'common.lib.php');
 	require_once (INCLUDES.'db_tables.inc.php');
@@ -227,10 +228,86 @@ if ($setup_success) {
 
 		if ($totalRows_prefs_check == 0) {
 
-			$sql = sprintf("INSERT INTO `%s` (`id`, `prefsTemp`, `prefsWeight1`, `prefsWeight2`, `prefsLiquid1`, `prefsLiquid2`, `prefsPaypal`, `prefsPaypalAccount`, `prefsPaypalIPN`, `prefsCurrency`, `prefsCash`, `prefsCheck`, `prefsCheckPayee`, `prefsTransFee`, `prefsCAPTCHA`, `prefsGoogleAccount`, `prefsSponsors`, `prefsSponsorLogos`, `prefsSponsorLogoSize`, `prefsCompLogoSize`, `prefsDisplayWinners`, `prefsWinnerDelay`, `prefsWinnerMethod`, `prefsDisplaySpecial`, `prefsBOSMead`, `prefsBOSCider`, `prefsEntryForm`, `prefsRecordLimit`, `prefsRecordPaging`, `prefsProEdition`, `prefsTheme`, `prefsDateFormat`, `prefsContact`, `prefsTimeZone`, `prefsEntryLimit`, `prefsTimeFormat`, `prefsUserEntryLimit`, `prefsUserSubCatLimit`, `prefsUSCLEx`, `prefsUSCLExLimit`, `prefsPayToPrint`, `prefsHideRecipe`, `prefsUseMods`, `prefsSEF`, `prefsSpecialCharLimit`, `prefsStyleSet`, `prefsAutoPurge`, `prefsEntryLimitPaid`, `prefsEmailRegConfirm`, `prefsEmailCC`, `prefsShipping`, `prefsDropOff`, `prefsLanguage`, `prefsSpecific`, `prefsShowBestBrewer`, `prefsBestBrewerTitle`, `prefsFirstPlacePts`, `prefsSecondPlacePts`, `prefsThirdPlacePts`, `prefsFourthPlacePts`, `prefsHMPts`, `prefsTieBreakRule1`, `prefsTieBreakRule2`, `prefsTieBreakRule3`, `prefsTieBreakRule4`, `prefsTieBreakRule5`, `prefsTieBreakRule6`, `prefsShowBestClub`, `prefsBestClubTitle`, `prefsBestUseBOS`, `prefsEval`) VALUES (1, 'Fahrenheit', 'ounces', 'pounds', 'ounces', 'gallons', 'N', NULL, 0, '$', 'N', 'N', NULL, 'Y', 0, '|', 'N', 'N', '250', '300', 'Y', '1616974200', 0, 'J', 'N', 'N', '5', 9999, 150, 0, 'bruxellensis', '1', 'Y', -7.001, NULL, 0, NULL, NULL, NULL, NULL, 'N', 'Y', 'N', 'N', 200, 'BJCP2015', 0, NULL, 0, 1, 1, 1, 'en-US', 1, 0, NULL, 0, 0, 0, 0, 0, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1);",$preferences_db_table);
-			mysqli_select_db($connection,$database);
-			mysqli_real_escape_string($connection,$sql);
-			$result = mysqli_query($connection,$sql) or die (mysqli_error($connection));
+			$update_table = $prefix."preferences";
+			$data = array(
+				'id' => '1',
+				'prefsTemp' => 'Fahrenheit',
+				'prefsWeight1' => 'ounces',
+				'prefsWeight2' => 'pounds',
+				'prefsLiquid1' => 'ounces',
+				'prefsLiquid2' => 'gallons',
+				'prefsPaypal' => 'N',
+				'prefsPaypalAccount' => NULL,
+				'prefsPaypalIPN' => '0',
+				'prefsCurrency' => '$',
+				'prefsCash' => 'N',
+				'prefsCheck' => 'N',
+				'prefsCheckPayee' => NULL,
+				'prefsTransFee' => 'Y',
+				'prefsGoogle' => NULL,
+				'prefsGoogleAccount' => '|',
+				'prefsSponsors' => 'N',
+				'prefsSponsorLogos' => 'N',
+				'prefsSponsorLogoSize' => '250',
+				'prefsCompLogoSize' => '300',
+				'prefsDisplayWinners' => 'Y',
+				'prefsWinnerDelay' => '1616974200',
+				'prefsWinnerMethod' => '0',
+				'prefsDisplaySpecial' => 'J',
+				'prefsBOSMead' => 'N',
+				'prefsBOSCider' => 'N',
+				'prefsEntryForm' => '5',
+				'prefsRecordLimit' => '9999',
+				'prefsRecordPaging' => '150',
+				'prefsProEdition' => '0',
+				'prefsTheme' => 'bruxellensis',
+				'prefsDateFormat' => '1',
+				'prefsContact' => 'Y',
+				'prefsTimeZone' => '-7.001',
+				'prefsEntryLimit' => NULL,
+				'prefsTimeFormat' => '0',
+				'prefsUserEntryLimit' => NULL,
+				'prefsUserSubCatLimit' => NULL,
+				'prefsUSCLEx' => NULL,
+				'prefsUSCLExLimit' => NULL,
+				'prefsPayToPrint' => 'N',
+				'prefsHideRecipe' => 'Y',
+				'prefsUseMods' => 'N',
+				'prefsSEF' => 'N',
+				'prefsSpecialCharLimit' => '200',
+				'prefsStyleSet' => 'BJCP2021',
+				'prefsAutoPurge' => '0',
+				'prefsEntryLimitPaid' => NULL,
+				'prefsEmailRegConfirm' => '0',
+				'prefsEmailCC' => '1',
+				'prefsShipping' => '1',
+				'prefsDropOff' => '1',
+				'prefsLanguage' => 'en-US',
+				'prefsSpecific' => '1',
+				'prefsShowBestBrewer' => '0',
+				'prefsBestBrewerTitle' => NULL,
+				'prefsFirstPlacePts' => '0',
+				'prefsSecondPlacePts' => '0',
+				'prefsThirdPlacePts' => '0',
+				'prefsFourthPlacePts' => '0',
+				'prefsHMPts' => '0',
+				'prefsTieBreakRule1' => NULL,
+				'prefsTieBreakRule2' => NULL,
+				'prefsTieBreakRule3' => NULL,
+				'prefsTieBreakRule4' => NULL,
+				'prefsTieBreakRule5' => NULL,
+				'prefsTieBreakRule6' => NULL,
+				'prefsShowBestClub' => '0',
+				'prefsBestClubTitle' => NULL,
+				'prefsCAPTCHA' => '0',
+				'prefsBestUseBOS' => '0',
+				'prefsEval' => '1'
+			);
+			$result = $db_conn->insert ($update_table, $data);
+			if (!$result) {
+				$error_output[] = $db_conn->getLastError();
+				$errors = TRUE;
+			}
 
 			$alert_flag_preferences = TRUE;
 
@@ -238,10 +315,14 @@ if ($setup_success) {
 
 		if ($row_prefs_check['id'] != "1") {
 
-			$sql = sprintf("UPDATE %s SET id = '1' WHERE id = '%s'",$preferences_db_table,$row_prefs_check['id']);
-			mysqli_select_db($connection,$database);
-			mysqli_real_escape_string($connection,$sql);
-			$result = mysqli_query($connection,$sql) or die (mysqli_error($connection));
+			$update_table = $prefix."preferences";
+			$data = array('id' => 1);
+			$db_conn->where ('id', $row_prefs_check['id']);
+			$result = $db_conn->update ($update_table, $data);
+			if (!$result) {
+				$error_output[] = $db_conn->getLastError();
+				$errors = TRUE;
+			}
 
 		}
 
@@ -264,11 +345,51 @@ if ($setup_success) {
 
 		if ($totalRows_contest_info_check == 0) {
 
-			$sql = sprintf("INSERT INTO `%s` (`id`, `contestName`, `contestHost`, `contestHostWebsite`, `contestHostLocation`, `contestRegistrationOpen`, `contestRegistrationDeadline`, `contestEntryOpen`, `contestEntryDeadline`, `contestJudgeOpen`, `contestJudgeDeadline`, `contestRules`, `contestAwardsLocation`, `contestAwardsLocName`, `contestAwardsLocDate`, `contestAwardsLocTime`, `contestShippingOpen`, `contestShippingDeadline`, `contestEntryFee`, `contestEntryFee2`, `contestEntryFeeDiscount`, `contestEntryFeeDiscountNum`, `contestDropoffOpen`, `contestBottles`, `contestShippingAddress`, `contestShippingName`, `contestAwards`, `contestLogo`, `contestBOSAward`, `contestDropoffDeadline`, `contestEntryCap`, `contestEntryFeePassword`, `contestEntryFeePasswordNum`, `contestID`, `contestCircuit`, `contestVolunteers`, `contestCheckInPassword`) VALUES
-	(1, 'Baseline Data Installation', 'Baseline', 'http://www.brewcompetition.com', 'Denver, CO', '1438322400', '1483253940', '1438322400', '1483253940', '1438322400', '1483253940', '<p>This competition is AHA sanctioned and open to any amateur homebrewer age 21 or older.</p>\r\n<p>All mailed entries must <strong>received</strong> at the mailing location by the entry deadline - please allow for shipping time.</p>\r\n<p>All entries will be picked up from drop-off locations the day of the entry deadline.</p>\r\n<p>All entries must be handcrafted products, containing ingredients available to the general public, and made using private equipment by hobbyist brewers (i.e., no use of commercial facilities or Brew on Premises operations, supplies, etc.).</p>\r\n<p>The competition organizers are not responsible for mis-categorized entries, mailed entries that are not received by the entry deadline, or entries that arrived damaged.</p>\r\n<p>The competition organizers reserve the right to combine styles for judging and to restructure awards as needed depending upon the quantity and quality of entries.</p>\r\n<p>Qualified judging of all entries is the primary goal of our event. Judges will evaluate and score each entry. The average of the scores will rank each entry in its category. Each flight will have at least one BJCP judge.</p>\r\n<p>Brewers are not limited to one entry in each category but may only enter each subcategory once.</p>\r\n<p>The competition committee reserves the right to combine categories based on number of entries. All possible effort will be made to combine similar styles. All brews in combined categories will be judged according to the style they were originally entered in.</p>\r\n<p>The Best of Show judging will be determined by a Best of Show panel based on a second judging of the top winners.</p>\r\n<p>Bottles will not be returned to entrants.</p>', '200 E Colfax Ave, Denver, CO 80203', 'Baseline Awards Location', NULL, '1483798980', '1438322400', '1483253940', 8, NULL, 'N', NULL, '1438322400', '<p>Each entry will consist of capped or corked bottles that are void of all identifying information, including labels and embossing. Printed caps are allowed, but must be blacked out completely.</p>\r\n<p>12oz brown glass bottles are preferred; however, green and clear glass will be accepted. Swing top bottles will likewise be accepted as well as corked bottles.</p>\r\n<p>Bottles will not be returned to contest entrants.</p>\r\n<p>Completed entry forms and recipe sheets must be submitted with all entries, and can be printed directly from this website. Entry forms should be attached to bottle labels by the method specified on the bottle label.</p>\r\n<p>Please fill out the entry forms completely. Be meticulous about noting any special ingredients that must be specified. Failure to note such ingredients may impact the judges'' scoring of your entry.</p>\r\n<p>Brewers are not limited to one entry in each category but may only enter each subcategory once.</p>', '200 E Colfax Ave, Denver, CO 80203', 'Shipping Location', '<p>The awards ceremony will take place once judging is completed.</p>\r\n<p>Places will be awarded to 1st, 2nd, and 3rd place in each category/table.</p>\r\n<p>The 1st place entry in each category will advance to the Best of Show (BOS) round with a single, overall Best of Show beer selected.</p>\r\n<p>Additional prizes may be awarded to those winners present at the awards ceremony at the discretion of the competition organizers.</p>\r\n<p>Both score sheets and awards will be available for pick up that night after the ceremony concludes. Awards and score sheets not picked up will be mailed back to participants. Results will be posted to the competition web site after the ceremony concludes.</p>', NULL, NULL, '1483253940', NULL, NULL, NULL, '000000', NULL, '<p>Volunteer information coming soon!</p>', NULL);",$contest_info_db_table);
-			mysqli_select_db($connection,$database);
-			mysqli_real_escape_string($connection,$sql);
-			$result = mysqli_query($connection,$sql) or die (mysqli_error($connection));
+			$update_table = $prefix."contest_info";
+			$data = array(
+				'id' => '1',
+				'contestName' => 'Baseline Data Installation',
+				'contestHost' => 'Baseline',
+				'contestHostWebsite' => 'http://www.brewcompetition.com',
+				'contestHostLocation' => 'Denver, CO',
+				'contestRegistrationOpen' => '1438322400',
+				'contestRegistrationDeadline' => '1483253940',
+				'contestEntryOpen' => '1438322400',
+				'contestEntryDeadline' => '1483253940',
+				'contestJudgeOpen' => '1438322400',
+				'contestJudgeDeadline' => '1483253940',
+				'contestRules' => '<p>This competition is AHA sanctioned and open to any amateur homebrewer age 21 or older.</p><p>All mailed entries must <strong>received</strong> at the mailing location by the entry deadline - please allow for shipping time.</p><p>All entries will be picked up from drop-off locations the day of the entry deadline.</p><p>All entries must be handcrafted products, containing ingredients available to the general public, and made using private equipment by hobbyist brewers (i.e., no use of commercial facilities or Brew on Premises operations, supplies, etc.).</p><p>The competition organizers are not responsible for mis-categorized entries, mailed entries that are not received by the entry deadline, or entries that arrived damaged.</p><p>The competition organizers reserve the right to combine styles for judging and to restructure awards as needed depending upon the quantity and quality of entries.</p><p>Qualified judging of all entries is the primary goal of our event. Judges will evaluate and score each entry. The average of the scores will rank each entry in its category. Each flight will have at least one BJCP judge.</p><p>Brewers are not limited to one entry in each category but may only enter each subcategory once.</p><p>The competition committee reserves the right to combine categories based on number of entries. All possible effort will be made to combine similar styles. All brews in combined categories will be judged according to the style they were originally entered in.</p><p>The Best of Show judging will be determined by a Best of Show panel based on a second judging of the top winners.</p><p>Bottles will not be returned to entrants.</p>',
+				'contestAwardsLocation' => '200 E Colfax Ave, Denver, CO 80203',
+				'contestAwardsLocName' => 'Baseline Awards Location',
+				'contestAwardsLocDate' => NULL,
+				'contestAwardsLocTime' => '1483798980',
+				'contestShippingOpen' => '1438322400',
+				'contestShippingDeadline' => '1483253940',
+				'contestEntryFee' => '8.00',
+				'contestEntryFee2' => NULL,
+				'contestEntryFeeDiscount' => 'N',
+				'contestEntryFeeDiscountNum' => NULL,
+				'contestDropoffOpen' => '1438322400',
+				'contestBottles' => '<p>Each entry will consist of capped or corked bottles that are void of all identifying information, including labels and embossing. Printed caps are allowed, but must be blacked out completely.</p><p>12oz brown glass bottles are preferred; however, green and clear glass will be accepted. Swing top bottles will likewise be accepted as well as corked bottles.</p><p>Bottles will not be returned to contest entrants.</p><p>Completed entry forms and recipe sheets must be submitted with all entries, and can be printed directly from this website. Entry forms should be attached to bottle labels by the method specified on the bottle label.</p><p>Please fill out the entry forms completely. Be meticulous about noting any special ingredients that must be specified. Failure to note such ingredients may impact the judges\' scoring of your entry.</p><p>Brewers are not limited to one entry in each category but may only enter each subcategory once.</p>',
+				'contestShippingAddress' => '200 E Colfax Ave, Denver, CO 80203',
+				'contestShippingName' => 'Shipping Location',
+				'contestAwards' => '<p>The awards ceremony will take place once judging is completed.</p><p>Places will be awarded to 1st, 2nd, and 3rd place in each category/table.</p><p>The 1st place entry in each category will advance to the Best of Show (BOS) round with a single, overall Best of Show beer selected.</p><p>Additional prizes may be awarded to those winners present at the awards ceremony at the discretion of the competition organizers.</p><p>Both score sheets and awards will be available for pick up that night after the ceremony concludes. Awards and score sheets not picked up will be mailed back to participants. Results will be posted to the competition web site after the ceremony concludes.</p>',
+				'contestLogo' => NULL,
+				'contestBOSAward' => NULL,
+				'contestDropoffDeadline' => '1483253940',
+				'contestEntryCap' => NULL,
+				'contestEntryFeePassword' => NULL,
+				'contestEntryFeePasswordNum' => NULL,
+				'contestID' => '000000',
+				'contestCircuit' => NULL,
+				'contestVolunteers' => '<p>Volunteer information coming soon!</p>',
+				'contestCheckInPassword' => NULL
+			);
+			$result = $db_conn->update ($update_table, $data);
+			if (!$result) {
+				$error_output[] = $db_conn->getLastError();
+				$errors = TRUE;
+			}
 
 			$alert_flag_contest_info = TRUE;
 
@@ -276,10 +397,14 @@ if ($setup_success) {
 
 		if ($row_contest_info_check['id'] != "1") {
 
-			$sql = sprintf("UPDATE %s SET id = '1' WHERE id = '%s'",$contest_info_db_table,$row_contest_info_check['id']);
-			mysqli_select_db($connection,$database);
-			mysqli_real_escape_string($connection,$sql);
-			$result = mysqli_query($connection,$sql) or die (mysqli_error($connection));
+			$update_table = $prefix."contest_info";
+			$data = array('id' => 1);
+			$db_conn->where ('id', $row_contest_info_check['id']);
+			$result = $db_conn->update ($update_table, $data);
+			if (!$result) {
+				$error_output[] = $db_conn->getLastError();
+				$errors = TRUE;
+			}
 
 		}
 

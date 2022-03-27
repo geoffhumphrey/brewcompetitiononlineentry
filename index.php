@@ -10,10 +10,16 @@
 require_once ('paths.php');
 require_once (CONFIG.'bootstrap.php');
 require_once (DB.'mods.db.php');
-$account_pages = array("list","pay","brewer","user","brew","beerxml","pay","evaluation");
+
+$account_pages = array("list","pay","brewer","user","brew","pay","evaluation");
+
 if ((!$logged_in) && (in_array($section,$account_pages))) {
-    header(sprintf("Location: %s", $base_url."index.php?section=login&msg=99"));
-    exit;
+
+    $redirect = $base_url."index.php?section=login&msg=99";
+    $redirect = prep_redirect_link($redirect);
+    $redirect_go_to = sprintf("Location: %s", $redirect);
+    header($redirect_go_to);
+    exit();
 }
 
 // ---------------------------------------------------------------------------------
@@ -24,13 +30,23 @@ if ($section == "admin") {
 
     // Redirect if non-admins try to access admin functions
     if (!$logged_in) {
-        header(sprintf("Location: %s", $base_url."index.php?section=login&msg=0"));
-        exit;
+
+        $redirect = $base_url."index.php?section=login&msg=0";
+        $redirect = prep_redirect_link($redirect);
+        $redirect_go_to = sprintf("Location: %s", $redirect);
+        header($redirect_go_to);
+        exit();
+
     }
 
     if (($logged_in) && ($_SESSION['userLevel'] > 1)) {
-        header(sprintf("Location: %s", $base_url."index.php?msg=4"));
-        exit;
+        
+        $redirect = $base_url."index.php?msg=4";
+        $redirect = prep_redirect_link($redirect);
+        $redirect_go_to = sprintf("Location: %s", $redirect);
+        header($redirect_go_to);
+        exit();
+
     }
 
     require_once (LIB.'admin.lib.php');
@@ -156,7 +172,36 @@ if ($section == "past-winners") {
 
 <!-- ALERTS -->
 <div class="<?php echo $container_main; ?> bcoem-warning-container">
-    <?php include (SECTIONS.'alerts.sec.php'); ?>
+    <?php
+    
+    if ((!empty($_SESSION['error_output'])) || (!empty($error_output))) {
+        
+        echo "<div class=\"bcoem-admin-element\">";
+        echo "<div class=\"alert alert-danger alert-dismissible hidden-print fade in\">";
+        echo "<p><span class=\"fa fa-lg fa-exclamation-circle\"></span> <strong>MySQL Error(s)</strong></p>";
+        echo "<p>The following errors were logged on the last MySQL server call:</p>";
+        echo "<ul>";
+        
+        if (!empty($error_output)) {
+            foreach ($error_output as $key => $value) {
+                echo "<li>".$value."</li>";
+            }
+        }
+
+        if (!empty($_SESSION['error_output'])) {
+            foreach ($_SESSION['error_output'] as $key => $value) {
+                echo "<li>".$value."</li>";
+            }
+        }
+            
+        echo "</ul>";
+        echo "</div>";
+        echo "</div>";
+    }
+
+    include (SECTIONS.'alerts.sec.php'); 
+
+    ?>
 </div><!-- ./container -->
 <!-- ./ALERTS -->
 
@@ -284,7 +329,6 @@ if ($section == "past-winners") {
                     if ($section == "brew") include (SECTIONS.'brew.sec.php');
                     if ($section == "pay") include (SECTIONS.'pay.sec.php');
                     if ($section == "user") include (SECTIONS.'user.sec.php');
-                    if ($section == "beerxml") include (SECTIONS.'beerxml.sec.php');
                 }
 
             }
@@ -330,6 +374,7 @@ session_write_close();
 if ($logged_in) {
 $session_end_seconds = (time() + $session_expire_after_seconds);
 $session_end = date('Y-m-d H:i:s',$session_end_seconds);
+if (!empty($error_output)) $_SESSION['error_output'] = $error_output;
 ?>
 <!-- Session Expiring Modal: 2 Minute Warning -->
 <div class="modal fade" id="session-expire-warning" tabindex="-1" role="dialog" aria-labelledby="session-expire-warning-label">

@@ -175,9 +175,6 @@ if ($logged_in)  {
 	if ($_SESSION['userLevel'] <= "1") $add_entry_link .= "index.php?section=brew&amp;go=entries&amp;action=add&amp;filter=admin";
 	else $add_entry_link .= "index.php?section=brew&amp;action=add";
 
-	// Build Add Entry BeerXML Link
-	$add_entry_beerxml_link = "index.php?section=beerxml";
-
 }
 if (($logged_in) && ($admin_user) && ($go != "error_page")) { ?>
 <!-- Admin Push Menu -->
@@ -410,7 +407,6 @@ $(document).ready(function(){
                     <li><a href="<?php echo $link_user_entries; ?>" tabindex="-1"><?php echo $label_entries; ?></a></li>
                     <?php if ($add_entry_link_show) { ?>
                     <li><a href="<?php echo $add_entry_link; ?>" tabindex="-1"><?php echo $label_add_entry; ?></a></li>
-                    <?php if ((!NHC) && ($_SESSION['prefsHideRecipe'] == "N")) { ?><li tabindex="-1"><a href="<?php echo $add_entry_beerxml_link; ?>"><?php echo $label_add_beerXML; ?></a><?php } ?>
                     <?php } ?>
                     <?php } if ($_SESSION['prefsEval'] == 1) { 
                     	$brewer_assignment = brewer_assignment($_SESSION['user_id'],"1","blah",$dbTable,$filter);

@@ -429,13 +429,6 @@ switch($section) {
 		$sidebar_status_icon_8 = "fa fa-lg fa-refresh fa-spin";
 	break;
 
-	case "beerxml":
-		include (DB.'styles.db.php');
-		$header_output = $header_text_059;
-		if ($msg == "1") $output = sprintf("<strong>%s</strong>",$header_text_060);
-		if ($msg == "2") $output = sprintf("<strong>%s</strong>",$header_text_061);
-	break;
-
 	case "admin":
 		if ($action != "print") $header_output = $label_admin;
 		else $header_output = $_SESSION['contestName'];

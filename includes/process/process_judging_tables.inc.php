@@ -8,6 +8,13 @@
 
 if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1))) {
 
+	$errors = FALSE;
+	$error_output = array();
+	$_SESSION['error_output'] = "";
+
+	if ($_SESSION['jPrefsTablePlanning'] == 1) $flightPlanning = 1; 
+	else $flightPlanning = 0;
+
 	include (INCLUDES.'process/process_judging_flight_check.inc.php');
 
 	// Instantiate HTMLPurifier
@@ -15,30 +22,33 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 	$config_html_purifier = HTMLPurifier_Config::createDefault();
 	$purifier = new HTMLPurifier($config_html_purifier);
 
-	if ($_POST['tableStyles'] != "") $table_styles = implode(",",$_POST['tableStyles']); 
-	else $table_styles = $_POST['tableStyles'];
+	if ($_POST['tableStyles'] != "") $tableStyles = implode(",",$_POST['tableStyles']); 
+	else $tableStyles = $_POST['tableStyles'];
+	$tableStyles = sterilize($tableStyles);
+
+	$tableName = "";
 	if (isset($_POST['tableName'])) {
 		$tableName = $purifier->purify($_POST['tableName']);
-		$tableName = filter_var($tableName,FILTER_SANITIZE_STRING);
+		$tableName = sterilize($tableName);
 	}
-	else $tableName = "";
+
+	$tableNumber = sterilize($_POST['tableNumber']);
+	$tableLocation = sterilize($_POST['tableLocation']);
 
 	if ($action == "add") {
 
-		$insertSQL = sprintf("INSERT INTO $judging_tables_db_table (
-		tableName,
-		tableStyles,
-		tableNumber,
-		tableLocation
-		) VALUES (%s, %s, %s, %s)",
-						   GetSQLValueString($tableName, "text"),
-						   GetSQLValueString(sterilize($table_styles), "text"),
-						   GetSQLValueString(sterilize($_POST['tableNumber']), "text"),
-						   GetSQLValueString(sterilize($_POST['tableLocation']), "text")
-						   );
-
-		mysqli_real_escape_string($connection,$insertSQL);
-		$result = mysqli_query($connection,$insertSQL) or die (mysqli_error($connection));
+		$table_update = $prefix."judging_tables";
+		$data = array(
+			'tableName' => $tableName,
+			'tableStyles' => $tableStyles,
+			'tableNumber' => $tableNumber,
+			'tableLocation' => $tableLocation
+		);
+		$result = $db_conn->insert ($update_table, $data);
+		if (!$result) {
+			$error_output[] = $db_conn->getLastError();
+			$errors = TRUE;
+		}
 
 		$query_table = "SELECT id,tableLocation FROM $judging_tables_db_table ORDER BY id DESC LIMIT 1";
 		$table = mysqli_query($connection,$query_table) or die (mysqli_error($connection));
@@ -49,10 +59,9 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 		$row_table_rounds = mysqli_fetch_assoc($table_rounds);
 		if ($row_table_rounds['judgingRounds'] == 1) $rounds = "1"; else $rounds = "";
 
-		$a = explode(",",$table_styles);
+		$a = explode(",",$tableStyles);
 
 		foreach (array_unique($a) as $value) {
-
 
 			if ($_SESSION['prefsStyleSet'] != "BA") {
 				$query_styles = sprintf("SELECT brewStyleGroup, brewStyleNum FROM %s WHERE id='%s'", $styles_db_table, $value);
@@ -78,13 +87,15 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 			$row_entries = mysqli_fetch_assoc($entries);
 
 			do {
-				// Update any scores that have been entered already for the entry with the new table number
-				$updateSQL = sprintf("UPDATE $judging_scores_db_table SET scoreTable=%s WHERE eid=%s",
-							   GetSQLValueString($row_table['id'], "text"),
-							   GetSQLValueString($row_entries['id'], "text"));
 
-				mysqli_real_escape_string($connection,$updateSQL);
-				$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+				$update_table = $prefix."judging_scores";
+				$data = array('scoreTable' => $row_table['id']);
+				$db_conn->where ('eid', $row_entries['id']);
+				$result = $db_conn->update ($update_table, $data);
+				if (!$result) {
+					$error_output[] = $db_conn->getLastError();
+					$errors = TRUE;
+				}
 
 				// Check if entry is already in the judging_flights table
 				$query_empty_count = sprintf("SELECT * FROM $judging_flights_db_table WHERE flightEntryID='%s'",$row_entries['id']);
@@ -95,50 +106,57 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 				// if so, update the record with the new judging_table id
 				if ($totalRows_empty_count > 0) {
 
-					$updateSQL = sprintf("UPDATE $judging_flights_db_table SET flightTable=%s WHERE flightEntryID=%s",
-								   GetSQLValueString($row_table['id'], "text"),
-								   GetSQLValueString($row_entries['id'], "text"));
+					$update_table = $prefix."judging_flights";
+					$data = array('flightTable' => $row_table['id']);
+					$db_conn->where ('flightEntryID', $row_entries['id']);
+					$result = $db_conn->update ($update_table, $data);
+					if (!$result) {
+						$error_output[] = $db_conn->getLastError();
+						$errors = TRUE;
+					}
 
-					mysqli_real_escape_string($connection,$updateSQL);
-					$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 				}
 
 				// if not, add a new record to the judging_flights table
 				else {
 
-					$insertSQL = sprintf("INSERT INTO $judging_flights_db_table (
-						flightTable,
-						flightNumber,
-						flightEntryID,
-						flightRound
-						) VALUES (%s, %s, %s, %s)",
-							   GetSQLValueString($row_table['id'], "text"),
-							   GetSQLValueString("1", "text"),
-							   GetSQLValueString($row_entries['id'], "text"),
-							   GetSQLValueString($rounds, "text")
-							   );
+					$update_table = $prefix."judging_flights";
+					$data = array(
+						'flightTable' => $row_table['id'],
+						'flightNumber' => 1,
+						'flightEntryID' => $row_entries['id'],
+						'flightRound' => $rounds
+					);
+					$result = $db_conn->insert ($update_table, $data);
+					if (!$result) {
+						$error_output[] = $db_conn->getLastError();
+						$errors = TRUE;
+					}
 
-					mysqli_real_escape_string($connection,$insertSQL);
-					$result = mysqli_query($connection,$insertSQL) or die (mysqli_error($connection));
-
-				}
+				} // end else
 
 			} while ($row_entries = mysqli_fetch_assoc($entries));
 
 			// Finally change the flightPlanning status for all records
-			if ($_SESSION['jPrefsTablePlanning'] == 1) $sql = sprintf("UPDATE `%s` SET flightPlanning='1'", $prefix."judging_flights");
-			else $sql = sprintf("UPDATE `%s` SET flightPlanning='0'", $prefix."judging_flights");
-			mysqli_real_escape_string($connection,$sql);
-			$result = mysqli_query($connection,$sql) or die (mysqli_error($connection));
+			$update_table = $prefix."judging_flights";
+			$data = array('flightPlanning' => $flightPlanning);
+			$result = $db_conn->update ($update_table, $data);
+			if (!$result) {
+				$error_output[] = $db_conn->getLastError();
+				$errors = TRUE;
+			}
 
 		}
 
-		if ($_POST['tableStyles'] != "") $insertGoTo = $insertGoTo; else $insertGoTo = $insertGoTo = $_POST['relocate']."&msg=13";
-		$pattern = array('\'', '"');
-		$insertGoTo = str_replace($pattern, "", $insertGoTo);
-		$redirect_go_to = sprintf("Location: %s", stripslashes($insertGoTo));
+		if (!empty($error_output)) $_SESSION['error_output'] = $error_output;
 
-	}
+		if ($_POST['tableStyles'] != "") $insertGoTo = $insertGoTo;
+		else $insertGoTo = $insertGoTo = $_POST['relocate']."&msg=13";
+		if ($errors) $insertGoTo = $_POST['relocate']."&msg=3";
+		$insertGoTo = prep_redirect_link($insertGoTo);
+		$redirect_go_to = sprintf("Location: %s", $insertGoTo);
+
+	} // end if ($action == "add")
 
 	if ($action == "edit") {
 
@@ -148,18 +166,27 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 		$row_table = mysqli_fetch_assoc($table);
 
 		// If so...
-		if ($table_styles != $row_table['tableStyles']) {
+		if ($tableStyles != $row_table['tableStyles']) {
 
 			// Delete all associated scores
-			$deleteSQL = sprintf("DELETE FROM %s WHERE scoreTable='%s'", $prefix."judging_scores", $id);
-			mysqli_real_escape_string($connection,$deleteSQL);
-			$result = mysqli_query($connection,$deleteSQL) or die (mysqli_error($connection));
+			$update_table = $prefix."judging_scores";
+			$db_conn->where ('scoreTable', $id);
+			$result = $db_conn->delete ($update_table);
+			if (!$result) {
+				$error_output[] = $db_conn->getLastError();
+				$errors = TRUE;
+			}
 
 			// Delete all entries in flights table that were previously assigned
 			// Fool-proof way to avoid breaking system when adding new tables
-			$deleteSQL = sprintf("DELETE FROM $judging_flights_db_table WHERE flightTable='%s'", $id);
-			mysqli_real_escape_string($connection,$deleteSQL);
-			$result = mysqli_query($connection,$deleteSQL) or die (mysqli_error($connection));
+
+			$update_table = $prefix."judging_flights";
+			$db_conn->where ('flightTable', $id);
+			$result = $db_conn->delete ($update_table);
+			if (!$result) {
+				$error_output[] = $db_conn->getLastError();
+				$errors = TRUE;
+			}
 
 			// Add back in
 			$query_table = sprintf("SELECT id,tableLocation FROM %s WHERE id=%s", $judging_tables_db_table, $id);
@@ -171,7 +198,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 			$row_table_rounds = mysqli_fetch_assoc($table_rounds);
 			if ($row_table_rounds['judgingRounds'] == 1) $rounds = "1"; else $rounds = "";
 
-			$a = explode(",",$table_styles);
+			$a = explode(",",$tableStyles);
 
 			foreach (array_unique($a) as $value) {
 
@@ -187,13 +214,15 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 				$row_entries = mysqli_fetch_assoc($entries);
 
 				do {
-					// Update any scores that have been entered already for the entry with the new table number
-					$updateSQL = sprintf("UPDATE $judging_scores_db_table SET scoreTable=%s WHERE eid=%s",
-								   GetSQLValueString($row_table['id'], "text"),
-								   GetSQLValueString($row_entries['id'], "text"));
 
-					mysqli_real_escape_string($connection,$updateSQL);
-					$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+					$update_table = $prefix."judging_scores";
+					$data = array('scoreTable' => $row_table['id']);
+					$db_conn->where ('eid', $row_entries['id']);
+					$result = $db_conn->update ($update_table, $data);
+					if (!$result) {
+						$error_output[] = $db_conn->getLastError();
+						$errors = TRUE;
+					}
 
 					// Check if entry is already in the judging_flights table
 					$query_empty_count = sprintf("SELECT id FROM %s WHERE flightEntryID='%s'", $judging_flights_db_table, $row_entries['id']);
@@ -204,62 +233,64 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 					// if so, update the record with the new judging_table id
 					if ($totalRows_empty_count > 0) {
 
-						$updateSQL = sprintf("UPDATE $judging_flights_db_table SET flightTable=%s WHERE flightEntryID=%s",
-									   GetSQLValueString($id, "text"),
-									   GetSQLValueString($row_entries['id'], "text"));
+						$update_table = $prefix."judging_flights";
+						$data = array('flightTable' => $id);
+						$db_conn->where ('flightEntryID', $row_entries['id']);
+						$result = $db_conn->update ($update_table, $data);
+						if (!$result) {
+							$error_output[] = $db_conn->getLastError();
+							$errors = TRUE;
+						}
 
-						mysqli_real_escape_string($connection,$updateSQL);
-						$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 					}
 
 					// if not, add a new record to the judging_flights table
 					else {
 
-						$insertSQL = sprintf("INSERT INTO $judging_flights_db_table (
-							flightTable,
-							flightNumber,
-							flightEntryID,
-							flightRound
-							) VALUES (%s, %s, %s, %s)",
-								   GetSQLValueString($id, "text"),
-								   GetSQLValueString("1", "text"),
-								   GetSQLValueString($row_entries['id'], "text"),
-								   GetSQLValueString($rounds, "text")
-								   );
-
-						mysqli_real_escape_string($connection,$insertSQL);
-						$result = mysqli_query($connection,$insertSQL) or die (mysqli_error($connection));
+						$update_table = $prefix."judging_flights";
+						$data = array(
+							'flightTable' => $id,
+							'flightNumber' => 1,
+							'flightEntryID' => $row_entries['id'],
+							'flightRound' => $rounds
+						);
+						$result = $db_conn->insert ($update_table, $data);
+						if (!$result) {
+							$error_output[] = $db_conn->getLastError();
+							$errors = TRUE;
+						}
 
 					}
 
 				} while ($row_entries = mysqli_fetch_assoc($entries));
 
 				// Finally change the flightPlanning status for all records
-				if ($_SESSION['jPrefsTablePlanning'] == 1) $sql = sprintf("UPDATE `%s` SET flightPlanning='1'", $prefix."judging_flights");
-				else $sql = sprintf("UPDATE `%s` SET flightPlanning='0'", $prefix."judging_flights");
-				mysqli_real_escape_string($connection,$sql);
-				$result = mysqli_query($connection,$sql) or die (mysqli_error($connection));
+				$update_table = $prefix."judging_flights";
+				$data = array('flightPlanning' => $flightPlanning);
+				$result = $db_conn->update ($update_table, $data);
+				if (!$result) {
+					$error_output[] = $db_conn->getLastError();
+					$errors = TRUE;
+				}
 
 			}
 
-		} // End if ($table_styles != $row_table['tableStyles'])
+		} // End if ($tableStyles != $row_table['tableStyles'])
 
-		// Update table in judging_tables table
-		$updateSQL = sprintf("UPDATE $judging_tables_db_table SET
-		tableName=%s,
-		tableStyles=%s,
-		tableNumber=%s,
-		tableLocation=%s
-		WHERE id=%s",
 
-							GetSQLValueString($tableName, "text"),
-							GetSQLValueString(sterilize($table_styles), "text"),
-							GetSQLValueString(sterilize($_POST['tableNumber']), "text"),
-							GetSQLValueString(sterilize($_POST['tableLocation']), "text"),
-							GetSQLValueString($id, "text"));
-
-		mysqli_real_escape_string($connection,$updateSQL);
-		$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+		$table_update = $prefix."judging_tables";
+		$data = array(
+			'tableName' => $tableName,
+			'tableStyles' => $tableStyles,
+			'tableNumber' => $tableNumber,
+			'tableLocation' => $tableLocation
+		);
+		$db_conn->where ('id', $id);
+		$result = $db_conn->update ($update_table, $data);
+		if (!$result) {
+			$error_output[] = $db_conn->getLastError();
+			$errors = TRUE;
+		}
 
 		// Check rows for "blank" flightTables in the judging_flights table
 
@@ -298,8 +329,8 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 				//echo $query_style."<br>";
 
 				$query_table_styles = "SELECT id,tableStyles FROM $judging_tables_db_table";
-				$table_styles = mysqli_query($connection,$query_table_styles) or die (mysqli_error($connection));
-				$row_table_styles = mysqli_fetch_assoc($table_styles);
+				$tableStyles = mysqli_query($connection,$query_table_styles) or die (mysqli_error($connection));
+				$row_table_styles = mysqli_fetch_assoc($tableStyles);
 
 				//echo $row_style['id']."<br>";
 				//echo $query_table_styles."<br>";
@@ -309,20 +340,22 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 
 					if (in_array($style_id,$style_array)) {
 
-						$updateSQL = sprintf("UPDATE $judging_flights_db_table SET flightTable=%s WHERE flightEntryID=%s",
-							   GetSQLValueString($row_table_styles['id'], "text"),
-							   GetSQLValueString($id, "text"));
-
-						mysqli_real_escape_string($connection,$updateSQL);
-						$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+						$update_table = $prefix."judging_flights";
+						$data = array('flightTable' => $row_table_styles['id']);
+						$db_conn->where ('flightEntryID', $id);
+						$result = $db_conn->update ($update_table, $data);
+						if (!$result) {
+							$error_output[] = $db_conn->getLastError();
+							$errors = TRUE;
+						}
 
 					}
 
-				} while ($row_table_styles = mysqli_fetch_assoc($table_styles));
+				} while ($row_table_styles = mysqli_fetch_assoc($tableStyles));
 
 			}
 
-		}
+		} // end if ($totalRows_empty_count > 0)
 
 		// Remove all flight rows if unassigning ALL present table styles
 		if (empty($_POST['tableStyles'])) {
@@ -331,28 +364,40 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 
 			foreach ($a as $id) {
 
-				$deleteSQL = sprintf("DELETE FROM $judging_flights_db_table WHERE id='%s'", $id);
-				mysqli_real_escape_string($connection,$deleteSQL);
-				$result = mysqli_query($connection,$deleteSQL) or die (mysqli_error($connection));
-
+				$update_table = $prefix."judging_flights";
+				$db_conn->where ('id', $id);
+				$result = $db_conn->delete ($update_table);
+				if (!$result) {
+					$error_output[] = $db_conn->getLastError();
+					$errors = TRUE;
 				}
 
-		} // end if (($totalRows_flight_count > 0) && ($table_styles == ""))
+			} // end foreach
 
-		// Finally change the flightPlanning status for all records
-		if ($_SESSION['jPrefsTablePlanning'] == 1) $sql = sprintf("UPDATE `%s` SET flightPlanning='1'", $prefix."judging_flights");
-		else $sql = sprintf("UPDATE `%s` SET flightPlanning='0'", $prefix."judging_flights");
-		mysqli_real_escape_string($connection,$sql);
-		$result = mysqli_query($connection,$sql) or die (mysqli_error($connection));
+		} // end if (empty($_POST['tableStyles']))
 
-		$updateGoTo = $base_url."index.php?section=admin&go=judging_tables&msg=2";
-		$pattern = array('\'', '"');
-		$updateGoTo = str_replace($pattern, "", $updateGoTo);
-		$redirect_go_to = sprintf("Location: %s", stripslashes($updateGoTo));
-
+		$update_table = $prefix."judging_flights";
+		$data = array('flightPlanning' => $flightPlanning);
+		$result = $db_conn->update ($update_table, $data);
+		if (!$result) {
+			$error_output[] = $db_conn->getLastError();
+			$errors = TRUE;
 		}
 
+		if (!empty($error_output)) $_SESSION['error_output'] = $error_output;
+
+		$updateGoTo = $base_url."index.php?section=admin&go=judging_tables&msg=2";
+		if ($errors) $updateGoTo = $base_url."index.php?section=admin&go=judging_tables&msg=3";
+		$updateGoTo = prep_redirect_link($updateGoTo);
+		$redirect_go_to = sprintf("Location: %s", $updateGoTo);
+
+	} // end if ($action == "edit")
+
 } else {
-	$redirect_go_to = sprintf("Location: %s", $base_url."index.php?msg=98");
+
+	$redirect = $base_url."index.php?msg=98";
+	$redirect = prep_redirect_link($redirect);
+	$redirect_go_to = sprintf("Location: %s", $redirect);
+
 }
 ?>

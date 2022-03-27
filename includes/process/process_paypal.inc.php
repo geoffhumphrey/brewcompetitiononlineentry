@@ -1,9 +1,10 @@
 <?php
+
 // PayPal settings
 $paypal_email = $_POST['business'];
 $return_url = $_POST['return'];
 $cancel_url = $_POST['cancel_return'];
-// $notify_url = $base_url."ppv.php";
+
 if ((TESTING) || (DEBUG)) $paypal_url = "https://www.sandbox.paypal.com/cgi-bin/webscr";
 else $paypal_url = "https://www.paypal.com/cgi-bin/webscr";
 
@@ -30,7 +31,6 @@ foreach($_POST as $key => $value){
 // Append paypal return addresses
 $query_string .= "return=".urlencode(stripslashes($return_url));
 $query_string .= "&cancel_return=".urlencode(stripslashes($cancel_url));
-// $query_string .= "&notify_url=".urlencode($notify_url);
 
 // Redirect to PayPal IPN
 $redirect_go_to = sprintf('location:%s%s',$paypal_url,$query_string);

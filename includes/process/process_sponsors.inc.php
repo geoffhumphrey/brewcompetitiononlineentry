@@ -28,62 +28,75 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 		$redirect_go_to = sprintf("Location: %s", stripslashes($massUpdateGoTo));
 	}
 
-	if ($action == "add") {
+	if (($action == "add") || ($action == "edit")) {
 
 		$sponsorURL = check_http($purifier->purify($_POST['sponsorURL']));
-		$sponsor_name = capitalize($purifier->purify($_POST['sponsorName']));
-		$sponsor_name = filter_var($sponsor_name,FILTER_SANITIZE_STRING);
-		$sponsor_info = $purifier->purify($_POST['sponsorText']);
-		$sponsor_info = filter_var($sponsor_info,FILTER_SANITIZE_STRING);
+		$sponsorURL = sterilize($sponsorURL);
+		$sponsorName = capitalize($purifier->purify($_POST['sponsorName']));
+		$sponsorName = sterilize($sponsorName);
+		$sponsorText = $purifier->purify($_POST['sponsorText']);
+		$sponsorText = sterilize($sponsorText);
 
-		$insertSQL = sprintf("INSERT INTO $sponsors_db_table (sponsorName, sponsorURL, sponsorImage, sponsorText, sponsorLocation, sponsorLevel, sponsorEnable) VALUES (%s, %s, %s, %s, %s, %s, %s)",
-						   GetSQLValueString($sponsor_name, "text"),
-						   GetSQLValueString($sponsorURL, "text"),
-						   GetSQLValueString(sterilize($_POST['sponsorImage']), "text"),
-						   GetSQLValueString($sponsor_info, "text"),
-						   GetSQLValueString(sterilize($_POST['sponsorLocation']), "text"),
-						   GetSQLValueString(sterilize($_POST['sponsorLevel']), "int"),
-						   GetSQLValueString(sterilize($_POST['sponsorEnable']), "int")
-						   );
+	}
 
+	if ($action == "add") {
 
-		mysqli_real_escape_string($connection,$insertSQL);
-		$result = mysqli_query($connection,$insertSQL) or die (mysqli_error($connection));
+		$update_table = $prefix."sponsors";
+		$data = array(
+			'sponsorName' => $sponsorName,
+			'sponsorURL' => $sponsorURL,
+			'sponsorImage' => sterilize($_POST['sponsorImage']),
+			'sponsorText' => $sponsorText,
+			'sponsorLocation' => sterilize($_POST['sponsorLocation']),
+			'sponsorLevel' => sterilize($_POST['sponsorLevel']),
+			'sponsorEnable' => sterilize($_POST['sponsorEnable'])
+		);
+		$result = $db_conn->insert ($update_table, $data);
+		if (!$result) {
+			$error_output[] = $db_conn->getLastError();
+			$errors = TRUE;
+		}
 
-		$pattern = array('\'', '"');
-		$insertGoTo = str_replace($pattern, "", $insertGoTo);
-		$redirect_go_to = sprintf("Location: %s", stripslashes($insertGoTo));
+		if (!empty($error_output)) $_SESSION['error_output'] = $error_output;
+		
+		if (!$result) $insertGoTo = $_POST['relocate']."&msg=3";
+		$insertGoTo = prep_redirect_link($insertGoTo);
+		$redirect_go_to = sprintf("Location: %s", $insertGoTo);
 
 	}
 
 	if ($action == "edit") {
 
-		$sponsorURL = check_http($purifier->purify($_POST['sponsorURL']));
-		$sponsor_name = capitalize($purifier->purify($_POST['sponsorName']));
-		$sponsor_name = filter_var($sponsor_name,FILTER_SANITIZE_STRING);
-		$sponsor_info = $purifier->purify($_POST['sponsorText']);
-		$sponsor_info = filter_var($sponsor_info,FILTER_SANITIZE_STRING);
+		$update_table = $prefix."sponsors";
+		$data = array(
+			'sponsorName' => $sponsorName,
+			'sponsorURL' => $sponsorURL,
+			'sponsorImage' => sterilize($_POST['sponsorImage']),
+			'sponsorText' => $sponsorText,
+			'sponsorLocation' => sterilize($_POST['sponsorLocation']),
+			'sponsorLevel' => sterilize($_POST['sponsorLevel']),
+			'sponsorEnable' => sterilize($_POST['sponsorEnable'])
+		);
+		$db_conn->where ('id', $id);
+		$result = $db_conn->update ($update_table, $data);
+		if (!$result) {
+			$error_output[] = $db_conn->getLastError();
+			$errors = TRUE;
+		}
 
-		$updateSQL = sprintf("UPDATE $sponsors_db_table SET sponsorName=%s, sponsorURL=%s, sponsorImage=%s, sponsorText=%s, sponsorLocation=%s , sponsorLevel=%s, sponsorEnable=%s WHERE id=%s",
-						   GetSQLValueString($sponsor_name, "text"),
-						   GetSQLValueString($sponsorURL, "text"),
-						   GetSQLValueString(sterilize($_POST['sponsorImage']), "text"),
-						   GetSQLValueString($sponsor_info, "text"),
-						   GetSQLValueString(sterilize($_POST['sponsorLocation']), "text"),
-						   GetSQLValueString(sterilize($_POST['sponsorLevel']), "int"),
-						   GetSQLValueString(sterilize($_POST['sponsorEnable']), "int"),
-						   GetSQLValueString($id, "int"));
+		if (!empty($error_output)) $_SESSION['error_output'] = $error_output;
 
-		mysqli_real_escape_string($connection,$updateSQL);
-		$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
-
-		$pattern = array('\'', '"');
-		$updateGoTo = str_replace($pattern, "", $updateGoTo);
-		$redirect_go_to = sprintf("Location: %s", stripslashes($updateGoTo));
+		if ($errors) $updateGoTo = $_POST['relocate']."&msg=3";
+		$updateGoTo = prep_redirect_link($updateGoTo);
+		$redirect_go_to = sprintf("Location: %s", $updateGoTo);
 
 	}
 
 } else {
-	$redirect_go_to = sprintf("Location: %s", $base_url."index.php?msg=98");
+
+	$redirect = $base_url."index.php?msg=98";
+	$redirect = prep_redirect_link($redirect);
+	$redirect_go_to = sprintf("Location: %s", $redirect);
+	
 }
 ?>

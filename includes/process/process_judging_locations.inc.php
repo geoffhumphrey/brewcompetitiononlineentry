@@ -3,7 +3,12 @@
  * Module:      process_judging_location.inc.php
  * Description: This module does all the heavy lifting for adding/editing info in the "judging_locations" table
  */
+
 if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) || ($section == "setup"))) {
+
+	$errors = FALSE;
+	$error_output = array();
+	$_SESSION['error_output'] = "";
 
 	// Instantiate HTMLPurifier
 	require (CLASSES.'htmlpurifier/HTMLPurifier.standalone.php');
@@ -12,65 +17,81 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 
 	$judgingDate = strtotime(sterilize($_POST['judgingDate']));
 	$judgingLocName = $purifier->purify($_POST['judgingLocName']);
-	$judgingLocName = filter_var($judgingLocName,FILTER_SANITIZE_STRING);
+	$judgingLocName = sterilize($judgingLocName);
 	$judgingLocation = $purifier->purify($_POST['judgingLocation']);
-	$judgingLocation = filter_var($judgingLocation,FILTER_SANITIZE_STRING);
+	$judgingLocation = sterilize($judgingLocation);
+	$judgingLocType = sterilize($_POST['judgingLocType']);
+	$judgingRounds = sterilize($_POST['judgingRounds']);
 	
 	$judgingDateEnd = "";
 	if (!empty($_POST['judgingDateEnd'])) $judgingDateEnd = strtotime(sterilize($_POST['judgingDateEnd']));
 
-	if ($action == "add") {
-		$insertSQL = sprintf("INSERT INTO $judging_locations_db_table (judgingLocType, judgingDate, judgingDateEnd, judgingLocation, judgingLocName, judgingRounds) VALUES (%s, %s, %s, %s, %s, %s)",
-						   GetSQLValueString(sterilize($_POST['judgingLocType']), "text"),
-						   GetSQLValueString($judgingDate, "text"),
-						   GetSQLValueString($judgingDateEnd, "text"),
-						   GetSQLValueString($judgingLocation, "text"),
-						   GetSQLValueString($judgingLocName, "text"),
-						   GetSQLValueString(sterilize($_POST['judgingRounds']), "text")
-						   );
+	$update_table = $prefix."judging_locations";
+	$data = array(
+		'judgingLocType' => $judgingLocType,
+		'judgingDate' => $judgingDate,
+		'judgingDateEnd' => $judgingDateEnd,
+		'judgingLocation' => $judgingLocation,
+		'judgingLocName' => $judgingLocName,
+		'judgingRounds' => $judgingRounds
+	);
 
-		//echo $insertSQL;
-		mysqli_real_escape_string($connection,$insertSQL);
-		$result = mysqli_query($connection,$insertSQL) or die (mysqli_error($connection));
+	if ($action == "add") {
+		
+		$result = $db_conn->insert ($update_table, $data);
+		if (!$result) {
+			$error_output[] = $db_conn->getLastError();
+			$errors = TRUE;
+		}
 
 		if ($section == "setup") {
 
-			$sql = sprintf("UPDATE `%s` SET setup_last_step = '5' WHERE id='1';", $system_db_table);
-			mysqli_select_db($connection,$database);
-			mysqli_real_escape_string($connection,$sql);
-			$result = mysqli_query($connection,$sql) or die (mysqli_error($connection));
+			$update_table = $prefix."bcoem_sys";
+			$data = array('setup_last_step' => 5);
+			$db_conn->where ('id', 1);
+			$result = $db_conn->update ($update_table, $data);
+			if (!$result) {
+				$error_output[] = $db_conn->getLastError();
+				$errors = TRUE;
+			}
 
 			$insertGoTo = $base_url."setup.php?section=step5&msg=9";
+			if ($errors) $insertGoTo = $base_url."setup.php?section=step5&msg=3";
+			$insertGoTo = prep_redirect_link($insertGoTo);
+			$redirect_go_to = sprintf("Location: %s", $insertGoTo);
 
 		}
 
-		else $insertGoTo = $insertGoTo;
+		else {
+			if ($errors) $insertGoTo = $_POST['relocate']."&msg=3";
+			$insertGoTo = prep_redirect_link($insertGoTo);
+			$redirect_go_to = sprintf("Location: %s", $insertGoTo);
+		}
 
-		$pattern = array('\'', '"');
-		$insertGoTo = str_replace($pattern, "", $insertGoTo);
-		$redirect_go_to = sprintf("Location: %s", stripslashes($insertGoTo));
-
-	}
+	} // end if ($action == "add")
 
 	if ($action == "edit") {
-		$updateSQL = sprintf("UPDATE $judging_locations_db_table SET judgingLocType=%s, judgingDate=%s, judgingDateEnd=%s, judgingLocation=%s, judgingLocName=%s, judgingRounds=%s WHERE id=%s",
-						   GetSQLValueString(sterilize($_POST['judgingLocType']), "text"),
-						   GetSQLValueString($judgingDate, "text"),
-						   GetSQLValueString($judgingDateEnd, "text"),
-						   GetSQLValueString($judgingLocation, "text"),
-						   GetSQLValueString($judgingLocName, "text"),
-						   GetSQLValueString(sterilize($_POST['judgingRounds']), "text"),
-						   GetSQLValueString($id, "int"));
 
-		mysqli_real_escape_string($connection,$updateSQL);
-		$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
-		$pattern = array('\'', '"');
-		$updateGoTo = str_replace($pattern, "", $updateGoTo);
-		$redirect_go_to = sprintf("Location: %s", stripslashes($updateGoTo));
-	}
+		$db_conn->where ('id', $id);
+		$result = $db_conn->update ($update_table, $data);
+		if (!$result) {
+			$error_output[] = $db_conn->getLastError();
+			$errors = TRUE;
+		}
 
+		if ($errors) $updateGoTo = $_POST['relocate']."&msg=3";
+		$updateGoTo = prep_redirect_link($updateGoTo);
+		$redirect_go_to = sprintf("Location: %s", $updateGoTo);
+	
+	} // end if ($action == "edit")
+
+	if (!empty($error_output)) $_SESSION['error_output'] = $error_output;
 
 } else {
-	$redirect_go_to = sprintf("Location: %s", $base_url."index.php?msg=98");
+
+	$redirect = $base_url."index.php?msg=98";
+	$redirect = prep_redirect_link($redirect);
+	$redirect_go_to = sprintf("Location: %s", $redirect);
+
 }
 ?>

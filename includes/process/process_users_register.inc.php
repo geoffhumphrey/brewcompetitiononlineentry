@@ -7,12 +7,18 @@
 
 use PHPMailer\PHPMailer\PHPMailer;
 require(LIB.'email.lib.php');
-$captcha_success = FALSE;
 
-if (isset($_SERVER['HTTP_REFERER'])) {
+if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) && (isset($_SESSION['userLevel']))) || ($section == "setup"))) {
+
+	require(CLASSES.'phpass/PasswordHash.php');
+
+	$errors = FALSE;
+	$error_output = array();
+	$_SESSION['error_output'] = "";
+	
+	$captcha_success = FALSE;
 
 	require(PROCESS.'process_brewer_info.inc.php');
-	require(CLASSES.'phpass/PasswordHash.php');
 
 	$username = strtolower($_POST['user_name']);
 	$username = filter_var($username,FILTER_SANITIZE_EMAIL);
@@ -52,8 +58,6 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 
 	if ($filter != "admin") {
 
-	// CAPCHA check
-
 		if (($_SESSION['prefsCAPTCHA'] == 1) && (isset($_POST['g-recaptcha-response'])) && (!empty($_POST['g-recaptcha-response']))) {
 
 			if ((!HOSTED) && (!empty($_SESSION['prefsGoogleAccount']))) {
@@ -70,360 +74,395 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 
 		elseif ($_SESSION['prefsCAPTCHA'] == 0) $captcha_success = TRUE;
 
-	}
-
+	} // end if ($filter != "admin")
 
 	if (($view == "default") && ($filter != "admin") && (!$captcha_success)) {
 
-		$location = $base_url."index.php?section=".$section."&go=".$go."&msg=4";
-		header(sprintf("Location: %s", $location));
+		$redirect = $base_url."index.php?section=".$section."&go=".$go."&msg=4";
+		$redirect = prep_redirect_link($redirect);
+		$redirect_go_to = sprintf("Location: %s", $redirect);
+		header($redirect_go_to);
+		exit();
 
-	}
+	} // end if (($view == "default") && ($filter != "admin") && (!$captcha_success))
 
 	elseif (($view == "default") && ($username != $username2)) {
 
-		if ($filter == "admin") $location =  $base_url."index.php?section=admin&go=entrant&action=register&msg=27";
-		else $location = $base_url."index.php?section=".$section."&go=".$go."&msg=5";
-		header(sprintf("Location: %s", $location));
+		if ($filter == "admin") $redirect =  $base_url."index.php?section=admin&go=entrant&action=register&msg=27";
+		else $redirect = $base_url."index.php?section=".$section."&go=".$go."&msg=5";
+		$redirect = prep_redirect_link($redirect);
+		$redirect_go_to = sprintf("Location: %s", $redirect);
+		header($redirect_go_to);
+		exit();
 
-	} else {
+	} 
 
-	// Check to see if email address is already in the system. If so, redirect.
+	else {
 
-	if (strstr($username,'@'))  {
+		// Check to see if email address is already in the system. If so, redirect.
+		if (strstr($username,'@'))  {
 
-		// Sanity check from AJAX widget
-		$query_userCheck = sprintf("SELECT user_name FROM %s WHERE user_name = '%s'",$prefix."users",$username);
-		$userCheck = mysqli_query($connection,$query_userCheck) or die (mysqli_error($connection));
-		$row_userCheck = mysqli_fetch_assoc($userCheck);
-		$totalRows_userCheck = mysqli_num_rows($userCheck);
+			// Sanity check from AJAX widget
+			$query_userCheck = sprintf("SELECT user_name FROM %s WHERE user_name = '%s'",$prefix."users",$username);
+			$userCheck = mysqli_query($connection,$query_userCheck) or die (mysqli_error($connection));
+			$row_userCheck = mysqli_fetch_assoc($userCheck);
+			$totalRows_userCheck = mysqli_num_rows($userCheck);
 
-		if ($totalRows_userCheck > 0) {
+			if ($totalRows_userCheck > 0) {
 
-			if ($filter == "admin") header(sprintf("Location: %s", $base_url."index.php?section=admin&go=".$go."&action=register&msg=10"));
-			else header(sprintf("Location: %s", $base_url."index.php?section=".$section."&go=".$go."&action=".$action."&msg=2"));
+				if ($section == "admin") $msg = "10"; else $msg = "2";
+				$redirect = $base_url."index.php?section=".$section."&go=".$go."&action=".$action."&msg=".$msg;
+				$redirect = prep_redirect_link($redirect);
+				$redirect_go_to = sprintf("Location: %s", $redirect);
 
-			} else {
-
-			// Add the user's creds to the "users" table
-			$password = md5($_POST['password']);
-			$hasher = new PasswordHash(8, false);
-			$hash = $hasher->HashPassword($password);
-
-			if ($filter == "admin") {
-
-			}
-
-			$insertSQL = sprintf("INSERT INTO $users_db_table (user_name, userLevel, password, userQuestion, userQuestionAnswer, userCreated) VALUES (%s, %s, %s, %s, %s, %s)",
-						   GetSQLValueString($username, "text"),
-						   GetSQLValueString($_POST['userLevel'], "int"),
-						   GetSQLValueString($hash, "text"),
-						   GetSQLValueString(sterilize($_POST['userQuestion']), "text"),
-						   GetSQLValueString($hash_question, "text"),
-						   "NOW( )"
-						   );
-
-			mysqli_real_escape_string($connection,$insertSQL);
-			$result = mysqli_query($connection,$insertSQL) or die (mysqli_error($connection));
-			//echo $insertSQL."<br>";
-
-			// Get the id from the "users" table to insert as the uid in the "brewer" table
-			$query_user= "SELECT * FROM $users_db_table WHERE user_name = '$username'";
-			$user = mysqli_query($connection,$query_user) or die (mysqli_error($connection));
-			$row_user = mysqli_fetch_assoc($user);
-
-			// Add the user's info to the "brewer" table
-
-			$insertSQL = sprintf("INSERT INTO $brewer_db_table (
-			  uid,
-			  brewerFirstName,
-			  brewerLastName,
-			  brewerAddress,
-			  brewerCity,
-
-			  brewerState,
-			  brewerZip,
-			  brewerCountry,
-			  brewerPhone1,
-			  brewerPhone2,
-
-			  brewerClubs,
-			  brewerEmail,
-			  brewerSteward,
-			  brewerJudge,
-			  brewerJudgeID,
-
-			  brewerJudgeMead,
-			  brewerJudgeRank,
-			  brewerJudgeLocation,
-			  brewerStewardLocation,
-			  brewerJudgeWaiver,
-
-			  brewerDropOff,
-			  brewerStaff,
-			  brewerBreweryName,
-			  brewerBreweryTTB,
-			  brewerProAm,
-			  
-			  brewerAHA
-
-			) VALUES (
-			%s, %s, %s, %s, %s,
-			%s, %s, %s, %s, %s,
-			%s, %s, %s, %s, %s,
-			%s, %s, %s, %s, %s,
-			%s, %s, %s, %s, %s,
-			%s
-			)",
-						   GetSQLValueString($row_user['id'], "int"),
-						   GetSQLValueString($first_name, "text"),
-						   GetSQLValueString($last_name, "text"),
-						   GetSQLValueString($address, "text"),
-						   GetSQLValueString($city, "text"),
-						   GetSQLValueString($state, "text"),
-						   GetSQLValueString($purifier->purify($_POST['brewerZip']), "text"),
-						   GetSQLValueString($purifier->purify($_POST['brewerCountry']), "text"),
-						   GetSQLValueString($brewerPhone1, "text"),
-						   GetSQLValueString($brewerPhone2, "text"),
-						   GetSQLValueString($brewerClubs, "text"),
-						   GetSQLValueString($username, "text"),
-						   GetSQLValueString($brewerSteward, "text"),
-						   GetSQLValueString($brewerJudge, "text"),
-						   GetSQLValueString($brewerJudgeID, "text"),
-						   GetSQLValueString($brewerJudgeMead, "text"),
-						   GetSQLValueString($brewerJudgeRank, "text"),
-						   GetSQLValueString($location_pref1, "text"),
-						   GetSQLValueString($location_pref2, "text"),
-						   GetSQLValueString($brewerJudgeWaiver, "text"),
-						   GetSQLValueString($brewerDropOff, "text"),
-						   GetSQLValueString($brewerStaff, "text"),
-						   GetSQLValueString($brewerBreweryName, "text"),
-						   GetSQLValueString($brewerBreweryTTB, "text"),
-						   GetSQLValueString($brewerProAm, "text"),
-						   GetSQLValueString($brewerAHA, "text")
-						   );
-
-			mysqli_real_escape_string($connection,$insertSQL);
-			$result = mysqli_query($connection,$insertSQL) or die (mysqli_error($connection));
-
-			/*
-			echo $_POST['userQuestion']."<br>";
-			echo $userQuestionAnswer."<br>";
-			echo $first_name."<br>";
-			echo $last_name."<br>";
-			echo $address."<br>";
-			echo $city."<br>";
-			echo $state."<br>";
-			echo $purifier->purify($_POST['brewerZip'])."<br>";
-			echo $purifier->purify($_POST['brewerCountry'])."<br>";
-			echo $brewerPhone1."<br>";
-			echo $brewerPhone2."<br>";
-			echo $brewerClubs."<br>";
-			echo $brewerAHA."<br>";
-			echo $brewerStaff."<br>";
-			echo $brewerSteward."<br>";
-			echo $brewerJudge."<br>";
-			echo $brewerDropOff."<br>";
-			echo $location_pref1."<br>";
-			echo $location_pref2."<br>";
-			echo $brewerBreweryName."<br>";
-			echo $brewerBreweryTTB."<br>";
-			echo $brewerJudgeID."<br>";
-			echo $brewerProAm."<br>";
-			echo $brewerJudgeWaiver."<br>";
-			echo $insertSQL."<br>";
-			exit;
-			*/
-
-			$staff_judge = 0;
-			$staff_steward = 0;
-			$staff_staff = 0;
-
-			if ($filter == "admin") {
-				if ($go == "judge") $staff_judge = 1;
-				if ($go == "steward") $staff_steward = 1;
-				if ($_POST['brewerStaff'] == "Y") $staff_staff = 1;
-			}
-
-			// Check if UID is in staff table, if so (why is another matter, but hey), clear out assignments and associate with the newly added staff member
-			$query_stray = sprintf("SELECT COUNT(*) AS 'count' FROM %s WHERE uid='%s'", $prefix."staff", $row_user['id']);
- 			$stray = mysqli_query($connection,$query_stray) or die (mysqli_error($connection));
- 			$row_stray = mysqli_fetch_assoc($stray);
-
- 			if ($row_stray['count'] == 0) {
- 				$insertSQL = sprintf("INSERT INTO %s (uid, staff_judge, staff_judge_bos, staff_steward, staff_organizer, staff_staff) VALUES ('%s', '%s', '%s', '%s', '%s', '%s')", $prefix."staff", $row_user['id'], $staff_judge, "0", $staff_steward, "0", $staff_staff);
- 				echo $insertSQL;
- 				mysqli_real_escape_string($connection,$insertSQL);
-				$result = mysqli_query($connection,$insertSQL) or die (mysqli_error($connection));
- 			}
-
- 			elseif ($row_stray['count'] == 1) {
- 				$updateSQL = sprintf("UPDATE %s SET staff_judge='%s', staff_judge_bos='0', staff_steward='%s', staff_organizer='0', staff_staff='%s' WHERE uid= %s",$prefix."staff",$staff_judge,$staff_steward,$staff_staff,$row_user['id']);
-				mysqli_real_escape_string($connection,$updateSQL);
-				$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
- 			}
-
-			// If email registration info option is yes, email registrant their info...
-			if ($_SESSION['prefsEmailRegConfirm'] == 1) {
-
-				$show_entrant_fields = TRUE;
-
-				if (isset($_POST['brewerBreweryName'])) {
-
-					$label_name = $label_contact." ".$label_name;
-					$label_username = $label_contact." ".$label_username;
-					$label_address = $label_organization." ".$label_address;
-					$label_phone_primary = $label_contact." ".$label_phone_primary;
-					$label_phone_secondary = $label_contact." ".$label_phone_secondary;
-
-					$show_entrant_fields = FALSE;
-
-				}
-
-				// Build vars
-				$url = str_replace("www.","",$_SERVER['SERVER_NAME']);
-				$to_name = $first_name." ".$last_name;
-				$to_email = $username;
-				$subject = sprintf($_SESSION['contestName'].": %s",$register_text_037);
-
-				$message = "<html>" . "\r\n";
-				$message .= "<body>" . "\r\n";
-				if ((!empty($_SESSION['contestLogo'])) && (file_exists(USER_IMAGES.$_SESSION['contestLogo']))) $message .= "<p><img src='".$base_url."user_images/".$_SESSION['contestLogo']."' height='150'></p>";
-				$message .= "<p>".$first_name.",</p>";
-				if ($filter == "admin") $message .= sprintf("<p>%s</p>",$register_text_038);
-				else $message .= sprintf("<p>%s</p>",$register_text_039);
-				$message .= "<table cellpadding='5' border='0'>";
-				if (isset($_POST['brewerBreweryName'])) $message .= sprintf("<tr><td valign='top'><strong>%s:</strong></td><td valign='top'>%s</td></tr>",$label_organization,sterilize($_POST['brewerBreweryName']));
-				if (isset($_POST['brewerBreweryTTB'])) 	$message .= sprintf("<tr><td valign='top'><strong>%s:</strong></td><td valign='top'>%s</td></tr>",$label_ttb,sterilize($_POST['brewerBreweryTTB']));
-				$message .= sprintf("<tr><td valign='top'><strong>%s:</strong></td><td valign='top'>%s</td></tr>",$label_name,$first_name." ".$last_name);
-				$message .= sprintf("<tr><td valign='top'><strong>%s (%s):</strong></td><td valign='top'>%s</td></tr>",$label_username,$label_email,$username);
-				$message .= sprintf("<tr><td valign='top'><strong>%s:</strong></td><td valign='top'>%s</td></tr>",$label_security_question,sterilize($_POST['userQuestion']));
-				$message .= sprintf("<tr><td valign='top'><strong>%s:</strong></td><td valign='top'>%s</td></tr>",$label_security_answer,$userQuestionAnswer);
-				$message .= sprintf("<tr><td valign='top'><strong>%s:</strong></td><td valign='top'>%s<br>%s, %s %s</td></tr>",$label_address,$address,$city,sterilize($_POST['brewerState']),sterilize($_POST['brewerZip']));
-				$message .= sprintf("<tr><td valign='top'><strong>%s:</strong></td><td valign='top'>%s</td></tr>",$label_phone_primary,$brewerPhone1);
-				if (!empty($brewerPhone2)) $message .= sprintf("<tr><td valign='top'><strong>%s:</strong></td><td valign='top'>%s</td></tr>",$label_phone_secondary,$brewerPhone2);
-
-				if ($show_entrant_fields) {
-
-					if ($brewerJudge == "Y") $brewerJudge1 = $label_yes; else $brewerJudge1 = $label_no;
-					if ($brewerSteward == "Y") $brewerSteward1 = $label_yes; else $brewerSteward1 = $label_no;
-					if ($brewerStaff == "Y") $brewerStaff1 = $label_yes; else $brewerStaff1 = $label_no;
-					if ($_POST['brewerProAm'] == 1) $brewerProAm1 = $label_yes; else $brewerProAm1 = $label_no;
-
-					if (!empty($brewerClubs)) $message .= sprintf("<tr><td valign='top'><strong>%s:</strong></td><td valign='top'>%s</td></tr>",$label_club,$brewerClubs);
-					if (!empty($brewerAHA)) $message .= sprintf("<tr><td valign='top'><strong>%s:</strong></td><td valign='top'>%s</td></tr>",$label_aha_number,$brewerAHA);
-					$message .= sprintf("<tr><td valign='top'><strong>%s:</strong></td><td valign='top'>%s</td></tr>",$label_staff,$brewerStaff1);
-					$message .= sprintf("<tr><td valign='top'><strong>%s:</strong></td><td valign='top'>%s</td></tr>",$label_judge,$brewerJudge1);
-					$message .= sprintf("<tr><td valign='top'><strong>%s:</strong></td><td valign='top'>%s</td></tr>",$label_steward,$brewerSteward1);
-					$message .= sprintf("<tr><td valign='top'><strong>%s:</strong></td><td valign='top'>%s</td></tr>",$label_pro_am,$brewerProAm1);
-				}
-
-				$message .= "</table>";
-				$message .= sprintf("<p>%s <a href='".$base_url."index.php?section=login'>%s</a> %s</p>",$register_text_040,$register_text_041,$register_text_042);
-				$message .= sprintf("<p><small>%s</small></p>",$register_text_043);
-				if ((DEBUG || TESTING) && ($mail_use_smtp)) $message .= "<p><small>Sent using phpMailer.</small></p>";
-				$message .= "</body>" . "\r\n";
-				$message .= "</html>";
-
-				$headers  = "MIME-Version: 1.0" . "\r\n";
-				$headers .= "Content-type: text/html; charset=utf-8" . "\r\n";
-				$headers .= sprintf("%s: ".$to_name. " <".$to_email.">, " . "\r\n",$label_to);
-
-				$url = str_replace("www.","",$_SERVER['SERVER_NAME']);
-				$from_email = (!isset($mail_default_from) || trim($mail_default_from) === '') ? "noreply@".$url : $mail_default_from;
-
-				if (strpos($url, 'brewcomp.com') !== false) {
-					$from_email = "noreply@brewcomp.com";
-				} elseif (strpos($url, 'brewcompetition.com') !== false) {
-					$from_email = "noreply@brewcompetition.com";
-				}
-
-				$contestName = $_SESSION['contestName'];
-
-				$to_email = mb_convert_encoding($to_email, "UTF-8");
-				$to_name = mb_convert_encoding($to_name, "UTF-8");
-				$from_email = mb_convert_encoding($from_email, "UTF-8");
-				$from_name = mb_convert_encoding($contestName, "UTF-8");
-				$subject = mb_convert_encoding($subject, "UTF-8");
-
-				$headers .= sprintf("%s: %s  <".$from_email. ">\r\n",$label_from,$from_name);
-
-				if ($mail_use_smtp) {
-					$mail = new PHPMailer(true);
-					$mail->CharSet = 'UTF-8';
-					$mail->Encoding = 'base64';
-					$mail->addAddress($to_email, $to_name);
-					$mail->setFrom($from_email, $from_name);
-					$mail->Subject = $subject;
-					$mail->Body = $message;
-					sendPHPMailerMessage($mail);
 				} else {
-					mail($to_name. " <".$to_email.">", $subject, $message, $headers);
+
+				// Add the user's creds to the "users" table
+				
+				$hasher = new PasswordHash(8, false);
+				$password = md5($_POST['password']);
+				$hash = $hasher->HashPassword($password);
+				$hasher_question = new PasswordHash(8, false);
+				$hash_question = $hasher_question->HashPassword(sterilize($userQuestionAnswer));
+
+				$update_table = $prefix."users";
+				$data = array(
+					'user_name' => $username,
+					'userLevel' => sterilize($_POST['userLevel']),
+					'password' => $hash,
+					'userQuestion' => sterilize($_POST['userQuestion']),
+					'userQuestionAnswer' => $hash_question,
+					'userCreated' =>  $db_conn->now()
+				);
+				$result = $db_conn->insert ($update_table, $data);
+				if (!$result) {
+					$error_output[] = $db_conn->getLastError();
+					$errors = TRUE;
+				}
+
+				// Get the id from the "users" table to insert as the uid in the "brewer" table
+				$query_user= "SELECT * FROM $users_db_table WHERE user_name = '$username'";
+				$user = mysqli_query($connection,$query_user) or die (mysqli_error($connection));
+				$row_user = mysqli_fetch_assoc($user);
+
+				$update_table = $prefix."brewer";
+				$data = array(
+					'uid' => $row_user['id'],
+					'brewerFirstName' => $first_name,
+					'brewerLastName' => $last_name,
+					'brewerAddress' => $address,
+					'brewerCity' => $city,
+					'brewerState' => $state,
+					'brewerZip' => $purifier->purify($_POST['brewerZip']),
+					'brewerCountry' => $purifier->purify($_POST['brewerCountry']),
+					'brewerPhone1' => $brewerPhone1,
+					'brewerPhone2' => $brewerPhone2,
+					'brewerClubs' => $brewerClubs,
+					'brewerEmail' => $brewerEmail,
+					'brewerStaff' => $brewerStaff,
+					'brewerSteward' => $brewerSteward,
+					'brewerJudge' => $brewerJudge,
+					'brewerJudgeID' => $brewerJudgeID,
+					'brewerJudgeMead' => $brewerJudgeMead,
+					'brewerJudgeCider' => $brewerJudgeCider,
+					'brewerJudgeRank' => $brewerJudgeRank,
+					'brewerJudgeLocation' => $location_pref1,
+					'brewerStewardLocation' => $location_pref2,
+					'brewerJudgeWaiver' => $brewerJudgeWaiver,
+					'brewerAHA' => $brewerAHA,
+					'brewerProAm' => $brewerProAm,
+					'brewerDropOff' => $brewerDropOff,
+					'brewerBreweryName' => $brewerBreweryName,
+					'brewerBreweryTTB' => $brewerBreweryTTB
+				);
+				$result = $db_conn->insert ($update_table, $data);
+				if (!$result) {
+					$error_output[] = $db_conn->getLastError();
+					$errors = TRUE;
 				}
 
 				/*
-				echo $url;
-				echo $headers."<br>";
-				echo $subject."<br>";
-				echo $message;
+				echo $_POST['userQuestion']."<br>";
+				echo $userQuestionAnswer."<br>";
+				echo $first_name."<br>";
+				echo $last_name."<br>";
+				echo $address."<br>";
+				echo $city."<br>";
+				echo $state."<br>";
+				echo $purifier->purify($_POST['brewerZip'])."<br>";
+				echo $purifier->purify($_POST['brewerCountry'])."<br>";
+				echo $brewerPhone1."<br>";
+				echo $brewerPhone2."<br>";
+				echo $brewerClubs."<br>";
+				echo $brewerAHA."<br>";
+				echo $brewerStaff."<br>";
+				echo $brewerSteward."<br>";
+				echo $brewerJudge."<br>";
+				echo $brewerDropOff."<br>";
+				echo $location_pref1."<br>";
+				echo $location_pref2."<br>";
+				echo $brewerBreweryName."<br>";
+				echo $brewerBreweryTTB."<br>";
+				echo $brewerJudgeID."<br>";
+				echo $brewerProAm."<br>";
+				echo $brewerJudgeWaiver."<br>";
+				print_r($data);
 				exit;
 				*/
 
-			}
+				$staff_judge = 0;
+				$staff_steward = 0;
+				$staff_staff = 0;
 
-		if ($filter == "default") {
-			// Log in the user and redirect
+				if ($filter == "admin") {
+					if ($go == "judge") $staff_judge = 1;
+					if ($go == "steward") $staff_steward = 1;
+					if ($_POST['brewerStaff'] == "Y") $staff_staff = 1;
+				}
 
-			session_name($prefix_session);
-			session_start();
-			$_SESSION['loginUsername'] = $username;
+				/**
+				 * Check if UID is in staff table, if so (why is another matter, but hey),
+				 * clear out assignments and associate with the newly added staff member.
+				 */
 
-			// Redirect to Judge Info section if willing to judge
-			if ($brewerJudge == "Y") {
+				$query_stray = sprintf("SELECT COUNT(*) AS 'count' FROM %s WHERE uid='%s'", $prefix."staff", $row_user['id']);
+	 			$stray = mysqli_query($connection,$query_stray) or die (mysqli_error($connection));
+	 			$row_stray = mysqli_fetch_assoc($stray);
 
-				$query_brewer= sprintf("SELECT id FROM $brewer_db_table WHERE uid = '%s'", $row_user['id']);
-				$brewer = mysqli_query($connection,$query_brewer) or die (mysqli_error($connection));
-				$row_brewer = mysqli_fetch_assoc($brewer);
-				header(sprintf("Location: %s", $base_url."index.php?section=brewer&action=edit&go=account&psort=judge&id=".$row_brewer['id']));
+	 			if ($row_stray['count'] == 0) {
 
-			}
+	 				$update_table = $prefix."staff";
+	 				$data = array(
+	 					'uid' => $row_user['id'],
+	 					'staff_judge' => $staff_judge,
+	 					'staff_judge_bos' => 0,
+	 					'staff_steward' => $staff_steward,
+	 					'staff_organizer' => 0,
+	 					'staff_staff' => $staff_staff
+	 				);
+	 				$result = $db_conn->insert ($update_table, $data);
+	 				if (!$result) {
+	 					$error_output[] = $db_conn->getLastError();
+	 					$errors = TRUE;
+	 				}
 
-			else header(sprintf("Location: %s", $base_url."index.php?section=list&msg=7"));
+	 			} // end if ($row_stray['count'] == 0)
 
-		  } // end if ($filter == "default")
+	 			elseif ($row_stray['count'] == 1) {
 
-		if ($filter == "admin") {
+	 				$update_table = $prefix."staff";
+	 				$data = array(
+	 					'staff_judge' => $staff_judge,
+	 					'staff_judge_bos' => 0,
+	 					'staff_steward' => $staff_steward,
+	 					'staff_organizer' => 0,
+	 					'staff_staff' => $staff_staff
+	 				);
+	 				$db_conn->where ('uid', $row_user['id']);
+	 				$result = $db_conn->update ($update_table, $data);
+	 				if (!$result) {
+	 					$error_output[] = $db_conn->getLastError();
+	 					$errors = TRUE;
+	 				}
 
-			// Redirect to Judge Info section if willing to judge
-			if ($brewerJudge == "Y") {
+	 			} // end elseif ($row_stray['count'] == 1)
 
-				$query_brewer= sprintf("SELECT id FROM $brewer_db_table WHERE uid = '%s'", $row_user['id']);
-				$brewer = mysqli_query($connection,$query_brewer) or die (mysqli_error($connection));
-				$row_brewer = mysqli_fetch_assoc($brewer);
-				if ($view == "quick") $insertGoTo = $base_url."index.php?section=admin&go=participants&msg=28";
-				else $insertGoTo = $base_url."index.php?section=brewer&go=admin&action=edit&filter=".$row_brewer['id']."&psort=judge&id=".$row_brewer['id'];
-				header(sprintf("Location: %s", stripslashes($insertGoTo)));
+				// If email registration info option is yes, email registrant their info...
+				if ($_SESSION['prefsEmailRegConfirm'] == 1) {
 
-			}
+					$show_entrant_fields = TRUE;
 
-			else {
+					if (isset($_POST['brewerBreweryName'])) {
 
-				$pattern = array('\'', '"');
-				$insertGoTo = $base_url."index.php?section=admin";
-				$insertGoTo = str_replace($pattern, "", $insertGoTo);
-				header(sprintf("Location: %s", stripslashes($insertGoTo)));
+						$label_name = $label_contact." ".$label_name;
+						$label_username = $label_contact." ".$label_username;
+						$label_address = $label_organization." ".$label_address;
+						$label_phone_primary = $label_contact." ".$label_phone_primary;
+						$label_phone_secondary = $label_contact." ".$label_phone_secondary;
+						$show_entrant_fields = FALSE;
 
-			}
+					}
 
-		  } // end if ($filter == "admin")
+					// Build vars
+					$url = str_replace("www.","",$_SERVER['SERVER_NAME']);
+					$to_name = $first_name." ".$last_name;
+					$to_email = $username;
+					$subject = sprintf($_SESSION['contestName'].": %s",$register_text_037);
 
-		}
+					$message = "<html>" . "\r\n";
+					$message .= "<body>" . "\r\n";
+					if ((!empty($_SESSION['contestLogo'])) && (file_exists(USER_IMAGES.$_SESSION['contestLogo']))) $message .= "<p><img src='".$base_url."user_images/".$_SESSION['contestLogo']."' height='150'></p>";
+					$message .= "<p>".$first_name.",</p>";
+					if ($filter == "admin") $message .= sprintf("<p>%s</p>",$register_text_038);
+					else $message .= sprintf("<p>%s</p>",$register_text_039);
+					$message .= "<table cellpadding='5' border='0'>";
+					if (isset($_POST['brewerBreweryName'])) $message .= sprintf("<tr><td valign='top'><strong>%s:</strong></td><td valign='top'>%s</td></tr>",$label_organization,sterilize($_POST['brewerBreweryName']));
+					if (isset($_POST['brewerBreweryTTB'])) 	$message .= sprintf("<tr><td valign='top'><strong>%s:</strong></td><td valign='top'>%s</td></tr>",$label_ttb,sterilize($_POST['brewerBreweryTTB']));
+					$message .= sprintf("<tr><td valign='top'><strong>%s:</strong></td><td valign='top'>%s</td></tr>",$label_name,$first_name." ".$last_name);
+					$message .= sprintf("<tr><td valign='top'><strong>%s (%s):</strong></td><td valign='top'>%s</td></tr>",$label_username,$label_email,$username);
+					$message .= sprintf("<tr><td valign='top'><strong>%s:</strong></td><td valign='top'>%s</td></tr>",$label_security_question,sterilize($_POST['userQuestion']));
+					$message .= sprintf("<tr><td valign='top'><strong>%s:</strong></td><td valign='top'>%s</td></tr>",$label_security_answer,$userQuestionAnswer);
+					$message .= sprintf("<tr><td valign='top'><strong>%s:</strong></td><td valign='top'>%s<br>%s, %s %s</td></tr>",$label_address,$address,$city,sterilize($_POST['brewerState']),sterilize($_POST['brewerZip']));
+					$message .= sprintf("<tr><td valign='top'><strong>%s:</strong></td><td valign='top'>%s</td></tr>",$label_phone_primary,$brewerPhone1);
+					if (!empty($brewerPhone2)) $message .= sprintf("<tr><td valign='top'><strong>%s:</strong></td><td valign='top'>%s</td></tr>",$label_phone_secondary,$brewerPhone2);
 
-	  }
+					if ($show_entrant_fields) {
 
-	} // End CAPCHA check
+						if ($brewerJudge == "Y") $brewerJudge1 = $label_yes; else $brewerJudge1 = $label_no;
+						if ($brewerSteward == "Y") $brewerSteward1 = $label_yes; else $brewerSteward1 = $label_no;
+						if ($brewerStaff == "Y") $brewerStaff1 = $label_yes; else $brewerStaff1 = $label_no;
+						if ($_POST['brewerProAm'] == 1) $brewerProAm1 = $label_yes; else $brewerProAm1 = $label_no;
+
+						if (!empty($brewerClubs)) $message .= sprintf("<tr><td valign='top'><strong>%s:</strong></td><td valign='top'>%s</td></tr>",$label_club,$brewerClubs);
+						if (!empty($brewerAHA)) $message .= sprintf("<tr><td valign='top'><strong>%s:</strong></td><td valign='top'>%s</td></tr>",$label_aha_number,$brewerAHA);
+						$message .= sprintf("<tr><td valign='top'><strong>%s:</strong></td><td valign='top'>%s</td></tr>",$label_staff,$brewerStaff1);
+						$message .= sprintf("<tr><td valign='top'><strong>%s:</strong></td><td valign='top'>%s</td></tr>",$label_judge,$brewerJudge1);
+						$message .= sprintf("<tr><td valign='top'><strong>%s:</strong></td><td valign='top'>%s</td></tr>",$label_steward,$brewerSteward1);
+						$message .= sprintf("<tr><td valign='top'><strong>%s:</strong></td><td valign='top'>%s</td></tr>",$label_pro_am,$brewerProAm1);
+					}
+
+					$message .= "</table>";
+					$message .= sprintf("<p>%s <a href='".$base_url."index.php?section=login'>%s</a> %s</p>",$register_text_040,$register_text_041,$register_text_042);
+					$message .= sprintf("<p><small>%s</small></p>",$register_text_043);
+					if ((DEBUG || TESTING) && ($mail_use_smtp)) $message .= "<p><small>Sent using phpMailer.</small></p>";
+					$message .= "</body>" . "\r\n";
+					$message .= "</html>";
+
+					$headers  = "MIME-Version: 1.0" . "\r\n";
+					$headers .= "Content-type: text/html; charset=utf-8" . "\r\n";
+					$headers .= sprintf("%s: ".$to_name. " <".$to_email.">, " . "\r\n",$label_to);
+
+					$url = str_replace("www.","",$_SERVER['SERVER_NAME']);
+					$from_email = (!isset($mail_default_from) || trim($mail_default_from) === '') ? "noreply@".$url : $mail_default_from;
+
+					if (strpos($url, 'brewcomp.com') !== false) {
+						$from_email = "noreply@brewcomp.com";
+					} elseif (strpos($url, 'brewcompetition.com') !== false) {
+						$from_email = "noreply@brewcompetition.com";
+					}
+
+					$contestName = $_SESSION['contestName'];
+
+					$to_email = mb_convert_encoding($to_email, "UTF-8");
+					$to_name = mb_convert_encoding($to_name, "UTF-8");
+					$from_email = mb_convert_encoding($from_email, "UTF-8");
+					$from_name = mb_convert_encoding($contestName, "UTF-8");
+					$subject = mb_convert_encoding($subject, "UTF-8");
+
+					$headers .= sprintf("%s: %s  <".$from_email. ">\r\n",$label_from,$from_name);
+					$emails = $to_email;
+
+					if ($mail_use_smtp) {
+						$mail = new PHPMailer(true);
+						$mail->CharSet = 'UTF-8';
+						$mail->Encoding = 'base64';
+						$mail->addAddress($emails, $to_name);
+						$mail->setFrom($from_email, $from_name);
+						$mail->Subject = $subject;
+						$mail->Body = $message;
+						sendPHPMailerMessage($mail);
+					} else {
+						mail($to_name. " <".$to_email.">", $subject, $message, $headers);
+					}
+
+					/*
+					echo $url;
+					echo $headers."<br>";
+					echo $subject."<br>";
+					echo $message;
+					exit;
+					*/
+
+				} // end if ($_SESSION['prefsEmailRegConfirm'] == 1)
+
+				if ($filter == "default") {
+
+					session_name($prefix_session);
+					session_start();
+					$_SESSION['loginUsername'] = $username;
+
+					// Redirect to Judge Info section if willing to judge
+					if ($brewerJudge == "Y") {
+
+						$query_brewer= sprintf("SELECT id FROM $brewer_db_table WHERE uid = '%s'", $row_user['id']);
+						$brewer = mysqli_query($connection,$query_brewer) or die (mysqli_error($connection));
+						$row_brewer = mysqli_fetch_assoc($brewer);
+
+						$redirect = $base_url."index.php?section=brewer&action=edit&go=account&psort=judge&id=".$row_brewer['id'];
+						$redirect = prep_redirect_link($redirect);
+						$redirect_go_to = sprintf("Location: %s", $redirect);			
+						header($redirect_go_to);
+						exit();
+
+					} // end if ($brewerJudge == "Y")
+
+					else {
+
+						$redirect = $base_url."index.php?section=list&msg=7";
+						$redirect = prep_redirect_link($redirect);
+						$redirect_go_to = sprintf("Location: %s", $redirect);			
+						header($redirect_go_to);
+						exit();
+
+					}
+
+				} // end if ($filter == "default")
+
+				if ($filter == "admin") {
+
+					// Redirect to Judge Info section if willing to judge
+					if ($brewerJudge == "Y") {
+
+						$query_brewer= sprintf("SELECT id FROM $brewer_db_table WHERE uid = '%s'", $row_user['id']);
+						$brewer = mysqli_query($connection,$query_brewer) or die (mysqli_error($connection));
+						$row_brewer = mysqli_fetch_assoc($brewer);
+						
+						if ($view == "quick") {
+							$insertGoTo = $base_url."index.php?section=admin&go=participants&msg=28";
+							if ($errors) $insertGoTo = $base_url."index.php?section=admin&go=participants&msg=3";
+						}
+						
+						else {
+							$insertGoTo = $base_url."index.php?section=brewer&go=admin&action=edit&filter=".$row_brewer['id']."&psort=judge&id=".$row_brewer['id'];
+							if ($errors) $insertGoTo .= "&msg=3";
+						}
+
+						if (!empty($error_output)) $_SESSION['error_output'] = $error_output;
+
+						$insertGoTo = prep_redirect_link($insertGoTo);
+						$redirect_go_to = sprintf("Location: %s", $insertGoTo);
+						header($redirect_go_to);
+						exit();
+
+					} // end if ($brewerJudge == "Y")
+
+					else {
+
+						if (!empty($error_output)) $_SESSION['error_output'] = $error_output;
+
+						$insertGoTo = $base_url."index.php?section=admin&go=participants&msg=1";
+						if ($errors) $insertGoTo = $base_url."index.php?section=admin&go=participants&msg=3";
+						$insertGoTo = prep_redirect_link($insertGoTo);
+						$redirect_go_to = sprintf("Location: %s", $insertGoTo);
+						header($redirect_go_to);
+						exit();
+
+					} // end else
+
+				} // end if ($filter == "admin")
+
+			} // end if ($totalRows_userCheck > 0)
+
+		} // if (strstr($username,'@'))
+
+	} // end else (CAPCHA check OK)
+
 } else {
-	header(sprintf("Location: %s", $base_url."index.php?msg=98"));
-	exit;
+
+	$redirect = $base_url."index.php?msg=98";
+	$redirect = prep_redirect_link($redirect);
+	$redirect_go_to = sprintf("Location: %s", $redirect);
+	header($redirect_go_to);
+	exit();
 }
 ?>

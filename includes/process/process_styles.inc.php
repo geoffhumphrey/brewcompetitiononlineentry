@@ -4,12 +4,16 @@
  * Description: This module does all the heavy lifting for adding/editing info in the "styles" table
  */
 
-// Instantiate HTMLPurifier
-require (CLASSES.'htmlpurifier/HTMLPurifier.standalone.php');
-$config_html_purifier = HTMLPurifier_Config::createDefault();
-$purifier = new HTMLPurifier($config_html_purifier);
-
 if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) || ($section == "setup"))) {
+
+	$errors = FALSE;
+	$error_output = array();
+	$_SESSION['error_output'] = "";
+
+	// Instantiate HTMLPurifier
+	require (CLASSES.'htmlpurifier/HTMLPurifier.standalone.php');
+	$config_html_purifier = HTMLPurifier_Config::createDefault();
+	$purifier = new HTMLPurifier($config_html_purifier);
 
 	$ba_styles_accepted = "";
 	$brewStyleEntry = "";
@@ -20,7 +24,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 	if (isset($_POST['brewStyleEntry'])) {
 		$brewStyleEntry = trim($_POST['brewStyleEntry']);
 		$brewStyleEntry = $purifier->purify($brewStyleEntry);
-		$brewStyleEntry = filter_var($brewStyleEntry,FILTER_SANITIZE_STRING);
+		$brewStyleEntry = sterilize($brewStyleEntry);
 	}
 	
 	if (isset($_POST['brewStyleInfo'])) {
@@ -39,72 +43,94 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 			if (isset($_POST['brewStyleActive'.$id])) $brewStyleActive = "Y";
 			else $brewStyleActive = "N";
 
-				if ($filter == "default") {
+			if ($filter == "default") {
 
-					$updateSQL = "UPDATE $styles_db_table SET brewStyleActive='".$brewStyleActive."' WHERE id='".$id."'";
-					mysqli_real_escape_string($connection,$updateSQL);
-					$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+				$update_table = $prefix."styles";
+				$data = array('brewStyleActive' => $brewStyleActive);
+				$db_conn->where ('id', $id);
+				$result = $db_conn->update ($update_table, $data);
+				if (!$result) {
+					$error_output[] = $db_conn->getLastError();
+					$errors = TRUE;
+				}
 
-				 } // end if ($filter == "default")
+			} // end if ($filter == "default")
 
-				if (($filter == "judging") && ($bid == $_POST["brewStyleJudgingLoc".$id])) {
+			if (($filter == "judging") && ($bid == $_POST["brewStyleJudgingLoc".$id])) {
 
-					$updateSQL = "UPDATE $styles_db_table SET brewStyleJudgingLoc='".$_POST["brewStyleJudgingLoc".$id]."' WHERE id='".$id."';";
-					mysqli_real_escape_string($connection,$updateSQL);
-					$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+				$update_table = $prefix."styles";
+				$data = array('brewStyleJudgingLoc' => sterilize($_POST["brewStyleJudgingLoc".$id]));
+				$db_conn->where ('id', $id);
+				$result = $db_conn->update ($update_table, $data);
+				if (!$result) {
+					$error_output[] = $db_conn->getLastError();
+					$errors = TRUE;
+				}
 
-					// Also need to find all records in the "brewing" table (entries) that are null or have either old judging location associated with the style and update them with the new judging location.
-					$query_style_name = "SELECT *FROM $styles_db_table WHERE id='".$id."'";
-					$style_name = mysqli_query($connection,$query_style_name) or die (mysqli_error($connection));
-					$row_style_name = mysqli_fetch_assoc($style_name);
+				// Also need to find all records in the "brewing" table (entries) that are null or have either old judging location associated with the style and update them with the new judging location.
+				$query_style_name = "SELECT *FROM $styles_db_table WHERE id='".$id."'";
+				$style_name = mysqli_query($connection,$query_style_name) or die (mysqli_error($connection));
+				$row_style_name = mysqli_fetch_assoc($style_name);
 
-					$query_loc = sprintf("SELECT * FROM $brewing_db_table WHERE brewCategorySort='%s' AND brewSubCategory='%s'", $row_style_name['brewStyleGroup'], $row_style_name['brewStyleNum']);
-					$loc = mysqli_query($connection,$query_loc) or die (mysqli_error($connection));
-					$row_loc = mysqli_fetch_assoc($loc);
-					$totalRows_loc = mysqli_num_rows($loc);
+				$query_loc = sprintf("SELECT * FROM $brewing_db_table WHERE brewCategorySort='%s' AND brewSubCategory='%s'", $row_style_name['brewStyleGroup'], $row_style_name['brewStyleNum']);
+				$loc = mysqli_query($connection,$query_loc) or die (mysqli_error($connection));
+				$row_loc = mysqli_fetch_assoc($loc);
+				$totalRows_loc = mysqli_num_rows($loc);
 
-					if ($totalRows_loc > 0) {
-						do {
+				if ($totalRows_loc > 0) {
+					
+					do {
 
-							if ($row_loc['brewJudgingLocation'] != $_POST["brewStyleJudgingLoc".$id]) {
+						if ($row_loc['brewJudgingLocation'] != $_POST["brewStyleJudgingLoc".$id]) {
 
-								$updateSQL = sprintf("UPDATE $brewing_db_table SET brewJudgingLocation='%s' WHERE id='%s';", $_POST["brewStyleJudgingLoc".$id], $row_loc['id']);
-								mysqli_real_escape_string($connection,$updateSQL);
-								$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
-
+							$update_table = $prefix."brewing";
+							$data = array('brewJudgingLocation' => sterilize($_POST["brewStyleJudgingLoc".$id]));
+							$db_conn->where ('id', $row_loc['id']);
+							$result = $db_conn->update ($update_table, $data);
+							if (!$result) {
+								$error_output[] = $db_conn->getLastError();
+								$errors = TRUE;
 							}
 
-						} while($row_loc = mysqli_fetch_assoc($loc));
+						}
 
-					} // end if ($totalRows_loc > 0)
+					} while($row_loc = mysqli_fetch_assoc($loc));
 
-				} // end if (($filter == "judging") && ($bid == $_POST["brewStyleJudgingLoc".$id]))
+				} // end if ($totalRows_loc > 0)
 
-			} // end foreach($_POST['id'] as $id)
+			} // end if (($filter == "judging") && ($bid == $_POST["brewStyleJudgingLoc".$id]))
 
-		if($result) {
+		} // end foreach($_POST['id'] as $id)
 
-			if ($section == "setup") {
+		if ($section == "setup") {
 
-				$sql = sprintf("UPDATE `%s` SET setup_last_step = '7' WHERE id='1';", $system_db_table);
-				mysqli_select_db($connection,$database);
-				mysqli_real_escape_string($connection,$sql);
-				$result = mysqli_query($connection,$sql) or die (mysqli_error($connection));
-
-				$massUpdateGoTo = $base_url."setup.php?section=step8";
-				$pattern = array('\'', '"');
-				$massUpdateGoTo = str_replace($pattern, "", $massUpdateGoTo);
-				$redirect_go_to = sprintf("Location: %s", stripslashes($massUpdateGoTo));
-
+			$update_table = $prefix."bcoem_sys";
+			$data = array('setup_last_step' => 7);
+			$db_conn->where ('id', 1);
+			$result = $db_conn->update ($update_table, $data);
+			if (!$result) {
+				$error_output[] = $db_conn->getLastError();
+				$errors = TRUE;
 			}
 
-			else {
-				$pattern = array('\'', '"');
-				$massUpdateGoTo = str_replace($pattern, "", $massUpdateGoTo);
-				$redirect_go_to = sprintf("Location: %s", stripslashes($massUpdateGoTo));
-			}
+			if (!empty($error_output)) $_SESSION['error_output'] = $error_output;
 
-		} // end if($result)
+			$redirect = $base_url."setup.php?section=step8";
+			if ($errors) $base_url."setup.php?section=step7&msg=3";
+			$redirect = prep_redirect_link($redirect);
+			$redirect_go_to = sprintf("Location: %s", $redirect);
+
+		}
+
+		else {
+
+			if (!empty($error_output)) $_SESSION['error_output'] = $error_output;
+
+			if ($errors) $massUpdateGoTo = $_POST['relocate']."&msg=3";
+			$massUpdateGoTo = prep_redirect_link($updateGoTo);
+			$redirect_go_to = sprintf("Location: %s", $massUpdateGoTo);
+
+		}
 
 	} // end if ($action == "update");
 
@@ -127,158 +153,119 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 		}
 		else $style_num_add_one = "A";
 
-		$insertSQL = sprintf("INSERT INTO $styles_db_table (
-		brewStyleNum,
-		brewStyle,
-		brewStyleOG,
-		brewStyleOGMax,
-		brewStyleFG,
+		$update_table = $prefix."styles";
+		$data = array(
+			'brewStyleNum' => $style_num_add_one,
+			'brewStyle' => $purifier->purify($_POST['brewStyle']),
+			'brewStyleOG' => sterilize($_POST['brewStyleOG']),
+			'brewStyleOGMax' => sterilize($_POST['brewStyleOGMax']),
+			'brewStyleFG' => sterilize($_POST['brewStyleFG']),
+			'brewStyleFGMax' => sterilize($_POST['brewStyleFGMax']),
+			'brewStyleABV' => sterilize($_POST['brewStyleABV']),
+			'brewStyleABVMax' => sterilize($_POST['brewStyleABVMax']),
+			'brewStyleIBU' => sterilize($_POST['brewStyleIBU']),
+			'brewStyleIBUMax' => sterilize($_POST['brewStyleIBUMax']),
+			'brewStyleSRM' => sterilize($_POST['brewStyleSRM']),
+			'brewStyleSRMMax' => sterilize($_POST['brewStyleSRMMax']),
+			'brewStyleType' => sterilize($_POST['brewStyleType']),
+			'brewStyleInfo' => $brewStyleInfo,
+			'brewStyleLink' => $brewStyleLink,
+			'brewStyleGroup' => sterilize($style_add_one),
+			'brewStyleActive' => sterilize($_POST['brewStyleActive']),
+			'brewStyleOwn' => sterilize($_POST['brewStyleOwn']),
+			'brewStyleVersion' => $_SESSION['prefsStyleSet'],
+			'brewStyleReqSpec' => sterilize($_POST['brewStyleReqSpec']),
+			'brewStyleStrength' => sterilize($_POST['brewStyleStrength']),
+			'brewStyleCarb' => sterilize($_POST['brewStyleCarb']),
+			'brewStyleSweet' => sterilize($_POST['brewStyleSweet']),
+			'brewStyleEntry' => $brewStyleEntry
+		);
+		$result = $db_conn->insert ($update_table, $data);
+		if (!$result) {
+			$error_output[] = $db_conn->getLastError();
+			$errors = TRUE;
+		}
 
-		brewStyleFGMax,
-		brewStyleABV,
-		brewStyleABVMax,
-		brewStyleIBU,
-		brewStyleIBUMax,
+		if (!empty($error_output)) $_SESSION['error_output'] = $error_output;
 
-		brewStyleSRM,
-		brewStyleSRMMax,
-		brewStyleType,
-		brewStyleInfo,
-		brewStyleLink,
-
-		brewStyleGroup,
-		brewStyleActive,
-		brewStyleOwn,
-		brewStyleVersion,
-		brewStyleReqSpec,
-
-		brewStyleStrength,
-		brewStyleCarb,
-		brewStyleSweet,
-		brewStyleEntry
-		)
-		VALUES (
-		%s, %s, %s, %s, %s,
-		%s, %s, %s, %s, %s,
-		%s, %s, %s, %s, %s,
-		%s, %s, %s, %s, %s,
-		%s, %s, %s, %s
-		)",
-					   GetSQLValueString($style_num_add_one, "text"),
-					   GetSQLValueString($purifier->purify($_POST['brewStyle']), "text"),
-					   GetSQLValueString(sterilize($_POST['brewStyleOG']), "text"),
-					   GetSQLValueString(sterilize($_POST['brewStyleOGMax']), "text"),
-					   GetSQLValueString(sterilize($_POST['brewStyleFG']), "text"),
-					   GetSQLValueString(sterilize($_POST['brewStyleFGMax']), "text"),
-					   GetSQLValueString(sterilize($_POST['brewStyleABV']), "text"),
-					   GetSQLValueString(sterilize($_POST['brewStyleABVMax']), "text"),
-					   GetSQLValueString(sterilize($_POST['brewStyleIBU']), "text"),
-					   GetSQLValueString(sterilize($_POST['brewStyleIBUMax']), "text"),
-					   GetSQLValueString(sterilize($_POST['brewStyleSRM']), "text"),
-					   GetSQLValueString(sterilize($_POST['brewStyleSRMMax']), "text"),
-					   GetSQLValueString(sterilize($_POST['brewStyleType']), "text"),
-					   GetSQLValueString($brewStyleInfo, "text"),
-					   GetSQLValueString($brewStyleLink, "text"),
-					   GetSQLValueString(sterilize($style_add_one), "text"),
-					   GetSQLValueString(sterilize($_POST['brewStyleActive']), "text"),
-					   GetSQLValueString(sterilize($_POST['brewStyleOwn']), "text"),
-					   GetSQLValueString($_SESSION['prefsStyleSet'], "text"),
-					   GetSQLValueString(sterilize($_POST['brewStyleReqSpec']), "text"),
-					   GetSQLValueString(sterilize($_POST['brewStyleStrength']), "text"),
-					   GetSQLValueString(sterilize($_POST['brewStyleCarb']), "text"),
-					   GetSQLValueString(sterilize($_POST['brewStyleSweet']), "text"),
-					   GetSQLValueString($brewStyleEntry, "text")
-					   );
-
-		// echo $insertSQL; exit;
-		mysqli_real_escape_string($connection,$insertSQL);
-		$result = mysqli_query($connection,$insertSQL) or die (mysqli_error($connection));
-
-		$pattern = array('\'', '"');
-		$insertGoTo = str_replace($pattern, "", $insertGoTo);
-		$redirect_go_to = sprintf("Location: %s", stripslashes($insertGoTo));
+		if ($errors) $insertGoTo = $_POST['relocate']."&msg=3";
+		$insertGoTo = prep_redirect_link($insertGoTo);
+		$redirect_go_to = sprintf("Location: %s", $insertGoTo);
 
 
 	} // end if ($action == "add");
 
 	if ($action == "edit") {
 
-		$updateSQL = sprintf("UPDATE $styles_db_table SET
-		brewStyleNum=%s,
-		brewStyle=%s,
-		brewStyleOG=%s,
-		brewStyleOGMax=%s,
-		brewStyleFG=%s,
-
-		brewStyleFGMax=%s,
-		brewStyleABV=%s,
-		brewStyleABVMax=%s,
-		brewStyleIBU=%s,
-		brewStyleIBUMax=%s,
-
-		brewStyleSRM=%s,
-		brewStyleSRMMax=%s,
-		brewStyleType=%s,
-		brewStyleInfo=%s,
-		brewStyleLink=%s,
-
-		brewStyleGroup=%s,
-		brewStyleActive=%s,
-		brewStyleOwn=%s,
-		brewStyleReqSpec=%s,
-		brewStyleStrength=%s,
-		brewStyleCarb=%s,
-		brewStyleSweet=%s,
-		brewStyleEntry=%s
-
-		WHERE id=%s",
-					   GetSQLValueString(sterilize($_POST['brewStyleNum']), "text"),
-					   GetSQLValueString($purifier->purify($_POST['brewStyle']), "text"),
-					   GetSQLValueString(sterilize($_POST['brewStyleOG']), "text"),
-					   GetSQLValueString(sterilize($_POST['brewStyleOGMax']), "text"),
-					   GetSQLValueString(sterilize($_POST['brewStyleFG']), "text"),
-					   GetSQLValueString(sterilize($_POST['brewStyleFGMax']), "text"),
-					   GetSQLValueString(sterilize($_POST['brewStyleABV']), "text"),
-					   GetSQLValueString(sterilize($_POST['brewStyleABVMax']), "text"),
-					   GetSQLValueString(sterilize($_POST['brewStyleIBU']), "text"),
-					   GetSQLValueString(sterilize($_POST['brewStyleIBUMax']), "text"),
-					   GetSQLValueString(sterilize($_POST['brewStyleSRM']), "text"),
-					   GetSQLValueString(sterilize($_POST['brewStyleSRMMax']), "text"),
-					   GetSQLValueString(sterilize($_POST['brewStyleType']), "text"),
-					   GetSQLValueString($brewStyleInfo, "text"),
-					   GetSQLValueString($brewStyleLink, "text"),
-					   GetSQLValueString(sterilize($_POST['brewStyleGroup']), "text"),
-					   GetSQLValueString(sterilize($_POST['brewStyleActive']), "text"),
-					   GetSQLValueString(sterilize($_POST['brewStyleOwn']), "text"),
-					   GetSQLValueString(sterilize($_POST['brewStyleReqSpec']), "text"),
-					   GetSQLValueString($brewStyleStrength, "text"),
-					   GetSQLValueString(sterilize($_POST['brewStyleCarb']), "text"),
-					   GetSQLValueString(sterilize($_POST['brewStyleSweet']), "text"),
-					   GetSQLValueString($brewStyleEntry, "text"),
-					   GetSQLValueString($id, "int"));
-
-	  	mysqli_real_escape_string($connection,$updateSQL);
-		$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+		$update_table = $prefix."styles";
+		$data = array(
+			'brewStyleNum' => sterilize($_POST['brewStyleNum']),
+			'brewStyle' => $purifier->purify($_POST['brewStyle']),
+			'brewStyleOG' => sterilize($_POST['brewStyleOG']),
+			'brewStyleOGMax' => sterilize($_POST['brewStyleOGMax']),
+			'brewStyleFG' => sterilize($_POST['brewStyleFG']),
+			'brewStyleFGMax' => sterilize($_POST['brewStyleFGMax']),
+			'brewStyleABV' => sterilize($_POST['brewStyleABV']),
+			'brewStyleABVMax' => sterilize($_POST['brewStyleABVMax']),
+			'brewStyleIBU' => sterilize($_POST['brewStyleIBU']),
+			'brewStyleIBUMax' => sterilize($_POST['brewStyleIBUMax']),
+			'brewStyleSRM' => sterilize($_POST['brewStyleSRM']),
+			'brewStyleSRMMax' => sterilize($_POST['brewStyleSRMMax']),
+			'brewStyleType' => sterilize($_POST['brewStyleType']),
+			'brewStyleInfo' => $brewStyleInfo,
+			'brewStyleLink' => $brewStyleLink,
+			'brewStyleGroup' => sterilize($style_add_one),
+			'brewStyleActive' => sterilize($_POST['brewStyleActive']),
+			'brewStyleOwn' => sterilize($_POST['brewStyleOwn']),
+			'brewStyleVersion' => $_SESSION['prefsStyleSet'],
+			'brewStyleReqSpec' => sterilize($_POST['brewStyleReqSpec']),
+			'brewStyleStrength' => sterilize($_POST['brewStyleStrength']),
+			'brewStyleCarb' => sterilize($_POST['brewStyleCarb']),
+			'brewStyleSweet' => sterilize($_POST['brewStyleSweet']),
+			'brewStyleEntry' => $brewStyleEntry
+		);
+		$db_conn->where ('id', $id);
+		$result = $db_conn->update ($update_table, $data);
+		if (!$result) {
+			$error_output[] = $db_conn->getLastError();
+			$errors = TRUE;
+		}
 
 		$query_log = sprintf("SELECT id FROM $brewing_db_table WHERE brewStyle = '%s'",$_POST['brewStyleOld']);
 		$log = mysqli_query($connection,$query_log) or die (mysqli_error($connection));
 		$row_log = mysqli_fetch_assoc($log);
 		$totalRows_log = mysqli_num_rows($log);
 
-		do {
+		if ($totalRows_log > 0) {
 
-			$updateSQL = sprintf("UPDATE $brewing_db_table SET brewStyle='%s' WHERE id='%s'", $_POST['brewStyle'],$row_log['id']);
-			mysqli_real_escape_string($connection,$updateSQL);
-			$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+			do {
 
-		} while ($row_log = mysqli_fetch_assoc($log));
+				$update_table = $prefix."brewing";
+				$data = array('brewStyle' => $_POST['brewStyle']);
+				$db_conn->where ('id', $row_log['id']);
+				$result = $db_conn->update ($update_table, $data);
+				if (!$result) {
+					$error_output[] = $db_conn->getLastError();
+					$errors = TRUE;
+				}
 
-		$pattern = array('\'', '"');
-		$updateGoTo = str_replace($pattern, "", $updateGoTo);
-		$redirect_go_to = sprintf("Location: %s", stripslashes($updateGoTo));
+			} while ($row_log = mysqli_fetch_assoc($log));
+
+		}
+
+		if (!empty($error_output)) $_SESSION['error_output'] = $error_output;
+
+		if ($errors) $updateGoTo = $_POST['relocate']."&msg=3";
+		$updateGoTo = prep_redirect_link($updateGoTo);
+		$redirect_go_to = sprintf("Location: %s", $updateGoTo);
+
 	}
 
 } else {
-	$redirect_go_to = sprintf("Location: %s", $base_url."index.php?msg=98");
+	
+	$redirect = $base_url."index.php?msg=98";
+	$redirect = prep_redirect_link($redirect);
+	$redirect_go_to = sprintf("Location: %s", $redirect);
+	
 }
 ?>
