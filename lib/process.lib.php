@@ -1,5 +1,4 @@
 <?php
-
 // function to generate random number
 function random_judging_num_generator(){
 	srand ((double) microtime() * 10000000);

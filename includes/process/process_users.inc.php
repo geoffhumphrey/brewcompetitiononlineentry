@@ -4,7 +4,11 @@
  * Description: This module does all the heavy lifting for adding/editing users the DB
  */
 
-if (isset($_SERVER['HTTP_REFERER'])) {
+if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) && (isset($_SESSION['userLevel']))) || ($section == "setup"))) {
+
+	$errors = FALSE;
+	$error_output = array();
+	$_SESSION['error_output'] = "";
 
 	// --------------------------- If a User Registers On Their Own -------------------- //
 
@@ -32,76 +36,105 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 			if ($totalRows_userCheck > 0) {
 
 				if ($section == "admin") $msg = "10"; else $msg = "2";
-				$redirect_go_to = sprintf("Location:  %s", $base_url."index.php?section=".$section."&go=".$go."&action=".$action."&msg=".$msg);
+				$redirect = $base_url."index.php?section=".$section."&go=".$go."&action=".$action."&msg=".$msg;
+				$redirect = prep_redirect_link($redirect);
+				$redirect_go_to = sprintf("Location: %s", $redirect);
+
 			}
 
 			else  {
+				
 				require(CLASSES.'phpass/PasswordHash.php');
 				$hasher = new PasswordHash(8, false);
 				$password = md5($_POST['password']);
 				$hash = $hasher->HashPassword($password);
 				$hasher_question = new PasswordHash(8, false);
 				$hash_question = $hasher_question->HashPassword(sterilize($_POST['userQuestionAnswer']));
-				$insertSQL = sprintf("INSERT INTO $users_db_table (user_name, userLevel, password, userQuestion, userQuestionAnswer, userCreated) VALUES (%s, %s, %s, %s, %s, %s)",
-								   GetSQLValueString($username, "text"),
-								   GetSQLValueString($_POST['userLevel'], "text"),
-								   GetSQLValueString($hash, "text"),
-								   GetSQLValueString(sterilize($_POST['userQuestion']), "text"),
-								   GetSQLValueString($hash_question, "text"),
-								   "NOW( )"
-								   );
 
-				mysqli_real_escape_string($connection,$insertSQL);
-				$result = mysqli_query($connection,$insertSQL) or die (mysqli_error($connection));
+				$update_table = $prefix."users";
+				$data = array(
+					'user_name' => $username,
+					'userLevel' => sterilize($_POST['userLevel']),
+					'password' => $hash,
+					'userQuestion' => sterilize($_POST['userQuestion']),
+					'userQuestionAnswer' => $hash_question,
+					'userCreated' =>  $db_conn->now()
+				);
+				$result = $db_conn->insert ($update_table, $data);
+				if (!$result) {
+					$error_output[] = $db_conn->getLastError();
+					$errors = TRUE;
+				}
 
 				if ($section != "admin") {
 
-					$query_login = "SELECT password FROM $users_db_table WHERE user_name = '$username' AND password = '$password'";
+					$query_login = "SELECT password FROM $users_db_table WHERE user_name = '$username' AND password = '$hash'";
 					$login = mysqli_query($connection,$query_login) or die (mysqli_error($connection));
 					$row_login = mysqli_fetch_assoc($login);
 					$totalRows_login = mysqli_num_rows($login);
 
 					session_name($prefix_session);
 					session_start();
+					
 					// Authenticate the user
 					if ($totalRows_login == 1)	{
+						
 						// Register the loginUsername
 						$_SESSION['loginUsername'] = $username;
 
 						// If the username/password combo is OK, relocate to the "protected" content index page
-						$redirect_go_to = sprintf("Location: %s", $base_url."index.php?action=add&section=brewer&go=".$go."&msg=1");
+						$redirect = $base_url."index.php?action=add&section=brewer&go=".$go."&msg=1";
+						$redirect = prep_redirect_link($redirect);
+						$redirect_go_to = sprintf("Location: %s", $redirect);
+
 					}
+
 					else {
+						
 						// If the username/password combo is incorrect or not found, relocate to the login error page
-						$redirect_go_to = sprintf("Location: %s", $base_url."index.php?section=login&go=".$go."&msg=1");
+						$redirect = $base_url."index.php?section=login&go=".$go."&msg=1";
+						$redirect = prep_redirect_link($redirect);
+						$redirect_go_to = sprintf("Location: %s", $redirect);
 						session_destroy();
+
 					}
+
 				}
 
 				if ($section == "admin") {
 					$redirect_go_to = sprintf("Location: %s", $base_url."index.php?section=".$section."&go=".$go."&action=".$action."&filter=info&msg=1&username=".urlencode($username));
 				}
-			}
+
+			} // end else 
+
+		} // end if (strstr($username,'@'))
+
+		else {
+
+			$redirect = $base_url."index.php?section=".$section."&go=".$go."&action=".$action."&view=".$view."&msg=3";
+			$redirect = prep_redirect_link($redirect);
+			$redirect_go_to = sprintf("Location: %s", $redirect);
+
 		}
-		else $redirect_go_to = sprintf("Location: %s", $base_url."index.php?section=".$section."&go=".$go."&action=".$action."&view=".$view."&msg=3");
-	}
+	
+	} // end if (($action == "add") && ($section == "admin") && ($_SESSION['userLevel'] <= 1))
 
 	// ---------------------------  Editing a User -------------------------------------------
 	if (($action == "edit") && ($_POST['userEdit'] == 1)) {
+
+		$username = "";
+		$usernameOld = "";
 
 		// Check to see if email address is already in the system. If so, redirect.
 		if (isset($_POST['user_name'])) {
 			$username = strtolower($_POST['user_name']);
 			$username = filter_var($username,FILTER_SANITIZE_EMAIL);
 		}
-		else $username = "";
 
 		if (isset($_POST['user_name_old'])) {
 			$usernameOld = strtolower($_POST['user_name_old']);
 			$usernameOld = filter_var($usernameOld,FILTER_SANITIZE_EMAIL);
 		}
-		else $usernameOld = "";
-
 
 		if (strstr($username,'@')) {
 
@@ -116,51 +149,78 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 			$totalRows_userCheck = mysqli_num_rows($userCheck);
 
 			// --------------------------- If Changing a Participant's User Level ------------------------------- //
-			if ($go == "make_admin") {
+			if (($go == "make_admin") && ($_SESSION['userLevel'] <= 1)) {
 
-				$updateGoTo = $base_url."index.php?section=admin&go=participants&msg=2";
-				$updateSQL = sprintf("UPDATE $users_db_table SET userLevel=%s,userCreated=%s WHERE user_name=%s",
-								   GetSQLValueString($_POST['userLevel'], "text"),
-								   "NOW( )",
-								   GetSQLValueString($username, "text")
-								   );
-				mysqli_real_escape_string($connection,$updateSQL);
-				$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
-				
-				$pattern = array('\'', '"');
-				$updateGoTo = str_replace($pattern, "", $updateGoTo);
-				$redirect_go_to = sprintf("Location: %s", stripslashes($updateGoTo));
+				$update_table = $prefix."users";
+				$data = array(
+					'userLevel' => sterilize($_POST['userLevel']),
+					'userCreated' => $db_conn->now()
+				);			
+				$db_conn->where ('user_name', $username);
+				$result = $db_conn->update ($update_table, $data);
+				if (!$result) {
+					$error_output[] = $db_conn->getLastError();
+					$errors = TRUE;
+				}
 
-			} // end if ($go == "make_admin")
+				if (!empty($error_output)) $_SESSION['error_output'] = $error_output;
+
+				if ($errors) $updateGoTo = $base_url."index.php?section=admin&go=participants&msg=3";
+				$updateGoTo = prep_redirect_link($updateGoTo);
+				$redirect_go_to = sprintf("Location: %s", $updateGoTo);
+
+			} else {
+	
+				$redirect = $base_url."index.php?msg=98";
+				$redirect = prep_redirect_link($redirect);
+				$redirect_go_to = sprintf("Location: %s", $redirect);
+
+			}
 
 			// --------------------------- If Changing a Participant's User Name ------------------------------- //
 			if ($go == "username") {
 				
 				// User name found. Redirect.
-				if ($totalRows_userCheck > 0) $redirect_go_to = sprintf("Location: %s", $base_url."index.php?section=user&action=username&id=".$id."&msg=1");
+				if ($totalRows_userCheck > 0) {
+
+					$redirect = $base_url."index.php?section=user&action=username&id=".$id."&msg=1";
+					$redirect = prep_redirect_link($redirect);
+					$redirect_go_to = sprintf("Location: %s", $redirect);
+
+				}
 				
 				// User name not found. Update.
 				if ($totalRows_userCheck < 1) {
 
-					$updateSQL = sprintf("UPDATE $users_db_table SET user_name=%s,userCreated=%s WHERE id=%s",
-								   GetSQLValueString($username, "text"),
-								   "NOW( )",
-								   GetSQLValueString($id, "text")
-								   );
-					mysqli_real_escape_string($connection,$updateSQL);
-					$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+					$update_table = $prefix."users";
+					$data = array(
+						'user_name' => $username,
+						'userCreated' => $db_conn->now()
+					);			
+					$db_conn->where ('id', $id);
+					$result = $db_conn->update ($update_table, $data);
+					if (!$result) {
+						$error_output[] = $db_conn->getLastError();
+						$errors = TRUE;
+					}
 
-					$updateSQL = sprintf("UPDATE $brewer_db_table SET brewerEmail=%s WHERE uid=%s",
-									   GetSQLValueString($username, "text"),
-									   GetSQLValueString($id, "text"));
+					$update_table = $prefix."brewer";
+					$data = array('brewerEmail' => $username);			
+					$db_conn->where ('uid', $id);
+					$result = $db_conn->update ($update_table, $data);
+					if (!$result) {
+						$error_output[] = $db_conn->getLastError();
+						$errors = TRUE;
+					}
 
-					mysqli_real_escape_string($connection,$updateSQL);
-					$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+					if (!empty($error_output)) $_SESSION['error_output'] = $error_output;
 
 					if ($filter == "admin") {
-						$pattern = array('\'', '"');
-						$updateGoTo = str_replace($pattern, "", $updateGoTo);
-						$redirect_go_to = sprintf("Location: %s", stripslashes($updateGoTo));
+
+						if ($errors) $updateGoTo = $_POST['relocate']."&msg=3";
+						$updateGoTo = prep_redirect_link($updateGoTo);
+						$redirect_go_to = sprintf("Location: %s", $updateGoTo);
+					
 					} // end if ($filter == "admin")
 
 					if ($filter != "admin") {
@@ -169,7 +229,6 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 						$login = mysqli_query($connection,$query_login) or die (mysqli_error($connection));
 						$row_login = mysqli_fetch_assoc($login);
 						$totalRows_login = mysqli_num_rows($login);
-						// echo $query_login;
 
 						if (session_status() == PHP_SESSION_NONE) {
 							session_name($prefix_session);
@@ -178,17 +237,25 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 
 						// Authenticate the user
 						if ($totalRows_login == 1) {
+							
 							// Register the loginUsername
 							$_SESSION['loginUsername'] = $username;
 							unset($_SESSION['user_info'.$prefix_session]);
-							//$_SESSION['session_set_'.$prefix_session] = "";
+							
 							// If the username/password combo is OK, relocate to the "protected" content index page
-							$redirect_go_to = sprintf("Location: %s", $base_url."index.php?section=list&msg=3");
+							$redirect = $base_url."index.php?section=list&msg=3";
+							$redirect = prep_redirect_link($redirect);
+							$redirect_go_to = sprintf("Location: %s", $redirect);
 
 						}
+
 						else {
+
 							// If the username/password combo is incorrect or not found, relocate to the login error page
-							$redirect_go_to = sprintf("Location: %s", $base_url."index.php?section=user&action=username&msg=2");
+							$redirect = $base_url."index.php?section=user&action=username&msg=2";
+							$redirect = prep_redirect_link($redirect);
+							$redirect_go_to = sprintf("Location: %s", $redirect);
+
 						}
 
 					} // end if ($filter != "admin")
@@ -200,7 +267,11 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 		} // end if (strstr($username,'@'))
 
 		else {
-			$redirect_go_to = sprintf("Location: %s", $base_url."index.php?section=user&action=username&msg=4&id=".$id);
+
+			$redirect = $base_url."index.php?section=user&action=username&msg=4&id=".$id;
+			$redirect = prep_redirect_link($redirect);
+			$redirect_go_to = sprintf("Location: %s", $redirect);
+
 		}
 
 		// --------------------------- If a participant is changing their password ------------------------------- //
@@ -220,22 +291,37 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 			$check = $hasher->CheckPassword($password_old, $row_userPass['password']);
 			$hash_new = $hasher->HashPassword($password_new);
 
-			if (!$check) $redirect_go_to = sprintf("Location: %s", $base_url."index.php?section=user&action=password&msg=3&id=".$id);
+			if (!$check) {
+
+				$redirect = $base_url."index.php?section=user&action=password&msg=3&id=".$id;
+				$redirect = prep_redirect_link($redirect);
+				$redirect_go_to = sprintf("Location: %s", $redirect);
+
+			}
 
 			if ($check)  {
-				$updateSQL = sprintf("UPDATE $users_db_table SET password=%s,userCreated=%s WHERE id=%s",
-								GetSQLValueString($hash_new, "text"),
-								"NOW( )",
-								GetSQLValueString($id, "text")
-								);
 
-				mysqli_real_escape_string($connection,$updateSQL);
-				$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
-				$redirect_go_to = sprintf("Location: %s", $base_url."index.php?section=list&id=".$id."&msg=4");
+				$update_table = $prefix."users";
+				$data = array(
+					'password' => $hash_new,
+					'userCreated' => $db_conn->now()
+				);			
+				$db_conn->where ('id', $id);
+				$result = $db_conn->update ($update_table, $data);
+				if (!$result) {
+					$error_output[] = $db_conn->getLastError();
+					$errors = TRUE;
+				}
+				
+				$redirect = $base_url."index.php?section=list&id=".$id."&msg=4";
+				$redirect = prep_redirect_link($redirect);
+				$redirect_go_to = sprintf("Location: %s", $redirect);
+
 			}
-		 }
 
-		 // --------------------------- If an admin is changing their password ------------------------------- //
+		} // end if ($go == "password")
+
+		// --------------------------- If an admin is changing their password ------------------------------- //
 		if ($go == "change_user_password") {
 
 			require(CLASSES.'phpass/PasswordHash.php');
@@ -244,21 +330,35 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 			$password_new = md5(sterilize($_POST['password']));
 			$hash_new = $hasher->HashPassword($password_new);
 
-			$updateSQL = sprintf("UPDATE $users_db_table SET password=%s,userCreated=%s WHERE id=%s",
-								GetSQLValueString($hash_new, "text"),
-								"NOW( )",
-								GetSQLValueString($id, "text")
-								);
+			$update_table = $prefix."users";
+			$data = array(
+				'password' => $hash_new,
+				'userCreated' => $db_conn->now()
+			);			
+			$db_conn->where ('id', $id);
+			$result = $db_conn->update ($update_table, $data);
+			if (!$result) {
+				$error_output[] = $db_conn->getLastError();
+				$errors = TRUE;
+			}
 
-			mysqli_real_escape_string($connection,$updateSQL);
-			$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
-			$redirect_go_to = sprintf("Location: %s", $base_url."index.php?section=admin&go=participants&msg=33");
-		 }
+			if (!empty($error_output)) $_SESSION['error_output'] = $error_output;
 
-	} // end if ($action == "edit")
+			$redirect = $base_url."index.php?section=admin&go=participants&msg=33";
+			if ($errors) $redirect = $base_url."index.php?section=admin&go=participants&msg=3";
+			$redirect = prep_redirect_link($redirect);
+			$redirect_go_to = sprintf("Location: %s", $redirect);
+
+		} // end if ($go == "change_user_password")
+
+	} // end if (($action == "edit") && ($_POST['userEdit'] == 1))
 
 } else {
-	$redirect_go_to = sprintf("Location: %s", $base_url."index.php?msg=98");
+	
+	$redirect = $base_url."index.php?msg=98";
+	$redirect = prep_redirect_link($redirect);
+	$redirect_go_to = sprintf("Location: %s", $redirect);
+
 }
 
 ?>

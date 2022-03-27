@@ -14,7 +14,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 				
 				if ($_POST['sbd_judging_no'.$id] != "") {
 
-					/*
+					/**
 					 * The following was changed 04.15.19 (v2.1.17)
 					 * Judging numbers with a dash (-) were being rejected by the $cleaned var scripting below. 
 					 * Judging numbers went to 6-character a standard many releases ago, and worked until the

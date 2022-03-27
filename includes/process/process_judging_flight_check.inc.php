@@ -1,5 +1,10 @@
 <?php
+
 if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1))) {
+
+	$errors = FALSE;
+	$error_output = array();
+	$_SESSION['error_output'] = "";
 
 	$query_check_received = sprintf("SELECT id,brewCategorySort,brewSubCategory FROM %s WHERE brewReceived='1'", $prefix."brewing");
 	$check_received = mysqli_query($connection,$query_check_received) or die (mysqli_error($connection));
@@ -17,15 +22,18 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 	$totalRows_check_empty = mysqli_num_rows($check_empty);
 
 	if ($totalRows_check_empty > 0) {
-		do { $empty_array[] = $row_check_empty['flightEntryID']; } while ($row_check_empty = mysqli_fetch_assoc($check_empty));
+		do { 
+			$empty_array[] = $row_check_empty['flightEntryID']; 
+		} while ($row_check_empty = mysqli_fetch_assoc($check_empty));
 	}
 
 	// Put all of the flightEntryIDs into an array
-	do { $flight_array[] = $row_check_flights['flightEntryID']; } while ($row_check_flights = mysqli_fetch_assoc($check_flights));
-
+	do { 
+		$flight_array[] = $row_check_flights['flightEntryID']; 
+	} while ($row_check_flights = mysqli_fetch_assoc($check_flights));
 
 	do {
-		//
+		
 		if ($totalRows_check_empty > 0) {
 
 			if (in_array($row_check_received['id'],$empty_array)) {
@@ -44,20 +52,24 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 				//echo $query_table."<br>";
 
 				if ($totalRows_table > 0) {
+					
 					// Finally, update the table information into the judging_flights DB table
 					// IF there is a judging table with the entry's subcategory
-					$updateSQL = sprintf("UPDATE $judging_flights_db_table SET flightTable=%s WHERE flightEntryID=%s",
-							   GetSQLValueString($row_table['id'], "int"),
-							   GetSQLValueString($row_check_received['id'], "int")
-							   );
-					mysqli_real_escape_string($connection,$updateSQL);
-					$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
-					//echo $updateSQL."<br>";
-				}
 
-			}
+					$update_table = $prefix."judging_flights";
+					$data = array('flightTable' => $row_table['id']);
+					$db_conn->where ('flightEntryID', $row_check_received['id']);
+					$result = $db_conn->update ($update_table, $data);
+					if (!$result) {
+						$error_output[] = $db_conn->getLastError();
+						$errors = TRUE;
+					}
 
-		}
+				} // end if ($totalRows_table > 0)
+
+			} // end if (in_array($row_check_received['id'],$empty_array))
+
+		} // end if ($totalRows_check_empty > 0)
 
 		// Loop through the entries that have been received
 		// Assign any that are not in the judging_flights table to the appropriate user defined judging table
@@ -78,36 +90,53 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 			//echo $query_table."<br>";
 
 			if ($totalRows_table > 0) {
+				
 				// Finally, insert the information into the judging_flights DB table
 				// IF there is a judging table with the entry's subcategory
-				$updateSQL = sprintf("INSERT INTO $judging_flights_db_table (flightTable, flightNumber, flightEntryID, flightRound) VALUES (%s, %s, %s, %s)",
-						   GetSQLValueString($row_table['id'], "int"),
-						   GetSQLValueString("1", "int"),
-						   GetSQLValueString($row_check_received['id'], "int"),
-						   GetSQLValueString("1", "int")
-						   );
-				mysqli_real_escape_string($connection,$updateSQL);
-				$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
-				//echo $updateSQL."<br>";
-			}
-		}
+				$update_table = $prefix."judging_flights";
+				$data = array(
+					'flightTable' => $row_table['id'],
+					'flightNumber' => 1,
+					'flightEntryID' => $row_check_received['id'],
+					'flightRound' => 1
+				);
+				$result = $db_conn->insert ($update_table, $data);
+				if (!$result) {
+					$error_output[] = $db_conn->getLastError();
+					$errors = TRUE;
+				}
+
+			} // end if ($totalRows_table > 0)
+
+		} // end if (!in_array($row_check_received['id'],$flight_array))
 
 	} while ($row_check_received = mysqli_fetch_assoc($check_received));
 
 	if ($go == "judging_tables") {
 		$updateGoTo = $base_url."index.php?section=admin&go=judging_tables&msg=4";
-		$redirect_go_to = sprintf("Location: %s", $updateGoTo);
-	}
-	if ($go == "admin_dashboard") {
-		$updateGoTo = $base_url."index.php?section=admin&msg=4";
-		$redirect_go_to = sprintf("Location: %s", $updateGoTo);
-	}
-	if ($go == "hidden") {
-		$updateGoTo = $base_url."index.php?section=admin&go=judging_tables";
-		$redirect_go_to = sprintf("Location: %s", $updateGoTo);
+		if ($errors) $updateGoTo = $base_url."index.php?section=admin&go=judging_tables&msg=3";
 	}
 
+	if ($go == "admin_dashboard") {
+		$updateGoTo = $base_url."index.php?section=admin&msg=4";
+		if ($errors) $updateGoTo = $base_url."index.php?section=admin&msg=3";
+	}
+
+	if ($go == "hidden") {
+		$updateGoTo = $base_url."index.php?section=admin&go=judging_tables";
+		if ($errors) $updateGoTo = $base_url."index.php?section=admin&go=judging_tables&msg=3";
+	}
+
+	if (!empty($error_output)) $_SESSION['error_output'] = $error_output;
+
+	$updateGoTo = prep_redirect_link($updateGoTo);
+	$redirect_go_to = sprintf("Location: %s", $updateGoTo);
+
 } else {
-	$redirect_go_to = sprintf("Location: %s", $base_url."index.php?msg=98");
+
+	$redirect = $base_url."index.php?msg=98";
+	$redirect = prep_redirect_link($redirect);
+	$redirect_go_to = sprintf("Location: %s", $redirect);
+
 }
 ?>

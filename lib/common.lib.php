@@ -11,11 +11,12 @@
 include (LIB.'date_time.lib.php');
 include (INCLUDES.'version.inc.php');
 
-// ------------------ VERSION CHECK ------------------
-// Change version in system table if does not match in DB
-// If there are NO database structure or data updates for the current version,
-// USE THIS FUNCTION ONLY IF THERE ARE *NOT* ANY DB TABLE OR DATA UPDATES
-// OTHERWISE, DEFINE/UPDATE THE VERSION VIA THE UPDATE PROCEDURE
+/** ------------------ VERSION CHECK ------------------
+ * Change version in system table if does not match in DB
+ * If there are NO database structure or data updates for the current version,
+ * USE THIS FUNCTION ONLY IF THERE ARE *NOT* ANY DB TABLE OR DATA UPDATES
+ * OTHERWISE, DEFINE/UPDATE THE VERSION VIA THE UPDATE PROCEDURE
+ */
 
 function version_check($version,$current_version,$current_version_date_display) {
 
@@ -30,6 +31,55 @@ function version_check($version,$current_version,$current_version_date_display) 
 
 	}
 
+}
+
+/**
+ * MySQLi prepared statement functions
+ * @see https://phpdelusions.net/mysqli_examples/prepared_select#explanation 
+ * @see https://phpdelusions.net/mysqli/simple
+ * @see https://phpdelusions.net/mysqli_examples/insert
+ * @see https://phpdelusions.net/mysqli_examples/update
+ * @see https://phpdelusions.net/mysqli_examples/like
+ */
+
+function prepared_query($conn, $sql, $params = [], $types = "") {
+    if (!empty($params)) $types = $types ?: str_repeat("s", count($params));
+    $stmt = $conn->prepare($sql);
+    if (!empty($params)) $stmt->bind_param($types, ...$params);
+    $stmt->execute();
+    return $stmt;
+}
+
+function prepared_select($conn, $sql, $params = [], $types = "") {
+    return prepared_query($conn, $sql, $params, $types)->get_result();
+}
+
+function escape_mysql_identifier($field) {
+    return "`".str_replace("`", "``", $field)."`";
+}
+
+function prepared_insert($conn, $table, $data) {
+    $keys = array_keys($data);
+    $keys = array_map('escape_mysql_identifier', $keys);
+    $fields = implode(",", $keys);
+    $table = escape_mysql_identifier($table);
+    $placeholders = str_repeat('?,', count($keys) - 1) . '?';
+    $sql = "INSERT INTO $table ($fields) VALUES ($placeholders)";
+    prepared_query($conn, $sql, array_values($data));
+}
+
+function prepared_update_by_id($conn, $table, $data, $id) {
+    $table = escape_mysql_identifier($table);
+    $sql = "UPDATE $table SET ";
+
+    foreach (array_keys($data) as $i => $field) {
+        $field = escape_mysql_identifier($field);
+        $sql .= ($i) ? ", " : "";
+        $sql .= "$field = ?";
+    }       
+    $sql .= " WHERE id = ?";
+    $data[] = $id;
+    prepared_query($conn, $sql, array_values($data));
 }
 
 // ---------------------------------------------------
@@ -51,7 +101,6 @@ function search_array($array, $key, $value) {
     } 
     return $result; 
 }
-
 
 function in_string($haystack,$needle) {
 	if (strpos($haystack,$needle) !== false) return TRUE;
@@ -2395,11 +2444,13 @@ function get_suffix($dbTable) {
 function score_check($id,$judging_scores_db_table) {
 	require(CONFIG.'config.php');
 	mysqli_select_db($connection,$database);
+	
 	$query_scores = sprintf("SELECT scoreEntry FROM %s WHERE eid='%s'",$judging_scores_db_table,$id);
 	$scores = mysqli_query($connection,$query_scores) or die (mysqli_error($connection));
 	$row_scores = mysqli_fetch_assoc($scores);
 
-	$r = $row_scores['scoreEntry'];
+	$r = "";
+	if ($row_scores) $r = $row_scores['scoreEntry'];
 	return $r;
 }
 
@@ -2410,7 +2461,7 @@ function minibos_check($id,$judging_scores_db_table) {
 	$scores = mysqli_query($connection,$query_scores) or die (mysqli_error($connection));
 	$row_scores = mysqli_fetch_assoc($scores);
 
-	if ($row_scores['scoreMiniBOS'] == "1") return TRUE;
+	if (($row_scores) && ($row_scores['scoreMiniBOS'] == "1")) return TRUE;
 	else return FALSE;
 }
 
@@ -2427,7 +2478,7 @@ function winner_check($id,$judging_scores_db_table,$judging_tables_db_table,$bre
 	$scores = mysqli_query($connection,$query_scores) or die (mysqli_error($connection));
 	$row_scores = mysqli_fetch_assoc($scores);
 
-	if ($row_scores['scorePlace'] >= "1") {
+	if (($row_scores) && ($row_scores['scorePlace'] >= "1")) {
 
 		if ($method == "0") {  // Display by Table
 
@@ -4448,6 +4499,14 @@ function clean_up_text($text) {
 	$r = preg_replace( "/\r|\n/", "", $r);
 	$r = htmlspecialchars_decode($r);
 	return $r;
+}
+
+function prep_redirect_link($link) {
+	$pattern = array('\'', '"');
+	$link = filter_var($link,FILTER_SANITIZE_STRING);
+	$link = str_replace($pattern, "", $link);
+	$link = stripslashes($link);
+	return $link;
 }
 
 ?>

@@ -192,10 +192,7 @@ if (!NHC) $user_edit_links .= sprintf("<a class=\"btn btn-default\" href=\"".$ed
 $user_edit_links .= sprintf("<a class=\"btn btn-default\" href=\"%s\"><span class=\"fa fa-key\"></span> %s</a>",$edit_user_password_link,$label_change_password);
 $user_edit_links .= "</div><!-- ./button group --> ";
 $user_edit_links .= "<div class=\"btn-group hidden-print\" role=\"group\" aria-label=\"AddEntries\">";
-if (($show_entries) && ($add_entry_link_show)) {
-	$user_edit_links .= sprintf("<a class=\"btn btn-default\" href=\"%s\"><span class=\"fa fa-plus-circle\"></span> %s</a>",$add_entry_link,$label_add_entry);
-	if ((!NHC) && ($_SESSION['prefsHideRecipe'] == "N")) $user_edit_links .= sprintf("<a class=\"btn btn-default\" href=\"%s\"><span class=\"fa fa-file-code-o\"></span> %s</a>",$add_entry_beerxml_link,$label_add_beerXML);
-}
+if (($show_entries) && ($add_entry_link_show)) $user_edit_links .= sprintf("<a class=\"btn btn-default\" href=\"%s\"><span class=\"fa fa-plus-circle\"></span> %s</a>",$add_entry_link,$label_add_entry);
 $user_edit_links .= "</div><!-- ./button group -->";
 
 

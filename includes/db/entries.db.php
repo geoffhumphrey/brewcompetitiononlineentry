@@ -69,7 +69,7 @@ else {
 
 	}
 
-	elseif ((($section == "brew") || ($section == "beerxml")) && ($action == "add")) {
+	elseif (($section == "brew") && ($action == "add")) {
 
 		$query_log = sprintf("SELECT * FROM $brewing_db_table WHERE brewBrewerID = '%s'", $_SESSION['user_id']);
 		$query_log_paid = sprintf("SELECT * FROM $brewing_db_table WHERE brewPaid='1'", $_SESSION['user_id']);
@@ -83,7 +83,7 @@ else {
 
 	}
 
-	elseif ((($section == "brew") || ($section == "beerxml")) && ($action == "edit")) {
+	elseif (($section == "brew") && ($action == "edit")) {
 
 		$query_log = sprintf("SELECT * FROM %s WHERE id = '%s'", $brewing_db_table, $id);
 		$query_log_paid = sprintf("SELECT * FROM %s WHERE brewPaid='1'", $brewing_db_table);

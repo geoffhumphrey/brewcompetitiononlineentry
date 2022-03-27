@@ -150,7 +150,6 @@ if (((isset($_SERVER['HTTP_REFERER'])) && ($referrer['host'] == $_SERVER['SERVER
 	// --------------------------- Various Actions ------------------------------- //
 
 	if ($action == "delete") include (PROCESS.'process_delete.inc.php');
-	elseif ($action == "beerxml") include (PROCESS.'process_beerxml.inc.php');
 	elseif ($action == "update_judging_flights") include (PROCESS.'process_judging_flight_check.inc.php');
 	elseif ($action == "delete_scoresheets") {
 
