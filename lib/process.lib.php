@@ -1,22 +1,29 @@
 <?php
-// function to generate random number
+
 function random_judging_num_generator(){
+	
 	srand ((double) microtime() * 10000000);
 
-	$random_generator = "";// Initialize the string to store random numbers
-	for ($i=1;$i<6+1;$i++) { // Loop the number of times of required digits
-		$random_generator .=rand(1,9); // one number is added
-	} // end of for loop
+	$random_generator = "";
+	
+	for ($i=1;$i<6+1;$i++) { 
+		$random_generator .= rand(1,9);
+	}
 
 	return $random_generator;
-} // end of function
+
+}
 
 function check_http($input) {
+
 	if ($input != "") {
-			if (strstr($input,"http://")) return $input;
-			if (strstr($input,"https://")) return $input;
-			if ((!strstr($input, "http://")) || (!strstr($input, "https://"))) return "http://".$input;
-		}
+
+		if (strstr($input,"http://")) return $input;
+		if (strstr($input,"https://")) return $input;
+		if ((!strstr($input, "http://")) || (!strstr($input, "https://"))) return "http://".$input;
+
+	}
+
 }
 
 function check_judging_num($input) {

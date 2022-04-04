@@ -39,7 +39,7 @@ $updateSQL = sprintf("CREATE TABLE `%s` (
   `evalFlaws` mediumtext COLLATE utf8mb4_unicode_ci,
   `evalInitialDate` int(12) DEFAULT NULL COMMENT 'UNIX timestamp of initial submit',
   `evalUpdatedDate` int(12) DEFAULT NULL COMMENT 'UNIX timestamp of edited submit',
-  `evalTable` smallint(5) DEFAULT NULL COMMENT 'ID of table from tables table',
+  `evalTable` smallint(5) DEFAULT NULL COMMENT 'ID of table from judging_tables table',
   `evalFinalScore` smallint(5) DEFAULT NULL COMMENT 'final, agreed upon score',
   `evalMiniBOS` tinyint(1) DEFAULT NULL COMMENT '0=no; 1=yes',
   `evalPosition` varchar(15) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'Position in flight - separated by comma',

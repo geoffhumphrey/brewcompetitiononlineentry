@@ -1,6 +1,6 @@
 <script type="text/javascript">
-var username_url = "<?php echo $base_url; ?>includes/ajax_functions.inc.php?action=username";
-var email_url="<?php echo $base_url; ?>includes/ajax_functions.inc.php?action=email";
+var username_url = "<?php echo $base_url; ?>ajax/username.ajax.php";
+var email_url="<?php echo $base_url; ?>ajax/valid_email.ajax.php";
 </script>
 <script src="<?php echo $base_url; ?>js_includes/registration_checks.min.js"></script>
 <script type="text/javascript">
@@ -47,7 +47,7 @@ if (($action != "print") && ($msg != "default")) echo $msg_output; ?>
 			<div class="input-group has-warning">
 				<span class="input-group-addon" id="email-addon1"><span class="fa fa-envelope"></span></span>
 				<!-- Input Here -->
-				<input class="form-control" name="user_name" id="user_name" type="email" placeholder="Your email address is your user name" onBlur="checkAvailability()" onkeyup="twitter.updateUrl(this.value)" onchange="AjaxFunction(this.value);" value="<?php if ((isset($_COOKIE['user_name'])) && ($msg > 0)) echo $_COOKIE['user_name']; ?>" required>
+				<input class="form-control" name="user_name" id="user_name" type="email" placeholder="Your email address is your user name" onBlur="checkAvailability()" onchange="AjaxFunction(this.value);" value="<?php if ((isset($_COOKIE['user_name'])) && ($msg > 0)) echo $_COOKIE['user_name']; ?>" required>
 				<span class="input-group-addon" id="email-addon2"><span class="fa fa-star"></span>
 			</div>
 			<div id="msg_email" class="help-block"></div>

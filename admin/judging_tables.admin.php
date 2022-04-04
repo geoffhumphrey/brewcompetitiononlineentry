@@ -165,12 +165,13 @@ if (($action == "default") && ($filter == "default")) {
 
     do {
 
-        $loc_total = get_table_info(1,"count_total","default","default",$row_judging['id']);
+        $loc_total = 0;
+        if ($row_judging) $loc_total = get_table_info(1,"count_total","default","default",$row_judging['id']);
         $all_loc_total[] = $loc_total;
 
         $sidebar_assigned_entries_by_location .= "<div class=\"bcoem-sidebar-panel\">";
         $sidebar_assigned_entries_by_location .= "<strong class=\"text-info\">";
-        $sidebar_assigned_entries_by_location .= $row_judging['judgingLocName'];
+        if ($row_judging) $sidebar_assigned_entries_by_location .= $row_judging['judgingLocName'];
         $sidebar_assigned_entries_by_location .= "</strong>";
         $sidebar_assigned_entries_by_location .= "<span class=\"pull-right\">";
         $sidebar_assigned_entries_by_location .= $loc_total;

@@ -669,8 +669,8 @@ $alert_text_078 = "Registering as a judge is still available.";
 $alert_text_080 = "Password incorrect.";
 $alert_text_081 = "Password accepted.";
 
-$alert_email_valid = "Email format is valid!";
-$alert_email_not_valid = "Email format is not valid!";
+$alert_email_valid = "Email format is valid.";
+$alert_email_not_valid = "Email format is not valid.";
 $alert_email_in_use = "The email address you entered is already in use. Please choose another.";
 $alert_email_not_in_use = "Congratulations! The email address you entered is not in use.";
 

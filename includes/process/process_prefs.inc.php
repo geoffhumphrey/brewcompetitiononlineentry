@@ -218,8 +218,8 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 				  PRIMARY KEY (`id`)
 				) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;",$prefix."payments");
 				
-				$result = $db_conn->rawQuery($sql);
-				if (!$result) {
+				$db_conn->rawQuery($sql);
+				if ($db_conn->getLastErrno() !== 0) {
 					$error_output[] = $db_conn->getLastError();
 					$errors = TRUE;
 				}
@@ -372,8 +372,8 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 				  PRIMARY KEY (`id`)
 				) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;",$prefix."payments");
 				
-				$result = $db_conn->rawQuery($sql);
-				if (!$result) {
+				$db_conn->rawQuery($sql);
+				if ($db_conn->getLastErrno() !== 0) {
 					$error_output[] = $db_conn->getLastError();
 					$errors = TRUE;
 				}

@@ -131,10 +131,10 @@
 		<div class="input-group">
 			<!-- Input Here -->
 			<label class="radio-inline">
-				<input type="radio"  name="sbi_display_places" value="1" id="sbi_display_places_1" <?php if (($row_sbi['sbi_display_places'] == "1") || ($action == "add")) echo "CHECKED"; ?>> Yes
+				<input type="radio"  name="sbi_display_places" value="1" id="sbi_display_places_1" <?php if (($row_sbi) && ($row_sbi['sbi_display_places'] == "1")) echo "CHECKED"; ?>> Yes
 			</label>
 			<label class="radio-inline">
-				<input type="radio" name="sbi_display_places" value="0" id="sbi_display_places_0" <?php if ($row_sbi['sbi_display_places'] == "0") echo "CHECKED"; ?> />No
+				<input type="radio" name="sbi_display_places" value="0" id="sbi_display_places_0" <?php if ((($row_sbi) && ($row_sbi['sbi_display_places'] == "0")) || ($action == "add")) echo "CHECKED"; ?> />No
 			</label>
 		</div>
 	</div>

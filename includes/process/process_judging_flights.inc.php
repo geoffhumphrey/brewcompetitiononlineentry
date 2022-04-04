@@ -123,7 +123,6 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 				} // end if ($totalRows_assignments > 0)
 
 				// Change the rounds for all affected table/flight assignments.
-
 				$query_flights = sprintf("SELECT id FROM $judging_flights_db_table WHERE flightTable='%s' AND flightNumber='%s' ORDER BY id", $_POST['flightTable'.$a],$_POST['flightNumber'.$a]);
 				$flights = mysqli_query($connection,$query_flights) or die (mysqli_error($connection));
 				$row_flights = mysqli_fetch_assoc($flights);
@@ -151,6 +150,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 		$redirect_go_to = sprintf("Location: %s", $updateGoTo);
 
 	}
+	
 } else {
 
 	$redirect = $base_url."index.php?msg=98";

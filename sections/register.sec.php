@@ -1,6 +1,4 @@
 <script type="text/javascript">
-var username_url = "<?php echo $base_url; ?>includes/ajax_functions.inc.php?action=username";
-var email_url="<?php echo $base_url; ?>includes/ajax_functions.inc.php?action=email";
 var action = "<?php echo $action; ?>";
 </script>
 <script src="<?php echo $base_url; ?>js_includes/registration_checks.min.js"></script>
@@ -111,7 +109,7 @@ else { // THIS ELSE ENDS at the end of the script
 	}
 }
 
-if (($comp_paid_entry_limit) && ($go == "entrant")) $warning0 .= sprintf("<div class=\"alert alert-danger\"><strong>%s:</strong> %s %s</div>",$label_please_note,$alert_text_053);
+if (($comp_paid_entry_limit) && ($go == "entrant")) $warning0 .= sprintf("<div class=\"alert alert-danger\"><strong>%s:</strong> %s</div>",$label_please_note,$alert_text_053);
 
 if (($_SESSION['prefsProEdition'] == 1) && ($go == "entrant")) $warning1 .= sprintf("<p class=\"lead\">%s <small>%s</small></p>",$register_text_035,$register_text_036);
 elseif (($_SESSION['prefsProEdition'] == 1) && ($go != "entrant")) $warning1 .= sprintf("<p class=\"lead\">%s</p>",$register_text_004);
@@ -375,7 +373,7 @@ if ($go == "default") {  ?>
 			<div class="input-group has-warning">
 				<span class="input-group-addon" id="email-addon1"><span class="fa fa-envelope"></span></span>
 				<!-- Input Here -->
-				<input class="form-control" name="user_name" id="user_name" type="email" placeholder="" data-error="<?php echo $register_text_019; ?>" onBlur="checkAvailability()" onkeyup="twitter.updateUrl(this.value)" onchange="AjaxFunction(this.value);" value="<?php if (($msg != "default") && (isset($_COOKIE['user_name']))) echo $_COOKIE['user_name']; ?>" required <?php if ($_SESSION['prefsProEdition'] == 0) echo "autofocus"; ?>>
+				<input class="form-control" name="user_name" id="user_name" type="email" placeholder="" data-error="<?php echo $register_text_019; ?>" onBlur="checkAvailability()" onchange="AjaxFunction(this.value);" value="<?php if (($msg != "default") && (isset($_COOKIE['user_name']))) echo $_COOKIE['user_name']; ?>" required <?php if ($_SESSION['prefsProEdition'] == 0) echo "autofocus"; ?>>
 				<span class="input-group-addon" id="email-addon2"><span class="fa fa-star"></span>
 			</div>
             <div class="help-block"><?php echo $register_text_021; ?></div>

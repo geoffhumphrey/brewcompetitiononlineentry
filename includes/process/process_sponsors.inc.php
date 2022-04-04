@@ -31,26 +31,24 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 	if (($action == "add") || ($action == "edit")) {
 
 		$sponsorURL = check_http($purifier->purify($_POST['sponsorURL']));
-		$sponsorURL = sterilize($sponsorURL);
 		$sponsorName = capitalize($purifier->purify($_POST['sponsorName']));
-		$sponsorName = sterilize($sponsorName);
 		$sponsorText = $purifier->purify($_POST['sponsorText']);
-		$sponsorText = sterilize($sponsorText);
+
+		$update_table = $prefix."sponsors";
+		$data = array(
+			'sponsorName' => sterilize($sponsorName),
+			'sponsorURL' => sterilize($sponsorURL),
+			'sponsorImage' => sterilize($_POST['sponsorImage']),
+			'sponsorText' => sterilize($sponsorText),
+			'sponsorLocation' => sterilize($_POST['sponsorLocation']),
+			'sponsorLevel' => sterilize($_POST['sponsorLevel']),
+			'sponsorEnable' => sterilize($_POST['sponsorEnable'])
+		);
 
 	}
 
 	if ($action == "add") {
 
-		$update_table = $prefix."sponsors";
-		$data = array(
-			'sponsorName' => $sponsorName,
-			'sponsorURL' => $sponsorURL,
-			'sponsorImage' => sterilize($_POST['sponsorImage']),
-			'sponsorText' => $sponsorText,
-			'sponsorLocation' => sterilize($_POST['sponsorLocation']),
-			'sponsorLevel' => sterilize($_POST['sponsorLevel']),
-			'sponsorEnable' => sterilize($_POST['sponsorEnable'])
-		);
 		$result = $db_conn->insert ($update_table, $data);
 		if (!$result) {
 			$error_output[] = $db_conn->getLastError();
@@ -67,16 +65,6 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 
 	if ($action == "edit") {
 
-		$update_table = $prefix."sponsors";
-		$data = array(
-			'sponsorName' => $sponsorName,
-			'sponsorURL' => $sponsorURL,
-			'sponsorImage' => sterilize($_POST['sponsorImage']),
-			'sponsorText' => $sponsorText,
-			'sponsorLocation' => sterilize($_POST['sponsorLocation']),
-			'sponsorLevel' => sterilize($_POST['sponsorLevel']),
-			'sponsorEnable' => sterilize($_POST['sponsorEnable'])
-		);
 		$db_conn->where ('id', $id);
 		$result = $db_conn->update ($update_table, $data);
 		if (!$result) {

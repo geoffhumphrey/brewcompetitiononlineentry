@@ -59,8 +59,8 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 				ADD `jPrefsScoreDispMax` tinyint(2) NULL DEFAULT NULL COMMENT 'Maximum disparity of entry scores between judges' AFTER `jPrefsScoresheet`;
 				", $prefix."judging_preferences");
 				
-				$result = $db_conn->rawQuery($sql);
-				if (!$result) {
+				$db_conn->rawQuery($sql);
+				if ($db_conn->getLastErrno() !== 0) {
 					$error_output[] = $db_conn->getLastError();
 					$errors = TRUE;
 				}
@@ -137,7 +137,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 					sendPHPMailerMessage($mail);
 
 				} else {
-					mail("BCOEM Admin <" . $to_email . ">", $subject, $message, $headers);
+					mail($to_email, $subject, $message, $headers);
 				}
 			
 			} // end if (HOSTED)

@@ -25,7 +25,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 	$dropLocationWebsite = check_http(sterilize($_POST['dropLocationWebsite']));
 	$dropLocationWebsite = $purifier->purify($dropLocationWebsite);
 	$dropLocationWebsite = strtolower($dropLocationWebsite);
-	$dropLocationNotes = check_http(sterilize($_POST['dropLocationNotes']));
+	$dropLocationNotes = sterilize($_POST['dropLocationNotes']);
 	$dropLocationNotes = $purifier->purify($dropLocationNotes);
 
 	if ($action == "add") {

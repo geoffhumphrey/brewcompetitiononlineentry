@@ -60,7 +60,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 				);
 
 				if (isset($_POST['unassign'.$random])) $unassign = $_POST['unassign'.$random];
-				else $unassign = 0
+				else $unassign = 0;
 
 				// Check to see if participant is 1) not being "unassigned" and reassigned, and 2) being assigned.
 				if (($unassign == 0) && ((isset($_POST['assignFlight'.$random])) && ($_POST['assignFlight'.$random] > 0))) {

@@ -281,8 +281,7 @@ function table_choose($section,$go,$action,$filter,$view,$script_name,$method) {
 		$flights = mysqli_query($connection,$query_flights) or die (mysqli_error($connection));
 		$row_flights = mysqli_fetch_assoc($flights);
 		$totalRows_flights = mysqli_num_rows($flights);
-		$table_choose = $totalRows_flights."^".$row_flights['flightTable'];
-		//$table_choose = $query_flights;
+		if ($totalRows_flights > 0) $table_choose = $totalRows_flights."^".$row_flights['flightTable'];
 	}
 
 	else {
@@ -477,18 +476,23 @@ function participant_choose($brewer_db_table,$pro_edition,$judge) {
 	if ($judge == 0) $output .= "<option value=\"\" selected disabled data-icon=\"fa fa-plus-circle\">Add an Entry For...</option>";
 	else $output .= "<option value=\"\"></option>";
 	
-	do {
+	if ($row_brewers) {
+		
+		do {
 
-		if ($judge == 1) {
-			$output .= "<option value=\"".$row_brewers['uid']."\">".$row_brewers['brewerLastName'].", ".$row_brewers['brewerFirstName']."</option>";
-		}
+			if ($judge == 1) {
+				$output .= "<option value=\"".$row_brewers['uid']."\">".$row_brewers['brewerLastName'].", ".$row_brewers['brewerFirstName']."</option>";
+			}
 
-		else {
-			if ($pro_edition == 1) $output .= "<option value=\"index.php?section=brew&amp;go=entries&amp;bid=".$row_brewers['uid']."&amp;action=add\" data-content=\"<span class='small'>".$row_brewers['brewerBreweryName']."</span>\">".$row_brewers['brewerBreweryName']."</option>";
-			else $output .= "<option value=\"index.php?section=brew&amp;go=entries&amp;bid=".$row_brewers['uid']."&amp;action=add\" data-content=\"<span class='small'>".$row_brewers['brewerLastName'].", ".$row_brewers['brewerFirstName']."</span>\">".$row_brewers['brewerLastName'].", ".$row_brewers['brewerFirstName']."</option>";
-		}
+			else {
+				if ($pro_edition == 1) $output .= "<option value=\"index.php?section=brew&amp;go=entries&amp;bid=".$row_brewers['uid']."&amp;action=add\" data-content=\"<span class='small'>".$row_brewers['brewerBreweryName']."</span>\">".$row_brewers['brewerBreweryName']."</option>";
+				else $output .= "<option value=\"index.php?section=brew&amp;go=entries&amp;bid=".$row_brewers['uid']."&amp;action=add\" data-content=\"<span class='small'>".$row_brewers['brewerLastName'].", ".$row_brewers['brewerFirstName']."</span>\">".$row_brewers['brewerLastName'].", ".$row_brewers['brewerFirstName']."</option>";
+			}
 
-	} while ($row_brewers = mysqli_fetch_assoc($brewers));
+		} while ($row_brewers = mysqli_fetch_assoc($brewers));
+		
+	}
+
 	$output .= "</select>";
 
 	return $output;
@@ -913,13 +917,16 @@ function date_created($uid,$date_format,$time_format,$timezone,$dbTable) {
 }
 
 function user_info($uid) {
+	
 	include (CONFIG.'config.php');
 	mysqli_select_db($connection,$database);
+	
 	$query_user1 = sprintf("SELECT id,userLevel FROM %s WHERE id = '%s'", $prefix."users", $uid);
 	$user1 = mysqli_query($connection,$query_user1) or die (mysqli_error($connection));
 	$row_user1 = mysqli_fetch_assoc($user1);
 
-	$return = $row_user1['id']."^".$row_user1['userLevel'];
+	$return = "";
+	if ($row_user1) $return = $row_user1['id']."^".$row_user1['userLevel'];
 	return $return;
 
 }

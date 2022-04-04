@@ -50,6 +50,7 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 
 		$headers  = "MIME-Version: 1.0" . "\r\n";
 		$headers .= "Content-type: text/html; charset=utf-8" . "\r\n";
+		$headers .= "To: ".$to_name. " <".$to_email.">, " . "\r\n";
 		$headers .= "From: ".$from_name." <".$from_email.">" . "\r\n";
 
 		if ($mail_use_smtp) {
@@ -135,6 +136,7 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 
 				$headers  = "MIME-Version: 1.0" . "\r\n";
 				$headers .= "Content-type: text/html; charset=utf-8" . "\r\n";
+				$headers .= "To: ".$to_name. " <".$to_email.">, " . "\r\n";
 				$headers .= "From: ".$from_name." <".$from_email.">" . "\r\n";
 
 				if ($mail_use_smtp) {

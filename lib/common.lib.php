@@ -288,12 +288,16 @@ function purge_entries($type, $interval) {
 	mysqli_select_db($connection,$database);
 
 	if ($type == "unconfirmed") {
+		
 		$query_check = sprintf("SELECT id FROM %s WHERE brewConfirmed='0'", $prefix."brewing");
 		if ($interval > 0) $query_check .= " AND brewUpdated < DATE_SUB( NOW(), INTERVAL 1 DAY)";
 		$check = mysqli_query($connection,$query_check) or die (mysqli_error($connection));
 		$row_check = mysqli_fetch_assoc($check);
+		$totalRows_check = mysqli_num_rows($check);
 
-		if (!empty($row_check)) {
+		if ($totalRows_check == 0) $count += 1;
+
+		if ($totalRows_check > 0) {
 			do { $a[] = $row_check['id']; } while ($row_check = mysqli_fetch_assoc($check));
 			foreach ($a as $id) {
 				$deleteEntries = sprintf("DELETE FROM %s WHERE id='%s'", $prefix."brewing", $id);
@@ -302,17 +306,21 @@ function purge_entries($type, $interval) {
 				$result = mysqli_query($connection,$deleteEntries) or die (mysqli_error($connection));
 				if ($result) $count += 1;
 			}
+		
 		}
+	
 	}
 
 	if ($type == "special") {
 		$query_check = sprintf("SELECT a.id, a.brewUpdated, a.brewInfo, a.brewCategorySort, a.brewSubCategory FROM %s as a, %s as b WHERE a.brewCategorySort=b.brewStyleGroup AND a.brewSubCategory=b.brewStyleNum AND b.brewStyleReqSpec=1 AND (a.brewInfo IS NULL OR a.brewInfo='') AND b.brewStyleVersion = '%s'", $prefix."brewing",$prefix."styles",$_SESSION['prefsStyleSet']);
 		if ($interval > 0) $query_check .=" AND a.brewUpdated < DATE_SUB( NOW(), INTERVAL 1 DAY)";
-
 		$check = mysqli_query($connection,$query_check) or die (mysqli_error($connection));
 		$row_check = mysqli_fetch_assoc($check);
+		$totalRows_check = mysqli_num_rows($check);
 
-		if (!empty($row_check)) {
+		if ($totalRows_check == 0) $count += 1;
+
+		if ($totalRows_check > 0) {
 			do {
 				$deleteEntries = sprintf("DELETE FROM %s WHERE id='%s'", $prefix."brewing", $row_check['id']);
 				mysqli_select_db($connection,$database);

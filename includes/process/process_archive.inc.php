@@ -115,7 +115,6 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 			$tables_array[] = $special_best_data_db_table;
 		}
 
-		if (!isset($_POST['keepStyleTypes'])) $tables_array[] = $style_types_db_table;
 		if (!isset($_POST['keepSponsors'])) $tables_array[] = $sponsors_db_table;
 
 		$truncate_tables_array = array();
@@ -129,36 +128,29 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 		if (isset($_POST['keepParticipants'])) {
 
 			$sql = "CREATE TABLE ".$prefix."users_".$suffix." LIKE ".$users_db_table.";";
-			$result = $db_conn->rawQuery($sql);
-			if (!$result) {
-				$error_output[] = $db_conn->getLastError();
-				$errors = TRUE;
-			}
-
-			$sql = "CREATE TABLE ".$prefix."users_".$suffix." LIKE ".$users_db_table.";";
-			$result = $db_conn->rawQuery($sql);
-			if (!$result) {
+			$db_conn->rawQuery($sql);
+			if ($db_conn->getLastErrno() !== 0) {
 				$error_output[] = $db_conn->getLastError();
 				$errors = TRUE;
 			}
 
 			$sql = "INSERT INTO ".$prefix."users_".$suffix." SELECT * FROM ".$users_db_table.";";
-			$result = $db_conn->rawQuery($sql);
-			if (!$result) {
+			$db_conn->rawQuery($sql);
+			if ($db_conn->getLastErrno() !== 0) {
 				$error_output[] = $db_conn->getLastError();
 				$errors = TRUE;
 			}
 
 			$sql = "CREATE TABLE ".$prefix."brewer_".$suffix." LIKE ".$brewer_db_table.";";
-			$result = $db_conn->rawQuery($sql);
-			if (!$result) {
+			$db_conn->rawQuery($sql);
+			if ($db_conn->getLastErrno() !== 0) {
 				$error_output[] = $db_conn->getLastError();
 				$errors = TRUE;
 			}
 
 			$sql = "INSERT INTO ".$prefix."brewer_".$suffix." SELECT * FROM ".$brewer_db_table.";";
-			$result = $db_conn->rawQuery($sql);
-			if (!$result) {
+			$db_conn->rawQuery($sql);
+			if ($db_conn->getLastErrno() !== 0) {
 				$error_output[] = $db_conn->getLastError();
 				$errors = TRUE;
 			}
@@ -169,29 +161,29 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 		if (isset($_POST['keepSpecialBest'])) {
 			
 			$sql = "CREATE TABLE ".$special_best_info_db_table."_".$suffix." LIKE ".$special_best_info_db_table.";";
-			$result = $db_conn->rawQuery($sql);
-			if (!$result) {
+			$db_conn->rawQuery($sql);
+			if ($db_conn->getLastErrno() !== 0) {
 				$error_output[] = $db_conn->getLastError();
 				$errors = TRUE;
 			}
 
 			$sql = "INSERT INTO ".$special_best_info_db_table."_".$suffix." SELECT * FROM ".$special_best_info_db_table.";";
-			$result = $db_conn->rawQuery($sql);
-			if (!$result) {
+			$db_conn->rawQuery($sql);
+			if ($db_conn->getLastErrno() !== 0) {
 				$error_output[] = $db_conn->getLastError();
 				$errors = TRUE;
 			}
 
 			$sql = "RENAME TABLE ".$special_best_data_db_table." TO ".$special_best_data_db_table."_".$suffix.";";
-			$result = $db_conn->rawQuery($sql);
-			if (!$result) {
+			$db_conn->rawQuery($sql);
+			if ($db_conn->getLastErrno() !== 0) {
 				$error_output[] = $db_conn->getLastError();
 				$errors = TRUE;
 			}
 
 			$sql = "CREATE TABLE ".$special_best_data_db_table." LIKE ".$special_best_data_db_table."_".$suffix.";";
-			$result = $db_conn->rawQuery($sql);
-			if (!$result) {
+			$db_conn->rawQuery($sql);
+			if ($db_conn->getLastErrno() !== 0) {
 				$error_output[] = $db_conn->getLastError();
 				$errors = TRUE;
 			}
@@ -201,15 +193,15 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 		if (isset($_POST['keepStyleTypes'])) {
 
 			$sql = "CREATE TABLE ".$style_types_db_table."_".$suffix." LIKE ".$style_types_db_table.";";
-			$result = $db_conn->rawQuery($sql);
-			if (!$result) {
+			$db_conn->rawQuery($sql);
+			if ($db_conn->getLastErrno() !== 0) {
 				$error_output[] = $db_conn->getLastError();
 				$errors = TRUE;
 			}
 
 			$sql = "INSERT INTO ".$style_types_db_table."_".$suffix." SELECT * FROM ".$style_types_db_table.";";
-			$result = $db_conn->rawQuery($sql);
-			if (!$result) {
+			$db_conn->rawQuery($sql);
+			if ($db_conn->getLastErrno() !== 0) {
 				$error_output[] = $db_conn->getLastError();
 				$errors = TRUE;
 			}
@@ -219,25 +211,25 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 		/*
 		if (($eval_db_exist) && (isset($_POST['keepEvaluations']))) {
 			$sql = sprintf("CREATE TABLE %s LIKE %s", $prefix."evaluation_".$suffix, $prefix."evaluation");
-			$result = $db_conn->rawQuery($sql);
+			$db_conn->rawQuery($sql);
 
 			$sql = sprintf("INSERT INTO %s SELECT * FROM %s", $prefix."evaluation_".$suffix, $prefix."evaluation");
-			$result = $db_conn->rawQuery($sql);
+			$db_conn->rawQuery($sql);
 		}
 		*/
 
 		foreach ($tables_array as $table) {
 
 			$sql = sprintf("RENAME TABLE %s TO %s", $table, $table."_".$suffix);
-			$result = $db_conn->rawQuery($sql);
-			if (!$result) {
+			$db_conn->rawQuery($sql);
+			if ($db_conn->getLastErrno() !== 0) {
 				$error_output[] = $db_conn->getLastError();
 				$errors = TRUE;
 			}
 
 			$sql = sprintf("CREATE TABLE %s LIKE %s", $table, $table."_".$suffix);
-			$result = $db_conn->rawQuery($sql);
-			if (!$result) {
+			$db_conn->rawQuery($sql);
+			if ($db_conn->getLastErrno() !== 0) {
 				$error_output[] = $db_conn->getLastError();
 				$errors = TRUE;
 			}
@@ -246,8 +238,8 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 
 		foreach ($truncate_tables_array as $table) {
 			$sql = sprintf("TRUNCATE %s", $table);
-			$result = $db_conn->rawQuery($sql);
-			if (!$result) {
+			$db_conn->rawQuery($sql);
+			if ($db_conn->getLastErrno() !== 0) {
 				$error_output[] = $db_conn->getLastError();
 				$errors = TRUE;
 			}
@@ -255,73 +247,23 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 
 		if (!isset($_POST['keepStyleTypes'])) {
 
+			$sql = "CREATE TABLE ".$style_types_db_table."_".$suffix." LIKE ".$style_types_db_table.";";
+			$db_conn->rawQuery($sql);
+			if ($db_conn->getLastErrno() !== 0) {
+				$error_output[] = $db_conn->getLastError();
+				$errors = TRUE;
+			}
+
+			$sql = "INSERT INTO ".$style_types_db_table."_".$suffix." SELECT * FROM ".$style_types_db_table.";";
+			$db_conn->rawQuery($sql);
+			if ($db_conn->getLastErrno() !== 0) {
+				$error_output[] = $db_conn->getLastError();
+				$errors = TRUE;
+			}
+
 			$update_table = $prefix."style_types";
-			$data = array(
-				array(
-					'id' => 1,
-					'styleTypeName' => 'Beer',
-					'styleTypeOwn' => 'bcoe',
-					'styleTypeBOS' => 'N',
-					'styleTypeBOSMethod' => 1
-				),
-				array(
-					'id' => 2,
-					'styleTypeName' => 'Cider',
-					'styleTypeOwn' => 'bcoe',
-					'styleTypeBOS' => 'N',
-					'styleTypeBOSMethod' => 1
-				),
-				array(
-					'id' => 3,
-					'styleTypeName' => 'Mead',
-					'styleTypeOwn' => 'bcoe',
-					'styleTypeBOS' => 'N',
-					'styleTypeBOSMethod' => 1
-				),
-				array(
-					'id' => 4,
-					'styleTypeName' => 'Mead/Cider',
-					'styleTypeOwn' => 'bcoe',
-					'styleTypeBOS' => 'N',
-					'styleTypeBOSMethod' => 1
-				),
-				array(
-					'id' => 5,
-					'styleTypeName' => 'Wine',
-					'styleTypeOwn' => 'bcoe',
-					'styleTypeBOS' => 'N',
-					'styleTypeBOSMethod' => 1
-				),
-				array(
-					'id' => 6,
-					'styleTypeName' => 'Rice Wine',
-					'styleTypeOwn' => 'bcoe',
-					'styleTypeBOS' => 'N',
-					'styleTypeBOSMethod' => 1
-				),
-				array(
-					'id' => 7,
-					'styleTypeName' => 'Spirits',
-					'styleTypeOwn' => 'bcoe',
-					'styleTypeBOS' => 'N',
-					'styleTypeBOSMethod' => 1
-				),
-				array(
-					'id' => 8,
-					'styleTypeName' => 'Kombucha',
-					'styleTypeOwn' => 'bcoe',
-					'styleTypeBOS' => 'N',
-					'styleTypeBOSMethod' => 1
-				),
-				array(
-					'id' => 9,
-					'styleTypeName' => 'Pulque',
-					'styleTypeOwn' => 'bcoe',
-					'styleTypeBOS' => 'N',
-					'styleTypeBOSMethod' => 1
-				)
-			);
-			$result = $db_conn->insertMulti($update_table, $data);
+			$db_conn->where ('id', 16, ">=");
+			$result = $db_conn->delete ($update_table);
 			if (!$result) {
 				$error_output[] = $db_conn->getLastError();
 				$errors = TRUE;
@@ -336,7 +278,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 				'id' => 1, 
 				'user_name' => $user_name, 
 				'password' => $password,	
-				'userLevel' => $userQuestion, 
+				'userLevel' => $userLevel, 
 				'userQuestion' => $userQuestion, 
 				'userQuestionAnswer' => $userQuestionAnswer, 
 				'userCreated' => $db_conn->now()
@@ -358,7 +300,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 				'brewerZip' => $brewerZip,
 				'brewerCountry' => $brewerCountry,
 				'brewerPhone1' => $brewerPhone1,
-				'brewerPhone2' => $brewerPhone1,
+				'brewerPhone2' => $brewerPhone2,
 				'brewerClubs' => $brewerClubs,
 				'brewerEmail' => $brewerEmail,
 				'brewerStaff' => $brewerStaff,
@@ -623,11 +565,22 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 
 	if ($go == "edit") {
 
-		$tables_array[] = $brewer_db_table;
-		$tables_array[] = $special_best_data_db_table;
-		$tables_array[] = $special_best_info_db_table;
-		$tables_array[] = $style_types_db_table;
-		$tables_array[] = $users_db_table;
+		$tables_array = array(
+			$brewing_db_table, 
+			$judging_assignments_db_table, 
+			$judging_flights_db_table, 
+			$judging_scores_db_table, 
+			$judging_scores_bos_db_table, 
+			$judging_tables_db_table, 
+			$staff_db_table,
+			$brewer_db_table,
+			$special_best_data_db_table,
+			$special_best_info_db_table,
+			$style_types_db_table,
+			$users_db_table,
+			$sponsors_db_table,
+			$eval_db_table
+		);
 		
 		// If the user changed the archive suffix name
 		// Need to loop through each possible archive
@@ -639,11 +592,11 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 				$table_old = $table."_".$filter;
 				$table_new = $table."_".$suffix;
 
-				if (check_setup($table_old,$database)){
+				if (check_setup($table_old,$database)) {
 					
 					$sql = sprintf("RENAME TABLE %s TO %s;", $table_old, $table_new);
-					$result = $db_conn->rawQuery($sql);
-					if (!$result) {
+					$db_conn->rawQuery($sql);
+					if ($db_conn->getLastErrno() !== 0) {
 						$error_output[] = $db_conn->getLastError();
 						$errors = TRUE;
 					}

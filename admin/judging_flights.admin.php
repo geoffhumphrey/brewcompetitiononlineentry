@@ -259,24 +259,31 @@ if (($action == "assign") && ($filter == "rounds")) {
 			//echo $query_flights."<br>";
 			//echo $totalRows_flights."<br>";
 
-
-
 			$judging_location_rounds = "";
-			if ($row_table_location['judgingRounds'] > 1) $judging_location_rounds = $row_table_location['judgingRounds']." rounds";
-			else $judging_location_rounds = $judging_location_rounds = $row_table_location['judgingRounds']." round";
-
 			$judging_table_name = "Table ".$row_tables['tableNumber']." &ndash; ".$row_tables['tableName'];
-			if ($_SESSION['jPrefsQueued'] == "N") $judging_table_name .= " <small><a href=\"".$base_url."index.php?section=admin&amp;go=judging_flights&amp;filter=define&amp;action=edit&amp;id=".$flight_table." data-toggle=\"tooltip\" data-placement=\"top\" title=\"Define/Edit the ".$row_tables['tableName']." Flights\"><span class=\"fa fa-lg fa-pencil-square-o\"></span></a></small>";
+			$judging_location_string = "";
+			$location_missing = FALSE;
 
-			$judging_location_string = $row_table_location['judgingLocName']." &ndash; ".getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_table_location['judgingDate'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "long", "date-time")." (".$judging_location_rounds." <a href=\"".$base_url."index.php?section=admin&amp;go=judging&amp;action=edit&amp;id=".$row_table_location['id']."\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Edit the ".$row_table_location['judgingLocName']." location\">defined for this location</a>)";
-			?>
+			if ($row_table_location) {
+				if ($row_table_location['judgingRounds'] > 1) $judging_location_rounds = $row_table_location['judgingRounds']." rounds";
+				else $judging_location_rounds = $judging_location_rounds = $row_table_location['judgingRounds']." round";
+				if ($_SESSION['jPrefsQueued'] == "N") $judging_table_name .= " <small><a href=\"".$base_url."index.php?section=admin&amp;go=judging_flights&amp;filter=define&amp;action=edit&amp;id=".$flight_table." data-toggle=\"tooltip\" data-placement=\"top\" title=\"Define/Edit the ".$row_tables['tableName']." Flights\"><span class=\"fa fa-lg fa-pencil-square-o\"></span></a></small>";
+
+				$judging_location_string = $row_table_location['judgingLocName']." &ndash; ".getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_table_location['judgingDate'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "long", "date-time")." (".$judging_location_rounds." <a href=\"".$base_url."index.php?section=admin&amp;go=judging&amp;action=edit&amp;id=".$row_table_location['id']."\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Edit the ".$row_table_location['judgingLocName']." location\">defined for this location</a>)";
+			} else {
+				$location_missing = TRUE;
+				$judging_location_string = sprintf("<span class=\"text-danger\">No location chosen.</span> <a href=\"%s%s\">Choose a location</a>.",$base_url."index.php?section=admin&amp;go=judging_tables&amp;action=edit&amp;id=",$row_tables['id']);
+			}
+			
+?>
 
 
 	<h4><?php echo $judging_table_name; ?></h4>
 
 	<p><strong>Location:</strong> <?php echo $judging_location_string; ?></p>
 	<?php
-	if ($totalRows_flights > 0) {
+
+	if (($totalRows_flights > 0) && (!$location_missing)) {
 		if ($_SESSION['jPrefsQueued'] == "N") $flight_no_total = $row_flights['flightNumber']; else $flight_no_total = 1;
 
 		for($i=1; $i<$flight_no_total+1; $i++) {

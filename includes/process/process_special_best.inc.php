@@ -18,7 +18,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 	$sbi_name = "";
 	$sbi_description = "";
 
-	if (isset($_POST['sbi_name'])) {
+	if (isset($_POST['sbi_name']) {
 		$sbi_name = $purifier->purify($_POST['sbi_name']);
 		$sbi_name = sterilize($sbi_name);
 	}
@@ -80,6 +80,6 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 	$redirect = $base_url."index.php?msg=98";
 	$redirect = prep_redirect_link($redirect);
 	$redirect_go_to = sprintf("Location: %s", $redirect);
-	
+
 }
 ?>

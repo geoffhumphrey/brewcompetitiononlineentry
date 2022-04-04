@@ -456,8 +456,8 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 			if (check_setup($table,$database)) {
 
 				$sql = sprintf("DROP TABLE %s", $table);
-				$result = $db_conn->rawQuery($sql);
-				if (!$result) {
+				$db_conn->rawQuery($sql);
+				if ($db_conn->getLastErrno() !== 0) {
 					$error_output[] = $db_conn->getLastError();
 					$errors = TRUE;
 				}
@@ -495,8 +495,8 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 				if (table_exists($table)) {
 
 					$sql = sprintf("DROP TABLE %s", $table);
-					$result = $db_conn->rawQuery($sql);
-					if (!$result) {
+					$db_conn->rawQuery($sql);
+					if ($db_conn->getLastErrno() !== 0) {
 						$error_output[] = $db_conn->getLastError();
 						$errors = TRUE;
 					}

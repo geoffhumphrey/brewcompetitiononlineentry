@@ -1,10 +1,12 @@
 <?php
 ob_start();
-ini_set('display_errors', 0); // Change to 0 for prod.
-ini_set('display_startup_errors', 0); // Change to 0 for prod.
-error_reporting(0); // Change to error_reporting(0) for prod.
+
 require('../paths.php');
 require(CONFIG.'bootstrap.php');
+
+ini_set('display_errors', 0); // Change to 0 for prod; change to 1 for testing.
+ini_set('display_startup_errors', 0); // Change to 0 for prod; change to 1 for testing.
+error_reporting(0); // Change to error_reporting(0) for prod; change to E_ALL for testing.
 
 /**
  * The action variable cooresponds to a table in the DB.

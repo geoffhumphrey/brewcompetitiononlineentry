@@ -140,6 +140,12 @@ if ($section == "past-winners") {
     <!-- Load BCOE&M Custom CSS - Contains Bootstrap overrides and custom classes common to all BCOE&M themes -->
     <link rel="stylesheet" type="text/css" href="<?php echo $base_url."css/common.min.css"; ?>" />
     <link rel="stylesheet" type="text/css" href="<?php echo $theme; ?>" />
+
+    <script type="text/javascript">
+        var username_url = "<?php echo $base_url; ?>ajax/username.ajax.php";
+        var email_url="<?php echo $base_url; ?>ajax/valid_email.ajax.php";
+        var user_agent_msg = "<?php echo $alert_text_086; ?>";
+    </script>
     
     <!-- Load BCOE&M Custom JS -->
     <script src="<?php echo $base_url; ?>js_includes/bcoem_custom.min.js"></script>

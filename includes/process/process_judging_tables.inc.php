@@ -37,7 +37,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 
 	if ($action == "add") {
 
-		$table_update = $prefix."judging_tables";
+		$update_table = $prefix."judging_tables";
 		$data = array(
 			'tableName' => $tableName,
 			'tableStyles' => $tableStyles,
@@ -278,7 +278,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 		} // End if ($tableStyles != $row_table['tableStyles'])
 
 
-		$table_update = $prefix."judging_tables";
+		$update_table = $prefix."judging_tables";
 		$data = array(
 			'tableName' => $tableName,
 			'tableStyles' => $tableStyles,

@@ -71,7 +71,7 @@ $save_log_file = TRUE;
 
 $url = str_replace("www.","",$_SERVER['SERVER_NAME']);
 
-$paypal_email_address = $row_prefs['prefsPayPalAccount'];
+$paypal_email_address = filter_var($row_prefs['prefsPayPalAccount'],FILTER_SANITIZE_EMAIL);
 
 $from_email = (!isset($mail_default_from) || trim($mail_default_from) === '') ? "noreply@".$url : $mail_default_from;
 
@@ -137,9 +137,13 @@ if ($verified) {
 
 		foreach ($b as $key=>$value) {
 
-			$updateSQL = sprintf("UPDATE %s SET brewPaid='1', brewUpdated=NOW( ) WHERE id='%s'",$prefix."brewing",$value);
-			mysqli_real_escape_string($connection,$updateSQL);
-			$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+			$update_table = $prefix."brewing";
+			$data = array(
+				'brewPaid' => 1,
+				'brewUpdated' => $db_conn->now()
+			);
+			$db_conn->where ('id', ,$value);
+			$result = $db_conn->update ($update_table, $data);
 
 			$display_entry_no[$key] = sprintf("%.06s",$b[$key]);
 
@@ -148,11 +152,15 @@ if ($verified) {
 		$display_entry_numbers = implode(", ", $display_entry_no);
 		$display_entry_numbers = rtrim($display_entry_numbers, ", ");
 
-		$to_email = 	$row_user_info['brewerEmail'];
-		$to_recipient = $row_user_info['brewerFirstName']." ".$row_user_info['brewerLastName'];
+		$to_email = filter_var($to_email,FILTER_SANITIZE_EMAIL);
+		$from_email = filter_var($from_email,FILTER_SANITIZE_EMAIL);
+		$cc_email = filter_var($cc_email,FILTER_SANITIZE_EMAIL);
 
-		$cc_email = 	$data['payer_email'];
-		$cc_recipient = $data['first_name']." ".$data['last_name'];
+		$to_email = mb_convert_encoding($row_user_info['brewerEmail'], "UTF-8");
+		$to_recipient = mb_convert_encoding($row_user_info['brewerFirstName']." ".$row_user_info['brewerLastName'], "UTF-8");
+
+		$cc_email = mb_convert_encoding($data['payer_email'], "UTF-8");
+		$cc_recipient = mb_convert_encoding($data['first_name']." ".$data['last_name'], "UTF-8");
 
 		$headers  = "MIME-Version: 1.0" . "\r\n";
 		$headers .= "Content-type: text/html; charset=utf-8" . "\r\n";
@@ -186,7 +194,7 @@ if ($verified) {
 		$message_all = $message_top.$message_body.$message_bottom;
 
 		// Send the email message
-		$subject = $test_text." ".$data['item_name']." - ".ucwords($paypal_response_text_009);
+		$subject = mb_convert_encoding($test_text." ".$data['item_name']." - ".ucwords($paypal_response_text_009), "UTF-8");
 
 		if ($mail_use_smtp) {
 			$mail = new PHPMailer(true);
@@ -202,7 +210,6 @@ if ($verified) {
 			mail($to_recipient. " <".$to_email .">", $subject, $message_all, $headers);
 		}
 
-
     }
 
 }
@@ -217,9 +224,20 @@ elseif ($_POST['test_ipn'] == 1) {
 
 if ($save_log_file) {
 
-	$insertSQL = sprintf ("INSERT INTO %s (uid, first_name, last_name, item_name, txn_id, payment_gross, currency_code, payment_status, payment_entries, payment_time) VALUES ('%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s')", $prefix."payments", $custom_parts[0], $data['first_name'], $data['last_name'], $data['item_name'], $data['txn_id'], $data['payment_amount'], $data['payment_currency'], $paypal_ipn_status, $custom_parts[1], time());
-	mysqli_real_escape_string($connection,$insertSQL);
-	$result = mysqli_query($connection,$insertSQL) or die (mysqli_error($connection));
+	$update_table = $prefix."payments";
+	$data = array(
+		'uid' => $custom_parts[0],
+		'first_name' => $data['first_name'],
+		'last_name' => $data['last_name'],
+		'item_name' => $data['item_name'],
+		'txn_id' => $data['txn_id'],
+		'payment_gross' => $data['payment_amount'],
+		'currency_code' => $data['payment_currency'],
+		'payment_status' => $paypal_ipn_status,
+		'payment_entries' => $custom_parts[1],
+		'payment_time' => time()
+	);
+	$result = $db_conn->insert ($update_table, $data);
 
 }
 
@@ -256,7 +274,7 @@ if ($send_confirmation_email) {
 
 	$message_all_confirm = $message_top_confirm.$message_body_confirm.$message_bottom_confirm;
 
-	$subject_confirm = "PayPal IPN: ".$paypal_ipn_status;
+	$subject_confirm =  mb_convert_encoding("PayPal IPN: ".$paypal_ipn_status, "UTF-8");
 
 	if ($mail_use_smtp) {
 		$mail = new PHPMailer(true);

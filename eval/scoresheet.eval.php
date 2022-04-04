@@ -421,10 +421,14 @@ if ($entry_found) {
   
   // Sticky score
   $sticky_score_tally = "<div id=\"sticky-score\" class=\"pull-right\">";
+  $sticky_score_tally .= "<section style=\"width: 100%\">";
+  $sticky_score_tally .= "<p style=\"font-size: 1.5em\">";
+  $sticky_score_tally .= "<span id=\"scoring-guide-badge\" class=\"label label-default sticky-glow\">".$label_score.": <span id=\"judge-score\">".$eval_score."</span> <span id=\"scoring-guide\"></span></span>";
+  $sticky_score_tally .= "<a style=\"padding-top: 5px; font-size: .75em\"\" id=\"show-hide-status-btn\" class=\"pull-right\" data-toggle=\"collapse\" href=\"#scoring-guide-status\" aria-controls=\"scoring-guide-status\"><span id=\"toggle-icon\" class=\"fa fa-chevron-circle-up\"></span></a>";
+  $sticky_score_tally .= "</p>";
+  $sticky_score_tally .= "</section>";
   
-  $sticky_score_tally .= "<section style=\"width: 100%\"><h3><span id=\"scoring-guide-badge\" class=\"label label-default sticky-glow\">".$label_score.": <span id=\"judge-score\">".$eval_score."</span> <span id=\"scoring-guide\"></span></span></h3></section>";
-  
-  $sticky_score_tally .= "<section style=\"margin-top: -5px; position: absolute; width: 100%; background-color: rgba(220,220,220,0.80);\" id=\"scoring-guide-status\" class=\"well sticky-glow\">";
+  $sticky_score_tally .= "<section position: absolute; width: 100%; background-color: rgba(220,220,220,0.80);\" id=\"scoring-guide-status\" class=\"well sticky-glow collapse in\">";
   
   $sticky_score_tally .= "<p><span id=\"elapsed-time-p\"><i class=\"fa fa-clock\"></i> <strong>".$label_elapsed_time.": <span id=\"elapsed-time\"></span></strong></span><br><small id=\"session-end-eval-p\">".$label_auto_log_out." <span id=\"session-end-eval\"></span></small>";
   $sticky_score_tally .= "</p>";
@@ -442,7 +446,6 @@ if ($entry_found) {
     if (!empty($other_judge_consensus_scores)) $sticky_score_tally .= "<br><small>".$other_judge_consensus_scores."</small>";
     $sticky_score_tally .= "</p>";
   }
-
   $sticky_score_tally .= "</section>";
   $sticky_score_tally .= "</div>";
 
@@ -520,15 +523,18 @@ var score_range_ok_text = "<?php echo $evaluation_info_047; ?>";
 var score_range_ok_output = "<span class=\"text-success\"><strong>" + score_range_ok + "</strong><br><small><strong>" + score_range_ok_text + "</strong></small></span>";
 </script>
 <script src="<?php echo $base_url;?>js_includes/eval_checks.min.js"></script>
-<?php if ($action == "edit") { ?>
 <script>
 $(document).ready(function() {
+    <?php if ($action == "edit") { ?>
     displayCalc(<?php echo $eval_score; ?>);
     checkScoreRange(<?php echo $eval_score; ?>,judgeScores,score_range,0);
     checkConsensus(consensusScores);
+    <?php }?>
+    $('#show-hide-status-btn').click(function(){
+      $('#toggle-icon').toggleClass('fa-chevron-circle-up fa-chevron-circle-down');
+    });
 });
 </script>
-<?php }?>
 <style type="text/css">
 
 .scoring-guide-bottom-text {

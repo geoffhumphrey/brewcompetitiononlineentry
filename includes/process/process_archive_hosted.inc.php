@@ -1,6 +1,4 @@
 <?php
-$error_output = array();
-$_SESSION['error_output'] = "";
 
 if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] == 0))) {
 
@@ -22,8 +20,8 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 	foreach ($tables_array as $table) {
 
 		$sql = "TRUNCATE ".$table.";";
-		$result = $db_conn->rawQuery($sql);
-		if (!$result) {
+		$db_conn->rawQuery($sql);
+		if ($db_conn->getLastErrno() !== 0) {
 			$error_output[] = $db_conn->getLastError();
 			$errors = TRUE;
 		}

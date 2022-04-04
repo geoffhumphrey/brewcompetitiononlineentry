@@ -200,8 +200,8 @@ do {
         }
       }
 
-      if ($_SESSION['jPrefsQueued'] == "Y") {
-          // Activate for Roles
+      if (($_SESSION['jPrefsQueued'] == "Y") && ($row_judge_roles)) {
+          
       		if (!empty($row_judge_roles['assignRoles'])) {
       			$roles_previously_defined = 1;
       		}
@@ -217,6 +217,7 @@ do {
       		if (strpos($row_judge_roles['assignRoles'],"MBOS") !== FALSE) {
       			$checked_minibos_judge = "CHECKED";
       		}
+      
       }
 
 		if (table_round($row_tables_edit['id'],$i)) {

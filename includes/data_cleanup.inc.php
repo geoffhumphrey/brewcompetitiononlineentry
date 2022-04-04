@@ -7,7 +7,6 @@ Checked Single
 $count_results = 0;
 $date_threshold = "";
 
-
 if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] == 0)) {
 
 	if (is_numeric($view)) {
@@ -25,7 +24,11 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] == 0)) {
 
 			$uncon = purge_entries("unconfirmed", 0);
 			$spec = purge_entries("special", 0);
-			$redirect_go_to = sprintf("Location: %s", $base_url."index.php?section=admin&go=entries&purge=true");
+
+			$redirect = $base_url."index.php?section=admin&go=entries&purge=true";
+			$redirect = prep_redirect_link($redirect);
+			$redirect_go_to = sprintf("Location: %s", $redirect);
+
 			if (($uncon) && ($spec)) $status = 1;
 
 		} // END if ($go == "unconfirmed")
@@ -59,19 +62,20 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] == 0)) {
 
 					do {
 
-						$updateSQL = sprintf("DELETE FROM %s WHERE id='%s'", $prefix."brewing", $row_purge_entries['id']);
-						mysqli_real_escape_string($connection,$updateSQL);
-						$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+						$update_table = $prefix."brewing";
+						$db_conn->where ('id', $row_purge_entries['id']);
+						$result = $db_conn->delete ($update_table);
 						if ($result) $count_results += 1;
 
 						$purge_array = array($judging_scores_db_table,$judging_scores_bos_db_table,$special_best_data_db_table);
 						if (table_exists($prefix."evaluation")) $purge_array[] = $prefix."evaluation";
 
 						foreach ($purge_array as $db_table) {
-							$updateSQL = sprintf("DELETE FROM %s WHERE eid='%s'",$db_table,$row_purge_entries['id']);
-							mysqli_real_escape_string($connection,$updateSQL);
-							$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+
+							$db_conn->where ('eid', $row_purge_entries['id']);
+							$result = $db_conn->delete ($db_table);
 							if ($result) $count_results += 1;
+
 						}
 
 						// Delete any associated scoresheet
@@ -119,24 +123,34 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] == 0)) {
 				if (table_exists($prefix."payments")) $purge_array[] = $prefix."payments";
 
 				foreach ($purge_array as $db_table) {
-					$updateSQL = sprintf("TRUNCATE %s",$db_table);
-					if (SINGLE) $updateSQL .= sprintf(" WHERE comp_id='%s'",$_SESSION['comp_id']);
-					mysqli_real_escape_string($connection,$updateSQL);
-					$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+
+					$sql_purge = sprintf("TRUNCATE %s",$db_table);
+					if (SINGLE) $sql_purge .= sprintf(" WHERE comp_id='%s'",$_SESSION['comp_id']);
+					$result = $db_conn->rawQuery($sql_purge);
 					if ($result) $count_results += 1;
+
 				}
 
 				// Clear judging preferences
 				if (!SINGLE) {
-					$updateSQL = sprintf("UPDATE %s SET brewerJudge='N',brewerSteward='N',brewerJudgeLikes=NULL,brewerJudgeDislikes=NULL,brewerJudgeLocation=NULL,brewerStewardLocation=NULL",$brewer_db_table);
-					mysqli_real_escape_string($connection,$updateSQL);
-					$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+
+					$update_table = $prefix."brewer";
+					$data = array(
+						'brewerJudge' => 'N',
+						'brewerSteward' => 'N',
+						'brewerJudgeLocation' => NULL,
+						'brewerStewardLocation' => NULL
+					);			
+					$result = $db_conn->update ($update_table, $data);
 					if ($result) $count_results += 1;
+
 				}
 
 			}
 
-			$redirect_go_to = sprintf("Location: %s", $base_url."index.php?section=admin&msg=26");
+			$redirect = $base_url."index.php?section=admin&msg=26";
+			$redirect = prep_redirect_link($redirect);
+			$redirect_go_to = sprintf("Location: %s", $redirect);
 			
 			if ($count_results > 0) {
 					
@@ -199,34 +213,29 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] == 0)) {
 
 					if (!in_array($row_non_admin['id'],$admin_ids)) {
 
-						// Delete the user's record
-						$updateSQL = sprintf("DELETE FROM %s WHERE id='%s'", $prefix."users", $row_non_admin['id']);
-						mysqli_real_escape_string($connection,$updateSQL);
-						$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+						$update_table = $prefix."users";
+						$db_conn->where ('id', $row_non_admin['id']);
+						$result = $db_conn->delete ($update_table);
 						if ($result) $count_results += 1;
 
-						// Delete the associated brewer's record
-						$updateSQL = sprintf("DELETE FROM %s WHERE uid='%s'", $prefix."brewer", $row_non_admin['id']);
-						mysqli_real_escape_string($connection,$updateSQL);
-						$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+						$update_table = $prefix."brewer";
+						$db_conn->where ('uid', $row_non_admin['id']);
+						$result = $db_conn->delete ($update_table);
 						if ($result) $count_results += 1;
 
-						// Delete all the user's entries
-						$updateSQL = sprintf("DELETE FROM %s WHERE brewBrewerID='%s'", $prefix."brewing", $row_non_admin['id']);
-						mysqli_real_escape_string($connection,$updateSQL);
-						$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+						$update_table = $prefix."brewing";
+						$db_conn->where ('brewBrewerID', $row_non_admin['id']);
+						$result = $db_conn->delete ($update_table);
 						if ($result) $count_results += 1;
 
-						// Purge all user's data from judging_assignments table
-						$updateSQL = sprintf("DELETE FROM %s WHERE bid='%s'",$prefix."judging_assignments", $row_non_admin['id']);
-						mysqli_real_escape_string($connection,$updateSQL);
-						$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+						$update_table = $prefix."staff";
+						$db_conn->where ('uid', $row_non_admin['id']);
+						$result = $db_conn->delete ($update_table);
 						if ($result) $count_results += 1;
 
-						// Purge all user's data from staff table
-						$updateSQL = sprintf("DELETE FROM %s WHERE uid='%s'",$prefix."staff", $row_non_admin['id']);
-						mysqli_real_escape_string($connection,$updateSQL);
-						$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+						$update_table = $prefix."judging_assignments";
+						$db_conn->where ('bid', $row_non_admin['id']);
+						$result = $db_conn->delete ($update_table);
 						if ($result) $count_results += 1;
 
 					}
@@ -248,14 +257,14 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] == 0)) {
 
 					if ($totalRows_stray_users == 0) {
 
-						$updateSQL = sprintf("DELETE FROM %s WHERE id='%s'", $prefix."users", $row_stray_users['id']);
-						mysqli_real_escape_string($connection,$updateSQL);
-						$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+						$update_table = $prefix."users";
+						$db_conn->where ('id', $row_stray_users['id']);
+						$result = $db_conn->delete ($update_table);
 						if ($result) $count_results += 1;
 
-						$updateSQL = sprintf("DELETE FROM %s WHERE id='%s'", $prefix."brewer", $row_stray_brewers['id']);
-						mysqli_real_escape_string($connection,$updateSQL);
-						$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+						$update_table = $prefix."brewer";
+						$db_conn->where ('uid', $row_stray_users['id']);
+						$result = $db_conn->delete ($update_table);
 						if ($result) $count_results += 1;
 
 					}
@@ -290,7 +299,9 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] == 0)) {
 
 			if (!empty($date_threshold)) $date_threshold = strtotime($date_threshold);
 
-			$redirect_go_to = sprintf("Location: %s", $base_url."index.php?section=admin&msg=26");
+			$redirect = $base_url."index.php?section=admin&msg=26";
+			$redirect = prep_redirect_link($redirect);
+			$redirect_go_to = sprintf("Location: %s", $redirect);
 
 		} // END if (($go == "participants") || ($go == "purge-all"))
 
@@ -300,11 +311,12 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] == 0)) {
 			$purge_array = array($judging_scores_db_table,$judging_scores_bos_db_table,$special_best_data_db_table);
 
 			foreach ($purge_array as $db_table) {
-				$updateSQL = sprintf("TRUNCATE %s",$db_table);
-				if (SINGLE) $updateSQL .= sprintf(" WHERE comp_id='%s'",$_SESSION['comp_id']);
-				mysqli_real_escape_string($connection,$updateSQL);
-				$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
-				if ($result) $count_results += 1;
+
+				$sql_purge = sprintf("TRUNCATE %s",$db_table);
+				if (SINGLE) $sql_purge .= sprintf(" WHERE comp_id='%s'",$_SESSION['comp_id']);
+				$result = $db_conn->rawQuery($sql_purge);
+				$count_results += 1;
+			
 			}
 
 			if ($count_results > 0) $status = 1;
@@ -318,41 +330,75 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] == 0)) {
 			$purge_array = array($judging_tables_db_table,$judging_assignments_db_table,$judging_flights_db_table,$judging_scores_db_table,$special_best_data_db_table);
 
 			foreach ($purge_array as $db_table) {
-				$updateSQL = sprintf("TRUNCATE %s",$db_table);
-				if (SINGLE) $updateSQL .= sprintf(" WHERE comp_id='%s'",$_SESSION['comp_id']);
-				mysqli_real_escape_string($connection,$updateSQL);
-				$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
-				if ($result) $count_results += 1;
+
+				$sql_purge = sprintf("TRUNCATE %s",$db_table);
+				if (SINGLE) $sql_purge .= sprintf(" WHERE comp_id='%s'",$_SESSION['comp_id']);
+				$result = $db_conn->rawQuery($sql_purge);
+				$count_results += 1;
+
 			}
 
 			if ($count_results > 0) $status = 1;
-			$redirect_go_to = sprintf("Location: %s", $base_url."index.php?section=admin&msg=26");
+
+			$redirect = $base_url."index.php?section=admin&msg=26";
+			$redirect = prep_redirect_link($redirect);
+			$redirect_go_to = sprintf("Location: %s", $redirect);
 
 		} // END if (($go == "tables") || ($go == "purge-all"))
 
 		if ($go == "judge-assignments") {
 
+			$update_table = $prefix."judging_assignments";
+
 			if ($view != "default") {
+
 				$view = explode("-",$view);
-				$updateSQL = sprintf("DELETE FROM %s WHERE assignTable='%s' AND assignment='J'",$judging_assignments_db_table,$view[2]);
+				$db_conn->where ('assignTable', $view[2]);
+				$db_conn->where ('assignment', 'J');
+				$result = $db_conn->delete ($update_table);
+				if ($result) $status = 1;
+
 			}
-			else $updateSQL = sprintf("DELETE FROM %s WHERE assignment='J'",$judging_assignments_db_table);
-			$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
-			if ($result) $status = 1;
-			$redirect_go_to = sprintf("Location: %s", $base_url."index.php?section=admin&msg=26");
+
+			else {
+
+				$db_conn->where ('assignment', 'J');
+				$result = $db_conn->delete ($update_table);
+				if ($result) $status = 1;
+
+			}
+
+			$redirect = $base_url."index.php?section=admin&msg=26";
+			$redirect = prep_redirect_link($redirect);
+			$redirect_go_to = sprintf("Location: %s", $redirect);
 
 		} // END if ($go == "judging-assignments")
 
 		if ($go == "steward-assignments") {
 
+			$update_table = $prefix."judging_assignments";
+
 			if ($view != "default") {
+
 				$view = explode("-",$view);
-				$updateSQL = sprintf("DELETE FROM %s WHERE assignTable='%s' AND assignment='S'",$judging_assignments_db_table,$view[2]);
+				$db_conn->where ('assignTable', $view[2]);
+				$db_conn->where ('assignment', 'S');
+				$result = $db_conn->delete ($update_table);
+				if ($result) $status = 1;
+
 			}
-			else $updateSQL = sprintf("DELETE FROM %s WHERE assignment='S'",$judging_assignments_db_table);
-			$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
-			if ($result) $status = 1;
-			$redirect_go_to = sprintf("Location: %s", $base_url."index.php?section=admin&msg=26");
+			
+			else {
+
+				$db_conn->where ('assignment', 'S');
+				$result = $db_conn->delete ($update_table);
+				if ($result) $status = 1;
+
+			}
+
+			$redirect = $base_url."index.php?section=admin&msg=26";
+			$redirect = prep_redirect_link($redirect);
+			$redirect_go_to = sprintf("Location: %s", $redirect);
 
 		} // END if ($go == "judging-assignments")
 
@@ -361,59 +407,55 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] == 0)) {
 			$purge_array = array($special_best_info_db_table,$special_best_data_db_table);
 
 			foreach ($purge_array as $db_table) {
-				$updateSQL = sprintf("TRUNCATE %s",$db_table);
-				if (SINGLE) $updateSQL .= sprintf(" WHERE comp_id='%s'",$_SESSION['comp_id']);
-				mysqli_real_escape_string($connection,$updateSQL);
-				$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
-				if ($result) $count_results += 1;
+
+				$sql_purge = sprintf("TRUNCATE %s",$db_table);
+				if (SINGLE) $sql_purge .= sprintf(" WHERE comp_id='%s'",$_SESSION['comp_id']);
+				$result = $db_conn->rawQuery($sql_purge);
+				$count_results += 1;
+
 			}
 
 			if ($count_results > 0) $status = 1;
-			$redirect_go_to = sprintf("Location: %s", $base_url."index.php?section=admin&msg=26");
+
+			$redirect = $base_url."index.php?section=admin&msg=26";
+			$redirect = prep_redirect_link($redirect);
+			$redirect_go_to = sprintf("Location: %s", $redirect);
 
 		} // END if (($go == "custom") || ($go == "purge-all"))
 
 		if (($go == "availability") || ($go == "purge-all")) {
 
-			$updateSQL = sprintf("UPDATE %s SET brewerJudge='N'",$brewer_db_table);
-			if (SINGLE) $updateSQL .= sprintf(" WHERE comp_id='%s'",$_SESSION['comp_id']);
-			mysqli_real_escape_string($connection,$updateSQL);
-			$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
-			if ($result) $count_results += 1;
-
-			$updateSQL = sprintf("UPDATE %s SET brewerSteward='N'",$brewer_db_table);
-			if (SINGLE) $updateSQL .= sprintf(" WHERE comp_id='%s'",$_SESSION['comp_id']);
-			mysqli_real_escape_string($connection,$updateSQL);
-			$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
-			if ($result) $count_results += 1;
-
-			$updateSQL = sprintf("UPDATE %s SET brewerStaff='N'",$brewer_db_table);
-			if (SINGLE) $updateSQL .= sprintf(" WHERE comp_id='%s'",$_SESSION['comp_id']);
-			mysqli_real_escape_string($connection,$updateSQL);
-			$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
-			if ($result) $count_results += 1;
-
-			$updateSQL = sprintf("UPDATE %s SET brewerAssignment=NULL",$brewer_db_table);
-			if (SINGLE) $updateSQL .= sprintf(" WHERE comp_id='%s'",$_SESSION['comp_id']);
-			mysqli_real_escape_string($connection,$updateSQL);
-			$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+			$update_table = $prefix."brewer";
+			$data = array(
+				'brewerJudge' => 'N',
+				'brewerSteward' => 'N',
+				'brewerStaff' => 'N',
+				'brewerAssignment' => NULL
+			);
+			if (SINGLE) $db_conn->where ('comp_id', $_SESSION['comp_id']);
+			$result = $db_conn->update ($update_table, $data);
 			if ($result) $count_results += 1;
 
 			if (SINGLE) {
 
-				$updateSQL = sprintf("UPDATE %s SET staff_judge='0', staff_steward='0', staff_judge_bos='0', staff_staff='0', staff_organizer='0' WHERE comp_id='%s'",$staff_db_table,$_SESSION['comp_id']);
-				mysqli_real_escape_string($connection,$updateSQL);
-				$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+				$update_table = $prefix."staff";
+				$data = array(
+					'staff_judge' => 0,
+					'staff_steward' => 0,
+					'staff_judge_bos' => 0,
+					'staff_staff' => 0
+				);
+				$db_conn->where ('comp_id', $_SESSION['comp_id']);
+				$result = $db_conn->update ($update_table, $data);
 				if ($result) $count_results += 1;
 
 			}
 
 			else {
-
-				$updateSQL = sprintf("TRUNCATE %s ",$staff_db_table);
-				mysqli_real_escape_string($connection,$updateSQL);
-				$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
-				if ($result) $count_results += 1;
+				
+				$sql_purge = sprintf("TRUNCATE %s",$prefix."staff");
+				$result = $db_conn->rawQuery($sql_purge);
+				$count_results += 1;
 
 			}
 
@@ -437,16 +479,13 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] == 0)) {
 
 					$locations_all = implode(",",$locations);
 
-					$updateSQL = sprintf("UPDATE %s SET brewerJudgeLocation='%s'",$brewer_db_table, $locations_all);
-					if (SINGLE) $updateSQL .= sprintf(" WHERE comp_id='%s'",$_SESSION['comp_id']);
-					mysqli_real_escape_string($connection,$updateSQL);
-					$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
-					if ($result) $count_results += 1;
-
-					$updateSQL = sprintf("UPDATE %s SET brewerStewardLocation='%s'",$brewer_db_table, $locations_all);
-					if (SINGLE) $updateSQL .= sprintf(" WHERE comp_id='%s'",$_SESSION['comp_id']);
-					mysqli_real_escape_string($connection,$updateSQL);
-					$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+					$update_table = $prefix."brewer";
+					$data = array(
+						'brewerJudgeLocation' => $locations_all,
+						'brewerStewardLocation' => $locations_all
+					);
+					if (SINGLE) $db_conn->where ('comp_id', $_SESSION['comp_id']);
+					$result = $db_conn->update ($update_table, $data);
 					if ($result) $count_results += 1;
 
 				}
@@ -464,10 +503,9 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] == 0)) {
 
 					do {
 
-						$updateSQL = sprintf("DELETE FROM %s WHERE id='%s'",$judging_assignments_db_table, $row_availability['id']);
-						mysqli_real_escape_string($connection,$updateSQL);
-						$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
-						if ($result) $count_results += 1;
+						$db_conn->where ('id', $row_availability['id']);
+						$result = $db_conn->delete ($judging_assignments_db_table);
+						if ($result) $status = 1;
 
 					} while ($row_availability = mysqli_fetch_assoc($availability));
 
@@ -477,48 +515,74 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] == 0)) {
 
 			else {
 
-				$updateSQL = sprintf("TRUNCATE %s",$judging_assignments_db_table);
-				mysqli_real_escape_string($connection,$updateSQL);
-				$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
-				if ($result) $count_results += 1;
+				$sql_purge = sprintf("TRUNCATE %s",$prefix."judging_assignments");
+				$result = $db_conn->rawQuery($sql_purge);
+				$count_results += 1;
 
 			}
 
 			if ($count_results > 0) $status = 1;
-			$redirect_go_to = sprintf("Location: %s", $base_url."index.php?section=admin&msg=26");
+			$redirect = $base_url."index.php?section=admin&msg=26";
+			$redirect = prep_redirect_link($redirect);
+			$redirect_go_to = sprintf("Location: %s", $redirect);
 
 		} // END if (($go == "availability") || ($go == "purge-all"))
 
 		if ((($go == "evaluation") || ($go == "purge-all")) && (table_exists($prefix."evaluation"))) {
-			$updateSQL = sprintf("TRUNCATE %s",$prefix."evaluation");
-			mysqli_real_escape_string($connection,$updateSQL);
-			$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
-			if ($result) $status = 1;
+
+			$sql_purge = sprintf("TRUNCATE %s",$prefix."evaluation");
+			$result = $db_conn->rawQuery($sql_purge);
+			$status = 1;
+			$dom_ct_eval = get_evaluation_count('total');
+
 		}
 
 		if ((($go == "payments") || ($go == "purge-all")) && (table_exists($prefix."payments"))) {
 
+			$update_table = $prefix."payments";
+
 			// Purge back from posted date
 			if (!empty($date_threshold)) {
+				
 				$date_threshold = strtotime($date_threshold);
-				$updateSQL = sprintf("DELETE FROM %s WHERE payment_time < '%s' OR payment_time IS NULL",$prefix."payments",$date_threshold);
-				if (SINGLE) $updateSQL .= sprintf(" AND comp_id='%s'",$_SESSION['comp_id']);
+
+				if (SINGLE) {
+					$db_conn->where ('comp_id', $_SESSION['comp_id']);
+				}
+				else {
+					$db_conn->where ('payment_time', $date_threshold, "<");
+					$db_conn->orWhere ('payment_time', NULL, 'IS');
+				}
+				$result = $db_conn->delete ($update_table);
+				if ($result) $count_results += 1;
+
 			}
 
 			// Purge all data
 			else {
-				$updateSQL = sprintf("TRUNCATE %s",$prefix."payments");
-				if (SINGLE) $updateSQL = sprintf("DELETE FROM %s WHERE comp_id='%s'",$prefix."payments",$_SESSION['comp_id']);
+
+				if (SINGLE) {
+
+					$db_conn->where ('comp_id', $_SESSION['comp_id']);
+					$result = $db_conn->delete ($update_table);
+					if ($result) $count_results += 1;
+
+				}
+
+				else {
+
+					$sql_purge = sprintf("TRUNCATE %s",$prefix."payments");
+					$result = $db_conn->rawQuery($sql_purge);
+					$count_results += 1;
+
+				}
+
 			}
 
-			// echo $updateSQL; exit;
-
-			mysqli_real_escape_string($connection,$updateSQL);
-			$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
-			if ($result) $count_results += 1;
-
 			if ($count_results > 0) $status = 1;
-			$redirect_go_to = sprintf("Location: %s", $base_url."index.php?section=admin&msg=26");
+			$redirect = $base_url."index.php?section=admin&msg=26";
+			$redirect = prep_redirect_link($redirect);
+			$redirect_go_to = sprintf("Location: %s", $redirect);
 
 		} // END if (($go == "payments") || (($go == "purge-all") && (table_exists($prefix."payments"))))
 
@@ -526,16 +590,22 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] == 0)) {
 
 	// User initiated triggering of data integrity check
 	if ($action == "cleanup") {
+		
 		$data_int = data_integrity_check();
 		if ($data_int) $status = 1;
-		$redirect_go_to = sprintf("Location: %s", $base_url."index.php?section=admin&purge=cleanup");
+		$redirect = $base_url."index.php?section=admin&purge=cleanup";
+		$redirect = prep_redirect_link($redirect);
+		$redirect_go_to = sprintf("Location: %s", $redirect);
+
 	} // END if ($action == "cleanup")
 
 	if ($action == "confirmed") {
-		$updateSQL = sprintf("UPDATE %s SET brewConfirmed='1'",$prefix."brewing");
-		mysqli_real_escape_string($connection,$updateSQL);
-		$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+
+		$update_table = $prefix."brewing";
+		$data = array('brewConfirmed' => 1);
+		$result = $db_conn->update ($update_table, $data);
 		if ($result) $status = 1;
+
 	} // END if ($action == "confirmed")
 
 }
