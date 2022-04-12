@@ -12,8 +12,8 @@ if (isset($_SESSION['session_set_'.$prefix_session])) {
 	require(CLASSES.'is_email/is_email.php');
 	$email = sterilize($_GET['email']);
 	$email = filter_var($email, FILTER_VALIDATE_EMAIL);
-	if ((is_email($email)) && (!empty($email))) echo sprintf("<span class=\"text-success\"><span class=\"fa fa-check-circle\"></span> %s</span>",$alert_email_valid);
-	else echo sprintf("<span class=\"text-danger\"><span class=\"fa fa-exclamation-triangle\"></span> %s</span>",$alert_email_not_valid);
+	if ((is_email($email)) && (!empty($email))) echo sprintf("<span class=\"text-success\"><i class=\"fa fa-check-circle\"></i> %s</span>", $alert_email_valid);
+	else echo sprintf("<span class=\"text-danger\"><i class=\"fa fa-exclamation-triangle\"></i> %s</span>", $alert_email_not_valid);
 
 } 
 

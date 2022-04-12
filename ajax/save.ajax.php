@@ -56,7 +56,8 @@ if (($session_active) && ($_SESSION['userLevel'] <= 2)) {
 
 		// If successful, change $status from fail (0) to success (1)
 		$db_conn->where ('eid', $id);
-		if ($db_conn->update ($update_table, $data)) $status = 1;
+		$result = $db_conn->update ($update_table, $data);
+		if ($result) $status = 1;
 		else $error_type = 3; // SQL error
 
 	} // end if ($action == "evaluation")
@@ -126,12 +127,15 @@ if (($session_active) && ($_SESSION['userLevel'] <= 1)) {
 
 		// If successful, change $status from fail (0) to success (1)
 		$db_conn->where ('id', $id);
-		if ($db_conn->update ($update_table, $data)) $status = 1;
+		$result = $db_conn->update ($update_table, $data);
+		if ($result) $status = 1;
 		else $error_type = 3; // SQL error
 
 	} // END if ($action == "brewing")
 
 	if ($action == "sponsors") {
+
+		$update_table = $prefix.$action;
 
 		if ($go == "sponsorEnable") {
 			$input = filter_var($_POST['sponsorEnable'],FILTER_SANITIZE_NUMBER_FLOAT);
@@ -149,8 +153,6 @@ if (($session_active) && ($_SESSION['userLevel'] <= 1)) {
 			$input = filter_var($_POST['sponsorImage'],FILTER_SANITIZE_STRING);
 		}
 
-		$update_table = $prefix.$action;
-
 		if (empty($input)) {
 			if ($rid2 == "text-col")  $data = array($go => '');
 			else $data = array($go => NULL);
@@ -163,7 +165,8 @@ if (($session_active) && ($_SESSION['userLevel'] <= 1)) {
 
 		// If successful, change $status from fail (0) to success (1)
 		$db_conn->where ('id', $id);
-		if ($db_conn->update ($update_table, $data)) $status = 1;
+		$result = $db_conn->update ($update_table, $data);
+		if ($result) $status = 1;
 		else $error_type = 3; // SQL error
 		
 	} // END if ($action == "sponsors")
@@ -205,22 +208,20 @@ if (($session_active) && ($_SESSION['userLevel'] <= 1)) {
 
 			if ($totalRows_already_scored == 1) {				
 				
-				$process = TRUE;
-				$data = array($go => $input);
 				$update_table = $prefix.$action;
-
-				if ($process) {
-					$db_conn->where ('id', $row_already_scored['id']);
-					if ($db_conn->update ($update_table, $data)) $status = 1;
-				}
+				$data = array($go => $input);
+				$db_conn->where ('id', $row_already_scored['id']);
+				$result = $db_conn->update ($update_table, $data);
+				if ($result) $status = 1;
 				else $error_type = 3; // SQL error
 
-			}
+			} // END if ($totalRows_already_scored == 1)
 
 			else if ($totalRows_already_scored == 0) {
 
 				if (($action == "judging_scores") && ($rid1 != "default") && ($rid2 != "default") && ($rid3 != "default")) $process = TRUE;
 				if (($action == "judging_scores_bos") && ($rid1 != "default") && ($rid3 != "default")) $process = TRUE;
+				
 				if ($go == "scoreEntry") $scoreEntry = $input;	
 				if ($go == "scorePlace") $scorePlace = $input;		
 				if ($go == "scoreMiniBOS") $scoreMiniBOS = $input;
@@ -239,15 +240,14 @@ if (($session_active) && ($_SESSION['userLevel'] <= 1)) {
 						'scoreMiniBOS' => $scoreMiniBOS
 					);
 
-					// $sql = sprintf("INSERT INTO %s (eid, bid, scoreTable, scoreEntry, scorePlace, scoreType, scoreMiniBOS)", $prefix.$action);
-
 					if ($process) {
 						$result = $db_conn->insert ($update_table, $data);
 						if ($result) $status = 1;
 					}
+					
 					else $error_type = 3; // SQL error
 
-				}
+				} // END if ($action == "judging_scores")
 
 				if ($action == "judging_scores_bos") {
 
@@ -266,14 +266,9 @@ if (($session_active) && ($_SESSION['userLevel'] <= 1)) {
 
 					else $error_type = 3; // SQL error
 
-				}
+				} // END if ($action == "judging_scores_bos")
 
-			}
-
-			// If more than one in the DB, perform some functions
-			else {
-				if (($rid1 != "default") && ($rid2 != "default") && ($rid3 != "default")) $process = TRUE;
-			}
+			} // END else if ($totalRows_already_scored == 0)
 
 		} // END if (is_numeric($post))
 
@@ -281,11 +276,11 @@ if (($session_active) && ($_SESSION['userLevel'] <= 1)) {
 			$error_type = 1;
 		}
 
-	} // END if ($action == "scores")
+	} // END if (($action == "judging_scores") || ($action == "judging_scores_bos"))
 
-}
+} // END if (($session_active) && ($_SESSION['userLevel'] <= 1))
 
-if (!$session_active) $status = 9; // Session expired, not enabled, etc.
+else $status = 9; // Session expired, not enabled, etc.
 
 $return_json = array(
 	"status" => "$status",
@@ -295,8 +290,8 @@ $return_json = array(
 	"error_type" => "$error_type"
 );
 
-// Return the json
 echo json_encode($return_json);
+mysqli_close($connection);
 
 /**  
  * The following is unfinished. Need more

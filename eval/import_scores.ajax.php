@@ -1,12 +1,12 @@
 <?php
 ob_start();
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
-
 require('../paths.php');
 require(CONFIG.'bootstrap.php');
 include (LIB.'admin.lib.php');
+
+ini_set('display_errors', 0); // Change to 0 for prod; change to 1 for testing.
+ini_set('display_startup_errors', 0); // Change to 0 for prod; change to 1 for testing.
+error_reporting(0); // Change to error_reporting(0) for prod; change to E_ALL for testing.
 
 if ((isset($_SESSION['session_set_'.$prefix_session])) && (isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) {
 
@@ -118,18 +118,16 @@ if ((isset($_SESSION['session_set_'.$prefix_session])) && (isset($_SESSION['logi
 				}
 
 				if ($update_place) {
-					
-					$updateSQL = sprintf("UPDATE `%s` SET scorePlace=%s, scoreType=%s WHERE eid=%s",
-						$prefix."judging_scores",
-						GetSQLValueString($evalPlace, "text"),
-						GetSQLValueString($evalStyleType, "text"),
-						GetSQLValueString($value, "text")
-					);
 
-					mysqli_real_escape_string($connection,$updateSQL);
-					$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
-					if (!$result) $status = 2;
-					$score_count++;
+					$update_table = $prefix."judging_scores";
+					$data = array(
+						'scorePlace' => $evalPlace,
+						'scoreType' => $evalStyleType
+					);
+					$db_conn->where ('eid', $value);
+					$result = $db_conn->update ($update_table, $data);
+					if ($result) $score_count++;
+					else $status = 2;
 				
 				}
 
@@ -154,7 +152,7 @@ if ((isset($_SESSION['session_set_'.$prefix_session])) && (isset($_SESSION['logi
 					$not_imported_count ++;
 				}
 				
-				if ($totalRows_evals > 0) {
+				if ($totalRows_evals > 1) {
 
 					// Loop through and compare each final score. 
 					do {
@@ -195,23 +193,20 @@ if ((isset($_SESSION['session_set_'.$prefix_session])) && (isset($_SESSION['logi
 				
 					// If all consensus scores match, add the sql insert statement
 					if ($row_eval_max['count'] == $totalRows_evals) {
-						
-						$insertSQL = sprintf("INSERT INTO %s (eid, bid, scoreTable, scoreEntry, scoreMiniBOS, scorePlace, scoreType) VALUES (%s, %s, %s, %s, %s, %s, %s);",
-							$prefix."judging_scores",
-							GetSQLValueString($eid, "text"),
-							GetSQLValueString($uid, "text"),
-							GetSQLValueString($evalTable, "text"),
-							GetSQLValueString($final_score, "text"),
-							GetSQLValueString($evalMiniBOS, "int"),
-							GetSQLValueString($evalPlace, "text"),
-							GetSQLValueString($evalStyleType, "text")
+
+						$update_table = $prefix."judging_scores";
+						$data = array(
+							'eid' => $eid,
+							'bid' => $uid, 
+							'scoreTable' => $evalTable, 
+							'scoreEntry' => $final_score, 
+							'scoreMiniBOS' => $evalMiniBOS, 
+							'scorePlace' => $evalPlace, 
+							'scoreType' => $evalStyleType
 						);
-
-						mysqli_real_escape_string($connection,$insertSQL);
-						$result = mysqli_query($connection,$insertSQL) or die (mysqli_error($connection));
-						if (!$result) $status = 2;
-
-						$score_count++;
+						$result = $db_conn->insert ($update_table, $data);
+						if ($result) $score_count++;
+						else $status = 2;
 					
 					} 
 
@@ -231,23 +226,24 @@ if ((isset($_SESSION['session_set_'.$prefix_session])) && (isset($_SESSION['logi
 		}
 
 		// Finally, clear out all zeroes in scorePlace columns. Just in case.
-		
-		$updateSQL = sprintf("UPDATE `%s` SET scorePlace=NULL WHERE scorePlace='0'", $prefix."judging_scores");
-		mysqli_real_escape_string($connection,$updateSQL);
-		$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+		$update_table = $prefix."judging_scores";
+		$data = array('scorePlace' => NULL);
+		$db_conn->where ('scorePlace', 0);
+		$result = $db_conn->update ($update_table, $data);
 
 		$return_json = array(
 			"status" => "$status",
 			"scores_imported_count" => "$score_count",
 			"scores_not_imported_count" => "$not_imported_count",
 			"flagged_count" => "$flagged_count"
-			//"flagged" => $flagged,
-			//"singles" => $singles
 		);
+	
 	}
 
 	echo json_encode($return_json);
 	// https://www.dyn-web.com/tutorials/php-js/json/multidim-arrays.php
 
-} else echo "<p>Not allowed.</p>";
+} else {
+	header("Location: https://pbs.twimg.com/media/CGx6dsDVIAAV0am.png");
+}
 ?>

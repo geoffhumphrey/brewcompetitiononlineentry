@@ -17,13 +17,12 @@ if ((isset($_SESSION['session_set_'.$prefix_session])) && (isset($_SESSION['logi
 	$new_jn = generate_judging_numbers($prefix."brewing",$action);
 	if ($new_jn == 0) $status = 1;
 
-} else {
-	$status = 9; // Session expired, not enabled, etc.
-}
+} 
+
+else $status = 9; // Session expired, not enabled, etc.
 
 $return_json = array(
-	"status" => "$status",
-	// "action" => "$action"
+	"status" => "$status"
 );
 
 echo json_encode($return_json);

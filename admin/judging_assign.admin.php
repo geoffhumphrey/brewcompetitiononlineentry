@@ -445,7 +445,7 @@ $(document).ready(function() {
   </div>
   <div class="row">
     <div class="col-md-12">
-      <?php if (!empty($cb_list)) { ?><strong>Co-Brewer Names Associated with Entries at this Table:</strong> <?php echo rtrim($cb_list,", "); } ?>
+      <?php if (!empty($cb_list)) { ?><strong>Co-Brewer Names Associated with Entries at this Table:</strong> <?php echo trim($cb_list,", "); } ?>
     </div>
   </div>
 </div>

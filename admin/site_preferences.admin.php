@@ -1677,7 +1677,7 @@ $(document).ready(function(){
                 </div>
                 <div class="modal-body">
                     <p>Do you want participants paying via PayPal also pay the transaction fees?</p>
-                    <p>PayPal charges 2.9% + $0.30 USD per transaction. Enabling this indicates that the transaction fees will be added to the entrant's total.</p>
+                    <p>PayPal charges 3.49% of the total + $0.49 USD per transaction. Enabling this indicates that these transaction fees will be added to the entrant's total.</p>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>

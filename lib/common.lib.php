@@ -21,68 +21,22 @@ include (INCLUDES.'version.inc.php');
 function version_check($version,$current_version,$current_version_date_display) {
 
 	require(CONFIG.'config.php');
+	$db_conn = new MysqliDb($connection);;
 
 	if ($version != $current_version) {
 
-		if (check_setup($prefix."system",$database)) $updateSQL = sprintf("UPDATE %s SET version='%s', version_date='%s' WHERE id=%s", $prefix."system", $current_version, $current_version_date_display, "1");
-		else $updateSQL = sprintf("UPDATE %s SET version='%s', version_date='%s' WHERE id=%s", $prefix."bcoem_sys", $current_version, $current_version_date_display, "1");
-		mysqli_real_escape_string($connection,$updateSQL);
-		$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+		if (check_setup($prefix."system",$database)) $update_table = $prefix."system";
+		else $update_table = $prefix."bcoem_sys";
+		$data = array(
+			'version' => $current_version,
+			'version_date' => $current_version_date_display
+		);
+		$db_conn->where ('id', 1);
+		$db_conn->update ($update_table, $data);
 
 	}
 
 }
-
-/**
- * MySQLi prepared statement functions
- * @see https://phpdelusions.net/mysqli_examples/prepared_select#explanation 
- * @see https://phpdelusions.net/mysqli/simple
- * @see https://phpdelusions.net/mysqli_examples/insert
- * @see https://phpdelusions.net/mysqli_examples/update
- * @see https://phpdelusions.net/mysqli_examples/like
- */
-
-function prepared_query($conn, $sql, $params = [], $types = "") {
-    if (!empty($params)) $types = $types ?: str_repeat("s", count($params));
-    $stmt = $conn->prepare($sql);
-    if (!empty($params)) $stmt->bind_param($types, ...$params);
-    $stmt->execute();
-    return $stmt;
-}
-
-function prepared_select($conn, $sql, $params = [], $types = "") {
-    return prepared_query($conn, $sql, $params, $types)->get_result();
-}
-
-function escape_mysql_identifier($field) {
-    return "`".str_replace("`", "``", $field)."`";
-}
-
-function prepared_insert($conn, $table, $data) {
-    $keys = array_keys($data);
-    $keys = array_map('escape_mysql_identifier', $keys);
-    $fields = implode(",", $keys);
-    $table = escape_mysql_identifier($table);
-    $placeholders = str_repeat('?,', count($keys) - 1) . '?';
-    $sql = "INSERT INTO $table ($fields) VALUES ($placeholders)";
-    prepared_query($conn, $sql, array_values($data));
-}
-
-function prepared_update_by_id($conn, $table, $data, $id) {
-    $table = escape_mysql_identifier($table);
-    $sql = "UPDATE $table SET ";
-
-    foreach (array_keys($data) as $i => $field) {
-        $field = escape_mysql_identifier($field);
-        $sql .= ($i) ? ", " : "";
-        $sql .= "$field = ?";
-    }       
-    $sql .= " WHERE id = ?";
-    $data[] = $id;
-    prepared_query($conn, $sql, array_values($data));
-}
-
-// ---------------------------------------------------
 
 function search_array($array, $key, $value) { 
     // https://www.geeksforgeeks.org/how-to-search-by-keyvalue-in-a-multidimensional-array-in-php/?ref=rp
@@ -285,7 +239,7 @@ function purge_entries($type, $interval) {
 	$count = 0;
 
 	require(CONFIG.'config.php');
-	mysqli_select_db($connection,$database);
+	$db_conn = new MysqliDb($connection);
 
 	if ($type == "unconfirmed") {
 		
@@ -298,13 +252,18 @@ function purge_entries($type, $interval) {
 		if ($totalRows_check == 0) $count += 1;
 
 		if ($totalRows_check > 0) {
-			do { $a[] = $row_check['id']; } while ($row_check = mysqli_fetch_assoc($check));
+			
+			do { 
+				$a[] = $row_check['id']; 
+			} while ($row_check = mysqli_fetch_assoc($check));
+			
 			foreach ($a as $id) {
-				$deleteEntries = sprintf("DELETE FROM %s WHERE id='%s'", $prefix."brewing", $id);
-				mysqli_select_db($connection,$database);
-				mysqli_real_escape_string($connection,$deleteEntries);
-				$result = mysqli_query($connection,$deleteEntries) or die (mysqli_error($connection));
+
+				$update_table = $prefix."brewing";
+				$db_conn->where ('id', $id);
+				$result = $db_conn->delete ($update_table);
 				if ($result) $count += 1;
+
 			}
 		
 		}
@@ -312,6 +271,7 @@ function purge_entries($type, $interval) {
 	}
 
 	if ($type == "special") {
+		
 		$query_check = sprintf("SELECT a.id, a.brewUpdated, a.brewInfo, a.brewCategorySort, a.brewSubCategory FROM %s as a, %s as b WHERE a.brewCategorySort=b.brewStyleGroup AND a.brewSubCategory=b.brewStyleNum AND b.brewStyleReqSpec=1 AND (a.brewInfo IS NULL OR a.brewInfo='') AND b.brewStyleVersion = '%s'", $prefix."brewing",$prefix."styles",$_SESSION['prefsStyleSet']);
 		if ($interval > 0) $query_check .=" AND a.brewUpdated < DATE_SUB( NOW(), INTERVAL 1 DAY)";
 		$check = mysqli_query($connection,$query_check) or die (mysqli_error($connection));
@@ -321,18 +281,23 @@ function purge_entries($type, $interval) {
 		if ($totalRows_check == 0) $count += 1;
 
 		if ($totalRows_check > 0) {
+			
 			do {
-				$deleteEntries = sprintf("DELETE FROM %s WHERE id='%s'", $prefix."brewing", $row_check['id']);
-				mysqli_select_db($connection,$database);
-				mysqli_real_escape_string($connection,$deleteEntries);
-				$result = mysqli_query($connection,$deleteEntries) or die (mysqli_error($connection));
+
+				$update_table = $prefix."brewing";
+				$db_conn->where ('id', $row_check['id']);
+				$result = $db_conn->delete ($update_table);
 				if ($result) $count += 1;
+
 			} while ($row_check = mysqli_fetch_assoc($check));
+
 		}
+
 	}
 
 	if ($count > 0) return TRUE;
 	else return FALSE;
+
 }
 
 // function to generate random number
@@ -2653,7 +2618,9 @@ function entries_no_special($user_id) {
 function data_integrity_check() {
 
 	require(CONFIG.'config.php');
-	mysqli_select_db($connection,$database);
+	$db_conn = new MysqliDb($connection);
+
+	$errors = 0;
 
 	// Match user emails against the record in the brewer table,
 	// Compare user's id against uid,
@@ -2673,10 +2640,13 @@ function data_integrity_check() {
 
 		// Check to see if info is matching up. If not...
 		if (($row_brewer['brewerEmail'] == $row_user_check['user_name']) && ($row_brewer['uid'] != $row_user_check['id']) && ($totalRows_brewer == 1)) {
-			// ...Update to the correct uid
-			$updateSQL = sprintf("UPDATE %s SET uid='%s' WHERE id='%s'", $prefix."brewer", $row_user_check['id'], $row_brewer['id']);
-			mysqli_real_escape_string($connection,$updateSQL);
-			$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+			
+			// Update to the correct uid
+			$update_table = $prefix."brewer";
+			$data = array('uid' => $row_user_check['id']);
+			$db_conn->where ('id', $row_brewer['id']);
+			$result = $db_conn->update ($update_table, $data);
+			if (!$result) $errors += 1;
 
 			// Change all associated entries to the correct uid (brewBrewerID row) in the "brewing" table
 			$query_brewer_entries = sprintf("SELECT id FROM %s WHERE brewBrewerLastName='%s' AND brewBrewerFirstName='%s'",$prefix."brewing",$row_brewer['brewerLastName'],$row_brewer['brewerLastName']);
@@ -2685,35 +2655,37 @@ function data_integrity_check() {
 			$totalRows_brewer_entries = mysqli_num_rows($brewer_entries);
 
 			if ($totalRows_brewer_entries > 0) {
+				
 				do {
-					$updateSQL = sprintf("UPDATE %s SET brewBrewerID='%s' WHERE id='%s'", $prefix."brewing", $row_brewer_entries['id'], $row_brewer['id']);
-					mysqli_real_escape_string($connection,$updateSQL);
-					$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+					
+					$update_table = $prefix."brewing";
+					$data = array('brewBrewerID' => $row_user_check['id']);
+					$db_conn->where ('id', $row_brewer_entries['id']);
+					$result = $db_conn->update ($update_table, $data);
+					if (!$result) $errors += 1;
+
 				} while ($row_brewer_entries = mysqli_fetch_assoc($brewer_entries));
+
 			}
+
 		} // end if (($row_brewer['brewerEmail'] == $row_user_check['user_name']) && ($row_brewer['uid'] != $row_user_check['id']) && ($totalRows_brewer == 1))
 
 
 		// Delete user record if no record of the user's extended information is found in the "brewer" table
 		if ($totalRows_brewer == 0) {
-			$deleteSQL = sprintf("DELETE FROM %s WHERE id='%s'", $prefix."users", $row_user_check['id']);
-			mysqli_real_escape_string($connection,$deleteSQL);
-			$result = mysqli_query($connection,$deleteSQL) or die (mysqli_error($connection));
 
-			// Check to see if there are entries under that uid. If so, delete.
-			$query_brewer_entries = sprintf("SELECT id FROM %s WHERE brewBrewerID='%s'",$prefix."brewing",$row_user_check['id']);
-			$brewer_entries = mysqli_query($connection,$query_brewer_entries) or die (mysqli_error($connection));
-			$row_brewer_entries = mysqli_fetch_assoc($brewer_entries);
-			$totalRows_brewer_entries = mysqli_num_rows($brewer_entries);
+			$update_table = $prefix."users";
+			$db_conn->where ('id', $row_user_check['id']);
+			$result = $db_conn->delete ($update_table);
+			if (!$result) $errors += 1;
 
-			if ($totalRows_brewer_entries > 0) {
-				do {
-					$deleteSQL = sprintf("DELETE FROM %s WHERE id='%s'", $prefix."brewing", $row_brewer_entries['id']);
-					mysqli_real_escape_string($connection,$deleteSQL);
-					$result = mysqli_query($connection,$deleteSQL) or die (mysqli_error($connection));
-				} while ($row_brewer_entries = mysqli_fetch_assoc($brewer_entries));
-			}
+			$update_table = $prefix."brewing";
+			$db_conn->where ('brewBrewerID', $row_user_check['id']);
+			$result = $db_conn->delete ($update_table);
+			if (!$result) $errors += 1;
+
 		} // end if ($totalRows_brewer == 0)
+
 	} while ($row_user_check = mysqli_fetch_assoc($user_check));
 
 	// Check if there are "blank" entries. If so, delete.
@@ -2723,11 +2695,16 @@ function data_integrity_check() {
 	$totalRows_blank = mysqli_num_rows($blank);
 
 	if ($totalRows_blank > 0) {
+		
 		do {
-			$deleteSQL = sprintf("DELETE FROM %s WHERE id='%s'", $prefix."brewing", $row_blank['id']);
-			mysqli_real_escape_string($connection,$deleteSQL);
-			$result = mysqli_query($connection,$deleteSQL) or die (mysqli_error($connection));
+
+			$update_table = $prefix."brewing";
+			$db_conn->where ('id', $row_blank['id']);
+			$result = $db_conn->delete ($update_table);
+			if (!$result) $errors += 1;
+
 		} while ($row_blank = mysqli_fetch_assoc($blank));
+	
 	}
 
 	// Check if there are "blanks" in the brewer table. If so, delete.
@@ -2737,11 +2714,16 @@ function data_integrity_check() {
 	$totalRows_blank1 = mysqli_num_rows($blank1);
 
 	if ($totalRows_blank1 > 0) {
+		
 		do {
-			$deleteSQL = sprintf("DELETE FROM %s WHERE id='%s'", $prefix."brewer", $row_blank1['id']);
-			mysqli_real_escape_string($connection,$deleteSQL);
-			$result = mysqli_query($connection,$deleteSQL) or die (mysqli_error($connection));
+			
+			$update_table = $prefix."brewer";
+			$db_conn->where ('id', $row_blank1['id']);
+			$result = $db_conn->delete ($update_table);
+			if (!$result) $errors += 1;
+
 		} while ($row_blank1 = mysqli_fetch_assoc($blank1));
+
 	}
 
 	// Look for duplicate entries in the judging_scores table
@@ -2752,7 +2734,9 @@ function data_integrity_check() {
 
 	if ($totalRows_judging_duplicates > 2) {
 
-	do { $a[] = $row_judging_duplicates['eid']; } while ($row_judging_duplicates = mysqli_fetch_assoc($judging_duplicates));
+		do { 
+			$a[] = $row_judging_duplicates['eid']; 
+		} while ($row_judging_duplicates = mysqli_fetch_assoc($judging_duplicates));
 
 		foreach ($a as $eid) {
 
@@ -2769,27 +2753,32 @@ function data_integrity_check() {
 					$duplicate = mysqli_query($connection,$query_duplicate) or die (mysqli_error($connection));
 					$row_duplicate = mysqli_fetch_assoc($duplicate);
 
-					$deleteSQL = sprintf("DELETE FROM %s WHERE id='%s'", $prefix."judging_scores", $row_duplicate['id']);
-					mysqli_real_escape_string($connection,$deleteSQL);
-					$result = mysqli_query($connection,$deleteSQL) or die (mysqli_error($connection));
+					$update_table = $prefix."judging_scores";
+					$db_conn->where ('id', $row_duplicate['id']);
+					$result = $db_conn->delete ($update_table);
+					if (!$result) $errors += 1;
+
 				}
 
 			}
+
 		}
+
 	}
 
 	if ($_SESSION['prefsAutoPurge'] == 1) {
-		// Next, purge all entries that are unconfirmed
 		purge_entries("unconfirmed", 1);
 		purge_entries("special", 1);
 	}
 
-	// Last update the "system" table with the date/time the function ended
-	$updateSQL = sprintf("UPDATE %s SET data_check=%s WHERE id='1'", $prefix."bcoem_sys", "NOW( )");
-	mysqli_real_escape_string($connection,$updateSQL);
-	$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+	$update_table = $prefix."bcoem_sys";
+	$data = array('data_check' => $db_conn->now());
+	$db_conn->where ('id', 1);
+	$result = $db_conn->update ($update_table, $data);
+	if (!$result) $errors += 1;
 
-	return TRUE;
+	if ($errors > 0) return FALSE;
+	else return TRUE;
 
 } // END function
 
@@ -3485,71 +3474,7 @@ function open_limit($total,$limit,$registration_open) {
 	else return FALSE;
 }
 
-// For hosted accounts on brewcompetition.com or brewcomp.com
-function check_hosted_gh() {
 
-	require(CONFIG.'config.php');
-	mysqli_select_db($connection,$database);
-
-	$gh_user_name = "geoff@zkdigital.com";
-
-	$query_gh_user = sprintf("SELECT * FROM %s WHERE user_name='%s'",$prefix."users",$gh_user_name);
-	$gh_user = mysqli_query($connection,$query_gh_user) or die (mysqli_error($connection));
-	$row_gh_user = mysqli_fetch_assoc($gh_user);
-	$totalRows_gh_user = mysqli_num_rows($gh_user);
-
-	$gh_password = "d9efb18ba2bc4a434ddf85013dbe58f8";
-	$random1 = random_generator(7,2);
-	$random2 = random_generator(7,2);
-	
-	require(CLASSES.'phpass/PasswordHash.php');
-	$hasher = new PasswordHash(8, false);
-	$hash = $hasher->HashPassword($gh_password);
-	$hasher_question = new PasswordHash(8, false);
-	$hash_question = $hasher_question->HashPassword($random2);
-
-	if ($totalRows_gh_user == 1) {
-
-		$query_gh_brewer = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE uid='%s'",$prefix."brewer",$row_gh_user['id']);
-		$gh_brewer = mysqli_query($connection,$query_gh_brewer) or die (mysqli_error($connection));
-		$row_gh_brewer = mysqli_fetch_assoc($gh_brewer);
-
-		if ($row_gh_brewer['count'] == 0) {
-
-			$sql = sprintf("INSERT INTO `%s` (`id`, `uid`, `brewerFirstName`, `brewerLastName`, `brewerAddress`, `brewerCity`, `brewerState`, `brewerZip`, `brewerCountry`, `brewerPhone1`, `brewerPhone2`, `brewerClubs`, `brewerEmail`, `brewerStaff`, `brewerSteward`, `brewerJudge`, `brewerJudgeID`, `brewerJudgeRank`, `brewerAHA`) VALUES (NULL, '%s', 'Geoff', 'Humphrey', '1234 Main Street', 'Castle Rock', 'CO', '80104', 'United States', '303-555-5555', '303-555-5555', 'Rock Hoppers Brew Club', '%s', 'N', 'N', 'N', 'D0986', 'Certified', '000000');",$prefix."brewer",$row_gh_user['id'],$gh_user_name);
-			mysqli_select_db($connection,$database);
-			mysqli_real_escape_string($connection,$sql);
-			$result = mysqli_query($connection,$sql) or die (mysqli_error($connection));
-
-		}
-
-		if ($row_gh_user['userLevel'] > 0) {
-			$updateSQL = sprintf("UPDATE %s SET userLevel='0' WHERE id='%s';",$prefix."users",$row_gh_user['id']);
-			mysqli_real_escape_string($connection,$updateSQL);
-			$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
-		}
-	
-	}
-
-	if ($totalRows_gh_user == 0) {
-
-		$sql = sprintf("INSERT INTO `%s` (`id`, `user_name`, `password`, `userLevel`, `userQuestion`, `userQuestionAnswer`,`userCreated`) VALUES (NULL, '%s', '%s', '0', '%s', '%s', NOW());", $prefix."users",$gh_user_name,$hash,$random1,$hash_question);
-		mysqli_select_db($connection,$database);
-		mysqli_real_escape_string($connection,$sql);
-		$result = mysqli_query($connection,$sql) or die (mysqli_error($connection));
-
-		$query_gh_user = sprintf("SELECT id FROM %s WHERE user_name='%s'",$prefix."users",$gh_user_name);
-		$gh_user = mysqli_query($connection,$query_gh_user) or die (mysqli_error($connection));
-		$row_gh_user = mysqli_fetch_assoc($gh_user);
-
-		$sql = sprintf("INSERT INTO `%s` (`id`, `uid`, `brewerFirstName`, `brewerLastName`, `brewerAddress`, `brewerCity`, `brewerState`, `brewerZip`, `brewerCountry`, `brewerPhone1`, `brewerPhone2`, `brewerClubs`, `brewerEmail`, `brewerStaff`, `brewerSteward`, `brewerJudge`, `brewerJudgeID`, `brewerJudgeRank`, `brewerAHA`) VALUES (NULL, '%s', 'Geoff', 'Humphrey', '1234 Main Street', 'Castle Rock', 'CO', '80104', 'United States', '303-555-5555', '303-555-5555', 'Rock Hoppers Brew Club', '%s', 'N', 'N', 'N', 'D0986', 'Certified', '000000');",$prefix."brewer",$row_gh_user['id'],$gh_user_name);
-		mysqli_select_db($connection,$database);
-		mysqli_real_escape_string($connection,$sql);
-		$result = mysqli_query($connection,$sql) or die (mysqli_error($connection));
-
-	}
-
-}
 
 // Simple encrypt and decrypt
 // Useful for URL passed strings that need to be obfuscated for *casual* users

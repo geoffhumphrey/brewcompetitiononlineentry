@@ -99,21 +99,14 @@ if (($session_active) && ($_SESSION['userLevel'] <= 2)) {
 
 							if ($row_entries['brewReceived'] == 0) {
 
-								$sql = sprintf("INSERT INTO %s (
-								flightTable,
-								flightNumber,
-								flightEntryID,
-								flightRound
-								) VALUES (%s, %s, %s, %s)",
-									$prefix."judging_flights",
-									GetSQLValueString($row_table['id'], "text"),
-									GetSQLValueString("1", "text"),
-									GetSQLValueString($row_entries['id'], "text"),
-									GetSQLValueString($row_fl_round['flightRound'], "text")
+								$update_table = $prefix."judging_flights";
+								$data = array(
+									'flightTable' => $row_table['id'],
+									'flightNumber' => 1,
+									'flightEntryID' => $row_entries['id'],
+									'flightRound' => $row_fl_round['flightRound']
 								);
-
-								mysqli_real_escape_string($connection,$sql);
-								$result = mysqli_query($connection,$sql) or die (mysqli_error($connection));
+								$result = $db_conn->insert ($update_table, $data);
 								if (!$result) $error_count += 1;
 
 							}
@@ -127,19 +120,19 @@ if (($session_active) && ($_SESSION['userLevel'] <= 2)) {
 
 				if (empty($updated_table_styles)) {
 
-					$sql = sprintf("DELETE FROM %s WHERE id='%s'",$prefix."judging_tables", $row_table['id']);
-					mysqli_real_escape_string($connection,$sql);
-					$result = mysqli_query($connection,$sql) or die (mysqli_error($connection));
+					$update_table = $prefix."judging_tables";
+					$db_conn->where ('id', $row_table['id']);
+					$result = $db_conn->delete ($update_table);
 					if (!$result) $error_count += 1;
 
-					$sql = sprintf("DELETE FROM %s WHERE assignTable='%s'",$prefix."judging_assignments", $row_table['id']);
-					mysqli_real_escape_string($connection,$sql);
-					$result = mysqli_query($connection,$sql) or die (mysqli_error($connection));
+					$update_table = $prefix."judging_assignments";
+					$db_conn->where ('assignTable', $row_table['id']);
+					$result = $db_conn->delete ($update_table);
 					if (!$result) $error_count += 1;
 
-					$sql = sprintf("DELETE FROM %s WHERE flightTable='%s'",$prefix."judging_flights", $row_table['id']);
-					mysqli_real_escape_string($connection,$sql);
-					$result = mysqli_query($connection,$sql) or die (mysqli_error($connection));
+					$update_table = $prefix."judging_flights";
+					$db_conn->where ('flightTable', $row_table['id']);
+					$result = $db_conn->delete ($update_table);
 					if (!$result) $error_count += 1;
 					
 				}
@@ -148,34 +141,32 @@ if (($session_active) && ($_SESSION['userLevel'] <= 2)) {
 				else {
 
 					$new_table_styles = implode(",", $updated_table_styles);
-					$sql = sprintf("UPDATE %s SET tableStyles=%s WHERE id=%s",
-								$prefix."judging_tables",
-								GetSQLValueString($new_table_styles, "text"),
-								GetSQLValueString($row_table['id'], "text")
-							);
-					mysqli_real_escape_string($connection,$sql);
-					$result = mysqli_query($connection,$sql) or die (mysqli_error($connection));
+					
+					$update_table = $prefix."judging_tables";
+					$data = array('tableStyles' => $new_table_styles);
+					$db_conn->where ('id', $row_table['id']);
+					$result = $db_conn->update ($update_table, $data);
 					if (!$result) $error_count += 1;
 
 				}
 
 			} while($row_table = mysqli_fetch_assoc($table));
-
-			$sql = sprintf("UPDATE `%s` SET flightPlanning='1'", $prefix."judging_flights");
-			mysqli_real_escape_string($connection,$sql);
-			$result = mysqli_query($connection,$sql) or die (mysqli_error($connection));
+			
+			$update_table = $prefix."judging_flights";
+			$data = array('flightPlanning' => 1);
+			$result = $db_conn->update ($update_table, $data);
 			if (!$result) $error_count += 1;
-
-			$sql = sprintf("UPDATE `%s` SET assignPlanning='1'", $prefix."judging_assignments");
-			mysqli_real_escape_string($connection,$sql);
-			$result = mysqli_query($connection,$sql) or die (mysqli_error($connection));
+			
+			$update_table = $prefix."judging_assignments";
+			$data = array('assignPlanning' => 1);
+			$result = $db_conn->update ($update_table, $data);
 			if (!$result) $error_count += 1;
 
 		} // end if ($row_flight_entries['count'] > 0)
-
-		$sql = sprintf("UPDATE `%s` SET jPrefsTablePlanning='1'", $prefix."judging_preferences");
-		mysqli_real_escape_string($connection,$sql);
-		$result = mysqli_query($connection,$sql) or die (mysqli_error($connection));
+		
+		$update_table = $prefix."judging_preferences";
+		$data = array('jPrefsTablePlanning' => 1);
+		$result = $db_conn->update ($update_table, $data);
 		if (!$result) $error_count += 1;
 
 		unset($_SESSION['prefs'.$prefix_session]);
@@ -248,19 +239,21 @@ if (($session_active) && ($_SESSION['userLevel'] <= 2)) {
 				
 				// Delete if no relational value
 				if (!in_array($value, $received_entries_arr)) {
-					$sql = sprintf("DELETE FROM `%s` WHERE flightEntryID='%s'",$prefix."judging_flights",$value);
-					mysqli_real_escape_string($connection,$sql);
-					$result = mysqli_query($connection,$sql) or die (mysqli_error($connection));
+					
+					$update_table = $prefix."judging_flights";
+					$db_conn->where ('flightEntryID', $value);
+					$result = $db_conn->delete ($update_table);
 					if (!$result) $error_count += 1;
-					//echo $sql."<br>";
+
 				}
 
 			}
 
 			// Update all records left to production (0)
-			$sql = sprintf("UPDATE `%s` SET flightPlanning='0'", $prefix."judging_flights");
-			mysqli_real_escape_string($connection,$sql);
-			$result = mysqli_query($connection,$sql) or die (mysqli_error($connection));
+			$update_table = $prefix."judging_flights";
+			$data = array('flightPlanning' => 0);
+			$result = $db_conn->update ($update_table, $data);
+			if (!$result) $error_count += 1;
 
 			// Loop through the tables and their styles made in planning mode
 			$query_table = sprintf("SELECT id,tableStyles,tableLocation FROM %s", $prefix."judging_tables");
@@ -293,17 +286,20 @@ if (($session_active) && ($_SESSION['userLevel'] <= 2)) {
 				// If no styles, delete the table and any associated flights or assignments
 				if (empty($updated_table_styles)) {
 
-					$sql = sprintf("DELETE FROM %s WHERE id='%s'",$prefix."judging_tables", $row_table['id']);
-					mysqli_real_escape_string($connection,$sql);
-					$result = mysqli_query($connection,$sql) or die (mysqli_error($connection));
+					$update_table = $prefix."judging_tables";
+					$db_conn->where ('id', $row_table['id']);
+					$result = $db_conn->delete ($update_table);
+					if (!$result) $error_count += 1;
 
-					$sql = sprintf("DELETE FROM %s WHERE assignTable='%s'",$prefix."judging_assignments", $row_table['id']);
-					mysqli_real_escape_string($connection,$sql);
-					$result = mysqli_query($connection,$sql) or die (mysqli_error($connection));
+					$update_table = $prefix."judging_assignments";
+					$db_conn->where ('assignTable', $row_table['id']);
+					$result = $db_conn->delete ($update_table);
+					if (!$result) $error_count += 1;
 
-					$sql = sprintf("DELETE FROM %s WHERE flightTable='%s'",$prefix."judging_flights", $row_table['id']);
-					mysqli_real_escape_string($connection,$sql);
-					$result = mysqli_query($connection,$sql) or die (mysqli_error($connection));
+					$update_table = $prefix."judging_flights";
+					$db_conn->where ('flightTable', $row_table['id']);
+					$result = $db_conn->delete ($update_table);
+					if (!$result) $error_count += 1;
 					
 				}
 
@@ -311,14 +307,12 @@ if (($session_active) && ($_SESSION['userLevel'] <= 2)) {
 				else {
 
 					$new_table_styles = implode(",", $updated_table_styles);
-					$sql = sprintf("UPDATE %s SET tableStyles=%s WHERE id=%s",
-								$prefix."judging_tables",
-								GetSQLValueString($new_table_styles, "text"),
-								GetSQLValueString($row_table['id'], "text")
-							);
-					mysqli_real_escape_string($connection,$sql);
-					$result = mysqli_query($connection,$sql) or die (mysqli_error($connection));
-					// echo $sql."<br>";
+					
+					$update_table = $prefix."judging_tables";
+					$data = array('tableStyles' => $new_table_styles);
+					$db_conn->where ('id', $row_table['id']);
+					$result = $db_conn->update ($update_table, $data);
+					if (!$result) $error_count += 1;
 
 					// Check if assigned judges or stewards have any
 					// entries at this table.
@@ -330,22 +324,28 @@ if (($session_active) && ($_SESSION['userLevel'] <= 2)) {
 
 					do {
 
-						$entry_conflict = entry_conflict($row_table_assignments['bid'],$new_table_styles);
+						if ($row_table_assignments) $entry_conflict = entry_conflict($row_table_assignments['bid'],$new_table_styles);
+						else $entry_conflict = entry_conflict("999999999",$new_table_styles);
+						
 						if ($entry_conflict) {
-							$sql = sprintf("DELETE FROM %s WHERE id='%s'",$prefix."judging_assignments",$row_table_assignments['id']);
-							mysqli_real_escape_string($connection,$sql);
-							$result = mysqli_query($connection,$sql) or die (mysqli_error($connection));
+
+							$update_table = $prefix."judging_assignments";
+							$db_conn->where ('id', $row_table_assignments['id']);
+							$result = $db_conn->delete ($update_table);
+							if (!$result) $error_count += 1;
+
 						}
 
 					} while($row_table_assignments = mysqli_fetch_assoc($table_assignments));
 
-				}
+				} // end else
 				
-			} while($row_table = mysqli_fetch_assoc($table));	
+			} while($row_table = mysqli_fetch_assoc($table));
 
-			$sql = sprintf("UPDATE `%s` SET assignPlanning='0'", $prefix."judging_assignments");
-			mysqli_real_escape_string($connection,$sql);
-			$result = mysqli_query($connection,$sql) or die (mysqli_error($connection));
+			$update_table = $prefix."judging_assignments";
+			$data = array('assignPlanning' => 0);
+			$result = $db_conn->update ($update_table, $data);
+			if (!$result) $error_count += 1;
 
 		} // end if (!empty($flight_entries_arr))
 
@@ -354,22 +354,22 @@ if (($session_active) && ($_SESSION['userLevel'] <= 2)) {
 		else {
 			
 			$sql = sprintf("TRUNCATE `%s`", $prefix."judging_assignments");
-			mysqli_real_escape_string($connection,$sql);
-			$result = mysqli_query($connection,$sql) or die (mysqli_error($connection));
+			$db_conn->rawQuery($sql);
+			if ($db_conn->getLastErrno() !== 0) $error_count += 1;
 
 			$sql = sprintf("TRUNCATE `%s`", $prefix."judging_flights");
-			mysqli_real_escape_string($connection,$sql);
-			$result = mysqli_query($connection,$sql) or die (mysqli_error($connection));
+			$db_conn->rawQuery($sql);
+			if ($db_conn->getLastErrno() !== 0) $error_count += 1;
 
 			$sql = sprintf("TRUNCATE `%s`", $prefix."judging_tables");
-			mysqli_real_escape_string($connection,$sql);
-			$result = mysqli_query($connection,$sql) or die (mysqli_error($connection));
+			$db_conn->rawQuery($sql);
+			if ($db_conn->getLastErrno() !== 0) $error_count += 1;
 
 		}
-		
-		$sql = sprintf("UPDATE `%s` SET jPrefsTablePlanning='0'", $prefix."judging_preferences");
-		mysqli_real_escape_string($connection,$sql);
-		$result = mysqli_query($connection,$sql) or die (mysqli_error($connection));
+
+		$update_table = $prefix."judging_preferences";
+		$data = array('jPrefsTablePlanning' => 0);
+		$result = $db_conn->update ($update_table, $data);
 		if (!$result) $error_count += 1;
 
 		unset($_SESSION['prefs'.$prefix_session]);

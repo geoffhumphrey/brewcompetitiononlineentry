@@ -261,7 +261,7 @@ class MysqliDb
      * @param string $charset
      * @param string $socket
      */
-    public function __construct($host = null, $username = null, $password = null, $db = null, $port = null, $charset = 'utf8', $socket = null)
+    public function __construct($host = null, $username = null, $password = null, $db = null, $port = null, $charset = 'utf8mb4', $socket = null)
     {
         $isSubQuery = false;
 
@@ -551,12 +551,13 @@ class MysqliDb
      * @return string Contains the returned rows from the query.
      */
     public function rawAddPrefix($query){
-        $query = str_replace(PHP_EOL, null, $query);
+        $query = str_replace(PHP_EOL, '', $query);
         $query = preg_replace('/\s+/', ' ', $query);
         preg_match_all("/(from|into|update|join) [\\'\\´]?([a-zA-Z0-9_-]+)[\\'\\´]?/i", $query, $matches);
         list($from_table, $from, $table) = $matches;
 
-        return str_replace($table[0], self::$prefix.$table[0], $query);
+        if (isset($table[0])) $query = str_replace($table[0], self::$prefix.$table[0], $query);
+        return $query;
     }
 
     /**
@@ -1641,7 +1642,7 @@ class MysqliDb
             }
 
             if ($this->_nestJoin && $field->table != $this->_tableName) {
-                $field->table = substr($field->table, strlen(self::$prefix));
+                $field->table = mb_substr($field->table, mb_strlen(self::$prefix));
                 $row[$field->table][$field->name] = null;
                 $parameters[] = & $row[$field->table][$field->name];
             } else {
@@ -2060,8 +2061,8 @@ class MysqliDb
             if ($val === null) {
                 $val = 'NULL';
             }
-            $newStr .= substr($str, 0, $pos) . "'" . $val . "'";
-            $str = substr($str, $pos + 1);
+            $newStr .= mb_substr($str, 0, $pos) . "'" . $val . "'";
+            $str = mb_substr($str, $pos + 1);
         }
         $newStr .= $str;
         return $newStr;
@@ -2096,7 +2097,7 @@ class MysqliDb
      *
      * @return int
      */
-    public function getLastErrno () {
+    public function getLastErrno() {
         return $this->_stmtErrno;
     }
 

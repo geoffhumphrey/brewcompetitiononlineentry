@@ -35,7 +35,8 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 			'sbi_name' => $sbi_name,
 			'sbi_description' => $sbi_description,
 			'sbi_places' => sterilize($_POST['sbi_places']),
-			'sbi_rank' => sterilize($_POST['sbi_rank'])
+			'sbi_rank' => sterilize($_POST['sbi_rank']),
+			'sbi_display_places' => sterilize($_POST['sbi_display_places'])
 		);
 		$result = $db_conn->insert ($update_table, $data);
 		if (!$result) {
@@ -58,7 +59,8 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 			'sbi_name' => $sbi_name,
 			'sbi_description' => $sbi_description,
 			'sbi_places' => sterilize($_POST['sbi_places']),
-			'sbi_rank' => sterilize($_POST['sbi_rank'])
+			'sbi_rank' => sterilize($_POST['sbi_rank']),
+			'sbi_display_places' => sterilize($_POST['sbi_display_places'])
 		);
 		$db_conn->where ('id', $id);
 		$result = $db_conn->update ($update_table, $data);

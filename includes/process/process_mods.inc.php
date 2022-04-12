@@ -58,6 +58,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 		$mod_filename = sterilize($_POST['mod_filename']);
 		$mod_description = $purifier->purify($_POST['mod_description']);
 		$mod_description = sterilize($mod_description);
+		$mod_description = trim($mod_description);
 		$mod_permission = sterilize($_POST['mod_permission']);
 		$mod_rank = sterilize($_POST['mod_rank']);
 		$mod_display_rank = sterilize($_POST['mod_display_rank']);

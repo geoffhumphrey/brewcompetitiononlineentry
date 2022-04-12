@@ -17,10 +17,10 @@ if (isset($_SESSION['session_set_'.$prefix_session])) {
 		$db_conn->where("user_name",$user_name);
 		$user = $db_conn->getOne ($prefix."users");
 		
-		if ($db_conn->count > 0) echo sprintf("<span class=\"text-danger\"><span class=\"fa fa-exclamation-triangle\"></span> %s</span>",$alert_email_in_use);
+		if ($db_conn->count > 0) echo sprintf("<span class=\"text-danger\"><i class=\"fa fa-exclamation-triangle\"></i> %s</span>", $alert_email_in_use);
 		
 		else {
-			if (!empty($user_name)) echo sprintf("<span class=\"text-success\"><span class=\"fa fa-check-circle\"></span> %s</span>",$alert_email_not_in_use);
+			if (!empty($user_name)) echo sprintf("<span class=\"text-success\"><i class=\"fa fa-check-circle\"></i> %s</span>", $alert_email_not_in_use);
 		}
 
 	}

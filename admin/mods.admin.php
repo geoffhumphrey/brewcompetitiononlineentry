@@ -176,9 +176,7 @@ if (($action == "add") || ($action == "edit")) { ?>
     <label for="mod_description" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Description</label>
     <div class="col-lg-4 col-md-4 col-sm-8 col-xs-12">
         <!-- Input Here -->
-        <textarea id="mod_description" class="form-control" name="mod_description" rows="8">
-		<?php if ($action == "edit") echo $row_mods['mod_description']; ?>
-        </textarea>
+        <textarea id="mod_description" class="form-control" name="mod_description" rows="8"><?php if ($action == "edit") echo trim($row_mods['mod_description']); ?></textarea>
      </div>
 </div><!-- ./Form Group -->
 
@@ -285,10 +283,10 @@ if (($action == "add") || ($action == "edit")) { ?>
         <div class="input-group">
             <!-- Input Here -->
             <label class="radio-inline">
-                <input type="radio" name="mod_enable" value="1" id="mod_enable_0"  <?php if ($row_mods['mod_enable'] == 1) echo "CHECKED"; ?> /> Yes
+                <input type="radio" name="mod_enable" value="1" id="mod_enable_0"  <?php if ((($action == "edit") && ($row_mods['mod_enable'] == 1)) || ($action == "add")) echo "CHECKED"; ?> /> Yes
             </label>
             <label class="radio-inline">
-                <input type="radio" name="mod_enable" value="0" id="mod_enable_1" <?php if ($row_mods['mod_enable'] == 0) echo "CHECKED"; ?>/> No
+                <input type="radio" name="mod_enable" value="0" id="mod_enable_1" <?php if (($action == "edit") && ($row_mods['mod_enable'] == 0)) echo "CHECKED"; ?>/> No
             </label>
         </div>
     </div>

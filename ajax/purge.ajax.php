@@ -20,7 +20,7 @@ $dom_ct_stewards_assigned = 0;
 $dom_ct_staff_avail = 0;
 $dom_ct_staff_assigned = 0;
 $dom_ct_entries = 0;
-$dom_ct_entries_unconfirmed = 0;
+$dom_ct_entries_unconfirmed = 0; 
 $dom_ct_entries_paid = 0;
 $dom_ct_entries_paid_received = 0;
 $dom_total_fees = 0;
@@ -70,7 +70,6 @@ else {
 	);
 }
 
-// Return the json
 echo json_encode($return_json);
 mysqli_close($connection);
 

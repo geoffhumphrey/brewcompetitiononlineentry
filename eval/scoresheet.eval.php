@@ -216,7 +216,7 @@ if (isset($_POST['entry_number'])) {
   $flight_info = mysqli_query($connection,$query_flight_info) or die (mysqli_error($connection));
   $row_flight_info = mysqli_fetch_assoc($flight_info);
 
-  $filter = $row_flight_info['flightTable'];
+  if ($row_flight_info) $filter = $row_flight_info['flightTable'];
 
 }
 
