@@ -742,17 +742,13 @@ if ($filter == "stewards")  echo "<div class='error'>There are no stewards avail
 } // end if ($action == "default")
 
 if ($action == "add")  {
-	if ($filter == "default") { ?>
-<script type="text/javascript">
-var username_url = "<?php echo $base_url; ?>includes/ajax_functions.inc.php?action=username";
-var email_url="<?php echo $base_url; ?>includes/ajax_functions.inc.php?action=email";
-</script>
+if ($filter == "default") { ?>
 <script src="<?php echo $base_url; ?>js_includes/registration_checks.min.js"></script>
 <form action="<?php echo $base_url; ?>includes/process.inc.php?action=add&amp;dbTable=<?php echo $users_db_table; ?>&amp;section=<?php echo $section; ?>&amp;go=<?php echo $go; ?>" method="POST" name="form1" id="form1" onSubmit="return CheckRequiredFields()">
 <table>
 	<tr>
     	<td class="dataLabel">Email Address:</td>
-    	<td class="data"><input name="user_name" id="user_name" type="text" class="submit" size="40" onBlur="checkAvailability()" onkeyup="twitter.updateUrl(this.value)" onchange="AjaxFunction(this.value);" value="<?php if ($msg == "4") echo $_SESSION['user_name']; ?>"><div id="msg_email">Email Format:</div><div id="username-status"></div></td>
+    	<td class="data"><input name="user_name" id="user_name" type="text" class="submit" size="40" onBlur="checkAvailability()" onchange="AjaxFunction(this.value);" value="<?php if ($msg == "4") echo $_SESSION['user_name']; ?>"><div id="msg_email">Email Format:</div><div id="username-status"></div></td>
         <td class="data" id="inf_email"><span class="required">Required</span></td>
   	</tr>
   	<tr>

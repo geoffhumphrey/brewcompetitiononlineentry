@@ -805,10 +805,6 @@ $cl_mf_desc_finish = array($label_cloying,$label_sweet,$label_med,$label_dry,$la
       <div class="col-sm-9 col-xs-12">
         <div class="radio">
             <label>
-            </label>
-        </div>
-        <div class="radio">
-            <label>
                 <input type="radio" name="evalDrinkability" id="evalDrinkability1" data-error="<?php echo $evaluation_info_062; ?>" value="<?php echo $evaluation_info_063; ?>" required <?php if (($action == "edit") && ($row_eval['evalDrinkability'] == $evaluation_info_063)) echo "checked"; ?>> <?php echo $evaluation_info_063; ?>
             </label>
         </div>

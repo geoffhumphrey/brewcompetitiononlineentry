@@ -134,7 +134,7 @@ if ($logged_in) {
 
 		$page_info100 .= "<div class=\"bcoem-sidebar-panel\">";
 		$page_info100 .= "<strong class=\"text-info\">Evaluations</strong>";
-		$page_info100 .= "<span class=\"pull-right\"><a href=\"".$base_url."index.php?section=evaluation&amp;go=default&amp;filter=default&amp;view=admin\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Total evaluations\"><span id=\"admin-dashboard-evaluation-count\">".get_evaluation_count('total')."</span></a> / <a href=\"".$base_url."index.php?section=evaluation&amp;go=default&amp;filter=default&amp;view=admin\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Entries with evaluations\">".get_evaluation_count('unique')."</a></span>";
+		$page_info100 .= "<span class=\"pull-right\"><a href=\"".$base_url."index.php?section=evaluation&amp;go=default&amp;filter=default&amp;view=admin\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Total evaluations\"><span id=\"admin-dashboard-evaluation-count-total\">".get_evaluation_count('total')."</span></a> / <a href=\"".$base_url."index.php?section=evaluation&amp;go=default&amp;filter=default&amp;view=admin\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Entries with evaluations\"><span id=\"admin-dashboard-evaluation-count\">".get_evaluation_count('unique')."</span></a></span>";
 		$page_info100 .= "</div>";
 
 	}

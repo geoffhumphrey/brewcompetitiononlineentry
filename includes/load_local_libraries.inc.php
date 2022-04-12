@@ -53,7 +53,7 @@
     <?php } ?>
     <?php } ?>
     
-    <?php if ((($logged_in) && ($_SESSION['userLevel'] <= 1)) || (($logged_in) && ($section == "beerxml"))) { ?>
+    <?php if (($logged_in) && ($_SESSION['userLevel'] <= 1)) { ?>
     
     <!-- Load Jasny Off-Canvas Menu for Admin / http://www.jasny.net/bootstrap -->
     <link rel="stylesheet" href="<?php echo $base_url; ?>libraries/jasny-bootstrap/css/jasny-bootstrap.min.css">

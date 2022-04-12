@@ -55,7 +55,6 @@ elseif ((($section == "judge") && ($go == "judge")) || ($go == "judging_tables")
 	if ($_SESSION['prefsStyleSet'] == "BA") $query_styles .= " AND brewStyleActive='Y' ORDER BY brewStyleGroup,brewStyle ASC";
 	else $query_styles .= " AND brewStyleActive='Y' ORDER BY brewStyleGroup,brewStyleNum ASC";
 }
-elseif (($section == "beerxml") && ($msg != "default")) $query_styles .= " AND brewStyleActive='Y' AND brewStyleOwn='bcoe'";
 elseif ($section == "sorting") $query_styles .= " AND brewStyleActive='Y'";
 elseif ($section == "list") {
 	if ((isset($row_log['brewCategorySort'])) && (isset($row_log['brewCategorySort']))) $query_styles .= sprintf(" AND brewStyleGroup = '%s' AND brewStyleNum = '%s'", $row_log['brewCategorySort'], $row_log['brewSubCategory']);

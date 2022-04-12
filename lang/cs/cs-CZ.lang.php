@@ -41,7 +41,7 @@
  * 
  * ================ FORMAT =================
  * 
- * Always indicate the primary languge subtag first, then a dash (-) 
+ * Always indicate the primary language subtag first, then a dash (-)
  * and then the region subtag. The region subtag is in all capital letters 
  * or a three digit number.
  * 

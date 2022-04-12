@@ -41,10 +41,6 @@ if ($action == "username") {
 
 ?>
 <?php if ($action == "username") { ?>
-<script type="text/javascript">
-var username_url = "<?php echo $base_url; ?>includes/ajax_functions.inc.php?action=username";
-var email_url="<?php echo $base_url; ?>includes/ajax_functions.inc.php?action=email";
-</script>
 <script src="<?php echo $base_url; ?>js_includes/registration_checks.min.js"></script>
 <?php } // end if ($action == "username") ?>
 <p class="lead"><?php echo $lead_msg; ?></p>
@@ -64,7 +60,7 @@ var email_url="<?php echo $base_url; ?>includes/ajax_functions.inc.php?action=em
             <div class="input-group has-warning">
                 <!-- Input Here -->
                 <span class="input-group-addon" id="user_name-addon1"><span class="fa fa-envelope"></span></span>
-                <input class="form-control" id="user_name" name="user_name" type="email" onBlur="checkAvailability()" onkeyup="twitter.updateUrl(this.value)" onchange="AjaxFunction(this.value);" placeholder="" data-error="<?php echo $user_text_000; ?>" required>
+                <input class="form-control" id="user_name" name="user_name" type="email" onBlur="checkAvailability()" onchange="AjaxFunction(this.value);" placeholder="" data-error="<?php echo $user_text_000; ?>" required>
                 <span class="input-group-addon" id="user_name-addon2"><span class="fa fa-star"></span></span>
             </div>
             <div class="help-block with-errors"></div>

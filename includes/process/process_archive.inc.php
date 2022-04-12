@@ -1,5 +1,10 @@
 <?php
+
 if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] == 0))) {
+
+	$errors = FALSE;
+	$error_output = array();
+	$_SESSION['error_output'] = "";
 
 	require (INCLUDES.'scrubber.inc.php');
 	require (INCLUDES.'db_tables.inc.php');
@@ -90,6 +95,11 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 			$brewerJudgeRank = $row_name['brewerJudgeRank'];
 			$brewerJudgeLikes = $row_name['brewerJudgeLikes'];
 			$brewerJudgeDislikes = $row_name['brewerJudgeDislikes'];
+			$brewerJudgeMead = $row_name['brewerJudgeMead'];
+			$brewerJudgeCider = $row_name['brewerJudgeCider'];
+			$brewerJudgeLocation = $row_name['brewerJudgeLocation'];
+			$brewerStewardLocation = $row_name['brewerStewardLocation'];
+			$brewerJudgeExp = $row_name['brewerJudgeExp'];
 			$brewerAHA = $row_name['brewerAHA'];
 			$brewerBreweryName = $row_name['brewerBreweryName'];
 
@@ -105,7 +115,6 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 			$tables_array[] = $special_best_data_db_table;
 		}
 
-		if (!isset($_POST['keepStyleTypes'])) $tables_array[] = $style_types_db_table;
 		if (!isset($_POST['keepSponsors'])) $tables_array[] = $sponsors_db_table;
 
 		$truncate_tables_array = array();
@@ -117,136 +126,250 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 		$keep_participants = FALSE;
 
 		if (isset($_POST['keepParticipants'])) {
-			$updateSQL = "CREATE TABLE ".$prefix."users_".$suffix." LIKE ".$users_db_table.";";
-			mysqli_real_escape_string($connection,$updateSQL);
-			$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 
-			$updateSQL = "INSERT INTO ".$prefix."users_".$suffix." SELECT * FROM ".$users_db_table.";";
-			mysqli_real_escape_string($connection,$updateSQL);
-			$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+			$sql = "CREATE TABLE ".$prefix."users_".$suffix." LIKE ".$users_db_table.";";
+			$db_conn->rawQuery($sql);
+			if ($db_conn->getLastErrno() !== 0) {
+				$error_output[] = $db_conn->getLastError();
+				$errors = TRUE;
+			}
 
-			$updateSQL = "CREATE TABLE ".$prefix."brewer_".$suffix." LIKE ".$brewer_db_table.";";
-			mysqli_real_escape_string($connection,$updateSQL);
-			$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+			$sql = "INSERT INTO ".$prefix."users_".$suffix." SELECT * FROM ".$users_db_table.";";
+			$db_conn->rawQuery($sql);
+			if ($db_conn->getLastErrno() !== 0) {
+				$error_output[] = $db_conn->getLastError();
+				$errors = TRUE;
+			}
 
-			$updateSQL = "INSERT INTO ".$prefix."brewer_".$suffix." SELECT * FROM ".$brewer_db_table.";";
-			mysqli_real_escape_string($connection,$updateSQL);
-			$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+			$sql = "CREATE TABLE ".$prefix."brewer_".$suffix." LIKE ".$brewer_db_table.";";
+			$db_conn->rawQuery($sql);
+			if ($db_conn->getLastErrno() !== 0) {
+				$error_output[] = $db_conn->getLastError();
+				$errors = TRUE;
+			}
+
+			$sql = "INSERT INTO ".$prefix."brewer_".$suffix." SELECT * FROM ".$brewer_db_table.";";
+			$db_conn->rawQuery($sql);
+			if ($db_conn->getLastErrno() !== 0) {
+				$error_output[] = $db_conn->getLastError();
+				$errors = TRUE;
+			}
 
 			$keep_participants = TRUE;
 		}
 
 		if (isset($_POST['keepSpecialBest'])) {
-			$updateSQL = "CREATE TABLE ".$special_best_info_db_table."_".$suffix." LIKE ".$special_best_info_db_table.";";
-			mysqli_real_escape_string($connection,$updateSQL);
-			$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+			
+			$sql = "CREATE TABLE ".$special_best_info_db_table."_".$suffix." LIKE ".$special_best_info_db_table.";";
+			$db_conn->rawQuery($sql);
+			if ($db_conn->getLastErrno() !== 0) {
+				$error_output[] = $db_conn->getLastError();
+				$errors = TRUE;
+			}
 
-			$updateSQL = "INSERT INTO ".$special_best_info_db_table."_".$suffix." SELECT * FROM ".$special_best_info_db_table.";";
-			mysqli_real_escape_string($connection,$updateSQL);
-			$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+			$sql = "INSERT INTO ".$special_best_info_db_table."_".$suffix." SELECT * FROM ".$special_best_info_db_table.";";
+			$db_conn->rawQuery($sql);
+			if ($db_conn->getLastErrno() !== 0) {
+				$error_output[] = $db_conn->getLastError();
+				$errors = TRUE;
+			}
 
-			$updateSQL = "RENAME TABLE ".$special_best_data_db_table." TO ".$special_best_data_db_table."_".$suffix.";";
-			mysqli_real_escape_string($connection,$updateSQL);
-			$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+			$sql = "RENAME TABLE ".$special_best_data_db_table." TO ".$special_best_data_db_table."_".$suffix.";";
+			$db_conn->rawQuery($sql);
+			if ($db_conn->getLastErrno() !== 0) {
+				$error_output[] = $db_conn->getLastError();
+				$errors = TRUE;
+			}
 
-			$updateSQL = "CREATE TABLE ".$special_best_data_db_table." LIKE ".$special_best_data_db_table."_".$suffix.";";
-			mysqli_real_escape_string($connection,$updateSQL);
-			$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+			$sql = "CREATE TABLE ".$special_best_data_db_table." LIKE ".$special_best_data_db_table."_".$suffix.";";
+			$db_conn->rawQuery($sql);
+			if ($db_conn->getLastErrno() !== 0) {
+				$error_output[] = $db_conn->getLastError();
+				$errors = TRUE;
+			}
+
 		}
 
 		if (isset($_POST['keepStyleTypes'])) {
-			$updateSQL = "CREATE TABLE ".$style_types_db_table."_".$suffix." LIKE ".$style_types_db_table.";";
-			mysqli_real_escape_string($connection,$updateSQL);
-			$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 
-			$updateSQL = "INSERT INTO ".$style_types_db_table."_".$suffix." SELECT * FROM ".$style_types_db_table.";";
-			mysqli_real_escape_string($connection,$updateSQL);
-			$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+			$sql = "CREATE TABLE ".$style_types_db_table."_".$suffix." LIKE ".$style_types_db_table.";";
+			$db_conn->rawQuery($sql);
+			if ($db_conn->getLastErrno() !== 0) {
+				$error_output[] = $db_conn->getLastError();
+				$errors = TRUE;
+			}
+
+			$sql = "INSERT INTO ".$style_types_db_table."_".$suffix." SELECT * FROM ".$style_types_db_table.";";
+			$db_conn->rawQuery($sql);
+			if ($db_conn->getLastErrno() !== 0) {
+				$error_output[] = $db_conn->getLastError();
+				$errors = TRUE;
+			}
+
 		}
 		
 		/*
 		if (($eval_db_exist) && (isset($_POST['keepEvaluations']))) {
-			$updateSQL = sprintf("CREATE TABLE %s LIKE %s", $prefix."evaluation_".$suffix, $prefix."evaluation");
-			mysqli_real_escape_string($connection,$updateSQL);
-			$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+			$sql = sprintf("CREATE TABLE %s LIKE %s", $prefix."evaluation_".$suffix, $prefix."evaluation");
+			$db_conn->rawQuery($sql);
 
-			$updateSQL = sprintf("INSERT INTO %s SELECT * FROM %s", $prefix."evaluation_".$suffix, $prefix."evaluation");
-			mysqli_real_escape_string($connection,$updateSQL);
-			$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+			$sql = sprintf("INSERT INTO %s SELECT * FROM %s", $prefix."evaluation_".$suffix, $prefix."evaluation");
+			$db_conn->rawQuery($sql);
 		}
 		*/
 
 		foreach ($tables_array as $table) {
 
-			$updateSQL = sprintf("RENAME TABLE %s TO %s", $table, $table."_".$suffix);
-			mysqli_real_escape_string($connection,$updateSQL);
-			$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+			$sql = sprintf("RENAME TABLE %s TO %s", $table, $table."_".$suffix);
+			$db_conn->rawQuery($sql);
+			if ($db_conn->getLastErrno() !== 0) {
+				$error_output[] = $db_conn->getLastError();
+				$errors = TRUE;
+			}
 
-			$updateSQL = sprintf("CREATE TABLE %s LIKE %s", $table, $table."_".$suffix);
-			mysqli_real_escape_string($connection,$updateSQL);
-			$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+			$sql = sprintf("CREATE TABLE %s LIKE %s", $table, $table."_".$suffix);
+			$db_conn->rawQuery($sql);
+			if ($db_conn->getLastErrno() !== 0) {
+				$error_output[] = $db_conn->getLastError();
+				$errors = TRUE;
+			}
 
 		}
 
 		foreach ($truncate_tables_array as $table) {
-			$updateSQL = sprintf("TRUNCATE %s", $table);
-			mysqli_real_escape_string($connection,$updateSQL);
-			$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+			$sql = sprintf("TRUNCATE %s", $table);
+			$db_conn->rawQuery($sql);
+			if ($db_conn->getLastErrno() !== 0) {
+				$error_output[] = $db_conn->getLastError();
+				$errors = TRUE;
+			}
 		}
 
 		if (!isset($_POST['keepStyleTypes'])) {
-			$insertSQL = sprintf("INSERT INTO %s (id, styleTypeName, styleTypeOwn, styleTypeBOS, styleTypeBOSMethod) VALUES (1, 'Beer', 'bcoe', 'Y', 1), (2, 'Cider', 'bcoe', 'N', 1), (3, 'Mead', 'bcoe', 'N', 1), (4, 'Mead/Cider', 'bcoe', 'N', 1), (5, 'Wine', 'N', 'bcoe', 1), (6, 'Rice Wine', 'N', 'bcoe', 1), (7, 'Spirits', 'bcoe', 'N', 1), (8, 'Kombucha', 'bcoe', 'N', 1), (9, 'Pulque', 'bcoe', 'N', 1);", $style_types_db_table);
-			mysqli_real_escape_string($connection,$insertSQL);
-			$result = mysqli_query($connection,$insertSQL) or die (mysqli_error($connection));
+
+			$sql = "CREATE TABLE ".$style_types_db_table."_".$suffix." LIKE ".$style_types_db_table.";";
+			$db_conn->rawQuery($sql);
+			if ($db_conn->getLastErrno() !== 0) {
+				$error_output[] = $db_conn->getLastError();
+				$errors = TRUE;
+			}
+
+			$sql = "INSERT INTO ".$style_types_db_table."_".$suffix." SELECT * FROM ".$style_types_db_table.";";
+			$db_conn->rawQuery($sql);
+			if ($db_conn->getLastErrno() !== 0) {
+				$error_output[] = $db_conn->getLastError();
+				$errors = TRUE;
+			}
+
+			$update_table = $prefix."style_types";
+			$db_conn->where ('id', 16, ">=");
+			$result = $db_conn->delete ($update_table);
+			if (!$result) {
+				$error_output[] = $db_conn->getLastError();
+				$errors = TRUE;
+			}
+
 		}
 
 		if (!isset($_POST['keepParticipants']))  {
 
-			// Insert current user's info into new "users" and "brewer" table
-			$insertSQL = sprintf("INSERT INTO %s (id, user_name, password,	userLevel, userQuestion, userQuestionAnswer, userCreated) 
-				VALUES ('1', '%s', '%s', '0', '%s', '%s', NOW());", $users_db_table, $user_name, $password, $userQuestion, $userQuestionAnswer);
-			mysqli_real_escape_string($connection,$insertSQL);
-			$result = mysqli_query($connection,$insertSQL) or die (mysqli_error($connection));
+			$update_table = $prefix."users";
+			$data = array(
+				'id' => 1, 
+				'user_name' => $user_name, 
+				'password' => $password,	
+				'userLevel' => $userLevel, 
+				'userQuestion' => $userQuestion, 
+				'userQuestionAnswer' => $userQuestionAnswer, 
+				'userCreated' => $db_conn->now()
+			);
+			$result = $db_conn->insert ($update_table, $data);
+			if (!$result) {
+				$error_output[] = $db_conn->getLastError();
+				$errors = TRUE;
+			}
 
-			$insertSQL = "INSERT INTO $brewer_db_table (id, uid, brewerFirstName, brewerLastName, brewerAddress, brewerCity, brewerState, brewerZip, brewerCountry, brewerPhone1, brewerPhone2, brewerClubs, brewerEmail, brewerStaff, brewerSteward, brewerJudge, brewerJudgeID, brewerJudgeRank, brewerJudgeLikes, brewerJudgeDislikes, brewerJudgeLocation, brewerStewardLocation, brewerJudgeExp, brewerJudgeNotes, brewerAssignment, brewerAHA, brewerDiscount, brewerDropOff, brewerBreweryName) VALUES (NULL, '1', '$brewerFirstName', '$brewerLastName', '$brewerAddress', '$brewerCity',  '$brewerState', '$brewerZip', '$brewerCountry', '$brewerPhone1', '$brewerPhone2', '$brewerClubs', '$brewerEmail', '$brewerStaff', '$brewerSteward', '$brewerJudge', '$brewerJudgeID', '$brewerJudgeRank', '$brewerJudgeLikes', '$brewerJudgeDislikes', NULL, NULL, NULL, NULL, NULL, '$brewerAHA', NULL, NULL,'$brewerBreweryName');";
-			mysqli_real_escape_string($connection,$insertSQL);
-			$result = mysqli_query($connection,$insertSQL) or die (mysqli_error($connection));
+			$update_table = $prefix."brewer";
+			$data = array('id' => '1',
+				'uid' => '1',
+				'brewerFirstName' => $brewerFirstName,
+				'brewerLastName' => $brewerLastName,
+				'brewerAddress' => $brewerAddress,
+				'brewerCity' => $brewerCity,
+				'brewerState' => $brewerState,
+				'brewerZip' => $brewerZip,
+				'brewerCountry' => $brewerCountry,
+				'brewerPhone1' => $brewerPhone1,
+				'brewerPhone2' => $brewerPhone2,
+				'brewerClubs' => $brewerClubs,
+				'brewerEmail' => $brewerEmail,
+				'brewerStaff' => $brewerStaff,
+				'brewerSteward' => $brewerSteward,
+				'brewerJudge' => $brewerJudge,
+				'brewerJudgeID' => $brewerJudgeID,
+				'brewerJudgeMead' => $brewerJudgeMead,
+				'brewerJudgeCider' => $brewerJudgeCider,
+				'brewerJudgeRank' => $brewerJudgeRank,
+				'brewerJudgeLikes' => $brewerJudgeLikes,
+				'brewerJudgeDislikes' => $brewerJudgeDislikes,
+				'brewerJudgeLocation' => $brewerJudgeLocation,
+				'brewerStewardLocation' => $brewerStewardLocation,
+				'brewerJudgeExp' => $brewerJudgeExp,
+				'brewerJudgeNotes' => NULL,
+				'brewerAssignment' => NULL,
+				'brewerJudgeWaiver' => 'Y',
+				'brewerAHA' => $brewerAHA,
+				'brewerDiscount' => NULL,
+				'brewerProAm' => '0',
+				'brewerDropOff' => '0',
+				'brewerBreweryName' => $brewerBreweryName,
+				'brewerBreweryTTB' => NULL
+			);
+			$result = $db_conn->insert ($update_table, $data);
+			if (!$result) {
+				$error_output[] = $db_conn->getLastError();
+				$errors = TRUE;
+			}
 
 		}
 
 		// Insert a new record into the "archive" table containing the newly created archives names (allows access to archived tables)
 		$styleSet = $_SESSION['prefsStyleSet'];
 
-		$insertSQL = sprintf("
-			INSERT INTO %s (
-			archiveSuffix,
-			archiveProEdition,
-			archiveStyleSet,
-			archiveScoresheet,
-			archiveWinnerMethod,
-			archiveDisplayWinners
-		) VALUES (
-		'%s','%s','%s','%s','%s','%s'
-		);",
-		$archive_db_table,
-		$suffix,
-		$_SESSION['prefsProEdition'],
-		$styleSet,
-		$_SESSION['prefsDisplaySpecial'],
-		$_SESSION['prefsWinnerMethod'],
-		$_SESSION['prefsDisplayWinners']
+		$update_table = $prefix."archive";
+		$data = array(
+			'archiveSuffix' => $suffix,
+			'archiveProEdition' => $_SESSION['prefsProEdition'],
+			'archiveStyleSet' => $styleSet,
+			'archiveScoresheet' => $_SESSION['prefsDisplaySpecial'],
+			'archiveWinnerMethod' => $_SESSION['prefsWinnerMethod'],
+			'archiveDisplayWinners' => $_SESSION['prefsDisplayWinners']
 		);
-		mysqli_real_escape_string($connection,$insertSQL);
-		$result = mysqli_query($connection,$insertSQL) or die (mysqli_error($connection));
+		$result = $db_conn->insert ($update_table, $data);
+		if (!$result) {
+			$error_output[] = $db_conn->getLastError();
+			$errors = TRUE;
+		}
 
 		// If participants were kept, no need to kill session and re-login - just redirect
 		if ($keep_participants) {
 
 			// First, clear judging preferences
 			if (!SINGLE) {
-				$updateSQL = sprintf("UPDATE %s SET brewerJudge='N',brewerSteward='N',brewerJudgeLikes=NULL,brewerJudgeDislikes=NULL,brewerJudgeLocation=NULL,brewerStewardLocation=NULL",$brewer_db_table);
-				mysqli_real_escape_string($connection,$updateSQL);
-				$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+
+				$update_table = $prefix."brewer";
+				$data = array(
+					'brewerJudge' => 'N',
+					'brewerSteward' => 'N',
+					'brewerJudgeLocation' => NULL,
+					'brewerStewardLocation' => NULL
+				);
+				$result = $db_conn->update ($update_table, $data);
+				if (!$result) {
+					$error_output[] = $db_conn->getLastError();
+					$errors = TRUE;
+				}
+
 			}
 
 			$redirect_go_to = sprintf("Location: %s", $base_url."index.php?section=admin&go=archive&msg=7");
@@ -257,9 +380,20 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 
 			// First, clear judging preferences for remaining users
 			if (!SINGLE) {
-				$updateSQL = sprintf("UPDATE %s SET brewerJudge='N',brewerSteward='N',brewerJudgeLikes=NULL,brewerJudgeDislikes=NULL,brewerJudgeLocation=NULL,brewerStewardLocation=NULL",$brewer_db_table);
-				mysqli_real_escape_string($connection,$updateSQL);
-				$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+				
+				$update_table = $prefix."brewer";
+				$data = array(
+					'brewerJudge' => 'N',
+					'brewerSteward' => 'N',
+					'brewerJudgeLocation' => NULL,
+					'brewerStewardLocation' => NULL
+				);
+				$result = $db_conn->update ($update_table, $data);
+				if (!$result) {
+					$error_output[] = $db_conn->getLastError();
+					$errors = TRUE;
+				}
+
 			}
 
 			$query_login = "SELECT COUNT(*) as 'count' FROM $users_db_table WHERE user_name = '$user_name' AND password = '$password'";
@@ -403,14 +537,27 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 				$_SESSION['brewerAHA'] = $row_name['brewerAHA'];
 				$_SESSION['user_info'.$prefix_session] = "1";
 
-				$redirect_go_to = sprintf("Location: %s", $base_url."index.php?section=admin&go=archive&msg=7");
+				if (!empty($error_output)) $_SESSION['error_output'] = $error_output;
+
+				$redirect = $base_url."index.php?section=admin&go=archive&msg=7";
+				$redirect = prep_redirect_link($redirect);
+				$redirect_go_to = sprintf("Location: %s", $redirect);
+
 			}
 
 			else {
+
+				if (!empty($error_output)) $_SESSION['error_output'] = $error_output;
+				
 				// If the username/password combo is incorrect or not found, relocate to the login error page
-				$redirect_go_to = sprintf("Location: %s", $base_url."index.php?section=login&msg=1");
+				$redirect = $base_url."index.php?section=login&msg=1";
+				$redirect = prep_redirect_link($redirect);
+				$redirect_go_to = sprintf("Location: %s", $redirect);
+				
 				session_destroy();
+
 			}
+			
 		}
 
 	} // end if ($go == "add")
@@ -418,11 +565,22 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 
 	if ($go == "edit") {
 
-		$tables_array[] = $brewer_db_table;
-		$tables_array[] = $special_best_data_db_table;
-		$tables_array[] = $special_best_info_db_table;
-		$tables_array[] = $style_types_db_table;
-		$tables_array[] = $users_db_table;
+		$tables_array = array(
+			$brewing_db_table, 
+			$judging_assignments_db_table, 
+			$judging_flights_db_table, 
+			$judging_scores_db_table, 
+			$judging_scores_bos_db_table, 
+			$judging_tables_db_table, 
+			$staff_db_table,
+			$brewer_db_table,
+			$special_best_data_db_table,
+			$special_best_info_db_table,
+			$style_types_db_table,
+			$users_db_table,
+			$sponsors_db_table,
+			$eval_db_table
+		);
 		
 		// If the user changed the archive suffix name
 		// Need to loop through each possible archive
@@ -434,39 +592,49 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 				$table_old = $table."_".$filter;
 				$table_new = $table."_".$suffix;
 
-				if (check_setup($table_old,$database)){
-					$updateSQL = sprintf("RENAME TABLE %s TO %s;", $table_old, $table_new);
-					//echo $updateSQL."<br>";
-					mysqli_real_escape_string($connection,$updateSQL);
-					$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+				if (check_setup($table_old,$database)) {
+					
+					$sql = sprintf("RENAME TABLE %s TO %s;", $table_old, $table_new);
+					$db_conn->rawQuery($sql);
+					if ($db_conn->getLastErrno() !== 0) {
+						$error_output[] = $db_conn->getLastError();
+						$errors = TRUE;
+					}
+
 				}
 
 			}
 
-			$updateSQL = sprintf("UPDATE `%s` SET archiveSuffix='%s' WHERE id='%s'",$prefix."archive",$suffix,$id);
-			mysqli_real_escape_string($connection,$updateSQL);
-			$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+			$update_table = $prefix."archive";
+			$data = array('archiveSuffix' => $suffix);
+			$result = $db_conn->where ('id', $id);
+			if (!$result) {
+				$error_output[] = $db_conn->getLastError();
+				$errors = TRUE;
+			}
 
 		} // end if ($filter != $suffix)
 
-		$updateSQL = sprintf("UPDATE `%s` SET 
-				archiveProEdition='%s',
-				archiveStyleSet='%s',
-				archiveScoresheet='%s',
-				archiveWinnerMethod='%s',
-				archiveDisplayWinners='%s'
-				WHERE id='%s'",
-				$prefix."archive",
-				$_POST['archiveProEdition'],
-				$_POST['archiveStyleSet'],
-				$_POST['archiveScoresheet'],
-				$_POST['archiveWinnerMethod'],
-				$_POST['archiveDisplayWinners'],
-				$id);
-		mysqli_real_escape_string($connection,$updateSQL);
-		$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+		$update_table = $prefix."archive";
+		$sql = array( 
+			'archiveProEdition' => sterilize($_POST['archiveProEdition']),
+			'archiveStyleSet' => sterilize($_POST['archiveStyleSet']),
+			'archiveScoresheet' => sterilize($_POST['archiveScoresheet']),
+			'archiveWinnerMethod' => sterilize($_POST['archiveWinnerMethod']),
+			'archiveDisplayWinners' => sterilize($_POST['archiveDisplayWinners'])
+			);
+		$db_conn->where ('id', $id);
+		$result = $db_conn->update ($update_table, $data);
+		if (!$result) {
+			$error_output[] = $db_conn->getLastError();
+			$errors = TRUE;
+		}
 
-		$redirect_go_to = sprintf("Location: %s", $base_url."index.php?section=admin&go=archive&msg=2");
+		if (!empty($error_output)) $_SESSION['error_output'] = $error_output;
+
+		$redirect = $base_url."index.php?section=admin&go=archive&msg=2";
+		$redirect = prep_redirect_link($redirect);
+		$redirect_go_to = sprintf("Location: %s", $redirect);
 
 	} // end if ($go == "edit")
 

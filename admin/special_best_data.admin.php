@@ -143,21 +143,21 @@ if ($action == "add") {
 	} // end if ($action == "add")
 	if ($action == "edit") {
 		do {
-		$info = explode("^", entry_info($row_sbd['eid']));
-		?>
+		if ($row_sbd) $info = explode("^", entry_info($row_sbd['eid']));
+	?>
 
 
-  <input type="hidden" name="id[]" value="<?php echo $row_sbd['id']; ?>" />
-  <input type="hidden" name="bid<?php echo $row_sbd['id']; ?>" value="<?php echo $row_sbd['bid']; ?>" />
-  <input type="hidden" name="eid<?php echo $row_sbd['id']; ?>" value="<?php echo $row_sbd['eid']; ?>" />
-  <input type="hidden" name="sid<?php echo $row_sbd['id']; ?>" value="<?php echo $id; ?>">
+  <input type="hidden" name="id[]" value="<?php if ($row_sbd) echo $row_sbd['id']; ?>" />
+  <input type="hidden" name="bid<?php if ($row_sbd) echo $row_sbd['id']; ?>" value="<?php echo $row_sbd['bid']; ?>" />
+  <input type="hidden" name="eid<?php if ($row_sbd) echo $row_sbd['id']; ?>" value="<?php echo $row_sbd['eid']; ?>" />
+  <input type="hidden" name="sid<?php if ($row_sbd) echo $row_sbd['id']; ?>" value="<?php echo $id; ?>">
   <input type="hidden" name="entry_exists<?php echo $row_sbd['id']; ?>" value="Y" />
   <div class="form-group"><!-- Form Group REQUIRED Text Input -->
 		<label for="sbd_judging_no<?php echo $row_sbd['id']; ?>" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Winning Entry's Judging Number</label>
 		<div class="col-lg-3 col-md-6 col-sm-8 col-xs-12">
 			<div class="input-group has-warning">
 				<!-- Input Here -->
-				<input class="form-control" id="sbd_judging_no<?php echo $row_sbd['id']; ?>" name="sbd_judging_no<?php echo $row_sbd['id']; ?>" type="text" size="10" maxlength="255" value="<?php echo readable_judging_number($info[3],$info[6]); ?>" placeholder="">
+				<input class="form-control" id="sbd_judging_no<?php if ($row_sbd) echo $row_sbd['id']; ?>" name="sbd_judging_no<?php if ($row_sbd) echo $row_sbd['id']; ?>" type="text" size="10" maxlength="255" value="<?php if ($row_sbd)  echo readable_judging_number($info[3],$info[6]); ?>" placeholder="">
 				<span class="input-group-addon" id="sbd_judging_no<?php echo $row_sbd['id']; ?>-2"><span class="fa fa-star"></span></span>
 			</div>
 		</div>
@@ -167,8 +167,8 @@ if ($action == "add") {
 		<div class="col-lg-3 col-md-6 col-sm-8 col-xs-12">
 			<div class="input-group has-warning">
 				<!-- Input Here -->
-				<input class="form-control" id="sbd_place<?php  echo $row_sbd['id']; ?>" name="sbd_place<?php  echo $row_sbd['id']; ?>" type="text" value="<?php echo $row_sbd['sbd_place']; ?>">
-				<span class="input-group-addon" id="sbd_place<?php  echo $row_sbd['id']; ?>-2"><span class="fa fa-star"></span></span>
+				<input class="form-control" id="sbd_place<?php if ($row_sbd)  echo $row_sbd['id']; ?>" name="sbd_place<?php  echo $row_sbd['id']; ?>" type="text" value="<?php if ($row_sbd) echo $row_sbd['sbd_place']; ?>">
+				<span class="input-group-addon" id="sbd_place<?php if ($row_sbd)  echo $row_sbd['id']; ?>-2"><span class="fa fa-star"></span></span>
 			</div>
 		</div>
 	</div><!-- ./Form Group -->
@@ -176,14 +176,14 @@ if ($action == "add") {
 	<div class="form-group"><!-- Form Group NOT REQUIRED  -->
 		<label for="<?php echo $info[0]; ?>" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Entry Name</label>
 		<div class="col-lg-3 col-md-6 col-sm-8 col-xs-12">
-			<p class="form-control-static"><?php echo $info[0]; ?></p>
+			<p class="form-control-static"><?php if ($row_sbd) echo $info[0]; ?></p>
 		</div>
 	</div><!-- ./Form Group -->
-	<?php $info2 = explode("^", brewer_info($row_sbd['bid'])); ?>
+	<?php if ($row_sbd) $info2 = explode("^", brewer_info($row_sbd['bid'])); ?>
 	<div class="form-group"><!-- Form Group NOT REQUIRED  -->
-		<label for="<?php echo $info2[0].$info2[1]; ?>" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Brewer</label>
+		<label for="<?php if ($row_sbd) echo $info2[0].$info2[1]; ?>" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Brewer</label>
 		<div class="col-lg-3 col-md-6 col-sm-8 col-xs-12">
-			<p class="form-control-static"><?php  echo $info2[0]." ".$info2[1]; ?></p>
+			<p class="form-control-static"><?php if ($row_sbd) echo $info2[0]." ".$info2[1]; ?></p>
 		</div>
 	</div><!-- ./Form Group -->
   	<?php } while($row_sbd = mysqli_fetch_assoc($sbd));

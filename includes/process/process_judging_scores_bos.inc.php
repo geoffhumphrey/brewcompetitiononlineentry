@@ -6,72 +6,85 @@
 
 if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1))) {
 
+	$errors = FALSE;
+	$error_output = array();
+	$_SESSION['error_output'] = "";
+
 	if ($action == "enter") {
 
-		foreach($_POST['score_id'] as $score_id)	{
+		foreach($_POST['score_id'] as $score_id) {
+
+			// Prep Vars
+			$eid = sterilize($_POST['eid'.$score_id]);
+			$bid = sterilize($_POST['bid'.$score_id]), "text"),
+			$scoreEntry = sterilize($_POST['scoreEntry'.$score_id]);
+			$scorePlace = sterilize($_POST['scorePlace'.$score_id]);
+			$scoreType = sterilize($_POST['scoreType'.$score_id]);
 
 			if ((!empty($_POST['scorePlace'.$score_id])) && ($_POST['scorePrevious'.$score_id] == "Y")) {
-				$sql = sprintf("UPDATE $judging_scores_bos_db_table SET
-				eid=%s,
-				bid=%s,
-				scoreEntry=%s,
-				scorePlace=%s,
-				scoreType=%s
-				WHERE id=%s",
-								GetSQLValueString(sterilize($_POST['eid'.$score_id]), "text"),
-								GetSQLValueString(sterilize($_POST['bid'.$score_id]), "text"),
-								GetSQLValueString(sterilize($_POST['scoreEntry'.$score_id]), "text"),
-								GetSQLValueString(sterilize($_POST['scorePlace'.$score_id]), "text"),
-								GetSQLValueString(sterilize($_POST['scoreType'.$score_id]), "text"),
-								GetSQLValueString(sterilize($_POST['id'.$score_id]), "text")
-								);
 
-				mysqli_real_escape_string($connection,$sql);
-				$result = mysqli_query($connection,$sql) or die (mysqli_error($connection));
+				$update_table = $prefix."judging_scores_bos";
+				$data = array(
+					'eid' => $eid,
+					'bid' => $bid,
+					'scoreEntry' => $scoreEntry,
+					'scorePlace' => $scorePlace,
+					'scoreType' => $scoreType
+				);
+				$db_conn->where ('id', sterilize($_POST['id'.$score_id]));
+				$result = $db_conn->update ($update_table, $data);
+				if (!$result) {
+					$error_output[] = $db_conn->getLastError();
+					$errors = TRUE;
+				}
 
-			}
+			} // end if ((!empty($_POST['scorePlace'.$score_id])) && ($_POST['scorePrevious'.$score_id] == "Y"))
 
 			if ((!empty($_POST['scorePlace'.$score_id])) && ($_POST['scorePrevious'.$score_id] == "N")) {
-				$sql = sprintf("INSERT INTO $judging_scores_bos_db_table (
-				eid,
-				bid,
-				scoreEntry,
-				scorePlace,
-				scoreType
-				) VALUES (%s, %s, %s, %s, %s)",
-								GetSQLValueString(sterilize($_POST['eid'.$score_id]), "text"),
-								GetSQLValueString(sterilize($_POST['bid'.$score_id]), "text"),
-								GetSQLValueString(sterilize($_POST['scoreEntry'.$score_id]), "text"),
-								GetSQLValueString(sterilize($_POST['scorePlace'.$score_id]), "text"),
-								GetSQLValueString(sterilize($_POST['scoreType'.$score_id]), "text")
-								);
 
-				mysqli_real_escape_string($connection,$sql);
-				$result = mysqli_query($connection,$sql) or die (mysqli_error($connection));
+				$update_table = $prefix."judging_scores_bos";
+				$data = array(
+					'eid' => $eid,
+					'bid' => $bid,
+					'scoreEntry' => $scoreEntry,
+					'scorePlace' => $scorePlace,
+					'scoreType' => $scoreType
+				);
+				$result = $db_conn->insert ($update_table, $data);
+				if (!$result) {
+					$error_output[] = $db_conn->getLastError();
+					$errors = TRUE;
+				}
 
-			}
+			} // end if ((!empty($_POST['scorePlace'.$score_id])) && ($_POST['scorePrevious'.$score_id] == "N"))
 
 			if ((empty($_POST['scorePlace'.$score_id])) && ($_POST['scorePrevious'.$score_id] == "Y")) {
 
-				$sql = sprintf("DELETE FROM %s WHERE id='%s'", $judging_scores_bos_db_table, $_POST['id'.$score_id]);
-				mysqli_real_escape_string($connection,$sql);
-				$result = mysqli_query($connection,$sql) or die (mysqli_error($connection));
+				$update_table = $prefix."judging_scores_bos";
+				$db_conn->where ('id', sterilize($_POST['id'.$score_id]));
+				$result = $db_conn->delete ($update_table);
+				if (!$result) {
+					$error_output[] = $db_conn->getLastError();
+					$errors = TRUE;
+				}
 
-			}
+			} // end if ((empty($_POST['scorePlace'.$score_id])) && ($_POST['scorePrevious'.$score_id] == "Y"))
 
-			//echo $sql."<br>";
+		} // end foreach
 
-		}
+		if (!empty($error_output)) $_SESSION['error_output'] = $error_output;
 
-		//exit;
-
-		$pattern = array('\'', '"');
-		$updateGoTo = str_replace($pattern, "", $updateGoTo);
-		$redirect_go_to = sprintf("Location: %s", stripslashes($updateGoTo));
+		if ($errors) $updateGoTo = $_POST['relocate']."&msg=3";
+		$updateGoTo = prep_redirect_link($updateGoTo);
+		$redirect_go_to = sprintf("Location: %s", $updateGoTo);
 
 	} // end if ($action == "enter")
 
 } else {
-	$redirect_go_to = sprintf("Location: %s", $base_url."index.php?msg=98");
+	
+	$redirect = $base_url."index.php?msg=98";
+	$redirect = prep_redirect_link($redirect);
+	$redirect_go_to = sprintf("Location: %s", $redirect);
+
 }
 ?>

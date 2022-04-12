@@ -99,7 +99,7 @@ INSERT INTO `baseline_bcoem_sys` (`id`, `version`, `version_date`, `data_check`,
 DROP TABLE IF EXISTS `baseline_brewer`;
 CREATE TABLE `baseline_brewer` (
   `id` int(11) NOT NULL,
-  `uid` int(8) DEFAULT NULL,
+  `uid` int(8) COMMENT 'ID of entrant from users table' DEFAULT NULL,
   `brewerFirstName` varchar(200) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `brewerLastName` varchar(200) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `brewerAddress` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
@@ -485,7 +485,7 @@ CREATE TABLE `baseline_brewing` (
   `brewComments` mediumtext COLLATE utf8mb4_unicode_ci,
   `brewFinings` mediumtext COLLATE utf8mb4_unicode_ci,
   `brewWaterNotes` mediumtext COLLATE utf8mb4_unicode_ci,
-  `brewBrewerID` varchar(8) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `brewBrewerID` varchar(8) COLLATE utf8mb4_unicode_ci COMMENT 'id from brewer table' DEFAULT NULL,
   `brewCarbonationMethod` char(1) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `brewCarbonationVol` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `brewCarbonationNotes` mediumtext COLLATE utf8mb4_unicode_ci,
@@ -655,7 +655,7 @@ CREATE TABLE `baseline_evaluation` (
   `evalFlaws` mediumtext COLLATE utf8mb4_unicode_ci,
   `evalInitialDate` int(12) DEFAULT NULL COMMENT 'UNIX timestamp of initial submit',
   `evalUpdatedDate` int(12) DEFAULT NULL COMMENT 'UNIX timestamp of edited submit',
-  `evalTable` smallint(5) DEFAULT NULL COMMENT 'ID of table from tables table',
+  `evalTable` smallint(5) DEFAULT NULL COMMENT 'ID of table from judging_tables table',
   `evalFinalScore` smallint(5) DEFAULT NULL COMMENT 'final, agreed upon score',
   `evalMiniBOS` tinyint(1) DEFAULT NULL COMMENT '0=no; 1=yes',
   `evalPosition` varchar(15) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'Position in flight - separated by comma',
@@ -690,7 +690,7 @@ CREATE TABLE `baseline_judging_assignments` (
 DROP TABLE IF EXISTS `baseline_judging_flights`;
 CREATE TABLE `baseline_judging_flights` (
   `id` int(11) NOT NULL,
-  `flightTable` int(11) DEFAULT NULL COMMENT 'id of Table from tables',
+  `flightTable` int(11) DEFAULT NULL COMMENT 'ID of table from judging_tables table',
   `flightNumber` int(11) DEFAULT NULL,
   `flightEntryID` mediumtext COLLATE utf8mb4_unicode_ci COMMENT 'array of ids of each entry from the brewing table',
   `flightRound` int(11) DEFAULT NULL,
@@ -959,7 +959,7 @@ CREATE TABLE `baseline_sponsors` (
 DROP TABLE IF EXISTS `baseline_staff`;
 CREATE TABLE `baseline_staff` (
   `id` int(11) NOT NULL,
-  `uid` int(11) DEFAULT NULL COMMENT 'user''s id from user table',
+  `uid` int(11) DEFAULT NULL COMMENT 'ID of entrant from users table',
   `staff_judge` int(2) DEFAULT '0' COMMENT '0=no; 1=yes',
   `staff_judge_bos` int(2) DEFAULT '0' COMMENT '0=no; 1=yes',
   `staff_steward` int(2) DEFAULT '0' COMMENT '0=no; 1=yes',

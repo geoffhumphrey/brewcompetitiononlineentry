@@ -5,15 +5,21 @@
  */
 if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1))) {
 
+	$errors = FALSE;
+	$error_output = array();
+	$_SESSION['error_output'] = "";
+
 	// Instantiate HTMLPurifier
 	require (CLASSES.'htmlpurifier/HTMLPurifier.standalone.php');
 	$config_html_purifier = HTMLPurifier_Config::createDefault();
 	$purifier = new HTMLPurifier($config_html_purifier);
 
+	$styleTypeName = "";
+
 	if (isset($_POST['styleTypeName'])) {
 		$styleTypeName = $purifier->purify($_POST['styleTypeName']);
 		$styleTypeName = capitalize($styleTypeName);
-		$styleTypeName = filter_var($styleTypeName,FILTER_SANITIZE_STRING);
+		$styleTypeName = sterilize($styleTypeName,);
 	}
 		
 	if ($action == "add") {
@@ -27,27 +33,25 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 		if ($row_id_last_num['id'] < 16) $id = 16;
 		else $id = $row_id_last_num['id'] + 1;
 
-		$insertSQL = sprintf("INSERT INTO $style_types_db_table (
-		id,
-		styleTypeName,
-		styleTypeOwn,
-		styleTypeBOS,
-		styleTypeBOSMethod
-		)
-		VALUES
-		(%s, %s, %s, %s, %s)",
-						   GetSQLValueString($id, "int"),
-						   GetSQLValueString($styleTypeName, "text"),
-						   GetSQLValueString(sterilize($_POST['styleTypeOwn']), "text"),
-						   GetSQLValueString(sterilize($_POST['styleTypeBOS']), "text"),
-						   GetSQLValueString(sterilize($_POST['styleTypeBOSMethod']), "text"));
+		$update_table = $prefix."style_types";
+		$data = array(
+			'id' => $id,
+			'styleTypeName' => $styleTypeName,
+			'styleTypeOwn' => sterilize($_POST['styleTypeOwn']),
+			'styleTypeBOS' => sterilize($_POST['styleTypeBOS']),
+			'styleTypeBOSMethod' => sterilize($_POST['styleTypeBOSMethod'])
+		);
+		$result = $db_conn->insert ($update_table, $data);
+		if (!$result) {
+			$error_output[] = $db_conn->getLastError();
+			$errors = TRUE;
+		}
 
-		mysqli_real_escape_string($connection,$insertSQL);
-		$result = mysqli_query($connection,$insertSQL) or die (mysqli_error($connection));
+		if (!empty($error_output)) $_SESSION['error_output'] = $error_output;
 
-		$pattern = array('\'', '"');
-		$insertGoTo = str_replace($pattern, "", $insertGoTo);
-		$redirect_go_to = sprintf("Location: %s", stripslashes($insertGoTo));
+		if ($errors) $insertGoTo = $_POST['relocate']."&msg=3";
+		$insertGoTo = prep_redirect_link($insertGoTo);
+		$redirect_go_to = sprintf("Location: %s", $insertGoTo);
 
 	}
 
@@ -55,22 +59,44 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 
 		if ($go == "combine") {
 
-			$updateSQL = "UPDATE $style_types_db_table SET styleTypeBOS='Y' WHERE styleTypeName='Mead/Cider'";
-			mysqli_real_escape_string($connection,$updateSQL);
-			$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+			$update_table = $prefix."style_types";
 
-			$updateSQL = "UPDATE $style_types_db_table SET styleTypeBOS='N' WHERE id='2'";
-			mysqli_real_escape_string($connection,$updateSQL);
-			$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+			// Activate Mead/Cider style type
+			$data = array('styleTypeBOS' => 'Y');
+			$db_conn->where ('styleTypeName', 'Mead/Cider');
+			$result = $db_conn->update ($update_table, $data);
+			if (!$result) {
+				$error_output[] = $db_conn->getLastError();
+				$errors = TRUE;
+			}
 
-			$updateSQL = "UPDATE $style_types_db_table SET styleTypeBOS='N' WHERE id='3'";
-			mysqli_real_escape_string($connection,$updateSQL);
-			$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+			// Deactivate Cider
+			$data = array('styleTypeBOS' => 'N');
+			$db_conn->where ('id', 2);
+			$result = $db_conn->update ($update_table, $data);
+			if (!$result) {
+				$error_output[] = $db_conn->getLastError();
+				$errors = TRUE;
+			}
+
+			// Deactivate Mead
+			$data = array('styleTypeBOS' => 'N');
+			$db_conn->where ('id', 3);
+			$result = $db_conn->update ($update_table, $data);
+			if (!$result) {
+				$error_output[] = $db_conn->getLastError();
+				$errors = TRUE;
+			}
 
 			// Delete any BOS score entries with Mead or Cider ids; failsafe
-			$updateSQL = "DELETE FROM $judging_scores_bos_db_table WHERE scoreType='2' OR scoreType='3'";
-			mysqli_real_escape_string($connection,$updateSQL);
-			$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+			$update_table = $prefix."judging_scores_bos";
+			$db_conn->where ('scoreType', 2);
+			$db_conn->orWhere ('scoreType', 3);
+			$result = $db_conn->delete ($update_table);
+			if (!$result) {
+				$error_output[] = $db_conn->getLastError();
+				$errors = TRUE;
+			}
 
 			$updateGoTo = $base_url."index.php?section=admin&go=style_types&msg=2";
 
@@ -78,56 +104,83 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 
 		elseif ($go == "separate") {
 
-			$updateSQL = "UPDATE $style_types_db_table SET styleTypeBOS='N' WHERE styleTypeName='Mead/Cider'";
-			mysqli_real_escape_string($connection,$updateSQL);
-			$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+			$update_table = $prefix."style_types";
 
-			$updateSQL = "UPDATE $style_types_db_table SET styleTypeBOS='Y' WHERE id='2'";
-			mysqli_real_escape_string($connection,$updateSQL);
-			$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+			// Activate Mead/Cider style type
+			$data = array('styleTypeBOS' => 'N');
+			$db_conn->where ('styleTypeName', 'Mead/Cider');
+			$result = $db_conn->update ($update_table, $data);
+			if (!$result) {
+				$error_output[] = $db_conn->getLastError();
+				$errors = TRUE;
+			}
 
-			$updateSQL = "UPDATE $style_types_db_table SET styleTypeBOS='Y' WHERE id='3'";
-			mysqli_real_escape_string($connection,$updateSQL);
-			$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+			// Deactivate Cider
+			$data = array('styleTypeBOS' => 'Y');
+			$db_conn->where ('id', 2);
+			$result = $db_conn->update ($update_table, $data);
+			if (!$result) {
+				$error_output[] = $db_conn->getLastError();
+				$errors = TRUE;
+			}
+
+			// Deactivate Mead
+			$data = array('styleTypeBOS' => 'Y');
+			$db_conn->where ('id', 3);
+			$result = $db_conn->update ($update_table, $data);
+			if (!$result) {
+				$error_output[] = $db_conn->getLastError();
+				$errors = TRUE;
+			}
 
 			// Delete any BOS score entries with Mead/Cider id; failsafe
 			$query_mead_cider_present = sprintf("SELECT id FROM %s WHERE styleTypeName = 'Mead/Cider'",$prefix."style_types");
 			$mead_cider_present = mysqli_query($connection,$query_mead_cider_present) or die (mysqli_error($connection));
 			$row_mead_cider_present = mysqli_fetch_assoc($mead_cider_present);
 
-			$updateSQL = sprintf("DELETE FROM $judging_scores_bos_db_table WHERE scoreType='%s'",$row_mead_cider_present['id']);
-			mysqli_real_escape_string($connection,$updateSQL);
-			$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+			$update_table = $prefix."judging_scores_bos";
+			$db_conn->where ('scoreType', $row_mead_cider_present['id']);
+			$result = $db_conn->delete ($update_table);
+			if (!$result) {
+				$error_output[] = $db_conn->getLastError();
+				$errors = TRUE;
+			}
 
 			$updateGoTo = $base_url."index.php?section=admin&go=style_types&msg=2";
 
 		}
 
 		else {
-			$updateSQL = sprintf("UPDATE $style_types_db_table SET
-			styleTypeName=%s,
-			styleTypeOwn=%s,
-			styleTypeBOS=%s,
-			styleTypeBOSMethod=%s
-			WHERE id=%s",
-							   GetSQLValueString($styleTypeName, "text"),
-							   GetSQLValueString(sterilize($_POST['styleTypeOwn']), "text"),
-							   GetSQLValueString(sterilize($_POST['styleTypeBOS']), "text"),
-							   GetSQLValueString(sterilize($_POST['styleTypeBOSMethod']), "text"),
-							   GetSQLValueString($id, "int"));
 
-			mysqli_real_escape_string($connection,$updateSQL);
-			$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+			$update_table = $prefix."style_types";
+			$data = array(
+				'styleTypeName' => $styleTypeName,
+				'styleTypeOwn' => sterilize($_POST['styleTypeOwn']),
+				'styleTypeBOS' => sterilize($_POST['styleTypeBOS']),
+				'styleTypeBOSMethod' => sterilize($_POST['styleTypeBOSMethod'])
+			);
+			$db_conn->where ('id', $id);
+			$result = $db_conn->update ($update_table, $data);
+			if (!$result) {
+				$error_output[] = $db_conn->getLastError();
+				$errors = TRUE;
+			}
 
 		}
 
-		$pattern = array('\'', '"');
-		$updateGoTo = str_replace($pattern, "", $updateGoTo);
-		$redirect_go_to = sprintf("Location: %s", stripslashes($updateGoTo));
+		if (!empty($error_output)) $_SESSION['error_output'] = $error_output;
+
+		if ($errors) $updateGoTo = $_POST['relocate']."&msg=3";
+		$updateGoTo = prep_redirect_link($updateGoTo);
+		$redirect_go_to = sprintf("Location: %s", $updateGoTo);
 
 	}
 
 } else {
-	$redirect_go_to = sprintf("Location: %s", $base_url."index.php?msg=98");
+	
+	$redirect = $base_url."index.php?msg=98";
+	$redirect = prep_redirect_link($redirect);
+	$redirect_go_to = sprintf("Location: %s", $redirect);
+
 }
 ?>

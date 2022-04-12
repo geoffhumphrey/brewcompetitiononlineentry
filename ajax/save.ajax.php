@@ -1,10 +1,12 @@
 <?php
 ob_start();
-ini_set('display_errors', 0); // Change to 0 for prod.
-ini_set('display_startup_errors', 0); // Change to 0 for prod.
-error_reporting(0); // Change to error_reporting(0) for prod.
+
 require('../paths.php');
 require(CONFIG.'bootstrap.php');
+
+ini_set('display_errors', 0); // Change to 0 for prod; change to 1 for testing.
+ini_set('display_startup_errors', 0); // Change to 0 for prod; change to 1 for testing.
+error_reporting(0); // Change to error_reporting(0) for prod; change to E_ALL for testing.
 
 /**
  * The action variable cooresponds to a table in the DB.
@@ -44,19 +46,17 @@ if (($session_active) && ($_SESSION['userLevel'] <= 2)) {
 			$input = filter_var($_POST['evalPlace'],FILTER_SANITIZE_STRING);
 		}
 
-		if (empty($input)) {
-			$sql = sprintf("UPDATE `%s` SET %s=NULL WHERE eid=%s", $prefix.$action, $go, $id);
-		}
+		$update_table = $prefix.$action;
 
+		if (empty($input)) $data = array($go => NULL);
 		else {
-			if ($input == "0") $sql = sprintf("UPDATE `%s` SET %s=NULL WHERE eid='%s'", $prefix.$action, $go, $id);
-			else $sql = sprintf("UPDATE `%s` SET %s='%s' WHERE eid='%s'", $prefix.$action, $go, $input, $id);
+			if ($input == "0") $data = array($go => NULL);			
+			else $data = array($go => $input);
 		}
-
-		mysqli_real_escape_string($connection,$sql);
-		$result = mysqli_query($connection,$sql) or die (mysqli_error($connection));
 
 		// If successful, change $status from fail (0) to success (1)
+		$db_conn->where ('eid', $id);
+		$result = $db_conn->update ($update_table, $data);
 		if ($result) $status = 1;
 		else $error_type = 3; // SQL error
 
@@ -66,7 +66,6 @@ if (($session_active) && ($_SESSION['userLevel'] <= 2)) {
 
 if (($session_active) && ($_SESSION['userLevel'] <= 1)) {
 
-	// brewing (entries) DB table
 	if ($action == "brewing") {
 		
 		$eid = $id;
@@ -99,25 +98,44 @@ if (($session_active) && ($_SESSION['userLevel'] <= 1)) {
 		}
 
 		if (empty($input)) {
-			if ($rid2 == "text-col") $sql = sprintf("UPDATE `%s` SET %s='' WHERE id=%s", $prefix.$action, $go, $id);
-			else $sql = sprintf("UPDATE `%s` SET %s=NULL WHERE id=%s", $prefix."brewing", $go, $id);
+
+			if ($rid2 == "text-col") {
+				$data = array($go => '');
+				$update_table = $prefix.$action;
+			}
+
+			else {
+				$data = array($go => NULL);
+				$update_table = $prefix."brewing";
+			}
+
 		}
 
 		else {
-			if ($input == "0") $sql = sprintf("UPDATE `%s` SET %s=NULL WHERE id=%s", $prefix.$action, $go, $id);
-			else $sql = sprintf("UPDATE `%s` SET %s='%s' WHERE id=%s", $prefix."brewing", $go, $input, $id);
+
+			if ($input == "0") {
+				$data = array($go => NULL);
+				$update_table = $prefix.$action;
+			}
+
+			else {
+				$data = array($go => $input);
+				$update_table = $prefix."brewing";
+			}
+
 		}
 
-		mysqli_real_escape_string($connection,$sql);
-		$result = mysqli_query($connection,$sql) or die (mysqli_error($connection));
-		
 		// If successful, change $status from fail (0) to success (1)
+		$db_conn->where ('id', $id);
+		$result = $db_conn->update ($update_table, $data);
 		if ($result) $status = 1;
 		else $error_type = 3; // SQL error
 
 	} // END if ($action == "brewing")
 
 	if ($action == "sponsors") {
+
+		$update_table = $prefix.$action;
 
 		if ($go == "sponsorEnable") {
 			$input = filter_var($_POST['sponsorEnable'],FILTER_SANITIZE_NUMBER_FLOAT);
@@ -136,19 +154,18 @@ if (($session_active) && ($_SESSION['userLevel'] <= 1)) {
 		}
 
 		if (empty($input)) {
-			if ($rid2 == "text-col") $sql = sprintf("UPDATE `%s` SET %s='' WHERE id=%s", $prefix.$action, $go, $id);
-			else $sql = sprintf("UPDATE `%s` SET %s=NULL WHERE id=%s", $prefix.$action, $go, $id);
+			if ($rid2 == "text-col")  $data = array($go => '');
+			else $data = array($go => NULL);
 		}
 
 		else {
-			if ($input == "0") $sql = sprintf("UPDATE `%s` SET %s=NULL WHERE id=%s", $prefix.$action, $go, $id);
-			else $sql = sprintf("UPDATE `%s` SET %s='%s' WHERE id=%s", $prefix.$action, $go, $input, $id);
+			if ($input == "0") $data = array($go => NULL); 
+			else $data = array($go => $input);
 		}
 
-		mysqli_real_escape_string($connection,$sql);
-		$result = mysqli_query($connection,$sql) or die (mysqli_error($connection));
-		
 		// If successful, change $status from fail (0) to success (1)
+		$db_conn->where ('id', $id);
+		$result = $db_conn->update ($update_table, $data);
 		if ($result) $status = 1;
 		else $error_type = 3; // SQL error
 		
@@ -161,9 +178,9 @@ if (($session_active) && ($_SESSION['userLevel'] <= 1)) {
 		$bid = "";
 		$scoreTable = "";
 		$scoreType = "";
-		$scoreEntry = "NULL";
-		$scorePlace = "NULL";
-		$scoreMiniBOS = "NULL";
+		$scoreEntry = NULL;
+		$scorePlace = NULL;
+		$scoreMiniBOS = NULL;
 		
 		if ($rid1 != "default") $bid = $rid1;
 		if ($rid2 != "default") $scoreTable = $rid2;
@@ -181,7 +198,7 @@ if (($session_active) && ($_SESSION['userLevel'] <= 1)) {
 			$input = filter_var($post,FILTER_SANITIZE_NUMBER_FLOAT,FILTER_FLAG_ALLOW_FRACTION);
 
 			// However, if that number is actually zero, make the value null instead for storage in DB
-			if ($input == 0) $input = "NULL";
+			if ($input == 0) $input = NULL;
 			
 			// First, query if there is a record with the eid
 			$query_already_scored = sprintf("SELECT * FROM %s WHERE eid=%s", $prefix.$action, $eid);
@@ -189,75 +206,69 @@ if (($session_active) && ($_SESSION['userLevel'] <= 1)) {
 			$row_already_scored = mysqli_fetch_assoc($already_scored);
 			$totalRows_already_scored = mysqli_num_rows($already_scored);
 
-			// If so, and only one is present, create update query (only update the column specified).
-			if ($totalRows_already_scored == 1) {
-				$process = TRUE;
-				$sql = sprintf("UPDATE %s SET %s=%s WHERE id=%s", $prefix.$action, $go, $input, $row_already_scored['id']);
-			}
+			if ($totalRows_already_scored == 1) {				
+				
+				$update_table = $prefix.$action;
+				$data = array($go => $input);
+				$db_conn->where ('id', $row_already_scored['id']);
+				$result = $db_conn->update ($update_table, $data);
+				if ($result) $status = 1;
+				else $error_type = 3; // SQL error
 
-			// If no record, create an insert query
+			} // END if ($totalRows_already_scored == 1)
+
 			else if ($totalRows_already_scored == 0) {
 
 				if (($action == "judging_scores") && ($rid1 != "default") && ($rid2 != "default") && ($rid3 != "default")) $process = TRUE;
 				if (($action == "judging_scores_bos") && ($rid1 != "default") && ($rid3 != "default")) $process = TRUE;
+				
 				if ($go == "scoreEntry") $scoreEntry = $input;	
 				if ($go == "scorePlace") $scorePlace = $input;		
 				if ($go == "scoreMiniBOS") $scoreMiniBOS = $input;
-				
+
+				$update_table = $prefix.$action;
+
 				if ($action == "judging_scores") {
-					$sql = sprintf("INSERT INTO %s (eid, bid, scoreTable, scoreEntry, scorePlace, scoreType, scoreMiniBOS)", $prefix.$action);
-					$sql .= sprintf(" VALUES (%s, %s, %s, %s, %s, %s, %s)", $eid, $bid, $scoreTable, $scoreEntry, $scorePlace, $scoreType, $scoreMiniBOS);
-				}
 
-				if ($action == "judging_scores_bos") {
-					$sql = sprintf("INSERT INTO %s (eid, bid, scoreEntry, scorePlace, scoreType)", $prefix.$action);
-					$sql .= sprintf(" VALUES (%s, %s, %s, %s, %s)", $eid, $bid, $scoreEntry, $scorePlace, $scoreType);
-				}
-			
-			}
-			
-			// If more than one in the DB, perform some functions
-			else {
-
-				if (($rid1 != "default") && ($rid2 != "default") && ($rid3 != "default")) $process = TRUE;
-
-				/*
-				$retain_arr = array();
-
-				do {
-					
-					$retain_arr[] = array(
-						"eid" => $row_already_scored['eid'],
-						"bid" => $row_already_scored['bid'],
-						"scoreTable" => $row_already_scored['scoreTable'],
-						"scoreEntry" => $row_already_scored['scoreEntry'],
-						"scorePlace" => $row_already_scored['scorePlace'],
-						"scoreMiniBOS" => $row_already_scored['scoreMiniBOS']
+					$data = array(
+						'eid' => $eid,
+						'bid' => $bid,
+						'scoreTable' => $scoreTable,
+						'scoreEntry' => $scoreEntry,
+						'scorePlace' => $scorePlace,
+						'scoreType' => $scoreType,
+						'scoreMiniBOS' => $scoreMiniBOS
 					);
 
-					$deleteSQL = sprintf("DELETE FROM %s WHERE id='%s'", $prefix."judging_scores", $row_delete_assign['id']);
-					mysqli_real_escape_string($connection,$deleteSQL);
-					$result = mysqli_query($connection,$deleteSQL) or die (mysqli_error($connection));
-				
-				} 
+					if ($process) {
+						$result = $db_conn->insert ($update_table, $data);
+						if ($result) $status = 1;
+					}
+					
+					else $error_type = 3; // SQL error
 
-				while ($row_already_scored = mysqli_fetch_assoc($already_scored));
+				} // END if ($action == "judging_scores")
 
-				*/
+				if ($action == "judging_scores_bos") {
 
-			}
+					$data = array(
+						'eid' => $eid,
+						'bid' => $bid,
+						'scoreEntry' => $scoreEntry,
+						'scorePlace' => $scorePlace,
+						'scoreType' => $scoreType
+					);
 
-			// Finally, submit the query if all conditions to process are met
-			if ($process) {
-				mysqli_real_escape_string($connection,$sql);
-				$result = mysqli_query($connection,$sql) or die (mysqli_error($connection));
-				// If successful, change $status from fail (0) to success (1)
-				if ($result) $status = 1;
-			}
+					if ($process) {
+						$result = $db_conn->insert ($update_table, $data);
+						if ($result) $status = 1;
+					}
 
-			else {
-				$error_type = 3; // SQL error
-			}
+					else $error_type = 3; // SQL error
+
+				} // END if ($action == "judging_scores_bos")
+
+			} // END else if ($totalRows_already_scored == 0)
 
 		} // END if (is_numeric($post))
 
@@ -265,12 +276,11 @@ if (($session_active) && ($_SESSION['userLevel'] <= 1)) {
 			$error_type = 1;
 		}
 
-	} // END if ($action == "scores")
+	} // END if (($action == "judging_scores") || ($action == "judging_scores_bos"))
 
-} 
+} // END if (($session_active) && ($_SESSION['userLevel'] <= 1))
 
-
-if (!$session_active) $status = 9; // Session expired, not enabled, etc.
+else $status = 9; // Session expired, not enabled, etc.
 
 $return_json = array(
 	"status" => "$status",
@@ -280,8 +290,8 @@ $return_json = array(
 	"error_type" => "$error_type"
 );
 
-// Return the json
 echo json_encode($return_json);
+mysqli_close($connection);
 
 /**  
  * The following is unfinished. Need more

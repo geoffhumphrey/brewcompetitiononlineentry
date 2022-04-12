@@ -7,6 +7,15 @@
 
 if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) || ($section == "setup"))) {
 
+	$errors = FALSE;
+	$error_output = array();
+	$_SESSION['error_output'] = "";
+	
+	// Instantiate HTMLPurifier
+	require (CLASSES.'htmlpurifier/HTMLPurifier.standalone.php');
+	$config_html_purifier = HTMLPurifier_Config::createDefault();
+	$purifier = new HTMLPurifier($config_html_purifier);
+
 	// Sanity check for prefs
 	if ($section == "setup") {
 		$query_prefs = sprintf("SELECT * FROM %s WHERE id='1'", $prefix."preferences");
@@ -17,583 +26,398 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 		if ($totalRows_prefs < 1) $action = "add";
 	}
 
+	$style_alert = FALSE;
+
 	$prefsGoogleAccount = "";
+	$prefsUSCLEx = "";
+	$prefsBestBrewerTitle = "";
+	$prefsBestClubTitle = "";
+
 	if ((isset($_POST['prefsGoogleAccount0'])) && (isset($_POST['prefsGoogleAccount1']))) $prefsGoogleAccount = $_POST['prefsGoogleAccount0']."|".$_POST['prefsGoogleAccount1'];
 
 	if (isset($_POST['prefsUSCLEx'])) $prefsUSCLEx = implode(",",$_POST['prefsUSCLEx']);
-	else  $prefsUSCLEx = "";
 
 	if (HOSTED) $prefsCAPTCHA = 1;
 	else $prefsCAPTCHA = $_POST['prefsCAPTCHA'];
 
-	$prefsStyleSet = "";
-	$style_alert = FALSE;
-
-	$prefsStyleSet = sterilize($_POST['prefsStyleSet']);
-
 	if (!empty($_POST['prefsWinnerDelay'])) $prefsWinnerDelay = strtotime(sterilize($_POST['prefsWinnerDelay']));
 	else $prefsWinnerDelay = 2145916800;
 
-	if ($action == "add") {
-		$insertSQL = sprintf("INSERT INTO $preferences_db_table (
-		prefsTemp,
-		prefsWeight1,
-		prefsWeight2,
-		prefsLiquid1,
-		prefsLiquid2,
+	if (!empty($_POST['prefsBestBrewerTitle'])) {
+		$prefsBestBrewerTitle = $purifier->purify($_POST['prefsBestBrewerTitle']);
+		$prefsBestBrewerTitle = sterilize($prefsBestBrewerTitle);
+	}
 
-		prefsPaypal,
-		prefsPaypalAccount,
-		prefsCurrency,
-		prefsCash,
-		prefsCheck,
-
-		prefsCheckPayee,
-		prefsTransFee,
-		prefsSponsors,
-		prefsSponsorLogos,
-		prefsDisplayWinners,
-
-		prefsWinnerDelay,
-		prefsWinnerMethod,
-		prefsEntryForm,
-		prefsRecordLimit,
-		prefsRecordPaging,
-
-		prefsTheme,
-		prefsDateFormat,
-		prefsContact,
-		prefsTimeZone,
-		prefsEntryLimit,
-
-		prefsTimeFormat,
-		prefsUserEntryLimit,
-		prefsUserSubCatLimit,
-		prefsUSCLEx,
-		prefsUSCLExLimit,
-
-		prefsPayToPrint,
-		prefsHideRecipe,
-		prefsUseMods,
-		prefsSEF,
-		prefsSpecialCharLimit,
-
-		prefsStyleSet,
-		prefsAutoPurge,
-		prefsEntryLimitPaid,
-		prefsEmailRegConfirm,
-		prefsSpecific,
-
-		prefsDropOff,
-		prefsShipping,
-		prefsPaypalIPN,
-		prefsProEdition,
-		prefsDisplaySpecial,
-
-		prefsShowBestBrewer,
-		prefsBestBrewerTitle,
-		prefsShowBestClub,
-		prefsBestClubTitle,
-		prefsFirstPlacePts,
-
-		prefsSecondPlacePts,
-		prefsThirdPlacePts,
-		prefsFourthPlacePts,
-		prefsHMPts,
-		prefsTieBreakRule1,
-
-		prefsTieBreakRule2,
-		prefsTieBreakRule3,
-		prefsTieBreakRule4,
-		prefsTieBreakRule5,
-		prefsTieBreakRule6,
-
-		prefsCAPTCHA,
-		prefsGoogleAccount,
-		prefsBestUseBOS,
-		prefsLanguage,
-		prefsEmailCC,
+	if (!empty($_POST['prefsBestClubTitle'])) {
+		$prefsBestClubTitle = $purifier->purify($_POST['prefsBestClubTitle']);
+		$prefsBestClubTitle = sterilize($prefsBestClubTitle);
+	}
 		
-		prefsEval,
-		id
+	$update_table = $prefix."preferences";
 
-		) VALUES (
-		%s, %s, %s, %s, %s,
-		%s, %s, %s, %s, %s,
-		%s, %s, %s, %s, %s,
-		%s, %s, %s, %s, %s,
-		%s, %s, %s, %s, %s,
-		%s, %s, %s, %s, %s,
-		%s, %s, %s, %s, %s,
-		%s, %s, %s, %s, %s,
-		%s, %s, %s, %s, %s,
-		%s, %s, %s, %s, %s,
-		%s, %s, %s, %s, %s,
-		%s, %s, %s, %s, %s,
-		%s, %s, %s, %s, %s,
-		%s, %s)",
+	$data = array(
+		'prefsTemp' => sterilize($_POST['prefsTemp']),
+		'prefsWeight1' => sterilize($_POST['prefsWeight1']),
+		'prefsWeight2' => sterilize($_POST['prefsWeight2']),
+		'prefsLiquid1' => sterilize($_POST['prefsLiquid1']),
+		'prefsLiquid2' => sterilize($_POST['prefsLiquid2']),
+		'prefsPaypal' => sterilize($_POST['prefsPaypal']),
+		'prefsPaypalAccount' => sterilize($_POST['prefsPaypalAccount']),
+		'prefsPaypalIPN' => sterilize($_POST['prefsPaypalIPN']),
+		'prefsCurrency' => sterilize($_POST['prefsCurrency']),
+		'prefsCash' => sterilize($_POST['prefsCash']),
+		'prefsCheck' => sterilize($_POST['prefsCheck']),
+		'prefsCheckPayee' => sterilize($_POST['prefsCheckPayee']),
+		'prefsTransFee' => sterilize($_POST['prefsTransFee']),
+		'prefsCAPTCHA' => $prefsCAPTCHA,
+		'prefsGoogleAccount' => $prefsGoogleAccount,
+		'prefsSponsors' => sterilize($_POST['prefsSponsors']),
+		'prefsSponsorLogos' => sterilize($_POST['prefsSponsorLogos']),
+		'prefsSponsorLogoSize' => sterilize($_POST['prefsSponsorLogoSize']),
+		'prefsCompLogoSize' => sterilize($_POST['prefsCompLogoSize']),
+		'prefsDisplayWinners' => sterilize($_POST['prefsDisplayWinners']),
+		'prefsWinnerDelay' => $prefsWinnerDelay,
+		'prefsWinnerMethod' => sterilize($_POST['prefsWinnerMethod']),
+		'prefsDisplaySpecial' => sterilize($_POST['prefsDisplaySpecial']),
+		'prefsBOSMead' => sterilize($_POST['prefsBOSMead']),
+		'prefsBOSCider' => sterilize($_POST['prefsBOSCider']),
+		'prefsShowBestBrewer' => sterilize($_POST['prefsShowBestBrewer']),
+		'prefsBestBrewerTitle' => $prefsBestBrewerTitle,
+		'prefsShowBestClub' => sterilize($_POST['prefsShowBestClub']),
+		'prefsBestClubTitle' => $prefsBestClubTitle,
+		'prefsFirstPlacePts' => sterilize($_POST['prefsFirstPlacePts']),
+		'prefsSecondPlacePts' => sterilize($_POST['prefsSecondPlacePts']),
+		'prefsThirdPlacePts' => sterilize($_POST['prefsThirdPlacePts']),
+		'prefsFourthPlacePts' => sterilize($_POST['prefsFourthPlacePts']),
+		'prefsHMPts' => sterilize($_POST['prefsHMPts']),
+		'prefsTieBreakRule1' => sterilize($_POST['prefsTieBreakRule1']),
+		'prefsTieBreakRule2' => sterilize($_POST['prefsTieBreakRule2']),
+		'prefsTieBreakRule3' => sterilize($_POST['prefsTieBreakRule3']),
+		'prefsTieBreakRule4' => sterilize($_POST['prefsTieBreakRule4']),
+		'prefsTieBreakRule5' => sterilize($_POST['prefsTieBreakRule5']),
+		'prefsTieBreakRule6' => sterilize($_POST['prefsTieBreakRule6']),
+		'prefsEntryForm' => sterilize($_POST['prefsEntryForm']),
+		'prefsRecordLimit' => sterilize($_POST['prefsRecordLimit']),
+		'prefsRecordPaging' => sterilize($_POST['prefsRecordPaging']),
+		'prefsProEdition' => sterilize($_POST['prefsProEdition']),
+		'prefsTheme' => sterilize($_POST['prefsTheme']),
+		'prefsDateFormat' => sterilize($_POST['prefsDateFormat']),
+		'prefsContact' => sterilize($_POST['prefsContact']),
+		'prefsTimeZone' => sterilize($_POST['prefsTimeZone']),
+		'prefsEntryLimit' => sterilize($_POST['prefsEntryLimit']),
+		'prefsTimeFormat' => sterilize($_POST['prefsTimeFormat']),
+		'prefsUserEntryLimit' => sterilize($_POST['prefsUserEntryLimit']),
+		'prefsUserSubCatLimit' => sterilize($_POST['prefsUserSubCatLimit']),
+		'prefsUSCLEx' => $prefsUSCLEx,
+		'prefsUSCLExLimit' => sterilize($_POST['prefsUSCLExLimit']),
+		'prefsPayToPrint' => sterilize($_POST['prefsPayToPrint']),
+		'prefsHideRecipe' => 'Y',
+		'prefsUseMods' => sterilize($_POST['prefsUseMods']),
+		'prefsSEF' => sterilize($_POST['prefsSEF']),
+		'prefsSpecialCharLimit' => sterilize($_POST['prefsSpecialCharLimit']),
+		'prefsStyleSet' => sterilize($_POST['prefsStyleSet']),
+		'prefsAutoPurge' => sterilize($_POST['prefsAutoPurge']),
+		'prefsEntryLimitPaid' => sterilize($_POST['prefsEntryLimitPaid']),
+		'prefsEmailRegConfirm' => sterilize($_POST['prefsEmailRegConfirm']),
+		'prefsEmailCC' => sterilize($_POST['prefsEmailCC']),
+		'prefsLanguage' => sterilize($_POST['prefsLanguage']),
+		'prefsSpecific' => sterilize($_POST['prefsSpecific']),
+		'prefsDropOff' => sterilize($_POST['prefsDropOff']),
+		'prefsShipping' => sterilize($_POST['prefsShipping']),
+		'prefsBestUseBOS' => sterilize($_POST['prefsBestUseBOS']),
+		'prefsEval' => sterilize($_POST['prefsEval'])
+	);
 
-			GetSQLValueString(sterilize($_POST['prefsTemp']), "text"),
-			GetSQLValueString(sterilize($_POST['prefsWeight1']), "text"),
-			GetSQLValueString(sterilize($_POST['prefsWeight2']), "text"),
-			GetSQLValueString(sterilize($_POST['prefsLiquid1']), "text"),
-			GetSQLValueString(sterilize($_POST['prefsLiquid2']), "text"),
+	if ($action == "add") {
 
-			GetSQLValueString(sterilize($_POST['prefsPaypal']), "text"),
-			GetSQLValueString(sterilize($_POST['prefsPaypalAccount']), "text"),
-			GetSQLValueString(sterilize($_POST['prefsCurrency']), "text"),
-			GetSQLValueString(sterilize($_POST['prefsCash']), "text"),
-			GetSQLValueString(sterilize($_POST['prefsCheck']), "text"),
+		$result = $db_conn->insert ($update_table, $data);
+		if (!$result) {
+			$error_output[] = $db_conn->getLastError();
+			$errors = TRUE;
+		}
 
-			GetSQLValueString(sterilize($_POST['prefsCheckPayee']), "text"),
-			GetSQLValueString(sterilize($_POST['prefsTransFee']), "text"),
-			GetSQLValueString(sterilize($_POST['prefsSponsors']), "text"),
+		// Update style set of any custom styles to chosen style set
+		// Safeguards against a bug introduced in 2.1.13 scripting
+		// Also update sub-style idenfication scheming
 
-			GetSQLValueString(sterilize($_POST['prefsSponsorLogos']), "text"),
-			GetSQLValueString(sterilize($_POST['prefsDisplayWinners']), "text"),
-			GetSQLValueString($prefsWinnerDelay, "text"),
+		foreach ($style_sets as $key) {
+            
+            if ($key['style_set_name'] == $prefsStyleSet) {
+            	
+            	if ($prefsStyleSet == "BA") {
+            		
+            		$query_style_name = sprintf("SELECT id,brewStyleNum FROM %s WHERE brewStyleOwn='custom' ORDER BY id", $prefix."styles");
+					$style_name = mysqli_query($connection,$query_style_name) or die (mysqli_error($connection));
+					$row_style_name = mysqli_fetch_assoc($style_name);
 
-			GetSQLValueString(sterilize($_POST['prefsWinnerMethod']), "text"),
-			GetSQLValueString(sterilize($_POST['prefsEntryForm']), "text"),
-			GetSQLValueString(sterilize($_POST['prefsRecordLimit']), "int"),
-			GetSQLValueString(sterilize($_POST['prefsRecordPaging']), "int"),
+					$query_style_num = sprintf("SELECT brewStyleNum FROM %s WHERE brewStyleVersion='BA' ORDER BY brewStyleNum DESC LIMIT 1", $prefix."styles");
+					$style_num = mysqli_query($connection,$query_style_num) or die (mysqli_error($connection));
+					$row_style_num = mysqli_fetch_assoc($style_num);
 
-			GetSQLValueString(sterilize($_POST['prefsTheme']), "text"),
-			GetSQLValueString(sterilize($_POST['prefsDateFormat']), "text"),
-			GetSQLValueString(sterilize($_POST['prefsContact']), "text"),
-			GetSQLValueString(sterilize($_POST['prefsTimeZone']), "text"),
-			GetSQLValueString(sterilize($_POST['prefsEntryLimit']), "text"),
+					$sub_style_id = $row_style_num['brewStyleNum'] + 1;
 
-			GetSQLValueString(sterilize($_POST['prefsTimeFormat']), "text"),
-			GetSQLValueString(sterilize($_POST['prefsUserEntryLimit']), "int"),
-			GetSQLValueString(sterilize($_POST['prefsUserSubCatLimit']), "int"),
-			GetSQLValueString($prefsUSCLEx, "text"),
-			GetSQLValueString(sterilize($_POST['prefsUSCLExLimit']), "int"),
+					do {
 
-			GetSQLValueString(sterilize($_POST['prefsPayToPrint']), "text"),
-			GetSQLValueString(sterilize($_POST['prefsHideRecipe']), "text"),
-			GetSQLValueString(sterilize($_POST['prefsUseMods']), "text"),
-			GetSQLValueString(sterilize($_POST['prefsSEF']), "text"),
-			GetSQLValueString(sterilize($_POST['prefsSpecialCharLimit']), "int"),
-			GetSQLValueString($prefsStyleSet, "text"),
-			GetSQLValueString(sterilize($_POST['prefsAutoPurge']), "text"),
-			GetSQLValueString(sterilize($_POST['prefsEntryLimitPaid']), "int"),
-			GetSQLValueString(sterilize($_POST['prefsEmailRegConfirm']), "int"),
-			GetSQLValueString(sterilize($_POST['prefsSpecific']), "int"),
-			GetSQLValueString(sterilize($_POST['prefsDropOff']), "int"),
-			GetSQLValueString(sterilize($_POST['prefsShipping']), "int"),
-			GetSQLValueString(sterilize($_POST['prefsPaypalIPN']), "int"),
-			GetSQLValueString(sterilize($_POST['prefsProEdition']), "int"),
-			GetSQLValueString(sterilize($_POST['prefsDisplaySpecial']), "text"),
+						$sub_style = str_pad($sub_style_id,3,"0", STR_PAD_LEFT);
+						
+						$update_table = $prefix."styles";
+						$data = array('brewStyleNum' => $sub_style);
+						$db_conn->where ('id', $row_style_name['id']);
+						$result = $db_conn->update ($update_table, $data);
+						if (!$result) {
+							$error_output[] = $db_conn->getLastError();
+							$errors = TRUE;
+						}
 
-			GetSQLValueString(sterilize($_POST['prefsShowBestBrewer']), "int"),
-			GetSQLValueString(sterilize($_POST['prefsBestBrewerTitle']), "text"),
-			GetSQLValueString(sterilize($_POST['prefsShowBestClub']), "int"),
-			GetSQLValueString(sterilize($_POST['prefsBestClubTitle']), "text"),
-			GetSQLValueString(sterilize($_POST['prefsFirstPlacePts']), "int"),
-			GetSQLValueString(sterilize($_POST['prefsSecondPlacePts']), "int"),
-			GetSQLValueString(sterilize($_POST['prefsThirdPlacePts']), "int"),
+						$sub_style_id++;
 
-			GetSQLValueString(sterilize($_POST['prefsFourthPlacePts']), "int"),
-			GetSQLValueString(sterilize($_POST['prefsHMPts']), "int"),
-			GetSQLValueString(sterilize($_POST['prefsTieBreakRule1']), "text"),
-			GetSQLValueString(sterilize($_POST['prefsTieBreakRule2']), "text"),
-			GetSQLValueString(sterilize($_POST['prefsTieBreakRule3']), "text"),
+					} while ($row_style_name = mysqli_fetch_assoc($style_name));
 
-			GetSQLValueString(sterilize($_POST['prefsTieBreakRule4']), "text"),
-			GetSQLValueString(sterilize($_POST['prefsTieBreakRule5']), "text"),
-			GetSQLValueString(sterilize($_POST['prefsTieBreakRule6']), "text"),
-			GetSQLValueString(sterilize($prefsCAPTCHA), "text"),
-			GetSQLValueString(sterilize($prefsGoogleAccount), "text"),
-			GetSQLValueString($_POST['prefsBestUseBOS'], "int"),
-			GetSQLValueString(sterilize($_POST['prefsLanguage']), "text"),
-			GetSQLValueString($_POST['prefsEmailCC'], "int"),
-			GetSQLValueString($_POST['prefsEval'], "int"),
-			GetSQLValueString($id, "int"));
-
-			mysqli_real_escape_string($connection,$insertSQL);
-			$result = mysqli_query($connection,$insertSQL) or die (mysqli_error($connection));
-
-			// Update style set of any custom styles to chosen style set
-			// Safeguards against a bug introduced in 2.1.13 scripting
-			// Also update sub-style idenfication scheming
-
-			foreach ($style_sets as $key) {
-	            
-	            if ($key['style_set_name'] == $prefsStyleSet) {
+            	}
+            	
+            	else {
 	            	
-	            	if ($prefsStyleSet == "BA") {
-	            		
-	            		$query_style_name = sprintf("SELECT id,brewStyleNum FROM %s WHERE brewStyleOwn='custom' ORDER BY id", $prefix."styles");
-						$style_name = mysqli_query($connection,$query_style_name) or die (mysqli_error($connection));
-						$row_style_name = mysqli_fetch_assoc($style_name);
+	            	if ($key['style_set_sub_style_method'] == 0) $sub_style_id = "A";
+	            	else $sub_style_id = "001";
 
-						$query_style_num = sprintf("SELECT brewStyleNum FROM %s WHERE brewStyleVersion='BA' ORDER BY brewStyleNum DESC LIMIT 1", $prefix."styles");
-						$style_num = mysqli_query($connection,$query_style_num) or die (mysqli_error($connection));
-						$row_style_num = mysqli_fetch_assoc($style_num);
-
-						$sub_style_id = $row_style_num['brewStyleNum'] + 1;
-
-						do {
-
-							$updateSQL = sprintf("UPDATE `%s` SET brewStyleNum='%s' WHERE id='%s'",$prefix."styles",str_pad($sub_style_id,3,"0", STR_PAD_LEFT),$row_style_name['id']);
-							mysqli_real_escape_string($connection,$updateSQL);
-							$result = mysqli_query($connection,$updateSQL);
-
-							$sub_style_id++;
-
-						} while ($row_style_name = mysqli_fetch_assoc($style_name));
-
+	            	$update_table = $prefix."styles";
+	            	$data = array(
+	            		'brewStyleVersion' => $prefsStyleSet,
+	            		'brewStyleNum' => $sub_style_id
+	            	);
+	            	$db_conn->where ('brewStyleOwn', 'custom');
+	            	$result = $db_conn->update ($update_table, $data);
+	            	if (!$result) {
+	            		$error_output[] = $db_conn->getLastError();
+	            		$errors = TRUE;
 	            	}
-	            	
-	            	else {
-		            	if ($key['style_set_sub_style_method'] == 0) $sub_style_id = "A";
-		            	else $sub_style_id = "001";
-		            	$updateSQL = sprintf("UPDATE `%s` SET brewStyleVersion='%s',brewStyleNum='%s' WHERE brewStyleOwn='custom'",$prefix."styles",$prefsStyleSet,$sub_style_id);
-						mysqli_real_escape_string($connection,$updateSQL);
-						$result = mysqli_query($connection,$updateSQL);
-		            }
 
-	            } 
+	            } // end else
 
-	        }
-			
-			$updateSQL = sprintf("UPDATE `%s` SET brewStyleVersion='%s',brewStyleNum='%s' WHERE brewStyleOwn='custom'",$prefix."styles",$prefsStyleSet,$sub_style_id);
-			mysqli_select_db($connection,$database);
-			mysqli_real_escape_string($connection,$updateSQL);
-			$result = mysqli_query($connection,$updateSQL);
+            } // end if ($key['style_set_name'] == $prefsStyleSet)
 
-			if ($_POST['prefsPaypalIPN'] == 1) {
+        } // end foreach
 
-				// Only install the payments db table if enabled and if not there already
-				if (!check_setup($prefix."payments", $database)) {
+		if ($_POST['prefsPaypalIPN'] == 1) {
 
-					$sql = sprintf("CREATE TABLE IF NOT EXISTS `%s` (
-					  `id` int(11) NOT NULL AUTO_INCREMENT,
-					  `uid` int(11) DEFAULT NULL,
-					  `item_name` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-					  `first_name` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-					  `last_name` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-					  `txn_id` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-					  `payment_gross` float(10,2) DEFAULT NULL,
-					  `currency_code` varchar(5) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-					  `payment_status` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-					  `payment_entries` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-					  `payment_time` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-					  PRIMARY KEY (`id`)
-					) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;",$prefix."payments");
-					mysqli_select_db($connection,$database);
-					mysqli_real_escape_string($connection,$sql);
-					$result = mysqli_query($connection,$sql) or die (mysqli_error($connection));
+			// Only install the payments db table if enabled and if not there already
+			if (!check_setup($prefix."payments", $database)) {
 
+				$sql = sprintf("CREATE TABLE IF NOT EXISTS `%s` (
+				  `id` int(11) NOT NULL AUTO_INCREMENT,
+				  `uid` int(11) DEFAULT NULL,
+				  `item_name` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+				  `first_name` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+				  `last_name` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+				  `txn_id` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+				  `payment_gross` float(10,2) DEFAULT NULL,
+				  `currency_code` varchar(5) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+				  `payment_status` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+				  `payment_entries` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+				  `payment_time` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+				  PRIMARY KEY (`id`)
+				) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;",$prefix."payments");
+				
+				$db_conn->rawQuery($sql);
+				if ($db_conn->getLastErrno() !== 0) {
+					$error_output[] = $db_conn->getLastError();
+					$errors = TRUE;
 				}
 
 			}
 
-			// Check to see if processed correctly.
-			$query_prefs_check = sprintf("SELECT COUNT(*) as 'count' FROM %s",$preferences_db_table);
-			$prefs_check = mysqli_query($connection,$query_prefs_check) or die (mysqli_error($connection));
-			$row_prefs_check = mysqli_fetch_assoc($prefs_check);
+		} // end if ($_POST['prefsPaypalIPN'] == 1)
 
-			// If so, mark step as complete in system table and redirect to next step.
-			if ($row_prefs_check['count'] == 1) {
+		// Check to see if processed correctly.
+		$query_prefs_check = sprintf("SELECT COUNT(*) as 'count' FROM %s",$preferences_db_table);
+		$prefs_check = mysqli_query($connection,$query_prefs_check) or die (mysqli_error($connection));
+		$row_prefs_check = mysqli_fetch_assoc($prefs_check);
 
-				$sql = sprintf("UPDATE `%s` SET setup_last_step = '3' WHERE id='1';", $system_db_table);
-				mysqli_select_db($connection,$database);
-				mysqli_real_escape_string($connection,$sql);
-				$result = mysqli_query($connection,$sql) or die (mysqli_error($connection));
-
-				$insertGoTo = $base_url."setup.php?section=step4";
-
+		// If so, mark step as complete in system table and redirect to next step.
+		if ($row_prefs_check['count'] == 1) {
+			
+			$update_table = $prefix."bcoem_sys";
+			$data = array('setup_last_step' => 3);
+			$db_conn->where ('id', 1);
+			$result = $db_conn->update ($update_table, $data);
+			if (!$result) {
+				$error_output[] = $db_conn->getLastError();
+				$errors = TRUE;
 			}
 
-			// If not, redirect back to step 3 and display message.
-			else  $insertGoTo = $base_url."setup.php?section=step3&msg=99";
+			$insertGoTo = $base_url."setup.php?section=step4";
 
-			$pattern = array('\'', '"');
-			$insertGoTo = str_replace($pattern, "", $insertGoTo);
-			$redirect_go_to = sprintf("Location: %s", stripslashes($insertGoTo));
+		}
+
+		if (!empty($error_output)) $_SESSION['error_output'] = $error_output;
+
+		// If not, redirect back to step 3 and display message.
+		else  $insertGoTo = $base_url."setup.php?section=step3&msg=99";
+		if ($errors) $insertGoTo = $base_url."setup.php?section=step3&msg=3";
+		$insertGoTo = prep_redirect_link($insertGoTo);
+		$redirect_go_to = sprintf("Location: %s", $insertGoTo);
 
 	}
 
 	if ($action == "edit") {
 
-		$updateSQL = sprintf("UPDATE $preferences_db_table SET
-		prefsTemp=%s,
-		prefsWeight1=%s,
-		prefsWeight2=%s,
-		prefsLiquid1=%s,
-		prefsLiquid2=%s,
+		$db_conn->where ('id', $id);
+		$result = $db_conn->update ($update_table, $data);
+		if (!$result) {
+			$error_output[] = $db_conn->getLastError();
+			$errors = TRUE;
+		}
 
-		prefsPaypal=%s,
-		prefsPaypalAccount=%s,
-		prefsCurrency=%s,
-		prefsCash=%s,
-		prefsCheck=%s,
-
-		prefsCheckPayee=%s,
-		prefsTransFee=%s,
-		prefsSponsors=%s,
-		prefsDisplayWinners=%s,
-		prefsWinnerDelay=%s,
-
-		prefsWinnerMethod=%s,
-		prefsEntryForm=%s,
-		prefsRecordLimit=%s,
-		prefsRecordPaging=%s,
-
-		prefsTheme=%s,
-		prefsDateFormat=%s,
-		prefsContact=%s,
-		prefsTimeZone=%s,
-		prefsEntryLimit=%s,
-
-		prefsTimeFormat=%s,
-		prefsUserEntryLimit=%s,
-		prefsUserSubCatLimit=%s,
-		prefsUSCLEx=%s,
-		prefsUSCLExLimit=%s,
-
-		prefsPayToPrint=%s,
-		prefsHideRecipe=%s,
-		prefsUseMods=%s,
-		prefsSEF=%s,
-		prefsSpecialCharLimit=%s,
-
-		prefsStyleSet=%s,
-		prefsAutoPurge=%s,
-		prefsEntryLimitPaid=%s,
-		prefsEmailRegConfirm=%s,
-		prefsSponsorLogos=%s,
-		prefsSpecific=%s,
-
-		prefsDropOff=%s,
-		prefsShipping=%s,
-		prefsPaypalIPN=%s,
-		prefsProEdition=%s,
-		prefsDisplaySpecial=%s,
-
-		prefsShowBestBrewer=%s,
-		prefsBestBrewerTitle=%s,
-		prefsShowBestClub=%s,
-		prefsBestClubTitle=%s,
-		prefsBestUseBOS=%s,
-		prefsFirstPlacePts=%s,
-		prefsSecondPlacePts=%s,
-		prefsThirdPlacePts=%s,
-
-		prefsFourthPlacePts=%s,
-		prefsHMPts=%s,
-		prefsTieBreakRule1=%s,
-		prefsTieBreakRule2=%s,
-		prefsTieBreakRule3=%s,
-
-		prefsTieBreakRule4=%s,
-		prefsTieBreakRule5=%s,
-		prefsTieBreakRule6=%s,
-		prefsCAPTCHA=%s,
-		prefsGoogleAccount=%s,
+		/**
+		 * If the style set has changed from BJCP 2015 to BJCP 2021, map
+		 * 2015 styles to updated 2021 styles in brewing DB.
+		 * Update scripting changed BJCP2008 preference to BJCP2015 and
+		 * performed a conversion from 2008 to 2015 on all entries in the DB.
+		 */
 		
-		prefsLanguage=%s,
-		prefsEmailCC=%s,
-		prefsEval=%s
-
-		WHERE id=%s",
-			GetSQLValueString(sterilize($_POST['prefsTemp']), "text"),
-			GetSQLValueString(sterilize($_POST['prefsWeight1']), "text"),
-			GetSQLValueString(sterilize($_POST['prefsWeight2']), "text"),
-			GetSQLValueString(sterilize($_POST['prefsLiquid1']), "text"),
-			GetSQLValueString(sterilize($_POST['prefsLiquid2']), "text"),
-
-			GetSQLValueString(sterilize($_POST['prefsPaypal']), "text"),
-			GetSQLValueString(sterilize($_POST['prefsPaypalAccount']), "text"),
-			GetSQLValueString(sterilize($_POST['prefsCurrency']), "text"),
-			GetSQLValueString(sterilize($_POST['prefsCash']), "text"),
-			GetSQLValueString(sterilize($_POST['prefsCheck']), "text"),
-
-			GetSQLValueString(sterilize($_POST['prefsCheckPayee']), "text"),
-			GetSQLValueString(sterilize($_POST['prefsTransFee']), "text"),
-			GetSQLValueString(sterilize($_POST['prefsSponsors']), "text"),
-			GetSQLValueString(sterilize($_POST['prefsDisplayWinners']), "text"),
-			GetSQLValueString($prefsWinnerDelay, "text"),
-
-			GetSQLValueString(sterilize($_POST['prefsWinnerMethod']), "int"),
-			GetSQLValueString(sterilize($_POST['prefsEntryForm']), "text"),
-			GetSQLValueString(sterilize($_POST['prefsRecordLimit']), "int"),
-			GetSQLValueString(sterilize($_POST['prefsRecordPaging']), "int"),
-
-			GetSQLValueString(sterilize($_POST['prefsTheme']), "text"),
-			GetSQLValueString(sterilize($_POST['prefsDateFormat']), "text"),
-			GetSQLValueString(sterilize($_POST['prefsContact']), "text"),
-			GetSQLValueString(sterilize($_POST['prefsTimeZone']), "text"),
-			GetSQLValueString(sterilize($_POST['prefsEntryLimit']), "text"),
-
-			GetSQLValueString(sterilize($_POST['prefsTimeFormat']), "text"),
-			GetSQLValueString(sterilize($_POST['prefsUserEntryLimit']), "int"),
-			GetSQLValueString(sterilize($_POST['prefsUserSubCatLimit']), "int"),
-			GetSQLValueString($prefsUSCLEx, "text"),
-			GetSQLValueString(sterilize($_POST['prefsUSCLExLimit']), "int"),
-
-			GetSQLValueString(sterilize($_POST['prefsPayToPrint']), "text"),
-			GetSQLValueString(sterilize($_POST['prefsHideRecipe']), "text"),
-			GetSQLValueString(sterilize($_POST['prefsUseMods']), "text"),
-			GetSQLValueString(sterilize($_POST['prefsSEF']), "text"),
-			GetSQLValueString(sterilize($_POST['prefsSpecialCharLimit']), "int"),
-
-			GetSQLValueString($prefsStyleSet, "text"),
-			GetSQLValueString(sterilize($_POST['prefsAutoPurge']), "int"),
-			GetSQLValueString(sterilize($_POST['prefsEntryLimitPaid']), "int"),
-			GetSQLValueString(sterilize($_POST['prefsEmailRegConfirm']), "int"),
-			GetSQLValueString(sterilize($_POST['prefsSponsorLogos']), "text"),
-			GetSQLValueString(sterilize($_POST['prefsSpecific']), "int"),
-
-			GetSQLValueString(sterilize($_POST['prefsDropOff']), "int"),
-			GetSQLValueString(sterilize($_POST['prefsShipping']), "int"),
-			GetSQLValueString(sterilize($_POST['prefsPaypalIPN']), "int"),
-			GetSQLValueString(sterilize($_POST['prefsProEdition']), "int"),
-			GetSQLValueString(sterilize($_POST['prefsDisplaySpecial']), "text"),
-
-			GetSQLValueString(sterilize($_POST['prefsShowBestBrewer']), "int"),
-			GetSQLValueString(sterilize($_POST['prefsBestBrewerTitle']), "text"),
-			GetSQLValueString(sterilize($_POST['prefsShowBestClub']), "int"),
-			GetSQLValueString(sterilize($_POST['prefsBestClubTitle']), "text"),
-			GetSQLValueString($_POST['prefsBestUseBOS'], "int"),
-			GetSQLValueString(sterilize($_POST['prefsFirstPlacePts']), "int"),
-			GetSQLValueString(sterilize($_POST['prefsSecondPlacePts']), "int"),
-			GetSQLValueString(sterilize($_POST['prefsThirdPlacePts']), "int"),
-
-			GetSQLValueString(sterilize($_POST['prefsFourthPlacePts']), "int"),
-			GetSQLValueString(sterilize($_POST['prefsHMPts']), "int"),
-			GetSQLValueString(sterilize($_POST['prefsTieBreakRule1']), "text"),
-			GetSQLValueString(sterilize($_POST['prefsTieBreakRule2']), "text"),
-			GetSQLValueString(sterilize($_POST['prefsTieBreakRule3']), "text"),
-
-			GetSQLValueString(sterilize($_POST['prefsTieBreakRule4']), "text"),
-			GetSQLValueString(sterilize($_POST['prefsTieBreakRule5']), "text"),
-			GetSQLValueString(sterilize($_POST['prefsTieBreakRule6']), "text"),
-			GetSQLValueString(sterilize($prefsCAPTCHA), "text"),
-			GetSQLValueString(sterilize($prefsGoogleAccount), "text"),
+		if ($prefsStyleSet == "BJCP2021") {
 			
-			GetSQLValueString(sterilize($_POST['prefsLanguage']), "text"),
-			GetSQLValueString($_POST['prefsEmailCC'], "int"),
-			GetSQLValueString($_POST['prefsEval'], "int"),
-			GetSQLValueString($id, "int"));
+			if ($_SESSION['prefsStyleSet'] == "BJCP2015") {
 
-			mysqli_real_escape_string($connection,$updateSQL);
-			$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
-			//echo $updateSQL; exit;
-
-			/**
-			 * If the style set has changed from BJCP 2015 to BJCP 2021, map
-			 * 2015 styles to updated 2021 styles in brewing DB.
-			 * Update scripting changed BJCP2008 preference to BJCP2015 and
-			 * performed a conversion from 2008 to 2015 on all entries in the DB.
-			 */
-			
-			if ($prefsStyleSet == "BJCP2021") {
+				include (LIB.'convert.lib.php');
+				include (INCLUDES.'convert/convert_bjcp_2021.inc.php');
 				
-				if ($_SESSION['prefsStyleSet'] == "BJCP2015") {
-
-					include (LIB.'convert.lib.php');
-					include (INCLUDES.'convert/convert_bjcp_2021.inc.php');
-					
-				}
-
 			}
 
-			// Update style set of any custom styles to chosen style set
-			// Safeguards against a bug introduced in 2.1.13 scripting
-			// Also update sub-style idenfication scheming
+		}
 
-			foreach ($style_sets as $key) {
-	            
-	            if ($key['style_set_name'] == $prefsStyleSet) {
+		// Update style set of any custom styles to chosen style set
+		// Safeguards against a bug introduced in 2.1.13 scripting
+		// Also update sub-style idenfication scheming
+
+		// Update style set of any custom styles to chosen style set
+		// Safeguards against a bug introduced in 2.1.13 scripting
+		// Also update sub-style idenfication scheming
+
+		foreach ($style_sets as $key) {
+            
+            if ($key['style_set_name'] == $prefsStyleSet) {
+            	
+            	if ($prefsStyleSet == "BA") {
+            		
+            		$query_style_name = sprintf("SELECT id,brewStyleNum FROM %s WHERE brewStyleOwn='custom' ORDER BY id", $prefix."styles");
+					$style_name = mysqli_query($connection,$query_style_name) or die (mysqli_error($connection));
+					$row_style_name = mysqli_fetch_assoc($style_name);
+
+					$query_style_num = sprintf("SELECT brewStyleNum FROM %s WHERE brewStyleVersion='BA' ORDER BY brewStyleNum DESC LIMIT 1", $prefix."styles");
+					$style_num = mysqli_query($connection,$query_style_num) or die (mysqli_error($connection));
+					$row_style_num = mysqli_fetch_assoc($style_num);
+
+					$sub_style_id = $row_style_num['brewStyleNum'] + 1;
+
+					do {
+
+						$sub_style = str_pad($sub_style_id,3,"0", STR_PAD_LEFT);
+						
+						$update_table = $prefix."styles";
+						$data = array('brewStyleNum' => $sub_style);
+						$db_conn->where ('id', $row_style_name['id']);
+						$result = $db_conn->update ($update_table, $data);
+						if (!$result) {
+							$error_output[] = $db_conn->getLastError();
+							$errors = TRUE;
+						}
+
+						$sub_style_id++;
+
+					} while ($row_style_name = mysqli_fetch_assoc($style_name));
+
+            	}
+            	
+            	else {
 	            	
-	            	if ($prefsStyleSet == "BA") {
-	            		
-	            		$query_style_name = sprintf("SELECT id,brewStyleNum FROM %s WHERE brewStyleOwn='custom' ORDER BY id", $prefix."styles");
-						$style_name = mysqli_query($connection,$query_style_name) or die (mysqli_error($connection));
-						$row_style_name = mysqli_fetch_assoc($style_name);
+	            	if ($key['style_set_sub_style_method'] == 0) $sub_style_id = "A";
+	            	else $sub_style_id = "001";
 
-						$query_style_num = sprintf("SELECT brewStyleNum FROM %s WHERE brewStyleVersion='BA' ORDER BY brewStyleNum DESC LIMIT 1", $prefix."styles");
-						$style_num = mysqli_query($connection,$query_style_num) or die (mysqli_error($connection));
-						$row_style_num = mysqli_fetch_assoc($style_num);
-
-						$sub_style_id = $row_style_num['brewStyleNum'] + 1;
-
-						do {
-
-							$updateSQL = sprintf("UPDATE `%s` SET brewStyleNum='%s' WHERE id='%s'",$prefix."styles",str_pad($sub_style_id,3,"0", STR_PAD_LEFT),$row_style_name['id']);
-							mysqli_real_escape_string($connection,$updateSQL);
-							$result = mysqli_query($connection,$updateSQL);
-
-							$sub_style_id++;
-
-						} while ($row_style_name = mysqli_fetch_assoc($style_name));
-
+	            	$update_table = $prefix."styles";
+	            	$data = array(
+	            		'brewStyleVersion' => $prefsStyleSet,
+	            		'brewStyleNum' => $sub_style_id
+	            	);
+	            	$db_conn->where ('brewStyleOwn', 'custom');
+	            	$result = $db_conn->update ($update_table, $data);
+	            	if (!$result) {
+	            		$error_output[] = $db_conn->getLastError();
+	            		$errors = TRUE;
 	            	}
-	            	
-	            	else {
-		            	if ($key['style_set_sub_style_method'] == 0) $sub_style_id = "A";
-		            	else $sub_style_id = "001";
-		            	$updateSQL = sprintf("UPDATE `%s` SET brewStyleVersion='%s',brewStyleNum='%s' WHERE brewStyleOwn='custom'",$prefix."styles",$prefsStyleSet,$sub_style_id);
-						mysqli_real_escape_string($connection,$updateSQL);
-						$result = mysqli_query($connection,$updateSQL);
-		            }
 
-	            } 
+	            } // end else
 
-	        }
+            } // end if ($key['style_set_name'] == $prefsStyleSet)
+
+        } // end foreach
 			
-			if ($_POST['prefsPaypalIPN'] == 1) {
+		if ($_POST['prefsPaypalIPN'] == 1) {
 
-				// Only install the payments db table if enabled and if not there already
-				if (!check_setup($prefix."payments", $database)) {
+			// Only install the payments db table if enabled and if not there already
+			if (!check_setup($prefix."payments", $database)) {
 
-					$sql = sprintf("CREATE TABLE IF NOT EXISTS `%s` (
-					  `id` int(11) NOT NULL AUTO_INCREMENT,
-					  `uid` int(11) DEFAULT NULL,
-					  `item_name` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-					  `first_name` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-					  `last_name` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-					  `txn_id` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-					  `payment_gross` float(10,2) DEFAULT NULL,
-					  `currency_code` varchar(5) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-					  `payment_status` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-					  `payment_entries` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-					  `payment_time` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-					  PRIMARY KEY (`id`)
-					) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;",$prefix."payments");
-					mysqli_select_db($connection,$database);
-					mysqli_real_escape_string($connection,$sql);
-					$result = mysqli_query($connection,$sql) or die (mysqli_error($connection));
-
+				$sql = sprintf("CREATE TABLE IF NOT EXISTS `%s` (
+				  `id` int(11) NOT NULL AUTO_INCREMENT,
+				  `uid` int(11) DEFAULT NULL,
+				  `item_name` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+				  `first_name` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+				  `last_name` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+				  `txn_id` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+				  `payment_gross` float(10,2) DEFAULT NULL,
+				  `currency_code` varchar(5) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+				  `payment_status` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+				  `payment_entries` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+				  `payment_time` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+				  PRIMARY KEY (`id`)
+				) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;",$prefix."payments");
+				
+				$db_conn->rawQuery($sql);
+				if ($db_conn->getLastErrno() !== 0) {
+					$error_output[] = $db_conn->getLastError();
+					$errors = TRUE;
 				}
 
 			}
 
-			// Empty the prefs session variable
-			// Will trigger the session to reset the variables in common.db.php upon reload after redirect
-			session_name($prefix_session);
-			session_start();
-			unset($_SESSION['prefs'.$prefix_session]);
+		} // end if ($_POST['prefsPaypalIPN'] == 1)
 
-			if ($style_alert) $updateGoTo .= $_POST['relocate']."&msg=37";
+		// Empty the prefs session variable
+		// Will trigger the session to reset the variables in common.db.php upon reload after redirect
+		session_name($prefix_session);
+		session_start();
+		unset($_SESSION['prefs'.$prefix_session]);
 
-			if ($section == "setup") {
-				$sql = sprintf("UPDATE `%s` SET setup_last_step = '3' WHERE id='1';", $system_db_table);
-				mysqli_select_db($connection,$database);
-				mysqli_real_escape_string($connection,$sql);
-				$result = mysqli_query($connection,$sql) or die (mysqli_error($connection));
-				$updateGoTo = $base_url."setup.php?section=step4";
+		if ($style_alert) $updateGoTo .= $_POST['relocate']."&msg=37";
+
+		if ($section == "setup") {
+			
+			$update_table = $prefix."bcoem_sys";
+			$data = array('setup_last_step' => 3);
+			$db_conn->where ('id', 1);
+			$result = $db_conn->update ($update_table, $data);
+			if (!$result) {
+				$error_output[] = $db_conn->getLastError();
+				$errors = TRUE;
 			}
 
-			$pattern = array('\'', '"');
-			$updateGoTo = str_replace($pattern, "", $updateGoTo);
-			$redirect_go_to = sprintf("Location: %s", stripslashes($updateGoTo));
+			$updateGoTo = $base_url."setup.php?section=step4";
+
+		}
+
+		if (!empty($error_output)) $_SESSION['error_output'] = $error_output;
+
+		if ($errors) $updateGoTo = $_POST['relocate']."&msg=3";
+		$updateGoTo = prep_redirect_link($updateGoTo);
+		$redirect_go_to = sprintf("Location: %s", $updateGoTo);
+
 	}
 
 } else {
-	$redirect_go_to = sprintf("Location: %s", $base_url."index.php?msg=98");
+
+	$redirect = $base_url."index.php?msg=98";
+	$redirect = prep_redirect_link($redirect);
+	$redirect_go_to = sprintf("Location: %s", $redirect);
+
 }
 ?>

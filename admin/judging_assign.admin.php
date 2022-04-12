@@ -200,8 +200,8 @@ do {
         }
       }
 
-      if ($_SESSION['jPrefsQueued'] == "Y") {
-          // Activate for Roles
+      if (($_SESSION['jPrefsQueued'] == "Y") && ($row_judge_roles)) {
+          
       		if (!empty($row_judge_roles['assignRoles'])) {
       			$roles_previously_defined = 1;
       		}
@@ -217,6 +217,7 @@ do {
       		if (strpos($row_judge_roles['assignRoles'],"MBOS") !== FALSE) {
       			$checked_minibos_judge = "CHECKED";
       		}
+      
       }
 
 		if (table_round($row_tables_edit['id'],$i)) {
@@ -444,7 +445,7 @@ $(document).ready(function() {
   </div>
   <div class="row">
     <div class="col-md-12">
-      <?php if (!empty($cb_list)) { ?><strong>Co-Brewer Names Associated with Entries at this Table:</strong> <?php echo rtrim($cb_list,", "); } ?>
+      <?php if (!empty($cb_list)) { ?><strong>Co-Brewer Names Associated with Entries at this Table:</strong> <?php echo trim($cb_list,", "); } ?>
     </div>
   </div>
 </div>

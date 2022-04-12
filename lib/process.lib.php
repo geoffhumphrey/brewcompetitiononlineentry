@@ -1,23 +1,29 @@
 <?php
 
-// function to generate random number
 function random_judging_num_generator(){
+	
 	srand ((double) microtime() * 10000000);
 
-	$random_generator = "";// Initialize the string to store random numbers
-	for ($i=1;$i<6+1;$i++) { // Loop the number of times of required digits
-		$random_generator .=rand(1,9); // one number is added
-	} // end of for loop
+	$random_generator = "";
+	
+	for ($i=1;$i<6+1;$i++) { 
+		$random_generator .= rand(1,9);
+	}
 
 	return $random_generator;
-} // end of function
+
+}
 
 function check_http($input) {
+
 	if ($input != "") {
-			if (strstr($input,"http://")) return $input;
-			if (strstr($input,"https://")) return $input;
-			if ((!strstr($input, "http://")) || (!strstr($input, "https://"))) return "http://".$input;
-		}
+
+		if (strstr($input,"http://")) return $input;
+		if (strstr($input,"https://")) return $input;
+		if ((!strstr($input, "http://")) || (!strstr($input, "https://"))) return "http://".$input;
+
+	}
+
 }
 
 function check_judging_num($input) {
@@ -156,56 +162,17 @@ function clean_up_url($referer) {
 	return $reconstruct;
 
 }
-/*
-function purge_entries($type, $interval) {
-
-	require(CONFIG.'config.php');
-	mysqli_select_db($connection,$database);
-
-	if ($type == "unconfirmed") {
-		$query_check = sprintf("SELECT id FROM %s WHERE brewConfirmed='0'", $prefix."brewing");
-		if ($interval > 0) $query_check .= " AND brewUpdated < DATE_SUB( NOW(), INTERVAL 1 DAY)";
-		$check = mysqli_query($connection,$query_check) or die (mysqli_error($connection));
-		$row_check = mysqli_fetch_assoc($check);
-
-		do { $a[] = $row_check['id']; } while ($row_check = mysqli_fetch_assoc($check));
-
-		foreach ($a as $id) {
-			$deleteSQL = sprintf("DELETE FROM %s WHERE id='%s'", $prefix."brewing", $id);
-			mysqli_real_escape_string($connection,$deleteSQL);
-			$result = mysqli_query($connection,$deleteSQL) or die (mysqli_error($connection));
-		}
-	}
-
-	if ($type == "special") {
-		$query_check = sprintf("SELECT a.id, a.brewUpdated, a.brewInfo, a.brewCategorySort, a.brewSubCategory FROM %s as a, %s as b WHERE a.brewCategorySort=b.brewStyleGroup AND a.brewSubCategory=b.brewStyleNum AND b.brewStyleReqSpec=1 AND (a.brewInfo IS NULL OR a.brewInfo='') AND b.brewStyleVersion = '%s'", $prefix."brewing",$prefix."styles",$_SESSION['prefsStyleSet']);
-		if ($interval > 0) $query_check .=" AND a.brewUpdated < DATE_SUB( NOW(), INTERVAL 1 DAY)";
-
-		$check = mysqli_query($connection,$query_check) or die (mysqli_error($connection));
-		$row_check = mysqli_fetch_assoc($check);
-
-		do {
-
-			$deleteSQL = sprintf("DELETE FROM %s WHERE id='%s'", $prefix."brewing", $row_check['id']);
-			mysqli_real_escape_string($connection,$deleteSQL);
-			$result = mysqli_query($connection,$deleteSQL) or die (mysqli_error($connection));
-
-		} while ($row_check = mysqli_fetch_assoc($check));
-	}
-}
-*/
 
 function generate_judging_numbers($brewing_db_table,$method) {
 
 	require(CONFIG.'config.php');
-	mysqli_select_db($connection,$database);
+	$db_conn = new MysqliDb($connection);
 
-	$status = array();
-
-	// Clear out all current judging numbers
-	$updateSQL = sprintf("UPDATE %s SET brewJudgingNumber=NULL", $brewing_db_table);
-	mysqli_real_escape_string($connection,$updateSQL);
-	$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+	$status = 0;
+	
+	$data = array('brewJudgingNumber' => NULL);
+	$result = $db_conn->update ($brewing_db_table, $data);
+	if (!$result) $status += 1;
 
 	$query_judging_numbers = sprintf("SELECT id,brewCategory,brewName FROM %s", $brewing_db_table);
 	$judging_numbers = mysqli_query($connection,$query_judging_numbers) or die (mysqli_error($connection));
@@ -221,68 +188,60 @@ function generate_judging_numbers($brewing_db_table,$method) {
 
 			while($judging_number_looper) {
 
-				$generated_judging_number = generate_judging_num(1,"default");
-				$scoresheet_file_name_judging = $generated_judging_number.".pdf";
+				$j_num = generate_judging_num(1,"default");
+				$scoresheet_file_name_judging = $j_num.".pdf";
 
-				if (!in_array($scoresheet_file_name_judging,$files))  {
-					$brewJudgingNumber = $generated_judging_number;
-					$updateSQL = sprintf("UPDATE %s SET brewJudgingNumber=%s WHERE id=%s",
-						$brewing_db_table,
-						GetSQLValueString($brewJudgingNumber, "text"),
-						GetSQLValueString($row_judging_numbers['id'], "text"));
+				if (!in_array($scoresheet_file_name_judging,$files))  {				
 
-					mysqli_real_escape_string($connection,$updateSQL);
-					$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
-
-					if ($result) $status[] = 0; 
-					else $status[] = 1;
+					$data = array('brewJudgingNumber' => $j_num);
+					$db_conn->where ('id', $row_judging_numbers['id']);
+					$result = $db_conn->update ($brewing_db_table, $data);
+					if (!$result) $status += 1;
 
 					$judging_number_looper = FALSE;
+				
 				}
-				else {
-					$judging_number_looper = TRUE;
-				}
+
+				else $judging_number_looper = TRUE;
+
 			}
+
 		} while ($row_judging_numbers = mysqli_fetch_assoc($judging_numbers));
 	
 	}
 
 	if ($method == "identical") {
+		
 		do {
 			
 			$j_num = sprintf("%06s",$row_judging_numbers['id']);
 			
-			$updateSQL = sprintf("UPDATE %s SET brewJudgingNumber=%s WHERE id=%s",
-						$brewing_db_table,
-						GetSQLValueString($j_num, "text"),
-						GetSQLValueString($row_judging_numbers['id'], "text"));
-			mysqli_real_escape_string($connection,$updateSQL);
-			$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
-			
-			if ($result) $status[] = 0;
-			else $status[] = 1;
+			$data = array('brewJudgingNumber' => $j_num);
+			$db_conn->where ('id', $row_judging_numbers['id']);
+			$result = $db_conn->update ($brewing_db_table, $data);
+			if (!$result) $status += 1;
 
 		} while ($row_judging_numbers = mysqli_fetch_assoc($judging_numbers));
+	
 	}
 
 	if ($method == "legacy") {
+		
 		do {
-			
-			$updateSQL = sprintf("UPDATE %s SET brewJudgingNumber=%s WHERE id=%s",
-						$brewing_db_table,
-						GetSQLValueString(generate_judging_num(2,$row_judging_numbers['brewCategory']), "text"),
-						GetSQLValueString($row_judging_numbers['id'], "text"));
-			mysqli_real_escape_string($connection,$updateSQL);
-			$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 
-			if ($result) $status[] = 0;
-			else $status[] = 1;
+			$j_num = generate_judging_num(2,$row_judging_numbers['brewCategory']);
+
+			$data = array('brewJudgingNumber' => $j_num);
+			$db_conn->where ('id', $row_judging_numbers['id']);
+			$result = $db_conn->update ($brewing_db_table, $data);
+			if (!$result) $status += 1;
 
 		} while ($row_judging_numbers = mysqli_fetch_assoc($judging_numbers));
+	
 	}
 
-	$status = array_sum($status);
 	return $status;
+
 }
 
 function check_sweetness($style,$styleSet) {

@@ -3,6 +3,7 @@
 use PHPMailer\PHPMailer\PHPMailer;
 require(LIB.'email.lib.php');
 
+
 if (isset($_SERVER['HTTP_REFERER'])) {
 
 	$url = str_replace("www.","",$_SERVER['SERVER_NAME']);
@@ -62,10 +63,12 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 			$mail->Body = $message;
 			sendPHPMailerMessage($mail);
 		} else {
-			mail($to_email, $subject, $message, $headers);
+			mail($to_name. " <".$to_email.">", $subject, $message, $headers);
 		}
 
-		$redirect_go_to = sprintf("Location: %s", $base_url."index.php?section=admin&go=preferences&msg=32");
+		$redirect = $base_url."index.php?section=admin&go=preferences&msg=32";
+		$redirect = prep_redirect_link($redirect);
+		$redirect_go_to = sprintf("Location: %s", $redirect);
 
 	}
 
@@ -146,11 +149,8 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 					$mail->Body = $message;
 					sendPHPMailerMessage($mail);
 				} else {
-					mail($to_email, $subject, $message, $headers);
+					mail($to_name. " <".$to_email.">", $subject, $message, $headers);
 				}
-
-				//echo $message."<br><br>";
-				//echo $headers."<br><br><br><br>";
 
 			}
 
@@ -160,6 +160,10 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 
 }
 else {
-	$redirect_go_to = sprintf("Location: %s", $base_url."index.php?msg=98");
+
+	$redirect = $base_url."index.php?msg=98";
+	$redirect = prep_redirect_link($redirect);
+	$redirect_go_to = sprintf("Location: %s", $redirect);
+
 }
 ?>

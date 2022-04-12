@@ -7,67 +7,94 @@
 
 if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) && (isset($_SESSION['userLevel'])))) {
 
+	$errors = FALSE;
+	$error_output = array();
+	$_SESSION['error_output'] = "";
+
+	if ($go == "image") {
 		
+		$upload_dir = (USER_IMAGES);
+		unlink($upload_dir.$filter);
+		if ($view == "html") $deleteGoTo = $base_url."index.php?section=admin&go=upload&action=html&msg=31";
+		else $deleteGoTo = $base_url."index.php?section=admin&go=upload&msg=31";
+		
+		$deleteGoTo = prep_redirect_link($deleteGoTo);
+		$redirect_go_to = sprintf("Location: %s", $deleteGoTo);
 
-		if ($go == "image") {
-			
-			$upload_dir = (USER_IMAGES);
-			unlink($upload_dir.$filter);
-			if ($view == "html") $deleteGoTo = $base_url."index.php?section=admin&go=upload&action=html&msg=31";
-			else $deleteGoTo = $base_url."index.php?section=admin&go=upload&msg=31";
-			$redirect_go_to = sprintf("Location: %s", $deleteGoTo);
+	}
 
+	elseif ($go == "doc") {
+		
+		$upload_dir = (USER_DOCS);
+		unlink($upload_dir.$filter);
+		if ($view == "html") $deleteGoTo = $base_url."index.php?section=admin&go=upload_scoresheets&action=html&msg=31";
+		else $deleteGoTo = $base_url."index.php?section=admin&go=upload_scoresheets&msg=31";
+		
+		$deleteGoTo = prep_redirect_link($deleteGoTo);
+		$redirect_go_to = sprintf("Location: %s", $deleteGoTo);
+
+	}
+
+	elseif ($go == "judging_scores") {
+
+		$update_table = $prefix."judging_scores";
+		$db_conn->where ('id', $id);
+		$result = $db_conn->delete($update_table);
+		if (!$result) {
+			$error_output[] = $db_conn->getLastError();
+			$errors = TRUE;
 		}
 
-		elseif ($go == "doc") {
-			
-			$upload_dir = (USER_DOCS);
-			unlink($upload_dir.$filter);
-			if ($view == "html") $deleteGoTo = $base_url."index.php?section=admin&go=upload_scoresheets&action=html&msg=31";
-			else $deleteGoTo = $base_url."index.php?section=admin&go=upload_scoresheets&msg=31";
-			$redirect_go_to = sprintf("Location: %s", $deleteGoTo);
+		$deleteGoTo = prep_redirect_link($deleteGoTo);
+		$redirect_go_to = sprintf("Location: %s", $deleteGoTo);
 
+	}
+
+	elseif ($go == "special_best") {
+
+		$db_conn->where ('id', $id);
+		$result = $db_conn->delete($dbTable);
+		if (!$result) {
+			$error_output[] = $db_conn->getLastError();
+			$errors = TRUE;
 		}
 
-		elseif ($go == "judging_scores") {
+		$query_delete_assign = sprintf("SELECT id FROM %s WHERE sid='%s'", $special_best_data_db_table, $id);
+		$delete_assign = mysqli_query($connection,$query_delete_assign) or die (mysqli_error($connection));
+		$row_delete_assign = mysqli_fetch_assoc($delete_assign);
+		$totalRows_delete_assign = mysqli_num_rows($delete_assign);
 
-			$deleteSQL = sprintf("DELETE FROM %s WHERE id='%s'", $prefix."judging_scores",$id);
-			mysqli_real_escape_string($connection,$deleteSQL);
-			$result = mysqli_query($connection,$deleteSQL) or die (mysqli_error($connection));
-			$redirect_go_to = sprintf("Location: %s", $deleteGoTo);
+		if ($totalRows_delete_assign > 0) {
+			do { $z[] = $row_delete_assign['id']; } while ($row_delete_assign = mysqli_fetch_assoc($delete_assign));
 
-		}
+			foreach ($z as $aid) {
 
-		elseif ($go == "special_best") {
-
-			$deleteSQL = sprintf("DELETE FROM $dbTable WHERE id='%s'", $id);
-			mysqli_real_escape_string($connection,$deleteSQL);
-			$result = mysqli_query($connection,$deleteSQL) or die (mysqli_error($connection));
-
-			$query_delete_assign = sprintf("SELECT id FROM $special_best_data_db_table WHERE sid='%s'", $id);
-			$delete_assign = mysqli_query($connection,$query_delete_assign) or die (mysqli_error($connection));
-			$row_delete_assign = mysqli_fetch_assoc($delete_assign);
-			$totalRows_delete_assign = mysqli_num_rows($delete_assign);
-
-			if ($totalRows_delete_assign > 0) {
-				do { $z[] = $row_delete_assign['id']; } while ($row_delete_assign = mysqli_fetch_assoc($delete_assign));
-
-				foreach ($z as $aid) {
-					$deleteSQL = sprintf("DELETE FROM $special_best_data_db_table WHERE id='%s'", $aid);
-					mysqli_real_escape_string($connection,$deleteSQL);
-					$result = mysqli_query($connection,$deleteSQL) or die (mysqli_error($connection));
+				$update_table = $special_best_data_db_table;
+				$db_conn->where ('id', $aid);
+				$result = $db_conn->delete($update_table);
+				if (!$result) {
+					$error_output[] = $db_conn->getLastError();
+					$errors = TRUE;
 				}
-			}
 
+
+				$deleteSQL = sprintf("DELETE FROM %s WHERE id='%s'", $special_best_data_db_table, $aid);
+				mysqli_real_escape_string($connection,$deleteSQL);
+				$result = mysqli_query($connection,$deleteSQL) or die (mysqli_error($connection));
+			}
 		}
 
-		elseif ($go == "judging") {
+	}
 
-			// remove relational location ids from affected rows in brewer's table
-			$query_loc = "SELECT id,brewerJudgeLocation,brewerStewardLocation from $brewer_db_table";
-			$loc = mysqli_query($connection,$query_loc) or die (mysqli_error($connection));
-			$row_loc = mysqli_fetch_assoc($loc);
-			$totalRows_loc = mysqli_num_rows($loc);
+	elseif ($go == "judging") {
+
+		// remove relational location ids from affected rows in brewer's table
+		$query_loc = sprintf("SELECT id, brewerJudgeLocation, brewerStewardLocation from %s", $brewer_db_table);
+		$loc = mysqli_query($connection,$query_loc) or die (mysqli_error($connection));
+		$row_loc = mysqli_fetch_assoc($loc);
+		$totalRows_loc = mysqli_num_rows($loc);
+
+		if ($totalRows_loc > 0) {
 
 			do  {
 
@@ -84,11 +111,16 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 						}
 
 						$d = rtrim(implode("",$c),",");
-						$updateSQL = "UPDATE $brewer_db_table SET brewerJudgeLocation='".$d."' WHERE id='".$row_loc['id']."'; ";
-						mysqli_real_escape_string($connection,$updateSQL);
-						$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 
-						//echo $updateSQL."<br>";
+						$update_table = $prefix."brewer";
+						$data = array('brewerJudgeLocation' => $d);
+						$db_conn->where ('id', $row_loc['id']);
+						$result = $db_conn->update ($update_table, $data);
+						if (!$result) {
+							$error_output[] = $db_conn->getLastError();
+							$errors = TRUE;
+						}
+
 						unset($c, $d);
 
 					}
@@ -110,11 +142,16 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 						}
 
 						$h = rtrim(implode("",$g),",");
-						$updateSQL = "UPDATE $brewer_db_table SET brewerStewardLocation='".$h."' WHERE id='".$row_loc['id']."'; ";
-						mysqli_real_escape_string($connection,$updateSQL);
-						$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 
-						//echo $updateSQL."<br>";
+						$update_table = $prefix."brewer";
+						$data = array('brewerStewardLocation' => $h);
+						$db_conn->where ('id', $row_loc['id']);
+						$result = $db_conn->update ($update_table, $data);
+						if (!$result) {
+							$error_output[] = $db_conn->getLastError();
+							$errors = TRUE;
+						}
+
 						unset($g, $h);
 
 					}
@@ -125,242 +162,375 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 
 			} while ($row_loc = mysqli_fetch_assoc($loc));
 
-			$deleteSQL = sprintf("DELETE FROM %s WHERE id='%s'", $prefix."judging_locations",$id);
-			mysqli_real_escape_string($connection,$deleteSQL);
-			$result = mysqli_query($connection,$deleteSQL) or die (mysqli_error($connection));
+		}
 
-		} // end if ($go == "judging")
+		$update_table = $prefix."judging_locations";
+		$db_conn->where ('id', $id);
+		$result = $db_conn->delete($update_table);
+		if (!$result) {
+			$error_output[] = $db_conn->getLastError();
+			$errors = TRUE;
+		}
 
-		elseif ($go == "participants") {
+	} // end if ($go == "judging")
 
-			if ($uid != "") {
+	elseif ($go == "participants") {
 
-				$deleteSQL = sprintf("DELETE FROM $users_db_table WHERE id='%s'", $id);
-				mysqli_real_escape_string($connection,$deleteSQL);
-				$result = mysqli_query($connection,$deleteSQL) or die (mysqli_error($connection));
+		if ($uid != "") {
 
-				$deleteSQL = sprintf("DELETE FROM $brewer_db_table WHERE uid='%s'", $id);
-				mysqli_real_escape_string($connection,$deleteSQL);
-				$result = mysqli_query($connection,$deleteSQL) or die (mysqli_error($connection));
-
-				$query_entries = sprintf("SELECT id from $brewing_db_table WHERE brewBrewerID='%s'",$id);
-				$entries = mysqli_query($connection,$query_entries) or die (mysqli_error($connection));
-				$row_entries = mysqli_fetch_assoc($entries);
-
-				do { $a[] = $row_entries['id']; } while ($row_entries = mysqli_fetch_assoc($entries));
-
-					sort($a);
-
-					foreach ($a as $brew_id) {
-						$deleteSQL = sprintf("DELETE FROM $brewing_db_table WHERE id='%s'", $brew_id);
-						mysqli_real_escape_string($connection,$deleteSQL);
-						$result = mysqli_query($connection,$deleteSQL) or die (mysqli_error($connection));
-
-						$deleteSQL = sprintf("DELETE FROM $judging_scores_db_table WHERE eid='%s'", $brew_id);
-						mysqli_real_escape_string($connection,$deleteSQL);
-						$result = mysqli_query($connection,$deleteSQL) or die (mysqli_error($connection));
-
-						$deleteScoreSQL = sprintf("DELETE FROM $judging_scores_bos_db_table WHERE eid='%s'", $brew_id);
-						mysqli_real_escape_string($connection,$deleteSQL);
-						$result = mysqli_query($connection,$deleteSQL) or die (mysqli_error($connection));
-					}
-
-
-				// Clear any Judging Assignments
-				$query_judge_assign = sprintf("SELECT id from $judging_assignments_db_table WHERE bid='%s'",$id);
-				$judge_assign = mysqli_query($connection,$query_judge_assign) or die (mysqli_error($connection));
-				$row_judge_assign = mysqli_fetch_assoc($judge_assign);
-
-				do { $b[] = $row_judge_assign['id']; } while ($row_judge_assign = mysqli_fetch_assoc($judge_assign));
-
-					sort($b);
-
-					foreach ($b as $judge_id) {
-						$deleteSQL = sprintf("DELETE FROM $judging_assignments_db_table WHERE id='%s'", $judge_id);
-						mysqli_real_escape_string($connection,$deleteSQL);
-						$result = mysqli_query($connection,$deleteSQL) or die (mysqli_error($connection));
-					}
-
-				// Clear any Staff Assignments
-				$query_staff_assign = sprintf("SELECT id from %s WHERE uid='%s'",$prefix."staff",$id);
-				$staff_assign = mysqli_query($connection,$query_staff_assign) or die (mysqli_error($connection));
-				$row_staff_assign = mysqli_fetch_assoc($staff_assign);
-
-				do { $c[] = $row_staff_assign['id']; } while ($row_staff_assign = mysqli_fetch_assoc($staff_assign));
-
-					sort($c);
-
-					foreach ($c as $staff_id) {
-						$deleteSQL = sprintf("DELETE FROM %s WHERE id='%s'", $prefix."staff", $staff_id);
-						mysqli_real_escape_string($connection,$deleteSQL);
-						$result = mysqli_query($connection,$deleteSQL) or die (mysqli_error($connection));
-					}
-
-			} else {
-
-				$deleteSQL = sprintf("DELETE FROM $users_db_table WHERE id='%s'", $id);
-				mysqli_real_escape_string($connection,$deleteSQL);
-				$result = mysqli_query($connection,$deleteSQL) or die (mysqli_error($connection));
-
-				$deleteSQL = sprintf("DELETE FROM $brewer_db_table WHERE uid='%s'", $id);
-				mysqli_real_escape_string($connection,$deleteSQL);
-				$result = mysqli_query($connection,$deleteSQL) or die (mysqli_error($connection));
-			}
-			//exit;
-		} // end if ($go == "participants")
-
-		elseif ($go == "entries") {
-
-			$deleteSQL = sprintf("DELETE FROM $dbTable WHERE id='%s'", $id);
-			mysqli_real_escape_string($connection,$deleteSQL);
-			$result = mysqli_query($connection,$deleteSQL) or die (mysqli_error($connection));
-
-			$query_delete_entry = sprintf("SELECT id FROM $judging_scores_db_table WHERE eid='%s'", $id);
-			$delete_entry = mysqli_query($connection,$query_delete_entry) or die (mysqli_error($connection));
-			$row_delete_entry = mysqli_fetch_assoc($delete_entry);
-
-			$deleteSQL = sprintf("DELETE FROM $judging_scores_db_table WHERE id='%s'", $row_delete_entry['id']);
-			mysqli_real_escape_string($connection,$deleteSQL);
-			$result = mysqli_query($connection,$deleteSQL) or die (mysqli_error($connection));
-
-		} // end if ($go == "entries")
-
-		elseif ($go == "judging_tables") {
-
-			$query_delete_assign = sprintf("SELECT id FROM $judging_scores_db_table WHERE scoreTable='%s'", $id);
-			$delete_assign = mysqli_query($connection,$query_delete_assign) or die (mysqli_error($connection));
-			$row_delete_assign = mysqli_fetch_assoc($delete_assign);
-			$totalRows_delete_assign = mysqli_num_rows($delete_assign);
-
-			$a = array();
-			$b = array();
-			$z = array();
-			$c = array();
-
-			if ($totalRows_delete_assign > 0) {
-				do { $z[] = $row_delete_assign['id']; } while ($row_delete_assign = mysqli_fetch_assoc($delete_assign));
-
-				foreach ($z as $aid) {
-					$deleteSQL = sprintf("DELETE FROM $judging_assignments_db_table WHERE id='%s'", $aid);
-					mysqli_real_escape_string($connection,$deleteSQL);
-					$result = mysqli_query($connection,$deleteSQL) or die (mysqli_error($connection));
-				}
-
-				$query_delete_scores = sprintf("SELECT id,eid FROM $judging_scores_db_table WHERE scoreTable='%s'", $id);
-				$delete_scores = mysqli_query($connection,$query_delete_scores) or die (mysqli_error($connection));
-				$row_delete_scores = mysqli_fetch_assoc($delete_scores);
-
-				do { $a[] = $row_delete_scores['id']; $c[] = $row_delete_scores['eid']; } while ($row_delete_scores = mysqli_fetch_assoc($delete_scores));
-
-				foreach ($a as $sid) {
-					$deleteSQL = sprintf("DELETE FROM $judging_scores_db_table WHERE id='%s'", $sid);
-					mysqli_real_escape_string($connection,$deleteSQL);
-					$result = mysqli_query($connection,$deleteSQL) or die (mysqli_error($connection));
-				}
+			$update_table = $prefix."users";
+			$db_conn->where ('id', $id);
+			$result = $db_conn->delete($update_table);
+			if (!$result) {
+				$error_output[] = $db_conn->getLastError();
+				$errors = TRUE;
 			}
 
-			$query_delete_flights = sprintf("SELECT id,flightTable FROM $judging_flights_db_table WHERE flightTable='%s'", $id);
-			$delete_flights = mysqli_query($connection,$query_delete_flights) or die (mysqli_error($connection));
-			$row_delete_flights = mysqli_fetch_assoc($delete_flights);
-			$totalRows_delete_flights = mysqli_num_rows($delete_flights);
-
-			if ($totalRows_delete_flights > 0) {
-				do { $b[] = $row_delete_flights['id']; } while ($row_delete_flights = mysqli_fetch_assoc($delete_flights));
-
-				foreach ($b as $fid) {
-					$deleteSQL = sprintf("DELETE FROM $judging_flights_db_table WHERE id='%s'", $fid);
-					mysqli_real_escape_string($connection,$deleteSQL);
-					$result = mysqli_query($connection,$deleteSQL) or die (mysqli_error($connection));
-
-				}
-
-				if ($c != "") {
-
-					foreach ($c as $eid) {
-						$query_delete_bos = sprintf("SELECT id,eid FROM $judging_scores_bos_db_table WHERE eid='%s'", $eid);
-						$delete_bos = mysqli_query($connection,$query_delete_bos) or die (mysqli_error($connection));
-						$row_delete_bos = mysqli_fetch_assoc($delete_bos);
-
-						if ($eid == $row_delete_bos['eid']) {
-							$deleteSQL = sprintf("DELETE FROM $judging_scores_bos_db_table WHERE id='%s'", $row_delete_bos['id']);
-							mysqli_real_escape_string($connection,$deleteSQL);
-							$result = mysqli_query($connection,$deleteSQL) or die (mysqli_error($connection));
-						}
-					}
-				}
+			$update_table = $prefix."brewer";
+			$db_conn->where ('uid', $id);
+			$result = $db_conn->delete($update_table);
+			if (!$result) {
+				$error_output[] = $db_conn->getLastError();
+				$errors = TRUE;
 			}
 
-			$deleteSQL = sprintf("DELETE FROM $dbTable WHERE id='%s'", $id);
-			mysqli_real_escape_string($connection,$deleteSQL);
-			$result = mysqli_query($connection,$deleteSQL) or die (mysqli_error($connection));
+			$query_entries = sprintf("SELECT id from $brewing_db_table WHERE brewBrewerID='%s'",$id);
+			$entries = mysqli_query($connection,$query_entries) or die (mysqli_error($connection));
+			$row_entries = mysqli_fetch_assoc($entries);
 
-		} // end if ($go == "judging_tables")
+			do { $a[] = $row_entries['id']; } while ($row_entries = mysqli_fetch_assoc($entries));
 
-		elseif ($go == "archive") {
+				sort($a);
 
-			$delete_suffix = "_".$filter; 
+				foreach ($a as $brew_id) {
 
-			$drop_tables_array = array(
-				$prefix."brewer".$delete_suffix,
-				$prefix."brewing".$delete_suffix,
-				$prefix."evaluation".$delete_suffix,
-				$prefix."judging_assignments".$delete_suffix,
-				$prefix."judging_flights".$delete_suffix,
-				$prefix."judging_scores".$delete_suffix,
-				$prefix."judging_scores_bos".$delete_suffix,
-				$prefix."judging_tables".$delete_suffix,
-				$prefix."special_best_data".$delete_suffix,
-				$prefix."special_best_info".$delete_suffix,
-				$prefix."staff".$delete_suffix,
-				$prefix."style_types".$delete_suffix,
-				$prefix."users".$delete_suffix
-			);
+					$update_table = $prefix."brewing";
+					$db_conn->where ('id', $brew_id);
+					$result = $db_conn->delete($update_table);
+					if (!$result) {
+						$error_output[] = $db_conn->getLastError();
+						$errors = TRUE;
+					}
+
+					$update_table = $prefix."judging_scores";
+					$db_conn->where ('eid', $brew_id);
+					$result = $db_conn->delete($update_table);
+					if (!$result) {
+						$error_output[] = $db_conn->getLastError();
+						$errors = TRUE;
+					}
+
+					$update_table = $prefix."judging_scores_bos";
+					$db_conn->where ('eid', $brew_id);
+					$result = $db_conn->delete($update_table);
+					if (!$result) {
+						$error_output[] = $db_conn->getLastError();
+						$errors = TRUE;
+					}
+
+				}
+
+			// Clear any Judging Assignments
+			$query_judge_assign = sprintf("SELECT id from $judging_assignments_db_table WHERE bid='%s'",$id);
+			$judge_assign = mysqli_query($connection,$query_judge_assign) or die (mysqli_error($connection));
+			$row_judge_assign = mysqli_fetch_assoc($judge_assign);
+
+			do { $b[] = $row_judge_assign['id']; } while ($row_judge_assign = mysqli_fetch_assoc($judge_assign));
+
+				sort($b);
+
+				foreach ($b as $judge_id) {
+
+					$update_table = $prefix."judging_assignments";
+					$db_conn->where ('id', $judge_id);
+					$result = $db_conn->delete($update_table);
+					if (!$result) {
+						$error_output[] = $db_conn->getLastError();
+						$errors = TRUE;
+					}
+
+				}
+
+			// Clear any Staff Assignments
+			$query_staff_assign = sprintf("SELECT id from %s WHERE uid='%s'",$prefix."staff",$id);
+			$staff_assign = mysqli_query($connection,$query_staff_assign) or die (mysqli_error($connection));
+			$row_staff_assign = mysqli_fetch_assoc($staff_assign);
+
+			do { $c[] = $row_staff_assign['id']; } while ($row_staff_assign = mysqli_fetch_assoc($staff_assign));
+
+				sort($c);
+
+				foreach ($c as $staff_id) {
+
+					$update_table = $prefix."staff";
+					$db_conn->where ('id', $staff_id);
+					$result = $db_conn->delete($update_table);
+					if (!$result) {
+						$error_output[] = $db_conn->getLastError();
+						$errors = TRUE;
+					}
+
+				}
+
+		} else {
+
+			$update_table = $prefix."users";
+			$db_conn->where ('id', $id);
+			$result = $db_conn->delete($update_table);
+			if (!$result) {
+				$error_output[] = $db_conn->getLastError();
+				$errors = TRUE;
+			}
+
+			$update_table = $prefix."brewer";
+			$db_conn->where ('uid', $id);
+			$result = $db_conn->delete($update_table);
+			if (!$result) {
+				$error_output[] = $db_conn->getLastError();
+				$errors = TRUE;
+			}
+
+		}
+
+	} // end if ($go == "participants")
+
+	elseif ($go == "entries") {
+
+		$db_conn->where ('id', $id);
+		$result = $db_conn->delete($dbTable);
+		if (!$result) {
+			$error_output[] = $db_conn->getLastError();
+			$errors = TRUE;
+		}
+
+		$update_table = $prefix."judging_scores";
+		$db_conn->where ('id', $row_delete_entry['id']);
+		$result = $db_conn->delete($update_table);
+		if (!$result) {
+			$error_output[] = $db_conn->getLastError();
+			$errors = TRUE;
+		}
+
+		$query_delete_entry = sprintf("SELECT id FROM $judging_scores_db_table WHERE eid='%s'", $id);
+		$delete_entry = mysqli_query($connection,$query_delete_entry) or die (mysqli_error($connection));
+		$row_delete_entry = mysqli_fetch_assoc($delete_entry);
+
+		$update_table = $prefix."judging_scores";
+		$db_conn->where ('id', $row_delete_entry['id']);
+		$result = $db_conn->delete($update_table);
+		if (!$result) {
+			$error_output[] = $db_conn->getLastError();
+			$errors = TRUE;
+		}
+
+	} // end if ($go == "entries")
+
+	elseif ($go == "judging_tables") {
+
+		$query_delete_assign = sprintf("SELECT id FROM $judging_scores_db_table WHERE scoreTable='%s'", $id);
+		$delete_assign = mysqli_query($connection,$query_delete_assign) or die (mysqli_error($connection));
+		$row_delete_assign = mysqli_fetch_assoc($delete_assign);
+		$totalRows_delete_assign = mysqli_num_rows($delete_assign);
+
+		$a = array();
+		$b = array();
+		$z = array();
+		$c = array();
+
+		if ($totalRows_delete_assign > 0) {
+			do { $z[] = $row_delete_assign['id']; } while ($row_delete_assign = mysqli_fetch_assoc($delete_assign));
+
+			foreach ($z as $aid) {
+
+				$update_table = $prefix."judging_assignments";
+				$db_conn->where ('id', $aid);
+				$result = $db_conn->delete($update_table);
+				if (!$result) {
+					$error_output[] = $db_conn->getLastError();
+					$errors = TRUE;
+				}
+
+			}
+
+			$query_delete_scores = sprintf("SELECT id,eid FROM $judging_scores_db_table WHERE scoreTable='%s'", $id);
+			$delete_scores = mysqli_query($connection,$query_delete_scores) or die (mysqli_error($connection));
+			$row_delete_scores = mysqli_fetch_assoc($delete_scores);
+
+			do { $a[] = $row_delete_scores['id']; $c[] = $row_delete_scores['eid']; } while ($row_delete_scores = mysqli_fetch_assoc($delete_scores));
+
+			foreach ($a as $sid) {
+
+				$update_table = $prefix."judging_scores";
+				$db_conn->where ('id', $sid);
+				$result = $db_conn->delete($update_table);
+				if (!$result) {
+					$error_output[] = $db_conn->getLastError();
+					$errors = TRUE;
+				}
+
+			}
+
+		}
+
+		$query_delete_flights = sprintf("SELECT id,flightTable FROM $judging_flights_db_table WHERE flightTable='%s'", $id);
+		$delete_flights = mysqli_query($connection,$query_delete_flights) or die (mysqli_error($connection));
+		$row_delete_flights = mysqli_fetch_assoc($delete_flights);
+		$totalRows_delete_flights = mysqli_num_rows($delete_flights);
+
+		if ($totalRows_delete_flights > 0) {
 			
-			foreach ($drop_tables_array as $table) {
-				if (check_setup($table,$database)) {
-					$updateSQL = "DROP TABLE ".$table.";";
-					mysqli_real_escape_string($connection,$updateSQL);
-					$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
-					//echo $updateSQL."<br>";
+			do { $b[] = $row_delete_flights['id']; } while ($row_delete_flights = mysqli_fetch_assoc($delete_flights));
+
+			foreach ($b as $fid) {
+
+				$update_table = $prefix."judging_flights";
+				$db_conn->where ('id', $fid);
+				$result = $db_conn->delete($update_table);
+				if (!$result) {
+					$error_output[] = $db_conn->getLastError();
+					$errors = TRUE;
 				}
+
 			}
 
-			$deleteSQL = sprintf("DELETE FROM $dbTable WHERE id='%s'", $id);
-			mysqli_real_escape_string($connection,$deleteSQL);
-			$result = mysqli_query($connection,$deleteSQL) or die (mysqli_error($connection));
+			if ($c != "") {
 
-		}
+				foreach ($c as $eid) {
+					
+					$query_delete_bos = sprintf("SELECT id,eid FROM $judging_scores_bos_db_table WHERE eid='%s'", $eid);
+					$delete_bos = mysqli_query($connection,$query_delete_bos) or die (mysqli_error($connection));
+					$row_delete_bos = mysqli_fetch_assoc($delete_bos);
 
-		elseif ($go == "default") {
+					if ($eid == $row_delete_bos['eid']) {
 
-			$deleteSQL = sprintf("DELETE FROM $dbTable WHERE id='%s'", $id);
-			mysqli_real_escape_string($connection,$deleteSQL);
-			$result = mysqli_query($connection,$deleteSQL) or die (mysqli_error($connection));
+						$update_table = $prefix."judging_scores_bos";
+						$db_conn->where ('id', $row_delete_bos['id']);
+						$result = $db_conn->delete($update_table);
+						if (!$result) {
+							$error_output[] = $db_conn->getLastError();
+							$errors = TRUE;
+						}
 
-			if ($dbTable == $prefix."archive") {
-
-				$tables_array = array($brewer_db_table, $brewing_db_table, $judging_assignments_db_table, $judging_flights_db_table, $judging_scores_db_table, $judging_scores_bos_db_table, $judging_tables_db_table, $special_best_info_db_table, $special_best_data_db_table, $sponsors_db_table, $staff_db_table, $style_types_db_table, $users_db_table);
-
-				foreach ($tables_array as $table) {
-					$table = $table."_".$filter;
-					if (table_exists($table)) {
-						$deleteSQL = sprintf("DROP TABLE %s",$table);
+						$deleteSQL = sprintf("DELETE FROM $judging_scores_bos_db_table WHERE id='%s'", $row_delete_bos['id']);
 						mysqli_real_escape_string($connection,$deleteSQL);
 						$result = mysqli_query($connection,$deleteSQL) or die (mysqli_error($connection));
 					}
+
 				}
+
 			}
+
 		}
 
-		else {
-			$deleteSQL = sprintf("DELETE FROM $dbTable WHERE id='%s'", $id);
-			mysqli_real_escape_string($connection,$deleteSQL);
-			$result = mysqli_query($connection,$deleteSQL) or die (mysqli_error($connection));
+		$db_conn->where ('id', $id);
+		$result = $db_conn->delete($dbTable);
+		if (!$result) {
+			$error_output[] = $db_conn->getLastError();
+			$errors = TRUE;
 		}
 
-		$redirect_go_to = sprintf("Location: %s", $deleteGoTo);
+	} // end if ($go == "judging_tables")
+
+	elseif ($go == "archive") {
+
+		$delete_suffix = "_".$filter; 
+
+		$drop_tables_array = array(
+			$prefix."brewer".$delete_suffix,
+			$prefix."brewing".$delete_suffix,
+			$prefix."evaluation".$delete_suffix,
+			$prefix."judging_assignments".$delete_suffix,
+			$prefix."judging_flights".$delete_suffix,
+			$prefix."judging_scores".$delete_suffix,
+			$prefix."judging_scores_bos".$delete_suffix,
+			$prefix."judging_tables".$delete_suffix,
+			$prefix."special_best_data".$delete_suffix,
+			$prefix."special_best_info".$delete_suffix,
+			$prefix."staff".$delete_suffix,
+			$prefix."style_types".$delete_suffix,
+			$prefix."users".$delete_suffix
+		);
+		
+		foreach ($drop_tables_array as $table) {
+			
+			if (check_setup($table,$database)) {
+
+				$sql = sprintf("DROP TABLE %s", $table);
+				$db_conn->rawQuery($sql);
+				if ($db_conn->getLastErrno() !== 0) {
+					$error_output[] = $db_conn->getLastError();
+					$errors = TRUE;
+				}
+				
+			}
+
+		}
+
+		$db_conn->where ('id', $id);
+		$result = $db_conn->delete($dbTable);
+		if (!$result) {
+			$error_output[] = $db_conn->getLastError();
+			$errors = TRUE;
+		}
+
+	}
+
+	elseif ($go == "default") {
+
+		$db_conn->where ('id', $id);
+		$result = $db_conn->delete($dbTable);
+		if (!$result) {
+			$error_output[] = $db_conn->getLastError();
+			$errors = TRUE;
+		}
+
+		if ($dbTable == $prefix."archive") {
+
+			$tables_array = array($brewer_db_table, $brewing_db_table, $judging_assignments_db_table, $judging_flights_db_table, $judging_scores_db_table, $judging_scores_bos_db_table, $judging_tables_db_table, $special_best_info_db_table, $special_best_data_db_table, $sponsors_db_table, $staff_db_table, $style_types_db_table, $users_db_table);
+
+			foreach ($tables_array as $table) {
+
+				$table = $table."_".$filter;
+
+				if (table_exists($table)) {
+
+					$sql = sprintf("DROP TABLE %s", $table);
+					$db_conn->rawQuery($sql);
+					if ($db_conn->getLastErrno() !== 0) {
+						$error_output[] = $db_conn->getLastError();
+						$errors = TRUE;
+					}
+
+				}
+
+			}
+
+		}
+
+	}
+
+	else {
+
+		$db_conn->where ('id', $id);
+		$result = $db_conn->delete($dbTable);
+		if (!$result) {
+			$error_output[] = $db_conn->getLastError();
+			$errors = TRUE;
+		}
+
+	}
+
+	if (!empty($error_output)) $_SESSION['error_output'] = $error_output;
+
+	if ($errors) $deleteGoTo = $base_url."index.php?section=admin&msg=3";
+	$deleteGoTo = prep_redirect_link($deleteGoTo);
+	$redirect_go_to = sprintf("Location: %s", $deleteGoTo);
 
 } else {
-	$redirect_go_to = sprintf("Location: %s", $base_url."index.php?msg=98");
+
+	$redirect = $base_url."index.php?msg=98";
+	$redirect = prep_redirect_link($redirect);
+	$redirect_go_to = sprintf("Location: %s", $redirect);
+
 }
 ?>

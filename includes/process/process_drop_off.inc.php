@@ -3,67 +3,109 @@
  * Module:      process_drop_off.inc.php
  * Description: This module does all the heavy lifting for adding/editing info in the "drop_off" table
  */
+
+$errors = FALSE;
+$error_output = array();
+$_SESSION['error_output'] = "";
+
 if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) || ($section == "setup"))) {
 
-	$dropLocationWebsite = check_http(sterilize($_POST['dropLocationWebsite']));
+	// Instantiate HTMLPurifier
+	require (CLASSES.'htmlpurifier/HTMLPurifier.standalone.php');
+	$config_html_purifier = HTMLPurifier_Config::createDefault();
+	$purifier = new HTMLPurifier($config_html_purifier);
+
 	$dropLocationName = sterilize($_POST['dropLocationName']);
+	$dropLocationName = $purifier->purify($dropLocationName);
+	$dropLocationName = capitalize($dropLocationName);
+	$dropLocation = sterilize($_POST['dropLocation']);
+	$dropLocation = $purifier->purify($dropLocation);
+	$dropLocationPhone = sterilize($_POST['dropLocationPhone']);
+	$dropLocationPhone = $purifier->purify($dropLocationPhone);
+	$dropLocationWebsite = check_http(sterilize($_POST['dropLocationWebsite']));
+	$dropLocationWebsite = $purifier->purify($dropLocationWebsite);
+	$dropLocationWebsite = strtolower($dropLocationWebsite);
+	$dropLocationNotes = sterilize($_POST['dropLocationNotes']);
+	$dropLocationNotes = $purifier->purify($dropLocationNotes);
 
 	if ($action == "add") {
 
 		if ($go != "skip") {
 
-			$insertSQL = sprintf("INSERT INTO $drop_off_db_table (dropLocationName, dropLocation, dropLocationPhone, dropLocationWebsite, dropLocationNotes) VALUES (%s, %s, %s, %s, %s)",
-							   GetSQLValueString(capitalize($dropLocationName), "text"),
-							   GetSQLValueString(sterilize($_POST['dropLocation']), "text"),
-							   GetSQLValueString(sterilize($_POST['dropLocationPhone']), "text"),
-							   GetSQLValueString(strtolower($dropLocationWebsite), "text"),
-							   GetSQLValueString(sterilize($_POST['dropLocationNotes']), "text")
-							   );
-
-			mysqli_real_escape_string($connection,$insertSQL);
-			$result = mysqli_query($connection,$insertSQL) or die (mysqli_error($connection));
+			$update_table = $prefix."drop_off";
+			$data = array(
+				'dropLocationName' => $dropLocationName,
+				'dropLocation' => $dropLocation,
+				'dropLocationPhone' => $dropLocationPhone,
+				'dropLocationWebsite' => $dropLocationWebsite,
+				'dropLocationNotes' => $dropLocationNotes
+			);
+			$result = $db_conn->insert ($update_table, $data);
+			if (!$result) {
+				$error_output[] = $db_conn->getLastError();
+				$errors = TRUE;
+			}
 
 		}
 
 		if ($section == "setup") {
 
-			$sql = sprintf("UPDATE `%s` SET setup_last_step = '6' WHERE id='1';", $system_db_table);
-			mysqli_select_db($connection,$database);
-			mysqli_real_escape_string($connection,$sql);
-			$result = mysqli_query($connection,$sql) or die (mysqli_error($connection));
+			$update_table = $prefix."bcoem_sys";
+			$data = array('setup_last_step' => 6);
+			$db_conn->where ('id', 1);
+			$result = $db_conn->update ($update_table, $data);
+			if (!$result) {
+				$error_output[] = $db_conn->getLastError();
+				$errors = TRUE;
+			}
 
 			if ($go == "skip") $insertGoTo = $base_url."setup.php?section=step7";
 			else $insertGoTo = $base_url."setup.php?section=step6&msg=11";
+			if ($errors) $insertGoTo = $base_url."setup.php?section=step6&msg=3";
 
 		}
 
+		if (!empty($error_output)) $_SESSION['error_output'] = $error_output;
+
 		else $insertGoTo = $base_url."index.php?section=admin&go=dropoff&msg=1";
-		$pattern = array('\'', '"');
-		$insertGoTo = str_replace($pattern, "", $insertGoTo);
-		$redirect_go_to = sprintf("Location: %s", stripslashes($insertGoTo));
+		
+		if ($errors) $insertGoTo = $base_url."index.php?section=admin&go=dropoff&msg=3";
+		$insertGoTo = prep_redirect_link($insertGoTo);
+		$redirect_go_to = sprintf("Location: %s", $insertGoTo);
 
 	}
 
 	if ($action == "edit") {
-		$updateSQL = sprintf("UPDATE $drop_off_db_table SET dropLocationName=%s, dropLocation=%s, dropLocationPhone=%s, dropLocationWebsite=%s, dropLocationNotes=%s WHERE id=%s",
-						   GetSQLValueString(capitalize($dropLocationName), "text"),
-						   GetSQLValueString(sterilize($_POST['dropLocation']), "text"),
-						   GetSQLValueString(sterilize($_POST['dropLocationPhone']), "text"),
-						   GetSQLValueString(strtolower($dropLocationWebsite), "text"),
-						   GetSQLValueString(sterilize($_POST['dropLocationNotes']), "text"),
-						   GetSQLValueString($id, "int"));
 
-		mysqli_real_escape_string($connection,$updateSQL);
-		$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+		$update_table = $prefix."drop_off";
+		$data = array(
+			'dropLocationName' => $dropLocationName,
+			'dropLocation' => $dropLocation,
+			'dropLocationPhone' => $dropLocationPhone,
+			'dropLocationWebsite' => $dropLocationWebsite,
+			'dropLocationNotes' => $dropLocationNotes
+		);
+		$db_conn->where ('id', $id);
+		$result = $db_conn->update ($update_table, $data);
+		if (!$result) {
+			$error_output[] = $db_conn->getLastError();
+			$errors = TRUE;
+		}
+
+		if (!empty($error_output)) $_SESSION['error_output'] = $error_output;
 
 		$updateGoTo = $base_url."index.php?section=admin&go=dropoff&msg=2";
+		if ($errors) $updateGoTo = $base_url."index.php?section=admin&go=dropoff&msg=3";
+		$updateGoTo = prep_redirect_link($updateGoTo);
+		$redirect_go_to = sprintf("Location: %s", $updateGoTo);
 
-		$pattern = array('\'', '"');
-		$updateGoTo = str_replace($pattern, "", $updateGoTo);
-		$redirect_go_to = sprintf("Location: %s", stripslashes($updateGoTo));
 	}
 
 } else {
-	$redirect_go_to = sprintf("Location: %s", $base_url."index.php?msg=98");
+
+	$redirect = $base_url."index.php?msg=98";
+	$redirect = prep_redirect_link($redirect);
+	$redirect_go_to = sprintf("Location: %s", $redirect);
+
 }
 ?>

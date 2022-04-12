@@ -1,14 +1,15 @@
 <?php
+
 if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] == 0))) {
 
-	//session_name($prefix_session);
-	//session_start();
+	$errors = FALSE;
+	$error_output = array();
+	$_SESSION['error_output'] = "";
 
 	require(INCLUDES.'scrubber.inc.php');
 	require(INCLUDES.'db_tables.inc.php');
 
 	$dbTable = "default";
-	$gh_user_name = "geoff@zkdigital.com";
 
 	$tables_array = array($special_best_info_db_table, $special_best_data_db_table, $brewing_db_table, $judging_assignments_db_table, $judging_flights_db_table, $judging_scores_db_table, $judging_scores_bos_db_table, $judging_tables_db_table, $staff_db_table);
 
@@ -18,10 +19,12 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 
 	foreach ($tables_array as $table) {
 
-		$updateSQL = "TRUNCATE ".$table.";";
-		mysqli_real_escape_string($connection,$updateSQL);
-		$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
-		//echo $updateSQL."<br>";
+		$sql = "TRUNCATE ".$table.";";
+		$db_conn->rawQuery($sql);
+		if ($db_conn->getLastErrno() !== 0) {
+			$error_output[] = $db_conn->getLastError();
+			$errors = TRUE;
+		}
 
 	}
 
@@ -29,9 +32,18 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 	rdelete(USER_DOCS,"");
 
 	// Reset judge, steward, and staff interest and availability
-	$updateSQL = sprintf("UPDATE %s SET brewerStaff = 'N', brewerSteward = 'N', brewerJudge = 'N', brewerJudgeLocation = NULL, brewerStewardLocation = NULL", $prefix."brewer");
-	mysqli_real_escape_string($connection,$updateSQL);
-	$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+	$update_table = $prefix."brewer";
+	$data = array(
+		'brewerJudge' => 'N',
+		'brewerSteward' => 'N',
+		'brewerJudgeLocation' => NULL,
+		'brewerStewardLocation' => NULL
+	);
+	$result = $db_conn->update ($update_table, $data);
+	if (!$result) {
+		$error_output[] = $db_conn->getLastError();
+		$errors = TRUE;
+	}
 
 	// If not retaining participant data, keep current admins
 	if ($filter == "default") {
@@ -63,14 +75,22 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 				if (!in_array($row_non_admin['id'],$admin_ids)) {
 
 					// Delete the user's record
-					$updateSQL = sprintf("DELETE FROM %s WHERE id='%s'", $prefix."users", $row_non_admin['id']);
-					mysqli_real_escape_string($connection,$updateSQL);
-					$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+					$update_table = $prefix."users";
+					$db_conn->where ('id', $row_non_admin['id']);
+					$result = $db_conn->delete($update_table);
+					if (!$result) {
+						$error_output[] = $db_conn->getLastError();
+						$errors = TRUE;
+					}
 
 					// Delete the associated brewer's record
-					$updateSQL = sprintf("DELETE FROM %s WHERE uid='%s'", $prefix."brewer", $row_non_admin['id']);
-					mysqli_real_escape_string($connection,$updateSQL);
-					$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+					$update_table = $prefix."brewer";
+					$db_conn->where ('uid', $row_non_admin['id']);
+					$result = $db_conn->delete($update_table);
+					if (!$result) {
+						$error_output[] = $db_conn->getLastError();
+						$errors = TRUE;
+					}
 
 				} // end if (!in_array($row_non_admin['id'],$admin_ids))
 
@@ -81,6 +101,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 	} // end if ($filter == "default")
 
 	// Check for GH
+	$gh_user_name = "geoff@zkdigital.com";
 	$query_check_gh = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE user_name='%s'", $prefix."users", $gh_user_name);
 	$check_gh = mysqli_query($connection,$query_check_gh) or die (mysqli_error($connection));
 	$row_check_gh = mysqli_fetch_assoc($check_gh);
@@ -94,29 +115,66 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 		$hasher = new PasswordHash(8, false);
 		$hash = $hasher->HashPassword($gh_password);
 
-		$updateSQL = sprintf("
-			INSERT INTO `%s` (`user_name`, `password`, `userLevel`, `userQuestion`, `userQuestionAnswer`,`userCreated`)
-			VALUES ('%s', '%s', '0', '%s', '%s', NOW());",
-			$users_db_table,$gh_user_name,$hash,$random1,$random2);
-		mysqli_real_escape_string($connection,$updateSQL);
-		$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+		$update_table = $prefix."users";
+		$data = array(
+			'user_name' => $gh_user_name,
+			'password' => $hash,
+			'userLevel' => '0',
+			'userQuestion' => $random1,
+			'userQuestionAnswer' => $random2,
+			'userCreated' => $db_conn->now()
+		);
+		$result = $db_conn->insert ($update_table, $data);
+		if (!$result) {
+			$error_output[] = $db_conn->getLastError();
+			$errors = TRUE;
+		}
 
-		$query_gh_admin_user1 = sprintf("SELECT id FROM %s WHERE user_name='%s'",$users_db_table,$gh_user_name);
+		$query_gh_admin_user1 = sprintf("SELECT id FROM %s WHERE user_name='%s'", $prefix."users", $gh_user_name);
 		$gh_admin_user1 = mysqli_query($connection,$query_gh_admin_user1) or die (mysqli_error($connection));
 		$row_gh_admin_user1 = mysqli_fetch_assoc($gh_admin_user1);
 
-		$updateSQL = sprintf("
-			INSERT INTO `%s` (`uid`, `brewerFirstName`, `brewerLastName`, `brewerAddress`, `brewerCity`, `brewerState`, `brewerZip`, `brewerCountry`, `brewerPhone1`, `brewerPhone2`, `brewerClubs`, `brewerEmail`, `brewerStaff`, `brewerSteward`, `brewerJudge`, `brewerJudgeID`, `brewerJudgeRank`, `brewerAHA`)
-			VALUES ('%s', 'Geoff', 'Humphrey', '1234 Main Street', 'Anytown', 'CO', '80000', 'United States', '303-555-5555', '303-555-5555', 'Rock Hoppers Brew Club', '%s', 'N', 'N', 'N', 'A0000', 'Certified', 000000);",
-			$brewer_db_table,$row_gh_admin_user1['id'],$gh_user_name);
-		mysqli_real_escape_string($connection,$updateSQL);
-		$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+		$update_table = $prefix."brewer";
+		$data = array('id' => '1',
+			'uid' => $row_gh_admin_user1['id'],
+			'brewerFirstName' => 'Geoff',
+			'brewerLastName' => 'Humphrey',
+			'brewerAddress' => '1234 Main Street',
+			'brewerCity' => 'Denver',
+			'brewerState' => 'CO',
+			'brewerZip' => '80001',
+			'brewerCountry' => 'United States',
+			'brewerPhone1' => '303-555-5555',
+			'brewerPhone2' => '303-555-5555',
+			'brewerClubs' => 'Rock Hoppers Brew Club',
+			'brewerEmail' => $gh_user_name,
+			'brewerStaff' => 'N',
+			'brewerSteward' => 'N',
+			'brewerJudge' => 'N',
+			'brewerJudgeWaiver' => 'Y',
+			'brewerProAm' => '0',
+			'brewerDropOff' => '0'
+		);		
+		$db_conn->where ('id', $id);
+		$result = $db_conn->update ($update_table, $data);
+		if (!$result) {
+			$error_output[] = $db_conn->getLastError();
+			$errors = TRUE;
+		}
 
 	} // end if ($totalRows_check_gh == 0)
 
-	$redirect_go_to = sprintf("Location: %s", $base_url."index.php?section=admin&go=archive&msg=7");
+	if (!empty($error_output)) $_SESSION['error_output'] = $error_output;
+
+	$redirect = $base_url."index.php?section=admin&go=archive&msg=7";
+	$redirect = prep_redirect_link($redirect);
+	$redirect_go_to = sprintf("Location: %s", $redirect);
 
 } else {
-	$redirect_go_to = sprintf("Location: %s", $base_url."index.php?msg=98");
+
+	$redirect = $base_url."index.php?msg=98";
+	$redirect = prep_redirect_link($redirect);
+	$redirect_go_to = sprintf("Location: %s", $redirect);
+
 }
 ?>

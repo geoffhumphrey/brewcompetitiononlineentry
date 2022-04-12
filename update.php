@@ -17,7 +17,7 @@ require_once (INCLUDES.'constants.inc.php');
 require_once (LANG.'language.lang.php');
 require_once (INCLUDES.'headers.inc.php');
 require_once (INCLUDES.'scrubber.inc.php');
-if (HOSTED) check_hosted_gh();
+if (HOSTED) require_once (LIB.'hosted.lib.php');
 
 // Get current version from DB
 if (table_exists($prefix."bcoem_sys")) {
