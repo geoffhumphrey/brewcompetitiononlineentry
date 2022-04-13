@@ -515,6 +515,17 @@ if ($totalRows_tables > 0) {
                                 </div>
                             </div><!-- ./row -->
                             <div class="row">
+                                <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                                    <strong>Cellarmaster</strong>
+                                </div>
+                                <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-8">
+                                    <ul class="list-inline">
+                                        <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/labels.output.php?section=admin&amp;go=judging_tables">Beer Box Labels</a></li>
+                                        <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/labels.output.php?section=admin&amp;go=judging_tables&amp;filter=judges">Virtual Judging Box Tags</a></li>
+                                    </ul>
+                                </div>
+                            </div><!-- ./row -->
+                            <div class="row">
                                 <div class="col col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                     <h5>Print Bottle Labels (PDF)<hr></h5>
                                 </div>
@@ -527,6 +538,7 @@ if ($totalRows_tables > 0) {
                                     <ul class="list-inline">
                                         <li><a class="hide-loader" data-toggle="tooltip" title="6 entry numbers per label" href="<?php echo $base_url; ?>output/labels.output.php?section=admin&amp;go=entries&amp;action=bottle-entry&amp;filter=default&amp;psort=5160">Entry Numbers</a></li>
                                         <li><a class="hide-loader" data-toggle="tooltip" title="6 judging numbers per label" href="<?php echo $base_url; ?>output/labels.output.php?section=admin&amp;go=entries&amp;action=bottle-judging&amp;filter=default&amp;psort=5160">Judging Numbers</a></li>
+                                        <li><a class="hide-loader" data-toggle="tooltip" title="Quicksort labels" href="<?php echo $base_url; ?>output/labels.output.php?section=admin&amp;go=entries&amp;action=bottle-judging&amp;filter=default&amp;view=quicksort&amp;psort=5160">Quicksort</a></li>
                                     </ul>
 									<ul class="list-unstyled">
 										<li>With Required Info - All Styles (Entry Numbers)

@@ -25,8 +25,8 @@ if (table_exists($prefix."bcoem_sys")) {
 	$system_db_table = $prefix."bcoem_sys";
 }
 else {
-	$query_system = sprintf("SELECT version FROM %s", $prefix."system");
-	$system_db_table = $prefix."system";
+	$query_system = sprintf("SELECT version FROM %s", $prefix."`system`");
+	$system_db_table = $prefix."`system`";
 }
 $system = mysqli_query($connection,$query_system) or die (mysqli_error($connection));
 $row_system = mysqli_fetch_assoc($system);

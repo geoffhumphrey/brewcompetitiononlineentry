@@ -264,7 +264,21 @@ class PDF_Label extends FPDF {
             'width'=>45,
             'height'=>45,
             'font-size'=>9
-        )
+        ),
+        // Labels for custom quick sort
+        '5167' 		=> array(
+			'paper-size'=>'letter',		
+			'metric'=>'mm',	
+            'marginLeft'=>5.4, 		
+			'marginTop'=>7.3, 		
+			'NX'=>4, 	
+			'NY'=>20, 	
+			'SpaceX'=>7.14, 		
+			'SpaceY'=>0, 	
+			'width'=>44.45, 		
+			'height'=>12.7,		
+			'font-size'=>9),
+
 
     );
 
@@ -351,11 +365,43 @@ class PDF_Label extends FPDF {
         $this->MultiCell($this->_Width - $this->_Padding, $this->_Line_Height, $text, 0, 'L');
     }
 
+    function Next_Label() {
+		$this->_COUNTX++;
+		if ($this->_COUNTX == $this->_X_Number) {
+			// Row full, we start a new one
+			$this->_COUNTX=0;
+			$this->_COUNTY++;
+			if ($this->_COUNTY == $this->_Y_Number) {
+				// End of page reached, we start a new one
+				$this->_COUNTY=0;
+				$this->AddPage();
+			}
+		}
+
+		$_PosX = $this->_Margin_Left + $this->_COUNTX*($this->_Width+$this->_X_Space) + $this->_Padding;
+		$_PosY = $this->_Margin_Top + $this->_COUNTY*($this->_Height+$this->_Y_Space) + $this->_Padding;
+		$this->SetXY($_PosX, $_PosY);
+		//$this->MultiCell($this->_Width - $this->_Padding, $this->_Line_Height, '', 0, 'L');
+	}
+
+
     function _putcatalog()
     {
         parent::_putcatalog();
         // Disable the page scaling option in the printing dialog
         $this->_put('/ViewerPreferences <</PrintScaling /None>>');
     }
+
+    // New function for custom quick sort.
+    function SetDash($black=null, $white=null)
+    {
+        if($black!==null)
+            $s=sprintf('[%.3F %.3F] 0 d',$black*$this->k,$white*$this->k);
+        else
+            $s='[] 0 d';
+        $this->_out($s);
+ 
+    }
+ 
 
 }

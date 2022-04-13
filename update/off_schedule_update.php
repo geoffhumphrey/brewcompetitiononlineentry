@@ -12,6 +12,7 @@ if (!isset($output)) $output = "";
  * ---------------------------------------------------------------------------------------------------
  */
 
+
 if (check_setup($prefix."system",$database)) {
 
 	$sql = sprintf("RENAME TABLE %s TO %s",$prefix."system",$prefix."bcoem_sys");

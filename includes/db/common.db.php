@@ -4,7 +4,7 @@ $today = time();
 $url = parse_url($_SERVER['PHP_SELF']);
 mysqli_select_db($connection,$database);
 
-if (check_setup($prefix."system",$database)) $query_version1 = sprintf("SELECT * FROM %s WHERE id='1'", $prefix."system");
+if (check_setup($prefix."`system`",$database)) $query_version1 = sprintf("SELECT * FROM %s WHERE id='1'", $prefix."`system`");
 else  $query_version1 = sprintf("SELECT * FROM %s WHERE id='1'", $prefix."bcoem_sys");
 $version1 = mysqli_query($connection,$query_version1) or die (mysqli_error($connection));
 $row_version1 = mysqli_fetch_assoc($version1);
