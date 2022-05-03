@@ -5,11 +5,9 @@
  * 
  */
 
-if ((isset($_SESSION['prefsEval'])) && ($_SESSION['prefsEval'] == 1)) $current_version_display .= " (e)";
-
 $footer = "";
 
-if(!empty($_SESSION['contestName'])) $footer .= $_SESSION['contestName']." &ndash; ";
+if(!empty($_SESSION['contestName'])) $footer .= "<span class=\"hidden-sm hidden-md\">".$_SESSION['contestName']." &ndash; </span>";
 
 $footer .= "<a href=\"http://www.brewcompetition.com\" target=\"_blank\">BCOE&amp;M</a> ";
 

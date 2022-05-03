@@ -1,8 +1,8 @@
 <?php
-require('../paths.php');
+require ('../paths.php');
 //session_name($prefix_session);
-require(CONFIG.'bootstrap.php');
-require(LIB.'output.lib.php');
+require (CONFIG.'bootstrap.php');
+require (LIB.'output.lib.php');
 include (CLASSES.'tiny_but_strong/tbs_class.php');
 include (DB.'output_entry.db.php');
 
@@ -53,7 +53,8 @@ if ($brewer_info['brewerCountry'] = "United States") {
 	$brewer_info['brewerPhone2'] = format_phone_us($brewer_info['brewerPhone2']);
 }
 
-$organizer = $row_brewer_organizer['brewerFirstName']." ".$row_brewer_organizer['brewerLastName'];
+if ($row_brewer_organizer) $organizer = $row_brewer_organizer['brewerFirstName']." ".$row_brewer_organizer['brewerLastName'];
+else $organizer = "";
 
 if (in_array($_SESSION['prefsEntryForm'],$barcode_qrcode_array)) {
 

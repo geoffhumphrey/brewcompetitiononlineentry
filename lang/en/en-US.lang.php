@@ -2009,6 +2009,7 @@ $register_text_050 = "Your security question's answer is encrypted and cannot be
 $register_text_051 = "Account Information Updated";
 $register_text_052 = "A \"Yes\" or \"No\" response is required for each location below.";
 $brewer_text_044 = "Do you wish to change your security question and/or answer?";
+$brewer_text_045 = "No results have been recorded.";
 $label_change_security = "Change Security Question/Answer?";
 
 /**

@@ -1683,7 +1683,12 @@ function get_table_info($input,$method,$table_id,$dbTable,$param) {
 		$judging_location = mysqli_query($connection,$query_judging_location) or die (mysqli_error($connection));
 		$row_judging_location = mysqli_fetch_assoc($judging_location);
 
-		$return = $row_judging_location['judgingDate']."^".$row_judging_location['judgingDateEnd']."^".$row_judging_location['judgingLocName']."^".$row_judging_location['judgingLocation']."^".$row_judging_location['judgingLocType'];
+		$return = 
+		$row_judging_location['judgingDate']."^".
+		$row_judging_location['judgingDateEnd']."^".
+		$row_judging_location['judgingLocName']."^".
+		$row_judging_location['judgingLocation']."^".
+		$row_judging_location['judgingLocType'];
 		return $return;
 	}
 

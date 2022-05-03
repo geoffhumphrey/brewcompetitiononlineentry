@@ -1872,6 +1872,7 @@ $register_text_050 = "Odpověď na bezpečnostní otázku je zašifrovaná a spr
 $register_text_051 = "Informace o účtu Aktualizováno";
 $register_text_052 = "U každého níže uvedeného místa je třeba uvést odpověď Ano nebo Ne.";
 $brewer_text_044 = "Chcete změnit bezpečnostní otázku a/nebo odpověď?";
+$brewer_text_045 = "Nebyly zaznamenány žádné výsledky.";
 $label_change_security = "Změna bezpečnostní otázky/odpovědi?";
 
 /**

@@ -1876,6 +1876,7 @@ $register_text_050 = "A resposta de sua pergunta de segurança é criptografada 
 $register_text_051 = "Informações de Conta Atualizadas";
 $register_text_052 = "Uma resposta de Sim ou Não é necessária para cada local abaixo.";
 $brewer_text_044 = "Você deseja mudar sua pergunta e/ou resposta de segurança?";
+$brewer_text_045 = "Não se registraram resultados.";
 $label_change_security = "Mudar pergunta/resposta de segurança?";
 
 /**

@@ -157,6 +157,11 @@ if ($totalRows_tables > 0) {
 }
 
 ?>
+<style>
+    .row {
+        padding-bottom: 8px;
+    }
+</style>
 <script src="<?php echo $base_url;?>js_includes/admin_ajax.min.js"></script>
 <p class="lead">Hello, <?php echo $_SESSION['brewerFirstName']; ?>. <span class="small">Select the headings or icons below to view the options available in each category.</span></p>
 <div class="row bcoem-admin-element">
@@ -514,31 +519,121 @@ if ($totalRows_tables > 0) {
                                     </ul>
                                 </div>
                             </div><!-- ./row -->
-                            <div class="row">
-                                <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-4">
-                                    <strong>Cellarmaster</strong>
+                            <div class="row" style="padding: 25px 0px 15px 0px;">
+                                <div class="col col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                    <strong>Print Box Labels (PDF)</strong>
                                 </div>
-                                <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-8">
-                                    <ul class="list-inline">
-                                        <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/labels.output.php?section=admin&amp;go=judging_tables">Beer Box Labels</a></li>
-                                        <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/labels.output.php?section=admin&amp;go=judging_tables&amp;filter=judges">Virtual Judging Box Tags</a></li>
+                            </div><!-- ./row -->
+                            <div class="row">
+                                <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-4 small">
+                                    <strong><a class="hide-loader" href="https://www.avery.com/products/labels/5160" target="_blank" data-toggle="tooltip" data-placement="right" title="Avery 5160">Letter</a></strong>
+                                </div>
+                                <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-8 small">
+                                    <ul class="list-unstyled">
+                                        <li>Box Labels (by Table)
+                                            <div class="dropdown bcoem-admin-dashboard-select">
+                                                <button class="btn btn-default dropdown-toggle" type="button" id="boxLabelMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Number of Labels per Table <span class="caret"></span>
+                                                </button>
+                                                <ul class="dropdown-menu" aria-labelledby="boxLabelMenu1">
+                                                    <?php for($i=1; $i<=6; $i++) { ?>
+                                                    <li class="small"><a class="hide-loader" href="<?php echo $base_url; ?>output/labels.output.php?section=admin&amp;go=judging_tables&amp;sort=<?php echo $i; ?>"><?php echo $i; ?></a></li>
+                                                    <?php } ?>
+                                                </ul>
+                                            </div>
+                                        </li>
+                                        <li>Virtual Judging Box Labels (by Judge Name)
+                                            <div class="dropdown bcoem-admin-dashboard-select">
+                                                <button class="btn btn-default dropdown-toggle" type="button" id="boxLabelMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Number of Labels per Judge <span class="caret"></span>
+                                                </button>
+                                                <ul class="dropdown-menu" aria-labelledby="boxLabelMenu2">
+                                                    <?php for($i=1; $i<=6; $i++) { ?>
+                                                    <li class="small"><a class="hide-loader" href="<?php echo $base_url; ?>output/labels.output.php?section=admin&amp;go=judging_tables&amp;filter=judges&amp;sort=<?php echo $i; ?>"><?php echo $i; ?></a></li>
+                                                    <?php } ?>
+                                                </ul>
+                                            </div>
+                                        </li>
                                     </ul>
                                 </div>
                             </div><!-- ./row -->
                             <div class="row">
+                                <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-4 small">
+                                    <strong><a class="hide-loader" href="https://www.avery.fi/product/multipurpose-labels-ultragrip-3422" target="_blank" data-toggle="tooltip" data-placement="right" title="Avery 3422">A4</a></strong>
+                                </div>
+                                <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-8 small">
+                                    <ul class="list-unstyled">
+                                        <li>Box Labels (by Table)
+                                            <div class="dropdown bcoem-admin-dashboard-select">
+                                                <button class="btn btn-default dropdown-toggle" type="button" id="boxLabelMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Number of Labels per Table <span class="caret"></span>
+                                                </button>
+                                                <ul class="dropdown-menu" aria-labelledby="boxLabelMenu1">
+                                                    <?php for($i=1; $i<=6; $i++) { ?>
+                                                    <li class="small"><a class="hide-loader" href="<?php echo $base_url; ?>output/labels.output.php?section=admin&amp;go=judging_tables&amp;psort=3422&amp;sort=<?php echo $i; ?>"><?php echo $i; ?></a></li>
+                                                    <?php } ?>
+                                                </ul>
+                                            </div>
+                                        </li>
+                                        <li>Virtual Judging Box Labels (by Judge Name)
+                                            <div class="dropdown bcoem-admin-dashboard-select">
+                                                <button class="btn btn-default dropdown-toggle" type="button" id="boxLabelMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Number of Labels per Judge <span class="caret"></span>
+                                                </button>
+                                                <ul class="dropdown-menu" aria-labelledby="boxLabelMenu2">
+                                                    <?php for($i=1; $i<=6; $i++) { ?>
+                                                    <li class="small"><a class="hide-loader" href="<?php echo $base_url; ?>output/labels.output.php?section=admin&amp;go=judging_tables&amp;filter=judges&amp;psort=3422&amp;&amp;sort=<?php echo $i; ?>"><?php echo $i; ?></a></li>
+                                                    <?php } ?>
+                                                </ul>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div><!-- ./row -->
+                            <div class="row" style="padding: 25px 0px 15px 0px;">
                                 <div class="col col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                    <h5>Print Bottle Labels (PDF)<hr></h5>
+                                    <strong>Print Bottle Labels (PDF)</strong>
                                 </div>
                             </div><!-- ./row -->
                             <div class="row">
                                 <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
-                                    <a class="hide-loader" href="http://www.avery.com/avery/en_us/Products/Labels/Addressing-Labels/Easy-Peel-White-Address-Labels_05160.htm" target="_blank" data-toggle="tooltip" data-placement="right" title="Avery 5160"><strong>Letter</strong></a>
+                                    <a class="hide-loader" href="https://www.avery.com/products/labels/5167" target="_blank" data-toggle="tooltip" data-placement="right" title="Avery 5167"><strong>Letter</strong></a>
+                                </div>
+                                <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
+                                    <ul class="list-inline">
+                                        <li><a class="hide-loader" data-toggle="tooltip" title="Quicksort labels" href="<?php echo $base_url; ?>output/labels.output.php?section=admin&amp;go=entries&amp;action=bottle-judging&amp;filter=default&amp;view=quicksort&amp;psort=5167">Quicksort</a> <a class="hide-loader" href="#" data-toggle="modal" data-target="#quicksortModal"><i class="fa fa-question-circle"></i></a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="modal fade" id="quicksortModal" tabindex="-1" role="dialog" aria-labelledby="quicksortModalLabel">
+                                <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                        <h4 class="modal-title" id="quicksortModalLabel">What are Quicksort Labels?</h4>
+                                    </div>
+                                    <div class="modal-body">
+                                        <p>Quicksort labels are intended to be used using the Quicksort entry sorting method employed by some larger competitions. In essence:</p>
+                                        <ul>
+                                            <li>All entries are assumed received. Admins can mark all entries as received via the Admin Dashboard > Manage Entries screen.</li>
+                                            <li>Entries are moved from received boxes to staged areas labeled by category number.</li>
+                                            <li>Staff members affix the Quicksort labels (Avery 5167) to entry bottles/cans, making sure to keep the paper entry labels attached.</li>
+                                            <li>A second sorting staff member then crosschecks each entry and removes all paper entry labels.</li>
+                                            <li>Initial round bottles/cans are placed into their appropriate boxes.</li>
+                                            <li>Second/BOS round bottles/cans are placed into boxes by category numbers.</li>
+                                            <li>After sorting, admins review which entry labels were <strong>not</strong> applied, marking those entries as not received via the Admin Dashboard > Manage Entries screen.</li>
+                                        </ul>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                                    </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
+                                    <a class="hide-loader" href="https://www.avery.com/products/labels/5160" target="_blank" data-toggle="tooltip" data-placement="right" title="Avery 5160"><strong>Letter</strong></a>
                                 </div>
                                 <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
                                     <ul class="list-inline">
                                         <li><a class="hide-loader" data-toggle="tooltip" title="6 entry numbers per label" href="<?php echo $base_url; ?>output/labels.output.php?section=admin&amp;go=entries&amp;action=bottle-entry&amp;filter=default&amp;psort=5160">Entry Numbers</a></li>
                                         <li><a class="hide-loader" data-toggle="tooltip" title="6 judging numbers per label" href="<?php echo $base_url; ?>output/labels.output.php?section=admin&amp;go=entries&amp;action=bottle-judging&amp;filter=default&amp;psort=5160">Judging Numbers</a></li>
-                                        <li><a class="hide-loader" data-toggle="tooltip" title="Quicksort labels" href="<?php echo $base_url; ?>output/labels.output.php?section=admin&amp;go=entries&amp;action=bottle-judging&amp;filter=default&amp;view=quicksort&amp;psort=5160">Quicksort</a></li>
                                     </ul>
 									<ul class="list-unstyled">
 										<li>With Required Info - All Styles (Entry Numbers)
@@ -592,7 +687,7 @@ if ($totalRows_tables > 0) {
                              </div><!-- ./row -->
                              <div class="row">
                                 <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
-                                    <a class="hide-loader" href="http://www.avery.se/avery/en_se/Products/Labels/Multipurpose/White-Multipurpose-Labels-Permanent/General-Usage-Labels-White_3422.htm" target="_blank" data-toggle="tooltip" data-placement="right" title="Avery 3422"><strong>A4</strong></a>
+                                    <a class="hide-loader" href="https://www.avery.fi/product/multipurpose-labels-ultragrip-3422" target="_blank" data-toggle="tooltip" data-placement="right" title="Avery 3422"><strong>A4</strong></a>
                                 </div>
                                 <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
                                     <ul class="list-inline">
@@ -651,7 +746,7 @@ if ($totalRows_tables > 0) {
                              </div><!-- ./row -->
                              <div class="row">
                                 <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
-                                    <a class="hide-loader" href="http://www.onlinelabels.com/Products/OL32.htm" target="_blank" data-toggle="tooltip" data-placement="right" title="Online Lables OL32"><strong>0.50 in/13 mm Round</strong></a>
+                                    <a class="hide-loader" href="http://www.onlinelabels.com/Products/OL32.htm" target="_blank" data-toggle="tooltip" data-placement="auto" title="Online Lables OL32"><strong>0.50 in/13 mm Round</strong></a>
                                 </div>
                                 <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
                                     <ul class="list-unstyled">
@@ -704,7 +799,7 @@ if ($totalRows_tables > 0) {
                             </div><!-- ./row -->
                             <div class="row">
                                 <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
-                                    <a class="hide-loader" href="http://www.onlinelabels.com/Products/OL5275WR.htm" target="_blank" data-toggle="tooltip" data-placement="right" title="Online Lables OL5275WR"><strong>0.75 in/19 mm Round</strong></a>
+                                    <a class="hide-loader" href="http://www.onlinelabels.com/Products/OL5275WR.htm" target="_blank" data-toggle="tooltip" data-placement="auto" title="Online Lables OL5275WR"><strong>0.75 in/19 mm Round</strong></a>
                                 </div>
                                 <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
                                     <ul class="list-unstyled">
@@ -1160,9 +1255,9 @@ if ($totalRows_tables > 0) {
 				</div>
 				<div id="collapseReports" class="panel-collapse collapse">
 					<div class="panel-body">
-						<div class="row">
+						<div class="row" style="padding: 0px 0px 15px 0px;">
 							<div class="col col-lg-12 col-md-12 col-sm-12 col-xs-12">
-								<h5>Before Judging<hr></h5>
+								<strong>Before Judging</strong>
 							</div>
 						</div><!-- ./row -->
                         <div class="row">
@@ -1466,9 +1561,9 @@ if ($totalRows_tables > 0) {
                             
 
                         ?>
-						<div class="row">
+						<div class="row" style="padding: 25px 0px 15px 0px;">
 							<div class="col col-lg-12 col-md-12 col-sm-12 col-xs-12">
-								<h5>During Judging<hr></h5>
+								<strong>During Judging</strong>
 							</div>
 						</div><!-- ./row -->
 						<div class="row">
@@ -1543,9 +1638,9 @@ if ($totalRows_tables > 0) {
                             </div>
                         </div><!-- ./row -->
                         <?php } ?>
-						<div class="row">
+						<div class="row" style="padding: 25px 0px 15px 0px;">
 							<div class="col col-lg-12 col-md-12 col-sm-12 col-xs-12">
-								<h5>After Judging<hr></h5>
+								<strong>After Judging</strong>
 							</div>
 						</div><!-- ./row -->
 						<?php if ($totalRows_tables > 0) { ?>
