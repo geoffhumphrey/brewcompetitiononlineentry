@@ -38,6 +38,10 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 
 	if ($action == "update") {
 
+		$update_table = $prefix."styles";
+		$data = array('brewStyleActive' => 'N');
+		$result = $db_conn->update ($update_table, $data);
+
 		foreach($_POST['id'] as $id) {
 
 			if (isset($_POST['brewStyleActive'.$id])) $brewStyleActive = "Y";

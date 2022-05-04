@@ -198,6 +198,18 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 
         } // end foreach
 
+        // Deactivate all styles
+		$update_table = $prefix."styles";
+		$data = array('brewStyleActive' => 'N');
+		$result = $db_conn->update ($update_table, $data);
+
+		// Activate all styles associated with the chosen style set
+		// User will deselect any unwanted in Step 7
+		$update_table = $prefix."styles";
+		$data = array('brewStyleActive' => 'Y');
+		$db_conn->where ('brewStyleVersion', sterilize($_POST['prefsStyleSet']));
+		$result = $db_conn->update ($update_table, $data);
+
 		if ($_POST['prefsPaypalIPN'] == 1) {
 
 			// Only install the payments db table if enabled and if not there already
@@ -229,7 +241,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 		} // end if ($_POST['prefsPaypalIPN'] == 1)
 
 		// Check to see if processed correctly.
-		$query_prefs_check = sprintf("SELECT COUNT(*) as 'count' FROM %s",$preferences_db_table);
+		$query_prefs_check = sprintf("SELECT COUNT(*) as 'count' FROM %s", $prefix."preferences");
 		$prefs_check = mysqli_query($connection,$query_prefs_check) or die (mysqli_error($connection));
 		$row_prefs_check = mysqli_fetch_assoc($prefs_check);
 
@@ -249,11 +261,13 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 
 		}
 
+		else {
+			$insertGoTo = $base_url."setup.php?section=step3&msg=99";
+			if ($errors) $insertGoTo = $base_url."setup.php?section=step3&msg=3";
+		}
+
 		if (!empty($error_output)) $_SESSION['error_output'] = $error_output;
 
-		// If not, redirect back to step 3 and display message.
-		else  $insertGoTo = $base_url."setup.php?section=step3&msg=99";
-		if ($errors) $insertGoTo = $base_url."setup.php?section=step3&msg=3";
 		$insertGoTo = prep_redirect_link($insertGoTo);
 		$redirect_go_to = sprintf("Location: %s", $insertGoTo);
 

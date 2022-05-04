@@ -140,6 +140,7 @@ if ($section == "past-winners") {
         var username_url = "<?php echo $base_url; ?>ajax/username.ajax.php";
         var email_url="<?php echo $base_url; ?>ajax/valid_email.ajax.php";
         var user_agent_msg = "<?php echo $alert_text_086; ?>";
+        var setup = 0;
     </script>
     
     <!-- Load BCOE&M Custom JS -->

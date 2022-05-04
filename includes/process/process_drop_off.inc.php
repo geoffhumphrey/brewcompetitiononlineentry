@@ -65,11 +65,10 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 
 		}
 
+		else $insertGoTo = $base_url."index.php?section=admin&go=dropoff&msg=1";
+		if ($errors) $insertGoTo = $base_url."index.php?section=admin&go=dropoff&msg=3";
 		if (!empty($error_output)) $_SESSION['error_output'] = $error_output;
 
-		else $insertGoTo = $base_url."index.php?section=admin&go=dropoff&msg=1";
-		
-		if ($errors) $insertGoTo = $base_url."index.php?section=admin&go=dropoff&msg=3";
 		$insertGoTo = prep_redirect_link($insertGoTo);
 		$redirect_go_to = sprintf("Location: %s", $insertGoTo);
 

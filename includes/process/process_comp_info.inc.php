@@ -146,14 +146,13 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 			'contestCheckInPassword' => $hash,
 			'contestID' => $contestID
 		);
-		$db_conn->where ('id', $id);
 		$result = $db_conn->insert ($update_table, $data);
 		if (!$result) {
 			$error_output[] = $db_conn->getLastError();
 			$errors = TRUE;
 		}
 
-		$update_table = $prefix."contest_info";
+		$update_table = $prefix."contacts";
 		$data = array(
 			'contactFirstName' => sterilize($_POST['contactFirstName']),
 			'contactLastName' => sterilize($_POST['contactLastName']),
@@ -189,8 +188,8 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 
 		// If not, redirect back to step 4 and display message.
 		else  {
-			if ($errors) $insertGoTo = $base_url."setup.php?section=step4&msg=3";
 			$insertGoTo = $base_url."setup.php?section=step4&msg=99";
+			if ($errors) $insertGoTo = $base_url."setup.php?section=step4&msg=3";
 		}
 
 		if (!empty($error_output)) $_SESSION['error_output'] = $error_output;

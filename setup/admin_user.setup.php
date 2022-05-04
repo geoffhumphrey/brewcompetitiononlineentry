@@ -1,6 +1,7 @@
 <script type="text/javascript">
 var username_url = "<?php echo $base_url; ?>ajax/username.ajax.php";
 var email_url="<?php echo $base_url; ?>ajax/valid_email.ajax.php";
+var setup = 1;
 </script>
 <script src="<?php echo $base_url; ?>js_includes/registration_checks.min.js"></script>
 <script type="text/javascript">
@@ -36,7 +37,7 @@ foreach ($security_questions_display as $key => $value) {
 	$security .= "<div class=\"radio\"><label><input type=\"radio\" name=\"userQuestion\" value=\"".$security_question[$value]."\" required> ".$security_question[$value]."</label></div>";
 }
 
-if (($action != "print") && ($msg != "default")) echo $msg_output; ?>
+?>
 <p class="lead">This will be the Administrator's account with full access to <em>all</em> of the installation's features and functions.</p>
 <p class="lead"><small>The owner of this account will be able to add, edit, and delete any entry and participant, grant administration privileges to other users, define custom styles, define tables and flights, add scores, print reports, etc. This user will also be able to add, edit, and delete their own entries into the competition.</small></p>
 <form class="form-horizontal" data-toggle="validator" action="<?php echo $base_url; ?>includes/process.inc.php?section=<?php if ($section == "step1") echo "setup"; else echo $section; ?>&amp;action=add&amp;dbTable=<?php echo $users_db_table; ?>" method="POST" name="form1" id="form1" onSubmit="return CheckRequiredFields()">
@@ -47,7 +48,7 @@ if (($action != "print") && ($msg != "default")) echo $msg_output; ?>
 			<div class="input-group has-warning">
 				<span class="input-group-addon" id="email-addon1"><span class="fa fa-envelope"></span></span>
 				<!-- Input Here -->
-				<input class="form-control" name="user_name" id="user_name" type="email" placeholder="Your email address is your user name" onBlur="checkAvailability()" onchange="AjaxFunction(this.value);" value="<?php if ((isset($_COOKIE['user_name'])) && ($msg > 0)) echo $_COOKIE['user_name']; ?>" required>
+				<input class="form-control" name="user_name" id="user_name" type="email" placeholder="Your email address is your user name" onchange="AjaxFunction(this.value);" value="<?php if ((isset($_COOKIE['user_name'])) && ($msg > 0)) echo $_COOKIE['user_name']; ?>" required>
 				<span class="input-group-addon" id="email-addon2"><span class="fa fa-star"></span>
 			</div>
 			<div id="msg_email" class="help-block"></div>

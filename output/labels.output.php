@@ -55,10 +55,6 @@ if (isset($_SESSION['loginUsername'])) {
 
 	} while ($row_styles = mysqli_fetch_assoc($styles));
 
-	//print_r($special_ingredients); 
-
-	//print_r($mead); exit;
-
 	if ($_SESSION['userLevel'] <= 1) {
 
 		/**
@@ -162,7 +158,7 @@ if (isset($_SESSION['loginUsername'])) {
 							else {
 
 								$pdf->SetFont('Arial', 'B', 12);
-								$judge_flight = "Table ______";
+								$judge_flight = "Table: ______";
 								$pdf->Cell(66, 6, $judge_flight, 0, 2, 'C');
 
 							}

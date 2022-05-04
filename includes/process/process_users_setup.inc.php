@@ -39,6 +39,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 			'userQuestionAnswer' => $hash_question,
 			'userCreated' =>  $db_conn->now()
 		);
+
 		$result = $db_conn->insert ($update_table, $data);
 		if (!$result) {
 			$error_output[] = $db_conn->getLastError();
@@ -46,7 +47,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 		}
 
 		// Check to see if processed correctly.
-		$query_user_check = sprintf("SELECT COUNT(*) as 'count' FROM %s",$users_db_table);
+		$query_user_check = sprintf("SELECT COUNT(*) as 'count' FROM %s", $prefix."users");
 		$user_check = mysqli_query($connection,$query_user_check) or die (mysqli_error($connection));
 		$row_user_check = mysqli_fetch_assoc($user_check);
 
@@ -69,10 +70,8 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 
 		}
 
+		else $insertGoTo = $base_url."setup.php?section=step1&go=".$username."&msg=99";
 		if (!empty($error_output)) $_SESSION['error_output'] = $error_output;
-
-		// If not, redirect back to step 1 and display message.
-		else  $insertGoTo = $base_url."setup.php?section=step1&go=".$username."&msg=99";
 
 		$insertGoTo = prep_redirect_link($insertGoTo);
 		$redirect_go_to = sprintf("Location: %s", $insertGoTo);

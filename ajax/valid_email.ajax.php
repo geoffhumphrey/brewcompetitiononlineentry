@@ -1,7 +1,16 @@
 <?php 
 ob_start();
 require('../paths.php');
-require(CONFIG.'bootstrap.php');
+require(INCLUDES.'url_variables.inc.php');
+
+if ($section == "setup") {
+	$alert_email_valid = "Email format is valid!";
+	$alert_email_not_valid = "Email format is not valid.";
+}
+
+else {
+	require(CONFIG.'bootstrap.php');
+}
 
 ini_set('display_errors', 0); // Change to 0 for prod; change to 1 for testing.
 ini_set('display_startup_errors', 0); // Change to 0 for prod; change to 1 for testing.
