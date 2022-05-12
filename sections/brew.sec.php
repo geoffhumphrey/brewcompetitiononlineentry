@@ -616,7 +616,7 @@ else $relocate_referrer = $_SERVER['HTTP_REFERER'];
         </div><!-- ./Form Group -->
      </div>
      <!-- Select Sweetness -->
-     <div id="sweetness">
+     <div id="sweetness-mead">
     	<div id="fg-sweetness" class="form-group <?php if (($highlight_carb) || ($highlight_sweetness)) echo "has-error"; ?>">
     		<!-- Form Group Radio INLINE -->
             <label for="brewMead2" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label"><?php echo $label_sweetness; ?></label>
@@ -634,6 +634,33 @@ else $relocate_referrer = $_SERVER['HTTP_REFERER'];
                     </label>
                     <label class="radio-inline">
                         <input type="radio" name="brewMead2" value="Medium Sweet" id="brewMead2_3"  <?php if (($action == "edit") && ($row_log['brewMead2'] == "Medium Sweet")) echo "CHECKED";  ?>/> <?php echo $label_med_sweet; ?>
+                    </label>
+                    <label class="radio-inline">
+                        <input type="radio" name="brewMead2" value="Sweet" id="brewMead2_4"  <?php if (($action == "edit") && ($row_log['brewMead2'] == "Sweet")) echo "CHECKED";  ?>/> <?php echo $label_sweet; ?>
+                    </label>
+                </div>
+                <div class="help-block with-errors"></div>
+            </div>
+        </div><!-- ./Form Group -->
+    </div>
+    <div id="sweetness-cider">
+    	<div id="fg-sweetness" class="form-group <?php if (($highlight_carb) || ($highlight_sweetness)) echo "has-error"; ?>">
+    		<!-- Form Group Radio INLINE -->
+            <label for="brewMead2" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label"><?php echo $label_sweetness; ?></label>
+            <div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
+                <div class="input-group">
+                    <!-- Input Here -->
+                    <label class="radio-inline">
+                        <input type="radio" name="brewMead2" value="Dry" id="brewMead2_0"  <?php if (($action == "edit") && ($row_log['brewMead2'] == "Dry")) echo "CHECKED";  ?> /><?php echo $label_dry; ?>
+                    </label>
+                    <label class="radio-inline">
+                        <input type="radio" name="brewMead2" value="Semi-Dry" id="brewMead2_1"  <?php if (($action == "edit") && ($row_log['brewMead2'] == "Semi-Dry")) echo "CHECKED";  ?>/> <?php echo $label_semi_dry; ?>
+                    </label>
+                    <label class="radio-inline">
+                        <input type="radio" name="brewMead2" value="Medium" id="brewMead2_2"  <?php if (($action == "edit") && ($row_log['brewMead2'] == "Medium")) echo "CHECKED";  ?>/> <?php echo $label_med; ?>
+                    </label>
+                    <label class="radio-inline">
+                        <input type="radio" name="brewMead2" value="Semi-Sweet" id="brewMead2_3"  <?php if (($action == "edit") && ($row_log['brewMead2'] == "Semi-Sweet")) echo "CHECKED";  ?>/> <?php echo $label_semi_sweet; ?>
                     </label>
                     <label class="radio-inline">
                         <input type="radio" name="brewMead2" value="Sweet" id="brewMead2_4"  <?php if (($action == "edit") && ($row_log['brewMead2'] == "Sweet")) echo "CHECKED";  ?>/> <?php echo $label_sweet; ?>
@@ -689,7 +716,7 @@ else $relocate_referrer = $_SERVER['HTTP_REFERER'];
 	        <div class="input-group">
 	            <!-- Input Here -->
 	            <label class="radio-inline">
-	                <input type="radio" name="brewPaid" value="1" id="brewPaid_0" <?php if ($row_log['brewPaid'] == 1) echo "CHECKED"; ?> />Yes
+	                <input type="radio" name="brewPaid" value="1" id="brewPaid_0" <?php if (($row_log) && ($row_log['brewPaid'] == 1)) echo "CHECKED"; ?> />Yes
 	            </label>
 	            <label class="radio-inline">
 	                <input type="radio" name="brewPaid" value="0" id="brewPaid_1" <?php if (($action == "edit") && ((empty($row_log['brewPaid'])) || ($row_log['brewPaid'] == 0))) echo "CHECKED"; if ($action == "add") echo "CHECKED"; ?> />No
@@ -704,7 +731,7 @@ else $relocate_referrer = $_SERVER['HTTP_REFERER'];
 	        <div class="input-group">
 	            <!-- Input Here -->
 	            <label class="radio-inline">
-	                <input type="radio" name="brewReceived" value="1" id="brewReceived_0" <?php if ($row_log['brewReceived'] == 1) echo "CHECKED"; ?> />Yes
+	                <input type="radio" name="brewReceived" value="1" id="brewReceived_0" <?php if (($row_log) && ($row_log['brewReceived'] == 1)) echo "CHECKED"; ?> />Yes
 	            </label>
 	            <label class="radio-inline">
 	                <input type="radio" name="brewReceived" value="0" id="brewReceived_1" <?php if (($action == "edit") && ((empty($row_log['brewReceived'])) || ($row_log['brewReceived'] == 0))) echo "CHECKED"; if ($action == "add") echo "CHECKED"; ?> />No

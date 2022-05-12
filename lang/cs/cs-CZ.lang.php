@@ -1874,6 +1874,8 @@ $register_text_052 = "U každého níže uvedeného místa je třeba uvést odpo
 $brewer_text_044 = "Chcete změnit bezpečnostní otázku a/nebo odpověď?";
 $brewer_text_045 = "Nebyly zaznamenány žádné výsledky.";
 $label_change_security = "Změna bezpečnostní otázky/odpovědi?";
+$label_semi_dry = "Polosuché";
+$label_semi_sweet = "Polosladké";
 
 /**
  * ----------------------------------------------------------------------------------

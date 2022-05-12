@@ -1878,6 +1878,8 @@ $register_text_052 = "Uma resposta de Sim ou Não é necessária para cada local
 $brewer_text_044 = "Você deseja mudar sua pergunta e/ou resposta de segurança?";
 $brewer_text_045 = "Não se registraram resultados.";
 $label_change_security = "Mudar pergunta/resposta de segurança?";
+$label_semi_dry = "Semi-Seco";
+$label_semi_sweet = "Semi-Doce";
 
 /**
  * ----------------------------------------------------------------------------------

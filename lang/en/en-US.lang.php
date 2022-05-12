@@ -2011,6 +2011,8 @@ $register_text_052 = "A \"Yes\" or \"No\" response is required for each location
 $brewer_text_044 = "Do you wish to change your security question and/or answer?";
 $brewer_text_045 = "No results have been recorded.";
 $label_change_security = "Change Security Question/Answer?";
+$label_semi_dry = "Semi-Dry";
+$label_semi_sweet = "Semi-Sweet";
 
 /**
  * ----------------------------------------------------------------------------------
