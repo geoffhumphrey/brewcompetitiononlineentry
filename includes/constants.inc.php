@@ -1005,6 +1005,7 @@ $club_array = array(
     "Garage Brewers Society",
     "Garage Tavern Brewers",
     "Garden City Homebrew Club",
+    "Garden State Homebrewers",
     "Garlic City Brewmasters",
     "Garrison City Brewers Collective",
     "Gate City Homebrewers",
