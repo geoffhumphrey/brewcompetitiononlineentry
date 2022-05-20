@@ -58,16 +58,32 @@ $bjcp2015_exceptions = array(
   "21B4" => "//bjcp.org/style/2015/21/21B/specialty-ipa-red-ipa/",
   "21B5" => "//bjcp.org/style/2015/21/21B/specialty-ipa-rye-ipa/",
   "21B6" => "//bjcp.org/style/2015/21/21B/specialty-ipa-white-ipa/",
-  "21B7" => "//dev.bjcp.org/beer-styles/21b-specialty-ipa-new-england-ipa/",
-  "17A1" => "//dev.bjcp.org/beer-styles/17a-british-strong-ale-burton-ale/",
-  "PRX1" => "//dev.bjcp.org/beer-styles/x1-dorada-pampeana/",
-  "PRX2" => "//dev.bjcp.org/beer-styles/x2-ipa-argenta/",
-  "PRX3" => "//dev.bjcp.org/beer-styles/x3-italian-grape-ale/",
-  "PRX4" => "//dev.bjcp.org/beer-styles/x4-catharina-sour/",
-  "PRX5" => "//dev.bjcp.org/beer-styles/x5-new-zealand-pilsner/"
+  "21B7" => "//bjcp.org/beer-styles/21b-specialty-ipa-new-england-ipa/",
+  "17A1" => "//bjcp.org/beer-styles/17a-british-strong-ale-burton-ale/",
+  "PRX1" => "//bjcp.org/beer-styles/x1-dorada-pampeana/",
+  "PRX2" => "//bjcp.org/beer-styles/x2-ipa-argenta/",
+  "PRX3" => "//bjcp.org/beer-styles/x3-italian-grape-ale/",
+  "PRX4" => "//bjcp.org/beer-styles/x4-catharina-sour/",
+  "PRX5" => "//bjcp.org/beer-styles/x5-new-zealand-pilsner/"
 );
 
-$bjcp2021_execptions = array(
+$bjcp2021_exceptions = array(
+  "17A1" => "//bjcp.org/beer-styles/17a-british-strong-ale-burton-ale/",
+  "21B1" => "//bjcp.org/style/2021/21/21B/specialty-ipa-belgian-ipa/",
+  "21B2" => "//bjcp.org/style/2021/21/21B/specialty-ipa-black-ipa/",
+  "21B3" => "//bjcp.org/style/2021/21/21B/specialty-ipa-brown-ipa/",
+  "21B4" => "//bjcp.org/style/2021/21/21B/specialty-ipa-red-ipa/",
+  "21B5" => "//bjcp.org/style/2021/21/21B/specialty-ipa-rye-ipa/",
+  "21B6" => "//bjcp.org/style/2021/21/21B/specialty-ipa-white-ipa/",
+  "27A1" => "//bjcp.org/style/2021/27/27A/historical-beer-kellerbier/",
+  "27A2" => "//bjcp.org/style/2021/27/27A/historical-beer-kentucky-common/",
+  "27A3" => "//bjcp.org/style/2021/27/27A/historical-beer-lichtenhainer/",
+  "27A4" => "//bjcp.org/style/2021/27/27A/historical-beer-london-brown-ale/",
+  "27A5" => "//bjcp.org/style/2021/27/27A/historical-beer-piwo-grodziskie/",
+  "27A6" => "//bjcp.org/style/2021/27/27A/historical-beer-pre-prohibition-lager/",
+  "27A7" => "//bjcp.org/style/2021/27/27A/historical-beer-pre-prohibition-porter/",
+  "27A8" => "//bjcp.org/style/2021/27/27A/historical-beer-roggenbier/",
+  "27A9" => "//bjcp.org/style/2021/27/27A/historical-beer-sahti/",
   "LSX1" => "//bjcp.org/beer-styles/x1-dorada-pampeana/",
   "LSX2" => "//bjcp.org/beer-styles/x2-ipa-argenta/",
   "LSX3" => "//bjcp.org/beer-styles/x3-italian-grape-ale/",
@@ -275,46 +291,51 @@ if ($entry_found) {
   $entry_info_html .= "<div class=\"col col-lg-3 col-md-4 col-sm-4 col-xs-12\"><strong>".$_SESSION['style_set_short_name']." ".$label_style."</strong></div>";
   $entry_info_html .= "<div class=\"col col-lg-9 col-md-8 col-sm-8 col-xs-12\">";
 
+  // Style Links
+  $style_link = "";
+  $style_concat = ltrim($row_style['brewStyleGroup'],"0").strtoupper($row_style['brewStyleNum']);
+
   if (!empty($row_style['brewStyleLink'])) {
     
     if ($_SESSION['prefsStyleSet'] == "BJCP2015") {
 
-      $style_concat = ltrim($row_style['brewStyleGroup'],"0").strtoupper($row_style['brewStyleNum']);
-      if (array_key_exists($style_concat, $bjcp2015_exceptions)) $bjcp2015_link = $bjcp2015_exceptions[$style_concat];
-      else $bjcp2015_link = "https://bjcp.org/style/2015/".ltrim($row_style['brewStyleGroup'],"0")."/".$style_concat."/";
-      $entry_info_html .= "<a href=\"".$bjcp2015_link."\" target=\"_blank\">";
-      $entry_info_html .= $style_num." ".$row_style['brewStyle'];
-      $entry_info_html .= " <i class=\"small fa fa-external-link\"></i></a>";
-    
+      if (array_key_exists($style_concat, $bjcp2015_exceptions)) $style_link = $bjcp2015_exceptions[$style_concat];
+      else $style_link = "//bjcp.org/style/2015/".ltrim($row_style['brewStyleGroup'],"0")."/".$style_concat."/";
+      
     }
     
-    else {
+    else $style_link = $row_style['brewStyleLink'];
 
-      $entry_info_html .= "<a href=\"".$row_style['brewStyleLink']."\" target=\"_blank\">";
-      $entry_info_html .= $style_num." ".$row_style['brewStyle'];
-      $entry_info_html .= " <i class=\"small fa fa-external-link\"></i></a>";
-
-    }    
-  
   }
-
-  /*
   
   elseif ($_SESSION['prefsStyleSet'] == "BJCP2021") {
 
-    $style_concat = ltrim($row_style['brewStyleGroup'],"0").strtoupper($row_style['brewStyleNum']);
-    if (array_key_exists($style_concat, $bjcp2021_exceptions)) $bjcp2021_link = $bjcp2021_exceptions[$style_concat];
-    else $bjcp2021_link = "//bjcp.org/style/2021/".ltrim($row_style['brewStyleGroup'],"0")."/".$style_concat."/";
-    $entry_info_html .= "<a href=\"".$bjcp2021_link."\" target=\"_blank\">";
+    // Exceptions
+    if (array_key_exists($style_concat, $bjcp2021_exceptions)) $style_link = $bjcp2021_exceptions[$style_concat];
+
+    // 2021 update was beer only; find numbered styles
+    elseif (is_numeric(ltrim($row_style['brewStyleGroup'],"0"))) $style_link = "//bjcp.org/style/2021/".ltrim($row_style['brewStyleGroup'],"0")."/".$style_concat."/";
+
+    // If mead or cider, use 2015 link
+    else $style_link = "//bjcp.org/style/2015/".ltrim($row_style['brewStyleGroup'],"0")."/".$style_concat."/";
 
   }
 
-  */
+  if (empty($style_link)) {
+
+    $entry_info_html .= $style_num." ".$row_style['brewStyle'];
+    if (($_SESSION['prefsStyleSet'] == "BJCP2021") || ($_SESSION['prefsStyleSet'] == "BJCP2015")) $entry_info_html .= "<a style=\"margin-left:10px;\" href=\"https://www.bjcp.org/bjcp-style-guidelines\" target=\"_blank\"><i class=\"small fa fa-external-link\"></i></a>";
+    if ($_SESSION['prefsStyleSet'] == "AABC") $entry_info_html .= "<a style=\"margin-left:10px;\" href=\"http://www.aabc.org.au/docs/AABC2022CategoriesAndStyles.pdf\" target=\"_blank\"><i class=\"small fa fa-external-link\"></i></a>";
+    if ($_SESSION['prefsStyleSet'] == "BA") $entry_info_html .= "<a style=\"margin-left:10px;\" href=\"https://www.brewersassociation.org/edu/brewers-association-beer-style-guidelines/\" target=\"_blank\"><i class=\"small fa fa-external-link\"></i></a>";
+
+  }
 
   else {
+
+    $entry_info_html .= "<a href=\"".$style_link."\" target=\"_blank\">";
     $entry_info_html .= $style_num." ".$row_style['brewStyle'];
-    if (($_SESSION['prefsStyleSet'] == "BJCP2021") && (is_numeric($row_style['brewStyleGroup']))) $entry_info_html .= "<a style=\"margin-left:10px;\" href=\"https://www.bjcp.org/download/2021_Guidelines_Beer.pdf\" target=\"_blank\"><i class=\"small fa fa-external-link\"></i></a>";
-    else $entry_info_html .= "<a style=\"margin-left:10px;\" href=\"https://www.bjcp.org/bjcp-style-guidelines\" target=\"_blank\"><i class=\"small fa fa-external-link\"></i></a>";
+    $entry_info_html .= "<i style=\"margin-left:10px;\" class=\"small fa fa-external-link\"></i></a>";
+
   }
 
   $entry_info_html .= "</div>";

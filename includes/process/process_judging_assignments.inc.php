@@ -85,6 +85,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 
 					else {
 
+						$update_table = $prefix."judging_assignments";
 						$db_conn->where ('id', sterilize($row_flights['id']));
 						$result = $db_conn->update ($update_table, $data);
 						if (!$result) {
@@ -98,6 +99,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 
 				if (($unassign > 0) && ((isset($_POST['assignFlight'.$random])) && ($_POST['assignFlight'.$random] > 0))) {
 
+					$update_table = $prefix."judging_assignments";
 					$db_conn->where ('id', sterilize($_POST['unassign'.$random]));
 					$result = $db_conn->update ($update_table, $data);
 					if (!$result) {
@@ -235,6 +237,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 
 				if (((isset($_POST['unassign'.$random])) && ($_POST['unassign'.$random] > 0)) && ((isset($_POST['assignRound'.$random])) && ($_POST['assignRound'.$random] > 0))) {
 		
+					$update_table = $prefix."judging_assignments";
 					$db_conn->where ('id', sterilize($_POST['unassign'.$random]));
 					$result = $db_conn->update ($update_table, $data);
 					if (!$result) {

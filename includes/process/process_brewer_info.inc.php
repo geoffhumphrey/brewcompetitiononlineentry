@@ -32,6 +32,8 @@ $brewerJudgeExp = "";
 $likes = "";
 $dislikes = "";
 $rank = "";
+$location_pref1 = "";
+$location_pref2 = "";
 
 if ($go == "admin") $user_id = $filter;
 elseif ($id != "default") $user_id = $id;
@@ -177,8 +179,6 @@ if ($brewerJudge == "N") {
 
     }
 
-    $location_pref1 = "";
-
 } // end if ($brewerJudge == "N") 
 
 if ($brewerSteward == "Y") {
@@ -255,8 +255,6 @@ if ($brewerSteward == "N") {
         }
 
     }
-
-    $location_pref2 = "";
 
 } // end if ($brewerSteward == "N")
 

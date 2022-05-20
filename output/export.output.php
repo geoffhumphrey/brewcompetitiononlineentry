@@ -283,14 +283,14 @@ if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($en
 
             else {
                 //first name, last name, email, category, subcategory, entry #, judging #, brewinfo, brewmead1, brewmead2, brewmead3, address, city, state, zip
-                if (($go == "csv") && ($action == "hccp") && ($filter != "winners")) {
+                if (($go == "csv") && ($action == "hccp") && ($filter != "winners") && ($tb != "winners")) {
 
                     if ($_SESSION['prefsProEdition'] == 1) $a[] = array($label_first_name,$label_last_name,$label_organization,$label_ttb,$label_entry_number,$label_category,$label_style,$label_name,$label_entry_number,$label_judging_number,$label_name,$label_required_info,$label_sweetness,$label_carbonation,$label_strength);
 
                     else $a[] = array($label_first_name,$label_last_name,$label_entry_number,$label_category,$label_style,$label_name,$label_entry_number,$label_judging_number,$label_name,$label_required_info,$label_sweetness,$label_carbonation,$label_strength);
                 }
 
-                if (($go == "csv") && (($action == "default") || ($action == "email")) && ($filter != "winners")) {
+                if (($go == "csv") && (($action == "default") || ($action == "email")) && ($filter != "winners") && ($tb != "winners")) {
 
                     if ($_SESSION['prefsProEdition'] == 1) $a[] = array($label_first_name,$label_last_name,$label_organization,$label_ttb,$label_email,$label_address,$label_city,$label_state_province,$label_zip,$label_country,$label_entry_number,$label_judging_number,$label_category,$label_subcategory,$label_name,$label_entry_name,$label_required_info,$label_brewer_specifics,$label_sweetness,$label_carbonation,$label_strength,$label_table,$label_location,$label_flight,$label_round,$label_score,$label_place,$label_bos);
 
