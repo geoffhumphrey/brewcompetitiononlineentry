@@ -380,7 +380,7 @@ if ($section != "admin") {
 	// --------------------------------------------------------------
 	// Display
 	// --------------------------------------------------------------
-	if ((isset($_SESSION['contestLogo'])) && (file_exists(USER_IMAGES.$_SESSION['contestLogo']))) echo $competition_logo;
+	if ((isset($_SESSION['contestLogo'])) && (!empty($_SESSION['contestLogo'])) && (file_exists(USER_IMAGES.$_SESSION['contestLogo']))) echo $competition_logo;
 
 	echo $page_info;
 

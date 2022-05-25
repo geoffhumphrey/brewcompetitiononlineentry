@@ -86,7 +86,7 @@ if ($setup_free_access == TRUE) {
 			PRIMARY KEY (`id`)
 			) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci COLLATE utf8mb4_unicode_ci;
 			", $archive_db_table);
-		$result = $db_conn->rawQuery($sql);
+		$db_conn->rawQuery($sql);
 		if (!check_setup($archive_db_table,$database)) {
 			$error_output[] = $db_conn->getLastError();
 			$errors = TRUE;
@@ -138,7 +138,7 @@ if ($setup_free_access == TRUE) {
 		  	PRIMARY KEY (`id`)
 			) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci;
 			", $brewer_db_table);
-		$result = $db_conn->rawQuery($sql);
+		$db_conn->rawQuery($sql);
 		if (!check_setup($brewer_db_table,$database)) {
 			$error_output[] = $db_conn->getLastError();
 			$errors = TRUE;
@@ -194,7 +194,7 @@ if ($setup_free_access == TRUE) {
 			PRIMARY KEY (`id`)
 			) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci;
 			", $brewing_db_table);
-		$result = $db_conn->rawQuery($sql);
+		$db_conn->rawQuery($sql);
 		if (!check_setup($brewing_db_table,$database)) {
 			$error_output[] = $db_conn->getLastError();
 			$errors = TRUE;
@@ -218,7 +218,7 @@ if ($setup_free_access == TRUE) {
 			PRIMARY KEY (`id`)
 			) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci;
 			",$contacts_db_table);
-		$result = $db_conn->rawQuery($sql);
+		$db_conn->rawQuery($sql);
 		if (!check_setup($contacts_db_table,$database)) {
 			$error_output[] = $db_conn->getLastError();
 			$errors = TRUE;
@@ -273,7 +273,7 @@ if ($setup_free_access == TRUE) {
 			PRIMARY KEY (`id`)
 		) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci;
 		", $contest_info_db_table);
-		$result = $db_conn->rawQuery($sql);
+		$db_conn->rawQuery($sql);
 		if (!check_setup($contest_info_db_table,$database)) {
 			$error_output[] = $db_conn->getLastError();
 			$errors = TRUE;
@@ -298,7 +298,7 @@ if ($setup_free_access == TRUE) {
 			PRIMARY KEY (`id`)
 			) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci;
 			", $drop_off_db_table);
-		$result = $db_conn->rawQuery($sql);
+		$db_conn->rawQuery($sql);
 		if (!check_setup($drop_off_db_table,$database)) {
 			$error_output[] = $db_conn->getLastError();
 			$errors = TRUE;
@@ -325,7 +325,7 @@ if ($setup_free_access == TRUE) {
 			PRIMARY KEY (`id`)
 			) ENGINE = MYISAM ;
 			", $judging_assignments_db_table);
-		$result = $db_conn->rawQuery($sql);
+		$db_conn->rawQuery($sql);
 		if (!check_setup($judging_assignments_db_table,$database)) {
 			$error_output[] = $db_conn->getLastError();
 			$errors = TRUE;
@@ -349,7 +349,7 @@ if ($setup_free_access == TRUE) {
 			PRIMARY KEY (`id`)
 			) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci;
 			", $judging_flights_db_table);
-		$result = $db_conn->rawQuery($sql);
+		$db_conn->rawQuery($sql);
 		if (!check_setup($judging_flights_db_table,$database)) {
 			$error_output[] = $db_conn->getLastError();
 			$errors = TRUE;
@@ -374,7 +374,7 @@ if ($setup_free_access == TRUE) {
 			PRIMARY KEY (`id`)
 			) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci;
 			", $judging_locations_db_table);
-		$result = $db_conn->rawQuery($sql);
+		$db_conn->rawQuery($sql);
 		if (!check_setup($judging_locations_db_table,$database)) {
 			$error_output[] = $db_conn->getLastError();
 			$errors = TRUE;
@@ -401,7 +401,7 @@ if ($setup_free_access == TRUE) {
 			PRIMARY KEY (`id`)
 			) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci ;
 			", $judging_preferences_db_table);
-		$result = $db_conn->rawQuery($sql);
+		$db_conn->rawQuery($sql);
 		if (!check_setup($judging_preferences_db_table,$database)) {
 			$error_output[] = $db_conn->getLastError();
 			$errors = TRUE;
@@ -448,7 +448,7 @@ if ($setup_free_access == TRUE) {
 			PRIMARY KEY (`id`)
 			) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci;
 			", $judging_scores_db_table);
-		$result = $db_conn->rawQuery($sql);
+		$db_conn->rawQuery($sql);
 		if (!check_setup($judging_scores_db_table,$database)) {
 			$error_output[] = $db_conn->getLastError();
 			$errors = TRUE;
@@ -473,7 +473,7 @@ if ($setup_free_access == TRUE) {
 			PRIMARY KEY (`id`)
 			) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci;
 			", $judging_scores_bos_db_table);
-		$result = $db_conn->rawQuery($sql);
+		$db_conn->rawQuery($sql);
 		if (!check_setup($judging_scores_bos_db_table,$database)) {
 			$error_output[] = $db_conn->getLastError();
 			$errors = TRUE;
@@ -499,7 +499,7 @@ if ($setup_free_access == TRUE) {
 			PRIMARY KEY (`id`)
 			) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci ;
 			", $judging_tables_db_table);
-		$result = $db_conn->rawQuery($sql);
+		$db_conn->rawQuery($sql);
 		if (!check_setup($judging_tables_db_table,$database)) {
 			$error_output[] = $db_conn->getLastError();
 			$errors = TRUE;
@@ -528,7 +528,7 @@ if ($setup_free_access == TRUE) {
 			PRIMARY KEY (`id`)
 			) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci
 			", $mods_db_table);
-		$result = $db_conn->rawQuery($sql);
+		$db_conn->rawQuery($sql);
 		if (!check_setup($mods_db_table,$database)) {
 			$error_output[] = $db_conn->getLastError();
 			$errors = TRUE;
@@ -615,7 +615,7 @@ if ($setup_free_access == TRUE) {
 			PRIMARY KEY (`id`)
 			) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci;
 		", $preferences_db_table);
-		$result = $db_conn->rawQuery($sql);
+		$db_conn->rawQuery($sql);
 		if (!check_setup($preferences_db_table,$database)) {
 			$error_output[] = $db_conn->getLastError();
 			$errors = TRUE;
@@ -638,7 +638,7 @@ if ($setup_free_access == TRUE) {
 			PRIMARY KEY (`id`)
 			) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci;
 			", $special_best_data_db_table);
-		$result = $db_conn->rawQuery($sql);
+		$db_conn->rawQuery($sql);
 		if (!check_setup($special_best_data_db_table,$database)) {
 			$error_output[] = $db_conn->getLastError();
 			$errors = TRUE;
@@ -661,7 +661,7 @@ if ($setup_free_access == TRUE) {
 			PRIMARY KEY (`id`)
 			) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci;
 			", $special_best_info_db_table);
-		$result = $db_conn->rawQuery($sql);
+		$db_conn->rawQuery($sql);
 		if (!check_setup($special_best_info_db_table,$database)) {
 			$error_output[] = $db_conn->getLastError();
 			$errors = TRUE;
@@ -686,7 +686,7 @@ if ($setup_free_access == TRUE) {
 			PRIMARY KEY (`id`)
 			) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci;
 			", $sponsors_db_table);
-		$result = $db_conn->rawQuery($sql);
+		$db_conn->rawQuery($sql);
 		if (!check_setup($sponsors_db_table,$database)) {
 			$error_output[] = $db_conn->getLastError();
 			$errors = TRUE;
@@ -710,7 +710,7 @@ if ($setup_free_access == TRUE) {
 			PRIMARY KEY (`id`)
 			) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci;
 			", $staff_db_table);
-		$result = $db_conn->rawQuery($sql);
+		$db_conn->rawQuery($sql);
 		if (!check_setup($staff_db_table,$database)) {
 			$error_output[] = $db_conn->getLastError();
 			$errors = TRUE;
@@ -760,7 +760,7 @@ if ($setup_free_access == TRUE) {
 			PRIMARY KEY (`id`)
 			) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci;
 			", $prefix."styles");
-		$result = $db_conn->rawQuery($sql);
+		$db_conn->rawQuery($sql);
 		if (!check_setup($prefix."styles",$database)) {
 			$error_output[] = $db_conn->getLastError();
 			$errors = TRUE;
@@ -769,20 +769,25 @@ if ($setup_free_access == TRUE) {
 		else $output .= "<li class=\"list-group-item\"><span class=\"fa fa-lg fa-check text-success\"></span> <strong>Styles</strong> data installed successfully.</li>";
 
 		/**
-		 * Add BJCP 2008 and BJCP 2015 styles
-		 * to the table. 
+		 * Add BJCP 2015 styles to the table. 
 		 * 
 		 * BA and BJCP 2021 are added via the 
 		 * off_schedule_updade.php file.
 		 * 
-		 * Even though deprecated in 2.4.0, the
-		 * BJCP 2008 styles remain in the table
-		 * for reference and archive purposes.
+		 * BJCP 2008 styles were deprecated in 
+		 * version 2.4.0.
+		 * 
+		 * As of version 2.4.1, BJCP 2008 styles
+		 * are not included for new or clean installs.
+		 * Those styles are available here, but
+		 * are commented out.
 		 */
 
+		/*
+		// BJCP 2008 styles. Uncomment to install.
 		$update_table = $prefix."styles";
 		$data = array(
-		  array('id' => '1','brewStyleGroup' => '01','brewStyleNum' => 'A','brewStyle' => 'Lite American Lager','brewStyleCategory' => 'Light Lager','brewStyleVersion' => 'BJCP2008','brewStyleOG' => '1.028','brewStyleOGMax' => '1.04','brewStyleFG' => '0.998','brewStyleFGMax' => '1.008','brewStyleABV' => '3.2','brewStyleABVMax' => '4.2','brewStyleIBU' => '8','brewStyleIBUMax' => '12','brewStyleSRM' => '2','brewStyleSRMMax' => '3','brewStyleType' => '1','brewStyleInfo' => 'A lower gravity and lower calorie beer than standard international lagers. Strong flavors are a fault. Designed to appeal to the broadest range of the general public as possible.','brewStyleLink' => 'http://www.bjcp.org/2008styles/style01.php#1a','brewStyleActive' => 'Y','brewStyleOwn' => 'bcoe','brewStyleReqSpec' => '0','brewStyleStrength' => '0','brewStyleCarb' => '0','brewStyleSweet' => '0','brewStyleTags' => NULL,'brewStyleComEx' => 'Bitburger Light, Sam Adams Light, Heineken Premium Light, Miller Lite, Bud Light, Coors Light, Baltika 1 Light, Old Milwaukee Light, Amstel Light. ','brewStyleEntry' => NULL),
+			array('id' => '1','brewStyleGroup' => '01','brewStyleNum' => 'A','brewStyle' => 'Lite American Lager','brewStyleCategory' => 'Light Lager','brewStyleVersion' => 'BJCP2008','brewStyleOG' => '1.028','brewStyleOGMax' => '1.04','brewStyleFG' => '0.998','brewStyleFGMax' => '1.008','brewStyleABV' => '3.2','brewStyleABVMax' => '4.2','brewStyleIBU' => '8','brewStyleIBUMax' => '12','brewStyleSRM' => '2','brewStyleSRMMax' => '3','brewStyleType' => '1','brewStyleInfo' => 'A lower gravity and lower calorie beer than standard international lagers. Strong flavors are a fault. Designed to appeal to the broadest range of the general public as possible.','brewStyleLink' => 'http://www.bjcp.org/2008styles/style01.php#1a','brewStyleActive' => 'Y','brewStyleOwn' => 'bcoe','brewStyleReqSpec' => '0','brewStyleStrength' => '0','brewStyleCarb' => '0','brewStyleSweet' => '0','brewStyleTags' => NULL,'brewStyleComEx' => 'Bitburger Light, Sam Adams Light, Heineken Premium Light, Miller Lite, Bud Light, Coors Light, Baltika 1 Light, Old Milwaukee Light, Amstel Light. ','brewStyleEntry' => NULL),
 		  array('id' => '2','brewStyleGroup' => '01','brewStyleNum' => 'B','brewStyle' => 'Standard American Lager','brewStyleCategory' => 'Light Lager','brewStyleVersion' => 'BJCP2008','brewStyleOG' => '1.04','brewStyleOGMax' => '1.05','brewStyleFG' => '1.004','brewStyleFGMax' => '1.01','brewStyleABV' => '4.2','brewStyleABVMax' => '5.3','brewStyleIBU' => '8','brewStyleIBUMax' => '15','brewStyleSRM' => '2','brewStyleSRMMax' => '4','brewStyleType' => '1','brewStyleInfo' => 'Strong flavors are a fault. An international style including the standard mass-market lager from most countries.','brewStyleLink' => 'http://www.bjcp.org/2008styles/style01.php#1b','brewStyleActive' => 'Y','brewStyleOwn' => 'bcoe','brewStyleReqSpec' => '0','brewStyleStrength' => '0','brewStyleCarb' => '0','brewStyleSweet' => '0','brewStyleTags' => NULL,'brewStyleComEx' => 'Pabst Blue Ribbon, Miller High Life, Budweiser, Baltika #3 Classic, Kirin Lager, Grain Belt Premium Lager, Molson Golden, Labatt Blue, Coors Original, Foster&rsquo;s Lager.','brewStyleEntry' => NULL),
 		  array('id' => '3','brewStyleGroup' => '01','brewStyleNum' => 'C','brewStyle' => 'Premium American Lager','brewStyleCategory' => 'Light Lager','brewStyleVersion' => 'BJCP2008','brewStyleOG' => '1.046','brewStyleOGMax' => '1.056','brewStyleFG' => '1.008','brewStyleFGMax' => '1.012','brewStyleABV' => '4.6','brewStyleABVMax' => '6','brewStyleIBU' => '15','brewStyleIBUMax' => '25','brewStyleSRM' => '2','brewStyleSRMMax' => '6','brewStyleType' => '1','brewStyleInfo' => 'Premium beers tend to have fewer adjuncts than standard/lite lagers, and can be all-malt. Strong flavors are a fault, but premium lagers have more flavor than standard/lite lagers. A broad style of international mass-market lagers ranging from up-scale American lagers to the typical &rsquo;import&rsquo; or &rsquo;green bottle&rsquo; international beers found in America.','brewStyleLink' => 'http://www.bjcp.org/2008styles/style01.php#1c','brewStyleActive' => 'Y','brewStyleOwn' => 'bcoe','brewStyleReqSpec' => '0','brewStyleStrength' => '0','brewStyleCarb' => '0','brewStyleSweet' => '0','brewStyleTags' => NULL,'brewStyleComEx' => 'Full Sail Session Premium Lager, Miller Genuine Draft, Corona Extra, Michelob, Coors Extra Gold, Birra Moretti, Heineken, Beck&rsquo;s, Stella Artois, Red Stripe, Singha.','brewStyleEntry' => NULL),
 		  array('id' => '4','brewStyleGroup' => '01','brewStyleNum' => 'D','brewStyle' => 'Munich Helles','brewStyleCategory' => 'Light Lager','brewStyleVersion' => 'BJCP2008','brewStyleOG' => '1.045','brewStyleOGMax' => '1.051','brewStyleFG' => '1.008','brewStyleFGMax' => '1.012','brewStyleABV' => '4.7','brewStyleABVMax' => '5.4','brewStyleIBU' => '16','brewStyleIBUMax' => '22','brewStyleSRM' => '3','brewStyleSRMMax' => '5','brewStyleType' => '1','brewStyleInfo' => 'Unlike Pilsner but like its cousin, Munich Dunkel, Helles is a malt-accentuated beer that is not overly sweet, but rather focuses on malt flavor with underlying hop bitterness in a supporting role.','brewStyleLink' => 'http://www.bjcp.org/2008styles/style01.php#1d','brewStyleActive' => 'Y','brewStyleOwn' => 'bcoe','brewStyleReqSpec' => '0','brewStyleStrength' => '0','brewStyleCarb' => '0','brewStyleSweet' => '0','brewStyleTags' => NULL,'brewStyleComEx' => 'Weihenstephaner Original, Hacker-Pschorr Munchner Gold, Burgerbrau Wolznacher Hell Naturtrub, Mahr&rsquo;s Hell, Paulaner Premium Lager, Spaten Premium Lager, Stoudt&rsquo;s Gold Lager.','brewStyleEntry' => NULL),
@@ -880,6 +885,20 @@ if ($setup_free_access == TRUE) {
 		  array('id' => '96','brewStyleGroup' => '28','brewStyleNum' => 'B','brewStyle' => 'Fruit Cider','brewStyleCategory' => 'Specialty Cider and Perry','brewStyleVersion' => 'BJCP2008','brewStyleOG' => '1.045','brewStyleOGMax' => '1.07','brewStyleFG' => '0.995','brewStyleFGMax' => '1.01','brewStyleABV' => '5','brewStyleABVMax' => '9','brewStyleIBU' => 'N/A','brewStyleIBUMax' => 'N/A','brewStyleSRM' => 'N/A','brewStyleSRMMax' => 'N/A','brewStyleType' => '2','brewStyleInfo' => 'Like a dry wine with complex flavors. The apple character must marry with the added fruit so that neither dominates the other. ','brewStyleLink' => 'http://www.bjcp.org/2008styles/style28.php#1b','brewStyleActive' => 'Y','brewStyleOwn' => 'bcoe','brewStyleReqSpec' => '1','brewStyleStrength' => '0','brewStyleCarb' => '1','brewStyleSweet' => '1','brewStyleTags' => NULL,'brewStyleComEx' => '[US] West County Blueberry-Apple Wine (MA), AEppelTreow Red Poll Cran-Apple Draft Cider (WI), Bellwether Cherry Street (NY), Uncle John&rsquo;s Fruit Farm Winery Apple Cherry Hard Cider (MI).','brewStyleEntry' => 'Entrants must specify what fruit(s) and/or fruit juice(s) were added.'),
 		  array('id' => '97','brewStyleGroup' => '28','brewStyleNum' => 'C','brewStyle' => 'Applewine','brewStyleCategory' => 'Specialty Cider and Perry','brewStyleVersion' => 'BJCP2008','brewStyleOG' => '1.07','brewStyleOGMax' => '1.1','brewStyleFG' => '0.995','brewStyleFGMax' => '1.01','brewStyleABV' => '9','brewStyleABVMax' => '12','brewStyleIBU' => 'N/A','brewStyleIBUMax' => 'N/A','brewStyleSRM' => 'N/A','brewStyleSRMMax' => 'N/A','brewStyleType' => '2','brewStyleInfo' => 'Like a dry white wine, balanced, and with low astringency and bitterness.','brewStyleLink' => 'http://www.bjcp.org/2008styles/style28.php#1c','brewStyleActive' => 'Y','brewStyleOwn' => 'bcoe','brewStyleReqSpec' => '1','brewStyleStrength' => '0','brewStyleCarb' => '1','brewStyleSweet' => '1','brewStyleTags' => NULL,'brewStyleComEx' => '[US] AEppelTreow Summer&rsquo;s End (WI), Wandering Aengus Pommeau (OR), Uncle John&rsquo;s Fruit House Winery Fruit House Apple (MI), Irvine&rsquo;s Vintage Ciders (WA).','brewStyleEntry' => NULL),
 		  array('id' => '98','brewStyleGroup' => '28','brewStyleNum' => 'D','brewStyle' => 'Other Specialty Cider or Perry','brewStyleCategory' => 'Specialty Cider and Perry','brewStyleVersion' => 'BJCP2008','brewStyleOG' => '1.045','brewStyleOGMax' => '1.1','brewStyleFG' => '0.995','brewStyleFGMax' => '1.02','brewStyleABV' => '5','brewStyleABVMax' => '12','brewStyleIBU' => 'N/A','brewStyleIBUMax' => 'N/A','brewStyleSRM' => 'N/A','brewStyleSRMMax' => 'N/A','brewStyleType' => '2','brewStyleInfo' => NULL,'brewStyleLink' => 'http://www.bjcp.org/2008styles/style28.php#1d','brewStyleActive' => 'Y','brewStyleOwn' => 'bcoe','brewStyleReqSpec' => '1','brewStyleStrength' => '0','brewStyleCarb' => '1','brewStyleSweet' => '1','brewStyleTags' => NULL,'brewStyleComEx' => '[US] Red Barn Cider Fire Barrel (WA), AEppelTreow Pear Wine and Sparrow Spiced Cider (WI).','brewStyleEntry' => 'Entrants must specify all major ingredients and adjuncts. Entrants must specify carbonation level (still, petillant, or sparkling). Entrants must specify sweetness (dry or medium).'),
+		);
+		$result = $db_conn->insertMulti($update_table, $data);
+		if (!$result) {
+			$error_output[] = $db_conn->getLastError();
+			$errors = TRUE;
+		}
+		*/
+
+		// BJCP 2015
+		// Legacy row ids are retained to aid 
+		// in archive display should a clean
+		// install be necessary.
+		$update_table = $prefix."styles";
+		$data = array(
 		  array('id' => '99','brewStyleGroup' => '01','brewStyleNum' => 'A','brewStyle' => 'American Light Lager','brewStyleCategory' => 'Standard American Beer','brewStyleVersion' => 'BJCP2015','brewStyleOG' => '1.028','brewStyleOGMax' => '1.04','brewStyleFG' => '0.998','brewStyleFGMax' => '1.008','brewStyleABV' => '2.8','brewStyleABVMax' => '4.2','brewStyleIBU' => '8','brewStyleIBUMax' => '12','brewStyleSRM' => '2','brewStyleSRMMax' => '3','brewStyleType' => '1','brewStyleInfo' => 'Highly carbonated, very light-bodied, nearly flavorless lager designed to be consumed very cold. Very refreshing and thirst quenching. ','brewStyleLink' => 'http://bjcp.org/stylecenter.php','brewStyleActive' => 'Y','brewStyleOwn' => 'bcoe','brewStyleReqSpec' => '0','brewStyleStrength' => '0','brewStyleCarb' => '0','brewStyleSweet' => '0','brewStyleTags' => 'session-strength, pale-color, bottom-fermented, lagered, north-america, traditional-style, pale-lager-family, balanced','brewStyleComEx' => 'Miller Lite, Bud Light, Coors Light, Old Milwaukee Light, Keystone Light, Michelob Light.','brewStyleEntry' => NULL),
 		  array('id' => '100','brewStyleGroup' => '01','brewStyleNum' => 'B','brewStyle' => 'American Lager','brewStyleCategory' => 'Standard American Beer','brewStyleVersion' => 'BJCP2015','brewStyleOG' => '1.04','brewStyleOGMax' => '1.05','brewStyleFG' => '1.004','brewStyleFGMax' => '1.01','brewStyleABV' => '4.5','brewStyleABVMax' => '5.3','brewStyleIBU' => '8','brewStyleIBUMax' => '18','brewStyleSRM' => '2','brewStyleSRMMax' => '4','brewStyleType' => '1','brewStyleInfo' => 'A very pale, highly-carbonated, light-bodied, well-attenuated lager with a very neutral flavor profile and low bitterness. Served very cold, it can be a very refreshing and thirst quenching drink.','brewStyleLink' => 'http://bjcp.org/stylecenter.php','brewStyleActive' => 'Y','brewStyleOwn' => 'bcoe','brewStyleReqSpec' => '0','brewStyleStrength' => '0','brewStyleCarb' => '0','brewStyleSweet' => '0','brewStyleTags' => 'standard-strength, pale-color, bottom-fermented, lagered, north-america, traditional-style, pale-lager-family, balanced','brewStyleComEx' => 'Pabst Blue Ribbon, Miller High Life, Budweiser, Grain Belt Premium Lager, Coors Original, Special Export.','brewStyleEntry' => NULL),
 		  array('id' => '101','brewStyleGroup' => '01','brewStyleNum' => 'C','brewStyle' => 'Cream Ale','brewStyleCategory' => 'Standard American Beer','brewStyleVersion' => 'BJCP2015','brewStyleOG' => '1.042','brewStyleOGMax' => '1.055','brewStyleFG' => '1.006','brewStyleFGMax' => '1.012','brewStyleABV' => '4.2','brewStyleABVMax' => '5.6','brewStyleIBU' => '15','brewStyleIBUMax' => '20','brewStyleSRM' => '2.5','brewStyleSRMMax' => '5','brewStyleType' => '1','brewStyleInfo' => 'A clean, well-attenuated, flavorful American lawnmower beer. Easily drinkable and refreshing, with more character than typical American lagers.','brewStyleLink' => 'http://bjcp.org/stylecenter.php','brewStyleActive' => 'Y','brewStyleOwn' => 'bcoe','brewStyleReqSpec' => '0','brewStyleStrength' => '0','brewStyleCarb' => '0','brewStyleSweet' => '0','brewStyleTags' => 'standard-strength, pale-color, any-fermentation, north-america, traditional-style, pale-ale-family, balanced','brewStyleComEx' => 'Genesee Cream Ale, Little Kings Cream Ale, Sleeman Cream Ale, Liebotschaner Cream Ale, New Glarus Spotted Cow, Old Style.','brewStyleEntry' => NULL),
@@ -1047,7 +1066,7 @@ if ($setup_free_access == TRUE) {
 			PRIMARY KEY (`id`)
 			) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci;
 			", $style_types_db_table);
-		$result = $db_conn->rawQuery($sql);
+		$db_conn->rawQuery($sql);
 		if (!check_setup($style_types_db_table,$database)) {
 			$error_output[] = $db_conn->getLastError();
 			$errors = TRUE;
@@ -1102,7 +1121,7 @@ if ($setup_free_access == TRUE) {
 			PRIMARY KEY (`id`)
 			) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci ;
 			", $prefix."system");
-		$result = $db_conn->rawQuery($sql);
+		$db_conn->rawQuery($sql);
 		if (!check_setup($prefix."system",$database)) {
 			$error_output[] = $db_conn->getLastError();
 			$errors = TRUE;
@@ -1143,7 +1162,7 @@ if ($setup_free_access == TRUE) {
 			PRIMARY KEY (`id`)
 			) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci ;
 			", $users_db_table);
-		$result = $db_conn->rawQuery($sql);
+		$db_conn->rawQuery($sql);
 		if (!check_setup($users_db_table,$database)) {
 			$error_output[] = $db_conn->getLastError();
 			$errors = TRUE;

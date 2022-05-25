@@ -359,7 +359,7 @@ $(document).ready(function(){
             <!-- Input Here -->
             <?php foreach ($results_method as $key => $value) { ?>
             <label class="radio-inline">
-                <input type="radio" name="prefsWinnerMethod" value="<?php echo $key; ?>" id="prefsWinnerMethod_<?php echo $key; ?>" <?php if ((($section == "step3") && ($key == 0)) || ($row_prefs['prefsWinnerMethod'] == $key)) echo "CHECKED"; ?>> <?php echo $value; ?>
+                <input type="radio" name="prefsWinnerMethod" value="<?php echo $key; ?>" id="prefsWinnerMethod_<?php echo $key; ?>" <?php if (($section == "step3") && ($key == "0")) echo "CHECKED"; elseif ($row_prefs['prefsWinnerMethod'] == $key) echo "CHECKED"; ?>> <?php echo $value; ?>
             </label>
             <?php } ?>
         </div>
@@ -407,15 +407,6 @@ $(document).ready(function(){
         </div>
     </div>
 </div><!-- ./modal -->
-
-
-
-
-
-
-
-
-
 <div class="form-group"><!-- Form Group Radio STACKED -->
     <label for="prefsDisplaySpecial" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Scoresheet Unique Identifier</label>
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
@@ -494,8 +485,9 @@ $(document).ready(function(){
         <?php if (ENABLE_MAILER) {?>
         <p>You have phpMailer enabled. Make sure it has been properly configured in the /site/config.mail.php file and then select the &ldquo;Send Test Email&rdquo; button above to send an email to <?php echo $_SESSION['loginUsername']; ?>. Be sure to check your spam folder.</p>
         <?php } else { ?>
-
+        <?php if ($section != "step3") { ?>
         <p>If you are not sure that your server supports sending email via PHP scripts, select the &ldquo;Send Test Email&rdquo; button above to send an email to <?php echo $_SESSION['loginUsername']; ?>. Be sure to check your spam folder.</p>
+        <?php } ?>
         <?php } ?>
         </span>
     </div>
@@ -509,7 +501,7 @@ $(document).ready(function(){
                 <h4 class="modal-title" id="contactFormModalLabel">Contact Form Info</h4>
             </div>
             <div class="modal-body">
-                <p>Enable or disable your installation's contact form. This may be necessary if your site&rsquo;s server does not support PHP&rsquo;s <a class="hide-loader" href="http://php.net/manual/en/function.mail.php" target="_blank">mail()</a> function. Admins should test the form before disabling as the form is the more secure option. Admins should use the &ldquo;Send Test Email&rdquo; button to test the function.</p>
+                <p>Enable or disable your installation's contact form. This may be necessary if your site&rsquo;s server does not support PHP&rsquo;s <a class="hide-loader" href="http://php.net/manual/en/function.mail.php" target="_blank">mail()</a> function. Admins should test the form before disabling as the form is the more secure option. <?php if ($section != "step3") { ?>Admins should use the &ldquo;Send Test Email&rdquo; button to test the function.<?php } ?></p>
                 <p>If mail() is not an option, Admins have the option to enable phpMailer to send system-generated emails via SMTP. To enable phpMailer, change the MAILER definition in paths.php to TRUE and customize the variables in the /site/config.mail.php folder to your server environment.</p>
             </div>
             <div class="modal-footer">
@@ -564,7 +556,9 @@ $(document).ready(function(){
         <?php if (ENABLE_MAILER) {?>
         <p>You have phpMailer enabled. Make sure it has been properly configured in the /site/config.mail.php file and then select the &ldquo;Send Test Email&rdquo; button above to send an email to <?php echo $_SESSION['loginUsername']; ?>. Be sure to check your spam folder.</p>
         <?php } else { ?>
+        <?php if ($section != "step3") { ?>
         <p>If you are not sure that your server supports sending email via PHP scripts, select the &ldquo;Send Test Email&rdquo; button above to send an email to <?php echo $_SESSION['loginUsername']; ?>. Be sure to check your spam folder.</p>
+        <?php } ?>
         <?php } ?>
         </span>
     </div>
@@ -579,7 +573,7 @@ $(document).ready(function(){
             </div>
             <div class="modal-body">
                 <p>Do you want a system-generated confirmation email sent to all users upon registering their account information?</p>
-                <p>Please note that these system-generated emails may not be possible if your site&rsquo;s server does not support PHP&rsquo;s <a class="hide-loader" href="http://php.net/manual/en/function.mail.php" target="_blank">mail()</a> function. Admins should use the &ldquo;Send Test Email&rdquo; button to test the function.</p>
+                <p>Please note that these system-generated emails may not be possible if your site&rsquo;s server does not support PHP&rsquo;s <a class="hide-loader" href="http://php.net/manual/en/function.mail.php" target="_blank">mail()</a> function. <?php if ($section != "step3") { ?>Admins should use the &ldquo;Send Test Email&rdquo; button to test the function.<?php } ?></p>
                 <p>If mail() is not an option, Admins have the option to enable phpMailer to send system-generated emails via SMTP. To enable phpMailer, change the MAILER definition in paths.php to TRUE and customize the variables in the /site/config.mail.php folder to your server environment.</p>
             </div>
             <div class="modal-footer">
