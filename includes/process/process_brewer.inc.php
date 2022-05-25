@@ -14,8 +14,6 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 	$error_output = array();
 	$_SESSION['error_output'] = "";
 
-	require(PROCESS.'process_brewer_info.inc.php');
-
 	if ($_SESSION['userLevel'] == 2) {
 
 		// Check whether user is "authorized" to edit the entry in DB
@@ -31,6 +29,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 
 	}
 
+	if (($action == "add") || ($action == "edit")) require(PROCESS.'process_brewer_info.inc.php');
 	require(DB.'brewer.db.php');
 	require(DB.'judging_locations.db.php');
 
@@ -313,52 +312,58 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 
 		} // end foreach($_POST['uid'] as $uid)
 
-		if ($filter == "staff") {
+		if (($filter == "staff") && ($_POST['Organizer'] != "")) {
 
-			if ($_POST['Organizer'] != "") {
+			$uid = sterilize($_POST['Organizer']);
 
-				$query_org = sprintf("SELECT uid FROM %s WHERE staff_organizer='1'",$prefix."staff");
-				$org = mysqli_query($connection,$query_org) or die (mysqli_error($connection));
-				$row_org = mysqli_fetch_assoc($org);
-				//echo $_POST['Organizer']."<br>";
-				//echo $row_org['uid']."<br>";
+			$query_org = sprintf("SELECT * FROM %s WHERE uid='%s'", $prefix."staff", $uid);
+			$org = mysqli_query($connection,$query_org) or die (mysqli_error($connection));
+			$row_org = mysqli_fetch_assoc($org);
+			$totalRows_org = mysqli_num_rows($org);
+			//echo $_POST['Organizer']."<br>";
+			//echo $row_org['uid']."<br>";
 
-				if ($_POST['Organizer'] != $row_org['uid']) {
+			if ($row_org) {
+
+				// Clear any Organizer assignments
+				$update_table = $prefix."staff";
+				$data = array('staff_organizer' => 0);
+				$result = $db_conn->update ($update_table, $data);
+
+				// If the posted UID is not in the DB, add and make the Org
+
+				if ($totalRows_org == 0) {
 
 					$update_table = $prefix."staff";
-					$data = array('staff_organizer' => '0');
-					$result = $db_conn->where ('uid', $row_org['uid']);
+					$data = array(
+						'staff_organizer' => 1,
+						'staff_staff' => 0,
+						'staff_judge' => 0,
+						'staff_judge_bos' => 0,
+						'uid' => $uid
+					);
+					$result = $db_conn->insert ($update_table, $data);
 					if (!$result) {
 						$error_output[] = $db_conn->getLastError();
 						$errors = TRUE;
 					}
 
-					$query_staff_org = sprintf("SELECT uid FROM %s WHERE uid='%s'",$prefix."staff",$purifier->purify($_POST['Organizer']));
-					$staff_org = mysqli_query($connection,$query_staff_org) or die (mysqli_error($connection));
-					$row_staff_org = mysqli_fetch_assoc($staff_org);
-					$totalRows_staff_org = mysqli_num_rows($staff_org);
+				} // end if ($totalRows_org == 0)
 
-					if ($totalRows_staff_org == 0) {
-						
-						$update_table = $prefix."staff";
-						$data = array('uid' => $uid,'staff_organizer' => '1');
-						$result = $db_conn->insert ($update_table, $data);
-						if (!$result) {
-							$error_output[] = $db_conn->getLastError();
-							$errors = TRUE;
-						}
+				else {
 
-					}
-					
-					else {
+					// If the posted UID is the same as the retrieved UID,
+					// make the Org and clear out all other assignments.
+
+					if ($uid == $row_org['uid']) {
 
 						$update_table = $prefix."staff";
 						$data = array(
-							'staff_organizer' => '1',
-							'staff_staff' => '0',
-							'staff_judge' => '0',
-							'staff_judge_bos' => '0'
-						);			
+							'staff_organizer' => 1,
+							'staff_staff' => 0,
+							'staff_judge' => 0,
+							'staff_judge_bos' => 0,
+						);
 						$db_conn->where ('uid', $uid);
 						$result = $db_conn->update ($update_table, $data);
 						if (!$result) {
@@ -368,24 +373,30 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 
 					}
 
-				}
+				} // end else
 
-				if ($_POST['Organizer'] == $row_org['uid']) {
+			} // end if ($row_org) 
 
-					$update_table = $prefix."staff";
-					$data = array('staff_organizer' => '1');			
-					$db_conn->where ('uid', $row_org['uid']);
-					$result = $db_conn->update ($update_table, $data);
-					if (!$result) {
-						$error_output[] = $db_conn->getLastError();
-						$errors = TRUE;
-					}
+			// If the DB table is empty, add record making the Org
+			else {
 
+				$update_table = $prefix."staff";
+				$data = array(
+					'staff_organizer' => '1',
+					'staff_staff' => '0',
+					'staff_judge' => '0',
+					'staff_judge_bos' => '0',
+					'uid' => $uid
+				);
+				$result = $db_conn->insert ($update_table, $data);
+				if (!$result) {
+					$error_output[] = $db_conn->getLastError();
+					$errors = TRUE;
 				}
 
 			}
 
-		}
+		} // end if (($filter == "staff") && ($_POST['Organizer'] != ""))
 
 		$update_table = $prefix."brewer";
 		$data = array('brewerJudgeWaiver' => 'Y');

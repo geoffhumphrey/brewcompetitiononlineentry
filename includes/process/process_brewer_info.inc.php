@@ -354,12 +354,13 @@ if ($view == "quick") {
 
     $locations = array();
 
-    $update_table = $prefix."judging_locations";
-    $result = $db_conn->get($update_table);
+    $query_j_locs = sprintf("SELECT id FROM %s", $prefix."judging_locations");
+    $j_locs = mysqli_query($connection,$query_j_locs) or die (mysqli_error($connection));
+    $row_j_locs = mysqli_fetch_assoc($j_locs);
     
-    foreach ($result as $key => $value) {
-        $locations[] = "Y-".$value;
-    }
+    do {
+        $locations[] = "Y-".$row_j_locs['id'];
+    } while ($row_j_locs = mysqli_fetch_assoc($j_locs));
 
     $location_pref1 = sterilize(implode(",",$locations));
     $location_pref2 = $location_pref1;

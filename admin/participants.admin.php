@@ -562,8 +562,10 @@ echo $output_user_question_modals;
 		</button>
 		<ul class="dropdown-menu">
 			<li class="small"><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=entrant&amp;action=register">A Participant</a></li>
-			<li class="small"><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judge&amp;action=register">A Judge or Steward (Standard)</a><li>
-            <li class="small"><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judge&amp;action=register&amp;view=quick">A Judge or Steward (Quick)</a><li>
+			<li class="small"><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judge&amp;action=register">A Judge (Standard)</a><li>
+			<li class="small"><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=steward&amp;action=register">A Steward (Standard)</a><li>
+      <li class="small"><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judge&amp;action=register&amp;view=quick">A Judge (Quick)</a><li>
+     	<li class="small"><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=steward&amp;action=register&amp;view=quick">A Steward (Quick)</a><li>
 		</ul>
 	</div>
     <?php if (($action != "add") && ($dbTable == "default")) { ?>
