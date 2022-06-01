@@ -160,6 +160,6 @@ $data = array(
 $update_table = $prefix."styles";
 $result = $db_conn->insertMulti($update_table, $data);
 if ($result) $output .= "<li>Added BJCP 2021 Styles to styles table.</li>"; 
-else $output .= "<li>Addition of BJCP 2021 Styles to the style table failed. Error: ".$db_conn->getLastError()."</li>";
+else $output .= "<li>Addition of BJCP 2021 Styles to the style table failed. <strong class=\"text-danger\">Error: ".$db_conn->getLastError()."</strong></li>";
 
 ?>

@@ -8,10 +8,12 @@ $no_updates_needed = FALSE;
 $hosted_setup = FALSE;
 $check_setup = FALSE;
 $system_name_change = FALSE;
+$recently_updated = FALSE;
+if (((isset($_SESSION['update_complete'])) && ($_SESSION['update_complete'] == 1)) && (isset($_SESSION['update_summary']))) $recently_updated = TRUE;
 
-if (check_setup($prefix."`system`",$database)) {
+if (check_setup($prefix."system",$database)) {
 	
-	$query_system = sprintf("SELECT * FROM %s WHERE id='1'",$prefix."`system`");
+	$query_system = sprintf("SELECT * FROM `%s` WHERE id='1'",$prefix."system");
 	$system = mysqli_query($connection,$query_system) or die (mysqli_error($connection));
 	$row_system = mysqli_fetch_assoc($system);
 	
@@ -28,7 +30,7 @@ if (check_setup($prefix."`system`",$database)) {
 if (check_setup($prefix."bcoem_sys",$database)) {
 	
 	$system_name_change = TRUE;
-	$query_system = sprintf("SELECT * FROM %s WHERE id='1'",$prefix."bcoem_sys");
+	$query_system = sprintf("SELECT * FROM `%s` WHERE id='1'",$prefix."bcoem_sys");
 	$system = mysqli_query($connection,$query_system) or die (mysqli_error($connection));
 	$row_system = mysqli_fetch_assoc($system);
 	
@@ -97,9 +99,8 @@ if ((!isset($_SESSION['currentVersion'])) || ((isset($_SESSION['currentVersion']
 
 		/**
 		 * If the current version is the same as what is in 
-		 * the DB, trigger a force update.
-		 * if system version date in DB is prior to the 
-		 * current version date.
+		 * the DB, trigger a force update if system version 
+		 * date in DB is prior to the current version date.
 		 * Covers updates made in between pre-releases 
 		 * and full version.
 		 */
@@ -107,6 +108,7 @@ if ((!isset($_SESSION['currentVersion'])) || ((isset($_SESSION['currentVersion']
 		if ($row_system['version'] == $current_version) {
 			if ((strtotime($row_system['version_date'])) < ($current_version_date)) $force_update = TRUE;
 			$setup_success = TRUE;
+			$setup_relocate = "Location: ".$base_url;
 		}
 
 		if ($row_system['version'] != $current_version) {
@@ -136,13 +138,15 @@ if ((!isset($_SESSION['currentVersion'])) || ((isset($_SESSION['currentVersion']
 
 	else {
 		if (!$force_update) $no_updates_needed = TRUE;
-		if (!$system_name_change) {
-			$query_sys = sprintf("RENAME TABLE %s TO %s",$prefix."`system`",$prefix."bcoem_sys");
-			$sys = mysqli_query($connection,$query_sys) or die (mysqli_error($connection));
-		}
 	}
 
 } // end if (!isset($_SESSION['currentVersion']))
+
+if (!$system_name_change) {
+	$query_sys = sprintf("RENAME TABLE %s TO %s",$prefix."system",$prefix."bcoem_sys");
+	$sys = mysqli_query($connection,$query_sys) or die (mysqli_error($connection));
+	$system_name_change = TRUE;
+}
 
 /*
 if ($system_name_change) echo "System DB table name has been changed to bcoem_sys.<br>";
@@ -157,6 +161,7 @@ echo $row_system['version'];
 echo "<br>";
 echo $current_version;
 echo "<br>";
+echo $_SESSION['currentVersion'];
 exit();
 */
 ?>

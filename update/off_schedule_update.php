@@ -1,7 +1,60 @@
 <?php
+
+$query_pv = sprintf("SELECT version FROM %s WHERE id='1'",$prefix."bcoem_sys");
+$pv = mysqli_query($connection,$query_pv);
+$row_pv = mysqli_fetch_assoc($pv);
+
+unset($_SESSION['update_previous_version']);
+unset($_SESSION['update_version']);
+$_SESSION['update_previous_version'] = $row_pv['version'];
+$_SESSION['update_version'] = $current_version;
+
+// Clear the version_date and data_check to not throw error.
+$update_table = $prefix."bcoem_sys";
+$data = array(
+	'version_date' => NULL,
+	'data_check' => $db_conn->now()
+);
+$db_conn->where ('id', 1);
+$db_conn->update ($update_table, $data);
+
+$versions = array(
+	"1.3.0.4" => 0,
+	"1.3.1.0" => 0,
+	"1.3.2.0" => 0,
+	"2.0.0.0" => 0,
+	"2.0.1.0" => 0,
+	"2.1.1.0" => 0,
+	"2.1.2.0" => 0,
+	"2.1.3.0" => 0,
+	"2.1.4.0" => 0,
+	"2.1.5.0" => 1,
+	"2.1.6.0" => 2,
+	"2.1.7.0" => 3,
+	"2.1.8.0" => 4,
+	"2.1.9.0" => 5,
+	"2.1.10.0" => 6,
+	"2.1.11.0" => 7,
+	"2.1.12.0" => 8,
+	"2.1.13.0" => 9,
+	"2.1.14.0" => 10,
+	"2.1.15.0" => 11,
+	"2.1.16.0" => 12,
+	"2.1.17.0" => 13,
+	"2.1.18.0" => 14,
+	"2.1.19.0" => 15,
+	"2.2.0.0" => 16,
+	"2.3.0.0" => 17,
+	"2.3.1.0" => 18,
+	"2.3.2.0" => 19,
+	"2.4.0.0" => 20,
+	"2.4.1.0" => 21
+);
+
 flush();
 
 if (!isset($output)) $output = "";
+if (!isset($output_off_sched_update)) $output_off_sched_update = "";
 
 /**
  * ---------------------------------------------- 2.3.2 ----------------------------------------------
@@ -12,6 +65,7 @@ if (!isset($output)) $output = "";
  * ---------------------------------------------------------------------------------------------------
  */
 
+$system_db_table = $prefix."bcoem_sys";
 
 if (check_setup($prefix."system",$database)) {
 
@@ -19,8 +73,11 @@ if (check_setup($prefix."system",$database)) {
 	mysqli_select_db($connection,$database);
 	mysqli_real_escape_string($connection,$sql);
 	$result = mysqli_query($connection,$sql);
-	if ($result) $output .= "<li>System table named changed successfully.</li>";
-	else $output .= "<li>System table named change failed. Error: ".$db_conn->getLastError()."</li>";
+	if ($result) $output_off_sched_update .= "<li>System table named changed successfully.</li>";
+	else {
+		$output_off_sched_update .= "<li>System table named change failed. <strong class=\"text-danger\">Error: ".$db_conn->getLastError()."</strong></li>";
+		$system_db_table = $prefix."system";
+	}
 
 }
 
@@ -30,7 +87,7 @@ if (check_setup($prefix."system",$database)) {
  */
 
 $query_current_prefs = sprintf("SELECT * FROM %s WHERE id='1'",$prefix."preferences");
-$current_prefs = mysqli_query($connection,$query_current_prefs) or die (mysqli_error($connection));
+$current_prefs = mysqli_query($connection,$query_current_prefs);
 $row_current_prefs = mysqli_fetch_assoc($current_prefs);
 
 /**
@@ -39,114 +96,151 @@ $row_current_prefs = mysqli_fetch_assoc($current_prefs);
  * ---------------------------------------------------------------------------------------------------
  */
 
+$output_off_sched_update .= "<p>If there are any errors listed below, search the <a href=\"https://github.com/geoffhumphrey/brewcompetitiononlineentry/issues\" target=\"_blank\">BCOE&amp;M Project Issues list on GitHub</a> for possible resolutions. Post your error as an issue if you cannot find any previous reports or resolutions. Your PHP version is ".$php_version." and your MySQL version is ".$connection -> server_info.".";
+
+/*
+$output_off_sched_update .= "<p>";
+$output_off_sched_update .= "<strong>Version 2.1.5.0 Updates</strong>";
+if ($row_pv['version'] == "2.1.4.0") $output_off_sched_update .= "<br><em><span class=\"text-primary\">Your previous version was ".$row_pv['version'].". Your installation's updates begin here.</span></em>";
+$output_off_sched_update .= "</p>";
+$output_off_sched_update .= "<ul>";
+*/
+
+$v215 = FALSE;
+
 if (!check_update("prefsLanguage", $prefix."preferences")) {
+
+	$v215 = TRUE;
 
 	$sql = sprintf("ALTER TABLE `%s` ADD `prefsLanguage` VARCHAR(25) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL;",$prefix."preferences");
 	mysqli_select_db($connection,$database);
 	mysqli_real_escape_string($connection,$sql);
 	$result = mysqli_query($connection,$sql);
-	if ($result) $output .= "<li>Language preferences added successfully.</li>";
-	else $output .= "<li>Addition of language preferences failed. Error: ".$db_conn->getLastError()."</li>";
+	if ($result) $output_off_sched_update .= "<li>Language preferences added successfully.</li>";
+	else $output_off_sched_update .= "<li>Addition of language preferences failed. <strong class=\"text-warning\">Error: ".$db_conn->getLastError()."</strong></li>";
 
 }
 
 if (!check_update("prefsSpecific", $prefix."preferences")) {
 
+	$v215 = TRUE;
+
 	$sql = sprintf("ALTER TABLE `%s` ADD `prefsSpecific` TINYINT(1) NULL;",$prefix."preferences");
 	mysqli_select_db($connection,$database);
 	mysqli_real_escape_string($connection,$sql);
 	$result = mysqli_query($connection,$sql);
-	if ($result) $output .= "<li>Hide/show Brewer's Specific field added successfully.</li>";
-	else $output .= "<li>Addition of the hide/show Brewer's Specific field failed. Error: ".$db_conn->getLastError()."</li>";
+	if ($result) $output_off_sched_update .= "<li>Hide/show Brewer's Specific field added successfully.</li>";
+	else $output_off_sched_update .= "<li>Addition of the hide/show Brewer's Specific field failed. <strong class=\"text-warning\">Error: ".$db_conn->getLastError()."</strong></li>";
 
 }
 
 if (!check_update("prefsEntryLimitPaid", $prefix."preferences")) {
+
+	$v215 = TRUE;
 	
 	$sql = sprintf("ALTER TABLE `%s` ADD `prefsEntryLimitPaid` INT(4) NULL DEFAULT NULL;",$prefix."preferences");
 	mysqli_select_db($connection,$database);
 	mysqli_real_escape_string($connection,$sql);
 	$result = mysqli_query($connection,$sql);
-	if ($result) $output .= "<li>Paid entry limit field added successfully.</li>";
-	else $output .= "<li>Addition of the paid entry limit field failed. Error: ".$db_conn->getLastError()."</li>";
+	if ($result) $output_off_sched_update .= "<li>Paid entry limit field added successfully.</li>";
+	else $output_off_sched_update .= "<li>Addition of the paid entry limit field failed. <strong class=\"text-warning\">Error: ".$db_conn->getLastError()."</strong></li>";
 
 }
 
 if (!check_update("prefsEmailRegConfirm", $prefix."preferences")) {
 
+	$v215 = TRUE;
+
 	$sql = sprintf("ALTER TABLE `%s` ADD `prefsEmailRegConfirm` TINYINT(1) NULL DEFAULT NULL;",$prefix."preferences");
 	mysqli_select_db($connection,$database);
 	mysqli_real_escape_string($connection,$sql);
 	$result = mysqli_query($connection,$sql);
-	if ($result) $output .= "<li>Registration email confirmation field added successfully.</li>";
-	else $output .= "<li>Addition of the registration email confirmation field failed. Error: ".$db_conn->getLastError()."</li>";
+	if ($result) $output_off_sched_update .= "<li>Registration email confirmation field added successfully.</li>";
+	else $output_off_sched_update .= "<li>Addition of the registration email confirmation field failed. <strong class=\"text-warning\">Error: ".$db_conn->getLastError()."</strong></li>";
 }
 
 if (!check_update("jPrefsCapJudges", $prefix."judging_preferences")) {
+
+	$v215 = TRUE;
 
 	$sql = sprintf("ALTER TABLE `%s` ADD `jPrefsCapJudges` INT(3) NULL DEFAULT NULL;", $prefix."judging_preferences");
 	mysqli_select_db($connection,$database);
 	mysqli_real_escape_string($connection,$sql);
 	$result = mysqli_query($connection,$sql);
-	if ($result) $output .= "<li>Cap judges field added successfully.</li>";
-	else $output .= "<li>Addition of the cap judges field failed. Error: ".$db_conn->getLastError()."</li>";
+	if ($result) $output_off_sched_update .= "<li>Cap judges field added successfully.</li>";
+	else $output_off_sched_update .= "<li>Addition of the cap judges field failed. <strong class=\"text-warning\">Error: ".$db_conn->getLastError()."</strong></li>";
 
 }
 
 if (!check_update("jPrefsCapStewards", $prefix."judging_preferences")) {
 
+	$v215 = TRUE;
+
 	$sql = sprintf("ALTER TABLE `%s` ADD `jPrefsCapStewards` INT(3) NULL DEFAULT NULL;", $prefix."judging_preferences");
 	mysqli_select_db($connection,$database);
 	mysqli_real_escape_string($connection,$sql);
 	$result = mysqli_query($connection,$sql);
-	if ($result) $output .= "<li>Cap stewards field added successfully.</li>";
-	else $output .= "<li>Addition of the cap stewards field failed. Error: ".$db_conn->getLastError()."</li>";
+	if ($result) $output_off_sched_update .= "<li>Cap stewards field added successfully.</li>";
+	else $output_off_sched_update .= "<li>Addition of the cap stewards field failed. <strong class=\"text-warning\">Error: ".$db_conn->getLastError()."</strong></li>";
 
 }
 
 if (!check_update("jPrefsBottleNum", $prefix."judging_preferences")) {
 
+	$v215 = TRUE;
+
 	$sql = sprintf("ALTER TABLE `%s` ADD `jPrefsBottleNum` INT(3) NULL DEFAULT NULL;",$prefix."judging_preferences");
 	mysqli_select_db($connection,$database);
 	mysqli_real_escape_string($connection,$sql);
 	$result = mysqli_query($connection,$sql);
-	if ($result) $output .= "<li>Number of bottles required field added successfully.</li>";
-	else $output .= "<li>Addition of the number of bottles required field failed. Error: ".$db_conn->getLastError()."</li>";
+	if ($result) $output_off_sched_update .= "<li>Number of bottles required field added successfully.</li>";
+	else $output_off_sched_update .= "<li>Addition of the number of bottles required field failed. <strong class=\"text-warning\">Error: ".$db_conn->getLastError()."</strong></li>";
 
 }
 
 if (!check_update("contestCheckInPassword", $prefix."contest_info")) {
 
+	$v215 = TRUE;
+
 	$sql = sprintf("ALTER TABLE `%s` ADD `contestCheckInPassword` VARCHAR(255) NULL CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL;",$prefix."contest_info");
 	mysqli_select_db($connection,$database);
 	mysqli_real_escape_string($connection,$sql);
 	$result = mysqli_query($connection,$sql);
-	if ($result) $output .= "<li>Mobile device check-in password field added successfully.</li>";
-	else $output .= "<li>Addition of the mobile device check-in password field failed. Error: ".$db_conn->getLastError()."</li>";
+	if ($result) $output_off_sched_update .= "<li>Mobile device check-in password field added successfully.</li>";
+	else $output_off_sched_update .= "<li>Addition of the mobile device check-in password field failed. <strong class=\"text-warning\">Error: ".$db_conn->getLastError()."</strong></li>";
 
 }
 
 if (!check_update("brewStyleEntry", $prefix."styles")) {
 
+	$v215 = TRUE;
+
 	$sql = sprintf("ALTER TABLE `%s` ADD `brewStyleEntry` TEXT CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL;",$prefix."styles");
 	mysqli_select_db($connection,$database);
 	mysqli_real_escape_string($connection,$sql);
 	$result = mysqli_query($connection,$sql);
-	if ($result) $output .= "<li>Style entry information field added successfully.</li>";
-	else $output .= "<li>Addition of the style entry information field failed. Error: ".$db_conn->getLastError()."</li>";
+	if ($result) $output_off_sched_update .= "<li>Style entry information field added successfully.</li>";
+	else $output_off_sched_update .= "<li>Addition of the style entry information field failed. <strong class=\"text-warning\">Error: ".$db_conn->getLastError()."</strong></li>";
 
 }
 
 if (!check_update("brewStyleComEx", $prefix."styles")) {
 
+	$v215 = TRUE;
+
 	$sql = sprintf("ALTER TABLE  `%s` ADD `brewStyleComEx` TEXT CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL;",$prefix."styles");
 	mysqli_select_db($connection,$database);
 	mysqli_real_escape_string($connection,$sql);
 	$result = mysqli_query($connection,$sql);
-	if ($result) $output .= "<li>Style commercial examples field added successfully.</li>";
-	else $output .= "<li>Addition of the style commercial examples field failed. Error: ".$db_conn->getLastError()."</li>";
+	if ($result) $output_off_sched_update .= "<li>Style commercial examples field added successfully.</li>";
+	else $output_off_sched_update .= "<li>Addition of the style commercial examples field failed. <strong class=\"text-warning\">Error: ".$db_conn->getLastError()."</strong></li>";
 
 }
+
+/*
+if (!$v215) $output_off_sched_update .= "<li>All 2.1.5.0 updates present.</li>";
+$output_off_sched_update .= "</ul>";
+*/
 
 /**
  * ----------------------------------------------- 2.1.8 -----------------------------------------------
@@ -155,8 +249,14 @@ if (!check_update("brewStyleComEx", $prefix."styles")) {
  * -----------------------------------------------------------------------------------------------------
  */
 
-$output .= "<li>System table updates.</li>";
 
+$output_off_sched_update .= "<p>";
+$output_off_sched_update .= "<strong>Version 2.1.8.0 Updates</strong>";
+if ($row_pv['version'] == "2.1.7.0") $output_off_sched_update .= "<br><em><span class=\"text-primary\">Your previous version was ".$row_pv['version'].". Your installation's updates begin here.</span></em>";
+$output_off_sched_update .= "</p>";
+$output_off_sched_update .= "<ul>";
+$output_off_sched_update .= "<li>System table updates.";
+$output_off_sched_update .= "<ul>";
 if (!check_update("setup_last_step", $prefix."bcoem_sys")) {
 	// Add setup_last_step column to system table
 
@@ -164,16 +264,18 @@ if (!check_update("setup_last_step", $prefix."bcoem_sys")) {
 	mysqli_select_db($connection,$database);
 	mysqli_real_escape_string($connection,$sql);
 	$result = mysqli_query($connection,$sql);
-	if ($result) $output .= "<li>Setup last step field added successfully.</li>";
-	else $output .= "<li>Addition of the setup last step field failed. Error: ".$db_conn->getLastError()."</li>";
+	if ($result) $output_off_sched_update .= "<li>Setup last step field added successfully.</li>";
+	else $output_off_sched_update .= "<li>Addition of the setup last step field failed. <strong class=\"text-danger\">Error: ".$db_conn->getLastError()."</strong></li>";
 
 	$update_table = $prefix."bcoem_sys";
 	$data = array('setup_last_step' => 8);
 	$db_conn->where ('id', 1);
-	if ($db_conn->update ($update_table, $data)) $output .= "<li>Setup last step value updated.</li>";
-	else $output .= "<li>Setup last step value not updated. Error: ".$db_conn->getLastError()."</li>";
+	if ($db_conn->update ($update_table, $data)) $output_off_sched_update .= "<li>Setup last step value updated.</li>";
+	else $output_off_sched_update .= "<li>Setup last step value not updated. <strong class=\"text-danger\">Error: ".$db_conn->getLastError()."</strong></li>";
 
 }
+$output_off_sched_update .= "</ul>";
+$output_off_sched_update .= "</li>";
 
 // Make sure styles table is auto increment
 
@@ -181,11 +283,11 @@ $sql = sprintf("ALTER TABLE `%s` CHANGE `id` `id` INT(11) NOT NULL AUTO_INCREMEN
 mysqli_select_db($connection,$database);
 mysqli_real_escape_string($connection,$sql);
 $result = mysqli_query($connection,$sql);
-if ($result) $output .= "<li>Styles table set to auto increment.</li>";
-else $output .= "<li>Styles table was not set to auto increment. Error: ".$db_conn->getLastError()."</li>";
+if ($result) $output_off_sched_update .= "<li>Styles table set to auto increment.</li>";
+else $output_off_sched_update .= "<li>Styles table was not set to auto increment. <strong class=\"text-warning\">Error: ".$db_conn->getLastError()."</strong></li>";
 
-$output .= "<li>Updating styles table with current sub-style information.</li>";
-
+$output_off_sched_update .= "<li>Updating styles table with current sub-style information.";
+$output_off_sched_update .= "<ul>";
 $update_table = $prefix."styles";
 $data = array(
 	'brewStyle' => 'Historical Beer',
@@ -207,8 +309,8 @@ if (!check_new_style("27","A1","Gose")) {
 	$data = array('brewStyleGroup' => '27',	'brewStyleNum' => 'A1',	'brewStyle' => 'Gose', 'brewStyleCategory' => 'Historical Beer', 'brewStyleVersion' => 'BJCP2015', 'brewStyleOG' => '1.036', 'brewStyleOGMax' => '1.056', 'brewStyleFG' => '1.006', 'brewStyleFGMax' => '1.010', 'brewStyleABV' => '4.2', 'brewStyleABVMax' => '4.8', 'brewStyleIBU' => '5', 'brewStyleIBUMax' => '12', 'brewStyleSRM' => '3', 'brewStyleSRMMax' => '4', 'brewStyleType' => '1', 'brewStyleInfo' => 'A highly-carbonated, tart and fruity wheat ale with a restrained coriander and salt character and low bitterness. Very refreshing, with bright flavors and high attenuation.', 'brewStyleLink' => 'http://bjcp.org/stylecenter.php', 'brewStyleActive' => 'Y', 'brewStyleOwn' => 'bcoe', 'brewStyleReqSpec' => '0', 'brewStyleStrength' => '0', 'brewStyleCarb' => '0', 'brewStyleSweet' => '0', 'brewStyleTags' => 'standard-strength, pale-color, top-fermented, centraleurope, historical-style, wheat-beer-family, sour, spice','brewStyleComEx' => 'Anderson Valley Gose, Bayerisch Bahnhof Leipziger Gose, Dollnitzer Ritterguts Gose', 'brewStyleEntry' => NULL
 	);
 	$result = $db->insert ($update_table, $data);
-	if ($result) $output .= "<li>Gose style added to BJCP 2015 styles.</li>";
-	else $output .= "<li>Gose style NOT added to BJCP 2015 styles. Error: ".$db_conn->getLastError()."</li>";
+	if ($result) $output_off_sched_update .= "<li>Gose style added to BJCP 2015 styles.</li>";
+	else $output_off_sched_update .= "<li>Gose style NOT added to BJCP 2015 styles. <strong class=\"text-warning\">Error: ".$db_conn->getLastError()."</strong></li>";
 
 }
 
@@ -216,8 +318,8 @@ if (!check_new_style("27","A2","Piwo Grodziskie")) {
 
 	$data =  array('brewStyleGroup' => '27','brewStyleNum' => 'A2','brewStyle' => 'Piwo Grodziskie','brewStyleCategory' => 'Historical Beer','brewStyleVersion' => 'BJCP2015','brewStyleOG' => '1.028','brewStyleOGMax' => '1.032','brewStyleFG' => '1.010','brewStyleFGMax' => '1.015','brewStyleABV' => '4.5','brewStyleABVMax' => '6.0','brewStyleIBU' => '25','brewStyleIBUMax' => '40','brewStyleSRM' => '3','brewStyleSRMMax' => '6','brewStyleType' => '1','brewStyleInfo' => 'A low-gravity, highly-carbonated, light bodied ale combining an oak-smoked flavor with a clean hop bitterness. Highly sessionable.','brewStyleLink' => 'http://bjcp.org/stylecenter.php','brewStyleActive' => 'Y','brewStyleOwn' => 'bcoe','brewStyleReqSpec' => '0','brewStyleStrength' => '0','brewStyleCarb' => '0','brewStyleSweet' => '0','brewStyleTags' => 'standard-strength, pale-color, bottom-fermented,lagered, north-america, historical-style, pilsner-family, bitter, hoppy','brewStyleComEx' => NULL,'brewStyleEntry' => NULL);
 	$result = $db->insert ($update_table, $data);
-	if ($result) $output .= "<li>Piwo Grodziskie style added to BJCP 2015 styles.</li>";
-	else $output .= "<li>Piwo Grodziskie style NOT added to BJCP 2015 styles. Error: ".$db_conn->getLastError()."</li>";
+	if ($result) $output_off_sched_update .= "<li>Piwo Grodziskie style added to BJCP 2015 styles.</li>";
+	else $output_off_sched_update .= "<li>Piwo Grodziskie style NOT added to BJCP 2015 styles. <strong class=\"text-warning\">Error: ".$db_conn->getLastError()."</strong></li>";
 
 }
 
@@ -225,8 +327,8 @@ if (!check_new_style("27","A3","Lichtenhainer")) {
 
 	$data = array('id' => '229','brewStyleGroup' => '27','brewStyleNum' => 'A3','brewStyle' => 'Lichtenhainer','brewStyleCategory' => 'Historical Beer','brewStyleVersion' => 'BJCP2015','brewStyleOG' => '1.032','brewStyleOGMax' => '1.040','brewStyleFG' => '1.004','brewStyleFGMax' => '1.008','brewStyleABV' => '3.5','brewStyleABVMax' => '4.7','brewStyleIBU' => '5','brewStyleIBUMax' => '12','brewStyleSRM' => '3','brewStyleSRMMax' => '6','brewStyleType' => '1','brewStyleInfo' => 'A sour, smoked, lower-gravity historical German wheat beer. Complex yet refreshing character due to high attenuation and carbonation, along with low bitterness and moderate sourness. ','brewStyleLink' => 'http://bjcp.org/stylecenter.php','brewStyleActive' => 'Y','brewStyleOwn' => 'bcoe','brewStyleReqSpec' => '0','brewStyleStrength' => '0','brewStyleCarb' => '0','brewStyleSweet' => '0','brewStyleTags' => 'standard-strength, pale-color, top-fermented, centraleurope, historical-style, wheat-beer-family, sour, smoke','brewStyleComEx' => NULL,'brewStyleEntry' => NULL);
 	$result = $db->insert ($update_table, $data);
-	if ($result) $output .= "<li>Lichtenhainer style added to BJCP 2015 styles.</li>";
-	else $output .= "<li>Lichtenhainer style NOT added to BJCP 2015 styles. Error: ".$db_conn->getLastError()."</li>";
+	if ($result) $output_off_sched_update .= "<li>Lichtenhainer style added to BJCP 2015 styles.</li>";
+	else $output_off_sched_update .= "<li>Lichtenhainer style NOT added to BJCP 2015 styles. <strong class=\"text-warning\">Error: ".$db_conn->getLastError()."</strong></li>";
 
 }
 
@@ -234,8 +336,8 @@ if (!check_new_style("27","A4","Roggenbier")) {
 
 	$data = array('brewStyleGroup' => '27','brewStyleNum' => 'A4','brewStyle' => 'Roggenbier','brewStyleCategory' => 'Historical Beer','brewStyleVersion' => 'BJCP2015','brewStyleOG' => '1.046','brewStyleOGMax' => '1.056','brewStyleFG' => '1.010','brewStyleFGMax' => '1.014','brewStyleABV' => '4.5','brewStyleABVMax' => '6.0','brewStyleIBU' => '10','brewStyleIBUMax' => '20','brewStyleSRM' => '14','brewStyleSRMMax' => '19','brewStyleType' => '1','brewStyleInfo' => 'A dunkelweizen made with rye rather than wheat, but with a greater body and light finishing hops.','brewStyleLink' => 'http://bjcp.org/stylecenter.php','brewStyleActive' => 'Y','brewStyleOwn' => 'bcoe','brewStyleReqSpec' => '0','brewStyleStrength' => '0','brewStyleCarb' => '0','brewStyleSweet' => '0','brewStyleTags' => 'standard-strength, amber-color, top-fermenting, central-europe, historical-style, wheat-beer-family','brewStyleComEx' => 'Thurn und Taxis Roggen','brewStyleEntry' => NULL);
 	$result = $db->insert ($update_table, $data);
-	if ($result) $output .= "<li>Roggenbier style added to BJCP 2015 styles.</li>";
-	else $output .= "<li>Roggenbier style NOT added to BJCP 2015 styles. Error: ".$db_conn->getLastError()."</li>";
+	if ($result) $output_off_sched_update .= "<li>Roggenbier style added to BJCP 2015 styles.</li>";
+	else $output_off_sched_update .= "<li>Roggenbier style NOT added to BJCP 2015 styles. <strong class=\"text-warning\">Error: ".$db_conn->getLastError()."</strong></li>";
 
 }
 
@@ -243,8 +345,8 @@ if (!check_new_style("27","A5","Sahti")) {
 
 	$data = array('brewStyleGroup' => '27','brewStyleNum' => 'A5','brewStyle' => 'Sahti','brewStyleCategory' => 'Historical Beer','brewStyleVersion' => 'BJCP2015','brewStyleOG' => '1.076','brewStyleOGMax' => '1.120','brewStyleFG' => '1.016','brewStyleFGMax' => '1.020','brewStyleABV' => '7.0','brewStyleABVMax' => '11.0','brewStyleIBU' => '7','brewStyleIBUMax' => '15','brewStyleSRM' => '4','brewStyleSRMMax' => '22','brewStyleType' => '1','brewStyleInfo' => 'A sweet, heavy, strong traditional Finnish beer with a rye, juniper, and juniper berry flavor and a strong banana-clove yeast character.','brewStyleLink' => 'http://bjcp.org/stylecenter.php','brewStyleActive' => 'Y','brewStyleOwn' => 'bcoe','brewStyleReqSpec' => '0','brewStyleStrength' => '0','brewStyleCarb' => '0','brewStyleSweet' => '0','brewStyleTags' => 'high-strength, amber-color, top-fermented, centraleurope, historical-style, spice','brewStyleComEx' => NULL,'brewStyleEntry' => NULL);
 	$result = $db->insert ($update_table, $data);
-	if ($result) $output .= "<li>Sahti style added to BJCP 2015 styles.</li>";
-	else $output .= "<li>Sahti style NOT added to BJCP 2015 styles. Error: ".$db_conn->getLastError()."</li>";
+	if ($result) $output_off_sched_update .= "<li>Sahti style added to BJCP 2015 styles.</li>";
+	else $output_off_sched_update .= "<li>Sahti style NOT added to BJCP 2015 styles. <strong class=\"text-warning\">Error: ".$db_conn->getLastError()."</strong></li>";
 
 }
 
@@ -252,8 +354,8 @@ if (!check_new_style("27","A6","Kentucky Common")) {
 
 	$data = array('brewStyleGroup' => '27','brewStyleNum' => 'A6','brewStyle' => 'Kentucky Common','brewStyleCategory' => 'Historical Beer','brewStyleVersion' => 'BJCP2015','brewStyleOG' => '1.044','brewStyleOGMax' => '1.055','brewStyleFG' => '1.010','brewStyleFGMax' => '1.018','brewStyleABV' => '4.0','brewStyleABVMax' => '5.5','brewStyleIBU' => '15','brewStyleIBUMax' => '30','brewStyleSRM' => '11','brewStyleSRMMax' => '20','brewStyleType' => '1','brewStyleInfo' => 'A darker-colored, light-flavored, malt-accented beer with a dry finish and interesting character malt flavors. Refreshing due to its high carbonation and mild flavors, and highly  sessionable due to being served very fresh and with restrained alcohol levels.','brewStyleLink' => 'http://bjcp.org/stylecenter.php','brewStyleActive' => 'Y','brewStyleOwn' => 'bcoe','brewStyleReqSpec' => '0','brewStyleStrength' => '0','brewStyleCarb' => '0','brewStyleSweet' => '0','brewStyleTags' => 'standard-strength, amber-color, top-fermented, north america,historical-style, balanced','brewStyleComEx' => 'Apocalypse Brew Works Ortel\'s 1912','brewStyleEntry' => NULL);
 	$result = $db->insert ($update_table, $data);
-	if ($result) $output .= "<li>Kentucky Common style added to BJCP 2015 styles.</li>";
-	else $output .= "<li>Kentucky Common style NOT added to BJCP 2015 styles. Error: ".$db_conn->getLastError()."</li>";
+	if ($result) $output_off_sched_update .= "<li>Kentucky Common style added to BJCP 2015 styles.</li>";
+	else $output_off_sched_update .= "<li>Kentucky Common style NOT added to BJCP 2015 styles. <strong class=\"text-warning\">Error: ".$db_conn->getLastError()."</strong></li>";
 
 }
 
@@ -261,8 +363,8 @@ if (!check_new_style("27","A7","Pre-Prohibition Lager")) {
 
 	$data =  array('brewStyleGroup' => '27','brewStyleNum' => 'A7','brewStyle' => 'Pre-Prohibition Lager','brewStyleCategory' => 'Historical Beer','brewStyleVersion' => 'BJCP2015','brewStyleOG' => '1.044','brewStyleOGMax' => '1.060','brewStyleFG' => '1.010','brewStyleFGMax' => '1.015','brewStyleABV' => '4.5','brewStyleABVMax' => '6.0','brewStyleIBU' => '25','brewStyleIBUMax' => '40','brewStyleSRM' => '3','brewStyleSRMMax' => '6','brewStyleType' => '1','brewStyleInfo' => 'A clean, refreshing, but bitter pale lager, often showcasing a grainy-sweet corn flavor. All malt or rice-based versions have a crisper, more neutral character. The higher bitterness level is the largest differentiator between this style and most modern mass-market pale lagers, but the more robust flavor profile also sets it apart.','brewStyleLink' => 'http://bjcp.org/stylecenter.php','brewStyleActive' => 'Y','brewStyleOwn' => 'bcoe','brewStyleReqSpec' => '0','brewStyleStrength' => '0','brewStyleCarb' => '0','brewStyleSweet' => '0','brewStyleTags' => 'standard-strength, pale-color, bottom-fermented, lagered, north-america, historical-style, pilsner-family, bitter, hoppy','brewStyleComEx' => 'Anchor California Lager, Coors Batch 19, Little Harpeth Chicken Scratch','brewStyleEntry' => NULL);
 	$result = $db->insert ($update_table, $data);
-	if ($result) $output .= "<li>Pre-Prohibition Lager style added to BJCP 2015 styles.</li>";
-	else $output .= "<li>Pre-Prohibition Lager style NOT added to BJCP 2015 styles. Error: ".$db_conn->getLastError()."</li>";
+	if ($result) $output_off_sched_update .= "<li>Pre-Prohibition Lager style added to BJCP 2015 styles.</li>";
+	else $output_off_sched_update .= "<li>Pre-Prohibition Lager style NOT added to BJCP 2015 styles. <strong class=\"text-warning\">Error: ".$db_conn->getLastError()."</strong></li>";
 
 }
 
@@ -270,8 +372,8 @@ if (!check_new_style("27","A8","Pre-Prohibition Porter")) {
 
 	$data = array('brewStyleGroup' => '27','brewStyleNum' => 'A8','brewStyle' => 'Pre-Prohibition Porter','brewStyleCategory' => 'Historical Beer','brewStyleVersion' => 'BJCP2015','brewStyleOG' => '1.046','brewStyleOGMax' => '1.060','brewStyleFG' => '1.010','brewStyleFGMax' => '1.016','brewStyleABV' => '4.5','brewStyleABVMax' => '6.0','brewStyleIBU' => '20','brewStyleIBUMax' => '30','brewStyleSRM' => '18','brewStyleSRMMax' => '30','brewStyleType' => '1','brewStyleInfo' => 'An American adaptation of English Porter using American ingredients, including adjuncts.','brewStyleLink' => 'http://bjcp.org/stylecenter.php','brewStyleActive' => 'Y','brewStyleOwn' => 'bcoe','brewStyleReqSpec' => '0','brewStyleStrength' => '0','brewStyleCarb' => '0','brewStyleSweet' => '0','brewStyleTags' => 'standard-strength, dark-color, any-fermentation, northamerica, historical-style, porter-family, malty','brewStyleComEx' => 'Stegmaier Porter, Yuengling Porter','brewStyleEntry' => NULL);
 	$result = $db->insert ($update_table, $data);
-	if ($result) $output .= "<li>Pre-Prohibition Porter style added to BJCP 2015 styles.</li>";
-	else $output .= "<li>Pre-Prohibition Porter style NOT added to BJCP 2015 styles. Error: ".$db_conn->getLastError()."</li>";
+	if ($result) $output_off_sched_update .= "<li>Pre-Prohibition Porter style added to BJCP 2015 styles.</li>";
+	else $output_off_sched_update .= "<li>Pre-Prohibition Porter style NOT added to BJCP 2015 styles. <strong class=\"text-warning\">Error: ".$db_conn->getLastError()."</strong></li>";
 
 }
 
@@ -279,8 +381,8 @@ if (!check_new_style("27","A9","London Brown Ale")) {
 
 	$data = array('brewStyleGroup' => '27','brewStyleNum' => 'A9','brewStyle' => 'London Brown Ale','brewStyleCategory' => 'Historical Beer','brewStyleVersion' => 'BJCP2015','brewStyleOG' => '1.033','brewStyleOGMax' => '1.038','brewStyleFG' => '1.012','brewStyleFGMax' => '1.015','brewStyleABV' => '2.8','brewStyleABVMax' => '3.6','brewStyleIBU' => '15','brewStyleIBUMax' => '20','brewStyleSRM' => '22','brewStyleSRMMax' => '35','brewStyleType' => '1','brewStyleInfo' => 'A luscious, sweet, malt-oriented dark brown ale, with caramel and toffee malt complexity and a sweet finish.','brewStyleLink' => 'http://bjcp.org/stylecenter.php','brewStyleActive' => 'Y','brewStyleOwn' => 'bcoe','brewStyleReqSpec' => '0','brewStyleStrength' => '0','brewStyleCarb' => '0','brewStyleSweet' => '0','brewStyleTags' => 'session-strength, dark-color, top-fermented, britishisles, historical-style, brown-ale-family, malty, sweet','brewStyleComEx' => 'Harveys Bloomsbury Brown Ale, Mann\'s Brown Ale','brewStyleEntry' => 'Entrant MUST specify a strength (session: 3.0-5.0%, standard: 5.0-7.5%, double: 7.5-9.5%).');
 	$result = $db->insert ($update_table, $data);
-	if ($result) $output .= "<li>London Brown Ale style added to BJCP 2015 styles.</li>";
-	else $output .= "<li>London Brown Ale style NOT added to BJCP 2015 styles. Error: ".$db_conn->getLastError()."</li>";
+	if ($result) $output_off_sched_update .= "<li>London Brown Ale style added to BJCP 2015 styles.</li>";
+	else $output_off_sched_update .= "<li>London Brown Ale style NOT added to BJCP 2015 styles. <strong class=\"text-warning\">Error: ".$db_conn->getLastError()."</strong></li>";
 
 }
 
@@ -288,8 +390,8 @@ if (!check_new_style("21","B1","Belgian IPA")) {
 
 	$data = array('brewStyleGroup' => '21','brewStyleNum' => 'B1','brewStyle' => 'Belgian IPA','brewStyleCategory' => 'Specialty IPA','brewStyleVersion' => 'BJCP2015','brewStyleOG' => '1.058','brewStyleOGMax' => '1.080','brewStyleFG' => '1.008','brewStyleFGMax' => '1.016','brewStyleABV' => '6.2','brewStyleABVMax' => '9.5','brewStyleIBU' => '50','brewStyleIBUMax' => '100','brewStyleSRM' => '5','brewStyleSRMMax' => '15','brewStyleType' => '1','brewStyleInfo' => 'An IPA with the fruitiness and spiciness derived from the use of Belgian yeast. The examples from Belgium tend to be lighter in color and more attenuated, similar to a tripel that has been brewed with more hops. This beer has a more complex flavor profile and may be higher in alcohol than a typical IPA.','brewStyleLink' => 'http://bjcp.org/stylecenter.php','brewStyleActive' => 'Y','brewStyleOwn' => 'bcoe','brewStyleReqSpec' => '1','brewStyleStrength' => '0','brewStyleCarb' => '0','brewStyleSweet' => '0','brewStyleTags' => 'high-strength, pale-color, top-fermented, north-america, craft-style, ipa-family, specialty-family, bitter, hoppy','brewStyleComEx' => 'Brewery Vivant Triomphe, Houblon Chouffe, Epic Brainless IPA, Green Flash Le Freak, Stone Cali-Belgique, Urthel Hop It','brewStyleEntry' => 'Entrant MUST specify a strength (session: 3.0-5.0%, standard: 5.0-7.5%, double: 7.5-9.5%).');
 	$result = $db->insert ($update_table, $data);
-	if ($result) $output .= "<li>Belgian IPA style added to BJCP 2015 styles.</li>";
-	else $output .= "<li>Belgian IPA style NOT added to BJCP 2015 styles. Error: ".$db_conn->getLastError()."</li>";
+	if ($result) $output_off_sched_update .= "<li>Belgian IPA style added to BJCP 2015 styles.</li>";
+	else $output_off_sched_update .= "<li>Belgian IPA style NOT added to BJCP 2015 styles. <strong class=\"text-warning\">Error: ".$db_conn->getLastError()."</strong></li>";
 
 }
 
@@ -297,8 +399,8 @@ if (!check_new_style("21","B2","Black IPA")) {
 
 	$data = array('brewStyleGroup' => '21','brewStyleNum' => 'B2','brewStyle' => 'Black IPA','brewStyleCategory' => 'Specialty IPA','brewStyleVersion' => 'BJCP2015','brewStyleOG' => '1.050','brewStyleOGMax' => '1.085','brewStyleFG' => '1.010','brewStyleFGMax' => '1.018','brewStyleABV' => '5.5','brewStyleABVMax' => '9.0','brewStyleIBU' => '50','brewStyleIBUMax' => '90','brewStyleSRM' => '25','brewStyleSRMMax' => '40','brewStyleType' => '1','brewStyleInfo' => 'A beer with the dryness, hop-forward balance, and flavor characteristics of an American IPA, only darker in color – but without strongly roasted or burnt flavors. The flavor of darker malts is gentle and supportive, not a major flavor component. Drinkability is a key characteristic.','brewStyleLink' => 'http://bjcp.org/stylecenter.php','brewStyleActive' => 'Y','brewStyleOwn' => 'bcoe','brewStyleReqSpec' => '1','brewStyleStrength' => '0','brewStyleCarb' => '0','brewStyleSweet' => '0','brewStyleTags' => 'high-strength, dark-color, top-fermented, north-america, craft-style, ipa-family, specialty-family, bitter, hoppy','brewStyleComEx' => '21st Amendment Back in Black (standard), Deschutes Hop in the Dark CDA (standard), Rogue Dad’s Little Helper (standard), Southern Tier Iniquity (double), Widmer Pitch Black IPA (standard)','brewStyleEntry' => 'Entrant MUST specify a strength (session: 3.0-5.0%, standard: 5.0-7.5%, double: 7.5-9.5%).');
 	$result = $db->insert ($update_table, $data);
-	if ($result) $output .= "<li>Black IPA style added to BJCP 2015 styles.</li>";
-	else $output .= "<li>Black IPA style NOT added to BJCP 2015 styles. Error: ".$db_conn->getLastError()."</li>";
+	if ($result) $output_off_sched_update .= "<li>Black IPA style added to BJCP 2015 styles.</li>";
+	else $output_off_sched_update .= "<li>Black IPA style NOT added to BJCP 2015 styles. <strong class=\"text-warning\">Error: ".$db_conn->getLastError()."</strong></li>";
 
 }
 
@@ -306,8 +408,8 @@ if (!check_new_style("21","B3","Brown IPA")) {
 
 	$data = array('brewStyleGroup' => '21','brewStyleNum' => 'B3','brewStyle' => 'Brown IPA','brewStyleCategory' => 'Specialty IPA','brewStyleVersion' => 'BJCP2015','brewStyleOG' => '1.056','brewStyleOGMax' => '1.070','brewStyleFG' => '1.008','brewStyleFGMax' => '1.016','brewStyleABV' => '5.5','brewStyleABVMax' => '7.5','brewStyleIBU' => '40','brewStyleIBUMax' => '70','brewStyleSRM' => '11','brewStyleSRMMax' => '19','brewStyleType' => '1','brewStyleInfo' => 'Hoppy, bitter, and moderately strong like an American IPA, but with some caramel, chocolate, toffee, and/or dark fruit malt character as in an American Brown Ale. Retaining the dryish finish and lean body that makes IPAs so drinkable, a Brown IPA is a little more flavorful and malty than an American IPA without being sweet or heavy.','brewStyleLink' => 'http://bjcp.org/stylecenter.php','brewStyleActive' => 'Y','brewStyleOwn' => 'bcoe','brewStyleReqSpec' => '1','brewStyleStrength' => '0','brewStyleCarb' => '0','brewStyleSweet' => '0','brewStyleTags' => 'high-strength, dark-color, top-fermented, north-america, craft-style, ipa-family, specialty-family, bitter, hoppy','brewStyleComEx' => 'Dogfish Head Indian Brown Ale, Grand Teton Bitch Creek, Harpoon Brown IPA, Russian River Janet’s Brown Ale','brewStyleEntry' => 'Entrant MUST specify a strength (session: 3.0-5.0%, standard: 5.0-7.5%, double: 7.5-9.5%).');
 	$result = $db->insert ($update_table, $data);
-	if ($result) $output .= "<li>Brown IPA style added to BJCP 2015 styles.</li>";
-	else $output .= "<li>Brown IPA style NOT added to BJCP 2015 styles. Error: ".$db_conn->getLastError()."</li>";
+	if ($result) $output_off_sched_update .= "<li>Brown IPA style added to BJCP 2015 styles.</li>";
+	else $output_off_sched_update .= "<li>Brown IPA style NOT added to BJCP 2015 styles. <strong class=\"text-warning\">Error: ".$db_conn->getLastError()."</strong></li>";
 
 }
 
@@ -315,8 +417,8 @@ if (!check_new_style("21","B4","Red IPA")) {
 
 	$data = array('brewStyleGroup' => '21','brewStyleNum' => 'B4','brewStyle' => 'Red IPA','brewStyleCategory' => 'Specialty IPA','brewStyleVersion' => 'BJCP2015','brewStyleOG' => '1.056','brewStyleOGMax' => '1.070','brewStyleFG' => '1.008','brewStyleFGMax' => '1.016','brewStyleABV' => '5.5','brewStyleABVMax' => '7.5','brewStyleIBU' => '40','brewStyleIBUMax' => '70','brewStyleSRM' => '11','brewStyleSRMMax' => '19','brewStyleType' => '1','brewStyleInfo' => 'Hoppy, bitter, and moderately strong like an American IPA, but with some caramel, toffee, and/or dark fruit malt character. Retaining the dryish finish and lean body that makes IPAs so drinkable, a Red IPA is a little more flavorful and malty than an American IPA without being sweet or heavy.','brewStyleLink' => 'http://bjcp.org/stylecenter.php','brewStyleActive' => 'Y','brewStyleOwn' => 'bcoe','brewStyleReqSpec' => '1','brewStyleStrength' => '0','brewStyleCarb' => '0','brewStyleSweet' => '0','brewStyleTags' => 'high-strength, amber-color, top-fermented, north-america, craft-style, ipa-family, specialty-family, bitter, hoppy','brewStyleComEx' => 'Green Flash Hop Head Red Double Red IPA (double), Midnight Sun Sockeye Red, Sierra Nevada Flipside Red IPA, Summit Horizon Red IPA, Odell Runoff Red IPA','brewStyleEntry' => 'Entrant MUST specify a strength (session: 3.0-5.0%, standard: 5.0-7.5%, double: 7.5-9.5%).');
 	$result = $db->insert ($update_table, $data);
-	if ($result) $output .= "<li>Red IPA style added to BJCP 2015 styles.</li>";
-	else $output .= "<li>Red IPA style NOT added to BJCP 2015 styles. Error: ".$db_conn->getLastError()."</li>";
+	if ($result) $output_off_sched_update .= "<li>Red IPA style added to BJCP 2015 styles.</li>";
+	else $output_off_sched_update .= "<li>Red IPA style NOT added to BJCP 2015 styles. <strong class=\"text-warning\">Error: ".$db_conn->getLastError()."</strong></li>";
 
 }
 
@@ -324,8 +426,8 @@ if (!check_new_style("21","B5","Rye IPA")) {
 
 	$data = array('brewStyleGroup' => '21','brewStyleNum' => 'B5','brewStyle' => 'Rye IPA','brewStyleCategory' => 'Specialty IPA','brewStyleVersion' => 'BJCP2015','brewStyleOG' => '1.056','brewStyleOGMax' => '1.075','brewStyleFG' => '1.008','brewStyleFGMax' => '1.014','brewStyleABV' => '5.5','brewStyleABVMax' => '8.0','brewStyleIBU' => '50','brewStyleIBUMax' => '75','brewStyleSRM' => '6','brewStyleSRMMax' => '14','brewStyleType' => '1','brewStyleInfo' => 'A decidedly hoppy and bitter, moderately strong American pale ale, showcasing modern American and New World hop varieties and rye malt. The balance is hop-forward, with a clean fermentation profile, dry finish, and clean, supporting malt allowing a creative range of hop character to shine through.','brewStyleLink' => 'http://bjcp.org/stylecenter.php','brewStyleActive' => 'Y','brewStyleOwn' => 'bcoe','brewStyleReqSpec' => '1','brewStyleStrength' => '0','brewStyleCarb' => '0','brewStyleSweet' => '0','brewStyleTags' => 'high-strength, amber-color, top-fermented, north-america, craft-style, ipa-family, specialty-family, bitter, hoppy','brewStyleComEx' => 'Arcadia Sky High Rye, Bear Republic Hop Rod Rye, Founders Reds Rye, Great Lakes Rye of the Tiger, Sierra Nevada Ruthless Rye','brewStyleEntry' => 'Entrant MUST specify a strength (session: 3.0-5.0%, standard: 5.0-7.5%, double: 7.5-9.5%).');
 	$result = $db->insert ($update_table, $data);
-	if ($result) $output .= "<li>Rye IPA style added to BJCP 2015 styles.</li>";
-	else $output .= "<li>Rye IPA style NOT added to BJCP 2015 styles. Error: ".$db_conn->getLastError()."</li>";
+	if ($result) $output_off_sched_update .= "<li>Rye IPA style added to BJCP 2015 styles.</li>";
+	else $output_off_sched_update .= "<li>Rye IPA style NOT added to BJCP 2015 styles. <strong class=\"text-warning\">Error: ".$db_conn->getLastError()."</strong></li>";
 
 }
 
@@ -333,10 +435,13 @@ if (!check_new_style("21","B6","White IPA")) {
 
 	$data = array('brewStyleGroup' => '21','brewStyleNum' => 'B6','brewStyle' => 'White IPA','brewStyleCategory' => 'Specialty IPA','brewStyleVersion' => 'BJCP2015','brewStyleOG' => '1.056','brewStyleOGMax' => '1.065','brewStyleFG' => '1.010','brewStyleFGMax' => '1.016','brewStyleABV' => '5.5','brewStyleABVMax' => '7.0','brewStyleIBU' => '40','brewStyleIBUMax' => '70','brewStyleSRM' => '5','brewStyleSRMMax' => '8','brewStyleType' => '1','brewStyleInfo' => 'A fruity, spicy, refreshing version of an American IPA, but with a lighter color, less body, and featuring either the distinctive yeast and/or spice additions typical of a Belgian witbier.','brewStyleLink' => 'http://bjcp.org/stylecenter.php','brewStyleActive' => 'Y','brewStyleOwn' => 'bcoe','brewStyleReqSpec' => '1','brewStyleStrength' => '0','brewStyleCarb' => '0','brewStyleSweet' => '0','brewStyleTags' => 'high-strength, pale-color, top-fermented, north-america, craft-style, ipa-family, specialty-family, bitter, hoppy, spice','brewStyleComEx' => 'Blue Point White IPA, Deschutes Chainbreaker IPA, Harpoon The Long Thaw, New Belgium Accumulation','brewStyleEntry' => 'Entrant MUST specify a strength (session: 3.0-5.0%, standard: 5.0-7.5%, double: 7.5-9.5%).');
 	$result = $db->insert ($update_table, $data);
-	if ($result) $output .= "<li>White IPA style added to BJCP 2015 styles.</li>";
-	else $output .= "<li>White IPA style NOT added to BJCP 2015 styles. Error: ".$db_conn->getLastError()."</li>";
+	if ($result) $output_off_sched_update .= "<li>White IPA style added to BJCP 2015 styles.</li>";
+	else $output_off_sched_update .= "<li>White IPA style NOT added to BJCP 2015 styles. <strong class=\"text-warning\">Error: ".$db_conn->getLastError()."</strong></li>";
 
 }
+$output_off_sched_update .= "</ul>";
+$output_off_sched_update .= "</li>";
+$output_off_sched_update .= "</ul>";
 
 /**
  * ----------------------------------------------- 2.1.9 -----------------------------------------------
@@ -344,14 +449,20 @@ if (!check_new_style("21","B6","White IPA")) {
  * -----------------------------------------------------------------------------------------------------
  */
 
+$output_off_sched_update .= "<p>";
+$output_off_sched_update .= "<strong>Version 2.1.9.0 Updates</strong>";
+if ($row_pv['version'] == "2.1.8.0") $output_off_sched_update .= "<br><em><span class=\"text-primary\">Your previous version was ".$row_pv['version'].". Your installation's updates begin here.</span></em>";
+$output_off_sched_update .= "</p>";
+$output_off_sched_update .= "<ul>";
+
 if (check_update("brewerNickname", $prefix."brewer")) {
 
 	$sql = sprintf("ALTER TABLE `%s` CHANGE `brewerNickname` `brewerStaff` CHAR(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL;", $prefix."brewer");
 	mysqli_select_db($connection,$database);
 	mysqli_real_escape_string($connection,$sql);
 	$result = mysqli_query($connection,$sql);
-	if ($result) $output .= "<li>Participant staff opt in added to the brewer table.</li>";
-	else $output .= "<li>Participant staff opt in NOT added to the brewer table. Error: ".$db_conn->getLastError()."</li>";
+	if ($result) $output_off_sched_update .= "<li>Participant staff opt in added to the brewer table.</li>";
+	else $output_off_sched_update .= "<li>Participant staff opt in NOT added to the brewer table. <strong class=\"text-danger\">Error: ".$db_conn->getLastError()."</strong></li>";
 
 
 }
@@ -362,8 +473,8 @@ if ((!check_update("brewerNickname", $prefix."brewer")) && (!check_update("brewe
 	mysqli_select_db($connection,$database);
 	mysqli_real_escape_string($connection,$sql);
 	$result = mysqli_query($connection,$sql);
-	if ($result) $output .= "<li>Participant staff opt in added to the brewer table.</li>";
-	else $output .= "<li>Participant staff opt in NOT added to the brewer table. Error: ".$db_conn->getLastError()."</li>";
+	if ($result) $output_off_sched_update .= "<li>Participant staff opt in added to the brewer table.</li>";
+	else $output_off_sched_update .= "<li>Participant staff opt in NOT added to the brewer table. <strong class=\"text-danger\">Error: ".$db_conn->getLastError()."</strong></li>";
 
 }
 
@@ -371,8 +482,8 @@ $sql = sprintf("ALTER TABLE `%s` CHANGE `brewCategory` `brewCategory` VARCHAR(4)
 mysqli_select_db($connection,$database);
 mysqli_real_escape_string($connection,$sql);
 $result = mysqli_query($connection,$sql);
-if ($result) $output .= "<li>Brewing table updated to correct style saving bug.</li>";
-else $output .= "<li>Brewing table NOT updated to correct style saving bug. Error: ".$db_conn->getLastError()."</li>";
+if ($result) $output_off_sched_update .= "<li>Brewing table updated to correct style saving bug.</li>";
+else $output_off_sched_update .= "<li>Brewing table NOT updated to correct style saving bug. <strong class=\"text-warning\">Error: ".$db_conn->getLastError()."</strong></li>";
 
 if (!check_update("assignRoles", $prefix."judging_assignments")) {
 
@@ -380,11 +491,12 @@ if (!check_update("assignRoles", $prefix."judging_assignments")) {
 	mysqli_select_db($connection,$database);
 	mysqli_real_escape_string($connection,$sql);
 	$result = mysqli_query($connection,$sql);
-	if ($result) $output .= "<li>Judging Roles column added to the judging_assignments table.</li>";
-	else $output .= "<li>Judging Roles column NOT added to the judging_assignments  table. Error: ".$db_conn->getLastError()."</li>";
+	if ($result) $output_off_sched_update .= "<li>Judging Roles column added to the judging_assignments table.</li>";
+	else $output_off_sched_update .= "<li>Judging Roles column NOT added to the judging_assignments  table. <strong class=\"text-warning\">Error: ".$db_conn->getLastError()."</strong></li>";
 
 }
 
+$output_off_sched_update .= "</ul>";
 
 /**
  * ----------------------------------------------- 2.1.10 ----------------------------------------------
@@ -396,14 +508,20 @@ if (!check_update("assignRoles", $prefix."judging_assignments")) {
  * -----------------------------------------------------------------------------------------------------
  */
 
+$output_off_sched_update .= "<p>";
+$output_off_sched_update .= "<strong>Version 2.1.10.0 Updates</strong>";
+if ($row_pv['version'] == "2.1.9.0") $output_off_sched_update .= "<br><em><span class=\"text-primary\">Your previous version was ".$row_pv['version'].". Your installation's updates begin here.</span></em>";
+$output_off_sched_update .= "</p>";
+$output_off_sched_update .= "<ul>";
+
 if (!check_update("brewerBreweryName", $prefix."brewer")) {
 	
 	$sql = sprintf("ALTER TABLE `%s` ADD `brewerBreweryName` VARCHAR(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL, ADD `brewerBreweryTTB` VARCHAR(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL;", $prefix."brewer");
 	mysqli_select_db($connection,$database);
 	mysqli_real_escape_string($connection,$sql);
 	$result = mysqli_query($connection,$sql);
-	if ($result) $output .= "<li>Pro Edition brewery and TTB columns added to the brewer table.</li>";
-	else $output .= "<li>Pro Edition brewery and TTB columns NOT added to the brewer table. Error: ".$db_conn->getLastError()."</li>";
+	if ($result) $output_off_sched_update .= "<li>Pro Edition brewery and TTB columns added to the brewer table.</li>";
+	else $output_off_sched_update .= "<li>Pro Edition brewery and TTB columns NOT added to the brewer table. <strong class=\"text-danger\">Error: ".$db_conn->getLastError()."</strong></li>";
 
 }
 
@@ -429,8 +547,8 @@ if (!check_update("prefsShowBestBrewer", $prefix."preferences")) {
 	mysqli_select_db($connection,$database);
 	mysqli_real_escape_string($connection,$sql);
 	$result = mysqli_query($connection,$sql);
-	if ($result) $output .= "<li>Best Brewer and Best Club columns added to preferences table.</li>";
-	else $output .= "<li>Best Brewer and Best Club columns NOT added to preferences table. Error: ".$db_conn->getLastError()."</li>";
+	if ($result) $output_off_sched_update .= "<li>Best Brewer and Best Club columns added to preferences table.</li>";
+	else $output_off_sched_update .= "<li>Best Brewer and Best Club columns NOT added to preferences table. <strong class=\"text-danger\">Error: ".$db_conn->getLastError()."</strong></li>";
 
 }
 
@@ -440,17 +558,17 @@ if (!check_update("prefsCAPTCHA", $prefix."preferences")) {
 	mysqli_select_db($connection,$database);
 	mysqli_real_escape_string($connection,$sql);
 	$result = mysqli_query($connection,$sql);
-	if ($result) $output .= "<li>CAPTCHA column added to preferences table.</li>";
-	else $output .= "<li>CAPTCHA column NOT added to preferences table. Error: ".$db_conn->getLastError()."</li>";	
+	if ($result) $output_off_sched_update .= "<li>CAPTCHA column added to preferences table.</li>";
+	else $output_off_sched_update .= "<li>CAPTCHA column NOT added to preferences table. <strong class=\"text-danger\">Error: ".$db_conn->getLastError()."</strong></li>";	
 
 	if (check_update("prefsCAPTCHA", $prefix."preferences")) {
 		$update_table = $prefix."preferences";
 		$data = array('prefsCAPTCHA' => 0);
 		$db_conn->where ('id', 1);
-		if ($db_conn->update ($update_table, $data)) $output .= "<li>CAPTCHA column value updated in the preferences table.</li>";
-		else $output .= "<li>CAPTCHA column value NOT updated in the preferences table. Error: ".$db_conn->getLastError()."</li>";
+		if ($db_conn->update ($update_table, $data)) $output_off_sched_update .= "<li>CAPTCHA column value updated in the preferences table.</li>";
+		else $output_off_sched_update .= "<li>CAPTCHA column value NOT updated in the preferences table. <strong class=\"text-danger\">Error: ".$db_conn->getLastError()."</strong></li>";
 	}
-	else $output .= "<li>CAPTCHA column missing in the preferences table.</li>";
+	else $output_off_sched_update .= "<li>CAPTCHA column missing in the preferences table.</li>";
 		
 }
 
@@ -460,8 +578,8 @@ if (!check_update("prefsPaypalIPN", $prefix."preferences")) {
 	mysqli_select_db($connection,$database);
 	mysqli_real_escape_string($connection,$sql);
 	$result = mysqli_query($connection,$sql);
-	if ($result) $output .= "<li>PayPal IPN column added to preferences table.</li>";
-	else $output .= "<li>Paypal IPN column NOT added to preferences table. Error: ".$db_conn->getLastError()."</li>";
+	if ($result) $output_off_sched_update .= "<li>PayPal IPN column added to preferences table.</li>";
+	else $output_off_sched_update .= "<li>Paypal IPN column NOT added to preferences table. <strong class=\"text-danger\">Error: ".$db_conn->getLastError()."</strong></li>";
 
 }
 
@@ -469,10 +587,10 @@ if (check_update("prefsPaypalIPN", $prefix."preferences")) {
 	$update_table = $prefix."preferences";
 	$data = array('prefsPaypalIPN' => 0);
 	$db_conn->where ('id', 1);
-	if ($db_conn->update ($update_table, $data)) $output .= "<li>Paypal IPN column value updated in the preferences table.</li>";
-	else $output .= "<li>Paypal IPN column value NOT updated in the preferences table. Error: ".$db_conn->getLastError()."</li>";
+	if ($db_conn->update ($update_table, $data)) $output_off_sched_update .= "<li>Paypal IPN column value updated in the preferences table.</li>";
+	else $output_off_sched_update .= "<li>Paypal IPN column value NOT updated in the preferences table. <strong class=\"text-danger\">Error: ".$db_conn->getLastError()."</strong></li>";
 }
-else $output .= "<li>Paypal IPN column missing in the preferences table.</li>";
+else $output_off_sched_update .= "<li>Paypal IPN column missing in the preferences table.</li>";
 
 if (check_update("prefsCompOrg", $prefix."preferences")) {
 
@@ -480,8 +598,8 @@ if (check_update("prefsCompOrg", $prefix."preferences")) {
 	mysqli_select_db($connection,$database);
 	mysqli_real_escape_string($connection,$sql);
 	$result = mysqli_query($connection,$sql);
-	if ($result) $output .= "<li>Pro Edition column added to preferences table.</li>";
-	else $output .= "<li>Pro Edition column NOT added to preferences table. Error: ".$db_conn->getLastError()."</li>";
+	if ($result) $output_off_sched_update .= "<li>Pro Edition column added to preferences table.</li>";
+	else $output_off_sched_update .= "<li>Pro Edition column NOT added to preferences table. <strong class=\"text-danger\">Error: ".$db_conn->getLastError()."</strong></li>";
 
 }
 
@@ -491,8 +609,8 @@ if ((!check_update("prefsCompOrg", $prefix."preferences")) && (!check_update("pr
 	mysqli_select_db($connection,$database);
 	mysqli_real_escape_string($connection,$sql);
 	$result = mysqli_query($connection,$sql);
-	if ($result) $output .= "<li>Pro Edition column added to preferences table.</li>";
-	else $output .= "<li>Pro Edition column NOT added to preferences table. Error: ".$db_conn->getLastError()."</li>";
+	if ($result) $output_off_sched_update .= "<li>Pro Edition column added to preferences table.</li>";
+	else $output_off_sched_update .= "<li>Pro Edition column NOT added to preferences table. <strong class=\"text-danger\">Error: ".$db_conn->getLastError()."</strong></li>";
 
 }
 
@@ -500,17 +618,17 @@ if (check_update("prefsProEdition", $prefix."preferences")) {
 	$update_table = $prefix."preferences";
 	$data = array('prefsProEdition' => 0);
 	$db_conn->where ('id', 1);
-	if ($db_conn->update ($update_table, $data)) $output .= "<li>Pro Edition column value updated in the preferences table.</li>";
-	else $output .= "<li>Pro Edition column value NOT updated in the preferences table. Error: ".$db_conn->getLastError()."</li>";
+	if ($db_conn->update ($update_table, $data)) $output_off_sched_update .= "<li>Pro Edition column value updated in the preferences table.</li>";
+	else $output_off_sched_update .= "<li>Pro Edition column value NOT updated in the preferences table. <strong class=\"text-warning\">Error: ".$db_conn->getLastError()."</strong></li>";
 }
-else $output .= "<li>Pro Edition column missing in the preferences table.</li>";
+else $output_off_sched_update .= "<li>Pro Edition column missing in the preferences table.</li>";
 
 $sql = sprintf("ALTER TABLE `%s` CHANGE `prefsStyleSet` `prefsStyleSet` TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL;",$prefix."preferences");
 mysqli_select_db($connection,$database);
 mysqli_real_escape_string($connection,$sql);
 $result = mysqli_query($connection,$sql);
-if ($result) $output .= "<li>Style Set column changed to text in the preferences table.</li>";
-else $output .= "<li>Style Set column NOT changed to text in the preferences table. Error: ".$db_conn->getLastError()."</li>";
+if ($result) $output_off_sched_update .= "<li>Style Set column changed to text in the preferences table.</li>";
+else $output_off_sched_update .= "<li>Style Set column NOT changed to text in the preferences table. <strong class=\"text-warning\">Error: ".$db_conn->getLastError()."</strong></li>";
 
 if (check_update("archiveUserTableName", $prefix."archive")) {
 	
@@ -526,8 +644,8 @@ if (check_update("archiveUserTableName", $prefix."archive")) {
 	mysqli_select_db($connection,$database);
 	mysqli_real_escape_string($connection,$sql);
 	$result = mysqli_query($connection,$sql);
-	if ($result) $output .= "<li>Archive Pro Edition column added to archive table.</li>";
-	else $output .= "<li>Archive Pro Edition column NOT added to archive table. Error: ".$db_conn->getLastError()."</li>";
+	if ($result) $output_off_sched_update .= "<li>Archive Pro Edition column added to archive table.</li>";
+	else $output_off_sched_update .= "<li>Archive Pro Edition column NOT added to archive table. <strong class=\"text-danger\">Error: ".$db_conn->getLastError()."</strong></li>";
 
 }
 
@@ -537,8 +655,8 @@ if ((!check_update("archiveUserTableName", $prefix."archive")) && (!check_update
 	mysqli_select_db($connection,$database);
 	mysqli_real_escape_string($connection,$sql);
 	$result = mysqli_query($connection,$sql);
-	if ($result) $output .= "<li>Archive Pro Edition column added to archive table.</li>";
-	else $output .= "<li>Archive Pro Edition column NOT added to archive table. Error: ".$db_conn->getLastError()."</li>";
+	if ($result) $output_off_sched_update .= "<li>Archive Pro Edition column added to archive table.</li>";
+	else $output_off_sched_update .= "<li>Archive Pro Edition column NOT added to archive table. <strong class=\"text-danger\">Error: ".$db_conn->getLastError()."</strong></li>";
 
 }
 
@@ -548,8 +666,8 @@ if (check_update("archiveBrewerTableName", $prefix."archive")) {
 	mysqli_select_db($connection,$database);
 	mysqli_real_escape_string($connection,$sql);
 	$result = mysqli_query($connection,$sql);
-	if ($result) $output .= "<li>Archive Style Set column added to archive table.</li>";
-	else $output .= "<li>Archive Style Set column NOT added to archive table. Error: ".$db_conn->getLastError()."</li>";
+	if ($result) $output_off_sched_update .= "<li>Archive Style Set column added to archive table.</li>";
+	else $output_off_sched_update .= "<li>Archive Style Set column NOT added to archive table. <strong class=\"text-danger\">Error: ".$db_conn->getLastError()."</strong></li>";
 
 }
 
@@ -559,8 +677,8 @@ if ((!check_update("archiveBrewerTableName", $prefix."archive")) && (!check_upda
 	mysqli_select_db($connection,$database);
 	mysqli_real_escape_string($connection,$sql);
 	$result = mysqli_query($connection,$sql);
-	if ($result) $output .= "<li>Archive Style Set column added to archive table.</li>";
-	else $output .= "<li>Archive Style Set column NOT added to archive table. Error: ".$db_conn->getLastError()."</li>";
+	if ($result) $output_off_sched_update .= "<li>Archive Style Set column added to archive table.</li>";
+	else $output_off_sched_update .= "<li>Archive Style Set column NOT added to archive table. <strong class=\"text-danger\">Error: ".$db_conn->getLastError()."</strong></li>";
 
 }
 
@@ -571,8 +689,8 @@ if (HOSTED) {
 	mysqli_select_db($connection,$database);
 	mysqli_real_escape_string($connection,$sql);
 	$result = mysqli_query($connection,$sql);
-	if ($result) $output .= "<li>Archive table truncated.</li>";
-	else $output .= "<li>Archive table not truncated. Error: ".$db_conn->getLastError()."</li>";
+	if ($result) $output_off_sched_update .= "<li>Archive table truncated.</li>";
+	else $output_off_sched_update .= "<li>Archive table not truncated. <strong class=\"text-danger\">Error: ".$db_conn->getLastError()."</strong></li>";
 
 }
 
@@ -594,8 +712,8 @@ else {
 				mysqli_select_db($connection,$database);
 				mysqli_real_escape_string($connection,$sql);
 				$result = mysqli_query($connection,$sql);
-				if ($result) $output .= "<li>Brewery Name added to ".$prefix."brewer_".$row_archive['archiveSuffix']." archive table.</li>";
-				else $output .= "<li>Brewery Name NOT added to ".$prefix."brewer_".$row_archive['archiveSuffix']." archive table. Error: ".$db_conn->getLastError()."</li>";
+				if ($result) $output_off_sched_update .= "<li>Brewery Name added to ".$prefix."brewer_".$row_archive['archiveSuffix']." archive table.</li>";
+				else $output_off_sched_update .= "<li>Brewery Name NOT added to ".$prefix."brewer_".$row_archive['archiveSuffix']." archive table. <strong class=\"text-danger\">Error: ".$db_conn->getLastError()."</strong></li>";
 
 			}
 
@@ -607,8 +725,8 @@ else {
 					mysqli_select_db($connection,$database);
 					mysqli_real_escape_string($connection,$sql);
 					$result = mysqli_query($connection,$sql);
-					if ($result) $output .= "<li>Brew Info Optional column added to ".$prefix."brewing_".$row_archive['archiveSuffix']." archive table.</li>";
-					else $output .= "<li>Brew Info Optional column NOT added to ".$prefix."brewing_".$row_archive['archiveSuffix']." archive table. Error: ".$db_conn->getLastError()."</li>";
+					if ($result) $output_off_sched_update .= "<li>Brew Info Optional column added to ".$prefix."brewing_".$row_archive['archiveSuffix']." archive table.</li>";
+					else $output_off_sched_update .= "<li>Brew Info Optional column NOT added to ".$prefix."brewing_".$row_archive['archiveSuffix']." archive table. <strong class=\"text-danger\">Error: ".$db_conn->getLastError()."</strong></li>";
 
 				}
 
@@ -618,8 +736,8 @@ else {
 					mysqli_select_db($connection,$database);
 					mysqli_real_escape_string($connection,$sql);
 					$result = mysqli_query($connection,$sql);
-					if ($result) $output .= "<li>Brew Info Optional column added to ".$prefix."brewing_".$row_archive['archiveSuffix']." archive table.</li>";
-					else $output .= "<li>Brew Info Optional column NOT added to ".$prefix."brewing_".$row_archive['archiveSuffix']." archive table. Error: ".$db_conn->getLastError()."</li>";
+					if ($result) $output_off_sched_update .= "<li>Brew Info Optional column added to ".$prefix."brewing_".$row_archive['archiveSuffix']." archive table.</li>";
+					else $output_off_sched_update .= "<li>Brew Info Optional column NOT added to ".$prefix."brewing_".$row_archive['archiveSuffix']." archive table. <strong class=\"text-danger\">Error: ".$db_conn->getLastError()."</strong></li>";
 
 				}
 
@@ -637,8 +755,8 @@ if (check_update("brewWinnerSubCat", $prefix."brewing")) {
 	mysqli_select_db($connection,$database);
 	mysqli_real_escape_string($connection,$sql);
 	$result = mysqli_query($connection,$sql);
-	if ($result) $output .= "<li>Optional Info column added to the brewing table.</li>";
-	else $output .= "<li>Optional Info column NOT added to the brewing table. Error: ".$db_conn->getLastError()."</li>";
+	if ($result) $output_off_sched_update .= "<li>Optional Info column added to the brewing table.</li>";
+	else $output_off_sched_update .= "<li>Optional Info column NOT added to the brewing table. <strong class=\"text-danger\">Error: ".$db_conn->getLastError()."</strong></li>";
 
 }
 
@@ -648,8 +766,8 @@ if ((!check_update("brewWinnerSubCat", $prefix."brewing")) && (!check_update("br
 	mysqli_select_db($connection,$database);
 	mysqli_real_escape_string($connection,$sql);
 	$result = mysqli_query($connection,$sql);
-	if ($result) $output .= "<li>Optional Info column added to the brewing table.</li>";
-	else $output .= "<li>Optional Info column NOT added to the brewing table. Error: ".$db_conn->getLastError()."</li>";
+	if ($result) $output_off_sched_update .= "<li>Optional Info column added to the brewing table.</li>";
+	else $output_off_sched_update .= "<li>Optional Info column NOT added to the brewing table. <strong class=\"text-danger\">Error: ".$db_conn->getLastError()."</strong></li>";
 
 }
 
@@ -664,13 +782,13 @@ if (!check_update("userToken", $prefix."users")) {
 	mysqli_select_db($connection,$database);
 	mysqli_real_escape_string($connection,$sql);
 	$result = mysqli_query($connection,$sql);
-	if ($result) $output .= "<li>Fogot password token columns added to the users table.</li>";
-	else $output .= "<li>Fogot password token columns NOT added to the users table. Error: ".$db_conn->getLastError()."</li>";
+	if ($result) $output_off_sched_update .= "<li>Fogot password token columns added to the users table.</li>";
+	else $output_off_sched_update .= "<li>Fogot password token columns NOT added to the users table. <strong class=\"text-danger\">Error: ".$db_conn->getLastError()."</strong></li>";
 
 	$update_table = $prefix."users";
 	$data = array('userFailedLogins' => 0);
-	if ($db_conn->update ($update_table, $data)) $output .= "<li>Set failed logins column to 0 for all records in the users table.</li>";
-	else $output .= "<li>Failed logins columns were NOT set to 0 for any records in the users table. Error: ".$db_conn->getLastError()."</li>";
+	if ($db_conn->update ($update_table, $data)) $output_off_sched_update .= "<li>Set failed logins column to 0 for all records in the users table.</li>";
+	else $output_off_sched_update .= "<li>Failed logins columns were NOT set to 0 for any records in the users table. <strong class=\"text-danger\">Error: ".$db_conn->getLastError()."</strong></li>";
 
 }
 
@@ -678,22 +796,22 @@ $sql = sprintf("ALTER TABLE `%s` CHANGE `contestEntryFee` `contestEntryFee` FLOA
 mysqli_select_db($connection,$database);
 mysqli_real_escape_string($connection,$sql);
 $result = mysqli_query($connection,$sql);
-if ($result) $output .= "<li>Altered entry fee columns to allow for decimals in the contest_info table.</li>";
-else $output .= "<li>Entry fee columns to allow for decimals in the contest_info table NOT altered. Error: ".$db_conn->getLastError()."</li>";
+if ($result) $output_off_sched_update .= "<li>Altered entry fee columns to allow for decimals in the contest_info table.</li>";
+else $output_off_sched_update .= "<li>Entry fee columns to allow for decimals in the contest_info table NOT altered. <strong class=\"text-warning\">Error: ".$db_conn->getLastError()."</strong></li>";
 
 $sql = sprintf("ALTER TABLE `%s` CHANGE `scorePlace` `scorePlace` VARCHAR(3) NULL DEFAULT NULL;",$prefix."judging_scores_bos");
 mysqli_select_db($connection,$database);
 mysqli_real_escape_string($connection,$sql);
 $result = mysqli_query($connection,$sql);
-if ($result) $output .= "<li>Altered place columns to allow for variable characters in the judging_scores_bos table.</li>";
-else $output .= "<li>Allow for variable characters in place columns in the judging_scores_bos table NOT successful. Error: ".$db_conn->getLastError()."</li>";
+if ($result) $output_off_sched_update .= "<li>Altered place columns to allow for variable characters in the judging_scores_bos table.</li>";
+else $output_off_sched_update .= "<li>Allow for variable characters in place columns in the judging_scores_bos table NOT successful. <strong class=\"text-warning\">Error: ".$db_conn->getLastError()."</strong></li>";
 
 $sql = sprintf("ALTER TABLE `%s` CHANGE `prefsWinnerDelay` `prefsWinnerDelay` VARCHAR(15) NULL DEFAULT NULL COMMENT 'Unix timestamp to display winners';",$prefix."preferences");
 mysqli_select_db($connection,$database);
 mysqli_real_escape_string($connection,$sql);
 $result = mysqli_query($connection,$sql);
-if ($result) $output .= "<li>Altered winner delay column to allow for UNIX timestamp in the preferences table.</li>";
-else $output .= "<li>Allow for UNIX timestamp in winner delay column in the preferences table NOT successful. Error: ".$db_conn->getLastError()."</li>";
+if ($result) $output_off_sched_update .= "<li>Altered winner delay column to allow for UNIX timestamp in the preferences table.</li>";
+else $output_off_sched_update .= "<li>Allow for UNIX timestamp in winner delay column in the preferences table NOT successful. <strong class=\"text-danger\">Error: ".$db_conn->getLastError()."</strong></li>";
 
 // Get the delay value from DB
 $query_delay = sprintf("SELECT prefsWinnerDelay FROM %s WHERE id='1'", $prefix."preferences");
@@ -721,13 +839,15 @@ if ((!empty($row_delay)) && ((strlen($row_delay['prefsWinnerDelay'])) < 10)) {
 	$update_table = $prefix."preferences";
 	$data = array('prefsWinnerDelay' => $new_timestamp);
 	$db_conn->where ('id', 1);
-	if ($db_conn->update ($update_table, $data)) $output .= "<li>Winner display date updated in the preferences table.</li>";
-	else $output .= "<li>Winner display date NOT updated in the preferences table. Error: ".$db_conn->getLastError()."</li>";
+	if ($db_conn->update ($update_table, $data)) $output_off_sched_update .= "<li>Winner display date updated in the preferences table.</li>";
+	else $output_off_sched_update .= "<li>Winner display date NOT updated in the preferences table. <strong class=\"text-warning\">Error: ".$db_conn->getLastError()."</strong></li>";
 
 	// Update the session variable
 	$_SESSION['prefsWinnerDelay'] = $new_timestamp;
 
 }
+
+$output_off_sched_update .= "</ul>";
 
 // Instantiate HTMLPurifier
 require (LIB.'process.lib.php');
@@ -747,6 +867,10 @@ $totalRows_names = mysqli_num_rows($names);
 $update_table = $prefix."brewer";
 
 if ($totalRows_names > 0) {
+
+	$output_off_sched_update .= "<div style=\"padding-bottom:5px;\"><button class=\"btn btn-primary btn-sm\" type=\"button\" data-toggle=\"collapse\" data-target=\"#users-name-standard\" aria-expanded=\"false\" aria-controls=\"users-name-standard\">Name Standardization for Users (Expand for Details)</button></div>";
+	$output_off_sched_update .= "<div class=\"collapse\" id=\"users-name-standard\">";
+	$output_off_sched_update .= "<ul>";
 
 	do {
 
@@ -828,10 +952,13 @@ if ($totalRows_names > 0) {
 		);
 
 		$db_conn->where ('id', $row_names['id']);
-		if ($db_conn->update ($update_table, $data)) $output .= "<li>Brewer name and associated data cleanup/standardization complete for ".$last_name.", ".$first_name."</li>";
-		else $output .= "<li>Brewer name and associated data cleanup/standardization NOT complete for ".$last_name.", ".$first_name."</li>";
+		if ($db_conn->update ($update_table, $data)) $output_off_sched_update .= "<li>Brewer name and associated data cleanup/standardization complete for ".$last_name.", ".$first_name."</li>";
+		else $output_off_sched_update .= "<li>Brewer name and associated data cleanup/standardization NOT complete for ".$last_name.", ".$first_name."</li>";
 
 	} while ($row_names = mysqli_fetch_assoc($names));
+
+	$output_off_sched_update .= "</ul>";
+	$output_off_sched_update .= "</div>";
 
 }
 
@@ -844,6 +971,10 @@ $totalRows_entry_names = mysqli_num_rows($entry_names);
 $update_table = $prefix."brewing";
 
 if ($totalRows_entry_names > 0) {
+
+	$output_off_sched_update .= "<div style=\"padding-bottom:5px;\"><button class=\"btn btn-primary btn-sm\" type=\"button\" data-toggle=\"collapse\" data-target=\"#entries-name-standard\" aria-expanded=\"false\" aria-controls=\"entries-name-standard\">Name Standardization for Entries (Expand for Details)</button></div>";
+	$output_off_sched_update .= "<div class=\"collapse\" id=\"entries-name-standard\">";
+	$output_off_sched_update .= "<ul>";
 
 	do {
 
@@ -895,10 +1026,13 @@ if ($totalRows_entry_names > 0) {
 		);
 
 		$db_conn->where ('id', $row_entry_names['id']);
-		if ($db_conn->update ($update_table, $data)) $output .= "<li>Entry name and associated data cleanup/standardization complete for ".$brewName."</li>";
-		else $output .= "<li>Entry name and associated data cleanup/standardization NOT complete for ".$brewName."</li>";
+		if ($db_conn->update ($update_table, $data)) $output_off_sched_update .= "<li>Entry name and associated data cleanup/standardization complete for ".$brewName."</li>";
+		else $output_off_sched_update .= "<li>Entry name and associated data cleanup/standardization NOT complete for ".$brewName."</li>";
 
 	} while ($row_entry_names = mysqli_fetch_assoc($entry_names));
+
+	$output_off_sched_update .= "</ul>";
+	$output_off_sched_update .= "</div>";
 
 }
 
@@ -907,6 +1041,12 @@ if ($totalRows_entry_names > 0) {
  * All PDF files in the user_docs directory must be converted to all lowercase (including extension)
  * -----------------------------------------------------------------------------------------------------
  */
+
+$output_off_sched_update .= "<p>";
+$output_off_sched_update .= "<strong>Version 2.1.11.0 Updates</strong>";
+if ($row_pv['version'] == "2.1.10.0") $output_off_sched_update .= "<br><em><span class=\"text-primary\">Your previous version was ".$row_pv['version'].". Your installation's updates begin here.</span></em>";
+$output_off_sched_update .= "</p>";
+$output_off_sched_update .= "<ul>";
 
 $files = new FilesystemIterator(USER_DOCS);
 
@@ -957,7 +1097,8 @@ if (SINGLE) {
 
 */
 
-$output .= "<li>PDF file names in the user_docs directory converted to lowercase (including extension).</li>";
+$output_off_sched_update .= "<li>PDF file names in the user_docs directory converted to lowercase (including extension).</li>";
+$output_off_sched_update .= "</ul>";
 
 /**
  * ----------------------------------------------- 2.1.12 ----------------------------------------------
@@ -966,20 +1107,26 @@ $output .= "<li>PDF file names in the user_docs directory converted to lowercase
  * Saves the preference from current when archiving for correct display of archived scoresheets
  */
 
+$output_off_sched_update .= "<p>";
+$output_off_sched_update .= "<strong>Version 2.1.12.0 Updates</strong>";
+if ($row_pv['version'] == "2.1.11.0") $output_off_sched_update .= "<br><em><span class=\"text-primary\">Your previous version was ".$row_pv['version'].". Your installation's updates begin here.</span></em>";
+$output_off_sched_update .= "</p>";
+$output_off_sched_update .= "<ul>";
+
 if (!check_update("brewerJudgeCider", $prefix."brewer")) {
 
 	$sql = sprintf("ALTER TABLE `%s` ADD `brewerJudgeCider` CHAR(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL AFTER `brewerJudgeMead`;",$prefix."brewer");
 	mysqli_select_db($connection,$database);
 	mysqli_real_escape_string($connection,$sql);
 	$result = mysqli_query($connection,$sql);
-	if ($result) $output .= "<li>Certified Cider Judge designation added to brewer table.</li>";
-	else $output .= "<li>Certified Cider Judge designation NOT added to brewer table. Error: ".$db_conn->getLastError()."</li>";
+	if ($result) $output_off_sched_update .= "<li>Certified Cider Judge designation added to brewer table.</li>";
+	else $output_off_sched_update .= "<li>Certified Cider Judge designation NOT added to brewer table. <strong class=\"text-danger\">Error: ".$db_conn->getLastError()."</strong></li>";
 
 	if (check_update("brewerJudgeCider", $prefix."brewer")) {
 		$update_table = $prefix."brewer";
 		$data = array('brewerJudgeCider' => 'N');
-		if ($db_conn->update ($update_table, $data)) $output .= "<li>Certified Cider Judge designation values entered.</li>";
-		else $output .= "<li>Certified Cider Judge designation values NOT entered. Error: ".$db_conn->getLastError()."</li>";
+		if ($db_conn->update ($update_table, $data)) $output_off_sched_update .= "<li>Certified Cider Judge designation values entered.</li>";
+		else $output_off_sched_update .= "<li>Certified Cider Judge designation values NOT entered. <strong class=\"text-warning\">Error: ".$db_conn->getLastError()."</strong></li>";
 	}
 
 }
@@ -990,17 +1137,19 @@ if (!check_update("archiveScoresheet", $prefix."archive")) {
 	mysqli_select_db($connection,$database);
 	mysqli_real_escape_string($connection,$sql);
 	$result = mysqli_query($connection,$sql);
-	if ($result) $output .= "<li>Archive table updated for proper access of archived scoresheets.</li>";
-	else $output .= "<li>Archive table NOT updated for proper access of archived scoresheets. Error: ".$db_conn->getLastError()."</li>";
+	if ($result) $output_off_sched_update .= "<li>Archive table updated for proper access of archived scoresheets.</li>";
+	else $output_off_sched_update .= "<li>Archive table NOT updated for proper access of archived scoresheets. <strong class=\"text-danger\">Error: ".$db_conn->getLastError()."</strong></li>";
 
 	if (check_update("archiveScoresheet", $prefix."archive")) {
 		$update_table = $prefix."archive";
 		$data = array('archiveScoresheet' => 'J');
-		if ($db_conn->update ($update_table, $data)) $output .= "<li>Archive table scoresheet values updated.</li>";
-		else $output .= "<li>Archive table scoresheet values NOT updated. Error: ".$db_conn->getLastError()."</li>";
+		if ($db_conn->update ($update_table, $data)) $output_off_sched_update .= "<li>Archive table scoresheet values updated.</li>";
+		else $output_off_sched_update .= "<li>Archive table scoresheet values NOT updated. <strong class=\"text-warning\">Error: ".$db_conn->getLastError()."</strong></li>";
 	}
 
 }
+
+$output_off_sched_update .= "</ul>";
 
 /**
  * ----------------------------------------------- 2.1.13 ----------------------------------------------
@@ -1008,6 +1157,12 @@ if (!check_update("archiveScoresheet", $prefix."archive")) {
  * As of April 2018, BreweryDB not issuing API keys; installations not able to use BA styles
  * -----------------------------------------------------------------------------------------------------
  */
+
+$output_off_sched_update .= "<p>";
+$output_off_sched_update .= "<strong>Version 2.1.13.0 Updates</strong>";
+if ($row_pv['version'] == "2.1.12.0") $output_off_sched_update .= "<br><em><span class=\"text-primary\">Your previous version was ".$row_pv['version'].". Your installation's updates begin here.</span></em>";
+$output_off_sched_update .= "</p>";
+$output_off_sched_update .= "<ul>";
 
 $ba_styles_present = FALSE;
 if (check_new_style("08","077","American-Style Pilsener")) $ba_styles_present = TRUE;
@@ -1029,15 +1184,15 @@ if (!check_update("prefsBestUseBOS", $prefix."preferences")) {
 	mysqli_select_db($connection,$database);
 	mysqli_real_escape_string($connection,$sql);
 	$result = mysqli_query($connection,$sql);
-	if ($result) $output .= "<li>Toggle to preferences added to allow users to specify whether to use BOS in \"Best of\" calculations.</li>";
-	else $output .= "<li>Toggle to preferences NOT added to allow users to specify whether to use BOS in \"Best of\" calculations. Error: ".$db_conn->getLastError()."</li>";
+	if ($result) $output_off_sched_update .= "<li>Toggle to preferences added to allow users to specify whether to use BOS in \"Best of\" calculations.</li>";
+	else $output_off_sched_update .= "<li>Toggle to preferences NOT added to allow users to specify whether to use BOS in \"Best of\" calculations. <strong class=\"text-warning\">Error: ".$db_conn->getLastError()."</strong></li>";
 
 	if (check_update("prefsBestUseBOS", $prefix."preferences")) {
 		$update_table = $prefix."preferences";
 		$data = array('prefsBestUseBOS' => 1);
 		$db_conn->where ('id', 1);
-		if ($db_conn->update ($update_table, $data)) $output .= "<li>Toggle to preferences value added to allow users to specify whether to use BOS in \"Best of\" calculations.</li>";
-		else $output .= "<li>Toggle to preferences value NOT added to allow users to specify whether to use BOS in \"Best of\" calculations. Error: ".$db_conn->getLastError()."</li>";
+		if ($db_conn->update ($update_table, $data)) $output_off_sched_update .= "<li>Toggle to preferences value added to allow users to specify whether to use BOS in \"Best of\" calculations.</li>";
+		else $output_off_sched_update .= "<li>Toggle to preferences value NOT added to allow users to specify whether to use BOS in \"Best of\" calculations. <strong class=\"text-warning\">Error: ".$db_conn->getLastError()."</strong></li>";
 	}
 }
 
@@ -1054,8 +1209,8 @@ if ($row_mead_cider_present['count'] == 0) {
 		'styleTypeBOS' => 'N',
 		'styleTypeBOSMethod' => '1'
 	);
-	if ($db_conn->insert ($update_table, $data)) $output .= "<li>Mead/Cider style type added.</li>";
-	else $output .= "<li>Mead/Cider style type NOT added. Error: ".$db_conn->getLastError()."</li>";
+	if ($db_conn->insert ($update_table, $data)) $output_off_sched_update .= "<li>Mead/Cider style type added.</li>";
+	else $output_off_sched_update .= "<li>Mead/Cider style type NOT added. <strong class=\"text-danger\">Error: ".$db_conn->getLastError()."</strong></li>";
 
 }
 
@@ -1064,8 +1219,8 @@ else {
 	$update_table = $prefix."style_types";
 	$data = array('styleTypeOwn' => 'bcoe');
 	$db_conn->where ('styleTypeName', 'Mead/Cider');
-	if ($db_conn->update ($update_table, $data)) $output .= "<li>Mead/Cider style type updated.</li>";
-	else $output .= "<li>Mead/Cider style type NOT updated. Error: ".$db_conn->getLastError()."</li>";
+	if ($db_conn->update ($update_table, $data)) $output_off_sched_update .= "<li>Mead/Cider style type updated.</li>";
+	else $output_off_sched_update .= "<li>Mead/Cider style type NOT updated. <strong class=\"text-warning\">Error: ".$db_conn->getLastError()."</strong></li>";
 
 }
 
@@ -1075,8 +1230,8 @@ if (check_update("brewWinnerPlace", $prefix."brewing")) {
 	mysqli_select_db($connection,$database);
 	mysqli_real_escape_string($connection,$sql);
 	$result = mysqli_query($connection,$sql);
-	if ($result) $output .= "<li>Admin notes column added to the brewing table.</li>";
-	else $output .= "<li>Admin notes column NOT added to the brewing table. Error: ".$db_conn->getLastError()."</li>";
+	if ($result) $output_off_sched_update .= "<li>Admin notes column added to the brewing table.</li>";
+	else $output_off_sched_update .= "<li>Admin notes column NOT added to the brewing table. <strong class=\"text-danger\">Error: ".$db_conn->getLastError()."</strong></li>";
 
 }
 
@@ -1086,8 +1241,8 @@ if (check_update("brewBOSRound", $prefix."brewing")) {
 	mysqli_select_db($connection,$database);
 	mysqli_real_escape_string($connection,$sql);
 	$result = mysqli_query($connection,$sql);
-	if ($result) $output .= "<li>Admin staff notes column added to the brewing table.</li>";
-	else $output .= "<li>Admin staff notes column NOT added to the brewing table. Error: ".$db_conn->getLastError()."</li>";
+	if ($result) $output_off_sched_update .= "<li>Admin staff notes column added to the brewing table.</li>";
+	else $output_off_sched_update .= "<li>Admin staff notes column NOT added to the brewing table. <strong class=\"text-danger\">Error: ".$db_conn->getLastError()."</strong></li>";
 
 }
 
@@ -1097,8 +1252,8 @@ if (check_update("brewBOSPlace", $prefix."brewing")) {
 	mysqli_select_db($connection,$database);
 	mysqli_real_escape_string($connection,$sql);
 	$result = mysqli_query($connection,$sql);
-	if ($result) $output .= "<li>Possible Allergens column added to the brewing table.</li>";
-	else $output .= "<li>Possible Allergens column NOT added to the  brewing table. Error: ".$db_conn->getLastError()."</li>";
+	if ($result) $output_off_sched_update .= "<li>Possible Allergens column added to the brewing table.</li>";
+	else $output_off_sched_update .= "<li>Possible Allergens column NOT added to the  brewing table. <strong class=\"text-danger\">Error: ".$db_conn->getLastError()."</strong></li>";
 
 }
 
@@ -1106,14 +1261,14 @@ $sql = sprintf("ALTER TABLE `%s` CHANGE `prefsLanguage` `prefsLanguage` VARCHAR(
 mysqli_select_db($connection,$database);
 mysqli_real_escape_string($connection,$sql);
 $result = mysqli_query($connection,$sql);
-if ($result) $output .= "<li>Language column updated in the preferences table.</li>";
-else $output .= "<li>Language column NOT updated in the preferences table. Error: ".$db_conn->getLastError()."</li>";
+if ($result) $output_off_sched_update .= "<li>Language column updated in the preferences table.</li>";
+else $output_off_sched_update .= "<li>Language column NOT updated in the preferences table. <strong class=\"text-warning\">Error: ".$db_conn->getLastError()."</strong></li>";
 
 $update_table = $prefix."preferences";
 $data = array('prefsLanguage' => 'en-US');
 $db_conn->where ('id', 1);
-if ($db_conn->update ($update_table, $data))  $output .= "<li>Language column value updated in the preferences table.</li>";
-else $output .= "<li>Language column value NOT updated in the preferences table. Error: ".$db_conn->getLastError()."</li>";
+if ($db_conn->update ($update_table, $data))  $output_off_sched_update .= "<li>Language column value updated in the preferences table.</li>";
+else $output_off_sched_update .= "<li>Language column value NOT updated in the preferences table. <strong class=\"text-warning\">Error: ".$db_conn->getLastError()."</strong></li>";
 
 /**
  * ----------------------------------------------- 2.1.13 ----------------------------------------------
@@ -1136,56 +1291,56 @@ $update_table = $prefix."styles";
 if (!check_new_style("17","A1","Burton Ale")) {
 
 	$data = array('brewStyleGroup' => '17','brewStyleNum' => 'A1','brewStyle' => 'Burton Ale','brewStyleCategory' => 'British Strong Ale','brewStyleVersion' => 'BJCP2015','brewStyleOG' => '1.055','brewStyleOGMax' => '1.075','brewStyleFG' => '1.018','brewStyleFGMax' => '1.024','brewStyleABV' => '5.0','brewStyleABVMax' => '7.5','brewStyleIBU' => '40','brewStyleIBUMax' => '50','brewStyleSRM' => '14','brewStyleSRMMax' => '22','brewStyleType' => '1','brewStyleInfo' => 'A rich, malty, sweet, and bitter dark ale of moderately strong alcohol. Full bodied and chewy with a balanced hoppy finish and complex malty and hoppy aroma. Fruity notes accentuate the malt richness, while the hops help balance the sweeter finish. Has some similarity in malt flavor to Wee Heavy, but with substantially more bitterness. Less strong than an English Barleywine.','brewStyleLink' => 'http://dev.bjcp.org/beer-styles/17a-british-strong-ale-burton-ale/','brewStyleActive' => 'Y','brewStyleOwn' => 'bcoe','brewStyleReqSpec' => '0','brewStyleStrength' => '0','brewStyleCarb' => '0','brewStyleSweet' => '0','brewStyleTags' => 'high-strength, traditional-style, balanced, strong-ale-family, british-isles, brown-color, top-fermented','brewStyleComEx' => 'The Laboratory Brewery Gone for a Burton','brewStyleEntry' => NULL);
-	if ($db_conn->insert ($update_table, $data)) $output .= "<li>Burton Ale style added.</li>";
-	else $output .= "<li>Burton Ale style NOT added. Error: ".$db_conn->getLastError()."</li>";
+	if ($db_conn->insert ($update_table, $data)) $output_off_sched_update .= "<li>Burton Ale style added.</li>";
+	else $output_off_sched_update .= "<li>Burton Ale style NOT added. <strong class=\"text-warning\">Error: ".$db_conn->getLastError()."</strong></li>";
 
 }
 
 if (!check_new_style("21","B7","New England IPA")) {
 
 	$data = array('brewStyleGroup' => '21','brewStyleNum' => 'B7','brewStyle' => 'New England IPA','brewStyleCategory' => 'Specialty IPA','brewStyleVersion' => 'BJCP2015','brewStyleOG' => '1.060','brewStyleOGMax' => '1.085','brewStyleFG' => '1.010','brewStyleFGMax' => '1.015','brewStyleABV' => '6.0','brewStyleABVMax' => '9.0','brewStyleIBU' => '25','brewStyleIBUMax' => '60','brewStyleSRM' => '3','brewStyleSRMMax' => '7','brewStyleType' => '1','brewStyleInfo' => 'An American IPA with intense fruit flavors and aromas, a soft body, and smooth mouthfeel, and often opaque with substantial haze. Less perceived bitterness than traditional IPAs but always massively hop forward. This emphasis on late hopping, especially dry hopping, with hops with tropical fruit qualities lends the specific \'juicy\' character for which this style is known. The style is still evolving, but this style is essentially a smoother, hazier, juicier American IPA. In this context, ‘juicy’ refers to a mental impression of fruit juice or eating fresh, fully ripe fruit. Heavy examples suggestive of milkshakes, creamsicles, or fruit smoothies are beyond this range; IPAs should always be drinkable. Haziness comes from the dry hopping regime, not suspended yeast, starch haze, set pectins, or other techniques; a hazy shine is desirable, not a cloudy, murky mess.','brewStyleLink' => 'http://dev.bjcp.org/beer-styles/21b-specialty-ipa-new-england-ipa/','brewStyleActive' => 'Y','brewStyleOwn' => 'bcoe','brewStyleReqSpec' => '1','brewStyleStrength' => '0','brewStyleCarb' => '0','brewStyleSweet' => '0','brewStyleTags' => 'bitter, craft-style, pale-color, high-strength, hoppy, ipa-family, north-america, specialty-family, top-fermented','brewStyleComEx' => 'Hill Farmstead Susan, Other Half Green Diamonds Double IPA, Tired Hands Alien Church, Tree House Julius, Trillium Congress Street, WeldWerks Juicy Bits','brewStyleEntry' => 'Entrant MUST specify a strength (session: 3.0-5.0%, standard: 5.0-7.5%, double: 7.5-9.5%).');
-	if ($db_conn->insert ($update_table, $data)) $output .= "<li>New England IPA style added.</li>";
-	else $output .= "<li>New England IPA style NOT added. Error: ".$db_conn->getLastError()."</li>";
+	if ($db_conn->insert ($update_table, $data)) $output_off_sched_update .= "<li>New England IPA style added.</li>";
+	else $output_off_sched_update .= "<li>New England IPA style NOT added. <strong class=\"text-warning\">Error: ".$db_conn->getLastError()."</strong></li>";
 
 }
 
 if (!check_new_style("PR","X1","Dorada Pampeana")) {
 
 	$data = array('brewStyleGroup' => 'PR','brewStyleNum' => 'X1','brewStyle' => 'Dorada Pampeana','brewStyleCategory' => 'Provisional Styles','brewStyleVersion' => 'BJCP2015','brewStyleOG' => '1.042','brewStyleOGMax' => '1.054','brewStyleFG' => '1.009','brewStyleFGMax' => '1.013','brewStyleABV' => '4.3','brewStyleABVMax' => '5.5','brewStyleIBU' => '15','brewStyleIBUMax' => '22','brewStyleSRM' => '3','brewStyleSRMMax' => '5','brewStyleType' => '1','brewStyleInfo' => 'At the beginning argentine homebrewers were very limited: there wasn\'t extract - they could use only pils malt, Cascade hops and dry yeast, commonly Nottingham, Windsor or Safale. With these ingredients, Argentine brewers developed a specific version of Blond Ale, named Dorada Pampeana. Ingredients: usually only pale or pils malt, although may include low rates of caramelized malt. Commonly Cascade hops. Clean American yeast, slightly fruity British or Kölsch, usually packaged in cold.','brewStyleLink' => 'http://dev.bjcp.org/beer-styles/x1-dorada-pampeana/','brewStyleActive' => 'Y','brewStyleOwn' => 'bcoe','brewStyleReqSpec' => '0','brewStyleStrength' => '0','brewStyleCarb' => '0','brewStyleSweet' => '0','brewStyleTags' => NULL,'brewStyleComEx' => NULL,'brewStyleEntry' => NULL);
-	if ($db_conn->insert ($update_table, $data)) $output .= "<li>Dorada Pampeana style added.</li>";
-	else $output .= "<li>Dorada Pampeana style NOT added. Error: ".$db_conn->getLastError()."</li>";
+	if ($db_conn->insert ($update_table, $data)) $output_off_sched_update .= "<li>Dorada Pampeana style added.</li>";
+	else $output_off_sched_update .= "<li>Dorada Pampeana style NOT added. <strong class=\"text-warning\">Error: ".$db_conn->getLastError()."</strong></li>";
 
 }
 
 if (!check_new_style("PR","X2","IPA Argenta")) {
 
 	$data = array('brewStyleGroup' => 'PR','brewStyleNum' => 'X2','brewStyle' => 'IPA Argenta','brewStyleCategory' => 'Provisional Styles','brewStyleVersion' => 'BJCP2015','brewStyleOG' => '1.055','brewStyleOGMax' => '1.065','brewStyleFG' => '1.008','brewStyleFGMax' => '1.015','brewStyleABV' => '5.0','brewStyleABVMax' => '6.5','brewStyleIBU' => '35','brewStyleIBUMax' => '60','brewStyleSRM' => '6','brewStyleSRMMax' => '15','brewStyleType' => '1','brewStyleInfo' => 'A decidedly hoppy and bitter, refreshing, and moderately strong Argentine pale ale. The clue is drinkability without harshness and best balance. An Argentine version of the historical English style, developed in 2013 from Somos Cerveceros Association meetings, when its distinctive characteristics were defined. Different from an American IPA in that it is brewed with wheat and using Argentine hops (Cascade, Mapuche and Nugget are typical, although Spalt, Victoria or Bullion may be used to add complexity), with its unique flavor and aroma characteristics. Based on a citrus (from Argetine hops) and wheat pairing idea, like in a Witbier. Low amounts of wheat are similar to a Kölsch grist, as is some fruitiness from fermentation.','brewStyleLink' => 'http://dev.bjcp.org/beer-styles/x2-ipa-argenta/','brewStyleActive' => 'Y','brewStyleOwn' => 'bcoe','brewStyleReqSpec' => '0','brewStyleStrength' => '0','brewStyleCarb' => '0','brewStyleSweet' => '0','brewStyleTags' => NULL,'brewStyleComEx' => 'Antares Ipa Argenta, Kerze Ipa Argenta.','brewStyleEntry' => NULL);
-	if ($db_conn->insert ($update_table, $data)) $output .= "<li>IPA Argenta style added.</li>";
-	else $output .= "<li>IPA Argenta style NOT added. Error: ".$db_conn->getLastError()."</li>";
+	if ($db_conn->insert ($update_table, $data)) $output_off_sched_update .= "<li>IPA Argenta style added.</li>";
+	else $output_off_sched_update .= "<li>IPA Argenta style NOT added. <strong class=\"text-warning\">Error: ".$db_conn->getLastError()."</strong></li>";
 
 }
 
 if (!check_new_style("PR","X3","Italian Grape Ale")) {
 
 	$data = array('brewStyleGroup' => 'PR','brewStyleNum' => 'X3','brewStyle' => 'Italian Grape Ale','brewStyleCategory' => 'Provisional Styles','brewStyleVersion' => 'BJCP2015','brewStyleOG' => '1.043','brewStyleOGMax' => '1.090','brewStyleFG' => '1.007','brewStyleFGMax' => '1.015','brewStyleABV' => '4.8','brewStyleABVMax' => '10','brewStyleIBU' => '10','brewStyleIBUMax' => '30','brewStyleSRM' => '5','brewStyleSRMMax' => '30','brewStyleType' => '1','brewStyleInfo' => 'A sometimes refreshing, sometimes more complex Italian ale characterized by different varieties of grapes.','brewStyleLink' => 'http://dev.bjcp.org/beer-styles/x3-italian-grape-ale/','brewStyleActive' => 'Y','brewStyleOwn' => 'bcoe','brewStyleReqSpec' => '1','brewStyleStrength' => '0','brewStyleCarb' => '0','brewStyleSweet' => '0','brewStyleTags' => NULL,'brewStyleComEx' => 'Montegioco Tibir, Montegioco Open Mind, Birranova Moscata, LoverBeer BeerBera, Loverbeer D\'uvaBeer, Birra del Borgo Equilibrista, Barley BB10, Barley BBevò, Cudera, Pasturana Filare!, Gedeone PerBacco! Toccalmatto Jadis, Rocca dei Conti Tarì Giacchè','brewStyleEntry' => NULL);
-	if ($db_conn->insert ($update_table, $data)) $output .= "<li>Italian Grape Ale style added.</li>";
-	else $output .= "<li>Italian Grape Ale style NOT added. Error: ".$db_conn->getLastError()."</li>";
+	if ($db_conn->insert ($update_table, $data)) $output_off_sched_update .= "<li>Italian Grape Ale style added.</li>";
+	else $output_off_sched_update .= "<li>Italian Grape Ale style NOT added. <strong class=\"text-warning\">Error: ".$db_conn->getLastError()."</strong></li>";
 
 }
 
 if (!check_new_style("PR","X4","Catharina Sour")) {
 
 	$data = array('brewStyleGroup' => 'PR','brewStyleNum' => 'X4','brewStyle' => 'Catharina Sour','brewStyleCategory' => 'Provisional Styles','brewStyleVersion' => 'BJCP2015','brewStyleOG' => '1.039','brewStyleOGMax' => '1.048','brewStyleFG' => '1.002','brewStyleFGMax' => '1.008','brewStyleABV' => '4.0','brewStyleABVMax' => '5.5','brewStyleIBU' => '2','brewStyleIBUMax' => '68','brewStyleSRM' => '2','brewStyleSRMMax' => '7','brewStyleType' => '1','brewStyleInfo' => 'A light and refreshing wheat ale with a clean lactic sourness that is balanced by a fresh fruit addition. The low bitterness, light body, moderate alcohol content, and moderately high carbonation allow the flavor and aroma of the fruit to be the primary focus of the beer. The fruit is often, but not always, tropical in nature. This beer is stronger than a Berliner Weiss and typically features fresh fruit. The kettle souring method allows for fast production of the beer, so this is typically a present-use style. It may be bottled or canned, but it should be consumed while fresh.','brewStyleLink' => 'http://dev.bjcp.org/beer-styles/x4-catharina-sour/','brewStyleActive' => 'Y','brewStyleOwn' => 'bcoe','brewStyleReqSpec' => '1','brewStyleStrength' => '0','brewStyleCarb' => '0','brewStyleSweet' => '0','brewStyleTags' => 'craft-style, fruit, sour, specialty-beer','brewStyleComEx' => 'Itajahy Catharina Araca Sour, Blumenau Catharina Sour Sun of a Peach, Lohn Bier Catharina Sour Jaboticaba, Liffey Coroa Real, UNIKA Tangerina, Armada Daenerys.','brewStyleEntry' => 'Entrant must specify the types of fresh fruit(s) used.');
-	if ($db_conn->insert ($update_table, $data)) $output .= "<li>Catharina Sour style added.</li>";
-	else $output .= "<li>Catharina Sour style NOT added. Error: ".$db_conn->getLastError()."</li>";
+	if ($db_conn->insert ($update_table, $data)) $output_off_sched_update .= "<li>Catharina Sour style added.</li>";
+	else $output_off_sched_update .= "<li>Catharina Sour style NOT added. <strong class=\"text-warning\">Error: ".$db_conn->getLastError()."</strong></li>";
 
 }
 
 if (!check_new_style("PR","X5","New Zealand Pilsner")) {
 
 	$data = array('brewStyleGroup' => 'PR','brewStyleNum' => 'X5','brewStyle' => 'New Zealand Pilsner','brewStyleCategory' => 'Provisional Styles','brewStyleVersion' => 'BJCP2015','brewStyleOG' => '1.044','brewStyleOGMax' => '1.046','brewStyleFG' => '1.009','brewStyleFGMax' => '1.014','brewStyleABV' => '4.5','brewStyleABVMax' => '5.8','brewStyleIBU' => '25','brewStyleIBUMax' => '45','brewStyleSRM' => '2','brewStyleSRMMax' => '7','brewStyleType' => '1','brewStyleInfo' => 'A pale, dry, golden-colored, cleanly-fermented beer showcasing the characteristic tropical, citrusy, fruity, grassy New Zealand-type hops. Medium body, soft mouthfeel, and smooth palate and finish, with a neutral to bready malt base provide the support for this very drinkable, refreshing, hop-forward beer.','brewStyleLink' => 'http://dev.bjcp.org/beer-styles/x5-new-zealand-pilsner/','brewStyleActive' => 'Y','brewStyleOwn' => 'bcoe','brewStyleReqSpec' => '0','brewStyleStrength' => '0','brewStyleCarb' => '0','brewStyleSweet' => '0','brewStyleTags' => 'bitter, pale-color, standard-strength, bottom-fermented, hoppy, pilsner-family, lagered, craft-style, pacific','brewStyleComEx' => 'Croucher New Zealand Pilsner, Emerson’s Pilsner, Liberty Halo Pilsner, Panhead Port Road Pilsner, Sawmill Pilsner, Tuatara Mot Eureka','brewStyleEntry' => NULL); 
-	if ($db_conn->insert ($update_table, $data)) $output .= "<li>New Zealand Pilsner style added.</li>";
-	else $output .= "<li>New Zealand Pilsner style NOT added. Error: ".$db_conn->getLastError()."</li>";
+	if ($db_conn->insert ($update_table, $data)) $output_off_sched_update .= "<li>New Zealand Pilsner style added.</li>";
+	else $output_off_sched_update .= "<li>New Zealand Pilsner style NOT added. <strong class=\"text-warning\">Error: ".$db_conn->getLastError()."</strong></li>";
 
 }
 
@@ -1202,8 +1357,8 @@ foreach ($style_type_convert as $key => $value) {
 
 	$data = array('brewStyleType' => $value);
 	$db_conn->where ('brewStyleType', $key);
-	if ($db_conn->update ($update_table, $data)) $output .= "<li>Style type ".$key." updated.</li>";
-	else $output .= "<li>Style type ".$key." NOT updated. Error: ".$db_conn->getLastError()."</li>";
+	if ($db_conn->update ($update_table, $data)) $output_off_sched_update .= "<li>Style type ".$key." updated.</li>";
+	else $output_off_sched_update .= "<li>Style type ".$key." NOT updated. <strong class=\"text-danger\">Error: ".$db_conn->getLastError()."</strong></li>";
 
 }
 
@@ -1238,8 +1393,10 @@ mysqli_select_db($connection,$database);
 mysqli_real_escape_string($connection,$updateSQL);
 $result = mysqli_query($connection,$updateSQL);
 
-$output .= "<li>BJCP Provisional styles added.</li>";
+$output_off_sched_update .= "<li>BJCP Provisional styles added.</li>";
 */
+
+$output_off_sched_update .= "</ul>";
 
 /**
  * ----------------------------------------------- 2.1.14 ----------------------------------------------
@@ -1247,14 +1404,20 @@ $output .= "<li>BJCP Provisional styles added.</li>";
  * -----------------------------------------------------------------------------------------------------
  */
 
+$output_off_sched_update .= "<p>";
+$output_off_sched_update .= "<strong>Version 2.1.14.0 Updates</strong>";
+if ($row_pv['version'] == "2.1.13.0") $output_off_sched_update .= "<br><em><span class=\"text-primary\">Your previous version was ".$row_pv['version'].". Your installation's updates begin here.</span></em>";
+$output_off_sched_update .= "</p>";
+$output_off_sched_update .= "<ul>";
+
 if (check_update("brewerJudgeBOS", $prefix."brewer")) {
 
 	$sql = sprintf("ALTER TABLE `%s` CHANGE `brewerJudgeBOS` `brewerProAm` TINYINT(2) NULL DEFAULT NULL",$prefix."brewer");
 	mysqli_select_db($connection,$database);
 	mysqli_real_escape_string($connection,$sql);
 	$result = mysqli_query($connection,$sql);
-	if ($result) $output .= "<li>Previous pro-am column added in the brewer table.</li>";
-	else $output .= "<li>Previous pro-am indicator column NOT added in the brewer table. Error: ".$db_conn->getLastError()."</li>";
+	if ($result) $output_off_sched_update .= "<li>Previous pro-am column added in the brewer table.</li>";
+	else $output_off_sched_update .= "<li>Previous pro-am indicator column NOT added in the brewer table. <strong class=\"text-warning\">Error: ".$db_conn->getLastError()."</strong></li>";
 
 }
 
@@ -1263,10 +1426,12 @@ if (isset($row_current_prefs['prefsStyleSet'])) {
 	$update_table = $prefix."styles";
 	$data = array('brewStyleVersion' => $row_current_prefs['prefsStyleSet']);
 	$db_conn->where ('brewStyleOwn', 'custom');
-	if ($db_conn->update ($update_table, $data)) $output .= "<li>Custom styles updated to currently chosen style set.</li>";
-	else $output .= "<li>Custom styles NOT updated to currently chosen style set. Error: ".$db_conn->getLastError()."</li>";
+	if ($db_conn->update ($update_table, $data)) $output_off_sched_update .= "<li>Custom styles updated to currently chosen style set.</li>";
+	else $output_off_sched_update .= "<li>Custom styles NOT updated to currently chosen style set. <strong class=\"text-danger\">Error: ".$db_conn->getLastError()."</strong></li>";
 
 }
+
+$output_off_sched_update .= "</ul>";
 
 /**
  * ----------------------------------------------- 2.1.15 ----------------------------------------------
@@ -1275,12 +1440,18 @@ if (isset($row_current_prefs['prefsStyleSet'])) {
  * -----------------------------------------------------------------------------------------------------
  */
 
+$output_off_sched_update .= "<p>";
+$output_off_sched_update .= "<strong>Version 2.1.15.0 Updates</strong>";
+if ($row_pv['version'] == "2.1.14.0") $output_off_sched_update .= "<br><em><span class=\"text-primary\">Your previous version was ".$row_pv['version'].". Your installation's updates begin here.</span></em>";
+$output_off_sched_update .= "</p>";
+$output_off_sched_update .= "<ul>";
+
 if ((empty($row_current_prefs['prefsDisplaySpecial'])) || (!isset($row_current_prefs['prefsDisplaySpecial']))) {
 	
 	$update_table = $prefix."preferences";
 	$data = array('prefsDisplaySpecial' => 'J');
-	if ($db_conn->update ($update_table, $data)) $output .= "<li>Uploaded scoresheet preferences updated (were not set).</li>";
-	else $output .= "<li>Uploaded scoresheet preferences NOT updated. Error: ".$db_conn->getLastError()."</li>";
+	if ($db_conn->update ($update_table, $data)) $output_off_sched_update .= "<li>Uploaded scoresheet preferences updated (were not set).</li>";
+	else $output_off_sched_update .= "<li>Uploaded scoresheet preferences NOT updated. <strong class=\"text-danger\">Error: ".$db_conn->getLastError()."</strong></li>";
 
 }
 
@@ -1288,8 +1459,10 @@ $update_table = $prefix."styles";
 $data = array('brewStyle' => 'British Strong Ale');
 $db_conn->where ('brewStyle', 'English Strong Ale');
 $db_conn->where ('brewStyleVersion', 'BJCP2015');
-if ($db_conn->update ($update_table, $data)) $output .= "<li>British Strong Ale name corrected in styles table.</li>";
-else $output .= "<li>British Strong Ale name NOT corrected in styles table. Error: ".$db_conn->getLastError()."</li>";
+if ($db_conn->update ($update_table, $data)) $output_off_sched_update .= "<li>British Strong Ale name corrected in styles table.</li>";
+else $output_off_sched_update .= "<li>British Strong Ale name NOT corrected in styles table. <strong class=\"text-warning\">Error: ".$db_conn->getLastError()."</strong></li>";
+
+$output_off_sched_update .= "</ul>";
 
 /**
  * ----------------------------------------------- 2.1.19 ----------------------------------------------
@@ -1297,18 +1470,24 @@ else $output .= "<li>British Strong Ale name NOT corrected in styles table. Erro
  * -----------------------------------------------------------------------------------------------------
  */
 
+$output_off_sched_update .= "<p>";
+$output_off_sched_update .= "<strong>Version 2.1.19.0 Updates</strong>";
+if (($row_pv['version'] == "2.1.15.0") || ($row_pv['version'] == "2.1.16.0") || ($row_pv['version'] == "2.1.17.0") || ($row_pv['version'] == "2.1.18.0")) $output_off_sched_update .= "<br><em><span class=\"text-primary\">Your previous version was ".$row_pv['version'].". Your installation's updates begin here.</span></em>";
+$output_off_sched_update .= "</p>";
+$output_off_sched_update .= "<ul>";
+
 $update_table = $prefix."styles";
 $data = array('brewStyle' => 'Specialty Fruit Beer');
 $db_conn->where ('brewStyle', 'Speciality Fruit Beer');
 $db_conn->where ('brewStyleVersion', 'BJCP2015');
-if ($db_conn->update ($update_table, $data)) $output .= "<li>Specialty Fruit Beer name corrected in styles table.</li>";
-else $output .= "<li>Specialty Fruit Beer name NOT corrected in styles table. Error: ".$db_conn->getLastError()."</li>";
+if ($db_conn->update ($update_table, $data)) $output_off_sched_update .= "<li>Specialty Fruit Beer name corrected in styles table.</li>";
+else $output_off_sched_update .= "<li>Specialty Fruit Beer name NOT corrected in styles table. <strong class=\"text-warning\">Error: ".$db_conn->getLastError()."</strong></li>";
 
 $update_table = $prefix."brewing";
 $data = array('brewStyle' => 'Specialty Fruit Beer');
 $db_conn->where ('brewStyle', 'Speciality Fruit Beer');
-if ($db_conn->update ($update_table, $data)) $output .= "<li>All Specialty Fruit Beer names corrected in brewing table.</li>";
-else $output .= "<li>All Specialty Fruit Beer names NOT corrected in brewing table. Error: ".$db_conn->getLastError()."</li>";
+if ($db_conn->update ($update_table, $data)) $output_off_sched_update .= "<li>All Specialty Fruit Beer names corrected in brewing table.</li>";
+else $output_off_sched_update .= "<li>All Specialty Fruit Beer names NOT corrected in brewing table. <strong class=\"text-warning\">Error: ".$db_conn->getLastError()."</strong></li>";
 
 /**
  * ----------------------------------------------- 2.1.19 ----------------------------------------------
@@ -1321,10 +1500,10 @@ $sql = sprintf("ALTER TABLE `%s` CHANGE `prefsTimeZone` `prefsTimeZone` FLOAT NU
 mysqli_select_db($connection,$database);
 mysqli_real_escape_string($connection,$sql);
 $result = mysqli_query($connection,$sql);
-if ($result) $output .= "<li>prefsTimeZone DB column altered to FLOAT to accomodate fractional time zone numbers.</li>";
-else $output .= "<li>prefsTimeZone DB column NOT altered to FLOAT to accomodate fractional time zone numbers. Error: ".$db_conn->getLastError()."</li>";
+if ($result) $output_off_sched_update .= "<li>prefsTimeZone DB column altered to FLOAT to accomodate fractional time zone numbers.</li>";
+else $output_off_sched_update .= "<li>prefsTimeZone DB column NOT altered to FLOAT to accomodate fractional time zone numbers. <strong class=\"text-danger\">Error: ".$db_conn->getLastError()."</strong></li>";
 
-// $output .= "<li>Altered prefsTimeZone DB column to FLOAT to accomodate fractional time zone numbers.</li>";
+// $output_off_sched_update .= "<li>Altered prefsTimeZone DB column to FLOAT to accomodate fractional time zone numbers.</li>";
 
 /**
  * ----------------------------------------------- 2.1.19 ----------------------------------------------
@@ -1448,8 +1627,8 @@ $data = array(
 		'styleTypeBOSMethod' => 1
 	)
 );
-if ($db_conn->insertMulti($update_table, $data)) $output .= "<li>Legacy core style types reconstructed.</li>";
-else $output .= "<li>Legacy core style types NOT reconstructed. Error: ".$db_conn->getLastError()."</li>";
+if ($db_conn->insertMulti($update_table, $data)) $output_off_sched_update .= "<li>Legacy core style types reconstructed.</li>";
+else $output_off_sched_update .= "<li>Legacy core style types NOT reconstructed. <strong class=\"text-danger\">Error: ".$db_conn->getLastError()."</strong></li>";
 
 // Add the new style types by looping through the array
 foreach ($new_style_types as $key => $value) {
@@ -1462,8 +1641,8 @@ foreach ($new_style_types as $key => $value) {
 		'styleTypeBOS' => 'N',
 		'styleTypeBOSMethod' => 1
     );
-    if ($db_conn->insert ($update_table, $data)) $output .= "<li>".$key." style type added.</li>";
-	else $output .= "<li>".$key." style type NOT added. Error: ".$db_conn->getLastError()."</li>";
+    if ($db_conn->insert ($update_table, $data)) $output_off_sched_update .= "<li>".$key." style type added.</li>";
+	else $output_off_sched_update .= "<li>".$key." style type NOT added. <strong class=\"text-danger\">Error: ".$db_conn->getLastError()."</strong></li>";
 
 }
 
@@ -1493,16 +1672,16 @@ do {
             $update_table = $prefix."styles";
 			$data = array('brewStyleType' => $all_style_types[$row_current_st['styleTypeName']]);
 			$db_conn->where ('brewStyleType', $row_current_st['id']);
-			if ($db_conn->update ($update_table, $data)) $output .= "<li>".$all_style_types[$row_current_st['styleTypeName']]." reassigned.</li>";
-			else $output .= "<li>".$all_style_types[$row_current_st['styleTypeName']]." NOT reassigned. Error: ".$db_conn->getLastError()."</li>";
+			if ($db_conn->update ($update_table, $data)) $output_off_sched_update .= "<li>".$all_style_types[$row_current_st['styleTypeName']]." Style Type reassigned in Styles table.</li>";
+			else $output_off_sched_update .= "<li>".$all_style_types[$row_current_st['styleTypeName']]." Style Type NOT reassigned in Styles table. <strong class=\"text-danger\">Error: ".$db_conn->getLastError()."</strong></li>";
 
         }
 
         $update_table = $prefix."style_types";
 		$data = array('styleTypeBOS' => $row_current_st['styleTypeBOS'], 'styleTypeBOSMethod' => $row_current_st['styleTypeBOSMethod']);
 		$db_conn->where ('styleTypeName', $row_current_st['styleTypeName']);
-		if ($db_conn->update ($update_table, $data)) $output .= "<li>".$row_current_st['styleTypeName']." reassigned.</li>";
-		else $output .= "<li>".$row_current_st['styleTypeName']." NOT reassigned. Error: ".$db_conn->getLastError()."</li>";
+		if ($db_conn->update ($update_table, $data)) $output_off_sched_update .= "<li>".$row_current_st['styleTypeName']." Style Type reassigned.</li>";
+		else $output_off_sched_update .= "<li>".$row_current_st['styleTypeName']." Style Type NOT reassigned. <strong class=\"text-danger\">Error: ".$db_conn->getLastError()."</strong></li>";
 
     }
 
@@ -1518,8 +1697,8 @@ do {
 			'styleTypeBOS' => $row_current_st['styleTypeBOS'], 
 			'styleTypeBOSMethod' => $row_current_st['styleTypeBOSMethod']
 		);
-		if ($db_conn->insert ($update_table, $data)) $output .= "<li>".$row_current_st['styleTypeName']." reassigned.</li>";
-		else $output .= "<li>".$row_current_st['styleTypeName']." NOT reassigned. Error: ".$db_conn->getLastError()."</li>";
+		if ($db_conn->insert ($update_table, $data)) $output_off_sched_update .= "<li>".$row_current_st['styleTypeName']." Style Type reassigned.</li>";
+		else $output_off_sched_update .= "<li>".$row_current_st['styleTypeName']." Style Type NOT reassigned. <strong class=\"text-danger\">Error: ".$db_conn->getLastError()."</strong></li>";
 
         $query_new_st = sprintf("SELECT id FROM %s ORDER BY id DESC LIMIT 1",$prefix."style_types");
         $new_st = mysqli_query($connection,$query_new_st) or die (mysqli_error($connection));
@@ -1528,8 +1707,8 @@ do {
         $update_table = $prefix."styles";
 		$data = array('brewStyleType' => $row_new_st['id']);
 		$db_conn->where ('brewStyleType', $row_current_st['styleTypeName']);
-		if ($db_conn->update ($update_table, $data)) $output .= "<li>".$row_current_st['styleTypeName']." relational id updated in styles table.</li>";
-		else $output .= "<li>".$row_current_st['styleTypeName']." relational id NOT updated in styles table. Error: ".$db_conn->getLastError()."</li>";
+		if ($db_conn->update ($update_table, $data)) $output_off_sched_update .= "<li>".$row_current_st['styleTypeName']." Style Type relational id updated in styles table.</li>";
+		else $output_off_sched_update .= "<li>".$row_current_st['styleTypeName']." Style Type relational id NOT updated in styles table. <strong class=\"text-danger\">Error: ".$db_conn->getLastError()."</strong></li>";
 
     }
 
@@ -1548,8 +1727,8 @@ $sql = sprintf("UPDATE %s SET brewJudgingNumber = LOWER(brewJudgingNumber)", $pr
 mysqli_select_db($connection,$database);
 mysqli_real_escape_string($connection,$sql);
 $result = mysqli_query($connection,$sql);
-if ($result) $output .= "<li>All alpha-numeric judging numbers converted to lower case.</li>";
-else $output .= "<li>All alpha-numeric judging numbers NOT converted to lower case. Error: ".$db_conn->getLastError()."</li>";
+if ($result) $output_off_sched_update .= "<li>All alpha-numeric judging numbers converted to lower case.</li>";
+else $output_off_sched_update .= "<li>All alpha-numeric judging numbers NOT converted to lower case. <strong class=\"text-warning\">Error: ".$db_conn->getLastError()."</strong></li>";
 
 /**
  * ----------------------------------------------- 2.2.0 ---------------------------------------------
@@ -1566,13 +1745,13 @@ if (check_update("judgingTime", $prefix."judging_locations")) {
 	mysqli_select_db($connection,$database);
 	mysqli_real_escape_string($connection,$sql);
 	$result = mysqli_query($connection,$sql);
-	if ($result) $output .= "<li>The judgingDateEnd column was added to the judging_locations table.</li>";
-	else $output .= "<li>The judgingDateEnd column was NOT added to the judging_locations table. Error: ".$db_conn->getLastError()."</li>";
+	if ($result) $output_off_sched_update .= "<li>The judgingDateEnd column was added to the judging_locations table.</li>";
+	else $output_off_sched_update .= "<li>The judgingDateEnd column was NOT added to the judging_locations table. <strong class=\"text-danger\">Error: ".$db_conn->getLastError()."</strong></li>";
 
 	$update_table = $prefix."judging_locations";
 	$data = array('judgingDateEnd' => NULL);
-	if ($db_conn->update ($update_table, $data)) $output .= "<li>The judgingDateEnd value was set.</li>";
-	else $output .= "<li>The judgingDateEnd value was NOT set. Error: ".$db_conn->getLastError()."</li>";
+	if ($db_conn->update ($update_table, $data)) $output_off_sched_update .= "<li>The judgingDateEnd value was set.</li>";
+	else $output_off_sched_update .= "<li>The judgingDateEnd value was NOT set. <strong class=\"text-warning\">Error: ".$db_conn->getLastError()."</strong></li>";
 
 }
 
@@ -1582,16 +1761,17 @@ if (!check_update("judgingLocType", $prefix."judging_locations")) {
 	mysqli_select_db($connection,$database);
 	mysqli_real_escape_string($connection,$sql);
 	$result = mysqli_query($connection,$sql);
-	if ($result) $output .= "<li>The judgingLocType column was added to the judging_locations table.</li>";
-	else $output .= "<li>The judgingLocType column was NOT added to the judging_locations table. Error: ".$db_conn->getLastError()."</li>";
+	if ($result) $output_off_sched_update .= "<li>The judgingLocType column was added to the judging_locations table.</li>";
+	else $output_off_sched_update .= "<li>The judgingLocType column was NOT added to the judging_locations table. <strong class=\"text-danger\">Error: ".$db_conn->getLastError()."</strong></li>";
 
 	$update_table = $prefix."judging_locations";
 	$data = array('judgingLocType' => 0);
-	if ($db_conn->update ($update_table, $data)) $output .= "<li>The judgingLocType value was set for all judging locations.</li>";
-	else $output .= "<li>The judgingLocType value was NOT set for all judging locations. Error: ".$db_conn->getLastError()."</li>";
-
+	if ($db_conn->update ($update_table, $data)) $output_off_sched_update .= "<li>The judgingLocType value was set for all judging locations.</li>";
+	else $output_off_sched_update .= "<li>The judgingLocType value was NOT set for all judging locations. <strong class=\"text-warning\">Error: ".$db_conn->getLastError()."</strong></li>";
 
 }
+
+$output_off_sched_update .= "</ul>";
 
 /**
  * ----------------------------------------------- 2.2.0 ---------------------------------------------
@@ -1601,14 +1781,20 @@ if (!check_update("judgingLocType", $prefix."judging_locations")) {
  * ---------------------------------------------------------------------------------------------------
  */
 
+$output_off_sched_update .= "<p>";
+$output_off_sched_update .= "<strong>Version 2.2.0.0 Updates</strong>";
+if ($row_pv['version'] == "2.1.19.0") $output_off_sched_update .= "<br><em><span class=\"text-primary\">Your previous version was ".$row_pv['version'].". Your installation's updates begin here.</span></em>";
+$output_off_sched_update .= "</p>";
+$output_off_sched_update .= "<ul>";
+
 if (!check_update("assignPlanning", $prefix."judging_assignments")) {
 	
 	$sql = sprintf("ALTER TABLE `%s` ADD `assignPlanning` TINYINT(1) NULL;",$prefix."judging_assignments");
 	mysqli_select_db($connection,$database);
 	mysqli_real_escape_string($connection,$sql);
 	$result = mysqli_query($connection,$sql);
-	if ($result) $output .= "<li>The assignPlanning column was added to the judging_assignments table.</li>";
-	else $output .= "<li>The assignPlanning column was NOT added to the judging_assignments table. Error: ".$db_conn->getLastError()."</li>";
+	if ($result) $output_off_sched_update .= "<li>The assignPlanning column was added to the judging_assignments table.</li>";
+	else $output_off_sched_update .= "<li>The assignPlanning column was NOT added to the judging_assignments table. <strong class=\"text-danger\">Error: ".$db_conn->getLastError()."</strong></li>";
 
 }
 
@@ -1618,8 +1804,8 @@ if (!check_update("flightPlanning", $prefix."judging_flights")) {
 	mysqli_select_db($connection,$database);
 	mysqli_real_escape_string($connection,$sql);
 	$result = mysqli_query($connection,$sql);
-	if ($result) $output .= "<li>The flightPlanning column was added to the judging_flights table.</li>";
-	else $output .= "<li>The flightPlanning column was NOT added to the judging_flights table. Error: ".$db_conn->getLastError()."</li>";
+	if ($result) $output_off_sched_update .= "<li>The flightPlanning column was added to the judging_flights table.</li>";
+	else $output_off_sched_update .= "<li>The flightPlanning column was NOT added to the judging_flights table. <strong class=\"text-danger\">Error: ".$db_conn->getLastError()."</strong></li>";
 
 }
 
@@ -1629,12 +1815,12 @@ if (!check_update("jPrefsTablePlanning", $prefix."judging_preferences")) {
 	mysqli_select_db($connection,$database);
 	mysqli_real_escape_string($connection,$sql);
 	$result = mysqli_query($connection,$sql);
-	if ($result) $output .= "<li>The jPrefsTablePlanning column was added to the judging_preferences table.</li>";
-	else $output .= "<li>The jPrefsTablePlanning column was NOT added to the judging_preferences table. Error: ".$db_conn->getLastError()."</li>";
+	if ($result) $output_off_sched_update .= "<li>The jPrefsTablePlanning column was added to the judging_preferences table.</li>";
+	else $output_off_sched_update .= "<li>The jPrefsTablePlanning column was NOT added to the judging_preferences table. <strong class=\"text-danger\">Error: ".$db_conn->getLastError()."</strong></li>";
 
 }
 
-// $output .= "<li>Added columns to facilitate Tables Planning Mode.</li>";
+// $output_off_sched_update .= "<li>Added columns to facilitate Tables Planning Mode.</li>";
 
 if (!check_update("prefsEmailCC", $prefix."preferences")) {
 
@@ -1642,17 +1828,17 @@ if (!check_update("prefsEmailCC", $prefix."preferences")) {
 	mysqli_select_db($connection,$database);
 	mysqli_real_escape_string($connection,$sql);
 	$result = mysqli_query($connection,$sql);
-	if ($result) $output .= "<li>The prefsEmailCC column was added to the preferences table.</li>";
-	else $output .= "<li>The prefsEmailCC column was NOT added to the preferences table. Error: ".$db_conn->getLastError()."</li>";
+	if ($result) $output_off_sched_update .= "<li>The prefsEmailCC column was added to the preferences table.</li>";
+	else $output_off_sched_update .= "<li>The prefsEmailCC column was NOT added to the preferences table. <strong class=\"text-danger\">Error: ".$db_conn->getLastError()."</strong></li>";
 
 	$update_table = $prefix."preferences";
 	$data = array('prefsEmailCC' => 0);
-	if ($db_conn->update ($update_table, $data)) $output .= "<li>The prefsEmailCC value was set to 0.</li>";
-	else $output .= "<li>The prefsEmailCC value was NOT set to 0. Error: ".$db_conn->getLastError()."</li>";
+	if ($db_conn->update ($update_table, $data)) $output_off_sched_update .= "<li>The prefsEmailCC value was set to 0.</li>";
+	else $output_off_sched_update .= "<li>The prefsEmailCC value was NOT set to 0. <strong class=\"text-warning\">Error: ".$db_conn->getLastError()."</strong></li>";
 
 }
 
-// $output .= "<li>Added column to enable or disable carbon copying contact messages.</li>";
+// $output_off_sched_update .= "<li>Added column to enable or disable carbon copying contact messages.</li>";
 
 /**
  * ----------------------------------------------- 2.2.0 ---------------------------------------------
@@ -1668,13 +1854,13 @@ if (!check_update("archiveWinnerMethod", $prefix."archive")) {
 	mysqli_select_db($connection,$database);
 	mysqli_real_escape_string($connection,$sql);
 	$result = mysqli_query($connection,$sql);
-	if ($result) $output .= "<li>The archiveWinnerMethod column was added to the archive table.</li>";
-	else $output .= "<li>The archiveWinnerMethod column was NOT added to the archive table. Error: ".$db_conn->getLastError()."</li>";
+	if ($result) $output_off_sched_update .= "<li>The archiveWinnerMethod column was added to the archive table.</li>";
+	else $output_off_sched_update .= "<li>The archiveWinnerMethod column was NOT added to the archive table. <strong class=\"text-danger\">Error: ".$db_conn->getLastError()."</strong></li>";
 
 	$update_table = $prefix."archive";
 	$data = array('archiveWinnerMethod' => 0);
-	if ($db_conn->update ($update_table, $data)) $output .= "<li>The archiveWinnerMethod value was set to 0.</li>";
-	else $output .= "<li>The archiveWinnerMethod value was NOT set to 0. Error: ".$db_conn->getLastError()."</li>";
+	if ($db_conn->update ($update_table, $data)) $output_off_sched_update .= "<li>The archiveWinnerMethod value was set to 0.</li>";
+	else $output_off_sched_update .= "<li>The archiveWinnerMethod value was NOT set to 0. <strong class=\"text-warning\">Error: ".$db_conn->getLastError()."</strong></li>";
 
 }
 
@@ -1684,13 +1870,13 @@ if (!check_update("archiveDisplayWinners", $prefix."archive")) {
 	mysqli_select_db($connection,$database);
 	mysqli_real_escape_string($connection,$sql);
 	$result = mysqli_query($connection,$sql);
-	if ($result) $output .= "<li>The archiveDisplayWinners column was added to the archive table.</li>";
-	else $output .= "<li>The archiveDisplayWinners column was NOT added to the archive table. Error: ".$db_conn->getLastError()."</li>";
+	if ($result) $output_off_sched_update .= "<li>The archiveDisplayWinners column was added to the archive table.</li>";
+	else $output_off_sched_update .= "<li>The archiveDisplayWinners column was NOT added to the archive table. <strong class=\"text-danger\">Error: ".$db_conn->getLastError()."</strong></li>";
 
 	$update_table = $prefix."archive";
 	$data = array('archiveDisplayWinners' => 'N');
-	if ($db_conn->update ($update_table, $data)) $output .= "<li>The archiveDisplayWinners value was set to No.</li>";
-	else $output .= "<li>The archiveDisplayWinners value was NOT set to No. Error: ".$db_conn->getLastError()."</li>";
+	if ($db_conn->update ($update_table, $data)) $output_off_sched_update .= "<li>The archiveDisplayWinners value was set to No.</li>";
+	else $output_off_sched_update .= "<li>The archiveDisplayWinners value was NOT set to No. <strong class=\"text-warning\">Error: ".$db_conn->getLastError()."</strong></li>";
 
 }
 
@@ -1734,15 +1920,15 @@ if ($totalRows_archive > 0) {
 				mysqli_select_db($connection,$database);
 				mysqli_real_escape_string($connection,$sql);
 				$result = mysqli_query($connection,$sql);
-				if ($result) $output .= sprintf("<li>Archive table %s created.</li>",$table_archive);
-				else $output .= sprintf("<li>Archive table %s NOT created. Error: %s</li>",$table_archive,$db_conn->getLastError());
+				if ($result) $output_off_sched_update .= sprintf("<li>Archive table %s created.</li>",$table_archive);
+				else $output_off_sched_update .= sprintf("<li>Archive table %s NOT created. Error: %s</li>",$table_archive,$db_conn->getLastError());
 
 				$sql = sprintf("TRUNCATE TABLE %s;",$table_archive);
 				mysqli_select_db($connection,$database);
 				mysqli_real_escape_string($connection,$sql);
 				$result = mysqli_query($connection,$sql);
-				if ($result) $output .= sprintf("<li>Archive table %s truncated.</li>",$table_archive);
-				else $output .= sprintf("<li>Archive table %s NOT truncated. Error: %s</li>",$table_archive,$db_conn->getLastError());
+				if ($result) $output_off_sched_update .= sprintf("<li>Archive table %s truncated.</li>",$table_archive);
+				else $output_off_sched_update .= sprintf("<li>Archive table %s NOT truncated. Error: %s</li>",$table_archive,$db_conn->getLastError());
 
 			}
 
@@ -1754,8 +1940,8 @@ if ($totalRows_archive > 0) {
 					mysqli_select_db($connection,$database);
 					mysqli_real_escape_string($connection,$sql);
 					$result = mysqli_query($connection,$sql);
-					if ($result) $output .= sprintf("<li>The brewerJudgeMead column added to the %s archive table.</li>",$table_archive);
-					else $output .= sprintf("<li>The brewerJudgeMead column NOT added to the %s archive table. Error: %s</li>",$table_archive,$db_conn->getLastError());
+					if ($result) $output_off_sched_update .= sprintf("<li>The brewerJudgeMead column added to the %s archive table.</li>",$table_archive);
+					else $output_off_sched_update .= sprintf("<li>The brewerJudgeMead column NOT added to the %s archive table. Error: %s</li>",$table_archive,$db_conn->getLastError());
 
 				}
 
@@ -1765,8 +1951,8 @@ if ($totalRows_archive > 0) {
 					mysqli_select_db($connection,$database);
 						mysqli_real_escape_string($connection,$sql);
 						$result = mysqli_query($connection,$sql);
-						if ($result) $output .= sprintf("<li>The brewerBreweryName column added to the %s archive table.</li>",$table_archive);
-					else $output .= sprintf("<li>The brewerBreweryName column NOT added to the %s archive table. Error: %s</li>",$table_archive,$db_conn->getLastError());
+						if ($result) $output_off_sched_update .= sprintf("<li>The brewerBreweryName column added to the %s archive table.</li>",$table_archive);
+					else $output_off_sched_update .= sprintf("<li>The brewerBreweryName column NOT added to the %s archive table. Error: %s</li>",$table_archive,$db_conn->getLastError());
 
 				}
 
@@ -1776,8 +1962,8 @@ if ($totalRows_archive > 0) {
 					mysqli_select_db($connection,$database);
 					mysqli_real_escape_string($connection,$sql);
 					$result = mysqli_query($connection,$sql);
-					if ($result) $output .= sprintf("<li>The brewerProAm column added to the %s archive table.</li>",$table_archive);
-					else $output .= sprintf("<li>The brewerProAm column NOT added to the %s archive table. Error: %s</li>",$table_archive,$db_conn->getLastError());
+					if ($result) $output_off_sched_update .= sprintf("<li>The brewerProAm column added to the %s archive table.</li>",$table_archive);
+					else $output_off_sched_update .= sprintf("<li>The brewerProAm column NOT added to the %s archive table. Error: %s</li>",$table_archive,$db_conn->getLastError());
 
 				}
 
@@ -1787,8 +1973,8 @@ if ($totalRows_archive > 0) {
 					mysqli_select_db($connection,$database);
 					mysqli_real_escape_string($connection,$sql);
 					$result = mysqli_query($connection,$sql);
-					if ($result) $output .= sprintf("<li>The brewerDiscount column added to the %s archive table.</li>",$table_archive);
-					else $output .= sprintf("<li>The brewerDiscount column NOT added to the %s archive table. Error: %s</li>",$table_archive,$db_conn->getLastError());
+					if ($result) $output_off_sched_update .= sprintf("<li>The brewerDiscount column added to the %s archive table.</li>",$table_archive);
+					else $output_off_sched_update .= sprintf("<li>The brewerDiscount column NOT added to the %s archive table. Error: %s</li>",$table_archive,$db_conn->getLastError());
 
 				}
 
@@ -1802,8 +1988,8 @@ if ($totalRows_archive > 0) {
 					mysqli_select_db($connection,$database);
 					mysqli_real_escape_string($connection,$sql);
 					$result = mysqli_query($connection,$sql);
-					if ($result) $output .= sprintf("<li>The brewJudgingNumber column added to the %s archive table.</li>",$table_archive);
-					else $output .= sprintf("<li>The brewJudgingNumber column NOT added to the %s archive table. Error: %s</li>",$table_archive,$db_conn->getLastError());
+					if ($result) $output_off_sched_update .= sprintf("<li>The brewJudgingNumber column added to the %s archive table.</li>",$table_archive);
+					else $output_off_sched_update .= sprintf("<li>The brewJudgingNumber column NOT added to the %s archive table. Error: %s</li>",$table_archive,$db_conn->getLastError());
 
 				}
 
@@ -1813,8 +1999,8 @@ if ($totalRows_archive > 0) {
 					mysqli_select_db($connection,$database);
 					mysqli_real_escape_string($connection,$sql);
 					$result = mysqli_query($connection,$sql);
-					if ($result) $output .= sprintf("<li>The brewStaffNotes column added to the %s archive table.</li>",$table_archive);
-					else $output .= sprintf("<li>The brewStaffNotes column NOT added to the %s archive table. Error: %s</li>",$table_archive,$db_conn->getLastError());
+					if ($result) $output_off_sched_update .= sprintf("<li>The brewStaffNotes column added to the %s archive table.</li>",$table_archive);
+					else $output_off_sched_update .= sprintf("<li>The brewStaffNotes column NOT added to the %s archive table. Error: %s</li>",$table_archive,$db_conn->getLastError());
 
 				}
 
@@ -1824,8 +2010,8 @@ if ($totalRows_archive > 0) {
 					mysqli_select_db($connection,$database);
 					mysqli_real_escape_string($connection,$sql);
 					$result = mysqli_query($connection,$sql);
-					if ($result) $output .= sprintf("<li>The brewAdminNotes column added to the %s archive table.</li>",$table_archive);
-					else $output .= sprintf("<li>The brewAdminNotes column NOT added to the %s archive table. Error: %s</li>",$table_archive,$db_conn->getLastError());
+					if ($result) $output_off_sched_update .= sprintf("<li>The brewAdminNotes column added to the %s archive table.</li>",$table_archive);
+					else $output_off_sched_update .= sprintf("<li>The brewAdminNotes column NOT added to the %s archive table. Error: %s</li>",$table_archive,$db_conn->getLastError());
 
 				}
 
@@ -1835,8 +2021,8 @@ if ($totalRows_archive > 0) {
 					mysqli_select_db($connection,$database);
 					mysqli_real_escape_string($connection,$sql);
 					$result = mysqli_query($connection,$sql);
-					if ($result) $output .= sprintf("<li>The brewPossAllergens column added to the %s archive table.</li>",$table_archive);
-					else $output .= sprintf("<li>The brewPossAllergens column NOT added to the %s archive table. Error: %s</li>",$table_archive,$db_conn->getLastError());
+					if ($result) $output_off_sched_update .= sprintf("<li>The brewPossAllergens column added to the %s archive table.</li>",$table_archive);
+					else $output_off_sched_update .= sprintf("<li>The brewPossAllergens column NOT added to the %s archive table. Error: %s</li>",$table_archive,$db_conn->getLastError());
 
 				}
 
@@ -1846,8 +2032,8 @@ if ($totalRows_archive > 0) {
 					mysqli_select_db($connection,$database);
 					mysqli_real_escape_string($connection,$sql);
 					$result = mysqli_query($connection,$sql);
-					if ($result) $output .= sprintf("<li>The brewJudgingNumber column added to the %s archive table.</li>",$table_archive);
-					else $output .= sprintf("<li>The brewJudgingNumber column NOT added to the %s archive table. Error: %s</li>",$table_archive,$db_conn->getLastError());
+					if ($result) $output_off_sched_update .= sprintf("<li>The brewJudgingNumber column added to the %s archive table.</li>",$table_archive);
+					else $output_off_sched_update .= sprintf("<li>The brewJudgingNumber column NOT added to the %s archive table. Error: %s</li>",$table_archive,$db_conn->getLastError());
 
 				}
 
@@ -1864,8 +2050,8 @@ if ($totalRows_archive > 0) {
 				$update_table = $prefix."archive";
 				$data = array('archiveDisplayWinners' => 'Y');
 				$db_conn->where ('archiveSuffix', $row_archive['archiveSuffix']);
-				if ($db_conn->update ($update_table, $data)) $output .= "<li>Winner display for all archives set to Yes.</li>";
-				else $output .= "<li>Winner display for all archives NOT set to Yes. Error: ".$db_conn->getLastError()."</li>";
+				if ($db_conn->update ($update_table, $data)) $output_off_sched_update .= "<li>Winner display for all archives set to Yes.</li>";
+				else $output_off_sched_update .= "<li>Winner display for all archives NOT set to Yes. <strong class=\"text-warning\">Error: ".$db_conn->getLastError()."</strong></li>";
 
         	}
 		}
@@ -1874,7 +2060,8 @@ if ($totalRows_archive > 0) {
 
 }
 
-$output .= "<li>Cleaned up archive tables as necessary.</li>";
+$output_off_sched_update .= "<li>Cleaned up archive tables as necessary.</li>";
+$output_off_sched_update .= "</ul>";
 
 /**
  * ----------------------------------------------- 2.3.0 ---------------------------------------------
@@ -1883,6 +2070,12 @@ $output .= "<li>Cleaned up archive tables as necessary.</li>";
  * ---------------------------------------------------------------------------------------------------
  */
 
+$output_off_sched_update .= "<p>";
+$output_off_sched_update .= "<strong>Version 2.3.0.0 Updates</strong>";
+if ($row_pv['version'] == "2.2.0.0") $output_off_sched_update .= "<br><em><span class=\"text-primary\">Your previous version was ".$row_pv['version'].". Your installation's updates begin here.</span></em>";
+$output_off_sched_update .= "</p>";
+$output_off_sched_update .= "<ul>";
+
 if (!check_update("prefsEval", $prefix."preferences")) {
 
 
@@ -1890,22 +2083,23 @@ if (!check_update("prefsEval", $prefix."preferences")) {
 	mysqli_select_db($connection,$database);
 	mysqli_real_escape_string($connection,$sql);
 	$result = mysqli_query($connection,$sql);
-	if ($result) $output .= "<li>The prefsEval column was added to the preferences table.</li>";
-	else $output .= "<li>The prefsEval column was NOT added to the preferences table. Error: ".$db_conn->getLastError()."</li>";
+	if ($result) $output_off_sched_update .= "<li>The prefsEval column was added to the preferences table.</li>";
+	else $output_off_sched_update .= "<li>The prefsEval column was NOT added to the preferences table. <strong class=\"text-danger\">Error: ".$db_conn->getLastError()."</strong></li>";
 
 	$update_table = $prefix."preferences";
 	
 	if (EVALUATION) $data = array('prefsEval' => 1);
 	else $data = array('prefsEval' => 0);
 	$db_conn->where ('id', 1);
-	if ($db_conn->update ($update_table, $data)) $output .= "<li>The prefsEval column value was set.</li>";
-	else $output .= "<li>The prefsEval column value was NOT set. Error: ".$db_conn->getLastError()."</li>";
+	if ($db_conn->update ($update_table, $data)) $output_off_sched_update .= "<li>The prefsEval column value was set.</li>";
+	else $output_off_sched_update .= "<li>The prefsEval column value was NOT set. <strong class=\"text-warning\">Error: ".$db_conn->getLastError()."</strong></li>";
 
 	if (EVALUATION) $_SESSION['prefsEval'] = 1;
 	else $_SESSION['prefsEval'] = 0;
 }
 
-$output .= "<li>Added column to enable or disable Electronic Scoresheets functionality.</li>";
+$output_off_sched_update .= "<li>Added column to enable or disable Electronic Scoresheets functionality.</li>";
+$output_off_sched_update .= "</ul>";
 
 /**
  * ----------------------------------------------- 2.3.2 ---------------------------------------------
@@ -1913,13 +2107,20 @@ $output .= "<li>Added column to enable or disable Electronic Scoresheets functio
  * ---------------------------------------------------------------------------------------------------
  */
 
+$output_off_sched_update .= "<p>";
+$output_off_sched_update .= "<strong>Version 2.3.2.0 Updates</strong>";
+if (($row_pv['version'] == "2.3.0.0") || ($row_pv['version'] == "2.3.1.0")) $output_off_sched_update .= "<br><em><span class=\"text-primary\">Your previous version was ".$row_pv['version'].". Your installation's updates begin here.</span></em>";
+$output_off_sched_update .= "</p>";
+$output_off_sched_update .= "<ul>";
+
 $update_table = $prefix."styles";
 $data = array('brewStyleReqSpec' => 1);
 $db_conn->where ('brewStyleGroup', 'PR');
 $db_conn->where ('brewStyleNum', 'X3');
 $db_conn->where ('brewStyleVersion', 'BJCP2015');
-if ($db_conn->update ($update_table, $data)) $output .= "<li>Added more information requirement for Italian Grape Ale (PRX3).</li>";
-else $output .= "<li>More information requirement for Italian Grape Ale (PRX3) failed. Error: ".$db_conn->getLastError()."</li>"; 
+if ($db_conn->update ($update_table, $data)) $output_off_sched_update .= "<li>Added more information requirement for Italian Grape Ale (PRX3).</li>";
+else $output_off_sched_update .= "<li>More information requirement for Italian Grape Ale (PRX3) failed. <strong class=\"text-warning\">Error: ".$db_conn->getLastError()."</strong></li>"; 
+$output_off_sched_update .= "</ul>";
 
 /**
  * ----------------------------------------------- 2.4.0 ---------------------------------------------
@@ -1928,6 +2129,12 @@ else $output .= "<li>More information requirement for Italian Grape Ale (PRX3) f
  * If so, run conversion script to BJCP 2015.
  * ---------------------------------------------------------------------------------------------------
  */
+
+$output_off_sched_update .= "<p>";
+$output_off_sched_update .= "<strong>Version 2.4.0.0 Updates</strong>";
+if ($row_pv['version'] == "2.3.2.0") $output_off_sched_update .= "<br><em><span class=\"text-primary\">Your previous version was ".$row_pv['version'].". Your installation's updates begin here.</span></em>";
+$output_off_sched_update .= "</p>";
+$output_off_sched_update .= "<ul>";
 
 $bjcp_2021_styles_present = FALSE;
 if (check_new_style("28","D","Straight Sour Beer")) $bjcp_2021_styles_present = TRUE;
@@ -1949,9 +2156,9 @@ if ((!empty($row_current_prefs)) && ($row_current_prefs['prefsStyleSet'] == "BJC
 	$update_table = $prefix."preferences";
 	$data = array('prefsStyleSet' => 'BJCP2015');
 	$db_conn->where ('id', 1);
-	if ($db_conn->update ($update_table, $data)) $output .= "<li>Corrected British Golden Ale name.</li>";
+	if ($db_conn->update ($update_table, $data)) $output_off_sched_update .= "<li>Corrected British Golden Ale name.</li>";
 
-	$output .= "<li>BJCP 2008 is now deprecated. Converted all entries, judge preferences, etc. to BJCP 2015.</li>";
+	$output_off_sched_update .= "<li>BJCP 2008 is now deprecated. Converted all entries, judge preferences, etc. to BJCP 2015.</li>";
 
 }
 
@@ -1959,20 +2166,20 @@ $sql = sprintf("ALTER TABLE `%s` MODIFY COLUMN `brewStyleGroup` VARCHAR(3) AFTER
 mysqli_select_db($connection,$database);
 mysqli_real_escape_string($connection,$sql);
 $result = mysqli_query($connection,$sql);
-if ($result) $output .= "<li>The brewStyleGroup column was moved after id in the styles table.</li>";
-else $output .= "<li>The brewStyleGroup column was NOT moved after id in the styles table. Error: ".$db_conn->getLastError()."</li>";
+if ($result) $output_off_sched_update .= "<li>The brewStyleGroup column was moved after id in the styles table.</li>";
+else $output_off_sched_update .= "<li>The brewStyleGroup column was NOT moved after id in the styles table. <strong class=\"text-warning\">Error: ".$db_conn->getLastError()."</strong></li>";
 
 $sql = sprintf("ALTER TABLE `%s` MODIFY COLUMN `brewStyleVersion` VARCHAR(20) AFTER `brewStyleCategory`;",$styles_db_table);
 mysqli_select_db($connection,$database);
 mysqli_real_escape_string($connection,$sql);
 $result = mysqli_query($connection,$sql);
-if ($result) $output .= "<li>The brewStyleVersion column was moved after brewStyleCategory in the styles table.</li>";
-else $output .= "<li>The brewStyleVersion column was NOT moved after brewStyleCategory in the styles table. Error: ".$db_conn->getLastError()."</li>";
+if ($result) $output_off_sched_update .= "<li>The brewStyleVersion column was moved after brewStyleCategory in the styles table.</li>";
+else $output_off_sched_update .= "<li>The brewStyleVersion column was NOT moved after brewStyleCategory in the styles table. <strong class=\"text-warning\">Error: ".$db_conn->getLastError()."</strong></li>";
 
 // Make sure evaluation table is present in the DB
 if (!check_setup($prefix."evaluation",$database)) require_once (EVALS.'install_eval_db.eval.php');
 
-$output .= "<li>Added evaluation DB table - for use with Electronic Scoresheets.</li>";
+$output_off_sched_update .= "<li>Added evaluation DB table - for use with Electronic Scoresheets.</li>";
 
 /**
  * ----------------------------------------------- 2.4.0 ---------------------------------------------
@@ -1984,14 +2191,16 @@ $update_table = $prefix."styles";
 $data = array('brewStyle' => 'British Golden Ale');
 $db_conn->where ('brewStyle', 'English Golden Ale');
 $db_conn->where ('brewStyleVersion', 'BJCP2015');
-if ($db_conn->update ($update_table, $data)) $output .= "<li>Corrected British Golden Ale name in styles table.</li>";
-else $output .= "<li>Correction of British Golden Ale failed in styles table. Error: ".$db_conn->getLastError()."</li>";
+if ($db_conn->update ($update_table, $data)) $output_off_sched_update .= "<li>Corrected British Golden Ale name in styles table.</li>";
+else $output_off_sched_update .= "<li>Correction of British Golden Ale failed in styles table. <strong class=\"text-warning\">Error: ".$db_conn->getLastError()."</strong></li>";
 
 $update_table = $prefix."brewing";
 $data = array('brewStyle' => 'British Golden Ale');
 $db_conn->where ('brewStyle', 'English Golden Ale');
-if ($db_conn->update ($update_table, $data)) $output .= "<li>Corrected British Golden Ale name in brewing table.</li>";
-else $output .= "<li>Correction of British Golden Ale failed in brewing table. Error: ".$db_conn->getLastError()."</li>";
+if ($db_conn->update ($update_table, $data)) $output_off_sched_update .= "<li>Corrected British Golden Ale name in brewing table.</li>";
+else $output_off_sched_update .= "<li>Correction of British Golden Ale failed in brewing table. <strong class=\"text-warning\">Error: ".$db_conn->getLastError()."</strong></li>";
+
+$output_off_sched_update .= "</ul>";
 
 /**
  * ----------------------------------------------- 2.4.1 ---------------------------------------------
@@ -1999,6 +2208,11 @@ else $output .= "<li>Correction of British Golden Ale failed in brewing table. E
  * @see https://github.com/geoffhumphrey/brewcompetitiononlineentry/issues/1208
  * ---------------------------------------------------------------------------------------------------
  */
+
+$output_off_sched_update .= "<p>";
+$output_off_sched_update .= "<strong>Version 2.4.1.0 Updates</strong>";
+$output_off_sched_update .= "</p>";
+$output_off_sched_update .= "<ul>";
 
 $query_security_resp = sprintf("SELECT id, userQuestionAnswer FROM `%s`",$prefix."users");
 $security_resp = mysqli_query($connection,$query_security_resp);
@@ -2039,8 +2253,8 @@ if ($totalRows_security_resp > 0) {
 
 }
 
-if ($total_encrypted > 0) $output .= "<li>".$total_encrypted." plain-text security question responses were hashed.</li>";
-if ($total_not_encrypted > 0) $output .= "<li>".$total_not_encrypted." plain-text security question responses were NOT hashed.</li>";
+if ($total_encrypted > 0) $output_off_sched_update .= "<li>".$total_encrypted." plain-text security question responses were hashed.</li>";
+if ($total_not_encrypted > 0) $output_off_sched_update .= "<li>".$total_not_encrypted." plain-text security question responses were NOT hashed.</li>";
 
 /**
  * ----------------------------------------------- 2.4.1 ---------------------------------------------
@@ -2052,8 +2266,8 @@ if ($total_not_encrypted > 0) $output .= "<li>".$total_not_encrypted." plain-tex
 $update_table = $prefix."preferences";
 $data = array('prefsHideRecipe' => 'Y');
 $db_conn->where ('id', 1);
-if ($db_conn->update ($update_table, $data)) $output .= "<li>Removed entry recipe fields from UI.</li>";
-else $output .= "<li>Removal of entry recipe fields from UI failed. Error: ".$db_conn->getLastError()."</li>";
+if ($db_conn->update ($update_table, $data)) $output_off_sched_update .= "<li>Removed entry recipe fields from UI.</li>";
+else $output_off_sched_update .= "<li>Removal of entry recipe fields from UI failed. <strong class=\"text-warning\">Error: ".$db_conn->getLastError()."</strong></li>";
 
 $_SESSION['prefsHideRecipe'] = "Y";
 
@@ -2075,6 +2289,32 @@ include (UPDATE.'styles_ba_2022_update.php');
  */
 
 /**
+ * ----------------------------------------------- 2.4.1 ---------------------------------------------
+ * Add update_summary column to the bcoem_sys table.
+ * ---------------------------------------------------------------------------------------------------
+ */
+
+if (!check_update("update_summary", $prefix."bcoem_sys")) {
+	$sql = sprintf("ALTER TABLE `%s` ADD `update_summary` MEDIUMTEXT CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL;",$prefix."bcoem_sys");
+	mysqli_select_db($connection,$database);
+	mysqli_real_escape_string($connection,$sql);
+	$result = mysqli_query($connection,$sql);
+	if ($result) $output_off_sched_update .= "<li>The update_summary column was added to the bcoem_sys table.</li>";
+	else $output_off_sched_update .= "<li>The update_summary column was NOT added to the bcoem_sys table. <strong class=\"text-warning\">Error: ".$db_conn->getLastError()."</strong></li>";
+}
+
+if (!check_update("update_date", $prefix."bcoem_sys")) {
+	$sql = sprintf("ALTER TABLE `%s` ADD `update_date` VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL;",$prefix."bcoem_sys");
+	mysqli_select_db($connection,$database);
+	mysqli_real_escape_string($connection,$sql);
+	$result = mysqli_query($connection,$sql);
+	if ($result) $output_off_sched_update .= "<li>The update_date column was added to the bcoem_sys table.</li>";
+	else $output_off_sched_update .= "<li>The update_date column was NOT added to the bcoem_sys table. <strong class=\"text-warning\">Error: ".$db_conn->getLastError()."</strong></li>";
+}
+
+$output_off_sched_update .= "</ul>";
+
+/**
  * ----------------------------------------------------------------------------------------------------
  * Change the version number and date.
  * ALWAYS the final script.
@@ -2085,15 +2325,34 @@ $update_table = $prefix."bcoem_sys";
 $data = array(
 	'version' => $current_version,
 	'version_date' => $current_version_date_display,
-	'data_check' => $db_conn->now()
+	'data_check' => $db_conn->now(),
+	'update_date' => time()
 );
 $db_conn->where ('id', 1);
-if ($db_conn->update ($update_table, $data)) $output .= "<li>Update to latest version complete.</li>";
-else $output .= "<li>Update to latest version in system table failed. Error: ".$db_conn->getLastError()."</li>";
+if ($db_conn->update ($update_table, $data)) $output_off_sched_update .= "<p><strong class=\"text-primary\">Update to latest version complete.</strong></p>";
+else $output_off_sched_update .= "<p><strong class=\"text-primary\">Update to latest version in system table failed.</strong> <strong class=\"text-danger\">Error: ".$db_conn->getLastError()."</strong></p>";
+
+$output .= $output_off_sched_update;
+
+/**
+ * ---------------------------------------------------------------------------------------------------
+ * Insert $output_off_sched_update data into the bcoem_sys
+ * table, update_summary column, at row 1.
+ * ---------------------------------------------------------------------------------------------------
+ */
+
+$update_table = $prefix."bcoem_sys";
+$data = array('update_summary' => $output_off_sched_update);
+$db_conn->where ('id', 1);
+$db_conn->update ($update_table, $data);
 
 // Force reset of some session data
 unset($_SESSION['prefs'.$prefix_session]);
 unset($_SESSION['contest_info_general'.$prefix_session]);
 unset($_SESSION['prefsLang'.$prefix_session]);
 unset($_SESSION['prefsLanguageFolder'.$prefix_session]);
+unset($_SESSION['update_complete']);
+unset($_SESSION['update_summary']);
+$_SESSION['update_complete'] = 1;
+$_SESSION['update_summary'] = $output_off_sched_update;
 ?>

@@ -6,13 +6,13 @@ $current_version = "2.4.1.0";
 $current_version_display = "2.4.1";
 
 // Add if pre-release - alpha, beta, etc., otherwise leave empty
-$current_version_display_append = "alpha";
+$current_version_display_append = "Beta";
 if (!empty($current_version_display_append)) $current_version_display .= " ".$current_version_display_append;
 
 if ((isset($_SESSION['prefsEval'])) && ($_SESSION['prefsEval'] == 1)) $current_version_display .= " (e)";
 
 // Change date for each pre-release and release. Will trigger a force update.
-$current_version_date_display = "2022-05-15";
+$current_version_date_display = "2022-06-01";
 
 // Convert current version date to Unix timestamp
 $current_version_date = strtotime($current_version_date_display);

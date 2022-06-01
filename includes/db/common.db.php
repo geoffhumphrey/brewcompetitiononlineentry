@@ -19,9 +19,9 @@ if (((!empty($_SESSION['session_set_'.$prefix_session])) && ($_SESSION['session_
 	session_unset();
 	session_destroy();
 	session_write_close();
-	session_regenerate_id(true);
 	session_name($prefix_session);
 	session_start();
+	session_regenerate_id(true);
 	$_SESSION['session_set_'.$prefix_session] = $prefix_session;
 
 }

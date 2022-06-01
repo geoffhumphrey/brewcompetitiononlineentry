@@ -12,6 +12,6 @@ $data = array(
 $update_table = $prefix."styles";
 $result = $db_conn->insertMulti($update_table, $data);
 if ($result) $output .= "<li>Added new 2020 BA Styles to styles table.</li>";
-else $output .= "<li>Addition of new 2020 BA Styles BA Styles to the style table failed. Error: ".$db_conn->getLastError()."</li>";
+else $output .= "<li>Addition of new 2020 BA Styles BA Styles to the style table failed. <strong class=\"text-danger\">Error: ".$db_conn->getLastError()."</strong></li>";
 
 ?>
