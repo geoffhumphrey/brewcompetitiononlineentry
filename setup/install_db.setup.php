@@ -1120,16 +1120,16 @@ if ($setup_free_access == TRUE) {
 			`setup_last_step` int(3) DEFAULT NULL,
 			PRIMARY KEY (`id`)
 			) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci ;
-			", $prefix."system");
+			", $prefix."bcoem_sys");
 		$db_conn->rawQuery($sql);
-		if (!check_setup($prefix."system",$database)) {
+		if (!check_setup($prefix."bcoem_sys",$database)) {
 			$error_output[] = $db_conn->getLastError();
 			$errors = TRUE;
 			$output .= "<li class=\"list-group-item\"><span class=\"fa fa-lg fa-times text-danger\"></span> The <strong>System</strong> table was NOT installed successfully.</li>";
 		}
 		else $output .= "<li class=\"list-group-item\"><span class=\"fa fa-lg fa-check text-success\"></span> The <strong>System</strong> table was installed successfully.</li>";
 		
-		$update_table = $prefix."system";
+		$update_table = $prefix."bcoem_sys";
 		$data = array(
 			'id' => 1,
 			'version' => '2.1.10.0',
@@ -1180,10 +1180,10 @@ if ($setup_free_access == TRUE) {
 		 * -------------------------------------------------
 		 */
 
-		$output .=  "<h3>Other Installation Items</h3>";
-		$output .=  "<ul>";
+		$output .= "<h3>Other Installation Items</h3>";
+		$output .= "<ul>";
 		include(UPDATE.'off_schedule_update.php');
-		$output .=  "</ul>";
+		$output .= "</ul>";
 
 	}
 

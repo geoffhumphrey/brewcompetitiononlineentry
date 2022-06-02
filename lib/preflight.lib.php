@@ -143,7 +143,7 @@ if ((!isset($_SESSION['currentVersion'])) || ((isset($_SESSION['currentVersion']
 } // end if (!isset($_SESSION['currentVersion']))
 
 if (!$system_name_change) {
-	$query_sys = sprintf("RENAME TABLE %s TO %s",$prefix."system",$prefix."bcoem_sys");
+	$query_sys = sprintf("RENAME TABLE `%s` TO `%s`",$prefix."system",$prefix."bcoem_sys");
 	$sys = mysqli_query($connection,$query_sys) or die (mysqli_error($connection));
 	$system_name_change = TRUE;
 }

@@ -270,11 +270,11 @@ var action = "<?php echo $action; ?>";
 var club_other = <?php if ($club_other) echo "true"; else echo "false"; ?>;
 var brewer_judge = "N";
 var brewer_steward = "N";
-var user_question_answer = "<?php echo $_SESSION['userQuestionAnswer']; ?>"
+var user_question_answer = "<?php if (isset($_SESSION['userQuestionAnswer'])) echo $_SESSION['userQuestionAnswer']; ?>"
 if (action == "edit") {
-    var brewer_country = "<?php echo $row_brewer['brewerCountry']; ?>";
-    var brewer_judge = "<?php echo $row_brewer['brewerJudge']; ?>";
-    var brewer_steward = "<?php echo $row_brewer['brewerSteward']; ?>";
+    var brewer_country = "<?php if (isset($row_brewer)) echo $row_brewer['brewerCountry']; ?>";
+    var brewer_judge = "<?php if (isset($row_brewer)) echo $row_brewer['brewerJudge']; ?>";
+    var brewer_steward = "<?php if (isset($row_brewer)) echo $row_brewer['brewerSteward']; ?>";
 }
 </script>
 <script src="<?php echo $base_url; ?>js_includes/add_edit_user.min.js"></script>

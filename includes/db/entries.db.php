@@ -196,7 +196,7 @@ else {
 
 	else {
 
-		if ((isset($_SESSION['loginUsername'])) && ($section != "admin")) $query_log = sprintf("SELECT * FROM %s WHERE brewBrewerID = '%s'", $brewing_db_table, $_SESSION['user_id']);
+		if ((isset($_SESSION['loginUsername'])) && (isset($_SESSION['user_id'])) && ($section != "admin")) $query_log = sprintf("SELECT * FROM %s WHERE brewBrewerID = '%s'", $brewing_db_table, $_SESSION['user_id']);
 		else $query_log = sprintf("SELECT * FROM %s", $brewing_db_table);
 		$query_log_paid = sprintf("SELECT * FROM %s WHERE brewReceived='1'", $brewing_db_table);
 		$query_log_confirmed = sprintf("SELECT * FROM %s WHERE brewConfirmed='1'", $brewing_db_table);

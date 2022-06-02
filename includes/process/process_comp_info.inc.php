@@ -5,7 +5,7 @@
  *              "contest_info" table.
  */
 
-if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] == 0)) || ($section == "setup"))) {
+if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) && ((isset($_SESSION['userLevel'])) && ($_SESSION['userLevel'] == 0))) || ($section == "setup"))) {
 
 	$errors = FALSE;
 	$error_output = array();
@@ -98,6 +98,8 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 	 */
 
 	if ($action == "add") {
+
+		$hash = NULL;
 
 		if (isset($_POST['contestCheckInPassword'])) {
 			require(CLASSES.'phpass/PasswordHash.php');
@@ -204,6 +206,8 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 	 */
 
 	if ($action == "edit") {
+
+		$hash = NULL;
 
 		if ($go == "qr") {
 

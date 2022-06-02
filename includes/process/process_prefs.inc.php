@@ -5,7 +5,7 @@
  *              "preferences" table.
  */
 
-if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) || ($section == "setup"))) {
+if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) && ((isset($_SESSION['userLevel'])) && ($_SESSION['userLevel'] == 0))) || ($section == "setup"))) {
 
 	$errors = FALSE;
 	$error_output = array();
@@ -54,6 +54,11 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 	}
 		
 	$update_table = $prefix."preferences";
+
+	if (!isset($_POST['prefsSponsorLogoSize'])) $_POST['prefsSponsorLogoSize'] = NULL;
+	if (!isset($_POST['prefsCompLogoSize'])) $_POST['prefsCompLogoSize'] = NULL;
+	if (!isset($_POST['prefsBOSMead'])) $_POST['prefsBOSMead'] = NULL;
+	if (!isset($_POST['prefsBOSCider'])) $_POST['prefsBOSCider'] = NULL;
 
 	$data = array(
 		'prefsTemp' => sterilize($_POST['prefsTemp']),
@@ -139,6 +144,10 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 		// Update style set of any custom styles to chosen style set
 		// Safeguards against a bug introduced in 2.1.13 scripting
 		// Also update sub-style idenfication scheming
+
+
+
+		$prefsStyleSet = sterilize($_POST['prefsStyleSet']);
 
 		foreach ($style_sets as $key) {
             

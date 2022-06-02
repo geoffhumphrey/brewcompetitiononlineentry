@@ -14,7 +14,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 	$error_output = array();
 	$_SESSION['error_output'] = "";
 
-	if ($_SESSION['userLevel'] == 2) {
+	if ((isset($_SESSION['userLevel'])) && ($_SESSION['userLevel'] == 2)) {
 
 		// Check whether user is "authorized" to edit the entry in DB
 		$query_brewer_id = sprintf("SELECT id FROM $brewer_db_table WHERE uid = '%s'", $_SESSION['user_id']);

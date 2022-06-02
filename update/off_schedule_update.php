@@ -53,7 +53,9 @@ $versions = array(
 
 flush();
 
-if (!isset($output)) $output = "";
+$setup_running = FALSE;
+if (isset($output)) $setup_running = TRUE;
+else $output = "";
 if (!isset($output_off_sched_update)) $output_off_sched_update = "";
 
 /**
@@ -96,15 +98,7 @@ $row_current_prefs = mysqli_fetch_assoc($current_prefs);
  * ---------------------------------------------------------------------------------------------------
  */
 
-$output_off_sched_update .= "<p>If there are any errors listed below, search the <a href=\"https://github.com/geoffhumphrey/brewcompetitiononlineentry/issues\" target=\"_blank\">BCOE&amp;M Project Issues list on GitHub</a> for possible resolutions. Post your error as an issue if you cannot find any previous reports or resolutions. Your PHP version is ".$php_version." and your MySQL version is ".$connection -> server_info.".";
-
-/*
-$output_off_sched_update .= "<p>";
-$output_off_sched_update .= "<strong>Version 2.1.5.0 Updates</strong>";
-if ($row_pv['version'] == "2.1.4.0") $output_off_sched_update .= "<br><em><span class=\"text-primary\">Your previous version was ".$row_pv['version'].". Your installation's updates begin here.</span></em>";
-$output_off_sched_update .= "</p>";
-$output_off_sched_update .= "<ul>";
-*/
+if (!$setup_running) $output_off_sched_update .= "<p>If there are any errors listed below, search the <a href=\"https://github.com/geoffhumphrey/brewcompetitiononlineentry/issues\" target=\"_blank\">BCOE&amp;M Project Issues list on GitHub</a> for possible resolutions. Post your error as an issue if you cannot find any previous reports or resolutions. Your PHP version is ".$php_version." and your MySQL version is ".$connection -> server_info.".";
 
 $v215 = FALSE;
 
@@ -237,11 +231,6 @@ if (!check_update("brewStyleComEx", $prefix."styles")) {
 
 }
 
-/*
-if (!$v215) $output_off_sched_update .= "<li>All 2.1.5.0 updates present.</li>";
-$output_off_sched_update .= "</ul>";
-*/
-
 /**
  * ----------------------------------------------- 2.1.8 -----------------------------------------------
  * Check for setup_last_step and add
@@ -249,15 +238,19 @@ $output_off_sched_update .= "</ul>";
  * -----------------------------------------------------------------------------------------------------
  */
 
+if (!$setup_running) {
+	$output_off_sched_update .= "<p>";
+	$output_off_sched_update .= "<strong>Version 2.1.8.0 Updates</strong>";
+	if ($row_pv['version'] == "2.1.7.0") $output_off_sched_update .= "<br><em><span class=\"text-primary\">Your previous version was ".$row_pv['version'].". Your installation's updates begin here.</span></em>";
+	$output_off_sched_update .= "</p>";
+	$output_off_sched_update .= "<ul>";
+}
 
-$output_off_sched_update .= "<p>";
-$output_off_sched_update .= "<strong>Version 2.1.8.0 Updates</strong>";
-if ($row_pv['version'] == "2.1.7.0") $output_off_sched_update .= "<br><em><span class=\"text-primary\">Your previous version was ".$row_pv['version'].". Your installation's updates begin here.</span></em>";
-$output_off_sched_update .= "</p>";
-$output_off_sched_update .= "<ul>";
-$output_off_sched_update .= "<li>System table updates.";
-$output_off_sched_update .= "<ul>";
 if (!check_update("setup_last_step", $prefix."bcoem_sys")) {
+
+	$output_off_sched_update .= "<li>System table updates.";
+	$output_off_sched_update .= "<ul>";
+
 	// Add setup_last_step column to system table
 
 	$sql = sprintf("ALTER TABLE `%s` ADD `setup_last_step` INT(3) NULL DEFAULT NULL;",$prefix."bcoem_sys");
@@ -273,9 +266,11 @@ if (!check_update("setup_last_step", $prefix."bcoem_sys")) {
 	if ($db_conn->update ($update_table, $data)) $output_off_sched_update .= "<li>Setup last step value updated.</li>";
 	else $output_off_sched_update .= "<li>Setup last step value not updated. <strong class=\"text-danger\">Error: ".$db_conn->getLastError()."</strong></li>";
 
+	$output_off_sched_update .= "</ul>";
+	$output_off_sched_update .= "</li>";
+
 }
-$output_off_sched_update .= "</ul>";
-$output_off_sched_update .= "</li>";
+
 
 // Make sure styles table is auto increment
 
@@ -441,7 +436,7 @@ if (!check_new_style("21","B6","White IPA")) {
 }
 $output_off_sched_update .= "</ul>";
 $output_off_sched_update .= "</li>";
-$output_off_sched_update .= "</ul>";
+if (!$setup_running) $output_off_sched_update .= "</ul>";
 
 /**
  * ----------------------------------------------- 2.1.9 -----------------------------------------------
@@ -449,11 +444,13 @@ $output_off_sched_update .= "</ul>";
  * -----------------------------------------------------------------------------------------------------
  */
 
-$output_off_sched_update .= "<p>";
-$output_off_sched_update .= "<strong>Version 2.1.9.0 Updates</strong>";
-if ($row_pv['version'] == "2.1.8.0") $output_off_sched_update .= "<br><em><span class=\"text-primary\">Your previous version was ".$row_pv['version'].". Your installation's updates begin here.</span></em>";
-$output_off_sched_update .= "</p>";
-$output_off_sched_update .= "<ul>";
+if (!$setup_running) {
+	$output_off_sched_update .= "<p>";
+	$output_off_sched_update .= "<strong>Version 2.1.9.0 Updates</strong>";
+	if ($row_pv['version'] == "2.1.8.0") $output_off_sched_update .= "<br><em><span class=\"text-primary\">Your previous version was ".$row_pv['version'].". Your installation's updates begin here.</span></em>";
+	$output_off_sched_update .= "</p>";
+	$output_off_sched_update .= "<ul>";
+}
 
 if (check_update("brewerNickname", $prefix."brewer")) {
 
@@ -496,7 +493,7 @@ if (!check_update("assignRoles", $prefix."judging_assignments")) {
 
 }
 
-$output_off_sched_update .= "</ul>";
+if (!$setup_running) $output_off_sched_update .= "</ul>";
 
 /**
  * ----------------------------------------------- 2.1.10 ----------------------------------------------
@@ -508,11 +505,14 @@ $output_off_sched_update .= "</ul>";
  * -----------------------------------------------------------------------------------------------------
  */
 
-$output_off_sched_update .= "<p>";
-$output_off_sched_update .= "<strong>Version 2.1.10.0 Updates</strong>";
-if ($row_pv['version'] == "2.1.9.0") $output_off_sched_update .= "<br><em><span class=\"text-primary\">Your previous version was ".$row_pv['version'].". Your installation's updates begin here.</span></em>";
-$output_off_sched_update .= "</p>";
-$output_off_sched_update .= "<ul>";
+if (!$setup_running) {
+	$output_off_sched_update .= "<p>";
+	$output_off_sched_update .= "<strong>Version 2.1.10.0 Updates</strong>";
+	if ($row_pv['version'] == "2.1.9.0") $output_off_sched_update .= "<br><em><span class=\"text-primary\">Your previous version was ".$row_pv['version'].". Your installation's updates begin here.</span></em>";
+	$output_off_sched_update .= "</p>";
+	$output_off_sched_update .= "<ul>";
+}
+
 
 if (!check_update("brewerBreweryName", $prefix."brewer")) {
 	
@@ -847,7 +847,7 @@ if ((!empty($row_delay)) && ((strlen($row_delay['prefsWinnerDelay'])) < 10)) {
 
 }
 
-$output_off_sched_update .= "</ul>";
+if (!$setup_running) $output_off_sched_update .= "</ul>";
 
 // Instantiate HTMLPurifier
 require (LIB.'process.lib.php');
@@ -1042,11 +1042,13 @@ if ($totalRows_entry_names > 0) {
  * -----------------------------------------------------------------------------------------------------
  */
 
-$output_off_sched_update .= "<p>";
-$output_off_sched_update .= "<strong>Version 2.1.11.0 Updates</strong>";
-if ($row_pv['version'] == "2.1.10.0") $output_off_sched_update .= "<br><em><span class=\"text-primary\">Your previous version was ".$row_pv['version'].". Your installation's updates begin here.</span></em>";
-$output_off_sched_update .= "</p>";
-$output_off_sched_update .= "<ul>";
+if (!$setup_running) {
+	$output_off_sched_update .= "<p>";
+	$output_off_sched_update .= "<strong>Version 2.1.11.0 Updates</strong>";
+	if ($row_pv['version'] == "2.1.10.0") $output_off_sched_update .= "<br><em><span class=\"text-primary\">Your previous version was ".$row_pv['version'].". Your installation's updates begin here.</span></em>";
+	$output_off_sched_update .= "</p>";
+	$output_off_sched_update .= "<ul>";
+}
 
 $files = new FilesystemIterator(USER_DOCS);
 
@@ -1098,7 +1100,7 @@ if (SINGLE) {
 */
 
 $output_off_sched_update .= "<li>PDF file names in the user_docs directory converted to lowercase (including extension).</li>";
-$output_off_sched_update .= "</ul>";
+if (!$setup_running) $output_off_sched_update .= "</ul>";
 
 /**
  * ----------------------------------------------- 2.1.12 ----------------------------------------------
@@ -1107,11 +1109,13 @@ $output_off_sched_update .= "</ul>";
  * Saves the preference from current when archiving for correct display of archived scoresheets
  */
 
-$output_off_sched_update .= "<p>";
-$output_off_sched_update .= "<strong>Version 2.1.12.0 Updates</strong>";
-if ($row_pv['version'] == "2.1.11.0") $output_off_sched_update .= "<br><em><span class=\"text-primary\">Your previous version was ".$row_pv['version'].". Your installation's updates begin here.</span></em>";
-$output_off_sched_update .= "</p>";
-$output_off_sched_update .= "<ul>";
+if (!$setup_running) {
+	$output_off_sched_update .= "<p>";
+	$output_off_sched_update .= "<strong>Version 2.1.12.0 Updates</strong>";
+	if ($row_pv['version'] == "2.1.11.0") $output_off_sched_update .= "<br><em><span class=\"text-primary\">Your previous version was ".$row_pv['version'].". Your installation's updates begin here.</span></em>";
+	$output_off_sched_update .= "</p>";
+	$output_off_sched_update .= "<ul>";
+}
 
 if (!check_update("brewerJudgeCider", $prefix."brewer")) {
 
@@ -1149,7 +1153,7 @@ if (!check_update("archiveScoresheet", $prefix."archive")) {
 
 }
 
-$output_off_sched_update .= "</ul>";
+if (!$setup_running) $output_off_sched_update .= "</ul>";
 
 /**
  * ----------------------------------------------- 2.1.13 ----------------------------------------------
@@ -1158,11 +1162,13 @@ $output_off_sched_update .= "</ul>";
  * -----------------------------------------------------------------------------------------------------
  */
 
-$output_off_sched_update .= "<p>";
-$output_off_sched_update .= "<strong>Version 2.1.13.0 Updates</strong>";
-if ($row_pv['version'] == "2.1.12.0") $output_off_sched_update .= "<br><em><span class=\"text-primary\">Your previous version was ".$row_pv['version'].". Your installation's updates begin here.</span></em>";
-$output_off_sched_update .= "</p>";
-$output_off_sched_update .= "<ul>";
+if (!$setup_running) {
+	$output_off_sched_update .= "<p>";
+	$output_off_sched_update .= "<strong>Version 2.1.13.0 Updates</strong>";
+	if ($row_pv['version'] == "2.1.12.0") $output_off_sched_update .= "<br><em><span class=\"text-primary\">Your previous version was ".$row_pv['version'].". Your installation's updates begin here.</span></em>";
+	$output_off_sched_update .= "</p>";
+	$output_off_sched_update .= "<ul>";
+}
 
 $ba_styles_present = FALSE;
 if (check_new_style("08","077","American-Style Pilsener")) $ba_styles_present = TRUE;
@@ -1396,19 +1402,20 @@ $result = mysqli_query($connection,$updateSQL);
 $output_off_sched_update .= "<li>BJCP Provisional styles added.</li>";
 */
 
-$output_off_sched_update .= "</ul>";
+if (!$setup_running) $output_off_sched_update .= "</ul>";
 
 /**
  * ----------------------------------------------- 2.1.14 ----------------------------------------------
  * Pro-Am indication. Change brewerJudgeBOS to brewerProAm
  * -----------------------------------------------------------------------------------------------------
  */
-
-$output_off_sched_update .= "<p>";
-$output_off_sched_update .= "<strong>Version 2.1.14.0 Updates</strong>";
-if ($row_pv['version'] == "2.1.13.0") $output_off_sched_update .= "<br><em><span class=\"text-primary\">Your previous version was ".$row_pv['version'].". Your installation's updates begin here.</span></em>";
-$output_off_sched_update .= "</p>";
-$output_off_sched_update .= "<ul>";
+if (!$setup_running) {
+	$output_off_sched_update .= "<p>";
+	$output_off_sched_update .= "<strong>Version 2.1.14.0 Updates</strong>";
+	if ($row_pv['version'] == "2.1.13.0") $output_off_sched_update .= "<br><em><span class=\"text-primary\">Your previous version was ".$row_pv['version'].". Your installation's updates begin here.</span></em>";
+	$output_off_sched_update .= "</p>";
+	$output_off_sched_update .= "<ul>";
+}
 
 if (check_update("brewerJudgeBOS", $prefix."brewer")) {
 
@@ -1431,7 +1438,7 @@ if (isset($row_current_prefs['prefsStyleSet'])) {
 
 }
 
-$output_off_sched_update .= "</ul>";
+if (!$setup_running) $output_off_sched_update .= "</ul>";
 
 /**
  * ----------------------------------------------- 2.1.15 ----------------------------------------------
@@ -1440,11 +1447,13 @@ $output_off_sched_update .= "</ul>";
  * -----------------------------------------------------------------------------------------------------
  */
 
-$output_off_sched_update .= "<p>";
-$output_off_sched_update .= "<strong>Version 2.1.15.0 Updates</strong>";
-if ($row_pv['version'] == "2.1.14.0") $output_off_sched_update .= "<br><em><span class=\"text-primary\">Your previous version was ".$row_pv['version'].". Your installation's updates begin here.</span></em>";
-$output_off_sched_update .= "</p>";
-$output_off_sched_update .= "<ul>";
+if (!$setup_running) {
+	$output_off_sched_update .= "<p>";
+	$output_off_sched_update .= "<strong>Version 2.1.15.0 Updates</strong>";
+	if ($row_pv['version'] == "2.1.14.0") $output_off_sched_update .= "<br><em><span class=\"text-primary\">Your previous version was ".$row_pv['version'].". Your installation's updates begin here.</span></em>";
+	$output_off_sched_update .= "</p>";
+	$output_off_sched_update .= "<ul>";
+}
 
 if ((empty($row_current_prefs['prefsDisplaySpecial'])) || (!isset($row_current_prefs['prefsDisplaySpecial']))) {
 	
@@ -1462,7 +1471,7 @@ $db_conn->where ('brewStyleVersion', 'BJCP2015');
 if ($db_conn->update ($update_table, $data)) $output_off_sched_update .= "<li>British Strong Ale name corrected in styles table.</li>";
 else $output_off_sched_update .= "<li>British Strong Ale name NOT corrected in styles table. <strong class=\"text-warning\">Error: ".$db_conn->getLastError()."</strong></li>";
 
-$output_off_sched_update .= "</ul>";
+if (!$setup_running) $output_off_sched_update .= "</ul>";
 
 /**
  * ----------------------------------------------- 2.1.19 ----------------------------------------------
@@ -1470,11 +1479,13 @@ $output_off_sched_update .= "</ul>";
  * -----------------------------------------------------------------------------------------------------
  */
 
-$output_off_sched_update .= "<p>";
-$output_off_sched_update .= "<strong>Version 2.1.19.0 Updates</strong>";
-if (($row_pv['version'] == "2.1.15.0") || ($row_pv['version'] == "2.1.16.0") || ($row_pv['version'] == "2.1.17.0") || ($row_pv['version'] == "2.1.18.0")) $output_off_sched_update .= "<br><em><span class=\"text-primary\">Your previous version was ".$row_pv['version'].". Your installation's updates begin here.</span></em>";
-$output_off_sched_update .= "</p>";
-$output_off_sched_update .= "<ul>";
+if (!$setup_running) {
+	$output_off_sched_update .= "<p>";
+	$output_off_sched_update .= "<strong>Version 2.1.19.0 Updates</strong>";
+	if (($row_pv['version'] == "2.1.15.0") || ($row_pv['version'] == "2.1.16.0") || ($row_pv['version'] == "2.1.17.0") || ($row_pv['version'] == "2.1.18.0")) $output_off_sched_update .= "<br><em><span class=\"text-primary\">Your previous version was ".$row_pv['version'].". Your installation's updates begin here.</span></em>";
+	$output_off_sched_update .= "</p>";
+	$output_off_sched_update .= "<ul>";
+}
 
 $update_table = $prefix."styles";
 $data = array('brewStyle' => 'Specialty Fruit Beer');
@@ -1771,7 +1782,7 @@ if (!check_update("judgingLocType", $prefix."judging_locations")) {
 
 }
 
-$output_off_sched_update .= "</ul>";
+if (!$setup_running) $output_off_sched_update .= "</ul>";
 
 /**
  * ----------------------------------------------- 2.2.0 ---------------------------------------------
@@ -1781,11 +1792,13 @@ $output_off_sched_update .= "</ul>";
  * ---------------------------------------------------------------------------------------------------
  */
 
-$output_off_sched_update .= "<p>";
-$output_off_sched_update .= "<strong>Version 2.2.0.0 Updates</strong>";
-if ($row_pv['version'] == "2.1.19.0") $output_off_sched_update .= "<br><em><span class=\"text-primary\">Your previous version was ".$row_pv['version'].". Your installation's updates begin here.</span></em>";
-$output_off_sched_update .= "</p>";
-$output_off_sched_update .= "<ul>";
+if (!$setup_running) {
+	$output_off_sched_update .= "<p>";
+	$output_off_sched_update .= "<strong>Version 2.2.0.0 Updates</strong>";
+	if ($row_pv['version'] == "2.1.19.0") $output_off_sched_update .= "<br><em><span class=\"text-primary\">Your previous version was ".$row_pv['version'].". Your installation's updates begin here.</span></em>";
+	$output_off_sched_update .= "</p>";
+	$output_off_sched_update .= "<ul>";
+}
 
 if (!check_update("assignPlanning", $prefix."judging_assignments")) {
 	
@@ -2061,7 +2074,7 @@ if ($totalRows_archive > 0) {
 }
 
 $output_off_sched_update .= "<li>Cleaned up archive tables as necessary.</li>";
-$output_off_sched_update .= "</ul>";
+if (!$setup_running) $output_off_sched_update .= "</ul>";
 
 /**
  * ----------------------------------------------- 2.3.0 ---------------------------------------------
@@ -2070,11 +2083,13 @@ $output_off_sched_update .= "</ul>";
  * ---------------------------------------------------------------------------------------------------
  */
 
-$output_off_sched_update .= "<p>";
-$output_off_sched_update .= "<strong>Version 2.3.0.0 Updates</strong>";
-if ($row_pv['version'] == "2.2.0.0") $output_off_sched_update .= "<br><em><span class=\"text-primary\">Your previous version was ".$row_pv['version'].". Your installation's updates begin here.</span></em>";
-$output_off_sched_update .= "</p>";
-$output_off_sched_update .= "<ul>";
+if (!$setup_running) {
+	$output_off_sched_update .= "<p>";
+	$output_off_sched_update .= "<strong>Version 2.3.0.0 Updates</strong>";
+	if ($row_pv['version'] == "2.2.0.0") $output_off_sched_update .= "<br><em><span class=\"text-primary\">Your previous version was ".$row_pv['version'].". Your installation's updates begin here.</span></em>";
+	$output_off_sched_update .= "</p>";
+	$output_off_sched_update .= "<ul>";
+}
 
 if (!check_update("prefsEval", $prefix."preferences")) {
 
@@ -2099,7 +2114,7 @@ if (!check_update("prefsEval", $prefix."preferences")) {
 }
 
 $output_off_sched_update .= "<li>Added column to enable or disable Electronic Scoresheets functionality.</li>";
-$output_off_sched_update .= "</ul>";
+if (!$setup_running) $output_off_sched_update .= "</ul>";
 
 /**
  * ----------------------------------------------- 2.3.2 ---------------------------------------------
@@ -2107,11 +2122,13 @@ $output_off_sched_update .= "</ul>";
  * ---------------------------------------------------------------------------------------------------
  */
 
-$output_off_sched_update .= "<p>";
-$output_off_sched_update .= "<strong>Version 2.3.2.0 Updates</strong>";
-if (($row_pv['version'] == "2.3.0.0") || ($row_pv['version'] == "2.3.1.0")) $output_off_sched_update .= "<br><em><span class=\"text-primary\">Your previous version was ".$row_pv['version'].". Your installation's updates begin here.</span></em>";
-$output_off_sched_update .= "</p>";
-$output_off_sched_update .= "<ul>";
+if (!$setup_running) {
+	$output_off_sched_update .= "<p>";
+	$output_off_sched_update .= "<strong>Version 2.3.2.0 Updates</strong>";
+	if (($row_pv['version'] == "2.3.0.0") || ($row_pv['version'] == "2.3.1.0")) $output_off_sched_update .= "<br><em><span class=\"text-primary\">Your previous version was ".$row_pv['version'].". Your installation's updates begin here.</span></em>";
+	$output_off_sched_update .= "</p>";
+	$output_off_sched_update .= "<ul>";
+}
 
 $update_table = $prefix."styles";
 $data = array('brewStyleReqSpec' => 1);
@@ -2120,7 +2137,7 @@ $db_conn->where ('brewStyleNum', 'X3');
 $db_conn->where ('brewStyleVersion', 'BJCP2015');
 if ($db_conn->update ($update_table, $data)) $output_off_sched_update .= "<li>Added more information requirement for Italian Grape Ale (PRX3).</li>";
 else $output_off_sched_update .= "<li>More information requirement for Italian Grape Ale (PRX3) failed. <strong class=\"text-warning\">Error: ".$db_conn->getLastError()."</strong></li>"; 
-$output_off_sched_update .= "</ul>";
+if (!$setup_running) $output_off_sched_update .= "</ul>";
 
 /**
  * ----------------------------------------------- 2.4.0 ---------------------------------------------
@@ -2130,11 +2147,13 @@ $output_off_sched_update .= "</ul>";
  * ---------------------------------------------------------------------------------------------------
  */
 
-$output_off_sched_update .= "<p>";
-$output_off_sched_update .= "<strong>Version 2.4.0.0 Updates</strong>";
-if ($row_pv['version'] == "2.3.2.0") $output_off_sched_update .= "<br><em><span class=\"text-primary\">Your previous version was ".$row_pv['version'].". Your installation's updates begin here.</span></em>";
-$output_off_sched_update .= "</p>";
-$output_off_sched_update .= "<ul>";
+if (!$setup_running) {
+	$output_off_sched_update .= "<p>";
+	$output_off_sched_update .= "<strong>Version 2.4.0.0 Updates</strong>";
+	if ($row_pv['version'] == "2.3.2.0") $output_off_sched_update .= "<br><em><span class=\"text-primary\">Your previous version was ".$row_pv['version'].". Your installation's updates begin here.</span></em>";
+	$output_off_sched_update .= "</p>";
+	$output_off_sched_update .= "<ul>";
+}
 
 $bjcp_2021_styles_present = FALSE;
 if (check_new_style("28","D","Straight Sour Beer")) $bjcp_2021_styles_present = TRUE;
@@ -2200,7 +2219,7 @@ $db_conn->where ('brewStyle', 'English Golden Ale');
 if ($db_conn->update ($update_table, $data)) $output_off_sched_update .= "<li>Corrected British Golden Ale name in brewing table.</li>";
 else $output_off_sched_update .= "<li>Correction of British Golden Ale failed in brewing table. <strong class=\"text-warning\">Error: ".$db_conn->getLastError()."</strong></li>";
 
-$output_off_sched_update .= "</ul>";
+if (!$setup_running) $output_off_sched_update .= "</ul>";
 
 /**
  * ----------------------------------------------- 2.4.1 ---------------------------------------------
@@ -2209,10 +2228,12 @@ $output_off_sched_update .= "</ul>";
  * ---------------------------------------------------------------------------------------------------
  */
 
-$output_off_sched_update .= "<p>";
-$output_off_sched_update .= "<strong>Version 2.4.1.0 Updates</strong>";
-$output_off_sched_update .= "</p>";
-$output_off_sched_update .= "<ul>";
+if (!$setup_running) {
+	$output_off_sched_update .= "<p>";
+	$output_off_sched_update .= "<strong>Version 2.4.1.0 Updates</strong>";
+	$output_off_sched_update .= "</p>";
+	$output_off_sched_update .= "<ul>";
+}
 
 $query_security_resp = sprintf("SELECT id, userQuestionAnswer FROM `%s`",$prefix."users");
 $security_resp = mysqli_query($connection,$query_security_resp);
@@ -2312,7 +2333,7 @@ if (!check_update("update_date", $prefix."bcoem_sys")) {
 	else $output_off_sched_update .= "<li>The update_date column was NOT added to the bcoem_sys table. <strong class=\"text-warning\">Error: ".$db_conn->getLastError()."</strong></li>";
 }
 
-$output_off_sched_update .= "</ul>";
+if (!$setup_running) $output_off_sched_update .= "</ul>";
 
 /**
  * ----------------------------------------------------------------------------------------------------
@@ -2329,22 +2350,28 @@ $data = array(
 	'update_date' => time()
 );
 $db_conn->where ('id', 1);
-if ($db_conn->update ($update_table, $data)) $output_off_sched_update .= "<p><strong class=\"text-primary\">Update to latest version complete.</strong></p>";
-else $output_off_sched_update .= "<p><strong class=\"text-primary\">Update to latest version in system table failed.</strong> <strong class=\"text-danger\">Error: ".$db_conn->getLastError()."</strong></p>";
+if ($db_conn->update ($update_table, $data)) {
+	if (!$setup_running) $output_off_sched_update .= "<p><strong class=\"text-primary\">Update to latest version complete.</strong></p>";
+}
+else {
+	if (!$setup_running) $output_off_sched_update .= "<p><strong class=\"text-primary\">Update to latest version in system table failed.</strong> <strong class=\"text-danger\">Error: ".$db_conn->getLastError()."</strong></p>";
+}
 
 $output .= $output_off_sched_update;
 
 /**
  * ---------------------------------------------------------------------------------------------------
- * Insert $output_off_sched_update data into the bcoem_sys
- * table, update_summary column, at row 1.
+ * If updating, insert $output_off_sched_update data into the 
+ * bcoem_sys table, update_summary column, at row 1.
  * ---------------------------------------------------------------------------------------------------
  */
 
-$update_table = $prefix."bcoem_sys";
-$data = array('update_summary' => $output_off_sched_update);
-$db_conn->where ('id', 1);
-$db_conn->update ($update_table, $data);
+if (!$setup_running) {
+	$update_table = $prefix."bcoem_sys";
+	$data = array('update_summary' => $output_off_sched_update);
+	$db_conn->where ('id', 1);
+	$db_conn->update ($update_table, $data);
+}
 
 // Force reset of some session data
 unset($_SESSION['prefs'.$prefix_session]);
@@ -2353,6 +2380,9 @@ unset($_SESSION['prefsLang'.$prefix_session]);
 unset($_SESSION['prefsLanguageFolder'.$prefix_session]);
 unset($_SESSION['update_complete']);
 unset($_SESSION['update_summary']);
-$_SESSION['update_complete'] = 1;
-$_SESSION['update_summary'] = $output_off_sched_update;
+if (!$setup_running) {
+	$_SESSION['update_complete'] = 1;
+	$_SESSION['update_summary'] = $output_off_sched_update;
+}
+else $_SESSION['update_complete'] = 0;
 ?>

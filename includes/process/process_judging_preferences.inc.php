@@ -7,7 +7,7 @@
 use PHPMailer\PHPMailer\PHPMailer;
 require(LIB.'email.lib.php');
 
-if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1))  || ($section == "setup"))) {
+if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) && ((isset($_SESSION['userLevel'])) && ($_SESSION['userLevel'] <= 1))) || ($section == "setup"))) {
 
 	$errors = FALSE;
 	$error_output = array();
@@ -27,8 +27,6 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 
 		// Empty the prefs session variable
 		// Will trigger the session to reset the variables in common.db.php upon reload after redirect
-		session_name($prefix_session);
-		session_start();
 		unset($_SESSION['prefs'.$prefix_session]);
 
 		$update_table = $prefix."judging_preferences";
@@ -93,7 +91,6 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 			session_unset();
 			session_destroy();
 			session_write_close();
-			session_regenerate_id(true);
 
 			$update_table = $prefix."bcoem_sys";
 			$data = array('setup_last_step' => 8);

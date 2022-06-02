@@ -64,8 +64,6 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 			}
 
 			$insertGoTo = $base_url."setup.php?section=step2&go=".$username;
-			session_name($prefix_session);
-			session_start();
 			$_SESSION['loginUsername'] = $username;
 
 		}

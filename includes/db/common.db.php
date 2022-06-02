@@ -44,11 +44,16 @@ if ((!isset($_SESSION['contest_info_general'.$prefix_session])) || (empty($_SESS
 		$contest_info = mysqli_query($connection,$query_contest_info) or die (mysqli_error($connection));
 		$row_contest_info = mysqli_fetch_assoc($contest_info);
 
-	    foreach ($row_contest_info as $key => $value) {
-			if ($key != "id") $_SESSION[$key] = $value;
+		if ($row_contest_info) {
+
+			foreach ($row_contest_info as $key => $value) {
+				if ($key != "id") $_SESSION[$key] = $value;
+			}
+
+			$_SESSION['comp_id'] = $row_contest_info['id'];
+
 		}
 
-		$_SESSION['comp_id'] = $row_contest_info['id'];
 		$_SESSION['contest_info_general'.$prefix_session] = $prefix_session;
 	}
 }
@@ -63,8 +68,10 @@ if ((!isset($_SESSION['prefs'.$prefix_session])) || (empty($_SESSION['prefs'.$pr
 		$row_prefs = mysqli_fetch_assoc($prefs);
 		$totalRows_prefs = mysqli_num_rows($prefs);
 
-		foreach ($row_prefs as $key => $value) {
-			if ($key != "id") $_SESSION[$key] = $value;
+		if ($totalRows_prefs > 0) {
+			foreach ($row_prefs as $key => $value) {
+				if ($key != "id") $_SESSION[$key] = $value;
+			}	
 		}
 
 		if (SINGLE) $query_judging_prefs = sprintf("SELECT * FROM %s WHERE id='%s'", $prefix."judging_preferences",$_SESSION['comp_id']);
@@ -109,7 +116,7 @@ if ((!isset($_SESSION['prefs'.$prefix_session])) || (empty($_SESSION['prefs'.$pr
 		 * As of April 2018, BreweryDB is not issuing any further API keys
 		 */
 
-		if ($_SESSION['prefsStyleSet'] == "BA") {
+		if ((isset($_SESSION['prefsStyleSet'])) && ($_SESSION['prefsStyleSet'] == "BA")) {
 
 			include(INCLUDES.'ba_constants.inc.php');
 

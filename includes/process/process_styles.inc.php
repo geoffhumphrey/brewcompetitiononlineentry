@@ -4,7 +4,7 @@
  * Description: This module does all the heavy lifting for adding/editing info in the "styles" table
  */
 
-if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1)) || ($section == "setup"))) {
+if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) && ((isset($_SESSION['userLevel'])) && ($_SESSION['userLevel'] <= 1))) || ($section == "setup"))) {
 
 	$errors = FALSE;
 	$error_output = array();
@@ -34,7 +34,12 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 	}
 	
 	if (isset($_POST['brewStyleLink'])) $brewStyleLink = sterilize($_POST['brewStyleLink']);
-	if ((isset($_POST['brewStyleType'])) && ($_POST['brewStyleType'] == 2)) $brewStyleStrength = 0; else $brewStyleStrength = sterilize($_POST['brewStyleStrength']);
+
+	if ((isset($_POST['brewStyleType'])) && ($_POST['brewStyleType'] == 2)) $brewStyleStrength = 0; 
+	else {
+		$brewStyleStrength = 0;
+		if (isset($_POST['brewStyleStrength'])) $brewStyleStrength = sterilize($_POST['brewStyleStrength']);
+	}
 
 	if ($action == "update") {
 
