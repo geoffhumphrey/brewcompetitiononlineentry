@@ -106,7 +106,7 @@ if (isset($_POST['brewerJudgeNotes'])) {
 
 if ($brewerJudge == "Y") {
     
-    if (($_POST['brewerJudgeLocation'] != "") && (is_array($_POST['brewerJudgeLocation']))) {
+    if ((isset($_POST['brewerJudgeLocation'])) && (is_array($_POST['brewerJudgeLocation']))) {
         
         foreach ($_POST['brewerJudgeLocation'] as $value) {
             
@@ -136,7 +136,7 @@ if ($brewerJudge == "Y") {
     
     } // end if (($_POST['brewerJudgeLocation'] != "") && (is_array($_POST['brewerJudgeLocation'])))
 
-    elseif (($_POST['brewerJudgeLocation'] != "") && (!is_array($_POST['brewerJudgeLocation']))) {
+    elseif ((isset($_POST['brewerJudgeLocation'])) && (!is_array($_POST['brewerJudgeLocation']))) {
 
         $loc = explode("-",$_POST['brewerJudgeLocation']);
 
@@ -183,7 +183,7 @@ if ($brewerJudge == "N") {
 
 if ($brewerSteward == "Y") {
 
-    if (($_POST['brewerStewardLocation'] != "") && (is_array($_POST['brewerStewardLocation']))) {
+    if ((isset($_POST['brewerStewardLocation'])) && (is_array($_POST['brewerStewardLocation']))) {
 
         foreach ($_POST['brewerStewardLocation'] as $value) {
             
@@ -213,7 +213,7 @@ if ($brewerSteward == "Y") {
 
     } // end if (($_POST['brewerStewardLocation'] != "") && (is_array($_POST['brewerStewardLocation'])))
 
-    elseif (($_POST['brewerStewardLocation'] != "") && (!is_array($_POST['brewerStewardLocation']))) {
+    elseif ((isset($_POST['brewerStewardLocation'])) && (!is_array($_POST['brewerStewardLocation']))) {
 
         $loc = explode("-",$_POST['brewerStewardLocation']);
 

@@ -284,6 +284,8 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 
 	if ($action == "edit") {
 
+		$prefsStyleSet = sterilize($_POST['prefsStyleSet']);
+
 		$db_conn->where ('id', $id);
 		$result = $db_conn->update ($update_table, $data);
 		if (!$result) {
@@ -407,8 +409,6 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 
 		// Empty the prefs session variable
 		// Will trigger the session to reset the variables in common.db.php upon reload after redirect
-		session_name($prefix_session);
-		session_start();
 		unset($_SESSION['prefs'.$prefix_session]);
 
 		if ($style_alert) $updateGoTo .= $_POST['relocate']."&msg=37";
