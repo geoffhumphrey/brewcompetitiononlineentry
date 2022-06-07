@@ -1863,7 +1863,7 @@ if ($_SESSION['prefsStyleSet'] == "BJCP2021") {
 
 /**
  * ------------------------------------------------------------------------
- * Version 2.4.1 Additions
+ * Version 2.5.0 Additions
  * Via DeepL Translator English to Portuguese - and for that, I'm sorry. 
  * Again. :)
  * ------------------------------------------------------------------------

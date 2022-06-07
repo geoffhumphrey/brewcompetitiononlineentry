@@ -149,7 +149,7 @@ if ($setup_free_access == TRUE) {
 		/**
 		 * --------------------------------------
 		 * Brewing Table
-		 * Version 2.4.1, the 325 recipe-related
+		 * Version 2.5.0, the 325 recipe-related
 		 * columns were removed.
 		 * A new column is added to house the 
 		 * string name of an uploaded recipe
@@ -777,7 +777,7 @@ if ($setup_free_access == TRUE) {
 		 * BJCP 2008 styles were deprecated in 
 		 * version 2.4.0.
 		 * 
-		 * As of version 2.4.1, BJCP 2008 styles
+		 * As of version 2.5.0, BJCP 2008 styles
 		 * are not included for new or clean installs.
 		 * Those styles are available here, but
 		 * are commented out.

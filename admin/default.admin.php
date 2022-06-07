@@ -207,10 +207,22 @@ if ($totalRows_tables > 0) {
     </div>
     <?php } ?>
 </div>
-<?php if ($recently_updated) { ?>
+<?php 
+if ($recently_updated) { 
+    
+    $summary_button_style = "btn btn-warning btn-block";
+    $summary_button_icon = "fa fa-code";
+    $summary_button_errors = "";
+    if ($_SESSION['update_errors'] == 1) {
+        $summary_button_style = "btn btn-danger btn-block";
+        $summary_button_icon = "fa fa-exclamation-circle";
+        $summary_button_errors = " (Errors Present)";
+    }
+
+?>
 <div class="row bcoem-admin-element">
     <div class="col col-lg-6 col-md-12 col-sm-12 col-xs-12" style="padding-bottom: 5px;">
-        <button type="button" class="btn btn-warning btn-block" data-toggle="modal" data-target="#updateSummary"><?php echo $current_version_display; ?> Update Summary <span class="fa fa-code"></span></button>
+        <button type="button" class="<?php echo $summary_button_style; ?>" data-toggle="modal" data-target="#updateSummary"><?php echo $current_version_display; ?> Update Summary<?php echo $summary_button_errors; ?> <span class="<?php echo $summary_button_icon; ?>"></span></button>
     </div>
 </div>
 <?php } ?>
@@ -2072,13 +2084,26 @@ if ($totalRows_tables > 0) {
                     </div>
                     <div id="collapseHelp" class="panel-collapse collapse">
                         <div class="panel-body">
-                            <?php if (!$recently_updated) { ?>
+                            <?php 
+                            if (!$recently_updated) {
+
+                                $update_errors_msg = "";
+
+                                if (isset($_SESSION['update_summary'])) {
+                                    if (strpos($_SESSION['update_summary'], 'Warning: Errors') !== false) $update_errors_msg = " <span class=\"text-danger\"><i class=\"fa fa-exclamation-circle\"></i> Errors Present</span>";
+                                }                                
+                                
+                                else {
+                                   if (strpos($row_system['update_summary'], 'Warning: Errors') !== false) $update_errors_msg = " <span class=\"text-danger\"><i class=\"fa fa-exclamation-circle\"></i> Errors Present</span>"; 
+                                } 
+
+                            ?>
                             <div class="row">
                                 <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
                                     <strong>Version Updates</strong>
                                 </div>
                                 <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
-                                    <a href="#" data-toggle="modal" data-target="#updateSummary"><?php echo $current_version_display; ?> Update Summary</a>
+                                    <a href="#" data-toggle="modal" data-target="#updateSummary"><?php echo $current_version_display; ?> Update Summary<?php echo $update_errors_msg; ?></a>
                                 </div>
                             </div>
                             <?php } ?>

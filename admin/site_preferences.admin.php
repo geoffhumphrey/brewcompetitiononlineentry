@@ -32,7 +32,9 @@ foreach ($style_sets as $style_set) {
 
     // Generate exception list for each of the style sets in the 
     // array and show/hide the list as each are selected via jQuery.
-    $query_styles_all = sprintf("SELECT id,brewStyleGroup,brewStyleNum,brewStyle,brewStyleVersion,brewStyleOwn FROM %s WHERE brewStyleVersion='%s' AND brewStyleOwn != 'custom' ORDER BY brewStyleVersion,brewStyleGroup,brewStyleNum,brewStyle ASC ",$prefix."styles",$style_set['style_set_name']);
+    $query_styles_all = sprintf("SELECT id,brewStyleGroup,brewStyleNum,brewStyle,brewStyleVersion,brewStyleOwn FROM %s WHERE brewStyleVersion='%s' AND brewStyleOwn != 'custom'",$prefix."styles",$style_set['style_set_name']);
+    if ($style_set['style_set_name'] == "BA") $query_styles_all .= " ORDER BY brewStyleVersion,brewStyleGroup,brewStyle ASC";
+    else $query_styles_all .= " ORDER BY brewStyleVersion,brewStyleGroup,brewStyleNum,brewStyle ASC";
     $styles_all = mysqli_query($connection,$query_styles_all) or die (mysqli_error($connection));
     $row_styles_all = mysqli_fetch_assoc($styles_all);
 
@@ -42,8 +44,8 @@ foreach ($style_sets as $style_set) {
     do {
         
         $all_exceptions_USCLEx .= "<div class=\"checkbox\"><label><input name=\"prefsUSCLEx[]\" type=\"checkbox\" class=\"chkbox\" value=\"".$row_styles_all['id']."\">";
-        $all_exceptions_USCLEx .= style_number_const($row_styles_all['brewStyleGroup'],$row_styles_all['brewStyleNum'],$style_set['style_set_display_separator'],$method);
-        if ($style_set['style_set_name'] == "BA") $all_exceptions_USCLEx .= $row_styles_all['brewStyle']."</label></div>\n";
+        if ($style_set['style_set_name'] != "BA") $all_exceptions_USCLEx .= style_number_const($row_styles_all['brewStyleGroup'],$row_styles_all['brewStyleNum'],$style_set['style_set_display_separator'],$method);
+        if ($style_set['style_set_name'] == "BA") $all_exceptions_USCLEx .= $style_set['style_set_categories'][$row_styles_all['brewStyleGroup']]." - ".$row_styles_all['brewStyle']."</label></div>\n";
         else $all_exceptions_USCLEx .= " ".$row_styles_all['brewStyle']."</label></div>\n";
         
     } while($row_styles_all = mysqli_fetch_assoc($styles_all));
@@ -954,7 +956,7 @@ $(document).ready(function(){
                 <h4 class="modal-title" id="hideRecipeModalLabel">Hide Entry Recipe Section Info</h4>
             </div>
             <div class="modal-body">
-                <p>As of version 2.4.1, the entry recipe section has been removed from the add/edit entry functions. This preference will be removed altogether in a future release; until then, it will be "Yes."</p>
+                <p>As of version 2.5.0, the entry recipe section has been removed from the add/edit entry functions. This preference will be removed altogether in a future release; until then, it will be "Yes."</p>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>

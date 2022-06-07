@@ -243,7 +243,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 		*/
 
 		// The following are only enabled when preferences dictate that the recipe fields be shown.
-		// DEPRECATE for version 2.4.1
+		// DEPRECATE for version 2.5.0
 
 		/*
 		if ($_SESSION['prefsHideRecipe'] == "N") {

@@ -329,3 +329,12 @@ if (!$judge_limit) $alert_text_079 .= $alert_text_078;
         <p><span class="fa fa-lg fa-info-circle"></span> Your installation was recently updated to <strong>BCOE&amp;M <?php echo $current_version_display; ?></strong>. Administrators, log in and select the <?php echo $current_version_display; ?> Update Summary button on the Administration Dashboard for a full account of what changes were made.</p>
     </div>
 <?php } ?>
+
+<?php if (($recently_updated) && ($_SESSION['update_errors'] == 1) && (($section == "admin") && ($go == "default"))) { ?>
+    <div class="alert alert-danger alert-dismissible hidden-print fade in" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <p><span class="fa fa-lg fa-exclamation-circle"></span> <strong>Warning: Update Errors</strong></p>
+        <p>Your installation was recently updated to <strong>BCOE&amp;M <?php echo $current_version_display; ?></strong>, but there were errors during the update process which may result in unexpected behaviors.</p>
+        <p>Select the Update Summary button below for details.</p>
+    </div>
+<?php } ?>
