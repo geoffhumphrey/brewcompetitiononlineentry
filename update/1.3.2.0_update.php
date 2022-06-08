@@ -138,11 +138,11 @@ $totalRows_custom_styles = mysqli_num_rows($custom_styles);
 
 if ($totalRows_custom_styles > 0) {
 
-	$a = "";
+	$a = array();
 
 	do {
 
-		$a[] .= $row_custom_styles['id']."|".$row_custom_styles['brewStyleNum']."|".$row_custom_styles['brewStyle']."|".$row_custom_styles['brewStyleCategory']."|".$row_custom_styles['brewStyleOG']."|".$row_custom_styles['brewStyleOGMax']."|".$row_custom_styles['brewStyleFG']."|".$row_custom_styles['brewStyleFGMax']."|".$row_custom_styles['brewStyleABV']."|".$row_custom_styles['brewStyleABVMax']."|".$row_custom_styles['brewStyleIBU']."|".$row_custom_styles['brewStyleIBUMax']."|".$row_custom_styles['brewStyleSRM']."|".$row_custom_styles['brewStyleSRMMax']."|".$row_custom_styles['brewStyleType']."|".$row_custom_styles['brewStyleInfo']."|".$row_custom_styles['brewStyleLink']."|".$row_custom_styles['brewStyleGroup']."|".$row_custom_styles['brewStyleActive']."|".$row_custom_styles['brewStyleOwn'];
+		$a[] = $row_custom_styles['id']."|".$row_custom_styles['brewStyleNum']."|".$row_custom_styles['brewStyle']."|".$row_custom_styles['brewStyleCategory']."|".$row_custom_styles['brewStyleOG']."|".$row_custom_styles['brewStyleOGMax']."|".$row_custom_styles['brewStyleFG']."|".$row_custom_styles['brewStyleFGMax']."|".$row_custom_styles['brewStyleABV']."|".$row_custom_styles['brewStyleABVMax']."|".$row_custom_styles['brewStyleIBU']."|".$row_custom_styles['brewStyleIBUMax']."|".$row_custom_styles['brewStyleSRM']."|".$row_custom_styles['brewStyleSRMMax']."|".$row_custom_styles['brewStyleType']."|".$row_custom_styles['brewStyleInfo']."|".$row_custom_styles['brewStyleLink']."|".$row_custom_styles['brewStyleGroup']."|".$row_custom_styles['brewStyleActive']."|".$row_custom_styles['brewStyleOwn'];
 
 	} while ($row_custom_styles = mysqli_fetch_assoc($custom_styles));
 
@@ -451,7 +451,7 @@ if ($totalRows_custom_styles > 0) {
 
 		do {
 			$b = "";
-			$new_table_styles = "";
+			$new_table_styles = array();
 
 			//echo $row_custom_style_table['id']."<br>";
 			//echo $row_custom_style_table['tableStyles']."<br>";
@@ -462,8 +462,8 @@ if ($totalRows_custom_styles > 0) {
 			if (in_array($custom_style_data[0],$table_styles)) {
 
 				foreach ($table_styles as $b) {
-					if ($custom_style_data[0] == $b) $new_table_styles[] .= $row_custom_style_id['id'];
-					else $new_table_styles[] .= $b;
+					if ($custom_style_data[0] == $b) $new_table_styles[] = $row_custom_style_id['id'];
+					else $new_table_styles[] = $b;
 
 				}
 

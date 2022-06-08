@@ -288,11 +288,5 @@ $update_table = $prefix."styles";
 $data = array('brewStyleVersion' => 'BJCP2015');
 $db_conn->where ('brewStyleOwn', NULL, 'IS');
 $db_conn->orWhere ('brewStyleOwn', 'custom');
-$result = $db_conn->rawQuery($sql);
-
-/*
-$updateSQL = sprintf("UPDATE %s SET brewStyleVersion = 'BJCP2015' WHERE brewStyleOwn='custom' OR brewStyleOwn IS NULL",$prefix."styles");
-mysqli_select_db($connection,$database);
-$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
-*/
+$result = $db_conn->update ($update_table, $data);
 ?>

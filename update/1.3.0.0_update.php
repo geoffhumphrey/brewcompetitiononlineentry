@@ -737,6 +737,8 @@ if (!NHC) {
 	$archive_current = mysqli_query($connection,$query_archive_current) or die (mysqli_error($connection));
 	$row_archive_current = mysqli_fetch_assoc($archive_current);
 	$totalRows_archive_current = mysqli_num_rows($archive_current);
+
+	$a_current = array();
 	
 	if ($totalRows_archive_current > 0) {
 		

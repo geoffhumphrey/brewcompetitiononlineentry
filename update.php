@@ -1,8 +1,4 @@
 <?php
-// -----------------------------------------------------------
-// Version 2.3.2
-// -----------------------------------------------------------
-
 require_once ('paths.php');
 require_once (INCLUDES.'url_variables.inc.php');
 $section = "update";
@@ -12,6 +8,14 @@ require_once (LIB.'common.lib.php');
 require_once (LIB.'update.lib.php');
 require_once (INCLUDES.'db_tables.inc.php');
 require_once (LIB.'help.lib.php');
+
+// Check if bcoem_sys is there. If not, change.
+if (table_exists($prefix."system")) {
+	$query_sys = sprintf("RENAME TABLE `%s` TO `%s`",$prefix."system",$prefix."bcoem_sys");
+	$sys = mysqli_query($connection,$query_sys) or die (mysqli_error($connection));
+	$system_name_change = TRUE;
+}
+
 require_once (DB.'common.db.php');
 require_once (INCLUDES.'constants.inc.php');
 require_once (LANG.'language.lang.php');
@@ -19,15 +23,8 @@ require_once (INCLUDES.'headers.inc.php');
 require_once (INCLUDES.'scrubber.inc.php');
 if (HOSTED) require_once (LIB.'hosted.lib.php');
 
-// Get current version from DB
-if (table_exists($prefix."bcoem_sys")) {
-	$query_system = sprintf("SELECT version FROM %s", $prefix."bcoem_sys");
-	$system_db_table = $prefix."bcoem_sys";
-}
-else {
-	$query_system = sprintf("SELECT version FROM %s", $prefix."`system`");
-	$system_db_table = $prefix."`system`";
-}
+$query_system = sprintf("SELECT version FROM %s", $prefix."bcoem_sys");
+$system_db_table = $prefix."bcoem_sys";
 $system = mysqli_query($connection,$query_system) or die (mysqli_error($connection));
 $row_system = mysqli_fetch_assoc($system);
 $version = $row_system['version'];
@@ -310,6 +307,7 @@ else {
 	$update_body .= "<blockquote><pre>&#60;&#63;php &#36;version = \"1.2.0.4\"; &#63;&#62;</pre></blockquote>";
 	$update_body .= "<p>Save the file, upload to your installation's /includes/ directory, and run this script again.</p>";
 }
+
 ?>
 <!DOCTYPE html>
 <html lang="en">

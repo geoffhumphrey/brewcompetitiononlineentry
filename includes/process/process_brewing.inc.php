@@ -347,9 +347,9 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 
 		else {
 
-			$brewBrewerID = $_POST['brewBrewerID'];
-			$brewBrewerLastName = $_POST['brewBrewerLastName'];
-			$brewBrewerFirstName = $_POST['brewBrewerFirstName'];
+			$brewBrewerID = filter_var($_POST['brewBrewerID'],FILTER_SANITIZE_STRING);
+			$brewBrewerLastName = filter_var($_POST['brewBrewerLastName'],FILTER_SANITIZE_STRING);
+			$brewBrewerFirstName = filter_var($_POST['brewBrewerFirstName'],FILTER_SANITIZE_STRING);
 
 		}
 
@@ -386,8 +386,8 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 			'brewMead3' => $brewMead3,
 			'brewComments' => $brewComments,
 			'brewBrewerID' => $brewBrewerID,
-			'brewBrewerFirstName' => $brewerFirstName,
-			'brewBrewerLastName' => $brewerLastName,
+			'brewBrewerFirstName' => $brewBrewerFirstName,
+			'brewBrewerLastName' => $brewBrewerLastName,
 			'brewPaid' => $brewPaid,
 			'brewInfoOptional' => $brewInfoOptional,
 			'brewAdminNotes' => $brewAdminNotes,
@@ -643,8 +643,8 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 			'brewMead3' => $brewMead3,
 			'brewComments' => $brewComments,
 			'brewBrewerID' => $brewBrewerID,
-			'brewBrewerFirstName' => $brewerFirstName,
-			'brewBrewerLastName' => $brewerLastName,
+			'brewBrewerFirstName' => $brewBrewerFirstName,
+			'brewBrewerLastName' => $brewBrewerLastName,
 			'brewPaid' => $brewPaid,
 			'brewInfoOptional' => $brewInfoOptional,
 			'brewAdminNotes' => $brewAdminNotes,

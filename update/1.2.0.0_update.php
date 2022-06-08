@@ -460,6 +460,8 @@ if (!check_update("brewerDiscount", $prefix."brewer")) {
 	$archive_1200 = mysqli_query($connection,$query_archive_1200) or die (mysqli_error($connection));
 	$row_archive_1200 = mysqli_fetch_assoc($archive_1200);
 	$totalRows_archive_1200 = mysqli_num_rows($archive_1200);
+
+	$a_1200 = array();
 	
 	if ($totalRows_archive_1200 > 0) {
 		do { $a_1200[] = $row_archive_1200['archiveSuffix']; } while ($row_archive_1200 = mysqli_fetch_assoc($archive_1200));
