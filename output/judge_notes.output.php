@@ -35,12 +35,16 @@ if ($go == "org_notes") {
 </tr>
 </thead>
 <tbody>
-<?php do { ?>
+<?php 
+do { 
+	if (!empty($row_brewer['brewerJudgeNotes'])) {
+?>
 <tr>
 	<td><?php echo $row_brewer['brewerLastName'].", ".$row_brewer['brewerFirstName']; ?></td>
 	<td><?php echo $row_brewer['brewerJudgeNotes']; ?></td>
 </tr>
-<?php } while ($row_brewer = mysqli_fetch_assoc($brewer)); ?>
+<?php }
+} while ($row_brewer = mysqli_fetch_assoc($brewer)); ?>
 </tbody>
 </table>
 <?php } else { ?>

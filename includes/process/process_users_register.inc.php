@@ -8,7 +8,7 @@
 use PHPMailer\PHPMailer\PHPMailer;
 require(LIB.'email.lib.php');
 
-if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) && (isset($_SESSION['userLevel']))) || ($section == "setup"))) {
+if (isset($_SERVER['HTTP_REFERER'])) {
 
 	require(CLASSES.'phpass/PasswordHash.php');
 

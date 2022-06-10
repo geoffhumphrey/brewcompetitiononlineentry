@@ -29,64 +29,101 @@ $alert_text_075 = sprintf("<strong>%s</strong> %s",$alert_text_072,$alert_text_0
 if (!$steward_limit) $alert_text_075 .= $alert_text_074;
 $alert_text_079 = sprintf("<strong>%s</strong> %s ",$alert_text_076,$alert_text_077);
 if (!$judge_limit) $alert_text_079 .= $alert_text_078;
-?>
 
-<?php if ($msg != "default") { ?>
+if ($msg != "default") { 
+
+  /**
+   * Four types of alerts: success, info, warning, danger
+   * Majority of $msg numbers for alerts are associated
+   * with successful actions, thus no array after defining
+   * the other three.
+   */
+
+  $info_msg_alerts = array(11,12,99);
+  $warning_msg_alerts = array(6,37,10);
+  $danger_msg_alerts = array(3,13,15,18,19,24,27,30,755);
+
+  if (in_array($msg,$info_msg_alerts)) {
+    $alert_type = "alert-info";
+    $alert_icon = "fa-info-circle";
+  }
+
+  elseif (in_array($msg,$warning_msg_alerts)) {
+    $alert_type = "alert-warning";
+    $alert_icon = "fa-exclamation-triangle";
+  }
+
+  elseif (in_array($msg,$danger_msg_alerts)) {
+    $alert_type = "alert-danger";
+    $alert_icon = "fa-exclamation-circle";
+  }
+
+  else {
+    $alert_type = "alert-success";
+    $alert_icon = "fa-check-circle";
+  }
+
+  if (!empty($output)) {
+
+?>
     <!-- User action alerts -->
-    <div class="alert alert-danger alert-dismissible hidden-print fade in" role="alert">
+    <div class="alert <?php echo $alert_type; ?> alert-dismissible hidden-print fade in" role="alert">
       <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-      <span class="fa fa-lg fa-exclamation-circle"></span> <?php echo $output; ?>
+      <span class="fa fa-lg <?php echo $alert_icon; ?>"></span> <?php echo $output; ?>
     </div>
     <?php echo $output_extend; ?>
-<?php } ?>
+<?php } 
+  }
+?>
 
 <?php if (($logged_in) && ($_SESSION['userLevel'] <= 1) && ($section == "admin")) {
   $bjcp_2008 = FALSE;
 ?>
   <!-- Admin Alerts -->
   <?php if ($go == "make_admin") { ?>
-    <div class="alert alert-danger alert-dismissible hidden-print fade in" role="alert">
+      <div class="alert alert-danger alert-dismissible hidden-print fade in" role="alert">
           <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
           <span class="fa fa-lg fa-exclamation-circle"></span> <strong><?php echo $alert_text_000; ?></strong>
-        </div>
+      </div>
   <?php } ?>
 
   <?php if ($purge == "cleanup") { ?>
       <!-- Data cleanup complete -->
-      <div class="alert alert-danger alert-dismissible hidden-print fade in" role="alert">
+      <div class="alert alert-success alert-dismissible hidden-print fade in" role="alert">
           <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-          <span class="fa fa-lg fa-exclamation-circle"></span> <?php echo $alert_text_001; ?>
-        </div>
-    <?php } ?>
+          <span class="fa fa-lg fa-check-circle"></span> <?php echo $alert_text_001; ?>
+      </div>
+  <?php } ?>
 
     <?php if (($setup_free_access == TRUE) && ($action != "print")) { ?>
       <!-- Setup free access true -->
-      <div class="alert alert-danger alert-dismissible hidden-print fade in" role="alert">
+      <div class="alert alert-warning alert-dismissible hidden-print fade in" role="alert">
           <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-          <span class="fa fa-lg fa-exclamation-circle"></span> <strong><?php echo $alert_text_002; ?></strong>
-        </div>
+          <span class="fa fa-lg fa-exclamation-triangle"></span> <strong><?php echo $alert_text_002; ?></strong>
+      </div>
     <?php } ?>
 
     <?php if (($totalRows_dropoff == "0") && ($go == "default")) { ?>
-      <div class="alert alert-danger alert-dismissible hidden-print fade in" role="alert">
+      <!-- No Drop-off Dates -->
+      <div class="alert alert-warning alert-dismissible hidden-print fade in" role="alert">
           <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-          <span class="fa fa-lg fa-exclamation-circle"></span> <?php echo $alert_text_007; ?>
-        </div>
+          <span class="fa fa-lg fa-exclamation-triangle"></span> <?php echo $alert_text_007; ?>
+      </div>
     <?php } ?>
 
     <?php if (($totalRows_judging == "0") && ($go == "default")) { ?>
       <!-- No judging dates -->
-      <div class="alert alert-danger alert-dismissible hidden-print fade in" role="alert">
+      <div class="alert alert-warning alert-dismissible hidden-print fade in" role="alert">
           <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-          <span class="fa fa-lg fa-exclamation-circle"></span> <?php echo $alert_text_010; ?>
-        </div>
+          <span class="fa fa-lg fa-exclamation-triangle"></span> <?php echo $alert_text_010; ?>
+      </div>
     <?php } ?>
 
     <?php if (($totalRows_contact == "0") && ($go == "default")) { ?>
       <!-- No competition dontacts -->
-      <div class="alert alert-danger alert-dismissible hidden-print fade in" role="alert">
+      <div class="alert alert-warning alert-dismissible hidden-print fade in" role="alert">
           <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-          <span class="fa fa-lg fa-exclamation-circle"></span> <?php echo $alert_text_013; ?>
+          <span class="fa fa-lg fa-exclamation-triangle"></span> <?php echo $alert_text_013; ?>
         </div>
     <?php } ?>
     <?php if ($bjcp_2008) { ?>
@@ -98,9 +135,9 @@ if (!$judge_limit) $alert_text_079 .= $alert_text_078;
     <?php } ?>
     <?php if ($purge == "purge") { ?>
       <!-- Purge completed -->
-      <div class="alert alert-danger alert-dismissible hidden-print fade in" role="alert">
+      <div class="alert alert-success alert-dismissible hidden-print fade in" role="alert">
           <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-          <span class="fa fa-lg fa-exclamation-circle"></span> <strong><?php echo $alert_text_019; ?></strong>
+          <span class="fa fa-lg fa-check-circle"></span> <strong><?php echo $alert_text_019; ?></strong>
         </div>
     <?php } ?>
 <?php } // end if (($logged_in) && ($_SESSION['userLevel'] <= 1) && ($section == "admin") && ($go == "default")) ?>
@@ -114,10 +151,10 @@ if (!$judge_limit) $alert_text_079 .= $alert_text_078;
         </div>
     <?php } ?>
   <?php  if ((($section == "step7") || (($section == "admin") && ($go == "dropoff"))) && ($msg == "11")) { ?>
-      <!-- Setup Add More Dropoffs? -->
-    <div class="alert alert-danger alert-dismissible hidden-print fade in" role="alert">
+    <!-- Setup Add More Dropoffs? -->
+    <div class="alert alert-info alert-dismissible hidden-print fade in" role="alert">
           <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-      <span class="fa fa-lg fa-exclamation-circle"></span> <?php echo $alert_text_026; ?>
+      <span class="fa fa-lg fa-info-circle"></span> <?php echo $alert_text_026; ?>
     </div>
   <?php } ?>
 <?php } // end if ($section == "admin") ?>
@@ -138,8 +175,8 @@ if (!$judge_limit) $alert_text_079 .= $alert_text_078;
       }
     </style>
     <section id="alert-update-button-enabled" class="container-fluid sticky-alert">
-    <div class="alert alert-danger alert-dismissible hidden-print fade in" role="alert">
-      <span class="fa fa-lg fa-exclamation-circle"></span> <strong>Due to an error saving the previous data input, the Update button has been enabled.</strong> Any unsaved input will be saved if you select the Update button now. Otherwise, try again.
+    <div class="alert alert-warning alert-dismissible hidden-print fade in" role="alert">
+      <span class="fa fa-lg fa-exclamation-triangle"></span> <strong>Due to an error saving the previous data input, the Update button has been enabled.</strong> Any unsaved input will be saved if you select the Update button now. Otherwise, try again.
     </div>
     </section>
     <?php } ?>
@@ -148,7 +185,8 @@ if (!$judge_limit) $alert_text_079 .= $alert_text_078;
 
   <?php if ($section == "brew") { ?>
 
-    <?php if (($registration_open != 1) && ($entry_window_open != 1) && ($_SESSION['userLevel'] > 1)) {
+    <?php 
+    if (($registration_open != 1) && ($entry_window_open != 1) && ($_SESSION['userLevel'] > 1)) {
       if ($entry_window_open == 0) $alert_message_closed = $alert_text_027;
       if ($entry_window_open == 2) $alert_message_closed = $alert_text_028;
     ?>
@@ -161,41 +199,41 @@ if (!$judge_limit) $alert_text_079 .= $alert_text_078;
 
         <?php if (($entry_window_open == 1) && ($_SESSION['userLevel'] > 1) && (($comp_entry_limit) || ($comp_paid_entry_limit)) && ($action == "add") && ($go != "admin")) { ?>
         <!-- Open but competition entry limit reached - only allow editing -->
-        <div class="alert alert-danger alert-dismissible hidden-print fade in" role="alert">
+        <div class="alert alert-warning alert-dismissible hidden-print fade in" role="alert">
           <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-          <span class="fa fa-lg fa-exclamation-circle"></span> <strong><?php echo $alert_text_029; ?></strong> <?php echo $alert_text_030; ?>
+          <span class="fa fa-lg fa-exclamation-triangle"></span> <strong><?php echo $alert_text_029; ?></strong> <?php echo $alert_text_030; ?>
         </div>
         <?php } ?>
 
         <?php if (($entry_window_open == 1) && ($_SESSION['userLevel'] > 1) && ($comp_entry_limit) && ($comp_paid_entry_limit) && ($remaining_entries == 0) && ($action == "add") && ($go != "admin")) { ?>
         <!-- Open but personal entry limit reached - only allow editing -->
-        <div class="alert alert-danger alert-dismissible hidden-print fade in" role="alert">
+        <div class="alert alert-warning alert-dismissible hidden-print fade in" role="alert">
           <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-          <span class="fa fa-lg fa-exclamation-circle"></span> <strong><?php echo $alert_text_029; ?></strong> <?php echo $alert_text_031; ?>
+          <span class="fa fa-lg fa-exclamation-triangle"></span> <strong><?php echo $alert_text_029; ?></strong> <?php echo $alert_text_031; ?>
         </div>
         <?php } ?>
 
         <?php if (($registration_open == 1) && ($entry_window_open != 1) && ($_SESSION['userLevel'] > 1) && ($action == "add")) { ?>
         <!-- Registration open, but entry window not -->
-        <div class="alert alert-success alert-dismissible hidden-print fade in" role="alert">
+        <div class="alert alert-warning alert-dismissible hidden-print fade in" role="alert">
           <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-          <span class="fa fa-lg fa-check-circle"></span> <strong><?php echo $alert_text_029; ?></strong> <?php echo $alert_text_032; ?>
+          <span class="fa fa-lg fa-exclamation-triangle"></span> <strong><?php echo $alert_text_029; ?></strong> <?php echo $alert_text_032; ?>
         </div>
         <?php } ?>
 
         <?php if ((NHC) && ($_SESSION['userLevel'] > 1) && ($registration_open != 1) && ($prefix != "final_")) { ?>
         <!-- Special for NHC - close adding or editing during the entry window as well -->
-        <div class="alert alert-success alert-dismissible hidden-print fade in" role="alert">
+        <div class="alert alert-warning alert-dismissible hidden-print fade in" role="alert">
           <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-          <span class="fa fa-lg fa-check-circle"></span> <strong>Adding/editing entries is not available.</strong> NHC registration has closed.
+          <span class="fa fa-lg fa-exclamation-triangle"></span> <strong>Adding/editing entries is not available.</strong> NHC registration has closed.
         </div>
         <?php } ?>
 
         <?php if ((NHC) && ($_SESSION['userLevel'] > 1) && ($registration_open != 1) && ($entry_window_open != 1) && ($prefix == "final_")) { ?>
         <!-- Special for NHC - close adding or editing during the entry window as well -->
-        <div class="alert alert-success alert-dismissible hidden-print fade in" role="alert">
+        <div class="alert alert-warning alert-dismissible hidden-print fade in" role="alert">
           <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-          <span class="fa fa-lg fa-check-circle"></span> <strong>Adding/editing entries is not available.</strong> NHC registration has closed.
+          <span class="fa fa-lg fa-exclamation-triangle"></span> <strong>Adding/editing entries is not available.</strong> NHC registration has closed.
         </div>
         <?php } ?>
 
@@ -206,17 +244,17 @@ if (!$judge_limit) $alert_text_079 .= $alert_text_078;
     
   <?php if (($registration_open == 0) && (!$ua) && ($section == "default") && ($msg == "default")) { ?>
     <!-- Account registration not open yet -->
-    <div class="alert alert-success alert-dismissible hidden-print fade in" role="alert">
+    <div class="alert alert-info alert-dismissible hidden-print fade in" role="alert">
       <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-      <span class="fa fa-lg fa-check-circle"></span> <?php echo $alert_text_035; ?>
+      <span class="fa fa-lg fa-info-circle"></span> <?php echo $alert_text_035; ?>
     </div>
   <?php } ?>
 
   <?php if (($entry_window_open == 0) && (!$ua) && ($section == "default") && ($msg == "default")) { ?>
     <!-- Entry registration not open yet -->
-    <div class="alert alert-success alert-dismissible hidden-print fade in" role="alert">
+    <div class="alert alert-info alert-dismissible hidden-print fade in" role="alert">
       <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-      <span class="fa fa-lg fa-check-circle"></span> <?php echo $alert_text_038; ?>
+      <span class="fa fa-lg fa-info-circle"></span> <?php echo $alert_text_038; ?>
     </div>
   <?php } ?>
 
@@ -230,9 +268,9 @@ if (!$judge_limit) $alert_text_079 .= $alert_text_078;
 
   <?php if (($registration_open == 1) && ($entry_window_open == 1) && (!$ua) && ($section == "default") && ($comp_entry_limit) && ($msg == "default")) { ?>
     <!-- Account and entry registration open -->
-    <div class="alert alert-success alert-dismissible hidden-print fade in" role="alert">
+    <div class="alert alert-info alert-dismissible hidden-print fade in" role="alert">
       <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-      <span class="fa fa-lg fa-check-circle"></span> <?php echo $alert_text_045; ?>
+      <span class="fa fa-lg fa-info-circle"></span> <?php echo $alert_text_045; ?>
     </div>
   <?php } ?>
 
@@ -240,7 +278,7 @@ if (!$judge_limit) $alert_text_079 .= $alert_text_078;
     <!-- Entry limit nearly reached -->
     <div class="alert alert-warning alert-dismissible hidden-print fade in" role="alert">
       <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-      <span class="fa fa-lg fa-info-circle"></span> <?php echo $alert_text_048; ?>
+      <span class="fa fa-lg fa-exclamation-triangle"></span> <?php echo $alert_text_048; ?>
     </div>
   <?php } ?>
 
@@ -308,25 +346,27 @@ if (!$judge_limit) $alert_text_079 .= $alert_text_078;
       <span class="fa fa-lg fa-exclamation-circle"></span> <?php echo $alert_text_075; ?>
     </div>
   <?php } ?>
-        <?php if (($steward_limit) && ($section == "register")) { ?>
-            <!-- Limit of stewards reached -->
-            <div class="alert alert-danger alert-dismissible hidden-print fade in" role="alert">
-              <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-              <span class="fa fa-lg fa-exclamation-circle"></span> <?php echo $alert_text_079; ?>
-            </div>
-        <?php } ?>
+
+  <?php if (($steward_limit) && ($section == "register")) { ?>
+      <!-- Limit of stewards reached -->
+      <div class="alert alert-danger alert-dismissible hidden-print fade in" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <span class="fa fa-lg fa-exclamation-circle"></span> <?php echo $alert_text_079; ?>
+      </div>
+  <?php } ?>
+
 <?php } // end if (!$logged_in) ?>
 
 <?php if ($go == "default") { ?>
-    <div id="no-js-alert" class="alert alert-danger lead">
+    <div id="no-js-alert" class="alert alert-danger">
         <i class="fa fa-lg fa-exclamation-circle"></i> <strong><?php echo $alert_text_087; ?></strong>
     </div>
 <?php } ?>
 
-<?php if (($recently_updated) && ($section == "default")) { ?>
+<?php if (($recently_updated) && (($section == "admin") && ($go == "default"))) { ?>
     <div class="alert alert-info alert-dismissible hidden-print fade in" role="alert">
         <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <p><span class="fa fa-lg fa-info-circle"></span> Your installation was recently updated to <strong>BCOE&amp;M <?php echo $current_version_display; ?></strong>. Administrators, log in and select the <?php echo $current_version_display; ?> Update Summary button on the Administration Dashboard for a full account of what changes were made.</p>
+        <p><span class="fa fa-lg fa-info-circle"></span> Your installation was recently updated to <strong>BCOE&amp;M <?php echo $current_version_display; ?></strong>. Select the <?php echo $current_version_display; ?> Update Summary button below for a full account of what changes were made.</p>
     </div>
 <?php } ?>
 
@@ -335,6 +375,6 @@ if (!$judge_limit) $alert_text_079 .= $alert_text_078;
         <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
         <p><span class="fa fa-lg fa-exclamation-circle"></span> <strong>Warning: Update Errors</strong></p>
         <p>Your installation was recently updated to <strong>BCOE&amp;M <?php echo $current_version_display; ?></strong>, but there were errors during the update process which may result in unexpected behaviors.</p>
-        <p>Select the Update Summary button below for details.</p>
+        <p>Select the <?php echo $current_version_display; ?> Update Summary button below for details. Errors are in <span class="text-danger">red text</span>.</p>
     </div>
 <?php } ?>

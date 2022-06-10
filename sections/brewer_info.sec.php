@@ -198,7 +198,7 @@ $user_edit_links .= "</div><!-- ./button group -->";
 
 // Build User Info
 $name .= $_SESSION['brewerFirstName']." ".$_SESSION['brewerLastName'];
-$email .= $_SESSION['brewerEmail'];
+$email .= $_SESSION['user_name'];
 if (!empty($_SESSION['brewerAddress'])) $address = $_SESSION['brewerAddress']; else $address = $label_none_entered;
 if (!empty($_SESSION['brewerCity'])) $city = $_SESSION['brewerCity']; else $city = $label_none_entered;
 if (!empty($_SESSION['brewerState'])) $state = $_SESSION['brewerState']; else $state = $label_none_entered;

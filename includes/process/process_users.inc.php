@@ -4,7 +4,7 @@
  * Description: This module does all the heavy lifting for adding/editing users the DB
  */
 
-if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) && (isset($_SESSION['userLevel']))) || ($section == "setup"))) {
+if (isset($_SERVER['HTTP_REFERER'])) {
 
 	$errors = FALSE;
 	$error_output = array();
