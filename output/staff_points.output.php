@@ -69,12 +69,13 @@ do {
 $days = number_format(total_days(),1);
 $sessions = number_format(total_sessions(),1);
 
+$output_organizer = "";
+$output_judges = "";
+$output_stewards = "";
+$output_staff = "";
+$organ_bjcp_id = "999999999999";
+
 if ($view == "default") {
-	$output_organizer = "";
-	$output_judges = "";
-	$output_stewards = "";
-	$output_staff = "";
-	$organ_bjcp_id = "";
 
 	if ($totalRows_organizer > 0) {
 		$organ_bjcp_id = strtoupper(strtr($row_org['brewerJudgeID'],$bjcp_num_replace));

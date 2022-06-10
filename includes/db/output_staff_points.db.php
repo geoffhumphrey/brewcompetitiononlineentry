@@ -19,10 +19,12 @@ $organizer = mysqli_query($connection,$query_organizer) or die (mysqli_error($co
 $row_organizer = mysqli_fetch_assoc($organizer);
 $totalRows_organizer = mysqli_num_rows($organizer);
 
-$query_org = sprintf("SELECT brewerLastName,brewerFirstName,brewerJudgeID FROM %s WHERE uid='%s'",$prefix."brewer",$row_organizer['uid']);
-$org = mysqli_query($connection,$query_org) or die (mysqli_error($connection));
-$row_org = mysqli_fetch_assoc($org);
-$totalRows_org = mysqli_num_rows($org);
+if ($totalRows_organizer > 0) {
+	$query_org = sprintf("SELECT brewerLastName,brewerFirstName,brewerJudgeID FROM %s WHERE uid='%s'",$prefix."brewer",$row_organizer['uid']);
+	$org = mysqli_query($connection,$query_org) or die (mysqli_error($connection));
+	$row_org = mysqli_fetch_assoc($org);
+	$totalRows_org = mysqli_num_rows($org);
+}
 
 // Judges
 $query_judges = sprintf("SELECT a.uid, b.uid, b.brewerLastName, b.brewerFirstName, b.brewerJudgeID FROM %s a, %s b WHERE a.staff_judge='1' AND a.uid = b.uid ORDER BY b.brewerLastName ASC",$prefix."staff",$prefix."brewer");

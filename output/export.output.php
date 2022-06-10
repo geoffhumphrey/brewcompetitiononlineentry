@@ -44,11 +44,15 @@ else {
     $row_archive_prefs = mysqli_fetch_assoc($archive_prefs);
     $totalRows_archive_prefs = mysqli_num_rows($archive_prefs);
 
-    $winner_method = $row_archive_prefs['archiveWinnerMethod'];
-    $style_set = $row_archive_prefs['archiveStyleSet'];
-    $judging_scores_db_table = $prefix."judging_scores_".$filter;
-    $brewing_db_table = $prefix."brewing_".$filter;
-    $brewer_db_table = $prefix."brewer_".$filter;
+    if ($totalRows_archive_prefs > 0) {
+
+        $winner_method = $row_archive_prefs['archiveWinnerMethod'];
+        $style_set = $row_archive_prefs['archiveStyleSet'];
+        $judging_scores_db_table = $prefix."judging_scores_".$filter;
+        $brewing_db_table = $prefix."brewing_".$filter;
+        $brewer_db_table = $prefix."brewer_".$filter;
+
+    }
 
 }
 
@@ -398,6 +402,13 @@ if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($en
 
                             if (!empty($brewer_info)) {
 
+                                $scoreEntry = "";
+                                $scorePlace = "";
+                                if ($row_scores) {
+                                    $scoreEntry = sprintf("%02s",$row_scores['scoreEntry']);
+                                    $scorePlace = $row_scores['scorePlace'];
+                                }
+
                                 if ($_SESSION['prefsProEdition'] == 1) $a[] = array(
                                     $brewerFirstName,
                                     $brewerLastName,
@@ -424,8 +435,8 @@ if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($en
                                     html_entity_decode($location[2]),
                                     $row_flight['flightNumber'],
                                     $row_flight['flightRound'],
-                                    sprintf("%02s",$row_scores['scoreEntry']),
-                                    $row_scores['scorePlace'],
+                                    $scoreEntry,
+                                    $scorePlace,
                                     $bos_place
                                 );
 
@@ -454,8 +465,8 @@ if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($en
                                     html_entity_decode($location[2]),
                                     $row_flight['flightNumber'],
                                     $row_flight['flightRound'],
-                                    sprintf("%02s",$row_scores['scoreEntry']),
-                                    $row_scores['scorePlace'],
+                                    $scoreEntry,
+                                    $scorePlace,
                                     $bos_place
                                 );
                             }
@@ -1881,12 +1892,13 @@ if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($en
             $st = array();
             $o = array();
             $dates = array();
-            $organ_bjcp_id = strtoupper(strtr($row_org['brewerJudgeID'],$bjcp_num_replace));
-            do { $j[] = $row_judges['uid']; } while ($row_judges = mysqli_fetch_assoc($judges));
-            do { $s[] = $row_stewards['uid']; } while ($row_stewards = mysqli_fetch_assoc($stewards));
-            do { $st[] = $row_staff['uid']; } while ($row_staff = mysqli_fetch_assoc($staff));
-            do { $o[] = $row_organizer['uid']; } while ($row_organizer = mysqli_fetch_assoc($organizer));
-            do { $a[] = $row_judging['id']; $dates[] = $row_judging['judgingDate']; } while ($row_judging = mysqli_fetch_assoc($judging));
+            if ($totalRows_organizer > 0) $organ_bjcp_id = strtoupper(strtr($row_org['brewerJudgeID'],$bjcp_num_replace));
+            else $organ_bjcp_id = "999999999999";
+            if ($row_judges) { do { $j[] = $row_judges['uid']; } while ($row_judges = mysqli_fetch_assoc($judges)); }
+            if ($row_stewards) { do { $s[] = $row_stewards['uid']; } while ($row_stewards = mysqli_fetch_assoc($stewards)); }
+            if ($row_staff) { do { $st[] = $row_staff['uid']; } while ($row_staff = mysqli_fetch_assoc($staff)); }
+            if ($row_organizer) { do { $o[] = $row_organizer['uid']; } while ($row_organizer = mysqli_fetch_assoc($organizer)); }
+            if ($row_judging) { do { $a[] = $row_judging['id']; $dates[] = $row_judging['judgingDate']; } while ($row_judging = mysqli_fetch_assoc($judging)); }
 
             /**
              * DEBUG
@@ -2664,10 +2676,10 @@ if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($en
                 } // end $all_rules_applied
 
                 else {
-                    $output .= "The report cannot be generated for the following reasons:\n";
-                    if ($rule_org) $output .= "\t- No organizer has been designated.\n";
-                    if ($rule_sessions) $output .= "\t- Judging sessions exceed the maximum of three (3) per day.\n";
-                    if ($rule_comp_id) $output .= "\t- The BCJP Competition ID is missing.";
+                    $output .= "The report cannot be generated for the following reasons:";
+                    if ($rule_org) $output .= "\n- No organizer has been designated. The BJCP will not accept an XML report without a named Organizer. Designate the Organizer by going to Admin > Entries and Participants > Assign Staff. Choose the Organizer's name from the drop-down list near the top of the page. If the Organizer's name is not present in the drop-down, an account will need to be created for them.";
+                    if ($rule_sessions) $output .= "\n- Judging sessions exceed the maximum of three (3) per day.";
+                    if ($rule_comp_id) $output .= "\n- The BCJP Competition ID is missing. A Competition ID is required for submittal to the BJCP and can be found in the registration confirmation email sent by the BJCP. Add the Competition ID via Admin > Competition Preparation > Edit Competition Info.";
                 }
 
                 header('Content-Type: application/force-download');

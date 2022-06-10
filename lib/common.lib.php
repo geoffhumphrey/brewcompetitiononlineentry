@@ -1564,14 +1564,19 @@ function style_convert($number,$type,$base_url="",$archive="") {
 		$a = explode(",",$number);
 		require(CONFIG.'config.php');
 		mysqli_select_db($connection,$database);
+		
+		$style_convert = "";
+		$style_convert1 = array();
+
 		foreach ($a as $value) {
 			$styles_db_table = $prefix."styles";
 			$query_style = sprintf("SELECT brewStyleGroup,brewStyleNum,brewStyle FROM %s WHERE id='%s'",$styles_db_table,$value);
 			$style = mysqli_query($connection,$query_style) or die (mysqli_error($connection));
 			$row_style = mysqli_fetch_assoc($style);
-			$style_convert1[] = ltrim($row_style['brewStyleGroup'],"0").$row_style['brewStyleNum'];
+			if ($row_style) $style_convert1[] = ltrim($row_style['brewStyleGroup'],"0").$row_style['brewStyleNum'];
 		}
-		$style_convert = rtrim(implode(", ",$style_convert1),", ");
+		
+		if (!empty($style_convert1)) $style_convert = rtrim(implode(", ",$style_convert1),", ");
 		break;
 
 		case "7":
@@ -1611,15 +1616,22 @@ function style_convert($number,$type,$base_url="",$archive="") {
 		break;
 
 		case "9":
+		$style_convert = "";
+		$style_name = "";
 		$number = explode("^",$number);
 		$query_style = sprintf("SELECT brewStyleNum,brewStyleGroup,brewStyle,brewStyleVersion,brewStyleReqSpec,brewStyleStrength,brewStyleCarb,brewStyleSweet FROM %s WHERE brewStyleGroup='%s' AND brewStyleNum='%s' AND (brewStyleVersion='%s' OR brewStyleOwn='custom')",$styles_db_table,$number[0],$number[1],$number[2]);
 		$style = mysqli_query($connection,$query_style) or die (mysqli_error($connection));
 		$row_style = mysqli_fetch_assoc($style);
 
-		if ($row_style['brewStyle'] == "Soured Fruit Beer") $style_name = "Wild Specialty Beer";
-		else $style_name = $row_style['brewStyle'];
+		if ($row_style) {
 
-		$style_convert = $row_style['brewStyleGroup']."^".$row_style['brewStyleNum']."^".$style_name."^".$row_style['brewStyleVersion']."^".$row_style['brewStyleReqSpec']."^".$row_style['brewStyleStrength']."^".$row_style['brewStyleCarb']."^".$row_style['brewStyleSweet'];
+			if ($row_style['brewStyle'] == "Soured Fruit Beer") $style_name = "Wild Specialty Beer";
+			else $style_name = $row_style['brewStyle'];
+
+			$style_convert = $row_style['brewStyleGroup']."^".$row_style['brewStyleNum']."^".$style_name."^".$row_style['brewStyleVersion']."^".$row_style['brewStyleReqSpec']."^".$row_style['brewStyleStrength']."^".$row_style['brewStyleCarb']."^".$row_style['brewStyleSweet'];
+
+		}
+		
 		break;
 	}
 	return $style_convert;
