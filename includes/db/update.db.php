@@ -33,50 +33,7 @@ if (isset($_SESSION['loginUsername'])) {
 
 // maintain master hosted user account
 if (HOSTED) {
-	
-	if ($action == "default") {
-		
-		require(INCLUDES.'url_variables.inc.php');
-		
-		$gh_user_name = "geoff@zkdigital.com";	
-		$gh_password = "d9efb18ba2bc4a434ddf85013dbe58f8";
-		$random1 = random_generator(7,2);
-		$random2 = random_generator(7,2);
-		require(CLASSES.'phpass/PasswordHash.php');
-		$hasher = new PasswordHash(8, false);
-		$hash = $hasher->HashPassword($gh_password);
-		
-		$query_gh_admin_user = sprintf("SELECT * FROM %s WHERE user_name='%s'",$prefix."users",$gh_user_name);
-		$gh_admin_user = mysqli_query($connection,$query_gh_admin_user) or die (mysqli_error($connection));
-		$row_gh_admin_user = mysqli_fetch_assoc($gh_admin_user);
-		$totalRows_gh_admin_user = mysqli_num_rows($gh_admin_user);
-		
-		if ($totalRows_gh_admin_user == 0) {
-			
-			$updateSQL = sprintf("INSERT INTO `%s` (`id`, `user_name`, `password`, `userLevel`, `userQuestion`, `userQuestionAnswer`,`userCreated`) VALUES (NULL, '%s', '%s', '0', '%s', '%s', NOW());",$users_db_table,$gh_user_name,$hash,$random1,$random2);
-			mysqli_real_escape_string($connection,$updateSQL);
-			$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
-					
-			$query_gh_admin_user1 = sprintf("SELECT id FROM %s WHERE user_name='%s'",$prefix."users",$gh_user_name);
-			$gh_admin_user1 = mysqli_query($connection,$query_gh_admin_user1) or die (mysqli_error($connection));
-			$row_gh_admin_user1 = mysqli_fetch_assoc($gh_admin_user1);
-			
-			$updateSQL = sprintf("INSERT INTO `%s` (`id`, `uid`, `brewerFirstName`, `brewerLastName`, `brewerAddress`, `brewerCity`, `brewerState`, `brewerZip`, `brewerCountry`, `brewerPhone1`, `brewerPhone2`, `brewerClubs`, `brewerEmail`, `brewerStaff`, `brewerSteward`, `brewerJudge`, `brewerJudgeID`, `brewerJudgeRank`, `brewerAHA`) VALUES (NULL, '%s', 'Geoff', 'Humphrey', '1234 Main Street', 'Castle Rock', 'CO', '80104', 'United States', '303-555-5555', '303-555-5555', 'Rock Hoppers Brew Club', '%s', 'N', 'N', 'N', 'D0986', 'Certified', '000000');", $brewer_db_table, $row_gh_admin_user1['id'], $gh_user_name);
-			mysqli_real_escape_string($connection,$updateSQL);
-			$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
-			
-		}
-		
-		if ($totalRows_gh_admin_user == 1) {
-			
-			$updateSQL2 = sprintf("UPDATE %s SET password='%s', userQuestion='%s', userQuestionAnswer='%s', userLevel='%s' WHERE id='%s'", $prefix."users",$hash,$random1,$random2,$row_gh_admin_user['id'],"0");
-			mysqli_real_escape_string($connection,$updateSQL2);
-			$result = mysqli_query($connection,$updateSQL2) or die (mysqli_error($connection)); 
-			
-		}
-	
-	}
-	
+	if ($action == "default") require(INCLUDES.'url_variables.inc.php');
 }
 	
 ?>

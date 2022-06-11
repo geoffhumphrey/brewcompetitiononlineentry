@@ -2612,6 +2612,8 @@ if ($total_not_encrypted > 0) $output_off_sched_update .= "<li>".$total_not_encr
  * ----------------------------------------------- 2.5.0 ---------------------------------------------
  * Entry recipe fields deprecated. 
  * Remove admin ability to enable via UI.
+ * Look for deprecated entry/bottle label printed forms in preferences.
+ * If one is specified, change to bottle-label-only equivalent.
  * ---------------------------------------------------------------------------------------------------
  */
 
@@ -2625,6 +2627,26 @@ else {
 }
 
 $_SESSION['prefsHideRecipe'] = "Y";
+
+$deprecated_entry_forms = array("B","N","M","U","3","4");
+
+if (in_array($_SESSION['prefsEntryForm'],$deprecated_entry_forms)) {
+
+	if (($_SESSION['prefsEntryForm'] == "B") || ($_SESSION['prefsEntryForm'] == "M") || ($_SESSION['prefsEntryForm'] == "U")) $entry_form = 1;
+	else $entry_form = 2;
+
+	$update_table = $prefix."preferences";
+	$data = array('prefsEntryForm' => $entry_form);
+	$db_conn->where ('id', 1);
+	if ($db_conn->update ($update_table, $data)) $output_off_sched_update .= "<li>Changed to Printed Entry Bottle Labels.</li>";
+	else {
+		$output_off_sched_update .= "<li>Change Printed Entry Bottle Labels failed. <strong class=\"text-warning\">Error: ".$db_conn->getLastError()."</strong></li>";
+		$error_count += 1;
+	}
+
+	$_SESSION['prefsEntryForm'] = $entry_form;
+
+}
 
 /**
  * ----------------------------------------------- 2.5.0 ---------------------------------------------

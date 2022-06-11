@@ -867,26 +867,20 @@ $(document).ready(function(){
     </div>
 </div><!-- ./Form Group -->
 <div class="form-group"><!-- Form Group NOT REQUIRED Select -->
-    <label for="prefsEntryForm" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Printed Entry Form and/or Bottle Labels</label>
+    <label for="prefsEntryForm" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Printed Entry Bottle Labels</label>
     <div class="col-lg-6 col-md-3 col-sm-8 col-xs-12">
     <!-- Input Here -->
     <select class="selectpicker" name="prefsEntryForm" id="prefsEntryForm" data-size="12" data-width="auto">
         <optgroup label="Print Multiple Entries at a Time">
-            <option value="5" <?php if (($section != "step3") && ($row_prefs['prefsEntryForm'] == "5")) echo " SELECTED"; ?> />Barcode/QR Code (Bottle Labels Only)</option>
-            <option value="6" <?php if (($section != "step3") && ($row_prefs['prefsEntryForm'] == "6")) echo " SELECTED"; ?> />Anonymous with Barcode/QR Code (Bottle Labels Only)</option>
+            <option value="5" <?php if (($section != "step3") && ($row_prefs['prefsEntryForm'] == "5")) echo " SELECTED"; ?> />Barcode/QR Code</option>
+            <option value="6" <?php if (($section != "step3") && ($row_prefs['prefsEntryForm'] == "6")) echo " SELECTED"; ?> />Anonymous with Barcode/QR Code</option>
         </optgroup>
         <optgroup label="Print Single Entries at a Time">
-            <option value="1" <?php if (($section != "step3") && ($row_prefs['prefsEntryForm'] == "1")) echo " SELECTED"; ?> />BCOE&amp;M (Bottle Labels Only)</option>
-            <option value="2" <?php if (($section != "step3") && ($row_prefs['prefsEntryForm'] == "2")) echo " SELECTED"; ?> />BCOE&amp;M with Barcode/QR Code (Bottle Labels Only)</option>
-            <option value="0" <?php if (($section != "step3") && ($row_prefs['prefsEntryForm'] == "0")) echo " SELECTED"; ?> />BCOE&amp;M Anonymous with Barcode/QR Code (Bottle Labels Only)</option>
-            <option value="B" <?php if (($section != "step3") && ($row_prefs['prefsEntryForm'] == "B")) echo " SELECTED"; ?> />BJCP Official</option>
-            <option value="E" <?php if (($section != "step3") && ($row_prefs['prefsEntryForm'] == "E")) echo " SELECTED"; ?> />BJCP Official (Bottle Labels Only)</option>
-            <option value="N" <?php if (($section != "step3") && ($row_prefs['prefsEntryForm'] == "N")) echo " SELECTED"; ?> />BJCP Official with Barcode/QR Code</option>
-            <option value="C" <?php if (($section != "step3") && ($row_prefs['prefsEntryForm'] == "C")) echo " SELECTED"; ?> />BJCP Official with Barcode/QR Code (Bottle Labels Only)</option>
-            <option value="M" <?php if (($section != "step3") && ($row_prefs['prefsEntryForm'] == "M")) echo " SELECTED"; ?> />Simple Metric</option>
-            <option value="3" <?php if (($section != "step3") && ($row_prefs['prefsEntryForm'] == "3")) echo " SELECTED"; ?> />Simple Metric with Barcode/QR Code</option>
-            <option value="U" <?php if (($section != "step3") && ($row_prefs['prefsEntryForm'] == "U")) echo " SELECTED"; ?> />Simple U.S.</option>
-            <option value="4" <?php if (($section != "step3") && ($row_prefs['prefsEntryForm'] == "4")) echo " SELECTED"; ?> />Simple U.S. with Barcode/QR Code</option>
+            <option value="1" <?php if (($section != "step3") && ($row_prefs['prefsEntryForm'] == "1")) echo " SELECTED"; ?> />BCOE&amp;M</option>
+            <option value="2" <?php if (($section != "step3") && ($row_prefs['prefsEntryForm'] == "2")) echo " SELECTED"; ?> />BCOE&amp;M with Barcode/QR Code</option>
+            <option value="0" <?php if (($section != "step3") && ($row_prefs['prefsEntryForm'] == "0")) echo " SELECTED"; ?> />BCOE&amp;M Anonymous with Barcode/QR Code</option>
+            <option value="E" <?php if (($section != "step3") && ($row_prefs['prefsEntryForm'] == "E")) echo " SELECTED"; ?> />BJCP Official</option>
+            <option value="C" <?php if (($section != "step3") && ($row_prefs['prefsEntryForm'] == "C")) echo " SELECTED"; ?> />BJCP Official with Barcode/QR Code</option>
         </optgroup>
     </select>
     <span id="helpBlock" class="help-block">
@@ -904,7 +898,7 @@ $(document).ready(function(){
         <div class="modal-content">
             <div class="modal-header bcoem-admin-modal">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="entryFormModalLabel">Printed Entry Form and/or Bottle Labels</h4>
+                <h4 class="modal-title" id="entryFormModalLabel">Printed Entry Bottle Labels</h4>
             </div>
             <div class="modal-body">
                 <p>There are two groups of bottle labels available:</p>
@@ -912,13 +906,13 @@ $(document).ready(function(){
                     <li>The first, under the <em>Print Multiple Entries</em> header in the drop-down, will print all of the entries users choose from their My Account Page in a single document (9 bottle labels per page).</li>
                     <li>The second, under the <em>Print Single Entries</em> header in the drop-down, print one entry per document. Users select the printer icon for each entry they wish to print bottle labels and other paperwork (if required).</li>
                 </ul>
-                <p>The <em>BJCP Official</em> options only display U.S. weights and measures.</p>
                 <p>The <em>Anonymous with Barcode/QR Code</em> options provide bottle labels with only an entry number, style, barcode label, and QR code. These labels are intended to be taped to bottles by entrants before submittal, thereby saving the labor and waste of removing rubberbanded labels by competition staff when sorting. This approach is similar to the method used in the National Homebrew Competition final round.</p>
                 <p>The Barcode options are intended to be used with a USB barcode scanner and the <a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=checkin">barcode entry check-in function</a>.</p>
                 <p>The QR code options are intended to be used with a mobile device and <a class="hide-loader" href="<?php echo $base_url; ?>qr.php" target="_blank">QR code entry check-in function</a> (requires a QR code reading app).</p>
                 <div class="well">
                 <p>Both the QR code and barcode options are intended to be used with the Judging Number Barcode Labels and the Judging Number Round Labels <a class="hide-loader" href="http://www.brewcompetition.com/barcode-labels" target="_blank"><strong>available for download at brewcompetition.com</strong></a>. BCOE&amp;M utilizes the&nbsp;<strong><a class="hide-loader" href="http://en.wikipedia.org/wiki/Code_39" target="_blank">Code 39 specification</a></strong> to generate all barcodes. Please make sure your scanner recognizes this type of barcode <em>before</em> implementing in your competition.</p>
                 </div>
+                <p class="text-primary"><strong>As of version 2.5.0, due to the deprecation of all recipe-related fields for individual entries, options with entry recipe forms have been removed.</strong></p>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>

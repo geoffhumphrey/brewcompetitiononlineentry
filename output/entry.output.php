@@ -135,6 +135,15 @@ if ($brewing_info['brewCategory'] < $category_end) {
 
 else $brewing_info['styleName'] = $brewing_info['brewStyle'];
 
+/**
+ * Version 2.5.0
+ * June 11, 2022
+ * The recipe-related functions and fields have been deprecated.
+ * Disabling display and related reports. Remove in future
+ * releases.
+ */
+
+/*
 if (!in_array($_SESSION['prefsEntryForm'],$no_entry_form_array)) {
 
 	// Get some values that are easier to work with in the templates
@@ -265,7 +274,6 @@ if (!in_array($_SESSION['prefsEntryForm'],$no_entry_form_array)) {
 		   round(($fermentable['weight']['kg']/$totalFermentables)*100,2);
 	}
 
-	*/
 	// Hops
 	$brewing_info['hops']=array();
 	for ($i=1; $i <= 20; $i++) {
@@ -313,6 +321,8 @@ if (!in_array($_SESSION['prefsEntryForm'],$no_entry_form_array)) {
 	}
 } // end if (in_array($_SESSION['prefsEntryForm'],$no_entry_form_array))
 
+*/
+
 $TBS = new clsTinyButStrong;
 $TBS->SetOption('noerr',TRUE);
 
@@ -330,12 +340,23 @@ if ($go == "default") {
 		$TBS->LoadTemplate(TEMPLATES.'bcoem-entry-barcode.html');
 	}
 
-	elseif ($_SESSION['prefsEntryForm'] == "B") {
-		$TBS->LoadTemplate(TEMPLATES.'bjcp-entry.html');
-	}
-
 	elseif ($_SESSION['prefsEntryForm'] == "E") {
 		$TBS->LoadTemplate(TEMPLATES.'bjcp-entry-label-only.html');
+	}
+
+	elseif ($_SESSION['prefsEntryForm'] == "C") {
+		$TBS->LoadTemplate(TEMPLATES.'barcode-entry-label-only.html');
+		$TBS->MergeBlock('dropOffLocation',$brewing,'SELECT * FROM '.$prefix.'drop_off ORDER BY dropLocationName ASC');
+	}
+
+	// If using non-TBS bottle labels, redirect
+	else {
+		header(sprintf("Location: %s?id=%s&bid=%s", $base_url."output/bottle_label.output.php", $id, $bid));
+	}
+
+/*
+	elseif ($_SESSION['prefsEntryForm'] == "B") {
+		$TBS->LoadTemplate(TEMPLATES.'bjcp-entry.html');
 	}
 
 	elseif ($_SESSION['prefsEntryForm'] == "M") {
@@ -359,17 +380,11 @@ if ($go == "default") {
 		$TBS->MergeBlock('dropOffLocation',$brewing,'SELECT * FROM '.$prefix.'drop_off ORDER BY dropLocationName ASC');
 	}
 
-	elseif ($_SESSION['prefsEntryForm'] == "C") {
-		$TBS->LoadTemplate(TEMPLATES.'barcode-entry-label-only.html');
-		$TBS->MergeBlock('dropOffLocation',$brewing,'SELECT * FROM '.$prefix.'drop_off ORDER BY dropLocationName ASC');
-	}
+*/
 
-	// If using non-TBS bottle labels, redirect
-	else {
-		header(sprintf("Location: %s?id=%s&bid=%s", $base_url."output/bottle_label.output.php", $id, $bid));
-	}
 }
 
+/*
 if ($go == "recipe") {
 	$TBS->LoadTemplate(TEMPLATES.'recipe.html');
 }
@@ -379,6 +394,8 @@ if (isset($brewing_info['extracts'])) $TBS->MergeBlock('extracts',$brewing_info[
 if (isset($brewing_info['adjuncts'])) $TBS->MergeBlock('adjuncts',$brewing_info['adjuncts']);
 if (isset($brewing_info['hops'])) $TBS->MergeBlock('hops',$brewing_info['hops']);
 if (isset($brewing_info['mashSteps'])) $TBS->MergeBlock('mashSteps',$brewing_info['mashSteps']);
+
+*/
 
 $TBS->NoErr;
 $TBS->Show();
