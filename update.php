@@ -31,6 +31,7 @@ $version = $row_system['version'];
 
 // Set timezone globals for the site
 $timezone_raw = "0";
+$update_running = FALSE;
 
 // Check whether prefs have been established
 // If so, get time zone set by admin
@@ -76,7 +77,7 @@ if (file_exists($filename)) {
 			if (($current_version != $version) || (($current_version == $version) && ($version_date < $current_version_date))) {
 
 				if ($action == "default") {
-				$update_alerts .= "<div class=\"alert alert-danger\"><span class=\"fa fa-lg fa-exlamation-circle text-danger\"></span> <strong>Before running this script</strong>, make sure that you have uploaded the necessary version ".$current_version_display." files to your installation's root folder on your webserver and <strong>BACKED UP</strong> your MySQL database.</div>";
+				$update_alerts .= "<div class=\"alert alert-danger\"><span class=\"fa fa-lg fa-exlamation-circle text-danger\"></span> <strong>Before running this script</strong>, make sure that you have uploaded <strong>ALL</strong> of the necessary version ".$current_version_display." files to your installation's root folder on your webserver and <strong>BACKED UP</strong> your MySQL database.</div>";
 
 				$update_body .= "<p class=\"lead\">";
 				$update_body .= "This script will update your BCOE&amp;M database from its current version, ";
@@ -89,178 +90,213 @@ if (file_exists($filename)) {
 
 				$update_body .= "<p class=\"lead\"><small><strong class=\"text-danger\">Please note!</strong> This update contains a conversion script that affects each table in your database. Therefore, it may take a while to run. Please be patient!</small></p>";
 
-				$update_body .= "<div class=\"bcoem-admin-element-bottom\"><a class=\"btn btn-primary btn-lg btn-block hide-loader\" href=\"update.php?action=update\" data-confirm=\"Are you sure? Have you backed up your MySQL database? This will update your current installation and cannot be stopped once begun. Please note that the update may take some time to complete, so patience is warranted!\"><span class=\"fa fa-cog fa-spin\"></span> Begin The Update</a></div>";
+				$update_body .= "<div class=\"bcoem-admin-element-bottom\"><button class=\"btn btn-primary btn-lg btn-block hide-loader update-begin\" data-toggle=\"modal\" data-target=\"#update-begin-confirm\"><span class=\"fa fa-cog fa-spin\"></span> Begin The Update</button></div>";
+
+				$update_body .= "
+					<div class=\"modal fade\" id=\"update-begin-confirm\" tabindex=\"-1\" role=\"dialog\">
+					  <div class=\"modal-dialog\" role=\"document\">
+					    <div class=\"modal-content\">
+					      <div class=\"modal-header\">
+					        <button type=\"button\" class=\"close\" data-dismiss=\"modal\" aria-label=\"Close\"><span aria-hidden=\"true\">&times;</span></button>
+					        <h4 class=\"modal-title\">Please Confirm</h4>
+					      </div>
+					      <div class=\"modal-body\">
+					        <p>Are you sure you want to start the update?</p>
+					        <p>Before doing so, make sure that you have <a href=\"https://comodosslstore.com/resources/phpmyadmin-backup-database\" target=\"_blank\">created a backup</a> of up your MySQL database.</p>
+					        <p>This function will update your current installation and cannot be stopped once begun.</p>
+					        <p class=\"text-primary\"><strong>Please note that the update may take some time to complete, so patience is warranted!</strong></p>
+					      </div>
+					      <div class=\"modal-footer\">
+					        <button type=\"button\" class=\"btn btn-default\" data-dismiss=\"modal\">Close</button>
+					        <a id=\"confirm-start-update\" class=\"btn btn-success\" href=\"update.php?action=update\">Yes, I'm Sure</a>
+					      </div>
+					    </div><!-- /.modal-content -->
+					  </div><!-- /.modal-dialog -->
+					</div><!-- /.modal -->
+				";
+
 				}
 
 				if ($action == "update") {
 
-						// Perform updates to the db based upon the current version
-						$version = str_replace(".","",$version);
+					$update_running = TRUE;
 
-						if ($version == "200") $version = "2000";
+					// Perform updates to the db based upon the current version
+					$version = str_replace(".","",$version);
 
-						if ($version < "113") {
-							$update_alerts .= "<div class=\"alert alert-danger\"><span class=\"fa fa-lg fa-exclamation-circle\"></span> Your installed version is incompatible with this update script.</div>";
-							$output .= "<p>Please update your database and files manually through version 1.1.2.0 to utilize the update feature.</p>";
-						}
+					if ($version == "200") $version = "2000";
 
-						if (($version == "113") || ($version == "1130")) {
-							include (UPDATE.'1.1.4.0_update.php');
-							include (UPDATE.'1.1.5.0_update.php');
-							include (UPDATE.'1.1.6.0_update.php');
-							include (UPDATE.'1.2.0.0_update.php');
-							include (UPDATE.'1.2.0.3_update.php');
-							include (UPDATE.'1.2.1.0_update.php');
-							include (UPDATE.'1.3.0.0_update.php');
-							include (UPDATE.'1.3.2.0_update.php');
-							include (UPDATE.'2.0.0.0_update.php');
-							include (UPDATE.'2.1.0.0_update.php');
-							include (UPDATE.'2.1.5.0_update.php');
-							include (UPDATE.'2.1.8.0_update.php');
-							include (UPDATE.'current_update.php');
-						}
+					if ($version < "113") {
+						$update_alerts .= "<div class=\"alert alert-danger\"><span class=\"fa fa-lg fa-exclamation-circle\"></span> Your installed version is incompatible with this update script.</div>";
+						$output .= "<p>Please update your database and files manually through version 1.1.2.0 to utilize the update feature.</p>";
+					}
 
-						if (($version == "114") || ($version == "1140"))  {
-							include (UPDATE.'1.1.5.0_update.php');
-							include (UPDATE.'1.1.6.0_update.php');
-							include (UPDATE.'1.2.0.0_update.php');
-							include (UPDATE.'1.2.0.3_update.php');
-							include (UPDATE.'1.2.1.0_update.php');
-							include (UPDATE.'1.3.0.0_update.php');
-							include (UPDATE.'1.3.2.0_update.php');
-							include (UPDATE.'2.0.0.0_update.php');
-							include (UPDATE.'2.1.0.0_update.php');
-							include (UPDATE.'2.1.5.0_update.php');
-							include (UPDATE.'2.1.8.0_update.php');
-							include (UPDATE.'current_update.php');
-						}
+					if (($version == "113") || ($version == "1130")) {
+						include (UPDATE.'1.1.4.0_update.php');
+						include (UPDATE.'1.1.5.0_update.php');
+						include (UPDATE.'1.1.6.0_update.php');
+						include (UPDATE.'1.2.0.0_update.php');
+						include (UPDATE.'1.2.0.3_update.php');
+						include (UPDATE.'1.2.1.0_update.php');
+						include (UPDATE.'1.3.0.0_update.php');
+						include (UPDATE.'1.3.2.0_update.php');
+						include (UPDATE.'2.0.0.0_update.php');
+						include (UPDATE.'2.1.0.0_update.php');
+						include (UPDATE.'2.1.5.0_update.php');
+						include (UPDATE.'2.1.8.0_update.php');
+						include (UPDATE.'current_update.php');
+					}
 
-						if (($version == "115") || ($version == "1150"))  {
-							include (UPDATE.'1.1.6.0_update.php');
-							include (UPDATE.'1.2.0.0_update.php');
-							include (UPDATE.'1.2.0.3_update.php');
-							include (UPDATE.'1.2.1.0_update.php');
-							include (UPDATE.'1.3.0.0_update.php');
-							include (UPDATE.'1.3.2.0_update.php');
-							include (UPDATE.'2.0.0.0_update.php');
-							include (UPDATE.'2.1.0.0_update.php');
-							include (UPDATE.'2.1.5.0_update.php');
-							include (UPDATE.'2.1.8.0_update.php');
-							include (UPDATE.'current_update.php');
-						}
+					if (($version == "114") || ($version == "1140"))  {
+						include (UPDATE.'1.1.5.0_update.php');
+						include (UPDATE.'1.1.6.0_update.php');
+						include (UPDATE.'1.2.0.0_update.php');
+						include (UPDATE.'1.2.0.3_update.php');
+						include (UPDATE.'1.2.1.0_update.php');
+						include (UPDATE.'1.3.0.0_update.php');
+						include (UPDATE.'1.3.2.0_update.php');
+						include (UPDATE.'2.0.0.0_update.php');
+						include (UPDATE.'2.1.0.0_update.php');
+						include (UPDATE.'2.1.5.0_update.php');
+						include (UPDATE.'2.1.8.0_update.php');
+						include (UPDATE.'current_update.php');
+					}
 
-						if (($version == "116") || ($version == "1160") || ($version == "1161")) {
-							include (UPDATE.'1.2.0.0_update.php');
-							include (UPDATE.'1.2.0.3_update.php');
-							include (UPDATE.'1.2.1.0_update.php');
-							include (UPDATE.'1.3.0.0_update.php');
-							include (UPDATE.'1.3.2.0_update.php');
-							include (UPDATE.'2.0.0.0_update.php');
-							include (UPDATE.'2.1.0.0_update.php');
-							include (UPDATE.'2.1.5.0_update.php');
-							include (UPDATE.'2.1.8.0_update.php');
-							include (UPDATE.'current_update.php');
-						}
+					if (($version == "115") || ($version == "1150"))  {
+						include (UPDATE.'1.1.6.0_update.php');
+						include (UPDATE.'1.2.0.0_update.php');
+						include (UPDATE.'1.2.0.3_update.php');
+						include (UPDATE.'1.2.1.0_update.php');
+						include (UPDATE.'1.3.0.0_update.php');
+						include (UPDATE.'1.3.2.0_update.php');
+						include (UPDATE.'2.0.0.0_update.php');
+						include (UPDATE.'2.1.0.0_update.php');
+						include (UPDATE.'2.1.5.0_update.php');
+						include (UPDATE.'2.1.8.0_update.php');
+						include (UPDATE.'current_update.php');
+					}
 
-						if (($version >= "1200") && ($version < "1203")) {
-							include (UPDATE.'1.2.0.3_update.php');
-							include (UPDATE.'1.2.1.0_update.php');
-							include (UPDATE.'1.3.0.0_update.php');
-							include (UPDATE.'1.3.2.0_update.php');
-							include (UPDATE.'2.0.0.0_update.php');
-							include (UPDATE.'2.1.0.0_update.php');
-							include (UPDATE.'2.1.5.0_update.php');
-							include (UPDATE.'2.1.8.0_update.php');
-							include (UPDATE.'current_update.php');
-						}
+					if (($version == "116") || ($version == "1160") || ($version == "1161")) {
+						include (UPDATE.'1.2.0.0_update.php');
+						include (UPDATE.'1.2.0.3_update.php');
+						include (UPDATE.'1.2.1.0_update.php');
+						include (UPDATE.'1.3.0.0_update.php');
+						include (UPDATE.'1.3.2.0_update.php');
+						include (UPDATE.'2.0.0.0_update.php');
+						include (UPDATE.'2.1.0.0_update.php');
+						include (UPDATE.'2.1.5.0_update.php');
+						include (UPDATE.'2.1.8.0_update.php');
+						include (UPDATE.'current_update.php');
+					}
 
-						if (($version >= "1203") && ($version < "1210")) {
+					if (($version >= "1200") && ($version < "1203")) {
+						include (UPDATE.'1.2.0.3_update.php');
+						include (UPDATE.'1.2.1.0_update.php');
+						include (UPDATE.'1.3.0.0_update.php');
+						include (UPDATE.'1.3.2.0_update.php');
+						include (UPDATE.'2.0.0.0_update.php');
+						include (UPDATE.'2.1.0.0_update.php');
+						include (UPDATE.'2.1.5.0_update.php');
+						include (UPDATE.'2.1.8.0_update.php');
+						include (UPDATE.'current_update.php');
+					}
 
-							include (UPDATE.'1.2.1.0_update.php');
-							include (UPDATE.'1.3.0.0_update.php');
-							include (UPDATE.'1.3.2.0_update.php');
-							include (UPDATE.'2.0.0.0_update.php');
-							include (UPDATE.'2.1.0.0_update.php');
-							include (UPDATE.'2.1.5.0_update.php');
-							include (UPDATE.'2.1.8.0_update.php');
-							include (UPDATE.'current_update.php');
-						}
+					if (($version >= "1203") && ($version < "1210")) {
 
-						if (($version >= "1210") && ($version < "1300")) {
-							include (UPDATE.'1.3.0.0_update.php');
-							include (UPDATE.'1.3.2.0_update.php');
-							include (UPDATE.'2.0.0.0_update.php');
-							include (UPDATE.'2.1.0.0_update.php');
-							include (UPDATE.'2.1.5.0_update.php');
-							include (UPDATE.'2.1.8.0_update.php');
-							include (UPDATE.'current_update.php');
-						}
+						include (UPDATE.'1.2.1.0_update.php');
+						include (UPDATE.'1.3.0.0_update.php');
+						include (UPDATE.'1.3.2.0_update.php');
+						include (UPDATE.'2.0.0.0_update.php');
+						include (UPDATE.'2.1.0.0_update.php');
+						include (UPDATE.'2.1.5.0_update.php');
+						include (UPDATE.'2.1.8.0_update.php');
+						include (UPDATE.'current_update.php');
+					}
 
-						if (($version >= "1300") && ($version < "1320")) {
-							include (UPDATE.'1.3.2.0_update.php');
-							include (UPDATE.'2.0.0.0_update.php');
-							include (UPDATE.'2.1.0.0_update.php');
-							include (UPDATE.'2.1.5.0_update.php');
-							include (UPDATE.'2.1.8.0_update.php');
-							include (UPDATE.'current_update.php');
-						}
+					if (($version >= "1210") && ($version < "1300")) {
+						include (UPDATE.'1.3.0.0_update.php');
+						include (UPDATE.'1.3.2.0_update.php');
+						include (UPDATE.'2.0.0.0_update.php');
+						include (UPDATE.'2.1.0.0_update.php');
+						include (UPDATE.'2.1.5.0_update.php');
+						include (UPDATE.'2.1.8.0_update.php');
+						include (UPDATE.'current_update.php');
+					}
 
-
-						if (($version >= "1320") && ($version < "2000"))  {
-							include (UPDATE.'2.0.0.0_update.php');
-							include (UPDATE.'2.1.0.0_update.php');
-							include (UPDATE.'2.1.5.0_update.php');
-							include (UPDATE.'2.1.8.0_update.php');
-							include (UPDATE.'current_update.php');
-						}
+					if (($version >= "1300") && ($version < "1320")) {
+						include (UPDATE.'1.3.2.0_update.php');
+						include (UPDATE.'2.0.0.0_update.php');
+						include (UPDATE.'2.1.0.0_update.php');
+						include (UPDATE.'2.1.5.0_update.php');
+						include (UPDATE.'2.1.8.0_update.php');
+						include (UPDATE.'current_update.php');
+					}
 
 
-						if (($version >= "2000") && ($version < "2100"))  {
-							include (UPDATE.'2.1.0.0_update.php');
-							include (UPDATE.'2.1.5.0_update.php');
-							include (UPDATE.'2.1.8.0_update.php');
-							include (UPDATE.'current_update.php');
-						}
-
-						if (($version >= "2100") && ($version < "2150"))  {
-							include (UPDATE.'2.1.5.0_update.php');
-							include (UPDATE.'2.1.8.0_update.php');
-							include (UPDATE.'current_update.php');
-						}
+					if (($version >= "1320") && ($version < "2000"))  {
+						include (UPDATE.'2.0.0.0_update.php');
+						include (UPDATE.'2.1.0.0_update.php');
+						include (UPDATE.'2.1.5.0_update.php');
+						include (UPDATE.'2.1.8.0_update.php');
+						include (UPDATE.'current_update.php');
+					}
 
 
-						if (($version >= "2150") && ($version < "2180"))  {
-							include (UPDATE.'2.1.8.0_update.php');
-							include (UPDATE.'current_update.php');
-						}
+					if (($version >= "2000") && ($version < "2100"))  {
+						include (UPDATE.'2.1.0.0_update.php');
+						include (UPDATE.'2.1.5.0_update.php');
+						include (UPDATE.'2.1.8.0_update.php');
+						include (UPDATE.'current_update.php');
+					}
 
-						if (($version >= "2180") && ($version < "21120"))  {
-							include (UPDATE.'current_update.php');
-						}
+					if (($version >= "2100") && ($version < "2150"))  {
+						include (UPDATE.'2.1.5.0_update.php');
+						include (UPDATE.'2.1.8.0_update.php');
+						include (UPDATE.'current_update.php');
+					}
+
+
+					if (($version >= "2150") && ($version < "2180"))  {
+						include (UPDATE.'2.1.8.0_update.php');
+						include (UPDATE.'current_update.php');
+					}
+
+					if (($version >= "2180") && ($version < "21120"))  {
+						include (UPDATE.'current_update.php');
+					}
 
 					if ($version >= "113") {
 
-					// Due to session caching introduced in 1.3.0.0, need to destroy the session.
+						if (session_status() == PHP_SESSION_NONE) {
+							$_SESSION['update_complete'] = 1;
+							if (isset($output_off_sched_update)) $_SESSION['update_summary'] = $output_errors.$output_off_sched_update;
+							if ((isset($error_output)) && ($error_count == 1)) $_SESSION['update_errors'] = 1;
+							else $_SESSION['update_errors'] = 0;
+						}
 
-					session_unset();
-					session_destroy();
-					session_write_close();
+						/*
 
-					$update_alerts .= "<div class=\"alert alert-success\"><span class=\"fa fa-lg fa-check-circle\"></span> <strong>Update to ".$current_version_display." Complete!</strong></div>";
+						$redirect = $base_url;
+						$redirect = prep_redirect_link($redirect);
+						$redirect_go_to = sprintf("Location: %s", $redirect);
+						header($redirect_go_to);
+						*/
 
-					// -----------------------------------------------------------
-					//  Finish and Clean Up
-					// -----------------------------------------------------------
+						$update_alerts .= "<div class=\"alert alert-success\"><span class=\"fa fa-lg fa-check-circle\"></span> <strong>Update to ".$current_version_display." Complete!</strong></div>";
 
-					$update_body .= "<p>To take advantage of this version's added features, you'll need to log in again and update the following:</p>";
-					$update_body .= "<ul>";
-					$update_body .= "<li>Your site preferences.</li>";
-					$update_body .= "<li>Your site judging preferences.</li>";
-					$update_body .= "<li>Your competition&rsquo;s specific information.</li>";
-					$update_body .= "</ul>";
-					$update_body .= "<a class=\"btn btn-primary btn-lg\" role=\"button\" href='".$base_url."index.php?section=login'>Log In</a>";
-					$update_body .= "<h3>Updates Performed Are Detailed Below</h3>";
-					$update_body .= $output;
+						// -----------------------------------------------------------
+						//  Finish and Clean Up
+						// -----------------------------------------------------------
+
+						$update_body .= "<p>To take advantage of this version's added features, please go to the Admin Dashboard and update the following:</p>";
+						$update_body .= "<ul>";
+						$update_body .= "<li>Your site preferences.</li>";
+						$update_body .= "<li>Your site judging preferences.</li>";
+						$update_body .= "<li>Your competition&rsquo;s specific information.</li>";
+						$update_body .= "</ul>";
+						$update_body .= "<a class=\"btn btn-primary btn-lg hide-loader\" role=\"button\" href='".$base_url."index.php?section=admin'>Admin Dashboard</a>";
+						$update_body .= "<h3>Updates Performed Are Detailed Below</h3>";
+						$update_body .= $output;
 
 					}
 
@@ -273,10 +309,11 @@ if (file_exists($filename)) {
 				$update_alerts .= "<div class=\"alert alert-info\"><span class=\"fa fa-lg fa-info-circle\"></span> No database updates are necessary for version ".$current_version_display.".</div>";
 				$update_body .= "<p class=\"lead\">Your installation is up to date!</p>";
 				$update_body .= "<div class=\"btn-group\" role=\"group\">";
-				$update_body .= "<a class=\"btn btn-default btn-lg\" href=\"".$base_url."\">Go to the Home Page</a>";
-				$update_body .= "<a class=\"btn btn-default btn-lg\" href=\"".$base_url."index.php?section=admin\">Go to the Admin Dashboard</a>";
+				$update_body .= "<a class=\"btn btn-default btn-lg hide-loader\" href=\"".$base_url."\">Go to the Home Page</a>";
+				$update_body .= "<a class=\"btn btn-default btn-lg hide-loader\" href=\"".$base_url."index.php?section=admin\">Go to the Admin Dashboard</a>";
 				$update_body .= "</div>";
 			}
+		
 		} // end check of user level
 
 		// if user is not logged in or an admin...
@@ -296,10 +333,13 @@ if (file_exists($filename)) {
 		$update_alerts .= "<div class=\"alert alert-danger\"><span class=\"fa fa-lg fa-exclamation-circle\"></span> <strong>It looks like one or more tables in the database called $database are either missing or not setup correctly.</strong></div>";
 		if ($prefix != "") $update_alerts .= "<h3>Prefix Defined</h3>";
 		$update_body .= "<p>You have indicated in the config.php file that a prefix of $prefix should be prepended to each table name. Is this correct? If not, make the required changes to the config.php file and try again.</p>";
-		$update_body .= "<p>Please run the <a href='setup.php'>install and setup utility</a> to install the correct database tables.</p>";
+		$update_body .= "<p>Please run the <a class='hide-loader' href='setup.php'>install and setup utility</a> to install the correct database tables.</p>";
 	}
+
 } // end if version.inc.php file exists
+
 else {
+
     $update_alerts .= "<div class=\"alert alert-danger\"><span class=\"fa fa-lg fa-exclamation-circle\"></span> <strong>The update script cannot run.</strong> The version.inc.php file does not exist in the /includes/ directory of your BCOE&amp;M installation.</div>";
 	$update_body .= "<p>Currently your installation's base URL is <strong><?php echo $base_url; ?></strong>. If this is incorrect, you will need to <strong>edit the &#36base_url variable in the config.php file</strong>, located in your installation's /sites/ directory.</p>";
 	$update_body .= "<p><strong>Make sure the version.inc.php file from your <em>previous</em> installation is in your current installation's /includes/ directory.</strong> The update script utilizes this file to determine which database tables to update and install.</p>";
@@ -354,8 +394,25 @@ else {
 
         <!-- Load BCOE&M Custom JS -->
     	<script src="<?php echo $base_url; ?>js_includes/bcoem_custom.min.js"></script>
+
+    	<script type="text/javascript">
+    		$(document).ready(function() {
+    			$("#confirm-start-update").click(function() {
+    			    $('#loader-submit').show(0).delay(120000).hide(0);
+    			});
+    		});
+    	</script>
+
 	</head>
 <body>
+	<!-- LOADER -->
+	<div id="loader-submit">
+	    <div class="center">
+	        <span class="fa fa-cog fa-spin fa-5x fa-fw"></span>
+	        <p><strong>Working.<br>Please wait, update In progress.<br>Press ESC to hide this loader (update scripts will still be running in the background).</strong></p>
+	    </div>
+	</div>
+	<!-- ./LOADER -->
 	<!-- MAIN NAV -->
 	<div class="container-fluid hidden-print">
 		<!-- Fixed navbar -->
@@ -371,13 +428,13 @@ else {
             	</div>
             	<div class="collapse navbar-collapse" id="bcoem-navbar-collapse">
                     <ul class="nav navbar-nav">
-                        <li><a href="<?php echo $base_url; ?>">Home</a></li>
+                        <li><a class="hide-loader" href="<?php echo $base_url; ?>">Home</a></li>
                     </ul>
                     <ul class="nav navbar-nav navbar-right">
                         <?php if (isset($_SESSION['loginUsername'])) { ?>
                          <li role="presentation" class="text-muted"><a href="#">Logged in as <?php echo $_SESSION['loginUsername']; ?></a></li>
                         <?php } else { ?>
-                        <li><a href="<?php echo $base_url; ?>index.php?section=login">Log In</a></li>
+                        <li><a class="hide-loader" href="<?php echo $base_url; ?>index.php?section=login">Log In</a></li>
                         <?php } ?>
                     </ul>
               	</div><!--/.nav-collapse -->

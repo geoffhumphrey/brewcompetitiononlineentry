@@ -14,23 +14,23 @@ $mapped_style_ids = array();
 
 do {
 
-	$style_num = $row_style_ids['brewStyleGroup'].$row_style_ids['brewStyleNum'];
-	
-	if ($row_style_ids['brewStyleVersion'] == "BJCP2008") {
-		$styles_2008[$style_num] = $row_style_ids['id'];
-	}
-	
-	if ($row_style_ids['brewStyleVersion'] == "BJCP2015") {
-		$styles_2015[$style_num] = $row_style_ids['id'];
-	}
+    $style_num = $row_style_ids['brewStyleGroup'].$row_style_ids['brewStyleNum'];
+    
+    if ($row_style_ids['brewStyleVersion'] == "BJCP2008") {
+        $styles_2008[$style_num] = $row_style_ids['id'];
+    }
+    
+    if ($row_style_ids['brewStyleVersion'] == "BJCP2015") {
+        $styles_2015[$style_num] = $row_style_ids['id'];
+    }
 
 } while($row_style_ids = mysqli_fetch_assoc($style_ids));
 
 // Map ids from 2008 to 2015
 foreach ($styles_2008 as $key => $id_2008) {
-	// Convert the 2008 style to 2015
-	$mapped_style_to_2015 = bjcp_map_2008_2015($key,1,$prefix,1);
-	$mapped_style_ids[$id_2008] = $mapped_style_to_2015;
+    // Convert the 2008 style to 2015
+    $mapped_style_to_2015 = bjcp_map_2008_2015($key,1,$prefix,1);
+    $mapped_style_ids[$id_2008] = $mapped_style_to_2015;
 }
 
 /*
@@ -43,8 +43,6 @@ echo "<br><br>";
 print_r($mapped_style_ids);
 echo "<br><br>";
 */
-
-
 
 /**
  * Look up particpants that have judging likes and dislikes
@@ -60,82 +58,82 @@ $totalRows_judge_likes = mysqli_num_rows($judge_likes);
 
 if ($totalRows_judge_likes > 0) {
 
-	do {
+    do {
 
-		$likes_arr_new = array();
-		$dislikes_arr_new = array();
-		$likes_new = "";
-		$dislikes_new = "";
-		
-		$current_likes_2008 = array();
-		$current_dislikes_2008 = array();
-		$bjcp_2015_likes = array();
-		$bjcp_2015_dislikes = array();
+        $likes_arr_new = array();
+        $dislikes_arr_new = array();
+        $likes_new = "";
+        $dislikes_new = "";
+        
+        $current_likes_2008 = array();
+        $current_dislikes_2008 = array();
+        $bjcp_2015_likes = array();
+        $bjcp_2015_dislikes = array();
 
-		if (!empty($row_judge_likes['brewerJudgeLikes'])) {
-			$likes_arr = explode(",",$row_judge_likes['brewerJudgeLikes']);
-			foreach ($likes_arr as $value) {
-				
-				$current_likes_2008[] = array_search($value,$styles_2008);
-				
-				if (array_key_exists($value, $mapped_style_ids)) {
-					$new_style_num = $mapped_style_ids[$value];
-					$likes_arr_new[] = $styles_2015[$new_style_num];
-					$bjcp_2015_likes[] = $new_style_num;
-				}
-			}
-		}
+        if (!empty($row_judge_likes['brewerJudgeLikes'])) {
+            $likes_arr = explode(",",$row_judge_likes['brewerJudgeLikes']);
+            foreach ($likes_arr as $value) {
+                
+                $current_likes_2008[] = array_search($value,$styles_2008);
+                
+                if (array_key_exists($value, $mapped_style_ids)) {
+                    $new_style_num = $mapped_style_ids[$value];
+                    $likes_arr_new[] = $styles_2015[$new_style_num];
+                    $bjcp_2015_likes[] = $new_style_num;
+                }
+            }
+        }
 
-		if (!empty($row_judge_likes['brewerJudgeDisLikes'])) {
-			$dislikes_arr = explode(",",$row_judge_likes['brewerJudgeDisLikes']);
-			foreach ($dislikes_arr as $value) {
-				
-				$current_dislikes_2008[] = array_search($value,$styles_2008);
-				
-				if (array_key_exists($value, $mapped_style_ids)) {
-					$new_style_num = $mapped_style_ids[$value];
-					$dislikes_arr_new[] = $styles_2015[$new_style_num];
-					$bjcp_2015_dislikes[] = $new_style_num;
-				}
-			}
-		}
+        if (!empty($row_judge_likes['brewerJudgeDisLikes'])) {
+            $dislikes_arr = explode(",",$row_judge_likes['brewerJudgeDisLikes']);
+            foreach ($dislikes_arr as $value) {
+                
+                $current_dislikes_2008[] = array_search($value,$styles_2008);
+                
+                if (array_key_exists($value, $mapped_style_ids)) {
+                    $new_style_num = $mapped_style_ids[$value];
+                    $dislikes_arr_new[] = $styles_2015[$new_style_num];
+                    $bjcp_2015_dislikes[] = $new_style_num;
+                }
+            }
+        }
 
-		if (!empty($likes_arr_new)) $likes_new = implode(",",$likes_arr_new);
-		if (!empty($dislikes_arr_new)) $dislikes_new = implode(",",$dislikes_arr_new);
-		
-		$current_likes = implode(",",$current_likes_2008);
-		$current_dislikes = implode(",",$current_dislikes_2008);
-		$likes_2015 = implode(",",$bjcp_2015_likes);
-		$dislikes_2015 = implode(",",$bjcp_2015_dislikes);
+        if (!empty($likes_arr_new)) $likes_new = implode(",",$likes_arr_new);
+        if (!empty($dislikes_arr_new)) $dislikes_new = implode(",",$dislikes_arr_new);
+        
+        $current_likes = implode(",",$current_likes_2008);
+        $current_dislikes = implode(",",$current_dislikes_2008);
+        $likes_2015 = implode(",",$bjcp_2015_likes);
+        $dislikes_2015 = implode(",",$bjcp_2015_dislikes);
 
-		/*
-		print_r($current_likes);
-		echo "<br><br>";
-		
-		print_r($likes_2015);
-		echo "<br><br>";
-		
-		print_r($current_dislikes);
-		echo "<br><br>";
-		
-		print_r($dislikes_2015);
-		echo "<br><br>";
+        /*
+        print_r($current_likes);
+        echo "<br><br>";
+        
+        print_r($likes_2015);
+        echo "<br><br>";
+        
+        print_r($current_dislikes);
+        echo "<br><br>";
+        
+        print_r($dislikes_2015);
+        echo "<br><br>";
 
-		$updateSQL = sprintf("UPDATE %s SET brewerJudgeLikes='%s', brewerJudgeDislikes='%s' WHERE id='%s'", $prefix."brewer", $likes_new, $dislikes_new, $row_judge_likes['id']);
-		mysqli_select_db($connection,$database);
-		$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
-		*/
+        $updateSQL = sprintf("UPDATE %s SET brewerJudgeLikes='%s', brewerJudgeDislikes='%s' WHERE id='%s'", $prefix."brewer", $likes_new, $dislikes_new, $row_judge_likes['id']);
+        mysqli_select_db($connection,$database);
+        $result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+        */
 
-		$update_table = $prefix."brewer";
-		$data = array(
-			'brewerJudgeLikes' => $likes_new,
-			'brewerJudgeDislikes' => $dislikes_new
-		);
-		$db_conn->where ('id', $row_judge_likes['id']);
-		if ($db_conn->update ($update_table, $data)) $output .= "<li>Judge likes updated to BJCP 2015 for ".$row_judge_likes['brewerLastName'].", ".$row_judge_likes['brewerFirstName']."</li>";
-		else $output .= "<li>Judge likes NOT updated to BJCP 2015 for ".$row_judge_likes['brewerLastName'].", ".$row_judge_likes['brewerFirstName'].". Error: ".$db_conn->getLastError()."</li>";
+        $update_table = $prefix."brewer";
+        $data = array(
+            'brewerJudgeLikes' => $likes_new,
+            'brewerJudgeDislikes' => $dislikes_new
+        );
+        $db_conn->where ('id', $row_judge_likes['id']);
+        if ($db_conn->update ($update_table, $data)) $output_off_sched_update .= "<li>Judge likes updated to BJCP 2015 for ".$row_judge_likes['brewerLastName'].", ".$row_judge_likes['brewerFirstName']."</li>";
+        else $output_off_sched_update .= "<li>Judge likes NOT updated to BJCP 2015 for ".$row_judge_likes['brewerLastName'].", ".$row_judge_likes['brewerFirstName'].". Error: ".$db_conn->getLastError()."</li>";
 
-	} while($row_judge_likes = mysqli_fetch_assoc($judge_likes));
+    } while($row_judge_likes = mysqli_fetch_assoc($judge_likes));
 
 } // end if ($totalRows_judge_likes > 0)
 
@@ -167,16 +165,16 @@ if ($totalRows_tables > 0) {
         }
 
         if (!empty($table_styles_arr_new)) {
-			
-			$table_styles_new = implode(",",$table_styles_arr_new);
-			
-			$update_table = $prefix."judging_tables";
-			$data = array('tableStyles' => $table_styles_new);
-			$db_conn->where ('id', $row_tables['id']);
-			if ($db_conn->update ($update_table, $data)) $output .= "<li>Table styles updated to BJCP 2015 for ".$row_tables['tableName']."</li>";
-			else $output .= "<li>Judge likes NOT updated to BJCP 2015  for ".$row_tables['tableName'].". Error: ".$db_conn->getLastError()."</li>";
+            
+            $table_styles_new = implode(",",$table_styles_arr_new);
+            
+            $update_table = $prefix."judging_tables";
+            $data = array('tableStyles' => $table_styles_new);
+            $db_conn->where ('id', $row_tables['id']);
+            if ($db_conn->update ($update_table, $data)) $output_off_sched_update .= "<li>Table styles updated to BJCP 2015 for ".$row_tables['tableName']."</li>";
+            else $output_off_sched_update .= "<li>Judge likes NOT updated to BJCP 2015  for ".$row_tables['tableName'].". Error: ".$db_conn->getLastError()."</li>";
 
-			/*
+            /*
             $updateSQL = sprintf("UPDATE %s SET tableStyles='%s' WHERE id='%s'", $prefix."judging_tables", $table_styles_new, $row_tables['id']);
             mysqli_select_db($connection,$database);
             $result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
@@ -210,11 +208,11 @@ if ($totalRows_styles_active > 0) {
 
     // First, "deselect" all styles in the DB for BJCP2015
     $update_table = $prefix."styles";
-	$data = array('brewStyleActive' => 'N');
-	$db_conn->where ('brewStyleVersion', 'BJCP2015');
-	$result = $db_conn->update ($update_table, $data);
+    $data = array('brewStyleActive' => 'N');
+    $db_conn->where ('brewStyleVersion', 'BJCP2015');
+    $result = $db_conn->update ($update_table, $data);
     
-	/*
+    /*
     $updateSQL = sprintf("UPDATE %s SET brewStyleActive='N' WHERE brewStyleVersion='BJCP2015'",$prefix."styles");
     mysqli_select_db($connection,$database);
     $result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
@@ -232,9 +230,9 @@ if ($totalRows_styles_active > 0) {
             $id = $styles_2015[$new_style_num];
 
             $update_table = $prefix."styles";
-			$data = array('brewStyleActive' => 'Y');
-			$db_conn->where ('id', $id);
-			$result = $db_conn->update ($update_table, $data);
+            $data = array('brewStyleActive' => 'Y');
+            $db_conn->where ('id', $id);
+            $result = $db_conn->update ($update_table, $data);
             
             /*
             $updateSQL = sprintf("UPDATE %s SET brewStyleActive='Y' WHERE id='%s'",$prefix."styles",$id);
@@ -260,26 +258,26 @@ $totalRows_brews = mysqli_num_rows($brews);
 
 if ($totalRows_brews > 0) {
 
-	// Loop through entries and convert to 2015 styles
-	do {
+    // Loop through entries and convert to 2015 styles
+    do {
 
-		$update_table = $prefix."styles";
-		$style = $row_brews['brewCategorySort'].$row_brews['brewSubCategory'];
-		$sql = "";
-		$sql .= bjcp_map_2008_2015($style,0,$prefix,$row_brews['id']);
-		if (!empty($sql)) $result = $db_conn->rawQuery($sql);
-		
-		/*
-		$updateSQL = "";
-		$updateSQL = bjcp_map_2008_2015($style,0,$prefix,$row_brews['id']);
+        $update_table = $prefix."styles";
+        $style = $row_brews['brewCategorySort'].$row_brews['brewSubCategory'];
+        $sql = "";
+        $sql .= bjcp_map_2008_2015($style,0,$prefix,$row_brews['id']);
+        if (!empty($sql)) $result = $db_conn->rawQuery($sql);
+        
+        /*
+        $updateSQL = "";
+        $updateSQL = bjcp_map_2008_2015($style,0,$prefix,$row_brews['id']);
 
-		if (!empty($updateSQL)) {
-			mysqli_select_db($connection,$database);
-			$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
-		}
-		*/
+        if (!empty($updateSQL)) {
+            mysqli_select_db($connection,$database);
+            $result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+        }
+        */
 
-	} while ($row_brews = mysqli_fetch_assoc($brews));
+    } while ($row_brews = mysqli_fetch_assoc($brews));
 
 } //end if ($totalRows_brews > 0)
 

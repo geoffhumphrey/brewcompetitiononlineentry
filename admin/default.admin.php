@@ -207,13 +207,15 @@ if ($totalRows_tables > 0) {
     </div>
     <?php } ?>
 </div>
+
 <?php 
+
 if ($recently_updated) { 
     
     $summary_button_style = "btn btn-warning btn-block";
     $summary_button_icon = "fa fa-code";
     $summary_button_errors = "";
-    if ($_SESSION['update_errors'] == 1) {
+    if (strpos($row_system['update_summary'], 'Warning: Errors') !== false)  {
         $summary_button_style = "btn btn-danger btn-block";
         $summary_button_icon = "fa fa-exclamation-circle";
         $summary_button_errors = " (Errors Present)";

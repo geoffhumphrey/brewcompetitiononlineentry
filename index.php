@@ -118,6 +118,12 @@ if ($section == "past-winners") {
     if (!$archive_winner_display) header(sprintf("Location: %s", $base_url."index.php?msg=8"));
 }
 
+if ($row_system['update_date'] >= (time() - 86400)) {
+    $recently_updated = TRUE;
+    $_SESSION['update_summary'] = $row_system['update_summary'];
+    if (strpos($row_system['update_summary'], 'Warning: Errors') !== false) $_SESSION['update_errors'] == 1;
+}
+
 // ---------------------------------------------------------------------------------
 ?>
 <!DOCTYPE html>

@@ -5,9 +5,6 @@
 // 2.1.8.0 was last version to require an update trigger.
 // -----------------------------------------------------------
 
-$output .= "<h4>Version ".$current_version_display."</h4>";
-$output .= "<ul>";
-
 // THE INCLUDES MUST BE IN THIS ORDER! DO NOT CHANGE!!
 
 // -----------------------------------------------------------
@@ -34,6 +31,4 @@ include ('current_data_updates.php');
 // -----------------------------------------------------------
 
 include ('off_schedule_update.php');
-
-$output .= "</ul>";
 ?>

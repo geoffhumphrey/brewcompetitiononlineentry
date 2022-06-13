@@ -9,7 +9,6 @@ $hosted_setup = FALSE;
 $check_setup = FALSE;
 $system_name_change = FALSE;
 $recently_updated = FALSE;
-if (((isset($_SESSION['update_complete'])) && ($_SESSION['update_complete'] == 1)) && (isset($_SESSION['update_summary']))) $recently_updated = TRUE;
 
 if (check_setup($prefix."system",$database)) {
 	
@@ -44,7 +43,7 @@ if (check_setup($prefix."bcoem_sys",$database)) {
 
 }
 
-
+if (((isset($_SESSION['update_complete'])) && ($_SESSION['update_complete'] == 1)) && (isset($_SESSION['update_summary']))) $recently_updated = TRUE;
 
 if ((!isset($_SESSION['currentVersion'])) || ((isset($_SESSION['currentVersion'])) && ($_SESSION['currentVersion'] == 0))) {
 	
