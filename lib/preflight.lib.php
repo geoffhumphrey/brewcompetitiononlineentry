@@ -2,7 +2,7 @@
 include (LIB.'update.lib.php');
 
 $update_required = FALSE;
-$setup_success = TRUE;
+$setup_success = FALSE;
 $force_update = FALSE;
 $no_updates_needed = FALSE;
 $hosted_setup = FALSE;
@@ -21,7 +21,7 @@ if (check_setup($prefix."system",$database)) {
 		unset($_SESSION['currentVersion']);
 	}
 	
-	if ((HOSTED) && ($row_system['setup_last_step'] == 9)) $hosted_setup = TRUE;
+	if ((HOSTED) && ($row_system['setup_last_step'] == 8)) $hosted_setup = TRUE;
 	$check_setup = TRUE;
 
 }
@@ -38,7 +38,7 @@ if (check_setup($prefix."bcoem_sys",$database)) {
 		unset($_SESSION['currentVersion']);
 	}
 
-	if ((HOSTED) && ($row_system['setup_last_step'] == 9)) $hosted_setup = TRUE;
+	if ((HOSTED) && ($row_system['setup_last_step'] == 8)) $hosted_setup = TRUE;
 	$check_setup = TRUE;
 
 }
@@ -49,18 +49,15 @@ if ((!isset($_SESSION['currentVersion'])) || ((isset($_SESSION['currentVersion']
 	
 	// The following line will need to change with future conversions
 	if ((!check_setup($prefix."mods",$database)) && (!check_setup($prefix."preferences",$database))) {
-		$setup_success = FALSE;
 		$setup_relocate = "Location: ".$base_url."setup.php?section=step0";
 	}
 
 	// For older versions (pre-1.3.0.0)
 	if ((!check_setup($prefix."mods",$database)) && (check_setup($prefix."preferences",$database))) {
-		$setup_success = FALSE;
 		$setup_relocate = "Location: ".$base_url."update.php";
 	}
 
 	elseif (MAINT) {
-		$setup_success = FALSE;
 		$setup_relocate = "Location: ".$base_url."maintenance.php";
 	}
 
@@ -74,7 +71,6 @@ if ((!isset($_SESSION['currentVersion'])) || ((isset($_SESSION['currentVersion']
 
 		if (!check_update("prefsShipping", $prefix."preferences")) {
 			$update_required = TRUE;
-			$setup_success = FALSE;
 			$setup_relocate = "Location: ".$base_url."update.php";
 		}
 
@@ -83,7 +79,6 @@ if ((!isset($_SESSION['currentVersion'])) || ((isset($_SESSION['currentVersion']
 		 */
 		
 		if ($row_system['setup'] == 0) {
-			$setup_success = FALSE;
 			$setup_relocate = "Location: ".$base_url."setup.php?section=step".($row_system['setup_last_step']+1);
 
 			if ($row_system['setup_last_step'] == 1) {
@@ -110,11 +105,10 @@ if ((!isset($_SESSION['currentVersion'])) || ((isset($_SESSION['currentVersion']
 			$setup_relocate = "Location: ".$base_url;
 		}
 
-		if ($row_system['version'] != $current_version) {
+		else {
 
 			// Run update scripts if required
 			if ($update_required) {
-				$setup_success = FALSE;
 				$setup_relocate = "Location: ".$base_url."update.php";
 			}
 
@@ -141,26 +135,35 @@ if ((!isset($_SESSION['currentVersion'])) || ((isset($_SESSION['currentVersion']
 
 } // end if (!isset($_SESSION['currentVersion']))
 
-if (!$system_name_change) {
+else $setup_success = TRUE;
+
+
+if ((!$system_name_change) && (check_setup($prefix."system",$database))) {
 	$query_sys = sprintf("RENAME TABLE `%s` TO `%s`",$prefix."system",$prefix."bcoem_sys");
 	$sys = mysqli_query($connection,$query_sys) or die (mysqli_error($connection));
 	$system_name_change = TRUE;
 }
 
 /*
+if (!isset($_SESSION['currentVersion'])) echo "No currentVersion session variable.<br>";
+else echo "Version is ". $_SESSION['currentVersion']."<br>";
+
+if ($check_setup) echo "Setup checked, bcoem_sys table present.<br>";
+else echo "Setup checked, bcoem_sys table NOT present.<br>";
+
 if ($system_name_change) echo "System DB table name has been changed to bcoem_sys.<br>";
 else echo "System DB table name has NOT been changed to bcoem_sys.<br>";
-if ($check_setup) echo "Setup checked.<br>";
-else echo "Setup NOT checked.<br>";
-if ($row_system['version'] == $current_version) echo "Versions match.<br>";
-else echo "Versions DO NOT match.<br>";
-if ($force_update) echo "Update will run.<br>";
-else echo "Update will NOT run.<br>";
-echo $row_system['version'];
-echo "<br>";
-echo $current_version;
-echo "<br>";
-echo $_SESSION['currentVersion'];
-exit();
+
+if ($setup_success) {
+	if ($row_system['version'] == $current_version) echo "Versions match.<br>";
+	else echo "Versions DO NOT match.<br>";
+	if ($force_update) echo "Update will run.<br>";
+	else echo "Update will NOT run.<br>";
+	echo $row_system['version'];
+	echo "<br>";
+	echo $current_version;
+}
+else echo "Setup has not run<br>";
 */
+
 ?>

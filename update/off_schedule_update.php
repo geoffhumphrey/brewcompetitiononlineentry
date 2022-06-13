@@ -104,7 +104,7 @@ $row_current_prefs = mysqli_fetch_assoc($current_prefs);
  * ---------------------------------------------------------------------------------------------------
  */
 
-$output_off_sched_update .= "<ul>";
+if (!$setup_running) $output_off_sched_update .= "<ul>";
 
 if (!check_update("prefsLanguage", $prefix."preferences")) {
 
@@ -245,7 +245,7 @@ if (!check_update("brewStyleComEx", $prefix."styles")) {
 
 }
 
-$output_off_sched_update .= "</ul>";
+if (!$setup_running) $output_off_sched_update .= "</ul>";
 
 /**
  * ----------------------------------------------- 2.1.8 -----------------------------------------------
@@ -263,7 +263,7 @@ if ((!$setup_running) && (!$update_running)) {
 }
 
 // Begin version unordered list
-$output_off_sched_update .= "<ul>";
+if (!$setup_running) $output_off_sched_update .= "<ul>";
 
 if (!check_update("setup_last_step", $prefix."bcoem_sys")) {
 
@@ -508,7 +508,7 @@ if (!check_new_style("21","B6","White IPA")) {
 }
 $output_off_sched_update .= "</ul>";
 $output_off_sched_update .= "</li>";
-$output_off_sched_update .= "</ul>";
+if (!$setup_running) $output_off_sched_update .= "</ul>";
 
 /**
  * ----------------------------------------------- 2.1.9 -----------------------------------------------
@@ -523,12 +523,12 @@ if ((!$setup_running) && (!$update_running)) {
 	$output_off_sched_update .= "</p>";
 }
 
-else {
+elseif ($update_running) {
 	$output_off_sched_update .= "<h4>Version 2.1.9</h4>";
 }
 
 // Begin version unordered list
-$output_off_sched_update .= "<ul>";
+if (!$setup_running) $output_off_sched_update .= "<ul>";
 
 if (check_update("brewerNickname", $prefix."brewer")) {
 
@@ -582,7 +582,7 @@ if (!check_update("assignRoles", $prefix."judging_assignments")) {
 
 }
 
-$output_off_sched_update .= "</ul>";
+if (!$setup_running) $output_off_sched_update .= "</ul>";
 
 /**
  * ----------------------------------------------- 2.1.10 ----------------------------------------------
@@ -601,12 +601,12 @@ if ((!$setup_running) && (!$update_running)) {
 	$output_off_sched_update .= "</p>";
 }
 
-else {
+elseif ($update_running) {
 	$output_off_sched_update .= "<h4>Version 2.1.10</h4>";
 }
 
 // Begin version unordered list
-$output_off_sched_update .= "<ul>";
+if (!$setup_running) $output_off_sched_update .= "<ul>";
 
 
 if (!check_update("brewerBreweryName", $prefix."brewer")) {
@@ -1025,7 +1025,7 @@ if ((!empty($row_delay)) && ((strlen($row_delay['prefsWinnerDelay'])) < 10)) {
 
 }
 
-$output_off_sched_update .= "</ul>";
+if (!$setup_running) $output_off_sched_update .= "</ul>";
 
 // Instantiate HTMLPurifier
 require (LIB.'process.lib.php');
@@ -1233,12 +1233,12 @@ if ((!$setup_running) && (!$update_running)) {
 	$output_off_sched_update .= "</p>";
 }
 
-else {
+elseif ($update_running) {
 	$output_off_sched_update .= "<h4>Version 2.1.11</h4>";
 }
 
 // Begin version unordered list
-$output_off_sched_update .= "<ul>";
+if (!$setup_running) $output_off_sched_update .= "<ul>";
 
 $files = new FilesystemIterator(USER_DOCS);
 
@@ -1255,7 +1255,7 @@ foreach($files as $file) {
 }
 
 $output_off_sched_update .= "<li>PDF file names in the user_docs directory converted to lowercase (including extension).</li>";
-$output_off_sched_update .= "</ul>";
+if (!$setup_running) $output_off_sched_update .= "</ul>";
 
 /**
  * ----------------------------------------------- 2.1.12 ----------------------------------------------
@@ -1271,12 +1271,12 @@ if ((!$setup_running) && (!$update_running)) {
 	$output_off_sched_update .= "</p>";
 }
 
-else {
+elseif ($update_running) {
 	$output_off_sched_update .= "<h4>Version 2.1.12</h4>";
 }
 
 // Begin version unordered list
-$output_off_sched_update .= "<ul>";
+if (!$setup_running) $output_off_sched_update .= "<ul>";
 
 $update_counter = 0;
 
@@ -1332,8 +1332,8 @@ if (!check_update("archiveScoresheet", $prefix."archive")) {
 
 }
 
-if ($update_counter == 0) $output_off_sched_update .= "<li>No updates necessary.</li>";
-$output_off_sched_update .= "</ul>";
+if (($update_counter == 0) && (!$setup_running)) $output_off_sched_update .= "<li>No updates necessary.</li>";
+if (!$setup_running) $output_off_sched_update .= "</ul>";
 
 /**
  * ----------------------------------------------- 2.1.13 ----------------------------------------------
@@ -1349,12 +1349,12 @@ if ((!$setup_running) && (!$update_running)) {
 	$output_off_sched_update .= "</p>";
 }
 
-else {
+elseif ($update_running) {
 	$output_off_sched_update .= "<h4>Version 2.1.13</h4>";
 }
 
 // Begin version unordered list
-$output_off_sched_update .= "<ul>";
+if (!$setup_running) $output_off_sched_update .= "<ul>";
 
 if (!check_new_style("08","077","American-Style Pilsener")) include (UPDATE.'styles_ba_update.php');
 
@@ -1603,7 +1603,7 @@ foreach ($style_type_convert as $key => $value) {
 
 }
 
-$output_off_sched_update .= "</ul>";
+if (!$setup_running) $output_off_sched_update .= "</ul>";
 
 /**
  * ----------------------------------------------- 2.1.14 ----------------------------------------------
@@ -1618,12 +1618,12 @@ if ((!$setup_running) && (!$update_running)) {
 	$output_off_sched_update .= "</p>";
 }
 
-else {
+elseif ($update_running) {
 	$output_off_sched_update .= "<h4>Version 2.1.14</h4>";
 }
 
 // Begin version unordered list
-$output_off_sched_update .= "<ul>";
+if (!$setup_running) $output_off_sched_update .= "<ul>";
 
 $update_counter = 0;
 
@@ -1658,8 +1658,8 @@ if (isset($row_current_prefs['prefsStyleSet'])) {
 
 }
 
-if ($update_counter == 0) $output_off_sched_update .= "<li>No updates necessary.</li>";
-$output_off_sched_update .= "</ul>";
+if (($update_counter == 0) && (!$setup_running)) $output_off_sched_update .= "<li>No updates necessary.</li>";
+if (!$setup_running) $output_off_sched_update .= "</ul>";
 
 
 /**
@@ -1676,12 +1676,12 @@ if ((!$setup_running) && (!$update_running)) {
 	$output_off_sched_update .= "</p>";
 }
 
-else {
+elseif ($update_running) {
 	$output_off_sched_update .= "<h4>Version 2.1.15</h4>";
 }
 
 // Begin version unordered list
-$output_off_sched_update .= "<ul>";
+if (!$setup_running) $output_off_sched_update .= "<ul>";
 
 if ((empty($row_current_prefs['prefsDisplaySpecial'])) || (!isset($row_current_prefs['prefsDisplaySpecial']))) {
 	
@@ -1705,7 +1705,7 @@ else {
 	$error_count += 1;
 }
 
-$output_off_sched_update .= "</ul>";
+if (!$setup_running) $output_off_sched_update .= "</ul>";
 
 /**
  * ----------------------------------------------- 2.1.19 ----------------------------------------------
@@ -1720,12 +1720,12 @@ if ((!$setup_running) && (!$update_running)) {
 	$output_off_sched_update .= "</p>";
 }
 
-else {
+elseif ($update_running) {
 	$output_off_sched_update .= "<h4>Version 2.1.19</h4>";
 }
 
 // Begin version unordered list
-$output_off_sched_update .= "<ul>";
+if (!$setup_running) $output_off_sched_update .= "<ul>";
 
 $update_table = $prefix."styles";
 $data = array('brewStyle' => 'Specialty Fruit Beer');
@@ -2006,7 +2006,7 @@ else {
 	$error_count += 1;
 }
 
-$output_off_sched_update .= "</ul>";
+if (!$setup_running) $output_off_sched_update .= "</ul>";
 
 /**
  * ----------------------------------------------- 2.2.0 ---------------------------------------------
@@ -2024,12 +2024,12 @@ if ((!$setup_running) && (!$update_running)) {
 	$output_off_sched_update .= "</p>";
 }
 
-else {
+elseif ($update_running) {
 	$output_off_sched_update .= "<h4>Version 2.2.0</h4>";
 }
 
 // Begin version unordered list
-$output_off_sched_update .= "<ul>";
+if (!$setup_running) $output_off_sched_update .= "<ul>";
 
 $update_counter = 0;
 
@@ -2435,8 +2435,8 @@ if ($totalRows_archive > 0) {
 
 }
 
-if ($update_counter == 0) $output_off_sched_update .= "<li>No updates necessary.</li>";
-$output_off_sched_update .= "</ul>";
+if (($update_counter == 0) && (!$setup_running)) $output_off_sched_update .= "<li>No updates necessary.</li>";
+if (!$setup_running) $output_off_sched_update .= "</ul>";
 
 /**
  * ----------------------------------------------- 2.3.0 ---------------------------------------------
@@ -2452,12 +2452,12 @@ if ((!$setup_running) && (!$update_running)) {
 	$output_off_sched_update .= "</p>";
 }
 
-else {
+elseif ($update_running) {
 	$output_off_sched_update .= "<h4>Version 2.3.0</h4>";
 }
 
 // Begin version unordered list
-$output_off_sched_update .= "<ul>";
+if (!$setup_running) $output_off_sched_update .= "<ul>";
 
 $update_counter = 0;
 
@@ -2491,8 +2491,8 @@ if (!check_update("prefsEval", $prefix."preferences")) {
 
 }
 
-if ($update_counter == 0) $output_off_sched_update .= "<li>No updates necessary.</li>";
-$output_off_sched_update .= "</ul>";
+if (($update_counter == 0) && (!$setup_running)) $output_off_sched_update .= "<li>No updates necessary.</li>";
+if (!$setup_running) $output_off_sched_update .= "</ul>";
 
 /**
  * ----------------------------------------------- 2.3.2 ---------------------------------------------
@@ -2507,12 +2507,12 @@ if ((!$setup_running) && (!$update_running)) {
 	$output_off_sched_update .= "</p>";
 }
 
-else {
+elseif ($update_running) {
 	$output_off_sched_update .= "<h4>Version 2.3.2</h4>";
 }
 
 // Begin version unordered list
-$output_off_sched_update .= "<ul>";
+if (!$setup_running) $output_off_sched_update .= "<ul>";
 
 $update_table = $prefix."styles";
 $data = array('brewStyleReqSpec' => 1);
@@ -2525,7 +2525,7 @@ else {
 	$error_count += 1;
 }
 
-$output_off_sched_update .= "</ul>";
+if (!$setup_running) $output_off_sched_update .= "</ul>";
 
 /**
  * ----------------------------------------------- 2.4.0 ---------------------------------------------
@@ -2542,12 +2542,12 @@ if ((!$setup_running) && (!$update_running)) {
 	$output_off_sched_update .= "</p>";
 }
 
-else {
+elseif ($update_running) {
 	$output_off_sched_update .= "<h4>Version 2.4.0</h4>";
 }
 
 // Begin version unordered list
-$output_off_sched_update .= "<ul>";
+if (!$setup_running) $output_off_sched_update .= "<ul>";
 	
 /**
  * ----------------------------------------------- 2.4.0 ---------------------------------------------
@@ -2625,7 +2625,7 @@ else {
 	$error_count += 1;
 }
 
-$output_off_sched_update .= "</ul>";
+if (!$setup_running) $output_off_sched_update .= "</ul>";
 
 /**
  * ----------------------------------------------- 2.5.0 ---------------------------------------------
@@ -2640,12 +2640,12 @@ if ((!$setup_running) && (!$update_running)) {
 	$output_off_sched_update .= "</p>";
 }
 
-else {
+elseif ($update_running) {
 	$output_off_sched_update .= "<h4>Version 2.5.0</h4>";
 }
 
 // Begin version unordered list
-$output_off_sched_update .= "<ul>";
+if (!$setup_running) $output_off_sched_update .= "<ul>";
 
 $query_security_resp = sprintf("SELECT id, userQuestionAnswer FROM `%s`",$prefix."users");
 $security_resp = mysqli_query($connection,$query_security_resp);
@@ -2778,7 +2778,7 @@ if (!check_new_style("16","05","Straight Sour Beer")) include (UPDATE.'styles_aa
 
 
 // End all unordered lists
-$output_off_sched_update .= "</ul>";
+if (!$setup_running) $output_off_sched_update .= "</ul>";
 
 /**
  * ----------------------------------------------------------------------------------------------------

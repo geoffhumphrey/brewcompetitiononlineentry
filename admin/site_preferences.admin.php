@@ -27,7 +27,8 @@ foreach ($style_sets as $style_set) {
     $hide_other_js = "";
     
     // Build style set drop-down
-    if ((isset($_SESSION['prefsStyleSet'])) && ($style_set['style_set_name'] == $_SESSION['prefsStyleSet'])) $style_set_selected = "SELECTED";
+    if ((isset($_SESSION['prefsStyleSet'])) && ($style_set['style_set_name'] == $_SESSION['prefsStyleSet']))  $style_set_selected = "SELECTED";
+    if (($section == "step3") && ($style_set['style_set_name'] == "BJCP2021")) $style_set_selected = "SELECTED";
     $style_set_dropdown .= sprintf("<option value=\"%s\" %s>%s (%s)</option>",$style_set['style_set_name'],$style_set_selected,$style_set['style_set_long_name'],$style_set['style_set_short_name']);
 
     // Generate exception list for each of the style sets in the 
