@@ -148,38 +148,40 @@ if (($go == "default") && ($id != "default") && (isset($_SESSION['qrPasswordOK']
 					exit;
 				}
 
-				// If not, update DB
-				$updateSQL = sprintf("UPDATE %s SET brewReceived='1', brewJudgingNumber='%s'",$prefix."brewing",$judgingNumber);
-				if ((isset($_POST['brewBoxNum'])) && ($_POST['brewBoxNum'] != "")) $updateSQL .= sprintf(", brewBoxNum='%s'",sterilize($_POST['brewBoxNum']));
-				if ((isset($_POST['brewPaid'])) && ($_POST['brewPaid'] != "")) $updateSQL .= sprintf(", brewPaid='%s'",sterilize($_POST['brewPaid']));
-				$updateSQL .= sprintf(" WHERE id='%s';",$id);
-				mysqli_real_escape_string($connection,$updateSQL);
-				$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+				$update_table = $prefix."brewing";
+				$data = array(
+					'brewReceived' => 1,
+					'brewJudgingNumber' => $judgingNumber
+				);
+				if ((isset($_POST['brewBoxNum'])) && (!empty($_POST['brewBoxNum'])) $data[] = array('brewBoxNum' => sterilize($_POST['brewBoxNum']));
+				if ((isset($_POST['brewPaid'])) && (!empty($_POST['brewPaid'])) $data[] = array('brewPaid' => sterilize($_POST['brewPaid']));
+				$db_conn->where ('id', $id);
+				$db_conn->update ($update_table, $data);
 
 				$checkin_redirect .= "&view=".$id."^".$judgingNumber."&msg=3";
 				header(sprintf("Location: %s", $checkin_redirect));
-				exit;
+				exit();
 
 			}
 
 			else {
 
-				$updateSQL = sprintf("UPDATE %s SET brewReceived='1'",$prefix."brewing");
-				if ((isset($_POST['brewBoxNum'])) && ($_POST['brewBoxNum'] != "")) $updateSQL .= sprintf(", brewBoxNum='%s'",sterilize($_POST['brewBoxNum']));
-				if ((isset($_POST['brewPaid'])) && ($_POST['brewPaid'] != "")) $updateSQL .= sprintf(", brewPaid='%s'",sterilize($_POST['brewPaid']));
-				$updateSQL .= sprintf(" WHERE id='%s';",$id);
-				mysqli_real_escape_string($connection,$updateSQL);
-				$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
+				$update_table = $prefix."brewing";
+				$data = array('brewReceived' => 1);
+				if ((isset($_POST['brewBoxNum'])) && (!empty($_POST['brewBoxNum'])) $data[] = array('brewBoxNum' => sterilize($_POST['brewBoxNum']));
+				if ((isset($_POST['brewPaid'])) && (!empty($_POST['brewPaid'])) $data[] = array('brewPaid' => sterilize($_POST['brewPaid']));
+				$db_conn->where ('id', $id);
+				$db_conn->update ($update_table, $data);
 
 				$checkin_redirect .= "&view=".$id."^".$row_entry['brewJudgingNumber']."&msg=6";
 				header(sprintf("Location: %s", $checkin_redirect));
-				exit;
+				exit();
 
 			}
-		}
 
+		} // end if ($action == "update")
 
-	}
+	} // end if ($entry_found)
 
 	// If not, redirect to alert the user (message 4)
 	else {

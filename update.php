@@ -409,7 +409,7 @@ else {
 	<div id="loader-submit">
 	    <div class="center">
 	        <span class="fa fa-cog fa-spin fa-5x fa-fw"></span>
-	        <p><strong>Working.<br>Please wait, update In progress.<br>Press ESC to hide this loader (update scripts will still be running in the background).</strong></p>
+	        <p><strong>Working.<br>Please wait, update in progress.<br>Press ESC to hide this loader (update scripts will still be running in the background).</strong></p>
 	    </div>
 	</div>
 	<!-- ./LOADER -->

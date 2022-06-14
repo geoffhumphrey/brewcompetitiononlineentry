@@ -95,11 +95,11 @@ if ($msg != "default") {
       </div>
   <?php } ?>
 
-    <?php if (($setup_free_access == TRUE) && ($action != "print")) { ?>
+    <?php if (($setup_free_access) && ($action != "print")) { ?>
       <!-- Setup free access true -->
-      <div class="alert alert-warning alert-dismissible hidden-print fade in" role="alert">
+      <div class="alert alert-danger alert-dismissible hidden-print fade in" role="alert">
           <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-          <span class="fa fa-lg fa-exclamation-triangle"></span> <strong><?php echo $alert_text_002; ?></strong>
+          <span class="fa fa-lg fa-exclamation-circle"></span> <strong><?php echo $alert_text_002; ?></strong>
       </div>
     <?php } ?>
 

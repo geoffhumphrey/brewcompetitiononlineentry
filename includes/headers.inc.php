@@ -627,7 +627,7 @@ switch($section) {
 if ($msg == "14") $output = sprintf("<strong>%s</strong>",$header_text_096);
 if ($msg == "16") {
 	$output = sprintf("<strong>%s</strong>",$header_text_097);
-	$output_extend = sprintf("<div class=\"alert alert-warning\"><span class=\"fa fa-lg fa-exclamation-triangle\"></span> <strong>%s</strong> %s</div><div class=\"alert alert-info\"><span class=\"fa fa-lg fa-info-circle\"></span> <strong>%s</strong>.</div>",$header_text_098,$header_text_099,$header_text_100);
+	$output_extend = sprintf("<div class=\"alert alert-danger\"><span class=\"fa fa-lg fa-exclamation-circle\"></span> <strong>%s</strong> %s</div><div class=\"alert alert-info\"><span class=\"fa fa-lg fa-info-circle\"></span> <strong>%s</strong>.</div>",$header_text_098,$header_text_099,$header_text_100);
 	}
 if ($msg == "17") $output = sprintf("<strong>%s</strong>",$header_text_101);
 if ($msg == "27") $output = sprintf("<strong>%s</strong> %s",$header_text_102,$header_text_008);

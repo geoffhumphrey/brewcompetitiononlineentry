@@ -33,9 +33,31 @@ if ($setup_free_access == TRUE) {
 			}
 		}
 
-		$output .= "<a class=\"btn btn-lg btn-primary hide-loader\" href=\"".$base_url."setup.php?section=step0&amp;action=install-db\" data-confirm=\"Are you sure? This will install all database elements.\"><span class=\"fa fa-lg fa-download\"></span> Install DB Tables and Data</a>";
+		$output .= "<a class=\"btn btn-lg btn-primary hide-loader\" data-toggle=\"modal\" data-target=\"#install-begin-confirm\"><span class=\"fa fa-lg fa-download\"></span> Install DB Tables and Data</a>";
 
-		}
+		$output .= "
+			<div class=\"modal fade\" id=\"install-begin-confirm\" tabindex=\"-1\" role=\"dialog\">
+			  <div class=\"modal-dialog\" role=\"document\">
+			    <div class=\"modal-content\">
+			      <div class=\"modal-header\">
+			        <button type=\"button\" class=\"close\" data-dismiss=\"modal\" aria-label=\"Close\"><span aria-hidden=\"true\">&times;</span></button>
+			        <h4 class=\"modal-title\">Please Confirm</h4>
+			      </div>
+			      <div class=\"modal-body\">
+			        <p>Are you sure? This will install all database elements.</p>
+			        <p>This function cannot be stopped once begun.</p>
+			        <p class=\"text-primary\"><strong>Please note that the installation may take some time to complete, so patience is warranted.</strong></p>
+			      </div>
+			      <div class=\"modal-footer\">
+			        <button type=\"button\" class=\"btn btn-default\" data-dismiss=\"modal\">Close</button>
+			        <a id=\"confirm-start-install\" class=\"btn btn-success\" href=\"".$base_url."setup.php?section=step0&amp;action=install-db\">Yes, I'm Sure</a>
+			      </div>
+			    </div><!-- /.modal-content -->
+			  </div><!-- /.modal-dialog -->
+			</div><!-- /.modal -->
+		";
+
+	}
 
 	if ($action == "install-db") {
 
