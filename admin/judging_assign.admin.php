@@ -239,7 +239,7 @@ do {
 				$judge_alert = judge_alert($i,$row_brewer['uid'],$row_tables_edit['id'],$location,$judge_info[2],$judge_info[3],$row_tables_edit['tableStyles'],$row_tables_edit['id']);
 				$judge_alert = explode("|",$judge_alert);
 				$assign_row_color = $judge_alert[0];
-				$assign_flag = "<div>".$judge_alert[1]."</div>";
+				$assign_flag = "<div style=\"padding-bottom:15px;\">".$judge_alert[1]."</div>";
 			}
 
 			$random = random_generator(8,2);

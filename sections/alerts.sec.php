@@ -370,7 +370,7 @@ if ($msg != "default") {
     </div>
 <?php } ?>
 
-<?php if (($recently_updated) && ($_SESSION['update_errors'] == 1) && (($section == "admin") && ($go == "default"))) { ?>
+<?php if (($recently_updated) && ((isset($_SESSION['update_errors'])) && ($_SESSION['update_errors'] == 1)) && (($section == "admin") && ($go == "default"))) { ?>
     <div class="alert alert-danger alert-dismissible hidden-print fade in" role="alert">
         <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
         <p><span class="fa fa-lg fa-exclamation-circle"></span> <strong>Warning: Update Errors</strong></p>

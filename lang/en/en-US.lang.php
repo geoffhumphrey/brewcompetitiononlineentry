@@ -994,10 +994,7 @@ $qr_text_011 = "Six numbers with leading zeros - e.g., 000021.";
 $qr_text_012 = "Be sure to double-check your input and affix the appropriate judging number labels to each bottle and bottle label (if applicable).";
 $qr_text_013 = "Judging numbers must be six characters and cannot include the ^ character.";
 $qr_text_014 = "Waiting for scanned QR code input.";
-$qr_text_015 = "Launch or go back to your mobile device's scanning app to scan a QR code.";
 $qr_text_016 = "Need a QR Code scanning app? Search <a class=\"hide-loader\" href=\"https://play.google.com/store/search?q=qr%20code%20scanner&c=apps&hl=en\" target=\"_blank\">Google Play</a> (Android) or <a class=\"hide-loader\" href=\"https://itunes.apple.com/store/\" target=\"_blank\">iTunes</a> (iOS).";
-$qr_text_017 = "A QR Code scanning app is required to utilize this feature.";
-$qr_text_018 = "Launch the app on your mobile device, scan a QR Code located on a bottle label, enter the required password, and check in the entry.";
 
 /**
  * ------------------------------------------------------------------------
@@ -1932,7 +1929,7 @@ $brewer_entries_text_026 = "Judges scoresheets for this entry are in multiple fo
 
 // Update QR text
 $qr_text_008 = "To check in entries via QR code, please provide the correct password. You will only need to provide the password once per session - be sure to keep the browser or QR Code scanning app open.";
-$qr_text_015 = "Scan the next QR Code. For newer operating systems, access your mobile device's camera app. For older operating systems, launch/go back to your the scanning app.";
+$qr_text_015 = "Scan the next QR Code. Close this browser tab if you wish.<br><br>For newer operating systems, access your mobile device's camera app. For older operating systems, launch/go back to your the scanning app.";
 $qr_text_017 = "QR Code scanning is available natively on most modern mobile operating systems. Simply point your camera to the QR Code on a bottle label and follow the prompts. For older mobile operating systems, a QR Code scanning app is required to utilize this feature.";
 $qr_text_018 = "Scan a QR Code located on a bottle label, enter the required password, and check in the entry.";
 

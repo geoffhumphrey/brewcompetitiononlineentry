@@ -42,7 +42,8 @@ if ($action == "password-check") {
 
 	if ($id != "default") $password_redirect .= "&id=".$id;
 
-	if ((isset($_POST['inputPassword'])) && ($_POST['inputPassword'] != "")) {
+	if ((isset($_POST['inputPassword'])) && (!empty($_POST['inputPassword']))) {
+		
 		header('Expires: Sat, 26 Jul 1997 05:00:00 GMT');
 		header('Last-Modified: ' . gmdate( 'D, d M Y H:i:s' ) . ' GMT');
 		header('Cache-Control: no-store, no-cache, must-revalidate');
@@ -56,53 +57,54 @@ if ($action == "password-check") {
 
 		if (strlen($password) > 72) {
 			$password_redirect .= "&msg=1";
-			header(sprintf("Location: %s", $password_redirect));
-			exit;
-		}
-
-		mysqli_real_escape_string($connection,$password);
-		$password = md5($password);
-
-		// Check user input against DB
-		$query_qr_password = sprintf("SELECT contestCheckInPassword FROM %s WHERE id = '1'",$prefix."contest_info");
-		$qr_password = mysqli_query($connection,$query_qr_password) or die (mysqli_error($connection));
-		$row_qr_password = mysqli_fetch_assoc($qr_password);
-
-		// if no password set up, redirect
-		if (!isset($row_qr_password['contestCheckInPassword'])) {
-			$password_redirect .= "&msg=1";
-			header(sprintf("Location: %s", $password_redirect));
-			exit;
 		}
 
 		else {
-			$stored_hash = $row_qr_password['contestCheckInPassword'];
-			$check = 0;
-			$check = $hasher->CheckPassword($password, $stored_hash);
-		}
 
-		// If successful, register a session variable and set the redirect
-		if ($check == 1) {
-			$password_redirect .= "&msg=2";
-			$_SESSION['qrPasswordOK'] = $password;
-		}
+			mysqli_real_escape_string($connection,$password);
+			$password = md5($password);
 
-		// If not successful, destroy session and redirect
-		if ($check == 0) {
-			session_destroy();
-			$password_redirect .= "&msg=1";
-		}
+			// Check user input against DB
+			$query_qr_password = sprintf("SELECT contestCheckInPassword FROM %s WHERE id = '1'",$prefix."contest_info");
+			$qr_password = mysqli_query($connection,$query_qr_password) or die (mysqli_error($connection));
+			$row_qr_password = mysqli_fetch_assoc($qr_password);
 
-		header(sprintf("Location: %s", $password_redirect));
-		exit;
+			// if no password set up, redirect
+			if (!isset($row_qr_password['contestCheckInPassword'])) {
+				$password_redirect .= "&msg=1";
+			}
+
+			else {
+				
+				$stored_hash = $row_qr_password['contestCheckInPassword'];
+				$check = 0;
+				$check = $hasher->CheckPassword($password, $stored_hash);
+
+				// If successful, register a session variable and set the redirect
+				if ($check == 1) {
+					$password_redirect .= "&msg=2";
+					$_SESSION['qrPasswordOK'] = $password;
+				}
+
+				// If not successful, destroy session and redirect
+				if ($check == 0) {
+					session_destroy();
+					$password_redirect .= "&msg=1";
+				}
+
+			}
+
+		}
 
 	}
 
 	else {
 		$password_redirect .= "&msg=1";
-		header(sprintf("Location: %s", $password_redirect));
-		exit;
 	}
+
+	$redirect = prep_redirect_link($password_redirect);
+	header(sprintf("Location: %s", $redirect));
+	exit();
 
 }
 
@@ -116,79 +118,89 @@ if (($go == "default") && ($id != "default") && (isset($_SESSION['qrPasswordOK']
 	$entry = mysqli_query($connection,$query_entry) or die (mysqli_error($connection));
 	$row_entry = mysqli_fetch_assoc($entry);
 	$totalRows_entry = mysqli_num_rows($entry);
+	
+	if ($totalRows_entry == 1) {
 
-	$entry_found = FALSE;
+		$brewBoxNum = NULL;
+		$brewPaid = 0;
+		$paid_checked = "";
+		$paid = FALSE;
 
-	if ($totalRows_entry > 0) $entry_found = TRUE;
-
-	// If so, mark the entry as "received" and redirect (message 3)
-	if ($entry_found) {
-
-		if ($row_entry['brewPaid'] == 1) $paid_checked = "checked disabled";
+		if ($row_entry['brewPaid'] == 1) {
+			$paid = TRUE;
+			$paid_checked = "checked disabled";
+			$brewPaid = 1;
+		}
 
 		if ($action == "update") {
+
+			$update_table = $prefix."brewing";
+
+			if ((isset($_POST['brewBoxNum'])) && (!empty($_POST['brewBoxNum']))) $brewBoxNum = sterilize($_POST['brewBoxNum']);
+			if ((!$paid) && ((isset($_POST['brewPaid'])) && (!empty($_POST['brewPaid'])))) $brewPaid = 1;
 
 			// Check if judging number has been input
 			// If so, add to update query and perform redirect
 			if ((isset($_POST['brewJudgingNumber'])) && ($_POST['brewJudgingNumber'] != "")) {
 
-				$judgingNumber = sprintf("%06s",sterilize($_POST['brewJudgingNumber']));
-				$judgingNumber = strtolower($judgingNumber); // judging numbers are stored in all lower case
+				$brewJudgingNumber = sprintf("%06s",sterilize($_POST['brewJudgingNumber']));
+				$brewJudgingNumber = strtolower($brewJudgingNumber); // judging numbers are stored in all lower case
 
 				// Check to see if judging number has already been assigned
-				$query_judging_number = sprintf("SELECT id FROM %s WHERE brewJudgingNumber='%s' AND id <> %s ",$prefix."brewing",$judgingNumber,$id);
+				$query_judging_number = sprintf("SELECT id FROM %s WHERE brewJudgingNumber='%s' AND id <> %s ",$prefix."brewing",$brewJudgingNumber,$id);
 				$judging_number = mysqli_query($connection,$query_judging_number) or die (mysqli_error($connection));
 				$row_judging_number = mysqli_fetch_assoc($judging_number);
 				$totalRows_judging_number = mysqli_num_rows($judging_number);
 
 				// If so, redirect with message
 				if ($totalRows_judging_number > 0) {
-					$redirect = $base_url."qr.php?action=default&go=default&view=".$row_judging_number['id']."^".$judgingNumber."&msg=5";
+					$redirect = $base_url."qr.php?action=default&go=default&view=".$row_judging_number['id']."^".$brewJudgingNumber."&msg=5";
+					$redirect = prep_redirect_link($redirect);
 					header(sprintf("Location: %s", $redirect));
-					exit;
+					exit();
 				}
-
-				$update_table = $prefix."brewing";
+				
 				$data = array(
 					'brewReceived' => 1,
-					'brewJudgingNumber' => $judgingNumber
+					'brewJudgingNumber' => $brewJudgingNumber,
+					'brewBoxNum' => $brewBoxNum,
+					'brewPaid' => $brewPaid
 				);
-				if ((isset($_POST['brewBoxNum'])) && (!empty($_POST['brewBoxNum'])) $data[] = array('brewBoxNum' => sterilize($_POST['brewBoxNum']));
-				if ((isset($_POST['brewPaid'])) && (!empty($_POST['brewPaid'])) $data[] = array('brewPaid' => sterilize($_POST['brewPaid']));
-				$db_conn->where ('id', $id);
-				$db_conn->update ($update_table, $data);
 
-				$checkin_redirect .= "&view=".$id."^".$judgingNumber."&msg=3";
-				header(sprintf("Location: %s", $checkin_redirect));
-				exit();
+				$checkin_redirect .= "&view=".$id."^".$brewJudgingNumber."&msg=3";
 
 			}
 
 			else {
 
-				$update_table = $prefix."brewing";
-				$data = array('brewReceived' => 1);
-				if ((isset($_POST['brewBoxNum'])) && (!empty($_POST['brewBoxNum'])) $data[] = array('brewBoxNum' => sterilize($_POST['brewBoxNum']));
-				if ((isset($_POST['brewPaid'])) && (!empty($_POST['brewPaid'])) $data[] = array('brewPaid' => sterilize($_POST['brewPaid']));
-				$db_conn->where ('id', $id);
-				$db_conn->update ($update_table, $data);
+				$data = array(
+					'brewReceived' => 1,
+					'brewBoxNum' => $brewBoxNum,
+					'brewPaid' => $brewPaid
+				);
 
 				$checkin_redirect .= "&view=".$id."^".$row_entry['brewJudgingNumber']."&msg=6";
-				header(sprintf("Location: %s", $checkin_redirect));
-				exit();
-
+				
 			}
+
+			$db_conn->where ('id', $id);
+			if ($db_conn->update ($update_table, $data)) $redirect = $checkin_redirect;
+			else $redirect = "&view=".$id."^000000&msg=7";
+			$redirect = prep_redirect_link($redirect);
+			header(sprintf("Location: %s", $redirect));
+			exit();
 
 		} // end if ($action == "update")
 
-	} // end if ($entry_found)
+	} // end if ($totalRows_entry == 1)
 
 	// If not, redirect to alert the user (message 4)
 	else {
 
 		$checkin_redirect .= "&view=".$id."^000000&msg=4";
-		header(sprintf("Location: %s", $checkin_redirect));
-		exit;
+		$redirect = prep_redirect_link($checkin_redirect);
+		header(sprintf("Location: %s", $redirect));
+		exit();
 
 	}
 
@@ -199,21 +211,16 @@ $message = "";
 $alert_type = "alert-danger";
 
 if ($msg == "1") {
-	$message .= sprintf("<span class=\"fa fa-exclamation-circle\"></span> <strong>%s</strong> %s",$qr_text_000,$header_text_008);
+	$message .= sprintf("<span class=\"fa fa-exclamation-circle\"></span> <strong>%s</strong> %s",$alert_text_080,$header_text_008);
 }
 
 if ($msg == "2") {
-	$message .= sprintf("<span class=\"fa fa-check-circle\"></span> <strong>%s</strong>",$qr_text_001);
+	$message .= sprintf("<span class=\"fa fa-check-circle\"></span> <strong>%s</strong>",$alert_text_081);
 	$alert_type = "alert-success";
 }
 
 if ($msg == "3") {
-	$message .= sprintf("<p><span class=\"fa fa-check-circle\"></span> <strong>%s</strong></p><p>%s<p>",$qr_text_002,$qr_text_003);
-	$alert_type = "alert-success";
-}
-
-if ($msg == "6") {
-	$message .= sprintf("<p><span class=\"fa fa-check-circle\"></span> <strong>%s</strong></p>",$qr_text_004);
+	$message .= sprintf("<p><span class=\"fa fa-check-circle\"></span> <strong>%s</strong></p><p>%s<p></strong>",$qr_text_002, $qr_text_003);
 	$alert_type = "alert-success";
 }
 
@@ -225,6 +232,15 @@ if ($msg == "5") {
 	$message .= sprintf("<span class=\"fa fa-exclamation-circle\"></span> <strong>%s</strong>",$qr_text_006);
 }
 
+if ($msg == "6") {
+	$message .= sprintf("<p><span class=\"fa fa-check-circle\"></span> <strong>%s</strong></p>",$qr_text_004);
+	$alert_type = "alert-success";
+}
+
+if ($msg == "7") {
+	$message .= sprintf("<span class=\"fa fa-exclamation-circle\"></span> <strong>%s</strong>",$header_text_014);
+}
+
 if (isset($_SESSION['last_action'])) {
     $seconds_inactive = time() - $_SESSION['last_action'];
     $session_expire_after_seconds = $session_expire_after * 60;
@@ -233,7 +249,6 @@ if (isset($_SESSION['last_action'])) {
 		session_destroy();
 		session_write_close();
 		setcookie(session_name($prefix_session),'',0,'/');
-		session_regenerate_id(true);
     }
 }
 
@@ -250,11 +265,11 @@ $_SESSION['last_action'] = time();
     <title><?php echo $row_contest_info['contestName']; ?> - Brew Competition Online Entry &amp; Management</title>
 
 	<!-- Load jQuery / http://jquery.com/ -->
-	<script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
 
     <!-- Load Bootstrap / http://www.getbootsrap.com -->
-    <link rel="stylesheet" type="text/css" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
-    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
     <!--[if lt IE 9]>
       <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
@@ -265,7 +280,8 @@ $_SESSION['last_action'] = time();
     <script src="//cdnjs.cloudflare.com/ajax/libs/1000hz-bootstrap-validator/0.9.0/validator.min.js"></script>
 
     <!-- Load Font Awesome / https://fortawesome.github.io/Font-Awesome -->
-    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css" integrity="sha512-HK5fgLBL+xu6dm/Ii3z4xhlSUyZgTT9tuc/hSrtw6uzJOvgRr2a9jyxxT1ely+B+xFAmJKVSTbpM/CuL7qxO8w==" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/v4-shims.min.css" integrity="sha512-NfhLGuxy6G12XHj7/bvm0RC3jmR25RdpImn8P19aIMmN5pndO0fvIg78ihN2WIJtVRs+AYVrnYF4AipVikGPLg==" crossorigin="anonymous" />
 
     <!-- Load BCOE&M Custom Theme CSS - Contains Bootstrap overrides and custom classes -->
     <link rel="stylesheet" type="text/css" href="<?php echo $theme; ?>" />
@@ -350,9 +366,10 @@ $_SESSION['last_action'] = time();
     <?php if (isset($_SESSION['qrPasswordOK'])) { ?>
 	<?php if (($id == "default") && ($action == "default")) { ?>
     <p class="lead text-primary"><span class="fa fa-spinner fa-spin"></span> <strong><?php echo $qr_text_014; ?></strong></p>
-    <p class="lead text-danger"><small><span class="fa fa-exclamation-triangle"></span> <?php echo $qr_text_015; ?></small></p>
+    <p class="alert alert-info"><span class="fa fa-info-circle"></span> <?php echo $qr_text_015; ?></p>
     <p style="margin-top: 15px;" class="well"><small><?php echo $qr_text_016; ?></small></p>
-    <?php } if (($id != "default") && ($action == "default") && ($go != "success")) { ?>
+    <?php } ?>
+    <?php if (($id != "default") && ($action == "default") && ($go != "success")) { ?>
     <p class="lead text-primary"><strong><?php echo $qr_text_009; ?> <span class="badge"><?php echo sprintf("%06d",$id); ?></span></strong></p>
     <p class="lead text-danger"><small><strong><?php echo $qr_text_010; ?></strong></small></p>
     <form name="form1" data-toggle="validator" action="<?php echo $base_url; ?>qr.php?action=update<?php if ($id != "default") echo "&amp;id=".$id; ?>" method="post">

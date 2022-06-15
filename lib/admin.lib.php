@@ -1122,19 +1122,19 @@ function like_dislike($likes,$dislikes,$styles) {
 	}
 
 	if (($c > 0) && ($f == 0)) {
-		$r .= "bg-success text-success|<span class=\"text-success\" style=\"margin: 0 0 10px 0;\"><span class=\"fa fa-thumbs-o-up\"></span> <strong>Available and Preferred Style(s).</strong><span>"; // 1 or more likes matched, color table cell green
-		$r .= " <a tabindex=\"0\" role=\"button\" data-toggle=\"popover\" data-placement=\"right\" data-trigger=\"hover focus\" data-content=\"Paricipant is available for this round. One or more styles at the table are on the participant&rsquo;s &ldquo;likes&rdquo; list.\"><span class=\"fa fa-lg fa-info-circle\"></span></a>";
+		$r .= "bg-success text-success|<span class=\"text-success\"><span class=\"fa fa-thumbs-o-up\"></span> <strong>Available and Preferred Style(s).</strong><span>"; // 1 or more likes matched, color table cell green
+		$r .= " <a class=\"hide-loader\" tabindex=\"0\" role=\"button\" data-toggle=\"popover\" data-placement=\"right\" data-trigger=\"click hover focus\" data-content=\"Paricipant is available for this round. One or more styles at the table are on the participant&rsquo;s &ldquo;likes&rdquo; list.\"><span class=\"fa fa-info-circle\"></span></a>";
 	}
 	
 	elseif (($c == 0) && ($f > 0)) {
 		$r .= "bg-danger text-danger|<span class=\"text-danger\"><span class=\"fa fa-thumbs-o-down\"></span> <strong>Available but Non-Preferred Style(s).</strong></span>";
-		$r .= " <a tabindex=\"0\" role=\"button\" data-toggle=\"popover\" data-placement=\"right\" data-trigger=\"hover focus\" data-content=\"Paricipant is available for this round. One or more styles are on the participant&rsquo;s &ldquo;dislikes&rdquo; list.\"><span class=\"fa fa-lg fa-info-circle\"></span></a>";
+		$r .= " <a class=\"hide-loader\" tabindex=\"0\" role=\"button\" data-toggle=\"popover\" data-placement=\"right\" data-trigger=\"click hover focus\" data-content=\"Paricipant is available for this round. One or more styles are on the participant&rsquo;s &ldquo;dislikes&rdquo; list.\"><span class=\"fa fa-info-circle\"></span></a>";
 		// 1 or more dislikes matched, color table cell red
 	}
 	
 	else {
 		$r .="bg-grey text-grey|<span class=\"text-orange\"><span class=\"fa fa-star-o\"></span> <strong>Available.</strong></span>";
-		$r .= " <a tabindex=\"0\" role=\"button\" data-toggle=\"popover\" data-placement=\"right\" data-trigger=\"hover focus\" data-content=\"Paricipant is available for this round.\"><span class=\"fa fa-lg fa-info-circle\"></span></a>";
+		$r .= " <a class=\"hide-loader\" tabindex=\"0\" role=\"button\" data-toggle=\"popover\" data-placement=\"right\" data-trigger=\"click hover focus\" data-content=\"Paricipant is available for this round.\"><span class=\"fa fa-info-circle\"></span></a>";
 	}
 
 	return $r;
@@ -1282,11 +1282,16 @@ function assign_to_table($tid,$bid,$filter,$total_flights,$round,$location,$tabl
 				if (flight_round($tid,$f,$round)) {
 					
 					if (already_assigned($bid,$tid,$f,$round)) {
-						$output = 'Assigned'; $selected = 'selected'; $style = ' style="color: #990000;"';
+						$output = 'Assigned'; 
+						$selected = 'selected'; 
 					}
-					else $output = 'Assign'; $selected = ''; $style='';
 
-					$r .= '<option value="'.$f.'" '.$selected.$style.' />'.$output.' to Flight '.$f.'</option>';
+					else {
+						$output = 'Assign'; 
+						$selected = ''; 
+					}
+
+					$r .= '<option value="'.$f.'" '.$selected.' />'.$output.' to Flight '.$f.'</option>';
 
 				}
 
