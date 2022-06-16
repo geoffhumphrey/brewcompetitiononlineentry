@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Module:      staff_points.php
+ * Module:      staff_points.output.php
  * Description: This module calculates the BJCP points for staff, judges, and stewards
  *	            using the guidelines provided by the BJCP at https://dev.bjcp.org/about/reference/experience-point-award-schedule/.
  * Revision History:
@@ -33,39 +33,60 @@ To figure out steward points, need to assess:
 
 */
 
-require (DB.'judging_locations.db.php');
-require (DB.'styles.db.php');
-require (DB.'admin_common.db.php');
-require (LIB.'output.lib.php');
-require (DB.'output_staff_points.db.php');
+include (LIB.'output.lib.php');
+include (DB.'judging_locations.db.php');
+include (DB.'styles.db.php');
+include (DB.'admin_common.db.php');
+include (DB.'output_staff_points.db.php');
+
 // Get total amount of paid and received entries
 $total_entries = total_paid_received("judging_scores",0);
 //$total_entries = 750;
 
+$st_running_total = array();
+
 // Figure out whether BOS Judge Points are awarded or not
 // "BOS points may only be awarded if a competition has at least 30 entries in at least five beer and/or three mead/cider categories."
-$beer_styles = 0;
-$mead_styles = 0;
-$cider_styles = 0;
+$beer_styles = array();
+$mead_styles = array();
+$cider_styles = array();
+
+$beer_styles[] = array();
+$mead_styles[] = array();
+$cider_styles[] = array();
 
 do {
 
-	if ($row_styles2['brewStyleType'] = "Cider") $cider_styles += 1;
-	elseif ($row_styles2['brewStyleType'] = "Mead") $mead_styles += 1;
-	else $beer_syles += 1;
+    if (($row_styles2['brewStyleType'] == "Cider") || ($row_styles2['brewStyleType'] == "2")) {
+        $beer_styles[] = 0;
+        $mead_styles[] = 0;
+        $cider_styles[] = 1;
+    }
+
+    elseif (($row_styles2['brewStyleType'] == "Mead") || ($row_styles2['brewStyleType'] == "3")) {
+        $beer_styles[] = 0;
+        $mead_styles[] = 1;
+        $cider_styles[] = 0;
+    }
+
+    else  {
+        $beer_styles[] = 1;
+        $mead_styles[] = 0;
+        $cider_styles[] = 0;
+    }
 
 } while ($row_styles2 = mysqli_fetch_assoc($styles2));
 
-$mead_cider = $mead_styles+$cider_styles;
+$beer_styles_total = array_sum($beer_styles);
+$mead_styles_total = array_sum($mead_styles);
+$cider_styles_total = array_sum($cider_styles);
 
-if (($total_entries >= 30) && (($beer_styles >= 5) || ($mead_cider >= 3))) $bos_judge_points = 0.5;
+$mead_cider_total = $mead_styles_total + $cider_styles_total;
+$all_styles_total = $beer_styles_total + $mead_styles_total + $cider_styles_total;
+
+if (($total_entries >= 30) && (($beer_styles_total >= 5) || ($mead_cider_total >= 3))) $bos_judge_points = 0.5;
 else $bos_judge_points = 0.0;
 
-/*
-do { 
-	$a[] = $row_judging['id']; 
-} while ($row_judging = mysqli_fetch_assoc($judging));
-*/
 $days = number_format(total_days(),1);
 $sessions = number_format(total_sessions(),1);
 
@@ -78,8 +99,11 @@ $organ_bjcp_id = "999999999999";
 if ($view == "default") {
 
 	if ($totalRows_organizer > 0) {
+		
 		$organ_bjcp_id = strtoupper(strtr($row_org['brewerJudgeID'],$bjcp_num_replace));
+
 		$org_name = ucwords(strtolower($row_org['brewerLastName'])).", ".ucwords(strtolower($row_org['brewerFirstName']));
+
 		$output_organizer .= "<tr>";
 		$output_organizer .= "<td>".$org_name."</td>";
 		$output_organizer .= "<td>";
@@ -87,6 +111,7 @@ if ($view == "default") {
 		$output_organizer .= "</td>";
 		$output_organizer .= "<td>".$organ_max_points."</td>";
 		$output_organizer .= "</tr>";
+
 	}
 
 	if ($totalRows_judges > 0) {
@@ -219,25 +244,31 @@ if ($view == "default") {
 				
 			$staff_info = explode("^",brewer_info($uid));
 			$staff_bjcp_id = strtoupper(strtr($staff_info['4'],$bjcp_num_replace));
-			$st_running_total += $staff_points;
 
 			if ((!empty($staff_info['1'])) && ($staff_bjcp_id != $organ_bjcp_id)) {
 				$staff_name = ucwords(strtolower($staff_info['1'])).", ".ucwords(strtolower($staff_info['0']));
 
-				$output_staff .= "<tr>";
-				$output_staff .= "<td>".$staff_name."</td>";
-				$output_staff .= "<td>";
-				if (validate_bjcp_id($staff_info['4'])) $output_staff .= $staff_bjcp_id;
+				if ($st_running_total <= $staff_max_points) {
 
-				$output_staff .= "</td>";
-				$output_staff .= "<td>";
-				if ($staff_bjcp_id == $organ_bjcp_id) $output_staff .= "0.0 (".$label_organizer.")";
-				else {
-					if (($st_running_total <= $staff_max_points) && ($staff_points < $organ_max_points)) $output_staff .= $staff_points;
-					else $output_staff .= $organ_max_points;
+					$output_staff .= "<tr>";
+					$output_staff .= "<td>".$staff_name."</td>";
+					$output_staff .= "<td>";
+					if (validate_bjcp_id($staff_info['4'])) $output_staff .= $staff_bjcp_id;
+
+					$output_staff .= "</td>";
+					$output_staff .= "<td>";
+					if ($staff_bjcp_id == $organ_bjcp_id) $output_staff .= "0.0 (".$label_organizer.")";
+					else {
+						if (($st_running_total <= $staff_max_points) && ($staff_points < $organ_max_points)) $output_staff .= $staff_points;
+						else $output_staff .= $organ_max_points;
+					}
+					$output_staff .= "</td>";
+					$output_staff .= "</tr>";
+
+					$st_running_total += $staff_points;
+
 				}
-				$output_staff .= "</td>";
-				$output_staff .= "</tr>";
+					
 			}
 
 		}

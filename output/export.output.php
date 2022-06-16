@@ -2087,7 +2087,10 @@ if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($en
 
                             if ($judge_bjcp_id == $organ_bjcp_id) $string = sprintf("0.0 (%s)",$label_organizer);
                             else {
-                                if ($bos_judge) $string = $judge_points + $bos_judge_points;
+                                if ($bos_judge) {
+                                    $string = $judge_points + $bos_judge_points;
+                                    $string .= " (BOS)";
+                                }
                                 else $string = $judge_points;
                             }
                             $string = (iconv("UTF-8", "ASCII//TRANSLIT//IGNORE", transliterator_transliterate('Any-Latin; Latin-ASCII', $string)));
@@ -2119,7 +2122,10 @@ if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($en
 
                                 if ($judge_bjcp_id == $organ_bjcp_id) $string = sprintf("0.0 (%s)",$label_organizer);
                                 else {
-                                    if ($bos_judge) $string = $judge_points + $bos_judge_points;
+                                    if ($bos_judge) {
+                                        $string = $judge_points + $bos_judge_points;
+                                        $string .= " (BOS)";
+                                    }
                                     else $string = $judge_points;
                                 }
                                 $string = (iconv("UTF-8", "ASCII//TRANSLIT//IGNORE", transliterator_transliterate('Any-Latin; Latin-ASCII', $string)));
@@ -2196,6 +2202,8 @@ if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($en
 
                 if ($totalRows_staff > 0) {
 
+                    $st_running_total = 0;
+
                     $staff_title = $label_staff;
                     $staff_title = (iconv("UTF-8", "ASCII//TRANSLIT//IGNORE", transliterator_transliterate('Any-Latin; Latin-ASCII', $staff_title)));
                     
@@ -2219,13 +2227,13 @@ if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($en
 
                     foreach (array_unique($st) as $uid) {
                         
-                        if (array_sum($st_running_total) < $staff_max_points) {
+                        if ($st_running_total <= $staff_max_points) {
                             
                             $staff_info = explode("^",brewer_info($uid));
                             $staff_bjcp_id = "";
                             if (validate_bjcp_id($staff_info['4'])) $staff_bjcp_id = strtoupper(strtr($staff_info['4'],$bjcp_num_replace));
                            
-                            if ((array_sum($st_running_total) <= $staff_max_points) && ($staff_points < $organ_max_points)) $staff_points = $staff_points;
+                            if (($st_running_total <= $staff_max_points) && ($staff_points < $organ_max_points)) $staff_points = $staff_points;
                             else $staff_points = $organ_max_points;
 
                             $string = html_entity_decode($staff_info['1']).", ".html_entity_decode($staff_info['0']);
@@ -2240,8 +2248,11 @@ if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($en
                             $staff_table->easyCell($string);
 
                             $staff_table->printRow();
+
+                            $st_running_total += $staff_points;
                             
                         } // end if (array_sum($st_running_total) < $staff_max_points)
+
 
                     } // end foreach
                     
