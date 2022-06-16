@@ -453,32 +453,35 @@ $(document).ready(function() {
         $score_style_data = explode("^",$score_style_data);
 
         include (DB.'admin_judging_scores.db.php');
-        $style = style_number_const($row_entries['brewCategorySort'],$row_entries['brewSubCategory'],$_SESSION['style_set_display_separator'],$style_display_method);
 
-        do {
+        if ($row_entries) {
+        
+            $style = style_number_const($row_entries['brewCategorySort'],$row_entries['brewSubCategory'],$_SESSION['style_set_display_separator'],$style_display_method);
 
-            if ($totalRows_entries > 0) {
+            do {
 
-                $saving_random_num = random_generator(8,2);
+                if ($totalRows_entries > 0) {
 
-                if ($action == "edit") {
-                    $score_entry_data = score_entry_data($row_entries['id']);
-                    $score_entry_data = explode("^",$score_entry_data);
-                }
+                    $saving_random_num = random_generator(8,2);
 
-                if (!empty($score_entry_data[3])) $score_previous = "Y";
-                elseif (!empty($score_entry_data[4])) $score_previous = "Y";
-                else $score_previous = "N";
+                    if ($action == "edit") {
+                        $score_entry_data = score_entry_data($row_entries['id']);
+                        $score_entry_data = explode("^",$score_entry_data);
+                    }
 
-                $eid = $row_entries['id'];
-                $bid = $row_entries['brewBrewerID'];
-                $entry_number = sprintf("%06s",$row_entries['id']);
-                $judging_number = sprintf("%06s",$row_entries['brewJudgingNumber']);
+                    if (!empty($score_entry_data[3])) $score_previous = "Y";
+                    elseif (!empty($score_entry_data[4])) $score_previous = "Y";
+                    else $score_previous = "N";
 
-                if (empty($style)) $style_display = $score_style_data[2];
-                else $style_display = $style.": ".$score_style_data[2];
+                    $eid = $row_entries['id'];
+                    $bid = $row_entries['brewBrewerID'];
+                    $entry_number = sprintf("%06s",$row_entries['id']);
+                    $judging_number = sprintf("%06s",$row_entries['brewJudgingNumber']);
 
-                $scoreType = style_type($score_style_data[3],"1","bcoe");
+                    if (empty($style)) $style_display = $score_style_data[2];
+                    else $style_display = $style.": ".$score_style_data[2];
+
+                    $scoreType = style_type($score_style_data[3],"1","bcoe");
 
     ?>
     <tr>
@@ -501,7 +504,6 @@ $(document).ready(function() {
             </div>
         </td>
         <td>
-            <span id="score-entry-ajax-<?php echo $saving_random_num; ?>-scoreEntry-sortable-value" style="visibility: hidden;"><?php if ((isset($score_entry_data[3])) && ($action == "edit")) echo $score_entry_data[3]; ?></span>
             <div class="form-group" id="score-entry-ajax-<?php echo $saving_random_num; ?>-scoreEntry-form-group">
             <input class="form-control" id="score-entry-ajax-<?php echo $saving_random_num; ?>" type="number" pattern="\d{2}" maxlength="2" name="scoreEntry<?php echo $eid; ?>" size="6" maxlength="6" value="<?php if ($action == "edit") echo $score_entry_data[3]; ?>" onblur="save_column('<?php echo $base_url; ?>','scoreEntry','judging_scores','<?php echo $eid; ?>','<?php echo $bid; ?>','<?php echo $id; ?>','<?php echo $scoreType; ?>','default','score-entry-ajax-<?php echo $saving_random_num; ?>','value')" />
             </div>
@@ -530,8 +532,9 @@ $(document).ready(function() {
             <span id="score-place-ajax-<?php echo $saving_random_num; ?>-scorePlace-status-msg"></span>
         </td>
     </tr>
-    <?php }
-        } while ($row_entries = mysqli_fetch_assoc($entries));
+    <?php       }
+            } while ($row_entries = mysqli_fetch_assoc($entries));
+        } // end if ($row_entries)
     } // end foreach ?>
 </tbody>
 </table>

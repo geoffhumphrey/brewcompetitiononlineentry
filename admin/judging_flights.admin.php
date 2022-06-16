@@ -17,58 +17,61 @@ if (($filter != "default") && ($filter != "rounds"))  {
 
 		include (DB.'admin_judging_flights.db.php');
 
-		do {
+		if ($row_entries) {
 
-			$random = random_generator(7,2);
-			$flight_number_entry = "";
-			$flight_number_value = "";
+			do {
 
-			if ($action == "edit") {
-				$flight_number_entry = flight_entry_info($row_entries['id']);
-				$flight_number_value = explode("^",$flight_number_entry);
-			}
+				$random = random_generator(7,2);
+				$flight_number_entry = "";
+				$flight_number_value = "";
+				$hidden_input_id = "";
+				$checked = "";
 
-			$hidden_input_id = "";
-			$checked = "";
+				if ($action == "edit") {
+					$flight_number_entry = flight_entry_info($row_entries['id']);
+					$flight_number_value = explode("^",$flight_number_entry);
+				}
 
-			if ($action == "add") $hidden_input_id = $row_entries['id'];
-			elseif (($action == "edit") && (!empty($flight_number_value[0]))) $hidden_input_id = $flight_number_value[0];
-			else $hidden_input_id = $random;
+				if ($action == "add") $hidden_input_id = $row_entries['id'];
+				elseif (($action == "edit") && (!empty($flight_number_value[0]))) $hidden_input_id = $flight_number_value[0];
+				else $hidden_input_id = $random;
 
-			$flight_table_tbody .= "<tr>\n";
-			$flight_table_tbody .= "<td>";
-			$flight_table_tbody .= $row_entries['brewJudgingNumber'];
-			$flight_table_tbody .= "<input type=\"hidden\" name=\"id[]\" value=\"".$hidden_input_id."\">";
-			$flight_table_tbody .= "<input type=\"hidden\" name=\"flightTable\" value=\"".$row_tables_edit['id']."\">";
-			$flight_table_tbody .= "<input type=\"hidden\" name=\"flightEntryID".$hidden_input_id."\" value=\"".$row_entries['id']."\">";
-			$flight_table_tbody .= "</td>\n";
-
-			$flight_table_tbody .= "<td>";
-			if ($_SESSION['prefsStyleSet'] == "BA") $flight_table_tbody .= $row_entries['brewStyle'];
-			elseif ($_SESSION['prefsStyleSet'] == "AABC") $flight_table_tbody .= ltrim($row_entries['brewCategorySort'],"0").".".ltrim($row_entries['brewSubCategory'],"0")." ".style_convert($row_entries['brewCategorySort'],1).": ".$row_entries['brewStyle'];
-			else $flight_table_tbody .= $row_entries['brewCategorySort'].$row_entries['brewSubCategory']." ".style_convert($row_entries['brewCategorySort'],1).": ".$row_entries['brewStyle'];
-			$flight_table_tbody .= "</td>\n";
-
-			for($i=1; $i<$flight_count+1; $i++) {
-				if (($action == "add") && ($i == 1)) $checked = "checked";
-				elseif (($action == "edit") && ($flight_number_value[1] == $i)) $checked = "checked";
-				else $checked = "";
+				$flight_table_tbody .= "<tr>\n";
 				$flight_table_tbody .= "<td>";
-				$flight_table_tbody .= "<input type=\"radio\" name=\"flightNumber".$hidden_input_id."\" value=\"flight".$i."\" ".$checked.">";
+				$flight_table_tbody .= $row_entries['brewJudgingNumber'];
+				$flight_table_tbody .= "<input type=\"hidden\" name=\"id[]\" value=\"".$hidden_input_id."\">";
+				$flight_table_tbody .= "<input type=\"hidden\" name=\"flightTable\" value=\"".$row_tables_edit['id']."\">";
+				$flight_table_tbody .= "<input type=\"hidden\" name=\"flightEntryID".$hidden_input_id."\" value=\"".$row_entries['id']."\">";
 				$flight_table_tbody .= "</td>\n";
-			}
 
-			$flight_table_tbody .= "<td>";
-			if ($action == "edit") $flight_table_tbody .= $flight_number_value[3];
-			else $flight_table_tbody .= "&nbsp;";
-			$flight_table_tbody .= "</td>\n";
-			$flight_table_tbody .= "<td>";
-			$flight_table_tbody .= str_replace("^"," | ",$row_entries['brewInfo']);
-			if (!empty($row_entries['brewInfoOptional'])) $flight_table_tbody .= $row_entries['brewInfoOptional'];
-			$flight_table_tbody .= "</td>\n";
-			$flight_table_tbody .= "</tr>\n";
+				$flight_table_tbody .= "<td>";
+				if ($_SESSION['prefsStyleSet'] == "BA") $flight_table_tbody .= $row_entries['brewStyle'];
+				elseif ($_SESSION['prefsStyleSet'] == "AABC") $flight_table_tbody .= ltrim($row_entries['brewCategorySort'],"0").".".ltrim($row_entries['brewSubCategory'],"0")." ".style_convert($row_entries['brewCategorySort'],1).": ".$row_entries['brewStyle'];
+				else $flight_table_tbody .= $row_entries['brewCategorySort'].$row_entries['brewSubCategory']." ".style_convert($row_entries['brewCategorySort'],1).": ".$row_entries['brewStyle'];
+				$flight_table_tbody .= "</td>\n";
 
-		}  while ($row_entries = mysqli_fetch_assoc($entries));
+				for($i=1; $i<$flight_count+1; $i++) {
+					if (($action == "add") && ($i == 1)) $checked = "checked";
+					elseif (($action == "edit") && ($flight_number_value[1] == $i)) $checked = "checked";
+					else $checked = "";
+					$flight_table_tbody .= "<td>";
+					$flight_table_tbody .= "<input type=\"radio\" name=\"flightNumber".$hidden_input_id."\" value=\"flight".$i."\" ".$checked.">";
+					$flight_table_tbody .= "</td>\n";
+				}
+
+				$flight_table_tbody .= "<td>";
+				if ($action == "edit") $flight_table_tbody .= $flight_number_value[3];
+				else $flight_table_tbody .= "&nbsp;";
+				$flight_table_tbody .= "</td>\n";
+				$flight_table_tbody .= "<td>";
+				$flight_table_tbody .= str_replace("^"," | ",$row_entries['brewInfo']);
+				if (!empty($row_entries['brewInfoOptional'])) $flight_table_tbody .= $row_entries['brewInfoOptional'];
+				$flight_table_tbody .= "</td>\n";
+				$flight_table_tbody .= "</tr>\n";
+
+			}  while ($row_entries = mysqli_fetch_assoc($entries));
+
+		}
 
 	}
 
