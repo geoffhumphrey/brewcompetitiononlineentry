@@ -2043,6 +2043,9 @@ class MysqliDb
      * @param array  $vals
      *
      * @return string
+     * 
+     * UPDATED 06-17-2022 
+     * Errors output for empty array keys
      */
     protected function replacePlaceHolders($str, $vals)
     {
@@ -2053,19 +2056,31 @@ class MysqliDb
             return $str;
         }
 
-        while ($pos = strpos($str, "?")) {
-            $val = $vals[$i++];
-            if (is_object($val)) {
-                $val = '[object]';
+        else {
+
+            $str = "";
+
+            while ($pos = strpos($str, "?")) {
+
+                if (isset($vals)) {
+                    $val = $vals[$i++];
+                    if (is_object($val)) {
+                        $val = '[object]';
+                    }
+                    if ($val === null) {
+                        $val = 'NULL';
+                    }
+                    $newStr .= mb_substr($str, 0, $pos) . "'" . $val . "'";
+                    $str = mb_substr($str, $pos + 1);
+                }
+               
             }
-            if ($val === null) {
-                $val = 'NULL';
-            }
-            $newStr .= mb_substr($str, 0, $pos) . "'" . $val . "'";
-            $str = mb_substr($str, $pos + 1);
-        }
-        $newStr .= $str;
-        return $newStr;
+
+            $newStr .= $str;
+            return $newStr;
+
+        }   
+        
     }
 
     /**

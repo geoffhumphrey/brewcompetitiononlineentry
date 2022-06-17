@@ -54,6 +54,7 @@ $versions = array(
 flush();
 
 $setup_running = FALSE;
+if (!isset($update_running)) $update_running = FALSE;
 if (isset($output)) $setup_running = TRUE;
 else $output = "";
 
@@ -2711,7 +2712,7 @@ $_SESSION['prefsHideRecipe'] = "Y";
 
 $deprecated_entry_forms = array("B","N","M","U","3","4");
 
-if (in_array($_SESSION['prefsEntryForm'],$deprecated_entry_forms)) {
+if ((isset($_SESSION['prefsEntryForm'])) && (in_array($_SESSION['prefsEntryForm'],$deprecated_entry_forms))) {
 
 	if (($_SESSION['prefsEntryForm'] == "B") || ($_SESSION['prefsEntryForm'] == "M") || ($_SESSION['prefsEntryForm'] == "U")) $entry_form = 1;
 	else $entry_form = 2;
