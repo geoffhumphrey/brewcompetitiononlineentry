@@ -17,7 +17,10 @@
     <div id="brewerClubsOther" class="form-group">
         <label for="brewerClubsOther" class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label_club_enter; ?></label>
         <div class="col-lg-9 col-md-9 col-sm-8 col-xs-12">
-            <input class="form-control" name="brewerClubsOther" type="text" value="<?php if ($action == "edit") echo $row_brewer['brewerClubs']; ?>" placeholder="">
+            <input class="form-control" name="brewerClubsOther" type="text" value="<?php if ($action == "edit") echo $row_brewer['brewerClubs']; ?>" placeholder="" pattern="[^%&\x22\x27]+">
+            <div class="help-block">
+                <p><?php echo $brewer_text_046; ?></p>
+            </div>
         </div>
     </div>
 </section>
@@ -27,7 +30,6 @@
     <div class="form-group">
         <label for="" class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label_pro_am; ?></label>
         <div class="col-lg-9 col-md-9 col-sm-8 col-xs-12">
-            
             <div class="input-group">
                 <label class="radio-inline">
                     <input type="radio" name="brewerProAm" value="1" id="brewerProAm_1" <?php if (($section != "step2") && ($row_brewer['brewerProAm'] == "1")) echo "CHECKED"; ?> /> <?php echo $label_yes; ?>
@@ -40,7 +42,7 @@
                 <p><?php echo $brewer_text_041; ?></p>
                 <p><?php echo $brewer_text_043; ?></p>
                 <p><?php echo $brewer_text_042; ?></p>
-                </div>
+            </div>
         </div>
     </div>
 </section>

@@ -2007,6 +2007,7 @@ $register_text_051 = "Account Information Updated";
 $register_text_052 = "A \"Yes\" or \"No\" response is required for each location below.";
 $brewer_text_044 = "Do you wish to change your security question and/or answer?";
 $brewer_text_045 = "No results have been recorded.";
+$brewer_text_046 = "For free-form club name entry, some symbols are not allowed, including ampersand (&amp;), single-quotation marks (&#39;), double-quotation marks (&quot;), and percent (&#37;).";
 $label_change_security = "Change Security Question/Answer?";
 $label_semi_dry = "Semi-Dry";
 $label_semi_sweet = "Semi-Sweet";

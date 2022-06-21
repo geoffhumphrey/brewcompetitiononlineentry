@@ -1873,6 +1873,7 @@ $register_text_051 = "Informace o účtu Aktualizováno";
 $register_text_052 = "U každého níže uvedeného místa je třeba uvést odpověď Ano nebo Ne.";
 $brewer_text_044 = "Chcete změnit bezpečnostní otázku a/nebo odpověď?";
 $brewer_text_045 = "Nebyly zaznamenány žádné výsledky.";
+$brewer_text_046 = "Při zadávání názvu klubu ve volném tvaru nejsou povoleny některé symboly, včetně ampersandu (&amp;), jednoduchých uvozovek (&#39;), dvojitých uvozovek (&quot;), a procent (&#37;).";
 $label_change_security = "Změna bezpečnostní otázky/odpovědi?";
 $label_semi_dry = "Polosuché";
 $label_semi_sweet = "Polosladké";

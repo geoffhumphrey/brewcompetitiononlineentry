@@ -1877,6 +1877,7 @@ $register_text_051 = "Informações de Conta Atualizadas";
 $register_text_052 = "Uma resposta de Sim ou Não é necessária para cada local abaixo.";
 $brewer_text_044 = "Você deseja mudar sua pergunta e/ou resposta de segurança?";
 $brewer_text_045 = "Não se registraram resultados.";
+$brewer_text_046 = "Para a entrada de nomes de clubes de forma livre, alguns símbolos não são permitidos, incluindo ampersand (&amp;), marcas de cotações simples (&#39;), marcas de cotações duplas (&quot;), e porcentagem (&#37;).";
 $label_change_security = "Mudar pergunta/resposta de segurança?";
 $label_semi_dry = "Semi-Seco";
 $label_semi_sweet = "Semi-Doce";
