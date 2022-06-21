@@ -39,7 +39,7 @@ $print_icon = FALSE;
 
 if (isset($_SESSION['loginUsername']))  {
     $paid_icon = "";
-    $paid_icon .= " <small class=\"text-muted\">".$_SESSION['prefsCurrency'].number_format($total_to_pay,2)."</small>";
+    $paid_icon .= " <small class=\"text-muted\">".$currency_symbol.number_format($total_to_pay,2)."</small>";
     if ($total_to_pay > 0) $paid_icon .= " <span class=\"fa fa-lg fa-exclamation-circle text-danger\" aria-hidden=\"true\" data-toggle=\"tooltip\" title=\"".$pay_text_033."\" data-placement=\"auto top\" data-container=\"body\"></span>";
     else $paid_icon .= " <span class=\"fa fa-lg fa-check-circle text-success\" aria-hidden=\"true\" data-toggle=\"tooltip\" title=\"".$pay_text_024."\" data-placement=\"auto top\" data-container=\"body\"></span>";
 }

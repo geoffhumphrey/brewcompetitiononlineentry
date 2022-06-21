@@ -1580,39 +1580,54 @@ function style_convert($number,$type,$base_url="",$archive="") {
 		break;
 
 		case "7":
+		
 		$a = explode(",",$number);
 		$style_convert = "";
 		$style_convert .= "<ul>";
+		
 		foreach ($a as $value) {
+			
 			$styles_db_table = $prefix."styles";
 			$query_style = sprintf("SELECT brewStyleGroup,brewStyleNum,brewStyle,brewStyleOwn FROM %s WHERE id='%s'",$styles_db_table,$value);
 			$style = mysqli_query($connection,$query_style) or die (mysqli_error($connection));
 			$row_style = mysqli_fetch_assoc($style);
 
-			if ($row_style['brewStyle'] == "Soured Fruit Beer") $style_name = "Wild Specialty Beer";
-			else $style_name = $row_style['brewStyle'];
+			if ($row_style) {
 
-			if ($row_style['brewStyleOwn'] == "bcoe") {
-				if ($style_set == "BA") $style_convert .= "<li>".$style_name."</li>";
-				elseif ($style_set == "AABC") $style_convert .= "<li>".ltrim($row_style['brewStyleGroup'],"0").".".ltrim($row_style['brewStyleNum'],"0").": ".$style_name."</li>";
-				else $style_convert .= "<li>".ltrim($row_style['brewStyleGroup'],"0").$row_style['brewStyleNum'].": ".$style_name."</li>";
+				if ($row_style['brewStyle'] == "Soured Fruit Beer") $style_name = "Wild Specialty Beer";
+				else $style_name = $row_style['brewStyle'];
+
+				if ($row_style['brewStyleOwn'] == "bcoe") {
+					if ($style_set == "BA") $style_convert .= "<li>".$style_name."</li>";
+					elseif ($style_set == "AABC") $style_convert .= "<li>".ltrim($row_style['brewStyleGroup'],"0").".".ltrim($row_style['brewStyleNum'],"0").": ".$style_name."</li>";
+					else $style_convert .= "<li>".ltrim($row_style['brewStyleGroup'],"0").$row_style['brewStyleNum'].": ".$style_name."</li>";
+				}
+
+				else $style_convert .= "<li>".$label_custom_style.": ".$row_style['brewStyle']."</li>";
+
 			}
-			else $style_convert .= "<li>".$label_custom_style.": ".$row_style['brewStyle']."</li>";
+				
 		}
+
 		$style_convert .= "</ul>";
 
 		break;
 
 		// Get Style Name
 		case "8":
-		$query_styles = sprintf("SELECT brewStyle,brewStyleNum,brewStyleGroup FROM %s WHERE id='%s'",$styles_db_table,$number);
-		$styles = mysqli_query($connection,$query_styles) or die (mysqli_error($connection));
-		$row_styles = mysqli_fetch_assoc($styles);
 
-		if ($row_styles['brewStyle'] == "Soured Fruit Beer") $style_name = "Wild Specialty Beer";
-		else $style_name = $row_styles['brewStyle'];
+		$style_convert = "";
+		$style_name = "";
 
-		$style_convert = $row_styles['brewStyleGroup'].",".$row_styles['brewStyleNum'].",".$style_name;
+		$query_style = sprintf("SELECT brewStyle,brewStyleNum,brewStyleGroup FROM %s WHERE id='%s'",$styles_db_table,$number);
+		$style = mysqli_query($connection,$query_style) or die (mysqli_error($connection));
+		$row_style = mysqli_fetch_assoc($style);
+
+		if ($row_style) {
+			if ($row_styles['brewStyle'] == "Soured Fruit Beer") $style_name = "Wild Specialty Beer";
+			else $style_name = $row_styles['brewStyle'];			$style_convert = $row_styles['brewStyleGroup'].",".$row_styles['brewStyleNum'].",".$style_name;
+		}
+
 		break;
 
 		case "9":
