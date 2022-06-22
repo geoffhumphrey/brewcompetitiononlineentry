@@ -106,7 +106,7 @@ if ($action == "default") {
 	<tr>
     	<th>Name</th>
         <th nowrap="nowrap">BOS Enabled?</th>
-        <th nowrap="nowrap">BOS Method</th>
+        <th nowrap="nowrap">BOS Pull Method</th>
         <th>Actions</th>
     </tr>
 </thead>
@@ -133,7 +133,7 @@ if ($action == "default") {
  <input type="hidden" name="styleTypeName" value="<?php echo $row_style_type['styleTypeName']; ?>">
  <?php } ?>
 <div class="form-group"><!-- Form Group Radio INLINE -->
-	<label for="brewStyleReqSpec" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">BOS for Style?</label>
+	<label for="brewStyleReqSpec" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">BOS for Style Type</label>
 	<div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
 		<div class="input-group">
 			<!-- Input Here -->
@@ -144,10 +144,11 @@ if ($action == "default") {
 				<input type="radio" name="styleTypeBOS" value="N" id="styleTypeBOS_1" <?php if (($action == "edit") && ($row_style_type['styleTypeBOS'] == "N")) echo "checked"; ?> /> No
 			</label>
 		</div>
+		<div class="help-block with-errors"><p>Indicate whether there will be a Best of Show round for this style type.</p></div>
 	</div>
 </div><!-- ./Form Group -->
 <div class="form-group"><!-- Form Group Radio STACKED -->
-	<label for="styleTypeBOSMethod" class="col-lg-2 col-md-3 col-sm-4 col-xs-12  control-label">BOS Display Method</label>
+	<label for="styleTypeBOSMethod" class="col-lg-2 col-md-3 col-sm-4 col-xs-12  control-label">BOS Pull Method</label>
 	<div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
 		<div class="input-group">
 			<!-- Input Here -->
@@ -166,12 +167,15 @@ if ($action == "default") {
 					<input type="radio" name="styleTypeBOSMethod" value="3" id="styleTypeBOSMethod_2" <?php if (($action == "edit") && ($row_style_type['styleTypeBOSMethod'] == "3")) echo "checked"; ?> />1st, 2nd, and 3rd places
 				</label>
 			</div>
+			<!--
 			<div class="radio">
 				<label>
 					<input type="radio" name="styleTypeBOSMethod" value="4" id="styleTypeBOSMethod_3" <?php if (($action == "edit") && ($row_style_type['styleTypeBOSMethod'] == "4")) echo "checked"; ?> />1st, 2nd, and 3rd places with Honorable Mention
 				</label>
 			</div>
+			-->
 		</div>
+		<div class="help-block with-errors"><p>Determine how many placing entries from each medal category should be pulled for this style type in the Best of Show round.</p></div>
 	</div>
 </div><!-- ./Form Group -->
 <div class="bcoem-admin-element hidden-print">

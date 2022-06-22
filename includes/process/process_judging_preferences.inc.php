@@ -27,8 +27,6 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 
 		// Empty the prefs session variable
 		// Will trigger the session to reset the variables in common.db.php upon reload after redirect
-		session_name($prefix_session);
-		session_start();
 		unset($_SESSION['prefs'.$prefix_session]);
 
 		$update_table = $prefix."judging_preferences";
@@ -87,6 +85,29 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 			}
 		
 		} // end if ($_SESSION['prefsEval'] == 1)
+
+		if ($action == "edit") {
+
+			/**
+			 * If Max BOS changed to a lower number, remove any places defined 
+			 * in the BOS scores db table that are greater than the new maximum, 
+			 * except HM, which is 5.
+			 */
+
+			if ((isset($_SESSION['jPrefsMaxBOS'])) && ($_SESSION['jPrefsMaxBOS'] < $jPrefsMaxBOS)) {
+
+				$update_table = $prefix."judging_scores_bos";
+				$db_conn->where ("scorePlace", $jPrefsMaxBOS, ">");
+				$db_conn->where ("scorePlace != 5");
+				$result = $db_conn->delete ($update_table);
+				if (!$result) {
+					$error_output[] = $db_conn->getLastError();
+					$errors = TRUE;
+				}
+
+			}
+
+		}
 
 		if ($section == "setup") {
 

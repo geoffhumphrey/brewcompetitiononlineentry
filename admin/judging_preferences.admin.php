@@ -2,6 +2,27 @@
 if (empty($row_judging_prefs['jPrefsScoresheet'])) $judging_scoresheet = 1;
 elseif (!isset($_SESSION['jPrefsScoresheet'])) $judging_scoresheet = 1;
 else $judging_scoresheet = $_SESSION['jPrefsScoresheet'];
+
+$suggested_open = FALSE;
+$suggested_close = FALSE;
+$judging_open_date = "";
+$judging_close_date = "";
+
+if ($_SESSION['prefsEval'] == 1) {
+
+    if ((isset($_SESSION['jPrefsJudgingOpen'])) && (!empty($_SESSION['jPrefsJudgingOpen']))) $judging_open_date = getTimeZoneDateTime($_SESSION['prefsTimeZone'], $_SESSION['jPrefsJudgingOpen'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "system", "date-time-system"); 
+    else {
+        $judging_open_date = getTimeZoneDateTime($_SESSION['prefsTimeZone'], $suggested_open_date, $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "system", "date-time-system");
+        $suggested_open = TRUE;
+    }
+    if ((isset($_SESSION['jPrefsJudgingClosed'])) && (!empty($_SESSION['jPrefsJudgingClosed']))) $judging_close_date = getTimeZoneDateTime($_SESSION['prefsTimeZone'], $_SESSION['jPrefsJudgingClosed'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "system", "date-time-system"); 
+    else {
+        $judging_close_date = getTimeZoneDateTime($_SESSION['prefsTimeZone'], $suggested_close_date, $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "system", "date-time-system");
+        $suggested_close = TRUE;
+    }
+
+}
+
 ?>
 <form data-toggle="validator" role="form" class="form-horizontal" method="post" action="<?php echo $base_url; ?>includes/process.inc.php?section=<?php if ($section == "step8") echo "setup"; else echo $section; ?>&amp;action=edit&amp;dbTable=<?php echo $judging_preferences_db_table; ?>&amp;id=1" name="form1">
 <?php if ($section != "step8") { ?>
@@ -12,6 +33,17 @@ else $judging_scoresheet = $_SESSION['jPrefsScoresheet'];
 	</div><!-- ./button group -->
 </div>
 <?php } ?>
+<div class="form-group">
+    <label for="jPrefsBottleNum" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Number of Bottles Required per Entry</label>
+    <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
+            <select class="selectpicker" name="jPrefsBottleNum" id="jPrefsBottleNum" data-size="10" data-width="auto">
+            <?php for ($i=1; $i <= 15; $i++) { ?>
+            <option value="<?php echo $i; ?>" <?php if ((isset($_SESSION['jPrefsBottleNum'])) && ($_SESSION['jPrefsBottleNum'] == $i)) echo "SELECTED"; else { if ($i == 1) echo "SELECTED"; }?>><?php echo $i; ?></option>
+            <?php } ?>
+            </select>
+            <span id="helpBlock" class="help-block"><p>Most competitions require at least two bottles.</span>
+    </div>
+</div>
 <div class="form-group"><!-- Form Group Radio INLINE -->
     <label for="jPrefsQueued" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Use Queued Judging</label>
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
@@ -34,7 +66,7 @@ else $judging_scoresheet = $_SESSION['jPrefsScoresheet'];
 		</div>
 		</span>
     </div>
-</div><!-- ./Form Group -->
+</div>
 <!-- Modal -->
 <div class="modal fade" id="queuedModal" tabindex="-1" role="dialog" aria-labelledby="queuedModalLabel">
     <div class="modal-dialog" role="document">
@@ -53,23 +85,7 @@ else $judging_scoresheet = $_SESSION['jPrefsScoresheet'];
         </div>
     </div>
 </div><!-- ./modal -->
-<?php if ($_SESSION['prefsEval'] == 1) { 
-
-    $suggested_open = FALSE;
-    $suggested_close = FALSE;
-
-    if ((isset($_SESSION['jPrefsJudgingOpen'])) && (!empty($_SESSION['jPrefsJudgingOpen']))) $judging_open_date = getTimeZoneDateTime($_SESSION['prefsTimeZone'], $_SESSION['jPrefsJudgingOpen'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "system", "date-time-system"); 
-    else {
-        $judging_open_date = getTimeZoneDateTime($_SESSION['prefsTimeZone'], $suggested_open_date, $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "system", "date-time-system");
-        $suggested_open = TRUE;
-    }
-    if ((isset($_SESSION['jPrefsJudgingClosed'])) && (!empty($_SESSION['jPrefsJudgingClosed']))) $judging_close_date = getTimeZoneDateTime($_SESSION['prefsTimeZone'], $_SESSION['jPrefsJudgingClosed'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "system", "date-time-system"); 
-    else {
-        $judging_close_date = getTimeZoneDateTime($_SESSION['prefsTimeZone'], $suggested_close_date, $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "system", "date-time-system");
-        $suggested_close = TRUE;
-    }
-
-?>
+<?php if ($_SESSION['prefsEval'] == 1) { ?>
 <div class="form-group"><!-- Form Group Radio INLINE -->
     <label for="jPrefsScoresheet" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Entry Evaluation Scoresheet</label>
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
@@ -95,7 +111,7 @@ else $judging_scoresheet = $_SESSION['jPrefsScoresheet'];
         </div>
         </span>
     </div>
-</div><!-- ./Form Group -->
+</div>
 <!-- Modal -->
 <div class="modal fade" id="scoresheetModal" tabindex="-1" role="dialog" aria-labelledby="scoresheetModalLabel">
     <div class="modal-dialog" role="document">
@@ -117,58 +133,14 @@ else $judging_scoresheet = $_SESSION['jPrefsScoresheet'];
         </div>
     </div>
 </div><!-- ./modal -->
-<div class="form-group"><!-- Form Group REQUIRED Text Input -->
-    <label for="jPrefsJudgingOpen" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Judging Open Date and Time</label>
-    <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
-        <!-- Input Here -->
-        <input class="form-control" id="jPrefsJudgingOpen" name="jPrefsJudgingOpen" type="text" value="<?php echo $judging_open_date; ?>" placeholder="<?php echo $current_date." ".$current_time; ?>" required>
-        <div id="helpBlock" class="help-block">Indicate when judges will be allowed access to their Judging Dashboard to add entry evaluations.  Typically, the open date begins the day and time the first judging session begins.
-            <?php if ($suggested_open) echo "<br><span style=\"margin-bottom:5px;\">* The date and time above is suggested and is the system default. It is the the earliest judging session's start time.</span>";  ?>
-        </div>
-    </div>
-</div><!-- ./Form Group -->
-<div class="form-group"><!-- Form Group REQUIRED Text Input -->
-    <label for="jPrefsJudgingClosed" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Judging Close Date and Time</label>
-    <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
-            <input class="form-control" id="jPrefsJudgingClosed" name="jPrefsJudgingClosed" type="text" size="20" value="<?php echo $judging_close_date; ?>" placeholder="<?php echo $current_date." ".$current_time; ?>" required>
-        <div id="helpBlock" class="help-block"><p>The closing date and time is the absolute latest judges will be allowed to enter evaluations and scores.</p>
-            <?php if ($suggested_close) echo "<br><span style=\"margin-bottom:5px;\">* The date and time above is suggested and is the system default. It is the <u>last</u> judging session's start time + 8 hours.</span>"; ?>
-            <div class="btn-group" role="group" aria-label="judgingWindowModal">
-                <div class="btn-group" role="group">
-                    <button type="button" class="btn btn-xs btn-info" data-toggle="modal" data-target="#judgingWindowModal">
-                       Judging Open/Close Dates and Times Info
-                    </button>
-                </div>
-            </div>  
-        </div>
-    </div>
-</div><!-- ./Form Group -->
-<!-- Modal -->
-<div class="modal fade" id="judgingWindowModal" tabindex="-1" role="dialog" aria-labelledby="judgingWindowModalLabel">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header bcoem-admin-modal">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="judgingWindowModalLabel">Judging Open/Close Dates and Times Info</h4>
-            </div>
-            <div class="modal-body">
-                <p>Indicate when judges will be allowed access to their Judging Dashboard to add entry evaluations. Typically, the open date begins the day and time the first judging session begins. The closing date and time is the absolute latest judges will be allowed to enter evaluations and scores.</p>
-                <p>If no dates are input here for either open or close, these defaults will be used by the system:</p>
-                <ul>
-                    <li><strong>Open</strong> &ndash; the earliest judging session's start date/time.</li>
-                    <li><strong>Closed</strong> &ndash; the last judging session's start date/time <span class="text-primary">+ 8 hours</span>.</li>
-                </ul>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-            </div>
-        </div>
-    </div>
-</div><!-- ./modal -->
 <div class="form-group">
     <label for="jPrefsScoreDispMax" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Maximum Difference for Consensus Scores</label>
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
-            <input class="form-control" id="jPrefsScoreDispMax" name="jPrefsScoreDispMax" type="number" min="1" value="<?php if (($section == "step8") || (!isset($_SESSION['jPrefsScoreDispMax']))) echo "7"; else echo $_SESSION['jPrefsScoreDispMax']; ?>" placeholder="" required>
+        <select class="selectpicker" name="jPrefsScoreDispMax" id="jPrefsScoreDispMax" data-size="10" data-width="auto">
+        <?php for ($i=1; $i <= 10; $i++) { ?>
+        <option value="<?php echo $i; ?>" <?php if ((isset($_SESSION['jPrefsScoreDispMax'])) && ($_SESSION['jPrefsScoreDispMax'] == $i)) echo "SELECTED"; else { if ($i == 1) echo "SELECTED"; }?>><?php echo $i; ?></option>
+        <?php } ?>
+        </select>
         <div id="helpBlock" class="help-block">
             <p>Provide the maximum difference between judges' scores for any given entry.</p>
             <div class="btn-group" role="group" aria-label="maxDiffModal">
@@ -201,26 +173,62 @@ else $judging_scoresheet = $_SESSION['jPrefsScoresheet'];
         </div>
     </div>
 </div><!-- ./modal -->
-<?php } ?>
-<div class="form-group">
-    <label for="jPrefsBottleNum" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Number of Bottles Required per Entry</label>
+<div class="form-group"><!-- Form Group REQUIRED Text Input -->
+    <label for="jPrefsJudgingOpen" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Judging Open Date and Time</label>
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
-            <input class="form-control" id="jPrefsBottleNum" name="jPrefsBottleNum" type="number" min="1" value="<?php if (($section == "step8") || (!isset($_SESSION['jPrefsBottleNum']))) echo "2"; else echo $_SESSION['jPrefsBottleNum']; ?>" placeholder="" required>
-        <span id="helpBlock" class="help-block"><p>Most competitions require at least two bottles.</span>
+        <input class="form-control" id="jPrefsJudgingOpen" name="jPrefsJudgingOpen" type="text" value="<?php echo $judging_open_date; ?>" placeholder="<?php echo $current_date." ".$current_time; ?>" required>
+        <div id="helpBlock" class="help-block">Indicate when judges will be allowed access to their Judging Dashboard to add entry evaluations.  Typically, the open date begins the day and time the first judging session begins.
+            <?php if ($suggested_open) echo "<br><span style=\"margin-bottom:5px;\">* The date and time above is suggested and is the system default. It is the the earliest judging session's start time.</span>";  ?>
+        </div>
     </div>
 </div>
-
-<div class="form-group"><!-- Form Group NOT REQUIRED Text Input -->
+<div class="form-group"><!-- Form Group REQUIRED Text Input -->
+    <label for="jPrefsJudgingClosed" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Judging Close Date and Time</label>
+    <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
+        <input class="form-control" id="jPrefsJudgingClosed" name="jPrefsJudgingClosed" type="text" size="20" value="<?php echo $judging_close_date; ?>" placeholder="<?php echo $current_date." ".$current_time; ?>" required>
+        <div id="helpBlock" class="help-block"><p>The closing date and time is the absolute latest judges will be allowed to enter evaluations and scores.</p>
+            <?php if ($suggested_close) echo "<br><span style=\"margin-bottom:5px;\">* The date and time above is suggested and is the system default. It is the <u>last</u> judging session's start time + 8 hours.</span>"; ?>
+            <div class="btn-group" role="group" aria-label="judgingWindowModal">
+                <div class="btn-group" role="group">
+                    <button type="button" class="btn btn-xs btn-info" data-toggle="modal" data-target="#judgingWindowModal">
+                       Judging Open/Close Dates and Times Info
+                    </button>
+                </div>
+            </div>  
+        </div>
+    </div>
+</div>
+<!-- Modal -->
+<div class="modal fade" id="judgingWindowModal" tabindex="-1" role="dialog" aria-labelledby="judgingWindowModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header bcoem-admin-modal">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="judgingWindowModalLabel">Judging Open/Close Dates and Times Info</h4>
+            </div>
+            <div class="modal-body">
+                <p>Indicate when judges will be allowed access to their Judging Dashboard to add entry evaluations. Typically, the open date begins the day and time the first judging session begins. The closing date and time is the absolute latest judges will be allowed to enter evaluations and scores.</p>
+                <p>If no dates are input here for either open or close, these defaults will be used by the system:</p>
+                <ul>
+                    <li><strong>Open</strong> &ndash; the earliest judging session's start date/time.</li>
+                    <li><strong>Closed</strong> &ndash; the last judging session's start date/time <span class="text-primary">+ 8 hours</span>.</li>
+                </ul>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div><!-- ./modal -->
+<?php } ?>
+<div class="form-group">
     <label for="jPrefsCapJudges" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Judge Limit</label>
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
-        <!-- Input Here -->
-            <input class="form-control" id="jPrefsCapJudges" name="jPrefsCapJudges" type="number" value="<?php if (isset($_SESSION['jPrefsCapJudges'])) echo $_SESSION['jPrefsCapJudges']; ?>" placeholder="">
-
+        <input class="form-control" id="jPrefsCapJudges" name="jPrefsCapJudges" type="number" value="<?php if (isset($_SESSION['jPrefsCapJudges'])) echo $_SESSION['jPrefsCapJudges']; ?>" placeholder="">
         <span id="helpBlock" class="help-block"><p>Limit to the number of judges that may sign up. Leave blank for no limit.</span>
     </div>
-</div><!-- ./Form Group -->
-
-<div class="form-group"><!-- Form Group NOT REQUIRED Text Input -->
+</div>
+<div class="form-group">
     <label for="jPrefsCapStewards" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Steward Limit</label>
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
         <!-- Input Here -->
@@ -228,34 +236,42 @@ else $judging_scoresheet = $_SESSION['jPrefsScoresheet'];
 
         <span id="helpBlock" class="help-block"><p>Limit to the number of stewards that may sign up. Leave blank for no limit.</span>
     </div>
-</div><!-- ./Form Group -->
-
+</div>
 <div id="queued_no">
-	<div class="form-group"><!-- Form Group NOT REQUIRED Text Input -->
+	<div class="form-group">
 		<label for="jPrefsFlightEntries" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Maximum Entries per Flight</label>
 		<div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
-			<!-- Input Here -->
-				<input class="form-control" id="jPrefsFlightEntries" name="jPrefsFlightEntries" type="number" value="<?php if (isset($_SESSION['jPrefsFlightEntries'])) echo $_SESSION['jPrefsFlightEntries']; ?>" placeholder="" required>
+                <select class="selectpicker" name="jPrefsFlightEntries" id="jPrefsFlightEntries" data-size="10" data-width="auto">
+                <?php for ($i=1; $i <= 50; $i++) { ?>
+                <option value="<?php echo $i; ?>" <?php if ((isset($_SESSION['jPrefsFlightEntries'])) && ($_SESSION['jPrefsFlightEntries'] == $i)) echo "SELECTED"; else { if ($i == 1) echo "SELECTED"; }?>><?php echo $i; ?></option>
+                <?php } ?>
+                </select>
+            <span id="helpBlock" class="help-block"><p>The maximum number of entries a judge pair will be assigned to evaluate in the system per flight. This generally applies to the traditional (non-queued) judging methodology.</span>
 		</div>
-	</div><!-- ./Form Group -->
+	</div>
 </div>
-<div class="form-group"><!-- Form Group NOT REQUIRED Text Input -->
+<div class="form-group">
 	<label for="jPrefsRounds" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Maximum Rounds per Session</label>
 	<div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
-		<!-- Input Here -->
-			<input class="form-control" id="jPrefsRounds" name="jPrefsRounds" type="number" value="<?php if (isset($_SESSION['jPrefsRounds'])) echo $_SESSION['jPrefsRounds']; ?>" placeholder="" required>
+        <select class="selectpicker" name="jPrefsRounds" id="jPrefsRounds" data-size="10" data-width="auto">
+        <?php for ($i=1; $i <= 5; $i++) { ?>
+        <option value="<?php echo $i; ?>" <?php if ((isset($_SESSION['jPrefsRounds'])) && ($_SESSION['jPrefsRounds'] == $i)) echo "SELECTED"; else { if ($i == 1) echo "SELECTED"; }?>><?php echo $i; ?></option>
+        <?php } ?>
+        </select>
+        <span id="helpBlock" class="help-block"><p>The maximum number of judging rounds for each <a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging">defined judging session</a>.</span>
 	</div>
-</div><!-- ./Form Group -->
-<div class="form-group"><!-- Form Group NOT REQUIRED Text Input -->
+</div>
+<div class="form-group">
 	<label for="jPrefsMaxBOS" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Maximum Places in BOS Round</label>
 	<div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
         <select class="selectpicker" name="jPrefsMaxBOS" id="jPrefsMaxBOS" data-size="10" data-width="auto">
-            <?php for ($i=0; $i <= 4; $i++) { ?>
+            <?php for ($i=1; $i <= 4; $i++) { ?>
             <option value="<?php echo $i; ?>" <?php if ((isset($_SESSION['jPrefsMaxBOS'])) && ($_SESSION['jPrefsMaxBOS'] == $i)) echo "SELECTED"; else { if ($i == 3) echo "SELECTED"; }?>><?php echo $i; ?></option>
             <?php } ?>
         </select>
+        <span id="helpBlock" class="help-block"><p>The maximum number of places available to award and display for each style type. Number does not include Honorable Mention. Of course, all places do not need to be awarded by BOS judges.</p><p>This is <strong>NOT</strong> the number of entries for staff to pull for the BOS round. That methodology is determined for each <a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=style_types">style type</a> individually.</span>
 	</div>
-</div><!-- ./Form Group -->
+</div>
 <div class="bcoem-admin-element hidden-print">
 	<div class="form-group">
 		<div class="col-lg-offset-2 col-md-offset-3 col-sm-offset-4">

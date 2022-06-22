@@ -18,8 +18,9 @@ The biggest challenges of organizing a homebrewing competition is knowing who ha
 - Facilitating online entry fee payments (via PayPal).
 - Organizing and assigning participants as judges, stewards, and staff.
 - Defining tables/flights and assigning judges and stewards to them.
-- Mobile entry check-in using QR and/or barcodes.
-- Electronic scoresheets for use in virtual and/or in-person judging.
+- Mobile entry check-in using [QR and/or barcodes](https://brewcompetition.com/barcode-check-in).
+- [Electronic scoresheets](https://brewcompetition.com/setup-electronic-scoresheets) for use in [virtual](https://brewcompetition.com/virtual-judging) and/or in-person [judging](https://brewcompetition.com/judging-with-electronic-scoresheets).
+- Scoresheet [upload](https://brewcompetition.com/upload-scoresheets).
 - 60+ reports for use before, during, and after judging.
 - 20+ data export options.
 - Custom modules for information/functionality unique to your competition.
@@ -27,7 +28,7 @@ The biggest challenges of organizing a homebrewing competition is knowing who ha
 The best part: **BCOE&M is free and open-source**. Hundreds of competitions around the world have utilized BCOE&M since its [first release](https://brewcompetition.com/change-log) back in 2009.
 
 ## Download
-Version 2.4.X is available for [download here](https://github.com/geoffhumphrey/brewcompetitiononlineentry/releases). The [latest committed code](https://github.com/geoffhumphrey/brewcompetitiononlineentry/archive/master.zip) is also available for testers and contributors.
+Version 2.5.X is available for [download here](https://github.com/geoffhumphrey/brewcompetitiononlineentry/releases). The [latest committed code](https://github.com/geoffhumphrey/brewcompetitiononlineentry/archive/master.zip) is also available for testers and contributors.
 
 ## Install or Upgrade
 Step by step [installation](https://www.brewcompetition.com/install-instructions) and [upgrade](https://www.brewcompetition.com/upgrade-instructions) instructions are available.
@@ -55,5 +56,5 @@ There is also a growing number of instructive resources available on the [compan
 - [Barcode or QR Code Entry Check-in](https://brewcompetition.com/barcode-check-in) - utilize the barcode/QR code enabled bottle labels to efficiently check-in entries
 - [Implement PayPal Instant Payment Notifications](https://brewcompetition.com/paypal-ipn) - receive and process PayPal payment data to update entrant payment status instantly
 
-## Wanna Help?
-Fork and help out with the development!
+## Wanna Help with Development?
+Fork this repo and share your code!
