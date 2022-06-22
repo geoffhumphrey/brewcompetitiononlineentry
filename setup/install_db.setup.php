@@ -172,10 +172,11 @@ if ($setup_free_access == TRUE) {
 		 * --------------------------------------
 		 * Brewing Table
 		 * Version 2.5.0, the 325 recipe-related
-		 * columns were removed.
-		 * A new column is added to house the 
+		 * columns were removed. In a future release,
+		 * a new column will be added to house the 
 		 * string name of an uploaded recipe
 		 * XML or PDF file.
+		 * `brewRecipeFile` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL
 		 * --------------------------------------
 		 */
 
@@ -212,7 +213,6 @@ if ($setup_free_access == TRUE) {
 			`brewUpdated` timestamp NULL DEFAULT NULL COMMENT 'Timestamp of when the entry was last updated',
 			`brewConfirmed` tinyint(1) DEFAULT NULL COMMENT '1=true - 2=false',
 			`brewBoxNum` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-			`brewRecipeFile` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
 			PRIMARY KEY (`id`)
 			) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci;
 			", $brewing_db_table);
