@@ -105,9 +105,11 @@ else {
 		$primary_page_info .= sprintf("<p class=\"lead\"><small><span class=\"fa fa-lg fa-star-o text-primary\"></span> %s <strong class=\"text-success\">%s</strong> %s.</small></p>",$pay_text_007,$currency_symbol.number_format($_SESSION['contestEntryFeePasswordNum'], 2),$pay_text_004);
 	}
 	$primary_page_info .= "<p class=\"lead\">";
-	$primary_page_info .= sprintf("<small><span class=\"fa fa-lg fa-exclamation-triangle text-danger\"></span> %s <strong class=\"text-success\">%s</strong>.",$pay_text_008,$currency_symbol.number_format($total_entry_fees,2));
-	$primary_page_info .= sprintf(" %s <strong class=\"text-danger\">%s</strong>",$pay_text_009,$currency_symbol.number_format($total_to_pay,2));
-	if ($_SESSION['prefsTransFee'] == "Y") $primary_page_info .= "<strong><span class=\"text-primary\">*</span></strong>";
+	if ($total_to_pay == 0) $primary_page_info .= sprintf("<small><span class=\"fa fa-lg fa-check-circle text-success\"></span> %s <strong class=\"text-success\">%s</strong>.",$pay_text_008,$currency_symbol.number_format($total_entry_fees,2));
+	else $primary_page_info .= sprintf("<small><span class=\"fa fa-lg fa-exclamation-triangle text-danger\"></span> %s <strong class=\"text-success\">%s</strong>.",$pay_text_008,$currency_symbol.number_format($total_entry_fees,2));
+	if ($total_to_pay == 0) $primary_page_info .= sprintf(" %s <strong class=\"text-success\">%s</strong>",$pay_text_009,$currency_symbol.number_format($total_to_pay,2));
+	else $primary_page_info .= sprintf(" %s <strong class=\"text-danger\">%s</strong>",$pay_text_009,$currency_symbol.number_format($total_to_pay,2));
+	if (($_SESSION['prefsTransFee'] == "Y") && ($total_to_pay > 0)) $primary_page_info .= "<strong><span class=\"text-primary\">*</span></strong>";
 	$primary_page_info .= ".</small></p>";
 
 	if (($total_not_paid == 0) || ($total_to_pay == 0)) $primary_page_info .= sprintf("<p class=\"lead\"><small><span class=\"fa fa-lg fa-check-circle text-success\"></span> %s</p></small></p>",$pay_text_010);
@@ -156,15 +158,57 @@ else {
 		if ($_SESSION['prefsPaypal'] == "Y")  {
 
 			/**
-			 * As of August 1, 2021, PayPal fees were split. What is reflected here is the 
-			 * HIGHEST amount PayPal charges per transaction which is 3.49% + $0.49 US. The 
-			 * calculations below should be sufficient to cover costs for most international 
-			 * currencies as well.
+			 * August 1, 2021
+			 * PayPal fees were split. Checkout transaction rate is 3.49% + fixed fee.
+			 * @see https://www.paypal.com/us/webapps/mpp/merchant-fees#statement-2
+			 * 
+			 * June 23, 2022
+			 * Adjusted PayPal fixed fees by currency - the 0.49 flat fee used 
+			 * previously wasn't accurate for all currencies accepted by PayPal.
+			 * @see https://www.paypal.com/us/webapps/mpp/merchant-fees#fixed-fees-commercialtrans
+			 * 
+			 * Recalculated fees using a more accurate formula that better aligns 
+			 * with PayPal's calculations. This way, comps who add merchant fees 
+			 * will actually end up with the correct amount after those fees are 
+			 * deducted from the paid total.
+			 * @see https://github.com/geoffhumphrey/brewcompetitiononlineentry/issues/1317
 			 */
 			
 			if ($_SESSION['prefsTransFee'] == "Y") {
-				$fee = number_format((($total_to_pay * .035) + .50), 2, '.', '');
-				$payment_amount = $total_to_pay + $fee;
+				
+				$pp_fixed_fees_arr = array(
+					"$" => 0.49,
+					"R$" => 2.90,
+					"pound" => 0.39,
+					"euro" => 0.39,
+					"A$" => 0.59,
+					"C$" => 0.59,
+					"H$" => 3.79,
+					"N$" => 0.69,
+					"S$" => 0.69,
+					"T$" => 14.00,
+					"Ft" => 149.00,
+					"shekel" => 1.60,
+					"yen" => 49.00,
+					"nkr" => 3.90,
+					"kr" => 2.90,
+					"RM" => 2.00,
+					"M$" => 9.00,
+					"phpeso" => 25.00,
+					"pol" => 1.89,
+					"p." => 39.00,
+					"skr" => 4.09,
+					"sfranc" => 0.49,
+					"baht" => 15.00,
+				);
+
+				if ((isset($_SESSION['prefsCurrency'])) && (array_key_exists($_SESSION['prefsCurrency'],$pp_fixed_fees_arr))) $pp_fixed_fee = $pp_fixed_fees_arr[$_SESSION['prefsCurrency']];
+				else $pp_fixed_fee = 0;
+
+				$payment_amount = (($total_to_pay + $pp_fixed_fee) / 0.9651);
+				$fee = number_format($payment_amount - $total_to_pay, 2, '.', '');
+
+
 			} else {
 				$payment_amount = $total_to_pay;
 			}

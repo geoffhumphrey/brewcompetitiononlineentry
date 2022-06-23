@@ -1476,9 +1476,9 @@ $label_pro_am = "Pro-Am";
 $pay_text_034 = "The limit of paid entries has been reached - further entry payments are not being accepted.";
 
 $bottle_labels_000 = "Labels cannot be generated at this time.";
-$bottle_labels_001 = "Attach label ONLY with a rubber band.";
-$bottle_labels_002 = "Use clear packing tape to attach to the barrel of each bottle.";
-$bottle_labels_003 = "Cover the label completely!";
+$bottle_labels_001 = "Be sure to check the competition entry acceptance rules for specific label attachment guidelines before submitting!";
+$bottle_labels_002 = "Typically, clear packing tape is used to attach to the barrel of each entry - cover the label completely.";
+$bottle_labels_003 = "Typically, a rubber band is used to attach labels to each entry.";
 if (isset($_SESSION['jPrefsBottleNum'])) $bottle_labels_004 = "Please note: 4 labels are provided as a courtesy. This competition requires ".$_SESSION['jPrefsBottleNum']." bottles per entry. Discard any extra labels.";
 else $bottle_labels_004 = "Please note: 4 labels are provided as a courtesy. Discard any extra labels.";
 $bottle_labels_005 = "If any items are missing, close this window and edit the entry.";

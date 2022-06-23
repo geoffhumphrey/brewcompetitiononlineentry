@@ -1339,9 +1339,9 @@ $label_pro_am = "Pro-Am";
 $pay_text_034 = "O limite de entradas pagas foi atingido - pagamentos adicionais não estão sendo aceitos.";
 
 $bottle_labels_000 = "Os rótulos não podem ser gerados no momento.";
-$bottle_labels_001 = "Coloque a etiqueta SOMENTE com um elástico.";
-$bottle_labels_002 = "Use fita adesiva transparente para prender ao barril de cada garrafa.";
-$bottle_labels_003 = "Cubra a etiqueta completamente!";
+$bottle_labels_001 = "Certifique-se de verificar as regras de aceitação de participação na competição para diretrizes específicas de fixação de rótulos antes de enviar!";
+$bottle_labels_002 = "Tipicamente, é usada fita de embalagem transparente para fixar ao barril de cada entrada - cobrir completamente a etiqueta.";
+$bottle_labels_003 = "Normalmente, uma faixa de borracha é usada para fixar etiquetas em cada entrada.";
 if (isset($_SESSION['jPrefsBottleNum'])) $bottle_labels_004 = "Observação: são fornecidas 4 etiquetas como cortesia. Esta competição requer ".$_SESSION['jPrefsBottleNum']." garrafas por inscrição. Descarte qualquer etiqueta extra.";
 else $bottle_labels_004 = "Observação: são fornecidas 4 etiquetas como cortesia. Descarte qualquer etiqueta extra.";
 $bottle_labels_005 = "Se algum item estiver faltando, feche esta janela e edite a entrada.";

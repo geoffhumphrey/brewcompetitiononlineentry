@@ -72,13 +72,13 @@ if (isset($_SESSION['loginUsername'])) {
     if ($anon) {
       $bottle_label_colCountLimit = 12; // number of labels per page
       $bottle_label_height = 200;
-      $page_info0 = sprintf("<strong>%s</strong> %s", $bottle_labels_002, $bottle_labels_003);
+      $page_info0 = sprintf("%s<br><strong>%s</strong>", $bottle_labels_002, $bottle_labels_001);
     }
 
     else {
       $bottle_label_colCountLimit = 9; // number of labels per page
       $bottle_label_height = 290;
-      $page_info0 = "<strong>".$bottle_labels_001."</strong>";
+      $page_info0 = sprintf("%s<br><strong>%s</strong>", $bottle_labels_003, $bottle_labels_001);
     }
 
     if ($brewerCountry == "United States") $phone = format_phone_us($brewerPhone1);
@@ -271,7 +271,7 @@ else {
 </head>
 <body>
 <div class="container-fluid">
-  <p class="lead"><small><?php echo $page_info0; ?></small></p>
+  <p style="font-size: 1.3em;"><?php echo $page_info0; ?></p>
   <?php echo $page_info1; ?>
 </div><!-- end container -->
 </body>

@@ -1334,9 +1334,9 @@ $label_pro_am = "Pro-Am";
 $pay_text_034 = "Maximální počet uhrazených vzorků byl dosažen - další platby již nejsou přijímány.";
 
 $bottle_labels_000 = "Štítky momentálně nelze vygenerovat";
-$bottle_labels_001 = "Štítek na lahev nelepte, ale přichyťte jej pouze gumičkou.";
-$bottle_labels_002 = "Use clear packing tape to attach to the barrel of each bottle.";
-$bottle_labels_003 = "Etiketu zcela zakryjte!";
+$bottle_labels_001 = "Před odesláním se ujistěte, že jste si přečetli pravidla pro přijímání soutěžních příspěvků, kde jsou uvedeny konkrétní pokyny pro připojování štítků!";
+$bottle_labels_002 = "Obvykle se používá průhledná balicí páska, která se připevní na hlaveň každé položky - zcela zakryje štítek.";
+$bottle_labels_003 = "Ke každému záznamu se obvykle připevňují štítky pomocí gumičky.";
 if (isset($_SESSION['jPrefsBottleNum'])) $bottle_labels_004 = "Upozornění: Ke každému vzorku systém generuje 4 štítky. Tato soutěž vyžaduje ".$_SESSION['jPrefsBottleNum']." lahví od každého vzorku. Přebytečné štítky můžete vyhodit.";
 else $bottle_labels_004 = "Upozornění: 4 štítky poskytujeme volně k dispozici. Přebytečné štítky můžete vyhodit.";
 $bottle_labels_005 = "Pokud nějaký vzorek chybí, zavřete toto okno, upravte jej a pak se vraťte.";
