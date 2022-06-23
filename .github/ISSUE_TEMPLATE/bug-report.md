@@ -7,9 +7,12 @@ assignees: ''
 
 ---
 
-**Before Submitting Your Bug Report**
-1. If you are not running the most current version in your environment, please update prior to reporting your bug. Your issue may have already been addressed.
-2. Please search open *and* closed issues for issues similar to yours. Your bug may already have a posted solution.
+**Verify the Following**
+Reporting About the Latest Version? Yes or No
+*If you are not running the most current version in your environment, please update prior to reporting your bug. Your issue may have already been addressed.*
+
+Searched Issue Reports for Bug? Yes or No
+*Please search open *and* closed issues for issues similar to yours. Your bug may already have a posted solution.*
 
 **BCOE&M Info**
 Version: 
@@ -32,7 +35,7 @@ A clear and concise description of what you expected to happen.
 **Screenshots**
 If applicable, add screenshots to help explain your problem.
 
-** Server Environment **
+**Server Environment**
 - PHP Version:
 - MySQL Version: 
 - Other Info: [if applicable. Apache, nginx, etc.]
