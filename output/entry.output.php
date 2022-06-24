@@ -7,9 +7,12 @@ include (CLASSES.'tiny_but_strong/tbs_class.php');
 include (DB.'output_entry.db.php');
 
 $bottleNum = $_SESSION['jPrefsBottleNum'];
+
 $bottle_labels_001 = strtoupper($bottle_labels_001);
+/*
 $bottle_labels_002 = strtoupper($bottle_labels_002);
 $bottle_labels_003 = strtoupper($bottle_labels_003);
+*/
 
 $entry_closed = getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_contest_dates['contestEntryDeadline'], $_SESSION['prefsDateFormat'],$_SESSION['prefsTimeFormat'], "long", "date-no-gmt");
 $contest_name = $contest_info['contestName'];
@@ -48,7 +51,7 @@ $brewer_info['brewerState'] = html_entity_decode($brewer_info['brewerState']);
 $brewer_info['brewerClubs'] = html_entity_decode($brewer_info['brewerClubs']);
 $brewer_info['brewerEmail'] = html_entity_decode($brewer_info['brewerEmail']);
 
-if ($brewer_info['brewerCountry'] = "United States") {
+if ($brewer_info['brewerCountry'] == "United States") {
 	$brewer_info['brewerPhone1'] = format_phone_us($brewer_info['brewerPhone1']);
 	$brewer_info['brewerPhone2'] = format_phone_us($brewer_info['brewerPhone2']);
 }
@@ -59,7 +62,7 @@ else $organizer = "";
 if (in_array($_SESSION['prefsEntryForm'],$barcode_qrcode_array)) {
 
 	// Generate Barcode
-	$barcode_link = "http://www.brewcompetition.com/includes/barcode/html/image.php?filetype=PNG&dpi=300&scale=1&rotation=0&font_family=Arial.ttf&font_size=10&text=".$brewing_id."&thickness=50&code=BCGcode39";
+	$barcode_link = "https://www.brewcompetition.com/includes/barcode/html/image.php?filetype=PNG&dpi=300&scale=1&rotation=0&font_family=Arial.ttf&font_size=10&text=".$brewing_id."&thickness=50&code=BCGcode39";
 
 	// Generate QR Code
 	require_once (CLASSES.'qr_code/qrClass.php');

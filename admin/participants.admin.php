@@ -256,46 +256,47 @@ do {
 	else $brewer_tooltip_display_name = $row_brewer['brewerFirstName']." ".$row_brewer['brewerLastName'];
 
 	if (!$archive_display) {
-		$output_datatables_add_link = build_action_link("fa-beer",$base_url,"brew","entries","add",$row_brewer['uid'],"default","default","default",0,"Add an entry for ".$brewer_tooltip_display_name);
 
-		$output_datatables_edit_link = build_action_link("fa-pencil",$base_url,"brewer","admin","edit",$row_brewer['uid'],$row_brewer['id'],$dbTable,"default",0,"Edit ".$brewer_tooltip_display_name."&rsquo;s user account information");
-
-		if ($row_brewer['brewerEmail'] != $_SESSION['loginUsername']) $output_datatables_delete_link = build_action_link("fa-trash-o",$base_url,"admin","participants","delete",$row_brewer['uid'],$row_brewer['uid'],$brewer_db_table,"Are you sure you want to delete the participant account for ".$brewer_tooltip_display_name."? ALL entries for this participant WILL BE DELETED as well. This cannot be undone.",0,"Delete ".$brewer_tooltip_display_name."&rsquo;s account.");
-		else $output_datatables_delete_link = "<span class=\"fa fa-lg fa-trash-o text-muted\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Silly, you cannot delete yourself, ".$_SESSION['brewerFirstName']."!\"></span>";
-			
-		if ($row_brewer['brewerEmail'] != $_SESSION['loginUsername']) $output_datatables_other_link = build_action_link("fa-lock",$base_url,"admin","make_admin","default","default",$row_brewer['uid'],"default","default",0,"Change ".$brewer_tooltip_display_name."&rsquo;s User Level");
-		else $output_datatables_other_link = "<span class=\"fa fa-lg fa-lock text-muted\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"You cannot change your own user level, ".$_SESSION['brewerFirstName'].".\"></span>";
-		
-		if (strpos($brewer_assignment,'Judge') !== false)  {
-			$output_datatables_view_link = "<a class=\"hide-loader\" href=\"".$base_url."output/labels.output.php?section=admin&amp;go=participants&amp;action=judging_labels&amp;id=".$row_brewer['id']."&amp;psort=5160\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Download Judge Scoresheet Labels for ".$brewer_tooltip_display_name." - Letter (Avery 5160)\"><span class=\"fa fa-lg fa-file\"></span></a> <a class=\"hide-loader\" href=\"".$base_url."output/labels.output.php?section=admin&amp;go=participants&amp;action=judging_labels&amp;id=".$row_brewer['id']."&amp;psort=3422\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Download Judge Scoresheet Labels for ".$brewer_tooltip_display_name." - A4 (Avery 3422)\"><span class=\"fa fa-lg fa-file-text\"></span></a>";
-		}
-
-		$output_datatables_other_link2 = build_action_link("fa-user",$base_url,"user","default","username","admin",$row_brewer['uid'],"default","default",0,"Change ".$brewer_tooltip_display_name."&rsquo;s email address");
-		
-		$output_datatables_email_link .= "<a class=\"hide-loader\" href=\"mailto:".$row_brewer['brewerEmail']."\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Email ".$brewer_tooltip_display_name." at ".$row_brewer['brewerEmail']."\"><span class=\"fa fa-lg fa-envelope\"></span></a>";
-
-		if ($us_phone) {
-			$output_datatables_phone_link = "<a class=\"hide-loader\" href=\"#\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"".$brewer_tooltip_display_name."&rsquo;s phone number: ".format_phone_us($row_brewer['brewerPhone1'])."\"><span class=\"fa fa-lg fa-phone\"></span></a>";
-		}
-
-		else {
-			$output_datatables_phone_link = "<a class=\"hide-loader\" href=\"#\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"".$brewer_tooltip_display_name."&rsquo;s phone number: ".$row_brewer['brewerPhone1']."\"><span class=\"fa fa-lg fa-phone\"></span></a>";
-		}
-
-		/*
-		$output_datatables_user_question_link = "<a href=\"#\" data-tooltip=\"true\" data-toggle=\"modal\" data-target=\"#user-question-modal-".$row_brewer['uid']."\" data-placement=\"top\" title=\"Select to see ".$brewer_tooltip_display_name."&rsquo;s secret question and answer\"><span class=\"fa fa-lg fa-question-circle\"></span></a>";
-		*/
-
-		$output_datatables_change_pwd = build_action_link("fa-key",$base_url,"admin","change_user_password","edit","default",$row_brewer['uid'],"default","default",0,"Change ".$brewer_tooltip_display_name."&rsquo;s password");
-
-		if ((HOSTED) && ($row_brewer['brewerEmail'] == "geoff@zkdigital.com")) {
+		if ((HOSTED) && ($row_brewer['brewerEmail'] == $hosted_admin)) {
 				$output_datatables_edit_link = "<span class=\"fa fa-lg fa-pencil text-muted\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"This is the BCOE&amp;M Hosting master account. For troubleshooting purposes, it cannot be changed.\"></span>";
 				$output_datatables_delete_link = "<span class=\"fa fa-lg fa-trash-o text-muted\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"This is the BCOE&amp;M Hosting master account. For troubleshooting purposes, it cannot be deleted.\"></span>";
 				$output_datatables_other_link = "<span class=\"fa fa-lg fa-lock text-muted\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"This is the BCOE&amp;M Hosting master account. For troubleshooting purposes, it cannot be changed.\"></span>";
 				$output_datatables_other_link2 = "<span class=\"fa fa-lg fa-user text-muted\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"This is the BCOE&amp;M Hosting master account. For troubleshooting purposes, it cannot be changed.\"></span>";
 				$output_datatables_change_pwd = "<span class=\"fa fa-lg fa-key text-muted\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"This is the BCOE&amp;M Hosting master account. For troubleshooting purposes, it cannot be changed.\"></span>";
+				$output_datatables_phone_link = "<span class=\"fa fa-lg fa-phone text-muted\"></span></a>";
 		}
 
+		else {
+
+			$output_datatables_edit_link = build_action_link("fa-pencil",$base_url,"brewer","admin","edit",$row_brewer['uid'],$row_brewer['id'],$dbTable,"default",0,"Edit ".$brewer_tooltip_display_name."&rsquo;s user account information");
+
+			if ($row_brewer['brewerEmail'] != $_SESSION['loginUsername']) $output_datatables_delete_link = build_action_link("fa-trash-o",$base_url,"admin","participants","delete",$row_brewer['uid'],$row_brewer['uid'],$brewer_db_table,"Are you sure you want to delete the participant account for ".$brewer_tooltip_display_name."? ALL entries for this participant WILL BE DELETED as well. This cannot be undone.",0,"Delete ".$brewer_tooltip_display_name."&rsquo;s account.");
+			else $output_datatables_delete_link = "<span class=\"fa fa-lg fa-trash-o text-muted\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Silly, you cannot delete yourself, ".$_SESSION['brewerFirstName']."!\"></span>";
+				
+			if ($row_brewer['brewerEmail'] != $_SESSION['loginUsername']) $output_datatables_other_link = build_action_link("fa-lock",$base_url,"admin","make_admin","default","default",$row_brewer['uid'],"default","default",0,"Change ".$brewer_tooltip_display_name."&rsquo;s User Level");
+			else $output_datatables_other_link = "<span class=\"fa fa-lg fa-lock text-muted\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"You cannot change your own user level, ".$_SESSION['brewerFirstName'].".\"></span>";
+			
+			if (strpos($brewer_assignment,'Judge') !== false)  {
+				$output_datatables_view_link = "<a class=\"hide-loader\" href=\"".$base_url."output/labels.output.php?section=admin&amp;go=participants&amp;action=judging_labels&amp;id=".$row_brewer['id']."&amp;psort=5160\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Download Judge Scoresheet Labels for ".$brewer_tooltip_display_name." - Letter (Avery 5160)\"><span class=\"fa fa-lg fa-file\"></span></a> <a class=\"hide-loader\" href=\"".$base_url."output/labels.output.php?section=admin&amp;go=participants&amp;action=judging_labels&amp;id=".$row_brewer['id']."&amp;psort=3422\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Download Judge Scoresheet Labels for ".$brewer_tooltip_display_name." - A4 (Avery 3422)\"><span class=\"fa fa-lg fa-file-text\"></span></a>";
+			}
+
+			$output_datatables_other_link2 = build_action_link("fa-user",$base_url,"user","default","username","admin",$row_brewer['uid'],"default","default",0,"Change ".$brewer_tooltip_display_name."&rsquo;s email address");
+
+			if ($us_phone) {
+				$output_datatables_phone_link = "<a class=\"hide-loader\" href=\"#\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"".$brewer_tooltip_display_name."&rsquo;s phone number: ".format_phone_us($row_brewer['brewerPhone1'])."\"><span class=\"fa fa-lg fa-phone\"></span></a>";
+			}
+
+			else {
+				$output_datatables_phone_link = "<a class=\"hide-loader\" href=\"#\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"".$brewer_tooltip_display_name."&rsquo;s phone number: ".$row_brewer['brewerPhone1']."\"><span class=\"fa fa-lg fa-phone\"></span></a>";
+			}
+
+			$output_datatables_change_pwd = build_action_link("fa-key",$base_url,"admin","change_user_password","edit","default",$row_brewer['uid'],"default","default",0,"Change ".$brewer_tooltip_display_name."&rsquo;s password");
+
+		}
+
+		$output_datatables_email_link .= "<a class=\"hide-loader\" href=\"mailto:".$row_brewer['brewerEmail']."\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Email ".$brewer_tooltip_display_name." at ".$row_brewer['brewerEmail']."\"><span class=\"fa fa-lg fa-envelope\"></span></a>";
+
+		$output_datatables_add_link = build_action_link("fa-beer",$base_url,"brew","entries","add",$row_brewer['uid'],"default","default","default",0,"Add an entry for ".$brewer_tooltip_display_name);
 
 		$output_datatables_actions = $output_datatables_add_link." ".$output_datatables_edit_link." ".$output_datatables_delete_link." ".$output_datatables_other_link." ".$output_datatables_email_link." ".$output_datatables_phone_link." ".$output_datatables_other_link2." ".$output_datatables_change_pwd." ".$output_datatables_view_link;
 
@@ -342,6 +343,7 @@ do {
 		if ($filter == "stewards") $locations = $row_brewer['brewerStewardLocation'];
 
 		if ((!empty($brewer_assignment) && (!$archive_display))) {
+			
 			// Build assignment modal for participants
 			unset($assignment_modal_body);
 			if ((strpos($brewer_assignment,"Judge") !== false) || (strpos($brewer_assignment,"Steward") !== false) ) {

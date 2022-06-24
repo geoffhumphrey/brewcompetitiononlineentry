@@ -72,13 +72,13 @@ if (isset($_SESSION['loginUsername'])) {
     if ($anon) {
       $bottle_label_colCountLimit = 12; // number of labels per page
       $bottle_label_height = 200;
-      $page_info0 = sprintf("%s<br><strong>%s</strong>", $bottle_labels_002, $bottle_labels_001);
+      $page_info0 = sprintf("%s <strong>%s</strong>", $bottle_labels_002, strtoupper($bottle_labels_001));
     }
 
     else {
       $bottle_label_colCountLimit = 9; // number of labels per page
       $bottle_label_height = 290;
-      $page_info0 = sprintf("%s<br><strong>%s</strong>", $bottle_labels_003, $bottle_labels_001);
+      $page_info0 = sprintf("%s <strong>%s</strong>", $bottle_labels_003, strtoupper($bottle_labels_001));
     }
 
     if ($brewerCountry == "United States") $phone = format_phone_us($brewerPhone1);

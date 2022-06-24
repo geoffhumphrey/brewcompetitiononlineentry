@@ -7,6 +7,11 @@
 
 $footer = "";
 
+if ((!empty($current_version_display_append)) && (strpos($current_version_display, $current_version_display_append) !== false)) {
+	$new_version_display = str_replace($current_version_display_append, "", $current_version_display);
+	$current_version_display = $new_version_display."<small>".$current_version_display_append."</small>";
+}
+
 if(!empty($_SESSION['contestName'])) $footer .= "<span class=\"hidden-sm hidden-md\">".$_SESSION['contestName']." &ndash; </span>";
 
 $footer .= "<a href=\"http://www.brewcompetition.com\" target=\"_blank\">BCOE&amp;M</a> ";
@@ -14,7 +19,6 @@ $footer .= "<a href=\"http://www.brewcompetition.com\" target=\"_blank\">BCOE&am
 if ((isset($_SESSION['prefsProEdition'])) && ($_SESSION['prefsProEdition'] == 0)) {
 	if (HOSTED) $footer .= $current_version_display." &ndash; ".$label_hosted." ".$label_amateur_comp_edition;
 	else $footer .= $current_version_display." &ndash; ".$label_amateur_comp_edition;
-	
 }
 
 elseif ((isset($_SESSION['prefsProEdition'])) && ($_SESSION['prefsProEdition'] == 1)) {
