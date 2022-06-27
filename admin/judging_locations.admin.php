@@ -344,15 +344,15 @@ if ((($action == "add") || ($action == "edit")) || ($section == "step5")) {
 
 	if ($section == "step5") $action = "add"; else $action = $action;
 	if ($go == "default") $go = "setup"; else $go = $go;
+	
 	if ($section == "step5") $form_submit_url .= build_form_action($base_url,$section,$go,$action,$filter,"1",$judging_locations_db_table,TRUE);
-	else $form_submit_url .= build_form_action($base_url,$section,$go,$action,$filter,$row_judging['id'],$judging_locations_db_table,TRUE);
+	else {
+		if ($row_judging) $form_submit_url .= build_form_action($base_url,$section,$go,$action,$filter,$row_judging['id'],$judging_locations_db_table,TRUE);
+	}
+
 	if ($action == "add") $form_submit_button .= "Add Judging Session";
-		elseif ($action == "edit") $form_submit_button .= "Edit Judging Session";
-		else $form_submit_button .= "Submit";
-	//$form_submit_button .= "<input type=\"submit\" class=\"button\" value='";
-	//if ($action == "edit") $form_submit_button .= "Update";
-	//else $form_submit_button .= "Submit";
-	//$form_submit_button .= "'>";
+	elseif ($action == "edit") $form_submit_button .= "Edit Judging Session";
+	else $form_submit_button .= "Submit";
 
 	$judging_date = "";
 	$judging_end_date = "";

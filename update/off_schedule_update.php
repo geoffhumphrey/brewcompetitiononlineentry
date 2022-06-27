@@ -13,7 +13,7 @@ $_SESSION['update_version'] = $current_version;
 $update_table = $prefix."bcoem_sys";
 $data = array(
 	'version_date' => NULL,
-	'data_check' => $db_conn->now()
+	'data_check' => $db_conn->now();
 );
 $db_conn->where ('id', 1);
 $db_conn->update ($update_table, $data);
@@ -2338,6 +2338,24 @@ if ($totalRows_archive > 0) {
 
 			if ($table_archive == $brewing_db_table."_".$row_archive['archiveSuffix']) {
 
+				$update_table = $brewing_db_table."_".$row_archive['archiveSuffix'];
+				$data = array('brewStyle' => 'Czech Premium Pale Lager');
+				$db_conn->where ('brewStyle', 'Czech Premimum Pale Lager');
+				if ($db_conn->update ($update_table, $data)) $output_off_sched_update .= "<li>Corrected Czech Premium Pale Lager name in brewing table.</li>";
+				else {
+					$output_off_sched_update .= "<li>Correction of Czech Premium Pale Lager failed in brewing table. <strong class=\"text-warning\">Error: ".$db_conn->getLastError()."</strong></li>";
+					$error_count += 1;
+				}
+
+				$update_table = $brewing_db_table."_".$row_archive['archiveSuffix'];
+				$data = array('brewStyle' => 'British Golden Ale');
+				$db_conn->where ('brewStyle', 'English Golden Ale');
+				if ($db_conn->update ($update_table, $data)) $output_off_sched_update .= "<li>Corrected British Golden Ale name in archive ".$row_archive['archiveSuffix']." brewing table.</li>";
+				else {
+					$output_off_sched_update .= "<li>Correction of British Golden Ale failed in archive ".$row_archive['archiveSuffix']." brewing table. <strong class=\"text-warning\">Error: ".$db_conn->getLastError()."</strong></li>";
+					$error_count += 1;
+				}
+
 				if (!check_update("brewJudgingNumber",$brewing_db_table."_".$row_archive['archiveSuffix'])) {
 
 					$sql = sprintf("ALTER TABLE `%s` ADD `brewJudgingNumber` char(1) NULL DEFAULT NULL;",$brewing_db_table."_".$row_archive['archiveSuffix']);
@@ -2604,6 +2622,7 @@ $output_off_sched_update .= "<li>Added evaluation DB table - for use with Electr
 /**
  * ----------------------------------------------- 2.4.0 ---------------------------------------------
  * Change incorrect English Golden Ale name to British Golden Ale style
+ * Also added to archive update scripting above.
  * ---------------------------------------------------------------------------------------------------
  */
 
@@ -2777,6 +2796,32 @@ include (UPDATE.'styles_ba_2022_update.php');
 
 if (!check_new_style("16","05","Straight Sour Beer")) include (UPDATE.'styles_aabc_2022.php');
 
+
+/**
+ * ----------------------------------------------- 2.5.0 ---------------------------------------------
+ * Correct Czech Premium Pale Lager mispelling.
+ * Also added to archive update scripting above.
+ * Added after Beta release.
+ * ---------------------------------------------------------------------------------------------------
+ */
+
+$update_table = $prefix."styles";
+$data = array('brewStyle' => 'Czech Premium Pale Lager');
+$db_conn->where ('brewStyle', 'Czech Premimum Pale Lager');
+if ($db_conn->update ($update_table, $data)) $output_off_sched_update .= "<li>Corrected Czech Premium Pale Lager name in styles table.</li>";
+else {
+	$output_off_sched_update .= "<li>Correction of Czech Premium Pale Lager failed in styles table. <strong class=\"text-warning\">Error: ".$db_conn->getLastError()."</strong></li>";
+	$error_count += 1;
+}
+
+$update_table = $prefix."brewing";
+$data = array('brewStyle' => 'Czech Premium Pale Lager');
+$db_conn->where ('brewStyle', 'Czech Premimum Pale Lager');
+if ($db_conn->update ($update_table, $data)) $output_off_sched_update .= "<li>Corrected Czech Premium Pale Lager name in brewing table.</li>";
+else {
+	$output_off_sched_update .= "<li>Correction of Czech Premium Pale Lager failed in brewing table. <strong class=\"text-warning\">Error: ".$db_conn->getLastError()."</strong></li>";
+	$error_count += 1;
+}
 
 // End all unordered lists
 if (!$setup_running) $output_off_sched_update .= "</ul>";
