@@ -13,7 +13,7 @@ $_SESSION['update_version'] = $current_version;
 $update_table = $prefix."bcoem_sys";
 $data = array(
 	'version_date' => NULL,
-	'data_check' => $db_conn->now();
+	'data_check' => $db_conn->now()
 );
 $db_conn->where ('id', 1);
 $db_conn->update ($update_table, $data);
