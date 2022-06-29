@@ -12,6 +12,8 @@ $styles_2015 = array();
 $styles_2021 = array();
 $mapped_style_ids = array();
 
+if (!isset($output)) $output = "";
+
 do {
 
 	$style_num = $row_style_ids['brewStyleGroup'].$row_style_ids['brewStyleNum'];
@@ -47,7 +49,7 @@ echo "<br><br>";
  * Update judge likes and dislikes from 2015 to analogous 2021 styles
  */
 
-$query_judge_likes = sprintf("SELECT id, brewerJudgeLikes, brewerJudgeDislikes, brewerLastname, brewerFirstName FROM %s WHERE (brewerJudgeLikes IS NOT NULL OR brewerJudgeDislikes IS NOT NULL) OR (brewerJudgeLikes !='' OR brewerJudgeDislikes !='') ORDER BY id ASC", $prefix."brewer");
+$query_judge_likes = sprintf("SELECT * FROM %s WHERE (brewerJudgeLikes IS NOT NULL OR brewerJudgeDislikes IS NOT NULL) OR (brewerJudgeLikes !='' OR brewerJudgeDislikes !='') ORDER BY id ASC", $prefix."brewer");
 $judge_likes = mysqli_query($connection,$query_judge_likes) or die (mysqli_error($connection));
 $row_judge_likes = mysqli_fetch_assoc($judge_likes);
 $totalRows_judge_likes = mysqli_num_rows($judge_likes);
@@ -109,11 +111,6 @@ if ($totalRows_judge_likes > 0) {
             if ($db_conn->update ($update_table, $data)) $output .= "<li>Judge likes updated to BJCP 2021 for ".$row_judge_likes['brewerLastName'].", ".$row_judge_likes['brewerFirstName']."</li>";
             else $output .= "<li>Judge likes NOT updated to BJCP 2021 for ".$row_judge_likes['brewerLastName'].", ".$row_judge_likes['brewerFirstName'].". Error: ".$db_conn->getLastError()."</li>";
 
-            /*
-            $updateSQL = sprintf("UPDATE %s SET brewerJudgeLikes='%s', brewerJudgeDislikes='%s' WHERE id='%s'", $prefix."brewer", $likes_new, $dislikes_new, $row_judge_likes['id']);
-            mysqli_select_db($connection,$database);
-            $result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
-            */
         }
 
         /*
@@ -138,7 +135,7 @@ if ($totalRows_judge_likes > 0) {
  * Update defined 2015 styles for any table to 2021
  */
 
-$query_tables = sprintf("SELECT id, tableStyles, tableName FROM %s ORDER BY id ASC", $prefix."judging_tables");
+$query_tables = sprintf("SELECT * FROM %s ORDER BY id ASC", $prefix."judging_tables");
 $tables = mysqli_query($connection,$query_tables) or die (mysqli_error($connection));
 $row_tables = mysqli_fetch_assoc($tables);
 $totalRows_tables = mysqli_num_rows($tables);
@@ -169,11 +166,6 @@ if ($totalRows_tables > 0) {
             if ($db_conn->update ($update_table, $data)) $output .= "<li>Table styles updated to BJCP 2021 for ".$row_tables['tableName']."</li>";
             else $output .= "<li>Judge likes NOT updated to BJCP 2021  for ".$row_tables['tableName'].". Error: ".$db_conn->getLastError()."</li>";
 
-            /*
-            $updateSQL = sprintf("UPDATE %s SET tableStyles='%s' WHERE id='%s'", $prefix."judging_tables", $table_styles_new, $row_tables['id']);
-            mysqli_select_db($connection,$database);
-            $result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
-            */
         }
         
         /*
@@ -194,7 +186,7 @@ if ($totalRows_tables > 0) {
  * 2015 counterpart was active as well.
  */
 
-$query_styles_active = sprintf("SELECT id,brewStyleGroup,brewStyleNum FROM %s WHERE brewStyleVersion='BJCP2015' AND brewStyleActive='Y'", $prefix."styles");
+$query_styles_active = sprintf("SELECT * FROM %s WHERE brewStyleVersion='BJCP2015' AND brewStyleActive='Y'", $prefix."styles");
 $styles_active = mysqli_query($connection,$query_styles_active) or die (mysqli_error($connection));
 $row_styles_active = mysqli_fetch_assoc($styles_active);
 $totalRows_styles_active = mysqli_num_rows($styles_active);
@@ -202,11 +194,10 @@ $totalRows_styles_active = mysqli_num_rows($styles_active);
 if ($totalRows_styles_active > 0) {
 
     // First, "deselect" all styles in the DB for BJCP2021
-    $updateSQL = sprintf("UPDATE %s SET brewStyleActive='N' WHERE brewStyleVersion='BJCP2021'",$prefix."styles");
-    mysqli_select_db($connection,$database);
-    $result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
-
-    // echo $updateSQL."<br><br>";
+    $update_table = $prefix."styles";
+    $data = array('brewStyleActive' => 'N');
+    $db_conn->where ('brewStyleVersion', 'BJCP2021');
+    $db_conn->update ($update_table, $data);
 
     do {
 
@@ -223,12 +214,6 @@ if ($totalRows_styles_active > 0) {
             $db_conn->where ('id', $id);
             $result = $db_conn->update ($update_table, $data);
 
-            /*
-            $updateSQL = sprintf("UPDATE %s SET brewStyleActive='Y' WHERE id='%s'",$prefix."styles",$id);
-            mysqli_select_db($connection,$database);
-            $result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
-            */
-
         }
 
         /*
@@ -239,9 +224,6 @@ if ($totalRows_styles_active > 0) {
     } while($row_styles_active = mysqli_fetch_assoc($styles_active));
 
 } // end if ($totalRows_styles_active > 0)
-
-
-
 
 /**
  * Update any entries in the brewing table to analogous 2021 styles
@@ -257,22 +239,9 @@ if ($totalRows_brews > 0) {
 	do {
 
 		$style = $row_brews['brewCategorySort'].$row_brews['brewSubCategory'];
-        $update_table = $prefix."styles";
-        $style = $row_brews['brewCategorySort'].$row_brews['brewSubCategory'];
         $sql = "";
         $sql .= bjcp_map_2015_2021($style,0,$prefix,$row_brews['id']);
         if (!empty($sql)) $result = $db_conn->rawQuery($sql);
-
-        /*
-		$updateSQL = "";
-		$updateSQL = bjcp_map_2015_2021($style,0,$prefix,$row_brews['id']);
-
-		if (!empty($updateSQL)) {
-			// echo $updateSQL."<br>";
-			mysqli_select_db($connection,$database);
-			$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
-		}
-        */
 
 	} while ($row_brews = mysqli_fetch_assoc($brews));
 	
@@ -283,7 +252,7 @@ $update_table = $prefix."styles";
 $data = array('brewStyleVersion' => 'BJCP2021');
 $db_conn->where ('brewStyleOwn', NULL, 'IS');
 $db_conn->orWhere ('brewStyleOwn', 'custom');
-if ($db_conn->rawQuery($sql)) $output .= "<li>Custom styles updated to BJCP 2021.</li>";
+if ($db_conn->update ($update_table, $data)) $output .= "<li>Custom styles updated to BJCP 2021.</li>";
 else $output .= "Custom styles NOT updated to BJCP 2021. <li>Error: ".$db_conn->getLastError()."</li>";
 
 $update_table = $prefix."preferences";
@@ -291,16 +260,6 @@ $data = array('prefsStyleSet' => 'BJCP2021');
 $db_conn->where ('id', 1);
 if ($db_conn->update ($update_table, $data)) $output .= "<li>Preferences set to BJCP 2021.</li>";
 else $output .= "<li>Preferences NOT set to BJCP 2021. Error: ".$db_conn->getLastError()."</li>";
-
-/*
-$updateSQL = sprintf("UPDATE %s SET brewStyleVersion = 'BJCP2021' WHERE brewStyleOwn='custom' OR brewStyleOwn IS NULL",$prefix."styles");
-mysqli_select_db($connection,$database);
-$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
-
-$updateSQL = sprintf("UPDATE %s SET prefsStyleSet='%s' WHERE id='%s'",$prefix."preferences","BJCP2021","1");
-mysqli_real_escape_string($connection,$updateSQL);
-$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
-*/
 
 unset($_SESSION['prefs'.$prefix_session]);
 ?>

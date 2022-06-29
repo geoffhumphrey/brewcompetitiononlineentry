@@ -298,6 +298,9 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 		 * 2015 styles to updated 2021 styles in brewing DB.
 		 * Update scripting changed BJCP2008 preference to BJCP2015 and
 		 * performed a conversion from 2008 to 2015 on all entries in the DB.
+		 * As a safeguard to make sure the brewing table data is updated, 
+		 * perform a query for any old styles whose names have changed and/or
+		 * whose category has changed.
 		 */
 		
 		if ($prefsStyleSet == "BJCP2021") {
@@ -307,6 +310,17 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 				include (LIB.'convert.lib.php');
 				include (INCLUDES.'convert/convert_bjcp_2021.inc.php');
 				
+			}
+
+			$query_check_entry_styles = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE brewStyle='Clone Beer' OR brewStyle='New England IPA' OR brewStyle='Trappist Single' OR brewCategorySort='PR' OR (brewCategorySort='21' AND brewSubCategory='B7' AND brewStyle='New England IPA') OR (brewCategorySort='27' AND brewSubCategory='A1' AND brewStyle='Gose')", $prefix."brewing");
+			$check_entry_styles = mysqli_query($connection,$query_check_entry_styles) or die (mysqli_error($connection));
+			$row_check_entry_styles = mysqli_fetch_assoc($check_entry_styles);
+
+			if ($row_check_entry_styles['count'] > 0) {
+
+				include (LIB.'convert.lib.php');
+				include (INCLUDES.'convert/convert_bjcp_2021.inc.php');
+
 			}
 
 		}

@@ -12,6 +12,8 @@ $styles_2008 = array();
 $styles_2015 = array();
 $mapped_style_ids = array();
 
+if (!isset($output)) $output = "";
+
 do {
 
     $style_num = $row_style_ids['brewStyleGroup'].$row_style_ids['brewStyleNum'];
@@ -51,7 +53,7 @@ echo "<br><br>";
  * Implode and update db column
  */
 
-$query_judge_likes = sprintf("SELECT id, brewerJudgeLikes, brewerJudgeDislikes, brewerFirstName, brewerLastName FROM %s WHERE (brewerJudgeLikes IS NOT NULL OR brewerJudgeDislikes IS NOT NULL) ORDER BY id ASC", $prefix."brewer");
+$query_judge_likes = sprintf("SELECT * FROM %s WHERE (brewerJudgeLikes IS NOT NULL OR brewerJudgeDislikes IS NOT NULL) ORDER BY id ASC", $prefix."brewer");
 $judge_likes = mysqli_query($connection,$query_judge_likes) or die (mysqli_error($connection));
 $row_judge_likes = mysqli_fetch_assoc($judge_likes);
 $totalRows_judge_likes = mysqli_num_rows($judge_likes);
@@ -118,10 +120,6 @@ if ($totalRows_judge_likes > 0) {
         
         print_r($dislikes_2015);
         echo "<br><br>";
-
-        $updateSQL = sprintf("UPDATE %s SET brewerJudgeLikes='%s', brewerJudgeDislikes='%s' WHERE id='%s'", $prefix."brewer", $likes_new, $dislikes_new, $row_judge_likes['id']);
-        mysqli_select_db($connection,$database);
-        $result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
         */
 
         $update_table = $prefix."brewer";
@@ -142,7 +140,7 @@ if ($totalRows_judge_likes > 0) {
  * Update defined 2008 styles for any table to 2015
  */
 
-$query_tables = sprintf("SELECT id, tableStyles, tableName FROM %s ORDER BY id ASC", $prefix."judging_tables");
+$query_tables = sprintf("SELECT * FROM %s ORDER BY id ASC", $prefix."judging_tables");
 $tables = mysqli_query($connection,$query_tables) or die (mysqli_error($connection));
 $row_tables = mysqli_fetch_assoc($tables);
 $totalRows_tables = mysqli_num_rows($tables);
@@ -174,11 +172,6 @@ if ($totalRows_tables > 0) {
             if ($db_conn->update ($update_table, $data)) $output_off_sched_update .= "<li>Table styles updated to BJCP 2015 for ".$row_tables['tableName']."</li>";
             else $output_off_sched_update .= "<li>Judge likes NOT updated to BJCP 2015  for ".$row_tables['tableName'].". Error: ".$db_conn->getLastError()."</li>";
 
-            /*
-            $updateSQL = sprintf("UPDATE %s SET tableStyles='%s' WHERE id='%s'", $prefix."judging_tables", $table_styles_new, $row_tables['id']);
-            mysqli_select_db($connection,$database);
-            $result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
-            */
         }
 
         /*
@@ -199,7 +192,7 @@ if ($totalRows_tables > 0) {
  * 2008 counterpart was active as well.
  */
 
-$query_styles_active = sprintf("SELECT id,brewStyleGroup,brewStyleNum FROM %s WHERE brewStyleVersion='BJCP2008' AND brewStyleActive='Y'", $prefix."styles");
+$query_styles_active = sprintf("SELECT * FROM %s WHERE brewStyleVersion='BJCP2008' AND brewStyleActive='Y'", $prefix."styles");
 $styles_active = mysqli_query($connection,$query_styles_active) or die (mysqli_error($connection));
 $row_styles_active = mysqli_fetch_assoc($styles_active);
 $totalRows_styles_active = mysqli_num_rows($styles_active);
@@ -211,13 +204,6 @@ if ($totalRows_styles_active > 0) {
     $data = array('brewStyleActive' => 'N');
     $db_conn->where ('brewStyleVersion', 'BJCP2015');
     $result = $db_conn->update ($update_table, $data);
-    
-    /*
-    $updateSQL = sprintf("UPDATE %s SET brewStyleActive='N' WHERE brewStyleVersion='BJCP2015'",$prefix."styles");
-    mysqli_select_db($connection,$database);
-    $result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
-    echo $updateSQL."<br><br>";
-    */
 
     do {
 
@@ -233,12 +219,6 @@ if ($totalRows_styles_active > 0) {
             $data = array('brewStyleActive' => 'Y');
             $db_conn->where ('id', $id);
             $result = $db_conn->update ($update_table, $data);
-            
-            /*
-            $updateSQL = sprintf("UPDATE %s SET brewStyleActive='Y' WHERE id='%s'",$prefix."styles",$id);
-            mysqli_select_db($connection,$database);
-            $result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
-            */
 
         }
 
@@ -261,21 +241,10 @@ if ($totalRows_brews > 0) {
     // Loop through entries and convert to 2015 styles
     do {
 
-        $update_table = $prefix."styles";
         $style = $row_brews['brewCategorySort'].$row_brews['brewSubCategory'];
         $sql = "";
         $sql .= bjcp_map_2008_2015($style,0,$prefix,$row_brews['id']);
         if (!empty($sql)) $result = $db_conn->rawQuery($sql);
-        
-        /*
-        $updateSQL = "";
-        $updateSQL = bjcp_map_2008_2015($style,0,$prefix,$row_brews['id']);
-
-        if (!empty($updateSQL)) {
-            mysqli_select_db($connection,$database);
-            $result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
-        }
-        */
 
     } while ($row_brews = mysqli_fetch_assoc($brews));
 
