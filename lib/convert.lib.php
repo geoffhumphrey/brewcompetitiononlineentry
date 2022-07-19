@@ -543,18 +543,21 @@ function bjcp_map_2015_2021($style, $method, $prefix, $id) {
             case "06A":
                 if ($method == 0) $return = sprintf("UPDATE %s SET brewCategory='%s', brewCategorySort='%s', brewSubCategory='%s', brewStyle='%s' WHERE id='%s'",$prefix."brewing","6","06","A","Märzen",$id);
                 if ($method == 1) $return = "06A";
+                if ($method == 2) $return = "06-A";
             break;
 
             // Kellerbier now part of Historical Beer
             case "07C":
                 if ($method == 0) $return = sprintf("UPDATE %s SET brewCategory='%s', brewCategorySort='%s', brewSubCategory='%s', brewStyle='%s' WHERE id='%s'",$prefix."brewing","27","27","A1","Kellerbier",$id);
                 if ($method == 1) $return = "27A1";
+                if ($method == 2) $return = "27-A1";
             break;
 
             // English Barley Wine (2021 splits into two words)
             case "17D":
                 if ($method == 0) $return = sprintf("UPDATE %s SET brewCategory='%s', brewCategorySort='%s', brewSubCategory='%s', brewStyle='%s' WHERE id='%s'",$prefix."brewing","17","17","D","English Barley Wine",$id);
                 if ($method == 1) $return = "17D";
+                if ($method == 2) $return = "17-D";
             break;
 
             // New England IPA changed to Hazy IPA
@@ -562,12 +565,14 @@ function bjcp_map_2015_2021($style, $method, $prefix, $id) {
             case "21B7":
                 if ($method == 0) $return = sprintf("UPDATE %s SET brewCategory='%s', brewCategorySort='%s', brewSubCategory='%s', brewStyle='%s' WHERE id='%s'",$prefix."brewing","21","21","C","Hazy IPA",$id);
                 if ($method == 1) $return = "21C";
+                if ($method == 2) $return = "21-C";
             break;
 
             // Add accent for Bière de Garde
             case "24C":
                 if ($method == 0) $return = sprintf("UPDATE %s SET brewCategory='%s', brewCategorySort='%s', brewSubCategory='%s', brewStyle='%s' WHERE id='%s'",$prefix."brewing","24","24","C","Bière de Garde",$id);
                 if ($method == 1) $return = "24C";
+                if ($method == 2) $return = "24-C";
             break;
 
             // Trappist Ale now Monastic Ale
@@ -575,38 +580,45 @@ function bjcp_map_2015_2021($style, $method, $prefix, $id) {
             case "26A":
                 if ($method == 0) $return = sprintf("UPDATE %s SET brewCategory='%s', brewCategorySort='%s', brewSubCategory='%s', brewStyle='%s' WHERE id='%s'",$prefix."brewing","26","26","A","Belgian Single",$id);
                 if ($method == 1) $return = "26A";
+                if ($method == 2) $return = "26-A";
             break;
 
             // Clone Beer is now Commercial Specialty Beer
             case "34A":
                 if ($method == 0) $return = sprintf("UPDATE %s SET brewCategory='%s', brewCategorySort='%s', brewSubCategory='%s', brewStyle='%s' WHERE id='%s'",$prefix."brewing","34","34","A","Commercial Specialty Beer",$id);
                 if ($method == 1) $return = "34A";
+                if ($method == 2) $return = "34-A";
             break;
 
             // Provisional Styles prefix now LS for Local Styles
             case "PRX1":
                 if ($method == 0) $return = sprintf("UPDATE %s SET brewCategory='%s', brewCategorySort='%s', brewSubCategory='%s', brewStyle='%s' WHERE id='%s'",$prefix."brewing","LS","LS","X1","Dorada Pampeana",$id);
                 if ($method == 1) $return = "LSX1";
+                if ($method == 2) $return = "LS-X1";
             break;
 
             case "PRX2":
                 if ($method == 0) $return = sprintf("UPDATE %s SET brewCategory='%s', brewCategorySort='%s', brewSubCategory='%s', brewStyle='%s' WHERE id='%s'",$prefix."brewing","LS","LS","X2","IPA Argenta",$id);
                 if ($method == 1) $return = "LSX2";
+                if ($method == 2) $return = "LS-X2";
             break;
 
             case "PRX3":
                 if ($method == 0) $return = sprintf("UPDATE %s SET brewCategory='%s', brewCategorySort='%s', brewSubCategory='%s', brewStyle='%s' WHERE id='%s'",$prefix."brewing","LS","LS","X3","Italian Grape Ale",$id);
                 if ($method == 1) $return = "LSX3";
+                if ($method == 2) $return = "LS-X3";
             break;
 
             case "PRX4":
                 if ($method == 0) $return = sprintf("UPDATE %s SET brewCategory='%s', brewCategorySort='%s', brewSubCategory='%s', brewStyle='%s' WHERE id='%s'",$prefix."brewing","LS","LS","X4","Catharina Sour",$id);
                 if ($method == 1) $return = "LSX4";
+                if ($method == 2) $return = "LS-X4";
             break;
 
             case "PRX5":
                 if ($method == 0) $return = sprintf("UPDATE %s SET brewCategory='%s', brewCategorySort='%s', brewSubCategory='%s', brewStyle='%s' WHERE id='%s'",$prefix."brewing","LS","LS","X5","New Zealand Pilsner",$id);
                 if ($method == 1) $return = "LSX5";
+                if ($method == 2) $return = "LS-X5";
             break;
 
             // Historical styles have been shuffled
@@ -615,11 +627,13 @@ function bjcp_map_2015_2021($style, $method, $prefix, $id) {
             case "27A1":
                 if ($method == 0) $return = sprintf("UPDATE %s SET brewCategory='%s', brewCategorySort='%s', brewSubCategory='%s', brewStyle='%s' WHERE id='%s'",$prefix."brewing","23","23","G","Gose",$id);
                 if ($method == 1) $return = "23G";
+                if ($method == 2) $return = "23-G";
             break;
 
             case "27A2":
                 if ($method == 0) $return = sprintf("UPDATE %s SET brewCategory='%s', brewCategorySort='%s', brewSubCategory='%s', brewStyle='%s' WHERE id='%s'",$prefix."brewing","27","27","A5","Piwo Grodziskie",$id);
                 if ($method == 1) $return = "27A5";
+                if ($method == 2) $return = "27-A5";
             break;
 
             // 27A3 (Lichenhainer) is the same
@@ -627,31 +641,37 @@ function bjcp_map_2015_2021($style, $method, $prefix, $id) {
             case "27A4":
                 if ($method == 0) $return = sprintf("UPDATE %s SET brewCategory='%s', brewCategorySort='%s', brewSubCategory='%s', brewStyle='%s' WHERE id='%s'",$prefix."brewing","27","27","A8","Roggenbier",$id);
                 if ($method == 1) $return = "27A8";
+                if ($method == 2) $return = "27-A8";
             break;
 
             case "27A5":
                 if ($method == 0) $return = sprintf("UPDATE %s SET brewCategory='%s', brewCategorySort='%s', brewSubCategory='%s', brewStyle='%s' WHERE id='%s'",$prefix."brewing","27","27","A9","Sahti",$id);
                 if ($method == 1) $return = "27A9";
+                if ($method == 2) $return = "27-A9";
             break;
 
             case "27A6":
                 if ($method == 0) $return = sprintf("UPDATE %s SET brewCategory='%s', brewCategorySort='%s', brewSubCategory='%s', brewStyle='%s' WHERE id='%s'",$prefix."brewing","27","27","A2","Kentucky Common",$id);
                 if ($method == 1) $return = "27A2";
+                if ($method == 2) $return = "27-A2";
             break;
 
             case "27A7":
                 if ($method == 0) $return = sprintf("UPDATE %s SET brewCategory='%s', brewCategorySort='%s', brewSubCategory='%s', brewStyle='%s' WHERE id='%s'",$prefix."brewing","27","27","A6","Pre-Prohibition Lager",$id);
                 if ($method == 1) $return = "27A6";
+                if ($method == 2) $return = "27-A6";
             break;
 
             case "27A8":
                 if ($method == 0) $return = sprintf("UPDATE %s SET brewCategory='%s', brewCategorySort='%s', brewSubCategory='%s', brewStyle='%s' WHERE id='%s'",$prefix."brewing","27","27","A7","Pre-Prohibition Porter",$id);
                 if ($method == 1) $return = "27A7";
+                if ($method == 2) $return = "27-A7";
             break;
 
             case "27A9":
                 if ($method == 0) $return = sprintf("UPDATE %s SET brewCategory='%s', brewCategorySort='%s', brewSubCategory='%s', brewStyle='%s' WHERE id='%s'",$prefix."brewing","27","27","A4","London Brown Ale",$id);
                 if ($method == 1) $return = "27A4";
+                if ($method == 2) $return = "27-A4";
             break;
 
         }

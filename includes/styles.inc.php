@@ -59,7 +59,7 @@ $style_sets = array(
 	array(
 		
 		// REQUIRED. The next incremental *whole* number, NO leading zero.
-		"id" => 4,
+		"id" => 6,
 		
 		// REQUIRED. Style name for system use, with NO SPACES. 
 		// Must EXACTLY MATCH value of the brewStyleVersion column 
@@ -147,6 +147,7 @@ $style_sets = array(
  */
 
 	/*
+	
 	array(
 		"id" => 0,
 		"style_set_name" => "BJCP2008",

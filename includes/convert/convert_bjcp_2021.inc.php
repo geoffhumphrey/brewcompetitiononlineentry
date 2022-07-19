@@ -234,6 +234,8 @@ $brews = mysqli_query($connection,$query_brews) or die (mysqli_error($connection
 $row_brews = mysqli_fetch_assoc($brews);
 $totalRows_brews = mysqli_num_rows($brews);
 
+$current_active = array();
+
 if ($totalRows_brews > 0) {
 
 	do {
@@ -241,11 +243,33 @@ if ($totalRows_brews > 0) {
 		$style = $row_brews['brewCategorySort'].$row_brews['brewSubCategory'];
         $sql = "";
         $sql .= bjcp_map_2015_2021($style,0,$prefix,$row_brews['id']);
-        if (!empty($sql)) $result = $db_conn->rawQuery($sql);
+        if (!empty($sql)) {
+            $current_active[] = bjcp_map_2015_2021($style,2,$prefix,$row_brews['id']);
+            $result = $db_conn->rawQuery($sql);
+        }
 
 	} while ($row_brews = mysqli_fetch_assoc($brews));
 	
 } // end if ($totalRows_brews > 0)
+
+// Activate all styles that have been converted.
+// Failsafe just in case comp converts during entry window.
+
+if (!empty($current_active)) {
+
+    $update_table = $prefix."styles";
+
+    foreach($current_active as $value) {
+
+        $style_parts = explode("-", $value);
+        $data = array('brewStyleActive' => 'Y');
+        $db_conn->where ('brewStyleGroup', $style_parts[0]);
+        $db_conn->where ('brewStyleNum', $style_parts[1]);
+        $db_conn->update ($update_table, $data);
+
+    }
+
+}
 
 // Update all custom styles
 $update_table = $prefix."styles";

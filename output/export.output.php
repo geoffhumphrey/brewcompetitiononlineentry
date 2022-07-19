@@ -252,6 +252,10 @@ if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($en
                             $brewerLastName = "";
                             $brewer_club = "";
 
+                            $fields1 = array();
+                            $fields2 = array();
+                            $fields = array();
+
                             include (DB.'output_entries_export_extend.db.php');
 
                             if (isset($row_sql['brewBrewerID'])) $brewer_info = explode("^", brewer_info($row_sql['brewBrewerID']));
@@ -270,7 +274,7 @@ if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($en
                             }
 
                             $fields1 = array_values($row_sql);
-                            $fields2 = array($table_name,$row_flight['flightNumber'],$row_flight['flightRound'],sprintf("%02s",$row_scores['scoreEntry']),$row_scores['scorePlace'],$bos_place,$style_type_entry,$location[2]);
+                            if (($row_flight) && ($row_scores)) $fields2 = array($table_name,$row_flight['flightNumber'],$row_flight['flightRound'],sprintf("%02s",$row_scores['scoreEntry']),$row_scores['scorePlace'],$bos_place,$style_type_entry,$location[2]);
                             $fields = array_merge($fields0,$fields1,$fields2);
 
                             fputcsv($fp, $fields);
@@ -404,9 +408,17 @@ if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($en
 
                                 $scoreEntry = "";
                                 $scorePlace = "";
+                                $flightNumber = "";
+                                $flightRound = "";
+
                                 if ($row_scores) {
                                     $scoreEntry = sprintf("%02s",$row_scores['scoreEntry']);
                                     $scorePlace = $row_scores['scorePlace'];
+                                }
+
+                                if ($row_flight) {
+                                    $flightNumber = $row_flight['flightNumber'];
+                                    $flightRound = $row_flight['flightRound'];
                                 }
 
                                 if ($_SESSION['prefsProEdition'] == 1) $a[] = array(
@@ -433,8 +445,8 @@ if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($en
                                     $row_sql['brewMead3'],
                                     html_entity_decode($table_name),
                                     html_entity_decode($location[2]),
-                                    $row_flight['flightNumber'],
-                                    $row_flight['flightRound'],
+                                    $flightNumber,
+                                    $flightRound,
                                     $scoreEntry,
                                     $scorePlace,
                                     $bos_place
@@ -463,8 +475,8 @@ if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($en
                                     $row_sql['brewMead3'],
                                     html_entity_decode($table_name),
                                     html_entity_decode($location[2]),
-                                    $row_flight['flightNumber'],
-                                    $row_flight['flightRound'],
+                                    $flightNumber,
+                                    $flightRound,
                                     $scoreEntry,
                                     $scorePlace,
                                     $bos_place
@@ -572,93 +584,120 @@ if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($en
                 else $a [] = array($label_first_name,$label_last_name,$label_email,$label_address,$label_city,$label_state_province,$label_zip,$label_country,$label_phone,$label_club,$label_entries);
             }
 
-            do {
-                $brewerAddress = "";
-                $brewerCity = "";
-                $phone = "";
-                $brewerFirstName = html_entity_decode($row_sql['brewerFirstName']);
-                $brewerLastName = html_entity_decode($row_sql['brewerLastName']);
-                if ($filter == "default") {
-                    $brewerAddress = html_entity_decode($row_sql['brewerAddress']);
-                    $brewerCity = html_entity_decode($row_sql['brewerCity']);
-                    if ($row_sql['brewerCountry'] == "United States") $phone = format_phone_us($row_sql['brewerPhone1']); else $phone = $row_sql['brewerPhone1'];
-                }
+            if ($totalRows_sql > 0) {
 
-                $judge_avail = judge_steward_availability($row_sql['brewerJudgeLocation'],2,$prefix);
-                $steward_avail = judge_steward_availability($row_sql['brewerStewardLocation'],2,$prefix);
-
-                if (($filter == "judges") || ($filter == "avail_judges")) {
+                do {
+                    $brewerAddress = "";
+                    $brewerCity = "";
+                    $phone = "";
+                    $brewerFirstName = "";
+                    $brewerLastName = "";
+                    $brewerAddress = "";
+                    $brewerCity = "";
+                    $phone = "";
                     $brewerJudgeMead = "";
                     $brewerJudgeCider = "";
-                    if ((!empty($row_sql['brewerJudgeMead'])) && ($row_sql['brewerJudgeMead'] == "Y")) $brewerJudgeMead = $label_bjcp_mead;
-                    if ((!empty($row_sql['brewerJudgeCider'])) && ($row_sql['brewerJudgeCider'] == "Y")) $brewerJudgeCider =
-                        $label_bjcp_cider;
-                    $a [] = array(
-                        $brewerFirstName,
-                        $brewerLastName,
-                        $row_sql['brewerEmail'],
-                        str_replace(",",", ",$row_sql['brewerJudgeRank']),
-                        $brewerJudgeMead,
-                        $brewerJudgeCider,
-                        strtoupper(strtr($row_sql['brewerJudgeID'],$bjcp_num_replace)),
-                        $judge_avail,
-                        style_convert($row_sql['brewerJudgeLikes'],'6'),
-                        style_convert($row_sql['brewerJudgeDislikes'],'6'),
-                        judge_entries($row_sql['uid'],0));
-                }
-
-                elseif (($filter == "stewards") || ($filter == "avail_stewards")) {
-                    $a [] = array(
-                        $brewerFirstName,
-                        $brewerLastName,
-                        $row_sql['brewerEmail'],
-                        $steward_avail,
-                        judge_entries($row_sql['uid'],0)
-                    );
-                }
-
-                elseif ($filter == "staff") {
-                    $a [] = array(
-                        $brewerFirstName,
-                        $brewerLastName,
-                        $row_sql['brewerEmail'],
-                        judge_entries($row_sql['uid'],0)
-                    );
-                }
-
-                else {
-                    if ($_SESSION['prefsProEdition'] == 1) $a [] = array(
-                        $brewerFirstName,
-                        $brewerLastName,
-                        html_entity_decode($row_sql['brewerBreweryName']),
-                        html_entity_decode($row_sql['brewerBreweryTTB']),
-                        $row_sql['brewerEmail'],
-                        $brewerAddress,
-                        $brewerCity,
-                        html_entity_decode($row_sql['brewerState']),
-                        html_entity_decode($row_sql['brewerZip']),
-                        html_entity_decode($row_sql['brewerCountry']),
-                        $phone,
-                        html_entity_decode($row_sql['brewerClubs']),
-                        judge_entries($row_sql['uid'],0)
-                    );
+                    $judge_avail = "";
+                    $steward_avail = "";
+                    $brewerEmail = "";
                     
-                    else $a [] = array(
-                        $brewerFirstName,
-                        $brewerLastName,
-                        $row_sql['brewerEmail'],
-                        $brewerAddress,
-                        $brewerCity,
-                        html_entity_decode($row_sql['brewerState']),
-                        html_entity_decode($row_sql['brewerZip']),
-                        html_entity_decode($row_sql['brewerCountry']),
-                        $phone,
-                        html_entity_decode($row_sql['brewerClubs']),
-                        judge_entries($row_sql['uid'],0)
-                    );
-                }
+                    if (isset($row_sql['brewerEmail'])) $brewerEmail = $row_sql['brewerEmail'];
+                    if (isset($row_sql['brewerFirstName'])) $brewerFirstName = html_entity_decode($row_sql['brewerFirstName']);
+                    if (isset($row_sql['brewerLastName'])) $brewerLastName = html_entity_decode($row_sql['brewerLastName']);
+                    if ($filter == "default") {
+                        if (isset($row_sql['brewerAddress'])) $brewerAddress = html_entity_decode($row_sql['brewerAddress']);
+                        if (isset($row_sql['brewerCity'])) $brewerCity = html_entity_decode($row_sql['brewerCity']);
+                        if (isset($row_sql['brewerPhone1'])) {
+                            if ((isset($row_sql['brewerCountry'])) && ($row_sql['brewerCountry'] == "United States")) $phone = format_phone_us($row_sql['brewerPhone1']); 
+                            else $phone = $row_sql['brewerPhone1'];
+                        }
+                    }
 
-            } while ($row_sql = mysqli_fetch_assoc($sql));
+                    if (($filter == "judges") || ($filter == "avail_judges")) {
+                        $judge_entries = "";
+                        if (isset($row_sql['uid'])) $judge_entries = judge_entries($row_sql['uid'],0);
+                        
+                        if (isset($row_sql['brewerJudgeLocation'])) $judge_avail = judge_steward_availability($row_sql['brewerJudgeLocation'],2,$prefix);
+                        if (isset($row_sql['brewerStewardLocation'])) $steward_avail = judge_steward_availability($row_sql['brewerStewardLocation'],2,$prefix);
+
+                        if ((!empty($row_sql['brewerJudgeMead'])) && ($row_sql['brewerJudgeMead'] == "Y")) $brewerJudgeMead = $label_bjcp_mead;
+                        if ((!empty($row_sql['brewerJudgeCider'])) && ($row_sql['brewerJudgeCider'] == "Y")) $brewerJudgeCider =
+                            $label_bjcp_cider;
+                        
+                        $a [] = array(
+                            $brewerFirstName,
+                            $brewerLastName,
+                            $brewerEmail,
+                            str_replace(",",", ",$row_sql['brewerJudgeRank']),
+                            $brewerJudgeMead,
+                            $brewerJudgeCider,
+                            strtoupper(strtr($row_sql['brewerJudgeID'],$bjcp_num_replace)),
+                            $judge_avail,
+                            style_convert($row_sql['brewerJudgeLikes'],'6'),
+                            style_convert($row_sql['brewerJudgeDislikes'],'6'),
+                            $judge_entries
+                        );
+
+                    }
+
+                    elseif (($filter == "stewards") || ($filter == "avail_stewards")) {
+                        $judge_entries = "";
+                        if (isset($row_sql['uid'])) $judge_entries = judge_entries($row_sql['uid'],0);
+                        $a [] = array(
+                            $brewerFirstName,
+                            $brewerLastName,
+                            $brewerEmail,
+                            $steward_avail,
+                            $judge_entries
+                        );
+                    }
+
+                    elseif ($filter == "staff") {
+                        $judge_entries = "";
+                        if (isset($row_sql['uid'])) $judge_entries = judge_entries($row_sql['uid'],0);
+                        $a [] = array(
+                            $brewerFirstName,
+                            $brewerLastName,
+                            $brewerEmail,
+                            $judge_entries
+                        );
+                    }
+
+                    else {
+                        if ($_SESSION['prefsProEdition'] == 1) $a [] = array(
+                            $brewerFirstName,
+                            $brewerLastName,
+                            html_entity_decode($row_sql['brewerBreweryName']),
+                            html_entity_decode($row_sql['brewerBreweryTTB']),
+                            $brewerEmail,
+                            $brewerAddress,
+                            $brewerCity,
+                            html_entity_decode($row_sql['brewerState']),
+                            html_entity_decode($row_sql['brewerZip']),
+                            html_entity_decode($row_sql['brewerCountry']),
+                            $phone,
+                            html_entity_decode($row_sql['brewerClubs']),
+                            judge_entries($row_sql['uid'],0)
+                        );
+                        
+                        else $a [] = array(
+                            $brewerFirstName,
+                            $brewerLastName,
+                            $brewerEmail,
+                            $brewerAddress,
+                            $brewerCity,
+                            html_entity_decode($row_sql['brewerState']),
+                            html_entity_decode($row_sql['brewerZip']),
+                            html_entity_decode($row_sql['brewerCountry']),
+                            $phone,
+                            html_entity_decode($row_sql['brewerClubs']),
+                            judge_entries($row_sql['uid'],0)
+                        );
+                    }
+
+                } while ($row_sql = mysqli_fetch_assoc($sql));
+
+            }
 
             header("Content-Type: text/csv; charset=utf-8");
             header('Content-Disposition: attachment;filename="'.$filename.'"');
