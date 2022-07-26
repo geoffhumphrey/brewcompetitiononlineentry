@@ -158,7 +158,7 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 					'brewerPhone1' => $brewerPhone1,
 					'brewerPhone2' => $brewerPhone2,
 					'brewerClubs' => $brewerClubs,
-					'brewerEmail' => $brewerEmail,
+					'brewerEmail' => $username,
 					'brewerStaff' => $brewerStaff,
 					'brewerSteward' => $brewerSteward,
 					'brewerJudge' => $brewerJudge,
@@ -376,9 +376,8 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 				} // end if ($_SESSION['prefsEmailRegConfirm'] == 1)
 
 				if ($filter == "default") {
-
-					session_name($prefix_session);
-					session_start();
+					
+					unset($_SESSION['user_info'.$prefix_session]);
 					$_SESSION['loginUsername'] = $username;
 
 					// Redirect to Judge Info section if willing to judge
