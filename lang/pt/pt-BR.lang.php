@@ -1878,6 +1878,7 @@ $register_text_052 = "Uma resposta de Sim ou Não é necessária para cada local
 $brewer_text_044 = "Você deseja mudar sua pergunta e/ou resposta de segurança?";
 $brewer_text_045 = "Não se registraram resultados.";
 $brewer_text_046 = "Para a entrada de nomes de clubes de forma livre, alguns símbolos não são permitidos, incluindo ampersand (&amp;), marcas de cotações simples (&#39;), marcas de cotações duplas (&quot;), e porcentagem (&#37;).";
+$brewer_text_047 = "Se você não estiver disponível para qualquer uma das sessões listadas abaixo, mas ainda pode servir como funcionário em outra função, selecione Sim.";
 $label_change_security = "Mudar pergunta/resposta de segurança?";
 $label_semi_dry = "Semi-Seco";
 $label_semi_sweet = "Semi-Doce";

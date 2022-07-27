@@ -187,11 +187,13 @@ if (($logged_in) && ($admin_user) && ($go != "error_page")) { ?>
             <li class="dropdown">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">Competition Preparation <span class="caret"></span></a>
                 <ul class="dropdown-menu navmenu-nav">
-                    <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=contest_info&amp;action=edit">Edit Competition Info</a></li>
+                    <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=dates">Edit All Competition Dates</a></li>
+					<li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=contest_info&amp;action=edit">Edit Competition Info</a></li>
 					<li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=contacts">Manage Contacts</a></li>
                     <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=special_best">Manage Custom Categories</a></li>
                     <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=dropoff">Manage Drop-Off Locations</a></li>
                     <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging">Manage Judging Sessions</a></li>
+                    <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=non-judging">Manage Non-Judging Sessions</a></li>
                     <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=sponsors">Manage Sponsors</a></li>
                     <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=styles">Manage Styles Accepted</a></li>
                     <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=style_types">Manage Style Types</a></li>

@@ -1298,20 +1298,26 @@ function style_convert($number,$type,$base_url="",$archive="") {
 		$custom = FALSE;
 		$start_custom = ($_SESSION['style_set_category_end'] + 1);
 
-		if ((is_numeric($number)) && ($number >= $start_custom) && ($row_style['brewStyleOwn'] != "bcoe")) $custom = TRUE;
+		if ($row_style) {
 
-		// if numeric make two-digit by adding leading zero just in case
-		if (is_numeric($number)) $number = sprintf('%02d', $number); 
+			if ((is_numeric($number)) && ($number >= $start_custom) && ($row_style['brewStyleOwn'] != "bcoe")) $custom = TRUE;
 
-		if ($custom) $style_convert = $row_style['brewStyle']." (Custom Style)";
-		
-		else {
-			foreach ($style_sets as $style_set_data) {
-				if ($style_set_data['style_set_name'] === $style_set) {
-					$style_set_cat = $style_set_data['style_set_categories'];
-					$style_convert = $style_set_cat[$number];
+			// if numeric make two-digit by adding leading zero just in case
+			if (is_numeric($number)) $number = sprintf('%02d', $number); 
+
+			if ($custom) $style_convert = $row_style['brewStyle']." (Custom Style)";
+			
+			else {
+				foreach ($style_sets as $style_set_data) {
+					if (!empty($style_set_data)) {
+						if ($style_set_data['style_set_name'] === $style_set) {
+							$style_set_cat = $style_set_data['style_set_categories'];
+							if (!empty($style_set_cat)) $style_convert = $style_set_cat[$number];
+						}
+					}
 				}
 			}
+
 		}
 
 		break;
@@ -3266,7 +3272,8 @@ function limit_subcategory($style,$pref_num,$pref_exception_sub_num,$pref_except
 	$style = mysqli_query($connection,$query_style) or die (mysqli_error($connection));
 	$row_style = mysqli_fetch_assoc($style);
 
-	$style_id = $row_style['id'];
+	$style_id = "";
+	if ($row_style) $style_id = $row_style['id'];
 
 	// BA Styles
 	if ($_SESSION['prefsStyleSet'] == "BA") {
@@ -3406,24 +3413,28 @@ function yes_no($input,$base_url,$method=0) {
 	require(LANG.'language.lang.php');
 	$output = "";
 
-	if ($method != 3) {
+	if ($method == 3) {
+
+		if (($input == "Y") || ($input == 1)) $output = $label_yes;
+		else $output = $label_no;
+
+	}
+
+	else {
 
 		if (($input == "Y") || ($input == 1)) {
 			$output = "<span class=\"fa fa-lg fa-check text-success\"></span> ";
 			if ($method == 0) $output = $label_yes;
+			if ($method == 1) $output = "<span class=\"fa fa-fw fa-check text-success\"></span> <small>".$label_yes."</small>";
+			if ($method == 2) $output = "<span class=\"fa fa-lg fa-fw fa-check text-success\"></span> ".$label_yes;
 		}
 
 		else {
 			$output .= "<span class=\"fa fa-lg fa-times text-danger\"></span> ";
 			if ($method == 0) $output = $label_no;
+			if ($method == 1) $output = "<span class=\"fa fa-fw fa-times text-danger\"></span> <small>".$label_no."</small>";
+			if ($method == 2) $output = "<span class=\"fa fa-lg fa-fw fa-times text-danger\"></span> ".$label_no;
 		}
-
-	}
-
-	if ($method == 3) {
-
-		if (($input == "Y") || ($input == 1)) $output = $label_yes;
-		else $output = $label_no;
 
 	}
 

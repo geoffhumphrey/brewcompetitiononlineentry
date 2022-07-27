@@ -8,8 +8,6 @@
  *
  */
 
-include (DB.'judging_locations.db.php');
-
 // Set Vars
 $output_datatables_head = "";
 $output_datatables_body = "";
@@ -347,7 +345,8 @@ if ((($action == "add") || ($action == "edit")) || ($section == "step5")) {
 	
 	if ($section == "step5") $form_submit_url .= build_form_action($base_url,$section,$go,$action,$filter,"1",$judging_locations_db_table,TRUE);
 	else {
-		if ($row_judging) $form_submit_url .= build_form_action($base_url,$section,$go,$action,$filter,$row_judging['id'],$judging_locations_db_table,TRUE);
+		if ($action == "add") $form_submit_url .= build_form_action($base_url,$section,$go,$action,$filter,"1",$judging_locations_db_table,TRUE);
+		if ($action == "edit") $form_submit_url .= build_form_action($base_url,$section,$go,$action,$filter,$row_judging['id'],$judging_locations_db_table,TRUE);
 	}
 
 	if ($action == "add") $form_submit_button .= "Add Judging Session";

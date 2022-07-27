@@ -1,5 +1,4 @@
 <?php
-
 if ($section != "step7") include (DB.'judging_locations.db.php');
 include (DB.'styles.db.php');
 if ($_SESSION['prefsStyleSet'] == "BA") include (INCLUDES.'ba_constants.inc.php');

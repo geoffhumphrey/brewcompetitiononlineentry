@@ -104,7 +104,7 @@ if (isset($_POST['brewerJudgeNotes'])) {
  * table and delete the records.
  */
 
-if ($brewerJudge == "Y") {
+if (($brewerJudge == "Y") || ($brewerStaff == "Y")) {
     
     if ((isset($_POST['brewerJudgeLocation'])) && (is_array($_POST['brewerJudgeLocation']))) {
         
@@ -165,6 +165,59 @@ if ($brewerJudge == "Y") {
 } // end if ($brewerJudge == "Y")
 
 if ($brewerJudge == "N") {
+
+    if ($brewerStaff == "N") {
+
+        $location_pref1 = "";
+
+        if ((isset($_POST['brewerJudgeLocation'])) && (!is_array($_POST['brewerJudgeLocation']))) {
+            $loc = explode("-",$_POST['brewerJudgeLocation']);
+            $location_pref1 .= "N-".$loc[1];
+        }
+
+        elseif ((isset($_POST['brewerJudgeLocation'])) && (is_array($_POST['brewerJudgeLocation']))) {
+
+            foreach ($_POST['brewerJudgeLocation'] as $value) {
+                $loc = explode("-",$value);
+                $location_pref1 .= "N-".$loc[1].",";
+            }
+
+        }
+
+        $location_pref1 = sterilize($location_pref1);
+
+    }
+
+    if ($brewerStaff == "Y") {
+
+        $location_pref1 = "";
+
+        if ((isset($_POST['brewerJudgeLocation'])) && (is_array($_POST['brewerJudgeLocation']))) {
+
+            foreach ($_POST['brewerJudgeLocation'] as $value) {
+                $loc = explode("-",$value);
+                $judging_location_info = judging_location_info($loc[1]);
+                $judging_location_info = explode("^",$judging_location_info);
+                if ($judging_location_info[5] == "2") $location_pref1 .= $loc[0]."-".$loc[1].",";
+                else $location_pref1 .= "N-".$loc[1].",";
+            }
+
+        }
+
+        elseif ((isset($_POST['brewerJudgeLocation'])) && (!is_array($_POST['brewerJudgeLocation']))) {
+            
+            $loc = explode("-",$_POST['brewerJudgeLocation']);
+            $judging_location_info = judging_location_info($loc[1]);
+            $judging_location_info = explode("^",$judging_location_info);
+            if ($judging_location_info[5] == "2") $location_pref1 .= $loc[0]."-".$loc[1];
+            else $location_pref1 .= "N-".$loc[1];
+
+        }
+
+        if (!empty($location_pref1)) $location_pref1 = rtrim($location_pref1,",");
+        $location_pref1 = sterilize($location_pref1);
+
+    }
     
     if (!empty($user_id)) {
 

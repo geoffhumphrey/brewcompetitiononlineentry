@@ -166,17 +166,21 @@ if (($action == "default") && ($filter == "default")) {
     do {
 
         $loc_total = 0;
-        if ($row_judging) $loc_total = get_table_info(1,"count_total","default","default",$row_judging['id']);
-        $all_loc_total[] = $loc_total;
 
-        $sidebar_assigned_entries_by_location .= "<div class=\"bcoem-sidebar-panel\">";
-        $sidebar_assigned_entries_by_location .= "<strong class=\"text-info\">";
-        if ($row_judging) $sidebar_assigned_entries_by_location .= $row_judging['judgingLocName'];
-        $sidebar_assigned_entries_by_location .= "</strong>";
-        $sidebar_assigned_entries_by_location .= "<span class=\"pull-right\">";
-        $sidebar_assigned_entries_by_location .= $loc_total;
-        $sidebar_assigned_entries_by_location .= "</span>";
-        $sidebar_assigned_entries_by_location .= "</div>";
+        if ($row_judging['judgingLocType'] < 2) {
+            if ($row_judging) $loc_total = get_table_info(1,"count_total","default","default",$row_judging['id']);
+            $all_loc_total[] = $loc_total;
+
+            $sidebar_assigned_entries_by_location .= "<div class=\"bcoem-sidebar-panel\">";
+            $sidebar_assigned_entries_by_location .= "<strong class=\"text-info\">";
+            if ($row_judging) $sidebar_assigned_entries_by_location .= $row_judging['judgingLocName'];
+            $sidebar_assigned_entries_by_location .= "</strong>";
+            $sidebar_assigned_entries_by_location .= "<span class=\"pull-right\">";
+            $sidebar_assigned_entries_by_location .= $loc_total;
+            $sidebar_assigned_entries_by_location .= "</span>";
+            $sidebar_assigned_entries_by_location .= "</div>";  
+        }
+        
 
     } while ($row_judging = mysqli_fetch_assoc($judging));
 
@@ -365,9 +369,12 @@ if (($action == "add") || ($action == "edit")) {
             $disabled_table_location = "";
 
             if (($action == "edit") && ($row_tables_edit['tableLocation'] == $row_judging['id'])) $selected_table_location = " SELECTED";
-            $table_locations_available .= "<option value=\"".$row_judging['id']."\"".$selected_table_location.">";
-            $table_locations_available .= $row_judging['judgingLocName']." (".getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_judging['judgingDate'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "short", "date-time-no-gmt").")";
-            $table_locations_available .= "</option>\n";
+            if ($row_judging['judgingLocType'] < 2) {
+                $table_locations_available .= "<option value=\"".$row_judging['id']."\"".$selected_table_location.">";
+                $table_locations_available .= $row_judging['judgingLocName']." (".getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_judging['judgingDate'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "short", "date-time-no-gmt").")";
+                $table_locations_available .= "</option>\n";
+            }
+            
 
         } while ($row_judging = mysqli_fetch_assoc($judging));
 
@@ -988,7 +995,10 @@ $(document).ready(function() {
                 echo $sidebar_assigned_entries_by_location;
 				if ($sidebar_all_sessions) { ?>
                 <div class="bcoem-sidebar-panel">
-                	<strong class="text-info">All Sessions</strong>
+                    <hr>
+                </div>
+                <div class="bcoem-sidebar-panel">
+                	<strong class="text-info">All Judging Sessions</strong>
                     <span class="pull-right"><?php echo array_sum($all_loc_total); if ($_SESSION['jPrefsTablePlanning'] == 0) { ?> of <a href="<?php echo $base_url; ?>/index.php?section=admin&amp;go=entries" data-toggle="tooltip" data-placement="top" title="View all entries."><?php echo $row_entry_count['count']; ?></a><?php } ?></span>
                 </div>
                 <?php } ?>

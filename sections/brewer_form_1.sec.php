@@ -74,7 +74,17 @@
                     <input type="radio" name="brewerStaff" value="N" id="brewerStaff_1" <?php if (($action == "edit") && (($row_brewer['brewerStaff'] == "N") || ($row_brewer['brewerStaff'] == ""))) echo "checked";  if ($section == "step2") echo "checked"; ?>> <?php echo $label_no; ?>
                 </label>
             </div>
-            <span class="help-block"><?php echo $brewer_text_020; ?></span>
+            <span class="help-block"><?php echo "<p>".$brewer_text_020."</p>"; if (!empty($staff_location_avail)) echo "<p>".$brewer_text_047."</p>";  ?></span>
         </div>
     </div>
+    <?php if (!empty($staff_location_avail)) { ?>
+    <div id="brewerStaffFields">
+        <div class="form-group"><!-- Form Group NOT REQUIRED Select -->
+            <label for="brewerStaffLocation" class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo "Staff Availability"; ?></label>
+            <div class="col-lg-9 col-md-9 col-sm-8 col-xs-12">
+            <?php echo $staff_location_avail; ?>
+            </div>
+        </div>
+    </div>
+    <?php } // end if (!empty($staff_location_avail)) ?>
 </section>

@@ -21,7 +21,9 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 	$judgingLocation = $purifier->purify($_POST['judgingLocation']);
 	$judgingLocation = sterilize($judgingLocation);
 	$judgingLocType = sterilize($_POST['judgingLocType']);
-	$judgingRounds = sterilize($_POST['judgingRounds']);
+
+	$judgingRounds = "";
+	if (isset($_POST['judgingRounds'])) $judgingRounds = sterilize($_POST['judgingRounds']);
 	
 	$judgingDateEnd = "";
 	if (!empty($_POST['judgingDateEnd'])) $judgingDateEnd = strtotime(sterilize($_POST['judgingDateEnd']));

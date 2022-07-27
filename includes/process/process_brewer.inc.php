@@ -29,9 +29,9 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 
 	}
 
-	if (($action == "add") || ($action == "edit")) require(PROCESS.'process_brewer_info.inc.php');
-	require(DB.'brewer.db.php');
-	require(DB.'judging_locations.db.php');
+	if (($action == "add") || ($action == "edit")) require_once (PROCESS.'process_brewer_info.inc.php');
+	require_once (DB.'brewer.db.php');
+	require_once (DB.'judging_locations.db.php');
 
 	// Empty the user_info session variable
 	// Will trigger the session to reset the variables in common.db.php upon reload after redirect

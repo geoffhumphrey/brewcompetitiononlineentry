@@ -250,6 +250,7 @@ if (($row_system) && (!empty($row_system['update_date'])) && ($row_system['updat
         <?php
 
             if ($go == "judging") include (ADMIN.'judging_locations.admin.php');
+            if ($go == "non-judging") include (ADMIN.'non-judging_locations.admin.php');
             if ($go == "judging_preferences") include (ADMIN.'judging_preferences.admin.php');
             if ($go == "judging_tables") include (ADMIN.'judging_tables.admin.php');
             if ($go == "judging_flights") include (ADMIN.'judging_flights.admin.php');
@@ -281,6 +282,7 @@ if (($row_system) && (!empty($row_system['update_date'])) && ($row_system['updat
                 if ($go == "mods") include (ADMIN.'mods.admin.php');
                 if ($go == "upload") include (ADMIN.'upload.admin.php');
                 if ($go == "change_user_password") include (ADMIN.'change_user_password.admin.php');
+                if ($go == "dates") include (ADMIN.'all_dates.admin.php');
 
             }
 

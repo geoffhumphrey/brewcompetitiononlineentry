@@ -1874,6 +1874,7 @@ $register_text_052 = "U každého níže uvedeného místa je třeba uvést odpo
 $brewer_text_044 = "Chcete změnit bezpečnostní otázku a/nebo odpověď?";
 $brewer_text_045 = "Nebyly zaznamenány žádné výsledky.";
 $brewer_text_046 = "Při zadávání názvu klubu ve volném tvaru nejsou povoleny některé symboly, včetně ampersandu (&amp;), jednoduchých uvozovek (&#39;), dvojitých uvozovek (&quot;), a procent (&#37;).";
+$brewer_text_047 = "Pokud se nemůžete zúčastnit některého z níže uvedených zasedání, ale přesto můžete pracovat jako zaměstnanec v jiné funkci, vyberte možnost Ano.";
 $label_change_security = "Změna bezpečnostní otázky/odpovědi?";
 $label_semi_dry = "Polosuché";
 $label_semi_sweet = "Polosladké";

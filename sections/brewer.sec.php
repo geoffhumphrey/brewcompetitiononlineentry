@@ -7,13 +7,13 @@
  */
 
 if ($section != "step2") {
-    include (DB.'judging_locations.db.php');
-    include (DB.'stewarding.db.php');
-    include (DB.'styles.db.php');
+    include_once (DB.'judging_locations.db.php');
+    include_once (DB.'stewarding.db.php');
+    include_once (DB.'styles.db.php');
 }
 
-include (DB.'brewer.db.php');
-include (DB.'dropoff.db.php');
+include_once (DB.'brewer.db.php');
+include_once (DB.'dropoff.db.php');
 
 if ($section != "step2") {
 
@@ -171,14 +171,18 @@ foreach ($aus_state_abbrevs_names as $key => $value) {
 
 $judge_location_avail = "";
 $steward_location_avail = "";
+$staff_location_avail = "";
 
 if ((isset($row_judging3)) && (!empty($row_judging3))) {
+    
     do { 
 
         $location_yes = "";
         $location_no = "";
         $judge_avail_info = "";
         $judge_avail_option = "";
+        $staff_avail_info = "";
+        $staff_avail_option = "";
 
         $location_steward_no = "";
         $location_steward_yes = "";
@@ -209,28 +213,48 @@ if ((isset($row_judging3)) && (!empty($row_judging3))) {
             if ($value == $h) $location_steward_yes = " SELECTED";
         }
 
-        $judge_avail_info .= sprintf("<p class=\"bcoem-form-info\">%s (%s)</p>",$row_judging3['judgingLocName'],getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_judging3['judgingDate'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "short", "date-time"));
+        if ($row_judging3['judgingLocType'] == 2) {
+            
+            $staff_avail_info .= sprintf("<p class=\"bcoem-form-info\">%s (%s)</p>",$row_judging3['judgingLocName'],getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_judging3['judgingDate'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "short", "date-time"));
+           
+            $staff_avail_option .= "<select class=\"selectpicker\" name=\"brewerJudgeLocation[]\" id=\"brewerNonJudgeLocation".$row_judging3['id']."\" data-width=\"auto\">";
+            $staff_avail_option .= sprintf("<option value=\"N-%s\"%s>%s</option>",$row_judging3['id'],$location_no,$label_no);
+            $staff_avail_option .= sprintf("<option value=\"Y-%s\"%s>%s</option>",$row_judging3['id'],$location_yes,$label_yes);
+            $staff_avail_option .= "</select>";
 
-        $judge_avail_option .= "<select class=\"selectpicker\" name=\"brewerJudgeLocation[]\" id=\"brewerJudgeLocation\" data-width=\"auto\">";
-        $judge_avail_option .= sprintf("<option value=\"N-%s\"%s>%s</option>",$row_judging3['id'],$location_no,$label_no);
-        $judge_avail_option .= sprintf("<option value=\"Y-%s\"%s>%s</option>",$row_judging3['id'],$location_yes,$label_yes);
-        $judge_avail_option .= "</select>";
-        
-        if ((time() < $row_judging3['judgingDate'])  || (($go == "admin") && ($filter != "default"))) {
-            $judge_location_avail .= $judge_avail_info;
-            $judge_location_avail .= $judge_avail_option;
+            if ((time() < $row_judging3['judgingDate'])  || (($go == "admin") && ($filter != "default"))) {
+                $staff_location_avail .= $staff_avail_info;
+                $staff_location_avail .= $staff_avail_option;
+            }
+
         }
 
-        $steward_avail_info .= sprintf("<p class=\"bcoem-form-info\">%s (%s)</p>",$row_judging3['judgingLocName'],getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_judging3['judgingDate'], $_SESSION['prefsDateFormat'], $_SESSION['prefsTimeFormat'], "short", "date-time"));
+        else {
 
-        $steward_avail_option .= "<select class=\"selectpicker\" name=\"brewerStewardLocation[]\" id=\"brewerStewardLocation\" data-width=\"auto\">";
-        $steward_avail_option .= sprintf("<option value=\"N-%s\"%s>%s</option>",$row_judging3['id'],$location_steward_no,$label_no);
-        $steward_avail_option .= sprintf("<option value=\"Y-%s\"%s>%s</option>",$row_judging3['id'],$location_steward_yes,$label_yes);
-        $steward_avail_option .= "</select>";
+            $judge_avail_info .= sprintf("<p class=\"bcoem-form-info\">%s (%s)</p>",$row_judging3['judgingLocName'],getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_judging3['judgingDate'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "short", "date-time"));
 
-        if ((time() < $row_judging3['judgingDate'])  || (($go == "admin") && ($filter != "default"))) {
-            $steward_location_avail .= $steward_avail_info;
-            $steward_location_avail .= $steward_avail_option;
+            $judge_avail_option .= "<select class=\"selectpicker\" name=\"brewerJudgeLocation[]\" id=\"brewerJudgeLocation".$row_judging3['id']."\" data-width=\"auto\">";
+            $judge_avail_option .= sprintf("<option value=\"N-%s\"%s>%s</option>",$row_judging3['id'],$location_no,$label_no);
+            $judge_avail_option .= sprintf("<option value=\"Y-%s\"%s>%s</option>",$row_judging3['id'],$location_yes,$label_yes);
+            $judge_avail_option .= "</select>";
+            
+            if ((time() < $row_judging3['judgingDate'])  || (($go == "admin") && ($filter != "default"))) {
+                $judge_location_avail .= $judge_avail_info;
+                $judge_location_avail .= $judge_avail_option;
+            }
+
+            $steward_avail_info .= sprintf("<p class=\"bcoem-form-info\">%s (%s)</p>",$row_judging3['judgingLocName'],getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_judging3['judgingDate'], $_SESSION['prefsDateFormat'], $_SESSION['prefsTimeFormat'], "short", "date-time"));
+
+            $steward_avail_option .= "<select class=\"selectpicker\" name=\"brewerStewardLocation[]\" id=\"brewerStewardLocation".$row_judging3['id']."\" data-width=\"auto\">";
+            $steward_avail_option .= sprintf("<option value=\"N-%s\"%s>%s</option>",$row_judging3['id'],$location_steward_no,$label_no);
+            $steward_avail_option .= sprintf("<option value=\"Y-%s\"%s>%s</option>",$row_judging3['id'],$location_steward_yes,$label_yes);
+            $steward_avail_option .= "</select>";
+
+            if ((time() < $row_judging3['judgingDate'])  || (($go == "admin") && ($filter != "default"))) {
+                $steward_location_avail .= $steward_avail_info;
+                $steward_location_avail .= $steward_avail_option;
+            }
+
         }
 
     }  while ($row_judging3 = mysqli_fetch_assoc($judging3)); 
@@ -270,11 +294,13 @@ var action = "<?php echo $action; ?>";
 var club_other = <?php if ($club_other) echo "true"; else echo "false"; ?>;
 var brewer_judge = "N";
 var brewer_steward = "N";
+var brewer_staff = "N";
 var user_question_answer = "<?php if (isset($_SESSION['userQuestionAnswer'])) echo $_SESSION['userQuestionAnswer']; ?>"
 if (action == "edit") {
     var brewer_country = "<?php if (isset($row_brewer)) echo $row_brewer['brewerCountry']; ?>";
     var brewer_judge = "<?php if (isset($row_brewer)) echo $row_brewer['brewerJudge']; ?>";
     var brewer_steward = "<?php if (isset($row_brewer)) echo $row_brewer['brewerSteward']; ?>";
+    var brewer_staff = "<?php if (isset($row_brewer)) echo $row_brewer['brewerStaff']; ?>";
 }
 </script>
 <script src="<?php echo $base_url; ?>js_includes/add_edit_user.min.js"></script>

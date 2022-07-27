@@ -1,14 +1,3 @@
-<section id="judge-steward-notes">
-    <div class="form-group">
-        <label for="brewerJudgeNotes" class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label_org_notes; ?></label>
-        <div class="col-lg-9 col-md-9 col-sm-8 col-xs-12">
-            
-            <input class="form-control" name="brewerJudgeNotes" type="text" value="<?php if ($action == "edit") echo $row_brewer['brewerJudgeNotes']; ?>" placeholder="">
-            <span class="help-block"><?php echo $brewer_text_004; ?></span>
-        </div>
-    </div>
-</section>
-
 <?php if ((!$table_assignment) || ($go == "admin")) { ?>
 
 <?php if (((!$judge_limit) && ($go == "account")) || (($_SESSION['userLevel'] <= 1) && (($go == "admin") || ($go == "account")))) { 
@@ -334,6 +323,16 @@
                 </label>
             </div>
             <div class="help-block with-errors"></div>
+        </div>
+    </div>
+</section>
+<section id="judge-steward-notes">
+    <div class="form-group">
+        <label for="brewerJudgeNotes" class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label_org_notes; ?></label>
+        <div class="col-lg-9 col-md-9 col-sm-8 col-xs-12">
+            
+            <input class="form-control" name="brewerJudgeNotes" type="text" value="<?php if ($action == "edit") echo $row_brewer['brewerJudgeNotes']; ?>" placeholder="">
+            <span class="help-block"><?php echo $brewer_text_004; ?></span>
         </div>
     </div>
 </section>

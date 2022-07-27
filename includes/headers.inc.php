@@ -440,7 +440,7 @@ switch($section) {
 				break;
 
 				case "judging":
-				$header_output .= ": ".$label_admin_judging;
+				$header_output .= ": Sessions";
 				break;
 
 				case "stewards":
@@ -562,6 +562,15 @@ switch($section) {
 				case "payments":
 				$header_output .= ": ".$label_admin_payments;
 				break;
+
+				case "dates":
+				$header_output .= ": Competition-Related Dates";
+				break;
+
+				case "non-judging":
+				$header_output .= ": Sessions";
+				break;
+
 			}
 
 		if     ($msg == "1") $output = sprintf("<strong>%s</strong>",$header_text_005);

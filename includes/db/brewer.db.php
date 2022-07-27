@@ -254,7 +254,7 @@ if (isset($_SESSION['user_id'])) {
 	}
 
 	if ($section != "step2") {
-		$query_brewerID = sprintf("SELECT id,brewerEmail FROM $brewer_db_table WHERE id = '%s'", $id);
+		$query_brewerID = sprintf("SELECT id,brewerEmail FROM %s WHERE uid = '%s'", $brewer_db_table, $_SESSION['user_id']);
 		$brewerID = mysqli_query($connection,$query_brewerID) or die (mysqli_error($connection));
 		$row_brewerID = mysqli_fetch_assoc($brewerID);
 		$totalRows_brewerID = mysqli_num_rows($brewerID);

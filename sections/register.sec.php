@@ -52,10 +52,10 @@ elseif (($registration_open == 0) && ($judge_window_open == 1) && ($go == "entra
 
 else { // THIS ELSE ENDS at the end of the script
 
-	include (DB.'judging_locations.db.php');
-	include (DB.'stewarding.db.php');
-	include (DB.'styles.db.php');
-	include (DB.'brewer.db.php');
+	include_once (DB.'judging_locations.db.php');
+	include_once (DB.'stewarding.db.php');
+	include_once (DB.'styles.db.php');
+	include_once (DB.'brewer.db.php');
 	if (NHC) $totalRows_log = $totalRows_entry_count;
 	else $totalRows_log = $totalRows_log;
 	if ($go != "default") {
@@ -211,26 +211,50 @@ foreach ($security_questions_display as $key => $value) {
 
 $steward_location_avail = "";
 $judge_location_avail = "";
+$staff_location_avail = "";
 
 if ((isset($row_judging3)) && (!empty($row_judging3))) {
+    
     do { 
 
         $location_yes = "";
         $location_no = "";
         $judge_avail_info = "";
         $judge_avail_option = "";
+        $staff_avail_info = "";
+        $staff_avail_option = "";
 
         $location_steward_no = "";
         $location_steward_yes = "";
         $steward_avail_info = "";
         $steward_avail_option = "";
 
-        $judge_avail_info .= sprintf("<p class=\"bcoem-form-info\">%s (%s)</p>",$row_judging3['judgingLocName'],getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_judging3['judgingDate'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "short", "date-time"));
+        if ($row_judging3['judgingLocType'] == 2) {
+            
+            $staff_avail_info .= sprintf("<p class=\"bcoem-form-info\">%s (%s)</p>",$row_judging3['judgingLocName'],getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_judging3['judgingDate'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "short", "date-time"));
+           
+            $staff_avail_option .= "<select class=\"selectpicker\" name=\"brewerJudgeLocation[]\" id=\"brewerNonJudgeLocation".$row_judging3['id']."\" data-width=\"auto\">";
+            $staff_avail_option .= sprintf("<option value=\"N-%s\"%s>%s</option>",$row_judging3['id'],$location_no,$label_no);
+            $staff_avail_option .= sprintf("<option value=\"Y-%s\"%s>%s</option>",$row_judging3['id'],$location_yes,$label_yes);
+            $staff_avail_option .= "</select>";
 
-        $judge_avail_option .= "<select class=\"selectpicker\" name=\"brewerJudgeLocation[]\" id=\"brewerJudgeLocation_".$row_judging3['id']."\" data-width=\"auto\">";
-        $judge_avail_option .= sprintf("<option value=\"N-%s\"%s>%s</option>",$row_judging3['id'],$location_no,$label_no);
-        $judge_avail_option .= sprintf("<option value=\"Y-%s\"%s>%s</option>",$row_judging3['id'],$location_yes,$label_yes);
-        $judge_avail_option .= "</select>";
+            if ((time() < $row_judging3['judgingDate'])  || (($go == "admin") && ($filter != "default"))) {
+                $staff_location_avail .= $staff_avail_info;
+                $staff_location_avail .= $staff_avail_option;
+            }
+
+        }
+
+        else {
+
+	        $judge_avail_info .= sprintf("<p class=\"bcoem-form-info\">%s (%s)</p>",$row_judging3['judgingLocName'],getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_judging3['judgingDate'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "short", "date-time"));
+
+	        $judge_avail_option .= "<select class=\"selectpicker\" name=\"brewerJudgeLocation[]\" id=\"brewerJudgeLocation_".$row_judging3['id']."\" data-width=\"auto\">";
+	        $judge_avail_option .= sprintf("<option value=\"N-%s\"%s>%s</option>",$row_judging3['id'],$location_no,$label_no);
+	        $judge_avail_option .= sprintf("<option value=\"Y-%s\"%s>%s</option>",$row_judging3['id'],$location_yes,$label_yes);
+	        $judge_avail_option .= "</select>";
+
+	    }
         
         if (time() < $row_judging3['judgingDate']) {
             $judge_location_avail .= $judge_avail_info;
@@ -664,12 +688,8 @@ if ($go == "default") {  ?>
 	</div><!-- ./Form Group -->
     <?php } // END if (($_SESSION['prefsProEdition'] == 0) || (($_SESSION['prefsProEdition'] == 1) && ($go != "entrant"))) ?>
     <?php } // END if ($view == "default") ?>
-    <?php if (($_SESSION['prefsProEdition'] == 0) || (($_SESSION['prefsProEdition'] == 1) && (($go == "judge") || ($go == "steward")))) {
+    <?php if (($_SESSION['prefsProEdition'] == 0) || (($_SESSION['prefsProEdition'] == 1) && (($go == "judge") || ($go == "steward")))) { ?>
 
-
-
-
-    ?>
     <!-- Staff preferences -->
     <div class="form-group"><!-- Form Group Radio INLINE -->
         <label for="brewerStaff" class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label_staff; ?></label>
@@ -684,9 +704,25 @@ if ($go == "default") {  ?>
                     <input type="radio" name="brewerStaff" value="N" id="brewerStaff_1" <?php if (($msg != "default") && (isset($_COOKIE['brewerStaff'])) && ($_COOKIE['brewerStaff'] == "N")) echo "CHECKED"; if ($msg == "default") echo "CHECKED"; ?>> <?php echo $label_no; ?>
                 </label>
             </div>
-            <span class="help-block"><?php echo $brewer_text_021; ?></span>
+            <div class="help-block"><?php echo $brewer_text_021; ?></div>
+            <div id="staff-help" class="help-block"><?php if (!empty($staff_location_avail)) echo "<p>".$brewer_text_047."</p>"; ?></div>
         </div>
     </div><!-- ./Form Group -->
+
+
+    <?php if (!empty($staff_location_avail)) { ?>
+    <div id="brewerStaffFields">
+        <div class="form-group"><!-- Form Group NOT REQUIRED Select -->
+            <label for="brewerStaffLocation" class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo "Staff Availability"; ?></label>
+            <div class="col-lg-9 col-md-9 col-sm-8 col-xs-12">
+            <?php echo $staff_location_avail; ?>
+            </div>
+        </div>
+    </div>
+    <?php } // end if (!empty($staff_location_avail)) ?>
+
+
+
     <?php } // END if (($_SESSION['prefsProEdition'] == 0) || (($_SESSION['prefsProEdition'] == 1) && (($go == "judge") || ($go == "steward"))))?>
     <?php if (!$judge_hidden) {
         $judge_checked_yes = FALSE;
@@ -894,8 +930,24 @@ if ($go == "default") {  ?>
 	</div><!-- Form Group -->
 </form>
 <script type="text/javascript">
+	$("#brewerStaffFields").hide();
+	$("#staff-help").hide();
+  	
   	$(function () {
   		$('#user_screen_name').focus();
+	});
+
+	$('input[type="radio"]').click(function() {
+
+	    if($(this).attr('id') == 'brewerStaff_0') {
+	        $("#brewerStaffFields").show("slow");
+	        $("#staff-help").show("slow");
+	    }
+
+	    if($(this).attr('id') == 'brewerStaff_1') {
+	        $("#brewerStaffFields").hide("slow");
+	        $("#staff-help").hide("slow");
+	    }
 	});
 </script>
 <script src="https://www.google.com/recaptcha/api.js"></script>

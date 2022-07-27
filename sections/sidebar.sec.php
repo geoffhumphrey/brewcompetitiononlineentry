@@ -39,8 +39,8 @@ Declare all variables empty at the top of the script. Add on later...
 
  * ---------------- END Rebuild Info --------------------- */
 
-include (DB.'judging_locations.db.php');
-include (DB.'dropoff.db.php');
+include_once (DB.'judging_locations.db.php');
+include_once (DB.'dropoff.db.php');
 
 if ($section != "admin") {
 

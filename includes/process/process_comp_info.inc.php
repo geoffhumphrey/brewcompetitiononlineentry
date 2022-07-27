@@ -80,16 +80,18 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 		if (isset($_POST['contestCircuit'])) $contestCircuit = $purifier->purify($_POST['contestCircuit']);
 		if (isset($_POST['contestVolunteers'])) $contestVolunteers = $purifier->purify($_POST['contestVolunteers']);
 		if (isset($_POST['contestLogo'])) $contestLogo = $purifier->purify($_POST['contestLogo']);
-		if (isset($_POST['contestEntryFee'])) $contestEntryFee = filter_var($_POST['contestEntryFee'],FILTER_SANITIZE_NUMBER_FLOAT,FILTER_FLAG_ALLOW_FRACTION);
-		if (isset($_POST['contestEntryFee2'])) $contestEntryFee2 = filter_var($_POST['contestEntryFee2'],FILTER_SANITIZE_NUMBER_FLOAT,FILTER_FLAG_ALLOW_FRACTION);
 		if (isset($_POST['contestEntryFeePassword'])) $contestEntryFeePassword = sterilize($_POST['contestEntryFeePassword']);
-		if (isset($_POST['contestEntryFeeDiscountNum'])) $contestEntryFeeDiscountNum = filter_var($_POST['contestEntryFeeDiscountNum'],FILTER_SANITIZE_NUMBER_FLOAT,FILTER_FLAG_ALLOW_FRACTION);
-		if (isset($_POST['contestEntryFeePasswordNum'])) $contestEntryFeePasswordNum = filter_var($_POST['contestEntryFeePasswordNum'],FILTER_SANITIZE_NUMBER_FLOAT,FILTER_FLAG_ALLOW_FRACTION);
-		if (isset($_POST['contestEntryCap'])) $contestEntryCap = filter_var($_POST['contestEntryCap'],FILTER_SANITIZE_NUMBER_FLOAT,FILTER_FLAG_ALLOW_FRACTION);
 		if (isset($_POST['contestCheckInPassword'])) $contestCheckInPassword = sterilize($_POST['contestCheckInPassword']);
 		if (isset($_POST['contestID'])) $contestID = filter_var($_POST['contestID'],FILTER_SANITIZE_NUMBER_INT);
 		if ((empty($_POST['contestEntryFee2'])) || (empty($_POST['contestEntryFeeDiscountNum']))) $contestEntryFeeDiscount = "N";
 		if ((!empty($_POST['contestEntryFee2'])) && (!empty($_POST['contestEntryFeeDiscountNum']))) $contestEntryFeeDiscount = "Y";
+
+		if ((isset($_POST['contestEntryFee'])) && (!empty($_POST['contestEntryFee']))) $contestEntryFee = filter_var($_POST['contestEntryFee'],FILTER_SANITIZE_NUMBER_FLOAT,FILTER_FLAG_ALLOW_FRACTION);
+		if ((isset($_POST['contestEntryFee2'])) && (!empty($_POST['contestEntryFee2']))) $contestEntryFee2 = filter_var($_POST['contestEntryFee2'],FILTER_SANITIZE_NUMBER_FLOAT,FILTER_FLAG_ALLOW_FRACTION);
+		if ((isset($_POST['contestEntryFeeDiscountNum'])) && (!empty($_POST['contestEntryFeeDiscountNum']))) $contestEntryFeeDiscountNum = filter_var($_POST['contestEntryFeeDiscountNum'],FILTER_SANITIZE_NUMBER_FLOAT,FILTER_FLAG_ALLOW_FRACTION);
+		if ((isset($_POST['contestEntryFeePasswordNum'])) && (!empty($_POST['contestEntryFeePasswordNum']))) $contestEntryFeePasswordNum = filter_var($_POST['contestEntryFeePasswordNum'],FILTER_SANITIZE_NUMBER_FLOAT,FILTER_FLAG_ALLOW_FRACTION);
+		if ((isset($_POST['contestEntryCap'])) && (!empty($_POST['contestEntryCap']))) $contestEntryCap = filter_var($_POST['contestEntryCap'],FILTER_SANITIZE_NUMBER_FLOAT,FILTER_FLAG_ALLOW_FRACTION);
+		
 	
 	} // end if ($go == "default")
 
@@ -148,10 +150,67 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 			'contestCheckInPassword' => $hash,
 			'contestID' => $contestID
 		);
+
 		$result = $db_conn->insert ($update_table, $data);
 		if (!$result) {
 			$error_output[] = $db_conn->getLastError();
 			$errors = TRUE;
+		}
+
+		if (empty($_POST['contestEntryFee2'])) {
+
+			$data = array(
+				'contestEntryFee2' => NULL	
+			);
+			$db_conn->where ('id', 1);
+			$result = $db_conn->update ($update_table, $data);
+			if (!$result) {
+				$error_output[] = $db_conn->getLastError();
+				$errors = TRUE;
+			}
+
+		}
+
+		if (empty($_POST['contestEntryFeeDiscountNum'])) {
+
+			$data = array(
+				'contestEntryFeeDiscountNum' => NULL	
+			);
+			$db_conn->where ('id', 1);
+			$result = $db_conn->update ($update_table, $data);
+			if (!$result) {
+				$error_output[] = $db_conn->getLastError();
+				$errors = TRUE;
+			}
+
+		}
+		
+		if (empty($_POST['contestEntryFeePasswordNum'])) {
+
+			$data = array(
+				'contestEntryFeePasswordNum' => NULL	
+			);
+			$db_conn->where ('id', 1);
+			$result = $db_conn->update ($update_table, $data);
+			if (!$result) {
+				$error_output[] = $db_conn->getLastError();
+				$errors = TRUE;
+			}
+
+		}
+
+		if (empty($_POST['contestEntryCap'])) {
+
+			$data = array(
+				'contestEntryCap' => NULL	
+			);
+			$db_conn->where ('id', 1);
+			$result = $db_conn->update ($update_table, $data);
+			if (!$result) {
+				$error_output[] = $db_conn->getLastError();
+				$errors = TRUE;
+			}
+
 		}
 
 		$update_table = $prefix."contacts";
@@ -280,11 +339,68 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 				'contestCheckInPassword' => $hash,
 				'contestID' => $contestID
 			);
+
 			$db_conn->where ('id', 1);
 			$result = $db_conn->update ($update_table, $data);
 			if (!$result) {
 				$error_output[] = $db_conn->getLastError();
 				$errors = TRUE;
+			}
+
+			if (empty($_POST['contestEntryFee2'])) {
+
+				$data = array(
+					'contestEntryFee2' => NULL	
+				);
+				$db_conn->where ('id', 1);
+				$result = $db_conn->update ($update_table, $data);
+				if (!$result) {
+					$error_output[] = $db_conn->getLastError();
+					$errors = TRUE;
+				}
+
+			}
+
+			if (empty($_POST['contestEntryFeeDiscountNum'])) {
+
+				$data = array(
+					'contestEntryFeeDiscountNum' => NULL	
+				);
+				$db_conn->where ('id', 1);
+				$result = $db_conn->update ($update_table, $data);
+				if (!$result) {
+					$error_output[] = $db_conn->getLastError();
+					$errors = TRUE;
+				}
+
+			}
+			
+			if (empty($_POST['contestEntryFeePasswordNum'])) {
+
+				$data = array(
+					'contestEntryFeePasswordNum' => NULL	
+				);
+				$db_conn->where ('id', 1);
+				$result = $db_conn->update ($update_table, $data);
+				if (!$result) {
+					$error_output[] = $db_conn->getLastError();
+					$errors = TRUE;
+				}
+
+			}
+
+			if (empty($_POST['contestEntryCap'])) {
+
+				$data = array(
+					'contestEntryCap' => NULL	
+				);
+				$db_conn->where ('id', 1);
+				$result = $db_conn->update ($update_table, $data);
+				if (!$result) {
+					$error_output[] = $db_conn->getLastError();
+					$errors = TRUE;
+				}
+
 			}
 
 			if ($section == "setup") {

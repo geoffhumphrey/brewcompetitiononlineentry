@@ -261,6 +261,16 @@ if ($recently_updated) {
                         <div class="panel-body">
                             <div class="row">
                                 <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
+                                    <strong>All Competition Dates</strong>
+                                </div>
+                                <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
+                                    <ul class="list-inline">
+                                        <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=dates" data-toggle="tooltip" data-placement="top" title="Edit all competition-related dates in one location.">Edit</a></li>
+                                    </ul>
+                                </div>
+                            </div><!-- ./row -->
+                            <div class="row">
+                                <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
                                     <strong>Competition Info</strong>
                                 </div>
                                 <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
@@ -311,6 +321,17 @@ if ($recently_updated) {
                                     <ul class="list-inline">
                                         <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging">Manage</a></li>
                                         <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging&amp;action=add">Add</a></li>
+                                    </ul>
+                                </div>
+                            </div><!-- ./row -->
+                            <div class="row">
+                               <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
+                                    <strong>Non-Judging Sessions</strong>
+                                </div>
+                                <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
+                                    <ul class="list-inline">
+                                        <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=non-judging">Manage</a></li>
+                                        <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=non-judging&amp;action=add">Add</a></li>
                                     </ul>
                                 </div>
                             </div><!-- ./row -->

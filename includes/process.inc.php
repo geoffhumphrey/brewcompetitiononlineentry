@@ -275,6 +275,7 @@ if (((isset($_SERVER['HTTP_REFERER'])) && ($referrer['host'] == $_SERVER['SERVER
 
 	elseif (($action == "email") && ($dbTable == "default")) include (PROCESS.'process_email.inc.php');
 	elseif (($action == "paypal") && ($dbTable == "default")) include (PROCESS.'process_paypal.inc.php');
+	elseif (($action == "dates") && ($dbTable == "default")) include (PROCESS.'process_dates.inc.php');
 	else {
 
 		if ($dbTable == $prefix."brewing") include (PROCESS.'process_brewing.inc.php');
