@@ -3052,10 +3052,10 @@ function dropoff_location($input) {
 	$query_dropoff = sprintf("SELECT dropLocationName FROM %s WHERE id='%s'",$prefix."drop_off",$input);
 	$dropoff = mysqli_query($connection,$query_dropoff) or die (mysqli_error($connection));
 	$row_dropoff = mysqli_fetch_assoc($dropoff);
-	if ($input > 0)	return $row_dropoff['dropLocationName'];
-	else return $label_shipping_entries;
+	if ($input == 0) return $label_shipping_entries;
+	elseif (($input > 0) && ($input < 999))	return $row_dropoff['dropLocationName'];
+	else ($input == 999) return $brewer_text_005;
 }
-
 
 function judge_steward_availability($input,$method,$prefix) {
 

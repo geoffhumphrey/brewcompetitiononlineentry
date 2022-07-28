@@ -43,10 +43,10 @@ Declare all variables empty at the top of the script. Add on later...
 
  * ---------------- END Rebuild Info --------------------- */
 
-include_once (DB.'dropoff.db.php');
-include_once (DB.'judging_locations.db.php');
-include_once (DB.'styles.db.php');
-include_once (DB.'entry_info.db.php');
+include (DB.'dropoff.db.php');
+include (DB.'judging_locations.db.php');
+include (DB.'styles.db.php');
+include (DB.'entry_info.db.php');
 
 $primary_page_info = "";
 $header1_1 = "";

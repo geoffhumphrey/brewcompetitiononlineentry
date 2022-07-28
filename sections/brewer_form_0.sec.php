@@ -219,9 +219,14 @@
             <?php if (!empty($dropoff_select)) { ?>
                 <?php echo $dropoff_select; ?>
                 <option disabled>----------------------------------------</option>
+            <?php } if (!empty($_SESSION['contestShippingAddress'])) { ?>
+                <option value="0" <?php if (($section == "step2") || (($action == "edit") && ($row_brewer['brewerDropOff'] == "0"))) echo "SELECTED"; ?>><?php echo $brewer_text_048; ?></option>
+                <option disabled>----------------------------------------</option>
             <?php } ?>
-                <option value="0" <?php if (($section == "step2") || (($action == "edit") && ($row_brewer['brewerDropOff'] == "0"))) echo "SELECTED"; ?>><?php echo $brewer_text_005; ?></option>
+                <option value="999" <?php if (($section == "step2") || (($action == "edit") && ($row_brewer['brewerDropOff'] == "999"))) echo "SELECTED"; ?>><?php echo $brewer_text_005; ?></option>
             </select>
+            <?php if (!empty($_SESSION['contestShippingAddress'])) { ?><span class="help-block"><?php echo $brewer_text_050; ?></span><?php } ?>
+            <span class="help-block"><?php echo $brewer_text_049; ?></span>
         </div>
     </div>
 </section>

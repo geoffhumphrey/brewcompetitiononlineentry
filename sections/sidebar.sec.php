@@ -39,8 +39,8 @@ Declare all variables empty at the top of the script. Add on later...
 
  * ---------------- END Rebuild Info --------------------- */
 
-include_once (DB.'judging_locations.db.php');
-include_once (DB.'dropoff.db.php');
+include (DB.'judging_locations.db.php');
+include (DB.'dropoff.db.php');
 
 if ($section != "admin") {
 
@@ -307,30 +307,39 @@ if ($section != "admin") {
 	$header1_400 .= "</div>";
 	$page_info400 .= "<div class=\"panel-body\">";
 	if ($totalRows_judging == 0) $page_info400 .= sprintf("<p>%s</p>",$sidebar_text_024);
+	
 	else {
+		
 		do {
 
-			$page_info400 .= "<p>";
-			if ($row_judging['judgingLocName'] != "") $page_info400 .= "<strong>".$row_judging['judgingLocName']."</strong>";
-			if ($row_judging['judgingLocType'] == "0") {
-				if ($logged_in) {
-					$location_link = $base_url."output/maps.output.php?section=driving&amp;id=".str_replace(' ', '+', $row_judging['judgingLocation']);
-					$location_tooltip = "Map to ".$row_judging['judgingLocName'];
+			if ($row_judging['judgingLocType'] < 2) {
+
+				$page_info400 .= "<p>";
+				if ($row_judging['judgingLocName'] != "") $page_info400 .= "<strong>".$row_judging['judgingLocName']."</strong>";
+				if ($row_judging['judgingLocType'] == "0") {
+					if ($logged_in) {
+						$location_link = $base_url."output/maps.output.php?section=driving&amp;id=".str_replace(' ', '+', $row_judging['judgingLocation']);
+						$location_tooltip = "Map to ".$row_judging['judgingLocName'];
+					}
+					else {
+						$location_link = "#";
+						$location_tooltip = "Log in to view the ".$row_judging['judgingLocName']." location";
+					}
+					if ($row_judging['judgingLocation'] != "") $page_info400 .= " <a class=\"hide-loader\" href=\"".$location_link."\" target=\"".$location_target."\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"".$location_tooltip."\"> <span class=\"fa fa-lg fa-map-marker\"></span></a>";
 				}
-				else {
-					$location_link = "#";
-					$location_tooltip = "Log in to view the ".$row_judging['judgingLocName']." location";
+				if ($row_judging['judgingDate'] != "") $page_info400 .=  "<br />".getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_judging['judgingDate'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "short", "date-time");
+				if ($row_judging['judgingDateEnd'] != "") $page_info400 .=  " ".$sidebar_text_004." ".getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_judging['judgingDateEnd'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "short", "date-time");
+				$page_info400 .= ".</p>";
+				if ($row_judging['judgingLocType'] == "1") {
+					if (!empty($row_judging['judgingLocation'])) $page_info400 .= "<p><small>".$row_judging['judgingLocation']."</small></p>";
 				}
-				if ($row_judging['judgingLocation'] != "") $page_info400 .= " <a class=\"hide-loader\" href=\"".$location_link."\" target=\"".$location_target."\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"".$location_tooltip."\"> <span class=\"fa fa-lg fa-map-marker\"></span></a>";
+
 			}
-			if ($row_judging['judgingDate'] != "") $page_info400 .=  "<br />".getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_judging['judgingDate'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "short", "date-time");
-			if ($row_judging['judgingDateEnd'] != "") $page_info400 .=  " ".$sidebar_text_004." ".getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_judging['judgingDateEnd'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "short", "date-time");
-			$page_info400 .= ".</p>";
-			if ($row_judging['judgingLocType'] == "1") {
-				if (!empty($row_judging['judgingLocation'])) $page_info400 .= "<p><small>".$row_judging['judgingLocation']."</small></p>";
-			}
+			
 		} while ($row_judging = mysqli_fetch_assoc($judging));
-	}
+	
+	} // end else
+	
 	$page_info400 .= "</div>";
 	$page_info400 .= "</div>";
 

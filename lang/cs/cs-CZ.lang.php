@@ -133,11 +133,11 @@ $php_version = phpversion();
 
 $j_s_text = "";
 if (strpos($section, "step") === FALSE) {
-	if ((isset($judge_limit)) && (isset($steward_limit))) {
-		if (($judge_limit) && (!$steward_limit)) $j_s_text = "Obsluha"; // missing punctuation intentional
-		elseif ((!$judge_limit) && ($steward_limit)) $j_s_text = "Degustátor"; // missing punctuation intentional
-		else $j_s_text = "Obsluha nebo degustátor"; // missing punctuation intentional
-	}
+    if ((isset($judge_limit)) && (isset($steward_limit))) {
+        if (($judge_limit) && (!$steward_limit)) $j_s_text = "Obsluha"; // missing punctuation intentional
+        elseif ((!$judge_limit) && ($steward_limit)) $j_s_text = "Degustátor"; // missing punctuation intentional
+        else $j_s_text = "Obsluha nebo degustátor"; // missing punctuation intentional
+    }
 }
 
 $label_home = "Domů";
@@ -183,7 +183,7 @@ $label_character_limit = "znakový limit. Použijte klíčová slova a zkratky, 
 $label_carbonation = "Nasycení";
 $label_sweetness = "Sladkost";
 $label_strength = "Síla";
-$label_color = 	"Barva";
+$label_color =  "Barva";
 $label_table = "Stolní";
 $label_standard = "Standard";
 $label_super = "Super";
@@ -701,7 +701,7 @@ $brewer_text_000 = "Prosím, zadejte jméno pouze <em>jedné</em> osoby.";
 $brewer_text_001 = "Zvolte jednu z otázek. Tato otázka bude použita pro ověření vaší identity když zapomente heslo.";
 $brewer_text_003 = "Abyste mohli být vybráni na GABF Pro-Am brewing opportunity, musíte být členem AHA.";
 $brewer_text_004 = "Uveďte jakékoli informace, které si myslíte, že by měl organizátor, koordinátor degustátorů nebo personál vědět (např. alergie, speciální výživové požadavky, velikost trička atd.).";
-$brewer_text_005 = "Nevyužiji; vzorky zasílám";
+$brewer_text_005 = "Nepoužije se";
 $brewer_text_006 = "Chcete se účastnit jako degustátor a máte na to dostatečnou kvalifikaci?";
 $brewer_text_007 = "Absolvovali jste zkoušku BJCP Mead Judge?";
 $brewer_text_008 = "* Úroveň <em>Non-BJCP</em> je pro ty, kteří ještě neabsolvovali BJCP Beer Judge Entrance Exam a <em>nejsou</em> profesionálními sládky.";
@@ -882,9 +882,9 @@ $pay_text_029 = "Prosím, otevřete si seznam vzorků a potvrďte všechny vaše
 
 // Ignore the next four lines
 if (strpos($view, "^") !== FALSE) {
-	$qr_text_019 = sprintf("%06d",$checked_in_numbers[0]);
-	if (is_numeric($checked_in_numbers[1])) $qr_text_020 = sprintf("%06d",$checked_in_numbers[1]);
-	else $qr_text_020 = $checked_in_numbers[1];
+    $qr_text_019 = sprintf("%06d",$checked_in_numbers[0]);
+    if (is_numeric($checked_in_numbers[1])) $qr_text_020 = sprintf("%06d",$checked_in_numbers[1]);
+    else $qr_text_020 = $checked_in_numbers[1];
 }
 
 $qr_text_000 = $alert_text_080;
@@ -1875,6 +1875,9 @@ $brewer_text_044 = "Chcete změnit bezpečnostní otázku a/nebo odpověď?";
 $brewer_text_045 = "Nebyly zaznamenány žádné výsledky.";
 $brewer_text_046 = "Při zadávání názvu klubu ve volném tvaru nejsou povoleny některé symboly, včetně ampersandu (&amp;), jednoduchých uvozovek (&#39;), dvojitých uvozovek (&quot;), a procent (&#37;).";
 $brewer_text_047 = "Pokud se nemůžete zúčastnit některého z níže uvedených zasedání, ale přesto můžete pracovat jako zaměstnanec v jiné funkci, vyberte možnost Ano.";
+$brewer_text_048 = "Přepravní položky";
+$brewer_text_049 = "Pokud neplánujete do soutěže přihlásit žádné příspěvky, vyberte možnost \"Nepoužije se\".";
+$brewer_text_050 = "Zvolte \"Přepravní položky\", pokud plánujete své položky zabalit do krabice a odeslat na zadané přepravní místo.";
 $label_change_security = "Změna bezpečnostní otázky/odpovědi?";
 $label_semi_dry = "Polosuché";
 $label_semi_sweet = "Polosladké";

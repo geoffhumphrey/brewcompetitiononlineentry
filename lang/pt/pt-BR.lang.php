@@ -137,11 +137,11 @@ $php_version = phpversion();
 
 $j_s_text = "";
 if (strpos($section, "step") === FALSE) {
-	if ((isset($judge_limit)) && (isset($steward_limit))) {
-		if (($judge_limit) && (!$steward_limit)) $j_s_text = "Steward"; // missing punctuation intentional
-		elseif ((!$judge_limit) && ($steward_limit)) $j_s_text = "Judge"; // missing punctuation intentional
-		else $j_s_text = "Judge or steward"; // missing punctuation intentional
-	}
+    if ((isset($judge_limit)) && (isset($steward_limit))) {
+        if (($judge_limit) && (!$steward_limit)) $j_s_text = "Steward"; // missing punctuation intentional
+        elseif ((!$judge_limit) && ($steward_limit)) $j_s_text = "Judge"; // missing punctuation intentional
+        else $j_s_text = "Judge or steward"; // missing punctuation intentional
+    }
 }
 
 $label_home = "Home";
@@ -187,7 +187,7 @@ $label_character_limit = " limite de caracteres - use palavras-chaves e abrevia�
 $label_carbonation = "Carbonatação";
 $label_sweetness = "Dulçor";
 $label_strength = "Força";
-$label_color = 	"Cor";
+$label_color =  "Cor";
 $label_table = "Mesa";
 $label_standard = "Standard";
 $label_super = "Super";
@@ -705,7 +705,7 @@ $brewer_text_000 = "Por favor digite apenas <em> um </em> nome da pessoa.";
 $brewer_text_001 = "Escolha uma. Esta questão será usada para verificar sua identidade caso você esqueça sua senha.";
 $brewer_text_003 = "Para ser considerado para uma oportunidade GABF Pro-Am você deve ser um membro da AHA.";
 $brewer_text_004 = "Forneça qualquer informação que você acredite que o organizador da competição deva conhecer (por exemplo, alergias, restrições alimentares especiais, tamanho da camisa, etc.)";
-$brewer_text_005 = "Enviarei por correios";
+$brewer_text_005 = "Não Aplicável";
 $brewer_text_006 = "Você está disposto e qualificado para servir como juiz nesta competição?";
 $brewer_text_007 = "Você passou no exame BJCP Mead Judge?";
 $brewer_text_008 = "* A classificação <em> Não-BJCP </em> é para aqueles que não fizeram o Exame de Admissão ao Juiz de Cerveja BJCP, e não são <em> uma cervejaria profissional.";
@@ -884,9 +884,9 @@ $pay_text_028 = "Você tem amostras não confirmadas que <em>não</em> estão re
 $pay_text_029 = "Por favor, vá para a sua lista de amostras para confirmar todos os dados da sua amostra. As amostras não confirmadas podem ser excluídas do sistema sem aviso.";
 
 if (strpos ($view, "^")!== FALSE) {
-	$qr_text_019 =sprintf ("%06d", $checked_in_numbers [0]);
-	if (is_numeric ($checked_in_numbers [1])) $qr_text_020 = sprintf ("%06d", $checked_in_numbers [1]);
-	else $qr_text_020 = $checked_in_numbers [1];
+    $qr_text_019 =sprintf ("%06d", $checked_in_numbers [0]);
+    if (is_numeric ($checked_in_numbers [1])) $qr_text_020 = sprintf ("%06d", $checked_in_numbers [1]);
+    else $qr_text_020 = $checked_in_numbers [1];
 }
 
 $qr_text_000 = $alert_text_080;
@@ -1879,6 +1879,9 @@ $brewer_text_044 = "Você deseja mudar sua pergunta e/ou resposta de segurança?
 $brewer_text_045 = "Não se registraram resultados.";
 $brewer_text_046 = "Para a entrada de nomes de clubes de forma livre, alguns símbolos não são permitidos, incluindo ampersand (&amp;), marcas de cotações simples (&#39;), marcas de cotações duplas (&quot;), e porcentagem (&#37;).";
 $brewer_text_047 = "Se você não estiver disponível para qualquer uma das sessões listadas abaixo, mas ainda pode servir como funcionário em outra função, selecione Sim.";
+$brewer_text_048 = "Enviarei por correios";
+$brewer_text_049 = "Selecione \"Não Aplicável\" se você não planeja apresentar nenhuma participação na competição.";
+$brewer_text_050 = "Selecione \"Enviarei por correios\" se você planeja encaixotar e enviar suas entradas para o local de embarque fornecido.";
 $label_change_security = "Mudar pergunta/resposta de segurança?";
 $label_semi_dry = "Semi-Seco";
 $label_semi_sweet = "Semi-Doce";

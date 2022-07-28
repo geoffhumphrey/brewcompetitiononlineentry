@@ -254,26 +254,27 @@ if ((isset($row_judging3)) && (!empty($row_judging3))) {
 	        $judge_avail_option .= sprintf("<option value=\"Y-%s\"%s>%s</option>",$row_judging3['id'],$location_yes,$label_yes);
 	        $judge_avail_option .= "</select>";
 
-	    }
-        
-        if (time() < $row_judging3['judgingDate']) {
-            $judge_location_avail .= $judge_avail_info;
-            $judge_location_avail .= $judge_avail_option;
-        }
+	        if (time() < $row_judging3['judgingDate']) {
+	            $judge_location_avail .= $judge_avail_info;
+	            $judge_location_avail .= $judge_avail_option;
+	        }
 
-        $steward_avail_info .= sprintf("<p class=\"bcoem-form-info\">%s (%s)</p>",$row_judging3['judgingLocName'],getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_judging3['judgingDate'], $_SESSION['prefsDateFormat'], $_SESSION['prefsTimeFormat'], "short", "date-time"));
+	        $steward_avail_info .= sprintf("<p class=\"bcoem-form-info\">%s (%s)</p>",$row_judging3['judgingLocName'],getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_judging3['judgingDate'], $_SESSION['prefsDateFormat'], $_SESSION['prefsTimeFormat'], "short", "date-time"));
 
-        $steward_avail_option .= "<select class=\"selectpicker\" name=\"brewerStewardLocation[]\" id=\"brewerStewardLocation_".$row_judging3['id']."\" data-width=\"auto\">";
-        $steward_avail_option .= sprintf("<option value=\"N-%s\"%s>%s</option>",$row_judging3['id'],$location_steward_no,$label_no);
-        $steward_avail_option .= sprintf("<option value=\"Y-%s\"%s>%s</option>",$row_judging3['id'],$location_steward_yes,$label_yes);
-        $steward_avail_option .= "</select>";
+	        $steward_avail_option .= "<select class=\"selectpicker\" name=\"brewerStewardLocation[]\" id=\"brewerStewardLocation_".$row_judging3['id']."\" data-width=\"auto\">";
+	        $steward_avail_option .= sprintf("<option value=\"N-%s\"%s>%s</option>",$row_judging3['id'],$location_steward_no,$label_no);
+	        $steward_avail_option .= sprintf("<option value=\"Y-%s\"%s>%s</option>",$row_judging3['id'],$location_steward_yes,$label_yes);
+	        $steward_avail_option .= "</select>";
 
-        if (time() < $row_judging3['judgingDate']) {
-            $steward_location_avail .= $steward_avail_info;
-            $steward_location_avail .= $steward_avail_option;
-        }
+	        if (time() < $row_judging3['judgingDate']) {
+	            $steward_location_avail .= $steward_avail_info;
+	            $steward_location_avail .= $steward_avail_option;
+	        }
+
+	    } 
 
     }  while ($row_judging3 = mysqli_fetch_assoc($judging3)); 
+
 }
 
 // --------------------------------------------------------------
@@ -627,9 +628,15 @@ if ($go == "default") {  ?>
 				<?php if (!empty($dropoff_select)) { ?>
 	                <?php echo $dropoff_select; ?>
 	                <option disabled>----------------------------------------</option>
-	            <?php } ?>
-				<option value="0"><?php echo $brewer_text_005; ?></option>
+	            <?php } if (!empty($_SESSION['contestShippingAddress'])) { ?>
+					<option value="0"><?php echo $brewer_text_048; ?></option>
+					<option disabled>----------------------------------------</option>
+				<?php } ?>
+					<option value="999"><?php echo $brewer_text_005; ?></option>
 			</select>
+			<?php if (!empty($_SESSION['contestShippingAddress'])) { ?><span class="help-block"><?php echo $brewer_text_050; ?></span><?php } ?>
+			<span class="help-block"><?php echo $brewer_text_049; ?></span>
+			
 		</div>
 	</div><!-- ./Form Group -->
     <?php } // END if (($_SESSION['prefsProEdition'] == 0) || (($_SESSION['prefsProEdition'] == 1) && ($go == "entrant"))) ?>
@@ -705,7 +712,7 @@ if ($go == "default") {  ?>
                 </label>
             </div>
             <div class="help-block"><?php echo $brewer_text_021; ?></div>
-            <div id="staff-help" class="help-block"><?php if (!empty($staff_location_avail)) echo "<p>".$brewer_text_047."</p>"; ?></div>
+            <div id="staff-help" class="help-block"><?php if (!empty($staff_location_avail)) echo "<p class=\"well\">".$brewer_text_047."</p>"; ?></div>
         </div>
     </div><!-- ./Form Group -->
 

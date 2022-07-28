@@ -753,7 +753,7 @@ $brewer_text_000 = "Please enter only <em>one</em> person's name.";
 $brewer_text_001 = "Choose one. This question will be used to verify your identity should you forget your password.";
 $brewer_text_003 = "To be considered for a GABF Pro-Am brewing opportunity you must be an AHA member.";
 $brewer_text_004 = "Provide any information that you believe the competition organizer, judge coordinator, or competition staff should know (e.g., allergies, special dietary restrictions, shirt size, etc.).";
-$brewer_text_005 = "Not Applicable or Shipping Entries";
+$brewer_text_005 = "Not Applicable";
 $brewer_text_006 = "Are you willing and qualified to serve as a judge in this competition?";
 $brewer_text_007 = "Have you passed the BJCP Mead Judge exam?";
 $brewer_text_008 = "* The <em>Non-BJCP</em> rank is for those who haven't taken the BJCP Beer Judge Entrance Exam, and are <em>not</em> a professional brewer.";
@@ -1524,7 +1524,7 @@ $styles_entry_text_PRX4 = "Entrant must specify the types of fresh fruit(s) used
  * ------------------------------------------------------------------------
  */
 
-$output_text_032 = "Entry count only reflects entrants who indicated a drop-off location in their account profile. The actual number of entries may be higher or lower.";
+$output_text_032 = "Entry count only reflects entrants who indicated a location in their account profile. The actual number of entries may be higher or lower.";
 $brewer_text_043 = "Or, are you, or have you ever been, employed on the brewing staff at any brewery? This includes brewer positions as well as lab technicians, cellar crew, bottling/canning crew, etc. Current and former brewing staff employees are not eligible to participate in the Great American Beer Festival Pro-Am competition.";
 $label_entrant_reg = "Entrant Registration";
 $sidebar_text_026 = "are in the system as of";
@@ -2009,6 +2009,9 @@ $brewer_text_044 = "Do you wish to change your security question and/or answer?"
 $brewer_text_045 = "No results have been recorded.";
 $brewer_text_046 = "For free-form club name entry, some symbols are not allowed, including ampersand (&amp;), single-quotation marks (&#39;), double-quotation marks (&quot;), and percent (&#37;).";
 $brewer_text_047 = "If you are not available for any of the sessions listed below, but still can serve as as staff member in another capacity, select Yes.";
+$brewer_text_048 = "Shipping Entries";
+$brewer_text_049 = "Select \"Not Applicable\" if you don't plan to submit any entries into the competition.";
+$brewer_text_050 = "Select \"Shipping Entries\" if you plan to box up and send your entries to the provided Shipping Location.";
 $label_change_security = "Change Security Question/Answer?";
 $label_semi_dry = "Semi-Dry";
 $label_semi_sweet = "Semi-Sweet";
