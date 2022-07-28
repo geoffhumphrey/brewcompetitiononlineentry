@@ -20,7 +20,7 @@ elseif ($filter == "stewards") {
 }
 
 elseif ($filter == "staff") {
-	$query_sql = sprintf("SELECT a.brewerEmail, a.brewerFirstName, a.brewerLastName, a.uid, a.brewerJudgeRank, a.brewerJudgeID, a.brewerJudgeLocation, a.brewerStewardLocation, b.uid FROM %s a, %s b WHERE b.staff_staff='1' AND a.uid=b.uid", $prefix."brewer", $prefix."staff");
+	$query_sql = sprintf("SELECT a.brewerEmail, a.brewerFirstName, a.brewerLastName, a.uid, a.brewerJudgeRank, a.brewerJudgeID, a.brewerJudgeLocation, a.brewerStewardLocation, a.brewerStaff, b.uid, b.staff_staff FROM %s a, %s b WHERE a.brewerStaff='Y' AND a.uid=b.uid", $prefix."brewer", $prefix."staff");
 	if (SINGLE) $query_sql .= sprintf(" AND b.comp_id='%s'",$_SESSION['comp_id']);
 	$query_sql .= " ORDER BY a.brewerLastName,a.brewerFirstName ASC";
 }

@@ -60,6 +60,7 @@ else { // THIS ELSE ENDS at the end of the script
 	else $totalRows_log = $totalRows_log;
 	if ($go != "default") {
 		
+		asort($countries);
 		$country_select = "";
 		foreach ($countries as $country) {
 			$country_select .= "<option value=\"".$country."\" ";
@@ -562,21 +563,21 @@ if ($go == "default") {  ?>
 			<div id="non-us-state" class="input-group has-warning">
 				<span class="input-group-addon" id="state-addon1"><span class="fa fa-home"></span></span>
 				<!-- Input Here -->
-				<input class="form-control" name="brewerStateNon" id="brewerStateNon" type="text" placeholder="" value="<?php if (($msg != "default") && (isset($_COOKIE['brewerState']))) echo $_COOKIE['brewerState']; ?>" data-error="<?php echo $register_text_030; ?>" required>
+				<input class="form-control" name="brewerStateNon" id="brewerStateNon" type="text" placeholder="" value="<?php if (($msg != "default") && (isset($_COOKIE['brewerState']))) echo $_COOKIE['brewerState']; ?>" title="<?php echo $label_select_state; ?>" data-error="<?php echo $register_text_030; ?>" required>
 				<span class="input-group-addon" id="state-addon2"><span class="fa fa-star"></span>
 			</div>
 			<div id="us-state" class="input-group has-warning">
-				<select class="selectpicker" name="brewerStateUS" id="brewerStateUS" data-live-search="true" data-size="10" data-width="fit" title="<?php echo $label_select_state; ?>" data-error="<?php echo $register_text_030; ?>" required>
+				<select class="selectpicker" name="brewerStateUS" id="brewerStateUS" data-live-search="true" data-size="10" data-width="fit" data-header="<?php echo $label_select_state; ?>" title="<?php echo $label_select_state; ?>" data-error="<?php echo $register_text_030; ?>" required>
 	    			<?php echo $us_state_select; ?>
 	    		</select>
 	    	</div>
 	    	<div id="aus-state" class="has-warning">
-				<select class="selectpicker" name="brewerStateAUS" id="brewerStateAUS" data-live-search="true" data-size="10" data-width="fit" title="<?php echo $label_select_state; ?>" data-error="<?php echo $register_text_030; ?>" required>
+				<select class="selectpicker" name="brewerStateAUS" id="brewerStateAUS" data-live-search="true" data-size="10" data-width="fit" data-header="<?php echo $label_select_state; ?>" title="<?php echo $label_select_state; ?>" data-error="<?php echo $register_text_030; ?>" required>
 	    			<?php echo $aus_state_select; ?>
 	    		</select>
 	    	</div>
 	    	<div id="ca-state" class="has-warning">
-				<select class="selectpicker" name="brewerStateCA" id="brewerStateCA" data-live-search="true" data-size="10" data-width="fit" title="<?php echo $label_select_state; ?>" data-error="<?php echo $register_text_030; ?>" required>
+				<select class="selectpicker" name="brewerStateCA" id="brewerStateCA" data-live-search="true" data-size="10" data-width="fit" data-header="<?php echo $label_select_state; ?>" title="<?php echo $label_select_state; ?>" data-error="<?php echo $register_text_030; ?>" required>
 	    			<?php echo $ca_state_select; ?>
 	    		</select>
 	    	</div>
@@ -627,10 +628,10 @@ if ($go == "default") {  ?>
 			<select class="selectpicker" name="brewerDropOff" id="brewerDropOff" data-live-search="true" data-size="10" data-width="fit" data-show-tick="true" data-header="<?php echo $label_select_dropoff; ?>" title="<?php echo $label_select_dropoff; ?>" required>
 				<?php if (!empty($dropoff_select)) { ?>
 	                <?php echo $dropoff_select; ?>
-	                <option disabled>----------------------------------------</option>
+	                <option data-divider="true"></option>
 	            <?php } if (!empty($_SESSION['contestShippingAddress'])) { ?>
 					<option value="0"><?php echo $brewer_text_048; ?></option>
-					<option disabled>----------------------------------------</option>
+					<option data-divider="true"></option>
 				<?php } ?>
 					<option value="999"><?php echo $brewer_text_005; ?></option>
 			</select>

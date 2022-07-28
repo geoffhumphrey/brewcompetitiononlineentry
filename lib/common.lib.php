@@ -2053,25 +2053,28 @@ function table_location($table_id,$date_format,$time_zone,$time_format,$method) 
 	require(CONFIG.'config.php');
 	mysqli_select_db($connection,$database);
 
-	$query_table = sprintf("SELECT tableLocation FROM %s WHERE id='%s'", $prefix."judging_tables", $table_id);
-	$table = mysqli_query($connection,$query_table) or die (mysqli_error($connection));
-	$row_table = mysqli_fetch_assoc($table);
+	$table_location = "";
 
-	if ($method == "some-variable") {
-		// Future use
+	if ($method == "known-id") {
+		$query_location = sprintf("SELECT * FROM %s WHERE id='%s'", $prefix."judging_locations", $table_id);
 	}
 
 	if ($method == "default") {
 
-		$query_location = sprintf("SELECT * FROM %s WHERE id='%s'", $prefix."judging_locations", $row_table['tableLocation']);
-		$location = mysqli_query($connection,$query_location) or die (mysqli_error($connection));
-		$row_location = mysqli_fetch_assoc($location);
-		$totalRows_location = mysqli_num_rows($location);
+		$query_table = sprintf("SELECT tableLocation FROM %s WHERE id='%s'", $prefix."judging_tables", $table_id);
+		$table = mysqli_query($connection,$query_table) or die (mysqli_error($connection));
+		$row_table = mysqli_fetch_assoc($table);
 
-		if ($totalRows_location == 1) {
-			$table_location = $row_location['judgingLocName'].", ".getTimeZoneDateTime($time_zone, $row_location['judgingDate'], $date_format,  $time_format, "long", "date-time-no-gmt");
-		}
-		else $table_location = "";
+		$query_location = sprintf("SELECT * FROM %s WHERE id='%s'", $prefix."judging_locations", $row_table['tableLocation']);
+		
+	}
+
+	$location = mysqli_query($connection,$query_location) or die (mysqli_error($connection));
+	$row_location = mysqli_fetch_assoc($location);
+	$totalRows_location = mysqli_num_rows($location);
+
+	if ($totalRows_location == 1) {
+		$table_location = $row_location['judgingLocName'].", ".getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_location['judgingDate'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "long", "date-time-no-gmt");
 	}
 
 	return $table_location;
@@ -3066,37 +3069,62 @@ function judge_steward_availability($input,$method,$prefix) {
 	if (($input == "Y-") || ($input == "")) {
 		if ($method == "1") $return = strtolower(ucfirst($label_no_availability));
 	}
+	
 	else {
 
 		$a = explode(",",$input);
-		//$a = explode(",",$row_sql['brewerJudgeLocation']);
 
 		foreach ($a as $value) {
+			
 			$b = explode("-",$value);
 
 			if ($b[0] == "Y") {
-			require(CONFIG.'config.php');
-			mysqli_select_db($connection,$database);
-			$query_location = sprintf("SELECT judgingLocName FROM %s WHERE id='%s'", $prefix."judging_locations", $b[1]);
-			$location = mysqli_query($connection,$query_location) or die (mysqli_error($connection));
-			$row_location = mysqli_fetch_assoc($location);
-				if (!empty($row_location['judgingLocName'])) {
-					if ($method == "2") $return .= html_entity_decode($row_location['judgingLocName'])." ";
-					else $return .= $row_location['judgingLocName']." ";
-					if ($method == "1") $return .= "<br>";
-					elseif ($method == "2") $return .= " | ";
-					else $return .= " ";
-				 }
-				else $return .= "";
+			
+				require(CONFIG.'config.php');
+				mysqli_select_db($connection,$database);
+				
+				$query_location = sprintf("SELECT judgingLocName,judgingLocType FROM %s WHERE id='%s'", $prefix."judging_locations", $b[1]);
+				$location = mysqli_query($connection,$query_location) or die (mysqli_error($connection));
+				$row_location = mysqli_fetch_assoc($location);
+
+				if ($method == "1") $location_name = $row_location['judgingLocName'];
+				else $location_name = html_entity_decode($row_location['judgingLocName']);
+
+				if ($method == 3) {
+
+					if ((!empty($row_location['judgingLocName'])) && ($row_location['judgingLocType'] == 2)) {
+
+						$return .= $location_name." ";
+						$return .= "^";
+					
+					}
+
+				}
+
+				else {
+
+					if ((!empty($row_location['judgingLocName'])) && ($row_location['judgingLocType'] < 2)) {
+
+						$return .= $location_name." ";
+						$return .= "^";
+					
+					}
+
+				}
+
 			}
 
 		}
 
 	}
 
-	if ($method == "1")	return rtrim($return,"<br>");
-	elseif ($method == "2") return rtrim($return," | ");
-	else return $return;
+	$return = rtrim($return,"^");
+
+	if ($method == "1") $return = str_replace("^", "<br>", $return);
+	if (($method == "2") || ($method == "3")) $return = str_replace("^", " | ", $return);
+	else $return = str_replace("^", " ", $return);
+
+	return $return;
 }
 
 function judge_entries($uid,$method) {

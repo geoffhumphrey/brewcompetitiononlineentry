@@ -1,6 +1,7 @@
 <?php
 if (NHC) $base_url = "../";
-if ($filter == "stewards") $filter = "S"; else $filter = "J";
+if ($filter == "stewards") $filter = "S"; 
+elseif ($filter == "judges") $filter = "J";
 
 include (DB.'output_assignments.db.php');
 $count = round((get_entry_count('received')/($_SESSION['jPrefsFlightEntries'])),0);
@@ -12,10 +13,33 @@ $role_replace2 = array("<span class=\"text-primary\"><span class=\"fa fa-gavel\"
 <?php
 if ($view != "sign-in") {
 include (LIB.'admin.lib.php');
+
+if ($filter == "staff") {
 ?>
 <script type="text/javascript" language="javascript">
+ 	$(document).ready(function() {
+		$('#sortable').dataTable({
+			"bPaginate" : false,
+			"sDom": 'rt',
+			"bStateSave" : false,
+			"bLengthChange" : false,
+			<?php if ($view == "name") { ?>
+			"aaSorting": [[0,'asc'],[1,'asc']],
+			<?php } else { ?>
+			"aaSorting": [[1,'asc'],[0,'asc']],
+			<?php } ?>
+			"bProcessing" : false,
+			"aoColumns": [
+				{ "asSorting": [  ] },
+				{ "asSorting": [  ] },
+			]
+		});
+	});
+</script>
+<?php } else { ?>
+<script type="text/javascript" language="javascript">
 	 $(document).ready(function() {
-		$('#sortable').dataTable( {
+		$('#sortable').dataTable({
 			"bPaginate" : false,
 			"sDom": 'rt',
 			"bStateSave" : false,
@@ -42,9 +66,10 @@ include (LIB.'admin.lib.php');
 			<?php } ?>
 
 			<?php if ($view == "location") { ?>
-			"aaSorting": [[2,'asc'],[3,'asc'],[5,'asc'],[0,'asc']],
+			"aaSorting": [[3,'asc'],[0,'asc']],
 			<?php } ?>
 			"bProcessing" : false,
+			
 			"aoColumns": [
 				null,
 				<?php if ($filter == "J") { ?>
@@ -57,23 +82,45 @@ include (LIB.'admin.lib.php');
 				null<?php if ($_SESSION['jPrefsQueued'] == "N") { ?>,
 				null<?php } ?>
 				]
-			} );
+			
+			});
 		} );
 	</script>
+<?php } ?>
     <div class="page-header">
         <h1>
 		<?php
-		if ($filter == "S") echo sprintf("%s ",$label_steward);
-		else echo sprintf("%s ",$label_judge);
-		echo $label_assignments;
-		//if ($view == "name") echo sprintf(" %s",$label_by_last_name);
-		if ($view == "table") echo sprintf(" %s",$label_by_table);
-		elseif ($view == "location") echo sprintf(" %s",$label_by_location);
+		if ($filter == "staff") echo "Staff Availability";
+		else {
+			if ($filter == "S") echo sprintf("%s ",$label_steward);
+			else echo sprintf("%s ",$label_judge);
+			echo $label_assignments;
+			if ($view == "table") echo sprintf(" %s",$label_by_table);
+			elseif ($view == "location") echo sprintf(" %s",$label_by_location);
+		}
         echo "<br><small>".$_SESSION['contestName']."</small>";
 		?>
         </h1>
     </div>
-    <?php if ($totalRows_assignments > 0) { ?>
+    <?php if ($filter == "staff") { ?>
+
+    <?php if (!empty($tbody_staff)) { ?>
+    <p>Please note that the following people indicated that they are <em>available</em> to be a staff member for one or more non-judging locations. They may or may not be <em>assigned</em> as a staff member in the application by an Administrator, which is required for BJCP reporting purposes.</p>
+    <table class="table table-striped table-bordered" id="sortable">
+    	<thead>
+    		<tr>
+    			<th width="30%"><?php echo $label_name; ?></th>
+    			<th><?php echo $label_session; ?></th>
+    		</tr>
+    	</thead>
+    	<tbody>
+    		<?php echo $tbody_staff; ?>
+    	</tbody>
+    </table>
+	<?php } else echo sprintf("<p class=\"lead\">%s</p>",$output_text_011); ?>
+
+    <?php } else {
+    if ($totalRows_assignments > 0) { ?>
     <table class="table table-striped table-bordered" id="sortable">
     <thead>
     <tr>
@@ -81,18 +128,28 @@ include (LIB.'admin.lib.php');
     	<?php if ($filter == "J") { ?>
         <th width="10%">Role</th>
         <?php } ?>
-        <?php if ($filter == "J") { ?><th width="10%">Rank</th><?php } ?>
-        <th><?php echo $label_location; ?></th>
+        <?php if ($filter == "J") { ?>
+        <th width="10%">Rank</th>
+        <?php } ?>
+        <th><?php echo $label_session; ?></th>
+        <?php if ($filter != "staff") { ?>
         <th width="5%"><?php echo $label_table; ?></th>
         <th width="20%"><?php echo $label_name; ?></th>
         <th width="5%"><?php echo $label_round; ?></th>
         <?php if ($_SESSION['jPrefsQueued'] == "N") { ?>
         <th width="5%"><?php echo $label_flight; ?></th>
         <?php } ?>
+        <?php } ?>
     </tr>
     </thead>
     <tbody>
     <?php do {
+
+    	$judge_info = "";
+    	$table_info = "";
+    	$location_info = "";
+    	$judge_rank = "";
+
 		$judge_info = explode("^",brewer_info($row_assignments['bid']));
 		$table_info = explode("^",get_table_info("none","basic",$row_assignments['assignTable'],$dbTable,"default"));
 		$location_info = explode("^",get_table_info($row_assignments['assignLocation'],"location","1",$dbTable,"default"));
@@ -129,7 +186,10 @@ include (LIB.'admin.lib.php');
     <div style="page-break-after: always;"></div>
     <h1>Bull Pen</h1>
     <?php echo not_assigned($filter); ?>
-    <?php } else { echo sprintf("<p class=\"lead\">%s</p>",$output_text_011); } ?>
+    <?php } else { 
+    	echo sprintf("<p class=\"lead\">%s</p>",$output_text_011); 
+    	}
+    } // end else ?>
 <?php } // end if ($view != "sign-in")
 else {
 

@@ -122,6 +122,7 @@ if ($section != "step2") {
     }
 }
 
+asort($countries);
 $country_select = "";
 foreach ($countries as $country) {
     $country_select .= "<option value=\"".$country."\" ";

@@ -175,21 +175,21 @@
         <div class="col-lg-9 col-md-9 col-sm-8 col-xs-12">
             <div id="non-us-state" class="input-group has-warning">
                 <span class="input-group-addon" id="state-addon1"><span class="fa fa-home"></span></span>
-                <input class="form-control" name="brewerStateNon" id="brewerStateNon" type="text" placeholder="" value="<?php if ($action == "edit") echo $row_brewer['brewerState']; ?>" data-error="<?php echo $register_text_029; ?>" required>
+                <input class="form-control" name="brewerStateNon" id="brewerStateNon" type="text" placeholder="" value="<?php if ($action == "edit") echo $row_brewer['brewerState']; ?>" data-header="<?php echo $label_select_state; ?>" title="<?php echo $label_select_state; ?>" data-error="<?php echo $register_text_029; ?>" required>
                 <span class="input-group-addon" id="state-addon2"><span class="fa fa-star"></span>
             </div>
             <div id="us-state" class="has-warning">
-                <select class="selectpicker" name="brewerStateUS" id="brewerStateUS" data-live-search="true" data-size="10" data-width="fit" title="<?php echo $label_select_state; ?>" data-error="<?php echo $register_text_030; ?>" required>
+                <select class="selectpicker" name="brewerStateUS" id="brewerStateUS" data-live-search="true" data-size="10" data-width="fit" data-header="<?php echo $label_select_state; ?>" title="<?php echo $label_select_state; ?>" data-error="<?php echo $register_text_030; ?>" required>
                     <?php echo $us_state_select; ?>
                 </select>
             </div>
             <div id="aus-state" class="has-warning">
-                <select class="selectpicker" name="brewerStateAUS" id="brewerStateAUS" data-live-search="true" data-size="10" data-width="fit" title="<?php echo $label_select_state; ?>" data-error="<?php echo $register_text_030; ?>" required>
+                <select class="selectpicker" name="brewerStateAUS" id="brewerStateAUS" data-live-search="true" data-size="10" data-width="fit" data-header="<?php echo $label_select_state; ?>" title="<?php echo $label_select_state; ?>" data-error="<?php echo $register_text_030; ?>" required>
                     <?php echo $aus_state_select; ?>
                 </select>
             </div>
             <div id="ca-state" class="has-warning">
-                <select class="selectpicker" name="brewerStateCA" id="brewerStateCA" data-live-search="true" data-size="10" data-width="fit" title="<?php echo $label_select_state; ?>" data-error="<?php echo $register_text_030; ?>" required>
+                <select class="selectpicker" name="brewerStateCA" id="brewerStateCA" data-live-search="true" data-size="10" data-width="fit" data-header="<?php echo $label_select_state; ?>" title="<?php echo $label_select_state; ?>" data-error="<?php echo $register_text_030; ?>" required>
                     <?php echo $ca_state_select; ?>
                 </select>
             </div>
@@ -218,10 +218,10 @@
             <select class="selectpicker" name="brewerDropOff" id="brewerDropOff" data-live-search="true" data-size="10" data-width="fit" data-show-tick="true" data-header="<?php echo $label_select_dropoff; ?>" title="<?php echo $label_select_dropoff; ?>" required>
             <?php if (!empty($dropoff_select)) { ?>
                 <?php echo $dropoff_select; ?>
-                <option disabled>----------------------------------------</option>
+                <option data-divider="true"></option>
             <?php } if (!empty($_SESSION['contestShippingAddress'])) { ?>
                 <option value="0" <?php if (($section == "step2") || (($action == "edit") && ($row_brewer['brewerDropOff'] == "0"))) echo "SELECTED"; ?>><?php echo $brewer_text_048; ?></option>
-                <option disabled>----------------------------------------</option>
+                <option data-divider="true"></option>
             <?php } ?>
                 <option value="999" <?php if (($section == "step2") || (($action == "edit") && ($row_brewer['brewerDropOff'] == "999"))) echo "SELECTED"; ?>><?php echo $brewer_text_005; ?></option>
             </select>

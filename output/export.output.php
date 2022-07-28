@@ -553,12 +553,12 @@ if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($en
             $date = date("Y-m-d");
 
             // Appropriately name the CSV file for each type of download
-            if ($filter == "judges")                $filename = $contest."_Assigned_Judge_Email_Addresses_".$date.$loc.$extension;
+            if ($filter == "judges")                $filename = $contest."_Assigned_Judge_Emails_".$date.$loc.$extension;
             elseif ($filter == "stewards")          $filename = $contest."_Assigned_Steward_Email_Addresses_".$date.$loc.$extension;
-            elseif ($filter == "staff")             $filename = $contest."_Assigned_Staff_Email_Addresses_".$date.$loc.$extension;
-            elseif ($filter == "avail_judges")      $filename = $contest."_Available_Judge_Email_Addresses_".$date.$loc.$extension;
-            elseif ($filter == "avail_stewards")    $filename = $contest."_Available_Steward_Email_Addresses_".$date.$loc.$extension;
-            else                                    $filename = $contest."_All_Participant_Email_Addresses_".$date.$loc.$extension;
+            elseif ($filter == "staff")             $filename = $contest."_Available_and_Assigned_Staff_Emails_".$date.$loc.$extension;
+            elseif ($filter == "avail_judges")      $filename = $contest."_Available_Judge_Emails_".$date.$loc.$extension;
+            elseif ($filter == "avail_stewards")    $filename = $contest."_Available_Steward_Emails_".$date.$loc.$extension;
+            else                                    $filename = $contest."_All_Participant_Emails_".$date.$loc.$extension;
 
             // Set the header row of the CSV for each type of download
             if (($filter == "judges") || ($filter == "avail_judges")) $a [] = array(
@@ -577,7 +577,7 @@ if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($en
 
             elseif (($filter == "stewards") || ($filter == "avail_stewards")) $a [] = array($label_first_name,$label_last_name,$label_email,$label_avail,$label_entries);
 
-            elseif ($filter == "staff") $a [] = array($label_first_name,$label_last_name,$label_email,$label_entries);
+            elseif ($filter == "staff") $a [] = array($label_first_name,$label_last_name,$label_email,$label_avail,$label_assignment,$label_entries);
 
             else {
                 if ($_SESSION['prefsProEdition'] == 1) $a [] = array($label_first_name,$label_last_name,$label_organization,$label_ttb,$label_email,$label_address,$label_city,$label_state_province,$label_zip,$label_country,$label_phone,$label_club,$label_entries);
@@ -618,8 +618,6 @@ if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($en
                         if (isset($row_sql['uid'])) $judge_entries = judge_entries($row_sql['uid'],0);
                         
                         if (isset($row_sql['brewerJudgeLocation'])) $judge_avail = judge_steward_availability($row_sql['brewerJudgeLocation'],2,$prefix);
-                        if (isset($row_sql['brewerStewardLocation'])) $steward_avail = judge_steward_availability($row_sql['brewerStewardLocation'],2,$prefix);
-
                         if ((!empty($row_sql['brewerJudgeMead'])) && ($row_sql['brewerJudgeMead'] == "Y")) $brewerJudgeMead = $label_bjcp_mead;
                         if ((!empty($row_sql['brewerJudgeCider'])) && ($row_sql['brewerJudgeCider'] == "Y")) $brewerJudgeCider =
                             $label_bjcp_cider;
@@ -643,11 +641,12 @@ if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($en
                     elseif (($filter == "stewards") || ($filter == "avail_stewards")) {
                         $judge_entries = "";
                         if (isset($row_sql['uid'])) $judge_entries = judge_entries($row_sql['uid'],0);
+                        if (isset($row_sql['brewerJudgeLocation'])) $judge_avail = judge_steward_availability($row_sql['brewerJudgeLocation'],2,$prefix);
                         $a [] = array(
                             $brewerFirstName,
                             $brewerLastName,
                             $brewerEmail,
-                            $steward_avail,
+                            $judge_avail,
                             $judge_entries
                         );
                     }
@@ -655,10 +654,15 @@ if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($en
                     elseif ($filter == "staff") {
                         $judge_entries = "";
                         if (isset($row_sql['uid'])) $judge_entries = judge_entries($row_sql['uid'],0);
+                        $assignment = $label_no;
+                        if ($row_sql['staff_staff'] == 1) $assignment = $label_yes;
+                        if (isset($row_sql['brewerJudgeLocation'])) $judge_avail = judge_steward_availability($row_sql['brewerJudgeLocation'],3,$prefix);
                         $a [] = array(
                             $brewerFirstName,
                             $brewerLastName,
                             $brewerEmail,
+                            $judge_avail,
+                            $assignment,
                             $judge_entries
                         );
                     }

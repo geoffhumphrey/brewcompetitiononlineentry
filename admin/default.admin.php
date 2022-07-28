@@ -1326,6 +1326,17 @@ if ($recently_updated) {
                         </div><!-- ./row -->
                         <div class="row">
                             <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
+                                <strong>Staff Availability</strong>
+                            </div>
+                            <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
+                                <ul class="list-inline">
+                                    <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=assignments&amp;go=judging_assignments&amp;filter=staff&amp;view=name" data-toggle="tooltip" data-placement="top" title="Print staff location availability">By Last Name</a></li>
+                                    <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=assignments&amp;go=judging_assignments&amp;filter=staff" data-toggle="tooltip" data-placement="top" title="Print staff location availability">By Non-Judging Session</a></li>
+                                </ul>
+                            </div>
+                        </div><!-- ./row -->
+                        <div class="row">
+                            <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
                                 <strong>Notes</strong>
                             </div>
                             <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
@@ -1890,7 +1901,7 @@ if ($recently_updated) {
                                     <li><a class="hide-loader" href="<?php echo $base_url; ?>output/export.output.php?section=emails&amp;go=csv&amp;filter=avail_stewards&amp;action=email">Available Stewards</a></li>
                                     <li><a class="hide-loader" href="<?php echo $base_url; ?>output/export.output.php?section=emails&amp;go=csv&amp;filter=judges&amp;action=email">Assigned Judges</a></li>
                                     <li><a class="hide-loader" href="<?php echo $base_url; ?>output/export.output.php?section=emails&amp;go=csv&amp;filter=stewards&amp;action=email">Assigned Stewards</a></li>
-                                    <li><a class="hide-loader" href="<?php echo $base_url; ?>output/export.output.php?section=emails&amp;go=csv&amp;filter=staff&amp;action=email">Assigned Staff</a></li>
+                                    <li><a class="hide-loader" href="<?php echo $base_url; ?>output/export.output.php?section=emails&amp;go=csv&amp;filter=staff&amp;action=email">Available and Assigned Staff</a></li>
                                 </ul>
                             </div>
                         </div><!-- ./row -->

@@ -1151,7 +1151,6 @@ $volunteers_text_008 = "If you are willing to judge or steward, please return to
 
 // v2.1.9
 $volunteers_text_009 = "If you would like to volunteer to be a competition staff member, please register or update your account to indicate that you wish to be a part of the competition staff.";
-$volunteers_text_010 = "";
 
 /**
  * ------------------------------------------------------------------------
@@ -1246,9 +1245,9 @@ $label_to = "To"; // For email headers
 $label_varies = "Varies";
 $label_styles_accepted = "Styles Accepted";
 $label_judging_styles = "Judging Styles";
-$label_select_club = "Select or Search for Your Club";
-$label_select_style = "Select or Search for Your Entry's Style";
-$label_select_country = "Select or Search Your Country";
+$label_select_club = "Scroll or Search for Your Club";
+$label_select_style = "Scroll or Search for Your Entry's Style";
+$label_select_country = "Scroll or Search for Your Country";
 $label_select_dropoff = "Select Your Drop-Off Location";
 $label_club_enter = "Enter Club Name";
 $label_secret_05 = "What is your maternal grandmother&rsquo;s maiden name?";
@@ -1940,7 +1939,7 @@ $qr_text_018 = "Scan a QR Code located on a bottle label, enter the required pas
  * ------------------------------------------------------------------------
  */
 
-$label_select_state = "Select or Search for Your State";
+$label_select_state = "Scroll or Search for Your State";
 $label_select_below = "Select Below";
 $output_text_033 = "When submitting your report to the BJCP, it is possible that not all on the staff list will receive points. It is suggested that you allocate points to those with BJCP IDs first.";
 
@@ -2008,13 +2007,14 @@ $register_text_052 = "A \"Yes\" or \"No\" response is required for each location
 $brewer_text_044 = "Do you wish to change your security question and/or answer?";
 $brewer_text_045 = "No results have been recorded.";
 $brewer_text_046 = "For free-form club name entry, some symbols are not allowed, including ampersand (&amp;), single-quotation marks (&#39;), double-quotation marks (&quot;), and percent (&#37;).";
-$brewer_text_047 = "If you are not available for any of the sessions listed below, but still can serve as as staff member in another capacity, select Yes.";
+$brewer_text_047 = "If you are not available for any of the sessions listed below, but still can serve as as staff member in another capacity, please keep \"Yes\" selected above.";
 $brewer_text_048 = "Shipping Entries";
 $brewer_text_049 = "Select \"Not Applicable\" if you don't plan to submit any entries into the competition.";
-$brewer_text_050 = "Select \"Shipping Entries\" if you plan to box up and send your entries to the provided Shipping Location.";
+$brewer_text_050 = "Select \"Shipping Entries\" if you plan to box up and send your entries to the designated Shipping Location.";
 $label_change_security = "Change Security Question/Answer?";
 $label_semi_dry = "Semi-Dry";
 $label_semi_sweet = "Semi-Sweet";
+$volunteers_text_010 = "Staff can indicate their availability for the following non-judging sessions:";
 
 /**
  * ----------------------------------------------------------------------------------
