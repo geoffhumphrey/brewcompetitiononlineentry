@@ -3054,7 +3054,7 @@ function dropoff_location($input) {
 	$row_dropoff = mysqli_fetch_assoc($dropoff);
 	if ($input == 0) return $label_shipping_entries;
 	elseif (($input > 0) && ($input < 999))	return $row_dropoff['dropLocationName'];
-	else ($input == 999) return $brewer_text_005;
+	else return $brewer_text_005;
 }
 
 function judge_steward_availability($input,$method,$prefix) {
