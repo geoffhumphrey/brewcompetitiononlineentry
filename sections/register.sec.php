@@ -713,7 +713,7 @@ if ($go == "default") {  ?>
                 </label>
             </div>
             <div class="help-block"><?php echo $brewer_text_021; ?></div>
-            <div id="staff-help" class="help-block"><?php if (!empty($staff_location_avail)) echo "<p class=\"well\">".$brewer_text_047."</p>"; ?></div>
+            <div id="staff-help" class="help-block"><?php if (!empty($staff_location_avail)) echo "<p class=\"alert alert-info\">".$brewer_text_047."</p>"; ?></div>
         </div>
     </div><!-- ./Form Group -->
 

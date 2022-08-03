@@ -217,7 +217,9 @@
         <div class="col-lg-9 col-md-9 col-sm-8 col-xs-12">
             <select class="selectpicker" name="brewerDropOff" id="brewerDropOff" data-live-search="true" data-size="10" data-width="fit" data-show-tick="true" data-header="<?php echo $label_select_dropoff; ?>" title="<?php echo $label_select_dropoff; ?>" required>
             <?php if (!empty($dropoff_select)) { ?>
-                <?php echo $dropoff_select; ?>
+                <optgroup label="<?php echo $label_drop_offs; ?>">
+                    <?php echo $dropoff_select; ?>
+                </optgroup>
                 <option data-divider="true"></option>
             <?php } if (!empty($_SESSION['contestShippingAddress'])) { ?>
                 <option value="0" <?php if (($section == "step2") || (($action == "edit") && ($row_brewer['brewerDropOff'] == "0"))) echo "SELECTED"; ?>><?php echo $brewer_text_048; ?></option>

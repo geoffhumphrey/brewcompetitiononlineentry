@@ -1457,7 +1457,7 @@ if ($recently_updated) {
                         </div><!-- ./row -->
                         <div class="row">
                             <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
-                                <strong>Judge Inventories</strong> <a class="hide-loader" tabindex="0" type="button" role="button" data-toggle="popover" data-trigger="hover" data-placement="auto top" data-container="body" data-content="Judge Inventories are generally used judging sessions using the distributed methodology. Prints a list of all entries assigned to each judge for evaluation."><i class="fa fa-question-circle"></i></a>
+                                <strong>Judge Inventories</strong> <a class="hide-loader" tabindex="0" type="button" role="button" data-toggle="popover" data-trigger="hover" data-placement="auto top" data-container="body" data-content="Judge Inventories are generally used for judging sessions employing the distributed methodology. Provides a list of all entries assigned to each judge for evaluation."><i class="fa fa-question-circle"></i></a>
                             </div>
                             <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
                                 <div class="dropdown bcoem-admin-dashboard-select">

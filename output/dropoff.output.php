@@ -96,7 +96,7 @@ if ($go == "default") {  ?>
 <?php if ($go == "check") { ?>
 
     <div class="page-header">
-        <h1><?php echo $label_drop_offs; ?></h1>
+        <h1><?php echo sprintf("%s &ndash; %s, %s", $label_drop_off, $label_shipping_location, $label_drop_offs); ?></h1>
     </div>
 
     <!-- Shipping  -->
@@ -108,7 +108,7 @@ if ($go == "default") {  ?>
         $entries_by_dropoff_loc = entries_by_dropoff_loc("0");
         $location_count = location_count("0");
     ?>
-    <h2>Shipping Location<?php if (!empty($_SESSION['contestShippingName'])) echo  " &ndash; ".$_SESSION['contestShippingName']; ?><br><small><?php echo $_SESSION['contestShippingAddress']; ?></small></h2>
+    <h2><?php if (!empty($_SESSION['contestShippingName'])) echo sprintf("%s (%s)",$_SESSION['contestShippingName'], $label_shipping_location); else echo $label_shipping_location; ?><br><small><?php echo $_SESSION['contestShippingAddress']; ?></small></h2>
     <p class="lead"><?php echo sprintf("%s: %s",$output_text_012,$location_count); ?>*</p>
     <p><small>*<?php echo sprintf("%s",$output_text_032); ?></small></p>
     <script type="text/javascript" language="javascript">

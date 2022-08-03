@@ -1881,6 +1881,7 @@ $brewer_text_050 = "Zvolte \"Přepravní položky\", pokud plánujete své polo�
 $label_change_security = "Změna bezpečnostní otázky/odpovědi?";
 $label_semi_dry = "Polosuché";
 $label_semi_sweet = "Polosladké";
+$label_shipping_location = "Místo Odeslání";
 $volunteers_text_010 = "Zaměstnanci mohou oznámit svou dostupnost pro následující zasedání, která nejsou určena pro rozhodčí:";
 
 /**

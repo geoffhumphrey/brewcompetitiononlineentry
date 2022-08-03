@@ -74,7 +74,7 @@
                     <input type="radio" name="brewerStaff" value="N" id="brewerStaff_1" <?php if (($action == "edit") && (($row_brewer['brewerStaff'] == "N") || ($row_brewer['brewerStaff'] == ""))) echo "checked";  if ($section == "step2") echo "checked"; ?>> <?php echo $label_no; ?>
                 </label>
             </div>
-            <span class="help-block"><?php echo "<p>".$brewer_text_020."</p>"; if (!empty($staff_location_avail)) echo "<p>".$brewer_text_047."</p>";  ?></span>
+            <span class="help-block"><?php echo "<p>".$brewer_text_020."</p>"; if (!empty($staff_location_avail)) echo "<p id=\"staff-help\" class=\"alert alert-info\">".$brewer_text_047."</p>";  ?></span>
         </div>
     </div>
     <?php if (!empty($staff_location_avail)) { ?>

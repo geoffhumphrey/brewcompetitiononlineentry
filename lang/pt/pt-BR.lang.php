@@ -1885,6 +1885,7 @@ $brewer_text_050 = "Selecione \"Enviarei por correios\" se você planeja encaixo
 $label_change_security = "Mudar pergunta/resposta de segurança?";
 $label_semi_dry = "Semi-Seco";
 $label_semi_sweet = "Semi-Doce";
+$label_shipping_location = "Localização da Expedição";
 $volunteers_text_010 = "O pessoal pode indicar sua disponibilidade para as seguintes sessões sem juízos de valor:";
 
 /**
