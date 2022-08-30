@@ -63,6 +63,8 @@ if ((!isset($_SESSION['currentVersion'])) || ((isset($_SESSION['currentVersion']
 
 	if ($check_setup) {
 
+		$setup_success = TRUE;
+
 		/**
 		 * Check if "prefsShipping" column is in the prefs table 
 		 * since it was added in the 2.1.6.0 release. 
@@ -101,7 +103,6 @@ if ((!isset($_SESSION['currentVersion'])) || ((isset($_SESSION['currentVersion']
 
 		if ($row_system['version'] == $current_version) {
 			if ((strtotime($row_system['version_date'])) < ($current_version_date)) $force_update = TRUE;
-			$setup_success = TRUE;
 			$setup_relocate = "Location: ".$base_url;
 		}
 
@@ -114,7 +115,6 @@ if ((!isset($_SESSION['currentVersion'])) || ((isset($_SESSION['currentVersion']
 
 			else {
 				$force_update = TRUE;
-				$setup_success = TRUE;
 				$setup_relocate = "Location: ".$base_url;
 			}
 
