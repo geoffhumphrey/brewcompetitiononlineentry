@@ -2005,17 +2005,20 @@ $register_text_049 = "If you aren't able to log into your account, you should im
 $register_text_050 = "Your security question's answer is encrypted and cannot be read by site administrators. It must be entered if you elect to change your security question and/or answer.";
 $register_text_051 = "Account Information Updated";
 $register_text_052 = "A \"Yes\" or \"No\" response is required for each location below.";
+
 $brewer_text_044 = "Do you wish to change your security question and/or answer?";
 $brewer_text_045 = "No results have been recorded.";
 $brewer_text_046 = "For free-form club name entry, some symbols are not allowed, including ampersand (&amp;), single-quotation marks (&#39;), double-quotation marks (&quot;), and percent (&#37;).";
-$brewer_text_047 = "If you are not available for any of the sessions listed below, but still can serve as as staff member in another capacity, select Yes.";
+$brewer_text_047 = "If you are not available for any of the sessions listed below, but still can serve as as staff member in another capacity, keep \"Yes\" selected above.";
 $brewer_text_048 = "Shipping Entries";
-$brewer_text_049 = "Select \"Not Applicable\" if you don't plan to submit any entries into the competition.";
+$brewer_text_049 = "Select \"Not Applicable\" if you don't plan to submit any entries into the competition at this time.";
 $brewer_text_050 = "Select \"Shipping Entries\" if you plan to box up and send your entries to the provided Shipping Location.";
+
 $label_change_security = "Change Security Question/Answer?";
 $label_semi_dry = "Semi-Dry";
 $label_semi_sweet = "Semi-Sweet";
 $label_shipping_location = "Shipping Location";
+
 $volunteers_text_010 = "Staff can indicate their availability for the following non-judging sessions:";
 
 /**

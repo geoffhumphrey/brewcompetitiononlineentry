@@ -178,7 +178,7 @@ if ($logged_in)  {
 }
 if (($logged_in) && ($admin_user) && ($go != "error_page")) { ?>
 <!-- Admin Push Menu -->
-<div class="navbar-inverse navmenu navmenu-inverse navmenu-fixed-right offcanvas">
+<div class="navbar-inverse navmenu navmenu-inverse navmenu-fixed-right offcanvas admin-nav-off-canvas">
 <div class="navmenu-brand disabled off-canvas-header">Admin Essentials Menu</div>
         <ul class="nav navmenu-nav">
         	<li class="disabled"><a href="#"><em class="bcoem-admin-menu-disabled">This menu contains only essential functions. Select <strong>Admin Dashboard</strong> for all options.</em></a></li>

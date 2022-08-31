@@ -233,8 +233,7 @@ if (!empty($_SESSION['brewerAHA'])) {
 	elseif ($_SESSION['brewerAHA'] >= "999999994") $aha_number .= "Pending";
 } else $aha_number .= $label_none_entered;
 
-if ($_SESSION['brewerProAm'] == 1) $pro_am = $label_yes;
-else $pro_am = $label_no;
+$pro_am = yes_no($_SESSION['brewerProAm'],$base_url,2);
 
 // Build Judge Info Display
 
@@ -327,23 +326,23 @@ if ($_SESSION['jPrefsTablePlanning'] == 0) {
 	else $table_assign_steward = table_assignments($_SESSION['user_id'],"S",$_SESSION['prefsTimeZone'],$_SESSION['prefsDateFormat'],$_SESSION['prefsTimeFormat'],0);
 }
 
-	if ($_SESSION['brewerJudgeLikes'] != "") {
-		$judgeLikes = style_convert($_SESSION['brewerJudgeLikes'],4,$base_url);
-		$exploder = explode("|",$judgeLikes);
-		$judgeLikesDisplay = $exploder[0];
-		$judgeLikesModals = $exploder[1];
+if ($_SESSION['brewerJudgeLikes'] != "") {
+	$judgeLikes = style_convert($_SESSION['brewerJudgeLikes'],4,$base_url);
+	$exploder = explode("|",$judgeLikes);
+	$judgeLikesDisplay = $exploder[0];
+	$judgeLikesModals = $exploder[1];
 
-	}
-	else $judgeLikesDisplay = "N/A";
+}
+else $judgeLikesDisplay = "N/A";
 
-	if ($_SESSION['brewerJudgeDislikes'] != "") {
-		$judgeDislikes = style_convert($_SESSION['brewerJudgeDislikes'],4,$base_url);
-		$exploder = explode("|",$judgeDislikes);
-		$judgeDislikesDisplay = $exploder[0];
-		$judgeDislikesModals = $exploder[1];
+if ($_SESSION['brewerJudgeDislikes'] != "") {
+	$judgeDislikes = style_convert($_SESSION['brewerJudgeDislikes'],4,$base_url);
+	$exploder = explode("|",$judgeDislikes);
+	$judgeDislikesDisplay = $exploder[0];
+	$judgeDislikesModals = $exploder[1];
 
-	}
-	else $judgeDislikesDisplay = "N/A";
+}
+else $judgeDislikesDisplay = "N/A";
 
 // Build User Info display
 $account_display .= "<div class=\"row bcoem-account-info\">";
@@ -465,7 +464,7 @@ if (($_SESSION['brewerJudge'] == "Y") || ($_SESSION['brewerSteward'] == "Y")) {
 	$account_display .= "<div class=\"row bcoem-account-info\">";
 	$account_display .= sprintf("<div class=\"".$display_left_cols."\"><strong>%s</strong></div>",$label_waiver);
 	$account_display .= "<div class=\"".$display_right_cols."\">";
-	if (!empty($row_brewer['brewerJudgeWaiver'])) $account_display .= yes_no($row_brewer['brewerJudgeWaiver'],$base_url);
+	if (!empty($row_brewer['brewerJudgeWaiver'])) $account_display .= yes_no($row_brewer['brewerJudgeWaiver'],$base_url,2);
 	else $account_display .= $label_none_entered;
 	$account_display .= "</div>";
 	$account_display .= "</div>";
@@ -600,7 +599,7 @@ if ($show_judge_steward_fields) {
 
 	}  // end if ($_SESSION['brewerJudge'] == "Y")
 
-	if (($_SESSION['brewerSteward'] == "Y") && (!empty($steward_info))) $account_display .= "<hr>";
+	if ((($_SESSION['brewerSteward'] == "Y") && (!empty($steward_info))) || (($_SESSION['brewerJudge'] == "Y") && (!empty($judge_info))))  $account_display .= "<hr>";
 	$account_display .= "<div class=\"row bcoem-account-info\">";
 	$account_display .= sprintf("<div class=\"".$display_left_cols."\"><strong>%s</strong></div>",$label_steward);
 	$account_display .= "<div class=\"".$display_right_cols."\">";
@@ -667,7 +666,7 @@ if ($show_judge_steward_fields) {
 
 }
 
-if (($_SESSION['brewerStaff'] == "Y") && (!empty($staff_info))) $account_display .= "<hr>";
+if ((($_SESSION['brewerStaff'] == "Y") && (!empty($staff_info))) || (($_SESSION['brewerSteward'] == "Y") && (!empty($steward_info))))  $account_display .= "<hr>";
 $account_display .= "<div class=\"row bcoem-account-info\">";
 $account_display .= sprintf("<div class=\"".$display_left_cols."\"><strong>%s</strong></div>",$label_staff);
 $account_display .= "<div class=\"".$display_right_cols."\">";
