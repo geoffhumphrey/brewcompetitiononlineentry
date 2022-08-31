@@ -2825,7 +2825,7 @@ else {
 
 /**
  * ----------------------------------------------- 2.5.0 ---------------------------------------------
- * Correct character limit bug in judging_scores table.
+ * Correct character limit bug in judging_scores and judging_scores_bos table.
  * Added after Beta release.
  * ALTER TABLE `judging_scores` CHANGE `scoreType` `scoreType` CHAR(4);
  * ---------------------------------------------------------------------------------------------------
@@ -2838,6 +2838,16 @@ $result = mysqli_query($connection,$sql);
 if ($result) $output_off_sched_update .= "<li>The scoreType column was converted to INT(3) in the judging_scores table.</li>";
 else {
 	$output_off_sched_update .= "<li class=\"text-danger\">The scoreType column was NOT converted to INT(3) in the judging_scores table.</li>";
+	$error_count += 1;
+}
+
+$sql = sprintf("ALTER TABLE `%s` CHANGE `scoreType` `scoreType` INT(3) NULL DEFAULT NULL COMMENT 'Relational to id in style_types table';",$prefix."judging_scores_bos");
+mysqli_select_db($connection,$database);
+mysqli_real_escape_string($connection,$sql);
+$result = mysqli_query($connection,$sql);
+if ($result) $output_off_sched_update .= "<li>The scoreType column was converted to INT(3) in the judging_scores_bos table.</li>";
+else {
+	$output_off_sched_update .= "<li class=\"text-danger\">The scoreType column was NOT converted to INT(3) in the judging_scores_bos table.</li>";
 	$error_count += 1;
 }
 
