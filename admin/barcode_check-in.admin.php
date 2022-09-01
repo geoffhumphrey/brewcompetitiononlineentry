@@ -20,6 +20,15 @@ $barcode_text_002 = "<strong>The following judging number(s) have already been a
 if ($action == "add") {
 	include (INCLUDES.'process/process_barcode_check_in.inc.php');
 }
+
+if ($filter == "box-paid") {
+    $switch_to_button = "Judging/Entry Numbers Only";
+    $switch_to_link = $base_url."index.php?section=admin&amp;go=checkin";
+}
+else {
+    $switch_to_button = "Entry/Judging Numbers, Box, and Paid";
+    $switch_to_link = $base_url."index.php?section=admin&amp;go=checkin&amp;filter=box-paid";
+}
 ?>
 <script type="text/javascript">
 
@@ -98,12 +107,12 @@ foreach ($flag_enum as $num) {
 <div class="bcoem-admin-element">
     <p>Use the form below to check in entries into the system using a barcode reader/scanner.</p>
     <p>Leave the Judging Number field blank if you wish to use the system- or user-generated judging number already assigned to the entry.</p>
-<div class="btn-group" role="group" aria-label="barcodeInfo">
-    <div class="btn-group" role="group">
-        <button type="button" class="btn btn-xs btn-info" data-toggle="modal" data-target="#barcodeInfoModal">
+</div>
+<div class="bcoem-admin-element" style="margin-bottom: 25px;">
+    <a href="<?php echo $switch_to_link; ?>" class="btn btn-xs btn-primary">Switch View to <?php echo $switch_to_button; ?></a>
+    <button type="button" class="btn btn-xs btn-info" data-toggle="modal" data-target="#barcodeInfoModal">
           Barcode Check-In Info
-        </button>
-    </div>
+    </button>
 </div>
 <!-- Modal -->
 <div class="modal fade" id="barcodeInfoModal" tabindex="-1" role="dialog" aria-labelledby="barcodeInfoModalLabel">
@@ -129,10 +138,16 @@ foreach ($flag_enum as $num) {
         </div>
     </div>
 </div><!-- ./modal -->
-</div>
-<form method="post" data-toggle="validator" action="<?php echo $base_url; ?>index.php?section=admin&amp;go=checkin&amp;action=add" id="form1" onsubmit = "return(p)">
+<form method="post" data-toggle="validator" action="<?php echo $base_url; ?>index.php?section=admin&amp;go=checkin&amp;action=add<?php if ($filter != "default") echo "&amp;filter=".$filter; ?>" id="form1" onsubmit = "return(p)">
 <div class="form-inline">
-	<?php for ($i=1; $i <= $fields; $i++) { ?>
+	<?php 
+    for ($i=1; $i <= $fields; $i++) { 
+        if ($filter == "box-paid") $judging_number_move = "box".$i;
+        else {
+            $num = $i + 1;
+            $judging_number_move = "eid".$num;
+        };
+    ?>
     <div class="bcoem-admin-element hidden-print">
     <input type="hidden" name="id[]" value="<?php echo $i; ?>">
 	<div class="form-group">
@@ -144,8 +159,9 @@ foreach ($flag_enum as $num) {
   	</div>
   	<div class="form-group">
     	<label for="">Judging Number</label>
-    	<input type="text" class="form-control" maxlength="6" id="judgingNumber<?php echo $i; ?>" name="judgingNumber<?php echo $i; ?>" onkeyup="moveOnMax(this,'box<?php echo $i; ?>')" />
+    	<input type="text" class="form-control" maxlength="6" id="judgingNumber<?php echo $i; ?>" name="judgingNumber<?php echo $i; ?>" onkeyup="moveOnMax(this,'<?php echo $judging_number_move; ?>')" />
   	</div>
+    <?php if ($filter == "box-paid") { ?>
     <div class="form-group">
     	<label for="">Box Number</label>
     	<input type="text" class="form-control" maxlength="5" id="box<?php echo $i; ?>" name="box<?php echo $i; ?>" onkeyup="moveOnMax(this,'brewPaid<?php echo ($i); ?>')" />
@@ -155,9 +171,10 @@ foreach ($flag_enum as $num) {
     	<label for="">Paid</label>
     	<input type="checkbox" class="form-control" id="brewPaid<?php echo $i; ?>" name="brewPaid<?php echo $i; ?>" value="1" onClick="moveOnCheck(this,'eid<?php echo ($i+1); ?>')" />
   	</div>
-	<?php } ?>
+	<?php } // end if ($_SESSION['prefsPayToPrint'] == "N") ?>
+    <?php } // end if ($action == "box-paid") ?>
     </div>
-  	<?php } ?>
+  	<?php } // end for ($i=1; $i <= $fields; $i++) ?>
 </div>
 <p><input type="submit" value="Check-In Entries" class="btn btn-primary" onClick = "javascript: p=true;"/></p>
 </form>
