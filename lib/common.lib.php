@@ -1630,8 +1630,8 @@ function style_convert($number,$type,$base_url="",$archive="") {
 		$row_style = mysqli_fetch_assoc($style);
 
 		if ($row_style) {
-			if ($row_styles['brewStyle'] == "Soured Fruit Beer") $style_name = "Wild Specialty Beer";
-			else $style_name = $row_styles['brewStyle'];			$style_convert = $row_styles['brewStyleGroup'].",".$row_styles['brewStyleNum'].",".$style_name;
+			if ($row_style['brewStyle'] == "Soured Fruit Beer") $style_name = "Wild Specialty Beer";
+			else $style_name = $row_style['brewStyle'];			$style_convert = $row_style['brewStyleGroup'].",".$row_style['brewStyleNum'].",".$style_name;
 		}
 
 		break;
