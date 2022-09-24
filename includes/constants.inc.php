@@ -2039,6 +2039,7 @@ $club_array = array(
     "Society of Northeast Ohio Brewers",
     "Society of Oshkosh Brewers",
     "Solano Bike and Brew Boyz",
+    "Solano Garage Brewers Brew Club",
     "Sonoma Beerocrats",
     "Sonoma Valley Homebrewers Alliance",
     "Sonoran Association of Affiliated Zymurgists (SAAZ)",
