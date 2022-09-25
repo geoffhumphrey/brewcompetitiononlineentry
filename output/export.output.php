@@ -734,14 +734,23 @@ if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($en
 
             include (DB.'output_participants_export.db.php');
 
-            if ($go == "csv") { $separator = ","; $extension = ".csv"; }
-            if ($go == "tab") { $separator = "\t"; $extension = ".tab"; }
+            if ($go == "csv") { 
+                $separator = ","; 
+                $extension = ".csv"; 
+            }
+            
+            if ($go == "tab") { 
+                $separator = "\t"; 
+                $extension = ".tab"; 
+            }
+
             $contest = str_replace(' ', '_', $_SESSION['contestName']);
             if ($section == "loc") $loc = "_".str_replace(' ', '_', $row_judging['judgingLocName']);
             else $loc = "";
             $date = date("m-d-Y");
 
             if ($_SESSION['prefsProEdition'] == 1) $a[] = array($label_first_name,$label_last_name,$label_organization,$label_ttb,$label_address,$label_city,$label_state_province,$label_zip,$label_country,$label_phone,$label_email,$label_club,$label_entries,$label_assignment,$label_bjcp_id,$label_bjcp_rank,$label_bjcp_mead."?",$label_bjcp_cider."?",$label_judge_preferred,$label_judge_non_preferred);
+            
             else $a[] = array($label_first_name,$label_last_name,$label_address,$label_city,$label_state_province,$label_zip,$label_country,$label_phone,$label_email,$label_club,$label_entries,$label_assignment,$label_bjcp_id,$label_bjcp_rank,$label_bjcp_mead."?",$label_bjcp_cider."?",$label_judge_preferred,$label_judge_non_preferred);
 
             //echo $query_sql;
@@ -787,8 +796,8 @@ if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($en
                     $brewerState,
                     $brewerZip,
                     $brewerCountry,
-                    $phone,
-                    $row_sql['brewerEmail'],
+                    html_entity_decode($phone),
+                    html_entity_decode($row_sql['brewerEmail']),
                     $brewerClubs,
                     judge_entries($row_sql['uid'],0),
                     $assignment,$row_sql['brewerJudgeID'],
@@ -805,8 +814,8 @@ if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($en
                     $brewerState,
                     $brewerZip,
                     $brewerCountry,
-                    $phone,
-                    $row_sql['brewerEmail'],
+                    html_entity_decode($phone),
+                    html_entity_decode($row_sql['brewerEmail']),
                     $brewerClubs,
                     judge_entries($row_sql['uid'],0),
                     $assignment,
