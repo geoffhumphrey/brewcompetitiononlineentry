@@ -1631,7 +1631,8 @@ function style_convert($number,$type,$base_url="",$archive="") {
 
 		if ($row_style) {
 			if ($row_style['brewStyle'] == "Soured Fruit Beer") $style_name = "Wild Specialty Beer";
-			else $style_name = $row_style['brewStyle'];			$style_convert = $row_style['brewStyleGroup'].",".$row_style['brewStyleNum'].",".$style_name;
+			else $style_name = $row_style['brewStyle'];			
+			$style_convert = $row_style['brewStyleGroup'].",".$row_style['brewStyleNum'].",".$style_name;
 		}
 
 		break;

@@ -187,7 +187,7 @@ if (($judging_past == 0) && ($registration_open == 2) && ($entry_window_open == 
 				echo $header1_10;
 				echo $page_info10;
 				include (SECTIONS.'bos.sec.php');
-				}
+			}
 
 			if (($row_scored_entries['count'] > 0) && (($row_limits['prefsShowBestBrewer'] != 0) || ($row_limits['prefsShowBestClub'] != 0))) include (SECTIONS.'bestbrewer.sec.php');
 
