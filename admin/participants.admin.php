@@ -470,6 +470,8 @@ do {
 				$bjcp_rank = explode(",",$row_brewer['brewerJudgeRank']);
 				$display_rank = bjcp_rank($bjcp_rank[0],1);
 
+				if (((strpos($display_rank, "Level 0:") !== false)) && (($row_brewer['brewerJudgeMead'] == "Y") || ($row_brewer['brewerJudgeCider'] == "Y"))) $display_rank = "Level 3: Certified Cider or Mead Judge";
+
 				$output_datatables_body .= "<td class=\"".$output_hide_print."\">".$row_brewer['brewerJudgeID']."</td>";
 				$output_datatables_body .= "<td>".$display_rank;
 				$output_datatables_body .= "<small>";

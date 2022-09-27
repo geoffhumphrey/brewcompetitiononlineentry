@@ -130,6 +130,9 @@ if ($totalRows_brewer > 0) {
   	$judge_info = explode("^",$judge_info);
   	$bjcp_rank = explode(",",$judge_info[5]);
     $rank_display = bjcp_rank($bjcp_rank[0],1);
+    
+    if (((strpos($rank_display, "Level 0:") !== false)) && (($judge_info[4] == "Y") || ($judge_info[12] == "Y"))) $rank_display = "Level 3: Certified Cider or Mead Judge";
+
   	$display_rank = "<strong>".$rank_display."</strong>";
     $rank_number = preg_replace('/[^0-9]/','',$display_rank);
     //$rank_number = filter_var($display_rank,FILTER_SANITIZE_NUMBER_FLOAT);

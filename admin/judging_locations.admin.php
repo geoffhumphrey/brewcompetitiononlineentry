@@ -177,7 +177,7 @@ if ($section != "step5") {
 
 		if ($filter == "judges") 		$output_datatables_aoColumns = "{ \"asSorting\": [  ] }, null, null, null, null, null, null";
 		elseif ($filter == "stewards") 	$output_datatables_aoColumns = "{ \"asSorting\": [  ] }, null, null, null, null";
-		elseif ($filter == "staff")		$output_datatables_aoColumns = "{ \"asSorting\": [  ] }, null, null";
+		elseif ($filter == "staff")		$output_datatables_aoColumns = "{ \"asSorting\": [  ] }, null, null, null";
 		elseif ($filter == "bos") 		$output_datatables_aoColumns = "{ \"asSorting\": [  ] }, null, null, null, null, null";
 
 
@@ -193,6 +193,9 @@ if ($section != "step5") {
 		if (($filter == "judges") || ($filter == "stewards")) {
 			$output_datatables_head .= "<th class=\"hidden-xs hidden-sm\">Preferences</th>";
 			$output_datatables_head .= "<th class=\"hidden-xs hidden-sm\" width=\"30%\">Has Entries In...</th>";
+		}
+		if (($filter == "staff")) {
+			$output_datatables_head .= "<th class=\"hidden-xs hidden-sm\">Preferences</th>";
 		}
 		$output_datatables_head .= "</tr>";
 
@@ -259,24 +262,45 @@ if ($section != "step5") {
 						}
 				}
 
-				if (($filter == "judges") || ($filter == "stewards")) {
-					if ($filter == "judges") $exploder = $row_brewer['brewerJudgeLocation'];
+				if (($filter == "judges") || ($filter == "stewards") || ($filter == "staff")) {
+					
+					if (($filter == "judges") || ($filter == "staff")) $exploder = $row_brewer['brewerJudgeLocation'];
 					if ($filter == "stewards") $exploder = $row_brewer['brewerStewardLocation'];
 					$a = explode(",",$exploder);
 					$output = "";
-					if ($exploder != "") {
+					
+					if (!empty($exploder)) {
+						
 						sort($a);
+						$c = array();
+						
 						foreach ($a as $value) {
-							if ($value != "") {
+							if (!empty($value)) {
 								$b = substr($value, 2);
-								$output .= judging_location_avail($b,$value);
-								}
+								if ($filter == "staff") $c[] = judging_location_avail($b,$value,1);
+								else $c[] = judging_location_avail($b,$value);
 							}
 						}
-					$output = rtrim($output,"<br>");
+					
+						if (!empty($c)) {
+
+							sort($c);
+							foreach ($c as $value) {
+								if (!empty($value)) $output .= $value;
+							}
+							
+							$output = rtrim($output,"<br>");
+						}
+
+					}					
+						
+					if (empty($output)) {
+						if ($filter == "staff") $output_location = "None specified.";
+						else $output_location .= "<span class=\"fa fa-lg fa-ban text-danger\"></span> <a href=\"".$base_url."index.php?section=brewer&amp;go=admin&amp;action=edit&amp;filter=".$row_brewer['uid']."&amp;id=".$row_brewer['uid']."\" data-toggle=\"tooltip\" title=\"Enter ".$row_brewer['brewerFirstName']." ".$row_brewer['brewerLastName']."&rsquo;s location preferences\">None specified</a>.";
+					}
+					else $output_location = $output;
+
 				}
-				if (empty($output)) $output_location = "<span class=\"fa fa-lg fa-ban text-danger\"></span> <a href=\"".$base_url."index.php?section=brewer&amp;go=admin&amp;action=edit&amp;filter=".$row_brewer['uid']."&amp;id=".$row_brewer['uid']."\" data-toggle=\"tooltip\" title=\"Enter ".$row_brewer['brewerFirstName']." ".$row_brewer['brewerLastName']."&rsquo;s location preferences\">None specified</a>.";
-				else $output_location = $output;
 
 				if (($filter == "bos") && (!empty($bos_judge_eligible))) $output_datatables_body .= "<tr class=\"bg-danger text-danger\">";
 				elseif (($filter == "bos") && (empty($bos_judge_eligible))) {
@@ -323,17 +347,19 @@ if ($section != "step5") {
 					$output_datatables_body .= "<td class=\"hidden-xs hidden-sm\">".strtoupper($row_brewer['brewerJudgeID'])."</td>";
 					$output_datatables_body .= "<td>".$display_rank;
 					
-
-					
 					if (!empty($bjcp_rank[1])) {
 						$output_datatables_body .= "<em>".designations($row_brewer['brewerJudgeRank'],$bjcp_rank[0])."</em>";
 					}
 					
 					$output_datatables_body .= "</td>";
+				
+				}
+
+				if (($filter == "judges") || ($filter == "stewards") || ($filter == "staff")) {
+					$output_datatables_body .= "<td class=\"hidden-xs hidden-sm\">".$output_location."</td>";
 				}
 
 				if (($filter == "judges") || ($filter == "stewards")) {
-					$output_datatables_body .= "<td class=\"hidden-xs hidden-sm\">".$output_location."</td>";
 					$output_datatables_body .= "<td class=\"hidden-xs hidden-sm\">".judge_entries($row_brewer['uid'],1)."</td>";
 				}
 

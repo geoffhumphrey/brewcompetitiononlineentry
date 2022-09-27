@@ -713,6 +713,7 @@ if (isset($_SESSION['loginUsername'])) {
 
 				$bjcp_rank = explode(",",$row_brewer['brewerJudgeRank']);
 				$rank = bjcp_rank($bjcp_rank[0],2);
+				if (((strpos($rank, "Non-BJCP Judge") !== false)) && (($row_brewer['brewerJudgeMead'] == "Y") || ($row_brewer['brewerJudgeCider'] == "Y"))) $rank = "BJCP Cider or Mead Judge";
 				$mead = "";
 				$pro = "";
 				$cert_cicerone = "";
@@ -748,6 +749,10 @@ if (isset($_SESSION['loginUsername'])) {
 				elseif ((empty($cicerone)) && (!empty($other))) $other_combined = $other;
 				else $other_combined = "";
 				if (!empty($other_combined)) $other_ranks = implode(", ", $other_combined);
+				$other_ranks = ltrim($other_ranks," ,");
+				$other_ranks = ltrim($other_ranks," , ");
+				$other_ranks = ltrim($other_ranks,", ");
+				$other_ranks = ltrim($other_ranks,",");
 
 				$first_name = $row_brewer['brewerFirstName'];
 				$last_name = $row_brewer['brewerLastName'];
@@ -772,7 +777,6 @@ if (isset($_SESSION['loginUsername'])) {
 						strtolower($row_brewer['brewerEmail'])
 						);
 					}
-
 
 					$text = (iconv("UTF-8", "ASCII//TRANSLIT//IGNORE", transliterator_transliterate('Any-Latin; Latin-ASCII', $text))); 
 					$pdf->Add_Label($text);
@@ -934,6 +938,7 @@ if (isset($_SESSION['loginUsername'])) {
 
 		$bjcp_rank = explode(",",$row_brewer['brewerJudgeRank']);
 		$rank = bjcp_rank($bjcp_rank[0],2);
+		if (((strpos($rank, "Non-BJCP Judge") !== false)) && (($row_brewer['brewerJudgeMead'] == "Y") || ($row_brewer['brewerJudgeCider'] == "Y"))) $rank = "BJCP Cider or Mead Judge";
 		$mead = "";
 		$pro = "";
 		$cert_cicerone = "";
@@ -970,6 +975,10 @@ if (isset($_SESSION['loginUsername'])) {
 		elseif ((empty($cicerone)) && (!empty($other))) $other_combined = $other;
 		else $other_combined = "";
 		if (!empty($other_combined)) $other_ranks = implode(", ", $other_combined);
+		$other_ranks = ltrim($other_ranks," ,");
+		$other_ranks = ltrim($other_ranks," , ");
+		$other_ranks = ltrim($other_ranks,", ");
+		$other_ranks = ltrim($other_ranks,",");
 
 		for($i=0; $i<$number_of_labels; $i++) {
 
