@@ -81,6 +81,7 @@ $header1_1 .= "<div class=\"col col-xs-6 col-sm-3\">";
 $header1_1 .= "<div style=\"margin-top: 10px;\">".$pay_button."</div>";
 $header1_1 .= "</div>";
 $header1_1 .= "</div>";
+if (!empty($_SESSION['jPrefsBottleNum'])) $header1_1 .= sprintf("<p>%s: %s</p>", $label_number_bottles, $_SESSION['jPrefsBottleNum']);
 
 // Build Warnings
 $warnings = "";

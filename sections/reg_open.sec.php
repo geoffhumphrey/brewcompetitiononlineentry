@@ -59,6 +59,8 @@ $header1_7 = "";
 $page_info7 = "";
 $header1_8 = "";
 $page_info8 = "";
+$header1_9 = "";
+$page_info9 = "";
 
 if (($registration_open == 1) && ($judge_window_open == 1) && (!isset($_SESSION['loginUsername']))) {
 
@@ -121,6 +123,23 @@ if ((isset($row_contest_rules['contestRules'])) && (!empty($row_contest_rules['c
 				   ->text($row_contest_rules['contestRules']); 
 	}
 	else $page_info3 .= $row_contest_rules['contestRules'];
+}
+
+// Bottle Acceptance
+if (!empty($_SESSION['jPrefsBottleNum'])) $page_info4 .= sprintf("<p><strong>%s: %s</strong></p>", $label_number_bottles, $_SESSION['jPrefsBottleNum']);
+
+if ((isset($_SESSION['contestBottles'])) && (($dropoff_window_open < 2) || ($shipping_window_open < 2))) {
+	$header1_4 .= sprintf("<h2>%s</h2>",$label_entry_acceptance_rules);
+
+	if ((ENABLE_MARKDOWN) && (!is_html($_SESSION['contestBottles']))) { 
+		$page_info4 .= Parsedown::instance()
+					   ->setBreaksEnabled(true) # enables automatic line breaks
+					   ->setMarkupEscaped(true) # escapes markup (HTML)
+					   ->text($_SESSION['contestBottles']); 
+	}
+	
+	else $page_info4 .= $_SESSION['contestBottles'];
+
 }
 
 // --------------------------------------------------------------
