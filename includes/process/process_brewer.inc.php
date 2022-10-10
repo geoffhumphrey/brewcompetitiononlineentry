@@ -708,14 +708,24 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 			$hasher_question = new PasswordHash(8, false);
 			$hash_question = $hasher_question->HashPassword($userQuestionAnswer);
 
-			if ($_POST['userQuestionAnswer'] != $hash_question) {
-				// Store unhashed response for email confirmation
+			$query_security_resp = sprintf("SELECT userQuestionAnswer FROM `%s` WHERE id='%s'",$prefix."users",$id);
+			$security_resp = mysqli_query($connection,$query_security_resp);
+			$row_security_resp = mysqli_fetch_assoc($security_resp);
+			$totalRows_security_resp = mysqli_num_rows($security_resp);
+
+			$stored_hash = $row_security_resp['userQuestionAnswer'];
+			$check = 1;
+			
+			if ($totalRows_security_resp > 0) $check = $hasher_question->CheckPassword($userQuestionAnswer, $stored_hash);
+
+			if ($check == 0) {
+				// New  Store unhashed response for email confirmation
 				$userQuestion_change = TRUE;
 				$userQuestionAnswer_email = $userQuestionAnswer;
 			}
 
 			$update_table = $prefix."users";
-			$data = array('userQuestionAnswer' => $userQuestionAnswer);
+			$data = array('userQuestionAnswer' => $hash_question);
 			$db_conn->where ('id', $id);
 			$result = $db_conn->update ($update_table, $data);
 			if (!$result) {
