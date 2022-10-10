@@ -53,8 +53,14 @@ foreach ($subcats as $subcat) {
 
 	if (!empty($substyle)) {
 		if ($substyle[4] == "Y") {
-			if ($row_substyle_count_logged['count'] > 0) $html .= "<tr class=\"success text-success\">";
-			else $html .= "<tr>";
+			if ($row_substyle_count_logged['count'] > 0) {
+				if ($filter == "default") $html .= "<tr class=\"success text-success\">";
+				else $html .= "<tr>";
+			} 
+			else {
+				if ($filter == "no_zeros") $html .= "<tr class=\"hidden\">";
+				else $html .= "<tr>";
+			}
 			if ($substyle[3] != "") $substyle_cat = $substyle[3];
 			else $substyle_cat = "Custom";
 
@@ -192,10 +198,12 @@ if (($total_style_count > 0) || ($total_style_count_logged > 0)) {
     </div><!-- ./button group -->
 </div>
 <?php } echo $html_testing;
-if ($total_style_count > 0) { ?>
+if (($total_style_count > 0) || ($total_style_count_logged > 0)) { ?>
 <script type="text/javascript" language="javascript">
+// The following is for demonstration purposes only.
+// Complete documentation and usage at http://www.datatables.net
 	$(document).ready(function() {
-		$('#sortable5').dataTable( {
+		$('#sortable1').dataTable( {
 			"bPaginate" : false,
 			"sDom": 'rt',
 			"bStateSave" : false,
@@ -209,10 +217,10 @@ if ($total_style_count > 0) { ?>
 		} );
 	} );
 </script>
-<table class="table table-responsive table-bordered" id="sortable5">
+<table class="table table-responsive table-bordered" id="sortable1">
 <thead>
 	<tr>
-        <th>Style Type</th>
+		<th>Style Type</th>
 		<th>Logged</th>
 		<th>Paid &amp; Received</th>
 	</tr>
@@ -221,9 +229,14 @@ if ($total_style_count > 0) { ?>
 <?php echo $html_count; ?>
 </tbody>
 </table>
-<div style="margin-bottom: 20px;"></div>
 <?php } ?>
-<h3>Breakdown By Sub-Style</h3>
+<div class="row" style="margin-top: 20px;">
+	<div class="col-md-9 col-sm-7 col-xs-12"><h3>Breakdown By Sub-Style</h3></div>
+	<div class="col-md-3 col-sm-5 hidden-xs">
+		<?php if ($filter == "default") { ?><a class="btn btn-primary pull-right" href="<?php echo $base_url; ?>index.php?section=admin&amp;go=count_by_substyle&amp;filter=no_zeros">Hide Sub-Styles with Zero Entries</a><?php } ?>
+		<?php if ($filter == "no_zeros") { ?><a class="btn btn-primary pull-right" href="<?php echo $base_url; ?>index.php?section=admin&amp;go=count_by_substyle">Show Sub-Styles with Zero Entries</a><?php } ?>
+	</div>
+</div>
 <script type="text/javascript" language="javascript">
 	$(document).ready(function() {
 		$('#sortable6').dataTable( {
@@ -243,6 +256,7 @@ if ($total_style_count > 0) { ?>
 		} );
 	} );
 </script>
+
 <table class="table table-responsive table-bordered" id="sortable6">
 <thead>
 	<tr>

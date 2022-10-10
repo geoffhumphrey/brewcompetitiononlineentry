@@ -1005,7 +1005,8 @@ if ($recently_updated) {
                             </div>
                             <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
                                 <ul class="list-inline">
-                                    <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=notes&amp;go=org_notes" data-toggle="tooltip" data-placement="top" title="A List of Notes Individual Judges Have Provided to the Organizer - Includes Reports of Allergies">Notes to Organizer</a></li>
+                                    <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=notes&amp;go=org_notes" data-toggle="tooltip" data-placement="top" title="A List of Notes Individual Judges Have Provided to the Organizer">Notes to Organizer</a></li>
+                                    <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=notes&amp;go=admin" data-toggle="tooltip" data-placement="top" title="Notes attached to individual entries for Admin and Staff use.">Admin and Staff Notes</a></li>
                                 </ul>
                             </div>
                         </div><!-- ./row -->
@@ -1800,6 +1801,16 @@ if ($recently_updated) {
                             <?php } ?>
                             <div class="row">
                                 <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
+                                    <strong>Version Information</strong>
+                                </div>
+                                <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
+                                    <ul class="list-unstyled">
+                                        <li><a href="https://brewcompetition.com/release-notes" target="_blank">Release Notes, New Features, and Bug Fixes</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
                                     <strong>Guides</strong>
                                 </div>
                                 <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
@@ -1882,6 +1893,7 @@ if ($recently_updated) {
                 <h4 class="modal-title"><?php echo $current_version_display; ?> Update Summary</h4>
             </div>
             <div class="modal-body">
+                <p><a class="btn btn-success btn-block" href="https://brewcompetition.com/release-notes" target="_blank">Check Here for Release Notes, New Features, and Bug Fixes</a></p>
                 <p>Your installation was updated to <strong>BCOE&amp;M <?php echo $current_version_display; ?></strong> on <?php echo getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_system['update_date'], $_SESSION['prefsDateFormat'], $_SESSION['prefsTimeFormat'], "long", "date-time"); ?>. The following is a list of updates that were performed.</p>
                 <?php if (isset($_SESSION['update_summary'])) echo $_SESSION['update_summary']; else echo $row_system['update_summary']; ?>
             </div>

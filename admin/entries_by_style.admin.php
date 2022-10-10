@@ -38,8 +38,16 @@ if ($_SESSION['prefsStyleSet'] == "BA") {
 			
 			foreach ($style_set_cat as $key => $value) {
 				include (DB.'entries_by_style.db.php');
-				if ($row_style_count_logged['count'] > 0) $html .= "<tr class=\"success text-success\">";
-				else $html .= "<tr>";
+
+				if ($row_style_count_logged['count'] > 0) {
+					if ($filter == "default") $html .= "<tr class=\"success text-success\">";
+					else $html .= "<tr>";
+				} 
+				else {
+					if ($filter == "no_zeros") $html .= "<tr class=\"hidden\">";
+					else $html .= "<tr>";
+				}
+
 				$html .= "<td>".$value."</td>";
 				$html .= "<td>".$row_style_count_logged['count']."</td>";
 				$html .= "<td>".$row_style_count['count']."</td>";
@@ -71,13 +79,26 @@ else {
 	foreach ($style_sets as $style_set_data) {
 		if ($style_set_data['style_set_name'] === $_SESSION['prefsStyleSet']) {
 			$style_set_cat = $style_set_data['style_set_categories'];
-			// print_r($style_set_cat);
+			//print_r($style_set_cat);
 			
 			foreach ($style_set_cat as $key => $value) {
+				
 				include (DB.'entries_by_style.db.php');
-				if ($row_style_count_logged['count'] > 0) $html .= "<tr class=\"success text-success\">";
-				else $html .= "<tr>";
-				$html .= "<td>".$value."</td>";
+				
+				if ($row_style_count_logged['count'] > 0) {
+					if ($filter == "default") $html .= "<tr class=\"success text-success\">";
+					else $html .= "<tr>";
+				} 
+				
+				else {
+					if ($filter == "no_zeros") $html .= "<tr class=\"hidden\">";
+					else $html .= "<tr>";
+				}
+				
+				if (is_numeric($key)) $cat_number = sprintf('%02d', $key);
+				else $cat_number = $key;
+
+				$html .= "<td>".$cat_number." - ".$value."</td>";
 				$html .= "<td>".$row_style_count_logged['count']."</td>";
 				$html .= "<td>".$row_style_count['count']."</td>";
 				$html .= "<td class=\"hidden-xs hidden-sm\">".$style_type."</td>";
@@ -249,7 +270,7 @@ if (($total_style_count > 0) || ($total_style_count_logged > 0)) {
     </div><!-- ./button group -->
 </div>
 <?php }
-if ($total_style_count > 0) { ?>
+if (($total_style_count > 0) || ($total_style_count_logged > 0)) { ?>
 <script type="text/javascript" language="javascript">
 // The following is for demonstration purposes only.
 // Complete documentation and usage at http://www.datatables.net
@@ -280,10 +301,8 @@ if ($total_style_count > 0) { ?>
 <?php echo $html_count; ?>
 </tbody>
 </table>
-
 <?php } ?>
 
-<h3>Breakdown By Style</h3>
 <script type="text/javascript" language="javascript">
 	$(document).ready(function() {
 		$('#sortable2').dataTable( {
@@ -301,7 +320,14 @@ if ($total_style_count > 0) { ?>
 		} );
 	} );
 </script>
-<table class="table table-responsive table-bordered " id="sortable2">
+<div class="row" style="margin-top: 20px;">
+	<div class="col-md-9 col-sm-7 col-xs-12"><h3>Breakdown By Style</h3></div>
+	<div class="col-md-3 col-sm-5 hidden-xs">
+		<?php if ($filter == "default") { ?><a class="btn btn-primary pull-right" href="<?php echo $base_url; ?>index.php?section=admin&amp;go=count_by_style&amp;filter=no_zeros">Hide Styles with Zero Entries</a><?php } ?>
+		<?php if ($filter == "no_zeros") { ?><a class="btn btn-primary pull-right" href="<?php echo $base_url; ?>index.php?section=admin&amp;go=count_by_style">Show Styles with Zero Entries</a><?php } ?>
+	</div>
+</div>
+<table class="table table-responsive table-bordered" id="sortable2">
 <thead>
 	<tr>
 		<th>Style</th>

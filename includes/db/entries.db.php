@@ -168,15 +168,35 @@ else {
 
 	elseif ($section == "notes") {
 		
-		$query_log = sprintf("SELECT * FROM %s WHERE brewPossAllergens IS NOT NULL", $brewing_db_table, $bid);
-		$query_log_paid = sprintf("SELECT * FROM %s WHERE brewPossAllergens IS NOT NULL AND brewPaid='1'", $brewing_db_table, $bid);
-		$query_log_confirmed = sprintf("SELECT * FROM %s WHERE brewPossAllergens IS NOT NULL AND brewConfirmed='1'", $brewing_db_table, $bid);
+		if (($go == "allergens") || ($go == "org_notes")) {
+			
+			$query_log = sprintf("SELECT * FROM %s WHERE brewPossAllergens IS NOT NULL", $brewing_db_table);
+			$query_log_paid = sprintf("SELECT * FROM %s WHERE brewPossAllergens IS NOT NULL AND brewPaid='1'", $brewing_db_table);
+			$query_log_confirmed = sprintf("SELECT * FROM %s WHERE brewPossAllergens IS NOT NULL AND brewConfirmed='1'", $brewing_db_table);
 
-		if (SINGLE) {
-			$query_log .= sprintf(" AND comp_id='%s'", $_SESSION['comp_id']);
-			$query_log_paid .= sprintf(" AND comp_id='%s'", $_SESSION['comp_id']);
-			$query_log_confirmed .= sprintf(" AND comp_id='%s'", $_SESSION['comp_id']);
+			if (SINGLE) {
+				$query_log .= sprintf(" AND comp_id='%s'", $_SESSION['comp_id']);
+				$query_log_paid .= sprintf(" AND comp_id='%s'", $_SESSION['comp_id']);
+				$query_log_confirmed .= sprintf(" AND comp_id='%s'", $_SESSION['comp_id']);
+			}
+		
 		}
+
+		if ($go == "admin") {
+
+			$query_log = sprintf("SELECT * FROM %s WHERE brewAdminNotes IS NOT NULL OR brewStaffNotes IS NOT NULL", $brewing_db_table, $bid);
+			$query_log_paid = sprintf("SELECT * FROM %s WHERE (brewAdminNotes IS NOT NULL OR brewStaffNotes IS NOT NULL) AND brewPaid='1'", $brewing_db_table, $bid);
+			$query_log_confirmed = sprintf("SELECT * FROM %s WHERE (brewAdminNotes IS NOT NULL OR brewStaffNotes IS NOT NULL) AND brewConfirmed='1'", $brewing_db_table, $bid);
+
+			if (SINGLE) {
+				$query_log .= sprintf(" AND comp_id='%s'", $_SESSION['comp_id']);
+				$query_log_paid .= sprintf(" AND comp_id='%s'", $_SESSION['comp_id']);
+				$query_log_confirmed .= sprintf(" AND comp_id='%s'", $_SESSION['comp_id']);
+			}
+
+		}
+		
+
 
 	}
 
