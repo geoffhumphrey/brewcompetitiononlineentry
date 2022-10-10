@@ -802,27 +802,29 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 			$from_name = mb_convert_encoding($contestName, "UTF-8");
 			$subject = mb_convert_encoding($subject, "UTF-8");
 
-			$headers  = "MIME-Version: 1.0" . "\r\n";
-			$headers .= "Content-type: text/html; charset=utf-8" . "\r\n";
-			$headers .= sprintf("%s: ".$to_name. " <".$to_email.">, " . "\r\n",$label_to);
-			$headers .= sprintf("%s: %s  <".$from_email. ">\r\n",$label_from,$from_name);
-			$emails = $to_email;
+			$headers  = "MIME-Version: 1.0"."\r\n";
+			$headers .= "Content-type: text/html; charset=utf-8"."\r\n";
+			$headers .= "From: ".$from_name." Server <".$from_email.">"."\r\n";
+			$headers .= "To: ".$to_name. " <".$to_email.">"."\r\n";
+			$headers .= "Reply-To: ".$from_name." <".$from_email.">"."\r\n";
 
-			//echo "<pre>".htmlspecialchars($headers)."</pre>";
-			//echo $message;
-			//exit();
+			/*
+			echo "<pre>".htmlspecialchars($headers)."</pre>";
+			echo $message;
+			exit();
+			*/
 
 			if ($mail_use_smtp) {
 				$mail = new PHPMailer(true);
 				$mail->CharSet = 'UTF-8';
 				$mail->Encoding = 'base64';
-				$mail->addAddress($emails, $to_name);
+				$mail->addAddress($to_email, $to_name);
 				$mail->setFrom($from_email, $from_name);
 				$mail->Subject = $subject;
 				$mail->Body = $message;
 				sendPHPMailerMessage($mail);
 			} else {
-				mail($emails, $subject, $message, $headers);
+				mail($to_email, $subject, $message, $headers);
 			}
 
 		}

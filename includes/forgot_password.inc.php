@@ -62,9 +62,10 @@ if (($action == "email") && ($id != "default")) {
 	$from_name = mb_convert_encoding($contestName, "UTF-8");
 	$subject = mb_convert_encoding($subject, "UTF-8");
 	
-	$headers  = "MIME-Version: 1.0" . "\r\n";
-	$headers .= "Content-type: text/html; charset=utf-8" . "\r\n";
-	$headers .= "From: ".$from_name." Server <".$from_email. ">\r\n";
+	$headers  = "MIME-Version: 1.0"."\r\n";
+	$headers .= "Content-type: text/html; charset=utf-8"."\r\n";
+	$headers .= "From: ".$from_name." Server <".$from_email.">"."\r\n";
+	$headers .= "To: ".$to_name. " <".$to_email.">"."\r\n";
 
 	if ($mail_use_smtp) {
 		$mail = new PHPMailer(true);
@@ -75,7 +76,7 @@ if (($action == "email") && ($id != "default")) {
 		$mail->Body = $message;
 		sendPHPMailerMessage($mail);
 	} else {
-		mail($to_name. " <".$to_email.">", $subject, $message, $headers);
+		mail($to_email, $subject, $message, $headers);
 	}
 	
 	/*
@@ -154,9 +155,11 @@ if ($action == "forgot") {
 		$from_name = mb_convert_encoding($contestName, "UTF-8");
 		$subject = mb_convert_encoding($subject, "UTF-8");
 	
-		$headers  = "MIME-Version: 1.0" . "\r\n";
-		$headers .= "Content-type: text/html; charset=utf-8" . "\r\n";
-		$headers .= "From: ".$from_name." Server <".$from_email. ">\r\n";
+		$headers  = "MIME-Version: 1.0"."\r\n";
+		$headers .= "Content-type: text/html; charset=utf-8"."\r\n";
+		$headers .= "From: ".$from_name." Server <".$from_email.">"."\r\n";
+		$headers .= "To: ".$to_name. " <".$to_email.">"."\r\n";
+		$headers .= "Reply-To: ".$from_name." <".$from_email.">"."\r\n";
 
 		if ($mail_use_smtp) {
 			$mail = new PHPMailer(true);
@@ -168,7 +171,7 @@ if ($action == "forgot") {
 			$mail->Body = $message;
 			sendPHPMailerMessage($mail);
 		} else {
-			mail($to_name. " <".$to_email.">", $subject, $message, $headers);
+			mail($to_email, $subject, $message, $headers);
 		}
 		
 		/*
@@ -178,7 +181,7 @@ if ($action == "forgot") {
 		echo $row_forgot['user_name']."<br>";
 		echo $totalRows_forgot."<br>";
 		echo $updateSQL."<br>";
-		echo $emails."<br>".;
+		echo $to_email."<br>".;
 		echo $headers."<br>";
 		echo $subject."<br>";
 		echo $message;
