@@ -57,9 +57,14 @@ $row_user_info = mysqli_fetch_assoc($user_info);
 $totalRows_user_info = mysqli_num_rows($user_info);
 
 $url = str_replace("www.","",$_SERVER['SERVER_NAME']);
+
 $paypal_email_address = filter_var($row_prefs['prefsPayPalAccount'],FILTER_SANITIZE_EMAIL);
+
 $from_email = (!isset($mail_default_from) || trim($mail_default_from) === '') ? "noreply@".$url : $mail_default_from;
+
 $confirm_to_email_address = "PayPal IPN Confirmation <".$paypal_email_address.">";
+$confirm_to_email_address = mb_convert_encoding($confirm_to_email_address, "UTF-8");
+
 $confirm_from_email_address = $row_logo['contestName']." Server <".$from_email.">";
 
 if (!isset($mail_use_smtp)) $mail_use_smtp = FALSE;
@@ -148,9 +153,11 @@ if ($verified) {
 		$display_entry_numbers = implode(", ", $display_entry_no);
 		$display_entry_numbers = rtrim($display_entry_numbers, ", ");
 
+		$to_recipient = mb_convert_encoding($row_user_info['brewerFirstName']." ".$row_user_info['brewerLastName'], "UTF-8");
+
 		$to_email = filter_var($row_user_info['brewerEmail'],FILTER_SANITIZE_EMAIL);
 		$to_email = mb_convert_encoding($to_email, "UTF-8");
-		$to_recipient = mb_convert_encoding($row_user_info['brewerFirstName']." ".$row_user_info['brewerLastName'], "UTF-8");
+		$to_email_formatted .= $to_recipient." <".$to_email.">";
 
 		$from_email = filter_var($from_email,FILTER_SANITIZE_EMAIL);
 		$from_email = mb_convert_encoding($from_email, "UTF-8");
@@ -158,10 +165,11 @@ if ($verified) {
 		$cc_email = mb_convert_encoding($data['payer_email'], "UTF-8");
 		$cc_recipient = mb_convert_encoding($data['first_name']." ".$data['last_name'], "UTF-8");
 
-		$headers  = "MIME-Version: 1.0" . "\r\n";
-		$headers .= "Content-type: text/html; charset=utf-8" . "\r\n";
-		$headers .= "Bcc: ".$cc_recipient. " <".$cc_email.">, " . "\r\n";
-		$headers .= "From: ".$row_logo['contestName']." Server <".$from_email.">\r\n";
+		$headers  = "MIME-Version: 1.0"."\r\n";
+		$headers .= "Content-type: text/html; charset=utf-8"."\r\n";
+		$headers .= "From: ".$row_logo['contestName']." Server <".$from_email.">"."\r\n";
+		$headers .= "Reply-To: ".$from_name." <".$from_email.">"."\r\n";
+		$headers .= "Bcc: ".$cc_recipient. " <".$cc_email.">"."\r\n";
 
 		$message_top = "";
 		$message_body = "";
@@ -206,7 +214,7 @@ if ($verified) {
 			$mail->Body = $message_all;
 			sendPHPMailerMessage($mail);
 		} else {
-			mail($to_recipient. " <".$to_email .">", $subject, $message_all, $headers);
+			mail($to_email_formatted, $subject, $message_all, $headers);
 		}
 
     }
@@ -244,9 +252,11 @@ if ($send_confirmation_email) {
 
 	// Send confirmation email
 
-	$headers_confirm  = "MIME-Version: 1.0" . "\r\n";
-	$headers_confirm .= "Content-type: text/html; charset=utf-8" . "\r\n";
+	$headers_confirm  = "MIME-Version: 1.0"."\r\n";
+	$headers_confirm .= "Content-type: text/html; charset=utf-8"."\r\n";
 	$headers_confirm .= "From: ".mb_convert_encoding($confirm_from_email_address, "UTF-8")."\r\n";
+
+	$subject_confirm =  mb_convert_encoding("PayPal IPN: ".$paypal_ipn_status, "UTF-8");
 
 	$message_top_confirm = "";
 	$message_body_confirm = "";
@@ -273,13 +283,11 @@ if ($send_confirmation_email) {
 
 	$message_all_confirm = $message_top_confirm.$message_body_confirm.$message_bottom_confirm;
 
-	$subject_confirm =  mb_convert_encoding("PayPal IPN: ".$paypal_ipn_status, "UTF-8");
-
 	if ($mail_use_smtp) {
 		$mail = new PHPMailer(true);
 		$mail->CharSet = 'UTF-8';
 		$mail->Encoding = 'base64';
-		$mail->addAddress($confirm_to_email_address, "PayPal IPN Confirmation");
+		$mail->addAddress($paypal_email_address, "PayPal IPN Confirmation");
 		$mail->setFrom($from_email, $row_logo['contestName']." Server");
 		$mail->Subject = $subject_confirm;
 		$mail->Body = $message_all_confirm;

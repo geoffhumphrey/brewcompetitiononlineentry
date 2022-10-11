@@ -56,21 +56,31 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 			$query_contact = sprintf("SELECT * FROM $contacts_db_table WHERE id='%s'", $_POST['to']);
 			$contact = mysqli_query($connection,$query_contact) or die (mysqli_error($connection));
 			$row_contact = mysqli_fetch_assoc($contact);
-			//echo $query_contact;
 
-			// Gather the variables from the form
-			$to_email = $row_contact['contactEmail'];
 			$to_name = $row_contact['contactFirstName']." ".$row_contact['contactLastName'];
-			$from_email = strtolower(filter_var($_POST['from_email'], FILTER_SANITIZE_EMAIL));
-			$from_name = sterilize(ucwords($_POST['from_name']));
-			$subject = sterilize(ucwords($_POST['subject']));
-			$message_post = sterilize($_POST['message']);
-
-			$to_email = mb_convert_encoding($to_email, "UTF-8");
 			$to_name = mb_convert_encoding($to_name, "UTF-8");
+
+			$to_email = $row_contact['contactEmail'];
+			$to_email = mb_convert_encoding($to_email, "UTF-8");
+			$to_email_formatted .= $to_name." <".$to_email.">";
+
+			$from_email = strtolower(filter_var($_POST['from_email'], FILTER_SANITIZE_EMAIL));
 			$from_email = mb_convert_encoding($from_email, "UTF-8");
+
+			$from_name = sterilize(ucwords($_POST['from_name']));
 			$from_name = mb_convert_encoding($from_name, "UTF-8");
+			
+			$subject = sterilize(ucwords($_POST['subject']));
 			$subject = mb_convert_encoding($subject, "UTF-8");
+
+			$message_post = sterilize($_POST['message']);
+	
+			$url = str_replace("www.","",$_SERVER['SERVER_NAME']);
+			
+			$from_competition_email = (!isset($mail_default_from) || trim($mail_default_from) === '') ? "noreply@".$url : $mail_default_from;
+			$from_competition_email = mb_convert_encoding($from_competition_email, "UTF-8");
+			
+			$comp_name = mb_convert_encoding($_SESSION['contestName'], "UTF-8");
 
 			// Build the message
 			$message = "<html>" . "\r\n";
@@ -81,15 +91,9 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 			$message .= "</body>" . "\r\n";
 			$message .= "</html>";
 
-			$url = str_replace("www.","",$_SERVER['SERVER_NAME']);
-			$from_competition_email = (!isset($mail_default_from) || trim($mail_default_from) === '') ? "noreply@".$url : $mail_default_from;
-			$from_competition_email = mb_convert_encoding($from_competition_email, "UTF-8");
-			$comp_name = mb_convert_encoding($_SESSION['contestName'], "UTF-8");
-
 			$headers  = "MIME-Version: 1.0"."\r\n";
 			$headers .= "Content-type: text/html; charset=utf-8"."\r\n";
 			$headers .= "From: ".$comp_name." Server <".$from_competition_email.">" . "\r\n"; 
-			$headers .= "To: ".$to_name. " <".$to_email.">"."\r\n";
 			$headers .= "Reply-To: ".$from_name." <".$from_email.">"."\r\n";
 			if ($_SESSION['prefsEmailCC'] == 0) $headers .= "Bcc: ".$from_name." <".$from_email.">"."\r\n";
 
@@ -118,7 +122,7 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 				$mail->Body = $message;
 				sendPHPMailerMessage($mail);
 			} else {
-				mail($to_email, $subject, $message, $headers);
+				mail($to_email_formatted, $subject, $message, $headers);
 			}
 
 			$redirect = $base_url."index.php?section=contact&action=email&id=".$row_contact['id']."&msg=1";
