@@ -136,6 +136,9 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 
 				// For hosted version: email prost@brewcompetition.com to alert when setup has been completed.
 				$to_email = "prost@brewcompetition.com";
+				$to_email = mb_convert_encoding($to_email, "UTF-8");
+				$to_email_formatted = "BCOEM Admin <".$to_email.">";
+
 				$subject = "BCOEM Setup Completed for ".$_SERVER['SERVER_NAME'];
 				$message = "<html>" . "\r\n";
 				$message .= "<body>
@@ -147,7 +150,6 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 				$headers  = "MIME-Version: 1.0"."\r\n";
 				$headers .= "Content-type: text/html; charset=utf-8"."\r\n";
 				$headers .= "From: BCOEM Server <noreply@".$server.">"."\r\n";
-				$headers .= "To: BCOEM Admin <prost@brewcompetition.com>"."\r\n";
 				
 				if ($mail_use_smtp) {
 					
@@ -161,7 +163,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 					sendPHPMailerMessage($mail);
 
 				} else {
-					mail($to_email, $subject, $message, $headers);
+					mail($to_email_formatted, $subject, $message, $headers);
 				}
 			
 			} // end if (HOSTED)

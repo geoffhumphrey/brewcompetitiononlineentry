@@ -72,7 +72,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 		// Set up vars
 		$brewComments = "";
 		$brewCoBrewer = "";
-		$styleBreak = $_POST['brewStyle'];
+		$styleBreak = filter_var($_POST['brewStyle'],FILTER_SANITIZE_STRING);
 		$styleName = "";
 		$brewName = standardize_name($purifier->purify($_POST['brewName']));
 		$brewName = filter_var($brewName,FILTER_SANITIZE_STRING);
@@ -181,13 +181,13 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 
 		// -------------------------------- Required info --------------------------------
 		// Checked against requirements later
-		if (!empty($_POST['brewInfo'])) {
+		if ((!empty($_POST['brewInfo'])) && (in_array($styleBreak,$req_special_ing_styles))) {
 			$brewInfo = $purifier->purify($_POST['brewInfo']);
 			$brewInfo = filter_var($brewInfo,FILTER_SANITIZE_STRING);
 		}
 
 		// Specialized/Optional info
-		if (!empty($_POST['brewInfoOptional'])) {
+		if ((!empty($_POST['brewInfoOptional'])) && (in_array($styleBreak,$optional_info_styles))) {
 			$brewInfoOptional = $purifier->purify($_POST['brewInfoOptional']);
 			$brewInfoOptional = filter_var($brewInfoOptional,FILTER_SANITIZE_STRING);			
 		}
@@ -215,11 +215,9 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 
 		}
 
-		// if (!empty($brewInfo)) echo $brewInfo; else echo "Brew info empty"; exit;
-
 		if ($style[0] > 34) $styleID = $styleID; else $styleID = $style[1];
 
-		// check if style requires strength, carbonation, and/or sweetness
+		// check if style requires strength, carbonation, sweetness and/or requried info
 		$query_str_carb_sweet = sprintf("SELECT * FROM %s WHERE brewStyleGroup='%s' AND brewStyleNum='%s'", $styles_db_table,$style[0],$style[1]);
 		$str_carb_sweet = mysqli_query($connection,$query_str_carb_sweet) or die (mysqli_error($connection));
 		$row_str_carb_sweet = mysqli_fetch_assoc($str_carb_sweet);
@@ -227,9 +225,17 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 
 		if ($totalRows_str_carb_sweet > 0) {
 
-			if ((isset($_POST['brewMead1'])) && ($row_str_carb_sweet['brewStyleCarb'] == 1)) $brewMead1 .= filter_var($_POST['brewMead1'],FILTER_SANITIZE_STRING); // Carbonation
-			if ((isset($_POST['brewMead2'])) && ($row_str_carb_sweet['brewStyleSweet'] == 1))  $brewMead2 .= filter_var($_POST['brewMead2'],FILTER_SANITIZE_STRING); // Sweetness
-			if ((isset($_POST['brewMead3'])) && ($row_str_carb_sweet['brewStyleStrength'] == 1))  $brewMead3 .= filter_var($_POST['brewMead3'],FILTER_SANITIZE_STRING); // Strength
+			if ((isset($_POST['brewMead1'])) && ($row_str_carb_sweet['brewStyleCarb'] == 1)) $brewMead1 = filter_var($_POST['brewMead1'],FILTER_SANITIZE_STRING); // Carbonation
+
+			if ((isset($_POST['brewMead2-mead'])) && ($row_str_carb_sweet['brewStyleSweet'] == 1) && (strpos($style[0], "M") !== false)) $brewMead2 = filter_var($_POST['brewMead2-mead'],FILTER_SANITIZE_STRING); // Mead Sweetness
+			
+			if ((isset($_POST['brewMead2-cider'])) && ($row_str_carb_sweet['brewStyleSweet'] == 1) && (strpos($style[0], "C") !== false)) $brewMead2 = filter_var($_POST['brewMead2-cider'],FILTER_SANITIZE_STRING); // Cider Sweetness
+			
+			if ((isset($_POST['brewMead3'])) && ($row_str_carb_sweet['brewStyleStrength'] == 1)) $brewMead3 = filter_var($_POST['brewMead3'],FILTER_SANITIZE_STRING); // Strength
+
+			// Failsafe. When Admins change style, brewInfo and brewInfoOptional are not cleared. 
+			// If they choose a style that does not require it, empty the variable now.
+			if ((isset($_POST['brewInfo'])) && ($row_str_carb_sweet['brewStyleReqSpec'] == 0)) $brewInfo = "";
 
 		}
 

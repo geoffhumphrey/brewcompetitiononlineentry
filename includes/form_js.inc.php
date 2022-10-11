@@ -15,6 +15,7 @@
 <?php } ?>
 <?php if ($section == "brew") { ?>
 <script type="text/javascript">
+	var user_level = "<?php echo $_SESSION['userLevel']; ?>";
 	var style_set = "<?php echo $_SESSION['prefsStyleSet']; ?>";
 	var req_special_ing_styles = <?php echo json_encode($req_special_ing_styles); ?>;
 	var req_strength_styles = <?php echo json_encode($req_strength_styles); ?>;
