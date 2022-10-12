@@ -34,6 +34,7 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 		$to_name = mb_convert_encoding($to_name, "UTF-8");
 		$to_email = strtolower($row_forgot['user_name']);
 		$to_email = mb_convert_encoding($to_email, "UTF-8");
+		$to_email_formatted = $to_name." <".$to_email.">";
 		$subject = $_SESSION['contestName']." - System Generated Email Test";
 		$subject = mb_convert_encoding($subject, "UTF-8");
 
@@ -49,7 +50,6 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 
 		$headers  = "MIME-Version: 1.0" . "\r\n";
 		$headers .= "Content-type: text/html; charset=utf-8" . "\r\n";
-		$headers .= "To: ".$to_name. " <".$to_email.">, " . "\r\n";
 		$headers .= "From: ".$from_name." <".$from_email.">" . "\r\n";
 
 		if ($mail_use_smtp) {
@@ -62,7 +62,7 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 			$mail->Body = $message;
 			sendPHPMailerMessage($mail);
 		} else {
-			mail($to_email, $subject, $message, $headers);
+			mail($to_email_formatted, $subject, $message, $headers);
 		}
 
 		$redirect_go_to = sprintf("Location: %s", $base_url."index.php?section=admin&go=preferences&msg=32");
@@ -97,6 +97,7 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 				$to_name = $first_name." ".$last_name;
 				$to_name = mb_convert_encoding($to_name, "UTF-8");
 				$to_email = strtolower($row_brewer['brewerEmail']);
+				$to_email_formatted = $to_name." <".$to_email.">";
 				if ($row_brewer['staff_judge'] == 1) $subject = $_SESSION['contestName']." - Your Judging Assignments";
 				if ($row_brewer['staff_steward'] == 1) $subject = $_SESSION['contestName']." - Your Stewarding Assignments";
 				$subject = mb_convert_encoding($subject, "UTF-8");
@@ -133,7 +134,6 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 
 				$headers  = "MIME-Version: 1.0" . "\r\n";
 				$headers .= "Content-type: text/html; charset=utf-8" . "\r\n";
-				$headers .= "To: ".$to_name. " <".$to_email.">, " . "\r\n";
 				$headers .= "From: ".$from_name." <".$from_email.">" . "\r\n";
 
 				if ($mail_use_smtp) {
@@ -146,7 +146,7 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 					$mail->Body = $message;
 					sendPHPMailerMessage($mail);
 				} else {
-					mail($to_email, $subject, $message, $headers);
+					mail($to_email_formatted, $subject, $message, $headers);
 				}
 
 				//echo $message."<br><br>";
