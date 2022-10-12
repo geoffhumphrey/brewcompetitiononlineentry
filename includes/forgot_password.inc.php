@@ -64,21 +64,21 @@ if (($action == "email") && ($id != "default")) {
 	
 	$headers  = "MIME-Version: 1.0" . "\r\n";
 	$headers .= "Content-type: text/html; charset=utf-8" . "\r\n";
-	$headers .= "To: ".$to_name. " <".$to_email.">, " . "\r\n";
 	$headers .= "From: ".$from_name." Server <".$from_email. ">\r\n";
 	
-	$emails = $to_email;
+	$to_email_formatted = $to_name." <".$to_email.">";
 
 	if ($mail_use_smtp) {
 		$mail = new PHPMailer(true);
 		$mail->CharSet = 'UTF-8';
-		$mail->Encoding = 'base64';$mail->addAddress($to_email, $to_name);
+		$mail->Encoding = 'base64';
+		$mail->addAddress($to_email, $to_name);
 		$mail->setFrom($from_email, $from_name);
 		$mail->Subject = $subject;
 		$mail->Body = $message;
 		sendPHPMailerMessage($mail);
 	} else {
-		mail($emails, $subject, $message, $headers);
+		mail($to_email_formatted, $subject, $message, $headers);
 	}
 	
 	/*
@@ -155,10 +155,9 @@ if ($action == "forgot") {
 	
 		$headers  = "MIME-Version: 1.0" . "\r\n";
 		$headers .= "Content-type: text/html; charset=utf-8" . "\r\n";
-		$headers .= "To: ".$to_name. " <".$to_email.">, " . "\r\n";
 		$headers .= "From: ".$from_name." Server <".$from_email. ">\r\n";
 
-		$emails = $to_email;
+		$to_email_formatted = $to_name." <".$to_email.">";
 
 		if ($mail_use_smtp) {
 			$mail = new PHPMailer(true);
@@ -170,7 +169,7 @@ if ($action == "forgot") {
 			$mail->Body = $message;
 			sendPHPMailerMessage($mail);
 		} else {
-			mail($emails, $subject, $message, $headers);
+			mail($to_email_formatted, $subject, $message, $headers);
 		}
 		
 		/*
