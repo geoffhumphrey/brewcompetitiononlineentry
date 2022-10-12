@@ -156,7 +156,6 @@ if ($verified) {
 
 		$headers  = "MIME-Version: 1.0" . "\r\n";
 		$headers .= "Content-type: text/html; charset=utf-8" . "\r\n";
-		$headers .= "To: ".$to_recipient. " <".$to_email .">, " . "\r\n";
 		$headers .= "Bcc: ".$cc_recipient. " <".$cc_email.">, " . "\r\n";
 		$headers .= "From: ".$row_logo['contestName']." Server <".$from_email.">\r\n";
 
@@ -230,7 +229,6 @@ if ($send_confirmation_email) {
 
 	$headers_confirm  = "MIME-Version: 1.0" . "\r\n";
 	$headers_confirm .= "Content-type: text/html; charset=utf-8" . "\r\n";
-	$headers_confirm .= "To: ".$confirm_to_email_address.", " . "\r\n";
 	$headers_confirm .= "From: ".$confirm_from_email_address."\r\n";
 
 	$message_top_confirm = "";
@@ -270,7 +268,7 @@ if ($send_confirmation_email) {
 		$mail->Body = $message_all_confirm;
 		sendPHPMailerMessage($mail);
 	} else {
-		mail($confirm_to_email_address, $subject_confirm, $message_all_confirm, $headers_confirm);
+		mail($paypal_email_address, $subject_confirm, $message_all_confirm, $headers_confirm);
 	}
 }
 
