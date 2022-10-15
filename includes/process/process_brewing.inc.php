@@ -181,7 +181,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 
 		// -------------------------------- Required info --------------------------------
 		// Checked against requirements later
-		if ((!empty($_POST['brewInfo'])) && (in_array($styleBreak,$req_special_ing_styles))) {
+		if (!empty($_POST['brewInfo'])) {
 			$brewInfo = $purifier->purify($_POST['brewInfo']);
 			$brewInfo = filter_var($brewInfo,FILTER_SANITIZE_STRING);
 		}
@@ -232,10 +232,6 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 			if ((isset($_POST['brewMead2-cider'])) && ($row_str_carb_sweet['brewStyleSweet'] == 1) && (strpos($style[0], "C") !== false)) $brewMead2 = filter_var($_POST['brewMead2-cider'],FILTER_SANITIZE_STRING); // Cider Sweetness
 			
 			if ((isset($_POST['brewMead3'])) && ($row_str_carb_sweet['brewStyleStrength'] == 1)) $brewMead3 = filter_var($_POST['brewMead3'],FILTER_SANITIZE_STRING); // Strength
-
-			// Failsafe. When Admins change style, brewInfo and brewInfoOptional are not cleared. 
-			// If they choose a style that does not require it, empty the variable now.
-			if ((isset($_POST['brewInfo'])) && ($row_str_carb_sweet['brewStyleReqSpec'] == 0)) $brewInfo = "";
 
 		}
 

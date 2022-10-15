@@ -26,7 +26,8 @@ if ($_SESSION['prefsStyleSet'] == "AABC") $aabc = TRUE;
  * -------------------------------------------------------------------
  */
 
-$character_limit = 34;
+$character_limit = 32;
+$total_possible_characters = (6 * $character_limit); // 6 lines in 5160/3422
 
 if (isset($_SESSION['loginUsername'])) {
 
@@ -63,7 +64,7 @@ if (isset($_SESSION['loginUsername'])) {
 		 * Updated for 2.1.15 to remove special characters
 		 * Updated for 2.1.18:
 		 * - Convert UTF-8 characters to windows-1252 standard (FPDF limitation)
-		 * - Limit to 34 characters per line (Courier 8 pt)
+		 * - Limit to 32 characters per line (Courier 8 pt)
 		 * - Made formatting of both types consistent
 		 * -------------------------------------------------------------------
 		 */
@@ -404,9 +405,13 @@ if (isset($_SESSION['loginUsername'])) {
 				if ($psort == "3422") $filename .= "_Avery3422";
 				else $filename .= "_Avery5160";
 				$filename .= ".pdf";
+
+				
 				
 				// Print labels
 				do {
+
+					$character_length = 0;
 					
 					for($i=0; $i<$sort; $i++) {
 						
@@ -415,6 +420,7 @@ if (isset($_SESSION['loginUsername'])) {
 						$special = "";
 						$special_only = "";
 						$optional = "";
+						$allergens = "";
 						$entry_str_sweet_carb = "";
 						$mead_cider = "";
 						$beer_strength = "";
@@ -445,7 +451,8 @@ if (isset($_SESSION['loginUsername'])) {
 						$style_name = truncate($style_name,21);
 						
 						if ($ba) $entry_info = sprintf("%s (%s)", $entry_no, $style_name);
-						else $entry_info = sprintf("\n%s (%s: %s)", $entry_no, $style_display, $style_name);
+						else $entry_info = sprintf("%s (%s: %s)", $entry_no, $style_display, $style_name);
+						$character_length += strlen($entry_info);
 
 						if (in_array($style,$special_ingredients)) {
 
@@ -475,18 +482,26 @@ if (isset($_SESSION['loginUsername'])) {
 							$special = str_replace("^", "", $special);
 							$special = trim($special);
 							$entry_str_sweet_carb .= $beer_carbonation.$beer_sweeteness.$beer_strength;
-							if (!empty($special)) $special = sprintf("\n%s", $special);
+							if (!empty($special)) {
+								$character_length += strlen($special);
+								$special = sprintf("\n%s", $special);
+								
+							}
 						}
-						
-						if (!empty($row_log['brewInfoOptional'])) {
+
+						if ((!empty($row_log['brewPossAllergens'])) && ($character_length < $total_possible_characters)) {
 							
 							$character_limit_adjust = $character_limit * 2; // Allow for two lines
-							$special_optional = strip_tags($row_log['brewInfoOptional']);
-							$special_optional = iconv('UTF-8', 'windows-1252', html_entity_decode($special_optional));
-							$optional = str_replace("\n"," ",truncate($special_optional,$character_limit_adjust,""));
-							$optional = html_entity_decode($optional);
-							$optional = sprintf("\n%s",$optional);
-
+							$allergens = strip_tags($row_log['brewPossAllergens']);
+							$allergens = iconv('UTF-8', 'windows-1252', html_entity_decode($allergens));
+							$allergens = sprintf("%s: %s",$label_allergens,$allergens);
+							$allergens = str_replace("\n"," ",truncate($allergens,$character_limit_adjust,""));
+							$allergens = html_entity_decode($allergens);
+							if (!empty($allergens)) {
+								$character_length += strlen($allergens);
+								$allergens = sprintf("\n%s",$allergens);
+							}
+							
 						}
 						
 						if (in_array($style,$mead)) {
@@ -504,16 +519,33 @@ if (isset($_SESSION['loginUsername'])) {
 							$entry_str_sweet_carb = str_replace("Sparkling", "Spark", $entry_str_sweet_carb);
 							$entry_str_sweet_carb = str_replace("Hydromel", "Hydro", $entry_str_sweet_carb);
 							$entry_str_sweet_carb = str_replace("Petillant", "Petill", $entry_str_sweet_carb);
+							$character_length += strlen($entry_str_sweet_carb);
 							$entry_str_sweet_carb = sprintf("\n%s",$entry_str_sweet_carb);
 
 						}
+
+						if (!empty($row_log['brewInfoOptional'])) {
+							
+							$optional = strip_tags($row_log['brewInfoOptional']);
+							
+							if ((!empty($optional)) && ($character_length < ($total_possible_characters - $character_limit))) {
+								$optional = html_entity_decode($optional);
+								$optional = iconv('UTF-8', 'windows-1252', html_entity_decode($optional));
+								$optional = str_replace("\n"," ",truncate($optional,$character_limit_adjust,""));
+								$character_length += strlen($optional);
+								$optional = sprintf("\n%s",$optional);
+							}
+
+							else $optional = "";
+							
+						}
 						
 						if ($view == "special") {
-							if ((in_array($style,$special_ingredients)) || (in_array($style,$mead))) $text = $entry_info.$special.$entry_str_sweet_carb.$optional;
+							if ((in_array($style,$special_ingredients)) || (in_array($style,$mead))) $text = $entry_info.$special.$entry_str_sweet_carb.$allergens.$optional;
 							else $text = "";
 						}
 						
-						else $text = $entry_info.$special.$entry_str_sweet_carb.$optional;
+						else $text = $entry_info.$special.$entry_str_sweet_carb.$allergens.$optional;
 						$text = (iconv("UTF-8", "ASCII//TRANSLIT//IGNORE", transliterator_transliterate('Any-Latin; Latin-ASCII', $text))); 
 						if (!empty($text)) $pdf->Add_Label($text);
 
