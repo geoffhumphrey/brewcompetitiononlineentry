@@ -1234,7 +1234,7 @@ if ($recently_updated) {
                         </div><!-- ./row -->
                         <div class="row">
                             <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
-                                <strong>Entry Required Info Scoresheet Labels</strong>
+                                <strong>Entry Required Info Scoresheet Labels (Received Entries Only)</strong>
                             </div>
                             <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
                                 <ul class="list-unstyled">

@@ -8,9 +8,6 @@ $count = round((get_entry_count('received')/($_SESSION['jPrefsFlightEntries'])),
 $role_replace1 = array("HJ","LJ","MBOS",", ");
 $role_replace2 = array("<span class=\"text-primary\"><span class=\"fa fa-gavel\"></span> Table Head Judge</span><br>","<span class=\"text-warning\"><span class=\"fa fa-star\"></span> Lead Judge</span><br>","<span class=\"text-success\"><span class=\"fa fa-trophy\"></span> Mini-BOS Judge</span><br>","");
 
-?>
-
-<?php
 if ($view != "sign-in") {
 include (LIB.'admin.lib.php');
 
@@ -101,6 +98,14 @@ if ($filter == "staff") {
         echo "<br><small>".$_SESSION['contestName']."</small>";
 		?>
         </h1>
+        <?php if ($location != "default") {
+
+        	$location_header = explode("^",get_table_info($location,"location","1",$dbTable,"default"));
+			//print_r($location_header);
+			$location_start_date = getTimeZoneDateTime($_SESSION['prefsTimeZone'], $location_header[0], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "long", "date-time");
+        	echo sprintf("<h4>%s: %s</h4>", $location_header[2],$location_start_date);
+
+        	} ?>
     </div>
     <?php if ($filter == "staff") { ?>
 

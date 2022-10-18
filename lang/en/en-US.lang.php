@@ -2018,6 +2018,7 @@ $label_change_security = "Change Security Question/Answer?";
 $label_semi_dry = "Semi-Dry";
 $label_semi_sweet = "Semi-Sweet";
 $label_shipping_location = "Shipping Location";
+$label_allergens = "Allergens";
 
 $volunteers_text_010 = "Staff can indicate their availability for the following non-judging sessions:";
 

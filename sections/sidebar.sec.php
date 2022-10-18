@@ -131,7 +131,7 @@ if ($section != "admin") {
 	if ($show_entries) {
 
 		// Entry Window Dates
-		$header1_200 .= "<div class=\"panel ".$entry_panel_display."\">";
+		$header1_200 .= "<div class=\"hidden-print panel ".$entry_panel_display."\">";
 		$header1_200 .= "<div class=\"panel-heading\">";
 		$header1_200 .= sprintf("<h4 class=\"panel-title\">%s",$label_entry_registration);
 		if (($entry_window_open == 1) && (!$comp_entry_limit) && (!$comp_paid_entry_limit)) $header1_200 .= sprintf(" %s",$label_open);
@@ -170,7 +170,7 @@ if ($section != "admin") {
 			$total_not_paid = total_not_paid_brewer($_SESSION['user_id']);
 
 			// Online Registration Dates
-			$header1_100 .= "<div class=\"panel panel-info\">";
+			$header1_100 .= "<div class=\"hidden-print panel panel-info\">";
 			$header1_100 .= "<div class=\"panel-heading\">";
 			$header1_100 .= sprintf("<h4 class=\"panel-title\">%s<span class=\"fa fa-lg fa-info-circle text-primary pull-right\"></span></h4>",$label_account_summary);
 			$header1_100 .= "</div>";
@@ -257,7 +257,7 @@ if ($section != "admin") {
 
 		// Drop-off Dates and Location
 		if ($_SESSION['prefsDropOff'] == 1) {
-			$header1_300 .= sprintf("<div class=\"panel %s\">",$dropoff_panel_display);
+			$header1_300 .= sprintf("<div class=\"hidden-print panel %s\">",$dropoff_panel_display);
 			$header1_300 .= "<div class=\"panel-heading\">";
 			$header1_300 .= sprintf("<h4 class=\"panel-title\">%s",$label_entry_drop_off);
 			if ($dropoff_window_open == 1) $header1_300 .= sprintf(" %s",$label_open);
@@ -280,7 +280,7 @@ if ($section != "admin") {
 
 		// Shipping Date and Location
 		if (($_SESSION['prefsShipping'] == 1) && (!empty($row_contest_dates['contestShippingOpen']))) {
-			$header1_500 .= "<div class=\"panel ".$shipping_panel_display."\">";
+			$header1_500 .= "<div class=\"hidden-print panel ".$shipping_panel_display."\">";
 			$header1_500 .= "<div class=\"panel-heading\">";
 			$header1_500 .= sprintf("<h4 class=\"panel-title\">%s",$label_entry_shipping);
 			if ($shipping_window_open == 1) $header1_500 .= sprintf(" %s",$label_open);
@@ -301,7 +301,7 @@ if ($section != "admin") {
 	}
 
 	// Judging Location(s)
-	$header1_400 .= "<div class=\"panel panel-info\">";
+	$header1_400 .= "<div class=\"hidden-print panel panel-info\">";
 	$header1_400 .= "<div class=\"panel-heading\">";
 	$header1_400 .= sprintf("<h4 class=\"panel-title\">%s</h4>",$label_judging_loc);
 	$header1_400 .= "</div>";
@@ -372,7 +372,7 @@ if ($section != "admin") {
 		if ($archive_sidebar_count > 0) $archive_sidebar = TRUE;
 
 		if ($archive_sidebar) {
-			$header1_600 .= "<div class=\"panel panel-info\">";
+			$header1_600 .= "<div class=\"hidden-print panel panel-info\">";
 			$header1_600 .= "<div class=\"panel-heading\">";
 			$header1_600 .= sprintf("<h4 class=\"panel-title\">%s</h4>",$label_past_winners);
 			$header1_600 .= "</div>";
@@ -412,8 +412,6 @@ if ($section != "admin") {
 
 	echo $header1_500;
 	echo $page_info500;
-
-	
 
 	if ($_SESSION['prefsUseMods'] == "Y") include (INCLUDES.'mods_sidebar_bottom.inc.php');
 }

@@ -393,7 +393,7 @@ $(document).ready(function(){
             <li id="help-enable"><a class="hide-loader hidden-xs hidden-sm hidden-md" href="#" role="button" data-tooltip="true" data-toggle="modal" data-target="#helpModal"><span class="fa fa-question-circle"></span></a></li>
             <?php } ?>
           	<?php if ($print_icon) { ?>
-          	<li id="print-enable"><a class="hide-loader hidden-xs hidden-sm hidden-md" href="javascript:window.print()" role="button"><span class="fa fa-print"></span></a></li>
+          	<li id="print-enable"><a class="hide-loader hidden-xs hidden-sm hidden-md" href="#" onclick="window.print()" role="button"><span class="fa fa-print"></span></a></li>
             <?php } ?>
           	<?php if ($logged_in) { ?>
             <li id="user-menu-enable" class="dropdown">

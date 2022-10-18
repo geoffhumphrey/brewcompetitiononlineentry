@@ -258,23 +258,66 @@ if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($en
 
                             include (DB.'output_entries_export_extend.db.php');
 
-                            if (isset($row_sql['brewBrewerID'])) $brewer_info = explode("^", brewer_info($row_sql['brewBrewerID']));
-                            if (isset($row_sql['brewBrewerFirstName'])) $brewerFirstName = html_entity_decode($row_sql['brewBrewerFirstName']);
-                            if (isset($row_sql['brewBrewerLastName'])) $brewerLastName = html_entity_decode($row_sql['brewBrewerLastName']);
+                            if (isset($row_sql['brewBrewerID'])) {
+                                $brewer_info = explode("^", brewer_info($row_sql['brewBrewerID']));
+                                $brewer_info = iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', $brewer_info);
+                            }
+
+                            if (isset($row_sql['brewBrewerFirstName'])) {
+                                $brewerFirstName = html_entity_decode($row_sql['brewBrewerFirstName']);
+                                $brewerFirstName = iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', $brewerFirstName);
+                            }
+
+                            if (isset($row_sql['brewBrewerLastName'])) {
+                                $brewerLastName = html_entity_decode($row_sql['brewBrewerLastName']);
+                                $brewerLastName = iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', $brewerLastName);
+                            }
 
                             if ($_SESSION['prefsProEdition'] == 1) {
-                                if (!empty($brewer_info)) $fields0 = array($brewerFirstName,$brewerLastName,$brewer_info[15],$brewer_info[17],$brewer_info[6],$brewer_info[10],$brewer_info[11],$brewer_info[12],$brewer_info[13],$brewer_info[14]);
+                                if (!empty($brewer_info)) $fields0 = array(
+                                    $brewerFirstName,
+                                    $brewerLastName,
+                                    iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', $brewer_info[15]),
+                                    iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', $brewer_info[17]),
+                                    iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', $brewer_info[6]),
+                                    iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', $brewer_info[10]),
+                                    iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', $brewer_info[11]),
+                                    iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', $brewer_info[12]),
+                                    iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', $brewer_info[13]),
+                                    iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', $brewer_info[14])
+                                );
                                 else $fields0 = array($brewerFirstName,$brewerLastName,"","","","","","","","");
                             }
 
                             else {
-                                if ((isset($brewer_info[8])) && ($brewer_info[8] != "&nbsp;")) $brewer_club = $brewer_info[8];
-                                if (!empty($brewer_info)) $fields0 = array($brewerFirstName,$brewerLastName,$brewer_info[6],$brewer_info[10],$brewer_info[11],$brewer_info[12],$brewer_info[13],$brewer_info[14],$brewer_club);
+                                if ((isset($brewer_info[8])) && ($brewer_info[8] != "&nbsp;")) $brewer_club = iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', $brewer_info[8]);
+                                if (!empty($brewer_info)) $fields0 = array(
+                                    $brewerFirstName,
+                                    $brewerLastName,
+                                    iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', $brewer_info[6]),
+                                    iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', $brewer_info[10]),
+                                    iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', $brewer_info[11]),
+                                    iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', $brewer_info[12]),
+                                    iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', $brewer_info[13]),
+                                    iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', $brewer_info[14]),
+                                    iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', $brewer_club)
+                                );
                                 else $fields0 = array($brewerFirstName,$brewerLastName,"","","","","","","");
                             }
 
                             $fields1 = array_values($row_sql);
-                            if (($row_flight) && ($row_scores)) $fields2 = array($table_name,$row_flight['flightNumber'],$row_flight['flightRound'],sprintf("%02s",$row_scores['scoreEntry']),$row_scores['scorePlace'],$bos_place,$style_type_entry,$location[2]);
+                            
+                            if (($row_flight) && ($row_scores)) $fields2 = array(
+                                iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', $table_name),
+                                $row_flight['flightNumber'],
+                                $row_flight['flightRound'],
+                                sprintf("%02s",$row_scores['scoreEntry']),
+                                $row_scores['scorePlace'],
+                                $bos_place,
+                                iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', $style_type_entry),
+                                iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', $location[2])
+                            );
+                            
                             $fields = array_merge($fields0,$fields1,$fields2);
 
                             fputcsv($fp, $fields);
@@ -368,30 +411,30 @@ if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($en
                         if (($action == "hccp") && (($filter != "winners") && ($tb != "winners"))) {
 
                             if ($_SESSION['prefsProEdition'] == 1) $a[] = array(
-                                $brewerFirstName,
-                                $brewerLastName,
-                                html_entity_decode($brewer_info[15]),
-                                html_entity_decode($brewer_info[17]),
+                                iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', $brewerFirstName),
+                                iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', $brewerLastName),
+                                iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', html_entity_decode($brewer_info[15])),
+                                iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', html_entity_decode($brewer_info[17])),
                                 $row_sql['brewCategory'],
                                 $row_sql['brewSubCategory'],
-                                iconv("UTF-8", "ISO-8859-1//TRANSLIT",$row_sql['brewStyle']),
+                                iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE',$row_sql['brewStyle']),
                                 $entryNo,
-                                $brewName,
-                                $brewInfo,
+                                iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', $brewName),
+                                iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', $brewInfo),
                                 $row_sql['brewMead2'],
                                 $row_sql['brewMead1'],
                                 $row_sql['brewMead3']
                             );
                             
                             else $a[] = array(
-                                $brewerFirstName,
-                                $brewerLastName,
+                                iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', $brewerFirstName),
+                                iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', $brewerLastName),
                                 $row_sql['brewCategory'],
                                 $row_sql['brewSubCategory'],
-                                iconv("UTF-8", "ISO-8859-1//TRANSLIT",$row_sql['brewStyle']),
+                                iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', $row_sql['brewStyle']),
                                 $entryNo,
-                                $brewName,
-                                $brewInfo,
+                                iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', $brewName),
+                                iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', $brewInfo),
                                 $row_sql['brewMead2'],
                                 $row_sql['brewMead1'],
                                 $row_sql['brewMead3']
@@ -422,29 +465,29 @@ if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($en
                                 }
 
                                 if ($_SESSION['prefsProEdition'] == 1) $a[] = array(
-                                    $brewerFirstName,
-                                    $brewerLastName,
-                                    html_entity_decode($brewer_info[15]),
-                                    html_entity_decode($brewer_info[17]),
-                                    $brewer_info[6],
-                                    html_entity_decode($brewer_info[10]),
-                                    html_entity_decode($brewer_info[11]),
-                                    html_entity_decode($brewer_info[12]),
-                                    html_entity_decode($brewer_info[13]),
-                                    html_entity_decode($brewer_info[14]),
+                                    iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', $brewerFirstName),
+                                    iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', $brewerLastName),
+                                    iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', html_entity_decode($brewer_info[15])),
+                                    iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', html_entity_decode($brewer_info[17])),
+                                    iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', $brewer_info[6]),
+                                    iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', html_entity_decode($brewer_info[10])),
+                                    iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', html_entity_decode($brewer_info[11])),
+                                    iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', html_entity_decode($brewer_info[12])),
+                                    iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', html_entity_decode($brewer_info[13])),
+                                    iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', html_entity_decode($brewer_info[14])),
                                     $entryNo,
                                     $judgingNo,
                                     $row_sql['brewCategory'],
                                     $row_sql['brewSubCategory'],
-                                    iconv("UTF-8", "ISO-8859-1//TRANSLIT",$row_sql['brewStyle']),
-                                    $brewName,
-                                    $brewInfo,
-                                    $brewSpecifics,
+                                    iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', $row_sql['brewStyle']),
+                                    iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', $brewName),
+                                    iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', $brewInfo),
+                                    iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', $brewSpecifics),
                                     $row_sql['brewMead1'],
                                     $row_sql['brewMead2'],
                                     $row_sql['brewMead3'],
-                                    html_entity_decode($table_name),
-                                    html_entity_decode($location[2]),
+                                    iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', html_entity_decode($table_name)),
+                                    iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', html_entity_decode($location[2])),
                                     $flightNumber,
                                     $flightRound,
                                     $scoreEntry,
@@ -453,28 +496,28 @@ if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($en
                                 );
 
                                 else $a[] = array(
-                                    $brewerFirstName,
-                                    $brewerLastName,
-                                    $brewer_info[6],
-                                    html_entity_decode($brewer_info[10]),
-                                    html_entity_decode($brewer_info[11]),
-                                    html_entity_decode($brewer_info[12]),
-                                    html_entity_decode($brewer_info[13]),
-                                    html_entity_decode($brewer_info[14]),
-                                    $brewer_club,
+                                    iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', $brewerFirstName),
+                                    iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', $brewerLastName),
+                                    iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', $brewer_info[6]),
+                                    iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', html_entity_decode($brewer_info[10])),
+                                    iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', html_entity_decode($brewer_info[11])),
+                                    iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', html_entity_decode($brewer_info[12])),
+                                    iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', html_entity_decode($brewer_info[13])),
+                                    iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', html_entity_decode($brewer_info[14])),
+                                    iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', $brewer_club),
                                     $entryNo,
                                     $judgingNo,
                                     $row_sql['brewCategory'],
                                     $row_sql['brewSubCategory'],
-                                    iconv("UTF-8", "ISO-8859-1//TRANSLIT",$row_sql['brewStyle']),
-                                    $brewName,
-                                    $brewInfo,
-                                    $brewSpecifics,
+                                    iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', $row_sql['brewStyle']),
+                                    iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', $brewName),
+                                    iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', $brewInfo),
+                                    iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', $brewSpecifics),
                                     $row_sql['brewMead1'],
                                     $row_sql['brewMead2'],
                                     $row_sql['brewMead3'],
-                                    html_entity_decode($table_name),
-                                    html_entity_decode($location[2]),
+                                    iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', html_entity_decode($table_name)),
+                                    iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', html_entity_decode($location[2])),
                                     $flightNumber,
                                     $flightRound,
                                     $scoreEntry,
@@ -491,10 +534,10 @@ if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($en
                                          $judgingNo,
                                          $row_sql['brewCategory'],
                                          $row_sql['brewSubCategory'],
-                                         iconv("UTF-8", "ISO-8859-1//TRANSLIT",$row_sql['brewStyle']),
-                                         $brewInfo,
-                                         $brewInfoOptional,
-                                         $brewSpecifics,
+                                         iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', $row_sql['brewStyle']),
+                                         iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', $brewInfo),
+                                         iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', $brewInfoOptional),
+                                         iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', $brewSpecifics),
                                          $row_sql['brewMead1'],
                                          $row_sql['brewMead2'],
                                          $row_sql['brewMead3']
@@ -623,8 +666,8 @@ if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($en
                             $label_bjcp_cider;
                         
                         $a [] = array(
-                            $brewerFirstName,
-                            $brewerLastName,
+                            iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', $brewerFirstName),
+                            iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', $brewerLastName),
                             $brewerEmail,
                             str_replace(",",", ",$row_sql['brewerJudgeRank']),
                             $brewerJudgeMead,
@@ -643,8 +686,8 @@ if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($en
                         if (isset($row_sql['uid'])) $judge_entries = judge_entries($row_sql['uid'],0);
                         if (isset($row_sql['brewerJudgeLocation'])) $judge_avail = judge_steward_availability($row_sql['brewerJudgeLocation'],2,$prefix);
                         $a [] = array(
-                            $brewerFirstName,
-                            $brewerLastName,
+                            iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', $brewerFirstName),
+                            iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', $brewerLastName),
                             $brewerEmail,
                             $judge_avail,
                             $judge_entries
@@ -658,8 +701,8 @@ if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($en
                         if ($row_sql['staff_staff'] == 1) $assignment = $label_yes;
                         if (isset($row_sql['brewerJudgeLocation'])) $judge_avail = judge_steward_availability($row_sql['brewerJudgeLocation'],3,$prefix);
                         $a [] = array(
-                            $brewerFirstName,
-                            $brewerLastName,
+                            iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', $brewerFirstName),
+                            iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', $brewerLastName),
                             $brewerEmail,
                             $judge_avail,
                             $assignment,
@@ -669,32 +712,32 @@ if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($en
 
                     else {
                         if ($_SESSION['prefsProEdition'] == 1) $a [] = array(
-                            $brewerFirstName,
-                            $brewerLastName,
-                            html_entity_decode($row_sql['brewerBreweryName']),
-                            html_entity_decode($row_sql['brewerBreweryTTB']),
+                            iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', $brewerFirstName),
+                            iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', $brewerLastName),
+                            iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', html_entity_decode($row_sql['brewerBreweryName'])),
+                            iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', html_entity_decode($row_sql['brewerBreweryTTB'])),
                             $brewerEmail,
-                            $brewerAddress,
-                            $brewerCity,
-                            html_entity_decode($row_sql['brewerState']),
-                            html_entity_decode($row_sql['brewerZip']),
-                            html_entity_decode($row_sql['brewerCountry']),
+                            iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', $brewerAddress),
+                            iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', $brewerCity),
+                            iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', html_entity_decode($row_sql['brewerState'])),
+                            iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', html_entity_decode($row_sql['brewerZip'])),
+                            iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', html_entity_decode($row_sql['brewerCountry'])),
                             $phone,
-                            html_entity_decode($row_sql['brewerClubs']),
+                            iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', html_entity_decode($row_sql['brewerClubs'])),
                             judge_entries($row_sql['uid'],0)
                         );
                         
                         else $a [] = array(
-                            $brewerFirstName,
-                            $brewerLastName,
+                            iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', $brewerFirstName),
+                            iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', $brewerLastName),
                             $brewerEmail,
-                            $brewerAddress,
-                            $brewerCity,
-                            html_entity_decode($row_sql['brewerState']),
-                            html_entity_decode($row_sql['brewerZip']),
-                            html_entity_decode($row_sql['brewerCountry']),
+                            iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', $brewerAddress),
+                            iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', $brewerCity),
+                            iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', html_entity_decode($row_sql['brewerState'])),
+                            iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', html_entity_decode($row_sql['brewerZip'])),
+                            iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', html_entity_decode($row_sql['brewerCountry'])),
                             $phone,
-                            html_entity_decode($row_sql['brewerClubs']),
+                            iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', html_entity_decode($row_sql['brewerClubs'])),
                             judge_entries($row_sql['uid'],0)
                         );
                     }
@@ -787,18 +830,18 @@ if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($en
                 else $phone = $row_sql['brewerPhone1'];
 
                 if ($_SESSION['prefsProEdition'] == 1) $a[] = array(
-                    $brewerFirstName,
-                    $brewerLastName,
-                    html_entity_decode($row_sql['brewerBreweryName']),
-                    html_entity_decode($row_sql['brewerBreweryTTB']),
-                    $brewerAddress,
-                    $brewerCity,
-                    $brewerState,
+                    iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', $brewerFirstName),
+                    iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', $brewerLastName),
+                    iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', html_entity_decode($row_sql['brewerBreweryName'])),
+                    iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', html_entity_decode($row_sql['brewerBreweryTTB'])),
+                    iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', $brewerAddress),
+                    iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', $brewerCity),
+                    iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', $brewerState),
                     $brewerZip,
-                    $brewerCountry,
+                    iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', $brewerCountry),
                     html_entity_decode($phone),
                     html_entity_decode($row_sql['brewerEmail']),
-                    $brewerClubs,
+                    iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', $brewerClubs),
                     judge_entries($row_sql['uid'],0),
                     $assignment,$row_sql['brewerJudgeID'],
                     str_replace(",",", ",$row_sql['brewerJudgeRank']),
@@ -807,16 +850,16 @@ if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($en
                 );
 
                 else $a[] = array(
-                    $brewerFirstName,
-                    $brewerLastName,
-                    $brewerAddress,
-                    $brewerCity,
-                    $brewerState,
+                    iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', $brewerFirstName),
+                    iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', $brewerLastName),
+                    iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', $brewerAddress),
+                    iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', $brewerCity),
+                    iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', $brewerState),
                     $brewerZip,
-                    $brewerCountry,
+                    iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', $brewerCountry),
                     html_entity_decode($phone),
                     html_entity_decode($row_sql['brewerEmail']),
-                    $brewerClubs,
+                    iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', $brewerClubs),
                     judge_entries($row_sql['uid'],0),
                     $assignment,
                     $row_sql['brewerJudgeID'],

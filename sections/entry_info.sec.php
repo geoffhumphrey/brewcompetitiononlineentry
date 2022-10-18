@@ -87,7 +87,7 @@ $style_info_modals = "";
 $ba_accepted_styles = array();
 $anchor_links_nav = "";
 $anchor_links = array();
-$anchor_top = "<p><a href=\"#top-page\">".$label_top." <span class=\"fa fa-arrow-circle-up\"></span></a></p>";
+$anchor_top = "<p class=\"hidden-print\"><a href=\"#top-page\">".$label_top." <span class=\"fa fa-arrow-circle-up\"></span></a></p>";
 
 // Registration Window
 if (!$logged_in) {

@@ -696,7 +696,7 @@ $(document).ready(function(){
 <?php } ?>
 <p class="lead"><?php echo $_SESSION['contestName'].$title;  ?></p>
 <?php if ($dbTable == "default") { ?>
-<div id="mode-alert" class="hidden-print alert <?php echo $mode_alert_color; ?>"><?php echo $sub_lead_text; ?></div>
+<div id="mode-alert" class="alert <?php echo $mode_alert_color; ?> hidden-print"><?php echo $sub_lead_text; ?></div>
 <?php if ($action == "default") { ?>
 <!-- Planning Mode Button -->
 <div id="tables-planning-mode" class="bcoem-admin-element hidden-print">
@@ -752,7 +752,7 @@ $(document).ready(function(){
         <span class="caret"></span>
         </button>
         <ul class="dropdown-menu">
-            <li class="small"><a class="hide-loader" href="javascript:window.print()">Tables List</a></li>
+            <li class="small"><a href="#" class="hide-loader" onclick="window.print()">Tables List</a></li>
     		<li class="small"><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=pullsheets&amp;go=judging_tables&amp;id=default">Pullsheets by Table</a></li>
             <li class="small"><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=assignments&amp;go=judging_assignments&amp;filter=judges&amp;view=name" title="Print Judge Assignments by Name">Judge Assignments By Last Name</a></li>
 			<li class="small"><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output//print.output.php?section=assignments&amp;go=judging_assignments&amp;filter=judges&amp;view=table" title="Print Judge Assignments by Table">Judge Assignments By Table</a></li>
