@@ -7,14 +7,15 @@ assignees: ''
 
 ---
 
-**Please** check the _[Good to Know](https://github.com/geoffhumphrey/brewcompetitiononlineentry/issues?q=is%3Aissue+label%3A%22good+to+know%21%22)_ list before posting any issue. 
-
 **Verify the Following**
 Reporting About the Latest Version? Yes or No
 *If you are not running the most current version in your environment, please update prior to reporting your bug. Your issue may have already been addressed.*
 
 Searched Issue Reports for Bug? Yes or No
 *Please search open *and* closed issues for issues similar to yours. Your bug may already have a posted solution.*
+
+Reviewed the Good To Know Issue Reports? Yes or No
+*Please review the Issue reports that are labeled Good to Know. Find one and click on the label to view them all.*
 
 **BCOE&M Info**
 Version: 
