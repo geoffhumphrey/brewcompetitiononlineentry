@@ -108,6 +108,8 @@ if ($totalRows_tables > 0) {
     $bos_pull_pro_am_st_judging = "";
     $bos_cup_mat_st_entry = "";
     $bos_cup_mat_st_judging = "";
+    $bos_cup_mat_pro_am_st_entry = "";
+    $bos_cup_mat_pro_am_st_judging = "";
 
     do {
 
@@ -141,6 +143,19 @@ if ($totalRows_tables > 0) {
                 $bos_pull_pro_am_st_judging .= "<li>";
                 $bos_pull_pro_am_st_judging .= sprintf("<a id=\"modal_window_link\" class=\"hide-loader\" href=\"%s\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Print the %s BOS Pullsheet Using Judging Numbers\">%s - %s</a>",$bos_pull_pro_am_judging_link,$row_style_type['styleTypeName'],$row_style_type['styleTypeName'],$pro_am_bos_method);
                 $bos_pull_pro_am_st_judging .= "</li>";
+
+
+                $bos_cup_mat_pro_am_entry_link = $base_url."output/print.output.php?section=bos-mat&amp;action=pro-am&amp;sort=".$i."&amp;filter=entry&amp;view=".$row_style_type['id'];
+                $bos_cup_mat_pro_am_judging_link = $base_url."output/print.output.php?section=bos-mat&amp;action=pro-am&amp;sort=".$i."&amp;view=".$row_style_type['id'];
+
+                $bos_cup_mat_pro_am_st_entry .= "<li>";
+                $bos_cup_mat_pro_am_st_entry .= sprintf("<a id=\"modal_window_link\" class=\"hide-loader\" href=\"%s\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Print the %s BOS Pullsheet Using Entry Numbers\">%s - %s</a>",$bos_cup_mat_pro_am_entry_link,$row_style_type['styleTypeName'],$row_style_type['styleTypeName'],$pro_am_bos_method);
+                $bos_cup_mat_pro_am_st_entry .= "</li>";
+
+                $bos_cup_mat_pro_am_st_judging .= "<li>";
+                $bos_cup_mat_pro_am_st_judging .= sprintf("<a id=\"modal_window_link\" class=\"hide-loader\" href=\"%s\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Print the %s BOS Pullsheet Using Judging Numbers\">%s - %s</a>",$bos_cup_mat_pro_am_judging_link,$row_style_type['styleTypeName'],$row_style_type['styleTypeName'],$pro_am_bos_method);
+                $bos_cup_mat_pro_am_st_judging .= "</li>";
+
             
             }
 
@@ -155,9 +170,30 @@ if ($totalRows_tables > 0) {
             $bos_cup_mat_st_judging .= sprintf("<a id=\"modal_window_link\" class=\"hide-loader\" href=\"%s\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Print the %s BOS Cup Mat Using Judging Numbers\">%s</a>",$bos_mat_judging,$row_style_type['styleTypeName'],$row_style_type['styleTypeName']);
             $bos_cup_mat_st_judging .= "</li>";
 
+            
+
         }
 
     } while ($row_style_type = mysqli_fetch_assoc($style_type));
+
+    $mini_bos_cup_mat_st_entry = "";
+    $mini_bos_cup_mat_st_judging = "";
+
+    do {
+
+        $mini_bos_mat_entry = $base_url."output/print.output.php?section=bos-mat&amp;action=mini-bos&amp;filter=entry&amp;view=".$row_tables['id'];
+        $mini_bos_mat_judging = $base_url."output/print.output.php?section=bos-mat&amp;action=mini-bos&amp;view=".$row_tables['id'];
+
+        $mini_bos_cup_mat_st_entry .= "<li>";
+        $mini_bos_cup_mat_st_entry .= sprintf("<a id=\"modal_window_link\" class=\"hide-loader\" href=\"%s\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Print the %s Mini-BOS Cup Mat Using Entry Numbers\">%s: %s</a>",$mini_bos_mat_entry,$row_tables['tableName'],$row_tables['tableNumber'],$row_tables['tableName']);
+        $mini_bos_cup_mat_st_entry .= "</li>";
+
+        $mini_bos_cup_mat_st_judging .= "<li>";
+        $mini_bos_cup_mat_st_judging .= sprintf("<a id=\"modal_window_link\" class=\"hide-loader\" href=\"%s\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Print the %s BOS Cup Mat Using Judging Numbers\">%s: %s</a>",$mini_bos_mat_judging,$row_tables['tableName'],$row_tables['tableNumber'],$row_tables['tableName']);
+        $mini_bos_cup_mat_st_judging .= "</li>";
+
+
+    } while ($row_tables = mysqli_fetch_assoc($tables));
 
 }
 
@@ -1039,8 +1075,7 @@ if ($recently_updated) {
                             </div>
                             <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
                                 <ul class="list-unstyled">
-                                    <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=pullsheets&amp;go=all_entry_info&amp;view=entry&amp;id=default" data-toggle="tooltip" data-placement="top" title="Print Entries with Addtional Info by Table">Entry Numbers (By Table)</a></li>
-                                    <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=pullsheets&amp;go=all_entry_info&amp;id=default" data-toggle="tooltip" data-placement="top" title="Print Entries with Addtional Info by Table">Judging Numbers (By Table)</a></li>
+                                    <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=pullsheets&amp;go=all_entry_info&amp;view=entry&amp;id=default" data-toggle="tooltip" data-placement="top" title="Print Entries with Addtional Info by Table">All By Table - Entry Numbers</a></li>
                                 </ul>
                                 <div class="dropdown bcoem-admin-dashboard-select">
                                 <button class="btn btn-default dropdown-toggle" type="button" id="additionalInfoMenu0" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Entry Numbers for Table... <span class="caret"></span>
@@ -1049,6 +1084,9 @@ if ($recently_updated) {
                                         <?php echo table_choose("pullsheets","all_entry_info",$action,$filter,"entry","output/print.output.php","thickbox"); ?>
                                     </ul>
                                 </div>
+                                <ul class="list-unstyled">
+                                    <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=pullsheets&amp;go=all_entry_info&amp;id=default" data-toggle="tooltip" data-placement="top" title="Print Entries with Addtional Info by Table">All By Table - Judging Numbers</a></li>
+                                </ul>
                                 <div class="dropdown bcoem-admin-dashboard-select">
                                     <button class="btn btn-default dropdown-toggle" type="button" id="additionalInfoMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Judging Numbers for Table... <span class="caret"></span>
                                     </button>
@@ -1064,57 +1102,37 @@ if ($recently_updated) {
                             </div>
                             <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
                                 <ul class="list-unstyled">
-                                    <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=pullsheets&amp;go=judging_tables&amp;view=entry&amp;id=default" data-toggle="tooltip" data-placement="top" title="Print All Table Pullsheets with Entry Numbers">Entry Numbers</a></li>
-                                    <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=pullsheets&amp;go=mini_bos&amp;view=entry" data-toggle="tooltip" data-placement="top" title="Print a Mini-BOS Table Pullsheet with Judging Numbers">Entry Numbers (Mini-BOS - All)</a></li>
-                                    <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=pullsheets&amp;go=judging_tables&amp;view=entry&amp;filter=mini_bos&amp;id=default" data-toggle="tooltip" data-placement="top" title="Print All Mini-BOS Table Pullsheets with Entry Numbers">Entry Numbers (Mini-BOS - By Table)</a></li>
-                                </ul>
-                                <ul class="list-unstyled">
-                                    <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=pullsheets&amp;go=judging_tables&amp;id=default" data-toggle="tooltip" data-placement="top" title="Print All Table Pullsheets with Judging Numbers">Judging Numbers</a></li>
-                                    <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=pullsheets&amp;go=mini_bos" data-toggle="tooltip" data-placement="top" title="Print a Mini-BOS Table Pullsheet with Judging Numbers">Judging Numbers (Mini-BOS - All)</a></li>
-                                    <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=pullsheets&amp;go=judging_tables&amp;filter=mini_bos&amp;id=default" data-toggle="tooltip" data-placement="top" title="Print All Mini-BOS Table Pullsheets with Judging Numbers">Judging Numbers (Mini-BOS - By Table)</a></li>
+                                    <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=pullsheets&amp;go=judging_tables&amp;view=entry&amp;id=default" data-toggle="tooltip" data-placement="top" title="Print All Table Pullsheets with Entry Numbers">All By Table - Entry Numbers</a></li>
                                 </ul>
                                 <div class="dropdown bcoem-admin-dashboard-select">
                                     <button class="btn btn-default dropdown-toggle" type="button" id="pullsheetMenu3" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Entry Numbers for Table... <span class="caret"></span>
                                     </button>
                                     <ul class="dropdown-menu" aria-labelledby="pullsheetMenu3">
                                         <?php echo table_choose("pullsheets","judging_tables",$action,$filter,"entry","output/print.output.php","thickbox"); ?>
-                                        <li role="separator" class="divider"></li>
-                                        <?php echo table_choose("pullsheets","judging_tables",$action,"mini_bos","entry","output/print.output.php","thickbox"); ?>
-                                    </ul>
-                                </div>
-                                <div class="dropdown bcoem-admin-dashboard-select">
-                                    <button class="btn btn-default dropdown-toggle" type="button" id="pullsheetMenu4" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Judging Numbers for Table... <span class="caret"></span>
-                                    </button>
-                                    <ul class="dropdown-menu" aria-labelledby="pullsheetnMenu4">
-                                        <?php echo table_choose("pullsheets","judging_tables",$action,$filter,$view,"output/print.output.php","thickbox"); ?>
-                                        <li role="separator" class="divider"></li>
-                                        <?php echo table_choose("pullsheets","judging_tables",$action,"mini_bos",$view,"output/print.output.php","thickbox"); ?>
                                     </ul>
                                 </div>
                                 <div class="dropdown bcoem-admin-dashboard-select">
                                     <button class="btn btn-default dropdown-toggle" type="button" id="pullsheetMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Entry Numbers for Session... <span class="caret"></span>
                                     </button>
                                     <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-                                        <?php 
-                                        if (!empty($ps_loc_entry)) echo $ps_loc_entry; 
-                                        if (!empty($ps_loc_entry_mbos)) {
-                                            echo "<li role=\"separator\" class=\"divider\"></li>";
-                                            echo $ps_loc_entry_mbos;
-                                        }
-                                        ?>
+                                        <?php if (!empty($ps_loc_entry)) echo $ps_loc_entry; ?>
+                                    </ul>
+                                </div>
+                                <ul class="list-unstyled">
+                                    <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=pullsheets&amp;go=judging_tables&amp;id=default" data-toggle="tooltip" data-placement="top" title="Print All Table Pullsheets with Judging Numbers">All By Table - Judging Numbers</a></li>
+                                </ul>
+                                <div class="dropdown bcoem-admin-dashboard-select">
+                                    <button class="btn btn-default dropdown-toggle" type="button" id="pullsheetMenu4" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Judging Numbers for Table... <span class="caret"></span>
+                                    </button>
+                                    <ul class="dropdown-menu" aria-labelledby="pullsheetnMenu4">
+                                        <?php echo table_choose("pullsheets","judging_tables",$action,$filter,$view,"output/print.output.php","thickbox"); ?>
                                     </ul>
                                 </div>
                                 <div class="dropdown bcoem-admin-dashboard-select">
                                     <button class="btn btn-default dropdown-toggle" type="button" id="pullsheetMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Judging Numbers for Session...<span class="caret"></span>
                                     </button>
                                     <ul class="dropdown-menu" aria-labelledby="pullsheetMenu2">
-                                        <?php
-                                        if (!empty($ps_loc_judging)) echo $ps_loc_judging;
-                                        if (!empty($ps_loc_judging_mbos)) {
-                                            echo "<li role=\"separator\" class=\"divider\"></li>";
-                                            echo $ps_loc_judging_mbos;
-                                        }
-                                        ?>
+                                        <?php if (!empty($ps_loc_judging)) echo $ps_loc_judging; ?>
                                     </ul>
                                 </div>
                             </div>
@@ -1238,7 +1256,7 @@ if ($recently_updated) {
                             </div>
                             <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
                                 <ul class="list-unstyled">
-                                    <li>Letter (Entry Numbers)
+                                    <li>Letter - Entry Numbers
                                         <div class="dropdown bcoem-admin-dashboard-select">
                                             <button class="btn btn-default dropdown-toggle" type="button" id="reqLablesMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Number of Labels per Entry <span class="caret"></span>
                                             </button>
@@ -1249,7 +1267,7 @@ if ($recently_updated) {
                                             </ul>
                                         </div>
                                     </li>
-                                    <li>Letter (Judging Numbers)
+                                    <li>Letter - Judging Numbers
                                         <div class="dropdown bcoem-admin-dashboard-select">
                                             <button class="btn btn-default dropdown-toggle" type="button" id="reqLablesMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Number of Labels per Entry <span class="caret"></span>
                                             </button>
@@ -1260,7 +1278,7 @@ if ($recently_updated) {
                                             </ul>
                                         </div>
                                     </li>
-                                    <li>A4 (Entry Numbers)
+                                    <li>A4 - Entry Numbers
                                         <div class="dropdown bcoem-admin-dashboard-select">
                                             <button class="btn btn-default dropdown-toggle" type="button" id="reqLablesMenu3reqLablesMenu4" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Number of Labels per Entry <span class="caret"></span>
                                             </button>
@@ -1271,7 +1289,7 @@ if ($recently_updated) {
                                             </ul>
                                         </div>
                                     </li>
-                                    <li>A4 (Judging Numbers)
+                                    <li>A4 - Judging Numbers
                                         <div class="dropdown bcoem-admin-dashboard-select">
                                             <button class="btn btn-default dropdown-toggle" type="button" id="reqLablesMenu4" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Number of Labels per Entry <span class="caret"></span>
                                             </button>
@@ -1295,17 +1313,90 @@ if ($recently_updated) {
                                 </ul>
                             </div>
                         </div><!-- ./row -->
-                        <?php 
-                        if ($totalRows_tables > 0) { 
-
-                            
-
-                        ?>
+                        <?php if ($totalRows_tables > 0) { ?>
                         <div class="row" style="padding: 25px 0px 15px 0px;">
                             <div class="col col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                <hr style="margin-bottom: 10px;">
                                 <strong>During Judging</strong>
                             </div>
                         </div><!-- ./row -->
+
+                        <div class="row">
+                            <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
+                                <strong>Mini-BOS Pullsheets</strong>
+                            </div>
+                            <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
+                                <ul class="list-unstyled">
+                                    <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=pullsheets&amp;go=mini_bos&amp;view=entry" data-toggle="tooltip" data-placement="top" title="Print a Mini-BOS Table Pullsheet with Judging Numbers">All - Entry Numbers</a></li>
+                                    <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=pullsheets&amp;go=judging_tables&amp;view=entry&amp;filter=mini_bos&amp;id=default" data-toggle="tooltip" data-placement="top" title="Print All Mini-BOS Table Pullsheets with Entry Numbers">All By Table - Entry Numbers</a></li>
+                                </ul>
+                                <div class="dropdown bcoem-admin-dashboard-select">
+                                    <button class="btn btn-default dropdown-toggle" type="button" id="pullsheetMenu3" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Entry Numbers for Table... <span class="caret"></span>
+                                    </button>
+                                    <ul class="dropdown-menu" aria-labelledby="pullsheetMenu3">
+                                        <?php echo table_choose("pullsheets","judging_tables",$action,"mini_bos","entry","output/print.output.php","thickbox"); ?>
+                                    </ul>
+                                </div>
+                                <div class="dropdown bcoem-admin-dashboard-select">
+                                    <button class="btn btn-default dropdown-toggle" type="button" id="pullsheetMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Entry Numbers for Session... <span class="caret"></span>
+                                    </button>
+                                    <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                                        <?php if (!empty($ps_loc_entry_mbos)) echo $ps_loc_entry_mbos; ?>
+                                    </ul>
+                                </div>
+                                <ul class="list-unstyled">
+                                    <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=pullsheets&amp;go=mini_bos" data-toggle="tooltip" data-placement="top" title="Print a Mini-BOS Table Pullsheet with Judging Numbers">All - Judging Numbers</a></li>
+                                    <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=pullsheets&amp;go=judging_tables&amp;filter=mini_bos&amp;id=default" data-toggle="tooltip" data-placement="top" title="Print All Mini-BOS Table Pullsheets with Judging Numbers">All By Table - Judging Numbers</a></li>
+                                </ul>
+                                <div class="dropdown bcoem-admin-dashboard-select">
+                                    <button class="btn btn-default dropdown-toggle" type="button" id="pullsheetMenu4" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Judging Numbers for Table... <span class="caret"></span>
+                                    </button>
+                                    <ul class="dropdown-menu" aria-labelledby="pullsheetnMenu4">
+                                        <?php echo table_choose("pullsheets","judging_tables",$action,"mini_bos",$view,"output/print.output.php","thickbox"); ?>
+                                    </ul>
+                                </div>
+                                <div class="dropdown bcoem-admin-dashboard-select">
+                                    <button class="btn btn-default dropdown-toggle" type="button" id="pullsheetMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Judging Numbers for Session...<span class="caret"></span>
+                                    </button>
+                                    <ul class="dropdown-menu" aria-labelledby="pullsheetMenu2">
+                                        <?php if (!empty($ps_loc_judging_mbos)) echo $ps_loc_judging_mbos; ?>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
+                                <strong>Mini-BOS Cup Mats</strong>
+                            </div>
+                            <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
+                                <ul class="list-unstyled">
+                                    <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=bos-mat&amp;action=blank&view=mini-bos" data-toggle="tooltip" data-placement="top" title="Print blank Mini-BOS Cup Mats">Blank</a></li>
+                                </ul>
+                                <ul class="list-unstyled">
+                                    <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=bos-mat&amp;action=mini-bos&amp;filter=entry" data-toggle="tooltip" data-placement="top" title="Print all Mini-BOS Cup Mats with entry numbers only">All Tables - Entry Numbers</a></li>
+                                </ul>
+                                <div class="dropdown bcoem-admin-dashboard-select">
+                                    <button class="btn btn-default dropdown-toggle" type="button" id="bos-pullsheet-menu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Entry Numbers for Table... <span class="caret"></span>
+                                    </button>
+                                    <ul class="dropdown-menu" aria-labelledby="bos-pullsheet-menu">
+                                        <?php echo $mini_bos_cup_mat_st_entry; ?>
+                                    </ul>
+                                </div>
+
+                                <ul class="list-unstyled">
+                                    <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=bos-mat&amp;action=mini-bos" data-toggle="tooltip" data-placement="top" title="Print all Mini-BOS Cup Mats with judging numbers only">All Tables - Judging Numbers</a></li>
+                                </ul>
+                                <div class="dropdown bcoem-admin-dashboard-select">
+                                    <button class="btn btn-default dropdown-toggle" type="button" id="bos-pullsheet-menu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Judging Numbers for Table... <span class="caret"></span>
+                                    </button>
+                                    <ul class="dropdown-menu" aria-labelledby="bos-pullsheet-menu">
+                                        <?php echo $mini_bos_cup_mat_st_judging; ?>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div><!-- ./row -->
+
                         <div class="row">
                             <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
                                 <strong>BOS Pullsheets</strong>
@@ -1313,7 +1404,6 @@ if ($recently_updated) {
                             <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
                                 <ul class="list-unstyled">
                                     <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=pullsheets&amp;go=judging_scores_bos&amp;view=entry" data-toggle="tooltip" data-placement="top" title="Print All BOS Pullsheets Using Entry Numbers">All Style Types - Entry Numbers</a></li>
-                                    <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=pullsheets&amp;go=judging_scores_bos" data-toggle="tooltip" data-placement="top" title="Print All BOS Pullsheets Using Judging Numbers">All Style Types - Judging Numbers</a></li>
                                 </ul>
                                 <div class="dropdown bcoem-admin-dashboard-select">
                                     <button class="btn btn-default dropdown-toggle" type="button" id="bos-pullsheet-menu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Entry Numbers for Style Type... <span class="caret"></span>
@@ -1322,6 +1412,9 @@ if ($recently_updated) {
                                         <?php echo $bos_pull_st_entry; ?>
                                     </ul>
                                 </div>
+                                <ul class="list-unstyled">
+                                    <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=pullsheets&amp;go=judging_scores_bos" data-toggle="tooltip" data-placement="top" title="Print All BOS Pullsheets Using Judging Numbers">All Style Types - Judging Numbers</a></li>
+                                </ul>
                                 <div class="dropdown bcoem-admin-dashboard-select">
                                     <button class="btn btn-default dropdown-toggle" type="button" id="bos-pullsheet-menu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Judging Numbers for Style Type... <span class="caret"></span>
                                     </button>
@@ -1331,9 +1424,41 @@ if ($recently_updated) {
                                 </div>
                             </div>
                         </div><!-- ./row -->
+                        
                         <div class="row">
                             <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
-                                <strong>Pro-Am/Scale-up Pullsheets</strong>
+                                <strong>BOS Cup Mats</strong>
+                            </div>
+                            <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
+                                <ul class="list-unstyled">
+                                    <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=bos-mat&amp;action=blank" data-toggle="tooltip" data-placement="top" title="Print blank BOS Cup Mats">Blank</a></li>
+                                </ul>
+                                <ul class="list-unstyled">
+                                    <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=bos-mat&amp;filter=entry" data-toggle="tooltip" data-placement="top" title="Print all BOS Cup Mats with entry numbers only">All Style Types - Entry Numbers</a></li>
+                                </ul>
+                                <div class="dropdown bcoem-admin-dashboard-select">
+                                    <button class="btn btn-default dropdown-toggle" type="button" id="bos-pullsheet-menu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Entry Numbers for Style Type... <span class="caret"></span>
+                                    </button>
+                                    <ul class="dropdown-menu" aria-labelledby="bos-pullsheet-menu">
+                                        <?php echo $bos_cup_mat_st_entry; ?>
+                                    </ul>
+                                </div>
+                                <ul class="list-unstyled">
+                                    <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=bos-mat" data-toggle="tooltip" data-placement="top" title="Print all BOS Cup Mats with judging numbers only">All Style Types - Judging Numbers</a></li>
+                                </ul>
+                                <div class="dropdown bcoem-admin-dashboard-select">
+                                    <button class="btn btn-default dropdown-toggle" type="button" id="bos-pullsheet-menu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Judging Numbers for Style Type... <span class="caret"></span>
+                                    </button>
+                                    <ul class="dropdown-menu" aria-labelledby="bos-pullsheet-menu">
+                                        <?php echo $bos_cup_mat_st_judging; ?>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div><!-- ./row -->
+
+                        <div class="row">
+                            <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
+                                <strong>Pro-Am/Scale-Up Pullsheets</strong>
                             </div>
                             <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
                                 <div class="dropdown bcoem-admin-dashboard-select">
@@ -1352,34 +1477,36 @@ if ($recently_updated) {
                                 </div>
                             </div>
                         </div>
+
                         <div class="row">
                             <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
-                                <strong>BOS Cup Mats</strong>
+                                <strong>Pro-Am/Scale-Up Cup Mats</strong>
                             </div>
                             <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
                                 <ul class="list-unstyled">
-                                    <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=bos-mat&amp;filter=entry" data-toggle="tooltip" data-placement="top" title="Print all BOS Cup Mats with entry numbers only">All Style Types - Entry Numbers</a></li>
-                                    <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=bos-mat" data-toggle="tooltip" data-placement="top" title="Print all BOS Cup Mats with judging numbers only">All Style Types - Judging Numbers</a></li>
+                                    <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=bos-mat&amp;action=blank&view=pro-am" data-toggle="tooltip" data-placement="top" title="Print blank Pro-Am/Scale-Up Cup Mats">Blank</a></li>
                                 </ul>
                                 <div class="dropdown bcoem-admin-dashboard-select">
                                     <button class="btn btn-default dropdown-toggle" type="button" id="bos-pullsheet-menu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Entry Numbers for Style Type... <span class="caret"></span>
                                     </button>
                                     <ul class="dropdown-menu" aria-labelledby="bos-pullsheet-menu">
-                                        <?php echo $bos_cup_mat_st_entry; ?>
+                                        <?php echo $bos_cup_mat_pro_am_st_entry; ?>
                                     </ul>
                                 </div>
                                 <div class="dropdown bcoem-admin-dashboard-select">
                                     <button class="btn btn-default dropdown-toggle" type="button" id="bos-pullsheet-menu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Judging Numbers for Style Type... <span class="caret"></span>
                                     </button>
                                     <ul class="dropdown-menu" aria-labelledby="bos-pullsheet-menu">
-                                        <?php echo $bos_cup_mat_st_judging; ?>
+                                        <?php echo $bos_cup_mat_pro_am_st_judging; ?>
                                     </ul>
                                 </div>
                             </div>
                         </div><!-- ./row -->
+
                         <?php } ?>
                         <div class="row" style="padding: 25px 0px 15px 0px;">
                             <div class="col col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                <hr style="margin-bottom: 10px;">
                                 <strong>After Judging</strong>
                             </div>
                         </div><!-- ./row -->
