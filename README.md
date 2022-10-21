@@ -1,5 +1,9 @@
 # Brew Competition Online Entry & Management
 
+### Please check the _[Good to Know](https://github.com/geoffhumphrey/brewcompetitiononlineentry/issues?q=is%3Aissue+label%3A%22good+to+know%21%22)_ list before posting any issue. ###
+
+---
+
 Working repository of BCOE&M.
 
 Website: https://www.brewcompetition.com
