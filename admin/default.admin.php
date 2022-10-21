@@ -1991,7 +1991,7 @@ if ($recently_updated) {
                                         <li><a href="#" role="button" data-toggle="modal" data-target="#dashboard-help-modal-bos-results">Enter Scores and BOS Results?</a></li>
                                         <li><a href="#" role="button" data-toggle="modal" data-target="#dashboard-help-modal-winning">Display Winning Entries?</a></li>
                                         <li><a href="#" role="button" data-toggle="modal" data-target="#dashboard-help-modal-pro-am">Display Pro-Am Winner(s)?</a></li>
-                                        <li><a class="hide-loader" href="https://github.com/geoffhumphrey/brewcompetitiononlineentry/issues" target="_blank">Report an Issue?</a></li>
+                                        <li><a class="hide-loader" href="https://github.com/geoffhumphrey/brewcompetitiononlineentry/issues/new/choose" target="_blank">Report an Issue?</a></li>
                                         <!--
                                         <li><a href="#" role="button" data-toggle="modal" data-target="#dashboard-help-modal-winner-rpt">Print a Winner Report</a></li>
                                         <li><a href="#" role="button" data-toggle="modal" data-target="#dashboard-help-modal-bjcp-points">Report BJCP Judging Points</a></li>

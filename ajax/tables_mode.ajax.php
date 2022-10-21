@@ -16,6 +16,7 @@ $input = "";
 $post = 0;
 $error_type = 0;
 $error_count = 0;
+$unassign_flag = 0;
 
 /**
  * Convert all records in the judging_assignments 
@@ -194,6 +195,8 @@ if (($session_active) && ($_SESSION['userLevel'] <= 2)) {
 
 	if ($section == "enable-competition") {
 
+		$_SESSION['judge_unassign_flag'] = 0;
+
 		require(LIB."admin.lib.php");
 
 		$received_entries_arr = array();
@@ -334,6 +337,8 @@ if (($session_active) && ($_SESSION['userLevel'] <= 2)) {
 							$result = $db_conn->delete ($update_table);
 							if (!$result) $error_count += 1;
 
+							$unassign_flag += 1;
+
 						}
 
 					} while($row_table_assignments = mysqli_fetch_assoc($table_assignments));
@@ -377,6 +382,8 @@ if (($session_active) && ($_SESSION['userLevel'] <= 2)) {
 		// If error count is zero, change $status from fail (0) to success (1)
 		if ($error_count == 0) $status = 1;
 		else $error_type = 3; // SQL error
+
+		if ($unassign_flag > 0) $_SESSION['judge_unassign_flag'] = 1;
 
 	}
 

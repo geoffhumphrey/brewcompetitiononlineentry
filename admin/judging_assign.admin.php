@@ -8,41 +8,6 @@
  *
  */
 
-/* ---------------- Rebuild Info ---------------------
-
- * Role functionality commented out
- * Search for Activate for Roles
-
- * Beginning with the 1.3.0 release, an effort was begun to separate the programming
- * layer from the presentation layer for all scripts with this header.
-
- * All Admin pages have certain variables in common that build the page:
-
-  $output_datatables_head = the output for DataTables placed in the <thead> tag
-  $output_datatables_body = the output for DataTables placed in the <tbody> tag
-  $output_datatables_add_link = the link to add a record
-  $output_datatables_edit_link = the link to edit the record
-  $output_datatables_delete_link = the link to delete the record
-  $output_datatables_print_link = the link to print the record or output to print
-  $output_datatables_other_link = misc use link
-  $output_datatables_view_link = the link to view the record's detail
-  $output_datatables_actions = compiles all of the "actions" links (edit, delete, print, view, etc.)
-
-  $output_datatables_head = "";
-  $output_datatables_body = "";
-  $output_datatables_add_link = "";
-  $output_datatables_edit_link = "";
-  $output_datatables_delete_link = "";
-  $output_datatables_print_link = "";
-  $output_datatables_other_link = "";
-  $output_datatables_view_link = "";
-  $output_datatables_actions = "";
-
-   * ADD/EDIT SCREENS VARIABLE
-  $output_add_edit = whether to run/display the add/edit functions - default is FALSE
-
- * ---------------- END Rebuild Info --------------------- */
-
 $queued = $_SESSION['jPrefsQueued'];
 $location = $row_tables_edit['tableLocation'];
 
@@ -72,6 +37,7 @@ $unavailable = "";
 $at_table = "";
 $output_jquery_toggle = "";
 $head_judge_name = "";
+$entry_conflict_count = 0;
 
 // Build DataTables Header
 $output_datatables_head .= "<tr>";
@@ -161,6 +127,24 @@ if ($totalRows_brewer > 0) {
     $judge_roles_display = "";
     $head_judge_role_display = "";
 
+    // Determine if this participant is assigned to this table
+    $query_table_assignments = sprintf("SELECT id,bid FROM %s WHERE assignTable='%s' AND bid='%s'",$prefix."judging_assignments",$row_tables_edit['id'],$row_brewer['uid']);
+    $table_assignments = mysqli_query($connection,$query_table_assignments) or die (mysqli_error($connection));
+    $row_table_assignments = mysqli_fetch_assoc($table_assignments);
+
+    // If so, see if there are any entry conflicts
+    if ($row_table_assignments) $entry_conflict = entry_conflict($row_table_assignments['bid'],$row_tables_edit['tableStyles']);
+
+    // If the participant has an entry conflict, unassign them from the table.
+    // Increase the entry_conflict_count var
+    if ($entry_conflict) {
+      $entry_conflict_count++;
+      $update_table = $prefix."judging_assignments";
+      $db_conn->where ('bid', $row_brewer['uid']);
+      $db_conn->where ('assignTable', $row_tables_edit['id']);
+      $result = $db_conn->delete ($update_table);
+    }
+
     $random = random_generator(6,2);
 
   	for($i=1; $i<$row_flights['flightRound']+1; $i++) {
@@ -248,8 +232,8 @@ if ($totalRows_brewer > 0) {
 
   			$random = random_generator(8,2);
 
-  			$unavailable = unavailable($row_brewer['uid'],$row_tables_edit['tableLocation'],$i,$row_tables_edit['id']);
-  			$flights_display .= $assign_flag;
+  			$unavailable = unavailable($row_brewer['uid'],$row_tables_edit['tableLocation'],$i,$row_tables_edit['id']);  			
+        $flights_display .= $assign_flag;
   			$flights_display .= assign_to_table($row_tables_edit['id'],$row_brewer['uid'],$filter,$total_flights,$i,$location,$row_tables_edit['tableStyles'],$queued,$random,$base_url);
   			$flights_display .= "</td>";
 
@@ -379,9 +363,13 @@ if ($totalRows_brewer > 0) {
 $dashboard_link = build_public_url("evaluation","default","default","default",$sef,$base_url);
 $head_judge_explain = "<p>Choose the Head Judge for this table. <p>The Head Judge, <a class='hide-loader' href='http://www.bjcp.org/judgeprocman.php' target='_blank'>according to the BJCP</a>, is a <em>single judge</em> responsible for reviewing all scores and paperwork for accuracy.</p>";
 if ($_SESSION['prefsEval'] == 1) $head_judge_explain .= "<p>The Head Judge at each table confirms consensus scores and enters the placing entries into the system via their <a href='".$dashboard_link."'>Judging Dashboard</a> after all evaluations at the table have been submitted by judges.</p>";
+
 ?>
 <script>
 $(document).ready(function() {
+  <?php if ($entry_conflict_count > 0) { ?>
+  $('#unassigned-modal').modal('show');
+  <?php } ?>
   <?php if ($_SESSION['jPrefsQueued'] == "Y") { echo $output_jquery_toggle; ?>
   <?php } else { ?>
   $(".assign-flight").change(function() {
@@ -390,6 +378,25 @@ $(document).ready(function() {
   <?php } ?>
 });
 </script>
+
+<!-- Unassigned Judges/Stewards Modal -->
+<div class="modal fade" id="unassigned-modal" tabindex="-1" role="dialog" aria-labelledby="unassigned-modal-label" data-backdrop="static">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 style="margin-bottom:0;" class="modal-title" id="unassigned-modal-label"><?php if ($filter == "judges") echo "Judge(s)"; if ($filter == "stewards") echo "Steward(s)"; ?> Un-Assigned</h4>
+      </div>
+      <div class="modal-body">
+        <p>One or more <?php if ($filter == "judges") echo "judges"; if ($filter == "stewards") echo "stewards"; ?> were un-assigned from this table due to entry style conflicts.</p>
+        <p>Those individuals are now unavailable to assign to this table.</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-success" data-dismiss="modal">I Understand</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
 <div class="bcoem-admin-element hidden-print">
 	<div class="btn-group" role="group" aria-label="modals">
         <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -493,7 +500,6 @@ $(document).ready(function() {
 			    if  (table_round($row_tables_edit['id'],$i)) {
 				?>null,<?php } } ?>
 				]
-			} );
 	 		<?php } ?>
 		});
 </script>

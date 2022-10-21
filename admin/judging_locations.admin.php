@@ -406,15 +406,7 @@ if ((($action == "add") || ($action == "edit")) || ($section == "step5")) {
 // ----------------------------------------- Presentation ------------------------------------------
 
 
-// Display Top Of Page Elements (Subtitle, Primary Page Info, Nav, and Secondary Page Info)
-//echo $subtitle;
-//echo $primary_page_info;
-//if ($section != "step5") echo $goto_nav;
-//echo $secondary_nav;
-//echo $secondary_page_info;
-
 // Display HTML/JS elements and compiled PHP elements
-//if (!empty($output_no_records)) echo $output_no_records;
 ?>
 <?php if (!empty($form_submit_url)) echo $form_submit_url; ?>
 <?php if ($section != "step5") { ?><p class="lead"><?php echo $_SESSION['contestName'].$subtitle; ?></p><?php } ?>
@@ -434,17 +426,18 @@ if ((($action == "add") || ($action == "edit")) || ($section == "step5")) {
     <a class="btn btn-danger" href="<?php echo $base_url.$judge_loc_url_no; ?>"><span class="fa fa-times"></span> No</a>
 </div><!-- ./button group -->
 <?php } // end if (($filter == "default") && ($msg == "9")) ?>
+
 <?php if ($section != "step5") { ?>
 <div class="bcoem-admin-element hidden-print">
 	<!-- Page Navigation Elements -->
-
-
+	
 	<?php if (($action == "add") || ($action == "edit")) { ?>
 	<!-- Postion 1: View All Button -->
 	<div class="btn-group bcoem-admin-element" role="group" aria-label="...">
         <a class="btn btn-default" href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging"><span class="fa fa-arrow-circle-left"></span> All Judging Sessions</a>
     </div><!-- ./button group -->
 	<?php } ?>
+	
 	<?php if (($action == "default") || ($action == "edit")) { ?>
 	<div class="btn-group bcoem-admin-element" role="group" aria-label="...">
         <a class="btn btn-default" href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging&amp;action=add"><span class="fa fa-plus-circle"></span> Add a Judging Session</a>
@@ -462,6 +455,10 @@ if ((($action == "add") || ($action == "edit")) || ($section == "step5")) {
     <!-- All Participants Button -->
 	<div class="btn-group" role="group" aria-label="...">
         <a class="btn btn-default" href="<?php echo $base_url; ?>index.php?section=admin&amp;go=participants"><span class="fa fa-arrow-circle-left"></span> All Participants</a>
+    </div><!-- ./button group -->
+
+    <div class="btn-group" role="group" aria-label="...">
+        <a class="btn btn-default" href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging_tables"><span class="fa fa-arrow-circle-left"></span> All Tables</a>
     </div><!-- ./button group -->
 
 	<!-- View Participants Dropdown -->
@@ -484,7 +481,6 @@ if ((($action == "add") || ($action == "edit")) || ($section == "step5")) {
     <?php } ?>
 
 	<?php if (($section == "admin") && (($action == "update") || ($action == "assign"))) { ?>
-
 	<!-- Assign/Unassign Judges/Stewards Dropdown -->
 	<div class="btn-group" role="group">
 		<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

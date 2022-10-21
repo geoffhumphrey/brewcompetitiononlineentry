@@ -575,6 +575,11 @@ function enable_competition_mode() {
 }
 
 $(document).ready(function(){
+
+    // If judges and/or stewards have been un-assigned, trigger modal.
+    <?php if ((isset($_SESSION['judge_unassign_flag'])) && ($_SESSION['judge_unassign_flag'] == 1)) { ?>
+        $('#unassigned-modal').modal('show');
+    <?php $_SESSION['judge_unassign_flag'] = 0; } ?>
     
     <?php if ($_SESSION['jPrefsTablePlanning'] == 0) { ?>
 
@@ -639,13 +644,14 @@ $(document).ready(function(){
                 <h4 class="modal-title">Please Confirm</h4>
             </div>
             <div class="modal-body">
-                <p>Are you sure you want to switch to Tables Competition Mode? This should only be done after all entries have been sorted and those present are marked as received in the system.</p>
+                <p>Are you sure you want to switch to Tables Competition Mode? This should only be done after <strong>all</strong> entries have been sorted and those present are <strong>marked as received in the system</strong>.</p>
                 <p>Before you do, take note that in Tables Competition Mode:</p>
                 <ul>
                     <li>Table entry counts will only reflect entries marked as received.</li>
                     <li>Non-received entries' flight designations will be reset to 1 (default) should any be marked as received after switching to Competition Mode. Flight positions and associated rounds should be reviewed prior to judging.</li>
                     <li>If there are no entries marked as received for a particular sub-style, the sub-style will be removed from the table's styles list.</li>
                     <li>If there are no entries marked as received for all sub-styles defined for a table, that table will be deleted.</li>
+                    <li>Judges and stewards that now have entries at a table where they are assigned will be un-assigned from that table as a failsafe.</li>
                 </ul>
             </div>
             <div class="modal-footer">
@@ -692,6 +698,24 @@ $(document).ready(function(){
         </div>
     </div>
 </div>
+
+<!-- Unassigned Judges/Stewards Modal -->
+<div class="modal fade" id="unassigned-modal" tabindex="-1" role="dialog" aria-labelledby="unassigned-modal-label" data-backdrop="static">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 style="margin-bottom:0;" class="modal-title" id="unassigned-modal-label">Caution! Judges and/or Stewards Were Un-Assigned</h4>
+      </div>
+      <div class="modal-body">
+        <p>Upon switching to Tables Competition Mode, one or more judges/stewards were un-assigned from tables due to entry style conflicts. This can happen if the participant added or edited an entry's style that is designated at a table where they are assigned as a judge or steward.</p>
+        <p>Review the list below for any changes in judge or steward counts and make adjustments accordingly.</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-success" data-dismiss="modal">I Understand</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
 
 <?php } ?>
 <p class="lead"><?php echo $_SESSION['contestName'].$title;  ?></p>
