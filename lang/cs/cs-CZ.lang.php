@@ -2,7 +2,7 @@
 /**
  * Module:      cs-CZ.lang.php
  * Description: This module houses all display text in the Czech language.
- * Updated:     December 17, 2021
+ * Updated:     November 21, 2022
  *  
  * To translate this file, first make a copy of it and rename it with the 
  * language name in the title.
@@ -1883,6 +1883,15 @@ $label_semi_dry = "Polosuché";
 $label_semi_sweet = "Polosladké";
 $label_shipping_location = "Místo Odeslání";
 $volunteers_text_010 = "Zaměstnanci mohou oznámit svou dostupnost pro následující zasedání, která nejsou určena pro rozhodčí:";
+
+$evaluation_info_081 = "Komentář k medovému projevu, alkoholu, esterům, komplexnosti a dalším aromatickým látkám.";
+$evaluation_info_082 = "Komentář k barvě, čirosti, nohám a sycení oxidem uhličitým.";
+$evaluation_info_083 = "Komentář k medu, sladkosti, kyselosti, tříslovinám, alkoholu, vyváženosti, tělu, sycení, dochuti a případným zvláštním přísadám nebo chutím specifickým pro daný styl.";
+$evaluation_info_084 = "Okomentujte celkový požitek z pití spojený se vstupem, uveďte návrhy na zlepšení.";
+$evaluation_info_085 = "Barva (2), čirost (2), stupeň sycení (2).";
+$evaluation_info_086 = "Vyjádření dalších složek podle potřeby.";
+$evaluation_info_087 = "Vyváženost kyselosti, sladkosti, obsahu alkoholu, těla, sycení oxidem uhličitým (je-li to vhodné) (14), Další složky podle potřeby (5), Dochuť (5).";
+$evaluation_info_088 = "Comment on overall drinking pleasure associated with entry, give suggestions for improvement.";
 
 /**
  * ----------------------------------------------------------------------------------

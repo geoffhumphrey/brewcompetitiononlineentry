@@ -2022,6 +2022,16 @@ $label_allergens = "Allergens";
 
 $volunteers_text_010 = "Staff can indicate their availability for the following non-judging sessions:";
 
+$evaluation_info_081 = "Comment on honey expression, alcohol, esters, complexity, and other aromatics.";
+$evaluation_info_082 = "Comment on color, clarity, legs, and carbonation.";
+$evaluation_info_083 = "Comment on honey, sweetness, acidity, tannin, alcohol, balance, body, carbonation, aftertaste, and any special ingredients or style-specific flavors.";
+$evaluation_info_084 = "Comment on overall drinking pleasure associated with entry, give suggestions for improvement.";
+$evaluation_info_085 = "Color (2), clarity (2), carbonation level (2).";
+$evaluation_info_086 = "Expression of other ingredients as appropriate.";
+$evaluation_info_087 = "Balance of acidity, sweetness, alcohol strength, body, carbonation (if appropriate) (14),
+Other ingredients as appropriate (5), Aftertaste (5).";
+$evaluation_info_088 = "Comment on overall drinking pleasure associated with entry, give suggestions for improvement.";
+
 /**
  * ----------------------------------------------------------------------------------
  * END TRANSLATIONS

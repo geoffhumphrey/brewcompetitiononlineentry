@@ -2,7 +2,7 @@
 /**
  * Module:      pt-BR.lang.php
  * Description: This module houses all display text in the Portuguese language.
- * Updated:     September 1, 2021
+ * Updated:     November 21, 2022
  *  
  * To translate this file, first make a copy of it and rename it with the 
  * language name in the title.
@@ -1887,6 +1887,15 @@ $label_semi_dry = "Semi-Seco";
 $label_semi_sweet = "Semi-Doce";
 $label_shipping_location = "Localização da Expedição";
 $volunteers_text_010 = "O pessoal pode indicar sua disponibilidade para as seguintes sessões sem juízos de valor:";
+
+$evaluation_info_081 = "Comentário sobre a expressão do mel, álcool, ésteres, complexidade e outros aromáticos.";
+$evaluation_info_082 = "Comentário sobre cor, clareza, pernas e carbonatação.";
+$evaluation_info_083 = "Comentário sobre mel, doçura, acidez, tanino, álcool, equilíbrio, corpo, carbonatação, gosto residual e quaisquer ingredientes especiais ou sabores específicos de estilo.";
+$evaluation_info_084 = "Comente sobre o prazer geral de beber associado à entrada, dê sugestões para melhorias.";
+$evaluation_info_085 = "Cor (2), clareza (2), nível de carbonatação (2).";
+$evaluation_info_086 = "Expressão de outros ingredientes, conforme apropriado.";
+$evaluation_info_087 = "Equilíbrio de acidez, doçura, graduação alcoólica, corpo, carbonatação (se apropriado) (14), Outros ingredientes, se apropriado (5), Gosto residual (5).";
+$evaluation_info_088 = "Okomentujte celkový požitek z pití spojený se vstupem, uveďte návrhy na zlepšení.";
 
 /**
  * ----------------------------------------------------------------------------------
