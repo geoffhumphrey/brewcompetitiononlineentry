@@ -519,7 +519,7 @@ if ($totalRows_table_assignments > 0) {
 
 				if ($assigned_judges > 0) {
 
-					$query_assigned_judge_names = sprintf("SELECT a.brewerFirstName,a.brewerLastName FROM %s a, %s b WHERE b.assignTable='%s' AND a.uid = b.bid ORDER BY a.brewerLastName, a.brewerFirstName ASC",$prefix."brewer",$prefix."judging_assignments",$tbl_id);
+					$query_assigned_judge_names = sprintf("SELECT a.brewerFirstName,a.brewerLastName, b.assignment FROM %s a, %s b WHERE b.assignTable='%s' AND a.uid = b.bid AND b.assignment='J' ORDER BY a.brewerLastName, a.brewerFirstName ASC",$prefix."brewer",$prefix."judging_assignments",$tbl_id);
 					$assigned_judge_names = mysqli_query($connection,$query_assigned_judge_names);
 					$row_assigned_judge_names = mysqli_fetch_assoc($assigned_judge_names);
 					
@@ -794,8 +794,8 @@ if ($totalRows_table_assignments > 0) {
 
 		$total_evals_alert .= "<div class=\"alert alert-teal\">";
 
-		$two_to_end_prefs = ($row_judging_prefs['jPrefsJudgingClosed']-172800);
-		if ($totalRows_session_end > 0) $two_to_end_sess = ($row_session_end['judgingDateEnd']-172800);
+		$two_to_end_prefs = ($row_judging_prefs['jPrefsJudgingClosed'] - 172800);
+		if ((!empty($row_session_end['judgingDateEnd'])) && (is_numeric($row_session_end['judgingDateEnd'])) && ($totalRows_session_end > 0)) $two_to_end_sess = ($row_session_end['judgingDateEnd'] - 172800);	
 		else $two_to_end_sess = $two_to_end_prefs;
 
 		if ($two_to_end_sess > $two_to_end_prefs) {

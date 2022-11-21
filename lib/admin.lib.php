@@ -284,6 +284,21 @@ function table_choose($section,$go,$action,$filter,$view,$script_name,$method) {
 		if ($totalRows_flights > 0) $table_choose = $totalRows_flights."^".$row_flights['flightTable'];
 	}
 
+	
+	elseif ($method == "form_select") {
+
+		$query_tables = sprintf("SELECT * FROM %s ORDER BY tableNumber ASC", $prefix."judging_tables");
+		$tables = mysqli_query($connection,$query_tables) or die (mysqli_error($connection));
+		$row_tables = mysqli_fetch_assoc($tables);
+		$totalRows_tables = mysqli_num_rows($tables);
+
+		do {
+			$table_choose .= '<option value="'.$row_tables['id'].'">'.$row_tables['tableNumber'].': '.$row_tables['tableName'].'</option>';
+		} while ($row_tables = mysqli_fetch_assoc($tables));
+
+	}
+	
+
 	else {
 		if ($method == "thickbox") $class = 'class="hide-loader menuItem" id="modal_window_link"';
 		if ($method == "none") $class = 'class="menuItem"';

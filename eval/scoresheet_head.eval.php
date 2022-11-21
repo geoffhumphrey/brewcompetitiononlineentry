@@ -102,7 +102,11 @@ if (($head_ordinal) || ($head_miniBOS)) $head_rt_col = "col-xs-6";
             <strong><?php echo $label_bjcp_rank; ?>:</strong>
             </div>
             <div class="col col-lg-10 col-md-9 col-sm-8 col-xs-8">
-            <?php echo str_replace(",", ", ", $row_judge['brewerJudgeRank']); ?>
+            <?php 
+            echo str_replace(",", ", ", $row_judge['brewerJudgeRank']);
+            if ($row_judge['brewerJudgeMead'] == "Y") echo "<br>Certified Mead Judge";
+            if ($row_judge['brewerJudgeCider'] == "Y") echo "<br>Certified Cider Judge";
+            ?>
             </div>
         </div><!-- /row for judge rank -->
         <div class="row">

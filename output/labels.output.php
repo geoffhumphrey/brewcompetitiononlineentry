@@ -193,8 +193,13 @@ if (isset($_SESSION['loginUsername'])) {
 					$styles = str_replace('&nbsp;', ' ', display_array_content($style_arr, 0));
 					$styles = rtrim($styles,", ");
 
+					$tableName = htmlspecialchars_decode($row_tables['tableName']);
+					$tableName = truncate($tableName, 30);
+
 					$loc_arr = explode("^", get_table_info($row_tables['tableLocation'], "location", $row_tables['id'], $dbTable, "default"));
 					$location = $loc_arr[2];
+					$location = htmlspecialchars_decode($location);
+					$location = truncate($location, 30);
 
 					for ($i = 1; $i <= $sort; $i++) {
 						
@@ -207,16 +212,12 @@ if (isset($_SESSION['loginUsername'])) {
 
 						else $fill = false;
 						
-						$pdf->Cell(18, 18, $row_tables["tableNumber"], 0, 0, "C", $fill);
+						$pdf->Cell(18, 18, $row_tables['tableNumber'], 0, 0, "C", $fill);
 						
-						$tableName = htmlspecialchars_decode($row_tables["tableName"]);
 						$pdf->SetFont('Arial', 'B', 10);		
-						if ($pdf->GetStringWidth($tableName) > 48) {
-							$tableName = substr($tableName, 0, (50 - ($pdf->GetStringWidth($tableName) / 2)));
-						}
 						$pdf->Cell(48, 5, $tableName, 0, 2, 'L');
 
-						$pdf->SetFont('Arial', '', 9);
+						$pdf->SetFont('Arial', '', 9);						
 						$pdf->Cell(48, 5, $location, 0, 2);
 						$pdf->MultiCell(48, 5, $styles, 0, 'L');
 						$pdf->Next_Label();
@@ -292,24 +293,29 @@ if (isset($_SESSION['loginUsername'])) {
 
 				$pdf->AddPage();
 				$pdf->SetFont('Arial', '', 9);
-				$lastStyle = '';
+				$lastStyle = "";
 
 				do {
 					
-					if ($lastStyle != '') {
+					if ($lastStyle != "") {
+						
 						if ($lastStyle == $row_log['brewCategory']) {
+							
 							$pdf->SetLineWidth(0.1);
 							$pdf->SetDash(1, 1);
-							// GetTopMargin function is not defined
-							// $pdf->Line(0, $pdf->GetY() + $pdf->GetTopMargin(), 200, $pdf->GetY() + $pdf->GetTopMargin());
-							$pdf->Line(0, $pdf->GetY() + 5, 200, $pdf->GetY() + 5);
+							if ($tb == "default") $pdf->Line(0, $pdf->GetY() + 5, 200, $pdf->GetY() + 5);
+							if ($tb == "short") $pdf->Line(0, $pdf->GetY() + 2.5, 200, $pdf->GetY() + 2.5);
+								
 						} else {
+							
 							$pdf->SetLineWidth(1);
-							$pdf->Line(0, $pdf->GetY() + 5, 200, $pdf->GetY() + 5);
+							if ($tb == "default") $pdf->Line(0, $pdf->GetY() + 5, 200, $pdf->GetY() + 5);
+							if ($tb == "short") $pdf->Line(0, $pdf->GetY() + 2.5, 200, $pdf->GetY() + 2.5);
+
 						}
+					
 					}
 					
-
 					$lastStyle = $row_log['brewCategory'];
 					
 					$judging_number = readable_judging_number($row_log['brewCategory'], $row_log['brewJudgingNumber']);
@@ -318,7 +324,8 @@ if (isset($_SESSION['loginUsername'])) {
 					$style_name = truncate($row_log['brewStyle'], 22);
 					$brewer_name = truncate($row_log['brewBrewerFirstName']." ".$row_log['brewBrewerLastName'],30);
 					
-					$bottles = ['#1', '#2', '#3'];
+					if ($tb == "default") $bottles = ['#1', '#2', '#3'];
+					if ($tb == "short") $bottles = ['#1', '#2', 'BOS'];
 
 					$pdf->SetFont('Arial', '', 9);
 					foreach ($bottles as $b) {
@@ -329,28 +336,42 @@ if (isset($_SESSION['loginUsername'])) {
 					
 					reset($bottles);
 
-					$bottles = ['#4', '#5', 'BOS'];
+					if ($tb == "default") {
 
-					// Print Entrant info
-					$pdf->SetFont('Arial', '', 9);
-					$text = sprintf("\n%s %s\n%s", $style, $style_name, $brewer_name);
-					$text = iconv('UTF-8', 'windows-1252', $text);
-					$pdf->Add_Label($text);
+						$bottles = ['#4', '#5', 'BOS'];
 
-					$pdf->SetFont('Arial', '', 9);
-					foreach ($bottles as $b) {
-						$text = sprintf("\n              %s  %s\n                     %s", $style, $judging_number, $b);
+						// Print Entrant info
+						$pdf->SetFont('Arial', '', 9);
+						$text = sprintf("\n  %s %s\n  %s", $style, $style_name, $brewer_name);
 						$text = iconv('UTF-8', 'windows-1252', $text);
 						$pdf->Add_Label($text);
+
+						$pdf->SetFont('Arial', '', 9);
+						foreach ($bottles as $b) {
+							$text = sprintf("\n              %s  %s\n                     %s", $style, $judging_number, $b);
+							$text = iconv('UTF-8', 'windows-1252', $text);
+							$pdf->Add_Label($text);
+						}
+
+						reset($bottles);
+
+						$pdf->SetFont('Arial', '', 13);
+						if ($entry_number == $judging_number) $text = sprintf("\n  %s", $entry_number);
+						else $text = sprintf("\n  %s | %s", $entry_number, $judging_number);
+						$text = iconv('UTF-8', 'windows-1252', $text);
+						$pdf->Add_Label($text);
+
 					}
 
-					reset($bottles);
+					if ($tb == "short") {
 
-					$pdf->SetFont('Arial', '', 13);
-					if ($entry_number == $judging_number) $text = sprintf("\n%s", $entry_number);
-					else $text = sprintf("\n%s | %s", $entry_number, $judging_number);
-					$text = iconv('UTF-8', 'windows-1252', $text);
-					$pdf->Add_Label($text);
+						$pdf->SetFont('Arial', '', 9);
+						if ($entry_number == $judging_number) $text = sprintf("\n  %s - %s \n  %s", $style, $entry_number, $brewer_name);
+						else $text = sprintf("\n  %s - %s | %s\n  %s", $style, $entry_number, $judging_number, $brewer_name);
+						$text = iconv('UTF-8', 'windows-1252', $text);
+						$pdf->Add_Label($text);
+
+					}
 
 				} while ($row_log = mysqli_fetch_assoc($log));
 				
@@ -361,6 +382,8 @@ if (isset($_SESSION['loginUsername'])) {
 			}
 
 			else {
+
+				$labels_by_table = FALSE;
 
 				// Begin PDF generation 
 				if ($psort == "3422") $pdf = new PDF_Label('3422');
@@ -395,24 +418,44 @@ if (isset($_SESSION['loginUsername'])) {
 					);
 				
 				$pdf->SetFont('Courier','',8);
+
+				// If getting labels for a defined table
+				if ($location != "default") {
+					
+					$entries_at_table = array();
+					$table_info = explode("^",get_table_info(1,"basic",$location,"default","default"));
+
+					// First, get all of the entry ids for the table in the judging_flights db
+					$query_table_entries = sprintf("SELECT * FROM %s WHERE flightTable='%s'", $prefix."judging_flights",$location);
+					$row_table_entries = mysqli_query($connection,$query_table_entries) or die (mysqli_error($connection));
+					$table_entries = mysqli_fetch_assoc($row_table_entries);
+
+					do {
+
+						$entries_at_table[] = $table_entries['flightEntryID'];
+
+					} while($table_entries = mysqli_fetch_assoc($row_table_entries));
+
+					if (!empty($entries_at_table)) $labels_by_table = TRUE;
+				
+				}				
 				
 				// Assemble the file name
 				$filename = str_replace(" ","_",$_SESSION['contestName'])."_Bottle_Labels_";
 				if ($action == "bottle-entry") $filename .= "Entry_Numbers";
 				else $filename .= "Judging_Numbers";
 				if ($filter != "default") $filename .= "_Category_".$filter;
-				$filename .= "_Req_Info_Mead-Cider";
+				$filename .= "_Req_Info";
 				if ($psort == "3422") $filename .= "_Avery3422";
 				else $filename .= "_Avery5160";
+				if ($location != "default") $filename .= "_Table_".$table_info[0];
 				$filename .= ".pdf";
-
-				
 				
 				// Print labels
 				do {
 
 					$character_length = 0;
-					
+
 					for($i=0; $i<$sort; $i++) {
 						
 						$text = "";
@@ -426,6 +469,7 @@ if (isset($_SESSION['loginUsername'])) {
 						$beer_strength = "";
 						$beer_sweeteness = "";
 						$beer_carbonation = "";
+						$allergens = "";
 						
 						if ($action == "bottle-entry") $entry_no = sprintf("%06s",$row_log['id']);
 						else $entry_no = sprintf("%06s",strtoupper($row_log['brewJudgingNumber']));
@@ -455,38 +499,44 @@ if (isset($_SESSION['loginUsername'])) {
 						$character_length += strlen($entry_info);
 
 						if (in_array($style,$special_ingredients)) {
-
-							$character_limit_adjust = $character_limit * 2; // Allow for 2 lines
+							
 							$special = strip_tags($row_log['brewInfo']);
 							$special = iconv('UTF-8', 'windows-1252', html_entity_decode($special));
-							$sp_str_sweet_carb = mb_strtolower($row_log['brewInfo']);
-							if (strpos($sp_str_sweet_carb,"session strength") !== false) $beer_strength .= "*Session* ";
-							if (strpos($sp_str_sweet_carb,"standard strength") !== false) $beer_strength .= "*Standard* ";
-							if (strpos($sp_str_sweet_carb,"double strength") !== false) $beer_strength .= "*Double* ";
-							if (strpos($sp_str_sweet_carb,"table strength") !== false) $beer_strength .= "*Table* ";
-							if (strpos($sp_str_sweet_carb,"super strength") !== false) $beer_strength .= "*Super* ";
-							if (strpos($sp_str_sweet_carb,"low/none sweetness") !== false) $beer_sweeteness .= "*Low/No Sweet* ";
-							if (strpos($sp_str_sweet_carb,"medium sweetness") !== false) $beer_sweeteness .= "*Med Sweet* ";
-							if (strpos($sp_str_sweet_carb,"high sweetness") !== false) $beer_sweeteness .= "*High Sweet* ";
-							if (strpos($sp_str_sweet_carb,"low carbonation") !== false) $beer_carbonation .= "*Low Carb* ";
-							if (strpos($sp_str_sweet_carb,"medium carbonation") !== false) $beer_carbonation .= "*Med Carb* ";
-							if (strpos($sp_str_sweet_carb,"high carbonation") !== false) $beer_carbonation .= "*High Carb* ";
-							
-							if ((!empty($beer_strength)) || (!empty($beer_sweeteness)) || (!empty($beer_carbonation))) {
-								$character_limit_adjust = $character_limit_adjust - 12;
-								if (!in_array($style,$mead)) $special = strtr($special,$special_strength);
-							}
-
-							$special = str_replace("\n"," ",truncate($special,$character_limit_adjust));
 							$special = html_entity_decode($special);
 							$special = str_replace("^", "", $special);
+							$special = str_replace("\n", "", $special);
 							$special = trim($special);
-							$entry_str_sweet_carb .= $beer_carbonation.$beer_sweeteness.$beer_strength;
+							
 							if (!empty($special)) {
 								$character_length += strlen($special);
 								$special = sprintf("\n%s", $special);
-								
 							}
+							
+							if (!in_array($style,$mead)) {
+
+								$sp_str_sweet_carb = mb_strtolower($row_log['brewInfo']);
+
+								if (strpos($sp_str_sweet_carb,"session strength") !== false) $beer_strength .= "*Session* ";
+								if (strpos($sp_str_sweet_carb,"standard strength") !== false) $beer_strength .= "*Standard* ";
+								if (strpos($sp_str_sweet_carb,"double strength") !== false) $beer_strength .= "*Double* ";
+								if (strpos($sp_str_sweet_carb,"table strength") !== false) $beer_strength .= "*Table* ";
+								if (strpos($sp_str_sweet_carb,"super strength") !== false) $beer_strength .= "*Super* ";
+								if (strpos($sp_str_sweet_carb,"low/none sweetness") !== false) $beer_sweeteness .= "*Low/No Sweet* ";
+								if (strpos($sp_str_sweet_carb,"medium sweetness") !== false) $beer_sweeteness .= "*Med Sweet* ";
+								if (strpos($sp_str_sweet_carb,"high sweetness") !== false) $beer_sweeteness .= "*High Sweet* ";
+								if (strpos($sp_str_sweet_carb,"low carbonation") !== false) $beer_carbonation .= "*Low Carb* ";
+								if (strpos($sp_str_sweet_carb,"medium carbonation") !== false) $beer_carbonation .= "*Med Carb* ";
+								if (strpos($sp_str_sweet_carb,"high carbonation") !== false) $beer_carbonation .= "*High Carb* ";
+								
+								if ((!empty($beer_strength)) || (!empty($beer_sweeteness)) || (!empty($beer_carbonation))) {
+									$character_limit_adjust_special = $character_limit_adjust_special - 12;
+									if (!in_array($style,$mead)) $special = strtr($special,$special_strength);
+								}
+
+								$entry_str_sweet_carb .= $beer_carbonation.$beer_sweeteness.$beer_strength;
+
+							}
+						
 						}
 
 						if ((!empty($row_log['brewPossAllergens'])) && ($character_length < $total_possible_characters)) {
@@ -495,8 +545,9 @@ if (isset($_SESSION['loginUsername'])) {
 							$allergens = strip_tags($row_log['brewPossAllergens']);
 							$allergens = iconv('UTF-8', 'windows-1252', html_entity_decode($allergens));
 							$allergens = sprintf("%s: %s",$label_allergens,$allergens);
-							$allergens = str_replace("\n"," ",truncate($allergens,$character_limit_adjust,""));
+							$allergens = str_replace("\n"," ",$allergens);
 							$allergens = html_entity_decode($allergens);
+							
 							if (!empty($allergens)) {
 								$character_length += strlen($allergens);
 								$allergens = sprintf("\n%s",$allergens);
@@ -510,43 +561,64 @@ if (isset($_SESSION['loginUsername'])) {
 							if (!empty($row_log['brewMead2'])) $entry_str_sweet_carb .= sprintf("*%s* ",$row_log['brewMead2']);
 							if (!empty($row_log['brewMead3'])) $entry_str_sweet_carb .= sprintf("*%s* ",$row_log['brewMead3']);
 
-						}
-						
-						if (!empty($entry_str_sweet_carb)) {
-
 							$entry_str_sweet_carb = str_replace("Medium Sweet", "Med Sweet", $entry_str_sweet_carb);
 							$entry_str_sweet_carb = str_replace("Medium Dry", "Med Dry", $entry_str_sweet_carb);
 							$entry_str_sweet_carb = str_replace("Sparkling", "Spark", $entry_str_sweet_carb);
 							$entry_str_sweet_carb = str_replace("Hydromel", "Hydro", $entry_str_sweet_carb);
 							$entry_str_sweet_carb = str_replace("Petillant", "Petill", $entry_str_sweet_carb);
+
+						}
+						
+						if (!empty($entry_str_sweet_carb)) {
+
 							$character_length += strlen($entry_str_sweet_carb);
 							$entry_str_sweet_carb = sprintf("\n%s",$entry_str_sweet_carb);
 
 						}
 
 						if (!empty($row_log['brewInfoOptional'])) {
-							
-							$optional = strip_tags($row_log['brewInfoOptional']);
-							
-							if ((!empty($optional)) && ($character_length < ($total_possible_characters - $character_limit))) {
-								$optional = html_entity_decode($optional);
+
+							// Only show Optional if total possible characters minus one line has not been reached				
+							if (($character_length < ($total_possible_characters - $character_limit))) {
+								$optional = html_entity_decode($row_log['brewInfoOptional']);
 								$optional = iconv('UTF-8', 'windows-1252', html_entity_decode($optional));
-								$optional = str_replace("\n"," ",truncate($optional,$character_limit_adjust,""));
+								$optional = str_replace("\n"," ",truncate($optional,$character_limit,""));
 								$character_length += strlen($optional);
 								$optional = sprintf("\n%s",$optional);
 							}
+							
+						}
 
-							else $optional = "";
+						// Limit Special and Optional lines if allergens and/or mead/cider info are present
+						if ((!empty($allergens)) && (empty($entry_str_sweet_carb))) {
+							if (!empty($special)) $special = truncate($special,$character_limit*4,"");
+							if (!empty($optional)) $optional = truncate($optional,$character_limit,"");
+						}
+
+						elseif ((empty($allergens)) && (!empty($entry_str_sweet_carb))) { 
+							if (!empty($special)) $special = truncate($special,$character_limit*4,"");
+							if (!empty($optional)) $optional = truncate($optional,$character_limit,"");
+						}
+
+						elseif ((!empty($allergens)) && (!empty($entry_str_sweet_carb))) {
+							if (!empty($special)) $special = truncate($special,$character_limit*3,"");
+							if (!empty($optional)) $optional = truncate($optional,$character_limit,"");
+						}
+
+						if ($view == "special") {
+
+							if (($location != "default") && ((in_array($style,$special_ingredients)) || (in_array($style,$mead))) && (in_array($row_log['id'],$entries_at_table))) $text = $entry_info.$special.$entry_str_sweet_carb.$allergens.$optional;
+
+							elseif (($location == "default") && ((in_array($style,$special_ingredients)) || (in_array($style,$mead)))) $text = $entry_info.$special.$entry_str_sweet_carb.$allergens.$optional;
+							
+							else $text = "";
 							
 						}
 						
-						if ($view == "special") {
-							if ((in_array($style,$special_ingredients)) || (in_array($style,$mead))) $text = $entry_info.$special.$entry_str_sweet_carb.$allergens.$optional;
-							else $text = "";
-						}
-						
 						else $text = $entry_info.$special.$entry_str_sweet_carb.$allergens.$optional;
+						
 						$text = (iconv("UTF-8", "ASCII//TRANSLIT//IGNORE", transliterator_transliterate('Any-Latin; Latin-ASCII', $text))); 
+						
 						if (!empty($text)) $pdf->Add_Label($text);
 
 					}

@@ -1,14 +1,13 @@
 <?php
 require ('../paths.php');
-//session_name($prefix_session);
 require (CONFIG.'bootstrap.php');
 require (LIB.'output.lib.php');
 include (CLASSES.'tiny_but_strong/tbs_class.php');
 include (DB.'output_entry.db.php');
 
 $bottleNum = $_SESSION['jPrefsBottleNum'];
-
 $bottle_labels_001 = strtoupper($bottle_labels_001);
+
 /*
 $bottle_labels_002 = strtoupper($bottle_labels_002);
 $bottle_labels_003 = strtoupper($bottle_labels_003);
@@ -22,17 +21,17 @@ $restricted = FALSE;
 if (($_SESSION['user_id'] != $brewing_info['brewBrewerID']) && ($_SESSION['userLevel'] > 1)) $restricted = TRUE;
 
 if ($restricted) {
-  	echo "<html><head><title>Error</title></head><body>";
-  	echo "<p>You do not have sufficient access privileges to view this page.</p>";
-  	echo "</body>";
-  	exit();
+	echo "<html><head><title>Error</title></head><body>";
+	echo "<p>You do not have sufficient access privileges to view this page.</p>";
+	echo "</body>";
+	exit();
 }
 
 if ((!pay_to_print($_SESSION['prefsPayToPrint'],$brewing_info['brewPaid'])) && ($go != "recipe") && ($filter != "admin")) {
 	echo "<html><head><title>Error</title></head><body>";
-  	echo "<p>You must pay for your entry to print its entry form (if applicable) and any bottle labels.</p>";
-  	echo "</body>";
-  	exit();
+	echo "<p>You must pay for your entry to print its entry form (if applicable) and any bottle labels.</p>";
+	echo "</body>";
+	exit();
 }
 
 $category_end = $_SESSION['style_set_category_end'];
@@ -132,7 +131,7 @@ else $brewing_paid = "";
 
 // Style name
 if ($brewing_info['brewCategory'] < $category_end) {
-  	$brewing_info['styleName'] = $brewing_info['brewStyle'];
+  $brewing_info['styleName'] = $brewing_info['brewStyle'];
  	$brewing_info['styleCat'] = style_convert($brewing_info['brewCategory'],1);
 }
 
@@ -140,10 +139,10 @@ else $brewing_info['styleName'] = $brewing_info['brewStyle'];
 
 /**
  * Version 2.5.0
- * June 11, 2022
+ * November, 2022
  * The recipe-related functions and fields have been deprecated.
- * Disabling display and related reports. Remove in future
- * releases.
+ * Disabling display and related reports. Will remove in a future
+ * release.
  */
 
 /*
@@ -189,7 +188,6 @@ if (!in_array($_SESSION['prefsEntryForm'],$no_entry_form_array)) {
 	}
 
 	// Arrays for ingredients and mashing
-	//
 	$totalFermentables=0;
 	$totalHops=0;
 	$totalMash=0;
@@ -323,7 +321,6 @@ if (!in_array($_SESSION['prefsEntryForm'],$no_entry_form_array)) {
 	  }
 	}
 } // end if (in_array($_SESSION['prefsEntryForm'],$no_entry_form_array))
-
 */
 
 $TBS = new clsTinyButStrong;

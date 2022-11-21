@@ -8,7 +8,7 @@
 require ('../paths.php');
 require (CONFIG.'bootstrap.php');
 
-if (isset($_SESSION['loginUsername'])) {
+if ((isset($_SESSION['loginUsername'])) || ($token != "default")) {
 $role_replace1 = array("HJ","LJ","MBOS",", ");
 $role_replace2 = array("<span class=\"fa fa-gavel\"></span> Head Judge","<span class=\"fa fa-star\"></span> Lead Judge","<span class=\"fa fa-trophy\"></span> Mini-BOS Judge","&nbsp;&nbsp;&nbsp;");
 
@@ -89,11 +89,15 @@ else {
 			if ($section == "notes") 						include (OUTPUT.'judge_notes.output.php');
 		}
 
-		if ($section == "styles") 						include (OUTPUT.'styles.output.php');
-		if ($section == "shipping-label")			include (OUTPUT.'shipping_label.output.php');
+		if (isset($_SESSION['loginUsername'])) {
+			if ($section == "styles") 					include (OUTPUT.'styles.output.php');
+			if ($section == "shipping-label")		include (OUTPUT.'shipping_label.output.php');
+		}
+		
+		// Scoresheets are available without logging in if the $token url var is present.
 		if ($section == "evaluation")					include (EVALS.'scoresheet_output.eval.php');
 
-		if ($section == "admin") {
+		if (($section == "admin") && ($_SESSION['userLevel'] <= 1)) {
 			include (LIB.'admin.lib.php');
 			include (DB.'admin_common.db.php');
 			include (DB.'judging_locations.db.php');

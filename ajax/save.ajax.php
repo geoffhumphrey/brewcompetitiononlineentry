@@ -101,11 +101,11 @@ if (($session_active) && ($_SESSION['userLevel'] <= 1)) {
 		if (empty($input)) {
 
 			if ($rid2 == "text-col") {
-				$data = array($go => '');
+				$data = array($go => '', 'brewUpdated' => $db_conn->now());
 			}
 
 			else {
-				$data = array($go => NULL);
+				$data = array($go => NULL, 'brewUpdated' => $db_conn->now()); 
 			}
 
 		}
@@ -113,11 +113,11 @@ if (($session_active) && ($_SESSION['userLevel'] <= 1)) {
 		else {
 
 			if ($input == "0") {
-				$data = array($go => NULL);
+				$data = array($go => NULL, 'brewUpdated' => $db_conn->now());
 			}
 
 			else {
-				$data = array($go => $input);
+				$data = array($go => $input, 'brewUpdated' => $db_conn->now());
 			}
 
 		}

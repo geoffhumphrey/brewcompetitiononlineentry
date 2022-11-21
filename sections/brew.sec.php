@@ -761,7 +761,11 @@ else $relocate_referrer = $_SERVER['HTTP_REFERER'];
 			<input type="text" class="form-control" placeholder="" name="brewBoxNum" value="<?php if ($action == "edit") echo $row_log['brewBoxNum']; ?>">
 		</div>
 	</div><!-- ./Form Group -->
-<?php } 
+<?php } else { ?>
+<input type="hidden" name="brewAdminNotes" value="<?php if (($action == "edit") && (isset($row_log['brewAdminNotes']))) echo $row_log['brewAdminNotes']; ?>">
+<input type="hidden" name="brewStaffNotes" value="<?php if (($action == "edit") && (isset($row_log['brewStaffNotes']))) echo $row_log['brewStaffNotes']; ?>">
+<input type="hidden" name="brewBoxNum" value="<?php if (($action == "edit") && (isset($row_log['brewBoxNum']))) echo $row_log['brewBoxNum']; ?>">
+<?php } // end else
 if ($action == "add") {
 	$submit_icon = "plus";
 	$submit_text = $label_add_entry;

@@ -192,7 +192,9 @@ if (($totalRows_log > 0) && ($show_entries)) {
 	$primary_page_info .= sprintf("%s",$brewer_info_002);
 	if (!$disable_pay) {
 		if (!$comp_paid_entry_limit) $primary_page_info .= " ".$brewer_info_011." <a href=\"".build_public_url("pay","default","default","default",$sef,$base_url)."\">".$brewer_info_003."</a>.</small></p>";
-		else $primary_page_info .= sprintf(".</small></p><p class=\"lead hidden-print\"><small><span class=\"text-danger\"><strong>%s:</strong> %s</span> <a href=\"%s\">%s</a>",ucfirst(strtolower($label_please_note)),$pay_text_034,$link_contacts,$pay_text_001);
+		else {
+			if ($_SESSION['contestEntryFee'] > 0) $primary_page_info .= sprintf(".</small></p><p class=\"lead hidden-print\"><small><span class=\"text-danger\"><strong>%s:</strong> %s</span> <a href=\"%s\">%s</a>",ucfirst(strtolower($label_please_note)),$pay_text_034,$link_contacts,$pay_text_001);
+		} 
 	}
 	$primary_page_info .= "</small></p>";
 }

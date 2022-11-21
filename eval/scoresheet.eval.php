@@ -246,9 +246,9 @@ if ($totalRows_entry_info > 0) $entry_found = TRUE;
 
 if ($entry_found) {
 
-  if ($row_style['brewStyleType'] == 1) $beer = TRUE;
   if ($row_style['brewStyleType'] == 2) $cider = TRUE;
-  if ($row_style['brewStyleType'] == 3) $mead = TRUE;
+  elseif ($row_style['brewStyleType'] == 3) $mead = TRUE;
+  else $beer = TRUE;
 
   // If style is Cider (2) or Mead (3), only use full scoresheet instad of checklist
   if ((($judging_scoresheet == 1) || ($judging_scoresheet == 2)) && (($cider) || ($mead))) {

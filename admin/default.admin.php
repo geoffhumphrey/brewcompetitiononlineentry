@@ -220,12 +220,40 @@ if ($totalRows_tables > 0) {
         <a class="btn btn-primary btn-block hide-loader" href="<?php echo $base_url; ?>includes/process.inc.php?action=publish" data-toggle="popover" data-trigger="hover" data-placement="auto top" data-container="body" data-title="Publish Results" data-content="Immediately publish all results in the database to the home page." data-confirm="Are you sure you wish to publish the results now?">Publish Results Now <span class="fa fa-bullhorn"></span></a>
     </div>
     <?php } ?>
-    <?php if (($judging_started) && ($_SESSION['userLevel'] == 0)) { ?>
+    <?php 
+    if (($judging_started) && ($_SESSION['userLevel'] == 0)) { 
+        if ($_SESSION['prefsWinnerMethod'] == "0") { 
+    ?>
+    <div class="col col-lg-3 col-md-12 col-sm-12 col-xs-12" style="padding-bottom: 5px;">
+        <a class="btn btn-primary btn-block" href="#" data-toggle="modal" data-target="#presentationLaunch"><?php echo $label_launch_pres; ?> <span class="fa fa-award"></span></a>
+    </div>
+    <div class="modal fade" id="presentationLaunch" tabindex="-1" role="dialog" aria-labelledby="presentationLaunchLabel">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title"><?php echo $label_launch_pres; ?></h4>
+                </div>
+                <div class="modal-body">
+                    <p>PowerPoint-style presentation of placing entries and Best of Show winner(s). Intended to be projected or screen-shared during your awards ceremony.</p>
+                    <p><strong>Only Admin-level users can access the presentation before results are published.</strong></p>
+                    <p>Choose a presentation display method below.</p>
+                    <p><a class="btn btn-block btn-primary" href="<?php echo $base_url; ?>awards.php" target="_blank">By Table Number</a></p>
+                    <p><a class="btn btn-block btn-success" href="<?php echo $base_url; ?>awards.php?go=table-entry-count-asc" target="_blank">By Table/Medal Group Entry Count - Ascending</a></p>
+                    <p><a class="btn btn-block btn-info" href="<?php echo $base_url; ?>awards.php?go=table-entry-count-desc" target="_blank">By Table/Medal Group Entry Count - Descending</a></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <?php } else { ?>
     <div class="col col-lg-3 col-md-12 col-sm-12 col-xs-12" style="padding-bottom: 5px;">
         <a class="btn btn-primary btn-block" href="<?php echo $base_url; ?>awards.php" target="_blank" data-toggle="popover" data-trigger="hover" data-placement="auto top" data-container="body" data-title="Awards Presentation" data-html="true" data-content="<p>PowerPoint-style presentation of placing entries and Best of Show winner(s). Intended to be projected or screen-shared during your awards ceremony.</p><p><strong>Only Admin-level users can access the presentation before results are published.</strong></p>"><?php echo $label_launch_pres; ?> <span class="fa fa-award"></span></a>
     </div>
     <?php } ?>
-    <?php if ($show_best) { ?>
+    <?php } if ($show_best) { ?>
     <div class="col col-lg-3 col-md-12 col-sm-12 col-xs-12" style="padding-bottom: 5px;">
         <button type="button" class="btn btn-info btn-block" data-toggle="modal" data-target="#previewBest">Best Brewer/Best Club Results <span class="fa fa-trophy"></span></button>
     </div>
@@ -619,8 +647,9 @@ if ($recently_updated) {
                                     <a class="hide-loader" href="https://www.avery.com/products/labels/5167" target="_blank" data-toggle="tooltip" data-placement="right" title="Avery 5167"><strong>Letter <span class="fa fa-sm fa-external-link"></span></strong></a>
                                 </div>
                                 <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
-                                    <ul class="list-inline">
-                                        <li><a class="hide-loader" data-toggle="tooltip" title="Quicksort labels" href="<?php echo $base_url; ?>output/labels.output.php?section=admin&amp;go=entries&amp;action=bottle-judging&amp;filter=default&amp;view=quicksort&amp;psort=5167">Quicksort</a> <a class="hide-loader" href="#" data-toggle="modal" data-target="#quicksortModal"><i class="fa fa-question-circle"></i></a></li>
+                                    <ul class="list-unstyled">
+                                        <li><a class="hide-loader" data-toggle="tooltip" title="Quicksort labels with 6 labels per entry (1-5 plus BOS)" href="<?php echo $base_url; ?>output/labels.output.php?section=admin&amp;go=entries&amp;action=bottle-judging&amp;filter=default&amp;view=quicksort&amp;psort=5167">Quicksort - 6 Labels per Entry</a> <a class="hide-loader" href="#" data-toggle="modal" data-target="#quicksortModal"><i class="fa fa-question-circle"></i></a></li>
+                                        <li><a class="hide-loader" data-toggle="tooltip" title="Quicksort labels with 3 labels per entry (1 and 2 plus BOS)" href="<?php echo $base_url; ?>output/labels.output.php?section=admin&amp;go=entries&amp;action=bottle-judging&amp;filter=default&amp;view=quicksort&amp;psort=5167&amp;tb=short">Quicksort - 3 Labels per Entry</a></li>
                                     </ul>
                                 </div>
                             </div>
@@ -1245,7 +1274,7 @@ if ($recently_updated) {
                             </div>
                             <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
                                 <ul class="list-inline">
-                                    <li><a class="hide-loader" href="<?php echo $base_url; ?>output/labels.output.php?section=admin&amp;go=participants&amp;action=judging_labels&amp;psort=5160" data-toggle="tooltip" data-placement="top" title="Avery 5160">Letter <span class="fa fa-sm fa-external-link"></span></a></li>
+                                    <li><a class="hide-loader" href="<?php echo $base_url; ?>output/labels.output.php?section=admin&amp;go=participants&amp;action=judging_labels&amp;psort=5160" data-toggle="tooltip" data-placement="top" title="Avery 5160">Letter</a></li>
                                     <li><a class="hide-loader" href="<?php echo $base_url; ?>output/labels.output.php?section=admin&amp;go=participants&amp;action=judging_labels&amp;psort=3422" data-toggle="tooltip" data-placement="top" title="Avery 3422">A4</a></li>
                                 </ul>
                             </div>
@@ -1256,7 +1285,7 @@ if ($recently_updated) {
                             </div>
                             <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
                                 <ul class="list-unstyled">
-                                    <li>Letter - Entry Numbers
+                                    <li>Letter - Entry Numbers by Style
                                         <div class="dropdown bcoem-admin-dashboard-select">
                                             <button class="btn btn-default dropdown-toggle" type="button" id="reqLablesMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Number of Labels per Entry <span class="caret"></span>
                                             </button>
@@ -1267,7 +1296,7 @@ if ($recently_updated) {
                                             </ul>
                                         </div>
                                     </li>
-                                    <li>Letter - Judging Numbers
+                                    <li>Letter - Judging Numbers by Style
                                         <div class="dropdown bcoem-admin-dashboard-select">
                                             <button class="btn btn-default dropdown-toggle" type="button" id="reqLablesMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Number of Labels per Entry <span class="caret"></span>
                                             </button>
@@ -1278,7 +1307,8 @@ if ($recently_updated) {
                                             </ul>
                                         </div>
                                     </li>
-                                    <li>A4 - Entry Numbers
+
+                                    <li>A4 - Entry Numbers by Style
                                         <div class="dropdown bcoem-admin-dashboard-select">
                                             <button class="btn btn-default dropdown-toggle" type="button" id="reqLablesMenu3reqLablesMenu4" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Number of Labels per Entry <span class="caret"></span>
                                             </button>
@@ -1289,7 +1319,7 @@ if ($recently_updated) {
                                             </ul>
                                         </div>
                                     </li>
-                                    <li>A4 - Judging Numbers
+                                    <li>A4 - Judging Numbers by Style
                                         <div class="dropdown bcoem-admin-dashboard-select">
                                             <button class="btn btn-default dropdown-toggle" type="button" id="reqLablesMenu4" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Number of Labels per Entry <span class="caret"></span>
                                             </button>
@@ -1300,9 +1330,68 @@ if ($recently_updated) {
                                             </ul>
                                         </div>
                                     </li>
+                                    <?php $table_choose_info_labels = table_choose($section,$go,$action,$filter,$view,"none","form_select"); ?>
+                                    <li><a id="label-table-letter-link" role="button" data-toggle="collapse" href="#label-table-collapse-letter" aria-expanded="false" aria-controls="label-table-collapse-letter">Letter - By Table <i id="label-table-letter-link-icon" class="fa fa-sm fa-chevron-down"></i></a>
+                                        <section style="margin: 10px 0 10px 0; padding:0 0 0 15px;" id="label-table-collapse-letter" class="collapse">
+                                            <form id="label-table-letter" name="label-table-letter" class="form-horizontal hide-loader-form-submit">
+                                                <div class="form-group">
+                                                    <select class="selectpicker" title="For Table..." id="location-letter" name="location" data-with="fit" data-size="10">
+                                                        <?php echo $table_choose_info_labels; ?>
+                                                    </select>
+                                                </div>
+                                                <div class="form-group">
+                                                    <select class="selectpicker" title="Number of Labels per Entry" id="sort-letter" name="sort" data-with="fit" data-size="10">
+                                                        <?php for($i=1; $i<=8; $i++) { ?>
+                                                        <option value="<?php echo $i; ?>"><?php echo $i; ?></option>
+                                                        <?php } ?>
+                                                    </select>
+                                                </div>
+                                                <div class="form-group">
+                                                    <select class="selectpicker" title="Entry or Judging Numbers" id="action-letter" name="action" data-with="fit" data-size="10">
+                                                        <option value="bottle-entry">Entry Numbers</option>
+                                                        <option value="bottle-judging">Judging Numbers</option>
+                                                    </select>
+                                                </div>
+                                                <div class="form-group">
+                                                    <button name="submit" type="submit" class="btn btn-sm btn-primary">Generate</button>
+                                                    <div style="padding-top:10px" id="label-letter-msg" class="text-danger"></div>
+                                                </div>
+                                            </form>
+                                        </section>
+                                    </li>
+                                    <li><a id="label-table-a4-link" role="button" data-toggle="collapse" href="#label-table-collapse-a4" aria-expanded="false" aria-controls="label-table-collapse-a4">A4 - By Table <i id="label-table-a4-link-icon" class="fa fa-sm fa-chevron-down"></i></a>
+                                        <section style="margin: 10px 0 10px 0; padding:0 0 0 15px;" id="label-table-collapse-a4" class="collapse">
+                                            <form id="label-table-a4" name="label-table-a4" class="form-horizontal hide-loader-form-submit" action="">
+                                                <div class="form-group">
+                                                    <select class="selectpicker" title="For Table..." id="location-a4" name="location" data-with="fit" data-size="10">
+                                                        <?php echo $table_choose_info_labels; ?>
+                                                    </select>
+                                                </div>
+                                                <div class="form-group">
+                                                    <select class="selectpicker" title="Number of Labels per Entry" id="sort-a4" name="sort" data-with="fit" data-size="10">
+                                                        <?php for($i=1; $i<=8; $i++) { ?>
+                                                        <option value="<?php echo $i; ?>"><?php echo $i; ?></option>
+                                                        <?php } ?>
+                                                    </select>
+                                                </div>
+                                                <div class="form-group">
+                                                    <select class="selectpicker" title="Entry or Judging Numbers" id="action-a4" name="action" data-with="fit" data-size="10">
+                                                        <option value="bottle-entry">Entry Numbers</option>
+                                                        <option value="bottle-judging">Judging Numbers</option>
+                                                    </select>
+                                                </div>
+                                                <div class="form-group">
+                                                    <button name="submit" type="submit" class="btn btn-sm btn-primary">Generate</button>
+                                                    <div style="padding-top:10px" id="label-a4-msg" class="text-danger"></div>
+                                                </div>
+                                                
+                                            </form>
+                                        </section>
+                                    </li>
                                 </ul>
                             </div>
                         </div><!-- ./row -->
+
                         <div class="row">
                             <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
                                 <strong>Name Tags</strong>
@@ -2394,3 +2483,74 @@ if ($recently_updated) {
     echo bcoem_dashboard_help($content);
 }
 ?>
+
+<script type="text/javascript">
+
+    $("#label-letter-msg").hide();
+    $("#label-a4-msg").hide();
+
+    $("#label-table-letter-link").click(function() {
+        $("#label-table-letter-link-icon").toggleClass("fa-chevron-down fa-chevron-up");
+    });
+
+    $("#label-table-a4-link").click(function() {
+        $("#label-table-a4-link-icon").toggleClass("fa-chevron-down fa-chevron-up");
+    });
+    
+    $("#label-table-letter").on("submit", function(e) {
+        
+        e.preventDefault();
+        $("#label-letter-msg").hide();
+
+        if (($("#action-letter").val().length > 0) && ($("#sort-letter").val().length > 0) && ($("#location-letter").val().length > 0)) {
+            
+            $('#loader-submit').stop();
+
+            var serialize = $(this).serialize();
+            var new_url = "<?php echo $base_url; ?>output/labels.output.php?section=admin&go=entries&filter=default&view=special&psort=5160&tb=received&"+serialize;
+            
+            $("#action-letter").val("").trigger("change");
+            $("#sort-letter").val("").trigger("change");
+            $("#location-letter").val("").trigger("change");
+
+            $("#action-letter option:selected").removeAttr("selected");
+            $("#sort-letter option:selected").removeAttr("selected");
+            $("#location-letter option:selected").removeAttr("selected");
+
+            window.location.replace(new_url);
+        }
+
+        else {
+            $("#label-letter-msg").html("Please make a choice from all the above drop-down lists.");
+            $("#label-letter-msg").show(400).delay(8000).hide(400);
+        }
+
+    });
+
+    $("#label-table-a4").on("submit", function(e) {
+        
+        e.preventDefault();
+        $("#label-a4-msg").hide();
+
+        if (($("#action-a4").val().length > 0) && ($("#sort-a4").val().length > 0) && ($("#location-a4").val().length > 0)) {
+            $('#loader-submit').stop();
+            var serialize = $(this).serialize();
+            var new_url = "<?php echo $base_url; ?>output/labels.output.php?section=admin&go=entries&filter=default&view=special&psort=3422&tb=received&"+serialize;
+
+            $("#action-a4").val("").trigger("change");
+            $("#sort-a4").val("").trigger("change");
+            $("#location-a4").val("").trigger("change");
+
+            $("#action-a4 option:selected").removeAttr("selected");
+            $("#sort-a4 option:selected").removeAttr("selected");
+            $("#location-a4 option:selected").removeAttr("selected");
+
+            window.location.replace(new_url);
+        }
+
+        else {
+            $("#label-a4-msg").html("Please make a choice from all the above drop-down lists.");
+            $("#label-a4-msg").show(400).delay(8000).hide(400);
+        }
+    });
+</script>
