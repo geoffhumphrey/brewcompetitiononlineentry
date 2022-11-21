@@ -1891,7 +1891,7 @@ $evaluation_info_084 = "Okomentujte celkový požitek z pití spojený se vstupe
 $evaluation_info_085 = "Barva (2), čirost (2), stupeň sycení (2).";
 $evaluation_info_086 = "Vyjádření dalších složek podle potřeby.";
 $evaluation_info_087 = "Vyváženost kyselosti, sladkosti, obsahu alkoholu, těla, sycení oxidem uhličitým (je-li to vhodné) (14), Další složky podle potřeby (5), Dochuť (5).";
-$evaluation_info_088 = "Comment on overall drinking pleasure associated with entry, give suggestions for improvement.";
+$evaluation_info_088 = "Okomentujte celkový požitek z pití spojený se vstupem, uveďte návrhy na zlepšení.";
 
 /**
  * ----------------------------------------------------------------------------------

@@ -1895,7 +1895,7 @@ $evaluation_info_084 = "Comente sobre o prazer geral de beber associado à entra
 $evaluation_info_085 = "Cor (2), clareza (2), nível de carbonatação (2).";
 $evaluation_info_086 = "Expressão de outros ingredientes, conforme apropriado.";
 $evaluation_info_087 = "Equilíbrio de acidez, doçura, graduação alcoólica, corpo, carbonatação (se apropriado) (14), Outros ingredientes, se apropriado (5), Gosto residual (5).";
-$evaluation_info_088 = "Okomentujte celkový požitek z pití spojený se vstupem, uveďte návrhy na zlepšení.";
+$evaluation_info_088 = "Comente sobre o prazer geral de beber associado à entrada, dê sugestões para melhorias.";
 
 /**
  * ----------------------------------------------------------------------------------
