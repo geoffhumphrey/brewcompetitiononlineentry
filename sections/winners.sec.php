@@ -55,6 +55,9 @@ $winners_table_head_1 = "";
 $winners_table_body_1 = "";
 */
 
+$winners_by_table = "";
+$order_by = array();
+
 if ($section == "past-winners") {
 	$suffix = $go;
 	$judging_tables_db_table = $prefix."judging_tables_".$go;
@@ -74,6 +77,8 @@ else {
 if ($row_scored_entries['count'] > 0) {
 
 	do {
+
+		$winners_table_all = "";
 		
 		$a = explode(",", $row_tables['tableStyles']);
 		$missing_style = FALSE;
@@ -106,14 +111,17 @@ if ($row_scored_entries['count'] > 0) {
 		
 		if ($entry_count > 0) {
 
-			if ($entry_count > 1) $entries = strtolower($label_entries); else $entries = strtolower($label_entry);
+			if ($entry_count > 1) $entries = strtolower($label_entries); 
+			else $entries = strtolower($label_entry);
 
-			$winners_table_head_2 .= sprintf("<div class=\"bcoem-winner-table\"><h3>%s %s: %s (%s %s)</h3><p>%s</p></div>",$label_table,$row_tables['tableNumber'],$row_tables['tableName'],$entry_count,$entries,$winners_text_000);
+			if ($psort != "default") $winners_table_head_2 .= sprintf("<div class=\"bcoem-winner-table\"><h3>%s (%s %s)</h3><p>%s</p></div>",$row_tables['tableName'],$entry_count,$entries,$winners_text_000);
+			else $winners_table_head_2 .= sprintf("<div class=\"bcoem-winner-table\"><h3>%s %s: %s (%s %s)</h3><p>%s</p></div>",$label_table,$row_tables['tableNumber'],$row_tables['tableName'],$entry_count,$entries,$winners_text_000);
 
 			if (score_count($row_tables['id'],"1",$suffix))	{
 
 				// Build page headers
-				$winners_table_header .= sprintf("<h3>%s %s: %s (%s %s)</h3>",$label_table,$row_tables['tableNumber'],$row_tables['tableName'],$entry_count,$entries);
+				if ($psort != "default") $winners_table_header .= sprintf("<h3>%s (%s %s)</h3>",$row_tables['tableName'],$entry_count,$entries);
+				else $winners_table_header .= sprintf("<h3>%s %s: %s (%s %s)</h3>",$label_table,$row_tables['tableNumber'],$row_tables['tableName'],$entry_count,$entries);
 
 				if ($missing_style) $winners_table_header .= sprintf("<p>%s</p>",$winners_text_006);
 
@@ -192,51 +200,91 @@ if ($row_scored_entries['count'] > 0) {
 					} while ($row_scores = mysqli_fetch_assoc($scores));
 				}
 
-	$random1 = "";
-	$random1 .= random_generator(12,1);
+				$random1 = "";
+				$random1 .= random_generator(12,1);
 
-	// --------------------------------------------------------------
-	// Display
-	// --------------------------------------------------------------
-	?>
-	<script type="text/javascript" language="javascript">
-	 $(document).ready(function() {
-		$('#sortable<?php echo $random1; ?>').dataTable( {
-			"bPaginate" : false,
-			"sDom": 'rt',
-			"bStateSave" : false,
-			"bLengthChange" : false,
-			"aaSorting": [[0,'asc']],
-			"bProcessing" : false,
-			"aoColumns": [
-				{ "asSorting": [  ] },
-				{ "asSorting": [  ] },
-				{ "asSorting": [  ] },
-				<?php if ($_SESSION['prefsProEdition'] == 0) { ?>{ "asSorting": [  ] },<?php } ?>
-				{ "asSorting": [  ] }<?php if ($tb == "scores") { ?>,
-				{ "asSorting": [  ] }
-				<?php } ?>
-				]
-			} );
-		} );
-	</script>
-	<div class="bcoem-winner-table">
-		<?php echo $winners_table_header; ?>
-		<?php if (!empty($winners_table_body_1)) { ?>
-		<table class="table table-responsive table-striped table-bordered" id="sortable<?php echo $random1; ?>">
-		<thead>
-			<?php echo $winners_table_head_1; ?>
-		</thead>
-		<tbody>
-			<?php echo $winners_table_body_1; ?>
-		</tbody>
-		</table>
-		<?php } else echo sprintf("<p>%s</p>",$winners_text_007); ?>
-	</div>
-	<?php
-			} else echo $winners_table_head_2;
+				// --------------------------------------------------------------
+				// Display
+				// --------------------------------------------------------------
+
+
+				if ($sort == "default") $sort = "asc";
+				else $sort = $sort;
+				$winners_table_all .= "
+				<script type=\"text/javascript\" language=\"javascript\">
+				$(document).ready(function() {
+				    $('#sortable".$random1."').dataTable( {
+				    	\"bPaginate\" : false,
+				    	\"sDom\": 'rt',
+				        \"aaSorting\": [ [0,'".$sort."'] ],
+				        \"aoColumns\": [
+				            { \"asSorting\": [  ] },
+				            { \"asSorting\": [  ] },
+				            { \"asSorting\": [  ] },
+				            { \"asSorting\": [  ] },";
+
+				if ($_SESSION['prefsProEdition'] == 0) $winners_table_all .= " { \"asSorting\": [  ] },";
+				if ($tb == "scores") $winners_table_all .= " { \"asSorting\": [  ] }";
+
+				$winners_table_all .= "
+				        ]
+				    });
+				} );
+				</script>
+				";
+
+				$winners_table_all .= "<div class=\"bcoem-winner-table\">";
+				
+				$winners_table_all .= $winners_table_header;
+				
+				if (!empty($winners_table_body_1)) {
+					$winners_table_all .= "<table class=\"table table-responsive table-striped table-bordered\" id=\"sortable".$random1."\">";
+					$winners_table_all .= "<thead>";
+					$winners_table_all .= $winners_table_head_1;
+					$winners_table_all .= "</thead>";
+					$winners_table_all .= "<tbody>";
+					$winners_table_all .= $winners_table_body_1;
+					$winners_table_all .= "</tbody>";
+					$winners_table_all .= "</table>";
+				} else $winners_table_all .= sprintf("<p>%s</p>",$winners_text_007);
+
+				$winners_table_all .= "</div>";
+			
+			} // end if (score_count($row_tables['id'],"1",$suffix)) 
+			else $winners_table_all .= $winners_table_head_2;
+		
 		} // end if ($entry_count > 0);
+
+		if (($psort == "table-numbers") || ($psort == "default")) {
+			$order_by[] = array(
+				'id' => $row_tables['tableNumber'],
+				'table_name' => $row_tables['tableName'],
+				'data' => $winners_table_all
+			);
+		}
+
+		if (($psort == "table-entry-count-asc") || ($psort == "table-entry-count-desc")) {
+			$order_by[] = array(
+				'id' => $entry_count,
+				'table_name' => $row_tables['tableName'],
+				'data' => $winners_table_all
+			);
+		}
+	
 	} while ($row_tables = mysqli_fetch_assoc($tables));
+
+	$table_number = array_column($order_by, 'id');
+	$table_name = array_column($order_by, 'table_name');
+
+	if ($psort == "table-entry-count-desc") array_multisort($table_number, SORT_DESC, $table_name, SORT_ASC, $order_by);
+	else array_multisort($table_number, SORT_ASC, $table_name, SORT_ASC, $order_by);
+
+	foreach ($order_by as $key => $value) {
+		$winners_by_table .= $value['data'];
+	}
+
+	if (!empty($winners_by_table)) echo $winners_by_table;
+
 }
 
 else echo sprintf("<p>%s</p>",$winners_text_001);

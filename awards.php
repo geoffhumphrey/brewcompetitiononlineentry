@@ -209,6 +209,7 @@ if (($display_to_admin) || ($display_to_public)) {
 					if (($go == "table-numbers") || ($go == "default")) {
 						$order_by[] = array(
 							'id' => $row_tables['tableNumber'],
+							'table_name' => $row_tables['tableName'],
 							'data' => $slides_tables
 						);
 					}
@@ -216,6 +217,7 @@ if (($display_to_admin) || ($display_to_public)) {
 					if (($go == "table-entry-count-asc") || ($go == "table-entry-count-desc")) {
 						$order_by[] = array(
 							'id' => $entry_count,
+							'table_name' => $row_tables['tableName'],
 							'data' => $slides_tables
 						);
 					}
@@ -224,9 +226,11 @@ if (($display_to_admin) || ($display_to_public)) {
 
 			} // end if ($totalRows_tables > 0)
 
-			$key_values = array_column($order_by, 'id'); 
-			if ($go == "table-entry-count-desc") array_multisort($key_values, SORT_DESC, $order_by);
-			else array_multisort($key_values, SORT_ASC, $order_by);
+			$table_number = array_column($order_by, 'id');
+			$table_name = array_column($order_by, 'table_name');
+
+			if ($go == "table-entry-count-desc") array_multisort($table_number, SORT_DESC, $table_name, SORT_ASC, $order_by);
+			else array_multisort($table_number, SORT_ASC, $table_name, SORT_ASC, $order_by);
 
 			foreach ($order_by as $key => $value) {
 				//echo $value['data'];
