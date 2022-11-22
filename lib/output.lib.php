@@ -382,20 +382,22 @@ function judge_points($user_id,$judge_max_points) {
 
 	do {
 
-		// Get date and determine 24 hour window where it falls based upon the time zone
-		$timestamp_curr_day_midnight = strtotime(date("Y-m-d", $row_judging['judgingDate']));
-		$timestamp_next_day_midnight = $timestamp_curr_day_midnight + (60 * 60 * 24);
-		$possible_judging_days[] = $timestamp_curr_day_midnight;
+		if ($row_judging['judgingLocType'] < 2) {
+			// Get date and determine 24 hour window where it falls based upon the time zone
+			$timestamp_curr_day_midnight = strtotime(date("Y-m-d", $row_judging['judgingDate']));
+			$timestamp_next_day_midnight = $timestamp_curr_day_midnight + (60 * 60 * 24);
+			$possible_judging_days[] = $timestamp_curr_day_midnight;
 
-		$query_assignments = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE bid='%s' AND assignLocation='%s' AND assignment='J'", $prefix."judging_assignments", $user_id, $row_judging['id']);
-    $assignments = mysqli_query($connection,$query_assignments) or die (mysqli_error($connection));
-    $row_assignments = mysqli_fetch_assoc($assignments);
+			$query_assignments = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE bid='%s' AND assignLocation='%s' AND assignment='J'", $prefix."judging_assignments", $user_id, $row_judging['id']);
+	    $assignments = mysqli_query($connection,$query_assignments) or die (mysqli_error($connection));
+	    $row_assignments = mysqli_fetch_assoc($assignments);
 
-    if ($row_assignments['count'] > 0) {
-			$days_judged[] = array (
-				"day_midnight" => $timestamp_curr_day_midnight,
-				"points" => $row_assignments['count'] * 0.5,
-			);
+	    if ($row_assignments['count'] > 0) {
+				$days_judged[] = array (
+					"day_midnight" => $timestamp_curr_day_midnight,
+					"points" => $row_assignments['count'] * 0.5,
+				);
+			}
 		}
 
 	} while ($row_judging = mysqli_fetch_assoc($judging));
@@ -459,38 +461,35 @@ function steward_points($user_id) {
 
 	do {
 
-		// Get date and determine 24 hour window where it falls based upon the time zone
-		$timestamp_curr_day_midnight = strtotime(date("Y-m-d", $row_judging['judgingDate']));
-		$timestamp_next_day_midnight = $timestamp_curr_day_midnight + (60 * 60 * 24);
-		$possible_judging_days[] = $timestamp_curr_day_midnight;
+		if ($row_judging['judgingLocType'] < 1) {
+			// Get date and determine 24 hour window where it falls based upon the time zone
+			$timestamp_curr_day_midnight = strtotime(date("Y-m-d", $row_judging['judgingDate']));
+			$timestamp_next_day_midnight = $timestamp_curr_day_midnight + (60 * 60 * 24);
+			$possible_judging_days[] = $timestamp_curr_day_midnight;
+		
+			$query_assignments = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE bid='%s' AND assignLocation='%s' AND assignment='S';", $prefix."judging_assignments", $user_id, $row_judging['id']);
+	    $assignments = mysqli_query($connection,$query_assignments) or die (mysqli_error($connection));
+	    $row_assignments = mysqli_fetch_assoc($assignments);
 
-		$query_assignments = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE bid='%s' AND assignLocation='%s' AND assignment='S';", $prefix."judging_assignments", $user_id, $row_judging['id']);
-    $assignments = mysqli_query($connection,$query_assignments) or die (mysqli_error($connection));
-    $row_assignments = mysqli_fetch_assoc($assignments);
+	    $queries .= $query_assignments." ";
 
-    $queries .= $query_assignments." ";
-
-    if ($row_assignments['count'] > 0) {
-			$days_stewarded[] = array (
-				"day_midnight" => $timestamp_curr_day_midnight,
-				"points" => $row_assignments['count'] * 0.5,
-			);
+	    if ($row_assignments['count'] > 0) {
+				$days_stewarded[] = $timestamp_curr_day_midnight;
+			}
 		}
 
 	} while ($row_judging = mysqli_fetch_assoc($judging));
 
 	$possible_judging_days = array_unique($possible_judging_days);
+	$days_stewarded = array_unique($days_stewarded);
 
 	if (!empty($days_stewarded)) {
-
+		
 		foreach ($possible_judging_days as $judging_day) {
-			foreach ($days_stewarded as $day) {		
-				$point_day = 0;
-				if ($day['day_midnight'] == $judging_day) {
-					$point_day += $day['points'];
+			foreach ($days_stewarded as $day) {
+				if ($day == $judging_day) {
+					$points += 0.5;
 				}
-				if ($point_day > 0.5) $points += 0.5;
-				else $points += $point_day;
 			}
 		}
 

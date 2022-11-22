@@ -213,7 +213,7 @@ if (!$admin) {
 	$assignment_display .= "<table id=\"judge_assignments\" class=\"table table-condensed table-striped table-bordered table-responsive\">";
 	$assignment_display .= "<thead>";
 	$assignment_display .= "<tr>";
-	$assignment_display .= sprintf("<th>%s</th>",$label_location);
+	$assignment_display .= sprintf("<th>%s</th>",$label_session);
 	$assignment_display .= sprintf("<th width=\"30%%\">%s</th>",$label_date);
 	$assignment_display .= sprintf("<th width=\"30%%\">%s</th>",$label_table);
 	$assignment_display .= "</tr>";
@@ -285,7 +285,13 @@ if ($totalRows_table_assignments > 0) {
 		$table_location = get_table_info($tbl_loc_disp,"location",$tbl_id,"default","default");
 		$table_location = explode("^", $table_location);
 
-		if (($admin) || ((!$admin) && (time() > $table_location[0]))) {
+		/**
+		 * Open up for non-admins 10 minutes before the stated session start time.
+		 * Useful when judging is in-person and judges wish to review their assigned
+		 * entries prior to "officially" starting.
+		 */
+
+		if (($admin) || ((!$admin) && (time() > ($table_location[0] - 600))) { 
 
 			if ((!empty($table_location[1]) && (time() > $table_location[1]))) $disable_add_edit = TRUE;
 
