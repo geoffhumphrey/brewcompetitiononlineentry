@@ -38,6 +38,7 @@ $at_table = "";
 $output_jquery_toggle = "";
 $head_judge_name = "";
 $entry_conflict_count = 0;
+$entry_conflict = FALSE;
 
 // Build DataTables Header
 $output_datatables_head .= "<tr>";
