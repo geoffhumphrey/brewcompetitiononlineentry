@@ -291,7 +291,7 @@ if ($totalRows_table_assignments > 0) {
 		 * entries prior to "officially" starting.
 		 */
 
-		if (($admin) || ((!$admin) && (time() > ($table_location[0] - 600))) { 
+		if (($admin) || ((!$admin) && (time() > ($table_location[0] - 600)))) { 
 
 			if ((!empty($table_location[1]) && (time() > $table_location[1]))) $disable_add_edit = TRUE;
 
