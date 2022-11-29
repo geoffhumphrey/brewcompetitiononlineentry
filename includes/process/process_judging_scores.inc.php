@@ -64,13 +64,13 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 
 				$update_table = $prefix."judging_scores";
 				$data = array(
-					'eid' => $eid,
-					'bid' => $bid,
-					'scoreTable' => $scoreTable,
-					'scoreEntry' => $scoreEntry,
-					'scorePlace' => $scorePlace,
-					'scoreType' => $scoreType,
-					'scoreMiniBOS' => $scoreMiniBOS
+					'eid' => blank_to_null($eid),
+					'bid' => blank_to_null($bid),
+					'scoreTable' => blank_to_null($scoreTable),
+					'scoreEntry' => blank_to_null($scoreEntry),
+					'scorePlace' => blank_to_null($scorePlace),
+					'scoreType' => blank_to_null($scoreType),
+					'scoreMiniBOS' => blank_to_null($scoreMiniBOS)
 				);
 				$result = $db_conn->insert ($update_table, $data);
 				if (!$result) {

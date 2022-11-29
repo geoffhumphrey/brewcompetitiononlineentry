@@ -384,6 +384,11 @@ function rdelete($src,$file_mimes) {
 	return true;
 }
 
+function blank_to_null($var) {
+	if ((!isset($var)) || (empty($var))) $var = NULL;
+	return $var;
+}
+
 // Standardize name languages
 $name_check_langs = array("en", "fr", "es", "pt", "it", "de", "nl");
 $last_name_exception_langs = array("nl", "es", "de");

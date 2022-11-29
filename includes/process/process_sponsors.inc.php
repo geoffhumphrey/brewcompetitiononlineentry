@@ -36,13 +36,13 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 
 		$update_table = $prefix."sponsors";
 		$data = array(
-			'sponsorName' => sterilize($sponsorName),
-			'sponsorURL' => sterilize($sponsorURL),
-			'sponsorImage' => sterilize($_POST['sponsorImage']),
-			'sponsorText' => sterilize($sponsorText),
-			'sponsorLocation' => sterilize($_POST['sponsorLocation']),
-			'sponsorLevel' => sterilize($_POST['sponsorLevel']),
-			'sponsorEnable' => sterilize($_POST['sponsorEnable'])
+			'sponsorName' => blank_to_null(sterilize($sponsorName)),
+			'sponsorURL' => blank_to_null(sterilize($sponsorURL)),
+			'sponsorImage' => blank_to_null(sterilize($_POST['sponsorImage'])),
+			'sponsorText' => blank_to_null(sterilize($sponsorText)),
+			'sponsorLocation' => blank_to_null(sterilize($_POST['sponsorLocation'])),
+			'sponsorLevel' => blank_to_null(sterilize($_POST['sponsorLevel'])),
+			'sponsorEnable' => blank_to_null(sterilize($_POST['sponsorEnable']))
 		);
 
 	}

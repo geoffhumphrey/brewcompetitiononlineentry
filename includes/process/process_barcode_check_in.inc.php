@@ -72,9 +72,9 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 				$update_table = $prefix."brewing";
 				$data = array(
 					'brewReceived' => '1',
-					'brewJudgingNumber' => $judging_number,
-					'brewBoxNum' => sterilize($_POST['box'.$id]),
-					'brewPaid' => $brewPaid
+					'brewJudgingNumber' => blank_to_null($judging_number),
+					'brewBoxNum' => blank_to_null(sterilize($_POST['box'.$id])),
+					'brewPaid' => blank_to_null($brewPaid)
 				);			
 				$db_conn->where ('id', $eid);
 				$result = $db_conn->update ($update_table, $data);

@@ -16,12 +16,13 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 	if (isset($_POST['jPrefsBottleNum'])) $jPrefsBottleNum = sterilize($_POST['jPrefsBottleNum']);
 	else $jPrefsBottleNum = "2";
 
-	$jPrefsQueued = sterilize($_POST['jPrefsQueued']);
-	$jPrefsFlightEntries = sterilize($_POST['jPrefsFlightEntries']);
-	$jPrefsMaxBOS = sterilize($_POST['jPrefsMaxBOS']);
-	$jPrefsRounds = sterilize($_POST['jPrefsRounds']);
-	$jPrefsCapStewards = sterilize($_POST['jPrefsCapStewards']);
-	$jPrefsCapJudges = sterilize($_POST['jPrefsCapJudges']);
+	$jPrefsBottleNum = blank_to_null($jPrefsBottleNum);
+	$jPrefsQueued = blank_to_null(sterilize($_POST['jPrefsQueued']));
+	$jPrefsFlightEntries = blank_to_null(sterilize($_POST['jPrefsFlightEntries']));
+	$jPrefsMaxBOS = blank_to_null(sterilize($_POST['jPrefsMaxBOS']));
+	$jPrefsRounds = blank_to_null(sterilize($_POST['jPrefsRounds']));
+	$jPrefsCapStewards = blank_to_null(sterilize($_POST['jPrefsCapStewards']));
+	$jPrefsCapJudges = blank_to_null(sterilize($_POST['jPrefsCapJudges']));
 
 	if (($action == "edit") || ($section == "setup")) {
 
@@ -65,10 +66,10 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 
 			}
 
-			$jPrefsScoresheet = sterilize($_POST['jPrefsScoresheet']);
-			$jPrefsJudgingOpen = strtotime(sterilize($_POST['jPrefsJudgingOpen']));
-			$jPrefsJudgingClosed = strtotime(sterilize($_POST['jPrefsJudgingClosed']));
-			$jPrefsScoreDispMax = sterilize($_POST['jPrefsScoreDispMax']);
+			$jPrefsScoresheet = blank_to_null(sterilize($_POST['jPrefsScoresheet']));
+			$jPrefsJudgingOpen = blank_to_null(strtotime(sterilize($_POST['jPrefsJudgingOpen'])));
+			$jPrefsJudgingClosed = blank_to_null(strtotime(sterilize($_POST['jPrefsJudgingClosed'])));
+			$jPrefsScoreDispMax = blank_to_null(sterilize($_POST['jPrefsScoreDispMax']));
 			
 			$update_table = $prefix."judging_preferences";
 			$data = array(

@@ -49,14 +49,14 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 				$assignRoles = sterilize($assignRoles);
 
 				$data = array(
-					'bid' => $bid,
-					'assignment' => $assignment,
-					'assignTable' => $assignTable,
-					'assignFlight' => $assignFlight,
-					'assignRound' => $assignRound,
-					'assignLocation' => $assignLocation,
-					'assignPlanning' => $assignPlanning,
-					'assignRoles' => $assignRoles
+					'bid' => blank_to_null($bid),
+					'assignment' => blank_to_null($assignment),
+					'assignTable' => blank_to_null($assignTable),
+					'assignFlight' => blank_to_null($assignFlight),
+					'assignRound' => blank_to_null($assignRound),
+					'assignLocation' => blank_to_null($assignLocation),
+					'assignPlanning' => blank_to_null($assignPlanning),
+					'assignRoles' => blank_to_null($assignRoles)
 				);
 
 				if (isset($_POST['unassign'.$random])) $unassign = $_POST['unassign'.$random];
@@ -113,7 +113,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 				if (($roles_only_update) && ($_POST['id'.$random] > 0)) {
 
 					$update_table = $prefix."judging_assignments";
-					$data = array('assignRoles' => $assignRoles);
+					$data = array('assignRoles' => blank_to_null($assignRoles));
 					$db_conn->where ('id', sterilize($_POST['id'.$random]));
 					$result = $db_conn->update ($update_table, $data);
 					if (!$result) {
@@ -186,14 +186,14 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 				$assignRoles = sterilize($assignRoles);
 
 				$data = array(
-					'bid' => $bid,
-					'assignment' => $assignment,
-					'assignTable' => $assignTable,
-					'assignFlight' => $assignFlight,
-					'assignRound' => $assignRound,
-					'assignLocation' => $assignLocation,
-					'assignPlanning' => $assignPlanning,
-					'assignRoles' => $assignRoles
+					'bid' => blank_to_null($bid),
+					'assignment' => blank_to_null($assignment),
+					'assignTable' => blank_to_null($assignTable),
+					'assignFlight' => blank_to_null($assignFlight),
+					'assignRound' => blank_to_null($assignRound),
+					'assignLocation' => blank_to_null($assignLocation),
+					'assignPlanning' => blank_to_null($assignPlanning),
+					'assignRoles' => blank_to_null($assignRoles)
 				);
 
 				if ((!isset($_POST['unassign'.$random])) && (($_POST['rolesPrevDefined'.$random] == 1) || ($_POST['rolesPrevDefined'.$random] == 0)) && (!empty($assignRoles))) $roles_only_update = TRUE;
@@ -225,7 +225,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 				if (($roles_only_update) && ($_POST['id'.$random] > 0)) {
 
 					$update_table = $prefix."judging_assignments";
-					$data = array('assignRoles' => $assignRoles);
+					$data = array('assignRoles' => blank_to_null($assignRoles));
 					$db_conn->where ('id', sterilize($_POST['id'.$random]));
 					$result = $db_conn->update ($update_table, $data);
 					if (!$result) {

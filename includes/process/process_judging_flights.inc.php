@@ -23,10 +23,10 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 
 			$update_table = $prefix."judging_flights";
 			$data = array(
-				'flightTable' => $flightTable,
-				'flightNumber' => $flightNumber,
-				'flightEntryID' => $flightEntryID,
-				'flightRound' => $flightRound,
+				'flightTable' => blank_to_null($flightTable),
+				'flightNumber' => blank_to_null($flightNumber),
+				'flightEntryID' => blank_to_null($flightEntryID),
+				'flightRound' => blank_to_null($flightRound),
 			);
 			$result = $db_conn->insert ($update_table, $data);
 			if (!$result) {
@@ -55,8 +55,8 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 
 				$update_table = $prefix."judging_flights";
 				$data = array(
-					'flightTable' => $flightTable,
-					'flightNumber' => $flightNumber
+					'flightTable' => blank_to_null($flightTable),
+					'flightNumber' => blank_to_null($flightNumber)
 				);
 				$db_conn->where ('id', $id);
 				$result = $db_conn->update ($update_table, $data);
@@ -73,9 +73,9 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 
 				$update_table = $prefix."judging_flights";
 				$data = array(
-					'flightTable' => $flightTable,
-					'flightNumber' => $flightNumber,
-					'flightEntryID' => $flightEntryID
+					'flightTable' => blank_to_null($flightTable),
+					'flightNumber' => blank_to_null($flightNumber),
+					'flightEntryID' => blank_to_null($flightEntryID)
 				);
 				$result = $db_conn->insert ($update_table, $data);
 				if (!$result) {

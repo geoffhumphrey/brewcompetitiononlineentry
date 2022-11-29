@@ -290,39 +290,40 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 			}
 
 			$update_table = $prefix."brewer";
-			$data = array('id' => '1',
+			$data = array(
+				'id' => '1',
 				'uid' => '1',
-				'brewerFirstName' => $brewerFirstName,
-				'brewerLastName' => $brewerLastName,
-				'brewerAddress' => $brewerAddress,
-				'brewerCity' => $brewerCity,
-				'brewerState' => $brewerState,
-				'brewerZip' => $brewerZip,
-				'brewerCountry' => $brewerCountry,
-				'brewerPhone1' => $brewerPhone1,
-				'brewerPhone2' => $brewerPhone2,
-				'brewerClubs' => $brewerClubs,
-				'brewerEmail' => $brewerEmail,
-				'brewerStaff' => $brewerStaff,
-				'brewerSteward' => $brewerSteward,
-				'brewerJudge' => $brewerJudge,
-				'brewerJudgeID' => $brewerJudgeID,
-				'brewerJudgeMead' => $brewerJudgeMead,
-				'brewerJudgeCider' => $brewerJudgeCider,
-				'brewerJudgeRank' => $brewerJudgeRank,
-				'brewerJudgeLikes' => $brewerJudgeLikes,
-				'brewerJudgeDislikes' => $brewerJudgeDislikes,
-				'brewerJudgeLocation' => $brewerJudgeLocation,
-				'brewerStewardLocation' => $brewerStewardLocation,
-				'brewerJudgeExp' => $brewerJudgeExp,
+				'brewerFirstName' => blank_to_null($brewerFirstName),
+				'brewerLastName' => blank_to_null($brewerLastName),
+				'brewerAddress' => blank_to_null($brewerAddress),
+				'brewerCity' => blank_to_null($brewerCity),
+				'brewerState' => blank_to_null($brewerState),
+				'brewerZip' => blank_to_null($brewerZip),
+				'brewerCountry' => blank_to_null($brewerCountry),
+				'brewerPhone1' => blank_to_null($brewerPhone1),
+				'brewerPhone2' => blank_to_null($brewerPhone2),
+				'brewerClubs' => blank_to_null($brewerClubs),
+				'brewerEmail' => blank_to_null($brewerEmail),
+				'brewerStaff' => blank_to_null($brewerStaff),
+				'brewerSteward' => blank_to_null($brewerSteward),
+				'brewerJudge' => blank_to_null($brewerJudge),
+				'brewerJudgeID' => blank_to_null($brewerJudgeID),
+				'brewerJudgeMead' => blank_to_null($brewerJudgeMead),
+				'brewerJudgeCider' => blank_to_null($brewerJudgeCider),
+				'brewerJudgeRank' => blank_to_null($brewerJudgeRank),
+				'brewerJudgeLikes' => blank_to_null($brewerJudgeLikes),
+				'brewerJudgeDislikes' => blank_to_null($brewerJudgeDislikes),
+				'brewerJudgeLocation' => blank_to_null($brewerJudgeLocation),
+				'brewerStewardLocation' => blank_to_null($brewerStewardLocation),
+				'brewerJudgeExp' => blank_to_null($brewerJudgeExp),
 				'brewerJudgeNotes' => NULL,
 				'brewerAssignment' => NULL,
 				'brewerJudgeWaiver' => 'Y',
-				'brewerAHA' => $brewerAHA,
+				'brewerAHA' => blank_to_null($brewerAHA),
 				'brewerDiscount' => NULL,
 				'brewerProAm' => '0',
 				'brewerDropOff' => '0',
-				'brewerBreweryName' => $brewerBreweryName,
+				'brewerBreweryName' => blank_to_null($brewerBreweryName),
 				'brewerBreweryTTB' => NULL
 			);
 			$result = $db_conn->insert ($update_table, $data);
@@ -339,11 +340,11 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 		$update_table = $prefix."archive";
 		$data = array(
 			'archiveSuffix' => $suffix,
-			'archiveProEdition' => $_SESSION['prefsProEdition'],
-			'archiveStyleSet' => $styleSet,
-			'archiveScoresheet' => $_SESSION['prefsDisplaySpecial'],
-			'archiveWinnerMethod' => $_SESSION['prefsWinnerMethod'],
-			'archiveDisplayWinners' => $_SESSION['prefsDisplayWinners']
+			'archiveProEdition' => blank_to_null($_SESSION['prefsProEdition']),
+			'archiveStyleSet' => blank_to_null($styleSet),
+			'archiveScoresheet' => blank_to_null($_SESSION['prefsDisplaySpecial']),
+			'archiveWinnerMethod' => blank_to_null($_SESSION['prefsWinnerMethod']),
+			'archiveDisplayWinners' => blank_to_null($_SESSION['prefsDisplayWinners'])
 		);
 		$result = $db_conn->insert ($update_table, $data);
 		if (!$result) {

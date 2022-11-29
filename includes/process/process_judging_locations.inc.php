@@ -30,12 +30,12 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 
 	$update_table = $prefix."judging_locations";
 	$data = array(
-		'judgingLocType' => $judgingLocType,
-		'judgingDate' => $judgingDate,
-		'judgingDateEnd' => $judgingDateEnd,
-		'judgingLocation' => $judgingLocation,
-		'judgingLocName' => $judgingLocName,
-		'judgingRounds' => $judgingRounds
+		'judgingLocType' => blank_to_null($judgingLocType),
+		'judgingDate' => blank_to_null($judgingDate),
+		'judgingDateEnd' => blank_to_null($judgingDateEnd),
+		'judgingLocation' => blank_to_null($judgingLocation),
+		'judgingLocName' => blank_to_null($judgingLocName),
+		'judgingRounds' => blank_to_null($judgingRounds)
 	);
 
 	if ($action == "add") {

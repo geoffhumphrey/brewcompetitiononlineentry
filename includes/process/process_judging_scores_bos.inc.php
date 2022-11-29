@@ -15,11 +15,11 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 		foreach($_POST['score_id'] as $score_id) {
 
 			// Prep Vars
-			$eid = sterilize($_POST['eid'.$score_id]);
-			$bid = sterilize($_POST['bid'.$score_id]), "text"),
-			$scoreEntry = sterilize($_POST['scoreEntry'.$score_id]);
-			$scorePlace = sterilize($_POST['scorePlace'.$score_id]);
-			$scoreType = sterilize($_POST['scoreType'.$score_id]);
+			$eid = blank_to_null(sterilize($_POST['eid'.$score_id]));
+			$bid = blank_to_null(sterilize($_POST['bid'.$score_id])),
+			$scoreEntry = blank_to_null(sterilize($_POST['scoreEntry'.$score_id]));
+			$scorePlace = blank_to_null(sterilize($_POST['scorePlace'.$score_id]));
+			$scoreType = blank_to_null(sterilize($_POST['scoreType'.$score_id]));
 
 			if ((!empty($_POST['scorePlace'.$score_id])) && ($_POST['scorePrevious'.$score_id] == "Y")) {
 

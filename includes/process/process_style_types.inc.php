@@ -36,10 +36,10 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 		$update_table = $prefix."style_types";
 		$data = array(
 			'id' => $id,
-			'styleTypeName' => $styleTypeName,
-			'styleTypeOwn' => sterilize($_POST['styleTypeOwn']),
-			'styleTypeBOS' => sterilize($_POST['styleTypeBOS']),
-			'styleTypeBOSMethod' => sterilize($_POST['styleTypeBOSMethod'])
+			'styleTypeName' => blank_to_null($styleTypeName),
+			'styleTypeOwn' => blank_to_null(sterilize($_POST['styleTypeOwn'])),
+			'styleTypeBOS' => blank_to_null(sterilize($_POST['styleTypeBOS'])),
+			'styleTypeBOSMethod' => blank_to_null(sterilize($_POST['styleTypeBOSMethod']))
 		);
 		$result = $db_conn->insert ($update_table, $data);
 		if (!$result) {
@@ -154,10 +154,10 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 
 			$update_table = $prefix."style_types";
 			$data = array(
-				'styleTypeName' => $styleTypeName,
-				'styleTypeOwn' => sterilize($_POST['styleTypeOwn']),
-				'styleTypeBOS' => sterilize($_POST['styleTypeBOS']),
-				'styleTypeBOSMethod' => sterilize($_POST['styleTypeBOSMethod'])
+				'styleTypeName' => blank_to_null($styleTypeName),
+				'styleTypeOwn' => blank_to_null(sterilize($_POST['styleTypeOwn'])),
+				'styleTypeBOS' => blank_to_null(sterilize($_POST['styleTypeBOS'])),
+				'styleTypeBOSMethod' => blank_to_null(sterilize($_POST['styleTypeBOSMethod']))
 			);
 			$db_conn->where ('id', $id);
 			$result = $db_conn->update ($update_table, $data);

@@ -35,18 +35,18 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 
 	$update_table = $prefix."contest_info";
 	$data = array(
-		'contestRegistrationOpen' => $contestRegistrationOpen,
-		'contestRegistrationDeadline' => $contestRegistrationDeadline,
-		'contestEntryOpen' => $contestEntryOpen,
-		'contestEntryDeadline' => $contestEntryDeadline,
-		'contestJudgeOpen' => $contestJudgeOpen,
-		'contestJudgeDeadline' => $contestJudgeDeadline,
-		'contestAwardsLocDate' => $contestAwardsLocDate,
-		'contestAwardsLocTime' => $contestAwardsLocDate,
-		'contestShippingOpen' => $contestShippingOpen,
-		'contestShippingDeadline' => $contestShippingDeadline,
-		'contestDropoffOpen' => $contestDropoffOpen,
-		'contestDropoffDeadline' => $contestDropoffDeadline
+		'contestRegistrationOpen' => blank_to_null($contestRegistrationOpen),
+		'contestRegistrationDeadline' => blank_to_null($contestRegistrationDeadline),
+		'contestEntryOpen' => blank_to_null($contestEntryOpen),
+		'contestEntryDeadline' => blank_to_null($contestEntryDeadline),
+		'contestJudgeOpen' => blank_to_null($contestJudgeOpen),
+		'contestJudgeDeadline' => blank_to_null($contestJudgeDeadline),
+		'contestAwardsLocDate' => blank_to_null($contestAwardsLocDate),
+		'contestAwardsLocTime' => blank_to_null($contestAwardsLocDate),
+		'contestShippingOpen' => blank_to_null($contestShippingOpen),
+		'contestShippingDeadline' => blank_to_null($contestShippingDeadline),
+		'contestDropoffOpen' => blank_to_null($contestDropoffOpen),
+		'contestDropoffDeadline' => blank_to_null($contestDropoffDeadline)
 	);
 	$db_conn->where ('id', 1);
 	$result = $db_conn->update ($update_table, $data);
@@ -68,8 +68,8 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 
 	$update_table = $prefix."judging_preferences";
 	$data = array(
-		'jPrefsJudgingOpen' => $jPrefsJudgingOpen,
-		'jPrefsJudgingClosed' => $jPrefsJudgingClosed
+		'jPrefsJudgingOpen' => blank_to_null($jPrefsJudgingOpen),
+		'jPrefsJudgingClosed' => blank_to_null($jPrefsJudgingClosed)
 	);
 	$db_conn->where ('id', 1);
 	$result = $db_conn->update ($update_table, $data);
@@ -99,8 +99,8 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 
 	$update_table = $prefix."preferences";
 	$data = array(
-		'prefsWinnerDelay' => $prefsWinnerDelay,
-		'prefsDisplayWinners' => $prefsDisplayWinners
+		'prefsWinnerDelay' => blank_to_null($prefsWinnerDelay),
+		'prefsDisplayWinners' => blank_to_null($prefsDisplayWinners)
 	);
 	$db_conn->where ('id', 1);
 	$result = $db_conn->update ($update_table, $data);
@@ -125,8 +125,8 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 
 			$update_table = $prefix."judging_locations";
 			$data = array(
-				'judgingDate' => $judgingDate,
-				'judgingDateEnd' => $judgingDateEnd			
+				'judgingDate' => blank_to_null($judgingDate),
+				'judgingDateEnd' => blank_to_null($judgingDateEnd)			
 			);			
 			$db_conn->where ('id', $id);
 			$result = $db_conn->update ($update_table, $data);

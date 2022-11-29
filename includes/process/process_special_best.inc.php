@@ -32,10 +32,10 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 
 		$update_table = $prefix."special_best_info";
 		$data = array(
-			'sbi_name' => $sbi_name,
-			'sbi_description' => $sbi_description,
-			'sbi_places' => sterilize($_POST['sbi_places']),
-			'sbi_rank' => sterilize($_POST['sbi_rank'])
+			'sbi_name' => blank_to_null($sbi_name),
+			'sbi_description' => blank_to_null($sbi_description),
+			'sbi_places' => blank_to_null(sterilize($_POST['sbi_places'])),
+			'sbi_rank' => blank_to_null(sterilize($_POST['sbi_rank']))
 		);
 		$result = $db_conn->insert ($update_table, $data);
 		if (!$result) {
@@ -55,10 +55,10 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 
 		$update_table = $prefix."special_best_info";
 		$data = array(
-			'sbi_name' => $sbi_name,
-			'sbi_description' => $sbi_description,
-			'sbi_places' => sterilize($_POST['sbi_places']),
-			'sbi_rank' => sterilize($_POST['sbi_rank'])
+			'sbi_name' => blank_to_null($sbi_name),
+			'sbi_description' => blank_to_null($sbi_description),
+			'sbi_places' => blank_to_null(sterilize($_POST['sbi_places'])),
+			'sbi_rank' => blank_to_null(sterilize($_POST['sbi_rank']))
 		);
 		$db_conn->where ('id', $id);
 		$result = $db_conn->update ($update_table, $data);

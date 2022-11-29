@@ -117,8 +117,7 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 
 				} else {
 
-				// Add the user's creds to the "users" table
-				
+				// Add the user's creds to the "users" table			
 				$hasher = new PasswordHash(8, false);
 				$password = md5($_POST['password']);
 				$hash = $hasher->HashPassword($password);
@@ -148,32 +147,32 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 				$update_table = $prefix."brewer";
 				$data = array(
 					'uid' => $row_user['id'],
-					'brewerFirstName' => $first_name,
-					'brewerLastName' => $last_name,
-					'brewerAddress' => $address,
-					'brewerCity' => $city,
-					'brewerState' => $state,
-					'brewerZip' => $purifier->purify($_POST['brewerZip']),
-					'brewerCountry' => $purifier->purify($_POST['brewerCountry']),
-					'brewerPhone1' => $brewerPhone1,
-					'brewerPhone2' => $brewerPhone2,
-					'brewerClubs' => $brewerClubs,
-					'brewerEmail' => $username,
-					'brewerStaff' => $brewerStaff,
-					'brewerSteward' => $brewerSteward,
-					'brewerJudge' => $brewerJudge,
-					'brewerJudgeID' => $brewerJudgeID,
-					'brewerJudgeMead' => $brewerJudgeMead,
-					'brewerJudgeCider' => $brewerJudgeCider,
-					'brewerJudgeRank' => $brewerJudgeRank,
-					'brewerJudgeLocation' => $location_pref1,
-					'brewerStewardLocation' => $location_pref2,
-					'brewerJudgeWaiver' => $brewerJudgeWaiver,
-					'brewerAHA' => $brewerAHA,
-					'brewerProAm' => $brewerProAm,
-					'brewerDropOff' => $brewerDropOff,
-					'brewerBreweryName' => $brewerBreweryName,
-					'brewerBreweryTTB' => $brewerBreweryTTB
+					'brewerFirstName' => blank_to_null($first_name),
+					'brewerLastName' => blank_to_null($last_name),
+					'brewerAddress' => blank_to_null($address),
+					'brewerCity' => blank_to_null($city),
+					'brewerState' => blank_to_null($state),
+					'brewerZip' => blank_to_null($purifier->purify($_POST['brewerZip'])),
+					'brewerCountry' => blank_to_null($purifier->purify($_POST['brewerCountry'])),
+					'brewerPhone1' => blank_to_null($brewerPhone1),
+					'brewerPhone2' => blank_to_null($brewerPhone2),
+					'brewerClubs' => blank_to_null($brewerClubs),
+					'brewerEmail' => blank_to_null($username),
+					'brewerStaff' => blank_to_null($brewerStaff),
+					'brewerSteward' => blank_to_null($brewerSteward),
+					'brewerJudge' => blank_to_null($brewerJudge),
+					'brewerJudgeID' => blank_to_null($brewerJudgeID),
+					'brewerJudgeMead' => blank_to_null($brewerJudgeMead),
+					'brewerJudgeCider' => blank_to_null($brewerJudgeCider),
+					'brewerJudgeRank' => blank_to_null($brewerJudgeRank),
+					'brewerJudgeLocation' => blank_to_null($location_pref1),
+					'brewerStewardLocation' => blank_to_null($location_pref2),
+					'brewerJudgeWaiver' => blank_to_null($brewerJudgeWaiver),
+					'brewerAHA' => blank_to_null($brewerAHA),
+					'brewerProAm' => blank_to_null($brewerProAm),
+					'brewerDropOff' => blank_to_null($brewerDropOff),
+					'brewerBreweryName' => blank_to_null($brewerBreweryName),
+					'brewerBreweryTTB' => blank_to_null($brewerBreweryTTB)
 				);
 				$result = $db_conn->insert ($update_table, $data);
 				if (!$result) {

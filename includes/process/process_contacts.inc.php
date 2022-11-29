@@ -148,10 +148,10 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 
 			$update_table = $prefix."contacts";
 			$data = array(
-				'contactFirstName' => $contactFirstName,
-				'contactLastName' => $contactLastName,
-				'contactPosition' => $contactPosition,
-				'contactEmail' => $contactEmail
+				'contactFirstName' => blank_to_null($contactFirstName),
+				'contactLastName' => blank_to_null($contactLastName),
+				'contactPosition' => blank_to_null($contactPosition),
+				'contactEmail' => blank_to_null($contactEmail)
 			);
 			$result = $db_conn->insert ($update_table, $data);
 			if (!$result) {
@@ -170,10 +170,10 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 
 			$update_table = $prefix."contacts";
 			$data = array(
-				'contactFirstName' => $contactFirstName,
-				'contactLastName' => $contactLastName,
-				'contactPosition' => $contactPosition,
-				'contactEmail' => $contactEmail
+				'contactFirstName' => blank_to_null($contactFirstName),
+				'contactLastName' => blank_to_null($contactLastName),
+				'contactPosition' => blank_to_null($contactPosition),
+				'contactEmail' => blank_to_null($contactEmail)
 			);			
 			$db_conn->where ('id', $id);
 			$result = $db_conn->update ($update_table, $data);

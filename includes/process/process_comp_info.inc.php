@@ -113,104 +113,48 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 		$update_table = $prefix."contest_info";
 		$data = array(
 			'id' => 1,
-			'contestName' => $contestName,
-			'contestHost' => $contestHost,
-			'contestHostWebsite' => $contestHostWebsite,
-			'contestHostLocation' => $contestHostLocation,
-			'contestRegistrationOpen' => $contestRegistrationOpen,
-			'contestRegistrationDeadline' => $contestRegistrationDeadline,
-			'contestEntryOpen' => $contestEntryOpen,
-			'contestEntryDeadline' => $contestEntryDeadline,
-			'contestJudgeOpen' => $contestJudgeOpen,
-			'contestJudgeDeadline' => $contestJudgeDeadline,
-			'contestRules' => $contestRules,
-			'contestAwards' => $contestAwards,
-			'contestAwardsLocation' => $contestAwardsLocation,
-			'contestAwardsLocName' => $contestAwardsLocName,
-			'contestAwardsLocDate' => $contestAwardsLocDate,
-			'contestAwardsLocTime' => $contestAwardsLocDate,
-			'contestShippingOpen' => $contestShippingOpen,
-			'contestShippingDeadline' => $contestShippingDeadline,
-			'contestShippingName' => $contestShippingName,
-			'contestShippingAddress' => $contestShippingAddress,
-			'contestDropoffOpen' => $contestDropoffOpen,
-			'contestDropoffDeadline' => $contestDropoffDeadline,
-			'contestBottles' => $contestBottles,
-			'contestBOSAward' => $contestBOSAward,
-			'contestCircuit' => $contestCircuit,
-			'contestVolunteers' => $contestVolunteers,
-			'contestLogo' => $contestLogo,
-			'contestEntryFee' => $contestEntryFee,
-			'contestEntryFee2' => $contestEntryFee2,
-			'contestEntryFeeDiscount' => $contestEntryFeeDiscount,
-			'contestEntryFeeDiscountNum' => $contestEntryFeeDiscountNum,
-			'contestEntryCap' => $contestEntryCap,
-			'contestEntryFeePassword' => $contestEntryFeePassword,
-			'contestEntryFeePasswordNum' => $contestEntryFeePasswordNum,
-			'contestCheckInPassword' => $hash,
-			'contestID' => $contestID
+			'contestName' => blank_to_null($contestName),
+			'contestHost' => blank_to_null($contestHost),
+			'contestHostWebsite' => blank_to_null($contestHostWebsite),
+			'contestHostLocation' => blank_to_null($contestHostLocation),
+			'contestRegistrationOpen' => blank_to_null($contestRegistrationOpen),
+			'contestRegistrationDeadline' => blank_to_null($contestRegistrationDeadline),
+			'contestEntryOpen' => blank_to_null($contestEntryOpen),
+			'contestEntryDeadline' => blank_to_null($contestEntryDeadline),
+			'contestJudgeOpen' => blank_to_null($contestJudgeOpen),
+			'contestJudgeDeadline' => blank_to_null($contestJudgeDeadline),
+			'contestRules' => blank_to_null($contestRules),
+			'contestAwards' => blank_to_null($contestAwards),
+			'contestAwardsLocation' => blank_to_null($contestAwardsLocation),
+			'contestAwardsLocName' => blank_to_null($contestAwardsLocName),
+			'contestAwardsLocDate' => blank_to_null($contestAwardsLocDate),
+			'contestAwardsLocTime' => blank_to_null($contestAwardsLocDate),
+			'contestShippingOpen' => blank_to_null($contestShippingOpen),
+			'contestShippingDeadline' => blank_to_null($contestShippingDeadline),
+			'contestShippingName' => blank_to_null($contestShippingName),
+			'contestShippingAddress' => blank_to_null($contestShippingAddress),
+			'contestDropoffOpen' => blank_to_null($contestDropoffOpen),
+			'contestDropoffDeadline' => blank_to_null($contestDropoffDeadline),
+			'contestBottles' => blank_to_null($contestBottles),
+			'contestBOSAward' => blank_to_null($contestBOSAward),
+			'contestCircuit' => blank_to_null($contestCircuit),
+			'contestVolunteers' => blank_to_null($contestVolunteers),
+			'contestLogo' => blank_to_null($contestLogo),
+			'contestEntryFee' => blank_to_null($contestEntryFee),
+			'contestEntryFee2' => blank_to_null($contestEntryFee2),
+			'contestEntryFeeDiscount' => blank_to_null($contestEntryFeeDiscount),
+			'contestEntryFeeDiscountNum' => blank_to_null($contestEntryFeeDiscountNum),
+			'contestEntryCap' => blank_to_null($contestEntryCap),
+			'contestEntryFeePassword' => blank_to_null($contestEntryFeePassword),
+			'contestEntryFeePasswordNum' => blank_to_null($contestEntryFeePasswordNum),
+			'contestCheckInPassword' => blank_to_null($hash),
+			'contestID' => blank_to_null($contestID)
 		);
 
 		$result = $db_conn->insert ($update_table, $data);
 		if (!$result) {
 			$error_output[] = $db_conn->getLastError();
 			$errors = TRUE;
-		}
-
-		if (empty($_POST['contestEntryFee2'])) {
-
-			$data = array(
-				'contestEntryFee2' => NULL	
-			);
-			$db_conn->where ('id', 1);
-			$result = $db_conn->update ($update_table, $data);
-			if (!$result) {
-				$error_output[] = $db_conn->getLastError();
-				$errors = TRUE;
-			}
-
-		}
-
-		if (empty($_POST['contestEntryFeeDiscountNum'])) {
-
-			$data = array(
-				'contestEntryFeeDiscountNum' => NULL	
-			);
-			$db_conn->where ('id', 1);
-			$result = $db_conn->update ($update_table, $data);
-			if (!$result) {
-				$error_output[] = $db_conn->getLastError();
-				$errors = TRUE;
-			}
-
-		}
-		
-		if (empty($_POST['contestEntryFeePasswordNum'])) {
-
-			$data = array(
-				'contestEntryFeePasswordNum' => NULL	
-			);
-			$db_conn->where ('id', 1);
-			$result = $db_conn->update ($update_table, $data);
-			if (!$result) {
-				$error_output[] = $db_conn->getLastError();
-				$errors = TRUE;
-			}
-
-		}
-
-		if (empty($_POST['contestEntryCap'])) {
-
-			$data = array(
-				'contestEntryCap' => NULL	
-			);
-			$db_conn->where ('id', 1);
-			$result = $db_conn->update ($update_table, $data);
-			if (!$result) {
-				$error_output[] = $db_conn->getLastError();
-				$errors = TRUE;
-			}
-
 		}
 
 		$update_table = $prefix."contacts";
@@ -302,42 +246,42 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 
 			$update_table = $prefix."contest_info";
 			$data = array(
-				'contestName' => $contestName,
-				'contestHost' => $contestHost,
-				'contestHostWebsite' => $contestHostWebsite,
-				'contestHostLocation' => $contestHostLocation,
-				'contestRegistrationOpen' => $contestRegistrationOpen,
-				'contestRegistrationDeadline' => $contestRegistrationDeadline,
-				'contestEntryOpen' => $contestEntryOpen,
-				'contestEntryDeadline' => $contestEntryDeadline,
-				'contestJudgeOpen' => $contestJudgeOpen,
-				'contestJudgeDeadline' => $contestJudgeDeadline,
-				'contestRules' => $contestRules,
-				'contestAwards' => $contestAwards,
-				'contestAwardsLocation' => $contestAwardsLocation,
-				'contestAwardsLocName' => $contestAwardsLocName,
-				'contestAwardsLocDate' => $contestAwardsLocDate,
-				'contestAwardsLocTime' => $contestAwardsLocDate,
-				'contestShippingOpen' => $contestShippingOpen,
-				'contestShippingDeadline' => $contestShippingDeadline,
-				'contestShippingName' => $contestShippingName,
-				'contestShippingAddress' => $contestShippingAddress,
-				'contestDropoffOpen' => $contestDropoffOpen,
-				'contestDropoffDeadline' => $contestDropoffDeadline,
-				'contestBottles' => $contestBottles,
-				'contestBOSAward' => $contestBOSAward,
-				'contestCircuit' => $contestCircuit,
-				'contestVolunteers' => $contestVolunteers,
-				'contestLogo' => $contestLogo,
-				'contestEntryFee' => $contestEntryFee,
-				'contestEntryFee2' => $contestEntryFee2,
-				'contestEntryFeeDiscount' => $contestEntryFeeDiscount,
-				'contestEntryFeeDiscountNum' => $contestEntryFeeDiscountNum,
-				'contestEntryCap' => $contestEntryCap,
-				'contestEntryFeePassword' => $contestEntryFeePassword,
-				'contestEntryFeePasswordNum' => $contestEntryFeePasswordNum,
-				'contestCheckInPassword' => $hash,
-				'contestID' => $contestID
+				'contestName' => blank_to_null($contestName),
+				'contestHost' => blank_to_null($contestHost),
+				'contestHostWebsite' => blank_to_null($contestHostWebsite),
+				'contestHostLocation' => blank_to_null($contestHostLocation),
+				'contestRegistrationOpen' => blank_to_null($contestRegistrationOpen),
+				'contestRegistrationDeadline' => blank_to_null($contestRegistrationDeadline),
+				'contestEntryOpen' => blank_to_null($contestEntryOpen),
+				'contestEntryDeadline' => blank_to_null($contestEntryDeadline),
+				'contestJudgeOpen' => blank_to_null($contestJudgeOpen),
+				'contestJudgeDeadline' => blank_to_null($contestJudgeDeadline),
+				'contestRules' => blank_to_null($contestRules),
+				'contestAwards' => blank_to_null($contestAwards),
+				'contestAwardsLocation' => blank_to_null($contestAwardsLocation),
+				'contestAwardsLocName' => blank_to_null($contestAwardsLocName),
+				'contestAwardsLocDate' => blank_to_null($contestAwardsLocDate),
+				'contestAwardsLocTime' => blank_to_null($contestAwardsLocDate),
+				'contestShippingOpen' => blank_to_null($contestShippingOpen),
+				'contestShippingDeadline' => blank_to_null($contestShippingDeadline),
+				'contestShippingName' => blank_to_null($contestShippingName),
+				'contestShippingAddress' => blank_to_null($contestShippingAddress),
+				'contestDropoffOpen' => blank_to_null($contestDropoffOpen),
+				'contestDropoffDeadline' => blank_to_null($contestDropoffDeadline),
+				'contestBottles' => blank_to_null($contestBottles),
+				'contestBOSAward' => blank_to_null($contestBOSAward),
+				'contestCircuit' => blank_to_null($contestCircuit),
+				'contestVolunteers' => blank_to_null($contestVolunteers),
+				'contestLogo' => blank_to_null($contestLogo),
+				'contestEntryFee' => blank_to_null($contestEntryFee),
+				'contestEntryFee2' => blank_to_null($contestEntryFee2),
+				'contestEntryFeeDiscount' => blank_to_null($contestEntryFeeDiscount),
+				'contestEntryFeeDiscountNum' => blank_to_null($contestEntryFeeDiscountNum),
+				'contestEntryCap' => blank_to_null($contestEntryCap),
+				'contestEntryFeePassword' => blank_to_null($contestEntryFeePassword),
+				'contestEntryFeePasswordNum' => blank_to_null($contestEntryFeePasswordNum),
+				'contestCheckInPassword' => blank_to_null($hash),
+				'contestID' => blank_to_null($contestID)
 			);
 
 			$db_conn->where ('id', 1);
@@ -345,62 +289,6 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 			if (!$result) {
 				$error_output[] = $db_conn->getLastError();
 				$errors = TRUE;
-			}
-
-			if (empty($_POST['contestEntryFee2'])) {
-
-				$data = array(
-					'contestEntryFee2' => NULL	
-				);
-				$db_conn->where ('id', 1);
-				$result = $db_conn->update ($update_table, $data);
-				if (!$result) {
-					$error_output[] = $db_conn->getLastError();
-					$errors = TRUE;
-				}
-
-			}
-
-			if (empty($_POST['contestEntryFeeDiscountNum'])) {
-
-				$data = array(
-					'contestEntryFeeDiscountNum' => NULL	
-				);
-				$db_conn->where ('id', 1);
-				$result = $db_conn->update ($update_table, $data);
-				if (!$result) {
-					$error_output[] = $db_conn->getLastError();
-					$errors = TRUE;
-				}
-
-			}
-			
-			if (empty($_POST['contestEntryFeePasswordNum'])) {
-
-				$data = array(
-					'contestEntryFeePasswordNum' => NULL	
-				);
-				$db_conn->where ('id', 1);
-				$result = $db_conn->update ($update_table, $data);
-				if (!$result) {
-					$error_output[] = $db_conn->getLastError();
-					$errors = TRUE;
-				}
-
-			}
-
-			if (empty($_POST['contestEntryCap'])) {
-
-				$data = array(
-					'contestEntryCap' => NULL	
-				);
-				$db_conn->where ('id', 1);
-				$result = $db_conn->update ($update_table, $data);
-				if (!$result) {
-					$error_output[] = $db_conn->getLastError();
-					$errors = TRUE;
-				}
-
 			}
 
 			if ($section == "setup") {

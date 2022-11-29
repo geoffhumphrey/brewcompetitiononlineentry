@@ -39,10 +39,10 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 
 		$update_table = $prefix."judging_tables";
 		$data = array(
-			'tableName' => $tableName,
-			'tableStyles' => $tableStyles,
-			'tableNumber' => $tableNumber,
-			'tableLocation' => $tableLocation
+			'tableName' => blank_to_null($tableName),
+			'tableStyles' => blank_to_null($tableStyles),
+			'tableNumber' => blank_to_null($tableNumber),
+			'tableLocation' => blank_to_null($tableLocation)
 		);
 		$result = $db_conn->insert ($update_table, $data);
 		if (!$result) {
@@ -139,7 +139,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 
 			// Finally change the flightPlanning status for all records
 			$update_table = $prefix."judging_flights";
-			$data = array('flightPlanning' => $flightPlanning);
+			$data = array('flightPlanning' => blank_to_null($flightPlanning));
 			$result = $db_conn->update ($update_table, $data);
 			if (!$result) {
 				$error_output[] = $db_conn->getLastError();
@@ -252,7 +252,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 							'flightTable' => $id,
 							'flightNumber' => 1,
 							'flightEntryID' => $row_entries['id'],
-							'flightRound' => $rounds
+							'flightRound' => blank_to_null($rounds)
 						);
 						$result = $db_conn->insert ($update_table, $data);
 						if (!$result) {
@@ -266,7 +266,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 
 				// Finally change the flightPlanning status for all records
 				$update_table = $prefix."judging_flights";
-				$data = array('flightPlanning' => $flightPlanning);
+				$data = array('flightPlanning' => blank_to_null($flightPlanning));
 				$result = $db_conn->update ($update_table, $data);
 				if (!$result) {
 					$error_output[] = $db_conn->getLastError();
@@ -280,10 +280,10 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 
 		$update_table = $prefix."judging_tables";
 		$data = array(
-			'tableName' => $tableName,
-			'tableStyles' => $tableStyles,
-			'tableNumber' => $tableNumber,
-			'tableLocation' => $tableLocation
+			'tableName' => blank_to_null($tableName),
+			'tableStyles' => blank_to_null($tableStyles),
+			'tableNumber' => blank_to_null($tableNumber),
+			'tableLocation' => blank_to_null($tableLocation)
 		);
 		$db_conn->where ('id', $id);
 		$result = $db_conn->update ($update_table, $data);
@@ -377,7 +377,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 		} // end if (empty($_POST['tableStyles']))
 
 		$update_table = $prefix."judging_flights";
-		$data = array('flightPlanning' => $flightPlanning);
+		$data = array('flightPlanning' => blank_to_null($flightPlanning));
 		$result = $db_conn->update ($update_table, $data);
 		if (!$result) {
 			$error_output[] = $db_conn->getLastError();

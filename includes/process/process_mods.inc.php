@@ -1,4 +1,4 @@
-<?php
+blank_to_null(<?php
 /*
  * Module:      process_mods.inc.php
  * Description: This module does all the heavy lifting for adding/editing info in the "mods" table
@@ -50,19 +50,19 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 		elseif (isset($_POST['mod_extend_function_admin'])) $mod_extend_function_admin = $_POST['mod_extend_function_admin'];
 		else $mod_extend_function_admin = "";
 
-		$mod_name = $purifier->purify($_POST['mod_name']);
-		$mod_name = sterilize($mod_name);
-		$mod_type = sterilize($_POST['mod_type']);
-		$mod_extend_function = sterilize($_POST['mod_extend_function']);
-		$mod_extend_function_admin = sterilize($mod_extend_function_admin);
-		$mod_filename = sterilize($_POST['mod_filename']);
-		$mod_description = $purifier->purify($_POST['mod_description']);
-		$mod_description = sterilize($mod_description);
-		$mod_description = trim($mod_description);
-		$mod_permission = sterilize($_POST['mod_permission']);
-		$mod_rank = sterilize($_POST['mod_rank']);
-		$mod_display_rank = sterilize($_POST['mod_display_rank']);
-		$mod_enable = sterilize($_POST['mod_enable']);
+		$mod_name = blank_to_null($purifier->purify($_POST['mod_name']));
+		$mod_name = blank_to_null(sterilize($mod_name));
+		$mod_type = blank_to_null(sterilize($_POST['mod_type']));
+		$mod_extend_function = blank_to_null(sterilize($_POST['mod_extend_function']));
+		$mod_extend_function_admin = blank_to_null(sterilize($mod_extend_function_admin));
+		$mod_filename = blank_to_null(sterilize($_POST['mod_filename']));
+		$mod_description = blank_to_null($purifier->purify($_POST['mod_description']));
+		$mod_description = blank_to_null(sterilize($mod_description));
+		$mod_description = blank_to_null(trim($mod_description));
+		$mod_permission = blank_to_null(sterilize($_POST['mod_permission']));
+		$mod_rank = blank_to_null(sterilize($_POST['mod_rank']));
+		$mod_display_rank = blank_to_null(sterilize($_POST['mod_display_rank']));
+		$mod_enable = blank_to_null(sterilize($_POST['mod_enable']));
 
 		$data = array(
 			'mod_name' => $mod_name,

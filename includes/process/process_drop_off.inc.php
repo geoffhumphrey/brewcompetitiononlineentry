@@ -34,11 +34,11 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 
 			$update_table = $prefix."drop_off";
 			$data = array(
-				'dropLocationName' => $dropLocationName,
-				'dropLocation' => $dropLocation,
-				'dropLocationPhone' => $dropLocationPhone,
-				'dropLocationWebsite' => $dropLocationWebsite,
-				'dropLocationNotes' => $dropLocationNotes
+				'dropLocationName' => blank_to_null($dropLocationName),
+				'dropLocation' => blank_to_null($dropLocation),
+				'dropLocationPhone' => blank_to_null($dropLocationPhone),
+				'dropLocationWebsite' => blank_to_null($dropLocationWebsite),
+				'dropLocationNotes' => blank_to_null($dropLocationNotes)
 			);
 			$result = $db_conn->insert ($update_table, $data);
 			if (!$result) {
@@ -78,11 +78,11 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 
 		$update_table = $prefix."drop_off";
 		$data = array(
-			'dropLocationName' => $dropLocationName,
-			'dropLocation' => $dropLocation,
-			'dropLocationPhone' => $dropLocationPhone,
-			'dropLocationWebsite' => $dropLocationWebsite,
-			'dropLocationNotes' => $dropLocationNotes
+			'dropLocationName' => blank_to_null($dropLocationName),
+			'dropLocation' => blank_to_null($dropLocation),
+			'dropLocationPhone' => blank_to_null($dropLocationPhone),
+			'dropLocationWebsite' => blank_to_null($dropLocationWebsite),
+			'dropLocationNotes' => blank_to_null($dropLocationNotes)
 		);
 		$db_conn->where ('id', $id);
 		$result = $db_conn->update ($update_table, $data);
