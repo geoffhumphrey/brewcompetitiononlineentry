@@ -648,7 +648,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 			'brewerAddress' => blank_to_null($address),
 			'brewerCity' => blank_to_null($city),
 			'brewerState' => blank_to_null($state),
-			'brewerZip' => sterilize($_POST['brewerZip'])),
+			'brewerZip' => sterilize($_POST['brewerZip']),
 			'brewerCountry' => blank_to_null($_POST['brewerCountry']),
 			'brewerPhone1' => blank_to_null($brewerPhone1),
 			'brewerPhone2' => blank_to_null($brewerPhone2),
