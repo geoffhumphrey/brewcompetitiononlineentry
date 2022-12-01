@@ -2663,6 +2663,9 @@ function data_integrity_check() {
 	$db_conn = new MysqliDb($connection);
 
 	$errors = 0;
+	
+	$query_missing_emails = "UPDATE ".$prefix."brewer SET brewerEmail = ( SELECT user_name FROM ".$prefix."users WHERE ".$prefix."users.id = ".$prefix."brewer.uid ) WHERE brewerEmail IS NULL";
+	$missing_emails = mysqli_query($connection,$query_missing_emails) or die (mysqli_error($connection));
 
 	// Match user emails against the record in the brewer table,
 	// Compare user's id against uid,
