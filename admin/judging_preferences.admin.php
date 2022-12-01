@@ -178,7 +178,7 @@ if ($_SESSION['prefsEval'] == 1) {
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
         <input class="form-control" id="jPrefsJudgingOpen" name="jPrefsJudgingOpen" type="text" value="<?php echo $judging_open_date; ?>" placeholder="<?php echo $current_date." ".$current_time; ?>" required>
         <div id="helpBlock" class="help-block">Indicate when judges will be allowed access to their Judging Dashboard to add entry evaluations.  Typically, the open date begins the day and time the first judging session begins.
-            <?php if ($suggested_open) echo "<br><span style=\"margin-bottom:5px;\">* The date and time above is suggested and is the system default. It is the the earliest judging session's start time.</span>";  ?>
+            <?php if ($suggested_open) echo "<br><span class=\"text-warning\" style=\"margin-bottom:5px;\">* The date and time above is suggested and is the system default. It is the the earliest judging session's start time.</span>";  ?>
         </div>
     </div>
 </div>
@@ -186,9 +186,9 @@ if ($_SESSION['prefsEval'] == 1) {
     <label for="jPrefsJudgingClosed" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Judging Close Date and Time</label>
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
         <input class="form-control" id="jPrefsJudgingClosed" name="jPrefsJudgingClosed" type="text" size="20" value="<?php echo $judging_close_date; ?>" placeholder="<?php echo $current_date." ".$current_time; ?>" required>
-        <div id="helpBlock" class="help-block"><p>The closing date and time is the absolute latest judges will be allowed to enter evaluations and scores.</p>
-            <?php if ($suggested_close) echo "<br><span style=\"margin-bottom:5px;\">* The date and time above is suggested and is the system default. It is the <u>last</u> judging session's start time + 8 hours.</span>"; ?>
-            <div class="btn-group" role="group" aria-label="judgingWindowModal">
+        <div id="helpBlock" class="help-block">The closing date and time is the absolute latest judges will be allowed to enter evaluations and scores.
+            <?php if ($suggested_close) echo "<br><span class=\"text-warning\" style=\"margin-bottom:5px;\">* The date and time above is suggested and is the system default. It is the <u>last</u> judging session's start time + 8 hours.</span>"; ?>
+            <div style="margin-top: 5px;" class="btn-group" role="group" aria-label="judgingWindowModal">
                 <div class="btn-group" role="group">
                     <button type="button" class="btn btn-xs btn-info" data-toggle="modal" data-target="#judgingWindowModal">
                        Judging Open/Close Dates and Times Info

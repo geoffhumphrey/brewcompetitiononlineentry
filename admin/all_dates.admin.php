@@ -3,6 +3,7 @@ $suggested_open = FALSE;
 $suggested_close = FALSE;
 $judging_open_date = "";
 $judging_close_date = "";
+$non_judging_count = 0;
 
 if ($_SESSION['prefsEval'] == 1) {
 
@@ -52,7 +53,7 @@ if ($_SESSION['prefsEval'] == 1) {
     <label for="contestDropoffOpen" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Drop-Off Window Open</label>
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
         <!-- Input Here -->
-            <input class="form-control" id="contestDropoffOpen" name="contestDropoffOpen" type="text" value="<?php if (($section != "step4") && (isset($row_contest_dates['contestDropoffOpen']))) echo
+            <input class="form-control" id="contestDropoffOpen" name="contestDropoffOpen" type="text" value="<?php if (($section != "step4") && ((isset($row_contest_dates['contestDropoffOpen'])) && ($row_contest_dates['contestDropoffOpen'] > 0))) echo
     getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_contest_dates['contestDropoffOpen'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "system", "date-time-system"); ?>" placeholder="<?php echo $current_date." ".$current_time; ?>">
     </div>
 </div><!-- ./Form Group -->
@@ -61,7 +62,7 @@ if ($_SESSION['prefsEval'] == 1) {
     <label for="contestDropoffDeadline" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Drop-Off Window Close</label>
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
         <!-- Input Here -->
-            <input class="form-control" id="contestDropoffDeadline" name="contestDropoffDeadline" type="text" value="<?php if (($section != "step4") && (isset($row_contest_dates['contestDropoffDeadline']))) echo
+            <input class="form-control" id="contestDropoffDeadline" name="contestDropoffDeadline" type="text" value="<?php if (($section != "step4") && ((isset($row_contest_dates['contestDropoffDeadline'])) && ($row_contest_dates['contestDropoffDeadline'] > 0))) echo
     getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_contest_dates['contestDropoffDeadline'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "system", "date-time-system"); ?>" placeholder="<?php echo $current_date." ".$current_time; ?>">
     </div>
 </div><!-- ./Form Group -->
@@ -70,7 +71,7 @@ if ($_SESSION['prefsEval'] == 1) {
     <label for="contestShippingOpen" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Shipping Window Open</label>
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
         <!-- Input Here -->
-            <input class="form-control" id="contestShippingOpen" name="contestShippingOpen" type="text" value="<?php if (($section != "step4") && (isset($row_contest_dates['contestShippingOpen']))) echo
+            <input class="form-control" id="contestShippingOpen" name="contestShippingOpen" type="text" value="<?php if (($section != "step4") && ((isset($row_contest_dates['contestShippingOpen'])) && ($row_contest_dates['contestShippingOpen'] > 0))) echo
     getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_contest_dates['contestShippingOpen'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "system", "date-time-system"); ?>" placeholder="<?php echo $current_date." ".$current_time; ?>">
     </div>
 </div><!-- ./Form Group -->
@@ -79,7 +80,7 @@ if ($_SESSION['prefsEval'] == 1) {
     <label for="contestShippingDeadline" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Shipping Window Close</label>
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
         <!-- Input Here -->
-        <input class="form-control" id="contestShippingDeadline" name="contestShippingDeadline" type="text" value="<?php if (($section != "step4") && (isset($row_contest_dates['contestShippingDeadline']))) echo
+        <input class="form-control" id="contestShippingDeadline" name="contestShippingDeadline" type="text" value="<?php if (($section != "step4") && ((isset($row_contest_dates['contestShippingDeadline'])) && ($row_contest_dates['contestShippingDeadline'] > 0))) echo
     getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_contest_dates['contestShippingDeadline'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "system", "date-time-system"); ?>" placeholder="<?php echo $current_date." ".$current_time; ?>" >
     </div>
 </div><!-- ./Form Group -->
@@ -145,7 +146,7 @@ if ($_SESSION['prefsEval'] == 1) {
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
         <input class="form-control" id="jPrefsJudgingOpen" name="jPrefsJudgingOpen" type="text" value="<?php echo $judging_open_date; ?>" placeholder="<?php echo $current_date." ".$current_time; ?>" required>
         <div id="helpBlock" class="help-block">Indicate when judges will be allowed access to their Judging Dashboard to add entry evaluations.  Typically, the open date begins the day and time the first judging session begins.
-            <?php if ($suggested_open) echo "<br><span style=\"margin-bottom:5px;\">* The date and time above is suggested and is the system default. It is the the earliest judging session's start time.</span>";  ?>
+            <?php if ($suggested_open) echo "<br><span class='text-warning' style=\"margin-bottom:5px;\">* The date and time above is suggested and is the system default. It is the the earliest judging session's start time.</span>";  ?>
         </div>
     </div>
 </div>
@@ -153,9 +154,9 @@ if ($_SESSION['prefsEval'] == 1) {
     <label for="jPrefsJudgingClosed" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Close</label>
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
         <input class="form-control" id="jPrefsJudgingClosed" name="jPrefsJudgingClosed" type="text" size="20" value="<?php echo $judging_close_date; ?>" placeholder="<?php echo $current_date." ".$current_time; ?>" required>
-        <div id="helpBlock" class="help-block"><p>The closing date and time is the absolute latest judges will be allowed to enter or edit their evaluations and scores.</p>
-            <?php if ($suggested_close) echo "<br><span style=\"margin-bottom:5px;\">* The date and time above is suggested and is the system default. It is the <u>last</u> judging session's start time + 8 hours.</span>"; ?>
-            <div class="btn-group" role="group" aria-label="judgingWindowModal">
+        <div id="helpBlock" class="help-block">The closing date and time is the absolute latest judges will be allowed to enter or edit their evaluations and scores.
+            <?php if ($suggested_close) echo "<br><span class='text-warning' style=\"margin-bottom:5px;\">* The date and time above is suggested and is the system default. It is the <u>last</u> judging session's start time + 8 hours.</span>"; ?>
+            <div style="margin-top:5px" class="btn-group bcoem-admin-element" role="group" aria-label="judgingWindowModal">
                 <div class="btn-group" role="group">
                     <button type="button" class="btn btn-xs btn-info" data-toggle="modal" data-target="#judgingWindowModal">
                        Judging Open/Close Dates and Times Info
@@ -247,8 +248,6 @@ $judging_session_js = "";
 
 if ($totalRows_judging > 0) {
     
-    $non_judging_count = 0;
-    
     do { 
         
         $judging_date = "";
@@ -286,7 +285,7 @@ if ($non_judging_count == 0) echo "<p>No non-judging sessions have been defined.
 <div class="form-group"><!-- Form Group NOT REQUIRED Text Input -->
     <label for="prefsWinnerDelay" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Display Date and Time</label>
     <div class="col-lg-6 col-md-4 col-sm-8 col-xs-12">
-            <input class="form-control" id="prefsWinnerDelay" name="prefsWinnerDelay" type="text" value="<?php if ((isset($_SESSION['prefsWinnerDelay'])) && (!empty($_SESSION['prefsWinnerDelay']))) echo getTimeZoneDateTime($_SESSION['prefsTimeZone'], $_SESSION['prefsWinnerDelay'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "system", "date-time-system"); ?>" placeholder="">
+            <input class="form-control" id="prefsWinnerDelay" name="prefsWinnerDelay" type="text" value="<?php if ((isset($_SESSION['prefsWinnerDelay'])) && ($_SESSION['prefsWinnerDelay'] > 0)) echo getTimeZoneDateTime($_SESSION['prefsTimeZone'], $_SESSION['prefsWinnerDelay'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "system", "date-time-system"); ?>" placeholder="<?php echo $current_date." ".$current_time; ?>" >
         <span id="helpBlock" class="help-block">Date and time when the system will display winners. If a date and time are specified, winner display will be enabled. If the date and time are removed or blank, winner display will be disabled.</span>
         <div class="help-block with-errors"></div>
     </div>
@@ -297,7 +296,7 @@ if ($non_judging_count == 0) echo "<p>No non-judging sessions have been defined.
     <label for="contestAwardsLocDate" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Date and Time</label>
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
         <!-- Input Here -->
-            <input class="form-control" id="contestAwardsLocDate" name="contestAwardsLocDate" type="text" value="<?php if (($section != "step4") && (isset($_SESSION['contestAwardsLocTime']))) echo getTimeZoneDateTime($_SESSION['prefsTimeZone'], $_SESSION['contestAwardsLocTime'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "system", "date-time-system"); ?>" placeholder="Not set.">
+            <input class="form-control" id="contestAwardsLocDate" name="contestAwardsLocDate" type="text" value="<?php if (($section != "step4") && ((isset($_SESSION['contestAwardsLocTime'])) && ($_SESSION['contestAwardsLocTime'] > 0))) echo getTimeZoneDateTime($_SESSION['prefsTimeZone'], $_SESSION['contestAwardsLocTime'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "system", "date-time-system"); ?>" placeholder="<?php echo $current_date." ".$current_time; ?>" >
         <span id="helpBlock" class="help-block">Provide even if the date of judging is the same.</span>
     </div>
 </div><!-- ./Form Group -->
