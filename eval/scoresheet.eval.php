@@ -826,7 +826,9 @@ if ($entry_found) {
     </div>
   </div>
 </div>
-<?php } ?>
+<?php } 
+
+if ((isset($_SESSION['jPrefsMinWords'])) && ($_SESSION['jPrefsMinWords'] > 0)) { ?>
 
 <script type="text/javascript">
 var style_type = <?php echo $row_style['brewStyleType']; ?>;
@@ -836,7 +838,7 @@ var min_wordcount_not = '<?php echo $evaluation_info_091; ?>';
 var word_count_so_far = '<?php echo $evaluation_info_092; ?>';
 var edit = <?php if ($action == "edit") echo "true"; else echo "false"; ?>;
 
-<?php if (($judging_scoresheet == 3) && ((isset($_SESSION['jPrefsMinWords'])) && ($_SESSION['jPrefsMinWords'] > 0))) { ?>
+<?php if ($judging_scoresheet == 3) { ?>
 
 if (edit) var min_words_overall_ok = true;
 else var min_words_overall_ok = false;
@@ -959,6 +961,6 @@ $(document).ready(function() {
     <?php } ?>
 
 });
-
 <?php } ?>
 </script>
+<?php } // end if ((isset($_SESSION['jPrefsMinWords'])) && ($_SESSION['jPrefsMinWords'] > 0)) ?>
