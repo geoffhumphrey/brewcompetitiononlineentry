@@ -1897,6 +1897,13 @@ $evaluation_info_086 = "Expressão de outros ingredientes, conforme apropriado."
 $evaluation_info_087 = "Equilíbrio de acidez, doçura, graduação alcoólica, corpo, carbonatação (se apropriado) (14), Outros ingredientes, se apropriado (5), Gosto residual (5).";
 $evaluation_info_088 = "Comente sobre o prazer geral de beber associado à entrada, dê sugestões para melhorias.";
 
+$evaluation_info_089 = "Contagem mínima de palavras atingida ou excedida.";
+$evaluation_info_090 = "Obrigado por fornecer a avaliação mais completa possível. Palavras totais: ";
+$evaluation_info_091 = "Palavras mínimas necessárias para seus comentários: ";
+$evaluation_info_092 = "A contagem de palavras até o momento: ";
+$evaluation_info_093 = "O requisito mínimo de palavras não foi alcançado no campo de Feedback de Impressão Geral acima.";
+$evaluation_info_094 = "O requisito mínimo de palavras não foi alcançado em um ou mais campos de feedback / comentário acima.";
+
 /**
  * ----------------------------------------------------------------------------------
  * END TRANSLATIONS

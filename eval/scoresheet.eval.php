@@ -732,7 +732,9 @@ if ($entry_found) {
   </label>
   </div>
 </div>
+<p id="min-words-message" class="text-danger"></p>
 <button id="submitForm" class="btn btn-lg btn-success btn-block" type="submit"><?php echo $submit_button_text; ?></button>
+
 </form>
 <!-- Modals -->
 <div class="modal fade" id="score-disparity-modal" tabindex="-1" role="dialog" aria-labelledby="score-disparity-modal-label">
@@ -825,3 +827,138 @@ if ($entry_found) {
   </div>
 </div>
 <?php } ?>
+
+<script type="text/javascript">
+var style_type = <?php echo $row_style['brewStyleType']; ?>;
+var min_words = <?php echo $_SESSION['jPrefsMinWords']; ?>;
+var min_wordcount_reached = '<strong class="text-success"><?php echo $evaluation_info_089; ?></strong> <?php echo $evaluation_info_090; ?>';
+var min_wordcount_not = '<?php echo $evaluation_info_091; ?>';
+var word_count_so_far = '<?php echo $evaluation_info_092; ?>';
+var edit = <?php if ($action == "edit") echo "true"; else echo "false"; ?>;
+
+<?php if (($judging_scoresheet == 3) && ((isset($_SESSION['jPrefsMinWords'])) && ($_SESSION['jPrefsMinWords'] > 0))) { ?>
+
+if (edit) var min_words_overall_ok = true;
+else var min_words_overall_ok = false;
+
+function min_words_ok() {
+    $('#submitForm').attr('disabled','disabled');
+    if (min_words_overall_ok) {
+        $('#submitForm').removeAttr('disabled');
+        $('#min-words-message').hide();
+    } else {
+      $('#min-words-message').show();
+      $('#min-words-message').html('<i class="fa fa-lg fa-exclamation-circle"></i> <strong><?php echo $evaluation_info_093; ?></strong>');
+    }
+}
+
+$(document).ready(function() {
+
+    $('#min-words-message').hide();
+
+    $('#evalOverallComments').on('keyup keydown click onmouseout oninput', function() {
+
+        var currentWordCount = $('#evalOverallComments').val().match(/\S+/g).length;
+
+        if (currentWordCount >= min_words) {
+            min_words_overall_ok = true;
+            $('#evalOverallComments-words').html(min_wordcount_reached + currentWordCount);      
+        } 
+
+        else {
+           min_words_overall_ok = false;
+           $('#evalOverallComments-words').html('<strong> ' + min_wordcount_not + min_words + '</strong>');
+           if (currentWordCount > 1) $('#evalOverallComments-words').html('<strong>' + min_wordcount_not + min_words + '</strong>. <strong class="text-danger">' + word_count_so_far + currentWordCount + '</strong>');
+        }  
+
+        min_words_ok();
+
+    });
+
+});
+
+<?php } 
+
+if ((($judging_scoresheet == 1) || ($judging_scoresheet == 2)) && ((isset($_SESSION['jPrefsMinWords'])) && ($_SESSION['jPrefsMinWords'] > 0))) { 
+
+    if (($cider) || ($mead)) {
+      $comment_fields = array(
+        "aroma" => "#evalAromaComments",
+        "appearance" => "#evalAppearanceComments",
+        "flavor" => "#evalFlavorComments",
+        "overall" => "#evalOverallComments"
+      );
+    } else {
+      $comment_fields = array(
+          "aroma" => "#evalAromaComments",
+          "appearance" => "#evalAppearanceComments",
+          "flavor" => "#evalFlavorComments",
+          "mouthfeel" => "#evalMouthfeelComments",
+          "overall" => "#evalOverallComments"
+      );
+    }
+
+?>
+
+if (edit) {
+  var min_words_aroma_ok = true;
+  var min_words_appearance_ok = true;
+  var min_words_flavor_ok = true;
+  var min_words_mouthfeel_ok = true;  
+  var min_words_overall_ok = true;
+} else {
+  var min_words_aroma_ok = false;
+  var min_words_appearance_ok = false;
+  var min_words_flavor_ok = false;
+  if ((style_type == 2) || (style_type == 3)) var min_words_mouthfeel_ok = true;
+  else var min_words_mouthfeel_ok = false;
+  var min_words_overall_ok = false;
+}
+
+
+function min_words_ok() {
+    $('#submitForm').attr('disabled','disabled');
+    if ((min_words_aroma_ok) && (min_words_appearance_ok) && (min_words_flavor_ok) && (min_words_mouthfeel_ok) && (min_words_overall_ok)) {
+        $('#submitForm').removeAttr('disabled');
+        $('#min-words-message').hide();
+    } else {
+      $('#min-words-message').show();
+      $('#min-words-message').html('<i class="fa fa-lg fa-exclamation-circle"></i> <strong><?php echo $evaluation_info_094; ?></strong>');
+    }
+
+}
+
+$(document).ready(function() {
+
+    $('#min-words-message').hide();
+
+    <?php foreach ($comment_fields as $key => $value) { 
+        $value_words = $value."-words";
+        $key_ok = "min_words_".$key."_ok";
+    ?>
+
+    $('<?php echo $value; ?>').on('keyup keydown click onmouseout oninput', function() {
+
+        var currentWordCount_<?php echo $key; ?> = $('<?php echo $value; ?>').val().match(/\S+/g).length;
+
+        if (currentWordCount_<?php echo $key; ?> >= min_words) {
+            <?php echo $key_ok; ?> = true;
+            $('<?php echo $value_words; ?>').html(min_wordcount_reached + currentWordCount_<?php echo $key; ?>);      
+        } 
+
+        else {
+           <?php echo $key_ok; ?> = false;
+           $('<?php echo $value_words; ?>').html('<strong> ' + min_wordcount_not + min_words + '</strong>');
+           if (currentWordCount_<?php echo $key; ?> > 1) $('<?php echo $value_words; ?>').html('<strong>' + min_wordcount_not +  min_words + '</strong>. <strong class="text-danger">' + word_count_so_far + currentWordCount_<?php echo $key; ?> + '</strong>.');
+        }
+
+        min_words_ok();        
+
+    });
+        
+    <?php } ?>
+
+});
+
+<?php } ?>
+</script>

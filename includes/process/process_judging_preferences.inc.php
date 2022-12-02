@@ -67,6 +67,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 			}
 
 			$jPrefsScoresheet = blank_to_null(sterilize($_POST['jPrefsScoresheet']));
+			$jPrefsMinWords = blank_to_null(sterilize($_POST['jPrefsMinWords']));
 			$jPrefsJudgingOpen = blank_to_null(strtotime(sterilize($_POST['jPrefsJudgingOpen'])));
 			$jPrefsJudgingClosed = blank_to_null(strtotime(sterilize($_POST['jPrefsJudgingClosed'])));
 			$jPrefsScoreDispMax = blank_to_null(sterilize($_POST['jPrefsScoreDispMax']));
@@ -74,6 +75,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 			$update_table = $prefix."judging_preferences";
 			$data = array(
 				'jPrefsScoresheet' => $jPrefsScoresheet,
+				'jPrefsMinWords' => $jPrefsMinWords,
 				'jPrefsJudgingOpen' => $jPrefsJudgingOpen,
 				'jPrefsJudgingClosed' => $jPrefsJudgingClosed,
 				'jPrefsScoreDispMax' => $jPrefsScoreDispMax

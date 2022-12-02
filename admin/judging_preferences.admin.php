@@ -133,6 +133,15 @@ if ($_SESSION['prefsEval'] == 1) {
         </div>
     </div>
 </div><!-- ./modal -->
+
+<div class="form-group">
+    <label for="jPrefsMinWords" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Minimum Words for Scoresheet Comment/Feedback Fields</label>
+    <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
+        <input class="form-control" id="jPrefsMinWords" name="jPrefsMinWords" type="number" value="<?php if (isset($_SESSION['jPrefsMinWords'])) echo $_SESSION['jPrefsMinWords']; ?>" placeholder="">
+        <span id="helpBlock" class="help-block"><p>The minimum number of words judges must use when providing comments. Will be enforced for <strong>all comment fields</strong> on the Classic Scoresheet and Checklist Scoresheet, as well as the <strong>Overall Impression comment/feedback field</strong> on all Structured Scoresheets.</p><p>Leave blank or enter zero for no enforced minimum.</p></span>
+    </div>
+</div>
+
 <div class="form-group">
     <label for="jPrefsScoreDispMax" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Maximum Difference for Consensus Scores</label>
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">

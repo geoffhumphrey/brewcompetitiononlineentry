@@ -150,8 +150,9 @@ $cl_mf_desc_finish = array($label_cloying,$label_sweet,$label_med,$label_dry,$la
 <!-- Aroma Comments -->
 <div class="form-group">
     <label for="evalAromaComments"><?php echo sprintf("%s: %s",$label_aroma,$label_comments); ?></label>
-    <textarea class="form-control" name="evalAromaComments" rows="6" placeholder="<?php echo "450 ".$evaluation_info_060; ?>" maxlength="450" data-error="<?php echo $evaluation_info_061; ?>" required><?php if ($action == "edit") echo htmlentities($row_eval['evalAromaComments']); ?></textarea>
+    <textarea class="form-control" id="evalAromaComments" name="evalAromaComments" rows="6" placeholder="" data-error="<?php echo $evaluation_info_061; ?>" required><?php if ($action == "edit") echo htmlentities($row_eval['evalAromaComments']); ?></textarea>
     <div class="help-block small with-errors"></div>
+    <div class="help-block small" id="evalAromaComments-words"></div>
 </div>
 <!-- Aroma Descriptors
 <div class="bcoem-admin-element">
@@ -291,8 +292,9 @@ $cl_mf_desc_finish = array($label_cloying,$label_sweet,$label_med,$label_dry,$la
 <!-- Appearance Comments -->
 <div class="form-group">
     <label for="evalAppearanceComments"><?php echo sprintf("%s: %s",$label_appearance,$label_comments); ?></label>
-    <textarea class="form-control" name="evalAppearanceComments" rows="6" placeholder="<?php echo "450 ".$evaluation_info_060; ?>" maxlength="450" data-error="<?php echo $evaluation_info_061; ?>" required><?php if ($action == "edit") echo htmlentities($row_eval['evalAppearanceComments']); ?></textarea>
+    <textarea class="form-control" id="evalAppearanceComments" name="evalAppearanceComments" rows="6" placeholder="" data-error="<?php echo $evaluation_info_061; ?>" required><?php if ($action == "edit") echo htmlentities($row_eval['evalAppearanceComments']); ?></textarea>
     <div class="help-block small with-errors"></div>
+    <div class="help-block small" id="evalAppearanceComments-words"></div>
 </div>
 <!-- Appearance Descriptors
 <div class="bcoem-admin-element">
@@ -508,8 +510,9 @@ $cl_mf_desc_finish = array($label_cloying,$label_sweet,$label_med,$label_dry,$la
 <!-- Flavor Comments -->
 <div class="form-group">
     <label for="evalFlavorComments"><?php echo sprintf("%s: %s",$label_flavor,$label_comments); ?></label>
-    <textarea class="form-control" name="evalFlavorComments" rows="6" placeholder="<?php echo "450 ".$evaluation_info_060; ?>" maxlength="450" data-error="<?php echo $evaluation_info_062; ?>" required><?php if ($action == "edit") echo htmlentities($row_eval['evalFlavorComments']); ?></textarea>
+    <textarea class="form-control" id="evalFlavorComments" name="evalFlavorComments" rows="6" placeholder="" data-error="<?php echo $evaluation_info_062; ?>" required><?php if ($action == "edit") echo htmlentities($row_eval['evalFlavorComments']); ?></textarea>
     <div class="help-block small with-errors"></div>
+    <div class="help-block small" id="evalFlavorComments-words"></div>
 </div>
 <!-- Flavor Descriptors
 <div class="bcoem-admin-element">
@@ -695,8 +698,9 @@ $cl_mf_desc_finish = array($label_cloying,$label_sweet,$label_med,$label_dry,$la
 </div>
 <div class="form-group">
     <label for="evalMouthfeelComments"><?php echo sprintf("%s: %s",$label_mouthfeel,$label_comments); ?></label>
-    <textarea class="form-control" name="evalMouthfeelComments" rows="6" placeholder="<?php echo "450 ".$evaluation_info_060; ?>" maxlength="450" data-error="<?php echo $evaluation_info_062; ?>" required><?php if ($action == "edit") echo htmlentities($row_eval['evalMouthfeelComments']); ?></textarea>
+    <textarea class="form-control" id="evalMouthfeelComments" name="evalMouthfeelComments" rows="6" placeholder="" data-error="<?php echo $evaluation_info_062; ?>" required><?php if ($action == "edit") echo htmlentities($row_eval['evalMouthfeelComments']); ?></textarea>
     <div class="help-block small with-errors"></div>
+    <div class="help-block small" id="evalMouthfeelComments-words"></div>
 </div>
 <!-- Mouthfeel Descriptors 
 <div class="bcoem-admin-element">
@@ -829,8 +833,9 @@ $cl_mf_desc_finish = array($label_cloying,$label_sweet,$label_med,$label_dry,$la
 </div>
 <div class="form-group">
     <label for="evalOverallComments"><?php echo sprintf("%s: %s",$label_overall_impression,$label_comments); ?></label>
-    <textarea class="form-control" name="evalOverallComments" rows="6" placeholder="<?php echo "800 ".$evaluation_info_060; ?>" maxlength="800" data-error="<?php echo $evaluation_info_061; ?>" required><?php if ($action == "edit") echo htmlentities($row_eval['evalOverallComments']); ?></textarea>
+    <textarea class="form-control" id="evalOverallComments" name="evalOverallComments" rows="6" placeholder="" data-error="<?php echo $evaluation_info_061; ?>" required><?php if ($action == "edit") echo htmlentities($row_eval['evalOverallComments']); ?></textarea>
     <div class="help-block small with-errors"></div>
+    <div class="help-block small" id="evalOverallComments-words"></div>
 </div>
 
 <!-- Flaws -->

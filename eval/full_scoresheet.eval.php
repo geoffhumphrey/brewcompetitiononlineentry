@@ -25,8 +25,9 @@ else $beer = TRUE;
 <div class="form-group">
     <label for="evalAromaComments"><?php echo $label_comments; ?></label>
     <p><small><?php if ($mead) echo $evaluation_info_081; elseif ($cider) echo $evaluation_info_086; else echo $evaluation_info_076; ?></small></p>
-    <textarea class="form-control" name="evalAromaComments" rows="6" placeholder="" data-error="<?php echo $evaluation_info_061; ?>" required><?php if ($action == "edit") echo htmlentities($row_eval['evalAromaComments']); ?></textarea>
+    <textarea class="form-control" id="evalAromaComments" name="evalAromaComments" rows="6" placeholder="" data-error="<?php echo $evaluation_info_061; ?>" required><?php if ($action == "edit") echo htmlentities($row_eval['evalAromaComments']); ?></textarea>
     <div class="help-block small with-errors"></div>
+    <div class="help-block small" id="evalAromaComments-words"></div>
 </div>
 <!-- Appearance -->
 <h3 class="section-heading"><?php echo $label_appearance; ?></h3>
@@ -48,8 +49,9 @@ else $beer = TRUE;
 <div class="form-group">
     <label for="evalAppearanceComments"><?php echo $label_comments; ?></label>
     <p><small><?php if ($mead) echo $evaluation_info_082; elseif ($cider) echo $evaluation_info_085; else echo $evaluation_info_077; ?></small></p>
-    <textarea class="form-control" name="evalAppearanceComments" rows="6" placeholder="" data-error="<?php echo $evaluation_info_061; ?>" required><?php if ($action == "edit") echo htmlentities($row_eval['evalAppearanceComments']); ?></textarea>
+    <textarea class="form-control" id="evalAppearanceComments" name="evalAppearanceComments" rows="6" placeholder="" data-error="<?php echo $evaluation_info_061; ?>" required><?php if ($action == "edit") echo htmlentities($row_eval['evalAppearanceComments']); ?></textarea>
     <div class="help-block small with-errors"></div>
+    <div class="help-block small" id="evalAppearanceComments-words"></div>
 </div>
 <!-- Flavor -->
 <h3 class="section-heading"><?php echo $label_flavor; ?></h3>
@@ -71,8 +73,9 @@ else $beer = TRUE;
 <div class="form-group">
     <label for="evalFlavorComments"><?php echo $label_comments; ?></label>
     <p><small><?php if ($mead) echo $evaluation_info_083; elseif ($cider) echo $evaluation_info_087; else echo $evaluation_info_078; ?></small></p>
-    <textarea class="form-control" name="evalFlavorComments" rows="6" placeholder="" data-error="<?php echo $evaluation_info_061; ?>" required><?php if ($action == "edit") echo htmlentities($row_eval['evalFlavorComments']); ?></textarea>
+    <textarea class="form-control" id="evalFlavorComments" name="evalFlavorComments" rows="6" placeholder="" data-error="<?php echo $evaluation_info_061; ?>" required><?php if ($action == "edit") echo htmlentities($row_eval['evalFlavorComments']); ?></textarea>
     <div class="help-block small with-errors"></div>
+    <div class="help-block small" id="evalFlavorComments-words"></div>
 </div>
 <?php if ($beer) { ?>
 <!-- Mouthfeel -->
@@ -95,8 +98,9 @@ else $beer = TRUE;
 <div class="form-group">
     <label for="evalMouthfeelComments"><?php echo $label_comments; ?></label>
     <p><small><?php echo $evaluation_info_079; ?></small></p>
-    <textarea class="form-control" name="evalMouthfeelComments" rows="6" placeholder="" data-error="<?php echo $evaluation_info_061; ?>" required><?php if ($action == "edit") echo htmlentities($row_eval['evalMouthfeelComments']); ?></textarea>
+    <textarea class="form-control" id="evalMouthfeelComments" name="evalMouthfeelComments" rows="6" placeholder="" data-error="<?php echo $evaluation_info_061; ?>" required><?php if ($action == "edit") echo htmlentities($row_eval['evalMouthfeelComments']); ?></textarea>
     <div class="help-block small with-errors"></div>
+    <div class="help-block small" id="evalMouthfeelComments-words"></div>
 </div>
 <?php } ?>
 <!-- Overall Impression -->
@@ -119,8 +123,9 @@ else $beer = TRUE;
 <div class="form-group">
     <label for="evalOverallComments"><?php echo $label_comments; ?></label>
     <p><small><?php if ($mead) echo $evaluation_info_084; elseif ($cider) echo $evaluation_info_088; else echo $evaluation_info_080; ?></small></p>
-    <textarea class="form-control" name="evalOverallComments" rows="6" placeholder="" data-error="<?php echo $evaluation_info_061; ?>" required><?php if ($action == "edit") echo htmlentities($row_eval['evalOverallComments']); ?></textarea>
+    <textarea class="form-control" id="evalOverallComments" name="evalOverallComments" rows="6" placeholder="" data-error="<?php echo $evaluation_info_061; ?>" required><?php if ($action == "edit") echo htmlentities($row_eval['evalOverallComments']); ?></textarea>
     <div class="help-block small with-errors"></div>
+    <div class="help-block small" id="evalOverallComments-words"></div>
 </div>
 <!-- Style Accuracy -->
 <div class="form-group">

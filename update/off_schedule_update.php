@@ -2827,7 +2827,6 @@ else {
  * ----------------------------------------------- 2.5.0 ---------------------------------------------
  * Correct character limit bug in judging_scores and judging_scores_bos table.
  * Added after Beta release.
- * ALTER TABLE `judging_scores` CHANGE `scoreType` `scoreType` CHAR(4);
  * ---------------------------------------------------------------------------------------------------
  */
 
@@ -2849,6 +2848,28 @@ if ($result) $output_off_sched_update .= "<li>The scoreType column was converted
 else {
 	$output_off_sched_update .= "<li class=\"text-danger\">The scoreType column was NOT converted to INT(3) in the judging_scores_bos table.</li>";
 	$error_count += 1;
+}
+
+/**
+ * ----------------------------------------------- 2.5.0 ---------------------------------------------
+ * Add option to force minimum word count for selected scoresheet fields.
+ * By request.
+ * @see https://github.com/geoffhumphrey/brewcompetitiononlineentry/issues/1370#issuecomment-1324015942
+ * ---------------------------------------------------------------------------------------------------
+ */
+
+if (!check_update("jPrefsMinWords", $prefix."judging_preferences")) {
+
+	$sql = sprintf("ALTER TABLE `%s` ADD `jPrefsMinWords` INT(3) NULL DEFAULT NULL AFTER `jPrefsScoresheet`",$prefix."judging_preferences");
+	mysqli_select_db($connection,$database);
+	mysqli_real_escape_string($connection,$sql);
+	$result = mysqli_query($connection,$sql);
+	if ($result) $output_off_sched_update .= "<li>The jPrefsMinWords column was added to the judging preferences table.</li>";
+	else {
+		$output_off_sched_update .= "<li class=\"text-danger\">The jPrefsMinWords column was NOT added to the judging preferences table.</li>";
+		$error_count += 1;
+	}
+
 }
 
 // End all unordered lists
@@ -2904,7 +2925,7 @@ if (!$setup_running) {
 	$db_conn->update ($update_table, $data);
 }
 
-// Force reset of some session data
+// Force reset of session data
 unset($_SESSION['prefs'.$prefix_session]);
 unset($_SESSION['contest_info_general'.$prefix_session]);
 unset($_SESSION['prefsLang'.$prefix_session]);

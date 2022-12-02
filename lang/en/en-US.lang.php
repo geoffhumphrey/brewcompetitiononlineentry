@@ -1613,7 +1613,7 @@ $evaluation_info_020 = "Your Judging Dashboard will be available"; // Punctuatio
 $evaluation_info_021 = "to add evaluations for entries assigned to you"; // Punctuation omitted intentionally
 $evaluation_info_022 = "Judging and evaluation submission is closed.";
 $evaluation_info_023 = "If you have any questions, contact the competition organizer or judge coordinator.";
-$evaluation_info_024 = "You have been assigned to the following tables. Entry lists for each table will only show for past and current judging sessions.";
+$evaluation_info_024 = "You have been assigned to the following tables. <strong>Entry lists for each table will only show for <u>past</u> and <u>current</u> judging sessions.</strong>";
 $evaluation_info_025 = "Judges assigned to this table:";
 $evaluation_info_026 = "All consensus scores entered by judges match.";
 $evaluation_info_027 = "Entries that you have completed, or an admin has entered on your behalf, that were not assigned to you in the system.";
@@ -1908,7 +1908,7 @@ $evaluation_info_057 = "Scores should be no less than 5 and no greater than 50."
 $evaluation_info_058 = "The score you entered is greater than 50, the maximum score for any entry. Please review and revise your consensus score.";
 $evaluation_info_059 = "The score you provided for this entry is outside of the scoring difference range between judges.";
 $evaluation_info_060 = "characters maximum";
-$evaluation_info_061 = "Please provide some brief comments.";
+$evaluation_info_061 = "Please provide comments.";
 $evaluation_info_062 = "Please choose a descriptor.";
 $evaluation_info_063 = "I would finish this sample.";
 $evaluation_info_064 = "I would drink a pint of this beer.";
@@ -2031,6 +2031,13 @@ $evaluation_info_086 = "Expression of other ingredients as appropriate.";
 $evaluation_info_087 = "Balance of acidity, sweetness, alcohol strength, body, carbonation (if appropriate) (14),
 Other ingredients as appropriate (5), Aftertaste (5).";
 $evaluation_info_088 = "Comment on overall drinking pleasure associated with entry, give suggestions for improvement.";
+
+$evaluation_info_089 = "Minimum word count reached or exceeded.";
+$evaluation_info_090 = "Thank you for providing the most complete evaluation possible. Total words: ";
+$evaluation_info_091 = "Minimum words required for your comments: ";
+$evaluation_info_092 = "Word count so far: ";
+$evaluation_info_093 = "The minimum word requirement has not been reached in the Overall Impression Feedback field above.";
+$evaluation_info_094 = "The minimum word requirement has not been reached in one or more feedback/comment fields above.";
 
 /**
  * ----------------------------------------------------------------------------------

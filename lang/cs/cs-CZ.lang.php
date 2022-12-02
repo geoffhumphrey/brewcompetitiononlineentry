@@ -1893,6 +1893,13 @@ $evaluation_info_086 = "Vyjádření dalších složek podle potřeby.";
 $evaluation_info_087 = "Vyváženost kyselosti, sladkosti, obsahu alkoholu, těla, sycení oxidem uhličitým (je-li to vhodné) (14), Další složky podle potřeby (5), Dochuť (5).";
 $evaluation_info_088 = "Okomentujte celkový požitek z pití spojený se vstupem, uveďte návrhy na zlepšení.";
 
+$evaluation_info_089 = "Dosažený nebo překročený minimální počet slov.";
+$evaluation_info_090 = "Děkujeme vám za poskytnutí co nejúplnějšího hodnocení. Celkem slov: ";
+$evaluation_info_091 = "Minimální počet slov potřebných pro váš komentář: ";
+$evaluation_info_092 = "Dosavadní počet slov: ";
+$evaluation_info_093 = "Ve výše uvedeném poli Celkové hodnocení dojmu nebylo dosaženo minimálního počtu slov.";
+$evaluation_info_094 = "V jednom nebo více výše uvedených polích pro zpětnou vazbu / komentář nebylo dosaženo minimálního počtu slov.";
+
 /**
  * ----------------------------------------------------------------------------------
  * END TRANSLATIONS

@@ -1,6 +1,5 @@
 sftp-config.json
 site/config.reset.php
-site/config.php
 site/config-brewcomp-reset.php
 lang/es/*
 js_source/*
@@ -18,7 +17,6 @@ js_includes/autosave.js
 update/char_set_update.php
 update/move_files.php
 .vscode/
-site/config.php
-site/config.php
 lib/hosted.lib.php
-lang/es/es-419.lang.php
+ajax/autosave.ajax.php
+css/anomalus.css
