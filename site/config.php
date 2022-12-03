@@ -2,7 +2,7 @@
 /**
  * Module:        config.php
  * Description:   This module houses configuration variables for DB connection, etc.
- * Last Modified: August 26, 2021
+ * Last Modified: December 3, 2022
  */
 
 /**

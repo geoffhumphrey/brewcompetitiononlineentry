@@ -161,30 +161,21 @@ function is_https() {
  */
 
 function sterilize($sterilize = NULL) {
-    
     if ($sterilize == NULL) return NULL;
-    
     elseif (empty($sterilize)) return $sterilize;
-
     else {
-        
         $sterilize = trim($sterilize);
-        
         if (is_numeric($sterilize)) {
             if (is_float($sterilize)) $sterilize = filter_var($sterilize,FILTER_SANITIZE_NUMBER_FLOAT,FILTER_FLAG_ALLOW_FRACTION);
             if (is_int($sterilize)) $sterilize = filter_var($sterilize,FILTER_SANITIZE_NUMBER_INT);
         }
-
         else $sterilize = filter_var($sterilize,FILTER_SANITIZE_STRING);
-        
         $sterilize = strip_tags($sterilize);
         $sterilize = stripcslashes($sterilize);
         $sterilize = stripslashes($sterilize);
         $sterilize = addslashes($sterilize);
         return $sterilize;
-
     }
-
 }
 
 if (HOSTED) {
