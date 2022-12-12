@@ -22,6 +22,8 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 	$judgingLocation = sterilize($judgingLocation);
 	$judgingLocType = sterilize($_POST['judgingLocType']);
 
+	if (empty($judgingLocType)) $judgingLocType = 0;
+
 	$judgingRounds = "";
 	if (isset($_POST['judgingRounds'])) $judgingRounds = sterilize($_POST['judgingRounds']);
 	
@@ -30,7 +32,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 
 	$update_table = $prefix."judging_locations";
 	$data = array(
-		'judgingLocType' => blank_to_null($judgingLocType),
+		'judgingLocType' => $judgingLocType,
 		'judgingDate' => blank_to_null($judgingDate),
 		'judgingDateEnd' => blank_to_null($judgingDateEnd),
 		'judgingLocation' => blank_to_null($judgingLocation),

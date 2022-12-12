@@ -37,7 +37,8 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 		'brewerJudge' => 'N',
 		'brewerSteward' => 'N',
 		'brewerJudgeLocation' => NULL,
-		'brewerStewardLocation' => NULL
+		'brewerStewardLocation' => NULL,
+		'brewerDropOff' => '999'
 	);
 	$result = $db_conn->update ($update_table, $data);
 	if (!$result) {

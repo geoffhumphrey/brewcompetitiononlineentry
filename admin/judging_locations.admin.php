@@ -751,12 +751,12 @@ if (($output_add_edit) && ($msg != 9)) {
         <div class="radio">
             <!-- Input Here -->
             <label>
-                <input type="radio" name="judgingLocType" value="0" id="judgingLocType_0"  <?php if (($section == "step5") || ($action == "add")) echo "CHECKED"; if ((isset($row_judging['judgingLocType'])) && ($section != "step5") && ($row_judging['judgingLocType'] == "0")) echo "CHECKED";  ?> /> Traditional <small>(typically a single day in a central location)</small>
+                <input type="radio" name="judgingLocType" value="0" id="judgingLocType_0"  <?php if (($section == "step5") || ($action == "add")) echo "CHECKED"; if ((isset($row_judging['judgingLocType'])) && ($section != "step5") && ($row_judging['judgingLocType'] == "0")) echo "CHECKED";  ?> required /> Traditional <small>(typically a single day in a central location)</small>
             </label>
         </div>
         <div class="radio">
             <label>
-                <input type="radio" name="judgingLocType" value="1" id="judgingLocType_1" <?php if ((isset($row_judging['judgingLocType'])) && ($section != "step5") && ($row_judging['judgingLocType'] == "1")) echo "CHECKED"; ?>/> Distributed <small>(multi-day and/or multi-location)</small>
+                <input type="radio" name="judgingLocType" value="1" id="judgingLocType_1" <?php if ((isset($row_judging['judgingLocType'])) && ($section != "step5") && ($row_judging['judgingLocType'] == "1")) echo "CHECKED"; ?> required /> Distributed <small>(multi-day and/or multi-location)</small>
             </label>
         </div>
         <span class="help-block">Indicate whether judge teams in this session will be evaluating entries at a single, designated location, typically collectively, or over a series of days in various locations. For example, choose <em>Distributed</em> if judges will be evaluating entries virtually - synchronously or asynchronously - or if locations will be ad-hoc, such as in a judge team member home.</span>
