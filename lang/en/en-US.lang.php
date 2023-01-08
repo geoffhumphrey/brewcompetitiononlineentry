@@ -885,15 +885,25 @@ $entry_info_text_030 = "entries for for the following";
 $entry_info_text_031 = "After creating your account and adding your entries to the system, you must pay your entry fee(s). Accepted payment methods are:";
 $entry_info_text_032 = $label_cash;
 $entry_info_text_033 = $label_check.", made out to";
+/** Orig: 
 $entry_info_text_034 = "Credit/debit card and e-check, via PayPal";
+*/
+$entry_info_text_034 = "PayPal";
 $entry_info_text_035 = "Competition judging dates are yet to be determined. Please check back later.";
 $entry_info_text_036 = "Entry bottles accepted at our shipping location from";
 $entry_info_text_037 = "Ship entries to:";
+$entry_info_text_038 = "Make sure that you carefully pack your entries.";
+$entry_info_text_039 = "Bubble wrap secured with an elastic band around the container is advised.";
+$entry_info_text_040 = "";
+$entry_info_text_041 = "";
+$entry_info_text_042 = "";
+/** Orig:
 $entry_info_text_038 = "Carefully pack your entries in a sturdy box. Line the inside of your carton with a plastic trash bag. Partition and pack each bottle with adequate packaging material. Please do not over pack!";
 $entry_info_text_039 = "Write clearly: <em>Fragile. This Side Up.</em> on the package. Please only use bubble wrap as your packing material.";
 $entry_info_text_040 = "Enclose <em>each</em> of your bottle labels in a small zip-top bag before attaching to their respective bottles. This way it makes it possible for the organizer to identify specifically which entry has broken if there is damage during shipment.";
 $entry_info_text_041 = "Every reasonable effort will be made to contact entrants whose bottles have broken to make arrangements for sending replacement bottles.";
 $entry_info_text_042 = "If you live in the United States, please note that it is <strong>illegal</strong> to ship your entries via the United States Postal Service (USPS). Private shipping companies have the right to refuse your shipment if they are informed that the package contains glass and/or alcoholic beverages. Be aware that entries mailed internationally are often required by customs to have proper documentation. These entries might be opened and/or returned to the shipper by customs officials at their discretion. It is solely your responsibility to follow all applicable laws and regulations.";
+*/
 $entry_info_text_043 = "Entry bottles accepted at our drop-off locations from";
 $entry_info_text_044 = "Map to";
 $entry_info_text_045 = "Select/Tap for Required Entry Info";
