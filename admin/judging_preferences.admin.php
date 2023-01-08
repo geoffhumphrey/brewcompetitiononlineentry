@@ -34,7 +34,7 @@ if ($_SESSION['prefsEval'] == 1) {
 </div>
 <?php } ?>
 <div class="form-group">
-    <label for="jPrefsBottleNum" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Number of Bottles Required per Entry</label>
+    <label for="jPrefsBottleNum" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Number of Containers Required per Entry</label>
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
             <select class="selectpicker" name="jPrefsBottleNum" id="jPrefsBottleNum" data-size="10" data-width="auto">
             <?php for ($i=1; $i <= 15; $i++) { ?>

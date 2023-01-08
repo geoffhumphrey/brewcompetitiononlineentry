@@ -473,7 +473,7 @@ jQuery(document).ready(function($) {
             else echo $row_contest_info['contestBottles'];
         }
         ?></textarea>
-        <span id="helpBlock" class="help-block">Indicate the number of bottles, size, color, etc. Edit default text as needed. <?php if (ENABLE_MARKDOWN) echo $markdown_cheatsheet; ?></span>
+        <span id="helpBlock" class="help-block">Indicate the number of containers, size, color, etc. Edit default text as needed. <?php if (ENABLE_MARKDOWN) echo $markdown_cheatsheet; ?></span>
      </div>
 </div><!-- ./Form Group -->
 
