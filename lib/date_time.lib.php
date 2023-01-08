@@ -130,7 +130,7 @@ function getTimeZoneDateTime($timezone_offset, $timestamp, $date_format, $time_f
 		break;
 		default: $return = $date;
 	}
-	return $return;
+	return str_replace("ChST", "AEST", $return);
 }
 
 function greaterDate($start_date,$end_date) {
