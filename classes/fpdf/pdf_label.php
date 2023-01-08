@@ -157,14 +157,12 @@ class PDF_Label extends FPDF {
         '3422' => array(
             'paper-size'=>'A4',        
             'metric'=>'mm',    
-            'marginLeft'=>0,        
-            'marginTop'=>8.5,         
-            'NX'=>3,    
-            'NY'=>8,    
-            'SpaceX'=>0,        
+            'marginLeft'=>7.25,
+            'marginTop'=>12.9,
+            'SpaceX'=>2.5,
             'SpaceY'=>0,    
-            'width'=>70,       
-            'height'=>35,        
+            'width'=>63.5,
+            'height'=>33.9,
             'font-size'=>9
         ),
 
