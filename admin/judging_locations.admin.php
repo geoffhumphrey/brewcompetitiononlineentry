@@ -270,15 +270,27 @@ if ($section != "step5") {
 					$output = "";
 					
 					if (!empty($exploder)) {
+
+						//$output .= $exploder;
 						
 						sort($a);
 						$c = array();
+
+						$none_selected = 0;
 						
 						foreach ($a as $value) {
+							
 							if (!empty($value)) {
+								
 								$b = substr($value, 2);
-								if ($filter == "staff") $c[] = judging_location_avail($b,$value,1);
-								else $c[] = judging_location_avail($b,$value);
+								if ($filter == "staff") $judging_location_avail = judging_location_avail($b,$value,1);
+								else $judging_location_avail = judging_location_avail($b,$value);
+
+								if ($judging_location_avail != 0) {
+									$c[] = $judging_location_avail;
+									$none_selected += 1;
+								}
+
 							}
 						}
 					
@@ -292,13 +304,15 @@ if ($section != "step5") {
 							$output = rtrim($output,"<br>");
 						}
 
+					
 					}					
 						
-					if (empty($output)) {
-						if ($filter == "staff") $output_location = "None specified.";
-						else $output_location .= "<span class=\"fa fa-lg fa-ban text-danger\"></span> <a href=\"".$base_url."index.php?section=brewer&amp;go=admin&amp;action=edit&amp;filter=".$row_brewer['uid']."&amp;id=".$row_brewer['uid']."\" data-toggle=\"tooltip\" title=\"Enter ".$row_brewer['brewerFirstName']." ".$row_brewer['brewerLastName']."&rsquo;s location preferences\">None specified</a>.";
+					if ($none_selected == 0) {
+						if ($filter == "staff") $output = "None specified.";
+						else $output .= "<span class=\"fa fa-sm fa-ban text-danger\"></span> <a href=\"".$base_url."index.php?section=brewer&amp;go=admin&amp;action=edit&amp;filter=".$row_brewer['uid']."&amp;id=".$row_brewer['uid']."\" data-toggle=\"tooltip\" title=\"Enter ".$row_brewer['brewerFirstName']." ".$row_brewer['brewerLastName']."&rsquo;s location preferences\">None specified</a>.";
 					}
-					else $output_location = $output;
+					
+					$output_location = $output;
 
 				}
 
