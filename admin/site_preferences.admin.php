@@ -1585,7 +1585,7 @@ $(document).ready(function(){
     </div><!-- ./modal -->
 
     <div class="form-group"><!-- Form Group Radio INLINE -->
-        <label for="prefsPaypal" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label"><a class="hide-loader" href="https://developer.paypal.com/docs/classic/products/instant-payment-notification/" target="_blank">PayPal Instant Payment Notification</a> (IPN)</label>
+        <label for="prefsPaypal" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label"><a class="hide-loader" href="https://developer.paypal.com/api/nvp-soap/ipn/" target="_blank">PayPal Instant Payment Notification</a> (IPN)</label>
         <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
             <div class="input-group">
                 <!-- Input Here -->

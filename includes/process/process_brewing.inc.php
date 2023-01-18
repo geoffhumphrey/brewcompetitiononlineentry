@@ -181,6 +181,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 
 		// -------------------------------- Required info --------------------------------
 		// Checked against requirements later
+
 		if (!empty($_POST['brewInfo'])) {
 			$brewInfo = $purifier->purify($_POST['brewInfo']);
 			$brewInfo = filter_var($brewInfo,FILTER_SANITIZE_STRING);
@@ -192,8 +193,14 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 			$brewInfoOptional = filter_var($brewInfoOptional,FILTER_SANITIZE_STRING);			
 		}
 
-		// For BJCP 2015, process addtional info
+		// For BJCP 2015/2021, process addtional info
 		if (($_SESSION['prefsStyleSet'] == "BJCP2015") || ($_SESSION['prefsStyleSet'] == "BJCP2021")) {
+
+			// If BJCP 2021 and 2A, add optional regional variation if present
+			if (($index == "02-A") && ($_SESSION['prefsStyleSet'] == "BJCP2021") && (!empty($_POST['regionalVar']))) {
+				$brewInfo = $purifier->purify($_POST['regionalVar']);
+				$brewInfo = filter_var($brewInfo,FILTER_SANITIZE_STRING);
+			}
 
 			// IPA strength for 21B styles
 			if (strlen(strstr($index,"21-B")) > 0) {
@@ -694,7 +701,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 				$update_table = $prefix."brewing";
 				$data = array('brewConfirmed' => '0');
 				$db_conn->where ('id', $id);
-				$result = $db_conn->insert ($update_table, $data);
+				$result = $db_conn->update ($update_table, $data);
 				if (!$result) {
 					$error_output[] = $db_conn->getLastError();
 					$errors = TRUE;

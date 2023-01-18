@@ -573,6 +573,14 @@ else $relocate_referrer = $_SERVER['HTTP_REFERER'];
             <div class="help-block with-errors"></div>
         </div>
     </div>
+    <!-- International Light Lager Regional Variation -->
+	<div id="regionalVariation" class="form-group"><!-- Form Group NOT REQUIRED Text Input -->
+        <label for="brewCoBrewer" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label"><?php echo $label_regional_variation; ?></label>
+        <div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
+        	<!-- Input Here -->
+            <input class="form-control" id="regionalVar" name="regionalVar" type="text" value="<?php if (($action == "edit") && ($view == "02-A") && ($_SESSION['prefsStyleSet'] == "BJCP2021") && (!empty($row_log['brewInfo']))) echo $row_log['brewInfo']; ?>" placeholder="<?php echo $brew_text_041; ?>" maxlength="100">
+        </div>
+    </div><!-- ./Form Group -->
     <!-- Select Strength -->
     <div id="strength">
     	<div id="fg-strength" class="form-group"><!-- Form Group Radio INLINE -->

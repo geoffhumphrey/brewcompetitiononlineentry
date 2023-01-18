@@ -140,12 +140,12 @@ if ($totalRows_log > 0) {
 
 		if ((!empty($row_log['brewInfo'])) || (!empty($row_log['brewMead1'])) || (!empty($row_log['brewMead2'])) || (!empty($row_log['brewMead3']))) {
 			$brewInfo = "";
-			//$brewInfo .= "Required Info: ";
 			if (!empty($row_log['brewInfo'])) $brewInfo .= str_replace("^", " | ", $row_log['brewInfo']);
 			if (!empty($row_log['brewMead1'])) $brewInfo .= "<br>".$row_log['brewMead1'];
 			if (!empty($row_log['brewMead2'])) $brewInfo .= "<br>".$row_log['brewMead2'];
 			if (!empty($row_log['brewMead3'])) $brewInfo .= "<br>".$row_log['brewMead3'];
-			$required_info .= "<p><strong>".$label_required_info.":</strong> ".$brewInfo."</p>";
+			if (($_SESSION['prefsStyleSet'] == "BJCP2021") && ($row_log['brewCategorySort'] == "02") && ($row_log['brewSubCategory'] == "A")) $required_info .= "<p><strong>".$label_regional_variation.":</strong> ".$brewInfo."</p>";
+			else $required_info .= "<p><strong>".$label_required_info.":</strong> ".$brewInfo."</p>";
 		}
 
 		if (!empty($row_log['brewInfoOptional'])) {

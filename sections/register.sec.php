@@ -627,8 +627,9 @@ if ($go == "default") {  ?>
 			<!-- Input Here -->
 			<select class="selectpicker" name="brewerDropOff" id="brewerDropOff" data-live-search="true" data-size="10" data-width="fit" data-show-tick="true" data-header="<?php echo $label_select_dropoff; ?>" title="<?php echo $label_select_dropoff; ?>" required>
 				<?php if (!empty($dropoff_select)) { ?>
+					<optgroup label="<?php echo $label_drop_offs; ?>">
 	                <?php echo $dropoff_select; ?>
-	                <option data-divider="true"></option>
+	            	</optgroup>
 	            <?php } if (!empty($_SESSION['contestShippingAddress'])) { ?>
 					<option value="0"><?php echo $brewer_text_048; ?></option>
 					<option data-divider="true"></option>

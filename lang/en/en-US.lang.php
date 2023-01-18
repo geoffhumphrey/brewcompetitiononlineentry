@@ -2,7 +2,7 @@
 /**
  * Module:      en-US.lang.php
  * Description: This module houses all display text in the English language.
- * Updated:     September 1, 2021
+ * Updated:     January 17, 2023
  *  
  * To translate this file, first make a copy of it and rename it with the 
  * language name in the title.
@@ -2038,6 +2038,15 @@ $evaluation_info_091 = "Minimum words required for your comments: ";
 $evaluation_info_092 = "Word count so far: ";
 $evaluation_info_093 = "The minimum word requirement has not been reached in the Overall Impression Feedback field above.";
 $evaluation_info_094 = "The minimum word requirement has not been reached in one or more feedback/comment fields above.";
+
+/**
+ * ------------------------------------------------------------------------
+ * Version 2.5.1 Additions
+ * ------------------------------------------------------------------------
+ */
+
+$label_regional_variation = "Regional Variation";
+$brew_text_041 = "Optional &ndash; specify a regional variation (e.g., Mexican Lager, Dutch Lager, Japanese Rice Lager, etc.).";
 
 /**
  * ----------------------------------------------------------------------------------

@@ -181,6 +181,11 @@ do {
 	if ($row_required_optional['brewStyleSweet'] == 1) $req_sweetness_styles[] = $style_id;
 	if ($row_required_optional['brewStyleCarb'] == 1) $req_carb_styles[] = $style_id;
 
+	// If BJCP 2021, add style 2A to the list
+	if (($row_required_optional['brewStyleVersion'] == "BJCP2021") && ($style_id == "2-A")) {
+		$req_special_ing_styles[] = $style_id;
+	}
+
 	if ($_SESSION['prefsStyleSet'] == "BA") {
 		if (!empty($row_required_optional['brewStyleInfo'])) $styles_entry_text[$style_id] = str_replace($replacement1,$replacement2,$row_required_optional['brewStyleInfo']);
 	}

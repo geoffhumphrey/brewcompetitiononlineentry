@@ -137,6 +137,9 @@ if ($brewing_info['brewCategory'] < $category_end) {
 
 else $brewing_info['styleName'] = $brewing_info['brewStyle'];
 
+
+if (($_SESSION['prefsStyleSet'] == "BJCP2021") && ($brewing_info['brewCategorySort'] == "02") && ($brewing_info['brewSubCategory'] == "A")) $label_required_info = $label_regional_variation;
+
 /**
  * Version 2.5.0
  * November, 2022

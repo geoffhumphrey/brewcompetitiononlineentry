@@ -817,7 +817,7 @@ function judging_location_avail($loc_id,$judge_avail,$method=0) {
 	require(CONFIG.'config.php');
 	mysqli_select_db($connection,$database);
 
-	$return = "0";
+	$return = 0;
 
 	$query_judging_loc3 = sprintf("SELECT judgingLocName,judgingDate,judgingLocation,judgingLocType FROM %s WHERE id='%s'", $prefix."judging_locations", $loc_id);
 	$judging_loc3 = mysqli_query($connection,$query_judging_loc3) or die (mysqli_error($connection));

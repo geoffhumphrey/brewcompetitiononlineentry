@@ -285,6 +285,9 @@ if ($totalRows_table_assignments > 0) {
 		$table_location = get_table_info($tbl_loc_disp,"location",$tbl_id,"default","default");
 		$table_location = explode("^", $table_location);
 
+		if (!empty($table_location[0])) $location_start_date = $table_location[0];
+		else $location_start_date = time();
+
 		/**
 		 * Open up for non-admins 10 minutes before the stated session start time.
 		 * Useful when judging is in-person and judges wish to review their assigned
@@ -295,10 +298,12 @@ if ($totalRows_table_assignments > 0) {
 
 			if ((!empty($table_location[1]) && (time() > $table_location[1]))) $disable_add_edit = TRUE;
 
+
+
 			$random = random_generator(7,2);
 			$assigned_judges = assigned_judges($tbl_id,$dbTable,$judging_assignments_db_table,1);
 			
-			$table_start_time = getTimeZoneDateTime($_SESSION['prefsTimeZone'], $table_location[0], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "short", "date-time");
+			$table_start_time = getTimeZoneDateTime($_SESSION['prefsTimeZone'], $location_start_date, $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "short", "date-time");
 			
 			if (empty($table_location[1])) $table_assignment_entries .= sprintf("<h3 style=\"margin-top: 30px;\">%s %s - %s <small>%s</small></h3>",$label_table,$tbl_num_disp,$tbl_name_disp,$table_start_time);
 			
@@ -421,7 +426,11 @@ if ($totalRows_table_assignments > 0) {
 						$style_display = $style.": ".$score_style_data[2];
 
 						$info_display = "";
-						if (!empty($row_entries['brewInfo'])) $info_display .= $label_required_info.": ".$row_entries['brewInfo'];
+						if (!empty($row_entries['brewInfo'])) {
+							if (($_SESSION['prefsStyleSet'] == "BJCP2021") && ($row_entries['brewCategorySort'] == "02") && ($row_entries['brewSubCategory'] == "A")) $info_display .= $label_regional_variation; 
+							else $info_display .= $label_required_info;
+							$info_display .= ": ".$row_entries['brewInfo'];
+						}
 
 						$allergen_display = "";
 						if (!empty($row_entries['brewPossAllergens'])) $allergen_display .= $label_possible_allergens.": ".$row_entries['brewPossAllergens'];

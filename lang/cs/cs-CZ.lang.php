@@ -2,7 +2,7 @@
 /**
  * Module:      cs-CZ.lang.php
  * Description: This module houses all display text in the Czech language.
- * Updated:     November 21, 2022
+ * Updated:     January 17, 2023
  *  
  * To translate this file, first make a copy of it and rename it with the 
  * language name in the title.
@@ -1899,6 +1899,16 @@ $evaluation_info_091 = "Minimální počet slov potřebných pro váš komentá�
 $evaluation_info_092 = "Dosavadní počet slov: ";
 $evaluation_info_093 = "Ve výše uvedeném poli Celkové hodnocení dojmu nebylo dosaženo minimálního počtu slov.";
 $evaluation_info_094 = "V jednom nebo více výše uvedených polích pro zpětnou vazbu / komentář nebylo dosaženo minimálního počtu slov.";
+
+/**
+ * ------------------------------------------------------------------------
+ * Version 2.5.1 Additions
+ * ------------------------------------------------------------------------
+ */
+
+$label_regional_variation = "Regionální Rozdíly";
+$brew_text_041 = "Nepovinné - uveďte regionální variantu (např. mexický ležák, holandský ležák, japonský rýžový ležák atd.).";
+
 
 /**
  * ----------------------------------------------------------------------------------

@@ -179,7 +179,8 @@ if ($totalRows_log > 0) {
 			if (!empty($row_log['brewMead2'])) $brewInfo .= "&nbsp;&nbsp;".$row_log['brewMead2'];
 			if (!empty($row_log['brewMead3'])) $brewInfo .= "&nbsp;&nbsp;".$row_log['brewMead3'];
 
-			$required_info .= "<p><strong>Req. Info:</strong> ".$brewInfo."</p>";
+			if (($_SESSION['prefsStyleSet'] == "BJCP2021") && ($row_log['brewCategorySort'] == "02") && ($row_log['brewSubCategory'] == "A")) $required_info .= "<p><strong>Regional Var:</strong> ".$brewInfo."</p>";
+			else $required_info .= "<p><strong>Req. Info:</strong> ".$brewInfo."</p>";
 		
 		}
 

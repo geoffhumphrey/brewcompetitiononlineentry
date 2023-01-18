@@ -130,7 +130,7 @@ if (($head_ordinal) || ($head_miniBOS)) $head_rt_col = "col-xs-6";
         <?php if (!empty($evalSpecialIngredients)) { ?>
          <div class="row">
             <div class="col col-lg-2 col-md-3 col-sm-4 col-xs-3">
-            <strong><?php echo $label_required_info; ?></span>:</strong>
+            <strong><?php if (($_SESSION['prefsStyleSet'] == "BJCP2021") && ($row_style['brewStyleGroup'] == "2") && ($row_style['brewStyleNum'] == "A")) echo $label_regional_variation; else echo $label_required_info; ?></span>:</strong>
             </div>
             <div class="col col-lg-10 col-md-9 col-sm-8 col-xs-9">
             <?php echo $evalSpecialIngredients; ?>
