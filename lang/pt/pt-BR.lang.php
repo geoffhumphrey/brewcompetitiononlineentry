@@ -1912,6 +1912,12 @@ $evaluation_info_094 = "O requisito mínimo de palavras não foi alcançado em u
 
 $label_regional_variation = "Variação Regional";
 $brew_text_041 = "Opcional - especificar uma variação regional (por exemplo, Lager mexicana, Lager holandesa, Rice Lager japonesa, etc.).";
+$evaluation_info_095 = "Próxima sessão de julgamento designada aberta:";
+$evaluation_info_096 = "Para ajudar na preparação, mesas/voos designados e entradas associadas estão disponíveis dez minutos antes do início de uma sessão.";
+$evaluation_info_097 = "Sua próxima sessão de julgamento já está disponível.";
+$evaluation_info_098 = "Refresque-se para ver.";
+$evaluation_info_099 = "Sessões de julgamento passadas ou atuais:";
+$evaluation_info_100 = "Próximas sessões de julgamento:";
 
 
 /**

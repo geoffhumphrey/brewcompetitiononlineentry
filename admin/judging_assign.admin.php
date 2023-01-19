@@ -272,7 +272,7 @@ if ($totalRows_brewer > 0) {
         if (!empty($judge_roles_display)) $output_datatables_body .= $judge_roles_display;
       }
 
-      if (($co_brewer_flag) && ($assign_row_color != "bg-info text-info")) $output_datatables_body .= "<br><span class=\"text-danger\"><i class=\"fa fas fa-exclamation-triangle\"></i> <strong>Possible Co-Brewer conflict (last name match).</strong> <small>Verify with full co-brewer names listed above.</small></span>"; 
+      if (($co_brewer_flag) && ($assign_row_color != "bg-info text-info")) $output_datatables_body .= "<br><span class=\"text-danger\"><i class=\"fa fas fa-exclamation-triangle\"></i> <strong>Possible Co-Brewer conflict (name match).</strong> <small>Verify with full co-brewer names listed above.</small></span>"; 
       
       if (!empty($judge_info[10])) $output_datatables_body .= "<br><span class=\"text-danger\"><strong>Notes:</strong> ".$judge_info[10]."</strong>";
   		$output_datatables_body .= "</td>";
@@ -435,13 +435,13 @@ $(document).ready(function() {
 <div class="well small">
   <div class="row">
     <div class="col-md-4">
-      <strong>Total <?php echo ucwords($filter); ?> Available for This Location and Round:</strong> <?php echo $total_count; ?><br>
-      <strong>Remaining <?php echo ucwords($filter); ?> Available for This Location and Round:</strong> <?php echo $available_count; ?>
+      <strong>Total <?php echo ucwords($filter); ?> Available for This Session and Round:</strong> <?php echo $total_count; ?><br>
+      <strong>Remaining <?php echo ucwords($filter); ?> Available for This Session and Round:</strong> <?php echo $available_count; ?>
     </div>
     <div class="col-md-4">
       <?php if ((!empty($output_at_table_modal_body)) && ($filter == "judges"))  { ?>
-      <strong>Ranked Judges at this Table:</strong> <?php echo $ranked; ?><br>
-      <strong>Non-ranked Judges at this Table:</strong> <?php echo $nonranked; ?><br>
+      <strong>Ranked Judges Assigned to this Table:</strong> <?php echo $ranked; ?><br>
+      <strong>Non-ranked Judges Assigned to this Table:</strong> <?php echo $nonranked; ?><br>
       <?php } ?>
     </div>
     <div class="col-md-4">

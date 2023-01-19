@@ -2047,6 +2047,12 @@ $evaluation_info_094 = "The minimum word requirement has not been reached in one
 
 $label_regional_variation = "Regional Variation";
 $brew_text_041 = "Optional &ndash; specify a regional variation (e.g., Mexican Lager, Dutch Lager, Japanese Rice Lager, etc.).";
+$evaluation_info_095 = "Next assigned judging session open:";
+$evaluation_info_096 = "To assist in preparation, assigned tables/flights and associated entries are available ten minutes prior to the start of a session.";
+$evaluation_info_097 = "Your next judging session is now available.";
+$evaluation_info_098 = "Refresh to view.";
+$evaluation_info_099 = "Past or current judging sessions:";
+$evaluation_info_100 = "Upcoming judging sessions:";
 
 /**
  * ----------------------------------------------------------------------------------

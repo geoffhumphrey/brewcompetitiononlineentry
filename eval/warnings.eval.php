@@ -6,10 +6,59 @@ var judging_end = moment.tz("<?php echo $judging_end; ?>","<?php echo get_timezo
 var label_weeks = "<?php echo strtolower($label_weeks); ?>";
 var label_days = "<?php echo strtolower($label_days); ?>";
 var label_hours = "<?php echo strtolower($label_hours); ?>"; 
+var next_session_open_min = "<?php echo ($next_date - (time() + $diff)); ?>";
+var next_session_open = moment.tz("<?php echo $next_judging_date_open; ?>","<?php echo get_timezone($_SESSION['prefsTimeZone']); ?>");
+
 $("#judging-ends").countdown(judging_end.toDate(), function(event) {
     $(this).text(event.strftime('%-w '+label_weeks+' %-d '+label_days+' %-H:%M:%S '+label_hours));
 });
+$("#next-session-open").countdown(next_session_open.toDate(), function(event) {
+    if (next_session_open_min > 86400) {
+      var end_time = (event.strftime('%D:%H:%M:%S'));
+      $(this).text(event.strftime('%-d '+label_days+' %-H:%M:%S '+label_hours+'.'));
+    }
+
+    else if ((next_session_open_min > 3600) && (session_end_min < 86400)) {
+      var end_time = (event.strftime('%H:%M:%S'));
+      $(this).text(event.strftime('%-H:%M:%S '+label_hours+'.'));
+    }
+
+    else {
+      var end_time = (event.strftime('%M:%S'));
+      $(this).text(event.strftime('%M:%S'));
+    }
+
+    if ((end_time == "02:00") || (end_time == "00:02:00") || (end_time == "00:00:02:00")) {
+      $("#next-session-open").attr("class", "text-warning");
+    }
+
+    if ((end_time == "01:00") || (end_time == "00:01:00") || (end_time == "00:00:01:00")) {
+      $("#next-session-open").attr("class", "text-danger");
+    }
+    
+    if ((end_time == "00:00") || (end_time == "00:00:00") || (end_time == "00:00:00:00")) {
+        $("#next-session-open-modal").modal('show');
+        $("#next-session-refresh-button").show('fast');
+    }
+});
 </script>
+<div class="modal fade" id="next-session-open-modal" tabindex="-1" role="dialog" aria-labelledby="next-session-open-modal-label">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="next-session-open-modal-label"><?php echo $label_please_note; ?></h4>
+      </div>
+      <div class="modal-body">
+        <p><?php echo "<strong>".$evaluation_info_097."</strong> ".$evaluation_info_098; ?></p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal"><?php echo $label_stay_here; ?></button>
+        <button type="button" class="btn btn-success" data-dismiss="modal" onclick="window.location.reload()"><?php echo $label_refresh; ?></button>
+      </div>
+    </div>
+  </div>
+</div>
 <?php } ?>
 <?php if ($go == "scoresheet") { ?>
 <!-- Modal: 15 Minutes Elapsed Warning -->

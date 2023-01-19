@@ -76,6 +76,37 @@ $latest_submitted = array();
 $date_submitted = array();
 $latest_updated = array();
 $date_updated = array();
+$diff = 600; // Differential of seconds (10 minutes)
+
+function find_next($arr,$needle,$diff) {
+	$last = 0;
+	foreach ($arr as $key => $value) {
+		if ($value > ($needle-$diff))  {
+			return $value;
+		}
+	}
+	return $last;
+}
+
+function count_past($arr,$needle,$diff) {
+	$count = 0;
+	foreach ($arr as $key => $value) {
+		if ($value < ($needle-$diff))  {
+			$count += 1;
+		}
+	}
+	return $count;
+}
+
+function count_future($arr,$needle,$diff) {
+	$count = 0;
+	foreach ($arr as $key => $value) {
+		if ($value > ($needle-$diff)) {
+			$count += 1;
+		}
+	}
+	return $count;
+}
 
 // Get last judging session end date/time (if any)
 $query_session_end = sprintf("SELECT judgingDateEnd FROM %s",$prefix."judging_locations");
@@ -131,7 +162,7 @@ else {
 }
 	
 if ($admin) $query_table_assignments = sprintf("SELECT * FROM %s ORDER BY tableNumber ASC",$prefix."judging_tables");
-else $query_table_assignments = sprintf("SELECT * FROM %s WHERE bid='%s' AND assignment='%s' ORDER BY assignTable ASC",$prefix."judging_assignments",$_SESSION['user_id'],"J");
+else $query_table_assignments = sprintf("SELECT * FROM %s a, %s b WHERE a.bid='%s' AND a.assignment='%s' AND a.assignTable = b.id ORDER BY b.tableNumber",$prefix."judging_assignments",$prefix."judging_tables",$_SESSION['user_id'],"J");
 $table_assignments = mysqli_query($connection,$query_table_assignments) or die (mysqli_error($connection));
 $row_table_assignments = mysqli_fetch_assoc($table_assignments);
 $totalRows_table_assignments = mysqli_num_rows($table_assignments);
@@ -201,55 +232,9 @@ echo "<br>";
 exit;
 */
 
-// Display a summary of table(s) the judge is assigned.
-// Include the "on the fly" judging form so the judge can
-// add an evalation for any entry they are not assigned to.
-if (!$admin) {
-
-	if ($totalRows_table_assignments > 0) $table_assign_judge = table_assignments($_SESSION['user_id'],"J",$_SESSION['prefsTimeZone'],$_SESSION['prefsDateFormat'],$_SESSION['prefsTimeFormat'],0,$label_table);
-	
-	$assignment_display .= "<h2>".$label_table_assignments."</h2>";
-	$assignment_display .= "<p>".$evaluation_info_024."</p>";
-	$assignment_display .= "<table id=\"judge_assignments\" class=\"table table-condensed table-striped table-bordered table-responsive\">";
-	$assignment_display .= "<thead>";
-	$assignment_display .= "<tr>";
-	$assignment_display .= sprintf("<th>%s</th>",$label_session);
-	$assignment_display .= sprintf("<th width=\"30%%\">%s</th>",$label_date);
-	$assignment_display .= sprintf("<th width=\"30%%\">%s</th>",$label_table);
-	$assignment_display .= "</tr>";
-	$assignment_display .= "</thead>";
-	$assignment_display .= "<tbody>";
-	if (empty($table_assign_judge)) $assignment_display .= sprintf("<tr><td>%s</td><td>%s</td><td>%s</td></tr>",$label_na,$label_na,$label_na);
-	else $assignment_display .= $table_assign_judge;
-	$assignment_display .= "</tbody>";
-
-	// On the fly form
-	if ($judging_open) {
-		$assignment_display .= "<tfoot>";
-		$assignment_display .= "<tr>";
-		$assignment_display .= sprintf("<td colspan=\"2\">%s<br><small><em>* %s</em></small></td>",$evaluation_info_011,$evaluation_info_012);
-		$assignment_display .= "<td>";
-		$assignment_display .= sprintf("<a class=\"btn btn-block btn-sm btn-default\" role=\"button\" href=\"#add-single-form\" data-toggle=\"collapse\" aria-expanded=\"false\" aria-controls=\"add-single-form\">%s</a>",$label_add);
-		$assignment_display .= "<div class=\"collapse\" id=\"add-single-form\" style=\"margin-top:5px;\">";
-		$assignment_display .= "<form class=\"hide-loader-form-submit\"  name=\"form1\" data-toggle=\"validator\" role=\"form\" action=\"".$base_url."index.php?section=evaluation&amp;go=scoresheet&amp;action=add\" method=\"post\">";
-		$assignment_display .= "<div class=\"form-group small\" style=\"margin-top:5px;\">";
-		$assignment_display .= sprintf("<label for=\"entry_number\">%s</label>",$label_entry_number);
-		$assignment_display .= "<input id=\"entry-number-input\" name=\"entry_number\" type=\"text\" pattern=\".{6,6}\" maxlength=\"6\" class=\"form-control small\" style=\"width:100%;\" data-error=\"".$evaluation_info_015."\" required>";
-		$assignment_display .= "<div class=\"help-block small with-errors\"></div>";
-		$assignment_display .= "</div>";
-		$assignment_display .= sprintf("<button class=\"btn btn-xs btn-success btn-block\" style=\"margin-top:5px;\" type=\"submit\">%s</button>",$label_go);
-		$assignment_display .= "</form>";
-		$assignment_display .= "</div>";
-		$assignment_display .= "</td>";
-		$assignment_display .= "</tr>";
-		$assignment_display .= "</tfoot>";
-	}
-	
-	$assignment_display .= "</table>";
-
-}
-
 if ($totalRows_table_assignments > 0) {
+
+	$table_assignment_start = array();
 
 	do {
 
@@ -288,31 +273,32 @@ if ($totalRows_table_assignments > 0) {
 		if (!empty($table_location[0])) $location_start_date = $table_location[0];
 		else $location_start_date = time();
 
+		$table_assignment_start[] = $location_start_date;
+
 		/**
 		 * Open up for non-admins 10 minutes before the stated session start time.
 		 * Useful when judging is in-person and judges wish to review their assigned
 		 * entries prior to "officially" starting.
+		 * Uses $diff var.
 		 */
 
-		if (($admin) || ((!$admin) && (time() > ($table_location[0] - 600)))) { 
+		if (($admin) || ((!$admin) && (time() > ($table_location[0] - $diff)))) { 
 
 			if ((!empty($table_location[1]) && (time() > $table_location[1]))) $disable_add_edit = TRUE;
-
-
 
 			$random = random_generator(7,2);
 			$assigned_judges = assigned_judges($tbl_id,$dbTable,$judging_assignments_db_table,1);
 			
 			$table_start_time = getTimeZoneDateTime($_SESSION['prefsTimeZone'], $location_start_date, $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "short", "date-time");
 			
-			if (empty($table_location[1])) $table_assignment_entries .= sprintf("<h3 style=\"margin-top: 30px;\">%s %s - %s <small>%s</small></h3>",$label_table,$tbl_num_disp,$tbl_name_disp,$table_start_time);
+			if (empty($table_location[1])) $table_assignment_entries .= sprintf("<a name=\"table".$tbl_id."\"></a><h3 style=\"margin-top: 30px;\">%s %s - %s <br><small>%s &#8226; %s</small></h3>",$label_table,$tbl_num_disp,$tbl_name_disp,$table_location[2],$table_start_time);
 			
 			else {
 				$table_end_time = getTimeZoneDateTime($_SESSION['prefsTimeZone'], $table_location[1], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "short", "date-time");
 				
-				if (time() < $table_location[1]) $table_assignment_entries .= sprintf("<a name=\"table".$tbl_id."\"></a><h3 style=\"margin-top: 30px;\">%s %s - %s<br><small>%s %s %s</small></h3>",$label_table,$tbl_num_disp,$tbl_name_disp,$table_start_time,$entry_info_text_001,$table_end_time);
+				if (time() < $table_location[1]) $table_assignment_entries .= sprintf("<a name=\"table".$tbl_id."\"></a><h3 style=\"margin-top: 30px;\">%s %s - %s<br><small>%s &#8226; %s %s %s</small></h3>",$label_table,$tbl_num_disp,$tbl_name_disp,$table_location[2],$table_start_time,$entry_info_text_001,$table_end_time);
 
-				else $table_assignment_entries .= sprintf("<a name=\"table".$tbl_id."\"></a><h3 style=\"margin-top: 30px;\">%s %s - %s<br><small>%s %s <span class=\"text-warning\">%s</span> - %s</small></h3>",$label_table,$tbl_num_disp,$tbl_name_disp,$table_start_time,$entry_info_text_001,$table_end_time,strtolower($evaluation_info_028));
+				else $table_assignment_entries .= sprintf("<a name=\"table".$tbl_id."\"></a><h3 style=\"margin-top: 30px;\">%s %s - %s<br><small>%s &#8226; %s %s <span class=\"text-warning\">%s</span> - %s</small></h3>",$label_table,$tbl_num_disp,$tbl_name_disp,$table_location[2],$table_start_time,$entry_info_text_001,$table_end_time,strtolower($evaluation_info_028));
 			}
 
 			$table_assignment_pre = "";
@@ -601,7 +587,6 @@ if ($totalRows_table_assignments > 0) {
 
 			}
 
-
 			if (!$admin) {
 
 				if ((strpos($row_table_assignments['assignRoles'], "HJ") !== false) && ($table_entries_count == $table_scored_entries_count)) {
@@ -612,7 +597,7 @@ if ($totalRows_table_assignments > 0) {
 				
 				$table_assignment_stats .= "<div class=\"row small bcoem-account-info\">";
 			
-				if (($judging_open) && (time() < $table_location[1])) {
+				if ($judging_open) {
 					
 					$table_assignment_stats .= "<div class=\"col col-xs-8\">";
 
@@ -683,7 +668,7 @@ if ($totalRows_table_assignments > 0) {
 
 				}
 			
-				if (($judging_open) && (time() < $table_location[1])) $table_assignment_stats .= "<div class=\"col col-xs-4\">";
+				if ($judging_open) $table_assignment_stats .= "<div class=\"col col-xs-4\">";
 				else $table_assignment_stats .= "<div class=\"col col-xs-12\">";
 				if (strpos($row_table_assignments['assignRoles'], "HJ") !== false) {
 					$table_assignment_stats .= "<div class=\"text-right\"><span class=\"text-primary\"><i class=\"fa fa-gavel\"></i> ".$label_head_judge."</span></div>";
@@ -709,6 +694,72 @@ if ($totalRows_table_assignments > 0) {
 		} // end if (time() > $table_location[0])
 
 	} while ($row_table_assignments = mysqli_fetch_assoc($table_assignments));
+
+	asort($table_assignment_start);
+	//print_r($table_assignment_start);
+
+	$next_date = find_next($table_assignment_start,time(),0);
+	$next_judging_date_open = getTimeZoneDateTime($_SESSION['prefsTimeZone'], ($next_date - $diff) , "999",  $_SESSION['prefsTimeFormat'], "short", "date-no-gmt");
+	$current_or_past_sessions = count_past($table_assignment_start,time(),0);
+	$future_sessions = count_future($table_assignment_start,time(),0);
+
+	// Display a summary of table(s) the judge is assigned.
+	// Include the "on the fly" judging form so the judge can
+	// add an evalation for any entry they are not assigned to.
+	if (!$admin) {
+
+		if ($totalRows_table_assignments > 0) $table_assign_judge = table_assignments($_SESSION['user_id'],"J",$_SESSION['prefsTimeZone'],$_SESSION['prefsDateFormat'],$_SESSION['prefsTimeFormat'],0,$label_table);
+		
+		$assignment_display .= "<h2>".$label_table_assignments."</h2>";
+
+		if ($next_date-$diff > time()) {
+			$assignment_display .= "<div class=\"bcoem-admin-element\">".$evaluation_info_095."<strong> <span id=\"next-session-open\"></span></strong><br><span class=\"small text-muted\">".$evaluation_info_096."</span></div>";
+			$assignment_display .= "<div class=\"bcoem-admin-element text-success\" id=\"next-session-refresh-button\"><strong>".$evaluation_info_097."</strong> ".$evaluation_info_098." <button type=\"button\" class=\"btn btn-success btn-sm\" onClick=\"window.location.reload()\">".$label_refresh."</button></div>";
+		}
+
+		$assignment_display .= "<div class=\"bcoem-admin-element\">";
+		$assignment_display .= $evaluation_info_024;
+		$assignment_display .= sprintf("<br><span class=\"small text-muted\">%s %s &#8226; %s %s</span>",$evaluation_info_099,$current_or_past_sessions,$evaluation_info_100,$future_sessions);
+		$assignment_display .= "</div>";
+		
+		$assignment_display .= "<table id=\"judge_assignments\" class=\"table table-condensed table-striped table-bordered table-responsive\">";
+		$assignment_display .= "<thead>";
+		$assignment_display .= "<tr>";
+		$assignment_display .= sprintf("<th>%s</th>",$label_session);
+		$assignment_display .= sprintf("<th width=\"30%%\">%s</th>",$label_date);
+		$assignment_display .= sprintf("<th width=\"30%%\">%s</th>",$label_table);
+		$assignment_display .= "</tr>";
+		$assignment_display .= "</thead>";
+		$assignment_display .= "<tbody>";
+		if (empty($table_assign_judge)) $assignment_display .= sprintf("<tr><td>%s</td><td>%s</td><td>%s</td></tr>",$label_na,$label_na,$label_na);
+		else $assignment_display .= $table_assign_judge;
+		$assignment_display .= "</tbody>";
+
+		// On the fly form
+		if ($judging_open) {
+			$assignment_display .= "<tfoot>";
+			$assignment_display .= "<tr>";
+			$assignment_display .= sprintf("<td colspan=\"2\">%s<br><small><em>* %s</em></small></td>",$evaluation_info_011,$evaluation_info_012);
+			$assignment_display .= "<td>";
+			$assignment_display .= sprintf("<a class=\"btn btn-block btn-sm btn-default\" role=\"button\" href=\"#add-single-form\" data-toggle=\"collapse\" aria-expanded=\"false\" aria-controls=\"add-single-form\">%s</a>",$label_add);
+			$assignment_display .= "<div class=\"collapse\" id=\"add-single-form\" style=\"margin-top:5px;\">";
+			$assignment_display .= "<form class=\"hide-loader-form-submit\"  name=\"form1\" data-toggle=\"validator\" role=\"form\" action=\"".$base_url."index.php?section=evaluation&amp;go=scoresheet&amp;action=add\" method=\"post\">";
+			$assignment_display .= "<div class=\"form-group small\" style=\"margin-top:5px;\">";
+			$assignment_display .= sprintf("<label for=\"entry_number\">%s</label>",$label_entry_number);
+			$assignment_display .= "<input id=\"entry-number-input\" name=\"entry_number\" type=\"text\" pattern=\".{6,6}\" maxlength=\"6\" class=\"form-control small\" style=\"width:100%;\" data-error=\"".$evaluation_info_015."\" required>";
+			$assignment_display .= "<div class=\"help-block small with-errors\"></div>";
+			$assignment_display .= "</div>";
+			$assignment_display .= sprintf("<button class=\"btn btn-xs btn-success btn-block\" style=\"margin-top:5px;\" type=\"submit\">%s</button>",$label_go);
+			$assignment_display .= "</form>";
+			$assignment_display .= "</div>";
+			$assignment_display .= "</td>";
+			$assignment_display .= "</tr>";
+			$assignment_display .= "</tfoot>";
+		}
+		
+		$assignment_display .= "</table>";
+
+	}
 
 	// Build judge score disparity alert
 
@@ -871,12 +922,13 @@ if ($totalRows_table_assignments > 0) {
 		}
 	}
 	$(document).ready(function() {
+		$("#next-session-refresh-button").hide();
 		$('#judge_assignments').dataTable( {
 			"bPaginate" : false,
 			"sDom": 'rt',
 			"bStateSave" : false,
 			"bLengthChange" : false,
-			"aaSorting": [[2,'asc']],
+			"aaSorting": [[1,'asc']],
 			"aoColumns": [
 				null,
 				null,

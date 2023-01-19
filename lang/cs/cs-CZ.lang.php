@@ -1908,7 +1908,12 @@ $evaluation_info_094 = "V jednom nebo více výše uvedených polích pro zpětn
 
 $label_regional_variation = "Regionální Rozdíly";
 $brew_text_041 = "Nepovinné - uveďte regionální variantu (např. mexický ležák, holandský ležák, japonský rýžový ležák atd.).";
-
+$evaluation_info_095 = "Další přidělená hodnotící schůzka otevřena:";
+$evaluation_info_096 = "Pro usnadnění přípravy jsou přidělené stoly/lety a související záznamy k dispozici deset minut před začátkem zasedání.";
+$evaluation_info_097 = "Vaše další hodnotící zasedání je nyní k dispozici.";
+$evaluation_info_098 = "Obnovit zobrazení.";
+$evaluation_info_099 = "Minulá nebo současná soudní jednání:";
+$evaluation_info_100 = "Nadcházející hodnotící zasedání:";
 
 /**
  * ----------------------------------------------------------------------------------
