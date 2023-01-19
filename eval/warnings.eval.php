@@ -12,13 +12,20 @@ var next_session_open = moment.tz("<?php echo $next_judging_date_open; ?>","<?ph
 $("#judging-ends").countdown(judging_end.toDate(), function(event) {
     $(this).text(event.strftime('%-w '+label_weeks+' %-d '+label_days+' %-H:%M:%S '+label_hours));
 });
+
 $("#next-session-open").countdown(next_session_open.toDate(), function(event) {
-    if (next_session_open_min > 86400) {
+
+    if (next_session_open_min > 604800) {
+      var end_time = (event.strftime('%W:%D:%H:%M:%S'));
+      $(this).text(event.strftime('%-w '+label_weeks+' %-d '+label_days+' %-H:%M:%S '+label_hours+'.'));
+    }
+
+    else if ((next_session_open_min > 86400) && (next_session_open_min < 604800)) {
       var end_time = (event.strftime('%D:%H:%M:%S'));
       $(this).text(event.strftime('%-d '+label_days+' %-H:%M:%S '+label_hours+'.'));
     }
 
-    else if ((next_session_open_min > 3600) && (session_end_min < 86400)) {
+    else if ((next_session_open_min > 3600) && (next_session_open_min < 86400)) {
       var end_time = (event.strftime('%H:%M:%S'));
       $(this).text(event.strftime('%-H:%M:%S '+label_hours+'.'));
     }
