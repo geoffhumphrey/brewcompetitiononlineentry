@@ -92,7 +92,9 @@ else {
 		if ($row_judging['judgingLocType'] == "0") {
 
 			if ($logged_in) {
-				$location_link = $base_url."output/maps.output.php?section=driving&amp;id=".str_replace(' ', '+', $row_judging['judgingLocation']);
+				$address = rtrim($row_judging['judgingLocation'],"&amp;KeepThis=true");
+				$address = str_replace(' ', '+', $address);
+				$location_link = "http://maps.google.com/maps?f=q&source=s_q&hl=en&q=".$address;
 				$location_tooltip = "Map to ".$row_judging['judgingLocName'];
 				$page_info2 .= "<br>".$row_judging['judgingLocation'];
 			}
