@@ -22,6 +22,14 @@ if ((!$logged_in) && (in_array($section,$account_pages))) {
     exit();
 }
 
+if (MAINT) {
+    $redirect = $base_url."maintenance.php";
+    $redirect = prep_redirect_link($redirect);
+    $redirect_go_to = sprintf("Location: %s", $redirect);
+    header($redirect_go_to);
+    exit();
+}
+
 // ---------------------------------------------------------------------------------
 
 // ---------------------------- Admin Only Functions -------------------------------
