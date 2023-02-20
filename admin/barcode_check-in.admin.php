@@ -18,6 +18,7 @@ $barcode_text_002 = "<strong>The following judging number(s) have already been a
 
 // Update upon submitting the form
 if ($action == "add") {
+    include (LIB.'process.lib.php');
 	include (INCLUDES.'process/process_barcode_check_in.inc.php');
 }
 
