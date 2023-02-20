@@ -226,6 +226,7 @@ if ($add_or_edit) {
 	// If editing the entry, grab the value from the recordset
 	if ($action == "edit") $brewPaid = $row_log['brewPaid'];
 
+	/*
 	if (($action == "edit") && ($msg != "default")) {
 		$view = ltrim($msg,"1-");
 		$highlight_sweetness  = highlight_required($msg,0,$_SESSION['prefsStyleSet']);
@@ -233,6 +234,7 @@ if ($add_or_edit) {
 		$highlight_carb       = highlight_required($msg,2,$_SESSION['prefsStyleSet']);
 		$highlight_strength   = highlight_required($msg,3,$_SESSION['prefsStyleSet']);
 	}
+	*/
 
 	if ($action == "edit") {
 

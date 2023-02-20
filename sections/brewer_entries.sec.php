@@ -292,7 +292,7 @@ if ($totalRows_log > 0) {
 			$entry_output .= $label_judging_number.": ".$judging_number."<br>";
 		}
 
-		if ($row_styles['brewStyleActive'] == "Y") {
+		if (($row_styles) && ($row_styles['brewStyleActive'] == "Y")) {
 			if (!empty($st_disp_list)) $entry_output .= $st_disp_list.": ";
 			$entry_output .= $row_log['brewStyle'];
 		}
@@ -317,7 +317,7 @@ if ($totalRows_log > 0) {
 		// Style
 		$entry_output .= "<td class=\"hidden-xs hidden-sm hidden-md\">";
 
-		if ($row_styles['brewStyleActive'] == "Y") {
+		if (($row_styles) && ($row_styles['brewStyleActive'] == "Y")) {
 			$entry_output .= "<span class=\"hidden\">".$entry_style."</span>";
 			if (!empty($st_disp_list)) $entry_output .= $st_disp_list.": ";
 			$entry_output .= $row_log['brewStyle'];
@@ -601,7 +601,7 @@ if (($totalRows_log > 0) && ($entry_window_open >= 1)) {
   	<th width="5%"><?php echo $label_winner; ?></th>
   	<?php } ?>
   	<?php if ((!$show_scores) && ($multiple_bottle_ids)) { ?>
-    <th width="7%" class="hidden-print" nowrap><input type="checkbox" id="select_all"><a class="hide-loader" style="cursor: pointer;" data-toggle="popover" data-container="body" data-trigger="hover focus" data-placement="auto" title="<?php echo $brewer_entries_text_024; ?>" data-content="<?php echo $brewer_entries_text_021; ?>"><span style="padding-left:5px;" class="fa fa-question-circle hide-loader"></span></a></th>
+    <th width="7%" class="hidden-print" nowrap><input type="checkbox" id="select_all"><a class="hide-loader" style="cursor: pointer;" data-toggle="popover" data-container="body" data-trigger="hover focus" data-placement="auto" title="<?php echo $brewer_entries_text_024; ?>" data-content="<?php echo $brewer_entries_text_021; ?>"><span style="padding-left:5px;" class="fa fa-question-circle hide-loader hidden-xs hidden-sm"></span></a></th>
 	<?php } ?>
     <th class="hidden-print"><?php echo $label_actions; ?></th>
  </tr>

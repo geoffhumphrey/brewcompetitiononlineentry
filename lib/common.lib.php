@@ -3351,12 +3351,14 @@ function highlight_required($msg,$method,$style_version) {
 
 		if (!empty($explodies)) {
 
-			$query_check = sprintf("SELECT brewStyleSweet FROM %s WHERE (brewStyleVersion='%s' OR brewStyleOwn='custom') AND brewStyleGroup='%s' AND brewStyleNum='%s'", $prefix."styles",$style_version,$explodies[1],$explodies[2]);
-			$check = mysqli_query($connection,$query_check) or die (mysqli_error($connection));
-			$row_check = mysqli_fetch_assoc($check);
-			$totalRows_check = mysqli_num_rows($check);
+			if ((isset($explodies[1])) && (isset($explodies[2]))) {
+				$query_check = sprintf("SELECT brewStyleSweet FROM %s WHERE (brewStyleVersion='%s' OR brewStyleOwn='custom') AND brewStyleGroup='%s' AND brewStyleNum='%s'", $prefix."styles",$style_version,$explodies[1],$explodies[2]);
+				$check = mysqli_query($connection,$query_check) or die (mysqli_error($connection));
+				$row_check = mysqli_fetch_assoc($check);
+				$totalRows_check = mysqli_num_rows($check);
 
-			if ((!empty($row_check)) && ($row_check['brewStyleSweet'] == 1)) $return = TRUE;
+				if ((!empty($row_check)) && ($row_check['brewStyleSweet'] == 1)) $return = TRUE;
+			}
 
 		}
 
@@ -3366,11 +3368,14 @@ function highlight_required($msg,$method,$style_version) {
 
 		if (!empty($explodies)) {
 
-			$query_check = sprintf("SELECT brewStyleReqSpec FROM %s WHERE (brewStyleVersion='%s' OR brewStyleOwn='custom') AND brewStyleGroup='%s' AND brewStyleNum='%s'", $prefix."styles",$style_version,$explodies[1],$explodies[2]);
-			$check = mysqli_query($connection,$query_check) or die (mysqli_error($connection));
-			$row_check = mysqli_fetch_assoc($check);
+			if ((isset($explodies[1])) && (isset($explodies[2]))) {
 
-			if ((!empty($row_check)) && ($row_check['brewStyleReqSpec'] == 1)) $return = TRUE;
+				$query_check = sprintf("SELECT brewStyleReqSpec FROM %s WHERE (brewStyleVersion='%s' OR brewStyleOwn='custom') AND brewStyleGroup='%s' AND brewStyleNum='%s'", $prefix."styles",$style_version,$explodies[1],$explodies[2]);
+				$check = mysqli_query($connection,$query_check) or die (mysqli_error($connection));
+				$row_check = mysqli_fetch_assoc($check);
+
+				if ((!empty($row_check)) && ($row_check['brewStyleReqSpec'] == 1)) $return = TRUE;
+			}
 
 		}
 	}
@@ -3379,11 +3384,13 @@ function highlight_required($msg,$method,$style_version) {
 
 		if (!empty($explodies)) {
 
-			$query_check = sprintf("SELECT brewStyleCarb FROM %s WHERE (brewStyleVersion='%s' OR brewStyleOwn='custom') AND brewStyleGroup='%s' AND brewStyleNum='%s'", $prefix."styles",$style_version,$explodies[1],$explodies[2]);
-			$check = mysqli_query($connection,$query_check) or die (mysqli_error($connection));
-			$row_check = mysqli_fetch_assoc($check);
+			if ((isset($explodies[1])) && (isset($explodies[2]))) {
+				$query_check = sprintf("SELECT brewStyleCarb FROM %s WHERE (brewStyleVersion='%s' OR brewStyleOwn='custom') AND brewStyleGroup='%s' AND brewStyleNum='%s'", $prefix."styles",$style_version,$explodies[1],$explodies[2]);
+				$check = mysqli_query($connection,$query_check) or die (mysqli_error($connection));
+				$row_check = mysqli_fetch_assoc($check);
 
-			if ((!empty($row_check)) && ($row_check['brewStyleCarb'] == 1)) $return = TRUE;
+				if ((!empty($row_check)) && ($row_check['brewStyleCarb'] == 1)) $return = TRUE;
+			}
 		}
 
 	}
@@ -3392,11 +3399,14 @@ function highlight_required($msg,$method,$style_version) {
 
 		if (!empty($explodies)) {
 
-			$query_check = sprintf("SELECT brewStyleStrength FROM %s WHERE (brewStyleVersion='%s' OR brewStyleOwn='custom') AND brewStyleGroup='%s' AND brewStyleNum='%s'", $prefix."styles",$style_version,$explodies[1],$explodies[2]);
-			$check = mysqli_query($connection,$query_check) or die (mysqli_error($connection));
-			$row_check = mysqli_fetch_assoc($check);
+			if ((isset($explodies[1])) && (isset($explodies[2]))) {
+				$query_check = sprintf("SELECT brewStyleStrength FROM %s WHERE (brewStyleVersion='%s' OR brewStyleOwn='custom') AND brewStyleGroup='%s' AND brewStyleNum='%s'", $prefix."styles",$style_version,$explodies[1],$explodies[2]);
+				$check = mysqli_query($connection,$query_check) or die (mysqli_error($connection));
+				$row_check = mysqli_fetch_assoc($check);
 
-			if ((!empty($row_check)) && ($row_check['brewStyleStrength'] == 1)) $return = TRUE;
+				if ((!empty($row_check)) && ($row_check['brewStyleStrength'] == 1)) $return = TRUE;
+			}
+			
 		}
 
 	}
