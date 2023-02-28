@@ -2872,6 +2872,35 @@ if (!check_update("jPrefsMinWords", $prefix."judging_preferences")) {
 
 }
 
+/**
+ * ----------------------------------------------- 2.5.1 ---------------------------------------------
+ * Fix missing style type for Juicy or Hazy Imperial or Double India Pale Ale and Specialty Spice Beer.
+ * 2.5.0 - fixed Specialty Spice Beer in installation scripting, but did not include in updates.
+ * @see 
+ * ---------------------------------------------------------------------------------------------------
+ */
+
+
+$sql = sprintf("UPDATE `%s` SET brewStyleType = '1' WHERE brewStyle='Specialty Spice Beer' AND  brewStyleGroup='30' AND brewStyleNum='D'",$prefix."styles");
+mysqli_select_db($connection,$database);
+mysqli_real_escape_string($connection,$sql);
+$result = mysqli_query($connection,$sql);
+if ($result) $output_off_sched_update .= "<li>Updated the Style Type of BJCP 2021 30D - Specialty Spice Beer.</li>";
+else {
+	$output_off_sched_update .= "<li class=\"text-danger\">Style Type of BJCP 2021 30D - Specialty Spice Beer was NOT updated.</li>";
+	$error_count += 1;
+}
+
+$sql = sprintf("UPDATE `%s` SET brewStyleType = '1' WHERE brewStyleGroup='03' AND brewStyleNum='004'",$prefix."styles");
+mysqli_select_db($connection,$database);
+mysqli_real_escape_string($connection,$sql);
+$result = mysqli_query($connection,$sql);
+if ($result) $output_off_sched_update .= "<li>Updated the Style Type of BA style - Juicy or Hazy Imperial or Double India Pale Ale.</li>";
+else {
+	$output_off_sched_update .= "<li class=\"text-danger\">Style Type of BA style - Juicy or Hazy Imperial or Double India Pale Ale was NOT updated.</li>";
+	$error_count += 1;
+}
+
 // End all unordered lists
 if (!$setup_running) $output_off_sched_update .= "</ul>";
 

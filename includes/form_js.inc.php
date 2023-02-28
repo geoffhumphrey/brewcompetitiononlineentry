@@ -21,6 +21,8 @@
 	var req_strength_styles = <?php echo json_encode($req_strength_styles); ?>;
 	var req_sweetness_styles = <?php echo json_encode($req_sweetness_styles); ?>;
 	var req_carb_styles = <?php echo json_encode($req_carb_styles); ?>;
+	var cider_sweetness_custom_styles = <?php echo json_encode($cider_sweetness_custom_styles); ?>;
+	var mead_sweetness_custom_styles = <?php echo json_encode($mead_sweetness_custom_styles); ?>;
 	var optional_info_styles = <?php echo json_encode($optional_info_styles); ?>;
 	var edit_style = "<?php echo ltrim($view,"0"); ?>";
 	var label_this_style = "<?php echo $label_this_style; ?>";

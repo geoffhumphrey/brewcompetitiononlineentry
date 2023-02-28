@@ -172,6 +172,9 @@ $req_strength_styles = array();
 $req_sweetness_styles = array();
 $req_carb_styles = array();
 
+$cider_sweetness_custom_styles = array();
+$mead_sweetness_custom_styles = array();
+
 do {
 
 	$style_id = ltrim($row_required_optional['brewStyleGroup'],"0")."-".$row_required_optional['brewStyleNum'];
@@ -180,6 +183,8 @@ do {
 	if ($row_required_optional['brewStyleStrength'] == 1) $req_strength_styles[] = $style_id;
 	if ($row_required_optional['brewStyleSweet'] == 1) $req_sweetness_styles[] = $style_id;
 	if ($row_required_optional['brewStyleCarb'] == 1) $req_carb_styles[] = $style_id;
+	if (($row_required_optional['brewStyleType'] == 2) && (is_numeric($row_required_optional['brewStyleGroup']))) $cider_sweetness_custom_styles[] = $style_id;
+	if (($row_required_optional['brewStyleType'] == 3) && (is_numeric($row_required_optional['brewStyleGroup']))) $mead_sweetness_custom_styles[] = $style_id;
 
 	// If BJCP 2021, add style 2A to the list
 	if (($row_required_optional['brewStyleVersion'] == "BJCP2021") && ($style_id == "2-A")) {

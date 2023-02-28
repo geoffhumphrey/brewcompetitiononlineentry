@@ -447,7 +447,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 				$update_table = $prefix."brewing";
 				$data = array('brewConfirmed' => '0');
 				$db_conn->where ('id', $id);
-				$result = $db_conn->insert ($update_table, $data);
+				$result = $db_conn->update ($update_table, $data);
 				if (!$result) {
 					$error_output[] = $db_conn->getLastError();
 					$errors = TRUE;
@@ -475,7 +475,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 				$update_table = $prefix."brewing";
 				$data = array('brewConfirmed' => '0');
 				$db_conn->where ('id', $id);
-				$result = $db_conn->insert ($update_table, $data);
+				$result = $db_conn->update ($update_table, $data);
 				if (!$result) {
 					$error_output[] = $db_conn->getLastError();
 					$errors = TRUE;
@@ -503,7 +503,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 				$update_table = $prefix."brewing";
 				$data = array('brewConfirmed' => '0');
 				$db_conn->where ('id', $id);
-				$result = $db_conn->insert ($update_table, $data);
+				$result = $db_conn->update ($update_table, $data);
 				if (!$result) {
 					$error_output[] = $db_conn->getLastError();
 					$errors = TRUE;
@@ -531,7 +531,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 				$update_table = $prefix."brewing";
 				$data = array('brewConfirmed' => '0');
 				$db_conn->where ('id', $id);
-				$result = $db_conn->insert ($update_table, $data);
+				$result = $db_conn->update ($update_table, $data);
 				if (!$result) {
 					$error_output[] = $db_conn->getLastError();
 					$errors = TRUE;
@@ -557,7 +557,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 				$update_table = $prefix."brewing";
 				$data = array('brewConfirmed' => '0');
 				$db_conn->where ('id', $id);
-				$result = $db_conn->insert ($update_table, $data);
+				$result = $db_conn->update ($update_table, $data);
 				if (!$result) {
 					$error_output[] = $db_conn->getLastError();
 					$errors = TRUE;
@@ -683,7 +683,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 			$update_table = $prefix."brewing";
 			$data = array('brewConfirmed' => '0');
 			$db_conn->where ('id', $id);
-			$result = $db_conn->insert ($update_table, $data);
+			$result = $db_conn->update ($update_table, $data);
 			if (!$result) {
 				$error_output[] = $db_conn->getLastError();
 				$errors = TRUE;
@@ -729,7 +729,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 				$update_table = $prefix."brewing";
 				$data = array('brewConfirmed' => '0');
 				$db_conn->where ('id', $id);
-				$result = $db_conn->insert ($update_table, $data);
+				$result = $db_conn->update ($update_table, $data);
 				if (!$result) {
 					$error_output[] = $db_conn->getLastError();
 					$errors = TRUE;
@@ -756,7 +756,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 				$update_table = $prefix."brewing";
 				$data = array('brewConfirmed' => '0');
 				$db_conn->where ('id', $id);
-				$result = $db_conn->insert ($update_table, $data);
+				$result = $db_conn->update ($update_table, $data);
 				if (!$result) {
 					$error_output[] = $db_conn->getLastError();
 					$errors = TRUE;
@@ -783,7 +783,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 				$update_table = $prefix."brewing";
 				$data = array('brewConfirmed' => '0');
 				$db_conn->where ('id', $id);
-				$result = $db_conn->insert ($update_table, $data);
+				$result = $db_conn->update ($update_table, $data);
 				if (!$result) {
 					$error_output[] = $db_conn->getLastError();
 					$errors = TRUE;

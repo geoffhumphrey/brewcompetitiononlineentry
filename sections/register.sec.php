@@ -290,7 +290,6 @@ if (NHC) echo $warning2;
 echo $header1_1;
 echo $page_info1;
 if ($go == "default") {  ?>
-<!-- DEFAULT screen to choose role - Will be deprecated in 2.1.9 -->
 <p class="lead"><?php echo $register_text_014; ?></p>
 <div class="row">
 	<?php if ($registration_open == 1) { ?>
@@ -311,7 +310,7 @@ if ($go == "default") {  ?>
 </form>
 <?php } else { // THIS ELSE ENDS at the end of the script ?>
 <!-- Begin the Form -->
-	<form data-toggle="validator" role="form" class="form-horizontal" action="<?php echo $base_url; ?>includes/process.inc.php?action=add&amp;dbTable=<?php echo $users_db_table; ?>&amp;section=register&amp;go=<?php echo $go; if ($section == "admin") echo "&amp;filter=admin"; echo "&amp;view=".$view; ?>" method="POST" name="register_form" id="register_form">
+	<form id="submit-form" data-toggle="validator" role="form" class="form-horizontal hide-loader-form-submit" action="<?php echo $base_url; ?>includes/process.inc.php?action=add&amp;dbTable=<?php echo $users_db_table; ?>&amp;section=register&amp;go=<?php echo $go; if ($section == "admin") echo "&amp;filter=admin"; echo "&amp;view=".$view; ?>" method="POST" name="register_form">
 	<!-- Hidden Form Elements -->
 	<!-- User Level is Always 2 -->
 	<input type="hidden" name="userLevel" value="2" />
@@ -934,14 +933,14 @@ if ($go == "default") {  ?>
 	<div class="form-group">
 		<div class="col-lg-offset-2 col-md-offset-3 col-sm-offset-4">
 			<!-- Input Here -->
-			<button name="submit" type="submit" class="btn btn-primary">Register</button>
+			<button id="form-submit-button" name="submit" type="submit" class="btn btn-primary">Register</button>
 		</div>
 	</div><!-- Form Group -->
 </form>
 <script type="text/javascript">
 	$("#brewerStaffFields").hide();
 	$("#staff-help").hide();
-  	
+	
   	$(function () {
   		$('#user_screen_name').focus();
 	});

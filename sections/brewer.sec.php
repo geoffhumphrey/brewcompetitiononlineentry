@@ -305,7 +305,7 @@ if (action == "edit") {
 }
 </script>
 <script src="<?php echo $base_url; ?>js_includes/add_edit_user.min.js"></script>
-<form class="form-horizontal" data-toggle="validator" action="<?php echo $form_action; ?>" method="POST" name="form1" id="form1">
+<form id="submit-form" class="form-horizontal hide-loader-form-submit" data-toggle="validator" action="<?php echo $form_action; ?>" method="POST" name="form1">
 
 <?php 
 include (SECTIONS.'brewer_form_0.sec.php'); // Participant Info
@@ -339,7 +339,7 @@ if (($go != "entrant") && ($section != "step2")) include (SECTIONS.'brewer_form_
 <div class="form-group">
     <div class="col-lg-offset-2 col-md-offset-3 col-sm-offset-4">
         <!-- Input Here -->
-        <button name="submit" type="submit" class="btn btn-primary" ><?php echo $submit_text; ?> </button>
+        <button id="form-submit-button" name="submit" type="submit" class="btn btn-primary" ><?php echo $submit_text; ?> </button>
     </div>
 </div><!-- Form Group -->
 </form>
