@@ -26,10 +26,13 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 	$evalBottle = 0;
 	$evalBottleNotes = "";
 	$evalPosition = "";
-	$evalMouthfeelScore = "";
 	$evalStyleAccuracy = "";
 	$evalTechMerit = "";
 	$evalDrinkability = "";
+	$evalAromaScore = "";
+	$evalAppearanceScore = "";
+	$evalFlavorScore = "";
+	$evalMouthfeelScore = "";
 
 	if ($_SESSION['prefsSEF'] == "Y") $sef = "true";
 	else $sef = "false";
@@ -41,18 +44,22 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 	$config_html_purifier = HTMLPurifier_Config::createDefault();
 	$purifier = new HTMLPurifier($config_html_purifier);
 
-	$evalJudgeInfo = filter_var($_POST['evalJudgeInfo'],FILTER_SANITIZE_NUMBER_INT);
-	$evalScoresheet = filter_var($_POST['evalScoresheet'],FILTER_SANITIZE_NUMBER_INT);
-	$evalAromaScore = filter_var($_POST['evalAromaScore'],FILTER_SANITIZE_NUMBER_INT);
-	$evalAppearanceScore = filter_var($_POST['evalAppearanceScore'],FILTER_SANITIZE_NUMBER_INT);
-	$evalFlavorScore = filter_var($_POST['evalFlavorScore'],FILTER_SANITIZE_NUMBER_INT);
+	if (isset($_POST['evalJudgeInfo'])) $evalJudgeInfo = filter_var($_POST['evalJudgeInfo'],FILTER_SANITIZE_NUMBER_INT);
+	if (isset($_POST['evalScoresheet'])) $evalScoresheet = filter_var($_POST['evalScoresheet'],FILTER_SANITIZE_NUMBER_INT);
+	if (isset($_POST['evalAromaScore'])) $evalAromaScore = filter_var($_POST['evalAromaScore'],FILTER_SANITIZE_NUMBER_INT);
+	if (isset($_POST['evalAppearanceScore'])) $evalAppearanceScore = filter_var($_POST['evalAppearanceScore'],FILTER_SANITIZE_NUMBER_INT);
+	if (isset($_POST['evalFlavorScore'])) $evalFlavorScore = filter_var($_POST['evalFlavorScore'],FILTER_SANITIZE_NUMBER_INT);
 	if (isset($_POST['evalMouthfeelScore'])) $evalMouthfeelScore = filter_var($_POST['evalMouthfeelScore'],FILTER_SANITIZE_NUMBER_INT);
+	
+	// All scoresheets require an overall and consensus score
 	$evalOverallScore = filter_var($_POST['evalOverallScore'],FILTER_SANITIZE_NUMBER_INT);
+	$evalFinalScore = filter_var($_POST['evalFinalScore'],FILTER_SANITIZE_NUMBER_INT);
+	
 	if (isset($_POST['evalStyleAccuracy'])) $evalStyleAccuracy = filter_var($_POST['evalStyleAccuracy'],FILTER_SANITIZE_NUMBER_INT);
 	if (isset($_POST['evalTechMerit'])) $evalTechMerit = filter_var($_POST['evalTechMerit'],FILTER_SANITIZE_NUMBER_INT);
 	if (isset($_POST['evalDrinkability'])) $evalDrinkability = filter_var($_POST['evalDrinkability'],FILTER_SANITIZE_STRING);
 	$evalTable = filter_var($_POST['evalTable'],FILTER_SANITIZE_NUMBER_INT);
-	$evalFinalScore = filter_var($_POST['evalFinalScore'],FILTER_SANITIZE_NUMBER_INT);
+	
 
 	if ($action == "edit") $id = filter_var($id,FILTER_SANITIZE_NUMBER_INT);
 	if (isset($_POST['eid'])) $eid = filter_var($_POST['eid'],FILTER_SANITIZE_NUMBER_INT);
@@ -140,8 +147,15 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 			}
 
 			// Build Appearance Insert
+			// When processing NW, convert evalAppearanceColorChoice to evalAppearanceColor
+			// If evalAppearanceColorChoice is "Other", convert evalAppearanceColorOther to evalAppearanceColor
 			if ((strpos($key, "evalAppearance") !== FALSE) && (!in_array($key, $exceptions))) {
 				$key = filter_var($key,FILTER_SANITIZE_STRING);
+				if ($key == "evalAppearanceColorChoice") {
+					$key = "evalAppearanceColor";
+					if ($value == "999") $value = $_POST['evalAppearanceColorOther'];
+					else $value = $_POST['evalAppearanceColorChoice'];
+				}
 				$evalAppearance[$key] = $value;
 			}
 

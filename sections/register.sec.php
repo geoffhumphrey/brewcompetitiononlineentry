@@ -383,7 +383,7 @@ if ($go == "default") {  ?>
         </div>
     </div><!-- ./Form Group -->
 	<div class="form-group"><!-- Form Group Text Input -->
-        <label for="brewerBreweryTTB" class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label text-warning"><i class="fa fa-sm fa-asterisk"></i> <?php echo $label_ttb; ?></label>
+        <label for="brewerBreweryTTB" class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label_ttb; ?></label>
         <div class="col-lg-9 col-md-9 col-sm-8 col-xs-12">
         	<!-- Input Here -->
        		<input class="form-control has-warning" id="brewerBreweryTTB" name="brewerBreweryTTB" type="text" value="<?php if (($msg != "default") && (isset($_COOKIE['brewerBreweryTTB']))) echo $_COOKIE['brewerBreweryTTB']; ?>" placeholder="">
@@ -624,7 +624,7 @@ if ($go == "default") {  ?>
 		<label for="" class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label text-warning"><i class="fa fa-sm fa-asterisk"></i> <?php echo $label_drop_off; ?></label>
 		<div class="col-lg-9 col-md-9 col-sm-8 col-xs-12">
 			<!-- Input Here -->
-			<select class="selectpicker" name="brewerDropOff" id="brewerDropOff" data-live-search="true" data-size="10" data-width="fit" data-show-tick="true" data-header="<?php echo $label_select_dropoff; ?>" title="<?php echo $label_select_dropoff; ?>" required>
+			<select class="selectpicker" name="brewerDropOff" id="brewerDropOff" data-error="<?php if (!empty($_SESSION['contestShippingAddress'])) echo $brewer_text_050." "; echo $brewer_text_049; ?>" data-live-search="true" data-size="10" data-width="fit" data-show-tick="true" data-header="<?php echo $label_select_dropoff; ?>" title="<?php echo $label_select_dropoff; ?>" required>
 				<?php if (!empty($dropoff_select)) { ?>
 					<optgroup label="<?php echo $label_drop_offs; ?>">
 	                <?php echo $dropoff_select; ?>
@@ -635,9 +635,7 @@ if ($go == "default") {  ?>
 				<?php } ?>
 					<option value="999"><?php echo $brewer_text_005; ?></option>
 			</select>
-			<?php if (!empty($_SESSION['contestShippingAddress'])) { ?><span class="help-block"><?php echo $brewer_text_050; ?></span><?php } ?>
-			<span class="help-block"><?php echo $brewer_text_049; ?></span>
-			
+			<span class="help-block"><?php if (!empty($_SESSION['contestShippingAddress'])) echo $brewer_text_050." "; echo $brewer_text_049; ?></span>			
 		</div>
 	</div><!-- ./Form Group -->
     <?php } // END if (($_SESSION['prefsProEdition'] == 0) || (($_SESSION['prefsProEdition'] == 1) && ($go == "entrant"))) ?>
@@ -689,8 +687,9 @@ if ($go == "default") {  ?>
 			<div class="input-group">
 				<span class="input-group-addon" id="aha-addon1"><span class="fa fa-beer"></span></span>
 				<!-- Input Here -->
-				<input class="form-control" name="brewerAHA" id="brewerAHA" type="number" placeholder="" value="<?php if (($msg != "default") && (isset($_COOKIE['brewerAHA']))) echo $_COOKIE['brewerAHA']; ?>">
+				<input class="form-control" name="brewerAHA" id="brewerAHA" type="text" pattern="\d*" placeholder="" data-error="<?php echo $brew_text_019; ?>" value="<?php if (($msg != "default") && (isset($_COOKIE['brewerAHA']))) echo $_COOKIE['brewerAHA']; ?>">
 			</div>
+			<div class="help-block with-errors"></div>
             <div id="ahaProAmText" class="help-block"><?php echo $register_text_033; ?></div>
 		</div>
 	</div><!-- ./Form Group -->
@@ -831,7 +830,7 @@ if ($go == "default") {  ?>
 
             </div>
         </div><!-- ./Form Group -->
-    <?php if ($totalRows_judging > 1) {
+    <?php if ($totalRows_judging > 0) {
 	if ($action == "edit") $judging_locations = explode(",",$row_brewer['brewerJudgeLocation']);
 	elseif ((isset($_COOKIE['brewerJudgeLocation'])) && ($section != "admin")) $judging_locations = explode(",",$_COOKIE['brewerJudgeLocation']);
 	else $judging_locations = array("","");

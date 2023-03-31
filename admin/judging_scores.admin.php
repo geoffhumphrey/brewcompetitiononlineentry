@@ -235,12 +235,12 @@ $totalRows_entry_count = total_paid_received($go,0);
 
         if (in_array($row_scores['eid'], $evals)) {
 
+            /*
             $query_style = sprintf("SELECT id,brewStyleType FROM %s WHERE brewStyleVersion='%s'AND brewStyleGroup='%s' AND brewStyleNum='%s'",$prefix."styles",$style_set,$row_log['brewCategorySort'],$row_log['brewSubCategory']);
             $style = mysqli_query($connection,$query_style) or die (mysqli_error($connection));
             $row_style = mysqli_fetch_assoc($style);
-
-            if ((($row_style['brewStyleType'] == 2) || ($row_style['brewStyleType'] == 3)) && ($row_judging_prefs['jPrefsScoresheet'] != 3)) $output_form = "full-scoresheet";
-
+            */
+            
             $view_link = $base_url."output/print.output.php?section=evaluation&amp;go=default&amp;view=all&amp;id=".$row_scores['eid']."&amp;tb=1";
             if ($dbTable != "default") $view_link .= "&amp;dbTable=".$prefix."evaluation_".$archive_suffix;
             $print_link = $base_url."output/print.output.php?section=evaluation&amp;go=default&amp;view=all&amp;id=".$row_scores['eid'];

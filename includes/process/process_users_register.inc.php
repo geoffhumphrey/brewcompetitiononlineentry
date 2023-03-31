@@ -174,6 +174,10 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 					'brewerBreweryName' => blank_to_null($brewerBreweryName),
 					'brewerBreweryTTB' => blank_to_null($brewerBreweryTTB)
 				);
+
+				print_r($data);
+
+
 				$result = $db_conn->insert ($update_table, $data);
 				if (!$result) {
 					$error_output[] = $db_conn->getLastError();

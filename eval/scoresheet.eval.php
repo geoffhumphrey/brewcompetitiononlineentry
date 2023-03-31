@@ -16,6 +16,7 @@ $mead_cider = FALSE;
 $beer = FALSE;
 $cider = FALSE;
 $mead = FALSE;
+$nw_cider = FALSE;
 $scored_previously = FALSE;
 $consensus_match = FALSE;
 $auto_logout_extension = FALSE;
@@ -128,7 +129,7 @@ if ($judging_scoresheet == 2) {
   $scoresheet_version = $label_checklist_version;
 }
 
-if ($judging_scoresheet == 3) {
+if (($judging_scoresheet == 3) || ($judging_scoresheet == 4)) {
   $output_form = "structured_output.eval.php";
   $scoresheet_form = "structured_scoresheet.eval.php";
   $process_type = "process-eval-structured";
@@ -249,6 +250,11 @@ if ($entry_found) {
   if ($row_style['brewStyleType'] == 2) $cider = TRUE;
   elseif ($row_style['brewStyleType'] == 3) $mead = TRUE;
   else $beer = TRUE;
+
+  if (($judging_scoresheet == 4) && ($cider)) {
+    $nw_cider = TRUE;
+    $scoresheet_version .= " &ndash; ".$_SESSION['style_set_long_name'];
+  }
 
   // If style is Cider (2) or Mead (3), only use full scoresheet instad of checklist
   if ((($judging_scoresheet == 1) || ($judging_scoresheet == 2)) && (($cider) || ($mead))) {
@@ -443,12 +449,17 @@ if ($entry_found) {
   
   // Sticky score
   $sticky_score_tally = "<div id=\"sticky-score\" class=\"pull-right\">";
-  $sticky_score_tally .= "<section style=\"width: 100%\">";
-  $sticky_score_tally .= "<p style=\"font-size: 1.5em\">";
-  $sticky_score_tally .= "<span id=\"scoring-guide-badge\" class=\"label label-default sticky-glow\">".$label_score.": <span id=\"judge-score\">".$eval_score."</span> <span id=\"scoring-guide\"></span></span>";
-  $sticky_score_tally .= "<a style=\"padding-top: 5px; font-size: .75em\"\" id=\"show-hide-status-btn\" class=\"pull-right\" data-toggle=\"collapse\" href=\"#scoring-guide-status\" aria-controls=\"scoring-guide-status\"><span id=\"toggle-icon\" class=\"fa fa-chevron-circle-up\"></span></a>";
-  $sticky_score_tally .= "</p>";
-  $sticky_score_tally .= "</section>";
+  $sticky_score_tally .= "<div class=\"pull-right\" style=\"display:block; font-size: 1.5em; padding-right: 5px;  margin-bottom: 15px;\">";
+  $sticky_score_tally .= "<a style=\"padding-top: 5px; font-size: .75em\"\" id=\"show-hide-status-btn\" data-toggle=\"collapse\" href=\"#scoring-guide-status\" aria-controls=\"scoring-guide-status\"><span id=\"toggle-icon\" class=\"fa fa-chevron-circle-up\"></span></a>";
+  $sticky_score_tally .= "</div>";
+  
+  if (!$nw_cider) { 
+    $sticky_score_tally .= "<section style=\"width: 100%; margin-bottom: 15px;\">";
+    $sticky_score_tally .= "<div style=\"font-size: 1.5em\">";
+    $sticky_score_tally .= "<span id=\"scoring-guide-badge\" class=\"label label-default sticky-glow\">".$label_score.": <span id=\"judge-score\">".$eval_score."</span> <span id=\"scoring-guide\"></span></span>";
+    $sticky_score_tally .= "</div>";
+    $sticky_score_tally .= "</section>";
+  }
   
   $sticky_score_tally .= "<section position: absolute; width: 100%; background-color: rgba(220,220,220,0.80);\" id=\"scoring-guide-status\" class=\"well sticky-glow collapse in\">";
   
@@ -645,6 +656,16 @@ if ($entry_found) {
 </div>
 <?php include (EVALS.$scoresheet_form); ?>
 <h3 class="section-heading"><?php echo $label_score; ?></h3>
+
+<?php if (($_SESSION['jPrefsScoresheet'] == 4) && ($cider)) { ?>
+<div class="form-group">
+  <label for="evalOverallScore"><?php echo $label_your_score; ?></label>
+  <input type="number" min="5" max="50" name="evalOverallScore" id="evalOverallScore" class="form-control" placeholder="" data-error="<?php echo $evaluation_info_103; ?>" value="<?php if ($action == "edit") echo $row_eval['evalOverallScore']; ?>"required>
+  <div class="help-block small"><?php echo $evaluation_info_102; ?></div>
+  <div class="help-block small with-errors"></div>
+</div>
+<?php } ?>
+
 <div class="form-group">
   <label for="evalFinalScore"><?php echo $label_assigned_score; ?></label>
   <input type="number" min="5" max="50" name="evalFinalScore" id="evalFinalScore" class="form-control" placeholder="" data-error="<?php echo $evaluation_info_068; ?>" value="<?php if ($action == "edit") echo $row_eval['evalFinalScore']; ?>" onblur="checkConsensus(consensusScores)" required>
@@ -827,19 +848,19 @@ if ($entry_found) {
     </div>
   </div>
 </div>
-<?php } 
-
-if ((isset($_SESSION['jPrefsMinWords'])) && ($_SESSION['jPrefsMinWords'] > 0)) { ?>
-
+<?php } ?>
 <script type="text/javascript">
 var style_type = <?php echo $row_style['brewStyleType']; ?>;
+var edit = <?php if ($action == "edit") echo "true"; else echo "false"; ?>;
+</script>
+<?php if ((isset($_SESSION['jPrefsMinWords'])) && ($_SESSION['jPrefsMinWords'] > 0)) { ?>
+<script type="text/javascript">
 var min_words = <?php echo $_SESSION['jPrefsMinWords']; ?>;
 var min_wordcount_reached = '<strong class="text-success"><?php echo $evaluation_info_089; ?></strong> <?php echo $evaluation_info_090; ?>';
 var min_wordcount_not = '<?php echo $evaluation_info_091; ?>';
 var word_count_so_far = '<?php echo $evaluation_info_092; ?>';
-var edit = <?php if ($action == "edit") echo "true"; else echo "false"; ?>;
 
-<?php if ($judging_scoresheet == 3) { ?>
+<?php if (($judging_scoresheet == 3) || ($judging_scoresheet == 4)) { ?>
 
 if (edit) var min_words_overall_ok = true;
 else var min_words_overall_ok = false;
@@ -880,9 +901,7 @@ $(document).ready(function() {
 
 });
 
-<?php } 
-
-if ((($judging_scoresheet == 1) || ($judging_scoresheet == 2)) && ((isset($_SESSION['jPrefsMinWords'])) && ($_SESSION['jPrefsMinWords'] > 0))) { 
+<?php } if ((($judging_scoresheet == 1) || ($judging_scoresheet == 2)) && ((isset($_SESSION['jPrefsMinWords'])) && ($_SESSION['jPrefsMinWords'] > 0))) { 
 
     if (($cider) || ($mead)) {
       $comment_fields = array(
@@ -917,7 +936,6 @@ if (edit) {
   else var min_words_mouthfeel_ok = false;
   var min_words_overall_ok = false;
 }
-
 
 function min_words_ok() {
     $('#submitForm').attr('disabled','disabled');
@@ -959,7 +977,7 @@ $(document).ready(function() {
 
     });
         
-    <?php } ?>
+    <?php } // end foreach ?>
 
 });
 <?php } ?>

@@ -94,6 +94,7 @@ if (isset($_POST['brewerJudgeNotes'])) {
     $brewerJudgeNotes = sterilize($brewerJudgeNotes);
 }
 
+
 /**
  * Address GitHub Issue #1113
  * @see https://github.com/geoffhumphrey/brewcompetitiononlineentry/issues/1113

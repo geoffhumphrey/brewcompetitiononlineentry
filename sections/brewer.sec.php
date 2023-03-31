@@ -32,6 +32,7 @@ if ($section != "step2") {
 $show_judge_steward_fields = TRUE;
 $entrant_type_brewery = FALSE;
 $pro_entrant = FALSE;
+$club_other = FALSE;
 
 if ($section == "step2") {
     $_SESSION['prefsProEdition'] = 0;
@@ -92,7 +93,6 @@ if (($_SESSION['prefsProEdition'] == 0) || (($_SESSION['prefsProEdition'] == 1) 
     // Build Clubs dropdown
     $club_options = "";
     $club_alert = "";
-    $club_other = FALSE;
 
     if ($section != "step2") {
         if ((!empty($row_brewer['brewerClubs'])) && (!in_array($row_brewer['brewerClubs'],$club_array))) {

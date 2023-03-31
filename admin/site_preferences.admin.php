@@ -42,14 +42,16 @@ foreach ($style_sets as $style_set) {
     if ($style_set['style_set_name'] == "BA") $method = 2;
     else $method = 0;
 
-    do {
-        
-        $all_exceptions_USCLEx .= "<div class=\"checkbox\"><label><input name=\"prefsUSCLEx[]\" type=\"checkbox\" class=\"chkbox\" value=\"".$row_styles_all['id']."\">";
-        if ($style_set['style_set_name'] != "BA") $all_exceptions_USCLEx .= style_number_const($row_styles_all['brewStyleGroup'],$row_styles_all['brewStyleNum'],$style_set['style_set_display_separator'],$method);
-        if ($style_set['style_set_name'] == "BA") $all_exceptions_USCLEx .= $style_set['style_set_categories'][$row_styles_all['brewStyleGroup']]." - ".$row_styles_all['brewStyle']."</label></div>\n";
-        else $all_exceptions_USCLEx .= " ".$row_styles_all['brewStyle']."</label></div>\n";
-        
-    } while($row_styles_all = mysqli_fetch_assoc($styles_all));
+    if ($row_styles_all) {
+        do {
+            
+            $all_exceptions_USCLEx .= "<div class=\"checkbox\"><label><input name=\"prefsUSCLEx[]\" type=\"checkbox\" class=\"chkbox\" value=\"".$row_styles_all['id']."\">";
+            if ($style_set['style_set_name'] != "BA") $all_exceptions_USCLEx .= style_number_const($row_styles_all['brewStyleGroup'],$row_styles_all['brewStyleNum'],$style_set['style_set_display_separator'],$method);
+            if ($style_set['style_set_name'] == "BA") $all_exceptions_USCLEx .= $style_set['style_set_categories'][$row_styles_all['brewStyleGroup']]." - ".$row_styles_all['brewStyle']."</label></div>\n";
+            else $all_exceptions_USCLEx .= " ".$row_styles_all['brewStyle']."</label></div>\n";
+            
+        } while($row_styles_all = mysqli_fetch_assoc($styles_all));
+    }
 
     $all_exceptions .= "<div class=\"form-group\" id=\"".$style_set['id']."-".$style_set['style_set_name']."\">\n";
     $all_exceptions .= "<label for=\"prefsUSCLEx\" class=\"col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label\">Exceptions to Entry Limit per ".$style_set['style_set_name']." Sub-Style</label>\n";

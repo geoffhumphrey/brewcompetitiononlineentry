@@ -410,5 +410,32 @@ $style_sets = array(
 		"style_set_category_end" => "20"
 	)
 
+	/*
+	array(
+		"id" => 6,
+		"style_set_name" => "NWCiderCup",
+		"style_set_long_name" => "Northwest Cider Cup",
+		"style_set_short_name" => "NW Cider Cup",
+		"style_set_display_separator" => "-",
+		"style_set_system_separator" => "-",
+		"style_set_sub_style_method" => "0",
+		"style_set_categories" => array(
+			"C1" => "Low-Tannin Cider",
+			"C2" => "High-Tannin Cider",
+			"C3" => "Red Fleshed Cider",
+			"C4" => "Perry",
+			"C5" => "Wood/Oaked Cider or Perry",
+			"C6" => "Single Varietal Cider or Perry",
+			"C7" => "Fruit Cider or Perry",
+			"C8" => "Botanical Cider or Perry",
+			"C9" => "Specialty Cider or Perry",
+		),
+		"style_set_beer_end" => "0",
+		"style_set_mead" => array(),
+		"style_set_cider" => array("C1","C2","C3","C4","C5","C6","C7","C8","C9"),
+		"style_set_category_end" => "0"
+	)
+	*/
+
 );
 ?>

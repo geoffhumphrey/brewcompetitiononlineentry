@@ -24,7 +24,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 	if (isset($_POST['brewStyleEntry'])) {
 		$brewStyleEntry = trim($_POST['brewStyleEntry']);
 		$brewStyleEntry = $purifier->purify($brewStyleEntry);
-		$brewStyleEntry = sterilize($brewStyleEntry);
+		$brewStyleEntry = filter_var($brewStyleEntry,FILTER_SANITIZE_SPECIAL_CHARS,FILTER_FLAG_ENCODE_HIGH|FILTER_FLAG_ENCODE_LOW);
 	}
 	
 	if (isset($_POST['brewStyleInfo'])) {
@@ -222,7 +222,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 			'brewStyleType' => blank_to_null(sterilize($_POST['brewStyleType'])),
 			'brewStyleInfo' => blank_to_null($brewStyleInfo),
 			'brewStyleLink' => blank_to_null($brewStyleLink),
-			'brewStyleGroup' => blank_to_null(sterilize($style_add_one)),
+			'brewStyleGroup' => blank_to_null(sterilize($_POST['brewStyleGroup'])),
 			'brewStyleActive' => blank_to_null(sterilize($_POST['brewStyleActive'])),
 			'brewStyleOwn' => blank_to_null(sterilize($_POST['brewStyleOwn'])),
 			'brewStyleVersion' => $_SESSION['prefsStyleSet'],

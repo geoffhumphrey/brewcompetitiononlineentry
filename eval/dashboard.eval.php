@@ -290,15 +290,19 @@ if ($totalRows_table_assignments > 0) {
 			$assigned_judges = assigned_judges($tbl_id,$dbTable,$judging_assignments_db_table,1);
 			
 			$table_start_time = getTimeZoneDateTime($_SESSION['prefsTimeZone'], $location_start_date, $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "short", "date-time");
-			
-			if (empty($table_location[1])) $table_assignment_entries .= sprintf("<a name=\"table".$tbl_id."\"></a><h3 style=\"margin-top: 30px;\">%s %s - %s <br><small>%s &#8226; %s</small></h3>",$label_table,$tbl_num_disp,$tbl_name_disp,$table_location[2],$table_start_time);
-			
-			else {
-				$table_end_time = getTimeZoneDateTime($_SESSION['prefsTimeZone'], $table_location[1], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "short", "date-time");
-				
-				if (time() < $table_location[1]) $table_assignment_entries .= sprintf("<a name=\"table".$tbl_id."\"></a><h3 style=\"margin-top: 30px;\">%s %s - %s<br><small>%s &#8226; %s %s %s</small></h3>",$label_table,$tbl_num_disp,$tbl_name_disp,$table_location[2],$table_start_time,$entry_info_text_001,$table_end_time);
 
-				else $table_assignment_entries .= sprintf("<a name=\"table".$tbl_id."\"></a><h3 style=\"margin-top: 30px;\">%s %s - %s<br><small>%s &#8226; %s %s <span class=\"text-warning\">%s</span> - %s</small></h3>",$label_table,$tbl_num_disp,$tbl_name_disp,$table_location[2],$table_start_time,$entry_info_text_001,$table_end_time,strtolower($evaluation_info_028));
+			if (isset($table_location[1])) {
+
+				if (empty($table_location[1])) $table_assignment_entries .= sprintf("<a name=\"table".$tbl_id."\"></a><h3 style=\"margin-top: 30px;\">%s %s - %s <br><small>%s &#8226; %s</small></h3>",$label_table,$tbl_num_disp,$tbl_name_disp,$table_location[2],$table_start_time);
+				
+				else {
+					$table_end_time = getTimeZoneDateTime($_SESSION['prefsTimeZone'], $table_location[1], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "short", "date-time");
+					
+					if (time() < $table_location[1]) $table_assignment_entries .= sprintf("<a name=\"table".$tbl_id."\"></a><h3 style=\"margin-top: 30px;\">%s %s - %s<br><small>%s &#8226; %s %s %s</small></h3>",$label_table,$tbl_num_disp,$tbl_name_disp,$table_location[2],$table_start_time,$entry_info_text_001,$table_end_time);
+
+					else $table_assignment_entries .= sprintf("<a name=\"table".$tbl_id."\"></a><h3 style=\"margin-top: 30px;\">%s %s - %s<br><small>%s &#8226; %s %s <span class=\"text-warning\">%s</span> - %s</small></h3>",$label_table,$tbl_num_disp,$tbl_name_disp,$table_location[2],$table_start_time,$entry_info_text_001,$table_end_time,strtolower($evaluation_info_028));
+				}
+
 			}
 
 			$table_assignment_pre = "";
@@ -387,25 +391,40 @@ if ($totalRows_table_assignments > 0) {
 						$ordinal_position = array();
 						$ord_position = "";
 						
+						// Classic
 						if ($row_judging_prefs['jPrefsScoresheet'] == 1) {
 							$output_form = "full-scoresheet";
 							$scoresheet_form = "full_scoresheet.eval.php";
 						}
 
+						// Beer Checklist
 						if ($row_judging_prefs['jPrefsScoresheet'] == 2) {
-							$output_form = "checklist-scoresheet";
-							$scoresheet_form = "checklist_scoresheet.eval.php";
+
+							if ($score_style_data[3] == 1) {
+								$output_form = "checklist-scoresheet";
+								$scoresheet_form = "checklist_scoresheet.eval.php";
+							}
+
+							else  {
+								$output_form = "full-scoresheet";
+								$scoresheet_form = "full_scoresheet.eval.php";
+							}
+
 						}
 
-						if ($row_judging_prefs['jPrefsScoresheet'] == 3) {
-							$output_form = "structured-scoresheet";
-							$scoresheet_form = "structured_scoresheet.eval.php";
-						}
+						// Structured (Includes NW Cider Cup)
+						if (($row_judging_prefs['jPrefsScoresheet'] == 3) || ($row_judging_prefs['jPrefsScoresheet'] == 4)) {
 
-						// If style is Cider (2) or Mead (3), only use full scoresheet
-						if ((($score_style_data[3] == 2) || ($score_style_data[3] == 3)) && ($row_judging_prefs['jPrefsScoresheet'] != 3)) {
-							$output_form = "full-scoresheet";
-							$scoresheet_form = "full_scoresheet.eval.php";
+							if ($score_style_data[3] <= 3) {
+								$output_form = "structured-scoresheet";
+								$scoresheet_form = "structured_scoresheet.eval.php";
+							}
+
+							else {
+								$output_form = "full-scoresheet";
+								$scoresheet_form = "full_scoresheet.eval.php";
+							}
+							
 						}
 						
 		        		$style = style_number_const($row_entries['brewCategorySort'],$row_entries['brewSubCategory'],$_SESSION['style_set_display_separator'],0);
@@ -679,7 +698,7 @@ if ($totalRows_table_assignments > 0) {
 				$table_assignment_stats .= "</div>";
 				$table_assignment_stats .= "</div>";
 
-				if (($judging_open) && (time() < $table_location[1])) {
+				if ($judging_open) {
 					$table_assignment_stats .= "<section class=\"row small\">";
 					$table_assignment_stats .= "<div class=\"col col-xs-12\">";
 					$table_assignment_stats .= sprintf("<em>%s</em>",$evaluation_info_007);

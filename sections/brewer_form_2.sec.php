@@ -1,11 +1,13 @@
-<?php if ((!$table_assignment) || ($go == "admin")) { ?>
+<?php 
 
-<?php if (((!$judge_limit) && ($go == "account")) || (($_SESSION['userLevel'] <= 1) && (($go == "admin") || ($go == "account")))) { 
-    $judge_checked = FALSE;
-    if ((($action == "add") || ($action == "register")) && ($go == "judge")) $judge_checked = TRUE;
-    if (($action == "edit") && ($row_brewer['brewerJudge'] == "Y")) $judge_checked = TRUE;
+if (((!$table_assignment) || ($go == "admin")) && (!$entrant_type_brewery)) { 
+
+    if (((!$judge_limit) && ($go == "account")) || (($_SESSION['userLevel'] <= 1) && (($go == "admin") || ($go == "account")))) { 
+        $judge_checked = FALSE;
+        if ((($action == "add") || ($action == "register")) && ($go == "judge")) $judge_checked = TRUE;
+        if (($action == "edit") && ($row_brewer['brewerJudge'] == "Y")) $judge_checked = TRUE;
+
 ?>
-
 <section id="judge-preferences">
     <div class="form-group">
         <label for="brewerJudge" class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label_judging; ?></label>
@@ -32,11 +34,7 @@
 
     <div id="brewerJudgeFields">
 
-        <?php if (($totalRows_judging == 1) && (($go != "admin") && ($filter == "default"))) { ?>
-        <input name="brewerJudgeLocation" type="hidden" value="<?php echo "Y-".$row_judging3['id']; ?>" />
-        <?php } ?>
-
-        <?php if (($totalRows_judging > 1) || (($go == "admin") && ($filter != "default"))) { ?>
+        <?php if (($totalRows_judging > 0) || (($go == "admin") && ($filter != "default"))) { ?>
         <div class="form-group">
             <?php if (!empty($judge_location_avail)) { ?>
             <label for="brewerJudgeLocation" class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label_judging_avail; ?></label>
@@ -272,9 +270,9 @@
 </section><!-- ./ judge-preferences -->
 <?php } // end if (((!$judge_limit) && ($go == "account")) || (($_SESSION['userLevel'] <= 1) && (($go == "admin") || ($go == "account")))) ?>
 
-<?php if (((!$steward_limit) && ($go == "account")) || (($_SESSION['userLevel'] <= 1) && (($go == "admin") || ($go == "account")))) { ?>
+<?php 
+    if (((!$steward_limit) && ($go == "account")) || (($_SESSION['userLevel'] <= 1) && (($go == "admin") || ($go == "account")))) { ?>
 <section id="steward-preferences">
-    
     <div class="form-group">
         <label for="brewerSteward" class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label_stewarding; ?></label>
         <div class="col-lg-9 col-md-9 col-sm-8 col-xs-12">
@@ -310,7 +308,8 @@
 
 </section><!-- ./ steward-preferences -->
 <?php } // end if (((!$steward_limit) && ($go == "account")) || (($_SESSION['userLevel'] <= 1) && (($go == "admin") || ($go == "account")))) ?>
-<?php } // end if ((!$table_assignment) || ($go == "admin")) ?>
+
+
 
 <section id="judge-steward-waiver">
     <div id="judge-waiver" class="form-group">
@@ -336,3 +335,5 @@
         </div>
     </div>
 </section>
+
+<?php } // end if ((!$table_assignment) || ($go == "admin")) ?>

@@ -430,8 +430,6 @@ if ($show_judge_steward_fields) {
 	}
 }
 
-if (($_SESSION['prefsProEdition'] == 1) && (!$show_judge_steward_fields)) $account_display .= "<hr>";
-
 $account_display .= "<div class=\"row bcoem-account-info\">";
 $account_display .= sprintf("<div class=\"".$display_left_cols."\"><strong>%s</strong></div>",$label_drop_off);
 $account_display .= "<div class=\"".$display_right_cols."\">".dropoff_location($_SESSION['brewerDropOff']);
@@ -439,10 +437,14 @@ if ($_SESSION['brewerDropOff'] == 0) $account_display .= sprintf("<br><a id=\"mo
 $account_display .= "</div>";
 $account_display .= "</div>";
 
-$account_display .= "<div class=\"row bcoem-account-info\">";
-$account_display .= sprintf("<div class=\"".$display_left_cols."\"><strong>%s</strong></div>",$label_club);
-$account_display .=  "<div class=\"".$display_right_cols."\">".$club."</div>";
-$account_display .= "</div>";
+if ($_SESSION['prefsProEdition'] == 0) { 
+
+	$account_display .= "<div class=\"row bcoem-account-info\">";
+	$account_display .= sprintf("<div class=\"".$display_left_cols."\"><strong>%s</strong></div>",$label_club);
+	$account_display .=  "<div class=\"".$display_right_cols."\">".$club."</div>";
+	$account_display .= "</div>";
+
+}
 
 if ($entry_discount) {
 

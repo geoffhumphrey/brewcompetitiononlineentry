@@ -2,6 +2,7 @@
 $beer = FALSE;
 $cider = FALSE;
 $mead = FALSE;
+$nw_cider = FALSE;
 $anonymous_eval = TRUE;
 $scoresheet_type = "";
 include (EVALS.'descriptors.eval.php');
@@ -24,6 +25,8 @@ else {
   $label_scoresheet = $label_beer_scoresheet;
 }
 
+if (($cider) && ($row_eval['evalScoresheet'] == 4)) $nw_cider = TRUE;
+
 if ($_SESSION['prefsDisplaySpecial'] == "E") $entry_id = $row_entry_info['id'];
 else $entry_id = $row_entry_info['brewJudgingNumber'];
 $entry_id = sprintf("%06s",$entry_id);
@@ -44,7 +47,7 @@ if (($head_ordinal) || ($head_miniBOS)) $head_rt_col = "col-xs-6";
 <!-- Header Row -->
 <div class="row">
     <div class="col col-lg-2 col-md-2 col-sm-2 col-xs-2">
-        <p><img style="max-width: 60px; min-width: 40px;" src="<?php echo $base_url."images/bjcp_logo.jpg"; ?>"></p>
+        <p><?php if (!$nw_cider) { ?><img style="max-width: 60px; min-width: 40px;" src="<?php echo $base_url."images/bjcp_logo.jpg"; ?>"><?php } ?></p>
     </div>
     <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-8">
         <h2 class="text-center" style="margin:0; padding:0;"><?php echo $label_scoresheet; ?></h2>
@@ -74,7 +77,7 @@ if (($head_ordinal) || ($head_miniBOS)) $head_rt_col = "col-xs-6";
 
     </div>
     <div class="col col-lg-2 col-md-2 col-sm-2 col-xs-2">
-        <p class="pull-right"><img style="max-width: 60px; min-width: 40px;" src="<?php echo $base_url."images/aha_logo.jpg"; ?>"></p>
+        <p class="pull-right"><img style="max-width: 60px; min-width: 40px;" src="<?php if ($nw_cider) echo "https://www.nwcider.com/wp-content/themes/nwcider/assets/images/nw-cider-logo-2x.png"; else echo $base_url."images/aha_logo.jpg"; ?>"></p>
     </div>
 </div><!-- ./row (header) -->
 <!-- Entry Info Row -->

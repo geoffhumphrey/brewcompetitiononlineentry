@@ -77,7 +77,7 @@ if ($_SESSION['prefsEval'] == 1) {
             </div>
             <div class="modal-body">
                 <p>Indicate whether you would like to use the Queued Judging methodology (employed by the American Homebrewers Association for judging the National Hombrewers Competition).</p>
-                <p>If &ldquo;Yes,&rdquo; there is no need for competition organizers to define flights. More information can be downloaded on the <a class="hide-loader" href="http://www.bjcp.org/docs/Queued_Judging_organizer.pdf" target="_blank">BJCP's website</a>.</p>
+                <p>If &ldquo;Yes,&rdquo; there is no need for competition organizers to define flights. More information can be downloaded on the <a class="hide-loader" href="https://www.bjcp.org/competitions/supplies-reference-materials/" target="_blank">BJCP's website</a>.</p>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
@@ -89,16 +89,24 @@ if ($_SESSION['prefsEval'] == 1) {
 <div class="form-group"><!-- Form Group Radio INLINE -->
     <label for="jPrefsScoresheet" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Entry Evaluation Scoresheet</label>
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
-        <div class="input-group">
-            <!-- Input Here -->
-            <label class="radio-inline">
-                <input type="radio" name="jPrefsScoresheet" value="1" id="jPrefsScoresheet_0" rel=""  <?php if ($judging_scoresheet == "1") echo "CHECKED"; elseif ($section == "step8") echo "CHECKED"; ?> /> Classic Scoresheet
+        <div class="radio">
+            <label>
+                <input type="radio" name="jPrefsScoresheet" value="1" id="jPrefsScoresheet_0" rel="" <?php if ($judging_scoresheet == "1") echo "CHECKED"; elseif ($section == "step8") echo "CHECKED"; ?> /> BJCP Classic Scoresheet
             </label>
-            <label class="radio-inline">
-                <input type="radio" name="jPrefsScoresheet" value="2" id="jPrefsScoresheet_1" rel="" <?php if ($judging_scoresheet == "2") echo "CHECKED"; ?>/> Checklist Scoresheet (Beer Only)
+        </div>
+        <div class="radio">
+            <label>
+                <input type="radio" name="jPrefsScoresheet" value="2" id="jPrefsScoresheet_1" rel="" <?php if ($judging_scoresheet == "2") echo "CHECKED"; ?>/> BJCP Checklist Scoresheet (Beer Only)
             </label>
-            <label class="radio-inline">
-                <input type="radio" name="jPrefsScoresheet" value="3" id="jPrefsScoresheet_1" rel="" <?php if ($judging_scoresheet == "3") echo "CHECKED"; ?>/> Structured Scoresheet
+        </div>
+        <div class="radio">
+            <label>
+                <input type="radio" name="jPrefsScoresheet" value="3" id="jPrefsScoresheet_1" rel="" <?php if ($judging_scoresheet == "3") echo "CHECKED"; ?>/> BJCP Structured Scoresheet (Beer, Mead, and Cider)
+            </label>
+        </div>
+        <div class="radio">
+            <label>
+                <input type="radio" name="jPrefsScoresheet" value="4" id="jPrefsScoresheet_1" rel="" <?php if ($judging_scoresheet == "4") echo "CHECKED"; ?>/> NW Cider Cup Structured Scoresheet (Cider Only)
             </label>
         </div>
         <span id="helpBlock" class="help-block">
@@ -118,13 +126,14 @@ if ($_SESSION['prefsEval'] == 1) {
         <div class="modal-content">
             <div class="modal-header bcoem-admin-modal">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="scoresheetModalLabel">Queued Judging Info</h4>
+                <h4 class="modal-title" id="scoresheetModalLabel">Entry Evaluation Scoresheet Info</h4>
             </div>
             <div class="modal-body">
                 <p>Indicate which BJCP scoresheet judges will use for entry evaluation and scoring.</p>
-                <p>The <strong>Classic Scoresheet</strong> is the original BJCP-sanctioned competition scoresheet. Long form evaluation responses for aroma, appearance, flavor, mouthfeel, and overall impression for <a href="https://bjcp.org/docs/SCP_BeerScoreSheet.pdf" target="_blank">Beer</a>, <a href="https://bjcp.org/docs/SCP_MeadScoreSheet.pdf" target="_blank">Mead</a>, <a href="https://bjcp.org/docs/SCP_CiderScoreSheet.pdf" target="_blank">Cider</a>, and all other style types.</p>
-                <p>The <strong>Checklist Scoresheet</strong> is "a quick checklist-based beer scoresheet covering perhaps 80% of the sensory information necessary for any beer." This is only for use in <a href="https://bjcp.org/docs/Beer_checklist.pdf" target="_blank">evaluating beer entries</a>; Mead, Cider, and other style types utilize the Classic Scoresheet.</p>
-                <p>The <strong>Structured Scoresheet</strong> is a revised and updated version of the Checklist Scoresheet that features sliding scales (none to high) for aroma, appearance, flavor, and mouthfeel to "reduce the time [judges] spend writing out intensity levels." Considered experimental, these scoresheets were introduced at the National Homebrew Competition in 2018 and used again in 2019 to great success. While not officially adopted by the BJCP, their use has been increasing in local competitions. Available for Beer, Mead, and Cider. All other style types utilize the Full Scoresheet.</p>
+                <p>The <strong>BJCP Classic Scoresheet</strong> is the original BJCP-sanctioned competition scoresheet. Long form evaluation responses for aroma, appearance, flavor, mouthfeel, and overall impression for <a href="https://bjcp.org/docs/SCP_BeerScoreSheet.pdf" target="_blank">Beer</a>, <a href="https://bjcp.org/docs/SCP_MeadScoreSheet.pdf" target="_blank">Mead</a>, <a href="https://bjcp.org/docs/SCP_CiderScoreSheet.pdf" target="_blank">Cider</a>, and all other style types.</p>
+                <p>The <strong>BJCP Checklist Scoresheet</strong> is "a quick checklist-based beer scoresheet covering perhaps 80% of the sensory information necessary for any beer." This is only for use in <a href="https://bjcp.org/docs/Beer_checklist.pdf" target="_blank">evaluating beer entries</a>; Mead, Cider, and other style types utilize the Classic Scoresheet.</p>
+                <p>The <strong>BJCP Structured Scoresheet</strong> is a revised and updated version of the Checklist Scoresheet that features sliding scales (none to high) for aroma, appearance, flavor, and mouthfeel to "reduce the time [judges] spend writing out intensity levels." Considered experimental, these scoresheets were introduced at the National Homebrew Competition in 2018 and used again in 2019 to great success. While not officially adopted by the BJCP, their use has been increasing in local competitions. Available for Beer, Mead, and Cider. All other style types utilize the Full Scoresheet.</p>
+                <p>The <strong>NW Cider Cup Structured Scoresheet</strong> was developed for use in the NW Cider Cup (formerly Portland International Cider Cup) according the specifications of the <a href="https://www.nwcider.com/" target="_blank">Northwest Cider Association</a>. Cider only. Beer and Mead styles utilize the BJCP Structured Scoresheet; all other style types utilize the Full Scoresheet.</p>
                 <p>More information can be downloaded on the <a class="hide-loader" href="https://bjcp.org/compcenter.php" target="_blank">BJCP's website</a>.</p>
             </div>
             <div class="modal-footer">
