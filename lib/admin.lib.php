@@ -503,12 +503,17 @@ function score_custom_winning_choose($special_best_info_db_table,$special_best_d
 	return $r;
 }
 
-function participant_choose($brewer_db_table,$pro_edition,$judge) {
+function participant_choose($brewer_db_table,$pro_edition,$judge,$evaluation='0') {
 	
 	require(CONFIG.'config.php');
 	mysqli_select_db($connection,$database);
 
-	if ($pro_edition == 1) $query_brewers = "SELECT uid,brewerBreweryName FROM $brewer_db_table WHERE brewerBreweryName IS NOT NULL ORDER BY brewerBreweryName ASC";
+	if ($pro_edition == 1) {
+		
+		if (($evaluation == 1) && ($judge == 1)) $query_brewers = "SELECT uid,brewerFirstName,brewerLastName FROM $brewer_db_table WHERE brewerJudge='Y' ORDER BY brewerLastName ASC";
+		else $query_brewers = "SELECT uid,brewerBreweryName FROM $brewer_db_table WHERE brewerBreweryName IS NOT NULL ORDER BY brewerBreweryName ASC";
+
+	}
 	
 	else {
 		

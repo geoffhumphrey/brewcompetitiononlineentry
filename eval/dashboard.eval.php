@@ -134,7 +134,7 @@ if ($admin) {
 	$admin_add_eval .= "<div class=\"form-group\">";
 	$admin_add_eval .= sprintf("<label for=\"entry_number\" class=\"col-sm-4 control-label\">%s</label>",$label_judge);
 	$admin_add_eval .= "<div class=\"col-sm-8\">";
-	$admin_add_eval .= participant_choose($brewer_db_table,$_SESSION['prefsProEdition'],"1");
+	$admin_add_eval .= participant_choose($brewer_db_table,$_SESSION['prefsProEdition'],"1","1");
 	$admin_add_eval .= "</div>";
 	$admin_add_eval .= "</div>";
 	$admin_add_eval .= "<div class=\"form-group\">";
