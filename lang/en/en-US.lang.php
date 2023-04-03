@@ -1478,9 +1478,9 @@ $bottle_labels_000 = "Labels cannot be generated at this time.";
 $bottle_labels_001 = "Be sure to check the competition entry acceptance rules for specific label attachment guidelines before submitting!";
 $bottle_labels_002 = "Typically, clear packing tape is used to attach to the barrel of each entry - cover the label completely.";
 $bottle_labels_003 = "Typically, a rubber band is used to attach labels to each entry.";
-if (isset($_SESSION['jPrefsBottleNum'])) $bottle_labels_004 = "4 labels are provided as a courtesy. This competition requires ".$_SESSION['jPrefsBottleNum']." bottles per entry. Discard any extra labels.";
+if (isset($_SESSION['jPrefsBottleNum'])) $bottle_labels_004 = "4 labels are provided as a courtesy. This competition requires ".$_SESSION['jPrefsBottleNum']." bottles per entry. You may need to print multiple pages depending upon the number of bottles required.";
 else $bottle_labels_004 = "4 labels are provided as a courtesy. Discard any extra labels.";
-$bottle_labels_005 = "If any items are missing, close this window and edit the entry.";
+$bottle_labels_005 = "If any items are missing, close this window and edit the entry. You may need to print multiple pages depending upon the number of bottles required.";
 $bottle_labels_006 = "Space reserved for competition staff use.";
 $bottle_labels_007 = "THIS RECIPE FORM IS FOR YOUR RECORDS ONLY - please DO NOT include a copy of it with your entry shipment.";
 
@@ -2054,22 +2054,18 @@ $label_medium_dry = "Medium Dry";
 $label_medium_sweet = "Medium Sweet";
 $label_your_score = "Your Score";
 $label_summary_overall_impression = "Summary of Evaluation and Overall Impression";
-$label_deep_gold = "Deep Gold";
-$label_chestnut = "Chestnut";
-$label_pink = "Pink";
-$label_red = "Red";
-$label_purple = "Purple";
-$label_garnet = "Garnet";
-$label_clear = "Clear";
+$label_medal_count = "Medal Count";
+$label_best_brewer_place = "Best Brewer Place";
+
 
 $brew_text_041 = "Optional &ndash; specify a regional variation (e.g., Mexican Lager, Dutch Lager, Japanese Rice Lager, etc.).";
-
 $evaluation_info_095 = "Next assigned judging session open:";
 $evaluation_info_096 = "To assist in preparation, assigned tables/flights and associated entries are available ten minutes prior to the start of a session.";
 $evaluation_info_097 = "Your next judging session is now available.";
 $evaluation_info_098 = "Refresh to view.";
 $evaluation_info_099 = "Past or current judging sessions:";
 $evaluation_info_100 = "Upcoming judging sessions:";
+
 $evaluation_info_101 = "Please provide another color descriptor.";
 $evaluation_info_102 = "Enter your total score - maximum of 50. Use the scoring guide below if needed.";
 $evaluation_info_103 = "Please provide your score - minimum of 5, maximum of 50.";

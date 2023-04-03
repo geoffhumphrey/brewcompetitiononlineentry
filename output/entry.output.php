@@ -42,8 +42,15 @@ $style_entry = $brewing_info['brewCategory']."-".$brewing_info['brewSubCategory'
 
 $brewing_info['brewInfo'] = str_replace("^"," | ",$brewing_info['brewInfo']);
 $brewing_info['brewInfo'] = html_entity_decode($brewing_info['brewInfo']);
+if ($_SESSION['prefsProEdition'] == 1) {
+	$label_name = $label_contact;
+	$label_phone = $label_contact." ".$label_phone;
+	$label_email = $label_contact." ".$label_email;
+}
+
 $brewer_info['brewerFirstName'] = html_entity_decode($brewer_info['brewerFirstName']);
 $brewer_info['brewerLastName'] = html_entity_decode($brewer_info['brewerLastName']);
+
 $brewer_info['brewerAddress'] = html_entity_decode($brewer_info['brewerAddress']);
 $brewer_info['brewerCity'] = html_entity_decode($brewer_info['brewerCity']);
 $brewer_info['brewerState'] = html_entity_decode($brewer_info['brewerState']);
@@ -75,55 +82,9 @@ if (in_array($_SESSION['prefsEntryForm'],$barcode_qrcode_array)) {
 
 }
 
-// Various mead and cider info
-switch ($brewing_info['brewMead1']) {
-  case "Still":
-    $brewing_info['sparkling'] = 'Still';
-    break;
-  case "Petillant":
-    $brewing_info['sparkling'] = 'Petillant';
-    break;
-  case "Sparkling":
-    $brewing_info['sparkling'] = 'Sparkling';
-    break;
-  default:
-    $brewing_info['sparkling'] = '';
-}
-
-switch ($brewing_info['brewMead2']) {
-  case "Dry":
-    $brewing_info['sweetness'] = 'Dry';
-    break;
-  case "Medium Dry":
-    $brewing_info['sweetness'] = 'Medium Dry';
-    break;
-  case "Medium":
-    $brewing_info['sweetness'] = 'Medium';
-    break;
-  case "Medium Sweet":
-    $brewing_info['sweetness'] = 'Medium Sweet';
-    break;
-  case "Sweet":
-    $brewing_info['sweetness'] = 'Sweet';
-    break;
-  default:
-    $brewing_info['sweetness'] = '';
-}
-
-switch ($brewing_info['brewMead3']) {
-  case "Hydromel":
-    $brewing_info['meadType']='Hydromel';
-    break;
-  case "Standard":
-    $brewing_info['meadType']='Standard';
-    break;
-  case "Sack":
-    $brewing_info['meadType']='Sack';
-    break;
-  default:
-    $brewing_info['meadType']='';
-    break;
-}
+$brewing_info['sparkling'] = $brewing_info['brewMead1'];
+$brewing_info['sweetness'] = $brewing_info['brewMead2'];
+$brewing_info['meadType'] = $brewing_info['brewMead3'];
 
 // Paid or not
 if ($brewing_info['brewPaid'] == 1) $brewing_paid = sprintf("*** %s ***",strtoupper($label_paid));
@@ -137,194 +98,7 @@ if ($brewing_info['brewCategory'] < $category_end) {
 
 else $brewing_info['styleName'] = $brewing_info['brewStyle'];
 
-
 if (($_SESSION['prefsStyleSet'] == "BJCP2021") && ($brewing_info['brewCategorySort'] == "02") && ($brewing_info['brewSubCategory'] == "A")) $label_required_info = $label_regional_variation;
-
-/**
- * Version 2.5.0
- * November, 2022
- * The recipe-related functions and fields have been deprecated.
- * Disabling display and related reports. Will remove in a future
- * release.
- */
-
-/*
-if (!in_array($_SESSION['prefsEntryForm'],$no_entry_form_array)) {
-
-	// Get some values that are easier to work with in the templates
-	$brewing_info['carbonation'] = 'unknown';
-	if ($brewing_info['brewCarbonationMethod'] == "Y") {
-	  $brewing_info['sparkling'] = 'forced';
-	}
-	if ($brewing_info['brewCarbonationMethod'] == "N") {
-	  $brewing_info['sparkling'] = 'bottleConditioned';
-	}
-
-	// Some metric/US conversions
-	$brewing_info['brewSize']['us']=$brewing_info['brewYield'];
-	$brewing_info['brewSize']['metric']=round($brewing_info['brewYield']*3.78541,2);
-	$brewing_info['styleCat'] = "";
-
-	// Convert fermentation temperature
-	$brewPrimaryTemp=$brewing_info['brewPrimaryTemp'];
-	$brewing_info['brewPrimaryTemp']=array();
-	if ($_SESSION['prefsTemp'] == "Celsius") {
-	  $brewing_info['brewPrimaryTemp']['c'] = $brewPrimaryTemp;
-	  $brewing_info['brewPrimaryTemp']['f']  =
-		  round((9/5)*$brewPrimaryTemp+32, 0);
-	} else {
-	  $brewing_info['brewPrimaryTemp']['f'] = $brewPrimaryTemp;
-	  $brewing_info['brewPrimaryTemp']['c']  =
-		  round((5/9)*($brewPrimaryTemp-32), 0);
-	}
-
-	$brewSecondaryTemp=$brewing_info['brewSecondaryTemp'];
-	$brewing_info['brewSecondaryTemp']=array();
-	if ($_SESSION['prefsTemp'] == "Celsius") {
-	  $brewing_info['brewSecondaryTemp']['c'] = $brewSecondaryTemp;
-	  $brewing_info['brewSecondaryTemp']['f']  =
-		  round((9/5)*$brewSecondaryTemp+32, 0);
-	} else {
-	  $brewing_info['brewSecondaryTemp']['f'] = $brewSecondaryTemp;
-	  $brewing_info['brewSecondaryTemp']['c']  =
-		  round((5/9)*($brewSecondaryTemp-32), 0);
-	}
-
-	// Arrays for ingredients and mashing
-	$totalFermentables=0;
-	$totalHops=0;
-	$totalMash=0;
-	// Grains
-	$brewing_info['grains']=array();
-	for ($i=1; $i <= 20; $i++) {
-	  if ($brewing_info['brewGrain'.$i] != "") {
-		$brewing_info['grains'][$i]['name']=html_entity_decode($brewing_info['brewGrain'.$i]);;
-
-		// Metric/US conversion
-		if ($_SESSION['prefsWeight2'] == "kilograms") {
-		  $brewing_info['grains'][$i]['weight']['kg'] = $brewing_info['brewGrain'.$i.'Weight'];
-		  $brewing_info['grains'][$i]['weight']['lb'] =
-			   round($brewing_info['brewGrain'.$i.'Weight']*2.204,2);
-		 } else {
-		   $brewing_info['grains'][$i]['weight']['lb'] = $brewing_info['brewGrain'.$i.'Weight'];
-		   $brewing_info['grains'][$i]['weight']['kg'] =
-			   round($brewing_info['brewGrain'.$i.'Weight']/2.204,2);
-		 }
-
-		 $totalFermentables+=$brewing_info['grains'][$i]['weight']['kg'];
-		 $brewing_info['grains'][$i]['use']=$brewing_info['brewGrain'.$i.'Use'];
-	  }
-	}
-
-	// Extracts
-	$brewing_info['extracts']=array();
-	for ($i=1; $i <= 10; $i++) {
-	  if (isset($brewing_info['brewExtract'.$i])) {
-		$brewing_info['extracts'][$i]['name']=html_entity_decode($brewing_info['brewExtract'.$i]);;
-
-		// Metric/US conversion
-		if ($_SESSION['prefsWeight2'] == "kilograms") {
-		  $brewing_info['extracts'][$i]['weight']['kg'] = $brewing_info['brewExtract'.$i.'Weight'];
-		  $brewing_info['extracts'][$i]['weight']['lb'] =
-			   round($brewing_info['brewExtract'.$i.'Weight']*2.204,2);
-		 } else {
-		   $brewing_info['extracts'][$i]['weight']['lb'] = $brewing_info['brewExtract'.$i.'Weight'];
-		   $brewing_info['extracts'][$i]['weight']['kg'] =
-			   round($brewing_info['brewExtract'.$i.'Weight']/2.204,2);
-		 }
-
-		 $totalFermentables+=$brewing_info['extracts'][$i]['weight']['kg'];
-		 $brewing_info['extracts'][$i]['use']=$brewing_info['brewExtract'.$i.'Use'];
-	  }
-	}
-
-	// Adjuncts
-	$brewing_info['adjuncts']=array();
-	for ($i=1; $i <= 20; $i++) {
-	  if (isset($brewing_info['brewAddition'.$i])) {
-		$brewing_info['adjuncts'][$i]['name']=html_entity_decode($brewing_info['brewAddition'.$i]);;
-
-		// Metric/US conversion
-		if ($_SESSION['prefsWeight2'] == "kilograms") {
-		  $brewing_info['adjuncts'][$i]['weight']['kg'] = $brewing_info['brewAddition'.$i.'Amt'];
-		  $brewing_info['adjuncts'][$i]['weight']['lb'] =
-			   round($brewing_info['brewAddition'.$i.'Amt']*2.204,2);
-		 } else {
-		   $brewing_info['adjuncts'][$i]['weight']['lb'] = $brewing_info['brewAddition'.$i.'Amt'];
-		   $brewing_info['adjuncts'][$i]['weight']['kg'] =
-			   round($brewing_info['brewAddition'.$i.'Amt']/2.204,2);
-		 }
-
-		 $totalFermentables+=$brewing_info['adjuncts'][$i]['weight']['kg'];
-		 $brewing_info['adjuncts'][$i]['use']=$brewing_info['brewAddition'.$i.'Use'];
-	  }
-	}
-
-	/* Calculate percentages
-	if ($totalFermentables != 0) {
-	  reset ($brewing_info['grains']);
-	  foreach ($brewing_info['grains'] as &$fermentable)
-		$fermentable['weight']['percent'] =
-		   round(($fermentable['weight']['kg']/$totalFermentables)*100,2);
-
-	  reset ($brewing_info['extracts']);
-	  foreach ($brewing_info['extracts'] as &$fermentable)
-		$fermentable['weight']['percent'] =
-		   round(($fermentable['weight']['kg']/$totalFermentables)*100,2);
-
-	  reset ($brewing_info['adjuncts']);
-	  foreach ($brewing_info['adjuncts'] as &$fermentable)
-		$fermentable['weight']['percent'] =
-		   round(($fermentable['weight']['kg']/$totalFermentables)*100,2);
-	}
-
-	// Hops
-	$brewing_info['hops']=array();
-	for ($i=1; $i <= 20; $i++) {
-	  if (isset($brewing_info['brewHops'.$i])) {
-		$brewing_info['hops'][$i]['name'] = html_entity_decode($brewing_info['brewHops'.$i]);
-		$brewing_info['hops'][$i]['alphaAcid'] = $brewing_info['brewHops'.$i.'IBU'];
-		$brewing_info['hops'][$i]['minutes'] = $brewing_info['brewHops'.$i.'Time'];
-		$brewing_info['hops'][$i]['use'] = $brewing_info['brewHops'.$i.'Use'];
-		$brewing_info['hops'][$i]['form'] = $brewing_info['brewHops'.$i.'Form'];
-
-		// Metric/US conversion
-		if ($_SESSION['prefsWeight1'] == "grams") {
-		  $brewing_info['hops'][$i]['weight']['g'] = $brewing_info['brewHops'.$i.'Weight'];
-		  $brewing_info['hops'][$i]['weight']['oz'] = round($brewing_info['brewHops'.$i.'Weight']/28.3495,2);
-
-
-		 } else {
-		   $brewing_info['hops'][$i]['weight']['oz'] = $brewing_info['brewHops'.$i.'Weight'];
-		   $brewing_info['hops'][$i]['weight']['g'] = round($brewing_info['brewHops'.$i.'Weight']*28.3495,1);
-		 }
-
-		$totalHops+=$brewing_info['brewHops'.$i.'Weight'];
-
-	  }
-	}
-
-	// Mashing
-	$brewing_info['mashSteps']=array();
-	for ($i=1; $i <= 10; $i++) {
-	  if (isset($brewing_info['brewMashStep'.$i.'Temp'])) {
-		$brewing_info['mashSteps'][$i]['name']=html_entity_decode($brewing_info['brewMashStep'.$i.'Name']);
-		$brewing_info['mashSteps'][$i]['minutes']=$brewing_info['brewMashStep'.$i.'Time'];
-		$totalMash+=$brewing_info['mashSteps'][$i]['minutes'];
-		// Metric/US conversion
-		if ($_SESSION['prefsTemp'] == "Celsius") {
-		  $brewing_info['mashSteps'][$i]['temp']['c'] = $brewing_info['brewMashStep'.$i.'Temp'];
-		  $brewing_info['mashSteps'][$i]['temp']['f']  =
-			   round((9/5)*$brewing_info['brewMashStep'.$i.'Temp']+32, 0);
-		 } else {
-		  $brewing_info['mashSteps'][$i]['temp']['f'] = $brewing_info['brewMashStep'.$i.'Temp'];
-		  $brewing_info['mashSteps'][$i]['temp']['c']  =
-			   round((5/9)*($brewing_info['brewMashStep'.$i.'Temp']-32), 0);
-		 }
-	  }
-	}
-} // end if (in_array($_SESSION['prefsEntryForm'],$no_entry_form_array))
-*/
 
 $TBS = new clsTinyButStrong;
 $TBS->SetOption('noerr',TRUE);

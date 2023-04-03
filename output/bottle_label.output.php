@@ -152,8 +152,13 @@ if (isset($_SESSION['loginUsername'])) {
 
             if (!$anon) {
               $page_info1 .= "<small>";
-              $page_info1 .= "<p>".$brewerFirstName." ".$brewerLastName."<br>";
-              // $page_info1 .= $brewerAddress."<br>".$brewerCity.", ".$brewerState." ".$brewerZip." "."<br>";
+              $page_info1 .= "<p>";
+              if ($_SESSION['prefsProEdition'] == 1) {
+                $page_info1 .= $row_brewer['brewerBreweryName']."<br>";
+                $page_info1 .= $label_contact.": ".$brewerFirstName." ".$brewerLastName."<br>";
+              }
+              else $page_info1 .= $brewerFirstName." ".$brewerLastName."<br>";
+              //$page_info1 .= $brewerAddress."<br>".$brewerCity.", ".$brewerState." ".$brewerZip." "."<br>";
               $page_info1 .= $brewerEmail."<br>";
               $page_info1 .= $phone;
               $page_info1 .= "</p>";

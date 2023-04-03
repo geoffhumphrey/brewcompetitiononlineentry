@@ -2717,6 +2717,9 @@ $encryption_key = "8sQHfMk8rinRtA/Frhm+AWrSgOmkcbu+FxIUGy9Fq5I=";
 
 if ((isset($_SESSION['prefsStyleSet'])) && ($_SESSION['prefsStyleSet'] == "BA")) $optional_info_styles = array();
 elseif ((isset($_SESSION['prefsStyleSet'])) && ($_SESSION['prefsStyleSet'] == "AABC")) $optional_info_styles = array("12-01","14-08","17-03","18-04","18-05","19-05","19-07","16-01","19-01","19-02","19-03","19-04","19-06","20-02","20-03");
+elseif ((isset($_SESSION['prefsStyleSet'])) && ($_SESSION['prefsStyleSet'] == "NWCiderCup")) {
+$optional_info_styles = array("C4-A","C4-B","C5-A","C8-A","C8-B","C8-C","C9-A","C9-B","C9-C");
+}
 else {
     $optional_info_styles = array("21-B","28-A","30-B","33-A","33-B","34-B","M2-C","M2-D","M2-E","M3-A","M3-B","M4-B","M4-C","7-C","M1-A","M1-B","M1-C","M2-A","M2-B","M4-A","C1-A","C1-B","C1-C");
     if ((isset($_SESSION['prefsStyleSet'])) && ($_SESSION['prefsStyleSet'] == "BJCP2021")) $optional_info_styles[] = "25-B";

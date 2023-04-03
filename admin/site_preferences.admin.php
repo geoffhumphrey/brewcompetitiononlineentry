@@ -105,26 +105,30 @@ if (($section == "admin") && ($go == "preferences")) {
     if (isset($row_prefs['prefsGoogleAccount'])) $recaptcha_key = explode("|", $row_prefs['prefsGoogleAccount']);
     if ($_SESSION['prefsStyleSet'] == "BA") include (INCLUDES.'ba_constants.inc.php');
 
-    // Generate the default sub-style exception list (current settings)
-    do {
+    if ($row_styles) {
 
-        $checked = "";
+        // Generate the default sub-style exception list (current settings)
+        do {
 
-        if ($go == "preferences") {
-            $a = explode(",", $row_limits['prefsUSCLEx']);
-            $b = $row_styles['id'];
-            foreach ($a as $value) {
-                if ($value == $b) $checked = "CHECKED";
+            $checked = "";
+
+            if ($go == "preferences") {
+                $a = explode(",", $row_limits['prefsUSCLEx']);
+                $b = $row_styles['id'];
+                foreach ($a as $value) {
+                    if ($value == $b) $checked = "CHECKED";
+                }
             }
-        }
 
-        if ($row_styles['id'] != "") {
-            $style_number = style_number_const($row_styles['brewStyleGroup'],$row_styles['brewStyleNum'],$_SESSION['style_set_display_separator'],0);
-            $prefsUSCLEx .= "<div class=\"checkbox\"><label><input name=\"prefsUSCLEx[]\" type=\"checkbox\" value=\"".$row_styles['id']."\" ".$checked.">".$style_number." ".$row_styles['brewStyle']."</label></div>\n";
-        }
+            if ($row_styles['id'] != "") {
+                $style_number = style_number_const($row_styles['brewStyleGroup'],$row_styles['brewStyleNum'],$_SESSION['style_set_display_separator'],0);
+                $prefsUSCLEx .= "<div class=\"checkbox\"><label><input name=\"prefsUSCLEx[]\" type=\"checkbox\" value=\"".$row_styles['id']."\" ".$checked.">".$style_number." ".$row_styles['brewStyle']."</label></div>\n";
+            }
 
-    } while ($row_styles = mysqli_fetch_assoc($styles));
+        } while ($row_styles = mysqli_fetch_assoc($styles));
 
+    }
+    
 }
 
 if ($section == "admin") { ?>

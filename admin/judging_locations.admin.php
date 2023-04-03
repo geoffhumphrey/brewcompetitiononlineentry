@@ -267,16 +267,18 @@ if ($section != "step5") {
 				    // Get Judging Sessions
 				    $query_judging_loc3 = sprintf("SELECT id, judgingLocName, judgingLocType FROM %s", $prefix."judging_locations");
 				    if ($filter == "staff") $query_judging_loc3 .= " WHERE judgingLocType='2'";
-	$judging_loc3 = mysqli_query($connection,$query_judging_loc3) or die (mysqli_error($connection));
-	$row_judging_loc3 = mysqli_fetch_assoc($judging_loc3);
+					$judging_loc3 = mysqli_query($connection,$query_judging_loc3) or die (mysqli_error($connection));
+					$row_judging_loc3 = mysqli_fetch_assoc($judging_loc3);
 	
 	                $j_sess_arr = array();
+
+	                if ($row_judging_loc3) {
+	                	do {
+	                	    $j_sess_arr[$row_judging_loc3['id']] = $row_judging_loc3['judgingLocName'];
+	                	    
+	                	} while ($row_judging_loc3 = mysqli_fetch_assoc($judging_loc3));
+	                }
 	                
-	                do {
-	                    $j_sess_arr[$row_judging_loc3['id']] = $row_judging_loc3['judgingLocName'];
-	                    
-	                } while ($row_judging_loc3 = mysqli_fetch_assoc($judging_loc3));
-					
 					if (($filter == "judges") || ($filter == "staff")) $exploder = $row_brewer['brewerJudgeLocation'];
 					if ($filter == "stewards") $exploder = $row_brewer['brewerStewardLocation'];
 					$a = explode(",",$exploder);
