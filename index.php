@@ -433,7 +433,7 @@ if (!empty($error_output)) $_SESSION['error_output'] = $error_output;
 </div>
 <!-- Session Timer Displays and Auto Logout -->
 <script>
-var session_end = "<?php echo $session_end; ?>";
+var session_end = moment.tz("<?php echo $session_end; ?>","<?php echo get_timezone($_SESSION['prefsTimeZone']); ?>");
 var session_end_min = "<?php echo $session_expire_after; ?>";
 var session_end_seconds = "<?php echo $session_end_seconds; ?>";
 var session_end_redirect = "<?php echo $base_url; ?>includes/logout.inc.php";

@@ -142,6 +142,9 @@ if (($judging_scoresheet == 3) || ($judging_scoresheet == 4)) {
  * that the scoresheet is being added by a non-admin
  * on-the-fly.
  */
+
+$query_style = "";
+
 if ($action == "add") {
 
   $submit_button_text = $label_submit_evaluation;
@@ -166,7 +169,7 @@ if ($action == "add") {
   $row_entry_info = mysqli_fetch_assoc($entry_info);
   $totalRows_entry_info = mysqli_num_rows($entry_info);
 
-  $query_style = sprintf("SELECT * FROM %s WHERE brewStyleGroup = '%s' AND brewStyleNum = '%s' AND brewStyleVersion='%s'", $prefix."styles", $row_entry_info['brewCategorySort'], $row_entry_info['brewSubCategory'], $_SESSION['prefsStyleSet']);
+  if ($totalRows_entry_info > 0) $query_style = sprintf("SELECT * FROM %s WHERE brewStyleGroup = '%s' AND brewStyleNum = '%s' AND brewStyleVersion='%s'", $prefix."styles", $row_entry_info['brewCategorySort'], $row_entry_info['brewSubCategory'], $_SESSION['prefsStyleSet']);
 }
 
 /**
@@ -201,41 +204,47 @@ if ($action == "edit") {
     $row_entry_info = mysqli_fetch_assoc($entry_info);
     $totalRows_entry_info = mysqli_num_rows($entry_info);
     
-    $query_style = sprintf("SELECT * FROM %s WHERE id='%s'", $prefix."styles", $style);
+    if ($totalRows_entry_info > 0) $query_style = sprintf("SELECT * FROM %s WHERE id='%s'", $prefix."styles", $style);
 
   }
 
 }
 
-$style = mysqli_query($connection,$query_style) or die (mysqli_error($connection));
-$row_style = mysqli_fetch_assoc($style);
-$totalRows_style = mysqli_num_rows($style);
-
-$judge_scores = eval_exits($row_entry_info['id'],"judge_scores",$dbTable);
-if ($action == "add") $flight_count_info = flight_count_info($id,0);
-if ($action == "edit") $flight_count_info = flight_count_info($eid,0);
-
-if (!empty($judge_scores)) {
-  $scored_previously = TRUE;
-  $consensus_scores = eval_exits($row_entry_info['id'],"consensus_scores",$dbTable);
-  if (count(array_unique($consensus_scores)) === 1) $consensus_match = TRUE;
-  $other_judge_scores .= sprintf("%s: ".rtrim(display_array_content($judge_scores,2),", "),$label_judge_score);
-  $other_judge_consensus_scores .= sprintf("%s: ".rtrim(display_array_content($consensus_scores,2),", "),$label_judge_consensus_scores);
-  if (isset($row_eval['evalFinalScore'])) $my_consensus_score .= sprintf("%s: <span id=\"my-consensus-score\">".$row_eval['evalFinalScore']."</span>",$label_your_consensus_score);
+if (!empty($query_style)) {
+  $style = mysqli_query($connection,$query_style) or die (mysqli_error($connection));
+  $row_style = mysqli_fetch_assoc($style);
+  $totalRows_style = mysqli_num_rows($style);
 }
 
-if (($action == "edit") && (!$consensus_match)) $consensus_scores = array_diff($consensus_scores,array($row_eval['evalFinalScore']));
+if ($totalRows_entry_info > 0) {
+  $judge_scores = eval_exits($row_entry_info['id'],"judge_scores",$dbTable);
+  if ($action == "add") $flight_count_info = flight_count_info($id,0);
+  if ($action == "edit") $flight_count_info = flight_count_info($eid,0);
 
-if (isset($_POST['entry_number'])) {
-  
-  // Get table info
-  $query_flight_info = sprintf("SELECT flightTable FROM %s WHERE flightEntryID='%s'",$prefix."judging_flights",$row_entry_info['id']);
-  $flight_info = mysqli_query($connection,$query_flight_info) or die (mysqli_error($connection));
-  $row_flight_info = mysqli_fetch_assoc($flight_info);
+  if (!empty($judge_scores)) {
+    $scored_previously = TRUE;
+    $consensus_scores = eval_exits($row_entry_info['id'],"consensus_scores",$dbTable);
+    if (count(array_unique($consensus_scores)) === 1) $consensus_match = TRUE;
+    $other_judge_scores .= sprintf("%s: ".rtrim(display_array_content($judge_scores,2),", "),$label_judge_score);
+    $other_judge_consensus_scores .= sprintf("%s: ".rtrim(display_array_content($consensus_scores,2),", "),$label_judge_consensus_scores);
+    if (isset($row_eval['evalFinalScore'])) $my_consensus_score .= sprintf("%s: <span id=\"my-consensus-score\">".$row_eval['evalFinalScore']."</span>",$label_your_consensus_score);
+  }
 
-  if ($row_flight_info) $filter = $row_flight_info['flightTable'];
+  if (($action == "edit") && (!$consensus_match)) $consensus_scores = array_diff($consensus_scores,array($row_eval['evalFinalScore']));
+
+  if (isset($_POST['entry_number'])) {
+    
+    // Get table info
+    $query_flight_info = sprintf("SELECT flightTable FROM %s WHERE flightEntryID='%s'",$prefix."judging_flights",$row_entry_info['id']);
+    $flight_info = mysqli_query($connection,$query_flight_info) or die (mysqli_error($connection));
+    $row_flight_info = mysqli_fetch_assoc($flight_info);
+
+    if ($row_flight_info) $filter = $row_flight_info['flightTable'];
+
+  }
 
 }
+
 
 /**
  * Included Descriptors are used by multiple functions.
