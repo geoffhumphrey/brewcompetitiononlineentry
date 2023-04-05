@@ -102,6 +102,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 			$brewerJudgeExp = $row_name['brewerJudgeExp'];
 			$brewerAHA = $row_name['brewerAHA'];
 			$brewerBreweryName = $row_name['brewerBreweryName'];
+			$brewerAssignment = $row_name['brewerAssignment'];
 
 		} // end if (!isset($_POST['keepParticipants']))
 
@@ -317,12 +318,12 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 				'brewerStewardLocation' => blank_to_null($brewerStewardLocation),
 				'brewerJudgeExp' => blank_to_null($brewerJudgeExp),
 				'brewerJudgeNotes' => NULL,
-				'brewerAssignment' => NULL,
+				'brewerAssignment' => $brewerAssignment,
 				'brewerJudgeWaiver' => 'Y',
 				'brewerAHA' => blank_to_null($brewerAHA),
 				'brewerDiscount' => NULL,
 				'brewerProAm' => '0',
-				'brewerDropOff' => '0',
+				'brewerDropOff' => '999',
 				'brewerBreweryName' => blank_to_null($brewerBreweryName),
 				'brewerBreweryTTB' => NULL
 			);
@@ -363,7 +364,8 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 					'brewerJudge' => 'N',
 					'brewerSteward' => 'N',
 					'brewerJudgeLocation' => NULL,
-					'brewerStewardLocation' => NULL
+					'brewerStewardLocation' => NULL,
+					'brewerDropOff' => '999'
 				);
 				$result = $db_conn->update ($update_table, $data);
 				if (!$result) {
@@ -387,7 +389,8 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 					'brewerJudge' => 'N',
 					'brewerSteward' => 'N',
 					'brewerJudgeLocation' => NULL,
-					'brewerStewardLocation' => NULL
+					'brewerStewardLocation' => NULL,
+					'brewerDropOff' => '999'
 				);
 				$result = $db_conn->update ($update_table, $data);
 				if (!$result) {

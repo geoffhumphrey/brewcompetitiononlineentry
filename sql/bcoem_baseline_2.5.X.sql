@@ -136,7 +136,7 @@ CREATE TABLE `baseline_brewer` (
   `brewerStewardLocation` mediumtext COLLATE utf8mb4_unicode_ci,
   `brewerJudgeExp` varchar(25) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `brewerJudgeNotes` mediumtext COLLATE utf8mb4_unicode_ci,
-  `brewerAssignment` char(1) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `brewerAssignment` TEXT COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `brewerJudgeWaiver` char(1) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `brewerAHA` int(11) DEFAULT NULL,
   `brewerDiscount` char(1) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'Y or N if this participant receives a discount',
