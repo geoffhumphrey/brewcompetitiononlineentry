@@ -2056,9 +2056,10 @@ $label_your_score = "Your Score";
 $label_summary_overall_impression = "Summary of Evaluation and Overall Impression";
 $label_medal_count = "Medal Count";
 $label_best_brewer_place = "Best Brewer Place";
-
+$label_industry_affiliations = "Industry Organization Affiliations";
 
 $brew_text_041 = "Optional &ndash; specify a regional variation (e.g., Mexican Lager, Dutch Lager, Japanese Rice Lager, etc.).";
+
 $evaluation_info_095 = "Next assigned judging session open:";
 $evaluation_info_096 = "To assist in preparation, assigned tables/flights and associated entries are available ten minutes prior to the start of a session.";
 $evaluation_info_097 = "Your next judging session is now available.";
@@ -2069,6 +2070,9 @@ $evaluation_info_100 = "Upcoming judging sessions:";
 $evaluation_info_101 = "Please provide another color descriptor.";
 $evaluation_info_102 = "Enter your total score - maximum of 50. Use the scoring guide below if needed.";
 $evaluation_info_103 = "Please provide your score - minimum of 5, maximum of 50.";
+
+$brewer_text_051 = "Select the industry organizations that you are affiliated with as an employee, volunteer, etc. This is to make sure there are not any conflicts of interest when assigning judges and stewards to evaluate entries.";
+$brewer_text_052 = "<strong>If any industry organization is <u>not</u> listed in the drop-down above, enter it here.</strong> Separate each organization's name by comma (,) or semi-colon (;). Some symbols are not allowed, including ampersand (&amp;), single-quotation marks (&#39;), double-quotation marks (&quot;), and percent (&#37;).";
 
 /**
  * ----------------------------------------------------------------------------------

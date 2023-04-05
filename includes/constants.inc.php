@@ -2458,7 +2458,7 @@ $club_array = array(
     "Brewly Homebrew Club",
     "Butler County Brewing Society (BCBS)",
     "The Brü Club",
-    "Ninja Homebrewers",
+    "NINJA Homebrewers",
     "Master Homebrewer Program"
 );
 asort($club_array);

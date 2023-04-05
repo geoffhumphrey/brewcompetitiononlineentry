@@ -473,7 +473,8 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 				'brewerProAm' => blank_to_null($brewerProAm),
 				'brewerDropOff' => blank_to_null($brewerDropOff),
 				'brewerBreweryName' => blank_to_null($brewerBreweryName),
-				'brewerBreweryTTB' => blank_to_null($brewerBreweryTTB)
+				'brewerBreweryTTB' => blank_to_null($brewerBreweryTTB),
+				'brewerAssignment' => blank_to_null($brewerAssignment)
 			);
 
 			$result = $db_conn->insert ($update_table, $data);
@@ -672,7 +673,8 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 			'brewerProAm' => blank_to_null($brewerProAm),
 			'brewerDropOff' => blank_to_null($brewerDropOff),
 			'brewerBreweryName' => blank_to_null($brewerBreweryName),
-			'brewerBreweryTTB' => blank_to_null($brewerBreweryTTB)
+			'brewerBreweryTTB' => blank_to_null($brewerBreweryTTB),
+			'brewerAssignment' => blank_to_null($brewerAssignment)
 		);
 		$db_conn->where ('id', $id);
 		$result = $db_conn->update ($update_table, $data);

@@ -34,6 +34,7 @@ $dislikes = "";
 $rank = "";
 $location_pref1 = "";
 $location_pref2 = "";
+$brewerAssignment = "";
 
 if ($go == "admin") $user_id = $filter;
 elseif ($id != "default") $user_id = $id;
@@ -70,7 +71,7 @@ if (isset($_POST['brewerPhone2'])) $brewerPhone2 = sterilize($_POST['brewerPhone
 if (isset($_POST['brewerDropOff'])) $brewerDropOff = sterilize($_POST['brewerDropOff']);
 
 if (isset($_POST['brewerBreweryName'])) {
-    $brewerBreweryName = standardize_name($purifier->purify($_POST['brewerBreweryName']));
+    $brewerBreweryName = $purifier->purify($_POST['brewerBreweryName']);
     $brewerBreweryName = sterilize($brewerBreweryName);
 }
 
@@ -94,6 +95,39 @@ if (isset($_POST['brewerJudgeNotes'])) {
     $brewerJudgeNotes = sterilize($brewerJudgeNotes);
 }
 
+if (isset($_POST['brewerAssignment'])) {
+    $affilliated = array("affilliated" => $_POST['brewerAssignment']);
+}
+else $affilliated = array("affilliated" => array());
+
+if (isset($_POST['brewerAssignmentOther'])) {
+
+    $all_orgs = explode(",",$_POST['allOrgs']);   
+    $affilliated_other_arr = str_replace(", ",",",$_POST['brewerAssignmentOther']);
+    $affilliated_other_arr = str_replace(",",",",$_POST['brewerAssignmentOther']);
+    $affilliated_other_arr = str_replace("; ",",",$_POST['brewerAssignmentOther']);
+    $affilliated_other_arr = str_replace(";",",",$_POST['brewerAssignmentOther']);
+    $affilliated_other_arr = explode(",",$affilliated_other_arr);
+    $affilliated_other = array();
+
+    foreach ($affilliated_other_arr as $value) {  
+        $value = $purifier->purify($value);
+        $value = sterilize($value);
+        $value = strtolower($value);
+        if (!in_array($value,$all_orgs)) $affilliated_other[] = ucwords($value);
+    }
+
+    if (!empty($affilliated_other)) $affilliated_other_arr = array("affilliatedOther" => $affilliated_other);
+
+}
+
+else $affilliated_other_arr = array("affilliatedOther" => array());
+
+$brewerAssignment = array();
+$brewerAssignment = array_merge($affilliated,$affilliated_other_arr);
+$brewerAssignment = json_encode($brewerAssignment);
+
+// print_r($brewerAssignment); exit();
 
 /**
  * Address GitHub Issue #1113
