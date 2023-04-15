@@ -156,12 +156,17 @@ if (($_SESSION['prefsProEdition'] == 1) && ($show_judge_steward_fields)) {
     }
 
     $org_other = array();
-    foreach($affiliated_orgs['affilliatedOther'] as $value) {
-        if (!in_array($value,$org_array)) $org_other[] = $value;
+
+    if (!empty($affiliated_orgs)) {
+        foreach($affiliated_orgs['affilliatedOther'] as $value) {
+            if (!in_array($value,$org_array)) $org_other[] = $value;
+        }
     }
 
-    asort($org_other);
-    $org_other = implode(",",$org_other);
+    if (!empty($org_other)) {
+        asort($org_other);
+        $org_other = implode(",",$org_other);
+    }
 
 }
 

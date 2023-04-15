@@ -66,6 +66,7 @@ $available_count = 0;
 $total_count = 0;
 $table_styles = explode(",",$row_tables_edit['tableStyles']);
 $co_brewers_table = array();
+$industry_affliations = array();
 
 foreach ($table_styles as $table_style) {
 
@@ -73,21 +74,43 @@ foreach ($table_styles as $table_style) {
   $style = mysqli_query($connection,$query_style) or die (mysqli_error($connection));
   $row_style = mysqli_fetch_assoc($style);
 
-  $query_co_brewers = sprintf("SELECT brewCoBrewer FROM %s WHERE brewCoBrewer IS NOT NULL AND brewCategorySort='%s' AND brewSubCategory='%s'",$prefix."brewing",$row_style['brewStyleGroup'],$row_style['brewStyleNum']);
-  if ($_SESSION['jPrefsTablePlanning'] == 0) $query_co_brewers .= " AND brewReceived='1'";
-  $co_brewers = mysqli_query($connection,$query_co_brewers) or die (mysqli_error($connection));
-  $row_co_brewers = mysqli_fetch_assoc($co_brewers);
-  $totalRows_co_brewers = mysqli_num_rows($co_brewers);
-  
-  if ($totalRows_co_brewers > 0) {
-    do {
-      $co_brewers_table[] = $row_co_brewers['brewCoBrewer'];
-    } while ($row_co_brewers = mysqli_fetch_assoc($co_brewers));
+  if ($_SESSION['prefsProEdition'] == 0) {
+
+    $query_co_brewers = sprintf("SELECT brewCoBrewer FROM %s WHERE brewCoBrewer IS NOT NULL AND brewCategorySort='%s' AND brewSubCategory='%s'",$prefix."brewing",$row_style['brewStyleGroup'],$row_style['brewStyleNum']);
+    if ($_SESSION['jPrefsTablePlanning'] == 0) $query_co_brewers .= " AND brewReceived='1'";
+    $co_brewers = mysqli_query($connection,$query_co_brewers) or die (mysqli_error($connection));
+    $row_co_brewers = mysqli_fetch_assoc($co_brewers);
+    $totalRows_co_brewers = mysqli_num_rows($co_brewers);
+
+    if ($totalRows_co_brewers > 0) {
+      
+      do {
+        $co_brewers_table[] = $row_co_brewers['brewCoBrewer'];
+      } while ($row_co_brewers = mysqli_fetch_assoc($co_brewers));
+    
+    }
+
   }
 
+  if ($_SESSION['prefsProEdition'] == 1) {
+
+    $query_ind_aff = sprintf("SELECT a.brewBrewerID, b.brewerBreweryName FROM %s a, %s b WHERE a.brewBrewerID = b.uid AND b.brewerBreweryName IS NOT NULL AND brewCategorySort='%s' AND brewSubCategory='%s'",$prefix."brewing", $prefix."brewer", $row_style['brewStyleGroup'], $row_style['brewStyleNum']);
+    $ind_aff = mysqli_query($connection,$query_ind_aff) or die (mysqli_error($connection));
+    $row_ind_aff = mysqli_fetch_assoc($ind_aff);
+    $totalRows_ind_aff = mysqli_num_rows($ind_aff);
+
+    if ($totalRows_ind_aff > 0) {
+      
+      do {
+        $industry_affliations[] = $row_ind_aff['brewerBreweryName'];
+      } while ($row_ind_aff = mysqli_fetch_assoc($ind_aff));
+    
+    }
+
+  }
+    
 }
 
-// print_r($co_brewers_table);
 if ($totalRows_brewer > 0) {
   
   do {
@@ -105,15 +128,39 @@ if ($totalRows_brewer > 0) {
     //$rank_number = filter_var($display_rank,FILTER_SANITIZE_NUMBER_FLOAT);
     
     $co_brewer_flag = FALSE;
-    $cb_ct = 0;
-    $cb_list = array();
-    foreach ($co_brewers_table as $cb) {
-       if (strpos($cb, $judge_info[1]) !== false) $cb_ct +=1;
-       $cb_list[] = $cb;
+    $ind_aff_flag = FALSE;
+    $ind_aff_3 = array();
+    
+    if ($_SESSION['prefsProEdition'] == 0) {     
+      $cb_ct = 0;
+      $cb_list = array();
+      foreach ($co_brewers_table as $cb) {
+         if (strpos($cb, $judge_info[1]) !== false) $cb_ct +=1;
+         $cb_list[] = $cb;
+      }
+      if ($cb_ct > 0) $co_brewer_flag = TRUE;
     }
-    if ($cb_ct > 0) $co_brewer_flag = TRUE;
-    $cb_list = array_unique($cb_list);
-    $cb_list = implode(", ",$cb_list);
+
+    if ($_SESSION['prefsProEdition'] == 1) {
+
+      if (!empty($judge_info[13])) {
+
+        $ind_aff_0 = json_decode($judge_info[13],true);
+        $ind_aff_1 = $ind_aff_0['affilliated'];
+        $ind_aff_2 = $ind_aff_0['affilliatedOther'];
+        $ind_aff_3 = array_merge($ind_aff_1,$ind_aff_2);
+
+        print_r($ind_aff_3);
+        
+        $aff_ct = 0;
+        foreach ($industry_affliations as $ind_aff_4) {
+           if (in_array($ind_aff_4, $ind_aff_3)) $aff_ct +=1;
+        }
+
+        if ($aff_ct > 0) $ind_aff_flag = TRUE;
+      }
+
+    }
           
   	$assign_row_color = "";
   	$flights_display = "";
@@ -270,6 +317,20 @@ if ($totalRows_brewer > 0) {
         else $output_datatables_body .= $judge_info[9];
         if (!empty($head_judge_role_display)) $output_datatables_body .= $head_judge_role_display;
         if (!empty($judge_roles_display)) $output_datatables_body .= $judge_roles_display;
+      }
+
+      if ($ind_aff_flag) {
+        
+          $judge_ind_aff = "";
+
+          if (!empty($ind_aff_3)) {
+            foreach ($ind_aff_3 as $value) {
+                if (in_array($value,$industry_affliations)) $judge_ind_aff .= $value.", ";
+            }
+            $judge_ind_aff = trim($judge_ind_aff,", ");
+          }
+
+          $output_datatables_body .= "<br><span class=\"text-danger\"><i class=\"fa fas fa-exclamation-triangle\"></i> <strong>Affiliation conflict.</strong></span> Judge reports an industry affiliation with the following organization(s) that have entries at this table: <span class=\"text-danger\">".$judge_ind_aff."</span>"; 
       }
 
       if (($co_brewer_flag) && ($assign_row_color != "bg-info text-info")) $output_datatables_body .= "<br><span class=\"text-danger\"><i class=\"fa fas fa-exclamation-triangle\"></i> <strong>Possible Co-Brewer conflict (name match).</strong> <small>Verify with full co-brewer names listed above.</small></span>"; 
@@ -459,7 +520,8 @@ $(document).ready(function() {
   </div>
   <div class="row">
     <div class="col-md-12">
-      <?php if (!empty($cb_list)) { ?><strong>Co-Brewer Names Associated with Entries at this Table:</strong> <?php echo trim($cb_list,", "); } ?>
+      <?php if (!empty($cb_list)) { $cb_list = implode(", ", $cb_list); ?><strong>Co-Brewer Names Associated with Entries at this Table:</strong> <?php echo trim($cb_list,", "); } ?>
+      <?php if (!empty($industry_affliations)) { $industry_affliations = implode(", ", $industry_affliations); ?><strong>Organization(s) Associated with Entries at this Table:</strong> <?php echo trim($industry_affliations,", "); } ?>
     </div>
   </div>
 </div>

@@ -1484,7 +1484,7 @@ function judge_info($uid) {
 
 	$r = "";
 
-	$query_brewer_info = sprintf("SELECT id,brewerFirstName,brewerLastName,brewerJudgeLikes,brewerJudgeDislikes,brewerJudgeMead,brewerJudgeCider,brewerJudgeRank,brewerJudgeID,brewerStewardLocation,brewerJudgeLocation,brewerJudgeExp,brewerJudgeNotes FROM %s WHERE uid='%s'", $prefix."brewer", $uid);
+	$query_brewer_info = sprintf("SELECT id,brewerFirstName,brewerLastName,brewerJudgeLikes,brewerJudgeDislikes,brewerJudgeMead,brewerJudgeCider,brewerJudgeRank,brewerJudgeID,brewerStewardLocation,brewerJudgeLocation,brewerJudgeExp,brewerJudgeNotes,brewerAssignment FROM %s WHERE uid='%s'", $prefix."brewer", $uid);
 	$brewer_info = mysqli_query($connection,$query_brewer_info) or die (mysqli_error($connection));
 	$row_brewer_info = mysqli_fetch_assoc($brewer_info);
 
@@ -1505,6 +1505,8 @@ function judge_info($uid) {
 		."^".$row_brewer_info['id']
 		."^".$row_brewer_info['brewerJudgeCider'];
 	}
+
+	if ($_SESSION['prefsProEdition'] == 1) $r .= "^".$row_brewer_info['brewerAssignment'];
 
 	if ($_SESSION['jPrefsQueued'] == "N") {
 		
