@@ -149,9 +149,6 @@ if ($totalRows_brewer > 0) {
         $ind_aff_1 = $ind_aff_0['affilliated'];
         $ind_aff_2 = $ind_aff_0['affilliatedOther'];
         $ind_aff_3 = array_merge($ind_aff_1,$ind_aff_2);
-
-        print_r($ind_aff_3);
-        
         $aff_ct = 0;
         foreach ($industry_affliations as $ind_aff_4) {
            if (in_array($ind_aff_4, $ind_aff_3)) $aff_ct +=1;
