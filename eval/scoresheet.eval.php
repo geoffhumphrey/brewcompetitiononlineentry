@@ -651,6 +651,7 @@ if ($entry_found) {
     <div id="ordinal-help-total" class="help-block small text-danger"><?php echo $evaluation_info_051; ?></div>
   </div>
 </div>
+<?php if (!$nw_cider) { ?>
 <div class="form-group">
   <label for="evalBottle"><?php echo $label_bottle_inspection; ?></label>
   <div class="checkbox">
@@ -663,6 +664,7 @@ if ($entry_found) {
   <label for="evalBottleNotes"><?php echo $label_bottle_inspection_comments; ?></label>
   <input type="text" class="form-control" name="evalBottleNotes" id="evalBottleNotes" maxlength="255" placeholder="" value="<?php if ($action == "edit") echo $row_eval['evalBottleNotes']; ?>">
 </div>
+<?php } ?>
 <?php include (EVALS.$scoresheet_form); ?>
 <h3 class="section-heading"><?php echo $label_score; ?></h3>
 

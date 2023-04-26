@@ -1,4 +1,5 @@
 <!-- Not a Brewery; clubs, Pro-Am, AHA, Staff -->
+<?php if ($_SESSION['prefsProEdition'] == 0) { ?>
 <section id="participant-clubs">
     <div class="form-group">
         <label for="brewerClubs" class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label_club; ?></label>
@@ -24,8 +25,6 @@
         </div>
     </div>
 </section>
-
-<?php if ($_SESSION['prefsProEdition'] == 0) { ?>
 <section id="proAm">
     <div class="form-group">
         <label for="" class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label_pro_am; ?></label>
@@ -46,10 +45,6 @@
         </div>
     </div>
 </section>
-<?php } else { ?>
-    <input type="hidden" name="brewerProAm" value="0">
-<?php } ?>
-
 <section id="aha-number">
     <div class="form-group">
         <label for="brewerAHA" class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label_aha_number; ?></label>
@@ -60,7 +55,9 @@
         </div>
     </div>
 </section>
-
+<?php } else { ?>
+    <input type="hidden" name="brewerProAm" value="0">
+<?php } ?>
 <section id="staff-preferences">
     <div class="form-group">
         <label for="brewerStaff" class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label_staff; ?></label>
@@ -88,32 +85,3 @@
     </div>
     <?php } // end if (!empty($staff_location_avail)) ?>
 </section>
-<?php if (($_SESSION['prefsProEdition'] == 1) && (!$pro_entrant)) { 
-$org_array_lower = array();
-foreach ($org_array as $value) {
-    $org_array_lower[] = strtolower($value);
-}
-$org_array = implode(",",$org_array_lower);
-?>
-<section id="participant-orgs">
-        <div class="form-group">
-            <label for="brewerAssignment" class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label_industry_affiliations; ?></label>
-            <div class="col-lg-9 col-md-6 col-sm-8 col-xs-12">  
-            <select class="selectpicker" multiple name="brewerAssignment[]" id="brewerAssignment" data-live-search="true" data-size="40" data-width="auto" data-show-tick="true" data-header="<?php echo $label_industry_affiliations." - ".$label_select_below; ?>" title="<?php echo $label_industry_affiliations." - ".$label_select_below; ?>">
-                <?php echo $org_options; ?>
-            </select>
-            <span class="help-block"><?php echo $brewer_text_051; ?></span>
-            </div>
-        </div>
-        <input name="allOrgs" type="hidden" value="<?php echo $org_array; ?>">
-        <div id="brewerAssignmentOther" class="form-group">
-            <label for="brewerAssignmentOther" class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label_industry_affiliations." &ndash; ".$label_other; ?></label>
-            <div class="col-lg-9 col-md-9 col-sm-8 col-xs-12">
-                <input class="form-control" name="brewerAssignmentOther" type="text" value="<?php if (($action == "edit") && (!empty($org_other))) echo str_replace(",",", ",$org_other); ?>" placeholder="" pattern="[^%&\x22\x27]+">
-                <div class="help-block">
-                    <p><?php echo $brewer_text_052; ?></p>
-                </div>
-            </div>
-        </div>
-    </section>
-<?php } ?>

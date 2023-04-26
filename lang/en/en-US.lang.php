@@ -2057,6 +2057,13 @@ $label_summary_overall_impression = "Summary of Evaluation and Overall Impressio
 $label_medal_count = "Medal Count";
 $label_best_brewer_place = "Best Brewer Place";
 $label_industry_affiliations = "Industry Organization Affiliations";
+$label_deep_gold = "Deep Gold";
+$label_chestnut = "Chestnut";
+$label_pink = "Pink";
+$label_red = "Red";
+$label_purple = "Purple";
+$label_garnet = "Garnet";
+$label_clear = "Clear";
 
 $brew_text_041 = "Optional &ndash; specify a regional variation (e.g., Mexican Lager, Dutch Lager, Japanese Rice Lager, etc.).";
 

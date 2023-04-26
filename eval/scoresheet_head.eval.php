@@ -140,6 +140,7 @@ if (($head_ordinal) || ($head_miniBOS)) $head_rt_col = "col-xs-6";
             </div>
         </div>
         <?php } ?>
+        <?php if (!$nw_cider) { ?>
         <div class="row">
             <div class="col col-lg-2 col-md-3 col-sm-4 col-xs-3">
             <strong><?php echo $label_bottle_inspection; ?></span>:</strong>
@@ -158,6 +159,7 @@ if (($head_ordinal) || ($head_miniBOS)) $head_rt_col = "col-xs-6";
             <?php echo $evalOtherNotes; ?>
             </div>
         </div>
+        <?php } ?>
         <?php } ?>
     </div>
 </div>

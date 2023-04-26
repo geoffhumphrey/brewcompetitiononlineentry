@@ -417,41 +417,41 @@ $account_display .= "<div class=\"".$display_right_cols."\">".$_SESSION['userQue
 $account_display .= "</div>";
 */
 
-if ($show_judge_steward_fields) {
-	$account_display .= "<div class=\"row bcoem-account-info\">";
-	$account_display .= sprintf("<div class=\"".$display_left_cols."\"><strong>%s</strong></div>",$label_aha_number);
-	$account_display .= sprintf("<div class=\"".$display_right_cols."\"><a class=\"hide-loader\" href=\"http://www.homebrewersassociation.org/membership/join-or-renew/\" target=\"_blank\" data-toggle=\"tooltip\" title=\"%s\" data-placement=\"right\">".$aha_number."</a></div>",$brewer_info_005);
-	$account_display .= "</div>";
-	if (($_SESSION['prefsProEdition'] == 0) && ($_SESSION['brewerCountry'] == "United States")) {
+if ($_SESSION['prefsProEdition'] == 0) {
+
+	if ($show_judge_steward_fields) {
 		$account_display .= "<div class=\"row bcoem-account-info\">";
-		$account_display .= sprintf("<div class=\"".$display_left_cols."\"><strong>%s</strong></div>",$label_pro_am);
-		$account_display .= sprintf("<div class=\"".$display_right_cols."\">%s</div>",$pro_am);
+		$account_display .= sprintf("<div class=\"".$display_left_cols."\"><strong>%s</strong></div>",$label_aha_number);
+		$account_display .= sprintf("<div class=\"".$display_right_cols."\"><a class=\"hide-loader\" href=\"http://www.homebrewersassociation.org/membership/join-or-renew/\" target=\"_blank\" data-toggle=\"tooltip\" title=\"%s\" data-placement=\"right\">".$aha_number."</a></div>",$brewer_info_005);
 		$account_display .= "</div>";
-	}
-}
+		if (($_SESSION['prefsProEdition'] == 0) && ($_SESSION['brewerCountry'] == "United States")) {
+			$account_display .= "<div class=\"row bcoem-account-info\">";
+			$account_display .= sprintf("<div class=\"".$display_left_cols."\"><strong>%s</strong></div>",$label_pro_am);
+			$account_display .= sprintf("<div class=\"".$display_right_cols."\">%s</div>",$pro_am);
+			$account_display .= "</div>";
+		}
+	} 
 
-$account_display .= "<div class=\"row bcoem-account-info\">";
-$account_display .= sprintf("<div class=\"".$display_left_cols."\"><strong>%s</strong></div>",$label_drop_off);
-$account_display .= "<div class=\"".$display_right_cols."\">".dropoff_location($_SESSION['brewerDropOff']);
-if ($_SESSION['brewerDropOff'] == 0) $account_display .= sprintf("<br><a id=\"modal_window_link\" class=\"hide-loader\" data-toggle=\"tooltip\" title=\"%s\" href =\"".$base_url."output/print.output.php?section=shipping-label\">%s</a>",$brewer_info_006,$brewer_info_007);
-$account_display .= "</div>";
-$account_display .= "</div>";
-
-if ($_SESSION['prefsProEdition'] == 0) { 
+	$account_display .= "<div class=\"row bcoem-account-info\">";
+	$account_display .= sprintf("<div class=\"".$display_left_cols."\"><strong>%s</strong></div>",$label_drop_off);
+	$account_display .= "<div class=\"".$display_right_cols."\">".dropoff_location($_SESSION['brewerDropOff']);
+	if ($_SESSION['brewerDropOff'] == 0) $account_display .= sprintf("<br><a id=\"modal_window_link\" class=\"hide-loader\" data-toggle=\"tooltip\" title=\"%s\" href =\"".$base_url."output/print.output.php?section=shipping-label\">%s</a>",$brewer_info_006,$brewer_info_007);
+	$account_display .= "</div>";
+	$account_display .= "</div>";
 
 	$account_display .= "<div class=\"row bcoem-account-info\">";
 	$account_display .= sprintf("<div class=\"".$display_left_cols."\"><strong>%s</strong></div>",$label_club);
 	$account_display .=  "<div class=\"".$display_right_cols."\">".$club."</div>";
 	$account_display .= "</div>";
 
-}
+	if ($entry_discount) {
 
-if ($entry_discount) {
+		$account_display .= "<div class=\"row bcoem-account-info\">";
+		$account_display .= sprintf("<div class=\"".$display_left_cols."\"><strong>%s</strong></div>",$label_discount);
+		$account_display .= "<div class=\"".$display_right_cols."\">".$discount."</div>";
+		$account_display .= "</div>";
 
-	$account_display .= "<div class=\"row bcoem-account-info\">";
-	$account_display .= sprintf("<div class=\"".$display_left_cols."\"><strong>%s</strong></div>",$label_discount);
-	$account_display .= "<div class=\"".$display_right_cols."\">".$discount."</div>";
-	$account_display .= "</div>";
+	}
 
 }
 
@@ -534,6 +534,51 @@ if ($show_judge_steward_fields) {
 		if ($_SESSION['brewerJudgeRank'] != "") $account_display .= str_replace("<br />",", ",$display_rank); else $account_display .= "N/A";
 		$account_display .= "</div>";
 		$account_display .= "</div>";
+
+		if ($_SESSION['prefsProEdition'] == 1) {
+
+			$account_display .= "<div class=\"row bcoem-account-info\">";
+			$account_display .= sprintf("<div class=\"".$display_left_cols."\"><strong>%s</strong></div>",$label_industry_affiliations);
+			$account_display .= "<div class=\"".$display_right_cols."\">";
+			
+			if (!empty($_SESSION['brewerAssignment'])) {
+
+				$affiliated_orgs = json_decode($_SESSION['brewerAssignment'],true);
+				$affiliations = array();
+
+				if (!empty($affiliated_orgs['affilliated'])) {
+				    foreach($affiliated_orgs['affilliated'] as $value) {
+				    	if (!empty($value)) {
+				    		$affiliations[] = $value;
+				    	}
+				    }
+				}
+				
+				if (!empty($affiliated_orgs['affilliatedOther'])) {
+				    foreach($affiliated_orgs['affilliatedOther'] as $value) {
+				        if (!empty($value)) {
+				    		$affiliations[] = $value;
+				    	}
+				    }
+				}
+
+				if (!empty($affiliations)) {
+					$affiliations = implode(", ",$affiliations);
+					$account_display .= $affiliations;
+				}
+
+				else {
+					$account_display .= $label_none;
+				}
+
+			}
+			
+			else $account_display .= $label_none;
+			$account_display .= "</div>";
+			$account_display .= "</div>";
+
+		}
+
 		$account_display .= "<div class=\"row bcoem-account-info\">";
 		$account_display .= sprintf("<div class=\"".$display_left_cols."\"><strong>%s</strong></div>",$label_judge_comps);
 		$account_display .= "<div class=\"".$display_right_cols."\">";

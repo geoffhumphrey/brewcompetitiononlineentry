@@ -517,7 +517,7 @@ $(document).ready(function() {
   </div>
   <div class="row">
     <div class="col-md-12">
-      <?php if (!empty($cb_list)) { $cb_list = implode(", ", $cb_list); ?><strong>Co-Brewer Names Associated with Entries at this Table:</strong> <?php echo trim($cb_list,", "); } ?>
+      <?php if (!empty($cb_list)) { ?><strong>Co-Brewer Names Associated with Entries at this Table:</strong> <?php $cb_list = implode(", ", $cb_list); echo trim($cb_list,", "); } ?>
       <?php if (!empty($industry_affliations)) { $industry_affliations = implode(", ", $industry_affliations); ?><strong>Organization(s) Associated with Entries at this Table:</strong> <?php echo trim($industry_affliations,", "); } ?>
     </div>
   </div>
