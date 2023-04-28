@@ -277,7 +277,7 @@ foreach ($style_sets as $style_set) {
     <th width="12%"><?php echo $table_header4; ?></th>
     <th width="12%"><?php echo $table_header5; ?></th>
     <th width="12%"><?php echo $table_header6; ?></th>
-    <th width="12%" class="hidden-xs hidden-sm"><?php echo $label_admin_winner_display; ?> <a tabindex="0" type="button" role="button" data-toggle="popover" data-trigger="hover" data-placement="auto top" data-container="body" data-content="<?php echo $archive_text_019; ?>"><span class="fa fa-lg fa-question-circle"></span></th>
+    <th width="12%" class="hidden-xs hidden-sm"><?php echo $label_admin_winner_display; ?> <a tabindex="0" type="button" role="button" data-toggle="popover" data-html="true" data-trigger="hover" data-placement="auto top" data-container="body" data-content="<?php echo $archive_text_019; if ($_SESSION['prefsProEdition'] == 0) { ?> Select the <span class='fa fa-lg fa-file-excel'></span> icon to download a CSV of winner data.<?php } ?>"><span class="fa fa-lg fa-question-circle"></span></th>
     <th><?php echo $table_header7; ?></th>
 </thead>
 <tbody>
@@ -341,7 +341,14 @@ foreach ($style_sets as $style_set) {
         } else echo $row_archive['archiveSuffix']. " - ".$label_not_archived;
 	}  ?>
     </td>
-    <td class="hidden-xs hidden-sm"><?php echo yes_no($row_archive['archiveDisplayWinners'],$base_url,1); ?></td>
+    <td class="hidden-xs hidden-sm">
+        <?php 
+        echo yes_no($row_archive['archiveDisplayWinners'],$base_url,1);
+        if (($row_archive['archiveDisplayWinners'] == "Y") && ($_SESSION['prefsProEdition'] == 0)) {
+        ?>
+        &nbsp;<a target="_blank" data-toggle="tooltip" data-placement="top" title="Download a CSV of this archive's winner data." href="<?php echo $base_url; ?>output/export.output.php?section=entries&amp;go=csv&amp;filter=<?php echo $row_archive['archiveSuffix']; ?>&amp;tb=circuit&amp;sort=<?php echo $row_archive['archiveSuffix']; ?>" target="_blank"><span class="fa fa-lg fa-file-excel"></span></a>
+        <?php } ?>
+    </td>
     <td>
         <a href="<?php echo $base_url; ?>index.php?section=<?php echo $section; ?>&amp;go=<?php echo $go; ?>&amp;action=edit&amp;id=<?php echo $row_archive['id']; ?>"><span class="fa fa-lg fa-pencil"></span></a>&nbsp;
         <a class="hide-loader" href="<?php echo $base_url; ?>includes/process.inc.php?section=<?php echo $section; ?>&amp;go=<?php echo $go; ?>&amp;filter=<?php echo $row_archive['archiveSuffix']; ?>&amp;dbTable=<?php echo $archive_db_table; ?>&amp;action=delete&amp;id=<?php echo $row_archive['id']; ?>" data-toggle="tooltip" data-placement="top" title=" <?php echo $label_delete." ".$row_archive['archiveSuffix']; ?>" data-confirm="<?php echo $archive_text_015." ".$row_archive['archiveSuffix'].". ".$archive_text_016; ?>"><span class="fa fa-lg fa-trash-o"></span></a>

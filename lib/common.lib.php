@@ -1234,11 +1234,16 @@ function total_not_paid_brewer($bid) {
 	return $total_not_paid;
 }
 
-function total_paid_received($go,$id) {
+function total_paid_received($go,$id,$archive="") {
 	require(CONFIG.'config.php');
 	mysqli_select_db($connection,$database);
 
-	$query_entry_count =  sprintf("SELECT COUNT(*) as 'count' FROM %s", $prefix."brewing");
+	$archive_suffix = "";
+	if (!empty($archive)) {
+		if ($archive != "default") $archive_suffix = "_".$archive;
+	}
+
+	$query_entry_count =  sprintf("SELECT COUNT(*) as 'count' FROM %s", $prefix."brewing".$archive_suffix);
 	if (($go == "judging_scores") || ($go == "judging_tables")) $query_entry_count .= " WHERE brewPaid='1' AND brewReceived='1'";
 	if (($id > 0) && ($id !="default")) $query_entry_count .= " WHERE brewBrewerID='$id' AND brewPaid='1' AND brewReceived='1'";
 	$result = mysqli_query($connection,$query_entry_count) or die (mysqli_error($connection));
@@ -1701,14 +1706,18 @@ function get_table_info($input,$method,$table_id,$dbTable,$param) {
 	$table = mysqli_query($connection,$query_table) or die (mysqli_error($connection));
 	$row_table = mysqli_fetch_assoc($table);
 
-	// Only return basic info (table number, name, location, id)
-	if ($method == "basic") {
-		$return = $row_table['tableNumber'];
-		$return .= "^".$row_table['tableName'];
-		$return .= "^".$row_table['tableLocation'];
-		$return .= "^".$row_table['id'];
-		$return .= "^".$row_table['tableStyles'];
-		return $return;
+	$return = "";
+
+	if ($row_table) {
+		// Only return basic info (table number, name, location, id)
+		if ($method == "basic") {
+			$return .= $row_table['tableNumber'];
+			$return .= "^".$row_table['tableName'];
+			$return .= "^".$row_table['tableLocation'];
+			$return .= "^".$row_table['id'];
+			$return .= "^".$row_table['tableStyles'];
+			return $return;
+		}
 	}
 
 	// Return the table's location
@@ -2945,13 +2954,14 @@ function table_assignments($uid,$method,$time_zone,$date_format,$time_format,$me
 	$row_table_assignments = mysqli_fetch_assoc($table_assignments);
 	$totalRows_table_assignments = mysqli_num_rows($table_assignments);
 
-	if ($totalRows_table_assignments > 0) {
+	if (($row_table_assignments) && ($totalRows_table_assignments > 0)) {
 
 		require(LANG.'language.lang.php');
 
 		do {
 			$table_info = explode("^",get_table_info(1,"basic",$row_table_assignments['assignTable'],"default","default"));
-			$location = explode("^",get_table_info($table_info[2],"location",$row_table_assignments['assignTable'],"default","default"));
+			$location = "";
+			if (isset($table_info[2])) $location = explode("^",get_table_info($table_info[2],"location",$row_table_assignments['assignTable'],"default","default"));
 
 			if (!empty($row_table_assignments['assignRoles'])) {
 				$hj = "<span class=\"text-primary\"><i class=\"fa fa-gavel\"></i> ".$label_head_judge."</span>";
@@ -2982,19 +2992,24 @@ function table_assignments($uid,$method,$time_zone,$date_format,$time_format,$me
 			}
 
 			elseif ($method2 == 1) {
-				if ($method == "J") $output .= "<a href='".$base_url."index.php?section=admin&amp;action=assign&amp;go=judging_tables&amp;filter=judges&id=".$table_info[3]."' data-toggle=\"tooltip\" title='Assign/Unassign Judges to Table ".$table_info[0]." - ".$table_info[1]."'>".$table_info[0]." - ".$table_info[1]."</a>,&nbsp;";
-				if ($method == "S") $output .= "<a href='".$base_url."index.php?section=admin&amp;action=assign&amp;go=judging_tables&amp;filter=stewards&id=".$table_info[3]."' data-toggle=\"tooltip\" title='Assign/Unassign Stewards to Table ".$table_info[0]." - ".$table_info[1]."'>".$table_info[0]." - ".$table_info[1]."</a>,&nbsp;";
+				if ((isset($table_info[0])) && (isset($table_info[1])) && (isset($table_info[3]))) {
+					if ($method == "J") $output .= "<a href='".$base_url."index.php?section=admin&amp;action=assign&amp;go=judging_tables&amp;filter=judges&id=".$table_info[3]."' data-toggle=\"tooltip\" title='Assign/Unassign Judges to Table ".$table_info[0]." - ".$table_info[1]."'>".$table_info[0]." - ".$table_info[1]."</a>,&nbsp;";
+					if ($method == "S") $output .= "<a href='".$base_url."index.php?section=admin&amp;action=assign&amp;go=judging_tables&amp;filter=stewards&id=".$table_info[3]."' data-toggle=\"tooltip\" title='Assign/Unassign Stewards to Table ".$table_info[0]." - ".$table_info[1]."'>".$table_info[0]." - ".$table_info[1]."</a>,&nbsp;";
+				}
 			}
 
 			elseif ($method2 == 2) {
-				$output[] = $table_info[3];
+				if (isset($table_info[3])) $output[] = $table_info[3];
+				else $output[] = "";
 			}
 
 			else {
-				$output .= "\t\t\t<td>".$location[2]."</td>\n";
-				$output .= "\t\t\t<td>".getTimeZoneDateTime($time_zone, $location[0], $date_format,  $time_format, "long", "date-time")."</td>\n";
-				$output .= sprintf("\t\t\t<td>%s %s - %s</td>\n",$label_table,$table_info[0],$table_info[1]);
-				$output .= "\t\t</tr>\n";
+				if (!empty($location)) {
+					$output .= "\t\t\t<td>".$location[2]."</td>\n";
+					$output .= "\t\t\t<td>".getTimeZoneDateTime($time_zone, $location[0], $date_format,  $time_format, "long", "date-time")."</td>\n";
+					$output .= sprintf("\t\t\t<td>%s %s - %s</td>\n",$label_table,$table_info[0],$table_info[1]);
+					$output .= "\t\t</tr>\n";
+				}
 			}
 
 		} while ($row_table_assignments = mysqli_fetch_assoc($table_assignments));

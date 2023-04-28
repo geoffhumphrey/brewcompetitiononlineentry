@@ -54,7 +54,7 @@ if (((!$table_assignment) || ($go == "admin")) && (!$entrant_type_brewery)) {
         <div id="brewerAssignmentOther" class="form-group">
             <label for="brewerAssignmentOther" class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label_industry_affiliations." &ndash; ".$label_other; ?></label>
             <div class="col-lg-9 col-md-9 col-sm-8 col-xs-12">
-                <input class="form-control" name="brewerAssignmentOther" type="text" value="<?php if (($action == "edit") && (!empty($org_other))) echo str_replace(",",", ",$org_other); ?>" placeholder="" pattern="[^%&\x22\x27]+">
+                <input class="form-control" name="brewerAssignmentOther" type="text" value="<?php if (($action == "edit") && (!empty($org_other))) echo str_replace(",",", ",$org_other); ?>" placeholder="" pattern="[^%\x22]+">
                 <div class="help-block">
                     <p><?php echo $brewer_text_052; ?></p>
                 </div>

@@ -95,12 +95,13 @@ if (isset($_POST['brewerJudgeNotes'])) {
     $brewerJudgeNotes = sterilize($brewerJudgeNotes);
 }
 
-if (isset($_POST['brewerAssignment'])) {
+if ((isset($_POST['brewerAssignment'])) && (!empty($_POST['brewerAssignment']))) {
     $affilliated = array("affilliated" => $_POST['brewerAssignment']);
 }
-else $affilliated = array("affilliated" => array());
 
-if (isset($_POST['brewerAssignmentOther'])) {
+else $affilliated = array();
+
+if ((isset($_POST['brewerAssignmentOther'])) && (!empty($_POST['brewerAssignmentOther']))) {
 
     $all_orgs = explode(",",$_POST['allOrgs']);   
     $affilliated_other_arr = str_replace(", ",",",$_POST['brewerAssignmentOther']);
@@ -121,11 +122,18 @@ if (isset($_POST['brewerAssignmentOther'])) {
 
 }
 
-else $affilliated_other_arr = array("affilliatedOther" => array());
+else $affilliated_other_arr = array();
 
-$brewerAssignment = array();
-$brewerAssignment = array_merge($affilliated,$affilliated_other_arr);
-$brewerAssignment = json_encode($brewerAssignment);
+if ((empty($affilliated)) && (empty($affilliated_other_arr))) {
+    $brewerAssignment = NULL;
+}
+
+else {
+    $brewerAssignment = array();
+    $brewerAssignment = array_merge($affilliated,$affilliated_other_arr);
+    $brewerAssignment = json_encode($brewerAssignment);
+}
+
 
 // print_r($brewerAssignment); exit();
 

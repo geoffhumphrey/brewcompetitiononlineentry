@@ -587,7 +587,7 @@ if ($recently_updated) {
                                                 </button>
                                                 <ul class="dropdown-menu" aria-labelledby="boxLabelMenu1">
                                                     <?php for($i=1; $i<=6; $i++) { ?>
-                                                    <li class="small"><a class="hide-loader" href="<?php echo $base_url; ?>output/labels.output.php?section=admin&amp;go=judging_tables&amp;sort=<?php echo $i; ?>"><?php echo $i; ?></a></li>
+                                                    <li class="small"><a target="_blank" href="<?php echo $base_url; ?>output/labels.output.php?section=admin&amp;go=judging_tables&amp;sort=<?php echo $i; ?>"><?php echo $i; ?></a></li>
                                                     <?php } ?>
                                                 </ul>
                                             </div>
@@ -598,7 +598,7 @@ if ($recently_updated) {
                                                 </button>
                                                 <ul class="dropdown-menu" aria-labelledby="boxLabelMenu2">
                                                     <?php for($i=1; $i<=6; $i++) { ?>
-                                                    <li class="small"><a class="hide-loader" href="<?php echo $base_url; ?>output/labels.output.php?section=admin&amp;go=judging_tables&amp;filter=judges&amp;sort=<?php echo $i; ?>"><?php echo $i; ?></a></li>
+                                                    <li class="small"><a target="_blank" href="<?php echo $base_url; ?>output/labels.output.php?section=admin&amp;go=judging_tables&amp;filter=judges&amp;sort=<?php echo $i; ?>"><?php echo $i; ?></a></li>
                                                     <?php } ?>
                                                 </ul>
                                             </div>
@@ -618,7 +618,7 @@ if ($recently_updated) {
                                                 </button>
                                                 <ul class="dropdown-menu" aria-labelledby="boxLabelMenu1">
                                                     <?php for($i=1; $i<=6; $i++) { ?>
-                                                    <li class="small"><a class="hide-loader" href="<?php echo $base_url; ?>output/labels.output.php?section=admin&amp;go=judging_tables&amp;psort=3422&amp;sort=<?php echo $i; ?>"><?php echo $i; ?></a></li>
+                                                    <li class="small"><a target="_blank" href="<?php echo $base_url; ?>output/labels.output.php?section=admin&amp;go=judging_tables&amp;psort=3422&amp;sort=<?php echo $i; ?>"><?php echo $i; ?></a></li>
                                                     <?php } ?>
                                                 </ul>
                                             </div>
@@ -629,7 +629,7 @@ if ($recently_updated) {
                                                 </button>
                                                 <ul class="dropdown-menu" aria-labelledby="boxLabelMenu2">
                                                     <?php for($i=1; $i<=6; $i++) { ?>
-                                                    <li class="small"><a class="hide-loader" href="<?php echo $base_url; ?>output/labels.output.php?section=admin&amp;go=judging_tables&amp;filter=judges&amp;psort=3422&amp;&amp;sort=<?php echo $i; ?>"><?php echo $i; ?></a></li>
+                                                    <li class="small"><a target="_blank" href="<?php echo $base_url; ?>output/labels.output.php?section=admin&amp;go=judging_tables&amp;filter=judges&amp;psort=3422&amp;&amp;sort=<?php echo $i; ?>"><?php echo $i; ?></a></li>
                                                     <?php } ?>
                                                 </ul>
                                             </div>
@@ -648,8 +648,8 @@ if ($recently_updated) {
                                 </div>
                                 <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
                                     <ul class="list-unstyled">
-                                        <li><a class="hide-loader" data-toggle="tooltip" title="Quicksort labels with 6 labels per entry (1-5 plus BOS)" href="<?php echo $base_url; ?>output/labels.output.php?section=admin&amp;go=entries&amp;action=bottle-judging&amp;filter=default&amp;view=quicksort&amp;psort=5167">Quicksort - 6 Labels per Entry</a> <a class="hide-loader" href="#" data-toggle="modal" data-target="#quicksortModal"><i class="fa fa-question-circle"></i></a></li>
-                                        <li><a class="hide-loader" data-toggle="tooltip" title="Quicksort labels with 3 labels per entry (1 and 2 plus BOS)" href="<?php echo $base_url; ?>output/labels.output.php?section=admin&amp;go=entries&amp;action=bottle-judging&amp;filter=default&amp;view=quicksort&amp;psort=5167&amp;tb=short">Quicksort - 3 Labels per Entry</a></li>
+                                        <li><a target="_blank" data-toggle="tooltip" title="Quicksort labels with 6 labels per entry (1-5 plus BOS)" href="<?php echo $base_url; ?>output/labels.output.php?section=admin&amp;go=entries&amp;action=bottle-judging&amp;filter=default&amp;view=quicksort&amp;psort=5167">Quicksort - 6 Labels per Entry</a> <a class="hide-loader" href="#" data-toggle="modal" data-target="#quicksortModal"><i class="fa fa-question-circle"></i></a></li>
+                                        <li><a target="_blank" data-toggle="tooltip" title="Quicksort labels with 3 labels per entry (1 and 2 plus BOS)" href="<?php echo $base_url; ?>output/labels.output.php?section=admin&amp;go=entries&amp;action=bottle-judging&amp;filter=default&amp;view=quicksort&amp;psort=5167&amp;tb=short">Quicksort - 3 Labels per Entry</a></li>
                                     </ul>
                                 </div>
                             </div>
@@ -659,8 +659,8 @@ if ($recently_updated) {
                                 </div>
                                 <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
                                     <ul class="list-inline">
-                                        <li><a class="hide-loader" data-toggle="tooltip" title="6 entry numbers per label" href="<?php echo $base_url; ?>output/labels.output.php?section=admin&amp;go=entries&amp;action=bottle-entry&amp;filter=default&amp;psort=5160">Entry Numbers</a></li>
-                                        <li><a class="hide-loader" data-toggle="tooltip" title="6 judging numbers per label" href="<?php echo $base_url; ?>output/labels.output.php?section=admin&amp;go=entries&amp;action=bottle-judging&amp;filter=default&amp;psort=5160">Judging Numbers</a></li>
+                                        <li><a target="_blank" data-toggle="tooltip" title="6 entry numbers per label" href="<?php echo $base_url; ?>output/labels.output.php?section=admin&amp;go=entries&amp;action=bottle-entry&amp;filter=default&amp;psort=5160">Entry Numbers</a></li>
+                                        <li><a target="_blank" data-toggle="tooltip" title="6 judging numbers per label" href="<?php echo $base_url; ?>output/labels.output.php?section=admin&amp;go=entries&amp;action=bottle-judging&amp;filter=default&amp;psort=5160">Judging Numbers</a></li>
                                     </ul>
                                     <ul class="list-unstyled">
                                         <li>With Required Info - All Styles (Entry Numbers)
@@ -669,7 +669,7 @@ if ($recently_updated) {
                                                 </button>
                                                 <ul class="dropdown-menu" aria-labelledby="sortingMenu1">
                                                     <?php for($i=1; $i<=8; $i++) { ?>
-                                                    <li class="small"><a class="hide-loader" href="<?php echo $base_url; ?>output/labels.output.php?section=admin&amp;go=entries&amp;action=bottle-entry&amp;filter=default&amp;view=all&amp;psort=5160&amp;sort=<?php echo $i; ?>"><?php echo $i; ?></a></li>
+                                                    <li class="small"><a target="_blank" href="<?php echo $base_url; ?>output/labels.output.php?section=admin&amp;go=entries&amp;action=bottle-entry&amp;filter=default&amp;view=all&amp;psort=5160&amp;sort=<?php echo $i; ?>"><?php echo $i; ?></a></li>
                                                     <?php } ?>
                                                 </ul>
                                             </div>
@@ -680,7 +680,7 @@ if ($recently_updated) {
                                                 </button>
                                                 <ul class="dropdown-menu" aria-labelledby="sortingMenu2">
                                                     <?php for($i=1; $i<=8; $i++) { ?>
-                                                    <li class="small"><a class="hide-loader" href="<?php echo $base_url; ?>output/labels.output.php?section=admin&amp;go=entries&amp;action=bottle-entry&amp;filter=default&amp;view=special&amp;psort=5160&amp;sort=<?php echo $i; ?>"><?php echo $i; ?></a></li>
+                                                    <li class="small"><a target="_blank" href="<?php echo $base_url; ?>output/labels.output.php?section=admin&amp;go=entries&amp;action=bottle-entry&amp;filter=default&amp;view=special&amp;psort=5160&amp;sort=<?php echo $i; ?>"><?php echo $i; ?></a></li>
                                                     <?php } ?>
                                                 </ul>
                                             </div>
@@ -693,7 +693,7 @@ if ($recently_updated) {
                                                 </button>
                                                 <ul class="dropdown-menu" aria-labelledby="sortingMenu3">
                                                     <?php for($i=1; $i<=8; $i++) { ?>
-                                                    <li class="small"><a class="hide-loader" href="<?php echo $base_url; ?>output/labels.output.php?section=admin&amp;go=entries&amp;action=bottle-judging&amp;filter=default&amp;view=all&amp;&amp;psort=5160&amp;sort=<?php echo $i; ?>"><?php echo $i; ?></a></li>
+                                                    <li class="small"><a target="_blank" href="<?php echo $base_url; ?>output/labels.output.php?section=admin&amp;go=entries&amp;action=bottle-judging&amp;filter=default&amp;view=all&amp;&amp;psort=5160&amp;sort=<?php echo $i; ?>"><?php echo $i; ?></a></li>
                                                     <?php } ?>
                                                 </ul>
                                             </div>
@@ -704,7 +704,7 @@ if ($recently_updated) {
                                                 </button>
                                                 <ul class="dropdown-menu" aria-labelledby="sortingMenu4">
                                                     <?php for($i=1; $i<=8; $i++) { ?>
-                                                    <li class="small"><a class="hide-loader" href="<?php echo $base_url; ?>output/labels.output.php?section=admin&amp;go=entries&amp;action=bottle-judging&amp;filter=default&amp;view=special&amp;&amp;psort=5160&amp;sort=<?php echo $i; ?>"><?php echo $i; ?></a></li>
+                                                    <li class="small"><a target="_blank" href="<?php echo $base_url; ?>output/labels.output.php?section=admin&amp;go=entries&amp;action=bottle-judging&amp;filter=default&amp;view=special&amp;&amp;psort=5160&amp;sort=<?php echo $i; ?>"><?php echo $i; ?></a></li>
                                                     <?php } ?>
                                                 </ul>
                                             </div>
@@ -718,8 +718,8 @@ if ($recently_updated) {
                                 </div>
                                 <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
                                     <ul class="list-inline">
-                                        <li><a class="hide-loader" data-toggle="tooltip" title="6 entry numbers per label" href="<?php echo $base_url; ?>output/labels.output.php?section=admin&amp;go=entries&amp;action=bottle-entry&amp;filter=default&amp;psort=3422">Entry Numbers</a></li>
-                                        <li><a class="hide-loader" data-toggle="tooltip" title="6 judging numbers per label" href="<?php echo $base_url; ?>output/labels.output.php?section=admin&amp;go=entries&amp;action=bottle-judging&amp;filter=default&amp;psort=3422">Judging Numbers</a></li>
+                                        <li><a target="_blank" data-toggle="tooltip" title="6 entry numbers per label" href="<?php echo $base_url; ?>output/labels.output.php?section=admin&amp;go=entries&amp;action=bottle-entry&amp;filter=default&amp;psort=3422">Entry Numbers</a></li>
+                                        <li><a target="_blank" data-toggle="tooltip" title="6 judging numbers per label" href="<?php echo $base_url; ?>output/labels.output.php?section=admin&amp;go=entries&amp;action=bottle-judging&amp;filter=default&amp;psort=3422">Judging Numbers</a></li>
                                     </ul>
                                     <ul class="list-unstyled">
                                         <li>With Required Info - All Styles (Entry Numbers)
@@ -728,7 +728,7 @@ if ($recently_updated) {
                                                 </button>
                                                 <ul class="dropdown-menu" aria-labelledby="sortingMenu1">
                                                     <?php for($i=1; $i<=8; $i++) { ?>
-                                                    <li class="small"><a class="hide-loader" href="<?php echo $base_url; ?>output/labels.output.php?section=admin&amp;go=entries&amp;action=bottle-entry&amp;filter=default&amp;view=all&amp;psort=3422&amp;sort=<?php echo $i; ?>"><?php echo $i; ?></a></li>
+                                                    <li class="small"><a target="_blank" href="<?php echo $base_url; ?>output/labels.output.php?section=admin&amp;go=entries&amp;action=bottle-entry&amp;filter=default&amp;view=all&amp;psort=3422&amp;sort=<?php echo $i; ?>"><?php echo $i; ?></a></li>
                                                     <?php } ?>
                                                 </ul>
                                             </div>
@@ -739,7 +739,7 @@ if ($recently_updated) {
                                                 </button>
                                                 <ul class="dropdown-menu" aria-labelledby="sortingMenu2">
                                                     <?php for($i=1; $i<=8; $i++) { ?>
-                                                    <li class="small"><a class="hide-loader" href="<?php echo $base_url; ?>output/labels.output.php?section=admin&amp;go=entries&amp;action=bottle-entry&amp;filter=default&amp;view=special&amp;psort=3422&amp;sort=<?php echo $i; ?>"><?php echo $i; ?></a></li>
+                                                    <li class="small"><a target="_blank" href="<?php echo $base_url; ?>output/labels.output.php?section=admin&amp;go=entries&amp;action=bottle-entry&amp;filter=default&amp;view=special&amp;psort=3422&amp;sort=<?php echo $i; ?>"><?php echo $i; ?></a></li>
                                                     <?php } ?>
                                                 </ul>
                                             </div>
@@ -752,7 +752,7 @@ if ($recently_updated) {
                                                 </button>
                                                 <ul class="dropdown-menu" aria-labelledby="sortingMenu3">
                                                     <?php for($i=1; $i<=8; $i++) { ?>
-                                                    <li class="small"><a class="hide-loader" href="<?php echo $base_url; ?>output/labels.output.php?section=admin&amp;go=entries&amp;action=bottle-judging&amp;filter=default&amp;view=all&amp;&amp;psort=3422&amp;sort=<?php echo $i; ?>"><?php echo $i; ?></a></li>
+                                                    <li class="small"><a target="_blank" href="<?php echo $base_url; ?>output/labels.output.php?section=admin&amp;go=entries&amp;action=bottle-judging&amp;filter=default&amp;view=all&amp;&amp;psort=3422&amp;sort=<?php echo $i; ?>"><?php echo $i; ?></a></li>
                                                     <?php } ?>
                                                 </ul>
                                             </div>
@@ -763,7 +763,7 @@ if ($recently_updated) {
                                                 </button>
                                                 <ul class="dropdown-menu" aria-labelledby="sortingMenu4">
                                                     <?php for($i=1; $i<=8; $i++) { ?>
-                                                    <li class="small"><a class="hide-loader" href="<?php echo $base_url; ?>output/labels.output.php?section=admin&amp;go=entries&amp;action=bottle-judging&amp;filter=default&amp;view=special&amp;&amp;psort=3422&amp;sort=<?php echo $i; ?>"><?php echo $i; ?></a></li>
+                                                    <li class="small"><a target="_blank" href="<?php echo $base_url; ?>output/labels.output.php?section=admin&amp;go=entries&amp;action=bottle-judging&amp;filter=default&amp;view=special&amp;&amp;psort=3422&amp;sort=<?php echo $i; ?>"><?php echo $i; ?></a></li>
                                                     <?php } ?>
                                                 </ul>
                                             </div>
@@ -783,7 +783,7 @@ if ($recently_updated) {
                                                 </button>
                                                 <ul class="dropdown-menu" aria-labelledby="sortingMenu5">
                                                     <?php for($i=1; $i<=8; $i++) { ?>
-                                                    <li class="small"><a class="hide-loader" href="<?php echo $base_url; ?>output/labels.output.php?section=admin&amp;go=entries&amp;action=bottle-entry-round&amp;filter=default&amp;sort=<?php echo $i; ?>&amp;psort=OL32"><?php echo $i; ?></a></li>
+                                                    <li class="small"><a target="_blank" href="<?php echo $base_url; ?>output/labels.output.php?section=admin&amp;go=entries&amp;action=bottle-entry-round&amp;filter=default&amp;sort=<?php echo $i; ?>&amp;psort=OL32"><?php echo $i; ?></a></li>
                                                     <?php } ?>
                                                 </ul>
                                             </div>
@@ -794,7 +794,7 @@ if ($recently_updated) {
                                                 </button>
                                                 <ul class="dropdown-menu" aria-labelledby="sortingMenu6">
                                                     <?php for($i=1; $i<=8; $i++) { ?>
-                                                    <li class="small"><a class="hide-loader" href="<?php echo $base_url; ?>output/labels.output.php?section=admin&amp;go=entries&amp;action=bottle-judging-round&amp;filter=default&amp;sort=<?php echo $i; ?>&amp;psort=OL32"><?php echo $i; ?></a></li>
+                                                    <li class="small"><a target="_blank" href="<?php echo $base_url; ?>output/labels.output.php?section=admin&amp;go=entries&amp;action=bottle-judging-round&amp;filter=default&amp;sort=<?php echo $i; ?>&amp;psort=OL32"><?php echo $i; ?></a></li>
                                                     <?php } ?>
                                                 </ul>
                                             </div>
@@ -805,7 +805,7 @@ if ($recently_updated) {
                                                 </button>
                                                 <ul class="dropdown-menu" aria-labelledby="sortingMenu7">
                                                     <?php for($i=1; $i<=8; $i++) { ?>
-                                                    <li class="small"><a class="hide-loader" href="<?php echo $base_url; ?>output/labels.output.php?section=admin&amp;go=entries&amp;action=bottle-category-round&amp;filter=default&amp;sort=<?php echo $i; ?>&amp;psort=OL32"><?php echo $i; ?></a></li>
+                                                    <li class="small"><a target="_blank" href="<?php echo $base_url; ?>output/labels.output.php?section=admin&amp;go=entries&amp;action=bottle-category-round&amp;filter=default&amp;sort=<?php echo $i; ?>&amp;psort=OL32"><?php echo $i; ?></a></li>
                                                     <?php } ?>
                                                 </ul>
                                             </div>
@@ -816,7 +816,7 @@ if ($recently_updated) {
                                                 </button>
                                                 <ul class="dropdown-menu" aria-labelledby="sortingMenu8">
                                                     <?php for($i=1; $i<=8; $i++) { ?>
-                                                    <li class="small"><a class="hide-loader" href="<?php echo $base_url; ?>output/labels.output.php?section=admin&amp;go=entries&amp;action=bottle-entry-round&amp;filter=recent&amp;sort=<?php echo $i; ?>&amp;psort=OL32"><?php echo $i; ?></a></li>
+                                                    <li class="small"><a target="_blank" href="<?php echo $base_url; ?>output/labels.output.php?section=admin&amp;go=entries&amp;action=bottle-entry-round&amp;filter=recent&amp;sort=<?php echo $i; ?>&amp;psort=OL32"><?php echo $i; ?></a></li>
                                                     <?php } ?>
                                                 </ul>
                                             </div>
@@ -836,7 +836,7 @@ if ($recently_updated) {
                                                 </button>
                                                 <ul class="dropdown-menu" aria-labelledby="sortingMenu9">
                                                     <?php for($i=1; $i<=8; $i++) { ?>
-                                                    <li class="small"><a class="hide-loader" href="<?php echo $base_url; ?>output/labels.output.php?section=admin&amp;go=entries&amp;action=bottle-entry-round&amp;filter=default&amp;sort=<?php echo $i; ?>&amp;psort=OL5275WR"><?php echo $i; ?></a></li>
+                                                    <li class="small"><a target="_blank" href="<?php echo $base_url; ?>output/labels.output.php?section=admin&amp;go=entries&amp;action=bottle-entry-round&amp;filter=default&amp;sort=<?php echo $i; ?>&amp;psort=OL5275WR"><?php echo $i; ?></a></li>
                                                     <?php } ?>
                                                 </ul>
                                             </div>
@@ -847,7 +847,7 @@ if ($recently_updated) {
                                                 </button>
                                                 <ul class="dropdown-menu" aria-labelledby="sortingMenu10">
                                                     <?php for($i=1; $i<=8; $i++) { ?>
-                                                    <li class="small"><a class="hide-loader" href="<?php echo $base_url; ?>output/labels.output.php?section=admin&amp;go=entries&amp;action=bottle-judging-round&amp;filter=default&amp;sort=<?php echo $i; ?>&amp;psort=OL5275WR"><?php echo $i; ?></a></li>
+                                                    <li class="small"><a target="_blank" href="<?php echo $base_url; ?>output/labels.output.php?section=admin&amp;go=entries&amp;action=bottle-judging-round&amp;filter=default&amp;sort=<?php echo $i; ?>&amp;psort=OL5275WR"><?php echo $i; ?></a></li>
                                                     <?php } ?>
                                                 </ul>
                                             </div>
@@ -858,7 +858,7 @@ if ($recently_updated) {
                                                 </button>
                                                 <ul class="dropdown-menu" aria-labelledby="sortingMenu11">
                                                     <?php for($i=1; $i<=8; $i++) { ?>
-                                                    <li class="small"><a class="hide-loader" href="<?php echo $base_url; ?>output/labels.output.php?section=admin&amp;go=entries&amp;action=bottle-category-round&amp;filter=default&amp;sort=<?php echo $i; ?>&amp;psort=OL5275WR"><?php echo $i; ?></a></li>
+                                                    <li class="small"><a target="_blank" href="<?php echo $base_url; ?>output/labels.output.php?section=admin&amp;go=entries&amp;action=bottle-category-round&amp;filter=default&amp;sort=<?php echo $i; ?>&amp;psort=OL5275WR"><?php echo $i; ?></a></li>
                                                     <?php } ?>
                                                 </ul>
                                             </div>
@@ -869,7 +869,7 @@ if ($recently_updated) {
                                                 </button>
                                                 <ul class="dropdown-menu" aria-labelledby="sortingMenu12">
                                                     <?php for($i=1; $i<=8; $i++) { ?>
-                                                    <li class="small"><a class="hide-loader" href="<?php echo $base_url; ?>output/labels.output.php?section=admin&amp;go=entries&amp;action=bottle-judging-round&amp;filter=recent&amp;sort=<?php echo $i; ?>&amp;psort=OL5275WR"><?php echo $i; ?></a></li>
+                                                    <li class="small"><a target="_blank" href="<?php echo $base_url; ?>output/labels.output.php?section=admin&amp;go=entries&amp;action=bottle-judging-round&amp;filter=recent&amp;sort=<?php echo $i; ?>&amp;psort=OL5275WR"><?php echo $i; ?></a></li>
                                                     <?php } ?>
                                                 </ul>
                                             </div>
@@ -1274,8 +1274,8 @@ if ($recently_updated) {
                             </div>
                             <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
                                 <ul class="list-inline">
-                                    <li><a class="hide-loader" href="<?php echo $base_url; ?>output/labels.output.php?section=admin&amp;go=participants&amp;action=judging_labels&amp;psort=5160" data-toggle="tooltip" data-placement="top" title="Avery 5160">Letter</a></li>
-                                    <li><a class="hide-loader" href="<?php echo $base_url; ?>output/labels.output.php?section=admin&amp;go=participants&amp;action=judging_labels&amp;psort=3422" data-toggle="tooltip" data-placement="top" title="Avery 3422">A4</a></li>
+                                    <li><a target="_blank" href="<?php echo $base_url; ?>output/labels.output.php?section=admin&amp;go=participants&amp;action=judging_labels&amp;psort=5160" data-toggle="tooltip" data-placement="top" title="Avery 5160">Letter</a></li>
+                                    <li><a target="_blank" href="<?php echo $base_url; ?>output/labels.output.php?section=admin&amp;go=participants&amp;action=judging_labels&amp;psort=3422" data-toggle="tooltip" data-placement="top" title="Avery 3422">A4</a></li>
                                 </ul>
                             </div>
                         </div><!-- ./row -->
@@ -1291,7 +1291,7 @@ if ($recently_updated) {
                                             </button>
                                             <ul class="dropdown-menu" aria-labelledby="reqLablesMenu1">
                                                 <?php for($i=1; $i<=8; $i++) { ?>
-                                                <li class="small"><a class="hide-loader" href="<?php echo $base_url; ?>output/labels.output.php?section=admin&amp;go=entries&amp;action=bottle-entry&amp;filter=default&amp;view=special&amp;psort=5160&amp;sort=<?php echo $i; ?>&amp;tb=received"><?php echo $i; ?></a></li>
+                                                <li class="small"><a target="_blank" href="<?php echo $base_url; ?>output/labels.output.php?section=admin&amp;go=entries&amp;action=bottle-entry&amp;filter=default&amp;view=special&amp;psort=5160&amp;sort=<?php echo $i; ?>&amp;tb=received"><?php echo $i; ?></a></li>
                                                 <?php } ?>
                                             </ul>
                                         </div>
@@ -1302,7 +1302,7 @@ if ($recently_updated) {
                                             </button>
                                             <ul class="dropdown-menu" aria-labelledby="reqLablesMenu2">
                                                 <?php for($i=1; $i<=8; $i++) { ?>
-                                                <li class="small"><a class="hide-loader" href="<?php echo $base_url; ?>output/labels.output.php?section=admin&amp;go=entries&amp;action=bottle-judging&amp;filter=default&amp;view=special&amp;&amp;psort=5160&amp;sort=<?php echo $i; ?>&amp;tb=received"><?php echo $i; ?></a></li>
+                                                <li class="small"><a target="_blank" href="<?php echo $base_url; ?>output/labels.output.php?section=admin&amp;go=entries&amp;action=bottle-judging&amp;filter=default&amp;view=special&amp;&amp;psort=5160&amp;sort=<?php echo $i; ?>&amp;tb=received"><?php echo $i; ?></a></li>
                                                 <?php } ?>
                                             </ul>
                                         </div>
@@ -1314,7 +1314,7 @@ if ($recently_updated) {
                                             </button>
                                             <ul class="dropdown-menu" aria-labelledby="reqLablesMenu3reqLablesMenu4">
                                                 <?php for($i=1; $i<=8; $i++) { ?>
-                                                <li class="small"><a class="hide-loader" href="<?php echo $base_url; ?>output/labels.output.php?section=admin&amp;go=entries&amp;action=bottle-entry&amp;filter=default&amp;view=special&amp;psort=3422&amp;sort=<?php echo $i; ?>&amp;tb=received"><?php echo $i; ?></a></li>
+                                                <li class="small"><a target="_blank" href="<?php echo $base_url; ?>output/labels.output.php?section=admin&amp;go=entries&amp;action=bottle-entry&amp;filter=default&amp;view=special&amp;psort=3422&amp;sort=<?php echo $i; ?>&amp;tb=received"><?php echo $i; ?></a></li>
                                                 <?php } ?>
                                             </ul>
                                         </div>
@@ -1325,7 +1325,7 @@ if ($recently_updated) {
                                             </button>
                                             <ul class="dropdown-menu" aria-labelledby="reqLablesMenu4">
                                                 <?php for($i=1; $i<=8; $i++) { ?>
-                                                <li class="small"><a class="hide-loader" href="<?php echo $base_url; ?>output/labels.output.php?section=admin&amp;go=entries&amp;action=bottle-judging&amp;filter=default&amp;view=special&amp;&amp;psort=3422&amp;sort=<?php echo $i; ?>&amp;tb=received"><?php echo $i; ?></a></li>
+                                                <li class="small"><a target="_blank" href="<?php echo $base_url; ?>output/labels.output.php?section=admin&amp;go=entries&amp;action=bottle-judging&amp;filter=default&amp;view=special&amp;&amp;psort=3422&amp;sort=<?php echo $i; ?>&amp;tb=received"><?php echo $i; ?></a></li>
                                                 <?php } ?>
                                             </ul>
                                         </div>
@@ -1398,7 +1398,7 @@ if ($recently_updated) {
                             </div>
                             <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
                                 <ul class="list-inline">
-                                    <li><a class="hide-loader" href="<?php echo $base_url; ?>output/labels.output.php?section=admin&amp;go=participants&amp;action=judging_nametags&amp;psort=5395" data-toggle="tooltip" data-placement="top" title="Avery 5395">Letter</a></li>
+                                    <li><a target="_blank" href="<?php echo $base_url; ?>output/labels.output.php?section=admin&amp;go=participants&amp;action=judging_nametags&amp;psort=5395" data-toggle="tooltip" data-placement="top" title="Avery 5395">Letter</a></li>
                                 </ul>
                             </div>
                         </div><!-- ./row -->
@@ -1607,8 +1607,8 @@ if ($recently_updated) {
                             <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
                                 <ul class="list-inline">
                                     <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=results&amp;go=judging_scores_bos&amp;action=print&amp;tb=bos&amp;view=default" title="BOS Round(s) Results Report">Print</a></li>
-                                    <li><a class="hide-loader" href="<?php echo $base_url; ?>output/export.output.php?section=results&amp;go=judging_scores_bos&amp;action=download&amp;filter=default&amp;view=pdf">PDF</a></li>
-                                    <li><a class="hide-loader" href="<?php echo $base_url; ?>output/export.output.php?section=results&amp;go=judging_scores_bos&amp;action=download&amp;filter=default&amp;view=html">HTML</a></li>
+                                    <li><a target="_blank" href="<?php echo $base_url; ?>output/export.output.php?section=results&amp;go=judging_scores_bos&amp;action=download&amp;filter=default&amp;view=pdf">PDF</a></li>
+                                    <li><a target="_blank" href="<?php echo $base_url; ?>output/export.output.php?section=results&amp;go=judging_scores_bos&amp;action=download&amp;filter=default&amp;view=html">HTML</a></li>
                                 </ul>
                             </div>
                         </div><!-- ./row -->
@@ -1676,8 +1676,8 @@ if ($recently_updated) {
                                     <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=results&amp;go=judging_scores&amp;action=print&amp;view=winners" data-toggle="tooltip" data-placement="top" title="Print winners only results without scores listed">Winners Only without Scores</a></li>
                                 </ul>
                                 <ul class="list-inline">
-                                    <li><a class="hide-loader" href="<?php echo $base_url; ?>output/export.output.php?section=results&amp;go=judging_scores&amp;action=default&amp;tb=none&amp;view=pdf" data-toggle="tooltip" data-placement="top" title="Download a PDF report of results - winners only without scores">PDF</a></li>
-                                    <li><a class="hide-loader" href="<?php echo $base_url; ?>output/export.output.php?section=results&amp;go=judging_scores&amp;action=default&amp;tb=none&amp;view=html" data-toggle="tooltip" data-placement="top" title="Download a HTML report of results to copy/paste into another website - winners only without scores">HTML</a></li>
+                                    <li><a target="_blank" href="<?php echo $base_url; ?>output/export.output.php?section=results&amp;go=judging_scores&amp;action=default&amp;tb=none&amp;view=pdf" data-toggle="tooltip" data-placement="top" title="Download a PDF report of results - winners only without scores">PDF</a></li>
+                                    <li><a target="_blank" href="<?php echo $base_url; ?>output/export.output.php?section=results&amp;go=judging_scores&amp;action=default&amp;tb=none&amp;view=html" data-toggle="tooltip" data-placement="top" title="Download a HTML report of results to copy/paste into another website - winners only without scores">HTML</a></li>
                                 </ul>
                             <?php } ?>
                             </div>
@@ -1746,11 +1746,11 @@ if ($recently_updated) {
                             <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
                                 <ul class="list-inline">
                                     <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=staff&amp;go=judging_assignments&amp;action=download&amp;filter=default&amp;view=default" data-toggle="tooltip" data-placement="top" title="Print the BJCP Points report for judges, stewards, and staff">Print</a></li>
-                                    <li><a class="hide-loader" href="<?php echo $base_url; ?>output/export.output.php?section=staff&amp;go=judging_assignments&amp;action=download&amp;filter=default&amp;view=pdf" data-toggle="tooltip" data-placement="top" title="Download a PDF of the BJCP points report for judges, stewards, and staff">PDF</a></li>
+                                    <li><a target="_blank" href="<?php echo $base_url; ?>output/export.output.php?section=staff&amp;go=judging_assignments&amp;action=download&amp;filter=default&amp;view=pdf" data-toggle="tooltip" data-placement="top" title="Download a PDF of the BJCP points report for judges, stewards, and staff">PDF</a></li>
                                     <?php if (empty($_SESSION['contestID'])) { ?>
                                     <li><a href="#"  data-toggle="modal" data-target="#BJCPCompIDModal">XML</a></li>
                                     <?php } else { ?>
-                                    <li><a class="hide-loader" href="<?php echo $base_url; ?>output/export.output.php?section=staff&amp;go=judging_assignments&amp;action=download&amp;filter=default&amp;view=xml" data-toggle="tooltip" data-placement="top" title="Download a fully compliant XML version of the points report to submit to the BJCP">XML</a></li>
+                                    <li><a target="_blank" href="<?php echo $base_url; ?>output/export.output.php?section=staff&amp;go=judging_assignments&amp;action=download&amp;filter=default&amp;view=xml" data-toggle="tooltip" data-placement="top" title="Download a fully compliant XML version of the points report to submit to the BJCP">XML</a></li>
                                     <?php } ?>
                                 </ul>
                             </div>
@@ -1763,8 +1763,8 @@ if ($recently_updated) {
                             </div>
                             <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
                                 <ul class="list-inline">
-                                    <li><a class="hide-loader" href="<?php echo $base_url; ?>output/labels.output.php?section=admin&amp;go=judging_scores&amp;action=awards&amp;filter=default&amp;psort=5160" data-toggle="tooltip" data-placement="top" title="Avery 5160">Letter</a></li>
-                                    <li><a class="hide-loader" href="<?php echo $base_url; ?>output/labels.output.php?section=admin&amp;go=judging_scores&amp;action=awards&amp;filter=default&amp;psort=3422" data-toggle="tooltip" data-placement="top" title="Avery 3422">A4</a></li>
+                                    <li><a target="_blank" href="<?php echo $base_url; ?>output/labels.output.php?section=admin&amp;go=judging_scores&amp;action=awards&amp;filter=default&amp;psort=5160" data-toggle="tooltip" data-placement="top" title="Avery 5160">Letter</a></li>
+                                    <li><a target="_blank" href="<?php echo $base_url; ?>output/labels.output.php?section=admin&amp;go=judging_scores&amp;action=awards&amp;filter=default&amp;psort=3422" data-toggle="tooltip" data-placement="top" title="Avery 3422">A4</a></li>
                                 </ul>
                             </div>
                         </div><!-- ./row -->
@@ -1775,7 +1775,7 @@ if ($recently_updated) {
                             </div>
                             <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
                                 <ul class="list-inline">
-                                    <li><a class="hide-loader" href="<?php echo $base_url; ?>output/labels.output.php?section=admin&amp;go=judging_scores&amp;action=awards&amp;filter=round&amp;psort=5293" data-toggle="tooltip" data-placement="top" title="1 2/3 inch Round Avery 5293">Letter</a></li>
+                                    <li><a target="_blank" href="<?php echo $base_url; ?>output/labels.output.php?section=admin&amp;go=judging_scores&amp;action=awards&amp;filter=round&amp;psort=5293" data-toggle="tooltip" data-placement="top" title="1 2/3 inch Round Avery 5293">Letter</a></li>
                                 </ul>
                             </div>
                         </div>
@@ -1787,13 +1787,13 @@ if ($recently_updated) {
                             <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
                                 <ul class="list-inline">
                                     <li>All Participants</li>
-                                    <li><a class="hide-loader" href="<?php echo $base_url; ?>output/labels.output.php?section=admin&amp;go=participants&amp;action=address_labels&amp;filter=default&amp;psort=5160" data-toggle="tooltip" data-placement="top" title="Avery 5160">Letter</a></li>
-                                    <li><a class="hide-loader" href="<?php echo $base_url; ?>output/labels.output.php?section=admin&amp;go=participants&amp;action=address_labels&amp;filter=default&amp;psort=3422" data-toggle="tooltip" data-placement="top" title="Avery 3422">A4</a></li>
+                                    <li><a target="_blank" href="<?php echo $base_url; ?>output/labels.output.php?section=admin&amp;go=participants&amp;action=address_labels&amp;filter=default&amp;psort=5160" data-toggle="tooltip" data-placement="top" title="Avery 5160">Letter</a></li>
+                                    <li><a target="_blank" href="<?php echo $base_url; ?>output/labels.output.php?section=admin&amp;go=participants&amp;action=address_labels&amp;filter=default&amp;psort=3422" data-toggle="tooltip" data-placement="top" title="Avery 3422">A4</a></li>
                                 </ul>
                                 <ul class="list-inline">
                                     <li>All Participants with Entries
-                                    <li><a class="hide-loader" href="<?php echo $base_url; ?>output/labels.output.php?section=admin&amp;go=participants&amp;action=address_labels&amp;filter=with_entries&psort=5160" data-toggle="tooltip" data-placement="top" title="Avery 5160">Letter</a></li>
-                                    <li><a class="hide-loader" href="<?php echo $base_url; ?>output/labels.output.php?section=admin&amp;go=participants&amp;action=address_labels&amp;filter=with_entries&psort=3422" data-toggle="tooltip" data-placement="top" title="Avery 3422">A4</a></li>
+                                    <li><a target="_blank" href="<?php echo $base_url; ?>output/labels.output.php?section=admin&amp;go=participants&amp;action=address_labels&amp;filter=with_entries&psort=5160" data-toggle="tooltip" data-placement="top" title="Avery 5160">Letter</a></li>
+                                    <li><a target="_blank" href="<?php echo $base_url; ?>output/labels.output.php?section=admin&amp;go=participants&amp;action=address_labels&amp;filter=with_entries&psort=3422" data-toggle="tooltip" data-placement="top" title="Avery 3422">A4</a></li>
                                 </ul>
                             </div>
                         </div><!-- ./row -->
@@ -1838,12 +1838,12 @@ if ($recently_updated) {
                             </div>
                             <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
                                 <ul class="list-unstyled">
-                                    <li><a class="hide-loader" href="<?php echo $base_url; ?>output/export.output.php?section=emails">All Participants</a></li>
-                                    <li><a class="hide-loader" href="<?php echo $base_url; ?>output/export.output.php?section=emails&amp;go=csv&amp;filter=avail_judges&amp;action=email">Available Judges</a></li>
-                                    <li><a class="hide-loader" href="<?php echo $base_url; ?>output/export.output.php?section=emails&amp;go=csv&amp;filter=avail_stewards&amp;action=email">Available Stewards</a></li>
-                                    <li><a class="hide-loader" href="<?php echo $base_url; ?>output/export.output.php?section=emails&amp;go=csv&amp;filter=judges&amp;action=email">Assigned Judges</a></li>
-                                    <li><a class="hide-loader" href="<?php echo $base_url; ?>output/export.output.php?section=emails&amp;go=csv&amp;filter=stewards&amp;action=email">Assigned Stewards</a></li>
-                                    <li><a class="hide-loader" href="<?php echo $base_url; ?>output/export.output.php?section=emails&amp;go=csv&amp;filter=staff&amp;action=email">Available and Assigned Staff</a></li>
+                                    <li><a target="_blank" href="<?php echo $base_url; ?>output/export.output.php?section=emails">All Participants</a></li>
+                                    <li><a target="_blank" href="<?php echo $base_url; ?>output/export.output.php?section=emails&amp;go=csv&amp;filter=avail_judges&amp;action=email">Available Judges</a></li>
+                                    <li><a target="_blank" href="<?php echo $base_url; ?>output/export.output.php?section=emails&amp;go=csv&amp;filter=avail_stewards&amp;action=email">Available Stewards</a></li>
+                                    <li><a target="_blank" href="<?php echo $base_url; ?>output/export.output.php?section=emails&amp;go=csv&amp;filter=judges&amp;action=email">Assigned Judges</a></li>
+                                    <li><a target="_blank" href="<?php echo $base_url; ?>output/export.output.php?section=emails&amp;go=csv&amp;filter=stewards&amp;action=email">Assigned Stewards</a></li>
+                                    <li><a target="_blank" href="<?php echo $base_url; ?>output/export.output.php?section=emails&amp;go=csv&amp;filter=staff&amp;action=email">Available and Assigned Staff</a></li>
                                 </ul>
                             </div>
                         </div><!-- ./row -->
@@ -1853,8 +1853,11 @@ if ($recently_updated) {
                             </div>
                             <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
                                 <ul class="list-unstyled">
-                                    <li><a class="hide-loader" href="<?php echo $base_url; ?>output/export.output.php?section=participants&amp;go=csv">All Participants</a></li>
-                                    <li><a class="hide-loader" href="<?php echo $base_url; ?>output/export.output.php?section=entries&amp;go=csv&amp;tb=winners">Winners</a></li>
+                                    <li><a target="_blank" href="<?php echo $base_url; ?>output/export.output.php?section=participants&amp;go=csv">All Participants</a></li>
+                                    <li><a target="_blank" href="<?php echo $base_url; ?>output/export.output.php?section=entries&amp;go=csv&amp;tb=winners">Winners: Limited Data</a></li>
+                                    <?php if ($_SESSION['prefsProEdition'] == 0) { ?>
+                                    <li><a target="_blank" href="<?php echo $base_url; ?>output/export.output.php?section=entries&amp;go=csv&amp;tb=circuit">Winners: Circuit Data</a></li>
+                                    <?php } ?>
                                 </ul>
                             </div>
                         </div><!-- ./row -->
@@ -1864,15 +1867,15 @@ if ($recently_updated) {
                             </div>
                             <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
                                 <ul class="list-unstyled">
-                                    <li><a class="hide-loader" href="<?php echo $base_url; ?>output/export.output.php?section=entries&amp;go=csv&amp;action=all&amp;tb=all">All Entries: All Data</a></li>
-                                    <li><a class="hide-loader" href="<?php echo $base_url; ?>output/export.output.php?section=entries&amp;go=csv">All Entries: Limited Data</a></li>
-                                    <li><a class="hide-loader" href="<?php echo $base_url; ?>output/export.output.php?section=entries&amp;go=csv&amp;tb=brewer_contact_info">All Entries: Limited Data with Brewer Contact Info</a></li>
-                                    <li><a class="hide-loader" href="<?php echo $base_url; ?>output/export.output.php?section=entries&amp;go=csv&amp;tb=paid&amp;view=all">Paid Entries</a></li>
-                                    <li><a class="hide-loader" href="<?php echo $base_url; ?>output/export.output.php?section=entries&amp;go=csv&amp;tb=paid">Paid &amp; Received Entries</a></li>
-                                    <li><a class="hide-loader" href="<?php echo $base_url; ?>output/export.output.php?section=entries&amp;go=csv&amp;tb=paid&amp;view=not_received">Paid Entries Not Received</a></li>
-                                    <li><a class="hide-loader" href="<?php echo $base_url; ?>output/export.output.php?section=entries&amp;go=csv&amp;tb=nopay&amp;view=all">Non-Paid Entries</a></li>
-                                    <li><a class="hide-loader" href="<?php echo $base_url; ?>output/export.output.php?section=entries&amp;go=csv&amp;tb=nopay">Non-Paid &amp; Received Entries</a></li>
-                                    <li><a class="hide-loader" href="<?php echo $base_url; ?>output/export.output.php?section=entries&amp;go=csv&amp;action=required&amp;tb=required">Entries with Required &amp; Optional Info</a></li>
+                                    <li><a target="_blank" href="<?php echo $base_url; ?>output/export.output.php?section=entries&amp;go=csv&amp;action=all&amp;tb=all">All Entries: All Data</a></li>
+                                    <li><a target="_blank" href="<?php echo $base_url; ?>output/export.output.php?section=entries&amp;go=csv">All Entries: Limited Data</a></li>
+                                    <li><a target="_blank" href="<?php echo $base_url; ?>output/export.output.php?section=entries&amp;go=csv&amp;tb=brewer_contact_info">All Entries: Limited Data with Brewer Contact Info</a></li>
+                                    <li><a target="_blank" href="<?php echo $base_url; ?>output/export.output.php?section=entries&amp;go=csv&amp;tb=paid&amp;view=all">Paid Entries</a></li>
+                                    <li><a target="_blank" href="<?php echo $base_url; ?>output/export.output.php?section=entries&amp;go=csv&amp;tb=paid">Paid &amp; Received Entries</a></li>
+                                    <li><a target="_blank" href="<?php echo $base_url; ?>output/export.output.php?section=entries&amp;go=csv&amp;tb=paid&amp;view=not_received">Paid Entries Not Received</a></li>
+                                    <li><a target="_blank" href="<?php echo $base_url; ?>output/export.output.php?section=entries&amp;go=csv&amp;tb=nopay&amp;view=all">Non-Paid Entries</a></li>
+                                    <li><a target="_blank" href="<?php echo $base_url; ?>output/export.output.php?section=entries&amp;go=csv&amp;tb=nopay">Non-Paid &amp; Received Entries</a></li>
+                                    <li><a target="_blank" href="<?php echo $base_url; ?>output/export.output.php?section=entries&amp;go=csv&amp;action=required&amp;tb=required">Entries with Required &amp; Optional Info</a></li>
                                 </ul>
                             </div>
                         </div><!-- ./row -->
@@ -1882,9 +1885,9 @@ if ($recently_updated) {
                             </div>
                             <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
                                 <ul class="list-unstyled">
-                                    <li><a class="hide-loader" href="<?php echo $base_url; ?>output/export.output.php?section=promo&amp;go=html&amp;action=html">HTML</a></li>
-                                    <li><a class="hide-loader" href="<?php echo $base_url; ?>output/export.output.php?section=promo&amp;go=word&amp;action=word">Word</a></li>
-                                    <li><a class="hide-loader" href="<?php echo $base_url; ?>output/export.output.php?section=promo&amp;go=word&amp;action=bbcode">Bulletin Board Code (BBC)</a></li>
+                                    <li><a target="_blank" href="<?php echo $base_url; ?>output/export.output.php?section=promo&amp;go=html&amp;action=html">HTML</a></li>
+                                    <li><a target="_blank" href="<?php echo $base_url; ?>output/export.output.php?section=promo&amp;go=word&amp;action=word">Word</a></li>
+                                    <li><a target="_blank" href="<?php echo $base_url; ?>output/export.output.php?section=promo&amp;go=word&amp;action=bbcode">Bulletin Board Code (BBC)</a></li>
                                 </ul>
                             </div>
                         </div><!-- ./row -->

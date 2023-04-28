@@ -127,32 +127,42 @@ if (($_SESSION['prefsProEdition'] == 1) && ($show_judge_steward_fields)) {
 
     if ($totalRows_organizations > 0) {
 
-        /*
-        $affiliated_orgs = '{"affilliated":["Bloated Pear","Cider One"],"affilliatedOther":["Beginners Luck","Apres Cidery","Bloated Pear","Testing"]}';
-        */
-
         $affiliated_orgs = "";
+        
         if (!empty($row_brewer['brewerAssignment'])) $affiliated_orgs = json_decode($row_brewer['brewerAssignment'],true);
+
+        if (!empty($affiliated_orgs)) {
+
+            do {
+
+                if (!empty($row_organizations['brewerBreweryName'])) $org_array[] = $row_organizations['brewerBreweryName'];   
+                $org_selected_dropdown = "";
+                
+                if ($section != "step2") {
+
+                    if (is_array($affiliated_orgs)) {
+
+                        if ((isset($affiliated_orgs['affilliated'])) && (is_array($affiliated_orgs['affilliated']))) {
+                            if (in_array($row_organizations['brewerBreweryName'],$affiliated_orgs['affilliated'])) $org_selected_dropdown = "SELECTED";
+                        }
+
+
+                        if ((isset($affiliated_orgs['affilliatedOther'])) && (is_array($affiliated_orgs['affilliatedOther']))) {
+                            if (in_array($row_organizations['brewerBreweryName'],$affiliated_orgs['affilliatedOther'])) $org_selected_dropdown = "SELECTED";
+                        }
+                    
+                    }
+
+                }
+
+                if ((isset($row_organizations['brewerBreweryName'])) && (!empty($row_organizations['brewerBreweryName']))) $org_options .= "<option value=\"".$row_organizations['brewerBreweryName']."\"".$org_selected_dropdown.">".$row_organizations['brewerBreweryName']."</option>\n";
+
+            } while($row_organizations = mysqli_fetch_assoc($organizations));
+
+        }
 
         $org_array = array();
 
-        do {
-
-            if (!empty($row_organizations['brewerBreweryName'])) $org_array[] = $row_organizations['brewerBreweryName'];   
-            $org_selected_dropdown = "";
-            
-            if ($section != "step2") {
-
-                if (is_array($affiliated_orgs)) {
-                    if ((in_array($row_organizations['brewerBreweryName'],$affiliated_orgs['affilliated'])) || (in_array($row_organizations['brewerBreweryName'],$affiliated_orgs['affilliatedOther']))) $org_selected_dropdown = "SELECTED";
-                }
-
-            }
-
-            if ((isset($row_organizations['brewerBreweryName'])) && (!empty($row_organizations['brewerBreweryName']))) $org_options .= "<option value=\"".$row_organizations['brewerBreweryName']."\"".$org_selected_dropdown.">".$row_organizations['brewerBreweryName']."</option>\n";
-
-        } while($row_organizations = mysqli_fetch_assoc($organizations));
-            
     }
 
     $org_other = array();
