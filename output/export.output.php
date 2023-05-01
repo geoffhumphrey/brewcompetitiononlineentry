@@ -361,7 +361,7 @@ if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($en
                     else $a[] = array($label_table,$label_name,$label_category,$label_subcategory,$label_style,$label_place,$label_last_name,$label_first_name,$label_email,$label_address,$label_city,$label_state_province,$label_zip,$label_country,$label_phone,$label_entry_name,$label_club,$label_cobrewer);
                 }
 
-                if (($go == "csv") && ($action == "default") && ($filter == "default") && ($tb == "circuit")) {
+                if (($go == "csv") && ($action == "default") && ($tb == "circuit")) {
 
                     // Only for amateur comps
 
@@ -391,6 +391,15 @@ if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($en
                     // Make various queries for circuit export
                     if ($tb == "circuit") {
 
+                        if ($filter != "default") {
+
+                            $query_disp_archive_winners = sprintf("SELECT * FROM %s WHERE archiveSuffix='%s'",$prefix."archive",$filter);
+                            $disp_archive_winners = mysqli_query($connection,$query_disp_archive_winners);
+                            $row_disp_archive_winners = mysqli_fetch_assoc($disp_archive_winners);
+                            $totalRows_disp_archive_winners = mysqli_num_rows($disp_archive_winners);
+
+                        }
+                        
                         $bos_for_entry = 0;
                         $pro_am_for_entry = 0;
                         

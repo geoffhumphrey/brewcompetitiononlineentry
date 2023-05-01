@@ -126,10 +126,22 @@ if ($winner_method == 0) {
 // BY CATEGORY
 // @single
 if ($winner_method == 1) {
+	
+	$a = array();
+	
+	if ($tb == "circuit") $a[] = array($label_table,$label_name,$label_judging_number,$label_category,$label_subcategory,$label_style,$label_place,$label_last_name,$label_first_name,$label_email,$label_address,$label_city,$label_state_province,$label_zip,$label_country,$label_phone,$label_entry_name,$label_club,$label_cobrewer,$label_bos,$label_pro_am,$label_medal_count,$label_best_brewer_place);
+	
+	else {
+		
+		if ($pro_edition == 1) $a[] = array($label_table,$label_name,$label_category,$label_style,$label_name,$label_place,$label_last_name,$label_first_name,$label_organization,$label_ttb,$label_email,$label_address,$label_city,$label_state_province,$label_zip,$label_country,$label_phone,$label_entry_name,$label_club,$label_cobrewer);
 
-	$z = styles_active(0);
+		else $a[] = array($label_table,$label_name,$label_category,$label_subcategory,$label_style,$label_place,$label_last_name,$label_first_name,$label_email,$label_address,$label_city,$label_state_province,$label_zip,$label_country,$label_phone,$label_entry_name,$label_club,$label_cobrewer);
+	}	
 
-	foreach (array_unique($z) as $style) {
+	$z = styles_active(0,$archive_suffix);
+	$z = array_unique($z);
+
+	foreach ($z as $style) {
 
 		include (DB.'winners_category.db.php');
 
@@ -137,9 +149,9 @@ if ($winner_method == 1) {
 
 			$style_pad = sprintf("%02d", $style);
 
-			if ($_SESSION['prefsStyleSet'] == "BA") $query_scores = sprintf("SELECT a.scoreTable, a.scorePlace, a.scoreEntry, b.brewName, b.brewCategory, b.brewCategorySort, b.brewSubCategory, b.brewStyle, b.brewCoBrewer, c.brewerLastName, c.brewerFirstName, c.brewerEmail, c.brewerClubs, c.brewerAddress, c.brewerState, c.brewerCity, c.brewerZip, c.brewerPhone1, c.brewerCountry, c.brewerBreweryTTB, c.brewerBreweryName FROM %s a, %s b, %s c WHERE b.brewCategory='%s' AND a.eid = b.id AND c.uid = b.brewBrewerID", $prefix."judging_scores".$archive_suffix, $prefix."brewing".$archive_suffix, $prefix."brewer".$archive_suffix, $style);
+			if ($winner_style_set == "BA") $query_scores = sprintf("SELECT a.scoreTable, a.scorePlace, a.scoreEntry, b.id, b.brewJudgingNumber, b.brewName, b.brewCategory, b.brewCategorySort, b.brewSubCategory, b.brewStyle, b.brewCoBrewer, c.uid, c.brewerLastName, c.brewerFirstName, c.brewerEmail, c.brewerClubs, c.brewerAddress, c.brewerState, c.brewerCity, c.brewerZip, c.brewerPhone1, c.brewerCountry, c.brewerBreweryTTB, c.brewerBreweryName FROM %s a, %s b, %s c WHERE b.brewCategory='%s' AND a.eid = b.id AND c.uid = b.brewBrewerID", $prefix."judging_scores".$archive_suffix, $prefix."brewing".$archive_suffix, $prefix."brewer".$archive_suffix, $style);
 
-			else $query_scores = sprintf("SELECT a.scoreTable, a.scorePlace, a.scoreEntry, b.brewName, b.brewCategory, b.brewCategorySort, b.brewSubCategory, b.brewStyle, b.brewCoBrewer, c.brewerLastName, c.brewerFirstName, c.brewerEmail, c.brewerClubs, c.brewerAddress, c.brewerState, c.brewerCity, c.brewerZip, c.brewerPhone1, c.brewerCountry, c.brewerBreweryTTB, c.brewerBreweryName FROM %s a, %s b, %s c WHERE b.brewCategorySort='%s' AND a.eid = b.id AND c.uid = b.brewBrewerID", $prefix."judging_scores".$archive_suffix, $prefix."brewing".$archive_suffix, $prefix."brewer".$archive_suffix, $style_pad);
+			else $query_scores = sprintf("SELECT a.scoreTable, a.scorePlace, a.scoreEntry, b.id, b.brewJudgingNumber, b.brewName, b.brewCategory, b.brewCategorySort, b.brewSubCategory, b.brewStyle, b.brewCoBrewer, c.uid, c.brewerLastName, c.brewerFirstName, c.brewerEmail, c.brewerClubs, c.brewerAddress, c.brewerState, c.brewerCity, c.brewerZip, c.brewerPhone1, c.brewerCountry, c.brewerBreweryTTB, c.brewerBreweryName FROM %s a, %s b, %s c WHERE b.brewCategorySort='%s' AND a.eid = b.id AND c.uid = b.brewBrewerID", $prefix."judging_scores".$archive_suffix, $prefix."brewing".$archive_suffix, $prefix."brewer".$archive_suffix, $style_pad);
 
 			$query_scores .= " AND a.scorePlace IS NOT NULL";
 			$query_scores .= " ORDER BY b.brewCategory,a.scorePlace ASC";
@@ -201,7 +213,7 @@ if ($winner_method == 1) {
 
 						$a[] = array(
 							$row_sql['tableNumber'],
-							html_entity_decode($row_sql['tableName']),
+							html_entity_decode($row_table_name['tableName']),
 							$row_scores['brewJudgingNumber'],
 							$row_scores['brewCategory'],
 							$row_scores['brewSubCategory'],
@@ -252,17 +264,33 @@ if ($winner_method == 1) {
 
 					}
 
-				}
+				}				
 
-			} while ($row_scores = mysqli_fetch_assoc($scores));
+			} while ($row_scores = mysqli_fetch_assoc($scores));			
+		
 		}
+	
 	}
+
 } // end if ($winner_method == 1)
 
 // BY SUB-CATEGORY
 if ($winner_method == 2) {
 
-	$b = styles_active(2);
+	$a = array();
+	
+	if ($tb == "circuit") $a[] = array($label_table,$label_name,$label_judging_number,$label_category,$label_subcategory,$label_style,$label_place,$label_last_name,$label_first_name,$label_email,$label_address,$label_city,$label_state_province,$label_zip,$label_country,$label_phone,$label_entry_name,$label_club,$label_cobrewer,$label_bos,$label_pro_am,$label_medal_count,$label_best_brewer_place);
+	
+	else {
+		
+		if ($pro_edition == 1) $a[] = array($label_table,$label_name,$label_category,$label_style,$label_name,$label_place,$label_last_name,$label_first_name,$label_organization,$label_ttb,$label_email,$label_address,$label_city,$label_state_province,$label_zip,$label_country,$label_phone,$label_entry_name,$label_club,$label_cobrewer);
+
+		else $a[] = array($label_table,$label_name,$label_category,$label_subcategory,$label_style,$label_place,$label_last_name,$label_first_name,$label_email,$label_address,$label_city,$label_state_province,$label_zip,$label_country,$label_phone,$label_entry_name,$label_club,$label_cobrewer);
+	}
+
+	$b = styles_active(2,$archive_suffix);
+	// echo $archive_suffix;
+	// print_r($b);
 
 	foreach (array_unique($b) as $style) {
 
@@ -272,9 +300,9 @@ if ($winner_method == 2) {
 
 		if ($row_entry_count['count'] > 0) {
 
-			if ($_SESSION['prefsStyleSet'] != "BA") $query_scores = sprintf("SELECT a.scoreTable, a.scorePlace, a.scoreEntry, b.brewName, b.brewCategory, b.brewCategorySort, b.brewSubCategory, b.brewStyle, b.brewCoBrewer, c.brewerLastName, c.brewerFirstName, c.brewerClubs, c.brewerAddress, c.brewerState, c.brewerCity, c.brewerZip, c.brewerPhone1, c.brewerCountry, c.brewerEmail, c.brewerBreweryTTB, c.brewerBreweryName FROM %s a, %s b, %s c WHERE b.brewCategorySort='%s' AND b.brewSubCategory='%s' AND a.eid = b.id  AND c.uid = b.brewBrewerID", $prefix."judging_scores".$archive_suffix, $prefix."brewing".$archive_suffix, $prefix."brewer".$archive_suffix, $style[0], $style[1]);
+			if ($_SESSION['prefsStyleSet'] != "BA") $query_scores = sprintf("SELECT a.scoreTable, a.scorePlace, a.scoreEntry, b.id, b.brewJudgingNumber, b.brewName, b.brewCategory, b.brewCategorySort, b.brewSubCategory, b.brewStyle, b.brewCoBrewer, c.uid, c.brewerLastName, c.brewerFirstName, c.brewerEmail, c.brewerClubs, c.brewerAddress, c.brewerState, c.brewerCity, c.brewerZip, c.brewerPhone1, c.brewerCountry, c.brewerBreweryTTB, c.brewerBreweryName FROM %s a, %s b, %s c WHERE b.brewCategorySort='%s' AND b.brewSubCategory='%s' AND a.eid = b.id  AND c.uid = b.brewBrewerID", $prefix."judging_scores".$archive_suffix, $prefix."brewing".$archive_suffix, $prefix."brewer".$archive_suffix, $style[0], $style[1]);
 
-			else $query_scores = sprintf("SELECT a.scoreTable, a.scorePlace, a.scoreEntry, b.brewName, b.brewCategory, b.brewCategorySort, b.brewSubCategory, b.brewStyle, b.brewCoBrewer, c.brewerLastName, c.brewerFirstName, c.brewerClubs, c.brewerAddress, c.brewerState, c.brewerCity, c.brewerZip, c.brewerPhone1, c.brewerCountry, c.brewerEmail, c.brewerBreweryTTB, c.brewerBreweryName FROM %s a, %s b, %s c WHERE b.brewSubCategory='%s' AND a.eid = b.id  AND c.uid = b.brewBrewerID", $prefix."judging_scores".$archive_suffix, $prefix."brewing".$archive_suffix, $prefix."brewer".$archive_suffix.$archive_suffix, $style[1]);
+			else $query_scores = sprintf("SELECT a.scoreTable, a.scorePlace, a.scoreEntry, b.id, b.brewJudgingNumber, b.brewName, b.brewCategory, b.brewCategorySort, b.brewSubCategory, b.brewStyle, b.brewCoBrewer, c.uid, c.brewerLastName, c.brewerFirstName, c.brewerEmail, c.brewerClubs, c.brewerAddress, c.brewerState, c.brewerCity, c.brewerZip, c.brewerPhone1, c.brewerCountry, c.brewerBreweryTTB, c.brewerBreweryName FROM %s a, %s b, %s c WHERE b.brewSubCategory='%s' AND a.eid = b.id  AND c.uid = b.brewBrewerID", $prefix."judging_scores".$archive_suffix, $prefix."brewing".$archive_suffix, $prefix."brewer".$archive_suffix.$archive_suffix, $style[1]);
 
 			/*
 			if ($_SESSION['prefsStyleSet'] != "BA") $query_scores = sprintf("SELECT a.scoreTable, a.scorePlace, a.scoreEntry, b.brewName, b.brewCategory, b.brewCategorySort, b.brewSubCategory, b.brewStyle, b.brewCoBrewer, c.brewerLastName, c.brewerFirstName, c.brewerClubs, c.brewerAddress, c.brewerState, c.brewerCity, c.brewerZip, c.brewerPhone1, c.brewerCountry, c.brewerEmail FROM %s a, %s b, %s c WHERE b.brewCategorySort='%s' AND b.brewSubCategory='%s' AND a.eid = b.id  AND c.uid = b.brewBrewerID", $judging_scores_db_table, $brewing_db_table, $brewer_db_table, $style[0], $style[1]);
@@ -285,16 +313,18 @@ if ($winner_method == 2) {
 			if ($_SESSION['prefsStyleSet'] == "BA") $query_scores .= " ORDER BY b.brewStyle,a.scorePlace ASC";
 			else $query_scores .= " ORDER BY b.brewCategory,b.brewSubCategory,a.scorePlace";
 
-			//echo $query_scores;
+			// echo $query_scores."<br><br>";
 			$scores = mysqli_query($connection,$query_scores) or die (mysqli_error($connection));
 			$row_scores = mysqli_fetch_assoc($scores);
 			$totalRows_scores = mysqli_num_rows($scores);
 
 			do {
 
-				$query_table_name = sprintf("SELECT tableName,tableNumber from %s WHERE id = '%s'",$prefix."judging_tables".$archive_suffix,$row_scores['scoreTable']);
-				$table_name = mysqli_query($connection,$query_table_name) or die (mysqli_error($connection));
-				$row_table_name = mysqli_fetch_assoc($table_name);
+				if ((isset($row_scores['scoreTable'])) && (!empty($row_scores['scoreTable']))) {
+					$query_table_name = sprintf("SELECT tableName,tableNumber from %s WHERE id = '%s'",$prefix."judging_tables".$archive_suffix,$row_scores['scoreTable']);
+					$table_name = mysqli_query($connection,$query_table_name) or die (mysqli_error($connection));
+					$row_table_name = mysqli_fetch_assoc($table_name);
+				}
 
 				if (!empty($row_scores['scorePlace'])) {
 
@@ -332,6 +362,10 @@ if ($winner_method == 2) {
 
 						if ($tb == "circuit") {
 
+							$bos_for_entry = 0;
+							$pro_am_for_entry = "";
+							$bestbrewer_place = 0;
+
 							if (array_key_exists($row_scores['id'],$bos_score_arr)) {
 								$bos_for_entry = $bos_score_arr[$row_scores['id']];
 							}
@@ -346,7 +380,7 @@ if ($winner_method == 2) {
 
 							$a[] = array(
 								$row_sql['tableNumber'],
-								html_entity_decode($row_sql['tableName']),
+								html_entity_decode($row_table_name['tableName']),
 								$row_scores['brewJudgingNumber'],
 								$row_scores['brewCategory'],
 								$row_scores['brewSubCategory'],
@@ -401,4 +435,5 @@ if ($winner_method == 2) {
 		}
 	}
 } // end if ($winner_method == 2)
+
 ?>

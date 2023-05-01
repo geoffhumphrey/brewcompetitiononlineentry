@@ -3511,14 +3511,20 @@ function styles_active($method,$archive="") {
 	if ((empty($archive)) || ($archive == "default")) {
 		$style_set = $_SESSION['prefsStyleSet'];
 		$style_types_db = $prefix."style_types";
+		$archive = "";
 	}
 
 	else {
-		$query_archive_style_set = sprintf("SELECT archiveStyleSet FROM %s WHERE archiveSuffix='%s'",$prefix."archive",$archive);
+
+		$archive_suffix = str_replace("_","",$archive);
+
+		$query_archive_style_set = sprintf("SELECT archiveStyleSet FROM %s WHERE archiveSuffix='%s'",$prefix."archive",$archive_suffix);
 		$archive_style_set = mysqli_query($connection,$query_archive_style_set) or die (mysqli_error($connection));
 		$row_archive_style_set = mysqli_fetch_assoc($archive_style_set);
-		$style_set = $row_archive_style_set['archiveStyleSet'];
-		$style_types_db = $prefix."style_types_".$archive;
+		
+		$style_set = $row_archive_style_set['archiveStyleSet'];	
+		$style_types_db = $prefix."style_types_".$archive_suffix;
+	
 	}
 
 	if ($method == 0) { // Active Styles
@@ -3540,7 +3546,7 @@ function styles_active($method,$archive="") {
 
 	if ($method == 1) { // Style Types
 
-		$query_style_types_active = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE styleTypeBOS='Y'", $style_types_db);
+		$query_style_types_active = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE styleTypeBOS='Y'", $style_types_db.$archive);
 		$style_types_active = mysqli_query($connection,$query_style_types_active) or die (mysqli_error($connection));
 		$row_style_types_active = mysqli_fetch_assoc($style_types_active);
 
