@@ -1856,7 +1856,7 @@ $club_array = array(
     "Purgatory SOBs",
     "Puyallup Brew Crew",
     "Q and Q Brewers Guild",
-    "QUAFF (Quality Ale and Fermentation Fraternity)",
+    "QUAFF",
     "Queen City Homebrew Club",
     "Queers Makin' Beers",
     "Quick's Brew Club",

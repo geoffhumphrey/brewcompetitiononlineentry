@@ -74,7 +74,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 		$brewCoBrewer = "";
 		$styleBreak = filter_var($_POST['brewStyle'],FILTER_SANITIZE_STRING);
 		$styleName = "";
-		$brewName = standardize_name($purifier->purify($_POST['brewName']));
+		$brewName = $purifier->purify($_POST['brewName']);
 		$brewName = filter_var($brewName,FILTER_SANITIZE_STRING);
 		$brewName = capitalize($brewName);
 		$brewInfo = "";

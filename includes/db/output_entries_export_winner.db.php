@@ -289,8 +289,6 @@ if ($winner_method == 2) {
 	}
 
 	$b = styles_active(2,$archive_suffix);
-	// echo $archive_suffix;
-	// print_r($b);
 
 	foreach (array_unique($b) as $style) {
 

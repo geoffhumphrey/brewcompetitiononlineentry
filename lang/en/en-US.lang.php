@@ -750,7 +750,7 @@ $brew_text_026 = "Other fermentation in days.";
 
 $brewer_text_000 = "Please enter only <em>one</em> person's name.";
 $brewer_text_001 = "Choose one. This question will be used to verify your identity should you forget your password.";
-$brewer_text_003 = "To be considered for a GABF Pro-Am brewing opportunity you must be an AHA member.";
+$brewer_text_003 = "Input only accepts numeric characters. To be considered for a GABF Pro-Am brewing opportunity you must be an AHA member.";
 $brewer_text_004 = "Provide any information that you believe the competition organizer, judge coordinator, or competition staff should know (e.g., allergies, special dietary restrictions, shirt size, etc.).";
 $brewer_text_005 = "Not Applicable";
 $brewer_text_006 = "Are you willing and qualified to serve as a judge in this competition?";
