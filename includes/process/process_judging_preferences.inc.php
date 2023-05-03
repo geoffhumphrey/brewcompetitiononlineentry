@@ -143,6 +143,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 				$to_email_formatted = "BCOEM Admin <".$to_email.">";
 
 				$subject = "BCOEM Setup Completed for ".$_SERVER['SERVER_NAME'];
+				$subject = html_entity_decode($subject);
 				$message = "<html>" . "\r\n";
 				$message .= "<body>
 							<p>BCOEM Setup Completed for http://".$_SERVER['SERVER_NAME']."</p>

@@ -290,20 +290,23 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 					$url = str_replace("www.","",$_SERVER['SERVER_NAME']);
 					
 					$to_name = $first_name." ".$last_name;
+					$to_name = html_entity_decode($to_name);
 					$to_name = mb_convert_encoding($to_name, "UTF-8");
 					
 					$to_email = mb_convert_encoding($username, "UTF-8");
 					$to_email_formatted .= $to_name." <".$to_email.">";
 					
 					$subject = sprintf($_SESSION['contestName'].": %s",$register_text_037);
+					$subject = html_entity_decode($subject);
 					$subject = mb_convert_encoding($subject, "UTF-8");
 
 					$from_email = (!isset($mail_default_from) || trim($mail_default_from) === '') ? "noreply@".$url : $mail_default_from;
 					if (strpos($url, 'brewcomp.com') !== false) $from_email = "noreply@brewcomp.com";
 					elseif (strpos($url, 'brewcompetition.com') !== false) $from_email = "noreply@brewcompetition.com";
 					$from_email = mb_convert_encoding($from_email, "UTF-8");
-				
-					$from_name = mb_convert_encoding($_SESSION['contestName'], "UTF-8");		
+					
+					$from_name = html_entity_decode($_SESSION['contestName']);
+					$from_name = mb_convert_encoding($from_name, "UTF-8");		
 
 					$message = "<html>" . "\r\n";
 					$message .= "<body>" . "\r\n";

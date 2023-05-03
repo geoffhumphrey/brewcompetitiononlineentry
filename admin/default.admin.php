@@ -1675,11 +1675,11 @@ if ($recently_updated) {
                                     <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=results&amp;go=judging_scores&amp;action=print&amp;view=default" data-toggle="tooltip" data-placement="top" title="Print all entry results without scores listed">All without Scores</a></li>
                                     <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=results&amp;go=judging_scores&amp;action=print&amp;view=winners" data-toggle="tooltip" data-placement="top" title="Print winners only results without scores listed">Winners Only without Scores</a></li>
                                 </ul>
+                            <?php } ?>
                                 <ul class="list-inline">
                                     <li><a target="_blank" href="<?php echo $base_url; ?>output/export.output.php?section=results&amp;go=judging_scores&amp;action=default&amp;tb=none&amp;view=pdf" data-toggle="tooltip" data-placement="top" title="Download a PDF report of results - winners only without scores">PDF</a></li>
                                     <li><a target="_blank" href="<?php echo $base_url; ?>output/export.output.php?section=results&amp;go=judging_scores&amp;action=default&amp;tb=none&amp;view=html" data-toggle="tooltip" data-placement="top" title="Download a HTML report of results to copy/paste into another website - winners only without scores">HTML</a></li>
                                 </ul>
-                            <?php } ?>
                             </div>
                         </div><!-- ./row -->
                         <div class="row">
@@ -1688,7 +1688,6 @@ if ($recently_updated) {
                             </div>
                             <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
                                 <?php if ($_SESSION['prefsWinnerMethod'] == 0) { ?>
-
                                     <div class="dropdown bcoem-admin-dashboard-select">
                                         <button class="btn btn-default dropdown-toggle" type="button" id="bos-pullsheet-menu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">All with Scores...<span class="caret"></span>
                                         </button>
@@ -1725,7 +1724,6 @@ if ($recently_updated) {
                                             <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=results&amp;go=all&amp;action=print&amp;view=winners&amp;psort=table-entry-count-desc">By Table/Medal Group Entry Count - Descending</a></li>
                                         </ul>
                                     </div>
-
                                 <?php } else { ?>
                                 <ul class="list-inline">
                                     <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=results&amp;go=all&amp;action=print&amp;tb=scores&amp;view=default" data-toggle="tooltip" data-placement="top" title="Print all entry results with scores listed">All with Scores</a></li>

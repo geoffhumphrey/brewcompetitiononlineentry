@@ -58,6 +58,7 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 			$row_contact = mysqli_fetch_assoc($contact);
 
 			$to_name = $row_contact['contactFirstName']." ".$row_contact['contactLastName'];
+			$to_name = html_entity_decode($to_name);
 			$to_name = mb_convert_encoding($to_name, "UTF-8");
 
 			$to_email = $row_contact['contactEmail'];
@@ -68,9 +69,11 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 			$from_email = mb_convert_encoding($from_email, "UTF-8");
 
 			$from_name = sterilize(ucwords($_POST['from_name']));
+			$from_name = html_entity_decode($from_name);
 			$from_name = mb_convert_encoding($from_name, "UTF-8");
 			
 			$subject = sterilize(ucwords($_POST['subject']));
+			$subject = html_entity_decode($subject);
 			$subject = mb_convert_encoding($subject, "UTF-8");
 
 			$message_post = sterilize($_POST['message']);

@@ -153,7 +153,9 @@ if ($verified) {
 		$display_entry_numbers = implode(", ", $display_entry_no);
 		$display_entry_numbers = rtrim($display_entry_numbers, ", ");
 
-		$to_recipient = mb_convert_encoding($row_user_info['brewerFirstName']." ".$row_user_info['brewerLastName'], "UTF-8");
+		$to_recipient = $row_user_info['brewerFirstName']." ".$row_user_info['brewerLastName'];
+		$to_recipient = html_entity_decode($to_recipient);
+		$to_recipient = mb_convert_encoding($to_recipient, "UTF-8");
 
 		$to_email = filter_var($row_user_info['brewerEmail'],FILTER_SANITIZE_EMAIL);
 		$to_email = mb_convert_encoding($to_email, "UTF-8");
@@ -161,13 +163,16 @@ if ($verified) {
 
 		$from_email = filter_var($from_email,FILTER_SANITIZE_EMAIL);
 		$from_email = mb_convert_encoding($from_email, "UTF-8");
+		
+		$cc_recipient = $data['first_name']." ".$data['last_name'];
+		$cc_recipient = html_entity_decode($cc_recipient);
+		$cc_recipient = mb_convert_encoding($cc_recipient, "UTF-8");
 
 		$cc_email = mb_convert_encoding($data['payer_email'], "UTF-8");
-		$cc_recipient = mb_convert_encoding($data['first_name']." ".$data['last_name'], "UTF-8");
 
 		$headers  = "MIME-Version: 1.0"."\r\n";
 		$headers .= "Content-type: text/html; charset=utf-8"."\r\n";
-		$headers .= "From: ".$row_logo['contestName']." Server <".$from_email.">"."\r\n";
+		$headers .= "From: ".html_entity_decode($row_logo['contestName'])." Server <".$from_email.">"."\r\n";
 		$headers .= "Reply-To: ".$from_name." <".$from_email.">"."\r\n";
 		$headers .= "Bcc: ".$cc_recipient. " <".$cc_email.">"."\r\n";
 

@@ -1342,7 +1342,7 @@ if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($en
                                             $title = sprintf("%s (%s %s)",$ba_category_names[$style],$row_entry_count['count'],$entries);
                                         }
 
-                                        else $title = sprintf("%s: %s (%s %s)",$style_trimmed,style_convert($style,"1"),$row_entry_count['count'],$entries);
+                                        else $title = sprintf("%s: %s (%s %s)",$style,style_convert($style,"1"),$row_entry_count['count'],$entries);
                                         $title_table = new easyTable($pdf,1);
                                         $title_table->easyCell($title, 'font-size:16; font-style:B; font-color:#000000;');
                                         $title_table->printRow();
@@ -1389,6 +1389,8 @@ if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($en
 
                                             } while ($row_scores = mysqli_fetch_assoc($scores));
 
+                                            $table->endTable();
+
                                         } // end if ($totalRows_scores > 0)
 
                                         else {
@@ -1415,10 +1417,12 @@ if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($en
                     if ($winner_method == 2) {
 
                         $styles = styles_active(2);
+                        $styles = array_unique($styles);
 
-                        foreach (array_unique($styles) as $style) {
+                        foreach ($styles as $style) {
 
                             $style = explode("^",$style);
+                            
                             include (DB.'winners_subcategory.db.php');
 
                             if (($row_entry_count['count'] > 0) && ($row_score_count['count'] > 0)) {
@@ -1428,7 +1432,7 @@ if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($en
 
                                 include (DB.'scores.db.php');
 
-                                if (!empty($row_scores)) {
+                                if ($row_scores) {
 
                                     if ($_SESSION['prefsStyleSet'] == "BA") $title = sprintf("%s (%s %s)",$style[2],$row_entry_count['count'],$entries);
                                     else $title = sprintf("%s%s: %s (%s %s)",ltrim($style[0],"0"),$style[1],$style[2],$row_entry_count['count'],$entries);
@@ -1481,6 +1485,8 @@ if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($en
 
                                         } while ($row_scores = mysqli_fetch_assoc($scores));
 
+                                        $table->endTable();
+
                                     } // end if ($totalRows_scores > 0)
 
                                     else {
@@ -1489,6 +1495,8 @@ if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($en
                                         $no_places_table->printRow();
                                         $no_places_table->endTable();
                                     }
+
+                                    
 
                                 } // end if (!empty($row_scores))
 

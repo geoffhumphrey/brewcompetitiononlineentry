@@ -93,6 +93,8 @@ if ($row_scored_entries['count'] > 0) {
 
 			do {
 
+				if ((isset($row_scores['brewCategory'])) && (!empty($row_scores['brewCategory']))) {
+
 				$entry_name = html_entity_decode($row_scores['brewName'],ENT_QUOTES|ENT_XML1,"UTF-8");
     			$entry_name = htmlentities($entry_name,ENT_QUOTES|ENT_SUBSTITUTE|ENT_HTML5,"UTF-8");
 
@@ -167,10 +169,13 @@ if ($row_scored_entries['count'] > 0) {
 				}
 
 				$table_body1 .= "</tr>";
+			}
 
 			 } while ($row_scores = mysqli_fetch_assoc($scores));
 	$random1 = "";
 	$random1 .= random_generator(12,1);
+
+	if (!empty($table_body1)) {
 	?>
 	<?php echo $header1_1; ?></h3>
 	 <script type="text/javascript" language="javascript">
@@ -204,7 +209,8 @@ if ($row_scored_entries['count'] > 0) {
 		</tbody>
 		</table>
 	</div>
-	<?php 	}
+	<?php 		}
+			}
 		}
 	}
 } // end if score count > 0

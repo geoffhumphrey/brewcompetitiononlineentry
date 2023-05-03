@@ -9,6 +9,7 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 	$url = str_replace("www.","",$_SERVER['SERVER_NAME']);
 
 	$from_name = $_SESSION['contestName']." Competition Server";
+	$from_name = html_entity_decode($from_name);
 	$from_name = mb_convert_encoding($from_name, "UTF-8");
 	
 	$from_email = (!isset($mail_default_from) || trim($mail_default_from) === '') ? "noreply@".$url : $mail_default_from;
@@ -33,6 +34,7 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 		$last_name = ucwords(strtolower($row_brewer['brewerLastName']));
 
 		$to_name = $first_name." ".$last_name;
+		$to_name = html_entity_decode($to_name);
 		$to_name = mb_convert_encoding($to_name, "UTF-8");
 		
 		$to_email = strtolower($row_forgot['user_name']);
@@ -40,6 +42,7 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 		$to_email_formatted .= $to_name." <".$to_email.">";
 		
 		$subject = $_SESSION['contestName']." - System Generated Email Test";
+		$subject = html_entity_decode($subject);
 		$subject = mb_convert_encoding($subject, "UTF-8");
 
 		$message = "<html>" . "\r\n";
