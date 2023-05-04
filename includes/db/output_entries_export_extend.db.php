@@ -21,7 +21,7 @@ if ($row_scores) $style_type_entry = style_type($row_scores['scoreType'],2,"bcoe
 
 if (isset($row_flight['flightTable'])) {
 	$table_info = explode("^",get_table_info(1,"basic",$row_flight['flightTable'],"default","default"));
-	$table_name = sprintf("%02s",$table_info[0]).": ".$table_info[1];
+	$table_name = sprintf("%02s",$table_info[0]).": ".html_entity_decode($table_info[1]);
 	$location = explode("^",get_table_info($table_info[2],"location",$row_flight['flightTable'],"default","default"));
 } else {
 	$table_info = "";

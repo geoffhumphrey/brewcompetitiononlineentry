@@ -174,6 +174,8 @@ if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($en
 
 	if ($section == "entries") {
 
+        $a = array();
+
         if ($admin_role) {
 
             $type = "entries";
@@ -266,7 +268,6 @@ if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($en
 
                             if (isset($row_sql['brewBrewerID'])) {
                                 $brewer_info = explode("^", brewer_info($row_sql['brewBrewerID']));
-                                $brewer_info = iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', $brewer_info);
                             }
 
                             if (isset($row_sql['brewBrewerFirstName'])) {
@@ -347,7 +348,7 @@ if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($en
                     else $a[] = array($label_first_name,$label_last_name,$label_entry_number,$label_category,$label_style,$label_name,$label_entry_number,$label_judging_number,$label_name,$label_required_info,$label_sweetness,$label_carbonation,$label_strength);
                 }
 
-                if (($go == "csv") && (($action == "default") || ($action == "email")) && ($filter != "winners") && ($tb == "default")) {
+                if (($go == "csv") && (($action == "default") || ($action == "email")) && ($filter != "winners") && (($tb == "default") || ($tb == "paid") || ($tb == "nopay")  || ($tb == "brewer_contact_info"))) {
 
                     if ($_SESSION['prefsProEdition'] == 1) $a[] = array($label_first_name,$label_last_name,$label_organization,$label_ttb,$label_email,$label_address,$label_city,$label_state_province,$label_zip,$label_country,$label_entry_number,$label_judging_number,$label_category,$label_subcategory,$label_name,$label_entry_name,$label_required_info,$label_brewer_specifics,$label_sweetness,$label_carbonation,$label_strength,$label_table,$label_location,$label_flight,$label_round,$label_score,$label_place,$label_bos);
 
@@ -456,7 +457,6 @@ if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($en
                         include(SECTIONS.'bestbrewer.sec.php');
 
                     }
-
 
                     do {
                         
@@ -677,8 +677,10 @@ if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($en
                 $fp = fopen('php://output', 'w');
                 fwrite($fp, $BOM);
 
-                foreach ($a as $fields) {
-                    fputcsv($fp,$fields,$separator);
+                if ((isset($a)) && (is_array($a)) && (!empty($a))) {
+                    foreach ($a as $fields) {
+                        fputcsv($fp,$fields,$separator);
+                    }
                 }
 
                 fclose($fp);
