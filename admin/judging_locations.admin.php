@@ -784,7 +784,8 @@ if (($output_add_edit) && ($msg != 9)) {
                 <input type="radio" name="judgingLocType" value="1" id="judgingLocType_1" <?php if ((isset($row_judging['judgingLocType'])) && ($section != "step5") && ($row_judging['judgingLocType'] == "1")) echo "CHECKED"; ?> required /> Distributed <small>(multi-day and/or multi-location)</small>
             </label>
         </div>
-        <span class="help-block">Indicate whether judge teams in this session will be evaluating entries at a single, designated location, typically collectively, or over a series of days in various locations. For example, choose <em>Distributed</em> if judges will be evaluating entries virtually - synchronously or asynchronously - or if locations will be ad-hoc, such as in a judge team member home.</span>
+        <span class="help-block">Indicate whether judge teams in this session will be evaluating entries at a single, designated location, typically collectively, or over a series of days in various locations. For example, choose <em>Distributed</em> if judges will be evaluating entries virtually - synchronously or asynchronously - or if locations will be ad-hoc, such as in a judge team member's home.</span>
+    	<span class="help-block">Traditional sessions only require a start time. Distributed sessions require a start AND end time.</span>
     </div>
 </div><!-- ./Form Group -->
 

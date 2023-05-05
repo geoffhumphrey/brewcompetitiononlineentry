@@ -1650,6 +1650,9 @@ function style_convert($number,$type,$base_url="",$archive="") {
 		$style = mysqli_query($connection,$query_style) or die (mysqli_error($connection));
 		$row_style = mysqli_fetch_assoc($style);
 
+		// Exception for BJCP2021 2A
+		if (($number[0] == "02") && ($number[1] == "A") && ($number[2] == "BJCP2021")) $row_style['brewStyleReqSpec'] = 1;
+
 		if ($row_style) {
 
 			if ($row_style['brewStyle'] == "Soured Fruit Beer") $style_name = "Wild Specialty Beer";

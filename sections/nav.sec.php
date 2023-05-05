@@ -425,7 +425,9 @@ $(document).ready(function(){
                     <?php } ?>
                     <li role="separator" class="divider"></li>
                     <li><a href="<?php echo $base_url; ?>includes/logout.inc.php"><?php echo $label_log_out; ?></a></li>
+                    <?php if ((!in_array($go,$datetime_load)) || ($go == "default")) { ?>
                     <li class="dropdown-header"><small><?php echo $label_auto_log_out; ?> <span id="session-end"></span></small></li>
+                	<?php } ?>
                 </ul>
             </li>
             <li id="user-menu-disable"><a href="<?php echo $link_list; ?>" tabindex="-1"><?php echo $label_my_account; ?></a></li>

@@ -303,6 +303,7 @@ if (($action == "add") || ($action == "edit")) {
     $table_locations_available = "";
     $table_numbers = "";
     $table_total = 0;
+    $style_ids_at_table = array();
 
     if ($judging_session) {
         
@@ -412,6 +413,7 @@ if (($action == "add") || ($action == "edit")) {
             if ($style_assigned_this) {
                 $table_row_class = "bg-warning";
                 $selected_styles = "CHECKED";
+                $style_ids_at_table[] = $row_styles['id'];
             }
 
             $disabled_selected_styles = $selected_styles." ".$disabled_styles;
@@ -1436,17 +1438,58 @@ function update_table_total(element_id) {
 if ($already_scored) {
 ?>
 <script type="text/javascript">
+    var style_ids_at_table = <?php echo json_encode($style_ids_at_table); ?>;
     $(document).ready(function(){
         $('input[type="checkbox"]').click(function(){
             if($(this).is(":checked")){
-                confirm("Are you sure you want to change this table\'s styles? All scores entered for the table will be deleted if you add this style.");
+                if ($.inArray($(this).val(), style_ids_at_table) == -1) {
+                    $('#tableStyleAdd').modal('show');
+                }
             }
             else if($(this).is(":not(:checked)")){
-                confirm("Are you sure you want to change this table\'s styles? All scores entered for the table will be deleted if you remove this style.");
+                if ($.inArray($(this).val(), style_ids_at_table) != -1) {
+                    $('#tableStyleRemove').modal('show');
+                }
             }
         });
     });
 </script>
+<!-- Modal -->
+<div class="modal fade" id="tableStyleAdd" tabindex="-1" role="dialog" aria-labelledby="tableStyleAddLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header bcoem-admin-modal">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="tableStyleAddLabel">Are You Sure?</h4>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to change this table's styles? <strong>All scores entered for the table will be deleted</strong> if you add this style.</p>
+                <p>If you do not wish to delete any scores, uncheck any styles added and instead add them to one or more tables/medal groups that do not have any associated scores.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-success" data-dismiss="modal">I Understand</button>
+            </div>
+        </div>
+    </div>
+</div><!-- ./modal -->
+<!-- Modal -->
+<div class="modal fade" id="tableStyleRemove" tabindex="-1" role="dialog" aria-labelledby="tableStyleRemoveLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header bcoem-admin-modal">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="tableStyleRemoveLabel">Are You Sure?</h4>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to change this table's styles? <strong>All scores entered for the table will be deleted</strong> if you remove this style.</p>
+                <p>Recheck the style to maintain the styles defined for this table or simply navigate away from this page <strong>without</strong> editing the table.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-success" data-dismiss="modal">I Understand</button>
+            </div>
+        </div>
+    </div>
+</div><!-- ./modal -->
 <?php }
 } // end if (($action == "edit") && ($judging_session))
 if (!$judging_session) echo $alert_text_008." ".$alert_text_092." <a href=\"".$base_url."index.php?section=admin&amp;action=add&amp;go=judging\">".$alert_text_009."</a>";

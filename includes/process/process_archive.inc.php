@@ -582,9 +582,10 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 			$special_best_info_db_table,
 			$style_types_db_table,
 			$users_db_table,
-			$sponsors_db_table,
-			$eval_db_table
+			$sponsors_db_table
 		);
+
+		if ($eval_db_exist) $tables_array[] = $prefix."evaluation";
 		
 		// If the user changed the archive suffix name
 		// Need to loop through each possible archive
@@ -611,7 +612,8 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 
 			$update_table = $prefix."archive";
 			$data = array('archiveSuffix' => $suffix);
-			$result = $db_conn->where ('id', $id);
+			$db_conn->where ('id', $id);
+			$result = $db_conn->update ($update_table, $data);
 			if (!$result) {
 				$error_output[] = $db_conn->getLastError();
 				$errors = TRUE;
@@ -620,7 +622,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 		} // end if ($filter != $suffix)
 
 		$update_table = $prefix."archive";
-		$sql = array( 
+		$data = array( 
 			'archiveProEdition' => sterilize($_POST['archiveProEdition']),
 			'archiveStyleSet' => sterilize($_POST['archiveStyleSet']),
 			'archiveScoresheet' => sterilize($_POST['archiveScoresheet']),

@@ -1,6 +1,4 @@
 <?php if ($go == "default") { ?>
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment-timezone/0.5.32/moment-timezone-with-data.min.js"></script>
 <script>
 var judging_end = moment.tz("<?php echo $judging_end; ?>","<?php echo get_timezone($_SESSION['prefsTimeZone']); ?>");
 var label_weeks = "<?php echo strtolower($label_weeks); ?>";
@@ -109,7 +107,7 @@ setInterval(function() {
   }
 }, 1);
 // session_end var defined in index.php
-$("#session-end-eval").countdown(session_end, function(event) {
+$("#session-end-eval").countdown(session_end.toDate(), function(event) {
     if (session_end_min > 1440) var end_time = (event.strftime('%D:%H:%M:%S'));
     else if (session_end_min > 60) var end_time = (event.strftime('%H:%M:%S'));
     else var end_time = (event.strftime('%M:%S'));
