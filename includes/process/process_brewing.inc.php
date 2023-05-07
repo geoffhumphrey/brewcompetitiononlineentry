@@ -166,18 +166,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 		$styleName = $row_style_name['brewStyle'];
 
 		// Mark as paid if free entry fee
-		if ($_SESSION['contestEntryFee'] == 0) $brewPaid = "1";
-
-		/*
-		// Concat all special ingredient styles
-		$all_special_ing_styles = array();
-		if (is_array($special_beer)) $all_special_ing_styles = array_merge($all_special_ing_styles,$special_beer);
-		if (is_array($carb_str_sweet_special)) $all_special_ing_styles = array_merge($all_special_ing_styles,$carb_str_sweet_special);
-		if (is_array($spec_sweet_carb_only)) $all_special_ing_styles = array_merge($all_special_ing_styles,$spec_sweet_carb_only);
-		if (is_array($spec_carb_only)) $all_special_ing_styles = array_merge($all_special_ing_styles,$spec_carb_only);
-		// print_r($all_special_ing_styles);
-		// echo $index."<br>";
-		*/
+		if ($_SESSION['contestEntryFee'] == 0) $brewPaid = 1;
 
 		// -------------------------------- Required info --------------------------------
 		// Checked against requirements later

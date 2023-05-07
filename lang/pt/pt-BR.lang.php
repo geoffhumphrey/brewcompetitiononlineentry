@@ -692,7 +692,7 @@ $brew_text_015 = "Tipo de extrato (por exemplo, claro, escuro) ou marca.";
 $brew_text_016 = "Tipo de grão (por exemplo, pilsner, pale ale, etc.)";
 $brew_text_017 = "Tipo de ingrediente ou nome.";
 $brew_text_018 = "Nome do lúpulo";
-$brew_text_019 = "Somente números (por exemplo, 12.2, 6.6, etc.)";
+$brew_text_019 = "Somente números.";
 $brew_text_020 = "Nome da linhagem (por exemplo, 1056 American Ale).";
 $brew_text_021 = "Wyeast, White Labs, etc.";
 $brew_text_022 = "1 smackpack, 2 frascos, 2000 ml, etc.";
@@ -1911,6 +1911,28 @@ $evaluation_info_094 = "O requisito mínimo de palavras não foi alcançado em u
  */
 
 $label_regional_variation = "Variação Regional";
+$label_characteristics = "Características";
+$label_intensity = "Intensidade";
+$label_quality = "Qualidade";
+$label_palate = "Palato";
+$label_medium = "Médio";
+$label_medium_dry = "Meio Seco";
+$label_medium_sweet = "Doce Médio";
+$label_your_score = "Sua Pontuação";
+$label_summary_overall_impression = "Resumo da Avaliação e Impressão Geral";
+$label_medal_count = "Contagem de Grupos de Medalhas";
+$label_best_brewer_place = "Melhor Local para Cervejarias";
+$label_industry_affiliations = "Participação em Organizações do Setor";
+$label_deep_gold = "Ouro Profundo";
+$label_chestnut = "Castanha";
+$label_pink = "Rosa";
+$label_red = "Vermelho";
+$label_purple = "Roxo";
+$label_garnet = "Granada";
+$label_clear = "Transparente";
+$label_final_judging_date = "Data do Julgamento Final";
+$label_entries_judged = "Inscrições julgadas";
+
 $brew_text_041 = "Opcional - especificar uma variação regional (por exemplo, Lager mexicana, Lager holandesa, Rice Lager japonesa, etc.).";
 $evaluation_info_095 = "Próxima sessão de julgamento designada aberta:";
 $evaluation_info_096 = "Para ajudar na preparação, mesas/voos designados e entradas associadas estão disponíveis dez minutos antes do início de uma sessão.";
@@ -1918,6 +1940,12 @@ $evaluation_info_097 = "Sua próxima sessão de julgamento já está disponível
 $evaluation_info_098 = "Refresque-se para ver.";
 $evaluation_info_099 = "Sessões de julgamento passadas ou atuais:";
 $evaluation_info_100 = "Próximas sessões de julgamento:";
+$evaluation_info_101 = "Forneça outro descritor de cor.";
+$evaluation_info_102 = "Digite sua pontuação total - máximo de 50. Use o guia de pontuação abaixo, se necessário.";
+$evaluation_info_103 = "Forneça sua pontuação - mínimo de 5, máximo de 50.";
+
+$brewer_text_051 = "Selecione as organizações do setor às quais você é afiliado como funcionário, voluntário, etc. Isso serve para garantir que não haja conflitos de interesse ao designar juízes e comissários de bordo para avaliar as inscrições.";
+$brewer_text_052 = "<strong>Se alguma organização do setor <u>não</u> estiver listada no menu suspenso acima, insira-a aqui.</strong> Separe o nome de cada organização por vírgula (,) ou ponto e vírgula (;). Alguns símbolos não são permitidos, incluindo aspas duplas (&quot;) e porcentagem (&#37;).";
 
 
 /**

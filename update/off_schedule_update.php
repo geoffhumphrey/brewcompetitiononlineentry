@@ -2872,6 +2872,8 @@ if (!check_update("jPrefsMinWords", $prefix."judging_preferences")) {
 
 }
 
+if (!$setup_running) $output_off_sched_update .= "</ul>";
+
 /**
  * ----------------------------------------------- 2.5.1 ---------------------------------------------
  * Fix missing style type for Juicy or Hazy Imperial or Double India Pale Ale and Specialty Spice Beer.
@@ -2880,6 +2882,19 @@ if (!check_update("jPrefsMinWords", $prefix."judging_preferences")) {
  * ---------------------------------------------------------------------------------------------------
  */
 
+
+if ((!$setup_running) && (!$update_running)) {
+	$output_off_sched_update .= "<p>";
+	$output_off_sched_update .= "<strong>Version 2.5.1.0 Updates</strong>";
+	$output_off_sched_update .= "</p>";
+}
+
+elseif ($update_running) {
+	$output_off_sched_update .= "<h4>Version 2.5.0</h4>";
+}
+
+// Begin version unordered list
+if (!$setup_running) $output_off_sched_update .= "<ul>";
 
 $sql = sprintf("UPDATE `%s` SET brewStyleType = '1' WHERE brewStyle='Specialty Spice Beer' AND  brewStyleGroup='30' AND brewStyleNum='D'",$prefix."styles");
 mysqli_select_db($connection,$database);

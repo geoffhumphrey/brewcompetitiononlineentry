@@ -2075,7 +2075,6 @@ $evaluation_info_097 = "Your next judging session is now available.";
 $evaluation_info_098 = "Refresh to view.";
 $evaluation_info_099 = "Past or current judging sessions:";
 $evaluation_info_100 = "Upcoming judging sessions:";
-
 $evaluation_info_101 = "Please provide another color descriptor.";
 $evaluation_info_102 = "Enter your total score - maximum of 50. Use the scoring guide below if needed.";
 $evaluation_info_103 = "Please provide your score - minimum of 5, maximum of 50.";
