@@ -24,7 +24,12 @@ $languages = array(
  * The file name will be stored in the preferences DB table row called prefsTheme and called by all pages
  */
 
-$theme_name = array("default|BCOE&amp;M Default (Gray)","bruxellensis|Bruxellensis (Blue-Gray)", "claussenii|Claussenii (Green)", "naardenensis|Naardenensis (Teal)");
+$theme_name = array(
+    "default" => "BCOE&amp;M Default (Gray)",
+    "bruxellensis" => "Bruxellensis (Blue-Gray)",
+    "claussenii" => "Claussenii (Green)",
+    "naardenensis" => "Naardenensis (Teal)"
+);
 
 // -------------------------- Countries List ----------------------------------------------------
 // Array of countries to utilize when users sign up and for competition info
@@ -2477,8 +2482,10 @@ if (((strpos($section, "step") === FALSE) && ($section != "setup")) && ($section
         $registration_open = open_or_closed(time(), $row_contest_dates['contestRegistrationOpen'], $row_contest_dates['contestRegistrationDeadline']);
         $entry_window_open = open_or_closed(time(), $row_contest_dates['contestEntryOpen'], $row_contest_dates['contestEntryDeadline']);
         $judge_window_open = open_or_closed(time(), $row_contest_dates['contestJudgeOpen'], $row_contest_dates['contestJudgeDeadline']);
-        $dropoff_window_open = open_or_closed(time(), $row_contest_dates['contestDropoffOpen'], $row_contest_dates['contestDropoffDeadline']);
-        $shipping_window_open = open_or_closed(time(), $row_contest_dates['contestShippingOpen'], $row_contest_dates['contestShippingDeadline']);
+        if ((!empty($row_contest_dates['contestDropoffOpen'])) && (!empty($row_contest_dates['contestDropoffDeadline']))) $dropoff_window_open = open_or_closed(time(), $row_contest_dates['contestDropoffOpen'], $row_contest_dates['contestDropoffDeadline']);
+        else $dropoff_window_open = 1;
+        if ((!empty($row_contest_dates['contestShippingOpen'])) && (!empty($row_contest_dates['contestShippingDeadline']))) $shipping_window_open = open_or_closed(time(), $row_contest_dates['contestShippingOpen'], $row_contest_dates['contestShippingDeadline']);
+        else $shipping_window_open = 1;
         
         $judging_past = judging_date_return();
         $judging_started = FALSE;

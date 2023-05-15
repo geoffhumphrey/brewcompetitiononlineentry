@@ -596,11 +596,15 @@ $(document).ready(function(){
     <div class="col-lg-6 col-md-5 col-sm-8 col-xs-12">
     <!-- Input Here -->
     <select class="selectpicker" name="prefsTheme" id="prefsTheme" data-width="auto">
-        <?php foreach ($theme_name as $theme) {
-            $themes = explode("|",$theme);
+        <?php 
+        $themes = "";
+        foreach ($theme_name as $key => $value) {
+            $themes .= "<option value=\"".$key."\" ";
+            if ($row_prefs['prefsTheme'] == $key) $themes .= " SELECTED";
+            $themes .= ">".$value."</option>";
+        }
+        echo $themes;
         ?>
-        <option value="<?php echo $themes['0']; ?>" <?php if ($row_prefs['prefsTheme'] ==  $themes['0']) echo " SELECTED"; ?> /><?php echo  $themes['1']; ?></option>
-        <?php } ?>
     </select>
     </div>
 </div><!-- ./Form Group -->

@@ -420,8 +420,11 @@ if ($totalRows_brewer > 0) {
 } // end if ($totalRows_brewer > 0)
 
 $dashboard_link = build_public_url("evaluation","default","default","default",$sef,$base_url);
-$head_judge_explain = "<p>Choose the Head Judge for this table. <p>The Head Judge, <a class='hide-loader' href='http://www.bjcp.org/judgeprocman.php' target='_blank'>according to the BJCP</a>, is a <em>single judge</em> responsible for reviewing all scores and paperwork for accuracy.</p>";
-if ($_SESSION['prefsEval'] == 1) $head_judge_explain .= "<p>The Head Judge at each table confirms consensus scores and enters the placing entries into the system via their <a href='".$dashboard_link."'>Judging Dashboard</a> after all evaluations at the table have been submitted by judges.</p>";
+$head_judge_explain = "<p>Choose the Head Judge for this table. <p>The Head Judge, <a class='hide-loader' href='https://www.bjcp.org/exam-certification/judge-procedures-manual/' target='_blank'>according to the BJCP</a>, is a <em>single judge</em> responsible for reviewing all scores and paperwork for accuracy.</p>";
+if ($_SESSION['prefsEval'] == 1) $head_judge_explain .= "<p>Additionally, Head Judges confirm consensus scores and enter the placing entries into the system via their <a href='".$dashboard_link."'>Judging Dashboard</a> after all evaluations at the table have been submitted by judges.</p>";
+
+$head_judge_options_ranked = array_unique($head_judge_options_ranked, SORT_REGULAR);
+$head_judge_options_non = array_unique($head_judge_options_non, SORT_REGULAR);
 
 ?>
 <script>
@@ -751,14 +754,12 @@ select.custom-hj-dropdown {
 </style>
 <div class="row form-group">
   <label for="assignRoles" class="col-xs-12 col-sm-4 col-md-4 col-lg-2 control-label">
-  Head Judge for Table: <a href="#" role="button" data-html="true" data-toggle="popover" data-container="body" data-trigger="hover focus" data-placement="top" title="Designate the Head Judge" data-content="<?php echo $head_judge_explain; ?>"> <span class="fa fa-lg fa-question-circle"></span></a>
+  Head Judge for Table: <a href="#" role="button" data-html="true" data-toggle="popover" data-container="body" data-trigger="focus" data-placement="top" title="Designate the Head Judge" data-content="<?php echo $head_judge_explain; ?>"> <span class="fa fa-lg fa-question-circle"></span></a>
   </label>
   <div class="col-xs-12 col-sm-4 col-md-4 col-lg-6">
     <select id="head-judge-select" name="head_judge_choose" class="form-control custom-hj-dropdown" onchange="update_hj_display()">
-      <option value="">None (Names will populate as you assign judges)</option>
+      <option value="">None <?php if (empty($assigned_at_table)) echo "(Names will populate as you assign judges)"; ?></option>
       <?php 
-      $head_judge_options_ranked = array_unique($head_judge_options_ranked, SORT_REGULAR);
-      $head_judge_options_non = array_unique($head_judge_options_non, SORT_REGULAR);
       foreach ($head_judge_options_ranked as $key => $value) { 
         $enable_disable = "";
         $hj_class = "";
@@ -769,9 +770,11 @@ select.custom-hj-dropdown {
       <?php } ?>
       <?php foreach ($head_judge_options_non as $key => $value) { 
         $enable_disable = "";
+        $hj_class = "";
         if ((!empty($head_judge_id)) && (in_array($value['uid'], $head_judge_id))) $enable_disable = "selected";
+        if (!in_array($value['uid'], $assigned_at_table)) $hj_class = "hj-display";
       ?>
-      <option class="hj-display" id="hj-choose-<?php echo $value['uid']; ?>" value="<?php echo $value['uid']; ?>" <?php echo $enable_disable ?>><?php echo $value['last_name'].", ".$value['first_name']." (".$value['rank'].")"; ?></option>
+      <option class="<?php echo $hj_class; ?>" id="hj-choose-<?php echo $value['uid']; ?>" value="<?php echo $value['uid']; ?>" <?php echo $enable_disable ?>><?php echo $value['last_name'].", ".$value['first_name']." (".$value['rank'].")"; ?></option>
       <?php } ?>
     </select>
   </div>
