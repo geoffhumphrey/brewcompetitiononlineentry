@@ -295,6 +295,32 @@ function purge_entries($type, $interval) {
 
 	}
 
+	if ($type == "unpaid") {
+		
+		$query_check = sprintf("SELECT id FROM %s WHERE brewPaid='0' OR brewPaid IS NULL", $prefix."brewing");
+		if ($interval > 0) $query_check .=" AND a.brewUpdated < DATE_SUB( NOW(), INTERVAL 1 DAY)";
+		$check = mysqli_query($connection,$query_check) or die (mysqli_error($connection));
+		$row_check = mysqli_fetch_assoc($check);
+		$totalRows_check = mysqli_num_rows($check);
+
+		if ($totalRows_check == 0) $count += 1;
+
+		if ($totalRows_check > 0) {
+
+			do {
+
+				$update_table = $prefix."brewing";
+				$db_conn->where ('id', $row_check['id']);
+				$result = $db_conn->delete ($update_table);
+				if ($result) $count += 1;
+
+			} while ($row_check = mysqli_fetch_assoc($check));
+
+			
+		}
+
+	}
+
 	if ($count > 0) return TRUE;
 	else return FALSE;
 
@@ -2400,6 +2426,7 @@ function get_participant_count($type,$filter="") {
 	if ($type == 'staff') $query_participant_count = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE brewerStaff='Y'",$brewer_db_table);
 	if ($type == 'staff-assigned') $query_participant_count = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE staff_staff=1",$staff_db_table);
 	if ($type == 'received-entrant') $query_participant_count = sprintf("SELECT COUNT(DISTINCT brewBrewerID) as 'count' FROM %s WHERE brewReceived='1'",$brewing_db_table);
+	if ($type == 'with-entries') $query_participant_count = sprintf("SELECT COUNT(DISTINCT brewBrewerId) as 'count' FROM %s",$prefix."brewing");
 	if ($type == 'received-club') $query_participant_count = sprintf("SELECT COUNT(DISTINCT b.brewerClubs) as 'count' FROM %s a, %s b WHERE b.uid = a.brewBrewerID AND b.brewerClubs IS NOT NULL", $brewing_db_table, $brewer_db_table);
 	$participant_count = mysqli_query($connection,$query_participant_count) or die (mysqli_error($connection));
 	$row_participant_count = mysqli_fetch_assoc($participant_count);

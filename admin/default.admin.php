@@ -73,13 +73,6 @@ if ($totalRows_judging > 0) {
             $cards_loc_rnd .= sprintf("<li class=\"small\"><a id=\"modal_window_link\" class=\"hide-loader\" href=\"%s\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Print Table Cards for %s\">%s</a></li>", $cards_loc_rnd_link, $location_name, $location_name);
 
             /*
-
-            <li class="small"><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=table-cards&amp;go=judging_locations&amp;location=<?php echo $row_judging2['id']?>&amp;round=<?php echo $round; ?>" data-toggle="tooltip" data-placement="top" title="Print Table Cards for <?php echo $row_judging2['judgingLocName']. " - " . $location_date . ", Round " . $round; ?>"><?php echo $row_judging2['judgingLocName']. " - " . $location_date . ", Round " . $round; ?></a></li>
-
-            $ps_loc_judging .= "<li class=\"small\"><a id=\"modal_window_link\" class=\"hide-loader\" href=\"".$base_url."output/print.output.php?section=pullsheets&amp;go=judging_locations&amp;view=default&amp;location=".$row_judging['id']."&amp;round=".$round."\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Print Pullsheet for Session ".$row_judging['judgingLocName'] . " - " . $location_date. ", Round " . $round."\">".$row_judging['judgingLocName'] . " - " . $location_date. ", Round " . $round."</a></li>";
-
-            $ps_loc_judging_mbos .= "<li class=\"small\"><a id=\"modal_window_link\" class=\"hide-loader\" href=\"".$base_url."output/print.output.php?section=pullsheets&amp;go=judging_locations&amp;view=default&amp;filter=mini_bos&amp;location=".$row_judging['id']."&amp;round=".$round."\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Print Pullsheet for Session ".$row_judging['judgingLocName'] . " - " . $location_date. ", Round " . $round."\">".$row_judging['judgingLocName'] . " - " . $location_date. ", Round " . $round . " (Mini-BOS)</a></li>";
-            */
         }
 
         $ji_link_entry = $base_url."output/print.output.php?section=pullsheets&amp;go=all_entry_info&amp;view=judge_inventory&amp;filter=J&amp;sort=entry&amp;location=".$row_judging['id'];
@@ -1933,6 +1926,11 @@ if ($recently_updated) {
                                         <span style="margin-bottom: 10px;" class="hidden" id="purge-un-status"></span>
                                         <span style="margin-bottom: 10px;" class="hidden" id="purge-un-status-msg"></span>
                                     </div>
+                                    <li><a class="hide-loader" href="#" data-toggle="modal" data-target="#purgeUnpaid">Purge All Unpaid</a></li>
+                                    <div>
+                                        <span style="margin-bottom: 10px;" class="hidden" id="purge-unpaid-status"></span>
+                                        <span style="margin-bottom: 10px;" class="hidden" id="purge-unpaid-status-msg"></span>
+                                    </div>
                                 </ul>
                             </div>
                         </div>
@@ -2275,6 +2273,23 @@ if ($recently_updated) {
         <div class="modal-footer">
             <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
             <button type="button" class="btn btn-success" data-dismiss="modal" onclick="purge_data('<?php echo $base_url; ?>','confirmed','confirmed','admin-dashboard','conf');">Yes</button>
+        </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="purgeUnpaid" tabindex="-1" role="dialog" aria-labelledby="purgeUnpaid">
+    <div class="modal-dialog" role="document">
+    <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title" id="purgeUnpaid">Please Confirm</h4>
+        </div>
+        <div class="modal-body">
+            <p>Are you sure? This will delete ALL entries that are marked as unpaid on the <a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=entries">Administration: Entries</a> list. This action cannot be undone.</p>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+            <button type="button" class="btn btn-success" data-dismiss="modal" onclick="purge_data('<?php echo $base_url; ?>','purge','unpaid','admin-dashboard','purge-unpaid');">Yes</button>
         </div>
         </div>
     </div>

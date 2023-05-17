@@ -148,7 +148,7 @@ $tie_break_rules = array(
  * $club_array = json_decode($_SESSION['contestClubs'], true);
  */
 
-// Updated May 20, 2022
+// Updated May 1, 2023
 
 $club_array = array(
     "1.090",
