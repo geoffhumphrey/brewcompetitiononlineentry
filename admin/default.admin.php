@@ -43,6 +43,7 @@ $ps_loc_judging_mbos = "";
 $cards_loc_rnd = "";
 
 if ($totalRows_judging > 0) {
+    
     do {
 
         $judge_assign_links[$row_judging['judgingLocName']] = $base_url."output/print.output.php?section=assignments&amp;go=judging_assignments&amp;filter=judges&amp;location=".$row_judging['id'];
@@ -72,7 +73,6 @@ if ($totalRows_judging > 0) {
 
             $cards_loc_rnd .= sprintf("<li class=\"small\"><a id=\"modal_window_link\" class=\"hide-loader\" href=\"%s\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Print Table Cards for %s\">%s</a></li>", $cards_loc_rnd_link, $location_name, $location_name);
 
-            /*
         }
 
         $ji_link_entry = $base_url."output/print.output.php?section=pullsheets&amp;go=all_entry_info&amp;view=judge_inventory&amp;filter=J&amp;sort=entry&amp;location=".$row_judging['id'];

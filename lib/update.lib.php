@@ -41,4 +41,26 @@ function check_new_style($style1, $style2, $style3, $mode="none") {
 
 }
 
+
+function check_mysql_data_type($column_name, $table_name) {
+	
+	require(CONFIG.'config.php');	
+	mysqli_select_db($connection,$database);
+
+	$type = 0;
+	
+	$sql = sprintf("SELECT `%s` FROM `%s` LIMIT 1",$column_name,$table_name);
+	mysqli_real_escape_string($connection,$sql);
+	$result = mysqli_query($connection, $sql);
+	
+    if ($result) {
+        while ($finfo = mysqli_fetch_field($result)) {
+            $type = $finfo->type;
+        }
+    }
+
+    return $type;
+	
+}
+
 ?>

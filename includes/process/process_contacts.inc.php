@@ -98,7 +98,7 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 			$headers .= "Content-type: text/html; charset=utf-8"."\r\n";
 			$headers .= "From: ".$comp_name." Server <".$from_competition_email.">" . "\r\n"; 
 			$headers .= "Reply-To: ".$from_name." <".$from_email.">"."\r\n";
-			if ($_SESSION['prefsEmailCC'] == 0) $headers .= "Bcc: ".$from_name." <".$from_email.">"."\r\n";
+			if ((!HOSTED) && ($_SESSION['prefsEmailCC'] == 0)) $headers .= "Bcc: ".$from_name." <".$from_email.">"."\r\n";
 
 			/*
 			// Debug
@@ -120,7 +120,7 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 				$mail->addAddress($to_email, $to_name);
 				$mail->setFrom($from_competition_email, $comp_name);
 				$mail->addReplyTo($from_email, $from_name);
-				if ($_SESSION['prefsEmailCC'] == 0) $mail->addBCC($from_email, $from_name);
+				if ((!HOSTED) && ($_SESSION['prefsEmailCC'] == 0)) $mail->addBCC($from_email, $from_name);
 				$mail->Subject = $subject;
 				$mail->Body = $message;
 				sendPHPMailerMessage($mail);

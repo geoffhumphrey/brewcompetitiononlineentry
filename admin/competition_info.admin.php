@@ -49,6 +49,12 @@ $bottles = "
 <p>Be meticulous about noting any special ingredients that must be specified. Failure to note such ingredients may impact the judges' scoring of your entry.</p>
 ";
 
+$packing_shipping_rules = "";
+$packing_shipping_rules .= sprintf("<p>%s</p>",$entry_info_text_038);
+$packing_shipping_rules .= sprintf("<p>%s</p>",$entry_info_text_039);
+$packing_shipping_rules .= sprintf("<p>%s</p>",$entry_info_text_040);
+$packing_shipping_rules .= sprintf("<p>%s</p>",$entry_info_text_041);
+
 $volunteer = "<p>Volunteer information coming soon!</p>";
 
 $awards = "
@@ -70,6 +76,15 @@ include (CLASSES.'markdownify/Parser.php');
 jQuery(document).ready(function($) {
 
     $('#contestRules').markdownEditor({
+        fullscreen: false,
+        imageUpload: false,
+        preview: true,
+        onPreview: function (content, callback) {
+            callback( marked(content) );
+        }
+    });
+
+    $('#competitionPackingShipping').markdownEditor({
         fullscreen: false,
         imageUpload: false,
         preview: true,
@@ -278,7 +293,34 @@ jQuery(document).ready(function($) {
         <span id="helpBlock" class="help-block">For use with the <a href="<?php echo $base_url; ?>qr.php">QR Code Entry Check-In</a> function.</span>
     </div>
 </div><!-- ./Form Group -->
-<?php } ?>
+<?php
+} 
+
+$contestClubs = json_decode($row_contest_info['contestClubs']);
+$additional_clubs = implode(", ", $contestClubs);
+?>
+<div class="form-group"><!-- Form Group NOT REQUIRED Text Input -->
+    <label for="contestClubs" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Additional Club Names</label>
+    <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
+        <!-- Input Here -->
+        <input class="form-control" id="contestClubs" name="contestClubs" type="text" value="<?php if ($section != "step4") echo $additional_clubs; ?>" placeholder="" pattern="[^%\x22]+">
+        <span class="help-block"><p>Add any club names that cannot be found in the clubs database. Search below to check if a club is already included.</p><p>Separate each club's name by comma (,) or semi-colon (;). Some symbols are not allowed, including double-quotation marks (") and percent (%).</p></span>
+    </div>
+</div><!-- ./Form Group -->
+<div class="form-group">
+    <label class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label"></label>
+    <div class="col-lg-3 col-md-3 col-sm-4 col-xs-12">
+        <input id="search-club-list-input" class="form-control" placeholder="Search the clubs database">
+        <span class="small text-warning"><i class="fa fa-fw fa-sm fa-times"></i> Club not found. Select the Copy button to add it to the list above.</span><br>
+        <span id="search-club-list-results" class="small text-success"><i class="fa fa-fw fa-sm fa-check"></i> Club is in the database.</span>
+    </div>
+    <div class="col-lg-1 col-md-1 col-sm-1 col-xs-12">
+        <a id="search-club-list-btn" role="button" class="btn btn-primary btn-block">Search</a>
+    </div>
+    <div class="col-lg-1 col-md-1 col-sm-1 col-xs-12">
+        <a id="copy-to-club-list-btn" role="button" class="btn btn-warning btn-block" disabled>Copy</a>
+    </div>
+</div>
 
 <h3>Entry Window</h3>
 <div class="form-group"><!-- Form Group REQUIRED Text Input -->
@@ -412,10 +454,10 @@ jQuery(document).ready(function($) {
 </div><!-- ./Form Group -->
 <h3>Rules and Other Information</h3>
 <div class="form-group"><!-- Form Group NOT-REQUIRED Text Area -->
-    <label for="contestRules" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Competition Rules</label>
+    <label for="competition_rules" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Competition Rules</label>
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
         <!-- Input Here -->
-        <textarea id="contestRules" class="form-control" name="contestRules" rows="15" aria-describedby="helpBlock"><?php
+        <textarea id="contestRules" class="form-control" name="competition_rules" rows="15" aria-describedby="helpBlock"><?php
 
         if ($section == "step4") {
             if (ENABLE_MARKDOWN) {
@@ -426,18 +468,21 @@ jQuery(document).ready(function($) {
         }
 
         else {
+
+            $contestRulesJSON = json_decode($row_contest_info['contestRules'],true);
+
             if (ENABLE_MARKDOWN) {
-                if (is_html($row_contest_info['contestRules'])) {
-                    $rules = preg_replace("/<[\/]*div[^>]*>/i", "", $row_contest_info['contestRules']);
+                if (is_html($contestRulesJSON['competition_rules'])) {
+                    $rules = preg_replace("/<[\/]*div[^>]*>/i", "", $contestRulesJSON['competition_rules']);
                     $rules = preg_replace("/<[\/]*span[^>]*>/i", "", $rules);
                     $converter = new Markdownify\Converter;
                     $rules = $converter->parseString($rules);
                     $rules = strip_tags($rules);
                     echo $rules;
                 }
-                else echo $row_contest_info['contestRules'];
+                else echo $contestRulesJSON['competition_rules'];
             }
-            else echo $row_contest_info['contestRules'];
+            else echo $contestRulesJSON['competition_rules'];
         }
 
         ?></textarea>
@@ -474,6 +519,44 @@ jQuery(document).ready(function($) {
         }
         ?></textarea>
         <span id="helpBlock" class="help-block">Indicate the number of bottles, size, color, etc. Edit default text as needed. <?php if (ENABLE_MARKDOWN) echo $markdown_cheatsheet; ?></span>
+     </div>
+</div><!-- ./Form Group -->
+
+<div class="form-group"><!-- Form Group NOT-REQUIRED Text Area -->
+    <label for="competitionPackingShipping" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Packaging and Shipping Rules</label>
+    <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
+        <!-- Input Here -->
+        <textarea id="competitionPackingShipping" class="form-control" name="competition_packing_shipping" rows="15" aria-describedby="helpBlock">
+        <?php
+
+        if ($section == "step4") {
+            if (ENABLE_MARKDOWN) {
+                $converter = new Markdownify\Converter;
+                echo $converter->parseString($packing_shipping_rules);
+            }
+            else echo $packing_shipping_rules;
+        }
+
+        else {
+
+            $contestRulesJSON = json_decode($row_contest_info['contestRules'],true);
+
+            if (ENABLE_MARKDOWN) {
+                if (is_html($contestRulesJSON['competition_packing_shipping'])) {
+                    $packing_shipping_rules = preg_replace("/<[\/]*div[^>]*>/i", "", $contestRulesJSON['competition_packing_shipping']);
+                    $packing_shipping_rules = preg_replace("/<[\/]*span[^>]*>/i", "", $packing_shipping_rules);
+                    $converter = new Markdownify\Converter;
+                    $packing_shipping_rules = $converter->parseString($packing_shipping_rules);
+                    $packing_shipping_rules = strip_tags($packing_shipping_rules);
+                    echo $packing_shipping_rules;
+                }
+                else echo $contestRulesJSON['competition_packing_shipping'];
+            }
+            else echo $contestRulesJSON['competition_packing_shipping'];
+        }
+
+        ?></textarea>
+        <span id="helpBlock" class="help-block">Edit the provided general rules text as needed. <?php if (ENABLE_MARKDOWN) echo $markdown_cheatsheet; ?></span>
      </div>
 </div><!-- ./Form Group -->
 

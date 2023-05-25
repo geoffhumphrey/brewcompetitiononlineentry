@@ -13,7 +13,7 @@ $current_version_display_append = "";
 if (!empty($current_version_display_append)) $current_version_display .= " ".$current_version_display_append;
 
 // Change date for each pre-release and release. Will trigger a force update.
-$current_version_date_display = "2023-05-13";
+$current_version_date_display = "2023-05-24";
 
 // Convert current version date to Unix timestamp
 $current_version_date = strtotime($current_version_date_display);

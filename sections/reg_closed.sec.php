@@ -69,13 +69,14 @@ else {
 
 if ((isset($row_contest_rules['contestRules'])) && (!empty($row_contest_rules['contestRules']))) {
 	$header1_3 .= sprintf("<a name='rules'></a><h2>%s</h2>",$label_rules);
-	if ((ENABLE_MARKDOWN) && (!is_html($row_contest_rules['contestRules']))) { 
+	$contestRulesJSON = json_decode($row_contest_rules['contestRules'],true);
+	if ((ENABLE_MARKDOWN) && (!is_html($contestRulesJSON['competition_rules']))) {
 		$page_info3 .= Parsedown::instance()
-				   ->setBreaksEnabled(true) # enables automatic line breaks
-				   ->setMarkupEscaped(true) # escapes markup (HTML)
-				   ->text($row_contest_rules['contestRules']); 
+						->setBreaksEnabled(true) # enables automatic line breaks
+						->text($contestRulesJSON['competition_rules']); 
 	}
-	else $page_info3 .= $row_contest_rules['contestRules'];
+	else $page_info3 .= $contestRulesJSON['competition_rules'];
+
 }
 
 

@@ -53,6 +53,8 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 		$contestEntryCap = "";
 		$contestCheckInPassword = "";
 		$contestID = "";
+		$competition_rules = "";
+		$competition_packing_shipping = "";
 
 		if (isset($_POST['contestName'])) $contestName = $purifier->purify($_POST['contestName']);
 		if (isset($_POST['contestHost'])) $contestHost = $purifier->purify($_POST['contestHost']);
@@ -64,7 +66,8 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 		if (isset($_POST['contestEntryDeadline'])) $contestEntryDeadline = strtotime(filter_var($_POST['contestEntryDeadline'],FILTER_SANITIZE_STRING));
 		if (isset($_POST['contestJudgeOpen'])) $contestJudgeOpen = strtotime(filter_var($_POST['contestJudgeOpen'],FILTER_SANITIZE_STRING));
 		if (isset($_POST['contestJudgeDeadline'])) $contestJudgeDeadline = strtotime(filter_var($_POST['contestJudgeDeadline'],FILTER_SANITIZE_STRING));
-		if (isset($_POST['contestRules'])) $contestRules = $purifier->purify($_POST['contestRules']);
+		if (isset($_POST['competition_rules'])) $competition_rules = $purifier->purify($_POST['competition_rules']);
+		if (isset($_POST['competition_packing_shipping'])) $competition_packing_shipping = $purifier->purify($_POST['competition_packing_shipping']);
 		if (isset($_POST['contestAwards'])) $contestAwards = $purifier->purify($_POST['contestAwards']);
 		if (isset($_POST['contestAwardsLocation'])) $contestAwardsLocation = $purifier->purify($_POST['contestAwardsLocation']);
 		if (isset($_POST['contestAwardsLocName'])) $contestAwardsLocName = $purifier->purify($_POST['contestAwardsLocName']);
@@ -91,8 +94,14 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 		if ((isset($_POST['contestEntryFeeDiscountNum'])) && (!empty($_POST['contestEntryFeeDiscountNum']))) $contestEntryFeeDiscountNum = filter_var($_POST['contestEntryFeeDiscountNum'],FILTER_SANITIZE_NUMBER_FLOAT,FILTER_FLAG_ALLOW_FRACTION);
 		if ((isset($_POST['contestEntryFeePasswordNum'])) && (!empty($_POST['contestEntryFeePasswordNum']))) $contestEntryFeePasswordNum = filter_var($_POST['contestEntryFeePasswordNum'],FILTER_SANITIZE_NUMBER_FLOAT,FILTER_FLAG_ALLOW_FRACTION);
 		if ((isset($_POST['contestEntryCap'])) && (!empty($_POST['contestEntryCap']))) $contestEntryCap = filter_var($_POST['contestEntryCap'],FILTER_SANITIZE_NUMBER_FLOAT,FILTER_FLAG_ALLOW_FRACTION);
+
+		$contestRules = array(
+			"competition_rules" => $competition_rules,
+			"competition_packing_shipping" => $competition_packing_shipping
+		);
+
+		$contestRules = json_encode($contestRules);
 		
-	
 	} // end if ($go == "default")
 
 	/**

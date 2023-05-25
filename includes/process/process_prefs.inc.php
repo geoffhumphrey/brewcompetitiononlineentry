@@ -38,7 +38,10 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 	if (isset($_POST['prefsUSCLEx'])) $prefsUSCLEx = implode(",",$_POST['prefsUSCLEx']);
 
 	if (HOSTED) $prefsCAPTCHA = 1;
-	else $prefsCAPTCHA = $_POST['prefsCAPTCHA'];
+	else $prefsCAPTCHA = sterilize($_POST['prefsCAPTCHA']);
+
+	if (HOSTED) $prefsEmailCC = 1;
+	else $prefsEmailCC = sterilize($_POST['prefsEmailCC']);
 
 	if (!empty($_POST['prefsWinnerDelay'])) $prefsWinnerDelay = strtotime(sterilize($_POST['prefsWinnerDelay']));
 	else $prefsWinnerDelay = 2145916800;
@@ -124,7 +127,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 		'prefsAutoPurge' => sterilize($_POST['prefsAutoPurge']),
 		'prefsEntryLimitPaid' => blank_to_null(sterilize($_POST['prefsEntryLimitPaid'])),
 		'prefsEmailRegConfirm' => sterilize($_POST['prefsEmailRegConfirm']),
-		'prefsEmailCC' => sterilize($_POST['prefsEmailCC']),
+		'prefsEmailCC' => $prefsEmailCC,
 		'prefsLanguage' => sterilize($_POST['prefsLanguage']),
 		'prefsSpecific' => sterilize($_POST['prefsSpecific']),
 		'prefsDropOff' => sterilize($_POST['prefsDropOff']),

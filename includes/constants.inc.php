@@ -2466,6 +2466,12 @@ $club_array = array(
     "NINJA Homebrewers",
     "Master Homebrewer Program"
 );
+
+$club_array_json = json_encode($club_array);
+if ((isset($_SESSION['contestClubs'])) && (!empty($_SESSION['contestClubs']))) {
+    $club_additions = json_decode($_SESSION['contestClubs'],true);
+    $club_array = array_merge($club_array,$club_additions);
+}
 asort($club_array);
 
 $sidebar_date_format = "short";

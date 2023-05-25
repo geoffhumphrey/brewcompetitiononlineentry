@@ -519,6 +519,9 @@ $(document).ready(function(){
         </div>
     </div>
 </div><!-- ./modal -->
+<?php if (HOSTED) { ?>
+<input type="hidden" name="prefsEmailCC" value="0">
+<?php } else { ?>
 <div class="form-group"><!-- Form Group Radio INLINE -->
     <label for="prefsEmailCC" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Contact Form CC</label>
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
@@ -530,13 +533,13 @@ $(document).ready(function(){
             <label class="radio-inline">
                 <input type="radio" name="prefsEmailCC" value="1" id="prefsEmailCC_1"  <?php if ($row_prefs['prefsEmailCC'] == "1") echo "CHECKED"; elseif ($section == "step3") echo "CHECKED"; ?> /> Disable
             </label>
-            
         </div>
         <span id="helpBlock" class="help-block">
         <p>Enable or disable automatic carbon copying (CC) of emails sent by the system to the "sender" of the email. Since any email address can be entered in the From field of the Contact form, disabling CC will prevent malicious actors from using the competition contact form to spam emails unrelated to the competition.</p>
         </span>
     </div>
 </div><!-- ./Form Group -->
+<?php } ?>
 <div class="form-group"><!-- Form Group Radio INLINE -->
     <label for="EmailRegConfirm" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Confirmation Emails</label>
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">

@@ -775,8 +775,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 			$url = str_replace("www.","",$_SERVER['SERVER_NAME']);
 			
 			$from_email = (!isset($mail_default_from) || trim($mail_default_from) === '') ? "noreply@".$url : $mail_default_from;
-			if (strpos($url, 'brewcomp.com') !== false) $from_email = "noreply@brewcomp.com";
-			elseif (strpos($url, 'brewcompetition.com') !== false) $from_email = "noreply@brewcompetition.com";
+			if ((strpos($url, 'brewcomp.com') !== false) || (strpos($url, 'brewcompetition.com') !== false)) $from_email = "noreply@brewcompetition.com";
 			$from_email = mb_convert_encoding($from_email, "UTF-8");
 
 			$contestName = $_SESSION['contestName'];

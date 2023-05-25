@@ -89,6 +89,8 @@ $anchor_links_nav = "";
 $anchor_links = array();
 $anchor_top = "<p class=\"hidden-print\"><a href=\"#top-page\">".$label_top." <span class=\"fa fa-arrow-circle-up\"></span></a></p>";
 
+$contestRulesJSON = json_decode($row_contest_info['contestRules'],true);
+
 // Registration Window
 if (!$logged_in) {
 	$anchor_links[] = $label_account_registration;
@@ -363,7 +365,7 @@ if ($show_entries) {
 		$anchor_links[] = $label_shipping_info;
 		$anchor_name = str_replace(" ", "-", $label_shipping_info);
 		$header1_10 .= sprintf("<a class=\"anchor-offset\" name=\"%s\"></a><h2>%s</h2>",strtolower($anchor_name),$label_shipping_info);
-		$page_info10 .= sprintf("<p>%s <strong class=\"text-success\">%s</strong> %s <strong class=\"text-success\">%s</strong>.</p>",$entry_info_text_036,$shipping_open,$entry_info_text_001,$shipping_closed);
+		if ((!empty($row_contest_dates['contestShippingOpen'])) && (!empty($row_contest_dates['contestShippingDeadline']))) $page_info10 .= sprintf("<p>%s <strong class=\"text-success\">%s</strong> %s <strong class=\"text-success\">%s</strong>.</p>",$entry_info_text_036,$shipping_open,$entry_info_text_001,$shipping_closed);
 		$page_info10 .= sprintf("<p>%s</p>",$entry_info_text_037);
 		$page_info10 .= "<p>";
 		$page_info10 .= $_SESSION['contestShippingName'];
@@ -371,10 +373,21 @@ if ($show_entries) {
 		$page_info10 .= $_SESSION['contestShippingAddress'];
 		$page_info10 .= "</p>";
 		$page_info10 .= sprintf("<h3>%s</h3>",$label_packing_shipping);
+
+		if ((ENABLE_MARKDOWN) && (!is_html($contestRulesJSON['competition_packing_shipping']))) {
+			$page_info10 .= Parsedown::instance()
+							->setBreaksEnabled(true) # enables automatic line breaks
+							->text($contestRulesJSON['competition_packing_shipping']); 
+		}
+		else $page_info10 .= $contestRulesJSON['competition_packing_shipping'];
+
+		/*
+		
 		$page_info10 .= sprintf("<p>%s</p>",$entry_info_text_038);
 		$page_info10 .= sprintf("<p>%s</p>",$entry_info_text_039);
 		$page_info10 .= sprintf("<p>%s</p>",$entry_info_text_040);
 		$page_info10 .= sprintf("<p>%s</p>",$entry_info_text_041);
+		*/
 		/**
 		 * Removing USPS instructions. No need to include with global usage of application.
 		 * For 3.0, make a user-definied field to utilize.
@@ -396,7 +409,7 @@ if ($show_entries) {
 			$anchor_name = str_replace(" ", "-", $label_drop_offs);
 			$header1_11 .= sprintf("<a class=\"anchor-offset\" name=\"%s\"></a><h2>%s</h2>",strtolower($anchor_name),$label_drop_offs);
 		}
-		$page_info11 .= sprintf("<p>%s <strong class=\"text-success\">%s</strong> %s <strong class=\"text-success\">%s</strong>.</p>",$entry_info_text_043,$dropoff_open,$entry_info_text_001,$dropoff_closed);
+		if ((!empty($row_contest_dates['contestDropoffOpen'])) && (!empty($row_contest_dates['contestDropoffDeadline']))) $page_info11 .= sprintf("<p>%s <strong class=\"text-success\">%s</strong> %s <strong class=\"text-success\">%s</strong>.</p>",$entry_info_text_043,$dropoff_open,$entry_info_text_001,$dropoff_closed);
 		$page_info11 .= "<p>".$dropoff_qualifier_text_001."</p>";
 		do {
 
@@ -532,15 +545,17 @@ if ($show_entries) {
 
 // Show rules if winner display is active (moved from default page)
 if (($judging_past == 0) && ($registration_open == 2) && ($entry_window_open == 2)) {
+	
 	$anchor_links[] = $label_rules;
 	$anchor_name = str_replace(" ", "-", $label_rules);
 	$header1_17 .= sprintf("<a class=\"anchor-offset\" name=\"%s\"></a><h2>%s</h2>",strtolower($anchor_name),$label_rules);
-	if ((ENABLE_MARKDOWN) && (!is_html($row_contest_info['contestRules']))) {
+
+	if ((ENABLE_MARKDOWN) && (!is_html($contestRulesJSON['competition_rules']))) {
 		$page_info17 .= Parsedown::instance()
 						->setBreaksEnabled(true) # enables automatic line breaks
-						->text($row_contest_rules['contestRules']); 
+						->text($contestRulesJSON['competition_rules']); 
 	}
-	else $page_info17 .= $row_contest_rules['contestRules'];
+	else $page_info17 .= $contestRulesJSON['competition_rules'];
 	$page_info17 .= $anchor_top;
 }
 

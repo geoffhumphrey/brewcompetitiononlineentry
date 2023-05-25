@@ -64,6 +64,8 @@ if (!isset($output_off_sched_update)) $output_off_sched_update = "";
 
 $error_count = 0;
 
+require_once (LANG.'language.lang.php');
+
 /**
  * ---------------------------------------------- 2.3.2 ----------------------------------------------
  * SYSTEM is a reserved word in MySQL 8.
@@ -2153,10 +2155,10 @@ if (!check_update("prefsEmailCC", $prefix."preferences")) {
 	}
 
 	$update_table = $prefix."preferences";
-	$data = array('prefsEmailCC' => 0);
-	if ($db_conn->update ($update_table, $data)) $output_off_sched_update .= "<li>The prefsEmailCC value was set to 0.</li>";
+	$data = array('prefsEmailCC' => 1);
+	if ($db_conn->update ($update_table, $data)) $output_off_sched_update .= "<li>The prefsEmailCC value was set to 1.</li>";
 	else {
-		$output_off_sched_update .= "<li>The prefsEmailCC value was NOT set to 0. <strong class=\"text-warning\">Error: ".$db_conn->getLastError()."</strong></li>";
+		$output_off_sched_update .= "<li>The prefsEmailCC value was NOT set to 1. <strong class=\"text-warning\">Error: ".$db_conn->getLastError()."</strong></li>";
 		$error_count += 1;
 	}
 
@@ -2923,24 +2925,111 @@ else {
  * ---------------------------------------------------------------------------------------------------
  */
 
-$sql = sprintf("ALTER TABLE `%s` CHANGE `brewerAssignment` `brewerAssignment` TEXT NULL DEFAULT NULL",$prefix."brewer");
+$sql = sprintf("ALTER TABLE `%s` CHANGE `brewerAssignment` `brewerAssignment` MEDIUMTEXT NULL DEFAULT NULL",$prefix."brewer");
 mysqli_select_db($connection,$database);
 mysqli_real_escape_string($connection,$sql);
 $result = mysqli_query($connection,$sql);
-if ($result) $output_off_sched_update .= "<li>Changed brewerAssignment row type to TEXT - used store judge/steward industry affiliations while using the Professional Edition.</li>";
+if ($result) $output_off_sched_update .= "<li>Changed brewerAssignment row type to MEDIUMTEXT - used store judge/steward industry affiliations while using the Professional Edition.</li>";
 else {
-	$output_off_sched_update .= "<li class=\"text-danger\">The brewerAssignment row type was NOT changed to TEXT. It should be done manually to effectively store judge/steward industry affiliations while using the Professional Edition.</li>";
+	$output_off_sched_update .= "<li class=\"text-danger\">The brewerAssignment row type was NOT changed to MEDIUMTEXT. It should be done manually to effectively store judge/steward industry affiliations while using the Professional Edition.</li>";
 	$error_count += 1;
 }
 
-// End all unordered lists
+/**
+ * ----------------------------------------------- 2.5.1 ---------------------------------------------
+ * Leverage JSON data type in MySQL to store competition rules and provide admins the ability to
+ * customize shipping and packaging rules (previously hard-coded).
+ * ---------------------------------------------------------------------------------------------------
+ */
+
+$contest_rules_json = FALSE;
+if ((check_mysql_data_type("contestRules",$prefix."contest_info")) == 245) $contest_rules_json = TRUE;
+
+if (!$contest_rules_json) {
+
+	$sql = sprintf("ALTER TABLE `%s` ADD `contestJSON` JSON NULL DEFAULT NULL;",$prefix."contest_info");
+	mysqli_select_db($connection,$database);
+	mysqli_real_escape_string($connection,$sql);
+	$result = mysqli_query($connection,$sql);
+
+	$query_comp_rules = sprintf("SELECT contestRules FROM `%s` WHERE id='1'",$prefix."contest_info");
+	$comp_rules = mysqli_query($connection,$query_comp_rules);
+	$row_comp_rules = mysqli_fetch_assoc($comp_rules);
+
+	$current_shipping  = sprintf("<p>%s</p>",$entry_info_text_038);
+	$current_shipping .= sprintf("<p>%s</p>",$entry_info_text_039);
+	$current_shipping .= sprintf("<p>%s</p>",$entry_info_text_040);
+	$current_shipping .= sprintf("<p>%s</p>",$entry_info_text_041);
+
+	$rules_json = array(
+		"competition_rules" => $row_comp_rules['contestRules'],
+		"competition_packing_shipping" => $current_shipping,
+	);
+
+	$rules_json = json_encode($rules_json);
+
+	// Update the data in contestRules to JSON
+	$update_table = $prefix."contest_info";
+	$data = array('contestJSON' => $rules_json);
+	$db_conn->where ('id', 1);
+	if ($db_conn->update ($update_table, $data)) $output_off_sched_update .= "<li>Current contest rules and packing/shipping rules converted to JSON for storage.</li>";
+	else {
+		$output_off_sched_update .= "<li>Error in converting and/or recording current contestRules to JSON. <strong class=\"text-warning\">Error: ".$db_conn->getLastError()."</strong></li>";
+		$error_count += 1;
+	}
+
+	$sql = sprintf("ALTER TABLE `%s` DROP `contestRules`;",$prefix."contest_info");
+	mysqli_select_db($connection,$database);
+	mysqli_real_escape_string($connection,$sql);
+	$result = mysqli_query($connection,$sql);
+
+	$sql = sprintf("ALTER TABLE `%s` CHANGE `contestJSON` `contestRules` JSON NULL DEFAULT NULL;",$prefix."contest_info");
+	mysqli_select_db($connection,$database);
+	mysqli_real_escape_string($connection,$sql);
+	$result = mysqli_query($connection,$sql);
+	if ($result) $output_off_sched_update .= "<li>Changed contestRules row type to JSON to allow for storage and display of competition rules, packing/shipping rules, etc.</li>";
+	else {
+		$output_off_sched_update .= "<li class=\"text-danger\">The contestRules row type was NOT changed to JSON. It should be done manually to effectively store and display competition rules, packing/shipping suggestions, etc.</li>";
+		$error_count += 1;
+	}
+
+}
+
+/**
+ * ----------------------------------------------- 2.5.1 ---------------------------------------------
+ * Leverage JSON data type in MySQL to store user-added clubs.
+ * ---------------------------------------------------------------------------------------------------
+ */
+
+if (!check_update("contestClubs", $prefix."contest_info")) {
+	
+	$sql = sprintf("ALTER TABLE `%s` ADD `contestClubs` JSON NULL DEFAULT NULL;",$prefix."contest_info");
+	mysqli_select_db($connection,$database);
+	mysqli_real_escape_string($connection,$sql);
+	$result = mysqli_query($connection,$sql);
+	if ($result) $output_off_sched_update .= "<li>The contestClubs column was added to the competition information table.</li>";
+	else {
+		$output_off_sched_update .= "<li class=\"text-danger\">The contestClubs column was NOT added to the competition information table.</li>";
+		$error_count += 1;
+	}
+
+}
+
+
+//
+
+/**
+ * ---------------------------------------------------------------------------------------------------
+ * End all unordered lists
+ * ---------------------------------------------------------------------------------------------------
+ */
 if (!$setup_running) $output_off_sched_update .= "</ul>";
 
 /**
- * ----------------------------------------------------------------------------------------------------
+ * ---------------------------------------------------------------------------------------------------
  * Change the version number and date.
  * ALWAYS the final script.
- * ----------------------------------------------------------------------------------------------------
+ * ---------------------------------------------------------------------------------------------------
  */
 
 $update_table = $prefix."bcoem_sys";
