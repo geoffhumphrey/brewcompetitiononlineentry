@@ -961,6 +961,7 @@ $club_array = array(
     "Fitchburg Order of Ale Makers",
     "Five Guys Inebriated",
     "Flathead Valley Brewers",
+    "Flat Rock Brew Club",
     "Fletcher Street Brews and Social Club",
     "Fleuchaus Brauhaus",
     "Flint Urban Brewing",
