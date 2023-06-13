@@ -26,20 +26,22 @@ if ($filter == "box-paid") {
     $switch_to_button = "Judging/Entry Numbers Only";
     $switch_to_link = $base_url."index.php?section=admin&amp;go=checkin";
 }
+
 else {
     $switch_to_button = "Entry/Judging Numbers, Box, and Paid";
     $switch_to_link = $base_url."index.php?section=admin&amp;go=checkin&amp;filter=box-paid";
 }
+
 ?>
 <script type="text/javascript">
 
-function moveOnMax(field,nextFieldID){
-  if(field.value.length >= field.maxLength){
+function moveOnMax(field,nextFieldID) {
+  if(field.value.length >= field.maxLength) {
     document.getElementById(nextFieldID).focus();
   }
 }
 
-function moveOnCheck(field,nextFieldID){
+function moveOnCheck(field,nextFieldID) {
     document.getElementById(nextFieldID).focus();
 }
 

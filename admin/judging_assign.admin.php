@@ -129,9 +129,12 @@ if ($totalRows_brewer > 0) {
     
     $co_brewer_flag = FALSE;
     $ind_aff_flag = FALSE;
+    $ind_aff_0 = array();
+    $ind_aff_1 = array();
+    $ind_aff_2 = array();
     $ind_aff_3 = array();
     
-    if ($_SESSION['prefsProEdition'] == 0) {     
+    if ($_SESSION['prefsProEdition'] == 0) {
       $cb_ct = 0;
       $cb_list = array();
       foreach ($co_brewers_table as $cb) {
@@ -146,8 +149,8 @@ if ($totalRows_brewer > 0) {
       if (!empty($judge_info[13])) {
 
         $ind_aff_0 = json_decode($judge_info[13],true);
-        $ind_aff_1 = $ind_aff_0['affilliated'];
-        $ind_aff_2 = $ind_aff_0['affilliatedOther'];
+        if (isset($ind_aff_0['affilliated'])) $ind_aff_1 = $ind_aff_0['affilliated'];
+        if (isset($ind_aff_0['affilliatedOther'])) $ind_aff_2 = $ind_aff_0['affilliatedOther'];
         $ind_aff_3 = array_merge($ind_aff_1,$ind_aff_2);
         $aff_ct = 0;
         foreach ($industry_affliations as $ind_aff_4) {
@@ -367,20 +370,21 @@ if ($totalRows_brewer > 0) {
           });\n
           ";
 
-          // Activate for Roles
           $output_datatables_body .= "<td>";
           $output_datatables_body .= "<div id=\"toggleRoles".$random."\">";
           $output_datatables_body .= "<input type=\"hidden\" name=\"rolesPrevDefined".$random."\" value=\"".$roles_previously_defined."\">";
           $output_datatables_body .= "<div class=\"checkbox\">";
           $output_datatables_body .= "<label><input name=\"head_judge".$random."\" type=\"checkbox\" value=\"HJ\" ".$checked_head_judge." /> Head Judge</label>";
           $output_datatables_body .= "</div><br>";
-          //$output_datatables_body .= "<div class=\"checkbox\">";
-          //$output_datatables_body .= "<label><input name=\"lead_judge".$random."\" type=\"checkbox\" value=\"LJ\" ".$checked_lead_judge." /> Lead Judge</label>";
-          //$output_datatables_body .= "</div><br>";
+          /*
+          $output_datatables_body .= "<div class=\"checkbox\">";
+          $output_datatables_body .= "<label><input name=\"lead_judge".$random."\" type=\"checkbox\" value=\"LJ\" ".$checked_lead_judge." /> Lead Judge</label>";
+          $output_datatables_body .= "</div><br>";
+          */
           $output_datatables_body .= "<div class=\"checkbox\">";
           $output_datatables_body .= "<label><input name=\"minibos_judge".$random."\" type=\"checkbox\" value=\"MBOS\" ".$checked_minibos_judge." /> Mini-BOS Judge</label>";
           $output_datatables_body .= "</div>";
-          $output_datatables_body .= "</div>"; // End toggleRoles <div>
+          $output_datatables_body .= "</div>";
           $output_datatables_body .= "</td>";
         
         } // end if ($_SESSION['jPrefsQueued'] == "Y")
@@ -685,7 +689,9 @@ $(document).ready(function() {
     </div>
 </div><!-- ./modal -->
 <?php } ?>
+
 <form name="form1" method="post" action="<?php echo $base_url; ?>includes/process.inc.php?action=update&amp;dbTable=<?php echo $judging_assignments_db_table; ?>&amp;filter=<?php echo $filter; ?>&amp;limit=<?php echo $row_rounds['flightRound']; ?>&amp;view=<?php echo $_SESSION['jPrefsQueued']; ?>&amp;id=<?php echo $row_tables_edit['id']; ?>">
+
 <?php if ($_SESSION['jPrefsQueued'] == "N") { ?>
 <script type='text/javascript'>
 var hj_id = <?php if (!empty($head_judge_id)) echo max($head_judge_id); else echo "''"; ?>;
@@ -732,6 +738,7 @@ $(document).ready(function() {
   <?php } ?>
 });
 </script>
+
 <?php if ($filter == "judges") { ?>
 <style>
 select.custom-hj-dropdown::-ms-expand {
@@ -779,8 +786,8 @@ select.custom-hj-dropdown {
     </select>
   </div>
 </div>
-<?php } ?>
-<?php } ?>
+<?php } // end if ($filter == "judges")?>
+<?php } // end if ($_SESSION['jPrefsQueued'] == "N") ?>
 <table class="table table-responsive table-bordered table" id="sortable">
 <thead>
  	<?php echo $output_datatables_head; ?>

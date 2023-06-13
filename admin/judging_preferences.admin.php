@@ -104,13 +104,13 @@ if ($_SESSION['prefsEval'] == 1) {
                 <input type="radio" name="jPrefsScoresheet" value="3" id="jPrefsScoresheet_1" rel="" <?php if ($judging_scoresheet == "3") echo "CHECKED"; ?>/> BJCP Structured Scoresheet (Beer, Mead, and Cider Only)
             </label>
         </div>
-        <!-- 
+
         <div class="radio">
             <label>
                 <input type="radio" name="jPrefsScoresheet" value="4" id="jPrefsScoresheet_1" rel="" <?php if ($judging_scoresheet == "4") echo "CHECKED"; ?>/> NW Cider Cup Structured Scoresheet (Cider Only)
             </label>
         </div>
-        -->
+
         <span id="helpBlock" class="help-block">
         <div class="btn-group" role="group" aria-label="queuedModal">
             <div class="btn-group" role="group">
@@ -136,9 +136,7 @@ if ($_SESSION['prefsEval'] == 1) {
                 <p>The <strong>BJCP Checklist Scoresheet</strong> is "a quick checklist-based beer scoresheet covering perhaps 80% of the sensory information necessary for any beer." This is only for use in <a href="https://bjcp.org/docs/Beer_checklist.pdf" target="_blank">evaluating beer entries</a>; Mead, Cider, and other style types utilize the Classic Scoresheet.</p>
                 <p>The <strong>BJCP Structured Scoresheet</strong> is a revised and updated version of the Checklist Scoresheet that features sliding scales (none to high) for aroma, appearance, flavor, and mouthfeel to "reduce the time [judges] spend writing out intensity levels." Considered experimental, these scoresheets were introduced at the National Homebrew Competition in 2018 and used again in 2019 to great success. While not officially adopted by the BJCP, their use has been increasing in local competitions. Available for Beer, Mead, and Cider. All other style types utilize the Full Scoresheet.</p>
                 <p>More information about BJCP scoresheets can be found on the <a class="hide-loader" href="https://www.bjcp.org/competition-center/" target="_blank">BJCP's Competition Center</a>.</p>
-                <!-- 
                 <p>The <strong>NW Cider Cup Structured Scoresheet</strong> was developed for use in the NW Cider Cup (formerly Portland International Cider Cup) according the specifications of the <a href="https://www.nwcider.com/" target="_blank">Northwest Cider Association</a>. Cider only. Beer and Mead styles utilize the BJCP Structured Scoresheet; all other style types utilize the Full Scoresheet.</p> 
-                -->
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
