@@ -55,6 +55,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 		$contestID = "";
 		$competition_rules = "";
 		$competition_packing_shipping = "";
+		$contestClubs = "";
 
 		if (isset($_POST['contestName'])) $contestName = $purifier->purify($_POST['contestName']);
 		if (isset($_POST['contestHost'])) $contestHost = $purifier->purify($_POST['contestHost']);
@@ -94,6 +95,15 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 		if ((isset($_POST['contestEntryFeeDiscountNum'])) && (!empty($_POST['contestEntryFeeDiscountNum']))) $contestEntryFeeDiscountNum = filter_var($_POST['contestEntryFeeDiscountNum'],FILTER_SANITIZE_NUMBER_FLOAT,FILTER_FLAG_ALLOW_FRACTION);
 		if ((isset($_POST['contestEntryFeePasswordNum'])) && (!empty($_POST['contestEntryFeePasswordNum']))) $contestEntryFeePasswordNum = filter_var($_POST['contestEntryFeePasswordNum'],FILTER_SANITIZE_NUMBER_FLOAT,FILTER_FLAG_ALLOW_FRACTION);
 		if ((isset($_POST['contestEntryCap'])) && (!empty($_POST['contestEntryCap']))) $contestEntryCap = filter_var($_POST['contestEntryCap'],FILTER_SANITIZE_NUMBER_FLOAT,FILTER_FLAG_ALLOW_FRACTION);
+
+		if ((isset($_POST['contestClubs'])) && (!empty($_POST['contestClubs']))) {
+			$contestClubs = $purifier->purify($_POST['contestClubs']);
+			$contestClubs = trim($contestClubs);
+			$contestClubs = rtrim($contestClubs, ";");
+			$contestClubs = str_replace("; ",";",$contestClubs);
+			$contestClubs = explode(";",$contestClubs);
+			$contestClubs = json_encode($contestClubs);
+		}
 
 		$contestRules = array(
 			"competition_rules" => $competition_rules,
@@ -157,7 +167,8 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 			'contestEntryFeePassword' => blank_to_null($contestEntryFeePassword),
 			'contestEntryFeePasswordNum' => blank_to_null($contestEntryFeePasswordNum),
 			'contestCheckInPassword' => blank_to_null($hash),
-			'contestID' => blank_to_null($contestID)
+			'contestID' => blank_to_null($contestID),
+			'contestClubs' => blank_to_null($contestClubs)
 		);
 
 		$result = $db_conn->insert ($update_table, $data);
@@ -290,7 +301,8 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 				'contestEntryFeePassword' => blank_to_null($contestEntryFeePassword),
 				'contestEntryFeePasswordNum' => blank_to_null($contestEntryFeePasswordNum),
 				'contestCheckInPassword' => blank_to_null($hash),
-				'contestID' => blank_to_null($contestID)
+				'contestID' => blank_to_null($contestID),
+				'contestClubs' => blank_to_null($contestClubs)
 			);
 
 			$db_conn->where ('id', 1);

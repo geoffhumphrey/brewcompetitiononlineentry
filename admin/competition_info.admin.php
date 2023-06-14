@@ -68,16 +68,26 @@ $awards = "
 <p>Both score sheets and awards will be available for pick up that night after the ceremony concludes.  Awards and score sheets not picked up will be mailed back to participants.  Results will be posted to the competition web site after the ceremony concludes.</p>
 ";
 
+$additional_clubs = "";
+if ((isset($row_contest_info['contestClubs'])) && (!empty($row_contest_info['contestClubs']))) {
+    $contestClubs = json_decode($row_contest_info['contestClubs'],true);
+    if (!empty($contestClubs)) {
+        $additional_clubs = implode("; ", $contestClubs);
+        $additional_clubs .= "; ";
+    }
+}
+
 if ($section == "admin") { ?>
 <p class="lead"><?php echo $_SESSION['contestName'].": Update Competition Information"; ?></p>
 <?php } ?>
+
 <?php 
 if (ENABLE_MARKDOWN) { 
 include (CLASSES.'markdownify/Converter.php');
 include (CLASSES.'markdownify/Parser.php');
 ?>
 <script>
-jQuery(document).ready(function($) {
+$(document).ready(function($){
     $('#contestRules').markdownEditor({
         fullscreen: false,
         imageUpload: false,
@@ -138,6 +148,135 @@ jQuery(document).ready(function($) {
 </script>
 <?php } ?>
 
+<script>
+$(document).ready(function(){
+
+    var clubs = <?php echo json_encode($club_array); ?>;
+    var last_added;
+    var additional_clubs = '<?php echo $additional_clubs; ?>';
+    
+    $("#search-club-list-results-div").hide();
+    $("#club-separated").hide();
+    $("#restore-additional-clubs").hide();
+    $("#clear-last-added").attr("disabled", true);
+    
+    if ($("#contestClubs").val().length > 0) {
+        $("#club-separated").show();
+        $("#clear-additional-clubs").attr("disabled", false);
+    }
+
+    $("#clear-additional-clubs").click(function() {
+        $("#contestClubs").val("");
+        $("#club-separated").hide();
+        $("#clear-additional-clubs").hide();
+        $("#clear-additional-clubs").attr("disabled", true);
+        $("#restore-additional-clubs").show();
+        $("#restore-additional-clubs").attr("disabled", false);
+        $("#clear-last-added").attr("disabled", true);
+    });
+
+    $("#restore-additional-clubs").click(function() {
+        $("#contestClubs").val(additional_clubs);
+        $("#club-separated").show();
+        $("#clear-additional-clubs").show();
+        $("#clear-additional-clubs").attr("disabled", false);
+        $("#restore-additional-clubs").hide();
+        $("#restore-additional-clubs").attr("disabled", false);
+        $("#clear-last-added").attr("disabled", false);
+    });   
+
+    $("#update-comp-info-btn").click(function() {
+        $("#contestClubs").attr("disabled", false);
+    });
+
+    $("#copy-to-club-list-btn").click(function() {
+
+        $("#club-separated").show();
+        
+        var current_value = $('#contestClubs').val();
+        var new_value = $("#search-club-list-input").val();
+        last_added = $("#search-club-list-input").val() + ";";
+        additional_clubs = additional_clubs + $("#search-club-list-input").val() + "; ";
+
+        if (current_value.indexOf(new_value) == -1) {
+            $('#contestClubs').val(function(index, val) {
+                return val + new_value + "; ";
+            });
+
+        }
+
+        $("#search-club-list-results-div").hide("fast");
+        $("#search-club-list-input").val("");
+        $("#copy-to-club-list-btn").attr("disabled", true);
+        $("#clear-search-btn").attr("disabled", true);
+        $("#clear-additional-clubs").attr("disabled", false);
+        $("#clear-last-added").attr("disabled", false);
+
+    });
+
+    $("#clear-search-btn").click(function() {
+        
+        $("#search-club-list-results-div").hide("fast");
+        $("#search-club-list-input").val("");
+        $("#clear-search-btn").attr("disabled", true);
+        $("#copy-to-club-list-btn").attr("disabled", true);
+
+    });
+
+    $("#search-club-list-btn").click(function() {
+        
+        $("#search-club-list-results-div").hide("fast");
+        $("#copy-to-club-list-btn").attr("disabled", false);
+        $("#clear-search-btn").attr("disabled", false);
+        
+        var search_term = $("#search-club-list-input").val();
+        var output = "";
+
+        if (search_term) {
+
+            var my_expression = new RegExp(search_term, 'i');
+
+            $.each(clubs, function(index,value){
+                if (value.search(my_expression) != -1) {
+                    output += "<li>" + value + ";</li>";
+                }
+            });
+
+            if (output) {
+                $("#search-club-list-results-div").show("fast");
+                $("#search-club-list-results").html("<ul class=\"list-inline text-success\"><li><i class=\"fa fa-fw fa-sm fa-check\"></i></li><li><strong>Possible matches in the database:</strong></li> " + output + "</ul>If none match, select the Add button to add the name you searched to the list above.");
+            }
+
+            else {
+                $("#search-club-list-results-div").show("fast");
+                $("#search-club-list-results").html("<span class=\"text-danger\"><i class=\"fa fa-fw fa-sm fa-times\"></i> <strong>No possible matches found in the database.</strong></span> Select the Add button to add the name you searched to the list above.");
+            }
+
+        }
+
+        else {
+            $("#search-club-list-results-div").show("fast");
+            $("#search-club-list-results").html("<span class=\"text-primary\"><i class=\"fa fa-fw fa-sm fa-question\"></i> <strong>No search term entered.</strong> Enter a club name to search the database.</span>");
+        }
+
+    });
+
+     $("#clear-last-added").click(function() {
+        
+        var current_value = $("#contestClubs").val();
+        var new_value = current_value.replace(last_added,'');
+        new_value = new_value.trim();
+        new_value = new_value + " ";
+
+        $("#contestClubs").val(new_value);
+        $("#clear-last-added").attr("disabled", true);
+
+    });
+
+});
+
+</script>
+
 <form data-toggle="validator" role="form" class="form-horizontal" method="post" action="<?php echo $base_url; ?>includes/process.inc.php?section=<?php if ($section == "step4") echo "setup"; else echo $section; ?>&amp;action=<?php echo $action; ?>&amp;dbTable=<?php echo $prefix; ?>contest_info&amp;id=1" name="form1">
 
 <?php if ($section == "step4") { ?>
@@ -159,7 +298,6 @@ jQuery(document).ready(function($) {
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
         <div class="input-group has-warning">
             <span class="input-group-addon" id="contactLastName-addon1"><span class="fa fa-user"></span></span>
-            
             <input class="form-control" id="contactLastName" name="contactLastName" type="text" value="<?php echo $row_brewer['brewerLastName']; ?>" placeholder="" required>
             <span class="input-group-addon" id="contactLastName-addon2"><span class="fa fa-star"></span></span>
         </div>
@@ -211,7 +349,6 @@ jQuery(document).ready(function($) {
 		</span>
     </div>
 </div>
-
 
 <!-- Modal -->
 <div class="modal fade" id="BJCPCompIDModal" tabindex="-1" role="dialog" aria-labelledby="contactFormModalLabel">
@@ -289,36 +426,34 @@ jQuery(document).ready(function($) {
         <span id="helpBlock" class="help-block">For use with the <a href="<?php echo $base_url; ?>qr.php">QR Code Entry Check-In</a> function.</span>
     </div>
 </div>
-<?php }
-$additional_clubs = "";
-if ((isset($row_contest_info['contestClubs'])) && (!empty($row_contest_info['contestClubs']))) {
-    $contestClubs = json_decode($row_contest_info['contestClubs']);
-    $additional_clubs = implode(", ", $contestClubs);
-}
-?>
-<div class="form-group"><!-- Form Group NOT REQUIRED Text Input -->
-    <label for="contestClubs" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Additional Club Names</label>
-    <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
-        <!-- Input Here -->
-        <input class="form-control" id="contestClubs" name="contestClubs" type="text" value="<?php if ($section != "step4") echo $additional_clubs; ?>" placeholder="" pattern="[^%\x22]+">
-        <span class="help-block"><p>Add any club names that cannot be found in the clubs database. Search below to check if a club is already included.</p><p>Separate each club's name by comma (,) or semi-colon (;). Some symbols are not allowed, including double-quotation marks (") and percent (%).</p></span>
-    </div>
-</div><!-- ./Form Group -->
+<?php } ?>
+
 <div class="form-group">
-    <label class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label"></label>
-    <div class="col-lg-3 col-md-3 col-sm-4 col-xs-12">
+    <label class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Additional Club Names</label>
+    <div class="col-lg-4 col-md-6 col-sm-6 col-xs-12">
         <input id="search-club-list-input" class="form-control" placeholder="Search the clubs database">
-        <span class="small text-warning"><i class="fa fa-fw fa-sm fa-times"></i> Club not found. Select the Copy button to add it to the list above.</span><br>
-        <span id="search-club-list-results" class="small text-success"><i class="fa fa-fw fa-sm fa-check"></i> Club is in the database.</span>
+        <span class="help-block">Search to check if a club is already in the database. <a role="button" id="clear-search-btn" class="btn btn-xs btn-default" disabled>Clear the Search Field</a></span>
     </div>
-    <div class="col-lg-1 col-md-1 col-sm-1 col-xs-12">
-        <a id="search-club-list-btn" role="button" class="btn btn-primary btn-block">Search</a>
+    <div class="col-lg-1 col-md-2 col-sm-2 col-xs-12">
+        <a role="button" id="search-club-list-btn" class="btn btn-primary btn-block">Search</a>
     </div>
-    <div class="col-lg-1 col-md-1 col-sm-1 col-xs-12">
-        <a id="copy-to-club-list-btn" role="button" class="btn btn-warning btn-block" disabled>Copy</a>
+    <div class="col-lg-1 col-md-2 col-sm-2 col-xs-12">
+        <a role="button" id="copy-to-club-list-btn" class="btn btn-default btn-block" disabled>Add</a>
     </div>
 </div>
+<div style="margin-top: -15px; margin-bottom: 10px;" id="search-club-list-results-div" class="form-group">
+    <label class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label"></label>
+    <div class="col-lg-7 col-md-9 col-sm-8 col-xs-12 small" id="search-club-list-results"></div>
+</div>
 
+<div class="form-group"><!-- Form Group NOT REQUIRED Text Input -->
+    <label for="contestClubs" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label"></label>
+    <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
+        <!-- Input Here -->
+        <input class="form-control" id="contestClubs" name="contestClubs" type="text" value="<?php if ($section != "step4") echo $additional_clubs; ?>" placeholder="" pattern="[^%\x22]+" disabled>
+        <span class="help-block"><p>Use the search/add function above to add any club names that cannot be found in the clubs database. <a class="btn btn-xs btn-default" role="button" id="clear-additional-clubs">Clear Entire List</a><a class="btn btn-xs btn-default" role="button" id="restore-additional-clubs">Restore List</a> <a class="btn btn-xs btn-default" role="button" id="clear-last-added">Clear Last Added</a></p><p id="club-separated">Note: each club is separated by a semi-colon (;) for system use.</p></span>
+    </div>
+</div><!-- ./Form Group -->
 <h3>Entry Window</h3>
 <div class="form-group">
     <label for="contestEntryOpen" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Open Date</label>
@@ -778,7 +913,7 @@ if ((isset($row_contest_info['contestClubs'])) && (!empty($row_contest_info['con
 <div class="bcoem-admin-element hidden-print">
 	<div class="form-group">
 		<div class="col-lg-offset-2 col-md-offset-3 col-sm-offset-4">
-			<input name="submit" type="submit" class="btn btn-primary" value="Update Competition Info">
+			<input id="update-comp-info-btn" name="submit" type="submit" class="btn btn-primary" value="Update Competition Info">
 		</div>
 	</div>
 </div>

@@ -235,7 +235,7 @@ CREATE TABLE `baseline_contest_info` (
   `contestEntryDeadline` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `contestJudgeOpen` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `contestJudgeDeadline` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `contestRules` JSON DEFAULT NULL,
+  `contestRules` mediumtext COLLATE utf8mb4_unicode_ci,
   `contestAwardsLocation` mediumtext COLLATE utf8mb4_unicode_ci,
   `contestAwardsLocName` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `contestAwardsLocDate` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,

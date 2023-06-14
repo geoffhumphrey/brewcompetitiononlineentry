@@ -2796,7 +2796,7 @@ if (!check_new_style("11","181","Kentucky Common")) include (UPDATE.'styles_ba_2
  * ---------------------------------------------------------------------------------------------------
  */
 
-if (!check_new_style("16","05","Straight Sour Beer")) include (UPDATE.'styles_aabc_2022.php');
+if (!check_new_style("01","04","American Light Lager [BJCP 1A]")) include (UPDATE.'styles_aabc_2022.php');
 
 
 /**
@@ -2880,7 +2880,6 @@ if (!$setup_running) $output_off_sched_update .= "</ul>";
  * ----------------------------------------------- 2.5.1 ---------------------------------------------
  * Fix missing style type for Juicy or Hazy Imperial or Double India Pale Ale and Specialty Spice Beer.
  * 2.5.0 - fixed Specialty Spice Beer in installation scripting, but did not include in updates.
- * @see 
  * ---------------------------------------------------------------------------------------------------
  */
 
@@ -3030,6 +3029,79 @@ if (!check_new_style("C1","A","Low-Tannin Ciders Dry")) include (UPDATE.'styles_
  */
 
 if (!check_new_style("03","184","West Coast-Style India Pale Ale")) include (UPDATE.'styles_ba_2023_update.php');
+
+/**
+ * ----------------------------------------------- 2.5.1 ---------------------------------------------
+ * Deprecate BJCP 2015 Styles
+ * First, check to see what the current style set is. If it's BJCP 2015, 
+ * run 2015 conversion scripts, change preferences to 2021.
+ * ---------------------------------------------------------------------------------------------------
+ */
+
+if ((!empty($row_current_prefs)) && ($row_current_prefs['prefsStyleSet'] == "BJCP2015")) {
+	
+	include (LIB.'convert.lib.php');
+
+	$update_table = $prefix."preferences";
+	$data = array('prefsStyleSet' => 'BJCP2021');
+	$db_conn->where ('id', 1);
+	if ($db_conn->update ($update_table, $data)) $output_off_sched_update .= "<li>Changed style set to BJCP 2021 from BJCP 2015.</li>";
+
+	$output_off_sched_update .= "<li>BJCP 2015 is now deprecated. All entries, judge preferences, etc. were converted to BJCP 2021, including:";
+	$output_off_sched_update .= "<ul>";
+	include (INCLUDES.'convert/convert_bjcp_2021.inc.php');
+	$output_off_sched_update .= "</li></ul>";
+
+}
+
+/**
+ * ----------------------------------------------- 2.5.1 --------------------------------------------- 
+ * Remove BJCP 2015 Guidelines
+ * Convert any custom styles created under BJCP2015 to BJCP2021
+ * ---------------------------------------------------------------------------------------------------
+ */
+
+$update_table = $prefix."styles";
+$db_conn->where ('brewStyleVersion', 'BJCP2015');
+$db_conn->where ('brewStyleOwn', 'bcoe');
+$result = $db_conn->delete ($update_table);
+if ($result) $output_off_sched_update .= "<li>BJCP 2015 Styles were removed from the database.</li>";
+else {
+	$output_off_sched_update .= "<li class=\"text-danger\">The BJCP 2015 Styles were NOT removed.</li>";
+	$error_count += 1;
+}
+
+/**
+ * ----------------------------------------------- 2.5.2 --------------------------------------------- 
+ * Remove AABC 2021 Guidelines
+ * Need to write a conversion script. Save for 2.5.2.
+ * ---------------------------------------------------------------------------------------------------
+ */
+
+/*
+$update_table = $prefix."styles";
+$db_conn->where ('brewStyleVersion', 'AABC');
+$db_conn->where ('brewStyleOwn', 'bcoe');
+$result = $db_conn->delete ($update_table);
+if ($result) $output_off_sched_update .= "<li>AABC 2021 Styles were removed from the database.</li>";
+else {
+	$output_off_sched_update .= "<li class=\"text-danger\">The AABC 2021 Styles were NOT removed.</li>";
+	$error_count += 1;
+}
+
+$update_table = $prefix."styles";
+$data = array(
+	'brewStyleVersion' => "AABC2022"
+);
+$db_conn->where ('brewStyleVersion', 'AABC');
+$db_conn->where ('brewStyleOwn', 'custom');
+$result = $db_conn->update ($update_table, $data);
+if ($result) $output_off_sched_update .= "<li>All custom styles added under the AABC 2021 styles updated to AABC 2022.</li>";
+else {
+	$output_off_sched_update .= "<li class=\"text-danger\">Custom styles added under the AABC 2021 styles were NOT updated to AABC 2022.</li>";
+	$error_count += 1;
+}
+*/
 
 /**
  * ---------------------------------------------------------------------------------------------------

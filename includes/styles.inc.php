@@ -59,7 +59,8 @@ $style_sets = array(
 	array(
 		
 		// REQUIRED. The next incremental *whole* number, NO leading zero.
-		"id" => 6,
+		// ids 0-20 reserved for system use
+		"id" => 21,
 		
 		// REQUIRED. Style name for system use, with NO SPACES. 
 		// Must EXACTLY MATCH value of the brewStyleVersion column 
@@ -143,6 +144,8 @@ $style_sets = array(
  * ------------------------------------------------------------------------------
  * Built-in style set master information arrays.
  * DO NOT EDIT BELOW THIS LINE.
+ * BJCP 2008 Deprecated in version 2.4.0
+ * BJCP 2015 Deprecated in version 2.5.1
  * ------------------------------------------------------------------------------
  */
 
@@ -191,8 +194,6 @@ $style_sets = array(
 		"style_set_cider" => array("27","28"),
 		"style_set_category_end" => "28"
 	),
-
-	*/
 
 	array(
 		"id" => 1,
@@ -250,6 +251,8 @@ $style_sets = array(
 		"style_set_cider" => array("C1","C2"),
 		"style_set_category_end" => "34"
 	),
+
+	*/
 
 	array(
 		"id" => 2,

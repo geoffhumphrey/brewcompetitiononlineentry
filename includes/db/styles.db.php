@@ -36,7 +36,7 @@ if ($section == "step7") {
 }
 
 elseif (isset($_SESSION['prefsStyleSet'])) $styleSet = $_SESSION['prefsStyleSet'];
-else $styleSet = "BJCP2015";
+else $styleSet = "BJCP2021";
 
 $query_styles = sprintf("SELECT * FROM %s WHERE (brewStyleVersion='%s' OR brewStyleOwn='custom')",$styles_db_table,$styleSet);
 if (($view != "default") && ($section == "styles")) {
@@ -44,23 +44,23 @@ if (($view != "default") && ($section == "styles")) {
 	$query_styles .= sprintf(" AND brewStyleGroup='%s' AND brewStyleNum='%s'",$explodies[0],$explodies[1]);
 }
 if ((($section == "entry") || ($section == "brew") || ($action == "word") || ($action == "html")) || ((($section == "admin") && ($filter == "judging")) && ($bid != "default"))) {
-	if ($_SESSION['prefsStyleSet'] == "BA") $query_styles .= " AND brewStyleActive='Y' ORDER BY brewStyleGroup,brewStyle ASC";
-	else $query_styles .= " AND brewStyleActive='Y' ORDER BY brewStyleGroup,brewStyleNum ASC";
+	if ($_SESSION['prefsStyleSet'] == "BA") $query_styles .= " AND brewStyleActive='Y' ORDER BY brewStyleType, brewStyleGroup, brewStyle ASC";
+	else $query_styles .= " AND brewStyleActive='Y' ORDER BY brewStyleType, brewStyleGroup, brewStyle ASC";
 }
-elseif (($section == "admin") && ($go == "preferences")) $query_styles .= "  ORDER BY brewStyleOwn,brewStyleVersion,brewStyleGroup,brewStyleNum,brewStyle ASC";
+elseif (($section == "admin") && ($go == "preferences")) $query_styles .= "  ORDER BY brewStyleOwn,brewStyleVersion,brewStyleType,brewStyleGroup,brewStyleNum,brewStyle ASC";
 elseif (($section == "admin") && ($action == "edit") && ($go != "judging_tables")) $query_styles .= " AND id='$id'";
 elseif (($section == "admin") && ($go == "count_by_style")) $query_styles .= " AND brewStyleActive='Y'";
 elseif (($section == "admin") && ($go == "styles")) $query_styles .= " ORDER BY brewStyleGroup,brewStyleNum ASC";
 elseif ((($section == "judge") && ($go == "judge")) || ($go == "judging_tables") || ($action == "add") || ($action == "edit")) {
 	if ($_SESSION['prefsStyleSet'] == "BA") $query_styles .= " AND brewStyleActive='Y' ORDER BY brewStyleGroup,brewStyle ASC";
-	else $query_styles .= " AND brewStyleActive='Y' ORDER BY brewStyleGroup,brewStyleNum ASC";
+	else $query_styles .= " AND brewStyleActive='Y' ORDER BY brewStyleType,brewStyleGroup,brewStyleNum ASC";
 }
 elseif ($section == "sorting") $query_styles .= " AND brewStyleActive='Y'";
 elseif ($section == "list") {
 	if ((isset($row_log['brewCategorySort'])) && (isset($row_log['brewCategorySort']))) $query_styles .= sprintf(" AND brewStyleGroup = '%s' AND brewStyleNum = '%s'", $row_log['brewCategorySort'], $row_log['brewSubCategory']);
 }
 elseif ($section == "styles") {
-	if ($filter == "default") $query_styles .= " AND brewStyleActive='Y' ORDER BY brewStyleGroup,brewStyleNum ASC";
+	if ($filter == "default") $query_styles .= " AND brewStyleActive='Y' ORDER BY brewStyleType,brewStyleGroup,brewStyleNum ASC";
 	else $query_styles .= " AND brewStyleActive='Y' AND brewStyleGroup='$filter' ORDER BY brewStyleGroup,brewStyleNum ASC";
 }
 $styles = mysqli_query($connection,$query_styles) or die (mysqli_error($connection));
@@ -69,11 +69,11 @@ $totalRows_styles = mysqli_num_rows($styles);
 
 if ($section != "list") {
 	$query_styles2 = sprintf("SELECT * FROM %s WHERE (brewStyleVersion='%s' OR brewStyleOwn='custom')",$styles_db_table,$styleSet);
-	if (($section == "judge") && ($go == "judge")) $query_styles2 .= " AND brewStyleActive='Y' ORDER BY brewStyleGroup,brewStyleNum ASC";
+	if (($section == "judge") && ($go == "judge")) $query_styles2 .= " AND brewStyleActive='Y' ORDER BY brewStyleType,brewStyleGroup,brewStyleNum ASC";
 	elseif ($section == "brew") $query_styles2 .= " AND brewStyleActive='Y' AND brewStyleGroup > '28' AND brewStyleReqSpec = '1'";
 	else {
 		if ($styleSet == "BA") $query_styles2 .= " AND brewStyleActive='Y' ORDER BY brewStyleGroup,brewStyle ASC";
-		else $query_styles2 .= " AND brewStyleActive='Y' ORDER BY brewStyleGroup,brewStyleNum ASC";
+		else $query_styles2 .= " AND brewStyleActive='Y' ORDER BY brewStyleType,brewStyleGroup,brewStyleNum ASC";
 	}
 	$styles2 = mysqli_query($connection,$query_styles2) or die (mysqli_error($connection));
 	$row_styles2 = mysqli_fetch_assoc($styles2);
