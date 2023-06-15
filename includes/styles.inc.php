@@ -1,6 +1,14 @@
 <?php
 
 /**
+ * UPDATE June 13, 2023
+ * - Deprecated BJCP 2015
+ * - Made the style end number 49 for each style set (makes first custom style 50)
+ *   - This is to avoid any issues in case admins change style sets yet
+ *     want to keep the custom styles. 50 is a "safe" number to start those styles.
+ * 
+ * **********************************
+ * 
  * If you would like to add a custom style set for your competition, you
  * will need to import the style set's actual data into the styles table in the
  * BCOE&M database (style name, OG, FG, etc.).
@@ -134,8 +142,8 @@ $style_sets = array(
 		"style_set_cider" => array(),
 		
 		// REQURIED. MUST BE A 2-DIGIT WHOLE NUMBER WITH LEADING ZERO. NOT ALPHANUMERIC. 
-		// The number of last category in the style set. If none or alpha, use "01" (leave as is).
-		"style_set_category_end" => "01"
+		// The number of last category in the style set. If none or alpha, use "49" (leave as is).
+		"style_set_category_end" => "49"
 	),
 
  */
@@ -192,7 +200,7 @@ $style_sets = array(
 		"style_set_beer_end" => "23",
 		"style_set_mead" => array("24","25","26"),
 		"style_set_cider" => array("27","28"),
-		"style_set_category_end" => "28"
+		"style_set_category_end" => "49"
 	),
 
 	array(
@@ -249,7 +257,7 @@ $style_sets = array(
 		"style_set_beer_end" => "34",
 		"style_set_mead" => array("M1","M2","M3","M4"),
 		"style_set_cider" => array("C1","C2"),
-		"style_set_category_end" => "34"
+		"style_set_category_end" => "49"
 	),
 
 	*/
@@ -308,7 +316,7 @@ $style_sets = array(
 		"style_set_beer_end" => "34",
 		"style_set_mead" => array("M1","M2","M3","M4"),
 		"style_set_cider" => array("C1","C2"),
-		"style_set_category_end" => "34"
+		"style_set_category_end" => "49"
 	),
 
 	array(
@@ -338,7 +346,7 @@ $style_sets = array(
 		"style_set_beer_end" => "11",
 		"style_set_mead" => array("12"),
 		"style_set_cider" => array("12"),
-		"style_set_category_end" => "14"
+		"style_set_category_end" => "49"
 	),
 
 	array(
@@ -374,7 +382,7 @@ $style_sets = array(
 		"style_set_beer_end" => "18",
 		"style_set_mead" => array("19"),
 		"style_set_cider" => array("20"),
-		"style_set_category_end" => "20"
+		"style_set_category_end" => "49"
 	),
 
 	array(
@@ -410,7 +418,7 @@ $style_sets = array(
 		"style_set_beer_end" => "18",
 		"style_set_mead" => array("19"),
 		"style_set_cider" => array("20"),
-		"style_set_category_end" => "20"
+		"style_set_category_end" => "49"
 	),
 
 	array(
@@ -435,7 +443,7 @@ $style_sets = array(
 		"style_set_beer_end" => "0",
 		"style_set_mead" => array(),
 		"style_set_cider" => array("C1","C2","C3","C4","C5","C6","C7","C8","C9"),
-		"style_set_category_end" => "0"
+		"style_set_category_end" => "49"
 	)
 
 );

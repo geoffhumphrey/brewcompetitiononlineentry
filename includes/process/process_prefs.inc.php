@@ -27,6 +27,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 	}
 
 	$style_alert = FALSE;
+	$style_set_change = FALSE;
 
 	$prefsGoogleAccount = "";
 	$prefsUSCLEx = "";
@@ -55,6 +56,8 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 		$prefsBestClubTitle = $purifier->purify($_POST['prefsBestClubTitle']);
 		$prefsBestClubTitle = sterilize($prefsBestClubTitle);
 	}
+
+	if ($_POST['prefsStyleSet'] != $_SESSION['prefsStyleSet']) $style_set_change = TRUE;
 		
 	$update_table = $prefix."preferences";
 
@@ -62,6 +65,8 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 	if (!isset($_POST['prefsCompLogoSize'])) $_POST['prefsCompLogoSize'] = NULL;
 	if (!isset($_POST['prefsBOSMead'])) $_POST['prefsBOSMead'] = NULL;
 	if (!isset($_POST['prefsBOSCider'])) $_POST['prefsBOSCider'] = NULL;
+
+	$prefsStyleSet = sterilize($_POST['prefsStyleSet']);
 
 	$data = array(
 		'prefsTemp' => sterilize($_POST['prefsTemp']),
@@ -123,7 +128,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 		'prefsUseMods' => sterilize($_POST['prefsUseMods']),
 		'prefsSEF' => sterilize($_POST['prefsSEF']),
 		'prefsSpecialCharLimit' => sterilize($_POST['prefsSpecialCharLimit']),
-		'prefsStyleSet' => sterilize($_POST['prefsStyleSet']),
+		'prefsStyleSet' => $prefsStyleSet,
 		'prefsAutoPurge' => sterilize($_POST['prefsAutoPurge']),
 		'prefsEntryLimitPaid' => blank_to_null(sterilize($_POST['prefsEntryLimitPaid'])),
 		'prefsEmailRegConfirm' => sterilize($_POST['prefsEmailRegConfirm']),
@@ -147,8 +152,6 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 		// Update style set of any custom styles to chosen style set
 		// Safeguards against a bug introduced in 2.1.13 scripting
 		// Also update sub-style idenfication scheming
-
-		$prefsStyleSet = sterilize($_POST['prefsStyleSet']);
 
 		foreach ($style_sets as $key) {
             
@@ -285,8 +288,6 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 
 	if ($action == "edit") {
 
-		$prefsStyleSet = sterilize($_POST['prefsStyleSet']);
-
 		$db_conn->where ('id', $id);
 		$result = $db_conn->update ($update_table, $data);
 		if (!$result) {
@@ -330,17 +331,13 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 		// Safeguards against a bug introduced in 2.1.13 scripting
 		// Also update sub-style idenfication scheming
 
-		// Update style set of any custom styles to chosen style set
-		// Safeguards against a bug introduced in 2.1.13 scripting
-		// Also update sub-style idenfication scheming
-
 		foreach ($style_sets as $key) {
             
             if ($key['style_set_name'] == $prefsStyleSet) {
             	
             	if ($prefsStyleSet == "BA") {
             		
-            		$query_style_name = sprintf("SELECT id,brewStyleNum FROM %s WHERE brewStyleOwn='custom' ORDER BY id", $prefix."styles");
+            		$query_style_name = sprintf("SELECT id,brewStyleNum,brewStyle FROM %s WHERE brewStyleOwn='custom' ORDER BY id", $prefix."styles");
 					$style_name = mysqli_query($connection,$query_style_name) or die (mysqli_error($connection));
 					$row_style_name = mysqli_fetch_assoc($style_name);
 
@@ -355,8 +352,22 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 						$sub_style = str_pad($sub_style_id,3,"0", STR_PAD_LEFT);
 						
 						$update_table = $prefix."styles";
-						$data = array('brewStyleNum' => $sub_style);
+						$data = array(
+							'brewStyleVersion' => $prefsStyleSet,
+							'brewStyleNum' => $sub_style
+						);
 						$db_conn->where ('id', $row_style_name['id']);
+						$result = $db_conn->update ($update_table, $data);
+						if (!$result) {
+							$error_output[] = $db_conn->getLastError();
+							$errors = TRUE;
+						}
+
+						$update_table = $prefix."brewing";
+						$data = array(
+							'brewSubCategory' => $sub_style
+						);
+						$db_conn->where ('brewStyle', $row_style_name['brewStyle']);
 						$result = $db_conn->update ($update_table, $data);
 						if (!$result) {
 							$error_output[] = $db_conn->getLastError();
@@ -380,6 +391,17 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 	            		'brewStyleNum' => $sub_style_id
 	            	);
 	            	$db_conn->where ('brewStyleOwn', 'custom');
+	            	$result = $db_conn->update ($update_table, $data);
+	            	if (!$result) {
+	            		$error_output[] = $db_conn->getLastError();
+	            		$errors = TRUE;
+	            	}
+
+	            	$update_table = $prefix."brewing";
+	            	$data = array(
+	            		'brewSubCategory' => $sub_style_id
+	            	);
+	            	$db_conn->where ('brewCategory', 50, ">=");
 	            	$result = $db_conn->update ($update_table, $data);
 	            	if (!$result) {
 	            		$error_output[] = $db_conn->getLastError();
@@ -422,11 +444,35 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 
 		} // end if ($_POST['prefsPaypalIPN'] == 1)
 
+		// Finally, if the style set has changed, mark all in the chosen style set as active
+		// and deactivate all styles that aren't in the selected style set
+		if ($style_set_change) {
+
+			$update_table = $prefix."styles";
+			$data = array('brewStyleActive' => 'N');
+			$db_conn->where ('brewStyleOwn', "bcoe");
+			$result = $db_conn->update ($update_table, $data);
+			if (!$result) {
+				$error_output[] = $db_conn->getLastError();
+				$errors = TRUE;
+			}
+			
+			$update_table = $prefix."styles";
+			$data = array('brewStyleActive' => 'Y');
+			$db_conn->where ('brewStyleVersion', $prefsStyleSet);
+			$result = $db_conn->update ($update_table, $data);
+			if (!$result) {
+				$error_output[] = $db_conn->getLastError();
+				$errors = TRUE;
+			}
+
+		}
+
 		// Empty the prefs session variable
 		// Will trigger the session to reset the variables in common.db.php upon reload after redirect
 		unset($_SESSION['prefs'.$prefix_session]);
 
-		if ($style_alert) $updateGoTo .= $_POST['relocate']."&msg=37";
+		// if ($style_alert) $updateGoTo .= $_POST['relocate']."&msg=37";
 
 		if ($section == "setup") {
 			
@@ -446,6 +492,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 		if (!empty($error_output)) $_SESSION['error_output'] = $error_output;
 
 		if ($errors) $updateGoTo = $_POST['relocate']."&msg=3";
+		if ($style_set_change) $updateGoTo = $base_url."index.php?section=admin&go=styles&msg=37";
 		$updateGoTo = prep_redirect_link($updateGoTo);
 		$redirect_go_to = sprintf("Location: %s", $updateGoTo);
 

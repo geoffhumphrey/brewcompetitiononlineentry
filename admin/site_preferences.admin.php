@@ -870,7 +870,7 @@ $(document).ready(function(){
 <?php } ?>
 <h3>Entries</h3>
 <div class="form-group"><!-- Form Group Radio INLINE -->
-    <label for="prefsStyleSet" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Styleset</label>
+    <label for="prefsStyleSet" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Style Set</label>
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
         <!-- Input Here -->
         <select class="selectpicker" name="prefsStyleSet" id="prefsStyleSet" data-size="12" data-width="auto">

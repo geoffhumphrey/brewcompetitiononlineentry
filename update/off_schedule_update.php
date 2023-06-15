@@ -3104,6 +3104,85 @@ else {
 */
 
 /**
+ * ----------------------------------------------- 2.5.1 --------------------------------------------- 
+ * Convert Custom Style Numbers
+ * New numbering scheme starts ALL custom styles for any style set at 50
+ * ---------------------------------------------------------------------------------------------------
+ */
+
+$style_id = 50;
+$style_set_num_method = 0;
+
+include(INCLUDES.'styles.inc.php');
+
+foreach ($style_sets as $key) {
+	if ($key['style_set_name'] == $_SESSION['prefsStyleSet']) {
+		$style_set_num_method = $key['style_set_sub_style_method'];
+	}
+}
+
+// If style set substyle method is successive numbering, get the last substyle number
+if ($style_set_num_method == 1) {
+	
+	$query_style_number = sprintf("SELECT brewStyleNum FROM %s WHERE brewStyleVersion='%s' ORDER BY brewStyleNum DESC LIMIT 1", $prefix."styles", $_SESSION['prefsStyleSet']);
+	$style_number = mysqli_query($connection,$query_style_number) or die (mysqli_error($connection));
+	$row_style_number = mysqli_fetch_assoc($style_number);
+	
+	$sub_style_id = $row_style_number['brewStyleNum'] + 1;
+
+}
+
+else $sub_style_id = "A";
+
+/**
+ * Get the first style number of any custom style.
+ * If that number is less than 50, proceed with renumbering.
+ * Loop through the dataset, first changing the style's 
+ * record to the new number/substyle identifier and currently
+ * chosen style set and then changing all records in the 
+ * brewing table with the style to match.
+ */
+
+$query_style_num = sprintf("SELECT id,brewStyleGroup,brewStyleNum FROM %s WHERE brewStyleOwn='custom' ORDER BY brewStyleNum ASC LIMIT 1", $prefix."styles");
+$style_num = mysqli_query($connection,$query_style_num) or die (mysqli_error($connection));
+$row_style_num = mysqli_fetch_assoc($style_num);
+
+if ($row_style_num['brewStyleGroup'] < 50) {
+	
+	$query_style_name = sprintf("SELECT id,brewStyle,brewStyleGroup,brewStyleNum FROM %s WHERE brewStyleOwn='custom' ORDER BY id", $prefix."styles");
+	$style_name = mysqli_query($connection,$query_style_name) or die (mysqli_error($connection));
+	$row_style_name = mysqli_fetch_assoc($style_name);
+
+	do {
+
+		// Update styles table
+		$update_table = $prefix."styles";
+		$data = array(
+			'brewStyleGroup' => $style_id,
+			'brewStyleNum' => $sub_style_id,
+			'brewStyleVersion' => $_SESSION['prefsStyleSet'],
+		);
+		$db_conn->where ('id', $row_style_name['id']);
+		$result = $db_conn->update ($update_table, $data);
+
+		// Update all entries in brewing table with the style
+		$update_table = $prefix."brewing";
+		$data = array(
+			'brewCategory' => $style_id,
+			'brewCategorySort' => $style_id,
+			'brewSubCategory' => $sub_style_id
+		);
+		$db_conn->where ('brewStyle', $row_style_name['brewStyle']);
+		$result = $db_conn->update ($update_table, $data);
+
+		$style_id += 1;
+		if ($style_set_num_method == 1) $sub_style_id += 1;
+
+	} while($row_style_name = mysqli_fetch_assoc($style_name));
+
+}
+
+/**
  * ---------------------------------------------------------------------------------------------------
  * End all unordered lists
  * ---------------------------------------------------------------------------------------------------
