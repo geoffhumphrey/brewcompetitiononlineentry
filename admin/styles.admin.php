@@ -47,11 +47,11 @@ if ((($action == "default") && ($filter == "default")) || ($section == "step7") 
 			if ($bid != "default") $table_body .= "<td width=\"1%\" nowrap><input name=\"brewStyleJudgingLoc".$row_styles['id']."\" type=\"checkbox\" value=\"".$bid."\" ".$brewStyleJudgingLoc."></td>";
 			$table_body .= "<td>".$row_styles['brewStyle']."</td>";
 			if ($_SESSION['prefsStyleSet'] == "BA") {
-				if ($row_styles['brewStyleOwn'] == "custom") $table_body .= "<td>Custom Style</td>";
+				if ($row_styles['brewStyleOwn'] == "custom") $table_body .= "<td>*Custom Style</td>";
 				else $table_body .= "<td>".$ba_category_names[ltrim($row_styles['brewStyleGroup'],"0")]."</td>";
 			}
 			elseif ($_SESSION['prefsStyleSet'] == "AABC") {
-				if ($row_styles['brewStyleOwn'] == "custom") $table_body .= "<td>Custom Style</td>";
+				if ($row_styles['brewStyleOwn'] == "custom") $table_body .= "<td>*Custom Style</td>";
 				else $table_body .= "<td>".ltrim($row_styles['brewStyleGroup'], "0").".".ltrim($row_styles['brewStyleNum'], "0")."</td>";
 			}
 			else $table_body .= "<td>".$brewStyleOwn_prefix.$row_styles['brewStyleGroup'].$row_styles['brewStyleNum'].$brewStyleOwn_suffix."</td>";

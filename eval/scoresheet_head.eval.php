@@ -39,16 +39,27 @@ $head_miniBOS = FALSE;
 $head_rt_col = "col-xs-12";
 
 if (!empty($row_eval['evalPosition'])) $head_ordinal = TRUE;
-if (!empty($row_eval['evalMiniBOS'])) $head_miniBOS = TRUE;
+if ((!empty($row_eval['evalMiniBOS'])) || (!empty($row_eval['scoreMiniBOS']))) $head_miniBOS = TRUE;
 if (($head_ordinal) || ($head_miniBOS)) $head_rt_col = "col-xs-6";
+
+$show_rank = TRUE;
+$rank = str_replace(",", ", ", $row_judge['brewerJudgeRank']);
+if ($nw_cider) {
+    $rank = str_replace("Non-BJCP,", "", $row_judge['brewerJudgeRank']);
+    $rank = str_replace("Non-BJCP", "", $row_judge['brewerJudgeRank']);
+}
+
+if (($nw_cider) && (empty($rank))) $show_rank = FALSE;
 ?>
 
 <link rel="stylesheet" type="text/css" href="<?php echo $base_url; ?>eval/scoresheet_output.css">
 <!-- Header Row -->
 <div class="row">
+    
     <div class="col col-lg-2 col-md-2 col-sm-2 col-xs-2">
         <p><?php if (!$nw_cider) { ?><img style="max-width: 60px; min-width: 40px;" src="<?php echo $base_url."images/bjcp_logo.jpg"; ?>"><?php } ?></p>
     </div>
+    
     <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-8">
         <h2 class="text-center" style="margin:0; padding:0;"><?php echo $label_scoresheet; ?></h2>
         <div class="row">
@@ -68,7 +79,7 @@ if (($head_ordinal) || ($head_miniBOS)) $head_rt_col = "col-xs-6";
                         $evalPosition = explode(",",$row_eval['evalPosition']);
                         echo "<br>".$label_ordinal_position.": ".$evalPosition[0]." of ".$evalPosition[1];
                     }
-                    if (!empty($row_eval['evalMiniBOS'])) echo "<br><i class=\"fa fa-check-square-o\"></i> This entry advanced to a mini-BOS round";
+                    if ((!empty($row_eval['evalMiniBOS'])) || (!empty($row_eval['scoreMiniBOS']))) echo "<br><i class=\"fa fa-check-square-o\"></i> This entry advanced to a mini-BOS round";
                     ?>
                 </h5>
             </div>
@@ -77,7 +88,7 @@ if (($head_ordinal) || ($head_miniBOS)) $head_rt_col = "col-xs-6";
 
     </div>
     <div class="col col-lg-2 col-md-2 col-sm-2 col-xs-2">
-        <p class="pull-right"><img style="max-width: 60px; min-width: 40px;" src="<?php if ($nw_cider) echo "https://www.nwcider.com/wp-content/themes/nwcider/assets/images/nw-cider-logo-2x.png"; else echo $base_url."images/aha_logo.jpg"; ?>"></p>
+        <p class="pull-right"><img style="max-width: 50px; min-width: 35px;" src="<?php if ($nw_cider) echo "https://www.nwcider.com/wp-content/themes/nwcider/assets/images/nw-cider-logo-2x.png"; else echo $base_url."images/aha_logo.jpg"; ?>"></p>
     </div>
 </div><!-- ./row (header) -->
 <!-- Entry Info Row -->
@@ -92,6 +103,7 @@ if (($head_ordinal) || ($head_miniBOS)) $head_rt_col = "col-xs-6";
             <?php echo $row_judge['brewerFirstName']." ".$row_judge['brewerLastName']; ?>
             </div>
         </div><!-- /row for judge name -->
+        <?php if (strpos($row_judge['brewerJudgeRank'],"Non-BJCP") === false) { ?>
         <div class="row">
             <div class="col col-lg-2 col-md-3 col-sm-4 col-xs-4">
             <strong><?php echo $label_bjcp_id; ?>:</strong>
@@ -100,18 +112,29 @@ if (($head_ordinal) || ($head_miniBOS)) $head_rt_col = "col-xs-6";
             <?php echo $row_judge['brewerJudgeID']; ?>
             </div>
         </div><!-- /row for judge ID -->
+        <?php } if ($show_rank) { ?>
         <div class="row">
             <div class="col col-lg-2 col-md-3 col-sm-4 col-xs-4">
-            <strong><?php echo $label_bjcp_rank; ?>:</strong>
+            <strong><?php if ($nw_cider) echo $label_designations; else echo $label_bjcp_rank; ?>:</strong>
             </div>
             <div class="col col-lg-10 col-md-9 col-sm-8 col-xs-8">
             <?php 
-            echo str_replace(",", ", ", $row_judge['brewerJudgeRank']);
-            if ($row_judge['brewerJudgeMead'] == "Y") echo "<br>Certified Mead Judge";
-            if ($row_judge['brewerJudgeCider'] == "Y") echo "<br>Certified Cider Judge";
+            $rank = rtrim($rank,",");
+            $rank = ltrim($rank,",");
+            $rank = trim($rank);
+            if ($row_judge['brewerJudgeMead'] == "Y") {
+                if (empty($rank)) $rank .= "Certified Mead Judge";
+                else $rank .= "<br>Certified Mead Judge";
+            }
+            if ($row_judge['brewerJudgeCider'] == "Y") {
+                if (empty($rank)) $rank .= "Certified Cider Judge";
+                else $rank .= "<br>Certified Cider Judge";
+            }
+            echo $rank;
             ?>
             </div>
         </div><!-- /row for judge rank -->
+        <?php } ?>
         <div class="row">
             <div class="col col-lg-2 col-md-3 col-sm-4 col-xs-4">
             <strong><?php echo $label_email; ?>:</strong>

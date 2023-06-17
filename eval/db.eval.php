@@ -1,5 +1,5 @@
 <?php
-$query_eval = sprintf("SELECT * FROM %s WHERE id=%s", $dbTable, $id);
+$query_eval = sprintf("SELECT * FROM %s a, %s b WHERE a.id=%s AND a.eid=b.eid", $dbTable, $prefix."judging_scores".$archive_suffix, $id);
 $eval = mysqli_query($connection,$query_eval) or die (mysqli_error($connection));
 $row_eval = mysqli_fetch_assoc($eval);
 

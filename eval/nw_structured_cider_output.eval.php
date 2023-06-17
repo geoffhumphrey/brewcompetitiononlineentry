@@ -9,6 +9,8 @@
 </style>
 <!-- Appearance -->
 <h5 class="header-h5 header-bdr-bottom"><?php echo $label_appearance; ?></h5>
+
+<?php if (isset($appearance_data['evalAppearanceColor'])) { ?>
 <div class="row tick-row no-break" style="margin-bottom: 10px;">
 	<div class="col col-lg-3 col-md-3 col-sm-3 col-xs-3">
 	    <strong><?php echo $label_color; ?></strong>
@@ -20,7 +22,7 @@
         <small><?php echo $label_inappropriate; ?></small> <i class="<?php if ((isset($appearance_data['evalAppearanceColorInappr'])) && ($appearance_data['evalAppearanceColorInappr'] == "1")) echo "fa fa-check-square-o"; else echo "fa fa-square-o"; ?>"></i>
     </div>
 </div>
-
+<?php } ?>
 <div class="row tick-row no-break">
     <div class="col col-lg-3 col-md-3 col-sm-3 col-xs-3">
         <strong><?php echo $label_clarity; ?></strong>
@@ -193,7 +195,7 @@
         <small><?php echo $label_inappropriate; ?></small> <i class="<?php if ((isset($flavor_data['evalFlavorQualityInappr'])) && ($flavor_data['evalFlavorQualityInappr'] == "1")) echo "fa fa-check-square-o"; else echo "fa fa-square-o"; ?>"></i>
     </div> 
 </div><!-- ./row -->
-
+<?php if (isset($mouthfeel_data['evalMouthfeelSweetness'])) { ?>
 <div class="row tick-row no-break" style="margin-bottom: 10px;">
 	<div class="col col-lg-3 col-md-3 col-sm-3 col-xs-3">
 	    <strong><?php echo $label_sweetness; ?></strong>
@@ -205,7 +207,7 @@
         <small><?php echo $label_inappropriate; ?></small> <i class="<?php if ((isset($mouthfeel_data['evalMouthfeelSweetnessInappr'])) && ($mouthfeel_data['evalMouthfeelSweetnessInappr'] == "1")) echo "fa fa-check-square-o"; else echo "fa fa-square-o"; ?>"></i>
     </div> 
 </div>
-
+<?php } ?>
 <div class="row tick-row no-break">
     <div class="col col-lg-3 col-md-3 col-sm-3 col-xs-3">
         <strong><?php echo $label_acidity; ?></strong>
@@ -359,3 +361,78 @@
 <!-- Overall Impression -->
 <h5 class="header-h5 header-bdr-bottom"><?php echo $label_summary_overall_impression; ?></h5>
 <p class="tick-row"><?php echo htmlentities($row_eval['evalOverallComments']); ?></p>
+<h5 class="header-h5 header-bdr-bottom"><?php echo $label_judge. " ". $label_score; ?><span class="pull-right"><span class="judge-score"><?php echo $score; ?></span>/50</span></h5>
+
+<!-- Scoring Guide -->
+<div class="row footer-descriptor no-break" style="padding: 20px 0;">
+    <div class="col col-lg-6 col-md-6 col-sm-6 col-xs-6">
+        <div class="row <?php if ($score >= 45) echo "strong-text box-plain"; ?>">
+            <div class="col col-lg-2 col-md-2 col-sm-2 col-xs-2 no-wrap">
+            <?php echo $label_outstanding; ?>
+            </div>
+            <div class="col col-lg-2 col-md-2 col-sm-2 col-xs-2 no-wrap">
+            (45-50)
+            </div>
+            <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-10">
+            <?php echo $descr_outstanding; ?>
+            </div>
+        </div>
+        <div class="row <?php if (($score >= 38) && ($score <= 44)) echo "strong-text box-plain"; ?>">
+            <div class="col col-lg-2 col-md-2 col-sm-2 col-xs-2">
+            <?php echo $label_excellent; ?>
+            </div>
+            <div class="col col-lg-2 col-md-2 col-sm-2 col-xs-2 no-wrap">
+            (38-44)
+            </div>
+            <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-10">
+            <?php echo $descr_excellent; ?>
+            </div>
+        </div>
+        <div class="row <?php if (($score >= 30) && ($score <= 37)) echo "strong-text box-plain"; ?>">
+            <div class="col col-lg-2 col-md-2 col-sm-2 col-xs-2 no-wrap">
+            <?php echo $label_very_good; ?>
+            </div>
+            <div class="col col-lg-2 col-md-2 col-sm-2 col-xs-2 no-wrap">
+            (30-37)
+            </div>
+            <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-10">
+            <?php echo $descr_very_good; ?>
+            </div>
+        </div>
+    </div>
+    <div class="col col-lg-6 col-md-6 col-sm-6 col-xs-6">
+        <div class="row <?php if (($score >= 21) && ($score <= 29)) echo "strong-text box-plain"; ?>">
+            <div class="col col-lg-2 col-md-2 col-sm-2 col-xs-2 no-wrap">
+            <?php echo $label_good; ?>
+            </div>
+            <div class="col col-lg-2 col-md-2 col-sm-2 col-xs-2 no-wrap">
+            (21-29)
+            </div>
+            <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-10">
+            <?php echo $descr_good; ?>
+            </div>
+        </div>
+        <div class="row <?php if (($score >= 14) && ($score <= 20)) echo "strong-text box-plain"; ?>">
+            <div class="col col-lg-2 col-md-2 col-sm-2 col-xs-2 no-wrap">
+            <?php echo $label_fair; ?>
+            </div>
+            <div class="col col-lg-2 col-md-2 col-sm-2 col-xs-2 no-wrap">
+            (14-20)
+            </div>
+            <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-10">
+            <?php echo $descr_fair; ?>
+            </div>
+        </div>
+        <div class="row <?php if (($score >= 0) && ($score <= 13)) echo "strong-text box-plain"; ?>">
+            <div class="col col-lg-2 col-md-2 col-sm-2 col-xs-2 no-wrap">
+            <?php echo $label_problematic; ?>
+            </div>
+            <div class="col col-lg-2 col-md-2 col-sm-2 col-xs-2 no-wrap">
+            (00-13)
+            </div>
+            <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-10">
+            <?php echo $descr_problematic; ?>
+            </div>
+        </div>
+    </div>
+</div><!-- ./ scoring guide -->

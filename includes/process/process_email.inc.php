@@ -39,7 +39,7 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 		
 		$to_email = strtolower($row_forgot['user_name']);
 		$to_email = mb_convert_encoding($to_email, "UTF-8");
-		$to_email_formatted .= $to_name." <".$to_email.">";
+		$to_email_formatted = $to_name." <".$to_email.">";
 		
 		$subject = $_SESSION['contestName']." - System Generated Email Test";
 		$subject = html_entity_decode($subject);

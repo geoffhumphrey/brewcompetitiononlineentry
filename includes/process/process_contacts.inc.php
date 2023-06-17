@@ -63,7 +63,7 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 
 			$to_email = $row_contact['contactEmail'];
 			$to_email = mb_convert_encoding($to_email, "UTF-8");
-			$to_email_formatted .= $to_name." <".$to_email.">";
+			$to_email_formatted = $to_name." <".$to_email.">";
 
 			$from_email = strtolower(filter_var($_POST['from_email'], FILTER_SANITIZE_EMAIL));
 			$from_email = mb_convert_encoding($from_email, "UTF-8");
@@ -90,7 +90,7 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 			$message .= "<body>";
 			$message .= "<p>". $message_post. "</p>";
 			$message .= "<p><strong>Sender's Contact Info</strong><br>Name: " . $from_name . "<br>Email: ". $from_email . "<br><em><small>** Use if you try to reply and the email address contains &quot;noreply&quot; in it. Common with web-based mail services such as Gmail.</small></em></p>";
-			if ((DEBUG || TESTING) && ($mail_use_smtp)) $message .= "<p><small>Sent using phpMailer.</small></p>";
+			if ((DEBUG || TESTING) && (ENABLE_MAILER)) $message .= "<p><small>Sent using phpMailer.</small></p>";
 			$message .= "</body>" . "\r\n";
 			$message .= "</html>";
 

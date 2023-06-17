@@ -80,9 +80,9 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 		$brewInfo = "";
 		$brewInfoOptional = "";
 		$index = ""; // Defined with Style
-		$brewMead1 = "";
-		$brewMead2 = "";
-		$brewMead3 = "";
+		$brewMead1 = ""; // Carbonation
+		$brewMead2 = ""; // Sweetness
+		$brewMead3 = ""; // Strength
 		$brewJudgingNumber = "";
 		$brewPossAllergens = "";
 		$brewAdminNotes = "";
@@ -223,9 +223,9 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 
 			if ((isset($_POST['brewMead1'])) && ($row_str_carb_sweet['brewStyleCarb'] == 1)) $brewMead1 = filter_var($_POST['brewMead1'],FILTER_SANITIZE_STRING); // Carbonation
 
-			if ((isset($_POST['brewMead2-mead'])) && ($row_str_carb_sweet['brewStyleSweet'] == 1) && (strpos($style[0], "M") !== false)) $brewMead2 = filter_var($_POST['brewMead2-mead'],FILTER_SANITIZE_STRING); // Mead Sweetness
-			
-			if ((isset($_POST['brewMead2-cider'])) && ($row_str_carb_sweet['brewStyleSweet'] == 1) && (strpos($style[0], "C") !== false)) $brewMead2 = filter_var($_POST['brewMead2-cider'],FILTER_SANITIZE_STRING); // Cider Sweetness
+			if ((isset($_POST['brewMead2-cider'])) && ($row_str_carb_sweet['brewStyleSweet'] == 1) && ($row_str_carb_sweet['brewStyleType'] == 2)) $brewMead2 = filter_var($_POST['brewMead2-cider'],FILTER_SANITIZE_STRING); // Cider Sweetness
+
+			if ((isset($_POST['brewMead2-mead'])) && ($row_str_carb_sweet['brewStyleSweet'] == 1) && ($row_str_carb_sweet['brewStyleType'] == 3)) $brewMead2 = filter_var($_POST['brewMead2-mead'],FILTER_SANITIZE_STRING); // Mead Sweetness
 			
 			if ((isset($_POST['brewMead3'])) && ($row_str_carb_sweet['brewStyleStrength'] == 1)) $brewMead3 = filter_var($_POST['brewMead3'],FILTER_SANITIZE_STRING); // Strength
 
@@ -238,93 +238,6 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 		echo "Sweet: ".$brewMead2."<br>";
 		echo "Strength: ".$brewMead3;
 		exit();
-		*/
-
-		// The following are only enabled when preferences dictate that the recipe fields be shown.
-		// DEPRECATE for version 2.5.0
-
-		/*
-		if ($_SESSION['prefsHideRecipe'] == "N") {
-
-			$brewExtract = "";
-			$brewExtractWeight = "";
-			$brewExtractUse = "";
-			$brewGrain = "";
-			$brewGrainWeight = "";
-			$brewGrainUse = "";
-			$brewAddition = "";
-			$brewAdditionAmt = "";
-			$brewAdditionUse = "";
-			$brewHops = "";
-			$brewHopsWeight = "";
-			$brewHopsUse = "";
-			$brewHopsIBU = "";
-			$brewHopsTime = "";
-			$brewHopsType = "";
-			$brewHopsForm = "";
-			$brewMashStepName = "";
-			$brewMashStepTemp = "";
-			$brewMashStepTime = "";
-
-			for($i=1; $i<=5; $i++) {
-				$brewExtract .= "brewExtract".$i.",";
-				$brewExtractWeight .= "brewExtract".$i."Weight,";
-				$brewExtractUse .= "brewExtract".$i."Use,";
-			}
-
-			$brewExtract = rtrim($brewExtract,",");
-			$brewExtractWeight = rtrim($brewExtractWeight,",");
-			$brewExtractUse = rtrim($brewExtractUse,",");
-
-			for($i=1; $i<=20; $i++) {
-				$brewGrain .= "brewGrain".$i.",";
-				$brewGrainWeight .= "brewGrain".$i."Weight,";
-				$brewGrainUse .= "brewGrain".$i."Use,";
-			}
-
-			$brewGrain = rtrim($brewGrain,",");
-			$brewGrainWeight = rtrim($brewGrainWeight,",");
-			$brewGrainUse = rtrim($brewGrainUse,",");
-
-			for($i=1; $i<=20; $i++) {
-				$brewAddition .= "brewAddition".$i.",";
-				$brewAdditionAmt .= "brewAddition".$i."Amt,";
-				$brewAdditionUse .= "brewAddition".$i."Use,";
-			}
-
-			$brewAddition = rtrim($brewAddition,",");
-			$brewAdditionAmt = rtrim($brewAdditionAmt,",");
-			$brewAdditionUse = rtrim($brewAdditionUse,",");
-
-			for($i=1; $i<=20; $i++) {
-				$brewHops .= "brewHops".$i.",";
-				$brewHopsWeight .= "brewHops".$i."Weight,";
-				$brewHopsUse .= "brewHops".$i."Use,";
-				$brewHopsIBU .= "brewHops".$i."IBU,";
-				$brewHopsTime .= "brewHops".$i."Time,";
-				$brewHopsType .= "brewHops".$i."Type,";
-				$brewHopsForm .= "brewHops".$i."Form,";
-			}
-
-			$brewHops = rtrim($brewHops,",");
-			$brewHopsWeight = rtrim($brewHopsWeight,",");
-			$brewHopsUse = rtrim($brewHopsUse,",");
-			$brewHopsIBU = rtrim($brewHopsIBU,",");
-			$brewHopsTime = rtrim($brewHopsTime,",");
-			$brewHopsType = rtrim($brewHopsType,",");
-			$brewHopsForm = rtrim($brewHopsForm,",");
-
-			for($i=1; $i<=10; $i++) {
-				$brewMashStepName .= "brewMashStep".$i."Name,";
-				$brewMashStepTemp .= "brewMashStep".$i."Temp,";
-				$brewMashStepTime .= "brewMashStep".$i."Time,";
-			}
-
-			$brewMashStepName = rtrim($brewMashStepName,",");
-			$brewMashStepTemp = rtrim($brewMashStepTemp,",");
-			$brewMashStepTime = rtrim($brewMashStepTime,",");
-
-		}
 		*/
 
 	}
