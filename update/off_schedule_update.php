@@ -2878,11 +2878,188 @@ if (!$setup_running) $output_off_sched_update .= "</ul>";
 
 /**
  * ----------------------------------------------- 2.5.1 ---------------------------------------------
+ * Remove recipe-related columns from the brewing table.
+ * Columns will not be removed from archived tables.
+ * ---------------------------------------------------------------------------------------------------
+ */
+
+$drop_db = $prefix."brewing";
+
+if (check_update("brewExtract1", $drop_db)) {
+
+	$sql = sprintf("ALTER TABLE `%s` ",$drop_db);
+
+	for ($i=1; $i <= 5; $i++) {
+
+		$drop_col_1 = "brewExtract".$i;
+		$drop_col_2 = "brewExtract".$i."Weight";
+		$drop_col_3 = "brewExtract".$i."Use";
+
+		$sql .= sprintf("DROP `%s`, ",$drop_col_1);
+		$sql .= sprintf("DROP `%s`, ",$drop_col_2);
+		$sql .= sprintf("DROP `%s`, ",$drop_col_3);
+	
+	}
+
+	$sql = trim($sql);
+	$sql = rtrim($sql,",");
+	$sql .= ";";
+	mysqli_select_db($connection,$database);
+	mysqli_real_escape_string($connection,$sql);
+	$result = mysqli_query($connection,$sql);
+
+}
+
+if (check_update("brewGrain1", $drop_db)) {
+
+	$sql = sprintf("ALTER TABLE `%s` ",$drop_db);
+
+	for ($i=1; $i <= 20; $i++) {
+
+		$drop_col_1 = "brewGrain".$i;
+		$drop_col_2 = "brewGrain".$i."Weight";
+		$drop_col_3 = "brewGrain".$i."Use";
+
+		$sql .= sprintf("DROP `%s`, ",$drop_col_1);
+		$sql .= sprintf("DROP `%s`, ",$drop_col_2);
+		$sql .= sprintf("DROP `%s`, ",$drop_col_3);
+	
+	}
+
+	$sql = trim($sql);
+	$sql = rtrim($sql,",");
+	$sql .= ";";
+	mysqli_select_db($connection,$database);
+	mysqli_real_escape_string($connection,$sql);
+	$result = mysqli_query($connection,$sql);
+	
+}
+
+if (check_update("brewAddition1", $drop_db)) {
+
+	$sql = sprintf("ALTER TABLE `%s` ",$drop_db);
+
+	for ($i=1; $i <= 20; $i++) {
+
+		$drop_col_1 = "brewAddition".$i;
+		$drop_col_2 = "brewAddition".$i."Amt";
+		$drop_col_3 = "brewAddition".$i."Use";
+
+		$sql .= sprintf("DROP `%s`, ",$drop_col_1);
+		$sql .= sprintf("DROP `%s`, ",$drop_col_2);
+		$sql .= sprintf("DROP `%s`, ",$drop_col_3);
+	
+	}
+
+	$sql = trim($sql);
+	$sql = rtrim($sql,",");
+	$sql .= ";";
+	mysqli_select_db($connection,$database);
+	mysqli_real_escape_string($connection,$sql);
+	$result = mysqli_query($connection,$sql);
+	
+}
+
+if (check_update("brewHops1", $drop_db)) {
+
+	$sql = sprintf("ALTER TABLE `%s` ",$drop_db);
+
+	for ($i=1; $i <= 20; $i++) {
+
+		$drop_col_1 = "brewHops".$i;
+		$drop_col_2 = "brewHops".$i."Weight";
+		$drop_col_3 = "brewHops".$i."IBU";
+		$drop_col_4 = "brewHops".$i."Use";
+		$drop_col_5 = "brewHops".$i."Time";
+		$drop_col_6 = "brewHops".$i."Type";
+		$drop_col_7 = "brewHops".$i."Form";
+
+		$sql .= sprintf("DROP `%s`, ",$drop_col_1);
+		$sql .= sprintf("DROP `%s`, ",$drop_col_2);
+		$sql .= sprintf("DROP `%s`, ",$drop_col_3);
+		$sql .= sprintf("DROP `%s`, ",$drop_col_4);
+		$sql .= sprintf("DROP `%s`, ",$drop_col_5);
+		$sql .= sprintf("DROP `%s`, ",$drop_col_6);
+		$sql .= sprintf("DROP `%s`, ",$drop_col_7);
+
+	
+	}
+
+	$sql = trim($sql);
+	$sql = rtrim($sql,",");
+	$sql .= ";";
+	mysqli_select_db($connection,$database);
+	mysqli_real_escape_string($connection,$sql);
+	$result = mysqli_query($connection,$sql);
+	
+}
+
+if (check_update("brewMashStep1", $drop_db)) {
+
+	$sql = sprintf("ALTER TABLE `%s` ",$drop_db);
+
+	for ($i=1; $i <= 10; $i++) {
+
+		$drop_col_1 = "brewMashStep".$i."Name";
+		$drop_col_2 = "brewMashStep".$i."Temp";
+		$drop_col_3 = "brewMashStep".$i."Time";
+
+		$sql .= sprintf("DROP `%s`, ",$drop_col_1);
+		$sql .= sprintf("DROP `%s`, ",$drop_col_2);
+		$sql .= sprintf("DROP `%s`, ",$drop_col_3);
+	
+	}
+
+	$sql = trim($sql);
+	$sql = rtrim($sql,",");
+	$sql .= ";";
+	mysqli_select_db($connection,$database);
+	mysqli_real_escape_string($connection,$sql);
+	$result = mysqli_query($connection,$sql);
+	
+}
+
+if (check_update("brewYeast", $drop_db)) {
+
+	$sql = sprintf("ALTER TABLE `%s` ",$drop_db);
+	$sql .= "DROP `brewBottleDate`, ";
+	$sql .= "DROP `brewDate`, ";
+	$sql .= "DROP `brewYield`, ";
+	$sql .= "DROP `brewYeast`, ";
+  	$sql .= "DROP `brewYeastMan`, ";
+  	$sql .= "DROP `brewYeastForm`, ";
+  	$sql .= "DROP `brewYeastType`, ";
+  	$sql .= "DROP `brewYeastAmount`, ";
+  	$sql .= "DROP `brewYeastStarter`, ";
+  	$sql .= "DROP `brewYeastNutrients`, ";
+  	$sql .= "DROP `brewOG`, ";
+  	$sql .= "DROP `brewFG`, ";
+  	$sql .= "DROP `brewPrimary`, ";
+  	$sql .= "DROP `brewPrimaryTemp`, ";
+  	$sql .= "DROP `brewSecondary`, ";
+  	$sql .= "DROP `brewSecondaryTemp`, ";
+  	$sql .= "DROP `brewOther`, ";
+  	$sql .= "DROP `brewOtherTemp`, ";
+  	$sql .= "DROP `brewFinings`, ";
+  	$sql .= "DROP `brewWaterNotes`, ";
+  	$sql .= "DROP `brewCarbonationMethod`, ";
+  	$sql .= "DROP `brewCarbonationVol`, ";
+  	$sql .= "DROP `brewCarbonationNotes`, ";
+  	$sql .= "DROP `brewBoilHours`, ";
+  	$sql .= "DROP `brewBoilMins`, ";
+  	$sql .= "DROP `brewWinnerCat`; ";
+  	mysqli_select_db($connection,$database);
+	mysqli_real_escape_string($connection,$sql);
+	$result = mysqli_query($connection,$sql);
+	
+}
+
+/**
+ * ----------------------------------------------- 2.5.1 ---------------------------------------------
  * Fix missing style type for Juicy or Hazy Imperial or Double India Pale Ale and Specialty Spice Beer.
  * 2.5.0 - fixed Specialty Spice Beer in installation scripting, but did not include in updates.
  * ---------------------------------------------------------------------------------------------------
  */
-
 
 if ((!$setup_running) && (!$update_running)) {
 	$output_off_sched_update .= "<p>";
@@ -2891,7 +3068,7 @@ if ((!$setup_running) && (!$update_running)) {
 }
 
 elseif ($update_running) {
-	$output_off_sched_update .= "<h4>Version 2.5.0</h4>";
+	$output_off_sched_update .= "<h4>Version 2.5.1</h4>";
 }
 
 // Begin version unordered list
@@ -3034,7 +3211,7 @@ if (!check_new_style("03","184","West Coast-Style India Pale Ale")) include (UPD
  * ----------------------------------------------- 2.5.1 ---------------------------------------------
  * Deprecate BJCP 2015 Styles
  * First, check to see what the current style set is. If it's BJCP 2015, 
- * run 2015 conversion scripts, change preferences to 2021.
+ * run 2021 conversion scripts, change preferences to 2021.
  * ---------------------------------------------------------------------------------------------------
  */
 
@@ -3057,7 +3234,6 @@ if ((!empty($row_current_prefs)) && ($row_current_prefs['prefsStyleSet'] == "BJC
 /**
  * ----------------------------------------------- 2.5.1 --------------------------------------------- 
  * Remove BJCP 2015 Guidelines
- * Convert any custom styles created under BJCP2015 to BJCP2021
  * ---------------------------------------------------------------------------------------------------
  */
 
@@ -3113,10 +3289,15 @@ else {
 $style_id = 50;
 $style_set_num_method = 0;
 
+// Need to get style set since it may have changed in scripting above.
+$query_current_styleset = sprintf("SELECT prefsStyleSet FROM %s WHERE id='1'",$prefix."preferences");
+$current_styleset = mysqli_query($connection,$query_current_styleset);
+$row_current_styleset = mysqli_fetch_assoc($current_styleset);
+
 include(INCLUDES.'styles.inc.php');
 
 foreach ($style_sets as $key) {
-	if ($key['style_set_name'] == $_SESSION['prefsStyleSet']) {
+	if ($key['style_set_name'] == $row_current_styleset['prefsStyleSet']) {
 		$style_set_num_method = $key['style_set_sub_style_method'];
 	}
 }
@@ -3124,7 +3305,7 @@ foreach ($style_sets as $key) {
 // If style set substyle method is successive numbering, get the last substyle number
 if ($style_set_num_method == 1) {
 	
-	$query_style_number = sprintf("SELECT brewStyleNum FROM %s WHERE brewStyleVersion='%s' ORDER BY brewStyleNum DESC LIMIT 1", $prefix."styles", $_SESSION['prefsStyleSet']);
+	$query_style_number = sprintf("SELECT brewStyleNum FROM %s WHERE brewStyleVersion='%s' ORDER BY brewStyleNum DESC LIMIT 1", $prefix."styles", $row_current_styleset['prefsStyleSet']);
 	$style_number = mysqli_query($connection,$query_style_number) or die (mysqli_error($connection));
 	$row_style_number = mysqli_fetch_assoc($style_number);
 	
@@ -3160,7 +3341,7 @@ if ($row_style_num['brewStyleGroup'] < 50) {
 		$data = array(
 			'brewStyleGroup' => $style_id,
 			'brewStyleNum' => $sub_style_id,
-			'brewStyleVersion' => $_SESSION['prefsStyleSet'],
+			'brewStyleVersion' => $row_current_styleset['prefsStyleSet'],
 		);
 		$db_conn->where ('id', $row_style_name['id']);
 		$result = $db_conn->update ($update_table, $data);
