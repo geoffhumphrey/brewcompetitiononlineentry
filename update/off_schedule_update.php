@@ -2581,17 +2581,33 @@ if (!$setup_running) $output_off_sched_update .= "<ul>";
 if ((!empty($row_current_prefs)) && ($row_current_prefs['prefsStyleSet'] == "BJCP2008")) {
 	
 	include (LIB.'convert.lib.php');
+	include (INCLUDES.'convert/convert_bjcp_2015.inc.php');
 
 	$update_table = $prefix."preferences";
 	$data = array('prefsStyleSet' => 'BJCP2015');
 	$db_conn->where ('id', 1);
 	if ($db_conn->update ($update_table, $data)) $output_off_sched_update .= "<li>Changed style set to BJCP 2015 from BJCP 2008.</li>";
 
-	$output_off_sched_update .= "<li>BJCP 2008 is now deprecated. All entries, judge preferences, etc. were converted to BJCP 2015, including:";
-	$output_off_sched_update .= "<ul>";
-	include (INCLUDES.'convert/convert_bjcp_2015.inc.php');
-	$output_off_sched_update .= "</li></ul>";
+	$output_off_sched_update .= "<li>The BJCP 2008 styles are deprecated and no longer valid for BJCP-sanctioned competions. All entries, judge preferences, etc. were converted to BJCP 2015.</li>";
 
+}
+
+/**
+ * ----------------------------------------------- 2.4.0 --------------------------------------------- 
+ * Remove BJCP 2008 Guidelines - for hosted installations only.
+ * ---------------------------------------------------------------------------------------------------
+ */
+
+if (HOSTED) {
+	$update_table = $prefix."styles";
+	$db_conn->where ('brewStyleVersion', 'BJCP2008');
+	$db_conn->where ('brewStyleOwn', 'bcoe');
+	$result = $db_conn->delete ($update_table);
+	if ($result) $output_off_sched_update .= "<li>BJCP 2008 Styles were removed from the database.</li>";
+	else {
+		$output_off_sched_update .= "<li class=\"text-danger\">The BJCP 2008 Styles were NOT removed.</li>";
+		$error_count += 1;
+	}
 }
 
 if (!check_new_style("28","D","Straight Sour Beer")) include (UPDATE.'styles_bjcp2021_update.php');
@@ -2877,11 +2893,24 @@ if (!check_update("jPrefsMinWords", $prefix."judging_preferences")) {
 if (!$setup_running) $output_off_sched_update .= "</ul>";
 
 /**
- * ----------------------------------------------- 2.5.1 ---------------------------------------------
+ * ----------------------------------------------- 2.6.0 ---------------------------------------------
  * Remove recipe-related columns from the brewing table.
  * Columns will not be removed from archived tables.
  * ---------------------------------------------------------------------------------------------------
  */
+
+if ((!$setup_running) && (!$update_running)) {
+	$output_off_sched_update .= "<p>";
+	$output_off_sched_update .= "<strong>Version 2.6.0.0 Updates</strong>";
+	$output_off_sched_update .= "</p>";
+}
+
+elseif ($update_running) {
+	$output_off_sched_update .= "<h4>Version 2.6.0</h4>";
+}
+
+// Begin version unordered list
+if (!$setup_running) $output_off_sched_update .= "<ul>";
 
 $drop_db = $prefix."brewing";
 
@@ -2994,7 +3023,7 @@ if (check_update("brewHops1", $drop_db)) {
 	
 }
 
-if (check_update("brewMashStep1", $drop_db)) {
+if (check_update("brewMashStep1Name", $drop_db)) {
 
 	$sql = sprintf("ALTER TABLE `%s` ",$drop_db);
 
@@ -3054,25 +3083,14 @@ if (check_update("brewYeast", $drop_db)) {
 	
 }
 
+$output_off_sched_update .= "<li>All deprecated recipe-related columns were removed from the brewing table.</li>";
+
 /**
- * ----------------------------------------------- 2.5.1 ---------------------------------------------
+ * ----------------------------------------------- 2.6.0 ---------------------------------------------
  * Fix missing style type for Juicy or Hazy Imperial or Double India Pale Ale and Specialty Spice Beer.
  * 2.5.0 - fixed Specialty Spice Beer in installation scripting, but did not include in updates.
  * ---------------------------------------------------------------------------------------------------
  */
-
-if ((!$setup_running) && (!$update_running)) {
-	$output_off_sched_update .= "<p>";
-	$output_off_sched_update .= "<strong>Version 2.5.1.0 Updates</strong>";
-	$output_off_sched_update .= "</p>";
-}
-
-elseif ($update_running) {
-	$output_off_sched_update .= "<h4>Version 2.5.1</h4>";
-}
-
-// Begin version unordered list
-if (!$setup_running) $output_off_sched_update .= "<ul>";
 
 $sql = sprintf("UPDATE `%s` SET brewStyleType = '1' WHERE brewStyle='Specialty Spice Beer' AND  brewStyleGroup='30' AND brewStyleNum='D'",$prefix."styles");
 mysqli_select_db($connection,$database);
@@ -3095,7 +3113,7 @@ else {
 }
 
 /**
- * ----------------------------------------------- 2.5.1 ---------------------------------------------
+ * ----------------------------------------------- 2.6.0 ---------------------------------------------
  * Leverage unused DB row in the brewer table to store industry affiliations of judges/stewards while
  * using the Professional Edition.
  * ---------------------------------------------------------------------------------------------------
@@ -3112,7 +3130,7 @@ else {
 }
 
 /**
- * ----------------------------------------------- 2.5.1 ---------------------------------------------
+ * ----------------------------------------------- 2.6.0 ---------------------------------------------
  * Leverage JSON data type in MySQL to store competition rules and provide admins the ability to
  * customize shipping and packaging rules (previously hard-coded).
  * ---------------------------------------------------------------------------------------------------
@@ -3172,7 +3190,7 @@ if (!$contest_rules_json) {
 }
 
 /**
- * ----------------------------------------------- 2.5.1 ---------------------------------------------
+ * ----------------------------------------------- 2.6.0 ---------------------------------------------
  * Leverage JSON data type in MySQL to store user-added clubs.
  * ---------------------------------------------------------------------------------------------------
  */
@@ -3192,7 +3210,7 @@ if (!check_update("contestClubs", $prefix."contest_info")) {
 }
 
 /**
- * ----------------------------------------------- 2.5.1 --------------------------------------------- 
+ * ----------------------------------------------- 2.6.0 --------------------------------------------- 
  * Add Northwest Cider Cup Guidelines
  * ---------------------------------------------------------------------------------------------------
  */
@@ -3200,7 +3218,7 @@ if (!check_update("contestClubs", $prefix."contest_info")) {
 if (!check_new_style("C1","A","Low-Tannin Ciders Dry")) include (UPDATE.'styles_nw_cider_cup_2023.php');
 
 /**
- * ----------------------------------------------- 2.5.1 ---------------------------------------------
+ * ----------------------------------------------- 2.6.0 ---------------------------------------------
  * 2023 BA styles update.
  * ---------------------------------------------------------------------------------------------------
  */
@@ -3208,7 +3226,7 @@ if (!check_new_style("C1","A","Low-Tannin Ciders Dry")) include (UPDATE.'styles_
 if (!check_new_style("03","184","West Coast-Style India Pale Ale")) include (UPDATE.'styles_ba_2023_update.php');
 
 /**
- * ----------------------------------------------- 2.5.1 ---------------------------------------------
+ * ----------------------------------------------- 2.6.0 ---------------------------------------------
  * Deprecate BJCP 2015 Styles
  * First, check to see what the current style set is. If it's BJCP 2015, 
  * run 2021 conversion scripts, change preferences to 2021.
@@ -3218,34 +3236,35 @@ if (!check_new_style("03","184","West Coast-Style India Pale Ale")) include (UPD
 if ((!empty($row_current_prefs)) && ($row_current_prefs['prefsStyleSet'] == "BJCP2015")) {
 	
 	include (LIB.'convert.lib.php');
+	include (INCLUDES.'convert/convert_bjcp_2021.inc.php');
 
 	$update_table = $prefix."preferences";
 	$data = array('prefsStyleSet' => 'BJCP2021');
 	$db_conn->where ('id', 1);
 	if ($db_conn->update ($update_table, $data)) $output_off_sched_update .= "<li>Changed style set to BJCP 2021 from BJCP 2015.</li>";
 
-	$output_off_sched_update .= "<li>BJCP 2015 is now deprecated. All entries, judge preferences, etc. were converted to BJCP 2021, including:";
-	$output_off_sched_update .= "<ul>";
-	include (INCLUDES.'convert/convert_bjcp_2021.inc.php');
-	$output_off_sched_update .= "</li></ul>";
+	$output_off_sched_update .= "<li>The BJCP 2015 styles are deprecated and no longer valid for BJCP-sanctioned competions. All entries, judge preferences, etc. were converted to BJCP 2021.</li>";
 
 }
 
 /**
- * ----------------------------------------------- 2.5.1 --------------------------------------------- 
- * Remove BJCP 2015 Guidelines
+ * ----------------------------------------------- 2.6.0 --------------------------------------------- 
+ * Remove BJCP 2015 Guidelines - for hosted installations only.
  * ---------------------------------------------------------------------------------------------------
  */
 
-$update_table = $prefix."styles";
-$db_conn->where ('brewStyleVersion', 'BJCP2015');
-$db_conn->where ('brewStyleOwn', 'bcoe');
-$result = $db_conn->delete ($update_table);
-if ($result) $output_off_sched_update .= "<li>BJCP 2015 Styles were removed from the database.</li>";
-else {
-	$output_off_sched_update .= "<li class=\"text-danger\">The BJCP 2015 Styles were NOT removed.</li>";
-	$error_count += 1;
+if (HOSTED) {
+	$update_table = $prefix."styles";
+	$db_conn->where ('brewStyleVersion', 'BJCP2015');
+	$db_conn->where ('brewStyleOwn', 'bcoe');
+	$result = $db_conn->delete ($update_table);
+	if ($result) $output_off_sched_update .= "<li>BJCP 2015 Styles were removed from the database.</li>";
+	else {
+		$output_off_sched_update .= "<li class=\"text-danger\">The BJCP 2015 Styles were NOT removed.</li>";
+		$error_count += 1;
+	}
 }
+
 
 /**
  * ----------------------------------------------- 2.5.2 --------------------------------------------- 
@@ -3280,7 +3299,7 @@ else {
 */
 
 /**
- * ----------------------------------------------- 2.5.1 --------------------------------------------- 
+ * ----------------------------------------------- 2.6.0 --------------------------------------------- 
  * Convert Custom Style Numbers
  * New numbering scheme starts ALL custom styles for any style set at 50
  * ---------------------------------------------------------------------------------------------------
@@ -3325,13 +3344,14 @@ else $sub_style_id = "A";
  */
 
 $query_style_num = sprintf("SELECT id,brewStyleGroup,brewStyleNum FROM %s WHERE brewStyleOwn='custom' ORDER BY brewStyleNum ASC LIMIT 1", $prefix."styles");
-$style_num = mysqli_query($connection,$query_style_num) or die (mysqli_error($connection));
+$style_num = mysqli_query($connection,$query_style_num);
 $row_style_num = mysqli_fetch_assoc($style_num);
 
-if ($row_style_num['brewStyleGroup'] < 50) {
+if ((isset($row_style_num['brewStyleGroup']) && ($row_style_num['brewStyleGroup'] < 50))) {
 	
-	$query_style_name = sprintf("SELECT id,brewStyle,brewStyleGroup,brewStyleNum FROM %s WHERE brewStyleOwn='custom' ORDER BY id", $prefix."styles");
-	$style_name = mysqli_query($connection,$query_style_name) or die (mysqli_error($connection));
+	$query_style_name = sprintf("SELECT id,brewStyle,brewStyleGroup,brewStyleNum FROM %s 
+		WHERE brewStyleOwn='custom' ORDER BY id", $prefix."styles");
+	$style_name = mysqli_query($connection,$query_style_name);
 	$row_style_name = mysqli_fetch_assoc($style_name);
 
 	do {

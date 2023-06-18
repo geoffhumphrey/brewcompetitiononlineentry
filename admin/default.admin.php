@@ -106,7 +106,7 @@ if ($totalRows_tables > 0) {
 
     do {
 
-        if ($row_style_type['styleTypeBOS'] == "Y") {
+        if (($row_style_type) && ($row_style_type['styleTypeBOS'] == "Y")) {
 
             $bos_pull_entry_link = $base_url."output/print.output.php?section=pullsheets&amp;go=judging_scores_bos&amp;view=entry&amp;id=".$row_style_type['id'];
             $bos_pull_judging_link = $base_url."output/print.output.php?section=pullsheets&amp;go=judging_scores_bos&amp;id=".$row_style_type['id']; 

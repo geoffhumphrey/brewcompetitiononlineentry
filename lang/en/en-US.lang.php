@@ -2040,7 +2040,7 @@ $evaluation_info_094 = "The minimum word requirement has not been reached in one
 
 /**
  * ------------------------------------------------------------------------
- * Version 2.5.1 Additions
+ * Version 2.6.0 Additions
  * ------------------------------------------------------------------------
  */
 

@@ -1906,7 +1906,7 @@ $evaluation_info_094 = "O requisito mínimo de palavras não foi alcançado em u
 
 /**
  * ------------------------------------------------------------------------
- * Version 2.5.1 Additions
+ * Version 2.6.0 Additions
  * ------------------------------------------------------------------------
  */
 

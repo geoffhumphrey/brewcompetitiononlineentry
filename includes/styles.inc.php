@@ -153,7 +153,7 @@ $style_sets = array(
  * Built-in style set master information arrays.
  * DO NOT EDIT BELOW THIS LINE.
  * BJCP 2008 Deprecated in version 2.4.0
- * BJCP 2015 Deprecated in version 2.5.1
+ * BJCP 2015 Deprecated in version 2.6.0
  * ------------------------------------------------------------------------------
  */
 
