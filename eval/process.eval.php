@@ -29,10 +29,10 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 	$evalStyleAccuracy = "";
 	$evalTechMerit = "";
 	$evalDrinkability = "";
-	$evalAromaScore = "";
-	$evalAppearanceScore = "";
-	$evalFlavorScore = "";
-	$evalMouthfeelScore = "";
+	$evalAromaScore = 0;
+	$evalAppearanceScore = 0;
+	$evalFlavorScore = 0;
+	$evalMouthfeelScore = 0;
 
 	if ($_SESSION['prefsSEF'] == "Y") $sef = "true";
 	else $sef = "false";

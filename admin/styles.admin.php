@@ -153,21 +153,113 @@ function checkUncheckAll(theElement) {
 <input type="hidden" name="relocate" value="<?php echo relocate($base_url."index.php?section=admin&go=styles","default",$msg,$id); ?>">
 <?php } ?>
 </form>
-<?php } ?>
+<?php } ?>  
 
 <?php if (($action == "add") || ($action == "edit")) {
 $style_type_2 = style_type($row_styles['brewStyleType'],"1","bcoe");
 ?>
+
+<script>
+// Check if the entered style/sub-style combination of identifiers are in use
+var style_url = "<?php echo $base_url; ?>ajax/custom_style.ajax.php";
+var action = "<?php echo $action; ?>";
+
+$("#style-identifier-status").hide();
+
+
+function checkStyleIdentifier() {
+
+	$("#style-identifier-status").hide('fast');
+
+	var rid1 = $("#brewStyleGroup").val();
+	var rid2 = $("#brewStyleNum").val();
+
+	let url = style_url + "?rid1=" + rid1 + "&rid2=" + rid2;
+
+	<?php if ($action == "edit") { ?>
+	// If editing, establish constants for ajax script to compare against
+	var rid3 = "<?php echo $row_styles['brewStyleGroup']; ?>";
+	var rid4 = "<?php echo $row_styles['brewStyleNum']; ?>";
+	url += "&rid3=" + rid3
+	url += "&rid4=" + rid4
+	<?php } ?>
+
+	if ((rid1) && (rid2)) {
+
+		var disabled = $('#updateStyle').is(':disabled');
+
+		jQuery.ajax({
+			url: url,
+			data: "",
+			type: "POST",
+			success:function(data) {
+				
+				var jsonData = JSON.parse(data);
+
+				if (jsonData.status <= "2") {
+					if (!disabled) {
+						$('#updateStyle').prop("disabled", true);
+					}
+				}
+
+				else {
+					if (disabled) {
+						$('#updateStyle').prop("disabled", false);
+					}
+				}
+
+				if (jsonData.status <= "3") {
+					$("#style-identifier-status").show();
+					$("#style-identifier-status").html(jsonData.message);
+				}
+
+			},
+			
+			error:function () {
+		
+			}
+		});
+	}
+
+	
+}
+</script>
+
 <form data-toggle="validator" role="form" class="form-horizontal" method="post" action="<?php echo $base_url; ?>includes/process.inc.php?section=<?php echo $section; ?>&amp;action=<?php echo $action; ?>&amp;dbTable=<?php echo $styles_db_table; ?>&amp;go=<?php echo $go; if ($action == "edit") echo "&amp;id=".$id; ?>" id="form1" name="form1">
 <div class="form-group"><!-- Form Group REQUIRED Text Input -->
 	<label for="brewStyle" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Name</label>
 	<div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
 		<div class="input-group has-warning">
 			<!-- Input Here -->
-			<input class="form-control" id="brewStyle" name="brewStyle" type="text" value="<?php if ($action == "edit") echo $row_styles['brewStyle']; ?>" placeholder="" data-error="The custom style category's name is required" autofocus required>
+			<input class="form-control" id="brewStyle" name="brewStyle" type="text" value="<?php if ($action == "edit") echo $row_styles['brewStyle']; ?>" placeholder="" data-error="The custom style's name is required." autofocus required>
 			<span class="input-group-addon" id="brewStyle-addon2"><span class="fa fa-star"></span></span>
 		</div>
         <div class="help-block with-errors"></div>
+	</div>
+</div><!-- ./Form Group -->
+<div class="form-group">
+	<label for="brewStyleGroup" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Style Number or Identifier</label>
+	<div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
+		<div class="input-group has-warning">
+			<!-- Input Here -->
+			<input class="form-control" id="brewStyleGroup" name="brewStyleGroup" type="number" step="1" min="50" value="<?php if ($action == "edit") echo $row_styles['brewStyleGroup']; ?>" placeholder="" data-error="The custom style number or identifier is required." maxlength="3" required>
+			<span class="input-group-addon" id="brewStyle-addon2"><span class="fa fa-star"></span></span>
+		</div>
+		<div class="help-block">Provide the overall identifier for the style. Numbers 50 and greater only. Three (3) numeral limit.</div>
+       	<div class="help-block with-errors"></div>
+	</div>
+</div><!-- ./Form Group -->
+<div class="form-group">
+	<label for="brewStyleNum" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Sub-Style Number or Identifier</label>
+	<div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
+		<div class="input-group has-warning">
+			<!-- Input Here -->
+			<input class="form-control" id="brewStyleNum" name="brewStyleNum" type="text" value="<?php if ($action == "edit") echo $row_styles['brewStyleNum']; ?>" placeholder="" data-error="The custom style category's sub-style identifer is required." maxlength="2" required onBlur="checkStyleIdentifier()" onKeyup="checkStyleIdentifier()">
+			<span class="input-group-addon" id="brewStyle-addon2"><span class="fa fa-star"></span></span>
+		</div>
+		<div class="help-block">Provide a <strong>unique</strong> identifier. Two (2) character limit. Characters can be alphanumeric.</div>
+       	<div class="help-block with-errors"></div>
+       	<div id="style-identifier-status">Style Status</div>
 	</div>
 </div><!-- ./Form Group -->
 <div class="form-group"><!-- Form Group REQUIRED Select -->
@@ -350,8 +442,6 @@ $style_type_2 = style_type($row_styles['brewStyleType'],"1","bcoe");
 
 
 <input type="hidden" name="brewStyleOld" value="<?php if ($action == "edit") echo $row_styles['brewStyle'];?>">
-<input type="hidden" name="brewStyleGroup" value="<?php if ($action == "edit") echo $row_styles['brewStyleGroup'];?>">
-<input type="hidden" name="brewStyleNum" value="<?php if ($action == "edit") echo $row_styles['brewStyleNum'];?>" >
 <input type="hidden" name="brewStyleActive" value="<?php if ($action == "edit") echo $row_styles['brewStyleActive']; else echo "Y"; ?>">
 <input type="hidden" name="brewStyleOwn" value="<?php if ($action == "edit") echo $row_styles['brewStyleOwn']; else echo "custom"; ?>">
 <?php if (isset($_SERVER['HTTP_REFERER'])) { ?>

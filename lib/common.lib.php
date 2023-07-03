@@ -1331,7 +1331,7 @@ function style_convert($number,$type,$base_url="",$archive="") {
 
 		if ($row_style) {
 
-			if ((is_numeric($number)) && ($number >= $start_custom) && ($row_style['brewStyleOwn'] != "bcoe")) $custom = TRUE;
+			if ($row_style['brewStyleOwn'] != "bcoe") $custom = TRUE;
 
 			// if numeric make two-digit by adding leading zero just in case
 			if (is_numeric($number)) $number = sprintf('%02d', $number); 

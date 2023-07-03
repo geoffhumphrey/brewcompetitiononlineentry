@@ -20,3 +20,10 @@ update/move_files.php
 lib/hosted.lib.php
 ajax/autosave.ajax.php
 css/anomalus.css
+ajax/email.ajax.php
+ajax/emails.ajax.php
+templates/barcode-entry.html
+templates/simple-metric-entry-barcode.html
+templates/simple-metric-entry.html
+templates/simple-us-entry-barcode.html
+templates/simple-us-entry.html
