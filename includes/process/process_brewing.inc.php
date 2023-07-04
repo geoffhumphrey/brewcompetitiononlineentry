@@ -74,15 +74,15 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 		$brewCoBrewer = "";
 		$styleBreak = filter_var($_POST['brewStyle'],FILTER_SANITIZE_STRING);
 		$styleName = "";
-		$brewName = standardize_name($purifier->purify($_POST['brewName']));
+		$brewName = $purifier->purify($_POST['brewName']);
 		$brewName = filter_var($brewName,FILTER_SANITIZE_STRING);
 		$brewName = capitalize($brewName);
 		$brewInfo = "";
 		$brewInfoOptional = "";
 		$index = ""; // Defined with Style
-		$brewMead1 = "";
-		$brewMead2 = "";
-		$brewMead3 = "";
+		$brewMead1 = ""; // Carbonation
+		$brewMead2 = ""; // Sweetness
+		$brewMead3 = ""; // Strength
 		$brewJudgingNumber = "";
 		$brewPossAllergens = "";
 		$brewAdminNotes = "";
@@ -166,21 +166,11 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 		$styleName = $row_style_name['brewStyle'];
 
 		// Mark as paid if free entry fee
-		if ($_SESSION['contestEntryFee'] == 0) $brewPaid = "1";
-
-		/*
-		// Concat all special ingredient styles
-		$all_special_ing_styles = array();
-		if (is_array($special_beer)) $all_special_ing_styles = array_merge($all_special_ing_styles,$special_beer);
-		if (is_array($carb_str_sweet_special)) $all_special_ing_styles = array_merge($all_special_ing_styles,$carb_str_sweet_special);
-		if (is_array($spec_sweet_carb_only)) $all_special_ing_styles = array_merge($all_special_ing_styles,$spec_sweet_carb_only);
-		if (is_array($spec_carb_only)) $all_special_ing_styles = array_merge($all_special_ing_styles,$spec_carb_only);
-		// print_r($all_special_ing_styles);
-		// echo $index."<br>";
-		*/
+		if ($_SESSION['contestEntryFee'] == 0) $brewPaid = 1;
 
 		// -------------------------------- Required info --------------------------------
 		// Checked against requirements later
+
 		if (!empty($_POST['brewInfo'])) {
 			$brewInfo = $purifier->purify($_POST['brewInfo']);
 			$brewInfo = filter_var($brewInfo,FILTER_SANITIZE_STRING);
@@ -192,8 +182,14 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 			$brewInfoOptional = filter_var($brewInfoOptional,FILTER_SANITIZE_STRING);			
 		}
 
-		// For BJCP 2015, process addtional info
+		// For BJCP 2015/2021, process addtional info
 		if (($_SESSION['prefsStyleSet'] == "BJCP2015") || ($_SESSION['prefsStyleSet'] == "BJCP2021")) {
+
+			// If BJCP 2021 and 2A, add optional regional variation if present
+			if (($index == "02-A") && ($_SESSION['prefsStyleSet'] == "BJCP2021") && (!empty($_POST['regionalVar']))) {
+				$brewInfo = $purifier->purify($_POST['regionalVar']);
+				$brewInfo = filter_var($brewInfo,FILTER_SANITIZE_STRING);
+			}
 
 			// IPA strength for 21B styles
 			if (strlen(strstr($index,"21-B")) > 0) {
@@ -227,9 +223,9 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 
 			if ((isset($_POST['brewMead1'])) && ($row_str_carb_sweet['brewStyleCarb'] == 1)) $brewMead1 = filter_var($_POST['brewMead1'],FILTER_SANITIZE_STRING); // Carbonation
 
-			if ((isset($_POST['brewMead2-mead'])) && ($row_str_carb_sweet['brewStyleSweet'] == 1) && (strpos($style[0], "M") !== false)) $brewMead2 = filter_var($_POST['brewMead2-mead'],FILTER_SANITIZE_STRING); // Mead Sweetness
-			
-			if ((isset($_POST['brewMead2-cider'])) && ($row_str_carb_sweet['brewStyleSweet'] == 1) && (strpos($style[0], "C") !== false)) $brewMead2 = filter_var($_POST['brewMead2-cider'],FILTER_SANITIZE_STRING); // Cider Sweetness
+			if ((isset($_POST['brewMead2-cider'])) && ($row_str_carb_sweet['brewStyleSweet'] == 1) && ($row_str_carb_sweet['brewStyleType'] == 2)) $brewMead2 = filter_var($_POST['brewMead2-cider'],FILTER_SANITIZE_STRING); // Cider Sweetness
+
+			if ((isset($_POST['brewMead2-mead'])) && ($row_str_carb_sweet['brewStyleSweet'] == 1) && ($row_str_carb_sweet['brewStyleType'] == 3)) $brewMead2 = filter_var($_POST['brewMead2-mead'],FILTER_SANITIZE_STRING); // Mead Sweetness
 			
 			if ((isset($_POST['brewMead3'])) && ($row_str_carb_sweet['brewStyleStrength'] == 1)) $brewMead3 = filter_var($_POST['brewMead3'],FILTER_SANITIZE_STRING); // Strength
 
@@ -242,93 +238,6 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 		echo "Sweet: ".$brewMead2."<br>";
 		echo "Strength: ".$brewMead3;
 		exit();
-		*/
-
-		// The following are only enabled when preferences dictate that the recipe fields be shown.
-		// DEPRECATE for version 2.5.0
-
-		/*
-		if ($_SESSION['prefsHideRecipe'] == "N") {
-
-			$brewExtract = "";
-			$brewExtractWeight = "";
-			$brewExtractUse = "";
-			$brewGrain = "";
-			$brewGrainWeight = "";
-			$brewGrainUse = "";
-			$brewAddition = "";
-			$brewAdditionAmt = "";
-			$brewAdditionUse = "";
-			$brewHops = "";
-			$brewHopsWeight = "";
-			$brewHopsUse = "";
-			$brewHopsIBU = "";
-			$brewHopsTime = "";
-			$brewHopsType = "";
-			$brewHopsForm = "";
-			$brewMashStepName = "";
-			$brewMashStepTemp = "";
-			$brewMashStepTime = "";
-
-			for($i=1; $i<=5; $i++) {
-				$brewExtract .= "brewExtract".$i.",";
-				$brewExtractWeight .= "brewExtract".$i."Weight,";
-				$brewExtractUse .= "brewExtract".$i."Use,";
-			}
-
-			$brewExtract = rtrim($brewExtract,",");
-			$brewExtractWeight = rtrim($brewExtractWeight,",");
-			$brewExtractUse = rtrim($brewExtractUse,",");
-
-			for($i=1; $i<=20; $i++) {
-				$brewGrain .= "brewGrain".$i.",";
-				$brewGrainWeight .= "brewGrain".$i."Weight,";
-				$brewGrainUse .= "brewGrain".$i."Use,";
-			}
-
-			$brewGrain = rtrim($brewGrain,",");
-			$brewGrainWeight = rtrim($brewGrainWeight,",");
-			$brewGrainUse = rtrim($brewGrainUse,",");
-
-			for($i=1; $i<=20; $i++) {
-				$brewAddition .= "brewAddition".$i.",";
-				$brewAdditionAmt .= "brewAddition".$i."Amt,";
-				$brewAdditionUse .= "brewAddition".$i."Use,";
-			}
-
-			$brewAddition = rtrim($brewAddition,",");
-			$brewAdditionAmt = rtrim($brewAdditionAmt,",");
-			$brewAdditionUse = rtrim($brewAdditionUse,",");
-
-			for($i=1; $i<=20; $i++) {
-				$brewHops .= "brewHops".$i.",";
-				$brewHopsWeight .= "brewHops".$i."Weight,";
-				$brewHopsUse .= "brewHops".$i."Use,";
-				$brewHopsIBU .= "brewHops".$i."IBU,";
-				$brewHopsTime .= "brewHops".$i."Time,";
-				$brewHopsType .= "brewHops".$i."Type,";
-				$brewHopsForm .= "brewHops".$i."Form,";
-			}
-
-			$brewHops = rtrim($brewHops,",");
-			$brewHopsWeight = rtrim($brewHopsWeight,",");
-			$brewHopsUse = rtrim($brewHopsUse,",");
-			$brewHopsIBU = rtrim($brewHopsIBU,",");
-			$brewHopsTime = rtrim($brewHopsTime,",");
-			$brewHopsType = rtrim($brewHopsType,",");
-			$brewHopsForm = rtrim($brewHopsForm,",");
-
-			for($i=1; $i<=10; $i++) {
-				$brewMashStepName .= "brewMashStep".$i."Name,";
-				$brewMashStepTemp .= "brewMashStep".$i."Temp,";
-				$brewMashStepTime .= "brewMashStep".$i."Time,";
-			}
-
-			$brewMashStepName = rtrim($brewMashStepName,",");
-			$brewMashStepTemp = rtrim($brewMashStepTemp,",");
-			$brewMashStepTime = rtrim($brewMashStepTime,",");
-
-		}
 		*/
 
 	}
@@ -440,7 +349,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 				$update_table = $prefix."brewing";
 				$data = array('brewConfirmed' => '0');
 				$db_conn->where ('id', $id);
-				$result = $db_conn->insert ($update_table, $data);
+				$result = $db_conn->update ($update_table, $data);
 				if (!$result) {
 					$error_output[] = $db_conn->getLastError();
 					$errors = TRUE;
@@ -468,7 +377,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 				$update_table = $prefix."brewing";
 				$data = array('brewConfirmed' => '0');
 				$db_conn->where ('id', $id);
-				$result = $db_conn->insert ($update_table, $data);
+				$result = $db_conn->update ($update_table, $data);
 				if (!$result) {
 					$error_output[] = $db_conn->getLastError();
 					$errors = TRUE;
@@ -496,7 +405,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 				$update_table = $prefix."brewing";
 				$data = array('brewConfirmed' => '0');
 				$db_conn->where ('id', $id);
-				$result = $db_conn->insert ($update_table, $data);
+				$result = $db_conn->update ($update_table, $data);
 				if (!$result) {
 					$error_output[] = $db_conn->getLastError();
 					$errors = TRUE;
@@ -524,7 +433,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 				$update_table = $prefix."brewing";
 				$data = array('brewConfirmed' => '0');
 				$db_conn->where ('id', $id);
-				$result = $db_conn->insert ($update_table, $data);
+				$result = $db_conn->update ($update_table, $data);
 				if (!$result) {
 					$error_output[] = $db_conn->getLastError();
 					$errors = TRUE;
@@ -550,7 +459,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 				$update_table = $prefix."brewing";
 				$data = array('brewConfirmed' => '0');
 				$db_conn->where ('id', $id);
-				$result = $db_conn->insert ($update_table, $data);
+				$result = $db_conn->update ($update_table, $data);
 				if (!$result) {
 					$error_output[] = $db_conn->getLastError();
 					$errors = TRUE;
@@ -676,7 +585,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 			$update_table = $prefix."brewing";
 			$data = array('brewConfirmed' => '0');
 			$db_conn->where ('id', $id);
-			$result = $db_conn->insert ($update_table, $data);
+			$result = $db_conn->update ($update_table, $data);
 			if (!$result) {
 				$error_output[] = $db_conn->getLastError();
 				$errors = TRUE;
@@ -694,7 +603,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 				$update_table = $prefix."brewing";
 				$data = array('brewConfirmed' => '0');
 				$db_conn->where ('id', $id);
-				$result = $db_conn->insert ($update_table, $data);
+				$result = $db_conn->update ($update_table, $data);
 				if (!$result) {
 					$error_output[] = $db_conn->getLastError();
 					$errors = TRUE;
@@ -722,7 +631,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 				$update_table = $prefix."brewing";
 				$data = array('brewConfirmed' => '0');
 				$db_conn->where ('id', $id);
-				$result = $db_conn->insert ($update_table, $data);
+				$result = $db_conn->update ($update_table, $data);
 				if (!$result) {
 					$error_output[] = $db_conn->getLastError();
 					$errors = TRUE;
@@ -749,7 +658,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 				$update_table = $prefix."brewing";
 				$data = array('brewConfirmed' => '0');
 				$db_conn->where ('id', $id);
-				$result = $db_conn->insert ($update_table, $data);
+				$result = $db_conn->update ($update_table, $data);
 				if (!$result) {
 					$error_output[] = $db_conn->getLastError();
 					$errors = TRUE;
@@ -776,7 +685,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 				$update_table = $prefix."brewing";
 				$data = array('brewConfirmed' => '0');
 				$db_conn->where ('id', $id);
-				$result = $db_conn->insert ($update_table, $data);
+				$result = $db_conn->update ($update_table, $data);
 				if (!$result) {
 					$error_output[] = $db_conn->getLastError();
 					$errors = TRUE;

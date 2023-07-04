@@ -172,28 +172,33 @@ $appearance_points = 3;
 $flavor_points = 20;
 $mouthfeel_points = 5;
 $overall_points = 10;
+$descriptors = array();
 
-if ($row_style['brewStyleType'] == 2) {
-  $aroma_points = 10;
-  $appearance_points = 6;
-  $flavor_points = 24;
-  $overall_points = 10;
-  $descriptors = array_merge($common_descriptors,$cider_descriptors);
+if (!empty($query_style)) {
+
+  if ($row_style['brewStyleType'] == 2) {
+    $aroma_points = 10;
+    $appearance_points = 6;
+    $flavor_points = 24;
+    $overall_points = 10;
+    $descriptors = array_merge($common_descriptors,$cider_descriptors);
+  }
+
+  elseif ($row_style['brewStyleType'] == 3) {
+    $aroma_points = 10;
+    $appearance_points = 6;
+    $flavor_points = 24;
+    $overall_points = 10;
+    $descriptors = array_merge($common_descriptors,$mead_descriptors);
+  }
+
+  else {
+    $descriptors = array_merge($common_descriptors,$beer_descriptors);
+  }
+
+  ksort($descriptors);
+
 }
-
-elseif ($row_style['brewStyleType'] == 3) {
-  $aroma_points = 10;
-  $appearance_points = 6;
-  $flavor_points = 24;
-  $overall_points = 10;
-  $descriptors = array_merge($common_descriptors,$mead_descriptors);
-}
-
-else {
-  $descriptors = array_merge($common_descriptors,$beer_descriptors);
-}
-
-ksort($descriptors);
 
 $aroma_ticks_beer = array(
   $label_malt => "evalAromaMalt",

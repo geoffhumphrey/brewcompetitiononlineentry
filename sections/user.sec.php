@@ -44,8 +44,7 @@ if ($action == "username") {
 <script src="<?php echo $base_url; ?>js_includes/registration_checks.min.js"></script>
 <?php } // end if ($action == "username") ?>
 <p class="lead"><?php echo $lead_msg; ?></p>
-
-<form data-toggle="validator" role="form" class="form-horizontal"  action="<?php echo $base_url; ?>includes/process.inc.php?section=<?php echo $section; ?>&amp;go=<?php echo $action; ?>&amp;action=edit&amp;dbTable=<?php echo $users_db_table; ?>&amp;filter=<?php echo $filter; ?>&amp;id=<?php if ($filter == "admin") echo $row_brewer['uid']; else echo $_SESSION['user_id']; ?>" method="POST" name="form1" id="form1" onSubmit="return CheckRequiredFields()">
+<form id="submit-form" data-toggle="validator" role="form" class="form-horizontal hide-loader-form-submit"  action="<?php echo $base_url; ?>includes/process.inc.php?section=<?php echo $section; ?>&amp;go=<?php echo $action; ?>&amp;action=edit&amp;dbTable=<?php echo $users_db_table; ?>&amp;filter=<?php echo $filter; ?>&amp;id=<?php if ($filter == "admin") echo $row_brewer['uid']; else echo $_SESSION['user_id']; ?>" method="POST" name="form1">
 <input name="user_name_old" type="hidden" value="<?php if ($filter == "admin") echo $row_brewer['brewerEmail']; else echo $_SESSION['user_name']; ?>">
 <input type="hidden" name="userEdit" value="<?php echo $edit_user_enable; ?>">
 <?php if (isset($_SERVER['HTTP_REFERER'])) { ?>
@@ -85,7 +84,7 @@ if ($action == "username") {
 	<div class="form-group">
 		<div class="col-sm-offset-2 col-lg-10 col-md-6 col-sm-9 col-xs-12">
 			<!-- Input Here -->
-			<button name="submit" type="submit" class="btn btn-primary" ><?php echo $label_change_email; ?></button>
+			<button id="form-submit-button" name="submit" type="submit" class="btn btn-primary" ><?php echo $label_change_email; ?></button>
 		</div>
 	</div><!-- Form Group -->
 <?php } ?>
@@ -153,7 +152,7 @@ if ($action == "username") {
 	<div class="form-group">
 		<div class="col-sm-offset-2 col-lg-10 col-md-6 col-sm-9 col-xs-12">
 			<!-- Input Here -->
-			<button name="submit" type="submit" class="btn btn-primary" ><?php echo $label_change_password; ?></button>
+			<button id="form-submit-button" name="submit" type="submit" class="btn btn-primary" ><?php echo $label_change_password; ?></button>
 		</div>
 	</div><!-- Form Group -->
 

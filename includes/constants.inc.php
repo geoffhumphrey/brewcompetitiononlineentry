@@ -24,7 +24,12 @@ $languages = array(
  * The file name will be stored in the preferences DB table row called prefsTheme and called by all pages
  */
 
-$theme_name = array("default|BCOE&amp;M Default (Gray)","bruxellensis|Bruxellensis (Blue-Gray)", "claussenii|Claussenii (Green)", "naardenensis|Naardenensis (Teal)");
+$theme_name = array(
+    "default" => "BCOE&amp;M Default (Gray)",
+    "bruxellensis" => "Bruxellensis (Blue-Gray)",
+    "claussenii" => "Claussenii (Green)",
+    "naardenensis" => "Naardenensis (Teal)"
+);
 
 // -------------------------- Countries List ----------------------------------------------------
 // Array of countries to utilize when users sign up and for competition info
@@ -143,7 +148,7 @@ $tie_break_rules = array(
  * $club_array = json_decode($_SESSION['contestClubs'], true);
  */
 
-// Updated May 20, 2022
+// Updated May 1, 2023
 
 $club_array = array(
     "1.090",
@@ -956,6 +961,7 @@ $club_array = array(
     "Fitchburg Order of Ale Makers",
     "Five Guys Inebriated",
     "Flathead Valley Brewers",
+    "Flat Rock Brew Club",
     "Fletcher Street Brews and Social Club",
     "Fleuchaus Brauhaus",
     "Flint Urban Brewing",
@@ -1856,7 +1862,7 @@ $club_array = array(
     "Purgatory SOBs",
     "Puyallup Brew Crew",
     "Q and Q Brewers Guild",
-    "QUAFF (Quality Ale and Fermentation Fraternity)",
+    "QUAFF",
     "Queen City Homebrew Club",
     "Queers Makin' Beers",
     "Quick's Brew Club",
@@ -2458,9 +2464,15 @@ $club_array = array(
     "Brewly Homebrew Club",
     "Butler County Brewing Society (BCBS)",
     "The Brü Club",
-    "Ninja Homebrewers",
+    "NINJA Homebrewers",
     "Master Homebrewer Program"
 );
+
+$club_array_json = json_encode($club_array);
+if ((isset($_SESSION['contestClubs'])) && (!empty($_SESSION['contestClubs']))) {
+    $club_additions = json_decode($_SESSION['contestClubs'],true);
+    $club_array = array_merge($club_array,$club_additions);
+}
 asort($club_array);
 
 $sidebar_date_format = "short";
@@ -2477,8 +2489,10 @@ if (((strpos($section, "step") === FALSE) && ($section != "setup")) && ($section
         $registration_open = open_or_closed(time(), $row_contest_dates['contestRegistrationOpen'], $row_contest_dates['contestRegistrationDeadline']);
         $entry_window_open = open_or_closed(time(), $row_contest_dates['contestEntryOpen'], $row_contest_dates['contestEntryDeadline']);
         $judge_window_open = open_or_closed(time(), $row_contest_dates['contestJudgeOpen'], $row_contest_dates['contestJudgeDeadline']);
-        $dropoff_window_open = open_or_closed(time(), $row_contest_dates['contestDropoffOpen'], $row_contest_dates['contestDropoffDeadline']);
-        $shipping_window_open = open_or_closed(time(), $row_contest_dates['contestShippingOpen'], $row_contest_dates['contestShippingDeadline']);
+        if ((!empty($row_contest_dates['contestDropoffOpen'])) && (!empty($row_contest_dates['contestDropoffDeadline']))) $dropoff_window_open = open_or_closed(time(), $row_contest_dates['contestDropoffOpen'], $row_contest_dates['contestDropoffDeadline']);
+        else $dropoff_window_open = 1;
+        if ((!empty($row_contest_dates['contestShippingOpen'])) && (!empty($row_contest_dates['contestShippingDeadline']))) $shipping_window_open = open_or_closed(time(), $row_contest_dates['contestShippingOpen'], $row_contest_dates['contestShippingDeadline']);
+        else $shipping_window_open = 1;
         
         $judging_past = judging_date_return();
         $judging_started = FALSE;
@@ -2717,6 +2731,9 @@ $encryption_key = "8sQHfMk8rinRtA/Frhm+AWrSgOmkcbu+FxIUGy9Fq5I=";
 
 if ((isset($_SESSION['prefsStyleSet'])) && ($_SESSION['prefsStyleSet'] == "BA")) $optional_info_styles = array();
 elseif ((isset($_SESSION['prefsStyleSet'])) && ($_SESSION['prefsStyleSet'] == "AABC")) $optional_info_styles = array("12-01","14-08","17-03","18-04","18-05","19-05","19-07","16-01","19-01","19-02","19-03","19-04","19-06","20-02","20-03");
+elseif ((isset($_SESSION['prefsStyleSet'])) && ($_SESSION['prefsStyleSet'] == "NWCiderCup")) {
+$optional_info_styles = array("C4-A","C4-B","C5-A","C8-A","C8-B","C8-C","C9-A","C9-B","C9-C");
+}
 else {
     $optional_info_styles = array("21-B","28-A","30-B","33-A","33-B","34-B","M2-C","M2-D","M2-E","M3-A","M3-B","M4-B","M4-C","7-C","M1-A","M1-B","M1-C","M2-A","M2-B","M4-A","C1-A","C1-B","C1-C");
     if ((isset($_SESSION['prefsStyleSet'])) && ($_SESSION['prefsStyleSet'] == "BJCP2021")) $optional_info_styles[] = "25-B";

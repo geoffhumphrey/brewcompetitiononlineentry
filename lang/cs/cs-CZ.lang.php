@@ -2,7 +2,7 @@
 /**
  * Module:      cs-CZ.lang.php
  * Description: This module houses all display text in the Czech language.
- * Updated:     November 21, 2022
+ * Updated:     January 17, 2023
  *  
  * To translate this file, first make a copy of it and rename it with the 
  * language name in the title.
@@ -688,7 +688,7 @@ $brew_text_015 = "Druh výtažku (např. světlý, tmavý) nebo značka.";
 $brew_text_016 = "Druh sladu (plzeňský, pale ale, atd.)";
 $brew_text_017 = "Druh nebo název suroviny";
 $brew_text_018 = "Název chmelu.";
-$brew_text_019 = "Pouze čísla (např. 12.2, 6.6, atd.).";
+$brew_text_019 = "Pouze čísla.";
 $brew_text_020 = "Název kmene (např. 1056 American Ale).";
 $brew_text_021 = "Wyeast, White Labs, atd.";
 $brew_text_022 = "1 balíček, 2 ampule, 2000 ml, atd.";
@@ -1899,6 +1899,50 @@ $evaluation_info_091 = "Minimální počet slov potřebných pro váš komentá�
 $evaluation_info_092 = "Dosavadní počet slov: ";
 $evaluation_info_093 = "Ve výše uvedeném poli Celkové hodnocení dojmu nebylo dosaženo minimálního počtu slov.";
 $evaluation_info_094 = "V jednom nebo více výše uvedených polích pro zpětnou vazbu / komentář nebylo dosaženo minimálního počtu slov.";
+
+/**
+ * ------------------------------------------------------------------------
+ * Version 2.6.0 Additions
+ * ------------------------------------------------------------------------
+ */
+
+$label_regional_variation = "Regionální Rozdíly";
+$label_characteristics = "Charakteristika";
+$label_intensity = "Intenzita";
+$label_quality = "Kvalita";
+$label_palate = "Patro";
+$label_medium = "Střední";
+$label_medium_dry = "Středně Suché";
+$label_medium_sweet = "Středně Sladká";
+$label_your_score = "Vaše Skóre";
+$label_summary_overall_impression = "Shrnutí Hodnocení a Celkový Dojem";
+$label_medal_count = "Počet Skupin Medailí";
+$label_best_brewer_place = "Nejlepší Pivovarské Místo";
+$label_industry_affiliations = "Členství v Průmyslových Organizacích";
+$label_deep_gold = "Hluboké Zlato";
+$label_chestnut = "Kaštany";
+$label_pink = "Růžová";
+$label_red = "Červená";
+$label_purple = "Fialová";
+$label_garnet = "Garnet";
+$label_clear = "Přehledně";
+$label_final_judging_date = "Datum Závěrečného Hodnocení";
+$label_entries_judged = "Posuzované Položky";
+
+$brew_text_041 = "Nepovinné - uveďte regionální variantu (např. mexický ležák, holandský ležák, japonský rýžový ležák atd.).";
+
+$evaluation_info_095 = "Další přidělená hodnotící schůzka otevřena:";
+$evaluation_info_096 = "Pro usnadnění přípravy jsou přidělené stoly/lety a související záznamy k dispozici deset minut před začátkem zasedání.";
+$evaluation_info_097 = "Vaše další hodnotící zasedání je nyní k dispozici.";
+$evaluation_info_098 = "Obnovit zobrazení.";
+$evaluation_info_099 = "Minulá nebo současná soudní jednání:";
+$evaluation_info_100 = "Nadcházející hodnotící zasedání:";
+$evaluation_info_101 = "Uveďte prosím jiný popis barvy.";
+$evaluation_info_102 = "Zadejte celkový počet bodů - maximálně 50. V případě potřeby použijte níže uvedeného průvodce bodováním.";
+$evaluation_info_103 = "Uveďte své hodnocení - minimálně 5 bodů, maximálně 50 bodů.";
+
+$brewer_text_051 = "Vyberte oborové organizace, s nimiž jste spojeni jako zaměstnanci, dobrovolníci atd. To proto, abyste se ujistili, že nedochází ke střetu zájmů při přidělování porotců a stewardů k hodnocení přihlášek.";
+$brewer_text_052 = "<strong>Pokud některá z oborových organizací není v rozbalovacím seznamu výše uvedena, uveďte ji zde.</strong> Oddělte název každé organizace čárkou (,) nebo středníkem (;). Některé symboly nejsou povoleny, včetně dvojitých uvozovek (&quot;) a procent (&#37;).";
 
 /**
  * ----------------------------------------------------------------------------------

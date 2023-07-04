@@ -22,6 +22,14 @@ if ((!$logged_in) && (in_array($section,$account_pages))) {
     exit();
 }
 
+if (MAINT) {
+    $redirect = $base_url."maintenance.php";
+    $redirect = prep_redirect_link($redirect);
+    $redirect_go_to = sprintf("Location: %s", $redirect);
+    header($redirect_go_to);
+    exit();
+}
+
 // ---------------------------------------------------------------------------------
 
 // ---------------------------- Admin Only Functions -------------------------------
@@ -424,14 +432,17 @@ if (!empty($error_output)) $_SESSION['error_output'] = $error_output;
   </div>
 </div>
 <!-- Session Timer Displays and Auto Logout -->
+<?php if ((!in_array($go,$datetime_load)) || ($go == "default")) { ?>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment-timezone/0.5.32/moment-timezone-with-data.min.js"></script>
 <script>
-var session_end = "<?php echo $session_end; ?>";
+var session_end = moment.tz("<?php echo $session_end; ?>","<?php echo get_timezone($_SESSION['prefsTimeZone']); ?>");
 var session_end_min = "<?php echo $session_expire_after; ?>";
 var session_end_seconds = "<?php echo $session_end_seconds; ?>";
 var session_end_redirect = "<?php echo $base_url; ?>includes/logout.inc.php";
 </script>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery.countdown/2.2.0/jquery.countdown.min.js"></script>
 <script type="text/javascript" src="<?php echo $base_url; ?>js_includes/autologout.min.js"></script>
+<?php } ?>
 <?php if (($_SESSION['prefsEval'] == 1) && ($section == "evaluation")) include (EVALS.'warnings.eval.php'); ?>
 <?php } // end if ($logged_in) ?>
 <script type="text/javascript" src="<?php echo $base_url; ?>js_includes/loader_target.min.js"></script>

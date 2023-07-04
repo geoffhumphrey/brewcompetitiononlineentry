@@ -57,10 +57,6 @@ if ((!isset($_SESSION['currentVersion'])) || ((isset($_SESSION['currentVersion']
 		$setup_relocate = "Location: ".$base_url."update.php";
 	}
 
-	elseif (MAINT) {
-		$setup_relocate = "Location: ".$base_url."maintenance.php";
-	}
-
 	if ($check_setup) {
 
 		$setup_success = TRUE;

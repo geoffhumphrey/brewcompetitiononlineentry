@@ -83,7 +83,6 @@ if ($totalRows_log > 0) {
 
 		$saving_random_num = random_generator(8,2);
 
-		$styleConvert = style_convert($row_log['brewCategorySort'], 1);
 		$entry_style_system = style_number_const($row_log['brewCategorySort'],$row_log['brewSubCategory'],$_SESSION['style_set_system_separator'],0);
 
 		$entry_style_display = "";
@@ -104,6 +103,7 @@ if ($totalRows_log > 0) {
 		$entry_admin_notes_display = "";
 		$entry_staff_notes_display = "";
 		$entry_allergens_display = "";
+		$entry_unconfirmed_display = "";
 
 		$scoresheet = FALSE;
 		$scoresheet_eval = FALSE;
@@ -124,12 +124,12 @@ if ($totalRows_log > 0) {
 
 				$scoresheet_eval = TRUE;
 				
+				/*
 				$query_style = sprintf("SELECT id,brewStyleType FROM %s WHERE brewStyleVersion='%s'AND brewStyleGroup='%s' AND brewStyleNum='%s'",$prefix."styles",$style_set,$row_log['brewCategorySort'],$row_log['brewSubCategory']);
 				$style = mysqli_query($connection,$query_style) or die (mysqli_error($connection));
 				$row_style = mysqli_fetch_assoc($style);
-
-				if ((($row_style['brewStyleType'] == 2) || ($row_style['brewStyleType'] == 3)) && ($row_judging_prefs['jPrefsScoresheet'] != 3)) $output_form = "full-scoresheet";
-
+				*/
+				
 				$view_link = $base_url."output/print.output.php?section=evaluation&amp;go=default&amp;view=all&amp;id=".$row_log['id']."&amp;tb=1";
 				if ($dbTable != "default") $view_link .= "&amp;dbTable=".$prefix."evaluation_".$archive_suffix;
 				$print_link = $base_url."output/print.output.php?section=evaluation&amp;go=default&amp;view=all&amp;id=".$row_log['id'];
@@ -179,7 +179,8 @@ if ($totalRows_log > 0) {
 			if (!empty($row_log['brewMead2'])) $brewInfo .= "&nbsp;&nbsp;".$row_log['brewMead2'];
 			if (!empty($row_log['brewMead3'])) $brewInfo .= "&nbsp;&nbsp;".$row_log['brewMead3'];
 
-			$required_info .= "<p><strong>Req. Info:</strong> ".$brewInfo."</p>";
+			if (($_SESSION['prefsStyleSet'] == "BJCP2021") && ($row_log['brewCategorySort'] == "02") && ($row_log['brewSubCategory'] == "A")) $required_info .= "<p><strong>Regional Var:</strong> ".$brewInfo."</p>";
+			else $required_info .= "<p><strong>Req. Info:</strong> ".$brewInfo."</p>";
 		
 		}
 
@@ -193,7 +194,6 @@ if ($totalRows_log > 0) {
 		}
 
 		if (($row_log['brewConfirmed'] == 0) || (empty($row_log['brewConfirmed']))) $entry_unconfirmed_row = "bg-danger";
-		elseif (($style_set != "BA") && ((check_special_ingredients($entry_style_system,$row_styles['brewStyleVersion']))) && ($row_log['brewInfo'] == "")) $entry_unconfirmed_row = "bg-warning";
 
 		// Judging Number
 		if (isset($row_log['brewJudgingNumber'])) {
@@ -215,10 +215,8 @@ if ($totalRows_log > 0) {
 
 		// Entry Style
 		if ($style_set == "BA") {
-
-			if ($row_log['brewCategory'] <= 14) $entry_style_display .= $styleConvert.": ".$row_log['brewStyle'];
+			if ($row_log['brewCategory'] <= 14) $entry_style_display .= $row_log['brewStyle'];
 			else $entry_style_display .= "Custom: ".$row_log['brewStyle'];
-		
 		}
 
 		else {
@@ -240,24 +238,26 @@ if ($totalRows_log > 0) {
 		if (($row_log['brewerFirstName'] != "") && ($row_log['brewerLastName'] != "") && ($pro_edition == 0)) {
 
 			if (($bid == "default") && ($dbTable == "default")) {
-				$entry_brewer_display .= "<a href=\"".$base_url."index.php?section=admin&amp;go=entries&amp;bid=".$row_log['brewBrewerID']."\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"See only ".$row_log['brewerFirstName']." ".$row_log['brewerLastName']."&rsquo;s entries\">";
-				}
+				$entry_brewer_display .= "<a href=\"".$base_url."index.php?section=admin&amp;go=entries&amp;bid=".$row_log['brewBrewerID']."\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"See entires for ".$row_log['brewerFirstName']." ".$row_log['brewerLastName']." only.\">";
+			}
 
 			$entry_brewer_display .=  $row_log['brewerLastName'].", ".$row_log['brewerFirstName'];
 			if (($bid == "default") && ($dbTable == "default")) $entry_brewer_display .= "</a>";
 			$entry_brewer_display .= "<br><small>";
 			$entry_brewer_display .= rtrim($row_log['brewerCity']).", ".$row_log['brewerState'];
-			if ($row_log['brewerCountry'] != "United States") {
+			
+			if ($row_log['brewerCountry'] == "United States") {
+				$entry_brewer_display .= "<br>";
+				$entry_brewer_display .= format_phone_us($row_log['brewerPhone1']);
+			}
+			
+			else {
 				$entry_brewer_display .= ", ".$row_log['brewerCountry'];
 				$entry_brewer_display .= "<br>";
 				$entry_brewer_display .= $row_log['brewerPhone1'];
-				$entry_brewer_display .= "</small>";
 			}
-			else {
-				$entry_brewer_display .= "<br>";
-				$entry_brewer_display .= format_phone_us($row_log['brewerPhone1']);
-				$entry_brewer_display .= "</small>";
-			}
+			
+			$entry_brewer_display .= "</small>";
 
 		}
 
@@ -407,27 +407,18 @@ if ($totalRows_log > 0) {
 
 			if ((!empty($scoresheet_file_name_1)) && ($scoresheet_entry)) {
 
-				// The pseudo-random number and the corresponding name of the temporary file are defined each time
-				// this brewer_entries.sec.php script is accessed (or refreshed), but the temporary file is created
-				// only when the entrant clicks on the icon to access the scoresheet.
+				/**
+				 * The pseudo-random number and the corresponding name of the 
+				 * temporary file are defined each time. The temporary file is created
+				 * only when the user selects the icon to access the scoresheet.
+				 */
+
 				$random_num_str_1 = random_generator(8,2);
 				$random_file_name_1 = $random_num_str_1.".pdf";
 				$scoresheet_random_file_relative_1 = "user_temp/".$random_file_name_1;
 				$scoresheet_random_file_1 = USER_TEMP.$random_file_name_1;
 				$scoresheet_random_file_html_1 = $base_url.$scoresheet_random_file_relative_1;
 				$scoresheet_link_1 .= "<a class=\"hide-loader\" href=\"".$base_url."output/scoresheets.output.php?";
-
-				// Obfuscate the *ACTUAL* file names.
-				// Prevents casual users from right clicking on scoresheet download link and changing
-				// the entry or judging number pdf name passed via the URL to force downloads of files
-				// they shouldn't have access to. Can I get a harumph?!
-
-				/*
-				if (function_exists('openssl_encrypt')) {
-					$scoresheet_link_1 .= "scoresheetfilename=".obfuscateURL($scoresheet_file_name_1);
-					$scoresheet_link_1 .= "&amp;randomfilename=".obfuscateURL($random_file_name_1)."&amp;download=true";
-				}
-				*/
 
 				$scoresheet_link_1 .= "scoresheetfilename=".urlencode(obfuscateURL($scoresheet_file_name_1,$encryption_key));
 				$scoresheet_link_1 .= "&amp;randomfilename=".urlencode(obfuscateURL($random_file_name_1,$encryption_key))."&amp;download=true";
@@ -439,9 +430,11 @@ if ($totalRows_log > 0) {
 
 			if ((!empty($scoresheet_file_name_2)) && ($scoresheet_judging)) {
 
-				// The pseudo-random number and the corresponding name of the temporary file are defined each time
-				// this brewer_entries.sec.php script is accessed (or refreshed), but the temporary file is created
-				// only when the entrant clicks on the icon to access the scoresheet.
+				/**
+				 * The pseudo-random number and the corresponding name of the 
+				 * temporary file are defined each time. The temporary file is created
+				 * only when the user selects the icon to access the scoresheet.
+				 */
 
 				$random_num_str_2 = random_generator(8,2);
 				$random_file_name_2 = $random_num_str_2.".pdf";
@@ -451,17 +444,15 @@ if ($totalRows_log > 0) {
 
 				$scoresheet_link_2 .= "<a class=\"hide-loader\" href=\"".$base_url."output/scoresheets.output.php?";
 
-				// Obfuscate the *ACTUAL* file names.
-				// Prevents casual users from right clicking on scoresheet download link and changing
-				// the entry or judging number pdf name passed via the URL to force downloads of files
-				// they shouldn't have access to. Can I get a harumph?!
 				$scoresheet_link_2 .= "scoresheetfilename=".urlencode(obfuscateURL($scoresheet_file_name_2,$encryption_key));
 				$scoresheet_link_2 .= "&amp;randomfilename=".urlencode(obfuscateURL($random_file_name_2,$encryption_key))."&amp;download=true";
 				if ($dbTable != "default") $scoresheet_link_2 .= "&amp;view=".$archive_suffix;
 				$scoresheet_link_2 .= sprintf("\" data-toggle=\"tooltip\" title=\"%s '".$entry_name."' (by Judging Number).\">",$brewer_entries_text_006);
 				$scoresheet_link_2 .= "<span class=\"fa fa-lg fa-file-pdf-o\"></a>&nbsp;&nbsp;";
+			
 			}
 
+			/*
 			// Clean up temporary scoresheets created for other brewers, when they are at least 1 minute old (just to avoid problems when two entrants try accessing their scoresheets at practically the same time, and clean up previously created scoresheets for the same brewer, regardless of how old they are.
 			$tempfiles = array_diff(scandir(USER_TEMP), array('..', '.'));
 
@@ -476,6 +467,7 @@ if ($totalRows_log > 0) {
 					}
 				}
 			}
+			*/
 
 			if ((($dbTable == "default") && ($_SESSION['prefsDisplaySpecial'] == "E")) || ($dbTable != "default")) $entry_actions .= $scoresheet_link_1;
 			if ((($dbTable == "default") && ($_SESSION['prefsDisplaySpecial'] == "J")) || ($dbTable != "default")) $entry_actions .= $scoresheet_link_2;
@@ -501,17 +493,21 @@ if ($totalRows_log > 0) {
 
 		if ((!empty($entry_unconfirmed_row)) || (!empty($entry_allergen_row))) {
 
-			if (!empty($entry_unconfirmed_row)) $tbody_rows .= "<a href=\"".$base_url."index.php?section=brew&amp;go=".$go."&amp;bid=".$row_log['uid']."&amp;action=edit&amp;id=".$row_log['id']."&amp;view=".$row_log['brewCategory']."-".$row_log['brewSubCategory']."\" data-toggle=\"tooltip\" title=\"Unconfirmed Entry - Click to Edit\">";
+			if (!empty($entry_unconfirmed_row)) $tbody_rows .= "<a href=\"".$base_url."index.php?section=brew&amp;go=".$go."&amp;bid=".$row_log['uid']."&amp;action=edit&amp;id=".$row_log['id']."&amp;view=".$row_log['brewCategory']."-".$row_log['brewSubCategory']."\" data-toggle=\"tooltip\" title=\"Unconfirmed Entry - Select to Edit\">";
 			$tbody_rows .= "<span class=\"fa fa-lg fa-exclamation-triangle text-danger\"></span>";
 
 			if (!empty($entry_unconfirmed_row)) $tbody_rows .= "</a>";
 			$tbody_rows .= " ";
+
+
+			$entry_unconfirmed_display .= "<br><span class=\"text-danger small\"><strong>Unconfirmed entry.</strong> Edit or contact the participant to confirm.";
 		
 		}
 
 		if (!empty($required_info)) $tbody_rows .= " <a class=\"hide-loader hidden-print\" role=\"button\" data-toggle=\"collapse\" data-target=\"#collapseEntryInfo".$row_log['id']."\" aria-expanded=\"false\" aria-controls=\"collapseEntryInfo".$row_log['id']."\"><span class=\"fa fa-lg fa-info-circle <?php echo $hidden_sm; ?>\"></span></a> ";
 
 		$tbody_rows .= $entry_style_display;
+		$tbody_rows .= $entry_unconfirmed_display;
 		$tbody_rows .= $entry_allergens_display;
 
 		if (!empty($required_info)) $tbody_rows .= "<div class=\"visible-xs visible-sm hidden-print\" style=\"margin: 5px 0 5px 0\"><button class=\"btn btn-primary btn-block btn-xs\" type=\"button\" data-toggle=\"collapse\" data-target=\"#collapseEntryInfo".$row_log['id']."\" aria-expanded=\"false\" aria-controls=\"collapseEntryInfo".$row_log['id']."\">Entry Info <span class=\"fa fa-lg fa-info-circle\"></span></button></div>";
@@ -773,6 +769,7 @@ $(document).ready(function () {
 					<li class="small"><a class="hide-loader" href="<?php echo $base_url; ?>includes/process.inc.php?action=not-received&amp;dbTable=<?php echo $brewing_db_table; ?>" data-confirm="Are you sure? This will mark ALL entries as NOT received and could be a large pain to undo.">Un-Mark All as Received</a></li>
 					<li class="small"><a class="hide-loader" href="<?php echo $base_url; ?>includes/process.inc.php?action=confirmed&amp;dbTable=<?php echo $brewing_db_table; ?>" data-confirm="Are you sure? This will mark ALL entries as confirmed and could be a large pain to undo.">Confirm All Entries</a></li>
 					<li class="small"><a class="hide-loader" href="<?php echo $base_url; ?>includes/process.inc.php?action=purge&amp;go=unconfirmed" data-confirm="Are you sure? This will delete ALL unconfirmed entries and/or entries without special ingredients/classic style info that require them from the database - even those that are less than 24 hours old. This cannot be undone.">Purge All Unconfirmed Entries</a></li>
+					<li class="small"><a class="hide-loader" href="<?php echo $base_url; ?>includes/process.inc.php?action=purge&amp;go=unpaid" data-confirm="Are you sure? This will delete ALL unpaid entries from the database and cannot be undone.">Purge All Unpaid Entries</a></li>
 					<li class="small"><a class="hide-loader" data-confirm="Are you sure you want to regenerate judging numbers for all entries? This will over-write all judging numbers, including those that have been assigned via the barcode or QR Code scanning function. The process may take a while depending upon the number of entires in your database." href="<?php echo $base_url; ?>includes/process.inc.php?section=admin&amp;go=<?php echo $go; ?>&amp;action=generate_judging_numbers&amp;sort=default">Regenerate Judging Numbers (Random)</a></li>
 					<li class="small"><a class="hide-loader" data-confirm="Are you sure you want to regenerate judging numbers for all entries? This will over-write all judging numbers, including those that have been assigned via the barcode or QR Code scanning function. The process may take a while depending upon the number of entires in your database. PLEASE NOTE that judging numbers will be in the following format: XX-123 (where XX is the category number or name)." href="<?php echo $base_url; ?>includes/process.inc.php?section=admin&amp;go=<?php echo $go; ?>&amp;action=generate_judging_numbers&amp;sort=legacy">Regenerate Judging Numbers (With Style Number Prefix)</a></li>
 					<li class="small"><a class="hide-loader" data-confirm="Are you sure you want to regenerate judging numbers for all entries? This will over-write all judging numbers, including those that have been assigned via the barcode or QR Code scanning function. The process may take a while depending upon the number of entires in your database." href="<?php echo $base_url; ?>includes/process.inc.php?section=admin&amp;go=<?php echo $go; ?>&amp;action=generate_judging_numbers&amp;sort=identical">Regenerate Judging Numbers (Same as Entry Numbers)</a></li>

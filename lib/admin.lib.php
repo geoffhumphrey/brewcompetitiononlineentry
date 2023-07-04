@@ -292,12 +292,13 @@ function table_choose($section,$go,$action,$filter,$view,$script_name,$method) {
 		$row_tables = mysqli_fetch_assoc($tables);
 		$totalRows_tables = mysqli_num_rows($tables);
 
-		do {
-			$table_choose .= '<option value="'.$row_tables['id'].'">'.$row_tables['tableNumber'].': '.$row_tables['tableName'].'</option>';
-		} while ($row_tables = mysqli_fetch_assoc($tables));
+		if ($totalRows_tables > 0) {
+			do {
+				$table_choose .= '<option value="'.$row_tables['id'].'">'.$row_tables['tableNumber'].': '.$row_tables['tableName'].'</option>';
+			} while ($row_tables = mysqli_fetch_assoc($tables));
+		}
 
 	}
-	
 
 	else {
 		if ($method == "thickbox") $class = 'class="hide-loader menuItem" id="modal_window_link"';
@@ -310,10 +311,12 @@ function table_choose($section,$go,$action,$filter,$view,$script_name,$method) {
 		$row_tables = mysqli_fetch_assoc($tables);
 		$totalRows_tables = mysqli_num_rows($tables);
 
-		do {
-			if ($filter == "mini_bos") $table_choose .= '<li class="small"><a id="modal_window_link" class="hide-loader" href="'.$script_name.'?section='.$section.'&go='.$go.'&action='.$action.'&filter='.$filter.'&view='.$view.'&id='.$row_tables['id'].'" title="Print '.$row_tables['tableName'].'">'.$row_tables['tableNumber'].': '.$row_tables['tableName'].' (Mini-BOS)</a></li>';
-			else $table_choose .= '<li class="small"><a id="modal_window_link" class="hide-loader" href="'.$script_name.'?section='.$section.'&go='.$go.'&action='.$action.'&filter='.$filter.'&view='.$view.'&id='.$row_tables['id'].'" title="Print '.$row_tables['tableName'].'">'.$row_tables['tableNumber'].': '.$row_tables['tableName'].' </a></li>';
-		} while ($row_tables = mysqli_fetch_assoc($tables));
+		if ($totalRows_tables > 0) {
+			do {
+				if ($filter == "mini_bos") $table_choose .= '<li class="small"><a id="modal_window_link" class="hide-loader" href="'.$script_name.'?section='.$section.'&go='.$go.'&action='.$action.'&filter='.$filter.'&view='.$view.'&id='.$row_tables['id'].'" title="Print '.$row_tables['tableName'].'">'.$row_tables['tableNumber'].': '.$row_tables['tableName'].' (Mini-BOS)</a></li>';
+				else $table_choose .= '<li class="small"><a id="modal_window_link" class="hide-loader" href="'.$script_name.'?section='.$section.'&go='.$go.'&action='.$action.'&filter='.$filter.'&view='.$view.'&id='.$row_tables['id'].'" title="Print '.$row_tables['tableName'].'">'.$row_tables['tableNumber'].': '.$row_tables['tableName'].' </a></li>';
+			} while ($row_tables = mysqli_fetch_assoc($tables));
+		}
 
 	}
 
@@ -503,12 +506,17 @@ function score_custom_winning_choose($special_best_info_db_table,$special_best_d
 	return $r;
 }
 
-function participant_choose($brewer_db_table,$pro_edition,$judge) {
+function participant_choose($brewer_db_table,$pro_edition,$judge,$evaluation='0') {
 	
 	require(CONFIG.'config.php');
 	mysqli_select_db($connection,$database);
 
-	if ($pro_edition == 1) $query_brewers = "SELECT uid,brewerBreweryName FROM $brewer_db_table WHERE brewerBreweryName IS NOT NULL ORDER BY brewerBreweryName ASC";
+	if ($pro_edition == 1) {
+		
+		if (($evaluation == 1) && ($judge == 1)) $query_brewers = "SELECT uid,brewerFirstName,brewerLastName FROM $brewer_db_table WHERE brewerJudge='Y' ORDER BY brewerLastName ASC";
+		else $query_brewers = "SELECT uid,brewerBreweryName FROM $brewer_db_table WHERE brewerBreweryName IS NOT NULL ORDER BY brewerBreweryName ASC";
+
+	}
 	
 	else {
 		
@@ -817,13 +825,16 @@ function judging_location_avail($loc_id,$judge_avail,$method=0) {
 	require(CONFIG.'config.php');
 	mysqli_select_db($connection,$database);
 
+	$return = "";
+
 	$query_judging_loc3 = sprintf("SELECT judgingLocName,judgingDate,judgingLocation,judgingLocType FROM %s WHERE id='%s'", $prefix."judging_locations", $loc_id);
 	$judging_loc3 = mysqli_query($connection,$query_judging_loc3) or die (mysqli_error($connection));
 	$row_judging_loc3 = mysqli_fetch_assoc($judging_loc3);
-	
-	if (($method == 0) && (substr($judge_avail, 0, 1) == "Y") && (!empty($row_judging_loc3['judgingLocName'])) && ($row_judging_loc3['judgingLocType'] < 2)) $return = $row_judging_loc3['judgingLocName']."<br>";
-	else if (($method == 1) && (substr($judge_avail, 0, 1) == "Y") && (!empty($row_judging_loc3['judgingLocName'])) && ($row_judging_loc3['judgingLocType'] == 2)) $return = $row_judging_loc3['judgingLocName']."<br>";
-	else $return = "";
+
+	if ($row_judging_loc3) {
+		if (($method == 0) && (substr($judge_avail, 0, 1) == "Y") && (!empty($row_judging_loc3['judgingLocName'])) && ($row_judging_loc3['judgingLocType'] < 2)) $return = $row_judging_loc3['judgingLocName']."<br>";
+		else if (($method == 1) && (substr($judge_avail, 0, 1) == "Y") && (!empty($row_judging_loc3['judgingLocName'])) && ($row_judging_loc3['judgingLocType'] == 2)) $return = $row_judging_loc3['judgingLocName']."<br>";
+	}
 	
 	return $return;
 
@@ -1473,7 +1484,7 @@ function judge_info($uid) {
 
 	$r = "";
 
-	$query_brewer_info = sprintf("SELECT id,brewerFirstName,brewerLastName,brewerJudgeLikes,brewerJudgeDislikes,brewerJudgeMead,brewerJudgeCider,brewerJudgeRank,brewerJudgeID,brewerStewardLocation,brewerJudgeLocation,brewerJudgeExp,brewerJudgeNotes FROM %s WHERE uid='%s'", $prefix."brewer", $uid);
+	$query_brewer_info = sprintf("SELECT id,brewerFirstName,brewerLastName,brewerJudgeLikes,brewerJudgeDislikes,brewerJudgeMead,brewerJudgeCider,brewerJudgeRank,brewerJudgeID,brewerStewardLocation,brewerJudgeLocation,brewerJudgeExp,brewerJudgeNotes,brewerAssignment FROM %s WHERE uid='%s'", $prefix."brewer", $uid);
 	$brewer_info = mysqli_query($connection,$query_brewer_info) or die (mysqli_error($connection));
 	$row_brewer_info = mysqli_fetch_assoc($brewer_info);
 
@@ -1494,6 +1505,8 @@ function judge_info($uid) {
 		."^".$row_brewer_info['id']
 		."^".$row_brewer_info['brewerJudgeCider'];
 	}
+
+	if ($_SESSION['prefsProEdition'] == 1) $r .= "^".$row_brewer_info['brewerAssignment'];
 
 	if ($_SESSION['jPrefsQueued'] == "N") {
 		

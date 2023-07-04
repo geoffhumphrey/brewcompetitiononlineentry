@@ -1,5 +1,8 @@
 <?php
 
+$northwest = FALSE;
+if ($_SESSION['jPrefsScoresheet'] == 4) $northwest = TRUE;
+
 if ($beer) {
 	$aroma_ticks = $aroma_ticks_beer;
 	$flavor_ticks = $flavor_ticks_beer;
@@ -27,6 +30,10 @@ if ($action == "edit") {
 	$flavor_data = json_decode($row_eval['evalFlavorChecklist'], true);
 	$mouthfeel_data = json_decode($row_eval['evalMouthfeelChecklist'], true);
 }
+
+if (($cider) && ($northwest)) include (EVALS.'nw_structured_cider.eval.php');
+
+else {
 ?>
 
 <!-- Structured Evaluation Form -->
@@ -687,3 +694,4 @@ if ($action == "edit") {
   </div>
 </div>
 <?php } ?>
+<?php } // end else ?>

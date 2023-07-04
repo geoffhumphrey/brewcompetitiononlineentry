@@ -114,7 +114,7 @@ $(document).ready(function() {
     });
 });
 </script>
-        <form data-toggle="validator" role="form" class="form-horizontal" name="form1" method="post" action="<?php echo $base_url; ?>includes/process.inc.php?dbTable=<?php echo $contacts_db_table; ?>&action=email" onSubmit="return CheckRequiredFields()">
+        <form id="submit-form" data-toggle="validator" role="form" class="form-horizontal hide-loader-form-submit" name="form1" method="post" action="<?php echo $base_url; ?>includes/process.inc.php?dbTable=<?php echo $contacts_db_table; ?>&action=email">
         	<div class="form-group">
             	<label for="" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label1; ?></label>
                 <div class="col-lg-10 col-md-9 col-sm-8 col-xs-12">
@@ -186,7 +186,7 @@ $(document).ready(function() {
             <div class="form-group">
                 <div class="col-lg-offset-2 col-md-offset-3 col-sm-offset-4 col-xs-12">
                 	<!-- Input Here -->
-                  	<button name="submit" type="submit" class="btn btn-primary" ><?php echo $label_send_message; ?> <span class="fa fa-send"></span> </button>
+                  	<button id="form-submit-button" name="submit" type="submit" class="btn btn-primary" ><?php echo $label_send_message; ?> <span class="fa fa-send"></span> </button>
                 </div>
             </div><!-- Form Group -->
 

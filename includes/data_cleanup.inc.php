@@ -19,6 +19,19 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] == 0)) {
 
 	if ($action == "purge") {
 
+		// Purge unpaid entries
+		if ($go == "unpaid") {
+			
+			$unpaid = purge_entries("unpaid", 0);
+
+			$redirect = $base_url."index.php?section=admin&go=entries&purge=true";
+			$redirect = prep_redirect_link($redirect);
+			$redirect_go_to = sprintf("Location: %s", $redirect);
+
+			if ($unpaid) $status = 1;
+
+		}
+
 		// Purge unconfirmed and/or entries that require special ingredients that do not have special ingredient data
 		if ($go == "unconfirmed") {
 
@@ -104,21 +117,7 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] == 0)) {
 
 				} // end else
 
-				if ($count_results == $count_results_actual) {
-					
-					$status = 1;
-
-					$dom_ct_participants_entries = get_participant_count("received-entrant");
-					$dom_ct_entries = get_entry_count("total-logged");
-					$dom_ct_entries_unconfirmed = get_entry_count("unconfirmed");
-					$dom_ct_entries_paid = get_entry_count("paid");
-					$dom_ct_entries_paid_received = get_entry_count("paid-received");
-					$total_fees = total_fees($_SESSION['contestEntryFee'], $_SESSION['contestEntryFee2'], $_SESSION['contestEntryFeeDiscount'], $_SESSION['contestEntryFeeDiscountNum'], $_SESSION['contestEntryCap'], $_SESSION['contestEntryFeePasswordNum'], $bid, $filter, $_SESSION['comp_id']);
-					$total_fees_paid = total_fees_paid($_SESSION['contestEntryFee'], $_SESSION['contestEntryFee2'], $_SESSION['contestEntryFeeDiscount'], $_SESSION['contestEntryFeeDiscountNum'], $_SESSION['contestEntryCap'], $_SESSION['contestEntryFeePasswordNum'], $bid, $filter, $_SESSION['comp_id']);					
-					$dom_total_fees = number_format($total_fees,2);
-					$dom_total_fees_paid = number_format($total_fees_paid,2);
-
-				}
+				if ($count_results == $count_results_actual) $status = 1;
 			
 			} // end if (!empty($date_threshold))
 
@@ -173,25 +172,7 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] == 0)) {
 			$redirect = prep_redirect_link($redirect);
 			$redirect_go_to = sprintf("Location: %s", $redirect);
 			
-			if ($count_results == $count_results_actual) {
-					
-					$status = 1;
-
-					if ($go != "purge-all") {
-						
-						$dom_ct_participants_entries = get_participant_count("received-entrant");
-						$dom_ct_entries = get_entry_count("total-logged");
-						$dom_ct_entries_unconfirmed = get_entry_count("unconfirmed");
-						$dom_ct_entries_paid = get_entry_count("paid");
-						$dom_ct_entries_paid_received = get_entry_count("paid-received");
-						$total_fees = total_fees($_SESSION['contestEntryFee'], $_SESSION['contestEntryFee2'], $_SESSION['contestEntryFeeDiscount'], $_SESSION['contestEntryFeeDiscountNum'], $_SESSION['contestEntryCap'], $_SESSION['contestEntryFeePasswordNum'], $bid, $filter, $_SESSION['comp_id']);
-						$total_fees_paid = total_fees_paid($_SESSION['contestEntryFee'], $_SESSION['contestEntryFee2'], $_SESSION['contestEntryFeeDiscount'], $_SESSION['contestEntryFeeDiscountNum'], $_SESSION['contestEntryCap'], $_SESSION['contestEntryFeePasswordNum'], $bid, $filter, $_SESSION['comp_id']);					
-						$dom_total_fees = number_format($total_fees,2);
-						$dom_total_fees_paid = number_format($total_fees_paid,2);
-					
-					}
-
-				}
+			if ($count_results == $count_results_actual) $status = 1;
 
 			if (!empty($date_threshold)) $date_threshold = strtotime($date_threshold);
 
@@ -224,9 +205,7 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] == 0)) {
 			$row_non_admin = mysqli_fetch_assoc($non_admin);
 			$totalRows_non_admin = mysqli_num_rows($non_admin);
 
-			if ($totalRows_non_admin == 0) {
-				$status = 2; // No entries found
-			}
+			if ($totalRows_non_admin == 0) $status = 2; // No entries found
 
 			if ($totalRows_non_admin > 0) {
 
@@ -317,29 +296,7 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] == 0)) {
 
 			} // end if ($totalRows_non_admin > 0)
 
-			if ($count_results == $count_results_actual) {
-					
-				$status = 1;
-
-				if ($go != "purge-all") {
-					$dom_ct_judges_avail = get_participant_count("judge");
-					$dom_ct_judges_assigned = get_participant_count("judge-assigned");
-					$dom_ct_stewards_avail = get_participant_count("steward");
-					$dom_ct_stewards_assigned = get_participant_count("steward-assigned");
-					$dom_ct_staff_avail = get_participant_count("staff");
-					$dom_ct_staff_assigned = get_participant_count("staff-assigned");
-					$dom_ct_participants_entries = get_participant_count("received-entrant");
-					$dom_ct_entries = get_entry_count("total-logged");
-					$dom_ct_entries_unconfirmed = get_entry_count("unconfirmed");
-					$dom_ct_entries_paid = get_entry_count("paid");
-					$dom_ct_entries_paid_received = get_entry_count("paid-received");
-					$total_fees = total_fees($_SESSION['contestEntryFee'], $_SESSION['contestEntryFee2'], $_SESSION['contestEntryFeeDiscount'], $_SESSION['contestEntryFeeDiscountNum'], $_SESSION['contestEntryCap'], $_SESSION['contestEntryFeePasswordNum'], $bid, $filter, $_SESSION['comp_id']);
-					$total_fees_paid = total_fees_paid($_SESSION['contestEntryFee'], $_SESSION['contestEntryFee2'], $_SESSION['contestEntryFeeDiscount'], $_SESSION['contestEntryFeeDiscountNum'], $_SESSION['contestEntryCap'], $_SESSION['contestEntryFeePasswordNum'], $bid, $filter, $_SESSION['comp_id']);					
-					$dom_total_fees = number_format($total_fees,2);
-					$dom_total_fees_paid = number_format($total_fees_paid,2);
-				}
-				
-			}
+			if ($count_results == $count_results_actual) $status = 1;
 
 			if (!empty($date_threshold)) $date_threshold = strtotime($date_threshold);
 
@@ -404,7 +361,6 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] == 0)) {
 		} // END if (($go == "tables") || ($go == "purge-all"))
 
 		if ($go == "judge-assignments") {
-
 
 			$update_table = $prefix."judging_assignments";
 
@@ -618,7 +574,6 @@ if ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] == 0)) {
 			$db_conn->rawQuery($sql_purge);
 			if ($db_conn->getLastErrno() === 0) {
 				$status = 1;
-				$dom_ct_eval = get_evaluation_count('total');
 			}
 
 		}

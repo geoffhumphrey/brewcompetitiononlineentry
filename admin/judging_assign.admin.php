@@ -66,6 +66,7 @@ $available_count = 0;
 $total_count = 0;
 $table_styles = explode(",",$row_tables_edit['tableStyles']);
 $co_brewers_table = array();
+$industry_affliations = array();
 
 foreach ($table_styles as $table_style) {
 
@@ -73,21 +74,43 @@ foreach ($table_styles as $table_style) {
   $style = mysqli_query($connection,$query_style) or die (mysqli_error($connection));
   $row_style = mysqli_fetch_assoc($style);
 
-  $query_co_brewers = sprintf("SELECT brewCoBrewer FROM %s WHERE brewCoBrewer IS NOT NULL AND brewCategorySort='%s' AND brewSubCategory='%s'",$prefix."brewing",$row_style['brewStyleGroup'],$row_style['brewStyleNum']);
-  if ($_SESSION['jPrefsTablePlanning'] == 0) $query_co_brewers .= " AND brewReceived='1'";
-  $co_brewers = mysqli_query($connection,$query_co_brewers) or die (mysqli_error($connection));
-  $row_co_brewers = mysqli_fetch_assoc($co_brewers);
-  $totalRows_co_brewers = mysqli_num_rows($co_brewers);
-  
-  if ($totalRows_co_brewers > 0) {
-    do {
-      $co_brewers_table[] = $row_co_brewers['brewCoBrewer'];
-    } while ($row_co_brewers = mysqli_fetch_assoc($co_brewers));
+  if ($_SESSION['prefsProEdition'] == 0) {
+
+    $query_co_brewers = sprintf("SELECT brewCoBrewer FROM %s WHERE brewCoBrewer IS NOT NULL AND brewCategorySort='%s' AND brewSubCategory='%s'",$prefix."brewing",$row_style['brewStyleGroup'],$row_style['brewStyleNum']);
+    if ($_SESSION['jPrefsTablePlanning'] == 0) $query_co_brewers .= " AND brewReceived='1'";
+    $co_brewers = mysqli_query($connection,$query_co_brewers) or die (mysqli_error($connection));
+    $row_co_brewers = mysqli_fetch_assoc($co_brewers);
+    $totalRows_co_brewers = mysqli_num_rows($co_brewers);
+
+    if ($totalRows_co_brewers > 0) {
+      
+      do {
+        $co_brewers_table[] = $row_co_brewers['brewCoBrewer'];
+      } while ($row_co_brewers = mysqli_fetch_assoc($co_brewers));
+    
+    }
+
   }
 
+  if ($_SESSION['prefsProEdition'] == 1) {
+
+    $query_ind_aff = sprintf("SELECT a.brewBrewerID, b.brewerBreweryName FROM %s a, %s b WHERE a.brewBrewerID = b.uid AND b.brewerBreweryName IS NOT NULL AND brewCategorySort='%s' AND brewSubCategory='%s'",$prefix."brewing", $prefix."brewer", $row_style['brewStyleGroup'], $row_style['brewStyleNum']);
+    $ind_aff = mysqli_query($connection,$query_ind_aff) or die (mysqli_error($connection));
+    $row_ind_aff = mysqli_fetch_assoc($ind_aff);
+    $totalRows_ind_aff = mysqli_num_rows($ind_aff);
+
+    if ($totalRows_ind_aff > 0) {
+      
+      do {
+        $industry_affliations[] = $row_ind_aff['brewerBreweryName'];
+      } while ($row_ind_aff = mysqli_fetch_assoc($ind_aff));
+    
+    }
+
+  }
+    
 }
 
-// print_r($co_brewers_table);
 if ($totalRows_brewer > 0) {
   
   do {
@@ -105,15 +128,39 @@ if ($totalRows_brewer > 0) {
     //$rank_number = filter_var($display_rank,FILTER_SANITIZE_NUMBER_FLOAT);
     
     $co_brewer_flag = FALSE;
-    $cb_ct = 0;
-    $cb_list = array();
-    foreach ($co_brewers_table as $cb) {
-       if (strpos($cb, $judge_info[1]) !== false) $cb_ct +=1;
-       $cb_list[] = $cb;
+    $ind_aff_flag = FALSE;
+    $ind_aff_0 = array();
+    $ind_aff_1 = array();
+    $ind_aff_2 = array();
+    $ind_aff_3 = array();
+    
+    if ($_SESSION['prefsProEdition'] == 0) {
+      $cb_ct = 0;
+      $cb_list = array();
+      foreach ($co_brewers_table as $cb) {
+         if (strpos($cb, $judge_info[1]) !== false) $cb_ct +=1;
+         $cb_list[] = $cb;
+      }
+      if ($cb_ct > 0) $co_brewer_flag = TRUE;
     }
-    if ($cb_ct > 0) $co_brewer_flag = TRUE;
-    $cb_list = array_unique($cb_list);
-    $cb_list = implode(", ",$cb_list);
+
+    if ($_SESSION['prefsProEdition'] == 1) {
+
+      if (!empty($judge_info[13])) {
+
+        $ind_aff_0 = json_decode($judge_info[13],true);
+        if (isset($ind_aff_0['affilliated'])) $ind_aff_1 = $ind_aff_0['affilliated'];
+        if (isset($ind_aff_0['affilliatedOther'])) $ind_aff_2 = $ind_aff_0['affilliatedOther'];
+        $ind_aff_3 = array_merge($ind_aff_1,$ind_aff_2);
+        $aff_ct = 0;
+        foreach ($industry_affliations as $ind_aff_4) {
+           if (in_array($ind_aff_4, $ind_aff_3)) $aff_ct +=1;
+        }
+
+        if ($aff_ct > 0) $ind_aff_flag = TRUE;
+      }
+
+    }
           
   	$assign_row_color = "";
   	$flights_display = "";
@@ -272,7 +319,21 @@ if ($totalRows_brewer > 0) {
         if (!empty($judge_roles_display)) $output_datatables_body .= $judge_roles_display;
       }
 
-      if (($co_brewer_flag) && ($assign_row_color != "bg-info text-info")) $output_datatables_body .= "<br><span class=\"text-danger\"><i class=\"fa fas fa-exclamation-triangle\"></i> <strong>Possible Co-Brewer conflict (last name match).</strong> <small>Verify with full co-brewer names listed above.</small></span>"; 
+      if ($ind_aff_flag) {
+        
+          $judge_ind_aff = "";
+
+          if (!empty($ind_aff_3)) {
+            foreach ($ind_aff_3 as $value) {
+                if (in_array($value,$industry_affliations)) $judge_ind_aff .= $value.", ";
+            }
+            $judge_ind_aff = trim($judge_ind_aff,", ");
+          }
+
+          $output_datatables_body .= "<br><span class=\"text-danger\"><i class=\"fa fas fa-exclamation-triangle\"></i> <strong>Affiliation conflict.</strong></span> Judge reports an industry affiliation with the following organization(s) that have entries at this table: <span class=\"text-danger\">".$judge_ind_aff."</span>"; 
+      }
+
+      if (($co_brewer_flag) && ($assign_row_color != "bg-info text-info")) $output_datatables_body .= "<br><span class=\"text-danger\"><i class=\"fa fas fa-exclamation-triangle\"></i> <strong>Possible Co-Brewer conflict (name match).</strong> <small>Verify with full co-brewer names listed above.</small></span>"; 
       
       if (!empty($judge_info[10])) $output_datatables_body .= "<br><span class=\"text-danger\"><strong>Notes:</strong> ".$judge_info[10]."</strong>";
   		$output_datatables_body .= "</td>";
@@ -309,20 +370,21 @@ if ($totalRows_brewer > 0) {
           });\n
           ";
 
-          // Activate for Roles
           $output_datatables_body .= "<td>";
           $output_datatables_body .= "<div id=\"toggleRoles".$random."\">";
           $output_datatables_body .= "<input type=\"hidden\" name=\"rolesPrevDefined".$random."\" value=\"".$roles_previously_defined."\">";
           $output_datatables_body .= "<div class=\"checkbox\">";
           $output_datatables_body .= "<label><input name=\"head_judge".$random."\" type=\"checkbox\" value=\"HJ\" ".$checked_head_judge." /> Head Judge</label>";
           $output_datatables_body .= "</div><br>";
-          //$output_datatables_body .= "<div class=\"checkbox\">";
-          //$output_datatables_body .= "<label><input name=\"lead_judge".$random."\" type=\"checkbox\" value=\"LJ\" ".$checked_lead_judge." /> Lead Judge</label>";
-          //$output_datatables_body .= "</div><br>";
+          /*
+          $output_datatables_body .= "<div class=\"checkbox\">";
+          $output_datatables_body .= "<label><input name=\"lead_judge".$random."\" type=\"checkbox\" value=\"LJ\" ".$checked_lead_judge." /> Lead Judge</label>";
+          $output_datatables_body .= "</div><br>";
+          */
           $output_datatables_body .= "<div class=\"checkbox\">";
           $output_datatables_body .= "<label><input name=\"minibos_judge".$random."\" type=\"checkbox\" value=\"MBOS\" ".$checked_minibos_judge." /> Mini-BOS Judge</label>";
           $output_datatables_body .= "</div>";
-          $output_datatables_body .= "</div>"; // End toggleRoles <div>
+          $output_datatables_body .= "</div>";
           $output_datatables_body .= "</td>";
         
         } // end if ($_SESSION['jPrefsQueued'] == "Y")
@@ -362,8 +424,11 @@ if ($totalRows_brewer > 0) {
 } // end if ($totalRows_brewer > 0)
 
 $dashboard_link = build_public_url("evaluation","default","default","default",$sef,$base_url);
-$head_judge_explain = "<p>Choose the Head Judge for this table. <p>The Head Judge, <a class='hide-loader' href='http://www.bjcp.org/judgeprocman.php' target='_blank'>according to the BJCP</a>, is a <em>single judge</em> responsible for reviewing all scores and paperwork for accuracy.</p>";
-if ($_SESSION['prefsEval'] == 1) $head_judge_explain .= "<p>The Head Judge at each table confirms consensus scores and enters the placing entries into the system via their <a href='".$dashboard_link."'>Judging Dashboard</a> after all evaluations at the table have been submitted by judges.</p>";
+$head_judge_explain = "<p>Choose the Head Judge for this table. <p>The Head Judge, <a class='hide-loader' href='https://www.bjcp.org/exam-certification/judge-procedures-manual/' target='_blank'>according to the BJCP</a>, is a <em>single judge</em> responsible for reviewing all scores and paperwork for accuracy.</p>";
+if ($_SESSION['prefsEval'] == 1) $head_judge_explain .= "<p>Additionally, Head Judges confirm consensus scores and enter the placing entries into the system via their <a href='".$dashboard_link."'>Judging Dashboard</a> after all evaluations at the table have been submitted by judges.</p>";
+
+$head_judge_options_ranked = array_unique($head_judge_options_ranked, SORT_REGULAR);
+$head_judge_options_non = array_unique($head_judge_options_non, SORT_REGULAR);
 
 ?>
 <script>
@@ -435,13 +500,13 @@ $(document).ready(function() {
 <div class="well small">
   <div class="row">
     <div class="col-md-4">
-      <strong>Total <?php echo ucwords($filter); ?> Available for This Location and Round:</strong> <?php echo $total_count; ?><br>
-      <strong>Remaining <?php echo ucwords($filter); ?> Available for This Location and Round:</strong> <?php echo $available_count; ?>
+      <strong>Total <?php echo ucwords($filter); ?> Available for This Session and Round:</strong> <?php echo $total_count; ?><br>
+      <strong>Remaining <?php echo ucwords($filter); ?> Available for This Session and Round:</strong> <?php echo $available_count; ?>
     </div>
     <div class="col-md-4">
       <?php if ((!empty($output_at_table_modal_body)) && ($filter == "judges"))  { ?>
-      <strong>Ranked Judges at this Table:</strong> <?php echo $ranked; ?><br>
-      <strong>Non-ranked Judges at this Table:</strong> <?php echo $nonranked; ?><br>
+      <strong>Ranked Judges Assigned to this Table:</strong> <?php echo $ranked; ?><br>
+      <strong>Non-ranked Judges Assigned to this Table:</strong> <?php echo $nonranked; ?><br>
       <?php } ?>
     </div>
     <div class="col-md-4">
@@ -459,7 +524,8 @@ $(document).ready(function() {
   </div>
   <div class="row">
     <div class="col-md-12">
-      <?php if (!empty($cb_list)) { ?><strong>Co-Brewer Names Associated with Entries at this Table:</strong> <?php echo trim($cb_list,", "); } ?>
+      <?php if (!empty($cb_list)) { ?><strong>Co-Brewer Names Associated with Entries at this Table:</strong> <?php $cb_list = implode(", ", $cb_list); echo trim($cb_list,", "); } ?>
+      <?php if (!empty($industry_affliations)) { $industry_affliations = implode(", ", $industry_affliations); ?><strong>Organization(s) Associated with Entries at this Table:</strong> <?php echo trim($industry_affliations,", "); } ?>
     </div>
   </div>
 </div>
@@ -623,7 +689,9 @@ $(document).ready(function() {
     </div>
 </div><!-- ./modal -->
 <?php } ?>
+
 <form name="form1" method="post" action="<?php echo $base_url; ?>includes/process.inc.php?action=update&amp;dbTable=<?php echo $judging_assignments_db_table; ?>&amp;filter=<?php echo $filter; ?>&amp;limit=<?php echo $row_rounds['flightRound']; ?>&amp;view=<?php echo $_SESSION['jPrefsQueued']; ?>&amp;id=<?php echo $row_tables_edit['id']; ?>">
+
 <?php if ($_SESSION['jPrefsQueued'] == "N") { ?>
 <script type='text/javascript'>
 var hj_id = <?php if (!empty($head_judge_id)) echo max($head_judge_id); else echo "''"; ?>;
@@ -670,6 +738,7 @@ $(document).ready(function() {
   <?php } ?>
 });
 </script>
+
 <?php if ($filter == "judges") { ?>
 <style>
 select.custom-hj-dropdown::-ms-expand {
@@ -692,14 +761,12 @@ select.custom-hj-dropdown {
 </style>
 <div class="row form-group">
   <label for="assignRoles" class="col-xs-12 col-sm-4 col-md-4 col-lg-2 control-label">
-  Head Judge for Table: <a href="#" role="button" data-html="true" data-toggle="popover" data-container="body" data-trigger="hover focus" data-placement="top" title="Designate the Head Judge" data-content="<?php echo $head_judge_explain; ?>"> <span class="fa fa-lg fa-question-circle"></span></a>
+  Head Judge for Table: <a href="#" role="button" data-html="true" data-toggle="popover" data-container="body" data-trigger="focus" data-placement="top" title="Designate the Head Judge" data-content="<?php echo $head_judge_explain; ?>"> <span class="fa fa-lg fa-question-circle"></span></a>
   </label>
   <div class="col-xs-12 col-sm-4 col-md-4 col-lg-6">
     <select id="head-judge-select" name="head_judge_choose" class="form-control custom-hj-dropdown" onchange="update_hj_display()">
-      <option value="">None (Names will populate as you assign judges)</option>
+      <option value="">None <?php if (empty($assigned_at_table)) echo "(Names will populate as you assign judges)"; ?></option>
       <?php 
-      $head_judge_options_ranked = array_unique($head_judge_options_ranked, SORT_REGULAR);
-      $head_judge_options_non = array_unique($head_judge_options_non, SORT_REGULAR);
       foreach ($head_judge_options_ranked as $key => $value) { 
         $enable_disable = "";
         $hj_class = "";
@@ -710,15 +777,17 @@ select.custom-hj-dropdown {
       <?php } ?>
       <?php foreach ($head_judge_options_non as $key => $value) { 
         $enable_disable = "";
+        $hj_class = "";
         if ((!empty($head_judge_id)) && (in_array($value['uid'], $head_judge_id))) $enable_disable = "selected";
+        if (!in_array($value['uid'], $assigned_at_table)) $hj_class = "hj-display";
       ?>
-      <option class="hj-display" id="hj-choose-<?php echo $value['uid']; ?>" value="<?php echo $value['uid']; ?>" <?php echo $enable_disable ?>><?php echo $value['last_name'].", ".$value['first_name']." (".$value['rank'].")"; ?></option>
+      <option class="<?php echo $hj_class; ?>" id="hj-choose-<?php echo $value['uid']; ?>" value="<?php echo $value['uid']; ?>" <?php echo $enable_disable ?>><?php echo $value['last_name'].", ".$value['first_name']." (".$value['rank'].")"; ?></option>
       <?php } ?>
     </select>
   </div>
 </div>
-<?php } ?>
-<?php } ?>
+<?php } // end if ($filter == "judges")?>
+<?php } // end if ($_SESSION['jPrefsQueued'] == "N") ?>
 <table class="table table-responsive table-bordered table" id="sortable">
 <thead>
  	<?php echo $output_datatables_head; ?>

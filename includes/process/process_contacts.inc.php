@@ -58,19 +58,22 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 			$row_contact = mysqli_fetch_assoc($contact);
 
 			$to_name = $row_contact['contactFirstName']." ".$row_contact['contactLastName'];
+			$to_name = html_entity_decode($to_name);
 			$to_name = mb_convert_encoding($to_name, "UTF-8");
 
 			$to_email = $row_contact['contactEmail'];
 			$to_email = mb_convert_encoding($to_email, "UTF-8");
-			$to_email_formatted .= $to_name." <".$to_email.">";
+			$to_email_formatted = $to_name." <".$to_email.">";
 
 			$from_email = strtolower(filter_var($_POST['from_email'], FILTER_SANITIZE_EMAIL));
 			$from_email = mb_convert_encoding($from_email, "UTF-8");
 
 			$from_name = sterilize(ucwords($_POST['from_name']));
+			$from_name = html_entity_decode($from_name);
 			$from_name = mb_convert_encoding($from_name, "UTF-8");
 			
 			$subject = sterilize(ucwords($_POST['subject']));
+			$subject = html_entity_decode($subject);
 			$subject = mb_convert_encoding($subject, "UTF-8");
 
 			$message_post = sterilize($_POST['message']);
@@ -87,7 +90,7 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 			$message .= "<body>";
 			$message .= "<p>". $message_post. "</p>";
 			$message .= "<p><strong>Sender's Contact Info</strong><br>Name: " . $from_name . "<br>Email: ". $from_email . "<br><em><small>** Use if you try to reply and the email address contains &quot;noreply&quot; in it. Common with web-based mail services such as Gmail.</small></em></p>";
-			if ((DEBUG || TESTING) && ($mail_use_smtp)) $message .= "<p><small>Sent using phpMailer.</small></p>";
+			if ((DEBUG || TESTING) && (ENABLE_MAILER)) $message .= "<p><small>Sent using phpMailer.</small></p>";
 			$message .= "</body>" . "\r\n";
 			$message .= "</html>";
 
@@ -95,7 +98,7 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 			$headers .= "Content-type: text/html; charset=utf-8"."\r\n";
 			$headers .= "From: ".$comp_name." Server <".$from_competition_email.">" . "\r\n"; 
 			$headers .= "Reply-To: ".$from_name." <".$from_email.">"."\r\n";
-			if ($_SESSION['prefsEmailCC'] == 0) $headers .= "Bcc: ".$from_name." <".$from_email.">"."\r\n";
+			if ((!HOSTED) && ($_SESSION['prefsEmailCC'] == 0)) $headers .= "Bcc: ".$from_name." <".$from_email.">"."\r\n";
 
 			/*
 			// Debug
@@ -117,7 +120,7 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 				$mail->addAddress($to_email, $to_name);
 				$mail->setFrom($from_competition_email, $comp_name);
 				$mail->addReplyTo($from_email, $from_name);
-				if ($_SESSION['prefsEmailCC'] == 0) $mail->addBCC($from_email, $from_name);
+				if ((!HOSTED) && ($_SESSION['prefsEmailCC'] == 0)) $mail->addBCC($from_email, $from_name);
 				$mail->Subject = $subject;
 				$mail->Body = $message;
 				sendPHPMailerMessage($mail);

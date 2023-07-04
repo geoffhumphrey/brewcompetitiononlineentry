@@ -355,7 +355,7 @@ else {
 
 	if ($total_entry_fees > 0) {
 
-		if (($_SESSION['prefsPayToPrint'] == "N") && (($totalRows_log - $totalRows_log_confirmed) > 0)) $warning2 .= sprintf("<div class=\"alert alert-warning\"><span class=\"fa fa-lg fa-exclamation-triangle\"> <strong>%s</strong> %s</div>",$pay_text_028,$pay_text_029);
+		if (($_SESSION['prefsPayToPrint'] == "N") && (($totalRows_log - $totalRows_log_confirmed) > 0)) $warning2 .= sprintf("<p class=\"alert alert-warning\"><span class=\"fa fa-lg fa-exclamation-triangle\"></span> <strong>%s</strong> %s</p>",$pay_text_028,$pay_text_029);
 
 		echo $warning1;
 		echo $warning2;

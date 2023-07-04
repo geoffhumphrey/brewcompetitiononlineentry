@@ -30,6 +30,7 @@ foreach ($scoresheet_display as $id) {
     if ($row_eval['evalScoresheet'] == 1) include (EVALS.'full_output.eval.php');
 	if ($row_eval['evalScoresheet'] == 2) include (EVALS.'checklist_output.eval.php');
 	if ($row_eval['evalScoresheet'] == 3) include (EVALS.'structured_output.eval.php');
+    if ($row_eval['evalScoresheet'] == 4) include (EVALS.'structured_output.eval.php');
 
 } // end foreach ($scoresheet_display as $id)
 

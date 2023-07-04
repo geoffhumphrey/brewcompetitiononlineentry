@@ -226,6 +226,7 @@ if ($add_or_edit) {
 	// If editing the entry, grab the value from the recordset
 	if ($action == "edit") $brewPaid = $row_log['brewPaid'];
 
+	/*
 	if (($action == "edit") && ($msg != "default")) {
 		$view = ltrim($msg,"1-");
 		$highlight_sweetness  = highlight_required($msg,0,$_SESSION['prefsStyleSet']);
@@ -233,6 +234,7 @@ if ($add_or_edit) {
 		$highlight_carb       = highlight_required($msg,2,$_SESSION['prefsStyleSet']);
 		$highlight_strength   = highlight_required($msg,3,$_SESSION['prefsStyleSet']);
 	}
+	*/
 
 	if ($action == "edit") {
 
@@ -358,7 +360,7 @@ if (!isset($_SERVER['HTTP_REFERER'])) $relocate_referrer = "list";
 else $relocate_referrer = $_SERVER['HTTP_REFERER'];
 // echo $brewPaid; echo $row_limits['prefsUserSubCatLimit'];
 ?>
-<form data-toggle="validator" role="form" class="form-horizontal" action="<?php echo $base_url; ?>includes/process.inc.php?section=<?php echo admin_relocate($_SESSION['userLevel'],$go,$relocate_referrer);?>&amp;action=<?php echo $action; ?>&amp;go=<?php echo $go;?>&amp;dbTable=<?php echo $brewing_db_table; ?>&amp;filter=<?php echo $filter; if ($id != "default") echo "&amp;id=".$id; ?>" method="POST" name="form1" id="form1" onSubmit="return CheckRequiredFields()">
+<form id="submit-form" data-toggle="validator" role="form" class="form-horizontal hide-loader-form-submit" action="<?php echo $base_url; ?>includes/process.inc.php?section=<?php echo admin_relocate($_SESSION['userLevel'],$go,$relocate_referrer);?>&amp;action=<?php echo $action; ?>&amp;go=<?php echo $go;?>&amp;dbTable=<?php echo $brewing_db_table; ?>&amp;filter=<?php echo $filter; if ($id != "default") echo "&amp;id=".$id; ?>" method="POST" name="form1">
 <?php if ($_SESSION['userLevel'] > 1) { ?>
 <input type="hidden" name="brewBrewerID" value="<?php echo $_SESSION['user_id']; ?>">
 <input type="hidden" name="brewBrewerFirstName" value="<?php echo $_SESSION['brewerFirstName']; ?>">
@@ -439,11 +441,14 @@ else $relocate_referrer = $_SERVER['HTTP_REFERER'];
         <label for="brewStyle" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label"><?php echo $style_set." ".$label_style; ?></label>
         <div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
         <!-- Input Here -->
-        <select class="selectpicker" name="brewStyle" id="type" data-live-search="true" data-size="5" data-width="auto" data-show-tick="true" data-header="<?php echo $label_select_style; ?>" title="<?php echo $label_select_style; ?>" required>
-			<option value="0-A" <?php if (($action == "add") || (($action == "edit") && ($view == "00-A"))) echo "selected"; ?>><?php echo $header_text_107; ?></option>
+        <select class="selectpicker" name="brewStyle" id="type" data-error="<?php echo $header_text_107; ?>" data-live-search="true" data-size="5" data-width="auto" data-show-tick="true" data-header="<?php echo $label_select_style; ?>" title="<?php echo $label_select_style; ?>" required>
+        	<?php if (($action == "edit") && ($view == "00-A")) { ?>
+			<option><?php echo $header_text_107; ?></option>
             <option data-divider="true"></option>
+        	<?php } ?>
             <?php echo $styles_dropdown; ?>
         </select>
+        <div class="help-block with-errors"></div>
         <span id="helpBlock" class="help-block">
         	<div id="req-special" style="margin:0; padding:0">&spades; = <?php echo $brew_text_004; ?></div>
         	<div id="req-strength" style="margin:0; padding:0">&diams; = <?php echo $brew_text_005; ?></div>
@@ -474,7 +479,7 @@ else $relocate_referrer = $_SERVER['HTTP_REFERER'];
     <div id="optional" class="form-group"><!-- Form Group REQUIRED Text Input -->
         <label for="brewInfoOptional" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label"><?php echo $label_optional_info; ?></label>
         	<div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
-        		<textarea class="form-control" rows="8" name="brewInfoOptional" id="brewInfoOptional" data-error="<?php echo $brew_text_010; ?>" maxlength="<?php echo $_SESSION['prefsSpecialCharLimit']; ?>" placeholder="<?php echo $brew_text_028; ?>"><?php echo $row_log['brewInfoOptional']; ?></textarea>
+        		<textarea class="form-control" rows="8" name="brewInfoOptional" id="brewInfoOptional" data-error="<?php echo $brew_text_010; ?>" maxlength="<?php echo $_SESSION['prefsSpecialCharLimit']; ?>" placeholder="<?php echo $brew_text_028; ?>"><?php if ((isset($row_log['brewInfoOptional'])) && (!empty($row_log['brewInfoOptional']))) echo $row_log['brewInfoOptional']; ?></textarea>
 
             <div class="help-block with-errors"><?php if ((strpos($styleSet,"BABDB") !== false) && ($view_explodies[0] < 28)) echo $brew_text_027; ?></div>
             <div id="helpBlock" class="help-block"><p><?php echo $_SESSION['prefsSpecialCharLimit'].$label_character_limit; ?><span id="countInfoOptional">0</span></p></div>
@@ -573,6 +578,14 @@ else $relocate_referrer = $_SERVER['HTTP_REFERER'];
             <div class="help-block with-errors"></div>
         </div>
     </div>
+    <!-- International Light Lager Regional Variation -->
+	<div id="regionalVariation" class="form-group"><!-- Form Group NOT REQUIRED Text Input -->
+        <label for="brewCoBrewer" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label"><?php echo $label_regional_variation; ?></label>
+        <div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
+        	<!-- Input Here -->
+            <input class="form-control" id="regionalVar" name="regionalVar" type="text" value="<?php if (($action == "edit") && ($view == "02-A") && ($_SESSION['prefsStyleSet'] == "BJCP2021") && (!empty($row_log['brewInfo']))) echo $row_log['brewInfo']; ?>" placeholder="<?php echo $brew_text_041; ?>" maxlength="100">
+        </div>
+    </div><!-- ./Form Group -->
     <!-- Select Strength -->
     <div id="strength">
     	<div id="fg-strength" class="form-group"><!-- Form Group Radio INLINE -->
@@ -779,7 +792,7 @@ if ($action == "edit") {
 <div class="form-group">
     <div class="col-lg-offset-2 col-md-offset-3 col-sm-offset-3 col-xs-12">
         <!-- Input Here -->
-		<button name="submit" type="submit" class="btn btn-primary <?php if ($disable_fields) echo "disabled"; ?>" ><?php echo $submit_text; ?> <span class="fa fa-<?php echo $submit_icon; ?>"></span></button>
+		<button id="form-submit-button" name="submit" type="submit" class="btn btn-primary <?php if ($disable_fields) echo "disabled"; ?>" ><?php echo $submit_text; ?> <span class="fa fa-<?php echo $submit_icon; ?>"></span></button>
 	</div>
 </div><!-- Form Group -->
 </div>

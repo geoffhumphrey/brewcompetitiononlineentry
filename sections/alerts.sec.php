@@ -26,9 +26,9 @@ $alert_text_064 = sprintf("<strong>%s</strong> %s",$alert_text_062,$alert_text_0
 $alert_text_067 = sprintf("<strong>%s</strong> %s",$alert_text_065,$alert_text_066);
 $alert_text_071 = sprintf("<strong>%s</strong> %s",$alert_text_068,$alert_text_070);
 $alert_text_075 = sprintf("<strong>%s</strong> %s",$alert_text_072,$alert_text_073);
-if (!$steward_limit) $alert_text_075 .= $alert_text_074;
+if (!$steward_limit) $alert_text_075 .= " ".$alert_text_074;
 $alert_text_079 = sprintf("<strong>%s</strong> %s ",$alert_text_076,$alert_text_077);
-if (!$judge_limit) $alert_text_079 .= $alert_text_078;
+if (!$judge_limit) $alert_text_079 .= " ".$alert_text_078;
 
 if ($msg != "default") { 
 
@@ -40,15 +40,81 @@ if ($msg != "default") {
    */
 
   $info_msg_alerts = array(11,12,99);
-  $warning_msg_alerts = array(6,37,10);
-  $danger_msg_alerts = array(3,13,15,18,19,24,27,30,755);
+  $warning_msg_alerts = array(0,4,6,8,37,10);
+  $danger_msg_alerts = array(3,13,15,18,19,24,27,30,98,755);
+  $success_msg_alerts = array();
+
+  $success_msg = array();
+  $info_msg = array();
+  $warning_msg = array();
+  $danger_msg = array();
+
+  if ($section == "login") {
+    $warning_msg = array(1,4,7);
+    $danger_msg = array(1);
+  }
+
+  if ($section == "list") {
+    $success_msg = array(3,10);
+    $danger_msg = array(5,11,12);
+    $warning_msg = array(8,9);
+    unset($danger_msg_alerts[0]);
+    unset($warning_msg_alerts[3]);
+    unset($info_msg_alerts[0]);
+    unset($info_msg_alerts[1]);
+  }
+
+  if ($section == "contact") $danger_msg[] = 2;
+
+  if ($section == "pay") {
+    $success_msg = array(10,12);
+    $danger_msg = array(11);
+    unset($warning_msg_alerts[3]);
+    unset($info_msg_alerts[0]);
+    unset($info_msg_alerts[1]);
+  }
+
+  if ($section == "user") {
+    $warning_msg = array(1);
+    $danger_msg = array(2);
+  }
+
+  if ($section == "evaluation") {
+    $success_msg = array(3);
+    unset($danger_msg_alerts[0]);
+  }
+
+  if ($section == "register") {
+    $danger_msg = array(1,2,5,6);
+    unset($warning_msg_alerts[2]);
+  }
+
+  if ($section == "brew") {
+    $warning_msg = array(1);
+  }
+
+  if ($section == "admin") {
+    $success_msg = array(4);
+    $danger_msg = array(8,10);
+    unset($warning_msg_alerts[1]);
+    unset($warning_msg_alerts[3]);
+    unset($warning_msg_alerts[5]);
+  }
+
+  $success_msg_alerts = array_merge($success_msg_alerts,$success_msg);
+  $info_msg_alerts = array_merge($info_msg_alerts,$info_msg);
+  $warning_msg_alerts = array_merge($warning_msg_alerts,$warning_msg);
+  $danger_msg_alerts = array_merge($danger_msg_alerts,$danger_msg);
+
+  $alert_type = "alert-success";
+  $alert_icon = "fa-check-circle";
 
   if (in_array($msg,$info_msg_alerts)) {
     $alert_type = "alert-info";
     $alert_icon = "fa-info-circle";
   }
 
-  elseif (in_array($msg,$warning_msg_alerts)) {
+  elseif ((in_array($msg,$warning_msg_alerts)) || (strstr($msg,"1-"))) {
     $alert_type = "alert-warning";
     $alert_icon = "fa-exclamation-triangle";
   }
@@ -58,7 +124,7 @@ if ($msg != "default") {
     $alert_icon = "fa-exclamation-circle";
   }
 
-  else {
+  elseif (in_array($msg,$success_msg_alerts)) {
     $alert_type = "alert-success";
     $alert_icon = "fa-check-circle";
   }

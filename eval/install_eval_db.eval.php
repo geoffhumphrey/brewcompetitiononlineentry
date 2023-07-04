@@ -23,7 +23,7 @@ $updateSQL = sprintf("CREATE TABLE `%s` (
   `evalFlavorChecklist` mediumtext COLLATE utf8mb4_unicode_ci,
   `evalFlavorChecklistDesc` mediumtext COLLATE utf8mb4_unicode_ci,
   `evalFlavorComments` mediumtext COLLATE utf8mb4_unicode_ci,
-  `evalMouthfeelScore` tinyint(1) DEFAULT NULL,
+  `evalMouthfeelScore` tinyint(2) DEFAULT NULL,
   `evalMouthfeelChecklist` mediumtext COLLATE utf8mb4_unicode_ci,
   `evalMouthfeelChecklistDesc` mediumtext COLLATE utf8mb4_unicode_ci,
   `evalMouthfeelComments` mediumtext COLLATE utf8mb4_unicode_ci,

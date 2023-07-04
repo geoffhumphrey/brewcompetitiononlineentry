@@ -42,14 +42,16 @@ foreach ($style_sets as $style_set) {
     if ($style_set['style_set_name'] == "BA") $method = 2;
     else $method = 0;
 
-    do {
-        
-        $all_exceptions_USCLEx .= "<div class=\"checkbox\"><label><input name=\"prefsUSCLEx[]\" type=\"checkbox\" class=\"chkbox\" value=\"".$row_styles_all['id']."\">";
-        if ($style_set['style_set_name'] != "BA") $all_exceptions_USCLEx .= style_number_const($row_styles_all['brewStyleGroup'],$row_styles_all['brewStyleNum'],$style_set['style_set_display_separator'],$method);
-        if ($style_set['style_set_name'] == "BA") $all_exceptions_USCLEx .= $style_set['style_set_categories'][$row_styles_all['brewStyleGroup']]." - ".$row_styles_all['brewStyle']."</label></div>\n";
-        else $all_exceptions_USCLEx .= " ".$row_styles_all['brewStyle']."</label></div>\n";
-        
-    } while($row_styles_all = mysqli_fetch_assoc($styles_all));
+    if ($row_styles_all) {
+        do {
+            
+            $all_exceptions_USCLEx .= "<div class=\"checkbox\"><label><input name=\"prefsUSCLEx[]\" type=\"checkbox\" class=\"chkbox\" value=\"".$row_styles_all['id']."\">";
+            if ($style_set['style_set_name'] != "BA") $all_exceptions_USCLEx .= style_number_const($row_styles_all['brewStyleGroup'],$row_styles_all['brewStyleNum'],$style_set['style_set_display_separator'],$method);
+            if ($style_set['style_set_name'] == "BA") $all_exceptions_USCLEx .= $style_set['style_set_categories'][$row_styles_all['brewStyleGroup']]." - ".$row_styles_all['brewStyle']."</label></div>\n";
+            else $all_exceptions_USCLEx .= " ".$row_styles_all['brewStyle']."</label></div>\n";
+            
+        } while($row_styles_all = mysqli_fetch_assoc($styles_all));
+    }
 
     $all_exceptions .= "<div class=\"form-group\" id=\"".$style_set['id']."-".$style_set['style_set_name']."\">\n";
     $all_exceptions .= "<label for=\"prefsUSCLEx\" class=\"col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label\">Exceptions to Entry Limit per ".$style_set['style_set_name']." Sub-Style</label>\n";
@@ -103,26 +105,30 @@ if (($section == "admin") && ($go == "preferences")) {
     if (isset($row_prefs['prefsGoogleAccount'])) $recaptcha_key = explode("|", $row_prefs['prefsGoogleAccount']);
     if ($_SESSION['prefsStyleSet'] == "BA") include (INCLUDES.'ba_constants.inc.php');
 
-    // Generate the default sub-style exception list (current settings)
-    do {
+    if ($row_styles) {
 
-        $checked = "";
+        // Generate the default sub-style exception list (current settings)
+        do {
 
-        if ($go == "preferences") {
-            $a = explode(",", $row_limits['prefsUSCLEx']);
-            $b = $row_styles['id'];
-            foreach ($a as $value) {
-                if ($value == $b) $checked = "CHECKED";
+            $checked = "";
+
+            if ($go == "preferences") {
+                $a = explode(",", $row_limits['prefsUSCLEx']);
+                $b = $row_styles['id'];
+                foreach ($a as $value) {
+                    if ($value == $b) $checked = "CHECKED";
+                }
             }
-        }
 
-        if ($row_styles['id'] != "") {
-            $style_number = style_number_const($row_styles['brewStyleGroup'],$row_styles['brewStyleNum'],$_SESSION['style_set_display_separator'],0);
-            $prefsUSCLEx .= "<div class=\"checkbox\"><label><input name=\"prefsUSCLEx[]\" type=\"checkbox\" value=\"".$row_styles['id']."\" ".$checked.">".$style_number." ".$row_styles['brewStyle']."</label></div>\n";
-        }
+            if ($row_styles['id'] != "") {
+                $style_number = style_number_const($row_styles['brewStyleGroup'],$row_styles['brewStyleNum'],$_SESSION['style_set_display_separator'],0);
+                $prefsUSCLEx .= "<div class=\"checkbox\"><label><input name=\"prefsUSCLEx[]\" type=\"checkbox\" value=\"".$row_styles['id']."\" ".$checked.">".$style_number." ".$row_styles['brewStyle']."</label></div>\n";
+            }
 
-    } while ($row_styles = mysqli_fetch_assoc($styles));
+        } while ($row_styles = mysqli_fetch_assoc($styles));
 
+    }
+    
 }
 
 if ($section == "admin") { ?>
@@ -513,6 +519,9 @@ $(document).ready(function(){
         </div>
     </div>
 </div><!-- ./modal -->
+<?php if (HOSTED) { ?>
+<input type="hidden" name="prefsEmailCC" value="0">
+<?php } else { ?>
 <div class="form-group"><!-- Form Group Radio INLINE -->
     <label for="prefsEmailCC" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Contact Form CC</label>
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
@@ -524,13 +533,13 @@ $(document).ready(function(){
             <label class="radio-inline">
                 <input type="radio" name="prefsEmailCC" value="1" id="prefsEmailCC_1"  <?php if ($row_prefs['prefsEmailCC'] == "1") echo "CHECKED"; elseif ($section == "step3") echo "CHECKED"; ?> /> Disable
             </label>
-            
         </div>
         <span id="helpBlock" class="help-block">
         <p>Enable or disable automatic carbon copying (CC) of emails sent by the system to the "sender" of the email. Since any email address can be entered in the From field of the Contact form, disabling CC will prevent malicious actors from using the competition contact form to spam emails unrelated to the competition.</p>
         </span>
     </div>
 </div><!-- ./Form Group -->
+<?php } ?>
 <div class="form-group"><!-- Form Group Radio INLINE -->
     <label for="EmailRegConfirm" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Confirmation Emails</label>
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
@@ -590,11 +599,15 @@ $(document).ready(function(){
     <div class="col-lg-6 col-md-5 col-sm-8 col-xs-12">
     <!-- Input Here -->
     <select class="selectpicker" name="prefsTheme" id="prefsTheme" data-width="auto">
-        <?php foreach ($theme_name as $theme) {
-            $themes = explode("|",$theme);
+        <?php 
+        $themes = "";
+        foreach ($theme_name as $key => $value) {
+            $themes .= "<option value=\"".$key."\" ";
+            if ($row_prefs['prefsTheme'] == $key) $themes .= " SELECTED";
+            $themes .= ">".$value."</option>";
+        }
+        echo $themes;
         ?>
-        <option value="<?php echo $themes['0']; ?>" <?php if ($row_prefs['prefsTheme'] ==  $themes['0']) echo " SELECTED"; ?> /><?php echo  $themes['1']; ?></option>
-        <?php } ?>
     </select>
     </div>
 </div><!-- ./Form Group -->
@@ -857,7 +870,7 @@ $(document).ready(function(){
 <?php } ?>
 <h3>Entries</h3>
 <div class="form-group"><!-- Form Group Radio INLINE -->
-    <label for="prefsStyleSet" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Styleset</label>
+    <label for="prefsStyleSet" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Style Set</label>
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
         <!-- Input Here -->
         <select class="selectpicker" name="prefsStyleSet" id="prefsStyleSet" data-size="12" data-width="auto">
@@ -1585,7 +1598,7 @@ $(document).ready(function(){
     </div><!-- ./modal -->
 
     <div class="form-group"><!-- Form Group Radio INLINE -->
-        <label for="prefsPaypal" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label"><a class="hide-loader" href="https://developer.paypal.com/docs/classic/products/instant-payment-notification/" target="_blank">PayPal Instant Payment Notification</a> (IPN)</label>
+        <label for="prefsPaypal" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label"><a class="hide-loader" href="https://developer.paypal.com/api/nvp-soap/ipn/" target="_blank">PayPal Instant Payment Notification</a> (IPN)</label>
         <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
             <div class="input-group">
                 <!-- Input Here -->

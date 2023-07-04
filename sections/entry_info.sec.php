@@ -89,6 +89,8 @@ $anchor_links_nav = "";
 $anchor_links = array();
 $anchor_top = "<p class=\"hidden-print\"><a href=\"#top-page\">".$label_top." <span class=\"fa fa-arrow-circle-up\"></span></a></p>";
 
+$contestRulesJSON = json_decode($row_contest_info['contestRules'],true);
+
 // Registration Window
 if (!$logged_in) {
 	$anchor_links[] = $label_account_registration;
@@ -207,7 +209,10 @@ else {
 		if ($row_judging['judgingLocType'] == "0") {
 
 			if ($logged_in) {
-				$location_link = $base_url."output/maps.output.php?section=driving&amp;id=".str_replace(' ', '+', $row_judging['judgingLocation']);
+				$address = rtrim($row_judging['judgingLocation'],"&amp;KeepThis=true");
+				$address = str_replace(' ', '+', $address);
+				$driving = "http://maps.google.com/maps?f=q&source=s_q&hl=en&q=".$address;
+				$location_link = "http://maps.google.com/maps?f=q&source=s_q&hl=en&q=".$address;
 				$location_tooltip = "Map to ".$row_judging['judgingLocName'];
 				$page_info7 .= "<br>".$row_judging['judgingLocation'];
 			}
@@ -217,7 +222,7 @@ else {
 				$location_tooltip = "Log in to view the ".$row_judging['judgingLocName']." location";
 			}
 
-			if ($row_judging['judgingLocation'] != "") $page_info7 .= " <a href=\"".$location_link."\" target=\"".$location_target."\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"".$location_tooltip."\"><span class=\"fa fa-lg fa-map-marker\"></span></a>";
+			if ($row_judging['judgingLocation'] != "") $page_info7 .= " <a href=\"".$location_link."\" target=\"_blank\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"".$location_tooltip."\"><span class=\"fa fa-lg fa-map-marker\"></span></a>";
 
 		}
 
@@ -360,7 +365,7 @@ if ($show_entries) {
 		$anchor_links[] = $label_shipping_info;
 		$anchor_name = str_replace(" ", "-", $label_shipping_info);
 		$header1_10 .= sprintf("<a class=\"anchor-offset\" name=\"%s\"></a><h2>%s</h2>",strtolower($anchor_name),$label_shipping_info);
-		$page_info10 .= sprintf("<p>%s <strong class=\"text-success\">%s</strong> %s <strong class=\"text-success\">%s</strong>.</p>",$entry_info_text_036,$shipping_open,$entry_info_text_001,$shipping_closed);
+		if ((!empty($row_contest_dates['contestShippingOpen'])) && (!empty($row_contest_dates['contestShippingDeadline']))) $page_info10 .= sprintf("<p>%s <strong class=\"text-success\">%s</strong> %s <strong class=\"text-success\">%s</strong>.</p>",$entry_info_text_036,$shipping_open,$entry_info_text_001,$shipping_closed);
 		$page_info10 .= sprintf("<p>%s</p>",$entry_info_text_037);
 		$page_info10 .= "<p>";
 		$page_info10 .= $_SESSION['contestShippingName'];
@@ -368,10 +373,21 @@ if ($show_entries) {
 		$page_info10 .= $_SESSION['contestShippingAddress'];
 		$page_info10 .= "</p>";
 		$page_info10 .= sprintf("<h3>%s</h3>",$label_packing_shipping);
+
+		if ((ENABLE_MARKDOWN) && (!is_html($contestRulesJSON['competition_packing_shipping']))) {
+			$page_info10 .= Parsedown::instance()
+							->setBreaksEnabled(true) # enables automatic line breaks
+							->text($contestRulesJSON['competition_packing_shipping']); 
+		}
+		else $page_info10 .= $contestRulesJSON['competition_packing_shipping'];
+
+		/*
+		
 		$page_info10 .= sprintf("<p>%s</p>",$entry_info_text_038);
 		$page_info10 .= sprintf("<p>%s</p>",$entry_info_text_039);
 		$page_info10 .= sprintf("<p>%s</p>",$entry_info_text_040);
 		$page_info10 .= sprintf("<p>%s</p>",$entry_info_text_041);
+		*/
 		/**
 		 * Removing USPS instructions. No need to include with global usage of application.
 		 * For 3.0, make a user-definied field to utilize.
@@ -393,7 +409,7 @@ if ($show_entries) {
 			$anchor_name = str_replace(" ", "-", $label_drop_offs);
 			$header1_11 .= sprintf("<a class=\"anchor-offset\" name=\"%s\"></a><h2>%s</h2>",strtolower($anchor_name),$label_drop_offs);
 		}
-		$page_info11 .= sprintf("<p>%s <strong class=\"text-success\">%s</strong> %s <strong class=\"text-success\">%s</strong>.</p>",$entry_info_text_043,$dropoff_open,$entry_info_text_001,$dropoff_closed);
+		if ((!empty($row_contest_dates['contestDropoffOpen'])) && (!empty($row_contest_dates['contestDropoffDeadline']))) $page_info11 .= sprintf("<p>%s <strong class=\"text-success\">%s</strong> %s <strong class=\"text-success\">%s</strong>.</p>",$entry_info_text_043,$dropoff_open,$entry_info_text_001,$dropoff_closed);
 		$page_info11 .= "<p>".$dropoff_qualifier_text_001."</p>";
 		do {
 
@@ -401,12 +417,20 @@ if ($show_entries) {
 			if ($row_dropoff['dropLocationWebsite'] != "") $page_info11 .= sprintf("<a class=\"hide-loader\" href=\"%s\" target=\"_blank\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"".$row_dropoff['dropLocationName']." %s\"><strong>%s</strong></a> <span class=\"fa fa-lg fa-external-link\"></span>",$row_dropoff['dropLocationWebsite'],$label_website,$row_dropoff['dropLocationName']);
 			else $page_info11 .= sprintf("<strong>%s</strong>",$row_dropoff['dropLocationName']);
 			$page_info11 .= "<br />";
+			
 			if (empty($row_dropoff['dropLocationNotes'])) {
-			$page_info11 .= sprintf("%s <a class=\"hide-loader\" href=\"".$base_url."output/maps.output.php?section=driving&amp;id=%s\" target=\"_blank\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"%s\"><span class=\"fa fa-lg fa-map-marker\"></span></a>",$row_dropoff['dropLocation'],str_replace(' ', '+', $row_dropoff['dropLocation']),$entry_info_text_044." ".$row_dropoff['dropLocationName']);
+
+				$address = rtrim($row_dropoff['dropLocation'],"&amp;KeepThis=true");
+				$address = str_replace(' ', '+', $address);
+				$location_link = "http://maps.google.com/maps?f=q&source=s_q&hl=en&q=".$address;
+
+			$page_info11 .= sprintf("%s <a class=\"hide-loader\" href=\"%s\" target=\"_blank\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"%s\"><span class=\"fa fa-lg fa-map-marker\"></span></a>",$row_dropoff['dropLocation'],$location_link,$entry_info_text_044." ".$row_dropoff['dropLocationName']);
 			}
+
 			else {
 				$page_info11 .= sprintf("%s <a href=\"#\" data-toggle=\"modal\" data-target=\"#dropoff-loc".$row_dropoff['id']."\" title=\"%s\"><span class=\"fa fa-lg fa-map-marker\"></span></a>",$row_dropoff['dropLocation'],$row_dropoff['dropLocation'],$entry_info_text_044." ".$row_dropoff['dropLocationName']);
 			}
+
 			$page_info11 .= "<br />";
 			$page_info11 .= $row_dropoff['dropLocationPhone'];
 			$page_info11 .= "<br />";
@@ -415,6 +439,11 @@ if ($show_entries) {
 			$page_info11 .= "</p>";
 
 			if ($row_dropoff['dropLocationNotes'] != "") {
+
+				$address = rtrim($row_dropoff['dropLocation'],"&amp;KeepThis=true");
+				$address = str_replace(' ', '+', $address);
+				$location_link = "http://maps.google.com/maps?f=q&source=s_q&hl=en&q=".$address;
+
 				$page_info11 .= "<!-- Form submit confirmation modal -->";
 				$page_info11 .= "<!-- Refer to bcoem_custom.js for configuration -->";
 				$page_info11 .= "<div class=\"modal fade\" id=\"dropoff-loc".$row_dropoff['id']."\" tabindex=\"-1\" role=\"dialog\" aria-hidden=\"true\">";
@@ -428,7 +457,7 @@ if ($show_entries) {
 				$page_info11 .= "</div>";
 				$page_info11 .= "<div class=\"modal-footer\">";
 				$page_info11 .= sprintf("<button type=\"button\" class=\"btn btn-danger\" data-dismiss=\"modal\">%s</button>",$label_cancel);
-				$page_info11 .= sprintf("<a href=\"%s%s\" target=\"_blank\" class=\"hide-loader btn btn-success\">%s</a>",$base_url."output/maps.output.php?section=driving&amp;id=",str_replace(' ', '+', $row_dropoff['dropLocation']),$label_understand);
+				$page_info11 .= sprintf("<a href=\"%s\" target=\"_blank\" class=\"hide-loader btn btn-success\">%s</a>",$location_link,$label_understand);
 				$page_info11 .= "</div>";
 				$page_info11 .= "</div>";
 				$page_info11 .= "</div>";
@@ -474,13 +503,22 @@ if (isset($row_contest_info['contestAwards'])) {
 }
 
 if (isset($_SESSION['contestAwardsLocName'])) {
+
 	$anchor_links[] = $label_awards_ceremony;
 	$anchor_name = str_replace(" ", "-", $label_awards_ceremony);
 	$header1_14 .= sprintf("<a class=\"anchor-offset\" name=\"%s\"></a><h2>%s</h2>",strtolower($anchor_name),$label_awards_ceremony);
 	$page_info14 .= "<p>";
 	$page_info14 .= sprintf("<strong>%s</strong>",$_SESSION['contestAwardsLocName']);
 
-	if ($_SESSION['contestAwardsLocation'] != "") $page_info14 .= sprintf("<br />%s <a class=\"hide-loader\" href=\"".$base_url."output/maps.output.php?section=driving&amp;id=".str_replace(' ', '+', $_SESSION['contestAwardsLocation'])."\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Map to ".$_SESSION['contestAwardsLocName']." \" target=\"_blank\"><span class=\"fa fa-lg fa-map-marker\"></span></a>",$_SESSION['contestAwardsLocation']);
+	if ($_SESSION['contestAwardsLocation'] != "") {
+
+		$address = rtrim($_SESSION['contestAwardsLocation'],"&amp;KeepThis=true");
+		$address = str_replace(' ', '+', $address);
+		$location_link = "http://maps.google.com/maps?f=q&source=s_q&hl=en&q=".$address;
+
+		$page_info14 .= sprintf("<br />%s <a class=\"hide-loader\" href=\"".$location_link."\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Map to ".$_SESSION['contestAwardsLocName']." \" target=\"_blank\"><span class=\"fa fa-lg fa-map-marker\"></span></a>",$_SESSION['contestAwardsLocation']);
+
+	}
 
 	if ($_SESSION['contestAwardsLocTime'] != "") $page_info14 .= sprintf("<br />%s",getTimeZoneDateTime($_SESSION['prefsTimeZone'], $_SESSION['contestAwardsLocTime'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "long", "date-time"));
 	$page_info14 .= "</p>";
@@ -507,15 +545,17 @@ if ($show_entries) {
 
 // Show rules if winner display is active (moved from default page)
 if (($judging_past == 0) && ($registration_open == 2) && ($entry_window_open == 2)) {
+	
 	$anchor_links[] = $label_rules;
 	$anchor_name = str_replace(" ", "-", $label_rules);
 	$header1_17 .= sprintf("<a class=\"anchor-offset\" name=\"%s\"></a><h2>%s</h2>",strtolower($anchor_name),$label_rules);
-	if ((ENABLE_MARKDOWN) && (!is_html($row_contest_info['contestRules']))) {
+
+	if ((ENABLE_MARKDOWN) && (!is_html($contestRulesJSON['competition_rules']))) {
 		$page_info17 .= Parsedown::instance()
 						->setBreaksEnabled(true) # enables automatic line breaks
-						->text($row_contest_rules['contestRules']); 
+						->text($contestRulesJSON['competition_rules']); 
 	}
-	else $page_info17 .= $row_contest_rules['contestRules'];
+	else $page_info17 .= $contestRulesJSON['competition_rules'];
 	$page_info17 .= $anchor_top;
 }
 
@@ -525,7 +565,7 @@ if (($judging_past == 0) && ($registration_open == 2) && ($entry_window_open == 
 // --------------------------------------------------------------
 
 // Display anchor links
-echo "<p><a class=\"anchor-offset\" name=\"top-page\"></a>";
+echo "<p class=\"hidden-print\"><a class=\"anchor-offset\" name=\"top-page\"></a>";
 $anchor_link_display = "";
 
 if (is_array($anchor_links)) {
@@ -534,7 +574,7 @@ if (is_array($anchor_links)) {
 
 	$anchor_link_display .= "<p><ul class=\"nav nav-pills small\">";
 	$anchor_link_display .= "<li role=\"presentation\" class=\"dropdown\">";
-	$anchor_link_display .= "<a class=\"btn btn-default dropdown-toggle\" data-toggle=\"dropdown\" href=\"#\" role=\"button\" aria-haspopup=\"true\" aria-expanded=\"false\">";
+	$anchor_link_display .= "<a class=\"hidden-print btn btn-default dropdown-toggle\" data-toggle=\"dropdown\" href=\"#\" role=\"button\" aria-haspopup=\"true\" aria-expanded=\"false\">";
 	$anchor_link_display .= $label_jump_to." <span class=\"fa fa-caret-down\"></span>";
 	$anchor_link_display .= "</a>";
 	$anchor_link_display .= "<ul class=\"dropdown-menu\">";

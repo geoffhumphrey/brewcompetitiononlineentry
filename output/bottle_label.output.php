@@ -141,7 +141,10 @@ if (isset($_SESSION['loginUsername'])) {
                 if (!empty($row_log['brewMead3'])) $brewInfo .= $row_log['brewMead3'];
               }
               
-              if (!empty($brewInfo)) $page_info1 .= "<strong>".$label_required_info.":</strong> <span class=\"break-long\">".$brewInfo."</span>";
+              if (!empty($brewInfo)) {
+                if (($_SESSION['prefsStyleSet'] == "BJCP2021") && ($row_log['brewCategorySort'] == "02") && ($row_log['brewSubCategory'] == "A")) $page_info1 .= "<strong>".$label_regional_variation.":</strong> <span class=\"break-long\">".$brewInfo."</span>";
+                else $page_info1 .= "<strong>".$label_required_info.":</strong> <span class=\"break-long\">".$brewInfo."</span>";
+              }
             
             }
               
@@ -149,8 +152,13 @@ if (isset($_SESSION['loginUsername'])) {
 
             if (!$anon) {
               $page_info1 .= "<small>";
-              $page_info1 .= "<p>".$brewerFirstName." ".$brewerLastName."<br>";
-              // $page_info1 .= $brewerAddress."<br>".$brewerCity.", ".$brewerState." ".$brewerZip." "."<br>";
+              $page_info1 .= "<p>";
+              if ($_SESSION['prefsProEdition'] == 1) {
+                $page_info1 .= $row_brewer['brewerBreweryName']."<br>";
+                $page_info1 .= $label_contact.": ".$brewerFirstName." ".$brewerLastName."<br>";
+              }
+              else $page_info1 .= $brewerFirstName." ".$brewerLastName."<br>";
+              //$page_info1 .= $brewerAddress."<br>".$brewerCity.", ".$brewerState." ".$brewerZip." "."<br>";
               $page_info1 .= $brewerEmail."<br>";
               $page_info1 .= $phone;
               $page_info1 .= "</p>";

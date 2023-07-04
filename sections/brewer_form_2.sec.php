@@ -1,9 +1,12 @@
-<?php if ((!$table_assignment) || ($go == "admin")) { ?>
+<?php 
 
-<?php if (((!$judge_limit) && ($go == "account")) || (($_SESSION['userLevel'] <= 1) && (($go == "admin") || ($go == "account")))) { 
-    $judge_checked = FALSE;
-    if ((($action == "add") || ($action == "register")) && ($go == "judge")) $judge_checked = TRUE;
-    if (($action == "edit") && ($row_brewer['brewerJudge'] == "Y")) $judge_checked = TRUE;
+if (((!$table_assignment) || ($go == "admin")) && (!$entrant_type_brewery)) { 
+
+    if (((!$judge_limit) && ($go == "account")) || (($_SESSION['userLevel'] <= 1) && (($go == "admin") || ($go == "account")))) { 
+        $judge_checked = FALSE;
+        if ((($action == "add") || ($action == "register")) && ($go == "judge")) $judge_checked = TRUE;
+        if (($action == "edit") && ($row_brewer['brewerJudge'] == "Y")) $judge_checked = TRUE;
+
 ?>
 
 <section id="judge-preferences">
@@ -30,13 +33,39 @@
         </div>
     </div>
 
+    <?php if ($_SESSION['prefsProEdition'] == 1) { 
+    $org_array_lower = array();
+    foreach ($org_array as $value) {
+        $org_array_lower[] = strtolower($value);
+    }
+    $org_array = implode(",",$org_array_lower);
+    ?>
+    <section id="participant-orgs">
+        <div class="form-group">
+            <label for="brewerAssignment" class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label_industry_affiliations; ?></label>
+            <div class="col-lg-9 col-md-6 col-sm-8 col-xs-12">  
+            <select class="selectpicker" multiple name="brewerAssignment[]" id="brewerAssignment" data-live-search="true" data-size="40" data-width="auto" data-show-tick="true" data-header="<?php echo $label_industry_affiliations." - ".$label_select_below; ?>" title="<?php echo $label_industry_affiliations." - ".$label_select_below; ?>">
+                <?php echo $org_options; ?>
+            </select>
+            <span class="help-block"><?php echo $brewer_text_051; ?></span>
+            </div>
+        </div>
+        <input name="allOrgs" type="hidden" value="<?php echo $org_array; ?>">
+        <div id="brewerAssignmentOther" class="form-group">
+            <label for="brewerAssignmentOther" class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label_industry_affiliations." &ndash; ".$label_other; ?></label>
+            <div class="col-lg-9 col-md-9 col-sm-8 col-xs-12">
+                <input class="form-control" name="brewerAssignmentOther" type="text" value="<?php if (($action == "edit") && (!empty($org_other))) echo str_replace(",",", ",$org_other); ?>" placeholder="" pattern="[^%\x22]+">
+                <div class="help-block">
+                    <p><?php echo $brewer_text_052; ?></p>
+                </div>
+            </div>
+        </div>
+    </section>
+    <?php } ?>
+
     <div id="brewerJudgeFields">
 
-        <?php if (($totalRows_judging == 1) && (($go != "admin") && ($filter == "default"))) { ?>
-        <input name="brewerJudgeLocation" type="hidden" value="<?php echo "Y-".$row_judging3['id']; ?>" />
-        <?php } ?>
-
-        <?php if (($totalRows_judging > 1) || (($go == "admin") && ($filter != "default"))) { ?>
+        <?php if (($totalRows_judging > 0) || (($go == "admin") && ($filter != "default"))) { ?>
         <div class="form-group">
             <?php if (!empty($judge_location_avail)) { ?>
             <label for="brewerJudgeLocation" class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label_judging_avail; ?></label>
@@ -272,9 +301,9 @@
 </section><!-- ./ judge-preferences -->
 <?php } // end if (((!$judge_limit) && ($go == "account")) || (($_SESSION['userLevel'] <= 1) && (($go == "admin") || ($go == "account")))) ?>
 
-<?php if (((!$steward_limit) && ($go == "account")) || (($_SESSION['userLevel'] <= 1) && (($go == "admin") || ($go == "account")))) { ?>
+<?php 
+    if (((!$steward_limit) && ($go == "account")) || (($_SESSION['userLevel'] <= 1) && (($go == "admin") || ($go == "account")))) { ?>
 <section id="steward-preferences">
-    
     <div class="form-group">
         <label for="brewerSteward" class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label_stewarding; ?></label>
         <div class="col-lg-9 col-md-9 col-sm-8 col-xs-12">
@@ -310,7 +339,8 @@
 
 </section><!-- ./ steward-preferences -->
 <?php } // end if (((!$steward_limit) && ($go == "account")) || (($_SESSION['userLevel'] <= 1) && (($go == "admin") || ($go == "account")))) ?>
-<?php } // end if ((!$table_assignment) || ($go == "admin")) ?>
+
+
 
 <section id="judge-steward-waiver">
     <div id="judge-waiver" class="form-group">
@@ -336,3 +366,5 @@
         </div>
     </div>
 </section>
+
+<?php } // end if ((!$table_assignment) || ($go == "admin")) ?>

@@ -64,6 +64,8 @@ if (!isset($output_off_sched_update)) $output_off_sched_update = "";
 
 $error_count = 0;
 
+require_once (LANG.'language.lang.php');
+
 /**
  * ---------------------------------------------- 2.3.2 ----------------------------------------------
  * SYSTEM is a reserved word in MySQL 8.
@@ -2153,10 +2155,10 @@ if (!check_update("prefsEmailCC", $prefix."preferences")) {
 	}
 
 	$update_table = $prefix."preferences";
-	$data = array('prefsEmailCC' => 0);
-	if ($db_conn->update ($update_table, $data)) $output_off_sched_update .= "<li>The prefsEmailCC value was set to 0.</li>";
+	$data = array('prefsEmailCC' => 1);
+	if ($db_conn->update ($update_table, $data)) $output_off_sched_update .= "<li>The prefsEmailCC value was set to 1.</li>";
 	else {
-		$output_off_sched_update .= "<li>The prefsEmailCC value was NOT set to 0. <strong class=\"text-warning\">Error: ".$db_conn->getLastError()."</strong></li>";
+		$output_off_sched_update .= "<li>The prefsEmailCC value was NOT set to 1. <strong class=\"text-warning\">Error: ".$db_conn->getLastError()."</strong></li>";
 		$error_count += 1;
 	}
 
@@ -2579,17 +2581,33 @@ if (!$setup_running) $output_off_sched_update .= "<ul>";
 if ((!empty($row_current_prefs)) && ($row_current_prefs['prefsStyleSet'] == "BJCP2008")) {
 	
 	include (LIB.'convert.lib.php');
+	include (INCLUDES.'convert/convert_bjcp_2015.inc.php');
 
 	$update_table = $prefix."preferences";
 	$data = array('prefsStyleSet' => 'BJCP2015');
 	$db_conn->where ('id', 1);
 	if ($db_conn->update ($update_table, $data)) $output_off_sched_update .= "<li>Changed style set to BJCP 2015 from BJCP 2008.</li>";
 
-	$output_off_sched_update .= "<li>BJCP 2008 is now deprecated. All entries, judge preferences, etc. were converted to BJCP 2015, including:";
-	$output_off_sched_update .= "<ul>";
-	include (INCLUDES.'convert/convert_bjcp_2015.inc.php');
-	$output_off_sched_update .= "</li></ul>";
+	$output_off_sched_update .= "<li>The BJCP 2008 styles are deprecated and no longer valid for BJCP-sanctioned competions. All entries, judge preferences, etc. were converted to BJCP 2015.</li>";
 
+}
+
+/**
+ * ----------------------------------------------- 2.4.0 --------------------------------------------- 
+ * Remove BJCP 2008 Guidelines - for hosted installations only.
+ * ---------------------------------------------------------------------------------------------------
+ */
+
+if (HOSTED) {
+	$update_table = $prefix."styles";
+	$db_conn->where ('brewStyleVersion', 'BJCP2008');
+	$db_conn->where ('brewStyleOwn', 'bcoe');
+	$result = $db_conn->delete ($update_table);
+	if ($result) $output_off_sched_update .= "<li>BJCP 2008 Styles were removed from the database.</li>";
+	else {
+		$output_off_sched_update .= "<li class=\"text-danger\">The BJCP 2008 Styles were NOT removed.</li>";
+		$error_count += 1;
+	}
 }
 
 if (!check_new_style("28","D","Straight Sour Beer")) include (UPDATE.'styles_bjcp2021_update.php');
@@ -2786,7 +2804,7 @@ if (!check_update("update_date", $prefix."bcoem_sys")) {
  * ---------------------------------------------------------------------------------------------------
  */
 
-include (UPDATE.'styles_ba_2022_update.php');
+if (!check_new_style("11","181","Kentucky Common")) include (UPDATE.'styles_ba_2022_update.php');
 
 /**
  * ----------------------------------------------- 2.5.0 ---------------------------------------------
@@ -2794,7 +2812,7 @@ include (UPDATE.'styles_ba_2022_update.php');
  * ---------------------------------------------------------------------------------------------------
  */
 
-if (!check_new_style("16","05","Straight Sour Beer")) include (UPDATE.'styles_aabc_2022.php');
+if (!check_new_style("01","04","American Light Lager [BJCP 1A]")) include (UPDATE.'styles_aabc_2022.php');
 
 
 /**
@@ -2872,14 +2890,511 @@ if (!check_update("jPrefsMinWords", $prefix."judging_preferences")) {
 
 }
 
-// End all unordered lists
 if (!$setup_running) $output_off_sched_update .= "</ul>";
 
 /**
- * ----------------------------------------------------------------------------------------------------
+ * ----------------------------------------------- 2.6.0 ---------------------------------------------
+ * Remove recipe-related columns from the brewing table.
+ * Columns will not be removed from archived tables.
+ * ---------------------------------------------------------------------------------------------------
+ */
+
+if ((!$setup_running) && (!$update_running)) {
+	$output_off_sched_update .= "<p>";
+	$output_off_sched_update .= "<strong>Version 2.6.0.0 Updates</strong>";
+	$output_off_sched_update .= "</p>";
+}
+
+elseif ($update_running) {
+	$output_off_sched_update .= "<h4>Version 2.6.0</h4>";
+}
+
+// Begin version unordered list
+if (!$setup_running) $output_off_sched_update .= "<ul>";
+
+$drop_db = $prefix."brewing";
+
+if (check_update("brewExtract1", $drop_db)) {
+
+	$sql = sprintf("ALTER TABLE `%s` ",$drop_db);
+
+	for ($i=1; $i <= 5; $i++) {
+
+		$drop_col_1 = "brewExtract".$i;
+		$drop_col_2 = "brewExtract".$i."Weight";
+		$drop_col_3 = "brewExtract".$i."Use";
+
+		$sql .= sprintf("DROP `%s`, ",$drop_col_1);
+		$sql .= sprintf("DROP `%s`, ",$drop_col_2);
+		$sql .= sprintf("DROP `%s`, ",$drop_col_3);
+	
+	}
+
+	$sql = trim($sql);
+	$sql = rtrim($sql,",");
+	$sql .= ";";
+	mysqli_select_db($connection,$database);
+	mysqli_real_escape_string($connection,$sql);
+	$result = mysqli_query($connection,$sql);
+
+}
+
+if (check_update("brewGrain1", $drop_db)) {
+
+	$sql = sprintf("ALTER TABLE `%s` ",$drop_db);
+
+	for ($i=1; $i <= 20; $i++) {
+
+		$drop_col_1 = "brewGrain".$i;
+		$drop_col_2 = "brewGrain".$i."Weight";
+		$drop_col_3 = "brewGrain".$i."Use";
+
+		$sql .= sprintf("DROP `%s`, ",$drop_col_1);
+		$sql .= sprintf("DROP `%s`, ",$drop_col_2);
+		$sql .= sprintf("DROP `%s`, ",$drop_col_3);
+	
+	}
+
+	$sql = trim($sql);
+	$sql = rtrim($sql,",");
+	$sql .= ";";
+	mysqli_select_db($connection,$database);
+	mysqli_real_escape_string($connection,$sql);
+	$result = mysqli_query($connection,$sql);
+	
+}
+
+if (check_update("brewAddition1", $drop_db)) {
+
+	$sql = sprintf("ALTER TABLE `%s` ",$drop_db);
+
+	for ($i=1; $i <= 20; $i++) {
+
+		$drop_col_1 = "brewAddition".$i;
+		$drop_col_2 = "brewAddition".$i."Amt";
+		$drop_col_3 = "brewAddition".$i."Use";
+
+		$sql .= sprintf("DROP `%s`, ",$drop_col_1);
+		$sql .= sprintf("DROP `%s`, ",$drop_col_2);
+		$sql .= sprintf("DROP `%s`, ",$drop_col_3);
+	
+	}
+
+	$sql = trim($sql);
+	$sql = rtrim($sql,",");
+	$sql .= ";";
+	mysqli_select_db($connection,$database);
+	mysqli_real_escape_string($connection,$sql);
+	$result = mysqli_query($connection,$sql);
+	
+}
+
+if (check_update("brewHops1", $drop_db)) {
+
+	$sql = sprintf("ALTER TABLE `%s` ",$drop_db);
+
+	for ($i=1; $i <= 20; $i++) {
+
+		$drop_col_1 = "brewHops".$i;
+		$drop_col_2 = "brewHops".$i."Weight";
+		$drop_col_3 = "brewHops".$i."IBU";
+		$drop_col_4 = "brewHops".$i."Use";
+		$drop_col_5 = "brewHops".$i."Time";
+		$drop_col_6 = "brewHops".$i."Type";
+		$drop_col_7 = "brewHops".$i."Form";
+
+		$sql .= sprintf("DROP `%s`, ",$drop_col_1);
+		$sql .= sprintf("DROP `%s`, ",$drop_col_2);
+		$sql .= sprintf("DROP `%s`, ",$drop_col_3);
+		$sql .= sprintf("DROP `%s`, ",$drop_col_4);
+		$sql .= sprintf("DROP `%s`, ",$drop_col_5);
+		$sql .= sprintf("DROP `%s`, ",$drop_col_6);
+		$sql .= sprintf("DROP `%s`, ",$drop_col_7);
+
+	
+	}
+
+	$sql = trim($sql);
+	$sql = rtrim($sql,",");
+	$sql .= ";";
+	mysqli_select_db($connection,$database);
+	mysqli_real_escape_string($connection,$sql);
+	$result = mysqli_query($connection,$sql);
+	
+}
+
+if (check_update("brewMashStep1Name", $drop_db)) {
+
+	$sql = sprintf("ALTER TABLE `%s` ",$drop_db);
+
+	for ($i=1; $i <= 10; $i++) {
+
+		$drop_col_1 = "brewMashStep".$i."Name";
+		$drop_col_2 = "brewMashStep".$i."Temp";
+		$drop_col_3 = "brewMashStep".$i."Time";
+
+		$sql .= sprintf("DROP `%s`, ",$drop_col_1);
+		$sql .= sprintf("DROP `%s`, ",$drop_col_2);
+		$sql .= sprintf("DROP `%s`, ",$drop_col_3);
+	
+	}
+
+	$sql = trim($sql);
+	$sql = rtrim($sql,",");
+	$sql .= ";";
+	mysqli_select_db($connection,$database);
+	mysqli_real_escape_string($connection,$sql);
+	$result = mysqli_query($connection,$sql);
+	
+}
+
+if (check_update("brewYeast", $drop_db)) {
+
+	$sql = sprintf("ALTER TABLE `%s` ",$drop_db);
+	$sql .= "DROP `brewBottleDate`, ";
+	$sql .= "DROP `brewDate`, ";
+	$sql .= "DROP `brewYield`, ";
+	$sql .= "DROP `brewYeast`, ";
+  	$sql .= "DROP `brewYeastMan`, ";
+  	$sql .= "DROP `brewYeastForm`, ";
+  	$sql .= "DROP `brewYeastType`, ";
+  	$sql .= "DROP `brewYeastAmount`, ";
+  	$sql .= "DROP `brewYeastStarter`, ";
+  	$sql .= "DROP `brewYeastNutrients`, ";
+  	$sql .= "DROP `brewOG`, ";
+  	$sql .= "DROP `brewFG`, ";
+  	$sql .= "DROP `brewPrimary`, ";
+  	$sql .= "DROP `brewPrimaryTemp`, ";
+  	$sql .= "DROP `brewSecondary`, ";
+  	$sql .= "DROP `brewSecondaryTemp`, ";
+  	$sql .= "DROP `brewOther`, ";
+  	$sql .= "DROP `brewOtherTemp`, ";
+  	$sql .= "DROP `brewFinings`, ";
+  	$sql .= "DROP `brewWaterNotes`, ";
+  	$sql .= "DROP `brewCarbonationMethod`, ";
+  	$sql .= "DROP `brewCarbonationVol`, ";
+  	$sql .= "DROP `brewCarbonationNotes`, ";
+  	$sql .= "DROP `brewBoilHours`, ";
+  	$sql .= "DROP `brewBoilMins`, ";
+  	$sql .= "DROP `brewWinnerCat`; ";
+  	mysqli_select_db($connection,$database);
+	mysqli_real_escape_string($connection,$sql);
+	$result = mysqli_query($connection,$sql);
+	
+}
+
+$output_off_sched_update .= "<li>All deprecated recipe-related columns were removed from the brewing table.</li>";
+
+/**
+ * ----------------------------------------------- 2.6.0 ---------------------------------------------
+ * Fix missing style type for Juicy or Hazy Imperial or Double India Pale Ale and Specialty Spice Beer.
+ * 2.5.0 - fixed Specialty Spice Beer in installation scripting, but did not include in updates.
+ * ---------------------------------------------------------------------------------------------------
+ */
+
+$sql = sprintf("UPDATE `%s` SET brewStyleType = '1' WHERE brewStyle='Specialty Spice Beer' AND  brewStyleGroup='30' AND brewStyleNum='D'",$prefix."styles");
+mysqli_select_db($connection,$database);
+mysqli_real_escape_string($connection,$sql);
+$result = mysqli_query($connection,$sql);
+if ($result) $output_off_sched_update .= "<li>Updated the Style Type of BJCP 2021 30D - Specialty Spice Beer.</li>";
+else {
+	$output_off_sched_update .= "<li class=\"text-danger\">Style Type of BJCP 2021 30D - Specialty Spice Beer was NOT updated.</li>";
+	$error_count += 1;
+}
+
+$sql = sprintf("UPDATE `%s` SET brewStyleType = '1' WHERE brewStyleGroup='03' AND brewStyleNum='004'",$prefix."styles");
+mysqli_select_db($connection,$database);
+mysqli_real_escape_string($connection,$sql);
+$result = mysqli_query($connection,$sql);
+if ($result) $output_off_sched_update .= "<li>Updated the Style Type of BA style - Juicy or Hazy Imperial or Double India Pale Ale.</li>";
+else {
+	$output_off_sched_update .= "<li class=\"text-danger\">Style Type of BA style - Juicy or Hazy Imperial or Double India Pale Ale was NOT updated.</li>";
+	$error_count += 1;
+}
+
+/**
+ * ----------------------------------------------- 2.6.0 ---------------------------------------------
+ * Leverage unused DB row in the brewer table to store industry affiliations of judges/stewards while
+ * using the Professional Edition.
+ * ---------------------------------------------------------------------------------------------------
+ */
+
+$sql = sprintf("ALTER TABLE `%s` CHANGE `brewerAssignment` `brewerAssignment` MEDIUMTEXT NULL DEFAULT NULL",$prefix."brewer");
+mysqli_select_db($connection,$database);
+mysqli_real_escape_string($connection,$sql);
+$result = mysqli_query($connection,$sql);
+if ($result) $output_off_sched_update .= "<li>Changed brewerAssignment row type to MEDIUMTEXT - used store judge/steward industry affiliations while using the Professional Edition.</li>";
+else {
+	$output_off_sched_update .= "<li class=\"text-danger\">The brewerAssignment row type was NOT changed to MEDIUMTEXT. It should be done manually to effectively store judge/steward industry affiliations while using the Professional Edition.</li>";
+	$error_count += 1;
+}
+
+/**
+ * ----------------------------------------------- 2.6.0 ---------------------------------------------
+ * Leverage JSON data type in MySQL to store competition rules and provide admins the ability to
+ * customize shipping and packaging rules (previously hard-coded).
+ * ---------------------------------------------------------------------------------------------------
+ */
+
+$contest_rules_json = FALSE;
+if ((check_mysql_data_type("contestRules",$prefix."contest_info")) == 245) $contest_rules_json = TRUE;
+
+if (!$contest_rules_json) {
+
+	$sql = sprintf("ALTER TABLE `%s` ADD `contestJSON` JSON NULL DEFAULT NULL;",$prefix."contest_info");
+	mysqli_select_db($connection,$database);
+	mysqli_real_escape_string($connection,$sql);
+	$result = mysqli_query($connection,$sql);
+
+	$query_comp_rules = sprintf("SELECT contestRules FROM `%s` WHERE id='1'",$prefix."contest_info");
+	$comp_rules = mysqli_query($connection,$query_comp_rules);
+	$row_comp_rules = mysqli_fetch_assoc($comp_rules);
+
+	$current_shipping  = sprintf("<p>%s</p>",$entry_info_text_038);
+	$current_shipping .= sprintf("<p>%s</p>",$entry_info_text_039);
+	$current_shipping .= sprintf("<p>%s</p>",$entry_info_text_040);
+	$current_shipping .= sprintf("<p>%s</p>",$entry_info_text_041);
+
+	$rules_json = array(
+		"competition_rules" => $row_comp_rules['contestRules'],
+		"competition_packing_shipping" => $current_shipping,
+	);
+
+	$rules_json = json_encode($rules_json);
+
+	// Update the data in contestRules to JSON
+	$update_table = $prefix."contest_info";
+	$data = array('contestJSON' => $rules_json);
+	$db_conn->where ('id', 1);
+	if ($db_conn->update ($update_table, $data)) $output_off_sched_update .= "<li>Current contest rules and packing/shipping rules converted to JSON for storage.</li>";
+	else {
+		$output_off_sched_update .= "<li>Error in converting and/or recording current contestRules to JSON. <strong class=\"text-warning\">Error: ".$db_conn->getLastError()."</strong></li>";
+		$error_count += 1;
+	}
+
+	$sql = sprintf("ALTER TABLE `%s` DROP `contestRules`;",$prefix."contest_info");
+	mysqli_select_db($connection,$database);
+	mysqli_real_escape_string($connection,$sql);
+	$result = mysqli_query($connection,$sql);
+
+	$sql = sprintf("ALTER TABLE `%s` CHANGE `contestJSON` `contestRules` JSON NULL DEFAULT NULL;",$prefix."contest_info");
+	mysqli_select_db($connection,$database);
+	mysqli_real_escape_string($connection,$sql);
+	$result = mysqli_query($connection,$sql);
+	if ($result) $output_off_sched_update .= "<li>Changed contestRules row type to JSON to allow for storage and display of competition rules, packing/shipping rules, etc.</li>";
+	else {
+		$output_off_sched_update .= "<li class=\"text-danger\">The contestRules row type was NOT changed to JSON. It should be done manually to effectively store and display competition rules, packing/shipping suggestions, etc.</li>";
+		$error_count += 1;
+	}
+
+}
+
+/**
+ * ----------------------------------------------- 2.6.0 ---------------------------------------------
+ * Leverage JSON data type in MySQL to store user-added clubs.
+ * ---------------------------------------------------------------------------------------------------
+ */
+
+if (!check_update("contestClubs", $prefix."contest_info")) {
+	
+	$sql = sprintf("ALTER TABLE `%s` ADD `contestClubs` JSON NULL DEFAULT NULL;",$prefix."contest_info");
+	mysqli_select_db($connection,$database);
+	mysqli_real_escape_string($connection,$sql);
+	$result = mysqli_query($connection,$sql);
+	if ($result) $output_off_sched_update .= "<li>The contestClubs column was added to the competition information table.</li>";
+	else {
+		$output_off_sched_update .= "<li class=\"text-danger\">The contestClubs column was NOT added to the competition information table.</li>";
+		$error_count += 1;
+	}
+
+}
+
+/**
+ * ----------------------------------------------- 2.6.0 --------------------------------------------- 
+ * Add Northwest Cider Cup Guidelines
+ * ---------------------------------------------------------------------------------------------------
+ */
+
+if (!check_new_style("C1","A","Low-Tannin Ciders Dry")) include (UPDATE.'styles_nw_cider_cup_2023.php');
+
+/**
+ * ----------------------------------------------- 2.6.0 ---------------------------------------------
+ * 2023 BA styles update.
+ * ---------------------------------------------------------------------------------------------------
+ */
+
+if (!check_new_style("03","184","West Coast-Style India Pale Ale")) include (UPDATE.'styles_ba_2023_update.php');
+
+/**
+ * ----------------------------------------------- 2.6.0 ---------------------------------------------
+ * Deprecate BJCP 2015 Styles
+ * First, check to see what the current style set is. If it's BJCP 2015, 
+ * run 2021 conversion scripts, change preferences to 2021.
+ * ---------------------------------------------------------------------------------------------------
+ */
+
+if ((!empty($row_current_prefs)) && ($row_current_prefs['prefsStyleSet'] == "BJCP2015")) {
+	
+	include (LIB.'convert.lib.php');
+	include (INCLUDES.'convert/convert_bjcp_2021.inc.php');
+
+	$update_table = $prefix."preferences";
+	$data = array('prefsStyleSet' => 'BJCP2021');
+	$db_conn->where ('id', 1);
+	if ($db_conn->update ($update_table, $data)) $output_off_sched_update .= "<li>Changed style set to BJCP 2021 from BJCP 2015.</li>";
+
+	$output_off_sched_update .= "<li>The BJCP 2015 styles are deprecated and no longer valid for BJCP-sanctioned competions. All entries, judge preferences, etc. were converted to BJCP 2021.</li>";
+
+}
+
+/**
+ * ----------------------------------------------- 2.6.0 --------------------------------------------- 
+ * Remove BJCP 2015 Guidelines - for hosted installations only.
+ * ---------------------------------------------------------------------------------------------------
+ */
+
+if (HOSTED) {
+	$update_table = $prefix."styles";
+	$db_conn->where ('brewStyleVersion', 'BJCP2015');
+	$db_conn->where ('brewStyleOwn', 'bcoe');
+	$result = $db_conn->delete ($update_table);
+	if ($result) $output_off_sched_update .= "<li>BJCP 2015 Styles were removed from the database.</li>";
+	else {
+		$output_off_sched_update .= "<li class=\"text-danger\">The BJCP 2015 Styles were NOT removed.</li>";
+		$error_count += 1;
+	}
+}
+
+
+/**
+ * ----------------------------------------------- 2.5.2 --------------------------------------------- 
+ * Remove AABC 2021 Guidelines
+ * Need to write a conversion script. Save for 2.5.2.
+ * ---------------------------------------------------------------------------------------------------
+ */
+
+/*
+$update_table = $prefix."styles";
+$db_conn->where ('brewStyleVersion', 'AABC');
+$db_conn->where ('brewStyleOwn', 'bcoe');
+$result = $db_conn->delete ($update_table);
+if ($result) $output_off_sched_update .= "<li>AABC 2021 Styles were removed from the database.</li>";
+else {
+	$output_off_sched_update .= "<li class=\"text-danger\">The AABC 2021 Styles were NOT removed.</li>";
+	$error_count += 1;
+}
+
+$update_table = $prefix."styles";
+$data = array(
+	'brewStyleVersion' => "AABC2022"
+);
+$db_conn->where ('brewStyleVersion', 'AABC');
+$db_conn->where ('brewStyleOwn', 'custom');
+$result = $db_conn->update ($update_table, $data);
+if ($result) $output_off_sched_update .= "<li>All custom styles added under the AABC 2021 styles updated to AABC 2022.</li>";
+else {
+	$output_off_sched_update .= "<li class=\"text-danger\">Custom styles added under the AABC 2021 styles were NOT updated to AABC 2022.</li>";
+	$error_count += 1;
+}
+*/
+
+/**
+ * ----------------------------------------------- 2.6.0 --------------------------------------------- 
+ * Convert Custom Style Numbers
+ * New numbering scheme starts ALL custom styles for any style set at 50
+ * ---------------------------------------------------------------------------------------------------
+ */
+
+$style_id = 50;
+$style_set_num_method = 0;
+
+// Need to get style set since it may have changed in scripting above.
+$query_current_styleset = sprintf("SELECT prefsStyleSet FROM %s WHERE id='1'",$prefix."preferences");
+$current_styleset = mysqli_query($connection,$query_current_styleset);
+$row_current_styleset = mysqli_fetch_assoc($current_styleset);
+
+include(INCLUDES.'styles.inc.php');
+
+foreach ($style_sets as $key) {
+	if ($key['style_set_name'] == $row_current_styleset['prefsStyleSet']) {
+		$style_set_num_method = $key['style_set_sub_style_method'];
+	}
+}
+
+// If style set substyle method is successive numbering, get the last substyle number
+if ($style_set_num_method == 1) {
+	
+	$query_style_number = sprintf("SELECT brewStyleNum FROM %s WHERE brewStyleVersion='%s' ORDER BY brewStyleNum DESC LIMIT 1", $prefix."styles", $row_current_styleset['prefsStyleSet']);
+	$style_number = mysqli_query($connection,$query_style_number) or die (mysqli_error($connection));
+	$row_style_number = mysqli_fetch_assoc($style_number);
+	
+	$sub_style_id = $row_style_number['brewStyleNum'] + 1;
+
+}
+
+else $sub_style_id = "A";
+
+/**
+ * Get the first style number of any custom style.
+ * If that number is less than 50, proceed with renumbering.
+ * Loop through the dataset, first changing the style's 
+ * record to the new number/substyle identifier and currently
+ * chosen style set and then changing all records in the 
+ * brewing table with the style to match.
+ */
+
+$query_style_num = sprintf("SELECT id,brewStyleGroup,brewStyleNum FROM %s WHERE brewStyleOwn='custom' ORDER BY brewStyleNum ASC LIMIT 1", $prefix."styles");
+$style_num = mysqli_query($connection,$query_style_num);
+$row_style_num = mysqli_fetch_assoc($style_num);
+
+if ((isset($row_style_num['brewStyleGroup']) && ($row_style_num['brewStyleGroup'] < 50))) {
+	
+	$query_style_name = sprintf("SELECT id,brewStyle,brewStyleGroup,brewStyleNum FROM %s 
+		WHERE brewStyleOwn='custom' ORDER BY id", $prefix."styles");
+	$style_name = mysqli_query($connection,$query_style_name);
+	$row_style_name = mysqli_fetch_assoc($style_name);
+
+	do {
+
+		// Update styles table
+		$update_table = $prefix."styles";
+		$data = array(
+			'brewStyleGroup' => $style_id,
+			'brewStyleNum' => $sub_style_id,
+			'brewStyleVersion' => $row_current_styleset['prefsStyleSet'],
+		);
+		$db_conn->where ('id', $row_style_name['id']);
+		$result = $db_conn->update ($update_table, $data);
+
+		// Update all entries in brewing table with the style
+		$update_table = $prefix."brewing";
+		$data = array(
+			'brewCategory' => $style_id,
+			'brewCategorySort' => $style_id,
+			'brewSubCategory' => $sub_style_id
+		);
+		$db_conn->where ('brewStyle', $row_style_name['brewStyle']);
+		$result = $db_conn->update ($update_table, $data);
+
+		$style_id += 1;
+		if ($style_set_num_method == 1) $sub_style_id += 1;
+
+	} while($row_style_name = mysqli_fetch_assoc($style_name));
+
+}
+
+/**
+ * ---------------------------------------------------------------------------------------------------
+ * End all unordered lists
+ * ---------------------------------------------------------------------------------------------------
+ */
+if (!$setup_running) $output_off_sched_update .= "</ul>";
+
+/**
+ * ---------------------------------------------------------------------------------------------------
  * Change the version number and date.
  * ALWAYS the final script.
- * ----------------------------------------------------------------------------------------------------
+ * ---------------------------------------------------------------------------------------------------
  */
 
 $update_table = $prefix."bcoem_sys";

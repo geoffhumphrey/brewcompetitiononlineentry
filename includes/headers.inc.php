@@ -1,10 +1,4 @@
 <?php
-
-/*
-Checked Single
-2016-06-06
-*/
-
 /**
  * Module:      headers.inc.php
  * Description: This module defines all header text for the application based
@@ -80,7 +74,6 @@ switch($section) {
 		if     ($msg == "1") $output = sprintf("<strong>%s</strong>",$header_text_013);
 		elseif ($msg == "2") $output = sprintf("<strong>%s</strong>",$header_text_014);
 		elseif ($msg == "3") $output = sprintf("<strong>%s</strong> %s",$header_text_015, $header_text_008);
-		elseif ($msg == "4") $output = sprintf("<strong></strong>",$header_text_016);
 		else $output = "";
 	break;
 
@@ -91,7 +84,7 @@ switch($section) {
 		else $header_output .= " - ".$label_reg;
 		if     ($msg == "1") $output = sprintf("<strong>%s</strong> %s",$header_text_017, $header_text_008);
 		elseif ($msg == "2") { $output = sprintf("<strong>%s</strong>",$header_text_018); $output_extend = sprintf("<p>%s <a href=\"index.php?section=login\">%s</a></p>",$header_text_019,$header_text_020); }
-		elseif ($msg == "3") $output = sprintf("<strong>%</strong> %s",$header_text_021, $header_text_022);
+		elseif ($msg == "3") $output = sprintf("<strong>%s</strong> %s",$header_text_021, $header_text_022);
 		elseif ($msg == "4") $output = sprintf("<strong>%s</strong> %s",$header_text_023, $header_text_008);
 		elseif ($msg == "5") $output = sprintf("<strong>%s</strong> %s",$header_text_024, $header_text_008);
 		elseif ($msg == "6") $output = sprintf("<strong></strong> %s",$header_text_025, $header_text_008);
@@ -117,7 +110,7 @@ switch($section) {
 		else $header_output = $_SESSION['contestName']." - ".$label_log_in;
 		if ($msg == "0") $output = sprintf("<strong>%s</strong> ",$header_text_031);
 		elseif ($msg == "1") { $output = sprintf("<strong>%s</strong> %s",$header_text_032,$header_text_033); $output_extend = ""; }
-		elseif ($msg == "2") { $output = sprintf("<strong>%s</strong> %s",$header_text_034,$header_text_116); $output_extend = ""; }
+	 	elseif ($msg == "2") { $output = sprintf("<strong>%s</strong> %s",$header_text_034,$header_text_116); $output_extend = ""; }
 		elseif ($msg == "3") $output = sprintf("<strong>%s</strong> <a href=\#\"  role=\"button\" data-toggle=\"modal\" data-target=\"#loginModal\">%s</a>",$header_text_036,$header_text_037);
 		elseif ($msg == "4") $output = sprintf("<strong>%s</strong> %s",$header_text_038,$header_text_008);
 		elseif ($msg == "5") $output = sprintf("<strong>%s</strong>",$header_text_039);
@@ -606,7 +599,6 @@ switch($section) {
 			if ($section == "step3") $output_extend .= "setup.php?section=step4";
 			else $output_extend .= sprintf("index.php?section=admin\">%s</a>",$label_no);
 			}
-
 		elseif ($msg == "13") $output = sprintf("<strong>%s</strong>",$header_text_077);
 		elseif ($msg == "15") $output = sprintf("<strong>%s</strong> %s",$header_text_078,$header_text_008);
 		elseif ($msg == "18") $output = sprintf("<strong>%s</strong> %s",$header_text_079,$header_text_008);
@@ -627,7 +619,7 @@ switch($section) {
 		elseif ($msg == "34") $output = sprintf("<strong>%s</strong>",$header_text_110);
 		elseif ($msg == "35") $output = sprintf("<strong>%s</strong>",$header_text_111);
 		elseif ($msg == "36") $output = sprintf("<strong>%s</strong>",$header_text_115);
-		elseif ($msg == "37") $output = sprintf("<strong>%s</strong> %s","Please Note!", "Accepted BA Styles have been cleared. Please go to Admin > Competition Preparation > Manage Styles Accepted to define your competition's accepted styles.");
+		elseif ($msg == "37") $output = sprintf("<strong>%s</strong> %s","Please Note!", "Since your style set has changed, by default, all styles have been marked as active. Review and update below the styles your competition will and will not accept.");
 		elseif ($msg == "755") $output = sprintf("<strong>%s</strong> ",$header_text_094,$header_text_095);
 		else $output = "";
 	break;

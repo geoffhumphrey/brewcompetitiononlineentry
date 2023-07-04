@@ -41,9 +41,12 @@ if (($filter != "winners") || ($tb != "winners")) {
 if (($go == "csv") && ($action == "email")) $query_sql .= " ORDER BY brewBrewerLastName,brewBrewerFirstName,id ASC";
 if (($go == "csv") && ($action == "all") && ($filter == "all")) $query_sql .= " ORDER BY id ASC";
 
-if (($filter == "winners") || ($tb == "winners")) {
+if (($filter == "winners") || ($tb == "winners") || ($tb == "circuit")) {
 
-	$query_sql = "SELECT id,tableNumber,tableName FROM $judging_tables_db_table";
+	$archive_suffix = "";
+	if ($sort != "default") $archive_suffix = "_".$sort;
+
+	$query_sql = sprintf("SELECT id,tableNumber,tableName FROM %s", $judging_tables_db_table.$archive_suffix);
 	if (SINGLE) $query_sql .= sprintf(" AND comp_id='%s'",$_SESSION['comp_id']);
 	$query_sql .= " ORDER BY tableNumber ASC";
 

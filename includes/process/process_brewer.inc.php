@@ -473,7 +473,8 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 				'brewerProAm' => blank_to_null($brewerProAm),
 				'brewerDropOff' => blank_to_null($brewerDropOff),
 				'brewerBreweryName' => blank_to_null($brewerBreweryName),
-				'brewerBreweryTTB' => blank_to_null($brewerBreweryTTB)
+				'brewerBreweryTTB' => blank_to_null($brewerBreweryTTB),
+				'brewerAssignment' => blank_to_null($brewerAssignment)
 			);
 
 			$result = $db_conn->insert ($update_table, $data);
@@ -672,7 +673,8 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 			'brewerProAm' => blank_to_null($brewerProAm),
 			'brewerDropOff' => blank_to_null($brewerDropOff),
 			'brewerBreweryName' => blank_to_null($brewerBreweryName),
-			'brewerBreweryTTB' => blank_to_null($brewerBreweryTTB)
+			'brewerBreweryTTB' => blank_to_null($brewerBreweryTTB),
+			'brewerAssignment' => blank_to_null($brewerAssignment)
 		);
 		$db_conn->where ('id', $id);
 		$result = $db_conn->update ($update_table, $data);
@@ -773,11 +775,11 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 			$url = str_replace("www.","",$_SERVER['SERVER_NAME']);
 			
 			$from_email = (!isset($mail_default_from) || trim($mail_default_from) === '') ? "noreply@".$url : $mail_default_from;
-			if (strpos($url, 'brewcomp.com') !== false) $from_email = "noreply@brewcomp.com";
-			elseif (strpos($url, 'brewcompetition.com') !== false) $from_email = "noreply@brewcompetition.com";
+			if ((strpos($url, 'brewcomp.com') !== false) || (strpos($url, 'brewcompetition.com') !== false)) $from_email = "noreply@brewcompetition.com";
 			$from_email = mb_convert_encoding($from_email, "UTF-8");
 
 			$contestName = $_SESSION['contestName'];
+			$from_name = html_entity_decode($from_name);
 			$from_name = mb_convert_encoding($contestName, "UTF-8");
 
 			$to_email = filter_var($_POST['brewerEmail'],FILTER_SANITIZE_EMAIL);
@@ -785,9 +787,11 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 			$to_email_formatted = $to_name." <".$to_email.">";
 
 			$to_name = $first_name." ".$last_name;
+			$to_name = html_entity_decode($to_name);
 			$to_name = mb_convert_encoding($to_name, "UTF-8");
 			
 			$subject = sprintf($_SESSION['contestName'].": %s",$register_text_051);
+			$subject = html_entity_decode($subject);
 			$subject = mb_convert_encoding($subject, "UTF-8");
 
 			$message = "<html>" . "\r\n";

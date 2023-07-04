@@ -263,23 +263,47 @@ if ($section != "step5") {
 				}
 
 				if (($filter == "judges") || ($filter == "stewards") || ($filter == "staff")) {
-					
+				    
+				    // Get Judging Sessions
+				    $query_judging_loc3 = sprintf("SELECT id, judgingLocName, judgingLocType FROM %s", $prefix."judging_locations");
+				    if ($filter == "staff") $query_judging_loc3 .= " WHERE judgingLocType='2'";
+					$judging_loc3 = mysqli_query($connection,$query_judging_loc3) or die (mysqli_error($connection));
+					$row_judging_loc3 = mysqli_fetch_assoc($judging_loc3);
+	
+	                $j_sess_arr = array();
+
+	                if ($row_judging_loc3) {
+	                	do {
+	                	    $j_sess_arr[$row_judging_loc3['id']] = $row_judging_loc3['judgingLocName'];
+	                	    
+	                	} while ($row_judging_loc3 = mysqli_fetch_assoc($judging_loc3));
+	                }
+	                
 					if (($filter == "judges") || ($filter == "staff")) $exploder = $row_brewer['brewerJudgeLocation'];
 					if ($filter == "stewards") $exploder = $row_brewer['brewerStewardLocation'];
 					$a = explode(",",$exploder);
 					$output = "";
 					
 					if (!empty($exploder)) {
-						
+
 						sort($a);
 						$c = array();
+
+						$none_selected = 0;
 						
 						foreach ($a as $value) {
+							
 							if (!empty($value)) {
-								$b = substr($value, 2);
-								if ($filter == "staff") $c[] = judging_location_avail($b,$value,1);
-								else $c[] = judging_location_avail($b,$value);
+								
+								$b = explode("-",$value);
+								
+								if (($b[0] == "Y") && (isset($j_sess_arr[$b[1]]))) {
+								    $c[] = $j_sess_arr[$b[1]]."<br>";
+									$none_selected += 1;
+								}
+								
 							}
+							
 						}
 					
 						if (!empty($c)) {
@@ -292,13 +316,14 @@ if ($section != "step5") {
 							$output = rtrim($output,"<br>");
 						}
 
-					}					
-						
-					if (empty($output)) {
-						if ($filter == "staff") $output_location = "None specified.";
-						else $output_location .= "<span class=\"fa fa-lg fa-ban text-danger\"></span> <a href=\"".$base_url."index.php?section=brewer&amp;go=admin&amp;action=edit&amp;filter=".$row_brewer['uid']."&amp;id=".$row_brewer['uid']."\" data-toggle=\"tooltip\" title=\"Enter ".$row_brewer['brewerFirstName']." ".$row_brewer['brewerLastName']."&rsquo;s location preferences\">None specified</a>.";
+					
 					}
-					else $output_location = $output;
+						
+					if ($none_selected == 0) {
+						if ($filter != "staff") $output .= "<span class=\"fa fa-sm fa-ban text-danger\"></span> <a href=\"".$base_url."index.php?section=brewer&amp;go=admin&amp;action=edit&amp;filter=".$row_brewer['uid']."&amp;id=".$row_brewer['uid']."\" data-toggle=\"tooltip\" title=\"Enter ".$row_brewer['brewerFirstName']." ".$row_brewer['brewerLastName']."&rsquo;s location preferences\">None specified</a>.";
+					}
+					
+					$output_location = $output;
 
 				}
 
@@ -759,7 +784,8 @@ if (($output_add_edit) && ($msg != 9)) {
                 <input type="radio" name="judgingLocType" value="1" id="judgingLocType_1" <?php if ((isset($row_judging['judgingLocType'])) && ($section != "step5") && ($row_judging['judgingLocType'] == "1")) echo "CHECKED"; ?> required /> Distributed <small>(multi-day and/or multi-location)</small>
             </label>
         </div>
-        <span class="help-block">Indicate whether judge teams in this session will be evaluating entries at a single, designated location, typically collectively, or over a series of days in various locations. For example, choose <em>Distributed</em> if judges will be evaluating entries virtually - synchronously or asynchronously - or if locations will be ad-hoc, such as in a judge team member home.</span>
+        <span class="help-block">Indicate whether judge teams in this session will be evaluating entries at a single, designated location, typically collectively, or over a series of days in various locations. For example, choose <em>Distributed</em> if judges will be evaluating entries virtually - synchronously or asynchronously - or if locations will be ad-hoc, such as in a judge team member's home.</span>
+    	<span class="help-block">Traditional sessions only require a start time. Distributed sessions require a start AND end time.</span>
     </div>
 </div><!-- ./Form Group -->
 

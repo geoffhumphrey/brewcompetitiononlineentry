@@ -36,9 +36,11 @@ if (($action == "email") && ($id != "default")) {
 	$url = str_replace("www.","",$_SERVER['SERVER_NAME']);
 	
 	$contestName = ucwords($_SESSION['contestName']);
+	$from_name = html_entity_decode($contestName);
 	$from_name = mb_convert_encoding($contestName, "UTF-8");
 	
 	$to_name = $first_name." ".$last_name;
+	$to_name = html_entity_decode($to_name);
 	$to_name = mb_convert_encoding($to_name, "UTF-8");
 
 	$to_email = $row_forgot['user_name'];
@@ -46,6 +48,7 @@ if (($action == "email") && ($id != "default")) {
 	$to_email_formatted = $to_name." <".$to_email.">";
 
 	$subject = sprintf("%s: %s",$_SESSION['contestName'],$label_id_verification_request);
+	$subject = html_entity_decode($subject);
 	$subject = mb_convert_encoding($subject, "UTF-8");
 	
 	$from_email = (!isset($mail_default_from) || trim($mail_default_from) === '') ? "noreply@".$url : $mail_default_from;
@@ -133,6 +136,7 @@ if ($action == "forgot") {
 		$contestName = ucwords($_SESSION['contestName']);
 
 		$to_name = $first_name." ".$last_name;
+		$to_name = html_entity_decode($to_name);
 		$to_name = mb_convert_encoding($to_name, "UTF-8");
 
 		$to_email = $row_forgot['user_name'];
@@ -141,9 +145,11 @@ if ($action == "forgot") {
 		
 		$from_email = (!isset($mail_default_from) || trim($mail_default_from) === '') ? "noreply@".$url : $mail_default_from;
 		$from_email = mb_convert_encoding($from_email, "UTF-8");
+		$from_name = html_entity_decode($contestName);
 		$from_name = mb_convert_encoding($contestName, "UTF-8");
 
-		$subject = sprintf("%s: %s",$_SESSION['contestName'],$label_password_reset);
+		$subject = sprintf("%s: %s",$contestName,$label_password_reset);
+		$subject = html_entity_decode($subject);
 		$subject = mb_convert_encoding($subject, "UTF-8");
 		
 		$message = "<html>" . "\r\n";

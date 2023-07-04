@@ -142,6 +142,7 @@ if ($go == "all_entry_info") {
 
 									$special = style_convert($style_special,"9");
 									$special = explode("^",$special);
+
 									$table_flight_tbody .= "<td>";
 									if ((!empty($row_entries['brewInfo'])) && ($special[4] == "1")) $table_flight_tbody .= "<p>".str_replace("^","<br>",$row_entries['brewInfo'])."</p>";
 									$table_flight_tbody .= "<p>";
@@ -504,7 +505,10 @@ if ($go == "mini_bos") {
 			$table_flight_tbody .= "</td>";
 
 			$table_flight_tbody .= "<td>";
-			if (($row_entries_mini['brewInfo'] != "") && ($special[4] == "1")) $table_flight_tbody .= "<p><strong>".$label_required_info.":</strong> ".str_replace("^"," | ",$row_entries_mini['brewInfo'])."</p>";
+			if (($row_entries_mini['brewInfo'] != "") && ($special[4] == "1")) {
+				if (($_SESSION['prefsStyleSet'] == "BJCP2021") && ($style == "2A")) $table_flight_tbody .= "<p><strong>".$label_regional_variation.":</strong> ".str_replace("^"," | ",$row_entries_mini['brewInfo'])."</p>";
+				else $table_flight_tbody .= "<p><strong>".$label_required_info.":</strong> ".str_replace("^"," | ",$row_entries_mini['brewInfo'])."</p>";
+			}
 			if ($row_entries_mini['brewInfoOptional'] != "") $table_flight_tbody .= "<p><strong>".$label_optional_info.":</strong> ".$row_entries_mini['brewInfoOptional']."</p>";
 			if ($row_entries_mini['brewComments'] != "") $table_flight_tbody .= "<p><strong>".$label_brewer_specifics.":</strong> ".$row_entries_mini['brewComments']."</p>";
 			$table_flight_tbody .= "<p>";
@@ -648,7 +652,10 @@ if ($go == "judging_scores_bos") {
 						$special = style_convert($style_special,"9");
 						$special = explode("^",$special);
 
-						if (($row_bos['brewInfo'] != "") && ($special[4] == "1")) $table_flight_tbody .= "<p><strong>".$label_required_info.": </strong>".str_replace("^"," | ",$row_bos['brewInfo'])."</p>";
+						if (($row_bos['brewInfo'] != "") && ($special[4] == "1")) {
+							if (($_SESSION['prefsStyleSet'] == "BJCP2021") && ($style == "02A")) $table_flight_tbody .= "<p><strong>".$label_regional_variation.": </strong>".str_replace("^"," | ",$row_bos['brewInfo'])."</p>";
+							else $table_flight_tbody .= "<p><strong>".$label_required_info.": </strong>".str_replace("^"," | ",$row_bos['brewInfo'])."</p>";
+						}
 						if ($row_bos['brewInfoOptional'] != "") $table_flight_tbody .= "<p><strong>".$label_optional_info.": </strong>".$row_bos['brewInfoOptional']."</p>";
 						if ($row_bos['brewComments'] != "") $table_flight_tbody .= "<p><strong>".$label_brewer_specifics.": </strong>".$row_bos['brewComments']."</p>";
 
@@ -825,7 +832,10 @@ elseif (($go != "judging_scores_bos") && ($go != "mini_bos") && ($go != "all_ent
 									$special = style_convert($style_special,"9");
 									$special = explode("^",$special);
 
-									if (($row_entries['brewInfo'] != "") && ($special[4] == "1")) $table_flight_tbody .= "<p><strong>".$label_required_info.": </strong> ".str_replace("^"," | ",$row_entries['brewInfo'])."</p>";
+									if (($row_entries['brewInfo'] != "") && ($special[4] == "1")) {
+										if (($_SESSION['prefsStyleSet'] == "BJCP2021") && ($style == "2A")) $table_flight_tbody .= "<p><strong>".$label_regional_variation.": </strong> ".str_replace("^"," | ",$row_entries['brewInfo'])."</p>";
+										else $table_flight_tbody .= "<p><strong>".$label_required_info.": </strong> ".str_replace("^"," | ",$row_entries['brewInfo'])."</p>";
+									}
 									if ($row_entries['brewInfoOptional'] != "") $table_flight_tbody .= "<p><strong>".$label_optional_info.": </strong> ".$row_entries['brewInfoOptional']."</p>";
 									if ($row_entries['brewComments'] != "") $table_flight_tbody .= "<p><strong>".$label_brewer_specifics.": </strong> ".$row_entries['brewComments']."</p>";
 
@@ -961,65 +971,73 @@ elseif (($go != "judging_scores_bos") && ($go != "mini_bos") && ($go != "all_ent
 					foreach (array_unique($a) as $value) {
 
 						include (DB.'output_pullsheets_entries.db.php');
-						$style = style_number_const($row_entries['brewCategorySort'],$row_entries['brewSubCategory'],$_SESSION['style_set_display_separator'],0);
-						$style_special = $row_entries['brewCategorySort']."^".$row_entries['brewSubCategory']."^".$_SESSION['prefsStyleSet'];
 
-						do {
+						if ($row_entries) {
 
-							if (!empty($row_entries['brewCategorySort'])) {
+							$style = style_number_const($row_entries['brewCategorySort'],$row_entries['brewSubCategory'],$_SESSION['style_set_display_separator'],0);
+							$style_special = $row_entries['brewCategorySort']."^".$row_entries['brewSubCategory']."^".$_SESSION['prefsStyleSet'];
 
-								$table_flight_tbody .= "<tr>";
-								$table_flight_tbody .= "<td>";
-								$table_flight_tbody .= "<p>&nbsp;</p>";
-								$table_flight_tbody .= "</td>";
-								$table_flight_tbody .= "<td>";
-								if ($view == "entry")  $table_flight_tbody .= sprintf("%06s",$row_entries['id']);
-								else $table_flight_tbody .= sprintf("%06s",$row_entries['brewJudgingNumber']);
-								$table_flight_tbody .= "</td>";
-								$table_flight_tbody .= "<td>";
-								if ($_SESSION['prefsStyleSet'] == "BA") $table_flight_tbody .= $row_entries['brewStyle'];
-								else $table_flight_tbody .= $style." ".$row_entries['brewStyle']."<em><br>".style_convert($row_entries['brewCategorySort'],1)."</em>";
-								$table_flight_tbody .= "</td>";
-								$table_flight_tbody .= "<td>";
+							do {
 
-								$special = style_convert($style_special,"9");
-								$special = explode("^",$special);
+								if (!empty($row_entries['brewCategorySort'])) {
 
-								if (($row_entries['brewInfo'] != "") && ($special[4] == "1")) $table_flight_tbody .= "<p><strong>".$label_required_info.": </strong> ".str_replace("^"," | ",$row_entries['brewInfo'])."</p>";
-								if ($row_entries['brewInfoOptional'] != "") $table_flight_tbody .= "<p><strong>".$label_optional_info.": </strong> ".$row_entries['brewInfoOptional']."</p>";
-								if ($row_entries['brewComments'] != "") $table_flight_tbody .= "<p><strong>".$label_brewer_specifics.": </strong> ".$row_entries['brewComments']."</p>";
-
-								$table_flight_tbody .= "<p>";
-								if (!empty($row_entries['brewMead1'])) $table_flight_tbody .= "<strong>".$label_carbonation.": </strong> ".$row_entries['brewMead1']."<br>";
-								if (!empty($row_entries['brewMead2'])) $table_flight_tbody .= "<strong>".$label_sweetness.":</strong> ".$row_entries['brewMead2']."<br>";
-								if (!empty($row_entries['brewMead3'])) $table_flight_tbody .= "<strong>".$label_strength.":</strong> ".$row_entries['brewMead3'];
-								$table_flight_tbody .= "</p>";
-
-								if (!empty($row_entries['brewPossAllergens'])) $table_flight_tbody .= "<p><strong>".$label_possible_allergens.":</strong> ".$row_entries['brewPossAllergens']."</p>";
-
-								if (!empty($row_entries['brewStaffNotes'])) $table_flight_tbody .= "<p><strong>".$label_notes.":</strong> ".$row_entries['brewStaffNotes']."</p>";
-
-
-								$table_flight_tbody .= "</td>";
-								$table_flight_tbody .= "<td>";
-								$table_flight_tbody .= $row_entries['brewBoxNum'];;
-								$table_flight_tbody .= "</td>";
-								if ($filter != "mini_bos") {
+									$table_flight_tbody .= "<tr>";
 									$table_flight_tbody .= "<td>";
-									$table_flight_tbody .= "<p class=\"box_small\">";
+									$table_flight_tbody .= "<p>&nbsp;</p>";
 									$table_flight_tbody .= "</td>";
+									$table_flight_tbody .= "<td>";
+									if ($view == "entry")  $table_flight_tbody .= sprintf("%06s",$row_entries['id']);
+									else $table_flight_tbody .= sprintf("%06s",$row_entries['brewJudgingNumber']);
+									$table_flight_tbody .= "</td>";
+									$table_flight_tbody .= "<td>";
+									if ($_SESSION['prefsStyleSet'] == "BA") $table_flight_tbody .= $row_entries['brewStyle'];
+									else $table_flight_tbody .= $style." ".$row_entries['brewStyle']."<em><br>".style_convert($row_entries['brewCategorySort'],1)."</em>";
+									$table_flight_tbody .= "</td>";
+									$table_flight_tbody .= "<td>";
+
+									$special = style_convert($style_special,"9");
+									$special = explode("^",$special);
+
+									if (($row_entries['brewInfo'] != "") && ($special[4] == "1")) {
+										if (($_SESSION['prefsStyleSet'] == "BJCP2021") && ($style == "2A")) $table_flight_tbody .= "<p><strong>".$label_regional_variation.": </strong> ".str_replace("^"," | ",$row_entries['brewInfo'])."</p>";
+										else $table_flight_tbody .= "<p><strong>".$label_required_info.": </strong> ".str_replace("^"," | ",$row_entries['brewInfo'])."</p>";
+									}
+									if ($row_entries['brewInfoOptional'] != "") $table_flight_tbody .= "<p><strong>".$label_optional_info.": </strong> ".$row_entries['brewInfoOptional']."</p>";
+									if ($row_entries['brewComments'] != "") $table_flight_tbody .= "<p><strong>".$label_brewer_specifics.": </strong> ".$row_entries['brewComments']."</p>";
+
+									$table_flight_tbody .= "<p>";
+									if (!empty($row_entries['brewMead1'])) $table_flight_tbody .= "<strong>".$label_carbonation.": </strong> ".$row_entries['brewMead1']."<br>";
+									if (!empty($row_entries['brewMead2'])) $table_flight_tbody .= "<strong>".$label_sweetness.":</strong> ".$row_entries['brewMead2']."<br>";
+									if (!empty($row_entries['brewMead3'])) $table_flight_tbody .= "<strong>".$label_strength.":</strong> ".$row_entries['brewMead3'];
+									$table_flight_tbody .= "</p>";
+
+									if (!empty($row_entries['brewPossAllergens'])) $table_flight_tbody .= "<p><strong>".$label_possible_allergens.":</strong> ".$row_entries['brewPossAllergens']."</p>";
+
+									if (!empty($row_entries['brewStaffNotes'])) $table_flight_tbody .= "<p><strong>".$label_notes.":</strong> ".$row_entries['brewStaffNotes']."</p>";
+
+
+									$table_flight_tbody .= "</td>";
+									$table_flight_tbody .= "<td>";
+									$table_flight_tbody .= $row_entries['brewBoxNum'];;
+									$table_flight_tbody .= "</td>";
+									if ($filter != "mini_bos") {
+										$table_flight_tbody .= "<td>";
+										$table_flight_tbody .= "<p class=\"box_small\">";
+										$table_flight_tbody .= "</td>";
+									}
+									$table_flight_tbody .= "<td>";
+									$table_flight_tbody .= "<p>&nbsp;</p>";
+									$table_flight_tbody .= "</td>";
+									$table_flight_tbody .= "<td>";
+									$table_flight_tbody .= "<p>&nbsp;</p>";
+									$table_flight_tbody .= "</td>";
+									$table_flight_tbody .= "</tr>";
+
 								}
-								$table_flight_tbody .= "<td>";
-								$table_flight_tbody .= "<p>&nbsp;</p>";
-								$table_flight_tbody .= "</td>";
-								$table_flight_tbody .= "<td>";
-								$table_flight_tbody .= "<p>&nbsp;</p>";
-								$table_flight_tbody .= "</td>";
-								$table_flight_tbody .= "</tr>";
 
-							}
+							} while ($row_entries = mysqli_fetch_assoc($entries));
 
-						} while ($row_entries = mysqli_fetch_assoc($entries));
+						}
 
 					} // end foreach
 
@@ -1173,7 +1191,10 @@ elseif (($go != "judging_scores_bos") && ($go != "mini_bos") && ($go != "all_ent
 										$special = style_convert($style_special,"9");
 										$special = explode("^",$special);
 
-											if (($row_entries['brewInfo'] != "") && ($special[4] == "1")) $table_flight_tbody .= "<p><strong>".$label_required_info.": </strong> ".str_replace("^"," | ",$row_entries['brewInfo'])."</p>";
+											if (($row_entries['brewInfo'] != "") && ($special[4] == "1")) {
+												if (($_SESSION['prefsStyleSet'] == "BJCP2021") && ($style == "2A")) $table_flight_tbody .= "<p><strong>".$label_regional_variation.": </strong> ".str_replace("^"," | ",$row_entries['brewInfo'])."</p>";
+												else $table_flight_tbody .= "<p><strong>".$label_required_info.": </strong> ".str_replace("^"," | ",$row_entries['brewInfo'])."</p>";
+											}
 											if ($row_entries['brewInfoOptional'] != "") $table_flight_tbody .= "<p><strong>".$label_optional_info.": </strong> ".$row_entries['brewInfoOptional']."</p>";
 											if ($row_entries['brewComments'] != "") $table_flight_tbody .= "<p><strong>".$label_brewer_specifics.": </strong> ".$row_entries['brewComments']."</p>";
 
@@ -1351,7 +1372,10 @@ elseif (($go != "judging_scores_bos") && ($go != "mini_bos") && ($go != "all_ent
 									$special = style_convert($style_special,"9");
 									$special = explode("^",$special);
 
-										if (($row_entries['brewInfo'] != "") && ((isset($special[4])) && ($special[4] == "1"))) $table_flight_tbody .= "<p><strong>".$label_required_info.": </strong> ".str_replace("^"," | ",$row_entries['brewInfo'])."</p>";
+										if (($row_entries['brewInfo'] != "") && ((isset($special[4])) && ($special[4] == "1"))) {
+											if (($_SESSION['prefsStyleSet'] == "BJCP2021") && ($style == "2A")) $table_flight_tbody .= "<p><strong>".$label_regional_variation.": </strong> ".str_replace("^"," | ",$row_entries['brewInfo'])."</p>";
+											else $table_flight_tbody .= "<p><strong>".$label_required_info.": </strong> ".str_replace("^"," | ",$row_entries['brewInfo'])."</p>";
+										}
 										if ($row_entries['brewInfoOptional'] != "") $table_flight_tbody .= "<p><strong>".$label_optional_info.": </strong> ".$row_entries['brewInfoOptional']."</p>";
 										if ($row_entries['brewComments'] != "") $table_flight_tbody .= "<p><strong>".$label_brewer_specifics.": </strong> ".$row_entries['brewComments']."</p>";
 
@@ -1564,7 +1588,10 @@ elseif (($go != "judging_scores_bos") && ($go != "mini_bos") && ($go != "all_ent
 								$special = style_convert($style_special,"9");
 								$special = explode("^",$special);
 
-									if (($row_entries['brewInfo'] != "") && ($special[4] == "1")) $table_flight_tbody .= "<p><strong>".$label_required_info.": </strong> ".str_replace("^"," | ",$row_entries['brewInfo'])."</p>";
+									if (($row_entries['brewInfo'] != "") && ($special[4] == "1")) {
+										if (($_SESSION['prefsStyleSet'] == "BJCP2021") && ($style == "2A")) $table_flight_tbody .= "<p><strong>".$label_regional_variation.": </strong> ".str_replace("^"," | ",$row_entries['brewInfo'])."</p>";
+										else $table_flight_tbody .= "<p><strong>".$label_required_info.": </strong> ".str_replace("^"," | ",$row_entries['brewInfo'])."</p>";
+									}
 									if ($row_entries['brewInfoOptional'] != "") $table_flight_tbody .= "<p><strong>".$label_optional_info.": </strong>".$row_entries['brewInfoOptional']."</p>";
 									if ($row_entries['brewComments'] != "") $table_flight_tbody .= "<p><strong>".$label_brewer_specifics.": </strong> ".$row_entries['brewComments']."</p>";
 

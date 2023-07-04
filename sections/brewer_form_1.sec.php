@@ -1,4 +1,5 @@
 <!-- Not a Brewery; clubs, Pro-Am, AHA, Staff -->
+<?php if ($_SESSION['prefsProEdition'] == 0) { ?>
 <section id="participant-clubs">
     <div class="form-group">
         <label for="brewerClubs" class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label_club; ?></label>
@@ -24,8 +25,6 @@
         </div>
     </div>
 </section>
-
-<?php if ($_SESSION['prefsProEdition'] == 0) { ?>
 <section id="proAm">
     <div class="form-group">
         <label for="" class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label_pro_am; ?></label>
@@ -46,21 +45,18 @@
         </div>
     </div>
 </section>
-<?php } else { ?>
-    <input type="hidden" name="brewerProAm" value="0">
-<?php } ?>
-
 <section id="aha-number">
     <div class="form-group">
         <label for="brewerAHA" class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label_aha_number; ?></label>
         <div class="col-lg-9 col-md-9 col-sm-8 col-xs-12">
-            
-            <input class="form-control" id="brewerAHA" name="brewerAHA" type="text" value="<?php if ($action == "edit") echo $row_brewer['brewerAHA']; ?>" placeholder="">
+            <input class="form-control" name="brewerAHA" id="brewerAHA" type="text" pattern="\d*" placeholder="" data-error="<?php echo $brew_text_019; ?>" value="<?php if ($action == "edit") echo $row_brewer['brewerAHA']; ?>" placeholder="">
             <span id="ahaProAmText" class="help-block"><?php echo $brewer_text_003; ?></span>
         </div>
     </div>
 </section>
-
+<?php } else { ?>
+    <input type="hidden" name="brewerProAm" value="0">
+<?php } ?>
 <section id="staff-preferences">
     <div class="form-group">
         <label for="brewerStaff" class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label_staff; ?></label>
