@@ -2066,6 +2066,8 @@ $label_garnet = "Garnet";
 $label_clear = "Clear";
 $label_final_judging_date = "Final Judging Date";
 $label_entries_judged = "Entries Judged";
+$label_results_export = "Export Results";
+$label_results_export_personal = "Export Personal Results";
 
 $brew_text_041 = "Optional &ndash; specify a regional variation (e.g., Mexican Lager, Dutch Lager, Japanese Rice Lager, etc.).";
 

@@ -4,6 +4,7 @@ $suggested_close = FALSE;
 $judging_open_date = "";
 $judging_close_date = "";
 $non_judging_count = 0;
+$judging_session_js = ""; 
 
 if ($_SESSION['prefsEval'] == 1) {
 
@@ -196,8 +197,6 @@ if ($_SESSION['prefsEval'] == 1) {
 if ($totalRows_judging_locs == 0) echo "<p>No judging sessions have been defined. <a href=\"".$base_url."index.php?section=admin&amp;go=judging&amp;action=add\">Add a judging session</a>?</p>"; 
 
 if ($totalRows_judging_locs > 0) { 
-
-$judging_session_js = ""; 
     
     do { 
 

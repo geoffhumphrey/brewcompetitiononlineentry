@@ -1928,6 +1928,8 @@ $label_garnet = "Garnet";
 $label_clear = "Přehledně";
 $label_final_judging_date = "Datum Závěrečného Hodnocení";
 $label_entries_judged = "Posuzované Položky";
+$label_results_export = "Výsledky Exportu";
+$label_results_export_personal = "Export Osobních Výsledků";
 
 $brew_text_041 = "Nepovinné - uveďte regionální variantu (např. mexický ležák, holandský ležák, japonský rýžový ležák atd.).";
 

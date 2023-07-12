@@ -37,7 +37,18 @@ $multiple_bottle_ids = FALSE;
 if ((($_SESSION['prefsEntryForm'] == "5") || ($_SESSION['prefsEntryForm'] == "6")) && $print_bottle_labels) $multiple_bottle_ids = TRUE;
 
 // Build Headers
-if (($total_to_pay > 0) && (!$disable_pay)) $pay_button .= sprintf("<a class=\"btn btn-success pull-right\" href=\"%s\"><i class=\"fa fa-lg fa-money\"></i> %s</a>",$link_pay, $label_pay);
+if (($total_to_pay > 0) && (!$disable_pay)) $pay_button .= sprintf("<a class=\"btn btn-success pull-right\" href=\"%s\"><i class=\"fa fa-lg fa-money\"></i> %s</a>",$link_pay, $label_pay); 
+if ($show_scores) {
+	$link_results_export = $base_url."output/export.output.php?section=personal-results&amp;id=".$_SESSION['brewerID'];
+	$link_results_export_mhp = $base_url."output/export.output.php?section=personal-results&amp;filter=MHP&amp;id=".$_SESSION['brewerID'];
+	$pay_button .= "<div class=\"btn-group pull-right\">";
+	$pay_button .= sprintf("<button type=\"button\" class=\"btn btn-success dropdown-toggle\" data-toggle=\"dropdown\" aria-haspopup=\"true\" aria-expanded=\"false\"><i class=\"fa fa-lg fa-file-excel\" style=\"margin-right: 8px;\"></i>%s<span class=\"caret\" style=\"margin-left: 8px;\"></span></button>",$label_results_export_personal);
+	$pay_button .= "<ul class=\"dropdown-menu\">";
+	$pay_button .= sprintf("<li class=\"small\"><a class=\"hide-loader\" href=\"%s\" target=\"_blank\">%s</a></li>",$link_results_export,$label_general);
+	$pay_button .= sprintf("<li class=\"small\"><a class=\"hide-loader\" href=\"%s\" target=\"_blank\">Master Homebrewer Program</a></li>",$link_results_export_mhp);
+	$pay_button .= "</ul>";
+	$pay_button .= "</div>";
+}
 $header1_1 .= "<div class=\"row\">";
 $header1_1 .= "<div class=\"col col-xs-6 col-sm-9\">";
 $header1_1 .= sprintf("<a class=\"anchor-offset\" name=\"entries\"></a><h2>%s</h2>",$label_entries);
@@ -46,7 +57,7 @@ $header1_1 .= "<div class=\"col col-xs-6 col-sm-3\">";
 $header1_1 .= "<div style=\"margin-top: 10px;\">".$pay_button."</div>";
 $header1_1 .= "</div>";
 $header1_1 .= "</div>";
-if (!empty($_SESSION['jPrefsBottleNum'])) $header1_1 .= sprintf("<p>%s: %s</p>", $label_number_bottles, $_SESSION['jPrefsBottleNum']);
+if ((!empty($_SESSION['jPrefsBottleNum'])) && (!$show_scores)) $header1_1 .= sprintf("<p>%s: %s</p>", $label_number_bottles, $_SESSION['jPrefsBottleNum']);
 
 // Build Warnings
 $warnings = "";

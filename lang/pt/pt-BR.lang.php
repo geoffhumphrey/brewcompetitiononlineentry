@@ -1932,6 +1932,8 @@ $label_garnet = "Granada";
 $label_clear = "Transparente";
 $label_final_judging_date = "Data do Julgamento Final";
 $label_entries_judged = "Inscrições julgadas";
+$label_results_export = "Exportação Resultados";
+$label_results_export_personal = "Exportar Resultados Pessoais";
 
 $brew_text_041 = "Opcional - especificar uma variação regional (por exemplo, Lager mexicana, Lager holandesa, Rice Lager japonesa, etc.).";
 $evaluation_info_095 = "Próxima sessão de julgamento designada aberta:";

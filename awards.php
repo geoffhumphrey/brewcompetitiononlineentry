@@ -786,9 +786,7 @@ if (($display_to_admin) || ($display_to_public)) {
 				if ($bb_position <= $bb_max_position) {
 					$table_body1 .= "<tr class=\"fragment\" data-fragment-index=\"".$place_heirarchy."\" >";
 					$table_body1 .= "<td class=\"no-bottom-border\" width=\"1%\" nowrap><a name=\"".$points."\"></a>".$bb_display_position."</td>";
-					$table_body1 .= "<td class=\"no-bottom-border\" width=\"25%\">".$bestbrewer[$key]['Name'];
-					if (array_sum($bestbrewer[$key]['TypeBOS']) > 0) $table_body1 .= sprintf("<small><em><br>** %s %s **</em></small>",$label_bos,$label_participant);
-					$table_body1 .= "</td>";
+					$table_body1 .= "<td class=\"no-bottom-border\" width=\"25%\">".$bestbrewer[$key]['Name']."</td>";
 					$table_body1 .= "<td class=\"no-bottom-border\" width=\"5%\" nowrap>".$bestbrewer[$key]['Places'][0]."</td>";
 					$table_body1 .= "<td class=\"no-bottom-border\" width=\"5%\" nowrap>".$bestbrewer[$key]['Places'][1]."</td>";
 					$table_body1 .= "<td class=\"no-bottom-border\" width=\"5%\" nowrap>".$bestbrewer[$key]['Places'][2]."</td>";

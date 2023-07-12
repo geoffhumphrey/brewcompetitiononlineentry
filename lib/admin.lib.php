@@ -499,7 +499,7 @@ function score_custom_winning_choose($special_best_info_db_table,$special_best_d
 		
 		$r = "<li class=\"disabled small\"><a href=\"#\">No custom categories have been defined</a></li>";
 		$r .= "<li role=\"separator\" class=\"divider\"></li>";
-		$r .= "<li class=\"small\"><a href=\"".$base_url."index.php?section=admin&amp;go=special_best&amp;action=add\">Add a Custom Style</a></li>";
+		$r .= "<li class=\"small\"><a href=\"".$base_url."index.php?section=admin&amp;go=special_best&amp;action=add\">Add a Custom Category</a></li>";
 
 	}
 

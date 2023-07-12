@@ -356,9 +356,7 @@ if ($row_limits['prefsShowBestBrewer'] != 0) {
 
 			$table_body1 .= "<tr>";
 			$table_body1 .= "<td width=\"1%\" nowrap><a name=\"".$points."\"></a>".$bb_display_position."</td>";
-			$table_body1 .= "<td width=\"20%\">".$bestbrewer[$key]['Name'];
-			if ($bestbrewer[$key]['Places'][0] > 0) $table_body1 .= sprintf("<small><em><br>%s %s</em></small>",$label_bos,$label_participant);
-			$table_body1 .= "</td>";
+			$table_body1 .= "<td width=\"20%\">".$bestbrewer[$key]['Name']."</td>";
 			$table_body1 .= "<td width=\"10%\" nowrap>".$bestbrewer[$key]['Places'][0]."</td>";
 			$table_body1 .= "<td width=\"10%\" nowrap>".$bestbrewer[$key]['Places'][1]."</td>";
 			$table_body1 .= "<td width=\"10%\" nowrap>".$bestbrewer[$key]['Places'][2]."</td>";
