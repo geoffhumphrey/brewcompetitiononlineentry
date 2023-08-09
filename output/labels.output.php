@@ -7,6 +7,7 @@ include (DB.'output_labels.db.php');
 include (LIB.'output.lib.php');
 include (DB.'styles.db.php');
 include (INCLUDES.'scrubber.inc.php');
+setlocale(LC_ALL, "en_US.utf8");
 
 $filename = "";
 $number_of_labels = "";
@@ -86,6 +87,7 @@ if (isset($_SESSION['loginUsername'])) {
 				if ($psort == "3422") $filename .= "_Avery3422";
 				else $filename .= "_Avery5160";
 				$filename .= ".pdf";
+				$filename = iconv('UTF-8','ASCII//TRANSLIT//IGNORE',$filename);
 
 				$pdf->AddPage();
 				$pdf->Next_Label();
@@ -123,11 +125,13 @@ if (isset($_SESSION['loginUsername'])) {
 							// Add name to the label
 							$pdf->SetFont('Arial', 'B', 14);
 							$judge_name = $judge_info[0] . ' ' . $judge_info[1];
+							$judge_name = iconv('UTF-8','ASCII//TRANSLIT//IGNORE',$judge_name);
 							$pdf->Cell(66, 7, $judge_name, 0, 2, 'C');
 							
 							// Add location to the label
 							$pdf->SetFont('Arial', '', 10);
 							$judge_loc = $brewer_info[11] . ', ' . $brewer_info[12] ;
+							$judge_loc = iconv('UTF-8','ASCII//TRANSLIT//IGNORE',$judge_loc);
 							$pdf->Cell(66, 6, $judge_loc, 0, 2, 'C');
 
 							// Add table flights to the label
@@ -152,6 +156,7 @@ if (isset($_SESSION['loginUsername'])) {
 								
 								$pdf->SetFont('Arial', 'B', 12);
 								$judge_flight = $t_string.": ". join(', ', $table_flights);
+								$judge_flight = iconv('UTF-8','ASCII//TRANSLIT//IGNORE',$judge_flight);
 								$pdf->Cell(66, 6, $judge_flight, 0, 2, 'C');
 							
 							} 
@@ -182,6 +187,7 @@ if (isset($_SESSION['loginUsername'])) {
 				if ($psort == "3422") $filename .= "_Avery3422";
 				else $filename .= "_Avery5160";
 				$filename .= ".pdf";
+				$filename = iconv('UTF-8','ASCII//TRANSLIT//IGNORE',$filename);
 
 				$pdf->AddPage();
 				$pdf->Next_Label();
@@ -195,10 +201,12 @@ if (isset($_SESSION['loginUsername'])) {
 
 					$tableName = htmlspecialchars_decode($row_tables['tableName']);
 					$tableName = truncate($tableName, 30);
+					$tableName = iconv('UTF-8','ASCII//TRANSLIT//IGNORE',$tableName);							
 
 					$loc_arr = explode("^", get_table_info($row_tables['tableLocation'], "location", $row_tables['id'], $dbTable, "default"));
 					$location = $loc_arr[2];
 					$location = htmlspecialchars_decode($location);
+					$location = iconv('UTF-8','ASCII//TRANSLIT//IGNORE',$location);
 					$location = truncate($location, 30);
 
 					for ($i = 1; $i <= $sort; $i++) {
@@ -249,6 +257,8 @@ if (isset($_SESSION['loginUsername'])) {
 				if ($psort == "3422") 		$filename .= "_Avery3422";
 				else 						$filename .= "_Avery5160";
 				$filename .= ".pdf";
+				$filename = iconv('UTF-8','ASCII//TRANSLIT//IGNORE',$filename);
+
 				$pdf->SetFont('Courier','',6);
 				
 				// Print labels
@@ -271,7 +281,7 @@ if (isset($_SESSION['loginUsername'])) {
 					$entry_no, $cat_output
 					);
 
-					$text = (iconv("UTF-8", "ASCII//TRANSLIT//IGNORE", transliterator_transliterate('Any-Latin; Latin-ASCII', $text)));              
+					$text = iconv('UTF-8','ASCII//TRANSLIT//IGNORE',$text);              
 					$pdf->Add_Label($text);
 
 				} while ($row_log = mysqli_fetch_assoc($log));
@@ -289,6 +299,8 @@ if (isset($_SESSION['loginUsername'])) {
 				
 				$filename = str_replace(" ", "_", $_SESSION['contestName']) . "_QuickSort_Labels_Judging_Numbers";
 				$filename .= ".pdf";
+				$filename = iconv('UTF-8','ASCII//TRANSLIT//IGNORE',$filename);  
+				
 				$pdf = new PDF_Label('5167');
 
 				$pdf->AddPage();
@@ -322,7 +334,9 @@ if (isset($_SESSION['loginUsername'])) {
 					$entry_number = sprintf("%06s", $row_log['id']);
 					$style = $row_log['brewCategory'] . $row_log['brewSubCategory'];
 					$style_name = truncate($row_log['brewStyle'], 22);
+					$style_name = iconv('UTF-8','ASCII//TRANSLIT//IGNORE',$style_name);  
 					$brewer_name = truncate($row_log['brewBrewerFirstName']." ".$row_log['brewBrewerLastName'],30);
+					$brewer_name = iconv('UTF-8','ASCII//TRANSLIT//IGNORE',$brewer_name);  
 					
 					if ($tb == "default") $bottles = ['#1', '#2', '#3'];
 					if ($tb == "short") $bottles = ['#1', '#2', 'BOS'];
@@ -330,7 +344,7 @@ if (isset($_SESSION['loginUsername'])) {
 					$pdf->SetFont('Arial', '', 9);
 					foreach ($bottles as $b) {
 						$text = sprintf("\n              %s  %s\n                     %s", $style, $judging_number, $b);
-						$text = iconv('UTF-8', 'windows-1252', $text);
+						$text = iconv('UTF-8','ASCII//TRANSLIT//IGNORE',$text);
 						$pdf->Add_Label($text);
 					}
 					
@@ -343,13 +357,13 @@ if (isset($_SESSION['loginUsername'])) {
 						// Print Entrant info
 						$pdf->SetFont('Arial', '', 9);
 						$text = sprintf("\n  %s %s\n  %s", $style, $style_name, $brewer_name);
-						$text = iconv('UTF-8', 'windows-1252', $text);
+						$text = iconv('UTF-8','ASCII//TRANSLIT//IGNORE',$text);
 						$pdf->Add_Label($text);
 
 						$pdf->SetFont('Arial', '', 9);
 						foreach ($bottles as $b) {
 							$text = sprintf("\n              %s  %s\n                     %s", $style, $judging_number, $b);
-							$text = iconv('UTF-8', 'windows-1252', $text);
+							$text = iconv('UTF-8','ASCII//TRANSLIT//IGNORE',$text);
 							$pdf->Add_Label($text);
 						}
 
@@ -358,7 +372,7 @@ if (isset($_SESSION['loginUsername'])) {
 						$pdf->SetFont('Arial', '', 13);
 						if ($entry_number == $judging_number) $text = sprintf("\n  %s", $entry_number);
 						else $text = sprintf("\n  %s | %s", $entry_number, $judging_number);
-						$text = iconv('UTF-8', 'windows-1252', $text);
+						$text = iconv('UTF-8','ASCII//TRANSLIT//IGNORE',$text);
 						$pdf->Add_Label($text);
 
 					}
@@ -368,7 +382,7 @@ if (isset($_SESSION['loginUsername'])) {
 						$pdf->SetFont('Arial', '', 9);
 						if ($entry_number == $judging_number) $text = sprintf("\n  %s - %s \n  %s", $style, $entry_number, $brewer_name);
 						else $text = sprintf("\n  %s - %s | %s\n  %s", $style, $entry_number, $judging_number, $brewer_name);
-						$text = iconv('UTF-8', 'windows-1252', $text);
+						$text = iconv('UTF-8','ASCII//TRANSLIT//IGNORE',$text);
 						$pdf->Add_Label($text);
 
 					}
@@ -450,6 +464,7 @@ if (isset($_SESSION['loginUsername'])) {
 				else $filename .= "_Avery5160";
 				if ($location != "default") $filename .= "_Table_".$table_info[0];
 				$filename .= ".pdf";
+				$filename = iconv('UTF-8','ASCII//TRANSLIT//IGNORE',$filename);
 				
 				// Print labels
 				do {
@@ -493,6 +508,7 @@ if (isset($_SESSION['loginUsername'])) {
 						if (strpos($style_name,"with") !== false) $style_name = str_replace("with", "w/", $style_name);
 
 						$style_name = truncate($style_name,21);
+						$style_name = iconv('UTF-8','ASCII//TRANSLIT//IGNORE',$style_name);
 						
 						if ($ba) $entry_info = sprintf("%s (%s)", $entry_no, $style_name);
 						else $entry_info = sprintf("%s (%s: %s)", $entry_no, $style_display, $style_name);
@@ -501,11 +517,11 @@ if (isset($_SESSION['loginUsername'])) {
 						if (in_array($style,$special_ingredients)) {
 							
 							$special = strip_tags($row_log['brewInfo']);
-							$special = iconv('UTF-8', 'windows-1252', html_entity_decode($special));
 							$special = html_entity_decode($special);
 							$special = str_replace("^", "", $special);
 							$special = str_replace("\n", "", $special);
 							$special = trim($special);
+							$special = iconv('UTF-8','ASCII//TRANSLIT//IGNORE',$special);
 							
 							if (!empty($special)) {
 								$character_length += strlen($special);
@@ -543,10 +559,10 @@ if (isset($_SESSION['loginUsername'])) {
 							
 							$character_limit_adjust = $character_limit * 2; // Allow for two lines
 							$allergens = strip_tags($row_log['brewPossAllergens']);
-							$allergens = iconv('UTF-8', 'windows-1252', html_entity_decode($allergens));
 							$allergens = sprintf("%s: %s",$label_allergens,$allergens);
 							$allergens = str_replace("\n"," ",$allergens);
 							$allergens = html_entity_decode($allergens);
+							$allergens = iconv('UTF-8','ASCII//TRANSLIT//IGNORE',$allergens);
 							
 							if (!empty($allergens)) {
 								$character_length += strlen($allergens);
@@ -581,8 +597,8 @@ if (isset($_SESSION['loginUsername'])) {
 							// Only show Optional if total possible characters minus one line has not been reached				
 							if (($character_length < ($total_possible_characters - $character_limit))) {
 								$optional = html_entity_decode($row_log['brewInfoOptional']);
-								$optional = iconv('UTF-8', 'windows-1252', html_entity_decode($optional));
 								$optional = str_replace("\n"," ",truncate($optional,$character_limit,""));
+								$optional = iconv('UTF-8','ASCII//TRANSLIT//IGNORE',$optional);
 								$character_length += strlen($optional);
 								$optional = sprintf("\n%s",$optional);
 							}
@@ -616,8 +632,7 @@ if (isset($_SESSION['loginUsername'])) {
 						}
 						
 						else $text = $entry_info.$special.$entry_str_sweet_carb.$allergens.$optional;
-						
-						$text = (iconv("UTF-8", "ASCII//TRANSLIT//IGNORE", transliterator_transliterate('Any-Latin; Latin-ASCII', $text))); 
+						$text = iconv('UTF-8','ASCII//TRANSLIT//IGNORE',$text); 
 						
 						if (!empty($text)) $pdf->Add_Label($text);
 
@@ -661,14 +676,14 @@ if (isset($_SESSION['loginUsername'])) {
 					if (($entry_no != "") && ($filter == "default")) {
 						if ($aabc) $text = sprintf("\n%s\n(%s)",$entry_no, ltrim($row_log['brewCategory'],"0").".".ltrim($row_log['brewSubCategory'],"0"));
 						else $text = sprintf("\n%s\n(%s)",$entry_no, $row_log['brewCategory'].$row_log['brewSubCategory']);
-						$text = (iconv("UTF-8", "ASCII//TRANSLIT//IGNORE", transliterator_transliterate('Any-Latin; Latin-ASCII', $text))); 
+						$text = iconv('UTF-8','ASCII//TRANSLIT//IGNORE',$text);
 						$pdf->Add_Label($text);
 					}
 
 					if (($entry_no != "") && ($filter == "recent") && (strtotime($row_log['brewUpdated']) > $row_contest_dates['contestRegistrationDeadline'])) {
 						if ($aabc) $text = sprintf("\n%s\n(%s)",$entry_no, ltrim($row_log['brewCategory'],"0").".".ltrim($row_log['brewSubCategory'],"0"));
 						else $text = sprintf("\n%s\n(%s)",$entry_no, $row_log['brewCategory'].$row_log['brewSubCategory']);
-						$text = (iconv("UTF-8", "ASCII//TRANSLIT//IGNORE", transliterator_transliterate('Any-Latin; Latin-ASCII', $text))); 
+						$text = iconv('UTF-8','ASCII//TRANSLIT//IGNORE',$text);
 						$pdf->Add_Label($text);
 					}
 
@@ -763,6 +778,7 @@ if (isset($_SESSION['loginUsername'])) {
 			$pdf->AddPage();
 			$pdf->SetFont('Arial','B',18);
 			$filename .= str_replace(" ","_",$_SESSION['contestName'])."_Nametags_Avery5395.pdf";
+			$filename = iconv('UTF-8','ASCII//TRANSLIT//IGNORE',$filename);
 
 			do {
 
@@ -788,7 +804,7 @@ if (isset($_SESSION['loginUsername'])) {
 						$brewerLocation
 					);
 
-					$text = (iconv("UTF-8", "ASCII//TRANSLIT//IGNORE", transliterator_transliterate('Any-Latin; Latin-ASCII', $text))); 
+					$text = iconv('UTF-8','ASCII//TRANSLIT//IGNORE',$text); 
 					$pdf->Add_Label($text);
 
 				}
@@ -810,6 +826,7 @@ if (isset($_SESSION['loginUsername'])) {
 			if ($psort == "3422") 		$filename .= "_Avery3422";
 			else 						$filename .= "_Avery5160";
 			$filename .= ".pdf";
+			$filename = iconv('UTF-8','ASCII//TRANSLIT//IGNORE',$filename);
 
 			$character_limit = $character_limit + 6; // Arial allows for more characters per line
 
@@ -882,7 +899,7 @@ if (isset($_SESSION['loginUsername'])) {
 						);
 					}
 
-					$text = (iconv("UTF-8", "ASCII//TRANSLIT//IGNORE", transliterator_transliterate('Any-Latin; Latin-ASCII', $text))); 
+					$text = iconv('UTF-8','ASCII//TRANSLIT//IGNORE',$text);
 					$pdf->Add_Label($text);
 				}
 
@@ -914,60 +931,61 @@ if (isset($_SESSION['loginUsername'])) {
 			else 						$filename .= "_Avery5160";
 
 			$filename .= ".pdf";
+			$filename = iconv('UTF-8','ASCII//TRANSLIT//IGNORE',$filename);
 
 			do {
 
-					if ($filter == "with_entries") {
+				if ($filter == "with_entries") {
 
-						if (in_array($row_brewer['uid'],$with_entries_array)) {
+					if (in_array($row_brewer['uid'],$with_entries_array)) {
 
-							$user_entry_count1 = user_entry_count($row_brewer['uid'],$view);
-							$user_entry_count2 = explode("^",$user_entry_count1);
+						$user_entry_count1 = user_entry_count($row_brewer['uid'],$view);
+						$user_entry_count2 = explode("^",$user_entry_count1);
 
-							if ($user_entry_count2[0] == 1) $entry_count ="(". $user_entry_count2[0]." Entry)";
-							else $entry_count = "(".$user_entry_count2[0]." Entries)";
+						if ($user_entry_count2[0] == 1) $entry_count ="(". $user_entry_count2[0]." Entry)";
+						else $entry_count = "(".$user_entry_count2[0]." Entries)";
 
-							if ($view == "entry") $entries = $user_entry_count2[1];
-							else $entries = $user_entry_count2[2];
-
-							if ($row_brewer['brewerCountry'] != "United States") $brewer_country = $row_brewer['brewerCountry']; else $brewer_country = "";
-
-							if (!empty($brewer_country)) $last_line = $brewer_country."\n#: ".truncate($entries,126);
-							else $last_line = "#: ".truncate($entries,166);
-
-							$text = sprintf("\n%s %s\n%s\n%s, %s %s\n%s",
-								$row_brewer['brewerFirstName']." ".$row_brewer['brewerLastName'],
-								$entry_count,
-								$row_brewer['brewerAddress'],
-								$row_brewer['brewerCity'],
-								$row_brewer['brewerState'],
-								$row_brewer['brewerZip'],
-								$last_line
-							);
-
-							$text = (iconv("UTF-8", "ASCII//TRANSLIT//IGNORE", transliterator_transliterate('Any-Latin; Latin-ASCII', $text))); 
-							$pdf->Add_Label($text);
-
-						}
-					}
-
-					else {
+						if ($view == "entry") $entries = $user_entry_count2[1];
+						else $entries = $user_entry_count2[2];
 
 						if ($row_brewer['brewerCountry'] != "United States") $brewer_country = $row_brewer['brewerCountry']; else $brewer_country = "";
 
-						$text = sprintf("\n%s\n%s\n%s, %s %s\n%s",
-						$row_brewer['brewerFirstName']." ".$row_brewer['brewerLastName'],
-						$row_brewer['brewerAddress'],
-						$row_brewer['brewerCity'],
-						$row_brewer['brewerState'],
-						$row_brewer['brewerZip'],
-						$brewer_country
+						if (!empty($brewer_country)) $last_line = $brewer_country."\n#: ".truncate($entries,126);
+						else $last_line = "#: ".truncate($entries,166);
+
+						$text = sprintf("\n%s %s\n%s\n%s, %s %s\n%s",
+							$row_brewer['brewerFirstName']." ".$row_brewer['brewerLastName'],
+							$entry_count,
+							$row_brewer['brewerAddress'],
+							$row_brewer['brewerCity'],
+							$row_brewer['brewerState'],
+							$row_brewer['brewerZip'],
+							$last_line
 						);
 
-						$text = (iconv("UTF-8", "ASCII//TRANSLIT//IGNORE", transliterator_transliterate('Any-Latin; Latin-ASCII', $text))); 
+						$text = iconv('UTF-8','ASCII//TRANSLIT//IGNORE',$text);
 						$pdf->Add_Label($text);
 
 					}
+				}
+
+				else {
+
+					if ($row_brewer['brewerCountry'] != "United States") $brewer_country = $row_brewer['brewerCountry']; else $brewer_country = "";
+
+					$text = sprintf("\n%s\n%s\n%s, %s %s\n%s",
+					$row_brewer['brewerFirstName']." ".$row_brewer['brewerLastName'],
+					$row_brewer['brewerAddress'],
+					$row_brewer['brewerCity'],
+					$row_brewer['brewerState'],
+					$row_brewer['brewerZip'],
+					$brewer_country
+					);
+
+					$text = iconv('UTF-8','ASCII//TRANSLIT//IGNORE',$text);
+					$pdf->Add_Label($text);
+
+				}
 
 			} while ($row_brewer = mysqli_fetch_assoc($brewer));
 
@@ -988,6 +1006,7 @@ if (isset($_SESSION['loginUsername'])) {
 			if ($psort == "3422") $filename .= "_Avery3422";
 			else $filename .= "_Avery5160";
 			$filename .= ".pdf";
+			$filename = iconv('UTF-8','ASCII//TRANSLIT//IGNORE',$filename);
 
 			include (DB.'output_labels_awards.db.php');
 			ob_end_clean();
@@ -1007,6 +1026,7 @@ if (isset($_SESSION['loginUsername'])) {
 			$filename .= str_replace(" ","_",$_SESSION['contestName'])."_Medal_Labels_";
 			$filename .= ucwords($psort);
 			$filename .= ".pdf";
+			$filename = iconv('UTF-8','ASCII//TRANSLIT//IGNORE',$filename);
 
 			include (DB.'output_labels_awards.db.php');
 			ob_end_clean();
@@ -1037,6 +1057,7 @@ if (isset($_SESSION['loginUsername'])) {
 		if ($psort == "3422") 		$filename .= "_Avery3422";
 		else 						$filename .= "_Avery5160";
 		$filename .= ".pdf";
+		$filename = iconv('UTF-8','ASCII//TRANSLIT//IGNORE',$filename);
 
 		$character_limit = $character_limit + 6; // Arial allows for more characters per line
 
@@ -1105,7 +1126,7 @@ if (isset($_SESSION['loginUsername'])) {
 				);
 			}
 
-			$text = (iconv("UTF-8", "ASCII//TRANSLIT//IGNORE", transliterator_transliterate('Any-Latin; Latin-ASCII', $text))); 
+			$text = iconv('UTF-8','ASCII//TRANSLIT//IGNORE',$text);
 			$pdf->Add_Label($text);
 
 		}
@@ -1118,6 +1139,5 @@ if (isset($_SESSION['loginUsername'])) {
 }
 
 else echo "<p>Not available.</p>";
-
 
 ?>
