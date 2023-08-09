@@ -5,10 +5,6 @@
  *
  */
 
-// Turn off SEF for error pages
-if ($section >= 400) $sef = "false";
-else $sef = $sef;
-
 $add_entry_link_show = FALSE;
 $show_entries = TRUE;
 $nav_register_entrant_show = TRUE;
