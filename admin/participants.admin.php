@@ -131,15 +131,15 @@ if ($action == "print") {
 	if (($psort == "default") || ($psort == "brewer_name")) $output_datatables_aaSorting .= "[0,'asc']";
 	if ($psort == "organization") $output_datatables_aaSorting .= "[2,'asc']";
 	if ($filter == "default") 	{
-		$output_datatables_aoColumns .= "{ \"asSorting\": [  ] }, { \"asSorting\": [  ] }, { \"asSorting\": [  ] }, { \"asSorting\": [  ] }, { \"asSorting\": [  ] }, { \"asSorting\": [  ] }, { \"asSorting\": [  ] }";
+		$output_datatables_aoColumns .= "{ \"asSorting\": [  ] }, { \"asSorting\": [  ] }, { \"asSorting\": [  ] }, { \"asSorting\": [  ] }, { \"asSorting\": [  ] }, { \"asSorting\": [  ] }, { \"asSorting\": [  ] }, { \"asSorting\": [  ] }";
 	}
 
 	if ($filter == "judges") 	{
-		$output_datatables_aoColumns .= "{ \"asSorting\": [  ] }, { \"asSorting\": [  ] }, { \"asSorting\": [  ] }, { \"asSorting\": [  ] }, { \"asSorting\": [  ] }, { \"asSorting\": [  ] }, { \"asSorting\": [  ] }, { \"asSorting\": [  ] }, { \"asSorting\": [  ] }";
+		$output_datatables_aoColumns .= "{ \"asSorting\": [  ] },{ \"asSorting\": [  ] }, { \"asSorting\": [  ] }, { \"asSorting\": [  ] }, { \"asSorting\": [  ] }, { \"asSorting\": [  ] }, { \"asSorting\": [  ] }, { \"asSorting\": [  ] }, { \"asSorting\": [  ] }, { \"asSorting\": [  ] }";
 	}
 
 	if ($filter == "stewards") 	{
-		$output_datatables_aoColumns .= "{ \"asSorting\": [  ] }, { \"asSorting\": [  ] }, { \"asSorting\": [  ] }, { \"asSorting\": [  ] }, { \"asSorting\": [  ] }, null, null";
+		$output_datatables_aoColumns .= "{ \"asSorting\": [  ] }, { \"asSorting\": [  ] }, { \"asSorting\": [  ] }, { \"asSorting\": [  ] }, { \"asSorting\": [  ] }, { \"asSorting\": [  ] }, null, null";
 	}
 
 
@@ -150,18 +150,18 @@ else {
 	if ($filter == "default") 	{
 		if ($pro_edition == 1) $output_datatables_aaSorting .= "[1,'asc']";
 		else  $output_datatables_aaSorting .= "[0,'asc']";
-		$output_datatables_aoColumns .= "null, null, { \"asSorting\": [  ] }, { \"asSorting\": [  ] }, null, null";
+		$output_datatables_aoColumns .= "null, null, null, { \"asSorting\": [  ] }, { \"asSorting\": [  ] }, null, null";
 		if ($dbTable == "default") 	$output_datatables_aoColumns .= ",  { \"asSorting\": [  ] }";
 	}
 
 	if ($filter == "judges") 	{
 		$output_datatables_aaSorting .= "[0,'asc']";
-		$output_datatables_aoColumns .= "null, null,	null, null, null, null, null, null, { \"asSorting\": [  ] }";
+		$output_datatables_aoColumns .= "null, null, null,	null, null, null, null, null, null, { \"asSorting\": [  ] }";
 	}
 
 	if ($filter == "stewards") 	{
 		$output_datatables_aaSorting .= "[0,'asc']";
-		$output_datatables_aoColumns .= "null, null,	null, null, null, null, { \"asSorting\": [  ] }";
+		$output_datatables_aoColumns .= "null, null, null,	null, null, null, null, { \"asSorting\": [  ] }";
 	}
 
 	if ($filter == "with_entries") 	{
@@ -186,6 +186,7 @@ else {
 	$output_datatables_head .= "<tr>";
 	if ($pro_edition == 1) $output_datatables_head .= "<th>Contact Name</th>";
 	else $output_datatables_head .= "<th>Name</th>";
+	$output_datatables_head .= "<th>User Level</th>";
 	if ($action == "print") $output_datatables_head .= "<th>Info</th>";
 	if (($totalRows_judging > 0) && (($filter == "judges") || ($filter == "stewards"))) $output_datatables_head .= "<th class=\"".$output_hide_print."\">Location(s) Available</th>";
 	else {
@@ -217,293 +218,329 @@ else {
 	else $email_subject .= $_SESSION['contestName'];
 }
 
-do {
+if ($totalRows_brewer > 0) {
+	do {
 
-	$output_datatables_add_link = "";
-	$output_datatables_edit_link = "";
-	$output_datatables_delete_link = "";
-	$output_datatables_print_link = "";
-	$output_datatables_other_link = "";
-	$output_datatables_other_link2 = "";
-	$output_datatables_view_link = "";
-	$output_datatables_email_link = "";
-	$output_datatables_change_pwd = "";
-	$output_datatables_user_question_link = "";
-	$output_datatables_phone_link = "";
-	$output_datatables_actions = "";
-	$table_assign_judge = "";
-	$table_assign_steward = "";
-	$judge_entries = "";
-	$brewer_assignment = "";
-	$user_info = "";
-	
-	$user_info = user_info($row_brewer['uid']);
-	$user_info = explode("^",$user_info);
+		$output_datatables_add_link = "";
+		$output_datatables_edit_link = "";
+		$output_datatables_delete_link = "";
+		$output_datatables_print_link = "";
+		$output_datatables_other_link = "";
+		$output_datatables_other_link2 = "";
+		$output_datatables_view_link = "";
+		$output_datatables_email_link = "";
+		$output_datatables_change_pwd = "";
+		$output_datatables_user_question_link = "";
+		$output_datatables_phone_link = "";
+		$output_datatables_actions = "";
+		$table_assign_judge = "";
+		$table_assign_steward = "";
+		$judge_entries = "";
+		$brewer_assignment = "";
+		$user_info = "";
+		
+		$user_info = user_info($row_brewer['uid']);
+		$user_info = explode("^",$user_info);
 
-	if ($_SESSION['brewerCountry'] == "United States") $us_phone = TRUE; else $us_phone = FALSE;
+		if ($_SESSION['brewerCountry'] == "United States") $us_phone = TRUE; else $us_phone = FALSE;
 
-	$archive = "default";
-	if ($dbTable != "default") $archive = get_suffix($dbTable);
+		$archive = "default";
+		if ($dbTable != "default") $archive = get_suffix($dbTable);
 
-	unset($brewer_assignment);
-	$brewer_assignment = brewer_assignment($row_brewer['uid'],"1",$id,$dbTable,$filter,$archive);
-	$all_email_display[] = $row_brewer['brewerEmail'];
+		unset($brewer_assignment);
+		$brewer_assignment = brewer_assignment($row_brewer['uid'],"1",$id,$dbTable,$filter,$archive);
+		$all_email_display[] = $row_brewer['brewerEmail'];
 
-	// Build Action Links
-	// build_action_link($icon,$base_url,$section,$go,$action,$filter,$id,$dbTable,$alt_title) {
+		// Build Action Links
+		// build_action_link($icon,$base_url,$section,$go,$action,$filter,$id,$dbTable,$alt_title) {
 
-	if ($pro_edition == 1) $brewer_tooltip_display_name = $row_brewer['brewerBreweryName'];
-	else $brewer_tooltip_display_name = $row_brewer['brewerFirstName']." ".$row_brewer['brewerLastName'];
+		if ($pro_edition == 1) $brewer_tooltip_display_name = $row_brewer['brewerBreweryName'];
+		else $brewer_tooltip_display_name = $row_brewer['brewerFirstName']." ".$row_brewer['brewerLastName'];
 
-	if (!$archive_display) {
+		if (!$archive_display) {
 
-		if ((HOSTED) && ($row_brewer['brewerEmail'] == $hosted_admin)) {
-				$output_datatables_edit_link = "<span class=\"fa fa-lg fa-pencil text-muted\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"This is the BCOE&amp;M Hosting master account. For troubleshooting purposes, it cannot be changed.\"></span>";
-				$output_datatables_delete_link = "<span class=\"fa fa-lg fa-trash-o text-muted\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"This is the BCOE&amp;M Hosting master account. For troubleshooting purposes, it cannot be deleted.\"></span>";
-				$output_datatables_other_link = "<span class=\"fa fa-lg fa-lock text-muted\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"This is the BCOE&amp;M Hosting master account. For troubleshooting purposes, it cannot be changed.\"></span>";
-				$output_datatables_other_link2 = "<span class=\"fa fa-lg fa-user text-muted\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"This is the BCOE&amp;M Hosting master account. For troubleshooting purposes, it cannot be changed.\"></span>";
-				$output_datatables_change_pwd = "<span class=\"fa fa-lg fa-key text-muted\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"This is the BCOE&amp;M Hosting master account. For troubleshooting purposes, it cannot be changed.\"></span>";
-				$output_datatables_phone_link = "<span class=\"fa fa-lg fa-phone text-muted\"></span></a>";
-		}
-
-		else {
-
-			$output_datatables_edit_link = build_action_link("fa-pencil",$base_url,"brewer","admin","edit",$row_brewer['uid'],$row_brewer['id'],$dbTable,"default",0,"Edit ".$brewer_tooltip_display_name."&rsquo;s user account information");
-
-			if ($row_brewer['brewerEmail'] != $_SESSION['loginUsername']) $output_datatables_delete_link = build_action_link("fa-trash-o",$base_url,"admin","participants","delete",$row_brewer['uid'],$row_brewer['uid'],$brewer_db_table,"Are you sure you want to delete the participant account for ".$brewer_tooltip_display_name."? ALL entries for this participant WILL BE DELETED as well. This cannot be undone.",0,"Delete ".$brewer_tooltip_display_name."&rsquo;s account.");
-			else $output_datatables_delete_link = "<span class=\"fa fa-lg fa-trash-o text-muted\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Silly, you cannot delete yourself, ".$_SESSION['brewerFirstName']."!\"></span>";
-				
-			if ($row_brewer['brewerEmail'] != $_SESSION['loginUsername']) $output_datatables_other_link = build_action_link("fa-lock",$base_url,"admin","make_admin","default","default",$row_brewer['uid'],"default","default",0,"Change ".$brewer_tooltip_display_name."&rsquo;s User Level");
-			else $output_datatables_other_link = "<span class=\"fa fa-lg fa-lock text-muted\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"You cannot change your own user level, ".$_SESSION['brewerFirstName'].".\"></span>";
-			
-			if (strpos($brewer_assignment,'Judge') !== false)  {
-				$output_datatables_view_link = "<a class=\"hide-loader\" href=\"".$base_url."output/labels.output.php?section=admin&amp;go=participants&amp;action=judging_labels&amp;id=".$row_brewer['id']."&amp;psort=5160\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Download Judge Scoresheet Labels for ".$brewer_tooltip_display_name." - Letter (Avery 5160)\"><span class=\"fa fa-lg fa-file\"></span></a> <a class=\"hide-loader\" href=\"".$base_url."output/labels.output.php?section=admin&amp;go=participants&amp;action=judging_labels&amp;id=".$row_brewer['id']."&amp;psort=3422\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Download Judge Scoresheet Labels for ".$brewer_tooltip_display_name." - A4 (Avery 3422)\"><span class=\"fa fa-lg fa-file-text\"></span></a>";
-			}
-
-			$output_datatables_other_link2 = build_action_link("fa-user",$base_url,"user","default","username","admin",$row_brewer['uid'],"default","default",0,"Change ".$brewer_tooltip_display_name."&rsquo;s email address");
-
-			if ($us_phone) {
-				$output_datatables_phone_link = "<a class=\"hide-loader\" href=\"#\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"".$brewer_tooltip_display_name."&rsquo;s phone number: ".format_phone_us($row_brewer['brewerPhone1'])."\"><span class=\"fa fa-lg fa-phone\"></span></a>";
+			if ((HOSTED) && ($row_brewer['brewerEmail'] == $hosted_admin_email)) {
+					$output_datatables_edit_link = "<span class=\"fa fa-lg fa-pencil text-muted\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"This is the BCOE&amp;M Hosting master account. For troubleshooting purposes, it cannot be changed.\"></span>";
+					$output_datatables_delete_link = "<span class=\"fa fa-lg fa-trash-o text-muted\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"This is the BCOE&amp;M Hosting master account. For troubleshooting purposes, it cannot be deleted.\"></span>";
+					$output_datatables_other_link = "<span class=\"fa fa-lg fa-lock text-muted\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"This is the BCOE&amp;M Hosting master account. For troubleshooting purposes, it cannot be changed.\"></span>";
+					$output_datatables_other_link2 = "<span class=\"fa fa-lg fa-user text-muted\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"This is the BCOE&amp;M Hosting master account. For troubleshooting purposes, it cannot be changed.\"></span>";
+					$output_datatables_change_pwd = "<span class=\"fa fa-lg fa-key text-muted\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"This is the BCOE&amp;M Hosting master account. For troubleshooting purposes, it cannot be changed.\"></span>";
+					$output_datatables_phone_link = "<span class=\"fa fa-lg fa-phone text-muted\"></span></a>";
 			}
 
 			else {
-				$output_datatables_phone_link = "<a class=\"hide-loader\" href=\"#\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"".$brewer_tooltip_display_name."&rsquo;s phone number: ".$row_brewer['brewerPhone1']."\"><span class=\"fa fa-lg fa-phone\"></span></a>";
+
+				$output_datatables_edit_link = build_action_link("fa-pencil",$base_url,"brewer","admin","edit",$row_brewer['uid'],$row_brewer['id'],$dbTable,"default",0,"Edit ".$brewer_tooltip_display_name."&rsquo;s user account information");
+
+				if ($_SESSION['userLevel'] == 0) {
+
+					if ($row_brewer['brewerEmail'] != $_SESSION['loginUsername']) $output_datatables_delete_link = build_action_link("fa-trash-o",$base_url,"admin","participants","delete",$row_brewer['uid'],$row_brewer['uid'],$brewer_db_table,"Are you sure you want to delete the participant account for ".$brewer_tooltip_display_name."? ALL entries for this participant WILL BE DELETED as well. This cannot be undone.",0,"Delete ".$brewer_tooltip_display_name."&rsquo;s account.");
+					else $output_datatables_delete_link = "<span class=\"fa fa-lg fa-trash-o text-muted\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Silly, you cannot delete yourself, ".$_SESSION['brewerFirstName']."!\"></span>";
+
+				
+					if ($row_brewer['brewerEmail'] != $_SESSION['loginUsername']) $output_datatables_other_link = build_action_link("fa-lock",$base_url,"admin","make_admin","default","default",$row_brewer['uid'],"default","default",0,"Change ".$brewer_tooltip_display_name."&rsquo;s User Level");
+					else $output_datatables_other_link = "<span class=\"fa fa-lg fa-lock text-muted\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"You cannot change your own user level, ".$_SESSION['brewerFirstName'].".\"></span>";
+
+					$output_datatables_other_link2 = build_action_link("fa-user",$base_url,"user","default","username","admin",$row_brewer['uid'],"default","default",0,"Change ".$brewer_tooltip_display_name."&rsquo;s email address");
+
+				}
+
+				else {
+					$output_datatables_other_link = "";
+					$output_datatables_delete_link = "";
+					$output_datatables_other_link2 = "";
+				}
+				
+				if (strpos($brewer_assignment,'Judge') !== false)  {
+					$output_datatables_view_link = "<a class=\"hide-loader\" href=\"".$base_url."output/labels.output.php?section=admin&amp;go=participants&amp;action=judging_labels&amp;id=".$row_brewer['id']."&amp;psort=5160\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Download Judge Scoresheet Labels for ".$brewer_tooltip_display_name." - Letter (Avery 5160)\"><span class=\"fa fa-lg fa-file\"></span></a>";
+					$output_datatables_view_link2 = "<a class=\"hide-loader\" href=\"".$base_url."output/labels.output.php?section=admin&amp;go=participants&amp;action=judging_labels&amp;id=".$row_brewer['id']."&amp;psort=3422\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Download Judge Scoresheet Labels for ".$brewer_tooltip_display_name." - A4 (Avery 3422)\"><span class=\"fa fa-lg fa-file-text\"></span></a>";
+				}
+
+				else {
+					$output_datatables_view_link = "";
+					$output_datatables_view_link2 = "";
+				}
+
+				if ($us_phone) {
+					$output_datatables_phone_link = "<a class=\"hide-loader\" href=\"#\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"".$brewer_tooltip_display_name."&rsquo;s phone number: ".format_phone_us($row_brewer['brewerPhone1'])."\"><span class=\"fa fa-lg fa-phone\"></span></a>";
+				}
+
+				else {
+					$output_datatables_phone_link = "<a class=\"hide-loader\" href=\"#\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"".$brewer_tooltip_display_name."&rsquo;s phone number: ".$row_brewer['brewerPhone1']."\"><span class=\"fa fa-lg fa-phone\"></span></a>";
+				}
+
+				if ($_SESSION['userLevel'] == 0) {
+					$output_datatables_change_pwd = build_action_link("fa-key",$base_url,"admin","change_user_password","edit","default",$row_brewer['uid'],"default","default",0,"Change ".$brewer_tooltip_display_name."&rsquo;s password");
+				}
+
+				else $output_datatables_change_pwd = "";
+
 			}
 
-			$output_datatables_change_pwd = build_action_link("fa-key",$base_url,"admin","change_user_password","edit","default",$row_brewer['uid'],"default","default",0,"Change ".$brewer_tooltip_display_name."&rsquo;s password");
+			$output_datatables_email_link .= "<a class=\"hide-loader\" href=\"mailto:".$row_brewer['brewerEmail']."\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Email ".$brewer_tooltip_display_name." at ".$row_brewer['brewerEmail']."\"><span class=\"fa fa-lg fa-envelope\"></span></a>";
+
+			$output_datatables_add_link = build_action_link("fa-beer",$base_url,"brew","entries","add",$row_brewer['uid'],"default","default","default",0,"Add an entry for ".$brewer_tooltip_display_name);
+
+			$output_actions_arr = array($output_datatables_add_link, $output_datatables_edit_link, $output_datatables_delete_link, $output_datatables_other_link, $output_datatables_email_link, $output_datatables_phone_link, $output_datatables_other_link2, $output_datatables_change_pwd, $output_datatables_view_link, $output_datatables_view_link2);
+
+			$output_datatables_actions = "";
+			foreach ($output_actions_arr as $value) {
+				if (!empty($value)) $output_datatables_actions .= "<span style=\"margin-right: .4em\">".$value."</span>";
+			}
 
 		}
 
-		$output_datatables_email_link .= "<a class=\"hide-loader\" href=\"mailto:".$row_brewer['brewerEmail']."\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Email ".$brewer_tooltip_display_name." at ".$row_brewer['brewerEmail']."\"><span class=\"fa fa-lg fa-envelope\"></span></a>";
+		if ($filter == "with_entries") {
+			unset($entries);
 
-		$output_datatables_add_link = build_action_link("fa-beer",$base_url,"brew","entries","add",$row_brewer['uid'],"default","default","default",0,"Add an entry for ".$brewer_tooltip_display_name);
+			$output_datatables_body .= "<tr>";
+			if ($pro_edition == 1) $output_datatables_body .= "<td>".$row_brewer['brewerBreweryName']."</td>";
+			else {
+				$output_datatables_body .= "<td>";
+				$output_datatables_body .= "<a name='".$row_brewer['uid']."'></a>";
+				$output_datatables_body .= $row_brewer['brewBrewerLastName'].", ".$row_brewer['brewBrewerFirstName'];
+				$output_datatables_body .= "</td>";
+			}
 
-		$output_datatables_actions = $output_datatables_add_link." ".$output_datatables_edit_link." ".$output_datatables_delete_link." ".$output_datatables_other_link." ".$output_datatables_email_link." ".$output_datatables_phone_link." ".$output_datatables_other_link2." ".$output_datatables_change_pwd." ".$output_datatables_view_link;
+			$explodies = explode(",",$row_brewer['Entries']);
 
-	}
+			foreach ($explodies as $entry_number) {
+				$entry_number = sprintf("%06s",$entry_number);
+				$entries[] = $entry_number;
+			}
 
-	if ($filter == "with_entries") {
-		unset($entries);
+			$brewer_entries = implode(",",$entries);
 
-		$output_datatables_body .= "<tr>";
-		if ($pro_edition == 1) $output_datatables_body .= "<td>".$row_brewer['brewerBreweryName']."</td>";
+			$output_datatables_body .= "<td><a href=\"".$base_url."index.php?section=admin&amp;go=entries&amp;bid=".$row_brewer['uid']."\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"List ".$brewer_tooltip_display_name."&rsquo;s entries.\"><i class=\"fa fa-list\"></i></a> ".str_replace(",",", ",$brewer_entries)."</td>";
+			if ($action != "print") $output_datatables_body .= "<td>".$output_datatables_actions."</td>";
+			$output_datatables_body .= "</tr>";
+
+		}
+
 		else {
+
+			$table_assign_judge = table_assignments($user_info[0],"J",$_SESSION['prefsTimeZone'],$_SESSION['prefsDateFormat'],$_SESSION['prefsTimeFormat'],1);
+			$table_assign_judge = str_replace(",&nbsp;","<br>",$table_assign_judge);
+			
+			$table_assign_steward = table_assignments($user_info[0],"S",$_SESSION['prefsTimeZone'],$_SESSION['prefsDateFormat'],$_SESSION['prefsTimeFormat'],1);
+			$table_assign_steward = str_replace(",&nbsp;","<br>",$table_assign_steward);
+			
+			$judge_entries = judge_entries($row_brewer['uid'],1);
+
+			if ($filter == "judges") $locations = $row_brewer['brewerJudgeLocation'];
+			if ($filter == "stewards") $locations = $row_brewer['brewerStewardLocation'];
+
+			if ((!empty($brewer_assignment) && (!$archive_display))) {
+				
+				// Build assignment modal for participants
+				unset($assignment_modal_body);
+				if ((strpos($brewer_assignment,"Judge") !== false) || (strpos($brewer_assignment,"Steward") !== false) ) {
+
+					if (strpos($brewer_assignment,"Judge") !== false) {
+						if (!empty($table_assign_judge)) $assignment_modal_body = "<p>".$row_brewer['brewerFirstName']." is assigned as a <strong>judge</strong> to table(s): ".$table_assign_judge."<p>";
+						else $assignment_modal_body = "<p>".$row_brewer['brewerFirstName']." has been added to the <strong>judge</strong> pool, but has not been assigned to a table yet.<p>";
+					}
+					if (strpos($brewer_assignment,"Steward") !== false) {
+						if (!empty($table_assign_steward))  $assignment_modal_body = "<p>".$row_brewer['brewerFirstName']." is assigned as a <strong>steward</strong> to table(s): ".$table_assign_steward."<p>";
+						else $assignment_modal_body = "<p>".$row_brewer['brewerFirstName']." has been added to the <strong>steward</strong> pool, but has not been assigned to a table yet.<p>";
+					}
+					if (!empty($judge_entries)) $assignment_modal_body .= "<p>Has entries in: ".$judge_entries."</p>";
+					$output_assignment_modals .= "<div class=\"modal fade\" id=\"assignment-modal-".$row_brewer['uid']."\" tabindex=\"-1\" role=\"dialog\" aria-labelledby=\"assignment-modal-label-".$row_brewer['uid']."\">\n";
+					$output_assignment_modals .= "\t<div class=\"modal-dialog modal-lg\" role=\"document\">\n";
+					$output_assignment_modals .= "\t\t<div class=\"modal-content\">\n";
+					$output_assignment_modals .= "\t\t\t<div class=\"modal-header bcoem-admin-modal\">\n";
+					$output_assignment_modals .= "\t\t\t\t<button type=\"button\" class=\"close\" data-dismiss=\"modal\" aria-label=\"Close\"><span aria-hidden=\"true\">&times;</span></button>\n";
+					$output_assignment_modals .= "\t\t\t\t<h4 class=\"modal-title\" id=\"assignment-modal-label-".$row_brewer['uid']."\">Assignment(s) for ".$brewer_tooltip_display_name."</h4>\n";
+					$output_assignment_modals .= "\t\t\t</div><!-- ./modal-header -->\n";
+					$output_assignment_modals .= "\t\t\t<div class=\"modal-body\">\n";
+					$output_assignment_modals .= "\t\t\t\t".$assignment_modal_body."\n";
+					$output_assignment_modals .= "\t\t\t</div><!-- ./modal-body -->\n";
+					$output_assignment_modals .= "\t\t\t<div class=\"modal-footer\">\n";
+					$output_assignment_modals .= "\t\t\t\t<button type=\"button\" class=\"btn btn-danger\" data-dismiss=\"modal\">Close</button>\n";
+					$output_assignment_modals .= "\t\t\t</div><!-- ./modal-footer -->\n";
+					$output_assignment_modals .= "\t\t</div><!-- ./modal-content -->\n";
+					$output_assignment_modals .= "\t</div><!-- ./modal-dialog -->\n";
+					$output_assignment_modals .= "</div><!-- ./modal -->\n";
+				}
+			}
+
+			$output_datatables_body .= "<tr>";
+
 			$output_datatables_body .= "<td>";
 			$output_datatables_body .= "<a name='".$row_brewer['uid']."'></a>";
-			$output_datatables_body .= $row_brewer['brewBrewerLastName'].", ".$row_brewer['brewBrewerFirstName'];
+			$output_datatables_body .= $row_brewer['brewerLastName'].", ".$row_brewer['brewerFirstName'];
+			if (($dbTable == "default") && ($user_info[1] == 0)) $output_datatables_body .= " <i class=\"fa fa-sm fa-lock text-danger\"></i>";
+			elseif (($dbTable == "default") && ($user_info[1] == 1)) $output_datatables_body .= " <i class=\"fa fa-sm fa-lock text-warning\"></i>";
+			if ($action != "print") $output_datatables_body .= "<br><small>".$row_brewer['brewerCity'].", ".$row_brewer['brewerState']."</small>";
 			$output_datatables_body .= "</td>";
-		}
 
-		$explodies = explode(",",$row_brewer['Entries']);
-
-		foreach ($explodies as $entry_number) {
-			$entry_number = sprintf("%06s",$entry_number);
-			$entries[] = $entry_number;
-		}
-
-		$brewer_entries = implode(",",$entries);
-
-		$output_datatables_body .= "<td><a href=\"".$base_url."index.php?section=admin&amp;go=entries&amp;bid=".$row_brewer['uid']."\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"List ".$brewer_tooltip_display_name."&rsquo;s entries.\"><i class=\"fa fa-list\"></i></a> ".str_replace(",",", ",$brewer_entries)."</td>";
-		if ($action != "print") $output_datatables_body .= "<td>".$output_datatables_actions."</td>";
-		$output_datatables_body .= "</tr>";
-
-	}
-
-	else {
-
-		$table_assign_judge = table_assignments($user_info[0],"J",$_SESSION['prefsTimeZone'],$_SESSION['prefsDateFormat'],$_SESSION['prefsTimeFormat'],1);
-		$table_assign_judge = str_replace(",&nbsp;","<br>",$table_assign_judge);
-		
-		$table_assign_steward = table_assignments($user_info[0],"S",$_SESSION['prefsTimeZone'],$_SESSION['prefsDateFormat'],$_SESSION['prefsTimeFormat'],1);
-		$table_assign_steward = str_replace(",&nbsp;","<br>",$table_assign_steward);
-		
-		$judge_entries = judge_entries($row_brewer['uid'],1);
-
-		if ($filter == "judges") $locations = $row_brewer['brewerJudgeLocation'];
-		if ($filter == "stewards") $locations = $row_brewer['brewerStewardLocation'];
-
-		if ((!empty($brewer_assignment) && (!$archive_display))) {
-			
-			// Build assignment modal for participants
-			unset($assignment_modal_body);
-			if ((strpos($brewer_assignment,"Judge") !== false) || (strpos($brewer_assignment,"Steward") !== false) ) {
-
-				if (strpos($brewer_assignment,"Judge") !== false) {
-					if (!empty($table_assign_judge)) $assignment_modal_body = "<p>".$row_brewer['brewerFirstName']." is assigned as a <strong>judge</strong> to table(s): ".$table_assign_judge."<p>";
-					else $assignment_modal_body = "<p>".$row_brewer['brewerFirstName']." has been added to the <strong>judge</strong> pool, but has not been assigned to a table yet.<p>";
-				}
-				if (strpos($brewer_assignment,"Steward") !== false) {
-					if (!empty($table_assign_steward))  $assignment_modal_body = "<p>".$row_brewer['brewerFirstName']." is assigned as a <strong>steward</strong> to table(s): ".$table_assign_steward."<p>";
-					else $assignment_modal_body = "<p>".$row_brewer['brewerFirstName']." has been added to the <strong>steward</strong> pool, but has not been assigned to a table yet.<p>";
-				}
-				if (!empty($judge_entries)) $assignment_modal_body .= "<p>Has entries in: ".$judge_entries."</p>";
-				$output_assignment_modals .= "<div class=\"modal fade\" id=\"assignment-modal-".$row_brewer['uid']."\" tabindex=\"-1\" role=\"dialog\" aria-labelledby=\"assignment-modal-label-".$row_brewer['uid']."\">\n";
-				$output_assignment_modals .= "\t<div class=\"modal-dialog modal-lg\" role=\"document\">\n";
-				$output_assignment_modals .= "\t\t<div class=\"modal-content\">\n";
-				$output_assignment_modals .= "\t\t\t<div class=\"modal-header bcoem-admin-modal\">\n";
-				$output_assignment_modals .= "\t\t\t\t<button type=\"button\" class=\"close\" data-dismiss=\"modal\" aria-label=\"Close\"><span aria-hidden=\"true\">&times;</span></button>\n";
-				$output_assignment_modals .= "\t\t\t\t<h4 class=\"modal-title\" id=\"assignment-modal-label-".$row_brewer['uid']."\">Assignment(s) for ".$brewer_tooltip_display_name."</h4>\n";
-				$output_assignment_modals .= "\t\t\t</div><!-- ./modal-header -->\n";
-				$output_assignment_modals .= "\t\t\t<div class=\"modal-body\">\n";
-				$output_assignment_modals .= "\t\t\t\t".$assignment_modal_body."\n";
-				$output_assignment_modals .= "\t\t\t</div><!-- ./modal-body -->\n";
-				$output_assignment_modals .= "\t\t\t<div class=\"modal-footer\">\n";
-				$output_assignment_modals .= "\t\t\t\t<button type=\"button\" class=\"btn btn-danger\" data-dismiss=\"modal\">Close</button>\n";
-				$output_assignment_modals .= "\t\t\t</div><!-- ./modal-footer -->\n";
-				$output_assignment_modals .= "\t\t</div><!-- ./modal-content -->\n";
-				$output_assignment_modals .= "\t</div><!-- ./modal-dialog -->\n";
-				$output_assignment_modals .= "</div><!-- ./modal -->\n";
-			}
-		}
-
-		$output_datatables_body .= "<tr>";
-
-		$output_datatables_body .= "<td>";
-		$output_datatables_body .= "<a name='".$row_brewer['uid']."'></a>";
-		$output_datatables_body .= $row_brewer['brewerLastName'].", ".$row_brewer['brewerFirstName'];
-		if (($dbTable == "default") && ($user_info[1] == 0)) $output_datatables_body .= " <span class=\"fa fa-lg fa-lock text-danger\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"".$brewer_tooltip_display_name." is a Top-Level Admin User\"></span>";
-		elseif (($dbTable == "default") && ($user_info[1] == 1)) $output_datatables_body .= " <span class=\"fa fa-lg fa-lock text-warning\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"".$brewer_tooltip_display_name." is an Admin Level User\"></span>";
-		if ($action != "print") $output_datatables_body .= "<br><small>".$row_brewer['brewerCity'].", ".$row_brewer['brewerState']."</small>";
-		$output_datatables_body .= "</td>";
-
-		if ($action == "print") {
-			$output_datatables_body .= "<td nowrap>";
-			$output_datatables_body .= "<small>".$row_brewer['brewerEmail']."</small><br>";
-			if ($row_brewer['brewerPhone1'] != "") {
-				if ($us_phone) $output_datatables_body .= format_phone_us($row_brewer['brewerPhone1'])." (1)<br>";
-				else $output_datatables_body .= $row_brewer['brewerPhone1']." (1)<br>";
-			}
-			if ($row_brewer['brewerPhone2'] != "") {
-				if ($us_phone) $output_datatables_body .= format_phone_us($row_brewer['brewerPhone2'])." (2)<br>";
-				else $output_datatables_body .= $row_brewer['brewerPhone2']." (2)<br>";
-			}
+			$output_datatables_body .= "<td>";
+			if ($user_info[1] == 0)	$output_datatables_body .= "Top-Level Admin";
+			elseif ($user_info[1] == 1)	$output_datatables_body .= "Admin";
+			else $output_datatables_body .= "Participant";
+			if ($user_info[2] == 0) $output_datatables_body .= " <i class=\"fa fa-sm fa-eye\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"".$brewer_tooltip_display_name." can view Judging Numbers - edit their user level to change.\"></i>";
+			else  $output_datatables_body .= " <i class=\"fa fa-sm fa-eye-slash\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"".$brewer_tooltip_display_name." CANNOT view Judging Numbers - edit their user level to change.\"></i>";
 			$output_datatables_body .= "</td>";
-		}
 
-		if ($pro_edition == 1) $output_datatables_body .= "<td>";
-		else  $output_datatables_body .= "<td class=\"".$output_hide_print."\">";
-		if (($totalRows_judging > 0) && (($filter == "judges") || ($filter == "stewards"))) {
-			if ($filter == "judges") $exploder = $row_brewer['brewerJudgeLocation'];
-			if ($filter == "stewards") $exploder = $row_brewer['brewerStewardLocation'];
-			$a = explode(",",$exploder);
-			$output = "";
-			if ($exploder != "") {
-				sort($a);
-				foreach ($a as $value) {
-					if ($value != "") {
-						$b = substr($value, 2);
-						$output .= judging_location_avail($b,$value);
+			if ($action == "print") {
+				$output_datatables_body .= "<td nowrap>";
+				$output_datatables_body .= "<small>".$row_brewer['brewerEmail']."</small><br>";
+				if ($row_brewer['brewerPhone1'] != "") {
+					if ($us_phone) $output_datatables_body .= format_phone_us($row_brewer['brewerPhone1'])." (1)<br>";
+					else $output_datatables_body .= $row_brewer['brewerPhone1']." (1)<br>";
+				}
+				if ($row_brewer['brewerPhone2'] != "") {
+					if ($us_phone) $output_datatables_body .= format_phone_us($row_brewer['brewerPhone2'])." (2)<br>";
+					else $output_datatables_body .= $row_brewer['brewerPhone2']." (2)<br>";
+				}
+				$output_datatables_body .= "</td>";
+			}
+
+			if ($pro_edition == 1) $output_datatables_body .= "<td>";
+			else  $output_datatables_body .= "<td class=\"".$output_hide_print."\">";
+			if (($totalRows_judging > 0) && (($filter == "judges") || ($filter == "stewards"))) {
+				if ($filter == "judges") $exploder = $row_brewer['brewerJudgeLocation'];
+				if ($filter == "stewards") $exploder = $row_brewer['brewerStewardLocation'];
+				$a = explode(",",$exploder);
+				$output = "";
+				if ($exploder != "") {
+					sort($a);
+					foreach ($a as $value) {
+						if ($value != "") {
+							$b = substr($value, 2);
+							$output .= judging_location_avail($b,$value);
+							}
 						}
 					}
-				}
-			$output = rtrim($output,"<br>");
-			$output_datatables_body .= $output;
-		}
-		else {
-			if ($pro_edition == 1) $output_datatables_body .= $row_brewer['brewerBreweryName'];
-			else $output_datatables_body .= $row_brewer['brewerClubs'];
-		}
-		$output_datatables_body .= "</td>";
-
-		if ($filter == "default") {
-			$output_datatables_body .= "<td class=\"".$output_hide_print."\">";
-			if ($row_brewer['brewerSteward'] == "Y") {
-					if ($action == "print") $output_datatables_body .= "Y";
-					else $output_datatables_body .= "<span class=\"fa fa-lg fa-check text-success\"></span>";
-				}
-				if ($row_brewer['brewerSteward'] == "N") {
-					if ($action == "print") $output_datatables_body .= "N";
-					else $output_datatables_body .= "<span class=\"fa fa-lg fa-times text-danger\"></span>";
-				}
-			$output_datatables_body .= "</td>";
-			$output_datatables_body .= "<td class=\"".$output_hide_print."\">";
-			if ($row_brewer['brewerJudge'] == "Y") {
-					if ($action == "print") $output_datatables_body .= "Y";
-					else $output_datatables_body .= "<span class=\"fa fa-lg fa-check text-success\"></span>";
-				}
-				if ($row_brewer['brewerJudge'] == "N") {
-					if ($action == "print") $output_datatables_body .= "N";
-					else $output_datatables_body .= "<span class=\"fa fa-lg fa-times text-danger\"></span>";
-				}
-			$output_datatables_body .= "</td>";
-
-		}
-
-
-		$output_datatables_body .= "<td>";
-		
-		if (!empty($brewer_assignment)) {
-			
-			if ((!$archive_display) && ((strpos($brewer_assignment,"Judge") !== false) || (strpos($brewer_assignment,"Steward") !== false))) {
-				$output_datatables_body .= "<button type=\"button\" class=\"btn btn-link\" style=\"margin:0; padding:0;\" data-toggle=\"modal\" data-target=\"#assignment-modal-".$row_brewer['uid']."\">".ucwords($brewer_assignment)."</button>";
+				$output = rtrim($output,"<br>");
+				$output_datatables_body .= $output;
 			}
 			else {
-				$output_datatables_body .= ucwords($brewer_assignment);
+				if ($pro_edition == 1) $output_datatables_body .= $row_brewer['brewerBreweryName'];
+				else $output_datatables_body .= $row_brewer['brewerClubs'];
 			}
-			
-		}
+			$output_datatables_body .= "</td>";
 
-		$output_datatables_body .= "</td>";
-
-		if ($filter != "default") {
-			if ($filter == "judges") {
-				$bjcp_rank = explode(",",$row_brewer['brewerJudgeRank']);
-				$display_rank = bjcp_rank($bjcp_rank[0],1);
-
-				if (((strpos($display_rank, "Level 0:") !== false)) && (($row_brewer['brewerJudgeMead'] == "Y") || ($row_brewer['brewerJudgeCider'] == "Y"))) $display_rank = "Level 3: Certified Cider or Mead Judge";
-
-				$output_datatables_body .= "<td class=\"".$output_hide_print."\">".$row_brewer['brewerJudgeID']."</td>";
-				$output_datatables_body .= "<td>".$display_rank;
-				$output_datatables_body .= "<small>";
-				if ($row_brewer['brewerJudgeMead'] == "Y") $output_datatables_body .= "<br />Certified Mead Judge";
-				if ($row_brewer['brewerJudgeCider'] == "Y") $output_datatables_body .= "<br />Certified Cider Judge";
-				if (!empty($bjcp_rank[1])) {
-					$output_datatables_body .= designations($row_brewer['brewerJudgeRank'],$bjcp_rank[0]);
-				}
-				$output_datatables_body .= "</small>";
+			if ($filter == "default") {
+				$output_datatables_body .= "<td class=\"".$output_hide_print."\">";
+				if ($row_brewer['brewerSteward'] == "Y") {
+						if ($action == "print") $output_datatables_body .= "Y";
+						else $output_datatables_body .= "<span class=\"fa fa-lg fa-check text-success\"></span>";
+					}
+					if ($row_brewer['brewerSteward'] == "N") {
+						if ($action == "print") $output_datatables_body .= "N";
+						else $output_datatables_body .= "<span class=\"fa fa-lg fa-times text-danger\"></span>";
+					}
+				$output_datatables_body .= "</td>";
+				$output_datatables_body .= "<td class=\"".$output_hide_print."\">";
+				if ($row_brewer['brewerJudge'] == "Y") {
+						if ($action == "print") $output_datatables_body .= "Y";
+						else $output_datatables_body .= "<span class=\"fa fa-lg fa-check text-success\"></span>";
+					}
+					if ($row_brewer['brewerJudge'] == "N") {
+						if ($action == "print") $output_datatables_body .= "N";
+						else $output_datatables_body .= "<span class=\"fa fa-lg fa-times text-danger\"></span>";
+					}
 				$output_datatables_body .= "</td>";
 
 			}
-			if ($filter == "judges") $output_datatables_body .= "<td>".rtrim($table_assign_judge,",&nbsp;")."</td>";
-			if ($filter == "stewards") $output_datatables_body .= "<td>".rtrim($table_assign_steward,",&nbsp;")."</td>";
-			$output_datatables_body .= "<td class=\"".$output_hide_print."\">".judge_entries($row_brewer['uid'],1)."</td>";
+
+			$output_datatables_body .= "<td>";
+			
+			if (!empty($brewer_assignment)) {
+				
+				if ((!$archive_display) && ((strpos($brewer_assignment,"Judge") !== false) || (strpos($brewer_assignment,"Steward") !== false))) {
+					$output_datatables_body .= "<button type=\"button\" class=\"btn btn-link\" style=\"margin:0; padding:0;\" data-toggle=\"modal\" data-target=\"#assignment-modal-".$row_brewer['uid']."\">".ucwords($brewer_assignment)."</button>";
+				}
+				else {
+					$output_datatables_body .= ucwords($brewer_assignment);
+				}
+				
+			}
+
+			$output_datatables_body .= "</td>";
+
+			if ($filter != "default") {
+				if ($filter == "judges") {
+					$bjcp_rank = explode(",",$row_brewer['brewerJudgeRank']);
+					$display_rank = bjcp_rank($bjcp_rank[0],1);
+
+					if (((strpos($display_rank, "Level 0:") !== false)) && (($row_brewer['brewerJudgeMead'] == "Y") || ($row_brewer['brewerJudgeCider'] == "Y"))) $display_rank = "Level 3: Certified Cider or Mead Judge";
+
+					$output_datatables_body .= "<td class=\"".$output_hide_print."\">".$row_brewer['brewerJudgeID']."</td>";
+					$output_datatables_body .= "<td>".$display_rank;
+					$output_datatables_body .= "<small>";
+					if ($row_brewer['brewerJudgeMead'] == "Y") $output_datatables_body .= "<br />Certified Mead Judge";
+					if ($row_brewer['brewerJudgeCider'] == "Y") $output_datatables_body .= "<br />Certified Cider Judge";
+					if (!empty($bjcp_rank[1])) {
+						$output_datatables_body .= designations($row_brewer['brewerJudgeRank'],$bjcp_rank[0]);
+					}
+					$output_datatables_body .= "</small>";
+					$output_datatables_body .= "</td>";
+
+				}
+				if ($filter == "judges") $output_datatables_body .= "<td>".rtrim($table_assign_judge,",&nbsp;")."</td>";
+				if ($filter == "stewards") $output_datatables_body .= "<td>".rtrim($table_assign_steward,",&nbsp;")."</td>";
+				$output_datatables_body .= "<td class=\"".$output_hide_print."\">".judge_entries($row_brewer['uid'],1)."</td>";
+
+			}
+
+
+			$output_datatables_body .= "<td class=\"".$output_hide_print."\">".date_created($row_brewer['uid'],$_SESSION['prefsDateFormat'],$_SESSION['prefsTimeFormat'],$_SESSION['prefsTimeZone'],$dbTable)."</td>";
+
+			if (($action != "print") && ($dbTable == "default")) {
+
+				$output_datatables_body .= "<td>".$output_datatables_actions."</td>";
+
+			}
+
+		$output_datatables_body .= "</tr>";
 
 		}
 
+	} while ($row_brewer = mysqli_fetch_assoc($brewer));
 
-		$output_datatables_body .= "<td class=\"".$output_hide_print."\">".date_created($row_brewer['uid'],$_SESSION['prefsDateFormat'],$_SESSION['prefsTimeFormat'],$_SESSION['prefsTimeZone'],$dbTable)."</td>";
-
-		if (($action != "print") && ($dbTable == "default")) {
-
-			$output_datatables_body .= "<td>".$output_datatables_actions."</td>";
-
-		}
-
-	$output_datatables_body .= "</tr>";
-
-	}
-
-} while ($row_brewer = mysqli_fetch_assoc($brewer));
+} // end if ($totalRows_brewer > 0)
 
 if ($dbTable != "default") $subtitle .= "<p>".$edition."</p>";
 

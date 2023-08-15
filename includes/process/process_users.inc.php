@@ -51,6 +51,9 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 				$hasher_question = new PasswordHash(8, false);
 				$hash_question = $hasher_question->HashPassword(sterilize($_POST['userQuestionAnswer']));
 
+				$userAdminObfuscate = 1;
+				if ($_POST['userLevel'] == 0) $userAdminObfuscate = 0;
+
 				$update_table = $prefix."users";
 				$data = array(
 					'user_name' => $username,
@@ -58,7 +61,8 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 					'password' => $hash,
 					'userQuestion' => sterilize($_POST['userQuestion']),
 					'userQuestionAnswer' => $hash_question,
-					'userCreated' =>  $db_conn->now()
+					'userCreated' =>  $db_conn->now(),
+					'userAdminObfuscate' => $userAdminObfuscate
 				);
 				$result = $db_conn->insert ($update_table, $data);
 				if (!$result) {
@@ -148,13 +152,19 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 			$row_userCheck = mysqli_fetch_assoc($userCheck);
 			$totalRows_userCheck = mysqli_num_rows($userCheck);
 
-			// --------------------------- If Changing a Participant's User Level ------------------------------- //
+			// ----- If Changing a Participant's User Level ----- //
 			if (($go == "make_admin") && ($_SESSION['userLevel'] <= 1)) {
+
+				$userAdminObfuscate = 1;
+				if (!isset($_POST['userAdminObfuscate'])) {
+					if ($_POST['userLevel'] < 2) $userAdminObfuscate = 0;
+				}
 
 				$update_table = $prefix."users";
 				$data = array(
 					'userLevel' => sterilize($_POST['userLevel']),
-					'userCreated' => $db_conn->now()
+					'userCreated' => $db_conn->now(),
+					'userAdminObfuscate' => $userAdminObfuscate
 				);			
 				$db_conn->where ('user_name', $username);
 				$result = $db_conn->update ($update_table, $data);

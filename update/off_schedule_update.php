@@ -48,7 +48,9 @@ $versions = array(
 	"2.3.1.0" => 18,
 	"2.3.2.0" => 19,
 	"2.4.0.0" => 20,
-	"2.5.0.0" => 21
+	"2.5.0.0" => 21,
+	"2.6.0.0" => 22,
+	"2.6.1.0" => 23
 );
 
 flush();
@@ -3267,9 +3269,9 @@ if (HOSTED) {
 
 
 /**
- * ----------------------------------------------- 2.5.2 --------------------------------------------- 
+ * ----------------------------------------------- 2.6.2 --------------------------------------------- 
  * Remove AABC 2021 Guidelines
- * Need to write a conversion script. Save for 2.5.2.
+ * Need to write a conversion script.
  * ---------------------------------------------------------------------------------------------------
  */
 
@@ -3382,6 +3384,60 @@ if ((isset($row_style_num['brewStyleGroup']) && ($row_style_num['brewStyleGroup'
 	} while($row_style_name = mysqli_fetch_assoc($style_name));
 
 }
+
+if (!$setup_running) $output_off_sched_update .= "</ul>";
+
+/**
+ * ----------------------------------------------- 2.6.1 ---------------------------------------------
+ * Add userAdminObfuscate flag to users table.
+ * ---------------------------------------------------------------------------------------------------
+ */
+
+if ((!$setup_running) && (!$update_running)) {
+	$output_off_sched_update .= "<p>";
+	$output_off_sched_update .= "<strong>Version 2.6.1.0 Updates</strong>";
+	$output_off_sched_update .= "</p>";
+}
+
+elseif ($update_running) {
+	$output_off_sched_update .= "<h4>Version 2.6.1</h4>";
+}
+
+// Begin version unordered list
+if (!$setup_running) $output_off_sched_update .= "<ul>";
+
+if (!check_update("userAdminObfuscate", $prefix."users")) {
+	
+	$sql = sprintf("ALTER TABLE `%s` ADD `userAdminObfuscate` tinyint(1) NULL DEFAULT NULL;",$prefix."users");
+	mysqli_select_db($connection,$database);
+	mysqli_real_escape_string($connection,$sql);
+	$result = mysqli_query($connection,$sql);
+	
+	if ($result) {
+		$output_off_sched_update .= "<li>The userAdminObfuscate column was added to the users table.</li>";
+
+		$update_table = $prefix."users";
+		$data = array(
+			'userAdminObfuscate' => 1,
+		);
+		$result = $db_conn->update ($update_table, $data);
+		
+		$data = array(
+			'userAdminObfuscate' => 0,
+		);
+		$db_conn->where ('userLevel', 0);
+		$result = $db_conn->update ($update_table, $data);
+	
+	}
+
+	else {
+		$output_off_sched_update .= "<li class=\"text-danger\">The userAdminObfuscate column was NOT added to the users table.</li>";
+		$error_count += 1;
+	}
+
+}
+
+if (!$setup_running) $output_off_sched_update .= "</ul>";
 
 /**
  * ---------------------------------------------------------------------------------------------------

@@ -402,48 +402,25 @@ if (in_array($_SESSION['prefsLanguageFolder'], $name_check_langs)) {
     if (in_array($_SESSION['prefsLanguageFolder'], $last_name_exception_langs)) $last_name .= standardize_name($parsed_name['lname']);
     else $last_name .= $parsed_name['lname']; 
     if (!empty($parsed_name['suffix'])) $last_name .= " ".$parsed_name['suffix'];
+
 }
 
 else {
-    $first_name = $fname;
-    $last_name = $lname;
-    $first_name = sterilize($first_name);
-    $last_name = sterilize($last_name);
+    $first_name = sterilize($fname);
+    $last_name = sterilize($lname);
 }
 
-$address = standardize_name($purifier->purify($_POST['brewerAddress']));
-$address = sterilize($address);
-$city = standardize_name($purifier->purify($_POST['brewerCity']));
-$city = sterilize($city);
-$state = "";
+$address = sterilize($purifier->purify($_POST['brewerAddress']));
+$city = sterilize($purifier->purify($_POST['brewerCity']));
 
-if (isset($_POST['brewerCountry'])) {
+if ((isset($_POST['brewerStateUS'])) && (!empty($_POST['brewerStateUS']))) $state = $_POST['brewerStateUS'];
+elseif ((isset($_POST['brewerStateCA'])) && (!empty($_POST['brewerStateCA']))) $state = $_POST['brewerStateCA'];
+elseif ((isset($_POST['brewerStateAUS'])) && (!empty($_POST['brewerStateAUS']))) $state = $_POST['brewerStateAUS'];
+elseif ((isset($_POST['brewerStateNon'])) && (!empty($_POST['brewerStateNon']))) $state = $purifier->purify($_POST['brewerStateNon']);
+else $state = "";
 
-    if ($_POST['brewerCountry'] == "United States") {
-        if ((isset($_POST['brewerStateUS'])) && ($_POST['brewerStateUS'] != "")) $state = $_POST['brewerStateUS'];
-    }
-
-    if ($_POST['brewerCountry'] == "Canada") {
-        if ((isset($_POST['brewerStateCA'])) && ($_POST['brewerStateCA'] != "")) $state = $_POST['brewerStateCA'];
-    }
-
-    if ($_POST['brewerCountry'] == "Australia") {
-        if ((isset($_POST['brewerStateAUS'])) && ($_POST['brewerStateAUS'] != "")) $state = $_POST['brewerStateAUS'];
-    }
-
-    else {
-
-        if ((isset($_POST['brewerStateNon'])) && ($_POST['brewerStateNon'] != "")) {
-            $state = $purifier->purify($_POST['brewerStateNon']);
-            if (strlen($state) > 2) $state = standardize_name($state);
-            else $state = strtoupper($state);
-        }
-
-    }
-
-}
-
-if (!empty($state)) $state = sterilize($state);
+if (strlen($state) <= 2) $state = strtoupper($state);
+$state = sterilize($state);
 
 // Set all locations as YES for quick adds
 if ($view == "quick") {

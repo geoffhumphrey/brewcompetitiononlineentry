@@ -493,6 +493,7 @@ if ($recently_updated) {
                     </div>
                     <div id="collapseSorting" class="panel-collapse collapse">
                         <div class="panel-body">
+                            <?php if ($_SESSION['userAdminObfuscate'] == 0) { ?>
                             <div class="row">
                                 <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
                                     <strong>Regenerate</strong>
@@ -535,6 +536,7 @@ if ($recently_updated) {
                                 </div>
                             </div><!-- ./row -->
                             <?php } ?>
+                            <?php } ?>
                             <div class="row">
                                 <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
                                     <strong>Entry Check-In</strong>
@@ -542,13 +544,14 @@ if ($recently_updated) {
                                 <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
                                     <ul class="list-unstyled">
                                         <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=entries">Manually</a></li>
+                                        <?php if ($_SESSION['userAdminObfuscate'] == 0) { ?>
                                         <?php if (in_array($_SESSION['prefsEntryForm'],$barcode_qrcode_array)) { ?>
                                         <li><a class="hide-loader" href="<?php echo $base_url; ?>qr.php" target="_blank">Via Mobile Devices <span class="fa fa-sm fa-external-link"></span></a></li>
                                         <?php } ?>
                                         <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=checkin">Via Barcode Scanner (Entry/Judging Numbers Only)</a></li>
                                         <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=checkin&amp;filter=box-paid">Via Barcode Scanner (Entry/Judging Numbers, Box, and Paid)</a></li>
+                                    <?php } ?>
                                     </ul>
-                                    
                                 </div>
                             </div><!-- ./row -->
                             <div class="row">
@@ -558,8 +561,10 @@ if ($recently_updated) {
                                 <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
                                     <ul class="list-inline">
                                         <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=sorting&amp;go=default&amp;filter=default&amp;view=entry">Entry Numbers</a></li>
+                                        <?php if ($_SESSION['userAdminObfuscate'] == 0) { ?>
                                         <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=sorting&amp;go=default&amp;filter=default">Judging Numbers</a></li>
                                         <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=sorting&amp;go=cheat&amp;filter=default">Cheat Sheets</a></li>
+                                        <?php } ?>
                                     </ul>
                                 </div>
                             </div><!-- ./row -->
@@ -630,6 +635,7 @@ if ($recently_updated) {
                                     </ul>
                                 </div>
                             </div><!-- ./row -->
+                            <?php if ($_SESSION['userAdminObfuscate'] == 0) { ?>
                             <div class="row" style="padding: 25px 0px 15px 0px;">
                                 <div class="col col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                     <strong>Print Bottle Labels (PDF)</strong>
@@ -870,7 +876,7 @@ if ($recently_updated) {
                                     </ul>
                                 </div>
                             </div><!-- ./row -->
-
+                        <?php } ?>
                         </div>
                     </div>
                 </div>
@@ -948,6 +954,7 @@ if ($recently_updated) {
                             <a data-toggle="collapse" data-parent="#accordion" href="#collapseScoring">Scoring<span class="fa fa-clipboard pull-right"></span></a>
                         </h4>
                     </div>
+
                     <div id="collapseScoring" class="panel-collapse collapse">
                         <div class="panel-body">
                             <div class="row">
@@ -961,7 +968,7 @@ if ($recently_updated) {
                                     </ul>
                                 </div>
                             </div><!-- ./row -->
-                            <?php if ($_SESSION['prefsEval'] == 1) {?>
+                            <?php if (($_SESSION['prefsEval'] == 1) && ($_SESSION['userAdminObfuscate'] == 0)) { ?>
                             <div class="row">
                                <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
                                     <strong>Entry Evaluations</strong>
@@ -973,6 +980,7 @@ if ($recently_updated) {
                                 </div>
                             </div><!-- ./row -->
                             <?php } ?>
+                            <?php if ($_SESSION['userAdminObfuscate'] == 0) { ?>
                             <div class="row">
                                <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
                                     <strong>Scores</strong>
@@ -1003,6 +1011,7 @@ if ($recently_updated) {
                                     </ul>
                                 </div>
                             </div><!-- ./row -->
+                            <?php } ?>
                             <?php if ($_SESSION['userLevel'] == "0") { ?>
                             <div class="row">
                                <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
@@ -1020,7 +1029,6 @@ if ($recently_updated) {
                                             <?php echo score_custom_winning_choose($special_best_info_db_table,$special_best_data_db_table); ?>
                                         </ul>
                                     </div>
-
                                 </div>
                             </div><!-- ./row -->
                             <?php } ?>
@@ -1029,6 +1037,10 @@ if ($recently_updated) {
                 </div><!-- ./ Scoring Panel -->
             </div><!-- ./ panel-group -->
         </div><!-- ./left column -->
+        
+
+
+
         <!-- BEGIN Right column accordions -->
         <div class="col col-lg-6 col-md-12 col-sm-12 col-xs-12">
             <div class="panel-group" id="accordion2">
@@ -1068,6 +1080,7 @@ if ($recently_updated) {
                                 </ul>
                             </div>
                         </div><!-- ./row -->
+                        <?php if ($_SESSION['userAdminObfuscate'] == 0) { ?>
                         <div class="row">
                             <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
                                 <strong>Allergens</strong>
@@ -1078,6 +1091,7 @@ if ($recently_updated) {
                                 </ul>
                             </div>
                         </div><!-- ./row -->
+                        <?php } ?>
                         <div class="row">
                             <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
                                 <strong>Drop-Off and Shipping</strong>
@@ -1089,7 +1103,7 @@ if ($recently_updated) {
                                 </ul>
                             </div>
                         </div><!-- ./row -->
-                        <?php if ($totalRows_tables > 0) { ?>
+                        <?php if (($totalRows_tables > 0) && ($_SESSION['userAdminObfuscate'] == 0)) { ?>
                         <div class="row">
                             <?php if ($_SESSION['jPrefsTablePlanning'] == 0) { ?>
                             <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
@@ -1181,6 +1195,7 @@ if ($recently_updated) {
                                 </div>
                             </div>
                         </div>
+                        <?php } // end if (($totalRows_tables > 0) && ($_SESSION['userAdminObfuscate'] == 0)) ?>
                         <div class="row">
                             <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
                                 <strong>Table Cards</strong>
@@ -1204,8 +1219,7 @@ if ($recently_updated) {
                                     </ul>
                                 </div>
                             </div>
-                        </div><!-- ./row -->
-                        <?php } ?>
+                        </div><!-- ./row -->    
                         <div class="row">
                             <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
                                 <strong>Sign In Sheets</strong>
@@ -1258,7 +1272,6 @@ if ($recently_updated) {
                                     </ul>
                                 </div>
                             </div>
-                                
                         </div><!-- ./row -->
                         <?php } ?>
                         <div class="row">
@@ -1272,6 +1285,7 @@ if ($recently_updated) {
                                 </ul>
                             </div>
                         </div><!-- ./row -->
+                        <?php if ($_SESSION['userAdminObfuscate'] == 0) { ?>
                         <div class="row">
                             <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
                                 <strong>Entry Required Info Scoresheet Labels (Received Entries Only)</strong>
@@ -1384,7 +1398,7 @@ if ($recently_updated) {
                                 </ul>
                             </div>
                         </div><!-- ./row -->
-
+                        <?php } ?>
                         <div class="row">
                             <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
                                 <strong>Name Tags</strong>
@@ -1395,7 +1409,8 @@ if ($recently_updated) {
                                 </ul>
                             </div>
                         </div><!-- ./row -->
-                        <?php if ($totalRows_tables > 0) { ?>
+                        
+                        <?php if (($totalRows_tables > 0) && ($_SESSION['userAdminObfuscate'] == 0)) { ?>
                         <div class="row" style="padding: 25px 0px 15px 0px;">
                             <div class="col col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                 <hr style="margin-bottom: 10px;">
@@ -1446,7 +1461,6 @@ if ($recently_updated) {
                                 </div>
                             </div>
                         </div>
-
                         <div class="row">
                             <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
                                 <strong>Mini-BOS Cup Mats</strong>
@@ -1465,7 +1479,6 @@ if ($recently_updated) {
                                         <?php echo $mini_bos_cup_mat_st_entry; ?>
                                     </ul>
                                 </div>
-
                                 <ul class="list-unstyled">
                                     <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=bos-mat&amp;action=mini-bos" data-toggle="tooltip" data-placement="top" title="Print all Mini-BOS Cup Mats with judging numbers only">All Tables - Judging Numbers</a></li>
                                 </ul>
@@ -1478,7 +1491,6 @@ if ($recently_updated) {
                                 </div>
                             </div>
                         </div><!-- ./row -->
-
                         <div class="row">
                             <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
                                 <strong>BOS Pullsheets</strong>
@@ -1506,7 +1518,6 @@ if ($recently_updated) {
                                 </div>
                             </div>
                         </div><!-- ./row -->
-                        
                         <div class="row">
                             <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
                                 <strong>BOS Cup Mats</strong>
@@ -1537,7 +1548,6 @@ if ($recently_updated) {
                                 </div>
                             </div>
                         </div><!-- ./row -->
-
                         <div class="row">
                             <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
                                 <strong>Pro-Am/Scale-Up Pullsheets</strong>
@@ -1584,8 +1594,10 @@ if ($recently_updated) {
                                 </div>
                             </div>
                         </div><!-- ./row -->
-
                         <?php } ?>
+
+                <?php if ($judging_started) { ?>
+                        <!-- After Judging -->
                         <div class="row" style="padding: 25px 0px 15px 0px;">
                             <div class="col col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                 <hr style="margin-bottom: 10px;">
@@ -1810,6 +1822,7 @@ if ($recently_updated) {
                                 </ul>
                             </div>
                         </div><!-- ./row -->
+                    <?php } ?>
                     </div>
                 </div>
             </div>
@@ -1852,6 +1865,7 @@ if ($recently_updated) {
                                 </ul>
                             </div>
                         </div><!-- ./row -->
+                        <?php if ($_SESSION['userAdminObfuscate'] == 0) { ?>
                         <div class="row">
                             <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
                                 <strong>Entries and Associated Data (CSV)</strong>
@@ -1870,6 +1884,7 @@ if ($recently_updated) {
                                 </ul>
                             </div>
                         </div><!-- ./row -->
+                        <?php } ?>
                         <div class="row">
                             <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
                                 <strong>Promo Materials</strong>
@@ -2131,12 +2146,17 @@ if ($recently_updated) {
                                 </div>
                                 <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
                                     <ul class="list-unstyled">
+                                        <?php if ($_SESSION['userLevel'] == 0) { ?>
                                         <li><a href="#" role="button" data-toggle="modal" data-target="#dashboard-help-modal-comp-prep">Competition Preparation</a></li>
+                                        <?php } ?>
                                         <li><a href="#" role="button" data-toggle="modal" data-target="#dashboard-help-modal-entries-participants">Entries and Participants</a></li>
                                         <li><a href="#" role="button" data-toggle="modal" data-target="#dashboard-help-modal-sorting">Entry Sorting</a></li>
                                         <li><a href="#" role="button" data-toggle="modal" data-target="#dashboard-help-modal-organizing">Organizing</a></li>
+                                        <?php if ($_SESSION['userAdminObfuscate'] == 0)  { ?>
                                         <li><a href="#" role="button" data-toggle="modal" data-target="#dashboard-help-modal-scoring">Scoring</a></li>
+                                        <?php } if ($_SESSION['userLevel'] == 0) { ?>
                                         <li><a href="#" role="button" data-toggle="modal" data-target="#dashboard-help-modal-preferences">Preferences</a></li>
+                                        <?php } ?>
                                         <li><a href="#" role="button" data-toggle="modal" data-target="#dashboard-help-modal-reports">Reports</a></li>
                                         <li><a href="#" role="button" data-toggle="modal" data-target="#dashboard-help-modal-data-exports">Data Exports</a></li>
                                         <li><a href="#" role="button" data-toggle="modal" data-target="#dashboard-help-modal-data-mgmt">Data Management</a></li>
@@ -2149,16 +2169,20 @@ if ($recently_updated) {
                                 </div>
                                 <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
                                     <ul class="list-unstyled">
+                                        <?php if ($_SESSION['userLevel'] == 0) { ?>
                                         <li><a href="#" role="button" data-toggle="modal" data-target="#dashboard-help-modal-comp-logo">Display the Competition Logo?</a></li>
                                         <li><a href="#" role="button" data-toggle="modal" data-target="#dashboard-help-modal-sponsor-logo">Display Sponsors with Logos?</a></li>
+                                        <?php } ?>
                                         <li><a href="#" role="button" data-toggle="modal" data-target="#dashboard-help-modal-check-in">Check In Received Entries?</a></li>
                                         <li><a href="#" role="button" data-toggle="modal" data-target="#dashboard-help-modal-tables">Set Up Judging Tables?</a></li>
                                         <li><a href="#" role="button" data-toggle="modal" data-target="#dashboard-help-modal-assign-tables">Assign Judges/Stewards to Tables?</a></li>
                                         <li><a href="#" role="button" data-toggle="modal" data-target="#dashboard-help-modal-materials">Print Judging Day Materials?</a></li>
                                         <li><a href="#" role="button" data-toggle="modal" data-target="#dashboard-help-modal-bos-judges">Assign Best of Show Judges?</a></li>
+                                        <?php if ($_SESSION['userLevel'] == 0) { ?>
                                         <li><a href="#" role="button" data-toggle="modal" data-target="#dashboard-help-modal-bos-results">Enter Scores and BOS Results?</a></li>
                                         <li><a href="#" role="button" data-toggle="modal" data-target="#dashboard-help-modal-winning">Display Winning Entries?</a></li>
                                         <li><a href="#" role="button" data-toggle="modal" data-target="#dashboard-help-modal-pro-am">Display Pro-Am Winner(s)?</a></li>
+                                        <?php } ?>
                                         <li><a class="hide-loader" href="https://github.com/geoffhumphrey/brewcompetitiononlineentry/issues/new/choose" target="_blank">Report an Issue?</a></li>
                                         <!--
                                         <li><a href="#" role="button" data-toggle="modal" data-target="#dashboard-help-modal-winner-rpt">Print a Winner Report</a></li>

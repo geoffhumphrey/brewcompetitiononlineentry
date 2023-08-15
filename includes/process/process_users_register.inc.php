@@ -124,6 +124,9 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 				$hasher_question = new PasswordHash(8, false);
 				$hash_question = $hasher_question->HashPassword(sterilize($userQuestionAnswer));
 
+				$userAdminObfuscate = 1;
+				if ($_POST['userLevel'] == 0) $userAdminObfuscate = 0;
+
 				$update_table = $prefix."users";
 				$data = array(
 					'user_name' => $username,
@@ -131,7 +134,8 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 					'password' => $hash,
 					'userQuestion' => sterilize($_POST['userQuestion']),
 					'userQuestionAnswer' => $hash_question,
-					'userCreated' =>  $db_conn->now()
+					'userCreated' =>  $db_conn->now(),
+					'userAdminObfuscate' => $userAdminObfuscate
 				);
 				$result = $db_conn->insert ($update_table, $data);
 				if (!$result) {
@@ -176,7 +180,6 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 				);
 
 				print_r($data);
-
 
 				$result = $db_conn->insert ($update_table, $data);
 				if (!$result) {

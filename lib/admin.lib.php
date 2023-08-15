@@ -1003,12 +1003,12 @@ function user_info($uid) {
 	include (CONFIG.'config.php');
 	mysqli_select_db($connection,$database);
 	
-	$query_user1 = sprintf("SELECT id,userLevel FROM %s WHERE id = '%s'", $prefix."users", $uid);
+	$query_user1 = sprintf("SELECT id,userLevel,userAdminObfuscate FROM %s WHERE id = '%s'", $prefix."users", $uid);
 	$user1 = mysqli_query($connection,$query_user1) or die (mysqli_error($connection));
 	$row_user1 = mysqli_fetch_assoc($user1);
 
 	$return = "";
-	if ($row_user1) $return = $row_user1['id']."^".$row_user1['userLevel'];
+	if ($row_user1) $return = $row_user1['id']."^".$row_user1['userLevel']."^".$row_user1['userAdminObfuscate'];
 	
 	return $return;
 

@@ -217,9 +217,11 @@ if (($logged_in) && ($admin_user) && ($go != "error_page")) { ?>
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">Sorting <span class="caret"></span></a>
                 <ul class="dropdown-menu navmenu-nav">
                     <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=entries">Manually</a></li>
+                    <?php if ($_SESSION['userAdminObfuscate'] == 0) { ?>
                     <?php if (in_array($_SESSION['prefsEntryForm'],$barcode_qrcode_array)) { ?>
                     <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=checkin">Entry Check-in Via Barcode Scanner</a></li>
                     <li><a class="hide-loader" href="<?php echo $base_url; ?>qr.php" target="_blank">Entry Check-in Via Mobile Devices <span class="fa fa-external-link"></span></a></li>
+                    <?php } ?>
                     <?php } ?>
                 </ul>
             </li>
@@ -235,22 +237,31 @@ if (($logged_in) && ($admin_user) && ($go != "error_page")) { ?>
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">Scoring <span class="caret"></span></a>
                 <ul class="dropdown-menu navmenu-nav">
                 	<li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=upload_scoresheets">Upload Scoresheets</a></li>
-                	<?php if ($_SESSION['prefsEval'] == 1) { ?><li><a href="<?php echo $base_url; ?>index.php?section=evaluation&amp;go=default&amp;filter=default&amp;view=admin">Manage Entry Evaluations</a></li><?php } ?>
+                <?php if ($_SESSION['userAdminObfuscate'] == 0) { ?>
+                	<?php if ($_SESSION['prefsEval'] == 1) { ?><li><a href="<?php echo $base_url; ?>index.php?section=evaluation&amp;go=default&amp;filter=default&amp;view=admin">Manage Entry Evaluations</a></li>
+                	<?php } ?>
                     <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging_scores">Manage Scores</a></li>
                     <li><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging_scores_bos">Manage BOS Entries and Places</a></li>
+                <?php } ?>
                 </ul>
             </li>
             <li class="dropdown">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">Reports <span class="caret"></span></a>
                 <ul class="dropdown-menu navmenu-nav">
                     <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=table-cards&amp;go=judging_tables&amp;id=default">Table Cards</a></li>
+                <?php if ($_SESSION['userAdminObfuscate'] == 0) { ?>
                     <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=pullsheets&amp;go=judging_tables&amp;view=entry&amp;id=default">Pullsheets - Entry Numbers</a></li>
                     <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=pullsheets&amp;go=judging_tables&amp;id=default">Pullsheets - Judging Numbers</a></li>
+                    <?php if ($judging_started) { ?>
                     <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=pullsheets&amp;go=judging_scores_bos">BOS Pullsheets</a></li>
                     <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=bos-mat">BOS Cup Mats - Judging Numbers</a></li>
                     <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=bos-mat&amp;filter=entry">BOS Cup Mats - Entry Numbers</a></li>
+                	<?php } ?>
+                <?php } ?>
+                <?php if ($judging_started) { ?>
                     <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=results&amp;go=judging_scores&amp;action=print&amp;filter=scores&amp;view=winners">Winners with Scores</a></li>
                     <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=results&amp;go=judging_scores&amp;action=print&amp;filter=none&amp;view=winners">Winners without Scores</a></li>
+                <?php } ?>
                 </ul>
             </li>
 			<?php if ($_SESSION['userLevel'] == "0") { ?>

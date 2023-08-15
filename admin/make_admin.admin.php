@@ -7,7 +7,7 @@ else $edit_user_enable = 0;
 <p class="lead">Change User Level for <?php echo $row_brewer['brewerFirstName']." ".$row_brewer['brewerLastName']; ?></p>
 
 <form class="form-hoizontal" action="<?php echo $base_url; ?>includes/process.inc.php?section=<?php echo $section; ?>&amp;action=edit&amp;dbTable=<?php echo $users_db_table; ?>&amp;go=make_admin" name="form1" method="post">
-<p><strong>Top-level admins</strong> have full access to add, change, and delete all information in the database, including preferences, competition information, and archival data.</p>
+<p><strong>Top-level admins</strong> have full access to add, change, and delete all information in the database, including preferences, competition information, and archival data, so provide this level <span class="text-danger"><strong>with caution</strong>!</span></p>
 <p><strong>Admin users</strong> are able to add, change, and delete most information in the database, including participants, entries, tables, scores, etc.</p>
 <div class="bcoem-admin-element hidden-print">
 <div class="form-group"><!-- Form Group Radio STACKED -->
@@ -30,6 +30,11 @@ else $edit_user_enable = 0;
 					<input type="radio" name="userLevel" id="userLevel_0" value="0" <?php if ($row_username['userLevel'] == "0") echo "checked"; ?>> Top-Level Admin
 				</label>
 			</div>
+			<div class="checkbox" id="obfuscate-judging-nums">
+				<label>
+					<input type="checkbox" name="userAdminObfuscate" id="" value="1" <?php if ($row_username['userAdminObfuscate'] == 1) echo "checked"; ?>> Obfuscate Judging Numbers? <a tabindex="0" type="button" role="button" data-toggle="popover" data-html="true" data-trigger="hover" data-placement="auto top" data-container="body" data-content="If you wish to hide judging numbers from this Admin user, check the box." ?><i class="fa fa-question-circle"></i></a>
+				</label>
+			</div>
 		</div>
 	</div>
 </div><!-- ./Form Group -->
@@ -49,4 +54,29 @@ else $edit_user_enable = 0;
 <input type="hidden" name="relocate" value="<?php echo relocate($base_url."index.php?section=admin&go=participants","default",$msg,$id); ?>">
 <?php } ?>
 </form>
+<script type="text/javascript">
+$(document).ready(function(){
+	
+	var user_level = "<?php echo $row_username['userLevel']; ?>";
+	
+	$("#obfuscate-judging-nums").hide();
+	if (user_level < 2) {
+		$("#obfuscate-judging-nums").show();
+	}
 
+	$('input[type="radio"]').click(function() {
+        
+        if (($(this).attr('id') == 'userLevel_0') || ($(this).attr('id') == 'userLevel_1')) {
+            $("#obfuscate-judging-nums").show("fast");
+        }
+
+        else {
+            $("#obfuscate-judging-nums").hide("fast");
+            $("input[name='obJudingNumbers']").prop("required", false);
+            $("input[name='obJudingNumbers']").prop("checked", true);
+        }
+
+    });
+
+}); 
+</script>

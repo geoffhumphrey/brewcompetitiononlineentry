@@ -194,7 +194,7 @@ if (($action == "default") && ($filter == "default")) {
             if ($_SESSION['jPrefsTablePlanning'] == 0) {
                 $scored =  get_table_info("1","score_total",$row_tables['id'],$dbTable,"default");
                 //get_table_info($input,$method,$id,$dbTable,$param)
-                if (($received > $scored) && ($dbTable == "default")) $scored = $scored." <a class=\"hidden-print\" href=\"".$base_url."index.php?section=admin&amp;go=judging_scores&amp;action=edit&amp;id=".$row_tables['id']."\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Not all scores have been entered for this table. Select to add/edit scores.\"><span class=\"fa fa-lg fa-exclamation-circle text-danger\"></span></a>";
+                if (($received > $scored) && ($dbTable == "default") && ($_SESSION['userAdminObfuscate'] == 0)) $scored = $scored." <a class=\"hidden-print\" href=\"".$base_url."index.php?section=admin&amp;go=judging_scores&amp;action=edit&amp;id=".$row_tables['id']."\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Not all scores have been entered for this table. Select to add/edit scores.\"><span class=\"fa fa-lg fa-exclamation-circle text-danger\"></span></a>";
                 else $scored = $scored;
             }
 
@@ -230,24 +230,28 @@ if (($action == "default") && ($filter == "default")) {
                 $manage_tables_default_tbody .= "<span class=\"fa fa-lg fa-pencil\"></span>";
                 $manage_tables_default_tbody .= "</a> ";
 
-                if ($_SESSION['jPrefsTablePlanning'] == 0) {
-                    // Build print pullsheet link
-                    $manage_tables_default_tbody .= "<a id=\"modal_window_link\" class=\"hide-loader\" href=\"".$base_url."output/print.output.php?section=pullsheets&amp;go=judging_tables&amp;id=".$row_tables['id']."\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Print the pullsheet for Table ".$row_tables['tableNumber'].": ".$row_tables['tableName']."\">";
-                    $manage_tables_default_tbody .= "<span class=\"fa fa-lg fa-print\"></span>";
-                    $manage_tables_default_tbody .= "</a> ";
+                if ($_SESSION['userAdminObfuscate'] == 0) {
+
+                    if ($_SESSION['jPrefsTablePlanning'] == 0) {
+                        // Build print pullsheet link
+                        $manage_tables_default_tbody .= "<a id=\"modal_window_link\" class=\"hide-loader\" href=\"".$base_url."output/print.output.php?section=pullsheets&amp;go=judging_tables&amp;id=".$row_tables['id']."\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Print the pullsheet for Table ".$row_tables['tableNumber'].": ".$row_tables['tableName']."\">";
+                        $manage_tables_default_tbody .= "<span class=\"fa fa-lg fa-print\"></span>";
+                        $manage_tables_default_tbody .= "</a> ";
+
+                    }
+
+                    else $manage_tables_default_tbody .= "<span class=\"fa fa-lg fa-print text-muted\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Printing pullsheest is disabled in Tables Planning Mode\"></span> ";
+
+                    if ($_SESSION['jPrefsTablePlanning'] == 0) {
+                        // Build print pullsheet link
+                        $manage_tables_default_tbody .= "<a id=\"modal_window_link\" class=\"hide-loader\" href=\"".$base_url."output/print.output.php?section=pullsheets&amp;go=all_entry_info&amp;id=".$row_tables['id']."\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Print the Entries with Additional Info Report for Table ".$row_tables['tableNumber'].": ".$row_tables['tableName']."\">";
+                        $manage_tables_default_tbody .= "<span class=\"fa fa-lg fa-plus-square\"></span>";
+                        $manage_tables_default_tbody .= "</a> ";
+                    }
+
+                    else $manage_tables_default_tbody .= "<span class=\"fa fa-lg fa-plus-square text-muted\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Printing the Entries with Additional Info report is disabled in Tables Planning Mode\"></span> ";
 
                 }
-
-                else $manage_tables_default_tbody .= "<span class=\"fa fa-lg fa-print text-muted\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Printing pullsheest is disabled in Tables Planning Mode\"></span> ";
-
-                if ($_SESSION['jPrefsTablePlanning'] == 0) {
-                    // Build print pullsheet link
-                    $manage_tables_default_tbody .= "<a id=\"modal_window_link\" class=\"hide-loader\" href=\"".$base_url."output/print.output.php?section=pullsheets&amp;go=all_entry_info&amp;id=".$row_tables['id']."\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Print the Entries with Additional Info Report for Table ".$row_tables['tableNumber'].": ".$row_tables['tableName']."\">";
-                    $manage_tables_default_tbody .= "<span class=\"fa fa-lg fa-plus-square\"></span>";
-                    $manage_tables_default_tbody .= "</a> ";
-                }
-
-                else $manage_tables_default_tbody .= "<span class=\"fa fa-lg fa-plus-square text-muted\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Printing the Entries with Additional Info report is disabled in Tables Planning Mode\"></span> ";
 
                 // Build flight link
                 if (($_SESSION['jPrefsQueued'] == "N") && (flight_count($row_tables['id'],1))) {
@@ -256,15 +260,18 @@ if (($action == "default") && ($filter == "default")) {
                     $manage_tables_default_tbody .= "</a> ";
                 }
 
+                if ($_SESSION['userAdminObfuscate'] == 0) {
 
-                if ($_SESSION['jPrefsTablePlanning'] == 0) {
-                    //Build add scores link
-                    $manage_tables_default_tbody .= "<a href=\"".$base_url."index.php?section=admin&amp;go=judging_scores&amp;action=".$scoreAction."&amp;id=".$row_tables['id']."\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Add/edit scores for Table ".$row_tables['tableNumber'].": ".$row_tables['tableName']."\">";
-                    $manage_tables_default_tbody .= "<span class=\"fa fa-lg fa-trophy\"></span>";
-                    $manage_tables_default_tbody .= "</a> ";
+                    if ($_SESSION['jPrefsTablePlanning'] == 0) {
+                        //Build add scores link
+                        $manage_tables_default_tbody .= "<a href=\"".$base_url."index.php?section=admin&amp;go=judging_scores&amp;action=".$scoreAction."&amp;id=".$row_tables['id']."\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Add/edit scores for Table ".$row_tables['tableNumber'].": ".$row_tables['tableName']."\">";
+                        $manage_tables_default_tbody .= "<span class=\"fa fa-lg fa-trophy\"></span>";
+                        $manage_tables_default_tbody .= "</a> ";
+                    }
+
+                    else $manage_tables_default_tbody .= "<span class=\"fa fa-lg fa-trophy text-muted\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Add/edit scores disabled in Tables Planning Mode\"></span> ";
+
                 }
-
-                else $manage_tables_default_tbody .= "<span class=\"fa fa-lg fa-trophy text-muted\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Add/edit scores disabled in Tables Planning Mode\"></span> ";
 
                 // Build delete link
                 $manage_tables_default_tbody .= "<a class=\"hide-loader\" href=\"".$base_url;
@@ -779,7 +786,9 @@ $(document).ready(function(){
         </button>
         <ul class="dropdown-menu">
             <li class="small"><a href="#" class="hide-loader" onclick="window.print()">Tables List</a></li>
+            <?php if ($_SESSION['userAdminObfuscate'] == 0) { ?>
     		<li class="small"><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=pullsheets&amp;go=judging_tables&amp;id=default">Pullsheets by Table</a></li>
+            <?php } ?>
             <li class="small"><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=assignments&amp;go=judging_assignments&amp;filter=judges&amp;view=name" title="Print Judge Assignments by Name">Judge Assignments By Last Name</a></li>
 			<li class="small"><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output//print.output.php?section=assignments&amp;go=judging_assignments&amp;filter=judges&amp;view=table" title="Print Judge Assignments by Table">Judge Assignments By Table</a></li>
    			<?php if ($totalRows_judging > 1) { ?>
@@ -963,7 +972,7 @@ $(document).ready(function() {
 							</div>
 						</div>
 					</div><!-- ./accordion -->
-                    <?php if ($_SESSION['jPrefsTablePlanning'] == 0) { ?>
+                    <?php if (($_SESSION['jPrefsTablePlanning'] == 0) && ($_SESSION['userAdminObfuscate'] == 0)) { ?>
                     <div class="panel panel-default">
 						<div class="panel-heading">
 							<h4 class="panel-title">
@@ -1052,7 +1061,7 @@ if (($manage_tables_default) && ($judging_session)) { ?>
                         <h4 class="modal-title" id="compOrgModalLabel">Judging/Competition Organization Info</h4>
                     </div>
                     <div class="modal-body">
-                        <p><a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging_preferences">Competition organization preferences</a> are set to:</p>
+                        <p>Competition organization preferences are set to:</p>
                         <ul>
                             <li><?php if ($_SESSION['jPrefsQueued'] == "Y") echo "Queued Judging (no flights)."; else echo "Non-Queued Judging (with flights)."; ?></li>
                             <li>Maximum Rounds <?php if ($totalRows_judging > 0) echo "(per location)"; ?>: <?php echo $_SESSION['jPrefsRounds']; ?>.</li>
@@ -1063,7 +1072,9 @@ if (($manage_tables_default) && ($judging_session)) { ?>
                         </ul>
                     </div>
                     <div class="modal-footer">
+                        <?php if ($_SESSION['userLevel'] == 0) { ?>
                         <a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=judging_preferences" class="btn btn-primary">Update Preferences</a>
+                        <?php } ?>
                     	<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
                     </div>
                 </div>
@@ -1084,13 +1095,15 @@ if (($manage_tables_default) && ($judging_session)) { ?>
                         <h4 class="modal-title" id="entryFormModalLabel">Best of Show Settings Info</h4>
                     </div>
                     <div class="modal-body">
-                        <p>A Best of Show round is enabled for the following <a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=style_types">Style Types</a>:</p>
+                        <p>A Best of Show round is enabled for the following Style Types:</p>
                     <ul>
                         <?php echo $bos_modal_body; ?>
                     </ul>
                     </div>
                     <div class="modal-footer">
+                        <?php if ($_SESSION['userLevel'] == 0) { ?>
                         <a href="<?php echo $base_url; ?>index.php?section=admin&amp;go=style_types" class="btn btn-primary">Update BOS Settings</a>
+                        <?php } ?>
                     	<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
                     </div>
                 </div>
