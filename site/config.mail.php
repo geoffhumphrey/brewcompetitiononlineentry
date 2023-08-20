@@ -49,7 +49,7 @@ $smtp_auth = TRUE;
 $smtp_username = "apikey";
 
 // SMTP password
-$smtp_password = "${SMTP_PASSWORD}";
+$smtp_password = "";
 
 // Enable TLS encryption, `tls` and `ssl` are accepted; leave blank if not used.
 $smtp_secure = "tls";
