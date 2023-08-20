@@ -28,7 +28,7 @@ if (ENABLE_MAILER) $mail_use_smtp = TRUE;
 else $mail_use_smtp = FALSE;
 
 // Set this field if you want to override the from address of 'noreply@[website]' address that gets added by default
-$mail_default_from = "";
+$mail_default_from = "noreply@nswhomebrewing.org";
 
 // Enable verbose debug output
 // 0 = off (for production use)
@@ -38,7 +38,7 @@ $smtp_debug_level = 2;
 
 // Specify main (and backup, if necessary - ';' separated) SMTP servers.
 // Your host will have one more of these configured for you for an outgoing mail server.
-$smtp_host = "";
+$smtp_host = "smtp.sendgrid.net";
 
 // Enable / Disable SMTP authentication
 // To use this option, you'll likely need to have an email address established on your server to send outgoing messages from.
@@ -46,15 +46,15 @@ $smtp_auth = TRUE;
 
 // SMTP username
 // Generally the email address you are sending from.
-$smtp_username = "";
+$smtp_username = "apikey";
 
 // SMTP password
-$smtp_password = "";
+$smtp_password = "SMTP_PASSWORD";
 
 // Enable TLS encryption, `tls` and `ssl` are accepted; leave blank if not used.
-$smtp_secure = "";
+$smtp_secure = "tls";
 
 // TCP port to connect to - likely to be 25, 465 or 587.
-$smtp_port = 465;
+$smtp_port = 587;
 
 ?>
