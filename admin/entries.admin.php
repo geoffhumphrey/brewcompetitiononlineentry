@@ -110,26 +110,25 @@ if ($totalRows_log > 0) {
 		$scoresheet_entry = FALSE;
 		$scoresheet_judging = FALSE;
 
+		$entry_confirmed = FALSE;
+		if ($row_log['brewConfirmed'] == 1) $entry_confirmed = TRUE;
+
+		$entry_allergens = FALSE;
+		if ((isset($row_log['brewPossAllergens'])) && (!empty($row_log['brewPossAllergens']))) $entry_allergens = TRUE;
+
 		$entry_number = sprintf("%06s",$row_log['id']);
 		$entry_name = html_entity_decode($row_log['brewName'],ENT_QUOTES|ENT_XML1,"UTF-8");
 		$entry_name = htmlentities($entry_name,ENT_QUOTES|ENT_SUBSTITUTE|ENT_HTML5,"UTF-8");
 
 		$judging_number = "";
-		if (isset($row_log['brewJudgingNumber'])) $judging_number = sprintf("%06s",$row_log['brewJudgingNumber']);
+		if ((isset($row_log['brewJudgingNumber'])) && (!empty($row_log['brewJudgingNumber']))) $judging_number = sprintf("%06s",$row_log['brewJudgingNumber']);
 
 		// If using electronic scoresheets, build links
 		if ($eval_db_table) {
 
 			if (in_array($row_log['id'], $evals)) {
 
-				$scoresheet_eval = TRUE;
-				
-				/*
-				$query_style = sprintf("SELECT id,brewStyleType FROM %s WHERE brewStyleVersion='%s'AND brewStyleGroup='%s' AND brewStyleNum='%s'",$prefix."styles",$style_set,$row_log['brewCategorySort'],$row_log['brewSubCategory']);
-				$style = mysqli_query($connection,$query_style) or die (mysqli_error($connection));
-				$row_style = mysqli_fetch_assoc($style);
-				*/
-				
+				$scoresheet_eval = TRUE;				
 				$view_link = $base_url."output/print.output.php?section=evaluation&amp;go=default&amp;view=all&amp;id=".$row_log['id']."&amp;tb=1";
 				if ($dbTable != "default") $view_link .= "&amp;dbTable=".$prefix."evaluation_".$archive_suffix;
 				$print_link = $base_url."output/print.output.php?section=evaluation&amp;go=default&amp;view=all&amp;id=".$row_log['id'];
@@ -188,12 +187,10 @@ if ($totalRows_log > 0) {
 			$required_info .= "<p><strong>Op. Info:</strong> ".$row_log['brewInfoOptional']."</p>";
 		}
 
-		if (!empty($row_log['brewPossAllergens'])) {
+		if ($entry_allergens) {
 			$entry_allergens_display .= "<br><strong class=\"text-danger small\">".$label_possible_allergens.": ".$row_log['brewPossAllergens']."</strong>";
 			$entry_allergen_row = "bg-warning";
 		}
-
-		if (($row_log['brewConfirmed'] == 0) || (empty($row_log['brewConfirmed']))) $entry_unconfirmed_row = "bg-danger";
 
 		// Judging Number
 		if (isset($row_log['brewJudgingNumber'])) {
@@ -201,7 +198,7 @@ if ($totalRows_log > 0) {
 			$entry_judging_num .= $judging_number;
 		}
 
-		if (($action != "print") && ($dbTable == "default")) {
+		if (($action != "print") && ($dbTable == "default") && ($_SESSION['userAdminObfuscate'] == 0)) {
 			$entry_judging_num_display .= "<div class=\"form-group\" id=\"judging-number-ajax-".$saving_random_num."-brewJudgingNumber-form-group\">";
 			$entry_judging_num_display .= $entry_judging_num_hidden;
 			$entry_judging_num_display .= "<input class=\"form-control input-sm hidden-print\" id=\"judging-number-ajax-".$saving_random_num."\" name=\"brewJudgingNumber".$row_log['id']."\" type=\"text\" pattern=\".{6,}\" title=\"Judging numbers must be six characters and cannot include the ^ character. The ^ character will be converted to a dash (-) upon submit. Use leading zeroes (e.g., 000123 or 01-001, etc.). Alpha characters will be converted to lower case for consistency and system use.\" size=\"8\" maxlength=\"6\" value=\"".$entry_judging_num."\" onblur=\"save_column('".$base_url."','brewJudgingNumber','brewing','".$row_log['id']."','".$row_log['brewBrewerID']."','default','default','default','judging-number-ajax-".$saving_random_num."')\" /> ";
@@ -211,7 +208,10 @@ if ($totalRows_log > 0) {
 			$entry_judging_num_display .= "<span id=\"judging-number-ajax-".$saving_random_num."-brewJudgingNumber-status-msg\"></span>";
 			$entry_judging_num_display .= "</div>";
 		}
-		else $entry_judging_num_display = $entry_judging_num;
+		else {
+			if ($_SESSION['userAdminObfuscate'] == 0) $entry_judging_num_display = $entry_judging_num;
+			else $entry_judging_num_display = "<i class=\"fa fa-sm fa-eye-slash\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Your user level settings do not allow viewing of judging numbers.\"></i>";
+		}
 
 		// Entry Style
 		if ($style_set == "BA") {
@@ -473,9 +473,10 @@ if ($totalRows_log > 0) {
 			if ((($dbTable == "default") && ($_SESSION['prefsDisplaySpecial'] == "J")) || ($dbTable != "default")) $entry_actions .= $scoresheet_link_2;
 		}
 
-		if ((empty($entry_allergen_row)) && (!empty($entry_unconfirmed_row))) $entry_row_color = $entry_unconfirmed_row;
-		elseif ((!empty($entry_allergen_row)) && (empty($entry_unconfirmed_row))) $entry_row_color = $entry_allergen_row;
-		elseif ((!empty($entry_allergen_row)) && (!empty($entry_unconfirmed_row))) $entry_row_color = $entry_unconfirmed_row;
+		if (!$entry_confirmed) $entry_unconfirmed_row = "bg-danger";
+		if ((!$entry_allergens) && (!$entry_confirmed)) $entry_row_color = $entry_unconfirmed_row;
+		elseif (($entry_allergens) && ($entry_confirmed)) $entry_row_color = $entry_allergen_row;
+		elseif (($entry_allergens) && (!$entry_confirmed)) $entry_row_color = $entry_unconfirmed_row;
 		else $entry_row_color = "";
 
 		$tbody_rows .= "\n<tr class=\"".$entry_row_color."\">";
@@ -491,30 +492,28 @@ if ($totalRows_log > 0) {
 
 		$tbody_rows .= "<span class=\"hidden\">".$row_log['brewCategorySort'].$row_log['brewSubCategory']."</span>";
 
-		if ((!empty($entry_unconfirmed_row)) || (!empty($entry_allergen_row))) {
-
-			if (!empty($entry_unconfirmed_row)) $tbody_rows .= "<a href=\"".$base_url."index.php?section=brew&amp;go=".$go."&amp;bid=".$row_log['uid']."&amp;action=edit&amp;id=".$row_log['id']."&amp;view=".$row_log['brewCategory']."-".$row_log['brewSubCategory']."\" data-toggle=\"tooltip\" title=\"Unconfirmed Entry - Select to Edit\">";
-			$tbody_rows .= "<span class=\"fa fa-lg fa-exclamation-triangle text-danger\"></span>";
-
-			if (!empty($entry_unconfirmed_row)) $tbody_rows .= "</a>";
-			$tbody_rows .= " ";
-
-
-			$entry_unconfirmed_display .= "<br><span class=\"text-danger small\"><strong>Unconfirmed entry.</strong> Edit or contact the participant to confirm.";
-		
+		if (!$entry_confirmed) {
+			$unconfirmed_entry_link = $base_url."index.php?section=brew&amp;go=".$go."&amp;bid=".$row_log['uid']."&amp;action=edit&amp;id=".$row_log['id']."&amp;view=".$row_log['brewCategory']."-".$row_log['brewSubCategory'];
+			$entry_unconfirmed_display .= "<br><a href=\"".$unconfirmed_entry_link."\" data-toggle=\"tooltip\" title=\"Unconfirmed Entry - Select to Edit\">";
+			$entry_unconfirmed_display .= "<span class=\"fa fa-exclamation-triangle text-danger\"></span>";
+			$entry_unconfirmed_display .= "</a>&nbsp;";
+			$entry_unconfirmed_display .= "<span class=\"text-danger small\"><strong>Unconfirmed entry.</strong> <a href=\"".$unconfirmed_entry_link."\">Edit</a> or contact the participant to confirm.";
 		}
 
-		if (!empty($required_info)) $tbody_rows .= " <a class=\"hide-loader hidden-print\" role=\"button\" data-toggle=\"collapse\" data-target=\"#collapseEntryInfo".$row_log['id']."\" aria-expanded=\"false\" aria-controls=\"collapseEntryInfo".$row_log['id']."\"><span class=\"fa fa-lg fa-info-circle <?php echo $hidden_sm; ?>\"></span></a> ";
+		if (!empty($required_info)) $tbody_rows .= "<a class=\"hide-loader hidden-print\" role=\"button\" data-toggle=\"collapse\" data-target=\"#collapseEntryInfo".$row_log['id']."\" aria-expanded=\"false\" aria-controls=\"collapseEntryInfo".$row_log['id']."\"><span class=\"fa fa-lg fa-info-circle <?php echo $hidden_sm; ?>\"></span></a> ";
 
 		$tbody_rows .= $entry_style_display;
-		$tbody_rows .= $entry_unconfirmed_display;
-		$tbody_rows .= $entry_allergens_display;
 
-		if (!empty($required_info)) $tbody_rows .= "<div class=\"visible-xs visible-sm hidden-print\" style=\"margin: 5px 0 5px 0\"><button class=\"btn btn-primary btn-block btn-xs\" type=\"button\" data-toggle=\"collapse\" data-target=\"#collapseEntryInfo".$row_log['id']."\" aria-expanded=\"false\" aria-controls=\"collapseEntryInfo".$row_log['id']."\">Entry Info <span class=\"fa fa-lg fa-info-circle\"></span></button></div>";
+		if (!empty($required_info)) { 
+			$tbody_rows .= "<div class=\"visible-xs visible-sm hidden-print\" style=\"margin: 5px 0 5px 0\"><button class=\"btn btn-primary btn-block btn-xs\" type=\"button\" data-toggle=\"collapse\" data-target=\"#collapseEntryInfo".$row_log['id']."\" aria-expanded=\"false\" aria-controls=\"collapseEntryInfo".$row_log['id']."\">Entry Info <span class=\"fa fa-lg fa-info-circle\"></span></button></div>";
 		
-		$tbody_rows .= "<div class=\"collapse small alert alert-info\" id=\"collapseEntryInfo".$row_log['id']."\">";
-	    $tbody_rows .= $required_info;
-	    $tbody_rows .= "</div>";
+			$tbody_rows .= "<div class=\"collapse small alert alert-info\" style=\"margin-top:5px;margin-bottom:5px;\" id=\"collapseEntryInfo".$row_log['id']."\">";
+	    	$tbody_rows .= $required_info;
+	    	$tbody_rows .= "</div>";
+	    }
+
+	    $tbody_rows .= $entry_unconfirmed_display;
+		$tbody_rows .= $entry_allergens_display;
 
 	    $tbody_rows .= "<section class=\"visible-sm visible-xs hidden-print\">";
 		$tbody_rows .= "<div style=\"margin: 5px 0 5px 0\"><button class=\"btn btn-default btn-block btn-xs\" type=\"button\" data-toggle=\"collapse\" data-target=\"#collapseAdminMenu".$row_log['id']."\" aria-expanded=\"false\" aria-controls=\"collapseAdminMenu".$row_log['id']."\">Admin Info <span class=\"fa fa-lg fa-info-circle\"></span></button></div>";
@@ -529,9 +528,6 @@ if ($totalRows_log > 0) {
 	    $tbody_rows .= "<p><strong>Actions:</strong> ".$entry_actions."</p>";
 	    $tbody_rows .= "</div>";
 	    $tbody_rows .= "</section>";
-
-
-		// $tbody_rows .= $required_info;
 
 		if ($row_log['brewerProAm'] == 1) $tbody_rows .= "<p><span class=\"label label-info hidden-print <?php echo $hidden_sm; ?>\">NOT PRO-AM ELIGIBLE</span><span class=\"label label-info visible-xs visible-sm\">NO PRO-AM</span></p>";
 		$tbody_rows .= "</td>";
@@ -732,7 +728,9 @@ $(document).ready(function () {
 				</button>
 				<ul class="dropdown-menu">
 					<li class="small"><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=admin&amp;go=entries&amp;action=print&amp;psort=entry_number">By Entry Number</a></li>
+					<?php if ($_SESSION['userAdminObfuscate'] == 0) { ?>
 					<li class="small"><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=admin&amp;go=entries&amp;action=print&amp;psort=judging_number">By Judging Number</a></li>
+					<?php } ?>
 					<li class="small"><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=admin&amp;go=entries&amp;action=print&amp;psort=category">By Style</a></li>
 					<li class="small"><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=admin&amp;go=entries&amp;action=print&amp;psort=brewer_name"><?php if ($pro_edition == 0) echo "By Brewer Last Name"; else echo "By Organization Name"; ?></a></li>
 					<li class="small"><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=admin&amp;go=entries&amp;action=print&amp;psort=entry_name">By Entry Name</a></li>
@@ -770,9 +768,11 @@ $(document).ready(function () {
 					<li class="small"><a class="hide-loader" href="<?php echo $base_url; ?>includes/process.inc.php?action=confirmed&amp;dbTable=<?php echo $brewing_db_table; ?>" data-confirm="Are you sure? This will mark ALL entries as confirmed and could be a large pain to undo.">Confirm All Entries</a></li>
 					<li class="small"><a class="hide-loader" href="<?php echo $base_url; ?>includes/process.inc.php?action=purge&amp;go=unconfirmed" data-confirm="Are you sure? This will delete ALL unconfirmed entries and/or entries without special ingredients/classic style info that require them from the database - even those that are less than 24 hours old. This cannot be undone.">Purge All Unconfirmed Entries</a></li>
 					<li class="small"><a class="hide-loader" href="<?php echo $base_url; ?>includes/process.inc.php?action=purge&amp;go=unpaid" data-confirm="Are you sure? This will delete ALL unpaid entries from the database and cannot be undone.">Purge All Unpaid Entries</a></li>
+					<?php if ($_SESSION['userAdminObfuscate'] == 0) { ?>
 					<li class="small"><a class="hide-loader" data-confirm="Are you sure you want to regenerate judging numbers for all entries? This will over-write all judging numbers, including those that have been assigned via the barcode or QR Code scanning function. The process may take a while depending upon the number of entires in your database." href="<?php echo $base_url; ?>includes/process.inc.php?section=admin&amp;go=<?php echo $go; ?>&amp;action=generate_judging_numbers&amp;sort=default">Regenerate Judging Numbers (Random)</a></li>
 					<li class="small"><a class="hide-loader" data-confirm="Are you sure you want to regenerate judging numbers for all entries? This will over-write all judging numbers, including those that have been assigned via the barcode or QR Code scanning function. The process may take a while depending upon the number of entires in your database. PLEASE NOTE that judging numbers will be in the following format: XX-123 (where XX is the category number or name)." href="<?php echo $base_url; ?>includes/process.inc.php?section=admin&amp;go=<?php echo $go; ?>&amp;action=generate_judging_numbers&amp;sort=legacy">Regenerate Judging Numbers (With Style Number Prefix)</a></li>
 					<li class="small"><a class="hide-loader" data-confirm="Are you sure you want to regenerate judging numbers for all entries? This will over-write all judging numbers, including those that have been assigned via the barcode or QR Code scanning function. The process may take a while depending upon the number of entires in your database." href="<?php echo $base_url; ?>includes/process.inc.php?section=admin&amp;go=<?php echo $go; ?>&amp;action=generate_judging_numbers&amp;sort=identical">Regenerate Judging Numbers (Same as Entry Numbers)</a></li>
+					<?php } ?>
 				</ul>
 				</ul>
 			</div>
@@ -928,7 +928,7 @@ $(document).ready(function () {
 <thead>
     <tr>
         <th nowrap>Entry</th>
-        <th nowrap>Judging <?php if (($action != "print") &&  ($dbTable == "default")) { ?><a href="#" tabindex="0" role="button" data-toggle="popover" data-trigger="hover" data-placement="auto top" data-container="body" title="Judging Numbers" data-content="Judging numbers are random six-digit numbers that are automatically assigned by the system. You can override each judging number when scanning in barcodes, QR Codes, or by entering it in the field provided. Judging numbers must be six characters and cannot include the ^ character. The ^ character will be converted to a dash (-) upon submit. Use leading zeroes (e.g., 000123 or 01-001, etc.). Alpha characters will be converted to lower case for consistency and system use."><span class="<?php echo $hidden_md; ?> hidden-print fa fa-question-circle"></span></a><?php } ?></th>
+        <th nowrap>Judging <?php if (($action != "print") && ($dbTable == "default") && ($_SESSION['userAdminObfuscate'] == 0)) { ?><a href="#" tabindex="0" role="button" data-toggle="popover" data-trigger="hover" data-placement="auto top" data-container="body" title="Judging Numbers" data-content="Judging numbers are random six-digit numbers that are automatically assigned by the system. You can override each judging number when scanning in barcodes, QR Codes, or by entering it in the field provided. Judging numbers must be six characters and cannot include the ^ character. The ^ character will be converted to a dash (-) upon submit. Use leading zeroes (e.g., 000123 or 01-001, etc.). Alpha characters will be converted to lower case for consistency and system use."><span class="<?php echo $hidden_md; ?> hidden-print fa fa-question-circle"></span></a><?php } ?></th>
         <th class="<?php echo $hidden_md; ?>">Name</th>
         <th>Style</th>
         <th class="<?php echo $hidden_sm; ?>"><?php if ($pro_edition == 1) echo "Organization"; else echo "Brewer"; ?></th>

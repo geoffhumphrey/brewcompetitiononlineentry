@@ -139,8 +139,8 @@ if ($setup_success) {
 	require_once (LANG.'language.lang.php');
 	require_once (INCLUDES.'headers.inc.php');
 	require_once (INCLUDES.'scrubber.inc.php');
-	if ($_SESSION['prefsSEF'] == "Y") $sef = "true";
-	else $sef = "false";
+	if ($_SESSION['prefsSEF'] == "Y") $sef = TRUE;
+	else $sef = FALSE;
 
 	if ($no_updates_needed) $_SESSION['currentVersion'] = 1;
 	else $_SESSION['currentVersion'] = 0;

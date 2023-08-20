@@ -30,6 +30,9 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 		$hasher_question = new PasswordHash(8, false);
 		$hash_question = $hasher_question->HashPassword($userQuestionAnswer);
 
+		$userAdminObfuscate = 1;
+		if ($_POST['userLevel'] == 0) $userAdminObfuscate = 0;
+
 		$update_table = $prefix."users";
 		$data = array(
 			'user_name' => $username,
@@ -37,7 +40,8 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 			'password' => $hash,
 			'userQuestion' => sterilize($_POST['userQuestion']),
 			'userQuestionAnswer' => $hash_question,
-			'userCreated' =>  $db_conn->now()
+			'userCreated' =>  $db_conn->now(),
+			'userAdminObfuscate' => $userAdminObfuscate
 		);
 
 		$result = $db_conn->insert ($update_table, $data);

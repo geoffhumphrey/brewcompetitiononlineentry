@@ -34,8 +34,8 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 	$evalFlavorScore = 0;
 	$evalMouthfeelScore = 0;
 
-	if ($_SESSION['prefsSEF'] == "Y") $sef = "true";
-	else $sef = "false";
+	if ($_SESSION['prefsSEF'] == "Y") $sef = TRUE;
+	else $sef = FALSE;
 
 	if ($view == "admin") $insertGoTo = $base_url."index.php?section=evaluation&go=default&filter=default&view=admin";
 	else $insertGoTo = build_public_url("evaluation","default","default","default",$sef,$base_url);

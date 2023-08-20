@@ -499,7 +499,7 @@ function score_custom_winning_choose($special_best_info_db_table,$special_best_d
 		
 		$r = "<li class=\"disabled small\"><a href=\"#\">No custom categories have been defined</a></li>";
 		$r .= "<li role=\"separator\" class=\"divider\"></li>";
-		$r .= "<li class=\"small\"><a href=\"".$base_url."index.php?section=admin&amp;go=special_best&amp;action=add\">Add a Custom Style</a></li>";
+		$r .= "<li class=\"small\"><a href=\"".$base_url."index.php?section=admin&amp;go=special_best&amp;action=add\">Add a Custom Category</a></li>";
 
 	}
 
@@ -1003,12 +1003,12 @@ function user_info($uid) {
 	include (CONFIG.'config.php');
 	mysqli_select_db($connection,$database);
 	
-	$query_user1 = sprintf("SELECT id,userLevel FROM %s WHERE id = '%s'", $prefix."users", $uid);
+	$query_user1 = sprintf("SELECT id,userLevel,userAdminObfuscate FROM %s WHERE id = '%s'", $prefix."users", $uid);
 	$user1 = mysqli_query($connection,$query_user1) or die (mysqli_error($connection));
 	$row_user1 = mysqli_fetch_assoc($user1);
 
 	$return = "";
-	if ($row_user1) $return = $row_user1['id']."^".$row_user1['userLevel'];
+	if ($row_user1) $return = $row_user1['id']."^".$row_user1['userLevel']."^".$row_user1['userAdminObfuscate'];
 	
 	return $return;
 

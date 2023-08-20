@@ -76,7 +76,7 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 	// echo $referrer['host']."<br>".$_SERVER['SERVER_NAME']; exit;
 }
 
-if ((isset($_SESSION['prefsSEF'])) && ($_SESSION['prefsSEF'] == "Y")) $sef = "true";
+if ((isset($_SESSION['prefsSEF'])) && ($_SESSION['prefsSEF'] == "Y")) $sef = TRUE;
 
 if (((isset($_SERVER['HTTP_REFERER'])) && ($referrer['host'] == $_SERVER['SERVER_NAME'])) && ((isset($_SESSION['prefs'.$prefix_session])) || ($setup_free_access))) {
 

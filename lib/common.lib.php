@@ -152,32 +152,26 @@ function build_form_action($base_url,$section,$go,$action,$filter,$id,$dbTable,$
 }
 
 function build_public_url($section="default",$go="default",$action="default",$id="default",$sef,$base_url) {
-
-	include (CONFIG.'config.php');
-	if (NHC) {
-		$url = "index.php?section=".$section;
+	
+	if ($_SESSION['prefsSEF'] == 'Y') {
+		$url = $base_url."";
+		if ($section != "default") $url .= $section."/";
+		if ($go != "default") $url .= $go."/";
+		if ($action != "default") $url .= $action."/";
+		if ($id != "default") $url .= $id."/";
+		return rtrim($url,"/");
+	}
+	
+	else {
+		$url = $base_url."index.php?section=".$section;
 		if ($go != "default") $url .= "&amp;go=".$go;
 		if ($action != "default") $url .= "&amp;action=".$action;
+		if ($id != "default") $url .= "&amp;id=".$id;
 		return $url;
 	}
-	else {
-		if ($sef == "true") {
-			$url = $base_url."";
-			if ($section != "default") $url .= $section."/";
-			if ($go != "default") $url .= $go."/";
-			if ($action != "default") $url .= $action."/";
-			if ($id != "default") $url .= $id."/";
-			return rtrim($url,"/");
-		}
-		if ($sef == "false") {
-			$url = $base_url."index.php?section=".$section;
-			if ($go != "default") $url .= "&amp;go=".$go;
-			if ($action != "default") $url .= "&amp;action=".$action;
-			if ($id != "default") $url .= "&amp;id=".$id;
-			return $url;
-		}
-	}
+	
 }
+
 /*
 function build_admin_url ($section="default",$go="default",$action="default",$id="default",$filter="default",$view="default",$sef="true",$base_url) {
 	if ($sef == "true") {

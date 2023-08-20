@@ -7,6 +7,9 @@
 //require(DB.'mods.db.php');
 
 function mod_info($info,$method) {
+
+	$output = "";
+	
 	if ($method == 1) {
 		switch($info) {
 			case "0": $output = "Informational (Basic HTML)"; break;

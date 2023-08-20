@@ -145,10 +145,9 @@ $tie_break_rules = array(
  * Future release:
  * Convert the array to JSON array and move to contest_info DB table - 
  * contestClubs column.
- * $club_array = json_decode($_SESSION['contestClubs'], true);
+ * 
+ * Updated June 27, 2023
  */
-
-// Updated May 1, 2023
 
 $club_array = array(
     "1.090",
@@ -2465,7 +2464,9 @@ $club_array = array(
     "Butler County Brewing Society (BCBS)",
     "The Brü Club",
     "NINJA Homebrewers",
-    "Master Homebrewer Program"
+    "Master Homebrewer Program",
+    "Cider, Homebrew, And Mead Production Specialists (CHAMPS)",
+    "Ottawa's Homebrew Society"
 );
 
 $club_array_json = json_encode($club_array);
