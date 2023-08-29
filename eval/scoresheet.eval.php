@@ -461,6 +461,7 @@ if ($entry_found) {
   // Sticky score
   $sticky_score_tally = "<div id=\"sticky-score\" class=\"pull-right\">";
   $sticky_score_tally .= "<div class=\"pull-right\" style=\"display:block; font-size: 1.5em; padding-right: 5px;  margin-bottom: 15px;\">";
+  $sticky_score_tally .= "<i style=\"padding: 5px 5px 0 0; font-size: .75em\"\" id=\"warning-indicator-icon\" class=\"fa fa-exclamation-triangle text-danger\"></i>";
   $sticky_score_tally .= "<a style=\"padding-top: 5px; font-size: .75em\"\" id=\"show-hide-status-btn\" data-toggle=\"collapse\" href=\"#scoring-guide-status\" aria-controls=\"scoring-guide-status\"><span id=\"toggle-icon\" class=\"fa fa-chevron-circle-up\"></span></a>";
   $sticky_score_tally .= "</div>";
   
@@ -474,9 +475,20 @@ if ($entry_found) {
   
   $sticky_score_tally .= "<section position: absolute; width: 100%; background-color: rgba(220,220,220,0.80);\" id=\"scoring-guide-status\" class=\"well sticky-glow collapse in\">";
   
+  // Elapsed time
   $sticky_score_tally .= "<p><span id=\"elapsed-time-p\"><i class=\"fa fa-clock\"></i> <strong>".$label_elapsed_time.": <span id=\"elapsed-time\"></span></strong></span><br><small id=\"session-end-eval-p\">".$label_auto_log_out." <span id=\"session-end-eval\"></span></small>";
   $sticky_score_tally .= "</p>";
+
+  // 15-minute courtesy warning.
+  $sticky_score_tally .= "<p id=\"courtesy-alert-warning-15\">";
+  $sticky_score_tally .= "<span id=\"courtesy-alert-warning-15-header\"><i class=\"fa fa-exclamation-circle\"></i> <strong>".$label_please_note."<span id=\"elapsed-time\"></strong></span>";
+  $sticky_score_tally .= "<br>";
+  $sticky_score_tally .= "<small>";
+  $sticky_score_tally .= $evaluation_info_071;
+  $sticky_score_tally .= "</small>";
+  $sticky_score_tally .= "</p>";
   
+  // Show score range and consensus statuses if scored previously
   if ($scored_previously) {
     $sticky_score_tally .= "<p style=\"padding-top: 10px;\">";
     $sticky_score_tally .= "<i id=\"scoring-guide-status-icon\" class=\"fa fa-chevron-circle-right\"></i> <span id=\"scoring-guide-status-msg\"><strong>".$label_score_range_status."</strong></span>";
@@ -543,6 +555,7 @@ if ($eval_prevent_edit) $header_elements .= sprintf("<p>%s</p>",$header_text_104
 <!-- https://github.com/seiyria/bootstrap-slider -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/11.0.2/bootstrap-slider.min.js"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/11.0.2/css/bootstrap-slider.min.css" />
+
 <script>
 var judgeScores = <?php echo json_encode($judge_scores); ?>;
 var consensusScores = <?php echo json_encode($consensus_scores); ?>;
@@ -566,17 +579,25 @@ var score_range_ok = "<?php echo $label_score_range_ok; ?>";
 var score_range_ok_text = "<?php echo $evaluation_info_047; ?>";
 var score_range_ok_output = "<span class=\"text-success\"><strong>" + score_range_ok + "</strong><br><small><strong>" + score_range_ok_text + "</strong></small></span>";
 </script>
-<script src="<?php echo $base_url;?>js_includes/eval_checks.min.js"></script>
+
+<script src="<?php echo $base_url;?>js_source/eval_checks.js"></script>
+
 <script>
 $(document).ready(function() {
-    <?php if ($action == "edit") { ?>
-    displayCalc(<?php echo $eval_score; ?>);
-    checkScoreRange(<?php echo $eval_score; ?>,judgeScores,score_range,0);
-    checkConsensus(consensusScores);
-    <?php }?>
-    $('#show-hide-status-btn').click(function(){
+  
+  $("#courtesy-alert-warning-15").hide();
+  $("#warning-indicator-icon").hide();
+  
+  <?php if ($action == "edit") { ?>
+  displayCalc(<?php echo $eval_score; ?>);
+  checkScoreRange(<?php echo $eval_score; ?>,judgeScores,score_range,0);
+  checkConsensus(consensusScores);
+  <?php }?>
+  
+  $('#show-hide-status-btn').click(function(){
       $('#toggle-icon').toggleClass('fa-chevron-circle-up fa-chevron-circle-down');
-    });
+  });
+
 });
 </script>
 <style type="text/css">

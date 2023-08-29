@@ -45,15 +45,20 @@ if (($session_active) && ($_SESSION['userLevel'] <= 2)) {
 
 		if ($go == "evalPlace") {
 			$input = filter_var($_POST['evalPlace'],FILTER_SANITIZE_STRING);
+			if (empty($input)) $data = array($go => NULL);
+			else {
+				if ($input == "0") $data = array($go => NULL);			
+				else $data = array($go => $input);
+			}
+		}
+
+		if ($go == "evalMiniBOS") {
+			$input = filter_var($_POST['evalMiniBOS'],FILTER_SANITIZE_STRING);
+			if (empty($input)) $data = array($go => 0);
+			else $data = array($go => $input);
 		}
 
 		$update_table = $prefix.$action;
-
-		if (empty($input)) $data = array($go => NULL);
-		else {
-			if ($input == "0") $data = array($go => NULL);			
-			else $data = array($go => $input);
-		}
 
 		$db_conn->where ('eid', $id);
 		if ($db_conn->update ($update_table, $data)) $status = 1;

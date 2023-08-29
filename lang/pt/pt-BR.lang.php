@@ -1784,7 +1784,7 @@ $evaluation_info_067 = "Forneça uma classificação.";
 $evaluation_info_068 = "Forneça a pontuação de consenso - mínimo de 5, máximo de 50.";
 $evaluation_info_069 = "Pelo menos dois juízes do voo em que sua inscrição foi inscrita chegaram a um consenso sobre a pontuação final atribuída. Não é necessariamente uma média das pontuações individuais.";
 $evaluation_info_070 = "Com base na planilha de pontuação BJCP para";
-$evaluation_info_071 = "15 minutos se passaram desde que você iniciou sua avaliação. Embora você deva ter bastante tempo antes de ser desconectado automaticamente, este é um aviso de cortesia para certificar-se de concluir sua avaliação em tempo hábil para manter o ritmo de julgamento em uma taxa aceitável.";
+$evaluation_info_071 = "15+ minutos se passaram.";
 $evaluation_info_072 = "Por padrão, o Logout automático é estendido para 30 minutos para avaliações de entrada.";
 
 $alert_text_090 = "Sua sessão irá expirar em dois minutos. Você pode permanecer na página atual para terminar seu trabalho antes que o tempo expire, atualizar esta página para continuar sua sessão atual (os dados do formulário podem ser perdidos) ou fazer logout.";

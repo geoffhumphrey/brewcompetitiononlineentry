@@ -4192,7 +4192,11 @@ function is_html($string) {
 function style_number_const($style_category_number,$style_sub,$style_set_display_separator,$method) {
 	switch ($method) {
 		case 0:
-			if ((isset($_SESSION['prefsStyleSet'])) && ($_SESSION['prefsStyleSet'] != "BA")) return ltrim($style_category_number,"0").$style_set_display_separator.ltrim($style_sub,"0");
+			if (isset($_SESSION['prefsStyleSet'])) {
+				if ($_SESSION['prefsStyleSet'] == "BA") return "";
+				elseif (($_SESSION['prefsStyleSet'] == "BJCP2021") || ($_SESSION['prefsStyleSet'] == "BJCP2015")) return ltrim($style_category_number,"0").$style_set_display_separator.ltrim($style_sub,"0");
+				else return $style_category_number.$style_set_display_separator.$style_sub;
+			}
 			else return "";
 		break;
 

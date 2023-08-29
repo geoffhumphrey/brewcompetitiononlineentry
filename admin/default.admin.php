@@ -2159,7 +2159,9 @@ if ($recently_updated) {
                                         <?php } ?>
                                         <li><a href="#" role="button" data-toggle="modal" data-target="#dashboard-help-modal-reports">Reports</a></li>
                                         <li><a href="#" role="button" data-toggle="modal" data-target="#dashboard-help-modal-data-exports">Data Exports</a></li>
+                                        <?php if ($_SESSION['userLevel'] == 0) { ?>
                                         <li><a href="#" role="button" data-toggle="modal" data-target="#dashboard-help-modal-data-mgmt">Data Management</a></li>
+                                        <?php } ?>
                                     </ul>
                                 </div>
                             </div><!-- ./row -->
@@ -2179,15 +2181,13 @@ if ($recently_updated) {
                                         <li><a href="#" role="button" data-toggle="modal" data-target="#dashboard-help-modal-materials">Print Judging Day Materials?</a></li>
                                         <li><a href="#" role="button" data-toggle="modal" data-target="#dashboard-help-modal-bos-judges">Assign Best of Show Judges?</a></li>
                                         <?php if ($_SESSION['userLevel'] == 0) { ?>
+                                        <?php if ($_SESSION['userAdminObfuscate'] == 0)  { ?>
                                         <li><a href="#" role="button" data-toggle="modal" data-target="#dashboard-help-modal-bos-results">Enter Scores and BOS Results?</a></li>
+                                        <?php } ?>
                                         <li><a href="#" role="button" data-toggle="modal" data-target="#dashboard-help-modal-winning">Display Winning Entries?</a></li>
                                         <li><a href="#" role="button" data-toggle="modal" data-target="#dashboard-help-modal-pro-am">Display Pro-Am Winner(s)?</a></li>
                                         <?php } ?>
                                         <li><a class="hide-loader" href="https://github.com/geoffhumphrey/brewcompetitiononlineentry/issues/new/choose" target="_blank">Report an Issue?</a></li>
-                                        <!--
-                                        <li><a href="#" role="button" data-toggle="modal" data-target="#dashboard-help-modal-winner-rpt">Print a Winner Report</a></li>
-                                        <li><a href="#" role="button" data-toggle="modal" data-target="#dashboard-help-modal-bjcp-points">Report BJCP Judging Points</a></li>
-                                        -->
                                     </ul>
                                     <div class="alert alert-info">
                                         <?php echo $server_environ; ?>

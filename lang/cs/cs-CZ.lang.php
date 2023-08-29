@@ -1781,7 +1781,7 @@ $evaluation_info_067 = "Uveďte prosím hodnocení.";
 $evaluation_info_068 = "Uveďte konsensuální skóre - minimálně 5, maximálně 50.";
 $evaluation_info_069 = "Nejméně dva degustátoři ze sady, do které byl váš vzorek zadán, dosáhli konsensu o vašem konečném skóre. Není to nutně průměr jednotlivých skóre.";
 $evaluation_info_070 = "Na základě degustačního listu BJCP";
-$evaluation_info_071 = "Od vašeho hodnocení uplynulo 15 minut. I když máte dostatek času, než vás systém automaticky odhlásí, toto je zdvořilostní varování, abyste se ujistili, že dokončíte své hodnocení včas a abyste udrželi tempo posuzování v přijatelné míře.";
+$evaluation_info_071 = "Uplynulo 15+ minut.";
 $evaluation_info_072 = "Ve výchozím nastavení je automatické odhlášení prodlouženo na 30 minut pro hodnocení vzorků.";
 
 $alert_text_090 = "Vaše relace vyprší za dvě minuty. Můžete zůstat na aktuální stránce, abyste mohli dokončit práci, než vyprší čas, obnovit tuto stránku a pokračovat v aktuální relaci (data formuláře se mohou ztratit) nebo se odhlásit.";

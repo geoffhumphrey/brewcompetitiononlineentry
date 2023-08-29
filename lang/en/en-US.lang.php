@@ -367,7 +367,7 @@ $label_register_judge_quick = "Register a Judge or Steward (Quick)";
 $label_all_participants = "All Participants";
 $label_open = "Open";
 $label_closed = "Closed";
-$label_judging_loc = "Judging Sessions and Dates";
+$label_judging_loc = "Judging Sessions";
 $label_new = "New";
 $label_old = "Old";
 $label_sure = "Are You Sure?";
@@ -1917,7 +1917,7 @@ $evaluation_info_067 = "Please provide a rating.";
 $evaluation_info_068 = "Please provide the consensus score - minimum of 5, maximum of 50.";
 $evaluation_info_069 = "At least two judges from the flight in which your submission was entered reached consensus on your final assigned score. It is not necessarily an average of the individual scores.";
 $evaluation_info_070 = "Based upon the BJCP scoresheet for";
-$evaluation_info_071 = "15 minutes have elapsed since you began your evaluation. While you should have plenty of time left before being automatically logged out, this is a courtesy warning to make sure to complete your evaluation in a timely manner to keep the pace of judging moving at an acceptable rate.";
+$evaluation_info_071 = "15+ minutes have elapsed.";
 $evaluation_info_072 = "By default, Auto Log Out is extended to 30 minutes for entry evaluations.";
 
 $alert_text_090 = "Your session will expire in two minutes. You can stay on the current page to finish your work before time expires, refresh this page to continue your current session (unsaved form data may be lost), or log out.";
@@ -2083,6 +2083,18 @@ $evaluation_info_103 = "Please provide your score - minimum of 5, maximum of 50.
 
 $brewer_text_051 = "Select the industry organizations that you are affiliated with as an employee, volunteer, etc. This is to make sure there are not any conflicts of interest when assigning judges and stewards to evaluate entries.";
 $brewer_text_052 = "<strong>If any industry organization is <u>not</u> listed in the drop-down above, enter it here.</strong> Separate each organization's name by comma (,) or semi-colon (;). Some symbols are not allowed, including double-quotation marks (&quot;) and percent (&#37;).";
+
+
+/**
+ * ------------------------------------------------------------------------
+ * Version 2.6.0 Additions
+ * ------------------------------------------------------------------------
+ */
+
+$evaluation_info_104 = "Not all judges indicated this entry advanced to the Mini-BOS round. Please verify and select Yes or No above.";
+$evaluation_info_105 = "The following entries have mismatched Mini-BOS indications from judges:";
+
+$label_non_judging = "Non-Judging Sessions";
 
 /**
  * ----------------------------------------------------------------------------------

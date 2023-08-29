@@ -8,6 +8,16 @@
  **************************************
  */
 
+// Mini BOS
+$mini_bos_count_flag = FALSE;
+$score_previous_other = FALSE;
+$mini_bos_count = 0;
+$eval_count = 0;
+$mini_bos_alert_css = "";
+$mini_bos_alert_icon = "";
+$mini_bos_checked_yes = "";
+$mini_bos_checked_no = "";
+
 foreach ($eval_scores as $key => $value) {
 
 // Display Edit button for those evaluations that have been entered
@@ -55,9 +65,34 @@ foreach ($eval_scores as $key => $value) {
 		$actions .= "<a class=\"hide-loader\" href=\"".$delete_link."\" data-toggle=\"tooltip\" title=\"Delete this evaluation completed by ".$eval_judge[0]." ".$eval_judge[1].".\" data-confirm=\"Are you sure you want to delete this evaluation completed by ".$eval_judge[0]." ".$eval_judge[1]."? This cannot be undone.\"><i class=\"fa fa-lg fa-trash-o\"></i></a> ";
 		$actions .= "</div>";
 		$actions .= "</div>";
+		
+		$score_previous_other = TRUE;
+		$eval_count++;
+		$mini_bos_count += $value['mini_bos'];
 
 	}
 
+}
+
+if (($mini_bos_count > 0) && ($eval_count > $mini_bos_count)) $mini_bos_count_flag = TRUE;
+
+if ($mini_bos_count_flag) {
+	$mini_bos_alert_css = "text-danger";
+	$mini_bos_alert_icon = " <i class=\"fa fa-exclamation-triangle\"></i>";
+	$mini_bos_mismatch[] = array(
+	"table_id" => $tbl_id,
+	"table_name" => $tbl_num_disp." - ".$tbl_name_disp,
+	"id" => $row_entries['id'],
+	"brewJudgingNumber" => $number,
+	"brewCategorySort" => $row_entries['brewCategorySort'],
+	"brewSubCategory" => $row_entries['brewSubCategory'],
+	"brewStyle" => $row_entries['brewStyle']
+	);
+}
+
+if ($mini_bos_count == 0) $mini_bos_checked_no = "CHECKED";
+if ($mini_bos_count > 0) {
+	if ($eval_count == $mini_bos_count) $mini_bos_checked_yes = "CHECKED";	
 }
 
 if (!empty($eval_places)) {
@@ -121,6 +156,31 @@ if ($count_evals > 0) {
 	$eval_place_actions .= "</div>";
 	$eval_place_actions .= "</div>";
 	$eval_place_actions .= "</div>";
+
+	// Mini-BOS
+	$eval_place_actions .= "<div class=\"row\">";
+	$eval_place_actions .= "<div class=\"col col-lg-6 col-md-7 col-sm-12 ".$mini_bos_alert_css."\">";
+	$eval_place_actions .= $label_mini_bos;
+	$eval_place_actions .= "</div>";
+	$eval_place_actions .= "<div style=\"margin-bottom:5px;\" class=\"col col-lg-6 col-md-5 col-sm-12\">";
+	$eval_place_actions .= "<div class=\"input-group\">";
+	$eval_place_actions .= "<label class=\"radio-inline ".$mini_bos_alert_css."\">";
+	$eval_place_actions .= "<input type=\"radio\" name=\"evalMiniBOS".$row_entries['id']."\" value=\"1\" onclick=\"save_column('".$base_url."','evalMiniBOS','evaluation','".$row_entries['id']."','1','default','default','default','eval-mbos-ajax-".$row_entries['id']."','value')\" ".$mini_bos_checked_yes.">Yes";
+	$eval_place_actions .= "</label>";
+	$eval_place_actions .= "<label class=\"radio-inline ".$mini_bos_alert_css."\">";
+	$eval_place_actions .= "<input type=\"radio\" name=\"evalMiniBOS".$row_entries['id']."\" value=\"0\" onclick=\"save_column('".$base_url."','evalMiniBOS','evaluation','".$row_entries['id']."','0','default','default','default','eval-mbos-ajax-".$row_entries['id']."','value')\" ".$mini_bos_checked_no.">No";
+	$eval_place_actions .= "</label>";
+	$eval_place_actions .= "</div>";
+	$eval_place_actions .= "<br><span id=\"eval-mbos-ajax-".$row_entries['id']."-evalMiniBOS-status\"></span> ";
+	$eval_place_actions .= "<span id=\"eval-mbos-ajax-".$row_entries['id']."-evalMiniBOS-status-msg\"></span> ";
+   	$eval_place_actions .= "</div>";
+	if ($mini_bos_count_flag) {
+		$eval_place_actions .= "<div id=\"eval-mbos-ajax-".$row_entries['id']."-evalMiniBOS-hide\" style=\"margin-bottom:5px;\" class=\"col col-sm-12\">";
+		$eval_place_actions .= sprintf("<span class=\"small %s\">%s %s</span>",$mini_bos_alert_css,$mini_bos_alert_icon,$evaluation_info_104);
+		$eval_place_actions .= "</div>";
+	}
+	$eval_place_actions .= "</div>";
+	$eval_place_actions .= "<hr style=\"margin: 10px 0 10px 0; border: 0; border-top: 1px solid #ddd;\">";
 }
 
 if ($count_evals == 0) {

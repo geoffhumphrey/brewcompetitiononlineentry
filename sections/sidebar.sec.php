@@ -66,6 +66,10 @@ if ($section != "admin") {
 	$page_info8 = "";
 	$header1_600 = "";
 	$page_info600 = "";
+	$header1_700 = "";
+	$page_info700 = "";
+
+	$non_judging_display = "";
 
 	if ((isset($_SESSION['loginUsername'])) && ($_SESSION['brewerDiscount'] == "Y") && ($_SESSION['contestEntryFeePasswordNum'] != "")) $discount = TRUE;
 	else $discount = FALSE;
@@ -150,7 +154,6 @@ if ($section != "admin") {
 			$page_info200 .= sprintf("<strong class=\"text-success\">%s %s</strong> %s %s, %s.", $total_paid, strtolower($label_paid_entries), $sidebar_text_026, $current_time, $current_date_display);
 			if ($row_limits['prefsEntryLimitPaid'] > 0) $page_info200 .= sprintf(" %s <strong>%s</strong> <em>%s</em> %s",$entry_info_text_019,$row_limits['prefsEntryLimitPaid'],strtolower($label_paid),$entry_info_text_020);
 			$page_info200 .= "</p>";
-
 
 		}
 
@@ -312,11 +315,34 @@ if ($section != "admin") {
 		
 		do {
 
-			if ($row_judging['judgingLocType'] < 2) {
+			if ($row_judging['judgingLocType'] == 2) {
+
+				$non_judging_display .= "<p>";
+
+				if ($row_judging['judgingLocName'] != "") $non_judging_display .= "<strong>".$row_judging['judgingLocName']."</strong>";
+
+				if ($logged_in) {
+					$address = rtrim($row_judging['judgingLocation'],"&amp;KeepThis=true");
+					$address = str_replace(' ', '+', $address);
+					$location_link = "http://maps.google.com/maps?f=q&source=s_q&hl=en&q=".$address;
+					$location_tooltip = "Map to ".$row_judging['judgingLocName'];
+				}
+				else {
+					$location_link = "#";
+					$location_tooltip = "Log in to view the ".$row_judging['judgingLocName']." location.";
+				}
+				if ($row_judging['judgingLocation'] != "") $non_judging_display .= " <a class=\"hide-loader\" href=\"".$location_link."\" target=\"".$location_target."\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"".$location_tooltip."\"> <span class=\"fa fa-lg fa-map-marker\"></span></a>";
+
+				if ($row_judging['judgingDate'] != "") $non_judging_display .=  "<br />".getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_judging['judgingDate'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "short", "date-time");
+
+				$non_judging_display .= "</p>";
+			}
+
+			else {
 
 				$page_info400 .= "<p>";
 				if ($row_judging['judgingLocName'] != "") $page_info400 .= "<strong>".$row_judging['judgingLocName']."</strong>";
-				if ($row_judging['judgingLocType'] == "0") {
+				if ($row_judging['judgingLocType'] == 0) {
 					if ($logged_in) {
 						$address = rtrim($row_judging['judgingLocation'],"&amp;KeepThis=true");
 						$address = str_replace(' ', '+', $address);
@@ -325,17 +351,20 @@ if ($section != "admin") {
 					}
 					else {
 						$location_link = "#";
-						$location_tooltip = "Log in to view the ".$row_judging['judgingLocName']." location";
+						$location_tooltip = "Log in to view the ".$row_judging['judgingLocName']." location.";
 					}
 					if ($row_judging['judgingLocation'] != "") $page_info400 .= " <a class=\"hide-loader\" href=\"".$location_link."\" target=\"".$location_target."\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"".$location_tooltip."\"> <span class=\"fa fa-lg fa-map-marker\"></span></a>";
 				}
+				
 				if ($row_judging['judgingDate'] != "") $page_info400 .=  "<br />".getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_judging['judgingDate'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "short", "date-time");
 				if ($row_judging['judgingDateEnd'] != "") $page_info400 .=  " ".$sidebar_text_004." ".getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_judging['judgingDateEnd'], $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "short", "date-time");
-				$page_info400 .= ".</p>";
-				if ($row_judging['judgingLocType'] == "1") {
-					if (!empty($row_judging['judgingLocation'])) $page_info400 .= "<p><small>".$row_judging['judgingLocation']."</small></p>";
+				
+				if ($row_judging['judgingLocType'] == 1) {
+					if (!empty($row_judging['judgingLocation'])) $page_info400 .= "<br /><small>".$row_judging['judgingLocation']."</small>";
 				}
 
+				$page_info400 .= ".</p>";
+			
 			}
 			
 		} while ($row_judging = mysqli_fetch_assoc($judging));
@@ -344,6 +373,18 @@ if ($section != "admin") {
 	
 	$page_info400 .= "</div>";
 	$page_info400 .= "</div>";
+
+	// Non-Judging Location(s)
+	if (!empty($non_judging_display)) {
+		$header1_700 .= "<div class=\"hidden-print panel panel-info\">";
+		$header1_700 .= "<div class=\"panel-heading\">";
+		$header1_700 .= sprintf("<h4 class=\"panel-title\">%s</h4>",$label_non_judging);
+		$header1_700 .= "</div>";
+		$page_info700 .= "<div class=\"panel-body\">";
+		$page_info700 .= $non_judging_display;
+		$page_info700 .= "</div>";
+		$page_info700 .= "</div>";
+	}
 
 	if (!HOSTED) {
 
@@ -402,6 +443,9 @@ if ($section != "admin") {
 
 	echo $header1_400;
 	echo $page_info400;
+
+	echo $header1_700;
+	echo $page_info700;
 
 	echo $header1_100;
 	echo $page_info100;

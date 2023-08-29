@@ -300,7 +300,7 @@ if ($go == "all_entry_info") {
 						include (DB.'output_pullsheets_entries.db.php');
 						$style = style_number_const($row_entries['brewCategorySort'],$row_entries['brewSubCategory'],$_SESSION['style_set_display_separator'],0);
 						$style_special = $row_entries['brewCategorySort']."^".$row_entries['brewSubCategory']."^".$_SESSION['prefsStyleSet'];
-
+ 
 						do {
 
 							$show_record = FALSE;

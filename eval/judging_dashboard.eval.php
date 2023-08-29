@@ -108,11 +108,21 @@ if ($score_previous) {
 	
 }
 
+$mini_bos_count_flag = FALSE;
+$mini_bos_count = 0;
+$eval_count = 0;
+
 foreach ($eval_scores as $key => $value) {
+
 	if ($value['eid'] == $row_entries['id']) {
 		$score_previous_other = TRUE;
+		$eval_count++;
+		$mini_bos_count += $value['mini_bos'];
 	}
+	
 }
+
+if (($mini_bos_count > 0) && ($eval_count > $mini_bos_count)) $mini_bos_count_flag = TRUE;
 
 if (($judging_open) && (strpos($row_table_assignments['assignRoles'], "HJ") !== false)) {
 
@@ -158,6 +168,41 @@ if (($judging_open) && (strpos($row_table_assignments['assignRoles'], "HJ") !== 
         $actions .= "</div>";
 		$actions .= "</div>";
 		$actions .= "</div>";
+
+		// Mini BOS
+		$mini_bos_alert_css = "";
+		$mini_bos_alert_icon = "";
+		$mini_bos_checked = "";
+		if ($mini_bos_count_flag) {
+			$mini_bos_alert_css = "text-danger";
+			$mini_bos_alert_icon = " <i class=\"fa fa-exclamation-triangle\"></i>";
+		}
+
+		if ($mini_bos_count == $eval_count) $mini_bos_checked = "CHECKED";
+
+		$actions .= "<div class=\"row\">";
+		$actions .= "<div class=\"col col-sm-12\">";
+		$actions .= "<div class=\"checkbox\" style=\"margin-bottom:5px;\" id=\"eval-mbos-ajax-".$row_entries['id']."-evalPlace-form-group\">";
+		$actions .= "<label><input type=\"checkbox\" name=\"evalMiniBOS\" value=\"1\"".$mini_bos_checked." onclick=\"
+		save_column(
+		'".$base_url."',
+		'evalMiniBOS',
+		'evaluation',
+		'".$row_entries['id']."',
+		'eval-mini-bos-".$row_entries['id']."',
+		'default',
+		'default',
+		'default',
+		'eval-mbos-ajax-".$row_entries['id']."',
+		'value'
+	)\"> ".$evaluation_info_054."</label>";
+		if ($mini_bos_count_flag) $actions .= "<br><span class=\"small ".$mini_bos_alert_css."\">".$mini_bos_alert_icon." Not all judges indicated this entry advanced to the mini-BOS round. Please verify and check or uncheck the box above appropriately.</span>";
+		$actions .= "<br><span style=\"margin-left:5px;\" id=\"eval-mbos-ajax-".$row_entries['id']."-evalMiniBOS-status\"></span> ";
+		$actions .= "<span id=\"eval-mbos-ajax-".$row_entries['id']."-evalMiniBOS-status-msg\"></span> ";
+        $actions .= "</div>";
+		$actions .= "</div>";
+		$actions .= "</div>";
+
 	}
 
 }
@@ -327,7 +372,12 @@ if (($judging_open) && (strpos($row_table_assignments['assignRoles'], "HJ") !== 
 				$score_previous = $value['judge_score'];
 				$view_link = $base_url."output/print.output.php?section=evaluation&amp;go=default&amp;id=".$score_previous_id."&amp;tb=1";
 				$actions .= "<div style=\"margin-top: 5px;\">";
-				$actions .= "<a style=\"word-wrap:break-word;\" class=\"btn btn-block btn-sm btn-info hide-loader\" id=\"modal_window_link\" class=\"hide-loader\" href=\"".$view_link."\">".$label_view_other_judge_eval." (".$label_score.": ".$score_previous.")";
+				$actions .= "<a style=\"word-wrap:break-word;\" class=\"btn btn-block btn-sm btn-info hide-loader\" id=\"modal_window_link\" class=\"hide-loader\" href=\"".$view_link."\">";
+				$actions .= $label_view_other_judge_eval;
+				$actions .= " (";
+				$actions .= $label_score.": ".$score_previous;
+				if (!empty($value['mini_bos'])) $actions .= " - ".$label_mini_bos;
+				$actions .= ")";
 				$actions .= "</a>";
 				$actions .= "</div>";
 			}	

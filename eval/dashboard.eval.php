@@ -61,10 +61,12 @@ $jscore_disparity = "";
 $assigned_score_mismatch = array();
 $judge_score_disparity = array();
 $table_places_alert = array();
+$places_alert = "";
 $dup_judge_evals_alert = "";
 $duplicate_judge_evals_alert = array();
 $entries_evaluated = array();
-$places_alert = "";
+$mini_bos_mismatch = array();
+$mini_bos_mismatch_alert = "";
 $total_evals_alert = "";
 $single_eval = "";
 $single_evaluation = array();
@@ -207,7 +209,8 @@ if ($totalRows_eval_sub > 0) {
 			"ordinal_position" => $row_eval_sub['evalPosition'],
 			"date_added" => $row_eval_sub['evalInitialDate'],
 			"date_updated" => $row_eval_sub['evalUpdatedDate'],
-			"scoresheet" => $row_eval_sub['evalScoresheet']
+			"scoresheet" => $row_eval_sub['evalScoresheet'],
+			"mini_bos" => $row_eval_sub['evalMiniBOS']
 		);
 
 	} while($row_eval_sub = mysqli_fetch_assoc($eval_sub));
@@ -527,8 +530,8 @@ if ($totalRows_table_assignments > 0) {
 			if ($admin) {
 
 				if ($table_entries_count == $table_scored_entries_count) {
-					$table_assignment_stats .= "<div class=\"alert alert-warning\">";
-					$table_assignment_stats .= sprintf("<i class=\"fa fa-lg fa-exclamation-circle\"></i> <strong>%s</strong>",$evaluation_info_037);
+					$table_assignment_stats .= "<div class=\"alert alert-success\">";
+					$table_assignment_stats .= sprintf("<i class=\"fa fa-lg fa-check-circle\"></i> <strong>%s</strong>",$evaluation_info_037);
 					$table_assignment_stats .= "</div>";
 				}
 				
@@ -609,8 +612,8 @@ if ($totalRows_table_assignments > 0) {
 			if (!$admin) {
 
 				if ((strpos($row_table_assignments['assignRoles'], "HJ") !== false) && ($table_entries_count == $table_scored_entries_count)) {
-					$table_assignment_stats .= "<div class=\"alert alert-warning\">";
-					$table_assignment_stats .= sprintf("<i class=\"fa fa-lg fa-exclamation-circle\"></i> <strong>%s</strong> %s",$evaluation_info_037,$evaluation_info_038);
+					$table_assignment_stats .= "<div class=\"alert alert-success\">";
+					$table_assignment_stats .= sprintf("<i class=\"fa fa-lg fa-check-circle\"></i> <strong>%s</strong> %s",$evaluation_info_037,$evaluation_info_038);
 					$table_assignment_stats .= "</div>";
 				}
 				
@@ -843,8 +846,8 @@ if ($totalRows_table_assignments > 0) {
 
 	// Build single evaluation list alert
 	if (!empty($single_evaluation)) {	
-		$single_eval .= "<div class=\"alert alert-info\">";
-		$single_eval .= sprintf("<p><strong><i class=\"fa fa-info-circle\"></i> %s</strong></p><p>%s</p>",$label_please_note,$evaluation_info_019);
+		$single_eval .= "<div class=\"alert alert-warning\">";
+		$single_eval .= sprintf("<p><strong><i class=\"fa fa-exclamation-circle\"></i> %s</strong></p><p>%s</p>",$label_attention,$evaluation_info_019);
 		$single_eval .= "<ul>";
 		asort($single_evaluation);
 		foreach ($single_evaluation as $key => $value) {
@@ -871,6 +874,23 @@ if ($totalRows_table_assignments > 0) {
 		}
 		$places_alert .= "</ul>";
 		$places_alert .= "</div>";
+	}
+
+	// Build mini-bos mismatch alert
+	if (!empty($mini_bos_mismatch)) {
+		$mini_bos_mismatch_alert .= "<div class=\"alert alert-info\">";
+		$mini_bos_mismatch_alert .= sprintf("<p><strong><i class=\"fa fa-info-circle\"></i> %s</strong></p><p>%s</p>",$label_please_note,$evaluation_info_105);
+		$mini_bos_mismatch_alert .= "<ul>";
+		asort($mini_bos_mismatch);
+		foreach ($mini_bos_mismatch as $key => $value) {
+			$mini_bos_mismatch_alert .= "<li>";
+			$mini_bos_mismatch_alert .= "<a href=\"#".$value['brewJudgingNumber']."\">".$value['brewJudgingNumber']."</a>";
+			$mini_bos_mismatch_alert .= " - ".style_number_const($value['brewCategorySort'],$value['brewSubCategory'],$_SESSION['style_set_display_separator'],0)." ".$value['brewStyle'];
+			$mini_bos_mismatch_alert .= " (".$label_table." ".$value['table_name'].")";
+			$mini_bos_mismatch_alert .= "</li>";
+		}
+		$mini_bos_mismatch_alert .= "</ul>";
+		$mini_bos_mismatch_alert .= "</div>";
 	}
 
 	// Build display datatable if judge has evaluated entries 
@@ -963,7 +983,7 @@ if ($totalRows_table_assignments > 0) {
 	    });
 	});
 </script>
-<script src="<?php echo $base_url;?>js_includes/admin_ajax.min.js"></script>
+<script src="<?php echo $base_url;?>js_source/admin_ajax.js"></script>
 <?php
 } // end if ($totalRows_table_assignments > 0)
 
@@ -1000,15 +1020,18 @@ if (!$admin) {
 	echo $header;
 	if (($judging_open) && (empty($table_assign_judge))) echo sprintf("<p>%s</p>",$evaluation_info_009);
 }
+
 if (!empty($total_evals_alert)) {
 	if ($admin) echo $total_evals_alert;
 	if ((!$admin) && ($judging_open)) echo $total_evals_alert;
 }
+
 if (!empty($places_alert)) echo $places_alert;
 if (!empty($judge_score_disparity)) echo $jscore_disparity;
 if (!empty($assign_score_mismatch)) echo $assign_score_mismatch;
 if (!empty($dup_judge_evals_alert)) echo $dup_judge_evals_alert;
 if (!empty($single_evaluation)) echo $single_eval;
+if (!empty($mini_bos_mismatch_alert)) echo $mini_bos_mismatch_alert;
 
 if ((!empty($latest_submitted_accordion)) || (!empty($latest_updated_accordion))) {
 	echo "<div class=\"bcoem-admin-element\">";
