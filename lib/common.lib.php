@@ -1864,22 +1864,19 @@ function get_table_info($input,$method,$table_id,$dbTable,$param) {
 		if (!empty($row_table['tableStyles'])) {
 
 			$a = explode(",", $row_table['tableStyles']);
+			$b = array();
 
 				foreach ($a as $value) {
-
-					require(CONFIG.'config.php');
-					mysqli_select_db($connection,$database);
-					$query_styles = sprintf("SELECT * FROM %s WHERE id='%s'", $styles_db_table, $value);
+					
+					$query_styles = sprintf("SELECT brewStyleGroup,brewStyleNum FROM %s WHERE id='%s'", $styles_db_table, $value);
 					$styles = mysqli_query($connection,$query_styles) or die (mysqli_error($connection));
 					$row_styles = mysqli_fetch_assoc($styles);
-					if ($_SESSION['prefsStyleSet']  == "BA") $c[] = $row_styles['brewStyle'].",&nbsp;";
-					elseif ($_SESSION['prefsStyleSet'] == "AABC") $c[] = ltrim($row_styles['brewStyleGroup'],"0").".".ltrim($row_styles['brewStyleNum'],"0").",&nbsp;";
-					else $c[] = ltrim($row_styles['brewStyleGroup'].$row_styles['brewStyleNum'],"0").",&nbsp;";
+
+					$b[] = style_number_const($row_styles['brewStyleGroup'],$row_styles['brewStyleNum'],$_SESSION['style_set_display_separator'],0).",&nbsp;";
 
 				}
 
-			$d = array($c);
-			return $d;
+			return $b;
 
 		}
 

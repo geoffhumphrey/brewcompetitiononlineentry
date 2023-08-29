@@ -418,10 +418,10 @@ if ($totalRows_log > 0) {
 				$scoresheet_random_file_relative_1 = "user_temp/".$random_file_name_1;
 				$scoresheet_random_file_1 = USER_TEMP.$random_file_name_1;
 				$scoresheet_random_file_html_1 = $base_url.$scoresheet_random_file_relative_1;
-				$scoresheet_link_1 .= "<a class=\"hide-loader\" href=\"".$base_url."output/scoresheets.output.php?";
+				$scoresheet_link_1 .= "<a target=\"_blank\" class=\"hide-loader\" href=\"".$base_url."output/scoresheets.output.php?";
 
-				$scoresheet_link_1 .= "scoresheetfilename=".urlencode(obfuscateURL($scoresheet_file_name_1,$encryption_key));
-				$scoresheet_link_1 .= "&amp;randomfilename=".urlencode(obfuscateURL($random_file_name_1,$encryption_key))."&amp;download=true";
+				$scoresheet_link_1 .= "scoresheetfilename=".urlencode(obfuscateURL($scoresheet_file_name_1,$_SESSION['encryption_key']));
+				$scoresheet_link_1 .= "&amp;randomfilename=".urlencode(obfuscateURL($random_file_name_1,$_SESSION['encryption_key']))."&amp;download=true";
 
 				if ($dbTable != "default") $scoresheet_link_1 .= "&amp;view=".$archive_suffix;
 				$scoresheet_link_1 .= sprintf("\" data-toggle=\"tooltip\" title=\"%s '".$entry_name."'' (by Entry Number).\">",$brewer_entries_text_006);
@@ -442,10 +442,10 @@ if ($totalRows_log > 0) {
 				$scoresheet_random_file_2 = USER_TEMP.$random_file_name_2;
 				$scoresheet_random_file_html_2 = $base_url.$scoresheet_random_file_relative_2;
 
-				$scoresheet_link_2 .= "<a class=\"hide-loader\" href=\"".$base_url."output/scoresheets.output.php?";
+				$scoresheet_link_2 .= "<a target=\"_blank\" class=\"hide-loader\" href=\"".$base_url."output/scoresheets.output.php?";
 
-				$scoresheet_link_2 .= "scoresheetfilename=".urlencode(obfuscateURL($scoresheet_file_name_2,$encryption_key));
-				$scoresheet_link_2 .= "&amp;randomfilename=".urlencode(obfuscateURL($random_file_name_2,$encryption_key))."&amp;download=true";
+				$scoresheet_link_2 .= "scoresheetfilename=".urlencode(obfuscateURL($scoresheet_file_name_2,$_SESSION['encryption_key']));
+				$scoresheet_link_2 .= "&amp;randomfilename=".urlencode(obfuscateURL($random_file_name_2,$_SESSION['encryption_key']))."&amp;download=true";
 				if ($dbTable != "default") $scoresheet_link_2 .= "&amp;view=".$archive_suffix;
 				$scoresheet_link_2 .= sprintf("\" data-toggle=\"tooltip\" title=\"%s '".$entry_name."' (by Judging Number).\">",$brewer_entries_text_006);
 				$scoresheet_link_2 .= "<span class=\"fa fa-lg fa-file-pdf-o\"></a>&nbsp;&nbsp;";

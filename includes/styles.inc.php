@@ -20,7 +20,7 @@
  * There are various ways to import style data into the styles database. An easy
  * way is by filling out a comma-separated-value (CSV) file with relevant data
  * points. Common spreadsheet applications can open, edit, and save CSV files,
- * which can then be imported into the MySQL DB via online applications such as
+ * which can then be imported into the DB via online applications such as
  * phpMyAdmin, etc.
  *
  * Full directions for input of style set data and an available download of a 

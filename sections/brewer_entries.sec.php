@@ -208,7 +208,7 @@ if ($totalRows_log > 0) {
 
 				if (($scoresheet) && (!empty($scoresheet_file_name))) {
 					$scoresheet_link = "";
-					$scoresheet_link .= "<a class=\"hide-loader\" href=\"".$base_url."output/scoresheets.output.php?";
+					$scoresheet_link .= "<a target=\"_blank\" class=\"hide-loader\" href=\"".$base_url."output/scoresheets.output.php?";
 					$scoresheet_link .= "scoresheetfilename=".urlencode(obfuscateURL($scoresheet_file_name,$encryption_key));
 					$scoresheet_link .= "&amp;randomfilename=".urlencode(obfuscateURL($random_file_name,$encryption_key))."&amp;download=true";
 					$scoresheet_link .= sprintf("\" data-toggle=\"tooltip\" title=\"%s &ldquo;".$entry_name."&rdquo;.\">",$brewer_entries_text_006);

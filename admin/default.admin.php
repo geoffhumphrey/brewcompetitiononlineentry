@@ -5,14 +5,19 @@
  *
  */
 
+
 $server_environ_0 = "<p><strong>Reporting an issue?</strong> Here's your server environment information:</p>";
 $server_environ_1 = "<ul>";
 $server_environ_3 = "<ul class=\"list-inline\">";
 $server_environ_3 .= "<li>Environment Info:</li>";
 $server_environ_2 = "<li>PHP Version &ndash; ".$php_version.";</li>";
-$server_environ_2 .= "<li>MySQL Version &ndash; ".$connection -> server_info."</li>";
-$server_environ_2 .= "</ul>";
 
+if (!empty($db_version)) {
+    if ($db_maria) $server_environ_2 .= "<li>MariaDB Version &ndash; ".$db_version."</li>";
+    if ($db_mysql) $server_environ_2 .= "<li>MySQL Version &ndash; ".$db_version."</li>";
+}
+
+$server_environ_2 .= "</ul>";
 $server_environ = $server_environ_0.$server_environ_1.$server_environ_2;
 $server_environ_sidebar = $server_environ_3.$server_environ_2;
 

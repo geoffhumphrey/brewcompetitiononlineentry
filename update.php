@@ -77,7 +77,7 @@ if (file_exists($filename)) {
 			if (($current_version != $version) || (($current_version == $version) && ($version_date < $current_version_date))) {
 
 				if ($action == "default") {
-				$update_alerts .= "<div class=\"alert alert-danger\"><span class=\"fa fa-lg fa-exlamation-circle text-danger\"></span> <strong>Before running this script</strong>, make sure that you have uploaded <strong>ALL</strong> of the necessary version ".$current_version_display." files to your installation's root folder on your webserver and <strong>BACKED UP</strong> your MySQL database.</div>";
+				$update_alerts .= "<div class=\"alert alert-danger\"><span class=\"fa fa-lg fa-exlamation-circle text-danger\"></span> <strong>Before running this script</strong>, make sure that you have uploaded <strong>ALL</strong> of the necessary version ".$current_version_display." files to your installation's root folder on your webserver and <strong>BACKED UP</strong> your database.</div>";
 
 				$update_body .= "<p class=\"lead\">";
 				$update_body .= "This script will update your BCOE&amp;M database from its current version, ";
@@ -102,7 +102,7 @@ if (file_exists($filename)) {
 					      </div>
 					      <div class=\"modal-body\">
 					        <p>Are you sure you want to start the update?</p>
-					        <p>Before doing so, make sure that you have <a href=\"https://comodosslstore.com/resources/phpmyadmin-backup-database\" target=\"_blank\">created a backup</a> of up your MySQL database.</p>
+					        <p>Before doing so, make sure that you have <a href=\"https://comodosslstore.com/resources/phpmyadmin-backup-database\" target=\"_blank\">created a backup</a> of up your database.</p>
 					        <p>This function will update your current installation and cannot be stopped once begun.</p>
 					        <p class=\"text-primary\"><strong>Please note that the update may take some time to complete, so patience is warranted!</strong></p>
 					      </div>

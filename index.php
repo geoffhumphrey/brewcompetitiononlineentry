@@ -194,7 +194,7 @@ if (($row_system) && (!empty($row_system['update_date'])) && ($row_system['updat
         
         echo "<div class=\"bcoem-admin-element\">";
         echo "<div class=\"alert alert-danger alert-dismissible hidden-print fade in\">";
-        echo "<p><span class=\"fa fa-lg fa-exclamation-circle\"></span> <strong>MySQL Error(s)</strong></p>";
+        echo "<p><span class=\"fa fa-lg fa-exclamation-circle\"></span> <strong>Error(s)</strong></p>";
         echo "<p>The following errors were logged on the last MySQL server call:</p>";
         echo "<ul>";
         
