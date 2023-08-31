@@ -129,7 +129,7 @@ if ($setup_success) {
 	if (SINGLE) require_once(SSO.'sso.inc.php');
 	require_once (LIB.'common.lib.php');
 	require_once (INCLUDES.'db_tables.inc.php');
-	if (($msg == "16") || ($force_update)) include (UPDATE.'off_schedule_update.php');
+	if ($force_update) include (UPDATE.'off_schedule_update.php');
 	require_once (LIB.'help.lib.php');
 	require_once (INCLUDES.'styles.inc.php'); // Establishing session vars depends upon arrays here
 	require_once (DB.'common.db.php');

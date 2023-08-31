@@ -56,7 +56,6 @@ if ($setup_free_access == TRUE) {
 			  </div><!-- /.modal-dialog -->
 			</div><!-- /.modal -->
 		";
-
 	}
 
 	if ($action == "install-db") {

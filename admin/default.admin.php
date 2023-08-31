@@ -14,7 +14,7 @@ $server_environ_2 = "<li>PHP Version &ndash; ".$php_version.";</li>";
 
 if (!empty($db_version)) {
     if ($db_maria) $server_environ_2 .= "<li>MariaDB Version &ndash; ".$db_version."</li>";
-    if ($db_mysql) $server_environ_2 .= "<li>MySQL Version &ndash; ".$db_version."</li>";
+    else $server_environ_2 .= "<li>MySQL Version &ndash; ".$db_version."</li>";
 }
 
 $server_environ_2 .= "</ul>";
