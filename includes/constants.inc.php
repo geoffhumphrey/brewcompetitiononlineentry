@@ -2764,9 +2764,8 @@ if (isset($_SESSION['prefsStyleSet'])) {
 
 $db_version = $connection -> server_info;
 $db_maria = FALSE;
-if (str_contains(strtolower($db_version), "mariadb")) $db_maria = TRUE;
+if (strpos(strtolower($db_version), "mariadb") !== false) $db_maria = TRUE;
 
 if ((!isset($_SESSION['encryption_key'])) || (empty($_SESSION['encryption_key']))) $_SESSION['encryption_key'] = base64_encode(openssl_random_pseudo_bytes(32));
-// $encryption_key = $_SESSION['encryption_key'];
 // $encryption_key = "8sQHfMk8rinRtA/Frhm+AWrSgOmkcbu+FxIUGy9Fq5I=";
 ?>

@@ -70,7 +70,7 @@ require_once (LANG.'language.lang.php');
 
 $db_maria = FALSE;
 $db_version = $connection -> server_info;
-if (str_contains(strtolower($db_version), "mariadb")) $db_maria = TRUE;
+if (strpos(strtolower($db_version), "mariadb") !== false) $db_maria = TRUE;
 
 /**
  * ---------------------------------------------- 2.3.2 ----------------------------------------------
