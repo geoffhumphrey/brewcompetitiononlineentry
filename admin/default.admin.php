@@ -5,7 +5,6 @@
  *
  */
 
-
 $server_environ_0 = "<p><strong>Reporting an issue?</strong> Here's your server environment information:</p>";
 $server_environ_1 = "<ul>";
 $server_environ_3 = "<ul class=\"list-inline\">";
@@ -283,13 +282,15 @@ if ($recently_updated) {
         $summary_button_errors = " (Errors Present)";
     }
 
-?>
+if ((isset($_SESSION['update_summary'])) && (!empty($_SESSION['update_summary']))) { ?>
 <div class="row bcoem-admin-element">
     <div class="col col-lg-6 col-md-12 col-sm-12 col-xs-12" style="padding-bottom: 5px;">
         <button type="button" class="<?php echo $summary_button_style; ?>" data-toggle="modal" data-target="#updateSummary"><?php echo $current_version_display; ?> Update Summary<?php echo $summary_button_errors; ?> <span class="<?php echo $summary_button_icon; ?>"></span></button>
     </div>
 </div>
-<?php } ?>
+<?php } 
+}
+?>
 <div class="bcoem-admin-dashboard-accordion">
     <div class="row">
         <div class="col col-lg-6 col-md-12 col-sm-12 col-xs-12">
@@ -2091,7 +2092,7 @@ if ($recently_updated) {
                                 else {
                                    if (strpos($row_system['update_summary'], 'Warning: Errors') !== false) $update_errors_msg = " <span class=\"text-danger\"><i class=\"fa fa-exclamation-circle\"></i> Errors Present</span>"; 
                                 } 
-
+                                if ((isset($_SESSION['update_summary'])) && (!empty($_SESSION['update_summary']))) {
                             ?>
                             <div class="row">
                                 <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
@@ -2101,7 +2102,7 @@ if ($recently_updated) {
                                     <a href="#" data-toggle="modal" data-target="#updateSummary"><?php echo $current_version_display; ?> Update Summary<?php echo $update_errors_msg; ?></a>
                                 </div>
                             </div>
-                            <?php } ?>
+                            <?php } } ?>
                             <?php if ($hosted_setup) { ?>
                             <div class="row">
                                 <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">

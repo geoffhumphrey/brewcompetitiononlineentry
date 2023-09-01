@@ -429,7 +429,7 @@ if ($msg != "default") {
     </div>
 <?php } ?>
 
-<?php if (($recently_updated) && (($section == "admin") && ($go == "default"))) { ?>
+<?php if (($recently_updated) && ((isset($_SESSION['update_summary'])) && (!empty($_SESSION['update_summary']))) && ($section == "admin") && ($go == "default")) { ?>
     <div class="alert alert-info alert-dismissible hidden-print fade in" role="alert">
         <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
         <p><span class="fa fa-lg fa-info-circle"></span> Your installation was recently updated to <strong>BCOE&amp;M <?php echo $current_version_display; ?></strong>. Select the <?php echo $current_version_display; ?> Update Summary button below for a full account of what changes were made.</p>
