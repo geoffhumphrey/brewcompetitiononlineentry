@@ -12,11 +12,11 @@
  */
 
 $languages = array(
-    "pt-BR" => "Brazilian Portuguese"
+    "pt-BR" => "Brazilian Portuguese",
     "cs-CZ" => "Czech",
     "en-US" => "English (US)",
-    // "fr-FR" => "French",
-    // "es-419" => "Spanish (Latin America)"
+    //"fr-FR" => "French",
+    //"es-419" => "Spanish (Latin America)"
 );
 
 /** -------------------------- Theme File names and  Display Name -------------------------------
