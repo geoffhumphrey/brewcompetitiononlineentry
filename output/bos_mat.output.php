@@ -16,7 +16,7 @@ function check_table_name($id,$judging_tables_db_table) {
 	$query_tables = sprintf("SELECT tableName,tableNumber FROM %s WHERE id='%s'",$judging_tables_db_table,$id);
 	$tables = mysqli_query($connection,$query_tables) or die (mysqli_error($connection));
 	$row_tables = mysqli_fetch_assoc($tables);
-	return "From Table ".$row_tables['tableNumber'].": ".$row_tables['tableName'];
+	return "Table ".$row_tables['tableNumber'].": ".$row_tables['tableName'];
 }
 
 $a = array();
@@ -132,29 +132,33 @@ if (!empty($a)) {
 					$output .= '<td>';
 					$output .= '<div style="position:relative;width:100%;height:100%;">';
 					
-					if ($action == "mini-bos") $output .= '<p style="text-align:center"><strong>*** Mini-BOS ***</strong></p>';
-					elseif ($action == "pro-am") $output .= '<p style="text-align:center"><strong>*** Pro-Am/Scale-Up: '.$style_type_info[2].' * ***</strong></p>';
-					else $output .= '<p style="text-align:center"><strong>*** Best of Show: '.$style_type_info[2].' ***</strong></p>';
+					if ($action == "mini-bos") $output .= '<p style="text-align:center"><strong>*** '.$label_mini_bos.' ***</strong></p>';
+					elseif ($action == "pro-am") $output .= '<p style="text-align:center"><strong>*** '.$label_pro_am.': '.$style_type_info[2].' * ***</strong></p>';
+					else $output .= '<p style="text-align:center"><strong>*** '.$label_bos.': '.$style_type_info[2].' ***</strong></p>';
 					
 					if ($_SESSION['prefsStyleSet'] == "BA") {
+
 						$output .= '<h3 style="padding:0; margin: 0;">';
 						$output .= $row_scores['brewStyle'];
 						$output .= '</h3>';
 						$output .= '<h4>';
 						$output .= '<em>'.style_convert($row_scores['brewCategorySort'],1).'</em>';
 						$output .= '</h4>';
+
 					}
 					
 					else {
-						$output .= '<h3 style="padding:0 0 5px 0;margin:0;">';
-						$output .= ltrim($row_scores['brewCategory'],"0").': '.style_convert($row_scores['brewCategorySort'],1);
+
+						$output .= '<h3 style="padding:0 0 5px 0; margin:0;">';
+						$output .= $style.': '.$row_scores['brewStyle'];
 						$output .= '</h3>';
-						$output .= '<h4 style="padding:0 0 5px 0;margin:0;">';
-						$output .= '<em>'.$style.': '.$row_scores['brewStyle'].'</em>';
+						$output .= '<h4 style="padding:0 0 5px 0; margin:0;">';
+						if ($_SESSION['prefsWinnerMethod'] == 0) $output .= check_table_name($row_scores['scoreTable'],$judging_tables_db_table);
+						else $output .= ltrim($row_scores['brewCategory'],"0").': '.style_convert($row_scores['brewCategorySort'],1);
 						$output .= '</h4>';
+
 					}
 					
-					if (!empty($row_scores['brewPossAllergens'])) $output .= '<p style="width:100%;padding:3px;border:1px solid #000;border-radius:5px;"><strong>'.$label_possible_allergens.':</strong> <em>'.$row_scores['brewPossAllergens'].'</em></p>';
 					if (!empty($row_scores['brewInfo'])) $output .= '<p><em><small>'.str_replace("^"," | ",$row_scores['brewInfo']).'</small></em></p>';
 					if (!empty($row_scores['brewInfoOptional'])) $output .= '<p><em><small>'.str_replace("^"," | ",$row_scores['brewInfoOptional']).'</small></em></p>';
 					if (!empty($row_scores['brewComments'])) $output .= '<p><em><small>'.$row_scores['brewComments'].'</small></em></p>';
@@ -174,6 +178,9 @@ if (!empty($a)) {
 						$output .= '</p>';
 					}
 
+					if (!empty($row_scores['brewPossAllergens'])) $output .= '<p style="width:100%; padding:5px; border:1px solid #ccc; border-radius:5px;"><small><strong>'.$label_possible_allergens.':</strong> <em>'.$row_scores['brewPossAllergens'].'</em></small></p>';
+					
+
 					if (($action == "default") && (pro_am_check($row_scores['brewBrewerID']) == 1)) $output .= "<p><em>** NOT ELIGIBLE FOR PRO-AM **</em></p>";
 					
 					$output .= '<section style="text-align:right;position:absolute;bottom:0;right:0;">';
@@ -181,11 +188,10 @@ if (!empty($a)) {
 					if ($filter == "entry") $output .= '<p style="padding:0;margin:0"><small>#'.sprintf("%06s",$row_scores['id']).'</small></p>';
 					else $output .= '<p style="padding:0;margin:0"><small>#'.sprintf("%06s",$row_scores['brewJudgingNumber']).'</small></p>';
 
-					$endRow++;
-					$hloopRow1++;
-
-					$output .= '<p><small><strong>'.check_table_name($row_scores['scoreTable'],$judging_tables_db_table).'</strong></small></p>';
-					$output .= '</section>';
+					if ($_SESSION['prefsWinnerMethod'] > 0) {
+						$output .= '<p><small><strong>'.check_table_name($row_scores['scoreTable'],$judging_tables_db_table).'</strong></small></p>';
+						$output .= '</section>';
+					}
 					
 					/*
 					$output .= $tile_count;
@@ -196,6 +202,9 @@ if (!empty($a)) {
 					$output .= '</div>';
 					$output .= '</td>';
 					*/
+
+					$endRow++;
+					$hloopRow1++;
 
 					if ($endRow >= $columns) {
 						$output .= '</tr>';

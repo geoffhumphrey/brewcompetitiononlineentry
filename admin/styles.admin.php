@@ -242,10 +242,10 @@ function checkStyleIdentifier() {
 	<div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
 		<div class="input-group has-warning">
 			<!-- Input Here -->
-			<input class="form-control" id="brewStyleGroup" name="brewStyleGroup" type="number" step="1" min="50" value="<?php if ($action == "edit") echo $row_styles['brewStyleGroup']; ?>" placeholder="" data-error="The custom style number or identifier is required." maxlength="3" required>
+			<input class="form-control" id="brewStyleGroup" name="brewStyleGroup" type="text" value="<?php if ($action == "edit") echo $row_styles['brewStyleGroup']; ?>" placeholder="" data-error="The custom style number or identifier is required." maxlength="3" required>
 			<span class="input-group-addon" id="brewStyle-addon2"><span class="fa fa-star"></span></span>
 		</div>
-		<div class="help-block">Provide the overall identifier for the style. Numbers 50 and greater only. Three (3) numeral limit.</div>
+		<div class="help-block">Provide the overall identifier for the style. Three (3) character limit.</div>
        	<div class="help-block with-errors"></div>
 	</div>
 </div><!-- ./Form Group -->
@@ -257,7 +257,7 @@ function checkStyleIdentifier() {
 			<input class="form-control" id="brewStyleNum" name="brewStyleNum" type="text" value="<?php if ($action == "edit") echo $row_styles['brewStyleNum']; ?>" placeholder="" data-error="The custom style category's sub-style identifer is required." maxlength="2" required onBlur="checkStyleIdentifier()" onKeyup="checkStyleIdentifier()">
 			<span class="input-group-addon" id="brewStyle-addon2"><span class="fa fa-star"></span></span>
 		</div>
-		<div class="help-block">Provide a <strong>unique</strong> identifier. Two (2) character limit. Characters can be alphanumeric.</div>
+		<div class="help-block">Provide a <strong>unique</strong> identifier for this style. Two (2) character limit.</div>
        	<div class="help-block with-errors"></div>
        	<div id="style-identifier-status">Style Status</div>
 	</div>

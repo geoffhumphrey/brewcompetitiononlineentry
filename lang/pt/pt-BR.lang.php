@@ -2,7 +2,7 @@
 /**
  * Module:      pt-BR.lang.php
  * Description: This module houses all display text in the Portuguese language.
- * Updated:     January 17, 2023
+ * Updated:     September 9, 2023
  *  
  * To translate this file, first make a copy of it and rename it with the 
  * language name in the title.
@@ -1949,6 +1949,16 @@ $evaluation_info_103 = "Forneça sua pontuação - mínimo de 5, máximo de 50."
 $brewer_text_051 = "Selecione as organizações do setor às quais você é afiliado como funcionário, voluntário, etc. Isso serve para garantir que não haja conflitos de interesse ao designar juízes e comissários de bordo para avaliar as inscrições.";
 $brewer_text_052 = "<strong>Se alguma organização do setor <u>não</u> estiver listada no menu suspenso acima, insira-a aqui.</strong> Separe o nome de cada organização por vírgula (,) ou ponto e vírgula (;). Alguns símbolos não são permitidos, incluindo aspas duplas (&quot;) e porcentagem (&#37;).";
 
+/**
+ * ------------------------------------------------------------------------
+ * Version 2.6.1 Additions
+ * ------------------------------------------------------------------------
+ */
+
+$evaluation_info_104 = "Nem todos os juízes indicaram que essa inscrição avançou para a rodada Mini-BOS. Por favor, verifique e selecione Sim ou Não acima.";
+$evaluation_info_105 = "Os registros a seguir têm indicações incompatíveis de Mini-BOS dos juízes:";
+
+$label_non_judging = "Sessões sem Julgamento";
 
 /**
  * ----------------------------------------------------------------------------------
@@ -1977,12 +1987,5 @@ if (strpos($section, "step") === FALSE) $alert_text_070 = $alert_text_070; else 
 if (strpos($section, "step") === FALSE) $label_character_limit = $label_character_limit; else $label_character_limit = "";
 if (strpos($section, "step") === FALSE) $header_text_031 = $header_text_031; else $header_text_031 = "";
 if (strpos($section, "step") === FALSE) $beerxml_text_007 = $beerxml_text_007; else $beerxml_text_007 = "";
-
-/**
- * ----------------------------------------------------------------------------------
- * Admin Pages - Admin pages will be included in a future release
- * ----------------------------------------------------------------------------------
- */
-// if ($section == "admin") include (LANG.'en_admin.lang.php');
 
 ?>
