@@ -1,7 +1,6 @@
 sftp-config.json
 site/config.reset.php
 site/config-brewcomp-reset.php
-lang/es/*
 js_source/*
 js_unused/*
 libraries/*

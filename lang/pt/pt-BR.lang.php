@@ -144,10 +144,17 @@ if (strpos($section, "step") === FALSE) {
     }
 }
 
-$label_home = "Home";
-$label_welcome = "Benvindo";
-$label_comps = "Diretório da Competição";
-$label_info = "Info";
+/**
+ * ------------------------------------------------------------------------
+ * Global Labels
+ * Mostly used for titles and navigation.
+ * All labels are capitalized and without punctuation.
+ * ------------------------------------------------------------------------
+ */
+$label_home = "Início";
+$label_welcome = "Bem-vindo";
+$label_comps = "Diretório de Competições";
+$label_info = "Informações";
 $label_volunteers = "Voluntários";
 $label_register = "Registrar";
 $label_help = "Ajuda";
@@ -159,287 +166,286 @@ $label_low_none = "Baixo/Nenhum";
 $label_low = "Baixo";
 $label_med = "Médio";
 $label_high = "Alto";
-$label_pay = "Pagar Inscrição da Amostra";
-$label_reset_password = "Resetar Password";
-$label_log_in = "Log In";
-$label_logged_in = "Logado";
-$label_log_out = "Log Out";
-$label_logged_out = "Deslogado";
+$label_pay = "Pagar Taxas de Inscrição";
+$label_reset_password = "Redefinir Senha";
+$label_log_in = "Entrar";
+$label_logged_in = "Conectado";
+$label_log_out = "Sair";
+$label_logged_out = "Desconectado";
 $label_sponsors = "Patrocinadores";
 $label_rules = "Regras";
-$label_volunteer_info = "Informações de Voluntários";
+$label_volunteer_info = "Informações para Voluntários";
 $label_reg = $label_register;
 $label_judge_reg = "Registro de Juiz";
-$label_steward_reg = "Registro de Auxiliares";
+$label_steward_reg = "Registro de Mestre-cervejeiro";
 $label_past_winners = "Vencedores Anteriores";
 $label_contact = "Contato";
 $label_style = "Estilo";
-$label_entry = "Amostra";
-$label_add_entry = "Adicionar Amostra";
-$label_edit_entry = "Editar Amostra";
-$label_upload = "Upload";
-$label_bos = "Best of Show";
+$label_entry = "Inscrição";
+$label_add_entry = "Adicionar Inscrição";
+$label_edit_entry = "Editar Inscrição";
+$label_upload = "Enviar";
+$label_bos = "Melhor da Mostra";
 $label_brewer = "Cervejeiro";
 $label_cobrewer = "Co-Cervejeiro";
-$label_entry_name = "Nome da Amostra";
-$label_required_info = "Informação Necessária";
-$label_character_limit = " limite de caracteres - use palavras-chaves e abreviações se o espaço for limitado.<br>Characteres usados: ";
+$label_entry_name = "Nome da Inscrição";
+$label_required_info = "Informações Obrigatórias";
+$label_character_limit = " limite de caracteres - use palavras-chave e abreviações se o espaço for limitado.<br>Caracteres usados: ";
 $label_carbonation = "Carbonatação";
-$label_sweetness = "Dulçor";
+$label_sweetness = "Doçura";
 $label_strength = "Força";
-$label_color =  "Cor";
+$label_color = "Cor";
 $label_table = "Mesa";
-$label_standard = "Standard";
+$label_standard = "Padrão";
 $label_super = "Super";
-$label_session = "Session";
-$label_double = "Double";
-$label_blonde = "Blonde";
-$label_amber = "Amber";
-$label_brown = "Brown";
-$label_pale = "Pale";
-$label_dark = "Dark";
+$label_session = "Sessão";
+$label_double = "Duplo";
+$label_blonde = "Loira";
+$label_amber = "Âmbar";
+$label_brown = "Marrom";
+$label_pale = "Clara";
+$label_dark = "Escura";
 $label_hydromel = "Hidromel";
 $label_sack = "Sack";
-$label_still = "Still";
+$label_still = "Natural";
 $label_petillant = "Petillant";
-$label_sparkling = "Sparkling";
-$label_dry = "Dry";
-$label_med_dry = "Medium Dry";
-$label_med_sweet = "Medium Sweet";
-$label_sweet = "Sweet";
-$label_brewer_specifics = "Especificidades do Cervejeiro";
+$label_sparkling = "Espumante";
+$label_dry = "Seca";
+$label_med_dry = "Meio Seca";
+$label_med_sweet = "Meio Doce";
+$label_sweet = "Doce";
+$label_brewer_specifics = "Especificações do Cervejeiro";
 $label_general = "Geral";
-$label_amount_brewed = "Quantidade Brassada";
+$label_amount_brewed = "Quantidade Produzida";
 $label_specific_gravity = "Gravidade Específica";
 $label_fermentables = "Fermentáveis";
 $label_malt_extract = "Extrato de Malte";
-$label_grain = "Grãos";
+$label_grain = "Grão";
 $label_hops = "Lúpulos";
 $label_hop = "Lúpulo";
-$label_mash = "Mash";
-$label_steep = "Steep";
-$label_other = "Outro";
+$label_mash = "Mostura";
+$label_steep = "Embebição";
+$label_other = "Outros";
 $label_weight = "Peso";
 $label_use = "Uso";
 $label_time = "Tempo";
-$label_first_wort = "First Wort";
+$label_first_wort = "Primeira Dorna";
 $label_boil = "Fervura";
 $label_aroma = "Aroma";
 $label_dry_hop = "Dry Hop";
 $label_type = "Tipo";
-$label_bittering = "Bittering";
+$label_bittering = "Amargor";
 $label_both = "Ambos";
 $label_form = "Forma";
-$label_whole = "Flor";
+$label_whole = "Inteiro";
 $label_pellets = "Pellets";
 $label_plug = "Plug";
 $label_extract = "Extrato";
 $label_date = "Data";
-$label_bottled = "Engarrafado";
-$label_misc = "Miscellaneous";
+$label_bottled = "Engarrafada";
+$label_misc = "Miscelânea";
 $label_minutes = "Minutos";
 $label_hours = "Horas";
-$label_step = "Passos";
+$label_step = "Etapa";
 $label_temperature = "Temperatura";
 $label_water = "Água";
 $label_amount = "Quantidade";
-$label_yeast = "Fermento";
+$label_yeast = "Levedura";
 $label_name = "Nome";
 $label_manufacturer = "Fabricante";
 $label_nutrients = "Nutrientes";
-$label_liquid = "Líquido";
+$label_liquid = "Líquida";
 $label_ale = "Ale";
 $label_lager = "Lager";
-$label_wine = "Wine";
+$label_wine = "Vinho";
 $label_champagne = "Champagne";
 $label_boil = "Fervura";
 $label_fermentation = "Fermentação";
-$label_finishing = "Finishing";
-$label_finings = "Finings";
-$label_primary = "Primary";
-$label_secondary = "Secondary";
+$label_finishing = "Finalização";
+$label_finings = "Clarificantes";
+$label_primary = "Primária";
+$label_secondary = "Secundária";
 $label_days = "Dias";
-$label_forced = "Carbonatação Forçada";
-$label_bottle_cond = "Refermentação na garrafa";
+$label_forced = "Forçada CO2";
+$label_bottle_cond = "Carbonatação em Garrafa";
 $label_volume = "Volume";
 $label_og = "Gravidade Original";
 $label_fg = "Gravidade Final";
 $label_starter = "Starter";
 $label_password = "Senha";
-$label_judging_number = "Número para Julgamento";
-$label_check_in = "Check In da Amostra";
+$label_judging_number = "Número de Julgamento";
+$label_check_in = "Check-In de Inscrição";
 $label_box_number = "Número da Caixa";
-$label_first_name = "Nome";
+$label_first_name = "Primeiro Nome";
 $label_last_name = "Sobrenome";
-$label_secret_01 = "Qual é a sua cerveja favorita de todos os tempos?";
-$label_secret_02 = "Qual foi o nome do seu primeiro animal de estimação?";
+$label_secret_01 = "Qual é a sua cerveja favorita de todos os tempos para beber?";
+$label_secret_02 = "Qual era o nome do seu primeiro animal de estimação?";
 $label_secret_03 = "Qual era o nome da rua em que você cresceu?";
-$label_secret_04 = "Qual era o nome do bairro em que você nasceu?";
-$label_security_answer = "Resposta da Pergunta de Segurança";
-$label_security_question = "Pergunta de segurança";
-$label_judging = "Julgando";
+$label_secret_04 = "Qual era o mascote da sua escola?";
+$label_security_answer = "Resposta à Pergunta de Segurança";
+$label_security_question = "Pergunta de Segurança";
+$label_judging = "Julgamento";
 $label_judge = "Juiz";
-$label_steward = "Auxiliar";
-$label_account_info = "Detalhes da Conta";
-$label_street_address = "Endereço - Rua";
+$label_steward = "Mestre-cervejeiro";
+$label_account_info = "Informações da Conta";
+$label_street_address = "Endereço";
 $label_address = "Endereço";
 $label_city = "Cidade";
-$label_state_province = "Estado";
+$label_state_province = "Estado/Província";
 $label_zip = "CEP";
 $label_country = "País";
 $label_phone = "Telefone";
-$label_phone_primary = "Telefone Primário";
+$label_phone_primary = "Telefone Principal";
 $label_phone_secondary = "Telefone Secundário";
-$label_drop_off = "Local para entrega presencial de";
-$label_drop_offs = "Locais para entrega presencial de";
+$label_drop_off = "Entrega de Inscrição";
+$label_drop_offs = "Locais de Entrega";
 $label_club = "Clube";
-$label_aha_number = "AHA Member Number";
-$label_org_notes = "Observações para os Organizadores";
+$label_aha_number = "Número de Membro da AHA";
+$label_org_notes = "Notas para o Organizador";
 $label_avail = "Disponibilidade";
-$label_location = "Local";
-$label_judging_avail = "Disponibilidade para Sessão de Julgamento";
-$label_stewarding = "Stewarding";
-$label_stewarding_avail = "Disponibilidade para Auxiliar a Sessão de Julgamento";
-$label_bjcp_id = "BJCP ID";
-$label_bjcp_mead = "Juiz de Hidromel";
-$label_bjcp_rank = "BJCP Rank";
+$label_location = "Localização";
+$label_judging_avail = "Disponibilidade para Sessões de Julgamento";
+$label_stewarding = "Mestre-cervejeiro";
+$label_stewarding_avail = "Disponibilidade para Sessões de Mestre-cervejeiro";
+$label_bjcp_id = "ID BJCP";
+$label_bjcp_mead = "Juiz Certificado de Hidromel";
+$label_bjcp_rank = "Classificação BJCP";
 $label_designations = "Designações";
 $label_judge_sensory = "Juiz com Treinamento Sensorial";
 $label_judge_pro = "Cervejeiro Profissional";
 $label_judge_comps = "Competições Julgadas";
 $label_judge_preferred = "Estilos Preferidos";
-$label_judge_non_preferred = "Estilos Não-Preferidos";
-$label_waiver = "Waiver";
-$label_add_admin = "Adicionar Detalhes do Administrador";
-$label_add_account = "Adicionar Detalhes do Usuário";
-$label_edit_account = "Editar Detalhes do Usuário";
-$label_entries = "Amostras";
-$label_confirmed = "Confirmadas";
-$label_paid = "Pagas";
-$label_updated = "Atualizadas";
+$label_judge_non_preferred = "Estilos Não Preferidos";
+$label_waiver = "Isenção";
+$label_add_admin = "Adicionar Informações de Usuário Admin";
+$label_add_account = "Adicionar Informações de Conta";
+$label_edit_account = "Editar Informações de Conta";
+$label_entries = "Inscrições";
+$label_confirmed = "Confirmado";
+$label_paid = "Pago";
+$label_updated = "Atualizado";
 $label_mini_bos = "Mini-BOS";
 $label_actions = "Ações";
 $label_score = "Pontuação";
 $label_winner = "Vencedor?";
 $label_change_email = "Alterar Email";
 $label_change_password = "Alterar Senha";
-$label_add_beerXML = "Adicionar Amostra Usando BeerXML";
-$label_none_entered = "Nenhuma entrada";
-$label_none = "Nenhuma";
+$label_add_beerXML = "Adicionar uma Inscrição Usando BeerXML";
+$label_none_entered = "Nenhuma inscrição";
+$label_none = "Nenhum";
 $label_discount = "Desconto";
 $label_subject = "Assunto";
 $label_message = "Mensagem";
 $label_send_message = "Enviar Mensagem";
 $label_email = "Endereço de Email";
-$label_account_registration = "Registro de usuário";
-$label_entry_registration = "Inscrição de amostra";
-$label_entry_fees = "Taxas das Amostras";
-$label_entry_limit = "Limite de Amostras";
-$label_entry_info = "Detalhes da Amostra";
-$label_entry_per_entrant = "Limite de Amostras por Participante";
+$label_account_registration = "Registro de Conta";
+$label_entry_registration = "Registro de Inscrição";
+$label_entry_fees = "Taxas de Inscrição";
+$label_entry_limit = "Limite de Inscrição";
+$label_entry_info = "Informações de Inscrição";
+$label_entry_per_entrant = "Limites por Participante";
 $label_categories_accepted = "Estilos Aceitos";
 $label_judging_categories = "Categorias de Julgamento";
-$label_entry_acceptance_rules = "Regras para Aceitação da Amostra";
-$label_shipping_info = "Detalhes do Envio";
-$label_packing_shipping = "Embalando e Enviando";
-$label_awards = "Premiação";
+$label_entry_acceptance_rules = "Regras de Aceitação de Inscrição";
+$label_shipping_info = "Informações de Envio";
+$label_packing_shipping = "Embalagem e Envio";
+$label_awards = "Premiações";
 $label_awards_ceremony = "Cerimônia de Premiação";
-$label_circuit = "Qualificação do Circuito";
-$label_hosted = "Hosted Edition";
-$label_entry_check_in = "Check-In de Amostra";
+$label_circuit = "Qualificação de Circuito";
+$label_hosted = "Edição Hospedada";
+$label_entry_check_in = "Check-In de Inscrição";
 $label_cash = "Dinheiro";
 $label_check = "Cheque";
-$label_pay_online = "Pagamento Online";
+$label_pay_online = "Pagar Online";
 $label_cancel = "Cancelar";
-$label_understand = "Eu entendi";
-$label_fee_discount = "Desconto da taxa da Amostra";
+$label_understand = "Eu Entendo";
+$label_fee_discount = "Taxa de Inscrição com Desconto";
 $label_discount_code = "Código de Desconto";
-$label_register_judge = "Você está se registrando como Participante, Juiz ou Auxiliar?";
-$label_register_judge_standard = "Registrar como Juiz ou Auxiliar (Standard)";
-$label_register_judge_quick = "Registrar como Juiz ou Auxiliar (Quick)";
+$label_register_judge = "Você está se Registrando como Participante, Juiz ou Mestre-cervejeiro?";
+$label_register_judge_standard = "Registrar um Juiz ou Mestre-cervejeiro (Padrão)";
+$label_register_judge_quick = "Registrar um Juiz ou Mestre-cervejeiro (Rápido)";
 $label_all_participants = "Todos os Participantes";
 $label_open = "Aberto";
 $label_closed = "Fechado";
-$label_judging_loc = "Locais e Datas das Sessões de Julgamento";
+$label_judging_loc = "Sessões de Julgamento";
 $label_new = "Novo";
 $label_old = "Antigo";
-$label_sure = "Você tem certeza?";
+$label_sure = "Você tem Certeza?";
 $label_judges = "Juízes";
-$label_stewards = "Auxiliar";
-$label_staff = "Coordenação";
+$label_stewards = "Mestres-cervejeiros";
+$label_staff = "Equipe";
 $label_category = "Categoria";
-$label_delete = "Apagar";
-$label_undone = "Esta ação não pode ser desfeita";
+$label_delete = "Excluir";
+$label_undone = "Isso não pode ser desfeito.";
 $label_bitterness = "Amargor";
 $label_close = "Fechar";
 $label_custom_style = "Estilo Personalizado";
-$label_custom_style_types = "Tipos de Estilos Personalizados";
-$label_assigned_to_table = "Atribuída à Mesa";
+$label_custom_style_types = "Tipos de Estilo Personalizado";
+$label_assigned_to_table = "Atribuído à Mesa";
 $label_organizer = "Organizador";
 $label_by_table = "Por Mesa";
 $label_by_category = "Por Estilo";
 $label_by_subcategory = "Por Sub-Estilo";
-$label_by_last_name = "Pelo Sobrenome";
+$label_by_last_name = "Por Sobrenome";
 $label_by_table = "Por Mesa";
-$label_by_location = "Pela Localidade da Sessão";
-$label_shipping_entries = "Envio das Amostras"; //
-$label_no_availability = "Sem Disponibilidade Definida";
+$label_by_location = "Por Local de Sessão";
+$label_shipping_entries = "Envio de Inscrições";
+$label_no_availability = "Nenhuma Disponibilidade Definida";
 $label_error = "Erro";
 $label_round = "Rodada";
-$label_flight = "Flight";
+$label_flight = "Voo";
 $label_rounds = "Rodadas";
-$label_flights = "Flights";
-$label_sign_in = "Sign In";
+$label_flights = "Voos";
+$label_sign_in = "Entrar";
 $label_signature = "Assinatura";
-$label_assignment = "Tarefas";
-$label_assignments = "Tarefas";
+$label_assignment = "Atribuição";
+$label_assignments = "Atribuições";
 $label_letter = "Carta";
-$label_re_enter = "Re-Entrar";
-$label_website = "Website";
-$label_place = "Local";
-$label_cheers = "Cheers";
+$label_re_enter = "Reentrar";
+$label_website = "Site";
+$label_place = "Lugar";
+$label_cheers = "Saúde";
 $label_count = "Contagem";
 $label_total = "Total";
 $label_participant = "Participante";
-$label_entrant = "Competidor";
+$label_entrant = "Participante";
 $label_received = "Recebido";
-$label_please_note = "Preste Atenção";
-$label_pull_order = "Pull Order";
+$label_please_note = "Observe Por Favor";
+$label_pull_order = "Ordem de Retirada";
 $label_box = "Caixa";
 $label_sorted = "Ordenado";
 $label_subcategory = "Subcategoria";
-$label_affixed = "Etiqueta Afixada?";
+$label_affixed = "Rótulo Afixado?";
 $label_points = "Pontos";
-$label_comp_id = "BJCP Competition ID";
+$label_comp_id = "ID da Competição BJCP";
 $label_days = "Dias";
 $label_sessions = "Sessões";
 $label_number = "Número";
-$label_more_info = "Mais Detalhes";
-$label_entry_instructions = "Instruções da Amostra";
+$label_more_info = "Mais Informações";
+$label_entry_instructions = "Instruções de Inscrição";
 $label_commercial_examples = "Exemplos Comerciais";
 $label_users = "Usuários";
 $label_participants = "Participantes";
-$label_please_confirm = "Favor Confirmar";
-$label_undone = "Esta ação não pode ser desfeita.";
-$label_data_retain = "Dados para Reter";
-$label_comp_portal = "Diretório da Concurso";
-$label_comp = "Concurso";
+$label_please_confirm = "Por Favor, Confirme";
+$label_undone = "Isso não pode ser desfeito.";
+$label_data_retain = "Dados a Serem Mantidos";
+$label_comp_portal = "Diretório de Competições";
+$label_comp = "Competição";
 $label_continue = "Continuar";
-$label_host = "Host";
-$label_closing_soon = "Termina em Breve";
-$label_access = "Accesso";
+$label_host = "Anfitrião";
+$label_closing_soon = "Fechamento em Breve";
+$label_access = "Acesso";
 $label_length = "Comprimento";
-
 $label_admin = "Administração";
 $label_admin_short = "Admin";
-$label_admin_dashboard = "Dashboard";
+$label_admin_dashboard = "Painel de Controle";
 $label_admin_judging = $label_judging;
-$label_admin_stewarding = "Auxiliando";
+$label_admin_stewarding = "Mestre-cervejeiro";
 $label_admin_participants = $label_participants;
 $label_admin_entries = $label_entries;
-$label_admin_comp_info = "Detalhes do Concurso";
-$label_admin_web_prefs = "Preferências do Website";
-$label_admin_judge_prefs = "Preferências da Organização do Concurso";
+$label_admin_comp_info = "Informações da Competição";
+$label_admin_web_prefs = "Preferências do Site";
+$label_admin_judge_prefs = "Preferências de Julgamento/Organização de Competições";
 $label_admin_archives = "Arquivos";
 $label_admin_style = $label_style;
 $label_admin_styles = "Estilos";
@@ -447,24 +453,23 @@ $label_admin_dropoff = $label_drop_offs;
 $label_admin_judging_loc = $label_judging_loc;
 $label_admin_contacts = "Contatos";
 $label_admin_tables = "Mesas";
-$label_admin_scores = "Scores";
+$label_admin_scores = "Pontuações";
 $label_admin_bos = $label_bos;
 $label_admin_bos_acr = "BOS";
 $label_admin_style_types = "Tipos de Estilo";
 $label_admin_custom_cat = "Categorias Personalizadas";
-$label_admin_custom_cat_data = "Amostras da Categoria Personalizada";
+$label_admin_custom_cat_data = "Entradas de Categoria Personalizada";
 $label_admin_sponsors = $label_sponsors;
-$label_admin_entry_count = "Contagem de Amostras por Estilo";
-$label_admin_entry_count_sub = "Contagem de Amostras por Sub-Estilo";
-$label_admin_custom_mods = "Custom Modules";
+$label_admin_entry_count = "Contagem de Entradas por Estilo";
+$label_admin_entry_count_sub = "Contagem de Entradas por Sub-Estilo";
+$label_admin_custom_mods = "Módulos Personalizados";
 $label_admin_check_in = $label_entry_check_in;
-$label_admin_make_admin = "Alterar User Level";
+$label_admin_make_admin = "Alterar Nível de Usuário";
 $label_admin_register = "Registrar um Participante";
-$label_admin_upload_img = "Upload Images";
-$label_admin_upload_doc = "Upload Scoresheets e outros Documentos";
-$label_admin_password = "Alterar a Senha de Usuário";
+$label_admin_upload_img = "Enviar Imagens";
+$label_admin_upload_doc = "Enviar Fichas de Avaliação e Outros Documentos";
+$label_admin_password = "Alterar Senha de Usuário";
 $label_admin_edit_account = "Editar Conta de Usuário";
-
 $label_account_summary = "Resumo da Minha Conta";
 $label_confirmed_entries = "Amostras Confirmadas";
 $label_unpaid_confirmed_entries = "Amostras Confirmadas e NÃO Pagas";
@@ -477,6 +482,12 @@ $label_cellar = "Meu Porão";
 $label_verify = "Verificar";
 $label_entry_number = "Número da Amostra";
 
+/**
+ * ------------------------------------------------------------------------
+ * Headers
+ * Missing punctuation intentional for all.
+ * ------------------------------------------------------------------------
+ */
 $header_text_000 = "A Instalação foi bem sucedida.";
 $header_text_001 = "Você agora está logado e pronto para customizar o site do Concurso.";
 $header_text_002 = "Entretanto, as permissões do config.php não puderam ser alteradas.";
@@ -587,6 +598,11 @@ $header_text_109 = "Você se registrou como administrador.";
 $header_text_110 = "Todas as amostras foram marcadas como pagas.";
 $header_text_111 = "Todas as amostras foram marcadas como recebidas.";
 
+/**
+ * ------------------------------------------------------------------------
+ * Alerts
+ * ------------------------------------------------------------------------
+ */
 $alert_text_000 = "Conceda acesso de administrador e administrador de nível superior aos usuários com cautela.";
 $alert_text_001 = "Limpeza de dados concluída.";
 $alert_text_002 = "A variável setup_free_access em config.php está atualmente definida como TRUE.";
@@ -648,17 +664,26 @@ $alert_text_077 = "O registro de assistentes está encerrado.";
 $alert_text_078 = "O registro como juiz ainda está disponível.";
 $alert_text_080 = "Senha incorreta.";
 $alert_text_081 = "Senha aceita.";
-
 $alert_email_valid = "O formato de email é válido!";
 $alert_email_not_valid = "O formato de email não é válido!";
 $alert_email_in_use = "O endereço de email que você digitou já está em uso. Por favor, escolha outro.";
 $alert_email_not_in_use = "Parabéns! O endereço de e-mail que você digitou não está em uso.";
 
+/**
+ * ------------------------------------------------------------------------
+ * Public Pages
+ * ------------------------------------------------------------------------
+ */
 $comps_text_000 = "Escolha a competição que você deseja acessar na lista abaixo.";
 $comps_text_001 = "Competição atual:";
 $comps_text_002 = "Não há competições com janelas de amostras abertas agora.";
 $comps_text_003 = "Não há competições com janelas de amostras fechando nos próximos 7 dias.";
 
+/**
+ * ------------------------------------------------------------------------
+ * BeerXML
+ * ------------------------------------------------------------------------
+ */
 $beerxml_text_000 = "Importar amostras não está disponível.";
 $beerxml_text_001 = "foi enviado e o brew foi adicionado à sua lista de amostras.";
 $beerxml_text_002 = "Desculpe, este tipo de arquivo não pode ser enviado. Somente extensões de arquivo .xml são permitidas.";
@@ -673,6 +698,11 @@ $beerxml_text_010 = "Nenhum arquivo escolhido ...";
 $beerxml_text_011 = "amostras adicionadas"; // letras minúsculas e falta de pontuação intencional
 $beerxml_text_012 = "amostra adicionada"; // letras minúsculas e falta de pontuação intencional
 
+/**
+ * ------------------------------------------------------------------------
+ * Add Entry
+ * ------------------------------------------------------------------------
+ */
 $brew_text_000 = "Clique para detalhes sobre o estilo"; // falta de pontuação intencional
 $brew_text_001 = "Os juízes não saberão o nome da sua amostra.";
 $brew_text_002 = "[desativado - limite de amostra do estilo atingido]"; // falta de pontuação intencional
@@ -701,6 +731,11 @@ $brew_text_024 = "Descanso de sacarificação, etc.";
 $brew_text_025 = "Fermentação secundária em dias.";
 $brew_text_026 = "Outra fermentação em dias.";
 
+/**
+ * ------------------------------------------------------------------------
+ * My Account
+ * ------------------------------------------------------------------------
+ */
 $brewer_text_000 = "Por favor digite apenas <em> um </em> nome da pessoa.";
 $brewer_text_001 = "Escolha uma. Esta questão será usada para verificar sua identidade caso você esqueça sua senha.";
 $brewer_text_003 = "Para ser considerado para uma oportunidade GABF Pro-Am você deve ser um membro da AHA.";
@@ -723,11 +758,21 @@ $brewer_text_019 = "Se você planeja servir como juiz em qualquer competição, 
 $brewer_text_020 = "Você está disposto a servir como membro da equipe nesta competição?";
 $brewer_text_021 = "Equipe da competição são pessoas que atuam em várias funções para ajudar na organização e execução da competição antes, durante e após o julgamento. Juízes e mordomos também podem servir como membros da equipe. Os membros da equipe podem ganhar pontos BJCP se a competição é sancionado. ";
 
+/**
+ * ------------------------------------------------------------------------
+ * Contact
+ * ------------------------------------------------------------------------
+ */
 $contact_text_000 = "Use os links abaixo para contatar as pessoas envolvidas na coordenação desta competição:";
 $contact_text_001 = "Use o formulário abaixo para entrar em contato com um oficial da competição. Todos os campos com uma estrela são obrigatórios.";
 $contact_text_002 = "Além disso, uma cópia foi enviada para o endereço de e-mail que você forneceu.";
 $contact_text_003 = "Deseja enviar outra mensagem?";
 
+/**
+ * ------------------------------------------------------------------------
+ * Home Pages
+ * ------------------------------------------------------------------------
+ */
 $default_page_text_000 = "Nenhum local de entrega foi especificado.";
 $default_page_text_001 = "Adicionar um local de entrega?";
 $default_page_text_002 = "Nenhuma data / local de julgamento foi especificado.";
@@ -752,7 +797,6 @@ $default_page_text_020 = "Faça o download das amostras vencedoras no formato PD
 $default_page_text_021 = "Faça o download das amostras vencedoras no formato HTML.";
 $default_page_text_022 = "Obrigado pelo seu interesse no";
 $default_page_text_023 = "organizado por";
-
 $reg_open_text_000 = "O registro de juiz e assistente está";
 $reg_open_text_001 = "Aberto";
 $reg_open_text_002 = "Se você <em>não tiver</em> registrado e estiver disposto a ser um voluntário,";
@@ -768,7 +812,6 @@ $reg_open_text_011 = "Para adicionar suas amostras no sistema";
 $reg_open_text_012 = "prossiga pelo processo de registro";
 $reg_open_text_013 = "se você já possui uma conta.";
 $reg_open_text_014 = "use o formulário de adicionar uma amostra";
-
 $reg_open_text_015 = "O registro do juiz está";
 $reg_open_text_016 = "O registro de assistente está";
 $reg_closed_text_000 = "Obrigado e boa sorte a todos que entraram no";
@@ -785,6 +828,11 @@ $judge_closed_001 = "Houve";
 $judge_closed_002 = "amostras julgadas e";
 $judge_closed_003 = "participantes registrados, juízes e administradores.";
 
+/**
+ * ------------------------------------------------------------------------
+ * Entry Info
+ * ------------------------------------------------------------------------
+ */
 $entry_info_text_000 = "Você poderá criar sua conta começando";
 $entry_info_text_001 = "até";
 $entry_info_text_002 = "Juízes e assistentes podem se registrar no começo";
@@ -833,6 +881,11 @@ $entry_info_text_044 = "Abrir mapa";
 $entry_info_text_045 = "Clique para saber informações obrigatórias das amostras";
 $entry_info_text_046 = "Se o nome de um estilo é um link, a amostra possui requisitos específicos. Clique no nome para ver os requisitos da subcategoria.";
 
+/**
+ * ------------------------------------------------------------------------
+ * My Account Entry List
+ * ------------------------------------------------------------------------
+ */
 $brewer_entries_text_000 = "Há um problema conhecido com a impressão do navegador Firefox.";
 $brewer_entries_text_001 = "Você tem amostras não confirmadas.";
 $brewer_entries_text_002 = "Para cada amostra abaixo com o ícone <span class=\"fa-lg fa-exclamation-circle text-danger\"></span>, clique no ícone <span class=\"fa fa-lg fa-pencil text-primary\"></span> para revisar e confirmar todos os dados das amostras. As amostras não confirmadas podem ser excluídas do sistema sem aviso prévio.";
@@ -850,8 +903,18 @@ $brewer_entries_text_013 = "Você poderá adicionar amostras a partir de";
 $brewer_entries_text_014 = "Você não adicionou nenhuma amostra ao sistema.";
 $brewer_entries_text_015 = "Você não pode deletar sua amostra neste momento.";
 
+/**
+ * ------------------------------------------------------------------------
+ * Past Winners
+ * ------------------------------------------------------------------------
+ */
 $past_winners_text_000 = "Ver vencedores anteriores:";
 
+/**
+ * ------------------------------------------------------------------------
+ * Pay for Entries
+ * ------------------------------------------------------------------------
+ */
 $pay_text_000 = "a janela de pagamento passou.";
 $pay_text_001 = "Entre em contato com um oficial da competição se tiver alguma dúvida.";
 $pay_text_002 = "as seguintes são as opções para pagar as taxas de inscrição.";
@@ -883,6 +946,11 @@ $pay_text_027 = "Clique em <em>Minha conta</​​em> acima para revisar suas am
 $pay_text_028 = "Você tem amostras não confirmadas que <em>não</em> estão refletidas em seus totais de taxas abaixo.";
 $pay_text_029 = "Por favor, vá para a sua lista de amostras para confirmar todos os dados da sua amostra. As amostras não confirmadas podem ser excluídas do sistema sem aviso.";
 
+/**
+ * ------------------------------------------------------------------------
+ * QR Code Check-in
+ * ------------------------------------------------------------------------
+ */
 if (strpos ($view, "^")!== FALSE) {
     $qr_text_019 =sprintf ("%06d", $checked_in_numbers [0]);
     if (is_numeric ($checked_in_numbers [1])) $qr_text_020 = sprintf ("%06d", $checked_in_numbers [1]);
@@ -908,9 +976,12 @@ $qr_text_013 = "Os números de julgamento devem ter seis caracteres e não podem
 $qr_text_014 = "Esperando pela entrada do código QR digitalizado.";
 $qr_text_015 = "Inicie ou volte ao aplicativo de escaneamento do seu dispositivo móvel para escanear um código QR.";
 $qr_text_016 = "Precisa de um aplicativo de verificação de código QR? <a href=\"https://play.google.com/store/search?q=qr%20code%20scanner&c=apps&hl=en\" target=\"_blank\">Google Play</a> (Android) ou <a href=\"https://itunes.apple.com/store/\" target=\"_blank\">iTunes</a> (iOS).";
-$qr_text_017 = "É necessário um aplicativo de escaneamento de QR Code para utilizar este recurso.";
-$qr_text_018 = "Inicie o aplicativo em seu dispositivo móvel, digitalize um Código QR localizado em um rótulo de garrafa, insira a senha solicitada e faça o check-in da amostra.";
 
+/**
+ * ------------------------------------------------------------------------
+ * Registration
+ * ------------------------------------------------------------------------
+ */
 $register_text_000 = "É o voluntário";
 $register_text_001 = "Você está";
 $register_text_002 = "O registro foi encerrado.";
@@ -946,8 +1017,12 @@ $register_text_031 = "Por favor, forneça um CEP ou código postal.";
 $register_text_032 = "Por favor, forneça um número de telefone principal.";
 $register_text_033 = "Somente os membros da American Homebrewers Association são elegíveis para uma oportunidade do Great American Beer Festival Pro-Am.";
 $register_text_034 = "Para se registrar, você deve marcar a caixa, indicando que concorda com a declaração de renúncia.";
-$register_text_035 = "Favor preencher um CPF válido.";
 
+/**
+ * ------------------------------------------------------------------------
+ * Sidebar
+ * ------------------------------------------------------------------------
+ */
 $sidebar_text_000 = "Inscrições para juízes ou assitentes";
 $sidebar_text_001 = "Inscrições para assitentes";
 $sidebar_text_002 = "Inscrições para juízes";
@@ -975,6 +1050,11 @@ $sidebar_text_023 = "endereço para recebimento por correios de";
 $sidebar_text_024 = "As datas de julgamento da competição ainda serão determinadas. Por favor, volte mais tarde.";
 $sidebar_text_025 = "foram adicionadas ao sistema a partir de";
 
+/**
+ * ------------------------------------------------------------------------
+ * Styles
+ * ------------------------------------------------------------------------
+ */
 $styles_entry_text_07C = "O participante deve especificar se a amostra é um Munich Kellerbier (pálido, baseado em Helles) ou um Franconian Kellerbier (âmbar, baseado em Marzen). O participante pode especificar outro tipo de Kellerbier baseado em outros estilos base, como Pils. , Bock, Schwarzbier, mas deve fornecer uma descrição de estilo para os juízes. ";
 $styles_entry_text_09A = "O participante deve especificar se a amostra é uma variante pálida ou escura.";
 $styles_entry_text_10C = "O participante deve especificar se a amostra é uma variante pálida ou escura.";
@@ -1022,11 +1102,21 @@ $styles_entry_text_C2D = "Os participantes DEVEM especificar a gravidade inicial
 $styles_entry_text_C2E = "Os participantes DEVEM especificar o nível de carbonatação (3 níveis). Os participantes DEVEM especificar doçura (5 categorias). Os participantes DEVEM especificar todos os ingredientes adicionados. Se o lúpulo for usado, o participante deve especificar a variedade / variedades usadas.";
 $styles_entry_text_C2F = "Os participantes DEVEM especificar todos os ingredientes. Os participantes DEVEM especificar o nível de carbonatação (3 níveis). Os participantes DEVEM especificar a doçura (5 categorias).";
 
+/**
+ * ------------------------------------------------------------------------
+ * User Edit Email
+ * ------------------------------------------------------------------------
+ */
 $user_text_000 = "Um novo endereço de e-mail é obrigatório e deve estar em um formulário válido.";
 $user_text_001 = "Digite a senha antiga.";
 $user_text_002 = "Digite a nova senha.";
 $user_text_003 = "Por favor, marque esta caixa se você deseja mudar o seu endereço de e-mail.";
 
+/**
+ * ------------------------------------------------------------------------
+ * Volunteers
+ * ------------------------------------------------------------------------
+ */
 $volunteers_text_000 = "Se você se registrou,";
 $volunteers_text_001 = "e depois escolha <em> Editar conta </ ​​em> no menu Minha conta indicado pelo";
 $volunteers_text_002 = "ícone no menu superior";
@@ -1036,10 +1126,14 @@ $volunteers_text_005 = "Desde que você já se registrou,";
 $volunteers_text_006 = "acessar sua conta";
 $volunteers_text_007 = "para ver se você se ofereceu para ser um juiz ou mordomo";
 $volunteers_text_008 = "Se você estiver disposto a julgar ou administrar, por favor, retorne ao cadastro em ou após";
-
 $volunteers_text_009 = "Se você gostaria de se voluntariar para ser um membro da equipe de competição, registre ou atualize sua conta para indicar que você deseja fazer parte da equipe da competição.";
 $volunteers_text_010 = "";
 
+/**
+ * ------------------------------------------------------------------------
+ * Login
+ * ------------------------------------------------------------------------
+ */
 $login_text_000 = "Você já está logado.";
 $login_text_001 = "Não há endereço de e-mail no sistema que corresponda ao que você digitou.";
 $login_text_002 = "Tente de novo?";
@@ -1058,12 +1152,22 @@ $login_text_014 = "clique aqui para reenviá-lo para";
 $login_text_015 = "Se você não consegue lembrar a resposta à sua pergunta de segurança, entre em contato com um oficial de competição ou administrador do site.";
 $login_text_016 = "Envie-o por e-mail para";
 
+/**
+ * ------------------------------------------------------------------------
+ * Winners
+ * ------------------------------------------------------------------------
+ */
 $winners_text_000 = "Nenhum ganhador foi inserido para esta tabela. Por favor, volte mais tarde.";
 $winners_text_001 = "Amostras vencedoras ainda não foram postadas. Por favor, volte mais tarde.";
 $winners_text_002 = "Sua estrutura de premiação escolhida é premiar lugares por tabela. Selecione os lugares de premiação para a tabela como um todo abaixo.";
 $winners_text_003 = "Sua estrutura de premiação escolhida é premiar lugares por categoria. Selecione os locais de premiação para cada categoria geral abaixo (pode haver mais de um nesta tabela).";
 $winners_text_004 = "Sua estrutura de premiação escolhida é premiar lugares por subcategoria. Selecione os locais de premiação para cada subcategoria abaixo (pode haver mais de um nesta tabela).";
 
+/**
+ * ------------------------------------------------------------------------
+ * Output
+ * ------------------------------------------------------------------------
+ */
 $output_text_000 = "Obrigado por participar da nossa competição";
 $output_text_001 = "Um resumo de suas amostras, pontuações e lugares está abaixo.";
 $output_text_002 = "Resumo para";
@@ -1092,10 +1196,12 @@ $output_text_024 = "Relatório de Pontos BJCP";
 $output_text_025 = "Total de Pontos de Pessoal Disponíveis";
 $output_text_026 = "Estilos nesta categoria não são aceitos nesta competição.";
 $output_text_027 = "link para Diretrizes de Estilo do Programa de Certificação de Juiz de Cerveja";
-$output_text_028 = "";
-$output_text_029 = "";
-$output_text_030 = "";
 
+/**
+ * ------------------------------------------------------------------------
+ * Maintenance
+ * ------------------------------------------------------------------------
+ */
 $maintenance_text_000 = "O administrador do site retirou o site para manutenção.";
 $maintenance_text_001 = "Por favor, volte mais tarde.";
 
@@ -1104,7 +1210,6 @@ $maintenance_text_001 = "Por favor, volte mais tarde.";
  * Version 2.1.10-2.1.12 Additions
  * ------------------------------------------------------------------------
  */
-
 $label_entry_numbers = "Número(s) de amostra"; // Para PayPal IPN Email
 $label_status = "Status"; // Para PayPal IPN Email
 $label_amount = "Valor"; // Para PayPal IPN Email
@@ -1169,24 +1274,29 @@ $label_password_strength = "Força da senha";
 $label_entry_shipping = "Envio por correios";
 $label_jump_to = "Ir para ...";
 $label_top = "Top";
-
 $label_bjcp_cider = "Juiz de Cidra";
-
 $header_text_112 = "Você não tem privilégios de acesso suficientes para executar esta ação.";
 $header_text_113 = "Você pode editar apenas as informações da sua conta.";
 $header_text_114 = "Como administrador, você pode alterar as informações da conta de um usuário via Admin> Entradas e Participantes> Gerenciar Participantes.";
 $header_text_115 = "Resultados foram publicados.";
 $header_text_116 = "Se você não receber o email dentro de um prazo razoável, entre em contato com um oficial da competição ou administrador do site para redefinir sua senha para você.";
-
 $alert_text_082 = "Desde que você se inscreveu como juiz ou assistente, você não tem permissão para adicionar amostras à sua conta. Apenas representantes de uma organização podem adicionar amostras às suas contas.";
 $alert_text_083 = "Adicionar e editar amostras não está disponível.";
 $alert_text_084 = "Como dministrador, você pode adicionar uma amostra à conta de uma organização usando o menu suspenso & quot; Adicionar amostra para ...&quot; na página Administração &gt; Entradas e participantes &gt; Gerenciar inscrições.";
 $alert_text_085 = "Você não conseguirá imprimir a papelada de qualquer amostra (etiquetas de garrafas, etc.) até que o pagamento seja confirmado e tenha sido marcado como & quot; pago & quot; abaixo.";
-
 $brew_text_027 = "Este estilo da Associação de Cervejeiros requer uma declaração do fabricante de cerveja sobre a natureza especial do produto. Veja o <a href=\"https://www.brewersassociation.org/resources/brewers-association-beer-style- guidelines / \"target = \" _ blank \">Orientações de Estilo BA </a> para orientação específica.";
 $brew_text_028 = "*** NÃO REQUERIDO *** Adicione informações detalhadas nas diretrizes de estilo como uma característica que você PODE declarar.";
 $brew_text_029 = "Edição do administrador desativada. Seu perfil é considerado um perfil pessoal e não um perfil organizacional e, portanto, não está qualificado para adicionar amostras. Para adicionar uma amostra a uma organização, acesse a lista Gerenciar inscrições e escolha uma organização em;Adicionar uma amostra para...&quot; dropdown.";
-
+$brew_text_030 = "leite / lactose";
+$brew_text_031 = "ovos";
+$brew_text_032 = "peixe";
+$brew_text_033 = "crustáceos";
+$brew_text_034 = "nozes";
+$brew_text_035 = "amendoins";
+$brew_text_036 = "trigo";
+$brew_text_037 = "soja";
+$brew_text_038 = "Esta inscrição contém possíveis alérgenos alimentares? Os alérgenos alimentares comuns incluem leite (incluindo lactose), ovos, peixe, crustáceos, nozes, amendoins, trigo, soja, etc.";
+$brew_text_039 = "Por favor, especifique qualquer(s) alérgeno(s) possível(is)";
 $brewer_text_022 = "Você será capaz de identificar um co-cervejeiro ao adicionar suas amostras.";
 $brewer_text_023 = "Selecione <strong>None</strong> se você não é afiliado a um clube ou associação. Selecione <strong>Other</strong> se seu clube não estiver na lista - <strong> não deixe de usar a caixa de pesquisa </strong>.";
 $brewer_text_024 = "Por favor, forneça seu primeiro nome.";
@@ -1201,15 +1311,12 @@ $brewer_text_032 = "Por favor, forneça o nome da sua organização.";
 $brewer_text_033 = "Por favor, forneça uma pergunta de segurança.";
 $brewer_text_034 = "Por favor, forneça uma resposta à sua pergunta de segurança.";
 $brewer_text_035 = "Você passou no exame BJCP de Juiz de Cidra?";
-
 $entry_info_text_047 = "Se o nome de um estilo contém um link, ele possui requisitos específicos para a amostra. Clique ou toque no nome para acessar os estilos da Associação de Cervejeiros conforme listado em seu site.";
-
 $brewer_entries_text_016 = "Estilo digitado NÃO aceito";
 $brewer_entries_text_017 = "As inscrições não serão exibidas como recebidas até que a equipe da competição as tenha marcado como tal no sistema. Normalmente, isso ocorre DEPOIS todas as amostras foram coletadas de todos os locais de entrega e classificadas.";
 $brewer_entries_text_018 = "Você não poderá imprimir a papelada desta amostra (etiquetas de garrafas, etc.) até que seja marcada como paga.";
 $brewer_entries_text_019 = "A impressão de documentos da amostra não está disponível no momento.";
 $brewer_entries_text_020 = "A edição das inscrições não está disponível no momento. Se você deseja editar sua inscrição, entre em contato com um oficial da competição.";
-
 if (SINGLE) $brewer_info_000 = "Olá";
 else $brewer_info_000 = "Obrigado por participar do";
 $brewer_info_001 = "Os detalhes da sua conta foram atualizados pela última vez";
@@ -1224,12 +1331,10 @@ $brewer_info_009 = "Se você deseja alterar sua disponibilidade e / ou retirar s
 $brewer_info_010 = "Você já foi designado como";
 $brewer_info_011 = "ou";
 $brewer_info_012 = "Imprima suas etiquetas de avaliação de pontuação";
-
 $pay_text_030 = "Ao clicar no &quot;Entendo; botão a baixo, você será direcionado para o PayPal para efetuar seu pagamento. Depois de ter <strong> concluído </ strong> o seu pagamento, o PayPal o redirecionará para este site e envie um recibo por e-mail para a transação. <strong> Se o pagamento foi bem-sucedido, seu status pago será atualizado automaticamente. É possível que você precise aguardar alguns minutos para que o status do pagamento seja atualizado. </ strong> atualize a página de pagamento ou acesse sua lista de amostras. ";
 $pay_text_031 = "Sobre sair deste site";
 $pay_text_032 = "Nenhum pagamento é necessário. Obrigado!";
 $pay_text_033 = "Você tem amostras não pagas. Clique para pagar suas amostras.";
-
 $register_text_035 = "As informações que você fornece além do nome da sua organização são estritamente para fins de registro e manutenção.";
 $register_text_036 = "Uma condição para entrar na competição é fornecer essas informações, incluindo o endereço de e-mail e o número de telefone de uma pessoa de contato. O nome da sua organização pode ser exibido se uma das suas inscrições for publicada.";
 $register_text_037 = "Confirmação de inscrição";
@@ -1242,10 +1347,8 @@ $register_text_043 = "Por favor, não responda a este e-mail, pois ele é gerado
 $register_text_044 = "Por favor, forneça um nome de organização.";
 $register_text_045 = "Forneça um nome para a cervejaria, nome do brewpub, etc. Certifique-se de verificar as informações da competição para tipos de bebidas aceitos.";
 $register_text_046 = "Apenas para organizações dos EUA.";
-
 $user_text_004 = "Certifique-se de usar letras maiúsculas e minúsculas, números e caracteres especiais para uma senha mais forte.";
 $user_text_005 = "Seu endereço de e-mail atual é";
-
 $login_text_017 = "Envie-me minha resposta da pergunta de segurança";
 $login_text_018 = "Seu nome de usuário (endereço de email) é obrigatório.";
 $login_text_019 = "Sua senha é necessária.";
@@ -1257,9 +1360,7 @@ $login_text_024 = "É necessária uma senha de confirmação.";
 $login_text_025 = "Esqueceu sua senha?";
 $login_text_026 = "Digite o endereço de e-mail da sua conta e a nova senha abaixo.";
 $login_text_027 = "Sua senha foi reiniciada com sucesso. Agora você pode entrar com a nova senha.";
-
 $winners_text_005 = "O (s) vencedor (es) da Best of Show ainda não foi publicado. Por favor, volte mais tarde.";
-
 $paypal_response_text_000 = "Seu pagamento foi concluído. Os detalhes da transação são fornecidos aqui para sua conveniência.";
 $paypal_response_text_001 = "Por favor, note que você receberá uma comunicação oficial do PayPal no endereço de e-mail listado abaixo.";
 $paypal_response_text_002 = "Boa sorte na competição!";
@@ -1270,14 +1371,12 @@ $paypal_response_text_006 = "A resposta do Paypal foi inválida. & quot; Por fav
 $paypal_response_text_007 = "Por favor, entre em contato com o organizador da competição se você tiver alguma dúvida.";
 $paypal_response_text_008 = "Pagamento PayPal inválido";
 $paypal_response_text_009 = "Detalhes do pagamento via PayPal";
-
 $pwd_email_reset_text_000 = "Foi feita uma solicitação para verificar a conta no";
 $pwd_email_reset_text_001 = "website usando a função de e-mail Verification ID. Se você não iniciou isto, entre em contato com o organizador da competição.";
 $pwd_email_reset_text_002 = "A resposta de verificação de ID faz distinção entre maiúsculas e minúsculas";
 $pwd_email_reset_text_003 = "Foi feita uma solicitação para alterar sua senha no";
 $pwd_email_reset_text_004 = "website. Se você não iniciou isto, não se preocupe. Sua senha não pode ser redefinida sem o link abaixo.";
 $pwd_email_reset_text_005 = "Para redefinir sua senha, clique no link abaixo ou copie / cole no seu navegador.";
-
 $best_brewer_text_000 = "cervejeiros participantes";
 $best_brewer_text_001 = "HM";
 $best_brewer_text_002 = "Os desempatadores foram aplicados de acordo com a <a href=\"#\" data-toggle=\"modal\" data-target=\"#scoreMethod\"> metodologia de pontuação </a>. ";
@@ -1293,9 +1392,7 @@ $best_brewer_text_011 = "A maior pontuação máxima.";
 $best_brewer_text_012 = "A pontuação média mais alta.";
 $best_brewer_text_013 = "Não utilizado.";
 $best_brewer_text_014 = "clubes participantes";
-
 $dropoff_qualifier_text_001 = "Por favor, preste atenção nas notas fornecidas para cada local de entrega, pois podem haver especificidades, tais como, diferentes prazos, horários e pessoas específicas para deixar as amostras. <strong class=\"text-danger\">Os participantes são responsáveis por ler as informações fornecidas pelos organizadores para cada local de entrega.</strong>";
-
 $brewer_text_036 = "Como você escolheu <em> Outros</em>, verifique se o clube que você ingressou não está na nossa lista de forma semelhante.";
 $brewer_text_037 = "Por exemplo, você pode ter entrado a sigla do seu clube em vez do nome completo.";
 $brewer_text_038 = "Nomes de clubes consistentes entre os usuários são essenciais para os cálculos do \"Melhor Clube\", se implementados para esta competição.";
@@ -1307,16 +1404,13 @@ $brewer_text_040 = "Por favor, escolha da lista ou escolha <em> Outro </em> e di
  * Version 2.1.13 Additions
  * ------------------------------------------------------------------------
  */
-
 $entry_info_text_048 = "Para garantir um julgamento adequado, o participante deve fornecer informações adicionais sobre a bebida.";
 $entry_info_text_049 = "Para garantir um julgamento adequado, o participante deve fornecer o nível de força da bebida.";
 $entry_info_text_050 = "Para garantir um julgamento adequado, o participante deve fornecer o nível de carbonatação da bebida.";
 $entry_info_text_051 = "Para garantir um julgamento adequado, o participante deve fornecer o nível de doçura da bebida.";
 $entry_info_text_052 = "Ao entrar nesta categoria, o participante deve fornecer mais informações para que a entrada seja julgada com precisão. Quanto mais informação, melhor.";
-
 $output_text_028 = "As seguintes entradas têm possíveis alérgenos - como entrada pelos participantes.";
 $output_text_029 = "Nenhum participante forneceu informações sobre alérgenos para suas inscrições.";
-
 $label_this_style = "Esse Estilo";
 $label_notes = "Notas";
 $label_possible_allergens = "Possíveis Alérgenos";
@@ -1328,16 +1422,13 @@ $label_mead_cider_info = "Mead/Cider Info";
  * Version 2.1.10-2.1.14 Additions
  * ------------------------------------------------------------------------
  */
-
 $label_winners = "Vencedores";
 $label_unconfirmed_entries = "Entradas não Confirmadas";
 $label_recipe = "Receita";
 $label_view = "Visão";
 $label_number_bottles = "Número de Garrafas Necessárias por Entrada";
 $label_pro_am = "Pro-Am";
-
 $pay_text_034 = "O limite de entradas pagas foi atingido - pagamentos adicionais não estão sendo aceitos.";
-
 $bottle_labels_000 = "Os rótulos não podem ser gerados no momento.";
 $bottle_labels_001 = "Certifique-se de verificar as regras de aceitação de participação na competição para diretrizes específicas de fixação de rótulos antes de enviar!";
 $bottle_labels_002 = "Tipicamente, é usada fita de embalagem transparente para fixar ao barril de cada entrada - cobrir completamente a etiqueta.";
@@ -1347,9 +1438,7 @@ else $bottle_labels_004 = "Observação: são fornecidas 4 etiquetas como cortes
 $bottle_labels_005 = "Se algum item estiver faltando, feche esta janela e edite a entrada.";
 $bottle_labels_006 = "Espaço reservado para uso do pessoal da competição.";
 $bottle_labels_007 = "ESTE FORMULÁRIO DE RECEITA É APENAS PARA SEUS REGISTROS - NÃO inclua uma cópia dele na remessa de entrada.";
-
 $brew_text_040 = "Não há necessidade de especificar o glúten como alérgeno para qualquer estilo de cerveja; supõe-se que estará presente. As cervejas sem glúten devem ser inseridas na categoria Cerveja sem glúten (BA) ou na categoria Cerveja alternativa de grãos (BJCP). Apenas especifique o glúten como alérgeno nos estilos de hidromel ou sidra se uma fonte fermentável contiver glúten (por exemplo, malte de cevada, trigo ou centeio) ou se o fermento de cerveja foi usado.";
-
 $brewer_text_041 = "Você já recebeu a oportunidade Pro-Am de competir na próxima competição Pro-Am do Great American Beer Festival?";
 $brewer_text_042 = "Se você já recebeu um Pro-Am ou já fez parte da equipe de cervejarias de qualquer cervejaria, indique-o aqui. Isso ajudará a equipe da competição e os representantes da cervejaria Pro-Am (se aplicável a esta competição) a escolher as entradas Pro-Am de cervejeiros que não possuem uma.";
 
@@ -1358,13 +1447,10 @@ $brewer_text_042 = "Se você já recebeu um Pro-Am ou já fez parte da equipe de
  * Version 2.1.15 Additions
  * ------------------------------------------------------------------------
  */
-
 $label_submitting = "Enviando";
 $label_additional_info = "Entradas com informações adicionais";
 $label_working = "Trabalhando";
-
 $output_text_030 = "Por favor espere.";
-
 $brewer_entries_text_021 = "Verifique as entradas para imprimir suas etiquetas de garrafa. Marque a caixa de seleção superior para marcar ou desmarcar todas as caixas na coluna.";
 $brewer_entries_text_022 = "Imprimir Todas as Etiquetas de Garrafas para Entradas Verificadas";
 $brewer_entries_text_023 = "Os rótulos dos frascos serão abertos em uma nova guia ou janela.";
@@ -1375,7 +1461,6 @@ $brewer_entries_text_024 = "Imprimir Etiquetas de Garrafa";
  * Version 2.1.18 Additions
  * ------------------------------------------------------------------------
  */
-
 $output_text_031 = "Pressione Esc para ocultar.";
 $styles_entry_text_21X = "O participante DEVE especificar uma força (sessão: 3,0-5,0%, padrão: 5,0-7,5%, duplo: 7,5-9,5%).";
 $styles_entry_text_PRX4 = "O participante deve especificar os tipos de frutas frescas usadas.";
@@ -1385,7 +1470,6 @@ $styles_entry_text_PRX4 = "O participante deve especificar os tipos de frutas fr
  * Version 2.1.19 Additions
  * ------------------------------------------------------------------------
  */
-
 $output_text_032 = "A contagem de entradas reflete apenas os participantes que indicaram um local de entrega em seu perfil de conta. O número real de entradas pode ser maior ou menor.";
 $brewer_text_043 = "Ou você está ou já trabalhou na equipe de cervejaria de qualquer cervejaria? Isso inclui posições de cervejeiro, bem como técnicos de laboratório, equipe de adega, equipe de engarrafamento / conservas, etc. Os funcionários atuais e antigos da equipe de cervejaria não são elegíveis para participar da competição Pro-Am do Great American Beer Festival.";
 $label_entrant_reg = "Registro de Participantes";
@@ -1398,26 +1482,20 @@ $label_paid_entries = "Entradas Pagas";
  * Via Google Translate English to Portuguese - and for that, I'm sorry. :)
  * ------------------------------------------------------------------------
  */
-
 $alert_text_086 = "O Internet Explorer não é compatível com o BCOE&M - recursos e funções não serão renderizados corretamente e sua experiência não será a ideal. Por favor, atualize para um navegador mais recente.";
 $alert_text_087 = "Para uma experiência ideal e para que todos os recursos e funções sejam executados corretamente, habilite o JavaScript para continuar usando este site. Caso contrário, ocorrerá um comportamento inesperado.";
 $alert_text_088 = "A apresentação dos prêmios estará disponível publicamente após a publicação dos resultados.";
 $alert_text_089 = "Os dados arquivados não estão disponíveis.";
-
 $brewer_entries_text_025 = "Imprimir folhas de pontuação dos juízes";
-
 $brewer_info_013 = "Você foi designado como juiz.";
 $brewer_info_014 = "Acesse o painel de julgamento usando o botão abaixo para inserir avaliações das entradas atribuídas a você.";
-
 $contact_text_004 = "Os organizadores da competição não especificaram nenhum contato.";
-
 $label_thank_you = "Obrigado";
 $label_congrats_winners = "Parabéns a Todos os Vencedores de Medalhas";
 $label_placing_entries = "Colocando Entradas";
 $label_by_the_numbers = "Estatisticas";
 $label_launch_pres = "Apresentação de Prêmios de Lançamento";
 $label_entrants = "Competidores";
-
 $label_judging_dashboard = "Painel de Julgamento";
 $label_table_assignments = "Tarefas de Mesa";
 $label_table = "Mesa";
@@ -1452,7 +1530,6 @@ $label_place_awarded = "Lugar concedido";
 $label_honorable_mention = "Menção honrosa";
 $label_places_awarded_table = "Lugares premiados nesta mesa";
 $label_places_awarded_duplicate = "Lugares duplicados concedidos nesta mesa";
-
 $evaluation_info_000 = "O pool de entrada para cada uma das tabelas e voos que foram atribuídos a você é detalhado abaixo.";
 $evaluation_info_001 = "Esta competição está empregando julgamento em fila. Se houver mais de um par de juízes em sua mesa, avalie a próxima entrada na fila estabelecida.";
 $evaluation_info_002 = "Para garantir uma competição precisa e tranquila, você e seu (s) parceiro (s) de juízes SÓ devem julgar as inscrições em sua mesa que ainda não foram avaliadas. Consulte seu organizador ou coordenador de juízes se tiver alguma dúvida.";
@@ -1497,7 +1574,6 @@ $evaluation_info_040 = "Entradas pontuadas nesta mesa:";
 $evaluation_info_041 = "Entradas pontuadas em seu voo:";
 $evaluation_info_042 = "Suas entradas pontuadas:";
 $evaluation_info_043 = "Juízes com avaliações nesta mesa:";
-
 $label_submitted = "Submetido";
 $label_ordinal_position = "Posição Ordinal em Voo";
 $label_alcoholic = "Alcoólico";
@@ -1586,7 +1662,6 @@ $label_spicy = "Picante";
 $label_vinegary = "Vinagre";
 $label_plastic = "Plástico";
 $label_smoky = "Enfumaçado";
-
 $label_inappropriate = "Inapropriado";
 $label_possible_points = "Pontos Possíveis";
 $label_malt = "Malte";
@@ -1628,7 +1703,6 @@ $label_opaque = "Opaco";
 $label_fruit = "Fruta";
 $label_acidity = "Acidez";
 $label_tannin = "Tanino";
-
 $label_white = "Branco";
 $label_straw = "Cor de Palha";
 $label_yellow = "Amarelo";
@@ -1665,7 +1739,6 @@ $label_vinous = "Vinoso";
 $label_wood = "Madeira";
 $label_cream = "Creme";
 $label_flat = "Plano";
-
 $label_descriptor_defs = "Definições do descritor";
 $label_outstanding = "Excepcional";
 $descr_outstanding = "Exemplo de estilo de classe mundial.";
@@ -1687,9 +1760,7 @@ $descr_problematic = "Os principais sabores e aromas estranhos dominam. Difícil
  * Again. :)
  * ------------------------------------------------------------------------
  */
-
 $winners_text_006 = "Observação: os resultados desta tabela podem estar incompletos devido à entrada insuficiente ou informações de estilo.";
-
 $label_elapsed_time = "Tempo decorrido";
 $label_judge_score = "Pontuações do juiz";
 $label_judge_consensus_scores = "Pontuações do consenso do juiz";
@@ -1756,7 +1827,6 @@ $label_beer_scoresheet = "Folha de Pontuação da Cerveja";
 $label_cider_scoresheet = "Folha de Pontuação da Cidra";
 $label_mead_scoresheet = "Folha de Pontuação da Hidromel";
 $label_consensus_status = "Status de Consenso";
-
 $evaluation_info_044 = "Sua pontuação de consenso não corresponde às inseridas por outros juízes.";
 $evaluation_info_045 = "A pontuação de consenso inserida corresponde àquela inserida por juízes anteriores.";
 $evaluation_info_046 = "A diferença de pontuação é maior do que";
@@ -1786,13 +1856,11 @@ $evaluation_info_069 = "Pelo menos dois juízes do voo em que sua inscrição fo
 $evaluation_info_070 = "Com base na planilha de pontuação BJCP para";
 $evaluation_info_071 = "15+ minutos se passaram.";
 $evaluation_info_072 = "Por padrão, o Logout automático é estendido para 30 minutos para avaliações de entrada.";
-
 $alert_text_090 = "Sua sessão irá expirar em dois minutos. Você pode permanecer na página atual para terminar seu trabalho antes que o tempo expire, atualizar esta página para continuar sua sessão atual (os dados do formulário podem ser perdidos) ou fazer logout.";
 $alert_text_091 = "Sua sessão irá expirar em 30 segundos. Você pode atualizar para continuar sua sessão atual ou fazer logout.";
 $alert_text_092 = "Deve ser definida pelo menos uma sessão de julgamento para adicionar uma mesa.";
 
 $brewer_entries_text_026 = "As planilhas de pontuação dos juízes para esta inscrição estão em vários formatos. Cada formato contém uma ou mais avaliações válidas desta entrada.";
-
 // Update QR text
 $qr_text_008 = "Para fazer o check-in das entradas por meio do código QR, forneça a senha correta. Você só precisará fornecer a senha uma vez por sessão - certifique-se de manter o navegador ou o aplicativo de leitura de código QR aberto.";
 $qr_text_015 = "Digitalize o próximo código QR. Para sistemas operacionais mais recentes, acesse o aplicativo da câmera do seu dispositivo móvel. Para sistemas operacionais mais antigos, inicie / volte para o aplicativo de digitalização.";
@@ -1823,7 +1891,6 @@ $winners_text_007 = "Não há entradas vencedoras nesta tabela.";
  * Again. :)
  * ------------------------------------------------------------------------
  */
-
 $label_entries_to_judge = "Entradas para Julgar";
 $evaluation_info_073 = "Se você tiver alterado ou adicionado qualquer item ou comentário nesta folha de pontuação, seus dados poderão ser perdidos se você navegar para longe desta página.";
 $evaluation_info_074 = "Se você TENHA feito alterações, feche este diálogo, role até o final da folha de pontuação e selecione Submeter Avaliação.";
@@ -1833,7 +1900,6 @@ $evaluation_info_077 = "Comente sobre cor, clareza e cabeça (retenção, cor e 
 $evaluation_info_078 = "Comente sobre malte, lúpulo, características de fermentação, equilíbrio, acabamento/sabor, e outras características de sabor.";
 $evaluation_info_079 = "Comentário sobre o corpo, carbonação, calor, cremosidade, adstringência e outras sensações palatinas.";
 $evaluation_info_080 = "Comente sobre o prazer geral de beber associado à entrada, dê sugestões para melhorias.";
-
 if ($_SESSION['prefsStyleSet'] == "BJCP2021") {
     $styles_entry_text_21B = "O participante DEVE especificar uma força (sessão, padrão, duplo); se nenhuma força for especificada, o padrão será assumido. O participante DEVE especificar o tipo específico de Especialidade IPA da lista de Tipos Definidos Atualmente identificados nas Diretrizes de Estilo, ou conforme emendado pelos Estilos Provisórios no site do BJCP; OU o participante DEVE descrever o tipo de Especialidade IPA e suas principais características em forma de comentários para que os juízes saibam o que esperar. Os participantes PODEM especificar as variedades específicas de lúpulo utilizadas, se os participantes acharem que os juízes podem não reconhecer as características varietais dos lúpulos mais recentes. Os participantes PODEM especificar uma combinação de tipos IPA definidos (por exemplo, IPA Centeio Negro) sem fornecer descrições adicionais.";
     $styles_entry_text_24C = "O participante DEVE especificar a Bière de Garde loira, âmbar ou marrom.";
@@ -1887,7 +1953,6 @@ $label_semi_dry = "Semi-Seco";
 $label_semi_sweet = "Semi-Doce";
 $label_shipping_location = "Localização da Expedição";
 $volunteers_text_010 = "O pessoal pode indicar sua disponibilidade para as seguintes sessões sem juízos de valor:";
-
 $evaluation_info_081 = "Comentário sobre a expressão do mel, álcool, ésteres, complexidade e outros aromáticos.";
 $evaluation_info_082 = "Comentário sobre cor, clareza, pernas e carbonatação.";
 $evaluation_info_083 = "Comentário sobre mel, doçura, acidez, tanino, álcool, equilíbrio, corpo, carbonatação, gosto residual e quaisquer ingredientes especiais ou sabores específicos de estilo.";
@@ -1896,7 +1961,6 @@ $evaluation_info_085 = "Cor (2), clareza (2), nível de carbonatação (2).";
 $evaluation_info_086 = "Expressão de outros ingredientes, conforme apropriado.";
 $evaluation_info_087 = "Equilíbrio de acidez, doçura, graduação alcoólica, corpo, carbonatação (se apropriado) (14), Outros ingredientes, se apropriado (5), Gosto residual (5).";
 $evaluation_info_088 = "Comente sobre o prazer geral de beber associado à entrada, dê sugestões para melhorias.";
-
 $evaluation_info_089 = "Contagem mínima de palavras atingida ou excedida.";
 $evaluation_info_090 = "Obrigado por fornecer a avaliação mais completa possível. Palavras totais: ";
 $evaluation_info_091 = "Palavras mínimas necessárias para seus comentários: ";
@@ -1909,7 +1973,6 @@ $evaluation_info_094 = "O requisito mínimo de palavras não foi alcançado em u
  * Version 2.6.0 Additions
  * ------------------------------------------------------------------------
  */
-
 $label_regional_variation = "Variação Regional";
 $label_characteristics = "Características";
 $label_intensity = "Intensidade";
@@ -1934,7 +1997,6 @@ $label_final_judging_date = "Data do Julgamento Final";
 $label_entries_judged = "Inscrições julgadas";
 $label_results_export = "Exportação Resultados";
 $label_results_export_personal = "Exportar Resultados Pessoais";
-
 $brew_text_041 = "Opcional - especificar uma variação regional (por exemplo, Lager mexicana, Lager holandesa, Rice Lager japonesa, etc.).";
 $evaluation_info_095 = "Próxima sessão de julgamento designada aberta:";
 $evaluation_info_096 = "Para ajudar na preparação, mesas/voos designados e entradas associadas estão disponíveis dez minutos antes do início de uma sessão.";
@@ -1945,7 +2007,6 @@ $evaluation_info_100 = "Próximas sessões de julgamento:";
 $evaluation_info_101 = "Forneça outro descritor de cor.";
 $evaluation_info_102 = "Digite sua pontuação total - máximo de 50. Use o guia de pontuação abaixo, se necessário.";
 $evaluation_info_103 = "Forneça sua pontuação - mínimo de 5, máximo de 50.";
-
 $brewer_text_051 = "Selecione as organizações do setor às quais você é afiliado como funcionário, voluntário, etc. Isso serve para garantir que não haja conflitos de interesse ao designar juízes e comissários de bordo para avaliar as inscrições.";
 $brewer_text_052 = "<strong>Se alguma organização do setor <u>não</u> estiver listada no menu suspenso acima, insira-a aqui.</strong> Separe o nome de cada organização por vírgula (,) ou ponto e vírgula (;). Alguns símbolos não são permitidos, incluindo aspas duplas (&quot;) e porcentagem (&#37;).";
 
@@ -1954,10 +2015,8 @@ $brewer_text_052 = "<strong>Se alguma organização do setor <u>não</u> estiver
  * Version 2.6.1 Additions
  * ------------------------------------------------------------------------
  */
-
 $evaluation_info_104 = "Nem todos os juízes indicaram que essa inscrição avançou para a rodada Mini-BOS. Por favor, verifique e selecione Sim ou Não acima.";
 $evaluation_info_105 = "Os registros a seguir têm indicações incompatíveis de Mini-BOS dos juízes:";
-
 $label_non_judging = "Sessões sem Julgamento";
 
 /**

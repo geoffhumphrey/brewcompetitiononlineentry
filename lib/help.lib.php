@@ -241,65 +241,58 @@ function bcoem_dashboard_help($content) {
 function bcoem_help($section,$go,$action,$filter) {
 	require(CONFIG.'config.php');
 	require(INCLUDES.'url_variables.inc.php');
+	
 	// Define default variables
 	$return = "";
 	$content = FALSE;
 	$bcoem_help_title = "";
 	$bcoem_help_body = "";
 
+	/**
+	 * 2.6.2: Use translations for all public pages.
+	 */
+
+	if ((isset($_SESSION['prefsLanguage'])) && (!empty($_SESSION['prefsLanguage']))) $prefsLanguage = $_SESSION['prefsLanguage'];
+	else $prefsLanguage = "en-US";
+	if ((isset($_SESSION['prefsLanguageFolder'])) && (!empty($_SESSION['prefsLanguageFolder']))) $prefsLanguageFolder = $_SESSION['prefsLanguageFolder'];
+	else $prefsLanguageFolder = $prefsLanguageFolder = "en";
+
+	$language_file = $prefsLanguage."_help.lang.php";
+	require(LANG.$prefsLanguageFolder.DIRECTORY_SEPARATOR.$language_file);
+
 	// --------------------- General user sections ---------------------
 	// My account
 	if ($section == "list") {
-		$bcoem_help_title .= "My Account Help";
-		$bcoem_help_body .= "<p>This is a comprehensive snapshot of your account information.</p>";
-		$bcoem_help_body .= "<p>Here, you can view your personal information including name, address, phone number(s), clubs, AHA member number, BJCP ID, BJCP judge rank, judging preferences, and stewarding preferences.</p>";
-		$bcoem_help_body .= "<ul>";
-		$bcoem_help_body .= "<li>Select the &ldquo;Edit Account&rdquo; button to update your personal information.</li>";
-		$bcoem_help_body .= "<li>Select the &ldquo;Change Email&rdquo; button to update your email address. <strong>Note:</strong> your email address is also your user name.</li>";
-		$bcoem_help_body .= "<li>Select the &ldquo;Change Password&rdquo; button to update your account password.</li>";
-		$bcoem_help_body .= "</ul>";
-
-			$bcoem_help_body .= "<p>At the bottom of the page is your list of entries.</p>";
-			$bcoem_help_body .= "<ul>";
-			$bcoem_help_body .= "<li>Select the printer icon <span class=\"fa fa-print\"></span> to print the necessary documentation for each entry (bottle labels, etc.).</li>";
-			$bcoem_help_body .= "<li>Select the pencil icon <span class=\"fa fa-pencil\"></span> to edit the entry.</li>";
-			$bcoem_help_body .= "<li>Select the trash can icon <span class=\"fa fa-trash-o\"></span> to delete the entry.</li>";
-			$bcoem_help_body .= "</ul>";
-
+		$bcoem_help_title .= $list_help_title;
+		$bcoem_help_body .= $list_help_body;
 		$content = TRUE;
 	}
 
 	// Edit account
 	if (($section == "brewer") && ($go == "account") && ($action == "edit")) {
-		$bcoem_help_title .= "Edit Account Help";
-		$bcoem_help_body .= "<p>Here, you can update your account information including address/phone, AHA member number, BJCP ID, BJCP judge rank, judging or stewarding location availability and preferences, and so on.";
+		$bcoem_help_title .= $brewer_acct_edit_help_title;
+		$bcoem_help_body .= $brewer_acct_edit_help_body;
 		$content = TRUE;
 	}
 
 	// Pay fees
 	if ($section == "pay") {
-		$bcoem_help_title .= "Pay Entry Fees Help";
-		$bcoem_help_body .= "<p>This screen details your unpaid entries and associated fees. If the competition organizers have designated a discount for participants with a code, you can enter the code before paying for your entries.</p>";
-		$bcoem_help_body .= "<p>For the ".$_SESSION['contestName'].", accepted payment methods are:</p>";
-		$bcoem_help_body .= "<ul>";
-		if ($_SESSION['prefsCash'] == "Y") $bcoem_help_body .= "<li><strong>Cash.</strong> Put cash in an envelope and attach to one of your bottles. Please, for the sanity of the organizing staff, do not pay with coins.</li>";
-		if ($_SESSION['prefsCheck'] == "Y") $bcoem_help_body .= "<li><strong>Check.</strong> Make your check out to ".$_SESSION['prefsCheckPayee']." for the full amount of your entry fees, place in an envelope, and attach to one of your bottles. It would be extremely helpful for competition staff if you would list your entry numbers in the memo section.</li>";
-		if ($_SESSION['prefsPaypal'] == "Y") $bcoem_help_body .= "<li><strong>Credit/Debit Card via PayPal.</strong> To pay your entry fees with a credit or debit card, select the &ldquo;Pay with PayPal&rdquo; button. A PayPal account is not necessary. After you have paid, be sure to click the &ldquo;Return to...&rdquo; link on the PayPal confirmation screen. This will ensure that your entries are marked as paid for this competition.</li>";
-		$bcoem_help_body .= "</ul>";
+		$bcoem_help_title .= $pay_help_title;
+		$bcoem_help_body .= $pay_help_body;
 		$content = TRUE;
 	}
 
 	// Change username
 	if (($section == "user") && ($go == "account") && ($action == "username")) {
-		$bcoem_help_title .= "Change Email Address Help";
-		$bcoem_help_body .= "<p>Here, you can change your email address.</p><p><strong>Please Note:</strong> your email address also serves as your user name to access your account on this site.</p>";
+		$bcoem_help_title .= $username_help_title;
+		$bcoem_help_body .= $username_help_body;
 		$content = TRUE;
 	}
 
 	// Change password
 	if (($section == "user") && ($go == "account") && ($action == "password")) {
-		$bcoem_help_title .= "Change Password Help";
-		$bcoem_help_body .= "<p>Here, you can change your access password to this site. The more secure, the better &ndash; include special characters and/or numbers.</p>";
+		$bcoem_help_title .= $password_help_title;
+		$bcoem_help_body .= $password_help_body;
 		$content = TRUE;
 	}
 

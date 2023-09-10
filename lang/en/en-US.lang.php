@@ -436,8 +436,6 @@ $label_host = "Host";
 $label_closing_soon = "Closing Soon";
 $label_access = "Access";
 $label_length = "Length";
-
-// Admin
 $label_admin = "Administration";
 $label_admin_short = "Admin";
 $label_admin_dashboard = "Dashboard";
@@ -472,8 +470,6 @@ $label_admin_upload_img = "Upload Images";
 $label_admin_upload_doc = "Upload Scoresheets and Other Documents";
 $label_admin_password = "Change User Password";
 $label_admin_edit_account = "Edit User Account";
-
-// Sidebar Labels
 $label_account_summary = "My Account Summary";
 $label_confirmed_entries = "Confirmed Entries";
 $label_unpaid_confirmed_entries = "Unpaid Confirmed Entries";
@@ -955,7 +951,6 @@ $pay_text_029 = "Please go to your entry list to confirm all your entry data. Un
  * QR Code Check-in
  * ------------------------------------------------------------------------
  */
-
 // Ignore the next four lines
 if (strpos($view, "^") !== FALSE) {
 	$qr_text_019 = sprintf("%06d",$checked_in_numbers[0]);
@@ -1403,6 +1398,7 @@ $brewer_text_038 = "Consistent club names across users is essential if for \"Bes
 $brewer_text_039 = "The club you entered previously does not match one on our list.";
 $brewer_text_040 = "Please choose from the list or choose <em>Other</em> and enter your club name.";
 
+
 /**
  * ------------------------------------------------------------------------
  * Version 2.1.13 Additions
@@ -1762,7 +1758,6 @@ $descr_problematic = "Major off flavors and aromas dominate. Hard to drink.";
  * ------------------------------------------------------------------------
  */
 $winners_text_006 = "Please note: results from this table may be incomplete due to insufficient entry or style information.";
-
 $label_elapsed_time = "Elapsed Time";
 $label_judge_score = "Judge Score(s)";
 $label_judge_consensus_scores = "Judge consensus score(s)";
@@ -1829,7 +1824,6 @@ $label_beer_scoresheet = "Beer Scoresheet";
 $label_cider_scoresheet = "Cider Scoresheet";
 $label_mead_scoresheet = "Mead Scoresheet";
 $label_consensus_status = "Consensus Status";
-
 $evaluation_info_044 = "Your consensus score does not match those entered by other judges.";
 $evaluation_info_045 = "Consensus score entered matches those entered by previous judges.";
 $evaluation_info_046 = "Score difference is greater than";
@@ -1859,7 +1853,6 @@ $evaluation_info_069 = "At least two judges from the flight in which your submis
 $evaluation_info_070 = "Based upon the BJCP scoresheet for";
 $evaluation_info_071 = "15+ minutes have elapsed.";
 $evaluation_info_072 = "By default, Auto Log Out is extended to 30 minutes for entry evaluations.";
-
 $alert_text_090 = "Your session will expire in two minutes. You can stay on the current page to finish your work before time expires, refresh this page to continue your current session (unsaved form data may be lost), or log out.";
 $alert_text_091 = "Your session will expire in 30 seconds. You can refresh to continue your current session or log out.";
 $alert_text_092 = "At least one judging session must be defined to add a table.";
@@ -1872,7 +1865,6 @@ $qr_text_015 = "Scan the next QR Code. Close this browser tab if you wish.<br><b
 $qr_text_017 = "QR Code scanning is available natively on most modern mobile operating systems. Simply point your camera to the QR Code on a bottle label and follow the prompts. For older mobile operating systems, a QR Code scanning app is required to utilize this feature.";
 $qr_text_018 = "Scan a QR Code located on a bottle label, enter the required password, and check in the entry.";
 
-
 /**
  * ------------------------------------------------------------------------
  * Version 2.3.2 Additions
@@ -1882,7 +1874,6 @@ $qr_text_018 = "Scan a QR Code located on a bottle label, enter the required pas
 $label_select_state = "Select or Search for Your State";
 $label_select_below = "Select Below";
 $output_text_033 = "When submitting your report to the BJCP, it is possible that not all on the staff list will receive points. It is suggested that you allocate points to those with BJCP IDs first.";
-
 $styles_entry_text_PRX3 = "Entrant must specify the varietal of grapes or grape must used.";
 $styles_entry_text_C1A = "Entrants MUST specify carbonation level (3 levels). Entrants MUST specify sweetness (5 categories). If OG is substantially above typical range, entrant should explain, e.g., particular variety of apple giving high-gravity juice.";
 $styles_entry_text_C1B = "Entrants MUST specify carbonation level (3 levels). Entrants MUST specify sweetness (dry through medium-sweet, 4 levels). Entrants MAY specify variety of apple for a single varietal cider; if specified, varietal character will be expected.";
@@ -1894,7 +1885,6 @@ $winners_text_007 = "There are no winning entries at this table.";
  * Version 2.4.0 Additions
  * ------------------------------------------------------------------------
  */
-
 $label_entries_to_judge = "Entries to Judge";
 $evaluation_info_073 = "If you've changed or added any item or comment in this scoresheet, your data may be lost if you navigate away from this page.";
 $evaluation_info_074 = "If you HAVE made changes, close this dialog, scroll to the bottom of the scoresheet, and select Submit Evaluation.";
@@ -1904,7 +1894,6 @@ $evaluation_info_077 = "Comment on color, clarity, and head (retention, color, a
 $evaluation_info_078 = "Comment on malt, hops, fermentation characteristics, balance, finish/aftertaste, and other flavor characteristics.";
 $evaluation_info_079 = "Comment on body, carbonation, warmth, creaminess, astringency, and other palate sensations.";
 $evaluation_info_080 = "Comment on overall drinking pleasure associated with entry, give suggestions for improvement.";
-
 if ((isset($_SESSION['prefsStyleSet'])) && ($_SESSION['prefsStyleSet'] == "BJCP2021")) {
     $styles_entry_text_21B = "Entrant MUST specify a strength (session, standard, double); if no strength is specified, standard will be assumed. Entrant MUST specify specific type of Specialty IPA from the list of Currently Defined Types identified in the Style Guidelines, or as amended by Provisional Styles on the BJCP website; OR the entrant MUST describe the type of Specialty IPA and its key characteristics in comment form so judges will know what to expect. Entrants MAY specify specific hop varieties used, if entrants feel that judges may not recognize the varietal characteristics of newer hops. Entrants MAY specify a combination of defined IPA types (e.g., Black Rye IPA) without providing additional descriptions.";
     $styles_entry_text_24C = "Entrant MUST specify blond, amber, or brown Bière de Garde.";
@@ -1937,7 +1926,6 @@ if ((isset($_SESSION['prefsStyleSet'])) && ($_SESSION['prefsStyleSet'] == "BJCP2
  * Version 2.5.0 Additions
  * ------------------------------------------------------------------------
  */
-
 $register_text_047 = "Your security question and/or answer has changed.";
 $register_text_048 = "If you did not initiate this change, your account may be compromised. You should immediately log into your account and change your password in addition to updating your security question and answer.";
 $register_text_049 = "If you aren't able to log into your account, you should immediately contact a site administrator to update your password and other vital account information.";
@@ -1952,15 +1940,12 @@ $brewer_text_047 = "If you are not available for any of the sessions listed belo
 $brewer_text_048 = "Shipping Entries";
 $brewer_text_049 = "Select \"Not Applicable\" if you don't plan to submit any entries into the competition at this time.";
 $brewer_text_050 = "Select \"Shipping Entries\" if you plan to box up and send your entries to the provided Shipping Location.";
-
 $label_change_security = "Change Security Question/Answer?";
 $label_semi_dry = "Semi-Dry";
 $label_semi_sweet = "Semi-Sweet";
 $label_shipping_location = "Shipping Location";
 $label_allergens = "Allergens";
-
 $volunteers_text_010 = "Staff can indicate their availability for the following non-judging sessions:";
-
 $evaluation_info_081 = "Comment on honey expression, alcohol, esters, complexity, and other aromatics.";
 $evaluation_info_082 = "Comment on color, clarity, legs, and carbonation.";
 $evaluation_info_083 = "Comment on honey, sweetness, acidity, tannin, alcohol, balance, body, carbonation, aftertaste, and any special ingredients or style-specific flavors.";
@@ -1970,7 +1955,6 @@ $evaluation_info_086 = "Expression of other ingredients as appropriate.";
 $evaluation_info_087 = "Balance of acidity, sweetness, alcohol strength, body, carbonation (if appropriate) (14),
 Other ingredients as appropriate (5), Aftertaste (5).";
 $evaluation_info_088 = "Comment on overall drinking pleasure associated with entry, give suggestions for improvement.";
-
 $evaluation_info_089 = "Minimum word count reached or exceeded.";
 $evaluation_info_090 = "Thank you for providing the most complete evaluation possible. Total words: ";
 $evaluation_info_091 = "Minimum words required for your comments: ";
@@ -1983,7 +1967,6 @@ $evaluation_info_094 = "The minimum word requirement has not been reached in one
  * Version 2.6.0 Additions
  * ------------------------------------------------------------------------
  */
-
 $label_regional_variation = "Regional Variation";
 $label_characteristics = "Characteristics";
 $label_intensity = "Intensity";
@@ -2008,9 +1991,7 @@ $label_final_judging_date = "Final Judging Date";
 $label_entries_judged = "Entries Judged";
 $label_results_export = "Export Results";
 $label_results_export_personal = "Export Personal Results";
-
 $brew_text_041 = "Optional &ndash; specify a regional variation (e.g., Mexican Lager, Dutch Lager, Japanese Rice Lager, etc.).";
-
 $evaluation_info_095 = "Next assigned judging session open:";
 $evaluation_info_096 = "To assist in preparation, assigned tables/flights and associated entries are available ten minutes prior to the start of a session.";
 $evaluation_info_097 = "Your next judging session is now available.";
@@ -2020,17 +2001,14 @@ $evaluation_info_100 = "Upcoming judging sessions:";
 $evaluation_info_101 = "Please provide another color descriptor.";
 $evaluation_info_102 = "Enter your total score - maximum of 50. Use the scoring guide below if needed.";
 $evaluation_info_103 = "Please provide your score - minimum of 5, maximum of 50.";
-
 $brewer_text_051 = "Select the industry organizations that you are affiliated with as an employee, volunteer, etc. This is to make sure there are not any conflicts of interest when assigning judges and stewards to evaluate entries.";
 $brewer_text_052 = "<strong>If any industry organization is <u>not</u> listed in the drop-down above, enter it here.</strong> Separate each organization's name by comma (,) or semi-colon (;). Some symbols are not allowed, including double-quotation marks (&quot;) and percent (&#37;).";
-
 
 /**
  * ------------------------------------------------------------------------
  * Version 2.6.0 Additions
  * ------------------------------------------------------------------------
  */
-
 $evaluation_info_104 = "Not all judges indicated this entry advanced to the Mini-BOS round. Please verify and select Yes or No above.";
 $evaluation_info_105 = "The following entries have mismatched Mini-BOS indications from judges:";
 
