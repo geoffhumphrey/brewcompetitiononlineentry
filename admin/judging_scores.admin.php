@@ -394,6 +394,8 @@ if (NHC) echo "<div class='alert alert-danger'><span class=\"fa fa-exclamation-c
 ?>
 <?php if ($id != "default") { ?>
 <form name="scores" method="post" action="<?php echo $base_url; ?>includes/process.inc.php?action=<?php echo $action; ?>&amp;dbTable=<?php echo $judging_scores_db_table; ?>&amp;id=<?php echo $id; ?>">
+<input type="hidden" name="token" value ="<?php if (isset($_SESSION['token'])) echo $_SESSION['token']; ?>">
+
 <script type="text/javascript" language="javascript">
 
 /**

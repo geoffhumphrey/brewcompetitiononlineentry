@@ -788,6 +788,7 @@ if ($action == "add")  {
 if ($filter == "default") { ?>
 <script src="<?php echo $base_url; ?>js_includes/registration_checks.min.js"></script>
 <form action="<?php echo $base_url; ?>includes/process.inc.php?action=add&amp;dbTable=<?php echo $users_db_table; ?>&amp;section=<?php echo $section; ?>&amp;go=<?php echo $go; ?>" method="POST" name="form1" id="form1">
+<input type="hidden" name="token" value ="<?php if (isset($_SESSION['token'])) echo $_SESSION['token']; ?>">
 <table>
 	<tr>
     	<td class="dataLabel">Email Address:</td>
@@ -819,6 +820,7 @@ if ($filter == "info") {
 if (($action == "add") || (($action == "edit") && (($_SESSION['loginUsername'] == $row_brewer['brewerEmail'])) || ($_SESSION['userLevel'] <= "1")))  {
 ?>
 <form action="<?php echo $base_url; ?>includes/process.inc.php?section=<?php echo "admin&amp;go=".$go."&amp;filter=".$filter; ?>&amp;action=<?php echo $action; ?>&amp;dbTable=<?php echo $brewer_db_table; ?>" method="POST" name="form1" id="form1">
+<input type="hidden" name="token" value ="<?php if (isset($_SESSION['token'])) echo $_SESSION['token']; ?>">
 <table class="dataTable">
 <tr>
       <td class="dataLabel" width="5%">Email:</td>

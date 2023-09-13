@@ -4,7 +4,6 @@ $suggested_close = FALSE;
 $judging_open_date = "";
 $judging_close_date = "";
 $non_judging_count = 0;
-$judging_session_js = ""; 
 
 if ($_SESSION['prefsEval'] == 1) {
 
@@ -21,10 +20,19 @@ if ($_SESSION['prefsEval'] == 1) {
 
 }
 
+/*
+$now = time();
+$midnight_tomorrow = new \DateTime();
+$midnight_tomorrow->setTimestamp($now)->modify('tomorrow')->setTime(0,0);
+$eleven_fifty_nine = ($midnight_tomorrow->format('U') - 60);
+$eleven_fifty_nine = getTimeZoneDateTime($_SESSION['prefsTimeZone'], $eleven_fifty_nine, $_SESSION['prefsDateFormat'],  $_SESSION['prefsTimeFormat'], "system", "date-time-system");
+*/
+
 ?>
 <p class="lead"><?php echo $_SESSION['contestName']." Competition-Related Dates"; ?></p>
 <p>All competition-related dates for various functions are listed below. Useful when resetting the software for another competition instance after archiving or purging or to adjust any function's date/time for the current competition iteration.</p>
 <form data-toggle="validator" role="form" class="form-horizontal" method="post" action="<?php echo $base_url; ?>includes/process.inc.php?action=dates&amp;dbTable=default">
+<input type="hidden" name="token" value ="<?php if (isset($_SESSION['token'])) echo $_SESSION['token']; ?>">
 <h3>Entry-Related</h3>
 <div class="form-group"><!-- Form Group REQUIRED Text Input -->
     <label for="contestEntryOpen" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Entry Window Open</label>
@@ -197,6 +205,8 @@ if ($_SESSION['prefsEval'] == 1) {
 if ($totalRows_judging_locs == 0) echo "<p>No judging sessions have been defined. <a href=\"".$base_url."index.php?section=admin&amp;go=judging&amp;action=add\">Add a judging session</a>?</p>"; 
 
 if ($totalRows_judging_locs > 0) { 
+
+$judging_session_js = ""; 
     
     do { 
 

@@ -115,6 +115,7 @@ $(document).ready(function() {
 });
 </script>
         <form id="submit-form" data-toggle="validator" role="form" class="form-horizontal hide-loader-form-submit" name="form1" method="post" action="<?php echo $base_url; ?>includes/process.inc.php?dbTable=<?php echo $contacts_db_table; ?>&action=email">
+        <input type="hidden" name="token" value ="<?php if (isset($_SESSION['token'])) echo $_SESSION['token']; ?>">
         	<div class="form-group">
             	<label for="" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label1; ?></label>
                 <div class="col-lg-10 col-md-9 col-sm-8 col-xs-12">

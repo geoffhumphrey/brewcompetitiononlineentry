@@ -434,6 +434,8 @@ if ((($action == "add") || ($action == "edit")) || ($section == "step5")) {
 // Display HTML/JS elements and compiled PHP elements
 ?>
 <?php if (!empty($form_submit_url)) echo $form_submit_url; ?>
+
+<input type="hidden" name="token" value ="<?php if (isset($_SESSION['token'])) echo $_SESSION['token']; ?>">
 <?php if ($section != "step5") { ?><p class="lead"><?php echo $_SESSION['contestName'].$subtitle; ?></p><?php } ?>
 <?php if (($filter == "default") && ($msg == "9"))  {
 	if ($section == "step5") $judge_loc_url_yes .= "setup.php?section=step5";

@@ -11,16 +11,24 @@ $entry_list = "";
 $flag_jnum = "";
 $flag_enum = "";
 $jnum_info = "";
+$enum_info = "";
+
+if ((isset($_SESSION['barcode_entry_list'])) && (!empty($_SESSION['barcode_entry_list']))) $entry_list .= implode(", ",$_SESSION['barcode_entry_list']);
+
+if ((isset($_SESSION['flag_enum'])) && (!empty($_SESSION['flag_enum']))) $enum_info .= implode(", ",$_SESSION['flag_enum']);
+
+if ((isset($_SESSION['flag_jnum'])) && (!empty($_SESSION['flag_jnum']))) {
+    foreach ($_SESSION['flag_jnum'] as $key => $value) {
+        if ((isset($value)) && (!empty($value))) {
+          $jnum_info .= "<li>".$value." - attempted to assign to entry ".number_pad($key,6)."</li>";
+        }
+    }
+}
 
 $barcode_text_000 = "Check-In Entries with a Barcode Reader/Scanner";
 $barcode_text_001 = "The following entries have been checked in";
-$barcode_text_002 = "<strong>The following judging number(s) have already been assigned to entries.</strong> Please use another judging number for each.";
-
-// Update upon submitting the form
-if ($action == "add") {
-    include (LIB.'process.lib.php');
-	include (INCLUDES.'process/process_barcode_check_in.inc.php');
-}
+$barcode_text_002 = "<strong>The following judging number(s) have already been assigned to entries.</strong> Please use another judging number for each:";
+$barcode_text_003 = "The following entries <strong>were not found</strong> in the database";
 
 if ($filter == "box-paid") {
     $switch_to_button = "Judging/Entry Numbers Only";
@@ -64,47 +72,22 @@ $(function() {
 });
 </script>
 <p class="lead"><?php echo $_SESSION['contestName'].": ".$barcode_text_000; ?></p>
-<?php
-if (!empty($entry_list)) {
-$entry_list = rtrim($entry_list,", ");
-$entry_list = ltrim($entry_list, ", ");
-?>
+<?php if (!empty($entry_list)) {?>
 <div class="alert alert-info">
 <span class="fa fa-info-circle"></span> <?php echo sprintf("<strong>%s</strong>: %s", $barcode_text_001, $entry_list); ?>
 </div>
-<?php }
-if (!empty($flag_jnum)) {
-	// Build list of already used numbers and the entry number that it was associated with at scan
-	foreach ($flag_jnum as $num) {
-		if (!empty($num)) {
-		$num = explode("*",$num);
-		if ((NHC) && ($prefix == "final_")) $jnum_info .= "<li>".$num[0]."  - attempted to assign to entry ".number_pad($num[1],6)."</li>";
-		else $jnum_info .= "<li>".$num[0]." - attempted to assign to entry ".number_pad($num[1],6)."</li>";
-		}
-	}
-?>
+<?php } ?>
+<?php if (!empty($jnum_info)) { ?>
 <div class="alert alert-danger">
-	<span class="fa fa-exclamation-circle"></span> <?php echo $barcode_text_002; ?>
-	<ul class="small">
-	<?php echo $jnum_info; ?>
+    <span class="fa fa-exclamation-circle"></span> <?php echo $barcode_text_002; ?>
+    <ul class="small">
+    <?php echo $jnum_info; ?>
     </ul>
 </div>
-<?php }
-if (!empty($flag_enum)) {
-// Build list of already used numbers and the entry number that it was associated with at scan
-$enum_info = "";
-foreach ($flag_enum as $num) {
-	if ($num != "") {
-	$num = explode("*",$num);
-	if ((NHC) && ($prefix == "final_")) $enum_info .= "<li>Entry ".number_pad($num[1],6)." has already been assigned judging number ".$num[0]."</li>";
-	else $enum_info .= "<li>Entry ".number_pad($num[1],4)." has already been assigned judging number ".$num[0]."</li>";
-	}
-}
-?>
-<div class="alert alert-grey">
-    <p><span class="fa fa-info-circle"></span> These entries already have 6 digit judging numbers assigned to them - the current 6 digit judging number has been kept for each of the following:</p>
-    <ul class="small"><?php echo $enum_info; ?></ul>
-    <p>If any of the above are incorrect, you can update its judging number via the <a href="<?php $base_url; ?>index.php?section=admin&amp;go=entries">Administration: Entries</a> list.</p>
+<?php } ?>
+<?php if (!empty($enum_info)) { ?>
+<div class="alert alert-danger">
+	<span class="fa fa-exclamation-circle"></span> <?php echo sprintf("%s %s", $barcode_text_003, $enum_info); ?>
 </div>
 <?php } ?>
 <div class="bcoem-admin-element">
@@ -141,7 +124,8 @@ foreach ($flag_enum as $num) {
         </div>
     </div>
 </div><!-- ./modal -->
-<form method="post" data-toggle="validator" action="<?php echo $base_url; ?>index.php?section=admin&amp;go=checkin&amp;action=add<?php if ($filter != "default") echo "&amp;filter=".$filter; ?>" id="form1" onsubmit = "return(p)">
+<form method="post" data-toggle="validator" action="<?php echo $base_url; ?>includes/process.inc.php?section=admin&amp;action=barcode_check_in<?php if ($filter != "default") echo "&amp;go=".$filter; ?>" id="form1" onsubmit = "return(p)">
+<input type="hidden" name="token" value ="<?php if (isset($_SESSION['token'])) echo $_SESSION['token']; ?>">
 <div class="form-inline">
 	<?php 
     for ($i=1; $i <= $fields; $i++) { 
@@ -181,3 +165,9 @@ foreach ($flag_enum as $num) {
 </div>
 <p><input type="submit" value="Check-In Entries" class="btn btn-primary" onClick = "javascript: p=true;"/></p>
 </form>
+<?php 
+// Clear out session vars
+$_SESSION['barcode_entry_list'] = "";
+$_SESSION['flag_jnum'] = "";
+$_SESSION['flag_enum'] = "";
+?>

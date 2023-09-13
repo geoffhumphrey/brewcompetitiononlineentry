@@ -12,12 +12,24 @@ if ((isset($_SESSION['loginUsername'])) && ($section == "pdf-download")) {
 
 // Upload Function
 elseif ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] == "0") && ($section == "default")) {
-	
-	// Redirect if script accessed directly
-	if (empty($_FILES['file'])) {
-		$errorGoTo = "index.php?section=admin&go=upload&msg=0";
-		header(sprintf("Location: %s", $errorGoTo));
-		exit;
+
+	/**
+	 * Check for CSRF token.
+	 * If tokens match, continue with process.
+	 * If not, redirect to 403 page.
+	 */
+
+	$token = filter_input(INPUT_POST,'token',FILTER_SANITIZE_STRING);
+
+	if (((!$token) || ($token !== $_SESSION['token'])) || (empty($_FILES['file']))) {
+		session_unset();
+		session_destroy();
+		session_write_close();
+		$redirect = $base_url."403.php";
+		$redirect = prep_redirect_link($redirect);
+		$redirect_go_to = sprintf("Location: %s", $redirect);
+		header($redirect_go_to);
+		exit();
 	}
 	
 	// Define variables directory to upload to
@@ -41,7 +53,7 @@ elseif ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] == "0") &
 	*/
 	
 	// Security check variables
-	$max_size = 10000000; // Limit size of upload to 10MB
+	$max_size = 5000000; // Limit size of upload to 5MB
 	$file_mimes = array('image/jpeg','image/jpg','image/gif','image/png','application/pdf'); // Allowable file mime types
 	$file_exts  = array('.jpeg','.jpg','.png','.gif','.pdf'); // Allowable file extensions
 		
@@ -129,7 +141,13 @@ elseif ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] == "0") &
 }
 // Redirect if script accessed directly and/or session parameters not met
 else {
-        $errorGoTo = "index.php?section=login&msg=0";
-		header(sprintf("Location: %s", $errorGoTo));
+        session_unset();
+        session_destroy();
+        session_write_close();
+        $redirect = $base_url."403.php";
+        $redirect = prep_redirect_link($redirect);
+        $redirect_go_to = sprintf("Location: %s", $redirect);
+        header($redirect_go_to);
+        exit();
 }
 ?> 

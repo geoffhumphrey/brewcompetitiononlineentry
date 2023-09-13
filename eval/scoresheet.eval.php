@@ -649,7 +649,8 @@ echo $entry_info_html;
 if ($entry_found) {
   echo $sticky_score_tally;
 ?>
-<form class="hide-loader-form-submit" id="form1" name="form1" role="form" data-toggle="validator" action="<?php echo $base_url; ?>includes/process.inc.php?section=<?php echo $process_type; ?>&action=<?php echo $action; ?>&view=<?php echo $view; ?>&dbTable=<?php echo $prefix."evaluation"; if ($action == "edit") echo "&id=".$id; ?>" method="post">
+<form class="hide-loader-form-submit" id="scoresheet-form" name="scoresheet-form" role="form" data-toggle="validator" action="<?php echo $base_url; ?>includes/process.inc.php?section=<?php echo $process_type; ?>&action=<?php echo $action; ?>&view=<?php echo $view; ?>&dbTable=<?php echo $prefix."evaluation"; if ($action == "edit") echo "&id=".$id; ?>" method="post">
+<input type="hidden" name="token" value ="<?php if (isset($_SESSION['token'])) echo $_SESSION['token']; ?>">
 <!-- Provide information about the judge -->
 <input type="hidden" name="evalJudgeInfo" value="<?php if ($action == "add") echo $judge_id; else echo $row_eval['evalJudgeInfo']; ?>">
 <!-- Type of scoresheet -->
@@ -885,9 +886,15 @@ if ($entry_found) {
   </div>
 </div>
 <?php } ?>
+<script src="<?php echo $base_url; ?>js_includes/saveMyForm.jquery.min.js"></script>
 <script type="text/javascript">
 var style_type = <?php echo $row_style['brewStyleType']; ?>;
 var edit = <?php if ($action == "edit") echo "true"; else echo "false"; ?>;
+
+$(function() {
+    $('#scoresheet-form').saveMyForm();
+});
+
 </script>
 <?php if ((isset($_SESSION['jPrefsMinWords'])) && ($_SESSION['jPrefsMinWords'] > 0)) { ?>
 <script type="text/javascript">

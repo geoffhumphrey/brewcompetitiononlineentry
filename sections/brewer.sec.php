@@ -372,7 +372,7 @@ if (action == "edit") {
 </script>
 <script src="<?php echo $base_url; ?>js_includes/add_edit_user.min.js"></script>
 <form id="submit-form" class="form-horizontal hide-loader-form-submit" data-toggle="validator" action="<?php echo $form_action; ?>" method="POST" name="form1">
-
+<input type="hidden" name="token" value ="<?php if (isset($_SESSION['token'])) echo $_SESSION['token']; ?>">
 <?php 
 include (SECTIONS.'brewer_form_0.sec.php'); // Participant Info
 if (!$entrant_type_brewery) include (SECTIONS.'brewer_form_1.sec.php'); // Info for individuals only (not orgs)

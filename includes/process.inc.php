@@ -71,12 +71,40 @@ $bool = date("I");
 if ($bool == 1) $timezone_offset = number_format(($timezone_raw + 1.000),0);
 else $timezone_offset = number_format($timezone_raw,0);
 
+$process_allowed = FALSE;
 if (isset($_SERVER['HTTP_REFERER'])) {
 	$referrer = parse_url($_SERVER['HTTP_REFERER']);
-	// echo $referrer['host']."<br>".$_SERVER['SERVER_NAME']; exit;
+	if ((($referrer['host'] == $_SERVER['SERVER_NAME']) && (isset($_SESSION['prefs'.$prefix_session]))) || ($setup_free_access)) $process_allowed = TRUE;
 }
 
 if ((isset($_SESSION['prefsSEF'])) && ($_SESSION['prefsSEF'] == "Y")) $sef = TRUE;
+
+/**
+ * Check for CSRF token.
+ * If tokens match, continue with process.
+ * If not, redirect to 403 page.
+ */
+
+$request_method = strtoupper($_SERVER['REQUEST_METHOD']);
+
+if ($request_method === "POST") {
+
+	$token_hash = FALSE;
+	$token = filter_input(INPUT_POST,'token',FILTER_SANITIZE_STRING);
+	if (hash_equals($_SESSION['token'],$token)) $token_hash = TRUE;
+
+	if ((!$token) || (!$token_hash) || (!$process_allowed)) {
+		session_unset();
+		session_destroy();
+		session_write_close();
+		$redirect = $base_url."403.php";
+		$redirect = prep_redirect_link($redirect);
+		$redirect_go_to = sprintf("Location: %s", $redirect);
+		header($redirect_go_to);
+		exit();
+	}
+
+}
 
 if (((isset($_SERVER['HTTP_REFERER'])) && ($referrer['host'] == $_SERVER['SERVER_NAME'])) && ((isset($_SESSION['prefs'.$prefix_session])) || ($setup_free_access))) {
 
@@ -150,7 +178,11 @@ if (((isset($_SERVER['HTTP_REFERER'])) && ($referrer['host'] == $_SERVER['SERVER
 	// --------------------------- Various Actions ------------------------------- //
 
 	if ($action == "delete") include (PROCESS.'process_delete.inc.php');
+	
+	elseif ($action == "barcode_check_in") include (PROCESS.'process_barcode_check_in.inc.php');
+
 	elseif ($action == "update_judging_flights") include (PROCESS.'process_judging_flight_check.inc.php');
+	
 	elseif ($action == "delete_scoresheets") {
 
 		rdelete(USER_DOCS,"");
@@ -245,7 +277,7 @@ if (((isset($_SERVER['HTTP_REFERER'])) && ($referrer['host'] == $_SERVER['SERVER
 		mysqli_real_escape_string($connection,$update);
 		$result = mysqli_query($connection,$update) or die (mysqli_error($connection));
 
-		// Do some clean up just in case
+		// Mark all relevant dates in the past to trigger the winner display
 
 		if ($_SESSION['contestRegistrationDeadline'] > time()) {
 			$update = sprintf("UPDATE %s SET contestRegistrationDeadline='%s' WHERE id='%s'",$prefix."contest_info",time(),"1");
@@ -264,6 +296,37 @@ if (((isset($_SERVER['HTTP_REFERER'])) && ($referrer['host'] == $_SERVER['SERVER
 			mysqli_real_escape_string($connection,$update);
 			$result = mysqli_query($connection,$update) or die (mysqli_error($connection));
 		}
+
+		if ($_SESSION['jPrefsJudgingClosed'] > time()) {
+			$update = sprintf("UPDATE %s SET jPrefsJudgingClosed='%s' WHERE id='%s'",$prefix."judging_preferences",time(),"1");
+			mysqli_real_escape_string($connection,$update);
+			$result = mysqli_query($connection,$update) or die (mysqli_error($connection));
+		}
+
+		$query_judging_locations = sprintf("SELECT id,judgingDate FROM %s",$prefix."judging_locations",time());
+		$judging_locations = mysqli_query($connection,$query_judging_locations) or die (mysqli_error($connection));
+		$row_judging_locations = mysqli_fetch_assoc($judging_locations);
+		$totalRows_judging_locations = mysqli_num_rows($judging_locations);
+
+		if ($totalRows_judging_locations > 0) {
+			
+			do {
+
+				if ($row_judging_locations['judgingDate'] > time()) {
+
+					$update = sprintf("UPDATE %s SET judgingDate='%s' WHERE id='%s'",$prefix."judging_locations",time(),$row_judging_locations['id']);
+					mysqli_real_escape_string($connection,$update);
+					$result = mysqli_query($connection,$update) or die (mysqli_error($connection));
+
+				}
+
+			} while($row_judging_locations = mysqli_fetch_assoc($judging_locations));
+		
+		}
+
+		$update = sprintf("UPDATE %s SET judgingDateEnd='%s' WHERE judgingLocType='1'",$prefix."judging_locations",time());
+		mysqli_real_escape_string($connection,$update);
+		$result = mysqli_query($connection,$update) or die (mysqli_error($connection));
 
 		session_name($prefix_session);
 		session_start();

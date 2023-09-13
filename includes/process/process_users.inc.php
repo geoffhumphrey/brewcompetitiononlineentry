@@ -124,7 +124,7 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 	} // end if (($action == "add") && ($section == "admin") && ($_SESSION['userLevel'] <= 1))
 
 	// ---------------------------  Editing a User -------------------------------------------
-	if (($action == "edit") && ($_POST['userEdit'] == 1)) {
+	if (($action == "edit") && ($_POST['userEdit'] == 1) && (isset($_SESSION['loginUsername'])) && (isset($_SESSION['userLevel']))) {
 
 		$username = "";
 		$usernameOld = "";
@@ -370,5 +370,4 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 	$redirect_go_to = sprintf("Location: %s", $redirect);
 
 }
-
 ?>

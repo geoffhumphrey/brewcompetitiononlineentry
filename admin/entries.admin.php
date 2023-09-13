@@ -682,6 +682,7 @@ $(document).ready(function () {
 </script>
 <script src="<?php echo $base_url;?>js_includes/admin_ajax.min.js"></script>
 <form name="form1" method="post" action="<?php echo $base_url; ?>includes/process.inc.php?action=update&amp;dbTable=<?php echo $brewing_db_table; ?>&amp;filter=<?php echo $filter; ?>">
+<input type="hidden" name="token" value ="<?php if (isset($_SESSION['token'])) echo $_SESSION['token']; ?>">
 <?php if ($action != "print") { ?>
 <?php if ($dbTable != "default") { ?>
 <div class="btn-group" role="group" aria-label="...">

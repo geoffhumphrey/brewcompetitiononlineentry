@@ -19,6 +19,12 @@ $totalRows_prefs = mysqli_num_rows($prefs);
 
 $_SESSION['prefsLanguage'] = $row_prefs['prefsLanguage'];
 
+if (($action != "update") && ($action != "password-check")) {
+	if (function_exists('random_bytes')) $_SESSION['token'] = bin2hex(random_bytes(32));
+	elseif (function_exists('mcrypt_create_iv')) $_SESSION['token'] = bin2hex(mcrypt_create_iv(32,MCRYPT_DEV_URANDOM));
+	else $_SESSION['token'] = bin2hex(openssl_random_pseudo_bytes(32));
+}
+
 // Check if variation used (demarked with a dash)
 if (strpos($row_prefs['prefsLanguage'], '-') !== FALSE) {
 	$lang_folder = explode("-",$_SESSION['prefsLanguage']);
@@ -34,6 +40,7 @@ if (!isset($_SESSION['qrPasswordOK'])) $logged_in = TRUE;
 
 $header_output = $row_contest_info['contestName'];
 $theme = $base_url."css/".$row_prefs['prefsTheme'].".min.css";
+$process_allowed = FALSE;
 
 // Validate user input against password in DB
 if ($action == "password-check") {
@@ -108,11 +115,17 @@ if ($action == "password-check") {
 
 }
 
-if (($go == "default") && ($id != "default") && (isset($_SESSION['qrPasswordOK']))) {
+if (isset($_SERVER['HTTP_REFERER'])) {
+	$referrer = parse_url($_SERVER['HTTP_REFERER']);
+	if (($referrer['host'] == $_SERVER['SERVER_NAME']) && (isset($_SESSION['qrPasswordOK']))) $process_allowed = TRUE;
+}
+
+$paid_checked = "";
+
+if (($go == "default") && ($id != "default") && ($process_allowed)) {
 
 	$checkin_redirect = $base_url."qr.php?action=default&go=success";
-	$paid_checked = "";
-
+	
 	// Check to see if the entry is in the DB
 	$query_entry = sprintf("SELECT id,brewName,brewStyle,brewCategory,brewSubCategory,brewPaid,brewJudgingNumber FROM %s WHERE id='%s'",$prefix."brewing",$id);
 	$entry = mysqli_query($connection,$query_entry) or die (mysqli_error($connection));
@@ -123,7 +136,7 @@ if (($go == "default") && ($id != "default") && (isset($_SESSION['qrPasswordOK']
 
 		$brewBoxNum = NULL;
 		$brewPaid = 0;
-		$paid_checked = "";
+		
 		$paid = FALSE;
 
 		if ($row_entry['brewPaid'] == 1) {
@@ -133,6 +146,31 @@ if (($go == "default") && ($id != "default") && (isset($_SESSION['qrPasswordOK']
 		}
 
 		if ($action == "update") {
+
+			/**
+			 * Check for CSRF token.
+			 * If tokens match, continue with process.
+			 * If not, redirect to 403 page.
+			 */
+
+			if ($request_method === "POST") {
+
+				$token_hash = FALSE;
+				$token = filter_input(INPUT_POST,'token',FILTER_SANITIZE_STRING);
+				if (hash_equals($_SESSION['token'],$token)) $token_hash = TRUE;
+
+				if ((!$token) || (!$token_hash)) {
+					session_unset();
+					session_destroy();
+					session_write_close();
+					$redirect = $base_url."403.php";
+					$redirect = prep_redirect_link($redirect);
+					$redirect_go_to = sprintf("Location: %s", $redirect);
+					header($redirect_go_to);
+					exit();
+				}
+
+			}
 
 			$update_table = $prefix."brewing";
 
@@ -373,6 +411,7 @@ $_SESSION['last_action'] = time();
     <p class="lead text-primary"><strong><?php echo $qr_text_009; ?> <span class="badge"><?php echo sprintf("%06d",$id); ?></span></strong></p>
     <p class="lead text-danger"><small><strong><?php echo $qr_text_010; ?></strong></small></p>
     <form name="form1" data-toggle="validator" action="<?php echo $base_url; ?>qr.php?action=update<?php if ($id != "default") echo "&amp;id=".$id; ?>" method="post">
+    <input type="hidden" name="token" value ="<?php if (isset($_SESSION['token'])) echo $_SESSION['token']; ?>">
     	<div class="form-group">
             <label for="inputJudgingNumber"><?php echo $label_judging_number; ?></label>
             <input type="tel" pattern="[^^]+"  maxlength="6" data-minlength="6" name="brewJudgingNumber" id="brewJudgingNumber" class="form-control" placeholder="<?php echo $qr_text_011; ?>" data-error="<?php echo $qr_text_013; ?>" autofocus>

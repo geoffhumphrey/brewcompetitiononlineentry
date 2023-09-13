@@ -62,6 +62,7 @@ foreach ($style_sets as $style_set) {
     </div><!-- ./button group -->
 </div>
 <form data-toggle="validator" role="form" id="formfield" class="form-horizontal" action="<?php echo $base_url; ?>includes/process.inc.php?action=archive&go=<?php echo $action; if ($action == "edit") echo "&filter=".$row_archive['archiveSuffix']."&id=".$id; ?>" method="post" name="form1">
+<input type="hidden" name="token" value ="<?php if (isset($_SESSION['token'])) echo $_SESSION['token']; ?>">
 <input type="hidden" name="action" value="add_form" />
 <div class="bcoem-admin-element hidden-print">
 <?php if ($action == "edit") echo "<p class=\"alert alert-warning\"><i class=\"fa fa-lg fa-exclamation-circle\"></i> ".$archive_text_017."</p>"; else echo "<p>".$archive_text_010."</p>"; ?>

@@ -132,6 +132,19 @@ if (($row_system) && (!empty($row_system['update_date'])) && ($row_system['updat
     if (strpos($row_system['update_summary'], 'Warning: Errors') !== false) $_SESSION['update_errors'] = 1;
 }
 
+/**
+ * Generate a CSRF token on every page load.
+ * This will be used to prevent cross-site request forgeries
+ * when processing form data.
+ * First check for php 7 compatible random_bytes.
+ * If not, use mcrypt_create_iv (deprecated in php 7.1 removed in 7.2)
+ * If that's not available, default to openssl_random_pseudo_bytes.
+ */
+
+if (function_exists('random_bytes')) $_SESSION['token'] = bin2hex(random_bytes(32));
+elseif (function_exists('mcrypt_create_iv')) $_SESSION['token'] = bin2hex(mcrypt_create_iv(32,MCRYPT_DEV_URANDOM));
+else $_SESSION['token'] = bin2hex(openssl_random_pseudo_bytes(32));
+
 // ---------------------------------------------------------------------------------
 ?>
 <!DOCTYPE html>

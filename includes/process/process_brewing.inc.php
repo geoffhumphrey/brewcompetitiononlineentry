@@ -4,11 +4,11 @@
  * Description: This module does all the heavy lifting for adding entries to the DB
  */
 
-// if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) && (isset($_SESSION['userLevel'])))) echo "YES"; else echo "NO"; exit;
 /*
 foreach ($_POST as $key => $value) {
 	echo $key.": ".$value."<br>";
 }
+exit();
 */
 
 $errors = FALSE;
@@ -18,19 +18,27 @@ $_SESSION['error_output'] = "";
 if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) && (isset($_SESSION['userLevel'])))) {
 
 	include (DB.'entries.db.php');
-    include (INCLUDES.'constants.inc.php');
+	include (INCLUDES.'constants.inc.php');
 
-	// Instantiate HTMLPurifier
-	require (CLASSES.'htmlpurifier/HTMLPurifier.standalone.php');
-	$config_html_purifier = HTMLPurifier_Config::createDefault();
-	$purifier = new HTMLPurifier($config_html_purifier);
-
-	include (CLASSES.'capitalize_name/parser.php');
-	$name_parser = new FullNameParser();
-
-	$query_user = sprintf("SELECT userLevel FROM $users_db_table WHERE user_name = '%s'", $_SESSION['loginUsername']);
+	$query_user = sprintf("SELECT id,userLevel FROM $users_db_table WHERE user_name = '%s'", $_SESSION['loginUsername']);
 	$user = mysqli_query($connection,$query_user) or die (mysqli_error($connection));
 	$row_user = mysqli_fetch_assoc($user);
+
+	$process_allowed_entries = FALSE;
+
+	/**
+	 * Perform various checks
+	 */
+
+	// If non-admin, can only submit under their own brewer ID
+	if (($row_user['userLevel'] > 1) && ($row_user['id'] == $_POST['brewBrewerID'])) $process_allowed_entries = TRUE;
+
+	// Cannot submit if entry limits have been reached or exceeded
+	if (!$comp_entry_limit) $process_allowed_entries = TRUE;
+	if (!$comp_paid_entry_limit) $process_allowed_entries = TRUE;
+
+	// Allow processing if admin
+	if ($row_user['userLevel'] <= 1) $process_allowed_entries = TRUE;	
 
 	if (($row_limits['prefsUserEntryLimit'] != "") && ($row_user['userLevel'] == 2) && ($action == "add")) {
 
@@ -43,6 +51,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 				$insertGoTo = $base_url."index.php?section=list&msg=8";
 				$insertGoTo = prep_redirect_link($insertGoTo);
 				$redirect_go_to = sprintf("Location: %s", $insertGoTo);
+				header($redirect_go_to);
 				exit();
 			}
 
@@ -61,8 +70,28 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 		$insertGoTo = $base_url."index.php?section=list&msg=9";
 		$insertGoTo = prep_redirect_link($insertGoTo);
 		$redirect_go_to = sprintf("Location: %s", $insertGoTo);
+		header($redirect_go_to);
 		exit();
 	}
+
+	if (!$process_allowed_entries) {
+		session_unset();
+		session_destroy();
+		session_write_close();
+		$redirect = $base_url."403.php";
+		$redirect = prep_redirect_link($redirect);
+		$redirect_go_to = sprintf("Location: %s", $redirect);
+		header($redirect_go_to);
+		exit();
+	}
+
+	// Instantiate HTMLPurifier
+	require (CLASSES.'htmlpurifier/HTMLPurifier.standalone.php');
+	$config_html_purifier = HTMLPurifier_Config::createDefault();
+	$purifier = new HTMLPurifier($config_html_purifier);
+
+	include (CLASSES.'capitalize_name/parser.php');
+	$name_parser = new FullNameParser();
 
 	if (($action == "add") || ($action == "edit")) {
 
@@ -130,24 +159,59 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 			$brewPossAllergens = filter_var($brewPossAllergens,FILTER_SANITIZE_STRING);
 		} 
 
-		// Admin and Staff Notes
-		if ((isset($_POST['brewAdminNotes'])) && (!empty($_POST['brewAdminNotes']))) {
-			$brewAdminNotes = $purifier->purify($_POST['brewAdminNotes']);
-			$brewAdminNotes = filter_var($brewAdminNotes,FILTER_SANITIZE_STRING);
-		}
+		if ($_SESSION['userLevel'] <= 1) {
 
-		if ((isset($_POST['brewStaffNotes'])) && (!empty($_POST['brewStaffNotes']))) {
-			$brewStaffNotes = $purifier->purify($_POST['brewStaffNotes']);
-			$brewStaffNotes = filter_var($brewStaffNotes,FILTER_SANITIZE_STRING);
-		}
+			// Admin and Staff Notes
+			if ((isset($_POST['brewAdminNotes'])) && (!empty($_POST['brewAdminNotes']))) {
+				$brewAdminNotes = $purifier->purify($_POST['brewAdminNotes']);
+				$brewAdminNotes = filter_var($brewAdminNotes,FILTER_SANITIZE_STRING);
+			}
 
-		if ((isset($_POST['brewBoxNum'])) && (!empty($_POST['brewBoxNum']))) {
-			$brewBoxNum = $purifier->purify($_POST['brewBoxNum']);
-			$brewBoxNum = filter_var($brewBoxNum,FILTER_SANITIZE_STRING);
+			if ((isset($_POST['brewStaffNotes'])) && (!empty($_POST['brewStaffNotes']))) {
+				$brewStaffNotes = $purifier->purify($_POST['brewStaffNotes']);
+				$brewStaffNotes = filter_var($brewStaffNotes,FILTER_SANITIZE_STRING);
+			}
+
+			if ((isset($_POST['brewBoxNum'])) && (!empty($_POST['brewBoxNum']))) {
+				$brewBoxNum = $purifier->purify($_POST['brewBoxNum']);
+				$brewBoxNum = filter_var($brewBoxNum,FILTER_SANITIZE_STRING);
+			}
+
 		}
 		
-		if (isset($_POST['brewReceived'])) $brewReceived = $_POST['brewReceived'];
-		if (isset($_POST['brewPaid'])) $brewPaid = $_POST['brewPaid'];
+
+		if ($action == "add") {
+
+			if ($_SESSION['userLevel'] <= 1) {
+				if (isset($_POST['brewPaid'])) $brewPaid = $_POST['brewPaid'];
+				if (isset($_POST['brewReceived'])) $brewReceived = $_POST['brewReceived'];
+			}
+
+			else {
+				$brewPaid = 0;
+				$brewReceived = 0;
+			}
+
+		}
+
+		if ($action == "edit") {
+
+			if (($_SESSION['userLevel'] <= 1) && (isset($_POST['brewPaid']))) $brewPaid = $_POST['brewPaid'];
+
+			if (($_SESSION['userLevel'] <= 1) && (isset($_POST['brewReceived']))) $brewReceived = $_POST['brewReceived'];
+
+			if (($_SESSION['userLevel'] > 1) || ((!isset($_POST['brewPaid'])) || (!isset($_POST['brewReceived'])))) {
+
+				$query_entry_status = sprintf("SELECT brewPaid,brewReceived FROM %s WHERE id='%s'", $prefix."brewing",$id);
+				$entry_status = mysqli_query($connection,$query_entry_status) or die (mysqli_error($connection));
+				$row_entry_status = mysqli_fetch_assoc($entry_status);
+
+				$brewPaid = $row_entry_status['brewPaid'];
+				$brewReceived = $row_entry_status['brewReceived'];
+
+			}
+
+		}
 
 		// Style
 		$style = explode('-', $styleBreak);

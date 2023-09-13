@@ -7,11 +7,25 @@
 
 if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) && (isset($_SESSION['userLevel'])))) {
 
+	$query_user = sprintf("SELECT id,userLevel FROM $users_db_table WHERE user_name = '%s'", $_SESSION['loginUsername']);
+	$user = mysqli_query($connection,$query_user) or die (mysqli_error($connection));
+	$row_user = mysqli_fetch_assoc($user);
+
+	$admin_user = FALSE;
+	$admin_superuser = FALSE;
+	
+	if ($row_user['userLevel'] == 0) {
+		$admin_user = TRUE;
+		$admin_superuser = TRUE;
+	}
+
+	if ($row_user['userLevel'] == 1) $admin_user = TRUE;
+
 	$errors = FALSE;
 	$error_output = array();
 	$_SESSION['error_output'] = "";
 
-	if ($go == "image") {
+	if (($admin_user) && ($go == "image")) {
 		
 		$upload_dir = (USER_IMAGES);
 		unlink($upload_dir.$filter);
@@ -23,7 +37,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 
 	}
 
-	elseif ($go == "doc") {
+	elseif (($admin_user) && ($go == "doc")) {
 		
 		$upload_dir = (USER_DOCS);
 		unlink($upload_dir.$filter);
@@ -35,7 +49,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 
 	}
 
-	elseif ($go == "judging_scores") {
+	elseif (($admin_superuser) && ($go == "judging_scores")) {
 
 		$update_table = $prefix."judging_scores";
 		$db_conn->where ('id', $id);
@@ -50,7 +64,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 
 	}
 
-	elseif ($go == "special_best") {
+	elseif (($admin_superuser) && ($go == "special_best")) {
 
 		$db_conn->where ('id', $id);
 		$result = $db_conn->delete($dbTable);
@@ -86,7 +100,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 
 	}
 
-	elseif ($go == "judging") {
+	elseif (($admin_user) && ($go == "judging")) {
 
 		// remove relational location ids from affected rows in brewer's table
 		$query_loc = sprintf("SELECT id, brewerJudgeLocation, brewerStewardLocation from %s", $brewer_db_table);
@@ -174,7 +188,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 
 	} // end if ($go == "judging")
 
-	elseif ($go == "participants") {
+	elseif (($admin_superuser) && ($go == "participants")) {
 
 		if ($uid != "") {
 
@@ -294,7 +308,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 
 	} // end if ($go == "participants")
 
-	elseif ($go == "entries") {
+	elseif (($admin_user) && ($go == "entries")) {
 
 		$db_conn->where ('id', $id);
 		$result = $db_conn->delete($dbTable);
@@ -303,29 +317,26 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 			$errors = TRUE;
 		}
 
-		$update_table = $prefix."judging_scores";
-		$db_conn->where ('id', $row_delete_entry['id']);
-		$result = $db_conn->delete($update_table);
-		if (!$result) {
-			$error_output[] = $db_conn->getLastError();
-			$errors = TRUE;
-		}
-
 		$query_delete_entry = sprintf("SELECT id FROM $judging_scores_db_table WHERE eid='%s'", $id);
 		$delete_entry = mysqli_query($connection,$query_delete_entry) or die (mysqli_error($connection));
 		$row_delete_entry = mysqli_fetch_assoc($delete_entry);
+		$totalRows_delete_entry = mysqli_num_rows($delete_entry);
 
-		$update_table = $prefix."judging_scores";
-		$db_conn->where ('id', $row_delete_entry['id']);
-		$result = $db_conn->delete($update_table);
-		if (!$result) {
-			$error_output[] = $db_conn->getLastError();
-			$errors = TRUE;
-		}
+		if ($totalRows_delete_entry > 0) {
+
+			$update_table = $prefix."judging_scores";
+			$db_conn->where ('id', $row_delete_entry['id']);
+			$result = $db_conn->delete($update_table);
+			if (!$result) {
+				$error_output[] = $db_conn->getLastError();
+				$errors = TRUE;
+			}
+
+		}			
 
 	} // end if ($go == "entries")
 
-	elseif ($go == "judging_tables") {
+	elseif (($admin_user) && ($go == "judging_tables")) {
 
 		$query_delete_assign = sprintf("SELECT id FROM $judging_scores_db_table WHERE scoreTable='%s'", $id);
 		$delete_assign = mysqli_query($connection,$query_delete_assign) or die (mysqli_error($connection));
@@ -338,6 +349,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 		$c = array();
 
 		if ($totalRows_delete_assign > 0) {
+			
 			do { $z[] = $row_delete_assign['id']; } while ($row_delete_assign = mysqli_fetch_assoc($delete_assign));
 
 			foreach ($z as $aid) {
@@ -431,7 +443,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 
 	} // end if ($go == "judging_tables")
 
-	elseif ($go == "archive") {
+	elseif (($admin_superuser) && ($go == "archive")) {
 
 		$delete_suffix = "_".$filter; 
 
@@ -477,14 +489,48 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 
 	elseif ($go == "default") {
 
-		$db_conn->where ('id', $id);
-		$result = $db_conn->delete($dbTable);
-		if (!$result) {
-			$error_output[] = $db_conn->getLastError();
-			$errors = TRUE;
+		// Check if user is deleting their own stuff
+
+		if ($dbTable == $prefix."brewing") {
+
+			$entry_allow_delete = FALSE;
+
+			if (($admin_user) || ($admin_superuser)) $entry_allow_delete = TRUE;
+
+			if ($row_user['userLevel'] == 2) {
+
+				$query_brews = sprintf("SELECT id FROM $brewing_db_table WHERE brewBrewerId = '%s' AND id='%s'", $row_user['id'], $id);
+				$brews = mysqli_query($connection,$query_brews) or die (mysqli_error($connection));
+				$row_brews = mysqli_fetch_assoc($brews);
+
+				if ($row_brews) $entry_allow_delete = TRUE;
+
+			}
+
+			if ($entry_allow_delete) {
+
+				$db_conn->where ('id', $id);
+				$result = $db_conn->delete($dbTable);
+				if (!$result) {
+					$error_output[] = $db_conn->getLastError();
+					$errors = TRUE;
+				}
+
+			}
+
+			else {
+
+				$redirect = $base_url."index.php?msg=98";
+				$redirect = prep_redirect_link($redirect);
+				$redirect_go_to = sprintf("Location: %s", $redirect);
+				header($redirect_go_to);
+				exit();
+
+			}
+
 		}
 
-		if ($dbTable == $prefix."archive") {
+		elseif (($admin_superuser) && ($dbTable == $prefix."archive")) {
 
 			$tables_array = array($brewer_db_table, $brewing_db_table, $judging_assignments_db_table, $judging_flights_db_table, $judging_scores_db_table, $judging_scores_bos_db_table, $judging_tables_db_table, $special_best_info_db_table, $special_best_data_db_table, $sponsors_db_table, $staff_db_table, $style_types_db_table, $users_db_table);
 
@@ -507,15 +553,34 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 
 		}
 
+		else {
+
+			if ($admin_superuser) {
+				
+				$db_conn->where ('id', $id);
+				$result = $db_conn->delete($dbTable);
+				if (!$result) {
+					$error_output[] = $db_conn->getLastError();
+					$errors = TRUE;
+				}
+			
+			}
+
+		}
+
 	}
 
 	else {
 
-		$db_conn->where ('id', $id);
-		$result = $db_conn->delete($dbTable);
-		if (!$result) {
-			$error_output[] = $db_conn->getLastError();
-			$errors = TRUE;
+		if ($admin_superuser) {
+			
+			$db_conn->where ('id', $id);
+			$result = $db_conn->delete($dbTable);
+			if (!$result) {
+				$error_output[] = $db_conn->getLastError();
+				$errors = TRUE;
+			}
+		
 		}
 
 	}

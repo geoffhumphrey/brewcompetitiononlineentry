@@ -71,6 +71,7 @@ function mod_info($info,$method) {
 </div>
 <?php if ($action == "default") { ?>
 <form name="form1" method="post" action="<?php echo $base_url; ?>includes/process.inc.php?action=update&amp;dbTable=<?php echo $mods_db_table; ?>">
+<input type="hidden" name="token" value ="<?php if (isset($_SESSION['token'])) echo $_SESSION['token']; ?>">
 	<p>Custom modules are useful for competitions that wish to extend BCOE&amp;M's core functions. Provided in the program package are two sample HTML files to get you started, located in the &ldquo;Mods&rdquo; sub-folder. All mod files MUST have a .php extension (e.g., name_of_file.php - some servers running PHP are not configured to &quot;include&quot; files with other exensions).</p>
   	<p>For the program to use/display any custom module, its information MUST be added into the database. The corresponding file should be uploaded to the &ldquo;mods&rdquo; sub-folder via secure FTP.</p>
 	<p><em><strong>Errors in coding may result in warnings and/or &quot;broken&quot; pages. Use caution!</strong></em></p>
@@ -151,7 +152,7 @@ function mod_info($info,$method) {
 if (($action == "add") || ($action == "edit")) { ?>
 
 <form class="form-horizontal" method="post" action="<?php echo $base_url; ?>includes/process.inc.php?action=<?php echo $action; ?>&amp;dbTable=<?php echo $mods_db_table; ?><?php if ($action == "edit") echo "&amp;id=".$id; ?>" name="form1">
-
+<input type="hidden" name="token" value ="<?php if (isset($_SESSION['token'])) echo $_SESSION['token']; ?>">
 
 <div class="form-group"><!-- Form Group REQUIRED Text Input -->
 	<label for="mod_name" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Name</label>

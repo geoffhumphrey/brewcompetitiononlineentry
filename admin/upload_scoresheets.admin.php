@@ -21,6 +21,7 @@
         <li>Be <strong>less than</strong> 10 MB in size.</li>
     </ul>
 <form method="post" action="<?php echo $base_url; ?>handle.php?action=html_docs" ENCTYPE="multipart/form-data">
+<input type="hidden" name="token" value ="<?php if (isset($_SESSION['token'])) echo $_SESSION['token']; ?>">
 <div class="fileinput fileinput-new" data-provides="fileinput">
     <span class="btn btn-default btn-file"><span>Choose PDF File</span><input type="file" name="file" /></span>
     <span class="fileinput-filename text-success"></span> <span class="fileinput-new text-danger">No file chosen...</span>
@@ -51,6 +52,7 @@
     </ul>
 <p>Please note that file names and extensions uploaded with this browser-based function will be converted to lower-case. Files should be less than 10 MB.</p>
 <form id="upload-widget" method="post" action="<?php echo $base_url; ?>handle.php?action=docs" class="dropzone">
+<input type="hidden" name="token" value ="<?php if (isset($_SESSION['token'])) echo $_SESSION['token']; ?>">
 <div class="fallback">
     <input name="file" type="file" multiple />
   </div>

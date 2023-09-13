@@ -9,6 +9,7 @@ include (DB.'brewer.db.php');
 include (DB.'styles.db.php'); 
 ?>
 <form id="submit-form" action="<?php echo $base_url; ?>includes/process.inc.php?action=edit&amp;dbTable=<?php echo $brewer_db_table; ?>&amp;go=<?php echo $go; ?>&amp;id=<?php echo $row_brewer['id']; ?>" method="POST" name="form1">
+<input type="hidden" name="token" value ="<?php if (isset($_SESSION['token'])) echo $_SESSION['token']; ?>">
 <table class="dataTable">
 <?php include ('judge_info.sec.php'); ?>
 <tr>
