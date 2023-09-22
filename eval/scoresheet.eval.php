@@ -580,7 +580,7 @@ var score_range_ok_text = "<?php echo $evaluation_info_047; ?>";
 var score_range_ok_output = "<span class=\"text-success\"><strong>" + score_range_ok + "</strong><br><small><strong>" + score_range_ok_text + "</strong></small></span>";
 </script>
 
-<script src="<?php echo $base_url;?>js_source/eval_checks.js"></script>
+<script src="<?php echo $base_url;?>js_includes/eval_checks.min.js"></script>
 
 <script>
 $(document).ready(function() {

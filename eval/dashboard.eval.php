@@ -983,7 +983,7 @@ if ($totalRows_table_assignments > 0) {
 	    });
 	});
 </script>
-<script src="<?php echo $base_url;?>js_source/admin_ajax.js"></script>
+<script src="<?php echo $base_url;?>js_includes/admin_ajax.min.js"></script>
 <?php
 } // end if ($totalRows_table_assignments > 0)
 
