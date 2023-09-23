@@ -149,6 +149,19 @@ else {
 
 $security_question = array($label_secret_01, $label_secret_05, $label_secret_06, $label_secret_07, $label_secret_08, $label_secret_09, $label_secret_10, $label_secret_11, $label_secret_12, $label_secret_13, $label_secret_14, $label_secret_15, $label_secret_16, $label_secret_17, $label_secret_18, $label_secret_19, $label_secret_20, $label_secret_21, $label_secret_22, $label_secret_23, $label_secret_25, $label_secret_26, $label_secret_27);
 
+/**
+ * Generate a CSRF token on every page load.
+ * This will be used to prevent cross-site request forgeries
+ * when processing form data.
+ * First check for php 7 compatible random_bytes.
+ * If not, use mcrypt_create_iv (deprecated in php 7.1 removed in 7.2)
+ * If that's not available, default to openssl_random_pseudo_bytes.
+ */
+
+if (function_exists('random_bytes')) $_SESSION['token'] = bin2hex(random_bytes(32));
+elseif (function_exists('mcrypt_create_iv')) $_SESSION['token'] = bin2hex(mcrypt_create_iv(32,MCRYPT_DEV_URANDOM));
+else $_SESSION['token'] = bin2hex(openssl_random_pseudo_bytes(32));
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
