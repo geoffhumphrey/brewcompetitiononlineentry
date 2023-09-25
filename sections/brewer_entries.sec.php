@@ -279,7 +279,7 @@ if ($totalRows_log > 0) {
 			else $entry_output .= "<br><span class=\"text-success\">".$label_confirmed." <i class=\"fa fa-fw fa-check\"></i></span>";
 			if ($row_log['brewPaid'] == 0) $entry_output .= "<br><span class=\"text-danger\">".$label_paid." <i class=\"fa fa-sm fa-fw fa-times\"></i></span>";
 			else $entry_output .= "<br><span class=\"text-success\">".$label_paid." <i class=\"fa fa-sm fa-fw fa-check\"></i></span>";
-			if ($row_log['brewReceived'] == 0) $entry_output .= "<br><span class=\"text-danger\">".$label_received."</span>";
+			if ($row_log['brewReceived'] == 0) $entry_output .= "<br><span class=\"text-danger\">".$label_received." <i class=\"fa fa-sm fa-fw fa-times\"></i></span>";
 			else $entry_output .= "<br><span class=\"text-success\">".$label_received." <i class=\"fa fa-sm fa-fw fa-check\"></i></span>";
 		}
 		

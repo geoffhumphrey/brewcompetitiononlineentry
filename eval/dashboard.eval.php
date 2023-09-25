@@ -497,6 +497,8 @@ if ($totalRows_table_assignments > 0) {
 			$table_assignment_post .= "</tbody>";
 			$table_assignment_post .= "</table>";
 
+			$table_assignment_post .= "<p><a href=\"#top\"><i class=\"fa fa-sm fa-arrow-circle-up\"></i> Top</a></p>";
+
 			// If places have been awarded at the table, but there are duplicates, list them for admins
 			if (($admin) && (!empty($table_places))) {
 

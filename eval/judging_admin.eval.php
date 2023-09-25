@@ -176,7 +176,7 @@ if ($count_evals > 0) {
    	$eval_place_actions .= "</div>";
 	if ($mini_bos_count_flag) {
 		$eval_place_actions .= "<div id=\"eval-mbos-ajax-".$row_entries['id']."-evalMiniBOS-hide\" style=\"margin-bottom:5px;\" class=\"col col-sm-12\">";
-		$eval_place_actions .= sprintf("<span class=\"small %s\">%s %s</span>",$mini_bos_alert_css,$mini_bos_alert_icon,$evaluation_info_104);
+		$eval_place_actions .= sprintf("<span class=\"small %s\">%s %s</span> <a class=\"small\" href=\"#top\"><i class=\"fa fa-sm fa-arrow-circle-up\"></i> Top</a>",$mini_bos_alert_css,$mini_bos_alert_icon,$evaluation_info_104);
 		$eval_place_actions .= "</div>";
 	}
 	$eval_place_actions .= "</div>";

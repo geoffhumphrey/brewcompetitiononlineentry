@@ -243,7 +243,6 @@ if ($setup_success) {
 				'prefsCheck' => 'N',
 				'prefsCheckPayee' => NULL,
 				'prefsTransFee' => 'Y',
-				'prefsGoogle' => NULL,
 				'prefsGoogleAccount' => '|',
 				'prefsSponsors' => 'N',
 				'prefsSponsorLogos' => 'N',

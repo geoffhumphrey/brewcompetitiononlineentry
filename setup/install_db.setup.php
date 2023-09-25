@@ -242,6 +242,7 @@ if ($setup_free_access == TRUE) {
 			$output .= "<li class=\"list-group-item\"><span class=\"fa fa-lg fa-times text-danger\"></span> The <strong>Contacts</strong> table was NOT installed successfully.</li>";
 		}
 		else $output .= "<li class=\"list-group-item\"><span class=\"fa fa-lg fa-check text-success\"></span> The <strong>Contacts</strong> table was installed successfully.</li>";
+		
 		/**
 		 * --------------------------------------
 		 * Competition Info Table
@@ -297,6 +298,63 @@ if ($setup_free_access == TRUE) {
 			$output .= "<li class=\"list-group-item\"><span class=\"fa fa-lg fa-times text-danger\"></span> The <strong>Competition Info</strong> table was NOT installed successfully.</li>";
 		}
 		else $output .= "<li class=\"list-group-item\"><span class=\"fa fa-lg fa-check text-success\"></span> The <strong>Competition Info</strong> table was installed successfully.</li>";
+
+		$contestRules = array(
+			"competition_rules" => "<p>Placeholder</p>",
+			"competition_packing_shipping" => "<p>Placeholder</p>"
+		);
+
+		$contestRules = json_encode($contestRules);
+
+		$update_table = $prefix."contest_info";
+		$data = array(
+			'id' => 1,
+			'contestName' => 'Install Placeholder',
+			'contestHost' => 'BCOEM',
+			'contestHostWebsite' => 'http://www.brewcompetition.com',
+			'contestHostLocation' => 'Denver, CO',
+			'contestRegistrationOpen' => '1438322400',
+			'contestRegistrationDeadline' => '1483253940',
+			'contestEntryOpen' => '1438322400',
+			'contestEntryDeadline' => '1483253940',
+			'contestJudgeOpen' => '1438322400',
+			'contestJudgeDeadline' => '1483253940',
+			'contestRules' => $contestRules,
+			'contestAwardsLocation' => '200 E Colfax Ave, Denver, CO 80203',
+			'contestAwardsLocName' => NULL,
+			'contestAwardsLocDate' => NULL,
+			'contestAwardsLocTime' => NULL,
+			'contestShippingOpen' => NULL,
+			'contestShippingDeadline' => NULL,
+			'contestEntryFee' => '8.00',
+			'contestEntryFee2' => NULL,
+			'contestEntryFeeDiscount' => 'N',
+			'contestEntryFeeDiscountNum' => NULL,
+			'contestDropoffOpen' => '1438322400',
+			'contestBottles' => '<p>Placeholder</p>',
+			'contestShippingAddress' => '200 E Colfax Ave, Denver, CO 80203',
+			'contestShippingName' => 'Shipping Location',
+			'contestAwards' => '<p>Placeholder</p>',
+			'contestLogo' => NULL,
+			'contestBOSAward' => NULL,
+			'contestDropoffDeadline' => '1483253940',
+			'contestEntryCap' => NULL,
+			'contestEntryFeePassword' => NULL,
+			'contestEntryFeePasswordNum' => NULL,
+			'contestID' => '000000',
+			'contestCircuit' => NULL,
+			'contestVolunteers' => '<p>Placeholder</p>',
+			'contestCheckInPassword' => NULL,
+		);
+
+		$result = $db_conn->update ($update_table, $data);
+		if (!$result) {
+			$error_output[] = $db_conn->getLastError();
+			$errors = TRUE;
+			$output .= "<li class=\"list-group-item\"><span class=\"fa fa-lg fa-times text-danger\"></span> <strong>Competition Info</strong> placeholder data was NOT added successfully.</li>";
+		}
+
+		else $output .= "<li class=\"list-group-item\"><span class=\"fa fa-lg fa-check text-success\"></span> <strong>Competition Info</strong> placeholder data was added successfully.</li>";
 
 		/**
 		 * --------------------------------------
@@ -639,6 +697,86 @@ if ($setup_free_access == TRUE) {
 			$output .= "<li class=\"list-group-item\"><span class=\"fa fa-lg fa-times text-danger\"></span> The <strong>Mods</strong> table was NOT installed successfully.</li>";
 		}
 		else $output .= "<li class=\"list-group-item\"><span class=\"fa fa-lg fa-check text-success\"></span> The <strong>Preferences</strong> table was installed successfully.</li>";
+
+		$update_table = $prefix."preferences";
+		$data = array(
+			'id' => '1',
+			'prefsTemp' => 'Fahrenheit',
+			'prefsWeight1' => 'ounces',
+			'prefsWeight2' => 'pounds',
+			'prefsLiquid1' => 'ounces',
+			'prefsLiquid2' => 'gallons',
+			'prefsPaypal' => 'N',
+			'prefsPaypalAccount' => NULL,
+			'prefsPaypalIPN' => '0',
+			'prefsCurrency' => '$',
+			'prefsCash' => 'N',
+			'prefsCheck' => 'N',
+			'prefsCheckPayee' => NULL,
+			'prefsTransFee' => 'Y',
+			'prefsGoogleAccount' => '|',
+			'prefsSponsors' => 'N',
+			'prefsSponsorLogos' => 'N',
+			'prefsSponsorLogoSize' => '250',
+			'prefsCompLogoSize' => '300',
+			'prefsDisplayWinners' => 'Y',
+			'prefsWinnerDelay' => '1616974200',
+			'prefsWinnerMethod' => '0',
+			'prefsDisplaySpecial' => 'J',
+			'prefsBOSMead' => 'N',
+			'prefsBOSCider' => 'N',
+			'prefsEntryForm' => '5',
+			'prefsRecordLimit' => '9999',
+			'prefsRecordPaging' => '150',
+			'prefsProEdition' => '0',
+			'prefsTheme' => 'bruxellensis',
+			'prefsDateFormat' => '1',
+			'prefsContact' => 'Y',
+			'prefsTimeZone' => '-7.001',
+			'prefsEntryLimit' => NULL,
+			'prefsTimeFormat' => '0',
+			'prefsUserEntryLimit' => NULL,
+			'prefsUserSubCatLimit' => NULL,
+			'prefsUSCLEx' => NULL,
+			'prefsUSCLExLimit' => NULL,
+			'prefsPayToPrint' => 'N',
+			'prefsHideRecipe' => 'Y',
+			'prefsUseMods' => 'N',
+			'prefsSEF' => 'N',
+			'prefsSpecialCharLimit' => '200',
+			'prefsStyleSet' => 'BJCP2021',
+			'prefsAutoPurge' => '0',
+			'prefsEntryLimitPaid' => NULL,
+			'prefsEmailRegConfirm' => '0',
+			'prefsShipping' => '1',
+			'prefsDropOff' => '1',
+			'prefsLanguage' => 'en-US',
+			'prefsSpecific' => '1',
+			'prefsShowBestBrewer' => '0',
+			'prefsBestBrewerTitle' => NULL,
+			'prefsFirstPlacePts' => '0',
+			'prefsSecondPlacePts' => '0',
+			'prefsThirdPlacePts' => '0',
+			'prefsFourthPlacePts' => '0',
+			'prefsHMPts' => '0',
+			'prefsTieBreakRule1' => NULL,
+			'prefsTieBreakRule2' => NULL,
+			'prefsTieBreakRule3' => NULL,
+			'prefsTieBreakRule4' => NULL,
+			'prefsTieBreakRule5' => NULL,
+			'prefsTieBreakRule6' => NULL,
+			'prefsShowBestClub' => '0',
+			'prefsBestClubTitle' => NULL,
+			'prefsCAPTCHA' => '0'
+		);
+		$result = $db_conn->insert ($update_table, $data);
+		if (!$result) {
+			$error_output[] = $db_conn->getLastError();
+			$errors = TRUE;
+			$output .= "<li class=\"list-group-item\"><span class=\"fa fa-lg fa-times text-danger\"></span> <strong> Preferences</strong> placeholder data was NOT added successfully.</li>";
+		}
+
+		else $output .= "<li class=\"list-group-item\"><span class=\"fa fa-lg fa-check text-success\"></span> <strong> Preferences</strong> placeholder data was added successfully.</li>";
 
 		// -------------------
 		// Special Best Data Table

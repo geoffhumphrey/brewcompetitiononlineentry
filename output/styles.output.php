@@ -2,7 +2,7 @@
 $section = "styles";
 include (DB.'styles.db.php');
 ?>
-    <div class="page-header"><a name="top"></a>
+    <div class="page-header">
     <?php if ($go == "default") { ?>
     <h1>Accepted <?php echo str_replace("2"," 2",$row_styles['brewStyleVersion']); ?> Styles</h1>
     <?php } else { ?>

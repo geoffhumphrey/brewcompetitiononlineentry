@@ -89,19 +89,23 @@ $request_method = strtoupper($_SERVER['REQUEST_METHOD']);
 
 if ($request_method === "POST") {
 
-	$token_hash = FALSE;
-	$token = filter_input(INPUT_POST,'token',FILTER_SANITIZE_STRING);
-	if (hash_equals($_SESSION['token'],$token)) $token_hash = TRUE;
+	if ($action != "paypal") {
 
-	if ((!$token) || (!$token_hash) || (!$process_allowed)) {
-		session_unset();
-		session_destroy();
-		session_write_close();
-		$redirect = $base_url."403.php";
-		$redirect = prep_redirect_link($redirect);
-		$redirect_go_to = sprintf("Location: %s", $redirect);
-		header($redirect_go_to);
-		exit();
+		$token_hash = FALSE;
+		$token = filter_input(INPUT_POST,'token',FILTER_SANITIZE_STRING);
+		if (hash_equals($_SESSION['token'],$token)) $token_hash = TRUE;
+
+		if ((!$token) || (!$token_hash) || (!$process_allowed)) {
+			session_unset();
+			session_destroy();
+			session_write_close();
+			$redirect = $base_url."403.php";
+			$redirect = prep_redirect_link($redirect);
+			$redirect_go_to = sprintf("Location: %s", $redirect);
+			header($redirect_go_to);
+			exit();
+		}
+		
 	}
 
 }

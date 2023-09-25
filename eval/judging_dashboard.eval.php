@@ -108,9 +108,14 @@ if ($score_previous) {
 	
 }
 
+// Mini BOS
 $mini_bos_count_flag = FALSE;
 $mini_bos_count = 0;
 $eval_count = 0;
+$mini_bos_alert_css = "";
+$mini_bos_alert_icon = "";
+$mini_bos_checked_yes = "";
+$mini_bos_checked_no = "";
 
 foreach ($eval_scores as $key => $value) {
 
@@ -123,6 +128,16 @@ foreach ($eval_scores as $key => $value) {
 }
 
 if (($mini_bos_count > 0) && ($eval_count > $mini_bos_count)) $mini_bos_count_flag = TRUE;
+
+if ($mini_bos_count_flag) {
+	$mini_bos_alert_css = "text-danger";
+	$mini_bos_alert_icon = " <i class=\"fa fa-exclamation-triangle\"></i>";
+}
+
+if ($mini_bos_count == 0) $mini_bos_checked_no = "CHECKED";
+if ($mini_bos_count > 0) {
+	if ($eval_count == $mini_bos_count) $mini_bos_checked_yes = "CHECKED";
+}
 
 if (($judging_open) && (strpos($row_table_assignments['assignRoles'], "HJ") !== false)) {
 
@@ -169,38 +184,29 @@ if (($judging_open) && (strpos($row_table_assignments['assignRoles'], "HJ") !== 
 		$actions .= "</div>";
 		$actions .= "</div>";
 
-		// Mini BOS
-		$mini_bos_alert_css = "";
-		$mini_bos_alert_icon = "";
-		$mini_bos_checked = "";
-		if ($mini_bos_count_flag) {
-			$mini_bos_alert_css = "text-danger";
-			$mini_bos_alert_icon = " <i class=\"fa fa-exclamation-triangle\"></i>";
-		}
 
-		if ($mini_bos_count == $eval_count) $mini_bos_checked = "CHECKED";
-
+		// Mini-BOS
 		$actions .= "<div class=\"row\">";
-		$actions .= "<div class=\"col col-sm-12\">";
-		$actions .= "<div class=\"checkbox\" style=\"margin-bottom:5px;\" id=\"eval-mbos-ajax-".$row_entries['id']."-evalPlace-form-group\">";
-		$actions .= "<label><input type=\"checkbox\" name=\"evalMiniBOS\" value=\"1\"".$mini_bos_checked." onclick=\"
-		save_column(
-		'".$base_url."',
-		'evalMiniBOS',
-		'evaluation',
-		'".$row_entries['id']."',
-		'eval-mini-bos-".$row_entries['id']."',
-		'default',
-		'default',
-		'default',
-		'eval-mbos-ajax-".$row_entries['id']."',
-		'value'
-	)\"> ".$evaluation_info_054."</label>";
-		if ($mini_bos_count_flag) $actions .= "<br><span class=\"small ".$mini_bos_alert_css."\">".$mini_bos_alert_icon." Not all judges indicated this entry advanced to the mini-BOS round. Please verify and check or uncheck the box above appropriately.</span>";
-		$actions .= "<br><span style=\"margin-left:5px;\" id=\"eval-mbos-ajax-".$row_entries['id']."-evalMiniBOS-status\"></span> ";
-		$actions .= "<span id=\"eval-mbos-ajax-".$row_entries['id']."-evalMiniBOS-status-msg\"></span> ";
-        $actions .= "</div>";
+		$actions .= "<div class=\"col col-lg-6 col-md-7 col-sm-12 ".$mini_bos_alert_css."\">";
+		$actions .= $label_mini_bos;
 		$actions .= "</div>";
+		$actions .= "<div style=\"margin-bottom:5px;\" class=\"col col-lg-6 col-md-5 col-sm-12\">";
+		$actions .= "<div class=\"input-group\">";
+		$actions .= "<label class=\"radio-inline ".$mini_bos_alert_css."\">";
+		$actions .= "<input type=\"radio\" name=\"evalMiniBOS".$row_entries['id']."\" value=\"1\" onclick=\"save_column('".$base_url."','evalMiniBOS','evaluation','".$row_entries['id']."','1','default','default','default','eval-mbos-ajax-".$row_entries['id']."','value')\" ".$mini_bos_checked_yes.">Yes";
+		$actions .= "</label>";
+		$actions .= "<label class=\"radio-inline ".$mini_bos_alert_css."\">";
+		$actions .= "<input type=\"radio\" name=\"evalMiniBOS".$row_entries['id']."\" value=\"0\" onclick=\"save_column('".$base_url."','evalMiniBOS','evaluation','".$row_entries['id']."','0','default','default','default','eval-mbos-ajax-".$row_entries['id']."','value')\" ".$mini_bos_checked_no.">No";
+		$actions .= "</label>";
+		$actions .= "</div>";
+		$actions .= "<br><span id=\"eval-mbos-ajax-".$row_entries['id']."-evalMiniBOS-status\"></span> ";
+		$actions .= "<span id=\"eval-mbos-ajax-".$row_entries['id']."-evalMiniBOS-status-msg\"></span> ";
+       	$actions .= "</div>";
+		if ($mini_bos_count_flag) {
+			$actions .= "<div id=\"eval-mbos-ajax-".$row_entries['id']."-evalMiniBOS-hide\" style=\"margin-bottom:5px;\" class=\"col col-sm-12\">";
+			$actions .= "<span class=\"small ".$mini_bos_alert_css."\">".$mini_bos_alert_icon." Not all judges indicated this entry advanced to the mini-BOS round. Please verify and select Yes or No above.</span>";
+			$actions .= "</div>";
+		}
 		$actions .= "</div>";
 
 	}
@@ -293,12 +299,6 @@ elseif ($scored_by_user) {
 		$actions .= "</div>";
 	}
 	
-	if (!empty($user_submitted_eval['evalMiniBOS'])) {
-		$actions .= "<div class=\"text-center\">";
-		$actions .= "<small><i class=\"fa fa-check-square-o\"></i> ".$label_mini_bos."</small>";
-		$actions .= "</div>";
-	}
-	
 	if ($judging_open) $notes .= " ".$evaluation_info_006;
 
 }
@@ -376,7 +376,6 @@ if (($judging_open) && (strpos($row_table_assignments['assignRoles'], "HJ") !== 
 				$actions .= $label_view_other_judge_eval;
 				$actions .= " (";
 				$actions .= $label_score.": ".$score_previous;
-				if (!empty($value['mini_bos'])) $actions .= " - ".$label_mini_bos;
 				$actions .= ")";
 				$actions .= "</a>";
 				$actions .= "</div>";
