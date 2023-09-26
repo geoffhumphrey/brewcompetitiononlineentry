@@ -199,7 +199,6 @@ if ($totalRows_log > 0) {
 				 */
 
 				$scoresheet = TRUE;
-				$scoresheet_pdf = TRUE;
 				$random_num_str = random_generator(8,2);
 				$random_file_name = $random_num_str.".pdf";
 				$scoresheet_random_file_relative = "user_temp/".$random_file_name;
@@ -207,10 +206,9 @@ if ($totalRows_log > 0) {
 				$scoresheet_random_file_html = $base_url.$scoresheet_random_file_relative;
 
 				if (($scoresheet) && (!empty($scoresheet_file_name))) {
-					$scoresheet_link = "";
 					$scoresheet_link .= "<a target=\"_blank\" class=\"hide-loader\" href=\"".$base_url."output/scoresheets.output.php?";
-					$scoresheet_link .= "scoresheetfilename=".urlencode(obfuscateURL($scoresheet_file_name,$encryption_key));
-					$scoresheet_link .= "&amp;randomfilename=".urlencode(obfuscateURL($random_file_name,$encryption_key))."&amp;download=true";
+					$scoresheet_link .= "scoresheetfilename=".urlencode(obfuscateURL($scoresheet_file_name,$_SESSION['encryption_key']));
+					$scoresheet_link .= "&amp;randomfilename=".urlencode(obfuscateURL($random_file_name,$_SESSION['encryption_key']))."&amp;download=true";
 					$scoresheet_link .= sprintf("\" data-toggle=\"tooltip\" title=\"%s &ldquo;".$entry_name."&rdquo;.\">",$brewer_entries_text_006);
 					$scoresheet_link .= "<span class=\"fa fa-lg fa-file-pdf-o\"></a>&nbsp;&nbsp;";
 				}
@@ -228,6 +226,7 @@ if ($totalRows_log > 0) {
 
 			$tempfiles = array_diff(scandir(USER_TEMP), array('..', '.'));
 			foreach ($tempfiles as $file) {
+				
 				if ((filectime(USER_TEMP.$file) < time() - 1*60) || ((strpos($file, $scoresheet_file_name_judging) !== FALSE))) {
 					unlink(USER_TEMP.$file);
 				}
@@ -235,6 +234,7 @@ if ($totalRows_log > 0) {
 				if ((filectime(USER_TEMP.$file) < time() - 1*60) || ((strpos($file, $scoresheet_file_name_entry) !== FALSE))) {
 					unlink(USER_TEMP.$file);
 				}
+			
 			}
 		
 		}
