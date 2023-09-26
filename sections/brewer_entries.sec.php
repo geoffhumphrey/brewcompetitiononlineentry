@@ -225,16 +225,21 @@ if ($totalRows_log > 0) {
 			 */
 
 			$tempfiles = array_diff(scandir(USER_TEMP), array('..', '.'));
+			
 			foreach ($tempfiles as $file) {
 				
-				if ((filectime(USER_TEMP.$file) < time() - 1*60) || ((strpos($file, $scoresheet_file_name_judging) !== FALSE))) {
-					unlink(USER_TEMP.$file);
+				if (!empty($scoresheet_file_name_judging)) {
+					if ((filectime(USER_TEMP.$file) < time() - 1*60) || ((strpos($file, $scoresheet_file_name_judging) !== FALSE))) {
+						unlink(USER_TEMP.$file);
+					}
 				}
 
-				if ((filectime(USER_TEMP.$file) < time() - 1*60) || ((strpos($file, $scoresheet_file_name_entry) !== FALSE))) {
-					unlink(USER_TEMP.$file);
+				if (!empty($scoresheet_file_name_entry)) {
+					if ((filectime(USER_TEMP.$file) < time() - 1*60) || ((strpos($file, $scoresheet_file_name_entry) !== FALSE))) {
+						unlink(USER_TEMP.$file);
+					}
 				}
-			
+
 			}
 		
 		}
