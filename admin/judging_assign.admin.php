@@ -56,8 +56,14 @@ if ($filter == "judges") {
     }
 }
 
-for($i=1; $i<$row_flights['flightRound']+1; $i++) {
-	$output_datatables_head .= "<th>Round ".$i."</th>";
+if ($_SESSION['jPrefsQueued'] == "N") {
+  for($i=1; $i<$row_flights['flightRound']+1; $i++) {
+    $output_datatables_head .= "<th>Round ".$i."</th>";
+  }
+}
+
+if ($_SESSION['jPrefsQueued'] == "Y") {
+  $output_datatables_head .= "<th>Round ".$row_flights['flightRound']."</th>";
 }
 
 $output_datatables_head .= "</tr>";
@@ -120,6 +126,8 @@ if ($totalRows_brewer > 0) {
   	$judge_info = explode("^",$judge_info);
   	$bjcp_rank = explode(",",$judge_info[5]);
     $rank_display = bjcp_rank($bjcp_rank[0],1);
+
+    $random = random_generator(8,2);
     
     if (((strpos($rank_display, "Level 0:") !== false)) && (($judge_info[4] == "Y") || ($judge_info[12] == "Y"))) $rank_display = "Level 3: Certified Cider or Mead Judge";
 
@@ -193,101 +201,129 @@ if ($totalRows_brewer > 0) {
       $result = $db_conn->delete ($update_table);
     }
 
-    $random = random_generator(6,2);
+    // Get role from judging_assignments table
+    $query_judge_roles = sprintf("SELECT assignRoles FROM %s WHERE (bid='%s' AND assignTable='%s' AND assignRound='%s')", $prefix."judging_assignments", $row_brewer['uid'], $row_tables_edit['id'], $row_flights['flightRound']);
+    $judge_roles = mysqli_query($connection,$query_judge_roles) or die (mysqli_error($connection));
+    $row_judge_roles = mysqli_fetch_assoc($judge_roles);
 
-  	for($i=1; $i<$row_flights['flightRound']+1; $i++) {
+    if ($_SESSION['jPrefsQueued'] == "N") {
 
-  		// Get role from judging_assignments table
-  		$query_judge_roles = sprintf("SELECT assignRoles FROM %s WHERE (bid='%s' AND assignTable='%s' AND assignRound='%s')", $prefix."judging_assignments", $row_brewer['uid'], $row_tables_edit['id'], $i);
-  		$judge_roles = mysqli_query($connection,$query_judge_roles) or die (mysqli_error($connection));
-  		$row_judge_roles = mysqli_fetch_assoc($judge_roles);
-
-        if ($_SESSION['jPrefsQueued'] == "N") {
-          if ($rank_number >= 2) {
-            $head_judge_options_ranked[] = array(
-              "uid" => $row_brewer['uid'],
-              "first_name" => $row_brewer['brewerFirstName'],
-              "last_name" => $row_brewer['brewerLastName'],
-              "rank" => $rank_display
-            );
-          }
-          if ($rank_number < 2) {
-            $head_judge_options_non[] = array(
-              "uid" => $row_brewer['uid'],
-              "first_name" => $row_brewer['brewerFirstName'],
-              "last_name" => $row_brewer['brewerLastName'],
-              "rank" => $rank_display
-            );
-          }
+        if ($rank_number >= 2) {
+          $head_judge_options_ranked[] = array(
+            "uid" => $row_brewer['uid'],
+            "first_name" => $row_brewer['brewerFirstName'],
+            "last_name" => $row_brewer['brewerLastName'],
+            "rank" => $rank_display
+          );
         }
-
-        if ($_SESSION['jPrefsQueued'] == "N") {
-
-          $head_judge_role_display = "<div id=\"hj-display-".$row_brewer['uid']."\" class=\"text-primary hj-display hj-select-display\"><i class=\"fa fa-gavel\"></i> ".$label_head_judge."</div>";
-
-          if (!empty($row_judge_roles['assignRoles'])) {
-            if (strpos($row_judge_roles['assignRoles'],"HJ") !== FALSE) {
-              $head_judge_id[] = $row_brewer['uid'];
-              $head_judge_name = $row_brewer['brewerLastName'].", ".$row_brewer['brewerFirstName']." (".$rank_display.")";
-            }
-            if (strpos($row_judge_roles['assignRoles'],"MBOS") !== FALSE) {
-              $judge_roles_display .= "<div id=\"mbos-display-".$row_brewer['uid']."\" class=\"text-success\"><i class=\"fa fa-trophy\"></i> ".$label_mini_bos_judge."</div>";
-            }
-          }
+        
+        if ($rank_number < 2) {
+          $head_judge_options_non[] = array(
+            "uid" => $row_brewer['uid'],
+            "first_name" => $row_brewer['brewerFirstName'],
+            "last_name" => $row_brewer['brewerLastName'],
+            "rank" => $rank_display
+          );
         }
+        
+        $head_judge_role_display = "<div id=\"hj-display-".$row_brewer['uid']."\" class=\"text-primary hj-display hj-select-display\"><i class=\"fa fa-gavel\"></i> ".$label_head_judge."</div>";
 
-        if (($_SESSION['jPrefsQueued'] == "Y") && ($row_judge_roles)) {
-            
-        		if (!empty($row_judge_roles['assignRoles'])) {
-        			$roles_previously_defined = 1;
-        		}
-
-        		if (strpos($row_judge_roles['assignRoles'],"HJ") !== FALSE) {
-        			$checked_head_judge = "CHECKED";
-        		}
-
-        		if (strpos($row_judge_roles['assignRoles'],"LJ") !== FALSE) {
-        			$checked_lead_judge = "CHECKED";
-        		}
-
-        		if (strpos($row_judge_roles['assignRoles'],"MBOS") !== FALSE) {
-        			$checked_minibos_judge = "CHECKED";
-        		}
+        if (!empty($row_judge_roles['assignRoles'])) {
+          if (strpos($row_judge_roles['assignRoles'],"HJ") !== FALSE) {
+            $head_judge_id[] = $row_brewer['uid'];
+            $head_judge_name = $row_brewer['brewerLastName'].", ".$row_brewer['brewerFirstName']." (".$rank_display.")";
+          }
+          if (strpos($row_judge_roles['assignRoles'],"MBOS") !== FALSE) {
+            $judge_roles_display .= "<div id=\"mbos-display-".$row_brewer['uid']."\" class=\"text-success\"><i class=\"fa fa-trophy\"></i> ".$label_mini_bos_judge."</div>";
+          }
         
         }
 
-  		if (table_round($row_tables_edit['id'],$i)) {
+      for($i=1; $i<$row_flights['flightRound']+1; $i++) {
 
-  			$flights_display .= "<td>";
+        $random_dropdown = random_generator(6,2);
 
-  			if (at_table($row_brewer['uid'],$row_tables_edit['id'])) {
-          $assigned_at_this_table = TRUE;
-          $assigned_at_table[] = $row_brewer['uid'];
-  				$assign_row_color = "bg-orange text-orange";
-  				$assign_flag = "<span class=\"fa fa-lg fa-check\"></span> <strong>Assigned.</strong> Participant is assigned to this table/flight.";
-  				
-          //$rank_number = preg_replace("/[^0-9,.]/", "", $display_rank);
-  				if ($rank_number >= 2) $ranked += 1;
-  				if ($rank_number < 2) $nonranked += 1;
-  			}
+        if (table_round($row_tables_edit['id'],$i)) {
 
-  			else {
-  				$judge_alert = judge_alert($i,$row_brewer['uid'],$row_tables_edit['id'],$location,$judge_info[2],$judge_info[3],$row_tables_edit['tableStyles'],$row_tables_edit['id']);
-  				$judge_alert = explode("|",$judge_alert);
-  				$assign_row_color = $judge_alert[0];
-  				$assign_flag = "<div style=\"padding-bottom:15px;\">".$judge_alert[1]."</div>";
-  			}
+          $flights_display .= "<td>";
 
-  			$random = random_generator(8,2);
+          if (at_table($row_brewer['uid'],$row_tables_edit['id'])) {
+            $assigned_at_this_table = TRUE;
+            $assigned_at_table[] = $row_brewer['uid'];
+            $assign_row_color = "bg-orange text-orange";
+            $assign_flag = "<span class=\"fa fa-lg fa-check\"></span> <strong>Assigned.</strong> Participant is assigned to this table/flight.";
+            
+            //$rank_number = preg_replace("/[^0-9,.]/", "", $display_rank);
+            if ($rank_number >= 2) $ranked += 1;
+            if ($rank_number < 2) $nonranked += 1;
+          }
 
-  			$unavailable = unavailable($row_brewer['uid'],$row_tables_edit['tableLocation'],$i,$row_tables_edit['id']);  			
-        $flights_display .= $assign_flag;
-  			$flights_display .= assign_to_table($row_tables_edit['id'],$row_brewer['uid'],$filter,$total_flights,$i,$location,$row_tables_edit['tableStyles'],$queued,$random,$base_url);
-  			$flights_display .= "</td>";
+          else {
+            $judge_alert = judge_alert($i,$row_brewer['uid'],$row_tables_edit['id'],$location,$judge_info[2],$judge_info[3],$row_tables_edit['tableStyles'],$row_tables_edit['id']);
+            $judge_alert = explode("|",$judge_alert);
+            $assign_row_color = $judge_alert[0];
+            $assign_flag = "<div style=\"padding-bottom:15px;\">".$judge_alert[1]."</div>";
+          }
 
-  		}
+          $unavailable = unavailable($row_brewer['uid'],$row_tables_edit['tableLocation'],$i,$row_tables_edit['id']);       
+          $flights_display .= $assign_flag;
+          $flights_display .= assign_to_table($row_tables_edit['id'],$row_brewer['uid'],$filter,$total_flights,$i,$location,$row_tables_edit['tableStyles'],$queued,$random_dropdown,$base_url);
+          $flights_display .= "</td>";
 
-  	}
+        }
+
+      } // end for($i=1; $i<$row_flights['flightRound']+1; $i++) {
+
+    } // end if ($_SESSION['jPrefsQueued'] == "N")
+
+    if ($_SESSION['jPrefsQueued'] == "Y") {
+
+      if ($row_judge_roles) {
+          
+          if (!empty($row_judge_roles['assignRoles'])) {
+            $roles_previously_defined = 1;
+          }
+
+          if (strpos($row_judge_roles['assignRoles'],"HJ") !== FALSE) {
+            $checked_head_judge = "CHECKED";
+          }
+
+          if (strpos($row_judge_roles['assignRoles'],"LJ") !== FALSE) {
+            $checked_lead_judge = "CHECKED";
+          }
+
+          if (strpos($row_judge_roles['assignRoles'],"MBOS") !== FALSE) {
+            $checked_minibos_judge = "CHECKED";
+          }
+      
+      }
+
+      $flights_display .= "<td>";
+
+      if (at_table($row_brewer['uid'],$row_tables_edit['id'])) {
+        $assigned_at_this_table = TRUE;
+        $assigned_at_table[] = $row_brewer['uid'];
+        $assign_row_color = "bg-orange text-orange";
+        $assign_flag = "<span class=\"fa fa-lg fa-check\"></span> <strong>Assigned.</strong> Participant is assigned to this table/flight.";
+        
+        //$rank_number = preg_replace("/[^0-9,.]/", "", $display_rank);
+        if ($rank_number >= 2) $ranked += 1;
+        if ($rank_number < 2) $nonranked += 1;
+      }
+
+      else {
+        $judge_alert = judge_alert($row_flights['flightRound'],$row_brewer['uid'],$row_tables_edit['id'],$location,$judge_info[2],$judge_info[3],$row_tables_edit['tableStyles'],$row_tables_edit['id']);
+        $judge_alert = explode("|",$judge_alert);
+        $assign_row_color = $judge_alert[0];
+        $assign_flag = "<div style=\"padding-bottom:15px;\">".$judge_alert[1]."</div>";
+      }
+
+      $unavailable = unavailable($row_brewer['uid'],$row_tables_edit['tableLocation'],$row_flights['flightRound'],$row_tables_edit['id']);       
+      $flights_display .= $assign_flag;
+      $flights_display .= assign_to_table($row_tables_edit['id'],$row_brewer['uid'],$filter,$total_flights,$row_flights['flightRound'],$location,$row_tables_edit['tableStyles'],$queued,$random,$base_url);
+      $flights_display .= "</td>";
+
+    } // end if ($_SESSION['jPrefsQueued'] == "Y") 
 
   	if ($judge_info[4] == "Y") $display_rank .= "<br /><em>Certified Mead Judge</em>";
     if ($judge_info[12] == "Y") $display_rank .= "<br /><em>Certified Cider Judge</em>";
@@ -299,8 +335,8 @@ if ($totalRows_brewer > 0) {
 
   	if (in_array($table_location,$locations)) {
 
-      $total_count += 1;
-  		$output_datatables_body .= "<tr class=\"".$assign_row_color."\">\n";
+        $total_count += 1;
+        $output_datatables_body .= "<tr class=\"".$assign_row_color."\">\n";
 
       /*
        * Build Name, Rank, BJCP ID, and Role columns
@@ -351,14 +387,15 @@ if ($totalRows_brewer > 0) {
 
         if ($_SESSION['jPrefsQueued'] == "Y") {
           
+          
           // Activate for Roles
           // Build jQuery function vars
           if ($assigned_at_this_table) $output_jquery_toggle .= "$(\"#toggleRoles".$random."\").show();\n";
           else $output_jquery_toggle .= "$(\"#toggleRoles".$random."\").hide();\n";
 
           $output_jquery_toggle .= "
-          $(\"input[name$='assignRound".$random."']\").click(function() {
-              if ($(this).val() == \"1\") {
+          $(\"input[name='assignRound".$random."']\").click(function() {
+              if ($(this).val() == \"".$row_flights['flightRound']."\") {
                   $(\"#toggleRoles".$random."\").show();
               }
               else {
@@ -369,6 +406,8 @@ if ($totalRows_brewer > 0) {
               }
           });\n
           ";
+
+
 
           $output_datatables_body .= "<td>";
           $output_datatables_body .= "<div id=\"toggleRoles".$random."\">";
@@ -713,7 +752,9 @@ function show_hj_choose() {
 }
 
 function hj_enable(uid,element_id) {
+  
   var value = $("#"+element_id).val();
+  
   if (value == 0) {
     $("#hj-choose-"+uid).hide();
     $("#hj-display-"+uid).hide();
@@ -725,6 +766,7 @@ function hj_enable(uid,element_id) {
   }
 
 }
+
 $(document).ready(function() {
   $(".hj-display").hide();
 
