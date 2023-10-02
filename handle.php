@@ -1,6 +1,6 @@
 <?php
 require('paths.php');
-require('includes/url_variables.inc.php');
+require(INCLUDES.'url_variables.inc.php');
 
 // Force download of uploaded scoresheet PDF
 // Discourages random viewing of scoresheets by inputting direct URL

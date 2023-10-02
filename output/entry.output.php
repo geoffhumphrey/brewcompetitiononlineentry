@@ -68,7 +68,7 @@ else $organizer = "";
 if (in_array($_SESSION['prefsEntryForm'],$barcode_qrcode_array)) {
 
 	// Generate Barcode
-	$barcode_link = "https://www.brewcompetition.com/includes/barcode/html/image.php?filetype=PNG&dpi=300&scale=1&rotation=0&font_family=Arial.ttf&font_size=10&text=".$brewing_id."&thickness=50&code=BCGcode39";
+	$barcode_link = "https://admin.brewingcompetitions.com/includes/barcode/html/image.php?filetype=PNG&dpi=300&scale=1&rotation=0&font_family=Arial.ttf&font_size=10&text=".$brewing_id."&thickness=50&code=BCGcode39";
 
 	// Generate QR Code
 	require_once (CLASSES.'qr_code/qrClass.php');

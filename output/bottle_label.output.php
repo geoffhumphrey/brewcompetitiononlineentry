@@ -96,7 +96,7 @@ if (isset($_SESSION['loginUsername'])) {
             // Generate Barcode
             $barcode = sprintf("%06s",$row_log['id']);
 
-            $barcode_link = "http://www.brewcompetition.com/includes/barcode/html/image.php?filetype=PNG&dpi=300&scale=1&rotation=0&font_family=Arial.ttf&font_size=8&text=".$barcode."&thickness=20&code=BCGcode39";
+            $barcode_link = "https://admin.brewingcompetitions.com/includes/barcode/html/image.php?filetype=PNG&dpi=300&scale=1&rotation=0&font_family=Arial.ttf&font_size=8&text=".$barcode."&thickness=20&code=BCGcode39";
 
             // Generate QR Code
             require_once (CLASSES.'qr_code/qrClass.php');

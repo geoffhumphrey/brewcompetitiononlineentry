@@ -3626,10 +3626,12 @@ function open_limit($total,$limit,$registration_open) {
 	else return FALSE;
 }
 
-// Simple encrypt and decrypt
-// Useful for URL passed strings that need to be obfuscated for *casual* users
-// Thanks to https://bhoover.com/using-php-openssl_encrypt-openssl_decrypt-encrypt-decrypt-data/
-// Thanks to http://markgoldsmith.me/blog/url-safe-php-encryption-and-decryption-script/
+/**
+ * Simple encrypt and decrypt
+ * Useful for URL passed strings that need to be obfuscated for *casual* users
+ * Thanks to https://bhoover.com/using-php-openssl_encrypt-openssl_decrypt-encrypt-decrypt-data/
+ * Thanks to http://markgoldsmith.me/blog/url-safe-php-encryption-and-decryption-script/
+ */
 
 function obfuscateURL($data,$key) {
 
