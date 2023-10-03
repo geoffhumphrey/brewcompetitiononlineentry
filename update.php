@@ -389,8 +389,8 @@ else {
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
 
         <!-- Load BCOE&M Custom Theme CSS - Contains Bootstrap overrides and custom classes -->
-        <link rel="stylesheet" type="text/css" href="<?php echo $base_url; ?>css/common.min.css">
-        <link rel="stylesheet" type="text/css" href="<?php echo $base_url; ?>css/default.min.css" />
+        <link rel="stylesheet" type="text/css" href="<?php echo $css_url; ?>common.min.css">
+        <link rel="stylesheet" type="text/css" href="<?php echo $css_url; ?>default.min.css" />
 
         <!-- Load BCOE&M Custom JS -->
     	<script src="<?php echo $js_url; ?>bcoem_custom.min.js"></script>

@@ -996,7 +996,7 @@ if (($display_to_admin) || ($display_to_public)) {
     	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/lightslider/1.1.6/css/lightslider.min.css">
     	<!-- Load Fancybox / http://www.fancyapps.com -->
 	    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.css" />
-    	<link rel="stylesheet" href="<?php echo $base_url; ?>css/awards.css">
+    	<link rel="stylesheet" href="<?php echo $css_url; ?>awards.css">
     	<style>
     		.cs-hidden {
 		        height: 1px;

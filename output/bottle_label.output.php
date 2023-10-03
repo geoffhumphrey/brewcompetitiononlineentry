@@ -238,7 +238,7 @@ else {
     <!-- Load Font Awesome -->
     <!-- Homepage URL: https://fortawesome.github.io/Font-Awesome -->
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
-    <link rel="stylesheet" href="../css/templates.min.css">
+    <link rel="stylesheet" href="<?php echo $css_url."templates.min.css"; ?>">
     <style>
 
     body {

@@ -52,7 +52,7 @@ if ($nw_cider) {
 if (($nw_cider) && (empty($rank))) $show_rank = FALSE;
 ?>
 
-<link rel="stylesheet" type="text/css" href="<?php echo $base_url; ?>css/scoresheet_output.css">
+<link rel="stylesheet" type="text/css" href="<?php echo $css_url; ?>scoresheet_output.css">
 <!-- Header Row -->
 <div class="row">
     

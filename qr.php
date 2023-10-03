@@ -39,7 +39,7 @@ $logged_in = FALSE;
 if (!isset($_SESSION['qrPasswordOK'])) $logged_in = TRUE;
 
 $header_output = $row_contest_info['contestName'];
-$theme = $base_url."css/".$row_prefs['prefsTheme'].".min.css";
+$theme = $css_url.$row_prefs['prefsTheme'].".min.css";
 $process_allowed = FALSE;
 
 // Validate user input against password in DB

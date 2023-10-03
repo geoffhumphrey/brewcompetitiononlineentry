@@ -25,6 +25,9 @@ if (HOSTED) $js_url = "https://brewingcompetitions.com/_bcoem_shared/js_includes
 $images_url = $base_url."images/";
 if (HOSTED) $images_url = "https://brewingcompetitions.com/_bcoem_shared/images/";
 
+$css_url = $base_url."css/";
+if (HOSTED) $css_url = "https://brewingcompetitions.com/_bcoem_shared/css/";
+
 // ---------------------------- Preflight Checks ---------------------------------------
 require_once (LIB.'preflight.lib.php');
 
@@ -435,8 +438,8 @@ if ($setup_success) {
 
 	//  ---------------------------- Load Theme ----------------------------
 
-	if (!isset($_SESSION['prefsTheme'])) $theme = $base_url."css/default.min.css";
-	else $theme = $base_url."css/".$_SESSION['prefsTheme'].".min.css";
+	if (!isset($_SESSION['prefsTheme'])) $theme = $css_url."default.min.css";
+	else $theme = $css_url.$_SESSION['prefsTheme'].".min.css";
 
 } // end if ($setup_success);
 ?>
