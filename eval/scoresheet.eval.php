@@ -579,9 +579,7 @@ var score_range_ok = "<?php echo $label_score_range_ok; ?>";
 var score_range_ok_text = "<?php echo $evaluation_info_047; ?>";
 var score_range_ok_output = "<span class=\"text-success\"><strong>" + score_range_ok + "</strong><br><small><strong>" + score_range_ok_text + "</strong></small></span>";
 </script>
-
-<script src="<?php echo $base_url;?>js_includes/eval_checks.min.js"></script>
-
+<script src="<?php echo $js_url; ?>eval_checks.min.js"></script>
 <script>
 $(document).ready(function() {
   
@@ -886,7 +884,7 @@ if ($entry_found) {
   </div>
 </div>
 <?php } ?>
-<script src="<?php echo $base_url; ?>js_includes/saveMyForm.jquery.min.js"></script>
+<script src="<?php echo $js_url; ?>saveMyForm.jquery.min.js"></script>
 <script type="text/javascript">
 var style_type = <?php echo $row_style['brewStyleType']; ?>;
 var edit = <?php if ($action == "edit") echo "true"; else echo "false"; ?>;

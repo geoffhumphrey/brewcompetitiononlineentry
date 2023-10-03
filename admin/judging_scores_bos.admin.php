@@ -17,7 +17,7 @@ $(document).ready(function () {
     disable_update_button('judging_scores_bos');
 });
 </script>
-<script src="<?php echo $base_url;?>js_includes/admin_ajax.min.js"></script>
+<script src="<?php echo $js_url; ?>admin_ajax.min.js"></script>
 <!-- Modal -->
 <div class="modal fade" id="noDupeModal" tabindex="-1" role="dialog" aria-labelledby="noDupeModalLabel" aria-hidden="true">
   <div class="modal-dialog">

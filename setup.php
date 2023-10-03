@@ -181,7 +181,7 @@ else $_SESSION['token'] = bin2hex(openssl_random_pseudo_bytes(32));
         <link rel="stylesheet" type="text/css" href="<?php echo $base_url; ?>css/default.min.css">
 
         <!-- Load BCOE&M Custom JS -->
-        <script src="<?php echo $base_url; ?>js_includes/bcoem_custom.min.js"></script>
+    	<script src="<?php echo $js_url; ?>bcoem_custom.min.js"></script>
 
 	</head>
 	<body>

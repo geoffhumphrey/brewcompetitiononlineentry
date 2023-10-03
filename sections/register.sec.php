@@ -1,7 +1,7 @@
 <script type="text/javascript">
 var action = "<?php echo $action; ?>";
 </script>
-<script src="<?php echo $base_url; ?>js_includes/registration_checks.min.js"></script>
+<script src="<?php echo $js_url; ?>registration_checks.min.js"></script>
 <?php
 $warning0 = "";
 $warning1 = "";

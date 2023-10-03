@@ -1098,32 +1098,32 @@ if ($totalRows_names > 0) {
 		    $last_name = $lname;
 		}
 
-		$first_name = filter_var($first_name,FILTER_SANITIZE_STRING);
-		$last_name = filter_var($last_name,FILTER_SANITIZE_STRING);  
+		$first_name = filter_var($first_name,FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+		$last_name = filter_var($last_name,FILTER_SANITIZE_FULL_SPECIAL_CHARS);  
 		$address = standardize_name($purifier->purify($row_names['brewerAddress']));
-		$address = filter_var($address,FILTER_SANITIZE_STRING);
+		$address = filter_var($address,FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 		$city = standardize_name($purifier->purify($row_names['brewerCity']));
-		$city = filter_var($city,FILTER_SANITIZE_STRING);
+		$city = filter_var($city,FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 		$state = $purifier->purify($row_names['brewerState']);
 		if (strlen($state) > 2) $state = standardize_name($state);
 		else $state = strtoupper($state);
-		$state = filter_var($state,FILTER_SANITIZE_STRING);
+		$state = filter_var($state,FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 		$brewerEmail = filter_var($row_names['brewerEmail'],FILTER_SANITIZE_EMAIL);
 		
 		if (!empty($row_names['brewerJudgeID'])) {
 			$brewerJudgeID = sterilize($row_names['brewerJudgeID']);
-			$brewerJudgeID = filter_var($brewerJudgeID,FILTER_SANITIZE_STRING);
+			$brewerJudgeID = filter_var($brewerJudgeID,FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 			$brewerJudgeID = strtoupper($brewerJudgeID);
 		}
 
 		if (!empty($row_names['brewerClubs'])) {
 			$brewerClubs = $purifier->purify($row_names['brewerClubs']);
-			$brewerClubs = filter_var($brewerClubs,FILTER_SANITIZE_STRING);
+			$brewerClubs = filter_var($brewerClubs,FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 		}
 
 		if (!empty($row_names['brewerJudgeNotes'])) {
 			$brewerJudgeNotes = $purifier->purify($row_names['brewerJudgeNotes']);
-			$brewerJudgeNotes = filter_var($brewerJudgeNotes,FILTER_SANITIZE_STRING);
+			$brewerJudgeNotes = filter_var($brewerJudgeNotes,FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 		}
 
 		$data = array(
@@ -1172,7 +1172,7 @@ if ($totalRows_entry_names > 0) {
 		$brewCoBrewer = "";
 		$brewInfo = "";
 		$brewName = standardize_name($purifier->purify($row_entry_names['brewName']));
-		$brewName = filter_var($brewName,FILTER_SANITIZE_STRING);
+		$brewName = filter_var($brewName,FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 
 		if (isset($row_entry_names['brewComments'])) $brewComments = $purifier->purify($row_entry_names['brewComments']);
 
@@ -1198,13 +1198,13 @@ if ($totalRows_entry_names > 0) {
 
 			}
 
-			$brewCoBrewer = filter_var($brewCoBrewer,FILTER_SANITIZE_STRING);
+			$brewCoBrewer = filter_var($brewCoBrewer,FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 
 		}
 
 		if (isset($row_entry_names['brewInfo'])) {
 			$brewInfo = $purifier->purify($row_entry_names['brewInfo']);
-			$brewInfo = filter_var($brewInfo,FILTER_SANITIZE_STRING);
+			$brewInfo = filter_var($brewInfo,FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 		}
 
 		$data = array(

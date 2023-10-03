@@ -11,7 +11,7 @@
 		var style_type = "1";
 	}
 </script>
-<script src="<?php echo $base_url; ?>js_includes/add_edit_style.min.js"></script>
+<script src="<?php echo $js_url; ?>add_edit_style.min.js"></script>
 <?php } ?>
 <?php if ($section == "brew") { ?>
 <script type="text/javascript">
@@ -33,5 +33,5 @@
 	possible_allergens = null;		
 	<?php } ?>
 </script>
-<script src="<?php echo $base_url; ?>js_includes/add_edit_entry.min.js"></script>
+<script src="<?php echo $js_url; ?>add_edit_entry.min.js"></script>
 <?php } // end if ($section == "brew") ?>

@@ -44,7 +44,7 @@ if (($session_active) && ($_SESSION['userLevel'] <= 2)) {
 	if ($action == "evaluation") {
 
 		if ($go == "evalPlace") {
-			$input = filter_var($_POST['evalPlace'],FILTER_SANITIZE_STRING);
+			$input = filter_var($_POST['evalPlace'],FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 			if (empty($input)) $data = array($go => NULL);
 			else {
 				if ($input == "0") $data = array($go => NULL);			
@@ -53,7 +53,7 @@ if (($session_active) && ($_SESSION['userLevel'] <= 2)) {
 		}
 
 		if ($go == "evalMiniBOS") {
-			$input = filter_var($_POST['evalMiniBOS'],FILTER_SANITIZE_STRING);
+			$input = filter_var($rid1,FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 			if (empty($input)) $data = array($go => 0);
 			else $data = array($go => $input);
 		}
@@ -76,20 +76,20 @@ if (($session_active) && ($_SESSION['userLevel'] <= 1)) {
 		if ($rid1 != "default") $brewBrewerID = $rid1;
 
 		if ($go == "brewAdminNotes") {
-			$input = filter_var($_POST['brewAdminNotes'],FILTER_SANITIZE_STRING);
+			$input = filter_var($_POST['brewAdminNotes'],FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 		}
 
 		if ($go == "brewStaffNotes") {
-			$input = filter_var($_POST['brewStaffNotes'],FILTER_SANITIZE_STRING);
+			$input = filter_var($_POST['brewStaffNotes'],FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 		}
 
 		if ($go == "brewBoxNum") {
-			$input = filter_var($_POST['brewBoxNum'],FILTER_SANITIZE_STRING);
+			$input = filter_var($_POST['brewBoxNum'],FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 		}
 
 		if ($go == "brewJudgingNumber") {
 			$post = str_replace("^","-",$_POST['brewJudgingNumber']);
-			$input = filter_var($post,FILTER_SANITIZE_STRING);
+			$input = filter_var($post,FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 			$input = strtolower($input);
 		}
 
@@ -144,11 +144,11 @@ if (($session_active) && ($_SESSION['userLevel'] <= 1)) {
 		}
 
 		if ($go == "sponsorText") {
-			$input = filter_var($_POST['sponsorText'],FILTER_SANITIZE_STRING);
+			$input = filter_var($_POST['sponsorText'],FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 		}
 
 		if ($go == "sponsorImage") {
-			$input = filter_var($_POST['sponsorImage'],FILTER_SANITIZE_STRING);
+			$input = filter_var($_POST['sponsorImage'],FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 		}
 
 		$update_table = $prefix."sponsors";
@@ -376,7 +376,7 @@ if ($action == "judging_assignments") {
 
 	if ($go == "assignRoles") {
 		
-		$input = filter_var($rid1,FILTER_SANITIZE_STRING);
+		$input = filter_var($rid1,FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 		
 		if (empty($input)) {
 			$sql = sprintf("UPDATE `%s` SET %s=NULL WHERE assignTable='%s'", $prefix.$action, $go, $id);

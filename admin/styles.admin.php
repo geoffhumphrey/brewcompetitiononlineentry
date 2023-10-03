@@ -162,11 +162,10 @@ $style_type_2 = style_type($row_styles['brewStyleType'],"1","bcoe");
 
 <script>
 // Check if the entered style/sub-style combination of identifiers are in use
-var style_url = "<?php echo $base_url; ?>ajax/custom_style.ajax.php";
+var style_url = "<?php echo $ajax_url; ?>custom_style.ajax.php";
 var action = "<?php echo $action; ?>";
 
 $("#style-identifier-status").hide();
-
 
 function checkStyleIdentifier() {
 

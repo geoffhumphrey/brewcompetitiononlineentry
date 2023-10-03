@@ -1,9 +1,9 @@
 <script type="text/javascript">
-var username_url = "<?php echo $base_url; ?>ajax/username.ajax.php";
-var email_url="<?php echo $base_url; ?>ajax/valid_email.ajax.php";
+var username_url = "<?php echo $ajax_url; ?>username.ajax.php";
+var email_url="<?php echo $ajax_url; ?>valid_email.ajax.php";
 var setup = 1;
 </script>
-<script src="<?php echo $base_url; ?>js_includes/registration_checks.min.js"></script>
+<script src="<?php echo $js_url; ?>registration_checks.min.js"></script>
 <script type="text/javascript">
         $(document).ready(function () {
             "use strict";

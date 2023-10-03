@@ -27,7 +27,7 @@ $nav_container = "navbar-default";
     <link rel="stylesheet" type="text/css" href="<?php echo $theme; ?>" />
 
     <!-- Load BCOE&M Custom JS -->
-    <script src="<?php echo $base_url; ?>js_includes/bcoem_custom.min.js"></script>
+    <script src="<?php echo $js_url; ?>bcoem_custom.min.js"></script>
 
   </head>
 	<body>

@@ -1,9 +1,9 @@
 <script>
-  var base_url = "<?php echo $base_url; ?>";
+  var base_url = "<?php echo $ajax_url; ?>";
   var section = "<?php echo $section; ?>";
   var go = "<?php echo $go; ?>";
 </script>
-<script src="<?php echo $base_url; ?>js_includes/import_scores.min.js"></script>
+<script src="<?php echo $js_url; ?>import_scores.min.js"></script>
 <?php 
 if ($totalRows_scores > 0) $import_button_text = "Import <span class=\"hidden-xs\">Any</span> Newly Recorded <span class=\"hidden-xs\">Judges' Consensus</span> Scores";
 else $import_button_text = "Import Judges' Consensus Scores";

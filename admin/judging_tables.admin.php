@@ -460,11 +460,11 @@ if ($action == "default") {
  */
 function enable_planning_mode() {
 
-    var base_url = "<?php echo $base_url; ?>";
+    var ajax_url = "<?php echo $ajax_url; ?>";
     
     jQuery.ajax({
         
-        url: base_url+"ajax/tables_mode.ajax.php?section=enable-planning",
+        url: ajax_url+"tables_mode.ajax.php?section=enable-planning",
 
         success:function(data) {
             
@@ -528,11 +528,11 @@ function enable_planning_mode() {
 
 function enable_competition_mode() {
 
-    var base_url = "<?php echo $base_url; ?>";
+    var ajax_url = "<?php echo $ajax_url; ?>";
 
     jQuery.ajax({
         
-        url: base_url+"ajax/tables_mode.ajax.php?section=enable-competition",
+        url: ajax_url+"tables_mode.ajax.php?section=enable-competition",
 
         success:function(data) {
             
@@ -1528,5 +1528,5 @@ if (($action == "assign") && ($filter == "default")) { ?>
     </ul>
 </div>
 <?php } ?>
-<script src="<?php echo $base_url;?>js_includes/admin_ajax.min.js"></script>
+<script src="<?php echo $js_url; ?>admin_ajax.min.js"></script>
 <?php if (($action == "assign") && ($filter != "default") && ($id != "default")) include ('judging_assign.admin.php'); ?>

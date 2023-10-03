@@ -4588,7 +4588,7 @@ function clean_up_text($text) {
 
 function prep_redirect_link($link) {
 	$pattern = array('\'', '"');
-	$link = filter_var($link,FILTER_SANITIZE_STRING);
+	$link = filter_var($link,FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 	$link = str_replace($pattern, "", $link);
 	$link = stripslashes($link);
 	return $link;

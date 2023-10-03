@@ -57,7 +57,7 @@ if (($nw_cider) && (empty($rank))) $show_rank = FALSE;
 <div class="row">
     
     <div class="col col-lg-2 col-md-2 col-sm-2 col-xs-2">
-        <p><?php if (!$nw_cider) { ?><img style="max-width: 60px; min-width: 40px;" src="<?php echo $base_url."images/bjcp_logo.jpg"; ?>"><?php } ?></p>
+        <p><?php if (!$nw_cider) { ?><img style="max-width: 60px; min-width: 40px;" src="<?php echo $images_url."bjcp_logo.jpg"; ?>"><?php } ?></p>
     </div>
     
     <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-8">
@@ -85,10 +85,9 @@ if (($nw_cider) && (empty($rank))) $show_rank = FALSE;
             </div>
             <?php } ?>
         </div>
-
     </div>
     <div class="col col-lg-2 col-md-2 col-sm-2 col-xs-2">
-        <p class="pull-right"><img style="max-width: 50px; min-width: 35px;" src="<?php if ($nw_cider) echo "https://www.nwcider.com/wp-content/themes/nwcider/assets/images/nw-cider-logo-2x.png"; else echo $base_url."images/aha_logo.jpg"; ?>"></p>
+        <p class="pull-right"><img style="max-width: 50px; min-width: 35px;" src="<?php if ($nw_cider) echo "https://www.nwcider.com/wp-content/themes/nwcider/assets/images/nw-cider-logo-2x.png"; else echo $images_url."aha_logo.jpg"; ?>"></p>
     </div>
 </div><!-- ./row (header) -->
 <!-- Entry Info Row -->

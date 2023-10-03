@@ -17,6 +17,14 @@ else $base_url = $base_url;
 $php_version = phpversion();
 $nhc_landing_url = "https://www.brewingcompetition.com";
 
+$ajax_url = $base_url."ajax/";
+
+$js_url = $base_url."js_includes/";
+if (HOSTED) $js_url = "https://brewingcompetitions.com/_bcoem_shared/js_includes/";
+
+$images_url = $base_url."images/";
+if (HOSTED) $images_url = "https://brewingcompetitions.com/_bcoem_shared/images/";
+
 // ---------------------------- Preflight Checks ---------------------------------------
 require_once (LIB.'preflight.lib.php');
 

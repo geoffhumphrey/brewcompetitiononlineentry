@@ -164,14 +164,14 @@ else $_SESSION['token'] = bin2hex(openssl_random_pseudo_bytes(32));
     <link rel="stylesheet" type="text/css" href="<?php echo $theme; ?>" />
 
     <script type="text/javascript">
-        var username_url = "<?php echo $base_url; ?>ajax/username.ajax.php";
-        var email_url="<?php echo $base_url; ?>ajax/valid_email.ajax.php";
+        var username_url = "<?php echo $ajax_url; ?>username.ajax.php";
+        var email_url="<?php echo $ajax_url; ?>valid_email.ajax.php";
         var user_agent_msg = "<?php echo $alert_text_086; ?>";
         var setup = 0;
     </script>
     
     <!-- Load BCOE&M Custom JS -->
-    <script src="<?php echo $base_url; ?>js_includes/bcoem_custom.min.js"></script>
+    <script src="<?php echo $js_url; ?>bcoem_custom.min.js"></script>
     
     <!-- Open Graph Implementation -->
 <?php if (!empty($_SESSION['contestName'])) { ?>
@@ -456,10 +456,10 @@ var session_end_seconds = "<?php echo $session_end_seconds; ?>";
 var session_end_redirect = "<?php echo $base_url; ?>includes/logout.inc.php";
 </script>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery.countdown/2.2.0/jquery.countdown.min.js"></script>
-<script type="text/javascript" src="<?php echo $base_url; ?>js_includes/autologout.min.js"></script>
+<script type="text/javascript" src="<?php echo $js_url; ?>autologout.min.js"></script>
 <?php } ?>
 <?php if (($_SESSION['prefsEval'] == 1) && ($section == "evaluation")) include (EVALS.'warnings.eval.php'); ?>
 <?php } // end if ($logged_in) ?>
-<script type="text/javascript" src="<?php echo $base_url; ?>js_includes/loader_target.min.js"></script>
+<script type="text/javascript" src="<?php echo $js_url; ?>loader_target.min.js"></script>
 </body>
 </html>

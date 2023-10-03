@@ -427,7 +427,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 		$totalRows_user = mysqli_num_rows($user);
 
 		$brewerEmail = filter_var($_POST['brewerEmail'],FILTER_SANITIZE_EMAIL);
-		$uid = filter_var($_POST['uid'],FILTER_SANITIZE_STRING);
+		$uid = filter_var($_POST['uid'],FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 
 		if ($totalRows_user == 0) {
 
@@ -528,7 +528,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 	if ($action == "edit") {
 
 		$brewerEmail = filter_var($_POST['brewerEmail'],FILTER_SANITIZE_EMAIL);
-		$uid = filter_var($_POST['uid'],FILTER_SANITIZE_STRING);
+		$uid = filter_var($_POST['uid'],FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 
 		// Check for and clear assignments in staff DB table and judge assignments table if entrant
 		// indicates they do not want to judge, steward, or staff
@@ -699,7 +699,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 		if ((isset($_POST['userQuestionAnswer'])) && ($_POST['changeSecurity'] == "Y")) {
 			
 			$userQuestionAnswer = $purifier->purify($_POST['userQuestionAnswer']);
-			$userQuestionAnswer = filter_var($userQuestionAnswer,FILTER_SANITIZE_STRING);
+			$userQuestionAnswer = filter_var($userQuestionAnswer,FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 
 			/**
 			 * Hash the user's security question response.

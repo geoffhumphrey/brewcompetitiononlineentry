@@ -19,7 +19,7 @@ elseif ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] == "0") &
 	 * If not, redirect to 403 page.
 	 */
 
-	$token = filter_input(INPUT_POST,'token',FILTER_SANITIZE_STRING);
+	$token = filter_input(INPUT_POST,'token',FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 
 	if (((!$token) || ($token !== $_SESSION['token'])) || (empty($_FILES['file']))) {
 		session_unset();

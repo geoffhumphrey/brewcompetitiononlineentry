@@ -156,7 +156,7 @@ if (($go == "default") && ($id != "default") && ($process_allowed)) {
 			if ($request_method === "POST") {
 
 				$token_hash = FALSE;
-				$token = filter_input(INPUT_POST,'token',FILTER_SANITIZE_STRING);
+				$token = filter_input(INPUT_POST,'token',FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 				if (hash_equals($_SESSION['token'],$token)) $token_hash = TRUE;
 
 				if ((!$token) || (!$token_hash)) {
@@ -325,7 +325,7 @@ $_SESSION['last_action'] = time();
     <link rel="stylesheet" type="text/css" href="<?php echo $theme; ?>" />
 
 	<!-- Load BCOE&M Custom JS -->
-    <script src="<?php echo $base_url; ?>js_includes/bcoem_custom.min.js"></script>
+    <script src="<?php echo $js_url; ?>bcoem_custom.min.js"></script>
 
     <style>
 	body {

@@ -3,7 +3,7 @@ $(document).ready(function () {
     disable_update_button('judging_scores');
 });
 </script>
-<script src="<?php echo $base_url;?>js_includes/admin_ajax.min.js"></script>
+<script src="<?php echo $js_url; ?>admin_ajax.min.js"></script>
 <?php
 if ($dbTable == "default") $pro_edition = $_SESSION['prefsProEdition'];
 else $pro_edition = $row_archive_prefs['archiveProEdition'];

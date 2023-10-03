@@ -200,7 +200,7 @@ if ($totalRows_tables > 0) {
         padding-bottom: 8px;
     }
 </style>
-<script src="<?php echo $base_url;?>js_includes/admin_ajax.min.js"></script>
+<script src="<?php echo $js_url; ?>admin_ajax.min.js"></script>
 <p class="lead">Hello, <?php echo $_SESSION['brewerFirstName']; ?>. <span class="small">Select the headings or icons below to view the options available in each category.</span></p>
 <div class="row bcoem-admin-element">
     <?php if ($hosted_setup) { ?>

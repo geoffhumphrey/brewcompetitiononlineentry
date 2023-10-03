@@ -370,7 +370,7 @@ if (action == "edit") {
     var brewer_staff = "<?php if (isset($row_brewer)) echo $row_brewer['brewerStaff']; ?>";
 }
 </script>
-<script src="<?php echo $base_url; ?>js_includes/add_edit_user.min.js"></script>
+<script src="<?php echo $js_url; ?>add_edit_user.min.js"></script>
 <form id="submit-form" class="form-horizontal hide-loader-form-submit" data-toggle="validator" action="<?php echo $form_action; ?>" method="POST" name="form1">
 <input type="hidden" name="token" value ="<?php if (isset($_SESSION['token'])) echo $_SESSION['token']; ?>">
 <?php 

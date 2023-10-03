@@ -377,13 +377,13 @@ else {
 
 	    <!-- Load TinyMCE / https://www.tinymce.com/ -->
 		<script src="https://cdn.tinymce.com/4/tinymce.min.js"></script>
-		<script src="<?php echo $base_url;?>js_includes/tinymce-init.min.js"></script>
+		<script src="<?php echo $js_url; ?>tinymce-init.min.js"></script>
 
 		<!-- Load Bootstrap DateTime Picker / http://eonasdan.github.io/bootstrap-datetimepicker/ -->
 	    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/css/bootstrap-datetimepicker.min.css" />
 	    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.11.1/moment-with-locales.min.js"></script>
 	    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/js/bootstrap-datetimepicker.min.js"></script>
-	    <script src="<?php echo $base_url;?>js_includes/date-time.min.js"></script>
+	    <script src="<?php echo $js_url; ?>date-time.min.js"></script>
 
         <!-- Load Font Awesome / https://fortawesome.github.io/Font-Awesome -->
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
@@ -393,7 +393,7 @@ else {
         <link rel="stylesheet" type="text/css" href="<?php echo $base_url; ?>css/default.min.css" />
 
         <!-- Load BCOE&M Custom JS -->
-    	<script src="<?php echo $base_url; ?>js_includes/bcoem_custom.min.js"></script>
+    	<script src="<?php echo $js_url; ?>bcoem_custom.min.js"></script>
 
     	<script type="text/javascript">
     		$(document).ready(function() {

@@ -14,7 +14,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 
 		foreach($_POST['id'] as $id) {
 			$sponsor_info = $purifier->purify($_POST['sponsorText'.$id]);
-			$sponsor_info = filter_var($sponsor_info,FILTER_SANITIZE_STRING);
+			$sponsor_info = filter_var($sponsor_info,FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 			if ($_POST['sponsorEnable'.$id] == 1) $enable = 1; else $enable = 0;
 			if (isset($_POST['sponsorImage'.$id])) $image = $purifier->purify($_POST['sponsorImage'.$id]); else $image = "";
 			$updateSQL = sprintf("UPDATE %s SET sponsorEnable='%s', sponsorLevel='%s', sponsorImage='%s', sponsorText='%s' WHERE id='%s'",$sponsors_db_table,$enable,$_POST['sponsorLevel'.$id],$image,$sponsor_info,$id);

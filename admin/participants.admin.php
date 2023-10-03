@@ -786,7 +786,7 @@ if ($filter == "stewards")  echo "<div class='error'>There are no stewards avail
 
 if ($action == "add")  {
 if ($filter == "default") { ?>
-<script src="<?php echo $base_url; ?>js_includes/registration_checks.min.js"></script>
+<script src="<?php echo $js_url; ?>registration_checks.min.js"></script>
 <form action="<?php echo $base_url; ?>includes/process.inc.php?action=add&amp;dbTable=<?php echo $users_db_table; ?>&amp;section=<?php echo $section; ?>&amp;go=<?php echo $go; ?>" method="POST" name="form1" id="form1">
 <input type="hidden" name="token" value ="<?php if (isset($_SESSION['token'])) echo $_SESSION['token']; ?>">
 <table>

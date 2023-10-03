@@ -92,7 +92,7 @@ if ($request_method === "POST") {
 	if ($action != "paypal") {
 
 		$token_hash = FALSE;
-		$token = filter_input(INPUT_POST,'token',FILTER_SANITIZE_STRING);
+		$token = filter_input(INPUT_POST,'token',FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 		if (hash_equals($_SESSION['token'],$token)) $token_hash = TRUE;
 
 		if ((!$token) || (!$token_hash) || (!$process_allowed)) {

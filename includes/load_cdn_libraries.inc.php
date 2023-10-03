@@ -32,7 +32,7 @@
     <!-- Load Bootstrap DateTime Picker / http://eonasdan.github.io/bootstrap-datetimepicker/ -->
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/css/bootstrap-datetimepicker.min.css" />
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/js/bootstrap-datetimepicker.min.js"></script>
-    <script src="<?php echo $base_url;?>js_includes/date-time.min.js"></script>
+    <script src="<?php echo $js_url; ?>date-time.min.js"></script>
 <?php } ?>
 
 <?php if ((($section == "admin") || (strpos($section, 'step') !== FALSE)) && (in_array($go,$tinymce_load))) { ?>
@@ -46,7 +46,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/tinymce/4.9.11/tinymce.min.js"></script>
     <!-- Future Release - TinyMCE 5 (needs testing and config options) -->
     <!-- <script src="https://cdn.tiny.cloud/1/no-api-key/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script> -->
-    <script src="<?php echo $base_url;?>js_includes/tinymce-init.min.js"></script>
+    <script src="<?php echo $js_url; ?>tinymce-init.min.js"></script>
   <?php } ?>
 <?php } ?>
 
@@ -58,7 +58,7 @@
     <!-- Load DropZone / http://www.dropzonejs.com -->
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/4.2.0/min/dropzone.min.css" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/4.2.0/min/dropzone.min.js"></script>
-    <script src="<?php echo $base_url;?>js_includes/dz.min.js"></script>
+    <script src="<?php echo $js_url; ?>dz.min.js"></script>
   <?php } ?>
 <?php } ?>
 
