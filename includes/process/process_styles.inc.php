@@ -143,8 +143,41 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 
 	} // end if ($action == "update");
 
+	if (($action == "add") || ($action == "edit")) {
+
+		$update_table = $prefix."styles";
+		$data = array(
+			'brewStyle' => blank_to_null($purifier->purify($_POST['brewStyle'])),
+			'brewStyleOG' => blank_to_null(sterilize($_POST['brewStyleOG'])),
+			'brewStyleOGMax' => blank_to_null(sterilize($_POST['brewStyleOGMax'])),
+			'brewStyleFG' => blank_to_null(sterilize($_POST['brewStyleFG'])),
+			'brewStyleFGMax' => blank_to_null(sterilize($_POST['brewStyleFGMax'])),
+			'brewStyleABV' => blank_to_null(sterilize($_POST['brewStyleABV'])),
+			'brewStyleABVMax' => blank_to_null(sterilize($_POST['brewStyleABVMax'])),
+			'brewStyleIBU' => blank_to_null(sterilize($_POST['brewStyleIBU'])),
+			'brewStyleIBUMax' => blank_to_null(sterilize($_POST['brewStyleIBUMax'])),
+			'brewStyleSRM' => blank_to_null(sterilize($_POST['brewStyleSRM'])),
+			'brewStyleSRMMax' => blank_to_null(sterilize($_POST['brewStyleSRMMax'])),
+			'brewStyleType' => blank_to_null(sterilize($_POST['brewStyleType'])),
+			'brewStyleInfo' => blank_to_null($brewStyleInfo),
+			'brewStyleLink' => blank_to_null($brewStyleLink),
+			'brewStyleGroup' => blank_to_null(sterilize($_POST['brewStyleGroup'])),
+			'brewStyleNum' => blank_to_null(sterilize($_POST['brewStyleNum'])),
+			'brewStyleActive' => blank_to_null(sterilize($_POST['brewStyleActive'])),
+			'brewStyleOwn' => blank_to_null(sterilize($_POST['brewStyleOwn'])),
+			'brewStyleVersion' => $_SESSION['prefsStyleSet'],
+			'brewStyleReqSpec' => blank_to_null(sterilize($_POST['brewStyleReqSpec'])),
+			'brewStyleStrength' => blank_to_null(sterilize($_POST['brewStyleStrength'])),
+			'brewStyleCarb' => blank_to_null(sterilize($_POST['brewStyleCarb'])),
+			'brewStyleSweet' => blank_to_null(sterilize($_POST['brewStyleSweet'])),
+			'brewStyleEntry' => blank_to_null($brewStyleEntry)
+		);
+
+	}
+
 	if ($action == "add") {
 
+		/*
 		$order_by = "id";
 		$category_end = $_SESSION['style_set_category_end'];
 
@@ -161,10 +194,9 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 			$style_num_add_one = str_pad($style_num_add_one,3,"0", STR_PAD_LEFT);
 		}
 		else $style_num_add_one = "A";
-
+		
 		$update_table = $prefix."styles";
 		$data = array(
-			'brewStyleNum' => $style_num_add_one,
 			'brewStyle' => blank_to_null($purifier->purify($_POST['brewStyle'])),
 			'brewStyleOG' => blank_to_null(sterilize($_POST['brewStyleOG'])),
 			'brewStyleOGMax' => blank_to_null(sterilize($_POST['brewStyleOGMax'])),
@@ -179,7 +211,8 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 			'brewStyleType' => blank_to_null(sterilize($_POST['brewStyleType'])),
 			'brewStyleInfo' => blank_to_null($brewStyleInfo),
 			'brewStyleLink' => blank_to_null($brewStyleLink),
-			'brewStyleGroup' => blank_to_null(sterilize($style_add_one)),
+			'brewStyleGroup' => blank_to_null(sterilize($_POST['brewStyleGroup'])),
+			'brewStyleNum' => blank_to_null(sterilize($_POST['brewStyleNum'])),
 			'brewStyleActive' => blank_to_null(sterilize($_POST['brewStyleActive'])),
 			'brewStyleOwn' => blank_to_null(sterilize($_POST['brewStyleOwn'])),
 			'brewStyleVersion' => $_SESSION['prefsStyleSet'],
@@ -189,6 +222,9 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 			'brewStyleSweet' => blank_to_null(sterilize($_POST['brewStyleSweet'])),
 			'brewStyleEntry' => blank_to_null($brewStyleEntry)
 		);
+
+		*/
+
 		$result = $db_conn->insert ($update_table, $data);
 		if (!$result) {
 			$error_output[] = $db_conn->getLastError();
@@ -205,33 +241,6 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 
 	if ($action == "edit") {
 
-		$update_table = $prefix."styles";
-		$data = array(
-			'brewStyleNum' => sterilize($_POST['brewStyleNum']),
-			'brewStyle' => blank_to_null($purifier->purify($_POST['brewStyle'])),
-			'brewStyleOG' => blank_to_null(sterilize($_POST['brewStyleOG'])),
-			'brewStyleOGMax' => blank_to_null(sterilize($_POST['brewStyleOGMax'])),
-			'brewStyleFG' => blank_to_null(sterilize($_POST['brewStyleFG'])),
-			'brewStyleFGMax' => blank_to_null(sterilize($_POST['brewStyleFGMax'])),
-			'brewStyleABV' => blank_to_null(sterilize($_POST['brewStyleABV'])),
-			'brewStyleABVMax' => blank_to_null(sterilize($_POST['brewStyleABVMax'])),
-			'brewStyleIBU' => blank_to_null(sterilize($_POST['brewStyleIBU'])),
-			'brewStyleIBUMax' => blank_to_null(sterilize($_POST['brewStyleIBUMax'])),
-			'brewStyleSRM' => blank_to_null(sterilize($_POST['brewStyleSRM'])),
-			'brewStyleSRMMax' => blank_to_null(sterilize($_POST['brewStyleSRMMax'])),
-			'brewStyleType' => blank_to_null(sterilize($_POST['brewStyleType'])),
-			'brewStyleInfo' => blank_to_null($brewStyleInfo),
-			'brewStyleLink' => blank_to_null($brewStyleLink),
-			'brewStyleGroup' => blank_to_null(sterilize($_POST['brewStyleGroup'])),
-			'brewStyleActive' => blank_to_null(sterilize($_POST['brewStyleActive'])),
-			'brewStyleOwn' => blank_to_null(sterilize($_POST['brewStyleOwn'])),
-			'brewStyleVersion' => $_SESSION['prefsStyleSet'],
-			'brewStyleReqSpec' => blank_to_null(sterilize($_POST['brewStyleReqSpec'])),
-			'brewStyleStrength' => blank_to_null(sterilize($_POST['brewStyleStrength'])),
-			'brewStyleCarb' => blank_to_null(sterilize($_POST['brewStyleCarb'])),
-			'brewStyleSweet' => blank_to_null(sterilize($_POST['brewStyleSweet'])),
-			'brewStyleEntry' => blank_to_null($brewStyleEntry)
-		);
 		$db_conn->where ('id', $id);
 		$result = $db_conn->update ($update_table, $data);
 		if (!$result) {
