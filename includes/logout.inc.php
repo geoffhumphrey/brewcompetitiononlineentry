@@ -1,7 +1,5 @@
 <?php
 ob_start();
-require('../paths.php');
-
 session_unset();
 session_destroy();
 session_write_close();

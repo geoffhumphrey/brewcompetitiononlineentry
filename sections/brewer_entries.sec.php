@@ -39,8 +39,8 @@ if ((($_SESSION['prefsEntryForm'] == "5") || ($_SESSION['prefsEntryForm'] == "6"
 // Build Headers
 if (($total_to_pay > 0) && (!$disable_pay)) $pay_button .= sprintf("<a class=\"btn btn-success pull-right\" href=\"%s\"><i class=\"fa fa-lg fa-money\"></i> %s</a>",$link_pay, $label_pay); 
 if ($show_scores) {
-	$link_results_export = $base_url."output/export.output.php?section=personal-results&amp;id=".$_SESSION['brewerID'];
-	$link_results_export_mhp = $base_url."output/export.output.php?section=personal-results&amp;filter=MHP&amp;id=".$_SESSION['brewerID'];
+	$link_results_export = $base_url."includes/output.inc.php?section=export-personal-results&amp;id=".$_SESSION['brewerID'];
+	$link_results_export_mhp = $base_url."includes/output.inc.php?section=export-personal-results&amp;filter=MHP&amp;id=".$_SESSION['brewerID'];
 	$pay_button .= "<div class=\"btn-group pull-right\">";
 	$pay_button .= sprintf("<button type=\"button\" class=\"btn btn-success dropdown-toggle\" data-toggle=\"dropdown\" aria-haspopup=\"true\" aria-expanded=\"false\"><i class=\"fa fa-lg fa-file-excel\" style=\"margin-right: 8px;\"></i>%s<span class=\"caret\" style=\"margin-left: 8px;\"></span></button>",$label_results_export_personal);
 	$pay_button .= "<ul class=\"dropdown-menu\">";
@@ -107,7 +107,7 @@ if ($totalRows_log > 0) {
 	
 	do {
 
-		include (DB.'styles.db.php');
+		// include (DB.'styles.db.php');
 
 		// Vars
 		$print_forms_link = "";
@@ -174,7 +174,7 @@ if ($totalRows_log > 0) {
 
 					$scoresheet = TRUE;
 					$scoresheet_es = TRUE;
-					$print_link = $base_url."output/print.output.php?section=evaluation&amp;go=default&amp;view=all&amp;id=".$row_log['id'];
+					$print_link = $base_url."includes/output.inc.php?section=evaluation&amp;go=default&amp;view=all&amp;id=".$row_log['id'];
 					$scoresheet_link_eval = "<a id=\"modal_window_link\" class=\"hide-loader\" href=\"".$print_link."\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"".$brewer_entries_text_025." &ndash; &ldquo;".$entry_name.".&rdquo;\"><i class=\"fa fa-lg fa-file-text\"></i></a>&nbsp;&nbsp;";
 				}
 			
@@ -206,8 +206,8 @@ if ($totalRows_log > 0) {
 				$scoresheet_random_file_html = $base_url.$scoresheet_random_file_relative;
 
 				if (($scoresheet) && (!empty($scoresheet_file_name))) {
-					$scoresheet_link .= "<a target=\"_blank\" class=\"hide-loader\" href=\"".$base_url."output/scoresheets.output.php?";
-					$scoresheet_link .= "scoresheetfilename=".urlencode(obfuscateURL($scoresheet_file_name,$_SESSION['encryption_key']));
+					$scoresheet_link .= "<a target=\"_blank\" class=\"hide-loader\" href=\"".$base_url."includes/output.inc.php?section=scoresheet";
+					$scoresheet_link .= "&amp;scoresheetfilename=".urlencode(obfuscateURL($scoresheet_file_name,$_SESSION['encryption_key']));
 					$scoresheet_link .= "&amp;randomfilename=".urlencode(obfuscateURL($random_file_name,$_SESSION['encryption_key']))."&amp;download=true";
 					$scoresheet_link .= sprintf("\" data-toggle=\"tooltip\" title=\"%s &ldquo;".$entry_name."&rdquo;.\">",$brewer_entries_text_006);
 					$scoresheet_link .= "<span class=\"fa fa-lg fa-file-pdf-o\"></a>&nbsp;&nbsp;";
@@ -272,12 +272,8 @@ if ($totalRows_log > 0) {
 			$entry_output .= $label_judging_number.": ".$judging_number."<br>";
 		}
 
-		if (($row_styles) && ($row_styles['brewStyleActive'] == "Y")) {
-			if (!empty($st_disp_list)) $entry_output .= $st_disp_list.": ";
-			$entry_output .= $row_log['brewStyle'];
-		}
-
-		else $entry_output .= sprintf("<strong class=\"text-danger\">%s</strong>",$brewer_entries_text_016);
+		if (!empty($st_disp_list)) $entry_output .= $st_disp_list.": ";
+		$entry_output .= $row_log['brewStyle'];
 
 		if (!$show_scores) {
 			if ($row_log['brewConfirmed'] == 0) $entry_output .= "<br><span class=\"text-danger\">".$label_confirmed." <i class=\"fa fa-sm fa-fw fa-times\"></i></span>";
@@ -295,13 +291,9 @@ if ($totalRows_log > 0) {
 		// Style
 		$entry_output .= "<td class=\"hidden-xs hidden-sm hidden-md\">";
 
-		if (($row_styles) && ($row_styles['brewStyleActive'] == "Y")) {
-			$entry_output .= "<span class=\"hidden\">".$entry_style."</span>";
-			if (!empty($st_disp_list)) $entry_output .= $st_disp_list.": ";
-			$entry_output .= $row_log['brewStyle'];
-		}
-
-		else $entry_output .= sprintf("<strong class=\"text-danger\">%s</strong>",$brewer_entries_text_016);
+		$entry_output .= "<span class=\"hidden\">".$entry_style."</span>";
+		if (!empty($st_disp_list)) $entry_output .= $st_disp_list.": ";
+		$entry_output .= $row_log['brewStyle'];
 		
 		if (empty($row_log['brewCategorySort'])) $entry_output .= sprintf("<strong class=\"text-danger\">%s</strong>",$brewer_entries_text_007);
 
@@ -393,7 +385,7 @@ if ($totalRows_log > 0) {
 
 			if (((pay_to_print($_SESSION['prefsPayToPrint'],$row_log['brewPaid'])) && (!$comp_paid_entry_limit)) || (($comp_paid_entry_limit) && ($row_log['brewPaid'] == 1))) {
 					
-					$print_forms_link .= "<a id=\"modal_window_link\" class=\"hide-loader\" href=\"".$base_url."output/entry.output.php?";
+					$print_forms_link .= "<a id=\"modal_window_link\" class=\"hide-loader\" href=\"".$base_url."includes/output.inc.php?section=entry-form&amp;action=print&amp;";
 					$print_forms_link .= "id=".$row_log['id'];
 					$print_forms_link .= "&amp;bid=".$_SESSION['user_id'];
 					$print_forms_link .= "\" data-toggle=\"tooltip\" title=\"".$alt_title."\">";
@@ -411,7 +403,7 @@ if ($totalRows_log > 0) {
 		}
 
 		// Print Recipe
-		$print_recipe_link = sprintf("<a id=\"modal_window_link\" class=\"hide-loader\" href=\"".$base_url."output/entry.output.php?go=recipe&amp;id=".$row_log['id']."&amp;bid=".$_SESSION['brewerID']."\" title=\"%s ".$entry_name."\"><span class=\"fa fa-lg fa-book\"><span></a>&nbsp;&nbsp;",$brewer_entries_text_010);
+		$print_recipe_link = sprintf("<a id=\"modal_window_link\" class=\"hide-loader\" href=\"".$base_url."includes/output.inc.php?section=entry-form&amp;action=print&amp;go=recipe&amp;id=".$row_log['id']."&amp;bid=".$_SESSION['brewerID']."\" title=\"%s ".$entry_name."\"><span class=\"fa fa-lg fa-book\"><span></a>&nbsp;&nbsp;",$brewer_entries_text_010);
 
 		if ($comp_entry_limit) $warning_append = sprintf("\n%s",$brewer_entries_text_011); else $warning_append = "";
 

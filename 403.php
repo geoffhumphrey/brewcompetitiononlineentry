@@ -39,7 +39,7 @@ $nav_container = "navbar-default";
 
     <!-- ALERTS -->
     <div class="container bcoem-warning-container">
-    	<div class="alert alert-danger"><span class="fa fa-exclamation-circle"></span> <strong>Denied! You do not have permission for this request.</strong> Don't worry, we still want you around!</div>
+    	<div class="alert alert-danger"><span class="fa fa-exclamation-circle"></span> <strong>Action forbidden.</strong></div>
     </div><!-- ./container -->
     <!-- ./ALERTS -->
 
@@ -50,9 +50,10 @@ $nav_container = "navbar-default";
             <div class="page-header">
         		<h1>403 Error</h1>
         	</div>
-        	<p class="lead">Unfortunately, there was a problem.</p>
-            <p class="lead"><small>Please use the main navigation above to get where you want to go.</small></p>
-            <p>Cheers!<br>&ndash; The <?php echo $_SESSION['contestName']; ?> Site Server</p>
+        	<p class="lead">Unfortunately, you do not have permission for this request.</p>
+            <p class="lead"><small>Additionally, your session may have been terminated. If so, you'll need to log in again. Please use the main navigation above to get where you want to go.</small></p>
+            <p>Cheers!</p>
+            <p class="small">&ndash; The <?php echo $_SESSION['contestName']; ?> Site Server</p>
             </div><!-- ./left column -->
             <div class="sidebar col col-lg-3 col-md-4 col-sm-12 col-xs-12">
             	<?php include (SECTIONS.'sidebar.sec.php'); ?>

@@ -393,7 +393,7 @@ if ($tb == "default") {
 		</div>
 		<div class="col col-md-4 col-sm-12">
 			<div class="bcoem-admin-element">
-			<a class="btn btn-success btn-block hide-loader" role="button" id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=results&amp;go=best&amp;action=print&amp;filter=bos&amp;view=default" title="Best Brewer and/or Club Results Report">Print Results</a>
+			<a class="btn btn-success btn-block hide-loader" role="button" id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=results&amp;go=best&amp;action=print&amp;filter=bos&amp;view=default" title="Best Brewer and/or Club Results Report">Print Results</a>
 		</div>
 		</div>
 	</div><!-- ./row -->

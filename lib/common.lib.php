@@ -86,7 +86,7 @@ function build_action_link($icon,$base_url,$section,$go,$action,$filter,$id,$dbT
 	else {
 
 		if ($method == 2) { // print form link
-			$return .= "<a id=\"modal_window_link\" class=\"hide-loader\" href=\"".$base_url."output/entry.output.php?";
+			$return .= "<a id=\"modal_window_link\" class=\"hide-loader\" href=\"".$base_url."includes/outpoutput.inc.php?section=entry-form&amp;action=print&amp;";
 			$return .= "id=".$id;
 			$return .= "&amp;bid=".$section;
 			$return .= "\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"".$tooltip_text."\">";
@@ -2057,7 +2057,7 @@ function style_type($type,$method,$source) {
 		$query_style_type = sprintf("SELECT styleTypeName FROM %s WHERE id='%s'", $prefix."style_types", $type);
 		$style_type = mysqli_query($connection,$query_style_type) or die (mysqli_error($connection));
 		$row_style_type = mysqli_fetch_assoc($style_type);
-		$type = $row_style_type['styleTypeName'];
+		if ($row_style_type) $type = $row_style_type['styleTypeName'];
 	}
 
 	if ($method == "3") {
@@ -2071,6 +2071,7 @@ function style_type($type,$method,$source) {
 	}
 	return $type;
 }
+
 /*
 function check_bos_loc($id) {
 	require(CONFIG.'config.php');
@@ -2082,7 +2083,6 @@ function check_bos_loc($id) {
 	return $bos_loc;
 }
 */
-
 
 function table_location($table_id,$date_format,$time_zone,$time_format,$method) {
 	require(CONFIG.'config.php');
@@ -4588,6 +4588,7 @@ function clean_up_text($text) {
 
 function prep_redirect_link($link) {
 	$pattern = array('\'', '"');
+	$link = str_replace('&amp;', '&', $link);
 	$link = filter_var($link,FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 	$link = str_replace($pattern, "", $link);
 	$link = stripslashes($link);

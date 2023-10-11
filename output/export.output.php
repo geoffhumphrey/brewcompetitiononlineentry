@@ -28,11 +28,6 @@ error_reporting(1); // Change to error_reporting(0) for prod; change to E_ALL fo
  *              @see https://github.com/fpdf-easytable/fpdf-easytable
  */
 
-require('../paths.php');
-require(CONFIG.'bootstrap.php');
-require(LIB.'output.lib.php');
-require(INCLUDES.'scrubber.inc.php');
-
 // Queries for current data
 if ($filter == "default") {
     $winner_method = $_SESSION['prefsWinnerMethod'];
@@ -176,7 +171,7 @@ if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($en
      *  -------------- ENTRY Exports -------------- 
      */
 
-	if ($section == "entries") {
+	if ($section == "export-entries") {
 
         $a = array();
 
@@ -189,7 +184,7 @@ if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($en
             if ($go == "csv") { $separator = ","; $extension = ".csv"; }
             if ($go == "tab") { $separator = chr(9); $extension = ".tab"; }
             $contest = str_replace(' ', '_', $_SESSION['contestName']);
-            if ($section == "loc") $loc = "_".str_replace(' ', '_', $row_judging['judgingLocName']);
+            if ($section == "export-loc") $loc = "_".str_replace(' ', '_', $row_judging['judgingLocName']);
             else $loc = "";
             $date = date("m-d-Y");
             if ($sort != "default") $date = $sort;
@@ -458,7 +453,7 @@ if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($en
                             }
                         }
 
-                        include(SECTIONS.'bestbrewer.sec.php');
+                        include (SECTIONS.'bestbrewer.sec.php');
 
                     }
 
@@ -696,13 +691,13 @@ if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($en
         else echo "Not Allowed";
         exit();
 
-	} // END if ($section == "entries")
+	} // END if ($section == "export-entries")
 
     /** 
      * -------------- EMAIL Exports -------------- 
      */
 
-	if ($section == "emails") {
+	if ($section == "export-emails") {
 
         if ($admin_role) {
 
@@ -714,7 +709,7 @@ if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($en
             $contest = ltrim(filename($contest),"_");
             if ($filter == "default") $type = "All_Participants";
             else $type = $filter;
-            if ($section == "loc") {
+            if ($section == "export-loc") {
                  $loc = str_replace(' ', '_', $row_judging['judgingLocName']);
                  $loc = filename($loc);
             }
@@ -891,13 +886,13 @@ if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($en
         else echo "Not Allowed";
         exit();
 
-	} // END if ($section == "emails")
+	} // END if ($section == "export-emails")
 
     /** 
      * -------------- PARTICIPANT Exports -------------- 
      */
 
-	if ($section == "participants") {
+	if ($section == "export-participants") {
 
         if ($admin_role) {
 
@@ -914,7 +909,7 @@ if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($en
             }
 
             $contest = str_replace(' ', '_', $_SESSION['contestName']);
-            if ($section == "loc") $loc = "_".str_replace(' ', '_', $row_judging['judgingLocName']);
+            if ($section == "export-loc") $loc = "_".str_replace(' ', '_', $row_judging['judgingLocName']);
             else $loc = "";
             $date = date("m-d-Y");
 
@@ -1026,7 +1021,7 @@ if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($en
      * -------------- PROMO Exports -------------- 
      */
 
-	if ($section == "promo") {
+	if ($section == "export-promo") {
 
 		include (DB.'dropoff.db.php');
 		include (DB.'sponsors.db.php');
@@ -1115,11 +1110,13 @@ if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($en
 		$output .= "<h3>Styles Accepted</h3>\n";
 		$output .= "<ul>\n";
 		do {
-            $output .= "\t<li>";
-            if ($_SESSION['prefsStyleSet'] != "BA") $output .= ltrim($row_styles['brewStyleGroup'], "0").$row_styles['brewStyleNum']." ";
-            $output .= $row_styles['brewStyle'];
-            if ($row_styles['brewStyleOwn'] == "custom") $output .= " (Special style: ".$_SESSION['contestName'].")";
-            $output .= "</li>\n";
+            if (array_key_exists($row_styles['id'], $styles_selected)) {
+                $output .= "\t<li>";
+                if ($_SESSION['prefsStyleSet'] != "BA") $output .= ltrim($row_styles['brewStyleGroup'], "0").$row_styles['brewStyleNum']." ";
+                $output .= $row_styles['brewStyle'];
+                if ($row_styles['brewStyleOwn'] == "custom") $output .= " (Special style: ".$_SESSION['contestName'].")";
+                $output .= "</li>\n";
+            }
 		} while ($row_styles = mysqli_fetch_assoc($styles));
 		$output .= "</ul>\n";
 
@@ -1179,13 +1176,13 @@ if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($en
 		}
 		echo $output;
 
-	} // END if ($section == "promo")
+	} // END if ($section == "export-promo")
 
     /**
      * -------------- RESULTS Exports -------------- 
      */
 
-	if ($section == "results") {
+	if ($section == "export-results") {
 
         $results_download = FALSE;
         
@@ -1221,9 +1218,9 @@ if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($en
 
             if ($view == "pdf") {
                
-                include(CLASSES.'fpdf/fpdf.php');
-                include(CLASSES.'fpdf/exfpdf.php');
-                include(CLASSES.'fpdf/easyTable.php');
+                include (CLASSES.'fpdf/fpdf.php');
+                include (CLASSES.'fpdf/exfpdf.php');
+                include (CLASSES.'fpdf/easyTable.php');
                 
                 $pdf=new exFPDF();
                 $pdf->AddPage();
@@ -2048,11 +2045,11 @@ if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($en
         else echo "Not allowed. Results have not been published yet.";
         exit(); 		
 
-	} // END if ($section == "results")
+	} // END if ($section == "export-results")
 
 /* -------------- STAFF Exports -------------- */
 
-	if ($section == "staff") {
+	if ($section == "export-staff") {
 
         if ($admin_role) {
 
@@ -2937,17 +2934,17 @@ if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($en
         else echo "Not Allowed";
         exit();
 
-	} // END if ($section == "staff")
+	} // END if ($section == "export-staff")
 
 } // end if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($entry_window_open == 2))))
 
 else echo "Not allowed."; 
 
-if ((isset($_SESSION['loginUsername'])) && ($section == "personal-results") && ($id != "default")) {
+if ((isset($_SESSION['loginUsername'])) && ($section == "export-personal-results") && ($id != "default")) {
 
     // https://test.brewcomp.com/output/export.output.php?section=personal-results&filter=MHP&id=195
     // $prefix = "bcba_";
-    $query_brewer = sprintf("SELECT DISTINCT a.brewCategory, a.brewSubCategory, a.id AS eid, a.brewStyle, a.brewInfo, a.brewInfoOptional, a.brewComments, b.scoreEntry, b.scorePlace, c.brewerFirstName, c.brewerLastName, c.brewerClubs, c.brewerEmail FROM %s a, %s b, %s c WHERE a.brewBrewerID = %s AND b.bid = %s AND c.uid = %s AND a.id = b.eid", $prefix."brewing", $prefix."judging_scores", $prefix."brewer", $id, $id, $id);
+    $query_brewer = sprintf("SELECT DISTINCT a.brewCategory, a.brewSubCategory, a.id AS eid, a.brewStyle, a.brewInfo, a.brewInfoOptional, a.brewComments, b.scoreEntry, b.scorePlace, c.brewerFirstName, c.brewerLastName, c.brewerClubs, c.brewerEmail FROM %s a, %s b, %s c WHERE a.brewBrewerID = '%s' AND b.bid = '%s' AND c.uid = '%s' AND a.id = b.eid", $prefix."brewing", $prefix."judging_scores", $prefix."brewer", $id, $id, $id);
     $brewer = mysqli_query($connection,$query_brewer);
     $row_brewer = mysqli_fetch_assoc($brewer);
     $totalRows_brewer = mysqli_num_rows($brewer);
@@ -2965,98 +2962,107 @@ if ((isset($_SESSION['loginUsername'])) && ($section == "personal-results") && (
     // Results data headers
     $results[] = array("Category", "Category Name", "Required Info", "Official Score", "Highest Score", "Place");
 
-    do {
+    if ($row_brewer) {
 
-        $results_count++;
-        
-        $highest_score = array();
-        $consensus_score = array();
-        $eval_score = 0;
-        $highest_entry_score = "";
-        $entry_consensus_score = "";
-        
-        $category = $row_brewer['brewCategory'].$row_brewer['brewSubCategory'];
-        
-        $req_info = "";
-        if (!empty($row_brewer['brewInfo'])) $req_info .= iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', $row_brewer['brewInfo'])." ";
-        if (!empty($row_brewer['brewInfoOptional'])) $req_info .= iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', $row_brewer['brewInfoOptional'])." ";
-        if (!empty($row_brewer['brewComments'])) $req_info .= iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', $row_brewer['brewComments']);
-        if (!empty($req_info)) $req_info = str_replace("^"," ",$req_info);
+        do {
 
-        // Check Eval table for the highest score recorded for this entry
-        $query_eid_eval = sprintf("SELECT evalAromaScore, evalAppearanceScore, evalFlavorScore, evalMouthfeelScore, evalOverallScore, evalFinalScore FROM %s WHERE eid=%s", $prefix."evaluation", $row_brewer['eid']);
-        $eid_eval = mysqli_query($connection,$query_eid_eval);
-        $row_eid_eval = mysqli_fetch_assoc($eid_eval);
-        $totalRows_eid_eval = mysqli_num_rows($eid_eval);
-
-        if ($totalRows_eid_eval > 0) {
+            $results_count++;
             
-            do {
+            $highest_score = array();
+            $consensus_score = array();
+            $eval_score = 0;
+            $highest_entry_score = "";
+            $entry_consensus_score = "";
+            
+            $category = $row_brewer['brewCategory'].$row_brewer['brewSubCategory'];
+            
+            $req_info = "";
+            if (!empty($row_brewer['brewInfo'])) $req_info .= iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', $row_brewer['brewInfo'])." ";
+            if (!empty($row_brewer['brewInfoOptional'])) $req_info .= iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', $row_brewer['brewInfoOptional'])." ";
+            if (!empty($row_brewer['brewComments'])) $req_info .= iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', $row_brewer['brewComments']);
+            if (!empty($req_info)) $req_info = str_replace("^"," ",$req_info);
 
-                $score = 
-                $row_eid_eval['evalAromaScore'] + 
-                $row_eid_eval['evalAppearanceScore'] + 
-                $row_eid_eval['evalFlavorScore'] + 
-                $row_eid_eval['evalMouthfeelScore'] + 
-                $row_eid_eval['evalOverallScore']
-                ;
+            // Check Eval table for the highest score recorded for this entry
+            $query_eid_eval = sprintf("SELECT * FROM %s WHERE eid=%s", $prefix."evaluation", $row_brewer['eid']);
+            $eid_eval = mysqli_query($connection,$query_eid_eval);
+            $row_eid_eval = mysqli_fetch_assoc($eid_eval);
+            $totalRows_eid_eval = mysqli_num_rows($eid_eval);
 
-                $highest_score[] = $score;
-                $consensus_score[] = $row_eid_eval['evalFinalScore'];
+            if ($totalRows_eid_eval > 0) {
+                
+                do {
 
-            } while($row_eid_eval = mysqli_fetch_assoc($eid_eval));
+                    $score = 
+                    $row_eid_eval['evalAromaScore'] + 
+                    $row_eid_eval['evalAppearanceScore'] + 
+                    $row_eid_eval['evalFlavorScore'] + 
+                    $row_eid_eval['evalMouthfeelScore'] + 
+                    $row_eid_eval['evalOverallScore']
+                    ;
 
+                    $highest_score[] = $score;
+                    $consensus_score[] = $row_eid_eval['evalFinalScore'];
+
+                } while($row_eid_eval = mysqli_fetch_assoc($eid_eval));
+
+            }
+
+            if (empty($row_brewer['scoreEntry'])) $entry_consensus_score = max($consensus_score);
+            else {
+                $highest_entry_score = $row_brewer['scoreEntry'];
+                $entry_consensus_score = $row_brewer['scoreEntry'];
+            }
+
+            if (!empty($highest_score)) {
+                $eval_score = max($highest_score);
+                if ($eval_score > $row_brewer['scoreEntry']) $highest_entry_score = $eval_score;
+            }
+
+            // Results data
+            $results[] = array(
+                $category, 
+                $row_brewer['brewStyle'],
+                $req_info, 
+                $entry_consensus_score, 
+                $highest_entry_score, 
+                $row_brewer['scorePlace']
+            );
+
+            if ($results_count == $totalRows_brewer) {
+                $first_name = iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', $row_brewer['brewerFirstName']);
+                $last_name = iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', $row_brewer['brewerLastName']);
+                $club = iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', $row_brewer['brewerClubs']);
+                $email = iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', $row_brewer['brewerEmail']);
+            }
+
+        } while($row_brewer = mysqli_fetch_assoc($brewer));
+
+        // Spacer
+        $results[] = array("");
+
+        if ($filter == "MHP") {
+            $results[] = array("Expand columns or wrap text. Input your MHP Number under that column header. Also input your gender in that column if you wish.");
+            $results[] = array("Remove these last two lines and email to masterhomebrewerprogram@gmail.com");
         }
+        
+        // Name and associated info header
+        if ($filter == "MHP") $personal[] = array("Last Name", "First Name", "Club", "Email", "Gender", "MHP Number");
+        else $personal[] = array("Last Name", "First Name", "Club", "Email");
 
-        if (empty($row_brewer['scoreEntry'])) $entry_consensus_score = max($consensus_score);
-        else {
-            $highest_entry_score = $row_brewer['scoreEntry'];
-            $entry_consensus_score = $row_brewer['scoreEntry'];
-        }
+        // Name and associated info data
+        $personal[] = array($last_name,$first_name,$club,$email);
 
-        if (!empty($highest_score)) {
-            $eval_score = max($highest_score);
-            if ($eval_score > $row_brewer['scoreEntry']) $highest_entry_score = $eval_score;
-        }
+        // Spacer
+        $personal[] = array("");
 
-        // Results data
-        $results[] = array(
-            $category, 
-            $row_brewer['brewStyle'],
-            $req_info, 
-            $entry_consensus_score, 
-            $highest_entry_score, 
-            $row_brewer['scorePlace']
-        );
+        $a = array_merge($personal,$results);
 
-        if ($results_count == $totalRows_brewer) {
-            $first_name = iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', $row_brewer['brewerFirstName']);
-            $last_name = iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', $row_brewer['brewerLastName']);
-            $club = iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', $row_brewer['brewerClubs']);
-            $email = iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', $row_brewer['brewerEmail']);
-        }
+    } // end if ($row_brewer)
 
-    } while($row_brewer = mysqli_fetch_assoc($brewer));
-
-    // Spacer
-    $results[] = array("");
-
-    if ($filter == "MHP") {
-        $results[] = array("Expand columns or wrap text. Input your MHP Number under that column header. Also input your gender in that column if you wish.");
-        $results[] = array("Remove these last two lines and email to masterhomebrewerprogram@gmail.com");
+    else {
+        $results[] = array("No score data was found for your profile.");
+        $a = array_merge($results);
     }
-    
-    // Name and associated info header
-    if ($filter == "MHP") $personal[] = array("Last Name", "First Name", "Club", "Email", "Gender", "MHP Number");
-    else $personal[] = array("Last Name", "First Name", "Club", "Email");
-
-    // Name and associated info data
-    $personal[] = array($last_name,$first_name,$club,$email);
-
-    // Spacer
-    $personal[] = array("");
-
-    $a = array_merge($personal,$results);
 
     $separator = ","; 
     $extension = ".csv";

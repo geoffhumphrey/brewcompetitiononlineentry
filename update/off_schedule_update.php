@@ -1,5 +1,8 @@
 <?php
 
+if (HOSTED) $styles_db_table = "bcoem_shared_styles";
+else $styles_db_table = $prefix."styles";
+
 $query_pv = sprintf("SELECT version FROM %s WHERE id='1'",$prefix."bcoem_sys");
 $pv = mysqli_query($connection,$query_pv);
 $row_pv = mysqli_fetch_assoc($pv);
@@ -50,7 +53,8 @@ $versions = array(
 	"2.4.0.0" => 20,
 	"2.5.0.0" => 21,
 	"2.6.0.0" => 22,
-	"2.6.1.0" => 23
+	"2.6.1.0" => 23,
+	"2.6.2.0" => 24
 );
 
 flush();
@@ -226,9 +230,9 @@ if (!check_update("contestCheckInPassword", $prefix."contest_info")) {
 
 }
 
-if (!check_update("brewStyleEntry", $prefix."styles")) {
+if (!check_update("brewStyleEntry", $styles_db_table)) {
 
-	$sql = sprintf("ALTER TABLE `%s` ADD `brewStyleEntry` TEXT CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL;",$prefix."styles");
+	$sql = sprintf("ALTER TABLE `%s` ADD `brewStyleEntry` TEXT CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL;",$styles_db_table);
 	mysqli_select_db($connection,$database);
 	mysqli_real_escape_string($connection,$sql);
 	$result = mysqli_query($connection,$sql);
@@ -240,9 +244,9 @@ if (!check_update("brewStyleEntry", $prefix."styles")) {
 
 }
 
-if (!check_update("brewStyleComEx", $prefix."styles")) {
+if (!check_update("brewStyleComEx", $styles_db_table)) {
 
-	$sql = sprintf("ALTER TABLE  `%s` ADD `brewStyleComEx` TEXT CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL;",$prefix."styles");
+	$sql = sprintf("ALTER TABLE  `%s` ADD `brewStyleComEx` TEXT CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL;",$styles_db_table);
 	mysqli_select_db($connection,$database);
 	mysqli_real_escape_string($connection,$sql);
 	$result = mysqli_query($connection,$sql);
@@ -307,7 +311,7 @@ if (!check_update("setup_last_step", $prefix."bcoem_sys")) {
 
 // Make sure styles table is auto increment
 
-$sql = sprintf("ALTER TABLE `%s` CHANGE `id` `id` INT(11) NOT NULL AUTO_INCREMENT;",$prefix."styles");
+$sql = sprintf("ALTER TABLE `%s` CHANGE `id` `id` INT(11) NOT NULL AUTO_INCREMENT;",$styles_db_table);
 mysqli_select_db($connection,$database);
 mysqli_real_escape_string($connection,$sql);
 $result = mysqli_query($connection,$sql);
@@ -319,7 +323,7 @@ else {
 
 $output_off_sched_update .= "<li>Updating styles table with current sub-style information.";
 $output_off_sched_update .= "<ul>";
-$update_table = $prefix."styles";
+$update_table = $styles_db_table;
 $data = array(
 	'brewStyle' => 'Historical Beer',
 	'brewStyleTags' => 'standard-strength, pale-color, top-fermented, central-europe, historical-style, wheat-beer-family, sour, spice, amber-color, north-america, historical-style, balanced, smoke, dark-color, british-isles, brown-ale-family, malty, sweet, bottom-fermented',
@@ -1512,7 +1516,7 @@ else {
  * -----------------------------------------------------------------------------------------------------
  */
 
-$update_table = $prefix."styles";
+$update_table = $styles_db_table;
 
 if (!check_new_style("17","A1","Burton Ale")) {
 
@@ -1591,7 +1595,7 @@ if (!check_new_style("PR","X5","New Zealand Pilsner")) {
 
 }
 
-$update_table = $prefix."styles";
+$update_table = $styles_db_table;
 $style_type_convert = array(
 	'Lager' => 1,
 	'Ale' => 1,
@@ -1656,7 +1660,7 @@ if (isset($row_current_prefs['prefsStyleSet'])) {
 
 	$update_counter += 1;
 
-	$update_table = $prefix."styles";
+	$update_table = $styles_db_table;
 	$data = array('brewStyleVersion' => $row_current_prefs['prefsStyleSet']);
 	$db_conn->where ('brewStyleOwn', 'custom');
 	if ($db_conn->update ($update_table, $data)) $output_off_sched_update .= "<li>Custom styles updated to currently chosen style set.</li>";
@@ -1704,7 +1708,7 @@ if ((empty($row_current_prefs['prefsDisplaySpecial'])) || (!isset($row_current_p
 
 }
 
-$update_table = $prefix."styles";
+$update_table = $styles_db_table;
 $data = array('brewStyle' => 'British Strong Ale');
 $db_conn->where ('brewStyle', 'English Strong Ale');
 $db_conn->where ('brewStyleVersion', 'BJCP2015');
@@ -1736,7 +1740,7 @@ elseif ($update_running) {
 // Begin version unordered list
 if (!$setup_running) $output_off_sched_update .= "<ul>";
 
-$update_table = $prefix."styles";
+$update_table = $styles_db_table;
 $data = array('brewStyle' => 'Specialty Fruit Beer');
 $db_conn->where ('brewStyle', 'Speciality Fruit Beer');
 $db_conn->where ('brewStyleVersion', 'BJCP2015');
@@ -1804,7 +1808,7 @@ if (!check_new_style("11","174","Experimental India Pale Ale")) include (UPDATE.
  * any style numbers in the entries table to the new style number.
  */
 
-$query_cust_st = sprintf("SELECT id,brewStyleGroup FROM %s WHERE brewStyleOwn='custom' AND brewStyleGroup < 35 ORDER BY brewStyleGroup ASC",$prefix."styles");
+$query_cust_st = sprintf("SELECT id,brewStyleGroup FROM %s WHERE brewStyleOwn='custom' AND brewStyleGroup < 35 ORDER BY brewStyleGroup ASC",$styles_db_table);
 $cust_st = mysqli_query($connection,$query_cust_st) or die (mysqli_error($connection));
 $row_cust_st = mysqli_fetch_assoc($cust_st);
 $totalRows_cust_st = mysqli_num_rows($cust_st);
@@ -1812,7 +1816,7 @@ $totalRows_cust_st = mysqli_num_rows($cust_st);
 if ($totalRows_cust_st > 0) {
 
 	// Get the last custom style number if it's 35 or over
-	$query_st_num = sprintf("SELECT brewStyleGroup FROM %s WHERE brewStyleOwn='custom' AND brewStyleGroup >= 35 ORDER BY brewStyleGroup DESC LIMIT 1",$prefix."styles");
+	$query_st_num = sprintf("SELECT brewStyleGroup FROM %s WHERE brewStyleOwn='custom' AND brewStyleGroup >= 35 ORDER BY brewStyleGroup DESC LIMIT 1",$styles_db_table);
 	$st_num = mysqli_query($connection,$query_st_num) or die (mysqli_error($connection));
 	$row_st_num = mysqli_fetch_assoc($st_num);
 	$totalRows_st_num = mysqli_num_rows($st_num);
@@ -1822,7 +1826,7 @@ if ($totalRows_cust_st > 0) {
 
 	do {
 
-		$update_table = $prefix."styles";
+		$update_table = $styles_db_table;
 		$data = array('brewStyleGroup' => $new_style_number);
 		$db_conn->where ('id', $row_cust_st['id']);
 		if ($db_conn->update ($update_table, $data)) $new_style_number++;
@@ -1939,7 +1943,7 @@ do {
         // Only worry about any style types that were custom in the "old state"
         if ($row_current_st['id'] > 4) {
 
-            $update_table = $prefix."styles";
+            $update_table = $styles_db_table;
 			$data = array('brewStyleType' => $all_style_types[$row_current_st['styleTypeName']]);
 			$db_conn->where ('brewStyleType', $row_current_st['id']);
 			if ($db_conn->update ($update_table, $data)) $output_off_sched_update .= "<li>".$all_style_types[$row_current_st['styleTypeName']]." Style Type reassigned in Styles table.</li>";
@@ -1983,7 +1987,7 @@ do {
         $new_st = mysqli_query($connection,$query_new_st) or die (mysqli_error($connection));
         $row_new_st = mysqli_fetch_assoc($new_st);
 
-        $update_table = $prefix."styles";
+        $update_table = $styles_db_table;
 		$data = array('brewStyleType' => $row_new_st['id']);
 		$db_conn->where ('brewStyleType', $row_current_st['styleTypeName']);
 		if ($db_conn->update ($update_table, $data)) $output_off_sched_update .= "<li>".$row_current_st['styleTypeName']." Style Type relational id updated in styles table.</li>";
@@ -2541,7 +2545,7 @@ elseif ($update_running) {
 // Begin version unordered list
 if (!$setup_running) $output_off_sched_update .= "<ul>";
 
-$update_table = $prefix."styles";
+$update_table = $styles_db_table;
 $data = array('brewStyleReqSpec' => 1);
 $db_conn->where ('brewStyleGroup', 'PR');
 $db_conn->where ('brewStyleNum', 'X3');
@@ -2600,12 +2604,13 @@ if ((!empty($row_current_prefs)) && ($row_current_prefs['prefsStyleSet'] == "BJC
 
 /**
  * ----------------------------------------------- 2.4.0 --------------------------------------------- 
- * Remove BJCP 2008 Guidelines - for hosted installations only.
+ * Remove BJCP 2008 Guidelines for hosted installations (no archiving available).
+ * For proper display of archived data, the styles should be retained.
  * ---------------------------------------------------------------------------------------------------
  */
 
 if (HOSTED) {
-	$update_table = $prefix."styles";
+	$update_table = $styles_db_table;
 	$db_conn->where ('brewStyleVersion', 'BJCP2008');
 	$db_conn->where ('brewStyleOwn', 'bcoe');
 	$result = $db_conn->delete ($update_table);
@@ -2650,7 +2655,7 @@ $output_off_sched_update .= "<li>Added evaluation DB table - for use with Electr
  * ---------------------------------------------------------------------------------------------------
  */
 
-$update_table = $prefix."styles";
+$update_table = $styles_db_table;
 $data = array('brewStyle' => 'British Golden Ale');
 $db_conn->where ('brewStyle', 'English Golden Ale');
 $db_conn->where ('brewStyleVersion', 'BJCP2015');
@@ -2829,7 +2834,7 @@ if (!check_new_style("01","04","American Light Lager [BJCP 1A]")) include (UPDAT
  * ---------------------------------------------------------------------------------------------------
  */
 
-$update_table = $prefix."styles";
+$update_table = $styles_db_table;
 $data = array('brewStyle' => 'Czech Premium Pale Lager');
 $db_conn->where ('brewStyle', 'Czech Premimum Pale Lager');
 if ($db_conn->update ($update_table, $data)) $output_off_sched_update .= "<li>Corrected Czech Premium Pale Lager name in styles table.</li>";
@@ -3098,7 +3103,7 @@ $output_off_sched_update .= "<li>All deprecated recipe-related columns were remo
  * ---------------------------------------------------------------------------------------------------
  */
 
-$sql = sprintf("UPDATE `%s` SET brewStyleType = '1' WHERE brewStyle='Specialty Spice Beer' AND  brewStyleGroup='30' AND brewStyleNum='D'",$prefix."styles");
+$sql = sprintf("UPDATE `%s` SET brewStyleType = '1' WHERE brewStyle='Specialty Spice Beer' AND  brewStyleGroup='30' AND brewStyleNum='D'",$styles_db_table);
 mysqli_select_db($connection,$database);
 mysqli_real_escape_string($connection,$sql);
 $result = mysqli_query($connection,$sql);
@@ -3108,7 +3113,7 @@ else {
 	$error_count += 1;
 }
 
-$sql = sprintf("UPDATE `%s` SET brewStyleType = '1' WHERE brewStyleGroup='03' AND brewStyleNum='004'",$prefix."styles");
+$sql = sprintf("UPDATE `%s` SET brewStyleType = '1' WHERE brewStyleGroup='03' AND brewStyleNum='004'",$styles_db_table);
 mysqli_select_db($connection,$database);
 mysqli_real_escape_string($connection,$sql);
 $result = mysqli_query($connection,$sql);
@@ -3260,12 +3265,13 @@ if ((!empty($row_current_prefs)) && ($row_current_prefs['prefsStyleSet'] == "BJC
 
 /**
  * ----------------------------------------------- 2.6.0 --------------------------------------------- 
- * Remove BJCP 2015 Guidelines - for hosted installations only.
+ * Remove BJCP 2015 Guidelines for hosted installations.
+ * Styles should be retained for proper display of archived data.
  * ---------------------------------------------------------------------------------------------------
  */
 
 if (HOSTED) {
-	$update_table = $prefix."styles";
+	$update_table = $styles_db_table;
 	$db_conn->where ('brewStyleVersion', 'BJCP2015');
 	$db_conn->where ('brewStyleOwn', 'bcoe');
 	$result = $db_conn->delete ($update_table);
@@ -3275,11 +3281,11 @@ if (HOSTED) {
 		$error_count += 1;
 	}
 }
-
+	
 /**
  * ----------------------------------------------- 2.6.0 --------------------------------------------- 
  * Convert Custom Style Numbers
- * New numbering scheme starts ALL custom styles for any style set at 50
+ * New numbering scheme starts ALL custom styles for any style set at 50.
  * ---------------------------------------------------------------------------------------------------
  */
 
@@ -3373,20 +3379,20 @@ if (!$setup_running) $output_off_sched_update .= "</ul>";
  * ---------------------------------------------------------------------------------------------------
  */
 
-if ((!$setup_running) && (!$update_running)) {
-	$output_off_sched_update .= "<p>";
-	$output_off_sched_update .= "<strong>Version 2.6.1.0 Updates</strong>";
-	$output_off_sched_update .= "</p>";
-}
-
-elseif ($update_running) {
-	$output_off_sched_update .= "<h4>Version 2.6.1</h4>";
-}
-
-// Begin version unordered list
-if (!$setup_running) $output_off_sched_update .= "<ul>";
-
 if (!check_update("userAdminObfuscate", $prefix."users")) {
+
+	if ((!$setup_running) && (!$update_running)) {
+		$output_off_sched_update .= "<p>";
+		$output_off_sched_update .= "<strong>Version 2.6.1.0 Updates</strong>";
+		$output_off_sched_update .= "</p>";
+	}
+
+	elseif ($update_running) {
+		$output_off_sched_update .= "<h4>Version 2.6.1</h4>";
+	}
+
+	// Begin version unordered list
+	if (!$setup_running) $output_off_sched_update .= "<ul>";
 	
 	$sql = sprintf("ALTER TABLE `%s` ADD `userAdminObfuscate` tinyint(1) NULL DEFAULT NULL;",$prefix."users");
 	mysqli_select_db($connection,$database);
@@ -3415,12 +3421,258 @@ if (!check_update("userAdminObfuscate", $prefix."users")) {
 		$error_count += 1;
 	}
 
+	if (!$setup_running) $output_off_sched_update .= "</ul>";
+
+}
+
+
+/**
+ * ----------------------------------------------- 2.6.2 ---------------------------------------------
+ * Leverage unused prefsSponsorLogoSize row to house the 
+ * active styles for the competition. Change name.
+ * 
+ * JSON array of selected data from the styles table.
+ * Enables use of a single Styles table per DB for all 
+ * hosted installations.
+ * 
+ * Loop through current active styles; generate the 
+ * JSON data and insert into the preferences table.
+ * ---------------------------------------------------------------------------------------------------
+ */
+
+if ((!$setup_running) && (!$update_running)) {
+	$output_off_sched_update .= "<p>";
+	$output_off_sched_update .= "<strong>Version 2.6.2.0 Updates</strong>";
+	$output_off_sched_update .= "</p>";
+}
+
+elseif ($update_running) {
+	$output_off_sched_update .= "<h4>Version 2.6.2</h4>";
+}
+
+// Begin version unordered list
+if (!$setup_running) $output_off_sched_update .= "<ul>";
+
+if (check_update("prefsSelectedStyles", $prefix."preferences")) {
+	
+	// Change the data type (252 is TEXT/BLOB)
+	if ((check_mysql_data_type("prefsSelectedStyles",$prefix."preferences")) != 252) {
+		$sql = sprintf("ALTER TABLE `%s` CHANGE `prefsSelectedStyles` `prefsSelectedStyles` MEDIUMTEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT 'Changed in 2.6.2 to house active styles. JSON data.';",$prefix."preferences");
+		mysqli_select_db($connection,$database);
+		mysqli_real_escape_string($connection,$sql);
+		$result = mysqli_query($connection,$sql);
+	}
+	
+}
+
+else {
+	
+	$sql = sprintf("ALTER TABLE `%s` CHANGE `prefsSponsorLogoSize` `prefsSelectedStyles` MEDIUMTEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT 'Changed in 2.6.2 to house active styles. JSON data.';",$prefix."preferences");
+	mysqli_select_db($connection,$database);
+	mysqli_real_escape_string($connection,$sql);
+	$result = mysqli_query($connection,$sql);
+
+	if ($result) {
+		$output_off_sched_update .= "<li>The unused prefsSponsorLogoSize column was renamed to prefsSelectedStyles and set to MEDIUMTEXT.</li>";
+	}
+
+	else {
+		$output_off_sched_update .= "<li class=\"text-danger\">The unused prefsSponsorLogoSize column was NOT renamed to prefsSelectedStyles.</li>";
+		$error_count += 1;
+	}
+
+	$query_styles_default = sprintf("SELECT id, brewStyle, brewStyleGroup, brewStyleNum, brewStyleVersion FROM %s WHERE brewStyleActive='Y' ORDER BY id ASC",$prefix."styles");
+	$styles_default = mysqli_query($connection,$query_styles_default);
+	$row_styles_default = mysqli_fetch_assoc($styles_default);
+
+	do {
+		
+		// Need to compare the ids of each style against the shared styles table
+		$query_style_match = sprintf("SELECT id FROM %s WHERE brewStyleGroup = '%s'	AND brewStyleNum = '%s' AND brewStyle = '%s' AND brewStyleVersion = '%s'", $styles_db_table, $row_styles_default['brewStyleGroup'], $row_styles_default['brewStyleNum'], $row_styles_default['brewStyle'],
+			$_SESSION['prefsStyleSet']);
+		$style_match = mysqli_query($connection,$query_style_match);
+		$row_style_match = mysqli_fetch_assoc($style_match);
+
+		// Standard styles
+		if ($row_style_match) {
+			$styles_selected[$row_style_match['id']] = array(
+				'brewStyle' => $row_styles_default['brewStyle'],
+				'brewStyleGroup' => $row_styles_default['brewStyleGroup'],
+				'brewStyleNum' => $row_styles_default['brewStyleNum'],
+				'brewStyleVersion' => $row_styles_default['brewStyleVersion']
+			);
+		}
+
+		// Any custom Custom styles
+		else {
+			$styles_selected[$row_styles_default['id']] = array(
+				'brewStyle' => $row_styles_default['brewStyle'],
+				'brewStyleGroup' => $row_styles_default['brewStyleGroup'],
+				'brewStyleNum' => $row_styles_default['brewStyleNum'],
+				'brewStyleVersion' => $row_styles_default['brewStyleVersion']
+			);
+		}
+
+	} while ($row_styles_default = mysqli_fetch_assoc($styles_default));
+
+	$styles_selected_update = json_encode($styles_selected);
+
+	$update_table = $prefix."preferences";
+	$data = array(
+		'prefsSelectedStyles' => $styles_selected_update
+	);
+	$db_conn->where ('id', 1);
+	$result = $db_conn->update ($update_table, $data);
+
+	if ($result) {
+		$output_off_sched_update .= "<li>Selected styles data was added to the prefsSelectedStyles row.</li>";
+	}
+
+	else {
+		$output_off_sched_update .= "<li class=\"text-danger\">Selected styles data was NOT added to the prefsSelectedStyles row.</li>";
+		$error_count += 1;
+	}
+
+	/*
+	// Clean up. Delete any duplicate styles. 
+	// Do not perform for regular installations. 
+	// Deleting records may affect display of archived data.
+	$sql = sprintf("DELETE a1 FROM %s a1 INNER JOIN %s a2 WHERE a1.id > a2.id AND a1.brewStyle = a2.brewStyle AND a1.brewStyleGroup = a2.brewStyleGroup AND a1.brewStyleNum = a2.brewStyleNum AND a1.brewStyleVersion = a2.brewStyleVersion;",$prefix."styles",$prefix."styles");
+	$db_conn->rawQuery($sql);
+	*/
+
+	// Clear the table's overhead.
+	$sql = sprintf("OPTIMIZE TABLE %s",$prefix."styles");
+	$db_conn->rawQuery($sql);
+
+}
+
+/**
+ * As of 2.6.2, hosted sites use a standard styles table.
+ * If hosted, run the delete query to get rid of all
+ * styles but custom in the $prefix."styles" table.
+ * 
+ * Set the auto increment for the styles table to 4000
+ * (allows for future style additions to the shared table).
+ * 
+ * Add any current custom styles to generate a new id for
+ * each.
+ * 
+ * Finally, add to the active styles if appropriate.
+ */
+
+if (HOSTED) {
+	
+	// Delete all but custom styles from current $prefix."styles" table
+	$sql = sprintf("DELETE FROM `%s` WHERE brewStyleOwn <> 'custom'", $prefix."styles");
+	$db_conn->rawQuery($sql);
+	if ($db_conn->getLastErrno() !== 0) {
+		$output_off_sched_update .= "<li class=\"text-danger\">Custom styles table NOT updated. Old data persists.</li>";
+		$error_count += 1;
+	}
+	else {
+		$output_off_sched_update .= "<li>Custom styles table updated.</li>";
+	}
+	
+	// Copy the old table structure to a new table.
+	$sql = sprintf("CREATE TABLE %s LIKE %s;", $prefix."styles_temp", $prefix."styles");
+	$db_conn->rawQuery($sql);
+	if ($db_conn->getLastErrno() !== 0) {
+		$output_off_sched_update .= "<li class=\"text-danger\">Temporary custom styles table was NOT created.</li>";
+		$error_count += 1;
+	}
+	else {
+		$output_off_sched_update .= "<li>Temporary custom styles table created.</li>";
+	}
+
+	// Set auto increment to 4000 - definately a safe starting number
+	$sql = sprintf("ALTER TABLE %s AUTO_INCREMENT = 4000;", $prefix."styles_temp");
+	$db_conn->rawQuery($sql);
+	if ($db_conn->getLastErrno() !== 0) {
+		$output_off_sched_update .= "<li class=\"text-danger\">Auto increment for temporary styles table was NOT set to 3000.</li>";
+		$error_count += 1;
+	}
+	else {
+		$output_off_sched_update .= "<li>Auto increment for temporary styles table set to 3000.</li>";
+	}
+
+	$query_styles_custom = sprintf("SELECT * FROM %s WHERE brewStyleOwn='custom'",$prefix."styles");
+	$styles_custom = mysqli_query($connection,$query_styles_custom) or die (mysqli_error($connection));
+	$row_styles_custom = mysqli_fetch_assoc($styles_custom);
+
+	if ($row_styles_custom) {
+
+		$update_table = $prefix."styles_temp";
+
+		do {
+			
+			$data = array(
+				'brewStyleGroup' => $row_styles_custom['brewStyleGroup'],
+				'brewStyleNum' => $row_styles_custom['brewStyleNum'],
+				'brewStyle' => $row_styles_custom['brewStyle'],
+				'brewStyleCategory' => $row_styles_custom['brewStyleCategory'],
+				'brewStyleVersion' => $row_styles_custom['brewStyleVersion'],
+				'brewStyleOG' => $row_styles_custom['brewStyleOG'],
+				'brewStyleOGMax' => $row_styles_custom['brewStyleOGMax'],
+				'brewStyleFG' => $row_styles_custom['brewStyleFG'],
+				'brewStyleFGMax' => $row_styles_custom['brewStyleFGMax'], 
+				'brewStyleABV' => $row_styles_custom['brewStyleABV'], 
+				'brewStyleABVMax' => $row_styles_custom['brewStyleABVMax'],
+				'brewStyleIBU' => $row_styles_custom['brewStyleIBU'],
+				'brewStyleIBUMax' => $row_styles_custom['brewStyleIBUMax'],
+				'brewStyleSRM' => $row_styles_custom['brewStyleSRM'],
+				'brewStyleSRMMax' => $row_styles_custom['brewStyleSRMMax'],
+				'brewStyleType' => $row_styles_custom['brewStyleType'],
+				'brewStyleInfo' => $row_styles_custom['brewStyleInfo'],
+				'brewStyleLink' => $row_styles_custom['brewStyleLink'],
+				'brewStyleActive' => $row_styles_custom['brewStyle'],
+				'brewStyleOwn' => $row_styles_custom['brewStyleOwn'],
+				'brewStyleReqSpec' => $row_styles_custom['brewStyleReqSpec'],
+				'brewStyleStrength' => $row_styles_custom['brewStyleStrength'],
+				'brewStyleCarb' => $row_styles_custom['brewStyleCarb'],
+				'brewStyleSweet' => $row_styles_custom['brewStyleSweet'],
+				'brewStyleTags' => $row_styles_custom['brewStyleTags'],
+				'brewStyleComEx' => $row_styles_custom['brewStyleComEx'], 
+				'brewStyleEntry' => $row_styles_custom['brewStyleEntry']
+			);
+			$result = $db_conn->insert ($update_table, $data);
+			if (!$result) $error_count += 1;
+
+		} while ($row_styles_custom = mysqli_fetch_assoc($styles_custom));
+
+	}
+
+	// Delete the old table.
+	$sql = sprintf("DROP TABLE IF EXISTS %s;",$prefix."styles");
+	$db_conn->rawQuery($sql);
+	if ($db_conn->getLastErrno() !== 0) {
+		$output_off_sched_update .= "<li class=\"text-danger\">Old custom styles table was NOT deleted.</li>";
+		$error_count += 1;
+	}
+	else {
+		$output_off_sched_update .= "<li>Old custom styles table deleted successfully.</li>";
+	}
+
+	// Rename the new table to the old table's name.
+	$sql = sprintf("RENAME TABLE %s TO %s;", $prefix."styles_temp", $prefix."styles");
+	$db_conn->rawQuery($sql);
+	if ($db_conn->getLastErrno() !== 0) {
+		$output_off_sched_update .= "<li class=\"text-danger\">New custom styles table was NOT renamed.</li>";
+		$error_count += 1;
+	}
+	else {
+		$output_off_sched_update .= "<li>New custom styles table renamed and ready for use.</li>";
+	}
+
+	$sql = sprintf("OPTIMIZE TABLE %s",$prefix."styles");
+	$db_conn->rawQuery($sql);
+
 }
 
 if (!$setup_running) $output_off_sched_update .= "</ul>";
 
 /**
- * ----------------------------------------------- 2.6.2 --------------------------------------------- 
+ * ----------------------------------------------- Future --------------------------------------------- 
  * Remove AABC 2021 Guidelines
  * Need to write a conversion script.
  * ---------------------------------------------------------------------------------------------------
@@ -3457,6 +3709,31 @@ else {
  * ---------------------------------------------------------------------------------------------------
  */
 if (!$setup_running) $output_off_sched_update .= "</ul>";
+
+/**
+ * ---------------------------------------------------------------------------------------------------
+ * Optimize selected tables.
+ * ---------------------------------------------------------------------------------------------------
+ */
+
+$optimize_db_tables = array(
+	$brewer_db_table,
+	$brewing_db_table, 
+	$judging_assignments_db_table, 
+	$judging_flights_db_table, 
+	$judging_scores_db_table, 
+	$judging_scores_bos_db_table, 
+	$judging_tables_db_table,
+	$sponsors_db_table, 
+	$staff_db_table,
+	$styles_db_table,
+	$users_db_table
+);
+
+foreach ($optimize_db_tables as $table) {
+	$sql = sprintf("OPTIMIZE TABLE %s", $table);
+	$db_conn->rawQuery($sql);
+}
 
 /**
  * ---------------------------------------------------------------------------------------------------

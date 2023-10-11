@@ -7,47 +7,6 @@
  *
  */
 
-/* ---------------- Rebuild Info ---------------------
-
-Beginning with the 1.3.0 release, an effort was begun to separate the programming
-layer from the presentation layer for all scripts with this header.
-
-All Admin pages have certain variables in common that build the page:
-  $subtitle = the <h2> subtitle of the page
-  $primary_page_info = any information related to the page
-  $goto_nav = the "Back to Admin Dashboard" and other "Back to..." navigation
-  $secondary_nav = other navigation elements related to the subpage
-  $secondary_page_info = detailed information that comes after the nav elements
-
-  $form_submit_url = the processing url for the form
-  $form_submit_button = the form submit button element
-
-  DEFAULTS for all of the following are defined in constants.inc.php but can be overridden by defining on the page
-  $output_datatables_bPaginate = whether or not to paginate the DT output - default is true
-  $output_datatables_sPaginationType = type of pagination links output - default is full_numbers
-  $output_datatables_bLengthChange = whether or not the DT output will allow length changes - default is true
-  $output_datatables_iDisplayLength = limiting of the number of items the DT displays - default is round($_SESSION['prefsRecordPaging'])
-  $output_datatables_sDom = the order of DT elements - default is irftip
-  $output_datatables_bStateSave = true or false to save the state of the DT after refresh - default is false
-  $output_datatables_bProcessing = true or false to show a "processing" message -default is false
-  $output_datatables_aaSorting = the output in the DataTables JS for sort order - always customized for each display
-  $output_datatables_aoColumns = the output in the DataTables JS for columns - always customized for each display
-
-  $output_datatables_head = the output for DataTables placed in the <thead> tag
-  $output_datatables_body = the output for DataTables placed in the <tbody> tag
-  $output_datatables_add_link = the link to add a record
-  $output_datatables_edit_link = the link to edit the record
-  $output_datatables_delete_link = the link to delete the record
-  $output_datatables_print_link = the link to print the record or output to print
-  $output_datatables_other_link = misc use link
-  $output_datatables_view_link = the link to view the record's detail
-  $output_datatables_actions = compiles all of the "actions" links (edit, delete, print, view, etc.)
-
-  ADD/EDIT SCREENS VARIABLE
-  $output_add_edit = whether to run/display the add/edit functions - default is FALSE
-
- * ---------------- END Rebuild Info --------------------- */
-
 include (DB.'admin_participants.db.php');
 
 // Set Vars
@@ -292,8 +251,8 @@ if ($totalRows_brewer > 0) {
 				}
 				
 				if (strpos($brewer_assignment,'Judge') !== false)  {
-					$output_datatables_view_link = "<a class=\"hide-loader\" href=\"".$base_url."output/labels.output.php?section=admin&amp;go=participants&amp;action=judging_labels&amp;id=".$row_brewer['id']."&amp;psort=5160\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Download Judge Scoresheet Labels for ".$brewer_tooltip_display_name." - Letter (Avery 5160)\"><span class=\"fa fa-lg fa-file\"></span></a>";
-					$output_datatables_view_link2 = "<a class=\"hide-loader\" href=\"".$base_url."output/labels.output.php?section=admin&amp;go=participants&amp;action=judging_labels&amp;id=".$row_brewer['id']."&amp;psort=3422\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Download Judge Scoresheet Labels for ".$brewer_tooltip_display_name." - A4 (Avery 3422)\"><span class=\"fa fa-lg fa-file-text\"></span></a>";
+					$output_datatables_view_link = "<a class=\"hide-loader\" href=\"".$base_url."includes/output.inc.php?section=labels-judge&amp;go=participants&amp;action=judging_labels&amp;id=".$row_brewer['id']."&amp;psort=5160\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Download Judge Scoresheet Labels for ".$brewer_tooltip_display_name." - Letter (Avery 5160)\"><span class=\"fa fa-lg fa-file\"></span></a>";
+					$output_datatables_view_link2 = "<a class=\"hide-loader\" href=\"".$base_url."includes/output.inc.php?section=labels-judge&amp;go=participants&amp;action=judging_labels&amp;id=".$row_brewer['id']."&amp;psort=3422\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Download Judge Scoresheet Labels for ".$brewer_tooltip_display_name." - A4 (Avery 3422)\"><span class=\"fa fa-lg fa-file-text\"></span></a>";
 				}
 
 				else {
@@ -415,10 +374,10 @@ if ($totalRows_brewer > 0) {
 			$output_datatables_body .= "</td>";
 
 			$output_datatables_body .= "<td>";
-			if ($user_info[1] == 0)	$output_datatables_body .= "Top-Level Admin";
-			elseif ($user_info[1] == 1)	$output_datatables_body .= "Admin";
+			if (($dbTable == "default") && ($user_info[1] == 0))	$output_datatables_body .= "Top-Level Admin";
+			elseif (($dbTable == "default") && ($user_info[1] == 1))	$output_datatables_body .= "Admin";
 			else $output_datatables_body .= "Participant";
-			if ($user_info[2] == 0) $output_datatables_body .= " <i class=\"fa fa-sm fa-eye\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"".$brewer_tooltip_display_name." can view Judging Numbers - edit their user level to change.\"></i>";
+			if (($dbTable == "default") && ($user_info[1] == 0)) $output_datatables_body .= " <i class=\"fa fa-sm fa-eye\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"".$brewer_tooltip_display_name." can view Judging Numbers - edit their user level to change.\"></i>";
 			else  $output_datatables_body .= " <i class=\"fa fa-sm fa-eye-slash\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"".$brewer_tooltip_display_name." CANNOT view Judging Numbers - edit their user level to change.\"></i>";
 			$output_datatables_body .= "</td>";
 
@@ -633,24 +592,24 @@ echo $output_user_question_modals;
 		</button>
 		<ul class="dropdown-menu">
         	<?php if ($filter == "default") { ?>
-        	<li class="small"><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=admin&amp;go=participants&amp;action=print&amp;view=default&amp;psort=brewer_name">By Last Name</a></li>
+        	<li class="small"><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=admin&amp;go=participants&amp;action=print&amp;view=default&amp;psort=brewer_name">By Last Name</a></li>
 			<?php if ($pro_edition == 0) { ?>
-			<li class="small"><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=admin&amp;go=participants&amp;action=print&amp;view=default&amp;psort=club">By Club</a><li>
+			<li class="small"><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=admin&amp;go=participants&amp;action=print&amp;view=default&amp;psort=club">By Club</a><li>
             <?php } ?>
             <?php if ($pro_edition == 1) { ?>
-            <li class="small"><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=admin&amp;go=participants&amp;action=print&amp;view=default&amp;psort=organization">By Organization Name</a></li>
+            <li class="small"><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=admin&amp;go=participants&amp;action=print&amp;view=default&amp;psort=organization">By Organization Name</a></li>
             <?php } ?>
             <?php } ?>
             <?php if ($filter == "with_entries"){ ?>
             <?php if ($pro_edition == 1) $with_entries_name = "By Organization Name"; else $with_entries_name = "By Entrant Last Name"; ?>
-            <li class="small"><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=admin&amp;go=participants&amp;action=print&amp;view=default&amp;filter=with_entries"><?php echo $with_entries_name; ?></a><li>
+            <li class="small"><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=admin&amp;go=participants&amp;action=print&amp;view=default&amp;filter=with_entries"><?php echo $with_entries_name; ?></a><li>
             <?php } ?>
             <?php if ($filter == "judges") { ?>
-			<li class="small"><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=admin&amp;go=participants&amp;filter=judges&amp;action=print&amp;view=default&amp;psort=judge_id">By Judge ID</a><li>
-            <li class="small"><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=admin&amp;go=participants&amp;filter=judges&amp;action=print&amp;view=default&amp;psort=judge_rank">By Judge Rank</a><li>
+			<li class="small"><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=admin&amp;go=participants&amp;filter=judges&amp;action=print&amp;view=default&amp;psort=judge_id">By Judge ID</a><li>
+            <li class="small"><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=admin&amp;go=participants&amp;filter=judges&amp;action=print&amp;view=default&amp;psort=judge_rank">By Judge Rank</a><li>
             <?php } ?>
             <?php if ($filter == "stewards") { ?>
-			<li class="small"><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=admin&amp;go=participants&amp;filter=stewards&amp;action=print&amp;view=default">By Last Name</a><li>
+			<li class="small"><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=admin&amp;go=participants&amp;filter=stewards&amp;action=print&amp;view=default">By Last Name</a><li>
             <?php } ?>
 		</ul>
 	</div><!-- ./button group -->
@@ -662,16 +621,16 @@ echo $output_user_question_modals;
 		<span class="caret"></span>
 		</button>
 		<ul class="dropdown-menu">
-			<li class="small"><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=admin&amp;go=participants&amp;action=print&amp;view=default&amp;dbTable=<?php echo $dbTable; ?>&amp;psort=brewer_name">By Last Name</a></li>
+			<li class="small"><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=admin&amp;go=participants&amp;action=print&amp;view=default&amp;dbTable=<?php echo $dbTable; ?>&amp;psort=brewer_name">By Last Name</a></li>
 			<?php if ($pro_edition == 0) { ?>
-			<li class="small"><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=admin&amp;go=participants&amp;action=print&amp;view=default&amp;dbTable=<?php echo $dbTable; ?>&amp;psort=club">By Club</a><li>
+			<li class="small"><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=admin&amp;go=participants&amp;action=print&amp;view=default&amp;dbTable=<?php echo $dbTable; ?>&amp;psort=club">By Club</a><li>
             <?php } ?>
             <?php if ($pro_edition == 1) { ?>
-            <li class="small"><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=admin&amp;go=participants&amp;action=print&amp;view=default&amp;dbTable=<?php echo $dbTable; ?>&amp;psort=organization">By Organization Name</a></li>
+            <li class="small"><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=admin&amp;go=participants&amp;action=print&amp;view=default&amp;dbTable=<?php echo $dbTable; ?>&amp;psort=organization">By Organization Name</a></li>
             <?php } ?>
             <?php if ($filter == "judges") { ?>
-			<li class="small"><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=admin&amp;go=participants&amp;filter=judges&amp;action=print&amp;view=default&amp;dbTable=<?php echo $dbTable; ?>&amp;psort=judge_id">By Judge ID</a><li>
-            <li class="small"><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>output/print.output.php?section=admin&amp;go=participant&amp;filter=judgess&amp;action=print&amp;view=default&amp;dbTable=<?php echo $dbTable; ?>&amp;psort=judge_rank">By Judge Rank</a><li>
+			<li class="small"><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=admin&amp;go=participants&amp;filter=judges&amp;action=print&amp;view=default&amp;dbTable=<?php echo $dbTable; ?>&amp;psort=judge_id">By Judge ID</a><li>
+            <li class="small"><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=admin&amp;go=participant&amp;filter=judgess&amp;action=print&amp;view=default&amp;dbTable=<?php echo $dbTable; ?>&amp;psort=judge_rank">By Judge Rank</a><li>
             <?php } ?>
 		</ul>
 	</div><!-- ./button group -->

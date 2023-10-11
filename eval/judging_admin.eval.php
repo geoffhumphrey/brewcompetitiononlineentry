@@ -45,8 +45,8 @@ foreach ($eval_scores as $key => $value) {
 		if (!empty($value['ordinal_position'])) $ordinal_position[] = $value['ordinal_position'];
 		if (!empty($value['place'])) $eval_places[] = $value['place'];
 
-		$view_link = $base_url."output/print.output.php?section=evaluation&amp;go=default&amp;id=".$value['id']."&amp;tb=1";
-		$print_link = $base_url."output/print.output.php?section=evaluation&amp;go=default&amp;id=".$value['id'];
+		$view_link = $base_url."includes/output.inc.php?section=evaluation&amp;go=default&amp;id=".$value['id']."&amp;tb=1";
+		$print_link = $base_url."includes/output.inc.php?section=evaluation&amp;go=default&amp;id=".$value['id'];
 		$edit_link = $base_url."index.php?section=evaluation&amp;go=scoresheet&amp;action=edit&amp;filter=".$tbl_id."&amp;bid=".$value['judge_id']."&amp;view=admin&amp;sort=".$value['scoresheet']."&amp;id=".$value['id'];
 		$delete_link = $base_url."includes/process.inc.php?section=".$section."&amp;go=".$go."&amp;filter=".$filter."&amp;dbTable=".$prefix."evaluation&amp;action=delete&amp;id=".$value['id'];
 

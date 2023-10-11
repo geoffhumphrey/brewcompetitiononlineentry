@@ -263,7 +263,7 @@ if (($add_disabled) && ($judging_open)) {
 
 elseif ($scored_by_user) {
 
-	$view_link = $base_url."output/print.output.php?section=evaluation&amp;go=default&amp;id=".$user_submitted_eval['id']."&amp;tb=1";
+	$view_link = $base_url."includes/output.inc.php?section=evaluation&amp;go=default&amp;id=".$user_submitted_eval['id']."&amp;tb=1";
 
 	if ($judging_open) {
 
@@ -370,7 +370,7 @@ if (($judging_open) && (strpos($row_table_assignments['assignRoles'], "HJ") !== 
 			if ($value['judge_id'] != $_SESSION['user_id']) {
 				$score_previous_id = $value['id'];
 				$score_previous = $value['judge_score'];
-				$view_link = $base_url."output/print.output.php?section=evaluation&amp;go=default&amp;id=".$score_previous_id."&amp;tb=1";
+				$view_link = $base_url."includes/output.inc.php?section=evaluation&amp;go=default&amp;id=".$score_previous_id."&amp;tb=1";
 				$actions .= "<div style=\"margin-top: 5px;\">";
 				$actions .= "<a style=\"word-wrap:break-word;\" class=\"btn btn-block btn-sm btn-info hide-loader\" id=\"modal_window_link\" class=\"hide-loader\" href=\"".$view_link."\">";
 				$actions .= $label_view_other_judge_eval;

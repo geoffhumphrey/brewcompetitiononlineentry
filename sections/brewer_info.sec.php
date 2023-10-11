@@ -435,7 +435,7 @@ if ($_SESSION['prefsProEdition'] == 0) {
 	$account_display .= "<div class=\"row bcoem-account-info\">";
 	$account_display .= sprintf("<div class=\"".$display_left_cols."\"><strong>%s</strong></div>",$label_drop_off);
 	$account_display .= "<div class=\"".$display_right_cols."\">".dropoff_location($_SESSION['brewerDropOff']);
-	if ($_SESSION['brewerDropOff'] == 0) $account_display .= sprintf("<br><a id=\"modal_window_link\" class=\"hide-loader\" data-toggle=\"tooltip\" title=\"%s\" href =\"".$base_url."output/print.output.php?section=shipping-label\">%s</a>",$brewer_info_006,$brewer_info_007);
+	if ($_SESSION['brewerDropOff'] == 0) $account_display .= sprintf("<br><a id=\"modal_window_link\" class=\"hide-loader\" data-toggle=\"tooltip\" title=\"%s\" href =\"".$base_url."includes/output.inc.php?section=shipping-label\">%s</a>",$brewer_info_006,$brewer_info_007);
 	$account_display .= "</div>";
 	$account_display .= "</div>";
 
@@ -509,7 +509,7 @@ if ($show_judge_steward_fields) {
 		if ($_SESSION['prefsEval'] == 0) {
 			$account_display .= "<div class=\"row bcoem-account-info hidden-print\">";
 			$account_display .= "<div class=\"".$display_left_cols."\"><strong>&nbsp;</strong></div>";
-			$account_display .= sprintf("<div class=\"".$display_right_cols."\">%s <a class=\"hide-loader\" href=\"".$base_url."output/labels.output.php?section=admin&amp;go=participants&amp;action=judging_labels&amp;id=".$_SESSION['brewerID']."&amp;psort=5160\" data-toggle=\"tooltip\" title=\"Avery 5160\">%s</a> %s <a class=\"hide-loader\" href=\"".$base_url."output/labels.output.php?section=admin&amp;go=participants&amp;action=judging_labels&amp;id=".$_SESSION['brewerID']."&amp;psort=3422\" data-toggle=\"tooltip\" title=\"Avery 3422\">A4</a></div>",$brewer_info_012, $label_letter, $brewer_info_011);
+			$account_display .= sprintf("<div class=\"".$display_right_cols."\">%s <a class=\"hide-loader\" href=\"".$base_url."includes/output.inc.php?section=labels-judge&amp;go=participants&amp;action=judging_labels&amp;id=".$_SESSION['brewerID']."&amp;psort=5160\" data-toggle=\"tooltip\" title=\"Avery 5160\">%s</a> %s <a class=\"hide-loader\" href=\"".$base_url."includes/output.inc.php?section=labels-judge&amp;go=participants&amp;action=judging_labels&amp;id=".$_SESSION['brewerID']."&amp;psort=3422\" data-toggle=\"tooltip\" title=\"Avery 3422\">A4</a></div>",$brewer_info_012, $label_letter, $brewer_info_011);
 			$account_display .= "</div>";
 		}
 

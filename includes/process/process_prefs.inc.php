@@ -61,7 +61,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 		
 	$update_table = $prefix."preferences";
 
-	if (!isset($_POST['prefsSponsorLogoSize'])) $_POST['prefsSponsorLogoSize'] = NULL;
+	if (!isset($_POST['prefsSelectedStyles'])) $_POST['prefsSelectedStyles'] = NULL;
 	if (!isset($_POST['prefsCompLogoSize'])) $_POST['prefsCompLogoSize'] = NULL;
 	if (!isset($_POST['prefsBOSMead'])) $_POST['prefsBOSMead'] = NULL;
 	if (!isset($_POST['prefsBOSCider'])) $_POST['prefsBOSCider'] = NULL;
@@ -86,7 +86,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 		'prefsGoogleAccount' => blank_to_null($prefsGoogleAccount),
 		'prefsSponsors' => sterilize($_POST['prefsSponsors']),
 		'prefsSponsorLogos' => sterilize($_POST['prefsSponsorLogos']),
-		'prefsSponsorLogoSize' => blank_to_null(sterilize($_POST['prefsSponsorLogoSize'])),
+		'prefsSelectedStyles' => blank_to_null(sterilize($_POST['prefsSelectedStyles'])),
 		'prefsCompLogoSize' => blank_to_null(sterilize($_POST['prefsCompLogoSize'])),
 		'prefsDisplayWinners' => sterilize($_POST['prefsDisplayWinners']),
 		'prefsWinnerDelay' => $prefsWinnerDelay,

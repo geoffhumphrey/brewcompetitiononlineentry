@@ -73,7 +73,7 @@ do {
 		// Sponsor Image
 			$page_info1 .= "<img class=\"responsive-image img-thumbnail\" src=\"";
 			if (($row_sponsors['sponsorImage'] != "") && (file_exists(USER_IMAGES.$row_sponsors['sponsorImage']))) $page_info1 .= $base_url."user_images/".$row_sponsors['sponsorImage'];
-			else $page_info1 .= $base_url."images/no_image.png";
+			else $page_info1 .= $images_url."no_image.png";
 			$page_info1 .= sprintf("\" border=\"0\" alt=\"".$row_sponsors['sponsorName']."\" title=\"".$row_sponsors['sponsorName']."\" />");
 		}
 

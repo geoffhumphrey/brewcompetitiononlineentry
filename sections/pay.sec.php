@@ -40,12 +40,12 @@ Declare all variables empty at the top of the script. Add on later...
  * ---------------- END Rebuild Info --------------------- */
 
 if (TESTING) {
-	if ((isset($_SESSION['prefsPaypalIPN'])) && ($_SESSION['prefsPaypalIPN'] == 1)) $paypal_env = $base_url."includes/process.inc.php?action=paypal";
+	if ((isset($_SESSION['prefsPaypalIPN'])) && ($_SESSION['prefsPaypalIPN'] == 1)) $paypal_env = $base_url."includes/process.inc.php?section=paypal&action=paypal";
 	else $paypal_env = "https://www.sandbox.paypal.com/cgi-bin/webscr";
 }
 
 else {
-	if ((isset($_SESSION['prefsPaypalIPN'])) && ($_SESSION['prefsPaypalIPN'] == 1)) $paypal_env = $base_url."includes/process.inc.php?action=paypal";
+	if ((isset($_SESSION['prefsPaypalIPN'])) && ($_SESSION['prefsPaypalIPN'] == 1)) $paypal_env = $base_url."includes/process.inc.php?section=paypal&action=paypal";
 	else $paypal_env = "https://www.paypal.com/cgi-bin/webscr";
 }
 
@@ -248,30 +248,6 @@ else {
 			$page_info4 .= "</div>";
 			$page_info4 .= "</div>";
 			$page_info4 .= "</form>\n";
-
-			/* 
-			// If IPN is NOT enabled show this:
-			$page_info4 .= "<form role=\"form\" id=\"formfield\" name=\"PayPal\" action=\"https://www.paypal.com/cgi-bin/webscr\" method=\"post\">";
-			//$page_info4 .= "<form role=\"form\" id=\"formfield\" name=\"PayPal\" action=\"".$base_url."includes/process.inc.php?action=paypal\" method=\"post\">\n";
-			$page_info4 .= "<input type=\"hidden\" name=\"action\" value=\"add_form\" />\n";
-			$page_info4 .= "<input type=\"hidden\" name=\"cmd\" value=\"_xclick\">\n";
-			$page_info4 .= sprintf("<input type=\"hidden\" name=\"business\" value=\"%s\">\n",$_SESSION['prefsPaypalAccount']);
-			$page_info4 .= sprintf("<input type=\"hidden\" name=\"item_name\" value=\"%s, %s - %s Payment\">\n",$_SESSION['brewerLastName'],$_SESSION['brewerFirstName'],$_SESSION['contestName']);
-			$page_info4 .= sprintf("<input type=\"hidden\" name=\"amount\" value=\"%s\">\n",$payment_amount);
-			$page_info4 .= sprintf("<input type=\"hidden\" name=\"currency_code\" value=\"%s\">\n",$currency_code);
-			$page_info4 .= "<input type=\"hidden\" name=\"button_subtype\" value=\"services\">\n";
-			$page_info4 .= "<input type=\"hidden\" name=\"no_note\" value=\"0\">\n";
-			$page_info4 .= "<input type=\"hidden\" name=\"cn\" value=\"Add special instructions\">\n";
-			$page_info4 .= "<input type=\"hidden\" name=\"no_shipping\" value=\"1\">\n";
-			$page_info4 .= "<input type=\"hidden\" name=\"rm\" value=\"1\">\n";
-			if (($_SESSION['prefsPaypalIPN'] == 1) && (TESTING)) $page_info4 .= "<input type=\"hidden\" name=\"test_ipn\" value=\"1\">\n";
-			$page_info4 .= sprintf("<input type=\"hidden\" name=\"custom\" value=\"%s|%s\">\n",$_SESSION['user_id'],rtrim($return_entries, '-'));
-			$page_info4 .= sprintf("<input type=\"hidden\" name=\"return\" value=\"%s\">\n",rtrim($return, '-'));
-			$page_info4 .= sprintf("<input type=\"hidden\" name=\"cancel_return\" value=\"%s\">\n",$base_url."index.php?section=pay&msg=11");
-			$page_info4 .= "<input type=\"hidden\" name=\"bn\" value=\"PP-BuyNowBF:btn_paynowCC_LG.gif:NonHosted\">\n";
-			$page_info4 .= "<button type=\"button\" name=\"btn\" id=\"submitBtn\" data-toggle=\"modal\" data-target=\"#confirm-submit\" class=\"btn btn-primary\" /><span class=\"fa fa-paypal\"></span> Pay with PayPal</button>\n";
-			$page_info4 .= "</form>";
-			*/
 
 			$page_info4 .= "<!-- Form submit confirmation modal -->";
 			$page_info4 .= "<!-- Refer to bcoem_custom.js for configuration -->";

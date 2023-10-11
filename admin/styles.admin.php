@@ -10,15 +10,14 @@ if ((($action == "default") && ($filter == "default")) || ($section == "step7") 
 
 	$sorting_default = "[[2,'asc']]";
 
+	$current_styles_active = json_decode($_SESSION['prefsSelectedStyles'],true);
+
 	do {
 
 		if ($row_styles['id'] != "") {
 
 			$brewStyleActive = "";
-			if (isset($row_styles['brewStyleActive']) && ($row_styles['brewStyleActive'] == "Y")) $brewStyleActive = "CHECKED";
-
-			$brewStyleJudgingLoc = "";
-			if (isset($row_styles['brewStyleJudgingLoc']) && ($row_styles['brewStyleJudgingLoc'] == $bid)) $brewStyleJudgingLoc = "CHECKED";
+			if (array_key_exists($row_styles['id'],$current_styles_active)) $brewStyleActive = "CHECKED";
 
 			$brewStyleOwn_prefix = "";
 			$brewStyleOwn_suffix = "";
@@ -68,7 +67,7 @@ if ((($action == "default") && ($filter == "default")) || ($section == "step7") 
 
 		}
 
-	} while($row_styles = mysqli_fetch_assoc($styles));
+	} while ($row_styles = mysqli_fetch_assoc($styles));
 
 }
 

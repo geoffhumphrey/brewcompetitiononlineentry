@@ -5,9 +5,6 @@
  *
  */
 
-require ('../paths.php');
-require (CONFIG.'bootstrap.php');
-
 if ((isset($_SESSION['loginUsername'])) || ($token != "default")) {
 $role_replace1 = array("HJ","LJ","MBOS",", ");
 $role_replace2 = array("<span class=\"fa fa-gavel\"></span> Head Judge","<span class=\"fa fa-star\"></span> Lead Judge","<span class=\"fa fa-trophy\"></span> Mini-BOS Judge","&nbsp;&nbsp;&nbsp;");

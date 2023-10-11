@@ -16,10 +16,6 @@
  * 
  */
 
-require ('../paths.php');
-require (CONFIG.'bootstrap.php');
-require (LANG.'language.lang.php');
-
 if (isset($_SESSION['loginUsername'])) {
 
 	if (($_SESSION['brewerEmail'] != $_SESSION['loginUsername']) && ($_SESSION['userLevel'] > 1)) {

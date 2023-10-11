@@ -129,36 +129,46 @@ function strip_newline($input) {
 	return $output;
 }
 
-
 function clean_up_url($referer) {
 
-	include (CONFIG."config.php");
-	mysqli_select_db($connection,$database);
+	$reconstruct = "";
 
-	if (NHC) $base_url = "../";
+	if (!empty($referer)) {
+		
+		include (CONFIG."config.php");
+		mysqli_select_db($connection,$database);
 
-	// Break URL into an array
-	$parts = parse_url($referer);
-	$referer = $parts['query'];
+		if (NHC) $base_url = "../";
 
-	// Remove $msg=X from query string
-	$pattern = array("/[0-9]/", "/&msg=/");
-	$referer = preg_replace($pattern, "", $referer);
+		$parts = parse_url($referer);
 
-	// Remove $id=X from query string
-	$pattern = array("/[0-9]/", "/&id=/");
-	$referer = preg_replace($pattern, "", $referer);
+		if (!empty($parts['query'])) {
 
-	// Remove $pg=X from query string and add back in
-	$pattern = array("/[0-9]/", "/&pg=/");
-	$referer = str_replace($pattern,"",$referer);
+			$referer = $parts['query'];
 
-	$pattern = array('\'', '"');
-	$referer = str_replace($pattern,"",$referer);
-	$referer = stripslashes($referer);
+			// Remove $msg=X from query string
+			$pattern = array("/[0-9]/", "/&msg=/");
+			$referer = preg_replace($pattern, "", $referer);
 
-	// Reconstruct the URL
-	$reconstruct = $base_url."index.php?".$referer;
+			// Remove $id=X from query string
+			$pattern = array("/[0-9]/", "/&id=/");
+			$referer = preg_replace($pattern, "", $referer);
+
+			// Remove $pg=X from query string and add back in
+			$pattern = array("/[0-9]/", "/&pg=/");
+			$referer = str_replace($pattern,"",$referer);
+
+			$pattern = array('\'', '"');
+			$referer = str_replace($pattern,"",$referer);
+			$referer = stripslashes($referer);
+
+			// Reconstruct the URL
+			$reconstruct = $base_url."index.php?".$referer;
+
+		}
+
+	}
+
 	return $reconstruct;
 
 }

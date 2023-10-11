@@ -5,7 +5,7 @@
 --
 -- ------------------------------------------------------------------------------------
 --
--- UPDATED 2023-06-30 for Version 2.6.0
+-- UPDATED 2023-10-09 for Version 2.6.2
 --
 -- ------------------------------------------------------------------------------------
 --
@@ -544,7 +544,7 @@ CREATE TABLE `baseline_preferences` (
   `prefsGoogleAccount` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'Google Merchant ID',
   `prefsSponsors` char(1) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `prefsSponsorLogos` char(1) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `prefsSponsorLogoSize` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `prefsSelectedStyles` mediumtext COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `prefsCompLogoSize` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `prefsDisplayWinners` char(1) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `prefsWinnerDelay` varchar(15) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'Unix timestamp to display winners',
@@ -604,7 +604,7 @@ CREATE TABLE `baseline_preferences` (
 -- Dumping data for table `baseline_preferences`
 --
 
-INSERT INTO `baseline_preferences` (`id`, `prefsTemp`, `prefsWeight1`, `prefsWeight2`, `prefsLiquid1`, `prefsLiquid2`, `prefsPaypal`, `prefsPaypalAccount`, `prefsPaypalIPN`, `prefsCurrency`, `prefsCash`, `prefsCheck`, `prefsCheckPayee`, `prefsTransFee`, `prefsCAPTCHA`, `prefsGoogleAccount`, `prefsSponsors`, `prefsSponsorLogos`, `prefsSponsorLogoSize`, `prefsCompLogoSize`, `prefsDisplayWinners`, `prefsWinnerDelay`, `prefsWinnerMethod`, `prefsDisplaySpecial`, `prefsBOSMead`, `prefsBOSCider`, `prefsEntryForm`, `prefsRecordLimit`, `prefsRecordPaging`, `prefsProEdition`, `prefsTheme`, `prefsDateFormat`, `prefsContact`, `prefsTimeZone`, `prefsEntryLimit`, `prefsTimeFormat`, `prefsUserEntryLimit`, `prefsUserSubCatLimit`, `prefsUSCLEx`, `prefsUSCLExLimit`, `prefsPayToPrint`, `prefsHideRecipe`, `prefsUseMods`, `prefsSEF`, `prefsSpecialCharLimit`, `prefsStyleSet`, `prefsAutoPurge`, `prefsEntryLimitPaid`, `prefsEmailRegConfirm`, `prefsEmailCC`, `prefsShipping`, `prefsDropOff`, `prefsLanguage`, `prefsSpecific`, `prefsShowBestBrewer`, `prefsBestBrewerTitle`, `prefsFirstPlacePts`, `prefsSecondPlacePts`, `prefsThirdPlacePts`, `prefsFourthPlacePts`, `prefsHMPts`, `prefsTieBreakRule1`, `prefsTieBreakRule2`, `prefsTieBreakRule3`, `prefsTieBreakRule4`, `prefsTieBreakRule5`, `prefsTieBreakRule6`, `prefsShowBestClub`, `prefsBestClubTitle`, `prefsBestUseBOS`, `prefsEval`) VALUES (1, 'Fahrenheit', 'ounces', 'pounds', 'ounces', 'gallons', 'N', NULL, 0, '$', 'N', 'N', NULL, 'Y', 0, NULL, 'N', 'N', NULL, NULL, 'Y', '1698899400', 0, 'J', NULL, NULL, '5', 9999, 150, 0, 'default', '1', 'Y', -7, NULL, 0, NULL, NULL, NULL, NULL, 'N', 'Y', 'N', 'N', 200, 'BJCP2021', 0, NULL, 1, 1, 1, 1, 'en-US', 1, 0, NULL, 0, 0, 0, 0, 0, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1);
+INSERT INTO `baseline_preferences` (`id`, `prefsTemp`, `prefsWeight1`, `prefsWeight2`, `prefsLiquid1`, `prefsLiquid2`, `prefsPaypal`, `prefsPaypalAccount`, `prefsPaypalIPN`, `prefsCurrency`, `prefsCash`, `prefsCheck`, `prefsCheckPayee`, `prefsTransFee`, `prefsCAPTCHA`, `prefsGoogleAccount`, `prefsSponsors`, `prefsSponsorLogos`, `prefsSelectedStyles`, `prefsCompLogoSize`, `prefsDisplayWinners`, `prefsWinnerDelay`, `prefsWinnerMethod`, `prefsDisplaySpecial`, `prefsBOSMead`, `prefsBOSCider`, `prefsEntryForm`, `prefsRecordLimit`, `prefsRecordPaging`, `prefsProEdition`, `prefsTheme`, `prefsDateFormat`, `prefsContact`, `prefsTimeZone`, `prefsEntryLimit`, `prefsTimeFormat`, `prefsUserEntryLimit`, `prefsUserSubCatLimit`, `prefsUSCLEx`, `prefsUSCLExLimit`, `prefsPayToPrint`, `prefsHideRecipe`, `prefsUseMods`, `prefsSEF`, `prefsSpecialCharLimit`, `prefsStyleSet`, `prefsAutoPurge`, `prefsEntryLimitPaid`, `prefsEmailRegConfirm`, `prefsEmailCC`, `prefsShipping`, `prefsDropOff`, `prefsLanguage`, `prefsSpecific`, `prefsShowBestBrewer`, `prefsBestBrewerTitle`, `prefsFirstPlacePts`, `prefsSecondPlacePts`, `prefsThirdPlacePts`, `prefsFourthPlacePts`, `prefsHMPts`, `prefsTieBreakRule1`, `prefsTieBreakRule2`, `prefsTieBreakRule3`, `prefsTieBreakRule4`, `prefsTieBreakRule5`, `prefsTieBreakRule6`, `prefsShowBestClub`, `prefsBestClubTitle`, `prefsBestUseBOS`, `prefsEval`) VALUES (1, 'Fahrenheit', 'ounces', 'pounds', 'ounces', 'gallons', 'N', NULL, 0, '$', 'N', 'N', NULL, 'Y', 0, NULL, 'N', 'N', NULL, NULL, 'Y', '1698899400', 0, 'J', NULL, NULL, '5', 9999, 150, 0, 'default', '1', 'Y', -7, NULL, 0, NULL, NULL, NULL, NULL, 'N', 'Y', 'N', 'N', 200, 'BJCP2021', 0, NULL, 1, 1, 1, 1, 'en-US', 1, 0, NULL, 0, 0, 0, 0, 0, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1);
 
 
 -- --------------------------------------------------------

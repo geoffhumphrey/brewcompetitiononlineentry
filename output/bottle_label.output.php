@@ -1,8 +1,4 @@
 <?php
-require('../paths.php');
-require(CONFIG.'bootstrap.php');
-require(LIB.'output.lib.php');
-
 // Set up vars
 $page_info0 = "";
 $page_info1 = "";

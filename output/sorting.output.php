@@ -2,7 +2,9 @@
 $section = "sorting";
 include (DB.'styles.db.php');
 
-do { $a[] = $row_styles['brewStyleGroup']; } while ($row_styles = mysqli_fetch_assoc($styles));
+do { 
+	$a[] = $row_styles['brewStyleGroup']; 
+} while ($row_styles = mysqli_fetch_assoc($styles));
 
 if ($_SESSION['prefsStyleSet'] == "BA") {
 	include (INCLUDES.'ba_constants.inc.php');

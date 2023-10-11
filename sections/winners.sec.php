@@ -91,13 +91,16 @@ if ($row_scored_entries['count'] > 0) {
 			$styles = mysqli_query($connection,$query_styles) or die (mysqli_error($connection));
 			$row_styles = mysqli_fetch_assoc($styles);
 			$totalRows_styles = mysqli_num_rows($styles);
+			
 			if ($totalRows_styles == 0) $missing_style = TRUE;
+			
+			else {
+				$query_style_count = sprintf("SELECT COUNT(*) as count FROM %s WHERE brewCategorySort='%s' AND brewSubCategory='%s' AND brewReceived='1'", $brewing_db_table, $row_styles['brewStyleGroup'], $row_styles['brewStyleNum']);
+				$style_count = mysqli_query($connection,$query_style_count) or die (mysqli_error($connection));
+				$row_style_count = mysqli_fetch_assoc($style_count);
 
-			$query_style_count = sprintf("SELECT COUNT(*) as count FROM %s WHERE brewCategorySort='%s' AND brewSubCategory='%s' AND brewReceived='1'", $brewing_db_table, $row_styles['brewStyleGroup'], $row_styles['brewStyleNum']);
-			$style_count = mysqli_query($connection,$query_style_count) or die (mysqli_error($connection));
-			$row_style_count = mysqli_fetch_assoc($style_count);
-
-			$entry_count += $row_style_count['count'];
+				$entry_count += $row_style_count['count'];
+			}
 
 		}
 

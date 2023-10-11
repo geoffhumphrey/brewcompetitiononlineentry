@@ -1,17 +1,14 @@
 <?php
-require ('../paths.php');
-require (CONFIG.'bootstrap.php');
-require (LIB.'output.lib.php');
-include (CLASSES.'tiny_but_strong/tbs_class.php');
-include (DB.'output_entry.db.php');
+$entry_forms = array("0","1","2","E","C");
 
+// If using non-TBS bottle labels, redirect
+if (!in_array($_SESSION['prefsEntryForm'],$entry_forms)) {
+	header(sprintf("Location: %s?section=entry-form-multi&id=%s&bid=%s", $base_url."includes/output.inc.php", $id, $bid));
+}
+
+// Otherwise run normally.
 $bottleNum = $_SESSION['jPrefsBottleNum'];
 $bottle_labels_001 = strtoupper($bottle_labels_001);
-
-/*
-$bottle_labels_002 = strtoupper($bottle_labels_002);
-$bottle_labels_003 = strtoupper($bottle_labels_003);
-*/
 
 $entry_closed = getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_contest_dates['contestEntryDeadline'], $_SESSION['prefsDateFormat'],$_SESSION['prefsTimeFormat'], "long", "date-no-gmt");
 $contest_name = $contest_info['contestName'];
@@ -126,53 +123,7 @@ if ($go == "default") {
 		$TBS->MergeBlock('dropOffLocation',$brewing,'SELECT * FROM '.$prefix.'drop_off ORDER BY dropLocationName ASC');
 	}
 
-	// If using non-TBS bottle labels, redirect
-	else {
-		header(sprintf("Location: %s?id=%s&bid=%s", $base_url."output/bottle_label.output.php", $id, $bid));
-	}
-
-/*
-	elseif ($_SESSION['prefsEntryForm'] == "B") {
-		$TBS->LoadTemplate(TEMPLATES.'bjcp-entry.html');
-	}
-
-	elseif ($_SESSION['prefsEntryForm'] == "M") {
-		$TBS->LoadTemplate(TEMPLATES.'simple-metric-entry.html');
-	}
-
-	elseif ($_SESSION['prefsEntryForm'] == "3") {
-		$TBS->LoadTemplate(TEMPLATES.'simple-metric-entry-barcode.html');
-	}
-
-	elseif ($_SESSION['prefsEntryForm'] == "U") {
-		$TBS->LoadTemplate(TEMPLATES.'simple-us-entry.html');
-	}
-
-	elseif ($_SESSION['prefsEntryForm'] == "4") {
-		$TBS->LoadTemplate(TEMPLATES.'simple-us-entry-barcode.html');
-	}
-
-	elseif ($_SESSION['prefsEntryForm'] == "N") {
-		$TBS->LoadTemplate(TEMPLATES.'barcode-entry.html');
-		$TBS->MergeBlock('dropOffLocation',$brewing,'SELECT * FROM '.$prefix.'drop_off ORDER BY dropLocationName ASC');
-	}
-
-*/
-
 }
-
-/*
-if ($go == "recipe") {
-	$TBS->LoadTemplate(TEMPLATES.'recipe.html');
-}
-
-if (isset($brewing_info['grains'])) $TBS->MergeBlock('grains',$brewing_info['grains']);
-if (isset($brewing_info['extracts'])) $TBS->MergeBlock('extracts',$brewing_info['extracts']);
-if (isset($brewing_info['adjuncts'])) $TBS->MergeBlock('adjuncts',$brewing_info['adjuncts']);
-if (isset($brewing_info['hops'])) $TBS->MergeBlock('hops',$brewing_info['hops']);
-if (isset($brewing_info['mashSteps'])) $TBS->MergeBlock('mashSteps',$brewing_info['mashSteps']);
-
-*/
 
 $TBS->NoErr;
 $TBS->Show();

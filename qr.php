@@ -1,5 +1,6 @@
 <?php
 require_once ('paths.php');
+require_once (CONFIG.'bootstrap.php');
 require_once (INCLUDES.'url_variables.inc.php');
 require_once (LIB.'common.lib.php');
 require_once (INCLUDES.'db_tables.inc.php');

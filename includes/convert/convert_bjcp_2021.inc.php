@@ -216,12 +216,7 @@ if ($totalRows_styles_active > 0) {
 
         }
 
-        /*
-        echo $style."<br>";
-        if (isset($updateSQL)) echo $updateSQL."<br><br>";
-        */
-
-    } while($row_styles_active = mysqli_fetch_assoc($styles_active));
+    } while ($row_styles_active = mysqli_fetch_assoc($styles_active));
 
 } // end if ($totalRows_styles_active > 0)
 

@@ -15,7 +15,6 @@ else $base_url = $base_url;
 // ---------------------------- Globals ------------------------------------------------
 
 $php_version = phpversion();
-$nhc_landing_url = "https://www.brewingcompetition.com";
 
 $ajax_url = $base_url."ajax/";
 
@@ -45,67 +44,7 @@ if ($setup_success) {
 
 	// ---------------------------- Check if Valid Section -----------------------------
 	$section_array = array(
-		"default",
-		"rules",
-		"entry",
-		"volunteers",
-		"contact",
-		"pay",
-		"list",
-		"admin",
-		"login",
-		"logout",
-		"check",
-		"brewer",
-		"user",
-		"setup",
-		"judge",
-		"register",
-		"sponsors",
-		"past_winners",
-		"brew",
-		"step1",
-		"step2",
-		"step3",
-		"step4",
-		"step5",
-		"step6",
-		"step7",
-		"step8",
-		"update",
-		"confirm",
-		"delete",
-		"table_cards",
-		"participant_summary",
-		"loc",
-		"sorting",
-		"output_styles",
-		"map",
-		"driving",
-		"scores",
-		"entries",
-		"participants",
-		"emails",
-		"assignments",
-		"bos-mat",
-		"dropoff",
-		"summary",
-		"inventory",
-		"pullsheets",
-		"results",
-		"sorting",
-		"staff",
-		"styles",
-		"promo",
-		"table-cards",
-		"testing",
-		"notes",
-		"qr",
-		"shipping-label",
-		"particpant-entries",
-		"evaluation",
-		"competition",
-		"past-winners"
+		"default", "rules", "entry", "volunteers", "contact", "pay", "list", "admin", "login", "logout", "check", "brewer", "user", "setup", "judge", "register", "sponsors", "past_winners", "brew", "step1", "step2", "step3", "step4", "step5", "step6", "step7", "step8", "update", "confirm", "delete", "table_cards", "participant_summary", "loc", "sorting", "output_styles", "map", "driving", "scores", "entries", "participants", "emails", "assignments", "bos-mat", "dropoff", "summary", "inventory", "pullsheets", "results", "sorting", "staff", "styles", "promo", "table-cards", "testing", "notes", "qr", "shipping-label", "particpant-entries", "evaluation", "competition", "past-winners"
 	);
 
 	// ---------------------------- QR Redirect --------------------------------------
@@ -257,7 +196,7 @@ if ($setup_success) {
 				'prefsGoogleAccount' => '|',
 				'prefsSponsors' => 'N',
 				'prefsSponsorLogos' => 'N',
-				'prefsSponsorLogoSize' => '250',
+				'prefsSelectedStyles' => NULL,
 				'prefsCompLogoSize' => '300',
 				'prefsDisplayWinners' => 'Y',
 				'prefsWinnerDelay' => '1616974200',

@@ -86,7 +86,7 @@ foreach ($eval_scores as $key => $value) {
 				}
 
 				// Build actions
-				$view_link = $base_url."output/print.output.php?section=evaluation&amp;go=default&amp;id=".$value['id']."&amp;tb=1";
+				$view_link = $base_url."includes/output.inc.php?section=evaluation&amp;go=default&amp;id=".$value['id']."&amp;tb=1";
 
 				if ($judging_open) {
 	        		

@@ -18,7 +18,11 @@ include (DB.'styles.db.php');
 $subcats = array();
 
 do {
-	$subcats[] = $row_styles['brewStyleGroup']."|".$row_styles['brewStyleNum']."|".$row_styles['brewStyle']."|".$row_styles['brewStyleCategory']."|".$row_styles['brewStyleActive'];
+
+	if (array_key_exists($row_styles['id'], $styles_selected)) {
+		$subcats[] = $row_styles['brewStyleGroup']."|".$row_styles['brewStyleNum']."|".$row_styles['brewStyle']."|".$row_styles['brewStyleCategory']."|".$row_styles['brewStyleActive'];
+	}
+	
 } while ($row_styles = mysqli_fetch_assoc($styles));
 
 sort($subcats);
@@ -27,17 +31,13 @@ foreach ($subcats as $subcat) {
 
 	$substyle = explode("|",$subcat);
 
-	if ($substyle[4] == "Y") {
+	if (SINGLE) $query_substyle_count = sprintf("SELECT COUNT(*) AS 'count' FROM %s WHERE brewCategorySort='%s' AND brewSubCategory='%s' AND brewConfirmed='1' AND brewPaid='1' AND brewReceived='1' AND comp_id='%s'",$prefix."brewing",$substyle[0],$substyle[1], $_SESSION['comp_id']);
+	else $query_substyle_count = sprintf("SELECT COUNT(*) AS 'count' FROM %s WHERE brewCategorySort='%s' AND brewSubCategory='%s' AND brewConfirmed='1' AND brewPaid='1' AND brewReceived='1'",$prefix."brewing",$substyle[0],$substyle[1]);
 
-		if (SINGLE) $query_substyle_count = sprintf("SELECT COUNT(*) AS 'count' FROM %s WHERE brewCategorySort='%s' AND brewSubCategory='%s' AND brewConfirmed='1' AND brewPaid='1' AND brewReceived='1' AND comp_id='%s'",$prefix."brewing",$substyle[0],$substyle[1], $_SESSION['comp_id']);
-		else $query_substyle_count = sprintf("SELECT COUNT(*) AS 'count' FROM %s WHERE brewCategorySort='%s' AND brewSubCategory='%s' AND brewConfirmed='1' AND brewPaid='1' AND brewReceived='1'",$prefix."brewing",$substyle[0],$substyle[1]);
+	if (SINGLE) $query_substyle_count_logged = sprintf("SELECT COUNT(*) AS 'count' FROM %s WHERE brewCategorySort='%s' AND brewSubCategory='%s' AND brewConfirmed='1' AND comp_id='%s'",$prefix."brewing",$substyle[0],$substyle[1], $_SESSION['comp_id']);
+	else $query_substyle_count_logged = sprintf("SELECT COUNT(*) AS 'count' FROM %s WHERE brewCategorySort='%s' AND brewSubCategory='%s' AND brewConfirmed='1'",$prefix."brewing",$substyle[0],$substyle[1]);
 
-		if (SINGLE) $query_substyle_count_logged = sprintf("SELECT COUNT(*) AS 'count' FROM %s WHERE brewCategorySort='%s' AND brewSubCategory='%s' AND brewConfirmed='1' AND comp_id='%s'",$prefix."brewing",$substyle[0],$substyle[1], $_SESSION['comp_id']);
-		else $query_substyle_count_logged = sprintf("SELECT COUNT(*) AS 'count' FROM %s WHERE brewCategorySort='%s' AND brewSubCategory='%s' AND brewConfirmed='1'",$prefix."brewing",$substyle[0],$substyle[1]);
-
-		include (DB.'entries_by_substyle.db.php');
-
-	}
+	include (DB.'entries_by_substyle.db.php');
 
 	// ------ DEBUG ------
 	//print_r($subcats);
@@ -52,31 +52,31 @@ foreach ($subcats as $subcat) {
 
 
 	if (!empty($substyle)) {
-		if ($substyle[4] == "Y") {
-			if ($row_substyle_count_logged['count'] > 0) {
-				if ($filter == "default") $html .= "<tr class=\"success text-success\">";
-				else $html .= "<tr>";
-			} 
-			else {
-				if ($filter == "no_zeros") $html .= "<tr class=\"hidden\">";
-				else $html .= "<tr>";
-			}
-			if ($substyle[3] != "") $substyle_cat = $substyle[3];
-			else $substyle_cat = "Custom";
 
-			$html .= "<td>";
-			$html .= "<span class=\"hidden\">".$substyle[0]."</span>";
-			if ($_SESSION['prefsStyleSet'] != "BA") {
-				if ($_SESSION['prefsStyleSet'] == "AABC") $html .= ltrim($substyle[0],"0").".".ltrim($substyle[1],"0")." ";
-				else $html .= $substyle[0].$substyle[1]." - ";
-			}
-			$html .= $substyle[2]."</td>";
-			$html .= "<td class=\"hidden-xs hidden-sm\">".$substyle_cat."</td>";
-			$html .= "<td>".$row_substyle_count_logged['count']."</td>";
-			$html .= "<td>".$row_substyle_count['count']."</td>";
-			$html .= "<td class=\"hidden-xs hidden-sm\">".$style_type."</td>";
-			$html .= "</tr>";
+		if ($row_substyle_count_logged['count'] > 0) {
+			if ($filter == "default") $html .= "<tr class=\"success text-success\">";
+			else $html .= "<tr>";
+		} 
+		else {
+			if ($filter == "no_zeros") $html .= "<tr class=\"hidden\">";
+			else $html .= "<tr>";
 		}
+		if ($substyle[3] != "") $substyle_cat = $substyle[3];
+		else $substyle_cat = "Custom";
+
+		$html .= "<td>";
+		$html .= "<span class=\"hidden\">".$substyle[0]."</span>";
+		if ($_SESSION['prefsStyleSet'] != "BA") {
+			if ($_SESSION['prefsStyleSet'] == "AABC") $html .= ltrim($substyle[0],"0").".".ltrim($substyle[1],"0")." ";
+			else $html .= $substyle[0].$substyle[1]." - ";
+		}
+		$html .= $substyle[2]."</td>";
+		$html .= "<td class=\"hidden-xs hidden-sm\">".$substyle_cat."</td>";
+		$html .= "<td>".$row_substyle_count_logged['count']."</td>";
+		$html .= "<td>".$row_substyle_count['count']."</td>";
+		$html .= "<td class=\"hidden-xs hidden-sm\">".$style_type."</td>";
+		$html .= "</tr>";
+		
 	}
 
 }

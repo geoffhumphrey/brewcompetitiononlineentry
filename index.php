@@ -423,7 +423,7 @@ if (!empty($error_output)) $_SESSION['error_output'] = $error_output;
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal"><?php echo $label_stay_here; ?></button>
         <button type="button" class="btn btn-success" data-dismiss="modal" onclick="window.location.reload()"><?php echo $label_refresh; ?></button>
-        <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="window.location.replace('<?php echo $base_url; ?>includes/logout.inc.php')"><?php echo $label_log_out; ?></button>
+        <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="window.location.replace('<?php echo $base_url; ?>includes/process.inc.php?section=logout&action=logout')"><?php echo $label_log_out; ?></button>
       </div>
     </div>
   </div>
@@ -441,7 +441,7 @@ if (!empty($error_output)) $_SESSION['error_output'] = $error_output;
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-success" data-dismiss="modal" onclick="window.location.reload()"><?php echo $label_refresh; ?></button>
-        <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="window.location.replace('<?php echo $base_url; ?>includes/logout.inc.php')"><?php echo $label_log_out; ?></button>
+        <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="window.location.replace('<?php echo $base_url; ?>includes/process.inc.php?section=logout&action=logout')"><?php echo $label_log_out; ?></button>
       </div>
     </div>
   </div>
@@ -453,7 +453,7 @@ if (!empty($error_output)) $_SESSION['error_output'] = $error_output;
 var session_end = moment.tz("<?php echo $session_end; ?>","<?php echo get_timezone($_SESSION['prefsTimeZone']); ?>");
 var session_end_min = "<?php echo $session_expire_after; ?>";
 var session_end_seconds = "<?php echo $session_end_seconds; ?>";
-var session_end_redirect = "<?php echo $base_url; ?>includes/logout.inc.php";
+var session_end_redirect = "<?php echo $base_url; ?>includes/process.inc.php?section=logout&action=logout";
 </script>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery.countdown/2.2.0/jquery.countdown.min.js"></script>
 <script type="text/javascript" src="<?php echo $js_url; ?>autologout.min.js"></script>
