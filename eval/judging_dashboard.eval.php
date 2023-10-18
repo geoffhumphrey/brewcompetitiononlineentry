@@ -12,6 +12,17 @@ if ((!empty($score_entry_data[3])) || (!empty($score_entry_data[4]))) $score_pre
 elseif (is_array($user_submitted_eval)) $score_previous = TRUE;
 
 if (TESTING) {
+
+	/*
+	if (HOSTED) $styles_db_table = "bcoem_shared_styles";
+	else
+	*/
+	$styles_db_table = $prefix."styles";
+
+	/*
+	if (HOSTED) $query_style = sprintf("SELECT brewStyleType FROM %s WHERE brewStyleVersion='%s'AND brewStyleGroup='%s' AND brewStyleNum='%s' UNION ALL SELECT brewStyleType FROM %s WHERE brewStyleVersion='%s'AND brewStyleGroup='%s' AND brewStyleNum='%s'",$prefix."styles",$_SESSION['prefsStyleSet'],$row_entries['brewCategorySort'],$row_entries['brewSubCategory'],$styles_db_table,$_SESSION['prefsStyleSet'],$row_entries['brewCategorySort'],$row_entries['brewSubCategory']);
+	else 
+	*/
 	$query_style = sprintf("SELECT brewStyleType FROM %s WHERE brewStyleVersion='%s'AND brewStyleGroup='%s' AND brewStyleNum='%s'",$prefix."styles",$_SESSION['prefsStyleSet'],$row_entries['brewCategorySort'],$row_entries['brewSubCategory']);
 	$style = mysqli_query($connection,$query_style) or die (mysqli_error($connection));
 	$row_style = mysqli_fetch_assoc($style);

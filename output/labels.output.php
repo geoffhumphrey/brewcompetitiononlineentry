@@ -74,6 +74,10 @@ if (isset($_SESSION['loginUsername'])) {
 			else $pdf = new PDF_Label('5160');
 
 			if ($filter == "judges") {
+
+				$query_brewer = sprintf("SELECT * FROM %s WHERE brewerJudge='Y'",$prefix."brewer");
+				$brewer = mysqli_query($connection,$query_brewer) or die (mysqli_error($connection));
+				$row_brewer = mysqli_fetch_assoc($brewer);
 				
 				$filename = str_replace(" ", "_", $_SESSION['contestName']) . "_Virtual_Judge_Labels";
 				if ($psort == "3422") $filename .= "_Avery3422";
@@ -391,7 +395,7 @@ if (isset($_SESSION['loginUsername'])) {
 			
 			}
 
-			else {
+			else {		
 
 				$labels_by_table = FALSE;
 

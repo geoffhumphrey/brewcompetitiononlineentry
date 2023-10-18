@@ -33,7 +33,14 @@ foreach ($style_sets as $style_set) {
 
     // Generate exception list for each of the style sets in the 
     // array and show/hide the list as each are selected via jQuery.
-    $query_styles_all = sprintf("SELECT id,brewStyleGroup,brewStyleNum,brewStyle,brewStyleVersion,brewStyleOwn FROM %s WHERE brewStyleVersion='%s' AND brewStyleOwn != 'custom'",$prefix."styles",$style_set['style_set_name']);
+    
+    /*
+    if (HOSTED) $styles_db_table = "bcoem_shared_styles";
+    else
+    */
+    $styles_db_table = $prefix."styles";
+
+    $query_styles_all = sprintf("SELECT id,brewStyleGroup,brewStyleNum,brewStyle,brewStyleVersion,brewStyleOwn FROM %s WHERE brewStyleVersion='%s' AND brewStyleOwn != 'custom'",$styles_db_table,$style_set['style_set_name']);
     if ($style_set['style_set_name'] == "BA") $query_styles_all .= " ORDER BY brewStyleVersion,brewStyleGroup,brewStyle ASC";
     else $query_styles_all .= " ORDER BY brewStyleVersion,brewStyleGroup,brewStyleNum,brewStyle ASC";
     $styles_all = mysqli_query($connection,$query_styles_all) or die (mysqli_error($connection));
@@ -71,10 +78,14 @@ foreach ($style_sets as $style_set) {
         }
     }
 
-    // Generate jQuery for hide/show
-    // Unused as of now, but keeping just in case
-    // if ((isset($row_limits['prefsStyleSet'])) && ($row_limits['prefsStyleSet'] == $style_set['style_set_name'])) $js_edit_show_hide_style_set_div .= "$(\"#".$style_set['id']."-".$style_set['style_set_name']."\").show(\"fast\");";
-    // else $js_edit_show_hide_style_set_div .= "$(\"#".$style_set['id']."-".$style_set['style_set_name']."\").hide(\"fast\");";
+    /**
+     * Generate jQuery for hide/show
+     * Unused as of now, but keeping just in case
+     */
+    /*
+    if ((isset($row_limits['prefsStyleSet'])) && ($row_limits['prefsStyleSet'] == $style_set['style_set_name'])) $js_edit_show_hide_style_set_div .= "$(\"#".$style_set['id']."-".$style_set['style_set_name']."\").show(\"fast\");";
+    else $js_edit_show_hide_style_set_div .= "$(\"#".$style_set['id']."-".$style_set['style_set_name']."\").hide(\"fast\");";
+    */
 
     $all_exceptions_js .= "\t\telse if ($(\"#prefsStyleSet\").val() == \"".$style_set['style_set_name']."\") {\n";
     $all_exceptions_js .= "\t\t\t$(\"#subStyleExeptionsEdit\").hide(\"fast\");\n"; // Hide default upon entry
@@ -104,6 +115,9 @@ if (($section == "admin") && ($go == "preferences")) {
     $recaptcha_key = "";
     if (isset($row_prefs['prefsGoogleAccount'])) $recaptcha_key = explode("|", $row_prefs['prefsGoogleAccount']);
     if ($_SESSION['prefsStyleSet'] == "BA") include (INCLUDES.'ba_constants.inc.php');
+
+    $styles_selected = array();
+    $styles_selected = json_decode($_SESSION['prefsSelectedStyles'],true);
 
     if ($row_styles) {
 

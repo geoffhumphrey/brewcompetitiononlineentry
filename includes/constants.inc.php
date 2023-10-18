@@ -2769,4 +2769,122 @@ if (strpos(strtolower($db_version), "mariadb") !== false) $db_maria = TRUE;
 
 if ((!isset($_SESSION['encryption_key'])) || (empty($_SESSION['encryption_key']))) $_SESSION['encryption_key'] = base64_encode(openssl_random_pseudo_bytes(32));
 // $encryption_key = "8sQHfMk8rinRtA/Frhm+AWrSgOmkcbu+FxIUGy9Fq5I=";
+
+/**
+ * Failsafe for selected styles.
+ * If the session variable is empty, check the DB table column.
+ * If the column is empty, regenerate.
+ * If the column has data, check if it JSON. If so, repopulate
+ * session variable. If not, regenerate.
+ */
+
+$regenerate_selected_styles = FALSE;
+
+if (empty($_SESSION['prefsSelectedStyles'])) {
+
+    $query_selected_styles = sprintf("SELECT prefsSelectedStyles FROM %s WHERE id='1';",$prefix."preferences");
+    $selected_styles = mysqli_query($connection,$query_selected_styles) or die (mysqli_error($connection));
+    $row_selected_styles = mysqli_fetch_assoc($selected_styles);
+
+    if (empty($row_selected_styles['prefsSelectedStyles'])) $regenerate_selected_styles = TRUE;
+    else {
+        
+        $is_styles_json = json_decode($row_selected_styles['prefsSelectedStyles']);
+        if (json_last_error() === JSON_ERROR_NONE) $styles_json_data = TRUE;
+        else $styles_json_data = FALSE;
+
+        if ($styles_json_data) $_SESSION['prefsSelectedStyles'] = $row_selected_styles['prefsSelectedStyles'];
+        else $regenerate_selected_styles = TRUE;
+    
+    }
+
+    if ($regenerate_selected_styles) {
+
+        $update_selected_styles = array();
+        $prefsStyleSet = $_SESSION['prefsStyleSet'];
+
+        if (HOSTED) {
+            
+            $query_styles_default = sprintf("SELECT id, brewStyle, brewStyleGroup, brewStyleNum, brewStyleVersion FROM `bcoem_shared_styles` WHERE brewStyleVersion='%s'", $prefsStyleSet);
+            $styles_default = mysqli_query($connection,$query_styles_default);
+            $row_styles_default = mysqli_fetch_assoc($styles_default);
+
+            if ($row_styles_default) {
+
+                do {
+
+                    $update_selected_styles[$row_styles_default['id']] = array(
+                        'brewStyle' => $row_styles_default['brewStyle'],
+                        'brewStyleGroup' => $row_styles_default['brewStyleGroup'],
+                        'brewStyleNum' => $row_styles_default['brewStyleNum'],
+                        'brewStyleVersion' => $row_styles_default['brewStyleVersion']
+                    );
+
+                } while($row_styles_default = mysqli_fetch_assoc($styles_default));
+
+                    
+            }
+            
+            $query_styles_custom = sprintf("SELECT id, brewStyle, brewStyleGroup, brewStyleNum, brewStyleVersion FROM %s WHERE brewStyleOwn='custom'", $prefix."styles");
+            $styles_custom = mysqli_query($connection,$query_styles_custom);
+            $row_styles_custom = mysqli_fetch_assoc($styles_custom);
+
+            if ($row_styles_custom) {
+
+                do {
+
+                    $update_selected_styles[$row_styles_custom['id']] = array(
+                        'brewStyle' => sterilize($row_styles_custom['brewStyle']),
+                        'brewStyleGroup' => sterilize($row_styles_custom['brewStyleGroup']),
+                        'brewStyleNum' => sterilize($row_styles_custom['brewStyleNum']),
+                        'brewStyleVersion' => sterilize($row_styles_custom['brewStyleVersion'])
+                    );
+
+                } while($row_styles_custom = mysqli_fetch_assoc($styles_custom));
+
+                
+            }
+        
+        } // end if (HOSTED)
+            
+        else {
+
+            $query_styles_default = sprintf("SELECT id, brewStyle, brewStyleGroup, brewStyleNum, brewStyleVersion FROM %s WHERE brewStyleVersion='%s'", $prefix."styles", $prefsStyleSet);
+            $styles_default = mysqli_query($connection,$query_styles_default);
+            $row_styles_default = mysqli_fetch_assoc($styles_default);
+
+            if ($row_styles_default) {
+                do {
+                    $update_selected_styles[$row_styles_default['id']] = array(
+                        'brewStyle' => sterilize($row_styles_default['brewStyle']),
+                        'brewStyleGroup' => sterilize($row_styles_default['brewStyleGroup']),
+                        'brewStyleNum' => sterilize($row_styles_default['brewStyleNum']),
+                        'brewStyleVersion' => sterilize($row_styles_default['brewStyleVersion'])
+                    );
+                } while($row_styles_default = mysqli_fetch_assoc($styles_default));
+            }
+
+        } // end else
+
+        $update_selected_styles = json_encode($update_selected_styles);
+
+        $update_table = $prefix."preferences";
+        $data = array(
+            'prefsSelectedStyles' => $update_selected_styles
+        );
+        $db_conn->where ('id', 1);
+        $result = $db_conn->update ($update_table, $data);
+        if (!$result) {
+            $error_output[] = $db_conn->getLastError();
+            $errors = TRUE;
+        }
+
+        // Empty the prefs session variable
+        // Will trigger the session to reset the variables in common.db.php upon reload after redirect
+        unset($_SESSION['prefs'.$prefix_session]);
+
+    }
+
+}
+
 ?>

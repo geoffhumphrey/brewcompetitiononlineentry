@@ -137,10 +137,10 @@ if ($go == "all_entry_info") {
 
 									$table_flight_tbody .= "<td>";
 									if ($_SESSION['prefsStyleSet'] == "BA") $table_flight_tbody .= $row_entries['brewStyle'];
-									else $table_flight_tbody .= $style." ".$row_entries['brewStyle']."<em><br>".style_convert($row_entries['brewCategorySort'],1)."</em>";
+									else $table_flight_tbody .= $style." ".$row_entries['brewStyle']."<em><br>".style_convert($row_entries['brewCategorySort'],1,$base_url)."</em>";
 									$table_flight_tbody .= "</td>";
 
-									$special = style_convert($style_special,"9");
+									$special = style_convert($style_special,"9",$base_url);
 									$special = explode("^",$special);
 
 									$table_flight_tbody .= "<td>";
@@ -318,10 +318,10 @@ if ($go == "all_entry_info") {
 
 								$table_flight_tbody .= "<td>";
 								if ($_SESSION['prefsStyleSet'] == "BA") $table_flight_tbody .= $row_entries['brewStyle'];
-								else $table_flight_tbody .= $style." ".$row_entries['brewStyle']."<em><br>".style_convert($row_entries['brewCategorySort'],1)."</em>";
+								else $table_flight_tbody .= $style." ".$row_entries['brewStyle']."<em><br>".style_convert($row_entries['brewCategorySort'],1,$base_url)."</em>";
 								$table_flight_tbody .= "</td>";
 
-								$special = style_convert($style_special,"9");
+								$special = style_convert($style_special,"9",$base_url);
 								$special = explode("^",$special);
 								$table_flight_tbody .= "<td>";
 								if ((!empty($row_entries['brewInfo'])) && ((isset($special[4])) && ($special[4] == "1"))) $table_flight_tbody .= "<p>".str_replace("^","<br>",$row_entries['brewInfo'])."</p>";
@@ -486,7 +486,7 @@ if ($go == "mini_bos") {
 
 			$style = style_number_const($row_entries_mini['brewCategorySort'],$row_entries_mini['brewSubCategory'],$_SESSION['style_set_display_separator'],0);
 			$style_special = $row_entries_mini['brewCategorySort']."^".$row_entries_mini['brewSubCategory']."^".$_SESSION['prefsStyleSet'];
-			$special = style_convert($style_special,"9");
+			$special = style_convert($style_special,"9",$base_url);
 			$special = explode("^",$special);
 
 			$table_flight_tbody .= "<tr>";
@@ -501,7 +501,7 @@ if ($go == "mini_bos") {
 
 			$table_flight_tbody .= "<td>";
 			if ($_SESSION['prefsStyleSet'] == "BA") $table_flight_tbody .= $row_entries_mini['brewStyle'];
-			else $table_flight_tbody .= $style." ".$row_entries_mini['brewStyle']."<em><br>".style_convert($row_entries_mini['brewCategorySort'],1)."</em>"; 
+			else $table_flight_tbody .= $style." ".$row_entries_mini['brewStyle']."<em><br>".style_convert($row_entries_mini['brewCategorySort'],1,$base_url)."</em>"; 
 			$table_flight_tbody .= "</td>";
 
 			$table_flight_tbody .= "<td>";
@@ -645,11 +645,11 @@ if ($go == "judging_scores_bos") {
 
 						$table_flight_tbody .= "<td>";
 						if ($_SESSION['prefsStyleSet'] == "BA") $table_flight_tbody .= $row_bos['brewStyle'];
-						else $table_flight_tbody .= $style." ".$row_bos['brewStyle']."<em><br>".style_convert($row_bos['brewCategorySort'],1)."</em>";
+						else $table_flight_tbody .= $style." ".$row_bos['brewStyle']."<em><br>".style_convert($row_bos['brewCategorySort'],1,$base_url)."</em>";
 						$table_flight_tbody .= "</td>";
 
 						$table_flight_tbody .= "<td>";
-						$special = style_convert($style_special,"9");
+						$special = style_convert($style_special,"9",$base_url);
 						$special = explode("^",$special);
 
 						if (($row_bos['brewInfo'] != "") && ($special[4] == "1")) {
@@ -825,11 +825,11 @@ elseif (($go != "judging_scores_bos") && ($go != "mini_bos") && ($go != "all_ent
 									$table_flight_tbody .= "</td>";
 									$table_flight_tbody .= "<td>";
 									if ($_SESSION['prefsStyleSet'] == "BA") $table_flight_tbody .= $row_entries['brewStyle']; 
-									else $table_flight_tbody .= $style." ".$row_entries['brewStyle']."<em><br>".style_convert($row_entries['brewCategorySort'],1)."</em>";
+									else $table_flight_tbody .= $style." ".$row_entries['brewStyle']."<em><br>".style_convert($row_entries['brewCategorySort'],1,$base_url)."</em>";
 									$table_flight_tbody .= "</td>";
 									$table_flight_tbody .= "<td>";
 
-									$special = style_convert($style_special,"9");
+									$special = style_convert($style_special,"9",$base_url);
 									$special = explode("^",$special);
 
 									if (($row_entries['brewInfo'] != "") && ($special[4] == "1")) {
@@ -991,11 +991,11 @@ elseif (($go != "judging_scores_bos") && ($go != "mini_bos") && ($go != "all_ent
 									$table_flight_tbody .= "</td>";
 									$table_flight_tbody .= "<td>";
 									if ($_SESSION['prefsStyleSet'] == "BA") $table_flight_tbody .= $row_entries['brewStyle'];
-									else $table_flight_tbody .= $style." ".$row_entries['brewStyle']."<em><br>".style_convert($row_entries['brewCategorySort'],1)."</em>";
+									else $table_flight_tbody .= $style." ".$row_entries['brewStyle']."<em><br>".style_convert($row_entries['brewCategorySort'],1,$base_url)."</em>";
 									$table_flight_tbody .= "</td>";
 									$table_flight_tbody .= "<td>";
 
-									$special = style_convert($style_special,"9");
+									$special = style_convert($style_special,"9",$base_url);
 									$special = explode("^",$special);
 
 									if (($row_entries['brewInfo'] != "") && ($special[4] == "1")) {
@@ -1184,11 +1184,11 @@ elseif (($go != "judging_scores_bos") && ($go != "mini_bos") && ($go != "all_ent
 										$table_flight_tbody .= "</td>";
 										$table_flight_tbody .= "<td>";
 										if ($_SESSION['prefsStyleSet'] == "BA") $table_flight_tbody .= $row_entries['brewStyle'];
-										else $table_flight_tbody .= $style." ".$row_entries['brewStyle']."<em><br>".style_convert($row_entries['brewCategorySort'],1)."</em>";
+										else $table_flight_tbody .= $style." ".$row_entries['brewStyle']."<em><br>".style_convert($row_entries['brewCategorySort'],1,$base_url)."</em>";
 										$table_flight_tbody .= "</td>";
 										$table_flight_tbody .= "<td>";
 
-										$special = style_convert($style_special,"9");
+										$special = style_convert($style_special,"9",$base_url);
 										$special = explode("^",$special);
 
 											if (($row_entries['brewInfo'] != "") && ($special[4] == "1")) {
@@ -1365,11 +1365,11 @@ elseif (($go != "judging_scores_bos") && ($go != "mini_bos") && ($go != "all_ent
 									$table_flight_tbody .= "</td>";
 									$table_flight_tbody .= "<td>";
 									if ($_SESSION['prefsStyleSet'] == "BA") $table_flight_tbody .= $row_entries['brewStyle'];
-									else $table_flight_tbody .= $style." ".$row_entries['brewStyle']."<em><br>".style_convert($row_entries['brewCategorySort'],1)."</em>";
+									else $table_flight_tbody .= $style." ".$row_entries['brewStyle']."<em><br>".style_convert($row_entries['brewCategorySort'],1,$base_url)."</em>";
 									$table_flight_tbody .= "</td>";
 									$table_flight_tbody .= "<td>";
 
-									$special = style_convert($style_special,"9");
+									$special = style_convert($style_special,"9",$base_url);
 									$special = explode("^",$special);
 
 										if (($row_entries['brewInfo'] != "") && ((isset($special[4])) && ($special[4] == "1"))) {
@@ -1581,11 +1581,11 @@ elseif (($go != "judging_scores_bos") && ($go != "mini_bos") && ($go != "all_ent
 								$table_flight_tbody .= "</td>";
 								$table_flight_tbody .= "<td>";
 								if ($_SESSION['prefsStyleSet'] == "BA") $table_flight_tbody .= $row_entries['brewStyle'];
-								else $table_flight_tbody .= $style." ".$row_entries['brewStyle']."<em><br>".style_convert($row_entries['brewCategorySort'],1)."</em>";
+								else $table_flight_tbody .= $style." ".$row_entries['brewStyle']."<em><br>".style_convert($row_entries['brewCategorySort'],1,$base_url)."</em>";
 								$table_flight_tbody .= "</td>";
 								$table_flight_tbody .= "<td>";
 
-								$special = style_convert($style_special,"9");
+								$special = style_convert($style_special,"9",$base_url);
 								$special = explode("^",$special);
 
 									if (($row_entries['brewInfo'] != "") && ($special[4] == "1")) {

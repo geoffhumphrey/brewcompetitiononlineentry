@@ -90,7 +90,7 @@ else $brewing_paid = "";
 // Style name
 if ($brewing_info['brewCategory'] < $category_end) {
   $brewing_info['styleName'] = $brewing_info['brewStyle'];
- 	$brewing_info['styleCat'] = style_convert($brewing_info['brewCategory'],1);
+ 	$brewing_info['styleCat'] = style_convert($brewing_info['brewCategory'],1,$base_url);
 }
 
 else $brewing_info['styleName'] = $brewing_info['brewStyle'];

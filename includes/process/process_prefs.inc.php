@@ -5,6 +5,12 @@
  *              "preferences" table.
  */
 
+/*
+if (HOSTED) $styles_db_table = "bcoem_shared_styles";
+else
+*/
+$styles_db_table = $prefix."styles";
+
 if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) && ((isset($_SESSION['userLevel'])) && ($_SESSION['userLevel'] == 0))) || ($section == "setup"))) {
 
 	$errors = FALSE;
@@ -61,7 +67,6 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 		
 	$update_table = $prefix."preferences";
 
-	if (!isset($_POST['prefsSelectedStyles'])) $_POST['prefsSelectedStyles'] = NULL;
 	if (!isset($_POST['prefsCompLogoSize'])) $_POST['prefsCompLogoSize'] = NULL;
 	if (!isset($_POST['prefsBOSMead'])) $_POST['prefsBOSMead'] = NULL;
 	if (!isset($_POST['prefsBOSCider'])) $_POST['prefsBOSCider'] = NULL;
@@ -86,7 +91,6 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 		'prefsGoogleAccount' => blank_to_null($prefsGoogleAccount),
 		'prefsSponsors' => sterilize($_POST['prefsSponsors']),
 		'prefsSponsorLogos' => sterilize($_POST['prefsSponsorLogos']),
-		'prefsSelectedStyles' => blank_to_null(sterilize($_POST['prefsSelectedStyles'])),
 		'prefsCompLogoSize' => blank_to_null(sterilize($_POST['prefsCompLogoSize'])),
 		'prefsDisplayWinners' => sterilize($_POST['prefsDisplayWinners']),
 		'prefsWinnerDelay' => $prefsWinnerDelay,
@@ -159,11 +163,16 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
             	
             	if ($prefsStyleSet == "BA") {
             		
-            		$query_style_name = sprintf("SELECT id,brewStyleNum FROM %s WHERE brewStyleOwn='custom' ORDER BY id", $prefix."styles");
+            		// No hosted call since searching for custom styles
+            		$query_style_name = sprintf("SELECT id,brewStyleNum FROM %s WHERE brewStyleOwn='custom' ORDER BY id", $styles_db_table);
 					$style_name = mysqli_query($connection,$query_style_name) or die (mysqli_error($connection));
 					$row_style_name = mysqli_fetch_assoc($style_name);
 
-					$query_style_num = sprintf("SELECT brewStyleNum FROM %s WHERE brewStyleVersion='BA' ORDER BY brewStyleNum DESC LIMIT 1", $prefix."styles");
+					/*
+					if (HOSTED) $query_style_num = sprintf("SELECT brewStyleNum FROM %s WHERE brewStyleVersion='BA' UNION ALL SELECT brewStyleNum FROM %s WHERE brewStyleVersion='BA' ORDER BY brewStyleNum DESC LIMIT 1", $styles_db_table, $prefix."styles");
+					else 
+					*/
+					$query_style_num = sprintf("SELECT brewStyleNum FROM %s WHERE brewStyleVersion='BA' ORDER BY brewStyleNum DESC LIMIT 1", $styles_db_table);
 					$style_num = mysqli_query($connection,$query_style_num) or die (mysqli_error($connection));
 					$row_style_num = mysqli_fetch_assoc($style_num);
 
@@ -444,22 +453,42 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 
 		} // end if ($_POST['prefsPaypalIPN'] == 1)
 
-		// Finally, if the style set has changed, mark all in the chosen style set as active
-		// and deactivate all styles that aren't in the selected style set
+		// Finally, if the style set has changed, add all styles 
+		// in the chosen style set as active.
 		if ($style_set_change) {
 
-			$update_table = $prefix."styles";
-			$data = array('brewStyleActive' => 'N');
-			$db_conn->where ('brewStyleOwn', "bcoe");
-			$result = $db_conn->update ($update_table, $data);
-			if (!$result) {
-				$error_output[] = $db_conn->getLastError();
-				$errors = TRUE;
-			}
+			$update_selected_styles = array();
+
+			/*
+			if (HOSTED) $query_styles_default = sprintf("SELECT id, brewStyle, brewStyleGroup, brewStyleNum, brewStyleVersion FROM `%s` WHERE brewStyleVersion='%s' UNION ALL SELECT id, brewStyle, brewStyleGroup, brewStyleNum, brewStyleVersion FROM `%s` WHERE brewStyleVersion='%s';", $styles_db_table, $prefsStyleSet, $prefix."styles", $prefsStyleSet);
+			else 
+			*/
+			$query_styles_default = sprintf("SELECT id, brewStyle, brewStyleGroup, brewStyleNum, brewStyleVersion FROM %s WHERE brewStyleVersion='%s'", $styles_db_table, $prefsStyleSet);
+			$styles_default = mysqli_query($connection,$query_styles_default);
+			$row_styles_default = mysqli_fetch_assoc($styles_default);
+
+			if ($row_styles_default) {
+
+				do {
+
+					$update_selected_styles[$row_styles_default['id']] = array(
+						'brewStyle' => $row_styles_default['brewStyle'],
+						'brewStyleGroup' => $row_styles_default['brewStyleGroup'],
+						'brewStyleNum' => $row_styles_default['brewStyleNum'],
+						'brewStyleVersion' => $row_styles_default['brewStyleVersion']
+					);
+
+				} while($row_styles_default = mysqli_fetch_assoc($styles_default));
 			
-			$update_table = $prefix."styles";
-			$data = array('brewStyleActive' => 'Y');
-			$db_conn->where ('brewStyleVersion', $prefsStyleSet);
+			}
+
+			$update_selected_styles = json_encode($update_selected_styles);
+
+			$update_table = $prefix."preferences";
+			$data = array(
+				'prefsSelectedStyles' => blank_to_null($update_selected_styles)
+			);
+			$db_conn->where ('id', 1);
 			$result = $db_conn->update ($update_table, $data);
 			if (!$result) {
 				$error_output[] = $db_conn->getLastError();

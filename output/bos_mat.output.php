@@ -142,7 +142,7 @@ if (!empty($a)) {
 						$output .= $row_scores['brewStyle'];
 						$output .= '</h3>';
 						$output .= '<h4>';
-						$output .= '<em>'.style_convert($row_scores['brewCategorySort'],1).'</em>';
+						$output .= '<em>'.style_convert($row_scores['brewCategorySort'],1,$base_url).'</em>';
 						$output .= '</h4>';
 
 					}
@@ -154,7 +154,7 @@ if (!empty($a)) {
 						$output .= '</h3>';
 						$output .= '<h4 style="padding:0 0 5px 0; margin:0;">';
 						if ($_SESSION['prefsWinnerMethod'] == 0) $output .= check_table_name($row_scores['scoreTable'],$judging_tables_db_table);
-						else $output .= ltrim($row_scores['brewCategory'],"0").': '.style_convert($row_scores['brewCategorySort'],1);
+						else $output .= ltrim($row_scores['brewCategory'],"0").': '.style_convert($row_scores['brewCategorySort'],1,$base_url);
 						$output .= '</h4>';
 
 					}

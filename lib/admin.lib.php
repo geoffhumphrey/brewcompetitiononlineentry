@@ -162,11 +162,20 @@ function style_type_info($type,$suffix="default") {
 function score_style_data($value) {
 
 	require(CONFIG.'config.php');
+	require(LANG.'language.lang.php');
 	mysqli_select_db($connection,$database);
 
-	//if ($_SESSION['prefsStyleSet'] != "BA") {
+	/*
+	if (HOSTED) $styles_db_table = "bcoem_shared_styles";
+	else
+	*/
+	$styles_db_table = $prefix."styles";
 
-	$query_styles = sprintf("SELECT brewStyleGroup,brewStyleNum,brewStyle,brewStyleType FROM %s WHERE id='%s'", $prefix."styles", $value);
+	/*
+	if (HOSTED) $query_styles = sprintf("SELECT brewStyleGroup,brewStyleNum,brewStyle,brewStyleType FROM %s WHERE id='%s' UNION ALL SELECT brewStyleGroup,brewStyleNum,brewStyle,brewStyleType FROM %s WHERE id='%s'", $prefix."styles", $value, $styles_db_table, $value);
+	else 
+	*/
+	$query_styles = sprintf("SELECT brewStyleGroup,brewStyleNum,brewStyle,brewStyleType FROM %s WHERE id='%s'", $styles_db_table, $value);
 	$styles = mysqli_query($connection,$query_styles) or die (mysqli_error($connection));
 	$row_styles = mysqli_fetch_assoc($styles);
 
@@ -175,44 +184,6 @@ function score_style_data($value) {
 	$row_styles['brewStyleNum']."^". //1
 	$row_styles['brewStyle']."^". //2
 	$row_styles['brewStyleType']; //3
-/*
-	}
-
-	else {
-
-		include (INCLUDES.'ba_constants.inc.php');
-
-		$value1 = ($value - 1);
-
-		// Custom Styles
-		if ($value > 500) {
-			$query_styles = sprintf("SELECT brewStyleGroup,brewStyleNum,brewStyle,brewStyleType FROM %s WHERE id='%s'", $prefix."styles", $value);
-			$styles = mysqli_query($connection,$query_styles) or die (mysqli_error($connection));
-			$row_styles = mysqli_fetch_assoc($styles);
-
-			$return =
-			$row_styles['brewStyleGroup']."^". //0
-			$row_styles['brewStyleNum']."^". //1
-			$row_styles['brewStyle']."^"; //2
-
-			if ($row_styles['brewStyleType'] == "") $return .= 1; else $return .= $row_styles['brewStyleType'];
-		}
-
-		else {
-
-			$return = $_SESSION['styles']['data'][$value1]['id']."^"; //0
-			$return .= $_SESSION['styles']['data'][$value1]['id']."^"; //1
-			$return .= $_SESSION['styles']['data'][$value1]['name']."^"; //2
-
-			if (in_array($_SESSION['styles']['data'][$value1]['categoryId'],$ba_beer_categories)) $return .= 1; //3
-			if ((in_array($_SESSION['styles']['data'][$value1]['categoryId'],$ba_mead_cider_categories)) && (in_array($_SESSION['styles']['data'][$value1]['id'],$ba_mead))) $return .= 3; //3
-			if ((in_array($_SESSION['styles']['data'][$value1]['categoryId'],$ba_mead_cider_categories)) && (in_array($_SESSION['styles']['data'][$value1]['id'],$ba_cider))) $return .= 2; //3
-
-		}
-
-	}
-
-	*/
 
 	return $return;
 
@@ -324,10 +295,17 @@ function table_choose($section,$go,$action,$filter,$view,$script_name,$method) {
 
 }
 
+// Apparently unused.
 function style_choose($section,$go,$action,$filter,$view,$script_name,$method) {
 
 	require(CONFIG.'config.php');
 	mysqli_select_db($connection,$database);
+
+	/*
+	if (HOSTED) $styles_db_table = "bcoem_shared_styles";
+	else
+	*/
+	$styles_db_table = $prefix."styles";
 
 	$end = $_SESSION['style_set_category_end'];
 
@@ -355,12 +333,16 @@ function style_choose($section,$go,$action,$filter,$view,$script_name,$method) {
 		$row = mysqli_fetch_array($result);
 		
 		if ($row['count'] > 0) { 
-			$style_choose .= '<a '.$class.' style="font-size: 0.9em; padding: 1px;" href="'.$script_name.'?section='.$section.'&go='.$go.'&action='.$action.'&filter='.$num.$suffix.'&view='.$view.'" title="Print '.style_convert($i,"1").'">'.$num.' '.style_convert($i,"1").' ('.$row['count'].' entries)</a>'; 
+			$style_choose .= '<a '.$class.' style="font-size: 0.9em; padding: 1px;" href="'.$script_name.'?section='.$section.'&go='.$go.'&action='.$action.'&filter='.$num.$suffix.'&view='.$view.'" title="Print '.style_convert($i,"1",$base_url).'">'.$num.' '.style_convert($i,"1",$base_url).' ('.$row['count'].' entries)</a>'; 
 		}
 
 	}
 
-	$query_styles = sprintf("SELECT brewStyle,brewStyleGroup FROM %s WHERE brewStyleGroup > %s", $prefix."styles",$end);
+	/*
+	if (HOSTED) $query_styles = sprintf("SELECT brewStyle,brewStyleGroup FROM `%s` WHERE brewStyleGroup > '%s' UNION ALL SELECT brewStyle,brewStyleGroup FROM `%s` WHERE brewStyleGroup > '%s'", $styles_db_table, $end, $prefix."styles", $end);
+	else 
+	*/
+	$query_styles = sprintf("SELECT brewStyle,brewStyleGroup FROM `%s` WHERE brewStyleGroup > '%s'", $prefix."styles",$end);
 	$styles = mysqli_query($connection,$query_styles) or die (mysqli_error($connection));
 	$row_styles = mysqli_fetch_assoc($styles);
 	$totalRows_styles = mysqli_num_rows($styles);
@@ -407,9 +389,19 @@ function orphan_styles() {
 	
 	require(CONFIG.'config.php');
 
+	/*
+	if (HOSTED) $styles_db_table = "bcoem_shared_styles";
+	else
+	*/
+	$styles_db_table = $prefix."styles";
+
 	$end = $_SESSION['style_set_category_end'];
 
-	$query_styles = sprintf("SELECT id,brewStyle,brewStyleType FROM %s WHERE brewStyleGroup >= %s", $prefix."styles",$end);
+	/*
+	if (HOSTED) $query_styles = sprintf("SELECT id,brewStyle,brewStyleType WHERE brewStyleGroup >= %s FROM %s UNION ALL SELECT id,brewStyle,brewStyleType FROM %s WHERE brewStyleGroup >= %s;", $styles_db_table, $end, $prefix."styles", $end);
+	else 
+	*/
+	$query_styles = sprintf("SELECT id,brewStyle,brewStyleType FROM %s WHERE brewStyleGroup >= %s;", $prefix."styles",$end);
 	$styles = mysqli_query($connection,$query_styles) or die (mysqli_error($connection));
 	$row_styles = mysqli_fetch_assoc($styles);
 	$totalRows_styles = mysqli_num_rows($styles);
@@ -890,11 +882,21 @@ function received_entries() {
 	
 	include (CONFIG.'config.php');
 	mysqli_select_db($connection,$database);
+
+	/*
+	if (HOSTED) $styles_db_table = "bcoem_shared_styles";
+	else
+	*/
+	$styles_db_table = $prefix."styles";
 	
 	$style_array = array();
 
-	$query_styles = sprintf("SELECT brewStyle FROM %s WHERE (brewStyleVersion='%s' OR brewStyleOwn='custom')", $prefix."styles",$_SESSION['prefsStyleSet']);
-	$styles = mysqli_query($connection,$query_styles) or die (mysqli_error($connection));
+	/*
+	if (HOSTED) $query_styles = sprintf("SELECT brewStyle FROM %s WHERE (brewStyleVersion='%s' OR brewStyleOwn='custom') UNION ALL SELECT brewStyle FROM %s WHERE (brewStyleVersion='%s' OR brewStyleOwn='custom');", $styles_db_table, $_SESSION['prefsStyleSet'], $prefix."styles", $_SESSION['prefsStyleSet']);
+	else 
+	*/
+	$query_styles = sprintf("SELECT brewStyle FROM %s WHERE (brewStyleVersion='%s' OR brewStyleOwn='custom');", $prefix."styles",$_SESSION['prefsStyleSet']);
+	$styles = mysqli_query($connection,$query_styles);
 	$row_styles = mysqli_fetch_array($styles);
 
 	do { $style_array[] = $row_styles['brewStyle']; } while ($row_styles = mysqli_fetch_array($styles));
@@ -902,7 +904,7 @@ function received_entries() {
 	foreach ($style_array as $style) {
 		$style = mysqli_real_escape_string($connection,$style);
 		$query_entry_count = sprintf("SELECT COUNT(*) as 'count' FROM %s WHERE brewStyle='%s' AND brewReceived='1'", $prefix."brewing", $style);
-		$result = mysqli_query($connection,$query_entry_count) or die (mysqli_error($connection));
+		$result = mysqli_query($connection,$query_entry_count);
 		$row = mysqli_fetch_array($result);
 		if ($row['count'] > 0) $a[] = $style;
 	}
@@ -1173,6 +1175,12 @@ function entry_conflict($bid,$table_styles) {
 	require(CONFIG.'config.php');
 	mysqli_select_db($connection,$database);
 
+	/*
+	if (HOSTED) $styles_db_table = "bcoem_shared_styles";
+	else
+	*/
+	$styles_db_table = $prefix."styles";
+
 	$d = 0;
 
 	if (!empty($table_styles)) {
@@ -1181,6 +1189,10 @@ function entry_conflict($bid,$table_styles) {
 
 		foreach ($b as $style) {
 
+			/*
+			if (HOSTED) $query_style = sprintf("SELECT brewStyleGroup,brewStyleNum FROM %s WHERE id='%s' UNION ALL SELECT brewStyleGroup,brewStyleNum FROM %s WHERE id='%s'", $styles_db_table, $style, $prefix."styles", $style);
+			else 
+			*/
 			$query_style = sprintf("SELECT brewStyleGroup,brewStyleNum FROM %s WHERE id='%s'", $prefix."styles", $style);
 			$style = mysqli_query($connection,$query_style) or die (mysqli_error($connection));
 			$row_style = mysqli_fetch_assoc($style);

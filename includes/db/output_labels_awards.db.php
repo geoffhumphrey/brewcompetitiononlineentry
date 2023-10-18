@@ -1,4 +1,10 @@
 <?php
+/*
+if (HOSTED) $styles_db_table = "bcoem_shared_styles";
+else
+*/
+$styles_db_table = $prefix."styles";
+
 $query_tables = sprintf("SELECT * FROM %s ORDER BY tableNumber",$prefix."judging_tables");
 $tables = mysqli_query($connection,$query_tables) or die (mysqli_error($connection));
 $row_tables = mysqli_fetch_assoc($tables);
@@ -37,7 +43,11 @@ do {
 
 if ($_SESSION['prefsWinnerMethod'] == "1") { // Output by Category
 
-	$query_styles = sprintf("SELECT id,brewStyleGroup FROM %s WHERE (brewStyleVersion='%s' OR brewStyleOwn='custom') ORDER BY brewStyleGroup ASC", $prefix."styles", $_SESSION['prefsStyleSet']);
+	/*
+	if (HOSTED) $query_styles = sprintf("SELECT id,brewStyleGroup FROM %s WHERE (brewStyleVersion='%s' OR brewStyleOwn='custom') ORDER BY brewStyleGroup ASC UNION ALL SELECT id,brewStyleGroup FROM %s WHERE (brewStyleVersion='%s' OR brewStyleOwn='custom') ORDER BY brewStyleGroup ASC;", $styles_db_table, $_SESSION['prefsStyleSet'], $prefix."styles", $_SESSION['prefsStyleSet']);
+	else
+	*/
+	$query_styles = sprintf("SELECT id,brewStyleGroup FROM %s WHERE (brewStyleVersion='%s' OR brewStyleOwn='custom') ORDER BY brewStyleGroup ASC;", $styles_db_table, $_SESSION['prefsStyleSet']);
 	$styles = mysqli_query($connection,$query_styles) or die (mysqli_error($connection));
 	$row_styles = mysqli_fetch_assoc($styles);
 	$totalRows_styles = mysqli_num_rows($styles);
@@ -68,7 +78,7 @@ if ($_SESSION['prefsWinnerMethod'] == "1") { // Output by Category
 			$display_place = display_place($row_scores['scorePlace'],1);
 			$brewer_name = truncate($row_scores['brewerFirstName']." ".$row_scores['brewerLastName'], $character_limit,"...");
 			$entry_name = truncate(trim($row_scores['brewName']), $character_limit,"...");
-			$style = style_convert($row_scores['brewCategorySort'],1);
+			$style = style_convert($row_scores['brewCategorySort'],1,$base_url);
 			$style = truncate($style,$character_limit,"...");
 			$style_name = truncate($row_scores['brewStyle'],$character_limit);
 
@@ -107,7 +117,11 @@ if ($_SESSION['prefsWinnerMethod'] == "1") { // Output by Category
 
 elseif ($_SESSION['prefsWinnerMethod'] == "2") { // Output by sub-category
 
-	$query_styles = sprintf("SELECT id,brewStyleGroup,brewStyleNum,brewStyle FROM %s WHERE (brewStyleVersion='%s' OR brewStyleOwn='custom') ORDER BY brewStyleGroup,brewStyleNum ASC", $prefix."styles", $_SESSION['prefsStyleSet']);
+	/*
+	if (HOSTED) $query_styles = sprintf("SELECT id,brewStyleGroup,brewStyleNum,brewStyle FROM %s WHERE (brewStyleVersion='%s' OR brewStyleOwn='custom') ORDER BY brewStyleGroup,brewStyleNum ASC UNION ALL SELECT id,brewStyleGroup,brewStyleNum,brewStyle FROM %s WHERE (brewStyleVersion='%s' OR brewStyleOwn='custom') ORDER BY brewStyleGroup,brewStyleNum ASC;", $styles_db_table, $_SESSION['prefsStyleSet'], $prefix."styles", $_SESSION['prefsStyleSet']);
+	else
+	*/
+	$query_styles = sprintf("SELECT id,brewStyleGroup,brewStyleNum,brewStyle FROM %s WHERE (brewStyleVersion='%s' OR brewStyleOwn='custom') ORDER BY brewStyleGroup,brewStyleNum ASC;", $styles_db_table, $_SESSION['prefsStyleSet']);
 	$styles = mysqli_query($connection,$query_styles) or die (mysqli_error($connection));
 	$row_styles = mysqli_fetch_assoc($styles);
 	$totalRows_styles = mysqli_num_rows($styles);

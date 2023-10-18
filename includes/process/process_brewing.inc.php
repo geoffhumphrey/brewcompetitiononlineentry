@@ -224,16 +224,18 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 		$styleID = $style[1];
 
 		// Style Name
-		$query_style_name = sprintf("SELECT * FROM %s WHERE (brewStyleVersion='%s' OR brewStyleOwn='custom') AND brewStyleGroup='%s' AND brewStyleNum='%s'",$styles_db_table,$_SESSION['prefsStyleSet'],$styleFix,$style[1]);
+		/*
+		if (HOSTED) $query_style_name = sprintf("SELECT brewStyle, brewStyleCarb, brewStyleSweet, brewStyleStrength, brewStyleType FROM %s WHERE (brewStyleVersion='%s' OR brewStyleOwn='custom') AND brewStyleGroup='%s' AND brewStyleNum='%s' UNION ALL SELECT brewStyle, brewStyleCarb, brewStyleSweet, brewStyleStrength, brewStyleType FROM %s WHERE brewStyleVersion='%s' AND brewStyleGroup='%s' AND brewStyleNum='%s'", $prefix."styles", $_SESSION['prefsStyleSet'], $styleFix, $style[1], "bcoem_shared_styles", $_SESSION['prefsStyleSet'], $styleFix, $style[1]);
+		else 
+		*/
+		$query_style_name = sprintf("SELECT brewStyle, brewStyleCarb, brewStyleSweet, brewStyleStrength, brewStyleType FROM %s WHERE (brewStyleVersion='%s' OR brewStyleOwn='custom') AND brewStyleGroup='%s' AND brewStyleNum='%s'", $prefix."styles", $_SESSION['prefsStyleSet'], $styleFix, $style[1]);
 		$style_name = mysqli_query($connection,$query_style_name) or die (mysqli_error($connection));
 		$row_style_name = mysqli_fetch_assoc($style_name);
+		
 		$styleName = $row_style_name['brewStyle'];
 
 		// Mark as paid if free entry fee
 		if ($_SESSION['contestEntryFee'] == 0) $brewPaid = 1;
-
-		// -------------------------------- Required info --------------------------------
-		// Checked against requirements later
 
 		if (!empty($_POST['brewInfo'])) {
 			$brewInfo = $purifier->purify($_POST['brewInfo']);
@@ -277,21 +279,15 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 
 		if ($style[0] > 34) $styleID = $styleID; else $styleID = $style[1];
 
-		// check if style requires strength, carbonation, sweetness and/or requried info
-		$query_str_carb_sweet = sprintf("SELECT * FROM %s WHERE brewStyleGroup='%s' AND brewStyleNum='%s'", $styles_db_table,$style[0],$style[1]);
-		$str_carb_sweet = mysqli_query($connection,$query_str_carb_sweet) or die (mysqli_error($connection));
-		$row_str_carb_sweet = mysqli_fetch_assoc($str_carb_sweet);
-		$totalRows_str_carb_sweet = mysqli_num_rows($str_carb_sweet);
+		if ($row_style_name) {
 
-		if ($totalRows_str_carb_sweet > 0) {
+			if ((isset($_POST['brewMead1'])) && ($row_style_name['brewStyleCarb'] == 1)) $brewMead1 = filter_var($_POST['brewMead1'],FILTER_SANITIZE_FULL_SPECIAL_CHARS); // Carbonation
 
-			if ((isset($_POST['brewMead1'])) && ($row_str_carb_sweet['brewStyleCarb'] == 1)) $brewMead1 = filter_var($_POST['brewMead1'],FILTER_SANITIZE_FULL_SPECIAL_CHARS); // Carbonation
+			if ((isset($_POST['brewMead2-cider'])) && ($row_style_name['brewStyleSweet'] == 1) && ($row_style_name['brewStyleType'] == 2)) $brewMead2 = filter_var($_POST['brewMead2-cider'],FILTER_SANITIZE_FULL_SPECIAL_CHARS); // Cider Sweetness
 
-			if ((isset($_POST['brewMead2-cider'])) && ($row_str_carb_sweet['brewStyleSweet'] == 1) && ($row_str_carb_sweet['brewStyleType'] == 2)) $brewMead2 = filter_var($_POST['brewMead2-cider'],FILTER_SANITIZE_FULL_SPECIAL_CHARS); // Cider Sweetness
-
-			if ((isset($_POST['brewMead2-mead'])) && ($row_str_carb_sweet['brewStyleSweet'] == 1) && ($row_str_carb_sweet['brewStyleType'] == 3)) $brewMead2 = filter_var($_POST['brewMead2-mead'],FILTER_SANITIZE_FULL_SPECIAL_CHARS); // Mead Sweetness
+			if ((isset($_POST['brewMead2-mead'])) && ($row_style_name['brewStyleSweet'] == 1) && ($row_style_name['brewStyleType'] == 3)) $brewMead2 = filter_var($_POST['brewMead2-mead'],FILTER_SANITIZE_FULL_SPECIAL_CHARS); // Mead Sweetness
 			
-			if ((isset($_POST['brewMead3'])) && ($row_str_carb_sweet['brewStyleStrength'] == 1)) $brewMead3 = filter_var($_POST['brewMead3'],FILTER_SANITIZE_FULL_SPECIAL_CHARS); // Strength
+			if ((isset($_POST['brewMead3'])) && ($row_style_name['brewStyleStrength'] == 1)) $brewMead3 = filter_var($_POST['brewMead3'],FILTER_SANITIZE_FULL_SPECIAL_CHARS); // Strength
 
 		}
 
@@ -310,7 +306,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 
 		if ($row_user['userLevel'] <= 1) {
 
-			$query_brewer = sprintf("SELECT * FROM $brewer_db_table WHERE uid = '%s'", $_POST['brewBrewerID']);
+			$query_brewer = sprintf("SELECT * FROM `%s` WHERE uid = '%s'", $brewer_db_table, $_POST['brewBrewerID']);
 			$brewer = mysqli_query($connection,$query_brewer) or die (mysqli_error($connection));
 			$row_brewer = mysqli_fetch_assoc($brewer);
 
@@ -383,7 +379,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 
 		if ($id == "default") {
 
-			$query_brew_id = "SELECT id FROM $brewing_db_table WHERE brewBrewerID='$brewBrewerID' ORDER BY id DESC LIMIT 1";
+			$query_brew_id = sprintf("SELECT id FROM `%s` WHERE brewBrewerID='%s' ORDER BY id DESC LIMIT 1",$brewing_db_table,$brewBrewerID);
 			$brew_id = mysqli_query($connection,$query_brew_id) or die (mysqli_error($connection));
 			$row_brew_id = mysqli_fetch_assoc($brew_id);
 			$id = $row_brew_id['id'];
@@ -583,25 +579,6 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 			$brewBrewerFirstName = filter_var($_POST['brewBrewerFirstName'],FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 
 		}
-
-		$styleBreak = filter_var($_POST['brewStyle'],FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-		$style = explode('-', $styleBreak);
-		if (preg_match("/^[[:digit:]]+$/",$style[0])) $styleReturn = sprintf('%02d',$style[0])."-".$style[1];
-		else $styleReturn = $style[0]."-".$style[1];
-		$styleTrim = ltrim($style[0], "0");
-
-		if (($style [0] < 10) && (preg_match("/^[[:digit:]]+$/",$style [0]))) $styleFix = "0".$style[0];
-		else $styleFix = $style[0];
-
-		// Get style name from broken parts if BA (currently there are 14 overall BA categories, 34 BJCP 2015, and 28 BJCP 2007)
-		// Custom style overall category will always be greater than 28
-		if ((strpos($_SESSION['prefsStyleSet'],"BA") !== false) && ($style[0] > 28)) $query_style_name = sprintf("SELECT * FROM %s WHERE brewStyleOwn='custom' AND brewStyleGroup='%s' AND brewStyleNum='%s'",$styles_db_table,$styleFix,$style[1]);
-
-		// Get style name from broken parts
-		else $query_style_name = sprintf("SELECT * FROM %s WHERE (brewStyleVersion='%s' OR brewStyleOwn='custom') AND brewStyleGroup='%s' AND brewStyleNum='%s'", $styles_db_table, $_SESSION['prefsStyleSet'], $styleFix, $style[1]);
-		$style_name = mysqli_query($connection,$query_style_name) or die (mysqli_error($connection));
-		$row_style_name = mysqli_fetch_assoc($style_name);
-		$check = $row_style_name['brewStyleOwn'];
 
 		$brewJudgingNumber = strtolower($_POST['brewJudgingNumber']);
 

@@ -1,4 +1,9 @@
 <?php
+/*
+if (HOSTED) $styles_db_table = "bcoem_shared_styles";
+else
+*/
+$styles_db_table = $prefix."styles";
 
 if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] <= 1))) {
 
@@ -39,10 +44,13 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 			if (in_array($row_check_received['id'],$empty_array)) {
 
 				// First, get the id of the entry's style category/subcategory
-				$query_style = sprintf("SELECT id FROM %s WHERE (brewStyleVersion='%s' OR brewStyleOwn='custom') AND brewStyleGroup='%s' AND brewStyleNum='%s'",$styles_db_table,$_SESSION['prefsStyleSet'],$row_check_received['brewCategorySort'],$row_check_received['brewSubCategory']);
+				/*
+				if (HOSTED) $query_style = sprintf("SELECT id FROM %s WHERE (brewStyleVersion='%s' OR brewStyleOwn='custom') AND brewStyleGroup='%s' AND brewStyleNum='%s' UNION ALL SELECT id FROM %s WHERE (brewStyleVersion='%s' OR brewStyleOwn='custom') AND brewStyleGroup='%s' AND brewStyleNum='%s';", $styles_db_table, $_SESSION['prefsStyleSet'], $row_check_received['brewCategorySort'], $row_check_received['brewSubCategory'], $prefix."styles", $_SESSION['prefsStyleSet'], $row_check_received['brewCategorySort'], $row_check_received['brewSubCategory']);
+				else 
+				*/
+				$query_style = sprintf("SELECT id FROM %s WHERE (brewStyleVersion='%s' OR brewStyleOwn='custom') AND brewStyleGroup='%s' AND brewStyleNum='%s';", $styles_db_table, $_SESSION['prefsStyleSet'], $row_check_received['brewCategorySort'], $row_check_received['brewSubCategory']);
 				$style = mysqli_query($connection,$query_style) or die (mysqli_error($connection));
 				$row_style = mysqli_fetch_assoc($style);
-				//echo $query_style."<br>";
 
 				// Then, get the id of the user defined judging table
 				$query_table = sprintf("SELECT id FROM %s WHERE FIND_IN_SET('%s',tableStyles) > 0",$judging_tables_db_table,$row_style['id']);
@@ -77,17 +85,19 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 		if (!in_array($row_check_received['id'],$flight_array)) {
 
 			// First, get the id of the entry's style category/subcategory
-			$query_style = sprintf("SELECT id FROM %s WHERE (brewStyleVersion='%s' OR brewStyleOwn='custom') AND brewStyleGroup='%s' AND brewStyleNum='%s'",$styles_db_table,$_SESSION['prefsStyleSet'],$row_check_received['brewCategorySort'],$row_check_received['brewSubCategory']);
+			/*
+			if (HOSTED) $query_style = sprintf("SELECT id FROM %s WHERE (brewStyleVersion='%s' OR brewStyleOwn='custom') AND brewStyleGroup='%s' AND brewStyleNum='%s' UNION ALL SELECT id FROM %s WHERE (brewStyleVersion='%s' OR brewStyleOwn='custom') AND brewStyleGroup='%s' AND brewStyleNum='%s';", $styles_db_table, $_SESSION['prefsStyleSet'], $row_check_received['brewCategorySort'], $row_check_received['brewSubCategory'], $prefix."styles", $_SESSION['prefsStyleSet'], $row_check_received['brewCategorySort'], $row_check_received['brewSubCategory']);
+			else
+			*/
+			$query_style = sprintf("SELECT id FROM %s WHERE (brewStyleVersion='%s' OR brewStyleOwn='custom') AND brewStyleGroup='%s' AND brewStyleNum='%s'", $styles_db_table, $_SESSION['prefsStyleSet'], $row_check_received['brewCategorySort'], $row_check_received['brewSubCategory']);
 			$style = mysqli_query($connection,$query_style) or die (mysqli_error($connection));
 			$row_style = mysqli_fetch_assoc($style);
-			//echo $query_style."<br>";
 
 			// Then, get the id of the user defined judging table
 			$query_table = sprintf("SELECT id FROM %s WHERE FIND_IN_SET('%s',tableStyles) > 0",$judging_tables_db_table,$row_style['id']);
 			$table = mysqli_query($connection,$query_table) or die (mysqli_error($connection));
 			$row_table = mysqli_fetch_assoc($table);
 			$totalRows_table = mysqli_num_rows($table);
-			//echo $query_table."<br>";
 
 			if ($totalRows_table > 0) {
 				

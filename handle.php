@@ -53,7 +53,8 @@ elseif ((isset($_SESSION['loginUsername'])) && ($_SESSION['userLevel'] == "0") &
 	*/
 	
 	// Security check variables
-	$max_size = 5000000; // Limit size of upload to 5MB
+	if (HOSTED) $max_size = 4000000;
+	else $max_size = 5000000; // Limit size of upload to 5MB
 	$file_mimes = array('image/jpeg','image/jpg','image/gif','image/png','application/pdf'); // Allowable file mime types
 	$file_exts  = array('.jpeg','.jpg','.png','.gif','.pdf'); // Allowable file extensions
 		

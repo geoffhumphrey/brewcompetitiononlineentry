@@ -168,7 +168,12 @@ if ($totalRows_log > 0) {
 						
 				if (in_array($row_log['id'], $evals)) {
 
+					/*
+					if (HOSTED) $query_style = sprintf("SELECT id,brewStyleType FROM %s WHERE brewStyleVersion='%s'AND brewStyleGroup='%s' AND brewStyleNum='%s' UNION ALL SELECT id,brewStyleType FROM %s WHERE brewStyleVersion='%s'AND brewStyleGroup='%s' AND brewStyleNum='%s'", "bcoem_shared_styles", $_SESSION['prefsStyleSet'], $row_log['brewCategorySort'], $row_log['brewSubCategory'], $prefix."styles", $_SESSION['prefsStyleSet'], $row_log['brewCategorySort'], $row_log['brewSubCategory']);
+					else 
+					*/
 					$query_style = sprintf("SELECT id,brewStyleType FROM %s WHERE brewStyleVersion='%s'AND brewStyleGroup='%s' AND brewStyleNum='%s'",$prefix."styles",$_SESSION['prefsStyleSet'],$row_log['brewCategorySort'],$row_log['brewSubCategory']);
+					
 					$style = mysqli_query($connection,$query_style) or die (mysqli_error($connection));
 					$row_style = mysqli_fetch_assoc($style);
 
@@ -549,7 +554,7 @@ if (($totalRows_log > 0) && ($entry_window_open >= 1)) {
 			} );
 		} );
 </script>
-<form name="form1" method="post" action="<?php echo $base_url; ?>output/bottle_label.output.php" target="_blank" class="hide-loader-form-submit">
+<form name="form1" method="post" action="<?php echo $base_url; ?>includes/output.inc.php?section=entry-form-multi" target="_blank" class="hide-loader-form-submit">
 <table class="table table-responsive table-striped table-bordered dataTable" id="sortable">
 <thead>
  <tr>
@@ -582,7 +587,7 @@ if (($totalRows_log > 0) && ($entry_window_open >= 1)) {
 </table>
 <?php if ((!$show_scores) && ($multiple_bottle_ids)) { ?>
 <div style="margin-top: 20px;">
-<input type="submit" id="btn" class="btn btn-primary pull-right hidden-print" value="Print Bottle Labels" disabled data-toggle="popover" data-container="body" data-trigger="hover focus" data-placement="auto right" title="<?php echo $brewer_entries_text_022; ?>" data-content="<?php echo $brewer_entries_text_023; ?>">
+<input type="submit" id="btn" class="btn btn-primary pull-right hidden-print" value="<?php echo $brewer_entries_text_024; ?>" disabled data-toggle="popover" data-container="body" data-trigger="hover focus" data-placement="auto right" title="<?php echo $brewer_entries_text_022; ?>" data-content="<?php echo $brewer_entries_text_023; ?>">
 </div>
 <?php } ?>
 </form>

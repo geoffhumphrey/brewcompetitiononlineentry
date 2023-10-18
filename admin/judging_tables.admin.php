@@ -437,12 +437,12 @@ if (($action == "add") || ($action == "edit")) {
                 $table_styles_available .= "<td><input id=\"".$row_styles['id']."\" type=\"checkbox\" name=\"tableStyles[]\" onClick=\"update_table_total('".$row_styles['id']."');\" value=\"".$row_styles['id']."\" ".$disabled_selected_styles."></td>\n";
 
                 if ($_SESSION['prefsStyleSet'] == "BA") {
-                    $ba_category = style_convert($row_styles['brewStyleGroup'],1);
+                    $ba_category = style_convert($row_styles['brewStyleGroup'],1,$base_url);
                     $table_styles_available .= "<td>".$ba_category."</td><td>".$row_styles['brewStyle'].$style_no_entries.$style_assigned_location."</td>\n";
                 }
                 else {
                     $table_styles_available .= "<td><span class=\"hidden\">".$style_sort."</span>".$style_display."</td>\n";
-                    $table_styles_available .= "<td>".style_convert($row_styles['brewStyleGroup'],1)."</td>\n";
+                    $table_styles_available .= "<td>".style_convert($row_styles['brewStyleGroup'],1,$base_url)."</td>\n";
                     $table_styles_available .= "<td>".$row_styles['brewStyle'].$style_no_entries.$style_assigned_location."</td>\n";
                 }
                 $table_styles_available .= "<td><span id=\"".$row_styles['id']."-total\">".$received_entry_count_style."</span></td>\n";

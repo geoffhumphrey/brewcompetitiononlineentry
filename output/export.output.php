@@ -1,8 +1,7 @@
 <?php
-ini_set('display_errors', 1); // Change to 0 for prod; change to 1 for testing.
-ini_set('display_startup_errors', 1); // Change to 0 for prod; change to 1 for testing.
-error_reporting(1); // Change to error_reporting(0) for prod; change to E_ALL for testing.
-
+ini_set('display_errors', 0); // Change to 0 for prod; change to 1 for testing.
+ini_set('display_startup_errors', 0); // Change to 0 for prod; change to 1 for testing.
+error_reporting(0); // Change to error_reporting(0) for prod; change to E_ALL for testing.
 
 /**
  * Module: export.output.php
@@ -795,8 +794,8 @@ if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($en
                             $brewerJudgeCider,
                             strtoupper(strtr($row_sql['brewerJudgeID'],$bjcp_num_replace)),
                             $judge_avail,
-                            style_convert($row_sql['brewerJudgeLikes'],'6'),
-                            style_convert($row_sql['brewerJudgeDislikes'],'6'),
+                            style_convert($row_sql['brewerJudgeLikes'],'6',$base_url),
+                            style_convert($row_sql['brewerJudgeDislikes'],'6',$base_url),
                             $judge_entries
                         );
 
@@ -966,8 +965,8 @@ if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($en
                     judge_entries($row_sql['uid'],0),
                     $assignment,$row_sql['brewerJudgeID'],
                     str_replace(",",", ",$row_sql['brewerJudgeRank']),
-                    style_convert($row_sql['brewerJudgeLikes'],'6'),
-                    style_convert($row_sql['brewerJudgeDislikes'],'6')
+                    style_convert($row_sql['brewerJudgeLikes'],'6',$base_url),
+                    style_convert($row_sql['brewerJudgeDislikes'],'6',$base_url)
                 );
 
                 else $a[] = array(
@@ -987,8 +986,8 @@ if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($en
                     str_replace(",",", ",$row_sql['brewerJudgeRank']),
                     $brewerJudgeMead,
                     $brewerJudgeCider,
-                    style_convert($row_sql['brewerJudgeLikes'],'6'),
-                    style_convert($row_sql['brewerJudgeDislikes'],'6')
+                    style_convert($row_sql['brewerJudgeLikes'],'6',$base_url),
+                    style_convert($row_sql['brewerJudgeDislikes'],'6',$base_url)
                 );
 
             } while ($row_sql = mysqli_fetch_assoc($sql));
@@ -1345,7 +1344,7 @@ if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($en
                                             $title = sprintf("%s (%s %s)",$ba_category_names[$style],$row_entry_count['count'],$entries);
                                         }
 
-                                        else $title = sprintf("%s: %s (%s %s)",$style,style_convert($style,"1"),$row_entry_count['count'],$entries);
+                                        else $title = sprintf("%s: %s (%s %s)",$style,style_convert($style,"1",$base_url),$row_entry_count['count'],$entries);
                                         $title_table = new easyTable($pdf,1);
                                         $title_table->easyCell($title, 'font-size:16; font-style:B; font-color:#000000;');
                                         $title_table->printRow();
@@ -1771,7 +1770,7 @@ if (($admin_role) || ((($judging_past == 0) && ($registration_open == 2) && ($en
                                         $html .= '<h2>'.$ba_category_names[$style].' ('.$row_entry_count['count'].' '.$entries.')</h2>';
                                     }
 
-                                    else $html .= '<h2>Style '.$style_trimmed.': '.style_convert($style,"1").' ('.$row_entry_count['count'].' '.$entries.')</h2>';
+                                    else $html .= '<h2>Style '.$style_trimmed.': '.style_convert($style,"1",$base_url).' ('.$row_entry_count['count'].' '.$entries.')</h2>';
 
                                     $html .= '<table border="1" cellpadding="5" cellspacing="0" width="'.$table_width.'">';
                                     $html .= '<tr>';

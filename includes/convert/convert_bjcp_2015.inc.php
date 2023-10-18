@@ -4,7 +4,17 @@
  * Map ids from 2008 to 2015
  */
 
-$query_style_ids = sprintf("SELECT id,brewStyleGroup,brewStyleNum,brewStyleVersion FROM %s WHERE brewStyleVersion='BJCP2008' OR brewStyleVersion='BJCP2015' ORDER BY brewStyleVersion,id ASC", $prefix."styles");
+/*
+if (HOSTED) $styles_db_table = "bcoem_shared_styles";
+else
+*/
+$styles_db_table = $prefix."styles";
+
+/*
+if (HOSTED) $query_style_ids = sprintf("SELECT id,brewStyleGroup,brewStyleNum,brewStyleVersion FROM `%s` WHERE brewStyleVersion='BJCP2008' OR brewStyleVersion='BJCP2015' UNION ALL SELECT id,brewStyleGroup,brewStyleNum,brewStyleVersion FROM `%s` WHERE brewStyleVersion='BJCP2008' OR brewStyleVersion='BJCP2015' ORDER BY brewStyleVersion,id ASC", $styles_db_table, $prefix."styles");
+else 
+*/
+$query_style_ids = sprintf("SELECT id,brewStyleGroup,brewStyleNum,brewStyleVersion FROM %s WHERE brewStyleVersion='BJCP2008' OR brewStyleVersion='BJCP2015' ORDER BY brewStyleVersion,id ASC", $styles_db_table);
 $style_ids = mysqli_query($connection,$query_style_ids) or die (mysqli_error($connection));
 $row_style_ids = mysqli_fetch_assoc($style_ids);
 
@@ -192,7 +202,11 @@ if ($totalRows_tables > 0) {
  * 2008 counterpart was active as well.
  */
 
-$query_styles_active = sprintf("SELECT * FROM %s WHERE brewStyleVersion='BJCP2008' AND brewStyleActive='Y'", $prefix."styles");
+/*
+if (HOSTED) $query_styles_active = sprintf("SELECT * FROM %s WHERE brewStyleVersion='BJCP2008' AND brewStyleActive='Y' UNION ALL SELECT * FROM %s WHERE brewStyleVersion='BJCP2008' AND brewStyleActive='Y'", $styles_db_table, $prefix."styles");
+else 
+*/
+$query_styles_active = sprintf("SELECT * FROM %s WHERE brewStyleVersion='BJCP2008' AND brewStyleActive='Y'", $styles_db_table);
 $styles_active = mysqli_query($connection,$query_styles_active) or die (mysqli_error($connection));
 $row_styles_active = mysqli_fetch_assoc($styles_active);
 $totalRows_styles_active = mysqli_num_rows($styles_active);
@@ -204,6 +218,13 @@ if ($totalRows_styles_active > 0) {
     $data = array('brewStyleActive' => 'N');
     $db_conn->where ('brewStyleVersion', 'BJCP2015');
     $result = $db_conn->update ($update_table, $data);
+
+    if (HOSTED) {
+        $update_table = $styles_db_table;
+        $data = array('brewStyleActive' => 'N');
+        $db_conn->where ('brewStyleVersion', 'BJCP2015');
+        $result = $db_conn->update ($update_table, $data);
+    }
 
     do {
 
@@ -219,6 +240,13 @@ if ($totalRows_styles_active > 0) {
             $data = array('brewStyleActive' => 'Y');
             $db_conn->where ('id', $id);
             $result = $db_conn->update ($update_table, $data);
+
+            if (HOSTED) {
+                $update_table = $styles_db_table;
+                $data = array('brewStyleActive' => 'Y');
+                $db_conn->where ('id', $id);
+                $result = $db_conn->update ($update_table, $data);
+            }
 
         }
 

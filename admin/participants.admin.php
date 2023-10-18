@@ -377,7 +377,7 @@ if ($totalRows_brewer > 0) {
 			if (($dbTable == "default") && ($user_info[1] == 0))	$output_datatables_body .= "Top-Level Admin";
 			elseif (($dbTable == "default") && ($user_info[1] == 1))	$output_datatables_body .= "Admin";
 			else $output_datatables_body .= "Participant";
-			if (($dbTable == "default") && ($user_info[1] == 0)) $output_datatables_body .= " <i class=\"fa fa-sm fa-eye\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"".$brewer_tooltip_display_name." can view Judging Numbers - edit their user level to change.\"></i>";
+			if (($dbTable == "default") && ($user_info[2] == 0)) $output_datatables_body .= " <i class=\"fa fa-sm fa-eye\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"".$brewer_tooltip_display_name." can view Judging Numbers - edit their user level to change.\"></i>";
 			else  $output_datatables_body .= " <i class=\"fa fa-sm fa-eye-slash\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"".$brewer_tooltip_display_name." CANNOT view Judging Numbers - edit their user level to change.\"></i>";
 			$output_datatables_body .= "</td>";
 

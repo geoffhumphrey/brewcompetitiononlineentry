@@ -29,6 +29,12 @@ $other_judge_previous_consensus = array();
 $my_consensus_score = "";
 $evalPosition = "";
 
+/*
+if (HOSTED) $styles_db_table = "bcoem_shared_styles";
+else
+*/
+$styles_db_table = $prefix."styles";
+
 /**
  * Default judge range is 7 points, a commonly accepted
  * range. 
@@ -169,7 +175,15 @@ if ($action == "add") {
   $row_entry_info = mysqli_fetch_assoc($entry_info);
   $totalRows_entry_info = mysqli_num_rows($entry_info);
 
-  if ($totalRows_entry_info > 0) $query_style = sprintf("SELECT * FROM %s WHERE brewStyleGroup = '%s' AND brewStyleNum = '%s' AND brewStyleVersion='%s'", $prefix."styles", $row_entry_info['brewCategorySort'], $row_entry_info['brewSubCategory'], $_SESSION['prefsStyleSet']);
+  if ($totalRows_entry_info > 0) {
+    
+    /*
+    if (HOSTED) $query_style = sprintf("SELECT * FROM %s WHERE brewStyleGroup = '%s' AND brewStyleNum = '%s' AND brewStyleVersion='%s' UNION ALL SELECT * FROM %s WHERE brewStyleGroup = '%s' AND brewStyleNum = '%s' AND brewStyleVersion='%s'", $styles_db_table, $row_entry_info['brewCategorySort'], $row_entry_info['brewSubCategory'], $_SESSION['prefsStyleSet'], $prefix."styles", $row_entry_info['brewCategorySort'], $row_entry_info['brewSubCategory'], $_SESSION['prefsStyleSet']);
+    else
+    */
+    $query_style = sprintf("SELECT * FROM %s WHERE brewStyleGroup = '%s' AND brewStyleNum = '%s' AND brewStyleVersion='%s'", $prefix."styles", $row_entry_info['brewCategorySort'], $row_entry_info['brewSubCategory'], $_SESSION['prefsStyleSet']);
+  }
+
 }
 
 /**
@@ -204,7 +218,13 @@ if ($action == "edit") {
     $row_entry_info = mysqli_fetch_assoc($entry_info);
     $totalRows_entry_info = mysqli_num_rows($entry_info);
     
-    if ($totalRows_entry_info > 0) $query_style = sprintf("SELECT * FROM %s WHERE id='%s'", $prefix."styles", $style);
+    if ($totalRows_entry_info > 0) {
+      /*
+      if (HOSTED) $query_style = sprintf("SELECT * FROM %s WHERE id='%s' UNION ALL SELECT * FROM %s WHERE id='%s'", $styles_db_table, $style, $prefix."styles", $style);
+      else 
+      */
+      $query_style = sprintf("SELECT * FROM %s WHERE id='%s'", $prefix."styles", $style);
+    }
 
   }
 
@@ -299,7 +319,7 @@ if ($entry_found) {
   // Build entry info display
   $entry_info_html .= "<div class=\"alert alert-teal\">";
   $entry_info_html .= "<div class=\"row bcoem-admin-element\">";
-  $entry_info_html .= "<div class=\"col col-lg-3 col-md-4 col-sm-4 col-xs-12\"><strong>".$label_entry_number."</strong></div>";
+  $entry_info_html .= "<div class=\"col col-lg-3 col-md-4 col-sm-4 col-xs-12\"><strong>".$label_number."</strong></div>";
   $entry_info_html .= "<div class=\"col col-lg-9 col-md-8 col-sm-8 col-xs-12\">".$number."</div>";
   $entry_info_html .= "</div>";
 
@@ -410,8 +430,15 @@ if ($entry_found) {
 
   if (!empty($row_entry_info['brewStaffNotes'])) {
     $entry_info_html .= "<div class=\"row bcoem-admin-element\">";
-    $entry_info_html .= "<div class=\"col col-lg-3 col-md-4 col-sm-4 col-xs-12\"><strong>".$label_notes."</strong></div>";
+    $entry_info_html .= "<div class=\"col col-lg-3 col-md-4 col-sm-4 col-xs-12\"><strong>".$label_notes." &ndash; ".$label_staff."</strong></div>";
     $entry_info_html .= "<div class=\"col col-lg-9 col-md-8 col-sm-8 col-xs-12\">".$row_entry_info['brewStaffNotes']."</div>";
+    $entry_info_html .= "</div>";
+  }
+
+  if (!empty($row_entry_info['brewAdminNotes'])) {
+    $entry_info_html .= "<div class=\"row bcoem-admin-element\">";
+    $entry_info_html .= "<div class=\"col col-lg-3 col-md-4 col-sm-4 col-xs-12\"><strong>".$label_notes." &ndash; ".$label_admin_short."</strong></div>";
+    $entry_info_html .= "<div class=\"col col-lg-9 col-md-8 col-sm-8 col-xs-12\">".$row_entry_info['brewAdminNotes']."</div>";
     $entry_info_html .= "</div>";
   }
 

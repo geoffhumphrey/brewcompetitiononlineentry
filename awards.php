@@ -270,10 +270,8 @@ if (($display_to_admin) || ($display_to_public)) {
 
 						else {
 
-							//style_convert($number,$type,$base_url="",$archive="")
-
 							$slides .= "<h1 class=\"r-fit-text tight\">";
-							$slides .= sprintf("%s %s: %s",$label_category,ltrim($style,"0"),style_convert($style,"1"));
+							$slides .= sprintf("%s %s: %s",$label_category,ltrim($style,"0"),style_convert($style,"1",$base_url));
 							$slides .= "</h1>";
 
 						}

@@ -1,4 +1,9 @@
 <?php
+/*
+if (HOSTED) $styles_db_table = "bcoem_shared_styles";
+else
+*/
+$styles_db_table = $prefix."styles";
 
 if ($section == "step7") {
 	$query_prefs_styleset = sprintf("SELECT prefsStyleSet FROM %s WHERE id='1'",$prefix."preferences");
@@ -11,16 +16,17 @@ if ($section == "step7") {
 elseif (isset($_SESSION['prefsStyleSet'])) $styleSet = $_SESSION['prefsStyleSet'];
 else $styleSet = "BJCP2021";
 
-if (HOSTED) $styles_db_table = "bcoem_shared_styles";
-
 $styles_selected = array();
 $styles_selected = json_decode($_SESSION['prefsSelectedStyles'], true);
 
 if ((($section == "admin") && ($go == "preferences")) || ($section == "step3")) {
 
 	// Get custom styles from all style sets
+	/*
 	if (HOSTED) $query_styles_all = sprintf("SELECT id,brewStyleGroup,brewStyleNum,brewStyle,brewStyleVersion,brewStyleOwn FROM %s WHERE brewStyleOwn='custom' ORDER BY brewStyleVersion,brewStyleGroup,brewStyleNum,brewStyle ASC;",$prefix."styles");
-	else $query_styles_all = sprintf("SELECT id,brewStyleGroup,brewStyleNum,brewStyle,brewStyleVersion,brewStyleOwn FROM %s WHERE brewStyleOwn='custom' ORDER BY brewStyleVersion,brewStyleGroup,brewStyleNum,brewStyle ASC;",$styles_db_table);
+	else
+	*/
+	$query_styles_all = sprintf("SELECT id,brewStyleGroup,brewStyleNum,brewStyle,brewStyleVersion,brewStyleOwn FROM %s WHERE brewStyleOwn='custom' ORDER BY brewStyleVersion,brewStyleGroup,brewStyleNum,brewStyle ASC;",$styles_db_table);
 	$styles_all = mysqli_query($connection,$query_styles_all) or die (mysqli_error($connection));
 	$row_styles_all = mysqli_fetch_assoc($styles_all);
 	$totalRows_styles_all = mysqli_num_rows($styles_all);
@@ -44,9 +50,10 @@ if ((($section == "admin") && ($go == "preferences")) || ($section == "step3")) 
 
 }
 
+/*
 if (HOSTED) {
 	
-	$query_styles = sprintf("SELECT * FROM %s UNION ALL SELECT * FROM %s WHERE (brewStyleVersion='%s' OR brewStyleOwn='custom')", $prefix."styles", $styles_db_table, $styleSet);
+	$query_styles = sprintf("SELECT * FROM %s WHERE (brewStyleVersion='%s' OR brewStyleOwn='custom') UNION ALL SELECT * FROM %s WHERE (brewStyleVersion='%s' OR brewStyleOwn='custom')", $styles_db_table, $styleSet, $prefix."styles", $styleSet);
 
 	// Exceptions
 	if (($section == "admin") && ($action == "edit") && ($go != "judging_tables")) {
@@ -55,11 +62,10 @@ if (HOSTED) {
 	}
 
 }
+*/
 
-else {
-	$query_styles = sprintf("SELECT * FROM %s WHERE (brewStyleVersion='%s' OR brewStyleOwn='custom')", $styles_db_table, $styleSet);
-	if (($section == "admin") && ($action == "edit") && ($go != "judging_tables")) $query_styles .= " AND id='$id'";
-}
+$query_styles = sprintf("SELECT * FROM %s WHERE (brewStyleVersion='%s' OR brewStyleOwn='custom')", $styles_db_table, $styleSet);
+if (($section == "admin") && ($action == "edit") && ($go != "judging_tables")) $query_styles .= " AND id='$id'";
 
 if (($view != "default") && ($section == "styles")) {
 	$explodies = explode("-",$view);
@@ -94,8 +100,12 @@ $row_styles = mysqli_fetch_assoc($styles);
 $totalRows_styles = mysqli_num_rows($styles);
 
 if ($section != "list") {
-	if (HOSTED) $query_styles2 = sprintf("SELECT * FROM %s UNION ALL SELECT * FROM %s WHERE (brewStyleVersion='%s' OR brewStyleOwn='custom')", $prefix."styles", $styles_db_table, $styleSet);
-	else $query_styles2 = sprintf("SELECT * FROM %s WHERE (brewStyleVersion='%s' OR brewStyleOwn='custom')",$styles_db_table,$styleSet);
+	
+	/*
+	if (HOSTED) $query_styles2 = sprintf("SELECT * FROM %s WHERE (brewStyleVersion='%s' OR brewStyleOwn='custom') UNION ALL SELECT * FROM %s WHERE (brewStyleVersion='%s' OR brewStyleOwn='custom')", $styles_db_table, $styleSet, $prefix."styles", $styleSet);
+	else
+	*/
+	$query_styles2 = sprintf("SELECT * FROM %s WHERE (brewStyleVersion='%s' OR brewStyleOwn='custom')", $styles_db_table, $styleSet);
 	if (($section == "judge") && ($go == "judge")) $query_styles2 .= " ORDER BY brewStyleType, brewStyleGroup, brewStyleNum ASC";
 	elseif ($section == "brew") $query_styles2 .= " AND brewStyleGroup > '28' AND brewStyleReqSpec = '1'";
 	else {
@@ -105,6 +115,7 @@ if ($section != "list") {
 	$styles2 = mysqli_query($connection,$query_styles2) or die (mysqli_error($connection));
 	$row_styles2 = mysqli_fetch_assoc($styles2);
 	$totalRows_styles2 = mysqli_num_rows($styles2);
+	
 }
 
 ?>

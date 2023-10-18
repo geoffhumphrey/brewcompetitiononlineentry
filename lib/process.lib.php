@@ -259,12 +259,22 @@ function check_sweetness($style,$styleSet) {
 	include (CONFIG.'config.php');
 	mysqli_select_db($connection,$database);
 
+	/*
+	if (HOSTED) $styles_db_table = "bcoem_shared_styles";
+	else
+	*/
+	$styles_db_table = $prefix."styles";
+
 	$style_explodies = explode("-",$style);
 
 	if (preg_match("/^[[:digit:]]+$/",$style_explodies[0])) $style_0 = sprintf('%02d',$style_explodies[0]);
 	else $style_0 = $style_explodies[0];
 
-	$query_brews = sprintf("SELECT brewStyleSweet FROM %s WHERE brewStyleGroup='%s' AND brewStyleNum='%s' AND (brewStyleVersion='%s' OR brewStyleOwn='custom')", $prefix."styles", $style_0, $style_explodies[1], $_SESSION['prefsStyleSet']);
+	/*
+	if (HOSTED) $query_brews = sprintf("SELECT brewStyleSweet FROM %s WHERE brewStyleGroup='%s' AND brewStyleNum='%s' AND (brewStyleVersion='%s' OR brewStyleOwn='custom') UNION ALL SELECT brewStyleSweet FROM %s WHERE brewStyleGroup='%s' AND brewStyleNum='%s' AND (brewStyleVersion='%s' OR brewStyleOwn='custom')", $styles_db_table, $style_0, $style_explodies[1], $_SESSION['prefsStyleSet'], $prefix."styles", $style_0, $style_explodies[1], $_SESSION['prefsStyleSet']);
+	else 
+	*/
+	$query_brews = sprintf("SELECT brewStyleSweet FROM %s WHERE brewStyleGroup='%s' AND brewStyleNum='%s' AND (brewStyleVersion='%s' OR brewStyleOwn='custom')", $styles_db_table, $style_0, $style_explodies[1], $_SESSION['prefsStyleSet']);
 	$brews = mysqli_query($connection,$query_brews) or die (mysqli_error($connection));
 	$row_brews = mysqli_fetch_assoc($brews);
 
@@ -279,12 +289,22 @@ function check_carb($style,$styleSet) {
 	include (CONFIG.'config.php');
 	mysqli_select_db($connection,$database);
 
+	/*
+	if (HOSTED) $styles_db_table = "bcoem_shared_styles";
+	else
+	*/
+	$styles_db_table = $prefix."styles";
+
 	$style_explodies = explode("-",$style);
 
 	if (preg_match("/^[[:digit:]]+$/",$style[0])) $style_0 = sprintf('%02d',$style_explodies[0]);
 	else $style_0 = $style_explodies[0];
 
-	$query_brews = sprintf("SELECT brewStyleCarb FROM %s WHERE brewStyleGroup='%s' AND brewStyleNum='%s' AND (brewStyleVersion='%s' OR brewStyleOwn='custom')", $prefix."styles", $style_0, $style_explodies[1], $_SESSION['prefsStyleSet']);
+	/*
+	if (HOSTED) $query_brews = sprintf("SELECT brewStyleCarb FROM %s WHERE brewStyleGroup='%s' AND brewStyleNum='%s' AND (brewStyleVersion='%s' OR brewStyleOwn='custom') UNION ALL SELECT brewStyleSweet FROM %s WHERE brewStyleGroup='%s' AND brewStyleNum='%s' AND (brewStyleVersion='%s' OR brewStyleOwn='custom')", $styles_db_table, $style_0, $style_explodies[1], $_SESSION['prefsStyleSet'], $prefix."styles", $style_0, $style_explodies[1], $_SESSION['prefsStyleSet']);
+	else 
+	*/
+	$query_brews = sprintf("SELECT brewStyleCarb FROM %s WHERE brewStyleGroup='%s' AND brewStyleNum='%s' AND (brewStyleVersion='%s' OR brewStyleOwn='custom')", $styles_db_table, $style_0, $style_explodies[1], $_SESSION['prefsStyleSet']);
 	$brews = mysqli_query($connection,$query_brews) or die (mysqli_error($connection));
 	$row_brews = mysqli_fetch_assoc($brews);
 
@@ -300,10 +320,20 @@ function check_mead_strength($style,$styleSet) {
 
 	$style_explodies = explode("-",$style);
 
+	/*
+	if (HOSTED) $styles_db_table = "bcoem_shared_styles";
+	else
+	*/
+	$styles_db_table = $prefix."styles";
+
 	if (preg_match("/^[[:digit:]]+$/",$style_explodies[0])) $style_0 = sprintf('%02d',$style_explodies[0]);
 	else $style_0 = $style_explodies[0];
 
-	$query_brews = sprintf("SELECT brewStyleStrength FROM %s WHERE brewStyleGroup = '%s' AND brewStyleNum = '%s' AND (brewStyleVersion='%s' OR brewStyleOwn='custom')", $prefix."styles", $style_0, $style_explodies[1], $styleSet);
+	/*
+	if (HOSTED) $query_brews = sprintf("SELECT brewStyleStrength FROM %s WHERE brewStyleGroup='%s' AND brewStyleNum='%s' AND (brewStyleVersion='%s' OR brewStyleOwn='custom') UNION ALL SELECT brewStyleSweet FROM %s WHERE brewStyleGroup='%s' AND brewStyleNum='%s' AND (brewStyleVersion='%s' OR brewStyleOwn='custom')", $styles_db_table, $style_0, $style_explodies[1], $_SESSION['prefsStyleSet'], $prefix."styles", $style_0, $style_explodies[1], $_SESSION['prefsStyleSet']);
+	else
+	*/
+	$query_brews = sprintf("SELECT brewStyleStrength FROM %s WHERE brewStyleGroup = '%s' AND brewStyleNum = '%s' AND (brewStyleVersion='%s' OR brewStyleOwn='custom')", $styles_db_table, $style_0, $style_explodies[1], $styleSet);
 	$brews = mysqli_query($connection,$query_brews) or die (mysqli_error($connection));
 	$row_brews = mysqli_fetch_assoc($brews);
 

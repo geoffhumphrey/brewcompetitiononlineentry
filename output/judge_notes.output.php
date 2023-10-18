@@ -91,18 +91,21 @@ do {
 </thead>
 <tbody>
 <?php do {
-	$entry_number = sprintf("%06s",$row_log_paid['id']);
-	$judging_number = sprintf("%06s",$row_log_paid['brewJudgingNumber']);
-	$table_info = get_flight_info($row_log_paid['id']);
-	$table_info_all = "";
-	if ($table_info['response'] == "Assigned") {
-		$table_info_all .= $table_info['tableNumber'].": ";
-		$table_info_all .= $table_info['tableName'];
-		if ($_SESSION['jPrefsQueued'] == "N") {
-			$table_info_all .= "<br>".$label_round." ".$table_info['flightRound'];
-			$table_info_all .= "<br>".$label_flight." ".$table_info['flightNumber'];
+
+	if (!empty($row_log_paid['brewPossAllergens'])) {
+
+		$entry_number = sprintf("%06s",$row_log_paid['id']);
+		$judging_number = sprintf("%06s",$row_log_paid['brewJudgingNumber']);
+		$table_info = get_flight_info($row_log_paid['id']);
+		$table_info_all = "";
+		if ($table_info['response'] == "Assigned") {
+			$table_info_all .= $table_info['tableNumber'].": ";
+			$table_info_all .= $table_info['tableName'];
+			if ($_SESSION['jPrefsQueued'] == "N") {
+				$table_info_all .= "<br>".$label_round." ".$table_info['flightRound'];
+				$table_info_all .= "<br>".$label_flight." ".$table_info['flightNumber'];
+			}
 		}
-	}
 
 	?>
 <tr>
@@ -110,9 +113,10 @@ do {
 	<td><?php echo $judging_number; ?></td>
 	<td><?php echo $row_log_paid['brewStyle']; ?></td>
 	<td nowrap="nowrap"><?php echo $table_info_all; ?></td>
-	<td><?php if (!empty($row_log_paid['brewPossAllergens'])) echo $row_log_paid['brewPossAllergens']; ?></td>
+	<td><?php echo $row_log_paid['brewPossAllergens']; ?></td>
 </tr>
-<?php } while ($row_log_paid = mysqli_fetch_assoc($log_paid)); ?>
+<?php }
+} while ($row_log_paid = mysqli_fetch_assoc($log_paid)); ?>
 </tbody>
 </table>
 <?php } else { ?>

@@ -18,6 +18,12 @@ $error_type = 0;
 $error_count = 0;
 $unassign_flag = 0;
 
+/*
+if (HOSTED) $styles_db_table = "bcoem_shared_styles";
+else
+*/
+$styles_db_table = $prefix."styles";
+
 /**
  * Convert all records in the judging_assignments 
  * and judging_flights tables to 1 (planning).
@@ -79,7 +85,11 @@ if (($session_active) && ($_SESSION['userLevel'] <= 2)) {
 				// Query the entries table for all ids for each sub-style
 				foreach (array_unique($a) as $value) {
 
-					$query_styles = sprintf("SELECT brewStyleGroup, brewStyleNum FROM %s WHERE id='%s'", $prefix."styles", $value);
+					/* 
+					if (HOSTED) $query_styles = sprintf("SELECT brewStyleGroup, brewStyleNum FROM %s WHERE id='%s' UNION ALL SELECT brewStyleGroup, brewStyleNum FROM %s WHERE id='%s'", $styles_db_table, $value, $prefix."styles", $value); 
+					else 
+					*/
+					$query_styles = sprintf("SELECT brewStyleGroup, brewStyleNum FROM %s WHERE id='%s'", $styles_db_table, $value);
 					$styles = mysqli_query($connection,$query_styles) or die (mysqli_error($connection));
 					$row_styles = mysqli_fetch_assoc($styles);
 					
@@ -272,7 +282,11 @@ if (($session_active) && ($_SESSION['userLevel'] <= 2)) {
 
 				foreach (array_unique($a) as $value) {
 
-					$query_styles = sprintf("SELECT brewStyleGroup, brewStyleNum FROM %s WHERE id='%s'", $prefix."styles", $value);
+					/*
+					if (HOSTED) $query_styles = sprintf("SELECT brewStyleGroup, brewStyleNum FROM %s WHERE id='%s' UNION ALL SELECT brewStyleGroup, brewStyleNum FROM %s WHERE id='%s'", $styles_db_table, $value, $prefix."styles", $value); 
+					else 
+					*/
+					$query_styles = sprintf("SELECT brewStyleGroup, brewStyleNum FROM %s WHERE id='%s'", $styles_db_table, $value);
 					$styles = mysqli_query($connection,$query_styles) or die (mysqli_error($connection));
 					$row_styles = mysqli_fetch_assoc($styles);
 					

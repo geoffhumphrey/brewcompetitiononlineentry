@@ -11,6 +11,9 @@ $row_substyle_count = mysqli_fetch_assoc($substyle_count);
 $substyle_count_logged = mysqli_query($connection,$query_substyle_count_logged) or die (mysqli_error($connection));
 $row_substyle_count_logged = mysqli_fetch_assoc($substyle_count_logged);
 
+if (HOSTED) $styles_db_table = "bcoem_shared_styles";
+else $styles_db_table = $prefix."styles";
+
 if (($row_substyle_count_logged > 0) || ($row_substyle_count > 0)) {
 
 	$substyle_cat_num = ltrim($substyle[0],"0");
@@ -54,7 +57,11 @@ if (($row_substyle_count_logged > 0) || ($row_substyle_count > 0)) {
 
 		if ($substyle_cat_num > $category_end) {
 
-			$query_style_type = sprintf("SELECT brewStyleType FROM %s WHERE brewStyleGroup='%s'",$styles_db_table,$substyle_cat_num);
+			/*
+			if (HOSTED) $query_style_type = sprintf("SELECT brewStyleType FROM %s WHERE brewStyleGroup='%s' UNION ALL SELECT brewStyleType FROM %s WHERE brewStyleGroup='%s'", $styles_db_table, $substyle_cat_num, $prefix."styles", $substyle_cat_num);
+			else 
+			*/
+			$query_style_type = sprintf("SELECT brewStyleType FROM %s WHERE brewStyleGroup='%s'", $styles_db_table, $substyle_cat_num);
 			$style_type = mysqli_query($connection,$query_style_type) or die (mysqli_error($connection));
 			$row_style_type = mysqli_fetch_assoc($style_type);
 			$count_cider = FALSE;
@@ -109,10 +116,11 @@ if (($row_substyle_count_logged > 0) || ($row_substyle_count > 0)) {
 
 	if ($other_count) {
 
-		if ($row_style_type['brewStyleType'] <= 3) $source = "bcoe";
-		else $source = "custom";
+		if ((!empty($row_style_type['brewStyleType'])) && ($row_style_type['brewStyleType'] <= 3)) $source = "bcoe";
+		else  $source = "custom";
 
-		$style_type = style_type($row_style_type['brewStyleType'],"2",$source);
+		if (empty($row_style_type['brewStyleType'])) $style_type = "other";
+		else $style_type = style_type($row_style_type['brewStyleType'],"2",$source);
 
 		if ($style_type == "Beer") {
 			$style_beer_count[] .= $row_substyle_count['count'];

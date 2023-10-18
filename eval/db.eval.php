@@ -1,5 +1,11 @@
 <?php
-$query_eval = sprintf("SELECT * FROM %s a, %s b WHERE a.id=%s AND a.eid=b.eid", $dbTable, $prefix."judging_scores".$archive_suffix, $id);
+/*
+if (HOSTED) $styles_db_table = "bcoem_shared_styles";
+else
+*/
+$styles_db_table = $prefix."styles";
+
+$query_eval = sprintf("SELECT * FROM %s a, %s b WHERE a.id=%s AND a.eid=b.eid", $dbTable, $prefix."evaluation".$archive_suffix, $id);
 $eval = mysqli_query($connection,$query_eval) or die (mysqli_error($connection));
 $row_eval = mysqli_fetch_assoc($eval);
 
@@ -7,7 +13,11 @@ $query_judge = sprintf("SELECT brewerFirstName,brewerLastName,brewerJudgeID,brew
 $judge = mysqli_query($connection,$query_judge) or die (mysqli_error($connection));
 $row_judge = mysqli_fetch_assoc($judge);
 
-$query_style = sprintf("SELECT brewStyle,brewStyleGroup,brewStyleNum,brewStyleType FROM %s WHERE id=%s",$prefix."styles", $row_eval['evalStyle']);
+/*
+if (HOSTED) $query_style = sprintf("SELECT brewStyle,brewStyleGroup,brewStyleNum,brewStyleType FROM %s WHERE id='%s' UNION ALL SELECT brewStyle,brewStyleGroup,brewStyleNum,brewStyleType FROM %s WHERE id='%s'", $styles_db_table, $row_eval['evalStyle'], $prefix."styles", $row_eval['evalStyle']);
+else 
+*/
+$query_style = sprintf("SELECT brewStyle,brewStyleGroup,brewStyleNum,brewStyleType FROM %s WHERE id=%s", $styles_db_table, $row_eval['evalStyle']);
 $style = mysqli_query($connection,$query_style) or die (mysqli_error($connection));
 $row_style = mysqli_fetch_assoc($style);
 

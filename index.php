@@ -203,6 +203,7 @@ else $_SESSION['token'] = bin2hex(openssl_random_pseudo_bytes(32));
 
 <!-- ALERTS -->
 <div class="<?php echo $container_main; ?> bcoem-warning-container">
+    
     <?php
     
     if ((!empty($_SESSION['error_output'])) || (!empty($error_output))) {
@@ -228,11 +229,13 @@ else $_SESSION['token'] = bin2hex(openssl_random_pseudo_bytes(32));
         echo "</ul>";
         echo "</div>";
         echo "</div>";
+        
     }
 
     include (SECTIONS.'alerts.sec.php'); 
 
     ?>
+
 </div><!-- ./container -->
 <!-- ./ALERTS -->
 
@@ -405,7 +408,7 @@ echo $output_query_count;
 <?php 
 session_write_close(); 
 if ($logged_in) {
-$session_end_seconds = (time() + $session_expire_after_seconds);
+$session_end_seconds = (time() + ($session_expire_after * 60));
 $session_end = date('Y-m-d H:i:s',$session_end_seconds);
 if (!empty($error_output)) $_SESSION['error_output'] = $error_output;
 ?>

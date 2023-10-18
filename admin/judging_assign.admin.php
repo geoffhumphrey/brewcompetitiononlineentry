@@ -74,9 +74,19 @@ $table_styles = explode(",",$row_tables_edit['tableStyles']);
 $co_brewers_table = array();
 $industry_affliations = array();
 
+/*
+if (HOSTED) $styles_db_table = "bcoem_shared_styles";
+else
+*/
+$styles_db_table = $prefix."styles";
+
 foreach ($table_styles as $table_style) {
 
-  $query_style = sprintf("SELECT brewStyleGroup,brewStyleNum FROM %s WHERE id='%s'", $prefix."styles", $table_style);
+  /*
+  if (HOSTED) $query_style = sprintf("SELECT brewStyleGroup,brewStyleNum FROM %s WHERE id='%s' UNION ALL SELECT brewStyleGroup,brewStyleNum FROM %s WHERE id='%s'", $prefix."styles", $table_style, $styles_db_table, $table_style);
+  else
+  */
+  $query_style = sprintf("SELECT brewStyleGroup,brewStyleNum FROM %s WHERE id='%s'", $styles_db_table, $table_style);
   $style = mysqli_query($connection,$query_style) or die (mysqli_error($connection));
   $row_style = mysqli_fetch_assoc($style);
 

@@ -48,9 +48,9 @@
             </ul>
         </li>
         <li>Have a .pdf or .PDF extension.</li>
-        <li>Be <strong>less than</strong> 10 MB in size.</li>
+        <li>Be <strong>less than <?php if (HOSTED) echo "4"; else echo "5"; ?> MB</strong> in size.</li>
     </ul>
-<p>Please note that file names and extensions uploaded with this browser-based function will be converted to lower-case. Files should be less than 10 MB.</p>
+<p>Please note that file names and extensions uploaded with this browser-based function will be converted to lower-case.</p>
 <form id="upload-widget" method="post" action="<?php echo $base_url; ?>handle.php?action=docs" class="dropzone">
 <input type="hidden" name="token" value ="<?php if (isset($_SESSION['token'])) echo $_SESSION['token']; ?>">
 <div class="fallback">

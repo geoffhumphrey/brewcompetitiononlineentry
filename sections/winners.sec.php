@@ -6,55 +6,6 @@
  *
  */
 
-
-/* ---------------- PUBLIC Pages Rebuild Info ---------------------
-
-Beginning with the 1.3.0 release, an effort was begun to separate the programming
-layer from the presentation layer for all scripts with this header.
-
-All Public pages have certain variables in common that build the page:
-
-	$primary_page_info = any information related to the page
-
-	$header1_X = an <h2> header on the page
-	$header2_X = an <h3> subheader on the page
-
-	$page_infoX = the bulk of the information on the page.
-	$print_page_link = the "Print This Page" link
-	$competition_logo = display of the competition's logo
-
-	$labelX = the various labels in a table or on a form
-	$table_headX = all table headers (column names)
-	$table_bodyX = table body info
-	$messageX = various messages to display
-
-	$print_page_link = "<p><span class='icon'><img src='".$base_url."images/printer.png' border='0' alt='Print' title='Print' /></span><a id='modal_window_link' href='".$base_url."output/print.php?section=".$section."&amp;action=print' title='Print'>Print This Page</a></p>";
-	$competition_logo = "<img src='".$base_url."user_images/".$_SESSION['contestLogo']."' width='".$_SESSION['prefsCompLogoSize']."' style='float:right; padding: 5px 0 5px 5px' alt='Competition Logo' title='Competition Logo' />";
-
-Declare all variables empty at the top of the script. Add on later...
-	$primary_page_info = "";
-	$winners_table_header = "";
-	$winners_table_page_info_1 = "";
-	$winners_table_head_2 = "";
-	$winners_table_page_info_2 = "";
-
-	$winners_table_head_1 = "";
-	$winners_table_body_1 = "";
- 
-	etc., etc., etc.
-
- * ---------------- END Rebuild Info --------------------- */
-/*
-$primary_page_info = "";
-$winners_table_header = "";
-$winners_table_page_info_1 = "";
-$winners_table_head_2 = "";
-$winners_table_page_info_2 = "";
-
-$winners_table_head_1 = "";
-$winners_table_body_1 = "";
-*/
-
 $winners_by_table = "";
 $order_by = array();
 
@@ -87,7 +38,11 @@ if ($row_scored_entries['count'] > 0) {
 
 		foreach ($a as $value) {
 
-			$query_styles = sprintf("SELECT brewStyleGroup,brewStyleNum FROM %s WHERE id='%s'", $prefix."styles", $value);
+			/*
+			if (HOSTED) $query_styles = sprintf("SELECT brewStyleGroup,brewStyleNum FROM %s WHERE id='%s' UNION ALL SELECT brewStyleGroup, brewStyleNum FROM %s WHERE id='%s'", "bcoem_shared_styles", $value, $prefix."styles", $value);
+			else 
+			*/
+			$query_styles = sprintf("SELECT brewStyleGroup, brewStyleNum FROM %s WHERE id='%s'", $prefix."styles", $value);
 			$styles = mysqli_query($connection,$query_styles) or die (mysqli_error($connection));
 			$row_styles = mysqli_fetch_assoc($styles);
 			$totalRows_styles = mysqli_num_rows($styles);

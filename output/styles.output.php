@@ -31,7 +31,7 @@ else {
 <h2><?php echo $row_styles['brewStyle']; ?></h2>
 <ul class="list-inline">
     <li><?php echo sprintf("<strong>%s:</strong>",$label_category); ?></li>
-    <li><?php echo style_convert($row_styles['brewStyleGroup'],1);?></li>
+    <li><?php echo style_convert($row_styles['brewStyleGroup'],1,$base_url);?></li>
 </ul>
 <ul class="list-inline">
 	<li><?php echo sprintf("<strong>%s:</strong>",$label_number); ?></li>

@@ -71,7 +71,7 @@ if ((!isset($_SESSION['prefs'.$prefix_session])) || (empty($_SESSION['prefs'.$pr
 		if ($totalRows_prefs > 0) {
 			foreach ($row_prefs as $key => $value) {
 				if ($key != "id") $_SESSION[$key] = $value;
-			}	
+			}
 		}
 
 		if (SINGLE) $query_judging_prefs = sprintf("SELECT * FROM %s WHERE id='%s'", $prefix."judging_preferences",$_SESSION['comp_id']);
@@ -120,6 +120,10 @@ if ((!isset($_SESSION['prefs'.$prefix_session])) || (empty($_SESSION['prefs'.$pr
 
 			include(INCLUDES.'ba_constants.inc.php');
 
+			/*
+			if (HOSTED) $query_ba_style = sprintf("SELECT * FROM `bcoem_shared_styles` WHERE brewStyleVersion='BA' UNION ALL SELECT * FROM `%s` WHERE brewStyleVersion='BA'", $prefix."styles");
+			else 
+			*/
 			$query_ba_style = sprintf("SELECT * FROM %s WHERE brewStyleVersion='BA'", $prefix."styles");
 			$ba_style = mysqli_query($connection,$query_ba_style) or die (mysqli_error($connection));
 			$row_ba_style = mysqli_fetch_assoc($ba_style);
