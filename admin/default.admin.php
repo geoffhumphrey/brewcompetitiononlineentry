@@ -574,6 +574,17 @@ if ((isset($_SESSION['update_summary'])) && (!empty($_SESSION['update_summary'])
                                     </ul>
                                 </div>
                             </div><!-- ./row -->
+                            <div class="row">
+                                <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12 small">
+                                    <strong>Sorting Into Tables</strong>
+                                </div>
+                                <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
+                                    <ul class="list-inline">
+                                        <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=table-cards&amp;go=judging_tables&amp;psort=sorting&amp;view=master-list">Tables and Associated Styles Master List</a></li>
+                                        <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=table-cards&amp;go=judging_tables&amp;psort=sorting">Tables and Associated Styles Placards</a></li>
+                                    </ul>
+                                </div>
+                            </div><!-- ./row -->
                             <div class="row" style="padding: 25px 0px 15px 0px;">
                                 <div class="col col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                     <strong>Print Box Labels (PDF)</strong>

@@ -333,13 +333,12 @@ if (isset($_SESSION['loginUsername'])) {
 					$judging_number = readable_judging_number($row_log['brewCategory'], $row_log['brewJudgingNumber']);
 					$entry_number = sprintf("%06s", $row_log['id']);
 					$style = $row_log['brewCategory'] . $row_log['brewSubCategory'];
-					$style_name = truncate($row_log['brewStyle'], 22);
+					$style_name = truncate($row_log['brewStyle'], 18);
 					$style_name = iconv('UTF-8','ASCII//TRANSLIT//IGNORE',$style_name);  
 					$brewer_name = truncate($row_log['brewBrewerFirstName']." ".$row_log['brewBrewerLastName'],30);
 					$brewer_name = iconv('UTF-8','ASCII//TRANSLIT//IGNORE',$brewer_name);  
 					
-					if ($tb == "default") $bottles = ['#1', '#2', '#3'];
-					if ($tb == "short") $bottles = ['#1', '#2', 'BOS'];
+					$bottles = ['#1', '#2', '#3/BOS'];
 
 					$pdf->SetFont('Arial', '', 9);
 					foreach ($bottles as $b) {
@@ -352,7 +351,7 @@ if (isset($_SESSION['loginUsername'])) {
 
 					if ($tb == "default") {
 
-						$bottles = ['#4', '#5', 'BOS'];
+						$bottles = ['#1', '#2', '#3/BOS'];
 
 						// Print Entrant info
 						$pdf->SetFont('Arial', '', 9);
