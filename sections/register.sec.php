@@ -694,6 +694,15 @@ if ($go == "default") {  ?>
             <div id="ahaProAmText" class="help-block"><?php echo $register_text_033; ?></div>
 		</div>
 	</div><!-- ./Form Group -->
+	<section id="mhp-number">
+	    <div class="form-group">
+	        <label for="brewerMHP" class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label_mhp_number; ?></label>
+	        <div class="col-lg-9 col-md-9 col-sm-8 col-xs-12">
+	            <input class="form-control" name="brewerMHP" id="brewerMHP" type="text" pattern="\d*" placeholder="" data-error="<?php echo $brew_text_019; ?>" value="<?php if (($msg != "default") && (isset($_COOKIE['brewerMHP']))) echo $_COOKIE['brewerMHP']; ?>" placeholder="">
+	            <span class="help-block"><?php echo $brewer_text_053; ?></span>
+	        </div>
+	    </div>
+	</section>
     <?php } // END if (($_SESSION['prefsProEdition'] == 0) ?>
     <?php } // END if ($view == "default") ?>
     <?php if (($_SESSION['prefsProEdition'] == 0) || (($_SESSION['prefsProEdition'] == 1) && (($go == "judge") || ($go == "steward")))) { ?>

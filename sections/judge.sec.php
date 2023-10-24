@@ -33,7 +33,8 @@ include (DB.'styles.db.php');
 <input type="hidden" name="brewerSteward"  value="<?php echo $row_brewer['brewerSteward']; ?>" />
 <input type="hidden" name="brewerJudgeLocation"  value="<?php echo $row_brewer['brewerJudgeLocation']; ?>" />
 <input type="hidden" name="brewerStewardLocation"  value="<?php echo $row_brewer['brewerStewardLocation']; ?>" />
-<input type="hidden" name="brewerAHA"  value="<?php echo $row_brewer['brewerAHA']; ?>" />
+<input type="hidden" name="brewerAHA" value="<?php echo $row_brewer['brewerAHA']; ?>" />
+<input type="hidden" name="brewerMHP" value="<?php echo $row_brewer['brewerMHP']; ?>" />
 <?php if ($go != "judge") { ?>
 <input type="hidden" name="brewerJudgeID"  value="<?php echo $row_brewer['brewerJudgeID']; ?>" />
 <input type="hidden" name="brewerJudgeRank"  value="<?php echo $row_brewer['brewerJudgeRank']; ?>" />

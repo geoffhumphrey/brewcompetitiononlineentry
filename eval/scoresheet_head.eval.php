@@ -91,7 +91,7 @@ if (($nw_cider) && (empty($rank))) $show_rank = FALSE;
     </div>
 </div><!-- ./row (header) -->
 <!-- Entry Info Row -->
-<div class="row" style="padding-top: 10px;">
+<div class="row" style="padding-top: 10px; padding-bottom: 15px;">
     <div class="col col-lg-6 col-md-6 col-sm-6 col-xs-6">
         <!-- judge name, ID, email -->
         <div class="row">
@@ -133,6 +133,12 @@ if (($nw_cider) && (empty($rank))) $show_rank = FALSE;
             ?>
             </div>
         </div><!-- /row for judge rank -->
+        <?php } ?>
+        <?php if (!empty($row_judge['brewerMHP'])) { ?>
+        <div class="row">
+            <div class="col col-lg-2 col-md-3 col-sm-4 col-xs-4"><strong>MHP#:</strong></div>
+            <div class="col col-lg-10 col-md-9 col-sm-8 col-xs-8"><?php echo $row_judge['brewerMHP']; ?></div>
+        </div>
         <?php } ?>
         <div class="row">
             <div class="col col-lg-2 col-md-3 col-sm-4 col-xs-4">

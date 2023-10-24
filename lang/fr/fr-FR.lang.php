@@ -2034,8 +2034,16 @@ $evaluation_info_105 = "Les entrées suivantes présentent des indications contr
 $label_non_judging = "Sessions Hors Jugement";
 
 /**
+ * ------------------------------------------------------------------------
+ * Version 2.6.2 Additions
+ * ------------------------------------------------------------------------
+ */
+$label_mhp_number = "Numéro de Membre du Programme Master Homebrewer";
+$brewer_text_053 = "Le Master Homebrewer Program est une organisation à but non lucratif créée pour promouvoir la maîtrise du brassage amateur.";
+
+/**
  * ----------------------------------------------------------------------------------
- * END TRANSLATIONS
+ * END TRANSLATIONS 
  * ----------------------------------------------------------------------------------
  */
 

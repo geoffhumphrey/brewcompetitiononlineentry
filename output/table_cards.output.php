@@ -14,7 +14,57 @@ if ($totalRows_tables == 0) {
 
 else $table_card_output = TRUE;
 
-if (($table_card_output) && ($psort == "sorting")) { 
+if (($table_card_output) && ($psort == "sorting-placards")) {
+
+    include (DB.'styles.db.php');
+
+    $table_card_output_print = "";
+    $style_beer_count = array();
+    $style_beer_count_logged = array();
+    $style_mead_count = array();
+    $style_mead_count_logged = array();
+    $style_cider_count = array();
+    $style_cider_count_logged = array();
+    $style_mead_cider_count = array();
+    $style_mead_cider_count_logged = array();
+
+    foreach ($style_sets as $style_set_data) {
+        
+        if ($style_set_data['style_set_name'] === $_SESSION['prefsStyleSet']) {
+            
+            $style_set_cat = $style_set_data['style_set_categories'];
+            
+            foreach ($style_set_cat as $key => $value) {
+                
+                include (DB.'entries_by_style.db.php');
+                
+                if ($row_style_count_logged['count'] > 0) {
+
+                    if (is_numeric($key)) $cat_number = sprintf('%02d', $key);
+                    else $cat_number = $key;
+
+                    if ($row_style_count_logged['count'] == 1) $display_entries = $label_entry;
+                    else $display_entries = $label_entries;
+
+                    $table_card_output_print .= "<div class=\"table_card\">";
+                    $table_card_output_print .= "<h1>".$cat_number." - ".$value."</h1>";
+                    $table_card_output_print .= "<h1><small>".$row_style_count_logged['count']." ".$display_entries."</small></h1>";
+                    $table_card_output_print .= "</div>";
+                    $table_card_output_print .= "<div style=\"page-break-after:always;\"></div>";
+
+                } 
+                
+            }
+            
+        }
+
+    }
+
+    if (!empty($table_card_output_print)) echo $table_card_output_print;
+
+}
+
+if (($table_card_output) && ($psort == "sorting-tables")) { 
 
     $table_card_output_print = "";
     

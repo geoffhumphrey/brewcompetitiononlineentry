@@ -3507,6 +3507,13 @@ elseif ($update_running) {
 // Begin version unordered list
 if (!$setup_running) $output_off_sched_update .= "<ul>";
 
+if (!check_update("brewerMHP", $prefix."brewer")) {
+
+	$sql = sprintf("ALTER TABLE `%s` ADD `brewerMHP` int(11) NULL DEFAULT NULL;",$prefix."brewer");
+	$db_conn->rawQuery($sql);
+
+}
+
 if (check_update("prefsSelectedStyles", $prefix."preferences")) {
 	
 	// Change the data type (252 is TEXT/BLOB)

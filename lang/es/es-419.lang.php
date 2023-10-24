@@ -2034,6 +2034,14 @@ $evaluation_info_105 = "Las siguientes entradas tienen indicaciones desiguales d
 $label_non_judging = "Sesiones sin Evaluación";
 
 /**
+ * ------------------------------------------------------------------------
+ * Version 2.6.2 Additions
+ * ------------------------------------------------------------------------
+ */
+$label_mhp_number = "Número de miembro del Programa Master Homebrewer";
+$brewer_text_053 = "El Master Homebrewer Program es una organización sin ánimo de lucro creada para promover el dominio de la elaboración de cerveza entre aficionados.";
+
+/**
  * ----------------------------------------------------------------------------------
  * END TRANSLATIONS
  * ----------------------------------------------------------------------------------

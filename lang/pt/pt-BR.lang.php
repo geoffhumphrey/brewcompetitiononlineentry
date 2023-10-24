@@ -2020,6 +2020,13 @@ $evaluation_info_105 = "Os registros a seguir têm indicações incompatíveis d
 $label_non_judging = "Sessões sem Julgamento";
 
 /**
+ * ------------------------------------------------------------------------
+ * Version 2.6.2 Additions
+ * ------------------------------------------------------------------------
+ */
+$label_mhp_number = "Número de Membro do Programa Master Homebrewer";
+$brewer_text_053 = "O Master Homebrewer Program é uma organização sem fins lucrativos criada para promover o domínio da fabricação amadora de cerveja.";
+/**
  * ----------------------------------------------------------------------------------
  * END TRANSLATIONS
  * ----------------------------------------------------------------------------------

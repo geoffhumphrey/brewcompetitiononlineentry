@@ -235,6 +235,9 @@ if (!empty($_SESSION['brewerAHA'])) {
 	elseif ($_SESSION['brewerAHA'] >= "999999994") $aha_number .= "Pending";
 } else $aha_number .= $label_none_entered;
 
+if (!empty($_SESSION['brewerMHP'])) $mhp_number = $_SESSION['brewerMHP'];
+else $mhp_number .= $label_none_entered;
+
 $pro_am = yes_no($_SESSION['brewerProAm'],$base_url,2);
 
 // Build Judge Info Display
@@ -418,6 +421,11 @@ $account_display .= "</div>";
 */
 
 if ($_SESSION['prefsProEdition'] == 0) {
+
+	$account_display .= "<div class=\"row bcoem-account-info\">";
+	$account_display .= sprintf("<div class=\"".$display_left_cols."\"><strong>%s</strong></div>",$label_mhp_number);
+	$account_display .= sprintf("<div class=\"".$display_right_cols."\"><a class=\"hide-loader\" href=\"https://www.masterhomebrewerprogram.com\" target=\"_blank\" data-toggle=\"tooltip\" title=\"%s\" data-placement=\"right\">".$mhp_number."</a></div>",$brewer_text_053);
+	$account_display .= "</div>";
 
 	if ($show_judge_steward_fields) {
 		$account_display .= "<div class=\"row bcoem-account-info\">";

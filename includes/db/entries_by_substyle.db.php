@@ -11,8 +11,10 @@ $row_substyle_count = mysqli_fetch_assoc($substyle_count);
 $substyle_count_logged = mysqli_query($connection,$query_substyle_count_logged) or die (mysqli_error($connection));
 $row_substyle_count_logged = mysqli_fetch_assoc($substyle_count_logged);
 
+/*
 if (HOSTED) $styles_db_table = "bcoem_shared_styles";
 else $styles_db_table = $prefix."styles";
+*/
 
 if (($row_substyle_count_logged > 0) || ($row_substyle_count > 0)) {
 

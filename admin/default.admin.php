@@ -565,7 +565,8 @@ if ((isset($_SESSION['update_summary'])) && (!empty($_SESSION['update_summary'])
                                     <strong>Sorting Sheets</strong>
                                 </div>
                                 <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
-                                    <ul class="list-inline">
+                                    <ul class="list-unstyled">
+                                        <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=table-cards&amp;go=judging_tables&amp;psort=sorting-placards&amp;view=master-list">Sorting Placards</a></li>
                                         <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=sorting&amp;go=default&amp;filter=default&amp;view=entry">Entry Numbers</a></li>
                                         <?php if ($_SESSION['userAdminObfuscate'] == 0) { ?>
                                         <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=sorting&amp;go=default&amp;filter=default">Judging Numbers</a></li>
@@ -579,9 +580,9 @@ if ((isset($_SESSION['update_summary'])) && (!empty($_SESSION['update_summary'])
                                     <strong>Sorting Into Tables</strong>
                                 </div>
                                 <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
-                                    <ul class="list-inline">
-                                        <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=table-cards&amp;go=judging_tables&amp;psort=sorting&amp;view=master-list">Tables and Associated Styles Master List</a></li>
-                                        <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=table-cards&amp;go=judging_tables&amp;psort=sorting">Tables and Associated Styles Placards</a></li>
+                                    <ul class="list-unstyled">
+                                        <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=table-cards&amp;go=judging_tables&amp;psort=sorting-tables&amp;view=master-list">Tables and Associated Styles Master List</a></li>
+                                        <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=table-cards&amp;go=judging_tables&amp;psort=sorting-tables">Tables and Associated Styles Placards</a></li>
                                     </ul>
                                 </div>
                             </div><!-- ./row -->

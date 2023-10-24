@@ -45,6 +45,7 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 	setcookie("brewerPhone2", $brewerPhone2, 0, "/");
 	setcookie("brewerClubs", $brewerClubs, 0, "/");
 	setcookie("brewerAHA", $brewerAHA, 0, "/");
+	setcookie("brewerMHP", $brewerMHP, 0, "/");
 	setcookie("brewerStaff", sterilize($_POST['brewerStaff']), 0, "/");
 	setcookie("brewerSteward", $brewerSteward, 0, "/");
 	setcookie("brewerJudge", $brewerJudge, 0, "/");
@@ -173,6 +174,7 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 					'brewerStewardLocation' => blank_to_null($location_pref2),
 					'brewerJudgeWaiver' => blank_to_null($brewerJudgeWaiver),
 					'brewerAHA' => blank_to_null($brewerAHA),
+					'brewerMHP' => blank_to_null($brewerMHP),
 					'brewerProAm' => blank_to_null($brewerProAm),
 					'brewerDropOff' => blank_to_null($brewerDropOff),
 					'brewerBreweryName' => blank_to_null($brewerBreweryName),
@@ -336,6 +338,7 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 
 						if (!empty($brewerClubs)) $message .= sprintf("<tr><td valign='top'><strong>%s:</strong></td><td valign='top'>%s</td></tr>",$label_club,$brewerClubs);
 						if (!empty($brewerAHA)) $message .= sprintf("<tr><td valign='top'><strong>%s:</strong></td><td valign='top'>%s</td></tr>",$label_aha_number,$brewerAHA);
+						if (!empty($brewerMHP)) $message .= sprintf("<tr><td valign='top'><strong>%s:</strong></td><td valign='top'>%s</td></tr>",$label_mhp_number,$brewerMHP);
 						$message .= sprintf("<tr><td valign='top'><strong>%s:</strong></td><td valign='top'>%s</td></tr>",$label_staff,$brewerStaff1);
 						$message .= sprintf("<tr><td valign='top'><strong>%s:</strong></td><td valign='top'>%s</td></tr>",$label_judge,$brewerJudge1);
 						$message .= sprintf("<tr><td valign='top'><strong>%s:</strong></td><td valign='top'>%s</td></tr>",$label_steward,$brewerSteward1);

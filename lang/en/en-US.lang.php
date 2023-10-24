@@ -2015,6 +2015,14 @@ $evaluation_info_105 = "The following entries have mismatched Mini-BOS indicatio
 $label_non_judging = "Non-Judging Sessions";
 
 /**
+ * ------------------------------------------------------------------------
+ * Version 2.6.2 Additions
+ * ------------------------------------------------------------------------
+ */
+$label_mhp_number = "Master Homebrewer Program Membership Number";
+$brewer_text_053 = "The Master Homebrewer Program is a nonprofit organization established to promote the mastery of amateur brewing.";
+
+/**
  * ----------------------------------------------------------------------------------
  * END TRANSLATIONS
  * ----------------------------------------------------------------------------------

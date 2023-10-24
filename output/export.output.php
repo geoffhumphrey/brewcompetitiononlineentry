@@ -2943,7 +2943,7 @@ if ((isset($_SESSION['loginUsername'])) && ($section == "export-personal-results
 
     // https://test.brewcomp.com/output/export.output.php?section=personal-results&filter=MHP&id=195
     // $prefix = "bcba_";
-    $query_brewer = sprintf("SELECT DISTINCT a.brewCategory, a.brewSubCategory, a.id AS eid, a.brewStyle, a.brewInfo, a.brewInfoOptional, a.brewComments, b.scoreEntry, b.scorePlace, c.brewerFirstName, c.brewerLastName, c.brewerClubs, c.brewerEmail FROM %s a, %s b, %s c WHERE a.brewBrewerID = '%s' AND b.bid = '%s' AND c.uid = '%s' AND a.id = b.eid", $prefix."brewing", $prefix."judging_scores", $prefix."brewer", $id, $id, $id);
+    $query_brewer = sprintf("SELECT DISTINCT a.brewCategory, a.brewSubCategory, a.id AS eid, a.brewStyle, a.brewInfo, a.brewInfoOptional, a.brewComments, b.scoreEntry, b.scorePlace, c.brewerFirstName, c.brewerLastName, c.brewerClubs, c.brewerEmail, c.brewerMHP FROM %s a, %s b, %s c WHERE a.brewBrewerID = '%s' AND b.bid = '%s' AND c.uid = '%s' AND a.id = b.eid", $prefix."brewing", $prefix."judging_scores", $prefix."brewer", $id, $id, $id);
     $brewer = mysqli_query($connection,$query_brewer);
     $row_brewer = mysqli_fetch_assoc($brewer);
     $totalRows_brewer = mysqli_num_rows($brewer);
@@ -2957,6 +2957,7 @@ if ((isset($_SESSION['loginUsername'])) && ($section == "export-personal-results
     $last_name = "";
     $club = "";
     $email = "";
+    $mhp = "";
 
     // Results data headers
     $results[] = array("Category", "Category Name", "Required Info", "Official Score", "Highest Score", "Place");
@@ -3032,6 +3033,7 @@ if ((isset($_SESSION['loginUsername'])) && ($section == "export-personal-results
                 $last_name = iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', $row_brewer['brewerLastName']);
                 $club = iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', $row_brewer['brewerClubs']);
                 $email = iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', $row_brewer['brewerEmail']);
+                if ($filter == "MHP") $mhp = iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', $row_brewer['brewerMHP']);
             }
 
         } while($row_brewer = mysqli_fetch_assoc($brewer));
@@ -3040,16 +3042,20 @@ if ((isset($_SESSION['loginUsername'])) && ($section == "export-personal-results
         $results[] = array("");
 
         if ($filter == "MHP") {
-            $results[] = array("Expand columns or wrap text. Input your MHP Number under that column header. Also input your gender in that column if you wish.");
+            $results[] = array("Expand columns or wrap text. Also input your gender in that column if you wish.");
             $results[] = array("Remove these last two lines and email to masterhomebrewerprogram@gmail.com");
         }
         
         // Name and associated info header
-        if ($filter == "MHP") $personal[] = array("Last Name", "First Name", "Club", "Email", "Gender", "MHP Number");
-        else $personal[] = array("Last Name", "First Name", "Club", "Email");
-
-        // Name and associated info data
-        $personal[] = array($last_name,$first_name,$club,$email);
+        if ($filter == "MHP") {
+            $personal[] = array("Last Name", "First Name", "Club", "Email", "Gender", "MHP Number");
+            $personal[] = array($last_name,$first_name,$club,$email," ",$mhp);
+        }
+        
+        else {
+            $personal[] = array("Last Name", "First Name", "Club", "Email");
+            $personal[] = array($last_name,$first_name,$club,$email);
+        }        
 
         // Spacer
         $personal[] = array("");

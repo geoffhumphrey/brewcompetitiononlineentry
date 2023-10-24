@@ -1959,6 +1959,14 @@ $label_non_judging = "Zasedání, která se netýkají soudců";
 
 
 /**
+ * ------------------------------------------------------------------------
+ * Version 2.6.2 Additions
+ * ------------------------------------------------------------------------
+ */
+$label_mhp_number = "Číslo člena programu Master Homebrewer";
+$brewer_text_053 = "Program Master Homebrewer je nezisková organizace založená za účelem podpory amatérského vaření piva.";
+
+/**
  * ----------------------------------------------------------------------------------
  * END TRANSLATIONS
  * ----------------------------------------------------------------------------------
