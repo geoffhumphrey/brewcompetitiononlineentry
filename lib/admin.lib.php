@@ -679,7 +679,7 @@ function admin_help($go,$header_output,$action,$filter) {
 		break;
 	}
 
-	$return = '<p><span class="icon"><img src="'.$base_url.'/images/help.png" /></span><a id="modal_window_link" class="hide-loader" href="http://help.brewcompetition.com/files/'.$page.'.html" title="BCOE&amp;M Help for '.$header_output.'">Help</a></p>';
+	$return = '<p><span class="icon"><img src="'.$base_url.'/images/help.png" /></span><a id="modal_window_link" class="hide-loader" href="http://brewingcompetitions.com/'.$page.'.html" title="BCOE&amp;M Help for '.$header_output.'">Help</a></p>';
 	return $return;
 }
 

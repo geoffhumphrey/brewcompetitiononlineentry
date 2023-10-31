@@ -5,7 +5,7 @@ else
 */
 $styles_db_table = $prefix."styles";
 
-$query_eval = sprintf("SELECT * FROM %s a, %s b WHERE a.id=%s AND a.eid=b.eid", $dbTable, $prefix."evaluation".$archive_suffix, $id);
+$query_eval = sprintf("SELECT * FROM %s WHERE id=%s", $dbTable, $id);
 $eval = mysqli_query($connection,$query_eval) or die (mysqli_error($connection));
 $row_eval = mysqli_fetch_assoc($eval);
 

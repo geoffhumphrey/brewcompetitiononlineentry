@@ -22,10 +22,6 @@
  * points. Common spreadsheet applications can open, edit, and save CSV files,
  * which can then be imported into the DB via online applications such as
  * phpMyAdmin, etc.
- *
- * Full directions for input of style set data and an available download of a 
- * CSV template with the correct column headings are can be found here:
- * https://www.brewcompetition.com/add-a-custom-style-set
  * 
  * In a future version, a GUI interface will be provided for building these 
  * necessary data points and mass import of styles. For now, this will provide

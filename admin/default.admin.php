@@ -205,11 +205,11 @@ if ($totalRows_tables > 0) {
 <div class="row bcoem-admin-element">
     <?php if ($hosted_setup) { ?>
     <div class="col col-lg-3 col-md-12 col-sm-12 col-xs-12" style="padding-bottom: 5px;">
-        <a class="btn btn-info btn-block hide-loader" href="http://brewcompetition.com/customize-comp-info" target="_blank" data-toggle="popover" data-trigger="hover" data-placement="auto top" data-container="body" data-title="Reset Competition Information" data-content="Detailed instructions on how to customize your hosted BCOE&amp;M installation including defining registration dates, judging sessions, drop-off window and locations, shipping window and locations, sponsors, styles accepted, etc.">Customize Competition Info <span class="fa fa-info-circle"></span></a>
+        <a class="btn btn-info btn-block hide-loader" href="http://brewingcompetitions.com/customize-comp-info" target="_blank" data-toggle="popover" data-trigger="hover" data-placement="auto top" data-container="body" data-title="Reset Competition Information" data-content="Detailed instructions on how to customize your hosted BCOE&amp;M installation including defining registration dates, judging sessions, drop-off window and locations, shipping window and locations, sponsors, styles accepted, etc.">Customize Competition Info <span class="fa fa-info-circle"></span></a>
     </div>
     <?php } else { ?>
     <div class="col col-lg-3 col-md-12 col-sm-12 col-xs-12" style="padding-bottom: 5px;">
-        <a class="btn btn-info btn-block hide-loader" href="http://brewcompetition.com/reset-comp" target="_blank" data-toggle="popover" data-trigger="hover" data-placement="auto top" data-container="body" data-title="Reset Competition Information" data-content="Detailed instructions on how to reset the site information in preparation for an upcoming competition iteration.">Reset Competition Info <span class="fa fa-info-circle"></span></a>
+        <a class="btn btn-info btn-block hide-loader" href="http://brewingcompetitions.com/reset-comp" target="_blank" data-toggle="popover" data-trigger="hover" data-placement="auto top" data-container="body" data-title="Reset Competition Information" data-content="Detailed instructions on how to reset the site information in preparation for an upcoming competition iteration.">Reset Competition Info <span class="fa fa-info-circle"></span></a>
     </div>
     <?php } ?>
     <?php if (($judging_started) && ($_SESSION['userLevel'] == 0)) { ?>
@@ -537,7 +537,7 @@ if ((isset($_SESSION['update_summary'])) && (!empty($_SESSION['update_summary'])
                                 </div>
                                 <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
                                     <ul class="list-inline">
-                                        <li><a class="hide-loader" href="http://brewcompetition.com/barcode-labels" target="_blank">Download Barcode and Round Judging Number Labels <span class="fa fa-sm fa-external-link"></span></a></li>
+                                        <li><a class="hide-loader" href="http://brewingcompetitions.com/barcode-labels" target="_blank">Download Barcode and Round Judging Number Labels <span class="fa fa-sm fa-external-link"></span></a></li>
                                     </ul>
                                 </div>
                             </div><!-- ./row -->
@@ -2122,7 +2122,7 @@ if ((isset($_SESSION['update_summary'])) && (!empty($_SESSION['update_summary'])
                                 </div>
                                 <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
                                     <ul class="list-unstyled">
-                                        <li><a href="http://brewcompetition.com/customize-comp-info" target="_blank">Competition Information</a></li>
+                                        <li><a href="http://brewingcompetitions.com/customize-comp-info" target="_blank">Competition Information</a></li>
                                     </ul>
                                 </div>
                             </div>
@@ -2133,7 +2133,7 @@ if ((isset($_SESSION['update_summary'])) && (!empty($_SESSION['update_summary'])
                                 </div>
                                 <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
                                     <ul class="list-unstyled">
-                                        <li><a href="https://brewcompetition.com/release-notes" target="_blank">Release Notes, New Features, and Bug Fixes</a></li>
+                                        <li><a href="https://brewingcompetitions.com/release-notes" target="_blank">Release Notes, New Features, and Bug Fixes</a></li>
                                     </ul>
                                 </div>
                             </div>
@@ -2144,18 +2144,18 @@ if ((isset($_SESSION['update_summary'])) && (!empty($_SESSION['update_summary'])
                                 <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
                                     <ul class="list-unstyled">
                                         <?php if (HOSTED) { ?>
-                                        <li><a href="https://brewcompetition.com/customize-competition-info" target="_blank">Customize Competition Information Guide</a></li>
+                                        <li><a href="https://brewingcompetitions.com/customize-competition-info" target="_blank">Customize Competition Information Guide</a></li>
                                         <?php } ?>
-                                        <li><a href="https://brewcompetition.com/comp-org" target="_blank">Competition Organizer's Guide</a></li>
-                                        <li><a href="https://brewcompetition.com/reset-comp" target="_blank">Reset Competition Information Guide</a></li>
-                                        <li><a href="https://brewcompetition.com/paypal-ipn" target="_blank">Implement PayPal Instant Payment Notifications Guide</a></li>
-                                        <li><a href="https://brewcompetition.com/upload-scoresheets" target="_blank">Upload Scanned Judges’ Scoresheets Guide</a></li>
-                                        <li><a href="https://brewcompetition.com/barcode-check-in" target="_blank">Barcode or QR Code Entry Check-In Guide</a></li>
+                                        <li><a href="https://brewingcompetitions.com/comp-org" target="_blank">Competition Organizer's Guide</a></li>
+                                        <li><a href="https://brewingcompetitions.com/reset-comp" target="_blank">Reset Competition Information Guide</a></li>
+                                        <li><a href="https://brewingcompetitions.com/paypal-ipn" target="_blank">Implement PayPal Instant Payment Notifications Guide</a></li>
+                                        <li><a href="https://brewingcompetitions.com/upload-scoresheets" target="_blank">Upload Scanned Judges’ Scoresheets Guide</a></li>
+                                        <li><a href="https://brewingcompetitions.com/barcode-check-in" target="_blank">Barcode or QR Code Entry Check-In Guide</a></li>
                                         <?php if ($_SESSION['prefsEval'] == 1) { ?>
-                                        <li><a href="https://brewcompetition.com/setup-electronic-scoresheets" target="_blank">Setup BCOE&M Electronic Scoresheets Guide</a></li>
-                                        <li><a href="https://brewcompetition.com/judging-with-electronic-scoresheets" target="_blank">Judging with BCOE&M Electronic Scoresheets Guide</a></li>
-                                        <li><a href="https://brewcompetition.com/virtual-judging" target="_blank">Virtual Judging Guide</a></li>
-                                        <li><a href="https://brewcompetition.com/virtual-judging/tips" target="_blank">Virtual Judging - Tips for Judges</a></li>
+                                        <li><a href="https://brewingcompetitions.com/setup-electronic-scoresheets" target="_blank">Setup BCOE&M Electronic Scoresheets Guide</a></li>
+                                        <li><a href="https://brewingcompetitions.com/judging-with-electronic-scoresheets" target="_blank">Judging with BCOE&M Electronic Scoresheets Guide</a></li>
+                                        <li><a href="https://brewingcompetitions.com/virtual-judging" target="_blank">Virtual Judging Guide</a></li>
+                                        <li><a href="https://brewingcompetitions.com/virtual-judging/tips" target="_blank">Virtual Judging - Tips for Judges</a></li>
                                         <?php } ?>
                                     </ul>
                                 </div>
@@ -2230,7 +2230,7 @@ if ((isset($_SESSION['update_summary'])) && (!empty($_SESSION['update_summary'])
                 <h4 class="modal-title"><?php echo $current_version_display; ?> Update Summary</h4>
             </div>
             <div class="modal-body">
-                <p><a class="btn btn-success btn-block" href="https://brewcompetition.com/release-notes" target="_blank">Check Here for Release Notes, New Features, and Bug Fixes</a></p>
+                <p><a class="btn btn-success btn-block" href="https://brewingcompetitions.com/release-notes" target="_blank">Check Here for Release Notes, New Features, and Bug Fixes</a></p>
                 <p>Your installation was updated to <strong>BCOE&amp;M <?php echo $current_version_display; ?></strong> on <?php echo getTimeZoneDateTime($_SESSION['prefsTimeZone'], $row_system['update_date'], $_SESSION['prefsDateFormat'], $_SESSION['prefsTimeFormat'], "long", "date-time"); ?>. The following is a list of updates that were performed.</p>
                 <?php if (isset($_SESSION['update_summary'])) echo $_SESSION['update_summary']; else echo $row_system['update_summary']; ?>
             </div>

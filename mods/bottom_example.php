@@ -22,7 +22,7 @@ BCOE&M uses Font Awesome v4.7 icons throughout the core code. To use Font Awesom
 <h2>Explore Further</h2>
 <p>This is an example of a custom module placed at the bottom of the page with <a class="hide-loader" href="http://getbootstrap.com/" target="_blank">Bootstrap 3</a> markup. In this case, a simple button group with split dropup menu.</p>
 <div class="btn-group dropup" role="group" aria-label="...">
-	<a class="hide-loader" href="http://www.brewcompetition.com" target="_blank" role="button" class="btn btn-default">BCOE&amp;M</a>
+	<a class="hide-loader" href="http://www.brewingcompetitions.com" target="_blank" role="button" class="btn btn-default">BCOE&amp;M</a>
     <a class="hide-loader" href="http://bjcp.org/stylecenter.php" target="_blank" role="button" class="btn btn-default">BJCP Styles</a>
     <a class="hide-loader" href="http://www.homebrewersassociation.org" target="_blank" role="button" class="btn btn-default">American Homebrewers Association</a>
     <div class="btn-group" role="group">

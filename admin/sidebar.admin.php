@@ -226,7 +226,7 @@ if ($logged_in) {
 	else $page_info100 .= "<span class=\"pull-right text-danger\"><span class=\"fa fa-lg fa-times\"></span> Closed</span>";
 	$page_info100 .= "</div>";
 
-	$page_info100 .= "<div class=\"bcoem-sidebar-panel\" style=\"margin-top: 10px;\"><a data-toggle=\"tooltip\" data-placement=\"top\" title=\"Like the software? Buy the author a beer via PayPal!\" class=\"btn btn-small btn-default btn-block\" href=\"https://www.brewcompetition.com/donation\" target=\"_blank\">Donate <span class=\"fa fa-lg fa-cc-paypal\"></span></a></div>";
+	$page_info100 .= "<div class=\"bcoem-sidebar-panel\" style=\"margin-top: 10px;\"><a data-toggle=\"tooltip\" data-placement=\"top\" title=\"Like the software? Buy the author a beer via PayPal!\" class=\"btn btn-small btn-default btn-block\" href=\"https://www.brewingcompetitions.com/donation\" target=\"_blank\">Donate <span class=\"fa fa-lg fa-cc-paypal\"></span></a></div>";
 
 	$page_info100 .= "<div class=\"bcoem-sidebar-panel\" style=\"margin-top: 10px; margin-bottom: 0px;\">";
 	$page_info100 .= "<em><span class=\"text-muted\" style=\"font-size:.75em;\">".$server_environ_sidebar."</span></em>";

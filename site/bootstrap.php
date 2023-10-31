@@ -298,7 +298,7 @@ if ($setup_success) {
 				'id' => '1',
 				'contestName' => 'Baseline Data Installation',
 				'contestHost' => 'Baseline',
-				'contestHostWebsite' => 'http://www.brewcompetition.com',
+				'contestHostWebsite' => 'http://www.brewingcompetitions.com',
 				'contestHostLocation' => 'Denver, CO',
 				'contestRegistrationOpen' => '1438322400',
 				'contestRegistrationDeadline' => '1483253940',

@@ -1,7 +1,7 @@
 Brew Competition Online Entry & Management (BCOE&M)
 Developed by Geoff Humphrey with code contributions by the GitHub community.
 
-Website:     http://www.brewcompetition.com
+Website:     http://www.brewingcompetitions.com
 GitHub:      https://github.com/geoffhumphrey/brewcompetitiononlineentry
 
 Release 2.1.19, 2020-07-28
@@ -35,7 +35,7 @@ LICENSE
 This software is free, open source, and is covered under the General Public
 License (GPL) from the Open Source Initiative. Therefore, you are permitted to
 download the full source code of the software for your own use and customize it
-for your own purposes - see http://www.brewcompetition.com/license for more.
+for your own purposes - see http://www.brewingcompetitions.com/license for more.
 
 Brew Competition Online Entry & Management (BCOE&M) is distributed in the hope
 that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
@@ -44,7 +44,7 @@ warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 It is suggested that you fork the GitHub repository to make integration of your
 code with version releases easier. We are always looking for contributers!
 
-Direct inquiries to http://www.brewcompetition.com/contact
+Direct inquiries to http://www.brewingcompetitions.com/contact
 
 ***********************************************************************************
 PLEASE READ!
@@ -53,7 +53,7 @@ Please read this entire document before attempting to install or use the
 application.
 
 Step-by-step installation instructions are available at
-http://brewcompetition.com/install-instructions.
+http://brewingcompetitions.com/install-instructions.
 
 This software utilizes PHP 5.6.X and MySQL 5.5.X to process and store data.
 
@@ -76,16 +76,16 @@ Microsoft Edge, and Safari render BCOE&M correctly. Internet Explorer is not sup
 Help
 ***********************************************************************************
 Installation Instructions:
-http://brewcompetition.com/install-instructions
+http://brewingcompetitions.com/install-instructions
 
 Upgrade Instructinos:
-http://brewcompetition.com/upgrade-instructions
+http://brewingcompetitions.com/upgrade-instructions
 
 Competition Organization with BCOE&M:
-http://brewcompetition.com/comp-org
+http://brewingcompetitions.com/comp-org
 
 Load Libraries Locally (No CDNs):
-http://brewcompetition.com/local-load
+http://brewingcompetitions.com/local-load
 
 Starting with version 2.0.0, online documentation/help is available within the
 application. Select the question mark icon on the top navigation bar when available.
@@ -93,7 +93,7 @@ In-app help will be augmented and expanded in future releases.
 
 Other info can be found on the GitHub repository page.
 
-Pre-2.0.0 help is available at http://help.brewcompetition.com.
+Pre-2.0.0 help is available at http://help.brewingcompetitions.com.
 
 ***********************************************************************************
 About BCOE&M
@@ -117,7 +117,7 @@ Details on the official GitHub repository:
 https://github.com/geoffhumphrey/brewcompetitiononlineentry
 
 Also check the change log at:
-http://www.brewcompetition.com/change-log
+http://www.brewingcompetitions.com/change-log
 
 ***********************************************************************************
 Fallback DB Install

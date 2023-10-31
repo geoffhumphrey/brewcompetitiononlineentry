@@ -738,6 +738,15 @@ if (check_update("prefsCompOrg", $prefix."preferences")) {
 		$error_count += 1;
 	}
 
+	$update_table = $prefix."preferences";
+	$data = array('prefsProEdition' => 0);
+	$db_conn->where ('id', 1);
+	if ($db_conn->update ($update_table, $data)) $output_off_sched_update .= "<li>Pro Edition column value updated in the preferences table.</li>";
+	else {
+		$output_off_sched_update .= "<li>Pro Edition column value NOT updated in the preferences table. <strong class=\"text-warning\">Error: ".$db_conn->getLastError()."</strong></li>";
+		$error_count += 1;
+	}
+
 }
 
 if ((!check_update("prefsCompOrg", $prefix."preferences")) && (!check_update("prefsProEdition", $prefix."preferences"))) {
@@ -752,9 +761,6 @@ if ((!check_update("prefsCompOrg", $prefix."preferences")) && (!check_update("pr
 		$error_count += 1;
 	}
 
-}
-
-if (check_update("prefsProEdition", $prefix."preferences")) {
 	$update_table = $prefix."preferences";
 	$data = array('prefsProEdition' => 0);
 	$db_conn->where ('id', 1);
@@ -764,11 +770,6 @@ if (check_update("prefsProEdition", $prefix."preferences")) {
 		$error_count += 1;
 	}
 
-}
-
-else {
-	$output_off_sched_update .= "<li class=\"text-danger\">Pro Edition column missing in the preferences table.</li>";
-	$error_count += 1;
 }
 
 $sql = sprintf("ALTER TABLE `%s` CHANGE `prefsStyleSet` `prefsStyleSet` TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL;",$prefix."preferences");

@@ -150,7 +150,7 @@ function bcoem_dashboard_help($content) {
 
 		case "check-in":
 		$bcoem_dashboard_help_title .= "How Do I Check In Received Entries?";
-		$bcoem_dashboard_help_body .= "<p>If your competition is utilizing the <a class=\"hide-loader\" href=\"http://brewcompetition.com/barcode-labels\" target=\"_blank\">barcode option</a> on bottle labels, you can check-in entries using a barcode scanner via the <a href=\"".$base_url."index.php?section=admin&amp;go=checkin\">Check-In Entries with a Barcode Reader/Scanner</a> function.</p>";
+		$bcoem_dashboard_help_body .= "<p>If your competition is utilizing the <a class=\"hide-loader\" href=\"http://brewingcompetitions.com/barcode-labels\" target=\"_blank\">barcode option</a> on bottle labels, you can check-in entries using a barcode scanner via the <a href=\"".$base_url."index.php?section=admin&amp;go=checkin\">Check-In Entries with a Barcode Reader/Scanner</a> function.</p>";
 		$bcoem_dashboard_help_body .= "<p>If your competition is <em>not</em> utilizing the barcode option on bottle labels, you can check-in entries via the <a href=\"".$base_url."index.php?section=admin&amp;go=entries\">Manage Entries</a> function.</p>";
 		break;
 

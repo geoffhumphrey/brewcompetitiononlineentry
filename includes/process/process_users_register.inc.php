@@ -306,7 +306,7 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 					$subject = mb_convert_encoding($subject, "UTF-8");
 
 					$from_email = (!isset($mail_default_from) || trim($mail_default_from) === '') ? "noreply@".$url : $mail_default_from;
-					if ((strpos($url, 'brewcomp.com') !== false) || (strpos($url, 'brewcompetition.com') !== false)) $from_email = "noreply@brewingcompetitions.com";
+					if (strpos($url, 'brewingcompetitions.com') !== false) $from_email = $default_from."@brewingcompetitions.com";
 					$from_email = mb_convert_encoding($from_email, "UTF-8");
 					
 					$from_name = html_entity_decode($_SESSION['contestName']);

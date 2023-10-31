@@ -205,7 +205,7 @@ else $_SESSION['token'] = bin2hex(openssl_random_pseudo_bytes(32));
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </button>
-					<a class="navbar-brand" href="http://www.brewcompetition.com">BCOE&amp;M</a>
+					<a class="navbar-brand" href="http://www.brewingcompetitions.com">BCOE&amp;M</a>
             	</div>
           	</div>
         </nav>

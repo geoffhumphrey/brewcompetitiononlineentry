@@ -115,7 +115,7 @@ $(function() {
                       <li>Use the TAB key to move between fields, to skip a field, or if the cursor does not move after data is input.</li>
                       <li>Use the space bar to place a checkmark in the &quot;Paid&quot; box.</li>
                     </ul>
-                <p>This function was developed to be used with a barcode reader/scanner in conjunction with the Judging Number Barcode Labels and the Judging Number Round Labels <a class="hide-loader" href="http://www.brewcompetition.com/barcode-labels" target="_blank">available for download at brewcompetition.com</a>. See the <a class="hide-loader" href="http://www.brewcompetition.com/barcode-check-in" target="_blank">suggested usage instructions</a>.</p>
+                <p>This function was developed to be used with a barcode reader/scanner in conjunction with the Judging Number Barcode Labels and the Judging Number Round Labels <a class="hide-loader" href="http://www.brewingcompetitions.com/barcode-labels" target="_blank">available for download at brewingcompetitions.com</a>. See the <a class="hide-loader" href="http://www.brewingcompetitions.com/barcode-check-in" target="_blank">suggested usage instructions</a>.</p>
                 <p>However, this function can simply be used as a quick way to check-in entries without the use of the Judging Number Barcode Labels - simply leave the Judging Number field blank to use the system- or user-generated judging number already assigned to the entry.</p>
             </div>
             <div class="modal-footer">

@@ -4073,17 +4073,18 @@ function remove_sensitive_data() {
 	$row_check_user = mysqli_fetch_assoc($check_user);
 
 	$user_array = "";
+	$user_name = $default_to."@brewingcompetitions.com";
 
 	do {
 			if ($row_check_user['userLevel'] > 1) {
 			$random = random_generator(7,2);
 			$updateSQL = sprintf("UPDATE %s
 						 SET
-						 user_name='prost@brewcompetition.com',
+						 user_name='%s',
 						 password='f52dde34d49c8d69ab7fa5ee9ca13c72',
 						 userQuestion='Randomly generated.',
 						 userQuestionAnswer='%s'
-						 WHERE id='%s'",  $prefix."users", $random, $row_check_user['id']);
+						 WHERE id='%s'",  $prefix."users", $user_name, $random, $row_check_user['id']);
 			mysqli_real_escape_string($connection,$updateSQL);
 			$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 			$user_array[] = $row_check_user['id'];
@@ -4134,10 +4135,10 @@ function remove_sensitive_data() {
 							 brewerZip='',
 							 brewerPhone1='303-555-1234',
 							 brewerPhone2='303-555-9876',
-							 brewerEmail='prost@brewcompetition.com',
+							 brewerEmail='%s',
 							 brewerJudgeID='A0000',
 							 brewerClubs='%s'
-							 WHERE id='%s'", $prefix."brewer", $first_name, $last_name, $club_name, $row_check_brewer['id']);
+							 WHERE id='%s'", $prefix."brewer", $first_name, $last_name, $user_name, $club_name, $row_check_brewer['id']);
 						mysqli_real_escape_string($connection,$updateSQL);
 						$result = mysqli_query($connection,$updateSQL) or die (mysqli_error($connection));
 					}

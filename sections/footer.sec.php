@@ -14,7 +14,7 @@ if ((!empty($current_version_display_append)) && (strpos($current_version_displa
 
 if(!empty($_SESSION['contestName'])) $footer .= "<span class=\"hidden-sm hidden-md\">".$_SESSION['contestName']." &ndash; </span>";
 
-$footer .= "<a href=\"http://www.brewcompetition.com\" target=\"_blank\">BCOE&amp;M</a> ";
+$footer .= "<a href=\"http://www.brewingcompetitions.com\" target=\"_blank\">BCOE&amp;M</a> ";
 
 if ((isset($_SESSION['prefsProEdition'])) && ($_SESSION['prefsProEdition'] == 0)) {
 	if (HOSTED) $footer .= $current_version_display." &ndash; ".$label_hosted." ".$label_amateur_comp_edition;

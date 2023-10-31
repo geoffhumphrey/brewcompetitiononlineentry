@@ -447,7 +447,7 @@ $(document).ready(function(){
             <li id="login-modal-enable" <?php if ($section == "login") echo $active_class; ?>><a href="#" role="button" data-toggle="modal" data-target="#loginModal"><?php echo $label_log_in; ?></a></li>
             <li id="login-modal-disable"><a href="<?php echo $base_url; ?>index.php?section=login"><?php echo $label_log_in; ?></a></li>
             <?php } ?>
-            <li class="small visible-xs"><a href="https://brewcompetition.com" target="_blank">v <?php echo $current_version_display; ?></a></li>
+            <li class="small visible-xs"><a href="https://brewingcompetitions.com" target="_blank">v <?php echo $current_version_display; ?></a></li>
             </ul>
 
           </div>

@@ -45,7 +45,7 @@ $password = '';
 /**
  * The following line is the name of your MySQL database you set up already.
  * If you haven't set up the database yet, please refer to
- * http://brewcompetition.com/install-instructions for setup instructions.
+ * http://brewingcompetitions.com/install-instructions for setup instructions.
  */
 
 $database = '';
@@ -70,7 +70,7 @@ mysqli_set_charset($connection,'utf8mb4');
 mysqli_query($connection, "SET NAMES 'utf8mb4';");
 mysqli_query($connection, "SET CHARACTER SET 'utf8mb4';");
 mysqli_query($connection, "SET COLLATION_CONNECTION = 'utf8mb4_unicode_ci';");
-mysqli_query($connection, "SET sql_mode = '';"); // Disable strict mode
+mysqli_query($connection, "SET sql_mode = '';"); 
 
 /**
  * Do not change the following line.
