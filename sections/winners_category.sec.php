@@ -85,7 +85,10 @@ if ($row_scored_entries['count'] > 0) {
 
 					$table_body1 .= "<td width=\"25%\">";
 					if ($_SESSION['prefsProEdition'] == 1) $table_body1 .= $row_scores['brewerBreweryName'];
-					else $table_body1 .= $row_scores['brewerFirstName']." ".$row_scores['brewerLastName'];
+					else {
+						$table_body1 .= $row_scores['brewerFirstName']." ".$row_scores['brewerLastName'];
+						if (!empty($row_scores['brewerMHP'])) $table_body1 .= " <span data-toggle=\"tooltip\" data-placement=\"top\" title=\"Master Homebrewer Program Participant\" style=\"color: #F2D06C; background-color: #000;\" class=\"badge\">MHP</span>";
+					}
 					if (($_SESSION['prefsProEdition'] == 0) && (!empty($row_scores['brewCoBrewer'])) && ($row_scores['brewCoBrewer'] != " ")) $table_body1 .= "<br>".$label_cobrewer.": ".$row_scores['brewCoBrewer'];
 					$table_body1 .= "</td>";
 

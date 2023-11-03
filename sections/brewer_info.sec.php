@@ -74,48 +74,6 @@
  *
  */
 
-
-// For Bootsrap conversion use the Horizontal Description class - http://getbootstrap.com/css/#horizontal-description
-
-
-/* ---------------- USER Pages Rebuild Info ---------------------
-
-Beginning with the 1.3.0 release, an effort was begun to separate the programming
-layer from the presentation layer for all scripts with this header.
-
-All Public pages have certain variables in common that build the page:
-
-	$primary_page_info = any information related to the page
-	$primary_links = top of page links
-	$secondary_links = sublinks
-
-	$header1_X = an <h2> header on the page
-	$header2_X = an <h3> subheader on the page
-
-	$page_infoX = the bulk of the information on the page.
-
-	$labelX = the various labels in a table or on a form
-	$table_headX = all table headers (column names)
-	$table_bodyX = table body info
-	$messageX = various messages to display
-
-	$print_page_link = "<p><span class='icon'><img src='".$base_url."images/printer.png' border='0' alt='Print' title='Print' /></span><a id='modal_window_link' class='data' href='".$base_url."output/print.php?section=".$section."&amp;action=print' title='Print'>Print This Page</a></p>";
-
-Declare all variables empty at the top of the script. Add on later...
-	$primary_page_info = "";
-	$header1_1 = "";
-	$page_info1 = "";
-	$header1_2 = "";
-	$page_info2 = "";
-
-	$table_head1 = "";
-	$account_display = "";
-
-	etc., etc., etc.
-
- * ---------------- END Rebuild Info --------------------- */
-
-
 include_once (DB.'judging_locations.db.php');
 
 $primary_page_info = "";
@@ -407,23 +365,10 @@ $account_display .= "</div>";
 
 if (($_SESSION['prefsProEdition'] == 1) && (!$show_judge_steward_fields)) $account_display .= "<hr>";
 
-/*
-$account_display .= "<div class=\"row bcoem-account-info\">";
-$account_display .= sprintf("<div class=\"".$display_left_cols."\"><strong>%s</strong></div>",$label_security_question);
-$account_display .= "<div class=\"".$display_right_cols."\">".$_SESSION['userQuestion']."</div>";
-$account_display .= "</div>";
-
-
-$account_display .= "<div class=\"row bcoem-account-info\">";
-$account_display .= sprintf("<div class=\"".$display_left_cols."\"><strong>%s</strong></div>",$label_security_answer);
-$account_display .= "<div class=\"".$display_right_cols."\">".$_SESSION['userQuestionAnswer']."</div>";
-$account_display .= "</div>";
-*/
-
 if ($_SESSION['prefsProEdition'] == 0) {
 
 	$account_display .= "<div class=\"row bcoem-account-info\">";
-	$account_display .= sprintf("<div class=\"".$display_left_cols."\"><strong>%s</strong></div>",$label_mhp_number);
+	$account_display .= sprintf("<div class=\"".$display_left_cols."\"><strong>%s</strong> <span style=\"color: #F2D06C; background-color: #000;\" class=\"badge\">MHP</span></div>",$label_mhp_number);
 	$account_display .= sprintf("<div class=\"".$display_right_cols."\"><a class=\"hide-loader\" href=\"https://www.masterhomebrewerprogram.com\" target=\"_blank\" data-toggle=\"tooltip\" title=\"%s\" data-placement=\"right\">".$mhp_number."</a></div>",$brewer_text_053);
 	$account_display .= "</div>";
 
