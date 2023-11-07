@@ -2,7 +2,7 @@
 /**
  * Module:      pt-BR.lang.php
  * Description: This module houses all display text in the Portuguese language.
- * Updated:     September 9, 2023
+ * Updated:     November 6, 2023
  *  
  * To translate this file, first make a copy of it and rename it with the 
  * language name in the title.
@@ -2026,6 +2026,8 @@ $label_non_judging = "Sessões sem Julgamento";
  */
 $label_mhp_number = "Número de Membro do Programa Master Homebrewer";
 $brewer_text_053 = "O Master Homebrewer Program é uma organização sem fins lucrativos criada para promover o domínio da fabricação amadora de cerveja.";
+$best_brewer_text_015 = "Os pontos para cada inscrição classificada são calculados usando a seguinte fórmula, baseada na fórmula usada pelo Programa Master Homebrewer para o <a href='https://www.masterhomebrewerprogram.com/circuit-of-america' target='_blank'>Circuit of America</a>:";
+
 /**
  * ----------------------------------------------------------------------------------
  * END TRANSLATIONS

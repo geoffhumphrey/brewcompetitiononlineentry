@@ -2776,24 +2776,14 @@ if ($total_not_encrypted > 0) $output_off_sched_update .= "<li>".$total_not_encr
 
 /**
  * ----------------------------------------------- 2.5.0 ---------------------------------------------
- * Entry recipe fields deprecated. 
+ * Entry recipe fields deprecated.
  * Remove admin ability to enable via UI.
  * Look for deprecated entry/bottle label printed forms in preferences.
  * If one is specified, change to bottle-label-only equivalent.
  * ---------------------------------------------------------------------------------------------------
  */
 
-$update_table = $prefix."preferences";
-$data = array('prefsHideRecipe' => 'Y');
-$db_conn->where ('id', 1);
-if ($db_conn->update ($update_table, $data)) $output_off_sched_update .= "<li>Recipe-related data collection is now deprecated. Removed entry recipe fields from UI.</li>";
-else {
-	$output_off_sched_update .= "<li>Recipe-related data collection is now deprecated. However, removal of entry recipe fields from the UI failed. <strong class=\"text-warning\">Error: ".$db_conn->getLastError()."</strong></li>";
-	$error_count += 1;
-}
-
-$_SESSION['prefsHideRecipe'] = "Y";
-
+$output_off_sched_update .= "<li>Recipe-related data collection is now deprecated. Removed entry recipe fields from UI.</li>";
 $deprecated_entry_forms = array("B","N","M","U","3","4");
 
 if ((isset($_SESSION['prefsEntryForm'])) && (in_array($_SESSION['prefsEntryForm'],$deprecated_entry_forms))) {
@@ -3483,15 +3473,19 @@ if (check_update("contestClubs", $prefix."contest_info")) {
 
 /**
  * ----------------------------------------------- 2.6.2 ---------------------------------------------
+ * Add ability to specify Circuit of America scoring to Best 
+ * Brewer or Best Club Awards. If enabled, will override any 
+ * points calcs specified in prefs for Best Brewer and Best Club.
+ * @see https://www.masterhomebrewerprogram.com/circuit-of-america/2023-circuit-of-america
+ * 
+ * Add column to house a user's Master Homebrewer Program number.
+ * 
  * Leverage unused prefsSponsorLogoSize row to house the 
- * active styles for the competition. Change name.
- * 
- * JSON array of selected data from the styles table.
- * Enables use of a single Styles table per DB for all 
- * hosted installations.
- * 
- * Loop through current active styles; generate the 
- * JSON data and insert into the preferences table.
+ * active styles for the competition. Change name. JSON array 
+ * of selected data from the styles table. Enables future use 
+ * of a single Styles for all hosted installations. Loop through 
+ * current active styles; generate the JSON data and insert into 
+ * the preferences table.
  * ---------------------------------------------------------------------------------------------------
  */
 
@@ -3508,16 +3502,43 @@ elseif ($update_running) {
 // Begin version unordered list
 if (!$setup_running) $output_off_sched_update .= "<ul>";
 
-if (!check_update("brewerMHP", $prefix."brewer")) {
+if (!check_update("prefsScoringCOA", $prefix."preferences")) {
+	$sql = sprintf("ALTER TABLE `%s` ADD `prefsScoringCOA` tinyint(1) NULL DEFAULT NULL;",$prefix."preferences");
+	$result = $db_conn->rawQuery($sql);
+}
 
+if (check_update("prefsScoringCOA", $prefix."preferences")) {
+	$output_off_sched_update .= "<li>The prefsScoringCOA column was added to the preferences table.</li>";
+	$update_table = $prefix."preferences";
+	$data = array(
+		'prefsScoringCOA' => 0,
+	);
+	$result = $db_conn->update ($update_table, $data);
+}
+
+else {
+	$output_off_sched_update .= "<li class=\"text-danger\">The prefsScoringCOA column was NOT added to the preferences table.</li>";
+	$error_count += 1;
+}
+
+if (!check_update("brewerMHP", $prefix."brewer")) {
 	$sql = sprintf("ALTER TABLE `%s` ADD `brewerMHP` int(11) NULL DEFAULT NULL;",$prefix."brewer");
 	$db_conn->rawQuery($sql);
+}
 
+if (check_update("brewerMHP", $prefix."brewer")) {
+	$output_off_sched_update .= "<li>The brewerMHP column was added to the brewer table.</li>";
+}
+
+else {
+	$output_off_sched_update .= "<li class=\"text-danger\">The brewerMHP column was NOT added to the brewer table.</li>";
+	$error_count += 1;
 }
 
 if (check_update("prefsSelectedStyles", $prefix."preferences")) {
 	
-	// Change the data type (252 is TEXT/BLOB)
+	// Change the data type (252 is TEXT/BLOB).
+	// Change to MEDIUMTEXT to avoid compatiblity issues with MariaDB.
 	if ((check_mysql_data_type("prefsSelectedStyles",$prefix."preferences")) != 252) {
 		$sql = sprintf("ALTER TABLE `%s` CHANGE `prefsSelectedStyles` `prefsSelectedStyles` MEDIUMTEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT 'Changed in 2.6.2 to house active styles. JSON data.';",$prefix."preferences");
 		$db_conn->rawQuery($sql);
@@ -3548,9 +3569,9 @@ if (!check_update("prefsSelectedStyles", $prefix."preferences")) {
 	$query_style_set = sprintf("SELECT prefsStyleSet FROM %s WHERE id='1'", $prefix."preferences");
 	$style_set = mysqli_query($connection,$query_style_set);
 	$row_style_set = mysqli_fetch_assoc($style_set);
-	*/
 
-	// $style_match_up = array();
+	$style_match_up = array();
+	*/
 
 	do {
 
@@ -3676,6 +3697,7 @@ if (!check_update("prefsSelectedStyles", $prefix."preferences")) {
 }
 
 if (!$setup_running) $output_off_sched_update .= "</ul>";
+
 
 /**
  * ----------------------------------------------- Future --------------------------------------------- 

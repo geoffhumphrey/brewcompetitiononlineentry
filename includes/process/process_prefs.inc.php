@@ -72,6 +72,10 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 	if (!isset($_POST['prefsBOSCider'])) $_POST['prefsBOSCider'] = NULL;
 
 	$prefsStyleSet = sterilize($_POST['prefsStyleSet']);
+	$prefsBestUseBOS = sterilize($_POST['prefsBestUseBOS']);
+	$prefsScoringCOA = sterilize($_POST['prefsScoringCOA']);
+
+	if ($prefsScoringCOA == 1) $prefsBestUseBOS = 0;
 
 	$data = array(
 		'prefsTemp' => sterilize($_POST['prefsTemp']),
@@ -141,8 +145,9 @@ if ((isset($_SERVER['HTTP_REFERER'])) && (((isset($_SESSION['loginUsername'])) &
 		'prefsSpecific' => sterilize($_POST['prefsSpecific']),
 		'prefsDropOff' => sterilize($_POST['prefsDropOff']),
 		'prefsShipping' => sterilize($_POST['prefsShipping']),
-		'prefsBestUseBOS' => sterilize($_POST['prefsBestUseBOS']),
-		'prefsEval' => sterilize($_POST['prefsEval'])
+		'prefsBestUseBOS' => $prefsBestUseBOS,
+		'prefsEval' => sterilize($_POST['prefsEval']),
+		'prefsScoringCOA' => $prefsScoringCOA
 	);
 
 	if ($action == "add") {

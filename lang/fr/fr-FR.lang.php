@@ -2,8 +2,8 @@
 /**
  * Module:      en-US.lang.php
  * Description: This module houses all display text in the English language.
- * Updated:     September 9, 2023
- * Translation: ChatGPT
+ * Updated:     November 6, 2023
+ * Translation: ChatGPT, DeepL
  *  
  * To translate this file, first make a copy of it and rename it with the 
  * language name in the title.
@@ -2040,6 +2040,7 @@ $label_non_judging = "Sessions Hors Jugement";
  */
 $label_mhp_number = "Numéro de Membre du Programme Master Homebrewer";
 $brewer_text_053 = "Le Master Homebrewer Program est une organisation à but non lucratif créée pour promouvoir la maîtrise du brassage amateur.";
+$best_brewer_text_015 = "Les points pour chaque entrée classée sont calculés selon la formule suivante, basée sur celle utilisée par le Master Homebrewer Program pour le <a href='https://www.masterhomebrewerprogram.com/circuit-of-america' target='_blank'>Circuit of America</a>:";
 
 /**
  * ----------------------------------------------------------------------------------

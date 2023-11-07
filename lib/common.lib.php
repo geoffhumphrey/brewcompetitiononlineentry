@@ -2205,15 +2205,12 @@ function score_count($table_id,$method,$dbTable) {
 
 }
 
-function best_brewer_points($bid, $places, $entry_scores, $points_prefs, $tiebreaker) {
-	// Main points
-	$pts_first = $points_prefs[0]*$places[0]; // points for each first place position
-	$pts_second = $points_prefs[1]*$places[1]; // points for each secon place position
-	$pts_third = $points_prefs[2]*$places[2]; // points for each third place position
-	$pts_fourth = $points_prefs[3]*$places[3]; // points for each fourth place position
-	$pts_hm = $points_prefs[4]*$places[4]; // points for each honorable mention
-	// Tie breakers
+function best_brewer_points($bid, $places, $entry_scores, $points_prefs, $tiebreaker, $method="0") {
 
+	// Get number of entries for the user
+	$user_number_of_entries = total_paid_received("",$bid);
+
+	// Tie breakers
 	$pts_tb_num_places = 0;
 	$pts_tb_first_places = 0;
 	$pts_tb_num_entries = 0;
@@ -2223,56 +2220,98 @@ function best_brewer_points($bid, $places, $entry_scores, $points_prefs, $tiebre
 	$pts_tb_bos = 0;
 
 	$power = 0;
-
+	$points = 0;
 	$imax = count($tiebreaker) - 1;
 
-	$number_of_entries = total_paid_received("",$bid);
+	// Default Method
+	if ($method == 0) {
 
-	for ($i = 0; $i<= $imax; $i++) {
-		switch ($tiebreaker[$i]) {
-			// points for the number of 1st, 2nd, and 3rd places
-			case "TBTotalPlaces" :
-				$power  += 2;
-				$pts_tb_num_places = array_sum(array_slice($places,0,3))/pow(10,$power);
-				break;
-			// points for the number of 1st, 2nd, 3rd, 4th, HM places
-			case "TBTotalExtendedPlaces" :
-				$power  += 2;
-				$pts_tb_num_places = array_sum($places)/pow(10,$power);
-				break;
-			// points for number of first places
-			case "TBFirstPlaces" :
-				$power  += 2;
-				$pts_tb_first_places = $places[0]/pow(10,$power);
-				break;
-			// points for the number of competing entries (the smallest the better, of course)
-			case "TBNumEntries" :
-				$power  += 4;
-				if ($number_of_entries > 0) $pts_tb_num_entries = floor(100/$number_of_entries)/pow(10,$power);
-				else $pts_tb_num_entries = 0;
-				break;
-			// points for the minimum score
-			case "TBMinScore" :
-				$power  += 4;
-				$pts_tb_min_score = floor(10*min($entry_scores))/pow(10,$power);
-				break;
-			// points for the maximum score
-			case "TBMaxScore" :
-				$power  += 4;
-				$pts_tb_max_score = floor(10*max($entry_scores))/pow(10,$power);
-				break;
-			// points for the average score
-			case "TBAvgScore" :
-				$power  += 4;
-				if ($number_of_entries > 0) $pts_avg_score = floor(10*array_sum($entry_scores)/$number_of_entries)/pow(10,$power);
-				else $pts_avg_score = 0;
-				break;
+		// Main points
+		$pts_first = $points_prefs[0]*$places[0]; // points for each first place position
+		$pts_second = $points_prefs[1]*$places[1]; // points for each secon place position
+		$pts_third = $points_prefs[2]*$places[2]; // points for each third place position
+		$pts_fourth = $points_prefs[3]*$places[3]; // points for each fourth place position
+		$pts_hm = $points_prefs[4]*$places[4]; // points for each honorable mention
+
+		for ($i = 0; $i<= $imax; $i++) {
+			switch ($tiebreaker[$i]) {
+				// points for the number of 1st, 2nd, and 3rd places
+				case "TBTotalPlaces" :
+					$power  += 2;
+					$pts_tb_num_places = array_sum(array_slice($places,0,3))/pow(10,$power);
+					break;
+				// points for the number of 1st, 2nd, 3rd, 4th, HM places
+				case "TBTotalExtendedPlaces" :
+					$power  += 2;
+					$pts_tb_num_places = array_sum($places)/pow(10,$power);
+					break;
+				// points for number of first places
+				case "TBFirstPlaces" :
+					$power  += 2;
+					$pts_tb_first_places = $places[0]/pow(10,$power);
+					break;
+				// points for the number of competing entries (the smallest the better, of course)
+				case "TBNumEntries" :
+					$power  += 4;
+					if ($user_number_of_entries > 0) $pts_tb_num_entries = floor(100/$user_number_of_entries)/pow(10,$power);
+					else $pts_tb_num_entries = 0;
+					break;
+				// points for the minimum score
+				case "TBMinScore" :
+					$power  += 4;
+					$pts_tb_min_score = floor(10*min($entry_scores))/pow(10,$power);
+					break;
+				// points for the maximum score
+				case "TBMaxScore" :
+					$power  += 4;
+					$pts_tb_max_score = floor(10*max($entry_scores))/pow(10,$power);
+					break;
+				// points for the average score
+				case "TBAvgScore" :
+					$power  += 4;
+					if ($user_number_of_entries > 0) $pts_avg_score = floor(10*array_sum($entry_scores)/$user_number_of_entries)/pow(10,$power);
+					else $pts_avg_score = 0;
+					break;
+			}
+
+		}
+
+		$points = $pts_first + $pts_second + $pts_third + $pts_fourth + $pts_hm + $pts_tb_num_places + $pts_tb_first_places + $pts_tb_num_entries + $pts_tb_min_score + $pts_tb_max_score + $pts_tb_avg_score;
+	
+	}
+
+	// CoA Method
+	if ($method == 1) {
+
+		/**
+		 * The $points_prefs var has the Winner Place 
+		 * Distribution Method choice
+		 *  - For table winner place distribution (1), 
+		 *    this is the number of entries at the table
+		 *  - For category winner place distribution (2), 
+		 *    this is the number of entries in the overall category
+		 *  - For sub-category winner place distribution (3), 
+		 *    this is the number of entries in the sub-category
+		 * 
+		 * Also contains the number of total entries for the equation 
+		 * (table, category/style, sub-category/style).
+		 * 
+		 * Formula: (($tc_number_of_entries - $user_place) / $tc_number_of_entries) cubed.
+		 *  
+		 */
+		
+		foreach ($places as $key => $value) {
+
+			$tc_number_of_entries = $points_prefs[$key];
+			$points += pow((($tc_number_of_entries - $value) / $tc_number_of_entries),3);
+			//if ($points <= 0) $points = 0;
+		
 		}
 
 	}
 
-	$points = $pts_first + $pts_second + $pts_third + $pts_fourth + $pts_hm + $pts_tb_num_places + $pts_tb_first_places + $pts_tb_num_entries + $pts_tb_min_score + $pts_tb_max_score + $pts_tb_avg_score;
 	return $points;
+
 }
 
 function bjcp_rank($rank,$method) {

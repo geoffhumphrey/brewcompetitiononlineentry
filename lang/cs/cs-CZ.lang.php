@@ -2,7 +2,7 @@
 /**
  * Module:      cs-CZ.lang.php
  * Description: This module houses all display text in the Czech language.
- * Updated:     September 9, 2023
+ * Updated:     November 6, 2023
  *  
  * To translate this file, first make a copy of it and rename it with the 
  * language name in the title.
@@ -1965,6 +1965,7 @@ $label_non_judging = "Zasedání, která se netýkají soudců";
  */
 $label_mhp_number = "Číslo člena programu Master Homebrewer";
 $brewer_text_053 = "Program Master Homebrewer je nezisková organizace založená za účelem podpory amatérského vaření piva.";
+$best_brewer_text_015 = "Body za každé umístění se vypočítávají podle následujícího vzorce, který vychází z vzorce používaného v programu Master Homebrewer pro <a href='https://www.masterhomebrewerprogram.com/circuit-of-america' target='_blank'>Circuit of America</a>:";
 
 /**
  * ----------------------------------------------------------------------------------

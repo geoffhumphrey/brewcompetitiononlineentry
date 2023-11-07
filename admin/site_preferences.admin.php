@@ -176,7 +176,7 @@ $(document).ready(function(){
     ?>
 
     <?php if (($row_prefs['prefsCAPTCHA'] == "1") || ($section == "step3")) { ?>
-     $("#reCAPTCHA-keys").show("fast");
+     $("#reCAPTCHA-keys").show();
     <?php } ?>
 
     $("input[name$='prefsCAPTCHA']").click(function() {
@@ -185,6 +185,22 @@ $(document).ready(function(){
         }
         else {
             $("#reCAPTCHA-keys").hide("fast");
+        }
+    });
+
+    <?php if ($row_prefs['prefsScoringCOA'] == "1") { ?>
+     $("#non-COA-scoring").hide();
+     $("#bos-in-calcs").hide();
+    <?php } ?>
+
+    $("input[name$='prefsScoringCOA']").click(function() {
+        if ($(this).val() == "0") {
+            $("#non-COA-scoring").show("fast");
+            $("#bos-in-calcs").show("fast");
+        }
+        else {
+            $("#non-COA-scoring").hide("fast");
+            $("#bos-in-calcs").hide("fast");
         }
     });
 
@@ -423,7 +439,7 @@ $(document).ready(function(){
         <div class="modal-content">
             <div class="modal-header bcoem-admin-modal">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="prefsEvalModalLabel">Contact Form Info</h4>
+                <h4 class="modal-title" id="prefsEvalModalLabel">Electronic Scoresheets Info</h4>
             </div>
             <div class="modal-body">
                 <p>Enable or disable the Electronic Scoresheets function. If enabled, Admins have the option to accept judges' entry evaluations via fully electronic, web-based scoresheets built to emulate BJCP official and quasi-official paper-based forms.</p>
@@ -797,7 +813,7 @@ $(document).ready(function(){
         </div>
     </div><!-- ./Form Group -->
 </div>
-<div class="form-group"><!-- Form Group Radio  -->
+<div id="bos-in-calcs" class="form-group"><!-- Form Group Radio  -->
     <label for="prefsBestUseBOS" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Include BOS in Calculations?</label>
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
         <div class="input-group">
@@ -812,66 +828,112 @@ $(document).ready(function(){
         <span id="helpBlock" class="help-block">Indicate whether you wish to include any Best of Show (BOS) places in Best Brewer and Best Club calculations.</span>
     </div>
 </div><!-- ./Form Group -->
-<div class="form-group"><!-- Form Group NOT REQUIRED Select -->
-    <label for="prefsFirstPlacePts" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Points for First Place</label>
+<div class="form-group"><!-- Form Group Radio  -->
+    <label for="prefsBestUseBOS" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Use Circuit of America Calculations?</label>
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
-    <!-- Input Here -->
-    <select class="selectpicker" name="prefsFirstPlacePts" id="prefsFirstPlacePts" data-size="10" data-width="auto">
-        <?php for ($i=0; $i <= 25; $i++) { ?>
-        <option value="<?php echo $i; ?>" <?php if ($row_prefs['prefsFirstPlacePts'] == $i) echo "SELECTED"; elseif (($i == 0) && ($section == "step3")) echo "SELECTED"; ?>><?php echo $i; ?></option>
-        <?php } ?>
-    </select>
-    <span id="helpBlock" class="help-block">Enter the number of points awarded for each first place that an entrant receives.</span>
+        <div class="input-group">
+            <!-- Input Here -->
+            <label class="radio-inline">
+                <input type="radio" name="prefsScoringCOA" value="1" id="prefsScoringCOA_1" <?php if ($row_prefs['prefsScoringCOA'] == 1) echo "CHECKED"; ?>> Yes
+            </label>
+            <label class="radio-inline">
+                <input type="radio" name="prefsScoringCOA" value="0" id="prefsScoringCOA_0" <?php if (($section == "step3") || ($row_prefs['prefsScoringCOA'] == 0)) echo "CHECKED"; ?>> No
+            </label>
+        </div>
+        <span id="helpBlock" class="help-block">Indicate whether you wish use the Master Homebrewer Program's <a href="https://www.masterhomebrewerprogram.com/circuit-of-america" target="_blank">Circuit of America</a> scoring methodolgy for all Best Brewer and Best Club calculations. <strong>Indicating "Yes" here will override all other calculation preferences.</strong>
+        </span>
+        <div class="btn-group" role="group" aria-label="prefsEvalModal">
+            <div class="btn-group" role="group">
+                <button type="button" class="btn btn-xs btn-info" data-toggle="modal" data-target="#prefsScoringCOAModal">
+                   Circuit of America Calculations Info
+                </button>
+            </div>
+        </div>        
     </div>
 </div><!-- ./Form Group -->
-<div class="form-group"><!-- Form Group NOT REQUIRED Select -->
-    <label for="prefsSecondPlacePts" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Points for Second Place</label>
-    <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
-    <!-- Input Here -->
-    <select class="selectpicker" name="prefsSecondPlacePts" id="prefsSecondPlacePts" data-size="10" data-width="auto">
-        <?php for ($i=0; $i <= 25; $i++) { ?>
-        <option value="<?php echo $i; ?>" <?php if ($row_prefs['prefsSecondPlacePts'] == $i) echo "SELECTED"; elseif (($i == 0) && ($section == "step3")) echo "SELECTED"; ?>><?php echo $i; ?></option>
-        <?php } ?>
-    </select>
-    <span id="helpBlock" class="help-block">Enter the number of points awarded for each second place that an entrant receives.</span>
+
+<!-- Modal -->
+<div class="modal fade" id="prefsScoringCOAModal" tabindex="-1" role="dialog" aria-labelledby="prefsScoringCOAModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header bcoem-admin-modal">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="prefsScoringCOAModalLabel">Circuit of America Scoring Info</h4>
+            </div>
+            <div class="modal-body">
+                <p>Use the Master Homebrewer Program's Circuit of America scoring methodology to determine Best Brewer and Best Club results. The calculations look like this, depending upon your Winner Place Distribution Method:</p>
+                <p><img class="img-responsive" src="https://brewingcompetitions.com/00_images/CoA_Scoring_BCOEM.png" ></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+            </div>
+        </div>
     </div>
-</div><!-- ./Form Group -->
-<div class="form-group"><!-- Form Group NOT REQUIRED Select -->
-    <label for="prefsThirdPlacePts" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Points for Third Place</label>
-    <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
-    <!-- Input Here -->
-    <select class="selectpicker" name="prefsThirdPlacePts" id="prefsThirdPlacePts" data-size="10" data-width="auto">
-        <?php for ($i=0; $i <= 25; $i++) { ?>
-        <option value="<?php echo $i; ?>" <?php if ($row_prefs['prefsThirdPlacePts'] == $i) echo "SELECTED"; elseif (($i == 0) && ($section == "step3")) echo "SELECTED"; ?>><?php echo $i; ?></option>
-        <?php } ?>
-    </select>
-    <span id="helpBlock" class="help-block">Enter the number of points awarded for each third place that an entrant receives.</span>
-    </div>
-</div><!-- ./Form Group -->
-<div class="form-group"><!-- Form Group NOT REQUIRED Select -->
-    <label for="prefsFourthPlacePts" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Points for Fourth Place</label>
-    <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
-    <!-- Input Here -->
-    <select class="selectpicker" name="prefsFourthPlacePts" id="prefsFourthPlacePts" data-size="10" data-width="auto">
-        <?php for ($i=0; $i <= 25; $i++) { ?>
-        <option value="<?php echo $i; ?>" <?php if ($row_prefs['prefsFourthPlacePts'] == $i) echo "SELECTED"; elseif (($i == 0) && ($section == "step3")) echo "SELECTED"; ?>><?php echo $i; ?></option>
-        <?php } ?>
-    </select>
-    <span id="helpBlock" class="help-block">Enter the number of points awarded for each fourth place that an entrant receives.</span>
-    </div>
-</div><!-- ./Form Group -->
-<div class="form-group"><!-- Form Group NOT REQUIRED Select -->
-    <label for="prefsHMPts" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Points for Honorable Mention</label>
-    <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
-    <!-- Input Here -->
-    <select class="selectpicker" name="prefsHMPts" id="prefsHMPts" data-size="10" data-width="auto">
-        <?php for ($i=0; $i <= 25; $i++) { ?>
-        <option value="<?php echo $i; ?>" <?php if ($row_prefs['prefsHMPts'] == $i) echo "SELECTED"; elseif (($i == 0) && ($section == "step3")) echo "SELECTED"; ?>><?php echo $i; ?></option>
-        <?php } ?>
-    </select>
-    <span id="helpBlock" class="help-block">Enter the number of points awarded for each Honorable Mention that an entrant receives.</span>
-    </div>
-</div><!-- ./Form Group -->
+</div><!-- ./modal -->
+
+<section id="non-COA-scoring">
+    <div class="form-group"><!-- Form Group NOT REQUIRED Select -->
+        <label for="prefsFirstPlacePts" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Points for First Place</label>
+        <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
+        <!-- Input Here -->
+        <select class="selectpicker" name="prefsFirstPlacePts" id="prefsFirstPlacePts" data-size="10" data-width="auto">
+            <?php for ($i=0; $i <= 25; $i++) { ?>
+            <option value="<?php echo $i; ?>" <?php if ($row_prefs['prefsFirstPlacePts'] == $i) echo "SELECTED"; elseif (($i == 0) && ($section == "step3")) echo "SELECTED"; ?>><?php echo $i; ?></option>
+            <?php } ?>
+        </select>
+        <span id="helpBlock" class="help-block">Enter the number of points awarded for each first place that an entrant receives.</span>
+        </div>
+    </div><!-- ./Form Group -->
+    <div class="form-group"><!-- Form Group NOT REQUIRED Select -->
+        <label for="prefsSecondPlacePts" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Points for Second Place</label>
+        <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
+        <!-- Input Here -->
+        <select class="selectpicker" name="prefsSecondPlacePts" id="prefsSecondPlacePts" data-size="10" data-width="auto">
+            <?php for ($i=0; $i <= 25; $i++) { ?>
+            <option value="<?php echo $i; ?>" <?php if ($row_prefs['prefsSecondPlacePts'] == $i) echo "SELECTED"; elseif (($i == 0) && ($section == "step3")) echo "SELECTED"; ?>><?php echo $i; ?></option>
+            <?php } ?>
+        </select>
+        <span id="helpBlock" class="help-block">Enter the number of points awarded for each second place that an entrant receives.</span>
+        </div>
+    </div><!-- ./Form Group -->
+    <div class="form-group"><!-- Form Group NOT REQUIRED Select -->
+        <label for="prefsThirdPlacePts" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Points for Third Place</label>
+        <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
+        <!-- Input Here -->
+        <select class="selectpicker" name="prefsThirdPlacePts" id="prefsThirdPlacePts" data-size="10" data-width="auto">
+            <?php for ($i=0; $i <= 25; $i++) { ?>
+            <option value="<?php echo $i; ?>" <?php if ($row_prefs['prefsThirdPlacePts'] == $i) echo "SELECTED"; elseif (($i == 0) && ($section == "step3")) echo "SELECTED"; ?>><?php echo $i; ?></option>
+            <?php } ?>
+        </select>
+        <span id="helpBlock" class="help-block">Enter the number of points awarded for each third place that an entrant receives.</span>
+        </div>
+    </div><!-- ./Form Group -->
+    <div class="form-group"><!-- Form Group NOT REQUIRED Select -->
+        <label for="prefsFourthPlacePts" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Points for Fourth Place</label>
+        <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
+        <!-- Input Here -->
+        <select class="selectpicker" name="prefsFourthPlacePts" id="prefsFourthPlacePts" data-size="10" data-width="auto">
+            <?php for ($i=0; $i <= 25; $i++) { ?>
+            <option value="<?php echo $i; ?>" <?php if ($row_prefs['prefsFourthPlacePts'] == $i) echo "SELECTED"; elseif (($i == 0) && ($section == "step3")) echo "SELECTED"; ?>><?php echo $i; ?></option>
+            <?php } ?>
+        </select>
+        <span id="helpBlock" class="help-block">Enter the number of points awarded for each fourth place that an entrant receives.</span>
+        </div>
+    </div><!-- ./Form Group -->
+    <div class="form-group"><!-- Form Group NOT REQUIRED Select -->
+        <label for="prefsHMPts" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Points for Honorable Mention</label>
+        <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12">
+        <!-- Input Here -->
+        <select class="selectpicker" name="prefsHMPts" id="prefsHMPts" data-size="10" data-width="auto">
+            <?php for ($i=0; $i <= 25; $i++) { ?>
+            <option value="<?php echo $i; ?>" <?php if ($row_prefs['prefsHMPts'] == $i) echo "SELECTED"; elseif (($i == 0) && ($section == "step3")) echo "SELECTED"; ?>><?php echo $i; ?></option>
+            <?php } ?>
+        </select>
+        <span id="helpBlock" class="help-block">Enter the number of points awarded for each Honorable Mention that an entrant receives.</span>
+        </div>
+    </div><!-- ./Form Group -->
+</section>
+
 <?php for ($i=1; $i<=6; $i++) { ?>
 <div class="form-group"><!-- Form Group NOT REQUIRED Select -->
     <label for="<?php echo 'prefsTieBreakRule'.$i;?>" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Tie Break Rule #<?php echo $i; ?></label>
@@ -887,6 +949,7 @@ $(document).ready(function(){
     </div>
 </div><!-- ./Form Group -->
 <?php } ?>
+
 <h3>Entries</h3>
 <div class="form-group"><!-- Form Group Radio INLINE -->
     <label for="prefsStyleSet" class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">Style Set</label>

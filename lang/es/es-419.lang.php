@@ -3,7 +3,7 @@
  * Module:      es-419.lang.php
  * Description: This module houses all display text in the Spanish 
  *              (Latin America) language.
- * Updated:     September 8, 2023
+ * Updated:     November 6, 2023
  * Translation: ChatGPT
  *  
  * To translate this file, first make a copy of it and rename it with the 
@@ -2040,6 +2040,7 @@ $label_non_judging = "Sesiones sin Evaluación";
  */
 $label_mhp_number = "Número de miembro del Programa Master Homebrewer";
 $brewer_text_053 = "El Master Homebrewer Program es una organización sin ánimo de lucro creada para promover el dominio de la elaboración de cerveza entre aficionados.";
+$best_brewer_text_015 = "Los puntos de cada inscripción se calculan mediante la siguiente fórmula, basada en la utilizada por el Master Homebrewer Program del <a href='https://www.masterhomebrewerprogram.com/circuit-of-america' target='_blank'>Circuit of America</a>:";
 
 /**
  * ----------------------------------------------------------------------------------

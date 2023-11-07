@@ -2021,6 +2021,7 @@ $label_non_judging = "Non-Judging Sessions";
  */
 $label_mhp_number = "Master Homebrewer Program Membership Number";
 $brewer_text_053 = "The Master Homebrewer Program is a nonprofit organization established to promote the mastery of amateur brewing.";
+$best_brewer_text_015 = "The points for each placing entry are calculated using the following formula, based on the one used by the Master Homebrewer Program for the <a href='https://www.masterhomebrewerprogram.com/circuit-of-america' target='_blank'>Circuit of America</a>:";
 
 /**
  * ----------------------------------------------------------------------------------
