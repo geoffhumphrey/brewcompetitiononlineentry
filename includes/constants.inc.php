@@ -2781,7 +2781,7 @@ if ((!isset($_SESSION['encryption_key'])) || (empty($_SESSION['encryption_key'])
 
 $regenerate_selected_styles = FALSE;
 
-if (empty($_SESSION['prefsSelectedStyles'])) {
+if ((empty($_SESSION['prefsSelectedStyles'])) && (strpos($section, "step") === FALSE)) {
 
     $query_selected_styles = sprintf("SELECT prefsSelectedStyles FROM %s WHERE id='1';",$prefix."preferences");
     $selected_styles = mysqli_query($connection,$query_selected_styles) or die (mysqli_error($connection));

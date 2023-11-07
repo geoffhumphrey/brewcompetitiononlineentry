@@ -10,6 +10,11 @@ require_once (DB.'setup.db.php');
 require_once (INCLUDES.'db_tables.inc.php');
 require_once (LIB.'help.lib.php');
 
+$ajax_url = $base_url."ajax/";
+$js_url = $base_url."js_includes/";
+$images_url = $base_url."images/";
+$css_url = $base_url."css/";
+
 $prefs_set = FALSE;
 $jprefs_set = FALSE;
 

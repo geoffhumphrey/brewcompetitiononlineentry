@@ -159,7 +159,7 @@ if ($section == "admin") { ?>
 <?php } ?>
 <script type='text/javascript'>
 
-var entries_present = <?php if (isset($totalRows_log)) echo $totalRows_log; ?>;
+var entries_present = "<?php if (isset($totalRows_log)) echo $totalRows_log; ?>";
 var current_style_set = "<?php if (isset($_SESSION['prefsStyleSet'])) echo $_SESSION['prefsStyleSet']; ?>";
 
 $(document).ready(function(){
