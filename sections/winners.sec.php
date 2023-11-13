@@ -120,10 +120,13 @@ if ($row_scored_entries['count'] > 0) {
 						}
 
 						$winners_table_body_1 .= "<td>";
-						if ($_SESSION['prefsProEdition'] == 1) $winners_table_body_1 .= $row_scores['brewerBreweryName'];
+						if ($_SESSION['prefsProEdition'] == 1) {
+						    if (empty($row_scores['brewerBreweryName'])) $winners_table_body_1 .= $row_scores['brewerFirstName']." ".$row_scores['brewerLastName'];
+						    else $winners_table_body_1 .= $row_scores['brewerBreweryName'];
+						}
 						else {
 							$winners_table_body_1 .= $row_scores['brewerFirstName']." ".$row_scores['brewerLastName'];
-							if (!empty($row_scores['brewerMHP'])) $winners_table_body_1 .= " <span data-toggle=\"tooltip\" data-placement=\"top\" title=\"Master Homebrewer Program Participant\" style=\"color: #F2D06C; background-color: #000;\" class=\"badge\">MHP</span>";
+							if ((isset($row_scores['brewerMHP'])) && (!empty($row_scores['brewerMHP']))) $winners_table_body_1 .= " <span data-toggle=\"tooltip\" data-placement=\"top\" title=\"Master Homebrewer Program Participant\" style=\"color: #F2D06C; background-color: #000;\" class=\"badge\">MHP</span>";
 						}
 						if (($_SESSION['prefsProEdition'] == 0) && (!empty($row_scores['brewCoBrewer'])) && ($row_scores['brewCoBrewer'] != " ")) $winners_table_body_1 .= "<br>".$label_cobrewer.": ".$row_scores['brewCoBrewer'];
 						$winners_table_body_1 .= "</td>";

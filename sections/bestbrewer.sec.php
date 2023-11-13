@@ -591,11 +591,7 @@ foreach ($bestbrewer_clubs as $key => $value) {
 	echo "</p>"; 
 
 }
-
 */
-
-echo $club_points_show;
-
 
 ?>
 <div class="bcoem-winner-table">

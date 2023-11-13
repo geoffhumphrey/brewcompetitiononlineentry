@@ -178,7 +178,10 @@ if (($display_to_admin) || ($display_to_public)) {
 							else $style_display = $style.": ".$row_scores['brewStyle'];
 
 	       					// Name Display
-							if ($_SESSION['prefsProEdition'] == 1) $brewer_name = $row_scores['brewerBreweryName'];
+							if ($_SESSION['prefsProEdition'] == 1) {
+								if (empty($row_scores['brewerBreweryName'])) $brewer_name = $row_scores['brewerFirstName']." ".$row_scores['brewerLastName'];
+								else $brewer_name = $row_scores['brewerBreweryName'];
+							}
 							else $brewer_name = $row_scores['brewerFirstName']." ".$row_scores['brewerLastName'];
 
 							$brewer_club = "";

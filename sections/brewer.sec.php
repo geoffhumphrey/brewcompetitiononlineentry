@@ -327,7 +327,7 @@ if ((isset($row_judging3)) && (!empty($row_judging3))) {
 
 }
 
-if (($_SESSION['prefsProEdition'] == 1) && (!$show_judge_steward_fields)) $pro_entrant = TRUE;
+if (($_SESSION['prefsProEdition'] == 1) && ((!$show_judge_steward_fields) || ($go == "admin"))) $pro_entrant = TRUE;
 
 // Build drop-off select element
 $dropoff_select = "";

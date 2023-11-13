@@ -2,8 +2,6 @@
 /**
  * Module:      brewer_entries.sec.php
  * Description: This module displays the user's entries and related data
- * Info:		As of version 1.3.0, most of the presentation layer has been separated from the programming layer
- *
  *
  */
 
