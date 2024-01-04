@@ -269,14 +269,11 @@ else {
 	if (($row_brewer['brewerDiscount'] != "Y") && ($row_contest_info['contestEntryFeePassword'] != "") && ((($total_entry_fees > 0) && ($total_entry_fees != $total_paid_entry_fees)))) {
 		$header1_7 .= sprintf("<h2>%s</h2>",$label_fee_discount);
 		$page_info7 .= sprintf("<p>%s</p>",$pay_text_023);
-		$page_info7 .= "<form class=\"form-inline\" action=\"".$base_url."includes/process.inc.php?action=check_discount&amp;dbTable=".$brewer_db_table."&amp;id=".$row_brewer['uid']."\" method=\"POST\" name=\"form1\" id=\"form1\">";
-		$page_info7 .= sprintf("
-		<div class=\"form-group\"><!-- Form Group NOT REQUIRED Text Input -->
-				<label for=\"brewerDiscount\" class=\"sr-only\">%s</label>
-					<!-- Input Here -->
-					<input class=\"form-control\" name=\"brewerDiscount\" type=\"text\" value=\"\" placeholder=\"\" autofocus>
-			</div><!-- ./Form Group -->
-		",$label_discount_code);
+		$page_info7 .= sprintf("<form class=\"form-inline\" action=\"%sincludes/process.inc.php?action=check_discount&amp;dbTable=%s&amp;id=%s\" method=\"POST\" name=\"form1\" id=\"form1\">",$base_url,$brewer_db_table,$row_brewer['uid']);
+		$page_info7 .= "<input type=\"hidden\" name=\"token\" value =\"";
+		if (isset($_SESSION['token'])) $page_info7 .= $_SESSION['token'];
+		$page_info7 .= "\">";
+		$page_info7 .= sprintf("<div class=\"form-group\"><label for=\"brewerDiscount\" class=\"sr-only\">%s</label><input class=\"form-control\" name=\"brewerDiscount\" type=\"text\" value=\"\" placeholder=\"\" autofocus></div>",$label_discount_code);
 		$page_info7 .= sprintf("<input type=\"submit\" class=\"btn btn-primary\" value=\"%s\">",$label_verify);
 		$page_info7 .= "</form>";
 	}
@@ -285,8 +282,7 @@ else {
 		$page_info6 .= sprintf("<p class=\"text-success\"><span class=\"fa fa-lg fa-check-circle\"></span> <strong>%s</strong></p>",$pay_text_024);
 	if (($total_entry_fees == 0) && ($_SESSION['contestEntryFee'] > 0)) 
 		$page_info6 .= sprintf("<p>%s</p>",$pay_text_025);
-	else 
-		$page_info6 .= sprintf("<p class=\"text-success\"><span class=\"fa fa-lg fa-check-circle\"></span> <strong>%s</strong></p>",$pay_text_032);
+	else $page_info6 .= sprintf("<p class=\"text-success\"><span class=\"fa fa-lg fa-check-circle\"></span> <strong>%s</strong></p>",$pay_text_032);
 
 	if (($_SESSION['prefsPayToPrint'] == "Y") && ($unconfirmed > 0)) $warning1 .= sprintf("<div class=\"alert alert-danger\"><span class=\"fa fa-lg fa-exclamation-circle\"></span> <strong>%s</strong> %s</div>",$pay_text_026,$pay_text_027);
 
