@@ -74,7 +74,7 @@ if (in_array($_SESSION['prefsEntryForm'],$barcode_qrcode_array)) {
 	$qrcode_url = $base_url."qr.php?id=".$brewing_info['id'];
 	$qrcode_url = urlencode($qrcode_url);
 
-	$qr->qRCreate($qrcode_url,"90x90","UTF-8");
+	$qr->qRCreate($qrcode_url,"75x75","UTF-8");
 	$qrcode_link = $qr->url;
 
 }
