@@ -467,7 +467,7 @@ else $relocate_referrer = $_SERVER['HTTP_REFERER'];
         	<div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
         		<textarea class="form-control" rows="8" name="brewInfo" id="brewInfo" data-error="<?php echo $brew_text_010; ?>" maxlength="<?php echo $_SESSION['prefsSpecialCharLimit']; ?>" <?php if ($highlight_special) echo "autofocus"; elseif (($action == "edit") && ($special_required)) echo "autofocus"; ?>><?php echo $brewInfo; ?></textarea>
             <div class="help-block with-errors"><?php if ((strpos($styleSet,"BABDB") !== false) && ($view_explodies[0] < 28)) echo $brew_text_027; ?></div>
-            <div id="helpBlock" class="help-block"><p><?php echo $_SESSION['prefsSpecialCharLimit'].$label_character_limit; ?><span id="countInfo">0</span></p></div>
+            <div id="helpBlock" class="help-block"><p><?php echo $_SESSION['prefsSpecialCharLimit'].$label_character_limit; ?><span id="countInfo"><?php if ($action == "edit") echo mb_strlen($brewInfo); else echo "0" ?></span></p></div>
         </div>
     </div><!-- ./Form Group -->
     <!-- Optional Information -->
@@ -688,7 +688,7 @@ else $relocate_referrer = $_SERVER['HTTP_REFERER'];
             <span id="helpBlock" class="help-block">
             	<p><strong class="text-danger"><?php echo $brew_text_013; ?></strong></p>
                 <p><strong class="text-primary"><?php echo $brew_text_014; ?></strong></p>
-                <p><?php echo $_SESSION['prefsSpecialCharLimit'].$label_character_limit; ?><span id="countComments">0</span></p>
+                <p><?php echo $_SESSION['prefsSpecialCharLimit'].$label_character_limit; ?><span id="countComments"><?php if ($action == "edit") echo mb_strlen($row_log['brewComments']); else echo "0" ?></span></p>
             </span>
         </div>
     </div><!-- ./Form Group -->
