@@ -147,7 +147,7 @@ $tie_break_rules = array(
  * Convert the array to JSON array and move to contest_info DB table - 
  * contestClubs column.
  * 
- * Updated June 27, 2023
+ * Updated January 11, 2024
  */
 
 $club_array = array(
@@ -2467,7 +2467,8 @@ $club_array = array(
     "NINJA Homebrewers",
     "Master Homebrewer Program",
     "Cider, Homebrew, And Mead Production Specialists (CHAMPS)",
-    "Ottawa's Homebrew Society"
+    "Ottawa's Homebrew Society",
+    "Garner Ale Society"
 );
 
 $club_array_json = json_encode($club_array);
