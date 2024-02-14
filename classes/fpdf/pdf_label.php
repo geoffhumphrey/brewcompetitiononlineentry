@@ -270,7 +270,7 @@ class PDF_Label extends FPDF {
 			'paper-size'=>'letter',		
 			'metric'=>'mm',	
             'marginLeft'=>5.4, 		
-			'marginTop'=>7.3, 		
+			'marginTop'=>7.1, 		
 			'NX'=>4, 	
 			'NY'=>20, 	
 			'SpaceX'=>7.14, 		

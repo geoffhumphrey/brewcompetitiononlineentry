@@ -5,7 +5,7 @@
         <label for="brewerClubs" class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label"><?php echo $label_club; ?></label>
         <div class="col-lg-9 col-md-6 col-sm-8 col-xs-12">
         
-        <select class="selectpicker" name="brewerClubs" id="brewerClubs" data-live-search="true" data-size="10" data-width="fit" data-show-tick="true" data-header="<?php echo $label_select_club; ?>" title="<?php echo $label_select_club; ?>">
+        <select class="selectpicker" name="brewerClubs" id="brewerClubs" data-live-search-normalize="true" data-live-search="true" data-size="10" data-width="fit" data-show-tick="true" data-header="<?php echo $label_select_club; ?>" title="<?php echo $label_select_club; ?>">
             <option value="" <?php if (($action == "edit") && (empty($row_brewer['brewerClubs']))) echo "SELECTED"; ?>>None</option>
             <option value="Other" <?php if ($club_other) echo "SELECTED"; ?>>Other</option>
             <option data-divider="true"></option>

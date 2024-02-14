@@ -194,7 +194,7 @@ if (!empty($_SESSION['brewerAHA'])) {
 } else $aha_number .= $label_none_entered;
 
 if (!empty($_SESSION['brewerMHP'])) $mhp_number = $_SESSION['brewerMHP'];
-else $mhp_number .= $label_none_entered;
+else $mhp_number = $label_none_entered;
 
 $pro_am = yes_no($_SESSION['brewerProAm'],$base_url,2);
 

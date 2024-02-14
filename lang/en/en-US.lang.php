@@ -2001,7 +2001,7 @@ $evaluation_info_100 = "Upcoming judging sessions:";
 $evaluation_info_101 = "Please provide another color descriptor.";
 $evaluation_info_102 = "Enter your total score - maximum of 50. Use the scoring guide below if needed.";
 $evaluation_info_103 = "Please provide your score - minimum of 5, maximum of 50.";
-$brewer_text_051 = "Select the industry organizations that you are affiliated with as an employee, volunteer, etc. This is to make sure there are not any conflicts of interest when assigning judges and stewards to evaluate entries.";
+$brewer_text_051 = "Select the industry organizations that you are affiliated with as an employee, volunteer, etc. This is to make sure there are not any conflicts of interest when assigning judges and stewards to evaluate entries."; 
 $brewer_text_052 = "<strong>If any industry organization is <u>not</u> listed in the drop-down above, enter it here.</strong> Separate each organization's name by comma (,) or semi-colon (;). Some symbols are not allowed, including double-quotation marks (&quot;) and percent (&#37;).";
 
 /**
@@ -2011,7 +2011,6 @@ $brewer_text_052 = "<strong>If any industry organization is <u>not</u> listed in
  */
 $evaluation_info_104 = "Not all judges indicated this entry advanced to the Mini-BOS round. Please verify and select Yes or No above.";
 $evaluation_info_105 = "The following entries have mismatched Mini-BOS indications from judges:";
-
 $label_non_judging = "Non-Judging Sessions";
 
 /**
@@ -2022,6 +2021,21 @@ $label_non_judging = "Non-Judging Sessions";
 $label_mhp_number = "Master Homebrewer Program Membership Number";
 $brewer_text_053 = "The Master Homebrewer Program is a nonprofit organization established to promote the mastery of amateur brewing.";
 $best_brewer_text_015 = "The points for each placing entry are calculated using the following formula, based on the one used by the Master Homebrewer Program for the <a href='https://www.masterhomebrewerprogram.com/circuit-of-america' target='_blank'>Circuit of America</a>:";
+
+/**
+ * ------------------------------------------------------------------------
+ * Version 2.7.0 Additions
+ * ------------------------------------------------------------------------
+ */
+$label_abv = "Alcohol By Volume (ABV)";
+$label_sweetness_level = "Sweetness Level";
+$label_juice_source = "Juice Source(s)";
+$label_select_all_apply = "Select All That Apply";
+$brew_text_042 = "Please provide the alcohol by volume up to the hundredth place.";
+$brew_text_043 = "Numbers only - decimals acceptable to the hundredth place (e.g., 5.2, 12.84, etc.).";
+$brew_text_044 = "Please provide finishing specific gravity to the thousandth place (e.g., 0.991, 1.000, 1.007, etc.).";
+$brew_text_045 = "Please provide juice source(s) - select all that apply.";
+$brew_text_046 = "Please specify the two letter state/provice abbreviation of any other juice source(s) (e.g., VT, ME, CA, ON, etc.). Separate each location's abbreviation by comma (,) or semi-colon (;). Some symbols are not allowed, including double-quotation marks (&quot;) and percent (&#37;).";
 
 /**
  * ----------------------------------------------------------------------------------

@@ -407,6 +407,13 @@ if ($entry_found) {
     $entry_info_html .= "</div>";
   }
 
+  if (!empty($row_entry_info['brewMead3'])) {
+    $entry_info_html .= "<div class=\"row bcoem-admin-element\">";
+    $entry_info_html .= "<div class=\"col col-lg-3 col-md-4 col-sm-4 col-xs-12\"><strong>".$label_strength."</strong></div>";
+    $entry_info_html .= "<div class=\"col col-lg-9 col-md-8 col-sm-8 col-xs-12\">".$row_entry_info['brewMead3']."</div>";
+    $entry_info_html .= "</div>";
+  }
+
   if (!empty($row_entry_info['brewMead2'])) {
     $entry_info_html .= "<div class=\"row bcoem-admin-element\">";
     $entry_info_html .= "<div class=\"col col-lg-3 col-md-4 col-sm-4 col-xs-12\"><strong>".$label_sweetness."</strong></div>";
@@ -414,11 +421,43 @@ if ($entry_found) {
     $entry_info_html .= "</div>";
   }
 
-  if (!empty($row_entry_info['brewMead3'])) {
+  if (($_SESSION['prefsStyleSet'] == "NWCiderCup") && (!empty($row_entry_info['brewSweetnessLevel']))) {
     $entry_info_html .= "<div class=\"row bcoem-admin-element\">";
-    $entry_info_html .= "<div class=\"col col-lg-3 col-md-4 col-sm-4 col-xs-12\"><strong>".$label_strength."</strong></div>";
-    $entry_info_html .= "<div class=\"col col-lg-9 col-md-8 col-sm-8 col-xs-12\">".$row_entry_info['brewMead3']."</div>";
+    $entry_info_html .= "<div class=\"col col-lg-3 col-md-4 col-sm-4 col-xs-12\"><strong>".$label_sweetness_level."</strong></div>";
+    $entry_info_html .= "<div class=\"col col-lg-9 col-md-8 col-sm-8 col-xs-12\">".$row_entry_info['brewSweetnessLevel']."</div>";
     $entry_info_html .= "</div>";
+  }
+
+  if (!empty($row_entry_info['brewABV'])) {
+    $entry_info_html .= "<div class=\"row bcoem-admin-element\">";
+    $entry_info_html .= "<div class=\"col col-lg-3 col-md-4 col-sm-4 col-xs-12\"><strong>".$label_abv."</strong></div>";
+    $entry_info_html .= "<div class=\"col col-lg-9 col-md-8 col-sm-8 col-xs-12\">".$row_entry_info['brewABV']."&#37;</div>";
+    $entry_info_html .= "</div>";
+  }
+
+  if (($_SESSION['prefsStyleSet'] == "NWCiderCup") && (!empty($row_entry_info['brewJuiceSource']))) {
+    
+    $juice_src_arr = json_decode($row_entry_info['brewJuiceSource'],true);
+    $juice_src_disp = "";
+
+    if (is_array($juice_src_arr['juice_src'])) {
+      $juice_src_disp .= implode(", ",$juice_src_arr['juice_src']);
+      $juice_src_disp .= ", ";
+    }
+
+    if ((isset($juice_src_arr['juice_src_other'])) && (is_array($juice_src_arr['juice_src_other']))) {
+      $juice_src_disp .= implode(", ",$juice_src_arr['juice_src_other']);
+      $juice_src_disp .= ", ";
+    }
+
+    $juice_src_disp = rtrim($juice_src_disp,",");
+    $juice_src_disp = rtrim($juice_src_disp,", ");
+
+    $entry_info_html .= "<div class=\"row bcoem-admin-element\">";
+    $entry_info_html .= "<div class=\"col col-lg-3 col-md-4 col-sm-4 col-xs-12\"><strong>".$label_juice_source."</strong></div>";
+    $entry_info_html .= "<div class=\"col col-lg-9 col-md-8 col-sm-8 col-xs-12\">".$juice_src_disp."</div>";
+    $entry_info_html .= "</div>";
+  
   }
 
   if (!empty($row_entry_info['brewPossAllergens'])) {

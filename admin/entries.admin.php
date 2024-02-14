@@ -169,26 +169,32 @@ if ($totalRows_log > 0) {
 		if ($scoresheet_entry) $scoresheet_file_name_1 = $scoresheet_file_name_entry;
 		if ($scoresheet_judging) $scoresheet_file_name_2 = $scoresheet_file_name_judging;
 
-		if ((!empty($row_log['brewInfo'])) || (!empty($row_log['brewMead1'])) || (!empty($row_log['brewMead2'])) || (!empty($row_log['brewMead3']))) {
-			
-			$brewInfo = "";
-			//$brewInfo .= "Required Info: ";
-			if (!empty($row_log['brewInfo'])) $brewInfo .= str_replace("^", " | ", $row_log['brewInfo']);
-			if (!empty($row_log['brewMead1'])) $brewInfo .= "&nbsp;&nbsp;".$row_log['brewMead1'];
-			if (!empty($row_log['brewMead2'])) $brewInfo .= "&nbsp;&nbsp;".$row_log['brewMead2'];
-			if (!empty($row_log['brewMead3'])) $brewInfo .= "&nbsp;&nbsp;".$row_log['brewMead3'];
-
-			if (($_SESSION['prefsStyleSet'] == "BJCP2021") && ($row_log['brewCategorySort'] == "02") && ($row_log['brewSubCategory'] == "A")) $required_info .= "<p><strong>Regional Var:</strong> ".$brewInfo."</p>";
-			else $required_info .= "<p><strong>Req. Info:</strong> ".$brewInfo."</p>";
-		
+		// Required Info
+		$brewInfo = "";
+		if (!empty($row_log['brewInfo'])) {
+			if (($_SESSION['prefsStyleSet'] == "BJCP2021") && ($row_log['brewCategorySort'] == "02") && ($row_log['brewSubCategory'] == "A")) $brewInfo .= "<li><strong>".$label_regional_variation.":</strong> ".str_replace("^", " | ", $row_log['brewInfo'])."</li>";
+			else $brewInfo .= "<li><strong>".$label_required_info.":</strong> ".str_replace("^", " | ", $row_log['brewInfo'])."</li>";
 		}
 
+		if (!empty($brewInfo)) $required_info .= $brewInfo;
+
+		// Optional Info (Brewer's Specifics)
 		if (!empty($row_log['brewInfoOptional'])) {
-			$required_info .= "<p><strong>Op. Info:</strong> ".$row_log['brewInfoOptional']."</p>";
+			$required_info .= "<li><strong>".$label_optional_info.":</strong> ".$row_log['brewInfoOptional']."</li>";
 		}
 
+		// Required Info for Cider / Mead (Strength, Carb, Sweetness)
+		$cider_mead_req_info = "";
+		if (!empty($row_log['brewMead1'])) $cider_mead_req_info .= "<li><strong>".$label_carbonation.":</strong> ".$row_log['brewMead1']."</li>";
+		if (!empty($row_log['brewMead2'])) $cider_mead_req_info .= "<li><strong>".$label_sweetness.":</strong> ".$row_log['brewMead2']."</li>";
+		if (!empty($row_log['brewSweetnessLevel'])) $cider_mead_req_info .= "<li><strong>".$label_sweetness_level.":</strong> ".$row_log['brewSweetnessLevel']."</li>";
+		if (!empty($row_log['brewMead3'])) $cider_mead_req_info .= "<li><strong>".$label_strength.":</strong> ".$row_log['brewMead3']."</li>";
+
+		if (!empty($cider_mead_req_info)) $required_info .= $cider_mead_req_info;
+
+		// Allergens
 		if ($entry_allergens) {
-			$entry_allergens_display .= "<br><strong class=\"text-danger small\">".$label_possible_allergens.": ".$row_log['brewPossAllergens']."</strong>";
+			$entry_allergens_display .= "<p><strong class=\"text-danger small\">".$label_possible_allergens.": ".$row_log['brewPossAllergens']."</strong></p>";
 			$entry_allergen_row = "bg-warning";
 		}
 
@@ -491,7 +497,9 @@ if ($totalRows_log > 0) {
 			$tbody_rows .= "<div class=\"visible-xs visible-sm hidden-print\" style=\"margin: 5px 0 5px 0\"><button class=\"btn btn-primary btn-block btn-xs\" type=\"button\" data-toggle=\"collapse\" data-target=\"#collapseEntryInfo".$row_log['id']."\" aria-expanded=\"false\" aria-controls=\"collapseEntryInfo".$row_log['id']."\">Entry Info <span class=\"fa fa-lg fa-info-circle\"></span></button></div>";
 		
 			$tbody_rows .= "<div class=\"collapse small alert alert-info\" style=\"margin-top:5px;margin-bottom:5px;\" id=\"collapseEntryInfo".$row_log['id']."\">";
+			$tbody_rows .= "<ul class='list-unstyled'>";
 	    	$tbody_rows .= $required_info;
+	    	$tbody_rows .= "</ul>";
 	    	$tbody_rows .= "</div>";
 	    }
 
@@ -914,7 +922,7 @@ $(document).ready(function () {
         <th nowrap>Entry</th>
         <th nowrap>Judging <?php if (($action != "print") && ($dbTable == "default") && ($_SESSION['userAdminObfuscate'] == 0)) { ?><a href="#" tabindex="0" role="button" data-toggle="popover" data-trigger="hover" data-placement="auto top" data-container="body" title="Judging Numbers" data-content="Judging numbers are random six-digit numbers that are automatically assigned by the system. You can override each judging number when scanning in barcodes, QR Codes, or by entering it in the field provided. Judging numbers must be six characters and cannot include the ^ character. The ^ character will be converted to a dash (-) upon submit. Use leading zeroes (e.g., 000123 or 01-001, etc.). Alpha characters will be converted to lower case for consistency and system use."><span class="<?php echo $hidden_md; ?> hidden-print fa fa-question-circle"></span></a><?php } ?></th>
         <th class="<?php echo $hidden_md; ?>">Name</th>
-        <th>Style</th>
+        <th>Style <a href="#" tabindex="0" role="button" data-toggle="popover" data-trigger="hover" data-placement="auto top" data-container="body" data-html="true" title="Judging Numbers" data-content="If there is a <span class='fa fa-info-circle'></span> icon next to the style name, the entrant provided required and/or optional information about their entry. Select the icon to review the information."><span class="<?php echo $hidden_md; ?> hidden-print fa fa-question-circle"></span></a></th>
         <th class="<?php echo $hidden_sm; ?>"><?php if ($pro_edition == 1) echo "Organization"; else echo "Brewer"; ?></th>
         <?php if ($pro_edition == 0) { ?>
         <th class="<?php echo $hidden_md; ?> hidden-print">Club</th>
@@ -922,8 +930,8 @@ $(document).ready(function () {
         <th class="<?php echo $hidden_md; ?> hidden-print">Updated</th>
         <th class="<?php echo $hidden_sm; ?>" width="3%">P<span class="hidden-md">aid?</span></th>
         <th class="<?php echo $hidden_sm; ?>" width="3%">R<span class="hidden-md">ec'd?</span></th>
-        <th class="<?php echo $hidden_md; ?> ">Admin Notes <?php if (($action != "print") &&  ($dbTable == "default")) { ?><a href="#" tabindex="0" role="button" data-toggle="popover" data-trigger="hover" data-placement="auto top" data-container="body" title="Admin Notes" data-content="Catch-all for any information Admins may need for individual entries such as 'partial refund needed', 'maybe mis-categorized', etc. 255 character limit."><span class="<?php echo $hidden_md; ?> hidden-print fa fa-question-circle"></span></a><?php } ?></th>
-        <th class="<?php echo $hidden_md; ?> ">Staff Notes <?php if (($action != "print") &&  ($dbTable == "default")) { ?><a href="#" tabindex="0" role="button" data-toggle="popover" data-trigger="hover" data-placement="auto top" data-container="body" title="Staff Notes" data-content="Catch-all for any information staff may need to know about individual entries such as 'single 750ml bottle', 'missing MBOS bottle', etc. Notes entered here are printed on pullsheets. 255 character limit."><span class="<?php echo $hidden_md; ?> hidden-print fa fa-question-circle"></span></a><?php } ?></th>
+        <th class="<?php echo $hidden_md; ?> ">Admin Notes <?php if (($action != "print") &&  ($dbTable == "default")) { ?><a href="#" tabindex="0" role="button" data-toggle="popover" data-trigger="hover" data-placement="auto top" data-container="body" data-html="true" title="Admin Notes" data-content="Catch-all for any information Admins may need for individual entries such as &quot;received damaged,&quot; &quot;maybe mis-categorized,&quot; etc. 255 character limit."><span class="<?php echo $hidden_md; ?> hidden-print fa fa-question-circle"></span></a><?php } ?></th>
+        <th class="<?php echo $hidden_md; ?> ">Staff Notes <?php if (($action != "print") &&  ($dbTable == "default")) { ?><a href="#" tabindex="0" role="button" data-toggle="popover" data-trigger="hover" data-placement="auto top" data-container="body" data-html="true" title="Staff Notes" data-content="Catch-all for any information staff may need to know about individual entries such as &quot;single 750ml bottle,&quot; &quot;missing MBOS bottle,&quot; etc. Notes entered here are printed on pullsheets. 255 character limit."><span class="<?php echo $hidden_md; ?> hidden-print fa fa-question-circle"></span></a><?php } ?></th>
         <th class="<?php echo $hidden_sm; ?>">Loc<span class="hidden-md">/Box</span></th>
         <?php if ($action != "print") { ?><th class="hidden-xs hidden-sm hidden-print">Actions</th><?php } ?>
     </tr>

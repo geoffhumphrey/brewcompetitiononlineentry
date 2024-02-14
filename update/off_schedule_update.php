@@ -3698,6 +3698,79 @@ if (!check_update("prefsSelectedStyles", $prefix."preferences")) {
 
 if (!$setup_running) $output_off_sched_update .= "</ul>";
 
+/**
+ * ----------------------------------------------- 2.7.0 ---------------------------------------------
+ * Leverage unused brewWinner DB column to house ABV.
+ * ---------------------------------------------------------------------------------------------------
+ */
+
+if ((!$setup_running) && (!$update_running)) {
+	$output_off_sched_update .= "<p>";
+	$output_off_sched_update .= "<strong>Version 2.7.0.0 Updates</strong>";
+	$output_off_sched_update .= "</p>";
+}
+
+elseif ($update_running) {
+	$output_off_sched_update .= "<h4>Version 2.7.0</h4>";
+}
+
+// Begin version unordered list
+if (!$setup_running) $output_off_sched_update .= "<ul>";
+
+if (check_update("brewWinner", $prefix."brewing")) {
+
+	$sql = sprintf("ALTER TABLE `%s` CHANGE `brewWinner` `brewABV` FLOAT NULL DEFAULT NULL COMMENT 'Expressed as a decimal.';", $prefix."brewing");
+	mysqli_select_db($connection,$database);
+	mysqli_real_escape_string($connection,$sql);
+	$result = mysqli_query($connection,$sql);
+	if ($result) $output_off_sched_update .= "<li>ABV column added to the brewing table.</li>";
+	else {
+		$output_off_sched_update .= "<li class=\"text-danger\">ABV column NOT added to the brewing table.</li>";
+		$error_count += 1;
+	}
+
+}
+
+if (check_update("brewJudgingLocation", $prefix."brewing")) {
+
+	$sql = sprintf("ALTER TABLE `%s` CHANGE `brewJudgingLocation` `brewSweetnessLevel` VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT 'Only for NW Cider Cup style set.';", $prefix."brewing");
+	mysqli_select_db($connection,$database);
+	mysqli_real_escape_string($connection,$sql);
+	$result = mysqli_query($connection,$sql);
+	if ($result) $output_off_sched_update .= "<li>Sweetness Level column added to the brewing table.</li>";
+	else {
+		$output_off_sched_update .= "<li class=\"text-danger\">Sweetness Level column NOT added to the brewing table.</li>";
+		$error_count += 1;
+	}
+
+}
+
+if (!check_update("brewJuiceSource", $prefix."brewing")) {
+
+	$sql = sprintf("ALTER TABLE `%s` ADD `brewJuiceSource` VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT 'Only for NW Cider Cup style set.';", $prefix."brewing");
+	mysqli_select_db($connection,$database);
+	mysqli_real_escape_string($connection,$sql);
+	$result = mysqli_query($connection,$sql);
+	if ($result) $output_off_sched_update .= "<li>Juice Source column added to the brewing table.</li>";
+	else {
+		$output_off_sched_update .= "<li class=\"text-danger\">Juice Source column NOT added to the brewing table.</li>";
+		$error_count += 1;
+	}
+
+}
+
+$sql = sprintf("UPDATE `%s` SET brewStyleReqSpec='0' WHERE brewStyleVersion='NWCiderCup' AND (brewStyleGroup='C1' OR brewStyleGroup='C2');", $prefix."styles");
+mysqli_select_db($connection,$database);
+mysqli_real_escape_string($connection,$sql);
+$result = mysqli_query($connection,$sql);
+if ($result) $output_off_sched_update .= "<li>NW Cider Cup styles updated.</li>";
+else {
+	$output_off_sched_update .= "<li class=\"text-danger\">NW Cider Cup styles NOT updated.</li>";
+	$error_count += 1;
+}
+
+if (!$setup_running) $output_off_sched_update .= "</ul>";
+
 
 /**
  * ----------------------------------------------- Future --------------------------------------------- 

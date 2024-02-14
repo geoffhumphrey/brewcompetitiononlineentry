@@ -297,9 +297,11 @@ if (($action == "default") && ($filter == "default")) {
 
     do {
 
-        $bos_modal_body .= "<li>";
-        $bos_modal_body .= $row_style_type['styleTypeName']." (".bos_method($row_style_type['styleTypeBOSMethod'])." from each table to BOS).";
-        $bos_modal_body .= "</li>";
+        if (isset($row_style_type['styleTypeName'])) {
+            $bos_modal_body .= "<li>";
+            $bos_modal_body .= $row_style_type['styleTypeName']." (".bos_method($row_style_type['styleTypeBOSMethod'])." from each table to BOS).";
+            $bos_modal_body .= "</li>";
+        }
 
     } while ($row_style_type = mysqli_fetch_assoc($style_type));   
 

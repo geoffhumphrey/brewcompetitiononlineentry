@@ -12,8 +12,6 @@
  * TO DO:
  *    - Add check to see if all scores have been imported. If so, don't show or disable the import button.
  *    - Dynamically check at interval to see if entry currently evaluating has score entered by another judge.
- *    - Add elapsed time display.
- *    - Check translation items
  *
  *    -----------------------------------------------------------------------------------------
  * 
@@ -47,6 +45,7 @@
  *      - Cider http://dev.bjcp.org/download/bjcp-scoresheet-cstr.pdf/  *** DONE ***
  *      - Mead  http://dev.bjcp.org/download/bjcp-scoresheet-mstr.pdf/  *** DONE ***
  *      - Beer  http://dev.bjcp.org/download/bjcp-scoresheet-bstr.pdf/  *** DONE ***
+ *    - Add elapsed time display.  *** DONE ***
  */
 
 $judging_open = FALSE;
@@ -358,7 +357,7 @@ if ($totalRows_table_assignments > 0) {
 				$score_style_data = score_style_data($value);
 		        $score_style_data = explode("^",$score_style_data);
 		        
-				$query_entries = sprintf("SELECT id, brewBrewerID, brewStyle, brewCategorySort, brewCategory, brewSubCategory, brewInfo, brewJudgingNumber, brewName, brewPossAllergens FROM %s WHERE (brewCategorySort='%s' AND brewSubCategory='%s') AND brewReceived='1'", $prefix."brewing", $score_style_data[0], $score_style_data[1]);
+				$query_entries = sprintf("SELECT id, brewBrewerID, brewStyle, brewCategorySort, brewCategory, brewSubCategory, brewInfo, brewJudgingNumber, brewName, brewPossAllergens, brewABV, brewJuiceSource, brewSweetnessLevel, brewMead1, brewMead2, brewMead3 FROM %s WHERE (brewCategorySort='%s' AND brewSubCategory='%s') AND brewReceived='1'", $prefix."brewing", $score_style_data[0], $score_style_data[1]);
 				if ($_SESSION['prefsDisplaySpecial'] == "J") $query_entries .= " ORDER BY brewJudgingNumber ASC;";
 				else $query_entries .= " ORDER BY id ASC;";
 				$entries = mysqli_query($connection,$query_entries) or die (mysqli_error($connection));
@@ -434,14 +433,75 @@ if ($totalRows_table_assignments > 0) {
 						$style_display = $style.": ".$score_style_data[2];
 
 						$info_display = "";
+						$allergen_display = "";
+						$abv_display = "";
+						$juice_src_display = "";
+						$carb_display = "";
+						$sweetness_display = "";
+						$sweetness_level_display = "";
+						$strength_display = "";
+						$additional_info = 0;
+						
 						if (!empty($row_entries['brewInfo'])) {
-							if (($_SESSION['prefsStyleSet'] == "BJCP2021") && ($row_entries['brewCategorySort'] == "02") && ($row_entries['brewSubCategory'] == "A")) $info_display .= $label_regional_variation; 
-							else $info_display .= $label_required_info;
-							$info_display .= ": ".$row_entries['brewInfo'];
+							$additional_info++;
+							if (($_SESSION['prefsStyleSet'] == "BJCP2021") && ($row_entries['brewCategorySort'] == "02") && ($row_entries['brewSubCategory'] == "A")) $info_display .= "<strong>".$label_regional_variation; 
+							else $info_display .= "<strong>".$label_required_info;
+							$info_display .= ":</strong> ".$row_entries['brewInfo'];
 						}
 
-						$allergen_display = "";
-						if (!empty($row_entries['brewPossAllergens'])) $allergen_display .= $label_possible_allergens.": ".$row_entries['brewPossAllergens'];
+						if (!empty($row_entries['brewMead1'])) {
+							$additional_info++;
+							$carb_display .= "<strong>".$label_carbonation.":</strong> ".$row_entries['brewMead1'];
+						}
+
+						if (!empty($row_entries['brewMead2'])) {
+							$additional_info++;
+							$sweetness_display .= "<strong>".$label_sweetness.":</strong> ".$row_entries['brewMead2'];
+						}
+
+						if (!empty($row_entries['brewSweetnessLevel'])) {
+							$additional_info++;
+							$sweetness_level_display .= "<strong>".$label_sweetness_level.":</strong> ".$row_entries['brewSweetnessLevel'];
+						}
+
+						if (!empty($row_entries['brewMead3'])) {
+							$additional_info++;
+							$strength_display .= "<strong>".$label_strength.":</strong> ".$row_entries['brewMead3'];
+						}
+
+						if (!empty($row_entries['brewPossAllergens'])) {
+							$additional_info++;
+							$allergen_display .= "<strong>".$label_possible_allergens.":</strong> ".$row_entries['brewPossAllergens'];
+						}
+						
+						if (!empty($row_entries['brewABV'])) {
+							$additional_info++;
+							$abv_display .= "<strong>".$label_abv.":</strong> ".$row_entries['brewABV'];
+						}
+
+						if (($_SESSION['prefsStyleSet'] == "NWCiderCup") && (!empty($row_entries['brewJuiceSource']))) {
+
+							$additional_info++;
+
+							$juice_src_arr = json_decode($row_entries['brewJuiceSource'],true);
+							$juice_src_disp = "";
+
+							if (is_array($juice_src_arr['juice_src'])) {
+								$juice_src_disp .= implode(", ",$juice_src_arr['juice_src']);
+								$juice_src_disp .= ", ";
+							}
+
+							if ((isset($juice_src_arr['juice_src_other'])) && (is_array($juice_src_arr['juice_src_other']))) {
+								$juice_src_disp .= implode(", ",$juice_src_arr['juice_src_other']);
+								$juice_src_disp .= ", ";
+							}
+
+							$juice_src_disp = rtrim($juice_src_disp,",");
+							$juice_src_disp = rtrim($juice_src_disp,", ");
+
+							$juice_src_display .= "<strong>".$label_juice_source.":</strong> ".$juice_src_disp;
+						
+						}
 
 						$add_link = $base_url."index.php?section=evaluation&amp;go=scoresheet&amp;action=add&amp;filter=".$tbl_id."&amp;id=".$row_entries['id'];
 						
@@ -459,8 +519,20 @@ if ($totalRows_table_assignments > 0) {
 				        	$table_assignment_data .= "<td><a class=\"anchor\" name=\"".$number."\"></a>".$number."</td>";
 				        	$table_assignment_data .= "<td class=\"hidden-xs\">";
 				        	$table_assignment_data .= $style_display;
-				        	if (!empty($info_display)) $table_assignment_data .= "<br><small><em>".str_replace("^",", ",$info_display)."</em></small>";
-				        	if (!empty($allergen_display)) $table_assignment_data .= "<br><small><em>".$allergen_display."</em></small>";
+				        	
+				        	if ($additional_info > 0) {
+				        		$table_assignment_data .= "<ul class=\"list-unstyled small\">";
+				        		if (!empty($info_display)) $table_assignment_data .= "<li><em>".str_replace("^",", ",$info_display)."</em></li>";
+				        		if (!empty($carb_display)) $table_assignment_data .= "<li><em>".$carb_display."</em></li>";
+				        		if (!empty($sweetness_display)) $table_assignment_data .= "<li><em>".$sweetness_display."</em></li>";
+				        		if (!empty($sweetness_level_display)) $table_assignment_data .= "<li><em>".$sweetness_level_display."</em></li>";
+				        		if (!empty($allergen_display)) $table_assignment_data .= "<li><em>".$allergen_display."</em></li>";
+				        		if (!empty($abv_display)) $table_assignment_data .= "<li><em>".$abv_display."</em></li>";
+				        		if (!empty($juice_src_display)) $table_assignment_data .= "<li><em>".$juice_src_display."</em></li>";
+				        		if (!empty($strength_display)) $table_assignment_data .= "<li><em>".$strength_display."</em></li>";
+				        		$table_assignment_data .= "</ul>";
+				        	}
+					        	
 				        	$table_assignment_data .= "</td>";
 				        	$table_assignment_data .= "<td>".$notes."</td>";
 				        	$table_assignment_data .= "<td>".$eval_place_actions.$actions."</td>";

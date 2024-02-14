@@ -20,7 +20,7 @@ if ($filter == "mini_bos") {
 	if ($view == "default") $order = "b.brewJudgingNumber";
 	else $order = "b.id";
 
-	$query_entries = sprintf("SELECT a.scoreMiniBOS, b.id, b.brewStyle, b.brewCategory, b.brewCategorySort, b.brewSubCategory, b.brewInfo, b.brewMead1, b.brewMead2, b.brewMead3, b.brewJudgingNumber, b.brewBoxNum, b.brewComments, b.brewInfoOptional, b.brewPossAllergens, b.brewStaffNotes FROM %s a, %s b WHERE b.brewCategorySort='%s' AND b.brewSubCategory='%s' AND a.eid = b.id AND a.scoreMiniBOS='1' ORDER BY %s", $prefix."judging_scores", $prefix."brewing", $row_styles['brewStyleGroup'], $row_styles['brewStyleNum'], $order);
+	$query_entries = sprintf("SELECT a.scoreMiniBOS, b.id, b.brewStyle, b.brewCategory, b.brewCategorySort, b.brewSubCategory, b.brewInfo, b.brewMead1, b.brewMead2, b.brewMead3, b.brewJudgingNumber, b.brewBoxNum, b.brewComments, b.brewInfoOptional, b.brewPossAllergens, b.brewStaffNotes, b.brewABV, b.brewJuiceSource, b.brewSweetnessLevel FROM %s a, %s b WHERE b.brewCategorySort='%s' AND b.brewSubCategory='%s' AND a.eid = b.id AND a.scoreMiniBOS='1' ORDER BY %s", $prefix."judging_scores", $prefix."brewing", $row_styles['brewStyleGroup'], $row_styles['brewStyleNum'], $order);
 
 }
 
@@ -35,7 +35,7 @@ else {
 		if ($_SESSION['jPrefsTablePlanning'] == 1) $received = FALSE;
 	}
 
-	$query_entries = sprintf("SELECT id, brewStyle, brewCategory, brewCategorySort, brewSubCategory, brewInfo, brewMead1, brewMead2, brewMead3, brewJudgingNumber, brewBoxNum, brewComments, brewInfoOptional, brewPossAllergens, brewStaffNotes FROM %s WHERE brewCategorySort='%s' AND brewSubCategory='%s'", $prefix."brewing", $row_styles['brewStyleGroup'], $row_styles['brewStyleNum']);
+	$query_entries = sprintf("SELECT * FROM %s WHERE brewCategorySort='%s' AND brewSubCategory='%s'", $prefix."brewing", $row_styles['brewStyleGroup'], $row_styles['brewStyleNum']);
 	
 	if ($received) $query_entries .= " AND brewReceived='1'";
 	$query_entries .= sprintf(" ORDER BY %s ASC",$order);

@@ -9,7 +9,7 @@ $query_eval = sprintf("SELECT * FROM %s WHERE id=%s", $dbTable, $id);
 $eval = mysqli_query($connection,$query_eval) or die (mysqli_error($connection));
 $row_eval = mysqli_fetch_assoc($eval);
 
-if ($dbTable == "default") $query_judge = sprintf("SELECT * FROM %s WHERE uid=%s", $prefix."brewer".$archive_suffix, $row_eval['evalJudgeInfo']);
+$query_judge = sprintf("SELECT * FROM %s WHERE uid=%s", $prefix."brewer".$archive_suffix, $row_eval['evalJudgeInfo']);
 $judge = mysqli_query($connection,$query_judge) or die (mysqli_error($connection));
 $row_judge = mysqli_fetch_assoc($judge);
 

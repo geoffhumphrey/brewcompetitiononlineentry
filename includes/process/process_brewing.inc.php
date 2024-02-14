@@ -119,6 +119,9 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 		$brewBoxNum = "";
 		$brewPaid = 0;
 		$brewReceived = 0;
+		$brewABV = "";
+		$brewSweetnessLevel = "";
+		$brewJuiceSource = "";
 
 		// Comments
 		if ((isset($_POST['brewComments'])) && (!empty($_POST['brewComments']))) {
@@ -178,8 +181,60 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 			}
 
 		}
-		
 
+		// ABV
+		if ((isset($_POST['brewABV'])) && (!empty($_POST['brewABV']))) {
+			$brewABV = $purifier->purify($_POST['brewABV']);
+			$brewABV = filter_var($brewABV, FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION | FILTER_FLAG_ALLOW_THOUSAND);
+		}
+
+		// Sweetness Level (Specific Gravity)
+		if ((isset($_POST['brewSweetnessLevel'])) && (!empty($_POST['brewSweetnessLevel']))) {
+			$brewSweetnessLevel = $purifier->purify($_POST['brewSweetnessLevel']);
+			$brewSweetnessLevel = filter_var($brewSweetnessLevel, FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION | FILTER_FLAG_ALLOW_THOUSAND);
+			$brewSweetnessLevel = number_format($brewSweetnessLevel,3);
+		}
+
+		// Juice Sorce - From multi-select
+		if ((isset($_POST['brewJuiceSource'])) && (!empty($_POST['brewJuiceSource']))) {
+		    $juice_src = array("juice_src" => $_POST['brewJuiceSource']);
+		}
+
+		else $juice_src = array();
+
+		if ((isset($_POST['brewJuiceSourceOther'])) && (!empty($_POST['brewJuiceSourceOther']))) {
+
+		    $juice_src_other_arr = str_replace(", ",",",$_POST['brewJuiceSourceOther']);
+		    $juice_src_other_arr = str_replace(",",",",$_POST['brewJuiceSourceOther']);
+		    $juice_src_other_arr = str_replace("; ",",",$_POST['brewJuiceSourceOther']);
+		    $juice_src_other_arr = str_replace(";",",",$_POST['brewJuiceSourceOther']);
+		    $juice_src_other_arr = explode(",",$juice_src_other_arr);
+		    
+		    $juice_src_other = array();
+
+		    foreach ($juice_src_other_arr as $value) {  
+		        $value = $purifier->purify($value);
+		        $value = sterilize($value);
+		        $juice_src_other[] = strtoupper($value);
+		    }
+
+		    if (!empty($juice_src_other)) $juice_src_other_arr = array("juice_src_other" => $juice_src_other);
+
+		}
+
+		else $juice_src_other_arr = array();
+
+		if ((empty($juice_src)) && (empty($juice_src_other_arr))) {
+		    $brewJuiceSource = NULL;
+		}
+
+		else {
+		    $brewJuiceSource = array();
+		    $brewJuiceSource = array_merge($juice_src,$juice_src_other_arr);
+		    $brewJuiceSource = json_encode($brewJuiceSource);
+		}
+		
+		// Record Paid and Received
 		if ($action == "add") {
 
 			if ($_SESSION['userLevel'] <= 1) {
@@ -369,7 +424,10 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 			'brewJudgingNumber' => blank_to_null($brewJudgingNumber),
 			'brewUpdated' => $db_conn->now(),
 			'brewConfirmed' => blank_to_null(filter_var($_POST['brewConfirmed'],FILTER_SANITIZE_FULL_SPECIAL_CHARS)),
-			'brewBoxNum' => blank_to_null($brewBoxNum)
+			'brewBoxNum' => blank_to_null($brewBoxNum),
+			'brewABV' => blank_to_null($brewABV),
+			'brewJuiceSource' => blank_to_null($brewJuiceSource),
+			'brewSweetnessLevel' => blank_to_null($brewSweetnessLevel)
 		);
 		$result = $db_conn->insert ($update_table, $data);
 		if (!$result) {
@@ -607,7 +665,10 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 			'brewJudgingNumber' => $brewJudgingNumber,
 			'brewUpdated' => $db_conn->now(),
 			'brewConfirmed' => filter_var($_POST['brewConfirmed'],FILTER_SANITIZE_FULL_SPECIAL_CHARS),
-			'brewBoxNum' => $brewBoxNum
+			'brewBoxNum' => $brewBoxNum,
+			'brewABV' => blank_to_null($brewABV),
+			'brewJuiceSource' => blank_to_null($brewJuiceSource),
+			'brewSweetnessLevel' => blank_to_null($brewSweetnessLevel)
 		);
 		$db_conn->where ('id', $id);
 		$result = $db_conn->update ($update_table, $data);

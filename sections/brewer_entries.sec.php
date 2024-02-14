@@ -337,7 +337,6 @@ if ($totalRows_log > 0) {
 		if ($show_scores) {
 
 			$medal_winner = winner_check($row_log['id'],$judging_scores_db_table,$judging_tables_db_table,$brewing_db_table,$_SESSION['prefsWinnerMethod']);
-			if (NHC) $admin_adv = winner_check($row_log['id'],$judging_scores_db_table,$judging_tables_db_table,$brewing_db_table,$row_log['brewWinner']);
 			$winner_place = preg_replace("/[^0-9\s.-:]/", "", $medal_winner);
 	 		$score = score_check($row_log['id'],$judging_scores_db_table);
 
