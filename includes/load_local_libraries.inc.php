@@ -25,14 +25,10 @@
     <script type="text/javascript" src="<?php echo $base_url; ?>libraries/fancybox/lib/jquery.mousewheel-3.0.6.pack.js"></script>
     <script type="text/javascript" src="<?php echo $base_url; ?>libraries/fancybox/source/jquery.fancybox.pack.js"></script>
     
-    <?php if ((($section == "admin") || (strpos($section, 'step') !== FALSE)) && (in_array($go,$datetime_load)) || ($section == "brew")) { ?>
-    
     <!-- Load Bootstrap DateTime Picker / http://eonasdan.github.io/bootstrap-datetimepicker/ -->
     <link rel="stylesheet" type="text/css" href="<?php echo $base_url; ?>libraries/date-time-picker/css/bootstrap-datetimepicker.min.css" />
     <script type="text/javascript" src="<?php echo $base_url; ?>libraries/date-time-picker/js/moment-with-locales.js"></script>
     <script type="text/javascript" src="<?php echo $base_url; ?>libraries/date-time-picker/js/bootstrap-datetimepicker.min.js"></script>
-    <script src="<?php echo $js_url; ?>date-time.min.js"></script>
-    <?php } ?>
     
     <?php if ((($section == "admin") || (strpos($section, 'step') !== FALSE)) && (in_array($go,$tinymce_load))) { ?>
     <!-- Load TinyMCE / https://www.tinymce.com/ -->

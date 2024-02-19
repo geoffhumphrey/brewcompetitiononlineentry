@@ -9,49 +9,6 @@ include (DB.'styles.db.php');
 if ($_SESSION['prefsStyleSet'] == "BA") include (INCLUDES.'ba_constants.inc.php');
 include (DB.'styles_special.db.php');
 
-// Define custom functions
-function display_array_content_style($arrayname,$method,$base_url) {
-	include (LANG.'language.lang.php');
-	$a = "";
-	sort($arrayname);
-	while(list($key, $value) = each($arrayname)) {
-
-		if (is_array($value)) {
-			$c = display_array_content($value,'');
-			$d = ltrim($c,"0");
-			$d = str_replace("-","",$c);
-			$a .= "<a href=\"#\" data-toggle=\"modal\" data-target=\"#".$d."\">".$d."</a>";
-		}
-
-		else {
-			$value = explode("|",$value);
-			$e = str_replace("-","",$value[0]);
-			$e = ltrim($e,"0");
-			$a .= sprintf("<a href=\"#\" data-toggle=\"modal\" data-target=\"#".$value[0]."\" data-tooltip=\"true\" title=\"%s ".$e.": ".$value[1]."\">".$e."</a>",$brew_text_000);
-			//$a .= "<a id='modal_window_link' href='".$base_url."includes/output.inc.php?section=styles&amp;view=".$value."&amp;tb=true'>".$e."</a>";
-		}
-		if ($method == "1") $a .= "";
-		if ($method == "2") $a .= "&nbsp;&nbsp;";
-		if ($method == "3") $a .= ", ";
-	}
-	$b = rtrim($a, "&nbsp;&nbsp;");
-	$b = rtrim($a, ", ;");
-	$b = rtrim($b, "  ");
-
-	return $b;
-}
-
-function admin_relocate($user_level,$go,$referrer) {
-	$list = FALSE;
-	if (strstr($referrer,"list")) $list = TRUE;
-	if (strstr($referrer,"entries")) $list = FALSE;
-	if (strstr($referrer,"0-A")) $list = FALSE;
-	if (($user_level <= 1) && ($go == "entries") && (!$list)) $output = "admin";
-	elseif (($user_level <= 1) && ($go == "entries") && ($list)) $output = "list";
-	else $output = "list";
-	return $output;
-}
-
 // Disable fields trigger
 if ((($action == "add") && ($remaining_entries <= 0) && ($_SESSION['userLevel'] == 2)) || (($action == "add") && ($entry_window_open == "2") && ($_SESSION['userLevel'] == 2))) $disable_fields = TRUE; else $disable_fields = FALSE;
 
@@ -374,7 +331,7 @@ else $relocate_referrer = $_SERVER['HTTP_REFERER'];
             <div class="input-group has-warning">
                 <!-- Input Here -->
                 <p class="form-control-static"><?php echo $brewer_info[0]." ".$brewer_info[1]; ?></p>
-                <input type="hidden" name="brewBrewerID" value="<?php echo $brewer_info[7]; ?>">
+                <input type="hidden" name="brewBrewerID" id="brewBrewerID" value="<?php echo $brewer_info[7]; ?>">
             </div>
         </div>
     </div>
@@ -383,7 +340,7 @@ else $relocate_referrer = $_SERVER['HTTP_REFERER'];
         <label for="brewCoBrewer" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label"><?php echo $label_cobrewer; ?></label>
         <div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
         	<!-- Input Here -->
-            <input class="form-control" name="brewCoBrewer" type="text" value="<?php if ($disable_fields) echo "Not Available"; if ($action == "edit") echo $row_log['brewCoBrewer']; ?>" placeholder="" <?php if ($disable_fields) echo "disabled";  ?>>
+            <input class="form-control" name="brewCoBrewer" id="brewCoBrewer" type="text" value="<?php if ($disable_fields) echo "Not Available"; if ($action == "edit") echo $row_log['brewCoBrewer']; ?>" placeholder="" <?php if ($disable_fields) echo "disabled";  ?>>
         </div>
     </div>
     <?php } ?>
@@ -423,7 +380,7 @@ else $relocate_referrer = $_SERVER['HTTP_REFERER'];
         <div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
             <div class="input-group has-warning">
                 <!-- Input Here -->
-                <input class="form-control" name="brewName" type="text" value="<?php if ($disable_fields) echo "Not Available"; if ($action == "edit") echo $entry_name; ?>"
+                <input class="form-control" name="brewName" id="brewName" type="text" value="<?php if ($disable_fields) echo "Not Available"; if ($action == "edit") echo $entry_name; ?>"
                 <?php echo $entry_disabled; ?> placeholder="<?php echo $entry_disabled_placeholder; ?>" data-error="<?php echo $brew_text_011; ?>" required autofocus>
                 <span class="input-group-addon" id="brewName-addon2"><span class="fa fa-star"></span></span>
             </div>
@@ -433,7 +390,7 @@ else $relocate_referrer = $_SERVER['HTTP_REFERER'];
     </div>
     <!-- Choose Style -->
 	<div class="form-group"><!-- Form Group REQUIRED Select -->
-        <label for="brewStyle" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label"><?php echo $style_set." ".$label_style; ?></label>
+        <label for="type" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label"><?php echo $style_set." ".$label_style; ?></label>
         <div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
         <!-- Input Here -->
         <select class="selectpicker" name="brewStyle" id="type" data-error="<?php echo $header_text_107; ?>" data-live-search="true" data-size="5" data-width="auto" data-show-tick="true" data-header="<?php echo $label_select_style; ?>" title="<?php echo $label_select_style; ?>" required>
@@ -625,8 +582,7 @@ else $relocate_referrer = $_SERVER['HTTP_REFERER'];
      </div>
      <!-- Select Sweetness -->
      <div id="sweetness-mead">
-    	<div id="fg-sweetness" class="form-group <?php if (($highlight_carb) || ($highlight_sweetness)) echo "has-error"; ?>">
-    		
+    	<div id="fg-sweetness" class="form-group <?php if (($highlight_carb) || ($highlight_sweetness)) echo "has-error"; ?>">	
             <label for="brewMead2" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label"><?php echo $label_sweetness; ?></label>
             <div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
                 <div class="input-group">
@@ -653,7 +609,6 @@ else $relocate_referrer = $_SERVER['HTTP_REFERER'];
     </div>
     <div id="sweetness-cider">
     	<div id="fg-sweetness" class="form-group <?php if (($highlight_carb) || ($highlight_sweetness)) echo "has-error"; ?>">
-    		
             <label for="brewMead2" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label"><?php echo $label_sweetness; ?></label>
             <div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
                 <div class="input-group">
@@ -679,12 +634,70 @@ else $relocate_referrer = $_SERVER['HTTP_REFERER'];
         </div>
     </div>
 
-    <!-- ABV (Optional) -->
+    <!-- Pouring Instrucitons -->
+
+    <?php
+
+    if (($action == "edit") && (!empty($row_log['brewPouring']))) $pouring_arr = json_decode($row_log['brewPouring'],true);
+    else $pouring_arr = array(
+    	"pouring" => "",
+    	"pouring_rouse" => "",
+    	"pouring_notes" => ""
+    );
+
+    ?>
+
+	<div class="form-group">
+	    <label for="brewPouringInst" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label"><?php echo $label_pouring; ?></label>
+	    <div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
+	        <div class="input-group" id="brewPouringInst">
+			    <label class="radio-inline">
+			      <input name="brewPouringInst" type="radio" id="brewPouringInst-Fast" value="<?php echo $label_fast; ?>" <?php if (($action == "edit") && ($pouring_arr['pouring'] == $label_fast)) echo "CHECKED"; ?>> <?php echo $label_fast; ?>
+			    </label>
+			    <label class="radio-inline">
+			      <input name="brewPouringInst" type="radio" id="brewPouringInst-Normal" value="<?php echo $label_normal; ?>" <?php if ($action == "add") echo "CHECKED"; if (($action == "edit") && ($pouring_arr['pouring'] == $label_normal)) echo "CHECKED"; ?>> <?php echo $label_normal; ?>
+			    </label>
+			    <label class="radio-inline">
+			      <input name="brewPouringInst" type="radio" id="brewPouringInst-Slow" value="<?php echo $label_slow; ?>" <?php if (($action == "edit") && ($pouring_arr['pouring'] == $label_slow)) echo "CHECKED"; ?>> <?php echo $label_slow; ?>
+			    </label>
+			</div>
+			<div class="help-block with-errors"></div>
+			<div class="help-block with-errors"><?php echo $brew_text_047; ?></div>
+		</div>
+	</div>
+
+	<div class="form-group">
+	    <label for="brewPouringRouse" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label"><?php echo $label_rouse_yeast; ?></label>
+	    <div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
+	        <div class="input-group" id="brewPouringRouse">
+			    <label class="radio-inline">
+			      <input name="brewPouringRouse" type="radio" id="brewPouringRouse-Yes" value="<?php echo $label_yes; ?>" <?php if (($action == "edit") && ($pouring_arr['pouring_rouse'] == $label_yes)) echo "CHECKED"; ?>> <?php echo $label_yes; ?>
+			    </label>
+			    <label class="radio-inline">
+			      <input name="brewPouringRouse" type="radio" id="brewPouringRouse-No" value="<?php echo $label_no; ?>" <?php if ($action == "add") echo "CHECKED"; if (($action == "edit") && ($pouring_arr['pouring_rouse'] == $label_no)) echo "CHECKED"; ?>> <?php echo $label_no; ?>
+			    </label>
+			</div>
+			<div class="help-block with-errors"></div>
+			<div class="help-block with-errors"><?php echo $brew_text_048; ?></div>
+		</div>
+	</div>
+
+	<div class="form-group">
+        <label for="brewPouringNotes" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label"><?php echo $label_pouring_notes; ?></label>
+        <div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
+        	<!-- Input Here -->
+            <input class="form-control" name="brewPouringNotes" id="brewPouringNotes" type="text" maxlength="255" value="<?php if ($action == "edit") echo $pouring_arr['pouring_notes']; ?>">
+            <div class="help-block with-errors"></div>
+            <div class="help-block"><?php echo $brew_text_049; ?></div>
+        </div>
+    </div>
+
+    <!-- ABV (Optional for all except NW Cider Cup) -->
 	<div class="form-group">
         <label for="brewABV" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label"><?php echo $label_abv; ?></label>
         <div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
         	<!-- Input Here -->
-            <input class="form-control" name="brewABV" type="number" min="0" step=".01" value="<?php if ($disable_fields) echo "Not Available"; if ($action == "edit") echo $row_log['brewABV']; ?>" data-error="<?php echo $brew_text_042; ?>" placeholder="" <?php if ($disable_fields) echo "disabled "; if ($_SESSION['prefsStyleSet'] == "NWCiderCup") echo "required "; ?>>
+            <input class="form-control" name="brewABV" id="brewABV" type="number" min="0" step=".01" value="<?php if ($disable_fields) echo "Not Available"; if ($action == "edit") echo $row_log['brewABV']; ?>" data-error="<?php echo $brew_text_042; ?>" placeholder="" <?php if ($disable_fields) echo "disabled "; if ($_SESSION['prefsStyleSet'] == "NWCiderCup") echo "required "; ?>>
             <div class="help-block with-errors"></div>
             <div class="help-block"><?php echo $brew_text_043; ?></div>
         </div>
@@ -698,7 +711,7 @@ else $relocate_referrer = $_SERVER['HTTP_REFERER'];
         <label for="brewSweetnessLevel" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label"><?php echo $label_sweetness_level; ?></label>
         <div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
         	<!-- Input Here -->
-            <input class="form-control" name="brewSweetnessLevel" type="number" min="0" step=".001" value="<?php if ($disable_fields) echo "Not Available"; if ($action == "edit") echo $row_log['brewSweetnessLevel']; ?>" data-error="<?php echo $brew_text_044; ?>" placeholder="" <?php if ($disable_fields) echo "disabled "; if ($_SESSION['prefsStyleSet'] == "NWCiderCup") echo "required "; ?>>
+            <input class="form-control" name="brewSweetnessLevel" id="brewSweetnessLevel" type="number" min="0" step=".001" value="<?php if ($disable_fields) echo "Not Available"; if ($action == "edit") echo $row_log['brewSweetnessLevel']; ?>" data-error="<?php echo $brew_text_044; ?>" placeholder="" <?php if ($disable_fields) echo "disabled "; if ($_SESSION['prefsStyleSet'] == "NWCiderCup") echo "required "; ?>>
             <div class="help-block with-errors"><?php echo $brew_text_044; ?></div>
         </div>
     </div>
@@ -740,8 +753,9 @@ else $relocate_referrer = $_SERVER['HTTP_REFERER'];
 	);
 
 	$juice_select_dropdown = "";
+	$juice_source_arr = array();
 
-	if (!empty($row_log['brewJuiceSource'])) $juice_src_arr = json_decode($row_log['brewJuiceSource'],true);
+	if (($action == "edit") && (!empty($row_log['brewJuiceSource']))) $juice_src_arr = json_decode($row_log['brewJuiceSource'],true);
 
 	$juice_options = FALSE;
 	if ((isset($juice_src_arr['juice_src'])) && (is_array($juice_src_arr['juice_src']))) $juice_options = TRUE;
@@ -775,9 +789,9 @@ else $relocate_referrer = $_SERVER['HTTP_REFERER'];
         </div>
     </div>
     <div id="brewJuiceSourceOther" class="form-group">
-        <label for="brewJuiceSourceOther" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label"><?php echo $label_juice_source." &ndash; ".$label_other; ?></label>
+        <label for="other-juice-source" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label"><?php echo $label_juice_source." &ndash; ".$label_other; ?></label>
         <div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
-            <input class="form-control" name="brewJuiceSourceOther" type="text" value="<?php echo rtrim($juice_source_other,", "); ?>" placeholder="" pattern="[^%\x22]+">
+            <input class="form-control" name="brewJuiceSourceOther" id="other-juice-source" type="text" value="<?php echo rtrim($juice_source_other,", "); ?>" placeholder="" pattern="[^%\x22]+">
             <div class="help-block"><?php echo $brew_text_046; ?></div>
         </div>
     </div>
@@ -906,7 +920,4 @@ if ($action == "edit") {
 <input type="hidden" name="relocate" value="<?php echo relocate($base_url."index.php?section=list","default",$msg,$id); ?>">
 <?php } ?>
 </form>
-<?php 
-include (INCLUDES.'form_js.inc.php');
-}  // end adding and editing allowed (line 52 or so)
-?>
+<?php } // end adding and editing allowed (line 52 or so) ?>

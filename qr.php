@@ -325,9 +325,6 @@ $_SESSION['last_action'] = time();
     <!-- Load BCOE&M Custom Theme CSS - Contains Bootstrap overrides and custom classes -->
     <link rel="stylesheet" type="text/css" href="<?php echo $theme; ?>" />
 
-	<!-- Load BCOE&M Custom JS -->
-    <script src="<?php echo $js_url; ?>bcoem_custom.min.js"></script>
-
     <style>
 	body {
 		margin: 0;
@@ -433,5 +430,7 @@ $_SESSION['last_action'] = time();
     <?php } ?>
     </div><!-- /container-signin -->
 </div> <!-- /container -->
+<!-- Load BCOE&M Custom JS -->
+<script src="<?php echo $js_app_url; ?>"></script>
 </body>
 </html>

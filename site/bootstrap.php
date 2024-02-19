@@ -27,6 +27,22 @@ if (HOSTED) $images_url = "https://brewingcompetitions.com/_bcoem_shared/images/
 $css_url = $base_url."css/";
 if (HOSTED) $css_url = "https://brewingcompetitions.com/_bcoem_shared/css/";
 
+$js_app_url = $js_url."app.min.js";
+$css_common_url = $css_url."common.min.css";
+
+if ((DEBUG) || (TESTING)) {
+   
+    $css_common_url = str_replace(".min", "", $css_common_url);
+    $theme = str_replace(".min", "", $theme);
+    
+    if (strpos($base_url, 'test.brewingcompetitions.com') !== false) {
+        $js_app_url = $base_url."js_source/app.js";
+    }
+    
+    $js_app_url .= "?t=".time();
+    
+}
+
 // ---------------------------- Preflight Checks ---------------------------------------
 require_once (LIB.'preflight.lib.php');
 

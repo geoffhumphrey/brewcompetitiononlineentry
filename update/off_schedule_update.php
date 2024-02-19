@@ -3700,7 +3700,8 @@ if (!$setup_running) $output_off_sched_update .= "</ul>";
 
 /**
  * ----------------------------------------------- 2.7.0 ---------------------------------------------
- * Leverage unused brewWinner DB column to house ABV.
+ * Leverage unused brewWinner and brewJudgingLocation DB columns to house ABV and Sweetness Level.
+ * Update selected NW Cider Cup styles.
  * ---------------------------------------------------------------------------------------------------
  */
 
@@ -3754,6 +3755,20 @@ if (!check_update("brewJuiceSource", $prefix."brewing")) {
 	if ($result) $output_off_sched_update .= "<li>Juice Source column added to the brewing table.</li>";
 	else {
 		$output_off_sched_update .= "<li class=\"text-danger\">Juice Source column NOT added to the brewing table.</li>";
+		$error_count += 1;
+	}
+
+}
+
+if (!check_update("brewPouring", $prefix."brewing")) {
+
+	$sql = sprintf("ALTER TABLE `%s` ADD `brewPouring` VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT 'Houses pouring instructions.';", $prefix."brewing");
+	mysqli_select_db($connection,$database);
+	mysqli_real_escape_string($connection,$sql);
+	$result = mysqli_query($connection,$sql);
+	if ($result) $output_off_sched_update .= "<li>Pouring instructions column added to the brewing table.</li>";
+	else {
+		$output_off_sched_update .= "<li class=\"text-danger\">Pouring instructions column NOT added to the brewing table.</li>";
 		$error_count += 1;
 	}
 

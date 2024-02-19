@@ -27,7 +27,7 @@ $nav_container = "navbar-default";
     <link rel="stylesheet" type="text/css" href="<?php echo $theme; ?>" />
 
     <!-- Load BCOE&M Custom JS -->
-    <script src="<?php echo $js_url; ?>bcoem_custom.min.js"></script>
+    <script src="<?php echo $js_app_url; ?>"></script>
 
   </head>
 	<body>
@@ -39,7 +39,7 @@ $nav_container = "navbar-default";
 
     <!-- ALERTS -->
     <div class="container bcoem-warning-container">
-    	<div class="alert alert-danger"><span class="fa fa-exclamation-circle"></span> <strong>A misconfiguration on the server caused a hiccup.</strong> Don't worry, we still want you around!</div>
+    	<div style="margin-top:30px;" class="alert alert-danger"><span class="fa fa-exclamation-circle"></span> <strong>A misconfiguration on the server caused a hiccup.</strong> Don't worry, we still want you around!</div>
 
     </div><!-- ./container -->
     <!-- ./ALERTS -->

@@ -86,7 +86,7 @@ function build_action_link($icon,$base_url,$section,$go,$action,$filter,$id,$dbT
 	else {
 
 		if ($method == 2) { // print form link
-			$return .= "<a id=\"modal_window_link\" class=\"hide-loader\" href=\"".$base_url."includes/outpoutput.inc.php?section=entry-form&amp;action=print&amp;";
+			$return .= "<a data-fancybox data-type=\"iframe\" class=\"modal-window-link hide-loader\" href=\"".$base_url."includes/outpoutput.inc.php?section=entry-form&amp;action=print&amp;";
 			$return .= "id=".$id;
 			$return .= "&amp;bid=".$section;
 			$return .= "\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"".$tooltip_text."\">";
@@ -127,7 +127,7 @@ function build_output_link($icon,$base_url,$filename,$section,$go,$action,$filte
 	if ($filter != "default") $return .= "&amp;filter=".$filter;
 	if ($id != "default") $return .= "&amp;id=".$id;
 	$return .= "\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"".$alt_title."\"";
-	if ($modal_window) $return .= " id=\"modal_window_link\" class=\"hide-loader\"";
+	if ($modal_window) $return .= " data-fancybox data-type=\"iframe\" class=\"modal-window-link hide-loader\"";
 	$return .= ">";
 	$return .= "<span class=\"fa ".$icon." text-primary\"></span>";
 	$return .= "</span>";
@@ -4761,6 +4761,47 @@ function prep_redirect_link($link) {
 	$link = html_entity_decode($link);
 	$link = htmlspecialchars_decode($link);
 	return $link;
+}
+
+function display_array_content_style($arrayname,$method,$base_url) {
+	include (LANG.'language.lang.php');
+	$a = "";
+	sort($arrayname);
+	while(list($key, $value) = each($arrayname)) {
+
+		if (is_array($value)) {
+			$c = display_array_content($value,'');
+			$d = ltrim($c,"0");
+			$d = str_replace("-","",$c);
+			$a .= "<a href=\"#\" data-toggle=\"modal\" data-target=\"#".$d."\">".$d."</a>";
+		}
+
+		else {
+			$value = explode("|",$value);
+			$e = str_replace("-","",$value[0]);
+			$e = ltrim($e,"0");
+			$a .= sprintf("<a href=\"#\" data-toggle=\"modal\" data-target=\"#".$value[0]."\" data-tooltip=\"true\" title=\"%s ".$e.": ".$value[1]."\">".$e."</a>",$brew_text_000);
+		}
+		if ($method == "1") $a .= "";
+		if ($method == "2") $a .= "&nbsp;&nbsp;";
+		if ($method == "3") $a .= ", ";
+	}
+	$b = rtrim($a, "&nbsp;&nbsp;");
+	$b = rtrim($a, ", ;");
+	$b = rtrim($b, "  ");
+
+	return $b;
+}
+
+function admin_relocate($user_level,$go,$referrer) {
+	$list = FALSE;
+	if (strstr($referrer,"list")) $list = TRUE;
+	if (strstr($referrer,"entries")) $list = FALSE;
+	if (strstr($referrer,"0-A")) $list = FALSE;
+	if (($user_level <= 1) && ($go == "entries") && (!$list)) $output = "admin";
+	elseif (($user_level <= 1) && ($go == "entries") && ($list)) $output = "list";
+	else $output = "list";
+	return $output;
 }
 
 ?>

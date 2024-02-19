@@ -65,30 +65,30 @@ if ($totalRows_judging > 0) {
 
             $ps_loc_e_mbos_link = $base_url."includes/output.inc.php?section=pullsheets&amp;go=judging_locations&amp;view=entry&amp;filter=mini_bos&amp;location=".$row_judging['id']."&amp;round=".$round;
             
-            $ps_loc_judging .= sprintf("<li class=\"small\"><a id=\"modal_window_link\" class=\"hide-loader\" href=\"%s\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Print Pullsheet for Session %s (Judging Numbers)\">%s</a></li>", $ps_loc_j_link, $location_name, $location_name);
+            $ps_loc_judging .= sprintf("<li class=\"small\"><a data-fancybox data-type=\"iframe\" class=\"modal-window-link hide-loader\" href=\"%s\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Print Pullsheet for Session %s (Judging Numbers)\">%s</a></li>", $ps_loc_j_link, $location_name, $location_name);
 
-            $ps_loc_judging_mbos .= sprintf("<li class=\"small\"><a id=\"modal_window_link\" class=\"hide-loader\" href=\"%s\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Print Pullsheet for Session %s (Mini-BOS Judging Numbers)\">%s (Mini-BOS)</a></li>", $ps_loc_j_mbos_link, $location_name, $location_name);
+            $ps_loc_judging_mbos .= sprintf("<li class=\"small\"><a data-fancybox data-type=\"iframe\" class=\"modal-window-link hide-loader\" href=\"%s\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Print Pullsheet for Session %s (Mini-BOS Judging Numbers)\">%s (Mini-BOS)</a></li>", $ps_loc_j_mbos_link, $location_name, $location_name);
 
-            $ps_loc_entry .= sprintf("<li class=\"small\"><a id=\"modal_window_link\" class=\"hide-loader\" href=\"%s\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Print Pullsheet for Session %s (Entry Numbers)\">%s</a></li>", $ps_loc_e_link, $location_name, $location_name);
+            $ps_loc_entry .= sprintf("<li class=\"small\"><a data-fancybox data-type=\"iframe\" class=\"modal-window-link hide-loader\" href=\"%s\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Print Pullsheet for Session %s (Entry Numbers)\">%s</a></li>", $ps_loc_e_link, $location_name, $location_name);
 
-            $ps_loc_entry_mbos .= sprintf("<li class=\"small\"><a id=\"modal_window_link\" class=\"hide-loader\" href=\"%s\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Print Pullsheet for Session %s (Mini-BOS Entry Numbers)\">%s (Mini-BOS)</a></li>", $ps_loc_e_mbos_link, $location_name, $location_name);
+            $ps_loc_entry_mbos .= sprintf("<li class=\"small\"><a data-fancybox data-type=\"iframe\" class=\"modal-window-link hide-loader\" href=\"%s\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Print Pullsheet for Session %s (Mini-BOS Entry Numbers)\">%s (Mini-BOS)</a></li>", $ps_loc_e_mbos_link, $location_name, $location_name);
 
             $cards_loc_rnd_link = $base_url."includes/output.inc.php?section=table-cards&amp;go=judging_locations&amp;location=".$row_judging['id']."&amp;round=".$round;
 
-            $cards_loc_rnd .= sprintf("<li class=\"small\"><a id=\"modal_window_link\" class=\"hide-loader\" href=\"%s\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Print Table Cards for %s\">%s</a></li>", $cards_loc_rnd_link, $location_name, $location_name);
+            $cards_loc_rnd .= sprintf("<li class=\"small\"><a data-fancybox data-type=\"iframe\" class=\"modal-window-link hide-loader\" href=\"%s\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Print Table Cards for %s\">%s</a></li>", $cards_loc_rnd_link, $location_name, $location_name);
 
         }
 
         $ji_link_entry = $base_url."includes/output.inc.php?section=pullsheets&amp;go=all_entry_info&amp;view=judge_inventory&amp;filter=J&amp;sort=entry&amp;location=".$row_judging['id'];
         $ji_loc_entry .= "<li class=\"small\">";
-        $ji_loc_entry .= sprintf("<a id=\"modal_window_link\" class=\"hide-loader\" href=\"%s\">",$ji_link_entry);
+        $ji_loc_entry .= sprintf("<a data-fancybox data-type=\"iframe\" class=\"modal-window-link hide-loader\" href=\"%s\">",$ji_link_entry);
         $ji_loc_entry .= $row_judging['judgingLocName'];
         $ji_loc_entry .= "</a>";
         $ji_loc_entry .= "</li>";
 
         $ji_loc_judging_link = $base_url."includes/output.inc.php?section=pullsheets&amp;go=all_entry_info&amp;view=judge_inventory&amp;filter=J&amp;location=".$row_judging['id'];
         $ji_loc_judging .= "<li class=\"small\">";
-        $ji_loc_judging .= sprintf("<a id=\"modal_window_link\" class=\"hide-loader\" href=\"%s\">",$ji_loc_judging_link);
+        $ji_loc_judging .= sprintf("<a data-fancybox data-type=\"iframe\" class=\"modal-window-link hide-loader\" href=\"%s\">",$ji_loc_judging_link);
         $ji_loc_judging .= $row_judging['judgingLocName'];
         $ji_loc_judging .= "</a>";
         $ji_loc_judging .= "</li>";
@@ -116,11 +116,11 @@ if ($totalRows_tables > 0) {
             $bos_pull_judging_link = $base_url."includes/output.inc.php?section=pullsheets&amp;go=judging_scores_bos&amp;id=".$row_style_type['id']; 
 
             $bos_pull_st_entry .= "<li>";
-            $bos_pull_st_entry .= sprintf("<a id=\"modal_window_link\" class=\"hide-loader\" href=\"%s\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Print the %s BOS Pullsheet Using Entry Numbers\">%s</a>",$bos_pull_entry_link,$row_style_type['styleTypeName'],$row_style_type['styleTypeName']);
+            $bos_pull_st_entry .= sprintf("<a data-fancybox data-type=\"iframe\" class=\"modal-window-link hide-loader\" href=\"%s\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Print the %s BOS Pullsheet Using Entry Numbers\">%s</a>",$bos_pull_entry_link,$row_style_type['styleTypeName'],$row_style_type['styleTypeName']);
             $bos_pull_st_entry .= "</li>";
 
             $bos_pull_st_judging .= "<li>";
-            $bos_pull_st_judging .= sprintf("<a id=\"modal_window_link\" class=\"hide-loader\" href=\"%s\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Print the %s BOS Pullsheet Using Judging Numbers\">%s</a>",$bos_pull_judging_link,$row_style_type['styleTypeName'],$row_style_type['styleTypeName']);
+            $bos_pull_st_judging .= sprintf("<a data-fancybox data-type=\"iframe\" class=\"modal-window-link hide-loader\" href=\"%s\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Print the %s BOS Pullsheet Using Judging Numbers\">%s</a>",$bos_pull_judging_link,$row_style_type['styleTypeName'],$row_style_type['styleTypeName']);
             $bos_pull_st_judging .= "</li>";
 
 
@@ -134,11 +134,11 @@ if ($totalRows_tables > 0) {
                 $bos_pull_pro_am_judging_link = $base_url."includes/output.inc.php?section=pullsheets&amp;go=judging_scores_bos&amp;action=pro-am&amp;filter=".$i."&amp;id=".$row_style_type['id']; 
 
                 $bos_pull_pro_am_st_entry .= "<li>";
-                $bos_pull_pro_am_st_entry .= sprintf("<a id=\"modal_window_link\" class=\"hide-loader\" href=\"%s\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Print the %s BOS Pullsheet Using Entry Numbers\">%s - %s</a>",$bos_pull_pro_am_entry_link,$row_style_type['styleTypeName'],$row_style_type['styleTypeName'],$pro_am_bos_method);
+                $bos_pull_pro_am_st_entry .= sprintf("<a data-fancybox data-type=\"iframe\" class=\"modal-window-link hide-loader\" href=\"%s\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Print the %s BOS Pullsheet Using Entry Numbers\">%s - %s</a>",$bos_pull_pro_am_entry_link,$row_style_type['styleTypeName'],$row_style_type['styleTypeName'],$pro_am_bos_method);
                 $bos_pull_pro_am_st_entry .= "</li>";
 
                 $bos_pull_pro_am_st_judging .= "<li>";
-                $bos_pull_pro_am_st_judging .= sprintf("<a id=\"modal_window_link\" class=\"hide-loader\" href=\"%s\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Print the %s BOS Pullsheet Using Judging Numbers\">%s - %s</a>",$bos_pull_pro_am_judging_link,$row_style_type['styleTypeName'],$row_style_type['styleTypeName'],$pro_am_bos_method);
+                $bos_pull_pro_am_st_judging .= sprintf("<a data-fancybox data-type=\"iframe\" class=\"modal-window-link hide-loader\" href=\"%s\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Print the %s BOS Pullsheet Using Judging Numbers\">%s - %s</a>",$bos_pull_pro_am_judging_link,$row_style_type['styleTypeName'],$row_style_type['styleTypeName'],$pro_am_bos_method);
                 $bos_pull_pro_am_st_judging .= "</li>";
 
 
@@ -146,11 +146,11 @@ if ($totalRows_tables > 0) {
                 $bos_cup_mat_pro_am_judging_link = $base_url."includes/output.inc.php?section=bos-mat&amp;action=pro-am&amp;sort=".$i."&amp;view=".$row_style_type['id'];
 
                 $bos_cup_mat_pro_am_st_entry .= "<li>";
-                $bos_cup_mat_pro_am_st_entry .= sprintf("<a id=\"modal_window_link\" class=\"hide-loader\" href=\"%s\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Print the %s BOS Pullsheet Using Entry Numbers\">%s - %s</a>",$bos_cup_mat_pro_am_entry_link,$row_style_type['styleTypeName'],$row_style_type['styleTypeName'],$pro_am_bos_method);
+                $bos_cup_mat_pro_am_st_entry .= sprintf("<a data-fancybox data-type=\"iframe\" class=\"modal-window-link hide-loader\" href=\"%s\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Print the %s BOS Pullsheet Using Entry Numbers\">%s - %s</a>",$bos_cup_mat_pro_am_entry_link,$row_style_type['styleTypeName'],$row_style_type['styleTypeName'],$pro_am_bos_method);
                 $bos_cup_mat_pro_am_st_entry .= "</li>";
 
                 $bos_cup_mat_pro_am_st_judging .= "<li>";
-                $bos_cup_mat_pro_am_st_judging .= sprintf("<a id=\"modal_window_link\" class=\"hide-loader\" href=\"%s\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Print the %s BOS Pullsheet Using Judging Numbers\">%s - %s</a>",$bos_cup_mat_pro_am_judging_link,$row_style_type['styleTypeName'],$row_style_type['styleTypeName'],$pro_am_bos_method);
+                $bos_cup_mat_pro_am_st_judging .= sprintf("<a data-fancybox data-type=\"iframe\" class=\"modal-window-link hide-loader\" href=\"%s\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Print the %s BOS Pullsheet Using Judging Numbers\">%s - %s</a>",$bos_cup_mat_pro_am_judging_link,$row_style_type['styleTypeName'],$row_style_type['styleTypeName'],$pro_am_bos_method);
                 $bos_cup_mat_pro_am_st_judging .= "</li>";
 
             
@@ -160,11 +160,11 @@ if ($totalRows_tables > 0) {
             $bos_mat_judging = $base_url."includes/output.inc.php?section=bos-mat&amp;view=".$row_style_type['id'];
 
             $bos_cup_mat_st_entry .= "<li>";
-            $bos_cup_mat_st_entry .= sprintf("<a id=\"modal_window_link\" class=\"hide-loader\" href=\"%s\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Print the %s BOS Cup Mat Using Entry Numbers\">%s</a>",$bos_mat_entry,$row_style_type['styleTypeName'],$row_style_type['styleTypeName']);
+            $bos_cup_mat_st_entry .= sprintf("<a data-fancybox data-type=\"iframe\" class=\"modal-window-link hide-loader\" href=\"%s\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Print the %s BOS Cup Mat Using Entry Numbers\">%s</a>",$bos_mat_entry,$row_style_type['styleTypeName'],$row_style_type['styleTypeName']);
             $bos_cup_mat_st_entry .= "</li>";
 
             $bos_cup_mat_st_judging .= "<li>";
-            $bos_cup_mat_st_judging .= sprintf("<a id=\"modal_window_link\" class=\"hide-loader\" href=\"%s\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Print the %s BOS Cup Mat Using Judging Numbers\">%s</a>",$bos_mat_judging,$row_style_type['styleTypeName'],$row_style_type['styleTypeName']);
+            $bos_cup_mat_st_judging .= sprintf("<a data-fancybox data-type=\"iframe\" class=\"modal-window-link hide-loader\" href=\"%s\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Print the %s BOS Cup Mat Using Judging Numbers\">%s</a>",$bos_mat_judging,$row_style_type['styleTypeName'],$row_style_type['styleTypeName']);
             $bos_cup_mat_st_judging .= "</li>";
 
             
@@ -182,11 +182,11 @@ if ($totalRows_tables > 0) {
         $mini_bos_mat_judging = $base_url."includes/output.inc.php?section=bos-mat&amp;action=mini-bos&amp;view=".$row_tables['id'];
 
         $mini_bos_cup_mat_st_entry .= "<li>";
-        $mini_bos_cup_mat_st_entry .= sprintf("<a id=\"modal_window_link\" class=\"hide-loader\" href=\"%s\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Print the %s Mini-BOS Cup Mat Using Entry Numbers\">%s: %s</a>",$mini_bos_mat_entry,$row_tables['tableName'],$row_tables['tableNumber'],$row_tables['tableName']);
+        $mini_bos_cup_mat_st_entry .= sprintf("<a data-fancybox data-type=\"iframe\" class=\"modal-window-link hide-loader\" href=\"%s\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Print the %s Mini-BOS Cup Mat Using Entry Numbers\">%s: %s</a>",$mini_bos_mat_entry,$row_tables['tableName'],$row_tables['tableNumber'],$row_tables['tableName']);
         $mini_bos_cup_mat_st_entry .= "</li>";
 
         $mini_bos_cup_mat_st_judging .= "<li>";
-        $mini_bos_cup_mat_st_judging .= sprintf("<a id=\"modal_window_link\" class=\"hide-loader\" href=\"%s\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Print the %s BOS Cup Mat Using Judging Numbers\">%s: %s</a>",$mini_bos_mat_judging,$row_tables['tableName'],$row_tables['tableNumber'],$row_tables['tableName']);
+        $mini_bos_cup_mat_st_judging .= sprintf("<a data-fancybox data-type=\"iframe\" class=\"modal-window-link hide-loader\" href=\"%s\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Print the %s BOS Cup Mat Using Judging Numbers\">%s: %s</a>",$mini_bos_mat_judging,$row_tables['tableName'],$row_tables['tableNumber'],$row_tables['tableName']);
         $mini_bos_cup_mat_st_judging .= "</li>";
 
 
@@ -566,11 +566,11 @@ if ((isset($_SESSION['update_summary'])) && (!empty($_SESSION['update_summary'])
                                 </div>
                                 <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
                                     <ul class="list-unstyled">
-                                        <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=table-cards&amp;go=judging_tables&amp;psort=sorting-placards&amp;view=master-list">Sorting Placards</a></li>
-                                        <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=sorting&amp;go=default&amp;filter=default&amp;view=entry">Entry Numbers</a></li>
+                                        <li><a data-fancybox data-type="iframe" data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=table-cards&amp;go=judging_tables&amp;psort=sorting-placards&amp;view=master-list">Sorting Placards</a></li>
+                                        <li><a data-fancybox data-type="iframe" data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=sorting&amp;go=default&amp;filter=default&amp;view=entry">Entry Numbers</a></li>
                                         <?php if ($_SESSION['userAdminObfuscate'] == 0) { ?>
-                                        <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=sorting&amp;go=default&amp;filter=default">Judging Numbers</a></li>
-                                        <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=sorting&amp;go=cheat&amp;filter=default">Cheat Sheets</a></li>
+                                        <li><a data-fancybox data-type="iframe" data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=sorting&amp;go=default&amp;filter=default">Judging Numbers</a></li>
+                                        <li><a data-fancybox data-type="iframe" data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=sorting&amp;go=cheat&amp;filter=default">Cheat Sheets</a></li>
                                         <?php } ?>
                                     </ul>
                                 </div>
@@ -581,8 +581,8 @@ if ((isset($_SESSION['update_summary'])) && (!empty($_SESSION['update_summary'])
                                 </div>
                                 <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
                                     <ul class="list-unstyled">
-                                        <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=table-cards&amp;go=judging_tables&amp;psort=sorting-tables&amp;view=master-list">Tables and Associated Styles Master List</a></li>
-                                        <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=table-cards&amp;go=judging_tables&amp;psort=sorting-tables">Tables and Associated Styles Placards</a></li>
+                                        <li><a data-fancybox data-type="iframe" data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=table-cards&amp;go=judging_tables&amp;psort=sorting-tables&amp;view=master-list">Tables and Associated Styles Master List</a></li>
+                                        <li><a data-fancybox data-type="iframe" data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=table-cards&amp;go=judging_tables&amp;psort=sorting-tables">Tables and Associated Styles Placards</a></li>
                                     </ul>
                                 </div>
                             </div><!-- ./row -->
@@ -1082,8 +1082,8 @@ if ((isset($_SESSION['update_summary'])) && (!empty($_SESSION['update_summary'])
                             </div>
                             <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
                                 <ul class="list-inline">
-                                    <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=assignments&amp;go=judging_assignments&amp;filter=staff&amp;view=name" data-toggle="tooltip" data-placement="top" title="Print staff location availability">By Last Name</a></li>
-                                    <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=assignments&amp;go=judging_assignments&amp;filter=staff" data-toggle="tooltip" data-placement="top" title="Print staff location availability">By Non-Judging Session</a></li>
+                                    <li><a data-fancybox data-type="iframe" data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=assignments&amp;go=judging_assignments&amp;filter=staff&amp;view=name" data-toggle="tooltip" data-placement="top" title="Print staff location availability">By Last Name</a></li>
+                                    <li><a data-fancybox data-type="iframe" data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=assignments&amp;go=judging_assignments&amp;filter=staff" data-toggle="tooltip" data-placement="top" title="Print staff location availability">By Non-Judging Session</a></li>
                                 </ul>
                             </div>
                         </div><!-- ./row -->
@@ -1093,8 +1093,8 @@ if ((isset($_SESSION['update_summary'])) && (!empty($_SESSION['update_summary'])
                             </div>
                             <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
                                 <ul class="list-inline">
-                                    <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=notes&amp;go=org_notes" data-toggle="tooltip" data-placement="top" title="A List of Notes Individual Judges Have Provided to the Organizer">Notes to Organizer</a></li>
-                                    <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=notes&amp;go=admin" data-toggle="tooltip" data-placement="top" title="Notes attached to individual entries for Admin and Staff use.">Admin and Staff Notes</a></li>
+                                    <li><a data-fancybox data-type="iframe" data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=notes&amp;go=org_notes" data-toggle="tooltip" data-placement="top" title="A List of Notes Individual Judges Have Provided to the Organizer">Notes to Organizer</a></li>
+                                    <li><a data-fancybox data-type="iframe" data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=notes&amp;go=admin" data-toggle="tooltip" data-placement="top" title="Notes attached to individual entries for Admin and Staff use.">Admin and Staff Notes</a></li>
                                 </ul>
                             </div>
                         </div><!-- ./row -->
@@ -1105,7 +1105,7 @@ if ((isset($_SESSION['update_summary'])) && (!empty($_SESSION['update_summary'])
                             </div>
                             <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
                                 <ul class="list-inline">
-                                    <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=notes&amp;go=allergens" data-toggle="tooltip" data-placement="top" title="A List of Entries with Allergen Information">Possible Allergens in Entries</a></li>
+                                    <li><a data-fancybox data-type="iframe" data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=notes&amp;go=allergens" data-toggle="tooltip" data-placement="top" title="A List of Entries with Allergen Information">Possible Allergens in Entries</a></li>
                                 </ul>
                             </div>
                         </div><!-- ./row -->
@@ -1116,8 +1116,8 @@ if ((isset($_SESSION['update_summary'])) && (!empty($_SESSION['update_summary'])
                             </div>
                             <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
                                 <ul class="list-inline">
-                                    <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=dropoff" data-toggle="tooltip" data-placement="top" title="Print Entry Totals for Each Drop-Off Location and Shipping Location">Entry Totals</a></li>
-                                    <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=dropoff&amp;go=check" data-toggle="tooltip" data-placement="top" title="Print Entries By Drop-Off Location and Shipping Location">List of Entries</a></li>
+                                    <li><a data-fancybox data-type="iframe" data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=dropoff" data-toggle="tooltip" data-placement="top" title="Print Entry Totals for Each Drop-Off Location and Shipping Location">Entry Totals</a></li>
+                                    <li><a data-fancybox data-type="iframe" data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=dropoff&amp;go=check" data-toggle="tooltip" data-placement="top" title="Print Entries By Drop-Off Location and Shipping Location">List of Entries</a></li>
                                 </ul>
                             </div>
                         </div><!-- ./row -->
@@ -1129,7 +1129,7 @@ if ((isset($_SESSION['update_summary'])) && (!empty($_SESSION['update_summary'])
                             </div>
                             <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
                                 <ul class="list-unstyled">
-                                    <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=pullsheets&amp;go=all_entry_info&amp;view=entry&amp;id=default" data-toggle="tooltip" data-placement="top" title="Print Entries with Addtional Info by Table">All By Table - Entry Numbers</a></li>
+                                    <li><a data-fancybox data-type="iframe" data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=pullsheets&amp;go=all_entry_info&amp;view=entry&amp;id=default" data-toggle="tooltip" data-placement="top" title="Print Entries with Addtional Info by Table">All By Table - Entry Numbers</a></li>
                                 </ul>
                                 <div class="dropdown bcoem-admin-dashboard-select">
                                 <button class="btn btn-default dropdown-toggle" type="button" id="additionalInfoMenu0" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Entry Numbers for Table... <span class="caret"></span>
@@ -1139,7 +1139,7 @@ if ((isset($_SESSION['update_summary'])) && (!empty($_SESSION['update_summary'])
                                     </ul>
                                 </div>
                                 <ul class="list-unstyled">
-                                    <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=pullsheets&amp;go=all_entry_info&amp;id=default" data-toggle="tooltip" data-placement="top" title="Print Entries with Addtional Info by Table">All By Table - Judging Numbers</a></li>
+                                    <li><a data-fancybox data-type="iframe" data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=pullsheets&amp;go=all_entry_info&amp;id=default" data-toggle="tooltip" data-placement="top" title="Print Entries with Addtional Info by Table">All By Table - Judging Numbers</a></li>
                                 </ul>
                                 <div class="dropdown bcoem-admin-dashboard-select">
                                     <button class="btn btn-default dropdown-toggle" type="button" id="additionalInfoMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Judging Numbers for Table... <span class="caret"></span>
@@ -1156,7 +1156,7 @@ if ((isset($_SESSION['update_summary'])) && (!empty($_SESSION['update_summary'])
                             </div>
                             <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
                                 <ul class="list-unstyled">
-                                    <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=pullsheets&amp;go=judging_tables&amp;view=entry&amp;id=default" data-toggle="tooltip" data-placement="top" title="Print All Table Pullsheets with Entry Numbers">All By Table - Entry Numbers</a></li>
+                                    <li><a data-fancybox data-type="iframe" data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=pullsheets&amp;go=judging_tables&amp;view=entry&amp;id=default" data-toggle="tooltip" data-placement="top" title="Print All Table Pullsheets with Entry Numbers">All By Table - Entry Numbers</a></li>
                                 </ul>
                                 <div class="dropdown bcoem-admin-dashboard-select">
                                     <button class="btn btn-default dropdown-toggle" type="button" id="pullsheetMenu3" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Entry Numbers for Table... <span class="caret"></span>
@@ -1173,7 +1173,7 @@ if ((isset($_SESSION['update_summary'])) && (!empty($_SESSION['update_summary'])
                                     </ul>
                                 </div>
                                 <ul class="list-unstyled">
-                                    <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=pullsheets&amp;go=judging_tables&amp;id=default" data-toggle="tooltip" data-placement="top" title="Print All Table Pullsheets with Judging Numbers">All By Table - Judging Numbers</a></li>
+                                    <li><a data-fancybox data-type="iframe" data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=pullsheets&amp;go=judging_tables&amp;id=default" data-toggle="tooltip" data-placement="top" title="Print All Table Pullsheets with Judging Numbers">All By Table - Judging Numbers</a></li>
                                 </ul>
                                 <div class="dropdown bcoem-admin-dashboard-select">
                                     <button class="btn btn-default dropdown-toggle" type="button" id="pullsheetMenu4" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Judging Numbers for Table... <span class="caret"></span>
@@ -1220,7 +1220,7 @@ if ((isset($_SESSION['update_summary'])) && (!empty($_SESSION['update_summary'])
                             </div>
                             <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
                                 <ul class="list-unstyled">
-                                    <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=table-cards&amp;go=judging_tables&amp;id=default" data-toggle="tooltip" data-placement="top" title="Print Table Cards">All Tables</a></li>
+                                    <li><a data-fancybox data-type="iframe" data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=table-cards&amp;go=judging_tables&amp;id=default" data-toggle="tooltip" data-placement="top" title="Print Table Cards">All Tables</a></li>
                                 </ul>
                                 <div class="dropdown bcoem-admin-dashboard-select">
                                     <button class="btn btn-default dropdown-toggle" type="button" id="cardsMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">For Table... <span class="caret"></span>
@@ -1244,8 +1244,8 @@ if ((isset($_SESSION['update_summary'])) && (!empty($_SESSION['update_summary'])
                             </div>
                             <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
                                 <ul class="list-inline">
-                                    <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=assignments&amp;go=judging_assignments&amp;filter=judges&amp;view=sign-in" data-toggle="tooltip" data-placement="top" title="Print a Judge Sign-in Sheet">Judges</a></li>
-                                    <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=assignments&amp;go=judging_assignments&amp;filter=stewards&amp;view=sign-in" data-toggle="tooltip" data-placement="top" title="Print a Steward Sign-in Sheet">Stewards</a></li>
+                                    <li><a data-fancybox data-type="iframe" data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=assignments&amp;go=judging_assignments&amp;filter=judges&amp;view=sign-in" data-toggle="tooltip" data-placement="top" title="Print a Judge Sign-in Sheet">Judges</a></li>
+                                    <li><a data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=assignments&amp;go=judging_assignments&amp;filter=stewards&amp;view=sign-in" data-toggle="tooltip" data-placement="top" title="Print a Steward Sign-in Sheet">Stewards</a></li>
                                 </ul>
                             </div>
                         </div><!-- ./row -->
@@ -1256,23 +1256,23 @@ if ((isset($_SESSION['update_summary'])) && (!empty($_SESSION['update_summary'])
                             </div>
                             <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
                                 <ul class="list-unstyled">
-                                    <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=assignments&amp;go=judging_assignments&amp;filter=judges&amp;view=name" data-toggle="tooltip" data-placement="top" title="Print Judge Assignments by Name">All Judges By Last Name</a></li>
-                                    <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=assignments&amp;go=judging_assignments&amp;filter=judges&amp;view=table" data-toggle="tooltip" data-placement="top" title="Print Judge Assignments by Table">All Judges By Table</a></li>
-                                    <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=assignments&amp;go=judging_assignments&amp;filter=judges&amp;view=location" data-toggle="tooltip" data-placement="top" title="Print Judge Assignments by Session">All Judges By Session</a></li>
-                                    <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=assignments&amp;go=judging_assignments&amp;filter=stewards&amp;view=name" data-toggle="tooltip" data-placement="top" title="Print Steward Assignments by Name">All Stewards Last Name</a></li>
-                                    <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=assignments&amp;go=judging_assignments&amp;filter=stewards&amp;view=table" data-toggle="tooltip" data-placement="top" title="Print Steward Assignments by Table">All Stewards By Table</a></li>
-                                    <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=assignments&amp;go=judging_assignments&amp;filter=stewards&amp;view=location" data-toggle="tooltip" data-placement="top" title="Print Steward Assignments by Session">All Stewards By Session</a></li>
+                                    <li><a data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=assignments&amp;go=judging_assignments&amp;filter=judges&amp;view=name" data-toggle="tooltip" data-placement="top" title="Print Judge Assignments by Name">All Judges By Last Name</a></li>
+                                    <li><a data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=assignments&amp;go=judging_assignments&amp;filter=judges&amp;view=table" data-toggle="tooltip" data-placement="top" title="Print Judge Assignments by Table">All Judges By Table</a></li>
+                                    <li><a data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=assignments&amp;go=judging_assignments&amp;filter=judges&amp;view=location" data-toggle="tooltip" data-placement="top" title="Print Judge Assignments by Session">All Judges By Session</a></li>
+                                    <li><a data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=assignments&amp;go=judging_assignments&amp;filter=stewards&amp;view=name" data-toggle="tooltip" data-placement="top" title="Print Steward Assignments by Name">All Stewards Last Name</a></li>
+                                    <li><a data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=assignments&amp;go=judging_assignments&amp;filter=stewards&amp;view=table" data-toggle="tooltip" data-placement="top" title="Print Steward Assignments by Table">All Stewards By Table</a></li>
+                                    <li><a data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=assignments&amp;go=judging_assignments&amp;filter=stewards&amp;view=location" data-toggle="tooltip" data-placement="top" title="Print Steward Assignments by Session">All Stewards By Session</a></li>
                                 </ul>
                                 <div class="dropdown bcoem-admin-dashboard-select">
                                     <button class="btn btn-default dropdown-toggle" type="button" id="judgeAssignMenuLoc" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Judges for Session... <span class="caret"></span>
                                     </button>
                                     <ul class="dropdown-menu" aria-labelledby="judgeAssignMenuLoc">
                                         <?php foreach($judge_assign_links as $key => $value) { ?>
-                                            <li class="small"><a id="modal_window_link" class="hide-loader" href="<?php echo $value."&amp;view=name"; ?>" data-toggle="tooltip" data-placement="top" title="Print Judge Assignments for <?php echo $key; ?>"><?php echo $key; ?> By Name</a></li>
+                                            <li class="small"><a data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $value."&amp;view=name"; ?>" data-toggle="tooltip" data-placement="top" title="Print Judge Assignments for <?php echo $key; ?>"><?php echo $key; ?> By Name</a></li>
                                         <?php } ?>
                                         <li role="separator" class="divider"></li>
                                         <?php foreach($judge_assign_links as $key => $value) { ?>
-                                            <li class="small"><a id="modal_window_link" class="hide-loader" href="<?php echo $value."&amp;view=table"; ?>" data-toggle="tooltip" data-placement="top" title="Print Judge Assignments for <?php echo $key; ?>"><?php echo $key; ?> By Table</a></li>
+                                            <li class="small"><a data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $value."&amp;view=table"; ?>" data-toggle="tooltip" data-placement="top" title="Print Judge Assignments for <?php echo $key; ?>"><?php echo $key; ?> By Table</a></li>
                                         <?php } ?>
                                     </ul>
                                 </div>
@@ -1281,11 +1281,11 @@ if ((isset($_SESSION['update_summary'])) && (!empty($_SESSION['update_summary'])
                                     </button>
                                     <ul class="dropdown-menu" aria-labelledby="stewardAssignMenuLoc">
                                         <?php foreach($steward_assign_links as $key => $value) { ?>
-                                            <li class="small"><a id="modal_window_link" class="hide-loader" href="<?php echo $value."&amp;view=name"; ?>" data-toggle="tooltip" data-placement="top" title="Print Steward Assignments for <?php echo $key; ?>"><?php echo $key; ?> By Name</a></li>
+                                            <li class="small"><a data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $value."&amp;view=name"; ?>" data-toggle="tooltip" data-placement="top" title="Print Steward Assignments for <?php echo $key; ?>"><?php echo $key; ?> By Name</a></li>
                                         <?php } ?>
                                         <li role="separator" class="divider"></li>
                                         <?php foreach($steward_assign_links as $key => $value) { ?>
-                                            <li class="small"><a id="modal_window_link" class="hide-loader" href="<?php echo $value."&amp;view=table"; ?>" data-toggle="tooltip" data-placement="top" title="Print Steward Assignments for <?php echo $key; ?>"><?php echo $key; ?> By Table</a></li>
+                                            <li class="small"><a data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $value."&amp;view=table"; ?>" data-toggle="tooltip" data-placement="top" title="Print Steward Assignments for <?php echo $key; ?>"><?php echo $key; ?> By Table</a></li>
                                         <?php } ?>
                                     </ul>
                                 </div>
@@ -1442,8 +1442,8 @@ if ((isset($_SESSION['update_summary'])) && (!empty($_SESSION['update_summary'])
                             </div>
                             <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
                                 <ul class="list-unstyled">
-                                    <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=pullsheets&amp;go=mini_bos&amp;view=entry" data-toggle="tooltip" data-placement="top" title="Print a Mini-BOS Table Pullsheet with Judging Numbers">All - Entry Numbers</a></li>
-                                    <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=pullsheets&amp;go=judging_tables&amp;view=entry&amp;filter=mini_bos&amp;id=default" data-toggle="tooltip" data-placement="top" title="Print All Mini-BOS Table Pullsheets with Entry Numbers">All By Table - Entry Numbers</a></li>
+                                    <li><a data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=pullsheets&amp;go=mini_bos&amp;view=entry" data-toggle="tooltip" data-placement="top" title="Print a Mini-BOS Table Pullsheet with Judging Numbers">All - Entry Numbers</a></li>
+                                    <li><a data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=pullsheets&amp;go=judging_tables&amp;view=entry&amp;filter=mini_bos&amp;id=default" data-toggle="tooltip" data-placement="top" title="Print All Mini-BOS Table Pullsheets with Entry Numbers">All By Table - Entry Numbers</a></li>
                                 </ul>
                                 <div class="dropdown bcoem-admin-dashboard-select">
                                     <button class="btn btn-default dropdown-toggle" type="button" id="pullsheetMenu3" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Entry Numbers for Table... <span class="caret"></span>
@@ -1460,8 +1460,8 @@ if ((isset($_SESSION['update_summary'])) && (!empty($_SESSION['update_summary'])
                                     </ul>
                                 </div>
                                 <ul class="list-unstyled">
-                                    <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=pullsheets&amp;go=mini_bos" data-toggle="tooltip" data-placement="top" title="Print a Mini-BOS Table Pullsheet with Judging Numbers">All - Judging Numbers</a></li>
-                                    <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=pullsheets&amp;go=judging_tables&amp;filter=mini_bos&amp;id=default" data-toggle="tooltip" data-placement="top" title="Print All Mini-BOS Table Pullsheets with Judging Numbers">All By Table - Judging Numbers</a></li>
+                                    <li><a data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=pullsheets&amp;go=mini_bos" data-toggle="tooltip" data-placement="top" title="Print a Mini-BOS Table Pullsheet with Judging Numbers">All - Judging Numbers</a></li>
+                                    <li><a data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=pullsheets&amp;go=judging_tables&amp;filter=mini_bos&amp;id=default" data-toggle="tooltip" data-placement="top" title="Print All Mini-BOS Table Pullsheets with Judging Numbers">All By Table - Judging Numbers</a></li>
                                 </ul>
                                 <div class="dropdown bcoem-admin-dashboard-select">
                                     <button class="btn btn-default dropdown-toggle" type="button" id="pullsheetMenu4" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Judging Numbers for Table... <span class="caret"></span>
@@ -1485,10 +1485,10 @@ if ((isset($_SESSION['update_summary'])) && (!empty($_SESSION['update_summary'])
                             </div>
                             <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
                                 <ul class="list-unstyled">
-                                    <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=bos-mat&amp;action=blank&view=mini-bos" data-toggle="tooltip" data-placement="top" title="Print blank Mini-BOS Cup Mats">Blank</a></li>
+                                    <li><a data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=bos-mat&amp;action=blank&view=mini-bos" data-toggle="tooltip" data-placement="top" title="Print blank Mini-BOS Cup Mats">Blank</a></li>
                                 </ul>
                                 <ul class="list-unstyled">
-                                    <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=bos-mat&amp;action=mini-bos&amp;filter=entry" data-toggle="tooltip" data-placement="top" title="Print all Mini-BOS Cup Mats with entry numbers only">All Tables - Entry Numbers</a></li>
+                                    <li><a data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=bos-mat&amp;action=mini-bos&amp;filter=entry" data-toggle="tooltip" data-placement="top" title="Print all Mini-BOS Cup Mats with entry numbers only">All Tables - Entry Numbers</a></li>
                                 </ul>
                                 <div class="dropdown bcoem-admin-dashboard-select">
                                     <button class="btn btn-default dropdown-toggle" type="button" id="bos-pullsheet-menu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Entry Numbers for Table... <span class="caret"></span>
@@ -1498,7 +1498,7 @@ if ((isset($_SESSION['update_summary'])) && (!empty($_SESSION['update_summary'])
                                     </ul>
                                 </div>
                                 <ul class="list-unstyled">
-                                    <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=bos-mat&amp;action=mini-bos" data-toggle="tooltip" data-placement="top" title="Print all Mini-BOS Cup Mats with judging numbers only">All Tables - Judging Numbers</a></li>
+                                    <li><a data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=bos-mat&amp;action=mini-bos" data-toggle="tooltip" data-placement="top" title="Print all Mini-BOS Cup Mats with judging numbers only">All Tables - Judging Numbers</a></li>
                                 </ul>
                                 <div class="dropdown bcoem-admin-dashboard-select">
                                     <button class="btn btn-default dropdown-toggle" type="button" id="bos-pullsheet-menu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Judging Numbers for Table... <span class="caret"></span>
@@ -1515,7 +1515,7 @@ if ((isset($_SESSION['update_summary'])) && (!empty($_SESSION['update_summary'])
                             </div>
                             <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
                                 <ul class="list-unstyled">
-                                    <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=pullsheets&amp;go=judging_scores_bos&amp;view=entry" data-toggle="tooltip" data-placement="top" title="Print All BOS Pullsheets Using Entry Numbers">All Style Types - Entry Numbers</a></li>
+                                    <li><a data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=pullsheets&amp;go=judging_scores_bos&amp;view=entry" data-toggle="tooltip" data-placement="top" title="Print All BOS Pullsheets Using Entry Numbers">All Style Types - Entry Numbers</a></li>
                                 </ul>
                                 <div class="dropdown bcoem-admin-dashboard-select">
                                     <button class="btn btn-default dropdown-toggle" type="button" id="bos-pullsheet-menu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Entry Numbers for Style Type... <span class="caret"></span>
@@ -1525,7 +1525,7 @@ if ((isset($_SESSION['update_summary'])) && (!empty($_SESSION['update_summary'])
                                     </ul>
                                 </div>
                                 <ul class="list-unstyled">
-                                    <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=pullsheets&amp;go=judging_scores_bos" data-toggle="tooltip" data-placement="top" title="Print All BOS Pullsheets Using Judging Numbers">All Style Types - Judging Numbers</a></li>
+                                    <li><a data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=pullsheets&amp;go=judging_scores_bos" data-toggle="tooltip" data-placement="top" title="Print All BOS Pullsheets Using Judging Numbers">All Style Types - Judging Numbers</a></li>
                                 </ul>
                                 <div class="dropdown bcoem-admin-dashboard-select">
                                     <button class="btn btn-default dropdown-toggle" type="button" id="bos-pullsheet-menu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Judging Numbers for Style Type... <span class="caret"></span>
@@ -1542,10 +1542,10 @@ if ((isset($_SESSION['update_summary'])) && (!empty($_SESSION['update_summary'])
                             </div>
                             <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
                                 <ul class="list-unstyled">
-                                    <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=bos-mat&amp;action=blank" data-toggle="tooltip" data-placement="top" title="Print blank BOS Cup Mats">Blank</a></li>
+                                    <li><a data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=bos-mat&amp;action=blank" data-toggle="tooltip" data-placement="top" title="Print blank BOS Cup Mats">Blank</a></li>
                                 </ul>
                                 <ul class="list-unstyled">
-                                    <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=bos-mat&amp;filter=entry" data-toggle="tooltip" data-placement="top" title="Print all BOS Cup Mats with entry numbers only">All Style Types - Entry Numbers</a></li>
+                                    <li><a data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=bos-mat&amp;filter=entry" data-toggle="tooltip" data-placement="top" title="Print all BOS Cup Mats with entry numbers only">All Style Types - Entry Numbers</a></li>
                                 </ul>
                                 <div class="dropdown bcoem-admin-dashboard-select">
                                     <button class="btn btn-default dropdown-toggle" type="button" id="bos-pullsheet-menu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Entry Numbers for Style Type... <span class="caret"></span>
@@ -1555,7 +1555,7 @@ if ((isset($_SESSION['update_summary'])) && (!empty($_SESSION['update_summary'])
                                     </ul>
                                 </div>
                                 <ul class="list-unstyled">
-                                    <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=bos-mat" data-toggle="tooltip" data-placement="top" title="Print all BOS Cup Mats with judging numbers only">All Style Types - Judging Numbers</a></li>
+                                    <li><a data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=bos-mat" data-toggle="tooltip" data-placement="top" title="Print all BOS Cup Mats with judging numbers only">All Style Types - Judging Numbers</a></li>
                                 </ul>
                                 <div class="dropdown bcoem-admin-dashboard-select">
                                     <button class="btn btn-default dropdown-toggle" type="button" id="bos-pullsheet-menu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Judging Numbers for Style Type... <span class="caret"></span>
@@ -1594,7 +1594,7 @@ if ((isset($_SESSION['update_summary'])) && (!empty($_SESSION['update_summary'])
                             </div>
                             <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
                                 <ul class="list-unstyled">
-                                    <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=bos-mat&amp;action=blank&view=pro-am" data-toggle="tooltip" data-placement="top" title="Print blank Pro-Am/Scale-Up Cup Mats">Blank</a></li>
+                                    <li><a data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=bos-mat&amp;action=blank&view=pro-am" data-toggle="tooltip" data-placement="top" title="Print blank Pro-Am/Scale-Up Cup Mats">Blank</a></li>
                                 </ul>
                                 <div class="dropdown bcoem-admin-dashboard-select">
                                     <button class="btn btn-default dropdown-toggle" type="button" id="bos-pullsheet-menu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Entry Numbers for Style Type... <span class="caret"></span>
@@ -1629,7 +1629,7 @@ if ((isset($_SESSION['update_summary'])) && (!empty($_SESSION['update_summary'])
                             </div>
                             <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
                                 <ul class="list-inline">
-                                    <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=results&amp;go=judging_scores_bos&amp;action=print&amp;tb=bos&amp;view=default" title="BOS Round(s) Results Report">Print</a></li>
+                                    <li><a data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=results&amp;go=judging_scores_bos&amp;action=print&amp;tb=bos&amp;view=default" title="BOS Round(s) Results Report">Print</a></li>
                                     <li><a target="_blank" href="<?php echo $base_url; ?>includes/output.inc.php?section=export-results&amp;go=judging_scores_bos&amp;action=download&amp;filter=default&amp;view=pdf">PDF</a></li>
                                     <li><a target="_blank" href="<?php echo $base_url; ?>includes/output.inc.php?section=export-results&amp;go=judging_scores_bos&amp;action=download&amp;filter=default&amp;view=html">HTML</a></li>
                                 </ul>
@@ -1642,7 +1642,7 @@ if ((isset($_SESSION['update_summary'])) && (!empty($_SESSION['update_summary'])
                             </div>
                             <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
                                 <ul class="list-inline">
-                                    <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=results&amp;go=best&amp;action=print&amp;tb=bos&amp;view=default" title="Best Brewer and/or Club Results Report">Print</a></li>
+                                    <li><a data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=results&amp;go=best&amp;action=print&amp;tb=bos&amp;view=default" title="Best Brewer and/or Club Results Report">Print</a></li>
                                 </ul>
                             </div>
                         </div><!-- ./row -->
@@ -1657,46 +1657,46 @@ if ((isset($_SESSION['update_summary'])) && (!empty($_SESSION['update_summary'])
                                     <button class="btn btn-default dropdown-toggle" type="button" id="bos-pullsheet-menu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">All with Scores...<span class="caret"></span>
                                     </button>
                                     <ul class="dropdown-menu" aria-labelledby="bos-pullsheet-menu">
-                                        <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=results&amp;go=judging_scores&amp;action=print&amp;tb=scores&amp;view=default">By Table Number</a></li>
-                                        <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=results&amp;go=judging_scores&amp;action=print&amp;tb=scores&amp;view=default&amp;psort=table-entry-count-asc">By Table/Medal Group Entry Count - Ascending</a></li>
-                                        <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=results&amp;go=judging_scores&amp;action=print&amp;tb=scores&amp;view=default&amp;psort=table-entry-count-desc">By Table/Medal Group Entry Count - Descending</a></li>
+                                        <li><a data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=results&amp;go=judging_scores&amp;action=print&amp;tb=scores&amp;view=default">By Table Number</a></li>
+                                        <li><a data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=results&amp;go=judging_scores&amp;action=print&amp;tb=scores&amp;view=default&amp;psort=table-entry-count-asc">By Table/Medal Group Entry Count - Ascending</a></li>
+                                        <li><a data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=results&amp;go=judging_scores&amp;action=print&amp;tb=scores&amp;view=default&amp;psort=table-entry-count-desc">By Table/Medal Group Entry Count - Descending</a></li>
                                     </ul>
                                 </div>
                                 <div class="dropdown bcoem-admin-dashboard-select">
                                     <button class="btn btn-default dropdown-toggle" type="button" id="bos-pullsheet-menu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Winners Only with Scores...<span class="caret"></span>
                                     </button>
                                     <ul class="dropdown-menu" aria-labelledby="bos-pullsheet-menu">
-                                        <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=results&amp;go=judging_scores&amp;action=print&amp;tb=scores&amp;view=winners">By Table Number</a></li>
-                                        <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=results&amp;go=judging_scores&amp;action=print&amp;tb=scores&amp;view=winners&amp;psort=table-entry-count-asc">By Table/Medal Group Entry Count - Ascending</a></li>
-                                        <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=results&amp;go=judging_scores&amp;action=print&amp;tb=scores&amp;view=winners&amp;psort=table-entry-count-desc">By Table/Medal Group Entry Count - Descending</a></li>
+                                        <li><a data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=results&amp;go=judging_scores&amp;action=print&amp;tb=scores&amp;view=winners">By Table Number</a></li>
+                                        <li><a data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=results&amp;go=judging_scores&amp;action=print&amp;tb=scores&amp;view=winners&amp;psort=table-entry-count-asc">By Table/Medal Group Entry Count - Ascending</a></li>
+                                        <li><a data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=results&amp;go=judging_scores&amp;action=print&amp;tb=scores&amp;view=winners&amp;psort=table-entry-count-desc">By Table/Medal Group Entry Count - Descending</a></li>
                                     </ul>
                                 </div>
                                 <div class="dropdown bcoem-admin-dashboard-select">
                                     <button class="btn btn-default dropdown-toggle" type="button" id="bos-pullsheet-menu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">All without Scores...<span class="caret"></span>
                                     </button>
                                     <ul class="dropdown-menu" aria-labelledby="bos-pullsheet-menu">
-                                        <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=results&amp;go=judging_scores&amp;action=print&amp;view=default">By Table Number</a></li>
-                                        <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=results&amp;go=judging_scores&amp;action=print&amp;view=default&amp;psort=table-entry-count-asc">By Table/Medal Group Entry Count - Ascending</a></li>
-                                        <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=results&amp;go=judging_scores&amp;action=print&amp;view=default&amp;psort=table-entry-count-desc">By Table/Medal Group Entry Count - Descending</a></li>
+                                        <li><a data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=results&amp;go=judging_scores&amp;action=print&amp;view=default">By Table Number</a></li>
+                                        <li><a data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=results&amp;go=judging_scores&amp;action=print&amp;view=default&amp;psort=table-entry-count-asc">By Table/Medal Group Entry Count - Ascending</a></li>
+                                        <li><a data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=results&amp;go=judging_scores&amp;action=print&amp;view=default&amp;psort=table-entry-count-desc">By Table/Medal Group Entry Count - Descending</a></li>
                                     </ul>
                                 </div>
                                 <div class="dropdown bcoem-admin-dashboard-select">
                                     <button class="btn btn-default dropdown-toggle" type="button" id="bos-pullsheet-menu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Winners Only without Scores...<span class="caret"></span>
                                     </button>
                                     <ul class="dropdown-menu" aria-labelledby="bos-pullsheet-menu">
-                                        <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=results&amp;go=judging_scores&amp;action=print&amp;view=winners">By Table Number</a></li>
-                                        <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=results&amp;go=judging_scores&amp;action=print&amp;view=winners&amp;psort=table-entry-count-asc">By Table/Medal Group Entry Count - Ascending</a></li>
-                                        <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=results&amp;go=judging_scores&amp;action=print&amp;view=winners&amp;psort=table-entry-count-desc">By Table/Medal Group Entry Count - Descending</a></li>
+                                        <li><a data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=results&amp;go=judging_scores&amp;action=print&amp;view=winners">By Table Number</a></li>
+                                        <li><a data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=results&amp;go=judging_scores&amp;action=print&amp;view=winners&amp;psort=table-entry-count-asc">By Table/Medal Group Entry Count - Ascending</a></li>
+                                        <li><a data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=results&amp;go=judging_scores&amp;action=print&amp;view=winners&amp;psort=table-entry-count-desc">By Table/Medal Group Entry Count - Descending</a></li>
                                     </ul>
                                 </div>
                             <?php } else { ?>
                                 <ul class="list-inline">
-                                    <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=results&amp;go=judging_scores&amp;action=print&amp;tb=scores&amp;view=default" data-toggle="tooltip" data-placement="top" title="Print all entry results with scores listed">All with Scores</a></li>
-                                    <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=results&amp;go=judging_scores&amp;action=print&amp;tb=scores&amp;view=winners" data-toggle="tooltip" data-placement="top" title="Print winners only results with scores listed">Winners Only with Scores</a></li>
+                                    <li><a data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=results&amp;go=judging_scores&amp;action=print&amp;tb=scores&amp;view=default" data-toggle="tooltip" data-placement="top" title="Print all entry results with scores listed">All with Scores</a></li>
+                                    <li><a data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=results&amp;go=judging_scores&amp;action=print&amp;tb=scores&amp;view=winners" data-toggle="tooltip" data-placement="top" title="Print winners only results with scores listed">Winners Only with Scores</a></li>
                                 </ul>
                                 <ul class="list-inline">
-                                    <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=results&amp;go=judging_scores&amp;action=print&amp;view=default" data-toggle="tooltip" data-placement="top" title="Print all entry results without scores listed">All without Scores</a></li>
-                                    <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=results&amp;go=judging_scores&amp;action=print&amp;view=winners" data-toggle="tooltip" data-placement="top" title="Print winners only results without scores listed">Winners Only without Scores</a></li>
+                                    <li><a data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=results&amp;go=judging_scores&amp;action=print&amp;view=default" data-toggle="tooltip" data-placement="top" title="Print all entry results without scores listed">All without Scores</a></li>
+                                    <li><a data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=results&amp;go=judging_scores&amp;action=print&amp;view=winners" data-toggle="tooltip" data-placement="top" title="Print winners only results without scores listed">Winners Only without Scores</a></li>
                                 </ul>
                             <?php } ?>
                                 <ul class="list-inline">
@@ -1715,46 +1715,46 @@ if ((isset($_SESSION['update_summary'])) && (!empty($_SESSION['update_summary'])
                                         <button class="btn btn-default dropdown-toggle" type="button" id="bos-pullsheet-menu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">All with Scores...<span class="caret"></span>
                                         </button>
                                         <ul class="dropdown-menu" aria-labelledby="bos-pullsheet-menu">
-                                            <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=results&amp;go=all&amp;action=print&amp;tb=scores&amp;view=default">By Table Number</a></li>
-                                            <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=results&amp;go=all&amp;action=print&amp;tb=scores&amp;view=default&amp;psort=table-entry-count-asc">By Table/Medal Group Entry Count - Ascending</a></li>
-                                            <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=results&amp;go=all&amp;action=print&amp;tb=scores&amp;view=default&amp;psort=table-entry-count-desc">By Table/Medal Group Entry Count - Descending</a></li>
+                                            <li><a data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=results&amp;go=all&amp;action=print&amp;tb=scores&amp;view=default">By Table Number</a></li>
+                                            <li><a data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=results&amp;go=all&amp;action=print&amp;tb=scores&amp;view=default&amp;psort=table-entry-count-asc">By Table/Medal Group Entry Count - Ascending</a></li>
+                                            <li><a data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=results&amp;go=all&amp;action=print&amp;tb=scores&amp;view=default&amp;psort=table-entry-count-desc">By Table/Medal Group Entry Count - Descending</a></li>
                                         </ul>
                                     </div>
                                     <div class="dropdown bcoem-admin-dashboard-select">
                                         <button class="btn btn-default dropdown-toggle" type="button" id="bos-pullsheet-menu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Winners Only with Scores...<span class="caret"></span>
                                         </button>
                                         <ul class="dropdown-menu" aria-labelledby="bos-pullsheet-menu">
-                                            <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=results&amp;go=all&amp;action=print&amp;tb=scores&amp;view=winners">By Table Number</a></li>
-                                            <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=results&amp;go=all&amp;action=print&amp;tb=scores&amp;view=winners&amp;psort=table-entry-count-asc">By Table/Medal Group Entry Count - Ascending</a></li>
-                                            <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=results&amp;go=all&amp;action=print&amp;tb=scores&amp;view=winners&amp;psort=table-entry-count-desc">By Table/Medal Group Entry Count - Descending</a></li>
+                                            <li><a data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=results&amp;go=all&amp;action=print&amp;tb=scores&amp;view=winners">By Table Number</a></li>
+                                            <li><a data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=results&amp;go=all&amp;action=print&amp;tb=scores&amp;view=winners&amp;psort=table-entry-count-asc">By Table/Medal Group Entry Count - Ascending</a></li>
+                                            <li><a data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=results&amp;go=all&amp;action=print&amp;tb=scores&amp;view=winners&amp;psort=table-entry-count-desc">By Table/Medal Group Entry Count - Descending</a></li>
                                         </ul>
                                     </div>
                                     <div class="dropdown bcoem-admin-dashboard-select">
                                         <button class="btn btn-default dropdown-toggle" type="button" id="bos-pullsheet-menu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">All without Scores...<span class="caret"></span>
                                         </button>
                                         <ul class="dropdown-menu" aria-labelledby="bos-pullsheet-menu">
-                                            <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=results&amp;go=all&amp;action=print&amp;view=default">By Table Number</a></li>
-                                            <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=results&amp;go=all&amp;action=print&amp;view=default&amp;psort=table-entry-count-asc">By Table/Medal Group Entry Count - Ascending</a></li>
-                                            <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=results&amp;go=all&amp;action=print&amp;view=default&amp;psort=table-entry-count-desc">By Table/Medal Group Entry Count - Descending</a></li>
+                                            <li><a data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=results&amp;go=all&amp;action=print&amp;view=default">By Table Number</a></li>
+                                            <li><a data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=results&amp;go=all&amp;action=print&amp;view=default&amp;psort=table-entry-count-asc">By Table/Medal Group Entry Count - Ascending</a></li>
+                                            <li><a data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=results&amp;go=all&amp;action=print&amp;view=default&amp;psort=table-entry-count-desc">By Table/Medal Group Entry Count - Descending</a></li>
                                         </ul>
                                     </div>
                                     <div class="dropdown bcoem-admin-dashboard-select">
                                         <button class="btn btn-default dropdown-toggle" type="button" id="bos-pullsheet-menu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Winners Only without Scores...<span class="caret"></span>
                                         </button>
                                         <ul class="dropdown-menu" aria-labelledby="bos-pullsheet-menu">
-                                            <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=results&amp;go=all&amp;action=print&amp;view=winners">By Table Number</a></li>
-                                            <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=results&amp;go=all&amp;action=print&amp;view=winners&amp;psort=table-entry-count-asc">By Table/Medal Group Entry Count - Ascending</a></li>
-                                            <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=results&amp;go=all&amp;action=print&amp;view=winners&amp;psort=table-entry-count-desc">By Table/Medal Group Entry Count - Descending</a></li>
+                                            <li><a data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=results&amp;go=all&amp;action=print&amp;view=winners">By Table Number</a></li>
+                                            <li><a data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=results&amp;go=all&amp;action=print&amp;view=winners&amp;psort=table-entry-count-asc">By Table/Medal Group Entry Count - Ascending</a></li>
+                                            <li><a data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=results&amp;go=all&amp;action=print&amp;view=winners&amp;psort=table-entry-count-desc">By Table/Medal Group Entry Count - Descending</a></li>
                                         </ul>
                                     </div>
                                 <?php } else { ?>
                                 <ul class="list-inline">
-                                    <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=results&amp;go=all&amp;action=print&amp;tb=scores&amp;view=default" data-toggle="tooltip" data-placement="top" title="Print all entry results with scores listed">All with Scores</a></li>
-                                    <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=results&amp;go=all&amp;action=print&amp;tb=scores&amp;view=winners" data-toggle="tooltip" data-placement="top" title="Print winners only results with scores listed">Winners Only with Scores</a></li>
+                                    <li><a data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=results&amp;go=all&amp;action=print&amp;tb=scores&amp;view=default" data-toggle="tooltip" data-placement="top" title="Print all entry results with scores listed">All with Scores</a></li>
+                                    <li><a data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=results&amp;go=all&amp;action=print&amp;tb=scores&amp;view=winners" data-toggle="tooltip" data-placement="top" title="Print winners only results with scores listed">Winners Only with Scores</a></li>
                                 </ul>
                                 <ul class="list-inline">
-                                    <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=results&amp;go=all&amp;action=print" data-toggle="tooltip" data-placement="top" title="Print all entry results without scores listed">All without Scores</a></li>
-                                    <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=results&amp;go=all&amp;action=print&amp;view=winners" data-toggle="tooltip" data-placement="top" title="Print winners only results without scores listed">Winners Only without Scores</a></li>
+                                    <li><a data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=results&amp;go=all&amp;action=print" data-toggle="tooltip" data-placement="top" title="Print all entry results without scores listed">All without Scores</a></li>
+                                    <li><a data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=results&amp;go=all&amp;action=print&amp;view=winners" data-toggle="tooltip" data-placement="top" title="Print winners only results without scores listed">Winners Only without Scores</a></li>
                                 </ul>
                                 <?php } ?>
                             </div>
@@ -1766,7 +1766,7 @@ if ((isset($_SESSION['update_summary'])) && (!empty($_SESSION['update_summary'])
                             </div>
                             <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
                                 <ul class="list-inline">
-                                    <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=staff&amp;go=judging_assignments&amp;action=download&amp;filter=default&amp;view=default" data-toggle="tooltip" data-placement="top" title="Print the BJCP Points report for judges, stewards, and staff">Print</a></li>
+                                    <li><a data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=staff&amp;go=judging_assignments&amp;action=download&amp;filter=default&amp;view=default" data-toggle="tooltip" data-placement="top" title="Print the BJCP Points report for judges, stewards, and staff">Print</a></li>
                                     <li><a target="_blank" href="<?php echo $base_url; ?>includes/output.inc.php?section=export-staff&amp;go=judging_assignments&amp;action=download&amp;filter=default&amp;view=pdf" data-toggle="tooltip" data-placement="top" title="Download a PDF of the BJCP points report for judges, stewards, and staff">PDF</a></li>
                                     <?php if (empty($_SESSION['contestID'])) { ?>
                                     <li><a href="#"  data-toggle="modal" data-target="#BJCPCompIDModal">XML</a></li>
@@ -1824,8 +1824,8 @@ if ((isset($_SESSION['update_summary'])) && (!empty($_SESSION['update_summary'])
                             </div>
                             <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
                                 <ul class="list-inline">
-                                    <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=summary" data-toggle="tooltip" data-placement="top" title="Print participant summaries - each on a separate sheet of paper. Useful as a cover sheet for mailing entry scoresheets to participants.">All Participants with Entries</a></li>
-                                    <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=particpant-entries" data-toggle="tooltip" data-placement="top" title="Print a list of all participants with entries and associated judging numbers as assigned in the system. Useful for distributing scoresheets that are physically sorted by entry or judging numbers.">All Entries by Particpant</a></li>
+                                    <li><a data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=summary" data-toggle="tooltip" data-placement="top" title="Print participant summaries - each on a separate sheet of paper. Useful as a cover sheet for mailing entry scoresheets to participants.">All Participants with Entries</a></li>
+                                    <li><a data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=particpant-entries" data-toggle="tooltip" data-placement="top" title="Print a list of all participants with entries and associated judging numbers as assigned in the system. Useful for distributing scoresheets that are physically sorted by entry or judging numbers.">All Entries by Particpant</a></li>
                                 </ul>
                             </div>
                         </div><!-- ./row -->
@@ -1835,8 +1835,8 @@ if ((isset($_SESSION['update_summary'])) && (!empty($_SESSION['update_summary'])
                             </div>
                             <div class="col col-lg-8 col-md-8 col-sm-8 col-xs-12 small">
                                 <ul class="list-inline">
-                                    <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=inventory&amp;go=scores" data-toggle="tooltip" data-placement="top" title="Print an inventory of entry bottles remaining after judging - with scores">With Scores</a></li>
-                                    <li><a id="modal_window_link" class="hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=inventory" data-toggle="tooltip" data-placement="top" title="Print an inventory of entry bottles remaining after judging - without scores">Without Scores</a></li>
+                                    <li><a data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=inventory&amp;go=scores" data-toggle="tooltip" data-placement="top" title="Print an inventory of entry bottles remaining after judging - with scores">With Scores</a></li>
+                                    <li><a data-fancybox data-type="iframe" class="modal-window-link hide-loader" href="<?php echo $base_url; ?>includes/output.inc.php?section=inventory" data-toggle="tooltip" data-placement="top" title="Print an inventory of entry bottles remaining after judging - without scores">Without Scores</a></li>
                                 </ul>
                             </div>
                         </div><!-- ./row -->

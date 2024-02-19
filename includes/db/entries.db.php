@@ -106,7 +106,7 @@ elseif ($section == "admin") {
 
 		}
 
-		$query_log = sprintf("SELECT a.id, a.brewBrewerID, a.brewBoxNum, a.brewName, a.brewStyle, a.brewCategory, a.brewCategorySort, a.brewSubCategory, a.brewInfo, a.brewPossAllergens, a.brewPaid, a.brewReceived, a.brewAdminNotes, a.brewStaffNotes, a.brewJudgingNumber, a.brewUpdated, a.brewConfirmed, a.brewMead1, a.brewMead2, a.brewMead3, a.brewSweetnessLevel, a.brewABV, a.brewJuiceSource, a.brewInfoOptional, b.brewerFirstName, b.uid, b.brewerBreweryName, b.brewerBreweryTTB, b.brewerLastName, b.brewerCity, b.brewerState, b.brewerCountry, b.brewerPhone1, b.brewerClubs, b.brewerProAm, b.brewerDiscount, b.brewerEmail FROM %s a, %s b WHERE a.brewBrewerID = b.uid", $brewing_db_table, $brewer_db_table);
+		$query_log = sprintf("SELECT a.id, a.brewBrewerID, a.brewBoxNum, a.brewName, a.brewStyle, a.brewCategory, a.brewCategorySort, a.brewSubCategory, a.brewInfo, a.brewPossAllergens, a.brewPaid, a.brewReceived, a.brewAdminNotes, a.brewStaffNotes, a.brewJudgingNumber, a.brewUpdated, a.brewConfirmed, a.brewMead1, a.brewMead2, a.brewMead3, a.brewSweetnessLevel, a.brewABV, a.brewJuiceSource, a.brewInfoOptional, a.brewPouring, b.brewerFirstName, b.uid, b.brewerBreweryName, b.brewerBreweryTTB, b.brewerLastName, b.brewerCity, b.brewerState, b.brewerCountry, b.brewerPhone1, b.brewerClubs, b.brewerProAm, b.brewerDiscount, b.brewerEmail FROM %s a, %s b WHERE a.brewBrewerID = b.uid", $brewing_db_table, $brewer_db_table);
 			
 		if ($view == "paid") $query_log .= " AND a.brewPaid='1'";
 		if ($view == "unpaid") $query_log .= " AND (a.brewPaid='' OR a.brewPaid='0' OR a.brewPaid IS NULL)";

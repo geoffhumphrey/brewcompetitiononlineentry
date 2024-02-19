@@ -122,6 +122,7 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 		$brewABV = "";
 		$brewSweetnessLevel = "";
 		$brewJuiceSource = "";
+		$brewPouring = "";
 
 		// Comments
 		if ((isset($_POST['brewComments'])) && (!empty($_POST['brewComments']))) {
@@ -233,7 +234,25 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 		    $brewJuiceSource = array_merge($juice_src,$juice_src_other_arr);
 		    $brewJuiceSource = json_encode($brewJuiceSource);
 		}
-		
+
+		$pouring_instructions = array();
+
+		if ((isset($_POST['brewPouringInst'])) && (!empty($_POST['brewPouringInst']))) {
+			$pouring_instructions['pouring'] = sterilize($_POST['brewPouringInst']);		
+		}
+
+		if ((isset($_POST['brewPouringRouse'])) && (!empty($_POST['brewPouringRouse']))) {
+			$pouring_instructions['pouring_rouse'] = sterilize($_POST['brewPouringRouse']);		
+		}
+
+		if ((isset($_POST['brewPouringNotes'])) && (!empty($_POST['brewPouringNotes']))) {
+			$brewPouringNotes = $purifier->purify($_POST['brewPouringNotes']);
+			$brewPouringNotes = sterilize($brewPouringNotes);
+			$pouring_instructions['pouring_notes'] = $brewPouringNotes;
+		}
+
+		$brewPouring = json_encode($pouring_instructions);
+
 		// Record Paid and Received
 		if ($action == "add") {
 
@@ -427,7 +446,8 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 			'brewBoxNum' => blank_to_null($brewBoxNum),
 			'brewABV' => blank_to_null($brewABV),
 			'brewJuiceSource' => blank_to_null($brewJuiceSource),
-			'brewSweetnessLevel' => blank_to_null($brewSweetnessLevel)
+			'brewSweetnessLevel' => blank_to_null($brewSweetnessLevel),
+			'brewPouring' => blank_to_null($brewPouring)
 		);
 		$result = $db_conn->insert ($update_table, $data);
 		if (!$result) {
@@ -668,7 +688,8 @@ if ((isset($_SERVER['HTTP_REFERER'])) && ((isset($_SESSION['loginUsername'])) &&
 			'brewBoxNum' => $brewBoxNum,
 			'brewABV' => blank_to_null($brewABV),
 			'brewJuiceSource' => blank_to_null($brewJuiceSource),
-			'brewSweetnessLevel' => blank_to_null($brewSweetnessLevel)
+			'brewSweetnessLevel' => blank_to_null($brewSweetnessLevel),
+			'brewPouring' => blank_to_null($brewPouring)
 		);
 		$db_conn->where ('id', $id);
 		$result = $db_conn->update ($update_table, $data);

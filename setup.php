@@ -185,9 +185,6 @@ else $_SESSION['token'] = bin2hex(openssl_random_pseudo_bytes(32));
         <link rel="stylesheet" type="text/css" href="<?php echo $css_url; ?>common.min.css">
         <link rel="stylesheet" type="text/css" href="<?php echo $css_url; ?>default.min.css">
 
-        <!-- Load BCOE&M Custom JS -->
-    	<script src="<?php echo $js_url; ?>bcoem_custom.min.js"></script>
-
 	</head>
 	<body>
 	<!-- LOADER -->
@@ -331,5 +328,7 @@ else $_SESSION['token'] = bin2hex(openssl_random_pseudo_bytes(32));
     	</nav>
     </footer><!-- ./footer -->
 	<!-- ./ Footer -->
+	<!-- Load BCOE&M Custom JS -->
+	<script src="<?php echo $js_app_url; ?>"></script>
 	</body>
 </html>

@@ -458,12 +458,7 @@ function checkStyleIdentifier() {
 	</div>
 </div>
 </form>
-<?php
-
-// Load Show/Hide
-include (INCLUDES.'form_js.inc.php');
-
-} ?>
+<?php } ?>
 <?php if (($action == "default") && ($filter == "orphans") && ($bid == "default")) { ?>
 <h3>Styles Without a Valid Style Type</h3>
 <?php

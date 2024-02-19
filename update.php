@@ -383,7 +383,6 @@ else {
 	    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/css/bootstrap-datetimepicker.min.css" />
 	    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.11.1/moment-with-locales.min.js"></script>
 	    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/js/bootstrap-datetimepicker.min.js"></script>
-	    <script src="<?php echo $js_url; ?>date-time.min.js"></script>
 
         <!-- Load Font Awesome / https://fortawesome.github.io/Font-Awesome -->
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
@@ -391,9 +390,6 @@ else {
         <!-- Load BCOE&M Custom Theme CSS - Contains Bootstrap overrides and custom classes -->
         <link rel="stylesheet" type="text/css" href="<?php echo $css_url; ?>common.min.css">
         <link rel="stylesheet" type="text/css" href="<?php echo $css_url; ?>default.min.css" />
-
-        <!-- Load BCOE&M Custom JS -->
-    	<script src="<?php echo $js_url; ?>bcoem_custom.min.js"></script>
 
     	<script type="text/javascript">
     		$(document).ready(function() {
@@ -478,5 +474,6 @@ else {
     </footer><!-- ./footer -->
 	<!-- ./ Footer -->
 
+	<script src="<?php echo $js_url; ?>app.min.js"></script>
 </body>
 </html>

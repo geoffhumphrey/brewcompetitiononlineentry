@@ -549,8 +549,11 @@ function check_flight_number($entry_id,$flight,$method) {
   $flights = mysqli_query($connection,$query_flights) or die (mysqli_error($connection));
   $row_flights = mysqli_fetch_assoc($flights);
 
-	if (($method == 0) && ($row_flights['flightNumber'] == $flight)) $r = $row_flights['flightRound'];
-	if ($method == 1) $r = $row_flights['flightNumber'];
+  if ($row_flights) {
+  	if (($method == 0) && ($row_flights['flightNumber'] == $flight)) $r = $row_flights['flightRound'];
+  	if ($method == 1) $r = $row_flights['flightNumber'];
+  }
+	
 	return $r;
 
 }

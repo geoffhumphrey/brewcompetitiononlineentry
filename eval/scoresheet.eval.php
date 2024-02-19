@@ -467,6 +467,29 @@ if ($entry_found) {
     $entry_info_html .= "</div>";
   }
 
+  if (!empty($row_entry_info['brewPouring'])) {
+    
+    $pouring_arr = json_decode($row_entry_info['brewPouring'],true);
+
+    $entry_info_html .= "<div class=\"row bcoem-admin-element\">";
+    $entry_info_html .= "<div class=\"col col-lg-3 col-md-4 col-sm-4 col-xs-12\"><strong>".$label_pouring."</strong></div>";
+    $entry_info_html .= "<div class=\"col col-lg-9 col-md-8 col-sm-8 col-xs-12\">".$pouring_arr['pouring']."</div>";
+    $entry_info_html .= "</div>";
+
+    if ((isset($pouring_arr['pouring_notes'])) && (!empty($pouring_arr['pouring_notes'])))  {
+      $entry_info_html .= "<div class=\"row bcoem-admin-element\">";
+      $entry_info_html .= "<div class=\"col col-lg-3 col-md-4 col-sm-4 col-xs-12\"><strong>".$label_pouring_notes."</strong></div>";
+      $entry_info_html .= "<div class=\"col col-lg-9 col-md-8 col-sm-8 col-xs-12\">".$pouring_arr['pouring_notes']."</div>";
+      $entry_info_html .= "</div>";
+    }
+
+    $entry_info_html .= "<div class=\"row bcoem-admin-element\">";
+    $entry_info_html .= "<div class=\"col col-lg-3 col-md-4 col-sm-4 col-xs-12\"><strong>".$label_rouse_yeast."</strong></div>";
+    $entry_info_html .= "<div class=\"col col-lg-9 col-md-8 col-sm-8 col-xs-12\">".$pouring_arr['pouring_rouse']."</div>";
+    $entry_info_html .= "</div>";
+
+  }
+
   if (!empty($row_entry_info['brewStaffNotes'])) {
     $entry_info_html .= "<div class=\"row bcoem-admin-element\">";
     $entry_info_html .= "<div class=\"col col-lg-3 col-md-4 col-sm-4 col-xs-12\"><strong>".$label_notes." &ndash; ".$label_staff."</strong></div>";
@@ -645,25 +668,17 @@ var score_range_ok = "<?php echo $label_score_range_ok; ?>";
 var score_range_ok_text = "<?php echo $evaluation_info_047; ?>";
 var score_range_ok_output = "<span class=\"text-success\"><strong>" + score_range_ok + "</strong><br><small><strong>" + score_range_ok_text + "</strong></small></span>";
 </script>
-<script src="<?php echo $js_url; ?>eval_checks.min.js"></script>
+
+<?php if ($action == "edit") { ?>
 <script>
 $(document).ready(function() {
-  
-  $("#courtesy-alert-warning-15").hide();
-  $("#warning-indicator-icon").hide();
-  
-  <?php if ($action == "edit") { ?>
   displayCalc(<?php echo $eval_score; ?>);
   checkScoreRange(<?php echo $eval_score; ?>,judgeScores,score_range,0);
   checkConsensus(consensusScores);
-  <?php }?>
-  
-  $('#show-hide-status-btn').click(function(){
-      $('#toggle-icon').toggleClass('fa-chevron-circle-up fa-chevron-circle-down');
-  });
-
 });
 </script>
+<?php }?>
+
 <style type="text/css">
 
 .scoring-guide-bottom-text {
@@ -700,6 +715,7 @@ $(document).ready(function() {
 }
 
 </style>
+
 <?php
 $evalPos = FALSE; 
 if ((isset($row_eval['evalPosition'])) && (!empty($row_eval['evalPosition']))) {
@@ -713,6 +729,7 @@ echo $entry_info_html;
 if ($entry_found) {
   echo $sticky_score_tally;
 ?>
+
 <form class="hide-loader-form-submit" id="scoresheet-form" name="scoresheet-form" role="form" data-toggle="validator" action="<?php echo $base_url; ?>includes/process.inc.php?section=<?php echo $process_type; ?>&action=<?php echo $action; ?>&view=<?php echo $view; ?>&dbTable=<?php echo $prefix."evaluation"; if ($action == "edit") echo "&id=".$id; ?>" method="post">
 <input type="hidden" name="token" value ="<?php if (isset($_SESSION['token'])) echo $_SESSION['token']; ?>">
 <!-- Provide information about the judge -->
@@ -950,65 +967,68 @@ if ($entry_found) {
   </div>
 </div>
 <?php } ?>
-<script src="<?php echo $js_url; ?>saveMyForm.jquery.min.js"></script>
+<script src="<?php echo $js_url; ?>save_my_form.min.js"></script>
 <script type="text/javascript">
 var style_type = <?php echo $row_style['brewStyleType']; ?>;
 var edit = <?php if ($action == "edit") echo "true"; else echo "false"; ?>;
-
 $(function() {
     $('#scoresheet-form').saveMyForm();
 });
-
 </script>
+
+
+
 <?php if ((isset($_SESSION['jPrefsMinWords'])) && ($_SESSION['jPrefsMinWords'] > 0)) { ?>
 <script type="text/javascript">
 var min_words = <?php echo $_SESSION['jPrefsMinWords']; ?>;
 var min_wordcount_reached = '<strong class="text-success"><?php echo $evaluation_info_089; ?></strong> <?php echo $evaluation_info_090; ?>';
 var min_wordcount_not = '<?php echo $evaluation_info_091; ?>';
 var word_count_so_far = '<?php echo $evaluation_info_092; ?>';
+</script>
 
 <?php if (($judging_scoresheet == 3) || ($judging_scoresheet == 4)) { ?>
-
-if (edit) var min_words_overall_ok = true;
-else var min_words_overall_ok = false;
-
-function min_words_ok() {
-    $('#submitForm').attr('disabled','disabled');
-    if (min_words_overall_ok) {
-        $('#submitForm').removeAttr('disabled');
-        $('#min-words-message').hide();
-    } else {
-      $('#min-words-message').show();
-      $('#min-words-message').html('<i class="fa fa-lg fa-exclamation-circle"></i> <strong><?php echo $evaluation_info_093; ?></strong>');
+<script type="text/javascript">
+    if (edit) var min_words_overall_ok = true;
+    else var min_words_overall_ok = false;
+    function min_words_ok() {
+        $('#submitForm').attr('disabled','disabled');
+        if (min_words_overall_ok) {
+            $('#submitForm').removeAttr('disabled');
+            $('#min-words-message').hide();
+        } else {
+          $('#min-words-message').show();
+          $('#min-words-message').html('<i class="fa fa-lg fa-exclamation-circle"></i> <strong><?php echo $evaluation_info_093; ?></strong>');
+        }
     }
-}
 
-$(document).ready(function() {
+    $(document).ready(function() {
 
-    $('#min-words-message').hide();
+        $('#min-words-message').hide();
 
-    $('#evalOverallComments').on('keyup keydown click onmouseout oninput', function() {
+        $('#evalOverallComments').on('keyup keydown click onmouseout oninput', function() {
 
-        var currentWordCount = $('#evalOverallComments').val().match(/\S+/g).length;
+            var currentWordCount = $('#evalOverallComments').val().match(/\S+/g).length;
 
-        if (currentWordCount >= min_words) {
-            min_words_overall_ok = true;
-            $('#evalOverallComments-words').html(min_wordcount_reached + currentWordCount);      
-        } 
+            if (currentWordCount >= min_words) {
+                min_words_overall_ok = true;
+                $('#evalOverallComments-words').html(min_wordcount_reached + currentWordCount);      
+            } 
 
-        else {
-           min_words_overall_ok = false;
-           $('#evalOverallComments-words').html('<strong> ' + min_wordcount_not + min_words + '</strong>');
-           if (currentWordCount > 1) $('#evalOverallComments-words').html('<strong>' + min_wordcount_not + min_words + '</strong>. <strong class="text-danger">' + word_count_so_far + currentWordCount + '</strong>');
-        }  
+            else {
+               min_words_overall_ok = false;
+               $('#evalOverallComments-words').html('<strong> ' + min_wordcount_not + min_words + '</strong>');
+               if (currentWordCount > 1) $('#evalOverallComments-words').html('<strong>' + min_wordcount_not + min_words + '</strong>. <strong class="text-danger">' + word_count_so_far + currentWordCount + '</strong>');
+            }  
 
-        min_words_ok();
+            min_words_ok();
+
+        });
 
     });
+</script>
+<?php } // end if (($judging_scoresheet == 3) || ($judging_scoresheet == 4)) ?>
 
-});
-
-<?php } if ((($judging_scoresheet == 1) || ($judging_scoresheet == 2)) && ((isset($_SESSION['jPrefsMinWords'])) && ($_SESSION['jPrefsMinWords'] > 0))) { 
+<?php if ((($judging_scoresheet == 1) || ($judging_scoresheet == 2)) && ((isset($_SESSION['jPrefsMinWords'])) && ($_SESSION['jPrefsMinWords'] > 0))) { 
 
     if (($cider) || ($mead)) {
       $comment_fields = array(
@@ -1028,65 +1048,72 @@ $(document).ready(function() {
     }
 
 ?>
+<script type="text/javascript">
 
-if (edit) {
-  var min_words_aroma_ok = true;
-  var min_words_appearance_ok = true;
-  var min_words_flavor_ok = true;
-  var min_words_mouthfeel_ok = true;  
-  var min_words_overall_ok = true;
-} else {
-  var min_words_aroma_ok = false;
-  var min_words_appearance_ok = false;
-  var min_words_flavor_ok = false;
-  if ((style_type == 2) || (style_type == 3)) var min_words_mouthfeel_ok = true;
-  else var min_words_mouthfeel_ok = false;
-  var min_words_overall_ok = false;
-}
-
-function min_words_ok() {
-    $('#submitForm').attr('disabled','disabled');
-    if ((min_words_aroma_ok) && (min_words_appearance_ok) && (min_words_flavor_ok) && (min_words_mouthfeel_ok) && (min_words_overall_ok)) {
-        $('#submitForm').removeAttr('disabled');
-        $('#min-words-message').hide();
+    if (edit) {
+      var min_words_aroma_ok = true;
+      var min_words_appearance_ok = true;
+      var min_words_flavor_ok = true;
+      var min_words_mouthfeel_ok = true;  
+      var min_words_overall_ok = true;
     } else {
-      $('#min-words-message').show();
-      $('#min-words-message').html('<i class="fa fa-lg fa-exclamation-circle"></i> <strong><?php echo $evaluation_info_094; ?></strong>');
+      var min_words_aroma_ok = false;
+      var min_words_appearance_ok = false;
+      var min_words_flavor_ok = false;
+      if ((style_type == 2) || (style_type == 3)) var min_words_mouthfeel_ok = true;
+      else var min_words_mouthfeel_ok = false;
+      var min_words_overall_ok = false;
     }
 
-}
-
-$(document).ready(function() {
-
-    $('#min-words-message').hide();
-
-    <?php foreach ($comment_fields as $key => $value) { 
-        $value_words = $value."-words";
-        $key_ok = "min_words_".$key."_ok";
-    ?>
-
-    $('<?php echo $value; ?>').on('keyup keydown click onmouseout oninput', function() {
-
-        var currentWordCount_<?php echo $key; ?> = $('<?php echo $value; ?>').val().match(/\S+/g).length;
-
-        if (currentWordCount_<?php echo $key; ?> >= min_words) {
-            <?php echo $key_ok; ?> = true;
-            $('<?php echo $value_words; ?>').html(min_wordcount_reached + currentWordCount_<?php echo $key; ?>);      
-        } 
-
-        else {
-           <?php echo $key_ok; ?> = false;
-           $('<?php echo $value_words; ?>').html('<strong> ' + min_wordcount_not + min_words + '</strong>');
-           if (currentWordCount_<?php echo $key; ?> > 1) $('<?php echo $value_words; ?>').html('<strong>' + min_wordcount_not +  min_words + '</strong>. <strong class="text-danger">' + word_count_so_far + currentWordCount_<?php echo $key; ?> + '</strong>.');
+    function min_words_ok() {
+        $('#submitForm').attr('disabled','disabled');
+        if ((min_words_aroma_ok) && (min_words_appearance_ok) && (min_words_flavor_ok) && (min_words_mouthfeel_ok) && (min_words_overall_ok)) {
+            $('#submitForm').removeAttr('disabled');
+            $('#min-words-message').hide();
+        } else {
+          $('#min-words-message').show();
+          $('#min-words-message').html('<i class="fa fa-lg fa-exclamation-circle"></i> <strong><?php echo $evaluation_info_094; ?></strong>');
         }
 
-        min_words_ok();        
+    }
+
+    $(document).ready(function() {
+
+        $('#min-words-message').hide();
+
+        <?php foreach ($comment_fields as $key => $value) { 
+            $value_words = $value."-words";
+            $key_ok = "min_words_".$key."_ok";
+        ?>
+
+        $('<?php echo $value; ?>').on('keyup keydown click onmouseout oninput', function() {
+
+            var currentWordCount_<?php echo $key; ?> = $('<?php echo $value; ?>').val().match(/\S+/g).length;
+
+            if (currentWordCount_<?php echo $key; ?> >= min_words) {
+                <?php echo $key_ok; ?> = true;
+                $('<?php echo $value_words; ?>').html(min_wordcount_reached + currentWordCount_<?php echo $key; ?>);      
+            } 
+
+            else {
+               <?php echo $key_ok; ?> = false;
+               $('<?php echo $value_words; ?>').html('<strong> ' + min_wordcount_not + min_words + '</strong>');
+               if (currentWordCount_<?php echo $key; ?> > 1) $('<?php echo $value_words; ?>').html('<strong>' + min_wordcount_not +  min_words + '</strong>. <strong class="text-danger">' + word_count_so_far + currentWordCount_<?php echo $key; ?> + '</strong>.');
+            }
+
+            min_words_ok();        
+
+        });
+            
+        <?php } // end foreach ?>
 
     });
-        
-    <?php } // end foreach ?>
 
-});
-<?php } ?>
 </script>
-<?php } // end if ((isset($_SESSION['jPrefsMinWords'])) && ($_SESSION['jPrefsMinWords'] > 0)) ?>
+<?php } // end if ((($judging_scoresheet == 1) || ($judging_scoresheet == 2)) && ((isset($_SESSION['jPrefsMinWords'])) && ($_SESSION['jPrefsMinWords'] > 0))) ?>
+
+
+
+
+<?php } // End if ((isset($_SESSION['jPrefsMinWords'])) && ($_SESSION['jPrefsMinWords'] > 0)) ?>
+

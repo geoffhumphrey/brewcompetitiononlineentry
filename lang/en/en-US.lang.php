@@ -2031,11 +2031,20 @@ $label_abv = "Alcohol By Volume (ABV)";
 $label_sweetness_level = "Sweetness Level";
 $label_juice_source = "Juice Source(s)";
 $label_select_all_apply = "Select All That Apply";
+$label_pouring = "Pouring";
+$label_pouring_notes = "Pouring Notes";
+$label_rouse_yeast = "Rouse Yeast";
+$label_fast = "Fast";
+$label_slow = "Slow";
+$label_normal = "Normal";
 $brew_text_042 = "Please provide the alcohol by volume up to the hundredth place.";
 $brew_text_043 = "Numbers only - decimals acceptable to the hundredth place (e.g., 5.2, 12.84, etc.).";
 $brew_text_044 = "Please provide finishing specific gravity to the thousandth place (e.g., 0.991, 1.000, 1.007, etc.).";
 $brew_text_045 = "Please provide juice source(s) - select all that apply.";
 $brew_text_046 = "Please specify the two letter state/provice abbreviation of any other juice source(s) (e.g., VT, ME, CA, ON, etc.). Separate each location's abbreviation by comma (,) or semi-colon (;). Some symbols are not allowed, including double-quotation marks (&quot;) and percent (&#37;).";
+$brew_text_047 = "How should your entry be poured for the judges?";
+$brew_text_048 = "Should any yeast be roused before pouring?";
+$brew_text_049 = "Provide further information regarding how your entry should be poured or other related items (e.g., possible gushing, etc.).";
 
 /**
  * ----------------------------------------------------------------------------------

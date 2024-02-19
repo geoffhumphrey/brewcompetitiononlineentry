@@ -3,7 +3,6 @@ var username_url = "<?php echo $ajax_url; ?>username.ajax.php";
 var email_url="<?php echo $ajax_url; ?>valid_email.ajax.php";
 var setup = 1;
 </script>
-<script src="<?php echo $js_url; ?>registration_checks.min.js"></script>
 <script type="text/javascript">
         $(document).ready(function () {
             "use strict";
@@ -36,7 +35,6 @@ $security = "";
 foreach ($security_questions_display as $key => $value) {
 	$security .= "<div class=\"radio\"><label><input type=\"radio\" name=\"userQuestion\" value=\"".$security_question[$value]."\" required> ".$security_question[$value]."</label></div>";
 }
-
 ?>
 <p class="lead">This will be the Administrator's account with full access to <em>all</em> of the installation's features and functions.</p>
 <p class="lead"><small>The owner of this account will be able to add, edit, and delete any entry and participant, grant administration privileges to other users, define custom styles, define tables and flights, add scores, print reports, etc. This user will also be able to add, edit, and delete their own entries into the competition.</small></p>

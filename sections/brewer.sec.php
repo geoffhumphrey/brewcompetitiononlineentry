@@ -356,21 +356,6 @@ else {
 
 if ($go != "admin") echo $info_msg;
 ?>
-<script type='text/javascript'>
-var action = "<?php echo $action; ?>";
-var club_other = <?php if ($club_other) echo "true"; else echo "false"; ?>;
-var brewer_judge = "N";
-var brewer_steward = "N";
-var brewer_staff = "N";
-var user_question_answer = "<?php if (isset($_SESSION['userQuestionAnswer'])) echo $_SESSION['userQuestionAnswer']; ?>"
-if (action == "edit") {
-    var brewer_country = "<?php if (isset($row_brewer)) echo $row_brewer['brewerCountry']; ?>";
-    var brewer_judge = "<?php if (isset($row_brewer)) echo $row_brewer['brewerJudge']; ?>";
-    var brewer_steward = "<?php if (isset($row_brewer)) echo $row_brewer['brewerSteward']; ?>";
-    var brewer_staff = "<?php if (isset($row_brewer)) echo $row_brewer['brewerStaff']; ?>";
-}
-</script>
-<script src="<?php echo $js_url; ?>add_edit_user.min.js"></script>
 <form id="submit-form" class="form-horizontal hide-loader-form-submit" data-toggle="validator" action="<?php echo $form_action; ?>" method="POST" name="form1">
 <input type="hidden" name="token" value ="<?php if (isset($_SESSION['token'])) echo $_SESSION['token']; ?>">
 <?php 
@@ -409,6 +394,6 @@ if (($go != "entrant") && ($section != "step2")) include (SECTIONS.'brewer_form_
     </div>
 </div><!-- Form Group -->
 </form>
-<?php } // WAY up top.. end if (($section == "step2") || ($action == "add") || (($action == "edit") && (($_SESSION['loginUsername'] == $row_brewerID['brewerEmail'])) || ($_SESSION['userLevel'] <= "1")))
+<?php } // WAY up top... end if (($section == "step2") || ($action == "add") || (($action == "edit") && (($_SESSION['loginUsername'] == $row_brewerID['brewerEmail'])) || ($_SESSION['userLevel'] <= "1")))
 else echo "<p class='lead'>You can only edit your own profile.</p>";
 ?>

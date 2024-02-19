@@ -388,7 +388,7 @@ if ($_SESSION['prefsProEdition'] == 0) {
 	$account_display .= "<div class=\"row bcoem-account-info\">";
 	$account_display .= sprintf("<div class=\"".$display_left_cols."\"><strong>%s</strong></div>",$label_drop_off);
 	$account_display .= "<div class=\"".$display_right_cols."\">".dropoff_location($_SESSION['brewerDropOff']);
-	if ($_SESSION['brewerDropOff'] == 0) $account_display .= sprintf("<br><a id=\"modal_window_link\" class=\"hide-loader\" data-toggle=\"tooltip\" title=\"%s\" href =\"".$base_url."includes/output.inc.php?section=shipping-label\">%s</a>",$brewer_info_006,$brewer_info_007);
+	if ($_SESSION['brewerDropOff'] == 0) $account_display .= sprintf("<br><a data-fancybox data-type=\"iframe\" class=\"modal-window-link hide-loader\" data-toggle=\"tooltip\" title=\"%s\" href =\"".$base_url."includes/output.inc.php?section=shipping-label\">%s</a>",$brewer_info_006,$brewer_info_007);
 	$account_display .= "</div>";
 	$account_display .= "</div>";
 

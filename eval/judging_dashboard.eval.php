@@ -287,7 +287,7 @@ elseif ($scored_by_user) {
     		$actions .= "</a>";
     	}
 		
-		$actions .= "<a style=\"word-wrap:break-word;\" class=\"btn btn-sm btn-info hide-loader\" id=\"modal_window_link\" class=\"hide-loader\" href=\"".$view_link."\">";
+		$actions .= "<a style=\"word-wrap:break-word;\" data-fancybox data-type=\"iframe\" class=\"btn btn-sm btn-info modal-window-link hide-loader\" href=\"".$view_link."\">";
 		if (strpos($row_table_assignments['assignRoles'], "HJ") !== false) $actions .= $label_view_my_eval;
 		else $actions .= $label_view;
 		$actions .= "</a>";
@@ -296,7 +296,7 @@ elseif ($scored_by_user) {
 	}
 
 	else {
-		$actions .= "<a class=\"btn btn-block btn-sm btn-info hide-loader\" id=\"modal_window_link\" class=\"hide-loader\" href=\"".$view_link."\">".$label_view;
+		$actions .= "<a data-fancybox data-type=\"iframe\" class=\"btn btn-block btn-sm btn-info modal-window-link hide-loader\" href=\"".$view_link."\">".$label_view;
 		$actions .= "</a>";
 	}
 
@@ -383,7 +383,7 @@ if (($judging_open) && (strpos($row_table_assignments['assignRoles'], "HJ") !== 
 				$score_previous = $value['judge_score'];
 				$view_link = $base_url."includes/output.inc.php?section=evaluation&amp;go=default&amp;id=".$score_previous_id."&amp;tb=1";
 				$actions .= "<div style=\"margin-top: 5px;\">";
-				$actions .= "<a style=\"word-wrap:break-word;\" class=\"btn btn-block btn-sm btn-info hide-loader\" id=\"modal_window_link\" class=\"hide-loader\" href=\"".$view_link."\">";
+				$actions .= "<a style=\"word-wrap:break-word;\" data-fancybox data-type=\"iframe\" class=\"btn btn-block btn-sm btn-info modal-window-link hide-loader\" href=\"".$view_link."\">";
 				$actions .= $label_view_other_judge_eval;
 				$actions .= " (";
 				$actions .= $label_score.": ".$score_previous;
